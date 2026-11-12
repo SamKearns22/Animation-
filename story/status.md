@@ -1,5 +1,5 @@
-- Blessed (11 Nov, chat 10, Opus high): Brand's pre-scandal manner researched; his moves rebuilt to it (clips sent);
-  Hook Text placed; brief ticked; critique hunt 1: 15 faults. Next: Opus medium chat fixes them, hunt 2, check sheet.
+- Blessed (12 Nov, chat 11, Opus high): Sam's note 10 built, the jury shot in the middle of the oath (12 invented
+  jurors, annoyed brows, glances); clip sent. Next: Opus medium chat: critique hunt 1 fixes, hunt 2, check sheet.
   Notes: notes/blessed.md.
 remakes: Sam's notes on the final (76 tower boots, 77 wipe entrance) fixed 11 Nov, clip sent; Sam said Y: Sonnet chat re-rendering the final.
 Next: Sonnet chat, final render, send to Sam.

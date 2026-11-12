@@ -32,6 +32,7 @@ import filmkit                   # noqa: E402  the general checks
 import film_engine as E          # noqa: E402  render with the picture cache, subtitle list, mouth check
 import blessed_cast as BC        # noqa: E402  Brand, the judge, the officer, the newsreader
 import blessed_sets as ST        # noqa: E402  the eight places
+import blessed_jury as JY        # noqa: E402  the twelve jurors (Sam's note 10)
 import press_secretary as PS     # noqa: E402,F401  (its seated reporters are no longer drawn: Sam's note 4)
 import views as V                # noqa: E402
 import moves                     # noqa: E402
@@ -57,7 +58,8 @@ CAST = dict(BC.CAST,
             inmate2=dict(INMATE, who='inmate2', name='Inmate 2', skin=(120, 82, 60), hair='bald', hair_c=(30, 24, 20),
                          jacket=(110, 116, 124), sleeve=(110, 116, 124), shoulders=170, height=1.84, seed=302),
             inmate3=dict(INMATE, who='inmate3', name='Inmate 3', skin=(232, 190, 164), hair='bald',
-                         hair_c=(170, 120, 70), jacket=(150, 152, 156), sleeve=(150, 152, 156), height=1.72, seed=303))
+                         hair_c=(170, 120, 70), jacket=(150, 152, 156), sleeve=(150, 152, 156), height=1.72, seed=303),
+            **JY.JURORS)
 LINES = [   # the script word for word (brief rows 5, 6, 7, 11, 13-14, 15); Sam's takes time every line
     dict(n=1, audio='blessed-1', who='brand', text="Yeah, I'm feeling blessed, mate, super blessed."),
     dict(n=2, audio='blessed-2', who='brand', text="I swear by Almighty God that the blessed evidence I shall give "
@@ -93,6 +95,10 @@ T = {}
 T['s1'] = 0.0
 T['s2'] = _at(1, 0.5) + 0.7                       # arrival (line 1), then the oath
 T['s3'] = _at(2, T['s2'] + 0.5) + 0.6             # the oath, then the sentencing (the dock)
+# Sam's note 10 (12 Nov): in the middle of the oath, 180 to the jury staring at him (cut in the pause after
+# "Almighty God", back in the pause after "shall be the truth"; his voice carries over)
+T['jury'] = L[2]['start'] + L[2]['_stretches'][0][1] + 0.12
+T['oath2'] = L[2]['start'] + L[2]['_stretches'][2][1] + 0.12
 T['bang'] = T['s3']                               # the gavel is only HEARD, on the dock shot's first frame
 T['s4'] = T['s3']                                 # (Sam, 12 Nov: no gavel shot)
 T['hollow'] = T['s4'] + 0.3                       # the stillness cracks just before line 3
@@ -127,15 +133,17 @@ def _voice_env(who):
 import headlife                  # noqa: E402  (rule 74: every talking head tilts and nods on the voice)
 HEAD_LIFE = {'brand': headlife.HeadLife(_voice_env('brand'), 0.0, seed=5),
              'newsreader': headlife.HeadLife(_voice_env('newsreader'), 0.0, seed=9)}
-SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['s3']),
+SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['jury']), ('jury', T['jury'], T['oath2']),
+         ('oath2', T['oath2'], T['s3']),
          ('dock', T['s4'], T['van']), ('van', T['van'], T['cell']), ('escort', T['cell'], T['cot']),
          ('cot', T['cot'], T['phone']), ('phone', T['phone'], T['tvroom']), ('tvroom', T['tvroom'], T['tv']),
          ('tv', T['tv'], T['push']), ('push', T['push'], T['gates']), ('gates', T['gates'], T['gates2']),
          ('gates2', T['gates2'], DUR)]
-VIEW = {'arrive': 'court_out', 'oath': 'court_box', 'dock': 'court_dock', 'van': 'van',
+VIEW = {'arrive': 'court_out', 'oath': 'court_box', 'jury': 'court_jury', 'oath2': 'court_box', 'dock': 'court_dock', 'van': 'van',
         'escort': 'cell', 'cot': 'cell_cot', 'phone': 'phone', 'tvroom': 'tvroom', 'tv': 'tv', 'push': 'tvroom',
         'gates': 'gates', 'gates2': 'gates2'}
-SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'dock': ['brand'],
+SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'jury': list(JY.JURORS), 'oath2': ['brand', 'judge'],
+             'dock': ['brand'],
              'van': ['brand'], 'escort': ['brand', 'officer'], 'cot': ['brand'], 'phone': ['brand'],
              'tvroom': ['brand'], 'tv': ['newsreader'], 'push': ['brand'], 'gates': ['brand'],
              'gates2': ['brand']}
@@ -337,7 +345,7 @@ def brand_mood(t):
     s = shot_of(t)
     if s == 'arrive':
         return 'showman', ('lowered' if t >= word_at(1, 'mate') else 'on')
-    if s == 'oath':
+    if s in ('oath', 'oath2'):
         return 'oath', None
     if s == 'dock':
         return ('hollow' if t >= T['hollow'] else 'neutral'), None
@@ -811,6 +819,9 @@ def _cam(view, t):
         u = _ease(_ramp(t, T['push'], T['overjoyed'] + 0.6))
         x, y, ppm = ST.STAGE['tvroom']['brand']
         return B.Cam(1.0 + 1.6 * u, 540 + (x - 540) * u, 960 + (y - 0.95 * ppm - 960) * u)
+    if shot_of(t) == 'jury':                      # a slow push in on the twelve faces
+        u = _ease(_ramp(t, T['jury'], T['oath2']))
+        return B.Cam(1.0 + 0.12 * u, 540, 1080 + 60 * u)
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))
         x, y = ST.GATE.p(0.65, ST.GATE_D, 1.2)
@@ -828,7 +839,9 @@ def draw_people(img, cam, shot, t):
         mark, yaw, j = arrive(sp, t)
         put(img, cam, sp, mark, t, yaw, j)
         press(img, cam, ST.OUT, st['press'], t, reach=230, at=(0.45, 3.9))
-    elif shot == 'oath':
+    elif shot == 'jury':
+        JY.draw(img, cam, t, word_at(2, 'blessed evidence'), put_seated, face, ST)
+    elif shot in ('oath', 'oath2'):
         x, y, ppm = st['judge']
         put_seated(img, cam, dict(BC.JUDGE, **face('judge', t, 'neutral')), (x, y, ppm), t)
         ST.mid(view, img, cam, t)
@@ -938,7 +951,7 @@ def picture(t):
     img = B.canvas((0, 0, 0))
     feed = ST.studio_feed(t, dict(BC.NEWSREADER, head_life=HEAD_LIFE['newsreader'], **face('newsreader', t, 'neutral'))) if view == 'tv' else None
     ST.back(view, img, cam, t, feed)
-    if view not in ('court_box', 'court_dock'):     # those two put the mid layer between their people
+    if view not in ST.MID:                          # those put the mid layer between their people
         ST.mid(view, img, cam, t)
     DEFER.clear()
     draw_people(img, cam, shot, t)

@@ -7,7 +7,8 @@ px at zoom 1), so a push-in is a zoomed camera on the same painting.
 MAP (rule 61)
   helpers ........... 40   Level, wob, quad, blob, clump (from remakes_sets), sign (lettering), bricks, window
   court outside ..... 120  court_out: Southwark Crown Court (ref 00): buff brick, the dark sign band, steps, beds
-  courtroom ......... 250  court_box (refs 05, 07: witness box, judge behind), court_bench (the gavel close-up),
+  courtroom ......... 250  court_box (refs 05, 07: witness box, judge behind), court_jury (the reverse onto the jury
+                           box, Sam's note 10), court_bench (the gavel close-up, unused since 12 Nov),
                            court_dock (refs 08, 11: the glass dock), _arms (the royal arms over the bench)
   van ............... 400  van: the cubicle (no photo found: Sam's list), street lights sliding past its window
   prison ............ 450  cell (refs 12-14: bed, window, toilet, blue door open to the landing), cell_cot (a
@@ -391,6 +392,68 @@ def court_box_front(img, cam, t=0.0):
     p.poly(quad(540, 1770, 990, 1990), mix(OAK, OAK_D, 0.45), None)
     p.poly([(860, 1668), (1010, 1668), (1020, 1648), (872, 1648)], (40, 36, 34), INK, 1.6)   # the Bible on the ledge
     _mic(p, (520, 1664), (610, 1300), 3.0)
+
+
+JURY_FRONT_Y = 1690          # the front row's ledge (screen y): over their chests
+JURY_BACK_Y = 1420           # the back row's: their own box rail, between the two rows
+
+
+def court_jury(img, cam, t=0.0):
+    """Sam's note 10 (12 Nov): the reverse shot from the witness box onto the jury box across the court: the same
+    pale panelled walls (refs 05, 07), tall windows with their blinds half down, a picture rail, the back row's
+    high oak bench back; two tiers of six jurors (cast, drawn by the film between this, the mid rail and the front)."""
+    p = B.Pen(img, cam)
+    _panels(p, -300, -400, W + 300, 1250, 120, 31)
+    p.poly(quad(-300, 120, W + 300, 136), dk(WALL, 0.88), INK, 1.4)                         # the picture rail
+    for k, x in enumerate((110, 690)):                                                      # two tall windows
+        window(p, (x, 230, x + 280, 760), (200, 196, 186), (186, 204, 214), 41 + k, bars=2, blind=(BLIND, 0.45))
+    p.poly(wob(quad(450, 300, 630, 900), 1.2, 44), OAK_D, INK, 2.4)                         # a door to the jury room
+    p.poly(quad(470, 330, 610, 580), mix(OAK, OAK_D, 0.4), INK, 1.4)
+    p.poly(quad(470, 620, 610, 880), mix(OAK, OAK_D, 0.4), INK, 1.4)
+    p.ell(600, 600, 7, 7, (200, 170, 90), INK, 1.2)
+    p.poly(quad(-300, 930, W + 300, 962), OAK_D, INK, 2.0)                                  # the dado rail
+    p.poly(wob(quad(-300, 970, W + 300, 1460), 1.2, 45), OAK, INK, 3.0)                     # the back row's high bench
+    for k in range(9):                                                                     # back, in raised panels
+        a = -260 + k * 160
+        p.poly(quad(a + 14, 1000, a + 146, 1300), mix(OAK, OAK_D, 0.35), INK, 1.4)
+    p.poly(quad(-300, 960, W + 300, 990), OAK_L, INK, 2.2)                                  # its top rail
+
+
+def court_jury_mid(img, cam, t=0.0):
+    """The back row's own box front, over their laps, under the front row (and the front row's bench back)."""
+    p = B.Pen(img, cam)
+    y = JURY_BACK_Y
+    p.poly(wob(quad(-300, y, W + 300, 2400), 1.2, 46), OAK, INK, 3.0)
+    p.poly(quad(-300, y - 18, W + 300, y + 6), OAK_L, INK, 2.4)                             # the ledge
+    for k in range(9):
+        a = -260 + k * 160
+        p.poly(quad(a + 14, y + 34, a + 146, y + 260), mix(OAK, OAK_D, 0.35), INK, 1.4)
+    for x in (130, 560, 930):                                                               # notepads on the ledge
+        p.poly([(x, y - 18), (x + 70, y - 18), (x + 80, y - 30), (x + 10, y - 30)], (246, 244, 236), INK, 1.2)
+
+
+def court_jury_front(img, cam, t=0.0):
+    """The front row's box: pale oak front and ledge over their chests; notepads, pens, a water jug and tumblers."""
+    p = B.Pen(img, cam)
+    y = JURY_FRONT_Y
+    p.poly(wob(quad(-300, y, W + 300, 2400), 1.4, 47), OAK, INK, 3.2)
+    for k in range(7):
+        a = -230 + k * 230
+        p.poly(quad(a + 18, y + 50, a + 212, 1960), OAK_D, INK, 1.6)
+        p.poly(quad(a + 28, y + 60, a + 202, 1950), mix(OAK, OAK_D, 0.4), None)
+    p.poly(quad(-300, y - 26, W + 300, y + 8), OAK_L, INK, 2.6)                             # the ledge
+    r = random.Random(48)
+    for x in (60, 300, 760, 1000):                                                          # notepads and pens
+        x += r.uniform(-20, 20)
+        p.poly([(x - 50, y - 26), (x + 50, y - 26), (x + 62, y - 44), (x - 38, y - 44)], (246, 244, 236), INK, 1.4)
+        p.line([(x - 20, y - 36), (x + 30, y - 40)], (30, 60, 140), 3.0)
+    jx = 540                                                                               # the water jug, tumblers
+    p.poly([(jx - 30, y - 26), (jx + 30, y - 26), (jx + 34, y - 100), (jx + 20, y - 118), (jx - 26, y - 116),
+            (jx - 34, y - 100)], (214, 228, 234), INK, 2.0)
+    p.poly(quad(jx - 28, y - 80, jx + 30, y - 30), (186, 210, 222), None)                   # the water in it
+    p.line([(jx + 30, y - 96), (jx + 50, y - 86), (jx + 48, y - 50), (jx + 32, y - 44)], INK, 2.2)   # its handle
+    for x in (jx - 74, jx + 80):
+        p.poly([(x - 16, y - 26), (x + 16, y - 26), (x + 18, y - 70), (x - 18, y - 70)], (214, 228, 234), INK, 1.6)
 
 
 def court_bench(img, cam, t=0.0):
@@ -1033,6 +1096,8 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
                                                            (1.7, 2.7), (-1.75, 2.8), (-0.8, 3.1), (0.95, 3.2)]},
     'court_box': {'brand': (720, 2240, 600.0), 'judge': (300, 1330, 420.0)},     # judge: neck point's x, seat
     'court_bench': {'judge': (540, 1780, 620.0)},
+    'court_jury': {'back': [(30 + 206 * k, 1643, 380.0) for k in range(6)],      # seated: feet on each tier
+                   'front': [(-60 + 240 * k, 1945, 430.0) for k in range(6)]},
     'court_dock': {'brand': (560, 2240, 600.0), 'guard1': (170, 1540, 400.0), 'guard2': (910, 1540, 400.0)},
     'van': {'brand': (540, 1600, 760.0)},                                        # seated, bent over
     'cell': {'brand': (600, 1820, 520.0), 'officer': (1000, 1700, 480.0)},
@@ -1191,12 +1256,12 @@ BENCHMARK = [
 
 
 # ================================================================================================ sheets
-VIEWS = ('court_out', 'court_box', 'court_bench', 'court_dock', 'van', 'cell', 'cell_cot', 'phone', 'tvroom', 'tv',
+VIEWS = ('court_out', 'court_box', 'court_jury', 'court_bench', 'court_dock', 'van', 'cell', 'cell_cot', 'phone', 'tvroom', 'tv',
          'gates')
-BACK = {'court_out': court_out, 'court_box': court_box, 'court_bench': court_bench, 'court_dock': court_dock,
+BACK = {'court_out': court_out, 'court_box': court_box, 'court_jury': court_jury, 'court_bench': court_bench, 'court_dock': court_dock,
         'van': van, 'cell': cell, 'phone': phone, 'tvroom': tvroom, 'gates': gates}
-MID = {'court_box': court_box_mid, 'court_dock': court_dock_mid}
-FRONT = {'court_box': court_box_front, 'court_bench': court_bench_front, 'court_dock': court_dock_front,
+MID = {'court_box': court_box_mid, 'court_dock': court_dock_mid, 'court_jury': court_jury_mid}
+FRONT = {'court_box': court_box_front, 'court_jury': court_jury_front, 'court_bench': court_bench_front, 'court_dock': court_dock_front,
          'van': van_front, 'tvroom': lambda img, cam, t: tv_flicker(img, cam, t)}
 
 

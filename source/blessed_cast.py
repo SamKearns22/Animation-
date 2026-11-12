@@ -714,9 +714,13 @@ INMATE_FACES = {
 }
 
 
+FRONT_FACES = dict(INMATE_FACES)      # every front-only invented face (the jurors add theirs: blessed_jury.py)
+LONG_STYLES = ('bob', 'long', 'curly', 'bun')   # hair that has a mass behind the head, drawn before it
+
+
 def _inmate_layout(who):
     m = dict(P4.AVG)
-    for k, v in INMATE_FACES[who]['m'].items():
+    for k, v in FRONT_FACES[who]["m"].items():
         m[k] = m[k] + v
     return P4.layout(m)
 
@@ -728,14 +732,17 @@ def inmate_head(img, p, sp, t, hx, hy):
 
 def _inmate_head(img, p, sp, t, hx, hy):
     who = sp['who']
-    fc = INMATE_FACES[who]
+    fc = FRONT_FACES[who]
     L = _inmate_layout(who)
     up = max(0.0, -sp.get('gaze_dy', 0.0))                 # looking up at the TV: the face tips up a little
     f = P4.Face(hx, hy, down=-0.8 * up)
     skin, hc = sp['skin'], sp.get('hair_c', (40, 32, 28))
     fw, fhw = L['fw'], L['fhw']
     e, c = fw * 0.5, fhw * 0.5
-    AV._ears(p, f, L, skin)
+    if fc['hair'] in LONG_STYLES:
+        _hair_mass(p, f, L, fc, hc)
+    if fc['hair'] not in ('bob', 'long', 'curly'):
+        AV._ears(p, f, L, skin)
     p.poly(curve(f.pts(_outline(L)), 4), skin, INK, 2.6)
     jaw = [(-e, 0.5), (-L['jw'] * 0.5, 0.82), (-0.08, 0.98), (0.0, 1.0), (0.08, 0.98), (L['jw'] * 0.5, 0.82), (e, 0.5),
            (e * 0.7, 0.62), (L['mw'] * 0.75, L['lip17'] + 0.04), (0.0, L['lip17'] + 0.03),
@@ -777,13 +784,17 @@ def _inmate_head(img, p, sp, t, hx, hy):
             p.poly(oval(*f(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up)), fc['iris'], dk(skin, 0.8),
             liner=2.6)
-    P4.brows(p, f, L, fc['brow'], 0.05 if fc['hair'] != 'side' else 0.04, sp.get('brow_up', 0.012 * up),
-             sp.get('frown', 0.0))
+    if fc.get('glasses'):
+        _glasses(p, f, L, fc['glasses'])
+    P4.brows(p, f, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
+             sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
     P4.nose(p, f, L, skin)
     fx, my = f(0.0, L['lip13'])
     P4.lips(p, f, L, dict(sp, smile=sp.get('smile', -0.4)), fc['lip'], (fx, my - 6))
     hl = -0.06
-    if fc['hair'] == 'crop':                                  # a short crop: a low straight hairline, the skull's shape
+    if fc['hair'] in LONG_STYLES + ('receding', 'pony'):
+        _hair_front(p, f, L, fc, hc, skin)
+    elif fc['hair'] == 'crop':                                  # a short crop: a low straight hairline, the skull's shape
         cap = [(-e - 0.01, 0.3), (-e - 0.02, 0.04), (-e + 0.04, -0.22), (-0.24, -0.38), (0.0, -0.43), (0.24, -0.38),
                (e - 0.04, -0.22), (e + 0.02, 0.04), (e + 0.01, 0.3), (e - 0.02, 0.3), (c + 0.01, 0.12), (c - 0.03, 0.02),
                (c * 0.7, hl), (0.0, hl - 0.012), (-c * 0.7, hl), (-c + 0.03, 0.02), (-c - 0.01, 0.12), (-e + 0.02, 0.3)]
@@ -810,6 +821,89 @@ def _inmate_head(img, p, sp, t, hx, hy):
             p.line(curve(f.pts([(u0, -0.36 + 0.02 * k), (u0 + 0.08, -0.2), (u0 + 0.13, -0.04 + 0.01 * k)]), 3),
                    dk(hc, 0.72), 1.4)
     return fx
+
+
+def _hair_mass(p, f, L, fc, hc):
+    """The hair seen round and below the head from the front (drawn before the face): a bob to the jaw, long hair
+    over the shoulders, a mass of curls, a bun on the crown (the press pack's haircuts, seen from the front)."""
+    e, st = L['fw'] * 0.5, fc['hair']
+    if st == 'bob':
+        pts = [(-e - 0.05, 0.92), (-e - 0.1, 0.5), (-e - 0.08, 0.05), (-e + 0.02, -0.33), (0.0, -0.5), (e - 0.02, -0.33),
+               (e + 0.08, 0.05), (e + 0.1, 0.5), (e + 0.05, 0.92), (e - 0.06, 0.88), (-e + 0.06, 0.88)]
+    elif st == 'long':
+        pts = [(-e - 0.1, 1.5), (-e - 0.13, 0.9), (-e - 0.09, 0.2), (-e + 0.02, -0.34), (0.0, -0.5), (e - 0.02, -0.34),
+               (e + 0.09, 0.2), (e + 0.13, 0.9), (e + 0.1, 1.5), (e - 0.04, 1.42), (-e + 0.04, 1.42)]
+    elif st == 'curly':
+        n, pts = 22, []
+        for k in range(n + 1):
+            a = math.pi * (0.92 + 1.16 * k / n)
+            r = 1.0 + 0.06 * math.sin(k * 2.7)
+            pts.append(((e + 0.17) * r * math.cos(a), 0.22 + 0.62 * r * math.sin(a)))
+        pts += [(e + 0.1, 0.62), (-e - 0.1, 0.62)]
+    else:                                                     # bun: a knot on the crown
+        p.poly(curve(f.pts([(-0.13, -0.46), (-0.12, -0.62), (0.0, -0.68), (0.12, -0.62), (0.13, -0.46)]), 3), hc, INK,
+               2.2)
+        p.line(curve(f.pts([(-0.08, -0.6), (0.0, -0.56), (0.08, -0.6)]), 3), dk(hc, 0.7), 1.4)
+        return
+    p.poly(curve(f.pts(pts), 3), hc, INK, 2.4)
+    rng = np.random.default_rng(len(fc['m']) * 7 + len(st))
+    for _ in range(14 if st != 'curly' else 0):              # strands falling down the mass
+        u = rng.choice([-1, 1]) * rng.uniform(e + 0.01, e + 0.08)
+        v0 = rng.uniform(0.1, 0.4)
+        p.line(curve(f.pts([(u, v0), (u * 1.03, v0 + 0.25), (u * 0.99, v0 + (0.45 if st == 'bob' else 0.9))]), 3),
+               dk(hc, 0.75), 1.3)
+    if st == 'curly':
+        for _ in range(26):
+            a = rng.uniform(math.pi * 0.95, math.pi * 2.05)
+            r = rng.uniform(0.75, 0.95)
+            x, y = f((e + 0.17) * r * math.cos(a), 0.22 + 0.62 * r * math.sin(a))
+            p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+
+
+def _hair_front(p, f, L, fc, hc, skin):
+    """The hair over the forehead (after the face): a fringe for the bob and long hair, curls for the curly mass,
+    hair drawn back to the bun or a ponytail, a grey horseshoe round a bald crown (receding)."""
+    e, c, st = L['fw'] * 0.5, L['fhw'] * 0.5, fc['hair']
+    if st == 'receding':
+        for sgn in (-1, 1):
+            side = [(sgn * (e + 0.02), 0.44), (sgn * (e + 0.03), 0.08), (sgn * (c + 0.02), -0.16),
+                    (sgn * (c - 0.06), -0.12), (sgn * (e - 0.03), 0.12), (sgn * (e - 0.02), 0.42)]
+            p.poly(curve(f.pts(side), 3), hc, INK, 1.6)
+        p.line(curve(f.pts([(-0.12, -0.3), (0.0, -0.33), (0.12, -0.3)]), 3), dk(skin, 0.86), 1.4)
+        return
+    hl = {'bob': -0.02, 'long': -0.08, 'curly': -0.1, 'bun': -0.1, 'pony': -0.1}[st]
+    cap = _press_cap(L, hl)
+    if st == 'bob':                                           # a straight fringe to the brows
+        cap = [(-e - 0.02, 0.36), (-e - 0.03, 0.02), (-e + 0.04, -0.24), (-0.24, -0.4), (0.0, -0.45), (0.24, -0.4),
+               (e - 0.04, -0.24), (e + 0.03, 0.02), (e + 0.02, 0.36), (e - 0.03, 0.34), (c - 0.02, 0.1),
+               (c * 0.6, L['brow_y'] - 0.07), (-c * 0.6, L['brow_y'] - 0.07), (-c + 0.02, 0.1), (-e + 0.03, 0.34)]
+    p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
+    rng = np.random.default_rng(len(fc['m']) + 3)
+    if st == 'curly':
+        for _ in range(16):
+            u, v = rng.uniform(-c, c), rng.uniform(-0.38, hl - 0.04)
+            x, y = f(u, v)
+            p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+    elif st == 'bob':
+        for k in range(7):
+            u = -c * 0.55 + k * c * 0.18
+            p.line(curve(f.pts([(u * 0.6, -0.4), (u * 0.9, -0.2), (u, L['brow_y'] - 0.08)]), 3), dk(hc, 0.72), 1.3)
+    else:                                                     # drawn straight back from the hairline
+        for k in range(7):
+            u = -c * 0.75 + k * c * 0.25
+            p.line(curve(f.pts([(u, hl - 0.02), (u * 0.7, -0.24), (u * 0.3, -0.42)]), 3), dk(hc, 0.72), 1.3)
+
+
+def _glasses(p, f, L, col):
+    """Thin-framed glasses round both eyes, a bridge across the nose."""
+    w, h = L['ew'] * 0.78, L['eh'] * 1.15
+    for sgn in (-1, 1):
+        cx, cy = sgn * L['ecx'], L['eye_y'] + 0.004
+        x0, y0 = f(cx - w, cy - h)
+        x1, y1 = f(cx + w, cy + h)
+        p.poly(oval((x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2, 18), None, col, 2.6)
+    p.line(curve(f.pts([(-L['ecx'] + w, L['eye_y'] - 0.01), (0.0, L['eye_y'] - 0.03), (L['ecx'] - w, L['eye_y'] - 0.01)]),
+                 3), col, 2.4)
 
 
 TC.HEADS.update(brand=brand_head, judge=judge_head)
