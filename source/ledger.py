@@ -24,6 +24,8 @@ MAP
   audit item 4 ..... (Sam, 12 Nov) auto saves the last cost when the chat pushes its work; merge (git's driver for
                      ledger files) keeps each chat's larger cost; monday_question() / fit: the app's weekly figure
                      re-fits the allowance (allowance.json, read by costwatch); every % says "about, ±20%"
+  chain_stop() ..... audit item 6: when a chat pushes its handover and its "Where things stand" puts a check off
+                     ("still to do"), auto stops the chain of chats and tells the chat to ask Sam (once per line)
 
     python3 source/ledger.py estimate FILM 10 --stages "cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5"
     python3 source/ledger.py stage FILM cast          (at the end of each stage)
@@ -152,10 +154,18 @@ def auto(transcript):
     d = load(film)
     old = next((c for c in d['chats'] if c['chat'] == chat), None)
     ending = _pushed_this_turn(transcript)        # audit item 4 (Sam, 12 Nov): a chat's last cost is saved whatever it
+    stop_chain = chain_stop(film) if ending else ''   # audit item 6: a handover putting a check off stops the chain
+    if stop_chain and d.get('chain_told') == stop_chain:
+        stop_chain = ''                           # told once per handover line, so a chat that answers is not held
+    elif stop_chain:
+        d['chain_told'] = stop_chain
+        store(d)
     if old and (abs(old['cost'] - cost) < 0.01 or (abs(old.get('pushed', old['cost']) - cost) < 0.25 and not ending)):
         if old and abs(old['cost'] - cost) >= 0.01:   # moved (a chat pushes its work at its end): written every reply,
             old.update(cost=cost, model=model)      # committed and pushed at 0.25 or when the chat pushed its work
             store(d)
+        if stop_chain:
+            print(json.dumps({'decision': 'block', 'reason': stop_chain}))
         return
     row = dict(old or {'date': str(date.today()), 'chat': chat, 'stage': 'auto', 'round': None, 'notes': 0,
                        'repeats': []}, model=model, cost=cost, pushed=cost)
@@ -177,6 +187,7 @@ def auto(transcript):
     fore = forecast_alarm(d)
     alarm = alarm or (stop + (' ' + forecast_line(d) if fore else '') if stop else fore)
     store(d)
+    alarm = ' '.join(x for x in (stop_chain, alarm) if x)
     if alarm:
         print(json.dumps({'decision': 'block', 'reason': alarm}))
     if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
@@ -193,6 +204,35 @@ def auto(transcript):
             git('push', '-q', 'origin', 'HEAD')                              # this chat's unsaved files)
         elif os.path.exists(os.path.join(ROOT, '.git', 'MERGE_HEAD')):
             git('merge', '--abort')                                          # a clash: leave it to the chat
+
+
+PUT_OFF = re.compile(r"still to do|still to build|not (yet )?built( yet)?|yet to be built|not (yet )?set up( yet)?|"
+                     r"put off|left for later|for a later (chat|stage|round)|built later|to build later|"
+                     r"(next|later) chat (builds|will build|sets up)", re.I)
+
+
+def handover_stops(text):
+    """Audit item 6 (Sam, 12 Nov; CLAUDE.md, the chain): the lines of a "Where things stand" that say a check is
+    still to do. Any one stops the chain of chats: the chat asks Sam instead of opening the next one (Blessed went to
+    animatic with checks a handover had put off to a later chat)."""
+    out = []
+    for m in re.finditer(r'^##+ *Where things stand[^\n]*$(.*?)(?=^## |\Z)', text, re.M | re.S):
+        for ln in m.group(1).splitlines():
+            if re.search(r'\bchecks?\b', ln, re.I) and PUT_OFF.search(ln) and not re.search(
+                    r'\b(nothing|none|no checks?|no check is)\b[^.;]*(' + PUT_OFF.pattern + ')', ln, re.I):
+                out.append(ln.strip(' -*'))
+    return out
+
+
+def chain_stop(film):
+    """The Stop hook's message when the handover just pushed puts a check off ('' if none)."""
+    path = os.path.join(ROOT, 'notes', f'{film}.md')
+    lines = handover_stops(open(path).read()) if os.path.exists(path) else []
+    if not lines:
+        return ''
+    return ('CHAIN STOPS (CLAUDE.md, the chain of chats; audit item 6): the handover says a check is still to do: "'
+            + lines[0][:200] + '". Do not open the next chat. Ask Sam, numbered, your pick first: build the check '
+            'now, or leave it off with his yes (rule 59). The chain count starts again at 1 once he answers.')
 
 
 def _pushed_this_turn(transcript):

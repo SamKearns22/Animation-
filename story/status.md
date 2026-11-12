@@ -1,6 +1,6 @@
 - House look (12 Nov, chat 2): built and tested (paper, per-shape edges and shadows, pairs at 24 fps); off until Sam's Y on the side-by-side clip. Notes: notes/house-look.md.
-- System audit (12 Nov): report done (about 3.0%); Sam said Y to 1-11. Build chain on branch claude/audit-honest-checker:
-  items 2, 3, 4, 11 built (chat 1 of 8); next chat 2 (Opus high) builds 5-9. Joins the main line after Blessed's animatic 1.
+- System audit (12 Nov): Y to 1-11; items 2-9 and 11 built with their checks on branch claude/audit-honest-checker (61 of
+  61 broken examples caught). Paused by Sam (week at 92%) for Blessed; next: kit tests + six-film run (Sonnet), then join.
 - Blessed (12 Nov, chat 3 of 8, Opus): the missing checks built; their faults fixed; full pre-flight found 17 picture
   faults; stopped on budget (3.3% vs 1-1.5%) before animatic 1. Needs Sam: Y for ~1.5% more. Next: Opus medium, fix
   the 17, pre-flight, animatic 1. Notes: notes/blessed.md.

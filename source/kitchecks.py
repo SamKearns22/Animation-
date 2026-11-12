@@ -20,6 +20,8 @@ From what the audit already sees (scene(t) and the set; run inside audit.py's pa
 From the drawing (pre-flight's pass over every 3rd frame; every views.py person drawn is logged):
   facing      a head turned no more than 95 degrees from its body; seen from behind, nothing held out in front
               drawn over the back (Prepper notes 11, 12, 16)
+  still       anyone on screen 3 s with nothing moving (a pose signature logged per drawing), unless STILL_OK =
+              [(name, t0, t1, why)] (audit item 9, rule 74: not only speakers' heads)
   copies      no two people in one frame drawn from one copy (Job K, Sam: Y, 10 Nov; the crowds-from-behind rule made
               automatic): the same build, height, hair, skin and clothes is flagged; meant copies (twins, a reflection)
               in the film's COPIES_OK = [(name, name, why)]. The fix: each one a different build, height and kit detail
@@ -304,6 +306,7 @@ def install():
             if ft is not None:
                 d['_t'] = ft              # the film's time (pre-flight's drawing pass), for cut_rests and faces
             d['_look'] = look(sp)
+            d['_sig'] = pose_sig(j2, x, y, s, sp, t, yaw, head_yaw)   # audit item 9: the still check (still())
             DRAWN.append((where, sp.get('name', 'someone'), d))
         if joints and joints.get('props'):
             POSES.append((where, sp.get('name', 'someone'), sp, joints, t))
@@ -316,6 +319,54 @@ def install():
                     setattr(m, k, person)
         except TypeError:
             continue
+
+
+STILL_S = 3.0                 # seconds: anyone on screen this long with nothing moving is too still (audit item 9)
+
+
+def pose_sig(j2, x, y, s, sp, t, yaw, head_yaw):
+    """Everything about a drawn person that moves: where they stand, their size, which way they and their head face,
+    every joint of the pose as drawn (breathing leans included) and the head's acting (headlife's tilt and nod), to
+    half a unit. Two frames with one signature show the person not moving at all."""
+    vals = [x, y, s, yaw, head_yaw]
+    life = sp.get('head_life')
+    if life is not None and t is not None:
+        try:
+            vals += list(life.at_time(t))
+        except Exception:
+            pass
+    for k in sorted(j2):
+        v = j2[k]
+        if isinstance(v, (tuple, list)) and v and all(isinstance(c, (int, float)) for c in v):
+            vals += list(v)
+    return hash(tuple(round(float(v) * 2) if isinstance(v, (int, float)) else v for v in vals))
+
+
+def still(film, records, gap=0.6):
+    """Rule 74 (audit item 9, Sam 12 Nov: "a too-still check for every person on screen, not only speakers' heads"):
+    from the drawing pass, anyone drawn for STILL_S seconds or more with nothing moving (the same pose signature on
+    every frame drawn) is a fault, unless the film's STILL_OK = [(name, t0, t1, why)] covers that time (a stunned
+    stare; never cured with a looping sway). A gap of more than `gap` s between drawings breaks the run (off screen)."""
+    ok = [e for e in getattr(film, 'STILL_OK', ()) if isinstance(e, (tuple, list)) and len(e) >= 3]
+    by = {}
+    for where, name, d in records:
+        if d.get('_sig') is not None and d.get('_t') is not None:
+            by.setdefault(name, {}).setdefault(d['_t'], set()).add(d['_sig'])
+    out = []
+    for name, frames in sorted(by.items()):
+        ts = sorted(frames)
+        start = 0
+        for i in range(1, len(ts) + 1):
+            if i < len(ts) and frames[ts[i]] == frames[ts[start]] and ts[i] - ts[i - 1] <= gap:
+                continue
+            t0, t1 = ts[start], ts[i - 1]
+            if t1 - t0 >= STILL_S - 1e-6 and not any(fnmatch.fnmatch(name, e[0]) and e[1] <= t0 + 0.3 and t1 <= e[2] + 0.3
+                                                      for e in ok):
+                out.append(f'TOO STILL: {name} does not move at all from {t0:.2f} to {t1:.2f} s ({t1 - t0:.1f} s on '
+                           f'screen): give them a breath lean, a look, a shift of weight (rule 74), or list the hold in '
+                           f'STILL_OK with why')
+            start = i
+    return out
 
 
 def facing(records):

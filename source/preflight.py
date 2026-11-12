@@ -209,6 +209,45 @@ def claim_faults(film, has, drawn_names=()):
     return out
 
 
+ALLOW_LISTS = re.compile(r'^(ALLOWED_\w+|\w+_OK|SET_EXCLUDE|SET_MEANT|ORDER_SWAPS|TOUCHES|FREE_MOVES|AUDIT_ALLOW)$')
+
+
+def _whole(t0, t1, end):
+    return t0 <= 0.1 and t1 >= end - 0.1
+
+
+def allow_faults(film):
+    """Rule 5 (audit item 5, Sam 12 Nov): every "allowed" entry, in every allow-list a film keeps (ALLOWED_CONTACTS,
+    ALLOWED_POPS, SET_EXCLUDE, ORDER_SWAPS, SET_MEANT, TOUCHES, FREE_MOVES, and every NAME_OK list: HANDS_OK,
+    PORTAL_OK, STILL_OK...), gives its reason (the last words in the entry, at least two of them, after the names it
+    matches) and never spans the whole film (a time span from the start to the end lets the check off in silence).
+    One line per list."""
+    end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', 0)) or 1e9
+    out = []
+    for k in sorted(dir(film)):
+        v = getattr(film, k, None)
+        if not ALLOW_LISTS.match(k) or not isinstance(v, (list, tuple)) or k == 'CHECKS_OFF':
+            continue
+        bare, whole = [], []
+        for e in v:
+            e = tuple(e) if isinstance(e, (list, tuple)) else (e,)
+            idx = [i for i, x in enumerate(e) if isinstance(x, str)]
+            last = idx[-1] if idx else -1
+            after = len(e) - 1 - last                 # what follows the reason: nothing, or one cap (ALLOWED_CONTACTS)
+            if last < min(2, len(e) - 1) or after > 1 or len(e[last].split()) < 2:   # names and kinds come first
+                bare.append(e)
+            nums = [(i, x) for i, x in enumerate(e) if isinstance(x, (int, float)) and not isinstance(x, bool)]
+            if any(i2 == i1 + 1 and _whole(a, b, end) for (i1, a), (i2, b) in zip(nums, nums[1:])):
+                whole.append(e)
+        if bare:
+            out.append(f'ALLOWED with no reason: {k}: {len(bare)} of {len(v)} entr{"y" if len(v) == 1 else "ies"} '
+                       f'give no reason (first: {bare[0]!r:.90}): end each entry with why, in words (rule 5)')
+        if whole:
+            out.append(f'ALLOWED for the whole film: {k}: {len(whole)} entr{"y spans" if len(whole) == 1 else "ies span"}'
+                       f' 0 to {end:g} s (first: {whole[0]!r:.90}): give the seconds it is meant for (rule 5)')
+    return out
+
+
 def _drop_dupes(lines, rows):
     """The lines the shared checks print for an input the film lacks ('the film has no OUTFIT', 'SHOT_CAST missing')
     that a NOT RUN line already says, so each missing check is told once, at the top."""
@@ -306,6 +345,40 @@ def gates(film, name):
                    '"Composition sheet sent: DATE, FILE" to the notes file')
     import hookcheck
     out += hookcheck.plan_faults(film)                      # rule 75: the Hook Text planned at the first animatic
+    if os.sep + 'archive' + os.sep not in path:             # a posted film's notes are history
+        out += seen_before_faults(text)
+    return out
+
+
+NOT_FAILED = re.compile(r'seen before\W{0,3}(no\b|new kind)|new kind|not a failed fix|changed decision', re.I)
+
+
+def proven_checks():
+    """The names a "seen before" note can give for its check: checktests.py's cases (c_...) and kittests.py's tests."""
+    names = set()
+    for f in ('checktests.py', 'kittests.py'):
+        p = os.path.join(ROOT, 'source', f)
+        if os.path.exists(p):
+            names |= set(re.findall(r'^def ([a-z]\w*_\w+)\(', open(p).read(), re.M))
+    return names - {'proven_checks'}
+
+
+def seen_before_faults(text, known=None):
+    """Rule 30 (audit item 8, Sam 12 Nov): a "seen before" note means the first fix failed and a check was missing;
+    the check is built in the same round, before the fix is sent. Each such row in the notes' tables names it
+    ("check: c_resting_arm" or a kittests.py test) and the name must be a case that exists. A seen-before that was a
+    changed decision ("not a failed fix", "new kind") needs none."""
+    known = proven_checks() if known is None else known
+    out = []
+    for ln in text.splitlines():
+        if not ln.strip().startswith('|') or not re.search(r'seen before', ln, re.I) or NOT_FAILED.search(ln):
+            continue
+        n = ln.strip().strip('|').split('|')[0].strip()
+        named = [x for x in re.findall(r'\b([a-z]\w*_\w+)\b', ln) if x in known]
+        if not re.search(r'\bcheck\b', ln, re.I) or not named:
+            out.append(f'note {n[:30]} is "seen before" (the first fix failed) but names no built check: build it in '
+                       f'this round, with its broken example in checktests.py or kittests.py, and write "check: NAME" '
+                       f'in the note\'s status before the fix is sent (rule 30)')
     return out
 
 
@@ -637,6 +710,7 @@ def main():
     import plan, benchmark, sets
     people, rooms = 'people' in has, 'rooms' in has
     shared += housestyle.faults(film, B, has)   # the template's house style is on, and each check has its inputs
+    shared += allow_faults(film)                # rule 5: every allowed entry has a reason, none spans the whole film
     if rooms:
         shared += plan.faults(film)         # rule 1: one plan of the world in metres, joined up, a camera per shot
     shared += benchmark.faults(film)        # rule 3: each place benchmarked against its references, all decided
@@ -758,6 +832,8 @@ def main():
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
         problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
+        if not incremental:                     # (an incremental pass draws only some frames: no runs to measure)
+            problems += kitchecks.still(film, drawn)   # audit item 9: anyone on screen 3 s with nothing moving
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
         problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
         problems += kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
