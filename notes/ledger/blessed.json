@@ -120,7 +120,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.27
+   "cost": 1.51
   }
  ],
  "checks": {},
@@ -366,7 +366,8 @@
  },
  "stage_alarm": {
   "5:moves": 3,
-  "7:animatic1": 5
+  "7:animatic1": 7
  },
- "forecast_alarm": 1
+ "forecast_alarm": 1,
+ "alarm": 1
 }
