@@ -19,6 +19,10 @@ Before any of it, it REFUSES to run (rule 14) while the film's brief checklist (
 checklist") has a blank "done?" row, or before the composition sheet has been sent (a line "Composition sheet sent:
 DATE, FILE" in the notes, rule 11); and it fails a film whose shot is missing anyone the brief puts in it (SHOT_CAST,
 against the audit's roster). It prints a short summary; the full list goes to OUT_DIR/NAME-preflight.txt (rule 19).
+Honest (system audit, 12 Nov): every check that does not run (left out by HAS, never set up, or switched off) is a
+"NOT RUN" fault at the top of the list; HAS is checked against what the film gives and draws; --audit counts the
+figure guard's stops; the summary never says "clean" while a check is off (only CHECKS_OFF with Sam's yes and a date
+lets one stay off, and it is still listed first); checktests.py proves each check catches a broken film.
 The shared kit's checks (kitchecks.py, rule 13) run here on every film: facing on the drawing pass, marks, sounds,
 and (inside the audit) hands on what they touch, props held, resting hands clear. handcheck.py (rule 41) probes
 everyone drawn, on every frame: every arm ends in a visible hand. So do viewchecks.py's (rules S7, 16-18,
@@ -57,6 +61,138 @@ SKIP_WHY = {   # check: (the kinds it needs, any of them)
     'real sizes (props)': ('props',),
 }
 MAX_SHOT = 8.0
+
+# --- the honest checker (system audit, 12 Nov; rule 59) -------------------------------------------------------------
+# Every check pre-flight knows of, the kinds of film it is for (rule 58's HAS, any of them), and what the film must
+# give for it to run. A check that does not run is never silent: it is a fault at the top of the list ("NOT RUN"),
+# whether the film's HAS left it out, the film never set it up, or it was switched off; the summary never says
+# "clean" while one is off. The only way past one is CHECKS_OFF = {key: 'Sam, DATE: why'} in the film (Sam's yes,
+# rule 59), and even those are listed at the top of every run. claim_faults() checks HAS itself: a film that says it
+# has no people (or rooms, voices, props, effects) but gives them, or draws them, is a fault however it is set.
+CHECKS = {   # key: (what it checks, the kinds it is for, what the film gives: names, any of them)
+    'rooms': ('the plan, the rooms and the sets\' solids (rules 1, 2, 5, 12, 38)', ('rooms',), ('PLAN',)),
+    'portals': ('every opening shows the space beyond (rule 2)', ('rooms',), ('cam_for',)),
+    'collisions': ('collisions and pop-ins (rules 5, 6)', ('people', 'props'), ('scene', 'solids')),
+    'clip': ('passes through, teleports, drawing order (rule 57)', ('people', 'props'),
+             ('solids', 'layers', 'IN_SHOT', 'draw_order')),
+    'set feet': ('people moving through the set against its solid things (rule 13)', ('people+rooms',),
+                 ('SET_FEET',)),
+    'shot cast': ('who is in each shot (rule 14)', ('people',), ('SHOT_CAST',)),
+    'hands': ('hands, facing, poses, rests, copies and cut rests on the drawing pass (rules 13, 41, 72)', ('people',),
+              ()),
+    'body audit': ('each body alone: in pieces, popping, stretching, frozen (the general audit)', ('people',),
+                   ('audits',)),
+    'line work': ('every shape outlined, one weight', ('people',), ('LINE_SUBJECTS',)),
+    'clothes': ('clothes against the body (skirts from the waist, jackets to the hips)', ('people',), ('OUTFIT',)),
+    'famous faces': ('each famous face 240 px tall once (rule 50)', ('people',), ('FAMOUS',)),
+    'script and mouths': ('script v recordings v subtitles, and the mouths drawn (rule 7)', ('voices',), ('LINES',)),
+    'captions': ('subtitles readable: rows, width, reading speed (rule 62)', ('voices',), ('caption_at',)),
+    'sizes': ('props and set pieces at their real size', ('props',), ('PROP_SIZES',)),
+    'effect order': ('an effect never flips from in front to behind mid-shot (rule 57)', ('effects',),
+                     ('draw_order', 'layers')),
+    'shot lengths': ('shots over 8 s flagged; the shot named at every fault', ('*',), ('SHOTS',)),
+}
+_DATE = r'\b\d{1,2} (jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\b'
+
+
+def _gives(film, name):
+    v = getattr(film, name, None)
+    if v is None:
+        return False
+    if name == 'LINES':                         # LINES = [] is "no lines": the script check has nothing to check
+        return bool(v)
+    return True
+
+
+def coverage(film, has):
+    """The checks that will not run on this film: [(key, how, why)], how = 'left out by HAS', 'not set up' or 'off
+    with Sam's yes'. Read from the film alone (nothing drawn), so --text shows it too."""
+    off = dict(getattr(film, 'CHECKS_OFF', {}) or {})
+    out = []
+    for key, (what, kinds, gives) in CHECKS.items():
+        if kinds == ('*',):
+            wanted = True
+        elif kinds == ('people+rooms',):
+            wanted = 'people' in has and 'rooms' in has
+        else:
+            wanted = any(k in has for k in kinds)
+        if key == 'set feet' and wanted and getattr(film, 'SET_FEET', None) is None:
+            how, why = 'not set up', 'the film has people in rooms but no SET_FEET, movers(t), SET_CAM and MOVE_SPAN'
+        elif key == 'effect order' and not getattr(film, 'EFFECTS', None):
+            continue                            # (no EFFECTS listed: nothing to order; claim_faults asks if it lists any)
+        elif not wanted:
+            need = ' and '.join(kinds[0].split('+')) if kinds == ('people+rooms',) else ' or '.join(kinds)
+            how, why = 'left out by HAS', f'HAS says the film has no {need}'
+        elif gives and not any(_gives(film, g) for g in gives):
+            how, why = 'not set up', 'the film has no ' + ' or '.join(gives)
+        else:
+            continue
+        if key in off:
+            reason = str(off[key])
+            if re.search(r'\bSam\b', reason) and re.search(_DATE, reason, re.I):
+                how, why = "off with Sam's yes", reason
+        out.append((key, how, why))
+    for key in off:
+        if key not in CHECKS:
+            out.append((key, 'not set up', f'CHECKS_OFF names {key!r}, which is not a check (keys: '
+                                           + ', '.join(CHECKS) + ')'))
+    return out
+
+
+def coverage_lines(film, rows):
+    """(faults, offs): one line per check that will not run. A check off without Sam's yes (a CHECKS_OFF entry with
+    no 'Sam' and a date) is a fault like any other."""
+    off = dict(getattr(film, 'CHECKS_OFF', {}) or {})
+    faults, offs = [], []
+    for key, how, why in rows:
+        what = CHECKS[key][0] if key in CHECKS else key
+        if how == "off with Sam's yes":
+            offs.append(f'OFF (Sam\'s yes): {key}: {what}: {why}')
+            continue
+        tail = (f' (CHECKS_OFF[{key!r}] does not say Sam said yes, and when: {off[key]!r})' if key in off else
+                ': set it up, or ask Sam and record his yes in CHECKS_OFF (rule 59)')
+        faults.append(f'NOT RUN: {key} ({how}): {what}: {why}{tail}')
+    return faults, offs
+
+
+def claim_faults(film, has, drawn_names=()):
+    """What the film says it contains (HAS) against what it gives and draws (system audit, 12 Nov: Remakes said 'no
+    people, no rooms' with a cast and painted sets, and five checks never ran). A fault for each kind it leaves out
+    but has; a yes in CHECKS_OFF does not excuse it (Sam's yes was for a film without them)."""
+    out = []
+    plan = getattr(film, 'PLAN', None) or {}
+    rooms_in_plan = plan.get('ROOMS') if isinstance(plan, dict) else getattr(plan, 'rooms', None)
+    people_in_plan = plan.get('PEOPLE') if isinstance(plan, dict) else getattr(plan, 'people', None)
+    base = (getattr(film, '__name__', '') or '').split('.')[-1]
+    set_mods = sorted(n for n in sys.modules if n.startswith(base + '_') and
+                      re.search(r'_(sets?|rooms?|office|interior|house|studio)$', n)) if base else []
+    cast = sorted({n for names in (getattr(film, 'SHOT_CAST', None) or {}).values() for n in names})
+    famous = list(getattr(film, 'FAMOUS', None) or [])
+    drawn_names = sorted(set(drawn_names))
+    evidence = {
+        'people': ([f'SHOT_CAST puts {", ".join(cast[:4])} on screen'] if cast else []) +
+                  ([f'FAMOUS lists {", ".join(famous[:3])}'] if famous else []) +
+                  (['the plan has PEOPLE'] if people_in_plan else []) +
+                  ([f'the drawing pass drew {", ".join(drawn_names[:4])}'] if drawn_names else []),
+        'rooms': (['the plan has ROOMS'] if rooms_in_plan else []) +
+                 ([f'it draws sets from {", ".join(m + ".py" for m in set_mods)}'] if set_mods else []),
+        'voices': ['LINES has the script\'s lines'] if getattr(film, 'LINES', None) else [],
+        'props': ['PROP_SIZES lists props'] if getattr(film, 'PROP_SIZES', None) else [],
+        'effects': ['EFFECTS lists effects'] if getattr(film, 'EFFECTS', None) else [],
+    }
+    for kind, why in evidence.items():
+        if kind not in has and why:
+            out.append(f'HAS: the film says it has no {kind}, but ' + '; '.join(why) + f': add {kind!r} to HAS and '
+                       'set up its checks (rule 58), or, if HAS is right, take them out')
+    return out
+
+
+def _drop_dupes(lines, rows):
+    """The lines the shared checks print for an input the film lacks ('the film has no OUTFIT', 'SHOT_CAST missing')
+    that a NOT RUN line already says, so each missing check is told once, at the top."""
+    names = {g for key, how, _ in rows if how == 'not set up' and key in CHECKS for g in CHECKS[key][2]}
+    pats = [re.compile(rf'(\bno {re.escape(n)}\b|\b{re.escape(n)} missing\b|has no {re.escape(n)}\(t\))') for n in names]
+    return [x for x in lines if not any(p.search(x) for p in pats)]
 
 
 _FILM = None
@@ -158,9 +294,15 @@ def gate_warnings(film, name, has):
     out = []
     path = notes_path(film, name)
     text = open(path).read() if os.path.exists(path) else ''
+    old = os.path.join(os.path.dirname(path), 'archive', os.path.basename(path))   # a posted film's notes (audit,
+    if old != path and os.path.exists(old):                                        # 12 Nov: they were never read)
+        text += '\n' + open(old).read()
     if 'voices' in has:
-        m = re.search(r'^##+ *(The )?acting list.*?$(.*?)(?=^## |\Z)', text, re.M | re.S | re.I)
-        rows = [ln for ln in (m.group(2).splitlines() if m else []) if ln.strip().startswith('|')][2:]
+        # "## The acting list", "## Acting (rule 74 ...)", "## Acting, line 9": every table row under any of them
+        # (audit, 12 Nov: Ad-Vanced Notice's and Islamocommunism's lists were under "## Acting" and read as missing)
+        rows = []
+        for m in re.finditer(r'^##+ *(The )?acting\b(?! questions)[^\n]*$(.*?)(?=^##+ |\Z)', text, re.M | re.S | re.I):
+            rows += [ln for ln in m.group(2).splitlines() if ln.strip().startswith('|')][2:]
         if not rows:
             out.append('no acting list in the notes (rule 74: one row per line; guides/satire.md "The acting list")')
     out += head_life_faults(film)
@@ -220,6 +362,26 @@ def cast_faults(film, roster):
     return out
 
 
+def _clean_word(offs):
+    """Never the bare word 'clean' while a check is off (audit, 12 Nov)."""
+    return 'clean' if not offs else f'no faults found, but {len(offs)} check(s) did not run (Sam\'s yes, listed above)'
+
+
+def _audit_guard_faults():
+    """--audit (audit, 12 Nov): the figure guard's stops that --audit let through to keep going, as faults, each kind
+    once with how often (they used to go only into the file's small print, so a finished film's audit undercounted).
+    The film's own named breaks (F.allow('a gag')) stay small print: they were meant."""
+    seen = {}
+    for m in F.LOG:
+        if not m.endswith('(allowed: audit of a finished film)'):
+            continue
+        where, _, what = m.partition(': ')
+        what = what.rsplit(' (allowed', 1)[0]
+        key = (where.split(' ')[0], what.split(':')[-1].strip()[:60])
+        seen.setdefault(key, [0, m.rsplit(' (allowed', 1)[0]])[0] += 1
+    return [f'figure guard: {first} ({n} frame(s); a normal pre-flight stops here)' for n, first in seen.values()]
+
+
 def _sheet_tile(k):
     t = k + 0.5
     try:
@@ -254,6 +416,57 @@ def _checks_hash():
             with open(path, 'rb') as fh:
                 h.update(fh.read())
     return h.hexdigest()
+
+
+def _sha(path):
+    with open(path, 'rb') as fh:
+        return hashlib.sha1(fh.read()).hexdigest()
+
+
+def _check_files(name):
+    """The check code an incremental run trusts, {file: sha1} (audit, 12 Nov, question 5): CHECK_FILES, and every
+    other module from source/ loaded now, so a check module missing from CHECK_FILES (turnhead.py, setcheck.py,
+    posegallery.py, grips.py...) cannot change while an old clean run is trusted. The film's own drawing code is left
+    out (its pictures are compared instead); its own check modules (NAME_checks.py) are kept."""
+    import turnhead  # noqa: F401  (the drawing workers load it; its file counts)
+    here = os.path.join(ROOT, 'source')
+    out = {}
+    for mod in list(sys.modules.values()):
+        path = os.path.abspath(getattr(mod, '__file__', None) or '')
+        if not path.endswith('.py') or os.path.dirname(path) != here:
+            continue
+        stem = os.path.basename(path)[:-3]
+        if (stem == name or stem.startswith(name + '_')) and not re.search(r'check|audit', stem):
+            continue
+        out[os.path.basename(path)] = _sha(path)
+    for f in CHECK_FILES:
+        if os.path.exists(os.path.join(here, f)):
+            out[f] = _sha(os.path.join(here, f))
+    return out
+
+
+def _files_changed(files):
+    """The first check file that changed since the stamp (None: none did)."""
+    here = os.path.join(ROOT, 'source')
+    for f, h in sorted((files or {}).items()):
+        path = os.path.join(here, f)
+        if not os.path.exists(path) or _sha(path) != h:
+            return f
+    return None
+
+
+def _recheck(film, changed, n_frames, fps):
+    """The frames an incremental run redraws: each changed frame and 3 either side, and (audit, 12 Nov, question 5)
+    the last CUT_TAIL + 0.8 s of every shot that holds a changed frame, which is all kitchecks.cut_rests looks at: a fix
+    that makes an arm drop to rest just before a cut changes only the last frames, and the pose before them was not
+    redrawn, so the drop went unseen."""
+    import kitchecks
+    todo = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))}
+    tail = kitchecks.CUT_TAIL + 0.8 + 3 / fps
+    for _n, a, b in [s[:3] for s in getattr(film, 'SHOTS', [])]:
+        if any(a * fps <= i < b * fps for i in changed):
+            todo |= set(range(max(0, int((b - tail) * fps)), min(n_frames, int(round(b * fps)) + 1)))
+    return todo
 
 
 def _plain(v):
@@ -323,7 +536,7 @@ def _in_child(fn, *args):
     return val
 
 
-def _text_only(film, problems, end, fps):
+def _text_only(film, problems, end, fps, offs=()):
     """`preflight.py NAME OUT --text` (film-quality-rules 67): after the shared checks, only the subtitles (rows, reading
     speed) and shot lengths; no frame is drawn. Fix text faults here until it is clean, then run the full pre-flight once."""
     if hasattr(film, 'caption_at'):             # rule 62 at the delivered speed (rule 70: 1.1x), in the kit's style
@@ -332,8 +545,8 @@ def _text_only(film, problems, end, fps):
     for s in getattr(film, 'SHOTS', []):
         if s[2] - s[1] > MAX_SHOT:
             problems.append(f'shot {s[0]} ({s[1]:.1f}-{s[2]:.1f} s) is {s[2] - s[1]:.1f} s long (over {MAX_SHOT:.0f} s)')
-    print('quick check (--text):', 'clean' if not problems else f'{len(problems)} fault(s)')
-    for x in problems:
+    print('quick check (--text):', _clean_word(offs) if not problems else f'{len(problems)} fault(s)')
+    for x in list(offs) + problems:
         print(' -', x)
     print('(no pass stamp: the render still needs the full pre-flight)')
 
@@ -350,9 +563,12 @@ def main():
     if unknown:
         sys.exit(f'preflight: HAS has {sorted(unknown)}; use only {KINDS}')
     runs = {c: any(k in has for k in need) for c, need in SKIP_WHY.items()}
-    skipped = [c for c, on in runs.items() if not on]
-    if skipped:
-        print('skipped (the film has no ' + ', '.join(k for k in KINDS if k not in has) + '; HAS): ' + '; '.join(skipped))
+    cover = coverage(film, has)                 # the honest checker (audit, 12 Nov): every check that will not run
+    not_run, offs = coverage_lines(film, cover)
+    not_run += claim_faults(film, has)          # HAS against what the film gives
+    if not_run or offs:
+        print(f'CHECKS NOT RUN: {len(not_run)} fault(s)' + (f', {len(offs)} off with Sam\'s yes' if offs else '') +
+              ' (each listed first below)')
     stop = gates(film, name)   # rule 14: refuse while the brief or the sheet is not done
     warn = gate_warnings(film, name, has)      # Job J: rules 8, 61, 74
     path = notes_path(film, name)
@@ -376,6 +592,7 @@ def main():
     if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
         film.checks()
     shared = ['gate: ' + x for x in stop]       # the shared checks every film gets (Sam, 18 Oct: catch it before I do)
+    head = list(not_run)                        # the checks that did not run: always at the top of the list
     B.SS = 1
     import audit as collisions, clipcheck, hookcheck, linecheck, musiccheck, sizes, landmarks, housestyle
     import plan, benchmark, sets
@@ -423,7 +640,8 @@ def main():
         shared += _in_child(landmarks.faults, film)   # after about 330 frames: the Elder Swindon hang, 8 Nov)
     if 'props' in has:
         shared += _in_child(sizes.faults, film)  # props and set pieces at their real size
-    print('shared checks:', 'clean' if not shared else f'{len(shared)} fault(s)')
+    shared = head + _drop_dupes(shared, cover)  # each missing check told once, at the top
+    print('shared checks:', _clean_word(offs) if not shared else f'{len(shared)} fault(s)')
     end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', 0))
     if not end:                                 # a film without an end time would pass having checked nothing
         sys.exit('preflight: the film module needs BLACK_AT or DUR (its length in seconds)')
@@ -431,7 +649,7 @@ def main():
     problems = list(shared)
     B.SS = 1
     if '--text' in sys.argv:                    # rule 67: the quick check, in seconds: the plan, script, mouths, subtitles
-        _text_only(film, problems, end, fps)    # and shot lengths; no picture passes, no sheet, and never a pass stamp
+        _text_only(film, problems, end, fps, offs)   # and shot lengths; no picture passes, no sheet, never a pass stamp
         sys.exit(1 if problems else 0)
     # 2. every 3rd frame, small: the checks inside the drawing code (all processor cores)
     global _FILM, _FPS
@@ -452,22 +670,24 @@ def main():
             except (OSError, ValueError):
                 prev = None
             chk, cfg = _checks_hash(), _config_hash(film)
+            moved = _files_changed(prev.get('files')) if prev and prev.get('files') else 'no list of check files'
             incremental = bool(prev and prev.get('clean') and prev.get('checks') == chk and prev.get('config') == cfg
-                               and prev.get('n') == n_frames and prev.get('fps') == fps)
+                               and prev.get('n') == n_frames and prev.get('fps') == fps and moved is None)
             if incremental:
                 changed = [i for i in range(n_frames) if hashes[i] != prev['hashes'][i]]
-                near = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))}
+                near = _recheck(film, changed, n_frames, fps)
                 print(f'incremental pre-flight: {len(changed)} of {n_frames} frames changed since the last clean run; '
                       f're-checking {len(near)} (the rest were clean then and are unchanged). --full re-checks all.')
             elif prev:
                 why = ('the last run found a frame-level fault' if not prev.get('clean') else
                        'the check code changed' if prev.get('checks') != chk else
+                       f'the check code changed ({moved})' if moved else
                        'the film\'s settings or allow-lists changed' if prev.get('config') != cfg else
                        'the length changed')
                 print(f'full pre-flight (not incremental: {why})')
             else:
                 print('full pre-flight (no earlier clean run to compare with)')
-        todo = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))} if incremental else None
+        todo = _recheck(film, changed, n_frames, fps) if incremental else None
         hands = []
         first = [i for i in range(0, n_frames, 3) if todo is None or i in todo]
         heads_seen, heads_missing = set(), {}
@@ -510,11 +730,19 @@ def main():
             problems += film.audits()
         finally:
             filmkit.ONLY_FRAMES = None
+    if 'people' not in has:                     # HAS against what the drawing pass really drew (views.py people)
+        drawn_names = sorted({str(r[1]) for r in drawn if len(r) > 1})
+        late = [x for x in claim_faults(film, has, drawn_names) if 'drawing pass' in x and x not in problems]
+        problems[:0] = late
+        not_run += late
+        n_text += len(late)
+    if audit:                                   # --audit lets a bad drawing go on (so every fault is listed): the
+        problems += _audit_guard_faults()       # figure guard's stops still count, they are not small print
     if stamp_ok and hashes is not None:         # the fingerprints for the next run; "clean" = no frame-level fault
         os.makedirs(os.path.dirname(_frames_path(name)), exist_ok=True)
         with open(_frames_path(name), 'w') as fh:
             json.dump({'checks': _checks_hash(), 'config': _config_hash(film), 'n': n_frames, 'fps': fps,
-                       'hashes': hashes, 'clean': len(problems) == n_text}, fh)
+                       'hashes': hashes, 'clean': len(problems) == n_text, 'files': _check_files(name)}, fh)
     # 3. captions
     if hasattr(film, 'caption_at'):             # rule 62 at the delivered speed (rule 70: 1.1x), in the kit's style
         import subtitles as SUB
@@ -561,11 +789,11 @@ def main():
             problems.append(f'{line}: pre-flight refuses the animatic (rule 89) until the round\'s last critique pass '
                             'is clean, or its faults are named to Sam (then add --faults-named)')
     report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'),
-                     notes=(['The figure guard (allowed drawings, how often):'] + log) if log else ())
+                     notes=(['The figure guard (allowed drawings, how often):'] + log) if log else (), off=offs)
     print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
     if not audit:
         import film_engine                      # rule 59: the render checks this stamp before an animatic or final
-        film_engine.write_pass(name, len(problems))
+        film_engine.write_pass(name, len(problems), not_run=len(not_run))
     sys.exit(1 if problems else 0)
 
 

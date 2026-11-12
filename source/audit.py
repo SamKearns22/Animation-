@@ -330,6 +330,14 @@ def run(film, t0=None, t1=None, shots=None, sub=SUB, log=print):
                 recs.append((i, t, shot, {n: (things[n].kind, things[n].pos, bool(seen[x]), bool(inside[x]), box[x])
                                           for x, n in enumerate(names)}))
     faults = _collisions(hits, fps, sub) + _pops(film, recs) + shared.faults()
+    blind = sorted({r[2] for r in recs if r[3] and all(not v[3] for v in r[3].values())
+                    and _project(film, film.cam_for(r[1]) if hasattr(film, 'cam_for') else None,
+                                 np.zeros((1, 3))) is None})
+    if blind:                             # system audit, 12 Nov: with a camera it cannot read, nothing is ever "inside
+        faults.append(dict(what='untested', t=0.0, names=(), shot=blind[0],   # the frame", so the pop-in test was off
+                           text=f'pop-ins in shot(s) {", ".join(map(str, blind))}: the camera cannot be '
+                                'read (give the film project(cam, P), or a Cam3-style camera), so nothing counts as '
+                                'inside the frame and no pop-in can be found'))
     faults.sort(key=lambda f: f['t'])
     global LAST_ROSTER                    # who was on screen in each shot (pre-flight's shot cast check, rule 14)
     LAST_ROSTER = {}

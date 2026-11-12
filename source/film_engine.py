@@ -60,11 +60,12 @@ def code_hash():
     return h.hexdigest()
 
 
-def write_pass(film, faults):
-    """Pre-flight's stamp (rule 59): the code it ran on, and how many faults it found."""
+def write_pass(film, faults, not_run=0):
+    """Pre-flight's stamp (rule 59): the code it ran on, how many faults it found, and how many of them are checks
+    that did not run (left out, never set up, or a CHECKS_OFF entry without Sam's yes)."""
     os.makedirs(PASSES, exist_ok=True)
     with open(os.path.join(PASSES, f'{film}.json'), 'w') as fh:
-        json.dump({'code': code_hash(), 'faults': faults}, fh)
+        json.dump({'code': code_hash(), 'faults': faults, 'not_run': not_run}, fh)
 
 
 def lock_fault(film, faults_named=False):
@@ -77,6 +78,9 @@ def lock_fault(film, faults_named=False):
         stamp = json.load(fh)
     if stamp['code'] != code_hash():
         return f'the code has changed since pre-flight last ran on {film}: run it again'
+    if stamp.get('not_run'):                    # rule 59 (audit, 12 Nov): naming it is not enough; a check that did
+        return (f'pre-flight on {film}: {stamp["not_run"]} check(s) did not run (NOT RUN at the top of its list): '
+                'set each up, or record Sam\'s yes in the film\'s CHECKS_OFF; --faults-named does not cover these')
     if stamp['faults'] and not faults_named:
         return (f'pre-flight found {stamp["faults"]} fault(s) on {film}: fix them, or, if every one has been named to '
                 f'Sam, add --faults-named')

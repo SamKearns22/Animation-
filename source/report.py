@@ -30,29 +30,34 @@ def kind(line):
     return f'{k} {m.group(2)}' if m.group(2) else k
 
 
-def summarise(title, faults, path=None, first=FIRST, notes=()):
+def summarise(title, faults, path=None, first=FIRST, notes=(), off=()):
     """Print the short summary. A file is written only when there are more faults than the summary shows (Sam, 2 Nov:
-    he never reads it; the one line is enough). Returns the printed text."""
+    he never reads it; the one line is enough). Returns the printed text. off: checks that did not run with Sam's yes
+    (preflight's CHECKS_OFF): printed first, every time, and while there are any the summary never says 'clean'
+    (system audit, 12 Nov)."""
     faults = list(faults)
+    off = list(off)
     try:  # the film ledger keeps every round's full result, clean ones too (Job F, Sam 9 Nov)
         import ledger
         ledger.record(title, faults, notes)
     except ImportError:
         pass
-    if path and len(faults) <= first:
+    if path and len(faults) <= first and not off:
         path = None
     if path:
         os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
         with open(path, 'w') as f:
             f.write(f'{title}: {len(faults)} fault(s)\n')
-            f.write(''.join(f'- {x}\n' for x in faults))
+            f.write(''.join(f'- {x}\n' for x in off + faults))
             if notes:
                 f.write('\n' + '\n'.join(notes) + '\n')
     counts = {}
     for x in faults:
         counts[kind(x)] = counts.get(kind(x), 0) + 1
     where = f' (full list: {path})' if path else ''
-    if not faults:
+    if not faults and off:
+        out = [f'{title}: no faults found, but {len(off)} check(s) did not run (Sam\'s yes):']
+    elif not faults:
         out = [f'{title}: clean']
     else:
         top = ', '.join(f'{k} {n}' for k, n in sorted(counts.items(), key=lambda kv: -kv[1]))
@@ -60,6 +65,8 @@ def summarise(title, faults, path=None, first=FIRST, notes=()):
         out += [' - ' + (x if len(x) <= WIDTH else x[:WIDTH - 3] + '...') for x in faults[:first]]
         if len(faults) > first:
             out.append(f'   ... and {len(faults) - first} more in the file named in the line above')
+    if off:
+        out[1:1] = [' - ' + (x if len(x) <= WIDTH else x[:WIDTH - 3] + '...') for x in off]
     text = '\n'.join(out)
     print(text)
     return text
