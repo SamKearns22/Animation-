@@ -1,3 +1,3 @@
-Blessed: note 25 built (chat 5): Walliams' head passes the likeness check; new shot of him led into the prison door; clip sent.
-Waiting: Sam's notes on the Walliams clip.
-Next: chat 6 (Opus medium): critique of his head, then clips of notes 11-17/24 one at a time, then note 28.
+Blessed: Walliams not recognisable (note 29) and belongs in the background of the gates shot (note 30); both recorded with fixes.
+Waiting: Sam's Y to go on past round 1's share (5.8% vs 2.5%).
+Next: on his Y, chat 6 (Opus high): new Walliams references and head, then put him behind Brand in the gates shot.
