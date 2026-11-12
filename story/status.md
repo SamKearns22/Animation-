@@ -1,3 +1,3 @@
-Blessed: round-2 notes half done (newsreader mouth, one continuous release shot, Walliams' hands, preening, music, sigh, voice before the TV cut). Protest Tiers: news photos for every place and tiers 1 and 3 re-based on November Barcelona and 17 Oct Paris.
-Waiting: Blessed: Sam's voice memo of the guard's line (note 48); Y/N on the dock camera rise (note 37). Protest Tiers: Hook Text and sound (Q3, Q4), asked again with the pencil roughs; scene changes approved.
-Next: Blessed chat 2 of 8 (Opus medium): notes 33, 34, 36, 37, 41, 42, 43 as clips; then chat 3 (Opus high): seated poses, a van option sheet; then animatic 3. Framing research chat (Opus high, rule 86, 1.4%), then Protest Tiers pencil roughs.
+Blessed: Walliams' face job under way: a new blind "who is this?" test (Brand passes, old Walliams failed) and a first redrawn face (pear-shaped head, smirk, stubble); not yet passing.
+Waiting: Blessed: Sam's voice memo of the guard's line (note 48); Y/N on the dock camera rise (note 37); his number on adding the blind test to rule 49. Protest Tiers: Hook Text and sound (Q3, Q4).
+Next: Blessed chat 4 of 8 (Opus high): finish Walliams' face until it passes, then ONE sheet to Sam; then chat 5 (Opus high): seated rebuild, van option sheet, note 48 staging.
