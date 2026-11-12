@@ -140,7 +140,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.43
+   "cost": 1.45
   }
  ],
  "checks": {},
@@ -204,7 +204,10 @@
   {
    "name": "animatic1",
    "pct": 2.0,
-   "done": null
+   "done": {
+    "date": "2026-11-12",
+    "spent": 21.02
+   }
   },
   {
    "name": "round1",
