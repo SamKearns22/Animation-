@@ -560,6 +560,14 @@ def _beard_col(sp):
     return blend(skin, c, 0.55 if light else 0.9), blend(skin, c, 0.85 if light else 1.0)
 
 
+def _sits(j):
+    """Seated, for rule 80's lap check: the pose says so, or the body is down a seat's drop with the feet out in front
+    (a set that paints its own seat turns 'seated' off; a crouch or kneel has its feet under or behind the body)."""
+    feet = [j.get('foot' + s) for s in 'LR']
+    return bool(j.get('seated') or (j.get('bob', 0) >= 150 and all(f and len(f) > 2 and f[2] >= 0.5 * THIGH
+                                                                       for f in feet)))
+
+
 def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
     """The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
     same design (hair kind and colour, beard kind, eyes, brows, nose, glasses, mouth shapes)."""
@@ -927,7 +935,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     # nothing he holds out in front of him is drawn over his back
     j2['_drawn'] = dict(view=view, head=hv, yaw=yaw, head_yaw=yaw if head_yaw is None else head_yaw,
                         held_over_back=rear and held and not held_behind and bool(reach) and
-                        not (under and len(under) == len(j.get('props', []))))
+                        not (under and len(under) == len(j.get('props', []))),
+                        seated=_sits(j), lap=bool(j.get('lap')))   # rule 80 (waivers.lap_faults)
     head_view(img, head_pen, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])
     j2['_drawn']['eyes'] = head_pen.found         # each eye's white and pupil on screen, for the look check (rule 43)
     j2['_drawn']['head_mirror'] = head_mirror
@@ -937,6 +946,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         cx, cy = L0.P(hdx, -150.0 + sp_draw['head_dy'])
         j2['_drawn']['face_px'] = abs(L0.S(2.1 * sp_draw.get('hh', 90))) * 1920.0 / H
         j2['_drawn']['face_in'] = 0 <= cx < img.size[0] and 0 <= cy < H
+        lx, ly = L0.P(*j2['hipL'])                # the lap in the picture at all (waivers.lap_faults, rule 80)
+        j2['_drawn']['lap_in'] = 0 <= lx < img.size[0] and 0 <= ly < H
     except Exception:
         pass
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view

@@ -1474,6 +1474,66 @@ def follow_line_on_signoff():
     return ok, f'film_a {a!r} then {a2!r}, film_b {b!r}, used up stops: {stopped}; card outside the safe area: {worst}'
 
 
+@test
+def exceptions_need_a_written_reason():
+    """Rule 13 (tool chat, 12 Nov): every exception in a film's settings (HANDS_OK, LINE_OK, any *_OK, ALLOWED_POPS)
+    needs a row in the notes' "## Exceptions" with a reason and a full-size look; one without is refused, a pattern
+    row covers its matches, and the staging's meant touches (ALLOWED, TOUCHES) are not exceptions."""
+    import types
+    import waivers as W
+    film = types.SimpleNamespace(HANDS_OK=[('Journalist 3', '*', 'no hand', 0, 1, 'under the phone')],
+                                 LINE_OK=[('brand', 'line weight', 540, 289)], TOUCHES=[('a', 'b', 0, 1, 'meant')])
+    none = W.gate_faults(film, '# notes\n')[0]
+    half = W.gate_faults(film, '## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+                               '| HANDS_OK | Journalist* | seen from behind, under the phone | |\n')[0]
+    full = W.gate_faults(film, '## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+                               '| HANDS_OK | Journalist* | seen from behind, under the phone | sheet r2, panel 4 |\n'
+                               '| LINE_OK | brand | his moustache is a filled shape | sheet r2, panel 1 |\n')[0]
+    n = len(W.entries(film))
+    return (bool(none) and '2 exception' in none[0] and bool(half) and not full and n == 2,
+            f'entries {n}; no table: {len(none)} fault; a row with no look: {len(half)}; both written: {len(full)}')
+
+
+@test
+def house_look_and_lap():
+    """Rule 13's house look and rule 80 (tool chat, 12 Nov; Blessed notes 45, 52): with anyone on their own face,
+    someone on the house head is caught (not in a film where everyone is on it); a seated front-on body with no lap
+    is caught, its lap off the picture is not, and an exceptions row excuses one."""
+    import waivers as W
+    log = [('Brand', 'brand', False, 'tv 1s'), ('Newsreader', 'newsreader', True, 'tv 2s')]
+    all_house = [('A', 'a', True, ''), ('B', 'b', True, '')]
+    table = W.rows('## Exceptions\n| check | who | why | looked at |\n|-|-|-|-|\n'
+                   '| lap | Juror* | behind the box front | sheet 1 |\n')
+    drawn = [('jury 1s', 'Juror 4', dict(view='front', seated=True, lap=False, lap_in=True)),
+             ('tv 2s', 'Inmate', dict(view='front', seated=True, lap=False, lap_in=True)),
+             ('tv 2s', 'Low', dict(view='front', seated=True, lap=False, lap_in=False)),
+             ('tv 2s', 'Kit', dict(view='three', seated=True, lap=True, lap_in=True))]
+    a, b, c = W.look_faults(log), W.look_faults(all_house), W.lap_faults(drawn, table)
+    return (len(a) == 1 and 'Newsreader' in a[0] and not b and len(c) == 1 and 'Inmate' in c[0],
+            f'house head beside own faces: {len(a)}; all house: {len(b)}; laps caught: {[x.split(" ")[1] for x in c]}')
+
+
+@test
+def camera_feel():
+    """Rule 72 (tool chat, 12 Nov; Blessed note 51): a zoom eased over 3 s passes; the same zoom in 0.5 s, or one that
+    starts at full speed, is caught unless the acting list marks its shot sharp; a jump in one frame is a cut."""
+    import types
+    import burnham as B
+    import camfeel as C
+
+    def film(cam, dur=4.0):
+        return types.SimpleNamespace(__name__='fake', SHOTS=[('a', 0.0, dur)], DUR=dur, LINES=[], cam_for=cam)
+    ease = lambda u: 0.5 - 0.5 * math.cos(math.pi * min(1, max(0, u)))
+    slow = film(lambda t: B.Cam(1 + ease((t - 0.5) / 3.0)))
+    fast = film(lambda t: B.Cam(1 + 2 * ease((t - 1.0) / 0.5)))
+    jolt = film(lambda t: B.Cam(1 + 0.6 * max(0.0, min(1.0, (t - 1.0) / 2.5))))
+    cut = film(lambda t: B.Cam(1.0 if t < 2 else 2.0))
+    sharp = '## The acting list\n| line | who | shot and why |\n|-|-|-|\n| 1 | A | a: sharp snap in |\n'
+    r = [C.faults(slow, ''), C.faults(fast, ''), C.faults(fast, sharp), C.faults(jolt, ''), C.faults(cut, '')]
+    return ([len(x) for x in r] == [0, 1, 0, 1, 0],
+            'slow, fast, fast marked sharp, no ease, a cut: ' + str([len(x) for x in r]))
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

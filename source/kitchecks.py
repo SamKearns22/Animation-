@@ -304,6 +304,7 @@ def install():
             if ft is not None:
                 d['_t'] = ft              # the film's time (pre-flight's drawing pass), for cut_rests and faces
             d['_look'] = look(sp)
+            d['_who'] = sp.get('who')     # waivers.unseen_faults: CAST keys
             DRAWN.append((where, sp.get('name', 'someone'), d))
         if joints and joints.get('props'):
             POSES.append((where, sp.get('name', 'someone'), sp, joints, t))
