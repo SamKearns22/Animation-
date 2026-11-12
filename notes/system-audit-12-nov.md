@@ -60,24 +60,27 @@ Blessed comes first (its own budget). Then this job: jobs 1 and 2, then 3, then 
 about 3.5% of a week (the checking runs on Sonnet about 1%, reading old notes on Opus about 1%, fixing the checker on
 Opus about 1.5%). It's a guess; the first chat measures it and says if it's heading higher.
 
-## Where things stand
-- **Sam (12 Nov, before sleeping): start now and see it through to the end, as long as it doesn't get in Blessed's way.
-  It must end with a plain-language report on what this means for quality, cost and how we work.**
-- **Keeping out of Blessed's way:** jobs 1, 2 and 4 only read and report, and each runs in its own chat (its own
-  computer). Job 3 changes the checking tool that Blessed's chat is using right now, so it is built on its own branch,
-  `claude/audit-honest-checker`, and only joins the main line AFTER notes/blessed.md says animatic 1 was sent (if not
-  yet, it waits and says so in the report). Nothing in this job edits Blessed's files.
-- **The chain (chain rule, CLAUDE.md "Models and chats"; each chat opens the next):**
-  - **Chat A, Sonnet, medium:** job 1, the full check on the five films; writes the results per film below. Also
-    gathers the facts for questions 6 (cost record) and 7 (lost work on side branches).
-  - **Chat B, Opus, medium:** job 2 (did it cost notes?), and questions 1, 2, 3, 8 and 10 (reading lists and old notes).
-  - **Chat C, Opus, high:** job 3 (make the checker honest, with its test), and questions 4, 5 and 9 (testing the checks).
-  - **Chat D, Opus, medium:** the final report, `notes/system-audit-report.md`, in plain language: what we found, what
-    it did to quality, what it did to cost, what changes in how we work, and anything Sam needs to decide (numbered,
-    pick first). Sent in the chat, with a push notification.
-- **Rules for the chain:** report only; fix nothing in the five films. Any new rule is PROPOSED in the report, never
-  written (except the rule 59 wording Sam already said yes to). Stop and push-notify if the job passes about 5% of a
-  week. Write every finding here, in plain words, as you go.
+## Where things stand (12 Nov, after chat E, 1 of 8)
+- **Rules that bite next:** 59 (a check left off needs Sam's quoted yes, found in the notes), 13 (every check has a
+  broken example in `checktests.py`), 85 (the cost record).
+- **Done (chat E, Opus high, about 1.3% of a week, ±20%):** audit items 2, 3, 4 and 11 built WITH their checks on
+  `claude/audit-honest-checker` (main line merged in first); rulebook rules 13, 59, 85 widened, no new rows;
+  `checktests.py` 48 of 48 broken films caught, nothing left unproven. Handed over on amber (long history).
+- **Next (Opus, high), chat 2 of 8:** items 5, 6, 7, 8, 9 (boxes below), each a rule with its check merged into an
+  old rule; then kittests and the quick check on the six films (report only); results under "Sam's answers"; push
+  notification; handover. Budget left for the build about 2-2.5% (stop and push-notify past 4.5% in all).
+- **Needs Sam:** nothing yet.
+- **Read:** CLAUDE.md; this file from "## Sam's answers to the report"; `source/checktests.py` (its MAP and CASES).
+- **Open rule requests:** none (items 1-11 were Sam's Y, 12 Nov).
+- **For Claude:** 5: `preflight` reads every allow-list (ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE, ORDER_SWAPS,
+  SET_MEANT, PORTAL_OK, HANDS_OK, STILL_OK...): each entry has a reason and never spans the whole film (rule 5).
+  6: a handover line saying a check is "still to do" stops the chain (CLAUDE.md chain rule; a gate in pre-flight or
+  `ledger.auto` reading the notes). 7: `critique.status`: a movement line answered "can't tell" is not clean until a
+  clip-look line is recorded (rule 89). 8: each "seen before" note row names its check, which must exist in
+  checktests/kittests (rule 30). 9: `kitchecks.install` logs a pose signature; a new still check: anyone on screen
+  3 s with nothing moving, STILL_OK with reasons (rule 41 or 74). The ledger merge driver is set by `setup.sh`.
+
+### The old plan (chats A-D, all done; their results follow)
 - **Results:** (each chat adds its findings below)
 
 ### Chat A (Sonnet, medium, 12 Nov): job 1, the full check on the five films, and the facts for questions 6 and 7
@@ -353,16 +356,30 @@ Blessed's animatic 1). (10) left alone.
 **The build job (chat E, Opus high, ALL on branch `claude/audit-honest-checker`, nothing on the main line, no Blessed
 file touched; about 3-4% of a week; stop and push-notify Sam past 4.5%):** write each yes as a rule WITH its check,
 merging or replacing an old rule so the rulebook does not grow:
-- [ ] 2 every "off with Sam's yes" line names the note/message where he said it; the checker finds that line in the
+- [x] 2 every "off with Sam's yes" line names the note/message where he said it; the checker finds that line in the
       film's notes; the check sheet lists every "off" line before each animatic.
-- [ ] 3 a yes to skip checks covers one render only (Swindon's --no-lock becomes one-use).
-- [ ] 4 cost record: each chat's cost saved at its end whatever it moved; merging two ledgers keeps the larger; a
+- [x] 3 a yes to skip checks covers one render only (Swindon's --no-lock becomes one-use).
+- [x] 4 cost record: each chat's cost saved at its end whatever it moved; merging two ledgers keeps the larger; a
       Monday question to Sam for the app's weekly figure, re-fit the allowance; percentages labelled "about, ±20%".
 - [ ] 5 no "allowed" entry may cover a whole film or lack a reason (a check).
 - [ ] 6 a handover line saying a check is "still to do" stops the chain and asks Sam.
 - [ ] 7 a "can't tell" on a movement line needs a short clip looked at before the critique is clean.
 - [ ] 8 a "seen before" note gets its check built in the same round, before the fix is sent.
 - [ ] 9 a "too still" check for every person on screen (not only speakers' heads).
-- [ ] 11 broken examples for the 9 unproven checks (line work, clothes, real sizes, effects, the body audit, script
+- [x] 11 broken examples for the 9 unproven checks (line work, clothes, real sizes, effects, the body audit, script
       against voice, song joins, resting arms, doorways).
 Then run the kit tests and the quick check on the six films (report only), write results here, and hand over.
+
+### Chat E (Opus, high, 12 Nov; chat 1 of 8): items 2, 3, 4, 11 built, on `claude/audit-honest-checker`
+- **2:** a check left off counts only if its CHECKS_OFF line names the note or message and quotes Sam's words, and
+  those words are in the film's notes; otherwise it is NOT RUN. Every check left off is printed in a red band at the
+  top of pre-flight's check sheet before each animatic.
+- **3:** a render with the checks skipped needs a line "Checks skipped (Sam's yes): DATE, note N: "his words"" in the
+  notes, and each such line covers ONE render (the render writes "Checks skipped, used: ..." under it). Swindon's
+  `--no-lock` now needs a fresh yes.
+- **4:** a chat's last cost is saved when it pushes its work, however little it moved; two copies of a ledger merged
+  keep each chat's larger cost (git's merge driver, set at session start); every Monday the chat asks Sam for the app's
+  weekly figure and `ledger.py fit` re-fits the allowance the cost watch uses; every % reads "about ... ±20%".
+- **11:** broken examples for the 9 unproven checks (a shape with no outline, a skirt below the hips, a half-metre mug,
+  a cartoon star, a head apart from its body, 3 syllables for a 21-syllable script, half a second of song skipped, a
+  forearm in the desk, a window showing flat grey): all caught. 48 of 48 in all.
