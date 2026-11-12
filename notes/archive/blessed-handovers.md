@@ -265,3 +265,13 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Open rule requests:** none.
 - **For Claude:** G2_PRESS = _g2_press() + two close spots (-0.45, 3.0), (0.5, 3.0); ALLOWED_POPS walliams through the door; SHOT_CAST gates2 = guard1, guard2; blessed_checks placed() skips inmate3 (note 22 took him out); blessed_walliams MOODS scared = lips smile -0.8. Critique ledger round 2 pass 2 fixed.
 
+
+
+## Handover before r2 chat 1 (12 Nov)
+- **Rules that bite next:** 30 (notes 39 and 45 are repeats: find why the first fix failed before changing anything; tell Sam), 74 (moves against the acting list), 89 (critique the pool room hard, note 43).
+- **Done:** animatic 2 sent (12 Nov). Sam's round-2 notes 33-49 logged in the Notes table (open).
+- **Next: chat 1 of 8, Opus, MEDIUM (a notes round):** answer Sam's questions (34 elbow gesture, 45 how the mouth passed, 46 why the cut moves everyone, 47 why Walliams grabs his throat); fix 33-49 as clips (no yes needed); note 39 needs sitting references first; note 48 needs Sam's recording. Then animatic 3 (no stop for his Y between clips; ask before the final).
+- **Needs Sam:** a voice memo of the guard's line for note 48: "Walliams, you're going away for a very, very long week."
+- **Read:** `guides/job-packs.md` Notes round; this section; the Notes table rows 33-49.
+- **Open rule requests:** note 42 may be a rule ("the subject/action in the centre of the screen"): propose wording to Sam (search the rulebook first).
+- **For Claude:** scenes in Sam's numbering: 1 arrive, 2 oath/oath2, 3 dock, 4 van, 5 escort, 6 cot, 7 phone, 8 tvroom, 9 tv, release = gates/gates2, 10 gates2. Note 46: gates2 rebuilds the pack with _g2_press() (lane cleared for Brand) and its own camera; the wide shot uses ST.STAGE['gates']['press']. Note 45: newsreader mouth shut 50.8-51.7 s in the film before chat 2's trim (now in tv, about 36.8-43).
