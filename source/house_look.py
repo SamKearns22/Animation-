@@ -40,14 +40,18 @@ def paper(w, h):
     every render get the same sheet (paper doesn't crawl)."""
     if (w, h) in _PAPER:
         return _PAPER[(w, h)]
-    rng = np.random.default_rng(1212)
-    k = w / 1080
-    grain = nd.gaussian_filter(rng.normal(0, 1, (h, w)).astype(np.float32), 0.9 * k)
-    grain = 0.5 + np.clip(grain / (grain.std() + 1e-6) * 0.11, -0.35, 0.35)
-    bw, bh = max(8, w // 8), max(8, h // 8)
-    blot = nd.gaussian_filter(rng.normal(0, 1, (bh, bw)).astype(np.float32), 4 * bw / 135)
-    blot = np.asarray(Image.fromarray(blot / (blot.std() + 1e-6)).resize((w, h), Image.BICUBIC), np.float32)
-    blot = 0.5 + np.clip(blot * 0.2, -0.35, 0.35)
+    # made by exactly the steps of the test Sam chose (12 Nov). A first build copied the recipe by hand and came out
+    # with twice the blotches and half the grain: "far more smudged" (Sam, 12 Nov). Never re-derive it.
+    import subprocess
+    import imageio_ffmpeg
+
+    def make(size, chain):
+        raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-loglevel', 'error', '-f', 'lavfi', '-i',
+                              f'color=gray:s={size},format=gray,{chain}', '-frames:v', '1', '-f', 'rawvideo',
+                              '-pix_fmt', 'gray', '-'], capture_output=True, check=True).stdout
+        return np.frombuffer(raw, np.uint8).reshape(h, w).astype(np.float32) / 255
+    grain = make(f'{w}x{h}', 'noise=alls=90,gblur=sigma=0.9,eq=contrast=2.2')
+    blot = make(f'{max(8, w // 8)}x{max(8, h // 8)}', f'noise=alls=90,gblur=sigma=4,eq=contrast=4,scale={w}:{h}')
     p = (grain + blot) / 2
     _PAPER[(w, h)] = p
     return p

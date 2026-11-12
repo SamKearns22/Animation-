@@ -7,16 +7,20 @@
 - [x] Per-shape paper edges (thin light top edge) and soft shadows (down and right, where shapes overlap), done on each shape, not from outlines.
 - [ ] Then write rule S7 "House look" (replaces old S7, no shorthand merged in) in `guides/film-quality-rules.md`; trim the duplicate in `guides/satire.md` "The look". Check: engine applies it once; pre-flight confirms frames in pairs.
 
-## Where things stand (12 Nov, chat 2 of 8)
-- Rules that bite next: 13 (checks live in the shared kit), 30 (a repeat note: find why first), 61 (read the MAP).
-- Done: built and tested. `source/house_look.py` (paper, light top edges, soft shadows, per flat-colour shape; one
-  LOOK setting); `film_engine.render` lays it once per drawing before captions and writes 12-a-second films as 24 fps
-  with pairs; pre-flight's `look_faults`; kittest `house_look_once_in_pairs` (all kittests pass). Shadow flicker on
-  the checked shirt found and fixed (near-equal shapes fade, never flip). Side-by-side clip sent (10-22 s, 2 MB).
-- Switch: `film_engine.HOUSE_LOOK = False` until Sam's Y, so no render changes look by surprise.
-- Next (on Sam's Y): Sonnet, medium. Set HOUSE_LOOK = True; write S7 (wording below); trim `guides/satire.md` "The
-  look" ("no gradients or glows" now excepts the house look's shadows); kit catalogue row. On N: Opus medium, his notes.
-- Needs Sam: Y/N on the side-by-side; Y/N Flying Whales and Elder Swindon stay smooth (SMOOTH_WHY added).
+## Where things stand (12 Nov, chat 2 of 8, after Sam's note)
+- Rules that bite next: 30 (a repeat note: find why first), 13 (checks in the shared kit), 61 (read the MAP).
+- Sam's note 1 (12 Nov): "far more smudged than the test; makes no sense to build something that doesn't match it".
+  Why: the test's paper picture was never saved; the build re-made it from the one-line recipe and got the mix
+  backwards (blotches 0.09 v 0.04, grain 0.05 v 0.11). Fixed: `house_look.paper` now runs the test's exact ffmpeg
+  steps (measured equal). Clip 2 sent (`review/house-look-side-by-side-2.mp4`, not on GitHub).
+- Still different from the test, on purpose (brief): edges and shadows are per shape, not traced from outlines.
+- Done: `source/house_look.py`, engine, pre-flight `look_faults`, kittest `house_look_once_in_pairs` (passes).
+- Switch: `film_engine.HOUSE_LOOK = False` until Sam's Y.
+- Next (on Sam's Y): Sonnet, medium: set HOUSE_LOOK = True, write S7 (below), trim `guides/satire.md` "The look"
+  ("no gradients or glows" excepts the house look), catalogue row. On N: Opus medium, a new chat with his notes.
+- Needs Sam: 1 Y/N clip 2; 2 Y/N the 24-a-second films stay smooth; 3 Y/N S7 wording; 4 Y/N lesson (below).
+- Open rule request (lesson, proposed): merged into rule 86 (tools): "A test shown to Sam is saved as made (its files
+  and code); the build reuses it and is checked against it, side by side, before it goes to Sam."
 - Proposed S7 (replaces the shorthand row; that rule stays in `guides/satire.md` "The look" and its check still runs):
   "House look: every drawing laid on paper (grain and soft blotches, soft light 70%); each shape a thin light top edge
   and a soft shadow down-right onto what it lies on (thin things none); captions, Hook Text and sign-off clean on top;
