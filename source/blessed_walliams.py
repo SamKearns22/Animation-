@@ -39,10 +39,10 @@ P4.TUNE['walliams'] = dict(nose_long=-1.5, chin_long=2.2, jaw_wide=2.0, face_wid
                            eyes_apart=0.5, eye_size=1.0, eye_open=0.8, mouth_wide=-1.5, lip_top=0.6, lip_low=0.6)
 
 SKIN = (226, 172, 146)            # card: light (w06, w07), lifted for the flat style (Brand's is 232, 176, 150)
-HAIR = (84, 64, 50)               # dark brown on top (w06, w07, w09)
+HAIR = (80, 70, 62)               # dark brown on top (w06, w07, w09)
 HAIR_L = (120, 96, 78)
 HAIR_GREY = (104, 90, 80)        # the short sides, greying (w07)
-STUBBLE = (206, 170, 154)         # note 29: short grey stubble (w07, w10) instead of the full white beard, so the jaw
+STUBBLE = (196, 182, 174)         # note 29: short grey stubble (w07, w10) instead of the full white beard, so the jaw
 #                                   and long chin (his strongest shapes) show
 BROW = (72, 56, 46)
 IRIS = (92, 74, 54)
@@ -56,10 +56,10 @@ BD_MOUST = (126, 112, 100)        # darker grey-brown at the moustache
 MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.24, wide=0.0, mouth='lips', smile=0.1),
          # scared and alarmed (note 25): brows high and pinched up in the middle, eyes wide, mouth pulled into a
          # wide grimace, the teeth showing
-         'scared': dict(brow=0.05, frown=-0.07, lid=0.0, wide=1.0, mouth='grimace'),
-         'alarmed': dict(brow=0.06, frown=-0.04, lid=0.0, wide=0.8, mouth='gasp'),
+         'scared': dict(brow=0.06, frown=-0.1, lid=0.0, wide=1.0, mouth='lips', smile=-0.8),   # chat 3: the grimace read as a grin,
+         'alarmed': dict(brow=0.1, frown=-0.02, lid=0.0, wide=1.0, mouth='gasp'),
          # note 32: pleading with the press: brows up and pinched, soft wide eyes, the mouth turned down
-         'pleading': dict(brow=0.05, frown=-0.1, lid=0.06, wide=0.45, mouth='lips', smile=-0.6)}
+         'pleading': dict(brow=0.09, frown=-0.15, lid=0.06, wide=0.55, mouth='lips', smile=-0.9)}
 
 
 # ---------------------------------------------------------------------------------------------- the stubble

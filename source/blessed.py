@@ -119,7 +119,7 @@ _at(6, T['gates'] + 0.8)
 T['gates2'] = L[6]['start'] + L[6]['_stretches'][0][1] + 0.12   # the cut just after "Blessed!": closer, at his mark
 T['wal'] = T['gates2'] + 0.35                    # note 30: Walliams led in behind Brand, in gates2 (no shot of his own)
 DUR = max(L[6]['end'] + 1.0, T['wal'] + 5.15)     # note 32: held to the door's slam (4.55 s into his beats) and a beat
-G2_CAM = (600, 580, 1519)                          # gates2's camera centre: x at the cut, x pushed in, y (painting px)
+G2_CAM = (600, 580, 1440)   # 12 Nov chat 3: lower and closer, no empty tarmac under him                          # gates2's camera centre: x at the cut, x pushed in, y (painting px)
 # Brief 14: she drifts away. Her take is faded to silence by T['gates'] (soundtrack), so the film's record of line 5
 # ends where she is last heard, in the pause after "crisis." (12 Nov, chat 3: the script and mouth checks read the
 # whole take as heard and found her mouth shut at 50.8 s, off screen and inaudible). The full script stays in 'script'.
@@ -167,7 +167,7 @@ SHOT_CAST = {'arrive': ['brand'], 'oath': ['brand', 'judge'], 'oath2': ['brand',
              'dock': ['brand'],
              'van': ['brand'], 'escort': ['brand', 'officer'], 'cot': ['brand'], 'phone': ['brand'],
              'tvroom': ['brand'], 'tv': ['newsreader'], 'push': ['brand'], 'gates': ['brand'],
-             'gates2': ['brand', 'walliams', 'officer']}
+             'gates2': ['brand', 'walliams', 'guard1', 'guard2']}   # the two officers are guard1, guard2
 BENCHMARK = ST.BENCHMARK                          # rule 3: the sets' own (blessed_sets.py)
 SET_BOXES, SET_MEANT = ST.SET_BOXES, ST.SET_MEANT  # rule 83
 # Rule 1: the plan. A flat film: each place is its painting's Level camera in metres (blessed_sets); the marks are
@@ -206,7 +206,7 @@ HANDS_OK = [('Journalist*', '*', 'no hand', T['s1'], T['s2'], 'seen from behind,
              'in (brief 9; touch_faults checks the hand sits on the arm)')]
 LOOKS_AT = {}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
-ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [], []
+ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [('walliams', T['wal'] + 2.9, T['wal'] + 4.6, 'gone in through a door')], []
 TOUCHES, FREE_MOVES, RESTS = [], [], []
 SOUND_SOURCES, JOKE_PROPS, ORDER_SWAPS = {}, [], []
 LINE_OK = [('brand', 'line weight', 540, 289),                 # his moustache: a filled shape, not a line
@@ -1054,7 +1054,7 @@ def _g2_press():
     return [tuple(q) for q in out]
 
 
-G2_PRESS = _g2_press()
+G2_PRESS = _g2_press() + [(-0.45, 3.0), (0.5, 3.0)]   # chat 3: two of the pack close to us, heads in the bottom corners
 
 
 def gates_close(sp, t):
@@ -1083,7 +1083,7 @@ def gates_close(sp, t):
 
 
 # --- Walliams (notes 25, 30, 32): his beats, in seconds from T['wal'] (the acting list's gates2 rows)
-WAL_X = (2.7, 0.75, 0.55)                            # in from the right; at the door; inside, near its left jamb
+WAL_X = (3.4, 0.75, 0.55)                            # in from the right; at the door; inside, near its left jamb
 WAL_D = ST.GATE_D - 0.3                              # along the gate's front
 DOOR_D = ST.GATE_D + 0.27                            # the wicket door's plane
 DRAG, TAKE, PLEAD, SHOVE, GRAB, SLAM = 1.4, (1.4, 2.0), (2.0, 2.9), (2.9, 3.4), (3.45, 4.3), (4.3, 4.55)
@@ -1336,6 +1336,7 @@ def draw_walliams(img, cam, t):
     draw_leaf(img, cam, t)
     for side, sg, who in GUARD_SIDES:
         so = dict(GUARDS[who], **face('officer', t, 'stern'))
+        so['blink'] = F.blinking(t + (1.9 if sg > 0 else 0.0), BLINKS['officer'])   # chat 3: never blinking together
         ox, od = wal_place(t, sg * OFF_DX)
         om = ST._mark(ST.GATE, ox, od)
         walking = k < DRAG + 0.1
@@ -1387,7 +1388,7 @@ def _cam(view, t):
         return B.Cam(1.0, 740, 960)
     if shot_of(t) == 'gates2':                    # notes 31, 32: framed on Brand as he strides in, the door over his
         u = _ease(_ramp(t, T['gates2'], T['gates2'] + 1.9))   # shoulder; pushing in all shot
-        z = 2.0 + 0.2 * u + 0.1 * _ramp(t, T['gates2'] + 1.9, DUR)
+        z = 2.25 + 0.25 * u + 0.1 * _ramp(t, T['gates2'] + 1.9, DUR)
         return B.Cam(z, G2_CAM[0] + (G2_CAM[1] - G2_CAM[0]) * u, G2_CAM[2])
     if shot_of(t) == 'gates':                     # a slow push on the wicket door
         u = _ease(_ramp(t, T['gates'], T['gates2']))

@@ -1,0 +1,63 @@
+== critique, round 2 pass 1 (2026-11-12): 7 fault(s), 4 can't tell
+-- look.md --
+1: Worried stubbled man, grey zip top, grimacing smile; stray brown hand and pale hand at bottom edge. No words.
+2: Same man, sad closed mouth, head tilted; chin sinks into collar, no neck; brown hand bottom. No words.
+3: Same man grimacing, floating pale fist beside him; dark-skinned man cut off at left edge. No words.
+-- result.md --
+## Faults
+FAULT A1 P2 [1-3]: whole panel - beats don't read: no officers dragging (only disembodied hands at frame bottom), no cameras or press pack anywhere, no shove through a door; panel 2 hands not clasped, apart at the edges.
+FAULT P2 [1-3]: face - same worried-brows grimace on all three; never scared, pleading or alarmed; no double-take, gaze not on cameras or press.
+FAULT P4 [1-3]: hair and beard - ours dark brown hair and pinkish-brown stubble patch; references show grey side-parted hair and white-grey beard, older face.
+FAULT P11 [2]: chin - chin sinks onto collar, no neck; collar points stab up into jaw.
+FAULT P13 [2]: top - grey zip tracksuit turns into a pointed-collar shirt with tie-like V; doesn't match panels 1 and 3.
+FAULT P5 P6 [3]: right arm - fist sits on top of the forearm short of its end, hand not at the sleeve end.
+FAULT P6 [1]: right edge - pale hand with white object appears with no arm or owner.
+CAN'T TELL P1 P10 [1-3]: whether officers' hands grip him or hover; full-body frame showing hands on his arms.
+CAN'T TELL P7 [1-3]: feet and weight; a wider frame showing feet.
+CAN'T TELL P12 [1-3]: mouth open in 1 and 3, closed while pleading in 2; frames labelled with who speaks.
+CAN'T TELL P8 P3 [1-3]: arms cut by frame; full-body frames at each move's ends.
+
+## Checked
+1-3
+
+## Cold look
+I saw only a worried man; I named no officers, cameras, press or door because none are drawn readably. The bottom hands read as "stray hands", not officers dragging him. Panel 3's dark-skinned man reads as a bystander cut off, not someone shoving. I missed the sliver of a figure at panel 2's left edge. Feelings: I wrote "worried/sad", not scared, pleading or alarmed.
+
+## Not on the list
+- Officers cropped to half a face or a lone hand: suggested line: every person the brief names is at least head-and-shoulders inside frame.
+- Figure sliver at panel 2's left edge: suggested line: no person cut to a sliver at the frame edge.
+- Close-up framing hides the action the brief names: suggested line: framing shows the action the beat names (drag, shove, clasp).
+- Expression identical across three beats: suggested line: each beat's face differs from the previous beat's.
+
+== critique, round 2 pass 2 (2026-11-12): 9 fault(s), 2 can't tell
+-- look.md --
+1: Grey-bearded man, grey suit, uneasy grin; two white-uniform guards grip arms; grey curly blob foreground. No words.
+2: Man clasps hands, pleading upward; guards' eyes shut; detached grey arm, pink hand foreground. No words.
+3: Man's arm floats loose; female guard cut off right; sunglasses long-haired man cropped left. No words.
+-- result.md --
+## Faults
+FAULT P2 [1, 3]: his face - panel 1 is a toothy grin looking straight ahead, not a scared double-take at cameras; panel 3 is mild worry, not alarm.
+FAULT P2 [2]: guards - both officers have eyes shut, reading as asleep or praying along; his gaze goes up, not at the press.
+FAULT A1 P10 [1-3]: guards - not dragging or shoving: hands hover at his elbows; panel 3 no one touches him and he stands still before the door.
+FAULT P1 P6 [1-3]: guards' and his hands - plain round dots, no fingers, floating beside his arms instead of gripping.
+FAULT P3 [1-3]: officers' inner arms - bent sharply up at the elbow like rubber L-shapes; his arm in panel 3 juts out as a stiff tube.
+FAULT P5 [2-3]: his shoulders - panel 2 puffed pads with arms stepping out of them; panel 3 arm starts inside chest side.
+FAULT P4 [1-3]: his face - brown hair against the references' dark grey; heavy grey beard block where references show short salt-and-pepper stubble; jaw too soft.
+FAULT A1 [1-3]: foreground - grey curly blob reads as a rock or sheep, not press; panels 2-3 a detached grey arm with a pink ball hand pokes in.
+FAULT A1 [3]: edges - female officer cut in half at right; sunglasses man half-cropped left, both read as mistakes.
+CAN'T TELL P7 [1-3]: feet not in frame; a full-body frame at the start and end of the shot.
+CAN'T TELL P12 [1-3]: open teeth in panel 1; frames labelled with who speaks.
+
+## Checked
+1-3
+
+## Cold look
+I named the outfit a "grey suit", not a prison tracksuit, so the costume doesn't read as one. I saw no dragging or shoving: the guards just stand there. I read the foreground blob and arm as objects, not a press pack. Panel 1 read as an uneasy grin, not fear. Panel 2's pleading came across correctly.
+
+## Not on the list
+- No cameras or press pack can be recognised as such. suggested line: each crowd the brief names shows its tell-tale props (cameras, microphones).
+- Panels 1-3 are nearly identical framings with little change of pose. suggested line: each beat in a shot shows a clearly different pose.
+- Panel 1 has a yellow scrap and a dark figure at the right edge. suggested line: no stray part-shapes at the frame edges.
+
+critique, pass 2: faults fixed as one list: scared face no longer a toothy grin (down-turned mouth), alarmed and pleading brows stronger, hair greyer, stubble grey; officers no longer blink together; named not changed: circle hands (house style), grip and close crops, the curly-haired reporter's back
+

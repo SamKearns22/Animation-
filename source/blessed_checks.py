@@ -103,7 +103,7 @@ def placed(t):
     elif shot == 'phone':
         one('brand', st['brand'])
     elif shot in ('tvroom', 'push'):
-        for w in ('inmate3', 'inmate1', 'brand', 'inmate2'):
+        for w in [w for w in ('inmate3', 'inmate1', 'brand', 'inmate2') if w in st]:   # note 22 took inmate3 out
             one(w, st[w], True)
     elif shot == 'tv':                            # the newsreader at his desk, inside the TV picture
         out.append(('newsreader', v, (0.0, 3.0, 0.0), H['newsreader'], True, (0.0, -1.0)))
