@@ -7,7 +7,7 @@
 - **Then chat 3, Opus HIGH (building):** seated bodies in views (van 3/4, TV-room Brand and the sleeping inmate front-on): the torso is a rigid slab, thighs never foreshortened, near arm hidden. References filed: references/blessed/sitting/ (s1 hunched forearms on knees 3/4 = the van; s2, s3 front-on seated). Send Sam ONE option sheet for the van (rule 87). Then animatic 3 (Sonnet can render).
 - **Needs Sam:** voice memo of the guard's line (note 48); answer to 37's question.
 - **Read:** `guides/job-packs.md` Notes round; this section; Notes rows 33-49.
-- **Open rule requests:** Sam 12 Nov 'so the errors don't repeat': 4 proposals sent from r2 chat 1 (rule 13 every check on every person, no quiet skips; rule 13 house face check in the kit; rule 72 measured camera moves, checked; rule 87 a fix never changes a shot's length unasked), waiting for his numbers; note 42: "the subject/action in the centre of the screen": propose wording (search the rulebook first).
+- **Open rule requests:** (rules 13, 72, 87 written 12 Nov, Sam Y; the checks are a tool chat, ~1.5%, Sam Y) note 42: "the subject/action in the centre of the screen": propose wording (search the rulebook first).
 - **For Claude:** gates and gates2 are still two SHOTS internally but one continuous camera (_cam 'gates' zooms to G2_CAM by _gates_cut; gates_at() = where the pack looks). Newsreader: STAFF_FACES['newsreader'], TC.HEADS -> inmate_head. Rule 30 answers given: 45 = the house head draws no mouth at 'rest' and checks() skipped the newsreader; 39 = note 16's fix mended joins only, no photo was compared, the slab torso hides the arm.
 
 ## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
