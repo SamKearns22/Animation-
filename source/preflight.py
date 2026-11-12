@@ -66,7 +66,7 @@ MAX_SHOT = 8.0
 # Every check pre-flight knows of, the kinds of film it is for (rule 58's HAS, any of them), and what the film must
 # give for it to run. A check that does not run is never silent: it is a fault at the top of the list ("NOT RUN"),
 # whether the film's HAS left it out, the film never set it up, or it was switched off; the summary never says
-# "clean" while one is off. The only way past one is CHECKS_OFF = {key: 'Sam, DATE: why'} in the film (Sam's yes,
+# "clean" while one is off. The only way past one is CHECKS_OFF = {key: 'Sam, DATE, note N: "his words"'} (Sam's yes, found in the notes,
 # rule 59), and even those are listed at the top of every run. claim_faults() checks HAS itself: a film that says it
 # has no people (or rooms, voices, props, effects) but gives them, or draws them, is a fault however it is set.
 CHECKS = {   # key: (what it checks, the kinds it is for, what the film gives: names, any of them)
@@ -104,6 +104,26 @@ def _gives(film, name):
     return True
 
 
+def _notes_text(film):
+    """The film's notes and its archived notes, as one text (empty if it has none)."""
+    path = notes_path(film, (getattr(film, '__name__', '') or '').split('.')[-1])
+    old = os.path.join(os.path.dirname(path), 'archive', os.path.basename(path))
+    return '\n'.join(open(p).read() for p in dict.fromkeys((path, old)) if os.path.exists(p))
+
+
+def _yes_unfound(film, reason):
+    """Audit item 2 (Sam, 12 Nov): a check is off only on Sam's yes, and the yes is traceable. The CHECKS_OFF reason
+    quotes his words ("...", at least 3 words) and names the note or message they came in; those words must be found
+    in the film's notes (a chat cannot write "Sam, 12 Nov: yes" into the code by itself). '' if found, else why not."""
+    quotes = [q for q in re.findall(r'["\u201c]([^"\u201d]+)["\u201d]', reason) if len(q.split()) >= 3]
+    if not quotes or not re.search(r'\b(note|message|notes)\b', reason, re.I):
+        return 'it must quote Sam\'s words ("...") and name the note or message they came in'
+    norm = lambda x: re.sub(r'\s+', ' ', re.sub(r'[*_`>|]', ' ', x)).strip().lower()
+    text = norm(_notes_text(film))
+    missing = [q for q in quotes if norm(q) not in text]
+    return f'Sam\'s words "{missing[0]}" are not in the film\'s notes' if missing else ''
+
+
 def coverage(film, has):
     """The checks that will not run on this film: [(key, how, why)], how = 'left out by HAS', 'not set up' or 'off
     with Sam's yes'. Read from the film alone (nothing drawn), so --text shows it too."""
@@ -129,7 +149,7 @@ def coverage(film, has):
             continue
         if key in off:
             reason = str(off[key])
-            if re.search(r'\bSam\b', reason) and re.search(_DATE, reason, re.I):
+            if re.search(r'\bSam\b', reason) and re.search(_DATE, reason, re.I) and not _yes_unfound(film, reason):
                 how, why = "off with Sam's yes", reason
         out.append((key, how, why))
     for key in off:
@@ -149,7 +169,9 @@ def coverage_lines(film, rows):
         if how == "off with Sam's yes":
             offs.append(f'OFF (Sam\'s yes): {key}: {what}: {why}')
             continue
-        tail = (f' (CHECKS_OFF[{key!r}] does not say Sam said yes, and when: {off[key]!r})' if key in off else
+        tail = (f' (CHECKS_OFF[{key!r}] is not a yes Sam can be traced to: it needs Sam, the date, the note or '
+                f'message, and his words in quotes, found in the film\'s notes; '
+                f'{_yes_unfound(film, str(off[key])) or "no Sam or date"}: {off[key]!r})' if key in off else
                 ': set it up, or ask Sam and record his yes in CHECKS_OFF (rule 59)')
         faults.append(f'NOT RUN: {key} ({how}): {what}: {why}{tail}')
     return faults, offs
@@ -380,6 +402,23 @@ def _audit_guard_faults():
         key = (where.split(' ')[0], what.split(':')[-1].strip()[:60])
         seen.setdefault(key, [0, m.rsplit(' (allowed', 1)[0]])[0] += 1
     return [f'figure guard: {first} ({n} frame(s); a normal pre-flight stops here)' for n, first in seen.values()]
+
+
+def _off_banner(sheet, offs):
+    """The check sheet with a band on top listing every check that is off with Sam's yes, and his words."""
+    font = ImageFont.truetype(os.path.join(ROOT, 'source', 'fonts', 'DejaVuSans-Bold.ttf'), 18)
+    import textwrap
+    rows = ['CHECKS OFF WITH SAM\'S YES (each one, before this animatic):']
+    for x in offs:
+        rows += textwrap.wrap('- ' + x.split(': ', 1)[-1], 95)
+    band = Image.new('RGB', (sheet.width, 16 + 26 * len(rows)), (120, 20, 20))
+    d = ImageDraw.Draw(band)
+    for i, r in enumerate(rows):
+        d.text((12, 8 + 26 * i), r, font=font, fill=(255, 255, 255))
+    both = Image.new('RGB', (sheet.width, band.height + sheet.height))
+    both.paste(band, (0, 0))
+    both.paste(sheet, (0, band.height))
+    return both
 
 
 def _sheet_tile(k):
@@ -772,6 +811,8 @@ def main():
         both.paste(sheet, (0, 0))
         both.paste(turn, (0, sheet.height))
         sheet = both
+    if offs:                                    # audit item 2: every check off with Sam's yes is on the check sheet,
+        sheet = _off_banner(sheet, offs)        # at the top, before each animatic (he sees what he said yes to)
     sheet.save(os.path.join(out, f'{name}-preflight.jpg'), quality=85)
     del F.LOG[logged:]
     import contextlib

@@ -2397,8 +2397,8 @@ def main():
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
                  span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
                  stamp=False if '--nostamp' in a else None,
-                 lock=False if '--no-lock' in a else None)   # --no-lock: Sam, 8 Nov: "Skip the checks" (pre-flight
-#                                                              hung twice in its forked workers; notes, Decisions)
+                 lock=False if '--no-lock' in a else None)   # --no-lock: needs an unused "Checks skipped (Sam's
+#                     yes)" line in the notes; each covers one render (audit item 3; Sam's 8 Nov yes was for one)
 
 
 if __name__ == '__main__':

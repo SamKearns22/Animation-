@@ -14,6 +14,7 @@ import glob
 import hashlib
 import json
 import os
+import re
 import subprocess
 import sys
 
@@ -87,6 +88,43 @@ def lock_fault(film, faults_named=False):
     return None
 
 
+SKIP_YES = re.compile(r'^.*Checks skipped \(Sam\'s yes\):.*?["\u201c]([^"\u201d]{3,})["\u201d]', re.M)
+SKIP_USED = 'Checks skipped, used:'
+
+
+def _film_notes(main, film):
+    """The film's notes file (its NOTES, notes/NAME.md with _ or -, or the archived one); None for a tool's demo."""
+    root = os.path.dirname(HERE)
+    for p in [getattr(main, 'NOTES', None)] + [os.path.join(root, 'notes', d, f'{n}.md') for d in ('', 'archive')
+                                               for n in (film, film.replace('_', '-'))]:
+        if p and os.path.exists(p):
+            return p
+    return None
+
+
+def skip_fault(main, film, out, use=True):
+    """Rule 59, audit item 3 (Sam, 12 Nov): a render with the checks skipped (lock=False) needs Sam's yes, and each
+    yes covers ONE render. His yes is a line in the film's notes, 'Checks skipped (Sam's yes): DATE, note N: "his
+    words"'; the render that uses it adds 'Checks skipped, used: DATE, FILE ("his words")', and that yes is spent.
+    None: go (and, with use, the yes is now spent). A tool's own demo (no notes file) needs none."""
+    path = _film_notes(main, film)
+    if path is None:
+        return None
+    text = open(path).read()
+    used = text.split(SKIP_USED)
+    spent = [q for q in SKIP_YES.findall(text) if any(f'("{q}")' in u.split('\n', 1)[0] for u in used[1:])]
+    free = [q for q in SKIP_YES.findall(text) if q not in spent]
+    if not free:
+        return (f'the checks are skipped (lock off) but {os.path.relpath(path, os.path.dirname(HERE))} has no unused '
+                f'"Checks skipped (Sam\'s yes): DATE, note N: \"his words\"" line: a yes to skip the checks covers one '
+                f'render (rule 59); ask Sam, or run pre-flight')
+    if use:
+        import datetime
+        with open(path, 'a') as fh:
+            fh.write(f'\n{SKIP_USED} {datetime.date.today():%d %b}, {os.path.basename(out)} ("{free[0]}")\n')
+    return None
+
+
 def _frame(args):
     i, reuse = args
     j = _JOB
@@ -132,7 +170,8 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     stamp: the time and shot in the corner; None (the default) = on for every review copy (a span, or smaller than
     full size: rule 29), off for the full-size final.
     lock (rule 59): an animatic or final (no span) needs pre-flight's pass on the code as it is now; None = on for every
-    film but clips; False only for a tool's own demo render, never a film.
+    film but clips; False for a tool's own demo render, or a film with an unused yes of Sam's to skip the checks (one
+    render each: skip_fault).
     look (rule S7): the house look on every drawing (None = HOUSE_LOOK); False only for a tool's own demo, never a film. A film at 12 fps
     comes out at 24 fps, every drawing held 2 frames (FILE_FPS)."""
     look = HOUSE_LOOK if look is None else look
@@ -144,6 +183,10 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         os.remove(out)                            # gone before anything else, so a refused or stopped render leaves none
     if lock:
         why = lock_fault(film, '--faults-named' in sys.argv)
+        if why:
+            sys.exit('render REFUSED (rule 59): ' + why)
+    elif not span:                                # the checks skipped: one render per yes of Sam's (audit item 3)
+        why = skip_fault(main, film, out)
         if why:
             sys.exit('render REFUSED (rule 59): ' + why)
     import imageio_ffmpeg

@@ -204,7 +204,23 @@ def c_not_run_off_without_yes():
     import preflight as P
     f = film(CHECKS_OFF={'hands': 'not needed'})
     return [x for x in P.coverage_lines(f, P.coverage(f, {'voices'}))[0] if x.startswith('NOT RUN: hands')
-            and 'does not say Sam said yes' in x]
+            and 'is not a yes Sam can be traced to' in x]
+
+
+def c_off_yes_not_in_notes():
+    import preflight as P
+    f = film(NOTES=_notes('| 3 | the hands look fine |\n'),
+             CHECKS_OFF={'hands': 'Sam, 12 Nov, note 4: "leave the hands check off"'})
+    return [x for x in P.coverage_lines(f, P.coverage(f, {'voices'}))[0] if 'are not in the film' in x]
+
+
+def c_off_yes_traced():                               # (the other way: a quoted, found yes is an OFF line, not a fault)
+    import preflight as P
+    f = film(NOTES=_notes('| 4 | Sam: "leave the hands check off" for this film |\n'),
+             CHECKS_OFF={'hands': 'Sam, 12 Nov, note 4: "leave the hands check off"'})
+    faults, offs = P.coverage_lines(f, P.coverage(f, {'voices'}))
+    ok = any('hands' in x for x in offs) and not any(x.startswith('NOT RUN: hands') for x in faults)
+    return ['the traced yes is listed as OFF'] if ok else []
 
 
 def c_has_claim():
@@ -233,6 +249,14 @@ def c_lock_not_run():
         return [x for x in [E.lock_fault('x', faults_named=True)] if x]
     finally:
         E.PASSES = real
+
+
+def c_skip_yes_once():
+    import film_engine as E
+    main = types.SimpleNamespace(NOTES=_notes('Checks skipped (Sam\'s yes): 8 Nov, note 12: "skip the checks"\n'))
+    first = E.skip_fault(main, 'x', 'a.mp4')          # the yes covers this render...
+    second = E.skip_fault(main, 'x', 'b.mp4')         # ...and not the next
+    return [second] if first is None and second else []
 
 
 def c_audit_counts_guard():
@@ -388,10 +412,13 @@ CASES = [   # (check, rule, how it is broken, the case)
     ('pop-ins', '6', 'a camera the test cannot read (it used to go quiet)', c_pop_in_blind),
     ('honest: NOT RUN', '59', 'HAS leaves out people', c_not_run),
     ('honest: NOT RUN', '59', 'CHECKS_OFF with no Sam yes or date', c_not_run_off_without_yes),
+    ('honest: off yes', '59', "Sam's quoted yes not in the film's notes", c_off_yes_not_in_notes),
+    ('honest: off yes', '59', "a traced yes is listed OFF (the check's other side)", c_off_yes_traced),
     ('honest: HAS', '58', 'HAS says no people, SHOT_CAST has some', c_has_claim),
     ('honest: HAS', '58', 'HAS says no people, the drawing has some', c_has_claim_drawn),
     ('honest: summary', '59', '"clean" while a check is off', c_never_clean_while_off),
     ('honest: render lock', '59', 'a render past a check that never ran, "named"', c_lock_not_run),
+    ('honest: skip once', '59', 'a second render on one yes to skip the checks', c_skip_yes_once),
     ('honest: --audit', '19', "the arm guard's stops only in the small print", c_audit_counts_guard),
     ('incremental', '59', 'a drop to rest just before a cut', c_recheck_shot_tail),
     ('incremental', '59', 'a check file not in CHECK_FILES changes', c_recheck_check_files),
