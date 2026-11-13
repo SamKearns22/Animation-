@@ -289,8 +289,10 @@
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 0.19
+   "model": "sonnet",
+   "cost": 1.41,
+   "src": "estimate",
+   "sid": "session_01J1JB7YVwRXdWSXf4MQYM67"
   },
   {
    "date": "2026-11-13",
@@ -687,5 +689,5 @@
   "9:round2": 7,
   "10:round2": 2
  },
- "budget_stop": 29
+ "budget_stop": 30
 }
