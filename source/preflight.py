@@ -377,7 +377,7 @@ def main():
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
     for x in warn:
-        if new_template and ('rule 74' in x or 'rule 8:' in x):
+        if (new_template and ('rule 74' in x or 'rule 8:' in x)) or 'COULD NOT TEST' in x.upper():   # rule 19
             stop.append(x)                                           # Sam, 10 Nov (Job J Q4): refuse on new films
         else:
             print('WARNING:', x)
@@ -412,6 +412,9 @@ def main():
     if hasattr(film, 'scene'):
         shared += collisions.check(film)        # rules 5, 6, 12, 13: nothing passes through anything; nothing pops in;
         roster = collisions.LAST_ROSTER         # hands on what they touch, props held, resting hands clear
+    if people and not any(hasattr(film, a) for a in ('solids', 'layers')):   # Job C 5 (Sam, 13 Nov): Blessed's
+        shared.append('clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing '
+                      'checks that no one passes through anyone or teleports (clipcheck.py; rule 19)')   # in silence
     if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT', 'draw_order')):
         shared += clipcheck.run(film)           # passes through, teleports, drawing order, flips (rule 57)
     if runs['collisions and pop-ins (rules 5, 6)'] and not any(hasattr(film, a) for a in ('scene', 'solids')):

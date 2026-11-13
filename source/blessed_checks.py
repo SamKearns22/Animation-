@@ -5,6 +5,8 @@ for is a fault before the first animatic). blessed.py calls install(film) at its
 MAP
   metres ........... LEVELS, _level, where: each painting's level camera (real, or fitted to its marks) and a screen
                      mark (x, ground y, pixels per metre) back to metres (x, d, the floor's height)
+  solids ........... solids(t): everyone's body, head and legs, for clipcheck.py (Job C 5: nothing passes through
+                     anyone; nothing teleports). Held things stay with rule 83's by-hand stills.
   scene ............ scene(t), cam_for(t), project(cam, P), the plan's camera per shot (audit.py: rules 5, 6, 14)
   audits ........... audits(): each body alone over every frame it is on screen (filmkit.silhouette_audit)
   line work ........ LINE_SUBJECTS(): each of the cast alone, large (linecheck.py)
@@ -131,6 +133,12 @@ def scene(t):
         X = F._PX[_base(v)] + x
         things.append(audit.Thing(name, audit.simple(name, X, d, h, base, seated, facing)))
     return things
+
+
+def solids(t):
+    """Job C 5 (Sam, 13 Nov): clipcheck's list, from the same people scene(t) places (a person between cuts is
+    judged only inside one shot, so a new painting's metres never read as a jump)."""
+    return [s for th in scene(t) for s in th.solids]
 
 
 def cam_for(t):
@@ -276,7 +284,7 @@ def movers(t):
 def install(film):
     global F
     F = film
-    film.scene, film.cam_for, film.project = scene, cam_for, project
+    film.scene, film.cam_for, film.project, film.solids = scene, cam_for, project, solids
     film.audits, film.LINE_SUBJECTS = audits, LINE_SUBJECTS
     film.PLAN['CAMS'] = plan_cams()
     film.SET_FEET, film.SET_CAM, film.MOVE_SPAN = SET_FEET, set_cams(), move_spans()

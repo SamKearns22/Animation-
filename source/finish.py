@@ -33,7 +33,7 @@ import imageio_ffmpeg
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FF = imageio_ffmpeg.get_ffmpeg_exe()
-HOOK_FLAGS = ('--y', '--x', '--w', '--until')
+HOOK_FLAGS = ('--y', '--x', '--w', '--until', '--tilt')
 
 
 def has_sound(path):
@@ -61,7 +61,7 @@ def film_hook(film):
         return '', []
     text, opts = film.HOOK
     flags = []
-    for k in ('y', 'x', 'w', 'until'):
+    for k in ('y', 'x', 'w', 'until', 'tilt'):
         if opts.get(k) is not None:
             flags += [f'--{k}', str(opts[k])]
     if opts.get('centre'):

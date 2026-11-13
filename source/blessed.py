@@ -94,6 +94,7 @@ def _take(name, text):
     from burnham_film import load
     x = load(path)
     return x / (np.abs(x).max() + 1e-9) * 0.4
+MA.RESTORE_TAIL.add('blessed-guard')            # Sam, 13 Nov: the clean-up ate the 'k' of "week"
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # cut each take only in silence: before the first word, after the last
     x = _take(ln['audio'], ln['text'])
@@ -144,7 +145,7 @@ T['wal'] = T['gates2'] + 0.35                    # note 30: Walliams led in behi
 T['guard'] = max(T['wal'] + 1.7, L[6]['end'] + 0.6)   # after Brand's last word, so both are readable
 _at(7, T['guard'])
 WAL_SHIFT = L[7]['end'] + 0.35 - (T['wal'] + 1.4)
-DUR = max(L[6]['end'] + 1.0, T['wal'] + 5.15 + WAL_SHIFT)   # note 32: held to the door's slam and a beat
+DUR = L[7]['end'] + 0.9          # Sam, 13 Nov: the film ends on "week", before Walliams is shoved through the door
 G2_CAM = (600, 580, 1440)   # 12 Nov chat 3: lower and closer, no empty tarmac under him                          # gates2's camera centre: x at the cut, x pushed in, y (painting px)
 # Brief 14: she drifts away. Her take is faded to silence by T['gates'] (soundtrack), so the film's record of line 5
 # ends where she is last heard, in the pause after "crisis." (12 Nov, chat 3: the script and mouth checks read the
@@ -205,7 +206,7 @@ PLAN = dict(CEIL=3.0, ROOMS={v: (_PX[v] - 6.0, 0.0, _PX[v] + 6.0, 18.0) for v in
             PEOPLE={}, CAMS={v: dict(pos=(_PX[v], 1.6, 1.0), look=(_PX[v], 1.6, 6.0)) for v in ST.BACK}, GROUPS={})
 
 # What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
-HOOK = ('Russell Brand this week', {'y': 420})     # brief 17 (Claude's pick); over the court's upper windows, clear
+HOOK = ('The 5 stages of feeling blessed', {'y': 385, 'tilt': -7})   # Sam, 13 Nov: the sign-off's diagonal     # brief 17 (Claude's pick); over the court's upper windows, clear
 #                                                   of the sign and his hair (rule 75, measured 11 Nov)
 SUBS_IN_PICTURE = True
 PIECE_FIX = {2: {2: 2.9, 3: 4.24, 4: 5.48, 5: 6.4, 6: 7.35}, 4: {1: 3.2, 2: 4.47},
@@ -232,7 +233,8 @@ HANDS_OK = [('Journalist*', '*', 'no hand', T['s1'], T['s2'], 'seen from behind,
             ('Prison officer', '*', 'over *', T['cell'], T['cot'], "the officer's grip on Brand's arm, walking him "
              'in (brief 9; touch_faults checks the hand sits on the arm)')]
 LOOKS_AT = {}
-ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
+ALLOWED, CONTACTS, MOMENTUM, PUSHES = [('press*', 'press*', 0.0, 99.0)], [], [], []   # Job C 5: the packed press
+#   pack's shoulders brush (2-3 cm on clipcheck's simple 30 cm bodies); no one passes through anyone
 ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [('walliams', T['wal'] + 2.9 + WAL_SHIFT, T['wal'] + 4.6 + WAL_SHIFT, 'gone in through a door')], []
 TOUCHES, FREE_MOVES, RESTS = [], [], []
 SOUND_SOURCES, JOKE_PROPS, ORDER_SWAPS = {}, [], []
@@ -1827,7 +1829,7 @@ def draw_order(t):
 
 
 def caption_at(t):
-    return SUB.caption_at(LINES, t, PIECE_FIX)      # line 5 ends where she is last heard (brief 14: she drifts away)
+    return SUB.caption_at(LINES, t, PIECE_FIX, tail=0.15)   # Sam, 13 Nov: tighter (off as the voice stops); line 5 ends where she is last heard (brief 14: she drifts away)
 
 
 def overlay(img, t):
