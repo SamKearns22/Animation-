@@ -14,6 +14,7 @@
   stops on real figures at the budget and every 5% (no alarms_off); COULD NOT TEST stops; the after-film comparison
   line. Test on Blessed's files without rendering a film. Hand over.
 - **Needs Sam:** nothing.
+- **Then (Sam, 13 Nov): the pre-flight audit**, `notes/preflight-audit.md`, chat 1 of 8 (Opus high).
 - **Read:** this file's "Job C proposals" 5 and "Never again"; then only the lines each tool edits (`codemap.py`).
 - **Open rule requests:** none unwritten (5 and Never again are written; their tools are chat 4's).
 - **For Claude:** figure.NEVER_ALLOWED, figure.named(); preflight sets NAMED_FAULTS_FILE; critique.checks_line();
