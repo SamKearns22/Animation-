@@ -12,6 +12,10 @@
 - **Needs Sam:** nothing until the audit's numbered Y/N message.
 - **Read:** this file; `notes/cost-diagnosis.md` "Job B results" only; `preflight.py` by its MAP (`codemap.py`).
 - **Open rule requests:** none.
+- **Sam (13 Nov, 15:55): the audit's cost goes under its own name (preflight-audit), not Blessed's.** The Stop hook's
+  `ledger.film_of` picked 'blessed' (this chat named Blessed's files most) and fired Blessed's budget stop. At the
+  handover, move this chat's row from notes/ledger/blessed.json to notes/ledger/preflight-audit.json. Paused until 17:00
+  (Sam); a scheduled message resumes this chat then.
 
 ## Known so far (from the notes, 13 Nov)
 - **Time:** 9-15 min a run on Blessed (14 min 46 s in chat 3), up to 40 min on earlier films; re-run after every
