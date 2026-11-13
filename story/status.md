@@ -1,3 +1,3 @@
-Blessed: press placed to Sam's sheet; animatic 4 render stopped on Brand's left arm (elbow folded), 13 Nov chat 4 of 8.
-Waiting: nothing from Sam; the fix is with the next chat.
-Next: Blessed chat 5 of 8 (Opus medium): fix Brand L arm, render animatic 4, finish, send.
+Blessed: animatic 4 sent 13 Nov (Brand L arm fold still in, named).
+Next: Sam's notes on animatic 4.
+Then: fix the arm (Opus medium), routine on Sonnet.
