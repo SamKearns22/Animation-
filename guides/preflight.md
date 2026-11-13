@@ -72,4 +72,4 @@ flagged), and makes a contact sheet with the safe area. A film needs `BLACK_AT` 
 
 ## Stage 5: the final render
 - One final render, checked against the safe-area guides (title, widest caption, busiest frame).
-- Deliver in the chat, save in `animations/`, update `story/status.md`, propose new lessons to Sam (a rule goes in the rulebook on his yes).
+- Deliver in the chat, save in `animations/`, update `story/status.md`, then the end-of-film notes pass (rule 30): every note of the film sorted FAULT / CHOICE / ASK, each fault with the check that missed it and its fix drafted, sent as one numbered Y/N message with any other lessons (a rule goes in the rulebook on his yes).
