@@ -405,8 +405,9 @@ def press_pose(sp, t):
         jy = 8.0 * math.sin(t * 1.7 + sp['seed'] * 0.7)
         V.arm_to(j, sd, (sg * sw + jx, ny + jy, NEAR_Z), 'down', 'fist')
     elif kit == 'stills' and sp.get('eye'):           # Sam 13 Nov: camera to the eye, elbows out, shooting
-        V.arm_to(j, 'R', (60.0, -175.0, 120.0), 'down', 'fist')   # elbows tucked: no arm across Brand (Sam 13 Nov)
-        V.arm_to(j, 'L', (-60.0, -175.0, 120.0), 'down', 'fist')
+        dx = -110.0 * sp.get('eye_in', 0)              # held out on his side, towards RB (Sam chose this sheet, 13 Nov)
+        V.arm_to(j, 'R', (75.0 + dx, -175.0, 120.0), 'out', 'fist')
+        V.arm_to(j, 'L', (-75.0 + dx, -175.0, 120.0), 'out', 'fist')
     elif kit == 'stills':                             # the camera held up over the heads in both hands, shooting
         V.arm_to(j, 'R', (70.0, -240.0, 50.0), 'out', 'fist')
         V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'out', 'fist')   # 'in' folded the elbow back across his chest (13 Nov)
@@ -433,6 +434,7 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
         sp = press_sp(i, seed)
         if spots is G2_PRESS and i in G2_NEAR_KIT:       # Sam 13 Nov: the close-up's three photographers, shooting
             sp['kit'], sp['eye'] = G2_NEAR_KIT[i], True    #   at eye height (nothing held up over anyone),
+            sp['eye_in'] = 1 if spots[i][0] < at[0] else -1
         x, d = spots[i]                               # everyone faces him, body and head (Sam, 11 Nov): from
         sp['yaw'] = 180 - math.degrees(math.atan2(at[0] - x, at[1] - d))   # behind, turned towards his mark
         kit = sp['kit']
@@ -1241,7 +1243,7 @@ def _g2_press():
 # Sam 13 Nov, brief: "a press pack with all their arms and legs, facing the right direction, not blocking the action,
 #   taking photos"; pick 1: three photographers whole in the close-up (one left of Brand, two front-right in front of
 #   the guards' legs), the two near journalists with mics cut. Placed on the camera's numbers (scratch probe, chat 3).
-G2_PRESS = _g2_press() + [(-0.95, 8.3), (-0.6, 3.0), (0.66, 3.0)]   # Sam 13 Nov: one in each front corner, shooting RB
+G2_PRESS = _g2_press() + [(-0.95, 8.3), (-0.55, 2.6), (0.62, 2.6)]   # Sam 13 Nov: 'use this sheet' (sheet 4)   # Sam 13 Nov: one in each front corner, shooting RB
 G2_NEAR_KIT = {len(G2_PRESS) - k: 'stills' for k in (1, 2, 3)}
 
 
