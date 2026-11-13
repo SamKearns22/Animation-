@@ -475,23 +475,52 @@
      "1-3 P12: open teeth in panel 1; frames labelled with who speaks."
     ],
     "fixed": "scared face no longer a toothy grin (down-turned mouth), alarmed and pleading brows stronger, hair greyer, stubble grey; officers no longer blink together; named not changed: circle hands (house style"
+   },
+   {
+    "round": 3,
+    "pass": 1,
+    "stage": "animatic",
+    "date": "2026-11-13",
+    "hunt": 1,
+    "faults": 17,
+    "cant_tell": 1,
+    "open": [
+     "1-8 A1 P6: hands - fingerless balls; between ball knees at crotch (1,2,4,5) reads rude.",
+     "1-3 P2 P12: bun man grins at us, mouth open; not numb, head low, or watching TV.",
+     "1-5 P7 A2: seated men - torso slab on knee balls, no thighs; read standing.",
+     "1-5 P3: arms - stiff tubes to the knees, no elbow.",
+     "3-5 A2 O3: plastic chairs - colour sliver and stray lines only.",
+     "5 P2: sleeper bolt upright, not slumped.",
+     "3,6 P2 P1: pool player - upright, eyes shut, cue flat across body; not lining up a shot.",
+     "3,6 O3 O5: lamp - flat trapezoid hanging from nothing.",
+     "3,6 O3: pool table - no pockets; reads as desk.",
+     "1-3,5 P11: heads on collar, no neck.",
+     "1-3,7-8 P4: bun man round, not gaunt; comedian lacks his grey beard.",
+     "1 A1 S5: van reads as a lift: blank walls, no window or grille.",
+     "7-8 P2: left officer faces us, mouth shut; prisoner looks sleepy, not scared.",
+     "7-8 A1 P1 P10: officers' raised fists grip nothing - a victory salute; prisoner armless.",
+     "7-8 A1: grey curly foreground head reads as a brain.",
+     "7 S3 S5: gates are wooden boards, not the brick gatehouse.",
+     "7 S1: press has no cameras.",
+     "1 P7: van sway - a clip."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 27,
+    "faults": 31,
     "false": 1
    },
    "O3": {
-    "faults": 12,
+    "faults": 15,
     "false": 0
    },
    "A2": {
-    "faults": 11,
+    "faults": 13,
     "false": 0
    },
    "S3": {
-    "faults": 13,
+    "faults": 14,
     "false": 0
    },
    "S2": {
@@ -499,15 +528,15 @@
     "false": 0
    },
    "S1": {
-    "faults": 14,
+    "faults": 15,
     "false": 0
    },
    "S5": {
-    "faults": 9,
+    "faults": 11,
     "false": 0
    },
    "O5": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "O4": {
@@ -531,11 +560,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 7,
+    "faults": 8,
     "false": 4
    },
    "P1": {
-    "faults": 5,
+    "faults": 7,
     "false": 0
    },
    "P8": {
@@ -543,15 +572,15 @@
     "false": 0
    },
    "P2": {
-    "faults": 19,
+    "faults": 23,
     "false": 1
    },
    "P4": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "P7": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P5": {
@@ -563,7 +592,7 @@
     "false": 1
    },
    "P11": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P13": {
@@ -571,10 +600,14 @@
     "false": 1
    },
    "P10": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "P12": {
     "faults": 1,
     "false": 0
    }

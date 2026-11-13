@@ -857,6 +857,8 @@ def pool_table(p, front_only=False):
         p.poly(quad(x - 10, 1260, x + 10, 1320), (90, 60, 40), INK, 1.6)
     if front_only:
         return
+    for x, y in ((644, 1124), (840, 1122), (1036, 1124), (606, 1206), (840, 1208), (1074, 1206)):   # the pockets
+        p.ell(x, y, 11, 6, (20, 20, 22), None)                                               # (critique: 'a desk')
     for k, x in enumerate((700, 760, 990)):                                                 # balls
         p.ell(x, 1150, 9, 6, ((200, 40, 40), (240, 200, 60), (240, 240, 240))[k], INK, 1.0)
 

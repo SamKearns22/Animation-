@@ -544,7 +544,8 @@ def brand_mood(t):
 
 def brand_sp(t, look):
     mood, shades = brand_mood(t)
-    return dict(BC.LOOKS[look], head_life=HEAD_LIFE['brand'], **face('brand', t, mood, shades=shades))
+    d = dict(BC.LOOKS[look], head_life=HEAD_LIFE['brand'], **face('brand', t, mood, shades=shades))
+    return d
 
 
 # ---------------------------------------------------------------------------------------------- moves
@@ -851,10 +852,12 @@ def van(sp, t):
     import sitting as SIT
     seat = _kit_seat(sp, ST.STAGE['van']['brand'], 270)          # the moulded bench's front edge (blessed_sets.van)
     lean = VAN_LEAN + 1.5 * math.sin(2 * math.pi * (t - T['van']) / 2.4)
-    feet = {'L': (-80, 250.0), 'R': (80, 250.0)}
+    feet = {'L': (-90, 250.0), 'R': (90, 250.0)}
     kn, _ = SIT.knees(sp, seat, SIT._spec(lean=lean, feet=feet))
-    arms = {sd: SIT.arm_free((12.0, kn['R'][1] + 70, kn['R'][2]), (1.0, 0.2, -0.3), 'fist') for sd in 'LR'}
-    j = SIT.realize(sp, seat, SIT._spec(lean=lean, feet=feet, arms=arms, head_dy=40.0 if VAN_YAW == 0 else 24.0))
+    # the clasped hands hang down between the shins (chat 5 critique: two fists between two round knees at the
+    #   crotch read as rude), the head sunk low between the hunched shoulders
+    arms = {sd: SIT.arm_free((12.0, kn['R'][1] + 160, kn['R'][2] + 20), (1.0, 0.2, -0.3), 'fist') for sd in 'LR'}
+    j = SIT.realize(sp, seat, SIT._spec(lean=lean, feet=feet, arms=arms, head_dy=60.0 if VAN_YAW == 0 else 24.0))
     j['chair_draw'], j['mid'] = (lambda *a, **k: None), []        # the set paints the bench
     j['nod'] = 3.5 if VAN_YAW == 0 else 5.0
     return j
@@ -984,8 +987,13 @@ def asleep_pose(sp, t):
     """Note 22: asleep in his chair in front of the TV: slumped (the sitting kit's slump, on his red plastic chair),
     chin dropped, head lolled to one side, a slow breath lifting the head (chat 5: front-on with lap and chair)."""
     import sitting as SIT
-    j = SIT.pose(sp, 'slump', seat=SIT.Seat('plastic', col=(136, 52, 44), top=(160, 70, 60)))
-    j['head_roll'] = 16.0
+    seat = SIT.Seat('plastic', width=150, col=(136, 52, 44), top=(160, 70, 60))
+    spec = SIT.spec_slump(sp, seat)
+    for sd in 'LR':                              # chat 5 critique: hands limp on the thighs' outsides, not at the crotch
+        spec['arms'][sd] = SIT.arm_free((96.0, 470.0, 120.0), (0.8, 1.0, -0.1), 'palm')
+    j = SIT.realize(sp, seat, spec)
+    j['legs_over'] = {'L': 0.4, 'R': 0.4}        # the thighs over the jumper's hem: a lap (he read as standing)
+    j['head_roll'] = 26.0
     j['head_dy'] = j.get('head_dy', 0.0) + 3.0 * math.sin(t * 2 * math.pi / 3.6)
     return j
 
@@ -996,15 +1004,15 @@ def pool_pose(sp, t):
     his face up and showing over the cue, both hands down on the cloth's edge."""
     j = V.standing(sp)
     j['hide_legs'] = ('L', 'R')                    # behind the table: the cloth hides them
-    j['lean'] = POOL_LEAN
-    j['nod'] = -1.5                                # chin up, eyes along the cue
-    V.arm_to(j, 'L', unlean((-70.0, 470.0, 300.0), POOL_LEAN), 'out', 'palm')
+    j['lean'] = POOL_LEAN                          # bent low, chin just over the cue (chat 5 critique: he read upright)
+    j['nod'] = -2.5                                # chin up, eyes along the cue
+    V.arm_to(j, 'L', unlean((-10.0, 470.0, 330.0), POOL_LEAN), 'out', 'palm')
     k = 26.0 * math.sin(t * 2 * math.pi / 1.4)       # the practice strokes
-    V.arm_to(j, 'R', unlean((60.0, 440.0, 130.0 - k), POOL_LEAN), 'back', 'grip')
+    V.arm_to(j, 'R', unlean((40.0, 420.0, 120.0 - k), POOL_LEAN), 'back', 'grip')
     return j
 
 
-POOL_LEAN = 55.0
+POOL_LEAN = 66.0
 
 
 def pool_cue(img, cam, mark, sp, pts):
@@ -1028,8 +1036,12 @@ def tv_pose(sp, t):
     lean = _keys(t, [(T['amazed'], -6.0), (T['amazed'] + 0.6, 0.0), (T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, 6.0)])
     life = 1.0 - _ease(_ramp(t, T['amazed'] - 0.3, T['amazed']))   # the push's acting takes over at 'amazed'
     lean += life * filmkit.shifts(t, seed=73, amount=2.0, hold=(1.2, 2.0)) + 0.8 * F.breath(t, 3.2, 1.0)
-    seat = SIT.Seat('plastic')
-    j = SIT.realize(sp, seat, dict(SIT.spec_upright(sp, seat), lean=lean))
+    seat = SIT.Seat('plastic', width=150)          # a bucket seat: its edges show either side of him
+    spec = SIT.spec_upright(sp, seat)
+    for sd in 'LR':                                  # hands on the seat's edges beside his thighs (chat 5 critique:
+        spec['arms'][sd] = SIT.arm_free((110.0, V.HIP_Y - 30, 130.0), (0.6, 0.3, -1.0), 'palm')   # not at the crotch)
+    j = SIT.realize(sp, seat, dict(spec, lean=lean))
+    j['legs_over'] = {'L': 0.4, 'R': 0.4}            # the thighs over the jumper's hem: a lap (he read as standing)
     j['head_dy'] = _keys(t, [(T['amazed'], 6.0), (T['amazed'] + 0.6, 0.0)])
     j['nod'] = _keys(t, [(T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, -1.0)])
     # note 43 (head staring and still): his head lifts with his eyes to the screen, settles into small slack tilts
@@ -1280,7 +1292,9 @@ def wal_face(t):
                      (a + TAKE[0] + 0.32, -0.9), (a + TAKE[0] + 0.36, 0.0)])
     turn = _keys(t, [(a + TAKE[0] + 0.18, 0.0), (a + TAKE[0] + 0.26, -0.35), (a + TAKE[0] + 0.32, -0.35),
                      (a + TAKE[0] + 0.36, 0.0)])
-    if k < TAKE[0] + 0.32:
+    if T['guard'] - 0.2 <= t < TAKE[0]:              # note 48: hearing the line (critique: he read sleepy)
+        mood = 'alarmed'
+    elif k < TAKE[0] + 0.32:
         mood = 'scared'
     elif k < PLEAD[0]:
         mood = 'alarmed'
@@ -1469,8 +1483,8 @@ def draw_walliams(img, cam, t):
 
 def guard_look(t):
     """Note 48: the left officer turns his head to Walliams (on our right) for the line, then back."""
-    a = _keys(t, [(T['guard'] - 0.45, 0.0), (T['guard'] - 0.15, 45.0), (L[7]['end'] + 0.2, 45.0),
-                  (L[7]['end'] + 0.5, 0.0)])
+    a = _keys(t, [(T['guard'] - 0.45, 0.0), (T['guard'] - 0.15, 90.0), (L[7]['end'] + 0.2, 90.0),
+                  (L[7]['end'] + 0.5, 0.0)])          # side-on: at phone size a three-quarter turn read as facing us
     return a if a > 0.5 else None
 
 
@@ -1574,7 +1588,7 @@ def draw_people(img, cam, shot, t):
     elif shot in ('tvroom', 'push'):
         # Sam's note 22: Brand alone on a plastic chair, watching; behind on the left a man asleep in his chair
         # facing the TV; behind on the right an inmate bent over the pool table, lining up a shot
-        pts = put(img, cam, dict(CAST['inmate2'], **face('inmate2', t, 'neutral', gaze_dy=0.3)), st['inmate2'], t,
+        pts = put(img, cam, dict(CAST['inmate2'], **face('inmate2', t, 'neutral', gaze_dy=-0.2)), st['inmate2'], t,
                   j=pool_pose(CAST['inmate2'], t))
         pool_cue(img, cam, st['inmate2'], CAST['inmate2'], pts)
         put_kit(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
