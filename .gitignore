@@ -48,3 +48,6 @@ clips/
 # trial_lineup.py test renders: drafts, never on GitHub
 source/data/trial_lineup/
 OUT/
+source/data/*-round.log
+source/data/*-round-sheet.jpg
+source/data/*-clip-*.mp4

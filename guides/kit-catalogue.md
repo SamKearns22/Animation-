@@ -124,6 +124,7 @@ The follow line on the sign-off (rule 52, 12 Nov): `follow_line.py` (the next li
 | The hand check (rule 41): every arm ends in a visible hand, every frame, every view; a check sheet | `source/handcheck.py` (pre-flight runs it) |
 | The look check at the shot's own camera (rule 43): each face and its pupils measured as drawn; the sheet of eyes that meet | `source/filmkit.py` (`eyeline(aim=, drawn=, at=)`, `check_eyelines`, `look_sheet`); `views.Eyes` notes each pupil |
 | One labelled contact sheet from any film in one command (rule 48) | `source/sheet.py FILM TIMES... [--crop] [--clean]` |
+| One note's round in one command: checks, `--span` clip, sheet, save; one short printout (rule 19) | `source/round.py FILM T0 T1 -m "note"` |
 | The fresh-eye critique (rule 89): a pack for a NEW helper (cold look, then the checklist), its answer saved in the ledger; every named thing per shot, flagging pop-ins (rule 56); frames saved before a notes round | `source/critique.py` (`pack`, `record`, `false`, `where`, `before`, `status`; pre-flight prints `status`) |
 | `--nostamp` for a clip to splice into a final (rule 47) | `source/satire_template.py` (`final ... --nostamp`) |
 | Each shared check tested against the fault that taught it (the old version put back, caught; the fix passes) | `source/kittests.py` |

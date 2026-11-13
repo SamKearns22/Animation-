@@ -20,11 +20,16 @@ MAP
   stage ............ marks a stage done at its end (the first open one of that name; one not in the plan is added
                      with no share) and prints the forecast line for Sam's first line
   forecast() ....... spent / (share of the plan done) x estimate; mid-stage, never less than spent so far plus the
-                     stages after the open one at the rate so far. auto stops the chat once per quarter step when it
-                     passes the estimate by a quarter (only when it says more than the spend alarm already has)
+                     stages after the open one at the rate so far (the line Sam gets at each stage's end)
+  budget_stop() .... rule 24 (Sam, 13 Nov): the chain stops at the film's budget, then at every 5% over it (105%,
+                     110%, ... of the budget), on the real figures (app rows; a chat not yet imported counts at its
+                     running figure). It can be answered, never switched off (there is no alarms_off any more).
+                     Checked by auto after every reply, by `app` when the real figures come in, and at each stage
   stage_alarm() .... rule 24 (Sam, 11 Nov): auto stops the chat when the stage being worked on reaches its share, and
                      at each half share beyond (before: only when the whole film was a quarter over its estimate)
-  audit ............ the 10-line end-of-film audit, also written into FILM.md
+  audit ............ after the film (rule 24, Sam 13 Nov; replaced the 10-line audit): one line, its real cost
+                     against the last three films' (ledgers with an estimate); over 1.5x their average, the next chat
+                     finds why before any film work
   kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
 
     python3 source/ledger.py estimate FILM 10 --stages "cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5"
@@ -164,20 +169,9 @@ def auto(transcript):
         d['chats'][d['chats'].index(old)] = row
     else:
         d['chats'].append(row)
-    alarm = None
-    spent, est = totals(d)[0], d.get('estimate')
-    if est:                                       # Sam, 11 Nov: Remakes ran to 45% on a 14.5% estimate and nothing
-        step = int((spent / est - 1) / 0.25) + 1 if spent >= est else 0      # caught it: an alarm at the estimate
-        if step > d.get('alarm', 0):                                        # and at every quarter over it, once each
-            d['alarm'] = step
-            alarm = (f'COST ALARM (ledger): {film} has spent {spent}% of a week against its estimate of {est}% '
-                     f'({spent / est:.0%}). Stop this work now. Tell Sam in the first line of your reply, with what '
-                     f'is left to do and your estimate for it, and ask Y/N whether to go on. Do not go on before his Y.')
-    stop = stage_alarm(d)                         # each marks its own step, so none repeats on the next reply
-    fore = forecast_alarm(d)
-    alarm = alarm or (stop + (' ' + forecast_line(d) if fore else '') if stop else fore)
+    alarm = budget_stop(d) or stage_alarm(d)      # each marks its own step, so none repeats on the next reply
     store(d)
-    if alarm and not d.get('alarms_off'):          # Sam, 12 Nov: a film can have its alarms switched off
+    if alarm:                                     # never switched off (Sam, 13 Nov: Blessed's alarms_off hid 45%)
         print(json.dumps({'decision': 'block', 'reason': alarm}))
     if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
         return                                    # mid-merge: the chat's own next commit carries it
@@ -239,7 +233,10 @@ def app_import(path=APP):
             if sid not in have:
                 d['chats'].append(row)
         d['chats'].sort(key=lambda c: c['date'])
+        msg = budget_stop(d)                     # the real figures are in: the budget stop on them
         store(d)
+        if msg:
+            print(msg)
         out[film] = (len(rs), totals(d)[0])
     return out
 
@@ -293,20 +290,47 @@ def forecast_line(d):
     return f'Spent {f[0]:g}% of the {f[1]:g}% planned so far; at this rate the film lands at {f[2]:g}%.'
 
 
-def forecast_alarm(d):
-    """Rule 24: the forecast passes the estimate by a quarter: once per quarter step, and only when it says more
-    than the spend alarm (at the estimate and each quarter over) already has. Returns the message or None."""
-    f, est = forecast(d), d.get('estimate')
-    if not f or f[2] < est * 1.25:
+def budget_stop(d):
+    """Rule 24 (Sam, 13 Nov): at the film's budget, then at every 5% over it, the chain stops for Sam's Y; once per
+    step (the step is kept in the ledger, so answering it lets the chain go on to the next). Returns the message or
+    None. On the real figures: app rows, plus the running figure of a chat not yet imported."""
+    spent, est = totals(d)[0], d.get('estimate')
+    if not est or spent < est:
         return None
-    step = int((f[2] / est - 1) / 0.25)
-    if step <= max(d.get('forecast_alarm', 0), d.get('alarm', 0) - 1):
+    step = int(round((spent / est - 1) / 0.05, 6)) + 1
+    if step <= d.get('budget_stop', 0):
         return None
-    d['forecast_alarm'] = step
-    left = ', '.join(f"{x['name']} {x['pct']:g}" for x in d['stages'] if x['done'] is None) or 'nothing planned'
-    return (f"FORECAST ALARM (ledger, rule 24): {d['film']}: {forecast_line(d)} The estimate is {est}%, and this is "
-            f"{f[2] / est:.0%} of it. Stop this work now. First line to Sam: that forecast line, what is left "
-            f"({left}), and a cheaper way that keeps the quality; ask Y/N. Do not go on before his Y.")
+    d['budget_stop'] = step
+    real = round(sum(c['cost'] for c in d['chats'] if c.get('src') == 'app'), 2)
+    left = ', '.join(f"{x['name']} {x['pct']:g}" for x in d.get('stages') or [] if x['done'] is None) or 'not planned'
+    return (f"BUDGET STOP (ledger, rule 24): {d['film']} has spent {spent}% of a week ({real}% from the app's real "
+            f"figures, the rest from chats not yet read from the app) against its budget of {est}% ({spent / est:.0%}). Stop "
+            f"this work now, finish nothing more. First line to Sam: that figure, what exists, what is left ({left}), "
+            f"and the cheapest way on that keeps the quality; ask Y/N. Do not go on before his Y. The next stop is at "
+            f"{est * (1 + 0.05 * step):.1f}%.")
+
+
+def compare_line(d):
+    """Rule 24 (Sam, 13 Nov): after the film, one line: its real cost against the last three films' (ledgers with an
+    estimate, by their last chat before this film's). Returns (line, over 1.5x their average)."""
+    spent = totals(d)[0]
+    last = max((c['date'] for c in d['chats']), default='')
+    past = []
+    for f in glob.glob(os.path.join(DIR, '*.json')):
+        o = json.load(open(f))
+        if o.get('film') == d['film'] or o.get('estimate') is None or not o['chats']:
+            continue
+        end = max(c['date'] for c in o['chats'])
+        if end < last:                            # ended before this film's last chat (not one still running)
+            past.append((end, o['film'], totals(o)[0]))
+    past = sorted(past)[-3:]
+    if not past:
+        return f"{d['film']}: {spent}% of a week; no earlier film to compare.", False
+    avg = sum(x[2] for x in past) / len(past)
+    over = spent > 1.5 * avg
+    return (f"{d['film']}: {spent}% of a week, against the last {len(past)} films' average {avg:.1f}% ("
+            + ', '.join(f'{n} {v}' for _, n, v in past) + f"): {spent / avg:.1f}x"
+            + ('. OVER 1.5x: the next chat finds why before any film work.' if over else '.')), over
 
 
 def open_stage(d):
@@ -384,39 +408,9 @@ def render(d):
         for n, c in sorted(d['checks'].items()):
             kinds = ', '.join(f'{k} {v}' for k, v in sorted(c['kinds'].items(), key=lambda kv: -kv[1]))
             out.append(f"- {n}: {c['runs']} runs, {c['faults']} faults" + (f' ({kinds})' if kinds else ''))
-    if d.get('audit'):
-        out += ['', '## Audit (end of film)'] + d['audit']
+    if d.get('compare'):
+        out += ['', '## After the film', d['compare']]
     return '\n'.join(out) + '\n'
-
-
-def audit(d):
-    spent, rounds, notes, reps = totals(d)
-    est = d['estimate']
-    caught = sorted(((c['faults'], n) for n, c in d['checks'].items() if c['faults']), reverse=True)
-    silent = sorted(n for n, c in d['checks'].items() if not c['faults'])
-    falses = unable = 0
-    for f in glob.glob(os.path.join(_paths(d['film'])[2], 'round-*.txt')):
-        t = open(f).read().lower()
-        falses += t.count('false alarm')
-        unable += t.count('could not test')
-    over = '' if est is None else (' (over: name what ran over)' if spent > est else ' (within)')
-    models = {}
-    for c in d['chats']:
-        models[c['model']] = round(models.get(c['model'], 0) + c['cost'], 2)
-    lines = [
-        f"1. Cost: estimate {est if est is not None else '?'}%, spent {spent}% of a week{over}.",
-        f"2. Chats {len(d['chats'])}, rounds {rounds}; by model: " + ', '.join(f'{m} {v}%' for m, v in models.items()) + '.',
-        f"3. Sam's notes {notes}; repeated {len(reps)}" + (f' ({100 * len(reps) // notes}%)' if notes else '') + '.',
-        '4. Repeated: ' + ('; '.join(r.split(' | ')[0] for r in reps[:4]) or 'none') + '.',
-        '5. Would have caught them: ' + ('; '.join(r.split(' | ')[1] for r in reps if ' | ' in r)[:300] or 'not given') + '.',
-        '6. Checks that caught things: ' + (', '.join(f'{n} {k}' for k, n in caught[:6]) or 'none') + '.',
-        '7. Checks that ran and never fired: ' + (', '.join(silent) or 'none') + '.',
-        f'8. False alarms {falses}; could not test {unable} (from the round files).',
-        '9. By-hand rules: read the check sheet text in the round files; name any that never caught anything.',
-        '10. Proposal for Sam (one line, a rule replaced or a check added): ',
-    ]
-    return lines
-
 
 
 KEEP_DIRS = ('source/audio', 'music', 'references', 'refs', 'sounds')   # rule 37: these go on GitHub
@@ -508,7 +502,7 @@ def main():
         s_ = mark_stage(d, o.name)
         print(f"ledger: {o.film}: stage '{o.name}' done" + (' (not in the plan: no share)' if s_.get('unplanned') else ''))
         print(forecast_line(d))
-        msg = forecast_alarm(d)
+        msg = budget_stop(d)
         if msg:
             print(msg)
     elif o.cmd == 'round':
@@ -546,8 +540,9 @@ def main():
                  if est is not None else ' (no estimate set)'))
         print('\n'.join(kept_lines()))           # rule 37: sounds and references on GitHub, checked at the handover
     elif o.cmd == 'audit':
-        d['audit'] = audit(d)
-        print('\n'.join(d['audit']))
+        d['compare'], over = compare_line(d)
+        d.pop('audit', None)
+        print(d['compare'])
     store(d)
 
 

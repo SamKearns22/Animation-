@@ -233,7 +233,8 @@ HANDS_OK = [('Journalist*', '*', 'no hand', T['s1'], T['s2'], 'seen from behind,
             ('Prison officer', '*', 'over *', T['cell'], T['cot'], "the officer's grip on Brand's arm, walking him "
              'in (brief 9; touch_faults checks the hand sits on the arm)')]
 LOOKS_AT = {}
-ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
+ALLOWED, CONTACTS, MOMENTUM, PUSHES = [('press*', 'press*', 0.0, 99.0)], [], [], []   # Job C 5: the packed press
+#   pack's shoulders brush (2-3 cm on clipcheck's simple 30 cm bodies); no one passes through anyone
 ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [('walliams', T['wal'] + 2.9 + WAL_SHIFT, T['wal'] + 4.6 + WAL_SHIFT, 'gone in through a door')], []
 TOUCHES, FREE_MOVES, RESTS = [], [], []
 SOUND_SOURCES, JOKE_PROPS, ORDER_SWAPS = {}, [], []

@@ -1,27 +1,20 @@
 # Cost diagnosis job (Sam, 13 Nov): why each step got expensive, and how to make it cheap AND good
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 19 (short printouts), 85 (cost watch), 89 (critique).
-- **Done (13 Nov, chat 2 of 8, Opus high): Jobs B and C; Sam answered (below).**
-- **Sam's answers (13 Nov):** Y to 1, 2, 3, 6. **4:** ball hands are the house style (the critique stops listing
-  them); no necks and no thighs are FAULTS. **5:** "have we not built this check before?" Answered: yes,
-  `clipcheck.py` (18 Oct), run by pre-flight, but only on films that define `solids(t)` or `layers(t)`; Blessed defines
-  neither, so it tested nothing and said nothing. New plan for 5 (waiting for Sam's Y): pre-flight says COULD NOT TEST
-  when a film with people has no solids, and Blessed gets its list; no new check.
-- **Next: chat 3 of 8, Opus MEDIUM (building from this plan):** write and test 1, 2, 3, 6 and 4's checklist line
-  (ball hands = house style; necks and thighs stay faults), each in the rule or tool named in "Job C proposals";
-  CLAUDE.md wording for 2 and 6 as written there. Test on Blessed's files without rendering a film. Hand over.
-- **Sam (13 Nov):** Y to 5's new plan (sent to chat 3); necks and thighs fixed from the NEXT film, not Blessed.
-- **Sam: Y to "Never again" 1-5 (3 as rewritten: improve, then merge, then remove only with his Y).** Written 13 Nov:
-  rules 24, 85, 19 and CLAUDE.md "Rules are permanent". Their tools (ledger stop on real figures at budget and every
-  5%, no alarms_off; COULD NOT TEST stops; after-film comparison line) sent to chat 3 to build.
-- **Needs Sam:** nothing.
-- **Read:** this file's "Job C proposals" only; then only the lines of each tool it edits (`codemap.py`).
-- **Open rule requests:** Job C 1-6 (Y; chat 3 writing and building).
-- **For Claude:** `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Item 1 = `views.py` ~line 335
-  (the 'skeleton arm' allow must not cover "folded back across the body") + `critique.py fixed` printing open faults as
-  a "Checks:" line. Item 3 = a round runner in the film kit (fix, `final --small --span`, sheet, checks, commit, one
-  printout). Never page a whole chat's events (~1.2k tokens an event).
+- **Rules that bite next:** 24 (budget stop at the budget and every 5% over; never off), 19 (COULD NOT TEST stops), 85.
+- **Done (13 Nov, chat 4 of 8, Opus medium): Job C 5 and the "Never again" tools, tested on Blessed (no render).**
+  5: pre-flight says COULD NOT TEST and stops for a film with people and no solids/layers; Blessed has its list
+  (clipcheck on every frame, 8 s: clean once the press pack's 2-3 cm shoulder brushes were allowed). Ledger: one
+  budget stop at the budget and every 5% of it over (replaces the quarter alarm and the forecast alarm); alarms_off
+  gone (Blessed's removed); `app` checks it on real figures; `audit` is now the one after-film comparison line.
+  Report: COULD NOT TEST counted in the summary's first line; a pre-flight warning saying it stops. Kittests pass.
+- **Next:** the pre-flight audit (Sam, 13 Nov), `notes/preflight-audit.md`, chat 1 of 8, Opus HIGH (planning).
+  Blessed's next chat meets the budget stop at once (44.9% of 19%): Sam's Y.
+- **Needs Sam:** 1. "every 5% over" read as 5% of the budget (Blessed: a stop about every chat); N = every 5% of a week.
+- **Read:** `notes/preflight-audit.md` (the audit's brief); this file only for the rules above.
+- **Open rule requests:** none unwritten.
+- **For Claude:** ledger.budget_stop(d) (d['budget_stop'] = last step), ledger.compare_line(d); blessed_checks.solids;
+  blessed.ALLOWED press*; preflight item 5 just above the clipcheck call. Never page a whole chat's events.
 
 ## Never again (proposed 13 Nov; Sam asked "how can we ensure this never happens again?")
 1. Real money only: every handover adds its chat's real app cost to the film; the bottom lines show spent vs budget.

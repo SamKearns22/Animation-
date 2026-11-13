@@ -353,6 +353,9 @@ def _text_only(film, problems, end, fps):
 def main():
     name, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
+    named_file = os.path.join(out, f'{name}-named.txt')   # Job C 1: faults named not fixed (ARM_FOLD_NAMED), from
+    open(named_file, 'w').close()                         # every forked child too
+    os.environ['NAMED_FAULTS_FILE'] = named_file
     audit = '--audit' in sys.argv              # list every fault instead of stopping at the first
     if audit:
         F._ALLOW.append('audit of a finished film')
@@ -374,7 +377,7 @@ def main():
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
     for x in warn:
-        if new_template and ('rule 74' in x or 'rule 8:' in x):
+        if (new_template and ('rule 74' in x or 'rule 8:' in x)) or 'COULD NOT TEST' in x.upper():   # rule 19
             stop.append(x)                                           # Sam, 10 Nov (Job J Q4): refuse on new films
         else:
             print('WARNING:', x)
@@ -409,6 +412,9 @@ def main():
     if hasattr(film, 'scene'):
         shared += collisions.check(film)        # rules 5, 6, 12, 13: nothing passes through anything; nothing pops in;
         roster = collisions.LAST_ROSTER         # hands on what they touch, props held, resting hands clear
+    if people and not any(hasattr(film, a) for a in ('solids', 'layers')):   # Job C 5 (Sam, 13 Nov): Blessed's
+        shared.append('clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing '
+                      'checks that no one passes through anyone or teleports (clipcheck.py; rule 19)')   # in silence
     if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT', 'draw_order')):
         shared += clipcheck.run(film)           # passes through, teleports, drawing order, flips (rule 57)
     if runs['collisions and pop-ins (rules 5, 6)'] and not any(hasattr(film, a) for a in ('scene', 'solids')):
@@ -597,6 +603,17 @@ def main():
         if not ok and '--faults-named' not in sys.argv:
             problems.append(f'{line}: pre-flight refuses the animatic (rule 89) until the round\'s last critique pass '
                             'is clean, or its faults are named to Sam (then add --faults-named)')
+    checks = []                                  # Job C 1: a fault caught is fixed or told, never waved through
+    named = list(dict.fromkeys(x.strip() for x in open(named_file) if x.strip()))
+    if named:
+        checks.append(f'{len(named)} fault(s) named, not fixed: ' + '; '.join(named[:3])
+                      + (f' (+{len(named) - 3} more in {named_file})' if len(named) > 3 else ''))
+    if not audit:
+        cl = critique.checks_line(name)
+        if cl and ('--faults-named' in sys.argv or ok):
+            checks.append(cl[len('Checks: '):])
+    if checks:
+        print('Checks: ' + ' | '.join(checks) + '   <- put this line in Sam\'s message')
     notes = (['The figure guard (allowed drawings, how often):'] + log) if log else []
     notes += (['The film\'s exceptions (rule 13; reasons in the notes\' "## Exceptions"):'] + wlist) if wlist else []
     report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'), notes=notes)
