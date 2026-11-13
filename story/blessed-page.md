@@ -1,0 +1,479 @@
+# blessed: the page a notes round reads (python3 source/page.py blessed; regenerate after any edit)
+
+Read this, then only the lines a note points to (`page.py FILM find "note words"`).
+
+
+## blessed.py (2050 lines)
+- 23: HERE (data)
+- 51: NAME (data)
+- 52: HAS (data)
+- 53: TITLE (data)
+- 54: TITLE_AT (data)
+- 55: INMATE (data)
+- 58: CAST (data)
+- 65: LINES (data)
+- 81: `_take` Sam's recording, else an espeak-ng stand-in (polanski.py's way), cached in source/data.
+- 98: L (data)
+- 109: FADE_FROM (data)
+- 112: `_at` 
+- 118: T (data)
+- 147: WAL_SHIFT (data)
+- 148: DUR (data)
+- 149: G2_CAM (data)
+- 165: `_voice_env` The speaker's loudness per drawing over the whole film (for headlife).
+- 179: HEAD_LIFE (data)
+- 182: SHOTS (data)
+- 188: VIEW (data)
+- 191: SHOT_CAST (data)
+- 199: BENCHMARK (data)
+- 203: _PX (data)
+- 205: PLAN (data)
+- 209: HOOK (data)
+- 211: SUBS_IN_PICTURE (data)
+- 212: PIECE_FIX (data)
+- 215: KEEP_CLEAR (data)
+- 217: PROP_SIZES (data)
+- 218: OUTFIT (data)
+- 219: HEIGHTS (data)
+- 220: FAMOUS (data)
+- 221: CUT_RESTS_OK (data)
+- 223: HANDS_OK (data)
+- 235: LOOKS_AT (data)
+- 241: LINE_OK (data)
+- 255: STILL_OK (data)
+- 257: GUARDS (data)
+- 260: TRACK (data)
+- 263: BLINKS (data)
+- 266: `shot_of` 
+- 270: `_ramp` 
+- 274: `_ease` 
+- 279: `_s` 
+- 283: `put` Someone standing on a mark (screen x, ground y, pixels per metre).
+- 296: `_scarf_turned` His long white scarf when he is turned (hunt 1, 12 Nov: it vanished in the three-quarter walk): the front
+- 307: `_officer_turned` Note 28 (Sam, 12 Nov: the escort 'needs to look more like an HM Prison officer'): turned, his white shirt read
+- 326: `put_seated` Someone seated, feet on the floor at the mark (the seated pose's own drop lowers him onto the seat).
+- 337: `put_kit` Someone seated by the sitting kit (j from sitting.realize: the seat drawn with them, knees and lap front on),
+- 347: TV_TILT (data)
+- 350: PRESS_HAIR (data)
+- 351: PRESS_JKT (data)
+- 352: CREW_TOP (data)
+- 353: CREW_LEG (data)
+- 354: PRESS_STYLE (data)
+- 355: PRESS_KIT (data)
+- 357: PRESS_YAW (data)
+- 358: PRESS_FACE (data)
+- 362: `press_sp` Journalist i: their own build, clothes, haircut and turning head (blessed_cast.press_person).
+- 387: NEAR_ARM (data)
+- 392: `press_pose` Their arms: the camera operator's near hand up on the camera's grip, a boom held up in front (hands hidden by
+- 425: `press` The press pack from behind (Sam's note 4): standing people with shoulders, collars, arms and turning heads, fa
+- 466: `_kit` The hand-held kit at the hands (press(): from behind it is painted before the person, from the front after).
+- 476: `_stills` A stills camera held up over the heads, seen from behind (note 24): the body and its screen between the raised
+- 506: `_hand_mic` N10: a hand-held TV microphone held out towards him, seen from behind: the handle up out of the fist, the
+- 518: `_phone_up` A phone held up filming, seen from behind: its back over the hand, the screen's glow round its edge.
+- 527: `_tv_camera` A TV camera on the right shoulder, seen from behind: the body beside the head, the battery on its back,
+- 540: `_boom` A boom microphone held up over the scrum: the pole from his hands (in front of him, hidden) up and forward,
+- 561: `face` 
+- 568: `brand_mood` The acting list: sincere showman (arrival, shades lowered on 'mate'); stiff and earnest (the oath); hollow
+- 591: `brand_sp` 
+- 601: ANCHORS (data)
+- 605: `word_at` When line n reaches `words` (from ad_vanced_notice: the share of the text before them, spread over the take's
+- 622: `_bump` 
+- 626: `_keys` A number eased between timed keys [(t, value)], held before the first and after the last.
+- 636: `_contact` 
+- 641: `_rest_spec` The hand where the standing pose (or `j`) puts it, as an arm spec: (contact point, pole, hand shape).
+- 650: `_arm` views.arm_to with the hand's reach beyond the wrist given (`off`), so a hand changing shape never pops.
+- 660: `arm_keys` The hand on `side` through timed keys [(t, spec)]: spec = (target, pole, shape) in the torso frame, or None
+- 688: `unlean` A point where it should end up AFTER the body leans `lean` degrees, in the torso frame before the lean.
+- 698: HANDS (data)
+- 701: `_log_hands` 
+- 709: `_world_to_person` 
+- 714: `_beads` 
+- 728: `_sleeve_edge` An ink-edged, slightly darker forearm over the jacket, so the arm on the heart does not merge with it (Sam, hu
+- 740: `_box_prop` A flat box held in the hand (the Bible), drawn from its 8 corners in 3D, leaning with the body.
+- 756: `_sway` The swagger's roll of the head and shoulders, towards each planted foot.
+- 761: `_dip` Down at the knees by `amt` person units, feet kept on the floor, knees opening a little.
+- 778: `arrive` (mark, yaw, joints) for Brand arriving: swaggers in, leans in to the press on "mate", dips with his arms
+- 820: OATH_BIBLE (data)
+- 821: OATH_RAISE (data)
+- 822: OATH_BOOK (data)
+- 827: `oath` 
+- 867: `oath_gaze` 
+- 872: `dock` 
+- 883: VAN_HANDS (data)
+- 886: `van` 
+- 897: VAN_YAW (data)
+- 902: `_seat` Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
+- 930: CELL (data)
+- 932: ESC_GO (data)
+- 933: ESC_STOP (data)
+- 934: OFF_BEHIND (data)
+- 937: `_cell_mark` 
+- 942: `escort` (mark, yaw, joints, head_yaw) for Brand or the officer in the escort.
+- 974: BRAND_BED (data)
+- 976: CELL_LOOK (data)
+- 984: CELL_SHOULDERS (data)
+- 987: GRIP_AT (data)
+- 990: `officer_grip` His near hand ('L', facing left) on Brand's near upper arm until the stop, then back to his side.
+- 1013: `cot_pose` Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), staring up at the ceiling (t
+- 1031: COT_BIBLE_HAND (data)
+- 1034: `_cot_cross` 
+- 1045: `cot_face` Note 41: eyes squeezed shut on each sob, then a tear runs down from each eye (no static streaks).
+- 1052: `phone_extra` 
+- 1060: `asleep_pose` Note 22: asleep in his chair in front of the TV: slumped (the sitting kit's slump, on his red plastic chair),
+- 1075: POOL_TOP (data)
+- 1076: POOL_YAW (data)
+- 1079: `pool_pose` N8 (Sam, 13 Nov, a repeat of 43: 'a squashed person who clips through a pool table'): side-on at the table's
+- 1095: POOL_LEAN (data)
+- 1098: `pool_cue` The cue from his cue hand through the bridge hand on the cloth, its tip at the cue ball.
+- 1118: `pool_body_pts` N8 check: his body's points on the frame (hands and forearms left out: the bridge hand rests on the cloth).
+- 1136: POOL_SEEN (data)
+- 1139: `tv_pose` Chat 5: on the sitting kit (upright, hands on the seat's edges), front-on with knees and lap. Sam, 13 Nov
+- 1158: `tv_blink` Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones.
+- 1167: `_gates_cut` 
+- 1171: GATE_V (data)
+- 1172: GATE_OPEN (data)
+- 1175: `_arms_wide` Both arms flung up and open at t_up: out to the side on the way (figure-rig 3's waypoint), then up.
+- 1184: `gates_wide` 
+- 1202: GATE_D_OUT (data)
+- 1210: G2_WALK (data)
+- 1211: G2_X (data)
+- 1214: `_g2_press` The wide shot's whole pack (both sides, note 32). Anyone whose head would cover Brand (down to his hips) or th
+- 1248: G2_PRESS (data)
+- 1249: G2_NEAR_KIT (data)
+- 1252: `gates_at` Note 46: where Brand stands (x, d) at t in either release shot; the whole pack looks there.
+- 1261: `gates_close` 
+- 1300: `gates2_head` Note 49: his head turns to play to the cameras on one side, then the other (degrees, None = ahead).
+- 1312: WAL_X (data)
+- 1313: WAL_D (data)
+- 1314: DOOR_D (data)
+- 1317: OFF_DX (data)
+- 1318: LEAF_OPEN (data)
+- 1321: `wal_place` (x, d) in metres on the gates' Level camera: Walliams, or an officer at dx from him.
+- 1334: `wal_roll` His whole body tipped (degrees, + leaning to our right): dug in against the drag, wobbling as he fights.
+- 1341: `_blend_specs` A hand's (target, pole, shape) from timed phases [(t0, fn)]: each fn(t) gives a spec; 0.15 s cross-fades.
+- 1354: `wal_pose` His body and arms through the beats (front-on). jamb: the frame's edge in his own units, for the grab.
+- 1398: `wal_face` Scared, darting; the double-take (glance, away, SNAP back, alarmed); pleading; scared at the door.
+- 1422: `_person_pt` A point u of the way from a joint to the next (2D person units) -> screen, on a person drawn front-on.
+- 1430: `_to_person` A screen point -> a hand target in a front-on person's torso frame, z units nearer the lens.
+- 1437: `_reach` A hand target pushed out along its line from the shoulder to at least k of the arm's length (an elbow folded
+- 1447: `_rot` A screen point turned with a layer rotated `deg` (PIL: anticlockwise on screen) about c.
+- 1454: `leaf_angle` 
+- 1460: `_leaf` A point on the wicket's leaf (hinged on its right edge at x 1.15), x along it from the free edge (0) to the
+- 1468: `_gp` 
+- 1472: `door_inside` Note 32: the prison seen through the open wicket: a short lit passage (pale green walls, a lino floor, a strip
+- 1499: `draw_leaf` The wicket's leaf slammed shut (from SLAM): the set's painted open leaf is covered with the gate's timber, the
+- 1517: `_door_clip` A mask (the frame's size) of the wicket doorway, for people past its plane; hand: (x, y, r) also shows a hand
+- 1531: GUARD_SIDES (data)
+- 1534: `draw_walliams` Notes 25, 30, 32: the lit passage behind the wicket; Walliams between two officers on his own layer (tipped as
+- 1598: GUARD_EYES (data)
+- 1601: `guard_look` N9 (Sam, 13 Nov): no head turn. Turned side-on he swapped to the separate profile drawing (another size, hair
+- 1607: `guard_eyes` 0..1: the left officer's eyes on Walliams for the line (note 48), then back to the front.
+- 1614: ARRIVE_CAM (data)
+- 1615: TV_READER (data)
+- 1616: `_cam` The camera on a view; the push is a slow zoom into his face on the tvroom painting (brief 14).
+- 1649: `draw_people` 
+- 1757: DEFER (data)
+- 1760: `handset_pose` The landing phone's steel handset at his ear (moves.phone_at_ear's hold, his near hand: facing left he is
+- 1780: `phone_cord` The handset's armoured steel cord, from under his hand sagging back to the phone (blessed_sets.PHONE_CORD).
+- 1795: `picture` The frame WITHOUT captions (those go on last, so wording notes never re-render a picture).
+- 1813: `set_still` blessed_sets.alone's tile: the view with the cast at their marks, at the middle of its first shot.
+- 1827: `draw_order` 
+- 1831: `caption_at` 
+- 1835: `overlay` 
+- 1842: `frame_image` 
+- 1846: `_gavel_knock` A wooden gavel on a block: a sharp click, a hollow 'tock' and a short ring, about 0.5 s (made here: no sample)
+- 1858: `_gavel_sample` Sam's gavel (13 Nov, audio/sfx-gavel.mp3, two knocks): cut so the first knock lands on the dock's first frame.
+- 1867: MUSIC (data)
+- 1868: MUSIC_GAIN (data)
+- 1872: `music` Sam's note 27: The Mountain under the film from the cell (prison) on: its sad opening, then (joined in the hus
+- 1902: `soundtrack` 
+- 1929: `touch_faults` The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle):
+- 1954: `furniture_faults` N8 (Sam, 13 Nov: 'how did a squashed person who clips through a pool table get through a 40-minute check
+- 1990: `checks` Plan checks: subtitles printed to proofread, mouths on the words, the voice level. Raises on faults.
+- 2012: `_fx_tears` His tears alone, large (rule S7: an effect drawn alone for the shape check).
+- 2018: EFFECTS (data)
+- 2023: `main` 
+
+## blessed_cast.py (1144 lines)
+- 32: HERE (data)
+- 39: MC (data)
+- 42: BR_SKIN (data)
+- 43: BR_HAIR (data)
+- 44: BR_HAIR_L (data)
+- 45: BR_GREY (data)
+- 46: BR_BROW (data)
+- 47: BR_IRIS (data)
+- 48: BR_LIP (data)
+- 49: BD_MOUST (data)
+- 50: BD_MID (data)
+- 51: BD_LOW (data)
+- 52: BD_GRAIN (data)
+- 53: GREY_JKT (data)
+- 54: DARK_SUIT (data)
+- 55: SCARF (data)
+- 56: TRACK (data)
+- 57: GOLD (data)
+- 58: SHADES (data)
+- 70: MOODS (data)
+- 95: `brand_beard` 
+- 150: `curls` A curly edge: the polyline cut into bumps `step` long, each bulging `amp` to one side (out=+1 left of the
+- 168: `waves` A loose wavy edge (his curls are big waves, not ringlets): the polyline resampled every `step` and pushed
+- 194: `brand_hair` His hair (face fractions). Loose (b01-b07): a high hairline, swept back off the forehead, flat-ish on top, the
+- 235: `_texture` Wave strands inside a hair shape: short S-curves falling down the hair, light and grey (his grey streaks).
+- 255: `_top_strokes` 
+- 270: `bun` The topknot on the crown (sketch b08): a round knot of curls, a band, a few ends.
+- 280: `hair_back` Behind the head: the big curly mass down past the shoulders (loose), or just the bun (topknot).
+- 293: `shades` Aviator sunglasses (ref 02, b06, b07, b09): two big black teardrop lenses in a heavy black frame, a straight
+- 312: `tears` u None: the old streak and drop. u given (Blessed note 41: streaks read as snot): only a drop, squeezed out
+- 330: `deep_set` Deep-set eyes (b01-b03): a shadow under each brow, over the eye, and a soft bag line below.
+- 342: `brand_mouth` 'grin' (the showman's beam, top teeth), 'gasp' (amazed: an open O), 'cry' (open, corners pulled down).
+- 371: `eye_faults` Rule S5, measured (12 Nov): every face here draws its eyes through traitors_cast.eye (via P4.eyes). Each eye i
+- 404: `gaze` This film's gaze_dy is a share of the eye's half-height (-1 up .. 1 down); traitors_cast.eye takes drawing uni
+- 411: `look_of` 
+- 415: HEAD_K (data)
+- 418: `class _Big` While drawing his head, the face height (patriots4's and turnhead's H) is HEAD_K times the house size.
+- 428: `_lift` The head's anchor moved up so the bigger face grows upwards: the chin drops only a little onto the neck.
+- 433: `_outline` P4.outline_uv without its fold: that list runs out to the upper-left temple and back and repeats the left
+- 445: `brand_head` 
+- 450: `_brand_head` 
+- 494: BRAND_PROFILE (data)
+- 497: `_look_clamp` N11: a look past 1 (eyes to the corners) is kept; an ordinary one is clamped as before.
+- 502: `_brand_mood` 
+- 510: `_brand_rest` 
+- 518: `_scr` 
+- 524: `_turned_long` His curls from the side and behind: hanging from the back of the skull, over the ear and the nape, down past
+- 553: `_brand_turned_hair` 
+- 570: `_th_draw_big` 
+- 590: PRESS_STYLES (data)
+- 602: `_press_layout` 
+- 609: `_press_cap` 
+- 616: `_press_profile` 
+- 621: `_press_hair` 
+- 655: `_press_mood` 
+- 659: `_press_rest` 
+- 663: `press_person` Register one journalist's turning head (built when first drawn) and return their cast entry's head part.
+- 675: `brand_torso` trial: the open white shirt's deep V, chest hair, crucifixes on chains, the long white scarf hanging both
+- 704: `judge_torso` The red robe's black-trimmed front, white bands at the throat, a black sash over the shoulder.
+- 715: `officer_torso` HMPPS officer: white shirt, black tie, black epaulettes, a black belt with a key chain.
+- 734: WIG_K (data)
+- 737: `judge_head` The library's head (bald under the wig) with a short white bench wig: rows of rolled curls over the crown,
+- 765: INMATE_FACES (data)
+- 782: STAFF_FACES (data)
+- 795: FRONT_FACES (data)
+- 796: LONG_STYLES (data)
+- 799: `_inmate_layout` 
+- 806: `inmate_head` 
+- 813: `_inmate_head` 
+- 910: `_hair_mass` The hair seen round and below the head from the front (drawn before the face): a bob to the jaw, long hair
+- 948: `_hair_front` The hair over the forehead (after the face): a fringe for the bob and long hair, curls for the curly mass,
+- 982: `_glasses` Thin-framed glasses round both eyes, a bridge across the nose.
+- 994: FACE_HEADS (data)
+- 999: `mouth_faults` Notes 5, 13, 15 (a repeated note): nobody drawn with a front face may be on the house head, which draws no lip
+- 1013: BRAND (data)
+- 1017: BRAND_STAND (data)
+- 1018: BRAND_DOCK (data)
+- 1019: BRAND_PRISON (data)
+- 1021: JUDGE (data)
+- 1025: OFFICER (data)
+- 1029: NEWSREADER (data)
+- 1033: CAST (data)
+- 1034: LOOKS (data)
+- 1038: `_font` 
+- 1042: `sheet` Front, side, back of everyone at true heights (Brand in his three looks), a 1.75 m person.
+- 1073: FACES (data)
+- 1081: `faces_sheet` His face large in every mood and look; his photos beside (rule 76).
+- 1107: `turn_sheet` 
+- 1126: `head_png` 
+
+## blessed_checks.py (296 lines)
+- 26: F (data)
+- 29: ROOM (data)
+- 30: LEVELS (data)
+- 33: `_base` 
+- 37: `_level` The painting's level camera: the real one where the set has it, else one fitted to its first mark (eye 1.6 m,
+- 57: `where` A screen mark on a painting -> (x, d, floor height) in metres.
+- 66: `placed` Everyone drawn at t: [(name, view, (x, d, floor), height, seated, facing)], from the same functions the
+- 127: `scene` Everyone solid, in their painting's metres, laid in its plan room (audit.py: nothing passes through anything,
+- 138: `solids` Job C 5 (Sam, 13 Nov): clipcheck's list, from the same people scene(t) places (a person between cuts is
+- 144: `cam_for` 
+- 149: `project` World points (N x 3: x across the plan, y up, z = depth) -> screen x, y and depth, through the painting's leve
+- 161: `plan_cams` Rule 1: a camera in the plan for every shot, in its painting's room, looking in.
+- 171: _ALONE (data)
+- 174: `keep` While one body is audited alone, everyone else is drawn on a scratch picture (their points still come back:
+- 180: `scratch` 
+- 184: `_alone` 
+- 207: `audits` Each of the cast alone over every frame they are on screen: in pieces, popping, stretching, frozen
+- 231: `LINE_SUBJECTS` Each of the cast alone, large, for the line-work check (every shape outlined, one weight).
+- 243: SET_FEET (data)
+- 263: `set_cams` 
+- 267: `move_spans` 
+- 271: `set_movers` Everyone standing in the walking shots: (who, x, d, (body width, height)) in the painting's metres
+- 277: `movers` Everyone on screen as (name, world point at the body's middle) for the screen-direction check across cuts
+- 284: `install` 
+
+## blessed_jury.py (147 lines)
+- 21: TC (data)
+- 24: FACES (data)
+- 51: _P (data)
+- 52: JURORS (data)
+- 82: BACK_ROW (data)
+- 83: FRONT_ROW (data)
+- 88: ACT (data)
+- 102: LOOK_AT_HIM (data)
+- 105: `_ramp` 
+- 109: `_ease` 
+- 113: `state` The face and head of juror w at film time t; k is the film time of "the blessed evidence".
+- 136: `draw` Both rows on court_jury: the back row, its box rail (ST.mid), the front row; the front box is ST.front.
+
+## blessed_sets.py (1491 lines)
+- 37: HERE (data)
+- 43: NAME (data)
+- 45: SANS (data)
+- 46: _GLYPHS (data)
+- 50: `s_for` The cast's scale s for someone `height` m tall where one metre is ppm pixels (views.person: neck to soles
+- 56: `sign` Lettering drawn once large, then scaled to an exact width (it never pulses or spills: satire.md).
+- 75: `P` 
+- 79: `face` A flat upright rectangle facing the lens at depth d (a wall, a door, a sign), in screen px.
+- 85: `bricks` Brick texture without a ruled grid: scattered patches of a few bricks, each a touch lighter or darker, with
+- 104: `window` A window: the frame, the glass, glazing bars, a blind part-way down (some of them), a sill.
+- 119: `soft` A soft light or shade wash over a world box (the TV's glow, a window's light): no outline.
+- 133: OUT (data)
+- 134: BRICK (data)
+- 135: BRICK_D (data)
+- 136: FRAME (data)
+- 137: GLASS (data)
+- 138: BLIND (data)
+- 139: PAVE (data)
+- 140: PAVE_D (data)
+- 141: PLANT (data)
+- 142: PLANT_D (data)
+- 143: AUTUMN (data)
+- 144: SKY (data)
+- 145: FACADE_D (data)
+- 149: `court_out` 
+- 252: WALL (data)
+- 253: WALL_L (data)
+- 254: OAK (data)
+- 255: OAK_D (data)
+- 256: OAK_L (data)
+- 257: JUDGE_CHAIR (data)
+- 258: METAL (data)
+- 261: `_panels` Tall light-wood wall panels (the sketches' vertical strokes): each its own width, a darker joint.
+- 273: `_arms` The royal arms, simplified: a quartered shield in a blue garter, a crown on top, the motto scroll below.
+- 304: `_beast` A supporter of the arms, rearing on its hind legs and facing the shield (sg: -1 the lion on the left, +1 the
+- 339: `_mic` A courtroom microphone on a thin curved stalk (refs 05, 07, 10, 11).
+- 348: `_bench` The judge's bench: a long pale-oak desk front in raised panels, a ledge, papers and a laptop on it.
+- 363: `court_box` Line 2 (refs 05, 07): Brand side-on in the witness box (lower right, near), the judge behind him (upper left)
+- 392: `court_box_mid` The judge's bench and microphone, over the seated judge, under Brand.
+- 399: `court_box_front` The witness box's front and ledge, drawn over Brand's lower body, with his microphone (ref 07).
+- 412: JURY_FRONT_Y (data)
+- 413: JURY_BACK_Y (data)
+- 416: `court_jury` Sam's note 10 (12 Nov): the reverse shot from the witness box onto the jury box across the court: the same
+- 437: `court_jury_mid` The back row's own box front, over their laps, under the front row (and the front row's bench back).
+- 450: `court_jury_front` The front row's box: pale oak front and ledge over their chests; notepads, pens, a water jug and tumblers.
+- 474: `court_bench` The gavel: the judge front-on at the bench (chest up), the arms over him, papers and the gavel block.
+- 486: `court_bench_front` 
+- 497: GAVEL_LIFT (data)
+- 500: `gavel_block` The round sound block: a thick disc of dark wood, its top and its side.
+- 507: `gavel` A gavel: a barrel head with two pale bands, a turned handle; (x, y) the head's middle, ang the handle's
+- 523: `court_dock` Line 3 (refs 08, 11): the glass dock, Brand standing in it; the wall and two seated officers behind (the
+- 536: `court_dock_mid` The dock's back bench front, in front of the seated officers' legs, behind Brand.
+- 546: `court_dock_front` The dock's glass (thin steel uprights, a top rail, pale reflections) over a pale-oak base (ref 08).
+- 569: VAN_W (data)
+- 570: VAN_D (data)
+- 573: `van` 
+- 618: `van_front` Dim cold light over everyone in the van, the window's passing lights sweeping over them, and the cubicle's
+- 643: CELL (data)
+- 644: CELL_D (data)
+- 645: CELL_FLOOR (data)
+- 646: DOOR_BLUE (data)
+- 647: MATT (data)
+- 648: BLANKET (data)
+- 651: `_blanket` Note 17: a prison blanket thrown over the near two-thirds of the mattress, not a flat strip: its edge across
+- 671: STEEL (data)
+- 674: `cell` 
+- 735: PHONE_DY (data)
+- 736: PHONE_CORD (data)
+- 739: `phone` Line 4: the phone room off the landing (Sam's note 20, 12 Nov: "set it in a room, next to another phone
+- 769: `_booth` One wall phone under its blue acoustic hood (the hood's back, two cheeks, the canopy, perforations), dx to the
+- 801: TV_GREEN (data)
+- 802: TV_CREAM (data)
+- 805: `tvroom` 
+- 844: POOL_DX (data)
+- 845: POOL (data)
+- 848: `pool_table` The pool table at the back right, a pub table's proportions (Sam, 13 Nov: 'squashed and disproportionate'):
+- 872: `_chair` A moulded plastic chair seen from the front: a curved shell back, the seat, four splayed steel legs.
+- 882: `tv_flicker` The TV's light on everyone (over the cast): a cool wash from above the lens, its level jumping as the
+- 893: `tv` The TV on its wall bracket, high in the corner, the news on it (feed: an RGBA picture, 16:9).
+- 922: `studio_feed` The BBC-style studio (Sam's answer 5): newsdesk_set restyled red and white, the newsreader (reader: his sp,
+- 965: _RESTYLED (data)
+- 968: `_restyle` Newsdesk's studio in BBC News red and white: the colours swapped at the module, English lettering.
+- 998: GATE (data)
+- 999: SOOT (data)
+- 1000: SOOT_D (data)
+- 1001: STONE (data)
+- 1002: STONE_D (data)
+- 1003: TIMBER (data)
+- 1004: FRAME (data)
+- 1005: GATE_D (data)
+- 1008: `_rustic` A rusticated stone pilaster: big dark blocks, each outlined, a deeper course every other one.
+- 1019: `_arched_window` A tall round-headed window: a stone surround and hood, red-brown frame, small panes (ref 18).
+- 1041: `gates` HMP Wandsworth's gatehouse (ref 18): a wide sooty-brick front, two towers either side of a lower centre block,
+- 1146: COT_BED (data)
+- 1147: COT_BLANKET_Y (data)
+- 1150: `cot_top` 
+- 1167: `cot_top_front` The blanket over him from the waist down (drawn over the cast), its edge turned down, his feet two bumps.
+- 1186: `_mark` 
+- 1191: `press_spots` A press pack round his mark (notes 12 and 24, 'tons of press'): rows of people at the depths in `rows`, spread
+- 1211: STAGE (data)
+- 1229: CAMS (data)
+- 1238: `_box_from` 
+- 1243: `_out_boxes` 
+- 1253: SET_BOXES (data)
+- 1292: SET_MEANT (data)
+- 1308: SET_MEANT (data)
+- 1310: BENCHMARK (data)
+- 1406: VIEWS (data)
+- 1408: BACK (data)
+- 1410: MID (data)
+- 1411: FRONT (data)
+- 1415: `view_cam` 
+- 1422: `back` The painting behind the cast.
+- 1430: `mid` What stands between the people at the back and those in front (the bench before the judge).
+- 1436: `front` What the set draws over the cast (the box and bench fronts, the dock glass, the van's and TV's light).
+- 1442: `painting` 
+- 1451: `_reader` 
+- 1456: `picture` 
+- 1460: `alone` Every view at phone size (360 x 640 each) on one sheet; with the cast at their marks (blessed.py).
+
+## blessed_walliams.py (370 lines)
+- 24: HERE (data)
+- 41: MOODS (data)
+- 68: `_lay` By eye on w02, w06, w07 (the measures put the mouth just under the nose to make the long chin): the nose base
+- 80: SHAVE (data)
+- 81: LOW (data)
+- 84: `outline` His big face: temples a little in, full round cheeks, a wide heavy jaw, a long, broad, rounded chin.
+- 97: SKIN (data)
+- 98: HAIR (data)
+- 99: HAIR_L (data)
+- 100: HAIR_GREY (data)
+- 101: BROW (data)
+- 102: IRIS (data)
+- 103: LIP (data)
+- 107: BD_MID (data)
+- 108: BD_LIGHT (data)
+- 109: BD_MOUST (data)
+- 110: BD_GRAIN (data)
+- 111: STUBBLE (data)
+- 115: `beard` Short and two-tone (w02, w07, w10), Brand's way: a grey band along the jaw that turns white over the chin,
+- 157: `hair` Chat 4 (13 Nov), by eye on w02, w06, w09: short, thick and dark, brushed UP at the front into a low, wide
+- 184: `long_nose` A broad nose, straight bridge and a round tip (w02, w06): the tip's ball and the wings, P4's nostrils.
+- 194: `smirk_lines` The deep lines from the nose wings round the mouth corners, and the round cheeks over them (w02, w06, w09);
+- 209: `smirk` His closed-lip smirk (w02, w06, w09): the line a broad U, both corners lifted and tucked into the cheeks; a
+- 230: `crinkles` Small eyes that half-smile: bags under each eye and crow's feet at the outer corners.
+- 250: `mouth` 'grimace' (scared: wide and flat, the corners pulled out and down, both rows of teeth), 'gasp' (an open O).
+- 272: `walliams_head` 
+- 277: `_head` 
+- 313: WALLIAMS (data)
+- 324: `head_png` His head straight on, as likeness.py check wants it (the bare face; --average: the average face, the bias).
+- 339: `faces_sheet` His face large in each mood, two photos beside (rule 76).

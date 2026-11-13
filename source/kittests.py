@@ -1682,6 +1682,16 @@ def critic_bench_scores():
     return all(r), f'caught {sorted(got)}, {len(miss)} missed, {len(extras)} extra; checks {r}'
 
 
+@test
+def round_page():
+    """Ranking item 6 (overnight chat 3): a round reads Blessed's page (under 15% of its code) and a note finds its lines."""
+    sys.path.insert(0, HERE)
+    import page as P
+    out, pg, code = P.build('blessed')
+    hit = [w for _, w, _ in P.find('blessed', "note 28: the escort should look like an HM Prison officer", 3)]
+    return pg * 100 < code * 15 and 'blessed.py:307' in hit, f'page {pg} tokens, code {code}; note 28 -> {hit}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

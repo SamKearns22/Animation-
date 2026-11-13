@@ -1,19 +1,17 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-critic-bench` (also on the main line); face tool: `claude/face-tool-c2`.
-- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 89 (the critique).
-- **Done (overnight chat 2, critic bench, Opus medium, ~2.1%):** `source/critbench.py` (MAP, catalogue row, kittest
-  `critic_bench_scores`); cases `source/bench/blessed-a1(-crops).json` (Blessed animatic 1 from 5c95b9e, 12 of Sam's
-  notes as key); scores in `notes/critic-bench.tsv`: plain Opus 5/12, Sonnet 4/12; with people close-ups Sonnet 7, Opus 2.
-- **Face tool (item 2):** its own chain (face chat 3, Opus high; Sam gave it 7.5%); state in the morning report.
-- **Next: overnight chat 3, Opus HIGH (design): rounds read a page (ranking item 6), per `notes/overnight-run.md`.**
+- **Newest work:** `claude/rounds-read-page-c3` (also on the main line); face tool: its own chain.
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; now the page).
+- **Done (overnight chat 3, item 6, Opus high, ~0.75%, at the stop):** `source/page.py` (MAP, catalogue row, kittest
+  `round_page`): `story/FILM-page.md` = every film file's codemap (Blessed 8% of the code); `find "note"` gives FILE:LINE.
+  Notes-round pack now reads the page. Handover check: helpers' reports and parent seeds no longer read as Sam's.
+- **Waits for 4, 5, 7:** the page carries the people/places/moves description lines, so notes change the page.
+- **Next: overnight chat 4, Opus HIGH: people from a description (ranking item 4), per `notes/overnight-run.md`.**
 - **Needs Sam (morning report):** Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
-- **Bench left (a later chat, Opus medium, ~0.5%):** a second case (animatic 2, from 51e8d9f) before switching; rule the
-  extras real/false; P12 and P11 missed in all four runs: reword their Look ("the judge" small faces), then `critique.py`
-  gets HELPER `critic` + model sonnet and auto crops per person.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `notes/ranking-list.md` item 6.
+- **Bench left (a later chat, Opus medium, ~0.5%):** second case (animatic 2, from 51e8d9f); see `critbench.py` MAP.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `notes/ranking-list.md` item 4; `notes/overnight-run.md`.
 - **Open rule requests:** none.
-- **For Claude:** `python3 source/critbench.py make CASE`, run each printed Agent line, then `score CASE MODEL --cost P`;
-  Opus's crops answer ran 408 words (limit 300): 20 panels may need the limit raised.
+- **For Claude:** `find` scores by shared words: a note naming a note number ("note 28") hits best; item 4 should add
+  each person's description lines to `page.build`.
 
 ## Job Q, the handover check (Sam: Y, 13 Nov; Opus medium, ~1.5%; beside the face tool)
 Why: Blessed's handovers dropped things (notes 8-11 sat unread when chat 5 broke before writing them and chat 6 read
