@@ -1029,34 +1029,31 @@ def sounds_and_references_kept():
 
 @test
 def estimate_forecast_and_alarm():
-    """Rule 24 (Job M): the stages' forecast is spent / share of the plan done x estimate, an unplanned round pushes it
-    up, and the forecast alarm stops the chat once when it passes the estimate by a quarter (not again at that step,
-    and not when the spend alarm already said as much)."""
+    """Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned
+    round pushes it up; the budget stop fires at the budget and at every 5% over it, once each, and cannot be
+    switched off (an old alarms_off does nothing)."""
     import ledger
     d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
-         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5')}
+         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5'),
+         'alarms_off': 'old switch'}
     spend = lambda x: d['chats'][0].update(cost=x)
     spend(3.0); ledger.mark_stage(d, 'cast')
     on_plan = ledger.forecast(d)                                   # 3 of 3 planned: lands at 10
-    quiet = ledger.forecast_alarm(d) is None
-    spend(7.0)                                                     # sets cost 4 against 2 planned: mid-stage it shows
+    spend(7.0)
     mid = ledger.forecast(d)[2]                                    # 7 + (2 + 1 + 1.5 + .5) x 1 = 12
-    ledger.mark_stage(d, 'sets')                                   # 7 of 5 planned: lands at 14 (1.4 x)
-    over = ledger.forecast(d)[2]
-    first, again = ledger.forecast_alarm(d), ledger.forecast_alarm(d)
+    ledger.mark_stage(d, 'sets')
+    over = ledger.forecast(d)[2]                                   # 7 of 5 planned: lands at 14
+    under = ledger.budget_stop(d) is None                          # 7 of 10: quiet
+    spend(10.0); at = ledger.budget_stop(d); again = ledger.budget_stop(d)
+    spend(10.4); quiet = ledger.budget_stop(d) is None             # 104%: not yet the next step
+    spend(10.5); five = ledger.budget_stop(d)                      # 105%: stops again
+    spend(13.0); jump = ledger.budget_stop(d); step = d['budget_stop']   # 130%: one stop, at step 7
     ledger.mark_stage(d, 'moves'); ledger.mark_stage(d, 'animatic1'); ledger.mark_stage(d, 'round')
     extra = ledger.mark_stage(d, 'round')                          # a second round, not in the plan: no share
-    spend(20.0)                                                    # 20 spent with only the final left: lands at 20
-    d['alarm'], d['forecast_alarm'] = 5, 0                         # the spend alarm already at 2x
-    covered = ledger.forecast_alarm(d) is None                     # 2x: says nothing new
-    d['alarm'] = 0
-    fires = ledger.forecast_alarm(d) is not None                   # without the spend alarm it would stop the chat
-    line = ledger.forecast_line(d)
-    ok = (on_plan == (3.0, 3.0, 10.0) and quiet and mid == 12.0 and over == 14.0 and first and 'Stop' in first
-          and again is None and extra.get('unplanned') and extra['pct'] == 0 and covered
-          and fires and line == 'Spent 20% of the 9.5% planned so far; at this rate the film lands at 20%.')
-    return ok, f'on plan {on_plan}, mid-stage {mid}, after sets {over}, alarm once {bool(first) and again is None}, ' \
-               f'unplanned round {extra.get("unplanned")}, quiet under the spend alarm {covered}'
+    ok = (on_plan == (3.0, 3.0, 10.0) and mid == 12.0 and over == 14.0 and under and at and 'Stop' in at
+          and again is None and quiet and five and jump and step == 7 and extra.get('unplanned') and extra['pct'] == 0)
+    return ok, f'on plan {on_plan}, mid-stage {mid}, after sets {over}, stops at 100% {bool(at)}, once {again is None}, ' \
+               f'105% {bool(five)}, 130% step {step}, alarms_off ignored {bool(at)}'
 
 
 @test
