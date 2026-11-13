@@ -67,13 +67,14 @@ at session start (`.claude/hooks/setup.sh`).
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
-- **Chats open the next chat themselves (create_session), up to 8 in a row (Sam, 12 Nov):** each gets the handover's
-  model, effort and its place ("chat 3 of 8"); first it checks it can save to GitHub, else it stops and tells me.
+- **Chats open the next chat themselves (create_session), with no count (Sam, 13 Nov; was 8 in a row):** each gets the
+  handover's model, effort and its place ("chat 3"); first it checks it can save to GitHub, else it stops and tells me.
   **The Animation- project is always attached** (`source_url` of the repo, revision the main line), and the reply must
   list it before I'm told the chat is working (12 Nov: one opened without it and could do nothing).
-  **I never start a chat or type a prompt unless the chain has hit 8 or failed to save.** When a chat ends on a question
+  **The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work
+  on its job. I never start a chat or type a prompt unless it failed to save.** When a chat ends on a question
   for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
-  the count then starts again at 1. A chat on the wrong model for its next stage opens one on the right model, never
+  the chain then goes on. A chat on the wrong model for its next stage opens one on the right model, never
   carries on. No scheduled check-ins unless I ask. A message never says "start a new chat" or "type ...": it says what
   is done and what I'm needed for.
 - **One wait per render;** never check on it repeatedly. **Push notifications** when a render or long job finishes,
@@ -88,7 +89,7 @@ at session start (`.claude/hooks/setup.sh`).
   most**, in order: Rules that bite next (3, by number); Done; Next (model, effort, what it does); Needs Sam; Read
   (the pack in `guides/job-packs.md`, and any extra sections); Open rule requests; a "For Claude" line for code names.
   Update `story/status.md` (3 lines), commit and push. **The 3 lines at the bottom** say what's done and what's
-  next; "what to type" only when the chain has stopped for good (8 chats, or no save). **Every handover names the next
+  next; "what to type" only when the chain has stopped for good (no save). **Every handover names the next
   chat's model AND effort**; a stage not listed above gets your pick and one line why.
 
 # Reading little
