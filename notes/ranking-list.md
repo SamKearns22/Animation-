@@ -48,7 +48,13 @@ with that film's own things as its test, so part of its cost is that film's own 
 **Job N is not first.** It saves nothing by itself; it belongs at the start of the next new film's plan (Protest Tiers
 is already planned), where it names the items above that film needs.
 
-## Order and stages
+## Sam's answers (13 Nov): Y to all
+Rule 11 widened (written); chat limits stay 3%/5% of the true week; Job N at the next new film's plan; **item 2 (the
+face tool) moves first**, practised on **Kemi Badenoch** and **Andy Burnham** (Sam: Burnham from scratch: no
+`burnham.py` head, card or old photos), plus a **Walliams replay** as a test only (his w06-w10 pack; never in a film),
+counting tries against his five chats.
+
+## Order and stages (as first proposed)
 - **Stage 1 (now, ~13%, partly Protest Tiers' own cast):** 1 (rule wording on Sam's Y, this chat), 3 (Opus medium,
   one chat), 4 built with Protest Tiers' cast as its test (Opus high design, medium build), 2 at the next film with a
   famous face.

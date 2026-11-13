@@ -60,6 +60,9 @@ the helper still looks). The number in brackets is how many of Sam's notes the l
 - S6 (3) A set is the same set in every shot: sizes, walls and where people and furniture stand match from shot to shot. Look: one frame per shot of the set, side by side.
 - S3 (1) The place matches its references: layout, how many of each key feature, colours; repeated things (houses, windows) broken up as in the real place, not one flat block. Look: check sheet. Tool: benchmark.py (rule 3).
 - S4 (1) No edge of the set shows at any camera move or zoom: the painting fills every corner. Look: the first and last frame of each camera move.
+- S7 (1) The camera stands at the height the plan gives it (eye level unless the plan says high or low): the horizon and people's eye lines sit where that height puts them. Look: the widest frame of each shot. Tool: plan.py.
+- S8 (1) No one unbroken mass (crowd, wall, smoke, a single colour) fills over half the frame: it is broken by light, gaps, edges or layers. Look: phone-size frames.
+- S9 (1) Smoke and dust have volume: overlapping clumps lit on one side, darker underneath, thinning as they rise, never a flat cut-out. Look: frames with smoke.
 
 ## M. Movement (strips of frames with their times)
 - M1 (8) A fix made in one shot is in every shot the thing appears in, and nothing pops in, vanishes or jumps mid-shot unless planned: things enter from outside the frame or through a door, at their own speed, never slid slowly past the edge or uncovered by a camera move (Remakes 77). Look: first and last frames of each shot; the where-list. Tool: critique.py where.
@@ -80,3 +83,4 @@ C1: Flying Whales 8 (helideck), 15; CM23. C2: Elder Swindon 63; CM1. C3: Elder S
 O1: Elder Swindon 60; MidTerminal 37; IC1. O2: Flying Whales 11; Elder Swindon 59; PM13, AV24, AV42b, PM3. O3: Elder Swindon 61; PM19, PM27, PM31, PM50. O4: Elder Swindon 53; PM15, CM16, CM21, IC3, P4 1. O5: AV42a, PM18, PM22, PM55, NY4, NY11, P4 2. O6: AV29, PM20, PM46, PM53.
 S1: Elder Swindon 50; Ad-Vanced 22; PM2, P4 9, AV54a, NY6. S2: Elder Swindon 55; Ad-Vanced 23; P3 6, P4 5, P4 27, CM2. S3: Elder Swindon 51. S4: Cry Minister 44. S5: CM31, MT31, P3 7. S6: P4 18, 25, 26.
 M1: Elder Swindon 59, 62, 64; Remakes 77; Cry Minister 47; P4 12, PM29, PM34, PM60. M2: Islamocommunism 18; Elder Swindon 53; Flying Whales 8; Ad-Vanced 36a; AV47c, MT36, PM35, PM9. M3: Elder Swindon 63; Patriots 3 11; AV37d, AV42e, P4 16, P4 17, PM57. M4: Cry Minister 48. M5: PM8, PM10, PM17, PM30, AV29.
+- S7-S9: Protest Tiers' sketch critique (13 Nov); Sam: Y as checklist lines, not rules, scored on the critique test bench (ranking item 3).

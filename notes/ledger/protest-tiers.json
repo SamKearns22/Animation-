@@ -105,6 +105,15 @@
    }
   },
   {
+   "name": "plan extras",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-13",
+    "spent": 14.44
+   },
+   "unplanned": true
+  },
+  {
    "name": "cast",
    "pct": 3.0,
    "done": null

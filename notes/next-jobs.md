@@ -1,17 +1,19 @@
 # Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
-- **Rules that bite next:** 11 (to widen on Sam's Y: a rough of every new thing), 85 (chat limits: Sam's Q3), 24.
-- **Done (13 Nov, chat 2 of 8):** Job P, the ranked list (`notes/ranking-list.md`): roughs, likeness, critic bench,
-  people kit first; Job N is not first (it runs at the next new film's plan). Done jobs archived (`notes/archive/`).
-- **Next:** Sam's answers come back to this chat (the chain stopped on his questions; count restarts at 1). On his Y:
-  this chat writes rule 11 (Q2) and the chat limits (Q3), then opens chat 1 of 8, **Opus high**: item 4's design
-  (people from a description) with Protest Tiers' cast as its test; item 3 (critic bench) after it, Opus medium.
-- **Needs Sam:** Q1-Q8 in the 13 Nov message (stage 1, rule 11, chat limits, Job N's place, Protest Tiers' booking
-  and checks, Blessed posted and its music).
-- **Read:** this section, `notes/ranking-list.md`; `guides/job-packs.md` "A tool job"; `notes/protest-tiers.md` "Where
-  things stand" for its cast.
-- **Open rule requests:** rule 11 widened (Q2, wording in the message; merges Protest Tiers' "pencil sketches" request).
-- **For Claude:** chat-gbmazspz's one newer commit (a Blessed ledger row, chat 579e6f3d, old ruler) not merged: Job O
-  rebuilt the ledger from the app; check it is not a missing chat before merging. WEEK_USD 171.
+- **Rules that bite next:** 49 (likeness pack: 3+ straight-on, close, not smiling, current), 11 (roughs), 85.
+- **Done (13 Nov, chat 2 of 8):** Job P (`notes/ranking-list.md`); Sam: Y to all 10. Written: rule 11 (a rough of every
+  new thing), critique lines S7-S9, Protest Tiers' research booked as 'plan extras', Blessed's notes archived
+  (posted), its music confirmed Pixabay. Chat limits stay 3%/5% ($5.13/$8.55). Job N waits for the next film's plan.
+- **Next: chat 1 of 8 (count restarted), Opus high: the face tool (ranking item 2)**, practised on Kemi Badenoch and
+  Andy Burnham (from scratch: not `burnham.py`'s head, card or photos), then a Walliams replay as a test only.
+  Photos: one slow news search, 5+ each (3 straight-on, close, not smiling, current; 1-2 three-quarter); one failed
+  try per source, then ask Sam. Output: three heads beside the photos on one sheet each, Sam picks; count tries.
+  Then the critic bench (item 3, Opus medium) and the people kit on Protest Tiers' cast (item 4, Opus high).
+- **Needs Sam:** nothing until the face sheets (and Protest Tiers' Hook Text and sound, no rush).
+- **Read:** this section; `notes/ranking-list.md` item 2 and Sam's answers; `guides/job-packs.md` "A tool job";
+  rule 49; kit catalogue rows for `likeness.py`, `nametest.py`, `beardkit.py`.
+- **Open rule requests:** none.
+- **For Claude:** new tool file, not a film file; kittest it. Protest Tiers' forecast line misreads (1% plan share) after
+  'plan extras': harmless. chat-gbmazspz's ledger row (579e6f3d) left unmerged (Job O rebuilt from the app).
 
 ## Logged 13 Nov (Sam: log for now; not started). The one aim: films at 15% of a week, or as close as honestly possible
 - **Job O, true weekly figure (Sonnet, ~0.5%).** Sam: Blessed spent 80% of a week; our ledger counted 50.92% (WEEK_USD
