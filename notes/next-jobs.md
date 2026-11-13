@@ -1,22 +1,32 @@
 # Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/face-tool-c2` (also pushed to the main line).
-- **Rules that bite next:** 49 (likeness pack and check), 86 (every tool gets a kittest), 85 (cost watch).
-- **Done (chat 2 of 8, Opus high, amber at 2.4%):** the six faults fixed (tuning judged by the check's own rule on
-  its own photo; glasses by the cartoon's eye width; hair top colour plus grey temples and strands; calmer skin;
-  line-up of 14 from every film; sheet width and one shared frame for A/B/C), plus a drawn neck (no collar gap).
-  Burnham A/B/C pass: 68/77/71%, none the wrong way, first of 14. Not sent: by eye he reads young and round.
-- **Next: chat 3 of 8, Opus high:** 1) name test (namer helpers) on Burnham's heads; if he is not named, add age
-  lines from the photo (cheek folds, crow's feet: no kit piece has them, new) and re-run; 2) Badenoch (braids:
-  the hair mask down past the jaw); 3) Walliams replay (w06, w07, w01, w02; count tries vs his five chats);
-  4) kittest; 5) send Sam the three sheets. Then the critic bench (item 3, Opus medium).
-- **Needs Sam:** nothing until the face sheets.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
+- **Newest work:** `claude/overnight-q-handover-check` and `claude/face-tool-c2` (both on the main line).
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 30 (a repeated note: find why first).
+- **Done (overnight chat 1, Job Q, Opus medium, ~2.2%):** `source/handover.py` (MAP; catalogue row; kittest
+  `handover_drops` passes on Blessed's real chat 5 messages and notes files). The `log` hook (UserPromptSubmit) saves
+  Sam's typed messages to `notes/ledger/sam/CHAT.md` and pushes. `end` / `start PARENT --film F` flag his asks not
+  carried by a notes line written after he spoke, unanswered messages, unsent clips, an override he never typed.
+- **Face tool (item 2): HARD STOP at its 150% budget** (chat 1 2.58% + chat 2 ~2.7% = ~5.3% vs 4.5%). The six faults
+  fixed; Burnham's A/B/C pass the check (68/77/71%, first of 14) but read young and round. What is left and the pick:
+  `notes/morning-report.md`, "Face tool". No face chat runs until Sam says.
+- **Next: overnight chat 2, Opus medium: the critic bench (ranking item 3, `notes/ranking-list.md`).** Test on Blessed.
+- **Needs Sam:** morning report: Y to the CLAUDE.md line that makes chats run `handover.py end`/`start` (pick Y);
+  the face tool's go-on (pick Y, one more chat).
+- **OVERNIGHT RUN (Sam, 13 Nov 23:25 UTC): read `notes/overnight-run.md` first.** Order Q, critic bench, rounds-read-a-page,
+  then people, places, moves, rough command; test only on Blessed (never Protest Tiers); each job may reach 150% of its
+  estimate, then hard stop, `notes/morning-report.md`, next job.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; the job's own section.
 - **Open rule requests:** none.
-- **For Claude:** `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg
-  .../a02-front-national2026.jpg .../a03-front-smiling-ap2026.jpg --tq .../a04... .../a05...` (2.5 min; the
-  likeness pack's first photo is what check judges). `tune()` is a search (6 heads a round, `response()` table);
-  the finder is jumpy on cartoons, so a look change can drop a pass: re-run after each. Kittest idea: a head with
-  its eyes swapped for the average fails `verdict`, the tuned one passes; `_others` finds 13+ people.
+- **For Claude:** face tool state in `source/facepick.py` MAP (tune() is a search judged by `verdict()`, as check
+  judges; 2.5 min a person); its next steps are in the morning report.
+## Job Q, the handover check (Sam: Y, 13 Nov; Opus medium, ~1.5%; beside the face tool)
+Why: Blessed's handovers dropped things (notes 8-11 sat unread when chat 5 broke before writing them and chat 6 read
+only the notes file; Walliams' face, open in note 47, fell out of two handovers; chat 5 read "don't stop for any Y" as
+a cost override). Closest: CLAUDE.md "Fresh chats and the handover", rule 30, `ledger.py`; nothing checks a handover.
+One tool, two moments (Statement 1: quality, fewer notes and faults, cost; kittested; about $0.10 a chat to run):
+- **End of a chat, before it hands over:** list every message Sam sent in that chat (`list_events kinds=["user"]`,
+  filtered); flag any with no fix or reply, any open note the handover does not carry, any "clip sent" with no file.
+- **Start of the next chat:** read Sam's messages in the chat before, to catch one that broke before handing over.
+Saves about 2-4% on any film where a chat breaks or drops a note. Lost: nothing. Reads: `guides/job-packs.md` "A tool job".
 
 ## Logged 13 Nov (Sam: log for now; not started). The one aim: films at 15% of a week, or as close as honestly possible
 - **Job O, true weekly figure (Sonnet, ~0.5%).** Sam: Blessed spent 80% of a week; our ledger counted 50.92% (WEEK_USD

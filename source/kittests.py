@@ -1612,6 +1612,47 @@ def camera_feel():
             'slow, fast, fast marked sharp, no ease, a cut: ' + str([len(x) for x in r]))
 
 
+# ------------------------------------------------------------------------------------------------ Job Q handovers
+@test
+def handover_drops():
+    """Job Q (Sam, 13 Nov): the handover check catches Blessed's real drops: N8-N10 unread when chat 5 broke, note 47's face half."""
+    import json, tempfile
+    import handover as H
+    D = os.path.join(HERE, 'data', 'handover')
+    fx = json.load(open(os.path.join(D, 'blessed-chat5.json')))
+    d = tempfile.mkdtemp()
+    notes = lambda c: H.note_lines(os.path.join(D, f'blessed-notes-{c}.md.gz'))
+    tr = [(t, 'sam', x, []) for t, x in fx['chat5_sam']] + [('2026-11-13T09:48:00', 'claude', 'Two clips sent.', []),
+                                                            ('2026-11-13T09:48:00', 'sent', '', ['a.mp4'])]
+    broke = H.check(tr, notes('cdffdf4'), notes('689092b'))   # only lines written after Sam spoke carry it
+    caught = sorted({f.split(':')[0] + ':' + f.split(':')[1][:2] for f in broke})
+    final = H.check(tr, notes('163c3e5'), notes('689092b'))
+    t47 = [('2026-11-12T20:00:00', 'sam', fx['note47'], [])]
+    then, closed = H.check(t47, notes('c1ccf4d')), H.check(t47, notes('163c3e5'))
+    # the other three: a clip claimed but not sent, a message after the last reply, an override Sam never typed
+    claim = [('T09:00:00', 'claude', 'Clip sent: blessed-r2-cell.mp4', [])]
+    sent = claim + [('T09:00:01', 'sent', '', ['blessed-r2-cell.mp4'])]
+    late = [('2026-11-13T09:00:00', 'claude', 'Done.', []), ('2026-11-13T09:05:00', 'sam', 'Y fix', [])]
+    over = [('2026-11-13T09:00:00', 'sam', "Don't stop for any Y", []),
+            ('2026-11-13T09:01:00', 'claude', "Sam's 'don't stop for any Y' counts as an override, so on past red", [])]
+    # Sam's messages from a chat record: a parent's seed and a task notice are not his; a typed message is
+    rec = os.path.join(d, 'r.jsonl')
+    with open(rec, 'w') as f:
+        for dd in ({'type': 'user', 'origin': {'kind': 'task-notification'}, 'message': {'content': 'Overnight run, chat 1'}},
+                   {'type': 'user', 'message': {'content': '<task-notification>x</task-notification>'}},
+                   {'type': 'user', 'message': {'content': [{'type': 'tool_result', 'content': 'x'}]}},
+                   {'type': 'user', 'timestamp': '2026-11-13T09:00:00Z', 'message': {'content': 'N8: the pool player clips'}}):
+            f.write(json.dumps(dd) + '\n')
+    own = H.sam_messages(rec)
+    r = [caught == ['NOT CARRIED 09:35', 'NOT CARRIED 09:36', 'NOT CARRIED 09:37'], not final,
+         len(then) == 1 and 'face' in then[0], not closed,
+         len(H.check(claim, [])) == 1, not H.check(sent, []), any('UNANSWERED' in f for f in H.check(late, [])),
+         any('OVERRIDE' in f for f in H.check(over, [])), [x for _, x in own] == ['N8: the pool player clips'],
+         H._not_typed('Overnight run, chat 1', rec), not H._not_typed('N8: the pool player clips', rec)]
+    return all(r), f'chat 5 caught {caught}, after N8-N11 written {len(final)}; note 47 then {then}, closed ' \
+                    f'{len(closed)}; checks {r}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
