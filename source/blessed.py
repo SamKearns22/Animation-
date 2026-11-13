@@ -382,7 +382,7 @@ def press_sp(i, seed):
     return full
 
 
-NEAR_ARM = {'phone_out': ('L', -0.45, -330.0), 'mic': ('R', 0.62, -190.0)}   # Sam 13 Nov: the phone up clear of his own head   # N10b: the arm on each one's inside (seen from behind, mirrored)
+NEAR_ARM = {'mic_l': ('L', -0.4, -190.0), 'mic': ('R', 0.62, -190.0)}   # Sam 13 Nov: two mics, clear of heads and of Brand   # N10b: the arm on each one's inside (seen from behind, mirrored)
 NEAR_Y, NEAR_Z = -190.0, 230.0                        # the hand's height (the head's) and how far forward
 #   (NEAR_ARM's number: across, a share of the shoulder's width: clear of his own head and of Brand)
 
@@ -447,9 +447,7 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
             _tv_camera(img, cam, r, 1 if pts['wrR'][0] > 0 else -1)
         elif kit == 'phone':
             _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
-        elif kit == 'phone_out':
-            _phone_up(img, cam, r, pts, 1, lift=40, wr='wr' + NEAR_ARM[kit][0])
-        elif kit == 'mic':
+        elif kit in ('mic', 'mic_l'):
             _hand_mic(img, cam, r, pts, 'wr' + NEAR_ARM[kit][0])
         elif kit == 'stills':
             _stills(img, cam, r, pts, t)
@@ -1220,7 +1218,8 @@ def _g2_press():
 
 
 G2_PRESS = _g2_press() + [(-0.45, 3.0), (0.5, 3.0)]
-G2_NEAR_KIT = {len(G2_PRESS) - 2: 'phone_out', len(G2_PRESS) - 1: 'mic'}   # N10: our left a phone, our right a mic   # chat 3: two of the pack close to us, heads in the bottom corners
+G2_NEAR_KIT = {len(G2_PRESS) - 2: 'mic_l',   # Sam 13 Nov: a mic, not a phone (it covered his head)
+               len(G2_PRESS) - 1: 'mic'}   # N10: our left a phone, our right a mic   # chat 3: two of the pack close to us, heads in the bottom corners
 
 
 def gates_at(t):
