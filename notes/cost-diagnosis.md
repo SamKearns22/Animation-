@@ -1,17 +1,23 @@
 # Cost diagnosis job (Sam, 13 Nov): why each step got expensive, and how to make it cheap AND good
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 85 (cost watch), 19 (short printouts), 89 (critique).
-- **Done (13 Nov, chat 2 of 8, Opus high): Jobs B and C.** Results below; the numbered message sent to Sam.
-- **Next:** nothing runs until Sam answers. On his numbers: one chat, **Opus medium** (building from a clear plan),
-  makes only the Y'd changes (each says which rule or tool it edits), tests them on Blessed's next round, hands over.
-- **Needs Sam:** Y/N on Job C's 6 numbered items (below).
-- **Read:** this file's "Job C proposals" only.
-- **Open rule requests:** Job C 1-6 (proposed, not written).
-- **For Claude:** `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Job B's numbers: prices fitted
-  to the app's own per-chat figures (Opus 36 chats, Sonnet 6, fit within 1 cent); a per-action price from one page of
-  `list_events kinds=["assistant"]` (r2 chat 2); chat 5's last `result` (model_usage_since_last_result). Paging a
-  chat's events costs ~1.2k tokens an event: never page a whole chat; one page per question.
+- **Rules that bite next:** 19 (short printouts), 85 (cost watch), 89 (critique).
+- **Done (13 Nov, chat 2 of 8, Opus high): Jobs B and C; Sam answered (below).**
+- **Sam's answers (13 Nov):** Y to 1, 2, 3, 6. **4:** ball hands are the house style (the critique stops listing
+  them); no necks and no thighs are FAULTS. **5:** "have we not built this check before?" Answered: yes,
+  `clipcheck.py` (18 Oct), run by pre-flight, but only on films that define `solids(t)` or `layers(t)`; Blessed defines
+  neither, so it tested nothing and said nothing. New plan for 5 (waiting for Sam's Y): pre-flight says COULD NOT TEST
+  when a film with people has no solids, and Blessed gets its list; no new check.
+- **Next: chat 3 of 8, Opus MEDIUM (building from this plan):** write and test 1, 2, 3, 6 and 4's checklist line
+  (ball hands = house style; necks and thighs stay faults), each in the rule or tool named in "Job C proposals";
+  CLAUDE.md wording for 2 and 6 as written there. Test on Blessed's files without rendering a film. Hand over.
+- **Needs Sam:** Y/N on 5's new plan; whether necks and thighs are fixed in Blessed now or from the next film.
+- **Read:** this file's "Job C proposals" only; then only the lines of each tool it edits (`codemap.py`).
+- **Open rule requests:** 1, 2, 3, 4, 6 (Y, to write); 5 (plan, waiting).
+- **For Claude:** `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Item 1 = `views.py` ~line 335
+  (the 'skeleton arm' allow must not cover "folded back across the body") + `critique.py fixed` printing open faults as
+  a "Checks:" line. Item 3 = a round runner in the film kit (fix, `final --small --span`, sheet, checks, commit, one
+  printout). Never page a whole chat's events (~1.2k tokens an event).
 
 ## Job B results (13 Nov): where each step's money goes
 - **Prices, fitted to the app's real chat costs:** Opus re-read $0.22/M tokens, write $6.0/M, output $19.8/M;
