@@ -25,6 +25,7 @@ Usage (in a film module):
 """
 import contextlib
 import math
+import os
 import sys
 
 import numpy as np
@@ -69,9 +70,26 @@ def allow(reason):
         _ALLOW.pop()
 
 
+NEVER_ALLOWED = ('folded back across the body',)   # Job C 1 (Sam, 13 Nov): caught faults no allow() may wave through
+
+
+def named(msg):
+    """A fault Sam chose to have NAMED on the animatic, not stopping it (ARM_FOLD_NAMED): kept for pre-flight's
+    ready "Checks:" line (NAMED_FAULTS_FILE, set by preflight.py) as well as printed."""
+    print(f'NAMED FAULT: {msg}', file=sys.stderr)
+    path = os.environ.get('NAMED_FAULTS_FILE')
+    if path:
+        with open(path, 'a') as f:
+            f.write(msg + '\n')
+
+
 def fail(msg):
     if CONTEXT['where']:
         msg = f"{CONTEXT['where']}: {msg}"
+    if any(k in msg for k in NEVER_ALLOWED):
+        if os.environ.get('ARM_FOLD_NAMED'):
+            return named(msg)
+        raise FigureError('figure check: ' + msg + ' (never excused by allow())')
     if _ALLOW:
         LOG.append(f'{msg} (allowed: {_ALLOW[-1]})')
         return
@@ -242,8 +260,11 @@ def audit_arm(sh, el, wr, where='an arm'):
     # the front). Hands reaching across the body (clutching the chest, clasped) are fine: their wrists go inwards.
     sgn = 1 if sh[0] >= 0 else -1
     if sgn * el[0] < sgn * sh[0] - 0.5 * UPPER and sgn * wr[0] > sgn * el[0] + 0.3 * FORE:
-        fail(f'{where}: elbow folded back across the body (elbow on the chest, forearm pointing back out): '
-             f"bend the elbow 'out' or 'depth'")
+        if abs(sh[0]) < 0.2 * UPPER:    # side-on, the shoulder on the centre line: no 'across the body' to read (Job C 1:
+            fail(f'{where}: elbow folded back, seen side-on')   # a camera held to the face); allow() may cover it
+        else:
+            fail(f'{where}: elbow folded back across the body (elbow on the chest, forearm pointing back out): '
+                 f"bend the elbow 'out' or 'depth'")
 
 
 _GUARDED = {}

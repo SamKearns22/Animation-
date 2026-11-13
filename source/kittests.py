@@ -467,6 +467,30 @@ def elbow_folded_back_is_a_stop():
 
 
 @test
+def folded_back_never_allowed_on_screen():
+    """Job C 1 (Sam, 13 Nov): the on-screen arm check's 'folded back across the body' is never waved through by the
+    'skeleton arm' allow(); with ARM_FOLD_NAMED it is written to pre-flight's named list instead of stopping."""
+    import tempfile
+    import figure as F
+    stopped = False
+    try:
+        with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
+            F.fail('test arm: elbow folded back across the body (elbow on the chest, forearm pointing back out)')
+    except F.FigureError:
+        stopped = True
+    with F.allow('a skeleton arm'):
+        F.fail('test arm: upper arm 99 is longer than 90 (+6%)')         # an ordinary fault is still allowed
+    path = tempfile.mktemp()
+    os.environ.update(ARM_FOLD_NAMED='1', NAMED_FAULTS_FILE=path)
+    try:
+        F.fail('test arm: elbow folded back across the body')
+        named = open(path).read().strip()
+    finally:
+        del os.environ['ARM_FOLD_NAMED'], os.environ['NAMED_FAULTS_FILE']
+    return stopped and named.endswith('folded back across the body'), f'stopped: {stopped}; named: {named!r}'
+
+
+@test
 def point_hand_shows_a_finger():
     """Rule 41 (Sam, 4 Nov, MidTerminal note 33): whenever anyone points, the hand shows a pointing finger: the house
     circle hands draw one for 'point', and films that load them after their own finger keep it."""

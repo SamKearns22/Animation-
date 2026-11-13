@@ -1,23 +1,18 @@
 # Cost diagnosis job (Sam, 13 Nov): why each step got expensive, and how to make it cheap AND good
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 19 (short printouts), 85 (cost watch), 89 (critique).
-- **Done (13 Nov, chat 2 of 8, Opus high): Jobs B and C; Sam answered (below).**
-- **Sam's answers (13 Nov):** Y to 1, 2, 3, 6. **4:** ball hands are the house style (the critique stops listing
-  them); no necks and no thighs are FAULTS. **5:** "have we not built this check before?" Answered: yes,
-  `clipcheck.py` (18 Oct), run by pre-flight, but only on films that define `solids(t)` or `layers(t)`; Blessed defines
-  neither, so it tested nothing and said nothing. New plan for 5 (waiting for Sam's Y): pre-flight says COULD NOT TEST
-  when a film with people has no solids, and Blessed gets its list; no new check.
-- **Next: chat 3 of 8, Opus MEDIUM (building from this plan):** write and test 1, 2, 3, 6 and 4's checklist line
-  (ball hands = house style; necks and thighs stay faults), each in the rule or tool named in "Job C proposals";
-  CLAUDE.md wording for 2 and 6 as written there. Test on Blessed's files without rendering a film. Hand over.
-- **Needs Sam:** Y/N on 5's new plan; whether necks and thighs are fixed in Blessed now or from the next film.
-- **Read:** this file's "Job C proposals" only; then only the lines of each tool it edits (`codemap.py`).
-- **Open rule requests:** 1, 2, 3, 4, 6 (Y, to write); 5 (plan, waiting).
-- **For Claude:** `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Item 1 = `views.py` ~line 335
-  (the 'skeleton arm' allow must not cover "folded back across the body") + `critique.py fixed` printing open faults as
-  a "Checks:" line. Item 3 = a round runner in the film kit (fix, `final --small --span`, sheet, checks, commit, one
-  printout). Never page a whole chat's events (~1.2k tokens an event).
+- **Rules that bite next:** 19 (one command, short summary: `round.py`), 85 (cost watch), 89 (critique).
+- **Done (13 Nov, chat 3 of 8, Opus medium): Job C 1, 2, 3, 4, 6 written and tested on Blessed (no film render).**
+  1: an elbow folded back across the body stops pre-flight even under the 'skeleton arm' allow (side-on arms excepted:
+  no 'across' to read); ARM_FOLD_NAMED faults and `critique.py fixed ... --left N` print a ready "Checks:" line.
+  Whole Blessed swept every 0.5 s: clean. 2, 6: CLAUDE.md. 3: rule 19 widened + `source/round.py`. 4: checklist P6,
+  P7, P11. Also repaired a half-merged `notes/ledger/blessed.json` on the main line (both entries kept).
+- **Next:** nothing in this job until Sam answers 5. Blessed's own chain carries on (see `story/status.md`).
+- **Needs Sam:** Y/N on 5's new plan (pre-flight says COULD NOT TEST for a film with people and no solids; Blessed
+  gets its list); necks and thighs in Blessed now, or from the next film.
+- **Read (when 5 is a Y):** this file's "Job C proposals" item 5 and `clipcheck.py`'s map only. Opus medium.
+- **Open rule requests:** 5 (plan, waiting).
+- **For Claude:** figure.NEVER_ALLOWED, figure.named(); preflight sets NAMED_FAULTS_FILE; critique.checks_line().
 
 ## Job B results (13 Nov): where each step's money goes
 - **Prices, fitted to the app's real chat costs:** Opus re-read $0.22/M tokens, write $6.0/M, output $19.8/M;

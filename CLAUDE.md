@@ -16,7 +16,7 @@ is in `guides/job-packs.md`.
 - **Questions are numbered,** each answered by a number or Y/N, your pick first. **Every open decision, across all
   jobs, goes in one message.**
 - **A "Checks:" line only when a check slipped or was at risk** ("Checks: X slipped (looked: fine because …)"). Never
-  send something a check flagged without saying so.
+  send something a check flagged without saying so (the checks print that line ready).
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me (rule 30).
 - **The handover's 3 lines go at the bottom of the message** (never a request to start a chat myself, see Models and chats).
 
@@ -33,7 +33,8 @@ at session start (`.claude/hooks/setup.sh`).
 - **No check sheet before an animatic unless I ask** (Sam, 12 Nov): once the checks pass (every fault fixed or named),
   render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.
-- **"Just go" (or any override) skips waiting for my yes, never the checks:** every fault is fixed or named first.
+- **"Just go" (or any override) skips waiting for my yes, never the checks or the hand-over:** every fault is fixed
+  or named first; at red the chat opens the next one, which carries on without asking.
 - **Unattended runs stop after one animatic:** render, send, wait; never stack rounds I haven't seen.
 - **Notes on movement get a short clip** of just those seconds (`final OUT --small --span T0 T1`); clips need no yes;
   a full animatic once the clips look right.
@@ -73,7 +74,8 @@ at session start (`.claude/hooks/setup.sh`).
   fails or needs me, and at every stage end. Say how long each render will take and took.
 
 # Fresh chats and the handover
-- **A fresh chat for every round and every cost warning;** change model only by starting a new chat. **The cost watch
+- **A fresh chat for every round and every cost warning;** change model only by starting a new chat
+  (switching a long chat's model re-pays its whole history; for Sonnet, I say "hand over to Sonnet"). **The cost watch
   (rule 85):** amber, finish the step and hand over; red, hand over at once unless I type 'override'. Back after more
   than an hour to a chat on amber or red: the reply is the handover only.
 - **The handover** is the film's ONE "Where things stand" (old ones to `notes/archive/NAME-handovers.md`), **15 lines at

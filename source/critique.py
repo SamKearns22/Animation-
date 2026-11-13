@@ -30,7 +30,7 @@ MAP
     python3 source/critique.py before FILM SPEC.json
     python3 source/critique.py redo FILM SPEC.json [--all]
     python3 source/critique.py status FILM
-    python3 source/critique.py fixed FILM "what changed"
+    python3 source/critique.py fixed FILM "what changed" [--left 2,5]   (faults NOT fixed -> a ready Checks: line)
 
 A stage (cast, sets, moves, animatic, notes), rule 89: `before` (notes round, before any fix) -> fix -> ONE `pack` for
 the whole stage, never one per set or character -> a NEW helper with the printed prompt -> `record` -> fix the faults
@@ -616,18 +616,41 @@ def status(film_name):
     return False, f'critique: round {rnd}, pass {last["pass"]}: {last["faults"]} fault(s) open{ct}: {nxt}'
 
 
-def fixed(film_name, what):
-    """Hunt 2's faults were fixed as one list: say what changed. Hunt 1's faults are checked by hunt 2 instead."""
+def checks_line(film_name):
+    """Job C 1 (Sam, 13 Nov): every critique fault still open, as the ready "Checks:" line for Sam's message (CLAUDE.md:
+    never send something a check flagged without saying so). '' when nothing is open."""
+    _, rnd, last = _last(film_name)
+    if not last or not last.get('faults'):
+        return ''
+    left = last.get('left', None if not last.get('fixed') else [])
+    items = last.get('open', []) if left is None else left
+    if not items:
+        return ''
+    return f'Checks: {len(items)} critique fault(s) left open, named not fixed: ' + '; '.join(items)
+
+
+def fixed(film_name, what, left=()):
+    """Hunt 2's faults were fixed as one list: say what changed. Hunt 1's faults are checked by hunt 2 instead.
+    left: the numbers (as listed) of faults NOT fixed; they come back as a ready "Checks:" line (Job C 1)."""
     import ledger
     d, rnd, last = _last(film_name)
     if last is None or not last['faults']:
         sys.exit('critique fixed: the last pass has no open fault')
     if last.get('hunt', 1) < 2:
         sys.exit('critique fixed: that was hunt 1; its fixes are checked by hunt 2 (one new pack for the stage)')
+    opened = last.get('open', [])
+    bad = [n for n in left if not 1 <= n <= len(opened)]
+    if bad:
+        sys.exit(f'critique fixed: --left {bad}: the open list has {len(opened)} item(s)')
     last['fixed'] = what[:200]
+    last['left'] = [opened[n - 1] for n in left]
     ledger.store(d)
-    ledger.append(film_name, rnd, f'critique, pass {last["pass"]}: faults fixed as one list: {what}')
+    ledger.append(film_name, rnd, f'critique, pass {last["pass"]}: faults fixed as one list: {what}'
+                  + (f'; left open: {last["left"]}' if left else ''))
     print(status(film_name)[1])
+    for i, o in enumerate(opened, 1):
+        print(f'  {i}. {"LEFT OPEN" if i in left else "fixed"}: {o}')
+    print(checks_line(film_name) or 'Checks: none (every critique fault fixed)')
 
 
 # ---- palette (lines A2, S3: the colours) ---------------------------------------------------------------------------
@@ -797,8 +820,8 @@ def main():
         false_alarm(film, a[2], a[3])
     elif cmd == 'redo' and len(a) in (3, 4):
         redo(film, a[2], every='--all' in a)
-    elif cmd == 'fixed' and len(a) == 3:
-        fixed(film, a[2])
+    elif cmd == 'fixed' and len(a) in (3, 5) and (len(a) == 3 or a[3] == '--left'):
+        fixed(film, a[2], [int(n) for n in a[4].split(',')] if len(a) == 5 else ())
     elif cmd == 'before' and len(a) == 3:
         before(film, json.load(open(a[2])))
     elif cmd == 'status':
