@@ -382,7 +382,7 @@ def press_sp(i, seed):
     return full
 
 
-NEAR_ARM = {'phone_out': ('L', -0.5), 'mic': ('R', 0.62)}   # N10b: the arm on each one's inside (seen from behind, mirrored)
+NEAR_ARM = {'phone_out': ('L', -0.45, -330.0), 'mic': ('R', 0.62, -190.0)}   # Sam 13 Nov: the phone up clear of his own head   # N10b: the arm on each one's inside (seen from behind, mirrored)
 NEAR_Y, NEAR_Z = -190.0, 230.0                        # the hand's height (the head's) and how far forward
 #   (NEAR_ARM's number: across, a share of the shoulder's width: clear of his own head and of Brand)
 
@@ -400,10 +400,10 @@ def press_pose(sp, t):
     elif kit == 'phone':                              # held up above the head, filming over the others
         V.arm_to(j, 'R', (95.0, -250.0, 40.0), 'out', 'fist')
     elif kit in NEAR_ARM:                            # N10b (Sam, 13 Nov): elbow bent, the hand at head height just
-        sd, sg = NEAR_ARM[kit]                       #   inside his own shoulder, the upper arm hidden by his back,
+        sd, sg, ny = NEAR_ARM[kit]                   #   inside his own shoulder, the upper arm hidden by his back,
         jx = 10.0 * math.sin(t * 2.3 + sp['seed'])  #   the kit beside Brand, never over him; a small jostle
         jy = 8.0 * math.sin(t * 1.7 + sp['seed'] * 0.7)
-        V.arm_to(j, sd, (sg * sw + jx, NEAR_Y + jy, NEAR_Z), 'down', 'fist')
+        V.arm_to(j, sd, (sg * sw + jx, ny + jy, NEAR_Z), 'down', 'fist')
     elif kit == 'stills':                             # the camera held up over the heads in both hands, shooting
         V.arm_to(j, 'R', (70.0, -240.0, 50.0), 'out', 'fist')
         V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'out', 'fist')   # 'in' folded the elbow back across his chest (13 Nov)
@@ -1054,6 +1054,7 @@ def asleep_pose(sp, t):
     return j
 
 
+POOL_TOP = (128, 44, 48)       # Sam (13 Nov: lost against the wall): a maroon prison sweatshirt
 POOL_YAW = -90.0               # N8 (13 Nov): side-on at the table's right end, facing along it to our left
 
 
@@ -1063,15 +1064,17 @@ def pool_pose(sp, t):
     over the end rail, lining up a shot: the bridge hand on the cloth ahead, the cue hand back by his hip drawing
     small practice strokes. Side-on, a lean bends the body (front-on it only shortened it)."""
     j = V.standing(sp)
+    j['footL'] = (-40.0, 890.0, 120.0)              # Sam (13 Nov: 'one-legged'): a pool stance, the front foot
+    j['footR'] = (40.0, 890.0, -110.0)              #   forward towards the table, the back foot behind
     j['lean'] = POOL_LEAN
-    j['nod'] = -3.0                                # chin up, eyes along the cue
-    V.arm_to(j, 'L', unlean((-20.0, 420.0, 360.0), POOL_LEAN), 'down', 'palm')
+    j['nod'] = -1.0                                # chin low over the cue, eyes along it
+    V.arm_to(j, 'L', unlean((-20.0, 400.0, 400.0), POOL_LEAN), 'down', 'palm')     # the bridge on the cloth
     k = 22.0 * math.sin(t * 2 * math.pi / 1.4)       # the practice strokes
-    V.arm_to(j, 'R', unlean((20.0, 440.0, 60.0 - k), POOL_LEAN), 'back', 'grip')
+    V.arm_to(j, 'R', unlean((20.0, 470.0, 40.0 - k), POOL_LEAN), 'back', 'grip')      # by the hip
     return j
 
 
-POOL_LEAN = 58.0              # side-on: a real bend at the hips
+POOL_LEAN = 50.0              # side-on: a bend at the hips, back flat over the rail (58 humped the back)
 
 
 def pool_cue(img, cam, mark, sp, pts):
@@ -1082,13 +1085,16 @@ def pool_cue(img, cam, mark, sp, pts):
     sc = lambda q: (x + fl * s * q[0], y - 928 * s + s * q[1])
     a, b = sc(pts['wrR']), sc(pts['wrL'])
     d = (b[0] - a[0], b[1] - a[1])
-    tip = (b[0] + 0.25 * d[0], b[1] + 0.25 * d[1])
     p = B.Pen(img, cam)
     n = max(1.0, math.hypot(*d))
-    back = (a[0] - d[0] / n * 1.8 * s * 100, a[1] - d[1] / n * 1.8 * s * 100)   # the cue's butt behind the hand
+    u = (d[0] / n, d[1] / n)
+    tip = (b[0] + u[0] * 40 * s * 4, b[1] + u[1] * 40 * s * 4)                      # a hand's length past the bridge
+    back = (a[0] - u[0] * 0.5 * s * 400, a[1] - u[1] * 0.5 * s * 400)               # the butt just behind the hand
     p.line([back, tip], (150, 104, 60), 5.0)
     p.line([back, tip], INK, 1.0)
-    p.ell(tip[0] - 10, tip[1] + 4, 9, 6, (246, 246, 240), INK, 1.0)                      # the cue ball
+    r = 9.0
+    bx, by = tip[0] + u[0] * (r + 3), tip[1] + u[1] * (r + 3)
+    p.ell(bx, by, r, r, (246, 246, 240), INK, 1.2)                                   # the cue ball, round (Sam)
 
 
 def pool_body_pts(mark, sp, pts):
@@ -1101,9 +1107,11 @@ def pool_body_pts(mark, sp, pts):
               'ankR', 'footL', 'footR', 'pelvis', 'chest'):
         if k in pts and isinstance(pts[k], (tuple, list)) and len(pts[k]) >= 2:
             out[k] = (x + fl * s * pts[k][0], y - 928 * s + s * pts[k][1])
-    for sd in 'LR':                              # the knees, between hip and foot (put returns no knee point)
-        if 'hip' + sd in out and 'foot' + sd in out:
-            out['knee' + sd] = tuple((u + v) / 2 for u, v in zip(out['hip' + sd], out['foot' + sd]))
+    for sd in 'LR':                              # the whole leg and back, sampled every tenth (Sam: points alone
+        for a_, b_ in (('hip', 'foot'), ('sh', 'hip')):   #   let a drawn limb cross the rim)
+            if a_ + sd in out and b_ + sd in out:
+                for q in range(1, 10):
+                    out[f'{a_}-{b_}{sd}{q}'] = tuple(u + (v - u) * q / 10 for u, v in zip(out[a_ + sd], out[b_ + sd]))
     return out
 
 
@@ -1685,7 +1693,8 @@ def draw_people(img, cam, shot, t):
     elif shot in ('tvroom', 'push'):
         # Sam's note 22: Brand alone on a plastic chair, watching; behind on the left a man asleep in his chair
         # facing the TV; behind on the right an inmate bent over the pool table, lining up a shot
-        pts = put(img, cam, dict(CAST['inmate2'], **face("inmate2", t, "neutral", gaze_dy=0.2, lid4=0.3)), st['inmate2'], t,
+        pts = put(img, cam, dict(CAST['inmate2'], jacket=POOL_TOP, sleeve=POOL_TOP,
+                                 **face("inmate2", t, "neutral", gaze_dy=0.2, lid4=0.3)), st['inmate2'], t,
                   yaw=POOL_YAW, j=pool_pose(CAST['inmate2'], t))
         POOL_SEEN.append((t, pool_body_pts(st['inmate2'], CAST['inmate2'], pts)))
         pool_cue(img, cam, st['inmate2'], CAST['inmate2'], pts)
@@ -1937,9 +1946,18 @@ def furniture_faults():
         img = Image.new('RGBA', (1080, 1920))
         draw_people(img, _cam('tvroom', float(t)), 'tvroom', float(t))
         for _, body in POOL_SEEN:
-            bad = [k for k, q in body.items() if inside(q, table)]
+            # the legs never inside the table's shape; the back may be over the rim and cloth (he leans over the
+            #   end rail) but never down in the cabinet, below the near rim
+            bad = sorted({k.rstrip('0123456789') for k, q in body.items() if inside(q, table)
+                          and (k.startswith(('foot', 'hip-foot')) or q[1] > n + 10)})
             if bad:
                 out.append(f'tvroom {t:.2f}s: the pool player\'s {", ".join(bad)} inside the pool table')
+            gy = ST.STAGE['tvroom']['inmate2'][1]
+            s_ = _s(CAST['inmate2'], ST.STAGE['tvroom']['inmate2'][2])
+            for sd in 'LR':                      # Sam: 'feet off the ground': each foot on the floor at his mark
+                fy = body.get('foot' + sd, (0, gy - 38 * s_))[1]
+                if abs(fy - (gy - 38 * s_)) > 6:
+                    out.append(f'tvroom {t:.2f}s: the pool player\'s {sd} foot {fy - gy + 38 * s_:+.0f} px off the floor')
     return out
 
 
