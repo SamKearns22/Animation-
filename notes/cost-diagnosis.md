@@ -12,9 +12,12 @@
   (ball hands = house style; necks and thighs stay faults), each in the rule or tool named in "Job C proposals";
   CLAUDE.md wording for 2 and 6 as written there. Test on Blessed's files without rendering a film. Hand over.
 - **Sam (13 Nov):** Y to 5's new plan (sent to chat 3); necks and thighs fixed from the NEXT film, not Blessed.
-- **Needs Sam:** Y/N on "Never again" 1-5 (below); on his Y this chat writes them.
+- **Sam: Y to "Never again" 1-5 (3 as rewritten: improve, then merge, then remove only with his Y).** Written 13 Nov:
+  rules 24, 85, 19 and CLAUDE.md "Rules are permanent". Their tools (ledger stop on real figures at budget and every
+  5%, no alarms_off; COULD NOT TEST stops; after-film comparison line) sent to chat 3 to build.
+- **Needs Sam:** nothing.
 - **Read:** this file's "Job C proposals" only; then only the lines of each tool it edits (`codemap.py`).
-- **Open rule requests:** 1, 2, 3, 4, 6 (Y, to write); 5 (plan, waiting).
+- **Open rule requests:** Job C 1-6 (Y; chat 3 writing and building).
 - **For Claude:** `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Item 1 = `views.py` ~line 335
   (the 'skeleton arm' allow must not cover "folded back across the body") + `critique.py fixed` printing open faults as
   a "Checks:" line. Item 3 = a round runner in the film kit (fix, `final --small --span`, sheet, checks, commit, one
