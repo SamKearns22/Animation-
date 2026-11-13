@@ -289,8 +289,8 @@
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "sonnet",
-   "cost": 0.14
+   "model": "opus",
+   "cost": 0.72
   }
  ],
  "checks": {},
