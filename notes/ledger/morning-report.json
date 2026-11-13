@@ -4,25 +4,27 @@
  "chats": [
   {
    "date": "2026-11-13",
-<<<<<<< HEAD
    "chat": "8a7d7318",
-=======
-   "chat": "01fccb28",
->>>>>>> origin/claude/create-claude-md-oe8z4g
    "stage": "auto",
    "round": null,
    "notes": 0,
    "repeats": [],
    "model": "opus",
-<<<<<<< HEAD
    "cost": 2.59,
    "src": "estimate",
    "sid": "session_01J1JB7ViZN8ArQvNeB9PDsL"
-=======
+  },
+  {
+   "date": "2026-11-13",
+   "chat": "01fccb28",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
    "cost": 3.12,
    "src": "estimate",
    "sid": "session_01J1JB7XohygQBnMAVpQFPJC"
->>>>>>> origin/claude/create-claude-md-oe8z4g
   }
  ],
  "checks": {}
