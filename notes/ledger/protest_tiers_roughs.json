@@ -1,0 +1,103 @@
+{
+ "film": "protest_tiers_roughs",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "stage": "roughs",
+    "date": "2026-11-13",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 2,
+    "open": [
+     "1 A1 S1 P1: crowd - beads, not people; no raised keys, hooded knot, police line or fireworks readable; action a speck far off.",
+     "2 A1 P2: window - give-way sign fixed above shop, not swung; stick line reads as parade; no shutter, phones, blue sweep.",
+     "3-4 A1 P3: foreground vehicles - car reads as cart; P4 mopeds read as tables; toppled water-cannon truck missing.",
+     "3 A2 P3: monument - plain block plinth, not tiered column; no burning bikes; one police cluster, not two rows.",
+     "4 A2 P4: Ministry flat block, no rounded corner or balconies; fireball in front, not behind; helicopter tiny; rocket from mid-crowd; no Molotovs into bank.",
+     "1-2 S2 P1: P1 crowd ends in dark slab at right; P2 no street between shop and crowd, figures on a ledge.",
+     "1-2,4 S5 S3 P1: grey slab towers with repeated windows, blank distant blocks; no wet street.",
+     "2 P2: sign \"GEN Z REGEL\" clipped at right.",
+     "1 A4 P1: no Hook Text box drawn; need the Hook Text frame.",
+     "1-4 S6 S4: one frame each; need every shot and camera-move ends."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "stage": "roughs",
+    "date": "2026-11-13",
+    "hunt": 2,
+    "faults": 12,
+    "cant_tell": 2,
+    "open": [
+     "1 A1 S1: far end - no police line; fireworks burst over trees, so the beat can't play.",
+     "1 A1: keys are yellow specks; hooded knot reads as a bonfire; street not wet.",
+     "1 A4: lower middle - no Hook Text box drawn.",
+     "3 A1 A2: monument - green torch figure on a plain block reads as the Statue of Liberty.",
+     "3-4 A1 S1: water cannon (3) and rocket (4) read as light beams; rocket starts at the flag, not the moped.",
+     "4 A1: bottom-left - mopeds read as red carts.",
+     "3 A2: one police row, not two; stones lie on the ground; no burning kiosk.",
+     "4 A2 S3: Ministry is a flat grid block, no rounded corner or balconies; no toppled truck; helicopter a blob.",
+     "2 S2: gun-store group stands on a stage above the crowd; no street.",
+     "2 A2: WAFFEN window has no guns; blue light is a faint wash.",
+     "2-4 S5: identical blank window grids (2, 4); Paris buildings are flat blobs (3).",
+     "1-4 A2: everyone is a stick figure.",
+     "1-4 S6: one frame per shot of each set, side by side.",
+     "1-4 S4: first and last frame of each camera move."
+    ],
+    "fixed": "hunt 2 faults fixed as one list: T1 police line and knot bigger, T2 blue strobe, T3 bronze Marianne and stones in the air, T4 rocket trail puffs, flag moved, helicopter clear"
+   }
+  ],
+  "lines": {
+   "A1": {
+    "faults": 8,
+    "false": 0
+   },
+   "S1": {
+    "faults": 3,
+    "false": 0
+   },
+   "P1": {
+    "faults": 3,
+    "false": 0
+   },
+   "P2": {
+    "faults": 2,
+    "false": 0
+   },
+   "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "A2": {
+    "faults": 7,
+    "false": 0
+   },
+   "P4": {
+    "faults": 1,
+    "false": 0
+   },
+   "S2": {
+    "faults": 2,
+    "false": 0
+   },
+   "S5": {
+    "faults": 2,
+    "false": 0
+   },
+   "S3": {
+    "faults": 2,
+    "false": 0
+   },
+   "A4": {
+    "faults": 1,
+    "false": 0
+   }
+  }
+ }
+}

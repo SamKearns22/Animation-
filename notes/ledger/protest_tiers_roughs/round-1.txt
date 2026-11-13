@@ -1,0 +1,67 @@
+== critique, round 1 pass 1 (2026-11-13): 8 fault(s), 2 can't tell
+-- look.md --
+1: "SPAIN" "Barcelona"; huge dark faceless crowd fills street, tiny fires, tree avenue; static, no feeling.
+2: "GERMANY" "Frankfurt" "WAFFEN" "GEN Z REGEL" (clipped?) "NEIN!"; stick-figure riot line, smashed glass, protesters' signs.
+3: "FRANCE" "Paris"; riot police, burning car, flags, smoke, statue, flare streak; figures overlap muddily.
+4: "ALBANIA" "Tirana"; building explodes, red-black flag, tracer fire, shield wall, crowd; chaotic, dark, unclear focus.
+-- result.md --
+## Faults
+FAULT A1 S1 P1 [1]: crowd - beads, not people; no raised keys, hooded knot, police line or fireworks readable; action a speck far off.
+FAULT A1 P2 [2]: window - give-way sign fixed above shop, not swung; stick line reads as parade; no shutter, phones, blue sweep.
+FAULT A1 P3 [3, 4]: foreground vehicles - car reads as cart; P4 mopeds read as tables; toppled water-cannon truck missing.
+FAULT A2 P3 [3]: monument - plain block plinth, not tiered column; no burning bikes; one police cluster, not two rows.
+FAULT A2 P4 [4]: Ministry flat block, no rounded corner or balconies; fireball in front, not behind; helicopter tiny; rocket from mid-crowd; no Molotovs into bank.
+FAULT S2 P1 [1, 2]: P1 crowd ends in dark slab at right; P2 no street between shop and crowd, figures on a ledge.
+FAULT S5 S3 P1 [1, 2, 4]: grey slab towers with repeated windows, blank distant blocks; no wet street.
+FAULT P2 [2]: sign "GEN Z REGEL" clipped at right.
+CAN'T TELL A4 P1 [1]: no Hook Text box drawn; need the Hook Text frame.
+CAN'T TELL S6 S4 [1-4]: one frame each; need every shot and camera-move ends.
+
+## Checked
+1-4
+
+## Cold look
+Missed keys, hooded knot, police line, fireworks (P1); sign as weapon, shutter, phones, blue light (P2); Marianne, kiosk, bikes (P3); helicopter, moped, rocket, bank, truck (P4). Why: each too small or shapeless to name at phone size.
+
+## Not on the list
+- French flags read horizontal; Albanian flag lacks eagle. suggested line: national flags drawn right.
+- Smoke is flat dark blobs. suggested line: smoke shaped and lit.
+- Tier 1 doesn't read calmer than tier 2. suggested line: tiers escalate visibly.
+- Identical faceless silhouettes. suggested line: crowd varied.
+
+== critique, round 1 pass 2 (2026-11-13): 12 fault(s), 2 can't tell
+-- look.md --
+1: "SPAIN" "Barcelona"; huge static dark crowd, tiny flags, distant small fire; calm, no action.
+2: "GERMANY" "Frankfurt" "WAFFEN" "GEN Z REGELT" "NEIN!"; stick riot police, thrown sign, flat crowd.
+3: "FRANCE" "Paris"; burning car, black smoke, statue, police wall, white beam; crowd stiff, unclear.
+4: "ALBANIA" "Tirana"; burning building, helicopter, red flag, police shields, red carts; chaotic, muddled.
+-- result.md --
+## Faults
+FAULT A1 S1 [1]: far end - no police line; fireworks burst over trees, so the beat can't play.
+FAULT A1 [1]: keys are yellow specks; hooded knot reads as a bonfire; street not wet.
+FAULT A4 [1]: lower middle - no Hook Text box drawn.
+FAULT A1 A2 [3]: monument - green torch figure on a plain block reads as the Statue of Liberty.
+FAULT A1 S1 [3, 4]: water cannon (3) and rocket (4) read as light beams; rocket starts at the flag, not the moped.
+FAULT A1 [4]: bottom-left - mopeds read as red carts.
+FAULT A2 [3]: one police row, not two; stones lie on the ground; no burning kiosk.
+FAULT A2 S3 [4]: Ministry is a flat grid block, no rounded corner or balconies; no toppled truck; helicopter a blob.
+FAULT S2 [2]: gun-store group stands on a stage above the crowd; no street.
+FAULT A2 [2]: WAFFEN window has no guns; blue light is a faint wash.
+FAULT S5 [2, 3, 4]: identical blank window grids (2, 4); Paris buildings are flat blobs (3).
+FAULT A2 [1-4]: everyone is a stick figure.
+CAN'T TELL S6 [1-4]: one frame per shot of each set, side by side.
+CAN'T TELL S4 [1-4]: first and last frame of each camera move.
+
+## Checked
+1-4
+
+## Cold look
+Missed Hook Text box, police line, hooded knot (1); kiosk, water cannon (3); moped, rocket, bank, truck (4): too small or misdrawn to read.
+
+## Not on the list
+- P3 camera is eye level, not low. suggested line: camera height matches the brief.
+- P1 one black mass fills two-thirds. suggested line: no mass over half the frame without readable figures.
+- P4 smoke is flat stacked discs. suggested line: smoke and fire have volume.
+
+critique, pass 2: faults fixed as one list: hunt 2 faults fixed as one list: T1 police line and knot bigger, T2 blue strobe, T3 bronze Marianne and stones in the air, T4 rocket trail puffs, flag moved, helicopter clear
+

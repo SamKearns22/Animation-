@@ -26,3 +26,18 @@
 - **Open rule requests:** "pencil sketches before check sheets" every film (Sam: wait and see after this film's roughs; would merge into rule 11); crowd and framing lessons come from the research job.
 - **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading`; pencil kit = `source/pencil_cartoon.Canvas` (graphite on paper; reuse for the roughs); thumbnails script was scratch only; ledger estimate set, stage plan done.
 
+
+
+# Handover before chat 4 (13 Nov)
+## Where things stand (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 11 (one rough composition sheet before building: the pencil roughs), 10 (framing planned up front: the re-staging below), 3 (no place drawn without its photos).
+- **Done (12 Nov):** chat 2: news photos for every place (13 refs); reporting re-based (now in `notes/archive/protest-tiers-reporting.md`). Framing research (own job): frame study and lessons F1-F12 (`research/crowds-and-big-action.md`); this film's four scenes re-staged with them ("Re-staged" below, a proposal).
+- **Sam (12 Nov):** Q1 Y rule 86 "Learn first"; Q2 Y the framing research job; Q5-Q7 approved; Q8 pencil sketches: "wait and see how it turns out here". Note B is about artistic judgement and screen framing, not pencil technique.
+- **Sam (12 Nov, 23:48):** "Continue this work until we have articulate pencil sketches of your proposed scenes. I am heading to sleep." Just go: no waiting for his yes, never skipping the checks; unattended, so stop after the sketch sheet.
+- **Next: chat 4 of 8 (Opus high), pencil roughs:** the four scenes as re-staged ("Re-staged" below), 9:16, `pencil_cartoon.Canvas`, one labelled sheet with the safe area, eye-level lines and each beat's focus; rule 3 references; rule 89 critique; then ONE message to Sam: sketch sheet + `research/framing-study.jpg` + lessons F1-F12 by number + Hook Text + sound + Y to the re-staging. Build nothing past the sketches. Then the cast (Opus high).
+- **Needs Sam:** Hook Text ("European protests, ranked"?), sound (1 one sound per big moment / 2 siren only / 3 music), lessons by number, Y to the re-staging (T2 crowd moved to the near pavement): all in chat 4's message.
+- **Read:** `guides/job-packs.md` "Plan"; this file's "Re-staged", "The world", "Action lists"; `research/crowds-and-big-action.md` "The lessons".
+- **Lost / Added (Sam Y, 12 Nov):** Lost: yellow vests; pepper spray (now tear gas); the hammer (now a road sign). Added: wet dusk with streetlights (T1); burning newspaper kiosk, burning rental bikes, CGT banners, daytime (T3).
+- **Open rule requests:** "pencil sketches before check sheets" every film (after this film's roughs; would merge into rule 11); framing lessons F1-F12 (Sam's numbers).
+- **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading`; pencil kit = `source/pencil_cartoon.Canvas` (reuse for the roughs); ledger estimate set, stage plan done.
+
