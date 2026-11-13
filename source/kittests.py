@@ -1648,7 +1648,9 @@ def handover_drops():
          len(then) == 1 and 'face' in then[0], not closed,
          len(H.check(claim, [])) == 1, not H.check(sent, []), any('UNANSWERED' in f for f in H.check(late, [])),
          any('OVERRIDE' in f for f in H.check(over, [])), [x for _, x in own] == ['N8: the pool player clips'],
-         H._not_typed('Overnight run, chat 1', rec), not H._not_typed('N8: the pool player clips', rec)]
+         H._not_typed('Overnight run, chat 1', rec), not H._not_typed('N8: the pool player clips', rec),
+         H._not_typed('not in the record yet', rec) is None,              # the hook's background step waits for it
+         not H._is_sam('<agent-message from="a1">\n[Subagent hand-back] report')]   # overnight chat 3: helpers' reports
     return all(r), f'chat 5 caught {caught}, after N8-N11 written {len(final)}; note 47 then {then}, closed ' \
                     f'{len(closed)}; checks {r}'
 
