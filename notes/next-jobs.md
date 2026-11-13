@@ -1,24 +1,23 @@
 # Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/face-tool-c1` (also pushed to the main line).
+- **Newest work:** `claude/face-tool-c2` (also pushed to the main line).
 - **Rules that bite next:** 49 (likeness pack and check), 86 (every tool gets a kittest), 85 (cost watch).
-- **Done (chat 1 of 8, Opus high, amber at 2.1%):** photo packs filed (`references/faces/burnham/` a01-a05,
-  `references/faces/badenoch/` k01-k05: news and Parliament portraits; Burnham now wears thick dark glasses, his
-  trademark). The face tool `source/facepick.py` built and runs end to end on Burnham in 40 s: card, traced hair,
-  neck and shoulders, glasses from the photo, three heads (A/B/C on the unsure measures), tuning loop, check, sheet.
-  First sheet: 65/64/29%, first in a 4-photo line-up, but none passes (timid and wrong-way measures); not sent to Sam.
-- **Next: chat 2 of 8, Opus high:** finish the face tool (list in For Claude), then Badenoch, then the Walliams
-  replay (w06, w07, w01, w02; count tries vs his five chats), the name test (namer helpers), a kittest; send Sam
-  both sheets. Then the critic bench (item 3, Opus medium).
+- **Done (chat 2 of 8, Opus high, amber at 2.4%):** the six faults fixed (tuning judged by the check's own rule on
+  its own photo; glasses by the cartoon's eye width; hair top colour plus grey temples and strands; calmer skin;
+  line-up of 14 from every film; sheet width and one shared frame for A/B/C), plus a drawn neck (no collar gap).
+  Burnham A/B/C pass: 68/77/71%, none the wrong way, first of 14. Not sent: by eye he reads young and round.
+- **Next: chat 3 of 8, Opus high:** 1) name test (namer helpers) on Burnham's heads; if he is not named, add age
+  lines from the photo (cheek folds, crow's feet: no kit piece has them, new) and re-run; 2) Badenoch (braids:
+  the hair mask down past the jaw); 3) Walliams replay (w06, w07, w01, w02; count tries vs his five chats);
+  4) kittest; 5) send Sam the three sheets. Then the critic bench (item 3, Opus medium).
 - **Needs Sam:** nothing until the face sheets.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
 - **Open rule requests:** none.
-- **For Claude:** run `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg
-  .../a02-front-national2026.jpg .../a03-front-smiling-ap2026.jpg --tq .../a04... .../a05...`. Faults to fix:
-  1 tune() aims at the 3-photo card but check() scores the first photo only: score the tune on what check scores;
-  5 damped rounds do not converge (more rounds, keep the best by check's own pass rule). 2 glasses too big and high:
-  scale lenses by the cartoon eye width, not half the eye gap. 3 hair a flat blob: two tones from the photo (grey
-  sides), a few strand lines. 4 skin too pink (`_flat` boosts saturation). 5 line-up only 4: `_others` should find
-  every film's front photos. 6 sheet's third phone tile cut off. Badenoch: braids (hair mask down past the jaw).
+- **For Claude:** `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg
+  .../a02-front-national2026.jpg .../a03-front-smiling-ap2026.jpg --tq .../a04... .../a05...` (2.5 min; the
+  likeness pack's first photo is what check judges). `tune()` is a search (6 heads a round, `response()` table);
+  the finder is jumpy on cartoons, so a look change can drop a pass: re-run after each. Kittest idea: a head with
+  its eyes swapped for the average fails `verdict`, the tuned one passes; `_others` finds 13+ people.
+
 ## Logged 13 Nov (Sam: log for now; not started). The one aim: films at 15% of a week, or as close as honestly possible
 - **Job O, true weekly figure (Sonnet, ~0.5%).** Sam: Blessed spent 80% of a week; our ledger counted 50.92% (WEEK_USD
   290). Set `WEEK_USD` in `.claude/hooks/costwatch.py` so Blessed's recorded dollars read 80% (first check the ledger
