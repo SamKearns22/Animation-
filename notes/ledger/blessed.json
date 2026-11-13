@@ -260,7 +260,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.92
+   "cost": 2.27
   }
  ],
  "checks": {},
@@ -620,7 +620,7 @@
   "9:round2": 7
  },
  "forecast_alarm": 7,
- "alarm": 5,
+ "alarm": 6,
  "audit": [
   "1. Cost: estimate 19.0%, spent 21.02% of a week (over: name what ran over).",
   "2. Chats 14, rounds 0; by model: opus 20.67%, sonnet 0.35%.",
