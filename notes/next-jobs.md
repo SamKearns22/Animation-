@@ -18,10 +18,10 @@
 
 
 ## Logged 13 Nov (Sam: log for now; not started). The one aim: films at 15% of a week, or as close as honestly possible
-- **Job W, true weekly figure (Sonnet, ~0.5%).** Sam: Blessed spent 80% of a week; our ledger counted 50.92% (WEEK_USD
+- **Job O, true weekly figure (Sonnet, ~0.5%).** Sam: Blessed spent 80% of a week; our ledger counted 50.92% (WEEK_USD
   290). Set `WEEK_USD` in `.claude/hooks/costwatch.py` so Blessed's recorded dollars read 80% (first check the ledger
   has every Blessed chat: 11 Nov rows are estimates); restate every film's ledger and every quoted % with it.
-- **Job F, honest fit at planning (Opus high, ~1-2%).** Widen rule 24: before any building, the plan states whether the
+- **Job N, honest fit at planning (Opus high, ~1-2%).** Widen rule 24: before any building, the plan states whether the
   script fits 15% (from KNOWN vs NEW and real past costs on the true ruler); if not, why (people, places, likeness
   faces) and what to trim or reuse to get close, as numbered choices for Sam. Blessed (7 people, 8 places, one
   likeness face) is the test case: the plan should have said "about 25-35%, here is why".
