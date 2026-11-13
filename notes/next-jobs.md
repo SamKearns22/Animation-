@@ -1,24 +1,19 @@
-# Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-q-handover-check` (also pushed to the main line). Face tool chain runs on its own.
-- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 30 (a repeated note: find why first).
-- **Done (overnight chat 1, Job Q, Opus medium, ~2.2%):** `source/handover.py` (MAP; catalogue row; kittest
-  `handover_drops` passes on Blessed's real chat 5 messages and notes files). The `log` hook (UserPromptSubmit) saves
-  Sam's typed messages to `notes/ledger/sam/CHAT.md` and pushes. `end` / `start PARENT --film F` flag his asks not
-  carried by a notes line written after he spoke, unanswered messages, unsent clips, an override he never typed.
-- **Next: overnight chat 2, Opus medium: the critic bench (ranking item 3, `notes/ranking-list.md`).** Test on Blessed.
-- **Needs Sam:** morning report: Y to the CLAUDE.md line that makes chats run `handover.py end`/`start` (pick Y).
-- **OVERNIGHT RUN (Sam, 13 Nov 23:25 UTC): read `notes/overnight-run.md` first.** Order Q, critic bench, rounds-read-a-page,
-  then people, places, moves, rough command; test only on Blessed (never Protest Tiers); each job may reach 150% of its
-  estimate, then hard stop, `notes/morning-report.md`, next job. Face tool chain runs on its own.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
+# Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/overnight-critic-bench` (also pushed to the main line). Face tool chain runs on its own.
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 89 (the critique).
+- **Done (overnight chat 2, critic bench, Opus medium, ~2.1%):** `source/critbench.py` (MAP, catalogue row, kittest
+  `critic_bench_scores`); cases `source/bench/blessed-a1(-crops).json` (Blessed animatic 1 from 5c95b9e, 12 of Sam's
+  notes as key); scores in `notes/critic-bench.tsv`: plain Opus 5/12, Sonnet 4/12; with people close-ups Sonnet 7, Opus 2.
+- **Next: overnight chat 3, Opus HIGH (design): rounds read a page (ranking item 6), per `notes/overnight-run.md`.**
+- **Needs Sam (morning report):** Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
+- **Bench left (a later chat, Opus medium, ~0.5%):** a second case (animatic 2, from 51e8d9f) before switching; rule the
+  extras real/false; P12 and P11 missed in all four runs: reword their Look ("the judge" small faces), then `critique.py`
+  gets HELPER `critic` + model sonnet and auto crops per person.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `notes/ranking-list.md` item 6.
 - **Open rule requests:** none.
-- **For Claude:** run `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg
-  .../a02-front-national2026.jpg .../a03-front-smiling-ap2026.jpg --tq .../a04... .../a05...`. Faults to fix:
-  1 tune() aims at the 3-photo card but check() scores the first photo only: score the tune on what check scores;
-  5 damped rounds do not converge (more rounds, keep the best by check's own pass rule). 2 glasses too big and high:
-  scale lenses by the cartoon eye width, not half the eye gap. 3 hair a flat blob: two tones from the photo (grey
-  sides), a few strand lines. 4 skin too pink (`_flat` boosts saturation). 5 line-up only 4: `_others` should find
-  every film's front photos. 6 sheet's third phone tile cut off. Badenoch: braids (hair mask down past the jaw).
+- **For Claude:** `python3 source/critbench.py make CASE`, run each printed Agent line, then `score CASE MODEL --cost P`;
+  Opus's crops answer ran 408 words (limit 300): 20 panels may need the limit raised.
+
 ## Job Q, the handover check (Sam: Y, 13 Nov; Opus medium, ~1.5%; beside the face tool)
 Why: Blessed's handovers dropped things (notes 8-11 sat unread when chat 5 broke before writing them and chat 6 read
 only the notes file; Walliams' face, open in note 47, fell out of two handovers; chat 5 read "don't stop for any Y" as

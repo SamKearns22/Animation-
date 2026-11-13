@@ -1,3 +1,3 @@
-Face tool (ranking item 2): built and running, chat 1 of 8; first Burnham sheet fails the check, not sent.
-Now: chat 2 of 8 (Opus high) finishes the tool, then Badenoch and the Walliams replay; sheets to Sam.
-Waiting: nothing from Sam until the face sheets.
+Critic bench built: Sam's first Blessed notes replayed to Opus and Sonnet critics; Sonnet with close-ups did best (7 of 12).
+Now: overnight chat 3 (Opus high) designs "a round reads a page".
+Waiting: morning report picks (close-ups in every critique; Sonnet critic).

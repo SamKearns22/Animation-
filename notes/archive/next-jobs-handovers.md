@@ -409,3 +409,25 @@
 - **Open rule requests:** none.
 - **For Claude:** WEEK_USD in `.claude/hooks/costwatch.py`; ledger in `notes/ledger/`; Blessed's real cost per Sam 80%.
   A separate pre-flight timing run (Sonnet) may also be in progress from the pre-flight audit: merge, don't clash.
+
+# Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/overnight-q-handover-check` (also pushed to the main line). Face tool chain runs on its own.
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 30 (a repeated note: find why first).
+- **Done (overnight chat 1, Job Q, Opus medium, ~2.2%):** `source/handover.py` (MAP; catalogue row; kittest
+  `handover_drops` passes on Blessed's real chat 5 messages and notes files). The `log` hook (UserPromptSubmit) saves
+  Sam's typed messages to `notes/ledger/sam/CHAT.md` and pushes. `end` / `start PARENT --film F` flag his asks not
+  carried by a notes line written after he spoke, unanswered messages, unsent clips, an override he never typed.
+- **Next: overnight chat 2, Opus medium: the critic bench (ranking item 3, `notes/ranking-list.md`).** Test on Blessed.
+- **Needs Sam:** morning report: Y to the CLAUDE.md line that makes chats run `handover.py end`/`start` (pick Y).
+- **OVERNIGHT RUN (Sam, 13 Nov 23:25 UTC): read `notes/overnight-run.md` first.** Order Q, critic bench, rounds-read-a-page,
+  then people, places, moves, rough command; test only on Blessed (never Protest Tiers); each job may reach 150% of its
+  estimate, then hard stop, `notes/morning-report.md`, next job. Face tool chain runs on its own.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
+- **Open rule requests:** none.
+- **For Claude:** run `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg
+  .../a02-front-national2026.jpg .../a03-front-smiling-ap2026.jpg --tq .../a04... .../a05...`. Faults to fix:
+  1 tune() aims at the 3-photo card but check() scores the first photo only: score the tune on what check scores;
+  5 damped rounds do not converge (more rounds, keep the best by check's own pass rule). 2 glasses too big and high:
+  scale lenses by the cartoon eye width, not half the eye gap. 3 hair a flat blob: two tones from the photo (grey
+  sides), a few strand lines. 4 skin too pink (`_flat` boosts saturation). 5 line-up only 4: `_others` should find
+  every film's front photos. 6 sheet's third phone tile cut off. Badenoch: braids (hair mask down past the jaw).
