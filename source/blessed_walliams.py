@@ -38,7 +38,7 @@ P4.PUSH['walliams'] = 1.6
 
 # ---------------------------------------------------------------------------------------------- moods
 # brow: up (+); frown (-) lifts the inner ends (worry); lid: upper lid down; wide: the stare (P4.eyes)
-MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.22, wide=0.0, mouth='lips', smile=0.9, squint=0.35),   # the smirk
+MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.3, wide=0.0, mouth='lips', smile=1.0, squint=0.8, cock=0.035),   # the smirk
          # scared and alarmed (note 25): brows high and pinched up in the middle, eyes wide, mouth pulled into a
          # wide grimace, the teeth showing
          'scared': dict(brow=0.06, frown=-0.1, lid=0.0, wide=1.0, mouth='lips', smile=-0.8),   # chat 3: the grimace read as a grin,
@@ -56,7 +56,9 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.22, wide=0.0, mouth='lips', 
 # lines from the nose round the mouth); SMALL crinkled eyes that half-smile; thick dark straight brows sitting low;
 # a broad nose with a round tip; thick dark hair swept up and back in a high rounded dome, short and grey at the
 # sides, the temples receding; a short beard, dark grey round the mouth, white on the long round chin.
-P4.TUNE['walliams'] = dict(nose_long=0.0, chin_long=1.0, jaw_wide=3.5, face_wide=0.3, forehead_wide=3.5,
+# Chat 4 (13 Nov): the pear (temples narrowed to 0.69 of the cheeks) and the tall narrow quiff read as nobody; by eye
+# on w02, w06, w09 his head is a BIG BOX: the hair makes the top as wide as the cheeks, the jaw square and wide.
+P4.TUNE['walliams'] = dict(nose_long=0.0, chin_long=1.0, jaw_wide=3.5, face_wide=0.3, forehead_wide=0.0,
                            eyes_apart=1.5, eye_size=0.6, eye_open=0.3, mouth_wide=-2.0, lip_top=1.5, lip_low=1.5,
                            brow_high=3.0, brow_slope=-0.6)
 
@@ -66,20 +68,26 @@ def _lay(L):
     at 0.6 of the face, the lips at 0.71-0.75, a long round chin below; the brows low over small eyes."""
     L = dict(L)
     L['nose_y'] = 0.61
-    L['lip0'], L['lip13'], L['lip17'] = 0.72, 0.737, 0.763
+    L['lip0'], L['lip13'], L['lip17'] = 0.745, 0.762, 0.788      # chat 4: the long gap nose to lip (his card)
     L['nw'] = max(L['nw'], 0.25)
-    L['brow_y'] = L['eye_y'] - 0.06
+    L['brow_y'] = L['eye_y'] - 0.048
     L['mw'] = min(L['mw'], 2 * L['ecx'] * 0.98)          # the mouth about as wide as the pupils are apart
     return L
+
+
+SHAVE = 'stubble'                 # 'stubble' or 'clean' (chat 4's blind tests)
+LOW = 1.3                         # the lower face (below the cheekbones) stretched: his chin is his 98th-centile measure
 
 
 def outline(L):
     """His big face: temples a little in, full round cheeks, a wide heavy jaw, a long, broad, rounded chin."""
     fw, jw, fh = L['fw'] * 0.5, L['jw'] * 0.5, L['fhw'] * 0.5
-    jw = min(jw, fw)                                      # the pear: narrow temples, the jaw as wide as the cheeks
-    right = [(fh * 0.98, -0.02), (fh + 0.02, 0.14), (fw * 0.97, 0.36), (fw + 0.006, 0.52), (fw + 0.004, 0.66),
-             (jw * 0.99, 0.8), (jw * 0.9, 0.92), (jw * 0.66, 1.01), (0.14, 1.055), (0.0, 1.065)]
-    top = [(-fh * 0.75, -0.34), (0.0, -0.42), (fh * 0.75, -0.34)]
+    jw = min(jw, fw * 0.98)                               # chat 4: a box, the jaw nearly as wide as the cheeks
+    fh = max(fh, fw * 0.9)                                # the temples nearly as wide too (the hair squares it off)
+    right = [(fh * 0.98, -0.02), (fh + 0.01, 0.14), (fw * 0.99, 0.36), (fw + 0.006, 0.52), (fw + 0.004, 0.66),
+             (jw * 0.99, 0.8), (jw * 0.93, 0.92), (jw * 0.72, 1.0), (0.17, 1.05), (0.0, 1.058)]
+    top = [(-fh * 0.75, -0.34), (0.0, -0.4), (fh * 0.75, -0.34)]
+    right = [(u, v if v < 0.62 else 0.62 + (v - 0.62) * LOW) for u, v in right]   # chat 4: his long, heavy lower face
     left = [(-u, v) for u, v in right[::-1][1:]]
     return top + right + left
 
@@ -94,9 +102,9 @@ LIP = (200, 130, 118)
 # Blind test 2 (12 Nov): with a full white-chinned beard he was named as other bearded men; his famous face (w06,
 # w09, his TV years) is near clean-shaven. So the beard is light stubble: a grey shade the skin shows through,
 # a touch lighter on the chin, a touch darker round the mouth; the jaw, chin and smirk read through it.
-BD_MID = blend(SKIN, (150, 142, 140), 0.32)       # stubble over the jaw and cheeks
-BD_LIGHT = blend(SKIN, (200, 196, 194), 0.4)      # greyer-white on the chin
-BD_MOUST = blend(SKIN, (120, 108, 100), 0.42)     # darker round the mouth
+BD_MID = blend(SKIN, (150, 142, 140), 0.22)       # stubble over the jaw and cheeks
+BD_LIGHT = blend(SKIN, (200, 196, 194), 0.3)      # greyer-white on the chin
+BD_MOUST = blend(SKIN, (120, 108, 100), 0.32)     # darker round the mouth
 BD_GRAIN = blend(SKIN, (230, 228, 226), 0.5)
 STUBBLE = BD_MID
 
@@ -144,25 +152,28 @@ def beard(p, f, L, seed=61):
 
 # ---------------------------------------------------------------------------------------------- the hair
 def hair(p, f, L):
-    """Thick, dark, swept up and back into a rounded dome (w06, w09), lifted highest at the front just left of the
-    middle; cut short and close at the sides, greying there (w02, w07); the temples receding to an M."""
-    e, c = L['fw'] * 0.5, L['fhw'] * 0.5
-    hl, tl = -0.14, -0.04                                 # the hairline: middle, temples (receding)
-    side = [(-e * 0.97 + 0.004, 0.3), (-e * 0.97 - 0.012, 0.2), (-c - 0.03, 0.04), (-c - 0.024, -0.1),
-            (-c + 0.02, -0.12), (-c + 0.03, tl - 0.01), (-c + 0.012, 0.1), (-e * 0.97 + 0.02, 0.3)]
+    """Chat 4 (13 Nov), by eye on w02, w06, w09: short, thick and dark, brushed UP at the front into a low, wide
+    quiff and back over a flat-topped crown, as wide as the head (the box); the sides clipped close and greying,
+    hugging the head down to the ears; the temples receding a little, so the high forehead shows."""
+    e, c = L['fw'] * 0.5, max(L['fhw'], L['fw'] * 0.9) * 0.5
+    hl = -0.1                                              # the hairline in the middle
+    side = [(-c - 0.012, -0.12), (-e - 0.016, 0.06), (-e - 0.012, 0.27), (-e + 0.012, 0.3), (-e + 0.016, 0.1),
+            (-c + 0.04, -0.02), (-c + 0.07, -0.08)]
     for sgn in (-1, 1):
         p.poly(curve(f.pts([(sgn * -u, v) for u, v in side] if sgn > 0 else side), 2), HAIR_GREY, INK, 2.2)
-    dome = [(-c + 0.04, tl - 0.03), (-c - 0.035, -0.1), (-c - 0.01, -0.27), (-0.18, -0.41), (-0.04, -0.46),
-            (0.12, -0.45), (0.24, -0.39), (c + 0.0, -0.27), (c + 0.035, -0.1), (c - 0.04, tl - 0.03),
-            (c - 0.13, tl - 0.07), (c * 0.45, hl - 0.03), (0.1, hl - 0.02), (-0.02, hl - 0.04), (-c * 0.4, hl - 0.03),
-            (-c + 0.13, tl - 0.07)]
-    p.poly(curve(f.pts(AV.tufts(dome[:10], 0.006, 0.02, out=1.0, seed=52) + dome[10:]), 2), HAIR, INK, 2.4)
-    for k in range(7):                                    # swept up and back from the front
-        u = -c * 0.72 + k * c * 0.24
-        p.line(curve(f.pts([(u, hl - 0.04 - 0.02 * (1 - abs(u) / c)), (u * 0.95, -0.25), (u * 0.8, -0.38)]), 3),
+    top = [(-c - 0.035, -0.06), (-c - 0.04, -0.2), (-c + 0.0, -0.33), (-c * 0.55, -0.43), (-c * 0.15, -0.48),
+           (c * 0.25, -0.47), (c * 0.62, -0.41), (c + 0.0, -0.32), (c + 0.04, -0.2), (c + 0.035, -0.06)]
+    front = [(c - 0.01, -0.05), (c - 0.06, -0.16), (c * 0.62, -0.17), (c * 0.4, hl - 0.02), (c * 0.15, hl + 0.01),
+             (-c * 0.15, hl + 0.012), (-c * 0.4, hl - 0.015), (-c * 0.62, -0.17), (-c + 0.06, -0.16),
+             (-c + 0.01, -0.05)]                            # chat 4: the temples receding to an M (w02, w06)
+    p.poly(curve(f.pts(AV.tufts(top, 0.008, 0.022, out=1.0, seed=52) + front), 2), HAIR, INK, 2.4)
+    for k, (u, ln) in enumerate(((-0.24, 0.24), (-0.13, 0.3), (-0.03, 0.27), (0.08, 0.31), (0.18, 0.25),
+                                 (0.27, 0.2))):           # brushed up and over to our right, uneven
+        u *= c / 0.4
+        p.line(curve(f.pts([(u, hl - 0.03), (u + 0.03, hl - 0.03 - ln * 0.6), (u + 0.08, hl - 0.03 - ln)]), 3),
                HAIR_L if k % 2 else dk(HAIR, 0.7), 1.6)
-    p.poly(curve(f.pts([(-0.16, -0.19), (-0.12, -0.33), (0.0, -0.4), (-0.06, -0.31), (-0.09, -0.19)]), 3),
-           blend(HAIR, HAIR_L, 0.5), None)                # the light on the lifted front
+    p.poly(curve(f.pts([(-c * 0.3, hl - 0.04), (-c * 0.22, -0.3), (-c * 0.02, -0.41), (-c * 0.1, -0.29),
+                        (-c * 0.14, hl - 0.04)]), 3), blend(HAIR, HAIR_L, 0.5), None)   # the light on the quiff
 
 
 def long_nose(p, f, L, skin):
@@ -193,10 +204,11 @@ def smirk_lines(p, f, L, skin, smile):
 def smirk(p, f, L, smile):
     """His closed-lip smirk (w02, w06, w09): the line a broad U, both corners lifted and tucked into the cheeks; a
     thin upper lip, a fuller lower one following the curve; smile 0..1 lifts the corners."""
-    hw, l13 = L['mw'] / 2 * 1.08, L['lip13']
-    up = 0.036 * smile
+    hw, l13 = L['mw'] / 2 * 1.2, L['lip13']
+    up = 0.058 * smile
     us = np.linspace(-1, 1, 17)
-    yl = lambda u: l13 + 0.004 - up * u ** 4 - 0.008 * smile * u * u
+    lop = lambda u: 1.0 + 0.6 * u                       # chat 4: lopsided, our right corner higher (w06, w09)
+    yl = lambda u: l13 + 0.004 - up * u ** 4 * lop(u) - 0.008 * smile * u * u
     line = [(hw * u, yl(u)) for u in us]
     top = [(hw * u, yl(u) - 0.013 * (1 - u * u) ** 0.7) for u in us]
     bot = [(hw * u, yl(u) + 0.024 * (1 - u * u) ** 0.8) for u in us]
@@ -215,14 +227,18 @@ def crinkles(p, f, L, skin, smile):
     sh = dk(skin, 0.8)
     for sgn in (-1, 1):
         cx, ey, w = sgn * L['ecx'], L['eye_y'], L['ew'] * 0.6
-        p.line(curve(f.pts([(cx - sgn * w * 0.7, ey + 0.04), (cx, ey + 0.055), (cx + sgn * w * 0.9, ey + 0.035)]), 3),
-               sh, 1.6)
+        k = max(smile, 0.0)                              # chat 4: the round cheeks push up under the eyes
+        p.line(curve(f.pts([(cx - sgn * w * 0.8, ey + 0.035 - 0.01 * k), (cx, ey + 0.05 - 0.012 * k),
+                            (cx + sgn * w * 1.0, ey + 0.028 - 0.012 * k)]), 3), sh, 1.8)
         p.line(curve(f.pts([(cx - sgn * w, ey - 0.03), (cx, ey - 0.045), (cx + sgn * w * 1.1, ey - 0.012)]), 3),
                dk(skin, 0.86), 1.5)                       # the hood
-        if smile > 0.0:
-            ox = cx + sgn * w * 1.25
-            for dy in (-0.01, 0.012):
-                p.line(f.pts([(ox, ey + dy * 0.4), (ox + sgn * 0.035, ey + dy * 1.8)]), sh, 1.3)
+        p.line(curve(f.pts([(cx - sgn * w * 0.5, ey + 0.075 - 0.01 * k), (cx + sgn * w * 0.2, ey + 0.085 - 0.012 * k),
+                            (cx + sgn * w * 0.9, ey + 0.065 - 0.012 * k)]), 3), dk(skin, 0.86), 1.4)   # the bag
+        if smile > 0.0:                                   # crow's feet, fanned (his twinkle)
+            ox = cx + sgn * w * 1.2
+            for dy in (-0.016, 0.004, 0.024):
+                p.line(curve(f.pts([(ox, ey + dy * 0.3), (ox + sgn * 0.026, ey + dy * 1.2),
+                                    (ox + sgn * 0.045, ey + dy * 2.0)]), 3), sh, 1.4)
 
 
 # ---------------------------------------------------------------------------------------------- the mouth
@@ -260,7 +276,8 @@ def _head(img, p, sp, t, hx, hy):
     smile = look.get('smile', 0.0) if look['mouth'] == 'lips' else -0.5
     AV._ears(p, f, L, SKIN)
     p.poly(curve(f.pts(outline(L)), 4), SKIN, INK, 2.6)
-    beard(p, f, L)
+    if sp.get('shave', SHAVE) == 'stubble':
+        beard(p, f, L)
     if sp.get('empty'):                                  # the likeness check's bare face
         long_nose(p, f, L, SKIN)
         P4.lips(p, f, L, dict(sp, smile=0.1), LIP, f(0.0, L['lip13']))
@@ -272,7 +289,8 @@ def _head(img, p, sp, t, hx, hy):
                           squint=sp.get('squint', look.get('squint', 0.0)),
                           gaze_dy=BC.gaze(L, sp.get('gaze_dy', 0.0))), IRIS, dk(SKIN, 0.8), liner=3.0,
             wide=look['wide'])
-    P4.brows(p, f, L, BROW, 0.058, look['brow'] + sp.get('brow_up', 0.0), look['frown'] + sp.get('frown', 0.0))
+    r = look['brow'] + sp.get('brow_up', 0.0)
+    P4.brows(p, f, L, BROW, 0.052, (r + look.get('cock', 0.0), r), look['frown'] + sp.get('frown', 0.0))
     long_nose(p, f, L, SKIN)
     fx, my = f(0.0, L['lip13'])
     talking = str(sp.get('mouth', 'rest')).startswith('v:')
@@ -305,7 +323,11 @@ def head_png(out, average=False, mood='neutral', bare=False):
     B.SS = 1
     im = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
     V.person(im, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(WALLIAMS, average=average, mood=mood), 0.0, 0)
-    im.crop((180, 300, 900, 1000 if bare else 1250)).convert('RGB').save(out)
+    bot = 1250
+    if bare:                                             # cut just under the chin: the first ink below the mouth
+        a = np.asarray(im.convert('RGB')).astype(int).sum(2)[:, 540]
+        bot = next(y for y in range(800, 1250) if a[y] < 200 and a[y - 12] > 300) + 3
+    im.crop((180, 300, 900, bot)).convert('RGB').save(out)
     return out
 
 
@@ -334,6 +356,8 @@ def faces_sheet(out):
 
 
 if __name__ == '__main__':
+    if '--clean' in sys.argv:
+        SHAVE = 'clean'
     if sys.argv[1] == 'head':
         mood = sys.argv[sys.argv.index('--mood') + 1] if '--mood' in sys.argv else 'neutral'
         print(head_png(sys.argv[2], '--average' in sys.argv, mood, '--bare' in sys.argv))
