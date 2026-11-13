@@ -8,9 +8,10 @@
   budget stop at the budget and every 5% of it over (replaces the quarter alarm and the forecast alarm); alarms_off
   gone (Blessed's removed); `app` checks it on real figures; `audit` is now the one after-film comparison line.
   Report: COULD NOT TEST counted in the summary's first line; a pre-flight warning saying it stops. Kittests pass.
-- **Next:** nothing in this job. Blessed's next chat meets the budget stop at once (44.9% of 19%): Sam's Y.
+- **Next:** the pre-flight audit (Sam, 13 Nov), `notes/preflight-audit.md`, chat 1 of 8, Opus HIGH (planning).
+  Blessed's next chat meets the budget stop at once (44.9% of 19%): Sam's Y.
 - **Needs Sam:** 1. "every 5% over" read as 5% of the budget (Blessed: a stop about every chat); N = every 5% of a week.
-- **Read:** nothing more; the job is done.
+- **Read:** `notes/preflight-audit.md` (the audit's brief); this file only for the rules above.
 - **Open rule requests:** none unwritten.
 - **For Claude:** ledger.budget_stop(d) (d['budget_stop'] = last step), ledger.compare_line(d); blessed_checks.solids;
   blessed.ALLOWED press*; preflight item 5 just above the clipcheck call. Never page a whole chat's events.
