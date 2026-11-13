@@ -1,8 +1,9 @@
 # Notes for BLESSED (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **FINISHED (Sam, 13 Nov): "Please mark Blessed as finished."** The final is animations/blessed.mp4 (11.8 MB, sent
-  13 Nov). No more work on this film. Lost: the arrival-shot fix (Brand's left arm folded at frame 0) stays undone.
+- **FINISHED (Sam, 13 Nov).** Final: animations/blessed.mp4 (11.8 MB), re-sent 13 Nov with the arrival-shot arm fixed
+  (Sam: YY in chat 6): L hand to and from the heart now bends 'out' (pole 'in' folded it at 1.08 and 4.17-4.25 s).
+  Full 35-min redraw was a rule 47 miss (a splice would do); film_engine now refuses that without --full-ok (Sam: Y).
 - Notes go to notes/archive/ the day Sam says it is posted.
 
 ## Sam's notes on animatic 3 (13 Nov)
