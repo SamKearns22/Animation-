@@ -10,14 +10,18 @@ push changed, again. The steps that worked are now done by the tool:
                 the cartoon face's frame (anchored at the eyes, chin and cheek width), smoothed into flat house
                 shapes with an ink edge (rule 49.1: the outline at phone size first). Hair over the forehead and
                 down the sides is drawn over the face; the eyes and brows are never covered.
-    PUSH        a closed loop, not a guess (rule 49.2): each head is drawn, measured by the same face finder, and
-                every measure moved until the drawing differs from the average face the same way as the photo and
-                at least `GAIN` times as far (the drawing style's own pull taken away with the average twin).
+    PUSH        a search, not a guess (rule 49.2), judged by verdict(): likeness.check's own rule on its own photo
+                (the FIRST front photo), line-up included. The face finder reads cartoons jumpily (a 0.1-spread
+                change moves some readings 0.2), so no step-by-step solve settles: response() measures once how each
+                setting moves the drawing; tune() starts at the photo's measures x GAIN and draws 6 heads a round
+                round the best (one solved on that table, five shaken and pushed at what is still timid or wrong).
     CLEAN TWIN  the head is measured bare: no glasses, no beard (rule 49.3); they are drawn after, from the photo
-                (glasses: the frames' size and colour from the segmentation; beard: beardkit).
-    THREE HEADS the card's unsure measures (the photos disagree, or a smile moves them) are drawn three ways:
-                A as the card says, B at the average, C the other way (Walliams' nose: the card said short, by eye
-                it was long). With nothing unsure, the three differ in strength (x1.3, x1.7, x2.3).
+                (glasses: each lens's centre, width, top and bottom in eye widths, drawn by the cartoon's eye width;
+                beard: beardkit). Hair: the top's colour and, if the temples are lighter, grey sides; a few strands.
+    THREE HEADS the card's unsure measures (the photos disagree) are drawn three ways: A as the first photo, B half
+                as far, C further (or the other way where that photo does not notice it: the check only judges
+                what it notices). With nothing unsure, the three differ in strength (x1.3, x1.7, x2.3).
+    LINE-UP     every film's '*front*' photo, one per person (faces packs, likeness folders, each film's own).
 
     python3 source/facepick.py NAME OUT_DIR FRONT.jpg[:N] ... [--tq PHOTO[:N] ...] [--lineup "A,B,..."]
                                [--gain 1.6] [--says "beard=yes|no, glasses=yes|no"]
@@ -28,8 +32,8 @@ push changed, again. The steps that worked are now done by the tool:
     python3 source/facepick.py sheet OUT_DIR NAME     redraw the sheet, adding the name test's answers once in
     python3 source/facepick.py head OUT_DIR NAME A OUT.png [--size 600]   one picked head, for the cast code
 
-Map: pack and card 60 | the frame 120 | traced shapes 150 | the head 215 | glasses 300 | tuning 340 |
-     the sheet 400 | main 480
+Map: pack and card 65 | the frame 84 | traced shapes 131 | the head 242 | glasses 319 | tuning 370 |
+     the sheet 516 | main 607
 """
 import glob
 import json
@@ -51,7 +55,8 @@ from ed import INK, Pen, curve                           # noqa: E402
 FONT = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
 KEYS = [k for k, *_ in LK.MEASURES]
 GAIN = 1.6            # the drawing differs from the average this many times as far as the photo (check wants 0.9+)
-ROUNDS = 5            # tuning rounds per head
+ROUNDS = 6            # search rounds per head at most (it stops once the check passes with nothing timid)
+POP = 6               # heads drawn per round (about 1 s each)
 SC = 3                # canvas pixels per person unit (the head is ~200 units tall)
 HX, HY = 200, 190     # where the face sits on the canvas (person units): Face.top = HY - 72
 CW, CH = 400, 460
@@ -130,7 +135,8 @@ def traced(fr, n_fronts=()):
     q = fr['q']
     top, chin = q(10), q(152)
     hair = LK._own_region(m == 1, top, chin)
-    return dict(hair=hair, skin2=(m == 2), clothes=(m == 4), acc=(m == 5))
+    return dict(hair=hair, skin2=(m == 2), clothes=(m == 4), acc=(m == 5),
+                temple_y=float(top[1] + 0.12 * (chin[1] - top[1])))
 
 
 def colours(fr, shapes):
@@ -143,8 +149,10 @@ def colours(fr, shapes):
         x, y = q(i).astype(int)
         cheek[y - 6:y + 6, x - 6:x + 6] = True
     sk = px[cheek & (m == 3)] if (cheek & (m == 3)).sum() > 20 else px[m == 3]
-    skin = LK._flat(np.median(sk, 0), 1.05)
-    hair = LK._flat(np.median(px[shapes['hair']], 0)) if shapes['hair'].sum() > 50 else LK._dk(skin, 0.5)
+    skin = _tone(np.median(sk, 0), 1.06, 0.82)          # photos run warm and ruddy: lighter, a little greyer
+    hair, hair2 = _hair_tones(px, shapes)
+    if hair is None:
+        hair = LK._dk(skin, 0.5)
     lip_m = Image.new('L', m.shape[::-1], 0)
     ImageDraw.Draw(lip_m).polygon([tuple(q(i)) for i in LK.LIPS_OUT], fill=255)
     ImageDraw.Draw(lip_m).polygon([tuple(q(i)) for i in LK.LIPS_IN], fill=0)
@@ -154,12 +162,66 @@ def colours(fr, shapes):
     for ring in (LK.BROW_R, LK.BROW_L):
         ImageDraw.Draw(brow_m).polygon([tuple(q(i)) for i in ring], fill=255)
     bp = px[np.asarray(brow_m) > 0]
-    brow = LK._flat(np.percentile(bp, 30, axis=0)) if len(bp) > 10 else LK._dk(hair, 0.8)
+    brow = _tone(np.percentile(bp, 12, axis=0), 0.95, 1.0) if len(bp) > 10 else LK._dk(hair, 0.8)
+    fh = float(np.linalg.norm(q(152) - q(10)))                # the brow's thickness, in face heights
+    ln = (np.linalg.norm(q(70) - q(107)) + np.linalg.norm(q(300) - q(336))) / 2
+    fr['brow_th'] = float(np.clip((np.asarray(brow_m) > 0).sum() / 2 / max(ln, 1) / fh * 1.15, 0.03, 0.075))
     cl = px[shapes['clothes']]
     cloth = LK._flat(np.median(cl, 0)) if len(cl) > 50 else (40, 44, 60)
     acc = px[shapes['acc']]
     rim = LK._flat(np.percentile(acc, 25, axis=0)) if len(acc) > 30 else (30, 28, 30)
-    return dict(skin=skin, hair=hair, lip=lip, brow=brow, cloth=cloth, rim=rim)
+    return dict(skin=skin, hair=hair, hair2=hair2, lip=lip, brow=brow, cloth=cloth, rim=rim)
+
+
+def _tone(rgb, lift=1.0, sat=1.0):
+    """A photo colour made flat: lifted, and its saturation scaled (likeness._flat always adds 15%, which turns
+    skin pink)."""
+    r, g, b = [min(255.0, v * lift) for v in rgb]
+    m = (r + g + b) / 3
+    return tuple(int(np.clip(m + (v - m) * sat, 0, 255)) for v in (r, g, b))
+
+
+def _hair_tones(px, shapes):
+    """The hair's colours: the top's (its mean, so salt-and-pepper reads as the grey it is, not black) and, when
+    the sides at the temples are clearly lighter (greying), the sides' too; sets shapes['hair_lt'] to the sides."""
+    hm = shapes['hair']
+    shapes['hair_lt'] = np.zeros_like(hm)
+    if hm.sum() < 50:
+        return None, None
+    ty = int(shapes['temple_y'])
+    top, side = hm.copy(), hm.copy()
+    top[ty:] = False
+    side[:ty] = False
+    lum = lambda c: float(np.asarray(c) @ [0.299, 0.587, 0.114])
+    ct = px[top].mean(0) if top.sum() > 50 else px[hm].mean(0)
+    if side.sum() < 120 or lum(px[side].mean(0)) - lum(ct) < 6:
+        return _tone(px[hm].mean(0), 1.0, 0.9), None
+    shapes['hair_lt'] = side
+    return _tone(ct, 1.0, 0.9), _tone(px[side].mean(0), 1.3, 0.6)   # greying pushed, as the measures are
+
+
+def _strands(img, hair, face, colr, top_px):
+    """A few strand lines in the hair's mass above the face: arcs following the hair's outline a little inside
+    it, broken into pieces (house style: a hint of the comb's direction, not drawn hair)."""
+    import cv2
+    m = (hair & ~face).astype(np.uint8)
+    m[int(top_px + 0.1 * P4.H * SC):] = 0
+    if m.sum() < 400 * SC * SC:
+        return
+    dist = cv2.distanceTransform(m, cv2.DIST_L2, 5)
+    p = Pen(img, Cam())
+    for lev, gap in ((0.3, 0), (0.58, 1)):
+        cs, _ = cv2.findContours((dist > lev * dist.max()).astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
+        for c in cs:
+            c = c[:, 0, :].astype(float)
+            if len(c) < 60 * SC:
+                continue
+            c = c[c[:, 1] < top_px + 0.02 * P4.H * SC]       # the upper arc only (the outline's inside along the top)
+            n, run = len(c), int(26 * SC)
+            for i in range(gap * run // 2, n - run // 2, int(run * 1.6)):
+                seg = c[i:i + run:max(1, SC)]
+                if len(seg) > 4 and np.abs(np.diff(seg, axis=0)).max() < 4 * SC:
+                    p.line([(x / SC, y / SC) for x, y in seg], colr, 1.5)
 
 
 def _ink_edge(mask, w=2.4):
@@ -203,9 +265,16 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
     face = _face_mask(f, L)
     rows = np.arange(CH * SC)[:, None] / SC
     below_chin = rows > (f.top + 0.9 * P4.H)
-    _paint(img, _warp(fr, L, shapes['clothes']) & below_chin, col['cloth'])
-    neck = _warp(fr, L, shapes['skin2']) & below_chin
+    from scipy import ndimage
+    clothes = _warp(fr, L, shapes['clothes']) & below_chin
+    xs = np.arange(CW * SC)[None, :] / SC
+    column = (np.abs(xs - f.cx) < 0.37 * L['jw'] * P4.H) & (rows > f.top + 0.7 * P4.H)   # the neck under the jaw
+    neck = (_warp(fr, L, shapes['skin2']) & below_chin) | (column & ~below_chin)
+    near = (np.abs(xs - f.cx) < 0.6 * L['fw'] * P4.H) & (rows > f.top + 0.78 * P4.H)
+    wedge = ndimage.binary_closing(face | clothes | neck, iterations=8 * SC) & near   # jaw-to-shoulder slivers
+    neck = (neck | wedge) & ~face & ~clothes
     _paint(img, neck, col['skin'])
+    _paint(img, clothes, col['cloth'])
     hair = _warp(fr, L, shapes['hair'])
     if hair.any():                                            # no white gap between the traced hair and the face
         from scipy import ndimage
@@ -213,6 +282,10 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
         top_half = rows < (f.top + L['eye_y'] * P4.H)
         hair = hair | (ndimage.binary_fill_holes(both) & ~face & (top_half | hair))
     _paint(img, hair & ~face, col['hair'])
+    if col.get('hair2') and shapes.get('hair_lt') is not None and shapes['hair_lt'].any():
+        lt = _warp(fr, L, shapes['hair_lt']) & hair & ~face
+        _paint(img, lt, tuple(col['hair2']), ink=False)
+    _strands(img, hair, face, LK._dk(col['hair'], 0.55), f.top * SC)
     p = Pen(img, Cam())                                       # (the paste replaced the pixels: a fresh pen)
     AV._ears(p, f, L, col['skin'])
     p.poly(curve(f.pts(P4.outline_uv(L)), 4), col['skin'], INK, 2.6)
@@ -220,7 +293,7 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
         import beardkit
         beardkit.draw(p, f, L, col['skin'], beard)
     P4.eyes(p, f, L, dict(lid4=0.1), (66, 46, 34), P4.dk(col['skin'], 0.8), liner=2.8)
-    P4.brows(p, f, L, col['brow'], 0.04)
+    P4.brows(p, f, L, col['brow'], fr.get('brow_th', 0.04))
     P4.nose(p, f, L, col['skin'])
     P4.lips(p, f, L, dict(smile=0.0), col['lip'], f(0.0, L['lip13']))
     # hair over the face: the hairline, a fringe, side curtains; never over the eyes and brows
@@ -231,6 +304,8 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
     front = hair & face & keep
     if front.any():
         _paint(img, front, col['hair'], ink=False)
+        if col.get('hair2') and shapes.get('hair_lt') is not None and shapes['hair_lt'].any():
+            _paint(img, front & _warp(fr, L, shapes['hair_lt']), tuple(col['hair2']), ink=False)
         edge = _ink_edge(front, 2.2) & face
         a = np.asarray(img).copy()
         a[edge] = INK
@@ -258,22 +333,27 @@ def glasses_of(fr, shapes):
         if sel.sum() < 50:
             return None
         aa, dd = np.abs(a[sel]), d[sel]
-        boxes.append(dict(inner=float(np.percentile(aa, 3) / half), outer=float(np.percentile(aa, 97) / half),
+        lo, hi = np.percentile(aa, 3), np.percentile(aa, 97)
+        boxes.append(dict(cx=float(((lo + hi) / 2 - half) / ew), w=float((hi - lo) / ew),
                           top=float(np.percentile(dd, 3) / ew), bot=float(np.percentile(dd, 97) / ew)))
     g = {k: float(np.mean([b[k] for b in boxes])) for k in boxes[0]}
-    g['rim_w'] = float(min(0.35, max(0.12, (g['bot'] - g['top']) * 0.14)))
+    g['rim_w'] = float(min(0.3, max(0.1, (g['bot'] - g['top']) * 0.12)))
     return g
 
 
 def draw_glasses(p, f, L, g, colr=(30, 28, 30)):
-    """Thick flat frames (house style): a rounded box round each eye at the photo's size, the bridge, the arms."""
+    """Thick flat frames (house style): a rounded box round each eye, sized and placed in the CARTOON's eye widths
+    from the photo's (centre, width, top, bottom about each eye), the bridge, the arms. The lens top never rises
+    past the brow's top edge, and the lenses never meet in the middle."""
     colr = tuple(g.get('colr', colr))
     half, ew = L['ecx'], L['ew']
     lw = g['rim_w'] * ew * P4.H
+    y0 = max(L['eye_y'] + g['top'] * ew, L['brow_y'] - 0.03)
+    y1 = L['eye_y'] + g['bot'] * ew
     for sgn in (-1, 1):
-        x0, x1 = sorted((sgn * g['inner'] * half, sgn * g['outer'] * half))
-        y0, y1 = L['eye_y'] + g['top'] * ew, L['eye_y'] + g['bot'] * ew
-        r = 0.22
+        c, w = half + g['cx'] * ew, g['w'] * ew
+        x0, x1 = sorted((sgn * max(c - w / 2, 0.035), sgn * min(c + w / 2, L['fw'] * 0.52)))
+        r = 0.14
         box = [(x0, y0 + (y1 - y0) * r), (x0 + (x1 - x0) * r, y0), (x1 - (x1 - x0) * r, y0), (x1, y0 + (y1 - y0) * r),
                (x1, y1 - (y1 - y0) * r), (x1 - (x1 - x0) * r * 1.3, y1), (x0 + (x1 - x0) * r * 1.3, y1),
                (x0, y1 - (y1 - y0) * r)]
@@ -282,8 +362,8 @@ def draw_glasses(p, f, L, g, colr=(30, 28, 30)):
         p.line(pts + pts[:1], colr, lw)
         xo = x1 if sgn > 0 else x0
         p.line(f.pts([(xo, y0 + (y1 - y0) * 0.3), (sgn * L['fw'] * 0.5, y0 + (y1 - y0) * 0.3)]), colr, lw * 0.8)
-    xi = g['inner'] * half
-    yb = L['eye_y'] + g['top'] * ew + (g['bot'] - g['top']) * ew * 0.3
+    xi = max(half + g['cx'] * ew - g['w'] * ew / 2, 0.035)
+    yb = y0 + (y1 - y0) * 0.3
     p.line(curve(f.pts([(-xi, yb), (0.0, yb - 0.01), (xi, yb)]), 3), colr, lw * 0.8)
 
 
@@ -296,37 +376,141 @@ def _devs(png):
     return {r['key']: r['dev'] for r in B['diffs']}
 
 
-def tune(target, fr, shapes, col, out, rounds=ROUNDS, log=print):
-    """Draw, measure, move each measure towards the target (spreads from the average, the style's pull taken
-    away), again. Returns the measures drawn and the last reading."""
+def verdict(ref, d, others_v=()):
+    """likeness.check's own verdict, worked out here on the same numbers (so the tuning aims at what is judged):
+    ref = the FIRST front photo's measures (check compares with that one only), d = the drawing's, its style's pull
+    taken away. Score: the cosine over every measure; on the photo's noticeable measures, wrong way (the other sign
+    and past 0.2) and timid (under 0.9 of the photo); line-up: the drawing closer to ref than to every other photo."""
+    va, vb = np.array([ref[k] for k in KEYS]), np.array([d[k] for k in KEYS])
+    cos = lambda a: float(a @ vb / (np.linalg.norm(a) * np.linalg.norm(vb) + 1e-9))
+    score = cos(va)
+    good, timid, wrong = [], [], []
+    for k in KEYS:
+        if abs(ref[k]) <= LK.NOTICE:
+            continue
+        if np.sign(d[k]) != np.sign(ref[k]) and abs(d[k]) > 0.2:
+            wrong.append(k)
+        elif abs(d[k]) < abs(ref[k]) * 0.9:
+            timid.append(k)
+        else:
+            good.append(k)
+    first = all(cos(np.array([o[k] for k in KEYS])) < score for o in others_v)
+    ok = score >= 0.6 and not wrong and first
+    return dict(score=score, good=good, timid=timid, wrong=wrong, first=first, ok=ok,
+                key=(ok, -len(wrong), first, score - 0.04 * len(timid)))
+
+
+def response(fr, shapes, col, out_dir, name, step=1.5, log=print):
+    """How the drawing answers each of its 16 settings (once per person, ~16 s): the average head drawn and
+    measured, then each setting moved `step` spreads alone. Returns the average head's reading (the style's own
+    pull: check takes it away with the average twin) and J, where J[i, j] = how far measure i moves per spread of
+    setting j. Some settings barely move their own measure (the lower lip, the jaw) and many move others (the
+    mouth, lips and chin share the face's height), so the settings are solved together, not one by one."""
     spread = LK.baseline(False)['spread']
+    tmp = os.path.join(out_dir, f'{name}-probe.png')
+    draw_head(dict(P4.AVG), fr, shapes, col, tmp, extras=False)
+    d0 = _devs(tmp)
+    if d0 is None:
+        raise SystemExit(f'{name}: the face finder cannot read the average head: the traced shapes hide the face')
+    J = np.zeros((len(KEYS), len(KEYS)))
+    for j, k in enumerate(KEYS):
+        m = dict(P4.AVG)
+        m[k] += step * spread[k]
+        draw_head(m, fr, shapes, col, tmp, extras=False)
+        d = _devs(tmp)
+        if d is not None:
+            J[:, j] = [(d[q] - d0[q]) / step for q in KEYS]
+    os.remove(tmp)
+    weak = [k for i, k in enumerate(KEYS) if abs(J[i, i]) < 0.15]
+    log(f'   settings that barely move their own measure: {", ".join(weak) or "none"}')
+    return d0, J
+
+
+def _solve(J, off, target, ref, x0, lo=-6.0, hi=6.0):
+    """The settings (in spreads) whose predicted reading J x + off best meets the target, with nothing predicted
+    the wrong way on the photo's noticeable measures (a hinge), and a light pull towards the target itself for
+    settings the drawing does not answer to."""
+    from scipy.optimize import minimize
+    t = np.array([target[k] for k in KEYS])
+    r = np.array([ref[k] for k in KEYS])
+    big = np.abs(r) > LK.NOTICE
+    sg = np.sign(r)
+
+    def f(x):
+        d = J @ x + off
+        e = d - t
+        hinge = np.where(big, np.maximum(0.0, 0.35 - sg * d), 0.0)          # stay 0.35 clear of the wrong side
+        timid = np.where(big, np.maximum(0.0, 0.95 * np.abs(r) - sg * d), 0.0)
+        val = e @ e + 25 * hinge @ hinge + 2 * timid @ timid + 0.04 * (x - t) @ (x - t)
+        g = 2 * J.T @ e - 50 * J.T @ (hinge * sg) - 4 * J.T @ (timid * sg) + 0.08 * (x - t)
+        return val, g
+    lo, hi = np.broadcast_to(lo, x0.shape), np.broadcast_to(hi, x0.shape)
+    res = minimize(f, np.clip(x0, lo, hi), jac=True, method='L-BFGS-B', bounds=list(zip(lo, hi)))
+    return res.x
+
+
+def tune(target, fr, shapes, col, out, rounds=ROUNDS, log=print, ref=None, others_v=(), resp=None, seed=0):
+    """A small search, judged by verdict() exactly as the check judges (the face finder reads cartoons jumpily: a
+    0.1-spread change moves some readings 0.2, so no step-by-step solve settles). Start at the target (each
+    setting as far as the photo, times the gain); then each round draws POP heads round the best so far: one
+    solved on the response table (the table learning from every head drawn, Broyden's way), the rest shaken at
+    random and pushed towards whatever the best head still has timid or the wrong way. The best head is kept;
+    a round with no gain shrinks the shaking. Stops once it passes with nothing timid, or after `rounds` rounds."""
+    ref = ref or target
+    rng = np.random.default_rng(seed)
+    spread = LK.baseline(False)['spread']
+    bias, J = resp
+    J = J.copy()
     twin = os.path.splitext(out)[0] + '-average.png'
     draw_head(dict(P4.AVG), fr, shapes, col, twin, extras=False)
-    bias = _devs(twin) or {k: 0.0 for k in KEYS}
-    x = {k: 1.6 * target[k] for k in KEYS}
-    best = None
-    for r in range(rounds):
-        meas = {k: P4.AVG[k] + x[k] * spread[k] for k in KEYS}
+    sg = np.sign([ref[k] for k in KEYS])
+    best, sigma, n = None, 0.6, 0
+
+    def drawn(x):
+        meas = {k: P4.AVG[k] + x[i] * spread[k] for i, k in enumerate(KEYS)}
         draw_head(meas, fr, shapes, col, out, extras=False)
         got = _devs(out)
-        if got is None:                                       # the finder lost the face: pull everything back
-            x = {k: v * 0.7 for k, v in x.items()}
-            continue
-        d = {k: got[k] - bias[k] for k in KEYS}
-        va, vb = np.array([target[k] for k in KEYS]), np.array([d[k] for k in KEYS])
-        score = float(va @ vb / (np.linalg.norm(va) * np.linalg.norm(vb) + 1e-9))
-        short = [k for k in KEYS if abs(target[k]) > LK.NOTICE and
-                 (np.sign(d[k]) != np.sign(target[k]) or abs(d[k]) < abs(target[k]) * 0.9 / GAIN * 1.0)]
-        log(f'   round {r + 1}: match {score * 100:.0f}%, short of the target: {", ".join(short) or "none"}')
-        if best is None or score > best[0]:
-            best = (score, dict(meas), d)
-        if score > 0.9 and not short:
+        if got is None:
+            return None, None, meas
+        d = np.array([got[k] - bias[k] for k in KEYS])
+        return d, verdict(ref, dict(zip(KEYS, d)), others_v), meas
+
+    x0 = np.clip(np.array([target[k] for k in KEYS]), -6, 6)
+    for r in range(rounds * 2):                               # the second half only while it has not passed
+        if r >= rounds and best is not None and best[0]['ok']:
             break
-        for k in KEYS:
-            x[k] = float(np.clip(x[k] + 0.5 * (target[k] - d[k]), -9, 9))   # damped: the measures pull on each other
-    score, meas, d = best
+        if best is None:
+            cands = [x0] if r == 0 else [x0 * (0.8 ** r)]
+        else:
+            xb, db, vb = best[2], best[3], best[0]
+            bad = np.array([k in vb['timid'] or k in vb['wrong'] for k in KEYS], float)
+            cands = [_solve(J, db - J @ xb, target, ref, xb, np.maximum(xb - 1.5, -6), np.minimum(xb + 1.5, 6))]
+            for _ in range(POP - 1):
+                push = bad * sg * rng.uniform(0.0, 1.2, len(KEYS))
+                cands.append(np.clip(xb + rng.normal(0, sigma, len(KEYS)) + push, -6, 6))
+        gained = False
+        for x in cands:
+            d, v, meas = drawn(x)
+            n += 1
+            if d is None:
+                continue
+            if best is not None:
+                sx = x - best[2]
+                if sx @ sx > 0.04:
+                    J += np.outer((d - best[3]) - J @ sx, sx) / (sx @ sx) * 0.3
+            if best is None or v['key'] > best[0]['key']:
+                best, gained = (v, dict(meas), x.copy(), d), True
+        if best is None:
+            continue
+        v = best[0]
+        log(f"   round {r + 1} ({n} heads): best likeness {v['score'] * 100:.0f}%, timid: {', '.join(v['timid']) or 'none'}; "
+            f"wrong way: {', '.join(v['wrong']) or 'none'}; line-up {'first' if v['first'] else 'NOT first'}")
+        if v['ok'] and (not v['timid'] or (r >= 3 and not gained)):
+            break
+        sigma = sigma if gained else max(0.15, sigma * 0.6)
+    v, meas = best[0], best[1]
     draw_head(meas, fr, shapes, col, out, extras=False)
-    return meas, score
+    return meas, v
 
 
 # ---------------------------------------------------------------------------------------------- the sheet
@@ -345,8 +529,16 @@ def _face_tile(path, n, h, pad=(0.55, 0.75, 0.55, 0.45)):
     return c.resize((max(1, int(c.width * h / c.height)), h), Image.LANCZOS), f
 
 
-def _head_tile(png, h):
-    """The head cut the way the photo tiles are: the face box padded the same, so sizes compare."""
+def _head_tile(png, h, frame=None):
+    """The head cut the way the photo tiles are: padded round a face box, so sizes compare. All three heads share
+    one box (the average twin's: same canvas, same place), so A, B and C are framed alike."""
+    if frame and os.path.exists(frame):
+        im, faces = LK.find_faces(frame)
+        (x0, y0), (x1, y1) = faces[0]['box']
+        s = max(x1 - x0, y1 - y0)
+        c = Image.open(png).convert('RGB').crop((int(x0 - 0.55 * s), int(y0 - 0.75 * s), int(x1 + 0.55 * s),
+                                                 int(y1 + 0.45 * s)))
+        return c.resize((max(1, int(c.width * h / c.height)), h), Image.LANCZOS)
     return _face_tile(png, None, h)[0]
 
 
@@ -363,9 +555,8 @@ def sheet(out_dir, name):
     th = 420
     photos = [(_split(a), 'photo') for a in meta['fronts']] + [(_split(a), '3/4') for a in meta['tq']]
     ptiles = [(_face_tile(p, n, th)[0], lab) for (p, n), lab in photos]
-    htiles = [(_head_tile(os.path.join(out_dir, f'{name}-{v}.png'), th), v) for v in 'ABC']
-    W = max(sum(t.width + 12 for t, _ in ptiles), sum(t.width + 12 for t, _ in htiles) + 40) + 20
-    W = max(W, 1500)
+    htiles = [(_head_tile(os.path.join(out_dir, f'{name}-{v}.png'), th,
+                          os.path.join(out_dir, f'{name}-A-clean-average.png')), v) for v in 'ABC']
     lines = []
     for v in 'ABC':
         h = meta['heads'][v]
@@ -379,6 +570,9 @@ def sheet(out_dir, name):
         s = _phone(t, 70)
         strip.append(s)
         small_h = max(small_h, s.height)
+    strip_w = sum(s.width + 8 for s in strip) + 22 + 28
+    W = max(sum(t.width + 12 for t, _ in ptiles), sum(t.width + 12 for t, _ in htiles) + 40, strip_w) + 20
+    W = max(W, 1500)
     H = 60 + th + 50 + th + 70 + small_h + 40 + 30 * len(lines) + 30
     img = Image.new('RGB', (W, H), (238, 236, 232))
     d = ImageDraw.Draw(img)
@@ -411,20 +605,42 @@ def sheet(out_dir, name):
 
 
 # ---------------------------------------------------------------------------------------------- main
-def _others(name, fronts):
-    """Other people's front photos from every film's likeness folder, for the check's line-up."""
-    own = {os.path.dirname(os.path.abspath(_split(a)[0])) for a in fronts}
-    cands = sorted(glob.glob(os.path.join(HERE, '..', 'references', '*', 'likeness', '*front*.jpg')) +
-                   glob.glob(os.path.join(HERE, '..', 'references', 'faces', '*', '*front*.jpg')))
-    seen, out = set(), []
+GENERIC = {'front', 'close', 'closer', 'full', 'three', 'quarter', 'threequarter', 'left', 'right', 'smiling',
+           'talking', 'seated', 'walking', 'desk', 'sunglasses', 'eyesdown', 'pink', 'tie', 'rose', 'cuffs', 'bash',
+           'winners', 'table', 'bench', 'armchair', 'and', 'back'}
+THINGS = {'robot', 'van', 'set', 'sitting'}
+
+
+def _who(path):
+    """Who a reference photo shows: a faces pack's folder name, a likeness folder's letter, else the first name in
+    the file name ('24-damon-front-closer' -> damon); '' for a photo of a thing or of nobody named."""
+    path = os.path.abspath(path)
+    d = os.path.dirname(path)
+    if os.path.basename(os.path.dirname(d)) == 'faces':
+        return os.path.basename(d)
+    if os.path.basename(d) == 'likeness':
+        return os.path.basename(path)[:1] + '@' + os.path.basename(os.path.dirname(d))
+    toks = [t for t in os.path.splitext(os.path.basename(path))[0].lower().replace('_', '-').split('-')
+            if t.isalpha() and len(t) > 2]
+    if THINGS & set(toks) or THINGS & set(d.split(os.sep)):
+        return ''
+    return next((t for t in toks if t not in GENERIC), '')
+
+
+def _others(name, fronts, most=14):
+    """Other people's front photos from EVERY film's references (any '*front*' photo: the faces packs, the
+    likeness folders, each film's own), one per person, for the check's line-up. Photos of things (vans, sets,
+    robots) and unnamed ones are left out; a photo the face finder cannot read is dropped by the check itself."""
+    root = os.path.join(HERE, '..', 'references')
+    cands = sorted(set(glob.glob(os.path.join(root, '**', '*front*.jpg'), recursive=True)))
+    seen, out = {name.lower()} | {_who(_split(a)[0]) for a in fronts}, []
     for c in cands:
-        d = os.path.dirname(os.path.abspath(c))
-        tag = (d, os.path.basename(c)[:1])
-        if d in own or tag in seen or name.lower()[:4] in c.lower():
+        who = _who(c)
+        if not who or who in seen or name.lower()[:4] in os.path.basename(c).lower():
             continue
-        seen.add(tag)
-        out.append(c)
-    return out[:9]
+        seen.add(who)
+        out.append(os.path.abspath(c))
+    return out[:most]
 
 
 def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=print, rounds=ROUNDS):
@@ -449,30 +665,51 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
             beard = beardkit.analyse(name, [F[0][0]], out_dir)[2]
         except Exception as e:                                # the beard is drawn after; never stops the heads
             log(f'   beardkit skipped: {e}')
+    ref = _devs(F[0][0]) if F[0][1] is None else {r['key']: r['dev'] for r in LK.analyse([F[0][0]], [F[0][1]])['diffs']}
+    others = _others(name, fronts)
+    others_v = []
+    for o in others:
+        dv = _devs(o)
+        if dv:
+            others_v.append(dv)
+    log(f'   line-up: {len(others_v)} other people')
+    # the targets: the FIRST photo's measures (what the check compares with), pushed by the gain. The card's unsure
+    # measures (the photos disagree) are drawn three ways: A as the photo, B half as far, C further; or C the other
+    # way where the first photo does not notice it (the check only judges what that photo notices).
     if unsure:
-        ways = {'A': 1.0, 'B': 0.0, 'C': -0.8}
-        what = {'A': ', '.join(words[k] for k in unsure) + ' (as the card)',
-                'B': ', '.join(k.replace('_', ' ') for k in unsure) + ': average',
-                'C': ', '.join(k.replace('_', ' ') for k in unsure) + ': the other way'}
-        targets = {v: {k: gain * dev[k] * (ways[v] if k in unsure else 1.0) for k in KEYS} for v in 'ABC'}
+        what, targets = {}, {}
+        for v, kk in (('A', 1.0), ('B', 0.45), ('C', 1.8)):
+            t = {k: gain * ref[k] for k in KEYS}
+            ww = []
+            for k in unsure:
+                if v == 'C' and abs(ref[k]) <= LK.NOTICE:
+                    t[k] = -0.8 * gain * dev[k]
+                    ww.append(k.replace('_', ' ') + ' the other way')
+                else:
+                    t[k] = gain * ref[k] * kk
+                    ww.append(words[k] if v == 'A' else k.replace('_', ' ') + (' half as far' if v == 'B' else ' further'))
+            targets[v], what[v] = t, ', '.join(ww) + (' (as the photo)' if v == 'A' else '')
     else:
         st = {'A': 1.3 / 1.7, 'B': 1.0, 'C': 2.3 / 1.7}
         what = {v: f'every measure x{gain * st[v]:.1f}' for v in 'ABC'}
-        targets = {v: {k: gain * st[v] * dev[k] for k in KEYS} for v in 'ABC'}
-    others = _others(name, fronts)
+        targets = {v: {k: gain * st[v] * ref[k] for k in KEYS} for v in 'ABC'}
+    resp = response(fr, shapes, col, out_dir, name, log=log)
     heads = {}
     for v in 'ABC':
         log(f'{name} {v}: {what[v]}')
         png = os.path.join(out_dir, f'{name}-{v}.png')
-        meas, sc = tune(targets[v], fr, shapes, col, png, rounds, log)
+        meas, tv = tune(targets[v], fr, shapes, col, png, rounds, log, ref, others_v, resp)
         clean = os.path.join(out_dir, f'{name}-{v}-clean.png')
         os.replace(png, clean)
         os.replace(os.path.splitext(png)[0] + '-average.png', os.path.splitext(clean)[0] + '-average.png')
         res = _check(F[0], clean, os.path.join(out_dir, f'{name}-{v}-check.jpg'), others)
+        if res['pass'] != tv['ok']:
+            log(f'   (the tuning said {"pass" if tv["ok"] else "fail"}, the check says {"pass" if res["pass"] else "fail"}: '
+                f'the check rules)')
         draw_head(meas, fr, shapes, col, png, extras=True, beard=beard, glasses=g)
         heads[v] = dict(what=what[v], measures=meas, **res)
     meta = dict(title=name, fronts=list(fronts), tq=list(tq), unsure=unsure, gain=gain, glasses=g,
-                beard=bool(beard), colours={k: list(c) for k, c in col.items()}, heads=heads,
+                beard=bool(beard), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
                 card={k: round(dev[k], 2) for k in KEYS})
     json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
     if lineup:

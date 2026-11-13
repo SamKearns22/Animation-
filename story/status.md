@@ -1,3 +1,3 @@
-Face tool (ranking item 2): built and running, chat 1 of 8; first Burnham sheet fails the check, not sent.
-Now: chat 2 of 8 (Opus high) finishes the tool, then Badenoch and the Walliams replay; sheets to Sam.
-Waiting: nothing from Sam until the face sheets.
+Face tool: Sam added 100% to its budget (stop 7.5%); Burnham passes the check but reads young; face chat 3 opened.
+Now: face chat 3 (Opus high): age lines, name test, Badenoch, Walliams replay, kittest, sheets to Sam. Overnight chain: critic bench.
+Waiting: Sam's Y in notes/morning-report.md (the handover check line).

@@ -1,24 +1,25 @@
 # Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-q-handover-check` (also pushed to the main line). Face tool chain runs on its own.
+- **Newest work:** `claude/overnight-q-handover-check` and `claude/face-tool-c2` (both on the main line).
 - **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 30 (a repeated note: find why first).
 - **Done (overnight chat 1, Job Q, Opus medium, ~2.2%):** `source/handover.py` (MAP; catalogue row; kittest
   `handover_drops` passes on Blessed's real chat 5 messages and notes files). The `log` hook (UserPromptSubmit) saves
   Sam's typed messages to `notes/ledger/sam/CHAT.md` and pushes. `end` / `start PARENT --film F` flag his asks not
   carried by a notes line written after he spoke, unanswered messages, unsent clips, an override he never typed.
+- **Face tool (item 2): Sam, 13 Nov: "another 100% to the budget. Continue"** (stop now 7.5% of a week; spent ~5.6%
+  in chats 1-2). Burnham's A/B/C pass the check (68/77/71%, first of 14) but read young and round.
+  **Next: face chat 3, Opus high:** 1) age lines from the photo (cheek folds, crow's feet; no kit piece, new), re-run
+  Burnham (a look change can drop a pass: re-run after each), name test (namer helpers) on A/B/C; 2) Badenoch (braids:
+  hair mask down past the jaw); 3) Walliams replay (w06, w07, w01, w02; tries vs his five chats); 4) kittest
+  (eyes swapped for the average fail `verdict`, the tuned head passes; `_others` finds 13+); 5) send Sam the 3 sheets.
 - **Next: overnight chat 2, Opus medium: the critic bench (ranking item 3, `notes/ranking-list.md`).** Test on Blessed.
-- **Needs Sam:** morning report: Y to the CLAUDE.md line that makes chats run `handover.py end`/`start` (pick Y).
+- **Needs Sam:** morning report: Y to the CLAUDE.md line that makes chats run `handover.py end`/`start` (pick Y);
 - **OVERNIGHT RUN (Sam, 13 Nov 23:25 UTC): read `notes/overnight-run.md` first.** Order Q, critic bench, rounds-read-a-page,
   then people, places, moves, rough command; test only on Blessed (never Protest Tiers); each job may reach 150% of its
-  estimate, then hard stop, `notes/morning-report.md`, next job. Face tool chain runs on its own.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
+  estimate, then hard stop, `notes/morning-report.md`, next job.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; the job's own section.
 - **Open rule requests:** none.
-- **For Claude:** run `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg
-  .../a02-front-national2026.jpg .../a03-front-smiling-ap2026.jpg --tq .../a04... .../a05...`. Faults to fix:
-  1 tune() aims at the 3-photo card but check() scores the first photo only: score the tune on what check scores;
-  5 damped rounds do not converge (more rounds, keep the best by check's own pass rule). 2 glasses too big and high:
-  scale lenses by the cartoon eye width, not half the eye gap. 3 hair a flat blob: two tones from the photo (grey
-  sides), a few strand lines. 4 skin too pink (`_flat` boosts saturation). 5 line-up only 4: `_others` should find
-  every film's front photos. 6 sheet's third phone tile cut off. Badenoch: braids (hair mask down past the jaw).
+- **For Claude:** face tool state in `source/facepick.py` MAP (tune() is a search judged by `verdict()`, as check
+  judges; 2.5 min a person); its next steps are in the morning report.
 ## Job Q, the handover check (Sam: Y, 13 Nov; Opus medium, ~1.5%; beside the face tool)
 Why: Blessed's handovers dropped things (notes 8-11 sat unread when chat 5 broke before writing them and chat 6 read
 only the notes file; Walliams' face, open in note 47, fell out of two handovers; chat 5 read "don't stop for any Y" as

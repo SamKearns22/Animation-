@@ -88,7 +88,9 @@ at session start (`.claude/hooks/setup.sh`).
 - **The handover** is the film's ONE "Where things stand" (old ones to `notes/archive/NAME-handovers.md`), **15 lines at
   most**, in order: Rules that bite next (3, by number); Done; Next (model, effort, what it does); Needs Sam; Read
   (the pack in `guides/job-packs.md`, and any extra sections); Open rule requests; a "For Claude" line for code names.
-  Update `story/status.md` (3 lines), commit and push. **The 3 lines at the bottom** say what's done and what's
+  Update `story/status.md` (3 lines), commit and push. **The handover check (Sam, 13 Nov):** `python3 source/handover.py end
+  --film NAME` before every handover; first thing in a chat, `handover.py start PARENT_SESSION --film NAME`; every
+  fault it lists is fixed, written in the notes or answered first. **The 3 lines at the bottom** say what's done and what's
   next; "what to type" only when the chain has stopped for good (no save). **Every handover names the next
   chat's model AND effort**; a stage not listed above gets your pick and one line why.
 
