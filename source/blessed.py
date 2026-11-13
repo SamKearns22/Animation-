@@ -127,7 +127,7 @@ T['s4'] = T['s3']                                 # (Sam, 12 Nov: no gavel shot)
 T['hollow'] = T['s4'] + 0.3                       # the stillness cracks just before line 3
 T['van'] = _at(3, T['s4'] + 0.9) + 0.8
 T['cell'] = T['van'] + 2.8                        # montage: van, escorted in, weeping on the cot
-T['cot'] = T['cell'] + 4.5                        # note 17: room for a long, readable sigh; note 40: deeper, a beat more (was 3.9)
+T['cot'] = T['cell'] + 6.2                        # N11 (13 Nov): the look round the cell (bed, window, door) then the big sigh down (was 4.5)
 T['phone'] = T['cot'] + 2.8
 T['tvroom'] = _at(4, T['phone'] + 0.5) + 0.7
 T['tv'] = T['tvroom'] + 2.6                       # his eyes drift up as its voice starts (note 50: back to 2.6 s; the voice still leads the cut)
@@ -382,6 +382,11 @@ def press_sp(i, seed):
     return full
 
 
+NEAR_ARM = {'phone_out': ('L', -0.5), 'mic': ('R', 0.62)}   # N10b: the arm on each one's inside (seen from behind, mirrored)
+NEAR_Y, NEAR_Z = -190.0, 230.0                        # the hand's height (the head's) and how far forward
+#   (NEAR_ARM's number: across, a share of the shoulder's width: clear of his own head and of Brand)
+
+
 def press_pose(sp, t):
     """Their arms: the camera operator's near hand up on the camera's grip, a boom held up in front (hands hidden by
     the body), a phone held up filming, a notebook at the chest; the rest hang at rest."""
@@ -394,10 +399,11 @@ def press_pose(sp, t):
         V.arm_to(j, 'L', (40.0, -110.0, 50.0), 'in', 'fist')
     elif kit == 'phone':                              # held up above the head, filming over the others
         V.arm_to(j, 'R', (95.0, -250.0, 40.0), 'out', 'fist')
-    elif kit == 'mic':                               # N10: held out at shoulder height towards him
-        V.arm_to(j, 'R', (sw + 40.0, -150.0, 160.0), 'out', 'fist')   # from behind his right is the inside (in frame)
-    elif kit == 'phone_out':                         # N10: held out at face height, filming him
-        V.arm_to(j, 'L', (-sw - 40.0, -170.0, 160.0), 'out', 'fist')   # his left: the inside, in frame
+    elif kit in NEAR_ARM:                            # N10b (Sam, 13 Nov): elbow bent, the hand at head height just
+        sd, sg = NEAR_ARM[kit]                       #   inside his own shoulder, the upper arm hidden by his back,
+        jx = 10.0 * math.sin(t * 2.3 + sp['seed'])  #   the kit beside Brand, never over him; a small jostle
+        jy = 8.0 * math.sin(t * 1.7 + sp['seed'] * 0.7)
+        V.arm_to(j, sd, (sg * sw + jx, NEAR_Y + jy, NEAR_Z), 'down', 'fist')
     elif kit == 'stills':                             # the camera held up over the heads in both hands, shooting
         V.arm_to(j, 'R', (70.0, -240.0, 50.0), 'out', 'fist')
         V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'out', 'fist')   # 'in' folded the elbow back across his chest (13 Nov)
@@ -442,9 +448,9 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
         elif kit == 'phone':
             _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
         elif kit == 'phone_out':
-            _phone_up(img, cam, r, pts, 1, lift=40, wr='wrL')
+            _phone_up(img, cam, r, pts, 1, lift=40, wr='wr' + NEAR_ARM[kit][0])
         elif kit == 'mic':
-            _hand_mic(img, cam, r, pts, 'wrR')
+            _hand_mic(img, cam, r, pts, 'wr' + NEAR_ARM[kit][0])
         elif kit == 'stills':
             _stills(img, cam, r, pts, t)
 
@@ -931,13 +937,12 @@ def escort(sp, t, who='brand'):
     if who == 'brand' and k >= ESC_STOP + 0.15:
         yaw = 0.0                                 # notes 17/26: front-on once he stops
         a = T['cell'] + ESC_STOP
-        # note N2 (Sam, 13 Nov: 0.4 s is not legible): no snap to profile; his EYES go to the bed on our left
-        #   (0.15 s in, held 0.7 s, rule: a look is held long enough to read), then up to the window on the sigh
-        j['look'] = _keys(t, [(a + 0.15, 0.0), (a + 0.35, 1.0), (a + 1.05, 1.0), (a + 1.3, 0.0)])
-        # note 17: a big, slow sigh: breathes in looking up (shoulders rise), then out, the head and shoulders sinking
-        #   note 40 (Sam, 12 Nov): deeper, an extra beat: a bigger breath in, held, a long slump out, held
-        j['nod'] = _keys(t, [(a + 0.6, 0.0), (a + 1.1, -2.4), (a + 1.7, -2.6), (a + 2.8, 2.6)])
-        up = _keys(t, [(a + 0.6, 0.0), (a + 1.3, -26.0), (a + 1.7, -26.0), (a + 2.9, 20.0)])
+        # N11 (Sam, 13 Nov, a repeat of N2/17: eyes alone were invisible at this framing): the head leans WITH the
+        #   eyes, each look held 0.7 s: the bed on our left, up to the window, the door on our right; then a big sigh,
+        #   head and eyes dropping to the floor and held (never back to the lens). CELL_LOOK holds the keys.
+        for key, keys in CELL_LOOK.items():
+            j[key] = _keys(t, [(a + dt, v) for dt, v in keys])
+        up = _keys(t, [(a + dt, v) for dt, v in CELL_SHOULDERS])
         for sd in 'LR':
             for jt in ('sh', 'el', 'wr'):
                 x0, y0, z0 = j[jt + sd]
@@ -946,9 +951,19 @@ def escort(sp, t, who='brand'):
     return _cell_mark(x, d), yaw, j, head
 
 
-def escort_gaze(t):
-    a = T['cell'] + ESC_STOP
-    return _keys(t, [(a + 1.05, 0.0), (a + 1.3, -0.6), (a + 1.7, -0.6), (a + 2.2, 0.6)])   # N2: after the look left
+# N11: seconds after he stops -> value. look: pupils across (1.6 puts them in the corners); head_roll/head_dx lean
+#   the head the same way; gaze: eyes up (-) / down (+); nod: chin up (-) / down (+)
+BRAND_BED = -1.0                                  # 'look' below 0 sends Brand's pupils to our left (the bed)
+_L, _R, _D = 1.6 * BRAND_BED, 15.0, 28.0           # pupils in the corners; head roll (deg) and shift with them
+CELL_LOOK = {
+    'look': [(0.15, 0.0), (0.4, _L), (1.1, _L), (1.35, 0.0), (2.05, 0.0), (2.3, -_L), (2.9, -_L), (3.15, 0.0)],
+    'head_roll': [(0.15, 0.0), (0.4, _R), (1.1, _R), (1.35, 0.0), (2.05, 0.0), (2.3, -_R), (2.9, -_R), (3.15, 0.0)],
+    'head_dx': [(0.15, 0.0), (0.4, -_D), (1.1, -_D), (1.35, 0.0), (2.05, 0.0), (2.3, _D), (2.9, _D), (3.15, 0.0)],
+    'gaze': [(1.1, 0.0), (1.35, -0.95), (2.05, -0.95), (2.3, 0.0), (3.4, 0.0), (3.9, 1.0)],
+    'lid': [(3.4, 0.2), (3.9, 0.62)],                # the lids drop with the eyes: looking at the floor, not us
+    'nod': [(1.1, 0.0), (1.35, -2.6), (2.05, -2.6), (2.3, 0.0), (2.9, 0.0), (3.3, -1.6), (3.5, -1.6), (4.1, 4.2)],
+}
+CELL_SHOULDERS = [(2.9, 0.0), (3.3, -28.0), (3.5, -28.0), (4.2, 22.0)]   # breath in (rise), held, a long slump out
 
 
 GRIP_AT = [None]                                 # where the officer's hand should be on Brand's arm (touch check)
@@ -1039,37 +1054,60 @@ def asleep_pose(sp, t):
     return j
 
 
+POOL_YAW = -90.0               # N8 (13 Nov): side-on at the table's right end, facing along it to our left
+
+
 def pool_pose(sp, t):
-    """Note 22: bent over the pool table facing us, lining up a shot: bridge hand on the cloth, the cue hand by his
-    hip drawing back and forward in small practice strokes. Chat 5 (the hard critique: 'face-down in the table'):
-    his face up and showing over the cue, both hands down on the cloth's edge."""
+    """N8 (Sam, 13 Nov, a repeat of 43: 'a squashed person who clips through a pool table'): side-on at the table's
+    right end, his whole body beside it (legs and feet on the floor, nothing behind the cabinet), bent at the hips
+    over the end rail, lining up a shot: the bridge hand on the cloth ahead, the cue hand back by his hip drawing
+    small practice strokes. Side-on, a lean bends the body (front-on it only shortened it)."""
     j = V.standing(sp)
-    j['hide_legs'] = ('L', 'R')                    # behind the table: the cloth hides them
-    j['lean'] = POOL_LEAN                          # bent low, chin just over the cue (chat 5 critique: he read upright)
-    j['nod'] = -2.5                                # chin up, eyes along the cue
-    V.arm_to(j, 'L', unlean((-30.0, 450.0, 260.0), POOL_LEAN), 'out', 'palm')
-    k = 26.0 * math.sin(t * 2 * math.pi / 1.4)       # the practice strokes
-    V.arm_to(j, 'R', unlean((60.0, 420.0, 70.0 - k), POOL_LEAN), 'back', 'grip')
+    j['lean'] = POOL_LEAN
+    j['nod'] = -3.0                                # chin up, eyes along the cue
+    V.arm_to(j, 'L', unlean((-20.0, 420.0, 360.0), POOL_LEAN), 'down', 'palm')
+    k = 22.0 * math.sin(t * 2 * math.pi / 1.4)       # the practice strokes
+    V.arm_to(j, 'R', unlean((20.0, 440.0, 60.0 - k), POOL_LEAN), 'back', 'grip')
     return j
 
 
-POOL_LEAN = 48.0              # Sam, 13 Nov: 66 squashed him (a front-on lean shortens the body)
+POOL_LEAN = 58.0              # side-on: a real bend at the hips
 
 
 def pool_cue(img, cam, mark, sp, pts):
     """The cue from his cue hand through the bridge hand on the cloth, its tip at the cue ball."""
     x, y, ppm = mark
     s = _s(sp, ppm)
-    sc = lambda q: (x + s * q[0], y - 928 * s + s * q[1])
+    fl = -1 if POOL_YAW < 0 else 1
+    sc = lambda q: (x + fl * s * q[0], y - 928 * s + s * q[1])
     a, b = sc(pts['wrR']), sc(pts['wrL'])
     d = (b[0] - a[0], b[1] - a[1])
     tip = (b[0] + 0.25 * d[0], b[1] + 0.25 * d[1])
     p = B.Pen(img, cam)
     n = max(1.0, math.hypot(*d))
-    back = (a[0] - d[0] / n * 2.4 * s * 100, a[1] - d[1] / n * 2.4 * s * 100)   # a full cue's butt behind the hand (hunt 2)
+    back = (a[0] - d[0] / n * 1.8 * s * 100, a[1] - d[1] / n * 1.8 * s * 100)   # the cue's butt behind the hand
     p.line([back, tip], (150, 104, 60), 5.0)
     p.line([back, tip], INK, 1.0)
-    p.ell(tip[0] + 4, tip[1] + 8, 9, 6, (246, 246, 240), INK, 1.0)                       # the cue ball
+    p.ell(tip[0] - 10, tip[1] + 4, 9, 6, (246, 246, 240), INK, 1.0)                      # the cue ball
+
+
+def pool_body_pts(mark, sp, pts):
+    """N8 check: his body's points on the frame (hands and forearms left out: the bridge hand rests on the cloth)."""
+    x, y, ppm = mark
+    s = _s(sp, ppm)
+    fl = -1 if POOL_YAW < 0 else 1
+    out = {}
+    for k in ('head', 'neck', 'shL', 'shR', 'hipL', 'hipR', 'knL', 'knR', 'anL', 'anR', 'kneeL', 'kneeR', 'ankL',
+              'ankR', 'footL', 'footR', 'pelvis', 'chest'):
+        if k in pts and isinstance(pts[k], (tuple, list)) and len(pts[k]) >= 2:
+            out[k] = (x + fl * s * pts[k][0], y - 928 * s + s * pts[k][1])
+    for sd in 'LR':                              # the knees, between hip and foot (put returns no knee point)
+        if 'hip' + sd in out and 'foot' + sd in out:
+            out['knee' + sd] = tuple((u + v) / 2 for u, v in zip(out['hip' + sd], out['foot' + sd]))
+    return out
+
+
+POOL_SEEN = []                                   # (t, {joint: frame point}) for the furniture check
 
 
 def tv_pose(sp, t):
@@ -1612,9 +1650,17 @@ def draw_people(img, cam, shot, t):
         sp = brand_sp(t, 'prison')
         put_seated(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=VAN_YAW, j=van(sp, t))   # note 16: Sam keeps the 3/4 pose; limbs fixed
     elif shot == 'escort':
-        sp = dict(brand_sp(t, 'prison'), gaze_dy=escort_gaze(t))
+        sp = brand_sp(t, 'prison')
         bm, by, bj, bh = escort(sp, t)
-        sp['look'] = bj.pop('look', 0.0)                  # N2: the eyes lead the look round the cell
+        sp['look'] = bj.pop('look', 0.0)                  # N11: the eyes and head look round the cell
+        sp['head_dx'] = sp.get('head_dx', 0.0) + bj.pop('head_dx', 0.0)
+        sp['gaze_dy'] = bj.pop('gaze', 0.0)
+        a = T['cell'] + ESC_STOP
+        lid = bj.pop('lid', 0.0)
+        if a + 0.15 < t < a + 3.15:
+            sp['blink'] = False                           # N11: no blink to swallow a held look
+        if t > a + 3.4:
+            sp['lid4'] = lid
         so = dict(BC.OFFICER, **face('officer', t, 'neutral'))
         om, oy, oj, _ = escort(so, t, 'officer')
         bs = _s(sp, bm[2])
@@ -1639,8 +1685,9 @@ def draw_people(img, cam, shot, t):
     elif shot in ('tvroom', 'push'):
         # Sam's note 22: Brand alone on a plastic chair, watching; behind on the left a man asleep in his chair
         # facing the TV; behind on the right an inmate bent over the pool table, lining up a shot
-        pts = put(img, cam, dict(CAST['inmate2'], **face("inmate2", t, "neutral", gaze_dy=-0.45, lid4=0.0)), st['inmate2'], t,
-                  j=pool_pose(CAST['inmate2'], t))
+        pts = put(img, cam, dict(CAST['inmate2'], **face("inmate2", t, "neutral", gaze_dy=0.2, lid4=0.3)), st['inmate2'], t,
+                  yaw=POOL_YAW, j=pool_pose(CAST['inmate2'], t))
+        POOL_SEEN.append((t, pool_body_pts(st['inmate2'], CAST['inmate2'], pts)))
         pool_cue(img, cam, st['inmate2'], CAST['inmate2'], pts)
         put_kit(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
                 st['inmate1'], t, j=asleep_pose(CAST['inmate1'], t), tilt=TV_TILT)
@@ -1869,6 +1916,33 @@ def touch_faults():
     return out
 
 
+def furniture_faults():
+    """N8 (Sam, 13 Nov: 'how did a squashed person who clips through a pool table get through a 40-minute check
+    process?'): no body point of the pool player (head, shoulders, hips, knees, feet; the hands may rest on the cloth)
+    falls inside the table's drawn shape (rim, cabinet, end), sampled through the TV room shot and the push."""
+    import numpy as _np
+    f, n, fl = ST.POOL['far'], ST.POOL['near'], ST.POOL['floor']
+    (a0, a1), (b0, b1) = ST.POOL['x0'], ST.POOL['x1']
+    table = [(a0 - 14, f - 12), (a1 + 14, f - 12), (b1 + 16, n + 10), (b1 + 16, fl), (b0 - 16, fl), (b0 - 16, n + 10)]
+
+    def inside(q, poly):
+        c = False
+        for (x0, y0), (x1, y1) in zip(poly, poly[1:] + poly[:1]):
+            if (y0 > q[1]) != (y1 > q[1]) and q[0] < x0 + (q[1] - y0) * (x1 - x0) / (y1 - y0):
+                c = not c
+        return c
+    out = []
+    for t in _np.arange(T['tvroom'] + 0.1, T['tv'], 0.4):
+        POOL_SEEN.clear()
+        img = Image.new('RGBA', (1080, 1920))
+        draw_people(img, _cam('tvroom', float(t)), 'tvroom', float(t))
+        for _, body in POOL_SEEN:
+            bad = [k for k, q in body.items() if inside(q, table)]
+            if bad:
+                out.append(f'tvroom {t:.2f}s: the pool player\'s {", ".join(bad)} inside the pool table')
+    return out
+
+
 def checks():
     """Plan checks: subtitles printed to proofread, mouths on the words, the voice level. Raises on faults."""
     E.print_subtitles(caption_at, DUR, FPS)
@@ -1881,6 +1955,7 @@ def checks():
     import benchmark
     faults += benchmark.faults(sys.modules[__name__])
     faults += touch_faults()
+    faults += furniture_faults()                  # N8: no body through the furniture
     faults += BC.eye_faults()                     # rule S5, measured
     people = {sp['who']: sp.get('name', sp['who']) for sp in list(CAST.values()) + list(GUARDS.values())}
     #   note 45: the newsreader is checked too (he was skipped as 'always talking'; between phrases he had no mouth)

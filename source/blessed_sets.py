@@ -834,20 +834,16 @@ def tvroom(img, cam, t=0.0):
     for k in range(10):
         y = 1260 + k * 60 * (1 + k * 0.15)
         p.line([(-300, y), (W + 300, y)], (94, 88, 80), 1.6)
-    # the pool table at the back right (pool_table; the film draws it again over the man bent over it), its lamp
+    # the pool table at the back right, its right end in shot (N8: the player stands side-on at that end). N8: the
+    # lamp and its long cord are gone (Sam: the cord read as a stray vertical line on the wall); its light stays
     pool_table(p)
-    # chat 5 (the hard critique: 'a lamp over nothing'): the lamp hangs low over the cloth's middle on a long cord,
-    # its light falling in a pool on the table
-    p.line([(880, -400), (880, 990)], (40, 40, 44), 3.0)                                   # (3 m nearer than the
-    p.poly([(820, 990), (940, 990), (970, 1034), (790, 1034)], (74, 78, 84), INK, 2.2)       # board: its cord
-    #                                                                                        crosses in front)
-    p.poly([(810, 1028), (950, 1028), (958, 1038), (802, 1038)], (250, 236, 180), None)
-    soft(img, cam, (680, 1080, 1100, 1180), (255, 240, 190), 0.3, 60)                       # its light on the cloth
+    soft(img, cam, (680 + POOL_DX, 1080, 1100 + POOL_DX, 1180), (255, 240, 190), 0.3, 60)   # light on the cloth
     # Sam's note 22: moulded plastic chairs (adult wings: heavy-duty, wipe-clean), not a bench. Chat 5: the chairs
     # are drawn with the people now (sitting.Seat('plastic')), so the seat shows round them from every view
 
 
-POOL = dict(far=1100, near=1168, floor=1384, x0=(668, 1112), x1=(616, 1150))   # the table's measures (chat 5)
+POOL_DX = -170                                    # N8 (13 Nov): moved left so its right end is in shot
+POOL = dict(far=1100, near=1168, floor=1384, x0=(668 + POOL_DX, 1112 + POOL_DX), x1=(616 + POOL_DX, 1150 + POOL_DX))
 
 
 def pool_table(p, front_only=False):
@@ -861,15 +857,16 @@ def pool_table(p, front_only=False):
     (a0, a1), (b0, b1) = POOL['x0'], POOL['x1']
     wood, dark = (104, 66, 40), (70, 44, 28)
     p.poly([(b0, n), (a0, f), (a0, fl - 80), (b0, fl)], dk(wood, 0.8), INK, 2.2)                      # its left side
+    p.poly([(b1, n), (a1, f), (a1, fl - 80), (b1, fl)], dk(wood, 0.8), INK, 2.2)                      # its right end
     p.poly([(a0 - 14, f - 12), (a1 + 14, f - 12), (b1 + 16, n + 10), (b0 - 16, n + 10)], wood, INK, 2.4)   # the rim
     p.poly([(a0, f), (a1, f), (b1, n), (b0, n)], (40, 110, 70), INK, 2.0)                             # the cloth
     p.poly(quad(b0 - 16, n + 10, b1 + 16, fl), wood, INK, 2.4)                                        # the cabinet
     p.poly(quad(b0 - 10, fl - 26, b1 + 10, fl), dark, INK, 1.8)                                       # its plinth
-    p.poly(quad(860, n + 60, 920, n + 96), (150, 150, 156), INK, 1.6)                                 # the coin slot
-    p.line([(872, n + 78), (908, n + 78)], INK, 2.0)
+    p.poly(quad(860 + POOL_DX, n + 60, 920 + POOL_DX, n + 96), (150, 150, 156), INK, 1.6)                                 # the coin slot
+    p.line([(872 + POOL_DX, n + 78), (908 + POOL_DX, n + 78)], INK, 2.0)
     for x, y in ((a0, f), ((a0 + a1) / 2, f - 2), (a1, f), (b0, n), ((b0 + b1) / 2, n + 2), (b1, n)):   # pockets
         p.ell(x, y, 13, 7, (20, 20, 22), INK, 1.0)
-    for k, (x, y) in enumerate(((730, 1140), (790, 1128), (1000, 1150))):                            # the balls
+    for k, (x, y) in enumerate(((730 + POOL_DX, 1140), (790 + POOL_DX, 1128), (960 + POOL_DX, 1150))):                            # the balls
         p.ell(x, y, 10, 7, ((200, 40, 40), (240, 200, 60), (40, 70, 170))[k], INK, 1.0)   # one white: the cue's
 
 
@@ -1224,8 +1221,8 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'cell_cot': {'brand': (230, 1700, 560.0)},
     'cot_top': {'brand': (540, 1800, 740.0)},        # lying: drawn as standing front-on, seen from above
     'phone': {'brand': (690, 2500, 820.0)},
-    'tvroom': {'brand': (540, 1770, 700.0), 'inmate1': (190, 1330, 300.0), 'inmate2': (960, 1290, 250.0)},
-    #          chat 5: Brand nearer and lower (no empty floor under him); the pool player at the table's right end
+    'tvroom': {'brand': (540, 1770, 700.0), 'inmate1': (190, 1330, 300.0), 'inmate2': (1030, 1350, 262.0)},
+    #          chat 5: Brand nearer and lower (no empty floor under him); N8: the pool player side-on, beside the table's right end
     #          note 22: Brand alone near; the sleeper behind left; the pool player behind the table, right
     'gates': {'brand': _mark(GATE, 0.6, 7.6),       # the pack crowds the gate in a horseshoe (Sam, 11 Nov)
               'press': press_spots(0.6, 7.6, (7.3, 6.7, 6.1, 5.5, 4.9), 11, cx=0.15, half=2.3, step=0.6)},
@@ -1276,8 +1273,7 @@ SET_BOXES = _out_boxes(0) + [
     ('tvroom clock', (160 + 16000, 560, 280 + 16000, 680)),
     ('tvroom door', (420 + 16000, 470, 600 + 16000, 1240)),
     ('tvroom cue rack', (720 + 16000, 380, 1000 + 16000, 910)),
-    ('tvroom pool table', (600 + 16000, 1120, 1080 + 16000, 1320)),
-    ('tvroom pool lamp', (740 + 16000, 1000, 940 + 16000, 1050)),
+    ('tvroom pool table', (430 + 16000, 1120, 1000 + 16000, 1320)),
     # chat 3 (rule 59: the sets with no boxes were never checked). The dock is all full-width bands (rails, panels,
     # glass), no separate objects to overlap.
     ('court_jury left window', (110 + 20000, 230, 390 + 20000, 760)),
@@ -1295,15 +1291,13 @@ SET_BOXES = _out_boxes(0) + [
     ('right bollard', face(GATE, 1.63, 1.87, GATE_D - 0.4, 0, 0.9)),
     ('sign', face(GATE, -3.3, -1.9, GATE_D - 1.6, 1.95, 2.7)))]
 SET_MEANT = [
+    ('tvroom door', 'tvroom pool table', 'N8: the table stands 3 m into the room, in front of the back wall the door is in (Brand covers both there)'),
     ('court_box chair', 'court_box bench', 'the bench stands in front of the judge\'s chair'),
     ('court_box arms', 'court_box chair', 'the arms hang on the wall above and behind the chair back'),
     ('court_box bench', 'court_box door', 'the bench stands 2 m in front of the wall the door is in'),
     ('court_box bench', 'court_box witness box', 'the witness box stands 3 m nearer the lens, below the bench'),
     ('cell desk', 'cell pinboard', 'the pinboard hangs on the wall above the desk shelf'),
     ('cell bed', 'cell door', 'never: (the bed is on the left wall, the door on the right)'),
-    ('tvroom door', 'tvroom pool lamp', 'never'),
-    ('tvroom pool table', 'tvroom pool lamp', 'the lamp hangs over the table'),
-    ('tvroom cue rack', 'tvroom pool lamp', 'the lamp hangs 3 m nearer than the rack on the back wall'),
     ('phone railing', 'phone hood', 'never'),
     ('gates left tower', 'gates centre block', 'the centre block is set back 0.3 m and runs in behind both towers'),
     ('gates right tower', 'gates centre block', 'the centre block is set back 0.3 m and runs in behind both towers'),
@@ -1400,7 +1394,7 @@ BENCHMARK = [
     dict(place='The TV room', refs=['14-cell-tv-sky.jpg'], at='tvroom',
          items=[('dim association room, two-tone walls', 'done: green dado, cream above; no photo (Sam\'s list)'),
                 ('moulded plastic chairs in a row', 'done: four'),
-                ('a pool table under its lamp', 'done'),
+                ('a pool table (N8, 13 Nov: its lamp and cord taken out, the cord read as a stray wall line)', 'done'),
                 ('high barred windows, dark outside', 'done: a strip of three'),
                 ('a cue rack, a caged clock, a door with wired glass', 'done'),
                 ('the TV high on a bracket (the reverse shot)', 'done: tv()'),

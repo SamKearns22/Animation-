@@ -441,3 +441,15 @@ Length: about 101 words at Sam's pace (3.3 a second) is about 31 s, plus montage
 | LINE_OK | juror11 | a curl at the crown is a line itself; light brows are colour strokes | chat 11, 12 Nov |
 | LINE_OK | juror8 | light brows are colour strokes, not shapes (as Ad-Vanced Notice's brows) | chat 11, 12 Nov |
 
+
+
+## Archived 13 Nov (chat 1 of 8 handover, done by chat 2 of 8)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 30 (N11 is a repeat: check the look reads at PHONE size before sending), 41 (the pool player's bent body), 87 (ask, never decide, an ambiguous note).
+- **Done (chat 1 of 8, 13 Nov, Sam's go on the plan):** Sam's guard voice (source/audio/blessed-guard.m4a) and gavel (sfx-gavel.mp3, both knocks on the dock's first frame; Sam: fine) in; music +25% (MUSIC_GAIN). N9 built: the left officer's head stays front-on, eyes to Walliams and brows down for the line (guard_eyes). N10 built: the two nearest journalists hold out a phone (our left) and a TV mic with a red flag (our right) towards Brand (G2_NEAR_KIT, _hand_mic). Checks clean. CLAUDE.md: a question about the film gets the answer and a plan, then waits for Y.
+- **Next: chat 2 of 8, Opus MEDIUM (a round of notes, plan agreed):** (1) N11 cell look (escort, from T['cell']+ESC_STOP): head front-on; pupils right to the corners WITH a small head lean each way so it reads at phone size: bed on our left (hold 0.7 s), up to the window (0.7 s), the door on our right; then a BIG sigh, head and eyes dropping to the floor and held (gaze down, not at the lens). Added: about 1.2 s to the cell shot (T['cot']). The current 'look' keys and escort_gaze are this chat's too-small try: replace them. (2) N8 pool player: side-on at the table's end, bent at the hips, whole body above the rim, lining up the shot; add a check that no body overlaps furniture; remove the stray vertical line on the TV-room wall (x about 880 on the 1080 frame). (3) N10b (Sam: Y to the critique, 13 Nov): the two nearest journalists' arms were far too long, crossed in an X, the phone covered Brand's chest, elbows straight and still. Fix: elbows bent, hands at head height just inside each one's own shoulder, only forearm, hand and kit showing (upper arm hidden by the back), the phone and mic BESIDE Brand never over him, arms never crossing, a small jostle; check a still at phone size first (press_pose 'mic'/'phone_out', G2_NEAR_KIT). (4) Clips, one wait each: cell 20.9-26.7, tvroom 34.7-37.4, gates2 51.5-end (mic, phone, guard eyes). Send, then ask Sam Y for animatic 4.
+- **Needs Sam:** nothing until the clips.
+- **Read:** guides/job-packs.md "Satire film" pack; notes N8-N11 below; source/blessed.py MAP (escort ~895, tvroom shot, gates2 press ~409).
+- **Open rule requests:** none (CLAUDE.md rule written; N6's is rule 87, no new rule).
+- **For Claude:** P4 'look' moves pupils only 0.38 of the eye's half-width: invisible at the cell's framing, so the head must lean too. Drafts in OUT/ (gitignored).
+

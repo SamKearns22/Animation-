@@ -494,9 +494,14 @@ def _brand_head(img, p, sp, t, hx, hy):
 BRAND_PROFILE = TH.TEMPLATE
 
 
+def _look_clamp(look, s):
+    """N11: a look past 1 (eyes to the corners) is kept; an ordinary one is clamped as before."""
+    return look if abs(look) > 1.0 else min(1.0, look + 0.55 * s)
+
+
 def _brand_mood(sp, f):
     look = look_of(sp)
-    st = dict(lid=sp.get('lid4', look['lid']), look=min(1.0, sp.get('look', 0.0) + 0.55 * f.s),
+    st = dict(lid=sp.get('lid4', look['lid']), look=_look_clamp(sp.get('look', 0.0), f.s),
               squint=sp.get('squint', look['squint']), closed=sp.get('blink', False),
               gaze_dy=gaze(f.L if hasattr(f, 'L') else None, sp.get('gaze_dy', look.get('gaze_dy', 0.0))))
     return st, look['brow'] + sp.get('brow_up', 0.0), look['frown'] + sp.get('frown', 0.0)
