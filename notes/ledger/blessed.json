@@ -279,8 +279,22 @@
    "src": "app",
    "stage": "Blessed: animatic 4 (chat 4 of 8) [still running at reading]",
    "model": "sonnet",
+<<<<<<< HEAD
+   "cost": 0.09
+  },
+  {
+   "date": "2026-11-13",
+   "chat": "bac0a51e",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.19
+=======
    "cost": 0.1,
    "usd": 0.29
+>>>>>>> origin/claude/create-claude-md-oe8z4g
   }
  ],
  "checks": {},
