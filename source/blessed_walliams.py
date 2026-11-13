@@ -73,7 +73,7 @@ def _lay(L):
     L['lip0'], L['lip13'], L['lip17'] = 0.765, 0.782, 0.808      # chat 4: the long gap nose to lip (his card)
     L['nw'] = max(L['nw'], 0.25)
     L['brow_y'] = L['eye_y'] - 0.048
-    L['mw'] = min(L['mw'], 2 * L['ecx'] * 0.98)          # the mouth about as wide as the pupils are apart
+    L['mw'] = min(L['mw'], 2 * L['ecx'] * 0.98)          # the mouth about as wide as the eye centres are apart
     return L
 
 
@@ -161,8 +161,9 @@ def hair(p, f, L):
     e, c = L['fw'] * 0.5, L['fw'] * 0.5                 # the cap as wide as the cheeks: the box Sam liked
     hl = -0.1                                              # the hairline in the middle
     t = max(L['fhw'], L['fw'] * 0.9) * 0.5                    # the skin's temple (outline())
-    side = [(-c - 0.03, -0.12), (-e - 0.02, 0.06), (-e - 0.014, 0.27), (-e + 0.01, 0.3), (-t + 0.0, 0.12),
-            (-t + 0.03, -0.02), (-t + 0.06, -0.1)]          # the clipped grey sides fill out to the cap's width
+    side = [(-c - 0.03, -0.24), (-c - 0.03, -0.12), (-e - 0.02, 0.06), (-e - 0.014, 0.27), (-e + 0.01, 0.3),
+            (-t + 0.0, 0.12), (-t + 0.03, -0.02), (-t + 0.06, -0.1), (-t + 0.08, -0.24)]   # Sam 13 Nov: run up
+    # under the cap, so no gap is left at the temples between the skull and the hair          # the clipped grey sides fill out to the cap's width
     for sgn in (-1, 1):
         p.poly(curve(f.pts([(sgn * -u, v) for u, v in side] if sgn > 0 else side), 2), HAIR_GREY, INK, 2.2)
     top = [(-c - 0.035, -0.06), (-c - 0.04, -0.2), (-c + 0.0, -0.33), (-c * 0.55, -0.43), (-c * 0.15, -0.48),

@@ -592,8 +592,8 @@ def _patch_under_forearm(p, j2, side, sh, el, kind):
     p.img.alpha_composite(lay)
 
 
-def _leg(p, j, side, yaw, sp):
-    _LEG(p, j, side, yaw, sp)
+def _leg(p, j, side, yaw, sp, from_u=0.0):
+    _LEG(p, j, side, yaw, sp, from_u=from_u)       # from_u passed on (Blessed chat 5: the sitting kit's legs_over crashed)
     hip3, foot3 = j['hip' + side], j['foot' + side]
     knee3 = V.knee_of(j, side)
     hip, knee, foot = (V.project(q, yaw)[0] for q in (hip3, knee3, foot3))

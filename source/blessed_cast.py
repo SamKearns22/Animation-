@@ -673,7 +673,8 @@ def brand_torso(img, p, sp, t):
     look = sp.get('look_', 'trial')
     if look == 'prison':
         p.poly([(-42, -6), (42, -6), (46, 26), (-46, 26)], TRACK, INK, 2.2)          # the tracksuit's collar (round the wider neck)
-        p.line([(0, 22), (0, 560)], dk(TRACK, 0.7), 2.4)                          # the zip
+        p.line([(0, 22), (0, sp.get('bottom', 505) - 4)], dk(TRACK, 0.7), 2.4)    # the zip, to the hem (chat 5: it ran
+        #                                     on past the hem, a loose line between the legs; seated, the hem is higher)
         p.poly([(-5, 30), (5, 30), (5, 50), (-5, 50)], (180, 180, 184), INK, 1.2)
         return
     p.poly([(-22, 40), (22, 40), (0, 120)], BR_SKIN, None)                       # the open shirt, deeper

@@ -72,10 +72,31 @@ LINES = [   # the script word for word (brief rows 5, 6, 7, 11, 13-14, 15); Sam'
          "round of the early release scheme, as way of dealing with the prison capacity crisis. The Prime Minister "
          "has said that it is necessary to stop overcrowding."),
     dict(n=6, audio='blessed-5', who='brand', text="Blessed! I'm feeling so blessed right now, everybody!"),
+    # note 48 (Sam, 12 Nov): the left officer at the doorway, to Walliams. Sam records it (source/audio/
+    # blessed-guard.m4a); until then a robotic stand-in only for timing (espeak-ng), and the film re-times to his take
+    dict(n=7, audio='blessed-guard', who='officer', text="Walliams, you're going away for a very, very long week."),
 ]
+
+
+def _take(name, text):
+    """Sam's recording, else an espeak-ng stand-in (polanski.py's way), cached in source/data."""
+    if any(os.path.exists(os.path.join(HERE, 'audio', name + e)) for e in ('.m4a', '.wav', '.mp3')):
+        return MA.line(name)
+    import shutil
+    import subprocess
+    path = os.path.join(HERE, 'data', 'standin-' + name + '.wav')
+    if not os.path.exists(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        if not shutil.which('espeak-ng'):
+            return np.zeros(int(SR * len(text.split()) / 3.0))
+        subprocess.run(['espeak-ng', '-v', 'en-gb', '-s', '150', '-p', '40', '-w', path, text], check=True,
+                       stdout=subprocess.DEVNULL)
+    from burnham_film import load
+    x = load(path)
+    return x / (np.abs(x).max() + 1e-9) * 0.4
 L = {ln['n']: ln for ln in LINES}
 for ln in LINES:                                  # cut each take only in silence: before the first word, after the last
-    x = MA.line(ln['audio'])
+    x = _take(ln['audio'], ln['text'])
     st = MA.pauses(x, 0.12)
     a, b = max(0, int((st[0][0] - 0.12) * SR)), min(len(x), int((st[-1][1] + 0.25) * SR))
     x = x[a:b].copy()
@@ -118,7 +139,12 @@ T['gates'] = T['overjoyed'] + 1.6               # her voice has faded out by the
 _at(6, T['gates'] + 0.8)
 T['gates2'] = L[6]['start'] + L[6]['_stretches'][0][1] + 0.12   # the cut just after "Blessed!": closer, at his mark
 T['wal'] = T['gates2'] + 0.35                    # note 30: Walliams led in behind Brand, in gates2 (no shot of his own)
-DUR = max(L[6]['end'] + 1.0, T['wal'] + 5.15)     # note 32: held to the door's slam (4.55 s into his beats) and a beat
+# note 48: the officers stop him at the doorway (1.4 s into his beats), the left one turns his head to him and says
+#   the line; his double-take, plea, shove, grab and the slam all follow it (WAL_SHIFT later than before)
+T['guard'] = max(T['wal'] + 1.7, L[6]['end'] + 0.6)   # after Brand's last word, so both are readable
+_at(7, T['guard'])
+WAL_SHIFT = L[7]['end'] + 0.35 - (T['wal'] + 1.4)
+DUR = max(L[6]['end'] + 1.0, T['wal'] + 5.15 + WAL_SHIFT)   # note 32: held to the door's slam and a beat
 G2_CAM = (600, 580, 1440)   # 12 Nov chat 3: lower and closer, no empty tarmac under him                          # gates2's camera centre: x at the cut, x pushed in, y (painting px)
 # Brief 14: she drifts away. Her take is faded to silence by T['gates'] (soundtrack), so the film's record of line 5
 # ends where she is last heard, in the pause after "crisis." (12 Nov, chat 3: the script and mouth checks read the
@@ -150,7 +176,8 @@ def _voice_env(who):
 
 import headlife                  # noqa: E402  (rule 74: every talking head tilts and nods on the voice)
 HEAD_LIFE = {'brand': headlife.HeadLife(_voice_env('brand'), 0.0, seed=5),
-             'newsreader': headlife.HeadLife(_voice_env('newsreader'), 0.0, seed=9)}
+             'newsreader': headlife.HeadLife(_voice_env('newsreader'), 0.0, seed=9),
+             'officer': headlife.HeadLife(_voice_env('officer'), 0.0, seed=13)}   # note 48's line
 SHOTS = [('arrive', T['s1'], T['s2']), ('oath', T['s2'], T['jury']), ('jury', T['jury'], T['oath2']),
          ('oath2', T['oath2'], T['s3']),
          ('dock', T['s4'], T['van']), ('van', T['van'], T['cell']), ('escort', T['cell'], T['cot']),
@@ -206,12 +233,15 @@ HANDS_OK = [('Journalist*', '*', 'no hand', T['s1'], T['s2'], 'seen from behind,
              'in (brief 9; touch_faults checks the hand sits on the arm)')]
 LOOKS_AT = {}
 ALLOWED, CONTACTS, MOMENTUM, PUSHES = [], [], [], []
-ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [('walliams', T['wal'] + 2.9, T['wal'] + 4.6, 'gone in through a door')], []
+ALLOWED_CONTACTS, ALLOWED_POPS, SET_EXCLUDE = [], [('walliams', T['wal'] + 2.9 + WAL_SHIFT, T['wal'] + 4.6 + WAL_SHIFT, 'gone in through a door')], []
 TOUCHES, FREE_MOVES, RESTS = [], [], []
 SOUND_SOURCES, JOKE_PROPS, ORDER_SWAPS = {}, [], []
 LINE_OK = [('brand', 'line weight', 540, 289),                 # his moustache: a filled shape, not a line
+           ('walliams', 'line weight', 540, 322),              # his closed lips: a filled dark shape, not a line
            ('officer', 'no outline', 647, 932), ('officer', 'no outline', 648, 966),   # the key chain: a thin line itself
            ('officer', 'edge with no line', 614, 649), ('officer', 'edge with no line', 693, 497),   # the shirt's flat
+           ('officer', 'edge with no line', 617, 721),
+           ('judge', 'edge with no line', 500, 200), ('judge', 'edge with no line', 578, 200),   # light brows: strokes
            ('juror4', 'edge with no line', 660, 486), ('juror4', 'edge with no line', 600, 691),     # shadow side, the
            ('juror9', 'edge with no line', 632, 482), ('juror9', 'edge with no line', 599, 691),     # cardigans' (the kit's
            #                                                                                         allowed exception)
@@ -225,10 +255,10 @@ STILL_OK = ()                                     # nobody is meant to hold dead
 GUARDS = {'guard1': BC.OFFICER,                   # two different officers (pass 2: twins)
           'guard2': dict(BC.OFFICER, who='guard2', skin=(236, 196, 170), hair='bob', hair_c=(170, 120, 70), shoulders=150,
                          height=1.68, seed=97, lashes=True)}
-TRACK = {w: [] for w in CAST}
+TRACK = {w: [] for w in list(CAST) + ['officer', 'guard2']}
 for ln in LINES:
     TRACK[ln['who']] += [(a + ln['start'], b + ln['start'], sh) for a, b, sh in mouths.track(ln['text'], ln['_stretches'])]
-BLINKS = {w: F.blinks(7 + 3 * i, 0.5, DUR, talking=True) for i, w in enumerate(CAST)}
+BLINKS = {w: F.blinks(7 + 3 * i, 0.5, DUR, talking=True) for i, w in enumerate(list(CAST) + ['officer', 'guard2'])}
 
 
 def shot_of(t):
@@ -300,6 +330,19 @@ def put_seated(img, cam, sp, mark, t, yaw=0.0, j=None):
     j = j or moves.seated(sp)
     j['seated'] = False                           # the set paints the seat
     return V.person(img, cam, x, y - 928 * s, s, dict(sp, full=True, pose='custom'), t, yaw, j)
+
+
+def put_kit(img, cam, sp, mark, t, yaw=0.0, j=None, tilt=None):
+    """Someone seated by the sitting kit (j from sitting.realize: the seat drawn with them, knees and lap front on),
+    feet on the floor at the mark."""
+    x, y, ppm = mark
+    s = _s(sp, ppm)
+    if not CK.keep(sp):
+        img = CK.scratch()
+    return V.person(img, cam, x, y - 928 * s, s, dict(sp, full=True, pose='custom'), t, yaw, j, tilt=tilt)
+
+
+TV_TILT = (0.45, 0.92)       # the TV room camera looks down on the seated: more lap (rule 80)
 
 
 PRESS_HAIR = [(58, 44, 36), (30, 24, 22), (150, 110, 70), (170, 166, 162), (110, 70, 46), (196, 196, 192)]
@@ -501,7 +544,8 @@ def brand_mood(t):
 
 def brand_sp(t, look):
     mood, shades = brand_mood(t)
-    return dict(BC.LOOKS[look], head_life=HEAD_LIFE['brand'], **face('brand', t, mood, shades=shades))
+    d = dict(BC.LOOKS[look], head_life=HEAD_LIFE['brand'], **face('brand', t, mood, shades=shades))
+    return d
 
 
 # ---------------------------------------------------------------------------------------------- moves
@@ -789,49 +833,34 @@ def dock(sp, t):
     return j
 
 
-# --- van: bent over, forearms on the thighs, hands clasped between the knees, head down; the van sways him
-VAN_HANDS = lambda sg: (sg * 10, 400.0, 360.0)      # both fists together, between the knees
+# --- van: bent over, forearms down, hands clasped between the knees, head low; the van sways him. Note 39 (Sam,
+#     12 Nov, seen before: 'his sitting pose is still horrible'): rebuilt in chat 5 on the sitting kit (sitting.realize:
+#     hips on the seat, thighs, round knees, feet on the floor), front-on (the option sheet, rule 87): turned three-
+#     quarter, the leaning jumper is one flat panel that hides his thighs, so he read as standing bent (why chats 1-2's
+#     fixes failed)
+VAN_YAW = 0           # chat 5's pick on the option sheet (1 = three-quarter at 35, as Sam liked it)
+VAN_LEAN = 48
+
+
+def _kit_seat(sp, mark, px_high, **kw):
+    """A sitting-kit seat whose top is `px_high` screen pixels above the feet (a seat the set paints: drawn nothing)."""
+    import sitting as SIT
+    return SIT.Seat('stool', h=px_high / _s(sp, mark[2]), front=110, rear=-110, width=150, **kw)
 
 
 def van(sp, t):
-    j = moves.seated(sp)
-    lean = 28 + 1.5 * math.sin(2 * math.pi * (t - T['van']) / 2.4)
-    for sd, sg in (('L', -1), ('R', 1)):
-        V.arm_to(j, sd, unlean(VAN_HANDS(sg), lean), 'down')
-    j['lean'], j['head_dy'], j['nod'] = lean, 10.0, 2.2
-    j['hide_legs'], j['knee_round'] = {'L', 'R'}, True                    # note 16: the legs and seat are drawn here, before the jumper
-    j['pre'] = [lambda p, j2, view: _seat(p, j, sp, j2['yaw'])]
+    import sitting as SIT
+    seat = _kit_seat(sp, ST.STAGE['van']['brand'], 270)          # the moulded bench's front edge (blessed_sets.van)
+    lean = VAN_LEAN + 1.5 * math.sin(2 * math.pi * (t - T['van']) / 2.4)
+    feet = {'L': (-90, 250.0), 'R': (90, 250.0)}
+    kn, _ = SIT.knees(sp, seat, SIT._spec(lean=lean, feet=feet))
+    # the clasped hands hang down between the shins (chat 5 critique: two fists between two round knees at the
+    #   crotch read as rude), the head sunk low between the hunched shoulders
+    arms = {sd: SIT.arm_free((12.0, kn['R'][1] + 160, kn['R'][2] + 20), (1.0, 0.2, -0.3), 'fist') for sd in 'LR'}
+    j = SIT.realize(sp, seat, SIT._spec(lean=lean, feet=feet, arms=arms, head_dy=60.0 if VAN_YAW == 0 else 24.0))
+    j['chair_draw'], j['mid'] = (lambda *a, **k: None), []        # the set paints the bench
+    j['nod'] = 3.5 if VAN_YAW == 0 else 5.0
     return j
-
-
-VAN_YAW = 35          # Sam, 12 Nov: he keeps this three-quarter pose ("I even said I like the pose")
-
-
-def _seat(p, j, sp, yaw):
-    """Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
-    mid-air. His seat and hips as one rounded shape from the waist down to the thigh tops, drawn before the legs and
-    the jumper, so both lie over its edges and nothing floats. The legs are drawn first (far one first), then the seat
-    over their cut roots (chat 1 drew the seat first and the thighs' notched ends lay on top of it; it also used the
-    pose's 35 degrees, not the drawn view's 45, so the seat sat off the body)."""
-    far = sorted('LR', key=lambda sd: V.project(j['hip' + sd], yaw)[1])
-    pts = []
-    for sd in 'LR':
-        hx, hy, hz = j['hip' + sd]
-        for a in range(0, 360, 30):                   # round each hip joint, pushed back for the seat
-            c, s_ = math.cos(math.radians(a)), math.sin(math.radians(a))
-            pts.append(V.project((hx + 48 * c, hy + 40 * s_, hz - 10 + 30 * c), yaw)[0])   # a normal seat, not
-        #                                             pushed back (Sam, 12 Nov: the bigger one read as a huge bottom)
-        knee = V.knee_of(j, sd)
-        if knee:
-            u = 0.35                                    # a third of the way down the thigh, so the join is hidden
-            pts.append(V.project(tuple(a + (b - a) * u for a, b in zip(j['hip' + sd], knee)), yaw)[0])
-    hull, col = curve(V._hull(pts), 3), sp.get('trousers', (40, 40, 46))
-    p.poly(hull, col, INK, 2.4)                       # under the legs: its outline is the seat's edge
-    cx, cy = sum(q[0] for q in hull) / len(hull), sum(q[1] for q in hull) / len(hull)
-    for sd in far:
-        V.leg(p, j, sd, yaw, sp)
-    p.poly([(cx + (x - cx) * 0.9, cy + (y - cy) * 0.9) for x, y in hull], col, None)   # over the thighs' roots,
-    #                                                 no outline: the thighs grow out of the seat, no notched ends
 
 
 # --- escort: the officer walks him in by the arm; he stops, turns, and looks round numbly
@@ -955,27 +984,35 @@ def phone_extra(t):
 
 # --- TV room and the push: slouched; sits up on 'amazed', leans in on 'overjoyed'
 def asleep_pose(sp, t):
-    """Note 22: asleep in his chair in front of the TV: slumped, chin dropped, head lolled to one side, a slow
-    breath lifting the shoulders."""
-    j = moves.seated(sp)
-    j['lean'] = -6.0
-    j['head_roll'] = 16.0
-    j['nod'] = 0.6
-    j['head_dy'] = 10.0 + 3.0 * math.sin(t * 2 * math.pi / 3.6)
+    """Note 22: asleep in his chair in front of the TV: slumped (the sitting kit's slump, on his red plastic chair),
+    chin dropped, head lolled to one side, a slow breath lifting the head (chat 5: front-on with lap and chair)."""
+    import sitting as SIT
+    seat = SIT.Seat('plastic', width=150, col=(136, 52, 44), top=(160, 70, 60))
+    spec = SIT.spec_slump(sp, seat)
+    for sd in 'LR':                              # chat 5 critique: hands limp on the thighs' outsides, not at the crotch
+        spec['arms'][sd] = SIT.arm_free((96.0, 470.0, 120.0), (0.8, 1.0, -0.1), 'palm')
+    j = SIT.realize(sp, seat, spec)
+    j['legs_over'] = {'L': 0.4, 'R': 0.4}        # the thighs over the jumper's hem: a lap (he read as standing)
+    j['head_roll'] = 26.0
+    j['head_dy'] = j.get('head_dy', 0.0) + 3.0 * math.sin(t * 2 * math.pi / 3.6)
     return j
 
 
 def pool_pose(sp, t):
-    """Note 22: bent low over the pool table facing us, lining up a shot: bridge hand flat on the cloth, the cue
-    hand by his chest drawing back and forward in small practice strokes."""
+    """Note 22: bent over the pool table facing us, lining up a shot: bridge hand on the cloth, the cue hand by his
+    hip drawing back and forward in small practice strokes. Chat 5 (the hard critique: 'face-down in the table'):
+    his face up and showing over the cue, both hands down on the cloth's edge."""
     j = V.standing(sp)
     j['hide_legs'] = ('L', 'R')                    # behind the table: the cloth hides them
-    j['lean'] = 62.0
-    j['nod'] = -0.6                                # chin up, eyes along the cue
-    V.arm_to(j, 'L', (-120.0, 120.0, 360.0), 'out', 'palm')
+    j['lean'] = POOL_LEAN                          # bent low, chin just over the cue (chat 5 critique: he read upright)
+    j['nod'] = -2.5                                # chin up, eyes along the cue
+    V.arm_to(j, 'L', unlean((-10.0, 470.0, 330.0), POOL_LEAN), 'out', 'palm')
     k = 26.0 * math.sin(t * 2 * math.pi / 1.4)       # the practice strokes
-    V.arm_to(j, 'R', (70.0, 60.0, 150.0 - k), 'back', 'grip')
+    V.arm_to(j, 'R', unlean((40.0, 420.0, 120.0 - k), POOL_LEAN), 'back', 'grip')
     return j
+
+
+POOL_LEAN = 66.0
 
 
 def pool_cue(img, cam, mark, sp, pts):
@@ -993,19 +1030,25 @@ def pool_cue(img, cam, mark, sp, pts):
 
 
 def tv_pose(sp, t):
-    j = moves.seated(sp)
+    """Chat 5: on the sitting kit (upright, hands on his thighs, his blue plastic chair), front-on with knees and
+    lap (he read as standing). Sits up on 'amazed', leans in on 'overjoyed'; before that, note 43's life."""
+    import sitting as SIT
     lean = _keys(t, [(T['amazed'], -6.0), (T['amazed'] + 0.6, 0.0), (T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, 6.0)])
-    j['lean'] = lean
+    life = 1.0 - _ease(_ramp(t, T['amazed'] - 0.3, T['amazed']))   # the push's acting takes over at 'amazed'
+    lean += life * filmkit.shifts(t, seed=73, amount=2.0, hold=(1.2, 2.0)) + 0.8 * F.breath(t, 3.2, 1.0)
+    seat = SIT.Seat('plastic', width=150)          # a bucket seat: its edges show either side of him
+    spec = SIT.spec_upright(sp, seat)
+    for sd in 'LR':                                  # hands on the seat's edges beside his thighs (chat 5 critique:
+        spec['arms'][sd] = SIT.arm_free((110.0, V.HIP_Y - 30, 130.0), (0.6, 0.3, -1.0), 'palm')   # not at the crotch)
+    j = SIT.realize(sp, seat, dict(spec, lean=lean))
+    j['legs_over'] = {'L': 0.4, 'R': 0.4}            # the thighs over the jumper's hem: a lap (he read as standing)
     j['head_dy'] = _keys(t, [(T['amazed'], 6.0), (T['amazed'] + 0.6, 0.0)])
     j['nod'] = _keys(t, [(T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, -1.0)])
     # note 43 (head staring and still): his head lifts with his eyes to the screen, settles into small slack tilts
     #   and weight shifts, and he breathes; a slow, heavy blink (tv_face)
-    life = 1.0 - _ease(_ramp(t, T['amazed'] - 0.3, T['amazed']))   # the push's acting takes over at 'amazed'
     j['nod'] += life * (-2.5 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8)) +
                         filmkit.shifts(t, seed=71, amount=1.0, hold=(1.0, 1.7)))
     j['head_roll'] = j.get('head_roll', 0.0) + life * filmkit.shifts(t, seed=72, amount=4.0, hold=(0.9, 1.5))
-    j['lean'] += life * filmkit.shifts(t, seed=73, amount=2.0, hold=(1.2, 2.0))
-    j['bob'] = j.get('bob', 0.0) - F.breath(t, 3.2, 3.0)
     return j
 
 
@@ -1118,7 +1161,8 @@ def gates_close(sp, t):
     land = a + G2_WALK
     for sd, sg in (('L', -1), ('R', 1)):              # note 46: still up from the wide over the cut, then down
         arm_keys(j, sp, sd, t, [(a, GATE_V(sw, sg)), (a + 0.35, None), (min(land, ev - 0.3) - 0.35, None), (ev - 0.3, GATE_V(sw, sg)), (ev + 0.05, GATE_OPEN(sw, sg)),
-                                (ev + 0.25, GATE_OPEN(sw, sg)), (ev + 0.55, GATE_V(sw, sg))])
+                                (ev + 0.25, GATE_OPEN(sw, sg)), (ev + 0.55, GATE_V(sw, sg)), (ev + 3.8, GATE_V(sw, sg)),
+                                (ev + 4.3, None)])   # note 48 holds the shot longer: the V comes down after the preen
     dip = _bump(t, ev - 0.25, ev + 0.5, 0.25, 0.22)               # down at the knees with the sweep, springs up
     _dip(j, 40 * dip)
     chin = 1 - _bump(t, ev - 0.3, ev + 0.5, 0.2, 0.25)
@@ -1135,6 +1179,9 @@ def gates_close(sp, t):
     preen = _bump(t, ev + 0.9, ev + 1.6, 0.2, 0.3)
     j['nod'] -= 1.2 * preen
     j['nod'] += 0.9 * (_bump(t, ev + 2.1, ev + 2.5, 0.12, 0.2) + _bump(t, ev + 2.9, ev + 3.3, 0.12, 0.2))
+    late = _ease(_ramp(t, ev + 3.8, ev + 4.4))                     # note 48's longer hold: he keeps swaying, basking
+    j['lean'] += late * filmkit.shifts(t, seed=81, amount=2.5, hold=(0.8, 1.4))
+    j['head_roll'] += late * filmkit.shifts(t, seed=82, amount=5.0, hold=(0.7, 1.3))
     return mark, 0.0, j
 
 
@@ -1143,6 +1190,9 @@ def gates2_head(t):
     ev = word_at(6, 'everybody')
     a = _keys(t, [(ev + 1.7, 0.0), (ev + 2.0, -28.0), (ev + 2.6, -28.0), (ev + 2.9, 24.0), (ev + 3.5, 24.0),
                   (ev + 3.8, 0.0)])
+    # note 48: on "very long week" he glances back over his shoulder at Walliams (our right), then back to the press
+    b = max(ev + 3.9, L[7]['end'] - 0.2)
+    a += _keys(t, [(b, 0.0), (b + 0.3, 45.0), (b + 1.3, 45.0), (b + 1.6, 0.0)])
     return a if abs(a) > 0.5 else None
 
 
@@ -1151,6 +1201,7 @@ WAL_X = (3.4, 0.75, 0.55)                            # in from the right; at the
 WAL_D = ST.GATE_D - 0.3                              # along the gate's front
 DOOR_D = ST.GATE_D + 0.27                            # the wicket door's plane
 DRAG, TAKE, PLEAD, SHOVE, GRAB, SLAM = 1.4, (1.4, 2.0), (2.0, 2.9), (2.9, 3.4), (3.45, 4.3), (4.3, 4.55)
+TAKE, PLEAD, SHOVE, GRAB, SLAM = (tuple(v + WAL_SHIFT for v in b) for b in (TAKE, PLEAD, SHOVE, GRAB, SLAM))   # note 48
 OFF_DX = 0.72                                        # the officers either side of him, a step nearer us
 LEAF_OPEN = 95.0                                     # the wicket's leaf, swung out (the set paints it so)
 
@@ -1241,7 +1292,9 @@ def wal_face(t):
                      (a + TAKE[0] + 0.32, -0.9), (a + TAKE[0] + 0.36, 0.0)])
     turn = _keys(t, [(a + TAKE[0] + 0.18, 0.0), (a + TAKE[0] + 0.26, -0.35), (a + TAKE[0] + 0.32, -0.35),
                      (a + TAKE[0] + 0.36, 0.0)])
-    if k < TAKE[0] + 0.32:
+    if T['guard'] - 0.2 <= t < TAKE[0]:              # note 48: hearing the line (critique: he read sleepy)
+        mood = 'alarmed'
+    elif k < TAKE[0] + 0.32:
         mood = 'scared'
     elif k < PLEAD[0]:
         mood = 'alarmed'
@@ -1400,8 +1453,10 @@ def draw_walliams(img, cam, t):
     img.alpha_composite(lay)
     draw_leaf(img, cam, t)
     for side, sg, who in GUARD_SIDES:
-        so = dict(GUARDS[who], **face('officer', t, 'stern'))
-        so['blink'] = F.blinking(t + (1.9 if sg > 0 else 0.0), BLINKS['officer'])   # chat 3: never blinking together
+        so = dict(GUARDS[who], **face('officer' if who == 'guard1' else 'guard2', t, 'stern'))   # note 48: only the
+        so['blink'] = F.blinking(t + (1.9 if sg > 0 else 0.0), BLINKS['officer'])   # left one talks; never blinking together
+        if who == 'guard1':
+            so['head_life'] = HEAD_LIFE['officer']
         ox, od = wal_place(t, sg * OFF_DX)
         om = ST._mark(ST.GATE, ox, od)
         walking = k < DRAG + 0.1
@@ -1423,7 +1478,14 @@ def draw_walliams(img, cam, t):
                 gj = dict(oj)
                 V.arm_to(gj, 'L', _reach(oj, 'L', _to_person(so, om, oj, lp[0], lp[1], -40.0)), 'out', 'palm')
                 oj = moves.mix_poses(oj, gj, push)
-        put(img, cam, so, om, t, 0.0, oj)
+        put(img, cam, so, om, t, 0.0, oj, head_yaw=guard_look(t) if who == 'guard1' else None)
+
+
+def guard_look(t):
+    """Note 48: the left officer turns his head to Walliams (on our right) for the line, then back."""
+    a = _keys(t, [(T['guard'] - 0.45, 0.0), (T['guard'] - 0.15, 90.0), (L[7]['end'] + 0.2, 90.0),
+                  (L[7]['end'] + 0.5, 0.0)])          # side-on: at phone size a three-quarter turn read as facing us
+    return a if a > 0.5 else None
 
 
 # ---------------------------------------------------------------------------------------------- the shots
@@ -1498,7 +1560,7 @@ def draw_people(img, cam, shot, t):
         put(img, cam, sp, st['brand'], t, j=dock(sp, t))
     elif shot == 'van':
         sp = brand_sp(t, 'prison')
-        put_seated(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=VAN_YAW, j=van(sp, t))   # note 16: Sam keeps the 3/4 pose; limbs fixed
+        put_kit(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=VAN_YAW, j=van(sp, t))   # notes 16, 39: sitting kit
     elif shot == 'escort':
         sp = dict(brand_sp(t, 'prison'), gaze_dy=escort_gaze(t))
         bm, by, bj, bh = escort(sp, t)
@@ -1526,11 +1588,11 @@ def draw_people(img, cam, shot, t):
     elif shot in ('tvroom', 'push'):
         # Sam's note 22: Brand alone on a plastic chair, watching; behind on the left a man asleep in his chair
         # facing the TV; behind on the right an inmate bent over the pool table, lining up a shot
-        pts = put(img, cam, dict(CAST['inmate2'], **face('inmate2', t, 'neutral', gaze_dy=0.5)), st['inmate2'], t,
+        pts = put(img, cam, dict(CAST['inmate2'], **face('inmate2', t, 'neutral', gaze_dy=-0.2)), st['inmate2'], t,
                   j=pool_pose(CAST['inmate2'], t))
         pool_cue(img, cam, st['inmate2'], CAST['inmate2'], pts)
-        put_seated(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
-                   st['inmate1'], t, j=asleep_pose(CAST['inmate1'], t))
+        put_kit(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
+                st['inmate1'], t, j=asleep_pose(CAST['inmate1'], t), tilt=TV_TILT)
         sp = brand_sp(t, 'prison')
         if t < T['amazed']:
             sp['blink'] = tv_blink(t)
@@ -1538,7 +1600,7 @@ def draw_people(img, cam, shot, t):
             sp['gaze_dy'] = -0.7 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8))
         else:
             sp['gaze_dy'] = -0.7
-        put_seated(img, cam, sp, st['brand'], t, j=tv_pose(sp, t))
+        put_kit(img, cam, sp, st['brand'], t, j=tv_pose(sp, t), tilt=TV_TILT)
     elif shot == 'gates':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_wide(sp, t)

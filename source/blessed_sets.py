@@ -836,13 +836,15 @@ def tvroom(img, cam, t=0.0):
         p.line([(-300, y), (W + 300, y)], (94, 88, 80), 1.6)
     # the pool table at the back right (pool_table; the film draws it again over the man bent over it), its lamp
     pool_table(p)
-    p.line([(860, 700), (860, 860)], (40, 40, 44), 2.0)
-    p.poly([(790, 860), (930, 860), (960, 910), (760, 910)], (40, 70, 50), INK, 2.0)
-    soft(img, cam, (720, 900, 1000, 1120), (255, 240, 190), 0.25, 60)                       # its light on the cloth
-    # Sam's note 22: moulded plastic chairs (adult wings: heavy-duty, wipe-clean), not a bench: Brand's, near; the
-    # sleeper's, behind on the left (their seats under where the film sits them)
-    _chair(p, 200, 1236, 0.62, 1)
-    _chair(p, 540, 1352, 1.5, 0)
+    # chat 5 (the hard critique: 'a lamp over nothing'): the lamp hangs low over the cloth's middle on a long cord,
+    # its light falling in a pool on the table
+    p.line([(840, -400), (840, 1010)], (40, 40, 44), 3.0)                                   # (3 m nearer than the
+    p.poly([(780, 1010), (900, 1010), (930, 1052), (750, 1052)], (74, 78, 84), INK, 2.2)     # board: its cord
+    #                                                                                        crosses in front)
+    p.poly([(770, 1046), (910, 1046), (918, 1056), (762, 1056)], (250, 236, 180), None)
+    soft(img, cam, (660, 1080, 1020, 1220), (255, 240, 190), 0.3, 60)                       # its light on the cloth
+    # Sam's note 22: moulded plastic chairs (adult wings: heavy-duty, wipe-clean), not a bench. Chat 5: the chairs
+    # are drawn with the people now (sitting.Seat('plastic')), so the seat shows round them from every view
 
 
 def pool_table(p, front_only=False):
@@ -855,6 +857,8 @@ def pool_table(p, front_only=False):
         p.poly(quad(x - 10, 1260, x + 10, 1320), (90, 60, 40), INK, 1.6)
     if front_only:
         return
+    for x, y in ((644, 1124), (840, 1122), (1036, 1124), (606, 1206), (840, 1208), (1074, 1206)):   # the pockets
+        p.ell(x, y, 11, 6, (20, 20, 22), None)                                               # (critique: 'a desk')
     for k, x in enumerate((700, 760, 990)):                                                 # balls
         p.ell(x, 1150, 9, 6, ((200, 40, 40), (240, 200, 60), (240, 240, 240))[k], INK, 1.0)
 
@@ -874,9 +878,9 @@ def tv_flicker(img, cam, t, strength=1.0):
     picture cuts (a fixed, irregular pattern; never a smooth pulse)."""
     r = random.Random(int(t * 4))
     k = strength * (0.55 + 0.45 * r.random())
-    lay = Image.new('RGBA', img.size, (8, 16, 60, int(55 * strength)))                   # the room gone blue-dark
-    img.alpha_composite(lay)
-    soft(img, cam, (-100, 400, 1180, 1300), (120, 170, 255), 0.3 * k, 220)                 # the blue glow on their
+    lay = Image.new('RGBA', img.size, (8, 16, 60, int(34 * strength)))                   # the room gone blue-dark
+    img.alpha_composite(lay)                       # (chat 5: lighter, and a weaker glow: the picture read washed out)
+    soft(img, cam, (-100, 400, 1180, 1300), (120, 170, 255), 0.16 * k, 220)                # the blue glow on their
     #                                                                                        faces, from above
 
 
@@ -1211,7 +1215,8 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'cell_cot': {'brand': (230, 1700, 560.0)},
     'cot_top': {'brand': (540, 1800, 740.0)},        # lying: drawn as standing front-on, seen from above
     'phone': {'brand': (690, 2500, 820.0)},
-    'tvroom': {'brand': (540, 1560, 640.0), 'inmate1': (200, 1330, 300.0), 'inmate2': (850, 1290, 250.0)},
+    'tvroom': {'brand': (540, 1770, 700.0), 'inmate1': (190, 1330, 300.0), 'inmate2': (960, 1290, 250.0)},
+    #          chat 5: Brand nearer and lower (no empty floor under him); the pool player at the table's right end
     #          note 22: Brand alone near; the sleeper behind left; the pool player behind the table, right
     'gates': {'brand': _mark(GATE, 0.6, 7.6),       # the pack crowds the gate in a horseshoe (Sam, 11 Nov)
               'press': press_spots(0.6, 7.6, (7.3, 6.7, 6.1, 5.5, 4.9), 11, cx=0.15, half=2.3, step=0.6)},
