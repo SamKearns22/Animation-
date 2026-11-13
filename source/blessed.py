@@ -445,15 +445,28 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
             r['hands'] = [(back * j['wr' + k][0], j['wr' + k][1]) for k in 'LR']
             r['reach'] = reach
             _boom(img, cam, r, t)
+        # Sam 13 Nov ("the cameras are clipping through their heads"): held kit was always painted AFTER the person,
+        #   so kit held in front of someone seen from behind sat on top of their head. Now, from behind, the hands'
+        #   positions come from a dry run and the kit goes down first: their head, back and hands cover it.
+        if abs(sp['yaw']) > 90 and kit in ('phone', 'mic', 'mic_l', 'stills'):
+            _kit(img, cam, r, put(Image.new(img.mode, img.size), cam, sp, mark, t, sp['yaw'], j), t, kit)
+            put(img, cam, sp, mark, t, sp['yaw'], j)
+            continue
         pts = put(img, cam, sp, mark, t, sp['yaw'], j)
+        if kit in ('phone', 'mic', 'mic_l', 'stills'):
+            _kit(img, cam, r, pts, t, kit)
         if kit == 'tv':                               # on the raised hand's side (his right: our left from behind)
             _tv_camera(img, cam, r, 1 if pts['wrR'][0] > 0 else -1)
-        elif kit == 'phone':
-            _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
-        elif kit in ('mic', 'mic_l'):
-            _hand_mic(img, cam, r, pts, 'wr' + NEAR_ARM[kit][0])
-        elif kit == 'stills':
-            _stills(img, cam, r, pts, t)
+
+
+def _kit(img, cam, r, pts, t, kit):
+    """The hand-held kit at the hands (press(): from behind it is painted before the person, from the front after)."""
+    if kit == 'phone':
+        _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
+    elif kit in ('mic', 'mic_l'):
+        _hand_mic(img, cam, r, pts, 'wr' + NEAR_ARM[kit][0])
+    elif kit == 'stills':
+        _stills(img, cam, r, pts, t)
 
 
 def _stills(img, cam, r, pts, t):
