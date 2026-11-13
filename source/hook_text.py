@@ -50,7 +50,7 @@ def _rows(d, words, f, n):
     return best[1]
 
 
-def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None):
+def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None, tilt=0.0):
     """`width`: the card's widest row (at 1080 wide) when it sits beside someone (Netan-Yahoo!): up to three rows."""
     k = w / 1080
     room_w = (width if width else SAFE_X1 - SAFE_X0 - 80) * k
@@ -103,6 +103,17 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None)
             for ch in tail:
                 im.alpha_composite(emoji_img(ch, em), (int(ex), int(top + i * lh + (lh - em) / 2)))
                 ex += em + int(10 * k)
+    if tilt:                                   # --tilt: the sign-off card's diagonal (Sam, 13 Nov), soft shadow
+        from PIL import ImageFilter
+        box = im.getbbox()
+        c = im.crop(box).rotate(tilt, expand=True, resample=Image.BICUBIC)
+        sh = Image.new('RGBA', c.size, (0, 0, 0, 0))
+        sh.putalpha(c.split()[3].point(lambda v: int(v * 0.35)))
+        bx, by = int((box[0] + box[2]) / 2 - c.width / 2), int((box[1] + box[3]) / 2 - c.height / 2)
+        im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
+        im.alpha_composite(sh, (max(0, bx + int(6 * k)), max(0, by + int(8 * k))))
+        im = im.filter(ImageFilter.GaussianBlur(6 * k))
+        im.alpha_composite(c, (max(0, bx), max(0, by)))
     im.save(path)
 
 
@@ -146,13 +157,16 @@ def main():
     x_mid = None
     if '--x' in a:
         i = a.index('--x'); x_mid = float(a[i + 1]); del a[i:i + 2]
+    tilt = 0.0
+    if '--tilt' in a:
+        i = a.index('--tilt'); tilt = float(a[i + 1]); del a[i:i + 2]
     src, dst, text = a[0], a[1], ' '.join(a[2:])
     probe = subprocess.run([FF, '-i', src], capture_output=True, text=True).stderr
     w, h = next((int(x), int(y)) for t in probe.replace(',', ' ').split() if 'x' in t
                 for x, _, y in [t.partition('x')] if x.isdigit() and y.isdigit() and int(x) > 100)
     with tempfile.TemporaryDirectory() as tmp:
         png = os.path.join(tmp, "hook.png")
-        card(w, h, text, y_mid, png, centre=centre, x_mid=x_mid, width=width)
+        card(w, h, text, y_mid, png, centre=centre, x_mid=x_mid, width=width, tilt=tilt)
         fps = next((float(t) for t, n in zip(probe.split(), probe.split()[1:]) if n.startswith('fps')
                     and t.replace('.', '').isdigit()), 24.0)
         pop = _pop_frames(png, tmp, fps)                       # rule 75: a quick pop (small, overshoot, settle)
