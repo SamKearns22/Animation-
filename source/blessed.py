@@ -794,7 +794,7 @@ def arrive(sp, t):
     feel, mate, sup, last = (word_at(1, 'feeling'), word_at(1, 'mate'), word_at(1, 'super'),
                              word_at(1, 'blessed.'))
     sw = sp.get('shoulders', 150)
-    heart = ((-30.0, 135.0, 78.0), 'in', 'palm')
+    heart = ((-30.0, 135.0, 78.0), 'out', 'palm')   # chat 6 of 8: 'in' folded the elbow back on the way (Sam's frame)
     point = ((-(sw + 150.0), 20.0, 230.0), 'out', 'point')   # note 34: points at the pack on "mate" (was the shades)
     wide = lambda sg: ((sg * (sw + 300), 40.0, 150.0), 'out', 'palm')   # flung open at shoulder height
     arm_keys(j, sp, 'L', t, [(feel - 0.35, None), (feel, heart), (mate - 0.35, heart), (mate - 0.05, point),
