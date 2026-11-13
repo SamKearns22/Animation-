@@ -310,6 +310,12 @@ def check_arm3(j, side, where='an arm'):
     cosang = _dot(_mul(u, -1), f) / ((lu * lf) or 1)
     if math.degrees(math.acos(max(-1.0, min(1.0, cosang)))) < 25:
         F.fail(f'{where}: elbow folded tighter than 25 degrees')
+    # the elbow folded back across the body, in 3D (x is across the body, so no view or foreshortening can hide it):
+    # the elbow well past the chest's centre line and the wrist back out beyond it (figure.audit_arm's test, on the bones)
+    sgn = 1 if sh[0] >= 0 else -1
+    if sgn * el[0] < sgn * sh[0] - 0.5 * F.UPPER and sgn * wr[0] > sgn * el[0] + 0.3 * F.FORE:
+        raise F.FigureError(f'figure check: {where}: elbow folded back across the body (elbow on the chest, forearm '
+                            f"pointing back out): bend the elbow 'out' or 'depth' (never excused by allow())")
 
 
 PROBE = {}        # set by handcheck.py while it re-draws someone: {side: (sleeve colour, hand colour), 'full': {side: pen}}

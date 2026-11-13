@@ -396,7 +396,7 @@ def press_pose(sp, t):
         V.arm_to(j, 'R', (95.0, -250.0, 40.0), 'out', 'fist')
     elif kit == 'stills':                             # the camera held up over the heads in both hands, shooting
         V.arm_to(j, 'R', (70.0, -240.0, 50.0), 'out', 'fist')
-        V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'in', 'fist')
+        V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'out', 'fist')   # 'in' folded the elbow back across his chest (13 Nov)
     elif kit == 'pad':
         V.arm_to(j, 'L', (-30.0, 160.0, 150.0), 'down', 'palm')
         V.arm_to(j, 'R', (20.0, 170.0, 160.0), 'out', 'fist')
@@ -1190,8 +1190,8 @@ def gates_close(sp, t):
     j['head_roll'] = _sway(k + 0.25) * (1 - settle) + 4 * _ease(_ramp(t, ev + 0.5, ev + 0.9))   # a preening tilt to hold
     # note 49 (Sam, 12 Nov): preening and smiling at the cameras all shot: after the sweep, a hand runs back through
     #   his hair, chin up; then he plays to one side of the pack and the other (gates2_head) with a little nod to each
-    hair = ((sw * 0.55, -250.0, 40.0), 'in', 'palm')
-    back = ((sw * 0.95, -200.0, -30.0), 'in', 'palm')
+    hair = ((sw * 0.55, -250.0, 40.0), 'out', 'palm')     # Sam, 13 Nov (animatic 3): with the elbow 'in' it folded back
+    back = ((sw * 0.95, -200.0, -30.0), 'out', 'palm')    # across his chest, forearm pointing out: no arm bends so
     if t >= ev + 0.55:
         arm_keys(j, sp, 'R', t, [(ev + 0.55, GATE_V(sw, 1)), (ev + 0.95, hair), (ev + 1.35, back), (ev + 1.55, back),
                                  (ev + 2.0, None)])

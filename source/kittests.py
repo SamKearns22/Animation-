@@ -442,6 +442,31 @@ def standing_legs_straight_elbows_out():
 
 
 @test
+def elbow_folded_back_is_a_stop():
+    """Rule 41 (Sam, 13 Nov, Blessed animatic 3: an arm bent the wrong way passed 185 flags as 'allowed'): an arm whose
+    elbow sits across the chest with the forearm running back out is refused in 3D, whatever allow() is open and
+    whichever way the person faces; the same arm with the elbow out is fine."""
+    import figure as F
+    import views as V
+    sw = 150
+    j = V.standing({'shoulders': sw})
+    V.arm_to(j, 'R', (sw * 0.55, -250.0, 40.0), 'in', 'palm')       # Brand's hand through his hair, elbow in
+    stopped = False
+    try:
+        with F.allow('a test'):
+            V.check_arm3(j, 'R', 'test arm')
+    except F.FigureError:
+        stopped = True
+    V.arm_to(j, 'R', (sw * 0.55, -250.0, 40.0), 'out', 'palm')       # the same hand, elbow out
+    fine = True
+    try:
+        V.check_arm3(j, 'R', 'test arm')
+    except F.FigureError:
+        fine = False
+    return stopped and fine, f'folded arm stopped: {stopped}; the elbow-out arm passes: {fine}'
+
+
+@test
 def point_hand_shows_a_finger():
     """Rule 41 (Sam, 4 Nov, MidTerminal note 33): whenever anyone points, the hand shows a pointing finger: the house
     circle hands draw one for 'point', and films that load them after their own finger keep it."""
