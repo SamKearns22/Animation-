@@ -314,6 +314,8 @@ def check_arm3(j, side, where='an arm'):
     # the elbow well past the chest's centre line and the wrist back out beyond it (figure.audit_arm's test, on the bones)
     sgn = 1 if sh[0] >= 0 else -1
     if sgn * el[0] < sgn * sh[0] - 0.5 * F.UPPER and sgn * wr[0] > sgn * el[0] + 0.3 * F.FORE:
+        if os.environ.get('ARM_FOLD_NAMED'):                 # Sam, 13 Nov: named on the animatic, not stopping it
+            print(f'NAMED FAULT: {where}: elbow folded back', file=sys.stderr); return
         raise F.FigureError(f'figure check: {where}: elbow folded back across the body (elbow on the chest, forearm '
                             f"pointing back out): bend the elbow 'out' or 'depth' (never excused by allow())")
 
