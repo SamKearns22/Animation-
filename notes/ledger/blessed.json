@@ -289,6 +289,7 @@
    "round": null,
    "notes": 0,
    "repeats": [],
+<<<<<<< HEAD
    "model": "sonnet",
    "cost": 1.68,
    "src": "estimate",
@@ -305,6 +306,10 @@
    "cost": 0.92,
    "src": "estimate",
    "sid": "session_01J1JB7Vft8KBYHW15JpJvpH"
+=======
+   "model": "opus",
+   "cost": 0.19
+>>>>>>> origin/claude/create-claude-md-oe8z4g
   }
  ],
  "checks": {},

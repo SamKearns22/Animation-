@@ -1,21 +1,16 @@
 # Pre-flight audit (Sam, 13 Nov): quick, useful, cheap, effective
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 19 (PASS / FAULT / COULD NOT TEST, short summary), 59, 24 (real costs only).
-- **Done:** brief written by cost job chat 2 (13 Nov). Sam's philosophy for every stage: checks made more
-  intelligent, improved and condensed so the film (1) is high quality, (2) draws fewer notes and faults, (3) lands
-  within 15% of a week, every time. CLAUDE.md "Rules are permanent": improve the check that missed, merge overlaps,
-  remove only what caught nothing in three films with Sam's Y on a "Lost:" line.
-- **Next: chat 1 of 8, Opus HIGH (diagnosis and design):** the job below. First merge the main line and cost chat
-  4's branch (session ..YcS6kXZ4oqFySTEMa is editing `preflight.py`: COULD NOT TEST, Blessed's clipcheck solids);
-  touch no file it is editing until it has pushed.
-- **Needs Sam:** nothing until the audit's numbered Y/N message.
-- **Read:** this file; `notes/cost-diagnosis.md` "Job B results" only; `preflight.py` by its MAP (`codemap.py`).
-- **Open rule requests:** none.
-- **Sam (13 Nov, 15:55): the audit's cost goes under its own name (preflight-audit), not Blessed's.** The Stop hook's
-  `ledger.film_of` picked 'blessed' (this chat named Blessed's files most) and fired Blessed's budget stop. At the
-  handover, move this chat's row from notes/ledger/blessed.json to notes/ledger/preflight-audit.json. Paused until 17:00
-  (Sam); a scheduled message resumes this chat then.
+- **Rules that bite next:** 59 (render lock), 19 (PASS / FAULT / COULD NOT TEST, short summary), 30 (repeat notes).
+- **Done (chat 1 of 8, Opus high, 13 Nov):** measured one full pre-flight on Blessed's final code (--audit, 4 cores):
+  28.4 min + an 11 min fingerprint pass in a normal run (see Findings); the last 10 films' record; 5 proposals sent to
+  Sam as one numbered message. Ledger row moved to its own name (Sam: "own name").
+- **Next: on Sam's numbers, Opus MEDIUM (building from a clear plan): build the changes he says Y to, time one run
+  on Blessed, then one short message.** This chat is amber, so it opens that chat.
+- **Needs Sam:** his Y/N on proposals 1-5 below.
+- **Read:** this file (Findings and Proposals only); preflight.py by its MAP.
+- **Open rule requests:** none written; proposals 1-5 change rules 59/67 (1), 19 (2), 13 S7 (5) on Sam's Y.
+- **For Claude:** timer wrapper in the chat-1 scratchpad (gone); re-make: wrap each check's faults() and print times.
 
 ## Known so far (from the notes, 13 Nov)
 - **Time:** 9-15 min a run on Blessed (14 min 46 s in chat 3), up to 40 min on earlier films; re-run after every
@@ -42,3 +37,39 @@
    what it catches, "Lost:" lines for anything removed. Change no rule or tool before his numbers; then hand over to
    an Opus medium chat to build.
 5. Keep the chat small: batch commands, filtered printouts, hand over before 200k.
+
+## Findings (chat 1 of 8, 13 Nov; real figures)
+**What pre-flight did on the last 10 films** (notes, archive notes, commit messages; R = real fault fixed, N = noise
+or a choice Sam had made, M = Sam later noted what it missed):
+| Film | Pre-flight's record |
+|---|---|
+| Blessed | 99 faults (mostly noise: shot cast 'never on screen', plan rooms) -> 17 -> 1. R: oath arm fold (stopped the render), oath hand hidden, Bible floating off the hand, frozen judge (= Sam 36), 3 arms back to rest before a cut, lying pose (= Sam 6). Caught but let through: N1 elbow ('allowed'), 45 newsreader mouth (named). M: N8 pool player through the table and N3 fist through the Bible (clipcheck had no solids), 5/15 no mouths, 14/16/23 necks and limb joins, 17 wall detail pops in, 51 sudden zoom (camfeel built the day after), N9 head changes on a turn |
+| Remakes | 16, all named: syllable counter misreads (5), prop-turn test on people who never turn (8), no scene(t) (1), a 1.5 s caption (1), critique (1). R: 0 |
+| Elder Swindon | hung twice (forked workers, OpenMP); animatic 1 without it (Sam); later 15 min; long shots chosen (2) |
+| MidTerminal | R: press palm through the body (hands); 6 caption speeds (estimates, then fixed by recordings) |
+| Terfwarts | R: run arms, captions joined, livelier mouths; wiring gaps (scene, cameras) |
+| Patriots 4 | R: hands over the table; 7 named each round (3 voice flags meant, 3 captions under reading time) |
+| Flying Whales | 6 named, all noise (people/room checks on a film with neither: fixed by HAS, rule 58); 12 s shot chosen; 7.5 min |
+| Halo No-No | R: music 3-5 dB over voices, a 0.5 s caption, thin lines; 5 named |
+| Netan-yahoo | clean but the chosen long shot; named: prop turn on a staff never seen from behind, a flat portal |
+| Prepper Minister | R: stool into the island, robot through an opening's edge (collisions); 11 shared faults unread at render |
+
+**Time (Blessed, 762 frames, 4 cores, measured 13 Nov):** text and set checks 57 s (film load 16, film checks 13,
+linecheck 19, clipcheck 6); fingerprint pass (draws every frame plain, 3.5 s a frame) ~11 min, every normal run;
+picture checks (every frame drawn with probes, 7.5 s a frame) 24 min full; film audits 2.2 min; sheet 1.3 min.
+So a full run ~40 min, a re-run ~15 min even for one changed frame (the fingerprint pass). Animatic render 14.5 min.
+Re-runs fall back to full whenever a check file changes; 5 of the 6 such commits since 11 Nov were drawing-kit files.
+**Noise (Blessed final, --audit): 137 faults + 356 repeat lines.** DIRECTION 38 (press extras swapping sides at one
+cut: Sam's note 46's kind, but 38 lines), HANDS 43 (33 on extras), COPIES 20 (a bug: a person matched with itself),
+LAP 14 (real by Sam's 13 Nov checklist), "press0 stands in the sign" once a frame (360), 2 cm crowd brushes.
+**Cost:** Blessed's animatic 1 stage cost 9.8% of a week against 2% planned (99 faults, then 17, then reruns).
+
+## Proposals sent to Sam (13 Nov)
+1. One drawing pass per animatic: the render runs the picture checks while it draws (stops on a fault); pre-flight
+   before it is the 1-minute check. Saves the 11 min fingerprint + up to 24 min picture pass (~15-35 min an animatic).
+2. One line per fault: grouped by check, shot and who, with time span and count; extras' hand touches and crowd side
+   swaps summed per cut. 137+356 lines -> about 20.
+3. Fix two false-fault bugs: COPIES (a person with itself), per-frame repeats.
+4. Lost: "shot over 8 s" stops being a fault (6 of 10 films flagged it, always chosen; caught nothing); the prop-turn
+   test only for props seen turning (9 false, 0 real in 10 films).
+5. New: every face on screen has a mouth (Blessed 5, 15, 45); a head keeps its design through a turn (N9).
