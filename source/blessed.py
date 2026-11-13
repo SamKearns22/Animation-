@@ -428,6 +428,10 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
         people.append((d, i, (X, Y, L.ppm(d))))
     for d, i, mark in sorted(people, key=lambda q: -q[0]):
         sp = press_sp(i, seed)
+        if spots is G2_PRESS:                         # Sam (13 Nov): no one standing just past the frame's edge
+            sx, half = cam.P(mark[0], mark[1])[0], sp['shoulders'] * _s(sp, mark[2]) * cam.s   # with only toes in it
+            if sx + half < 0 or sx - half > B.W:
+                continue
         if spots is G2_PRESS and i in G2_NEAR_KIT:       # N10 (Sam, 13 Nov): the two nearest hold out a phone and a mic
             sp['kit'] = G2_NEAR_KIT[i]
         x, d = spots[i]                               # everyone faces him, body and head (Sam, 11 Nov): from
@@ -1217,9 +1221,8 @@ def _g2_press():
     return [tuple(q) for q in out]
 
 
-G2_PRESS = _g2_press() + [(-0.45, 3.0), (0.5, 3.0)]
-G2_NEAR_KIT = {len(G2_PRESS) - 2: 'mic_l',   # Sam 13 Nov: a mic, not a phone (it covered his head)
-               len(G2_PRESS) - 1: 'mic'}   # N10: our left a phone, our right a mic   # chat 3: two of the pack close to us, heads in the bottom corners
+G2_PRESS = _g2_press()   # Sam (13 Nov): the two near journalists cut (their held kit kept clipping)
+G2_NEAR_KIT = {}                                  # (the near pair's mic/phone: gone with them)
 
 
 def gates_at(t):
