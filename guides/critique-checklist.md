@@ -69,6 +69,9 @@ the helper still looks). The number in brackets is how many of Sam's notes the l
 - M4 (1) Scrolling or repeating backgrounds move smoothly: no loop jumps back. Look: frames across each scroll.
 - Tools already hold (look only if you see it plainly): nothing flips from in front to behind between frames (rule 57, clipcheck). Rule 72's drop back to rest before a cut is checked for standing people (kitchecks.cut_rests, Job L); under M2, look at the last frames only for seated people, creatures, and anything not drawn by views.py.
 
+## Taste, never a fault (Sam's choices; the end-of-film pass adds to it, rule 30)
+- Ball hands (Sam, 13 Nov; P6).
+
 ## Came from (for Claude; the helper never sees this)
 Harvest, 10 Nov (Job H chat 2: the notes tables of Ad-Vanced, Cry Minister, Islamocommunism, MidTerminal, Patriots 3 and 4, Terfwarts, Halo, Prepper, Netan-Yahoo; notes found by the checks themselves not counted; P9 merged into P7, rule 3 of the header). Short names: AV Ad-Vanced, CM Cry Minister, IC Islamocommunism, MT MidTerminal, P3/P4 Patriots, TW Terfwarts, PM Prepper, NY Netan-Yahoo.
 A1: Cry Minister 11, 15; AV25, P3 1, P3 2, P4 10, NY11, CM29. A2: Islamocommunism 1 and the beard (rule 76). A3: Elder Swindon 59, 64; the whales (rule 56). A4: Flying Whales 13; P3 13, CM43.
