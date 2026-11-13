@@ -25,6 +25,18 @@
    "cost": 1.74,
    "src": "estimate",
    "sid": "session_01J1JB7WterSUHH3ncS7n2dA"
+  },
+  {
+   "date": "2026-11-13",
+   "chat": "fe5c762d",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.07,
+   "src": "estimate",
+   "sid": "session_01J1JB7XcwaRjs9fU1qtkXnk"
   }
  ],
  "checks": {}
