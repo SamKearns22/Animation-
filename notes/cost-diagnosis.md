@@ -11,13 +11,26 @@
 - **Next: chat 3 of 8, Opus MEDIUM (building from this plan):** write and test 1, 2, 3, 6 and 4's checklist line
   (ball hands = house style; necks and thighs stay faults), each in the rule or tool named in "Job C proposals";
   CLAUDE.md wording for 2 and 6 as written there. Test on Blessed's files without rendering a film. Hand over.
-- **Needs Sam:** Y/N on 5's new plan; whether necks and thighs are fixed in Blessed now or from the next film.
+- **Sam (13 Nov):** Y to 5's new plan (sent to chat 3); necks and thighs fixed from the NEXT film, not Blessed.
+- **Needs Sam:** Y/N on "Never again" 1-5 (below); on his Y this chat writes them.
 - **Read:** this file's "Job C proposals" only; then only the lines of each tool it edits (`codemap.py`).
 - **Open rule requests:** 1, 2, 3, 4, 6 (Y, to write); 5 (plan, waiting).
 - **For Claude:** `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Item 1 = `views.py` ~line 335
   (the 'skeleton arm' allow must not cover "folded back across the body") + `critique.py fixed` printing open faults as
   a "Checks:" line. Item 3 = a round runner in the film kit (fix, `final --small --span`, sheet, checks, commit, one
   printout). Never page a whole chat's events (~1.2k tokens an event).
+
+## Never again (proposed 13 Nov; Sam asked "how can we ensure this never happens again?")
+1. Real money only: every handover adds its chat's real app cost to the film; the bottom lines show spent vs budget.
+   Replaces: rule 85's estimate-based ledger (Job A built the reading).
+2. The budget stops the chain on real figures: once at the budget, then every 5% over; it can be answered, not
+   switched off. Replaces: rule 24's forecast alarm.
+3. Process changes pay for themselves: every new rule, check, tool or step names its cost per film; after the next
+   film, kept only if that film was cheaper or drew fewer notes; adding a step removes one. Widens CLAUDE.md's
+   "the rulebook never grows" to tools and steps.
+4. Every check passes, fails or says "couldn't test"; couldn't test stops the animatic. Generalises 5. Rule 89.
+5. After each film, one line: real cost against the last three films; over 1.5x their average, the next chat's
+   first job is finding why, before film work. Replaces the ledger's 10-line audit.
 
 ## Job B results (13 Nov): where each step's money goes
 - **Prices, fitted to the app's real chat costs:** Opus re-read $0.22/M tokens, write $6.0/M, output $19.8/M;
