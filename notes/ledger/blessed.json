@@ -300,7 +300,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.59,
+   "cost": 0.92,
    "src": "estimate",
    "sid": "session_01J1JB7Vft8KBYHW15JpJvpH"
   }
@@ -686,5 +686,6 @@
   "8:round1": 6,
   "9:round2": 7,
   "10:round2": 2
- }
+ },
+ "budget_stop": 29
 }
