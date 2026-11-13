@@ -4,7 +4,8 @@
 - **Rules that bite next:** 11 (sheet sent once: Sam's notes on it are applied, never re-sent), 89 (cast drawn alone, critiqued), 3 (no place drawn without its photos).
 - **Done (13 Nov, chat 4):** pencil sketches of the four re-staged scenes (`source/protest_tiers_roughs.py`, sheet with safe area, eye level, focus by beat, movement); critique hunts 1 and 2 (`protest_tiers_roughs` r1 p1-p2), faults fixed as one list; sheet + framing study sent to Sam. Chat 4's first try (12 Nov) hit the usage limit before drawing; this chat redid it.
 - **Next: the cast (Opus high), only after Sam's answers:** protester, riot officer x4 forces, hooded rioter, moped + riders; drawn alone and critiqued (rule 89). Answers come back to this chat.
-- **Needs Sam:** Q1 Y to the re-staging (T2 crowd on the near pavement, store centre); Q2 Hook Text "European protests, ranked"; Q3 sound 1/2/3; Q4 lessons F1-F12 by number; Q5 any notes on the sketches.
+- **Sam (13 Nov):** Q1 Y to the re-staging (T2 crowd on the near pavement, store centre). Hook Text and sound: still pending (his word). Lessons: he could not see them; sent in plain words.
+- **Needs Sam:** lesson numbers (F1-F12); Y/N to booking the 4.2% (photos, framing research, sketches) as extra planning so the cast keeps its 3% (the ledger's stage stop holds the cast until then).
 - **Read:** `guides/job-packs.md` "Build"; this file's "Re-staged", "Action lists"; the estimate table's cast rows.
 - **Lost / Added (Sam Y, 12 Nov):** Lost: yellow vests; pepper spray (now tear gas); the hammer (now a road sign). Added: wet dusk with streetlights (T1); burning newspaper kiosk, burning rental bikes, CGT banners, daytime (T3).
 - **Open rule requests:** "pencil sketches before check sheets" every film (would merge into rule 11); framing lessons F1-F12 (Sam's numbers); helper's 3 proposed checks (camera height matches the plan; no unbroken mass over half the frame; smoke has volume) to weigh against the critique checklist, not yet proposed.
@@ -98,7 +99,7 @@ near figures, 30-60 variants mid, a painted shimmering mass far.
 - **Cuts (F10):** T1 ends on the line (centre) -> T2 opens on the window (centre); T2 ends on the frozen swinger
   (centre) -> T3 opens on the surge (centre); T3 ends with the crowd flowing left -> T4 opens on the mopeds
   bottom-left. Lines and empty ground (F7, F8): no close-ups anywhere.
-- **Changed from the brief (Sam to say no):** T2 crowd moves from "right half and behind the store" to the near
+- **Changed from the brief (Sam Y, 13 Nov):** T2 crowd moves from "right half and behind the store" to the near
   pavement, seen from behind, facing the store (it still stays on its pavement); T2 store centre, not centre-left.
 
 ## Action lists (one line per group; Glimpses, nobody speaks: rule 74's acting list has no lines to plan)
