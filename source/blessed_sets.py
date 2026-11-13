@@ -837,12 +837,11 @@ def tvroom(img, cam, t=0.0):
     # the pool table at the back right, its right end in shot (N8: the player stands side-on at that end). N8: the
     # lamp and its long cord are gone (Sam: the cord read as a stray vertical line on the wall); its light stays
     pool_table(p)
-    soft(img, cam, (680 + POOL_DX, 1080, 1100 + POOL_DX, 1180), (255, 240, 190), 0.3, 60)   # light on the cloth
     # Sam's note 22: moulded plastic chairs (adult wings: heavy-duty, wipe-clean), not a bench. Chat 5: the chairs
     # are drawn with the people now (sitting.Seat('plastic')), so the seat shows round them from every view
 
 
-POOL_DX = -170                                    # N8 (13 Nov): moved left so its right end is in shot
+POOL_DX = -220                                    # N8 (13 Nov): moved left so its right end is in shot
 POOL = dict(far=1100, near=1168, floor=1384, x0=(668 + POOL_DX, 1112 + POOL_DX), x1=(616 + POOL_DX, 1150 + POOL_DX))
 
 
@@ -867,7 +866,7 @@ def pool_table(p, front_only=False):
     for x, y in ((a0, f), ((a0 + a1) / 2, f - 2), (a1, f), (b0, n), ((b0 + b1) / 2, n + 2), (b1, n)):   # pockets
         p.ell(x, y, 13, 7, (20, 20, 22), INK, 1.0)
     for k, (x, y) in enumerate(((730 + POOL_DX, 1140), (790 + POOL_DX, 1128), (960 + POOL_DX, 1150))):                            # the balls
-        p.ell(x, y, 10, 7, ((200, 40, 40), (240, 200, 60), (40, 70, 170))[k], INK, 1.0)   # one white: the cue's
+        p.ell(x, y, 9, 9, ((200, 40, 40), (240, 200, 60), (40, 70, 170))[k], INK, 1.2)   # round (Sam: 'flat ovals')   # one white: the cue's
 
 
 def _chair(p, x, y, s, k):
@@ -1221,7 +1220,7 @@ STAGE = {   # where each person stands: (screen x, ground y, pixels per metre); 
     'cell_cot': {'brand': (230, 1700, 560.0)},
     'cot_top': {'brand': (540, 1800, 740.0)},        # lying: drawn as standing front-on, seen from above
     'phone': {'brand': (690, 2500, 820.0)},
-    'tvroom': {'brand': (540, 1770, 700.0), 'inmate1': (190, 1330, 300.0), 'inmate2': (1030, 1350, 262.0)},
+    'tvroom': {'brand': (540, 1770, 700.0), 'inmate1': (190, 1330, 300.0), 'inmate2': (1018, 1384, 270.0)},   # N8: feet level with the table's near foot (its scale)
     #          chat 5: Brand nearer and lower (no empty floor under him); N8: the pool player side-on, beside the table's right end
     #          note 22: Brand alone near; the sleeper behind left; the pool player behind the table, right
     'gates': {'brand': _mark(GATE, 0.6, 7.6),       # the pack crowds the gate in a horseshoe (Sam, 11 Nov)
@@ -1273,7 +1272,7 @@ SET_BOXES = _out_boxes(0) + [
     ('tvroom clock', (160 + 16000, 560, 280 + 16000, 680)),
     ('tvroom door', (420 + 16000, 470, 600 + 16000, 1240)),
     ('tvroom cue rack', (720 + 16000, 380, 1000 + 16000, 910)),
-    ('tvroom pool table', (430 + 16000, 1120, 1000 + 16000, 1320)),
+    ('tvroom pool table', (380 + 16000, 1120, 950 + 16000, 1320)),
     # chat 3 (rule 59: the sets with no boxes were never checked). The dock is all full-width bands (rails, panels,
     # glass), no separate objects to overlap.
     ('court_jury left window', (110 + 20000, 230, 390 + 20000, 760)),
