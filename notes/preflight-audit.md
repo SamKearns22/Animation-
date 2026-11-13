@@ -16,7 +16,7 @@
   14.5 min animatic). 3) One short message to Sam: what changed, minutes saved, the Lost/Added lines below.**
 - **Lost (to tell Sam):** the incremental re-check (fingerprints): the render redraws every frame anyway; the contact
   sheet unless asked (--pictures). **Added:** mouth check, turn-design check, final needs a clean animatic first.
-- **Needs Sam:** BUDGET STOP (Blessed 50.3% v 19%): his Y before any further work.
+- **Needs Sam:** nothing. Sam: Y (13 Nov) to the timed run; Blessed marked finished (no film changes).
 - **Read:** this section only; preflight.py by its MAP if a fault needs a fix.
 - **Open rule requests:** none (59, 67, 19, 13 written on Sam's Y).
 - **For Claude:** render check mode: film_engine.render (check=..., _checked, picture_faults at the end); stamp
