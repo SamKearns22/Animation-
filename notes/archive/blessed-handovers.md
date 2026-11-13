@@ -453,3 +453,15 @@ Length: about 101 words at Sam's pace (3.3 a second) is about 31 s, plus montage
 - **Open rule requests:** none (CLAUDE.md rule written; N6's is rule 87, no new rule).
 - **For Claude:** P4 'look' moves pupils only 0.38 of the eye's half-width: invisible at the cell's framing, so the head must lean too. Drafts in OUT/ (gitignored).
 
+
+
+## Archived 13 Nov (chat 2 of 8, first version)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 30 (N8, N10, N11 were repeats: look at the clips' notes before changing anything), 74 (moves against the acting list before animatic 4), 85 (cost watch).
+- **Done (chat 2 of 8, 13 Nov):** N11 cell look: head leans WITH the eyes (pupils to the corners) to the bed (our left), up to the window, the door (our right), each held ~0.7 s, no blinks; then a big sigh, head and lids dropping to the floor and held. Cell shot +1.7 s (T['cot'] = cell + 6.2). N8: pool table slid left (POOL_DX -170) so its right end is in shot; the player stands side-on beside that end, bent at the hips, bridge hand on the cloth; new furniture check (furniture_faults: his body never inside the table; it catches the old placement); lamp AND cord removed (the cord was the stray line). N10b: the two near journalists' arms bent on their inside (NEAR_ARM), hands at head height, phone and mic beside Brand, no crossing, a small jostle. Checks clean. Clips rendered, NOT sent: Sam asked for a critique of the pool fix first (13 Nov).
+- **Next:** on Sam's Y, **animatic 4, Sonnet** (routine: render, finish.py with Hook Text and sign-off, send). On notes instead: Opus medium.
+- **Needs Sam:** his Y to the pool re-fix plan (critique in chat); then the clips; then Y/N for animatic 4.
+- **Read:** guides/job-packs.md "Satire film" pack; notes N8-N11 below.
+- **Open rule requests:** none.
+- **For Claude:** eye 'look' past 1 is now kept (blessed_cast._look_clamp); Brand's 'look' < 0 = our left. CELL_LOOK/CELL_SHOULDERS hold the cell keys (seconds after ESC_STOP). Times after the cell moved +1.7 s (tvroom 36.45, gates2 50.75, DUR 63.5). Drafts in OUT/c2 (gitignored).
+

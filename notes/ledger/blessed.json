@@ -280,17 +280,17 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.94
+   "cost": 2.81
   },
   {
    "date": "2026-11-13",
-   "chat": "9fa0b77b",
+   "chat": "e8bf3161",
    "stage": "auto",
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 0.72
+   "model": "sonnet",
+   "cost": 0.09
   }
  ],
  "checks": {},

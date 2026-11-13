@@ -382,7 +382,7 @@ def press_sp(i, seed):
     return full
 
 
-NEAR_ARM = {'phone_out': ('L', -0.45, -330.0), 'mic': ('R', 0.62, -190.0)}   # Sam 13 Nov: the phone up clear of his own head   # N10b: the arm on each one's inside (seen from behind, mirrored)
+NEAR_ARM = {'mic_l': ('L', -0.4, -190.0), 'mic': ('R', 0.62, -190.0)}   # Sam 13 Nov: two mics, clear of heads and of Brand   # N10b: the arm on each one's inside (seen from behind, mirrored)
 NEAR_Y, NEAR_Z = -190.0, 230.0                        # the hand's height (the head's) and how far forward
 #   (NEAR_ARM's number: across, a share of the shoulder's width: clear of his own head and of Brand)
 
@@ -404,6 +404,10 @@ def press_pose(sp, t):
         jx = 10.0 * math.sin(t * 2.3 + sp['seed'])  #   the kit beside Brand, never over him; a small jostle
         jy = 8.0 * math.sin(t * 1.7 + sp['seed'] * 0.7)
         V.arm_to(j, sd, (sg * sw + jx, ny + jy, NEAR_Z), 'down', 'fist')
+    elif kit == 'stills' and sp.get('eye'):           # Sam 13 Nov: camera to the eye, elbows out, shooting
+        dx = -110.0 * sp.get('eye_in', 0)              # held out on his side, towards RB (Sam chose this sheet, 13 Nov)
+        V.arm_to(j, 'R', (75.0 + dx, -175.0, 120.0), 'out', 'fist')
+        V.arm_to(j, 'L', (-75.0 + dx, -175.0, 120.0), 'out', 'fist')
     elif kit == 'stills':                             # the camera held up over the heads in both hands, shooting
         V.arm_to(j, 'R', (70.0, -240.0, 50.0), 'out', 'fist')
         V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'out', 'fist')   # 'in' folded the elbow back across his chest (13 Nov)
@@ -428,8 +432,9 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
         people.append((d, i, (X, Y, L.ppm(d))))
     for d, i, mark in sorted(people, key=lambda q: -q[0]):
         sp = press_sp(i, seed)
-        if spots is G2_PRESS and i in G2_NEAR_KIT:       # N10 (Sam, 13 Nov): the two nearest hold out a phone and a mic
-            sp['kit'] = G2_NEAR_KIT[i]
+        if spots is G2_PRESS and i in G2_NEAR_KIT:       # Sam 13 Nov: the close-up's three photographers, shooting
+            sp['kit'], sp['eye'] = G2_NEAR_KIT[i], True    #   at eye height (nothing held up over anyone),
+            sp['eye_in'] = 1 if spots[i][0] < at[0] else -1
         x, d = spots[i]                               # everyone faces him, body and head (Sam, 11 Nov): from
         sp['yaw'] = 180 - math.degrees(math.atan2(at[0] - x, at[1] - d))   # behind, turned towards his mark
         kit = sp['kit']
@@ -442,17 +447,28 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
             r['hands'] = [(back * j['wr' + k][0], j['wr' + k][1]) for k in 'LR']
             r['reach'] = reach
             _boom(img, cam, r, t)
+        # Sam 13 Nov ("the cameras are clipping through their heads"): held kit was always painted AFTER the person,
+        #   so kit held in front of someone seen from behind sat on top of their head. Now, from behind, the hands'
+        #   positions come from a dry run and the kit goes down first: their head, back and hands cover it.
+        if abs(sp['yaw']) > 90 and kit in ('phone', 'mic', 'mic_l', 'stills'):
+            _kit(img, cam, r, put(Image.new(img.mode, img.size), cam, sp, mark, t, sp['yaw'], j), t, kit)
+            put(img, cam, sp, mark, t, sp['yaw'], j)
+            continue
         pts = put(img, cam, sp, mark, t, sp['yaw'], j)
+        if kit in ('phone', 'mic', 'mic_l', 'stills'):
+            _kit(img, cam, r, pts, t, kit)
         if kit == 'tv':                               # on the raised hand's side (his right: our left from behind)
             _tv_camera(img, cam, r, 1 if pts['wrR'][0] > 0 else -1)
-        elif kit == 'phone':
-            _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
-        elif kit == 'phone_out':
-            _phone_up(img, cam, r, pts, 1, lift=40, wr='wr' + NEAR_ARM[kit][0])
-        elif kit == 'mic':
-            _hand_mic(img, cam, r, pts, 'wr' + NEAR_ARM[kit][0])
-        elif kit == 'stills':
-            _stills(img, cam, r, pts, t)
+
+
+def _kit(img, cam, r, pts, t, kit):
+    """The hand-held kit at the hands (press(): from behind it is painted before the person, from the front after)."""
+    if kit == 'phone':
+        _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
+    elif kit in ('mic', 'mic_l'):
+        _hand_mic(img, cam, r, pts, 'wr' + NEAR_ARM[kit][0])
+    elif kit == 'stills':
+        _stills(img, cam, r, pts, t)
 
 
 def _stills(img, cam, r, pts, t):
@@ -1216,11 +1232,19 @@ def _g2_press():
                 if a is not b and abs(a[0] - b[0]) < 0.45 and abs(a[1] - b[1]) < 0.4:
                     far = a if abs(a[0] - 0.4) > abs(b[0] - 0.4) else b
                     far[0] += 0.12 if far[0] > 0.4 else -0.12
+    for q in out:                                      # Sam's pick 1 (13 Nov): at the close end of the zoom the
+        px, half = G.p(q[0], q[1])[0], 0.3 * G.f / q[1]   #   wide pack is wholly off screen, never a strip at the edge
+        lo, hi = G2_CAM[1] - 540 / 2.5, G2_CAM[1] + 540 / 2.5
+        if px + half > lo and px - half < hi:
+            q[0] += ((lo - half - px) if px < G2_CAM[1] else (hi + half - px)) * q[1] / G.f
     return [tuple(q) for q in out]
 
 
-G2_PRESS = _g2_press() + [(-0.45, 3.0), (0.5, 3.0)]
-G2_NEAR_KIT = {len(G2_PRESS) - 2: 'phone_out', len(G2_PRESS) - 1: 'mic'}   # N10: our left a phone, our right a mic   # chat 3: two of the pack close to us, heads in the bottom corners
+# Sam 13 Nov, brief: "a press pack with all their arms and legs, facing the right direction, not blocking the action,
+#   taking photos"; pick 1: three photographers whole in the close-up (one left of Brand, two front-right in front of
+#   the guards' legs), the two near journalists with mics cut. Placed on the camera's numbers (scratch probe, chat 3).
+G2_PRESS = _g2_press() + [(-0.95, 8.3), (-0.55, 2.6), (0.62, 2.6)]   # Sam 13 Nov: 'use this sheet' (sheet 4)   # Sam 13 Nov: one in each front corner, shooting RB
+G2_NEAR_KIT = {len(G2_PRESS) - k: 'stills' for k in (1, 2, 3)}
 
 
 def gates_at(t):
