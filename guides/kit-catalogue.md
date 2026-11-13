@@ -126,6 +126,7 @@ The follow line on the sign-off (rule 52, 12 Nov): `follow_line.py` (the next li
 | One labelled contact sheet from any film in one command (rule 48) | `source/sheet.py FILM TIMES... [--crop] [--clean]` |
 | One note's round in one command: checks, `--span` clip, sheet, save; one short printout (rule 19) | `source/round.py FILM T0 T1 -m "note"` |
 | The fresh-eye critique (rule 89): a pack for a NEW helper (cold look, then the checklist), its answer saved in the ledger; every named thing per shot, flagging pop-ins (rule 56); frames saved before a notes round | `source/critique.py` (`pack`, `record`, `false`, `where`, `before`, `status`; pre-flight prints `status`) |
+| The handover check (Job Q): every message Sam types is saved to GitHub as it arrives (a chat that breaks keeps his words); at a chat's end and the next one's start, each ask in his messages must be carried by a notes line written after he said it (a 'done' line in its own words, not his quote: note 47's face); also a message with no reply, "clip sent" with no file, an 'override' he never typed | `source/handover.py` (`log` hook, `end`, `start PARENT`, `dump`; kittest `handover_drops`) |
 | `--nostamp` for a clip to splice into a final (rule 47) | `source/satire_template.py` (`final ... --nostamp`) |
 | Each shared check tested against the fault that taught it (the old version put back, caught; the fix passes) | `source/kittests.py` |
 | Pre-flight runs only the checks for what a film contains, and names the ones it skips (rule 58) | `source/preflight.py` (the film's `HAS`) |
