@@ -37,6 +37,8 @@ at session start (`.claude/hooks/setup.sh`).
 - **Unattended runs stop after one animatic:** render, send, wait; never stack rounds I haven't seen.
 - **Notes on movement get a short clip** of just those seconds (`final OUT --small --span T0 T1`); clips need no yes;
   a full animatic once the clips look right.
+- **A question about the film is answered, not acted on** (Sam, 13 Nov): reply with the answer and the plan (what I'd
+  change and how), then wait for his Y before changing anything.
 - **"Hold" means collect, don't act:** reply to each note with how you understood it and how you'll fix it, change
   nothing, do it all when I say go. **"Hold responses until all my notes are through": no replies at all** until then.
 - **Critique-fix rounds:** after each batch of notes, up to three rounds on your own (render, critique, fix), each with
