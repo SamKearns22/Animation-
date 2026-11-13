@@ -329,6 +329,18 @@
    "cost": 1.01,
    "src": "estimate",
    "sid": "session_01J1JB7YcS6kXZ4oqFySTEMa"
+  },
+  {
+   "date": "2026-11-13",
+   "chat": "8b4ab850",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.65,
+   "src": "estimate",
+   "sid": "session_01J1JB7WterSUHH3ncS7n2dA"
   }
  ],
  "checks": {},
@@ -713,7 +725,7 @@
   "9:round2": 7,
   "10:round2": 2
  },
- "budget_stop": 16,
+ "budget_stop": 17,
  "budget_answers": [
   "Sam, 13 Nov: Y, continue (at 48.63% of 19%); stops every 10% over from now"
  ]
