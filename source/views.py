@@ -433,7 +433,7 @@ class Eyes(B.Pen):
 
     def line(self, pts, colr=INK, lw=4):
         self._mark(None, colr, pts)
-        return self.pen.line(pts, colr, lw)
+        return B.Pen.line(self, pts, colr, lw)           # the same drawing path as before the mark was kept
 
     def _mark(self, fill, line, pts):
         """Every mark on the face, in the head's units (mouth_seen: does the face have a mouth, Sam's notes 5, 15, 45)."""
