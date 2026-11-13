@@ -260,7 +260,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.21
+   "cost": 1.92
   }
  ],
  "checks": {},
@@ -336,6 +336,15 @@
     "date": "2026-11-12",
     "spent": 31.03
    }
+  },
+  {
+   "name": "walliams-face",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-13",
+    "spent": 42.61
+   },
+   "unplanned": true
   },
   {
    "name": "round2",
@@ -577,7 +586,7 @@
   "8:round1": 6,
   "9:round2": 7
  },
- "forecast_alarm": 6,
+ "forecast_alarm": 7,
  "alarm": 5,
  "audit": [
   "1. Cost: estimate 19.0%, spent 21.02% of a week (over: name what ran over).",
