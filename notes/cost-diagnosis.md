@@ -1,17 +1,33 @@
 # Cost diagnosis job (Sam, 13 Nov): why each step got expensive, and how to make it cheap AND good
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 85 (cost watch: it measures a chat, never a film), 24 (estimates from real costs), 74.
-- **Done (13 Nov, diagnosis chat, Sonnet then Opus):** found that the cost record is wrong and the process has grown
-  (facts below). Sam: Y to rebuilding the record; NO to "a film cap": "recording and alarming is useful but doesn't
-  solve the problem: how do we make each step cost-efficient and high quality."
-- **Next: chat 1 of 8, Opus high (building new tools and a new plan).** Jobs A, B, C below, in order.
-- **Needs Sam:** nothing until the proposals (job C).
-- **Read:** this file only; then the parts named in each job.
+- **Rules that bite next:** 85 (cost watch), 24 (estimates from real costs), 74.
+- **Done (13 Nov, cost job chat 1 of 8, Opus high): Job A.** The record now holds the app's real figures (below).
+  Fixed: the Stop hook's ledger push from a detached copy now goes to the chat's own branch `claude/chat-XXXXXXXX`
+  (tested); rows carry the app session id so a real figure is never overwritten by an estimate.
+- **Next: chat 2 of 8, Opus high: Jobs B then C.** Measure with `list_events` filtered (`kinds=["result"]` for
+  modelUsage; `["assistant"]` pages for what each step did), never whole transcripts: chat 1 hit amber at ~150k
+  history just from 45 `get_session` calls (1.7k tokens each). Hand over before 200k.
+- **Needs Sam:** nothing until Job C's numbered Y/N message.
+- **Read:** this file only; `notes/ledger/app-costs.tsv` for the numbers.
 - **Open rule requests:** none.
-- **For Claude:** real per-chat cost = `get_session(...).external_metadata.usage.cost_usd` (list $), plus
-  `modelUsage` in the last `result` event (`list_events kinds=["result"]`) for the split by model. WEEK_USD 290 in
-  `.claude/hooks/costwatch.py` is the yardstick (an estimate).
+- **For Claude:** `python3 source/ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv` (one line per
+  chat: film, session id without `session_`, created, title, cost_usd, cache read M, cache write M, output k, history
+  k, model). To add a chat: `get_session` it, append a line, run `ledger.py app`. Blessed keeps 6 estimate rows (11 Nov,
+  chats not in the app: earlier account) marked keep.
+
+## Job A results (13 Nov, real app figures, list $; % of a week at WEEK_USD 290)
+- **Blessed 44.7%** (16 chats from the app $93.6 = 32.3%, plus 12.4% estimated for 11 Nov chats the app cannot show);
+  estimate 19%. Chat 5 alone $27.73 (9.6%). **Remakes 30.4%** in the app (19 chats from 10 Nov; the old ledger's
+  "45% from Sam's meter" was the whole week's meter, not this film). **Protest Tiers 8.5%** so far (7 chats incl.
+  framing research and sketches; plan and research only).
+- **Where an Opus chat's money goes** (36 Opus chats, $176, prices fitted to the app's own figures: re-read $0.22/M,
+  write $6/M, output $20/M): **re-reading history 49%, writing new history 27%, output 22%.** 26 of 36 Opus chats ended
+  at 200k+ history and cost $158 of the $176; the 10 that stayed under 200k cost $18.
+- **Sonnet is ~50x cheaper per routine stage:** 6 Sonnet chats (animatics, finals) cost $2.80 in all ($0.13-0.97 each);
+  Opus chats that rendered animatics cost $5-28 (Blessed chats 3 and 5, Remakes "animatic completion" $6.50).
+- Typical Opus film chat: $4-8 (1.5-3% of a week), ending at 200-300k history. A film at 10-15% is about 5-7 such chats;
+  Blessed has used 22 and Remakes 19.
 
 ## The facts found (13 Nov)
 - **The record misses most of the cost.** `ledger.py auto` commits then runs `git push origin HEAD`; the start-up hook

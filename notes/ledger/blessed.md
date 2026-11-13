@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 19.0% of a week; spent 47.23% (+28.23); 29 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 19.0% of a week; spent 44.71% (+25.71); 22 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 47.23% of the 15% planned so far; at this rate the film lands at 55.8%.**
+**Forecast: Spent 44.71% of the 15% planned so far; at this rate the film lands at 54%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -21,37 +21,32 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | round2 | 2.5 |  |  |
 | final | 0.5 |  |  |
 
-| date | chat | model | stage | round | cost % | notes | repeated |
-|---|---|---|---|---|---|---|---|
-| 2026-11-11 | df286f4b | opus | auto |  | 1.2 | 0 | 0 |
-| 2026-11-11 | d32c74c4 | opus | auto |  | 1.21 | 0 | 0 |
-| 2026-11-11 | d99f2680 | opus | auto |  | 5.24 | 0 | 0 |
-| 2026-11-11 | e448e160 | opus | auto |  | 2.13 | 0 | 0 |
-| 2026-11-11 | 817fdf1d | opus | auto |  | 1.41 | 0 | 0 |
-| 2026-11-11 | 4d055212 | opus | auto |  | 1.24 | 0 | 0 |
-| 2026-11-11 | 49d138e0 | sonnet | auto |  | 0.13 | 0 | 0 |
-| 2026-11-12 | ecfd58d9 | opus | auto |  | 2.16 | 0 | 0 |
-| 2026-11-12 | 1c0b91bd | opus | auto |  | 1.74 | 0 | 0 |
-| 2026-11-12 | 6876d200 | opus | auto |  | 1.19 | 0 | 0 |
-| 2026-11-12 | 17f8537a | opus | auto |  | 0.19 | 0 | 0 |
-| 2026-11-12 | cacb518d | opus | auto |  | 1.51 | 0 | 0 |
-| 2026-11-12 | d3f676bc | sonnet | auto |  | 0.22 | 0 | 0 |
-| 2026-11-12 | 79ad6d23 | opus | auto |  | 2.15 | 0 | 0 |
-| 2026-11-12 | 2adb6415 | opus | auto |  | 1.76 | 0 | 0 |
-| 2026-11-12 | 6c9c297d | opus | auto |  | 1.41 | 0 | 0 |
-| 2026-11-12 | 10880cb3 | opus | auto |  | 1.24 | 0 | 0 |
-| 2026-11-12 | 09b16a07 | opus | auto |  | 1.81 | 0 | 0 |
-| 2026-11-12 | 469d6d34 | opus | auto |  | 1.41 | 0 | 0 |
-| 2026-11-12 | 9e4a39bd | opus | auto |  | 2.24 | 0 | 0 |
-| 2026-11-12 | c57c2eb5 | opus | auto |  | 1.58 | 0 | 0 |
-| 2026-11-12 | c9720b90 | opus | auto |  | 1.84 | 0 | 0 |
-| 2026-11-12 | 264929a5 | opus | auto |  | 1.63 | 0 | 0 |
-| 2026-11-12 | 6f1568f1 | opus | auto |  | 1.58 | 0 | 0 |
-| 2026-11-12 | 9cec312f | opus | auto |  | 2.47 | 0 | 0 |
-| 2026-11-13 | 84e3edba | opus | auto |  | 2.27 | 0 | 0 |
-| 2026-11-13 | 0c7b8ab5 | opus | auto |  | 1.37 | 0 | 0 |
-| 2026-11-13 | 1172d2a6 | opus | auto |  | 2.81 | 0 | 0 |
-| 2026-11-13 | e8bf3161 | sonnet | auto |  | 0.09 | 0 | 0 |
+Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
+
+| date | chat | source | model | stage | round | cost % | $ | notes | repeated |
+|---|---|---|---|---|---|---|---|---|---|
+| 2026-11-11 | df286f4b | est | opus | est.: chat not visible in the app (earlier account) |  | 1.2 |  | 0 | 0 |
+| 2026-11-11 | d32c74c4 | est | opus | est.: chat not visible in the app (earlier account) |  | 1.21 |  | 0 | 0 |
+| 2026-11-11 | d99f2680 | est | opus | est.: chat not visible in the app (earlier account) |  | 5.24 |  | 0 | 0 |
+| 2026-11-11 | e448e160 | est | opus | est.: chat not visible in the app (earlier account) |  | 2.13 |  | 0 | 0 |
+| 2026-11-11 | 817fdf1d | est | opus | est.: chat not visible in the app (earlier account) |  | 1.41 |  | 0 | 0 |
+| 2026-11-11 | 4d055212 | est | opus | est.: chat not visible in the app (earlier account) |  | 1.24 |  | 0 | 0 |
+| 2026-11-11 | X2p1vEST | app | sonnet | Blessed animatic render |  | 0.16 | 0.47 | 0 | 0 |
+| 2026-11-12 | aMcV1jLB | app | opus | Walliams build continuation |  | 2.06 | 5.97 | 0 | 0 |
+| 2026-11-12 | uZL5ZqGE | app | opus | Blessed chat 6 of 8: critique + round-1 clips |  | 0.06 | 0.18 | 0 | 0 |
+| 2026-11-12 | S9xpigXA | app | opus | Blessed chat 1 of 8: Walliams rebuild (notes 29-30) |  | 1.69 | 4.89 | 0 | 0 |
+| 2026-11-12 | Wqn8jXCT | app | opus | Blessed: Walliams rebuild in gates2 (chat 2 of 8) |  | 2.21 | 6.41 | 0 | 0 |
+| 2026-11-12 | nwFhAD5D | app | opus | Blessed chat 3 of 8: tune gates2, clip, animatic 2 |  | 2.07 | 5.99 | 0 | 0 |
+| 2026-11-12 | WRa5QYv6 | app | opus | Blessed round 2 notes (chat 1 of 8) |  | 2.03 | 5.88 | 0 | 0 |
+| 2026-11-12 | x47nKBwR | app | opus | Blessed round 2, chat 2 of 8 |  | 1.93 | 5.59 | 0 | 0 |
+| 2026-11-12 | b9kiWsnh | app | opus | Blessed: Walliams' face, chat 3 of 8 |  | 2.31 | 6.7 | 0 | 0 |
+| 2026-11-12 | Gk5gytbh | app | opus>sonnet | Blessed chat 4 of 8: Walliams' face (continued) |  | 2.68 | 7.77 | 0 | 0 |
+| 2026-11-13 | 5WZ2nxNH | app | opus>sonnet | Blessed chat 5 of 8: seated rebuild, van sheet, note 48, ani |  | 9.56 | 27.73 | 0 | 0 |
+| 2026-11-13 | J8tTQynM | app | opus | Blessed chat 5 revisions |  | 1.53 | 4.44 | 0 | 0 |
+| 2026-11-13 | gqTMEJuh | app | opus | Blessed chat 2 of 8: journalists' arms, cell look, pool play |  | 2.84 | 8.24 | 0 | 0 |
+| 2026-11-13 | 1eKJMA46 | app | sonnet | Blessed animatic 4 (chat 3 of 8) |  | 0.13 | 0.38 | 0 | 0 |
+| 2026-11-13 | Jc3AnCPr | app | opus | Blessed press re-placed (chat 3 of 8) |  | 0.92 | 2.67 | 0 | 0 |
+| 2026-11-13 | rtp4XEoj | app | sonnet | Blessed: animatic 4 (chat 4 of 8) [still running at reading] |  | 0.1 | 0.29 | 0 | 0 |
 
 ## Audit (end of film)
 1. Cost: estimate 19.0%, spent 21.02% of a week (over: name what ran over).

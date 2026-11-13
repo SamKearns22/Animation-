@@ -7,6 +7,11 @@ MAP
   record() ......... called by report.summarise: every check's full result (clean ones too) goes into the round file
   save / note ...... the check sheet's text, false alarms, "could not test", into the round file
   log .............. at every handover: this chat's cost (from the cost watch), model, stage, notes, repeated notes
+  app .............. the REAL record (cost job, 13 Nov): notes/ledger/app-costs.tsv holds each chat's cost from the
+                     app (get_session usage.cost_usd, list $); `app` turns it into each film's rows, replacing the
+                     estimates for the same chats (and, from a film's first app row on, its estimate rows without a
+                     session id, except rows marked keep). Chats that hit the usage limit or never pushed are caught
+                     here, since the app keeps the figure after the chat ends
   auto ............. the Stop hook (Sam, 11 Nov: "automate this"): after every turn, this chat's running cost goes
                      into the ledger of the film or job it worked on (found from the files it touched); committed and
                      pushed when it has moved by 0.25% of a week, so the record survives the chat
@@ -146,12 +151,15 @@ def auto(transcript):
     st, _ = costwatch.read_usage(transcript)
     _, pct = costwatch.level(st)
     chat, cost, model = os.path.basename(transcript)[:8], round(pct, 2), costwatch.fam(st['model'])
+    sid = this_sid()
     d = load(film)
+    if sid and any(c.get('sid') == sid and c.get('src') == 'app' for c in d['chats']):
+        return                                    # the real figure is in already; an estimate never replaces it
     old = next((c for c in d['chats'] if c['chat'] == chat), None)
     if old and abs(old['cost'] - cost) < 0.25:
         return
     row = dict(old or {'date': str(date.today()), 'chat': chat, 'stage': 'auto', 'round': None, 'notes': 0,
-                       'repeats': []}, model=model, cost=cost)
+                       'repeats': []}, model=model, cost=cost, src='estimate', sid=sid)
     if old:
         d['chats'][d['chats'].index(old)] = row
     else:
@@ -179,12 +187,61 @@ def auto(transcript):
     j, md, _ = _paths(film)
     git('add', j, md)
     if git('commit', '-q', '-m', f'Ledger: {film}, chat {chat} at {cost}% of a week (automatic)', '--', j,
-           md).returncode == 0 and git('push', '-q', 'origin', 'HEAD').returncode != 0:
+           md).returncode != 0:
+        return
+    if git('symbolic-ref', '-q', 'HEAD').returncode != 0:   # detached (setup.sh's advice): `push origin HEAD` fails
+        tail = (sid or chat).split('_')[-1][-8:].lower()     # (13 Nov: rows lost), so push to this chat's own branch,
+        git('push', '-q', 'origin', f'HEAD:refs/heads/claude/chat-{tail}')   # which the next chat's branch scan merges
+        return
+    if git('push', '-q', 'origin', 'HEAD').returncode != 0:
         br = git('rev-parse', '--abbrev-ref', 'HEAD').stdout.strip()      # another chat pushed first: merge its
         if git('pull', '-q', '--no-rebase', 'origin', br).returncode == 0:  # work (git refuses if it would touch
             git('push', '-q', 'origin', 'HEAD')                              # this chat's unsaved files)
         elif os.path.exists(os.path.join(ROOT, '.git', 'MERGE_HEAD')):
             git('merge', '--abort')                                          # a clash: leave it to the chat
+
+
+def this_sid():
+    """This chat's id in the app ('session_...'), from the cloud session's environment; None elsewhere."""
+    r = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '')
+    return 'session_' + r.split('_', 1)[1] if '_' in r else None
+
+
+APP = os.path.join(DIR, 'app-costs.tsv')
+
+
+def app_import(path=APP):
+    """The real record: app-costs.tsv rows (film, session, created, title, cost_usd, ...) become each film's rows
+    (src 'app', cost in % of a week at costwatch.WEEK_USD). Replaced: the film's rows for the same session, and its
+    estimate rows dated on or after its first app row (they are the same chats, under the transcript's id), except
+    rows marked keep (chats the app cannot show, e.g. from Sam's earlier account). Returns {film: (rows, % total)}."""
+    sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
+    import costwatch
+    rows = {}
+    for ln in open(path, encoding='utf-8'):
+        if not ln.strip() or ln.startswith('#'):
+            continue
+        f = ln.rstrip('\n').split('\t')
+        rows.setdefault(f[0], []).append(f)
+    out = {}
+    for film, rs in rows.items():
+        d = load(film)
+        first = min(r[2][:10] for r in rs)
+        sids = {'session_' + r[1] for r in rs}
+        d['chats'] = [c for c in d['chats'] if c.get('keep') or (c.get('sid') not in sids and
+                      (c.get('src') == 'app' or c['date'] < first))]
+        have = {c.get('sid'): c for c in d['chats']}
+        for r in rs:
+            sid = 'session_' + r[1]
+            row = have.get(sid) or {'notes': 0, 'repeats': [], 'round': None}
+            row.update(date=r[2][:10], chat=r[1][-8:], sid=sid, src='app', stage=r[3][:60],
+                       model=r[9], cost=round(float(r[4]) / costwatch.WEEK_USD * 100, 2), usd=float(r[4]))
+            if sid not in have:
+                d['chats'].append(row)
+        d['chats'].sort(key=lambda c: c['date'])
+        store(d)
+        out[film] = (len(rs), totals(d)[0])
+    return out
 
 
 def parse_stages(text):
@@ -312,9 +369,13 @@ def render(d):
                 f"{x['done']['date'] if x['done'] else ''} | {x['done']['spent'] if x['done'] else ''} |"
                 for x in d['stages']]
         out += ['']
-    out += ['| date | chat | model | stage | round | cost % | notes | repeated |', '|---|---|---|---|---|---|---|---|']
-    out += [f"| {c['date']} | {c['chat']} | {c['model']} | {c['stage']} | {c['round'] or ''} | {c['cost']} | "
-            f"{c['notes']} | {len(c['repeats'])} |" for c in d['chats']]
+    out += ["Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate "
+            '(chats the app cannot show, or not yet imported with `ledger.py app`).', '']
+    out += ['| date | chat | source | model | stage | round | cost % | $ | notes | repeated |',
+            '|---|---|---|---|---|---|---|---|---|---|']
+    out += [f"| {c['date']} | {c['chat']} | {'app' if c.get('src') == 'app' else 'est'} | {c['model']} | "
+            f"{c['stage']} | {c['round'] or ''} | {c['cost']} | {c.get('usd', '')} | {c['notes']} | "
+            f"{len(c['repeats'])} |" for c in d['chats']]
     if reps:
         out += ['', '## Repeated notes (what would have caught them)']
         out += [f'- {r}' for r in reps]
@@ -406,7 +467,12 @@ def main():
     p = s.add_parser('audit'); p.add_argument('film')
     s.add_parser('kept')
     s.add_parser('auto')
+    s.add_parser('app', help='rebuild film rows from notes/ledger/app-costs.tsv (the app\'s real per-chat costs)')
     o = a.parse_args()
+    if o.cmd == 'app':
+        for film, (n, pct) in app_import().items():
+            print(f'ledger: {film}: {n} chats from the app; film total now {pct}% of a week')
+        return
     if o.cmd == 'kept':
         print('\n'.join(kept_lines()))
         return

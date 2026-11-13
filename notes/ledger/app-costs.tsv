@@ -1,0 +1,46 @@
+# Real per-chat cost from the app (get_session external_metadata.usage, list $), read 13 Nov 15:05 UTC by the cost job.
+# film	session	created	title	cost_usd	cache_read_M	cache_write_M	output_k	history_k	model
+blessed	01J1JB7WL81wqn71X2p1vEST	2026-11-11T23:28	Blessed animatic render	0.47	2.47	0.043	5.2	101	sonnet
+blessed	01J1JB7VpbWW4XvraMcV1jLB	2026-11-12T17:10	Walliams build continuation	5.97	15.44	0.191	67.8	250	opus
+blessed	01J1JB7YqEHcDEhFuZL5ZqGE	2026-11-12T17:33	Blessed chat 6 of 8: critique + round-1 clips	0.18	0.06	0.020	0.2	80	opus
+blessed	01J1JB7ZaeTnwesxS9xpigXA	2026-11-12T17:38	Blessed chat 1 of 8: Walliams rebuild (notes 29-30)	4.89	13.33	0.151	53.8	211	opus
+blessed	01J1JB7YuDtWNziwWqn8jXCT	2026-11-12T18:12	Blessed: Walliams rebuild in gates2 (chat 2 of 8)	6.41	11.56	0.327	73.9	229	opus
+blessed	01J1JB7WN5bFNn3TnwFhAD5D	2026-11-12T18:32	Blessed chat 3 of 8: tune gates2, clip, animatic 2	5.99	13.97	0.301	44.5	200	opus
+blessed	01J1JB7YBnm9orNaWRa5QYv6	2026-11-12T22:59	Blessed round 2 notes (chat 1 of 8)	5.88	17.73	0.161	51.6	222	opus
+blessed	01J1JB7ZJYbKqoAKx47nKBwR	2026-11-12T23:19	Blessed round 2, chat 2 of 8	5.59	17.36	0.155	43.3	220	opus
+blessed	01J1JB7VPTenPTQFb9kiWsnh	2026-11-12T23:44	Blessed: Walliams' face, chat 3 of 8	6.70	15.04	0.372	66.7	232	opus
+blessed	01J1JB7Y9FiWpX41Gk5gytbh	2026-11-12T23:59	Blessed chat 4 of 8: Walliams' face (continued)	7.77	20.35	0.435	72.0	209	opus>sonnet
+blessed	01J1JB7WX6ZgL6kQ5WZ2nxNH	2026-11-13T07:02	Blessed chat 5 of 8: seated rebuild, van sheet, note 48, animatic 3	27.73	91.96	1.297	176.6	414	opus>sonnet
+blessed	01J1JB7XfHiB3H9wJ8tTQynM	2026-11-13T11:48	Blessed chat 5 revisions	4.44	11.82	0.155	41.4	214	opus
+blessed	01J1JB7XUiE4aoBsgqTMEJuh	2026-11-13T13:25	Blessed chat 2 of 8: journalists' arms, cell look, pool player, clips	8.24	24.13	0.226	79.6	256	opus
+blessed	01J1JB7YpTQXec5d1eKJMA46	2026-11-13T14:16	Blessed animatic 4 (chat 3 of 8)	0.38	0.74	0.074	1.3	94	sonnet
+blessed	01J1JB7YM1AKBpGsJc3AnCPr	2026-11-13T14:35	Blessed press re-placed (chat 3 of 8)	2.67	5.80	0.095	37.5	154	opus
+blessed	01J1JB7ZJpy34EDXrtp4XEoj	2026-11-13T14:57	Blessed: animatic 4 (chat 4 of 8) [still running at reading]	0.29	1.26	0.032	3.8	91	sonnet
+cost-job	01J1JB7WBFyL2ywCkLQzZL9E	2026-11-13T14:08	Blessed usage spike investigation (cost diagnosis)	2.68	4.21	0.208	27.8	200	opus
+remakes	01J1JB7ZiYVC8PdDeCSYYKF4	2026-11-11T13:42	Remakes: final render after S13 fix (Sonnet)	0.56	2.79	0.047	9.8	112	sonnet
+remakes	01J1JB7ZHmibakhFcqBrVaBo	2026-11-10T13:24	Ocarina of Time remake screenplay	3.45	5.74	0.212	35.2	165	opus
+remakes	01J1JB7Y5HrCcA1LcV8qpWf9	2026-11-10T13:46	Remakes: build the cast	5.17	7.29	0.326	55.4	232	opus
+remakes	01J1JB7Vd6CKXYeNRLVmUCUU	2026-11-10T13:56	Remakes: cast build 2 (Opus high)	5.64	10.37	0.288	62.8	233	opus
+remakes	01J1JB7VcUkGR8F3bDUdPBnr	2026-11-10T15:26	Remakes: creatures fixed, critique, cast sheet	5.64	12.28	0.257	72.2	219	opus
+remakes	01J1JB7ZtayVwJxcDCmEDsyc	2026-11-10T15:41	Remakes: cast build 4 (children, critique pass 2)	4.34	11.72	0.145	41.4	212	opus
+remakes	01J1JB7YgvEDcjzq2aYiLyKy	2026-11-10T15:52	Remakes: cast build 5 (critique pass 2, fixes)	5.57	11.31	0.268	76.5	210	opus
+remakes	01J1JB7Z9vg7espcn938rQGj	2026-11-10T16:07	Remakes: build chat 6 (pass-2 fixes, pass 3)	9.20	24.64	0.352	91.3	292	opus
+remakes	01J1JB7Vrg1otUhFtt4BhECS	2026-11-10T16:30	Remakes: build chat 7 (pass-3 fixes, then the sets)	4.15	7.85	0.160	65.2	226	opus
+remakes	01J1JB7VEVAGwtHsRWr6h3FU	2026-11-10T16:43	Remakes: sets fix and critique (build chat 8)	12.45	19.30	0.881	161.7	258	opus
+remakes	01J1JB7WhnW9gip1pyaZuURL	2026-11-10T20:50	Ocarina of Time remake stages	4.94	11.78	0.166	63.0	225	opus
+remakes	01J1JB7YtqpQ6PvJfbWX8jpn	2026-11-10T21:06	Remakes: town fixes + sets critique pass 3	7.07	13.06	0.405	98.5	218	opus
+remakes	01J1JB7VZbcXvCc92PLX7HD5	2026-11-10T21:20	Remakes: sets pass-3 fixes and options sheet	8.36	20.80	0.275	100.1	306	opus
+remakes	01J1JB7YVvRYp7ANbncKuFGi	2026-11-10T21:49	Remakes animatic completion	6.50	12.69	0.448	57.6	222	opus
+remakes	01J1JB7VvfsSxDg2WN9R3tsc	2026-11-10T22:11	Remakes: the animatic (Sonnet)	0.13	0.30	0.022	0.5	82	sonnet
+remakes	01J1JB7Zf3PeUuAf8zsn2sET	2026-11-10T22:28	Remakes: notes round on animatic 1 (Opus, medium)	2.05	4.65	0.079	24.4	145	opus
+tool-job	01J1JB7YzbbWDzxDHhMYCxhU	2026-11-11T11:57	Link barrel clipping fix (became the 11 Nov tool job)	4.88	12.52	0.227	51.7	202	opus
+remakes	01J1JB7a2f9YZLdBABA1v3RU	2026-11-11T12:23	Remakes: final render (1.1x, new captions)	0.97	5.52	0.067	14.5	128	sonnet
+remakes	01J1JB7a1ZuiKoxGegMj1SuN	2026-11-11T13:21	Remakes: blue banner in last shot	1.23	2.64	0.063	10.0	123	opus
+remakes	01J1JB7Xr5rUJ2sgdMz4dMHA	2026-11-11T13:39	Remakes: S13 banner fix, clip, then final	0.69	1.44	0.037	5.4	102	opus
+protest-tiers	01J1JB7WPmYfzEuV2FapHZwZ	2026-11-12T18:09	European protests satire film	0.49	0.65	0.031	5.3	90	opus
+protest-tiers	01J1JB7WaPkWpoRTWjJXBueP	2026-11-12T18:12	Protest tiers: plan (chat 1 of 8)	3.75	6.62	0.201	41.0	199	opus
+protest-tiers	01J1JB7YpF1AKQq8CgYaSUFB	2026-11-12T23:11	Protest Tiers: chat 2 of 8 (crowd research, sketches)	7.51	19.44	0.244	104.1	301	opus
+protest-tiers	01J1JB7ZXmLc5QC117XjNRhV	2026-11-12T23:37	Framing research: crowds, vistas, wide action (chat 2 of 8)	4.41	9.84	0.158	64.5	222	opus
+protest-tiers	01J1JB7Z3yWA45jmQkukuJUL	2026-11-12T23:51	Framing research chat 3 of 8: lessons + re-staging	2.45	5.61	0.091	29.9	155	opus
+protest-tiers	01J1JB7Yx9znxDrJTWFKPUgZ	2026-11-12T23:58	Protest Tiers pencil roughs (chat 4 of 8)	0.56	1.11	0.035	3.0	100	opus
+protest-tiers	01J1JB7VnYE348iFxQrZzs91	2026-11-13T06:47	Pencil sketches for scenes	5.52	11.05	0.264	76.7	209	opus
