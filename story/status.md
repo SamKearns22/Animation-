@@ -1,3 +1,3 @@
-Pre-flight audit: measured (a full run ~40 min, a re-run ~15 min on Blessed); 5 proposals with Sam.
-Next: Sam's numbers, then an Opus medium chat builds them.
-Blessed: final film in animations/.
+Blessed: final sent 13 Nov; Brand's L arm still folded at frame 0 (Sam: fix it).
+Next: chat 6 of 8, Opus medium: fix the arrival-shot arm, redraw that shot, re-join, finish, send.
+Waiting: nothing from Sam.

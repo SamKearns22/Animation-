@@ -289,8 +289,34 @@
    "round": null,
    "notes": 0,
    "repeats": [],
+   "model": "sonnet",
+   "cost": 1.68,
+   "src": "estimate",
+   "sid": "session_01J1JB7YVwRXdWSXf4MQYM67"
+  },
+  {
+   "date": "2026-11-13",
+   "chat": "2f2e1c95",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
    "model": "opus",
-   "cost": 0.19
+   "cost": 0.92,
+   "src": "estimate",
+   "sid": "session_01J1JB7Vft8KBYHW15JpJvpH"
+  },
+  {
+   "date": "2026-11-13",
+   "chat": "579e6f3d",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.31,
+   "src": "estimate",
+   "sid": "session_01J1JB7WDTgFAa72GBMazsPZ"
   }
  ],
  "checks": {},
@@ -675,5 +701,5 @@
   "9:round2": 7,
   "10:round2": 2
  },
- "budget_stop": 29
+ "budget_stop": 31
 }
