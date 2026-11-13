@@ -2,13 +2,13 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 19.0% of a week; spent 50.28% (+31.28); 27 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 19.0% of a week; spent 50.92% (+31.92); 27 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 50.28% of the 15% planned so far; at this rate the film lands at 58.8%.**
+**Forecast: Spent 50.92% of the 19% planned so far; at this rate the film lands at 50.9%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
-| plan | 1 |  |  |
+| plan | 1 | 2026-11-13 | 50.92 |
 | cast | 4 | 2026-11-11 | 2.41 |
 | cast (unplanned) | 0 | 2026-11-11 | 2.41 |
 | sets | 5 | 2026-11-11 | 2.41 |
@@ -18,8 +18,8 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | animatic1 | 2 | 2026-11-12 | 21.02 |
 | round1 | 2.5 | 2026-11-12 | 31.03 |
 | walliams-face (unplanned) | 0 | 2026-11-13 | 42.61 |
-| round2 | 2.5 |  |  |
-| final | 0.5 |  |  |
+| round2 | 2.5 | 2026-11-13 | 50.92 |
+| final | 0.5 | 2026-11-13 | 50.92 |
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -51,4 +51,4 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-13 | 2f2e1c95 | est | opus | auto |  | 0.92 |  | 0 | 0 |
 | 2026-11-13 | 579e6f3d | est | opus | auto |  | 0.31 |  | 0 | 0 |
 | 2026-11-13 | 1f73e167 | est | opus | auto |  | 1.01 |  | 0 | 0 |
-| 2026-11-13 | 8b4ab850 | est | opus | auto |  | 1.65 |  | 0 | 0 |
+| 2026-11-13 | 8b4ab850 | est | opus | auto |  | 2.29 |  | 0 | 0 |
