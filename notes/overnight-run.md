@@ -30,3 +30,14 @@
 
 **Model and effort per job:** Q Opus medium; bench Opus medium; rounds-read-a-page Opus high (design) then medium;
 people kit Opus high; places Opus high; moves Opus high; rough command Opus medium; routine filing Sonnet.
+
+## Sam's answers (13 Nov, ~23:45 UTC) to the three considerations
+1. **No total cap on the run.** Sam has a free usage reset in hand; the foundation layer matters more than its cost.
+   Keep each job's 150% hard stop and the report (that is how a bad job is caught); the run goes through the whole
+   list. Spend is still reported honestly in `notes/morning-report.md`. Cost is not a reason to cut a kit's quality
+   (Statement 1: quality first, then fewer notes and faults, then cost).
+2. **The replication test is the pass mark (Y).** A kit (people, places, moves) must redraw Blessed's existing cast and
+   places from short descriptions and match the finished film's pictures, so the same film could be made again in the
+   same satire style; if it cannot, the kit is not working and is not finished. Sheets (new beside finished, same
+   frames) go in the morning report; every old film's kittests pass; no film uses a kit until Sam approves it.
+3. **02:40 London time confirmed (Y).** The wake-up is set.
