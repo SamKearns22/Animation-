@@ -395,3 +395,17 @@
   the head's; tops swapped when the head is mirrored); `lying_flat.Slump`, `_sat`, `BACKS`; sp `nape_in_head` skips
   `turnhead.neck_over`. Debug renders: one shot via `L.lie`/`L._fit`/`L.draw` as in `lying_flat.sheet`.
 
+
+## Archived 13 Nov (chat 2 of 8): the 'Where things stand' before Job P
+# Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
+- **Rules that bite next:** CLAUDE.md "every film is new" (never trim the joke or repeat old content); Statement 1
+  (the three aims); 85 (cost watch: hand over at amber).
+- **Done (13 Nov):** rule 30 gains the end-of-film notes pass (FAULT / CHOICE / ASK, taste list in the critique
+  checklist); CLAUDE.md "every film is new"; jobs O, N, P logged below (Sam: Y to all three).
+- **Next, a chain:** Job O done (WEEK_USD 171). Chat 2 of 8, Opus high: Job P
+  (the ranking list), which ends on one numbered message to Sam. Job N (Opus high) after P, or as P's list ranks it.
+- **Needs Sam:** nothing until P's list.
+- **Read:** this section and the job's own entry below; `guides/job-packs.md` "A tool job".
+- **Open rule requests:** none.
+- **For Claude:** WEEK_USD in `.claude/hooks/costwatch.py`; ledger in `notes/ledger/`; Blessed's real cost per Sam 80%.
+  A separate pre-flight timing run (Sonnet) may also be in progress from the pre-flight audit: merge, don't clash.
