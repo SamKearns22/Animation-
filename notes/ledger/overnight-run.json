@@ -1,0 +1,19 @@
+{
+ "film": "overnight-run",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-13",
+   "chat": "18d650f1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.93,
+   "src": "estimate",
+   "sid": "session_01J1JB7Z34BFRGXNU2i4kdHY"
+  }
+ ],
+ "checks": {}
+}
