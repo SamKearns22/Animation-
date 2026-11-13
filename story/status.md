@@ -1,3 +1,3 @@
-Blessed: FINISHED (Sam, 13 Nov); final animations/blessed.mp4, arm fixed and re-sent.
-Pre-flight audit: built, saved; waiting on Sam's Y for a Sonnet chat to time one run.
-Waiting: Sam's Y/N on the pre-flight timing run.
+Blessed: FINISHED (Sam, 13 Nov); cost 80% of a week against 15% aimed.
+Now: getting films to 15%: true weekly figure (Job O), then the ranked list of improvements (Job P), then Job N.
+Waiting: nothing from Sam until the ranked list arrives.

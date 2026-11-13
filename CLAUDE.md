@@ -55,6 +55,10 @@ at session start (`.claude/hooks/setup.sh`).
 - **Every stage aims at three things (Sam, 13 Nov): high quality, fewer notes and faults, a film within 15% of a
   week; its checks are made smarter, improved and condensed toward them. Something new? First improve the check that missed it; then merge overlapping checks; remove a step only if it
   caught nothing in three films, with my Y on a "Lost:" line.** It stays if the next film is cheaper or gets fewer notes.
+- **The channel is topical, absurdist news-of-the-week satire; every film is new (Sam, 13 Nov).** Every idea for cost or
+  speed makes new things better, cheaper or faster: smarter tools, faults caught before Sam sees them, reading less.
+  Never suggest doing less, making it worse, trimming the joke, or repeating old characters, places or material. Reuse
+  means the means (rig, hands, poses, house look, checks), never the content.
   **Before suggesting anything** (rule, tool or idea), search the rulebook and `guides/kit-catalogue.md`; each
   suggestion names the closest rule or tool and says what is new, or is dropped (Sam, 12 Nov).
 - **Before every handover, search the film's notes for rule requests not yet written** and list them.
