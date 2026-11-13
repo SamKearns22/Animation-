@@ -1653,6 +1653,33 @@ def handover_drops():
                     f'{len(closed)}; checks {r}'
 
 
+@test
+def critic_bench_scores():
+    """Ranking item 3: the critic bench scores an answer against Sam's real Blessed notes: a hit by line or words, a miss names its line."""
+    import json, tempfile
+    import critbench as B
+    c = B.case('blessed-a1')
+    d = tempfile.mkdtemp()
+    c['name'] = 'kittest'
+    B.DATA = d
+    out = os.path.join(d, 'kittest', 'x')
+    os.makedirs(out)
+    json.dump({'round': 0, 'stage': 'bench', 'panels': c['panels']}, open(out + '.spec.json', 'w'))
+    open(os.path.join(out, 'look.md'), 'w').write('\n'.join(f'{i}: a picture' for i in range(1, 15)))
+    import time
+    time.sleep(0.01)
+    open(os.path.join(out, 'result.md'), 'w').write(
+        "## Faults\nFAULT P12 [2, 4]: the judge has no mouth\nFAULT A1 [3]: back-row woman's head sits straight on "
+        "her shoulders, no neck\nFAULT P11 [12]: chin to chest join reads wrong\nFAULT O5 [8]: a cup floats\n"
+        "CAN'T TELL P4 [1]: no reference\n## Checked\n1-14\n## Cold look\nfine\n")
+    got, miss, extras, cant, rep = B.score(c, 'x', write=False)
+    keys = {k['id'] for k in c['key']}
+    r = [sorted(got) == ['k13', 'k14a', 'k23'], len(miss) == len(keys) - 3, len(extras) == 1, len(cant) == 1,
+         'improve P5' in rep, all(set(k['panels']) <= set(range(1, 15)) for k in c['key']),
+         len(c['panels']) == len(c['shots'])]
+    return all(r), f'caught {sorted(got)}, {len(miss)} missed, {len(extras)} extra; checks {r}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
