@@ -42,3 +42,19 @@
    what it catches, "Lost:" lines for anything removed. Change no rule or tool before his numbers; then hand over to
    an Opus medium chat to build.
 5. Keep the chat small: batch commands, filtered printouts, hand over before 200k.
+
+## Findings (chat 1 of 8, 13 Nov; real figures)
+**What pre-flight did on the last 10 films** (notes, archive notes, commit messages; R = real fault fixed, N = noise
+or a choice Sam had made, M = Sam later noted what it missed):
+| Film | Pre-flight's record |
+|---|---|
+| Blessed | 99 faults (mostly noise: shot cast 'never on screen', plan rooms) -> 17 -> 1. R: oath arm fold (stopped the render), oath hand hidden, Bible floating off the hand, frozen judge (= Sam 36), 3 arms back to rest before a cut, lying pose (= Sam 6). Caught but let through: N1 elbow ('allowed'), 45 newsreader mouth (named). M: N8 pool player through the table and N3 fist through the Bible (clipcheck had no solids), 5/15 no mouths, 14/16/23 necks and limb joins, 17 wall detail pops in, 51 sudden zoom (camfeel built the day after), N9 head changes on a turn |
+| Remakes | 16, all named: syllable counter misreads (5), prop-turn test on people who never turn (8), no scene(t) (1), a 1.5 s caption (1), critique (1). R: 0 |
+| Elder Swindon | hung twice (forked workers, OpenMP); animatic 1 without it (Sam); later 15 min; long shots chosen (2) |
+| MidTerminal | R: press palm through the body (hands); 6 caption speeds (estimates, then fixed by recordings) |
+| Terfwarts | R: run arms, captions joined, livelier mouths; wiring gaps (scene, cameras) |
+| Patriots 4 | R: hands over the table; 7 named each round (3 voice flags meant, 3 captions under reading time) |
+| Flying Whales | 6 named, all noise (people/room checks on a film with neither: fixed by HAS, rule 58); 12 s shot chosen; 7.5 min |
+| Halo No-No | R: music 3-5 dB over voices, a 0.5 s caption, thin lines; 5 named |
+| Netan-yahoo | clean but the chosen long shot; named: prop turn on a staff never seen from behind, a flat portal |
+| Prepper Minister | R: stool into the island, robot through an opening's edge (collisions); 11 shared faults unread at render |
