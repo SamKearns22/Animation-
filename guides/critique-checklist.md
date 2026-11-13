@@ -26,7 +26,7 @@ the helper still looks). The number in brackets is how many of Sam's notes the l
 
 ## P. People
 - P2 (17) Acting reads: each face and body shows the feeling the acting list names on that beat, big enough for a phone, not overdone; eyes and head look at whom or what the beat says. Look: look.md feelings and gazes against the beats in brief.md.
-- P7 (11) Weight rests where it should: feet on the ground, seated people on the seat with thighs and a lap (never knee balls beside the hips), anyone lying flat with a neck and each arm on its own side; nothing floats, sinks, slides or bobs; legs the same length. Look: feet, seat or body, first and last frame of each shot. Tool: lying.py.
+- P7 (11) Weight rests where it should: feet on the ground, seated people on the seat with thighs and a lap (never knee balls beside the hips; a fault from the film after Blessed), anyone lying flat with a neck and each arm on its own side; nothing floats, sinks, slides or bobs; legs the same length. Look: feet, seat or body, first and last frame of each shot. Tool: lying.py.
 - P1 (10) Every hand that holds or rests on something touches it: no gap, no hover, nothing through the fingers; the prop sits the right way round in the hand. Look: each hand on a prop, full size, every view. Tool: handcheck (held), kitchecks.rests.
 - P8 (10) Turned, from behind or mirrored, the body still makes sense: face and body point the same way, hands on the right sides, nothing held in front drawn over the back or wrapped round it. Look: each person in every view the film uses. Tool: views (AVOID lists).
 - P3 (8) Arms bend only at the elbow, the right way, by a natural amount; no rubber or broken arm; upper arm and forearm keep their length. Look: arms at both ends of each move.
@@ -35,7 +35,7 @@ the helper still looks). The number in brackets is how many of Sam's notes the l
 - P6 (7) Hands read as hands (ball hands are the house style, Sam 13 Nov: never a fault): a point shows one finger out along the forearm (rule 41); no hand lost behind a prop or body where it should show. Look: each hand, full size. Tool: handcheck.
 - P10 (6) No body passes through another person, prop or set at a hit, step or touch; contact looks like touch. Look: frames at each contact. Tool: clipcheck.
 - P12 (6) Mouths move only on that person's words, close between lines, and there is one mouth, always. Look: frames labelled with who speaks. Tool: the mouth check.
-- P11 (5) Each head sits on a neck of believable length (no neck is a fault, Sam 13 Nov) and is the right size for the body and for any helmet or hood. Look: head and neck, full size.
+- P11 (5) Each head sits on a neck of believable length (no neck is a fault from the film after Blessed, Sam 13 Nov) and is the right size for the body and for any helmet or hood. Look: head and neck, full size.
 - P13 (4) Clothes fit the body: a pattern runs to every edge and onto the sleeves in every view; cuffs join their sleeve; wrists come out of the sleeve end. Look: sleeves and pattern edges, full size, every view.
 - P14 (3) Eyes stay whole: the pupil, iris and shine sit inside the eye's outline at every size and glance, on people and creatures alike; nothing spills onto the lid or face. Look: each face crop, full size, at its hardest glance. Tool: eyekit.
 
