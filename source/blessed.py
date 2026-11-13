@@ -206,7 +206,7 @@ PLAN = dict(CEIL=3.0, ROOMS={v: (_PX[v] - 6.0, 0.0, _PX[v] + 6.0, 18.0) for v in
             PEOPLE={}, CAMS={v: dict(pos=(_PX[v], 1.6, 1.0), look=(_PX[v], 1.6, 6.0)) for v in ST.BACK}, GROUPS={})
 
 # What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
-HOOK = ('The 5 stages of being blessed', {'y': 385, 'tilt': -7})   # Sam, 13 Nov: the sign-off's diagonal     # brief 17 (Claude's pick); over the court's upper windows, clear
+HOOK = ('The 5 stages of feeling blessed', {'y': 385, 'tilt': -7})   # Sam, 13 Nov: the sign-off's diagonal     # brief 17 (Claude's pick); over the court's upper windows, clear
 #                                                   of the sign and his hair (rule 75, measured 11 Nov)
 SUBS_IN_PICTURE = True
 PIECE_FIX = {2: {2: 2.9, 3: 4.24, 4: 5.48, 5: 6.4, 6: 7.35}, 4: {1: 3.2, 2: 4.47},
