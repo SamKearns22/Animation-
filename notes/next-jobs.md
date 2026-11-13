@@ -10,6 +10,9 @@
   replay (w06, w07, w01, w02; count tries vs his five chats), the name test (namer helpers), a kittest; send Sam
   both sheets. Then the critic bench (item 3, Opus medium).
 - **Needs Sam:** nothing until the face sheets.
+- **OVERNIGHT RUN (Sam, 13 Nov 23:25 UTC): read `notes/overnight-run.md` first.** Order Q, critic bench, rounds-read-a-page,
+  then people, places, moves, rough command; test only on Blessed (never Protest Tiers); each job may reach 150% of its
+  estimate, then hard stop, `notes/morning-report.md`, next job. Face tool chain runs on its own.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
 - **Open rule requests:** none.
 - **For Claude:** run `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg

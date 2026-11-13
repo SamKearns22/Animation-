@@ -68,3 +68,5 @@ counting tries against his five chats.
 7 new people, 8 places and a new famous face. **A typical film (3 new people, 2 places, no new famous face): about
 15-18%.** So 15% is in reach for a typical film and not for one of Blessed's size; Job N says so at planning.
 Uncertain: the 11 Nov build split is estimated (the app can't show those chats); each saving is about +-30%.
+
+**Sam (13 Nov, 23:25):** test everything on Blessed, never Protest Tiers (no finished cast or place); order Q, 3, 6, then 4, 5, 7, 1; each job to 150% of its estimate, then a hard stop and a morning report. See `notes/overnight-run.md`.
