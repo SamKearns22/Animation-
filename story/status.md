@@ -1,3 +1,3 @@
-Overnight run (Sam, 13 Nov): Job Q done; critic bench next. Face tool stopped at its budget (~5.3%): Burnham passes the check, reads young.
-Now: overnight chain on the critic bench (Opus medium); no face chat until Sam's Y in the morning report.
-Waiting: Sam's Ys in notes/morning-report.md (handover check line; one more face chat).
+Face tool: Sam added 100% to its budget (stop 7.5%); Burnham passes the check but reads young; face chat 3 opened.
+Now: face chat 3 (Opus high): age lines, name test, Badenoch, Walliams replay, kittest, sheets to Sam. Overnight chain: critic bench.
+Waiting: Sam's Y in notes/morning-report.md (the handover check line).

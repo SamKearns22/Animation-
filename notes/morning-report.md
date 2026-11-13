@@ -14,5 +14,4 @@
 - **Works:** Burnham's three heads pass the check (68%, 77%, 71%; none the wrong way; first of 14), 2.5 min a person.
 - **Left:** by eye Burnham still reads young and round (no cheek folds or crow's feet; no kit piece draws them, new);
   the name test, Badenoch (braids), the Walliams replay, the kittest, sending you the three sheets. About 2% more.
-- **Decide:** go on with one more face chat (Opus high, about 2%), after the overnight jobs? My pick: Y (the tool is
-  what makes every famous face cheaper; Walliams' face alone took 18.6% of a week). No sheet sent yet: none is ready.
+- **Decided (Sam, 13 Nov):** "another 100% to the budget. Continue": stop now 7.5%; face chat 3 (Opus high) opened.

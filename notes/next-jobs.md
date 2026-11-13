@@ -5,12 +5,14 @@
   `handover_drops` passes on Blessed's real chat 5 messages and notes files). The `log` hook (UserPromptSubmit) saves
   Sam's typed messages to `notes/ledger/sam/CHAT.md` and pushes. `end` / `start PARENT --film F` flag his asks not
   carried by a notes line written after he spoke, unanswered messages, unsent clips, an override he never typed.
-- **Face tool (item 2): HARD STOP at its 150% budget** (chat 1 2.58% + chat 2 ~2.7% = ~5.3% vs 4.5%). The six faults
-  fixed; Burnham's A/B/C pass the check (68/77/71%, first of 14) but read young and round. What is left and the pick:
-  `notes/morning-report.md`, "Face tool". No face chat runs until Sam says.
+- **Face tool (item 2): Sam, 13 Nov: "another 100% to the budget. Continue"** (stop now 7.5% of a week; spent ~5.6%
+  in chats 1-2). Burnham's A/B/C pass the check (68/77/71%, first of 14) but read young and round.
+  **Next: face chat 3, Opus high:** 1) age lines from the photo (cheek folds, crow's feet; no kit piece, new), re-run
+  Burnham (a look change can drop a pass: re-run after each), name test (namer helpers) on A/B/C; 2) Badenoch (braids:
+  hair mask down past the jaw); 3) Walliams replay (w06, w07, w01, w02; tries vs his five chats); 4) kittest
+  (eyes swapped for the average fail `verdict`, the tuned head passes; `_others` finds 13+); 5) send Sam the 3 sheets.
 - **Next: overnight chat 2, Opus medium: the critic bench (ranking item 3, `notes/ranking-list.md`).** Test on Blessed.
 - **Needs Sam:** morning report: Y to the CLAUDE.md line that makes chats run `handover.py end`/`start` (pick Y);
-  the face tool's go-on (pick Y, one more chat).
 - **OVERNIGHT RUN (Sam, 13 Nov 23:25 UTC): read `notes/overnight-run.md` first.** Order Q, critic bench, rounds-read-a-page,
   then people, places, moves, rough command; test only on Blessed (never Protest Tiers); each job may reach 150% of its
   estimate, then hard stop, `notes/morning-report.md`, next job.
