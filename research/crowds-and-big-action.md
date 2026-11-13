@@ -1,6 +1,7 @@
 # Framing crowds, big vistas and wide action: lessons for every film (framing research job, 12 Nov)
 
-A PROPOSAL for the whole project (rule 86, Learn first). **Nothing here is a rule until Sam picks numbers.**
+**Best-practice guidelines, not rules (Sam, 13 Nov):** read only when a shot has a mass crowd, a big vista or wide
+action (the Plan pack points here). Nothing below goes into the rulebook or the checks.
 Built from the sources in `notes/framing-research.md` "Findings" and the 16-frame study sheet
 `research/framing-study.jpg` (frame numbers below are the sheet's). The rulebook and `guides/kit-catalogue.md` were
 searched first: each lesson names the closest rule, check or kit piece and says what is new. The first pass's
