@@ -1,20 +1,66 @@
 # Cost diagnosis job (Sam, 13 Nov): why each step got expensive, and how to make it cheap AND good
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 85 (cost watch), 24 (estimates from real costs), 74.
-- **Done (13 Nov, cost job chat 1 of 8, Opus high): Job A.** The record now holds the app's real figures (below).
-  Fixed: the Stop hook's ledger push from a detached copy now goes to the chat's own branch `claude/chat-XXXXXXXX`
-  (tested); rows carry the app session id so a real figure is never overwritten by an estimate.
-- **Next: chat 2 of 8, Opus high: Jobs B then C.** Measure with `list_events` filtered (`kinds=["result"]` for
-  modelUsage; `["assistant"]` pages for what each step did), never whole transcripts: chat 1 hit amber at ~150k
-  history just from 45 `get_session` calls (1.7k tokens each). Hand over before 200k.
-- **Needs Sam:** nothing until Job C's numbered Y/N message.
-- **Read:** this file only; `notes/ledger/app-costs.tsv` for the numbers.
-- **Open rule requests:** none.
-- **For Claude:** `python3 source/ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv` (one line per
-  chat: film, session id without `session_`, created, title, cost_usd, cache read M, cache write M, output k, history
-  k, model). To add a chat: `get_session` it, append a line, run `ledger.py app`. Blessed keeps 6 estimate rows (11 Nov,
-  chats not in the app: earlier account) marked keep.
+- **Rules that bite next:** 85 (cost watch), 19 (short printouts), 89 (critique).
+- **Done (13 Nov, chat 2 of 8, Opus high): Jobs B and C.** Results below; the numbered message sent to Sam.
+- **Next:** nothing runs until Sam answers. On his numbers: one chat, **Opus medium** (building from a clear plan),
+  makes only the Y'd changes (each says which rule or tool it edits), tests them on Blessed's next round, hands over.
+- **Needs Sam:** Y/N on Job C's 6 numbered items (below).
+- **Read:** this file's "Job C proposals" only.
+- **Open rule requests:** Job C 1-6 (proposed, not written).
+- **For Claude:** `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Job B's numbers: prices fitted
+  to the app's own per-chat figures (Opus 36 chats, Sonnet 6, fit within 1 cent); a per-action price from one page of
+  `list_events kinds=["assistant"]` (r2 chat 2); chat 5's last `result` (model_usage_since_last_result). Paging a
+  chat's events costs ~1.2k tokens an event: never page a whole chat; one page per question.
+
+## Job B results (13 Nov): where each step's money goes
+- **Prices, fitted to the app's real chat costs:** Opus re-read $0.22/M tokens, write $6.0/M, output $19.8/M;
+  Sonnet $0.106, $3.94, $8.2. **Sonnet is about 2x cheaper a word, not 50x:** Job A's Sonnet chats were cheap because
+  they were short (90-130k, a few actions), not because of the model. Chat size matters more than model.
+- **Every action re-reads the whole history.** Measured (r2 chat 2, at 215k): each action, even an `ls`, costs about
+  4.7 cents before it does anything; at 400k (chat 5) about 9 cents. A median Opus film chat is ~78 actions ending
+  ~220k, about $5.6: the app's own 80k re-read on every action ~25%; start-up reading ~15%; work history (code
+  reads, printouts, pictures, each action adding 0.5-1.6k) ~25%; output (code, thinking, replies) ~20%; writes the rest.
+- **The steps that cost most (Blessed, real figures):**
+  1. **Rework of faults that came back: about 15% of a week.** Walliams' face took 5 chats, $31.7 (10.9%). Notes N1,
+     N6, N8, N11 were repeats; the round fixing them (chat 2 of 8, $8.24) and animatic 4's stop ($2.67 + reruns) ~4%.
+  2. **Running long and bundling stages: chat 5, $27.73 (9.6%).** Sam's "don't stop for any Y" was read as a cost
+     'override', so it bundled 4 stages (seated rebuild, van sheet, note 48, animatic 3) and ran to 414k. A model change
+     inside it re-paid the whole history: the switch to Sonnet rewrote 364k ($1.43); one action on the app's fallback
+     model rewrote 414k ($4.37). The same ~290 actions in chats of 200k or less: about $16.7, **saving ~$11 (4%)**.
+  3. **Critique helpers: about a quarter of every build chat** (Sam's 11 Nov measure, rule 85); 7 passes on Blessed,
+     6-17 faults each, most re-listed every pass as "named, not changed" (ball hands, no necks, no thighs).
+  4. **Small actions:** most of a chat's ~78 actions add under 2k each (look at a log, `ls`, one grep, a second
+     commit to fix the first handover). Each still pays the full re-read.
+  5. Pictures and pre-flight are cheap in tokens (a sheet ~1.6k; Blessed's pre-flight 17 faults, ~1.9k filtered).
+- **Did the checks catch what Sam later named? Yes, twice, and both were let through:**
+  - Pre-flight (chat 3): "gates2 50.25 s: elbow folded back across the body" = Sam's N1, printed under "allowed: a
+    skeleton arm, checked in 3D", so it passed; the film's own arm check then stopped animatic 4 a day later.
+  - Critique round 3: "pool player upright, cue flat... pool table reads as desk", and hunt 2 "grey figure sliced at
+    left" = Sam's N8 ("a squashed person who clips through a pool table"); the fix only lengthened the cue.
+  - So the money is lost after the catch, not in it: a named fault left open costs a full notes round (~2-3%).
+  - What no check tests: one body passing through a set object while moving (N8, and note 8 before it).
+
+## Job C proposals (13 Nov; sent to Sam as one numbered message; nothing written until his Y)
+1. **A caught fault is fixed or told, never waved through.** Pre-flight stops on an elbow folded back across the body
+   (the 3D 'allowed' covers only foreshortening); `critique.py fixed` prints every fault left open as a ready
+   "Checks:" line. Saves ~2-3% a film (N1, N8). Risk: more Checks lines. Replaces: CLAUDE.md's by-hand "never send
+   something a check flagged without saying so" becomes a check (views.py, critique.py); no new rule.
+2. **"Just go" never skips the hand-over.** At red the chat opens the next one, which carries on without asking.
+   Saves ~4% (chat 5). Risk: one more chat start (~$0.5). Replaces: CLAUDE.md "Just go ... never the checks" gains
+   "or the hand-over"; rule 85 unchanged.
+3. **One step, one command.** The film's round script does fix, clip, sheet, checks and save in one run with a short
+   summary. A third fewer actions saves ~$1 a chat, ~2.5% a 7-chat film. Risk: a failed run reruns more. Replaces:
+   rule 19 widened ("checks print a short summary" becomes "each step is one command with a short summary").
+4. **Ball hands, no necks, no thighs: fix or house style?** Y = house style: the critique stops listing them (saves
+   reading and answering ~5 faults a pass). N = fixed once in the figure kit (one build job, ~2%), then checked.
+   Replaces: a line in `guides/critique-checklist.md`.
+5. **No passing through things.** Rule 83 widened from painted objects to people and props in every frame;
+   pre-flight tests it (N8 kind). Build ~1% once; saves a notes round (~2-3%) each time. Replaces: rule 83, merged.
+6. **Model changes only by hand-over.** Switching a long chat's model re-pays its history (chat 5: $5.80, 2%).
+   If you want Sonnet, say "hand over to Sonnet". Replaces: CLAUDE.md's "change model only by starting a new chat",
+   which gains the reason; no new line.
+- **Together:** a Blessed-sized film at ~7-8 chats of $4-5 with no repeat round is $30-40, 10-14% of a week.
 
 ## Job A results (13 Nov, real app figures, list $; % of a week at WEEK_USD 290)
 - **Blessed 44.7%** (16 chats from the app $93.6 = 32.3%, plus 12.4% estimated for 11 Nov chats the app cannot show);
