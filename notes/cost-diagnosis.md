@@ -1,18 +1,35 @@
 # Cost diagnosis job (Sam, 13 Nov): why each step got expensive, and how to make it cheap AND good
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 19 (one command, short summary: `round.py`), 85 (cost watch), 89 (critique).
+- **Rules that bite next:** 19 (PASS/FAULT/COULD NOT TEST; one command, short summary), 85 (cost watch), 89.
 - **Done (13 Nov, chat 3 of 8, Opus medium): Job C 1, 2, 3, 4, 6 written and tested on Blessed (no film render).**
   1: an elbow folded back across the body stops pre-flight even under the 'skeleton arm' allow (side-on arms excepted:
   no 'across' to read); ARM_FOLD_NAMED faults and `critique.py fixed ... --left N` print a ready "Checks:" line.
   Whole Blessed swept every 0.5 s: clean. 2, 6: CLAUDE.md. 3: rule 19 widened + `source/round.py`. 4: checklist P6,
   P7, P11. Also repaired a half-merged `notes/ledger/blessed.json` on the main line (both entries kept).
-- **Next:** nothing in this job until Sam answers 5. Blessed's own chain carries on (see `story/status.md`).
-- **Needs Sam:** Y/N on 5's new plan (pre-flight says COULD NOT TEST for a film with people and no solids; Blessed
-  gets its list); necks and thighs in Blessed now, or from the next film.
-- **Read (when 5 is a Y):** this file's "Job C proposals" item 5 and `clipcheck.py`'s map only. Opus medium.
-- **Open rule requests:** 5 (plan, waiting).
-- **For Claude:** figure.NEVER_ALLOWED, figure.named(); preflight sets NAMED_FAULTS_FILE; critique.checks_line().
+- **Sam (13 Nov):** Y to 5's new plan; necks and thighs fixed from the NEXT film, not Blessed. Y to "Never again"
+  1-5 (below; rules 24, 85, 19 and CLAUDE.md already written; their tools not built).
+- **Next: chat 4 of 8, Opus MEDIUM (building from a clear plan):** build 5 (pre-flight says COULD NOT TEST and stops
+  when a film with people has no `solids`/`layers`; give Blessed its list) and the "Never again" tools: the ledger
+  stops on real figures at the budget and every 5% (no alarms_off); COULD NOT TEST stops; the after-film comparison
+  line. Test on Blessed's files without rendering a film. Hand over.
+- **Needs Sam:** nothing.
+- **Read:** this file's "Job C proposals" 5 and "Never again"; then only the lines each tool edits (`codemap.py`).
+- **Open rule requests:** none unwritten (5 and Never again are written; their tools are chat 4's).
+- **For Claude:** figure.NEVER_ALLOWED, figure.named(); preflight sets NAMED_FAULTS_FILE; critique.checks_line();
+  `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Never page a whole chat's events.
+
+## Never again (proposed 13 Nov; Sam asked "how can we ensure this never happens again?")
+1. Real money only: every handover adds its chat's real app cost to the film; the bottom lines show spent vs budget.
+   Replaces: rule 85's estimate-based ledger (Job A built the reading).
+2. The budget stops the chain on real figures: once at the budget, then every 5% over; it can be answered, not
+   switched off. Replaces: rule 24's forecast alarm.
+3. Process changes pay for themselves: every new rule, check, tool or step names its cost per film; after the next
+   film, kept only if that film was cheaper or drew fewer notes; adding a step removes one. Widens CLAUDE.md's
+   "the rulebook never grows" to tools and steps.
+4. Every check passes, fails or says "couldn't test"; couldn't test stops the animatic. Generalises 5. Rule 89.
+5. After each film, one line: real cost against the last three films; over 1.5x their average, the next chat's
+   first job is finding why, before film work. Replaces the ledger's 10-line audit.
 
 ## Job B results (13 Nov): where each step's money goes
 - **Prices, fitted to the app's real chat costs:** Opus re-read $0.22/M tokens, write $6.0/M, output $19.8/M;

@@ -52,7 +52,8 @@ at session start (`.claude/hooks/setup.sh`).
 - **"I want a rule" (or "every film", "from now on", "always") means a permanent rule for all films:** reply with the
   exact wording and place; on my yes, write it in that same chat. Each rule is written once: in the rulebook with its
   check, or here if it's about working with me (listed in the rulebook's last table).
-- **Every new rule replaces or merges an old one, or turns a by-hand rule into a check:** the rulebook never grows.
+- **Something new? First improve the check that missed it; then merge overlapping checks; remove a step only if it
+  caught nothing in three films, with my Y on a "Lost:" line.** It stays if the next film is cheaper or gets fewer notes.
   **Before suggesting anything** (rule, tool or idea), search the rulebook and `guides/kit-catalogue.md`; each
   suggestion names the closest rule or tool and says what is new, or is dropped (Sam, 12 Nov).
 - **Before every handover, search the film's notes for rule requests not yet written** and list them.
