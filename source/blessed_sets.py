@@ -974,6 +974,8 @@ def _restyle(ND):
     if _RESTYLED:
         return
     _RESTYLED.append(1)
+    for k in ('left1', 'left2'):                      # Sam, 13 Nov (animatic 3): remove the left-hand chair at the
+        ND.SEATS.pop(k, None)                         # news desk (this film's process only)
     for k, v in dict(DISC_BLUE=(184, 18, 24), DISC_MID=(206, 40, 44), DISC_PALE=(232, 120, 120),
                      DISC_NAVY=(70, 10, 14), DISC_RED=(250, 250, 250), DISC_ARC=(236, 226, 226),
                      DESK_BLUE=(170, 20, 26), DESK_LIGHT=(206, 36, 42), DESK_TOP=(236, 232, 232),
@@ -1157,16 +1159,13 @@ def cot_top(img, cam, t=0.0):
     x0, y0, x1, y1 = COT_BED
     p.poly(quad(x0 - 34, y0 - 40, x1 + 34, y1 + 40), STEEL, INK, 2.6)                # the steel frame
     p.poly(quad(x0, y0, x1, y1), MATT, INK, 2.4)                                     # the thin blue mattress
-    p.poly(curve([(x0 + 150, y0 + 40), (x1 - 150, y0 + 34), (x1 - 130, y0 + 290), (x0 + 130, y0 + 296)], 2),
-           (236, 234, 226), INK, 2.4)                                                 # the flat pillow
+    px0, px1, py0, py1 = x0 + 110, x1 - 110, y0 + 36, y0 + 290                         # the flat pillow: a plain
+    p.poly(curve([(px0 + 26, py0), (px1 - 26, py0 - 4), (px1, py0 + 30), (px1 + 6, py1 - 40), (px1 - 22, py1),
+                  (px0 + 22, py1 + 4), (px0 - 6, py1 - 40), (px0, py0 + 32)], 3), (236, 234, 226), INK, 2.4)   # soft
+    #                                                  rectangle, rounded corners (Sam, 13 Nov: 'hexagonal pillow?')
     p.line([(x0 + 80, y0 + 170), (x0 + 150, y0 + 178)], (206, 204, 196), 2.0)        # a crease in it
-    bx, by = 845, 1120                                                                 # the Bible on the sheet, by his hand
-    pts = [(bx - 62, by - 88), (bx + 58, by - 80), (bx + 66, by + 86), (bx - 54, by + 92)]
-    p.poly(pts, (40, 36, 40), INK, 2.4)
-    p.line([(bx - 46, by - 74), (bx - 40, by + 80)], (70, 64, 66), 2.0)               # the spine's edge
-    g = (214, 176, 70)
-    p.poly([(bx - 2, by - 40), (bx + 8, by - 40), (bx + 11, by + 34), (bx + 1, by + 34)], g, None)
-    p.poly([(bx - 22, by - 16), (bx + 30, by - 13), (bx + 30, by - 4), (bx - 22, by - 7)], g, None)
+    # (chat 5, Sam 13 Nov: the Bible the film draws under his hand is the only one; a second painted here, a little
+    #  off it, read as a distracting shadow)
 
 
 def cot_top_front(img, cam, t=0.0):

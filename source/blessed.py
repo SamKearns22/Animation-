@@ -250,7 +250,7 @@ LINE_OK = [('brand', 'line weight', 540, 289),                 # his moustache: 
            ('juror8', 'edge with no line', 509, 195), ('juror8', 'edge with no line', 569, 195),   # strokes, not shapes
            ('juror9', 'edge with no line', 508, 197), ('juror9', 'edge with no line', 570, 197),   # (as Ad-Vanced
            ('juror11', 'edge with no line', 503, 200), ('juror11', 'edge with no line', 576, 200)]   # Notice's brows)
-STILL_OK = ()                                     # nobody is meant to hold dead still
+STILL_OK = (f"brand [tvroom {T['tvroom']:.1f}]",)   # Sam, 13 Nov: his head dead still and dead-eyed in the TV room
 
 GUARDS = {'guard1': BC.OFFICER,                   # two different officers (pass 2: twins)
           'guard2': dict(BC.OFFICER, who='guard2', skin=(236, 196, 170), hair='bob', hair_c=(170, 120, 70), shoulders=150,
@@ -971,7 +971,7 @@ def cot_pose(sp, t):
     return j
 
 
-COT_BIBLE_HAND = (250.0, 440.0, 30.0)   # on the bottom of the cover: the cross shows above the hand
+COT_BIBLE_HAND = (292.0, 478.0, 30.0)   # on the cover's lower outer corner (Sam, 13 Nov: not through its centre)
 
 
 def _cot_cross(sw):
@@ -1049,31 +1049,27 @@ def pool_cue(img, cam, mark, sp, pts):
 
 
 def tv_pose(sp, t):
-    """Chat 5: on the sitting kit (upright, hands on his thighs, his blue plastic chair), front-on with knees and
-    lap (he read as standing). Sits up on 'amazed', leans in on 'overjoyed'; before that, note 43's life."""
+    """Chat 5: on the sitting kit (upright, hands on the seat's edges), front-on with knees and lap. Sam, 13 Nov
+    (animatic 3): 'explicit instructions were a still head and dead-eyed staring'. Note 43's 'head staring and still'
+    was read as a fault in chats 2-4 and given life (nods, tilts, shifts, a breath); it was the brief. Now: the head,
+    body and shoulders are DEAD STILL until 'amazed' (only the eyes drift up to the screen, with two slow blinks);
+    the push's acting (sits up, leans in) takes over from there."""
     import sitting as SIT
     lean = _keys(t, [(T['amazed'], -6.0), (T['amazed'] + 0.6, 0.0), (T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, 6.0)])
-    life = 1.0 - _ease(_ramp(t, T['amazed'] - 0.3, T['amazed']))   # the push's acting takes over at 'amazed'
-    lean += life * filmkit.shifts(t, seed=73, amount=2.0, hold=(1.2, 2.0)) + 0.8 * F.breath(t, 3.2, 1.0)
     seat = SIT.Seat('plastic', width=150)          # a bucket seat: its edges show either side of him
     spec = SIT.spec_upright(sp, seat)
-    for sd in 'LR':                                  # hands on the seat's edges beside his thighs (chat 5 critique:
-        spec['arms'][sd] = SIT.arm_free((110.0, V.HIP_Y - 30, 130.0), (0.6, 0.3, -1.0), 'palm')   # not at the crotch)
+    for sd in 'LR':                                  # hands on the seat's edges beside his thighs
+        spec['arms'][sd] = SIT.arm_free((110.0, V.HIP_Y - 30, 130.0), (0.6, 0.3, -1.0), 'palm')
     j = SIT.realize(sp, seat, dict(spec, lean=lean))
-    j['legs_over'] = {'L': 0.4, 'R': 0.4}            # the thighs over the jumper's hem: a lap (he read as standing)
+    j['legs_over'] = {'L': 0.4, 'R': 0.4}            # the thighs over the jumper's hem: a lap
     j['head_dy'] = _keys(t, [(T['amazed'], 6.0), (T['amazed'] + 0.6, 0.0)])
     j['nod'] = _keys(t, [(T['overjoyed'], 0.0), (T['overjoyed'] + 0.6, -1.0)])
-    # note 43 (head staring and still): his head lifts with his eyes to the screen, settles into small slack tilts
-    #   and weight shifts, and he breathes; a slow, heavy blink (tv_face)
-    j['nod'] += life * (-2.5 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8)) +
-                        filmkit.shifts(t, seed=71, amount=1.0, hold=(1.0, 1.7)))
-    j['head_roll'] = j.get('head_roll', 0.0) + life * filmkit.shifts(t, seed=72, amount=4.0, hold=(0.9, 1.5))
     return j
 
 
 def tv_blink(t):
     """Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones."""
-    return any(b <= t < b + 0.3 for b in (T['tvroom'] + 0.35, T['tvroom'] + 2.05, T['push'] + 0.6))
+    return any(b <= t < b + 0.3 for b in (T['push'] + 0.6,))   # Sam, 13 Nov: no blinks in the TV room, a dead-eyed stare
 
 
 # --- gates: swaggers out of the wicket door (wide), arms flung up and open, chin high, on "Blessed!"; then closer,

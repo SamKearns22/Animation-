@@ -80,7 +80,7 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.16, squint=0.0, mouth='lips'
          'dejected': dict(brow=0.004, frown=-0.05, lid=0.28, squint=0.15, mouth='lips', smile=-0.8, tears=True),
          # Sam's note 22: dead-eyed in the TV room, no tears: heavy lids, a blank, slack mouth
          'deadeyed': dict(brow=0.0, frown=0.0, lid=0.4, squint=0.0, mouth='lips', smile=-0.15),
-         'phone': dict(brow=0.004, frown=-0.05, lid=0.04, squint=0.0, mouth='lips', smile=-0.8, tears=True),   # open eyes
+         'phone': dict(brow=0.004, frown=-0.05, lid=0.04, squint=0.0, mouth='lips', smile=-0.8),   # open eyes; no tears (Sam, 13 Nov: they read as snot)
          'stern': dict(brow=-0.02, frown=0.05, lid=0.22, squint=0.1, mouth='lips', smile=-0.4),   # the judge's bang
          'sceptic': dict(brow=0.035, frown=0.05, lid=0.26, squint=0.15, mouth='lips', smile=-0.5),   # note 36: the judge
          'amazed': dict(brow=0.06, frown=0.0, lid=0.0, squint=0.0, mouth='gasp'),

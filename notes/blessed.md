@@ -109,6 +109,7 @@ Length: about 101 words at Sam's pace (3.3 a second) is about 31 s, plus montage
 ## Exceptions (rule 13): one row each; pre-flight refuses a setting with no row here
 | check | who | why | looked at full size |
 |---|---|---|---|
+| STILL_OK | brand [tvroom] | Sam's brief: in the TV room his head and body are dead still and he stares dead-eyed (notes 22, 43; only his eyes drift up to the screen and he blinks slowly) | chat 5, 13 Nov (frames 35 and 37 s) |
 | ALLOWED_POPS | walliams | gone in through the wicket door (the doorway clips him as he is yanked inside, note 32) | chat 3, 12 Nov; gates2 frames chat 5, 13 Nov |
 | HANDS_OK | Journalist* | the press from behind: each hand is under the phone or camera they hold up, drawn over it (arrival and gates) | chat 4, 12 Nov |
 | HANDS_OK | Russell Brand | arrival: hand on his heart (the 'prop' is only the sleeve's ink edge), his hair over the arm reads as a seam; van: hands clasped between his knees, one fist over the other | chat 4, 12 Nov (the van pose kept from animatic 2: Sam, 13 Nov) |
