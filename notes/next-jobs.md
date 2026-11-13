@@ -26,6 +26,15 @@
   faces), and which tool improvements would bring it closer (never trimming the joke or reusing
   old content: CLAUDE.md, Sam 13 Nov). Blessed (7 people, 8 places, one
   likeness face) is the test case: the plan should have said "about 25-35%, here is why, and these tools would close the gap".
+- **Job P, the ranking job (Opus high, ~2-3%; logged, not started).** One chat; output one ranked list of jobs to bring
+  films toward 15%, from the real record (every note, every fault caught or missed, every chat's cost, stage cost vs
+  plan, on the true weekly figure, Job O). Headings: catch faults before Sam sees them; better tools that work less hard;
+  making new people, places and moves faster and surer; reading less. Each job: build cost, saving per film (measured),
+  films to pay back, "Lost:" line. Ends with what a Blessed-sized film would cost if all were done. Never: trimming the
+  joke or repeating old content (CLAUDE.md). **Headline item: describe, don't code.** Blessed needed ~5,500 lines of its
+  own code (cast 1,144, sets 1,491, film 2,050, others); a new person, place or common move should be a short description
+  the engine draws from tested parts (figure kit, likeness, set painter joined up). Price it honestly, what it would have
+  saved on Blessed and the last 10 films, and a staged plan, people first.
 
 ## Rule 13/72 checks (tool chat 1 of 8, Opus high; Sam Y 12 Nov, about 1.5%): DONE 12 Nov, about 1.4%
 - Built: `waivers.py` (the exceptions list: pre-flight refuses any `*_OK`/`ALLOWED_POPS` entry with no row in the notes'
