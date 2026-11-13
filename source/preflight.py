@@ -501,7 +501,8 @@ def main():
         del F.LOG[logged:]
     else:
         print('picture checks: not run here; the animatic render runs them while it draws (or add --pictures)')
-    del F.LOG[logged:]
+    if pictures:
+        del F.LOG[logged:]
     import contextlib
     import io
     import report                               # rule 19: a short summary; every fault in the file
