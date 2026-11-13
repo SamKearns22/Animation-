@@ -1,20 +1,24 @@
 # Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
-- **Rules that bite next:** 49 (likeness pack: 3+ straight-on, close, not smiling, current), 11 (roughs), 85.
-- **Done (13 Nov, chat 2 of 8):** Job P (`notes/ranking-list.md`); Sam: Y to all 10. Written: rule 11 (a rough of every
-  new thing), critique lines S7-S9, Protest Tiers' research booked as 'plan extras', Blessed's notes archived
-  (posted), its music confirmed Pixabay. Chat limits stay 3%/5% ($5.13/$8.55). Job N waits for the next film's plan.
-- **Next: chat 1 of 8 (count restarted), Opus high: the face tool (ranking item 2)**, practised on Kemi Badenoch and
-  Andy Burnham (from scratch: not `burnham.py`'s head, card or photos), then a Walliams replay as a test only.
-  Photos: one slow news search, 5+ each (3 straight-on, close, not smiling, current; 1-2 three-quarter); one failed
-  try per source, then ask Sam. Output: three heads beside the photos on one sheet each, Sam picks; count tries.
-  Then the critic bench (item 3, Opus medium) and the people kit on Protest Tiers' cast (item 4, Opus high).
-- **Needs Sam:** nothing until the face sheets (and Protest Tiers' Hook Text and sound, no rush).
-- **Read:** this section; `notes/ranking-list.md` item 2 and Sam's answers; `guides/job-packs.md` "A tool job";
-  rule 49; kit catalogue rows for `likeness.py`, `nametest.py`, `beardkit.py`.
+- **Newest work:** `claude/face-tool-c1` (also pushed to the main line).
+- **Rules that bite next:** 49 (likeness pack and check), 86 (every tool gets a kittest), 85 (cost watch).
+- **Done (chat 1 of 8, Opus high, amber at 2.1%):** photo packs filed (`references/faces/burnham/` a01-a05,
+  `references/faces/badenoch/` k01-k05: news and Parliament portraits; Burnham now wears thick dark glasses, his
+  trademark). The face tool `source/facepick.py` built and runs end to end on Burnham in 40 s: card, traced hair,
+  neck and shoulders, glasses from the photo, three heads (A/B/C on the unsure measures), tuning loop, check, sheet.
+  First sheet: 65/64/29%, first in a 4-photo line-up, but none passes (timid and wrong-way measures); not sent to Sam.
+- **Next: chat 2 of 8, Opus high:** finish the face tool (list in For Claude), then Badenoch, then the Walliams
+  replay (w06, w07, w01, w02; count tries vs his five chats), the name test (namer helpers), a kittest; send Sam
+  both sheets. Then the critic bench (item 3, Opus medium).
+- **Needs Sam:** nothing until the face sheets.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
 - **Open rule requests:** none.
-- **For Claude:** new tool file, not a film file; kittest it. Protest Tiers' forecast line misreads (1% plan share) after
-  'plan extras': harmless. chat-gbmazspz's ledger row (579e6f3d) left unmerged (Job O rebuilt from the app).
-
+- **For Claude:** run `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg
+  .../a02-front-national2026.jpg .../a03-front-smiling-ap2026.jpg --tq .../a04... .../a05...`. Faults to fix:
+  1 tune() aims at the 3-photo card but check() scores the first photo only: score the tune on what check scores;
+  5 damped rounds do not converge (more rounds, keep the best by check's own pass rule). 2 glasses too big and high:
+  scale lenses by the cartoon eye width, not half the eye gap. 3 hair a flat blob: two tones from the photo (grey
+  sides), a few strand lines. 4 skin too pink (`_flat` boosts saturation). 5 line-up only 4: `_others` should find
+  every film's front photos. 6 sheet's third phone tile cut off. Badenoch: braids (hair mask down past the jaw).
 ## Logged 13 Nov (Sam: log for now; not started). The one aim: films at 15% of a week, or as close as honestly possible
 - **Job O, true weekly figure (Sonnet, ~0.5%).** Sam: Blessed spent 80% of a week; our ledger counted 50.92% (WEEK_USD
   290). Set `WEEK_USD` in `.claude/hooks/costwatch.py` so Blessed's recorded dollars read 80% (first check the ledger

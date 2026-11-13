@@ -18,3 +18,21 @@
   `L.lie`/`L._fit`/`L.draw` as in `lying_flat.sheet`.
 
 
+
+# Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
+- **Rules that bite next:** 49 (likeness pack: 3+ straight-on, close, not smiling, current), 11 (roughs), 85.
+- **Done (13 Nov, chat 2 of 8):** Job P (`notes/ranking-list.md`); Sam: Y to all 10. Written: rule 11 (a rough of every
+  new thing), critique lines S7-S9, Protest Tiers' research booked as 'plan extras', Blessed's notes archived
+  (posted), its music confirmed Pixabay. Chat limits stay 3%/5% ($5.13/$8.55). Job N waits for the next film's plan.
+- **Next: chat 1 of 8 (count restarted), Opus high: the face tool (ranking item 2)**, practised on Kemi Badenoch and
+  Andy Burnham (from scratch: not `burnham.py`'s head, card or photos), then a Walliams replay as a test only.
+  Photos: one slow news search, 5+ each (3 straight-on, close, not smiling, current; 1-2 three-quarter); one failed
+  try per source, then ask Sam. Output: three heads beside the photos on one sheet each, Sam picks; count tries.
+  Then the critic bench (item 3, Opus medium) and the people kit on Protest Tiers' cast (item 4, Opus high).
+- **Needs Sam:** nothing until the face sheets (and Protest Tiers' Hook Text and sound, no rush).
+- **Read:** this section; `notes/ranking-list.md` item 2 and Sam's answers; `guides/job-packs.md` "A tool job";
+  rule 49; kit catalogue rows for `likeness.py`, `nametest.py`, `beardkit.py`.
+- **Open rule requests:** none.
+- **For Claude:** new tool file, not a film file; kittest it. Protest Tiers' forecast line misreads (1% plan share) after
+  'plan extras': harmless. chat-gbmazspz's ledger row (579e6f3d) left unmerged (Job O rebuilt from the app).
+
