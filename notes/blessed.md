@@ -9,7 +9,7 @@
 - **Needs Sam:** voice memo of the guard's line (note 48); his number on the rule requests below; Y/N on the new Walliams (sent; not waited on).
 - **Read:** guides/job-packs.md "Satire film" pack; this section; notes 22, 43, 48 in the table; `source/blessed.py` MAP (van, tvroom, gates shots).
 - **Sam (13 Nov) on the new Walliams with the temples fixed: "That's him. You did it!"** Face notes 25, 29, 47 closed.
-- **Open rule requests (chat 4, replacing its earlier rule-49 request; all merge into rule 49, nothing new):** (1) silhouette first: the head's outline WITH hair matches the photo's at phone size (box, pear, long) before any feature is touched; (2) push a plain-faced person's measures as hard as Brand's (x5-x8, not x2); (3) a bearded or stubbled head is measured on its clean-shaven twin, and likeness.py warns when it sees facial hair on the drawing (a by-hand rule turned into a check); (4) the blind name test is a tool, not a pass condition: it only works on trademark looks. Waiting for Sam's numbers.
+- **Open rule requests:** none. Sam said Y to all four (13 Nov); written into rule 49 (rulebook) and the kit catalogue's blind-test line. The facial-hair warning in likeness.py was tried and does NOT work (it cannot see a drawing's flat-grey beard), so check 3 stays a by-hand step: run `likeness.py check` on the head's `--clean` twin.
 - **For Claude:** the ledger's forecast alarm prints but alarms are OFF for Blessed (Sam, ledger.json alarms_off); ignore it, keep the per-chat amber/red handovers. Walliams: `blessed_walliams.py` SHAVE ('stubble' film look; `--clean` for checks), LOW, TUNE (measured 13 Nov), MOODS cock; before-sheet rendered from efc963b.
 
 ## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
