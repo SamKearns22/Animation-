@@ -73,7 +73,7 @@ def _lay(L):
     L['lip0'], L['lip13'], L['lip17'] = 0.765, 0.782, 0.808      # chat 4: the long gap nose to lip (his card)
     L['nw'] = max(L['nw'], 0.25)
     L['brow_y'] = L['eye_y'] - 0.048
-    L['mw'] = min(L['mw'], 2 * L['ecx'] * 0.98)          # the mouth about as wide as the pupils are apart
+    L['mw'] = min(L['mw'], 2 * L['ecx'] * 0.98)          # the mouth about as wide as the eye centres are apart
     return L
 
 

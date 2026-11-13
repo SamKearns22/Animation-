@@ -105,6 +105,10 @@ class Seat:
                          col=(122, 58, 52), top=(150, 76, 68)),
         'stool': dict(h=270, front=95, rear=-95, width=105, back_top=None, arms=None, cushion=0, swivel=False,
                       col=(128, 96, 64), top=(160, 124, 86)),
+        # a moulded plastic stacking chair (Blessed's TV room, chat 5): shell seat and back in one colour, four
+        # splayed steel legs (Seat('plastic', col=..., top=...) for another colour)
+        'plastic': dict(h=255, front=120, rear=-118, width=118, back_top=270, back_z=-78, arms=None, cushion=0,
+                        swivel=False, col=(62, 84, 136), top=(84, 108, 160), legs=(150, 154, 160)),
         # perched on a desk's corner (part 2): he stands beside the desk's front end, his left thigh up along its
         # top, the knee over its end and the shin hanging in front of it; the right leg stands. The desk runs away
         # from him on his left (its side at side_x).
@@ -171,17 +175,21 @@ class Seat:
                 for lz in (self.rear + 14, self.front - 14):
                     def leg(p, lx=lx, lz=lz):
                         a = V.project((lx, top + 30, lz + sh), yaw)[0]
-                        b = V.project((lx * (1.08 if self.kind == 'stool' else 1), floor, lz * (1.08 if self.kind == 'stool' else 1) + sh), yaw)[0]
-                        p.line([a, b], (52, 40, 30) if self.kind == 'stool' else (40, 30, 26), 10)
+                        sp_ = 1.08 if self.kind in ('stool', 'plastic') else 1
+                        b = V.project((lx * sp_, floor, lz * sp_ + sh), yaw)[0]
+                        lc = getattr(self, 'legs', None) or ((52, 40, 30) if self.kind == 'stool' else (40, 30, 26))
+                        p.line([a, b], lc, 10)
+                        if self.kind == 'plastic':
+                            p.line([a, b], INK, 1.2)
                     parts.append((_depth(lx, lz + sh, yaw) - 400, 'pre', leg))
             if self.kind == 'armchair':
                 parts.append((-500, 'pre', lambda p: _box(p, yaw, -w - 50, w + 50, top + 6, floor - 30, self.rear,
                                                           self.front, c, None, 0, sh)))
         parts.append((-300, 'pre', lambda p: _box(p, yaw, -w, w, top, top + 30, self.rear, self.front, c, ct, 0, sh)))
         if self.back_top:
-            bz = -78 if self.kind == 'office' else -86
-            thick = 28 if self.kind == 'office' else 60
-            bw = w - 10 if self.kind == 'office' else w + 50
+            bz = -78 if self.kind in ('office', 'plastic') else -86
+            thick = 28 if self.kind in ('office', 'plastic') else 60
+            bw = w - 10 if self.kind in ('office', 'plastic') else w + 50
 
             def back(p):
                 _box(p, yaw, -bw, bw, top - self.back_top, top - 8, bz - thick, bz, c, ct, -recline, sh)
