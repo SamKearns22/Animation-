@@ -9,13 +9,14 @@
   4: shots over 8 s an info line; PROP TURN kept only for people seen at yaws 30+ degrees apart. 5: MOUTH (views.Eyes
   marks, measured from the eye whites) and TURN DESIGN (own front face, generic turned head). Rules 59, 67, 19, 13
   reworded. New kittests pass (render_lock, preflight_lines_grouped, every_face_has_a_mouth); full suite: see Next.
-- **Next: Sonnet (routine: a timed run). 1) kittests in full: one failed in this chat's first full run (unknown which;
-  the re-run's result is in the commit after this one if it landed); fix only if it is ours. 2) Time ONE run on
+- **Next: Sonnet (routine: a timed run). 1) kittests: 2 fail. turned_heads_for_anyone ('Vance unchanged: False'):
+  maybe ours (views.Eyes now wraps line(); turnhead GENERIC hook): check with git stash first. estimate_forecast_and_alarm:
+  budget code, likely not ours (40b572d). 2) Time ONE run on
   Blessed: `preflight.py blessed OUT` then `blessed.py final OUT --small`, real minutes (old: ~40 min pre-flight +
   14.5 min animatic). 3) One short message to Sam: what changed, minutes saved, the Lost/Added lines below.**
 - **Lost (to tell Sam):** the incremental re-check (fingerprints): the render redraws every frame anyway; the contact
   sheet unless asked (--pictures). **Added:** mouth check, turn-design check, final needs a clean animatic first.
-- **Needs Sam:** nothing until the message.
+- **Needs Sam:** BUDGET STOP (Blessed 50.3% v 19%): his Y before any further work.
 - **Read:** this section only; preflight.py by its MAP if a fault needs a fix.
 - **Open rule requests:** none (59, 67, 19, 13 written on Sam's Y).
 - **For Claude:** render check mode: film_engine.render (check=..., _checked, picture_faults at the end); stamp
