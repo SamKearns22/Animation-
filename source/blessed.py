@@ -394,6 +394,10 @@ def press_pose(sp, t):
         V.arm_to(j, 'L', (40.0, -110.0, 50.0), 'in', 'fist')
     elif kit == 'phone':                              # held up above the head, filming over the others
         V.arm_to(j, 'R', (95.0, -250.0, 40.0), 'out', 'fist')
+    elif kit == 'mic':                               # N10: held out at shoulder height towards him
+        V.arm_to(j, 'R', (sw + 40.0, -150.0, 160.0), 'out', 'fist')   # from behind his right is the inside (in frame)
+    elif kit == 'phone_out':                         # N10: held out at face height, filming him
+        V.arm_to(j, 'L', (-sw - 40.0, -170.0, 160.0), 'out', 'fist')   # his left: the inside, in frame
     elif kit == 'stills':                             # the camera held up over the heads in both hands, shooting
         V.arm_to(j, 'R', (70.0, -240.0, 50.0), 'out', 'fist')
         V.arm_to(j, 'L', (-50.0, -235.0, 50.0), 'out', 'fist')   # 'in' folded the elbow back across his chest (13 Nov)
@@ -418,6 +422,8 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
         people.append((d, i, (X, Y, L.ppm(d))))
     for d, i, mark in sorted(people, key=lambda q: -q[0]):
         sp = press_sp(i, seed)
+        if spots is G2_PRESS and i in G2_NEAR_KIT:       # N10 (Sam, 13 Nov): the two nearest hold out a phone and a mic
+            sp['kit'] = G2_NEAR_KIT[i]
         x, d = spots[i]                               # everyone faces him, body and head (Sam, 11 Nov): from
         sp['yaw'] = 180 - math.degrees(math.atan2(at[0] - x, at[1] - d))   # behind, turned towards his mark
         kit = sp['kit']
@@ -435,6 +441,10 @@ def press(img, cam, L, spots, t, seed=0, reach=480, at=(0.5, 4.0), part=None):
             _tv_camera(img, cam, r, 1 if pts['wrR'][0] > 0 else -1)
         elif kit == 'phone':
             _phone_up(img, cam, r, pts, 1 if pts['wrR'][0] > 0 else -1)
+        elif kit == 'phone_out':
+            _phone_up(img, cam, r, pts, 1, lift=40, wr='wrL')
+        elif kit == 'mic':
+            _hand_mic(img, cam, r, pts, 'wrR')
         elif kit == 'stills':
             _stills(img, cam, r, pts, t)
 
@@ -469,11 +479,23 @@ def _stills(img, cam, r, pts, t):
     p.poly([(x - 30, y - 92), (x + 30, y - 92), (x + 30, y - 150), (x - 30, y - 150)], (40, 40, 44), INK, 2.2)  # flash
 
 
-def _phone_up(img, cam, r, pts, sg):
+def _hand_mic(img, cam, r, pts, wr='wrR'):
+    """N10: a hand-held TV microphone held out towards him, seen from behind: the handle up out of the fist, the
+    station's flag (a coloured cube) round it, the grey mesh ball on top."""
+    p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
+    wx, wy = pts[wr]
+    p.poly([(wx - 9, wy + 10), (wx + 9, wy + 10), (wx + 8, wy - 70), (wx - 8, wy - 70)], (28, 28, 32), INK, 2.0)
+    p.poly([(wx - 26, wy - 64), (wx + 26, wy - 64), (wx + 26, wy - 108), (wx - 26, wy - 108)], (200, 40, 48), INK, 2.2)
+    p.poly([(wx - 18, wy - 80), (wx + 18, wy - 80), (wx + 18, wy - 92), (wx - 18, wy - 92)], (248, 248, 248), None)
+    p.ell(wx, wy - 128, 24, 24, (120, 122, 128), INK, 2.2)
+    p.ell(wx - 7, wy - 136, 6, 6, (170, 172, 178), None)
+
+
+def _phone_up(img, cam, r, pts, sg, lift=70, wr='wrR'):
     """A phone held up filming, seen from behind: its back over the hand, the screen's glow round its edge."""
     p = B.Pen(img, B.Local(cam, r['x'], r['y'], r['s']))
-    wx, wy = pts['wrR']
-    x, y = wx + sg * 4, wy - 70                                       # just above his raised fist, clear of the hair
+    wx, wy = pts[wr]
+    x, y = wx + sg * 4, wy - lift                                      # just above his raised fist, clear of the hair
     p.poly([(x - 34, y - 60), (x + 34, y - 60), (x + 34, y + 60), (x - 34, y + 60)], (30, 30, 34), INK, 2.4)
     p.ell(x - 18, y - 42, 8, 8, (70, 70, 76), INK, 1.4)               # the lens
 
@@ -1151,7 +1173,8 @@ def _g2_press():
     return [tuple(q) for q in out]
 
 
-G2_PRESS = _g2_press() + [(-0.45, 3.0), (0.5, 3.0)]   # chat 3: two of the pack close to us, heads in the bottom corners
+G2_PRESS = _g2_press() + [(-0.45, 3.0), (0.5, 3.0)]
+G2_NEAR_KIT = {len(G2_PRESS) - 2: 'phone_out', len(G2_PRESS) - 1: 'mic'}   # N10: our left a phone, our right a mic   # chat 3: two of the pack close to us, heads in the bottom corners
 
 
 def gates_at(t):
@@ -1474,6 +1497,8 @@ def draw_walliams(img, cam, t):
         so['blink'] = F.blinking(t + (1.9 if sg > 0 else 0.0), BLINKS['officer'])   # left one talks; never blinking together
         if who == 'guard1':
             so['head_life'] = HEAD_LIFE['officer']
+            so['look'] = GUARD_EYES * guard_eyes(t)       # N9: head stays front-on; his eyes go to Walliams
+            so['frown'] = 0.1 * guard_eyes(t)            # ...and his brows come down, stern, for the line
         ox, od = wal_place(t, sg * OFF_DX)
         om = ST._mark(ST.GATE, ox, od)
         walking = k < DRAG + 0.1
@@ -1498,11 +1523,19 @@ def draw_walliams(img, cam, t):
         put(img, cam, so, om, t, 0.0, oj, head_yaw=guard_look(t) if who == 'guard1' else None)
 
 
+GUARD_EYES = 1.0                                  # which way 'look' sends the pupils to Walliams (our right)
+
+
 def guard_look(t):
-    """Note 48: the left officer turns his head to Walliams (on our right) for the line, then back."""
-    a = _keys(t, [(T['guard'] - 0.45, 0.0), (T['guard'] - 0.15, 90.0), (L[7]['end'] + 0.2, 90.0),
-                  (L[7]['end'] + 0.5, 0.0)])          # side-on: at phone size a three-quarter turn read as facing us
-    return a if a > 0.5 else None
+    """N9 (Sam, 13 Nov): no head turn. Turned side-on he swapped to the separate profile drawing (another size, hair
+    and shape), so the head popped. South Park style: the head stays facing us; the eyes and brows give direction."""
+    return None
+
+
+def guard_eyes(t):
+    """0..1: the left officer's eyes on Walliams for the line (note 48), then back to the front."""
+    return _keys(t, [(T['guard'] - 0.45, 0.0), (T['guard'] - 0.2, 1.0), (L[7]['end'] + 0.2, 1.0),
+                     (L[7]['end'] + 0.45, 0.0)])
 
 
 # ---------------------------------------------------------------------------------------------- the shots

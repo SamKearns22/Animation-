@@ -1,3 +1,3 @@
-Blessed: Walliams' face job done (new head sent to Sam; measured likeness 68-69%; the blind name test cannot judge plain faces). Protest Tiers: pencil sketches of the four scenes done, critiqued twice, sent (13 Nov).
-Waiting: Blessed: Sam's voice memo of the guard's line (note 48); his numbers on the revised rule-49 request and the likeness-on-clean-face request. Protest Tiers: Sam: Y to the re-staging, Hook Text, sound 1/2/3, lessons by number, notes on the sketches.
-Next: Blessed chat 5 of 8 (Opus high): seated rebuild, van option sheet, note 48 staging, then animatic 3 (no waiting, Sam's override). Protest Tiers: the cast (Opus high) once Sam answers.
+Blessed: guard voice, gavel, louder music, guard eyes (no head turn) and journalists' phone and mic done (13 Nov, chat 1 of 8).
+Waiting: nothing from Sam until the clips. Protest Tiers: Sam: Y to the re-staging, Hook Text, sound 1/2/3, lessons, notes on the sketches.
+Next: Blessed chat 2 of 8 (Opus medium): the cell look round and sigh, the pool player rebuilt, three clips, then ask for animatic 4.

@@ -315,3 +315,129 @@ The showman is the arrival, the oath (held in: bolt upright, only the chin lifts
 - **Open rule requests:** rule 49 + the blind name test (proposed below, waiting for Sam's number).
 - **For Claude:** test packs in the scratchpad; head drawn by `_head` with `_lay` (by-eye placement over the measures) and `outline` (own face edge); moods' `smile` drives `smirk` (> 0.3) else P4.lips. The 'stage' command closes a stage: run it only when the face job is done.
 
+
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 87 (the van option sheet), 89 (critique: animatic 3's pack carries Walliams' new head), 49 (likeness 60%+; his head measured on the CLEAN face, `--clean`).
+- **Done (chat 4 of 8, Walliams' face job, stage closed in the ledger):** new head sent to Sam as ONE sheet (OUT/walliams-face-sheet.jpg). Sam (13 Nov, mid-job, on the box-head draft): "This is the closest you've gotten so far you're on the right track." Kept that box head and wide brushed-up hair; pushed: M temples, narrow smiling eyes with bags and crow's feet, a small cocked brow (0.015), lopsided smirk, longer lower face (LOW 1.15), grey clipped sides filling out to the hair's width, slimmer lower brows, scared/pleading brows lower. likeness.py: 68% w02, 69% w06 (eye corners the wrong way, +0.5 on a smiling photo: named), 69% w07; first in the line-up each time. `head --bare` now cuts at the chin.
+- **Finding (blind name test):** fresh helpers named him nobody (JD Vance, Hegseth, DeSantis at 6-18%) on every version, AND the helper declines to name a real photo of him: it does not recognise faces, only trademark hair/beard/costume (Brand's). So it cannot judge his likeness; Sam's eye is the test. The stubble's edge also fools likeness.py's jaw and lip measures (measure with `--clean`).
+- **Sam (12 Nov, late): "Continue this work until we have animatic 3. Don't stop for any Y."** No waiting for his yes through to animatic 3 (sheets still sent; checks never skipped); unattended, so stop after animatic 3 is sent. The rule-49 request stays unwritten until he gives its number.
+- **Next: chat 5 of 8, Opus HIGH (building):** the seated rebuild (van 3/4, TV-room Brand and the sleeping inmate front-on: torso a rigid slab, thighs never foreshortened, near arm hidden; refs references/blessed/sitting/ s1 = the van, s2, s3 front-on); send Sam ONE van option sheet (rule 87), pick the best and say which (no wait); note 48's doorway staging with a timed gap for Sam's line; then animatic 3 (checks first; Hook Text and sign-off via finish.py), send it, stop.
+- **Needs Sam:** voice memo of the guard's line (note 48); his number on the rule requests below; Y/N on the new Walliams (sent; not waited on).
+- **Read:** guides/job-packs.md "Satire film" pack; this section; notes 22, 43, 48 in the table; `source/blessed.py` MAP (van, tvroom, gates shots).
+- **Sam (13 Nov) on the new Walliams with the temples fixed: "That's him. You did it!"** Face notes 25, 29, 47 closed.
+- **Open rule requests:** none. Sam said Y to all four (13 Nov); written into rule 49 (rulebook) and the kit catalogue's blind-test line. The facial-hair warning in likeness.py was tried and does NOT work (it cannot see a drawing's flat-grey beard), so check 3 stays a by-hand step: run `likeness.py check` on the head's `--clean` twin.
+- **For Claude:** the ledger's forecast alarm prints but alarms are OFF for Blessed (Sam, ledger.json alarms_off); ignore it, keep the per-chat amber/red handovers. Walliams: `blessed_walliams.py` SHAVE ('stubble' film look; `--clean` for checks), LOW, TUNE (measured 13 Nov), MOODS cock; before-sheet rendered from efc963b.
+
+## Job after Blessed's last round: the pre-flight audit (Sam: Y, 12 Nov)
+Run once Blessed's last notes round is done (Opus, high to design; medium to build). For each check pre-flight runs: what it has caught (films, faults, how many were real), checks that catch the same thing twice, which merge, and which can become built-in to the drawing kit so the fault cannot happen. Start with: the face-size check (rule 50) on partial re-checks (chat 6: a false 'never 240 px' from 7 re-drawn frames; fixed in preflight.py after animatic 1).
+
+## Sam's answers (12 Nov, late): Y go on after the second cost alarm (34.2% vs 19%; about 6.5% more to finish). Cost alarms OFF for the rest of Blessed (ledger.json alarms_off; cost still recorded; per-chat amber/red handovers still on). After Blessed: a FULL diagnosis of why it went so far over budget again, with suggested tool improvements (job below).
+
+## Walliams' face job (Sam, 12 Nov, late): chat 3 of 8, Opus HIGH, its own budget 10% of a week
+"His face still needs work ... look at our current DW face and available tools. If you need to improve our recognition tools to get it right, that's fine, I'll give you 10% budget to research and execute that. The Walliams we have is decent but still not nearly as recognisable as RB is." Target: as recognisable as Brand. Start: blessed_walliams.py, refs references/blessed (w01-w10), the kit catalogue's likeness/recognition tools. Ledger it as stage 'walliams-face'. Send Sam ONE labelled sheet (DW now vs new vs his photos) before any render. Then open the next chat (Opus high): the seated rebuild, the van option sheet, note 48's staging.
+Rule request (proposed 12 Nov, chat 3): rule 49 gains one sentence and its check one tool: "...and a fresh helper, told nothing, names the head from the drawing alone and puts it first in a line-up of look-alikes" | check: `nametest.py`. Merges into 49 (no new rule); closest tool likeness.py check (measures shapes; new: asks "who is that?").
+
+## Jobs after Blessed: the framing research (notes/framing-research.md, widened by Sam 12 Nov to dramatic framing of the whole screenplay); and the budget diagnosis (Sam, 12 Nov)
+Where every % of Blessed went (by stage, chat, helper, rework), why the estimate (19%) missed, why the alarms and forecasts did not change the outcome, compared with Remakes (45% on 14.5%); then concrete tool changes that would have kept it on budget. Opus high.
+
+## Sam's answers (12 Nov): Y finish round 1 although over its share (3.99% vs 2.5%; 'annoyed at the rendering and preflight errors'); Walliams set aside for now; Y go on after the cost alarm (23.8% of a week against 19%; about 7.5% more to finish: round-1 notes 3.5, animatic 2 1.0, round 2 2.5, final 0.5); 1 Y no check sheet before animatics unless he asks (CLAUDE.md written); 2 Y animatic 1 skips the sheet; 3 Y the pre-flight audit job above
+
+## Sam's answers (11 Nov): 1 FULL (19%); 2 Y gavel kept; 3 Y joke as written; 4 Y invented judge; 5 Y BBC News look and lettering; 6 Y press pack at the gates; 7 Y trial look at the gates, tracksuit and topknot in prison; 8 sincere showman; 9 quiet, to himself
+
+## Plan extras: the estimate (Sam chose FULL, 19%: every place drawn in full, TV-room inmates as real Glimpse figures, two notes rounds; the lean rows below plus: sets +1.2 (van and TV room as full paintings, cell and phone separate), cast +0.4 (two inmates), round2 2.5)
+Unmeasured: about 4.5 of the 15 (the sets and the support cast have no measured flat-painting or support figure yet; Remakes' sets cost about 2.7 each with three critique passes, the target is 0.7).
+
+| thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | est. % | measured from | spent |
+|---|---|---|---|---|---|---|
+| Plan, references, questions | | | plan | 1.0 | Remakes plan 1 | ~1 |
+| Brand (Lead): likeness, beard, long curly hair, topknot, 2 outfits | NEW | flat, all views the shots use; front, side, back | cast | 2.5 | Link trial 2.0 a Lead + outfits | |
+| Judge (Support), red robe, wig, seated at the bench, chest up | NEW | one view (front), upper body only | cast | 0.5 | unmeasured (target 0.6) | |
+| Prison officer (Support) | KNOWN `power_crime_cast` Met officer, recoloured | walk beside Brand | cast | 0.3 | unmeasured | |
+| Newsreader on TV | KNOWN `newsdesk_cast.PRESENTER`, restyled | front only | cast | 0.2 | unmeasured | |
+| Press pack (arrival and gates) | KNOWN `press_secretary.reporter` + photographers | from behind | cast | 0.1 | reuse | |
+| Southwark Crown Court outside | NEW flat painting, one camera | ref 00 | sets | 0.9 | unmeasured | |
+| Courtroom, two cameras (witness box with judge behind; glass dock) | NEW flat painting x2 | refs 05, 07, 08, 11 | sets | 1.0 | unmeasured | |
+| Prison inside: cell (door, cot, toilet) + wall phone, one painting | NEW | close shots | sets | 0.6 | unmeasured | |
+| Van cubicle and TV room: dark close-up backgrounds, TV flicker, silhouettes | NEW | close shots only | sets | 0.4 | unmeasured | |
+| BBC-style studio on the TV | KNOWN `newsdesk_set`, restyled red | one camera | sets | 0.3 | reuse | |
+| Prison gates outside | NEW flat painting | no reference (Sam: none needed after sentencing) | sets | 0.6 | unmeasured | |
+| Moves: press walk and gestures, oath (Bible, hand up), gavel, van slump, escorted walk, weeping on cot, phone, TV face change with zoom, gate exit | mostly KNOWN (walks, sitting, lying, phone_ear); oath and weeping NEW | rehearsal clips: gate exit, face change, escort | moves | 1.5 | unmeasured | |
+| Animatic 1 + Fable cold critique before it | | Fable (about 1%) to cut a notes round (2.5) | animatic1 | 2.0 | Remakes Fable r3 about 1 | |
+| Notes round 1 | | | round | 2.5 | budget-job target from Remakes rounds | |
+| Final | | | final | 0.5 | Remakes final 0.5 target | |
+| **Total** | | | | **15.0** | (Full: + 1.2 sets, + 0.4 cast, + 2.5 second round = about 19) | |
+
+## The brief as a checklist (Sam, 11 Nov)
+| # | from the brief (word for word where it matters) | done? |
+|---|------|------|
+| 1 | Title: Blessed. News: Russell Brand sentenced to ten years for sexual assault and rape (real: 10 y 6 m, 9 Nov 2026) | Y: title in the notes only (no title on screen, CLAUDE.md); real sentence 10 y 6 m kept in the notes |
+| 2 | Joke: he repeats his overly Christian "feeling blessed" line at arrival, sentencing, prison, then is released by Labour's early release scheme | Y: "blessed" at arrival, oath, dock, phone; release by the scheme at the gates |
+| 3 | Brand loquacious and ostentatious in his acting, balanced with the press's descriptions at each stage (below) | Y: showman at arrival, oath (held in) and gates, from "How Brand moves"; press descriptions per stage (below) |
+| 4 | Court drawings and press pictures for arrival, the stand, sentencing (none needed after sentencing); automatic retrieval fixed if it fails | Y: refs 00-20 filed and matched (court, box, dock, gates); fetched through the press sites after Sam's approval |
+| 5 | S1 arrives at court, first day; approaches the press: "Yeah, I'm feeling blessed, mate, super blessed." | Y: arrive 0-4.5 s, line 1 to the press pack |
+| 6 | S2 takes the stand: "I swear by Almighty God that the blessed evidence I shall give shall be the truth, the whole truth, and nothing but the blessed truth." | Y: oath 4.5-14 s, Bible and raised hand, judge behind |
+| 7 | S3 sentenced, looking harrowed; the judge bangs his gavel; "Well that doesn't feel very blessed." | Y: no gavel shot (Sam, 12 Nov): bang heard at the start of the dock shot 14.0 s, hollow on line 3 |
+| 8 | Montage: police van, bent over himself, empty and shocked | Y: van 19.5-22.3 s, bent over, numb |
+| 9 | Montage: escorted into his cell by an officer, looking around numbly | Y: escort 22.3-25.5 s, officer's hand on his arm, looks round |
+| 10 | Montage: weeping on the cot | Y: cot 25.5-28.3 s, weeping, sobs |
+| 11 | Prison phone, dejected: "Yeah, love. I'm not just not feeling blessed at all right now." (Sam's wording kept) | Y: phone 28.3-34.8 s, Sam's wording kept |
+| 12 | Shared room watching TV absently, TV light flickering on him; his eyes drift up to the screen | Y: TV room 34.8-37.4 s, blue flicker, eyes drift up |
+| 13 | Screen: BBC news desk; reporter: "Our breaking news. The government has announced a new round of the early release scheme—" | part: Brand front-on (note 26, chat 2); judge's mouth done chat 1 |
+| 14 | Zoom in on Brand: dejected to amazed and overjoyed; the reporter's words drift away and fade: "as way of dealing with the prison capacity crisis. The Prime Minister has said that it is necessary to stop overcrowding." | FIXED 12 Nov: the 'hijab' is long dark hair (juror4) drawn as one block over the neck, on a blouse panel to the chin: hair now two curtains, round-neck top; the two bald men 14% smaller faces (`k`), narrower pushes. Clip sent |
+| 15 | Brand leaves the prison gates in his usual attire: "Blessed! I'm feeling so blessed right now, everybody!" | mouths FIXED (see 13), clip sent; framing (empty wall) open |
+| 16 | Budget 8-12%; say honestly in advance if not; Fable 5.2 allowed where it makes a difference | IN PROGRESS. Sam (12 Nov): keep the 3/4 pose (I tried front-on: undone, Lost nothing); 'it deletes his butt area'. Cause: seated and turned, views.person ends the jumper at the waist and moves.seated's thighs are drawn again over the body (their cut hip ends show as notched boxes). `_seat` (blessed.py, van) adds a hip/seat shape in j['pre']: not enough, the redrawn thighs still sit on top. Next: stop the thighs being redrawn over the body for this shot, or draw them from 0.35 (from_u) so the seat covers the root; also the back slab left of him at lean 28 |
+| 17 | Hook Text (pick: "Russell Brand this week") and the CranbriJoos sign-off | fixed 12 Nov (chat 4): cell shot 3.9 s (was 3.2, film +0.7 s): a slow sigh (in looking up, shoulders up; out, head and shoulders sink); blanket redrawn (thrown over, turned-down fold, rucks, hanging over the side); the pop gone with cot_top |
+
+## The press's descriptions by stage (brief 3)
+- **Arrival (13 Oct):** dark glasses, long brown-grey wavy hair, grey beard; dark/grey jacket, open-neck white shirt, crucifixes of varying sizes, prayer beads, a long white scarf (another day a red one); held his wife's hand; "made a beeline for the media scrum"; "Hello, mate!"; "Today, I feel blessed... That's my prayer." (BBC, Sky, ABC)
+- **The stand (28 Oct):** dark suit, white open-necked shirt; took the Bible oath loudly; stood bolt upright, hands clasped behind his back; nervous start, unusually loud "no"s; later hands in pockets; terse, flashes of irritability. Gaunt, thinner. (BBC, AP)
+- **Verdict and sentencing (5 and 9 Nov):** hair in a topknot; stood upright in the glass dock, limited emotion; "Sit down Mr Brand"; mouthed "I'm good, I'm good" as he was led away. (BBC, sketches)
+- So: the showman at arrival and the gates; the stiff, too-loud showman in the box; the stillness cracks only at the sentence.
+
+## References as checklists
+| reference | what it shows | ours matches? |
+|---|------|------|
+| 00 court outside (Wikimedia) | buff brick, dark band sign "CROWN COURT SOUTHWARK", steps and rails left, planted beds, pavement | |
+| 02 arrival (Guardian) | aviator-style black sunglasses lifted by right hand, grey jacket, white open shirt, grey beard darker at the moustache, long dark curls | |
+| 05, 07 witness box (Elizabeth Cook) | Brand side-on in the box, brown-olive jacket, open white shirt, mic on stalk; judge behind in red robe, white wig, bands, glasses; pale wood, pale wall | |
+| 08 sentencing (Cook, Sky) | topknot, grey jacket, white shirt, standing in the glass dock, security officers seated behind | |
+| 09, 10 dock (Quenzler) | straight-on face: deep-set eyes, long nose, beard grey at the chin; dark open shirt | |
+| 11 verdict (Cook, BBC) | Brand standing in the dock, dark jacket, hands clasped low; judge in red, side-on, at a mic | |
+
+## The acting list (revised 11 Nov from "How Brand moves"; ticked against the film 11 Nov: every row built, checks clean)
+| line | who | shot and why | face | body | lands on |
+|---|---|---|---|---|---|
+| 1 "Yeah, I'm feeling blessed, mate..." | Brand | medium, press backs in front: the showman to the scrum | sincere showman (Sam): beaming, sunglasses lowered on "mate", chin up on "super" | swaggers in (sway per step), beads in the R hand; L hand to heart; leans in to the scrum, head tilted, on "mate"; dips at the knees, arms flung open on "super", springs up; hand to heart, small bow | "super blessed" |
+| 2 "I swear by Almighty God..." | Brand | side-on in the box, judge behind (as sketch 07): the stiff showman | eyes up on "Almighty God"; chin lifts on each "blessed" | bolt upright, Bible up, right hand raised (the showman held in) | "blessed truth" |
+| (gavel) | none | NO SHOT (Sam, 12 Nov): the bang is only heard, on the dock shot's first frame; Brand gives a small start | | | the bang |
+| 3 "Well that doesn't feel very blessed." | Brand | close-up in the dock: the stillness cracks | quiet, to himself (Sam): hollow, eyes down | shoulders drop | "blessed" |
+| montage | Brand | van close-up; cell walk with officer; cot | empty, numb, then weeping | bent over; looks round; curled on the cot, shaking | |
+| 4 "Yeah, love..." | Brand | close-up at the wall phone | tearful, voice cracking | forehead to the wall, phone at ear | "at all" |
+| 5 reporter | newsreader | the TV screen, then slow push on Brand | neutral | | "early release scheme" |
+| (face change) | Brand | slow zoom to a close-up | dejected to amazed to overjoyed | sits up | "early release" |
+| 6 "Blessed! I'm feeling so blessed..." | Brand | wide at the gates, then closer, press in front | full showman, sunglasses on, chin high | swaggers out; arms flung up and open, palms out (the messiah) on "Blessed!"; strides in; dips with arms swept open to the pack on "everybody!", springs up, head tilted | "everybody!" |
+| 6 cont. gates2 (note 32 rebuild, 12 Nov chat 2) | Brand | camera framed ON him, pushing in (zoom 2.3 to 3.0); the pack on BOTH sides of the frame, a lane cleared only between the lens, him and the door | full showman | 49.45-50.7 a clear stride straight out of the wicket towards us to his mark (left of the door), growing as he comes; plants, chin up; 51.3-52.1 the sweep on "everybody!"; holds, preening, oblivious to the end | "everybody!" |
+| (behind him) | Walliams + 2 officers | the background of the same shot, over Brand's shoulder; the doorway lit inside (a passage, a strip light, an inner grille) | scared; double-take; pleading; desperate | 49.8-51.2 dragged in from the right, leaning back, his whole body swaying, feet sliding; 51.2-51.8 DOUBLE-TAKE at the cameras (glance, away, snap back, jolt); 51.8-52.7 PLEADING to the pack (hands clasped, brows up, head tilted) under Brand's sweep; 52.7-53.3 shoved back through the door; 53.3-54.1 one hand GRABS the door frame, face peering out, two tugs; 54.1 the hand slips in, the officer slams the door; hold | the door slams |
+| 7 "Walliams, you're going away for a very, very long week." (note 48) | left officer | the same gates2 shot, behind Brand: the officers stop Walliams at the doorway | stern, flat, a little relish; mouth on the voice, head acting (headlife) | turns his head to Walliams (body stays, still gripping his arm), back after the line | "very long week": Walliams' double-take follows it; Brand glances back over his shoulder, smirking |
+
+Length: about 101 words at Sam's pace (3.3 a second) is about 31 s, plus montage and beats: about 45 s.
+
+## Exceptions (rule 13): one row each; pre-flight refuses a setting with no row here
+| check | who | why | looked at full size |
+|---|---|---|---|
+| STILL_OK | brand [tvroom] | Sam's brief: in the TV room his head and body are dead still and he stares dead-eyed (notes 22, 43; only his eyes drift up to the screen and he blinks slowly) | chat 5, 13 Nov (frames 35 and 37 s) |
+| ALLOWED_POPS | walliams | gone in through the wicket door (the doorway clips him as he is yanked inside, note 32) | chat 3, 12 Nov; gates2 frames chat 5, 13 Nov |
+| HANDS_OK | Journalist* | the press from behind: each hand is under the phone or camera they hold up, drawn over it (arrival and gates) | chat 4, 12 Nov |
+| HANDS_OK | Russell Brand | arrival: hand on his heart (the 'prop' is only the sleeve's ink edge), his hair over the arm reads as a seam; van: hands clasped between his knees, one fist over the other | chat 4, 12 Nov (the van pose kept from animatic 2: Sam, 13 Nov) |
+| HANDS_OK | Prison officer | the escort's grip on Brand's arm (touch_faults checks the hand sits on the arm) | chat 4, 12 Nov |
+| LINE_OK | brand | his moustache is a filled shape, not a line | chat 4, 12 Nov |
+| LINE_OK | walliams | his closed lips are a filled dark shape (the new head, chat 4), not a line | chat 5, 13 Nov (line sheet crop) |
+| LINE_OK | officer | the key chain is a thin line itself; the shirt's flat shadow side has no outline (the kit's allowed exception) | chat 4, 12 Nov; the lower shadow edge chat 5, 13 Nov |
+| LINE_OK | judge | his light grey brows are colour strokes, not shapes (as the jurors') | chat 5, 13 Nov (line sheet crop) |
+| LINE_OK | juror4 | the cardigan's flat shadow side (the kit's allowed exception) | chat 11, 12 Nov |
+| LINE_OK | juror9 | the cardigan's shadow side; light brows are colour strokes, not shapes | chat 11, 12 Nov |
+| LINE_OK | juror7 | a curl at the crown is a line itself; light brows are colour strokes | chat 11, 12 Nov |
+| LINE_OK | juror11 | a curl at the crown is a line itself; light brows are colour strokes | chat 11, 12 Nov |
+| LINE_OK | juror8 | light brows are colour strokes, not shapes (as Ad-Vanced Notice's brows) | chat 11, 12 Nov |
+
