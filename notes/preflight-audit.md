@@ -25,13 +25,13 @@
 
 ## The job
 1. **Measure each of pre-flight's checks** (about 12 check files, 43 imports): run time (time each on Blessed's
-   current code, one run, `--text`); faults it raised on the last 3 films with people (Blessed, Remakes, Protest
-   Tiers' roughs where they exist; ledger round files and notes); for each: real catch, false alarm, could not test,
+   current code, one run, `--text`); faults it raised on the LAST 10 FILMS (Sam, 13 Nov: they are all very different, and
+   some catch what others don't; ledger round files, notes and archive notes, commit messages); for each: real catch, false alarm, could not test,
    and whether Sam later named the same fault (caught, missed, or let through).
 2. **Cost per animatic** from the app's real figures: the actions spent answering pre-flight in one Blessed chat
    (one `list_events kinds=["assistant"]` page around a pre-flight run, never the whole chat).
 3. **Design, by the new order:** improve the checks that missed Sam's notes (overlaps in motion, arms bending the
-   wrong way, repeats); merge checks that overlap; propose removing only what caught nothing in 3 films. Targets: one
+   wrong way, repeats); merge checks that overlap; propose removing only what caught nothing in the 10 films. Targets: one
    run under 5 minutes (only changed shots re-checked; the rest cached), one short list of real faults with frame and
    fix, no "allowed" for a fault Sam has noted, every check PASS / FAULT / COULD NOT TEST, and its cost per animatic.
 4. **End with one numbered Y/N message to Sam:** each change with what it saves (minutes, % of a week, measured),
