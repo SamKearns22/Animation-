@@ -1,16 +1,16 @@
 # Cost diagnosis job (Sam, 13 Nov): why each step got expensive, and how to make it cheap AND good
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 24 (budget stop at the budget and every 5% over; never off), 19 (COULD NOT TEST stops), 85.
+- **Rules that bite next:** 24 (budget stop at the budget and every 10% over; never off), 19 (COULD NOT TEST stops), 85.
 - **Done (13 Nov, chat 4 of 8, Opus medium): Job C 5 and the "Never again" tools, tested on Blessed (no render).**
   5: pre-flight says COULD NOT TEST and stops for a film with people and no solids/layers; Blessed has its list
   (clipcheck on every frame, 8 s: clean once the press pack's 2-3 cm shoulder brushes were allowed). Ledger: one
-  budget stop at the budget and every 5% of it over (replaces the quarter alarm and the forecast alarm); alarms_off
+  budget stop at the budget and every 10% of it over (replaces the quarter alarm and the forecast alarm); alarms_off
   gone (Blessed's removed); `app` checks it on real figures; `audit` is now the one after-film comparison line.
   Report: COULD NOT TEST counted in the summary's first line; a pre-flight warning saying it stops. Kittests pass.
 - **Next:** the pre-flight audit (Sam, 13 Nov), `notes/preflight-audit.md`, chat 1 of 8, Opus HIGH (planning).
-  Blessed's next chat meets the budget stop at once (44.9% of 19%): Sam's Y.
-- **Needs Sam:** 1. "every 5% over" read as 5% of the budget (Blessed: a stop about every chat); N = every 5% of a week.
+  Blessed: Sam said Y at its first stop; the next is at 49.4%.
+- **Sam (13 Nov, at the first stop):** Y, Blessed continues; the stop comes every 10% of the budget, not 5% (written).
 - **Read:** `notes/preflight-audit.md` (the audit's brief); this file only for the rules above.
 - **Open rule requests:** none unwritten.
 - **For Claude:** ledger.budget_stop(d) (d['budget_stop'] = last step), ledger.compare_line(d); blessed_checks.solids;
@@ -19,7 +19,7 @@
 ## Never again (proposed 13 Nov; Sam asked "how can we ensure this never happens again?")
 1. Real money only: every handover adds its chat's real app cost to the film; the bottom lines show spent vs budget.
    Replaces: rule 85's estimate-based ledger (Job A built the reading).
-2. The budget stops the chain on real figures: once at the budget, then every 5% over; it can be answered, not
+2. The budget stops the chain on real figures: once at the budget, then every 10% over (Sam, 13 Nov: 10, not 5); it can be answered, not
    switched off. Replaces: rule 24's forecast alarm.
 3. Process changes pay for themselves: every new rule, check, tool or step names its cost per film; after the next
    film, kept only if that film was cheaper or drew fewer notes; adding a step removes one. Widens CLAUDE.md's

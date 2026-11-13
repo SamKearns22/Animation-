@@ -21,8 +21,8 @@ MAP
                      with no share) and prints the forecast line for Sam's first line
   forecast() ....... spent / (share of the plan done) x estimate; mid-stage, never less than spent so far plus the
                      stages after the open one at the rate so far (the line Sam gets at each stage's end)
-  budget_stop() .... rule 24 (Sam, 13 Nov): the chain stops at the film's budget, then at every 5% over it (105%,
-                     110%, ... of the budget), on the real figures (app rows; a chat not yet imported counts at its
+  budget_stop() .... rule 24 (Sam, 13 Nov): the chain stops at the film's budget, then at every 10% over it (110%,
+                     120%, ... of the budget; Sam, 13 Nov: 10, not 5), on the real figures (app rows; a chat not yet imported counts at its
                      running figure). It can be answered, never switched off (there is no alarms_off any more).
                      Checked by auto after every reply, by `app` when the real figures come in, and at each stage
   stage_alarm() .... rule 24 (Sam, 11 Nov): auto stops the chat when the stage being worked on reaches its share, and
@@ -290,14 +290,17 @@ def forecast_line(d):
     return f'Spent {f[0]:g}% of the {f[1]:g}% planned so far; at this rate the film lands at {f[2]:g}%.'
 
 
+STEP = 0.10                     # the budget stop's step over the budget (Sam, 13 Nov: every 10%)
+
+
 def budget_stop(d):
-    """Rule 24 (Sam, 13 Nov): at the film's budget, then at every 5% over it, the chain stops for Sam's Y; once per
+    """Rule 24 (Sam, 13 Nov): at the film's budget, then at every 10% over it, the chain stops for Sam's Y; once per
     step (the step is kept in the ledger, so answering it lets the chain go on to the next). Returns the message or
     None. On the real figures: app rows, plus the running figure of a chat not yet imported."""
     spent, est = totals(d)[0], d.get('estimate')
     if not est or spent < est:
         return None
-    step = int(round((spent / est - 1) / 0.05, 6)) + 1
+    step = int(round((spent / est - 1) / STEP, 6)) + 1
     if step <= d.get('budget_stop', 0):
         return None
     d['budget_stop'] = step
@@ -307,7 +310,7 @@ def budget_stop(d):
             f"figures, the rest from chats not yet read from the app) against its budget of {est}% ({spent / est:.0%}). Stop "
             f"this work now, finish nothing more. First line to Sam: that figure, what exists, what is left ({left}), "
             f"and the cheapest way on that keeps the quality; ask Y/N. Do not go on before his Y. The next stop is at "
-            f"{est * (1 + 0.05 * step):.1f}%.")
+            f"{est * (1 + STEP * step):.1f}%.")
 
 
 def compare_line(d):
