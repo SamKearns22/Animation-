@@ -345,7 +345,9 @@ def look(sp):
 
 def copies(film, records):
     """Job K (Sam: Y, 10 Nov): two people in one frame with the same look are one copy pasted twice (the ICE
-    officers' identical vests, builds and masks). Once per pair of names."""
+    officers' identical vests, builds and masks). Once per pair of names. One named person drawn twice in a frame (in
+    parts round a set piece, or on a TV feed as well) is the same person, not a copy (13 Nov: Blessed's 20 false lines);
+    two unnamed ones are still tested."""
     ok = {frozenset(r[:2]) for r in getattr(film, 'COPIES_OK', [])}
     frames, out, seen = {}, [], set()
     for where, name, d in records:
@@ -355,11 +357,24 @@ def copies(film, records):
         for i, (a, la) in enumerate(ppl):
             for b, lb in ppl[i + 1:]:
                 pair = frozenset((a, b))
-                if la == lb and pair not in ok and (len(pair) == 2 or a == b) and (a, b) not in seen:
+                if la == lb and pair not in ok and (a != b or a in ('someone', 'person', '')) and (a, b) not in seen:
                     seen.add((a, b))
                     out.append(f"COPIES: {where}: {a} and {b} are drawn from one copy (same build, height, hair and "
                                f"clothes): give each a different build, height and kit detail, or list them in "
                                f"COPIES_OK (first of these)")
+    return out
+
+
+def mouths(film, records):
+    """Rule 13 (Sam's notes 5, 15, 45: a face with no mouth, three times in one film): everyone whose face is on screen
+    with its eyes showing has a mouth drawn (views.Eyes.mouth_seen). MOUTH_OK lists anyone meant without one."""
+    ok = set(getattr(film, 'MOUTH_OK', ()))
+    out, seen = [], set()
+    for where, name, d in records:
+        if d.get('mouth') is False and d.get('face_in', True) and name not in ok and name not in seen:
+            seen.add(name)
+            out.append(f'MOUTH: {where}: {name}\'s face is on screen ({d.get("head", "front")}) with no mouth drawn '
+                       '(rule 13; notes 5, 15, 45): give the head lips at rest, or list them in MOUTH_OK with why')
     return out
 
 

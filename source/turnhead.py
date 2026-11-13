@@ -501,6 +501,7 @@ class Person:
 
 PEOPLE = {}
 SEEN, MISSING = [], []          # (who, view) drawn turned; (who, view) asked for with no Person (pre-flight reads)
+GENERIC = []                    # (name, view) drawn turned on views.py's generic head (pre-flight: a head keeps its design)
 
 
 def register(person):
@@ -555,6 +556,8 @@ def install(V):
             import patriots4_cast as P4
             if who in P4.MEASURED:
                 MISSING.append((who, view))
+        if view in YAW:
+            GENERIC.append((sp.get('name', who or 'someone'), view))
         return old(img, p, sp, t, view, hx, hy)
     head_view.turnhead = True
     V.head_view = head_view

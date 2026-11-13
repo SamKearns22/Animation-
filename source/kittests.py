@@ -294,10 +294,15 @@ def render_lock():
         E.write_pass('x', 3)
         faults = E.lock_fault('x')
         named = E.lock_fault('x', faults_named=True)
+        E.write_pass('x', 0)
+        final_quick = E.lock_fault('x', final=True)           # pictures not yet checked: no final
+        E.write_pass('x', 0, pictures=True)
+        final_ok = E.lock_fault('x', final=True)
     finally:
         E.PASSES = real
-    return bool(none) and ok is None and bool(faults) and named is None, \
-        f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; named: {named is None}'
+    return bool(none) and ok is None and bool(faults) and named is None and bool(final_quick) and final_ok is None, \
+        (f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; named: {named is None}; '
+         f'final before the pictures are checked refused: {bool(final_quick)}; after: {final_ok is None}')
 
 
 @test
@@ -400,21 +405,48 @@ def house_look_once_in_pairs():
 
 
 @test
-def incremental_preflight_fingerprints():
-    """Rule 59 as amended 3 Nov (Sam: a small fix should not re-check the whole film): the film's settings fingerprint is
-    the same run to run, changes when an allow-list changes, and the check-code fingerprint exists; so an incremental
-    pre-flight can trust an earlier clean run only when nothing it depends on has changed."""
-    import preflight as P
+def preflight_lines_grouped():
+    """Rule 19 (Sam, 13 Nov, proposals 2-3): one line per fault, grouped by check, shot and who (an extra's number and
+    the frame's time do not make a new fault); one named person drawn twice in a frame is not a copy of themselves."""
+    import report
+    import kitchecks as K
     import types
-    film = types.SimpleNamespace(HANDS_OK=[('a', '*', 'no hand', 0, 1, 'x')], SHOTS=[('s', 0, 1)], NAME='x',
-                                 CALLBACK=lambda: 1, LINES=[{'n': 1}])
-    a, b = P._config_hash(film), P._config_hash(film)
-    film.HANDS_OK.append(('b', '*', 'no hand', 0, 1, 'y'))
-    c = P._config_hash(film)
-    film.CALLBACK = lambda: 2                        # a function's memory address never counts
-    d = P._config_hash(film)
-    return a == b and a != c and c == d and bool(P._checks_hash()), \
-        f'same twice: {a == b}; allow-list change seen: {a != c}; stable over function addresses: {c == d}'
+    lines = [f'{t:6.2f} s: press{k} stands in the sign' for k in range(3) for t in (1.0, 1.08, 1.17)]
+    lines += ['HANDS: Journalist 4 left hand hidden 3.1-3.5 s', 'HANDS: Journalist 12 left hand hidden 3.9-4.5 s',
+              'plan: the cell has no door', '  6.00 s: press1 stands in the sign']
+    g = report.group(lines, [('a', 0, 5), ('b', 5, 9)])
+    look = K.look({'height': 1})
+    film = types.SimpleNamespace()
+    same = K.copies(film, [('a 1s', 'Brand', {'_look': look}), ('a 1s', 'Brand', {'_look': look})])
+    two = K.copies(film, [('a 1s', 'press1', {'_look': look}), ('a 1s', 'press2', {'_look': look})])
+    return len(g) == 4 and '[9 like it: shot a, 1.00-1.17 s]' in ' '.join(g) and not same and len(two) == 1, \
+        f'{len(lines)} lines -> {len(g)}; Brand with himself: {len(same)}; two extras alike: {len(two)}'
+
+
+@test
+def every_face_has_a_mouth():
+    """Rule 13 (Sam, 13 Nov, proposal 5; Blessed notes 5, 15, 45): a face turned to us with no mouth drawn is caught,
+    front and three-quarter; one with its mouth, or seen from behind, is not."""
+    from PIL import Image
+    import burnham as B
+    import patriots3_cast as C
+    import views as V
+    B.SS = 1
+
+    def seen():
+        out = []
+        for deg in (0, 40, 180):
+            im = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+            out.append(V.person(im, B.Cam(1.0, 540, 960), 540, 700, 0.8, dict(C.GUNNER), 0.0, deg)['_drawn']['mouth'])
+        return out
+    real = B.mouth
+    a = seen()
+    B.mouth = lambda *x, **k: None
+    try:
+        b = seen()
+    finally:
+        B.mouth = real
+    return a == [True, True, None] and b == [False, False, None], f'with mouth: {a}; mouth removed: {b}'
 
 
 # ------------------------------------------------------------------------------------------------ running them

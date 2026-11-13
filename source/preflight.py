@@ -9,12 +9,13 @@ and BLACK_AT / DUR. It:
    scene(t), a FAULT if the film has none; clipcheck: solids, drawing order, teleports,
    contacts; hookcheck: the Hook Text clear of signs; musiccheck: song joins; linecheck: outlines; sizes: real
    sizes; landmarks: clothes against the body), each only if the film defines what it needs;
-2. draws every 3rd frame small and quick, so any check inside the drawing code (overlaps, fingertips on the
-   keyboard, feet on the floor, unreachable hands) fires now, with the time of the frame;
-3. checks the captions: at most 700 px wide in at most 2 rows of 42 characters, on screen long enough to read
+2. checks the captions: at most 700 px wide in at most 2 rows of 42 characters, on screen long enough to read
    (about 17 characters a second at most), never empty between pieces of one line;
-4. checks shot lengths (over 8 s is flagged, so a long single shot is a choice, not an accident);
-5. makes a contact sheet (one frame a second, safe-area guides drawn on) to look at once, instead of renders.
+3. names shots over 8 s on an info line (not a fault: Sam, 13 Nov);
+4. the picture checks (every frame drawn with the probes: hands, facing, copies, mouths, turns, poses, the film's
+   audits) run in the animatic render while it draws (rule 59, 13 Nov: one drawing pass); --pictures runs them
+   here instead, with 5. a contact sheet (one frame a second, safe-area guides drawn on).
+Every list is one line per fault, grouped by check, shot and who, with its time span and count (report.group).
 Before any of it, it REFUSES to run (rule 14) while the film's brief checklist (notes/NAME.md, "The brief as a
 checklist") has a blank "done?" row, or before the composition sheet has been sent (a line "Composition sheet sent:
 DATE, FILE" in the notes, rule 11); and it fails a film whose shot is missing anyone the brief puts in it (SHOT_CAST,
@@ -26,14 +27,13 @@ everyone drawn, on every frame: every arm ends in a visible hand. So do viewchec
 held prop turned through every view.
 
 Usage:
-    python3 preflight.py patriots2 OUT_DIR            before the animatic: stops at the first fault
-    python3 preflight.py patriots2 OUT_DIR --audit    list every fault (for a finished film)
+    python3 preflight.py patriots2 OUT_DIR            before the animatic (~1 min; the render checks the pictures)
+    python3 preflight.py patriots2 OUT_DIR --pictures the picture checks here too, and the contact sheet
+    python3 preflight.py patriots2 OUT_DIR --audit    list every fault, pictures included (for a finished film)
     ... --faults-named    the round's critique faults are named to Sam (rule 89): the animatic may go ahead
 """
 import fnmatch
-import hashlib
 import importlib
-import json
 import os
 import re
 import sys
@@ -66,48 +66,118 @@ _FPS = 12
 _TURNED = set()                 # (per worker) the people and props already turned through every view
 
 
-def _check_frame(i):
+def install_probes(film):
+    """The picture checks' probes, put in before any drawing worker is started (pre-flight --pictures, and the
+    animatic render, which runs them while it draws: rule 59 as of 13 Nov)."""
+    global _FILM, _FPS
+    _FILM, _FPS = film, getattr(film, 'FPS', 12)
+    F.guard(B)
     import kitchecks
+    import posecheck
+    import turnhead
+    import views
+    import waivers
+    kitchecks.install()                         # every views.py person drawn is logged (facing, copies, mouths)
+    posecheck.install()                         # rule 42: named poses against the gallery's avoid views; lying bodies
+    handcheck.install()                         # rule 41: every views.py person drawn is probed for hands
+    waivers.install()                           # rule 13: the house look (who each front head is drawn on)
+    turnhead.install(views)                     # turned heads: who keeps their own design round a turn
+
+
+def probe(t, draw):
+    """Draw one frame (draw(t)) with the probes on. Returns (the picture or None, what the checks need)."""
+    import kitchecks
+    import turnhead
     import viewchecks
+    import waivers
     film = _FILM
-    t = i / _FPS
     shot = next((s[0] for s in getattr(film, 'SHOTS', []) if s[1] <= t < s[2]), '')
     F.CONTEXT['where'] = f'{shot} {t:.2f}s'
     F.CONTEXT['t'] = t                              # the film's time, for kitchecks' cut and face checks (Job L)
-    import turnhead
     n0, d0, p0 = len(F.LOG), len(kitchecks.DRAWN), len(kitchecks.POSES)
-    s0, m0 = len(turnhead.SEEN), len(turnhead.MISSING)
-    import waivers
+    s0, m0, g0 = len(turnhead.SEEN), len(turnhead.MISSING), len(turnhead.GENERIC)
     w0 = len(waivers.LOG)
-    err = None
+    err, pic = None, None
     handcheck.begin()
     try:
-        film.frame_image(t)
+        pic = draw(t)
     except Exception as e:
         err = (str(e), isinstance(e, ValueError), traceback.format_exc())
     hands = handcheck.end(t, F.CONTEXT['where'])    # rule 41: every arm ends in a visible hand
     turned = viewchecks.turn_faults(kitchecks.POSES[p0:], _TURNED)   # rule 20: every held prop through every view
     del kitchecks.POSES[p0:]
     heads = (sorted(set(turnhead.SEEN[s0:])), sorted(set(turnhead.MISSING[m0:])))   # Job I faces: turned heads drawn
-    del turnhead.SEEN[s0:], turnhead.MISSING[m0:]
+    generic = sorted(set(turnhead.GENERIC[g0:]))
+    del turnhead.SEEN[s0:], turnhead.MISSING[m0:], turnhead.GENERIC[g0:]
     looks = list(waivers.LOG[w0:])                  # rule 13's house look: who each front head was drawn on
     del waivers.LOG[w0:]
-    return t, err, list(F.LOG[n0:]), list(kitchecks.DRAWN[d0:]), turned, hands, heads, looks
-
-
-def _hands_frame(i):
-    """Rule 41 on the frames the drawing pass skips: the hands are checked on every frame."""
-    t = i / _FPS
-    shot = next((s[0] for s in getattr(_FILM, 'SHOTS', []) if s[1] <= t < s[2]), '')
-    F.CONTEXT['where'] = f'{shot} {t:.2f}s'
-    n0 = len(F.LOG)
-    handcheck.begin()
-    try:
-        _FILM.frame_image(t)
-    except Exception:                               # the drawing pass reports drawing faults
-        pass
+    log = list(F.LOG[n0:])
     del F.LOG[n0:]
-    return handcheck.end(t, F.CONTEXT['where'])
+    drawn = list(kitchecks.DRAWN[d0:])
+    del kitchecks.DRAWN[d0:]
+    return pic, (t, err, log, drawn, turned, hands, heads, looks, generic)
+
+
+def _check_frame(i):
+    return probe(i / _FPS, _FILM.frame_image)[1]
+
+
+def picture_faults(film, name, recs, fps, new_template=False):
+    """The faults from the drawing pass (recs: probe()'s records, one a frame), and who is seen turned. Shared by
+    pre-flight --pictures and the animatic render."""
+    import kitchecks
+    import waivers
+    problems, drawn, hands, looks, flog = [], [], [], [], []
+    heads_seen, heads_missing, generic, yaws = set(), {}, {}, {}
+    for t, err, log, dr, turned, hs, (seen, miss), lk, gen in recs:
+        looks += lk
+        heads_seen.update(seen)
+        for who, view in miss:
+            heads_missing.setdefault((who, view), t)
+        for who, view in gen:
+            generic.setdefault((who, view), t)
+        flog += log
+        drawn += dr
+        hands += hs
+        problems += [x for x in turned if x not in problems]
+        if err:
+            problems.append(f'{t:6.2f} s: {err[0]}')
+            if not err[1]:
+                print(err[2])
+    for _, who, d in drawn:
+        yaws.setdefault(who, set()).add(round(d.get('yaw', 0)) % 360)
+    turning = {w for w, ys in yaws.items()            # proposal 4 (Sam, 13 Nov): the prop-turn test only for someone
+               if any(abs((a - b + 180) % 360 - 180) >= 30 for a in ys for b in ys)}   # seen turning (9 false, 0 real)
+    problems = [x for x in problems if not x.startswith('PROP TURN') or
+                any(f': {w} ' in x for w in turning)]
+    people = 'people' in set(getattr(film, 'HAS', KINDS))
+    if people:
+        problems += [row[1] for row in handcheck.summary(film, hands, fps)]
+    for (who, view), t in sorted(heads_missing.items()):   # Job I faces: built only when a shot needs it
+        problems.append(f'{t:6.2f} s: {who} is drawn turned ({view}) with the old generic head: their front design is '
+                        'measured, so give them a turned head (turnhead.register, as the Ad-Vanced Notice cast does)')
+    own = {n for n, w, house, _ in looks if not house}   # proposal 5 (N9): a head keeps its design through a turn
+    for (who, view), t in sorted(generic.items()):
+        if who in own and view != 'back' and not any(w == who for w, _ in heads_missing):
+            problems.append(f'TURN DESIGN: {t:6.2f} s: {who} has their own front face but is drawn {view} on the '
+                            'generic head, so the head changes style, size and shape as they turn (Blessed N9): keep '
+                            'them face-on (eyes and expression show where they look), or give them a turned head')
+    F.CONTEXT['where'] = ''
+    path = notes_path(film, name)
+    if people:
+        problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
+        problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
+        problems += kitchecks.mouths(film, drawn)   # rule 13 (notes 5, 15, 45): every face on screen has a mouth
+        problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
+        problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
+        table = waivers.rows(open(path).read() if os.path.exists(path) else '')
+        problems += waivers.look_faults(looks, table)   # rule 13: everyone in the house look
+        problems += waivers.lap_faults(drawn, table)   # rule 80: seated front on shows knees and lap
+        problems += waivers.unseen_faults(film, drawn, table)   # rule 13: no one silently outside the checks
+        problems += kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous face 240 px tall once
+    if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
+        problems += film.audits()
+    return problems, sorted(heads_seen | set(heads_missing)), flog
 
 
 def _notes_file(name):
@@ -238,75 +308,6 @@ def _sheet_tile(k):
     return im.resize((216, 384))
 
 
-# --- incremental frame passes (rule 59 as amended 3 Nov, Sam: a small fix should not re-check the whole film) --------
-# Every frame is fingerprinted (its picture at the check size). A later run redraws and re-checks only the frames
-# whose fingerprint changed (and a few round them), and only the bodies whose shots they fall in. It falls back to the
-# full pass whenever it cannot be sure: no earlier run, an earlier run that found a frame-level fault, any change to the
-# check code, any change to the film's allow-lists and settings, or a change in length. The text and sound checks
-# (script, mouths, subtitles, plan, shared checks) always run in full: they take seconds. `--full` forces the full pass.
-CHECK_FILES = ('preflight.py', 'handcheck.py', 'posecheck.py', 'lying.py', 'audit.py', 'clipcheck.py', 'kitchecks.py',
-               'filmkit.py', 'figure.py', 'viewchecks.py', 'housestyle.py', 'plan.py', 'benchmark.py', 'sets.py', 'linecheck.py', 'landmarks.py',
-               'hookcheck.py', 'musiccheck.py', 'sizes.py', 'voices.py', 'report.py', 'mounts.py', 'collisions.py',
-               'waivers.py', 'camfeel.py', 'views.py')
-
-
-def _checks_hash():
-    h = hashlib.sha1()
-    for f in CHECK_FILES:
-        path = os.path.join(ROOT, 'source', f)
-        if os.path.exists(path):
-            h.update(f.encode())
-            with open(path, 'rb') as fh:
-                h.update(fh.read())
-    return h.hexdigest()
-
-
-def _plain(v):
-    if isinstance(v, (set, frozenset)):
-        return sorted(map(repr, v))
-    if isinstance(v, dict):
-        return {repr(k): _plain(x) for k, x in sorted(v.items(), key=lambda kv: repr(kv[0]))}
-    if isinstance(v, (list, tuple)):
-        return [_plain(x) for x in v]
-    return v
-
-
-def _config_hash(film):
-    """The film's own settings and allow-lists (HANDS_OK, ALLOWED, TOUCHES, SHOTS...): a change in any of them can
-    change what a check says about a frame that did not itself change. (Pictures cover the rest; one-letter names and
-    the heavy line, mouth and blink tables are left out: pictures and the text checks cover them.)"""
-    h = hashlib.sha1()
-    for k in sorted(dir(film)):
-        if k.isupper() and len(k) > 1 and not k.startswith('_') and k not in ('LINES', 'TRACK', 'BLINKS'):
-            v = getattr(film, k)
-            if isinstance(v, (list, tuple, dict, set, frozenset, str, int, float, bool, type(None))):
-                h.update(k.encode())
-                h.update(re.sub(r' at 0x[0-9a-fA-F]+', '', repr(_plain(v))).encode()[:400000])   # (no memory addresses)
-    return h.hexdigest()
-
-
-def _frame_hash(i):
-    B.SS = 1
-    t = i / _FPS
-    try:
-        pic = _FILM.picture(t) if hasattr(_FILM, 'picture') else _FILM.frame_image(t)
-    except Exception as e:                      # the figure guard stops a bad drawing: that frame is "changed" for good,
-        return 'ERROR ' + str(e)[:60]           # and the normal pass below draws it again and reports the fault
-    return hashlib.md5(pic.tobytes()).hexdigest()[:16]
-
-
-def _fault_frame(text, fps):
-    """The frame a fault names ('4.83s', '  4.83 s:'), or None when it names no time."""
-    import re
-    m = re.search(r'(\d+(?:\.\d+)?) ?s\b', text)
-    return int(round(float(m.group(1)) * fps)) if m else None
-
-
-def _frames_path(name):
-    import film_engine
-    return os.path.join(film_engine.PASSES, f'{name}-frames.json')
-
-
 def _in_child(fn, *args):
     """Run fn(*args) in a forked child and return its result (a list of fault strings): whatever libraries it loads
     (GNU OpenMP) stay out of this process, which later forks the drawing workers. Forked, not pickled: the film is a
@@ -341,9 +342,11 @@ def _text_only(film, problems, end, fps):
     if hasattr(film, 'caption_at'):             # rule 62 at the delivered speed (rule 70: 1.1x), in the kit's style
         import subtitles as SUB
         problems += SUB.readable_faults(film.caption_at, end, fps)
-    for s in getattr(film, 'SHOTS', []):
-        if s[2] - s[1] > MAX_SHOT:
-            problems.append(f'shot {s[0]} ({s[1]:.1f}-{s[2]:.1f} s) is {s[2] - s[1]:.1f} s long (over {MAX_SHOT:.0f} s)')
+    long = [f'{s[0]} {s[2] - s[1]:.1f} s' for s in getattr(film, 'SHOTS', []) if s[2] - s[1] > MAX_SHOT]
+    if long:                                    # an info line (Sam, 13 Nov, proposal 4)
+        print(f'info: shots over {MAX_SHOT:.0f} s (fine when chosen): ' + ', '.join(long))
+    import report
+    problems[:] = report.group(problems, getattr(film, 'SHOTS', []))
     print('quick check (--text):', 'clean' if not problems else f'{len(problems)} fault(s)')
     for x in problems:
         print(' -', x)
@@ -386,13 +389,8 @@ def main():
         for x in stop:
             print(' -', x)
         sys.exit(2)
-    F.guard(B)
+    install_probes(film)                        # figure guard, facing, poses, hands, house look, turned heads
     import kitchecks
-    kitchecks.install()                         # every views.py person drawn is logged for the facing check
-    import posecheck
-    posecheck.install()                         # rule 42: named poses against the gallery's avoid views; lying bodies
-    handcheck.install()                         # rule 41: every views.py person drawn is probed for hands
-    waivers.install()                           # rule 13: the house look (who each front head is drawn on)
     if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
         film.checks()
     shared = ['gate: ' + x for x in stop]       # the shared checks every film gets (Sam, 18 Oct: catch it before I do)
@@ -458,136 +456,51 @@ def main():
     if '--text' in sys.argv:                    # rule 67: the quick check, in seconds: the plan, script, mouths, subtitles
         _text_only(film, problems, end, fps)    # and shot lengths; no picture passes, no sheet, and never a pass stamp
         sys.exit(1 if problems else 0)
-    # 2. every 3rd frame, small: the checks inside the drawing code (all processor cores)
-    global _FILM, _FPS
-    _FILM, _FPS = film, fps
-    drawn = []
-    from multiprocessing import Pool
-    n_frames = int(end * fps)
-    n_text = len(problems)                      # faults after this are the frame-level ones (the stamp's "clean")
-    prev, incremental, changed = None, False, list(range(n_frames))
-    stamp_ok = not audit and '--full' not in sys.argv
-    with Pool(os.cpu_count()) as pool:
-        hashes = None
-        if stamp_ok:                            # fingerprint every frame: a plain picture, a quarter of a probed one
-            hashes = pool.map(_frame_hash, range(n_frames), chunksize=4)
-            try:
-                with open(_frames_path(name)) as fh:
-                    prev = json.load(fh)
-            except (OSError, ValueError):
-                prev = None
-            chk, cfg = _checks_hash(), _config_hash(film)
-            # A run that found frame-level faults is still a base to compare with (Sam, 12 Nov: a one-fault fix
-            # must not mean a full re-run): its faults are kept, each with its time, and carried forward unless
-            # their frame is re-checked. A fault with no time in it cannot be carried, so that case runs in full.
-            carry = prev.get('faults') if prev and not prev.get('clean') else []
-            carry_ok = carry is not None and all(_fault_frame(x, fps) is not None for x in carry)
-            incremental = bool(prev and (prev.get('clean') or carry_ok) and prev.get('checks') == chk
-                               and prev.get('config') == cfg and prev.get('n') == n_frames and prev.get('fps') == fps)
-            if incremental:
-                changed = [i for i in range(n_frames) if hashes[i] != prev['hashes'][i]]
-                near = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))}
-                for x in (carry or []):             # faults from the last run whose frame was not re-checked
-                    if _fault_frame(x, fps) not in near and x not in problems:
-                        problems.append(x)
-                print(f'incremental pre-flight: {len(changed)} of {n_frames} frames changed since the last clean run; '
-                      f're-checking {len(near)} (the rest were clean then and are unchanged). --full re-checks all.')
-            elif prev:
-                why = ('the last run found a fault with no time in it' if not prev.get('clean') and not carry_ok else
-                       'the check code changed' if prev.get('checks') != chk else
-                       'the film\'s settings or allow-lists changed' if prev.get('config') != cfg else
-                       'the length changed')
-                print(f'full pre-flight (not incremental: {why})')
-            else:
-                print('full pre-flight (no earlier clean run to compare with)')
-        todo = {j for i in changed for j in range(max(0, i - 3), min(n_frames, i + 4))} if incremental else None
-        hands, looks = [], []
-        first = [i for i in range(0, n_frames, 3) if todo is None or i in todo]
-        heads_seen, heads_missing = set(), {}
-        for t, err, log, dr, turned, hs, (seen, miss), lk in pool.imap(_check_frame, first, chunksize=4):
-            looks += lk
-            heads_seen.update(seen)
-            for who, view in miss:
-                heads_missing.setdefault((who, view), t)
-            F.LOG.extend(log)
-            drawn += dr
-            hands += hs
-            problems += [x for x in turned if x not in problems]
-            if err:
-                problems.append(f'{t:6.2f} s: {err[0]}')
-                if not err[1]:
-                    print(err[2])
-        rest = [i for i in range(n_frames) if i % 3 and (todo is None or i in todo)]
-        for hs in pool.imap(_hands_frame, rest, chunksize=4):   # the hands on every frame (rule 41)
-            hands += hs
-    if people:
-        problems += [row[1] for row in handcheck.summary(film, hands, fps)]
-    heads_seen = locals().get('heads_seen', set())
-    heads_missing = locals().get('heads_missing', {})
-    for (who, view), t in sorted(heads_missing.items()):   # Job I faces: built only when a shot needs it
-        problems.append(f'{t:6.2f} s: {who} is drawn turned ({view}) with the old generic head: their front design is '
-                        'measured, so give them a turned head (turnhead.register, as the Ad-Vanced Notice cast does)')
-    if heads_seen or heads_missing:
-        print('turned heads the shots need:', ', '.join(f'{w} {v}' for w, v in sorted(heads_seen | set(heads_missing))))
-    F.CONTEXT['where'] = ''
-    if people:
-        problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
-        problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
-        problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
-        problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
-        table = waivers.rows(open(path).read() if os.path.exists(path) else '')
-        problems += waivers.look_faults(locals().get('looks', []), table)   # rule 13: everyone in the house look
-        problems += waivers.lap_faults(drawn, table)   # rule 80: seated front on shows knees and lap
-        if not incremental:                     # (a re-check that redrew only some frames can't say who is unseen)
-            problems += waivers.unseen_faults(film, drawn, table)   # rule 13: no one silently outside the checks
-        _faces = kitchecks.faces(film, drawn, ask=new_template)   # rule 50: each famous person's face 240 px tall once
-        if incremental:                         # a re-check that did not redraw them cannot say they were "never drawn"
-            _faces = [x for x in _faces if 'never found drawn' not in x]
-        problems += _faces
-    if hasattr(film, 'audits'):               # the film's general body / movement / marks audit (filmkit.py)
-        import filmkit
-        if incremental:                         # only the bodies in shots that hold a changed frame (a second round)
-            filmkit.ONLY_FRAMES = {j for i in changed for j in range(max(0, i - 12), min(n_frames, i + 13))}
-        try:
-            problems += film.audits()
-        finally:
-            filmkit.ONLY_FRAMES = None
-    if stamp_ok and hashes is not None:         # the fingerprints for the next run; "clean" = no frame-level fault
-        os.makedirs(os.path.dirname(_frames_path(name)), exist_ok=True)
-        with open(_frames_path(name), 'w') as fh:
-            json.dump({'checks': _checks_hash(), 'config': _config_hash(film), 'n': n_frames, 'fps': fps,
-                       'hashes': hashes, 'clean': len(problems) == n_text,
-                       'faults': problems[n_text:]}, fh)
-    # 3. captions
-    if hasattr(film, 'caption_at'):             # rule 62 at the delivered speed (rule 70: 1.1x), in the kit's style
+    # 2. captions (rule 62 at the delivered speed, rule 70: 1.1x, in the kit's style)
+    if hasattr(film, 'caption_at'):
         import subtitles as SUB
         problems += SUB.readable_faults(film.caption_at, end, fps)
-    # 4. shot lengths
-    for s in getattr(film, 'SHOTS', []):
-        if s[2] - s[1] > MAX_SHOT:
-            problems.append(f'shot {s[0]} ({s[1]:.1f}-{s[2]:.1f} s) is {s[2] - s[1]:.1f} s long (over {MAX_SHOT:.0f} s: '
-                            f'fine only if chosen, e.g. an unbroken speech)')
-    # 5. contact sheet with the safe area drawn on
-    logged = len(F.LOG)                         # the sheet's frames repeat ones already checked
-    with Pool(os.cpu_count()) as pool:
-        tiles = pool.map(_sheet_tile, range(int(end)))
-    cols = 5                                    # 1080 px wide: one look, not a wall of pixels
-    sheet = Image.new('RGB', (cols * 216, ((len(tiles) + cols - 1) // cols) * 384), (20, 20, 20))
-    for i, im in enumerate(tiles):
-        sheet.paste(im, ((i % cols) * 216, (i // cols) * 384))
-    import turnhead                             # Job I faces: the turnaround of each (person, view) the shots need
-    try:
-        turn = turnhead.turnaround(sorted(heads_seen | set(heads_missing)))
-    except KeyError as e:                       # 11 Nov (Blessed): a person with no turnaround entry crashed the run
-        turn = None                             # before it wrote its stamp; the sheet is only a picture, the checks stand
-        problems.append(f'turnaround sheet skipped: a person it draws has no {e} (film has no PEOPLE entry)')
-    if turn is not None:
-        turn.thumbnail((sheet.width, 10 ** 5))
-        both = Image.new('RGB', (sheet.width, sheet.height + turn.height), (20, 20, 20))
-        both.paste(sheet, (0, 0))
-        both.paste(turn, (0, sheet.height))
-        sheet = both
-    sheet.save(os.path.join(out, f'{name}-preflight.jpg'), quality=85)
+    # 3. shot lengths: an info line, not a fault (Sam, 13 Nov, proposal 4: 6 of 10 films flagged it, always chosen)
+    long = [f'{s[0]} {s[2] - s[1]:.1f} s' for s in getattr(film, 'SHOTS', []) if s[2] - s[1] > MAX_SHOT]
+    if long:
+        print(f'info: shots over {MAX_SHOT:.0f} s (fine when chosen): ' + ', '.join(long))
+    # 4. the picture checks: every frame drawn with the probes on. Normally the animatic render runs them while it
+    # draws (rule 59, 13 Nov: one drawing pass); --pictures (or --audit) runs them here, with the contact sheet.
+    pictures = audit or any(a in sys.argv for a in ('--pictures', '--full', '--sheet'))
+    global _FILM, _FPS
+    _FILM, _FPS = film, fps
+    n_frames = int(end * fps)
+    heads = []
+    if pictures:
+        from multiprocessing import Pool
+        with Pool(os.cpu_count()) as pool:
+            recs = list(pool.imap(_check_frame, range(n_frames), chunksize=4))
+        pf, heads, flog = picture_faults(film, name, recs, fps, new_template)
+        problems += pf
+        F.LOG.extend(flog)
+        logged = len(F.LOG)                     # the sheet's frames repeat ones already checked
+        with Pool(os.cpu_count()) as pool:      # 5. contact sheet with the safe area drawn on
+            tiles = pool.map(_sheet_tile, range(int(end)))
+        cols = 5                                # 1080 px wide: one look, not a wall of pixels
+        sheet = Image.new('RGB', (cols * 216, ((len(tiles) + cols - 1) // cols) * 384), (20, 20, 20))
+        for i, im in enumerate(tiles):
+            sheet.paste(im, ((i % cols) * 216, (i // cols) * 384))
+        import turnhead                         # Job I faces: the turnaround of each (person, view) the shots need
+        try:
+            turn = turnhead.turnaround(heads)
+        except KeyError as e:                   # 11 Nov (Blessed): a person with no turnaround entry crashed the run
+            turn = None
+            problems.append(f'turnaround sheet skipped: a person it draws has no {e} (film has no PEOPLE entry)')
+        if turn is not None:
+            turn.thumbnail((sheet.width, 10 ** 5))
+            both = Image.new('RGB', (sheet.width, sheet.height + turn.height), (20, 20, 20))
+            both.paste(sheet, (0, 0))
+            both.paste(turn, (0, sheet.height))
+            sheet = both
+        sheet.save(os.path.join(out, f'{name}-preflight.jpg'), quality=85)
+        del F.LOG[logged:]
+    else:
+        print('picture checks: not run here; the animatic render runs them while it draws (or add --pictures)')
     del F.LOG[logged:]
     import contextlib
     import io
@@ -616,11 +529,13 @@ def main():
         print('Checks: ' + ' | '.join(checks) + '   <- put this line in Sam\'s message')
     notes = (['The figure guard (allowed drawings, how often):'] + log) if log else []
     notes += (['The film\'s exceptions (rule 13; reasons in the notes\' "## Exceptions"):'] + wlist) if wlist else []
+    problems = report.group(problems, getattr(film, 'SHOTS', []))   # rule 19 (13 Nov): one line per fault
     report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'), notes=notes)
-    print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
+    if pictures:
+        print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
     if not audit:
         import film_engine                      # rule 59: the render checks this stamp before an animatic or final
-        film_engine.write_pass(name, len(problems))
+        film_engine.write_pass(name, len(problems), pictures=pictures)
     sys.exit(1 if problems else 0)
 
 

@@ -60,27 +60,54 @@ def code_hash():
     return h.hexdigest()
 
 
-def write_pass(film, faults):
-    """Pre-flight's stamp (rule 59): the code it ran on, and how many faults it found."""
+def write_pass(film, faults, pictures=False):
+    """Pre-flight's stamp (rule 59): the code it ran on, how many faults it found, and whether the picture checks
+    (every frame drawn with the probes) have passed on this code: pre-flight --pictures, or an animatic render that ran
+    them while it drew."""
     os.makedirs(PASSES, exist_ok=True)
     with open(os.path.join(PASSES, f'{film}.json'), 'w') as fh:
-        json.dump({'code': code_hash(), 'faults': faults}, fh)
+        json.dump({'code': code_hash(), 'faults': faults, 'pictures': bool(pictures)}, fh)
 
 
-def lock_fault(film, faults_named=False):
-    """Rule 59: why an animatic or final render may not start (None: it may). A render that ran on past a failed
-    pre-flight (Flying Whales, animatic 4) cannot happen again: the render itself checks."""
+def read_pass(film):
     path = os.path.join(PASSES, f'{film}.json')
     if not os.path.exists(path):
-        return f'pre-flight has not been run on {film} in this session: python3 source/preflight.py {film} OUT_DIR'
+        return None
     with open(path) as fh:
-        stamp = json.load(fh)
+        return json.load(fh)
+
+
+def lock_fault(film, faults_named=False, final=False):
+    """Rule 59: why an animatic or final render may not start (None: it may). A render that ran on past a failed
+    pre-flight (Flying Whales, animatic 4) cannot happen again: the render itself checks. An animatic may start on
+    pre-flight's quick pass (it runs the picture checks itself while it draws); a final needs the picture checks
+    passed on this exact code (an animatic, or pre-flight --pictures)."""
+    stamp = read_pass(film)
+    if stamp is None:
+        return f'pre-flight has not been run on {film} in this session: python3 source/preflight.py {film} OUT_DIR'
     if stamp['code'] != code_hash():
         return f'the code has changed since pre-flight last ran on {film}: run it again'
     if stamp['faults'] and not faults_named:
         return (f'pre-flight found {stamp["faults"]} fault(s) on {film}: fix them, or, if every one has been named to '
                 f'Sam, add --faults-named')
+    if final and not stamp.get('pictures'):
+        return (f'the picture checks have not passed on this code: render the animatic (--small) first, which runs '
+                f'them, or run pre-flight with --pictures')
     return None
+
+
+_CHECK = {}                                       # the render's picture checks (rule 59, 13 Nov): the film module
+
+
+def _checked(t):
+    """The picture, drawn with pre-flight's probes; (picture, record). A drawing the figure guard stops is a black
+    frame here: the fault is in the record, and the video is refused."""
+    import preflight
+    pic, rec = preflight.probe(t, _JOB['picture'])
+    if pic is None:
+        from burnham import canvas
+        pic = canvas((0, 0, 0))
+    return pic, rec
 
 
 def _frame(args):
@@ -89,7 +116,11 @@ def _frame(args):
     t = i / j['fps']
     j['set_ss'](j['ss'])
     path = os.path.join(j['cache'], f'{i:04d}.png')
-    if reuse and os.path.exists(path):
+    rec = None
+    if j.get('check'):                            # rule 59 (13 Nov): the picture checks run on this one drawing
+        pic, rec = _checked(t)
+        pic.save(path, compress_level=1)
+    elif reuse and os.path.exists(path):
         pic = Image.open(path)
         pic.load()
     else:
@@ -101,7 +132,7 @@ def _frame(args):
     im = j['overlay'](pic, t).convert('RGB').resize(j['size'], Image.LANCZOS)
     if j.get('stamp'):
         stamp(im, t, j['shot_of'](t))
-    return np.asarray(im).tobytes()
+    return np.asarray(im).tobytes(), rec
 
 
 def stamp(im, t, shot):
@@ -138,10 +169,19 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         lock = not span
     if os.path.exists(out):                       # rule 66 (Sam, 3 Nov): never an old file standing in for a new render:
         os.remove(out)                            # gone before anything else, so a refused or stopped render leaves none
+    check = False
+    named = '--faults-named' in sys.argv
     if lock:
-        why = lock_fault(film, '--faults-named' in sys.argv)
+        small = ss == 1 and size[0] < 1080
+        why = lock_fault(film, named, final=not small)
         if why:
             sys.exit('render REFUSED (rule 59): ' + why)
+        check = not (read_pass(film) or {}).get('pictures')   # the animatic runs the picture checks as it draws
+        if check:
+            import preflight
+            preflight.install_probes(main)
+            reuse = False                         # every frame drawn (and checked): the cache cannot know what changed
+            print('picture checks: on, while drawing (rule 59); the video is refused if they find a fault', flush=True)
     import imageio_ffmpeg
     from multiprocessing import Pool
     cache = os.path.join(os.environ.get('FILM_CACHE', os.path.expanduser('~/.cache/filmcache')),
@@ -155,7 +195,8 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     if stamp is None:
         stamp = bool(span) or size[0] < 1080 and size[1] < 1920
     _JOB.update(fps=fps, ss=ss, size=size, cache=cache, picture=picture, overlay=overlay, set_ss=set_ss,
-                shot_of=shot_of, stamp=stamp, look=look)
+                shot_of=shot_of, stamp=stamp, look=look, check=check)
+    recs = []
     hold = FILE_FPS // fps if look and fps == DRAW_FPS else 1          # rule S7: 12 drawings a second, each shown twice
     wav = out + '.wav'
     write_wav(wav, sound())
@@ -166,8 +207,10 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     try:
         with Pool(os.cpu_count()) as pool:
-            for k, fr in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
+            for k, (fr, rec) in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
                 p.stdin.write(fr)
+                if rec is not None:
+                    recs.append(rec)
                 if k % 48 == 0:
                     print(f'frame {k}/{n - first}', flush=True)
         p.stdin.close()
@@ -184,6 +227,19 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                 os.remove(f)
         raise
     os.remove(wav)
+    if check:                                     # the drawing pass's own checks (pre-flight's picture checks)
+        import preflight
+        import report
+        found, _, _ = preflight.picture_faults(main, film, recs, fps)
+        found = report.group(found, getattr(main, 'SHOTS', []))
+        report.summarise(f'picture checks ({film})', found, os.path.join(os.path.dirname(os.path.abspath(out)),
+                                                                          f'{film}-picture-checks.txt'))
+        if found and not named:
+            os.remove(out)
+            sys.exit(f'render STOPPED (rule 59): the picture checks found {len(found)} fault(s), listed above; fix them '
+                     f'(or name every one to Sam and add --faults-named), then render again. No video was kept.')
+        stamp0 = read_pass(film) or {}
+        write_pass(film, stamp0.get('faults', 0) + len(found), pictures=True)   # the final may now go ahead
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB)', flush=True)
 
 

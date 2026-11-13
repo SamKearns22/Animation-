@@ -417,7 +417,7 @@ class Eyes(B.Pen):
     look check measures where the pupils really point on screen (rule 43), never what the film meant them to. A real
     Pen (code that looks for one finds it); its drawing goes through the pen it wraps."""
     def __init__(self, pen):
-        self.pen, self.found, self._white = pen, [], None
+        self.pen, self.found, self._white, self.marks = pen, [], None, []
         self.img, self.cam, self.d = pen.img, pen.cam, pen.d
 
     def __getattr__(self, k):
@@ -431,7 +431,21 @@ class Eyes(B.Pen):
         self._note(fill, line, [(cx - rx, cy), (cx + rx, cy), (cx, cy - ry), (cx, cy + ry)])
         return self.pen.ell(cx, cy, rx, ry, fill, line, lw, rot, n)
 
+    def line(self, pts, colr=INK, lw=4):
+        self._mark(None, colr, pts)
+        return self.pen.line(pts, colr, lw)
+
+    def _mark(self, fill, line, pts):
+        """Every mark on the face, in the head's units (mouth_seen: does the face have a mouth, Sam's notes 5, 15, 45)."""
+        try:
+            q = np.array(pts, float)[:, :2]
+            self.marks.append((q.min(0), q.max(0), None if fill is None else tuple(fill[:3]),
+                               None if not line else tuple(line[:3])))
+        except Exception:
+            pass
+
     def _note(self, fill, line, pts):
+        self._mark(fill, line, pts)
         if fill is None or len(fill) < 3:
             return
         q = np.array([self.pen.cam.P(*v) for v in pts], float)
@@ -441,8 +455,38 @@ class Eyes(B.Pen):
             w = self._white
             c = (w.max(0) + w.min(0)) / 2
             half = max(1.0, (w[:, 0].max() - w[:, 0].min()) / 2)
-            self.found.append(dict(white=tuple(c), pupil=tuple(q.mean(0)), off=tuple((q.mean(0) - c) / half)))
+            self.found.append(dict(white=tuple(c), pupil=tuple(q.mean(0)), off=tuple((q.mean(0) - c) / half),
+                                   half=half))
             self._white = None
+
+    def mouth_seen(self, sp, view):
+        """Rule 13 (Sam's notes 5, 15, 45: faces with no mouth): True when a mark is drawn where the mouth goes (a
+        mouth, lips, or a moustache over them), measured from the eyes' whites (any face system draws them; sizes
+        differ between systems, so the eye's width is the unit); False when the face is turned to us and nothing is
+        there; None when it cannot tell (from behind, eyes shut or drawn without whites)."""
+        if view not in ('front', 'three', 'side'):
+            return None
+        def pupil_in(lo, hi):                         # an eye's white has an iris or pupil inside it (teeth do not)
+            return any(f is not None and min(f) < 232 and (l2 >= lo).all() and (h2 <= hi).all()
+                       and (h2 - l2)[0] < (hi - lo)[0] for l2, h2, f, _ in self.marks)
+        whites = [(lo, hi) for lo, hi, fill, _ in self.marks
+                  if fill is not None and min(fill) >= 232 and hi[0] > lo[0] and pupil_in(lo, hi)]
+        if not whites:
+            return None
+        u = max(hi[0] - lo[0] for lo, hi in whites)                  # an eye's width
+        ex = np.mean([(lo[0] + hi[0]) / 2 for lo, hi in whites])
+        ey = max((lo[1] + hi[1]) / 2 for lo, hi in whites)
+        skin = tuple(sp.get('skin', ())[:3]) or None
+        for lo, hi, fill, line in self.marks:
+            cx, cy = (lo + hi) / 2
+            if not (ey + 1.5 * u < cy < ey + 4.2 * u and abs(cx - ex) < 2.6 * u and hi[1] - lo[1] < 3 * u):
+                continue
+            if hi[0] - lo[0] < 0.3 * u:
+                continue                              # a dot (stubble, a freckle) is not a mouth
+            if line is None and (fill is None or fill == skin):
+                continue                              # a skin-coloured shape (a cheek, a chin) is not a mouth
+            return True
+        return False
 
 
 class Lean:
@@ -947,6 +991,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
                         seated=_sits(j), lap=bool(j.get('lap')))   # rule 80 (waivers.lap_faults)
     head_view(img, head_pen, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])
     j2['_drawn']['eyes'] = head_pen.found         # each eye's white and pupil on screen, for the look check (rule 43)
+    j2['_drawn']['mouth'] = head_pen.mouth_seen(sp_draw, hv)   # rule 13
     j2['_drawn']['head_mirror'] = head_mirror
     j2['_drawn']['behind'] = set(behind)          # arms drawn before the torso (the seam check skips them: rule 81)
     try:                                          # the face's height on a 1920-tall frame, and whether it is in the

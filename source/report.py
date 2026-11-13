@@ -30,6 +30,35 @@ def kind(line):
     return f'{k} {m.group(2)}' if m.group(2) else k
 
 
+_TIME = re.compile(r'(?<![\w.])(-?\d+(?:\.\d+)?)(?:-(\d+(?:\.\d+)?))? ?s\b')   # '4.83 s', '3.1-3.5 s'
+
+
+def group(faults, shots=()):
+    """Rule 19 (Sam, 13 Nov: 137 faults and 356 repeat lines -> about 20): one line per fault, grouped by check, shot
+    and who. Lines that differ only in their times, numbers or an extra's number (press0, press12; Journalist 4) are
+    one fault: the first is kept, with its shot, time span and count. shots: the film's SHOTS, to name the shot."""
+    groups = {}
+    for x in faults:
+        times = [float(v) for m in _TIME.findall(x) for v in m if v]
+        t = times[0] if times else None
+        shot = next((s[0] for s in shots if t is not None and s[1] <= t < s[2]), '')
+        key = _TIME.sub('#s', x)
+        key = re.sub(r'\b([A-Za-z_]+?)( ?)\d+\b', r'\1\2*', key)   # an extra's number, and any other number
+        key = re.sub(r'\d+(\.\d+)?', '#', key)
+        g = groups.setdefault((kind(x), shot, key), [x, [], 0])
+        g[2] += 1
+        g[1].extend(times)
+    out = []
+    for (_, shot, _), (first, ts, n) in sorted(groups.items(), key=lambda kv: (kv[0][0], min(kv[1][1] or [0]))):
+        if n == 1:
+            out.append(first)
+            continue
+        span = (f'{min(ts):.2f}-{max(ts):.2f} s' if ts and max(ts) > min(ts) else f'{ts[0]:.2f} s' if ts else '')
+        where = ', '.join(v for v in ((f'shot {shot}' if shot else ''), span) if v)
+        out.append(f'{first}  [{n} like it' + (f': {where}' if where else '') + ']')
+    return out
+
+
 def summarise(title, faults, path=None, first=FIRST, notes=()):
     """Print the short summary. A file is written only when there are more faults than the summary shows (Sam, 2 Nov:
     he never reads it; the one line is enough). Returns the printed text."""

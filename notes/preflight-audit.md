@@ -1,16 +1,26 @@
 # Pre-flight audit (Sam, 13 Nov): quick, useful, cheap, effective
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 59 (render lock), 19 (PASS / FAULT / COULD NOT TEST, short summary), 30 (repeat notes).
-- **Done (chat 1 of 8, Opus high, 13 Nov):** measured one full pre-flight on Blessed's final code (--audit, 4 cores):
-  28.4 min + an 11 min fingerprint pass in a normal run (see Findings); the last 10 films' record; 5 proposals sent to
-  Sam as one numbered message. Ledger row moved to its own name (Sam: "own name").
-- **Next: on Sam's numbers, Opus MEDIUM (building from a clear plan): build the changes he says Y to, time one run
-  on Blessed, then one short message.** This chat is amber, so it opens that chat.
-- **Sam: Y to all of 1-5 (13 Nov, evening).** Needs Sam: nothing until chat 2's message.
-- **Read:** this file (Findings and Proposals only); preflight.py by its MAP.
-- **Open rule requests:** none written; proposals 1-5 change rules 59/67 (1), 19 (2), 13 S7 (5) on Sam's Y.
-- **For Claude:** timer wrapper in the chat-1 scratchpad (gone); re-make: wrap each check's faults() and print times.
+- **Rules that bite next:** 59 (the lock: an animatic now runs the picture checks itself), 19 (one line per fault), 30.
+- **Done (chat 2 of 8, Opus medium, 13 Nov):** all five built. 1: pre-flight is the quick check (no fingerprint pass,
+  no picture pass); the animatic render (--small) draws with the probes on and keeps no video on a fault; a clean one
+  stamps the code "pictures checked", which the final needs (or preflight --pictures). 2-3: report.group (one line per
+  fault, by check, shot and who, with span and count); COPIES no longer matches a named person with themselves.
+  4: shots over 8 s an info line; PROP TURN kept only for people seen at yaws 30+ degrees apart. 5: MOUTH (views.Eyes
+  marks, measured from the eye whites) and TURN DESIGN (own front face, generic turned head). Rules 59, 67, 19, 13
+  reworded. New kittests pass (render_lock, preflight_lines_grouped, every_face_has_a_mouth); full suite: see Next.
+- **Next: Sonnet (routine: a timed run). 1) kittests in full: one failed in this chat's first full run (unknown which;
+  the re-run's result is in the commit after this one if it landed); fix only if it is ours. 2) Time ONE run on
+  Blessed: `preflight.py blessed OUT` then `blessed.py final OUT --small`, real minutes (old: ~40 min pre-flight +
+  14.5 min animatic). 3) One short message to Sam: what changed, minutes saved, the Lost/Added lines below.**
+- **Lost (to tell Sam):** the incremental re-check (fingerprints): the render redraws every frame anyway; the contact
+  sheet unless asked (--pictures). **Added:** mouth check, turn-design check, final needs a clean animatic first.
+- **Needs Sam:** nothing until the message.
+- **Read:** this section only; preflight.py by its MAP if a fault needs a fix.
+- **Open rule requests:** none (59, 67, 19, 13 written on Sam's Y).
+- **For Claude:** render check mode: film_engine.render (check=..., _checked, picture_faults at the end); stamp
+  field 'pictures'; mouth: views.Eyes.mouth_seen; turn: turnhead.GENERIC. chat-qfystema's 1 newer commit is a ledger
+  row only (not merged). The render on Blessed is the first real test of check mode: if it crashes, fix there.
 
 ## Known so far (from the notes, 13 Nov)
 - **Time:** 9-15 min a run on Blessed (14 min 46 s in chat 3), up to 40 min on earlier films; re-run after every
