@@ -9,6 +9,8 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 ## Plan (Opus, high): the brief, staging, questions, the estimate
 - Read: `guides/preflight.md` Stage 1-2; `guides/satire.md` Start, Getting it right first time, The acting list;
   `guides/tiktok-design.md` Hook Text; the film's notes from `notes/_template.md`.
+- Only when a shot has a mass crowd, a big vista or wide action: `research/crowds-and-big-action.md` "The lessons"
+  (guidelines, not rules; Sam, 13 Nov).
 - Known or new: every person, set, prop, pose and move in the brief goes in the estimate table as KNOWN (a
   `guides/kit-catalogue.md` line, a `guides/pose-gallery.md` row, a "Passed the critique" row) or NEW (priced, drawn
   alone and critiqued before the cast sheet, rule 89). Known is almost free; the estimate is the new rows.
