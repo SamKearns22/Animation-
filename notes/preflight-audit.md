@@ -7,7 +7,7 @@
   Sam as one numbered message. Ledger row moved to its own name (Sam: "own name").
 - **Next: on Sam's numbers, Opus MEDIUM (building from a clear plan): build the changes he says Y to, time one run
   on Blessed, then one short message.** This chat is amber, so it opens that chat.
-- **Needs Sam:** his Y/N on proposals 1-5 below.
+- **Sam: Y to all of 1-5 (13 Nov, evening).** Needs Sam: nothing until chat 2's message.
 - **Read:** this file (Findings and Proposals only); preflight.py by its MAP.
 - **Open rule requests:** none written; proposals 1-5 change rules 59/67 (1), 19 (2), 13 S7 (5) on Sam's Y.
 - **For Claude:** timer wrapper in the chat-1 scratchpad (gone); re-make: wrap each check's faults() and print times.
@@ -64,7 +64,7 @@ cut: Sam's note 46's kind, but 38 lines), HANDS 43 (33 on extras), COPIES 20 (a 
 LAP 14 (real by Sam's 13 Nov checklist), "press0 stands in the sign" once a frame (360), 2 cm crowd brushes.
 **Cost:** Blessed's animatic 1 stage cost 9.8% of a week against 2% planned (99 faults, then 17, then reruns).
 
-## Proposals sent to Sam (13 Nov)
+## Proposals sent to Sam (13 Nov): Sam Y to all
 1. One drawing pass per animatic: the render runs the picture checks while it draws (stops on a fault); pre-flight
    before it is the 1-minute check. Saves the 11 min fingerprint + up to 24 min picture pass (~15-35 min an animatic).
 2. One line per fault: grouped by check, shot and who, with time span and count; extras' hand touches and crowd side
