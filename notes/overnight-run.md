@@ -13,6 +13,9 @@
   tool jobs. Rule 85 amber/red still hands over to a fresh chat of the same job.
 - **No Y/N waits:** a decision that needs Sam goes in `notes/morning-report.md` with your pick, and the job carries on
   on that pick. Anything that would take away something Sam has seen gets a "Lost:" line; do not do it, ask in the report.
+- **Statement 1 (Sam, 13 Nov: "always keep it in mind for all things") governs every choice, listed or not:** when two ways
+  are open, take the one that gives higher quality, fewer notes and faults, and a film nearer 15% of a week; never one that
+  trims the joke or reuses old content.
 - **Statement 1 for every job:** high quality, fewer notes and faults, cost; each job names its cost per film and is kept
   only if the next film is cheaper or draws fewer notes (CLAUDE.md). Every tool: a kittest, a MAP, a catalogue row.
 - **Chats open the next chat themselves (create_session): Animation- attached, revision the main line, model and effort
