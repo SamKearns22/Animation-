@@ -465,3 +465,14 @@ Length: about 101 words at Sam's pace (3.3 a second) is about 31 s, plus montage
 - **Open rule requests:** none.
 - **For Claude:** eye 'look' past 1 is now kept (blessed_cast._look_clamp); Brand's 'look' < 0 = our left. CELL_LOOK/CELL_SHOULDERS hold the cell keys (seconds after ESC_STOP). Times after the cell moved +1.7 s (tvroom 36.45, gates2 50.75, DUR 63.5). Drafts in OUT/c2 (gitignored).
 
+
+## Where things stand (before finished, 13 Nov)
+- **Rules that bite next:** 83 (people and held things: stills at phone size before the animatic), 75 (Hook Text), 85 (cost watch: project is 80-90% of a week; Sam: "wrap up asap").
+- **Done (chat 2 of 8, 13 Nov):** N11 cell look (head leans with eyes: bed, window, door; big sigh down; cell +1.7 s). N8 pool player re-fixed after Sam's critique: side-on at the table's right end, stance with both legs, feet on the floor clear of the cabinet, cue hand-bridge-ball, round balls, maroon top, lamp/cord/light patch gone; furniture_faults check. N10b: both near journalists hold MICS (left was a phone over his own head: Sam's call), bent arms on their inside, clear of Brand. Rule 83 widened (Sam: Y). Checks clean. Sam: no clips.
+- **Done chat 5 (13 Nov):** final sent (animations/blessed.mp4, 11.8 MB): "week" tail restored (RESTORE_TAIL), ends L[7]['end']+0.9 before the shove, Hook Text 'The 5 stages of feeling blessed' tilted -7 (hook_text --tilt), subtitles tail 0.15. Budget stop 47% of a week (rule 24): no more rounds except the one fix below.
+- **Next: chat 6 of 8, OPUS medium (Sam: Y, 13 Nov 17:55):** Brand's L arm is folded across his chest at FRAME 0 of the arrival shot (the 3 NAMED FAULTs at frame 0; I wrongly blamed the gates2 hair pose). Find the arm_keys/pose in the 'arrive' shot, pole 'out' or 'depth' (arm hangs at his side, rosary in hand), then `ARM_FOLD_NAMED=1` can be dropped: `film_engine.write_pass('blessed',1)`, `final source/data/blessed-clean.mp4 --faults-named --reuse --redo arrive` (full size, cache ~/.cache/filmcache may be gone: then render only --span 0 6 and splice), finish.py, send, push main line. ~25 min compute. Then stop.
+- **Needs Sam:** notes on animatic 4. Done chat 3: press re-placed to Sam's chosen sheet 4 (back-left photographer; one in each front corner at d 2.6, cameras held out towards RB; wide pack off screen at the close end; mics cut); hand kit from behind painted before the holder. Open: rule 83 held-things check (asked, no answer yet).
+- **Read:** CLAUDE.md; guides/job-packs.md "Satire film" pack, animatic section only.
+- **Open rule requests:** none.
+- **For Claude:** times after the cell moved +1.7 s (DUR 63.5). NEAR_ARM sets the mics; POOL_DX/POOL_TOP the pool shot. Drafts in OUT/c2 (gitignored).
+

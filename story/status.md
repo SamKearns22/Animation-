@@ -1,3 +1,3 @@
-Blessed: final sent 13 Nov; Brand's L arm still folded at frame 0 (Sam: fix it).
-Next: chat 6 of 8, Opus medium: fix the arrival-shot arm, redraw that shot, re-join, finish, send.
-Waiting: nothing from Sam.
+Blessed: FINISHED (Sam, 13 Nov); final animations/blessed.mp4. Arrival-shot arm fix dropped.
+Pre-flight audit: built, saved; waiting on Sam's Y for a Sonnet chat to time one run.
+Waiting: Sam's Y/N on the pre-flight timing run.

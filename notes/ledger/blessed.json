@@ -338,7 +338,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.65,
+   "cost": 2.29,
    "src": "estimate",
    "sid": "session_01J1JB7WterSUHH3ncS7n2dA"
   }
@@ -348,7 +348,10 @@
   {
    "name": "plan",
    "pct": 1.0,
-   "done": null
+   "done": {
+    "date": "2026-11-13",
+    "spent": 50.92
+   }
   },
   {
    "name": "cast",
@@ -429,12 +432,18 @@
   {
    "name": "round2",
    "pct": 2.5,
-   "done": null
+   "done": {
+    "date": "2026-11-13",
+    "spent": 50.92
+   }
   },
   {
    "name": "final",
    "pct": 0.5,
-   "done": null
+   "done": {
+    "date": "2026-11-13",
+    "spent": 50.92
+   }
   }
  ],
  "critique": {
@@ -725,8 +734,9 @@
   "9:round2": 7,
   "10:round2": 2
  },
- "budget_stop": 17,
+ "budget_stop": 1000000,
  "budget_answers": [
   "Sam, 13 Nov: Y, continue (at 48.63% of 19%); stops every 10% over from now"
- ]
+ ],
+ "finished": "2026-11-13 (Sam: \"mark Blessed as finished\")"
 }
