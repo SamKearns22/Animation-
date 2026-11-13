@@ -76,6 +76,7 @@ def make(c, models=('opus', 'sonnet')):
     paths = frames(c)
     specs = [dict(p, img=f) for p, f in zip(c['panels'], paths)]
     pics = [Image.open(f).convert('RGB') for f in paths]
+    pics = [im.crop(tuple(p['crop'])) if p.get('crop') else im for im, p in zip(pics, specs)]   # a detail panel
     parts = ''.join(sorted(set(''.join(p.get('parts', '') for p in specs)), key=C.PARTS.index))
     film = _Shots(c.get('shots', []))
     made = []
