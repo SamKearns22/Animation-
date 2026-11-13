@@ -10,7 +10,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.56
+   "cost": 2.65
   },
   {
    "date": "2026-11-11",
@@ -20,7 +20,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.92
+   "cost": 1.56
   }
  ],
  "checks": {}

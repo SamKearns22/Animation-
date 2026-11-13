@@ -3,7 +3,7 @@
   (the three aims); 85 (cost watch: hand over at amber).
 - **Done (13 Nov):** rule 30 gains the end-of-film notes pass (FAULT / CHOICE / ASK, taste list in the critique
   checklist); CLAUDE.md "every film is new"; jobs O, N, P logged below (Sam: Y to all three).
-- **Next, a chain:** chat 1 of 8, Sonnet medium: Job O (the true weekly figure). It then opens chat 2, Opus high: Job P
+- **Next, a chain:** Job O done (WEEK_USD 171). Chat 2 of 8, Opus high: Job P
   (the ranking list), which ends on one numbered message to Sam. Job N (Opus high) after P, or as P's list ranks it.
 - **Needs Sam:** nothing until P's list.
 - **Read:** this section and the job's own entry below; `guides/job-packs.md` "A tool job".
@@ -15,6 +15,14 @@
 - **Job O, true weekly figure (Sonnet, ~0.5%).** Sam: Blessed spent 80% of a week; our ledger counted 50.92% (WEEK_USD
   290). Set `WEEK_USD` in `.claude/hooks/costwatch.py` so Blessed's recorded dollars read 80% (first check the ledger
   has every Blessed chat: 11 Nov rows are estimates); restate every film's ledger and every quoted % with it.
+  **DONE 13 Nov (chat 1 of 8, Sonnet):** found Blessed's record missed two chats (chat 5 of 8, $5.08, and chat 6 of 8,
+  $2.11: added to `app-costs.tsv`) and carried five duplicate transcript-estimate rows for chats the app already
+  showed (dropped by `ledger.py app`). Real Blessed = $100.79 from the app + $36.05 estimated (six 11 Nov chats
+  the app cannot show, kept) = $136.84. `WEEK_USD` 290 -> **171** so that reads 80.02%. Every film's estimate rows were
+  rescaled x290/171 and app rows recomputed: Blessed 80.02%, Remakes 51.54%, Protest Tiers 14.44%, Link trial 1.9%.
+  Film estimates and stage plans (Blessed 19%, Remakes 14.5%) are NOT rescaled: they were guesses on the old ruler;
+  Job N redoes them. Rule 85's 3%/5% chat limits are unchanged in % (now $5.13/$8.55, tighter than before): Sam to say
+  if he wants them kept in dollars ($8.7/$14.5 = 5.1%/8.5%). Kittest `estimate_forecast_and_alarm` passes.
 - **Job N, honest fit at planning (Opus high, ~1-2%).** Widen rule 24: before any building, the plan states whether the
   script fits 15% (from KNOWN vs NEW and real past costs on the true ruler); if not, why (people, places, likeness
   faces), and which tool improvements would bring it closer (never trimming the joke or reusing

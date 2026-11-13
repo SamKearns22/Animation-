@@ -10,7 +10,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.46
+   "cost": 0.78
   },
   {
    "date": "2026-11-11",
@@ -20,7 +20,7 @@
    "notes": 0,
    "repeats": [],
    "model": "fable",
-   "cost": 1.13
+   "cost": 1.92
   },
   {
    "date": "2026-11-11",
@@ -28,7 +28,7 @@
    "model": "fable",
    "stage": "tool build (a)-(d), part of (e)",
    "round": null,
-   "cost": 2.54,
+   "cost": 4.31,
    "notes": 0,
    "repeats": []
   }

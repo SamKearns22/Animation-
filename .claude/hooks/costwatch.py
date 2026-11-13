@@ -11,8 +11,8 @@ MAP
 Runs as a Claude Code hook. Every step re-reads the whole chat, so cost per step grows
 with the chat's history; after an hour idle the whole history is loaded again at the
 dearer write price. Prices are list $ per million tokens, fitted to this account's
-own chat records (Nov 2026); WEEK_USD is a week's allowance at list price, fitted to
-the 7-9 Nov weekend (about $260 = 90%). Both are estimates: good to about +-20%.
+own chat records (Nov 2026); WEEK_USD is a week's allowance at list price, set on 13 Nov (Job O) so Blessed's recorded dollars (about
+$137: $101 from the app, $36 estimated for 11 Nov chats the app cannot show) read 80% of a week, as Sam saw it (was 290). Both are estimates: good to about +-20%.
 """
 import glob, json, os, sys, time
 from datetime import datetime
@@ -23,7 +23,7 @@ PRICE = {  # read, write(1h cache), input, output
     "sonnet": (0.10, 4.0, 3.0, 15.0),
     "haiku":  (0.03, 1.3, 1.0, 5.0),
 }
-WEEK_USD = 290.0
+WEEK_USD = 171.0
 FRESH = 90_000           # tokens a fresh chat starts with (rules, notes, tools)
 CTX_AMBER, CTX_RED = 200_000, 300_000
 CHAT_AMBER, CHAT_RED = 3.0, 5.0   # % of the week spent by this one chat

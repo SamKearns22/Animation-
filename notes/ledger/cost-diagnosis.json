@@ -10,7 +10,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.96,
+   "cost": 1.63,
    "src": "estimate",
    "sid": "session_01J1JB7W8qN8smb7UVwZg658"
   },
@@ -22,7 +22,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.33,
+   "cost": 2.26,
    "src": "estimate",
    "sid": "session_01J1JB7WD576AAXEZwP6ssza"
   },
@@ -34,7 +34,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.86,
+   "cost": 1.46,
    "src": "estimate",
    "sid": "session_01J1JB7Zj8SoiMY35SNYuo23"
   },
@@ -46,7 +46,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.63,
+   "cost": 1.07,
    "src": "estimate",
    "sid": "session_01J1JB7XcwaRjs9fU1qtkXnk"
   }

@@ -12,7 +12,7 @@
    "src": "app",
    "stage": "Blessed usage spike investigation (cost diagnosis)",
    "model": "opus",
-   "cost": 0.92,
+   "cost": 1.57,
    "usd": 2.68
   }
  ],

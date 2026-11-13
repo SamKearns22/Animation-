@@ -12,5 +12,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | frames | 0.6 | 2026-11-12 | 0 |
 | writeup | 0.3 | 2026-11-12 | 0 |
 
-| date | chat | model | stage | round | cost % | notes | repeated |
-|---|---|---|---|---|---|---|---|
+Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
+
+| date | chat | source | model | stage | round | cost % | $ | notes | repeated |
+|---|---|---|---|---|---|---|---|---|---|
