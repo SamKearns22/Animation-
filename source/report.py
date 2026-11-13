@@ -56,7 +56,10 @@ def summarise(title, faults, path=None, first=FIRST, notes=()):
         out = [f'{title}: clean']
     else:
         top = ', '.join(f'{k} {n}' for k, n in sorted(counts.items(), key=lambda kv: -kv[1]))
-        out = [f'{title}: {len(faults)} fault(s) -- {top}{where}']
+        cnt = sum('COULD NOT TEST' in x.upper() for x in faults)   # rule 19 (Sam, 13 Nov): stops like a fault
+        out = [f'{title}: {len(faults)} fault(s)' + (f', {cnt} of them COULD NOT TEST (stops the animatic like a '
+               'fault)' if cnt else '') + f' -- {top}{where}']
+        faults = sorted(faults, key=lambda x: 'COULD NOT TEST' not in x.upper())   # shown first
         out += [' - ' + (x if len(x) <= WIDTH else x[:WIDTH - 3] + '...') for x in faults[:first]]
         if len(faults) > first:
             out.append(f'   ... and {len(faults) - first} more in the file named in the line above')

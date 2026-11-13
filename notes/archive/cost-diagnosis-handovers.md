@@ -35,3 +35,24 @@
   a "Checks:" line. Item 3 = a round runner in the film kit (fix, `final --small --span`, sheet, checks, commit, one
   printout). Never page a whole chat's events (~1.2k tokens an event).
 
+
+
+## Where things stand (chat 3 of 8, 13 Nov)
+- **Rules that bite next:** 19 (PASS/FAULT/COULD NOT TEST; one command, short summary), 85 (cost watch), 89.
+- **Done (13 Nov, chat 3 of 8, Opus medium): Job C 1, 2, 3, 4, 6 written and tested on Blessed (no film render).**
+  1: an elbow folded back across the body stops pre-flight even under the 'skeleton arm' allow (side-on arms excepted:
+  no 'across' to read); ARM_FOLD_NAMED faults and `critique.py fixed ... --left N` print a ready "Checks:" line.
+  Whole Blessed swept every 0.5 s: clean. 2, 6: CLAUDE.md. 3: rule 19 widened + `source/round.py`. 4: checklist P6,
+  P7, P11. Also repaired a half-merged `notes/ledger/blessed.json` on the main line (both entries kept).
+- **Sam (13 Nov):** Y to 5's new plan; necks and thighs fixed from the NEXT film, not Blessed. Y to "Never again"
+  1-5 (below; rules 24, 85, 19 and CLAUDE.md already written; their tools not built).
+- **Next: chat 4 of 8, Opus MEDIUM (building from a clear plan):** build 5 (pre-flight says COULD NOT TEST and stops
+  when a film with people has no `solids`/`layers`; give Blessed its list) and the "Never again" tools: the ledger
+  stops on real figures at the budget and every 5% (no alarms_off); COULD NOT TEST stops; the after-film comparison
+  line. Test on Blessed's files without rendering a film. Hand over.
+- **Needs Sam:** nothing.
+- **Read:** this file's "Job C proposals" 5 and "Never again"; then only the lines each tool edits (`codemap.py`).
+- **Open rule requests:** none unwritten (5 and Never again are written; their tools are chat 4's).
+- **For Claude:** figure.NEVER_ALLOWED, figure.named(); preflight sets NAMED_FAULTS_FILE; critique.checks_line();
+  `ledger.py app` rebuilds film rows from `notes/ledger/app-costs.tsv`. Never page a whole chat's events.
+
