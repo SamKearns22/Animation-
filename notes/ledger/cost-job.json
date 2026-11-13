@@ -1,0 +1,20 @@
+{
+ "film": "cost-job",
+ "estimate": null,
+ "chats": [
+  {
+   "notes": 0,
+   "repeats": [],
+   "round": null,
+   "date": "2026-11-13",
+   "chat": "kLQzZL9E",
+   "sid": "session_01J1JB7WBFyL2ywCkLQzZL9E",
+   "src": "app",
+   "stage": "Blessed usage spike investigation (cost diagnosis)",
+   "model": "opus",
+   "cost": 0.92,
+   "usd": 2.68
+  }
+ ],
+ "checks": {}
+}
