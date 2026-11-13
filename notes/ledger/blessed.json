@@ -504,23 +504,48 @@
      "7 S1: press has no cameras.",
      "1 P7: van sway - a clip."
     ]
+   },
+   {
+    "round": 3,
+    "pass": 2,
+    "stage": "animatic",
+    "date": "2026-11-13",
+    "hunt": 2,
+    "faults": 12,
+    "cant_tell": 1,
+    "open": [
+     "1-5 A2 A1 P7: seated legs - no thighs or lap; knee balls beside the hips (2: reads rude).",
+     "1-3,7-8 P2 P12: faces - bun man head up, eyes on lens, not numb or on TV; left officer front, mouth shut; prisoner weary, not scared.",
+     "1-2 A2: hands - apart on knees, not clasped between them.",
+     "7-8 P1 P10 P6: officers' arms - fists raised, not holding the prisoner; his arms vanish.",
+     "1-3,5,7-8 P4: faces - bun man's beard all grey, hair neat; prisoner's hair dark, no grey temples, eyes half shut.",
+     "1-3,5-6 P11: heads - no necks.",
+     "3 A1 O3: pool table - player a grey lump; lamp a pale strip.",
+     "6 O4 P1: cue - forearm-long; bridge hand grips, not flat.",
+     "7-8 S3 S5: gates - plank wall, indoor floor; ref is stone gatehouse, arched gate.",
+     "7 A1 S1: press - no cameras, so no press; officer beat tiny; curly head reads as cauliflower.",
+     "1 A1 S5: cubicle - van reads as a cell; no window.",
+     "5 S1: right edge - cropped near man fills the right third.",
+     "1 P7: van sway - a clip of the shot."
+    ],
+    "fixed": "hunt 2 fixed as one list: van knees together (no gap between the thighs), hands clasped together between the shins, eyes down; the pool cue a full length; one white ball. Named, not changed: house sty"
    }
   ],
   "lines": {
    "A1": {
-    "faults": 31,
+    "faults": 35,
     "false": 1
    },
    "O3": {
-    "faults": 15,
+    "faults": 16,
     "false": 0
    },
    "A2": {
-    "faults": 13,
+    "faults": 15,
     "false": 0
    },
    "S3": {
-    "faults": 14,
+    "faults": 15,
     "false": 0
    },
    "S2": {
@@ -528,11 +553,11 @@
     "false": 0
    },
    "S1": {
-    "faults": 15,
+    "faults": 17,
     "false": 0
    },
    "S5": {
-    "faults": 11,
+    "faults": 13,
     "false": 0
    },
    "O5": {
@@ -540,7 +565,7 @@
     "false": 0
    },
    "O4": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "S6": {
@@ -560,11 +585,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 8,
+    "faults": 9,
     "false": 4
    },
    "P1": {
-    "faults": 7,
+    "faults": 9,
     "false": 0
    },
    "P8": {
@@ -572,15 +597,15 @@
     "false": 0
    },
    "P2": {
-    "faults": 23,
+    "faults": 24,
     "false": 1
    },
    "P4": {
-    "faults": 9,
+    "faults": 10,
     "false": 0
    },
    "P7": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P5": {
@@ -592,7 +617,7 @@
     "false": 1
    },
    "P11": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P13": {
@@ -600,7 +625,7 @@
     "false": 1
    },
    "P10": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P3": {
@@ -608,7 +633,7 @@
     "false": 0
    },
    "P12": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    }
   }

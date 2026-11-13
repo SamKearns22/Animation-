@@ -833,34 +833,51 @@ def dock(sp, t):
     return j
 
 
-# --- van: bent over, forearms down, hands clasped between the knees, head low; the van sways him. Note 39 (Sam,
-#     12 Nov, seen before: 'his sitting pose is still horrible'): rebuilt in chat 5 on the sitting kit (sitting.realize:
-#     hips on the seat, thighs, round knees, feet on the floor), front-on (the option sheet, rule 87): turned three-
-#     quarter, the leaning jumper is one flat panel that hides his thighs, so he read as standing bent (why chats 1-2's
-#     fixes failed)
-VAN_YAW = 0           # chat 5's pick on the option sheet (1 = three-quarter at 35, as Sam liked it)
-VAN_LEAN = 48
-
-
-def _kit_seat(sp, mark, px_high, **kw):
-    """A sitting-kit seat whose top is `px_high` screen pixels above the feet (a seat the set paints: drawn nothing)."""
-    import sitting as SIT
-    return SIT.Seat('stool', h=px_high / _s(sp, mark[2]), front=110, rear=-110, width=150, **kw)
+# --- van: bent over, forearms on the thighs, hands clasped between the knees, head down; the van sways him
+VAN_HANDS = lambda sg: (sg * 10, 400.0, 360.0)      # both fists together, between the knees
 
 
 def van(sp, t):
-    import sitting as SIT
-    seat = _kit_seat(sp, ST.STAGE['van']['brand'], 270)          # the moulded bench's front edge (blessed_sets.van)
-    lean = VAN_LEAN + 1.5 * math.sin(2 * math.pi * (t - T['van']) / 2.4)
-    feet = {'L': (-90, 250.0), 'R': (90, 250.0)}
-    kn, _ = SIT.knees(sp, seat, SIT._spec(lean=lean, feet=feet))
-    # the clasped hands hang down between the shins (chat 5 critique: two fists between two round knees at the
-    #   crotch read as rude), the head sunk low between the hunched shoulders
-    arms = {sd: SIT.arm_free((12.0, kn['R'][1] + 160, kn['R'][2] + 20), (1.0, 0.2, -0.3), 'fist') for sd in 'LR'}
-    j = SIT.realize(sp, seat, SIT._spec(lean=lean, feet=feet, arms=arms, head_dy=60.0 if VAN_YAW == 0 else 24.0))
-    j['chair_draw'], j['mid'] = (lambda *a, **k: None), []        # the set paints the bench
-    j['nod'] = 3.5 if VAN_YAW == 0 else 5.0
+    j = moves.seated(sp)
+    lean = 28 + 1.5 * math.sin(2 * math.pi * (t - T['van']) / 2.4)
+    for sd, sg in (('L', -1), ('R', 1)):
+        V.arm_to(j, sd, unlean(VAN_HANDS(sg), lean), 'down')
+    j['lean'], j['head_dy'], j['nod'] = lean, 10.0, 2.2
+    j['hide_legs'], j['knee_round'] = {'L', 'R'}, True                    # note 16: the legs and seat are drawn here, before the jumper
+    j['pre'] = [lambda p, j2, view: _seat(p, j, sp, j2['yaw'])]
     return j
+
+
+VAN_YAW = 35          # Sam, 12 Nov: he keeps this three-quarter pose ("I even said I like the pose"); 13 Nov, on chat
+#   5's option sheet (front-on and a sitting-kit three-quarter): "Keep the pose from animatic 2. It's not right but
+#   it's better than what you've proposed."
+
+
+def _seat(p, j, sp, yaw):
+    """Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
+    mid-air. His seat and hips as one rounded shape from the waist down to the thigh tops, drawn before the legs and
+    the jumper, so both lie over its edges and nothing floats. The legs are drawn first (far one first), then the seat
+    over their cut roots (chat 1 drew the seat first and the thighs' notched ends lay on top of it; it also used the
+    pose's 35 degrees, not the drawn view's 45, so the seat sat off the body)."""
+    far = sorted('LR', key=lambda sd: V.project(j['hip' + sd], yaw)[1])
+    pts = []
+    for sd in 'LR':
+        hx, hy, hz = j['hip' + sd]
+        for a in range(0, 360, 30):                   # round each hip joint, pushed back for the seat
+            c, s_ = math.cos(math.radians(a)), math.sin(math.radians(a))
+            pts.append(V.project((hx + 48 * c, hy + 40 * s_, hz - 10 + 30 * c), yaw)[0])   # a normal seat, not
+        #                                             pushed back (Sam, 12 Nov: the bigger one read as a huge bottom)
+        knee = V.knee_of(j, sd)
+        if knee:
+            u = 0.35                                    # a third of the way down the thigh, so the join is hidden
+            pts.append(V.project(tuple(a + (b - a) * u for a, b in zip(j['hip' + sd], knee)), yaw)[0])
+    hull, col = curve(V._hull(pts), 3), sp.get('trousers', (40, 40, 46))
+    p.poly(hull, col, INK, 2.4)                       # under the legs: its outline is the seat's edge
+    cx, cy = sum(q[0] for q in hull) / len(hull), sum(q[1] for q in hull) / len(hull)
+    for sd in far:
+        V.leg(p, j, sd, yaw, sp)
+    p.poly([(cx + (x - cx) * 0.9, cy + (y - cy) * 0.9) for x, y in hull], col, None)   # over the thighs' roots,
+    #                                                 no outline: the thighs grow out of the seat, no notched ends
 
 
 # --- escort: the officer walks him in by the arm; he stops, turns, and looks round numbly
@@ -1006,13 +1023,13 @@ def pool_pose(sp, t):
     j['hide_legs'] = ('L', 'R')                    # behind the table: the cloth hides them
     j['lean'] = POOL_LEAN                          # bent low, chin just over the cue (chat 5 critique: he read upright)
     j['nod'] = -2.5                                # chin up, eyes along the cue
-    V.arm_to(j, 'L', unlean((-10.0, 470.0, 330.0), POOL_LEAN), 'out', 'palm')
+    V.arm_to(j, 'L', unlean((-30.0, 450.0, 260.0), POOL_LEAN), 'out', 'palm')
     k = 26.0 * math.sin(t * 2 * math.pi / 1.4)       # the practice strokes
-    V.arm_to(j, 'R', unlean((40.0, 420.0, 120.0 - k), POOL_LEAN), 'back', 'grip')
+    V.arm_to(j, 'R', unlean((60.0, 420.0, 70.0 - k), POOL_LEAN), 'back', 'grip')
     return j
 
 
-POOL_LEAN = 66.0
+POOL_LEAN = 48.0              # Sam, 13 Nov: 66 squashed him (a front-on lean shortens the body)
 
 
 def pool_cue(img, cam, mark, sp, pts):
@@ -1024,8 +1041,10 @@ def pool_cue(img, cam, mark, sp, pts):
     d = (b[0] - a[0], b[1] - a[1])
     tip = (b[0] + 0.25 * d[0], b[1] + 0.25 * d[1])
     p = B.Pen(img, cam)
-    p.line([(a[0] - 0.5 * d[0], a[1] - 0.5 * d[1]), tip], (150, 104, 60), 5.0)
-    p.line([(a[0] - 0.5 * d[0], a[1] - 0.5 * d[1]), tip], INK, 1.0)
+    n = max(1.0, math.hypot(*d))
+    back = (a[0] - d[0] / n * 2.4 * s * 100, a[1] - d[1] / n * 2.4 * s * 100)   # a full cue's butt behind the hand (hunt 2)
+    p.line([back, tip], (150, 104, 60), 5.0)
+    p.line([back, tip], INK, 1.0)
     p.ell(tip[0] + 4, tip[1] + 8, 9, 6, (246, 246, 240), INK, 1.0)                       # the cue ball
 
 
@@ -1560,7 +1579,7 @@ def draw_people(img, cam, shot, t):
         put(img, cam, sp, st['brand'], t, j=dock(sp, t))
     elif shot == 'van':
         sp = brand_sp(t, 'prison')
-        put_kit(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=VAN_YAW, j=van(sp, t))   # notes 16, 39: sitting kit
+        put_seated(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=VAN_YAW, j=van(sp, t))   # note 16: Sam keeps the 3/4 pose; limbs fixed
     elif shot == 'escort':
         sp = dict(brand_sp(t, 'prison'), gaze_dy=escort_gaze(t))
         bm, by, bj, bh = escort(sp, t)
@@ -1588,7 +1607,7 @@ def draw_people(img, cam, shot, t):
     elif shot in ('tvroom', 'push'):
         # Sam's note 22: Brand alone on a plastic chair, watching; behind on the left a man asleep in his chair
         # facing the TV; behind on the right an inmate bent over the pool table, lining up a shot
-        pts = put(img, cam, dict(CAST['inmate2'], **face('inmate2', t, 'neutral', gaze_dy=-0.2)), st['inmate2'], t,
+        pts = put(img, cam, dict(CAST['inmate2'], **face("inmate2", t, "neutral", gaze_dy=-0.45, lid4=0.0)), st['inmate2'], t,
                   j=pool_pose(CAST['inmate2'], t))
         pool_cue(img, cam, st['inmate2'], CAST['inmate2'], pts)
         put_kit(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),

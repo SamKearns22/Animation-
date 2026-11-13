@@ -838,29 +838,39 @@ def tvroom(img, cam, t=0.0):
     pool_table(p)
     # chat 5 (the hard critique: 'a lamp over nothing'): the lamp hangs low over the cloth's middle on a long cord,
     # its light falling in a pool on the table
-    p.line([(840, -400), (840, 1010)], (40, 40, 44), 3.0)                                   # (3 m nearer than the
-    p.poly([(780, 1010), (900, 1010), (930, 1052), (750, 1052)], (74, 78, 84), INK, 2.2)     # board: its cord
+    p.line([(880, -400), (880, 990)], (40, 40, 44), 3.0)                                   # (3 m nearer than the
+    p.poly([(820, 990), (940, 990), (970, 1034), (790, 1034)], (74, 78, 84), INK, 2.2)       # board: its cord
     #                                                                                        crosses in front)
-    p.poly([(770, 1046), (910, 1046), (918, 1056), (762, 1056)], (250, 236, 180), None)
-    soft(img, cam, (660, 1080, 1020, 1220), (255, 240, 190), 0.3, 60)                       # its light on the cloth
+    p.poly([(810, 1028), (950, 1028), (958, 1038), (802, 1038)], (250, 236, 180), None)
+    soft(img, cam, (680, 1080, 1100, 1180), (255, 240, 190), 0.3, 60)                       # its light on the cloth
     # Sam's note 22: moulded plastic chairs (adult wings: heavy-duty, wipe-clean), not a bench. Chat 5: the chairs
     # are drawn with the people now (sitting.Seat('plastic')), so the seat shows round them from every view
 
 
+POOL = dict(far=1100, near=1168, floor=1384, x0=(668, 1112), x1=(616, 1150))   # the table's measures (chat 5)
+
+
 def pool_table(p, front_only=False):
-    """The pool table at the back right: green cloth, wooden rails and legs, three balls (front_only: the near
-    rail and legs, drawn again over the man standing behind it)."""
-    if not front_only:
-        p.poly([(640, 1120), (1040, 1120), (1080, 1210), (600, 1210)], (40, 110, 70), INK, 2.4)
-    p.poly(quad(600, 1210, 1080, 1260), (90, 60, 40), INK, 2.0)
-    for x in (630, 1050):
-        p.poly(quad(x - 10, 1260, x + 10, 1320), (90, 60, 40), INK, 1.6)
+    """The pool table at the back right, a pub table's proportions (Sam, 13 Nov: 'squashed and disproportionate'):
+    0.8 m tall to the cloth (its far edge at the player's hips), 2.1 m long, a solid wooden cabinet to the floor (as
+    pub tables are: the player's legs behind it are hidden by it, not missing), a cushioned wooden rim round the green
+    cloth, six pockets, three balls (front_only: unused, kept for callers)."""
     if front_only:
         return
-    for x, y in ((644, 1124), (840, 1122), (1036, 1124), (606, 1206), (840, 1208), (1074, 1206)):   # the pockets
-        p.ell(x, y, 11, 6, (20, 20, 22), None)                                               # (critique: 'a desk')
-    for k, x in enumerate((700, 760, 990)):                                                 # balls
-        p.ell(x, 1150, 9, 6, ((200, 40, 40), (240, 200, 60), (240, 240, 240))[k], INK, 1.0)
+    f, n, fl = POOL['far'], POOL['near'], POOL['floor']
+    (a0, a1), (b0, b1) = POOL['x0'], POOL['x1']
+    wood, dark = (104, 66, 40), (70, 44, 28)
+    p.poly([(b0, n), (a0, f), (a0, fl - 80), (b0, fl)], dk(wood, 0.8), INK, 2.2)                      # its left side
+    p.poly([(a0 - 14, f - 12), (a1 + 14, f - 12), (b1 + 16, n + 10), (b0 - 16, n + 10)], wood, INK, 2.4)   # the rim
+    p.poly([(a0, f), (a1, f), (b1, n), (b0, n)], (40, 110, 70), INK, 2.0)                             # the cloth
+    p.poly(quad(b0 - 16, n + 10, b1 + 16, fl), wood, INK, 2.4)                                        # the cabinet
+    p.poly(quad(b0 - 10, fl - 26, b1 + 10, fl), dark, INK, 1.8)                                       # its plinth
+    p.poly(quad(860, n + 60, 920, n + 96), (150, 150, 156), INK, 1.6)                                 # the coin slot
+    p.line([(872, n + 78), (908, n + 78)], INK, 2.0)
+    for x, y in ((a0, f), ((a0 + a1) / 2, f - 2), (a1, f), (b0, n), ((b0 + b1) / 2, n + 2), (b1, n)):   # pockets
+        p.ell(x, y, 13, 7, (20, 20, 22), INK, 1.0)
+    for k, (x, y) in enumerate(((730, 1140), (790, 1128), (1000, 1150))):                            # the balls
+        p.ell(x, y, 10, 7, ((200, 40, 40), (240, 200, 60), (40, 70, 170))[k], INK, 1.0)   # one white: the cue's
 
 
 def _chair(p, x, y, s, k):
