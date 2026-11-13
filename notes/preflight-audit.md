@@ -9,11 +9,14 @@
   4: shots over 8 s an info line; PROP TURN kept only for people seen at yaws 30+ degrees apart. 5: MOUTH (views.Eyes
   marks, measured from the eye whites) and TURN DESIGN (own front face, generic turned head). Rules 59, 67, 19, 13
   reworded. New kittests pass (render_lock, preflight_lines_grouped, every_face_has_a_mouth); full suite: see Next.
-- **Next: Sonnet (routine: a timed run). 1) kittests: 2 fail. turned_heads_for_anyone ('Vance unchanged: False'):
-  maybe ours (views.Eyes now wraps line(); turnhead GENERIC hook): check with git stash first. estimate_forecast_and_alarm:
-  budget code, likely not ours (40b572d). 2) Time ONE run on
-  Blessed: `preflight.py blessed OUT` then `blessed.py final OUT --small`, real minutes (old: ~40 min pre-flight +
-  14.5 min animatic). 3) One short message to Sam: what changed, minutes saved, the Lost/Added lines below.**
+- **Done (chat 3 of 8, Sonnet medium, 13 Nov):** kittests: the one failure WAS ours (views.Eyes.line drew through the
+  wrapped pen: Vance's turned head changed); fixed, all kittests now pass (the budget test passes too). Also fixed a crash
+  in preflight (`logged` unset without pictures). Timed run on Blessed (finished, no film change; pre-flight needs
+  `--audit` or the notes gates to run on a finished film): quick pre-flight 59 s (5 grouped lines); animatic render
+  with picture checks 29 min 8 s (4.7 MB, 36 faults found: HANDS 21, LAP 6, other 5, COPIES 1, CUT 1, TURN DESIGN 1,
+  UNSEEN 1; not fixed, video not sent). Total ~30 min vs old ~54 min (40 + 14.5). Not saved: render is 2x the old
+  animatic because it now also checks every frame.
+- **Next: nothing queued.** Sam decides what to do with the audit's result (see message).
 - **Lost (to tell Sam):** the incremental re-check (fingerprints): the render redraws every frame anyway; the contact
   sheet unless asked (--pictures). **Added:** mouth check, turn-design check, final needs a clean animatic first.
 - **Needs Sam:** nothing. Sam: Y (13 Nov) to the timed run; Blessed marked finished (no film changes).
