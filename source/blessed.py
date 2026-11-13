@@ -909,7 +909,9 @@ def escort(sp, t, who='brand'):
     if who == 'brand' and k >= ESC_STOP + 0.15:
         yaw = 0.0                                 # notes 17/26: front-on once he stops
         a = T['cell'] + ESC_STOP
-        head = -90.0 if a + 0.2 <= t < a + 0.6 else None      # a look left, then up to the window, then down
+        # note N2 (Sam, 13 Nov: 0.4 s is not legible): no snap to profile; his EYES go to the bed on our left
+        #   (0.15 s in, held 0.7 s, rule: a look is held long enough to read), then up to the window on the sigh
+        j['look'] = _keys(t, [(a + 0.15, 0.0), (a + 0.35, 1.0), (a + 1.05, 1.0), (a + 1.3, 0.0)])
         # note 17: a big, slow sigh: breathes in looking up (shoulders rise), then out, the head and shoulders sinking
         #   note 40 (Sam, 12 Nov): deeper, an extra beat: a bigger breath in, held, a long slump out, held
         j['nod'] = _keys(t, [(a + 0.6, 0.0), (a + 1.1, -2.4), (a + 1.7, -2.6), (a + 2.8, 2.6)])
@@ -924,7 +926,7 @@ def escort(sp, t, who='brand'):
 
 def escort_gaze(t):
     a = T['cell'] + ESC_STOP
-    return _keys(t, [(a + 0.6, 0.0), (a + 0.85, -0.6), (a + 1.3, -0.6), (a + 2.0, 0.6)])
+    return _keys(t, [(a + 1.05, 0.0), (a + 1.3, -0.6), (a + 1.7, -0.6), (a + 2.2, 0.6)])   # N2: after the look left
 
 
 GRIP_AT = [None]                                 # where the officer's hand should be on Brand's arm (touch check)
@@ -1579,6 +1581,7 @@ def draw_people(img, cam, shot, t):
     elif shot == 'escort':
         sp = dict(brand_sp(t, 'prison'), gaze_dy=escort_gaze(t))
         bm, by, bj, bh = escort(sp, t)
+        sp['look'] = bj.pop('look', 0.0)                  # N2: the eyes lead the look round the cell
         so = dict(BC.OFFICER, **face('officer', t, 'neutral'))
         om, oy, oj, _ = escort(so, t, 'officer')
         bs = _s(sp, bm[2])
@@ -1737,7 +1740,17 @@ def _gavel_knock():
     return 0.9 * x / np.abs(x).max()
 
 
+def _gavel_sample():
+    """Sam's gavel (13 Nov, audio/sfx-gavel.mp3, two knocks): cut so the first knock lands on the dock's first frame."""
+    from burnham_film import load
+    x = load(os.path.join(HERE, 'audio', 'sfx-gavel.mp3'))
+    i = int(np.argmax(np.abs(x) > 0.3 * np.abs(x).max()))
+    x = x[max(0, i - int(0.005 * SR)):].copy()
+    return 0.9 * x / (np.abs(x).max() + 1e-9)
+
+
 MUSIC = os.path.join(HERE, '..', 'music', 'the-mountain-sad-hope.mp3')
+MUSIC_GAIN = 0.30 * 1.25                          # Sam, 13 Nov: the music 25% louder
 MUSIC_SAD_END, MUSIC_PEAK = 12.9, 65.4   # the track's sad opening ends in a hush at 12.9 s; its hopeful lift hits 65.4 s
 
 
@@ -1759,10 +1772,10 @@ def music(n):
     tail = tail.copy()
     tail[:xf] *= np.linspace(0, 1, xf)
     out[i1 - xf:i1 - xf + len(tail)] += tail
-    g = np.full(n, 0.30)                           # under the voices: lower than them, never fighting them
+    g = np.full(n, MUSIC_GAIN)                     # under the voices: lower than them, never fighting them
     k = np.hanning(int(0.3 * SR))
     for ln in LINES:
-        g[int((ln['start'] - 0.15) * SR):int((ln['end'] + 0.15) * SR)] = 0.30 * 10 ** (-12 / 20)
+        g[int((ln['start'] - 0.15) * SR):int((ln['end'] + 0.15) * SR)] = MUSIC_GAIN * 10 ** (-12 / 20)
     g = np.convolve(g, k / k.sum(), 'same')
     g[:i0 + int(0.8 * SR)] *= np.clip(np.linspace(-i0 / (0.8 * SR), 1, i0 + int(0.8 * SR)), 0, 1)   # in over 0.8 s
     e = int(DUR * SR)
@@ -1785,7 +1798,7 @@ def soundtrack(stems=False):
                 seg[k0:m] *= (np.linspace(1.0, 0.0, k1 - k0) ** 1.5)[:m - k0]
                 seg[k1:] = 0.0
         voice[s:s + len(seg)] += seg
-    k = _gavel_knock()                                # Sam, 12 Nov: the gavel heard at the start of the sentencing shot
+    k = _gavel_sample()                               # Sam, 12 Nov: the gavel heard at the start of the sentencing shot
     i0 = int(T['bang'] * SR)
     rest[i0:i0 + len(k)] += k[:max(0, n - i0)]
     rest += music(n)                                  # note 27: The Mountain, from the cell on
