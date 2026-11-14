@@ -1140,7 +1140,8 @@ def _look(r):
     L = dict(sw=float(g.uniform(118, 158)), slope=float(g.uniform(24, 52)), hi=float(g.uniform(-12, 12)),
              nw=float(g.uniform(21, 29)), hrx=float(g.uniform(56, 70)), hry=float(g.uniform(70, 84)),
              garment=garment, pattern=pattern, lumps=[float(v) for v in g.uniform(-1, 1, 14)],
-             shade_side=1 if g.random() < 0.5 else -1, folds=int(g.integers(2, 5)),
+             shade_side=1 if g.random() < 0.5 else -1,   # unused since 14 Nov (kept: the draw keeps the crowd the same)
+             folds=int(g.integers(2, 5)),
              tufts=[float(v) for v in g.uniform(0.7, 1.3, 9)])
     r['look'] = L
     return L
@@ -1164,12 +1165,9 @@ def _head_outline(L, cx, cy):
 
 
 def _clothes(p, L, jc, sd, t):
-    """Seams, collar, folds and pattern on the back of the garment; a flat shadow down one side."""
+    """Seams, collar, folds and pattern on the back of the garment (no darker shadow side: Sam, 14 Nov)."""
     sw, sl, hi, nw = L['sw'], L['slope'], L['hi'], L['nw']
     jd, jl = B.dk(jc, 0.8), B.lt(jc, 1.18)
-    side = L['shade_side']
-    p.poly(curve([(side * sw * 0.45, sl * 0.4 + 20), (side * (sw - 10), sl + 30 + hi * side), (side * (sw + 2), sl + 160),
-                  (side * (sw - 4), 600), (side * sw * 0.55, 600), (side * sw * 0.6, 260)], 3), jd, None)   # flat shadow
     pat = L['pattern']
     if pat:                                               # the cloth's pattern, kept inside the back
         x0, x1, y0 = -sw + 26, sw - 26, sl + 46

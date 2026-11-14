@@ -12,8 +12,8 @@ above eye level, so from a high camera a person stayed an upright flat picture.
   room; `settle` drops it onto the floor (or table top) so it rests, never floats or sinks.
 - Drawn as ONE body (`draw`): rounded volumes (head, chest, hips, arms, legs, shoes; circle hands) traced through
   the camera, then one outline round the whole silhouette and a line only where a part lies over another (an arm
-  over the chest, one leg over the other) or two colours meet; flat fills with one darker shadow tone on the side
-  away from the light (house style, no gradient); collar, tie or bow tie, cuffs, jacket hem, belt (outfits with
+  over the chest, one leg over the other) or two colours meet; flat fills, no darker shadow side
+  (Sam, 14 Nov; house style, no gradient); collar, tie or bow tie, cuffs, jacket hem, belt (outfits with
   no jacket), shoe soles; the person's own face and hair (the library drawings, burnham.head and views' back of
   the head) laid onto the head, so the face turns with it through the camera. A flat contact shadow on the floor
   (and the wall) where the body rests on it.
@@ -60,7 +60,6 @@ M = V.M_PER_UNIT                                     # metres per person unit
 UPPER, FORE = F.UPPER * 0.98 * M, F.FORE * 0.98 * M  # the rig's bones, in metres
 THIGH, SHIN = V.THIGH * M, V.SHIN * M
 NECK_HEAD = 150 * M                                  # neck base to the head's centre
-SHADE = 0.8                                          # the shadow side: one darker tone
 SOLE_C = (120, 100, 86)
 
 
@@ -823,7 +822,7 @@ def draw(img, cam, k, sp, t=0.0, light=None, surfaces=None, prts=None):
 
 
 def draw_volumes(img, cam, k, sp, t=0.0, light=None, surfaces=None, prts=None):
-    """Draw the Body k through cam (sets.Cam) as one body: traced volumes, one outline, a flat shadow side, the
+    """Draw the Body k through cam (sets.Cam) as one body: traced volumes, one outline, flat fills, the
     person's own face and clothes (the look before Job I: still used for a body cut into pieces and for someone
     standing seen from a steep camera). `surfaces`: [(point, normal)] it rests on, for the contact shadow (drawn
     first). Returns {joint: frame point} for props and checks, or None if off camera."""
@@ -860,10 +859,7 @@ def draw_volumes(img, cam, k, sp, t=0.0, light=None, surfaces=None, prts=None):
     col = _paint(prts, idm.ravel(), Pw, sp, t, cam, hit.ravel())
     reg = col[:, 3].astype(np.int64).reshape(h, w)
     rgb = col[:, :3]
-    # the light from high on the left, a little beyond the subject: the shadow side is the right and underneath
-    L = _unit(light if light is not None else (_v(0, 1, 0) - np.asarray(cam.r) * 0.75 + np.asarray(cam.f) * 0.2))
-    dark = (N @ L) < 0.0
-    rgb = np.where(dark[:, None], rgb * SHADE, rgb)
+    # no darker shadow side (Sam, 14 Nov): the colours stay flat; the house look gives the depth
     # the lines: the silhouette; parts that lie over others (not joined on the body); colours meeting; a body
     # part in front of another of the same part (depth jump)
     dep = T.reshape(h, w)
@@ -1363,7 +1359,7 @@ def sheet(out_path, cell=430):
     sh = Image.new('RGB', (W, H), (246, 244, 238))
     d = ImageDraw.Draw(sh)
     d.text((16, 16), 'Build item 12: people lying down and seen from a high camera (3D body, one outline, '
-                     'a flat shadow side). Test people: P1, LADY, MAGNATE (Poker Mon cast).', fill=(20, 20, 20),
+                     'flat fills). Test people: P1, LADY, MAGNATE (Poker Mon cast).', fill=(20, 20, 20),
            font=font)
     faults = []
     for c, (title, _) in enumerate(COLS):

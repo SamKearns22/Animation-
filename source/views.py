@@ -28,7 +28,7 @@ sys.path.insert(0, HERE)
 
 import burnham as B          # noqa: E402
 import figure as F           # noqa: E402
-from ed import INK, curve, oval, soft   # noqa: E402
+from ed import INK, curve, oval   # noqa: E402
 
 VIEWS = {0: 'front', 45: 'three', 90: 'side', 135: 'three_back', 180: 'back'}
 THIGH, SHIN, ANKLE_Y = 228, 218, 890          # person units: hips at 450, soles at 928 (knees just soft standing)
@@ -567,7 +567,6 @@ def torso_view(img, p, sp, view, seated=False):
             p.line([(34, 0), (d * 0.86, 120), (d * 1.0, 290)], jd, 2.2)
         elif out == 'dress':
             p.poly([(10, -10), (40, -4), (36, 40), (14, 24)], skin, None)
-        soft(img, p.cam, [(-d * 1.02, 60), (-d * 0.5, 60), (-d * 0.5, bottom), (-d * 0.92, bottom)], (0, 0, 0), 0.25, 10, clip=body)
         if sp.get('rosette'):
             p.ell(d * 0.7, 120, 16, 20, (40, 156, 72), INK, 2.4)
         if sp.get('lanyard'):
@@ -592,8 +591,6 @@ def torso_view(img, p, sp, view, seated=False):
                 p.poly([(-44, 6), (44, 6), (40, 26), (-40, 26)], B.dk(jc, 0.85), INK, 2.0)
             p.line([(off, 26), (off, bottom - 110)], jd, 2.2)
             p.line([(off, bottom - 110), (off, bottom)], INK, 2.2)
-        soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k * B.HEM, bottom)], (0, 0, 0), 0.22, 10,
-             clip=body)
     for extra in TORSO_EXTRAS:                    # what a person wears over the clothes (the people kit's extras), in
         extra(img, p, sp, view, seated)           # this view too (face tool chat 15: one outfit in every view)
 
@@ -780,8 +777,6 @@ def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         p.poly(outline, skin, INK, 2.6)
         p.poly(oval(hx - 0.5 * hw, hy + 6, 12, 22), skin, INK, 2.4)
         p.line([(hx - 0.5 * hw - 2, hy - 4), (hx - 0.5 * hw + 3, hy + 12)], B.dk(skin, 0.8), 1.6)
-        soft(img, p.cam, [(hx - hw * 0.95, hy - 20), (hx - hw * 0.6, hy - 30), (hx - hw * 0.6, hy + hh * 0.7),
-                          (hx - hw * 0.8, hy + hh * 0.6)], (160, 100, 90), 0.18, 8)
         if beard in ('short', 'trim', 'full', 'white'):
             low = 1.14 if beard in ('short', 'trim') else 1.4
             p.poly(curve([(hx - hw * 0.62, hy + 22), (hx - hw * 0.8, hy + hh * 0.6), (hx - hw * 0.22, hy + hh * low * 0.92),

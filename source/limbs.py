@@ -6,7 +6,7 @@
         so the body's own outline stays crisp over the join. Drawn as a solid tube, so a sharp elbow cannot fold.
   Legs: one smooth shape: fuller at the thigh, in at the knee, a little calf, slim at the ankle; a gentle curve
         through the knee. Pockets and seams drawn on a leg follow its shape. Shoes unchanged.
-  Legs keep the film's soft shading down the outer side; arms are flat, like the film's own arms.
+  Legs and arms are flat: no darker shadow side (Sam, 14 Nov).
 
 Nothing in any film changes: the shapes are swapped in memory while a picture or video is drawn.
 
@@ -315,10 +315,6 @@ def install(B):
             n = _normals(spine)
             left, right = spine + n * hw[:, None], spine - n * hw[:, None]
             orig_poly(p, [tuple(v) for v in np.vstack([left, right[::-1]])], tc, INK, 2.6)
-            out_side = 1 if abs(left[:, 0]).mean() > abs(right[:, 0]).mean() else -1      # the film's soft shading,
-            edge = spine + out_side * n * (hw - 4)[:, None]                                  # down the outer side
-            inner = spine + out_side * n * (hw * 0.4)[:, None]
-            B.soft(img, p.cam, [tuple(v) for v in np.vstack([edge, inner[::-1]])], (0, 0, 0), 0.3, 6)
             maps[sgn] = (spine, hw)
             orig_poly(p, curve([(sgn * (24 + o), 896), (sgn * (94 + o), 894), (sgn * (128 + o), 910),
                                 (sgn * (124 + o), 928), (sgn * (20 + o), 928)], 4), (22, 20, 22), INK, 2.4)
