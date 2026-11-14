@@ -5,7 +5,7 @@ head size, with lips, brows, a nose, ears, eye bags, shaped hair, stubble or a b
 face card rides in their own spec (sp['kit_face']), so nothing is keyed by name. people.py reads the descriptions
 and hangs these parts on the engine; no film imports this file until Sam approves the kit.
 
-Map: gaze 23 | head size 31 | outline 49 | hair cap 62 | torsos (robe, officer) 70 | wig 100 | the front face 129 |
+Map: gaze 23 | head size 31 | outline 49 | hair cap 62 | torsos (robe, officer; their backs, the open collar: chat 15) 70 | wig | the front face 129 |
      hair mass 241 | hair front 279 | glasses 313
 """
 import math
@@ -95,6 +95,56 @@ def officer_torso(img, p, sp, t):
     p.poly([(sw * 0.3, 70), (sw * 0.62, 70), (sw * 0.62, 176), (sw * 0.3, 176)], (20, 20, 24), INK, 1.6)  # note 28:
     p.line([(sw * 0.38, 70), (sw * 0.38, 20)], (20, 20, 24), 4.0)                     # a radio clipped at the chest
     p.poly([(sw * 0.35, 96), (sw * 0.57, 96), (sw * 0.57, 128), (sw * 0.35, 128)], (90, 96, 104), None)
+
+
+def robe_back(img, p, sp, t):
+    """The robe from behind (face tool chat 15: one outfit in every view): the black sash coming over the shoulder
+    and across the back to the other hip (the back's own units: as seen from behind)."""
+    sw = sp.get('shoulders', 160)
+    p.poly([(sw * 0.9, 20), (sw * 0.6, 4), (-sw * 0.2, 300), (-sw * 0.1, 340)], (24, 22, 24), INK, 2.0)
+
+
+def officer_back(img, p, sp, t):
+    """HMPPS officer from behind (chat 15): the black belt all round, the black epaulettes on the shoulders."""
+    sw = sp.get('shoulders', 160)
+    p.poly([(-sw * 0.98, 466), (sw * 0.98, 466), (sw * 0.98, 496), (-sw * 0.98, 496)], (20, 20, 24), INK, 1.6)
+    for sgn in (-1, 1):
+        p.poly([(sgn * sw * 0.35, 10), (sgn * sw * 0.85, 26), (sgn * sw * 0.85, 46), (sgn * sw * 0.35, 30)],
+               (20, 20, 24), INK, 1.6)
+
+
+def open_collar(p, cx, yc, nw, skin, sc):
+    """The open shirt collar at the neck's foot (face tool chat 9, Sam: "look closely at the neckline"; an outfit
+    choice since chat 15, `outfit: suit .., no tie, open collar`, was in the braids code): the skin runs on down from
+    the neck in a V to the top button, and the two collar flaps lie over the lapels either side, so the neck no
+    longer stops at a flat shirt edge, steps in at its foot, or leaves white bars out at the sides."""
+    w = 36 * nw
+    p.poly([(cx - w, yc - 2), (cx + w, yc - 2), (cx + 4, 56), (cx - 4, 56)], skin, None)
+    for sg in (-1, 1):
+        p.poly([(cx + sg * (w + 1), yc - 3), (cx - sg * 1, 62), (cx + sg * 22, 70), (cx + sg * 60, 6),
+                (cx + sg * (w + 16), yc - 4)], sc, INK, 2.0)
+
+
+def open_collar_three(p, sp, nw, skin, sc, yc=-11.0):
+    """The open collar from three-quarter (face tool chat 12, Sam: "Kemi's correct outfit is replaced by her
+    previous one in her 3/4 pose"): the skin V from the neck's foot down to the top button on the chest's centre
+    (views' three-quarter V, `v_at`), the near flap over the near lapel, the far one foreshortened."""
+    sw = sp.get('shoulders', 150)
+    o = sp.get('v_at', 0.24 * sw)
+    nl, nr = -20.0 * nw, 44.0 * nw - 8 * (nw - 1)           # the three-quarter neck's foot, at her neck_w
+    p.poly([(nl, yc - 2), (nr, yc - 2), (o + 4, 56), (o - 4, 56)], skin, None)
+    for sg, tx, k in ((-1, nl, 1.0), (1, nr, 0.55)):
+        p.poly([(tx + sg * 1, yc - 3), (o - sg * 1, 62), (o + sg * 22 * k, 70), (tx + sg * 24 * k, 6),
+                (tx + sg * 16 * k, yc - 4)], sc, INK, 2.0)
+
+
+def collar_torso(img, p, sp, t):
+    """The open collar on the front torso, as an outfit piece (the neck's foot at the house's -11)."""
+    open_collar(p, 0.0, -11.0, sp.get('neck_w', 1.0), sp['skin'], sp.get('shirt', (246, 246, 246)))
+
+
+def collar_three(img, p, sp, t):
+    open_collar_three(p, sp, sp.get('neck_w', 1.0), sp['skin'], sp.get('shirt', (246, 246, 246)))
 
 
 WIG_K = (1.42, 1.0, -62)    # (width, height, shift down) of the wig on the front face

@@ -312,3 +312,40 @@
 - **For Claude:** facehouse._turn_face calls stubble(ink=False) (turnhead inks the outline); facehouse.load(name, src,
   variant); CAST['walliams']. Older code names: notes/archive/facetool-handovers.md (chat 13).
 
+
+
+## Face tool, where things stand (chat 14 of the face chain, 14 Nov)
+- **Rules that bite next:** 86 (every tool gets a kittest), 30 (Walliams is a repeated note: say why it failed), 49.
+- **Done (chat 14):** Walliams' stubble goes round his turned views (front's `stubble` on the turned face, as Vance's
+  goatee); Andy and Kemi pixel for pixel; kittest facehouse_beard_turns; sheet `notes/morning/walliams-turned-c14.jpg`.
+  Job (a) checked: all 29 people in the 3 people files (crowds included) already turn on turnhead's 30-degree
+  three-quarter (people_turned, famous, house); only the test-only hand-made Walliams part (HEAD_PARTS) does not.
+  Kittest kit_people_never_generic holds it for every people file.
+- **Next (chat 15, Opus high: new building):** (b) one outfit, every view. Found: the kit's torso extras (robe,
+  officer, open shirt, crucifix, scarf, zip; people._extras) run only in the FRONT torso (traitors_cast.torso via
+  B.torso); turned views draw views.torso_view's plain clothes, so every extra drops when a person turns. Kemi's open
+  collar lives in the braids code (front `braids_behind`, three `_turned_braids`), none at side/behind. Build: the
+  open collar as an outfit choice (`outfit: suit ..., open collar` in people.py, drawn by the torso, out of the hair
+  code, Kemi's lines carry it: her pixels held); each extra drawn in three, side, three_back, back; a kittest drawing
+  every extra and outfit from every view that fails when a turned view drops a piece the front has. Then Walliams'
+  head shape (below). One sheet to Sam: the extras turned, and Blessed Walliams vs new side by side.
+- **Sam on the Walliams sheet (14 Nov, a N):** "I would recognise the original as Walliams a lot more ... Just
+  doesn't look like him. Very different head shape too." Why (chat 13's read): the inner face was tuned off a smiling
+  photo, but the OUTLINE is the house's: narrow temples, long, tapering, where his (Blessed, "That's him") is a broad
+  box, jaw as wide as the cheeks, long heavy lower face (blessed_walliams.outline, LOW 1.15); eyes small and tired.
+  **Sam's direction (replaces the lesson chat 13 offered):** "I think it just needs to be able to draw the face shape
+  from the reference a lot more intelligently": the face tool reads the head's whole shape off the photos itself
+  (temples, cheeks, jaw, chin, crown with the hair), for every face, not a house outline from a few measures; also
+  bigger, livelier eyes as the Blessed head's. A new build at Opus high, judged on Walliams beside the Blessed head
+  Sam knows (Sam's eye is the judge; the name test is calibrated out). Andy and Kemi's front heads held.
+- **Seen, not fixed:** side view: the stubble's top edge ends in a straight step behind the jaw.
+- **Needs Sam:** nothing open (the Walliams N is being worked).
+- **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on
+  budget." Age lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP; people.py `_extras`,
+  views.py `torso_view`.
+- **Open rule requests:** none.
+- **For Claude:** facehouse._turn_face calls stubble(ink=False); open_collar / open_collar_three (facehouse 680/691);
+  PF.open_shirt/crucifix/scarf/zip_top, PP.robe_torso/officer_torso; views.torso_view(img, p, sp, view). Older code
+  names: notes/archive/facetool-handovers.md.
+

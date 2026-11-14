@@ -32,10 +32,11 @@ STYLES = {
     'side': dict(hl=-0.08, prof=dict(hair_low=0.44, nape=0.7, volume=0.035), parting=True),
     'knot': dict(hl=-0.1, prof=dict(hair_low=0.4, nape=0.66, volume=0.02), knot=True),
     'none': dict(hl=None, prof=dict(), bare=True),
-}
+    'wig': dict(hl=-0.2, prof=dict(hair_low=0.7, nape=0.82, volume=0.16), curls=True, rolls=True),   # chat 15:
+}   # the judge's white bench wig turned (the front's extra 'wig': rolled curls over the crown, a roll over each ear)
 TURNED = {'crop': 'crop', 'bald': 'bald', 'side': 'side', 'bob': 'bob', 'long': 'long', 'curly': 'curly',
           'bun': 'knot', 'receding': 'bald', 'none': 'none', 'pony': 'pony', 'short': 'short'}   # kit hair -> from behind
-HIDES_EARS = ('bob', 'long', 'curly')       # hair over the ears: none drawn on top of it
+HIDES_EARS = ('bob', 'long', 'curly', 'wig')       # hair over the ears: none drawn on top of it
 
 
 # ---------------------------------------------------------------------------------------------- the press pack's pieces
@@ -93,6 +94,15 @@ def _hair(img, p, f, L, sp, look):
         for k in range(3):
             p.line(curve([(x - 6 + 6 * k, y + 14), (x - 10 + 7 * k, y + 80), (x - 4 + 4 * k, y + 140)], 3), dk(hc, 0.72), 1.3)
         p.poly(oval(x, y + 6, 18, 8, 12), (40, 40, 44), INK, 1.6)
+    if st.get('rolls'):                                        # the wig's rolls over each ear (chat 15)
+        for deg in (-91, 91):
+            x, z = f.ring(deg, 0.42)
+            X, Z = f.view(float(x), float(z))
+            if Z < -0.05:
+                continue
+            ex = f.cx + X * H + math.copysign(8, X)
+            for k in range(3):
+                p.ell(ex, f.top + (0.3 + 0.08 * k) * H, 12, 9, hc, INK, 1.8)
     if st.get('knot'):                                         # new: a bun high on the back of the head
         x, y = bx - (0.0 if yaw >= 170 else 0.1 * H), f.top - 0.3 * H
         p.poly(curve(oval(x, y, 26, 22, 18), 2), hc, INK, 2.2)
@@ -144,7 +154,7 @@ def _over(img, p, f, L, sp, view):
 def look(sp):
     """This look's turned head: its key and what it is built from (the same look always gets the same Person)."""
     fc = sp['kit_face']
-    style = TURNED[fc.get('turned') or fc['hair']]
+    style = 'wig' if 'wig' in sp.get('kit_extras', ()) else TURNED[fc.get('turned') or fc['hair']]
     hc = tuple(sp.get('hair_c', (40, 32, 28)))
     key = 'kit:%s:%s:%s:%s:%s' % (sp['who'], style, tuple(sp['skin']), hc, sorted(fc['m'].items()))
     return dict(key=key, style=style, hair_c=hc, strand_seed=sp.get('strand_seed', 1),

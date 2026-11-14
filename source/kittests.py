@@ -2277,6 +2277,42 @@ def facehouse_beard_turns():
     return turned >= 2 and len(seen) >= 3, f'stubble drawn front {len(seen) - turned}, turned {turned} (want 1 and 2)'
 
 
+
+@test
+def outfit_every_view():
+    """Face tool chat 15 (one outfit in every view): every piece a person wears over the clothes (each extra, the open
+    collar) shows in the three-quarter and the side as it does from the front, and from behind where it goes round
+    (people.turned's 'back'); the wig turns with the head. Fails when a turned view drops a piece the front has."""
+    import numpy as np
+    from PIL import Image
+    import people
+    import people_parts as PP
+    from satire_style import install_circle_hands
+    B, V = PP.B, PP.AV.MC.V
+    install_circle_hands(B)
+    B.SS = 1
+    base = people.parse("# t: Test\nbody: 1.78 m\nskin: pale | hair: crop, 40 32 28\n"
+                        "outfit: suit 60 60 66, shirt white, no tie\n")['t']
+    tv = people.turned()
+
+    def draw(d, yaw):
+        cast = people.install({'t': people.person(d)})
+        tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(cast['t']), 0.0, yaw)
+        return np.asarray(tile.convert('RGB'), np.int16)
+    plain = {y: draw(base, y) for y in (0, 45, 90, 135, 180)}
+    bad, n = [], 0
+    for e in list(people.EXTRAS) + ['open collar']:
+        d = dict(base, collar='open') if e == 'open collar' else dict(base, extras=[e])
+        want = (0, 45, 90) + ((135, 180) if e == 'wig' or (e in tv and tv[e]['back']) else ())
+        for y in want:
+            n += 1
+            seen = int((np.abs(draw(d, y) - plain[y]).max(axis=2) > 24).sum())
+            if seen < 150:
+                bad.append(f'{e} at {y} ({seen} px)')
+    return not bad, f'{n} piece-views checked; dropped: {", ".join(bad) or "none"}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

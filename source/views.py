@@ -528,10 +528,7 @@ def torso_view(img, p, sp, view, seated=False):
         # Fitted (face tool chat 12, Sam: the clothes "look like they are coming forward and out, like a ridge, rather
         # than fitting"): the shoulders one soft slope round into the arms (were a flat roof with square corners), the
         # near side's hard-edged shadow panel and seam line gone (they read as a box's side plane).
-        from ed import open_curve
-        top = open_curve([(-sw * 0.97, 120), (-sw * 0.95, 48), (-sw * 0.84, 18), (-sw * 0.55, 4), (-30, -6),
-                          (52, -6), (sw * 0.5, 4), (sw * 0.78, 20), (sw * 0.88, 52), (sw * 0.89, 120)], 6)
-        body = top + [(sw * 0.88, 200), (sw * 0.78 * B.HEM, bottom), (-sw * 0.86 * B.HEM, bottom), (-sw * 0.97, 200)]
+        body = torso_outline(sp, view, bottom)
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)
@@ -561,8 +558,7 @@ def torso_view(img, p, sp, view, seated=False):
         d = 0.6 * sw
         if not sp.get('neck_off'):
             p.poly([(-26, -80), (24, -80), (34, 8), (-30, 8)], skin, INK, 2.6)
-        body = curve([(-34, -8), (-d * 0.92, 22), (-d * 1.02, 130), (-d * 0.96, 320), (-d * 0.92, bottom), (d * 1.0, bottom),
-                      (d * 1.02, 300), (d * 1.12, 140), (d * 0.86, 30), (30, -6)], 3)
+        body = torso_outline(sp, view, bottom)
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(4, -14), (36, -6), (34, 24), (16, 12)], sc, INK, 2.0)
@@ -587,8 +583,7 @@ def torso_view(img, p, sp, view, seated=False):
             if sp.get('neck_shade'):                  # the jaw's shadow on it: the neck sits under the head
                 p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (30 * nw, -40 + ny), (0, -28 + ny),
                         (-30 * nw, -40 + ny)], B.dk(skin, 0.82), None)
-        body = [(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
-                (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]
+        body = torso_outline(sp, view, bottom)
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             if not sp.get('collar_off'):              # lying_flat draws it round the neck's foot instead (Job I, 18)
@@ -599,6 +594,136 @@ def torso_view(img, p, sp, view, seated=False):
             p.line([(off, bottom - 110), (off, bottom)], INK, 2.2)
         soft(img, p.cam, [(-sw * k, 60), (-sw * 0.4 * k, 30), (-sw * 0.5 * k, bottom), (-sw * k * B.HEM, bottom)], (0, 0, 0), 0.22, 10,
              clip=body)
+    for extra in TORSO_EXTRAS:                    # what a person wears over the clothes (the people kit's extras), in
+        extra(img, p, sp, view, seated)           # this view too (face tool chat 15: one outfit in every view)
+
+
+# ------------------------------------------------------------------------------------- one outfit in every view
+TORSO_EXTRAS = []    # draw(img, p, sp, view, seated) after each turned torso (people.install hangs the kit's on it)
+
+
+def torso_outline(sp, view, bottom):
+    """The turned torso's outline (torso_view's body), facing right, in the body's units."""
+    sw = sp.get('shoulders', 150)
+    if view == 'three':
+        from ed import open_curve
+        top = open_curve([(-sw * 0.97, 120), (-sw * 0.95, 48), (-sw * 0.84, 18), (-sw * 0.55, 4), (-30, -6),
+                          (52, -6), (sw * 0.5, 4), (sw * 0.78, 20), (sw * 0.88, 52), (sw * 0.89, 120)], 6)
+        return top + [(sw * 0.88, 200), (sw * 0.78 * B.HEM, bottom), (-sw * 0.86 * B.HEM, bottom), (-sw * 0.97, 200)]
+    if view == 'side':
+        d = 0.6 * sw
+        return curve([(-34, -8), (-d * 0.92, 22), (-d * 1.02, 130), (-d * 0.96, 320), (-d * 0.92, bottom), (d * 1.0, bottom),
+                      (d * 1.02, 300), (d * 1.12, 140), (d * 0.86, 30), (30, -6)], 3)
+    k = 0.9 if view == 'three_back' else 1.0
+    return [(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
+            (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]
+
+
+def _span(pts, y):
+    """The outline's left and right edges at height y (None above or below it)."""
+    xs = []
+    for (x0, y0), (x1, y1) in zip(pts, pts[1:] + pts[:1]):
+        if (y0 - y) * (y1 - y) <= 0 and y0 != y1:
+            xs.append(x0 + (x1 - x0) * (y - y0) / (y1 - y0))
+    return (min(xs), max(xs)) if len(xs) >= 2 else None
+
+
+class WrapPen:
+    """A pen that draws a piece designed on the FRONT torso (or, face='back', on the back as seen from behind) round
+    the turned torso: each point of the front goes round a body whose edges are the turned torso's own outline
+    (torso_outline), so the piece sits where the drawn body is. Three-quarter and behind: a round body, its front
+    centre where the drawing puts it (the shirt's V, the back seam); the far side goes out of sight round the edge.
+    The side: the house's profile, front pieces pressed into a strip just inside the chest's front edge (as the
+    house's own side tie and shirt), the far half hidden. A shape wholly out of sight is not drawn."""
+    STEP = 10.0                                   # edges cut into steps this long, so they bend round the body
+
+    def __init__(self, img, p, sp, view, seated=False, face='front'):
+        import burnham
+        self.pen, self.view, self.face = burnham.Pen(img, p.cam), view, face
+        self.cam, self.img = p.cam, img
+        sw = sp.get('shoulders', 150)
+        bottom = min(sp.get('bottom', JACKET), 470) if seated else sp.get('bottom', JACKET)
+        self.out, self.sw, self.bottom = torso_outline(sp, view, bottom), sw, bottom
+        self.mid = sp.get('v_at', 0.24 * sw) if view == 'three' else (-0.22 * sw if view == 'three_back' else 0.0)
+        self._rows = {}
+
+    def width(self, y):
+        """The front torso's half width at y (burnham.torso's shape: the neck's foot, the shoulders, the hem)."""
+        sw = self.sw
+        return float(np.interp(y, [-6, 12, 50, 200, self.bottom], [40, sw * 0.8, sw, sw + 6, sw * B.HEM]))
+
+    def row(self, y):
+        key = round(y)
+        if key not in self._rows:
+            yy = min(max(y, -5.5), self.bottom - 0.5)
+            sp_ = _span(self.out, yy)
+            if sp_ is None:
+                sp_ = (-40.0, 40.0)
+            lo, hi = sp_
+            c, r = (lo + hi) / 2, max(1.0, (hi - lo) / 2)
+            if self.view == 'side':
+                psi = None
+            else:
+                s_ = max(-0.99, min(0.99, (self.mid - c) / r))
+                psi = math.asin(s_) if self.view == 'three' else (
+                    math.pi + math.asin(s_) if self.view == 'three_back' else math.pi)
+            self._rows[key] = (lo, hi, c, r, psi)
+        return self._rows[key]
+
+    def map(self, x, y):
+        """(screen x in the body's units, seen?) for a front (or back) point."""
+        lo, hi, c, r, psi = self.row(y)
+        u = max(-1.0, min(1.0, x / self.width(y)))
+        if psi is None:                               # the side: the near half (n < 0), pressed toward the edge
+            n, e, sg = (x, hi, 1.0) if self.face == 'front' else (-x, lo, -1.0)
+            W = self.width(y)
+            if n >= -40:                              # the middle: a strip inside the edge, as the house's side tie
+                return e + sg * (-10 + 0.5 * n), n < 22
+            return c + (e - sg * 30 - c) * max(0.0, n + W) / max(1.0, W - 40), True   # out to the side seam (mid body)
+        th = math.asin(u) if self.face == 'front' else math.pi + math.asin(u)
+        a = th + psi
+        a = math.atan2(math.sin(a), math.cos(a))
+        seen = math.cos(a) >= -1e-6
+        a = max(-math.pi / 2, min(math.pi / 2, a))
+        return c + r * math.sin(a), seen
+
+    def _at(self, x, y):
+        X, seen = self.map(x, y)
+        if self.view == 'side':                       # nothing past the chest's (or the back's) edge
+            X = min(X, self.row(y)[1]) if self.face == 'front' else max(X, self.row(y)[0])
+        return (X, y), seen
+
+    def _pts(self, pts, closed):
+        pts = [tuple(q) for q in pts]
+        if len(pts) < 2:
+            return [], False
+        out, any_seen = [], False
+        for (x0, y0), (x1, y1) in zip(pts, pts[1:] + (pts[:1] if closed else [])):
+            n = max(1, int(math.hypot(x1 - x0, y1 - y0) / self.STEP))
+            for i in range(n):
+                q, seen = self._at(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n)
+                out.append(q)
+                any_seen |= seen
+        if not closed:
+            q, seen = self._at(*pts[-1])
+            out.append(q)
+            any_seen |= seen
+        return out, any_seen
+
+    def poly(self, pts, fill, line=INK, lw=4):
+        q, seen = self._pts(pts, True)
+        if seen:
+            self.pen.poly(q, fill, line, lw)
+
+    def ell(self, cx, cy, rx, ry, fill, line=INK, lw=4, rot=0, n=40):
+        self.poly([(cx + rx * math.cos(a) * math.cos(rot) - ry * math.sin(a) * math.sin(rot),
+                    cy + rx * math.cos(a) * math.sin(rot) + ry * math.sin(a) * math.cos(rot))
+                   for a in np.linspace(0, 2 * math.pi, n, endpoint=False)], fill, line, lw)
+
+    def line(self, pts, colr=INK, lw=4):
+        q, seen = self._pts(pts, False)
+        if seen:
+            self.pen.line(q, colr, lw)
 
 
 # ------------------------------------------------------------------------------------------------ head views

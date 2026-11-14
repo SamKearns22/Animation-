@@ -521,6 +521,17 @@ def zip_top(img, p, sp, t):
     p.poly([(-5, 30), (5, 30), (5, 50), (-5, 50)], (180, 180, 184), INK, 1.2)
 
 
+def scarf_back(img, p, sp, t):
+    """The scarf from behind (face tool chat 15): round the back of the neck, its two ends gone over the shoulders."""
+    p.poly(curve([(-50, -8), (0, -12), (50, -8), (54, 18), (0, 14), (-54, 18)], 3), SCARF, INK, 2.2)
+    p.line(curve([(-44, 4), (0, 0), (44, 4)], 3), dk(SCARF, 0.86), 1.6)
+
+
+def zip_back(img, p, sp, t):
+    """The tracksuit top from behind (chat 15): its collar round the neck, as the front's."""
+    p.poly([(-42, -6), (42, -6), (46, 26), (-46, 26)], sp['jacket'], INK, 2.2)
+
+
 # ---------------------------------------------------------------------------------------------- install
 _old_hair_back = None
 

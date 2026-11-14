@@ -673,33 +673,11 @@ def braids_behind(p, f, L, hc, kh, sp):
     p.poly([(f.cx - 32 * nw, -90), (f.cx + 32 * nw, -90), (f.cx + 30 * nw, -46), (f.cx, -34), (f.cx - 30 * nw, -46)],
            dk(skin, 0.82), None)                            # the jaw's shadow on it (views' neck_shade)
     p.line([(f.cx - 35 * nw, yc), (f.cx + 35 * nw, yc)], skin, 2.0)   # no ink line along the collar's top
-    if sp.get('outfit') == 'suit' and not sp.get('tie'):
-        open_collar(p, f.cx, yc, nw, skin, sp.get('shirt', (246, 246, 246)))
+    if sp.get('collar') == 'open':                          # the outfit's neckline, laid again over the redrawn
+        open_collar(p, f.cx, yc, nw, skin, sp.get('shirt', (246, 246, 246)))   # neck (the torso leaves it: neck_redrawn)
 
 
-def open_collar(p, cx, yc, nw, skin, sc):
-    """The open shirt collar at the redrawn neck's foot (chat 9, Sam: "look closely at the neckline"): the skin runs
-    on down from the neck in a V to the top button, and the two collar flaps lie over the lapels either side, so
-    the neck no longer stops at a flat shirt edge, steps in at its foot, or leaves white bars out at the sides."""
-    w = 36 * nw
-    p.poly([(cx - w, yc - 2), (cx + w, yc - 2), (cx + 4, 56), (cx - 4, 56)], skin, None)
-    for sg in (-1, 1):
-        p.poly([(cx + sg * (w + 1), yc - 3), (cx - sg * 1, 62), (cx + sg * 22, 70), (cx + sg * 60, 6),
-                (cx + sg * (w + 16), yc - 4)], sc, INK, 2.0)
-
-
-def open_collar_three(p, sp, nw, skin, sc, yc=-11.0):
-    """Kemi's open collar from three-quarter (chat 12, Sam: "Kemi's correct outfit is replaced by her previous one in
-    her 3/4 pose"): the turned body drew the plain buttoned shirt. As open_collar, turned: the skin V from the neck's
-    foot down to the top button on the chest's centre (views' three-quarter V, `v_at`), the near flap over the near
-    lapel, the far one foreshortened."""
-    sw = sp.get('shoulders', 150)
-    o = sp.get('v_at', 0.24 * sw)
-    nl, nr = -20.0 * nw, 44.0 * nw - 8 * (nw - 1)           # the three-quarter neck's foot, at her neck_w
-    p.poly([(nl, yc - 2), (nr, yc - 2), (o + 4, 56), (o - 4, 56)], skin, None)
-    for sg, tx, k in ((-1, nl, 1.0), (1, nr, 0.55)):
-        p.poly([(tx + sg * 1, yc - 3), (o - sg * 1, 62), (o + sg * 22 * k, 70), (tx + sg * 24 * k, 6),
-                (tx + sg * 16 * k, yc - 4)], sc, INK, 2.0)
+open_collar, open_collar_three = PP.open_collar, PP.open_collar_three   # the outfit's (people_parts, chat 15)
 
 
 def braids(p, f, L, hc, lk, kh):
@@ -911,8 +889,6 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
         bx = back[-1][0] - H * 0.05
         front = [(ex + reach, f.top + v * H) for v in vs]
         curt.append((back + [(bx, foot)], front + [(ex + reach + H * 0.04, foot)]))
-        if yaw < 60 and sp.get('outfit') == 'suit' and not sp.get('tie'):   # her open collar, under the curtains
-            open_collar_three(p, sp, sp.get('neck_w', 1.0), sp['skin'], sp.get('shirt', (246, 246, 246)))
     head = [(x, y) for x, y, v, part in sil]
     for i, (a, b) in enumerate(curt):
         mid = ((a[0][0] + b[0][0]) / 2, a[0][1] - 0.12 * H)       # an arched top under the crown: no sharp
@@ -1014,7 +990,7 @@ def caricature(meas, push=1.0, tune=None):
 
 
 def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, src=None,
-           variant=None, **kw):
+           variant=None, collar=None, **kw):
     """The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
     `variant`: one of facepick's three heads before Sam picks (load())."""
     import people
@@ -1025,6 +1001,8 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     d = dict(who=name, name=name.title(), skin=skin, hair_style='none', hair_c=tuple(col['hair']), height=height,
              brows=tuple(col['brow']), lips=house_tone(col['lip'], lk['skin_k'] * 0.5), outfit=outfit[0],
              jacket=tuple(outfit[1]), sleeve=tuple(outfit[1]), shirt=shirt, tie=tie)
+    if collar:                                              # the outfit's neckline (chat 15: 'open collar')
+        d['collar'] = collar
     if 'neck_w' in kw:                                      # the person's lines: a wider neck (Kemi's, K1)
         d['neck_w'] = kw.pop('neck_w')
     if d['tie'] is not None:
@@ -1038,6 +1016,8 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     if kh['age'] and lk['age_k']:
         kh['age'] = dict(kh['age'])
     sp.update(kit_head='house', kit_house=kh, neck_shade=True)
+    if hair == 'braids':                                    # the plaits behind the neck repaint it and lay the
+        sp['neck_redrawn'] = True                           # collar again: the front torso leaves the collar to them
     return sp
 
 
@@ -1047,7 +1027,7 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
            # startled), and her face's outline traced off her three front photos (shape)
     'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
                     hairline=-0.07, brow_thick=0.058),
-    'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
+    'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7, collar='open',
                      brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
                      lid=0.24, shape=True),
     'walliams': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None,   # chat 13: his
