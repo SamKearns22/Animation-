@@ -16,7 +16,7 @@ about anything built that never went on a rough.
 
     python3 source/rough.py sheet FILM OUT.jpg [--all] [--draft]   the sheet (--all: everything, sent or not;
                                                                     --draft: the draft clock even with film code)
-    python3 source/rough.py sent FILM [OUT.jpg]                    after sending: records everything on the sheet
+    python3 source/rough.py sent FILM [OUT.jpg] --delivered                  after sending: records everything on the sheet
     python3 source/rough.py check FILM                             what is built but never sent on a rough (rule 11)
 
 Map: items 40 | the record 85 | people 110 | places 135 | moves (draft clock 170, key times 210, tiles 240) |
@@ -426,7 +426,11 @@ def main(argv):
         print('\n'.join(f) if f else f'{film}: everything built has been on a rough')
         return 1 if f else 0
     if argv[0] == 'sent':
-        n = mark_sent(film, argv[2] if len(argv) > 2 else '')
+        if '--delivered' not in argv:
+            print('NOT recorded: add --delivered once SendUserFile has delivered the sheet (a sheet is "sent" only when it arrived).')
+            return 1
+        rest = [a for a in argv[2:] if not a.startswith('--')]
+        n = mark_sent(film, rest[0] if rest else '')
         print(f'{film}: {n} things recorded as seen on a rough ({os.path.relpath(record_path(film), ROOT)})')
         return 0
     out, todo = sheet(film, argv[2], '--all' in argv, '--draft' in argv)

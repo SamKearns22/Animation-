@@ -137,6 +137,8 @@ Every hand is a circle at the end of the arm (`chand`; `gesture_hand` replaces b
 are laid over the circle (`phone_prop`); grips are implied, never drawn. `hands3d.py` (MakeHuman hands) is retired
 for these films: too costly in rounds and renders.
 
+**A head prop fits the head as drawn (Sam Y, 14 Nov).** A helmet, hood or hat is sized from the head's drawn outline (`fit`/`head_box` in the protest cast), never from the rig's half-width and half-height numbers: the kit heads are wider than those.
+
 **Pupils stay inside the eyes (Sam, 19 Oct: Poker Mon).** However far a character looks (`look`, `look_v`), the pupil
 never crosses the eye's outline: any part past the edge is under the lid. `burnham.face` draws the pupil already cut
 to the eye's shape, so this holds in every film.

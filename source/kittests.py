@@ -2385,6 +2385,16 @@ def outfit_every_view():
     return not bad, f'{n} piece-views checked; dropped: {", ".join(bad) or "none"}'
 
 
+@test
+def cast_tile_scale_is_one():
+    """Sam Y 14 Nov: a cast tile draws at scale 1 (B.SS), whatever the film left it at."""
+    import protest_tiers_cast as C
+    B = C.B
+    B.SS = 3
+    C.tile(lambda img, cam: None)
+    return B.SS == 1, f'B.SS after a tile = {B.SS}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
