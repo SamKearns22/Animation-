@@ -31,7 +31,7 @@
 - **Next (chat 14, Opus medium):** stubble carried round the turned views (turnhead's beard path, as Vance's goatee);
   then Sam's notes on the Walliams sheet, if any.
 - **Needs Sam:** Y/N on the new Walliams head (the chain does not wait on it).
-- **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
+- **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
   caricature. Andy and Kemi finished: do not change their front heads.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (TURNED) and `stubble`.
 - **Open rule requests:** none.
