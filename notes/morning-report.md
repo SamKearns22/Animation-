@@ -56,3 +56,9 @@
 - **Works:** one command draws a single sheet of everything new in a film's people, places and moves files, with the kits themselves (so the rough is what will be built): people front, side and back; each place's painting with blue outlines where its people stand; each person's moves at up to 5 key moments with the word under each. It remembers what you've seen, so only new or changed things come again ("changed since ..."), and the pre-flight warns about anything built that never went on a rough. A new film with no voice yet still gets true poses (timing waits for the voice). Blessed test: 60 things in about 1 minute; sheet `notes/morning/rough-blessed.jpg`. Every kit test passes.
 - **Cost per film:** a rough sheet is a 1-minute command and one look from you, instead of hand-drawn roughs; it aims at the ranking list's ~4% of rebuild notes (Blessed notes 4, 5, 20, 22, 32, 39 were rebuilds a rough would have shown).
 - **Decide (my picks):** 1) Y: the rough sheet goes to you once per film before building, plus a small one whenever something new is added. 2) Y: the place outlines stay as depth markers only (where across the picture people stand is set later by the shot, so the outlines are spread evenly; the van and phone ones are big because those people are near the lens).
+
+## Sam's answers (14 Nov, morning)
+- Face tool: 1) Burnham **C**; 2) Badenoch **C** ("best for the house style and matching the features"); 3) **Y**, finish the left list; 4) **Y**, rule 49.3 line written.
+- People kit: 1) **all people** turn with their own face (famous ones too: Walliams' turned head); 2) explain, then **all people** keep their own hair colour; 3) approve after a run-through of the kit's contents.
+- Places kit: 1) approve after a run-through of the contents; 2) explain the notice question.
+- Critic: 1) explain the close-ups; 2) not yet: test the critic again on Remakes and report back.
