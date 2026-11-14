@@ -1,3 +1,3 @@
-Face tool chat 4 done: Burnham C, Badenoch C saved; eyes and plaits fixed; rule 49.3 adds the eyes (Sam: Y).
-Now: face chain chat 5 (Opus medium): Walliams replay and the kittest for facepick and agelines; stop 0.9%.
-Waiting: Sam's earlier kit answers (people, places) in the morning chat.
+Critic bench: Remakes scored, close-ups in every pack; Sam wants a repeat test and an acting score before any Sonnet switch.
+Now: nothing running; next chat (Opus, high) builds the acting key and the three place-check edits.
+Waiting: Sam: wording of the 'building' rule edit (Y/N).
