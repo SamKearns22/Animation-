@@ -1435,6 +1435,17 @@ def camp_paths():
     return setcheck.moving_faults(_camp_movers, RS.SET_FEET, RS.CAMP, GATE, S8_AT, FPS, label='S7')[:6]
 
 
+def street_paths(folk=None):
+    """Rule 13 on S11's street (critic bench, 14 Nov; note 68): every townsperson against the house fronts and the far
+    row (RS.street_feet). They stand still, so one frame is every frame."""
+    import setcheck
+    folk = RS.STREET_FOLK if folk is None else folk
+    movers = lambda t: [(f'townsperson {sd}', x, d, (0.5, 1.7)) for x, d, _, sd in folk]
+    out = setcheck.moving_faults(movers, RS.street_feet(), RS.STREET_LEV, 0, 0, label='S11')
+    meant = ('townsperson 23 stands in the far row',)   # in the far house's open doorway (looked at full size, 14 Nov)
+    return [f for f in dict.fromkeys(out) if not any(m in f for m in meant)][:6]
+
+
 def _wall_marks():
     """Link's collar and scale at the wall, and KG's x (as _wall_scene places them)."""
     kx, ky, s, k = _wall_kg()
@@ -1663,7 +1674,7 @@ def soundtrack(stems=False):
 def checks():
     E.print_subtitles(caption_at, BLACK_AT, FPS)
     import voices
-    faults = voices.bleep_check(sys.modules[__name__], []) + s5_contact() + wall_contact() + camp_paths()
+    faults = voices.bleep_check(sys.modules[__name__], []) + s5_contact() + wall_contact() + camp_paths() + street_paths()
     if faults:
         raise ValueError('check: ' + '; '.join(faults))
 

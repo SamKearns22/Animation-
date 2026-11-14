@@ -266,6 +266,36 @@ def order_flip_mid_shot():
 
 
 @test
+def near_thing_after_the_haze():
+    """Rule 57 (critic bench, Remakes note 73): a near flower box drawn before the haze is caught; after it, clear; a
+    film that says it hazes but never names 'haze' in draw_order is named."""
+    import types
+    import clipcheck as C
+    film = types.SimpleNamespace(SHOTS=[('square', 0.0, 1.0)], FPS=12, DUR=1.0,
+                                 draw_order=lambda t: ['square', 'near flower box', 'haze', 'line-up'])
+    caught = C.haze_faults(film, C._times(film)[0])
+    film.draw_order = lambda t: ['square', 'haze', 'near flower box', 'line-up']
+    clear = C.haze_faults(film, C._times(film)[0])
+    film.draw_order = lambda t: ['square', 'line-up']
+    film.__file__ = os.path.join(HERE, 'remakes.py')
+    unnamed = C.haze_faults(film, C._times(film)[0])
+    return len(caught) == 1 and not clear and len(unnamed) == 1, \
+        f'caught {len(caught)}; after the haze {len(clear)}; unnamed haze {len(unnamed)}'
+
+
+@test
+def townsfolk_not_in_the_house_walls():
+    """Rule 13 (critic bench, Remakes note 68): S11's townsfolk as Sam saw them (two in the house fronts) are caught
+    against the street's SET_FEET; as fixed, clear."""
+    import remakes as R
+    old = ((-1.6, 22.0, 0, 21), (1.5, 25.0, 0, 22), (0.3, 30.0, 0, 23), (-0.6, 15.0, 0, 24), (1.4, 13.0, 0, 25),
+           (-1.9, 12.0, 0, 26))
+    then, now = R.street_paths(old), R.street_paths()
+    hit = {f.split()[3] for f in then if 'stands in' in f}
+    return hit == {'25', '26'} and not now, f'as Sam saw it: {sorted(hit)}; now {len(now)}'
+
+
+@test
 def hiss_heard_only_between_lines():
     """Rule S3 (Flying Whales): speech full of "s" sounds is not hiss; noise in the gaps between lines still is."""
     import numpy as np
