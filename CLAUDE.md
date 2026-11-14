@@ -59,8 +59,8 @@ at session start (`.claude/hooks/setup.sh`).
   speed makes new things better, cheaper or faster: smarter tools, faults caught before Sam sees them, reading less.
   Never suggest doing less, making it worse, trimming the joke, or repeating old characters, places or material. Reuse
   means the means (rig, hands, poses, house look, checks), never the content.
-  **Before suggesting anything** (rule, tool or idea), search the rulebook and `guides/kit-catalogue.md`; each
-  suggestion names the closest rule or tool and says what is new, or is dropped (Sam, 12 Nov).
+  **Before suggesting or building anything** (rule, tool, check or idea), search the rulebook and `guides/kit-catalogue.md`;
+  if an existing rule or tool needs only an edit, edit it; each names the closest one and says what is new, or is dropped (Sam, 12 Nov; "or building" 14 Nov).
 - **Before every handover, search the film's notes for rule requests not yet written** and list them.
 
 # Models and chats

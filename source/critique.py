@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""critique: rule 89's fresh-eye critique (Job H, 10 Nov). A NEW helper (Agent tool, HELPER below, model opus) sees
+"""critique: rule 89's fresh-eye critique (Job H, 10 Nov). A NEW helper (Agent tool, HELPER below, model sonnet; Sam 14 Nov, repeat test) sees
 only the pictures, the brief and the checklist, never the chat or the code, and answers in two steps (cold look first).
 
 MAP
@@ -451,7 +451,7 @@ def agent_line(out, kind=None):
     kind = kind or HELPER
     if kind in READ_ONLY:
         sys.exit(f'critique: a {kind} helper cannot write look.md (read-only): the cold look could not be checked')
-    return (f'Agent ({kind}, model opus, a NEW one, ONE for the whole stage): "Read {out}/step1.md and follow it '
+    return (f'Agent ({kind}, model sonnet, a NEW one, ONE for the whole stage): "Read {out}/step1.md and follow it '
             f'exactly; write only into {out}."')
 
 
