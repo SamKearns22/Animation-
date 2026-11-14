@@ -462,6 +462,8 @@ def analyse(name, paths, out_dir=None, says=None):
     out_dir = out_dir or os.path.dirname(paths[0])
     jpath = os.path.join(out_dir, f'{name}-beard.json')
     json.dump(spec, open(jpath, 'w'), indent=1)
+    if 'base' not in spec:                                    # no beard hair found in any photo: nothing to draw
+        return jpath, None, spec
     sheet = check_sheet(spec, faces, G, As, Bs, os.path.join(out_dir, f'{name}-beard.jpg'))
     return jpath, sheet, spec
 

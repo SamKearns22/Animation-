@@ -1,3 +1,3 @@
-Face tool chat 4 done: Burnham C, Badenoch C saved; eyes and plaits fixed; rule 49.3 adds the eyes (Sam: Y).
-Now: face chain chat 5 (Opus medium): Walliams replay and the kittest for facepick and agelines; stop 0.9%.
+Face tool chat 5 done: Walliams replay (one 3-min run vs five chats; tool's head weaker: beard, eyes, chin, hair); 3 tests pass.
+Now: waits for Sam: 1) rule 49 check column names the tests; 2) ~0.4% more to fix the four Walliams faults.
 Waiting: Sam's earlier kit answers (people, places) in the morning chat.

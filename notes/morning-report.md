@@ -28,6 +28,14 @@
 - **Sam: Y to both (14 Nov):** 6) ~0.6% more (face chain chat 5); 5) rule 49.3 adds the eyes (written). Was: rule 49.3 adds the eyes: "The eyes' darkness (eye_look) is drawn after the check too: the face
   finder reads a socket shade or a fuller iris as a brow or eye change." (pick Y)
 
+- **Chat 5 (14 Nov, ~0.3%):** Walliams replay: one 3-minute run made three heads that all pass the likeness check
+  and come 1st of 14, against five hand-made chats (18.6% of a week). Sheet: `notes/morning/facetool-walliams-replay.jpg`.
+  Honest: the hand-made head still reads more like him: the tool's beard is a solid brown band (his is light grey
+  stubble), eyes A/B look shut, his long chin stays timid, the hair is a cap, not swept up. Fixed on the way: the
+  beard was lost when the first photo is shaven (it crashed); redraw only ran from one folder. Tests written for
+  facepick and agelines (3, all pass).
+- **Decide (chat 5):** 1) Y/N rule 49's check column names the three face-tool tests (pick Y); 2) Y/N ~0.4% of a week
+  more to fix the four Walliams faults (pick Y).
 ## Critic bench (ranking item 3, chat 2; done, about 2.1% of a week against 1.5% estimate, under the 2.25% stop)
 - **Works:** `source/critbench.py` redraws Blessed's first animatic exactly as you saw it and scores critics against your 12 real notes on it. Plain pictures: Opus caught 5, Sonnet 4. With close-ups of the people added: Sonnet 7, Opus 2 (it spent its answer on acting). Both missed the judge's missing mouth and the neck join every time. Kittest passes.
 - **Decide (my picks):** 1) Y: critique packs add a close-up of every person (sheet fault, not wording: misses were too small to see). 2) Y: the critic runs on Sonnet (11 of 24 vs Opus 7, same 19 extras, about 40% cheaper). Lost: the Opus critic. Not switched yet; one film is a small test, so the next chat adds a second Blessed case (animatic 2) first.

@@ -1,13 +1,13 @@
 {
  "title": "badenoch",
  "fronts": [
-  "../references/faces/badenoch/k01-front-parliament.jpg",
-  "../references/faces/badenoch/k02-front-politicshome2025.jpg",
-  "../references/faces/badenoch/k03-front-jc2026.jpg"
+  "references/faces/badenoch/k01-front-parliament.jpg",
+  "references/faces/badenoch/k02-front-politicshome2025.jpg",
+  "references/faces/badenoch/k03-front-jc2026.jpg"
  ],
  "tq": [
-  "../references/faces/badenoch/k04-talking-nationcymru2026.jpg",
-  "../references/faces/badenoch/k05-threequarter-channel4-2026.jpg"
+  "references/faces/badenoch/k04-talking-nationcymru2026.jpg",
+  "references/faces/badenoch/k05-threequarter-channel4-2026.jpg"
  ],
  "unsure": [
   "mouth_wide",

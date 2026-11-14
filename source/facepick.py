@@ -693,7 +693,8 @@ def _phone(tile, face_px):
 def sheet(out_dir, name):
     meta = json.load(open(os.path.join(out_dir, f'{name}-pick.json')))
     th = 420
-    photos = [(_split(a), 'photo') for a in meta['fronts']] + [(_split(a), '3/4') for a in meta['tq']]
+    photos = [((_find(q, out_dir), n), 'photo') for q, n in map(_split, meta['fronts'])] + \
+             [((_find(q, out_dir), n), '3/4') for q, n in map(_split, meta['tq'])]
     ptiles = [(_face_tile(p, n, th)[0], lab) for (p, n), lab in photos]
     htiles = [(_head_tile(os.path.join(out_dir, f'{name}-{v}.png'), th,
                           os.path.join(out_dir, f'{name}-A-clean-average.png')), v) for v in 'ABC']
@@ -802,7 +803,7 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
     if says.get('beard') == 'yes' or (says.get('beard') != 'no' and (bs.get('beard', 0) > 0.2 or bs.get('moustache', 0) > 0.4)):
         import beardkit
         try:
-            beard = beardkit.analyse(name, [F[0][0]], out_dir)[2]
+            beard = _beard(name, F, out_dir)
         except Exception as e:                                # the beard is drawn after; never stops the heads
             log(f'   beardkit skipped: {e}')
     ref = _devs(F[0][0]) if F[0][1] is None else {r['key']: r['dev'] for r in LK.analyse([F[0][0]], [F[0][1]])['diffs']}
@@ -857,7 +858,7 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
                 f'the check rules)')
         draw_head(meas, fr, shapes, col, png, extras=True, beard=beard, glasses=g)
         heads[v] = dict(what=what[v], measures=meas, **res)
-    meta = dict(title=name, fronts=list(fronts), tq=list(tq), unsure=unsure, gain=gain, glasses=g,
+    meta = dict(title=name, fronts=[_rel(a) for a in fronts], tq=[_rel(a) for a in tq], unsure=unsure, gain=gain, glasses=g,
                 beard=bool(beard), age=shapes.get('age'), eyes=shapes.get('eyes'), braids=bool(shapes['braids']), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
                 card={k: round(dev[k], 2) for k in KEYS})
     json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
@@ -869,22 +870,55 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
     return sheet(out_dir, name)
 
 
+ROOT = os.path.dirname(HERE)
+
+
+def _rel(arg):
+    """A photo argument stored from the project's top folder, so redraw works from any folder (Burnham's pick held
+    '../references/...': it only worked from source/)."""
+    p, n = _split(arg)
+    p = os.path.relpath(os.path.abspath(p), ROOT)
+    return p if n is None else f'{p}:{n}'
+
+
+def _find(p, out_dir):
+    for c in (p, os.path.join(ROOT, p), os.path.join(out_dir, p), os.path.join(ROOT, p.lstrip('./'))):
+        if os.path.exists(c):
+            return c
+    raise SystemExit(f'facepick redraw: photo not found: {p}')
+
+
+def _beard(name, F, out_dir):
+    """The beard from every front photo. beardkit keeps what matches its FIRST photo, so a shaven first photo drops
+    the stubble the others show (Walliams w06, 14 Nov): each photo leads in turn and the fullest reading is kept."""
+    import beardkit
+    paths, best = [f for f, _ in F], None
+    for i in range(len(paths)):
+        spec = beardkit.analyse(name, paths[i:] + paths[:i], out_dir)[2]
+        if spec.get('base') and (best is None or spec.get('coverage', 0) > best.get('coverage', 0)):
+            best = spec
+    if best:                                     # leave the kept reading's json (and its check sheet) on disk
+        beardkit.analyse(name, best['photos'], out_dir)
+    return best
+
+
 def redraw(out_dir, name):
     """The picked heads drawn again from NAME-pick.json's measures with today's extras (glasses, beard, age lines,
     eyes, braids), no tuning: the faces stay exactly as checked, so a fix to an extra costs seconds, not minutes."""
     meta = json.load(open(os.path.join(out_dir, f'{name}-pick.json')))
-    F = [_split(a) for a in meta['fronts']]
+    F = [(_find(p, out_dir), n) for p, n in (_split(a) for a in meta['fronts'])]
     fr = photo_frame(*F[0])
     shapes = traced(fr)
     col = colours(fr, shapes)
     shapes['braids'] = meta.get('braids', braid_score(fr, shapes) > 0.45)
     if meta.get('age'):
         shapes['age'] = meta['age']
+    meta['fronts'] = [_rel(p if n is None else f'{p}:{n}') for p, n in F]      # stored from the top folder
+    meta['tq'] = [_rel(_find(q, out_dir) if n is None else f'{_find(q, out_dir)}:{n}') for q, n in map(_split, meta.get('tq', []))]
     shapes['eyes'] = meta['eyes'] = eye_look(F)
     beard = None
     if meta.get('beard'):
-        import beardkit
-        beard = beardkit.analyse(name, [F[0][0]], out_dir)[2]
+        beard = _beard(name, F, out_dir)
     for v, h in meta['heads'].items():
         draw_head(h['measures'], fr, shapes, col, os.path.join(out_dir, f'{name}-{v}.png'), extras=True, beard=beard,
                   glasses=meta.get('glasses'))

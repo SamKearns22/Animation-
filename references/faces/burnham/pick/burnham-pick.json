@@ -1,13 +1,13 @@
 {
  "title": "burnham",
  "fronts": [
-  "../references/faces/burnham/a01-front-parliament2026.jpg",
-  "../references/faces/burnham/a02-front-national2026.jpg",
-  "../references/faces/burnham/a03-front-smiling-ap2026.jpg"
+  "references/faces/burnham/a01-front-parliament2026.jpg",
+  "references/faces/burnham/a02-front-national2026.jpg",
+  "references/faces/burnham/a03-front-smiling-ap2026.jpg"
  ],
  "tq": [
-  "../references/faces/burnham/a04-threequarter-ap2026.jpg",
-  "../references/faces/burnham/a05-threequarter-national2026.jpg"
+  "references/faces/burnham/a04-threequarter-ap2026.jpg",
+  "references/faces/burnham/a05-threequarter-national2026.jpg"
  ],
  "unsure": [
   "jaw_wide",
