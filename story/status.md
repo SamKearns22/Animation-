@@ -1,3 +1,3 @@
-The overnight run is done: the rough command (ranking item 1) now draws one sheet of every new person, place and move, and remembers what Sam has seen.
-Now: nothing running; the chain waits for Sam's picks in the morning report.
-Waiting: morning report picks (people kit 1-3; places kit 1-2; moves: list words + kit Y/N; rough sheet 1-2).
+Face tool chat 4: Sam's picks saved (Burnham C, Badenoch C); Burnham's eyes darker and fuller, Badenoch's plait band gone; sheets sent.
+Now: nothing running; the face tool hit its 1.5% stop.
+Waiting: Sam, morning report questions 5 (rule 49.3 eyes) and 6 (~0.6% more for the Walliams replay and tests), plus the earlier kit picks.

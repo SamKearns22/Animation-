@@ -33,11 +33,18 @@ push changed, again. The steps that worked are now done by the tool:
         NAME-pick.json (each head's measures: what the film's head code reads), check sheets, name-test packs.
     python3 source/facepick.py sheet OUT_DIR NAME     redraw the sheet, adding the name test's answers once in
     python3 source/facepick.py head OUT_DIR NAME A OUT.png [--size 600]   one picked head, for the cast code
+    python3 source/facepick.py redraw OUT_DIR NAME    the heads again from NAME-pick.json's checked measures with
+                               today's extras (eyes, braids, age lines, glasses): seconds, no tuning
+    EYES (eye_look, 14 Nov): the eyes' dark share and socket shade measured from the photos; fuller, darker irises
+                and a flat socket shade, drawn after the check like the glasses (the face finder reads either one as
+                a brow or eye change: Burnham C 62% -> 34%, two the wrong way). Bigger eyes break the check too.
+    PICKS      references/faces/NAME/pick/: Sam's pick (NAME-pick.json 'picked') and its head; the film reads these.
 
 Map: pack and card 66 | the frame 85 | traced shapes 132 | the head 284 | glasses 379 | tuning 430 |
      the sheet 576 | main 706
 """
 import glob
+import math
 import json
 import os
 import sys
@@ -183,6 +190,66 @@ def _tone(rgb, lift=1.0, sat=1.0):
     return tuple(int(np.clip(m + (v - m) * sat, 0, 255)) for v in (r, g, b))
 
 
+def _eye_photo(path, n=None):
+    """One front photo's eyes: the dark share of the eye opening (iris and lash shadow: hooded, dark eyes read near
+    1, wide pale ones near 0.4), its colour, and the socket's brightness (lid to brow) over the cheeks' own, so the
+    reading is fair to every skin tone."""
+    im, faces = LK.find_faces(path)
+    if not faces:
+        return None
+    face = faces[n if n is not None else int(np.argmax([f['box'][1][0] - f['box'][0][0] for f in faces]))]
+    P = face['P']
+    a = np.asarray(im.convert('RGB')).astype(float)
+    lum = a @ [0.299, 0.587, 0.114]
+
+    def poly(idx):
+        m = Image.new('L', im.size, 0)
+        ImageDraw.Draw(m).polygon([tuple(P[i, :2]) for i in idx], fill=255)
+        return np.asarray(m) > 0
+    r = max(2, int(0.06 * np.linalg.norm(P[33, :2] - P[263, :2])))
+    skin = float(np.median(np.concatenate([lum[int(P[i, 1]) - r:int(P[i, 1]) + r, int(P[i, 0]) - r:int(P[i, 0]) + r].ravel()
+                                          for i in (50, 280, 101, 330)])))
+    eye = poly(LK.EYE_R) | poly(LK.EYE_L)
+    dark = lum[eye] < 0.55 * skin
+    sock = poly([246, 161, 160, 159, 158, 157, 173, 55, 65, 52, 53, 46]) | \
+        poly([466, 388, 387, 386, 385, 384, 398, 285, 295, 282, 283, 276])
+    return dict(dark=float(dark.mean()), sock=float(np.median(lum[sock]) / skin),
+                iris=np.median(a[eye][dark], 0).tolist() if dark.sum() > 5 else None)
+
+
+def eye_look(F):
+    """How dark and deep-set the eyes read, from every front photo (the median), as the extras draw them after the
+    check (rule 49.3): the iris's size in the opening (iris_r, in eye heights: 0.95 the house's, up to 1.45 for eyes
+    that are nearly all iris in the photos), its colour, and a flat socket shade under the brow (0 none .. 1).
+    Set on 14 Nov from 16 front photos of 6 people: dark share 0.4-1.0 (Burnham 0.85), socket 0.2-0.8 (Burnham
+    0.45, Badenoch 0.65, Walliams 0.75; glasses rims darken it a little). Burnham's helpers: 'his big dark eyes; the
+    cartoon's are small', while his measured eye size is average: the darkness, not the size, is what reads."""
+    ms = [m for m in (_eye_photo(p, n) for p, n in F) if m]
+    if not ms:
+        return None
+    dark = float(np.median([m['dark'] for m in ms]))
+    sock = float(np.median([m['sock'] for m in ms]))
+    ir = [m['iris'] for m in ms if m['iris']]
+    k = float(np.clip((dark - 0.5) / 0.35, 0, 1))
+    return dict(scale=1.0, dark=round(dark, 2), sock=round(sock, 2), iris_r=round(0.95 + 0.5 * k, 2),
+                pupil_r=round(0.42 + 0.2 * k, 2), iris=list(LK._dk(np.median(ir, 0), 1.0)) if ir else None,
+                shade=round(float(np.clip((0.6 - sock) / 0.2, 0, 1)), 2))
+
+
+def _sockets(p, f, L, skin, look):
+    """The socket shade: a flat crescent of darker skin from the upper lid up to under the brow (house style: one
+    flat shape, no ink), drawn before the eyes."""
+    if not look or look.get('shade', 0) < 0.1:
+        return
+    c = LK._dk(skin, 1 - 0.16 * look['shade'])
+    for sgn in (-1, 1):
+        ecx, ew, ey, by = L['ecx'], L['ew'], L['eye_y'], L['brow_y']
+        top = by + 0.012
+        pts = [(ecx - 0.62 * ew, ey), (ecx - 0.55 * ew, top + 0.4 * (ey - top)), (ecx - 0.2 * ew, top),
+               (ecx + 0.45 * ew, top + 0.05 * (ey - top)), (ecx + 0.85 * ew, top + 0.55 * (ey - top)), (ecx + 0.62 * ew, ey)]
+        p.poly(curve(f.pts([(sgn * u, v) for u, v in pts]), 4), c, None)
+
+
 def _hair_tones(px, shapes):
     """The hair's colours: the top's (its mean, so salt-and-pepper reads as the grey it is, not black) and, when
     the sides at the temples are clearly lighter (greying), the sides' too; sets shapes['hair_lt'] to the sides."""
@@ -255,14 +322,19 @@ def _braids(img, hair, face, f, L, light):
     if not len(ys):
         return
     ytop, ybot = ys.min() / SC, ys.max() / SC
+    # where each plait starts: not one level line (a hard band at brow height, chat 3) but higher towards the
+    # outside, as the crown lines curve down the sides, and a little uneven column to column; the crown lines stop
+    # where the plaits take over, so each line runs on into a plait
+    start = lambda x: (y0 - 0.16 * P4.H * float(np.clip((abs(x - f.cx) - 0.25 * P4.H) / (0.35 * P4.H), 0, 1))
+                       + 0.03 * P4.H * math.sin(x * 1.7))
     for x in np.arange(f.cx - 1.2 * P4.H, f.cx + 1.2 * P4.H, colw):
-        for y in np.arange(y0, ybot, step):
+        for y in np.arange(start(x), ybot, step):
             if inside(x, y) and inside(x, y + step):
                 p.line([(x - colw * 0.36, y), (x, y + step * 0.75), (x + colw * 0.36, y)], light, 1.7)
     for a in np.linspace(-1.0, 1.0, 13):                      # the crown: from the parting down to each side
         top = (f.cx, ytop + 0.04 * P4.H)
         pts = [(f.cx + a * 0.62 * P4.H * t, top[1] + (y0 - top[1]) * (t ** 0.8)) for t in np.linspace(0.05, 1, 12)]
-        run = [q for q in pts if inside(*q)]
+        run = [q for q in pts if inside(*q) and q[1] < start(q[0]) + step]
         if len(run) > 3:
             p.line(run, light, 1.3)
 
@@ -351,7 +423,14 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
     if extras and beard:
         import beardkit
         beardkit.draw(p, f, L, col['skin'], beard)
-    P4.eyes(p, f, L, dict(lid4=0.1), (66, 46, 34), P4.dk(col['skin'], 0.8), liner=2.8)
+    look = shapes.get('eyes') if extras else None   # the eyes' darkness, measured (eye_look), drawn after the check
+    if look:
+        _sockets(p, f, L, col['skin'], look)
+        P4.eyes(p, f, L, dict(lid4=0.1), tuple(int(c) for c in (look.get('iris') or (66, 46, 34))),
+                P4.dk(col['skin'], 0.8), liner=2.8 + 0.6 * look['shade'], iris_r=look['iris_r'], pupil_r=look['pupil_r'],
+                scale=look.get('scale', 1.0))
+    else:
+        P4.eyes(p, f, L, dict(lid4=0.1), (66, 46, 34), P4.dk(col['skin'], 0.8), liner=2.8)
     P4.brows(p, f, L, col['brow'], fr.get('brow_th', 0.04))
     P4.nose(p, f, L, col['skin'])
     if extras and shapes.get('age'):     # the age lines measured from the photos (agelines), drawn AFTER the check like
@@ -735,6 +814,8 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
         shapes['age'] = agelines.person([(p, n) for p, n in F], others, says.get('age'))
         log('   age lines: ' + ', '.join(f'{k} {v:.2f} (deeper than {shapes["age"]["rank"].get(k, "-")})'
                                          for k, v in shapes['age']['strength'].items()))
+    shapes['eyes'] = eye_look(F)
+    log(f'   eyes: {shapes["eyes"]}')
     others_v = []
     for o in others:
         dv = _devs(o)
@@ -777,7 +858,7 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
         draw_head(meas, fr, shapes, col, png, extras=True, beard=beard, glasses=g)
         heads[v] = dict(what=what[v], measures=meas, **res)
     meta = dict(title=name, fronts=list(fronts), tq=list(tq), unsure=unsure, gain=gain, glasses=g,
-                beard=bool(beard), age=shapes.get('age'), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
+                beard=bool(beard), age=shapes.get('age'), eyes=shapes.get('eyes'), braids=bool(shapes['braids']), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
                 card={k: round(dev[k], 2) for k in KEYS})
     json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
     if lineup:
@@ -785,6 +866,29 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
         for v in 'ABC':
             nametest.pack(os.path.join(out_dir, f'nt-{name}-{v}'), os.path.join(out_dir, f'{name}-{v}.png'),
                           lineup=lineup)
+    return sheet(out_dir, name)
+
+
+def redraw(out_dir, name):
+    """The picked heads drawn again from NAME-pick.json's measures with today's extras (glasses, beard, age lines,
+    eyes, braids), no tuning: the faces stay exactly as checked, so a fix to an extra costs seconds, not minutes."""
+    meta = json.load(open(os.path.join(out_dir, f'{name}-pick.json')))
+    F = [_split(a) for a in meta['fronts']]
+    fr = photo_frame(*F[0])
+    shapes = traced(fr)
+    col = colours(fr, shapes)
+    shapes['braids'] = meta.get('braids', braid_score(fr, shapes) > 0.45)
+    if meta.get('age'):
+        shapes['age'] = meta['age']
+    shapes['eyes'] = meta['eyes'] = eye_look(F)
+    beard = None
+    if meta.get('beard'):
+        import beardkit
+        beard = beardkit.analyse(name, [F[0][0]], out_dir)[2]
+    for v, h in meta['heads'].items():
+        draw_head(h['measures'], fr, shapes, col, os.path.join(out_dir, f'{name}-{v}.png'), extras=True, beard=beard,
+                  glasses=meta.get('glasses'))
+    json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
     return sheet(out_dir, name)
 
 
@@ -822,6 +926,8 @@ if __name__ == '__main__':
     o = LK._opts(args, ('--tq', '--lineup', '--gain', '--says', '--size'), multi=('--tq',))
     if args[0] == 'sheet':
         print(sheet(args[1], args[2]))
+    elif args[0] == 'redraw':
+        print(redraw(args[1], args[2]))
     elif args[0] == 'head':
         out_dir, name, v, out = args[1:5]
         print(os.path.join(out_dir, f'{name}-{v}.png'), '->', out)
