@@ -2229,6 +2229,25 @@ def facehouse_whole_head():
                 f'turned on a generic head: {generic}')
 
 
+@test
+def facehouse_beard_turns():
+    """Face tool chat 14: a measured beard (Walliams' stubble) is drawn in the turned views too, as Vance's goatee
+    goes round (chat 13 drew it front-on only: his three-quarter and side were bare-chinned)."""
+    import shutil
+    import tempfile
+    import facehouse as FH
+    seen, old = [], FH.stubble
+    FH.stubble = lambda p, f, *a, **k: (seen.append(type(f).__name__), old(p, f, *a, **k))[1]
+    tmp = tempfile.mkdtemp()
+    try:
+        FH.turns(os.path.join(tmp, 't.jpg'), ['walliams'], yaws=(0, 45, 90))
+    finally:
+        FH.stubble = old
+        shutil.rmtree(tmp)
+    turned = seen.count('TurnFace')
+    return turned >= 2 and len(seen) >= 3, f'stubble drawn front {len(seen) - turned}, turned {turned} (want 1 and 2)'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

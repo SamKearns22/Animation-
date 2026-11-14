@@ -391,7 +391,7 @@ def _head(img, p, sp, t, hx, hy):
     return fx
 
 
-def stubble(p, f, L, skin, bd, seed=61):
+def stubble(p, f, L, skin, bd, seed=61, ink=True):
     """A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
     beard's colour the skin shows through along the jaw and round the chin, lighter where the photo's is grey-white,
     a darker band over the lip and round the mouth; the cheeks above the jaw stay skin. How far it comes up and how
@@ -422,7 +422,8 @@ def stubble(p, f, L, skin, bd, seed=61):
     goat = [(mw * 0.6, l13 + 0.01), (mw * 0.3, l17 + 0.012), (mw * 0.14, l17 + 0.045), (0.0, l17 + 0.05),
             (-mw * 0.14, l17 + 0.045), (-mw * 0.3, l17 + 0.012), (-mw * 0.6, l13 + 0.01)]
     p.poly(f.pts(mo + AV.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), must, None)
-    p.poly(curve(f.pts(face_outline(L)), 4), None, INK, 2.6)   # the jaw's ink line back over the shade
+    if ink:                                               # turned (turnhead's TurnFace): its own outline inks
+        p.poly(curve(f.pts(face_outline(L)), 4), None, INK, 2.6)   # the jaw's ink line back over the shade
 
 
 def lashes(p, f, L, sp, k, scale=1.0):
@@ -850,6 +851,8 @@ def _turn_mouth(p, f, L, sp, fx, my):
 def _turn_face(pen, f, L, sp):
     kh = sp['kit_house']
     age_lines(pen, f, L, sp['skin'], kh['age'], LOOKS[kh['look']])
+    if kh.get('beard'):                                   # chat 14: the stubble carried round (as Vance's goatee)
+        stubble(pen, f, L, sp['skin'], kh['beard'], ink=False)
 
 
 def _turn_over(img, p, f, L, sp, view):
