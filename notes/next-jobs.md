@@ -1,22 +1,19 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/places-kit-c5c` (also on the main line).
-- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
-- **Done (chat 5c, Opus high, ~1.9%; job ~6.1% of 8%, stop 12%):** step 2 finished: van, cell (+cell_cot), cot_top,
-  phone, tvroom, tv all 0.000% (paintings, quick check) from a new `places_rooms.py` (27 indoor pieces: room, lines,
-  brick marks, stroke, studs, oval, wash, glow, flicker; van, cell, cot, phone and association pieces; wall tv with a
-  feed). All 13 views are now described (12 views + cell_cot's camera; 162 piece lines). Handed over on amber.
-- **Next: chat 5d, Opus MEDIUM (building from a clear plan), same job:** steps 3-5 below (full replicate with
-  frames, set_boxes vs SET_BOXES, kittest, MAPs, catalogue row, page lines, sheet, morning report entry), then open
-  the moves chat (ranking item 7, Opus high) per `notes/overnight-run.md`.
-- **Needs Sam (morning report):** people kit picks 1-3 (unchanged).
-- **Read:** `notes/overnight-run.md` in full; this file's item 5 section only; MAPs of `places.py`,
-  `places_parts.py`, `places_outside.py`, `places_rooms.py`.
+- **Newest work:** `claude/places-kit-c5d` (also on the main line).
+- **Rules that bite next:** 86 (every tool gets a kittest), 74 (the acting list), 85 (cost watch).
+- **Done (chat 5d, Opus medium, ~1%; item 5 DONE at ~7.1% of 8%):** full replicate: 13 paintings and 12 frames
+  within 0.004% (3 min 7 s); set_boxes vs the hand list: every hand box has a piece except 4 stale ones (phone railing,
+  phone notices, tvroom cue rack: the painting changed after Sam's note 20); the kit found the Samaritans notice over
+  the second hood (morning report). Kittest `places_from_a_description`, MAPs, catalogue row and tile, page lines,
+  sheet `notes/morning/places-kit-replicate.jpg`, morning report entry.
+- **Next: moves from the acting list (ranking item 7), Opus HIGH (design), new chat**, per `notes/overnight-run.md`
+  (estimate 6%, stop 9%; tested on Blessed).
+- **Needs Sam (morning report):** people kit picks 1-3; places kit picks 1-2.
+- **Read:** `notes/overnight-run.md` in full; `notes/ranking-list.md` row 7; CLAUDE.md "Reading little".
 - **Open rule requests:** none.
-- **For Claude:** replicate now patches `ST.tv` (the film's back() calls it directly) and painters take `feed`; the
-  MAPs of places.py / places_parts.py do not yet name places_rooms (step 4). Quick check: a scratch script that
-  installs the description and compares `ST.painting(v, 0.7)` (~10 s for six views); the full replicate with frames
-  takes ~3 min (run it in the background). Points are px -> metres as before (`x = (X-540)/ppm`,
-  `z = up - (Y-horizon)/ppm`, every ppm 2^a*5^b, pieces' REF = the ppm they stand at, so k = 1).
+- **For Claude:** places.py: `on NAME` (generic word: a meant overlap), a piece past both picture edges is a band (was
+  80% width: dropped the bench and witness box), repeats numbered in set_boxes, `## view: NAME (spoken name)` for the
+  page, `picture(view)` for the catalogue. page.py lists places pieces by line (Blessed page 13% of code).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
@@ -39,11 +36,8 @@ a turned (yawed) camera is not supported by these painted fronts (Blessed has no
    van (room walls run from the back wall's corners to the canvas corners (-300, -400)/(1380, 2400): a `room` piece
    with that mode), phone (booth, notices, signs), tvroom (pool table, chairs, `tv flicker` light), tv (`studio_feed`
    stays newsdesk_set's; a `tv` piece showing a feed).
-3. `places.py replicate blessed OUT` on all 13 paintings and the 12 frames, bar 0.05%; set_boxes vs the film's
-   hand-made SET_BOXES (every hand box has a piece; report new ones).
-4. Kittest `places_from_a_description` (refusals, no film imports the kit, every view at the bar), catalogue row,
-   page lines (`page.py`), sheet into `notes/morning/places-kit-replicate.jpg`.
-5. Morning report entry (3 lines; cost per film: Blessed's sets 1,491 lines -> about N description lines).
+3-5. **Done (5d):** replicate 0.004% worst (13 paintings, 12 frames); set_boxes: 36 of 40 hand boxes have their
+   piece, 4 hand boxes were stale; 94 kit boxes; kittest, catalogue, page, sheet, report (1,491 lines -> 226).
 
 ## Item 4, people from a description (ranking item 4; overnight run; Opus high design, medium build; 8%, stop 12%)
 Design (chat 4, 14 Nov): a person is a block of plain lines in `story/FILM-people.txt` (language in `people.py` MAP);

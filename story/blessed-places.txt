@@ -4,7 +4,7 @@
 # place: courtroom
 colours: wall 226 214 194 | wall light 236 226 208 | oak 204 166 116 | oak dark 170 130 86 | oak light 222 190 144 | chair red 128 34 40
 
-## view: court_box
+## view: court_box (the witness box, the judge behind)
 camera: up 1.6, horizon 850, lens 1500
 people: judge 3.571, brand 2.5
 panels: x -3.36 to 3.36, z 0 to 6.6, depth 6, step 0.48, seed 3 (the panelled wall)
@@ -18,10 +18,10 @@ carpet: x -3.36 to 3.36, z -4.6 to -0.2, depth 6, first 0.16, every 0.28 (the we
 bench: x -1.32 to 0.44, z 0.46 to 1.26, depth 3 (the judge's bench)
 microphone: at -0.04 1.292, depth 3, tip -0.22 1.5 (the judge's microphone)
 witness box: x -0.2464 to 1.3440, z -0.88 to 0.5952, depth 2.4 (the witness box)
-book: at 0.512 0.2912, depth 2.4 (the oath Bible)
-microphone: at -0.032 0.2976, depth 2.4, tip 0.112 0.88, detail 0.8 (the witness microphone)
+book: at 0.512 0.2912, depth 2.4, on the witness box (the oath Bible)
+microphone: at -0.032 0.2976, depth 2.4, tip 0.112 0.88, detail 0.8, on the witness box (the witness microphone)
 
-## view: court_bench
+## view: court_bench (the judge's bench)
 camera: up 1.6, horizon 1100, lens 1500
 people: judge 3.4
 panels: x -3.36 to 3.36, z 0 to 7.6, depth 6, step 0.6, seed 13 (the panelled wall)
@@ -29,12 +29,12 @@ royal arms: at 0 4.8, depth 6, size 1.25 (the royal arms)
 chair back: x -0.7 to 0.7, z 0.8 to 2.75, depth 3.75, look close, seed 31 (the judge's chair)
 bench: x -1.48 to 1.48, z -1 to 0.88, depth 3, papers 0 (the judge's bench)
 papers: at -0.39 1.24, depth 1.5, width 0.23 (a paper)
-papers: at -0.34 1.256, depth 1.5, width 0.21 (another paper)
+papers: at -0.34 1.256, depth 1.5, width 0.21, on a paper (another paper)
 gavel block: at 0.22 1.26, depth 1.5 (the sound block)
-gavel: at 0.22 1.296, depth 1.5, angle 180 (the gavel)
+gavel: at 0.22 1.296, depth 1.5, angle 180, on the sound block (the gavel)
 microphone: at -0.42 0.908, depth 3, tip -0.18 1.26, line 3 (the judge's microphone)
 
-## view: court_jury
+## view: court_jury (the jury box)
 camera: up 1.6, horizon 850, lens 1500
 people: back_row 4.5, front_row 3.4
 panels: x -3.36 to 3.36, z 0 to 6.6, depth 6, step 0.48, seed 31 (the panelled wall)
@@ -55,7 +55,7 @@ water jug: at 0 -0.028, depth 3 (the water jug)
 notepad: at 0.356924 -0.028, depth 3, look pad and pen (a notepad and pen)
 notepad: at 0.80418 -0.028, depth 3, look pad and pen (a notepad and pen)
 
-## view: court_dock
+## view: court_dock (the dock)
 camera: up 1.6, horizon 1100, lens 1500
 people: brand 2.5, guards 3.75
 panels: x -3.36 to 3.36, z 0 to 7.6, depth 6, step 0.44, seed 23 (the panelled wall)
@@ -70,7 +70,7 @@ panelled: x -1.344 to 1.344, z -0.48 to 0.576, depth 2.4, detail 1.2, look dock 
 # place: court outside
 colours: brick 192 156 112 | brick dark 162 128 90 | glass 172 186 192
 
-## view: court_out
+## view: court_out (outside the court)
 camera: up 1.7, horizon 1090, lens 1500
 people: brand 3.9, press 2.6
 sky: x -84 to 84, z -9.3 to 190.7, depth 150 (the sky)
@@ -80,10 +80,10 @@ brick front: x -14 to 14, z 0.7 to 15.7, depth 17, look court, seed 7, parapet 0
 window grid: x -12.6 to 13, z 5.2 to 14.3, depth 17, frame 130 60 40, rows 5.2 8.8 12.4, blinds 1, seed 100 (the ribbon windows)
 window grid: x -12.6 to 13, z 1.2 to 3.6, depth 17, frame 130 60 40, rows 1.2, size 1.9 2.4, skip -1.4 4.4, bars 1, glass glass / 60 70 80 0.45, seed 300, row seed 0 (the ground-floor glazing)
 entrance: x -1.4 to 4.4, z 0.7 to 3.7, depth 16.99, doors -0.6 0.9 2.4 (the entrance)
-brick front: x -2.15 to -1.25, z 0.7 to 4.1, depth 16.4, look court pier, seed 33 (a brick pier)
-brick front: x 4.25 to 5.15, z 0.7 to 4.1, depth 16.4, look court pier, seed 97 (a brick pier)
+brick front: x -2.15 to -1.25, z 0.7 to 4.1, depth 16.4, look court pier, seed 33, on the sign band (a brick pier)
+brick front: x 4.25 to 5.15, z 0.7 to 4.1, depth 16.4, look court pier, seed 97, on the sign band (a brick pier)
 sign board: x -2.3 to 5.3, z 3.45 to 4.25, depth 16.3, text CROWN COURT SOUTHWARK, text width 6.4 (the sign band)
-small sign: at 4.85 2.5, depth 16.38 (a red sign)
+small sign: at 4.85 2.5, depth 16.38, on a brick pier (a red sign)
 ground: depth 17 to 11, height 0.7 (the forecourt)
 planted wall: x -14 to -0.9, z 0 to 1.25, depth 11, seed 586, brick seed 56 (the left planted wall)
 planted wall: x 3.9 to 14, z 0 to 1.25, depth 11, seed 603, brick seed 73 (the right planted wall)
@@ -99,7 +99,7 @@ ground: depth 11 to 0, look paving (the pavement)
 # place: prison gate
 colours: soot 88 80 74 | soot dark 66 60 56 | stone 186 160 128 | stone dark 70 64 60
 
-## view: gates
+## view: gates (the prison gates)
 camera: up 2.4, horizon 1150, lens 1100
 people: brand 7.6, press 4.9
 sky: x -84 to 84, z -2.6 to 197.4, depth 110, colour 214 216 220 (the overcast sky)
@@ -107,34 +107,34 @@ cloud: at -30 103.4, depth 110, rx 26, ry 5, colour 198 202 208, seed 60 (a clou
 cloud: at 28 111.4, depth 110, rx 30, ry 5, colour 226 228 232, seed 61 (a cloud)
 brick front: x -2.45 to 2.45, z 0 to 9.8, depth 9.3, look gatehouse centre, colour soot dark, inset 0.15, seed 31 (the centre block)
 block: x -2.5 to 2.5, z 8.4 to 9, depth 9.25, colour stone, line 2 (the frieze)
-row: x -2.3 to -2.16, z 8.5 to 8.9, depth 9.22, n 15, pitch 0.32, colour stone * 0.8, line 1 (the frieze's brackets)
+row: x -2.3 to -2.16, z 8.5 to 8.9, depth 9.22, n 15, pitch 0.32, colour stone * 0.8, line 1, on the centre block (the frieze's brackets)
 block: x -2.7 to 2.7, z 9 to 9.8, depth 9.2, colour stone dark, line 2.4 (the cornice)
 brick front: x -5.3 to -2.3, z 0 to 12, depth 9, look gatehouse, colour soot, seed 19 (the left tower)
 pilaster: x -5.3 to -4.6, z 1.4 to 11, depth 8.9 (a pilaster)
 pilaster: x -3 to -2.3, z 1.4 to 11, depth 8.9 (a pilaster)
-arched window: x -4.25 to -3.35, z 1.6 to 3.7, depth 8.98 (a window)
-arched window: x -4.25 to -3.35, z 5.2 to 7.3, depth 8.98 (a window)
-arched window: x -4.25 to -3.35, z 8.6 to 10.7, depth 8.98 (a window)
+arched window: x -4.25 to -3.35, z 1.6 to 3.7, depth 8.98, on the left tower (a window)
+arched window: x -4.25 to -3.35, z 5.2 to 7.3, depth 8.98, on the left tower (a window)
+arched window: x -4.25 to -3.35, z 8.6 to 10.7, depth 8.98, on the left tower (a window)
 block: x -5.6 to -2, z 11 to 12, depth 8.8, colour stone dark, line 2.6 (the tower's cornice)
-row: x -5.5 to -5.34, z 10.6 to 11, depth 8.82, n 10, pitch 0.36, colour stone * 0.8, line 1 (its brackets)
+row: x -5.5 to -5.34, z 10.6 to 11, depth 8.82, n 10, pitch 0.36, colour stone * 0.8, line 1, on the left tower (its brackets)
 brick front: x 2.3 to 5.3, z 0 to 12, depth 9, look gatehouse, colour soot, seed 21 (the right tower)
 pilaster: x 2.3 to 3, z 1.4 to 11, depth 8.9 (a pilaster)
 pilaster: x 4.6 to 5.3, z 1.4 to 11, depth 8.9 (a pilaster)
-arched window: x 3.35 to 4.25, z 1.6 to 3.7, depth 8.98 (a window)
-arched window: x 3.35 to 4.25, z 5.2 to 7.3, depth 8.98 (a window)
-arched window: x 3.35 to 4.25, z 8.6 to 10.7, depth 8.98 (a window)
+arched window: x 3.35 to 4.25, z 1.6 to 3.7, depth 8.98, on the right tower (a window)
+arched window: x 3.35 to 4.25, z 5.2 to 7.3, depth 8.98, on the right tower (a window)
+arched window: x 3.35 to 4.25, z 8.6 to 10.7, depth 8.98, on the right tower (a window)
 block: x 2 to 5.6, z 11 to 12, depth 8.8, colour stone dark, line 2.6 (the tower's cornice)
-row: x 2.1 to 2.26, z 10.6 to 11, depth 8.82, n 10, pitch 0.36, colour stone * 0.8, line 1 (its brackets)
-arched gate: x -1.4 to 1.4, z 0 to 4.2, depth 9.28, wicket 0.15 1.15 2.1 (the arched gate)
+row: x 2.1 to 2.26, z 10.6 to 11, depth 8.82, n 10, pitch 0.36, colour stone * 0.8, line 1, on the right tower (its brackets)
+arched gate: x -1.4 to 1.4, z 0 to 4.2, depth 9.28, wicket 0.15 1.15 2.1, on the centre block (the arched gate)
 ground: depth 9.3 to 0, look tarmac (the forecourt)
 bollard: at -1.75 0, depth 8.6 (a bollard)
 bollard: at 1.75 0, depth 8.6 (a bollard)
-sign board: x -3.3 to -1.9, z 1.95 to 2.7, depth 7.4, look on posts, layer back, colour 250 250 248, line 2, text HM PRISON, text at 0.34, text width 1.036, text colour 30 30 34, text2 VISITS AND RECEPTION, text2 at 0.74, text2 width 1.148 (the prison sign: drawn behind everyone, off to the left of the crowd)
+sign board: x -3.3 to -1.9, z 1.95 to 2.7, depth 7.4, look on posts, layer back, colour 250 250 248, line 2, text HM PRISON, text at 0.34, text width 1.036, text colour 30 30 34, text2 VISITS AND RECEPTION, text2 at 0.74, text2 width 1.148 (the prison sign)
 
 # place: van  # (no photo reached us: a cubicle under a metre wide, white moulded plastic, cold and dim)
 colours: van white 196 202 208 | van dark 150 158 166 | van floor 84 88 96 | van frame 120 126 134
 
-## view: van
+## view: van (the prison van)
 camera: up 0.8, horizon 860, lens 1500
 people: brand 1.5
 room: x -0.475 to 0.475, z 0 to 1.625, depth 1.875, fill van white * 0.9, left van dark, right van dark * 0.92, back van white, ceiling van white * 0.8, line 2.6, ceiling line 2.4, order fill left right back ceiling (the cubicle)
@@ -146,7 +146,7 @@ vent: x -0.075 to 0.0875, z 1.1125 to 1.175, depth 1.875 (the air vent)
 stroke: at -0.45 1, depth 1.875, to -0.455 0.625, colour 150 154 160, width 7, core 1.2 (the grab rail)
 studs: x -0.4125 to 0.4125, z 0.0625 to 1.55, depth 1.875, points -0.4125 1.55; 0.4125 1.55; -0.4125 0.0625; 0.4125 0.0625, radius 0.00625, colour van dark (the rivets)
 street window: x 0.5 to 0.625, z 1 to 1.425, depth 1.875, slant 0.075 (the window, the street going by)
-moulded seat: x -0.4875 to 0.4875, z -0.075 to 0.4375, depth 1.875, top 0.225, flare 0.0375, seed 61 (the seat)
+moulded seat: x -0.4875 to 0.4875, z -0.075 to 0.4375, depth 1.875, top 0.225, flare 0.0375, seed 61, on a panel seam (the seat)
 room: x -0.44 to 0.44, z 0.06 to 0.06, depth 1.5, floor van floor, order floor (the floor)
 lines: x -0.44 to 0.44, z -0.58 to 0.02, depth 1.5, n 6, every 0.12, colour 70 74 80, width 2 (its ribs)
 wash: colour 30 40 70 60 (the dim cold light)
@@ -158,7 +158,7 @@ door leaf: x 0.235 to 0.42, z 0.03 to 1.43, depth 0.75, far 0.18 to 1.25 (the do
 # place: prison  # (refs 12-14: cream painted brick, blue steel doors; the phone room and association off the landing)
 colours: cell 226 216 190 | cell dark 198 186 160 | cell floor 150 140 124 | door blue 52 92 150 | white 255 255 255 | tv green 70 100 84 | tv cream 196 186 160
 
-## view: cell
+## view: cell (the cell)
 camera: up 1.6, horizon 760, lens 1500
 people: brand 2.9, officer 3.1
 room: x -0.992 to 1.088, z 0 to 2.976, depth 4.8, fill cell, ceiling cell / white 0.25, left cell dark, right cell dark * 0.95, back cell, floor cell floor, ceiling line 2.2 (the cell)
@@ -174,7 +174,7 @@ block: x 0.064 to 0.256, z 1.216 to 1.2864, depth 4.8, colour 240 240 236, line 
 prison bed: x -2.1 to -0.25, z -1 to 0.725, depth 3.75 (the bed)
 cell door: x 1.12 to 1.92, z -1.728 to 3.072, depth 4.8 (the open door, the landing)
 
-## view: cot_top  # (straight down on the cot: z up the screen, depth the height above the floor)
+## view: cot_top (the cot from above)  # (straight down on the cot: z up the screen, depth the height above the floor)
 camera: up 0, horizon 960, lens 1500
 people: brand 1.4
 block: x -1.05 to 1.05, z -1.8 to 1.7, depth 1.875, colour cell floor, line 0 (the floor)
@@ -182,7 +182,7 @@ lines: x -1.05 to 1.05, z -1.8 to 1.7, depth 1.875, n 11, every 0.325, drop 0.03
 cot from above: x -0.38 to 0.38, z -1.02 to 0.68, depth 1.5 (the cot)
 blanket from above: x -0.304 to 0.304, z -0.816 to 0.544, depth 1.2, edge 0.84 (the blanket over him)
 
-## view: phone
+## view: phone (the phone room)
 camera: up 1.6, horizon 600, lens 1500
 people: brand 1.2
 block: x -0.84 to 1.24, z -0.2 to 2.6, depth 1.5, colour cell, line 0 (the wall)
@@ -193,12 +193,12 @@ block: x -0.84 to 1.24, z 0.688 to 0.71, depth 1.5, colour cell / door blue 0.4 
 block: x -0.84 to 1.24, z -0.2 to 0, depth 1.5, colour 120 112 100 (the floor)
 pin phone: x -0.36 to 0.29, z 0.75 to 1.57, depth 1.5, seed 5 (his phone)
 pin phone: x 0.3 to 0.95, z 0.75 to 1.57, depth 1.5, empty 1, seed 665 (the other phone)
-notice: x -0.68 to -0.53, z 1.13 to 1.43, depth 1.5, colour 250 250 246, text NOTICE, seed 70 (the notice notice)
+notice: x -0.68 to -0.53, z 1.13 to 1.43, depth 1.5, colour 250 250 246, text NOTICE, seed 70 (the general notice)
 notice: x 0.318 to 0.448, z 1.13 to 1.35, depth 1.5, colour 250 236 120, text SAMARITANS, seed 71 (the samaritans notice)
 notice: x 0.3 to 0.47, z 1.71 to 1.93, depth 1.5, colour 246 246 246, text CALLS, seed 72 (the calls notice)
 notice: x 0.98 to 1.13, z 1.17 to 1.43, depth 1.5, colour 226 236 250, text VISITS, seed 73 (the visits notice)
 
-## view: tvroom
+## view: tvroom (the TV room)
 camera: up 1.6, horizon 840, lens 1500
 people: brand 2.1, inmate1 5, inmate2 5.5
 block: x -3.36 to 3.36, z 0 to 6.56, depth 6, colour tv cream, line 0 (the wall)
@@ -213,10 +213,10 @@ caged clock: at -1.28 2.48, depth 6 (the clock)
 wired door: x -0.48 to 0.24, z 0 to 3.08, depth 6 (the door)
 block: x -3.36 to 3.36, z -4.64 to 0, depth 6, colour 104 98 90, line 0 (the lino)
 lines: x -3.36 to 3.36, z -4.64 to -0.08, depth 6, n 10, every 0.24, grow 0.15, colour 94 88 80, width 1.6 (its joints)
-pool table: x -0.64 to 1.624, z -0.576 to 0.608, depth 6 (the pool table)
+pool table: x -0.64 to 1.624, z -0.576 to 0.608, depth 6, on the door (the pool table)
 flicker: strength 1 (the TV's light on everyone)
 
-## view: tv
+## view: tv (the TV on the wall)
 camera: up 2.2, horizon 960, lens 1500
 block: x -0.84 to 0.84, z 0.76 to 3.56, depth 1.5, colour tv cream * 0.72, line 0 (the wall)
 brick marks: x -0.84 to 0.84, z 0.76 to 3.56, depth 1.5, colour tv cream * 0.72, brick width 0.06, brick height 0.026, n 70, line 0.9, seed 101 (the painted brick)

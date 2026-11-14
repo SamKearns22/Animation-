@@ -1,3 +1,23 @@
+# Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/places-kit-c5c` (also on the main line).
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
+- **Done (chat 5c, Opus high, ~1.9%; job ~6.1% of 8%, stop 12%):** step 2 finished: van, cell (+cell_cot), cot_top,
+  phone, tvroom, tv all 0.000% (paintings, quick check) from a new `places_rooms.py` (27 indoor pieces: room, lines,
+  brick marks, stroke, studs, oval, wash, glow, flicker; van, cell, cot, phone and association pieces; wall tv with a
+  feed). All 13 views are now described (12 views + cell_cot's camera; 162 piece lines). Handed over on amber.
+- **Next: chat 5d, Opus MEDIUM (building from a clear plan), same job:** steps 3-5 below (full replicate with
+  frames, set_boxes vs SET_BOXES, kittest, MAPs, catalogue row, page lines, sheet, morning report entry), then open
+  the moves chat (ranking item 7, Opus high) per `notes/overnight-run.md`.
+- **Needs Sam (morning report):** people kit picks 1-3 (unchanged).
+- **Read:** `notes/overnight-run.md` in full; this file's item 5 section only; MAPs of `places.py`,
+  `places_parts.py`, `places_outside.py`, `places_rooms.py`.
+- **Open rule requests:** none.
+- **For Claude:** replicate now patches `ST.tv` (the film's back() calls it directly) and painters take `feed`; the
+  MAPs of places.py / places_parts.py do not yet name places_rooms (step 4). Quick check: a scratch script that
+  installs the description and compares `ST.painting(v, 0.7)` (~10 s for six views); the full replicate with frames
+  takes ~3 min (run it in the background). Points are px -> metres as before (`x = (X-540)/ppm`,
+  `z = up - (Y-horizon)/ppm`, every ppm 2^a*5^b, pieces' REF = the ppm they stand at, so k = 1).
+
 # Where things stand (archived 9 Nov) (project, 7 Nov; the last film is finished)
 
 ## Where things stand (replaced by Job J, 10 Nov) (project, 10 Nov; no film in progress)

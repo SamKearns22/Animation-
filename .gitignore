@@ -53,3 +53,6 @@ source/data/*-round.log
 source/data/*-round-sheet.jpg
 source/data/*-clip-*.mp4
 source/data/kittest-people/
+
+# kittest outputs (regenerated each run)
+source/data/kittest-*/

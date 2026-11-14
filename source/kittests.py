@@ -1759,6 +1759,64 @@ def people_from_a_description():
                                         + ', '.join(f'{lb} {d:.2f}%' for _, lb, d, _ in scores) + f' differ; a changed line shows ({seen:.2f}%)')
 
 
+@test
+def places_from_a_description():
+    """Ranking item 5 (overnight chat 5d): the places kit redraws Blessed's 13 paintings from 226 lines, and its boxes."""
+    import glob
+    import places as K
+    import setcheck
+    bad = []
+    head = '# place: p\ncolours: wall 1 2 3\n## view: v\ncamera: up 1.6, horizon 850, lens 1500\n'
+    for txt, why in (('panels: x 0 to 1, z 0 to 1, depth 6', 'a piece before any place'),
+                     ('# place: p\n## view: v\npanels: x 0 to 1, z 0 to 1, depth 6', 'a view with no camera'),
+                     (head + 'sofa: at 0 0, depth 3', 'an unknown kind'),
+                     (head + 'clock: at 0 0', 'a piece with no depth'),
+                     (head + 'clock: at 0 0, depth 6, colourful 3', 'an unknown param'),
+                     (head + 'door: x 0 to 1, z 0 to 2, depth 6, look palace', 'an unknown look'),
+                     (head + 'camera: up 1.6, horizon 850', 'a camera with no lens'),
+                     (head + 'clock: at 0 0, depth 6, on the wall (the clock)', 'on a piece that is not there'),
+                     ('# place: p\ncolours: wall 1 2', 'a colour of two numbers')):
+        try:
+            K.parse(txt)
+            bad.append(why + ' was not refused')
+        except K.DescriptionError:
+            pass
+    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if not os.path.basename(f).startswith(
+             ('places', 'page.py', 'kittests.py')) and re.search(r'^\s*(import places\b|from places\b|import places_)',
+             open(f, encoding='utf-8').read(), re.M)]
+    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
+        bad.append(f'films using the kit before Sam approves it: {users}')
+    out, scores = K.replicate('blessed', os.path.join(HERE, 'data', 'kittest-places'), frames=False)
+    if len(scores) < 13:
+        bad.append(f'only {len(scores)} of 13 paintings redrawn')
+    bad += [f'{lb}: {d:.3f}% of pixels differ' for lb, d in scores if d > 0.05]
+    desc = K.load('blessed')
+    boxes, meant = K.set_boxes(desc)
+    names = [n for n, _ in boxes]
+    for thing in ("court_box the judge's bench", 'court_box the witness box'):   # chat 5d: 'wider than 80%' dropped them
+        if thing not in names:
+            bad.append(f'{thing} is not a thing for rule 83')
+    if len(names) != len(set(names)):
+        bad.append('two boxes share a name (repeats must be numbered)')
+    known = setcheck.faults(boxes, meant)          # the one the hand list missed (stale box): phone's Samaritans notice
+    if len(known) != 1 or 'samaritans' not in known[0]:
+        bad.append(f'rule 83 on the kit\'s boxes: {known}')
+    gates = desc['views']['gates']['items']        # the old fault: a window in a tower with no 'on' must be caught
+    w = next(it for it in gates if it['name'] == 'a window')
+    keep = w['raw'].pop('on')
+    caught = len(setcheck.faults(*K.set_boxes(desc))) > len(known)
+    w['raw']['on'] = keep
+    if not caught:
+        bad.append('a window in a tower with no "on" was not caught')
+    import page as PG
+    hit = [w for _, w, _ in PG.find('blessed', 'move the TV room clock left', 3)] if PG.build('blessed') else []
+    if 'blessed-places.txt:212' not in hit:
+        bad.append(f'a note on the TV room clock did not find its line: {hit}')
+    lines = len(K.lines('blessed'))
+    return not bad, '; '.join(bad) or (f'{len(scores)} paintings from {lines} piece lines, worst '
+                                        f'{max(d for _, d in scores):.3f}%; {len(boxes)} boxes from the pieces')
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

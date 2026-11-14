@@ -13,7 +13,8 @@ MAP
     python3 source/page.py FILM find "the officer's arms clip the van" [-n 5]
 
 People (item 4, 14 Nov): the page carries each person's description from story/FILM-people.txt (people.lines), so
-`find` points a note on a person at their block. Waits for items 5, 7 (places, moves kits) to do the same.
+`find` points a note on a person at their block. Places (item 5, chat 5d): one line per piece from
+story/FILM-places.txt (its line number, view, kind and name), so a note on a place finds its line. Moves (item 7) next.
 """
 import glob, os, re, subprocess, sys
 
@@ -42,6 +43,11 @@ def build(film):
     if ppl:
         parts.append(f'\n## {film}-people.txt ({len(ppl)} people; a note on a person changes their lines)\n' +
                      '\n'.join(f'- {n}: {txt}' for n, txt in ppl))
+    import places                                 # item 5: each place's pieces (story/FILM-places.txt), by line
+    pcs = places.lines(film)
+    if pcs:
+        parts.append(f'\n## {film}-places.txt ({len(pcs)} pieces; a note on a place changes its line: open that line)\n' +
+                     '\n'.join(f'- {n}: {txt}' for n, txt in pcs))
     page = '\n'.join(parts) + '\n'
     out = os.path.join(ROOT, 'story', f'{film}-page.md')
     open(out, 'w', encoding='utf-8').write(page)

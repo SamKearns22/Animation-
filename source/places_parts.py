@@ -11,6 +11,9 @@ lines and edges at the house width at any distance); params {name: type} the lin
 was drawn at; overall = True for a light over the whole picture (no depth); band = True for a wall, rail or floor
 (not a thing for the collision check).
 
+The outdoor pieces are in places_outside.py and the indoor ones (rooms, the van, the cell, phones, the TV room, a TV)
+in places_rooms.py; both register into KINDS (imported at this file's end).
+
 Map: helpers 40 | walls, rails, floors 60 | courtroom pieces 110 | the table 380
 """
 import math

@@ -41,6 +41,7 @@ ENTRIES = [
     ('Sets', 'Oak study (Ad-Vanced Notice)', 'ad_vanced_notice_sets.py', ('frame', 'ad_vanced_notice_sets', 1.0)),
     ('Sets', 'Cliff top over the Strait of Hormuz', 'ad_vanced_notice_sets.py', ('frame', 'ad_vanced_notice_sets', 2.0)),
     ('Sets', 'Midwest gas station', 'ad_vanced_notice_sets.py', ('frame', 'ad_vanced_notice_sets', 4.0)),
+    ('Sets', 'Places from a description (the kit; Blessed\'s TV room from its lines)', 'places.py', ('frame', 'places', 'tvroom')),
     ('Props', 'Oil tanker, crew-cab pickup', 'ad_vanced_notice_sets.py', ('frame', 'ad_vanced_notice_sets', 5.0)),
     ('People', 'Andy, Wes, the robot (Prepper)', 'prepper_cast.py', ('cast', 'prepper')),
     ('People', 'Trump, Putin, Zelensky, Claudia', 'traitors_cast.py', ('cast', 'traitors')),

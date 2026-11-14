@@ -5,14 +5,18 @@ metres) listing every piece in it, back to front, each from the library (places_
 windows, benches, desks, chairs, beds, booths, signs, notices, TVs, trees, lamp posts, facades), each placed in metres
 (x across, depth from the lens, z up). The kit draws each view's back, middle and front layers (which layer comes
 from the piece's depth against the view's people), and hands every piece's box to the checks (rule 83: SET_BOXES;
-two boxes overlap as meant when one stands in front of the other), and its list of things to rule 3's benchmark.
+a piece reaching past both edges of the picture is a band, not a thing; repeats are numbered; two boxes overlap as
+meant when one stands 0.2 m or more in front of the other, or one is `on` the other), and its list of things to
+rule 3's benchmark. The library: places_parts.py (walls, the courtroom), places_outside.py (streets, fronts, the
+gatehouse), places_rooms.py (rooms seen from inside, the van, the cell, phones, the TV room, a TV).
 No film imports this until Sam approves the kit (overnight run, answer 2).
 
 THE LANGUAGE (one piece per line; params split by ', '; colours are 'R G B', a word from the place's colours,
 'WORD * 0.88' (darker), or 'WORD / OTHER 0.4' (mixed 0.4 of the way to OTHER))
     # place: courtroom                 starts a place; its views follow
     colours: wall 226 214 194 | oak 204 166 116 | oak dark 170 130 86
-    ## view: court_box                 a camera on the place (the film's view name)
+    ## view: court_box (the witness box)   a camera on the place (the film's view name; in brackets, what a note
+                                           calls it, for the page)
     camera: up 1.6, horizon 850, lens 1500       a level camera (verticals stay vertical): height in metres, the
                                                  horizon's screen row, the lens in pixels (centre 540 unless given)
     people: judge 3.571, brand 2.5     where the view's people stand (metres from the lens): pieces nearer than all of
@@ -20,14 +24,15 @@ THE LANGUAGE (one piece per line; params split by ', '; colours are 'R G B', a w
     KIND: x -3.36 to 3.36, z 0 to 6.6, depth 6, step 0.48, seed 3 (the panelled wall)
           x, z: the front face's left to right and bottom to top (metres); depth: metres from the lens;
           at X Z: a point piece; look NAME: one of the kind's house looks (its trim); detail K: the trim at K of its
-          usual size; any other param is the kind's own (places_parts.KINDS lists them); (NAME) names it for the checks
+          usual size; on NAME: drawn on, or in front of, that piece of the view (their overlap is meant, rule 83);
+          any other param is the kind's own (places_parts.KINDS lists them); (NAME) names it for the checks
 
     python3 source/places.py replicate FILM OUT_DIR   every view's finished painting beside the kit's, and the film's
                                                       frames with the kit's places swapped in (0.05% is the bar)
     python3 source/places.py describe FILM            the film's places, as the page shows them
 
-Map: parse 60 | colours 140 | the camera and layers 170 | draw 200 | boxes for the checks 250 | replicate 300 |
-     lines for the page 390 | main 400
+Map: parse 60 | colours 175 | the camera and layers 195 | draw (Piece) 245 | boxes for the checks 380 | replicate 435 |
+     the catalogue tile (picture) 490 | lines for the page 505 | main 525
 """
 import os
 import re
@@ -120,7 +125,7 @@ def parse(text):
         if mn:
             name, val = mn.group(1).strip(), val[:mn.start()].strip()
         it = {'kind': key, 'name': name, 'line': n, 'raw': {}}
-        names = sorted({'x', 'z', 'depth', 'at', 'detail', 'seed', 'look', 'layer'} | set(PP.KINDS[key]['params']),
+        names = sorted(GENERIC | set(PP.KINDS[key]['params']),
                        key=len, reverse=True)
         for part in [q.strip() for q in val.split(',') if q.strip()]:
             k = next((nm for nm in names if part == nm or part.startswith(nm + ' ')), part.partition(' ')[0])
@@ -133,11 +138,20 @@ def parse(text):
     for v, d in views.items():
         if d['camera'] is None:
             raise DescriptionError(f'view {v}: no camera line')
+        named = {it['name'] for it in d['items']}
+        for it in d['items']:
+            if 'on' in it['raw'] and it['raw']['on'] not in named:
+                raise DescriptionError(f'line {it["line"]}: on "{it["raw"]["on"]}": no piece of that name in view {v}')
     return {'places': places, 'views': views}
 
 
+GENERIC = {'x', 'z', 'depth', 'at', 'detail', 'seed', 'look', 'layer', 'on'}   # words every piece takes
+# on NAME: the piece is drawn on, or stands in front of, the piece called NAME in the same view (a window in a tower,
+# a Bible on the ledge): their overlap is meant (rule 83). Checked: NAME must be a piece in that view.
+
+
 def _check(it, kind, n):
-    allowed = {'x', 'z', 'depth', 'at', 'detail', 'seed', 'look', 'layer'} | set(kind['params'])
+    allowed = GENERIC | set(kind['params'])
     for k in it['raw']:
         if k not in allowed:
             raise DescriptionError(f'line {n}: {it["kind"]} takes no "{k}" (it takes: {", ".join(sorted(allowed))})')
@@ -362,28 +376,40 @@ def install(desc, film_sets):
 
 
 # ---------------------------------------------------------------------------------------------- boxes for the checks
-WIDE = 0.8          # a piece wider than this share of the picture is a band (a wall, a rail, a floor): not a thing
+EDGE = (0, 1080)    # a piece reaching past both edges of the picture is a band (a wall, a rail, a floor): not a thing
+                    # (was: wider than 80% of the frame, which dropped the judge's bench and the witness box, chat 5d)
 
 
 def set_boxes(desc, offsets=None):
     """Rule 83's boxes from the pieces themselves (no hand-made list): (VIEW NAME, screen box), each view laid
     `offsets[view]` px to the right so views never overlap; and the meant overlaps (one stands in front of the other
     by 0.2 m or more, or one hangs on the other: the same depth and named in `on`)."""
-    boxes, depth = [], {}
+    boxes, depth, own, on = [], {}, {}, {}
     for i, view in enumerate(desc['views']):
         off = (offsets or {}).get(view, 4000 * (i + 1))
-        for p in pieces(desc, view):
-            b = p.screen_box()
-            if b is None or p.kind.get('band') or (b[2] - b[0]) > WIDE * 1080:
-                continue
-            nm = f'{view} {p.it["name"]}'
+        things = [(p, p.screen_box()) for p in pieces(desc, view)]
+        things = [(p, b) for p, b in things if b is not None and not p.kind.get('band')
+                  and not (b[0] <= EDGE[0] and b[2] >= EDGE[1])]
+        count, seen = {}, {}
+        for p, _ in things:
+            count[p.it['name']] = count.get(p.it['name'], 0) + 1
+        for p, b in things:                          # repeats are numbered in drawing order: 'a tree 1', 'a tree 2'
+            nm = p.it['name']
+            if count[nm] > 1:
+                seen[nm] = seen.get(nm, 0) + 1
+                nm = f'{nm} {seen[nm]}'
+            nm = f'{view} {nm}'
             boxes.append((nm, (b[0] + off, b[1], b[2] + off, b[3])))
-            depth[nm] = p.d0
+            depth[nm], own[nm], on[nm] = p.d0, p.it['name'], p.it['raw'].get('on')
     meant = []
     for i, (a, ba) in enumerate(boxes):
         for b, bb in boxes[i + 1:]:
-            if a.split()[0] == b.split()[0] and abs(depth[a] - depth[b]) >= 0.2:
+            if a.split()[0] != b.split()[0]:
+                continue
+            if abs(depth[a] - depth[b]) >= 0.2:
                 meant.append((a, b, f'{a} stands {abs(depth[a] - depth[b]):.1f} m from {b} (their depths)'))
+            elif on[a] == own[b] or on[b] == own[a]:
+                meant.append((a, b, f'{a} and {b}: one is on the other (its "on")'))
     return boxes, meant
 
 
@@ -456,11 +482,40 @@ def replicate(film, out_dir, views=None, frames=True):
     return out, scores
 
 
+def picture(view, film='blessed'):
+    """One view painted by the kit alone (no cast): the catalogue's tile (catalogue.py)."""
+    ST = _film_sets(film)
+    keep = {n: dict(getattr(ST, n)) for n in ('BACK', 'MID', 'FRONT')}
+    install(load(film), ST)
+    try:
+        return ST.painting(view)
+    finally:
+        for n, d in keep.items():
+            getattr(ST, n).clear()
+            getattr(ST, n).update(d)
+
+
 # ---------------------------------------------------------------------------------------------- lines for the page
 def lines(film):
-    """The places file's lines, for the page (a note changes a line here, not the set's code)."""
-    with open(places_file(film), encoding='utf-8') as f:
-        return [ln.rstrip() for ln in f if ln.strip()]
+    """The places file for the page: (line number, 'VIEW: KIND (NAME)') for every piece, so a note on a place finds
+    its line (page.py find) and the chat opens that one line, not the file (a note changes a line, not the set's code)."""
+    p = places_file(film)
+    if not os.path.exists(p):
+        return []
+    out, view = [], ''
+    for n, raw in enumerate(open(p, encoding='utf-8'), 1):
+        ln = raw.split('  #')[0].strip()
+        m = re.match(r'##\s*view:\s*(\S+)\s*(?:\(([^)]*)\))?', ln)
+        if m:
+            view = m.group(1) + (f' ({m.group(2)})' if m.group(2) else '')
+            continue
+        if not ln or ln.startswith('#') or not view:
+            continue
+        m = re.match(r'([a-z][a-z ]*?):\s*(.*?)(?:\(([^)]*)\))?$', ln)
+        if m and m.group(1) not in ('camera', 'people', 'refs', 'colours'):
+            kind, name = m.group(1), m.group(3) or m.group(1)
+            out.append((n, f'{view}: {name}' if kind.split()[-1] in name else f'{view}: {kind} ({name})'))
+    return out
 
 
 def main(argv):
@@ -471,7 +526,7 @@ def main(argv):
             print(f'{label:34s} {s:6.3f}%{"   FAIL" if s > 0.05 else ""}')
         print(out)
     elif cmd == 'describe':
-        print('\n'.join(lines(argv[1])))
+        print('\n'.join(f'{n}: {s}' for n, s in lines(argv[1])))
     else:
         raise SystemExit(__doc__)
 

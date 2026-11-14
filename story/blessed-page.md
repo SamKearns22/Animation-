@@ -504,3 +504,167 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 197: brand_prison (Russell Brand (prison: tracksuit, topknot)): look of: brand; hair: knot; outfit: jumper 134 136 140, trousers 134 136 140, shoes 236 236 236; extras: zip
 - 203: walliams (David Walliams (TEST ONLY: never in a film; his head is his own part)): head: part walliams; body: 1.96 m, shoulders 158, head 66 x 96, neck 1.3; skin: 242 190 168 | hair: crop, 66 54 46 | brows: 56 44 38, width 4.6; outfit: jumper 134 136 140, shirt 134 136 140, trousers 134 136 140, shoes 236 236 236; extras: zip; seed: 95
 - 211: press (Journalist (a crowd: member i of the pack; s is the shot's seed; job is what the film has them doing)): crowd: press; body: 1.76 m, head 66 x 96; outfit: suit, shirt white, no tie, shoes 24 20 18; eyes: 80 60 44 | brows: darker hair 0.8; seed: 600 + i; hair (i+2s): short; bob; pony; crop; bald; curly; long; side; face (i+2s): face_wide 0.05, jaw_wide 0.06; face_wide -0.04, chin_long 0.02; ; jaw_wide 0.08; face_wide 0.06; face_wide -0.02; face_wide -0.05, jaw_wide -0.05; jaw_wide 0.03; hair seed (i+2s): 500; 501; 502; 503; 504; 505; 506; 507; hair colour (i+s): 58 44 36; 30 24 22; 150 110 70; 170 166 162; 110 70 46; 196 196 192; skin (i): pale; pink; olive; brown; jacket (3i+s): navy; charcoal; 110 40 50; 70 90 120; 90 96 80; 150 120 90; 60 60 70; trousers (i): 40 40 46; darker jacket 0.6; body (i): shoulders 150; shoulders 156; shoulders 162; taller (7i+s): 0; 0.05; 0.1; when hair bob; pony; long: body: 1.64 m, shoulders 138, head 62 x 96; when hair bald: hair colour: 128 120 114; when job tv; boom: outfit: jumper | jacket (i+s): 40 42 48; 52 56 50; 30 34 44 | trousers (i): 92 90 70; 70 72 64; 60 58 52 | shoes: 40 36 32; when job stills: jacket: 46 48 54 | trousers: 58 72 96 | shirt: 70 74 82
+
+## blessed-places.txt (162 pieces; a note on a place changes its line: open that line)
+- 10: court_box (the witness box, the judge behind): panels (the panelled wall)
+- 11: court_box (the witness box, the judge behind): block (the picture rail)
+- 12: court_box (the witness box, the judge behind): the royal arms
+- 13: court_box (the witness box, the judge behind): the clock
+- 14: court_box (the witness box, the judge behind): the door
+- 15: court_box (the witness box, the judge behind): chair back (the judge's chair)
+- 16: court_box (the witness box, the judge behind): block (the dais edge)
+- 17: court_box (the witness box, the judge behind): carpet (the well)
+- 18: court_box (the witness box, the judge behind): the judge's bench
+- 19: court_box (the witness box, the judge behind): the judge's microphone
+- 20: court_box (the witness box, the judge behind): the witness box
+- 21: court_box (the witness box, the judge behind): book (the oath Bible)
+- 22: court_box (the witness box, the judge behind): the witness microphone
+- 27: court_bench (the judge's bench): panels (the panelled wall)
+- 28: court_bench (the judge's bench): the royal arms
+- 29: court_bench (the judge's bench): chair back (the judge's chair)
+- 30: court_bench (the judge's bench): the judge's bench
+- 31: court_bench (the judge's bench): papers (a paper)
+- 32: court_bench (the judge's bench): papers (another paper)
+- 33: court_bench (the judge's bench): the sound block
+- 34: court_bench (the judge's bench): the gavel
+- 35: court_bench (the judge's bench): the judge's microphone
+- 40: court_jury (the jury box): panels (the panelled wall)
+- 41: court_jury (the jury box): block (the picture rail)
+- 42: court_jury (the jury box): the left window
+- 43: court_jury (the jury box): the right window
+- 44: court_jury (the jury box): the jury room door
+- 45: court_jury (the jury box): block (the dado rail)
+- 46: court_jury (the jury box): panelled (the back row's bench back)
+- 47: court_jury (the jury box): panelled (the back row's box)
+- 48: court_jury (the jury box): a notepad
+- 49: court_jury (the jury box): a notepad
+- 50: court_jury (the jury box): a notepad
+- 51: court_jury (the jury box): panelled (the front row's box)
+- 52: court_jury (the jury box): a notepad and pen
+- 53: court_jury (the jury box): a notepad and pen
+- 54: court_jury (the jury box): the water jug
+- 55: court_jury (the jury box): a notepad and pen
+- 56: court_jury (the jury box): a notepad and pen
+- 61: court_dock (the dock): panels (the panelled wall)
+- 62: court_dock (the dock): block (the dado rail)
+- 63: court_dock (the dock): block (the lower wall)
+- 64: court_dock (the dock): row (the dock's back bench)
+- 65: court_dock (the dock): block (the dock's floor)
+- 66: court_dock (the dock): panelled (the bench's front)
+- 67: court_dock (the dock): glass screen (the dock's glass)
+- 68: court_dock (the dock): panelled (the dock's base)
+- 76: court_out (outside the court): the sky
+- 77: court_out (outside the court): a cloud
+- 78: court_out (outside the court): a cloud
+- 79: court_out (outside the court): the court's front
+- 80: court_out (outside the court): window grid (the ribbon windows)
+- 81: court_out (outside the court): window grid (the ground-floor glazing)
+- 82: court_out (outside the court): the entrance
+- 83: court_out (outside the court): brick front (a brick pier)
+- 84: court_out (outside the court): brick front (a brick pier)
+- 85: court_out (outside the court): sign board (the sign band)
+- 86: court_out (outside the court): a red sign
+- 87: court_out (outside the court): ground (the forecourt)
+- 88: court_out (outside the court): the left planted wall
+- 89: court_out (outside the court): the right planted wall
+- 90: court_out (outside the court): the steps
+- 91: court_out (outside the court): the left rail
+- 92: court_out (outside the court): the right rail
+- 93: court_out (outside the court): a tree
+- 94: court_out (outside the court): a tree
+- 95: court_out (outside the court): a tree
+- 96: court_out (outside the court): the lamp post
+- 97: court_out (outside the court): ground (the pavement)
+- 105: gates (the prison gates): the overcast sky
+- 106: gates (the prison gates): a cloud
+- 107: gates (the prison gates): a cloud
+- 108: gates (the prison gates): brick front (the centre block)
+- 109: gates (the prison gates): block (the frieze)
+- 110: gates (the prison gates): row (the frieze's brackets)
+- 111: gates (the prison gates): block (the cornice)
+- 112: gates (the prison gates): brick front (the left tower)
+- 113: gates (the prison gates): a pilaster
+- 114: gates (the prison gates): a pilaster
+- 115: gates (the prison gates): a window
+- 116: gates (the prison gates): a window
+- 117: gates (the prison gates): a window
+- 118: gates (the prison gates): block (the tower's cornice)
+- 119: gates (the prison gates): row (its brackets)
+- 120: gates (the prison gates): brick front (the right tower)
+- 121: gates (the prison gates): a pilaster
+- 122: gates (the prison gates): a pilaster
+- 123: gates (the prison gates): a window
+- 124: gates (the prison gates): a window
+- 125: gates (the prison gates): a window
+- 126: gates (the prison gates): block (the tower's cornice)
+- 127: gates (the prison gates): row (its brackets)
+- 128: gates (the prison gates): the arched gate
+- 129: gates (the prison gates): ground (the forecourt)
+- 130: gates (the prison gates): a bollard
+- 131: gates (the prison gates): a bollard
+- 132: gates (the prison gates): sign board (the prison sign)
+- 140: van (the prison van): room (the cubicle)
+- 141: van (the prison van): oval (the ceiling light)
+- 142: van (the prison van): stroke (a panel seam)
+- 143: van (the prison van): stroke (a panel seam)
+- 144: van (the prison van): the CCTV sticker
+- 145: van (the prison van): the air vent
+- 146: van (the prison van): stroke (the grab rail)
+- 147: van (the prison van): studs (the rivets)
+- 148: van (the prison van): the window, the street going by
+- 149: van (the prison van): the seat
+- 150: van (the prison van): room (the floor)
+- 151: van (the prison van): lines (its ribs)
+- 152: van (the prison van): wash (the dim cold light)
+- 153: van (the prison van): glow (a street light passing)
+- 154: van (the prison van): block (the door frame, left)
+- 155: van (the prison van): block (the door frame, top)
+- 156: van (the prison van): door leaf (the door)
+- 164: cell (the cell): room (the cell)
+- 165: cell (the cell): lines (the brick courses)
+- 166: cell (the cell): brick marks (the painted brick)
+- 167: cell (the cell): block (the dado)
+- 168: cell (the cell): the window
+- 169: cell (the cell): the basin
+- 170: cell (the cell): the toilet
+- 171: cell (the cell): the shelf-desk
+- 172: cell (the cell): the pinboard
+- 173: cell (the cell): block (a plastic mug)
+- 174: cell (the cell): the bed
+- 175: cell (the cell): the open door, the landing
+- 180: cot_top (the cot from above): block (the floor)
+- 181: cot_top (the cot from above): lines (its tiles)
+- 182: cot_top (the cot from above): cot from above (the cot)
+- 183: cot_top (the cot from above): blanket from above (the blanket over him)
+- 188: phone (the phone room): block (the wall)
+- 189: phone (the phone room): brick marks (the painted brick)
+- 190: phone (the phone room): lines (the courses)
+- 191: phone (the phone room): block (the dado)
+- 192: phone (the phone room): block (its rail)
+- 193: phone (the phone room): block (the floor)
+- 194: phone (the phone room): his phone
+- 195: phone (the phone room): the other phone
+- 196: phone (the phone room): the general notice
+- 197: phone (the phone room): the samaritans notice
+- 198: phone (the phone room): the calls notice
+- 199: phone (the phone room): the visits notice
+- 204: tvroom (the TV room): block (the wall)
+- 205: tvroom (the TV room): brick marks (the painted brick)
+- 206: tvroom (the TV room): block (the green dado)
+- 207: tvroom (the TV room): block (its rail)
+- 208: tvroom (the TV room): a high barred window
+- 209: tvroom (the TV room): a high barred window
+- 210: tvroom (the TV room): a high barred window
+- 211: tvroom (the TV room): the noticeboard
+- 212: tvroom (the TV room): the clock
+- 213: tvroom (the TV room): the door
+- 214: tvroom (the TV room): block (the lino)
+- 215: tvroom (the TV room): lines (its joints)
+- 216: tvroom (the TV room): the pool table
+- 217: tvroom (the TV room): flicker (the TV's light on everyone)
+- 221: tv (the TV on the wall): block (the wall)
+- 222: tv (the TV on the wall): brick marks (the painted brick)
+- 223: tv (the TV on the wall): block (the green dado)
+- 224: tv (the TV on the wall): block (its rail)
+- 225: tv (the TV on the wall): wall tv (the TV)
+- 226: tv (the TV on the wall): its glow on the wall
