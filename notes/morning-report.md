@@ -100,3 +100,8 @@ Where things stand (critic bench, chat 4 onward):
 - Places kit: 1) approve after a run-through of the contents; 2) explain the notice question.
 - Critic: 1) explain the close-ups; 2) not yet: test the critic again on Remakes and report back.
 - Second answers (14 Nov): notice on Blessed left as posted (Y); close-ups of every person in critique packs (Y; the Remakes critic test still decides Sonnet); people kit: everyone, famous too, keeps one look in every pose and turn (Y); people kit approved (Y); places kit approved (Y); moves kit approved (Y); acting list's two words corrected (Y); the rough sheet once per film before building, plus a small one for anything new (Y). One look in every pose: written into rule 13 (Sam: Y, 14 Nov), not a new rule.
+
+## Critic bench: repeat test result (chat 4, 14 Nov; scores in notes/critic-bench.tsv)
+- Checklist caught, 3 runs each. Blessed (of 12): Opus 2, 2, 5; Sonnet 4, 9, 7. Remakes (of 7): Opus 2, 4, 3; Sonnet 3, 3, 2.
+- Acting caught. Blessed (of 5): Opus 3, 3, 2; Sonnet 4, 3, 4. Remakes (of 6): Opus 3, 2, 4; Sonnet 4, 2, 3.
+- Extras (unruled): Opus 65 over 6 runs, Sonnet 73. Averages: Sonnet equal or better on both scores; run-to-run spread is as big as the gap, so no real difference. Recommendation: Sonnet for both (Y/N to Sam). Nothing switched. Cost: about 3.1% of a week (amber).
