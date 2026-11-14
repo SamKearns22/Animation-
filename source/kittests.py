@@ -2211,8 +2211,12 @@ def facehouse_whole_head():
         for n in held:
             png = FH.draw(n, 'detail', os.path.join(tmp, f'{n}.png'))
             got[n] = hashlib.md5(open(png, 'rb').read()).hexdigest()
+        pk = __import__('json').load(open(FH.pick_file('badenoch')))                 # chat 13: facepick's sheet draws A, B, C
+        alt = FH.draw('badenoch', 'detail', os.path.join(tmp, 'v.png'), lines=FH.CAST['badenoch'],   # this way
+                      src=FH.pick_dir('badenoch'), variant=pk['picked'])
+        sheet_way = hashlib.md5(open(alt, 'rb').read()).hexdigest() == got['badenoch']
         cast = {w: sp for w, sp in people.load('facetool').items()}
-        same = all(cast[w]['kit_house']['meas'] == FH.person(n, 'detail', **FH.CAST[n])['kit_house']['meas']
+        same = sheet_way and all(cast[w]['kit_house']['meas'] == FH.person(n, 'detail', **FH.CAST[n])['kit_house']['meas']
                    for w, n in (('andy', 'burnham'), ('kemi', 'badenoch')))
         del TH.GENERIC[:]
         FH.turns(os.path.join(tmp, 't.jpg'), list(held))
@@ -2221,7 +2225,8 @@ def facehouse_whole_head():
         shutil.rmtree(tmp)
     kept = [n for n in held if got[n] == held[n]]
     ok = len(kept) == 2 and same and not generic
-    return ok, f'held pixel for pixel: {kept}; people file = facehouse: {same}; turned on a generic head: {generic}'
+    return ok, (f'held pixel for pixel: {kept}; people file = facehouse = facepick sheet: {same}; '
+                f'turned on a generic head: {generic}')
 
 
 def main():

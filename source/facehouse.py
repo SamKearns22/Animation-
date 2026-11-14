@@ -73,17 +73,25 @@ from midterminal_cast import blend               # noqa: E402
 from ed import open_curve                        # noqa: E402
 
 # ---------------------------------------------------------------------------------------------- reading the pick
-def pick_file(name):
-    return os.path.join(ROOT, 'references', 'faces', name, 'pick', f'{name}-pick.json')
+def pick_dir(name, src=None):
+    """Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
+    has not picked yet (its sheet draws A, B and C the house way: chat 13)."""
+    return src or os.path.join(ROOT, 'references', 'faces', name, 'pick')
 
 
-def load(name):
-    """Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes."""
-    d = json.load(open(pick_file(name)))
-    h = d['heads'][d.get('picked', 'C')]
+def pick_file(name, src=None):
+    return os.path.join(pick_dir(name, src), f'{name}-pick.json')
+
+
+def load(name, src=None, variant=None):
+    """Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
+    head of facepick's three instead (from `src`, facepick's folder)."""
+    d = json.load(open(pick_file(name, src)))
+    v = variant or d.get('picked', 'C')
+    h = d['heads'][v]
     return dict(name=name, meas=dict(h['measures']), col=d['colours'], glasses=d.get('glasses'),
-                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=d.get('picked', 'C'), outline=d.get('outline'),
-                brow=d.get('brow'))
+                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=v, outline=d.get('outline'),
+                brow=d.get('brow'), src=src)
 
 
 # ---------------------------------------------------------------------------------------------- the traced outline
@@ -456,7 +464,7 @@ def swept(p, f, L, hc, kh, lk):
 
 
 # ---------------------------------------------------------------------------------------------- hair: braids
-def pick_hair(name, picked='C'):
+def pick_hair(name, picked='C', src=None):
     """The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
     house cap was guessed, a head taller and narrower than the pick, and the head read long): its outer edge (half
     width at each row, both sides averaged) and the hairline over the forehead, in face units (facepick's canvas:
@@ -464,10 +472,10 @@ def pick_hair(name, picked='C'):
     from PIL import Image
     from scipy import ndimage
     import facepick as FP
-    png = os.path.join(ROOT, 'references', 'faces', name, 'pick', f'{name}-{picked}.png')
+    png = os.path.join(pick_dir(name, src), f'{name}-{picked}.png')
     if not os.path.exists(png):
         return None
-    col = json.load(open(pick_file(name)))['colours']
+    col = json.load(open(pick_file(name, src)))['colours']
     a = np.asarray(Image.open(png).convert('RGB')).astype(float)
     hair = (np.abs(a - col['hair']).sum(2) < np.abs(a - col['cloth']).sum(2)) & (a.max(2) < 80)
     hair = ndimage.binary_closing(hair, iterations=6) | hair
@@ -518,7 +526,7 @@ def _hair(L, kh):
     """The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head."""
     m = kh.get('_hair')
     if m is None:
-        m = kh['_hair'] = pick_hair(kh['name'], kh.get('picked', 'C')) or {}
+        m = kh['_hair'] = pick_hair(kh['name'], kh.get('picked', 'C'), kh.get('src')) or {}
     e = L['fw'] * 0.5
     rows = m.get('rows') or {}
     vs = sorted(v for v in rows if v >= -0.36)
@@ -941,10 +949,12 @@ def caricature(meas, push=1.0, tune=None):
     return {k: (P4.AVG[k] + push * tune.get(k, 1.0) * (v - P4.AVG[k])) if k in P4.AVG else v for k, v in meas.items()}
 
 
-def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, **kw):
-    """The engine's person (views.person) for one picked face in one look, on the people kit's body."""
+def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, src=None,
+           variant=None, **kw):
+    """The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
+    `variant`: one of facepick's three heads before Sam picks (load())."""
     import people
-    pk = load(name)
+    pk = load(name, src, variant)
     lk = LOOKS[look]
     col = pk['col']
     skin = house_tone(col['skin'], lk['skin_k'])
@@ -987,14 +997,15 @@ def install():
     return TC
 
 
-def draw(name, look, out, size=900):
-    """One head and shoulders, front on, on white: the people kit's person with the house head."""
+def draw(name, look, out, size=900, lines=None, src=None, variant=None):
+    """One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
+    person's house lines (CAST's for that face otherwise); `src`/`variant`: one of facepick's heads (load())."""
     from PIL import Image
     from satire_style import install_circle_hands
     B, V = PP.B, PP.AV.MC.V
     install_circle_hands(B)
     TC = install()
-    sp = person(name, look, **CAST[name])
+    sp = person(name, look, src=src, variant=variant, **(lines if lines is not None else CAST[name]))
     TC.HEADS[sp['who']] = house_head
     TC.TORSOS[sp['who']] = lambda *a: None
     B.SS = 1

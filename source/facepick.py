@@ -690,14 +690,27 @@ def _phone(tile, face_px):
     return sm.resize((sm.width * 2, sm.height * 2), Image.NEAREST)
 
 
+def house_heads(out_dir, name, meta, th, look='detail'):
+    """A, B and C drawn the house way (facehouse, chat 13): what a film will draw, so Sam picks the head he will
+    see, not the traced test. The hair piece: braids where the photo's hair is braided, else swept (the two pieces
+    facehouse has); the house lines are the defaults until the person's lines name more."""
+    import facehouse as FH
+    lines = dict(hair='braids' if meta.get('braids') else 'swept')
+    out = {}
+    for v in 'ABC':
+        png = os.path.join(out_dir, f'{name}-{v}-house.png')
+        FH.draw(name, look, png, lines=lines, src=out_dir, variant=v)
+        out[v] = FH._fit(Image.open(png), th)
+    return out
+
+
 def sheet(out_dir, name):
     meta = json.load(open(os.path.join(out_dir, f'{name}-pick.json')))
     th = 420
     photos = [((_find(q, out_dir), n), 'photo') for q, n in map(_split, meta['fronts'])] + \
              [((_find(q, out_dir), n), '3/4') for q, n in map(_split, meta['tq'])]
     ptiles = [(_face_tile(p, n, th)[0], lab) for (p, n), lab in photos]
-    htiles = [(_head_tile(os.path.join(out_dir, f'{name}-{v}.png'), th,
-                          os.path.join(out_dir, f'{name}-A-clean-average.png')), v) for v in 'ABC']
+    htiles = [(house_heads(out_dir, name, meta, th)[v], v) for v in 'ABC']
     lines = []
     for v in 'ABC':
         h = meta['heads'][v]
@@ -717,7 +730,7 @@ def sheet(out_dir, name):
     H = 60 + th + 50 + th + 70 + small_h + 40 + 30 * len(lines) + 30
     img = Image.new('RGB', (W, H), (238, 236, 232))
     d = ImageDraw.Draw(img)
-    d.text((14, 14), f"{meta['title']}: pick A, B or C (photos on top, heads below, phone size underneath)",
+    d.text((14, 14), f"{meta['title']}: pick A, B or C (photos on top, the heads drawn the house way below, phone size underneath)",
            font=_font(28), fill=(20, 20, 20))
     x, y = 14, 60
     for t, lab in ptiles:
