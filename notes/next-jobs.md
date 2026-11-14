@@ -35,8 +35,11 @@
   lower face (blessed_walliams.outline, LOW 1.15); the eyes also came out small and tired. Plan for chat 14 (after Sam's
   two jobs): `facehouse.py trace walliams` (his outline off his photos, `shape`, as Kemi's) and check it against the
   Blessed outline; bigger, livelier eyes as the Blessed head's; one sheet, Blessed vs new side by side, to Sam. The
-  name test is no judge for him (calibrated); Sam's eye is. Lesson to propose: the face tool's sheet puts a head Sam
-  already knows (any hand-made one) beside A, B, C, and traces the outline by default.
+  name test is no judge for him (calibrated); Sam's eye is. **Sam's direction (replaces the lesson chat 13 offered):**
+  "I think it just needs to be able to draw the face shape from the reference a lot more intelligently": the face
+  tool reads the head's whole shape off the photos itself (temples, cheeks, jaw, chin, crown with the hair), for every
+  face, not a house outline from a few measures. That is a new build: design it at Opus HIGH (a chat of its own after
+  Sam's two jobs), judged on Walliams beside the Blessed head Sam knows.
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
   caricature. Andy and Kemi finished: do not change their front heads.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (TURNED) and `stubble`.
