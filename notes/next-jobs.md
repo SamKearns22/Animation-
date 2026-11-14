@@ -13,33 +13,28 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 16 of the face chain, 14 Nov)
-- **Rules that bite next:** 30 (Walliams is a repeated note: the photos' shape alone did not give his box, below), 86, 85.
-- **Done (chat 16):** the face tool now reads each head's whole shape off the front photos (face edge with ears cut,
-  hair-and-skin silhouette, crown, hairline, side hair) and draws the face outline, the swept hair's cap and sides and
-  bigger eyes from it (on by default; Andy and Kemi held pixel for pixel). Walliams measured. New check sheet
-  `notes/morning/walliams-head-shape-c16-wip.jpg` (not sent: not good enough yet). Kittest facehouse_head_from_photos
-  (fails on the old outline). Sent nothing to Sam this chat.
-- **Why it is not his head yet (rule 30):** drawn true to his photos, the head reads as a light bulb: wide temples,
-  the chin rounding in. The photos say his jaw is only a little wider than average (about as Kemi's, against Andy's);
-  Blessed's box (jaw as wide as the cheeks, face half width 0.50 against his photos' 0.44, the lower face stretched
-  1.15, mouth and eye spacing pushed) is a caricaturist's exaggeration the photos do not show. Pushing the outline
-  from the average face x3 barely moved it (his differences are small) and made the hair a mushroom (capped since).
-- **Next (chat 17, Opus high: still new building):** make the push work on the head's proportions, not its absolute
-  rows: (a) the face's width against its features (Blessed: big face, small features; P4's face_wide push is not yet
-  applied to the measured outline), (b) the jaw-to-cheek ratio and chin squareness pushed against the three faces'
-  middle, (c) the beard's edge counted as jaw. Then judge on Walliams beside Blessed with the compare sheet (one
-  extra critique round), carry the measured widths into the turned views (still the house outline's: unchecked),
-  and send Sam ONE sheet with chat 15's outfit sheet (`notes/morning/outfit-every-view-c15.jpg`, not yet sent).
-- **Seen, not fixed:** the side view's stubble edge ends in a straight step behind the jaw. Kittest
-  people_from_a_description fails on protest-tiers' early import (not this job's).
-- **Needs Sam:** nothing yet.
+## Face tool, where things stand (chat 17 of the face chain, 14 Nov)
+- **Rules that bite next:** 30 (Walliams is a repeated note: say why if Sam still can't see him), 85 (amber here), 86.
+- **Done (chat 17):** the push now works on the head's PROPORTIONS from the card (face width x1.08, jaw 0.98 of the
+  cheeks against the photos' 0.87, chin squarer), every feature scaled so the eyes sit apart as his photos say (the
+  pick's tiny eyes had pulled them in a sixth), ears on the drawn face's edge, the turned views on the measured widths.
+  Beard: the segmenter already counts it as face skin (jaw), nothing to add. New kittest facehouse_head_proportions
+  (fails on chat 16's head); the 4 face kittests and outfit_every_view pass; Andy and Kemi held pixel for pixel.
+  Sent Sam `notes/morning/walliams-head-c17.jpg` with chat 15's outfit sheet.
+- **Name test:** not named (Jenrick 12%), line-up 7th of 8; uncalibrated for him (the helper can't name his photo).
+- **Needs Sam:** Y/N on the new Walliams head; the hair's top (his photos' rounded dome, my pick, or Blessed's flat
+  box); the outfit sheet.
+- **Next (on Sam's answer; Opus medium: a round of notes):** his notes on the head; then Walliams into a people file.
+- **Seen, not fixed:** the side view's stubble edge steps behind the jaw; the mouth is the pick's (narrower than
+  Blessed's smirk). Kittest people_from_a_description fails on protest-tiers' early import (not this job's).
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin. "Please don't limit yourself on budget." Age
   lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (WHOLE HEAD).
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (WHOLE HEAD, PROPORTIONS).
 - **Open rule requests:** none.
-- **For Claude:** FH.measure_head/_head_rows/drawn_head/_swept_measured/_Squeeze/compare/STRONG, SHAPE_PUSH, SKIN_BIAS,
-  HEAD_EYES, EYE_OPEN_HEAD; pick key 'head', lines `head`, `shape_push`; `facehouse.py compare OUT walliams blessed:walliams`.
+- **For Claude:** FH.proportions/feature_scale/_cheek/_turn_widths, SHAPE_PUSH 3 (card z), PROP_ROWS, SQUARE;
+  turnhead.Person(widths=); `facehouse.py compare OUT walliams blessed:walliams --turns`.
+
+
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
 with its colours, then `## view: NAME` per camera (`camera: up, horizon, lens`: a level camera, Blessed's `Level`;

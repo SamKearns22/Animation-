@@ -2266,6 +2266,42 @@ def facehouse_head_from_photos():
 
 
 @test
+def facehouse_head_proportions():
+    """Face tool chat 17 (rule 30 on Walliams: chat 16's row push x1.3 left his head a light bulb, the narrow chin
+    under wide temples): the measured head's PROPORTIONS pushed from real faces' middle by the card. A broad-jawed
+    face (his card: jaw_wide z 2.5) draws a box: the jaw within 0.06 of the cheeks' width (the photos: 0.87 of
+    them), the chin squarer than measured, the face wider by its face_wide push; the eye centres sit against the
+    drawn cheeks as the pushed photos say (within 5%: the pick's tiny eyes had pulled them in a sixth); the turned
+    views go round on the drawn face's own widths. Fails on chat 16's push (jaw about 0.87, the eye centres about 0.8 of the target)."""
+    import json
+    import numpy as np
+    import facehouse as FH
+    kh = FH.person('walliams', 'detail', **FH.CAST['walliams'])['kit_house']
+    L = FH.face_layout(kh)
+    hd, hm = L['head'], kh['head_m']
+    r = [(v, s) for v, s, _ in hd['rows'] if s is not None]
+    w = lambda rows, v: float(np.interp(v, *zip(*rows)))                     # noqa: E731
+    m = [(v, s) for v, s in zip(hm['v'], hm['skin']) if s is not None]
+    jaw = w(r, 0.8) / FH._cheek(r)
+    square, square0 = w(r, 0.95) / w(r, 0.8), w(m, 0.95) / w(m, 0.8)
+    wide = FH._cheek(r) / FH._cheek(m)
+    a = json.load(open(os.path.join(HERE, 'likeness_average.json')))['neutral']
+    z = kh['card']
+    raw = {k: a['med'][k] + z.get(k, 0) * a['spread'][k] for k in ('face_wide', 'eye_size', 'eyes_apart')}
+    ecx = lambda q: q['eye_size'] * q['face_wide'] * (q['eyes_apart'] + 1) / 2   # noqa: E731
+    avg = FH._cheek([(v, x + float(np.interp(v, *zip(*FH.SKIN_BIAS)))) for v, x in zip(hm['v'], hm['avg'])
+                     if x is not None]) / ecx(a['med'])
+    want = FH._cheek(r) / (avg + FH.SHAPE_PUSH * (FH._cheek(m) / ecx(raw) - avg))
+    eyes = L['ecx'] / want
+    turned = FH._turn_widths(L)
+    tw = abs(w(turned, 0.8) - w(r, 0.8))
+    ok = jaw >= 0.94 and square > square0 + 0.05 and abs(wide - hd['prop']['wide']) < 0.01 and abs(eyes - 1) < 0.05 \
+        and tw < 0.01
+    return ok, (f'jaw {jaw:.2f} of the cheeks (photos {w(m, 0.8) / FH._cheek(m):.2f}); chin {square:.2f} of the jaw '
+                f'(photos {square0:.2f}); face x{wide:.3f}; eye centres {eyes:.2f} of the target; turned jaw off by {tw:.3f}')
+
+
+@test
 def kit_people_never_generic():
     """Face tool chat 14 (Sam, 14 Nov, Y: background people move onto the new three-quarter turned head): everyone a
     people file builds, crowds included, turns through turnhead (its 30-degree three-quarter), never views.py's old

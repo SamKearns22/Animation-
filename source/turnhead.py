@@ -516,12 +516,13 @@ class Person:
     hood: hooded outer eye corners; brow_thick; sheet: the cast entry the turnaround draws."""
 
     def __init__(self, who, layout, crown, pad, profile, skin, iris, brow_c, lip_c, mood, mouth, hair, face=None,
-                 over=None, hood=False, brow_thick=0.05, sheet=None):
+                 over=None, hood=False, brow_thick=0.05, sheet=None, widths=None):
         self.who, self.layout, self.crown, self.pad, self.profile = who, layout, crown, pad, profile
         self.lip_c = lip_c
         self.skin, self.iris, self.brow_c, self.mood, self.mouth, self.hair = skin, iris, brow_c, mood, mouth, hair
         self.face, self.over, self.hood, self.brow_thick, self.sheet = face, over, hood, brow_thick, sheet
-        self.built = {}
+        self.widths = widths                   # widths(L) -> [(v, half width)]: a face measured off photos (the
+        self.built = {}                        # face tool's whole head, chat 17), else the house outline's
 
     def build(self, sp):
         """(L, profile, widths): made the first time a shot needs this person turned, then kept."""
@@ -529,7 +530,8 @@ class Person:
         if key not in self.built:
             import patriots4_cast as P4
             L = self.layout(sp)
-            self.built[key] = (L, self.profile(L), half_widths(P4.outline_uv(L, self.pad, crown=self.crown)))
+            w = self.widths(L) if self.widths else half_widths(P4.outline_uv(L, self.pad, crown=self.crown))
+            self.built[key] = (L, self.profile(L), w)
         return self.built[key]
 
 
