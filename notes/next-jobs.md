@@ -28,9 +28,13 @@
   line-up 5th of 8 (Ribeiro-Addy first). Namer: "fairly generic"; braids and navy suit fit several MPs.
 - **Sam (chat 10):** "Kemi is right." Build on: "Yes, what is left to do on the kit"; asked whether the Walliams test
   is still required. Answered with the plan (kit list 1-5, Walliams as the end-to-end proof, my pick keep it).
-- **Needs Sam:** Y to the plan (or drop Walliams).
-- **Next (on his answer; Opus medium):** as he picks. Build: facehouse in people.py, turned views, kittest,
-  catalogue row; then Walliams (run `facehouse.py brows` on every new face).
+- **Sam: Y** to the plan: 1-5 then Walliams.
+- **Needs Sam:** nothing open.
+- **Next (chat 11, Opus medium):** 1 facehouse in the people kit (people.py: `head: house NAME` from a people file,
+  not only CAST); 2 turned views (three-quarter, side) for house heads; 3 facehouse whole-head kittest (Andy and
+  Kemi held); 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for films (look
+  'detail'). Then Walliams end to end from his photos (`facehouse.py brows` on him), blind name test. Andy and Kemi
+  stay pixel for pixel unless Sam says.
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
   into caricature. Andy is finished. Kemi: bigger plaits, small pupils, calm eyes, face from photos, ears hidden,
   mouth as it is, neckline kept.
