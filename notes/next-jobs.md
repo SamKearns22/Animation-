@@ -36,7 +36,15 @@
   behind) draws it; nothing outfit-like hides in a hair piece (Kemi's open collar sits in the braids code: make it the
   outfit's own choice, e.g. `outfit: suit ..., open collar`). A kittest draws each outfit from every view and fails
   when a view drops a piece the front has (rule 86).
-- **Needs Sam:** Y/N on the new Walliams head (the chain does not wait on it).
+- **Sam on the Walliams sheet (14 Nov, a N):** "I would recognise the original as Walliams a lot more ... Just
+  doesn't look like him. Very different head shape too." Why (chat 13's read): the face tool tuned the inner face to
+  likeness.py's measures off a smiling photo, but the head's OUTLINE is the house's from those measures: narrow
+  temples, long, tapering, where his (Blessed, Sam: "That's him") is a broad box, jaw as wide as the cheeks, long heavy
+  lower face (blessed_walliams.outline, LOW 1.15); the eyes also came out small and tired. Plan for chat 14 (after Sam's
+  two jobs): `facehouse.py trace walliams` (his outline off his photos, `shape`, as Kemi's) and check it against the
+  Blessed outline; bigger, livelier eyes as the Blessed head's; one sheet, Blessed vs new side by side, to Sam. The
+  name test is no judge for him (calibrated); Sam's eye is. Lesson to propose: the face tool's sheet puts a head Sam
+  already knows (any hand-made one) beside A, B, C, and traces the outline by default.
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
   caricature. Andy and Kemi finished: do not change their front heads.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (TURNED) and `stubble`.
