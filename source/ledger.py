@@ -130,7 +130,7 @@ SKIP = {'archive', 'next-jobs', '_template', 'sheets', 'ledger'}
 
 def film_of(transcript):
     """The film or job this chat worked on: the notes/NAME.md (or source/NAME*.py with a notes file) its own tool
-    calls named most."""
+    calls named most; any chat that names notes/morning-report.md is overnight work, recorded there (Sam, 14 Nov)."""
     names = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(ROOT, 'notes')) if f.endswith('.md')} - SKIP
     count = {}
     for raw in open(transcript, encoding='utf-8', errors='replace'):
@@ -141,6 +141,8 @@ def film_of(transcript):
             n = n if n in names else n.split('_')[0]
             if n in names:
                 count[n] = count.get(n, 0) + 1
+    if count.get('morning-report'):               # Sam, 14 Nov: overnight builds and tests are recorded apart from
+        return 'morning-report'                   # the films they test on (a Remakes bench was billed to Remakes)
     return max(count, key=count.get) if count else None
 
 

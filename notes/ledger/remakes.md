@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 14.5% of a week; spent 52.79% (+38.29); 20 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 14.5% of a week; spent 51.54% (+37.04); 19 chats, 0 rounds, 0 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -27,4 +27,3 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-11 | ABA1v3RU | app | sonnet | Remakes: final render (1.1x, new captions) |  | 0.57 | 0.97 | 0 | 0 |
 | 2026-11-11 | egMj1SuN | app | opus | Remakes: blue banner in last shot |  | 0.72 | 1.23 | 0 | 0 |
 | 2026-11-11 | dMz4dMHA | app | opus | Remakes: S13 banner fix, clip, then final |  | 0.4 | 0.69 | 0 | 0 |
-| 2026-11-14 | 373677a3 | est | opus | auto |  | 1.25 |  | 0 | 0 |
