@@ -13,28 +13,26 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 11 of the face chain, 14 Nov; handed over at amber)
-- **Rules that bite next:** 49 (the blind name test is the judge), 86 (every tool gets a kittest), 85.
-- **Done (chat 11):** 1 people kit: a people file can say `head: house NAME, hair PIECE, look LOOK` and `house: ...`
-  (`story/facetool-people.txt` holds Andy and Kemi). 2 turned views (three-quarter, side, both behinds) for house
-  heads; sheet `notes/morning/facehouse-turned-c11.jpg`, sent to Sam. 3 kittest facehouse_whole_head: Andy and Kemi
-  held pixel for pixel, the people file builds the same faces, no turned view falls back to the plain head. facehouse
-  and people kittests pass.
-- **Seen, not fixed (taste, for Sam's look):** from behind the neck reads long (the people kit's old turned heads do
-  the same); turned brows are turnhead's plain brows (no arch); Andy's dark top from behind is a plain shape.
-- **Next (chat 12, Opus medium):** 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for
+## Face tool, where things stand (chat 12 of the face chain, 14 Nov)
+- **Rules that bite next:** 49 (the blind name test is the judge), 86 (every tool gets a kittest), 30 (a repeated note).
+- **Done (chat 12):** Sam's note "our 3/4 front poses simply don't work and look gaunt and weird" fixed for every
+  turned head (turnhead): the three-quarter is now 30 degrees on a flat face plan, both eyes and brows show (the far
+  one narrowed, never under half). Why it failed: at 45 degrees the muzzle-shaped plan hid the far eye and hollowed
+  the far cheek. Side and behind unchanged pixel for pixel. Sheet `notes/morning/threequarter-c12.jpg` sent (Andy,
+  Kemi, Vance, before and now). Kittest turned_heads_for_anyone now holds side/behind and counts both 3/4 eyes.
+- **Seen, not fixed:** Kemi's near jaw has a small notch where the plaits meet the neck (there before); the far eye
+  sits close to the far outline (cartoon-normal; for Sam's look).
+- **Next (chat 13, Opus medium):** 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for
   films (look 'detail'), naming `turns` and the people lines. Then Walliams end to end from his photos
   (`references/blessed/likeness/` w06, w07, w01, w02 fronts, w09 three-quarter; facepick make, `facehouse.py brows`,
   his lines in the people file), blind name test, and send Sam a sheet of the Walliams head (with a Checks line).
-- **Needs Sam:** nothing open.
+- **Needs Sam:** his look at the three-quarter sheet (a no comes back as a note; the chain does not wait on it).
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
-  caricature. Andy and Kemi finished: do not change their heads.
+  caricature. Andy and Kemi finished: do not change their front heads.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (IN THE PEOPLE KIT, TURNED).
 - **Open rule requests:** none.
-- **For Claude:** people.py `_house`, head kind 'house', 'house' line -> house_kw; facehouse HAIR, TURN_PROF,
-  _swept_shapes/_swept_strokes (swept split, pixels unchanged), _turned_braids, _outside, _turn_person (crown rows
-  extended: the house outline's few rows notched the skull), install_turned, turns(); kittest held md5s are the
-  chat-10 heads. kittests allowlist gained facehouse.py (a kit, not a film).
+- **For Claude:** turnhead YAW['three'] 30, TurnFace.three, PLAN3/KFAR/KMIN (3/4 only); VANCE_TURNED_MD5 now yaws
+  90-180. Kittests critique_helper_kind and round_page fail on the main line before this change too (not face work).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
