@@ -343,8 +343,9 @@ def painter(desc, view, layer):
     if not chosen:
         return None
 
-    def paint(img, cam, t=0.0, *rest):
+    def paint(img, cam, t=0.0, feed=None):
         for p in chosen:
+            p.args['feed'] = feed                     # a TV's picture, passed in by the film (its `tv` view)
             p.draw(img, cam, t)
     return paint
 
@@ -421,6 +422,9 @@ def replicate(film, out_dir, views=None, frames=True):
         fr = [(t, lab) for t, lab in FRAMES[film] if ST.view_cam(BL.VIEW[BL.shot_of(t)])[0] in desc['views']]
         olds = [BL.frame_image(t) for t, _ in fr]
     install(desc, ST)
+    keep_tv = getattr(ST, 'tv', None)
+    if 'tv' in desc['views'] and keep_tv is not None:      # the film's back() calls tv(img, cam, t, feed) directly
+        ST.tv = ST.BACK['tv']
     try:
         new = {v: ST.painting(v) for v in views}
         news = [BL.frame_image(t) for t, _ in fr] if frames else []
@@ -429,6 +433,8 @@ def replicate(film, out_dir, views=None, frames=True):
             tab = getattr(ST, n)
             tab.clear()
             tab.update(d)
+        if keep_tv is not None:
+            ST.tv = keep_tv
     pairs = [(f'{v} (painting)', old[v], new[v]) for v in views] + \
             ([(f'{lab} {t:.1f}s (frame)', a, b) for (t, lab), a, b in zip(fr, olds, news)] if frames else [])
     font = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 22)

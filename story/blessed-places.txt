@@ -130,3 +130,97 @@ ground: depth 9.3 to 0, look tarmac (the forecourt)
 bollard: at -1.75 0, depth 8.6 (a bollard)
 bollard: at 1.75 0, depth 8.6 (a bollard)
 sign board: x -3.3 to -1.9, z 1.95 to 2.7, depth 7.4, look on posts, layer back, colour 250 250 248, line 2, text HM PRISON, text at 0.34, text width 1.036, text colour 30 30 34, text2 VISITS AND RECEPTION, text2 at 0.74, text2 width 1.148 (the prison sign: drawn behind everyone, off to the left of the crowd)
+
+# place: van  # (no photo reached us: a cubicle under a metre wide, white moulded plastic, cold and dim)
+colours: van white 196 202 208 | van dark 150 158 166 | van floor 84 88 96 | van frame 120 126 134
+
+## view: van
+camera: up 0.8, horizon 860, lens 1500
+people: brand 1.5
+room: x -0.475 to 0.475, z 0 to 1.625, depth 1.875, fill van white * 0.9, left van dark, right van dark * 0.92, back van white, ceiling van white * 0.8, line 2.6, ceiling line 2.4, order fill left right back ceiling (the cubicle)
+oval: at 0 1.825, depth 1.875, rx 0.15, ry 0.0325, colour 236 240 230 (the ceiling light)
+stroke: at -0.2375 1.6175, depth 1.875, to -0.2325 0.405, colour van white * 0.86, width 2 (a panel seam)
+stroke: at 0.2375 1.6175, depth 1.875, to 0.2425 0.405, colour van white * 0.86, width 2 (a panel seam)
+cctv sticker: x -0.3625 to -0.2625, z 1.4 to 1.5, depth 1.875, seed 63 (the CCTV sticker)
+vent: x -0.075 to 0.0875, z 1.1125 to 1.175, depth 1.875 (the air vent)
+stroke: at -0.45 1, depth 1.875, to -0.455 0.625, colour 150 154 160, width 7, core 1.2 (the grab rail)
+studs: x -0.4125 to 0.4125, z 0.0625 to 1.55, depth 1.875, points -0.4125 1.55; 0.4125 1.55; -0.4125 0.0625; 0.4125 0.0625, radius 0.00625, colour van dark (the rivets)
+street window: x 0.5 to 0.625, z 1 to 1.425, depth 1.875, slant 0.075 (the window, the street going by)
+moulded seat: x -0.4875 to 0.4875, z -0.075 to 0.4375, depth 1.875, top 0.225, flare 0.0375, seed 61 (the seat)
+room: x -0.44 to 0.44, z 0.06 to 0.06, depth 1.5, floor van floor, order floor (the floor)
+lines: x -0.44 to 0.44, z -0.58 to 0.02, depth 1.5, n 6, every 0.12, colour 70 74 80, width 2 (its ribs)
+wash: colour 30 40 70 60 (the dim cold light)
+glow: x 0.288 to 0.608, z 0.288 to 1.248, depth 1.2, sweep 0.56, strength 0.1, blur 120 (a street light passing)
+block: x -0.42 to -0.25, z 0.03 to 1.43, depth 0.75, colour van frame, line 3 (the door frame, left)
+block: x -0.42 to 0.42, z 1.25 to 1.43, depth 0.75, colour van frame, line 3 (the door frame, top)
+door leaf: x 0.235 to 0.42, z 0.03 to 1.43, depth 0.75, far 0.18 to 1.25 (the door)
+
+# place: prison  # (refs 12-14: cream painted brick, blue steel doors; the phone room and association off the landing)
+colours: cell 226 216 190 | cell dark 198 186 160 | cell floor 150 140 124 | door blue 52 92 150 | white 255 255 255 | tv green 70 100 84 | tv cream 196 186 160
+
+## view: cell
+camera: up 1.6, horizon 760, lens 1500
+people: brand 2.9, officer 3.1
+room: x -0.992 to 1.088, z 0 to 2.976, depth 4.8, fill cell, ceiling cell / white 0.25, left cell dark, right cell dark * 0.95, back cell, floor cell floor, ceiling line 2.2 (the cell)
+lines: x -0.992 to 1.088, z 0 to 2.976, depth 4.8, n 10, first 0.128, every 0.2816, inset 0.0192, drop 0.0064, colour cell dark, width 1.2 (the brick courses)
+brick marks: x -0.992 to 1.088, z 0 to 2.976, depth 4.8, colour cell, brick width 0.128, brick height 0.0704, n 26, line 0.8, seed 77 (the painted brick)
+block: x -0.992 to 1.088, z 0 to 0.224, depth 4.8, colour cell / door blue 0.35, line 1.6 (the dado)
+barred window: x -0.288 to 0.384, z 1.984 to 2.688, depth 4.8, seed 3 (the window)
+basin: x 0.704 to 1.056, z 0.768 to 0.96, depth 4.8 (the basin)
+toilet: at 0.8 0.192, depth 4.8 (the toilet)
+shelf: x -0.224 to 0.512, z 1.152 to 1.216, depth 4.8, leg 0.512 (the shelf-desk)
+pinboard: x -0.128 to 0.48, z 1.344 to 1.792, depth 4.8 (the pinboard)
+block: x 0.064 to 0.256, z 1.216 to 1.2864, depth 4.8, colour 240 240 236, line 1.2 (a plastic mug)
+prison bed: x -2.1 to -0.25, z -1 to 0.725, depth 3.75 (the bed)
+cell door: x 1.12 to 1.92, z -1.728 to 3.072, depth 4.8 (the open door, the landing)
+
+## view: cot_top  # (straight down on the cot: z up the screen, depth the height above the floor)
+camera: up 0, horizon 960, lens 1500
+people: brand 1.4
+block: x -1.05 to 1.05, z -1.8 to 1.7, depth 1.875, colour cell floor, line 0 (the floor)
+lines: x -1.05 to 1.05, z -1.8 to 1.7, depth 1.875, n 11, every 0.325, drop 0.0375, colour cell floor * 0.92, width 1.4 (its tiles)
+cot from above: x -0.38 to 0.38, z -1.02 to 0.68, depth 1.5 (the cot)
+blanket from above: x -0.304 to 0.304, z -0.816 to 0.544, depth 1.2, edge 0.84 (the blanket over him)
+
+## view: phone
+camera: up 1.6, horizon 600, lens 1500
+people: brand 1.2
+block: x -0.84 to 1.24, z -0.2 to 2.6, depth 1.5, colour cell, line 0 (the wall)
+brick marks: x -0.84 to 1.24, z -0.2 to 2.6, depth 1.5, colour cell, brick width 0.07, brick height 0.03, n 110, seed 88 (the painted brick)
+lines: x -0.84 to 1.24, z -0.2 to 2.58, depth 1.5, n 40, every 0.06, drop 0.002, colour cell dark, width 1.2 (the courses)
+block: x -0.84 to 1.24, z -0.2 to 0.7, depth 1.5, colour cell / door blue 0.4 (the dado)
+block: x -0.84 to 1.24, z 0.688 to 0.71, depth 1.5, colour cell / door blue 0.4 * 0.8, line 1.6 (its rail)
+block: x -0.84 to 1.24, z -0.2 to 0, depth 1.5, colour 120 112 100 (the floor)
+pin phone: x -0.36 to 0.29, z 0.75 to 1.57, depth 1.5, seed 5 (his phone)
+pin phone: x 0.3 to 0.95, z 0.75 to 1.57, depth 1.5, empty 1, seed 665 (the other phone)
+notice: x -0.68 to -0.53, z 1.13 to 1.43, depth 1.5, colour 250 250 246, text NOTICE, seed 70 (the notice notice)
+notice: x 0.318 to 0.448, z 1.13 to 1.35, depth 1.5, colour 250 236 120, text SAMARITANS, seed 71 (the samaritans notice)
+notice: x 0.3 to 0.47, z 1.71 to 1.93, depth 1.5, colour 246 246 246, text CALLS, seed 72 (the calls notice)
+notice: x 0.98 to 1.13, z 1.17 to 1.43, depth 1.5, colour 226 236 250, text VISITS, seed 73 (the visits notice)
+
+## view: tvroom
+camera: up 1.6, horizon 840, lens 1500
+people: brand 2.1, inmate1 5, inmate2 5.5
+block: x -3.36 to 3.36, z 0 to 6.56, depth 6, colour tv cream, line 0 (the wall)
+brick marks: x -3.36 to 3.36, z 0 to 6.56, depth 6, colour tv cream, brick width 0.24, brick height 0.104, n 50, line 0.9, seed 99 (the painted brick)
+block: x -3.36 to 3.36, z 0 to 0.96, depth 6, colour tv green, line 2.2 (the green dado)
+block: x -3.36 to 3.36, z 0.936 to 1, depth 6, colour tv green * 0.7, line 1.4 (its rail)
+window: x -2 to -1.6, z 3.44 to 3.92, depth 6, frame 90 96 104, glass 40 52 90, bars 3, line 2, seed 11 (a high barred window)
+window: x -1.48 to -1.08, z 3.44 to 3.92, depth 6, frame 90 96 104, glass 40 52 90, bars 3, line 2, seed 12 (a high barred window)
+window: x -0.96 to -0.56, z 3.44 to 3.92, depth 6, frame 90 96 104, glass 40 52 90, bars 3, line 2, seed 13 (a high barred window)
+noticeboard: x 0.64 to 1.88, z 2.4 to 3.36, depth 6, seed 21 (the noticeboard)
+caged clock: at -1.28 2.48, depth 6 (the clock)
+wired door: x -0.48 to 0.24, z 0 to 3.08, depth 6 (the door)
+block: x -3.36 to 3.36, z -4.64 to 0, depth 6, colour 104 98 90, line 0 (the lino)
+lines: x -3.36 to 3.36, z -4.64 to -0.08, depth 6, n 10, every 0.24, grow 0.15, colour 94 88 80, width 1.6 (its joints)
+pool table: x -0.64 to 1.624, z -0.576 to 0.608, depth 6 (the pool table)
+flicker: strength 1 (the TV's light on everyone)
+
+## view: tv
+camera: up 2.2, horizon 960, lens 1500
+block: x -0.84 to 0.84, z 0.76 to 3.56, depth 1.5, colour tv cream * 0.72, line 0 (the wall)
+brick marks: x -0.84 to 0.84, z 0.76 to 3.56, depth 1.5, colour tv cream * 0.72, brick width 0.06, brick height 0.026, n 70, line 0.9, seed 101 (the painted brick)
+block: x -0.84 to 0.84, z 0.76 to 1.46, depth 1.5, colour tv green * 0.72, line 2.2 (the green dado)
+block: x -0.84 to 0.84, z 1.454 to 1.47, depth 1.5, colour tv green * 0.5, line 1.4 (its rail)
+wall tv: x -0.47 to 0.47, z 1.86 to 2.42, depth 1.5, seed 7 (the TV)
+glow: x -0.64 to 0.64, z 1.66 to 2.56, depth 1.5, colour 150 180 255, strength 0.18, blur 200 (its glow on the wall)

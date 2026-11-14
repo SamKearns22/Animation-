@@ -1,24 +1,22 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/places-kit-c5b` (also on the main line).
+- **Newest work:** `claude/places-kit-c5c` (also on the main line).
 - **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
-- **Done (chat 5b, Opus high, ~2.0%; job ~4.2% of 8%, stop 12%):** court_bench, court_jury, court_dock 0.000%;
-  court_out 0.002%, gates 0.004% (new `places_outside.py`: sky, cloud, brick front, window grid, entrance, sign
-  board, small sign, ground, planted wall, steps, stair rail, tree, lamp post, bollard, pilaster, arched window,
-  arched gate); params may now be several words ('parapet colour'). 7 of 13 views done. Handed over on amber.
-- **Next: chat 5c, Opus HIGH, same job:** step 2's last six views (van, cell (+cell_cot), cot_top, phone, tvroom,
-  tv), then steps 3-5 below.
+- **Done (chat 5c, Opus high, ~1.9%; job ~6.1% of 8%, stop 12%):** step 2 finished: van, cell (+cell_cot), cot_top,
+  phone, tvroom, tv all 0.000% (paintings, quick check) from a new `places_rooms.py` (27 indoor pieces: room, lines,
+  brick marks, stroke, studs, oval, wash, glow, flicker; van, cell, cot, phone and association pieces; wall tv with a
+  feed). All 13 views are now described (12 views + cell_cot's camera; 162 piece lines). Handed over on amber.
+- **Next: chat 5d, Opus MEDIUM (building from a clear plan), same job:** steps 3-5 below (full replicate with
+  frames, set_boxes vs SET_BOXES, kittest, MAPs, catalogue row, page lines, sheet, morning report entry), then open
+  the moves chat (ranking item 7, Opus high) per `notes/overnight-run.md`.
 - **Needs Sam (morning report):** people kit picks 1-3 (unchanged).
 - **Read:** `notes/overnight-run.md` in full; this file's item 5 section only; MAPs of `places.py`,
-  `places_parts.py`, `places_outside.py`; `blessed_sets.py` only the painter being lifted (its MAP).
+  `places_parts.py`, `places_outside.py`, `places_rooms.py`.
 - **Open rule requests:** none.
-- **For Claude:** px to metres as before (x = (X - 540) * d / lens, z = up - (Y - horizon) * d / lens); keep every
-  ppm a 2^a*5^b number (lens 1500: depths 1.5, 1.875, 2.4, 3, 3.75, 6, 7.5, 12) and use `detail` = ref / ppm off
-  Blessed's depth, so k snaps to 1 (any k != 1 also changes line widths). Blessed's FRAME is redefined at line 1004
-  (court_out's windows are red-brown 130 60 40). Rooms: a `room` piece whose side walls run from the back wall's
-  corners to the canvas corners (-300, -400)/(1380, 2400) (`pc.screen(X, Y)` gives screen px in own units); the tv
-  view: `ST.back` calls `tv(..., feed)` directly, so replicate must patch `ST.tv` (and restore it) and pass the
-  feed through the painter to the piece. Quick check: scratch `cmp.py VIEW...` style (painting only, ~2 s) before
-  the full replicate (~3 min with frames: run it in the background).
+- **For Claude:** replicate now patches `ST.tv` (the film's back() calls it directly) and painters take `feed`; the
+  MAPs of places.py / places_parts.py do not yet name places_rooms (step 4). Quick check: a scratch script that
+  installs the description and compares `ST.painting(v, 0.7)` (~10 s for six views); the full replicate with frames
+  takes ~3 min (run it in the background). Points are px -> metres as before (`x = (X-540)/ppm`,
+  `z = up - (Y-horizon)/ppm`, every ppm 2^a*5^b, pieces' REF = the ppm they stand at, so k = 1).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
@@ -35,7 +33,7 @@ a turned (yawed) camera is not supported by these painted fronts (Blessed has no
 1. **Done:** core, courtroom pieces (panels, block, row, carpet, royal arms, clock, door, chair back, bench,
    microphone, witness box, book, window, panelled, notepad, water jug, papers, gavel block, gavel, glass screen);
    court_box 0.00%.
-2. **Done (5b):** court_bench, court_jury, court_dock, court_out, gates. **Next:** the rest. Was: court_bench, court_jury, court_dock (pieces exist; cameras: horizon so the wall's foot is z 0 at depth
+2. **Done (5b, 5c):** court_bench, court_jury, court_dock, court_out, gates (5b); van, cell, cot_top, phone, tvroom, tv (5c, `places_rooms.py`). Was: court_bench, court_jury, court_dock (pieces exist; cameras: horizon so the wall's foot is z 0 at depth
    6; dock: brand 2.5, guards 3.75), then court_out and gates (already in metres: `OUT`, `GATE` Levels; lift facade,
    entrance, sign band, planted wall, steps, rails, tree, lamp post, pavement, sky; gatehouse pieces), cell, cot_top,
    van (room walls run from the back wall's corners to the canvas corners (-300, -400)/(1380, 2400): a `room` piece
