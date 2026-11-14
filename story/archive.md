@@ -2,6 +2,9 @@
 
 All films were marked finished by Sam on 2 Nov. Each film's notes are in `notes/archive/NAME.md`.
 
+## Done (Sam, 14 Nov: posted and closed, no more work): "Blessed" (TikTok satire, Russell Brand's trial; notes in `notes/archive/blessed.md`)
+- `animations/blessed.mp4` (11.8 MB, 56.7 s). Posted by Sam, 14 Nov.
+
 
 
 ## Finished (Sam, 2 Nov): "Flying Whales" (working name; untitled; TikTok satire: a team of flying humpbacks smash a Jackdaw-style gas platform into the sea at dusk; `notes/flying-whales.md`)
