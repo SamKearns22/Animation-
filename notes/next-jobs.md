@@ -1,17 +1,17 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-run-chat-7-gm52bo` (also on the main line).
+- **Newest work:** `claude/overnight-c8-moves` (also on the main line).
 - **Rules that bite next:** 74 (the acting list: each block lands on its word), 86 (every tool gets a kittest), 85.
-- **Done (chat 7, Opus high, ~2.5%):** item 7's design and first part: `story/blessed-moves.txt` (43 lines) +
-  `source/acting.py` redraw Brand's six showman shots (arrive, oath x2, dock, gates, gates2: ~160 lines of code) with
-  every joint, mark, mood and gaze identical each 1/12 s, 17 frames 0.000%; `check` ties each block to its acting-list
-  word; kittest `moves_from_the_acting_list` (19 s; a 0.01 s nudge fails it); page lines; catalogue tile; sheet
-  `notes/morning/moves-kit-replicate.jpg`; morning report entry.
-- **Next: chat 8, Opus MEDIUM (building from this plan), item 7 part 2**: the plan below, steps 2-4 (stop 9% for the job).
-- **Needs Sam:** morning report picks (people kit 1-3; places kit 1-2; moves kit later).
-- **Read:** this file's "Item 7" section; `acting.py` MAP; `blessed.py` MAP and only the shot functions named.
+- **Done (chat 8, Opus medium, ~2.3%; amber hand-over):** item 7 step 2 and step 4's list check. 16 people-in-shots
+  redrawn identical (kittest each 1/12 s; 26 frames 0.000%); one-offs named as code; `check` reads the acting-list table.
+- **Next: chat 9, Sonnet (routine: sheet, filing):** step 3 (`acting.py replicate blessed notes/morning` ~10 min: 30
+  frames; copy the sheet to `notes/morning/moves-kit-replicate.jpg`; catalogue row done), step 4's cost line in the
+  morning report, then item 7's close (handover; next job per `notes/overnight-run.md`). Stop 9% (spent ~4.8%).
+- **Needs Sam:** morning report picks (people kit 1-3; places kit 1-2; moves: list words + kit Y/N).
+- **Read:** this file's "Item 7" section; `acting.py` MAP only.
 - **Open rule requests:** none.
-- **For Claude:** blessed.py's Bible is now `_bible(j, sp)` (pure move, frames 0 diff); page.py lists moves lines via
-  `acting.gist` (times dropped, spoken words kept; the page stays under 15% of the code: 11,910 of 80,993 tokens).
+- **For Claude:** blessed.py has `person(shot, who, t)` (pure move, frames 0 diff), `van_seat`, `_handset`; kit hooks
+  `gates2_head`, `guard_eyes`; check_list reads `notes/archive/blessed-handovers.md`. kittests: page.py excluded
+  from "films using the kit" (it was failing since chat 7).
 
 ## Item 7, moves from the acting list (ranking item 7; overnight run; 6%, stop 9%)
 Design (chat 7, 14 Nov): a film's moves are plain lines in `story/FILM-moves.txt` (language in `acting.py` MAP), one
@@ -26,15 +26,15 @@ on channels lean, nod, roll, dip, bob, head_dy (+ filmkit.shifts idle life), `ho
 `body` lines. The film side (`FILMS['blessed']`): its timeline, word_at, grounds, props, which functions the kit
 stands in for. Pose-level replication (joints compared) is the fast test; frames prove the drawing.
 1. **Done (chat 7):** core + Brand's arrive, oath, oath2, dock, gates, gates2 (exact).
-2. **Next (chat 8):** the rest of Blessed: `stance: seated` (van with VAN_YAW; dock guards; the judge: shifts + the
+2. **Done (chat 8):** the rest of Blessed: `stance: seated` (van with VAN_YAW; dock guards; the judge: shifts + the
    peer bumps on "Almighty God"/"blessed", mood sceptic), the jury (JY.draw: leave as code unless short), escort (Brand
    and the officer walking, the officer's grip: `holds` a grip prop; eye channels look, head_dx, gaze, lid, blink off),
    `stance: lying` for the cot (cot_pose via lying.py), phone (handset prop, cord), tvroom (dead still: STILL_OK) and
    push (the face change: moods by beat), gates2's background (Walliams' phases: drag, startled, plead, flail, grab,
    gone; guard1's head turn on line 7). Where a move is one-off and the library has nothing, it stays code and the
    block names it (`code: wal_pose`), per the ranking row.
-3. **Then:** `acting.py replicate blessed` over all shots (~6 min) + kittest extended; catalogue row text; report.
-4. **Then:** cost per film in the report (Blessed's moves stage was ~1.5% by the ranking list; target ~0.5%), and the
+3. **Next (chat 9):** `acting.py replicate blessed` over all shots (~6 min) + kittest extended; catalogue row text; report.
+4. **Half done (chat 8: check_list, 2 drifts found):** cost per film in the report (Blessed's moves stage was ~1.5% by the ranking list; target ~0.5%), and the
    check against the notes' acting-list table itself (each row has a block), not only the block's own `lands on`.
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)

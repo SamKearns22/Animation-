@@ -27,15 +27,30 @@ THE LANGUAGE (story/FILM-moves.txt; '#' starts a comment)
     body: MOVE [AMOUNT] ... from A over D                                   eased up, then held
     body: MOVE [AMOUNT] ... except from A to B[, rise R, fall F]            held, down only between A and B
     holds L|R: PROP [between A and B, ...]      a thing in the hand (the film's PROPS: beads, bible ...)
+    stance: seated | upright on SEAT, lap 0.4 | slump on SEAT [, yaw Y] [, with EXTRA]   (chat 8) the base pose:
+                                               moves.seated, or the sitting kit on the film's seat (lean and hands go
+                                               into its spec); EXTRA is something the film draws with it (van seat)
+    keys CH [from T]: V at T | V at T          a channel eased through values (first line for a channel sets it, a
+                                               second adds); 'from T': only after T. CH: lean, nod, roll, head_dy,
+                                               shoulders (sh/arms ride, lean follows), head_yaw, and the eyes: look,
+                                               gaze, lid, head_dx (moved onto the face)
+    idle: CH A sine P | CH A shifts SEED H0 H1 | CH A pulse P W [, quiet while MOVE]     life that is always on
+    face: ..., head down 8 | gaze V eased from A over D | blink off|shut from A to B | MOOD while MOVE above X
+    walk: ... facing -90, turns 0 at T, still bob from T, settle T to T (times allowed), sway 0
+    place NAME: hw+22, ... , world             x in head half-widths; 'world': placed after the lean (unleaned)
+    code: FN (why)                             a one-off move left in the film's code, named (jury, cot, Walliams)
+    ## SHOT: WHO ...                           a second person in a shot is the block 'SHOT.WHO' (oath.judge)
   TIMES: "word" (the block's line says it), a beat in the film's timeline (s2, hollow, bang), end (the line's last
     word), cut / start (the shot's), landed (the walk's end), min(A, B), +/- seconds; a bare number is seconds into
     the shot.
 
-    python3 source/acting.py check FILM             every block parses; each lands on a move within 0.3 s (rule 74)
+    python3 source/acting.py check FILM             every block parses; each lands on a move within 0.3 s (rule 74);
+                                                    every acting-list row in the film's notes has a block, landing
+                                                    on the row's word (check_list, chat 8)
     python3 source/acting.py replicate FILM OUT_DIR the finished film's frames beside the same frames with the kit's
                                                     moves swapped in (nothing in the film changes); one sheet, scores
 
-MAP  library 60 | parse 120 | times 205 | hands 240 | body 300 | pose 335 | films 410 | check, replicate 460 | main 540
+MAP  library 70 | parse 120 | times 410 | hands 455 | body 545 | pose 590 | films 840 | check, replicate 965 | main 1117
 """
 import math
 import os
@@ -81,7 +96,10 @@ BODY = {
     'preen': dict(nod=-1.2),
     'bask': dict(lean=(2.5, 81, 0.8, 1.4), roll=(5.0, 82, 0.7, 1.3)),   # weight shifts, basking (filmkit.shifts)
     'lean': dict(lean=1.0), 'roll': dict(roll=1.0), 'nod by': dict(nod=1.0),
+    'peer': dict(lean=10.0, roll=-9.0, nod=6.0),             # leans in and peers down at someone (the judge, note 36)
+    'head shake': dict(roll=3.5, head_dx=8.4),               # one slow shake of the head, dying away ('from A over D')
 }
+SHAKES = {'head shake'}                                      # moves that swing once each way over their 'over'
 CHANNELS = ('lean', 'nod', 'roll', 'dip', 'bob', 'head_dy')
 SWAY = 3.5                     # the swagger's head roll towards each planted foot (degrees)
 
@@ -123,8 +141,9 @@ def parse(text):
             shot, who, n, lands = m.groups()
             lands = lands.split(' (')[0].strip() if lands else None
             cur = dict(shot=shot, who=who, line=int(n) if n else None, lands=lands, hands=[], body=[], holds=[],
-                       face=None, walk=None, like=None, row=None)
-            out['shots'][shot] = cur
+                       face=None, walk=None, like=None, row=None,
+                       stance=None, keys=[], idle=[], code=None, at=None)
+            out['shots'][block_key(shot, who, out['shots'])] = cur
             continue
         key, _, rest = line.partition(':')
         key, rest = key.strip(), rest.strip()
@@ -154,8 +173,63 @@ def parse(text):
             cur['body'].append(_body(rest))
         elif key.startswith('holds'):
             cur['holds'].append(_holds(key.split()[1], rest))
+        elif key == 'stance':
+            cur['stance'] = _stance(rest)
+        elif key.startswith('keys'):
+            cur['keys'].append(_keyline(key, rest))
+        elif key == 'idle':
+            cur['idle'].append(_idle(rest))
+        elif key == 'code':
+            cur['code'] = rest
+        elif key == 'at':
+            cur['at'] = rest
         else:
             raise ValueError(f'moves: unknown line in block {cur["shot"]}: {line!r}')
+    return out
+
+
+def block_key(shot, who, shots=None):
+    """A shot's first block is keyed by the shot ('van'); anyone else in it by 'shot.who' ('oath.judge')."""
+    if shots is None or shot not in shots or shots[shot]['who'] == who:
+        return shot
+    return f'{shot}.{who}'
+
+
+def _stance(rest):
+    """'seated' | 'standing' | 'upright on SEAT, lap 0.4' | 'slump on SEAT' (SEAT: the film's seats)."""
+    parts = [p.strip() for p in rest.split(',')]
+    kind, _, seat = parts[0].partition(' on ')
+    d = dict(kind=kind.strip(), seat=seat.strip() or None, lap=None, extras=[])
+    for p in parts[1:]:
+        if p.startswith('with '):
+            d['extras'].append(p[5:].strip())               # the film draws something with the pose (a seat)
+            continue
+        k, v = p.split()
+        d[k] = float(v)
+    return d
+
+
+def _keyline(key, rest):
+    """'keys CH: V at T | V at T' (eased between, held outside); 'keys CH from T: ...' applies only after T."""
+    m = re.match(r'keys (\w+)(?: from (.+))?$', key)
+    ks = []
+    for k in rest.split('|'):
+        v, _, at = k.strip().partition(' at ')
+        ks.append((float(v), at.strip() or '0'))
+    return dict(ch=m.group(1), after=m.group(2), keys=ks)
+
+
+def _idle(rest):
+    """'CH A sine P' (a slow swing, P seconds a cycle), 'CH A shifts SEED H0 H1' (filmkit.shifts weight shifts),
+    'CH A pulse P W' (a half-sine W s long at the start of every P s: a sob, a breath); ', quiet while MOVE' scales
+    the line down while that body move is up."""
+    out = dict(ch=[], quiet=None)
+    for p in [p.strip() for p in rest.split(',')]:
+        if p.startswith('quiet while '):
+            out['quiet'] = p[len('quiet while '):]
+            continue
+        w = p.split()
+        out['ch'].append((w[0], float(w[1]), w[2], [float(x) for x in w[3:]]))
     return out
 
 
@@ -172,12 +246,14 @@ def _gait(rest):
 def _place(rest):
     parts = [p.strip() for p in rest.split(',')]
     m = re.match(r'^(?:([\d.]*)sw)?\s*([+-]?\s*[\d.]+)?$', parts[0].replace(' ', ''))
-    a = float(m.group(1) or 1.0) if 'sw' in parts[0] else 0.0
+    unit = 'hw' if 'hw' in parts[0] else 'sw'
+    m = re.match(r'^(?:([\d.]*)(?:sw|hw))?\s*([+-]?\s*[\d.]+)?$', parts[0].replace(' ', ''))
+    a = float(m.group(1) or 1.0) if unit in parts[0] else 0.0
     c = float(m.group(2)) if m.group(2) else 0.0
     pole = parts[3]
     if pole.startswith('pole'):
         pole = tuple(float(x) for x in pole.split()[1:])
-    return (a, c, float(parts[1]), float(parts[2]), pole, parts[4])
+    return (a, c, float(parts[1]), float(parts[2]), pole, parts[4], unit, 'world' in parts[5:])
 
 
 def _channels(rest):
@@ -194,11 +270,25 @@ def _channels(rest):
 def _face(rest):
     parts = [p.strip() for p in rest.split('|')]
     first = [x.strip() for x in parts[0].split(',')]
-    f = dict(mood=first[0], shades=None, gaze=[], later=[])
+    f = dict(mood=first[0], shades=None, gaze=[], later=[], eased=[], blink=[], down=None, ** {'while': []})
     for x in first[1:]:
         if x.startswith('shades'):
             f['shades'] = x.split()[1]
+        elif x.startswith('head down'):
+            f['down'] = float(x.split()[2])
     for p in parts[1:]:
+        m = re.match(r'gaze ([-\d.]+) eased from (.+) over ([\d.]+)$', p)
+        if m:
+            f['eased'].append((float(m.group(1)), m.group(2), float(m.group(3))))
+            continue
+        m = re.match(r'blink (off|shut) from (.+) to (.+)$', p)
+        if m:
+            f['blink'].append(m.groups())
+            continue
+        m = re.match(r'(\w+) while ([a-z ]+) above ([\d.]+)$', p)
+        if m:
+            f['while'].append((m.group(1), m.group(2), float(m.group(3))))
+            continue
         if p.startswith('gaze'):
             m = re.match(r'gaze ([-\d.]+) from (.+) to (.+)$', p)
             f['gaze'].append((float(m.group(1)), m.group(2), m.group(3)))
@@ -216,7 +306,14 @@ def _walk(rest):
     for p in [p.strip() for p in more.split(',') if p.strip()]:
         k, _, v = p.partition(' ')
         if k == 'settle' and ' to ' in v:
-            w['settle'] = tuple(float(x) for x in v.split(' to '))
+            w['settle'] = tuple(_num_or_time(x) for x in v.split(' to '))
+        elif k == 'facing':
+            w['facing'] = float(v)
+        elif k == 'turns':
+            a_, _, at = v.partition(' at ')
+            w['turn'] = (float(a_), at.strip())
+        elif k == 'still' and v.startswith('bob'):
+            w['still'], w['still_bob'] = v.replace('bob', '').replace('from', '').strip(), True
         elif k in ('over',):
             w[k] = v if v == 'auto' else float(v)
         elif k == 'still':
@@ -227,6 +324,13 @@ def _walk(rest):
         else:
             w[k] = float(v)
     return w
+
+
+def _num_or_time(x):
+    try:
+        return float(x)
+    except ValueError:
+        return x.strip()
 
 
 def _key(text):
@@ -328,6 +432,8 @@ class Clock:
             anchored[0] = True
             if n == 'end':
                 return repr(self.f['line_end'](self.b['line']))
+            if n.startswith('end') and n[3:].isdigit():
+                return repr(self.f['line_end'](int(n[3:])))
             if n == 'cut':
                 return repr(self.cut)
             if n == 'start':
@@ -395,7 +501,7 @@ def arm_keys(j, sp, side, t, keys):
     return _arm(j, side, tgt, pole, off, b[2] if u >= 0.5 else a[2])
 
 
-def place(name, side, sw, places):
+def place(name, side, sw, places, lean=0.0):
     """A named hand place for `side` as an arm spec. 'wide fist' = the place 'wide' with a fist."""
     shape = None
     if name not in places:
@@ -404,15 +510,28 @@ def place(name, side, sw, places):
             name, shape = base, shp
         else:
             raise KeyError(f'moves: no hand place {name!r} (the library: {", ".join(sorted(places))})')
-    a, c, y, z, pole, shp = places[name]
+    a, c, y, z, pole, shp = places[name][:6]
+    unit, world = places[name][6] if len(places[name]) > 6 else 'sw', len(places[name]) > 7 and places[name][7]
+    size = sw if isinstance(sw, dict) else dict(sw=sw, hw=70)
     sg = -1 if side == 'L' else 1
-    return (sg * (a * sw + c), y, z), pole, shape or shp
+    tgt = (sg * (a * size[unit] + c), y, z)
+    if world and lean:
+        tgt = unlean(tgt, lean)
+    return tgt, pole, shape or shp
 
 
-def hand_keys(keys, side, sw, clock, places):
+def unlean(p, lean):
+    """A point where it should end up AFTER the body leans `lean` degrees, in the torso frame before the lean."""
+    cs, sn = math.cos(math.radians(lean)), math.sin(math.radians(lean))
+    x, y, z = p
+    dy = y - V.HIP_Y
+    return x, V.HIP_Y + cs * dy - sn * z, sn * dy + cs * z
+
+
+def hand_keys(keys, side, sw, clock, places, lean=0.0):
     out = []
     for k in keys:
-        spec = None if k[1] == 'rest' else place(k[1], side, sw, places)
+        spec = None if k[1] == 'rest' else place(k[1], side, sw, places, lean)
         if k[0] == 'at':
             out.append((clock(k[2]), spec))
         else:
@@ -421,9 +540,13 @@ def hand_keys(keys, side, sw, clock, places):
 
 
 # =============================================== body ==============================================================
-def body_value(m, t, clock, table):
-    """{channel: value} of one body move at t."""
-    if m['curve'] == 'ramp':
+def body_value(m, t, clock, table, with_u=False):
+    """{channel: value} of one body move at t (and its 0..1 curve, with_u)."""
+    if m['curve'] == 'ramp' and m['move'] in SHAKES:
+        a = clock(m['a'])
+        w = ramp(t, a, a + m['over'])
+        u = math.sin(2 * math.pi * w) * (1 - w) if 0 < w < 1 else 0.0
+    elif m['curve'] == 'ramp':
         a = clock(m['a'])
         u = ease(ramp(t, a, a + m['over']))
     else:
@@ -444,7 +567,7 @@ def body_value(m, t, clock, table):
             out[c] = u * filmkit.shifts(t, seed=v[1], amount=v[0], hold=(v[2], v[3]))
         else:
             out[c] = v * u
-    return out
+    return (out, u) if with_u else out
 
 
 def dip(j, amt, splay=0.2):
@@ -469,8 +592,9 @@ def install_gaits(desc):
 
 def block_for(desc, shot):
     b = desc['shots'][shot]
+    own = b
     while b.get('like'):
-        b = dict(desc['shots'][b['like']], shot=shot)
+        b = dict(desc['shots'][b['like']], shot=own['shot'], who=own['who'], like=None)
     return b
 
 
@@ -480,74 +604,231 @@ def walk_time(w):
     return math.hypot(w['b'][0] - w['a'][0], w['b'][1] - w['a'][1]) / moves.speed(w['gait'])
 
 
+EYES = ('look', 'gaze', 'lid', 'head_dx')            # channels the face draws (views.person reads them from sp)
+ALIAS = {'roll': 'head_roll'}
+
+
+def _keys_at(t, keys):
+    """A number eased between timed keys [(t, value)], held before the first and after the last (blessed._keys)."""
+    if t <= keys[0][0]:
+        return keys[0][1]
+    for (t0, a), (t1, b) in zip(keys, keys[1:]):
+        if t < t1:
+            return a + (b - a) * ease(ramp(t, t0, t1))
+    return keys[-1][1]
+
+
+def _idle_value(kind, amt, args, t, start):
+    if kind == 'sine':
+        return amt * math.sin(2 * math.pi * (t - start) / args[0])
+    if kind == 'pulse':
+        ph = ((t - start) % args[0]) / args[0]
+        w = args[1] / args[0]
+        return amt * math.sin(math.pi * min(1.0, ph / w)) if ph < w else 0.0
+    import filmkit
+    return filmkit.shifts(t, seed=int(args[0]), amount=amt, hold=(args[1], args[2]))
+
+
+def channels(b, clock, t, table):
+    """The block's channel values at t: (set, add, curve) -- `keys` lines set a channel (a second line for the same
+    channel adds to the first), idle and body moves add; `curve` is each body move's 0..1 (for 'quiet while')."""
+    put = {}
+    for kl in b['keys']:
+        if kl['after'] is not None and t < clock(kl['after']):
+            continue
+        v = _keys_at(t, [(clock(at), x) for x, at in kl['keys']])
+        c = ALIAS.get(kl['ch'], kl['ch'])
+        put[c] = put.get(c, 0.0) + v
+    curve, add = {}, {}
+    for m in b['body']:
+        vals, u = body_value(m, t, clock, table, with_u=True)
+        curve[m['move']] = max(curve.get(m['move'], 0.0), u)
+        for c, v in vals.items():
+            add[c] = add.get(c, 0.0) + v
+    for il in b['idle']:
+        q = 1 - curve.get(il['quiet'], 0.0) if il['quiet'] else 1.0
+        for c, amt, kind, args in il['ch']:
+            add[c] = add.get(c, 0.0) + q * _idle_value(kind, amt, args, t, clock.start)
+    return put, add, curve
+
+
+def _realize_seated(sp, b, film, places, put, add, t):
+    """The sitting kit's stances ('upright on SEAT', 'slump on SEAT'): lean and hands go into its spec."""
+    import sitting as SIT
+    st = b['stance']
+    seat = film['seats'][st['seat']]()
+    spec = (SIT.spec_upright if st['kind'] == 'upright' else SIT.spec_slump)(sp, seat)
+    for side, keys in b['hands']:
+        a, c, y, z, pole, shp = places[keys[0][1]][:6]
+        spec['arms'][side] = SIT.arm_free((c, y, z), pole if not isinstance(pole, str) else V.POLES[pole], shp)
+    if 'lean' in put or 'lean' in add:
+        spec = dict(spec, lean=put.pop('lean', spec.get('lean', 0.0)) + add.pop('lean', 0.0))
+    j = SIT.realize(sp, seat, spec)
+    if st.get('lap') is not None:
+        j['legs_over'] = {'L': st['lap'], 'R': st['lap']}
+    return j
+
+
 def pose(desc, film, shot, sp, t):
-    """(mark or None, yaw, joints) for the block of `shot` at film time t."""
+    """(mark or None, yaw, joints) for the block of `shot` (or 'shot.who') at film time t. Eye channels (look, gaze,
+    lid, head_dx) are left in the joints under those names for `person` to move onto the face."""
     b = block_for(desc, shot)
     places = dict(PLACES, **desc['places'])
     table = dict(BODY, **desc['body'])
     w = b['walk']
-    start = film['span'](shot)[0]
+    start = film['span'](b['shot'])[0]
     k = t - start
     mark, yaw = None, 0.0
+    st = b['stance'] or dict(kind='standing', seat=None, lap=None)
+    landed = start + walk_time(w) if w else None
+    clock = Clock(film, b, b['shot'], landed)
+    put, add, curve = channels(b, clock, t, table)
     if w:
         dur = walk_time(w)
         u = min(1.0, max(0.0, k / dur))
         mark = film['ground'](w['on'], w['a'][0] + (w['b'][0] - w['a'][0]) * u, w['a'][1] + (w['b'][1] - w['a'][1]) * u)
         g = moves.gait(sp, k + w['phase'], w['gait'])
-        s0, s1 = w['settle'] if isinstance(w['settle'], tuple) else (dur - w['settle'], dur + w['settle'])
+        if isinstance(w['settle'], tuple):
+            s0, s1 = (clock(x) - start if isinstance(x, str) else x for x in w['settle'])
+        else:
+            s0, s1 = dur - w['settle'], dur + w['settle']
         settle = ease(ramp(k, s0, s1))
         j = moves.mix_poses(g, V.standing(sp), settle)
-        still = float(w['still']) if w['still'] else s1
+        still = (clock(w['still']) - start) if w['still'] else s1
         if k >= still:
             j['bob'] = 0.0
-            j['lean'] = 0.0
-        rate = w.get('sway_rate') or moves.GAITS[w['gait']]['sps']          # towards each planted foot
-        j['head_roll'] = w['sway'] * math.sin(math.pi * rate * (k + w['phase'])) * (1 - settle)
+            if not w.get('still_bob'):
+                j['lean'] = 0.0
+        if w['sway']:
+            rate = w.get('sway_rate') or moves.GAITS[w['gait']]['sps']      # towards each planted foot
+            j['head_roll'] = w['sway'] * math.sin(math.pi * rate * (k + w['phase'])) * (1 - settle)
         if w['chest']:
             j['lean'] = j.get('lean', 0.0) - w['chest'] * (1 - settle)
-        landed = start + dur
+        yaw = w.get('facing', 0.0)
+        if w.get('turn') and t >= clock(w['turn'][1]):
+            yaw = w['turn'][0]
+    elif st['kind'] in ('upright', 'slump'):
+        j = _realize_seated(sp, b, film, places, put, add, t)
+    elif st['kind'] == 'seated':
+        j = moves.seated(sp)
     else:
         j = V.standing(sp)
-        landed = None
-    clock = Clock(film, b, shot, landed)
-    sw = sp.get('shoulders', 150)
+    yaw = st.get('yaw', yaw) if not w else yaw
+    lean_now = put.get('lean', j.get('lean', 0.0)) + add.get('lean', 0.0)
+    size = dict(sw=sp.get('shoulders', 150), hw=sp.get('hw', 70))
     seen = set()
-    for side, keys in b['hands']:
-        ks = hand_keys(keys, side, sw, clock, places)
-        if side in seen and t < ks[0][0]:
-            continue                                  # a later line for this hand lies over the first from its start
-        seen.add(side)
-        arm_keys(j, sp, side, t, ks)
-    tot = {}
-    for m in b['body']:
-        for c, v in body_value(m, t, clock, table).items():
-            tot[c] = tot.get(c, 0.0) + v
-    dip(j, tot.pop('dip', 0.0))
-    if 'nod' in tot:
-        j['nod'] = tot.pop('nod')
-    if 'roll' in tot:
-        j['head_roll'] = j.get('head_roll', 0.0) + tot.pop('roll')
-    for c, v in tot.items():
+    if st['kind'] not in ('upright', 'slump'):
+        for side, keys in b['hands']:
+            ks = hand_keys(keys, side, size, clock, places, lean_now)
+            if side in seen and t < ks[0][0]:
+                continue                              # a later line for this hand lies over the first from its start
+            seen.add(side)
+            arm_keys(j, sp, side, t, ks)
+    for c, v in put.items():
+        if c == 'shoulders':
+            continue
+        j[c] = v
+    dip(j, add.pop('dip', 0.0))
+    if 'nod' in add:
+        j['nod'] = add.pop('nod') + put.get('nod', 0.0) if 'nod' in put else add.pop('nod')
+    if 'roll' in add:
+        j['head_roll'] = j.get('head_roll', 0.0) + add.pop('roll')
+    for c, v in add.items():
         j[c] = j.get(c, 0.0) + v
+    up = put.get('shoulders', 0.0) + add.get('shoulders', 0.0) if ('shoulders' in put or 'shoulders' in add) else None
+    if up is not None:                                # a shrug (-) or a slump out (+): the shoulders and arms ride
+        j.pop('shoulders', None)
+        for sd in 'LR':
+            for jt in ('sh', 'el', 'wr'):
+                x0, y0, z0 = j[jt + sd]
+                j[jt + sd] = (x0, y0 + up * (1.0 if jt == 'sh' else 0.6), z0)
+        j['lean'] = j.get('lean', 0.0) + max(0.0, up) * 0.25
     for side, name, spans in b['holds']:
         if not spans or any(clock(a) < t < clock(c) for a, c in spans):
             film['props'][name](j, side, sp)
+    for name in st.get('extras', ()):
+        film['extras'][name](j, sp, yaw)
+    j['_curve'] = curve
     return mark, yaw, j
 
 
-def face(desc, film, shot, t):
+def clock_for(film, b):
+    landed = film['span'](b['shot'])[0] + walk_time(b['walk']) if b['walk'] else None
+    return Clock(film, b, b['shot'], landed)
+
+
+def face(desc, film, shot, t, curve=None):
     """(mood, shades, gaze) of the block's face line at t."""
     b = block_for(desc, shot)
     f = b['face']
     if not f:
         return None
-    clock = Clock(film, b, shot)
+    clock = clock_for(film, b)
     mood = f['mood']
     for at, m in f['later']:
         if t >= clock(at):
             mood = m
+    for m, mv, x in f['while']:
+        if (curve or {}).get(mv, 0.0) > x:
+            mood = m
     gaze = sum(g for g, a, c in f['gaze'] if clock(a) <= t < clock(c))
+    for g, a, d in f['eased']:
+        gaze += g * ease(ramp(t, clock(a), clock(a) + d))
     return mood, f['shades'], gaze
+
+
+def face_extras(desc, film, key, t):
+    """The face line's other parts at t: {'blink': False/True, 'lid4': .., 'head_dy': +..} (blink off/shut windows,
+    the lids from a time, the head lowered)."""
+    b = block_for(desc, key)
+    f = b['face'] or {}
+    clock = clock_for(film, b)
+    out = {}
+    for how, a, c in f.get('blink', []):
+        if clock(a) < t < clock(c):
+            out['blink'] = how == 'shut'
+    if f.get('down'):
+        out['head_dy+'] = f['down']
+    return out
+
+
+def person(desc, film, key, t):
+    """(face and look, mark, yaw, joints, head yaw) for one block: what the film's person(shot, who, t) returns."""
+    b = block_for(desc, key)
+    shot, who = b['shot'], b['who']
+    sp0 = film['sp'](shot, who, t, 'neutral', None)              # the person's build (the face is set below)
+    mark, yaw, j = pose(desc, film, key, sp0, t)
+    curve = j.pop('_curve', {})
+    mood, shades, gaze = face(desc, film, key, t, curve) or ('neutral', None, 0.0)
+    sp = film['sp'](shot, who, t, mood, shades)
+    if b['face'] and (b['face']['gaze'] or b['face']['eased']):
+        sp['gaze_dy'] = gaze
+    ex = face_extras(desc, film, key, t)
+    if 'head_dy+' in ex:
+        sp['head_dy'] = sp.get('head_dy', 0) + ex.pop('head_dy+')
+    eyes = {c: j.pop(c) for c in EYES if c in j}
+    if 'look' in eyes:
+        sp['look'] = eyes['look']
+    if 'head_dx' in eyes:
+        sp['head_dx'] = sp.get('head_dx', 0.0) + eyes['head_dx']
+    if 'gaze' in eyes:
+        sp['gaze_dy'] = eyes['gaze']
+    if 'lid' in eyes:
+        sp['lid4'] = eyes['lid']
+    sp.update(ex)
+    hy = j.pop('head_yaw', None)
+    hy = hy if hy is not None and abs(hy) > 0.5 else None
+    if mark is None:
+        mark = film['mark'](shot, who)
+    return sp, mark, yaw, j, hy
+
+
+def channel(desc, film, key, ch, t):
+    """One channel of a block at t (a hook: gates2_head, guard_eyes)."""
+    b = block_for(desc, key)
+    landed = film['span'](b['shot'])[0] + walk_time(b['walk']) if b['walk'] else None
+    put, add, _ = channels(b, Clock(film, b, b['shot'], landed), t, dict(BODY, **desc['body']))
+    return put.get(ch, 0.0) + add.get(ch, 0.0)
 
 
 # =============================================== films =============================================================
@@ -561,18 +842,43 @@ def _blessed():
         module=BL, T=BL.T, word_at=BL.word_at, line_end=lambda n: BL.L[n]['end'],
         line_start=lambda n: BL.L[n]['start'],
         span=lambda shot: spans[shot],
-        ground=lambda on, x, d: ST._mark(getattr(ST, on), x, d),
+        ground=lambda on, x, d: BL._cell_mark(x, d) if on == 'CELL' else ST._mark(getattr(ST, on), x, d),
         props={'beads': lambda j, side, sp: grips.held(j, side, sp, BL._beads(sp)),
                'sleeve edge': lambda j, side, sp: grips.held(j, side, sp, BL._sleeve_edge(sp)),
-               'bible': lambda j, side, sp: BL._bible(j, sp)},
+               'bible': lambda j, side, sp: BL._bible(j, sp),
+               'handset': lambda j, side, sp: grips.held(j, side, sp, BL._handset(sp, side))},
+        extras={'van seat': lambda j, sp, yaw: BL.van_seat(j, sp)},
+        seats={'plastic': lambda: __import__('sitting').Seat('plastic', width=150)},
+        sp=lambda shot, who, t, mood, shades: _blessed_sp(BL, shot, who, t, mood, shades),
+        mark=lambda shot, who: ST.STAGE[BL.VIEW[shot]][who],
+        # the film's person(shot, who, t) seam: the people the kit can stand in for there
+        people={('oath', 'judge'), ('oath2', 'judge'), ('dock', 'guard1'), ('dock', 'guard2'), ('van', 'brand'),
+                ('escort', 'brand'), ('escort', 'officer'), ('phone', 'brand'), ('tvroom', 'brand'), ('push', 'brand')},
+        # film functions that read one channel of a block: name -> (block, channel, None when |value| <= this)
+        acting_list='notes/archive/blessed-handovers.md',
+        hooks={'gates2_head': ('gates2', 'head_yaw', 0.5), 'guard_eyes': ('gates2.guard1', 'eyes', None)},
         # which film functions the kit stands in for: shot -> (function name, returns mark and yaw too)
         stands_in={'arrive': ('arrive', True), 'oath': ('oath', False), 'oath2': ('oath', False),
                    'dock': ('dock', False), 'gates': ('gates_wide', True), 'gates2': ('gates_close', True)})
 
 
+def _blessed_sp(BL, shot, who, t, mood, shades):
+    """A Blessed person's build and face for a mood (what brand_sp and the shots' dict(CAST, **face(..)) make)."""
+    if who == 'brand':
+        look = 'prison' if shot in ('van', 'escort', 'cot', 'phone', 'tvroom', 'tv', 'push') else 'trial'
+        return dict(BL.BC.LOOKS[look], head_life=BL.HEAD_LIFE['brand'], **BL.face('brand', t, mood, shades=shades))
+    if who == 'judge':
+        return dict(BL.BC.JUDGE, **BL.face('judge', t, mood))
+    if who in BL.GUARDS:
+        return dict(BL.GUARDS[who], **BL.face('officer', t, mood))
+    if who == 'officer':
+        return dict(BL.BC.OFFICER, **BL.face('officer', t, mood))
+    raise KeyError(f'moves: Blessed has no {who}')
+
+
 FILMS = {'blessed': _blessed}
-FRAMES = {'blessed': [1.0, 2.3, 2.9, 3.6, 4.1, 5.0, 6.6, 12.0, 14.2, 15.6, 16.8, 49.6, 50.3,
-                      51.6, 52.6, 53.5, 54.9]}
+FRAMES = {'blessed': [1.0, 2.3, 2.9, 3.6, 4.1, 5.0, 5.6, 6.6, 12.0, 12.6, 14.2, 15.6, 16.8, 18.5, 21.5, 23.9, 26.4,
+                      31.0, 34.6, 37.0, 46.2, 48.3, 49.6, 50.3, 51.6, 52.6, 53.5, 54.6, 54.9, 57.0]}
 
 
 def film_side(film):
@@ -599,6 +905,8 @@ def install(desc, film):
             if shot not in [s for s, _ in shots]:
                 shot = shots[0][0]
             mark, yaw, j = pose(desc, film, shot, sp, t)
+            j.pop('_curve', None)
+            j.pop('head_yaw', None)                       # read by the film's own head hook (gates2_head)
             return (mark, yaw, j) if shots[0][1] else j
         return stand_in
     for fn, shots in by_fn.items():
@@ -620,6 +928,25 @@ def install(desc, film):
             return face(desc, film, shot, t)[2]
         return old_gaze(t)
     BL.brand_mood, BL.oath_gaze = mood, gaze
+    served = {}
+    for key, b in desc['shots'].items():
+        if (b['shot'], b['who']) in film.get('people', ()) and not block_for(desc, key)['code']:
+            served[(b['shot'], b['who'])] = key
+    if served:
+        keep['person'] = old_person = BL.person
+
+        def person_in(shot, who, t):
+            key = served.get((shot, who))
+            return person(desc, film, key, t) if key else old_person(shot, who, t)
+        BL.person = person_in
+    for fn, (key, ch, floor) in film.get('hooks', {}).items():
+        if key in desc['shots'] and any(k['ch'] == ch for k in block_for(desc, key)['keys']):
+            keep[fn] = getattr(BL, fn)
+
+            def hook(t, key=key, ch=ch, floor=floor):
+                v = channel(desc, film, key, ch, t)
+                return (v if abs(v) > floor else None) if floor is not None else v
+            setattr(BL, fn, hook)
     return keep
 
 
@@ -638,13 +965,17 @@ def check(film_name):
     faults = []
     for shot in desc['shots']:
         b = block_for(desc, shot)
-        if shot not in film['stands_in'] and shot not in [s for s, _, _ in film['module'].SHOTS]:
+        if b['shot'] not in [s for s, _, _ in film['module'].SHOTS]:
             faults.append(f'{shot}: no such shot in the film')
             continue
+        if b['code']:
+            continue                                    # a one-off move left in the film's code, named by the block
         try:
-            landed = film['span'](shot)[0] + walk_time(b['walk']) if b['walk'] else None
-            clock = Clock(film, b, shot, landed)
-            times = []
+            landed = film['span'](b['shot'])[0] + walk_time(b['walk']) if b['walk'] else None
+            clock = Clock(film, b, b['shot'], landed)
+            times = [clock(at) for kl in b['keys'] for _, at in kl['keys']]
+            if b['face']:
+                times += [clock(at) for at, _ in b['face']['later']]
             for side, keys in b['hands']:
                 times += [k for k, _ in hand_keys(keys, side, 150, clock, dict(PLACES, **desc['places']))]
             for m in b['body']:
@@ -655,7 +986,7 @@ def check(film_name):
                 at = clock(b['lands'])
                 if not times or min(abs(x - at) for x in times) > 0.3:
                     faults.append(f'{shot}: nothing lands on {b["lands"]} ({at:.2f} s): the acting list says it should')
-            a, c = film['span'](shot)
+            a, c = film['span'](b['shot'])
             if b['line']:                                               # a line can run across a cut (the oath)
                 a, c = min(a, film['line_start'](b['line'])), max(c, film['line_end'](b['line']))
             for x in times:
@@ -663,6 +994,67 @@ def check(film_name):
                     faults.append(f'{shot}: a key at {x:.2f} s is far outside the shot ({a:.2f}-{c:.2f} s)')
         except Exception as e:                                          # noqa: BLE001  any reading fault, in words
             faults.append(f'{shot}: does not read ({e})')
+    return faults
+
+
+ROW_ID = re.compile(r'^\s*"?(\d+(?: cont\.)?|\([^)]*\)|\w+)')
+
+
+def acting_rows(path):
+    """The acting-list table in a film's notes ('## The acting list ...'): [(id, who, lands on, row text)]."""
+    rows, on = [], False
+    for ln in open(path, encoding='utf-8'):
+        if ln.startswith('## '):
+            on = 'acting list' in ln.lower()
+            continue
+        if on and ln.startswith('|') and not ln.startswith('| line') and not ln.startswith('|---'):
+            cols = [c.strip() for c in ln.strip().strip('|').split('|')]
+            m = ROW_ID.match(cols[0])
+            rows.append((m.group(1) if m else cols[0], cols[1], cols[-1], cols[0]))
+    return rows
+
+
+def check_list(film_name):
+    """The acting list itself against the moves file (rule 74): every row with someone moving has a block (matched
+    by the row's first column: '1', 'montage', '(face change)'), and the row's 'lands on' word, when it is a word of
+    that block's line, has a move within 0.3 s of it. Faults in plain words."""
+    desc = load(film_name)
+    film = film_side(film_name)
+    install_gaits(desc)
+    faults = []
+    by_id = {}
+    for key in desc['shots']:
+        b = block_for(desc, key)
+        m = ROW_ID.match(b['row'] or '')
+        if m:
+            by_id.setdefault(m.group(1), []).append(b)
+    for rid, who, lands, text in acting_rows(os.path.join(ROOT, film['acting_list'])):
+        if who.lower() in ('none', ''):
+            continue                                     # nobody moves (the gavel: the bang is only heard)
+        blocks = by_id.get(rid, []) + by_id.get(rid + ' cont.', [])     # row 6 is gates and gates2 ('6 cont.')
+        if not blocks:
+            faults.append(f'acting list row {text[:40]!r}: no block in story/{film_name}-moves.txt')
+            continue
+        word = lands.strip('"').rstrip('!').strip()
+        best = None
+        for b in blocks:
+            if not b['line'] or b['code'] or not word:
+                continue
+            try:
+                at = film['word_at'](b['line'], word)
+            except Exception:                            # noqa: BLE001  not a word of the line (a beat: 'the bang')
+                continue
+            clock = clock_for(film, b)
+            times = [clock(x) for kl in b['keys'] for _, x in kl['keys']]
+            for side, keys in b['hands']:
+                times += [k for k, _ in hand_keys(keys, side, 150, clock, dict(PLACES, **desc['places']))]
+            times += [clock(m_['a']) for m_ in b['body']] + [clock(m_['b']) for m_ in b['body'] if m_.get('b')]
+            near = min((abs(x - at) for x in times), default=99)
+            if best is None or near < best[0]:
+                best = (near, at, b['shot'])
+        if best and best[0] > 0.3:
+            faults.append(f'acting list row {rid}: lands on "{word}" ({best[1]:.2f} s) but the {best[2]} block\'s '
+                          f'nearest move is {best[0]:.2f} s away (the list or the block is out of date)')
     return faults
 
 
@@ -722,7 +1114,7 @@ def main():
         print(__doc__.split('MAP  library')[0])
         return 2
     if a[0] == 'check':
-        f = check(a[1])
+        f = check(a[1]) + check_list(a[1])
         print('\n'.join(f) if f else f'{a[1]} moves: every block reads and lands on its word')
         return 1 if f else 0
     out, scores = replicate(a[1], a[2])

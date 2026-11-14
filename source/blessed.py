@@ -894,7 +894,12 @@ def van(sp, t):
     for sd, sg in (('L', -1), ('R', 1)):
         V.arm_to(j, sd, unlean(VAN_HANDS(sg), lean), 'down')
     j['lean'], j['head_dy'], j['nod'] = lean, 10.0, 2.2
-    j['hide_legs'], j['knee_round'] = {'L', 'R'}, True                    # note 16: the legs and seat are drawn here, before the jumper
+    return van_seat(j, sp)
+
+
+def van_seat(j, sp):
+    """Note 16: the legs and seat are drawn here, before the jumper (the moves kit's 'with van seat')."""
+    j['hide_legs'], j['knee_round'] = {'L', 'R'}, True
     j['pre'] = [lambda p, j2, view: _seat(p, j, sp, j2['yaw'])]
     return j
 
@@ -1651,6 +1656,63 @@ def _cam(view, t):
     return ST.view_cam(view)[1]
 
 
+def person(shot, who, t):
+    """(face and look, mark, yaw, joints, head yaw) of one person in a shot: the seam the moves kit stands in for
+    (acting.py; ranking item 7, chat 8). The judge, the dock guards, the van, the escort, the phone and the TV room."""
+    st = ST.STAGE.get(VIEW[shot], {})
+    if who == 'judge':
+        # note 36 (too static): on each "blessed" in the oath he leans in and peers down at Brand, brows knitted,
+        # holds it, then settles back; bigger weight shifts and head tilts between
+        peer = max(_bump(t, word_at(2, w) - 0.1, word_at(2, w) + 1.1, 0.25, 0.4)
+                   for w in ('Almighty God', 'blessed evidence', 'blessed truth'))
+        sj = dict(BC.JUDGE, **face('judge', t, 'sceptic' if peer > 0.4 else 'neutral'))
+        jj = moves.seated(sj)
+        jj['lean'] = jj.get('lean', 0.0) + filmkit.shifts(t, seed=41, amount=3.0, hold=(0.8, 1.5)) + 10 * peer
+        jj['head_roll'] = filmkit.shifts(t, seed=42, amount=5.0, hold=(0.9, 1.6)) * (1 - peer) - 9 * peer
+        jj['nod'] = filmkit.shifts(t, seed=43, amount=1.5, hold=(1.0, 1.8)) + 6.0 * peer
+        return sj, st['judge'], 0.0, jj, None
+    if who in GUARDS and shot == 'dock':
+        gs = dict(GUARDS[who], **face('officer', t, 'neutral'))
+        return gs, st[who], 0.0, moves.seated(gs), None
+    if shot == 'van':
+        sp = brand_sp(t, 'prison')
+        return dict(sp, gaze_dy=0.6), st['brand'], VAN_YAW, van(sp, t), None
+    if shot == 'escort' and who == 'officer':
+        so = dict(BC.OFFICER, **face('officer', t, 'neutral'))
+        om, oy, oj, _ = escort(so, t, 'officer')
+        return so, om, oy, oj, None
+    if shot == 'escort':
+        sp = brand_sp(t, 'prison')
+        bm, by, bj, bh = escort(sp, t)
+        sp['look'] = bj.pop('look', 0.0)                  # N11: the eyes and head look round the cell
+        sp['head_dx'] = sp.get('head_dx', 0.0) + bj.pop('head_dx', 0.0)
+        sp['gaze_dy'] = bj.pop('gaze', 0.0)
+        a = T['cell'] + ESC_STOP
+        lid = bj.pop('lid', 0.0)
+        if a + 0.15 < t < a + 3.15:
+            sp['blink'] = False                           # N11: no blink to swallow a held look
+        if t > a + 3.4:
+            sp['lid4'] = lid
+        return sp, bm, by, bj, bh
+    if shot == 'phone':
+        sp = brand_sp(t, 'prison')
+        dx, roll = phone_extra(t)
+        sp = dict(sp, head_dy=sp.get('head_dy', 0) + 8, gaze_dy=0.55, **dx)   # eyes open, looking down at the phone
+        j = handset_pose(sp)
+        j['lean'], j['head_roll'] = 5.0, roll
+        return sp, st['brand'], 0.0, j, None
+    if shot in ('tvroom', 'push'):
+        sp = brand_sp(t, 'prison')
+        if t < T['amazed']:
+            sp['blink'] = tv_blink(t)
+        if shot == 'tvroom':                       # brief 12: his eyes drift up to the screen
+            sp['gaze_dy'] = -0.7 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8))
+        else:
+            sp['gaze_dy'] = -0.7
+        return sp, st['brand'], 0.0, tv_pose(sp, t), None
+    raise KeyError(f'blessed.person: no {who} in {shot}')
+
+
 def draw_people(img, cam, shot, t):
     view = VIEW[shot]
     st = ST.STAGE.get(view, {})
@@ -1665,43 +1727,24 @@ def draw_people(img, cam, shot, t):
     elif shot == 'jury':
         JY.draw(img, cam, t, word_at(2, 'blessed evidence'), put_seated, face, ST)
     elif shot in ('oath', 'oath2'):
-        x, y, ppm = st['judge']
-        # note 36 (too static): on each "blessed" in the oath he leans in and peers down at Brand, brows knitted,
-        # holds it, then settles back; bigger weight shifts and head tilts between
-        peer = max(_bump(t, word_at(2, w) - 0.1, word_at(2, w) + 1.1, 0.25, 0.4)
-                   for w in ('Almighty God', 'blessed evidence', 'blessed truth'))
-        sj = dict(BC.JUDGE, **face('judge', t, 'sceptic' if peer > 0.4 else 'neutral'))
-        jj = moves.seated(sj)
-        jj['lean'] = jj.get('lean', 0.0) + filmkit.shifts(t, seed=41, amount=3.0, hold=(0.8, 1.5)) + 10 * peer
-        jj['head_roll'] = filmkit.shifts(t, seed=42, amount=5.0, hold=(0.9, 1.6)) * (1 - peer) - 9 * peer
-        jj['nod'] = filmkit.shifts(t, seed=43, amount=1.5, hold=(1.0, 1.8)) + 6.0 * peer
-        put_seated(img, cam, sj, (x, y, ppm), t, j=jj)
+        sj, jm, _, jj, _ = person(shot, 'judge', t)
+        put_seated(img, cam, sj, jm, t, j=jj)
         ST.mid(view, img, cam, t)
         sp = dict(brand_sp(t, 'stand'), gaze_dy=oath_gaze(t))
         put(img, cam, sp, st['brand'], t, yaw=0, j=oath(sp, t))   # notes 13/26: front-on, South Park style
     elif shot == 'dock':
         for g in ('guard1', 'guard2'):
-            put_seated(img, cam, dict(GUARDS[g], **face('officer', t, 'neutral')), st[g], t)
+            gs, gm, _, gj, _ = person(shot, g, t)
+            put_seated(img, cam, gs, gm, t, j=gj)
         ST.mid(view, img, cam, t)
         sp = brand_sp(t, 'dock')
         put(img, cam, sp, st['brand'], t, j=dock(sp, t))
     elif shot == 'van':
-        sp = brand_sp(t, 'prison')
-        put_seated(img, cam, dict(sp, gaze_dy=0.6), st['brand'], t, yaw=VAN_YAW, j=van(sp, t))   # note 16: Sam keeps the 3/4 pose; limbs fixed
+        sp, mark, yaw, j, _ = person(shot, 'brand', t)
+        put_seated(img, cam, sp, mark, t, yaw=yaw, j=j)   # note 16: Sam keeps the 3/4 pose; limbs fixed
     elif shot == 'escort':
-        sp = brand_sp(t, 'prison')
-        bm, by, bj, bh = escort(sp, t)
-        sp['look'] = bj.pop('look', 0.0)                  # N11: the eyes and head look round the cell
-        sp['head_dx'] = sp.get('head_dx', 0.0) + bj.pop('head_dx', 0.0)
-        sp['gaze_dy'] = bj.pop('gaze', 0.0)
-        a = T['cell'] + ESC_STOP
-        lid = bj.pop('lid', 0.0)
-        if a + 0.15 < t < a + 3.15:
-            sp['blink'] = False                           # N11: no blink to swallow a held look
-        if t > a + 3.4:
-            sp['lid4'] = lid
-        so = dict(BC.OFFICER, **face('officer', t, 'neutral'))
-        om, oy, oj, _ = escort(so, t, 'officer')
+        sp, bm, by, bj, bh = person(shot, 'brand', t)
+        so, om, oy, oj, _ = person(shot, 'officer', t)
         bs = _s(sp, bm[2])
         bpts = put(img, cam, sp, bm, t, by, bj, head_yaw=bh)
         bpts['_bob'] = bj.get('bob', 0.0)
@@ -1713,11 +1756,7 @@ def draw_people(img, cam, shot, t):
         sp = dict(brand_sp(t, 'prison'), **cot_face(t))
         put(img, cam, sp, ST.STAGE['cot_top']['brand'], t, 0.0, cot_pose(sp, t))   # note 18: flat on his back, from above
     elif shot == 'phone':
-        sp = brand_sp(t, 'prison')
-        dx, roll = phone_extra(t)
-        sp = dict(sp, head_dy=sp.get('head_dy', 0) + 8, gaze_dy=0.55, **dx)   # eyes open, looking down at the phone
-        j = handset_pose(sp)
-        j['lean'], j['head_roll'] = 5.0, roll
+        sp, _, _, j, _ = person(shot, 'brand', t)
         pts = put(img, cam, sp, st['brand'], t, yaw=0, j=j)   # notes 21/26: front-on
         phone_cord(img, cam, pts, st['brand'], sp)
         _log_hands('brand', pts, st['brand'], _s(sp, st['brand'][2]), -1)
@@ -1731,14 +1770,8 @@ def draw_people(img, cam, shot, t):
         pool_cue(img, cam, st['inmate2'], CAST['inmate2'], pts)
         put_kit(img, cam, dict(CAST['inmate1'], **face('inmate1', t, 'neutral', blink=True, mouth='rest')),
                 st['inmate1'], t, j=asleep_pose(CAST['inmate1'], t), tilt=TV_TILT)
-        sp = brand_sp(t, 'prison')
-        if t < T['amazed']:
-            sp['blink'] = tv_blink(t)
-        if shot == 'tvroom':                       # brief 12: his eyes drift up to the screen
-            sp['gaze_dy'] = -0.7 * _ease(_ramp(t, T['tvroom'] + 0.8, T['tvroom'] + 1.8))
-        else:
-            sp['gaze_dy'] = -0.7
-        put_kit(img, cam, sp, st['brand'], t, j=tv_pose(sp, t), tilt=TV_TILT)
+        sp, mark, _, j, _ = person(shot, 'brand', t)
+        put_kit(img, cam, sp, mark, t, j=j, tilt=TV_TILT)
     elif shot == 'gates':
         sp = brand_sp(t, 'trial')
         mark, yaw, j = gates_wide(sp, t)
@@ -1769,6 +1802,14 @@ def handset_pose(sp, side='L'):
     sg = 1 if side == 'R' else -1
     hw = sp.get('hw', 70)
     V.arm_to(j, side, (sg * (hw + 22), -96.0, 12.0), (1.0, 0.35, 0.6), 'grip')
+    import grips
+    return grips.held(j, side, sp, _handset(sp, side))
+
+
+def _handset(sp, side='L'):
+    """The handset itself, drawn beside the head at the ear (the moves kit's 'handset' prop)."""
+    sg = 1 if side == 'R' else -1
+    hw = sp.get('hw', 70)
     top, bot = (-176.0, -40.0), (-60.0, 24.0)
     ay, az = bot[0] - top[0], bot[1] - top[1]
     n = math.hypot(ay, az)
@@ -1778,8 +1819,7 @@ def handset_pose(sp, side='L'):
     def draw(p, j2):
         pts = [V.project(V.leaned(q, j2.get('lean', 0.0)), j2['yaw'])[0] for q in box]
         p.poly(V._hull(pts), (176, 182, 188), INK, 2.4)              # brushed steel, chunkier than a mobile
-    import grips
-    return grips.held(j, side, sp, draw)
+    return draw
 
 
 def phone_cord(img, cam, pts, mark, sp, side='L'):

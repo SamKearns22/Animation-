@@ -1820,8 +1820,9 @@ def places_from_a_description():
 
 @test
 def moves_from_the_acting_list():
-    """Ranking item 7 (overnight chat 7): the moves kit redraws Brand's six showman shots (arrival, oath x2, dock,
-    gates, gates2) from story/blessed-moves.txt: every joint, mark, mood and gaze the same as the film's code, each
+    """Ranking item 7 (overnight chats 7-8): the moves kit redraws Brand's six showman shots (arrival, oath x2, dock,
+    gates, gates2) and (chat 8) the judge, the dock guards, the van, the escort (Brand and the officer), the phone,
+    the TV room and the push, the gates2 head turns and the guard's eyes, from story/blessed-moves.txt: every joint, mark, mood and gaze the same as the film's code, each
     twelfth of a second; each block lands on its acting-list word; bad lines are refused."""
     import glob
     import acting as A
@@ -1836,7 +1837,7 @@ def moves_from_the_acting_list():
         except (ValueError, IndexError, AttributeError):
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in (
-             'acting.py', 'kittests.py', 'catalogue.py') and re.search(r'^\s*(import acting\b|from acting\b)',
+             'acting.py', 'kittests.py', 'catalogue.py', 'page.py') and re.search(r'^\s*(import acting\b|from acting\b)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
         bad.append(f'films using the kit before Sam approves it: {users}')
@@ -1869,7 +1870,60 @@ def moves_from_the_acting_list():
             worst = max(worst, d)
         if n:
             bad.append(f'{shot}: {n} drawings differ from the film (worst {worst:.3f} person units)')
-    return not bad, '; '.join(bad) or 'six shots, every drawing the same as the film; every block lands on its word'
+    # chat 8: everyone else through the film's person(shot, who, t) seam, and the head and eye hooks
+    def diff(a, b):
+        d = 0.0
+        for k, v in a.items():
+            if isinstance(v, tuple) and len(v) == 3 and all(isinstance(x, (int, float)) for x in v):
+                d = max(d, max(abs(x - y) for x, y in zip(v, b[k])))
+            elif isinstance(v, (int, float)) and not isinstance(v, bool):
+                d = max(d, abs(v - b.get(k, 0.0)))
+            elif isinstance(v, (bool, str)) and v != b.get(k):
+                d = max(d, 1.0)
+        return d
+    people = 0
+    for key, blk in desc['shots'].items():
+        b = A.block_for(desc, key)
+        if (b['shot'], b['who']) not in film['people'] or b['code']:
+            continue
+        people += 1
+        a, c = [(x, y) for s_, x, y in BL.SHOTS if s_ == b['shot']][0]
+        n, worst = 0, 0.0
+        for i in range(int((c - a) * 12)):
+            t = a + i / 12
+            o, k_ = BL.person(b['shot'], b['who'], t), A.person(desc, film, key, t)
+            d = max(diff(o[0], k_[0]), diff(o[3], k_[3]), max(abs(x - y) for x, y in zip(o[1], k_[1])),
+                    abs(o[2] - k_[2]), 0.0 if o[4] == k_[4] else 1.0)
+            n += d > 1e-6
+            worst = max(worst, d)
+        if n:
+            bad.append(f'{key}: {n} drawings differ from the film (worst {worst:.3f})')
+    for fn, (key, ch, floor) in film['hooks'].items():
+        a, c = [(x, y) for s_, x, y in BL.SHOTS if s_ == A.block_for(desc, key)['shot']][0]
+        for i in range(int((c - a) * 12)):
+            t = a + i / 12
+            v = A.channel(desc, film, key, ch, t)
+            v = (v if abs(v) > floor else None) if floor is not None else v
+            o = getattr(BL, fn)(t)
+            if (o is None) != (v is None) or (o is not None and abs(o - v) > 1e-6):
+                bad.append(f'{fn}: differs from the film at {t:.2f} s')
+                break
+    # the acting list itself (step 4): Blessed's list has drifted from its film in two rows (the dock's slump and
+    #   the face change come before / after the list's word); a row with no block is caught too
+    drift = A.check_list('blessed')
+    if len(drift) != 2 or not all(('row 3' in d or 'face change' in d) for d in drift):
+        bad.append(f'the acting-list check found {drift}')
+    keep = desc['shots'].pop('phone')
+    A.load = (lambda f, d=desc: d)
+    try:
+        if not any('no block' in d for d in A.check_list('blessed')):
+            bad.append('a list row with no block was not caught')
+    finally:
+        desc['shots']['phone'] = keep
+        import importlib
+        importlib.reload(A)
+    return not bad, '; '.join(bad) or (f'six showman shots and {people} more people, every drawing the same as the '
+                                       f'film; head and eye hooks the same; every block lands; the list check works')
 
 
 def main():

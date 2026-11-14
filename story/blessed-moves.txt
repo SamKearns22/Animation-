@@ -6,6 +6,9 @@
 # --- the library this film adds (the kit keeps the ones a second film uses)
 gait swagger: like walk, sps 1.8, step 0.5, swing 0.42, bend 0.25, lean -3
 gait stride: like swagger, sps 2.15, step 0.9, swing 0.45
+place van fists: 10, 400, 360, down, fist, world     # both fists together between the knees (unleaned: placed after the lean)
+place ear: hw+22, -96, 12, pole 1 0.35 0.6, grip     # a phone handset at the ear (moves.phone_at_ear's hold)
+place seat edge: 110, 420, 130, pole 0.6 0.3 -1.0, palm   # hands on a chair's edges beside the thighs
 
 ## arrive: brand, line 1, lands on "super"
 row: 1 "Yeah, I'm feeling blessed, mate..." | sincere showman | swaggers in, hand to heart, points on "mate", dips with arms flung open on "super", hand to heart and a small bow
@@ -39,6 +42,104 @@ both: clasp low at 0
 body: start from bang to bang +0.3, rise 0.03, fall 0.25
 body: slump from hollow over 1.0
 
+## oath: judge, line 2, lands on "Almighty God"
+row: (2, behind Brand) the judge | sceptic on each "blessed" | weight shifts and head tilts; on each "blessed" leans in and peers down at Brand, brows knitted, holds, settles back (note 36)
+stance: seated
+face: neutral | sceptic while peer above 0.4
+idle: lean 3 shifts 41 0.8 1.5
+idle: roll 5 shifts 42 0.9 1.6, quiet while peer
+idle: nod 1.5 shifts 43 1.0 1.8
+body: peer from "Almighty God" -0.1 to "Almighty God" +1.1, rise 0.25, fall 0.4
+body: peer from "blessed evidence" -0.1 to "blessed evidence" +1.1, rise 0.25, fall 0.4
+body: peer from "blessed truth" -0.1 to "blessed truth" +1.1, rise 0.25, fall 0.4
+
+## oath2: judge, line 2 (the same oath after the jury shot)
+like: oath.judge
+
+## jury: jury, line 2
+row: (2, the jury shot) the jurors | sceptical glances | a one-off crowd: stays code
+code: JY.draw (jury.py: each juror's own glance and shift; nothing in the library is a crowd)
+
+## dock: guard1
+row: (3) the dock guards | neutral | seated, still either side of him
+stance: seated
+face: neutral
+
+## dock: guard2
+like: dock.guard1
+
+## van: brand
+row: montage, van close-up | empty, numb | bent over himself, fists between his knees, swaying with the van
+stance: seated, yaw 35, with van seat   # Sam keeps this three-quarter pose (note 39)
+face: numb | gaze 0.6 from start to cut
+keys lean: 28 at 0
+keys head_dy: 10 at 0
+keys nod: 2.2 at 0
+idle: lean 1.5 sine 2.4               # the van's sway
+both: van fists at 0.3
+
+## escort: brand
+row: montage, cell walk with officer | numb | walked in by the arm; stops, turns to us; looks round (bed, window, door); a big sigh, head and eyes to the floor (N11)
+face: numb | blink off from landed +0.15 to landed +3.15
+walk: stroll from 1.0 2.1 to 0.15 2.35 on CELL, phase 0.31, settle landed -0.2 to landed +0.15, still bob from landed, sway 0, facing -90, turns 0 at landed +0.15
+keys look from landed +0.15: 0 at landed +0.15 | -1.6 at landed +0.4 | -1.6 at landed +1.1 | 0 at landed +1.35 | 0 at landed +2.05 | 1.6 at landed +2.3 | 1.6 at landed +2.9 | 0 at landed +3.15
+keys roll from landed +0.15: 0 at landed +0.15 | 15 at landed +0.4 | 15 at landed +1.1 | 0 at landed +1.35 | 0 at landed +2.05 | -15 at landed +2.3 | -15 at landed +2.9 | 0 at landed +3.15
+keys head_dx from landed +0.15: 0 at landed +0.15 | -28 at landed +0.4 | -28 at landed +1.1 | 0 at landed +1.35 | 0 at landed +2.05 | 28 at landed +2.3 | 28 at landed +2.9 | 0 at landed +3.15
+keys gaze from landed +0.15: 0 at landed +1.1 | -0.95 at landed +1.35 | -0.95 at landed +2.05 | 0 at landed +2.3 | 0 at landed +3.4 | 1.0 at landed +3.9
+keys lid from landed +3.4: 0.2 at landed +3.4 | 0.62 at landed +3.9
+keys nod from landed +0.15: 0 at landed +1.1 | -2.6 at landed +1.35 | -2.6 at landed +2.05 | 0 at landed +2.3 | 0 at landed +2.9 | -1.6 at landed +3.3 | -1.6 at landed +3.5 | 4.2 at landed +4.1
+keys shoulders from landed +0.15: 0 at landed +2.9 | -28 at landed +3.3 | -28 at landed +3.5 | 22 at landed +4.2
+
+## escort: officer
+row: montage, cell walk | neutral | walks him in, a hand on his arm until they stop, then lets go
+face: neutral
+walk: stroll from 1.45 1.85 to 0.6 2.1 on CELL, phase 0.62, settle landed -0.2 to landed +0.15, still bob from landed, sway 0, facing -90
+# the grip on Brand's arm stays code: officer_grip (it reads where Brand's arm is drawn; the touch check)
+
+## cot: brand
+row: montage, cot | weeping | flat on his back from above, a hand on his heaving chest, the other on his Bible; a sob every 1.4 s (notes 18, 41)
+code: cot_pose, cot_face (one-off: seen from straight above, the hand rides the heaving chest, the Bible box)
+
+## phone: brand, line 4, lands on "blessed right"
+row: 4 "Yeah, love..." | dejected, eyes down at the phone | handset at his ear; a slow shake of the head on "blessed right now"
+face: phone, head down 8 | gaze 0.55 from start to cut
+L: ear at 0
+holds L: handset
+keys lean: 5 at 0
+keys roll: 0 at 0
+body: head shake from "blessed right" over 1.0
+# the cord stays code: phone_cord (drawn from the hand to the wall box)
+
+## tvroom: brand, line 5
+row: (5, watching) Brand in the TV room | dead-eyed | dead still on a plastic chair; only his eyes drift up to the screen (notes 22, 43: STILL_OK)
+stance: upright on plastic, lap 0.4
+face: deadeyed | gaze -0.7 eased from 0.8 over 1.0 | blink off from start to cut
+both: seat edge at 0
+keys lean: -6 at 0                    # slouched back, as the push starts
+keys head_dy: 6 at 0
+keys nod: 0 at 0
+
+## tvroom: inmate1
+row: the man asleep in his chair behind on the left | asleep | slumped, head lolled, a slow breath
+code: asleep_pose (one-off: the sitting kit's slump with the hands limp on the thighs)
+
+## tvroom: inmate2
+row: the inmate at the pool table behind on the right | absorbed | bent over the rail, lining up a shot, practice strokes
+code: pool_pose, pool_cue (one-off: side-on over the table; the touch check)
+
+## tv: newsreader, line 5, lands on "early release scheme"
+row: 5 reporter | neutral | reads the news on the TV: the mouth and head life only
+code: ST.studio_feed (the TV set draws him; his mouth and headlife follow the voice)
+
+## push: brand, line 5, lands on amazed
+row: (face change) 5 "...early release scheme" | dejected to amazed to overjoyed | sits up on "amazed", leans in on "overjoyed"
+stance: upright on plastic, lap 0.4
+face: deadeyed | amazed from amazed | overjoyed from overjoyed | gaze -0.7 from start to cut | blink off from start to amazed | blink shut from 0.6 to 0.9
+both: seat edge at 0
+keys lean: -6 at amazed | 0 at amazed +0.6 | 0 at overjoyed | 6 at overjoyed +0.6
+keys head_dy: 6 at amazed | 0 at amazed +0.6
+keys nod: 0 at overjoyed | -1 at overjoyed +0.6
+
 ## gates: brand, line 6, lands on "Blessed!"
 row: 6 "Blessed! I'm feeling so blessed..." | full showman | swaggers out; arms flung up and open, palms out (the messiah) on "Blessed!"
 face: overjoyed, shades on
@@ -59,3 +160,14 @@ body: preen from "everybody" +0.9 to "everybody" +1.6, rise 0.2, fall 0.3
 body: nod from "everybody" +2.1 to "everybody" +2.5, rise 0.12, fall 0.2
 body: nod from "everybody" +2.9 to "everybody" +3.3, rise 0.12, fall 0.2
 body: bask from "everybody" +3.8 over 0.6
+keys head_yaw: 0 at "everybody" +1.7 | -28 at "everybody" +2.0 | -28 at "everybody" +2.6 | 24 at "everybody" +2.9 | 24 at "everybody" +3.5 | 0 at "everybody" +3.8
+keys head_yaw: 0 at max("everybody" +3.9, end7 -0.2) | 45 at max("everybody" +3.9, end7 -0.2) +0.3 | 45 at max("everybody" +3.9, end7 -0.2) +1.3 | 0 at max("everybody" +3.9, end7 -0.2) +1.6
+
+## gates2: guard1, line 7, lands on guard
+row: 7 "Walliams, you're going away..." | stern, flat | head stays front-on (N9); his eyes go to Walliams for the line, brows down, then back
+keys eyes: 0 at guard -0.45 | 1 at guard -0.2 | 1 at end +0.2 | 0 at end +0.45
+# his body and grip on Walliams stay code with Walliams: draw_walliams
+
+## gates2: walliams
+row: (behind him) Walliams | scared, double-take, pleading, desperate | dragged in, double-take, pleads, shoved back, grabs the frame, yanked in; the door slams (notes 30, 32, 48)
+code: wal_pose, wal_face, draw_walliams (one-off: a comic struggle; the beats are in blessed.py's DRAG..SLAM)
