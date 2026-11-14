@@ -690,14 +690,27 @@ def _phone(tile, face_px):
     return sm.resize((sm.width * 2, sm.height * 2), Image.NEAREST)
 
 
+def house_heads(out_dir, name, meta, th, look='detail'):
+    """A, B and C drawn the house way (facehouse, chat 13): what a film will draw, so Sam picks the head he will
+    see, not the traced test. The hair piece: braids where the photo's hair is braided, else swept (the two pieces
+    facehouse has); the house lines are the defaults until the person's lines name more."""
+    import facehouse as FH
+    lines = dict(hair='braids' if meta.get('braids') else 'swept')
+    out = {}
+    for v in 'ABC':
+        png = os.path.join(out_dir, f'{name}-{v}-house.png')
+        FH.draw(name, look, png, lines=lines, src=out_dir, variant=v)
+        out[v] = FH._fit(Image.open(png), th)
+    return out
+
+
 def sheet(out_dir, name):
     meta = json.load(open(os.path.join(out_dir, f'{name}-pick.json')))
     th = 420
     photos = [((_find(q, out_dir), n), 'photo') for q, n in map(_split, meta['fronts'])] + \
              [((_find(q, out_dir), n), '3/4') for q, n in map(_split, meta['tq'])]
     ptiles = [(_face_tile(p, n, th)[0], lab) for (p, n), lab in photos]
-    htiles = [(_head_tile(os.path.join(out_dir, f'{name}-{v}.png'), th,
-                          os.path.join(out_dir, f'{name}-A-clean-average.png')), v) for v in 'ABC']
+    htiles = [(house_heads(out_dir, name, meta, th)[v], v) for v in 'ABC']
     lines = []
     for v in 'ABC':
         h = meta['heads'][v]
@@ -717,7 +730,7 @@ def sheet(out_dir, name):
     H = 60 + th + 50 + th + 70 + small_h + 40 + 30 * len(lines) + 30
     img = Image.new('RGB', (W, H), (238, 236, 232))
     d = ImageDraw.Draw(img)
-    d.text((14, 14), f"{meta['title']}: pick A, B or C (photos on top, heads below, phone size underneath)",
+    d.text((14, 14), f"{meta['title']}: pick A, B or C (photos on top, the heads drawn the house way below, phone size underneath)",
            font=_font(28), fill=(20, 20, 20))
     x, y = 14, 60
     for t, lab in ptiles:
@@ -800,12 +813,15 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
         g['colr'] = list(col['rim'])
     beard = None
     bs = A['shapes'] or {}
-    if says.get('beard') == 'yes' or (says.get('beard') != 'no' and (bs.get('beard', 0) > 0.2 or bs.get('moustache', 0) > 0.4)):
-        import beardkit
-        try:
-            beard = _beard(name, F, out_dir)
+    hint = bs.get('beard', 0) > 0.2 or bs.get('moustache', 0) > 0.4
+    if says.get('beard') != 'no':                           # chat 13: Walliams' grey stubble read 0 on the face
+        try:                                                # finder's hint, so beardkit now looks every time and
+            beard = _beard(name, F, out_dir)                # keeps a beard over BEARD_MIN of the lower face
         except Exception as e:                                # the beard is drawn after; never stops the heads
             log(f'   beardkit skipped: {e}')
+        if beard and not (says.get('beard') == 'yes' or hint or beard.get('coverage', 0) >= BEARD_MIN):
+            beard = None
+        log(f'   beard: {"yes, coverage %.2f" % beard["coverage"] if beard else "no"}')
     ref = _devs(F[0][0]) if F[0][1] is None else {r['key']: r['dev'] for r in LK.analyse([F[0][0]], [F[0][1]])['diffs']}
     others = _others(name, fronts)
     shapes['braids'] = says.get('hair') == 'braids' or (says.get('hair') is None and braid_score(fr, shapes) > 0.45)
@@ -859,7 +875,7 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
         draw_head(meas, fr, shapes, col, png, extras=True, beard=beard, glasses=g)
         heads[v] = dict(what=what[v], measures=meas, **res)
     meta = dict(title=name, fronts=[_rel(a) for a in fronts], tq=[_rel(a) for a in tq], unsure=unsure, gain=gain, glasses=g,
-                beard=bool(beard), age=shapes.get('age'), eyes=shapes.get('eyes'), braids=bool(shapes['braids']), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
+                beard=_beard_word(beard), age=shapes.get('age'), eyes=shapes.get('eyes'), braids=bool(shapes['braids']), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
                 card={k: round(dev[k], 2) for k in KEYS})
     json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
     if lineup:
@@ -886,6 +902,19 @@ def _find(p, out_dir):
         if os.path.exists(c):
             return c
     raise SystemExit(f'facepick redraw: photo not found: {p}')
+
+
+BEARD_MIN = 0.2      # beardkit's coverage of the lower face that counts as a beard without the face finder's hint
+
+
+def _beard_word(beard):
+    """What the pick keeps of the beard for the house head (facehouse.stubble): its colour, how much of the lower
+    face it covers, and whether the moustache is its own colour; False for none."""
+    if not beard:
+        return False
+    rgb = lambda c: [int(round(255 * x)) for x in c]      # noqa: E731
+    return dict(colour=rgb(beard['base']), moustache=rgb(beard.get('moustache') or beard['base']),
+                coverage=round(float(beard.get('coverage', 0)), 3), word=beard.get('colour_word', ''))
 
 
 def _beard(name, F, out_dir):
