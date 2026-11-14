@@ -27,7 +27,12 @@
   navy suit to Ribeiro-Addy.
 - **Next (Opus medium, a fresh chat):** Sam's answer to the smile question; then facehouse in people.py, turned
   views, kittest, catalogue row; then Walliams.
-- **Needs Sam:** (1) her closed-mouth half smile: Y/N. (2) brows and neckline as on sheet c9b: Y keep / N.
+- **Sam on c9b:** "Neckline is so much better." "Her eye brows are really far from her eyes?" (a question: answered
+  with the plan, waits for his Y). Why: the face tool measured her brows high (brow_high 0.80 vs 0.59 average,
+  landmark 52, likely thrown by her arch), and chat 9's arch lifted them more; laid over her photo, the drawn brows
+  sit above her real ones. Plan: set the brows' height from the drawing laid over her front photos (tune brow_high
+  down until they sit on hers), peak where hers peaks; a close-up of the eyes with the photo beside it.
+- **Needs Sam:** (1) lower the brows as planned: Y/N. (2) her closed-mouth half smile: Y/N. Neckline: kept.
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
   into caricature. Andy is finished. Kemi: bigger plaits, small pupils, calm eyes, face from photos, ears hidden.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS); rule 49.
