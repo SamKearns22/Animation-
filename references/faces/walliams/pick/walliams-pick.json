@@ -1,0 +1,226 @@
+{
+ "title": "walliams",
+ "fronts": [
+  "references/blessed/likeness/w06-front-hedge-sam.jpg",
+  "references/blessed/likeness/w07-front-bowtie-sam.jpg",
+  "references/blessed/likeness/w01-front-guardian.jpg",
+  "references/blessed/likeness/w02-front-bbc2024.jpg"
+ ],
+ "tq": [
+  "references/blessed/likeness/w09-threequarter-guardian-sam.jpg"
+ ],
+ "unsure": [
+  "lip_low",
+  "nose_long",
+  "brow_slope"
+ ],
+ "gain": 1.6,
+ "glasses": null,
+ "beard": {
+  "colour": [
+   138,
+   139,
+   137
+  ],
+  "moustache": [
+   138,
+   139,
+   137
+  ],
+  "coverage": 0.285,
+  "word": "dark"
+ },
+ "age": {
+  "depth": {
+   "nasolabial": 0.0976,
+   "crows_feet": 0.0706,
+   "eye_bags": 0.1409,
+   "forehead": 0.0375,
+   "marionette": 0.0855,
+   "cheek_hollow": 0.0227
+  },
+  "strength": {
+   "nasolabial": 0.73,
+   "crows_feet": 0.82,
+   "eye_bags": 0.35,
+   "forehead": 0.17,
+   "marionette": 0.68,
+   "cheek_hollow": 0.05
+  },
+  "rank": {
+   "nasolabial": "10 of 13",
+   "crows_feet": "11 of 12",
+   "eye_bags": "11 of 13",
+   "forehead": "7 of 12",
+   "marionette": "10 of 13",
+   "cheek_hollow": "5 of 12"
+  },
+  "age": "55",
+  "age_factor": 0.98,
+  "fold_out": 0.145
+ },
+ "eyes": {
+  "scale": 1.0,
+  "dark": 0.69,
+  "sock": 0.77,
+  "iris_r": 1.22,
+  "pupil_r": 0.53,
+  "iris": [
+   93,
+   54,
+   44
+  ],
+  "shade": 0.0
+ },
+ "braids": false,
+ "colours": {
+  "skin": [
+   247,
+   199,
+   185
+  ],
+  "hair": [
+   71,
+   52,
+   39
+  ],
+  "hair2": [
+   98,
+   85,
+   73
+  ],
+  "lip": [
+   223,
+   129,
+   126
+  ],
+  "brow": [
+   114,
+   72,
+   53
+  ],
+  "cloth": [
+   45,
+   37,
+   33
+  ],
+  "rim": [
+   30,
+   28,
+   30
+  ]
+ },
+ "heads": {
+  "A": {
+   "what": "a thin lower lip, a short nose, brows rising to the outside (as the photo)",
+   "measures": {
+    "face_wide": 0.8925830557962015,
+    "jaw_wide": 0.9490166264412077,
+    "forehead_wide": 0.8455402531273094,
+    "eyes_apart": 1.6905061464549334,
+    "eye_size": 0.13219461573401503,
+    "eye_open": 0.08101381006782701,
+    "eye_tilt": -6.0398278589421945,
+    "brow_high": 0.6202924712721618,
+    "brow_slope": -10.485325389577934,
+    "nose_long": 0.37348048849336035,
+    "nose_wide": 0.6654535017378788,
+    "mouth_wide": 0.9530621809212892,
+    "lip_top": 0.024229780715963184,
+    "lip_low": -0.022240410302274527,
+    "philtrum": 0.2241994364820476,
+    "chin_long": 0.4912294369309577
+   },
+   "score": 85.0428446994911,
+   "good": 6,
+   "timid": 4,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  },
+  "B": {
+   "what": "lip low half as far, nose long half as far, brow slope half as far",
+   "measures": {
+    "face_wide": 0.8812286631659013,
+    "jaw_wide": 0.9348345150377306,
+    "forehead_wide": 0.8224239378263366,
+    "eyes_apart": 1.8801584907901854,
+    "eye_size": 0.12461516630311381,
+    "eye_open": 0.1309474772578848,
+    "eye_tilt": -1.0311449098445884,
+    "brow_high": 0.6346921216613249,
+    "brow_slope": -12.11347839259252,
+    "nose_long": 0.3726101059033014,
+    "nose_wide": 0.7474955182046461,
+    "mouth_wide": 0.6907827098077066,
+    "lip_top": 0.06076376942287564,
+    "lip_low": -0.035781605416950996,
+    "philtrum": 0.23769798222443886,
+    "chin_long": 0.5236925800521706
+   },
+   "score": 87.03101290882923,
+   "good": 6,
+   "timid": 4,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  },
+  "C": {
+   "what": "lip low further, nose long the other way, brow slope the other way",
+   "measures": {
+    "face_wide": 0.9512458471784814,
+    "jaw_wide": 0.8876968975613659,
+    "forehead_wide": 0.8886513627321752,
+    "eyes_apart": 1.5002775671194524,
+    "eye_size": 0.15563508042193772,
+    "eye_open": 0.29050803662228886,
+    "eye_tilt": 0.6382716824427104,
+    "brow_high": 0.5485370251523775,
+    "brow_slope": -14.620189396191755,
+    "nose_long": 0.4142252829317862,
+    "nose_wide": 0.5758240860552684,
+    "mouth_wide": 0.7348142556760413,
+    "lip_top": 0.05481249098691453,
+    "lip_low": 0.04402851993415044,
+    "philtrum": 0.16530928918715437,
+    "chin_long": 0.36136335571735445
+   },
+   "score": 81.13685590366875,
+   "good": 2,
+   "timid": 8,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  }
+ },
+ "card": {
+  "face_wide": 0.62,
+  "jaw_wide": 2.52,
+  "forehead_wide": -2.73,
+  "eyes_apart": 0.8,
+  "eye_size": -0.86,
+  "eye_open": -0.78,
+  "eye_tilt": -0.35,
+  "brow_high": -0.47,
+  "brow_slope": 0.84,
+  "nose_long": -0.93,
+  "nose_wide": -0.0,
+  "mouth_wide": -0.33,
+  "lip_top": -0.69,
+  "lip_low": -1.3,
+  "philtrum": 1.22,
+  "chin_long": 2.02
+ },
+ "picked": "B",
+ "picked_by": "Claude, face chat 13 (best likeness 87%); Sam to confirm on the sheet",
+ "brow": {
+  "high": 0.401,
+  "peak": 0.525,
+  "photos": [
+   "references/blessed/likeness/w06-front-hedge-sam.jpg",
+   "references/blessed/likeness/w07-front-bowtie-sam.jpg",
+   "references/blessed/likeness/w01-front-guardian.jpg",
+   "references/blessed/likeness/w02-front-bbc2024.jpg"
+  ]
+ }
+}

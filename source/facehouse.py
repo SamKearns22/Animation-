@@ -73,17 +73,25 @@ from midterminal_cast import blend               # noqa: E402
 from ed import open_curve                        # noqa: E402
 
 # ---------------------------------------------------------------------------------------------- reading the pick
-def pick_file(name):
-    return os.path.join(ROOT, 'references', 'faces', name, 'pick', f'{name}-pick.json')
+def pick_dir(name, src=None):
+    """Where a face's pick lives: Sam's pick (references/faces/NAME/pick), or `src`, facepick's own folder while he
+    has not picked yet (its sheet draws A, B and C the house way: chat 13)."""
+    return src or os.path.join(ROOT, 'references', 'faces', name, 'pick')
 
 
-def load(name):
-    """Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes."""
-    d = json.load(open(pick_file(name)))
-    h = d['heads'][d.get('picked', 'C')]
+def pick_file(name, src=None):
+    return os.path.join(pick_dir(name, src), f'{name}-pick.json')
+
+
+def load(name, src=None, variant=None):
+    """Sam's pick: its tuned measures, colours, glasses, age-line strengths and eyes; `variant` A, B or C draws that
+    head of facepick's three instead (from `src`, facepick's folder)."""
+    d = json.load(open(pick_file(name, src)))
+    v = variant or d.get('picked', 'C')
+    h = d['heads'][v]
     return dict(name=name, meas=dict(h['measures']), col=d['colours'], glasses=d.get('glasses'),
-                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=d.get('picked', 'C'), outline=d.get('outline'),
-                brow=d.get('brow'))
+                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=v, outline=d.get('outline'),
+                brow=d.get('brow'), src=src, beard=d.get('beard') or None)
 
 
 # ---------------------------------------------------------------------------------------------- the traced outline
@@ -296,13 +304,17 @@ LOOKS = {'house': dict(skin_k=0.65, age_min=0.5, age_k=0.6, sockets=False, fleck
 
 
 # ---------------------------------------------------------------------------------------------- the head
+EYE_OPEN_MIN = 0.2   # chat 13: Walliams' smiling photos tuned his eyes to 0.08 open: shut, at phone size a line.
+                     # The house eye never opens less (real faces' middle 0.31; Andy's 0.26 untouched)
 LID0 = 0.12          # the house's resting upper lid (P4.eyes' lid4) that the measured brow height was laid out against
 
 
 def face_layout(kh):
     """The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
     DRAWN (chat 10: a heavier lid, `lid`, lowers the lid line; the brows used to stay put, so the gap grew)."""
-    L = P4.layout(kh['meas'])
+    meas = dict(kh['meas'])
+    meas['eye_open'] = max(meas.get('eye_open', EYE_OPEN_MIN), EYE_OPEN_MIN)
+    L = P4.layout(meas)
     L['brow_y'] += L['eh'] / 1.8 * (kh.get('lid', LID0) - LID0)
     if (kh.get('brow') or {}).get('high'):                 # browcheck() measured the photos: the brows sit as hers
         L['brow_y'] += (_brow_gap(L, kh) - kh['brow']['high']) * L['ew']
@@ -359,6 +371,8 @@ def _head(img, p, sp, t, hx, hy):
              kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0), _peak(kh))
     P4.nose(p, f, L, skin)
     age_lines(p, f, L, skin, kh['age'], lk)
+    if kh.get('beard'):
+        stubble(p, f, L, skin, kh['beard'])
     fx, my = f(0.0, L['lip13'])
     m = kh.get('mouth')
     if m:                                                 # the person's own resting mouth (chat 8: the likeness push)
@@ -375,6 +389,40 @@ def _head(img, p, sp, t, hx, hy):
     if kh.get('glasses'):
         glasses(p, f, L, kh['glasses'])
     return fx
+
+
+def stubble(p, f, L, skin, bd, seed=61):
+    """A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
+    beard's colour the skin shows through along the jaw and round the chin, lighter where the photo's is grey-white,
+    a darker band over the lip and round the mouth; the cheeks above the jaw stay skin. How far it comes up and how
+    strong it is follow its measured coverage (beardkit: share of the lower face)."""
+    col = bd['colour']
+    k = float(np.clip(bd.get('coverage', 0.3) / 0.3, 0.6, 1.4))
+    mid = blend(skin, col, 0.3 * k)
+    light = blend(skin, tuple(min(255, c + 50) for c in col), 0.3 * k)
+    must = blend(skin, tuple(int(c * 0.8) for c in bd.get('moustache') or col), 0.42 * k)
+    fw, jw, ny, l0, l13, l17, mw, nw = L['fw'], L['jw'], L['nose_y'], L['lip0'], L['lip13'], L['lip17'], L['mw'], L['nw']
+    jw = min(jw, fw * 0.98)
+    o = face_outline(L)
+    n = len(o)
+    top_v = 0.66 - 0.06 * (k - 1)                         # a fuller beard comes further up the cheek
+    i0 = next(i for i, q in enumerate(o) if q[0] > 0 and q[1] > top_v)
+    i1 = next(i for i in range(n - 1, -1, -1) if o[i][0] < 0 and o[i][1] > top_v)
+    low = o[i0:i1 + 1]
+    uj = _face_u(L, top_v)
+    cheek = [(-uj + 0.01, top_v), (-uj * 0.84, top_v + 0.07), (-mw * 0.8, l13), (-mw * 0.62, ny + 0.04),
+             (0.0, ny + 0.035), (mw * 0.62, ny + 0.04), (mw * 0.8, l13), (uj * 0.84, top_v + 0.07), (uj - 0.01, top_v)]
+    p.poly(f.pts(low + AV.tufts(cheek, 0.01, 0.014, out=1.0, seed=seed)), mid, None)
+    chin = AV.tufts([(jw * 0.46, 0.8), (mw * 0.55, l17 + 0.06), (0.0, l17 + 0.075), (-mw * 0.55, l17 + 0.06),
+                     (-jw * 0.46, 0.8)], 0.012, 0.016, out=-1.0, seed=seed + 1)
+    p.poly(f.pts([q for q in low if abs(q[0]) < jw * 0.47 and q[1] > 0.78] + chin[::-1]), light, None)
+    mt = l0 - 0.03
+    mo = AV.tufts([(-mw * 0.6, l13 + 0.004), (-mw * 0.52, mt + 0.008), (-nw * 0.3, mt), (0.0, mt + 0.004),
+                   (nw * 0.3, mt), (mw * 0.52, mt + 0.008), (mw * 0.6, l13 + 0.004)], 0.006, 0.012, out=1.0, seed=seed + 2)
+    goat = [(mw * 0.6, l13 + 0.01), (mw * 0.3, l17 + 0.012), (mw * 0.14, l17 + 0.045), (0.0, l17 + 0.05),
+            (-mw * 0.14, l17 + 0.045), (-mw * 0.3, l17 + 0.012), (-mw * 0.6, l13 + 0.01)]
+    p.poly(f.pts(mo + AV.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), must, None)
+    p.poly(curve(f.pts(face_outline(L)), 4), None, INK, 2.6)   # the jaw's ink line back over the shade
 
 
 def lashes(p, f, L, sp, k, scale=1.0):
@@ -414,8 +462,13 @@ def _swept_shapes(L, kh, hc):
     lift = kh.get('quiff', 0.06)                           # how much higher the sweep's side rises
     grey = kh.get('grey') or blend(hc, (150, 146, 142), 0.35)
     t = max(L['fhw'], L['fw'] * 0.9) * 0.5
+    # chat 13: the clipped side's inner edge never stands off the face: on Walliams' narrower temples (0.026 off at
+    # the cheek top) a white sliver showed between them; laid onto the face's own edge where it stands off over
+    # 0.015 (Andy's sits 0.003 off: unchanged, held pixel for pixel)
+    off = (t - 0.005) - _face_u(L, 0.12) > 0.015
+    fu = lambda d, v: -min(t - d, _face_u(L, v) - 0.012) if off else d - t      # noqa: E731
     side = [(-c - 0.025, -0.22), (-c - 0.025, -0.1), (-e - 0.018, 0.06), (-e - 0.012, 0.26), (-e + 0.012, 0.29),
-            (-t + 0.005, 0.12), (-t + 0.03, -0.02), (-t + 0.06, -0.12), (-t + 0.08, -0.22)]
+            (fu(0.005, 0.12), 0.12), (fu(0.03, -0.02), -0.02), (fu(0.06, -0.12), -0.12), (fu(0.08, -0.22), -0.22)]
     sides = [[(-u, v) for u, v in side] if sgn > 0 else side for sgn in (-1, 1)]
     top = [(-c - 0.03, -0.04), (-c - 0.04, -0.17), (-c + 0.0, -0.3), (-c * 0.6, -0.4), (-c * 0.15, -0.45 - lift * 0.3),
            (c * 0.3, -0.46 - lift * 0.8), (c * 0.68, -0.41 - lift), (c + 0.01, -0.3 - lift * 0.6), (c + 0.045, -0.16),
@@ -456,7 +509,7 @@ def swept(p, f, L, hc, kh, lk):
 
 
 # ---------------------------------------------------------------------------------------------- hair: braids
-def pick_hair(name, picked='C'):
+def pick_hair(name, picked='C', src=None):
     """The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
     house cap was guessed, a head taller and narrower than the pick, and the head read long): its outer edge (half
     width at each row, both sides averaged) and the hairline over the forehead, in face units (facepick's canvas:
@@ -464,10 +517,10 @@ def pick_hair(name, picked='C'):
     from PIL import Image
     from scipy import ndimage
     import facepick as FP
-    png = os.path.join(ROOT, 'references', 'faces', name, 'pick', f'{name}-{picked}.png')
+    png = os.path.join(pick_dir(name, src), f'{name}-{picked}.png')
     if not os.path.exists(png):
         return None
-    col = json.load(open(pick_file(name)))['colours']
+    col = json.load(open(pick_file(name, src)))['colours']
     a = np.asarray(Image.open(png).convert('RGB')).astype(float)
     hair = (np.abs(a - col['hair']).sum(2) < np.abs(a - col['cloth']).sum(2)) & (a.max(2) < 80)
     hair = ndimage.binary_closing(hair, iterations=6) | hair
@@ -518,7 +571,7 @@ def _hair(L, kh):
     """The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head."""
     m = kh.get('_hair')
     if m is None:
-        m = kh['_hair'] = pick_hair(kh['name'], kh.get('picked', 'C')) or {}
+        m = kh['_hair'] = pick_hair(kh['name'], kh.get('picked', 'C'), kh.get('src')) or {}
     e = L['fw'] * 0.5
     rows = m.get('rows') or {}
     vs = sorted(v for v in rows if v >= -0.36)
@@ -957,10 +1010,12 @@ def caricature(meas, push=1.0, tune=None):
     return {k: (P4.AVG[k] + push * tune.get(k, 1.0) * (v - P4.AVG[k])) if k in P4.AVG else v for k, v in meas.items()}
 
 
-def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, **kw):
-    """The engine's person (views.person) for one picked face in one look, on the people kit's body."""
+def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, src=None,
+           variant=None, **kw):
+    """The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
+    `variant`: one of facepick's three heads before Sam picks (load())."""
     import people
-    pk = load(name)
+    pk = load(name, src, variant)
     lk = LOOKS[look]
     col = pk['col']
     skin = house_tone(col['skin'], lk['skin_k'])
@@ -992,6 +1047,9 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
     'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
                      brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
                      lid=0.24, shape=True),
+    'walliams': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None,   # chat 13: his
+                     mouth=dict(kind='smirk'), brow_up=[0.0, 0.025], push=1.1),   # smirk and cocked brow
+                                                                         # (Blessed's hand-made, Sam: "That's him")
 }
 
 
@@ -1003,14 +1061,15 @@ def install():
     return TC
 
 
-def draw(name, look, out, size=900):
-    """One head and shoulders, front on, on white: the people kit's person with the house head."""
+def draw(name, look, out, size=900, lines=None, src=None, variant=None):
+    """One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
+    person's house lines (CAST's for that face otherwise); `src`/`variant`: one of facepick's heads (load())."""
     from PIL import Image
     from satire_style import install_circle_hands
     B, V = PP.B, PP.AV.MC.V
     install_circle_hands(B)
     TC = install()
-    sp = person(name, look, **CAST[name])
+    sp = person(name, look, src=src, variant=variant, **(lines if lines is not None else CAST[name]))
     TC.HEADS[sp['who']] = house_head
     TC.TORSOS[sp['who']] = lambda *a: None
     B.SS = 1
