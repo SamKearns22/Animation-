@@ -10,7 +10,8 @@ at phone size and in the film's frame, and must name the person, then pick from 
 Pass: named unprompted in its top 3, AND picked first from the line-up. Calibrate on a head Sam already recognises
 (Brand passed, 12 Nov) before trusting a fail. The helper is started with prompt.txt (`pack` prints it; an Agent with only Read
 and Write); after it answers, it is sent lineup.txt (SendMessage; it sits in OUT_DIR-key, out of the helper's folder) for step 2, so the list cannot steer step 1. It
-must never see file names, notes or the film's text.
+must never see file names, notes or the film's text: the pack's pictures go in a neutral folder (review/np/RANDOM),
+whatever OUT_DIR is called (chat 7 of the face tool).
 
 Map: pack 30 | score 75
 """
@@ -27,7 +28,21 @@ def _tile(im, h):
     return im.resize((max(1, int(im.width * k)), h), Image.LANCZOS)
 
 
+def _neutral():
+    """The helper's folder: a random name under review/np (face tool chat 6: a pack folder named after the person
+    was in the paths the helper reads, and two namers said it nudged them). OUT_DIR keeps only the key's pointer."""
+    root = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'review', 'np')
+    return os.path.join(root, '%08x' % random.SystemRandom().getrandbits(32))
+
+
+def _helper_dir(out):
+    k = os.path.join(out.rstrip('/') + '-key', 'pack.json')
+    return json.load(open(k)).get('dir', out) if os.path.exists(k) else out
+
+
 def pack(out, big, frame=None, lineup=()):
+    key_out = out
+    out = _neutral()
     os.makedirs(out, exist_ok=True)
     head = Image.open(big).convert('RGB')
     small = _tile(head, 150)                              # about how big a 240 px head reads on a phone held normally
@@ -41,9 +56,9 @@ def pack(out, big, frame=None, lineup=()):
         files.append('b.jpg')
     names = list(lineup)
     random.Random(len(names)).shuffle(names)
-    key = out.rstrip('/') + '-key'                         # kept out of the helper's folder
+    key = key_out.rstrip('/') + '-key'                     # kept out of the helper's folder
     os.makedirs(key, exist_ok=True)
-    json.dump(dict(lineup=names), open(os.path.join(key, 'pack.json'), 'w'))
+    json.dump(dict(lineup=names, dir=out), open(os.path.join(key, 'pack.json'), 'w'))
     paths = ', '.join(os.path.abspath(os.path.join(out, f)) for f in files)
     ans = os.path.abspath(os.path.join(out, 'answer.json'))
     prompt = f"""You are a fresh pair of eyes for a cartoon studio. Look at these pictures and nothing else: {paths}.
@@ -56,11 +71,12 @@ Rewrite {ans} adding "ranking": [all names in order] and "what_would_make_it_obv
 JSON only."""
     open(os.path.join(key, 'lineup.txt'), 'w').write(step2)
     open(os.path.join(out, 'prompt.txt'), 'w').write(prompt)
+    print(f'(the helper reads {out}: a neutral name; the key is in {key})')
     return prompt
 
 
 def score(out, true_name):
-    a = json.load(open(os.path.join(out, 'answer.json')))
+    a = json.load(open(os.path.join(_helper_dir(out), 'answer.json')))
     low = true_name.lower().split()[-1]
     named = [i for i, (n, c) in enumerate(a['guesses'][:3]) if low in n.lower()]
     first = bool(a['ranking']) and low in a['ranking'][0].lower()

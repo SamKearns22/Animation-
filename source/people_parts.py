@@ -46,11 +46,11 @@ def _lift(hy):
     return hy - (HEAD_K - 1) * 172.0 * 0.85
 
 
-def _outline(L):
+def _outline(L, crown=-0.42):
     """P4.outline_uv without its fold: that list runs out to the upper-left temple and back and repeats the left
     temple point, so the smoothing folds the left forehead into a notch (Sam, 11 Nov: "strange ridges on the left
     side"). Here: once round, crown first, both temples alike."""
-    pts = P4.outline_uv(L, 0.4, crown=-0.42)[2:]               # from the crown: right side, chin, left side
+    pts = P4.outline_uv(L, 0.4, crown=crown)[2:]               # from the crown: right side, chin, left side
     out = []
     for q in pts:
         if not out or abs(q[0] - out[-1][0]) + abs(q[1] - out[-1][1]) > 1e-6:

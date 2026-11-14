@@ -22,14 +22,18 @@ TWO LOOKS (the taste call, chat 6's sheet):
 HAIR PIECES (named in the person's lines, `head: house NAME, hair PIECE`):
     swept    short and thick, brushed up and over to one side into a low quiff, the sides clipped and greying
              (Walliams' hand-made hair made general: its height, sweep and grey from the lines)
-    braids   long box braids from a middle parting: sleek over the crown (lines from the parting), the plaits
-             hanging in two curtains in front of the shoulders, each plait a strip with its chevrons
+    braids   long box braids (chat 7, Sam's K1/K2): plaits from the middle parting over the whole crown, down the
+             temples into two curtains past the shoulders, each plait one rope with chevrons from parting to tip; the
+             hair's outline and hairline MEASURED off the pick's picture (pick_hair), not guessed (the guessed cap
+             was a head too tall and narrow: the face itself was the pick's, the head read long); dark behind the
+             neck, the neck redrawn at the person's neck_w; `ears` in the lines draws the ears over the plaits
 
     python3 source/facehouse.py sheet OUT.jpg NAME [NAME ...]   the design sheet: photo, the pick, both house looks
     python3 source/facehouse.py head NAME LOOK OUT.png             one head-and-shoulders (for the name test)
 
-Map: reading the pick 50 | colours 80 | the head 100 | hair: swept 190, braids 235 | glasses 300 | age lines 320 |
-     the person 370 | sheet 400 | main 470
+Map: reading the pick 52 | colours 65 | the head 88 | hair: swept 142, braids 178 (measured hair 179, crown 255,
+     curtains 268, plaits 279, behind the neck 310, the piece 329) | glasses 357 | age lines 387 | the person 437 |
+     sheet 494 | main 569
 """
 import json
 import math
@@ -98,10 +102,10 @@ def _head(img, p, sp, t, hx, hy):
     hc = sp['hair_c']
     piece = kh['hair']
     if piece == 'braids':
-        braids_back(p, f, L, hc, lk)
+        braids_behind(p, f, L, hc, kh, sp)
     if piece != 'braids':                                 # her plaits cover the ears
         AV._ears(p, f, L, skin)
-    o = curve(f.pts(PP._outline(L)), 4)
+    o = curve(f.pts(PP._outline(L, -0.42 if piece != 'braids' else _hair(L, kh)['crown'] + 0.06)), 4)
     p.poly(o, skin, INK, 2.6)
     if lk['sockets'] and kh['eyes'].get('shade', 0) >= 0.1:
         sockets(p, f, L, skin, kh['eyes']['shade'])
@@ -116,7 +120,9 @@ def _head(img, p, sp, t, hx, hy):
     if piece == 'swept':
         swept(p, f, L, hc, kh, lk)
     elif piece == 'braids':
-        braids_front(p, f, L, hc, lk)
+        braids(p, f, L, hc, lk, kh)
+        if kh.get('ears'):                                # over the plaits, as the pick drew them (K1: her width)
+            AV._ears(p, f, L, skin)
     if kh.get('glasses'):
         glasses(p, f, L, kh['glasses'])
     return fx
@@ -171,80 +177,182 @@ def swept(p, f, L, hc, kh, lk):
 
 
 # ---------------------------------------------------------------------------------------------- hair: braids
-VS = np.linspace(-0.2, 1.95, 44)             # the curtain's rows, top to bottom (fractions of the face height)
+def pick_hair(name, picked='C'):
+    """The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
+    house cap was guessed, a head taller and narrower than the pick, and the head read long): its outer edge (half
+    width at each row, both sides averaged) and the hairline over the forehead, in face units (facepick's canvas:
+    Face(HX, HY), H face height, SC pixels per unit). None when there is no pick picture."""
+    from PIL import Image
+    from scipy import ndimage
+    import facepick as FP
+    png = os.path.join(ROOT, 'references', 'faces', name, 'pick', f'{name}-{picked}.png')
+    if not os.path.exists(png):
+        return None
+    col = json.load(open(pick_file(name)))['colours']
+    a = np.asarray(Image.open(png).convert('RGB')).astype(float)
+    hair = (np.abs(a - col['hair']).sum(2) < np.abs(a - col['cloth']).sum(2)) & (a.max(2) < 80)
+    hair = ndimage.binary_closing(hair, iterations=6) | hair
+    skin = np.abs(a - col['skin']).sum(2) < 60
+    H, cx, top = 172.0 * FP.SC, FP.HX * FP.SC, (FP.HY - 72) * FP.SC
+    rows = {}
+    for v in np.arange(-0.6, 1.1, 0.05):
+        y = int(top + v * H)
+        xs = np.nonzero(hair[y])[0] if 0 <= y < a.shape[0] else []
+        if len(xs):
+            rows[round(float(v), 2)] = ((cx - xs.min()) + (xs.max() - cx)) / 2 / H
+    ys = np.nonzero(hair[:, int(cx) - 6:int(cx) + 6].any(1))[0]
+    crown = (ys.min() - top) / H if len(ys) else -0.4
+    hl = []
+    for u in (0.0, 0.1, 0.2, 0.3):                          # the first skin under the hair, middle to temple
+        x = int(cx + u * H)
+        ys = np.nonzero(skin[:int(top + 0.3 * H), x])[0]
+        if len(ys):
+            hl.append((u, (ys.min() - top) / H))
+    return dict(crown=float(crown), rows=rows, hairline=hl)
 
 
-def _edges(L):
-    """A curtain's inner and outer edge (our right side; mirrored for the left) at each row VS: the inner edge hugs
-    the cheek and jaw (no gap between the plaits and the face), then leaves the neck clear under the chin; the outer
-    edge falls past the cheek and spreads a little over the shoulder."""
-    e, j = L['fw'] * 0.5, L['jw'] * 0.5
-    inner = np.interp(VS, [-0.2, 0.0, 0.45, 0.8, 1.0, 1.2, 1.95], [0.12, e - 0.06, e - 0.03, j * 0.95, e * 0.62,
-                                                                    e * 0.6, e * 0.66])
-    outer = np.interp(VS, [-0.2, 0.0, 0.4, 1.0, 1.5, 1.95], [0.22, e + 0.06, e + 0.1, e + 0.15, e + 0.19, e + 0.2])
-    return inner, outer
+def _face_u(L, v):
+    """The face outline's half width at row v (our right side)."""
+    r = [q for q in PP._outline(L) if q[0] >= 0]
+    r = sorted({round(q[1], 4): q for q in r}.values(), key=lambda q: q[1])
+    return float(np.interp(v, [q[1] for q in r], [q[0] for q in r]))
 
 
-def _curtain(L, sgn):
-    inner, outer = _edges(L)
-    pts = [(o, v) for o, v in zip(outer, VS)] + [(i, v) for i, v in zip(inner[::-1], VS[::-1])]
-    return [(sgn * u, v) for u, v in pts]
+VJ = 0.3                                     # where the crown's plaits become the curtains (about the eye line)
+VS = np.linspace(VJ, 1.95, 40)               # the curtain's rows, top to bottom (fractions of the face height)
 
 
-def braids_back(p, f, L, hc, lk):
-    """Behind the face: the hair over the back of the skull (a round dome) and both curtains of plaits."""
+def _hair(L, kh):
+    """The braids' shape: the measured hair (pick_hair) or, without one, a round cap; kept per head."""
+    m = kh.get('_hair')
+    if m is None:
+        m = kh['_hair'] = pick_hair(kh['name'], kh.get('picked', 'C')) or {}
     e = L['fw'] * 0.5
-    dome = [(-e - 0.06, 0.3), (-e - 0.07, -0.05), (-e + 0.0, -0.33), (-0.2, -0.46), (0.0, -0.5), (0.2, -0.46),
-            (e - 0.0, -0.33), (e + 0.07, -0.05), (e + 0.06, 0.3)]
-    p.poly(curve(f.pts(dome), 3), hc, INK, 2.4)
-    for sgn in (-1, 1):
-        p.poly(curve(f.pts(_curtain(L, sgn)), 2), hc, INK, 2.4)
-        _plaits(p, f, L, hc, lk, sgn)
+    rows = m.get('rows') or {}
+    vs = sorted(v for v in rows if v >= -0.36)
+    crown = m.get('crown', -0.4)
+    if vs:
+        out_v = [crown] + vs + [1.95]
+        last = rows[vs[-1]]
+        out_u = [0.0] + [max(rows[v], _face_u(L, v) + 0.06) if v >= 0 else rows[v] for v in vs] + [last + 0.04]
+    else:
+        out_v, out_u = [crown, -0.25, 0.0, 0.5, 1.95], [0.0, e * 0.85, e + 0.12, e + 0.18, e + 0.22]
+    hl = m.get('hairline') or [(0.0, -0.18), (0.2, -0.09), (0.3, -0.02)]
+    return dict(crown=crown, out_v=np.array(out_v), out_u=np.array(out_u), hairline=hl)
 
 
-def _plaits(p, f, L, hc, lk, sgn):
-    """Each plait a strip between two lines that follow the curtain's shape; chevrons stacked down each strip (the
-    test's chevrons, kept, at house size: fewer and bolder in the 'house' look); each plait ends in its own tip."""
-    inner, outer = _edges(L)
-    light = blend(hc, (160, 156, 160), 0.6 if lk['plait_step'] > 0.04 else 0.5)
-    sep = blend(hc, (0, 0, 0), 0.6)
-    n = 6 if lk['plait_step'] > 0.04 else 9
-    step = lk['plait_step']
-    X = lambda a, v: np.interp(v, VS, inner * (1 - a) + outer * a)          # noqa: E731
+def _out(hs, v):
+    return np.interp(v, hs['out_v'], hs['out_u'])
+
+
+def _resample(pts, n=60):
+    """A path resampled to n points evenly along its length."""
+    pts = np.array(pts, float)
+    d = np.r_[0, np.cumsum(np.hypot(*np.diff(pts, axis=0).T))]
+    t = np.linspace(0, d[-1], n)
+    return np.c_[np.interp(t, d, pts[:, 0]), np.interp(t, d, pts[:, 1])]
+
+
+def _crown_paths(L, hs):
+    """The crown's two edges (our right side), each from the parting to the curtain's top at VJ, resampled to the
+    same count so a plait is the band between them at a share a: inner (a = 0) along the hairline over the forehead
+    and down the temple just inside the face's edge; outer (a = 1) over the top of the head along the measured edge."""
+    hl = sorted(hs['hairline'])
+    (u0, v0), (ut, vt) = hl[0], hl[-1]                    # a rounded arch: level at the parting, as in the photos
+    inner = [(u, v0 + (vt - v0) * (u / ut) ** 1.6) for u in np.linspace(u0, ut, 8)]
+    for v in np.linspace(max(hl[-1][1], -0.05) + 0.06, VJ, 6):
+        inner.append((_face_u(L, v) - 0.006, v))
+    outer = [(0.0, hs["crown"])] + [(_out(hs, v), v) for v in np.linspace(hs["crown"] + 0.01, VJ, 30)]
+    return _resample(inner), _resample(outer)
+
+
+def _edges(L, hs):
+    """A curtain's inner and outer edge (our right side) at each row VS: the inner edge on the cheek and jaw's ink
+    line (the plaits meet the face with no gap, the face's width kept), then leaving the neck clear under the chin;
+    the outer edge the measured hair's (the curtain as wide as the pick's)."""
+    e, j = L['fw'] * 0.5, L['jw'] * 0.5
+    face = np.array([_face_u(L, min(v, 1.0)) - 0.006 for v in VS])
+    under = np.interp(VS, [0.82, 1.0, 1.2, 1.95], [j * 0.95, e * 0.76, e * 0.74, e * 0.8])   # the pick's neck gap
+    inner = np.where(VS < 0.82, face, np.maximum(under, face))
+    return inner, _out(hs, VS)
+
+
+def _band(p, f, sgn, P, light, sep, n, step, w):
+    """Plaits as bands across a strip whose edges are P(0) and P(1) (P(a) a path from top to bottom): a dark line
+    between plaits, chevrons stacked down each, pointing the way the plait runs."""
+    def at(arr, k):
+        i = np.arange(len(arr))
+        return np.interp(k, i, arr[:, 0]), np.interp(k, i, arr[:, 1])
+    body = blend(sep, light, 0.22)                         # each plait a rope a shade lighter than the gaps
     for i in range(n):
         a0, a1 = i / n, (i + 1) / n
+        g = 0.1 / n
+        p.poly(f.pts([(sgn * u, v) for u, v in P(a0 + g)] + [(sgn * u, v) for u, v in P(a1 - g)[::-1]]), body, None)
         if i:
-            p.line(f.pts([(sgn * X(a0, v), v) for v in np.arange(0.05, 1.93, 0.05)]), sep, 1.5)
-        v = 0.06 + (step * 0.5 if i % 2 else 0.0)
-        while v < 1.9:
-            xl, xr, xm = X(a0 + 0.12 / n, v), X(a1 - 0.12 / n, v), X((a0 + a1) / 2, v + step * 0.7)
-            p.line(f.pts([(sgn * xl, v), (sgn * xm, v + step * 0.7), (sgn * xr, v)]), light,
-                   1.7 if lk['plait_step'] > 0.04 else 1.3)
-            v += step
-        xl, xr, xm = X(a0, 1.95), X(a1, 1.95), X((a0 + a1) / 2, 1.99)
-        p.poly(f.pts([(sgn * xl, 1.94), (sgn * xm, 1.995), (sgn * xr, 1.94)]), hc, None)
-        p.line(f.pts([(sgn * xl, 1.95), (sgn * xm, 1.995), (sgn * xr, 1.95)]), INK, 1.8)
+            p.line(f.pts([(sgn * u, v) for u, v in P(a0)]), sep, 1.5)
+        mid = P((a0 + a1) / 2)
+        lo, hi = P(a0 + 0.12 / n), P(a1 - 0.12 / n)
+        d = np.r_[0, np.cumsum(np.hypot(*np.diff(mid, axis=0).T))]
+        s = step * 0.5 if i % 2 else 0.0
+        while s < d[-1] - step * 0.7:
+            k0 = np.interp(s, d, np.arange(len(d)))
+            k1 = np.interp(s + step * 0.7, d, np.arange(len(d)))
+            (xl, yl), (xm, ym), (xr, yr) = at(lo, k0), at(mid, k1), at(hi, k0)
+            p.line(f.pts([(sgn * xl, yl), (sgn * xm, ym), (sgn * xr, yr)]), light, w)
+            s += step
 
 
-def braids_front(p, f, L, hc, lk):
-    """Over the forehead: sleek hair from a middle parting, swept down to each side and back behind the ears into
-    the curtains; lines from the parting (the test's crown lines, kept)."""
-    e, c = L['fw'] * 0.5, L['fhw'] * 0.5
-    hl = -0.22                                            # a high, rounded hairline (her high forehead)
-    cap = [(-e - 0.05, 0.3), (-e - 0.055, 0.02), (-e + 0.01, -0.29), (-0.22, -0.44), (0.0, -0.48), (0.22, -0.44),
-           (e - 0.01, -0.29), (e + 0.055, 0.02), (e + 0.05, 0.3), (e - 0.05, 0.3), (e - 0.04, 0.14), (c * 0.95, -0.04),
-           (c * 0.62, hl + 0.06), (0.0, hl), (-c * 0.62, hl + 0.06), (-c * 0.95, -0.04), (-e + 0.04, 0.14),
-           (-e + 0.05, 0.3)]
-    p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
-    light = blend(hc, (150, 146, 150), 0.5)
-    p.line(f.pts([(0.0, -0.46), (0.0, hl - 0.03)]), blend(hc, (200, 170, 150), 0.35), 1.6)   # the parting
-    n = 5 if lk['plait_step'] > 0.04 else 7
+def _looks(hc, lk):
+    house = lk['plait_step'] > 0.04
+    return (blend(hc, (160, 156, 160), 0.6 if house else 0.5), blend(hc, (0, 0, 0), 0.6), 7 if house else 10,
+            lk['plait_step'], 1.7 if house else 1.3)
+
+
+def braids_behind(p, f, L, hc, kh, sp):
+    """Behind the face: the plaits that fall behind the neck (the photos: dark between the curtains, never the
+    background), then the neck again over them, down to the collar (the person's neck_w: Kemi's is the pick's,
+    wider than the house's)."""
+    hs = _hair(L, kh)
+    inner, _ = _edges(L, hs)
+    yc = -11.0                                              # the collar's top in the body's units (views.torso)
+    vc = (yc - f.top) / P4.H
+    rows = VS[VS <= vc]
+    right = [(u + 0.01, v) for u, v in zip(inner[:len(rows)], rows)] + [(inner[len(rows) - 1] + 0.01, vc)]
+    p.poly(f.pts(right + [(-u, v) for u, v in right[::-1]]), dk(hc, 0.8), None)
+    nw = sp.get('neck_w', 1.0)
+    skin = sp['skin']
+    p.poly([(f.cx - 32 * nw, -90), (f.cx + 32 * nw, -90), (f.cx + 35 * nw, yc), (f.cx - 35 * nw, yc)], skin, INK, 2.6)
+    p.poly([(f.cx - 32 * nw, -90), (f.cx + 32 * nw, -90), (f.cx + 30 * nw, -46), (f.cx, -34), (f.cx - 30 * nw, -46)],
+           dk(skin, 0.82), None)                            # the jaw's shadow on it (views' neck_shade)
+    p.line([(f.cx - 35 * nw, yc), (f.cx + 35 * nw, yc)], skin, 2.0)   # no ink line along the collar's top
+
+
+def braids(p, f, L, hc, lk, kh):
+    """Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
+    way she keeps her hair"): plaits from the middle parting over the whole crown, down the temples and on into two
+    curtains past the shoulders, each plait one band from the parting to its own tip. The crown is the band between
+    the hairline and the hair's measured edge; the curtains the band between the face's edge and the measured edge."""
+    hs = _hair(L, kh)
+    ci, co = _crown_paths(L, hs)
+    ti, to = _edges(L, hs)
+    inner = np.r_[ci, np.c_[ti, VS][1:]]
+    outer = np.r_[co, np.c_[to, VS][1:]]
+    light, sep, n, step, w = _looks(hc, lk)
+    tips = []
+    for i in range(n):
+        xl = inner[-1][0] * (1 - i / n) + outer[-1][0] * i / n
+        xr = inner[-1][0] * (1 - (i + 1) / n) + outer[-1][0] * (i + 1) / n
+        tips.append([(xl, 1.94), ((xl + xr) / 2, 1.995), (xr, 1.94)])
+    for sgn in (-1, 1):                                    # the tips first: the curtain's edge closes over them
+        for t in tips:
+            p.poly(f.pts([(sgn * u, v) for u, v in t]), hc, INK, 1.8)
+    right = [tuple(q) for q in outer] + [tuple(q) for q in inner[::-1]]
+    whole = right + [(-u, v) for u, v in right[::-1]]
+    p.poly(curve(f.pts(whole), 2), hc, INK, 2.4)
     for sgn in (-1, 1):
-        for k in range(n):
-            a = (k + 1) / (n + 1)
-            pts = [(sgn * 0.01, -0.45 + 0.02 * a), (sgn * (0.12 + 0.2 * a), -0.38 + 0.1 * a),
-                   (sgn * (c * 0.4 + (e - c * 0.4) * a + 0.02), hl + 0.03 + 0.28 * a ** 1.5)]
-            p.line(open_curve(f.pts(pts), 4), light, 1.3)
+        _band(p, f, sgn, lambda a: inner * (1 - a) + outer * a, light, sep, n, step, w)
+    p.line(f.pts([(0.0, hs['crown'] + 0.02), (0.0, inner[0][1] - 0.005)]),
+           blend(hc, (200, 170, 150), 0.45), 1.8)                   # the parting
 
 
 # ---------------------------------------------------------------------------------------------- glasses
@@ -338,6 +446,8 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     d = dict(who=name, name=name.title(), skin=skin, hair_style='none', hair_c=tuple(col['hair']), height=height,
              brows=tuple(col['brow']), lips=house_tone(col['lip'], lk['skin_k'] * 0.5), outfit=outfit[0],
              jacket=tuple(outfit[1]), sleeve=tuple(outfit[1]), shirt=shirt, tie=tie)
+    if 'neck_w' in kw:                                      # the person's lines: a wider neck (Kemi's, K1)
+        d['neck_w'] = kw.pop('neck_w')
     sp = people.person(d)
     sp['hair'] = 'bald'                                    # the engine's own hair: none (the head part draws it all)
     kh = dict(pk, look=look, hair=hair, lip=d['lips'], **kw)
@@ -351,7 +461,7 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold
     'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
                     hairline=-0.07, brow_thick=0.058),
     'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
-                     brow_thick=0.052),
+                     brow_thick=0.052, neck_w=1.2, ears=True),
 }
 
 
