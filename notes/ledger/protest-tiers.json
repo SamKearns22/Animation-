@@ -128,6 +128,18 @@
    "cost": 0.24,
    "src": "estimate",
    "sid": "session_01GznaAUrCHfVFrcxQDM8iTN"
+  },
+  {
+   "date": "2026-11-14",
+   "chat": "963eb0a4",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.35,
+   "src": "estimate",
+   "sid": "session_01GznaAT4cMgkLVr34R5mkDm"
   }
  ],
  "checks": {},
@@ -187,6 +199,6 @@
  ],
  "stage_alarm": {
   "1:cast": 1,
-  "2:cast": 1
+  "2:cast": 2
  }
 }
