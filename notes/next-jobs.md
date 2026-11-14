@@ -13,36 +13,27 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 14 of the face chain, 14 Nov)
-- **Rules that bite next:** 49 (the name test cannot judge Walliams: calibrated), 86, 30.
-- **Done (chat 14):** Walliams' stubble carried round his turned views (three-quarter, side; a sliver on the far jaw
-  from three-quarter behind; none from behind), drawn by the front's own `stubble` on the turned face, as Vance's
-  goatee. Andy and Kemi held pixel for pixel (front and turned rows unchanged). Kittest facehouse_beard_turns; the
-  face and turn kittests pass. Sheet sent: `notes/morning/walliams-turned-c14.jpg`. No notes from Sam on c13's sheet yet.
-- **Seen, not fixed:** side view: the stubble's top edge ends in a straight step behind the jaw (as the front's top
-  edge); his eyes read smaller and more tired than the Blessed head's.
-- **Next (chat 14, in hand):** Sam's two jobs below; then Sam's notes on the Walliams sheets, if any.
-- **Sam, 14 Nov (to chat 12), two jobs (chat 14 doing them):** (a) Y: background people on the generic head
-  (views.head_view) move onto the new three-quarter turned head. (b) "clothes remain consistent no matter the pose, as
-  that was the source of the Kemi problem": the outfit described once and every view (front, three-quarter, side,
-  behind) draws it; nothing outfit-like hides in a hair piece (Kemi's open collar sits in the braids code: make it the
-  outfit's own choice, e.g. `outfit: suit ..., open collar`). A kittest draws each outfit from every view and fails
-  when a view drops a piece the front has (rule 86).
-- **Sam on the Walliams sheet (14 Nov, a N):** "I would recognise the original as Walliams a lot more ... Just
-  doesn't look like him. Very different head shape too." Why (chat 13's read): the face tool tuned the inner face to
-  likeness.py's measures off a smiling photo, but the head's OUTLINE is the house's from those measures: narrow
-  temples, long, tapering, where his (Blessed, Sam: "That's him") is a broad box, jaw as wide as the cheeks, long heavy
-  lower face (blessed_walliams.outline, LOW 1.15); the eyes also came out small and tired. Plan for chat 14 (after Sam's
-  two jobs): `facehouse.py trace walliams` (his outline off his photos, `shape`, as Kemi's) and check it against the
-  Blessed outline; bigger, livelier eyes as the Blessed head's; one sheet, Blessed vs new side by side, to Sam. The
-  name test is no judge for him (calibrated); Sam's eye is. Lesson to propose: the face tool's sheet puts a head Sam
-  already knows (any hand-made one) beside A, B, C, and traces the outline by default.
-- **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
-  caricature. Andy and Kemi finished: do not change their front heads.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (TURNED) and `stubble`.
+## Face tool, where things stand (chat 17 of the face chain, 14 Nov)
+- **Rules that bite next:** 30 (Walliams is a repeated note: say why if Sam still can't see him), 85 (amber here), 86.
+- **Done (chat 17):** the push now works on the head's PROPORTIONS from the card (face width x1.08, jaw 0.98 of the
+  cheeks against the photos' 0.87, chin squarer), every feature scaled so the eyes sit apart as his photos say (the
+  pick's tiny eyes had pulled them in a sixth), ears on the drawn face's edge, the turned views on the measured widths.
+  Beard: the segmenter already counts it as face skin (jaw), nothing to add. New kittest facehouse_head_proportions
+  (fails on chat 16's head); the 4 face kittests and outfit_every_view pass; Andy and Kemi held pixel for pixel.
+  Sent Sam `notes/morning/walliams-head-c17.jpg` with chat 15's outfit sheet.
+- **Name test:** not named (Jenrick 12%), line-up 7th of 8; uncalibrated for him (the helper can't name his photo).
+- **Needs Sam:** Y/N on the new Walliams head; the hair's top (his photos' rounded dome, my pick, or Blessed's flat
+  box); the outfit sheet.
+- **Next (on Sam's answer; Opus medium: a round of notes):** his notes on the head; then Walliams into a people file.
+- **Seen, not fixed:** the side view's stubble edge steps behind the jaw; the mouth is the pick's (narrower than
+  Blessed's smirk). Kittest people_from_a_description fails on protest-tiers' early import (not this job's).
+- **Sam's words kept:** the far temple of a three-quarter stays bare skin. "Please don't limit yourself on budget." Age
+  lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (WHOLE HEAD, PROPORTIONS).
 - **Open rule requests:** none.
-- **For Claude:** facehouse._turn_face calls stubble(ink=False) (turnhead inks the outline); facehouse.load(name, src,
-  variant); CAST['walliams']. Older code names: notes/archive/facetool-handovers.md (chat 13).
+- **For Claude:** FH.proportions/feature_scale/_cheek/_turn_widths, SHAPE_PUSH 3 (card z), PROP_ROWS, SQUARE;
+  turnhead.Person(widths=); `facehouse.py compare OUT walliams blessed:walliams --turns`.
+
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

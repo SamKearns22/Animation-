@@ -52,6 +52,22 @@ IN THE PEOPLE KIT (chat 11): a people file says `head: house NAME, hair PIECE, l
     python3 source/facehouse.py sheet OUT.jpg NAME [NAME ...]   the design sheet: photo, the pick, both house looks
     python3 source/facehouse.py head NAME LOOK OUT.png             one head-and-shoulders (for the name test)
     python3 source/facehouse.py brows NAME OUT.jpg                 the brows measured on the photos, the drawing laid over
+    python3 source/facehouse.py measure NAME [OUT.jpg]             the head's whole shape off the photos (chat 16)
+    python3 source/facehouse.py compare OUT.jpg NAME [FILM:WHO] [--turns]   photos, a known head, before, measured,
+                                                                   pushed (--turns: the pushed head turned, under)
+
+WHOLE HEAD (chat 16, Sam: "draw the face shape from the reference a lot more intelligently"): measure_head() reads
+    each front photo's face skin row by row (ears cut at the mesh's face edge), the hair and skin together (the head's
+    silhouette), the crown, the hairline and the side hair's foot into the pick ('head'); with `head` in the lines
+    (the default; CAST's finished pair say head=False) the face outline, the swept hair's cap and sides and the eyes'
+    size (HEAD_EYES) follow it. Kittest facehouse_head_from_photos.
+    PROPORTIONS (chat 17, rule 30: pushing each row from the average face left Walliams a light bulb; his rows differ
+    from it by hundredths): shape_push (SHAPE_PUSH 3) pushes the head's proportions from real faces' middle by the
+    pick's card (z-scores): the face's width (face_wide), the jaw against the cheeks (jaw_wide) and with it the chin's
+    squareness (SQUARE); feature_scale() scales every feature together so the eye centres sit against the drawn
+    cheeks as the photos' do, pushed alike; the layout's fw/jw/fhw are the drawn face's (ears, age lines, stubble);
+    the turned views go round on the drawn outline (_turn_widths). The beard is face skin to the segmenter already
+    (it counts as jaw). Kittest facehouse_head_proportions. shape_push 1 draws the photos' shape as measured.
 
 Map: reading the pick 67 | the traced outline 81 | the brows checked 156 | colours 270 | the head 290 (layout 294) |
      hair: swept 400, braids 436 (measured hair 437, crown 528, plaits 552, behind the neck 583, collar 604, the
@@ -91,7 +107,7 @@ def load(name, src=None, variant=None):
     h = d['heads'][v]
     return dict(name=name, meas=dict(h['measures']), col=d['colours'], glasses=d.get('glasses'),
                 age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=v, outline=d.get('outline'),
-                brow=d.get('brow'), src=src, beard=d.get('beard') or None)
+                brow=d.get('brow'), src=src, beard=d.get('beard') or None, head_m=d.get('head'), card=d.get('card') or {})
 
 
 # ---------------------------------------------------------------------------------------------- the traced outline
@@ -167,6 +183,155 @@ def overlay(name, got, tr, out, T=420):
 
 
 HOUSE_SKIN = [(246, 208, 188), (240, 196, 178), (226, 184, 150), (176, 120, 86), (120, 78, 56)]   # people.COLOURS
+
+
+# ---------------------------------------------------------------------------------------------- the whole head
+# Face tool chat 16 (Sam on the Walliams sheet, 14 Nov: "Very different head shape ... it just needs to be able to
+# draw the face shape from the reference a lot more intelligently"). The house outline was built from three widths
+# (forehead, cheeks, jaw) and the hair from the house's own cap: his broad box (the hair as wide as the cheeks, a
+# low flat crown, a jaw nearly as wide) came out a narrow, tall egg. Now the head's whole shape is read off the front
+# photos: the face skin row by row with the ears cut away (the mesh's face edge marks where the cheek ends and the
+# ear begins), the hair and skin together (the head's silhouette: temples, the hair's width, the crown), where the
+# hair starts over the forehead and how far down the sides it comes. The middle value of the photos per row.
+HV = tuple(round(v, 2) for v in np.arange(-0.6, 1.06, 0.05))      # the rows measured (face heights)
+OVAL = (10, 338, 297, 332, 284, 251, 389, 356, 454, 323, 361, 288, 397, 365, 379, 378, 400, 377, 152, 148, 176, 149,
+        150, 136, 172, 58, 132, 93, 234, 127, 162, 21, 54, 103, 67, 109)               # the mesh's face edge
+
+
+def _poly_halfw(u, v, rows):
+    """A closed outline's half width at each row (nan where it does not reach)."""
+    out = []
+    for r in rows:
+        xs = []
+        for i in range(len(u)):
+            j = (i + 1) % len(u)
+            if (v[i] - r) * (v[j] - r) < 0:
+                xs.append(u[i] + (r - v[i]) / (v[j] - v[i]) * (u[j] - u[i]))
+        out.append((max(xs) - min(xs)) / 2 if len(xs) >= 2 else float('nan'))
+    return out
+
+
+def _head_rows(path):
+    """One front photo's head, in the house's face units (0 the mesh's forehead point, 1 its chin, upright): per HV
+    row the face skin's half width (ears cut: past the mesh's face edge by EAR, the ear has begun), the hair and skin
+    together, the mesh edge; the crown (the hair's top over the middle), the chin's foot, the hairline (the first
+    face skin under the hair at 0, 0.1, 0.2, 0.3 across) and how low the hair comes down the sides."""
+    import likeness as LK
+    from scipy import ndimage
+    im, fc = LK.pick_face(path)
+    crop, mask, (x0, y0, x1, y1) = LK.segment(im, fc)
+    P = (fc['P'][:, :2] - [x0, y0]) * [512 / (x1 - x0), 512 / (y1 - y0)]
+    a, b = P[10], P[152]
+    hh, ang = np.hypot(*(b - a)), math.atan2(b[0] - a[0], b[1] - a[1])
+    ca, sa = math.cos(ang), math.sin(ang)
+    uv = lambda xs, ys: (((xs - a[0]) * ca - (ys - a[1]) * sa) / hh, ((xs - a[0]) * sa + (ys - a[1]) * ca) / hh)  # noqa: E731
+    seed = (int(P[1][1]), int(P[1][0]))
+    lab, _ = ndimage.label(mask == 3)
+    su, sv = uv(*np.nonzero(lab == lab[seed])[::-1])
+    hm = ndimage.binary_opening(mask == 1, iterations=1)
+    lab2, _ = ndimage.label(hm | (mask == 3))
+    hu, hv = uv(*np.nonzero(lab2 == lab2[seed])[::-1])
+    ou, ov = uv(P[list(OVAL), 0], P[list(OVAL), 1])
+    oval = _poly_halfw(ou, ov, HV)
+    mid_u = float(np.mean(ou))
+    skin, both = [], []
+    for v, o in zip(HV, oval):
+        s, h = np.abs(sv - v) < 0.008, np.abs(hv - v) < 0.008
+        sw = float((su[s].max() - su[s].min()) / 2) if s.sum() > 3 else float('nan')
+        hw = float((hu[h].max() - hu[h].min()) / 2) if h.sum() > 3 else float('nan')
+        if o == o and 0.15 <= v <= 0.75:                  # the ears: cut back to the face's edge (the hair beside
+            sw = min(sw, o + EAR) if sw == sw else sw     # the temples, above the ears, kept)
+            if v >= 0.3:
+                hw = min(hw, max(o + EAR, sw)) if hw == hw else hw
+        skin.append(sw)
+        both.append(hw)
+    top = hv[np.abs(hu - mid_u) < 0.05]
+    hl = []
+    for du in (0.0, 0.1, 0.2, 0.3):                       # the hairline: the first face skin from the top
+        vals = [sv[(np.abs(su - mid_u - sg * du) < 0.012) & (sv < 0.35)] for sg in (-1, 1)]
+        vals = [x.min() for x in vals if len(x)]
+        if vals:
+            hl.append((du, float(np.mean(vals))))
+    low = float('nan')                                    # the side hair's foot: hair beside the face
+    hs = (mask == 1)[lab2 == lab2[seed]]
+    hu2, hv2 = hu[hs], hv[hs]
+    side = hv2[np.abs(hu2 - mid_u) > 0.3]
+    if len(side):
+        low = float(np.percentile(side, 97))
+    return dict(skin=skin, both=both, oval=oval, crown=float(top.min()) if len(top) else float('nan'),
+                foot=float(sv.max()), hairline=hl, side_low=low, path=path, P=fc['P'], ang=ang, mid=mid_u)
+
+
+EAR = 0.01           # skin this far past the mesh's face edge (face heights) is ear
+
+
+def _canon_oval():
+    """The average face's edge (MediaPipe's canonical face), half width per HV row in the same face units."""
+    import likeness as LK
+    C = LK.canonical()
+    a, b = C[10, :2] * [1, -1], C[152, :2] * [1, -1]
+    hh = float(np.hypot(*(b - a)))
+    return _poly_halfw(list((C[list(OVAL), 0] - a[0]) / hh), list((-C[list(OVAL), 1] - a[1]) / hh), HV)
+
+
+def measure_head(name, out=None, src=None):
+    """The head's whole shape off the person's front photos (chat 16), saved into the pick as 'head': per row the
+    face skin (ears cut), the head's silhouette (hair and skin), the mesh's face edge and the average face's; the
+    crown, the chin's foot, the hairline, the side hair's foot. The person's lines draw it with `head` (every face
+    but the finished pair, Andy and Kemi). OUT: the drawn head's outline and hair edge laid over each photo."""
+    f = pick_file(name, src)
+    d = json.load(open(f))
+    got = [_head_rows(os.path.join(ROOT, p)) for p in d['fronts']]
+    med = lambda k: [None if np.isnan(x) else round(float(x), 4)                      # noqa: E731
+                     for x in np.nanmedian(np.array([g[k] for g in got], float), 0)]
+    hl = {}
+    for g in got:
+        for du, v in g['hairline']:
+            hl.setdefault(du, []).append(v)
+    hd = dict(v=list(HV), skin=med('skin'), both=med('both'), oval=med('oval'),
+              avg=[None if np.isnan(x) else round(float(x), 4) for x in _canon_oval()],
+              crown=round(float(np.nanmedian([g['crown'] for g in got])), 4),
+              foot=round(float(np.median([g['foot'] for g in got])), 4),
+              hairline=[[du, round(float(np.median(vs)), 4)] for du, vs in sorted(hl.items())],
+              side_low=round(float(np.nanmedian([g['side_low'] for g in got])), 4), photos=d['fronts'])
+    d['head'] = hd
+    json.dump(d, open(f, 'w'), indent=1)
+    if out:
+        head_overlay(name, got, out, src)
+    return hd
+
+
+def head_overlay(name, got, out, src=None, T=420):
+    """Each front photo with the drawn head laid over: the face outline (yellow) and the hair's edge (cyan)."""
+    from PIL import Image, ImageDraw
+    sp = person(name, 'detail', **dict(CAST.get(name, {}), head=True, src=src))
+    kh = sp['kit_house']
+    L = face_layout(kh)
+    face = face_outline(L, -0.3)
+    sh = _swept_shapes(L, kh, (0, 0, 0)) if kh['hair'] == 'swept' else None
+    tiles = []
+    for g in got:
+        im = Image.open(g['path']).convert('RGB')
+        P = g['P'][:, :2]
+        a, b = P[10], P[152]
+        hh, ca, sa = np.hypot(*(b - a)), math.cos(g['ang']), math.sin(g['ang'])
+        to = lambda uv: [(a[0] + hh * ((u + g['mid']) * ca + v * sa), a[1] + hh * (-(u + g['mid']) * sa + v * ca))  # noqa: E731
+                         for u, v in uv]
+        k = max(2, int(hh / 120))
+        dr = ImageDraw.Draw(im)
+        n = to(curve(face, 4))
+        dr.line(n + n[:1], fill=(255, 220, 0), width=2 * k)
+        if sh:
+            for piece in sh['sides'] + [sh['cap']]:
+                q = to(curve(piece, 2))
+                dr.line(q + q[:1], fill=(0, 230, 255), width=k)
+        c = (a + b) / 2
+        tiles.append(im.crop((int(c[0] - hh), int(c[1] - 1.15 * hh), int(c[0] + hh), int(c[1] + 0.85 * hh))).resize((T, T)))
+    sheet = Image.new('RGB', (len(tiles) * (T + 10) - 10, T), (255, 255, 255))
+    for i, t in enumerate(tiles):
+        sheet.paste(t, (i * (T + 10), 0))
+    sheet.save(out, quality=90)
+    return out
 
 
 # ---------------------------------------------------------------------------------------------- the brows checked
@@ -313,12 +478,115 @@ def face_layout(kh):
     """The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
     DRAWN (chat 10: a heavier lid, `lid`, lowers the lid line; the brows used to stay put, so the gap grew)."""
     meas = dict(kh['meas'])
-    meas['eye_open'] = max(meas.get('eye_open', EYE_OPEN_MIN), EYE_OPEN_MIN)
+    lo = EYE_OPEN_HEAD if kh.get('head') and kh.get('head_m') else EYE_OPEN_MIN
+    meas['eye_open'] = max(meas.get('eye_open', lo), lo)
+    hd = None
+    if kh.get('head') and kh.get('head_m'):                # chat 16: the whole head as measured (measure_head())
+        hd = drawn_head(kh['head_m'], kh.get('shape_push', SHAPE_PUSH), kh.get('card'))
+        meas['face_wide'] *= feature_scale(kh, hd, meas, kh.get('shape_push', SHAPE_PUSH))
     L = P4.layout(meas)
+    if hd:                                                 # chat 17: the widths every part reads (ears, age lines,
+        L['head'] = hd                                     # stubble, the turned views) are the drawn face's own
+        r = [(q[0], q[1]) for q in hd['rows'] if q[1] is not None]
+        w = lambda v: 2 * float(np.interp(v, *zip(*r)))   # noqa: E731
+        L.update(fw=2 * _cheek(r), jw=w(PROP_ROWS[1]), fhw=w(0.1))
     L['brow_y'] += L['eh'] / 1.8 * (kh.get('lid', LID0) - LID0)
     if (kh.get('brow') or {}).get('high'):                 # browcheck() measured the photos: the brows sit as hers
         L['brow_y'] += (_brow_gap(L, kh) - kh['brow']['high']) * L['ew']
     return L
+
+
+def _cheek(rows):
+    """The face's widest half width from the temples to the jaw (the cheeks), from (v, half width) rows."""
+    return max(w for v, w in rows if w is not None and 0.3 <= v <= PROP_ROWS[0] + 0.1)
+
+
+def feature_scale(kh, hd, meas, push=3.0):
+    """Chat 17: the face's width against its features. The features are laid out on the pick's face_wide; the drawn
+    face is the measured one, pushed. Every feature (eyes, their spacing, nose, mouth) is scaled together so the eye
+    centres sit against the drawn cheeks as the photos' do against theirs, that proportion pushed from real faces'
+    middle (the average face's skin cheek over its eye centres) like the head's other proportions. Without it the
+    pick's tiny eyes (eye_size pushed small) pulled the eye centres in by a sixth: pinched features on a big face."""
+    a = json.load(open(os.path.join(HERE, 'likeness_average.json')))['neutral']
+    card = kh.get('card') or {}
+    raw = {k: a['med'][k] + card.get(k, 0.0) * a['spread'][k] for k in ('face_wide', 'eye_size', 'eyes_apart')}
+    ecx = lambda m: m['eye_size'] * m['face_wide'] * (m['eyes_apart'] + 1) / 2         # noqa: E731
+    hm = kh['head_m']
+    photo = _cheek(list(zip(hm['v'], hm['skin']))) / ecx(raw)
+    avg = _cheek([(v, None if x is None else x + float(np.interp(v, *zip(*SKIN_BIAS))))
+                  for v, x in zip(hm['v'], hm['avg'])]) / ecx(a['med'])
+    want = _cheek([(q[0], q[1]) for q in hd['rows']]) / (avg + push * (photo - avg))
+    return want / ecx(meas)
+
+
+SHAPE_PUSH = 3.0     # chat 17: the head's PROPORTIONS pushed from real faces' middle by this (the card's z-scores,
+                     # likeness_average's spread): the face's width against its height, the jaw against the cheeks and
+                     # the chin's squareness. Chat 16 pushed each row from the average face (x1.3, x3): his rows differ
+                     # from it by a few hundredths, so nothing moved and the narrow chin read as a light bulb.
+PROP_ROWS = (0.5, 0.8)   # the cheeks' row and the jaw's (face heights): the jaw push grows from one to the other
+SQUARE = 2.5             # how much a pushed jaw squares the chin (a broad, square jaw: the card's words for one)
+
+
+def proportions(card, push=SHAPE_PUSH):
+    """The drawn head's proportion factors from the person's card (z-scores against real faces, likeness.py): the
+    face's width (face_wide) and the jaw against the cheeks (jaw_wide), each as the pushed measure over the
+    photos' own: (middle + push z spread) / (middle + z spread), held to 0.85-1.2; the chin's squareness from the
+    jaw's (a jaw pushed wider squares the chin, SQUARE)."""
+    a = json.load(open(os.path.join(HERE, 'likeness_average.json')))['neutral']
+
+    def fac(k):
+        z, m, sd = (card or {}).get(k, 0.0), a['med'][k], a['spread'][k]
+        return min(1.2, max(0.85, (m + push * z * sd) / (m + z * sd)))
+    w, j = fac('face_wide'), fac('jaw_wide')
+    return dict(wide=w, jaw=j, square=max(0.5, min(1.5, 1.0 - SQUARE * (j - 1.0))))
+
+
+def _smooth(x):
+    x = max(0.0, min(1.0, x))
+    return x * x * (3 - 2 * x)
+
+
+def drawn_head(hd, push=SHAPE_PUSH, card=None):
+    """The measured head (measure_head()) as the drawing uses it: rows (v, face half width, silhouette half width),
+    the face's proportions pushed (proportions()): every row widened by the face's width factor, the rows from the
+    cheeks to the jaw widened by the jaw's (growing smoothly), and under the jaw the chin's taper eased by the
+    squareness (the foot kept: the chin's bottom flattens); the hair standing off the head by as much as measured."""
+    pr = proportions(card, push)
+    c0, j0 = PROP_ROWS
+    known = [(v, s) for v, s in zip(hd['v'], hd['skin']) if s is not None]
+    sj = float(np.interp(j0, *zip(*known)))
+    top = max(s for v, s in known if v <= c0) * pr['wide']     # the jaw never wider than the cheeks (a box, not a pear)
+    rows = []
+    for v, s, b in zip(hd['v'], hd['skin'], hd['both']):
+        if s is None:
+            rows.append((v, s, None if b is None else b * pr['wide']))
+            continue
+        g = 1.0 + (pr['jaw'] - 1.0) * _smooth((v - c0) / (j0 - c0))
+        if v > j0:                                         # under the jaw: the taper eased (square < 1: squarer)
+            s = sj * (1.0 - (1.0 - s / sj) * pr['square'])
+        s1 = s * g * pr['wide']
+        if v > c0:
+            s1 = min(s1, top)
+        b1 = None if b is None else s1 + max(0.0, b - s) * min(1.0, pr['wide'])
+        rows.append((v, s1, b1))
+    return dict(rows=rows, crown=hd['crown'], foot=hd['foot'], hairline=[tuple(q) for q in hd['hairline']],
+                side_low=hd['side_low'], prop=pr)
+
+
+SKIN_BIAS = ((0.05, 0.072), (0.1, 0.023), (0.15, -0.005), (0.2, -0.018), (0.25, -0.015), (0.3, -0.014),
+             (0.35, -0.01), (0.4, -0.007), (0.45, -0.003), (0.5, 0.0), (0.55, 0.003), (0.6, 0.008), (0.65, 0.012),
+             (0.7, 0.015), (0.75, 0.016), (0.8, 0.023), (0.85, 0.026), (0.9, 0.04), (0.95, 0.054))
+# the photos' skin edge against the average face's mesh edge, the middle of the faces measured so far (Walliams,
+# Burnham, Badenoch, chat 16): the mesh's chin is narrower than any real chin's skin, its temples sit under the
+# hair. The push is from the average face plus this, so only what is this face's own grows.
+HEAD_EYES = dict(eye_scale=1.2, liner=3.0)   # Sam (14 Nov): bigger, livelier eyes, as the Blessed head's
+EYE_OPEN_HEAD = 0.26                          # and never shut to a line (EYE_OPEN_MIN for the finished pair)
+
+
+def _sil(L, v):
+    """The head's measured silhouette (hair and skin) half width at row v."""
+    r = [(q[0], q[2]) for q in L['head']['rows'] if q[2] is not None]
+    return float(np.interp(v, [q[0] for q in r], [q[1] for q in r]))
 
 
 def _brow_gap(L, kh):
@@ -356,17 +624,17 @@ def _head(img, p, sp, t, hx, hy):
     if piece == 'braids':
         braids_behind(p, f, L, hc, kh, sp)
     if piece != 'braids':                                 # her plaits cover the ears
-        AV._ears(p, f, L, skin)
+        AV._ears(p, f, _ear_L(L), skin)
     o = curve(f.pts(face_outline(L, -0.42 if piece != 'braids' else _hair(L, kh)['crown'] + 0.06)), 4)
     p.poly(o, skin, INK, 2.6)
     if lk['sockets'] and kh['eyes'].get('shade', 0) >= 0.1:
         sockets(p, f, L, skin, kh['eyes']['shade'])
     ey = kh['eyes']
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', kh.get('lid', 0.12))), tuple(kh.get('iris_c') or ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
-            liner=2.8 + 1.6 * kh.get('lashes', 0.0), iris_r=kh.get('iris_r', min(1.15, ey.get('iris_r', 0.95))),
-            pupil_r=kh.get('pupil_r', min(0.5, ey.get('pupil_r', 0.42))), scale=kh.get('eye_scale', 1.0))
+            liner=_eye(kh, 'liner', 2.8) + 1.6 * kh.get('lashes', 0.0), iris_r=kh.get('iris_r', min(1.15, ey.get('iris_r', 0.95))),
+            pupil_r=kh.get('pupil_r', min(0.5, ey.get('pupil_r', 0.42))), scale=_eye(kh, 'eye_scale', 1.0))
     if kh.get('lashes'):
-        lashes(p, f, L, sp, kh['lashes'], kh.get('eye_scale', 1.0))
+        lashes(p, f, L, sp, kh['lashes'], _eye(kh, 'eye_scale', 1.0))
     P4.brows(p, f, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0),
              kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0), _peak(kh))
     P4.nose(p, f, L, skin)
@@ -385,10 +653,23 @@ def _head(img, p, sp, t, hx, hy):
     elif piece == 'braids':
         braids(p, f, L, hc, lk, kh)
         if kh.get('ears'):                                # over the plaits, as the pick drew them (K1: her width)
-            AV._ears(p, f, L, skin)
+            AV._ears(p, f, _ear_L(L), skin)
     if kh.get('glasses'):
         glasses(p, f, L, kh['glasses'])
     return fx
+
+
+def _ear_L(L):
+    """The ears sit on the face's edge: the measured head's own (chat 17: on the house width they hid behind the
+    measured face, which is wider), else the house's."""
+    return dict(L, fw=2 * _face_u(L, 0.42)) if L.get('head') else L
+
+
+def _eye(kh, k, default):
+    """The person's own eye line (eye_scale, liner), else the measured head's (HEAD_EYES), else the house's."""
+    if k in kh:
+        return kh[k]
+    return HEAD_EYES[k] if kh.get('head') and kh.get('head_m') else default
 
 
 def stubble(p, f, L, skin, bd, seed=61, ink=True):
@@ -457,6 +738,8 @@ def sockets(p, f, L, skin, shade):
 # ---------------------------------------------------------------------------------------------- hair: swept
 def _swept_shapes(L, kh, hc):
     """The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light."""
+    if L.get('head'):
+        return _swept_measured(L, kh, hc)
     e = L['fw'] * 0.5
     c = max(L['fhw'] * 0.5 + 0.02, e)
     hl = kh.get('hairline', -0.08)
@@ -480,10 +763,73 @@ def _swept_shapes(L, kh, hc):
     return dict(c=c, hl=hl, lift=lift, grey=grey, sides=sides, cap=cap)
 
 
+def _swept_measured(L, kh, hc):
+    """Chat 16: the swept hair on the head's measured shape: the cap's outer edge the photos' silhouette from the
+    crown down the temples (as wide as it is: his box), the fringe's edge on the measured hairline, the clipped sides
+    from under the cap down to where the side hair ends, their inner edge laid on the face's own edge. The house's
+    look kept: the tufted top, the sweep rising higher on our right, the strokes and the light (scaled to the hair's
+    own depth, crown to hairline)."""
+    hd = L['head']
+    hm = dict(hd['hairline'])
+    hl = kh.get('hairline_m', hm.get(0.0, -0.1))
+    crown = hd['crown']
+    lift = kh.get('quiff', 0.02)                         # the photos hold his quiff already: a touch more only
+    grey = kh.get('grey') or blend(hc, (150, 146, 142), 0.35)
+    c = _sil(L, hl)
+    cb = min(hl + 0.1, 0.0)                               # the dark cap's foot at the side; the grey below
+    low = min(max(hd['side_low'], cb + 0.12), 0.34)
+    k = (hl - crown) / 0.42                              # the hair's own depth against the house cap's
+    vs = [v for v in np.arange(round(cb, 2), crown + 0.04, -0.03)]
+    up = lambda u: lift * 0.8 * max(0.0, min(1.0, (u + 0.1 * c) / (0.7 * c))) * (1 - max(0.0, u / c - 0.75) * 2)  # noqa: E731
+    rt = [(_sil(L, v) + 0.006, v) for v in vs]
+    top_mid = [(c * x, crown + 0.02 * x * x - up(c * x)) for x in (0.55, 0.3, 0.0, -0.3, -0.55)]
+    rt = [(u, v - (up(u) if v < hl else 0.0)) for u, v in rt]
+    lt = [(-(_sil(L, v) + 0.006), v) for v in vs]       # our left, from its foot up
+    top = lt + sorted(top_mid, key=lambda q: q[0]) + rt[::-1]   # over the crown, down to our right foot
+    h = lambda u: float(np.interp(abs(u), sorted(hm), [hm[x] for x in sorted(hm)]))   # noqa: E731
+    fe = _face_u(L, cb)
+    front = [(c - 0.01, cb), (fe - 0.02, cb - 0.02), (0.3, h(0.3)), (0.2, h(0.2) + 0.005), (0.1, h(0.1) + 0.012),
+             (0.0, h(0.0) + 0.016), (-0.1, h(0.1) + 0.012), (-0.2, h(0.2) + 0.002), (-0.3, h(0.3) - 0.004),
+             (-fe + 0.02, cb - 0.02), (-c + 0.01, cb)]
+    front = [q for q in front if abs(q[0]) <= c]
+    cap = AV.tufts(top, 0.005, 0.03 * max(0.5, min(1.0, k)), out=1.0, seed=31) + front
+    sides = []
+    for sgn in (1, -1):
+        sv = np.linspace(cb - 0.08, low, 7)
+        outer = [(_sil(L, v) + 0.006, v) for v in sv]
+        inner = [(min(_face_u(L, v) - 0.012, _sil(L, v) - 0.02), v) for v in sv[::-1]]
+        pts = outer + [(_face_u(L, low) - 0.02, low + 0.02)] + inner
+        sides.append([(-sgn * u, v) for u, v in pts])
+    roof = sorted([q for q in top if q[1] < hl], key=lambda q: q[0])
+    return dict(c=c, hl=hl, lift=lift, grey=grey, sides=sides, cap=cap, k=k, crown=crown, roof=roof)
+
+
+class _Squeeze:
+    """A face frame whose rows above `v0` are squeezed by k towards it (the house hair's strokes on a shallower or
+    deeper head of hair)."""
+
+    def __init__(self, f, v0, k, roof=None):
+        self.f, self.v0, self.k = f, v0, k
+        self.roof = roof                                  # the cap's top: nothing drawn above it (less a margin)
+
+    def __call__(self, u, v):
+        v = self.v0 + (v - self.v0) * self.k if v < self.v0 else v
+        if self.roof:
+            ru, rv = zip(*self.roof)
+            v = max(v, float(np.interp(u, ru, rv)) + 0.035)
+        return self.f(u, v)
+
+    def pts(self, uvs):
+        return [self(u, v) for u, v in uvs]
+
+
 def _swept_strokes(p, f, hc, sh, lk):
     """The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail')."""
     c, hl, lift, grey = sh['c'], sh['hl'], sh['lift'], sh['grey']
     light = blend(hc, (150, 140, 136), 0.38)
+    if 'k' in sh:                                        # chat 16: the measured head: the house's strokes squeezed
+        kk, f0 = sh['k'], f                              # to the hair's own depth (crown to hairline)
+        f = _Squeeze(f0, hl, kk, sh.get('roof'))
     for k, (u, ln) in enumerate(((-0.3, 0.2), (-0.2, 0.27), (-0.09, 0.3), (0.02, 0.32), (0.13, 0.3), (0.24, 0.26),
                                  (0.33, 0.18))):         # brushed up and over to our right
         u *= c / 0.42
@@ -549,6 +895,18 @@ def face_outline(L, crown=-0.42):
     widths) or, where the person's lines say `shape`, the one traced off their front photos (trace()): its half widths
     row by row down to the chin's foot, the crown over the top as the house draws it."""
     tr = L.get('trace')
+    hd = L.get('head')
+    if hd:                                                # chat 16: the measured head; under the hair, just inside
+        top = hd['crown'] + 0.035                         # the hair's edge (no white between hair and face)
+        right = []
+        for v, s, b in hd['rows']:
+            if v <= top + 0.02 or v > hd['foot'] - 0.01:
+                continue
+            u = s if s is not None else (b - 0.06 if b is not None else None)
+            if u:
+                right.append((round(u, 4), v))
+        right = [(right[0][0] * 0.55, top + 0.005)] + right + [(0.0, hd['foot'])]
+        return [(0.0, top)] + right + [(-u, v) for u, v in right[::-1][1:]]
     if not tr:
         return PP._outline(L, crown)
     rows = [(w, v) for v, w in tr['rows']]
@@ -673,33 +1031,11 @@ def braids_behind(p, f, L, hc, kh, sp):
     p.poly([(f.cx - 32 * nw, -90), (f.cx + 32 * nw, -90), (f.cx + 30 * nw, -46), (f.cx, -34), (f.cx - 30 * nw, -46)],
            dk(skin, 0.82), None)                            # the jaw's shadow on it (views' neck_shade)
     p.line([(f.cx - 35 * nw, yc), (f.cx + 35 * nw, yc)], skin, 2.0)   # no ink line along the collar's top
-    if sp.get('outfit') == 'suit' and not sp.get('tie'):
-        open_collar(p, f.cx, yc, nw, skin, sp.get('shirt', (246, 246, 246)))
+    if sp.get('collar') == 'open':                          # the outfit's neckline, laid again over the redrawn
+        open_collar(p, f.cx, yc, nw, skin, sp.get('shirt', (246, 246, 246)))   # neck (the torso leaves it: neck_redrawn)
 
 
-def open_collar(p, cx, yc, nw, skin, sc):
-    """The open shirt collar at the redrawn neck's foot (chat 9, Sam: "look closely at the neckline"): the skin runs
-    on down from the neck in a V to the top button, and the two collar flaps lie over the lapels either side, so
-    the neck no longer stops at a flat shirt edge, steps in at its foot, or leaves white bars out at the sides."""
-    w = 36 * nw
-    p.poly([(cx - w, yc - 2), (cx + w, yc - 2), (cx + 4, 56), (cx - 4, 56)], skin, None)
-    for sg in (-1, 1):
-        p.poly([(cx + sg * (w + 1), yc - 3), (cx - sg * 1, 62), (cx + sg * 22, 70), (cx + sg * 60, 6),
-                (cx + sg * (w + 16), yc - 4)], sc, INK, 2.0)
-
-
-def open_collar_three(p, sp, nw, skin, sc, yc=-11.0):
-    """Kemi's open collar from three-quarter (chat 12, Sam: "Kemi's correct outfit is replaced by her previous one in
-    her 3/4 pose"): the turned body drew the plain buttoned shirt. As open_collar, turned: the skin V from the neck's
-    foot down to the top button on the chest's centre (views' three-quarter V, `v_at`), the near flap over the near
-    lapel, the far one foreshortened."""
-    sw = sp.get('shoulders', 150)
-    o = sp.get('v_at', 0.24 * sw)
-    nl, nr = -20.0 * nw, 44.0 * nw - 8 * (nw - 1)           # the three-quarter neck's foot, at her neck_w
-    p.poly([(nl, yc - 2), (nr, yc - 2), (o + 4, 56), (o - 4, 56)], skin, None)
-    for sg, tx, k in ((-1, nl, 1.0), (1, nr, 0.55)):
-        p.poly([(tx + sg * 1, yc - 3), (o - sg * 1, 62), (o + sg * 22 * k, 70), (tx + sg * 24 * k, 6),
-                (tx + sg * 16 * k, yc - 4)], sc, INK, 2.0)
+open_collar, open_collar_three = PP.open_collar, PP.open_collar_three   # the outfit's (people_parts, chat 15)
 
 
 def braids(p, f, L, hc, lk, kh):
@@ -911,8 +1247,6 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
         bx = back[-1][0] - H * 0.05
         front = [(ex + reach, f.top + v * H) for v in vs]
         curt.append((back + [(bx, foot)], front + [(ex + reach + H * 0.04, foot)]))
-        if yaw < 60 and sp.get('outfit') == 'suit' and not sp.get('tie'):   # her open collar, under the curtains
-            open_collar_three(p, sp, sp.get('neck_w', 1.0), sp['skin'], sp.get('shirt', (246, 246, 246)))
     head = [(x, y) for x, y, v, part in sil]
     for i, (a, b) in enumerate(curt):
         mid = ((a[0][0] + b[0][0]) / 2, a[0][1] - 0.12 * H)       # an arched top under the crown: no sharp
@@ -964,6 +1298,13 @@ def _outside(img, p, poly, draw):
     img.alpha_composite(layer)
 
 
+def _turn_widths(L):
+    """The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
+    views carried the house outline's widths, so the head changed shape as it turned), else the house outline's."""
+    import turnhead as TH
+    return TH.half_widths(face_outline(L) if L.get('head') else P4.outline_uv(L, 0.4, crown=-0.42))
+
+
 def _turn_person(sp):
     import turnhead as TH
     kh = sp['kit_house']
@@ -971,14 +1312,14 @@ def _turn_person(sp):
     if key not in TH.PEOPLE:
         L = face_layout(kh)
         prof = TH.fitted(L, -0.42, 1.06, **TURN_PROF[kh['hair']])
-        w = TH.half_widths(P4.outline_uv(L, 0.4, crown=-0.42))     # the house outline's rows are few: between the
+        w = _turn_widths(L)                                         # the house outline's rows are few: between the
         wv = lambda v: float(np.interp(v, [q[0] for q in w], [q[1] for q in w]))   # crown's end and the temples
         c0 = prof['crown'][-1][1]                                   # the skull stepped in (a notch, spikes in the
         prof['crown'] = prof['crown'] + [(v, max(c0, wv(v))) for v in (0.15, 0.3, 0.43)]   # hair); held round here
         TH.register(TH.Person(key, lambda sp2, _kh=kh: face_layout(_kh), -0.42, 0.4, lambda L, _p=prof: _p,
                               sp['skin'], tuple(kh.get('iris_c') or kh['eyes'].get('iris') or (66, 46, 34)),
                               sp['brow_c'], kh['lip'], _turn_mood, _turn_mouth, _turn_hair, face=_turn_face,
-                              over=_turn_over, brow_thick=kh.get('brow_thick', 0.05)))
+                              over=_turn_over, brow_thick=kh.get('brow_thick', 0.05), widths=_turn_widths))
     return key
 
 
@@ -1014,7 +1355,7 @@ def caricature(meas, push=1.0, tune=None):
 
 
 def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, src=None,
-           variant=None, **kw):
+           variant=None, collar=None, **kw):
     """The engine's person (views.person) for one picked face in one look, on the people kit's body; `src` and
     `variant`: one of facepick's three heads before Sam picks (load())."""
     import people
@@ -1025,6 +1366,8 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     d = dict(who=name, name=name.title(), skin=skin, hair_style='none', hair_c=tuple(col['hair']), height=height,
              brows=tuple(col['brow']), lips=house_tone(col['lip'], lk['skin_k'] * 0.5), outfit=outfit[0],
              jacket=tuple(outfit[1]), sleeve=tuple(outfit[1]), shirt=shirt, tie=tie)
+    if collar:                                              # the outfit's neckline (chat 15: 'open collar')
+        d['collar'] = collar
     if 'neck_w' in kw:                                      # the person's lines: a wider neck (Kemi's, K1)
         d['neck_w'] = kw.pop('neck_w')
     if d['tie'] is not None:
@@ -1033,11 +1376,14 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     if 'brow_up' in kw:                                     # the person's resting brows (a pair: one raised)
         sp['brow_up'] = tuple(kw.pop('brow_up')) if isinstance(kw['brow_up'], list) else kw.pop('brow_up')
     sp['hair'] = 'bald'                                    # the engine's own hair: none (the head part draws it all)
-    kh = dict(pk, look=look, hair=hair, lip=d['lips'], **kw)
+    kw.setdefault('head', True)                             # chat 16: every face's whole head measured (but the
+    kh = dict(pk, look=look, hair=hair, lip=d['lips'], **kw)  # finished pair's: CAST says head=False)
     kh['meas'] = caricature(pk['meas'], kh.pop('push', 1.0), kh.pop('tune', {}))
     if kh['age'] and lk['age_k']:
         kh['age'] = dict(kh['age'])
     sp.update(kit_head='house', kit_house=kh, neck_shade=True)
+    if hair == 'braids':                                    # the plaits behind the neck repaint it and lay the
+        sp['neck_redrawn'] = True                           # collar again: the front torso leaves the collar to them
     return sp
 
 
@@ -1046,10 +1392,10 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
            # her ears hidden (Sam: "her hair hides her ears"), her thin arched brows (her photos; Sam: "try the eyebrows"), the small pupils in her own big dark iris under a heavier, calm upper lid (chat 8's were wide and
            # startled), and her face's outline traced off her three front photos (shape)
     'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
-                    hairline=-0.07, brow_thick=0.058),
-    'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
+                    hairline=-0.07, brow_thick=0.058, head=False),
+    'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7, collar='open',
                      brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
-                     lid=0.24, shape=True),
+                     lid=0.24, shape=True, head=False),
     'walliams': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None,   # chat 13: his
                      mouth=dict(kind='smirk'), brow_up=[0.0, 0.025], push=1.1),   # smirk and cocked brow
                                                                          # (Blessed's hand-made, Sam: "That's him")
@@ -1112,6 +1458,72 @@ def turns(out, names, look='detail', yaws=(0, 45, 90, 135, 180), T=420):
             crop = tile.crop((150, 230, 930, 1010)).convert('RGB').resize((T, T))
             img.paste(crop, (20 + k * (T + 10), y + 36))
     img.save(out, quality=88)
+    return out
+
+
+
+
+def compare(out, name, beside=None, T=440, title=None, turned=False):
+    """The whole-head sheet (chat 16): two front photos, a head Sam knows (`beside`: a people-file entry such as
+    Blessed's 'walliams', drawn by the people kit), the head before (the house outline: head=False) and the head
+    from the measured shape; a phone-size row under them."""
+    from PIL import Image, ImageDraw, ImageFont
+    import people
+    import facepick as FP
+    from satire_style import install_circle_hands
+    B, V = PP.B, PP.AV.MC.V
+    install_circle_hands(B)
+    TC = install()
+    tmp = os.path.join(os.path.dirname(os.path.abspath(out)), '_facehouse')
+    os.makedirs(tmp, exist_ok=True)
+    font = lambda n: ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), n)   # noqa: E731
+    pk = json.load(open(pick_file(name)))
+    tiles, heads = [], []
+    for ph in pk['fronts'][:2]:
+        im, _ = FP._face_tile(os.path.join(ROOT, ph), None, T)
+        sq = Image.new('RGB', (T, T), (255, 255, 255))
+        im = im.convert('RGB')
+        im.thumbnail((T, T))
+        sq.paste(im, ((T - im.width) // 2, (T - im.height) // 2))
+        tiles.append(sq)
+        heads.append('photo')
+    if beside:
+        film, who = beside
+        d = people.parse(open(people.people_file(film)).read())[who]
+        sp = people.person(d)
+        people.install({who: sp})
+        B.SS = 1
+        tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, 0)
+        tiles.append(_fit(tile.crop((150, 280, 930, 1180)), T))
+        heads.append('Blessed: "that\'s him"')
+    for lab, hd, sp_ in (('before', False, None), ('true to the photos', True, 1.0),
+                         ('NEW: proportions pushed', True, SHAPE_PUSH)):
+        png = os.path.join(tmp, f'{name}-{hd}-{sp_}.png')
+        ln = dict(CAST.get(name, {}), head=hd)
+        if sp_:
+            ln['shape_push'] = sp_
+        draw(name, 'detail', png, lines=ln)
+        tiles.append(_fit(Image.open(png), T))
+        heads.append(lab)
+    img = Image.new('RGB', (20 + len(tiles) * (T + 16), 120 + T + T // 3 + 40), (236, 232, 226))
+    d = ImageDraw.Draw(img)
+    d.text((20, 20), title or f'{name.title()}: the head\'s whole shape read off the photos', font=font(32), fill=(30, 30, 30))
+    for k, (tl, h) in enumerate(zip(tiles, heads)):
+        x = 20 + k * (T + 16)
+        img.paste(tl, (x, 100))
+        d.text((x + 4, 70), h, font=font(22), fill=(30, 30, 30))
+        sm = tl.resize((T // 3, T // 3))
+        img.paste(sm, (x, 100 + T + 20))
+    if turned:                                            # the new head turned, front to behind, under the row
+        tj = turns(os.path.join(tmp, f'{name}-turns.jpg'), [name])
+        tv = Image.open(tj)
+        tv = tv.resize((img.width - 40, int(tv.height * (img.width - 40) / tv.width)))
+        full = Image.new('RGB', (img.width, img.height + tv.height + 10), (236, 232, 226))
+        full.paste(img, (0, 0))
+        full.paste(tv, (20, img.height))
+        img = full
+    img.save(out, quality=90)
     return out
 
 
@@ -1201,6 +1613,11 @@ if __name__ == '__main__':
         print(browcheck(a[1], a[2] if len(a) > 2 else None))
     elif a and a[0] == 'turns':
         print(turns(a[1], a[2:] or ['burnham', 'badenoch']))
+    elif a and a[0] == 'measure':
+        print(measure_head(a[1], a[2] if len(a) > 2 else None))
+    elif a and a[0] == 'compare':
+        b = [x for x in a[3:] if ':' in x]
+        print(compare(a[1], a[2], tuple(b[0].split(':')) if b else None, turned='--turns' in a))
     elif a and a[0] == 'head':
         print(draw(a[1], a[2], a[3]))
     else:

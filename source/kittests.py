@@ -2230,6 +2230,107 @@ def facehouse_whole_head():
 
 
 @test
+def facehouse_head_from_photos():
+    """Face tool chat 16 (Sam on Walliams, 14 Nov: "Very different head shape ... draw the face shape from the
+    reference a lot more intelligently"): a measured head (facehouse.measure_head, saved in the pick) is drawn on its
+    photos' shape: the face's edge within 0.025 face heights of the photos' skin (ears cut) from the cheekbones to the
+    chin, the hair's outer edge within 0.03 of the photos' silhouette over the temples, the crown within 0.04. Fails
+    on the house outline and cap (narrow temples, a crown a tenth too high)."""
+    import numpy as np
+    import facehouse as FH
+    kh = FH.person('walliams', 'detail', **dict(FH.CAST['walliams'], shape_push=1.0))['kit_house']
+    hd = kh.get('head_m') or {}
+    if not hd:
+        return False, 'no measured head in the pick (facehouse.py measure walliams)'
+    L = FH.face_layout(kh)
+    rows = dict((v, (s, b)) for v, s, b in zip(hd['v'], hd['skin'], hd['both']))
+    face = [abs(FH._face_u(L, v) - rows[v][0]) for v in (0.4, 0.5, 0.6, 0.7, 0.8, 0.9) if rows[v][0]]
+    sh = FH._swept_shapes(L, kh, (60, 50, 40))
+    cap = sh['cap'] + [q for sd in sh['sides'] for q in sd]
+
+    pieces = [sh['cap']] + sh['sides']
+
+    def outer(v):                                      # the farthest crossing of row v by any piece's edge
+        r = []
+        for pc in pieces:
+            q = FH.curve(pc, 2)
+            for (u0, v0), (u1, v1) in zip(q, q[1:] + q[:1]):
+                if (v0 - v) * (v1 - v) < 0:
+                    r.append(abs(u0 + (v - v0) / (v1 - v0) * (u1 - u0)))
+        return max(r) if r else 0.0
+    hair = [abs(outer(v) - rows[v][1]) for v in (-0.2, -0.1, 0.0, 0.1) if rows[v][1]]
+    crown = min(w for _, w in cap)
+    errs = (max(face), max(hair), abs(crown - hd['crown']))
+    ok = errs[0] <= 0.025 and errs[1] <= 0.03 and errs[2] <= 0.04
+    return ok, f'face edge off by {errs[0]:.3f}, hair edge {errs[1]:.3f}, crown {errs[2]:.3f} (face heights)'
+
+
+@test
+def facehouse_head_proportions():
+    """Face tool chat 17 (rule 30 on Walliams: chat 16's row push x1.3 left his head a light bulb, the narrow chin
+    under wide temples): the measured head's PROPORTIONS pushed from real faces' middle by the card. A broad-jawed
+    face (his card: jaw_wide z 2.5) draws a box: the jaw within 0.06 of the cheeks' width (the photos: 0.87 of
+    them), the chin squarer than measured, the face wider by its face_wide push; the eye centres sit against the
+    drawn cheeks as the pushed photos say (within 5%: the pick's tiny eyes had pulled them in a sixth); the turned
+    views go round on the drawn face's own widths. Fails on chat 16's push (jaw about 0.87, the eye centres about 0.8 of the target)."""
+    import json
+    import numpy as np
+    import facehouse as FH
+    kh = FH.person('walliams', 'detail', **FH.CAST['walliams'])['kit_house']
+    L = FH.face_layout(kh)
+    hd, hm = L['head'], kh['head_m']
+    r = [(v, s) for v, s, _ in hd['rows'] if s is not None]
+    w = lambda rows, v: float(np.interp(v, *zip(*rows)))                     # noqa: E731
+    m = [(v, s) for v, s in zip(hm['v'], hm['skin']) if s is not None]
+    jaw = w(r, 0.8) / FH._cheek(r)
+    square, square0 = w(r, 0.95) / w(r, 0.8), w(m, 0.95) / w(m, 0.8)
+    wide = FH._cheek(r) / FH._cheek(m)
+    a = json.load(open(os.path.join(HERE, 'likeness_average.json')))['neutral']
+    z = kh['card']
+    raw = {k: a['med'][k] + z.get(k, 0) * a['spread'][k] for k in ('face_wide', 'eye_size', 'eyes_apart')}
+    ecx = lambda q: q['eye_size'] * q['face_wide'] * (q['eyes_apart'] + 1) / 2   # noqa: E731
+    avg = FH._cheek([(v, x + float(np.interp(v, *zip(*FH.SKIN_BIAS)))) for v, x in zip(hm['v'], hm['avg'])
+                     if x is not None]) / ecx(a['med'])
+    want = FH._cheek(r) / (avg + FH.SHAPE_PUSH * (FH._cheek(m) / ecx(raw) - avg))
+    eyes = L['ecx'] / want
+    turned = FH._turn_widths(L)
+    tw = abs(w(turned, 0.8) - w(r, 0.8))
+    ok = jaw >= 0.94 and square > square0 + 0.05 and abs(wide - hd['prop']['wide']) < 0.01 and abs(eyes - 1) < 0.05 \
+        and tw < 0.01
+    return ok, (f'jaw {jaw:.2f} of the cheeks (photos {w(m, 0.8) / FH._cheek(m):.2f}); chin {square:.2f} of the jaw '
+                f'(photos {square0:.2f}); face x{wide:.3f}; eye centres {eyes:.2f} of the target; turned jaw off by {tw:.3f}')
+
+
+@test
+def kit_people_never_generic():
+    """Face tool chat 14 (Sam, 14 Nov, Y: background people move onto the new three-quarter turned head): everyone a
+    people file builds, crowds included, turns through turnhead (its 30-degree three-quarter), never views.py's old
+    generic head; only the test-only hand-made head parts (people.HEAD_PARTS) are let off."""
+    from PIL import Image
+    import people
+    import people_parts as PP
+    import turnhead as TH
+    from satire_style import install_circle_hands
+    B, V = PP.B, PP.AV.MC.V
+    install_circle_hands(B)
+    B.SS = 1
+    films = sorted(f[:-len('-people.txt')] for f in os.listdir(os.path.join(HERE, '..', 'story')) if f.endswith('-people.txt'))
+    bad, n = [], 0
+    for film in films:
+        cast = people.install(people.load(film))
+        for w, sp in cast.items():
+            if sp.get('kit_head') in people.HEAD_PARTS:
+                continue
+            n += 1
+            del TH.GENERIC[:]
+            tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, 45)
+            if TH.GENERIC:
+                bad.append(f'{film}:{w}')
+    return not bad, f'{n} people in {len(films)} people files turned; on the generic head: {bad or "none"}'
+
+
+@test
 def facehouse_beard_turns():
     """Face tool chat 14: a measured beard (Walliams' stubble) is drawn in the turned views too, as Vance's goatee
     goes round (chat 13 drew it front-on only: his three-quarter and side were bare-chinned)."""
@@ -2246,6 +2347,42 @@ def facehouse_beard_turns():
         shutil.rmtree(tmp)
     turned = seen.count('TurnFace')
     return turned >= 2 and len(seen) >= 3, f'stubble drawn front {len(seen) - turned}, turned {turned} (want 1 and 2)'
+
+
+
+@test
+def outfit_every_view():
+    """Face tool chat 15 (one outfit in every view): every piece a person wears over the clothes (each extra, the open
+    collar) shows in the three-quarter and the side as it does from the front, and from behind where it goes round
+    (people.turned's 'back'); the wig turns with the head. Fails when a turned view drops a piece the front has."""
+    import numpy as np
+    from PIL import Image
+    import people
+    import people_parts as PP
+    from satire_style import install_circle_hands
+    B, V = PP.B, PP.AV.MC.V
+    install_circle_hands(B)
+    B.SS = 1
+    base = people.parse("# t: Test\nbody: 1.78 m\nskin: pale | hair: crop, 40 32 28\n"
+                        "outfit: suit 60 60 66, shirt white, no tie\n")['t']
+    tv = people.turned()
+
+    def draw(d, yaw):
+        cast = people.install({'t': people.person(d)})
+        tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(cast['t']), 0.0, yaw)
+        return np.asarray(tile.convert('RGB'), np.int16)
+    plain = {y: draw(base, y) for y in (0, 45, 90, 135, 180)}
+    bad, n = [], 0
+    for e in list(people.EXTRAS) + ['open collar']:
+        d = dict(base, collar='open') if e == 'open collar' else dict(base, extras=[e])
+        want = (0, 45, 90) + ((135, 180) if e == 'wig' or (e in tv and tv[e]['back']) else ())
+        for y in want:
+            n += 1
+            seen = int((np.abs(draw(d, y) - plain[y]).max(axis=2) > 24).sum())
+            if seen < 150:
+                bad.append(f'{e} at {y} ({seen} px)')
+    return not bad, f'{n} piece-views checked; dropped: {", ".join(bad) or "none"}'
 
 
 def main():

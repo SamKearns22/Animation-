@@ -14,8 +14,12 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     eyes: 90 110 130 | lips: 190 122 112 | brows: 150 140 132, width 4.4, thick 0.06
     beard: stubble 0.82 | beard: boxed 46 40 38 | glasses: 40 36 34 | freckles | lashes
     outfit: suit navy, shirt white, tie 120 30 40 (or 'no tie'), trousers 50 50 56, sleeves .., shoes .., dress ..
-            (suit, jumper, dress, blouse)
+            (suit, jumper, dress, blouse); 'open collar': the shirt open at the neck (chat 15)
     extras: wig, robe, officer, open shirt, crucifix, scarf, zip   (parts that sit on top: EXTRAS)
+  One outfit in every view (face tool chat 15): each extra and the open collar is drawn turned too (TURNED below):
+    its front drawing wrapped round the turned body (views.WrapPen), its own back where it shows from behind (the
+    belt, the sash, the scarf round the neck, the top's collar), a bespoke view where Sam has seen one (the open
+    collar at three-quarter); the wig turns with the head (people_turned's 'wig'). Kittest outfit_every_view.
     seed: 92                           (only to keep an old film's picture exactly; new people leave it out)
   A real person (chat 4c; people_famous.py: Brand's way, every colour from here):
     head: measured references/FILM/likeness/NAME-card.json, push 1.6     (the likeness card's measures)
@@ -311,6 +315,9 @@ def _fact(d, key, val, people):
             if p == 'no tie':
                 d['tie'] = None
                 continue
+            if p == 'open collar':                     # the shirt open at the neck (chat 15: an outfit choice)
+                d['collar'] = 'open'
+                continue
             w, _, c = p.partition(' ')
             if c.startswith('darker '):                # 'trousers darker jacket 0.6': the jacket's colour, darker
                 src, k = c.split()[1:]
@@ -342,7 +349,7 @@ def person(d):
     sp = dict(DEFAULTS)
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
-              'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed'):
+              'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar'):
         if k in d:
             sp[k] = d[k]
     if 'skin' not in sp:
@@ -391,7 +398,7 @@ def _house(d):
         raise DescriptionError(f"{d['who']}: head: house {h['name']} needs 'hair' one of {', '.join(FH.HAIR)}")
     out = kw.pop('outfit', ('suit', (31, 34, 58)))
     out = (d.get('outfit', out[0]), d.get('jacket', out[1]))
-    for k in ('shirt', 'tie', 'height'):
+    for k in ('shirt', 'tie', 'height', 'collar'):
         if k in d:
             kw[k] = d[k]
     if 'neck_w' in d:
@@ -442,7 +449,47 @@ def _extras():
     import people_famous as PF
     return {'wig': ('head', PP.wig_head), 'robe': ('torso', PP.robe_torso), 'officer': ('torso', PP.officer_torso),
             'open shirt': ('torso', PF.open_shirt), 'crucifix': ('torso', PF.crucifix), 'scarf': ('torso', PF.scarf),
-            'zip': ('torso', PF.zip_top)}
+            'zip': ('torso', PF.zip_top), 'open collar': ('torso', PP.collar_torso)}
+
+
+def turned():
+    """Each torso piece in the turned views (chat 15: one outfit in every view): 'back', its drawing seen from behind
+    (None: nothing of it shows from behind); 'own', a bespoke drawing for a view, in place of the front's wrapped."""
+    import people_parts as PP
+    import people_famous as PF
+    return {'robe': dict(back=PP.robe_back), 'officer': dict(back=PP.officer_back), 'open shirt': dict(back=None),
+            'crucifix': dict(back=None), 'scarf': dict(back=PF.scarf_back), 'zip': dict(back=PF.zip_back),
+            'open collar': dict(back=None, own={'three': PP.collar_three})}
+
+
+def pieces(sp):
+    """The torso pieces this look wears, in the order drawn: the open collar (the outfit's), then the extras."""
+    ex = _extras()
+    return (['open collar'] if sp.get('collar') == 'open' else []) + [e for e in sp.get('kit_extras', ())
+                                                                        if ex[e][0] == 'torso']
+
+
+TURNED_ON = True     # replicate turns the new turned pieces off to score a frame against the film (as PT.ON)
+FILM_TURNED = set()  # pieces the film being replicated draws turned itself (its own body props): left to it
+DREW = []            # the turned pieces drawn (replicate: a frame with any is scored again without them)
+
+
+def kit_torso_view(img, p, sp, view, seated=False):
+    """views.TORSO_EXTRAS: this look's torso pieces in a turned view."""
+    import views as V
+    tv = turned()
+    for e in pieces(sp):
+        if e in FILM_TURNED or not TURNED_ON:
+            continue
+        DREW.append(e)
+        own = tv[e].get('own', {}).get(view)
+        if own:
+            own(img, p, sp, 0.0)
+            continue
+        if view in ('three', 'side'):
+            _extras()[e][1](img, V.WrapPen(img, p, sp, view, seated), sp, 0.0)
+        if tv[e]['back'] and view in ('three_back', 'back', 'side'):
+            tv[e]['back'](img, V.WrapPen(img, p, sp, view, seated, face='back'), sp, 0.0)
 
 
 def _head_parts():
@@ -469,6 +516,9 @@ def install(cast):
     PF.install()
     PT.install()
     FH.install_turned()
+    V = PP.AV.MC.V
+    if kit_torso_view not in V.TORSO_EXTRAS:
+        V.TORSO_EXTRAS.append(kit_torso_view)
     for sp in cast.values():                     # one person may have several looks (Brand's four): the head and
         TC.HEADS[sp['who']] = kit_head           # torso are chosen from the look being drawn, not from the name
         TC.TORSOS[sp['who']] = kit_torso
@@ -485,11 +535,13 @@ def kit_head(img, p, sp, t, hx, hy):
 
 
 def kit_torso(img, p, sp, t):
-    """The look's torso extras, in the order written (open shirt, crucifix, scarf...); none: the plain torso."""
+    """The look's torso pieces, in the order written (open collar, open shirt, crucifix, scarf...); none: the plain
+    torso. A head that repaints the neck (braids) lays the collar again itself (neck_redrawn)."""
     ex = _extras()
-    for e in sp.get('kit_extras', ()):
-        if ex[e][0] == 'torso':
-            ex[e][1](img, p, sp, t)
+    for e in pieces(sp):
+        if e == 'open collar' and sp.get('neck_redrawn'):
+            continue
+        ex[e][1](img, p, sp, t)
 
 
 def faults(cast):
@@ -606,6 +658,7 @@ def replicate(film, out_dir, frames=None, film_keys=False):
     import people_turned as PT
     os.makedirs(out_dir, exist_ok=True)
     BL, found, unhook, crowd_hooks = _film_people(film)
+    FILM_TURNED.update({'blessed': ('scarf', 'officer')}.get(film, ()))   # its own turned scarf and officer kit
     frames = frames or FRAMES[film]
     old = [BL.frame_image(t) for t, _ in frames]
     kit = load(film)
@@ -642,13 +695,16 @@ def replicate(film, out_dir, frames=None, film_keys=False):
     for t, _ in frames:
         drawn.append(set())
         n0 = len(TH.SEEN)
+        del DREW[:]
         new.append(BL.frame_image(t))
         drawn[-1] |= {w.split(':')[1] + ' (turned)' for w, _ in TH.SEEN[n0:] if w.startswith(('kit:', 'kitfilm:'))}
         turned_new = {w for w, _ in TH.SEEN[n0:] if w.startswith(('kit:', 'kitfilm:')) and w.split(':')[1] in PT_WHO(kit, film)}
-        if turned_new:
+        if turned_new or DREW:
             PT.ON = False                         # the same frame with the invented people's turned heads off
+            global TURNED_ON                      # (and the kit's new turned pieces: chat 15)
+            TURNED_ON = False
             plain.append(BL.frame_image(t))
-            PT.ON = True
+            PT.ON = TURNED_ON = True
         else:
             plain.append(None)
     for (mod, name), fn in real.items():
@@ -672,6 +728,7 @@ def replicate(film, out_dir, frames=None, film_keys=False):
     out = os.path.join(out_dir, f'{film}-people-replicate.jpg')
     sheet_.save(out, quality=86)
     PT.KEYED.clear()
+    FILM_TURNED.clear()
     replicate.turned = turned
     return out, scores
 
