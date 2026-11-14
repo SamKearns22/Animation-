@@ -2230,6 +2230,35 @@ def facehouse_whole_head():
 
 
 @test
+def kit_people_never_generic():
+    """Face tool chat 14 (Sam, 14 Nov, Y: background people move onto the new three-quarter turned head): everyone a
+    people file builds, crowds included, turns through turnhead (its 30-degree three-quarter), never views.py's old
+    generic head; only the test-only hand-made head parts (people.HEAD_PARTS) are let off."""
+    from PIL import Image
+    import people
+    import people_parts as PP
+    import turnhead as TH
+    from satire_style import install_circle_hands
+    B, V = PP.B, PP.AV.MC.V
+    install_circle_hands(B)
+    B.SS = 1
+    films = sorted(f[:-len('-people.txt')] for f in os.listdir(os.path.join(HERE, '..', 'story')) if f.endswith('-people.txt'))
+    bad, n = [], 0
+    for film in films:
+        cast = people.install(people.load(film))
+        for w, sp in cast.items():
+            if sp.get('kit_head') in people.HEAD_PARTS:
+                continue
+            n += 1
+            del TH.GENERIC[:]
+            tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, 45)
+            if TH.GENERIC:
+                bad.append(f'{film}:{w}')
+    return not bad, f'{n} people in {len(films)} people files turned; on the generic head: {bad or "none"}'
+
+
+@test
 def facehouse_beard_turns():
     """Face tool chat 14: a measured beard (Walliams' stubble) is drawn in the turned views too, as Vance's goatee
     goes round (chat 13 drew it front-on only: his three-quarter and side were bare-chinned)."""
