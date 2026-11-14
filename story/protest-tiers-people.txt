@@ -1,18 +1,19 @@
 # Protest Tiers' people (14 Nov, cast chat 5), described for the people kit (source/people.py; first film test).
 # Everyone is a Glimpse (rule 24): wide shots, small. What they wear on top (helmets, visors, hoods, masks, shields,
 # armour, flags, keys, signs) is drawn by source/protest_tiers_cast.py over these bodies.
+# Officers and rioters have `hair: none`: a helmet or hood covers it all (chat 6: hair poked out behind helmets).
 # `python3 source/people.py sheet protest-tiers OUT.jpg` draws them all bare.
 
 # officer: Riot officer (one build; four forces recolour him in protest_tiers_cast.FORCES)
 body: 1.82 m, shoulders 172, head 68 x 92, hem 470
-skin: 226 186 160 | hair: crop, 40 32 28
+skin: 226 186 160 | hair: none, 40 32 28
 face: jaw_wide +0.06, face_wide +0.03
 eyes: 70 60 50 | lips: 170 116 104 | brows: 40 32 28, width 4.6
 outfit: jumper 34 38 52, shirt 34 38 52, no tie, trousers 34 38 52, shoes 18 18 20
 
 # rioter: Hooded rioter (black hoodie, hood up, face mask; the hood and mask in protest_tiers_cast)
 body: 1.78 m, shoulders 156, head 66 x 94, hem 470
-skin: 230 192 166 | hair: crop, 30 26 24
+skin: 230 192 166 | hair: none, 30 26 24
 eyes: 70 60 50 | lips: 170 116 104 | brows: 30 26 24, width 4.4
 outfit: jumper 26 26 30, shirt 26 26 30, no tie, trousers 30 30 34, shoes 20 20 22
 

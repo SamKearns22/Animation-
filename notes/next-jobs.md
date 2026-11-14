@@ -32,16 +32,18 @@
   doesn't look like him. Very different head shape too." Why (chat 13's read): the inner face was tuned off a smiling
   photo, but the OUTLINE is the house's: narrow temples, long, tapering, where his (Blessed, "That's him") is a broad
   box, jaw as wide as the cheeks, long heavy lower face (blessed_walliams.outline, LOW 1.15); eyes small and tired.
-  Plan: `facehouse.py trace walliams` (`shape`, as Kemi's), checked against the Blessed outline; bigger, livelier eyes
-  as the Blessed head's. Sam's eye is the judge (the name test is calibrated out). Lesson to propose: the face tool's
-  sheet puts a head Sam already knows beside A, B, C, and traces the outline by default.
+  **Sam's direction (replaces the lesson chat 13 offered):** "I think it just needs to be able to draw the face shape
+  from the reference a lot more intelligently": the face tool reads the head's whole shape off the photos itself
+  (temples, cheeks, jaw, chin, crown with the hair), for every face, not a house outline from a few measures; also
+  bigger, livelier eyes as the Blessed head's. A new build at Opus high, judged on Walliams beside the Blessed head
+  Sam knows (Sam's eye is the judge; the name test is calibrated out). Andy and Kemi's front heads held.
 - **Seen, not fixed:** side view: the stubble's top edge ends in a straight step behind the jaw.
 - **Needs Sam:** nothing open (the Walliams N is being worked).
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on
   budget." Age lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP; people.py `_extras`,
   views.py `torso_view`.
-- **Open rule requests:** the lesson above (Walliams sheet), to propose to Sam with the sheet.
+- **Open rule requests:** none.
 - **For Claude:** facehouse._turn_face calls stubble(ink=False); open_collar / open_collar_three (facehouse 680/691);
   PF.open_shirt/crucifix/scarf/zip_top, PP.robe_torso/officer_torso; views.torso_view(img, p, sp, view). Older code
   names: notes/archive/facetool-handovers.md.

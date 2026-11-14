@@ -1,3 +1,3 @@
-Protests (protest-tiers): cast built (4 police forces, hooded rioter, marchers, moped + RPG); first sheet drawn, 8 faults listed. Face tool: Walliams made end to end by the face tool (house head, stubble, smirk), sheet sent. Face tool chat 14: his stubble goes round the turned views; background people checked on the new three-quarter head.
-Now: Protests cast chat 6 (Opus high): fix the 8 faults, critique, cast sheet to Sam. Face tool chat 15 (Opus high): one outfit in every view, then Walliams' head shape.
-Waiting: nothing on the face tool (Sam's N on Walliams is being worked).
+Protests (protest-tiers): cast faults fixed in chat 6 (helmets and hoods fit the new heads, phone held in front with its screen to the holder, signs, flags, placard, shield); sheet redrawn, not sent. Face tool: Walliams' stubble goes round the turned views; background people all turn on the new three-quarter head (checked, test added); Sam said N to Walliams' head shape.
+Now: Protests cast chat 7 (Opus high): the check for things held behind the head, the last kit faults, glimpse panels, critique twice, cast sheet to Sam. Face tool chat 15 (Opus high): one outfit in every view, then the face-shape build.
+Waiting: Sam's answer to chat 5's rule question (held things in front of the face); his look at the second three-quarter sheet.
