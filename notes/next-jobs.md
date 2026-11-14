@@ -29,7 +29,13 @@
   films (look 'detail'), naming `turns` and the people lines. Then Walliams end to end from his photos
   (`references/blessed/likeness/` w06, w07, w01, w02 fronts, w09 three-quarter; facepick make, `facehouse.py brows`,
   his lines in the people file), blind name test, and send Sam a sheet of the Walliams head (with a Checks line).
-- **Needs Sam:** his look at the three-quarter sheet (a no comes back as a note; the chain does not wait on it).
+- **Sam, 14 Nov (after chat 12), two more jobs for chat 13, before Walliams:** (a) Y: background people on the generic
+  head (views.head_view) move onto the new three-quarter turned head. (b) "clothes remain consistent no matter the
+  pose, as that was the source of the Kemi problem": the outfit is described once and every view (front,
+  three-quarter, side, behind) draws it; nothing outfit-like hides in a hair piece (Kemi's open collar sits in the
+  braids code: make it the outfit's own choice, e.g. `outfit: suit ..., open collar`). A kittest draws each outfit
+  from every view and fails when a view drops a piece the front has (rule 86).
+- **Needs Sam:** nothing open (he has seen and liked the second three-quarter sheet).
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
   caricature. Andy and Kemi finished: do not change their front heads.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (IN THE PEOPLE KIT, TURNED).
