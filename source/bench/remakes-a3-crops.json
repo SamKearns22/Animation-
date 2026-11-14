@@ -329,7 +329,8 @@
     "P10"
    ],
    "words": "respirator|mask|throat|grip|(wing|hand).*(face|head)",
-   "said": "the front grip sits on top of the respirator: the hand should tuck round his neck"
+   "said": "the front grip sits on top of the respirator: the hand should tuck round his neck",
+   "words_only": true
   },
   {
    "id": "k76",
@@ -343,7 +344,8 @@
     "P7"
    ],
    "words": "boot|feet|foot|leg|(under|below|beneath).*(box|platform|tower|floor)",
-   "said": "the tower lookout's boots poke out under his box"
+   "said": "the tower lookout's boots poke out under his box",
+   "words_only": true
   },
   {
    "id": "k77",
@@ -357,8 +359,9 @@
     "P7",
     "P8"
    ],
-   "words": "leg|stiff|tube|stance|feet|foot",
-   "said": "the lower-left man is clearly not fully formed in the stills (both legs one stiff tube)"
+   "words": "leg|stiff|tube|stance",
+   "said": "the lower-left man is clearly not fully formed in the stills (both legs one stiff tube)",
+   "words_only": true
   },
   {
    "id": "k70",
@@ -371,8 +374,9 @@
    "lines": [
     "P7"
    ],
-   "words": "kneel|off the ground|lift|float|tilt|angled|tipp",
-   "said": "why is the kneeling man angled up off the ground as Navi hits?"
+   "words": "off the ground|lifted|float|angled up|tipp|not kneeling|straight leg",
+   "said": "why is the kneeling man angled up off the ground as Navi hits?",
+   "words_only": true
   },
   {
    "id": "k73",
@@ -387,7 +391,8 @@
     "S3"
    ],
    "words": "flower|planter|(haz|pale|faded|wash).*(near|foreground|box)|(near|foreground|box).*(haz|pale|faded|wash)",
-   "said": "the near flower box is hazed like the background, not coloured as foreground"
+   "said": "the near flower box is hazed like the background, not coloured as foreground",
+   "words_only": true
   },
   {
    "id": "k68",
@@ -401,7 +406,8 @@
     "S2"
    ],
    "words": "townsfol|wall|inside|embedded|(people|figure|person).*(house|building|door)",
-   "said": "townsfolk stood in the house walls: move or delete"
+   "said": "townsfolk stood in the house walls: move or delete",
+   "words_only": true
   },
   {
    "id": "k75",
@@ -417,7 +423,8 @@
     "M1"
    ],
    "words": "banner",
-   "said": "S13 has a blue banner behind Link that S12b doesn't show"
+   "said": "S13 has a blue banner behind Link that S12b doesn't show",
+   "words_only": true
   }
  ]
 }

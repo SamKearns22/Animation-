@@ -6,6 +6,8 @@ MAP
   paths ............ PACKS (source/data/critique/FILM/rR-pN, git-ignored), CHECKLIST (guides/critique-checklist.md)
   checklist_for .... the lines for the parts asked: A always, no "Came from", no header, no "Tool:"
   _panel / look .... render a panel (film.picture(t), clean) and the 1-look sheets (numbers only, 1080 px wide)
+  closeups ......... every person in a full panel gets a close-up panel (Sam, 14 Nov): boxes from the panel's
+                     "people" or the film's scene(t) (people_boxes); pack adds them after the spec's own panels
   check_sheet ...... each panel beside its references (same height), for step 2
   before / pairs ... a notes round: frames saved before any fix; beforeafter.jpg (marked, before, after, same box)
   pack ............. writes the pack and prints the one-line Agent prompt
@@ -130,6 +132,68 @@ def _frame(film, t):
 def _panel(film, p):
     im = Image.open(p['img']).convert('RGB') if p.get('img') else _frame(film, p['t'])
     return im.crop(tuple(p['crop'])) if p.get('crop') else im
+
+
+def people_boxes(film, t):
+    """[(name, screen box)] of every person on screen at t, from the film's scene(t) and cam_for(t) (audit.py's
+    solids: a person is a thing with a head); None when the film gives no scene(t)."""
+    if not (hasattr(film, 'scene') and hasattr(film, 'cam_for')):
+        return None
+    import numpy as np
+    import audit
+    folk = [th for th in film.scene(t) if any(str(s.part).startswith('head') for s in th.solids)]
+    if not folk:
+        return []
+    seen, _, box = audit._screen_boxes(film, film.cam_for(t), np.array([th.lo for th in folk]),
+                                      np.array([th.hi for th in folk]))
+    return [(th.name, [float(v) for v in b]) for th, ok, b in zip(folk, seen, box) if ok]
+
+
+def closeups(film, specs, W=1080, H=1920, pad=0.15, least=360, big=0.7):
+    """Sam, 14 Nov (critic bench: Blessed 4 -> 7 caught with them): every person in a full-frame panel gets a detail
+    panel of their own, so faults too small to see at phone size (a missing mouth, a neck, boots under a box) are
+    looked at full size. Boxes come from the panel's "people" ([[x0,y0,x1,y1] or {"name", "box"}]) or the film's
+    scene(t); people whose boxes mostly overlap share one close-up; anyone already filling the frame gets none.
+    Returns (detail panels, panels with a person but no boxes)."""
+    out, blind = [], []
+    for i, p in enumerate(specs, 1):
+        if p.get('crop') or p.get('glimpse') or 'P' not in p.get('parts', '') or p.get('closeups') is False:
+            continue
+        given = p.get('people')
+        if given is not None:
+            boxes = [(b.get('name', 'person'), b['box']) if isinstance(b, dict) else ('person', b) for b in given]
+        elif 't' in p:
+            boxes = people_boxes(film, p['t'])
+        else:
+            boxes = None
+        if boxes is None:
+            blind.append(i)
+            continue
+        groups = []
+        for name, (x0, y0, x1, y1) in boxes:
+            w, h = x1 - x0, y1 - y0
+            x0, y0, x1, y1 = x0 - pad * w, y0 - pad * h, x1 + pad * w, y1 + pad * h
+            cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+            w, h = max(x1 - x0, least), max(y1 - y0, least)
+            b = [max(0, cx - w / 2), max(0, cy - h / 2), min(W, cx + w / 2), min(H, cy + h / 2)]
+            if b[2] - b[0] < 40 or b[3] - b[1] < 40:
+                continue
+            for g in groups:
+                ix = max(0, min(g[1][2], b[2]) - max(g[1][0], b[0])) * max(0, min(g[1][3], b[3]) - max(g[1][1], b[1]))
+                if ix > 0.5 * min((g[1][2] - g[1][0]) * (g[1][3] - g[1][1]), (b[2] - b[0]) * (b[3] - b[1])):
+                    g[0].append(name)
+                    g[1] = [min(g[1][0], b[0]), min(g[1][1], b[1]), max(g[1][2], b[2]), max(g[1][3], b[3])]
+                    break
+            else:
+                groups.append([[name], b])
+        for names, b in groups:
+            if (b[2] - b[0]) >= big * W and (b[3] - b[1]) >= big * H:
+                continue                                   # already fills the frame: the panel is its close-up
+            d = {k: v for k, v in p.items() if k not in ('people', 'new', 'drawn')}
+            d.update(crop=[int(round(v)) for v in b],
+                     **{'is': f"close-up of panel {i}: {' and '.join(dict.fromkeys(names))} ({p['is']})"})
+            out.append(d)
+    return out, blind
 
 
 def _numbered(im, n, width, box=False):
@@ -375,6 +439,11 @@ def pack(film_name, spec_path):
     for i, p in enumerate(specs, 1):
         if 'P' in p.get('parts', '') and not p.get('refs'):
             print(f'critique: panel {i} shows a person with no reference: P4 (the face) will come back CAN\'T TELL')
+    extra, blind = closeups(film, specs)
+    if blind:
+        print(f'critique: panel(s) {_span(blind)} show a person but the film gives no scene(t): add "people" boxes '
+              f'to the spec for their close-ups (Sam, 14 Nov: every person gets one)')
+    specs = spec['panels'] = specs + extra
     out = os.path.join(PACKS, film_name, f'r{rnd}-p{_next_pass(film_name, rnd)}')
     os.makedirs(out)
     pics = [_panel(film, p) for p in specs]

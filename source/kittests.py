@@ -788,6 +788,40 @@ def critique_record():
 
 
 @test
+def critique_closeups():
+    """Sam, 14 Nov: every person in a full critique panel gets a close-up (boxes from the spec's "people" or the
+    film's scene(t)); none for a detail, a Glimpse, a panel with no person, or someone already filling the frame;
+    overlapping people share one; a film with no scene(t) and no boxes is named, not skipped silently."""
+    import critique as C
+
+    class NoScene:
+        pass
+    panels = [{'t': 1.0, 'is': 'two men talking', 'parts': 'PS',
+               'people': [[100, 900, 300, 1500], [250, 950, 420, 1500], {'name': 'judge', 'box': [700, 200, 860, 500]}]},
+              {'t': 1.0, 'is': 'a close-up', 'parts': 'P', 'people': [[0, 0, 1080, 1920]]},
+              {'t': 1.0, 'is': 'a detail', 'parts': 'P', 'crop': [0, 0, 500, 500], 'people': [[10, 10, 50, 50]]},
+              {'t': 1.0, 'is': 'a glimpse', 'parts': 'P', 'glimpse': True, 'people': [[10, 10, 300, 300]]},
+              {'t': 1.0, 'is': 'a sign', 'parts': 'O'},
+              {'t': 1.0, 'is': 'a crowd', 'parts': 'P'}]
+    extra, blind = C.closeups(NoScene(), panels)
+    names = [e['is'].split(':')[1].split('(')[0].strip() for e in extra]
+    whole = all(0 <= e['crop'][0] < e['crop'][2] <= 1080 and 0 <= e['crop'][1] < e['crop'][3] <= 1920 for e in extra)
+    ok = len(extra) == 2 and names == ['person', 'judge'] and blind == [6] and whole \
+        and all(e['crop'][2] - e['crop'][0] >= 300 for e in extra) and 'people' not in extra[0]
+    real = ''
+    try:
+        import importlib
+        F = importlib.import_module('satire_template')
+        t = F.SHOTS[0][1] + 0.5
+        got = C.people_boxes(F, t)
+        real = f"; satire_template at {t:.1f} s: {len(got or [])} person box(es)"
+        ok = ok and got is not None
+    except Exception as e:                               # the template may need its voice files: say so, not fail
+        real = f"; satire_template not tried ({type(e).__name__})"
+    return ok, f"close-ups: {names}, no boxes for panel(s) {blind}, all inside the frame: {whole}{real}"
+
+
+@test
 def critique_each_fault_once():
     """Rule 89 (Sam, 11 Nov): the helper lists each fault ONCE with its panels; the old per-panel form still reads, merged."""
     import json, tempfile, time

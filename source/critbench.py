@@ -9,6 +9,7 @@ MAP
   make ............. one pack per critic, the same pictures and step files critique.py writes (cold look, then check)
   prompt ........... the one-line Agent call for that critic (kind `critic`, model named)
   match ............ a key item is CAUGHT by a FAULT on one of its panels that names one of its lines or its words
+                     ("words_only": true: its words alone, where a line is too broad, e.g. S6 or P7 on a busy panel)
   score ............ caught / key, misses (with the line to improve), extras (faults not in the key: Claude rules
                      each real or false in the case file's "extras_ruled"), can't-tells; one row in notes/critic-bench.tsv
   table ............ the scores so far, critic by critic
@@ -113,7 +114,7 @@ def match(key, faults):
         for f in faults:
             if f['kind'] != 'FAULT' or not set(f['panels']) & set(k['panels']):
                 continue
-            if set(f['lids']) & set(k['lines']) or re.search(k['words'], f['words'], re.I):
+            if (not k.get('words_only') and set(f['lids']) & set(k['lines'])) or re.search(k['words'], f['words'], re.I):
                 got[k['id']] = f
                 break
     return got

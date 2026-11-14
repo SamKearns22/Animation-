@@ -57,10 +57,12 @@
 - **Cost per film:** a rough sheet is a 1-minute command and one look from you, instead of hand-drawn roughs; it aims at the ranking list's ~4% of rebuild notes (Blessed notes 4, 5, 20, 22, 32, 39 were rebuilds a rough would have shown).
 - **Decide (my picks):** 1) Y: the rough sheet goes to you once per film before building, plus a small one whenever something new is added. 2) Y: the place outlines stay as depth markers only (where across the picture people stand is set later by the shot, so the outlines are spread evenly; the van and phone ones are big because those people are near the lens).
 
-## Critic bench on Remakes (chat 2 of the retest; stopped by the budget stop before scoring)
-- **Built:** a Remakes test (`source/bench/remakes-a3.json` and `-crops`): 15 stills from the version Sam's notes 68-77 were on, 7 of his notes as the answer key (grip on the mask, lookout's boots under his box, the stiff-legged soldier, the kneeling man lifted, the hazed flower box, townsfolk in the walls, the banner in one wall shot only); the crops version adds 15 close-ups of every person. All four critic packs are made.
-- **Stopped:** the ledger's budget stop fired: this bench work is counted under the Remakes film (52.5% of a week against its 14.5%), though the job's own stop is 2.25%. The four critics were stopped before answering. On Sam's Y the next chat runs the four critics (about 0.65% of a week) and scores them.
-- **For Claude:** the stop is a misfiling (bench files named remakes-*); rerun: delete source/data/critbench/remakes-a3*/{opus,sonnet}, `critbench.py make remakes-a3` and `make remakes-a3-crops` (frames cached), four critic agents, `critbench.py score`.
+## Critic bench on Remakes (chat 2; done, about 2.8% of a week against the 2.25% stop: over, see Checks)
+- **Works:** a Remakes test (`source/bench/remakes-a3*.json`): 15 stills from the version Sam's notes 68-77 were on, 7 of his notes as the key. Caught, out of 7: plain pictures Opus 1, Sonnet 2; with close-ups of every person Opus 3, Sonnet 4. Both films together (19 notes): plain Opus 6, Sonnet 6; close-ups Opus 5, Sonnet 11. Extras about the same for all (9-11 a run).
+- **Missed by all four:** the hazed near flower box, townsfolk standing in the house walls, the banner in one wall shot only: all place faults, which person close-ups don't help. Next improvement: line S6 gets a side-by-side of the shots of one set, and S2 a close-up of far people against buildings.
+- **Built (Sam's Y, 14 Nov):** critique packs now add a close-up of every person (from the film's own record of where people stand, or boxes in the spec); rule 89 says so; kittest passes. The ledger now records overnight builds and tests apart from the films (Sam, 14 Nov): this chat had been billed to Remakes and tripped its budget stop.
+- **Decide:** Y/N the critic runs on Sonnet (my pick Y: 11 of 19 with close-ups against Opus 5, same extras, about 40% cheaper). Lost: the Opus critic.
+- **Checks:** budget slipped: 2.8% against the 2.25% stop (the rerun after the false budget stop, and the close-ups build in the same chat).
 
 ## Sam's answers (14 Nov, morning)
 - Face tool: 1) Burnham **C**; 2) Badenoch **C** ("best for the house style and matching the features"); 3) **Y**, finish the left list; 4) **Y**, rule 49.3 line written.
