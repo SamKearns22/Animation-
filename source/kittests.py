@@ -1702,22 +1702,34 @@ def people_from_a_description():
                      ('# a: A\nskin: pale\nhair: mohican', 'an unknown haircut'), ('skin: pale', 'no person yet'),
                      ('# a: A\nskin: pale\nbeard: full, chin pale', 'a full beard missing its colours'),
                      ('# a: A\nskin: pale\nhead: part nobody', 'an unknown head part'),
-                     ('# a: A\nlook of: b', 'a look of nobody')):
+                     ('# a: A\nlook of: b', 'a look of nobody'),
+                     ('# a: A\ncrowd: x\nskin (2q): pale; pink', 'a crowd formula not of i and s')):
         try:
             K.parse(txt)
             bad.append(why + ' was not refused')
         except K.DescriptionError:
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
-             ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'page.py',
+             ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'people_turned.py', 'page.py',
               'kittests.py') and re.search(r'^\s*(import people\b|from people\b)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
         bad.append(f'films using the kit before Sam approves it: {users}')
     tmp = os.path.join(HERE, 'data', 'kittest-people')
-    out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van')])
+    import blessed as BL0
+    press = K.crowds('blessed')['press']                # chat 4d: the press pack, a crowd of 31 from 16 lines
+    for i in range(31):
+        f, k = BL0.press_sp(i, 0), K.crowd_person(press, i, 0, BL0.press_sp(i, 0)['kit'])
+        if any(f.get(q) != k.get(q) for q in ('skin', 'hair_c', 'jacket', 'trousers', 'shirt', 'shoe', 'shoulders',
+                                             'height', 'hw', 'seed')) or f['face_m'] != k['kit_face']['m']:
+            bad.append(f'journalist {i + 1} not as the film drew them')
+            break
+    out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van'),
+                                               (24.0, 'escort'), (60.5, 'gates2')], film_keys=True)
     drawn = set().union(*[set(w) for *_, w in scores])
-    for who in ('brand', 'walliams', 'brand (turned)'):        # chat 4c: the famous faces, front and turned
+    if 'escort' not in K.replicate.turned:                 # chat 4d: invented people turn with their own face
+        bad.append('the officer in escort was not turned by the kit')
+    for who in ('brand', 'walliams', 'brand (turned)', 'press (turned)', 'officer (turned)'):
         if who not in drawn:
             bad.append(f'{who} not drawn by the kit')
     for t, label, diff, _ in scores:
@@ -1742,7 +1754,8 @@ def people_from_a_description():
     seen = float((np.abs(np.asarray(a.convert('RGB'), np.int16) - np.asarray(b.convert('RGB'), np.int16)).max(axis=2) > 24).mean() * 100)
     if seen <= 0.0:
         bad.append('a changed lip colour did not change the picture')
-    return not bad, '; '.join(bad) or (f'{len(drawn)} people redrawn from their descriptions, '
+    return not bad, '; '.join(bad) or (f'{len(drawn)} people redrawn from their descriptions (the press pack a crowd'
+                                        f' of 31; turned heads new: escort {K.replicate.turned["escort"]:.2f}%), '
                                         + ', '.join(f'{lb} {d:.2f}%' for _, lb, d, _ in scores) + f' differ; a changed line shows ({seen:.2f}%)')
 
 

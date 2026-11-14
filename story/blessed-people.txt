@@ -207,3 +207,23 @@ skin: 242 190 168 | hair: crop, 66 54 46 | brows: 56 44 38, width 4.6
 outfit: jumper 134 136 140, shirt 134 136 140, trousers 134 136 140, shoes 236 236 236
 extras: zip
 seed: 95
+
+# press: Journalist (a crowd: member i of the pack; s is the shot's seed; job is what the film has them doing)
+crowd: press
+body: 1.76 m, head 66 x 96
+outfit: suit, shirt white, no tie, shoes 24 20 18
+eyes: 80 60 44 | brows: darker hair 0.8
+seed: 600 + i
+hair (i+2s): short; bob; pony; crop; bald; curly; long; side
+face (i+2s): face_wide 0.05, jaw_wide 0.06; face_wide -0.04, chin_long 0.02; ; jaw_wide 0.08; face_wide 0.06; face_wide -0.02; face_wide -0.05, jaw_wide -0.05; jaw_wide 0.03
+hair seed (i+2s): 500; 501; 502; 503; 504; 505; 506; 507
+hair colour (i+s): 58 44 36; 30 24 22; 150 110 70; 170 166 162; 110 70 46; 196 196 192
+skin (i): pale; pink; olive; brown
+jacket (3i+s): navy; charcoal; 110 40 50; 70 90 120; 90 96 80; 150 120 90; 60 60 70
+trousers (i): 40 40 46; darker jacket 0.6
+body (i): shoulders 150; shoulders 156; shoulders 162
+taller (7i+s): 0; 0.05; 0.1
+when hair bob; pony; long: body: 1.64 m, shoulders 138, head 62 x 96
+when hair bald: hair colour: 128 120 114
+when job tv; boom: outfit: jumper | jacket (i+s): 40 42 48; 52 56 50; 30 34 44 | trousers (i): 92 90 70; 70 72 64; 60 58 52 | shoes: 40 36 32
+when job stills: jacket: 46 48 54 | trousers: 58 72 96 | shirt: 70 74 82

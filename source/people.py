@@ -25,15 +25,24 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     mood NAME: brow 0.03, frown -0.01, lid 0.14, squint 0.45, mouth grin  (adds to the house moods, people_famous)
     look of: OTHER                     the same person in another look (Brand's four); the film knows them by one name
     head: part walliams                a bespoke head too much its own for lines (HEAD_PARTS; test only)
+  A crowd (chat 4d; Blessed's press pack, 31 people from 16 lines): its lines apply to every member, and
+    crowd: press                       starts it (the film asks for member i; s is the shot's seed; job what they do)
+    hair (i+2s): short; bob; pony      member i takes item (i + 2s) of the list (any fact: skin, jacket, face...)
+    when hair bob; long: body: 1.64 m  facts for the members that fit (when hair ..., when job tv; boom: ...)
+    taller (7i+s): 0; 0.05 | seed: 600 + i | hair seed: 500 | hair colour: C | jacket: C | brows: darker hair 0.8
+    trousers: darker jacket 0.6
+  Turned heads (chat 4d; people_turned.py): every invented face turns with its own face card, colours, haircut,
+    beard and glasses (Blessed's press pack's way); before, the side and back were the engine's plain head.
 
     python3 source/people.py sheet FILM OUT.jpg          front, side, back of everyone in the file, true heights
-    python3 source/people.py replicate FILM OUT_DIR      the finished film's frames beside the same frames with the
-                                                         kit's people swapped in (nothing in the film changes)
+    python3 source/people.py replicate FILM OUT_DIR [--film-keys]   the finished film's frames beside the same frames
+                                                         with the kit's people swapped in (nothing in the film changes);
+                                                         new turned heads scored apart (an improvement to look at)
     python3 source/people.py describe FILM               the film's people, as the page shows them
 
-Map: colours 45 | steps 59 | parse 70 | the engine's person 230 (a real person 266) |
-     install 291 (each look's head and torso 325; faults 342) | sheet 352 |
-     replicate 389 | lines for the page 482 | main 494
+Map: colours 55 | steps 70 | parse 81 (a crowd's lines 129, member 166) | the engine's person 324 (a real person
+     366; crowds 391) | install 401 (each look's head and torso 437; faults 454) | sheet 464 | replicate 510 |
+     lines for the page 643 | main 655
 """
 import os
 import re
@@ -49,10 +58,11 @@ COLOURS = {   # the house's skin tones (burnham) and plain words for clothes and
     'deep': (120, 78, 56), 'navy': (34, 40, 62), 'charcoal': (46, 46, 54), 'black': (22, 20, 22),
     'white': (246, 246, 246), 'grey': (134, 136, 140), 'red': (170, 26, 34), 'blonde': (214, 184, 120),
     'ginger': (150, 70, 40), 'dark brown': (62, 42, 32), 'light brown': (150, 108, 66), 'silver': (196, 192, 186)}
-HAIR_STYLES = ('crop', 'bald', 'side', 'bob', 'long', 'curly', 'bun', 'pony', 'receding', 'none', 'curls', 'knot')
+HAIR_STYLES = ('crop', 'bald', 'side', 'bob', 'long', 'curly', 'bun', 'pony', 'receding', 'none', 'curls', 'knot',
+               'short')
 FAMOUS_HAIR = ('curls', 'knot')     # a measured head's hair (people_famous): long loose curls, or pulled into a topknot
 BEHIND = {'crop': 'crop', 'bald': 'bald', 'side': 'side', 'bob': 'bob', 'long': 'long', 'curly': 'wavy', 'bun': 'crop',
-          'pony': 'crop', 'receding': 'bald', 'none': 'bald', 'curls': 'wavy', 'knot': 'crop'}   # the engine's hair for the side and back views
+          'pony': 'crop', 'receding': 'bald', 'none': 'bald', 'curls': 'wavy', 'knot': 'crop', 'short': 'crop'}   # the engine's hair for the side and back views
 OUTFITS = ('suit', 'jumper', 'dress', 'blouse')
 DEFAULTS = dict(hw=66, hh=96, head_dy=10, full=True, pose='custom', shoulders=150, height=1.75, shoe=(30, 26, 24),
                 trousers=(50, 50, 56), shirt=(246, 246, 246), tie=None)
@@ -102,6 +112,8 @@ def parse(text):
         if cur is None:
             raise DescriptionError(f'line {n}: no person yet ("# who: Name" starts one)')
         cur['_lines'].append(line.strip())
+        if cur.get('crowd') is not None and _crowd_line(cur, line.strip(), n):
+            continue
         for fact in line.split(' | '):
             key, _, val = fact.partition(':')
             key = key.strip().lower()
@@ -114,9 +126,78 @@ def parse(text):
     return people
 
 
+CYCLE = re.compile(r'^([a-z ]+?)\s*\(([0-9is+ ]+)\)\s*:\s*(.*)$')
+WHEN = re.compile(r'^when\s+(\w+)\s+([^:]+):\s*(.+)$')
+
+
+def _formula(f):
+    """'3i+s' -> (3, 1): member i of a crowd takes item (3i + s) of a list (s: the shot's seed)."""
+    a = b = 0
+    for term in f.replace(' ', '').split('+'):
+        m = re.fullmatch(r'(\d*)([is])', term)
+        if not m:
+            raise DescriptionError(f'({f}): a sum of i and s terms, like (3i+s)')
+        k = int(m.group(1) or 1)
+        a, b = (a + k, b) if m.group(2) == 'i' else (a, b + k)
+    return a, b
+
+
+def _crowd_line(cur, line, n):
+    """A crowd's own lines, kept to apply per member: 'FACT (3i+s): item; item; ...' (member i takes one item) and
+    'when hair bob; long: FACTS' / 'when job tv: FACTS' (applied to the members it fits). True if it was one."""
+    m = WHEN.match(line)
+    if m:
+        facts = []
+        for fact in m.group(3).split(' | '):
+            c = CYCLE.match(fact.strip())
+            facts.append((c.group(1).strip(), _formula(c.group(2)), [q.strip() for q in c.group(3).split(';')])
+                         if c else (fact.partition(':')[0].strip() if ':' in fact else fact.split(' ')[0],
+                                    None, [fact.partition(':')[2].strip() if ':' in fact
+                                           else fact.strip().partition(' ')[2]]))
+        cur['crowd']['when'].append((m.group(1), {q.strip() for q in m.group(2).split(';')}, facts))
+        return True
+    c = CYCLE.match(line)
+    if c:
+        cur['crowd']['cycle'].append((c.group(1).strip(), _formula(c.group(2)), [q.strip() for q in c.group(3).split(';')]))
+        return True
+    return False
+
+
+def member(d, i, s=0, job=None):
+    """Crowd member i (s: the shot's seed; job: what the film has them doing) -> their own description."""
+    cr = d['crowd']
+    m = {k: (dict(v) if isinstance(v, dict) else v) for k, v in d.items() if k != 'crowd'}
+    m["name"] = f"{d['name'].split('(')[0].strip()} {i + 1}"
+
+    def apply(key, form, items):
+        val = items[0] if form is None else items[(form[0] * i + form[1] * s) % len(items)]
+        if val:
+            _fact(m, key, val, {})
+    for key, form, items in cr['cycle']:
+        apply(key, form, items)
+    for what, among, facts in cr['when']:
+        if (m.get('hair_style') if what == 'hair' else job if what == 'job' else None) in among:
+            for f in facts:
+                apply(*f)
+    m['height'] = m.get('height', DEFAULTS['height']) + m.pop('taller', 0.0)
+    if 'seed_base' in m:
+        m['seed'] = m.pop('seed_base') + i
+    return m
+
+
 def _fact(d, key, val, people):
     parts = [p.strip() for p in val.split(',') if p.strip()]
-    if key in ('like', 'look of'):
+    if key == 'crowd':
+        d['crowd'] = dict(kind=val, cycle=[], when=[])
+    elif key == 'hair colour':
+        d['hair_c'] = colour(val)
+    elif key == 'hair seed':
+        d['strand_seed'] = int(val)
+    elif key == 'taller':
+        d['taller'] = float(val)
+    elif key in ('jacket', 'trousers', 'shirt', 'shoes', 'sleeves'):
+        _fact(d, 'outfit', d.get('outfit', 'suit') + ', ' + key + ' ' + val, people)
+    elif key in ('like', 'look of'):
         if val not in people:
             raise DescriptionError(f'{key} {val}: no such person above')
         for k, v in people[val].items():
@@ -183,6 +264,9 @@ def _fact(d, key, val, people):
     elif key in ('eyes', 'lips'):
         d[key] = colour(val)
     elif key == 'brows':
+        if parts[0].startswith('darker hair'):         # the hair's colour, darker (settled when the person is built)
+            d['brows_dk'] = float(parts[0].split()[-1])
+            return
         d['brows'] = colour(parts[0])
         for p in parts[1:]:
             w, v = p.split(' ')
@@ -215,15 +299,24 @@ def _fact(d, key, val, people):
                 d['tie'] = None
                 continue
             w, _, c = p.partition(' ')
+            if c.startswith('darker '):                # 'trousers darker jacket 0.6': the jacket's colour, darker
+                src, k = c.split()[1:]
+                d['trousers' if w == 'trousers' else w] = tuple(int(v * float(k)) for v in d[src])
+                continue
             d[{'shirt': 'shirt', 'tie': 'tie', 'trousers': 'trousers', 'sleeves': 'sleeve', 'shoes': 'shoe',
                'dress': 'dress', 'jacket': 'jacket'}[w]] = colour(c)
+            if w == 'jacket':
+                d['sleeve'] = d['jacket']
     elif key == 'extras':
         for p in parts:
             if p not in EXTRAS:
                 raise DescriptionError(f'extra {p!r}: one of {", ".join(EXTRAS)}')
         d['extras'] = parts
     elif key == 'seed':
-        d['seed'] = int(val)
+        if val.replace(' ', '').endswith('+i'):          # a crowd: member i's seed
+            d['seed_base'] = int(val.split('+')[0])
+        else:
+            d['seed'] = int(val)
     else:
         raise DescriptionError(f'unknown line {key!r}')
 
@@ -241,6 +334,8 @@ def person(d):
         raise DescriptionError(f"{d['who']}: no skin line")
     sp.setdefault('hair_c', (40, 32, 28))
     sp['hair'] = BEHIND[style]
+    if 'brows_dk' in d:
+        d = dict(d, brows=tuple(int(v * d['brows_dk']) for v in sp['hair_c']))
     sp['brow_c'] = d.get('brows', (40, 32, 28))
     if 'brow_w' in d:
         sp['brow_w'] = d['brow_w']
@@ -249,13 +344,17 @@ def person(d):
     if d.get('lashes'):
         sp['lashes'] = True
     fc = dict(m=dict(d.get('face_m', {})), iris=d.get('eyes', (70, 60, 50)), lip=d.get('lips', (190, 120, 110)),
-              brow=sp['brow_c'], hair=style)
+              brow=sp['brow_c'], hair='crop' if style == 'short' else style, turned=style)
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
                   ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes')):
         if k in d:
             fc[fk] = d[k]
     sp['kit_face'] = fc
     sp['kit_extras'] = list(d.get('extras', ()))
+    if 'strand_seed' in d:
+        sp['strand_seed'] = d['strand_seed']
+    if d.get('crowd_member'):                       # a crowd member: the head draws all their hair (the film's press)
+        sp.update(hair='bald', kit_crowd=True)
     sp['who'] = d.get('person', d['who'])
     if d.get('head_part'):
         sp.update(kit_head=d['head_part'], neck_shade=True)
@@ -285,8 +384,18 @@ def people_file(film):
 
 
 def load(film):
-    """The film's people file -> {who: engine person}."""
-    return {w: person(d) for w, d in parse(open(people_file(film)).read()).items()}
+    """The film's people file -> {who: engine person} (crowds apart: crowds())."""
+    return {w: person(d) for w, d in parse(open(people_file(film)).read()).items() if 'crowd' not in d}
+
+
+def crowds(film):
+    """The film's crowds -> {who: description}; crowd_person(d, i, s, job) draws member i."""
+    return {w: d for w, d in parse(open(people_file(film)).read()).items() if 'crowd' in d}
+
+
+def crowd_person(d, i, s=0, job=None):
+    """Crowd member i as the engine's person (their own look; the film adds what they are doing)."""
+    return person(dict(member(d, i, s, job), crowd_member=True))
 
 
 # ---------------------------------------------------------------------------------------------- install
@@ -316,7 +425,9 @@ def install(cast):
     import people_parts as PP
     TC = PP.AV.MC.TC
     import people_famous as PF
+    import people_turned as PT
     PF.install()
+    PT.install()
     for sp in cast.values():                     # one person may have several looks (Brand's four): the head and
         TC.HEADS[sp['who']] = kit_head           # torso are chosen from the look being drawn, not from the name
         TC.TORSOS[sp['who']] = kit_torso
@@ -351,28 +462,37 @@ def faults(cast):
 
 
 # ---------------------------------------------------------------------------------------------- sheet
-def sheet(film, out, cast=None):
-    """Front, side and back of everyone in the people file at true heights, a 1.75 m person's scale."""
+YAWS = (0, 45, 90, 135, 180)      # the sheet's turns (chat 4d: every view, the rule that a person turns as drawn)
+
+
+def sheet(film, out, cast=None, yaws=YAWS, crowd=8):
+    """Every person in the people file at five turns (front, three-quarter, side, three-quarter behind, behind) at
+    true heights, a 1.75 m person's scale; each crowd's first `crowd` members after them."""
     import people_parts as PP
     from PIL import Image, ImageDraw, ImageFont
     B, V = PP.B, PP.AV.MC.V
     from satire_style import install_circle_hands
     install_circle_hands(B)
-    cast = install(cast or load(film))
+    cast = dict(cast or load(film))
+    for w, cd in crowds(film).items():
+        for i in range(crowd):
+            cast[f'{w}{i}'] = crowd_person(cd, i)
+    cast = install(cast)
     B.SS = 1
     font = lambda n: ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), n)   # noqa: E731
-    tw, th, per = 220, 380, 3
-    cols = 3
+    tw, th, per = 200, 360, len(yaws)
+    cols = 2
     rows = (len(cast) + cols - 1) // cols
     img = Image.new('RGB', (40 + cols * per * tw, 80 + rows * th), (232, 228, 222))
     d = ImageDraw.Draw(img)
-    d.text((20, 20), f'{film}: people from the description (front, side, back)', font=font(34), fill=(30, 30, 30))
+    d.text((20, 20), f'{film}: people from the description (turned {", ".join(map(str, yaws))})', font=font(34),
+           fill=(30, 30, 30))
     cam = B.Cam(1.0, 540, 960)
     for i, (w, sp) in enumerate(cast.items()):
         s = 0.5 * sp['height'] / 1.75
         x0, y0 = 20 + (i % cols) * per * tw, 70 + (i // cols) * th
         d.text((x0 + 4, y0), f"{sp['name']} ({sp['height']:.2f} m)", font=font(20), fill=(30, 30, 30))
-        for k, yaw in enumerate((0, 90, 180)):
+        for k, yaw in enumerate(yaws):
             tile = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
             V.person(tile, cam, 540, 840 - 928 * s, s, dict(sp), 0.0, yaw)
             tile = tile.crop((290, 60, 790, 880))
@@ -414,20 +534,44 @@ def _film_people(film):
         def unhook():
             for w in found:
                 BC.FRONT_FACES.pop(w, None)
-        return BL, found, unhook
+
+        def press(d):                              # the film asks for journalist i: the kit's look, the film's job
+            film_sp = BL.press_sp
+
+            def kit_sp(i, seed):
+                staging = film_sp(i, seed)
+                sp = crowd_person(d, i, seed, staging['kit'])
+                sp.update(kit=staging['kit'], yaw=staging['yaw'])
+                return sp
+            BL.press_sp = kit_sp
+        return BL, found, unhook, {'press': press}
     raise SystemExit(f'replicate: no table for {film}')
 
 
-def replicate(film, out_dir, frames=None):
-    """Render the finished frames, swap the kit's people in, render the same frames again; one labelled sheet of
-    pairs and a score per frame (the share of pixels that differ by more than a hair's colour)."""
+def _differ(a, b):
     import numpy as np
+    A, Bm = np.asarray(a.convert('RGB'), np.int16), np.asarray(b.convert('RGB'), np.int16)
+    return float((np.abs(A - Bm).max(axis=2) > 24).mean() * 100)
+
+
+def replicate(film, out_dir, frames=None, film_keys=False):
+    """Render the finished frames, swap the kit's people in, render the same frames again; one labelled sheet of
+    pairs and a score per frame (the share of pixels that differ by more than a hair's colour).
+    Turned invented people (chat 4d) are new: the film drew them on the engine's plain head. So each frame is drawn
+    a third time with their turned heads off: that score is the pass mark (0.05%); the change the turned heads make
+    is reported beside it (an improvement to look at, not a fail). film_keys: crowd heads keyed the film's way (one
+    head per haircut, the first member's colours), to show the lifted turned heads match the film exactly."""
     from PIL import Image, ImageDraw, ImageFont
+    import people_turned as PT
     os.makedirs(out_dir, exist_ok=True)
-    BL, found, unhook = _film_people(film)
+    BL, found, unhook, crowd_hooks = _film_people(film)
     frames = frames or FRAMES[film]
     old = [BL.frame_image(t) for t, _ in frames]
     kit = load(film)
+    for w, d in crowds(film).items():
+        crowd_hooks[w](d)
+        if film_keys:
+            PT.KEYED[w] = lambda sp, _w=w: f"kitfilm:{_w}:{sp['kit_face']['turned']}:{sorted(sp['kit_face']['m'].items())}"
     missing = [w for w in kit if w not in found]
     if missing:
         raise SystemExit(f'replicate: the film has no {missing}')
@@ -453,31 +597,47 @@ def replicate(film, out_dir, frames=None):
         setattr(mod, name, spy)
     for mod, name in ((PP, '_front_head'), (PF, '_famous_head'), (PW, '_head')):
         spying(mod, name)
-    new = []
+    new, plain = [], []
     for t, _ in frames:
         drawn.append(set())
         n0 = len(TH.SEEN)
         new.append(BL.frame_image(t))
-        drawn[-1] |= {w[4:] + ' (turned)' for w, _ in TH.SEEN[n0:] if w.startswith('kit:')}
+        drawn[-1] |= {w.split(':')[1] + ' (turned)' for w, _ in TH.SEEN[n0:] if w.startswith(('kit:', 'kitfilm:'))}
+        turned_new = {w for w, _ in TH.SEEN[n0:] if w.startswith(('kit:', 'kitfilm:')) and w.split(':')[1] in PT_WHO(kit, film)}
+        if turned_new:
+            PT.ON = False                         # the same frame with the invented people's turned heads off
+            plain.append(BL.frame_image(t))
+            PT.ON = True
+        else:
+            plain.append(None)
     for (mod, name), fn in real.items():
         setattr(mod, name, fn)
     font = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 28)
     tw, th = 405, 720
     sheet_ = Image.new('RGB', (tw * 4 + 30, (th + 50) * ((len(frames) + 1) // 2) + 10), (232, 228, 222))
     d = ImageDraw.Draw(sheet_)
-    scores = []
-    for i, ((t, label), a, b) in enumerate(zip(frames, old, new)):
-        A, Bm = np.asarray(a.convert('RGB'), np.int16), np.asarray(b.convert('RGB'), np.int16)
-        diff = float((np.abs(A - Bm).max(axis=2) > 24).mean() * 100)
+    scores, turned = [], {}
+    for i, ((t, label), a, b, c) in enumerate(zip(frames, old, new, plain)):
+        diff = _differ(a, b if c is None else c)
+        if c is not None:
+            turned[label] = _differ(a, b)
         scores.append((t, label, diff, sorted(drawn[i])))
         x, y = 10 + (i % 2) * (2 * tw + 10), 10 + (i // 2) * (th + 50)
         for k, im in enumerate((a, b)):
             sheet_.paste(im.convert('RGB').resize((tw, th)), (x + k * tw, y + 40))
-        d.text((x + 4, y + 4), f'{label} {t:.1f}s: finished | kit ({diff:.2f}% differ)', font=font, fill=(30, 30, 30))
+        extra = f'; turned heads {turned[label]:.2f}%' if label in turned else ''
+        d.text((x + 4, y + 4), f'{label} {t:.1f}s: finished | kit ({diff:.2f}%{extra})', font=font, fill=(30, 30, 30))
         b.convert('RGB').save(os.path.join(out_dir, f'kit-{label}.png'))
     out = os.path.join(out_dir, f'{film}-people-replicate.jpg')
     sheet_.save(out, quality=86)
+    PT.KEYED.clear()
+    replicate.turned = turned
     return out, scores
+
+
+def PT_WHO(kit, film):
+    """Who the new turned-head route draws that the film drew plain (invented faces; crowds were already turned)."""
+    return {sp['who'] for sp in kit.values() if not sp.get('kit_head')}
 
 
 # ---------------------------------------------------------------------------------------------- lines for the page
@@ -498,9 +658,12 @@ if __name__ == '__main__':
     if cmd == 'sheet':
         print(sheet(sys.argv[2], sys.argv[3]))
     elif cmd == 'replicate':
-        out, scores = replicate(sys.argv[2], sys.argv[3])
+        out, scores = replicate(sys.argv[2], sys.argv[3], film_keys='--film-keys' in sys.argv)
         for t, label, diff, who in scores:
-            print(f'{label:8s} {t:5.1f}s  {diff:6.2f}% of pixels differ; drawn by the kit: {", ".join(who) or "nobody"}')
+            tn = replicate.turned.get(label)
+            print(f'{label:8s} {t:5.1f}s  {diff:6.2f}% of pixels differ'
+                  + (f' (turned invented heads on: {tn:.2f}%)' if tn is not None else '')
+                  + f'; drawn by the kit: {", ".join(who) or "nobody"}')
         print(out)
     elif cmd == 'describe':
         for w, d in parse(open(people_file(sys.argv[2])).read()).items():

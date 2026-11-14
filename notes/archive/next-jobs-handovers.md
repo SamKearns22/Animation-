@@ -476,3 +476,22 @@
 - **For Claude:** replicate swaps the film's own dicts IN PLACE and pops `BC.FRONT_FACES`; `_front_head` is spied to
   prove who the kit drew. Bespoke heads join as parts (`EXTRAS`, `install`), never as film imports.
 
+
+
+# Where things stand (archived 14 Nov, chat 4d) (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/people-kit-c4c` (also on the main line); face tool: its own chain (stopped).
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
+- **Done (overnight chat 4c, item 4, Opus medium, ~2.2%; job ~4.6% of 8%, stop 12%):** step 2. Brand in his four looks
+  (front and turned) and Walliams redrawn from their lines: 13 finished frames at 0.00%. `people_famous.py` (Brand's
+  head made general: card, tune, full beard, curls/knot, deep set, house moods, torso extras), `people_walliams.py`
+  (his head as one part, test only). Kittest extended (18 people, 4 frames); every old kittest passes.
+- **Next: chat 4d, Opus MEDIUM (building from the clear plan below):** steps 3-5: the press pack as a crowd line,
+  turned heads for invented people (one module from blessed_cast's press code), then the morning-report sheets; then
+  the places kit chat (item 5, Opus HIGH). Hard stop: 12% for the job.
+- **Needs Sam (morning report):** as before (face tool picks, bench picks); nothing new from this chat.
+- **Read:** this section; "Item 4" below (steps 3-5 and the chat 4c notes); `notes/overnight-run.md`; `people.py` MAP.
+- **Open rule requests:** none.
+- **For Claude:** replicate swaps the film's dicts IN PLACE, keeping `KEEP` (look_, mood: film staging). TC.HEADS and
+  TORSOS point at `kit_head`/`kit_torso`, which pick per LOOK (Brand's four looks share who='brand'). Turned famous
+  heads go through turnhead under 'kit:WHO' (people_famous.install's head_view), so blessed_cast's Person is unused.
+

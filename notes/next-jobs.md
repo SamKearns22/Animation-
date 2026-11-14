@@ -1,19 +1,18 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/people-kit-c4c` (also on the main line); face tool: its own chain (stopped).
+- **Newest work:** `claude/overnight-people-c4d` (also on the main line); face tool: its own chain (stopped).
 - **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
-- **Done (overnight chat 4c, item 4, Opus medium, ~2.2%; job ~4.6% of 8%, stop 12%):** step 2. Brand in his four looks
-  (front and turned) and Walliams redrawn from their lines: 13 finished frames at 0.00%. `people_famous.py` (Brand's
-  head made general: card, tune, full beard, curls/knot, deep set, house moods, torso extras), `people_walliams.py`
-  (his head as one part, test only). Kittest extended (18 people, 4 frames); every old kittest passes.
-- **Next: chat 4d, Opus MEDIUM (building from the clear plan below):** steps 3-5: the press pack as a crowd line,
-  turned heads for invented people (one module from blessed_cast's press code), then the morning-report sheets; then
-  the places kit chat (item 5, Opus HIGH). Hard stop: 12% for the job.
-- **Needs Sam (morning report):** as before (face tool picks, bench picks); nothing new from this chat.
-- **Read:** this section; "Item 4" below (steps 3-5 and the chat 4c notes); `notes/overnight-run.md`; `people.py` MAP.
+- **Done (overnight chat 4d, item 4, Opus medium, ~2.2%; job ~6.8% of 8%, stop 12%): item 4 finished.** Steps 3-5:
+  the press pack as a crowd (31 journalists from 16 lines), every invented face turns with its own face
+  (`people_turned.py`), sheets in `notes/morning/people-kit-*.jpg`, morning report written. Kittest extended (20 people,
+  6 frames, the press keyed the film's way at 0.00%); every old kittest passes.
+- **Next: chat 5, Opus HIGH: places from a description (ranking item 5,** `notes/ranking-list.md` row 5): estimate 8%,
+  hard stop 12%; test only on Blessed (its sets in `blessed_sets.py`); replication of Blessed's places is the pass mark.
+- **Needs Sam (morning report):** people kit picks 1-3 (turned heads on, the journalists' own hair, approve the kit).
+- **Read:** `notes/overnight-run.md` in full; `notes/ranking-list.md` row 5; `guides/kit-catalogue.md` "Places"; the
+  MAP of `source/sets.py` and of Blessed's set file; `people.py` MAP only for how replicate is built (the same plan).
 - **Open rule requests:** none.
-- **For Claude:** replicate swaps the film's dicts IN PLACE, keeping `KEEP` (look_, mood: film staging). TC.HEADS and
-  TORSOS point at `kit_head`/`kit_torso`, which pick per LOOK (Brand's four looks share who='brand'). Turned famous
-  heads go through turnhead under 'kit:WHO' (people_famous.install's head_view), so blessed_cast's Person is unused.
+- **For Claude:** replicate's turned-head score: each frame drawn again with `people_turned.ON = False` (crowds keep
+  theirs); the pass mark is that score. `--film-keys` keys crowd heads the film's way (first member's colours).
 
 ## Item 4, people from a description (ranking item 4; overnight run; Opus high design, medium build; 8%, stop 12%)
 Design (chat 4, 14 Nov): a person is a block of plain lines in `story/FILM-people.txt` (language in `people.py` MAP);
@@ -43,8 +42,16 @@ finished frames beside the same frames with the kit's people swapped in; 0.05% o
    Kit hair to turned style: crop crop, bald bald, side side, bob bob, long long, curly curly, bun (new: a knot),
    receding bald, none (new: no hair). Turned invented people in Blessed frames may now differ from the film's plain
    turned heads: report which frames, as an improvement, not a fail.
-5. **The morning report:** one sheet per film-frame pair (new beside finished), the cast sheet, the cost; then the
-   places kit chat (item 5, Opus high).
+5. **Done (chat 4d): the morning report:** `notes/morning/people-kit-replicate.jpg` (13 frame pairs), `-cast.jpg`
+   (everyone at five turns, the press pack's first 8), `-changes.jpg` (the three frames that change, close up).
+**Chat 4d results:** steps 3-4 done. The crowd language: `crowd: press`, then `FACT (3i+s): a; b; c` (member i takes
+item 3i+s), `when hair ...: FACTS`, `when job ...: FACTS`, `taller`, `seed: 600 + i`, `hair seed`, `hair colour`,
+`brows: darker hair 0.8`, `trousers: darker jacket 0.6`. All 31 journalists' looks equal the film's. Keyed the film's
+way the press matches 0.00% everywhere; keyed per look (the kit's way) gates 50 s differs 0.53%: the film's journalists
+9+ wore the first same-haircut journalist's hair colour (a film fault, fixed). Turned invented heads: escort 24 s
+(the officer, 0.62%) and tvroom 38 s (inmate 2 tipped down, 0.27%); both bigger than the film's plain heads (they
+match the person's own front head now). The judge's wig is still front only (turned: bald, as the film was);
+Walliams' turned head is still the engine's (test only).
 Cost per film once approved: a new invented person ~10 lines (was ~60-120 lines of face table and code); Blessed's
 cast code 1,661 lines -> about 200 lines of descriptions plus Brand's own parts.
 
