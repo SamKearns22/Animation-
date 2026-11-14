@@ -20,3 +20,49 @@ microphone: at -0.04 1.292, depth 3, tip -0.22 1.5 (the judge's microphone)
 witness box: x -0.2464 to 1.3440, z -0.88 to 0.5952, depth 2.4 (the witness box)
 book: at 0.512 0.2912, depth 2.4 (the oath Bible)
 microphone: at -0.032 0.2976, depth 2.4, tip 0.112 0.88, detail 0.8 (the witness microphone)
+
+## view: court_bench
+camera: up 1.6, horizon 1100, lens 1500
+people: judge 3.4
+panels: x -3.36 to 3.36, z 0 to 7.6, depth 6, step 0.6, seed 13 (the panelled wall)
+royal arms: at 0 4.8, depth 6, size 1.25 (the royal arms)
+chair back: x -0.7 to 0.7, z 0.8 to 2.75, depth 3.75, look close, seed 31 (the judge's chair)
+bench: x -1.48 to 1.48, z -1 to 0.88, depth 3, papers 0 (the judge's bench)
+papers: at -0.39 1.24, depth 1.5, width 0.23 (a paper)
+papers: at -0.34 1.256, depth 1.5, width 0.21 (another paper)
+gavel block: at 0.22 1.26, depth 1.5 (the sound block)
+gavel: at 0.22 1.296, depth 1.5, angle 180 (the gavel)
+microphone: at -0.42 0.908, depth 3, tip -0.18 1.26, line 3 (the judge's microphone)
+
+## view: court_jury
+camera: up 1.6, horizon 850, lens 1500
+people: back_row 4.5, front_row 3.4
+panels: x -3.36 to 3.36, z 0 to 6.6, depth 6, step 0.48, seed 31 (the panelled wall)
+block: x -3.36 to 3.36, z 4.456 to 4.52, depth 6, colour wall * 0.88, line 1.4 (the picture rail)
+window: x -1.72 to -0.6, z 1.96 to 4.08, depth 6, blind 0.45, seed 41 (the left window)
+window: x 0.6 to 1.72, z 1.96 to 4.08, depth 6, blind 0.45, seed 42 (the right window)
+door: x -0.36 to 0.36, z 1.4 to 3.8, depth 6, look jury room, seed 44 (the jury room door)
+block: x -3.36 to 3.36, z 1.152 to 1.28, depth 6, colour oak dark, line 2 (the dado rail)
+panelled: x -2.8 to 2.8, z -0.433333 to 1.2, depth 5, look jury bench back, seed 45 (the back row's bench back)
+panelled: x -2.1 to 2.1, z -2.275 to 0.175, depth 3.75, look jury box, seed 46 (the back row's box)
+notepad: at -1.025 0.22, depth 3.75, look pad (a notepad)
+notepad: at 0.05 0.22, depth 3.75, look pad (a notepad)
+notepad: at 0.975 0.22, depth 3.75, look pad (a notepad)
+panelled: x -1.68 to 1.68, z -1.5 to -0.08, depth 3, look jury box near, seed 47 (the front row's box)
+notepad: at -1.056147 -0.028, depth 3, look pad and pen (a notepad and pen)
+notepad: at -0.609449 -0.028, depth 3, look pad and pen (a notepad and pen)
+water jug: at 0 -0.028, depth 3 (the water jug)
+notepad: at 0.356924 -0.028, depth 3, look pad and pen (a notepad and pen)
+notepad: at 0.80418 -0.028, depth 3, look pad and pen (a notepad and pen)
+
+## view: court_dock
+camera: up 1.6, horizon 1100, lens 1500
+people: brand 2.5, guards 3.75
+panels: x -3.36 to 3.36, z 0 to 7.6, depth 6, step 0.44, seed 23 (the panelled wall)
+block: x -3.36 to 3.36, z 1.68 to 1.76, depth 6, colour wall * 0.86, line 1.4 (the dado rail)
+block: x -3.36 to 3.36, z 0 to 1.68, depth 6, colour wall / oak 0.25, line 0 (the lower wall)
+row: x -1.5 to -1.075, z 1.025 to 1.175, depth 3.75, n 7, pitch 0.45, colour oak dark, line 1.8 (the dock's back bench)
+block: x -2.1 to 2.1, z -1.65 to 1.025, depth 3.75, colour 176 150 116, line 0 (the dock's floor)
+panelled: x -1.68 to 1.68, z -1 to 1.2, depth 3, look dock bench, seed 43 (the bench's front)
+glass screen: x -1.344 to 1.344, z 0.576 to 2.7264, depth 2.4, detail 1.2, uprights -0.928 -0.384 0.384 0.928, shines -0.736 -0.624 0.128 0.192 0.256 0.4 (the dock's glass)
+panelled: x -1.344 to 1.344, z -0.48 to 0.576, depth 2.4, detail 1.2, look dock base, seed 41 (the dock's base)
