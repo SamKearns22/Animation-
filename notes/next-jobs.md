@@ -26,8 +26,9 @@
   facepick and agelines pass. Andy pixel for pixel unchanged. Mouth and neckline untouched.
 - **Name test (neutral pack, chat 7's line-up):** not named (Dawn Butler 12, Ayanna Pressley 10, Diane Abbott 8);
   line-up 5th of 8 (Ribeiro-Addy first). Namer: "fairly generic"; braids and navy suit fit several MPs.
-- **Needs Sam:** 1. brows right now? 2. her likeness: go on to building (my pick: facehouse into the people kit,
-  turned views, catalogue row, then Walliams) with Kemi's name test still failing, or more likeness work on her first.
+- **Sam (chat 10):** "Kemi is right." Build on: "Yes, what is left to do on the kit"; asked whether the Walliams test
+  is still required. Answered with the plan (kit list 1-5, Walliams as the end-to-end proof, my pick keep it).
+- **Needs Sam:** Y to the plan (or drop Walliams).
 - **Next (on his answer; Opus medium):** as he picks. Build: facehouse in people.py, turned views, kittest,
   catalogue row; then Walliams (run `facehouse.py brows` on every new face).
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
