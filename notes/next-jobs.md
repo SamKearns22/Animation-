@@ -13,27 +13,27 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 9 of the face chain, 14 Nov; stopped on questions for Sam)
+## Face tool, where things stand (chat 9 of the face chain, 14 Nov; amber 3.2%: stops on a question for Sam)
 - **Rules that bite next:** 49 (the blind name test is the judge), 86 (facehouse needs its kittest), 85.
-- **Done (chat 9):** F1 Andy back to chat 7's head, pixel for pixel (checked): **finished**. F2 Kemi: plaits 1.2x
-  kept; eyes calm (her big dark iris 0.98, small pupil 0.28, iris a shade lighter so it shows, upper lid 0.24); F3
-  her face outline traced off her 3 front photos (`facehouse.py trace`, face skin row by row, the middle photo per
-  row): close to the old one, but a rounder chin a touch longer (foot 1.04) and fuller jaw. Everything else as chat 7.
-  Sheet: `notes/morning/facehouse-kemi-c9.jpg`. facepick and agelines kittests pass.
-- **Name test (neutral pack, chat 7's line-up), twice:** ears showing: not named (Cori Bush 15), line-up 5th;
-  ears hidden (the final): not named (Ketanji Brown Jackson 25), line-up 5th (Ribeiro-Addy, de Cordova, Butler
-  first). Namers: "generic face ... strong dark straight eyebrows"; want her own brows and smile. Her photos:
-  thin arched brows, a closed-mouth half smile.
-- **Next (on Sam's answers, Opus medium):** his picks below; then facehouse in people.py, turned views, kittest,
-  catalogue row; then Walliams.
-- **Sam answered (chat 8, merged in chat 9):** Kemi's ears HIDDEN (`ears` off); rule 49's check column: Y, written.
-- **Needs Sam:** (1) Kemi's brows thin and arched as in her photos: Y/N. (2) her closed-mouth half smile: Y/N.
+- **Done (chat 9):** F1 Andy = chat 7's head pixel for pixel: **finished**. F2 Kemi: plaits 1.2x; eyes calm (iris
+  0.98, pupil 0.28, iris_c a shade lighter, upper lid 0.24). F3 her outline traced off her 3 front photos
+  (`facehouse.py trace`): rounder, slightly longer chin. Ears hidden (Sam). **Sam's notes on the sheet:** "Try the
+  eyebrows" (Y) and "look closely at the neckline": brows now thin, arched, tapered (0.032, arch 0.03, taper 0.6);
+  her open collar redrawn (`open_collar`: the skin runs down into a V, collar flaps over the lapels; the old foot had
+  a step, white bars at the sides and a floating skin triangle). Smile: not answered, not done.
+  Sheets: `notes/morning/facehouse-kemi-c9.jpg`, `-c9b.jpg`. facepick and agelines kittests pass.
+- **Name tests (neutral pack, chat 7's line-up):** not named in any of 3 runs (Cori Bush / Ketanji Brown Jackson);
+  line-up 5th, 5th, then 7th with the new brows. Namers keep calling her face generic and matching the plaits and
+  navy suit to Ribeiro-Addy.
+- **Next (Opus medium, a fresh chat):** Sam's answer to the smile question; then facehouse in people.py, turned
+  views, kittest, catalogue row; then Walliams.
+- **Needs Sam:** (1) her closed-mouth half smile: Y/N. (2) brows and neckline as on sheet c9b: Y keep / N.
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
-  into caricature. Andy is finished (chat 7 head). Kemi: bigger plaits, smaller pupils, calm eyes, face from photos.
+  into caricature. Andy is finished. Kemi: bigger plaits, small pupils, calm eyes, face from photos, ears hidden.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS); rule 49.
 - **Open rule requests:** none.
-- **For Claude:** CAST badenoch: plait_k, iris_r, pupil_r, iris_c, lid, shape (new: iris_c, lid, shape; the trace
-  is saved in her pick JSON as 'outline'). Line-ups as chat 7; `nametest.py pack KEYDIR BIG.png --lineup "..."`.
+- **For Claude:** CAST badenoch: plait_k, iris_r, pupil_r, iris_c, lid, shape, brow_arch/taper (new: iris_c, lid,
+  shape; the trace is 'outline' in her pick JSON). open_collar only in the braids path (Andy's base torso untouched).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

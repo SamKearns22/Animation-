@@ -446,6 +446,19 @@ def braids_behind(p, f, L, hc, kh, sp):
     p.poly([(f.cx - 32 * nw, -90), (f.cx + 32 * nw, -90), (f.cx + 30 * nw, -46), (f.cx, -34), (f.cx - 30 * nw, -46)],
            dk(skin, 0.82), None)                            # the jaw's shadow on it (views' neck_shade)
     p.line([(f.cx - 35 * nw, yc), (f.cx + 35 * nw, yc)], skin, 2.0)   # no ink line along the collar's top
+    if sp.get('outfit') == 'suit' and not sp.get('tie'):
+        open_collar(p, f.cx, yc, nw, skin, sp.get('shirt', (246, 246, 246)))
+
+
+def open_collar(p, cx, yc, nw, skin, sc):
+    """The open shirt collar at the redrawn neck's foot (chat 9, Sam: "look closely at the neckline"): the skin runs
+    on down from the neck in a V to the top button, and the two collar flaps lie over the lapels either side, so
+    the neck no longer stops at a flat shirt edge, steps in at its foot, or leaves white bars out at the sides."""
+    w = 36 * nw
+    p.poly([(cx - w, yc - 2), (cx + w, yc - 2), (cx + 4, 56), (cx - 4, 56)], skin, None)
+    for sg in (-1, 1):
+        p.poly([(cx + sg * (w + 1), yc - 3), (cx - sg * 1, 62), (cx + sg * 22, 70), (cx + sg * 60, 6),
+                (cx + sg * (w + 16), yc - 4)], sc, INK, 2.0)
 
 
 def braids(p, f, L, hc, lk, kh):
@@ -595,12 +608,12 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
 
 CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Chat 9, Sam's sheet notes: Andy is
            # finished at chat 7's head (no push, grin, lashes or tie); Kemi back to that head but for the bigger plaits,
-           # her ears hidden (Sam: "her hair hides her ears"), the small pupils in her own big dark iris under a heavier, calm upper lid (chat 8's were wide and
+           # her ears hidden (Sam: "her hair hides her ears"), her thin arched brows (her photos; Sam: "try the eyebrows"), the small pupils in her own big dark iris under a heavier, calm upper lid (chat 8's were wide and
            # startled), and her face's outline traced off her three front photos (shape)
     'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
                     hairline=-0.07, brow_thick=0.058),
     'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
-                     brow_thick=0.052, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
+                     brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
                      lid=0.24, shape=True),
 }
 
