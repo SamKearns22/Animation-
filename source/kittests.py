@@ -1711,7 +1711,8 @@ def people_from_a_description():
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
              ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'people_turned.py', 'page.py',
-              'kittests.py') and re.search(r'^\s*(import people\b|from people\b)',
+              'kittests.py') and not os.path.basename(f).startswith('places')   # a kit, not a film (5d)
+             and re.search(r'^\s*(import people\b|from people\b)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
         bad.append(f'films using the kit before Sam approves it: {users}')
