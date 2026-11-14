@@ -8,7 +8,8 @@
   sheet `notes/morning/places-kit-replicate.jpg`, morning report entry.
 - **Next: moves from the acting list (ranking item 7), Opus HIGH (design), new chat**, per `notes/overnight-run.md`
   (estimate 6%, stop 9%; tested on Blessed).
-- **Needs Sam (morning report):** people kit picks 1-3; places kit picks 1-2.
+- **Needs Sam:** start the moves chat (chat 5d could not: sessions stop at 8 chats in a row, a system limit);
+  morning report picks (people kit 1-3; places kit 1-2).
 - **Read:** `notes/overnight-run.md` in full; `notes/ranking-list.md` row 7; CLAUDE.md "Reading little".
 - **Open rule requests:** none.
 - **For Claude:** places.py: `on NAME` (generic word: a meant overlap), a piece past both picture edges is a band (was
