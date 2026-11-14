@@ -25,7 +25,7 @@
   failed the likeness check). Badenoch: the plaits now climb unevenly up the sides, no level band. Both sheets resent
   (`notes/morning/facetool-burnham-C.jpg`, `-badenoch-C.jpg`). Also new: a seconds-long redraw from a saved pick.
 - **Still left (~0.6% more, stop 0.9%):** the Walliams replay; the kittest for facepick and agelines (rule 86).
-- **Decide:** 6) Y/N ~0.6% more to finish those two (pick Y). 5) Y/N rule 49.3 adds the eyes: "The eyes' darkness (eye_look) is drawn after the check too: the face
+- **Sam: Y to both (14 Nov):** 6) ~0.6% more (face chain chat 5); 5) rule 49.3 adds the eyes (written). Was: rule 49.3 adds the eyes: "The eyes' darkness (eye_look) is drawn after the check too: the face
   finder reads a socket shade or a fuller iris as a brow or eye change." (pick Y)
 
 ## Critic bench (ranking item 3, chat 2; done, about 2.1% of a week against 1.5% estimate, under the 2.25% stop)

@@ -1,3 +1,3 @@
-Critic bench retest on Remakes done (close-ups: Sonnet 4 of 7, Opus 3); close-ups now in every critique pack. Face tool chat 4: Burnham/Badenoch picks saved, sheets sent.
-Now: nothing running; both jobs at their stops.
-Waiting: Sam: Sonnet critic Y/N; morning report questions 5 (rule 49.3 eyes) and 6 (Walliams replay); rule 90 Y/N.
+Face tool chat 4 done: Burnham C, Badenoch C saved; eyes and plaits fixed; rule 49.3 adds the eyes (Sam: Y).
+Now: face chain chat 5 (Opus medium): Walliams replay and the kittest for facepick and agelines; stop 0.9%.
+Waiting: Sam's earlier kit answers (people, places) in the morning chat.
