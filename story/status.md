@@ -1,3 +1,3 @@
-Blessed: posted and closed. Face tool: Sam said the Walliams heads aren't him and drift off the house style.
-Now: face chain chat 6 (Opus high): rebuild the face tool on the house head, keep the detail; test Andy and Kemi.
-Waiting: nothing from Sam until chat 6's sheet.
+Blessed: posted and closed. Face tool chat 6: Andy and Kemi redrawn on the house head, two looks; sheet sent.
+Now: waiting for Sam's pick of the look (1 house, 2 house + detail); then a fresh Opus high chat pushes the likeness.
+Waiting: Sam's 1 or 2, and Y/N on rule 49's check column.
