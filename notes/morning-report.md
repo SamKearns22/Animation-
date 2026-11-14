@@ -107,3 +107,4 @@ Where things stand (critic bench, chat 4 onward):
 - Checklist caught, 3 runs each. Blessed (of 12): Opus 2, 2, 5; Sonnet 4, 9, 7. Remakes (of 7): Opus 2, 4, 3; Sonnet 3, 3, 2.
 - Acting caught. Blessed (of 5): Opus 3, 3, 2; Sonnet 4, 3, 4. Remakes (of 6): Opus 3, 2, 4; Sonnet 4, 2, 3.
 - Extras (unruled): Opus 65 over 6 runs, Sonnet 73. Averages: Sonnet equal or better on both scores; run-to-run spread is as big as the gap, so no real difference. Recommendation: Sonnet for both (Y/N to Sam). Nothing switched. Cost: about 3.1% of a week (amber).
+- **Cleanup (14 Nov, Sonnet):** the round page is now 13% of Blessed's code (bar 15% kept): repeated starts said once, numbers dropped from the people lines; the acting list's two words corrected to the film; two stale kittests updated (critic is Sonnet; list now has no drift). Every kittest passes.

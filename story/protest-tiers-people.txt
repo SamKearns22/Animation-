@@ -1,0 +1,46 @@
+# Protest Tiers' people (14 Nov, cast chat 5), described for the people kit (source/people.py; first film test).
+# Everyone is a Glimpse (rule 24): wide shots, small. What they wear on top (helmets, visors, hoods, masks, shields,
+# armour, flags, keys, signs) is drawn by source/protest_tiers_cast.py over these bodies.
+# `python3 source/people.py sheet protest-tiers OUT.jpg` draws them all bare.
+
+# officer: Riot officer (one build; four forces recolour him in protest_tiers_cast.FORCES)
+body: 1.82 m, shoulders 172, head 68 x 92, hem 470
+skin: 226 186 160 | hair: crop, 40 32 28
+face: jaw_wide +0.06, face_wide +0.03
+eyes: 70 60 50 | lips: 170 116 104 | brows: 40 32 28, width 4.6
+outfit: jumper 34 38 52, shirt 34 38 52, no tie, trousers 34 38 52, shoes 18 18 20
+
+# rioter: Hooded rioter (black hoodie, hood up, face mask; the hood and mask in protest_tiers_cast)
+body: 1.78 m, shoulders 156, head 66 x 94, hem 470
+skin: 230 192 166 | hair: crop, 30 26 24
+eyes: 70 60 50 | lips: 170 116 104 | brows: 30 26 24, width 4.4
+outfit: jumper 26 26 30, shirt 26 26 30, no tie, trousers 30 30 34, shoes 20 20 22
+
+# rider: Moped rider (masked, black; drives the moped)
+like: rioter
+body: 1.76 m, shoulders 152
+
+# gunner: Moped passenger (masked; fires the RPG)
+like: rioter
+body: 1.74 m, shoulders 150
+outfit: jumper 40 42 40, trousers 46 48 44
+
+# protester: The marchers (a crowd; the film asks for member i, job t1..t4 = the tier)
+crowd: protester
+body: 1.74 m, head 66 x 94
+outfit: jumper, shirt 236 236 232, no tie, shoes 30 28 26
+eyes: 70 60 50 | brows: darker hair 0.8
+seed: 700 + i
+hair (i+2s): short; bob; crop; pony; curly; long; bald; side
+face (i+2s): face_wide 0.04, jaw_wide 0.05; face_wide -0.04, chin_long 0.02; ; jaw_wide 0.07; face_wide 0.05; face_wide -0.03; jaw_wide 0.03; face_wide -0.05, jaw_wide -0.05
+hair seed (i+2s): 520; 521; 522; 523; 524; 525; 526; 527
+hair colour (i+s): 52 40 32; 28 24 22; 140 100 64; 180 170 160; 100 64 42; 196 160 100
+skin (i): pale; olive; pink; brown; olive; deep
+body (i): shoulders 148; shoulders 156; shoulders 160
+taller (7i+s): 0; 0.05; 0.08
+trousers (i): 40 40 46; 54 58 72; 70 66 58
+when hair bob; pony; long: body: 1.64 m, shoulders 138, head 62 x 94
+when job t1: jacket (3i+s): 26 28 34; 40 44 56; 70 30 34; 50 56 48; 30 30 32; 90 84 70
+when job t2: jacket (3i+s): 30 30 34; 186 70 40; 60 90 140; 220 210 190; 40 44 40; 120 40 90
+when job t3: jacket (3i+s): 40 50 80; 150 40 40; 230 226 216; 80 90 70; 120 100 70; 34 34 40
+when job t4: jacket (3i+s): 30 30 32; 60 56 50; 80 30 30; 44 50 60; 90 80 66; 26 26 28

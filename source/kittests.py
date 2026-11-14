@@ -933,7 +933,7 @@ def critique_helper_kind():
     builtin = C.HELPER in ('general-purpose', 'claude')
     path = os.path.join(C.ROOT, '.claude', 'agents', C.HELPER + '.md')
     own = os.path.exists(path) and bool(re.search(r'^tools: Read, Write$', open(path).read(), re.M))
-    ok = f'({C.HELPER}, model opus' in line and refused == list(C.READ_ONLY) and (builtin or own)
+    ok = f'({C.HELPER}, model sonnet' in line and refused == list(C.READ_ONLY) and (builtin or own)
     return ok, f"names '{C.HELPER}' ({'built in' if builtin else 'own definition'}); read-only kinds refused: {refused}"
 
 
@@ -1982,10 +1982,10 @@ def moves_from_the_acting_list():
             if (o is None) != (v is None) or (o is not None and abs(o - v) > 1e-6):
                 bad.append(f'{fn}: differs from the film at {t:.2f} s')
                 break
-    # the acting list itself (step 4): Blessed's list has drifted from its film in two rows (the dock's slump and
-    #   the face change come before / after the list's word); a row with no block is caught too
+    # the acting list itself (step 4): Blessed's list was corrected to its film (14 Nov: the dock slump at the start
+    #   of line 3, the face change 2.6 s after "early release"), so it finds nothing; a row with no block is caught too
     drift = A.check_list('blessed')
-    if len(drift) != 2 or not all(('row 3' in d or 'face change' in d) for d in drift):
+    if drift:
         bad.append(f'the acting-list check found {drift}')
     keep = desc['shots'].pop('phone')
     A.load = (lambda f, d=desc: d)
@@ -2211,8 +2211,12 @@ def facehouse_whole_head():
         for n in held:
             png = FH.draw(n, 'detail', os.path.join(tmp, f'{n}.png'))
             got[n] = hashlib.md5(open(png, 'rb').read()).hexdigest()
+        pk = __import__('json').load(open(FH.pick_file('badenoch')))                 # chat 13: facepick's sheet draws A, B, C
+        alt = FH.draw('badenoch', 'detail', os.path.join(tmp, 'v.png'), lines=FH.CAST['badenoch'],   # this way
+                      src=FH.pick_dir('badenoch'), variant=pk['picked'])
+        sheet_way = hashlib.md5(open(alt, 'rb').read()).hexdigest() == got['badenoch']
         cast = {w: sp for w, sp in people.load('facetool').items()}
-        same = all(cast[w]['kit_house']['meas'] == FH.person(n, 'detail', **FH.CAST[n])['kit_house']['meas']
+        same = sheet_way and all(cast[w]['kit_house']['meas'] == FH.person(n, 'detail', **FH.CAST[n])['kit_house']['meas']
                    for w, n in (('andy', 'burnham'), ('kemi', 'badenoch')))
         del TH.GENERIC[:]
         FH.turns(os.path.join(tmp, 't.jpg'), list(held))
@@ -2221,7 +2225,27 @@ def facehouse_whole_head():
         shutil.rmtree(tmp)
     kept = [n for n in held if got[n] == held[n]]
     ok = len(kept) == 2 and same and not generic
-    return ok, f'held pixel for pixel: {kept}; people file = facehouse: {same}; turned on a generic head: {generic}'
+    return ok, (f'held pixel for pixel: {kept}; people file = facehouse = facepick sheet: {same}; '
+                f'turned on a generic head: {generic}')
+
+
+@test
+def facehouse_beard_turns():
+    """Face tool chat 14: a measured beard (Walliams' stubble) is drawn in the turned views too, as Vance's goatee
+    goes round (chat 13 drew it front-on only: his three-quarter and side were bare-chinned)."""
+    import shutil
+    import tempfile
+    import facehouse as FH
+    seen, old = [], FH.stubble
+    FH.stubble = lambda p, f, *a, **k: (seen.append(type(f).__name__), old(p, f, *a, **k))[1]
+    tmp = tempfile.mkdtemp()
+    try:
+        FH.turns(os.path.join(tmp, 't.jpg'), ['walliams'], yaws=(0, 45, 90))
+    finally:
+        FH.stubble = old
+        shutil.rmtree(tmp)
+    turned = seen.count('TurnFace')
+    return turned >= 2 and len(seen) >= 3, f'stubble drawn front {len(seen) - turned}, turned {turned} (want 1 and 2)'
 
 
 def main():
