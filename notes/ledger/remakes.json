@@ -248,6 +248,18 @@
    "model": "opus",
    "cost": 0.4,
    "usd": 0.69
+  },
+  {
+   "date": "2026-11-14",
+   "chat": "373677a3",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.92,
+   "src": "estimate",
+   "sid": "session_01J1JB7Y6U3CzjozFiHe8mB7"
   }
  ],
  "checks": {},
@@ -520,5 +532,5 @@
    }
   }
  },
- "budget_stop": 26
+ "budget_stop": 27
 }
