@@ -28,6 +28,11 @@ HAIR PIECES (named in the person's lines, `head: house NAME, hair PIECE`):
              was a head too tall and narrow: the face itself was the pick's, the head read long); dark behind the
              neck, the neck redrawn at the person's neck_w; `ears` in the lines draws the ears over the plaits
 
+LIKENESS (chat 8): the person's lines may also name push/tune (caricature(): each measure moved further from real
+    faces' middle; Sam: "careful, you're straying too hard into caricature territory": keep push near 1.15), lashes,
+    eye_scale, iris_r/pupil_r, brow_up/brow_arch/brow_taper, mouth (the house mouths, AV.vance_mouth: soft, grin,
+    smirk; wide, gap, creases, drop), forehead (hairline lifted), plait_k (each plait bigger).
+
     python3 source/facehouse.py sheet OUT.jpg NAME [NAME ...]   the design sheet: photo, the pick, both house looks
     python3 source/facehouse.py head NAME LOOK OUT.png             one head-and-shoulders (for the name test)
 
@@ -111,12 +116,21 @@ def _head(img, p, sp, t, hx, hy):
         sockets(p, f, L, skin, kh['eyes']['shade'])
     ey = kh['eyes']
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.12)), tuple(ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
-            liner=2.8, iris_r=min(1.15, ey.get('iris_r', 0.95)), pupil_r=min(0.5, ey.get('pupil_r', 0.42)))
-    P4.brows(p, f, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0))
+            liner=2.8 + 1.6 * kh.get('lashes', 0.0), iris_r=kh.get('iris_r', min(1.15, ey.get('iris_r', 0.95))),
+            pupil_r=kh.get('pupil_r', min(0.5, ey.get('pupil_r', 0.42))), scale=kh.get('eye_scale', 1.0))
+    if kh.get('lashes'):
+        lashes(p, f, L, sp, kh['lashes'], kh.get('eye_scale', 1.0))
+    P4.brows(p, f, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0),
+             kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0))
     P4.nose(p, f, L, skin)
     age_lines(p, f, L, skin, kh['age'], lk)
     fx, my = f(0.0, L['lip13'])
-    P4.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0)), sp['kit_house']['lip'], (fx, my - 6))
+    m = kh.get('mouth')
+    if m:                                                 # the person's own resting mouth (chat 8: the likeness push)
+        PP.AV.MC.TC.talk_or(p, dict(sp, lips=True, lip_c=kh['lip']), 0.0, fx, my - 6, lambda: PP.AV.vance_mouth(
+            p, f, L, m['kind'], kh['lip'], skin, m.get('wide', 1.12), m.get('gap', 0.0), m.get('creases', 1.0), m.get('drop')))
+    else:
+        P4.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0)), kh['lip'], (fx, my - 6))
     if piece == 'swept':
         swept(p, f, L, hc, kh, lk)
     elif piece == 'braids':
@@ -126,6 +140,22 @@ def _head(img, p, sp, t, hx, hy):
     if kh.get('glasses'):
         glasses(p, f, L, kh['glasses'])
     return fx
+
+
+def lashes(p, f, L, sp, k, scale=1.0):
+    """Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
+    k (0..1) their length and count. The lid's curve is P4.eyes' own."""
+    w = L['ew'] * P4.H / 2 * scale
+    h = L['eh'] * P4.H / 1.8 * scale
+    lid = sp.get('lid4', 0.12)
+    for sgn in (-1, 1):
+        ex, ey = f(sgn * L['ecx'], L['eye_y'])
+        for u in np.linspace(0.05, 1.0, 3 + int(4 * k)):
+            x, y = ex + sgn * w * u, ey - h * (1 - u * u) * (1 - lid)
+            ln = (3 + 6 * k) * (0.6 + 0.6 * u)
+            a = math.radians(100 - 55 * u)                # straight up at the middle, out at the corner
+            p.line([(x, y), (x + sgn * ln * math.cos(a) * 0.5, y - ln * math.sin(a) * 0.6),
+                    (x + sgn * ln * math.cos(a), y - ln * math.sin(a))], INK, 1.3 + 0.8 * k)
 
 
 def sockets(p, f, L, skin, shade):
@@ -238,6 +268,8 @@ def _hair(L, kh):
     else:
         out_v, out_u = [crown, -0.25, 0.0, 0.5, 1.95], [0.0, e * 0.85, e + 0.12, e + 0.18, e + 0.22]
     hl = m.get('hairline') or [(0.0, -0.18), (0.2, -0.09), (0.3, -0.02)]
+    up = kh.get('forehead', 0.0)                 # a higher forehead (chat 8): the hairline lifted, most at the middle
+    hl = [(u, v - up * max(0.0, 1 - u / 0.4)) for u, v in hl]
     return dict(crown=crown, out_v=np.array(out_v), out_u=np.array(out_u), hairline=hl)
 
 
@@ -338,6 +370,8 @@ def braids(p, f, L, hc, lk, kh):
     inner = np.r_[ci, np.c_[ti, VS][1:]]
     outer = np.r_[co, np.c_[to, VS][1:]]
     light, sep, n, step, w = _looks(hc, lk)
+    k = kh.get('plait_k', 1.0)                              # each plait that much bigger (Sam, chat 8: "slightly")
+    n, step = max(3, round(n / k)), step * k
     tips = []
     for i in range(n):
         xl = inner[-1][0] * (1 - i / n) + outer[-1][0] * i / n
@@ -436,6 +470,14 @@ def age_lines(p, f, L, skin, age, lk):
 
 
 # ---------------------------------------------------------------------------------------------- the person
+def caricature(meas, push=1.0, tune=None):
+    """The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
+    measure moved further from real faces' middle (P4.AVG), by push, times tune[measure] where a person's lines name
+    one; push 1 and no tune is the pick as measured. What makes this face THIS face grows; nothing new is invented."""
+    tune = tune or {}
+    return {k: (P4.AVG[k] + push * tune.get(k, 1.0) * (v - P4.AVG[k])) if k in P4.AVG else v for k, v in meas.items()}
+
+
 def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, **kw):
     """The engine's person (views.person) for one picked face in one look, on the people kit's body."""
     import people
@@ -448,20 +490,31 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
              jacket=tuple(outfit[1]), sleeve=tuple(outfit[1]), shirt=shirt, tie=tie)
     if 'neck_w' in kw:                                      # the person's lines: a wider neck (Kemi's, K1)
         d['neck_w'] = kw.pop('neck_w')
+    if d['tie'] is not None:
+        d['tie'] = tuple(d['tie'])
     sp = people.person(d)
+    if 'brow_up' in kw:                                     # the person's resting brows (a pair: one raised)
+        sp['brow_up'] = tuple(kw.pop('brow_up')) if isinstance(kw['brow_up'], list) else kw.pop('brow_up')
     sp['hair'] = 'bald'                                    # the engine's own hair: none (the head part draws it all)
     kh = dict(pk, look=look, hair=hair, lip=d['lips'], **kw)
+    kh['meas'] = caricature(pk['meas'], kh.pop('push', 1.0), kh.pop('tune', {}))
     if kh['age'] and lk['age_k']:
         kh['age'] = dict(kh['age'])
     sp.update(kit_head='house', kit_house=kh, neck_shade=True)
     return sp
 
 
-CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold
-    'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
-                    hairline=-0.07, brow_thick=0.058),
+CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Chat 8, the likeness push, held back
+           # at Sam's "careful, you're straying too hard into caricature territory": a light push (1.15) on what the
+           # pick measured, plus each one's own cues (his lashes, heavy brows, grin and burgundy tie from his photo;
+           # her big eyes with small pupils, one brow raised, fuller mouth, high forehead, plaits a little bigger)
+    'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=(112, 28, 44), quiff=0.05,
+                    hairline=-0.07, brow_thick=0.066, push=1.15, tune=dict(eyes_apart=0.5, brow_high=1.3, brow_slope=1.5,
+                    mouth_wide=-0.5), lashes=0.5, mouth=dict(kind='grin', wide=1.2, creases=1.3, drop=0.03)),
     'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
-                     brow_thick=0.052, neck_w=1.2, ears=True),
+                     brow_thick=0.042, neck_w=1.2, ears=True, push=1.15, tune=dict(mouth_wide=0.6, lip_top=0.7, lip_low=0.7), eye_scale=1.08,
+                     iris_r=0.68, pupil_r=0.28, brow_up=(0.02, 0.0), brow_arch=0.02, brow_taper=0.5,
+                     mouth=dict(kind='soft'), forehead=0.08, plait_k=1.2),
 }
 
 

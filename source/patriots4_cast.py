@@ -148,9 +148,10 @@ def eyes(p, f, L, sp, iris, lid_c, liner=2.6, wide=0.0, iris_r=0.95, pupil_r=0.4
         TC.eye(p, ex, ey, sgn, ww, h, iris, st, lid_c, liner=liner, iris_r=iris_r, pupil_r=pupil_r)
 
 
-def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0):
+def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0, arch=0.0, taper=0.0):
     """Filled brows from inner to outer end at the measured height and slope. raise_ lifts them (surprise);
-    frown pulls the inner ends down (narrowed, accusing). raise_ may be a pair (our left, our right): one brow up."""
+    frown pulls the inner ends down (narrowed, accusing). raise_ may be a pair (our left, our right): one brow up.
+    arch lifts the brow's peak over its ends; taper (0..1) thins the outer end (the face tool's house heads)."""
     for sgn in (-1, 1):
         ecx, ew = L['ecx'], L['ew']
         xi, xo, xm = ecx - 0.69 * ew, ecx + 0.98 * ew, ecx + 0.21 * ew
@@ -158,9 +159,9 @@ def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0):
         y_m = L['brow_y'] - thick * 0.35 - up
         yi = y_m + L['slope'] * (xm - xi) * 1.0 + frown
         yo = y_m - L['slope'] * (xo - xm)
-        ym = y_m - 0.008
+        ym = y_m - 0.008 - arch
         th = thick
-        uv = [(xi, yi - th * 0.45), (xm, ym - th * 0.6), (xo, yo - th * 0.2), (xo + 0.01, yo + th * 0.15),
+        uv = [(xi, yi - th * 0.45), (xm, ym - th * 0.6), (xo, yo - th * 0.2 * (1 - taper)), (xo + 0.01, yo + th * 0.15 * (1 - taper)),
               (xm, ym + th * 0.45), (xi, yi + th * 0.55)]
         p.poly(curve(f.pts([(sgn * u, v) for u, v in uv]), 3), c, None)
 

@@ -329,23 +329,35 @@ def MC_inside(poly, q):
     return _inside(poly, q[0], q[1])
 
 
-def vance_mouth(p, f, L, kind):
+def vance_mouth(p, f, L, kind, lip=None, skin=None, wide=1.12, gap=0.0, creases=1.0, drop=None):
     """His mouths for the moods: 'soft' (closed, corners up a little, earnest), 'grin' (open, top teeth, corners
-    high), 'smirk' (closed, one corner up: our right)."""
+    high), 'smirk' (closed, one corner up: our right). lip, skin: another person's colours (the face tool's house
+    heads, chat 8); wide: the grin's width over the measured mouth; gap: a gap between the front teeth (its width in
+    face heights); creases: the smile creases' length and depth; drop: the grin's depth below the lip line (thin-
+    lipped faces measure almost none)."""
     hw, l0, l13, l17 = L['mw'] / 2, L['lip0'], L['lip13'], L['lip17']
+    if drop is not None:
+        l17 = max(l17, l13 + drop)
+    lip, skin = lip or V_LIP, skin or V_SKIN
     if kind == 'grin':
-        hw *= 1.12
+        hw *= wide
         top = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03)]
         bot = [(hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
         p.poly(curve(f.pts(top + bot), 3), (70, 26, 30), INK, 2.2)
-        teeth = [(-hw * 0.82, l13 - 0.022), (0.0, l13 - 0.006), (hw * 0.82, l13 - 0.022), (hw * 0.6, l13 + 0.012),
-                 (0.0, l13 + 0.02), (-hw * 0.6, l13 + 0.012)]
+        tb = 0.0 if drop is None else max(0.0, 0.5 * (l17 - l13) - 0.02)     # a deeper grin shows more tooth
+        teeth = [(-hw * 0.82, l13 - 0.022), (0.0, l13 - 0.006), (hw * 0.82, l13 - 0.022), (hw * 0.6, l13 + 0.012 + tb),
+                 (0.0, l13 + 0.02 + tb), (-hw * 0.6, l13 + 0.012 + tb)]
         p.poly(curve(f.pts(teeth), 3), (250, 248, 240), None)
+        if gap:
+            p.poly(curve(f.pts([(-gap / 2, l13 - 0.008), (gap / 2, l13 - 0.008), (gap / 2.4, l13 + 0.016 + tb),
+                                (-gap / 2.4, l13 + 0.016 + tb)]), 2), (70, 26, 30), None)
         p.line(curve(f.pts([(-hw, l13 - 0.03), (-hw * 0.5, l0 + 0.004), (0.0, l0 + 0.008), (hw * 0.5, l0 + 0.004),
-                            (hw, l13 - 0.03)]), 3), dk(V_LIP, 0.8), 3.0)                   # the thin top lip
+                            (hw, l13 - 0.03)]), 3), dk(lip, 0.8), 3.0)                   # the thin top lip
         for sgn in (-1, 1):                                                                # smile creases
-            p.line(curve(f.pts([(sgn * (hw + 0.03), l13 - 0.07), (sgn * (hw + 0.05), l13 - 0.02),
-                                (sgn * (hw + 0.035), l13 + 0.03)]), 3), dk(V_SKIN, 0.75), 1.6)
+            if creases:
+                p.line(curve(f.pts([(sgn * (hw + 0.03), l13 - 0.07 * creases), (sgn * (hw + 0.03 + 0.02 * creases),
+                                    l13 - 0.02), (sgn * (hw + 0.035), l13 + 0.03 * creases)]), 3),
+                       dk(skin, 0.75 - 0.05 * (creases - 1)), 1.6 * creases)
         return
     if kind == 'soft':
         ends = (0.014, 0.014)
@@ -357,13 +369,13 @@ def vance_mouth(p, f, L, kind):
     top = curve(f.pts([(-hw, l13 - a), (-hw * 0.4, l0 + 0.006), (0.0, l0 + 0.01), (hw * 0.4, l0 + 0.006),
                        (hw, l13 - b)] + line[::-1][1:-1]), 3)
     bot = curve(f.pts(line + [(hw * 0.5, l17 - 0.012 - b * 0.3), (0.0, l17 - 0.004), (-hw * 0.5, l17 - 0.012 - a * 0.3)]), 3)
-    p.poly(top, dk(V_LIP, 0.86), INK, 1.5)
-    p.poly(bot, V_LIP, INK, 1.5)
+    p.poly(top, dk(lip, 0.86), INK, 1.5)
+    p.poly(bot, lip, INK, 1.5)
     p.line(curve(f.pts(line), 3), INK, 2.4)
     for sgn, e in ((-1, a), (1, b)):                                                       # a dimple at a raised corner
         if e > 0.01:
             p.line(curve(f.pts([(sgn * (hw + 0.012), l13 - e - 0.02), (sgn * (hw + 0.022), l13 - e + 0.004)]), 2),
-                   dk(V_SKIN, 0.75), 1.6)
+                   dk(skin, 0.75), 1.6)
 
 
 # ---------------------------------------------------------------------------------------------- Vance turned

@@ -65,3 +65,30 @@
   per-person lines in facehouse.CAST (hair piece, quiff, hairline, brow_thick, outfit); looks in LOOKS. The sheet's
   photo tile prints a harmless mediapipe shutdown traceback. nametest packs: scratchpad (lost); rebuild them.
 
+
+## Face tool, where things stand (chat 7 of the face chain, 14 Nov; amber at ~3.1%: handed over after the sheet)
+- **Rules that bite next:** 49 (likeness: the blind name test is the judge), 86 (facehouse needs its kittest), 85.
+- **Done:** K1: Kemi's face was already pick C's (outlines match); the guessed hair cap made her head a head taller and
+  narrower. Hair now measured off the pick's picture (`pick_hair`), plus her ears (as in C) and a wider neck. K2: plaits
+  from the parting over the whole crown, one rope each down to the tips. Sheet sent: `notes/morning/facehouse-kemi-k1k2.jpg`.
+  Name test now uses neutral folders (`nametest.py`). facepick and agelines kittests pass; Andy unchanged (0 pixels).
+- **Name test, neutral folders (the honest baseline; chat 6's 8-35% were nudged by the folder name):** Kemi look 2:
+  not named (Ketanji Brown Jackson 30%), line-up 6th of 8 ("a generic template ... needs her own features: face shape,
+  nose and mouth"). Andy look 2: named 3rd at 5% (Starmer 15%), line-up 3rd. Both FAIL.
+- **Next (chat 8, Opus HIGH: new building): the likeness push** until each is named blind (neutral packs, line-up
+  step too): Burnham's heavy dark brows over deep-set eyes, longer face, the wide smile with deep folds, thick wavy
+  hair pushed up; Badenoch's high rounded forehead, wide-set big eyes, full lips, the gap-tooth smile (exaggerate:
+  "we are allowed to play with face shapes in the house style"). Keep the likeness check as the 'nothing the wrong
+  way' guard; don't undo K1/K2. Then facehouse in people.py (`head: house NAME`), turned views, kittest, catalogue
+  row, facepick's sheet drawing with facehouse; then Walliams.
+- **Needs Sam:** (1) Kemi's ears showing, as in pick C (her photos hide them): Y keep / N hide. (2) rule 49's check
+  column naming the face-tool tests (Y/N, asked three times).
+- **Sam's words kept:** "Please don't limit yourself on budget as this is important and I have spare." (no % stop;
+  rule 85 still hands over between chats). Age lines stay, house style, per character. Look 2 is the look.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP; rule 49.
+- **Open rule requests:** rule 49's check column.
+- **For Claude:** `python3 source/facehouse.py head NAME detail OUT.png`; per-person lines in facehouse.CAST (ears,
+  neck_w new). `nametest.py pack KEYDIR BIG.png --lineup "..."` now writes the helper's files to review/np/RANDOM;
+  `score KEYDIR NAME` finds them. Packs used: Kemi line-up Badenoch, Abbott, Butler, Patel, Harris, Obama, de Cordova,
+  Ribeiro-Addy; Andy line-up Burnham, Starmer, Streeting, Miliband, Sunak, Hunt, Gove, Khan.
+
