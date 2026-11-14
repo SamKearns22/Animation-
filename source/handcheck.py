@@ -175,7 +175,10 @@ def probe(img, args):
     cut = lambda im: im.crop((x0, y0, x1, y1))
     lay, full, props = cut(lay), {sd: cut(im) for sd, im in full.items()}, [(q, cut(o)) for q, o in props]
     held = {sd: np.asarray(cut(im))[:, :, 3] > 40 for sd, im in held.items()}
-    head = np.asarray(cut(head))[:, :, 3] > 40
+    head_rgba = np.asarray(cut(head)).astype(np.int16)
+    head = head_rgba[:, :, 3] > 40                 # where the head shows on top in the picture: the same colour there as
+    head = head & (np.abs(np.asarray(lay).astype(np.int16)[:, :, :3] - head_rgba[:, :, :3]).max(axis=2) <= 24)
+    # drawn alone (chat 8: a phone or arm drawn over the face is not the head covering the hand)
     if bare is not None:                            # the prop's pixels that show in the real picture
         d = np.abs(np.asarray(lay).astype(np.int16) - np.asarray(cut(bare)).astype(np.int16)).max(axis=2) > 12
         shown = {sd: held[sd] & d for sd in 'LR'}

@@ -236,8 +236,6 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
 
 
 AVOID = {   # views a pose fails the hand check in (rule 41): a film never uses it from there
-    'hands up': {'side': 'the near fist is drawn under his face: it reads as held behind the head (head check, '
-                         'Protest Tiers chat 7)'},
     'hands on a table (drawn)': {'three-quarter back': 'the far hand is on the table beyond his body',
                                  'behind': 'both hands are on the table beyond his body'},
     'cup in hand': {'three-quarter back': 'the cup is in front of him, hidden by his back (Job J: prop hidden)',

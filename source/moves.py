@@ -417,6 +417,8 @@ def pose(sp, name, beat=0.0, target=None):
     elif name == 'mic':
         V.arm_to(j, 'R', (30.0, 20.0, 150.0), 'down', 'fist')
         j['props'] = [lambda p, j2: _mic(p, j2)]
+        j['grip'] = ('R',)                                   # the fist round the handle, over it (chat 8: three-quarter
+                                                             # hid the hand under the mic)
     elif name == 'pen':
         V.arm_to(j, 'R', (40.0, 270.0, 160.0), 'down', 'pen')
         j['props'] = [lambda p, j2: _pen(p, j2)]

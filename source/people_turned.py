@@ -24,7 +24,8 @@ from people_parts import P4, TH, dk, INK, curve, oval
 STYLES = {
     'short': dict(hl=-0.1, prof=dict(hair_low=0.4, nape=0.66)),
     'crop': dict(hl=-0.06, prof=dict(hair_low=0.36, nape=0.62, volume=0.015)),
-    'bald': dict(hl=None, prof=dict(hair_top=0.3, hair_top_back=0.34, hair_ragged=0.008, hair_low=0.66, nape=0.7)),
+    'bald': dict(hl=None, prof=dict(hair_top=0.4, hair_top_back=0.44, hair_ragged=0.008, hair_low=0.66, nape=0.86)),   # chat 8 (Protest Tiers): the fringe
+    # of hair runs down to the neck: ending above it read as a dark band like a blindfold
     'bob': dict(hl=-0.12, prof=dict(hair_low=0.9, nape=0.95, volume=0.07), long=1.1),
     'pony': dict(hl=-0.14, prof=dict(hair_low=0.44, nape=0.7, volume=0.02), pony=True),
     'curly': dict(hl=-0.08, prof=dict(hair_low=0.5, nape=0.74, volume=0.12), curls=True),

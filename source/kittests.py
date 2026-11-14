@@ -760,10 +760,16 @@ def held_over_or_behind_the_head():
         return j
     gallery = [(n, lb) for n, build, _ in G.GALLERY for deg, lb in G.VIEWS
                if lb not in G.AVOID.get(n, {}) and found(build(G.MODEL), float(deg))]
-    front = found(c5(), 0.0)
+    V.RAISED_OVER = False                          # the kit as chat 5 drew it: the hand and phone under the face
+    try:
+        front = found(c5(), 0.0)
+    finally:
+        V.RAISED_OVER = True
+    fixed = found(c5(), 0.0)                       # chat 8: the kit draws a raised hand nearer than the head over it
     behind = [deg for deg, _ in G.VIEWS if found(back(), float(deg))]
-    ok = not gallery and bool(front) and len(behind) == len(G.VIEWS)
-    return ok, f"gallery: {gallery or 'clean'}; chat 5's phone from the front: {'caught' if front else 'MISSED'}; " \
+    ok = not gallery and bool(front) and not fixed and len(behind) == len(G.VIEWS)
+    return ok, f"gallery: {gallery or 'clean'}; chat 5's phone from the front: {'caught' if front else 'MISSED'} " \
+               f"(kit as then), {'clean' if not fixed else 'STILL UNDER'} (kit now); " \
                f"phone behind the head caught in {len(behind)} of {len(G.VIEWS)} views"
 
 

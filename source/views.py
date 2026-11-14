@@ -55,6 +55,9 @@ def snap(yaw):
     return m, y < 0
 
 
+RAISED_OVER = True     # a hand raised in front of the face is drawn over the head (chat 8; kittests switch it off)
+
+
 def project(p3, yaw):
     """A body point seen from the camera, the body facing `yaw` degrees: (screen x, y) and depth (+ = nearer)."""
     a = math.radians(yaw)
@@ -1142,6 +1145,29 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         if grips.hidden_by(grips.hand_centre(j, sd), view_deg, sp) == 'head':   # beyond the head: the head hides it
             continue                               # (Job G chat 3: the arm was drawn across his face)
         arm(p, j2, sd, sp)
+    # a hand raised in front of the face (fists up, seen side on) is nearer than the head: drawn over it, as a hand on
+    # the face is (Sam, 14 Nov, Protest Tiers: the gallery's 'hands up' side view had the near fist under his face).
+    # Only up at the head (above the chin, across its width) and nearer than its middle from this view; never an arm
+    # hidden behind his back, nor one already drawn over the face.
+    hc = (sp_draw.get('head_dx', 0.0), -150.0 + sp_draw['head_dy'], 0.0)
+    d_head = project(leaned(hc, lean), view_deg)[1]
+    hw, hh = sp_draw.get('hw', 70), sp_draw.get('hh', 92)
+    for sd in 'LR':
+        if sd in j.get('on_face', ()) or sd in behind:
+            continue
+        import grips
+        c = grips.hand_centre(j, sd)
+        (cx, cy), dc = project(leaned(c, lean), view_deg)
+        hx = project(leaned(hc, lean), view_deg)[0][0]
+        if RAISED_OVER and c[1] < hc[1] + 0.8 * hh and abs(cx - hx) < 1.1 * hw + 15 and dc > d_head + 0.3 * hw:
+            arm(p, j2, sd, sp)
+            grip = j.get('grip') or ()             # what that hand holds stays in it, over the arm: a prop naming
+            mine = [d for d in j.get('props', []) if getattr(d, 'side', None) == sd or   # its side, or any plain prop
+                    (getattr(d, 'side', None) is None and (not grip or sd in grip))]   # held by this hand
+            for draw in [] if held_behind else mine:
+                draw(p, j2)
+            if mine and sd in grip:                # a gripping hand is over what it holds
+                hand(p, j2, sd, sp, j2.get('hand', {}).get(sd, 'fist'))
     for draw in j.get('face_props', []):
         draw(p, j2)
     return j2

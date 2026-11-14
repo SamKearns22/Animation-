@@ -640,7 +640,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j['footR'] = (70, V.ANKLE_Y, -110.0)
         hand = np.array((sw + 40, 20.0, -170.0)) * (1 - e) + np.array((-20.0, 300.0, 200.0)) * e
         V.arm_to(j, 'R', tuple(hand + (0, 0, 10)), 'out')
-        V.arm_to(j, 'L', tuple(hand + (-10, 60, 20)), 'down')
+        V.arm_to(j, 'L', tuple(hand + (30, 60, 40)), 'down')   # on the pole's lower end, beside the body (chat 8: was pushed into its sleeve)
         ang = math.radians(-60 + 150 * e)               # pole angle from straight up, swinging forward
         j['props'] = [road_sign(j, dirn=(0.0, -math.cos(ang), math.sin(ang)))]
         j['grip'] = ('L', 'R')                      # both fists over the pole
@@ -847,21 +847,53 @@ def font(n):
     return ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), n)
 
 
-def tile(fn, w=360, h=640, bg=(232, 228, 222)):
-    """Draw fn(img, cam) on a 1080 x 1920 canvas and return the tight crop around what was drawn, fitted to w x h."""
+TILE_FAULTS = []    # (label, fault) from every tile drawn: the hand check runs on each (rule 41; chat 8: chat 5's sheet
+                    # was never checked, so the phone behind the head (note 1) reached Sam)
+
+
+# hand-check faults on the cast sheet that are meant, each looked at on a 2x crop (chat 8): (label pattern, side,
+# kind pattern, why). The check sees a hand under a prop as covered even when the prop is see-through.
+HANDS_OK = [
+    ('Mossos (Barcelona)', 'L', 'no hand', 'the shield hand, behind the clear shield: seen through the glass'),
+    ('Polizei (Frankfurt)', 'L', 'no hand', 'the shield hand, behind the clear shield: seen through the glass'),
+    ('CRS (Paris)', 'L', 'no hand', 'the shield hand, behind the clear shield: seen through the glass'),
+    ('Policia (Tirana)', 'L', 'no hand', 'the shield hand, behind the clear shield: seen through the glass'),
+    ('Policia, baton up', 'L', 'no hand', 'the shield hand, behind the clear shield: seen through the glass'),
+    ('Policia, baton up', 'R', 'no hand', 'the fist shows on the baton grip above his helmet (the baton is drawn over it)'),
+    ('Mossos from behind', '*', 'no hand', 'from behind: the shield is held in front, his hands hidden by his back'),
+    ('Moped + RPG', 'R', 'no hand', 'the far hands (handlebar, launcher) are beyond the bodies, side on'),
+    ('Moped + RPG', 'L', 'over *', 'two riders on one moped: the rider sits against the passenger'),
+]
+
+
+def tile(fn, w=360, h=640, bg=(232, 228, 222), label='?', wide=False):
+    """Draw fn(img, cam) on a 1080 x 1920 canvas and return the tight crop around what was drawn, fitted to w x h.
+    The hand check (handcheck: no hand, in sleeve, behind or under the head, ...) runs on the drawing; its faults go
+    in TILE_FAULTS and are printed."""
+    import handcheck as H
+    H.install()
     B.SS = 1
     img = Image.new('RGBA', (1080, 1920), bg + (255,))
     cam = B.Cam(1.0, 540, 960)
+    H.begin()
     fn(img, cam)
+    import fnmatch
+    for f in H.end(0.0, label):
+        ok = [why for lab, sd, kd, why in HANDS_OK if fnmatch.fnmatchcase(label, lab) and sd in ('*', f['side'])
+              and fnmatch.fnmatchcase(f['kind'], kd)]
+        if ok:
+            continue
+        TILE_FAULTS.append((label, f))
+        print(f"HANDS: {label}: {f.get('who', f.get('name', '?'))} {f.get('side', '')}: {f.get('kind', '?')}")
     a = np.asarray(img.convert('RGB')).astype(int)
     diff = np.abs(a - np.array(bg)).sum(2) > 12
     ys, xs = np.nonzero(diff)
     if len(xs):
         box = [max(0, xs.min() - 16), max(0, ys.min() - 16), min(1080, xs.max() + 16), min(1920, ys.max() + 16)]
         cx = (xs.min() + xs.max()) / 2              # a long prop (the sign's pole) never shrinks the figure: the
-        if box[2] - box[0] > 760:                   # crop is capped round the drawing's middle (chat 6)
+        if box[2] - box[0] > (1080 if wide else 760):                   # crop is capped round the drawing's middle (chat 6)
             box[0], box[2] = int(max(0, cx - 380)), int(min(1080, cx + 380))
-        if box[3] - box[1] > 1250:
+        if not wide and box[3] - box[1] > 1250:
             box[1] = box[3] - 1250
         img = img.crop(box)
     img.thumbnail((w, h))
@@ -887,7 +919,7 @@ def cast_items():
     items.append(('Rioter, running', lambda img, cam: draw(img, cam, 540, 700, 0.62, r, pose(r, 'run', t=0.1), 90)))
     items.append(('Rioter, throwing (wind-up)', lambda img, cam: draw(img, cam, 540, 700, 0.62, r,
                                                                       pose(r, 'throw', 0.0), 90)))
-    items.append(('Rioter, sign swing', lambda img, cam: draw(img, cam, 540, 700, 0.55, r, pose(r, 'swing', 0.2), 90)))
+    items.append(('Rioter, sign swing', lambda img, cam: draw(img, cam, 640, 760, 0.62, r, pose(r, 'swing', 0.2), 90)))
     items.append(('Rioter, from behind', lambda img, cam: draw(img, cam, 540, 700, 0.62, r, V.standing(r), 180)))
     for i, (tier, nm, kind) in enumerate((('t1', 'keys', None), ('t1', 'flag', 'catalan'), ('t2', 'placard', None),
                                           ('t2', 'phone', None), ('t3', 'flag', 'tricolour'), ('t4', 'flag', 'albania'))):
@@ -902,17 +934,27 @@ def cast_items():
 def sheet(out):
     items = cast_items()
     cols, tw, th = 6, 340, 560
-    rows = (len(items) + cols - 1) // cols
+    wide = {'Rioter, sign swing'}                   # the long pole: two tiles wide, so he is drawn full size (chat 8)
+    places, k = [], 0
+    for label, _ in items:
+        n = 2 if label in wide else 1
+        if k % cols + n > cols:
+            k += cols - k % cols
+        places.append((k, n))
+        k += n
+    rows = (k + cols - 1) // cols
     img = Image.new('RGB', (cols * tw + 40, rows * (th + 40) + 90), (232, 228, 222))
     d = ImageDraw.Draw(img)
     d.text((20, 20), 'PROTEST TIERS: the cast (Glimpses: drawn large here, small in the film)', font=font(34),
            fill=(30, 30, 30))
-    for k, (label, fn) in enumerate(items):
-        t = tile(fn, tw - 10, th - 10)
+    for (label, fn), (k, n) in zip(items, places):
+        t = tile(fn, tw * n - 10, th - 10, label=label, wide=n > 1)
         x0, y0 = 20 + (k % cols) * tw, 80 + (k // cols) * (th + 40)
-        img.paste(t.convert('RGB'), (x0 + (tw - t.size[0]) // 2, y0 + th - t.size[1]))
-        d.text((x0 + tw // 2, y0 + th + 18), label, font=font(20), fill=(30, 30, 30), anchor='mm')
+        img.paste(t.convert('RGB'), (x0 + (tw * n - t.size[0]) // 2, y0 + th - t.size[1]))
+        d.text((x0 + tw * n // 2, y0 + th + 18), label, font=font(20), fill=(30, 30, 30), anchor='mm')
     img.save(out, quality=88)
+    print(f'hand check: {len(TILE_FAULTS)} fault(s) on {len(items)} tiles' if TILE_FAULTS else
+          f'hand check: all {len(items)} tiles clean')
     return out
 
 
