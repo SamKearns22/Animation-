@@ -79,8 +79,9 @@ stop failed: it was measured with the low reading.
 ## Where things stand (goals review)
 - **Rules that bite next:** 85 (cost watch), 24 (estimate and budget stop), 86 (tool kittests).
 - **Done:** this review (verdicts, real spend from the app, what to measure on Protest Tiers).
-- **Next:** none for this job; the measures above go into Protest Tiers' notes when its cast chat hands over.
-- **Needs Sam:** Y/N on recommendations 1-3 (none is built until he says).
+- **Sam (14 Nov, ~22:40): Y to 1, 2 and 3.**
+- **Next (Opus, medium; building from a clear plan):** write 1 and 2 into the rulebook at rules 85 and 24 (edit, not new rules; each with its check), build 1 in `ledger.py` (budget stop and report lines from get_session cost) and 3 in `handover.py end` (flag 'start a new chat' / 'type' asks and limits not in CLAUDE.md), kittests for both, catalogue rows; tell Sam the exact wording written. Also copy the 7 measures into Protest Tiers' notes.
+- **Needs Sam:** nothing.
 - **Read:** this file only.
-- **Open rule requests:** recommendations 1-3, if Sam says Y.
+- **Open rule requests:** 1-3 (Sam: Y), to be written by the next chat.
 - **For Claude:** costs from get_session `external_metadata.usage.cost_usd`; face chats 12-13 were running (not counted).
