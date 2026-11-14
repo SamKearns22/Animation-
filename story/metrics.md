@@ -250,3 +250,15 @@ films; Sam has ruled it out (hostile to AI-built films). Hits spend every tag on
 show, fandom or event); the low films spend 1-3 tags on words nobody searches (#paranoia #antique #brave #rocket #Crabs
 #Nonsense #FirstDay #Abdul #Claudia #Halo #Plague). Ad-Vanced Notice had the most generic set of any politics film: three
 category tags, one person, one party, nothing naming the story (Hormuz, the war, fuel prices).
+
+## Snapshot: Sat 14 Nov 2026 (YouTube Studio, Shorts, Latest published content; Sam's phone screens)
+
+| Film (YouTube title cut off) | Age | Views | Likes | Comments | Avg % viewed | Note |
+|---|---|---|---|---|---|---|
+| Russell Brand feels super ble… | 1 d 1 h | 5.6K | 39 | 14 | 62.7% | Ranking by views 1 of 10; views, avg % viewed and likes all marked up; no unresponded comments |
+| Ocarina Of Time gets the rem… | 3 d 2 h | 1.2K | 34 | 0 | 43.9% | Views normal; avg % viewed marked down; likes up |
+| New Elder Scrolls Trailer is si… | 4 d 2 h | 17 | 2 | 0 | 61.1% | Views and likes marked down; avg % viewed normal |
+
+Reading (Claude): Russell Brand is the best YouTube Short of the latest ten by a wide margin, and holds people (62.7%) and draws comments (14).
+Ocarina got normal reach but people left sooner. Elder Scrolls got almost no reach (17 views in 4 days) though the few who saw it stayed (61.1%):
+a reach failure, not a film failure.
