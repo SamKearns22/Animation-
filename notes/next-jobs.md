@@ -6,7 +6,10 @@
   Notes-round pack now reads the page. Handover check: helpers' reports and parent seeds no longer read as Sam's.
 - **Waits for 4, 5, 7:** the page carries the people/places/moves description lines, so notes change the page.
 - **Next: overnight chat 4, Opus HIGH: people from a description (ranking item 4), per `notes/overnight-run.md`.**
-- **Needs Sam (morning report):** Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
+- **Face tool: HARD STOP (chat 3, ~8.2% of 7.5%).** Age lines (`agelines.py`), soft grey temples, braids built;
+  Burnham and Badenoch pass, sheets sent. Left: Walliams replay, kittest, braid band, Burnham's eyes (~1%; Sam's Y).
+- **Needs Sam (morning report):** pick Burnham and Badenoch A/B/C; Y to ~1% more for the face tool; Y to rule 49.3's
+  age-lines line; Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
 - **Bench left (a later chat, Opus medium, ~0.5%):** second case (animatic 2, from 51e8d9f); see `critbench.py` MAP.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `notes/ranking-list.md` item 4; `notes/overnight-run.md`.
 - **Open rule requests:** none.
