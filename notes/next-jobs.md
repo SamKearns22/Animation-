@@ -35,6 +35,12 @@
   that fails when a view drops a piece the front has. Both before more Walliams work.
 - **Next (chat 14, Opus medium):** Sam's (a) and (b) above first; then stubble carried round the turned views (turnhead's beard path, as Vance's goatee);
   then Sam's notes on the Walliams sheet, if any.
+- **Sam, 14 Nov (to chat 12), two jobs for chat 14 too:** (a) Y: background people on the generic head
+  (views.head_view) move onto the new three-quarter turned head. (b) "clothes remain consistent no matter the pose, as
+  that was the source of the Kemi problem": the outfit described once and every view (front, three-quarter, side,
+  behind) draws it; nothing outfit-like hides in a hair piece (Kemi's open collar sits in the braids code: make it the
+  outfit's own choice, e.g. `outfit: suit ..., open collar`). A kittest draws each outfit from every view and fails
+  when a view drops a piece the front has (rule 86).
 - **Needs Sam:** Y/N on the new Walliams head (the chain does not wait on it).
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
   caricature. Andy and Kemi finished: do not change their front heads.
