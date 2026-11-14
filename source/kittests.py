@@ -933,7 +933,7 @@ def critique_helper_kind():
     builtin = C.HELPER in ('general-purpose', 'claude')
     path = os.path.join(C.ROOT, '.claude', 'agents', C.HELPER + '.md')
     own = os.path.exists(path) and bool(re.search(r'^tools: Read, Write$', open(path).read(), re.M))
-    ok = f'({C.HELPER}, model opus' in line and refused == list(C.READ_ONLY) and (builtin or own)
+    ok = f'({C.HELPER}, model sonnet' in line and refused == list(C.READ_ONLY) and (builtin or own)
     return ok, f"names '{C.HELPER}' ({'built in' if builtin else 'own definition'}); read-only kinds refused: {refused}"
 
 
@@ -1982,10 +1982,10 @@ def moves_from_the_acting_list():
             if (o is None) != (v is None) or (o is not None and abs(o - v) > 1e-6):
                 bad.append(f'{fn}: differs from the film at {t:.2f} s')
                 break
-    # the acting list itself (step 4): Blessed's list has drifted from its film in two rows (the dock's slump and
-    #   the face change come before / after the list's word); a row with no block is caught too
+    # the acting list itself (step 4): Blessed's list was corrected to its film (14 Nov: the dock slump at the start
+    #   of line 3, the face change 2.6 s after "early release"), so it finds nothing; a row with no block is caught too
     drift = A.check_list('blessed')
-    if len(drift) != 2 or not all(('row 3' in d or 'face change' in d) for d in drift):
+    if drift:
         bad.append(f'the acting-list check found {drift}')
     keep = desc['shots'].pop('phone')
     A.load = (lambda f, d=desc: d)

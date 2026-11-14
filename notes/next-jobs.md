@@ -37,7 +37,8 @@
 - **Open rule requests:** none.
 - **For Claude:** facehouse.load(name, src, variant); CAST['walliams']; stubble() after age_lines; facepick
   BEARD_MIN, _beard_word (pick 'beard' is now a dict). Scratch run: `facepick.py walliams OUT w06 w07 w01 w02 --tq w09
-  --says "glasses=no, age=55, hair=plain"` (~3 min).
+  --says "glasses=no, age=55, hair=plain"` (~3 min). Chat 12b: turnhead YAW["three"] 30, TurnFace.three, PLAN3/KFAR/KMIN, _smoothed, chin ease (3/4 only); views three torso (open_curve top, v_at 0.24, neck to -130); facehouse open_collar_three; VANCE_TURNED_MD5 now yaws
+  90-180. Kittests critique_helper_kind and round_page fail on the main line before this change too (not face work).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

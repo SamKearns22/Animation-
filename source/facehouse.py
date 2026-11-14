@@ -687,6 +687,20 @@ def open_collar(p, cx, yc, nw, skin, sc):
                 (cx + sg * (w + 16), yc - 4)], sc, INK, 2.0)
 
 
+def open_collar_three(p, sp, nw, skin, sc, yc=-11.0):
+    """Kemi's open collar from three-quarter (chat 12, Sam: "Kemi's correct outfit is replaced by her previous one in
+    her 3/4 pose"): the turned body drew the plain buttoned shirt. As open_collar, turned: the skin V from the neck's
+    foot down to the top button on the chest's centre (views' three-quarter V, `v_at`), the near flap over the near
+    lapel, the far one foreshortened."""
+    sw = sp.get('shoulders', 150)
+    o = sp.get('v_at', 0.24 * sw)
+    nl, nr = -20.0 * nw, 44.0 * nw - 8 * (nw - 1)           # the three-quarter neck's foot, at her neck_w
+    p.poly([(nl, yc - 2), (nr, yc - 2), (o + 4, 56), (o - 4, 56)], skin, None)
+    for sg, tx, k in ((-1, nl, 1.0), (1, nr, 0.55)):
+        p.poly([(tx + sg * 1, yc - 3), (o - sg * 1, 62), (o + sg * 22 * k, 70), (tx + sg * 24 * k, 6),
+                (tx + sg * 16 * k, yc - 4)], sc, INK, 2.0)
+
+
 def braids(p, f, L, hc, lk, kh):
     """Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
     way she keeps her hair"): plaits from the middle parting over the whole crown, down the temples and on into two
@@ -894,6 +908,8 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
         bx = back[-1][0] - H * 0.05
         front = [(ex + reach, f.top + v * H) for v in vs]
         curt.append((back + [(bx, foot)], front + [(ex + reach + H * 0.04, foot)]))
+        if yaw < 60 and sp.get('outfit') == 'suit' and not sp.get('tie'):   # her open collar, under the curtains
+            open_collar_three(p, sp, sp.get('neck_w', 1.0), sp['skin'], sp.get('shirt', (246, 246, 246)))
     head = [(x, y) for x, y, v, part in sil]
     for i, (a, b) in enumerate(curt):
         mid = ((a[0][0] + b[0][0]) / 2, a[0][1] - 0.12 * H)       # an arched top under the crown: no sharp
