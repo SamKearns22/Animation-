@@ -41,3 +41,15 @@
 - **Open rule requests:** "pencil sketches before check sheets" every film (after this film's roughs; would merge into rule 11); framing lessons F1-F12 (Sam's numbers).
 - **For Claude:** film `protest-tiers`; headline = `islamocommunism_set.heading`; pencil kit = `source/pencil_cartoon.Canvas` (reuse for the roughs); ledger estimate set, stage plan done.
 
+
+## Handover replaced 14 Nov (chat 4)
+## Where things stand (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 11 (sheet sent once: Sam's notes on it are applied, never re-sent), 89 (cast drawn alone, critiqued), 3 (no place drawn without its photos).
+- **Done (13 Nov, chat 4):** pencil sketches of the four re-staged scenes (`source/protest_tiers_roughs.py`, sheet with safe area, eye level, focus by beat, movement); critique hunts 1 and 2 (`protest_tiers_roughs` r1 p1-p2), faults fixed as one list; sheet + framing study sent to Sam. Chat 4's first try (12 Nov) hit the usage limit before drawing; this chat redid it.
+- **Next: the cast (Opus high), only after Sam's answers:** protester, riot officer x4 forces, hooded rioter, moped + riders; drawn alone and critiqued (rule 89). Answers come back to this chat.
+- **Sam (13 Nov):** Q1 Y to the re-staging (T2 crowd on the near pavement, store centre). Hook Text and sound: still pending (his word). Lessons F1-F12: kept as crowd-scene guidelines, not rules (read only when a shot needs them; pointer in the Plan pack).
+- **Sam (13 Nov): Y** to booking the research (4.2% then, 7.1% on the true week) as extra planning: ledger stage 'plan extras' done, the cast keeps its 3%. Its cast is the first test of the people kit (ranking item 4). Helper's 3 checks: critique lines S7-S9 (Sam: Y). Still pending: Hook Text and sound list.
+- **Read:** `guides/job-packs.md` "Build"; this file's "Re-staged", "Action lists"; the estimate table's cast rows.
+- **Lost / Added (Sam Y, 12 Nov):** Lost: yellow vests; pepper spray (now tear gas); the hammer (now a road sign). Added: wet dusk with streetlights (T1); burning newspaper kiosk, burning rental bikes, CGT banners, daytime (T3).
+- **Open rule requests:** "pencil sketches before check sheets" every film (would merge into rule 11); helper's 3 proposed checks (camera height matches the plan; no unbroken mass over half the frame; smoke has volume) to weigh against the critique checklist, not yet proposed.
+- **For Claude:** film `protest-tiers`; roughs = `source/protest_tiers_roughs.py OUTDIR` (critique film name `protest_tiers_roughs`); pencil look patched there (`_apply_soft`: solid fills, no white specks); headline = Anton, same bands as `islamocommunism_set.heading`; sheet at `sketches/protest-tiers-pencil-sketches.jpg` (not on GitHub, a draft).
