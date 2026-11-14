@@ -1711,7 +1711,7 @@ def people_from_a_description():
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
              ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'people_turned.py', 'page.py',
-              'kittests.py') and not os.path.basename(f).startswith('places')   # a kit, not a film (5d)
+              'kittests.py', 'rough.py') and not os.path.basename(f).startswith('places')   # a kit, not a film (5d)
              and re.search(r'^\s*(import people\b|from people\b)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
@@ -1783,7 +1783,7 @@ def places_from_a_description():
         except K.DescriptionError:
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if not os.path.basename(f).startswith(
-             ('places', 'page.py', 'kittests.py')) and re.search(r'^\s*(import places\b|from places\b|import places_)',
+             ('places', 'page.py', 'kittests.py', 'rough.py')) and re.search(r'^\s*(import places\b|from places\b|import places_)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
         bad.append(f'films using the kit before Sam approves it: {users}')
@@ -1837,7 +1837,7 @@ def moves_from_the_acting_list():
         except (ValueError, IndexError, AttributeError):
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in (
-             'acting.py', 'kittests.py', 'catalogue.py', 'page.py') and re.search(r'^\s*(import acting\b|from acting\b)',
+             'acting.py', 'kittests.py', 'catalogue.py', 'page.py', 'rough.py') and re.search(r'^\s*(import acting\b|from acting\b)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
         bad.append(f'films using the kit before Sam approves it: {users}')
@@ -1924,6 +1924,61 @@ def moves_from_the_acting_list():
         importlib.reload(A)
     return not bad, '; '.join(bad) or (f'six showman shots and {people} more people, every drawing the same as the '
                                        f'film; head and eye hooks the same; every block lands; the list check works')
+
+
+@test
+def rough_of_every_new_thing():
+    """Ranking item 1 (overnight chat 10): rough.py finds every person, place view and moves block in Blessed's three
+    description files, sends only what is new or changed (a record keeps what was sent), draws one of each with the
+    kits (a place, a person, a move on the real clock and on the draft clock), and the pre-flight names what never went
+    on a rough."""
+    import shutil
+    import tempfile
+    import rough as R
+    bad = []
+    have = R.items('blessed')
+    n = {k: sum(1 for x in have if x[0] == k) for k in ('person', 'place', 'move')}
+    if n['place'] < 12 or n['move'] < 23 or n['person'] < 20:
+        bad.append(f'items found {n} (Blessed has 25 people, 12 views, 23 blocks)')
+    rec = R.record_path('blessed')
+    keep = open(rec).read() if os.path.exists(rec) else None
+    try:
+        if os.path.exists(rec):
+            os.remove(rec)
+        if len(R.new_items('blessed')) != len(have):
+            bad.append('with no record, not everything is new')
+        if not R.gate_faults('blessed'):
+            bad.append('the pre-flight line missed things never on a rough')
+        R.mark_sent('blessed', 'test')
+        if R.new_items('blessed') or R.gate_faults('blessed'):
+            bad.append('after `sent`, things still show as new')
+        lines = open(rec).read().splitlines()
+        lines = [ln.replace(ln.split()[2], '0000000000') if ln.startswith('place court_out ') else ln for ln in lines]
+        open(rec, 'w').write('\n'.join(lines) + '\n')
+        left = R.new_items('blessed')
+        if [(k, nm) for k, nm, _ in left] != [('place', 'court_out')] or 'changed since' not in left[0][2]:
+            bad.append(f'a changed place was not the only thing re-sent: {left}')
+    finally:
+        if keep is None:
+            os.path.exists(rec) and os.remove(rec)
+        else:
+            open(rec, 'w').write(keep)
+    if R.place_tile('blessed', 'court_box').size[0] < 100:
+        bad.append('a place did not draw')
+    for draft in (False, True):
+        t = R.move_tiles('blessed', ['arrive', 'cot'], draft=draft)
+        if sum(im is not None for im, _ in t['arrive']) < 4:
+            bad.append(f'arrive drew {len(t["arrive"])} moments (draft {draft})')
+        if 'left as code' not in t['cot'][0][1]:
+            bad.append('a block left as code was not named')
+    tmp = tempfile.mkdtemp()
+    try:
+        if R.people_tile('blessed', {'judge'}) is None:
+            bad.append('a person did not draw')
+    finally:
+        shutil.rmtree(tmp)
+    return not bad, '; '.join(bad) or (f'{len(have)} things found; only new or changed ones go on the sheet; a person, '
+                                       f'a place and a move (real and draft clock) drawn; the pre-flight line works')
 
 
 def main():

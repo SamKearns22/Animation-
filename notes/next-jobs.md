@@ -1,38 +1,16 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-c9-moves` (also on the main line). Item 7 closed (chat 9).
-- **Rules that bite next:** 74 (the acting list: each block lands on its word), 86 (every tool gets a kittest), 85.
-- **Done (chat 9, Sonnet, ~0.6%):** item 7 closed: replicate on all shots 0.000% (30 frames), sheet `notes/morning/moves-kit-replicate.jpg`, report entry with cost line. Total ~5.4% (stop 9%). Found: kittest `round_page` fails (page 16.4% of code, bar 15%), not from the moves kit.
-- **Next: chat 10, Opus medium:** ranking item 1, the rough command (0.5%, stop 0.75%); test on Blessed; per `notes/overnight-run.md`.
-- **Needs Sam:** morning report picks (people kit 1-3; places kit 1-2; moves: list words + kit Y/N).
-- **Read:** this file's "Item 7" section; `acting.py` MAP only.
+- **Newest work:** `claude/overnight-c10-rough` (also on the main line). Item 1 done (chat 10); the overnight list is done.
+- **Rules that bite next:** 11 (every new thing on a rough before it is built: `rough.py`), 74 (acting list), 86.
+- **Done (chat 10, Opus medium, ~0.45%):** ranking item 1, the rough command (`source/rough.py`): one sheet of every
+  new or changed person, place view and moves block, drawn by the kits; a record so nothing is sent twice; pre-flight
+  warning; kittest; catalogue row; rule 11's check column. Blessed: 60 things, ~1 min, `notes/morning/rough-blessed.jpg`.
+- **Next:** none in the chain: every overnight job is done (the face tool's chain hard-stopped at 7.5%). Waits for Sam.
+- **Needs Sam:** the morning report's picks (people kit 1-3; places 1-2; moves: list words + kit Y/N; rough: 1-2).
+- **Read:** `notes/morning-report.md`; for the next film, the pack in `guides/job-packs.md` its handover names.
 - **Open rule requests:** none.
-- **For Claude:** blessed.py has `person(shot, who, t)` (pure move, frames 0 diff), `van_seat`, `_handset`; kit hooks
-  `gates2_head`, `guard_eyes`; check_list reads `notes/archive/blessed-handovers.md`. kittests: page.py excluded
-  from "films using the kit" (it was failing since chat 7).
-
-## Item 7, moves from the acting list (ranking item 7; overnight run; 6%, stop 9%)
-Design (chat 7, 14 Nov): a film's moves are plain lines in `story/FILM-moves.txt` (language in `acting.py` MAP), one
-block per shot, each one acting-list row (`## SHOT: WHO, line N, lands on "WORD"`, `row:` the row's words). Lines:
-`face:` (mood, shades, gaze steps, later moods), `walk:` (gait, from/to metres on a ground, over, phase, settle, still,
-chest, sway), `L:`/`R:`/`both:` hand keys (`PLACE at T`, `PLACE from T to T`, `rest at T`; a second line for a hand
-lies over the first from its first key), `body:` moves (bump `from A to B, rise, fall`; ramp `from A over D`; `except`)
-on channels lean, nod, roll, dip, bob, head_dy (+ filmkit.shifts idle life), `holds L|R: PROP between A and B`. Times:
-"word", a T beat, end, cut, start, landed, min(), +/-; bare numbers are seconds into the shot. Library in the kit:
-12 hand places (heart, point, wide, sweep, messiah, arms out, hair, hair back, oath hand, oath mid, bible, clasp low),
-13 body moves (lean in, bow, chin up, dip, slump, start, tilt, nod, preen, bask...); a film adds `gait`, `place`,
-`body` lines. The film side (`FILMS['blessed']`): its timeline, word_at, grounds, props, which functions the kit
-stands in for. Pose-level replication (joints compared) is the fast test; frames prove the drawing.
-1. **Done (chat 7):** core + Brand's arrive, oath, oath2, dock, gates, gates2 (exact).
-2. **Done (chat 8):** the rest of Blessed: `stance: seated` (van with VAN_YAW; dock guards; the judge: shifts + the
-   peer bumps on "Almighty God"/"blessed", mood sceptic), the jury (JY.draw: leave as code unless short), escort (Brand
-   and the officer walking, the officer's grip: `holds` a grip prop; eye channels look, head_dx, gaze, lid, blink off),
-   `stance: lying` for the cot (cot_pose via lying.py), phone (handset prop, cord), tvroom (dead still: STILL_OK) and
-   push (the face change: moods by beat), gates2's background (Walliams' phases: drag, startled, plead, flail, grab,
-   gone; guard1's head turn on line 7). Where a move is one-off and the library has nothing, it stays code and the
-   block names it (`code: wal_pose`), per the ranking row.
-3. **Next (chat 9):** `acting.py replicate blessed` over all shots (~6 min) + kittest extended; catalogue row text; report.
-4. **Half done (chat 8: check_list, 2 drifts found):** cost per film in the report (Blessed's moves stage was ~1.5% by the ranking list; target ~0.5%), and the
-   check against the notes' acting-list table itself (each row has a block), not only the block's own `lands on`.
+- **For Claude:** rough.py imports the kits inside functions (kittests' "films using the kit" lists exclude it);
+  Blessed's record `story/blessed-roughs.txt` marks all 60 as seen (the finished film). Old fault: kittest
+  `round_page` (page 16.4% of code, bar 15%).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

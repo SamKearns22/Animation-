@@ -217,3 +217,28 @@ Order: E, F, G, H, I (the lying redraw), J (each its own chat; fresh chat each; 
 - **G. Bodies** (~3-5%, Opus high, likely two chats): a pose acceptance test (every gallery pose, every view, automatic seam/gap/hover/clip checks; a film may only use passing poses; new poses are priced at planning); grip points and contacts for picking up, resting and lying; one fix goes into the gallery for every film.
 - **H. Critique helper** (design DONE 10 Nov: `guides/critique-checklist.md`; the build list is in the Job H section above) (~2%, Opus high; Max only for the checklist design): a living checklist (people, creatures, props, sets, movement; each note of Sam's adds one line); a fresh helper with a small context reads the sheet, references and checklist cold; the "same kind everywhere" list per note; the before/after crop beside Sam's marked picture. First trial: the next new thing.
 - **J. Consolidation** (was I; renamed, Sam 10 Nov: Y; runs after H and I; also finishes Job G's one leftover, the "prop hidden" check: see Job G, "For chat 4") (~2-3%, Opus high): three layers of reading (one-page core, one job pack per job, rulebook and kit looked up only when named); each of the by-hand rules turned into a check, folded into the critique checklist, or retired (56, 76, 79 fold into 89); a library of new things that passed the critique (views, references, critique) so the next film reuses them; planning splits every film into known (almost free) and new (priced).
+
+
+## Item 7, moves from the acting list (ranking item 7; overnight run; 6%, stop 9%)
+Design (chat 7, 14 Nov): a film's moves are plain lines in `story/FILM-moves.txt` (language in `acting.py` MAP), one
+block per shot, each one acting-list row (`## SHOT: WHO, line N, lands on "WORD"`, `row:` the row's words). Lines:
+`face:` (mood, shades, gaze steps, later moods), `walk:` (gait, from/to metres on a ground, over, phase, settle, still,
+chest, sway), `L:`/`R:`/`both:` hand keys (`PLACE at T`, `PLACE from T to T`, `rest at T`; a second line for a hand
+lies over the first from its first key), `body:` moves (bump `from A to B, rise, fall`; ramp `from A over D`; `except`)
+on channels lean, nod, roll, dip, bob, head_dy (+ filmkit.shifts idle life), `holds L|R: PROP between A and B`. Times:
+"word", a T beat, end, cut, start, landed, min(), +/-; bare numbers are seconds into the shot. Library in the kit:
+12 hand places (heart, point, wide, sweep, messiah, arms out, hair, hair back, oath hand, oath mid, bible, clasp low),
+13 body moves (lean in, bow, chin up, dip, slump, start, tilt, nod, preen, bask...); a film adds `gait`, `place`,
+`body` lines. The film side (`FILMS['blessed']`): its timeline, word_at, grounds, props, which functions the kit
+stands in for. Pose-level replication (joints compared) is the fast test; frames prove the drawing.
+1. **Done (chat 7):** core + Brand's arrive, oath, oath2, dock, gates, gates2 (exact).
+2. **Done (chat 8):** the rest of Blessed: `stance: seated` (van with VAN_YAW; dock guards; the judge: shifts + the
+   peer bumps on "Almighty God"/"blessed", mood sceptic), the jury (JY.draw: leave as code unless short), escort (Brand
+   and the officer walking, the officer's grip: `holds` a grip prop; eye channels look, head_dx, gaze, lid, blink off),
+   `stance: lying` for the cot (cot_pose via lying.py), phone (handset prop, cord), tvroom (dead still: STILL_OK) and
+   push (the face change: moods by beat), gates2's background (Walliams' phases: drag, startled, plead, flail, grab,
+   gone; guard1's head turn on line 7). Where a move is one-off and the library has nothing, it stays code and the
+   block names it (`code: wal_pose`), per the ranking row.
+3. **Next (chat 9):** `acting.py replicate blessed` over all shots (~6 min) + kittest extended; catalogue row text; report.
+4. **Half done (chat 8: check_list, 2 drifts found):** cost per film in the report (Blessed's moves stage was ~1.5% by the ranking list; target ~0.5%), and the
+   check against the notes' acting-list table itself (each row has a block), not only the block's own `lands on`.

@@ -238,6 +238,8 @@ def gate_warnings(film, name, has):
         if not rows:
             out.append('no acting list in the notes (rule 74: one row per line; guides/satire.md "The acting list")')
     out += head_life_faults(film)
+    import rough                                            # rule 11: every new thing on a rough before it is built
+    out += rough.gate_faults(name)
     if not re.search(r'^\s*[-*]?\s*\**Rehearsal clips sent\**:\**[ \t]*[^\s(*]', text, re.M | re.I):
         out.append('no "Rehearsal clips sent: DATE, FILE" (or "none: why") line in the notes (rule 8: the 3-4 riskiest '
                    'moves as 2-3 s clips before the rest)')

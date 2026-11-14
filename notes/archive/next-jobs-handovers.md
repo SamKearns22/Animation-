@@ -565,3 +565,16 @@
 - **For Claude:** convert px to metres with the view's camera: x = (X - 540) * d / lens, z = up - (Y - horizon) * d /
   lens, 4 places; pick each depth so ppm (lens / d) equals the piece's REF (or its look's ref): then no `detail`.
 
+
+
+# Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/overnight-c9-moves` (also on the main line). Item 7 closed (chat 9).
+- **Rules that bite next:** 74 (the acting list: each block lands on its word), 86 (every tool gets a kittest), 85.
+- **Done (chat 9, Sonnet, ~0.6%):** item 7 closed: replicate on all shots 0.000% (30 frames), sheet `notes/morning/moves-kit-replicate.jpg`, report entry with cost line. Total ~5.4% (stop 9%). Found: kittest `round_page` fails (page 16.4% of code, bar 15%), not from the moves kit.
+- **Next: chat 10, Opus medium:** ranking item 1, the rough command (0.5%, stop 0.75%); test on Blessed; per `notes/overnight-run.md`.
+- **Needs Sam:** morning report picks (people kit 1-3; places kit 1-2; moves: list words + kit Y/N).
+- **Read:** this file's "Item 7" section; `acting.py` MAP only.
+- **Open rule requests:** none.
+- **For Claude:** blessed.py has `person(shot, who, t)` (pure move, frames 0 diff), `van_seat`, `_handset`; kit hooks
+  `gates2_head`, `guard_eyes`; check_list reads `notes/archive/blessed-handovers.md`. kittests: page.py excluded
+  from "films using the kit" (it was failing since chat 7).
