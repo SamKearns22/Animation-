@@ -1,0 +1,61 @@
+# Blessed's moves, from its acting list (moves kit, ranking item 7: source/acting.py; the language is in its MAP).
+# One block per shot; each block is one acting-list row: who, the line, the word the move lands on.
+# Times: "word" (when the block's line says it), a film beat by name (hollow, bang, landed), end (the line's last
+# word), cut (the shot's end), s2 (any beat in the film's timeline); +/- seconds after any of them; a bare number is seconds into the shot.
+
+# --- the library this film adds (the kit keeps the ones a second film uses)
+gait swagger: like walk, sps 1.8, step 0.5, swing 0.42, bend 0.25, lean -3
+gait stride: like swagger, sps 2.15, step 0.9, swing 0.45
+
+## arrive: brand, line 1, lands on "super"
+row: 1 "Yeah, I'm feeling blessed, mate..." | sincere showman | swaggers in, hand to heart, points on "mate", dips with arms flung open on "super", hand to heart and a small bow
+face: showman, shades on
+walk: swagger from 1.2 4.9 to 0.45 3.9 on OUT, over 1.35, phase 0.37, settle 0.15, still from 1.35
+L: rest at "feeling" -0.35 | heart from "feeling" to "mate" -0.35 | point from "mate" -0.05 to "mate" +0.2 | wide from "super" +0.05 to "blessed." -0.1 | heart from "blessed." +0.2 to end +0.2 | rest at 4.4
+R: rest at "mate" +0.1 | wide fist from "super" +0.05 to "blessed." -0.1 | rest at "blessed." +0.3
+body: lean in from "mate" -0.35 to "super" +0.05, rise 0.25, fall 0.2
+body: dip from "super" -0.12 to "blessed." +0.02, rise 0.14, fall 0.12
+body: chin up from "super" -0.05 to "blessed." +0.05, rise 0.12, fall 0.15
+body: bow from "blessed." -0.1 to "blessed." +0.7, rise 0.25, fall 0.35
+holds R: beads
+holds L: sleeve edge between "feeling" and "mate" -0.2, between "blessed." +0.25 and end +0.2
+
+## oath: brand, line 2, lands on "blessed truth"
+row: 2 "I swear by Almighty God..." | the stiff showman | bolt upright, Bible up, right hand raised; eyes up on "Almighty God"; chin lifts on each "blessed"
+face: oath | gaze -0.6 from "Almighty" -0.05 to "that the"
+L: rest at s2 +0.15 | bible from s2 +0.65 to s3 +0.05 | rest at s3 +0.45
+R: rest at s2 +0.15 | oath mid at s2 +0.4 | oath hand from s2 +0.65 to s3 +0.05 | oath mid at s3 +0.45 | rest at s3 +0.6
+body: chin up 1.1 from "blessed evidence" -0.05 to "blessed evidence" +0.55, rise 0.15, fall 0.3
+body: chin up 1.1 from "blessed truth" -0.05 to "blessed truth" +0.55, rise 0.15, fall 0.3
+holds L: bible between s2 +0.4 and s3 +0.35
+
+## oath2: brand, line 2 (the same oath after the jury shot)
+like: oath
+
+## dock: brand, line 3, lands on hollow
+row: 3 "Well that doesn't feel very blessed." | quiet, to himself | hands clasped low; a small start at the bang; still, then the shoulders drop
+face: neutral | hollow from hollow
+both: clasp low at 0
+body: start from bang to bang +0.3, rise 0.03, fall 0.25
+body: slump from hollow over 1.0
+
+## gates: brand, line 6, lands on "Blessed!"
+row: 6 "Blessed! I'm feeling so blessed..." | full showman | swaggers out; arms flung up and open, palms out (the messiah) on "Blessed!"
+face: overjoyed, shades on
+walk: swagger from 0.65 9.2 to 0.65 8.48 on GATE, over 0.8, settle 0.7 to 0.95
+both: rest at "Blessed!" -0.25 | arms out at "Blessed!" -0.02 | messiah at "Blessed!" +0.2
+body: chin up 1.5 with lean -3 from "Blessed!" over 0.3
+
+## gates2: brand, line 6, lands on "everybody"
+row: 6 cont. | full showman | a clear stride to his mark; plants, chin up; the sweep with a dip on "everybody!"; a hand back through his hair; nods to each side; basks
+face: overjoyed, shades on
+walk: stride from 0.65 8.48 to -0.3 5.0 on GATE, over auto, phase 0.25, settle 0.15, chest 4, sway 3.5 at 1.8
+both: messiah at 0 | rest at 0.35 | rest at min(landed, "everybody" -0.3) -0.35 | messiah at "everybody" -0.3 | sweep from "everybody" +0.05 to "everybody" +0.25 | messiah from "everybody" +0.55 to "everybody" +3.8 | rest at "everybody" +4.3
+R: messiah at "everybody" +0.55 | hair at "everybody" +0.95 | hair back from "everybody" +1.35 to "everybody" +1.55 | rest at "everybody" +2.0
+body: dip 40 with nod 0.8, lean 5 from "everybody" -0.25 to "everybody" +0.5, rise 0.25, fall 0.22
+body: chin up 1.5 with lean -3 except from "everybody" -0.3 to "everybody" +0.5, rise 0.2, fall 0.25
+body: tilt from "everybody" +0.5 over 0.4
+body: preen from "everybody" +0.9 to "everybody" +1.6, rise 0.2, fall 0.3
+body: nod from "everybody" +2.1 to "everybody" +2.5, rise 0.12, fall 0.2
+body: nod from "everybody" +2.9 to "everybody" +3.3, rise 0.12, fall 0.2
+body: bask from "everybody" +3.8 over 0.6

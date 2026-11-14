@@ -14,7 +14,8 @@ MAP
 
 People (item 4, 14 Nov): the page carries each person's description from story/FILM-people.txt (people.lines), so
 `find` points a note on a person at their block. Places (item 5, chat 5d): one line per piece from
-story/FILM-places.txt (its line number, view, kind and name), so a note on a place finds its line. Moves (item 7) next.
+story/FILM-places.txt (its line number, view, kind and name), so a note on a place finds its line. Moves (item 7, chat 7): one line per move from story/FILM-moves.txt
+(shot, who, the line), so a note on a move finds its line.
 """
 import glob, os, re, subprocess, sys
 
@@ -48,6 +49,11 @@ def build(film):
     if pcs:
         parts.append(f'\n## {film}-places.txt ({len(pcs)} pieces; a note on a place changes its line: open that line)\n' +
                      '\n'.join(f'- {n}: {txt}' for n, txt in pcs))
+    import acting                                 # item 7: each shot's moves (story/FILM-moves.txt), by line
+    mvs = acting.lines(film)
+    if mvs:
+        parts.append(f'\n## {film}-moves.txt ({len(mvs)} lines; a note on a move changes its line: open that line)\n' +
+                     '\n'.join(f'- {n}: {acting.gist(txt)}' for n, txt in mvs))
     page = '\n'.join(parts) + '\n'
     out = os.path.join(ROOT, 'story', f'{film}-page.md')
     open(out, 'w', encoding='utf-8').write(page)

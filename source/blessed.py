@@ -842,26 +842,31 @@ def oath(sp, t):
         b = _bump(t, k - 0.05, k + 0.55, 0.15, 0.3)
         j['nod'] = j.get('nod', 0.0) - 1.1 * b        # the showman held in: bolt upright, the chin lifts on each "blessed"
     if up0 + 0.25 < t < dn1 - 0.1:                # chat 6: from 4.83 s only its top edge cleared the box front (22%)
-        import grips
-        c = _contact(j, 'L', F.HAND.get('fist', 14))  # the book moves WITH the hand (chat 4: it was eased on its own
-        lift = V._sub(c, bible[0])                  # path and floated 1.1 hand-widths off it on the way up)
-        box = [V._add(q, lift) for q in OATH_BOOK]
-
-        def marks(p, j2):
-            pr = lambda q: V.project(V.leaned(V._add(q, lift), j.get('lean', 0.0)), j2['yaw'])[0]
-            x0, x1 = OATH_BOOK[0][0], OATH_BOOK[-1][0]
-            y0, y1 = OATH_BOOK[0][1], OATH_BOOK[-1][1]
-            zf = OATH_BOOK[-1][2]
-            # the pale page edge along the far (spine-less) side, seen past the cover
-            e = [pr((x0, y0 + 6, zf - 4)), pr((x0, y1 - 6, zf - 4)), pr((x0, y1 - 6, OATH_BOOK[0][2] + 4)),
-                 pr((x0, y0 + 6, OATH_BOOK[0][2] + 4))]
-            p.poly(e, (250, 244, 222), INK, 2.0)
-            c = pr(((x0 + x1) / 2, (y0 + y1) / 2, zf + 1))
-            g = (214, 176, 70)
-            p.poly([(c[0] - 4, c[1] - 26), (c[0] + 4, c[1] - 26), (c[0] + 4, c[1] + 26), (c[0] - 4, c[1] + 26)], g, None)
-            p.poly([(c[0] - 15, c[1] - 12), (c[0] + 15, c[1] - 12), (c[0] + 15, c[1] - 4), (c[0] - 15, c[1] - 4)], g, None)
-        grips.held(j, 'L', sp, _box_prop(j, box, (40, 30, 34), marks))
+        _bible(j, sp, bible)
     return j
+
+
+def _bible(j, sp, bible=OATH_BIBLE):
+    """The Bible in his far (L) hand, moving with the hand (also the moves kit's 'bible' prop: acting.py)."""
+    import grips
+    c = _contact(j, 'L', F.HAND.get('fist', 14))  # the book moves WITH the hand (chat 4: it was eased on its own
+    lift = V._sub(c, bible[0])                  # path and floated 1.1 hand-widths off it on the way up)
+    box = [V._add(q, lift) for q in OATH_BOOK]
+
+    def marks(p, j2):
+        pr = lambda q: V.project(V.leaned(V._add(q, lift), j.get('lean', 0.0)), j2['yaw'])[0]
+        x0, x1 = OATH_BOOK[0][0], OATH_BOOK[-1][0]
+        y0, y1 = OATH_BOOK[0][1], OATH_BOOK[-1][1]
+        zf = OATH_BOOK[-1][2]
+        # the pale page edge along the far (spine-less) side, seen past the cover
+        e = [pr((x0, y0 + 6, zf - 4)), pr((x0, y1 - 6, zf - 4)), pr((x0, y1 - 6, OATH_BOOK[0][2] + 4)),
+             pr((x0, y0 + 6, OATH_BOOK[0][2] + 4))]
+        p.poly(e, (250, 244, 222), INK, 2.0)
+        c = pr(((x0 + x1) / 2, (y0 + y1) / 2, zf + 1))
+        g = (214, 176, 70)
+        p.poly([(c[0] - 4, c[1] - 26), (c[0] + 4, c[1] - 26), (c[0] + 4, c[1] + 26), (c[0] - 4, c[1] + 26)], g, None)
+        p.poly([(c[0] - 15, c[1] - 12), (c[0] + 15, c[1] - 12), (c[0] + 15, c[1] - 4), (c[0] - 15, c[1] - 4)], g, None)
+    grips.held(j, 'L', sp, _box_prop(j, box, (40, 30, 34), marks))
 
 
 def oath_gaze(t):

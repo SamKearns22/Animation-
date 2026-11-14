@@ -1818,6 +1818,60 @@ def places_from_a_description():
                                         f'{max(d for _, d in scores):.3f}%; {len(boxes)} boxes from the pieces')
 
 
+@test
+def moves_from_the_acting_list():
+    """Ranking item 7 (overnight chat 7): the moves kit redraws Brand's six showman shots (arrival, oath x2, dock,
+    gates, gates2) from story/blessed-moves.txt: every joint, mark, mood and gaze the same as the film's code, each
+    twelfth of a second; each block lands on its acting-list word; bad lines are refused."""
+    import glob
+    import acting as A
+    bad = []
+    for txt, why in (('## arrive: brand\nL: heart', 'a hand key with no time'),
+                     ('## arrive: brand\nwiggle: 3', 'an unknown line'),
+                     ('gait x: like walk, sps', 'a gait number missing'),
+                     ('heart: 1 2 3', 'a library line of no kind')):
+        try:
+            A.parse(txt)
+            bad.append(why + ' was not refused')
+        except (ValueError, IndexError, AttributeError):
+            pass
+    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in (
+             'acting.py', 'kittests.py', 'catalogue.py') and re.search(r'^\s*(import acting\b|from acting\b)',
+             open(f, encoding='utf-8').read(), re.M)]
+    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
+        bad.append(f'films using the kit before Sam approves it: {users}')
+    bad += A.check('blessed')
+    desc, film = A.load('blessed'), A.film_side('blessed')
+    BL = film['module']
+    A.install_gaits(desc)
+    looks = {'arrive': 'trial', 'oath': 'stand', 'oath2': 'stand', 'dock': 'dock', 'gates': 'trial', 'gates2': 'trial'}
+    for shot, a, b in BL.SHOTS:
+        if shot not in looks:
+            continue
+        fn, walks = film['stands_in'][shot]
+        n, worst = 0, 0.0
+        for i in range(int((b - a) * 12)):
+            t = a + i / 12
+            sp = BL.brand_sp(t, looks[shot])
+            o = getattr(BL, fn)(sp, t)
+            mk, _, kj = A.pose(desc, film, shot, sp, t)
+            oj = o[2] if walks else o
+            d = max([abs(x - y) for x, y in zip(o[0], mk)] if walks else [0.0])
+            for k, v in oj.items():
+                if isinstance(v, tuple) and len(v) == 3 and all(isinstance(x, float) for x in v):
+                    d = max(d, max(abs(x - y) for x, y in zip(v, kj[k])))
+                elif isinstance(v, float):
+                    d = max(d, abs(v - kj.get(k, 0.0)))
+            mood = A.face(desc, film, shot, t)
+            if mood[:2] != BL.brand_mood(t):
+                d = max(d, 1.0)
+            n += d > 1e-6
+            worst = max(worst, d)
+        if n:
+            bad.append(f'{shot}: {n} drawings differ from the film (worst {worst:.3f} person units)')
+    return not bad, '; '.join(bad) or 'six shots, every drawing the same as the film; every block lands on its word'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
