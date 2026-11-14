@@ -92,6 +92,18 @@
    "model": "opus",
    "cost": 3.23,
    "usd": 5.52
+  },
+  {
+   "date": "2026-11-14",
+   "chat": "4668b913",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.22,
+   "src": "estimate",
+   "sid": "session_01J1JB7Wf2KVuv9irdxgcQf2"
   }
  ],
  "checks": {},
