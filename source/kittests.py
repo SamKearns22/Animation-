@@ -1774,7 +1774,7 @@ def people_from_a_description():
         except K.DescriptionError:
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
-             ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'people_turned.py', 'page.py',
+             ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'people_turned.py', 'page.py', 'facehouse.py',
               'kittests.py', 'rough.py') and not os.path.basename(f).startswith('places')   # a kit, not a film (5d)
              and re.search(r'^\s*(import people\b|from people\b)',
              open(f, encoding='utf-8').read(), re.M)]
@@ -2180,6 +2180,38 @@ def facehouse_brows_sit_on_hers():
     fitted = want is not None and abs(gap - want) < 0.01 and 0.4 < want < 0.75
     ok = middle_kept and fitted
     return ok, f'arch keeps the middle {middle_kept}; drawn brow {gap:.2f} eye widths above the lid, her photos {want}'
+
+
+@test
+def facehouse_whole_head():
+    """Face tool chat 11 (Sam: Y to the kit plan): the house head as a film gets it. Andy's and Kemi's finished heads
+    held pixel for pixel (Sam: "Kemi is right", "Andy is finished"); a people file's `head: house NAME` lines build
+    the same person as facehouse's own; every turned view draws through the house head's own turned Person (no
+    generic head), with her ears under her plaits."""
+    import hashlib
+    import shutil
+    import tempfile
+    import facehouse as FH
+    import people
+    import turnhead as TH
+    held = {'burnham': '54c5610fc43be94833e0df2d429d1370', 'badenoch': '13b8b16bcc3911dbf81494eb1bee2315'}
+    tmp = tempfile.mkdtemp()
+    got = {}
+    try:
+        for n in held:
+            png = FH.draw(n, 'detail', os.path.join(tmp, f'{n}.png'))
+            got[n] = hashlib.md5(open(png, 'rb').read()).hexdigest()
+        cast = {w: sp for w, sp in people.load('facetool').items()}
+        same = all(cast[w]['kit_house']['meas'] == FH.person(n, 'detail', **FH.CAST[n])['kit_house']['meas']
+                   for w, n in (('andy', 'burnham'), ('kemi', 'badenoch')))
+        del TH.GENERIC[:]
+        FH.turns(os.path.join(tmp, 't.jpg'), list(held))
+        generic = list(TH.GENERIC)
+    finally:
+        shutil.rmtree(tmp)
+    kept = [n for n in held if got[n] == held[n]]
+    ok = len(kept) == 2 and same and not generic
+    return ok, f'held pixel for pixel: {kept}; people file = facehouse: {same}; turned on a generic head: {generic}'
 
 
 def main():

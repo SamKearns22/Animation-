@@ -41,6 +41,14 @@ LIKENESS (chat 8): the person's lines may also name push/tune (caricature(): eac
     pick ('brow'), and lays the drawn brows over each photo; with 'brow' in the pick the brows are drawn at her
     height and peak (face_layout), and the arch bends the ends down. Run it on every new face.
 
+IN THE PEOPLE KIT (chat 11): a people file says `head: house NAME, hair PIECE, look LOOK` and `house: brow_thick
+    0.032 | lid 0.24 | shape` (CAST's lines are the defaults for that face); people.py builds it with person() here.
+    TURNED (chat 11): three-quarter, side and behind through turnhead (install_turned, _turn_person): the measured
+    face carried round, its age lines and glasses; swept: grey clipped back and sides, the dark top and quiff carried
+    round; braids: the crown's plaits running back over the skull, curtains hanging behind the ear (arched tops: sharp
+    corners inked as spikes), one curtain across the back from behind. Kittest facehouse_whole_head.
+
+    python3 source/facehouse.py turns OUT.jpg NAME [NAME ...]   each person turned, front to behind, big
     python3 source/facehouse.py sheet OUT.jpg NAME [NAME ...]   the design sheet: photo, the pick, both house looks
     python3 source/facehouse.py head NAME LOOK OUT.png             one head-and-shoulders (for the name test)
     python3 source/facehouse.py brows NAME OUT.jpg                 the brows measured on the photos, the drawing laid over
@@ -398,9 +406,8 @@ def sockets(p, f, L, skin, shade):
 
 
 # ---------------------------------------------------------------------------------------------- hair: swept
-def swept(p, f, L, hc, kh, lk):
-    """Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
-    the cap as wide as the cheeks, rising higher on the sweep's side; the sides clipped close and greying."""
+def _swept_shapes(L, kh, hc):
+    """The swept hair's pieces in face units: the two clipped sides, the cap (tufted top and fringe) and the light."""
     e = L['fw'] * 0.5
     c = max(L['fhw'] * 0.5 + 0.02, e)
     hl = kh.get('hairline', -0.08)
@@ -409,14 +416,19 @@ def swept(p, f, L, hc, kh, lk):
     t = max(L['fhw'], L['fw'] * 0.9) * 0.5
     side = [(-c - 0.025, -0.22), (-c - 0.025, -0.1), (-e - 0.018, 0.06), (-e - 0.012, 0.26), (-e + 0.012, 0.29),
             (-t + 0.005, 0.12), (-t + 0.03, -0.02), (-t + 0.06, -0.12), (-t + 0.08, -0.22)]
-    for sgn in (-1, 1):
-        p.poly(curve(f.pts([(-u, v) for u, v in side] if sgn > 0 else side), 2), grey, INK, 2.2)
+    sides = [[(-u, v) for u, v in side] if sgn > 0 else side for sgn in (-1, 1)]
     top = [(-c - 0.03, -0.04), (-c - 0.04, -0.17), (-c + 0.0, -0.3), (-c * 0.6, -0.4), (-c * 0.15, -0.45 - lift * 0.3),
            (c * 0.3, -0.46 - lift * 0.8), (c * 0.68, -0.41 - lift), (c + 0.01, -0.3 - lift * 0.6), (c + 0.045, -0.16),
            (c + 0.035, -0.04)]
     front = [(c - 0.005, -0.04), (c - 0.05, -0.14), (c * 0.66, -0.16 + 0.02), (c * 0.42, hl - 0.01), (c * 0.12, hl + 0.015),
              (-c * 0.2, hl + 0.02), (-c * 0.48, hl + 0.005), (-c * 0.7, -0.13), (-c + 0.05, -0.14), (-c + 0.01, -0.04)]
-    p.poly(curve(f.pts(AV.tufts(top, 0.005, 0.03, out=1.0, seed=31) + front), 2), hc, INK, 2.4)
+    cap = AV.tufts(top, 0.005, 0.03, out=1.0, seed=31) + front
+    return dict(c=c, hl=hl, lift=lift, grey=grey, sides=sides, cap=cap)
+
+
+def _swept_strokes(p, f, hc, sh, lk):
+    """The strokes brushed up and over, the light on the quiff, the grey flecks (the look 'detail')."""
+    c, hl, lift, grey = sh['c'], sh['hl'], sh['lift'], sh['grey']
     light = blend(hc, (150, 140, 136), 0.38)
     for k, (u, ln) in enumerate(((-0.3, 0.2), (-0.2, 0.27), (-0.09, 0.3), (0.02, 0.32), (0.13, 0.3), (0.24, 0.26),
                                  (0.33, 0.18))):         # brushed up and over to our right
@@ -431,6 +443,16 @@ def swept(p, f, L, hc, kh, lk):
             u, v = rng.uniform(-c * 0.85, c * 0.85), rng.uniform(-0.4, hl - 0.05)
             if v > -0.42 + 0.25 * (abs(u) / c) ** 2:
                 p.line(f.pts([(u, v), (u + 0.012, v - 0.02)]), blend(grey, (210, 206, 202), 0.4), 1.2)
+
+
+def swept(p, f, L, hc, kh, lk):
+    """Short, thick hair brushed up and over to our right into a low quiff (Walliams' hand-made hair, made general):
+    the cap as wide as the cheeks, rising higher on the sweep's side; the sides clipped close and greying."""
+    sh = _swept_shapes(L, kh, hc)
+    for sd in sh['sides']:
+        p.poly(curve(f.pts(sd), 2), sh['grey'], INK, 2.2)
+    p.poly(curve(f.pts(sh['cap']), 2), hc, INK, 2.4)
+    _swept_strokes(p, f, hc, sh, lk)
 
 
 # ---------------------------------------------------------------------------------------------- hair: braids
@@ -722,6 +744,194 @@ def age_lines(p, f, L, skin, age, lk):
             p.line(open_curve(f.pts([(x0, ey + 0.15), (x0 - sg * 0.025, ey + 0.22)]), 3), c, w * 0.8)
 
 
+# ---------------------------------------------------------------------------------------------- turned views
+HAIR = ('swept', 'braids')
+TURN_PROF = {'swept': dict(hair_low=0.36, nape=0.62, volume=0.015),         # clipped short at the back
+             'braids': dict(hair_low=0.5, nape=0.78, volume=0.05)}          # the plaits' bulk over the skull
+
+
+class _Screen:
+    """A frame that leaves points as they are: _band() drawn on paths already on screen (a curtain seen turned)."""
+    def pts(self, uvs):
+        return [tuple(q) for q in uvs]
+
+
+def _turn_key(kh):
+    import hashlib
+    keep = {k: v for k, v in kh.items() if not k.startswith('_')}
+    return 'house:%s:%s' % (kh['name'], hashlib.md5(repr(sorted(keep.items(), key=lambda q: q[0])).encode()).hexdigest()[:10])
+
+
+def _turn_mood(sp, f):
+    kh = sp['kit_house']
+    up = sp.get('brow_up', 0.0)
+    st = dict(lid=sp.get('lid4', kh.get('lid', LID0)), look=min(1.0, sp.get('look', 0.0) + 0.3), squint=0.0,
+              closed=sp.get('blink', False), gaze_dy=-0.2)
+    return st, (sum(up) / 2 if isinstance(up, tuple) else up), sp.get('frown', 0.0)
+
+
+def _turn_mouth(p, f, L, sp, fx, my):
+    kh = sp['kit_house']
+    m = kh.get('mouth')
+    if m:
+        PP.AV.vance_mouth(p, f, L, m['kind'], kh['lip'], sp['skin'], m.get('wide', 1.12), m.get('gap', 0.0),
+                          m.get('creases', 1.0), m.get('drop'))
+    else:
+        P4.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0), mouth='rest'), kh['lip'], (fx, my - 6))
+
+
+def _turn_face(pen, f, L, sp):
+    kh = sp['kit_house']
+    age_lines(pen, f, L, sp['skin'], kh['age'], LOOKS[kh['look']])
+
+
+def _turn_over(img, p, f, L, sp, view):
+    kh = sp['kit_house']
+    if kh.get('glasses') and view in ('three', 'side'):
+        glasses(p, f, L, kh['glasses'])
+
+
+def _turn_hair(img, p, f, L, sp):
+    import turnhead as TH
+    kh, hc = sp['kit_house'], sp['hair_c']
+    lk = LOOKS[kh['look']]
+    yaw = round(math.degrees(f.th))
+    if kh['hair'] == 'swept':
+        sh = _swept_shapes(L, kh, hc)
+        TH.hair(img, p, f, [], sh['grey'], f.prof, 2.2)        # the clipped back and sides, greying
+        if yaw <= 90:
+            for sd in sh['sides']:
+                p.poly(curve(f.pts(sd), 2), sh['grey'], INK, 2.2)
+        top = dict(f.prof, hair_low=-0.16, nape=0.12, volume=0.03)   # the thick dark top over the crown, down the back
+        fronts = [f.pts(TH.dense(curve(sh['cap'], 2)))] if yaw <= 90 else []
+        mask = TH.hair(img, p, f, fronts, hc, top)
+        if yaw <= 90:
+            TH.clipped(img, p, mask, lambda pen: _swept_strokes(pen, f, hc, sh, lk))
+    else:
+        _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw)
+
+
+def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
+    """The plaits from three-quarter, the side and behind: the crown's mass (the front's crown band carried round)
+    with plaits running from the parting back over the skull, then the curtains hanging to the same length as the
+    front's (VS's foot), behind the near ear and, from behind, across the whole back; plaits down each curtain."""
+    import turnhead as TH
+    H = TH.H
+    light, sep, n, step, w = _looks(hc, lk)
+    k = kh.get('plait_k', 1.0)
+    n, step = max(3, round(n / k)), step * k
+    hs = _hair(L, kh)
+    sil = TH.silhouette(f, 0.02)
+    near = {round(v, 2): x for x, y, v, part in sil if part == 'near'}
+    far = {round(v, 2): x for x, y, v, part in sil if part == 'far'}
+    foot = f.top + 1.97 * H
+    vs = [v for v in sorted(near) if 0.06 <= v <= 0.75]      # its top tucked under the crown's mass
+    # the curtains first (the crown closes over their tops)
+    curt = []
+    if yaw >= 135:                                               # behind: one curtain the whole back's width
+        sw = lambda v: H * min(0.08, 0.005 + 0.25 * max(0.0, v - 0.06))   # widening from the crown's edge
+        back = [(near[v] - sw(v), f.top + v * H) for v in vs]
+        fr = [(far[v] + sw(v), f.top + v * H) for v in vs]
+        bx, fx_ = back[-1][0] - H * 0.06, fr[-1][0] + H * 0.06
+        curt.append((back + [(bx, foot)], fr + [(fx_, foot)]))
+    else:
+        reach = {45: 0.03, 90: 0.12}.get(yaw, 0.1) * H          # in front of the ear: over it
+        ex = f.at(f.wrap(0.42, -100), 0.42, clamp=False)[0]   # the near ear's place
+        back = [(near[v] - H * (0.005 + 0.3 * max(0.0, v - 0.06)), f.top + v * H) for v in vs]
+        bx = back[-1][0] - H * 0.05
+        front = [(ex + reach, f.top + v * H) for v in vs]
+        curt.append((back + [(bx, foot)], front + [(ex + reach + H * 0.04, foot)]))
+    head = [(x, y) for x, y, v, part in sil]
+    for i, (a, b) in enumerate(curt):
+        mid = ((a[0][0] + b[0][0]) / 2, a[0][1] - 0.12 * H)       # an arched top under the crown: no sharp
+        a = [mid] + a                                            # corners (their ink stuck out as spikes)
+        b = [mid] + b
+        A, B = _resample(a, 50), _resample(b, 50)
+
+        def draw(pen, A=A, B=B):
+            pen.poly(curve([tuple(q) for q in A] + [tuple(q) for q in B[::-1]], 2), hc, INK, 2.4)
+            _band(pen, _Screen(), 1, lambda t: B * (1 - t) + A * t, light, sep,
+                  max(3, round(n * (1.6 if yaw >= 135 else 1.0))), step * H, w)
+        if i:                                                    # the far curtain: only where the head is not
+            _outside(img, p, head, draw)
+        else:
+            draw(p)
+    # the crown: the hair's mass over the skull, the front's crown carried round where it is seen
+    fronts = []
+    if yaw <= 90:
+        ci, co = _crown_paths(L, hs)
+        band = [tuple(q) for q in co] + [tuple(q) for q in ci[::-1]]
+        fronts = [f.pts(TH.dense(curve(band + [(-u, v) for u, v in band[::-1]], 2)))]
+    mask = TH.hair(img, p, f, fronts, hc, dict(f.prof, hair_low=0.12, nape=0.16))   # ends above the cheekbones: the curtains take over
+
+    def plaits(pen):
+        lo, hi = f.visible(0.1)
+        def merid(t):
+            psi = lo + (hi - lo) * t
+            out = []
+            for v in np.linspace(hs['crown'] - 0.02, 0.62, 40):
+                x, z = f.ring(psi, v)
+                X, _ = f.view(float(x) * 1.04, float(z) * 1.04)
+                out.append((f.cx + X * H, f.top + v * H))
+            return np.array(out)
+        _band(pen, _Screen(), 1, merid, light, sep, max(4, round(n * 1.4)), step * H, w)
+    TH.clipped(img, p, mask, plaits)
+
+
+def _outside(img, p, poly, draw):
+    """draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek."""
+    from PIL import Image, ImageDraw
+    import burnham as B
+    base = p.pen if hasattr(p, 'pen') else p
+    layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    draw(B.Pen(layer, base.cam))
+    m = Image.new('L', img.size, 255)
+    ImageDraw.Draw(m).polygon([base.cam.P(*q) for q in poly], fill=0)
+    a = np.asarray(layer)[:, :, 3].astype(np.uint16) * np.asarray(m) // 255
+    layer.putalpha(Image.fromarray(a.astype(np.uint8)))
+    img.alpha_composite(layer)
+
+
+def _turn_person(sp):
+    import turnhead as TH
+    kh = sp['kit_house']
+    key = _turn_key(kh)
+    if key not in TH.PEOPLE:
+        L = face_layout(kh)
+        prof = TH.fitted(L, -0.42, 1.06, **TURN_PROF[kh['hair']])
+        w = TH.half_widths(P4.outline_uv(L, 0.4, crown=-0.42))     # the house outline's rows are few: between the
+        wv = lambda v: float(np.interp(v, [q[0] for q in w], [q[1] for q in w]))   # crown's end and the temples
+        c0 = prof['crown'][-1][1]                                   # the skull stepped in (a notch, spikes in the
+        prof['crown'] = prof['crown'] + [(v, max(c0, wv(v))) for v in (0.15, 0.3, 0.43)]   # hair); held round here
+        TH.register(TH.Person(key, lambda sp2, _kh=kh: face_layout(_kh), -0.42, 0.4, lambda L, _p=prof: _p,
+                              sp['skin'], tuple(kh.get('iris_c') or kh['eyes'].get('iris') or (66, 46, 34)),
+                              sp['brow_c'], kh['lip'], _turn_mood, _turn_mouth, _turn_hair, face=_turn_face,
+                              over=_turn_over, brow_thick=kh.get('brow_thick', 0.05)))
+    return key
+
+
+def install_turned():
+    """Once: a house head's turned views (three-quarter, side, three-quarter behind, behind) through its own turnhead
+    Person: its measured face carried round the head, its colours, age lines and glasses, its hair piece turned;
+    drawn at the house's bigger head size, lifted as the front is. Ears hidden under braids."""
+    import turnhead as TH
+    V = PP.AV.MC.V
+    if getattr(V.head_view, 'kit_house', False):
+        return
+    old = V.head_view
+
+    def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
+        kh = sp.get('kit_house')
+        if kh and view in TH.YAW:
+            key = _turn_person(sp)
+            with PP._Big():
+                return TH.draw(img, p, dict(sp, who=key, ears_hidden=kh['hair'] == 'braids' and not kh.get('ears')),
+                               t, view, hx, PP._lift(hy))
+        return old(img, p, sp, t, view, hx, hy)
+    head_view.kit_house = head_view.turnhead = True
+    V.head_view = head_view
+
+
 # ---------------------------------------------------------------------------------------------- the person
 def caricature(meas, push=1.0, tune=None):
     """The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
@@ -793,6 +1003,37 @@ def draw(name, look, out, size=900):
     crop = tile.crop((150, 280, 930, 1180)).convert('RGB')
     crop = crop.resize((size, int(size * 900 / 780)))
     crop.save(out)
+    return out
+
+
+def turns(out, names, look='detail', yaws=(0, 45, 90, 135, 180), T=420):
+    """Each person turned (front, three-quarter, side, three-quarter behind, behind), head and shoulders, big enough
+    to judge; the people kit draws them (people.py's `head: house NAME` lines, as a film would)."""
+    from PIL import Image, ImageDraw, ImageFont
+    import people
+    from satire_style import install_circle_hands
+    B, V = PP.B, PP.AV.MC.V
+    install_circle_hands(B)
+    cast = {}
+    for n in names:
+        kw = dict(CAST.get(n, {}))
+        d = dict(who=n, name=n.title(), house=dict(name=n, hair=kw.get('hair'), look=look))
+        cast[n] = people.person(d)
+    people.install(cast)
+    B.SS = 1
+    font = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 26)
+    img = Image.new('RGB', (20 + len(yaws) * (T + 10), 60 + len(names) * (T + 50)), (236, 232, 226))
+    d = ImageDraw.Draw(img)
+    d.text((20, 16), 'Turned: front, three-quarter, side, three-quarter behind, behind', font=font, fill=(30, 30, 30))
+    for i, (n, sp) in enumerate(cast.items()):
+        y = 60 + i * (T + 50)
+        d.text((20, y), sp['name'], font=font, fill=(30, 30, 30))
+        for k, yaw in enumerate(yaws):
+            tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, yaw)
+            crop = tile.crop((150, 230, 930, 1010)).convert('RGB').resize((T, T))
+            img.paste(crop, (20 + k * (T + 10), y + 36))
+    img.save(out, quality=88)
     return out
 
 
@@ -880,6 +1121,8 @@ if __name__ == '__main__':
         print(trace(a[1], a[2] if len(a) > 2 else None))
     elif a and a[0] == 'brows':
         print(browcheck(a[1], a[2] if len(a) > 2 else None))
+    elif a and a[0] == 'turns':
+        print(turns(a[1], a[2:] or ['burnham', 'badenoch']))
     elif a and a[0] == 'head':
         print(draw(a[1], a[2], a[3]))
     else:

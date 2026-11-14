@@ -1,3 +1,3 @@
-Blessed: posted and closed. Face tool: Andy finished; Kemi's brows now sit on her own (cause found and fixed in the tool).
-Now: chat 11 (Opus medium) puts the face tool into the people kit, turned heads, its test; then Walliams.
+Blessed: posted and closed. Face tool: house heads now in the people kit and turn (three-quarter, side, behind); Andy and Kemi unchanged.
+Now: chat 12 (Opus medium): pick sheet on the house head, catalogue row, then Walliams end to end with a blind name test.
 Waiting: nothing.

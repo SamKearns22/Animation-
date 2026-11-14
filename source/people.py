@@ -212,12 +212,25 @@ def _fact(d, key, val, people):
             for q in parts[1:]:
                 w, v = q.split(' ')
                 d['measured'][w] = float(v)
+        elif kind == 'house':                      # a face tool pick on the house head (facehouse; face chat 11)
+            d['house'] = dict(name=rest.strip())
+            for q in parts[1:]:
+                w, _, v = q.partition(' ')
+                if w not in ('hair', 'look'):
+                    raise DescriptionError(f'head: house NAME, hair PIECE, look LOOK (not {w!r})')
+                d['house'][w] = v.strip()
         elif kind == 'part':
             if rest.strip() not in HEAD_PARTS:
                 raise DescriptionError(f'head part {rest.strip()!r}: one of {", ".join(HEAD_PARTS)}')
             d['head_part'] = rest.strip()
         else:
-            raise DescriptionError(f'head {kind!r}: measured CARD or part NAME')
+            raise DescriptionError(f'head {kind!r}: measured CARD, house NAME or part NAME')
+    elif key == 'house':                           # the house head's own lines (facehouse: brow_thick 0.05, lid 0.24,
+        h = d.setdefault('house_kw', {})          # iris_c 56 36 26, shape, ears)
+        for q in parts:
+            w, _, v = q.partition(' ')
+            n = re.findall(r'-?\d*\.?\d+', v)
+            h[w] = True if not v.strip() else (float(n[0]) if len(n) == 1 else tuple(int(float(x)) for x in n))
     elif key == 'tune':
         d.setdefault('tune', {}).update({w: float(v) for w, v in (q.rsplit(' ', 1) for q in parts)})
     elif key.startswith('mood '):
@@ -324,6 +337,8 @@ def _fact(d, key, val, people):
 # ---------------------------------------------------------------------------------------------- the engine's person
 def person(d):
     """One description -> the engine's person dict (views.person), with its face card in 'kit_face'."""
+    if d.get('house'):
+        return _house(d)
     sp = dict(DEFAULTS)
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
@@ -360,6 +375,29 @@ def person(d):
         sp.update(kit_head=d['head_part'], neck_shade=True)
     elif d.get('measured'):
         _famous(d, sp)
+    return sp
+
+
+def _house(d):
+    """A face tool pick on the house head (facehouse.person): the pick's face, colours and age lines; the hair piece,
+    look and the house lines from the people file, else facehouse.CAST's for that face; the body and clothes here."""
+    import facehouse as FH
+    h = d['house']
+    kw = dict(FH.CAST.get(h['name'], {}))
+    kw.update(d.get('house_kw', {}))
+    hair = h.get('hair') or kw.pop('hair', None)
+    kw.pop('hair', None)
+    if hair not in FH.HAIR:
+        raise DescriptionError(f"{d['who']}: head: house {h['name']} needs 'hair' one of {', '.join(FH.HAIR)}")
+    out = kw.pop('outfit', ('suit', (31, 34, 58)))
+    out = (d.get('outfit', out[0]), d.get('jacket', out[1]))
+    for k in ('shirt', 'tie', 'height'):
+        if k in d:
+            kw[k] = d[k]
+    if 'neck_w' in d:
+        kw['neck_w'] = d['neck_w']
+    sp = FH.person(h['name'], h.get('look', 'detail'), hair, outfit=out, **kw)
+    sp.update(who=d.get('person', d['who']), name=d['name'], kit_extras=list(d.get('extras', ())))
     return sp
 
 
@@ -410,7 +448,8 @@ def _extras():
 def _head_parts():
     import people_famous as PF
     import people_walliams as PW
-    return {'famous': PF.famous_head, 'walliams': PW.walliams_head}
+    import facehouse as FH
+    return {'famous': PF.famous_head, 'walliams': PW.walliams_head, 'house': FH.house_head}
 
 
 
@@ -426,8 +465,10 @@ def install(cast):
     TC = PP.AV.MC.TC
     import people_famous as PF
     import people_turned as PT
+    import facehouse as FH
     PF.install()
     PT.install()
+    FH.install_turned()
     for sp in cast.values():                     # one person may have several looks (Brand's four): the head and
         TC.HEADS[sp['who']] = kit_head           # torso are chosen from the look being drawn, not from the name
         TC.TORSOS[sp['who']] = kit_torso

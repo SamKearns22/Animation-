@@ -156,3 +156,35 @@
 - **Open rule requests:** none.
 - **For Claude:** CAST badenoch: plait_k, iris_r, pupil_r, iris_c, lid, shape, brow_arch/taper (new: iris_c, lid,
   shape; the trace is 'outline' in her pick JSON). open_collar only in the braids path (Andy's base torso untouched).
+
+## Face tool, where things stand (chat 10 of the face chain, 14 Nov; stops on a question for Sam)
+- **Rules that bite next:** 49 (the blind name test is the judge), 86 (facehouse's kittest), 85.
+- **Done (chat 10):** Kemi's brows lowered onto her own (sheet `notes/morning/facehouse-kemi-c10-brows.jpg`: before,
+  now, her photo, now laid over it). **Why the tool put them high:** its height was honest (on her sharp photo the
+  brow point sits on her brow; her brows ARE a little high), but three things stacked: the pick's push (0.68 -> 0.80),
+  chat 9's arch lifting the WHOLE brow (about 0.2 eye widths) and the heavier lid lowering the lid line. Her two small
+  photos (eyes 18-24 px) put the point mid-brow and read higher still. **Fixed in the tool:** the arch bends the ends
+  down; brows move with a heavier lid; `facehouse.py brows NAME OUT.jpg` measures the brow and its peak in the
+  pixels (small photos only when nothing sharper), saves them in the pick, draws the brows at her height (0.57 eye
+  widths above the lid) and peak, and lays the drawing over each photo. New kittest facehouse_brows_sit_on_hers;
+  facepick and agelines pass. Andy pixel for pixel unchanged. Mouth and neckline untouched.
+- **Name test (neutral pack, chat 7's line-up):** not named (Dawn Butler 12, Ayanna Pressley 10, Diane Abbott 8);
+  line-up 5th of 8 (Ribeiro-Addy first). Namer: "fairly generic"; braids and navy suit fit several MPs.
+- **Sam (chat 10):** "Kemi is right." Build on: "Yes, what is left to do on the kit"; asked whether the Walliams test
+  is still required. Answered with the plan (kit list 1-5, Walliams as the end-to-end proof, my pick keep it).
+- **Sam: Y** to the plan: 1-5 then Walliams.
+- **Needs Sam:** nothing open.
+- **Next (chat 11, Opus medium):** 1 facehouse in the people kit (people.py: `head: house NAME` from a people file,
+  not only CAST); 2 turned views (three-quarter, side) for house heads; 3 facehouse whole-head kittest (Andy and
+  Kemi held); 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for films (look
+  'detail'). Then Walliams end to end from his photos (`facehouse.py brows` on him), blind name test. Andy and Kemi
+  stay pixel for pixel unless Sam says.
+- **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
+  into caricature. Andy is finished. Kemi: bigger plaits, small pupils, calm eyes, face from photos, ears hidden,
+  mouth as it is, neckline kept.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS, brows); rule 49.
+- **Open rule requests:** none.
+- **For Claude:** CAST badenoch unchanged (brow_arch 0.03 now bends ends); pick JSON gained 'brow' {high 0.568, peak
+  0.42}; P4.brow_uv/brows took `peak`; facehouse.face_layout, _brow_gap, LID0, SHARP. Andy's pick has no 'brow'
+  (do not run browcheck on him: it would move his finished brows). Name pack key in this chat's scratchpad only.
+

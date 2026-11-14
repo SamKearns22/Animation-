@@ -1,0 +1,10 @@
+# The face tool's people (face chat 11): picks on the house head, from the people file's lines.
+# andy: Andy Burnham
+head: house burnham, hair swept, look detail
+outfit: suit 31 34 58, shirt white, no tie
+body: 1.75 m
+
+# kemi: Kemi Badenoch
+head: house badenoch, hair braids, look detail
+outfit: suit 30 32 58, shirt white, no tie
+body: 1.7 m
