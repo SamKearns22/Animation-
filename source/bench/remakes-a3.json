@@ -1,0 +1,246 @@
+{
+ "film": "remakes",
+ "commit": "98cc08d",
+ "what": "Remakes check sheet / clips before animatic 3 (11 Nov, code at 98cc08d; Sam's clip and still notes 68-77 were on this version; notes table in notes/remakes.md). Key = Sam's notes a fresh eye could spot on a still. Left out: taste and staging wishes (71 zoom, 49, 67 off-screen gunman), motion and sound (66, 69, 77's wipe entrance), and animatic 1's notes (a different version).",
+ "shots": [
+  [
+   "S1",
+   0.0,
+   4.06
+  ],
+  [
+   "S2",
+   4.06,
+   5.58
+  ],
+  [
+   "S3",
+   5.58,
+   8.34
+  ],
+  [
+   "S4",
+   8.34,
+   9.55
+  ],
+  [
+   "S5",
+   9.55,
+   14.07
+  ],
+  [
+   "S6",
+   14.07,
+   15.37
+  ],
+  [
+   "S7",
+   15.37,
+   22.69
+  ],
+  [
+   "S8",
+   22.69,
+   25.53
+  ],
+  [
+   "S9",
+   25.53,
+   27.16
+  ],
+  [
+   "S10",
+   27.16,
+   30.61
+  ],
+  [
+   "S11",
+   30.61,
+   33.15
+  ],
+  [
+   "S12",
+   33.15,
+   38.66
+  ],
+  [
+   "S12b",
+   38.66,
+   42.28
+  ],
+  [
+   "S13",
+   42.28,
+   44.51
+  ]
+ ],
+ "panels": [
+  {
+   "t": 2.0,
+   "is": "a forest: Kaepora Gaebora (a big brown owl, here a hype-man game guide) on a branch, wings flung wide: 'Hello, Link! Are you ready for an adventure?'; the back of Link's capped head bottom left",
+   "parts": "PSC"
+  },
+  {
+   "t": 4.8,
+   "is": "high angle from the owl's eyes: Link (green cap and tunic, small boy) unsure, 'Uh, yeah, I think so?', Navi (a glowing fairy) circling",
+   "parts": "PC"
+  },
+  {
+   "t": 7.0,
+   "is": "the owl on the branch, one wing raised like a teacher, eyes closed in a kindly smile: 'Great, here's some wisdom!'",
+   "parts": "PSC"
+  },
+  {
+   "t": 8.9,
+   "is": "close-up: Link, doubtful and sceptical: 'Ok?', Navi bouncing off his cap",
+   "parts": "PC"
+  },
+  {
+   "t": 12.41,
+   "is": "'Press R1 for an EXECUTION MOVE': a masked soldier with a rifle in the forest; the owl has swooped in behind him, wings closing round his head and neck for a neck-snap; an R1 button prompt",
+   "parts": "PSOC"
+  },
+  {
+   "t": 14.7,
+   "is": "close-up: Link, hands to his cheeks, 'Oh my god!'",
+   "parts": "PC"
+  },
+  {
+   "t": 16.6,
+   "is": "a Far Cry-style enemy camp: the gate blown in; a lookout fires from inside his wooden box up a watchtower; the owl (red bandana, machine gun) storms in",
+   "parts": "PSOC"
+  },
+  {
+   "t": 18.62,
+   "is": "the camp: a soldier runs in from lower left and fires at the owl; the owl fires back with his machine gun; Link scuttles in behind through the gate, aghast",
+   "parts": "PSOC"
+  },
+  {
+   "t": 24.48,
+   "is": "'R2 FOR GRENADES': Navi, glowing red, zips into a soldier kneeling behind sandbags as she explodes on him; an R2 prompt",
+   "parts": "PSOC"
+  },
+  {
+   "t": 26.3,
+   "is": "close-up: Link, flat horror, 'This is horrible.', dirt falling past",
+   "parts": "PC"
+  },
+  {
+   "t": 29.0,
+   "is": "Castle Town square: 'FIVE ROMANCE OPTIONS': a line-up of five (Zelda, Malon with a milk bottle, Ruto, a Goron, Saria) with the owl presenting them bottom left; a flower box in the near foreground",
+   "parts": "PSOC"
+  },
+  {
+   "t": 32.0,
+   "is": "reverse shot down a Castle Town street (balustrades, drapes, banners, planters, townsfolk): Link close-up, deadpan, 'I am 9 years old.'",
+   "parts": "PSO"
+  },
+  {
+   "t": 36.0,
+   "is": "at a stone wall: the owl grabs Link by the collar with his wings, lifts him and slams him against the wall, furious: 'Now listen here, you s***...'",
+   "parts": "PSOC"
+  },
+  {
+   "t": 40.0,
+   "is": "the same wall, a second angle: the owl holds Link up against the wall, shaking him: 'And you've got some god-damn CHOICES to make'; Navi reddening behind",
+   "parts": "PSOC"
+  },
+  {
+   "t": 43.4,
+   "is": "close-up: Link pinned to the wall, terrified, tears: 'I want to go home.'; the owl's wings on his collar from the bottom corners; Navi reddening",
+   "parts": "PSOC"
+  }
+ ],
+ "key": [
+  {
+   "id": "k72",
+   "note": 72,
+   "panels": [
+    5
+   ],
+   "lines": [
+    "P1",
+    "P10"
+   ],
+   "words": "respirator|mask|throat|grip|(wing|hand).*(face|head)",
+   "said": "the front grip sits on top of the respirator: the hand should tuck round his neck"
+  },
+  {
+   "id": "k76",
+   "note": 76,
+   "panels": [
+    7
+   ],
+   "lines": [
+    "O2",
+    "P7"
+   ],
+   "words": "boot|feet|foot|leg|(under|below|beneath).*(box|platform|tower|floor)",
+   "said": "the tower lookout's boots poke out under his box"
+  },
+  {
+   "id": "k77",
+   "note": 77,
+   "panels": [
+    8
+   ],
+   "lines": [
+    "P7",
+    "P8"
+   ],
+   "words": "leg|stiff|tube|stance|feet|foot",
+   "said": "the lower-left man is clearly not fully formed in the stills (both legs one stiff tube)"
+  },
+  {
+   "id": "k70",
+   "note": 70,
+   "panels": [
+    9
+   ],
+   "lines": [
+    "P7"
+   ],
+   "words": "kneel|off the ground|lift|float|tilt|angled|tipp",
+   "said": "why is the kneeling man angled up off the ground as Navi hits?"
+  },
+  {
+   "id": "k73",
+   "note": 73,
+   "panels": [
+    11
+   ],
+   "lines": [
+    "S1",
+    "S3"
+   ],
+   "words": "flower|planter|(haz|pale|faded|wash).*(near|foreground|box)|(near|foreground|box).*(haz|pale|faded|wash)",
+   "said": "the near flower box is hazed like the background, not coloured as foreground"
+  },
+  {
+   "id": "k68",
+   "note": 68,
+   "panels": [
+    12
+   ],
+   "lines": [
+    "S2"
+   ],
+   "words": "townsfol|wall|inside|embedded|(people|figure|person).*(house|building|door)",
+   "said": "townsfolk stood in the house walls: move or delete"
+  },
+  {
+   "id": "k75",
+   "note": 75,
+   "panels": [
+    14,
+    15
+   ],
+   "lines": [
+    "S6",
+    "M1"
+   ],
+   "words": "banner",
+   "said": "S13 has a blue banner behind Link that S12b doesn't show"
+  }
+ ]
+}

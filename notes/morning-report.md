@@ -65,8 +65,14 @@
 - **Cost per film:** a rough sheet is a 1-minute command and one look from you, instead of hand-drawn roughs; it aims at the ranking list's ~4% of rebuild notes (Blessed notes 4, 5, 20, 22, 32, 39 were rebuilds a rough would have shown).
 - **Decide (my picks):** 1) Y: the rough sheet goes to you once per film before building, plus a small one whenever something new is added. 2) Y: the place outlines stay as depth markers only (where across the picture people stand is set later by the shot, so the outlines are spread evenly; the van and phone ones are big because those people are near the lens).
 
+## Critic bench on Remakes (chat 2 of the retest; stopped by the budget stop before scoring)
+- **Built:** a Remakes test (`source/bench/remakes-a3.json` and `-crops`): 15 stills from the version Sam's notes 68-77 were on, 7 of his notes as the answer key (grip on the mask, lookout's boots under his box, the stiff-legged soldier, the kneeling man lifted, the hazed flower box, townsfolk in the walls, the banner in one wall shot only); the crops version adds 15 close-ups of every person. All four critic packs are made.
+- **Stopped:** the ledger's budget stop fired: this bench work is counted under the Remakes film (52.5% of a week against its 14.5%), though the job's own stop is 2.25%. The four critics were stopped before answering. On Sam's Y the next chat runs the four critics (about 0.65% of a week) and scores them.
+- **For Claude:** the stop is a misfiling (bench files named remakes-*); rerun: delete source/data/critbench/remakes-a3*/{opus,sonnet}, `critbench.py make remakes-a3` and `make remakes-a3-crops` (frames cached), four critic agents, `critbench.py score`.
+
 ## Sam's answers (14 Nov, morning)
 - Face tool: 1) Burnham **C**; 2) Badenoch **C** ("best for the house style and matching the features"); 3) **Y**, finish the left list; 4) **Y**, rule 49.3 line written.
 - People kit: 1) **all people** turn with their own face (famous ones too: Walliams' turned head); 2) explain, then **all people** keep their own hair colour; 3) approve after a run-through of the kit's contents.
 - Places kit: 1) approve after a run-through of the contents; 2) explain the notice question.
 - Critic: 1) explain the close-ups; 2) not yet: test the critic again on Remakes and report back.
+- Second answers (14 Nov): notice on Blessed left as posted (Y); close-ups of every person in critique packs (Y; the Remakes critic test still decides Sonnet); people kit: everyone, famous too, keeps one look in every pose and turn (Y); people kit approved (Y); places kit approved (Y); moves kit approved (Y); acting list's two words corrected (Y); the rough sheet once per film before building, plus a small one for anything new (Y). Open: a rule for one look in every pose (proposed as rule 90, waits for Sam's Y).
