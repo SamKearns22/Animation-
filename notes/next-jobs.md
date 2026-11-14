@@ -1,20 +1,41 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/places-kit-c5d` (also on the main line).
-- **Rules that bite next:** 86 (every tool gets a kittest), 74 (the acting list), 85 (cost watch).
-- **Done (chat 5d, Opus medium, ~1%; item 5 DONE at ~7.1% of 8%):** full replicate: 13 paintings and 12 frames
-  within 0.004% (3 min 7 s); set_boxes vs the hand list: every hand box has a piece except 4 stale ones (phone railing,
-  phone notices, tvroom cue rack: the painting changed after Sam's note 20); the kit found the Samaritans notice over
-  the second hood (morning report). Kittest `places_from_a_description`, MAPs, catalogue row and tile, page lines,
-  sheet `notes/morning/places-kit-replicate.jpg`, morning report entry.
-- **Next: moves from the acting list (ranking item 7), Opus HIGH (design), new chat**, per `notes/overnight-run.md`
-  (estimate 6%, stop 9%; tested on Blessed).
-- **Needs Sam:** start the moves chat (chat 5d could not: sessions stop at 8 chats in a row, a system limit);
-  morning report picks (people kit 1-3; places kit 1-2).
-- **Read:** `notes/overnight-run.md` in full; `notes/ranking-list.md` row 7; CLAUDE.md "Reading little".
+- **Newest work:** `claude/overnight-run-chat-7-gm52bo` (also on the main line).
+- **Rules that bite next:** 74 (the acting list: each block lands on its word), 86 (every tool gets a kittest), 85.
+- **Done (chat 7, Opus high, ~2.5%):** item 7's design and first part: `story/blessed-moves.txt` (43 lines) +
+  `source/acting.py` redraw Brand's six showman shots (arrive, oath x2, dock, gates, gates2: ~160 lines of code) with
+  every joint, mark, mood and gaze identical each 1/12 s, 17 frames 0.000%; `check` ties each block to its acting-list
+  word; kittest `moves_from_the_acting_list` (19 s; a 0.01 s nudge fails it); page lines; catalogue tile; sheet
+  `notes/morning/moves-kit-replicate.jpg`; morning report entry.
+- **Next: chat 8, Opus MEDIUM (building from this plan), item 7 part 2**: the plan below, steps 2-4 (stop 9% for the job).
+- **Needs Sam:** morning report picks (people kit 1-3; places kit 1-2; moves kit later).
+- **Read:** this file's "Item 7" section; `acting.py` MAP; `blessed.py` MAP and only the shot functions named.
 - **Open rule requests:** none.
-- **For Claude:** places.py: `on NAME` (generic word: a meant overlap), a piece past both picture edges is a band (was
-  80% width: dropped the bench and witness box), repeats numbered in set_boxes, `## view: NAME (spoken name)` for the
-  page, `picture(view)` for the catalogue. page.py lists places pieces by line (Blessed page 13% of code).
+- **For Claude:** blessed.py's Bible is now `_bible(j, sp)` (pure move, frames 0 diff); page.py lists moves lines via
+  `acting.gist` (times dropped, spoken words kept; the page stays under 15% of the code: 11,910 of 80,993 tokens).
+
+## Item 7, moves from the acting list (ranking item 7; overnight run; 6%, stop 9%)
+Design (chat 7, 14 Nov): a film's moves are plain lines in `story/FILM-moves.txt` (language in `acting.py` MAP), one
+block per shot, each one acting-list row (`## SHOT: WHO, line N, lands on "WORD"`, `row:` the row's words). Lines:
+`face:` (mood, shades, gaze steps, later moods), `walk:` (gait, from/to metres on a ground, over, phase, settle, still,
+chest, sway), `L:`/`R:`/`both:` hand keys (`PLACE at T`, `PLACE from T to T`, `rest at T`; a second line for a hand
+lies over the first from its first key), `body:` moves (bump `from A to B, rise, fall`; ramp `from A over D`; `except`)
+on channels lean, nod, roll, dip, bob, head_dy (+ filmkit.shifts idle life), `holds L|R: PROP between A and B`. Times:
+"word", a T beat, end, cut, start, landed, min(), +/-; bare numbers are seconds into the shot. Library in the kit:
+12 hand places (heart, point, wide, sweep, messiah, arms out, hair, hair back, oath hand, oath mid, bible, clasp low),
+13 body moves (lean in, bow, chin up, dip, slump, start, tilt, nod, preen, bask...); a film adds `gait`, `place`,
+`body` lines. The film side (`FILMS['blessed']`): its timeline, word_at, grounds, props, which functions the kit
+stands in for. Pose-level replication (joints compared) is the fast test; frames prove the drawing.
+1. **Done (chat 7):** core + Brand's arrive, oath, oath2, dock, gates, gates2 (exact).
+2. **Next (chat 8):** the rest of Blessed: `stance: seated` (van with VAN_YAW; dock guards; the judge: shifts + the
+   peer bumps on "Almighty God"/"blessed", mood sceptic), the jury (JY.draw: leave as code unless short), escort (Brand
+   and the officer walking, the officer's grip: `holds` a grip prop; eye channels look, head_dx, gaze, lid, blink off),
+   `stance: lying` for the cot (cot_pose via lying.py), phone (handset prop, cord), tvroom (dead still: STILL_OK) and
+   push (the face change: moods by beat), gates2's background (Walliams' phases: drag, startled, plead, flail, grab,
+   gone; guard1's head turn on line 7). Where a move is one-off and the library has nothing, it stays code and the
+   block names it (`code: wal_pose`), per the ranking row.
+3. **Then:** `acting.py replicate blessed` over all shots (~6 min) + kittest extended; catalogue row text; report.
+4. **Then:** cost per film in the report (Blessed's moves stage was ~1.5% by the ranking list; target ~0.5%), and the
+   check against the notes' acting-list table itself (each row has a block), not only the block's own `lands on`.
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

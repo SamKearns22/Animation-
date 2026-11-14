@@ -37,3 +37,12 @@
 - **Works:** `source/places.py` draws a place from plain lines: Blessed's 13 sets (court outside, courtroom x4, prison gates, van, cell, cot, phone room, TV room, TV) redrawn from 162 piece lines and match the finished film's paintings and 12 frames within 0.004% (bar 0.05%; sheet `notes/morning/places-kit-replicate.jpg`). Cost per film: Blessed's sets took 1,491 lines of code; the same places are 226 description lines, and a note on a place now finds its one line on the page.
 - **Found:** the kit's own boxes caught one overlap the film's hand-made list missed (its box was out of date): the phone room's Samaritans notice is pinned half across the second booth's blue hood. Left as you saw it.
 - **Decide (my picks):** 1) Y: approve the places kit for the next film's sets (no film uses it until you say). 2) N: leave Blessed's notice as posted (it's finished; the check now catches this on new films).
+
+## Moves from the acting list (ranking item 7, chat 7 of 2-3; in progress, about 2.5% of a week against 6%, stop 9%)
+- **Works:** a film's moves are now plain lines, one block per acting-list row (`story/blessed-moves.txt`: 43 lines
+  stand for ~160 lines of Brand's move code). The kit (`source/acting.py`) redraws his six showman shots (arrival,
+  oath, dock, gates, gates close) identical to the finished film: every joint each 1/12 s, 17 frames 0.000%
+  (sheet `notes/morning/moves-kit-replicate.jpg`). A note on a move finds its line on the film's page.
+- **Left (chat 8):** the rest of Blessed's moves (sitting, lying, the escort, the face change, Walliams and the guards).
+- **Decide (later, at the end of item 7):** Y/N the kit for the next film (my pick Y once all of Blessed matches).
+

@@ -1,3 +1,21 @@
+# Where things stand (archived 14 Nov, chat 7) (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/places-kit-c5d` (also on the main line).
+- **Rules that bite next:** 86 (every tool gets a kittest), 74 (the acting list), 85 (cost watch).
+- **Done (chat 5d, Opus medium, ~1%; item 5 DONE at ~7.1% of 8%):** full replicate: 13 paintings and 12 frames
+  within 0.004% (3 min 7 s); set_boxes vs the hand list: every hand box has a piece except 4 stale ones (phone railing,
+  phone notices, tvroom cue rack: the painting changed after Sam's note 20); the kit found the Samaritans notice over
+  the second hood (morning report). Kittest `places_from_a_description`, MAPs, catalogue row and tile, page lines,
+  sheet `notes/morning/places-kit-replicate.jpg`, morning report entry.
+- **Next: moves from the acting list (ranking item 7), Opus HIGH (design), new chat**, per `notes/overnight-run.md`
+  (estimate 6%, stop 9%; tested on Blessed).
+- **Needs Sam:** start the moves chat (chat 5d could not: sessions stop at 8 chats in a row, a system limit);
+  morning report picks (people kit 1-3; places kit 1-2).
+- **Read:** `notes/overnight-run.md` in full; `notes/ranking-list.md` row 7; CLAUDE.md "Reading little".
+- **Open rule requests:** none.
+- **For Claude:** places.py: `on NAME` (generic word: a meant overlap), a piece past both picture edges is a band (was
+  80% width: dropped the bench and witness box), repeats numbered in set_boxes, `## view: NAME (spoken name)` for the
+  page, `picture(view)` for the catalogue. page.py lists places pieces by line (Blessed page 13% of code).
+
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
 - **Newest work:** `claude/places-kit-c5c` (also on the main line).
 - **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
