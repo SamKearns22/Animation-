@@ -273,3 +273,13 @@ a reach failure, not a film failure.
 
 Russell Brand: total play time 104 h 31 m; about 1 day after posting. Per 1,000 views: likes 18, shares 1.8, saves 3.1, followers 1.4.
 Reading (Claude): Russell Brand is the second-biggest film on the channel after Bingo Bingo (20.2K) and the best new-follower film since Patriots 3 (23 vs 45). Same ranking as on YouTube Shorts (5.6K, top of its 10): the one film that works on both platforms. Ocarina and Elder Scrolls are both about 800-950 views with weak watch (9-11 s): on TikTok they stalled at the same level as the low films.
+
+## Snapshot: Sat 14 Nov 2026, 18:49-18:51 (Instagram Reel insights, crossposted to Facebook; Sam's phone screens)
+
+| Film | Posted | Views | Viewers | Avg watch | Likes | Comments | Reposts | Shares | Saves | Follows |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Russell Brand | Fri 13 Nov | 17,649 | 13,726 | 30 s | 133 | 19 | 3 | not shown (post screen: 14) | 17 | 25 |
+| Ocarina of Time | Wed 11 Nov | 529 | 241 | 9 s | 4 | 2 | 0 | not shown | 0 | 0 |
+| Elder Scrolls | Tue 10 Nov | 23,117 | 20,787 | 15 s | 753 | 20 | 20 | 1,266 (post screen) | 133 | 7 |
+
+Reading (Claude): Elder Scrolls, which stalled at 942 on TikTok and 17 on YouTube, is the biggest film on Instagram (23.1K views, 1,266 shares, the most shared film we have recorded on any platform). Russell Brand is also strong on Instagram (17.6K, 30 s average watch, 25 follows), so it worked on all three platforms. Ocarina flopped everywhere (769 TikTok, 529 Instagram, 1.2K YouTube). Same film, very different platform result: Elder Scrolls is a share-driven Instagram hit, in line with the 11 Nov note that Instagram is where the films that stall elsewhere sometimes take off.
