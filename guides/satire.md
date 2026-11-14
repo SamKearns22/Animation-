@@ -80,12 +80,12 @@ Sound · Overlays and Hook Text · Before every render (pre-flight) · Render ·
   checker, the general audit) or a check is missing what it needs from the film.
 
 ## The look (all built in: `source/satire_style.py`)
-Flat colour, one outline weight, no gradients or glows (the house look, rule S7, lays paper, light edges and soft shadows over every drawing: `film_engine`, never the film); shading is one hard-edged shape, never an airbrushed band, and ground shadows are flat (`ed.HARD`, kept inside the shape by `soft(clip=)`; a parody quoting the airbrush sets it off); a pattern on clothes (check, stripes) bends round the body, never flat on the screen (`ed.bent_check`); invented people are a touch uneven (`sp['lopsided']`; likeness heads stay as measured); no weight-on-one-leg stand (Sam, 11 Nov: awkward); talking heads tilt and nod on the voice (`headlife.from_voice`, given as `sp['head_life']`), never a still "talking photo"; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
+Flat colour, one outline weight, no gradients or glows (the house look, rule S7, lays paper, light edges and soft shadows over every drawing: `film_engine`, never the film); people have no darker shadow side on face or clothes (Sam, 14 Nov: plain clothing; seams, collars, creases stay); any other shading is one hard-edged shape, never an airbrushed band, and ground shadows are flat (`ed.HARD`, kept inside the shape by `soft(clip=)`; a parody quoting the airbrush sets it off); a pattern on clothes (check, stripes) bends round the body, never flat on the screen (`ed.bent_check`); invented people are a touch uneven (`sp['lopsided']`; likeness heads stay as measured); no weight-on-one-leg stand (Sam, 11 Nov: awkward); talking heads tilt and nod on the voice (`headlife.from_voice`, given as `sp['head_life']`), never a still "talking photo"; lumpy, hand-cut shapes (`blob`, `rough`), never perfect ovals
 or ruler-straight boxes; every copy different (colours, sizes, facing; pre-flight's `copies` check flags two people drawn from one copy); circle hands with props laid over them; deadpan
 faces; hard cuts; a close-up for the reaction that matters; no title by default (Sam, 15 Oct); the Cranberry Title style (on 2 s) only when asked for.
 **Crowds seen from behind are never one repeated block** (Sam, 15 Oct: it 'screams drawn with AI'): each person
 gets their own shoulder width, slope and a higher shoulder, a lumpy head, a haircut with a low nape, and real clothing
-detail (collar, seams, creases, ribbed knit, a flat shadow side, sometimes pinstripe, check or tweed). See
+detail (collar, seams, creases, ribbed knit, sometimes pinstripe, check or tweed). See
 `press_secretary.reporter`. **No off-style cartoon shorthand** (sweat drops, anger veins, stars, motion lines...) in any film unless Sam asks (16 Oct): show a
 feeling with the face and body. No blank surfaces: every building, wall and window in view gets windows, doors, signs, drainpipes or posters (a blank
 flat wall reads as unfinished or computer-made). Signs and posters are neutral and true to the place (an EXIT sign,
@@ -145,8 +145,8 @@ into Roadster unasked). Suggest a sign gag as a question with the cast sheet, an
   had its own list, so the table emptied between cuts).
 - **People lying down, or seen from a high camera: `source/lying.py`** (Build list item 12, 25 Oct; Poker Mon note 80):
   never a flat drawing laid on its side. `lie(sp, pose, x, z, yaw)` gives a body resting on the floor or table (poses
-  'face_down', 'back', 'side', 'slump'), `draw` draws it through the set's camera as one body (one outline, a flat
-  shadow side, the person's own face and clothes, a contact shadow); `fall` hands moves.fall over to it without a pop;
+  'face_down', 'back', 'side', 'slump'), `draw` draws it through the set's camera as one body (one outline, flat
+  fills, the person's own face and clothes, a contact shadow); `fall` hands moves.fall over to it without a pop;
   `stand` draws anyone through a 3D camera at its real tilt (3D above 40 degrees). `contact_faults` and `solids` go in
   the film's checks and `scene(t)`.
 - **Everything on a table, desk or shelf comes from one written plan** (Poker Mon's `THINGS`): kind, place in metres
@@ -372,7 +372,7 @@ be meant: put each to Sam with a recommended answer, and change nothing until he
 | `should hit ... stops ... short` / `slows to` / `flies against` | Move the end point to real contact; keep the speed up (no eased stop); launch things the way the push goes. |
 | `the Hook Text ... covers` | Move it (`--y`/`--x`, the same in `HOOK`) clear of the sign or readout. |
 | `the song skips` / `repeats` | Start the next piece where the message says, then send a sound-check clip. |
-| `no outline` / `edge with no line` / `line weight` | Ink that edge with the house outline; see the marked picture. A flat shadow side may go in `LINE_OK`. |
+| `no outline` / `edge with no line` / `line weight` | Ink that edge with the house outline; see the marked picture. |
 | `a real ... is about` / `too thin` | Redraw it at its real size (sizes.SIZES) through the scene's camera. |
 | `the skirt top is at` (etc.) | Move the garment edge to its landmark (waist, hips, knee). |
 | `house style:` | Switch the template's default back on, or give the check what it needs. |

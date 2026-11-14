@@ -4,8 +4,8 @@ line work were missing or inconsistent, and he had to point them out). A film li
 LINE_SUBJECTS() -> [(name, draw)], draw(img) painting one character (or prop) alone, large, on a clear
 1080 x 1920 layer. Three tests, each fault with where it is:
 1. the outside edge is inked all the way round (no run of more than RUN px without an outline);
-2. no edge between two colours inside the shape goes without a line (a flat shadow side is the one allowed
-   exception: list it in LINE_OK);
+2. no edge between two colours inside the shape goes without a line (people have no flat shadow side since
+   14 Nov, so there is no exception for one; LINE_OK is for a real, named exception only);
 3. the lines are one weight: no line much thicker or thinner than the house weight (filled black shapes, such as
    pupils and dark hair, are not lines and are skipped).
 A marked picture (faults in red) is saved for one look, instead of a picture per character.

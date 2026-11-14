@@ -533,8 +533,7 @@ def head(img, p, sp, t, hx, hy):
     for sgn in (-1, 1):  # ears, pushed round by a turn
         p.poly(oval(hx + sgn * (hw + 2) - turn * 6, hy + 6, 12, 22), skin, INK, 2.4)
     p.poly(head_outline(hx, hy, hw, hh, sp.get('jaw', 'square')), skin, INK, 2.6)
-    soft(img, p.cam, [(hx + hw * 0.4, hy - hh * 0.7), (hx + hw, hy - 10), (hx + hw * 0.9, hy + hh * 0.66),
-                      (hx + hw * 0.5, hy + hh), (hx + hw * 0.4, hy + 30)], (160, 100, 90), 0.22, 8)
+    # no darker shadow side on the face or clothes (Sam, 14 Nov): the house look gives the depth
     fx = face(img, p, sp, t, hx, hy, hw, hh)
     beard(p, sp, hx, hy, hw, hh, fx)
     mouth(p, sp, t, fx, hy + sp.get('mouth_y', 60))
@@ -636,22 +635,18 @@ def torso(img, p, sp, t):
                    jc, INK, 2.2)
         p.line([(0, 250), (0, bottom)], jd, 2.2)
         p.ell(6, 300, 5, 5, jd, None)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.25, 10)
     elif out == 'dress':
         dc = sp.get('dress', (190, 30, 44))
         p.poly(body, dc, INK, 2.6)
         p.poly([(-46, -4), (46, -4), (30, 50), (0, 70), (-30, 50)], skin, INK, 2.2)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.22, 10)
     elif out == 'blouse':  # a dark jacket over a pale top
         jc = sp.get('jacket', CHARCOAL)
         p.poly(body, jc, INK, 2.6)
         p.poly([(-50, -4), (50, -4), (34, 180), (-34, 180)], sp.get('shirt', (236, 232, 228)), INK, 2.0)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.25, 10)
     elif out == 'jumper':
         jc = sp.get('jacket', (90, 110, 140))
         p.poly(body, jc, INK, 2.6)
         p.line(oval(0, -2, 46, 22, 24, 0.2, math.pi - 0.2), INK, 2.4)
-        soft(img, p.cam, [(sw * 0.4, 30), (sw, 60), (sw * HEM, bottom), (sw * 0.5, bottom)], (0, 0, 0), 0.22, 10)
     elif out in ('armour', 'king'):
         a = sp.get('arm') or armour()
         c = a['steel']
@@ -836,7 +831,6 @@ def legs(img, p, sp):
         leg = [(sgn * 6, 440), (sgn * 104, 440), (sgn * (100 + o * 0.6), 700), (sgn * (90 + o), 900), (sgn * (30 + o), 902),
                (sgn * (18 + o * 0.6), 700)]
         p.poly(leg, tc, INK, 2.6)
-        soft(img, p.cam, [(sgn * 70, 450), (sgn * 100, 450), (sgn * (88 + o), 896), (sgn * (66 + o), 896)], (0, 0, 0), 0.3, 6)
         p.poly(curve([(sgn * (24 + o), 896), (sgn * (94 + o), 894), (sgn * (128 + o), 910), (sgn * (124 + o), 928),
                       (sgn * (20 + o), 928)], 4),
                (22, 20, 22), INK, 2.4)
