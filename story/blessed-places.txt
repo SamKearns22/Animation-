@@ -66,3 +66,67 @@ block: x -2.1 to 2.1, z -1.65 to 1.025, depth 3.75, colour 176 150 116, line 0 (
 panelled: x -1.68 to 1.68, z -1 to 1.2, depth 3, look dock bench, seed 43 (the bench's front)
 glass screen: x -1.344 to 1.344, z 0.576 to 2.7264, depth 2.4, detail 1.2, uprights -0.928 -0.384 0.384 0.928, shines -0.736 -0.624 0.128 0.192 0.256 0.4 (the dock's glass)
 panelled: x -1.344 to 1.344, z -0.48 to 0.576, depth 2.4, detail 1.2, look dock base, seed 41 (the dock's base)
+
+# place: court outside
+colours: brick 192 156 112 | brick dark 162 128 90 | glass 172 186 192
+
+## view: court_out
+camera: up 1.7, horizon 1090, lens 1500
+people: brand 3.9, press 2.6
+sky: x -84 to 84, z -9.3 to 190.7, depth 150 (the sky)
+cloud: at -36 104.7, depth 150, rx 22, ry 7, seed 30 (a cloud)
+cloud: at 22 109.7, depth 150, rx 26, ry 7, seed 31 (a cloud)
+brick front: x -14 to 14, z 0.7 to 15.7, depth 17, look court, seed 7, parapet 0.35, parapet colour brick dark (the court's front)
+window grid: x -12.6 to 13, z 5.2 to 14.3, depth 17, frame 130 60 40, rows 5.2 8.8 12.4, blinds 1, seed 100 (the ribbon windows)
+window grid: x -12.6 to 13, z 1.2 to 3.6, depth 17, frame 130 60 40, rows 1.2, size 1.9 2.4, skip -1.4 4.4, bars 1, glass glass / 60 70 80 0.45, seed 300, row seed 0 (the ground-floor glazing)
+entrance: x -1.4 to 4.4, z 0.7 to 3.7, depth 16.99, doors -0.6 0.9 2.4 (the entrance)
+brick front: x -2.15 to -1.25, z 0.7 to 4.1, depth 16.4, look court pier, seed 33 (a brick pier)
+brick front: x 4.25 to 5.15, z 0.7 to 4.1, depth 16.4, look court pier, seed 97 (a brick pier)
+sign board: x -2.3 to 5.3, z 3.45 to 4.25, depth 16.3, text CROWN COURT SOUTHWARK, text width 6.4 (the sign band)
+small sign: at 4.85 2.5, depth 16.38 (a red sign)
+ground: depth 17 to 11, height 0.7 (the forecourt)
+planted wall: x -14 to -0.9, z 0 to 1.25, depth 11, seed 586, brick seed 56 (the left planted wall)
+planted wall: x 3.9 to 14, z 0 to 1.25, depth 11, seed 603, brick seed 73 (the right planted wall)
+steps: x -0.9 to 3.9, z 0 to 0.7, depth 8.9 (the steps)
+stair rail: x -0.6, z 0 to 0.7, depth 9.2 to 11 (the left rail)
+stair rail: x 3.6, z 0 to 0.7, depth 9.2 to 11 (the right rail)
+tree: at -5.4 0, depth 12.5, seed 40, canopy seed 900 (a tree)
+tree: at 6.6 0, depth 13, detail 1.04, seed 41, canopy seed 910 (a tree)
+tree: at -9 0, depth 14, detail 1.12, seed 42, canopy seed 920 (a tree)
+lamp post: at -3.9 0, depth 8.5 (the lamp post)
+ground: depth 11 to 0, look paving (the pavement)
+
+# place: prison gate
+colours: soot 88 80 74 | soot dark 66 60 56 | stone 186 160 128 | stone dark 70 64 60
+
+## view: gates
+camera: up 2.4, horizon 1150, lens 1100
+people: brand 7.6, press 4.9
+sky: x -84 to 84, z -2.6 to 197.4, depth 110, colour 214 216 220 (the overcast sky)
+cloud: at -30 103.4, depth 110, rx 26, ry 5, colour 198 202 208, seed 60 (a cloud)
+cloud: at 28 111.4, depth 110, rx 30, ry 5, colour 226 228 232, seed 61 (a cloud)
+brick front: x -2.45 to 2.45, z 0 to 9.8, depth 9.3, look gatehouse centre, colour soot dark, inset 0.15, seed 31 (the centre block)
+block: x -2.5 to 2.5, z 8.4 to 9, depth 9.25, colour stone, line 2 (the frieze)
+row: x -2.3 to -2.16, z 8.5 to 8.9, depth 9.22, n 15, pitch 0.32, colour stone * 0.8, line 1 (the frieze's brackets)
+block: x -2.7 to 2.7, z 9 to 9.8, depth 9.2, colour stone dark, line 2.4 (the cornice)
+brick front: x -5.3 to -2.3, z 0 to 12, depth 9, look gatehouse, colour soot, seed 19 (the left tower)
+pilaster: x -5.3 to -4.6, z 1.4 to 11, depth 8.9 (a pilaster)
+pilaster: x -3 to -2.3, z 1.4 to 11, depth 8.9 (a pilaster)
+arched window: x -4.25 to -3.35, z 1.6 to 3.7, depth 8.98 (a window)
+arched window: x -4.25 to -3.35, z 5.2 to 7.3, depth 8.98 (a window)
+arched window: x -4.25 to -3.35, z 8.6 to 10.7, depth 8.98 (a window)
+block: x -5.6 to -2, z 11 to 12, depth 8.8, colour stone dark, line 2.6 (the tower's cornice)
+row: x -5.5 to -5.34, z 10.6 to 11, depth 8.82, n 10, pitch 0.36, colour stone * 0.8, line 1 (its brackets)
+brick front: x 2.3 to 5.3, z 0 to 12, depth 9, look gatehouse, colour soot, seed 21 (the right tower)
+pilaster: x 2.3 to 3, z 1.4 to 11, depth 8.9 (a pilaster)
+pilaster: x 4.6 to 5.3, z 1.4 to 11, depth 8.9 (a pilaster)
+arched window: x 3.35 to 4.25, z 1.6 to 3.7, depth 8.98 (a window)
+arched window: x 3.35 to 4.25, z 5.2 to 7.3, depth 8.98 (a window)
+arched window: x 3.35 to 4.25, z 8.6 to 10.7, depth 8.98 (a window)
+block: x 2 to 5.6, z 11 to 12, depth 8.8, colour stone dark, line 2.6 (the tower's cornice)
+row: x 2.1 to 2.26, z 10.6 to 11, depth 8.82, n 10, pitch 0.36, colour stone * 0.8, line 1 (its brackets)
+arched gate: x -1.4 to 1.4, z 0 to 4.2, depth 9.28, wicket 0.15 1.15 2.1 (the arched gate)
+ground: depth 9.3 to 0, look tarmac (the forecourt)
+bollard: at -1.75 0, depth 8.6 (a bollard)
+bollard: at 1.75 0, depth 8.6 (a bollard)
+sign board: x -3.3 to -1.9, z 1.95 to 2.7, depth 7.4, look on posts, layer back, colour 250 250 248, line 2, text HM PRISON, text at 0.34, text width 1.036, text colour 30 30 34, text2 VISITS AND RECEPTION, text2 at 0.74, text2 width 1.148 (the prison sign: drawn behind everyone, off to the left of the crowd)

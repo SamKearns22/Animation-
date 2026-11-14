@@ -271,18 +271,42 @@ WINDOW_FRAME = (200, 196, 186)
                 'blind colour': (226, 204, 140)})
 def window(p, img, cam, a, t):
     """A window: the frame, the glass, glazing bars, a blind part-way down (blind: the share drawn), a sill."""
-    x0, y0, x1, y1 = 0, 0, a['w'], a['h']
-    frame, glass, lw = a['frame'], a['glass'], a['line']
-    p.poly(wob(quad(x0, y0, x1, y1), 1.2, a['seed']), frame, INK, lw)
+    window_box(p, (0, 0, a['w'], a['h']), a['frame'], a['glass'], a['seed'], bars=int(a['bars']),
+               blind=a['blind'] or None, blind_colour=a['blind colour'], lw=a['line'])
+
+
+def window_box(p, box, frame, glass, seed, bars=2, blind=None, blind_colour=(226, 204, 140), lw=2.2):
+    """The house window in a box (own units): frame, glass, glazing bars, a blind `blind` of the way down, a sill."""
+    x0, y0, x1, y1 = box
+    p.poly(wob(quad(x0, y0, x1, y1), 1.2, seed), frame, INK, lw)
     m = max(2.0, (x1 - x0) * 0.08)
     p.poly(quad(x0 + m, y0 + m, x1 - m, y1 - m), glass, None)
-    if a['blind']:
-        p.poly(quad(x0 + m, y0 + m, x1 - m, y0 + m + (y1 - y0 - 2 * m) * a['blind']), a['blind colour'], None)
-    for k in range(1, int(a['bars'])):
-        x = x0 + (x1 - x0) * k / a['bars']
+    if blind:
+        p.poly(quad(x0 + m, y0 + m, x1 - m, y0 + m + (y1 - y0 - 2 * m) * blind), blind_colour, None)
+    for k in range(1, int(bars)):
+        x = x0 + (x1 - x0) * k / bars
         p.line([(x, y0 + m), (x, y1 - m)], frame, max(1.5, m * 0.6))
     p.line([(x0 + m * 1.4, y0 + m * 1.6), (x0 + (x1 - x0) * 0.35, y0 + m * 1.6)], mix(glass, (255, 255, 255), 0.5), 1.4)
     p.poly(quad(x0 - m * 0.6, y1, x1 + m * 0.6, y1 + m * 0.9), mix(frame, (200, 196, 190), 0.5), INK, lw * 0.7)
+
+
+def bricks_in(p, box, base, seed, cw=34, ch=13, n=40, lw=1.0):
+    """Brick texture without a ruled grid (the house's: Blessed's `bricks`): scattered patches of a few bricks, each
+    a touch lighter or darker, with their mortar lines; box and sizes in own units."""
+    x0, y0, x1, y1 = box
+    r = random.Random(seed)
+    for _ in range(n):
+        x, y = r.uniform(x0, x1 - cw * 3), r.uniform(y0, y1 - ch * 3)
+        y = y0 + round((y - y0) / ch) * ch
+        rows = r.randint(1, 3)
+        for k in range(rows):
+            off = (cw / 2) * (k % 2)
+            for j in range(r.randint(1, 3)):
+                bx, by = x + off + j * cw, y + k * ch
+                if bx + cw > x1 or by + ch > y1:
+                    continue
+                col = dk(base, r.uniform(0.86, 0.95)) if r.random() < 0.6 else mix(base, (250, 236, 210), 0.12)
+                p.poly(quad(bx, by, bx + cw - 2, by + ch - 2), col, dk(base, 0.72), lw)
 
 
 PANELLED_LOOKS = {   # a long panelled wooden front (a bench back, a box front, a dock's base); in its own units
@@ -403,3 +427,6 @@ def glass_screen(p, img, cam, a, t):
         x = X(xm)
         p.poly(quad(x - 7, 4, x + 7, h), a['metal'], INK, 1.6)
     p.poly(quad(0, 0, w, 18), a['metal'], INK, 1.8)
+
+
+import places_outside   # noqa: E402,F401  (registers the outdoor pieces into KINDS)

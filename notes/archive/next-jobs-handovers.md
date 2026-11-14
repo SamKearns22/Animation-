@@ -512,3 +512,18 @@
 - **Open rule requests:** none.
 - **For Claude:** replicate's turned-head score: each frame drawn again with `people_turned.ON = False` (crowds keep
   theirs); the pass mark is that score. `--film-keys` keys crowd heads the film's way (first member's colours).
+
+# Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/places-kit-c5` (also on the main line).
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
+- **Done (overnight chat 5, item 5, Opus high, ~2.2%; job ~2.2% of 8%, stop 12%):** the places kit's design (below),
+  its core (`places.py`: language, level cameras, layers from depth, pieces, rule 83 boxes, replicate) and the
+  courtroom's library pieces (`places_parts.py`); Blessed's court_box redrawn from 15 lines at 0.00%.
+- **Next: chat 5b, Opus HIGH, same job:** the other 12 views (step 2 below), then steps 3-5. Handed over on amber.
+- **Needs Sam (morning report):** people kit picks 1-3 (unchanged).
+- **Read:** `notes/overnight-run.md` in full; this file's item 5 section only; `places.py` and `places_parts.py` MAPs;
+  `blessed_sets.py` only the painter being lifted (MAP line numbers).
+- **Open rule requests:** none.
+- **For Claude:** convert px to metres with the view's camera: x = (X - 540) * d / lens, z = up - (Y - horizon) * d /
+  lens, 4 places; pick each depth so ppm (lens / d) equals the piece's REF (or its look's ref): then no `detail`.
+

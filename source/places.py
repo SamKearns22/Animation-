@@ -120,8 +120,11 @@ def parse(text):
         if mn:
             name, val = mn.group(1).strip(), val[:mn.start()].strip()
         it = {'kind': key, 'name': name, 'line': n, 'raw': {}}
+        names = sorted({'x', 'z', 'depth', 'at', 'detail', 'seed', 'look', 'layer'} | set(PP.KINDS[key]['params']),
+                       key=len, reverse=True)
         for part in [q.strip() for q in val.split(',') if q.strip()]:
-            k, _, v = part.partition(' ')
+            k = next((nm for nm in names if part == nm or part.startswith(nm + ' ')), part.partition(' ')[0])
+            v = part[len(k):]
             if k in it['raw']:
                 raise DescriptionError(f'line {n}: {k} given twice')
             it['raw'][k] = v.strip()
@@ -263,6 +266,10 @@ class Piece:
         X, Y = self.L.p(x, self.d0 if d is None else d, z)
         return (round((X - self.ox) / self.k, 6), round((Y - self.oy) / self.k, 6))
 
+    def screen(self, X, Y):
+        """A point on the screen (world px at zoom 1: the picture's edges, the canvas's corners) in own units."""
+        return (round((X - self.ox) / self.k, 6), round((Y - self.oy) / self.k, 6))
+
     def M(self, m):
         """A length in metres at the piece's depth, in its own units."""
         return round(m * self.L.ppm(self.d0) / self.k, 6)
@@ -305,6 +312,7 @@ class Piece:
         a['seed'] = int(raw['seed']) if 'seed' in raw else a.get('seed', 0)
         a['w'] = round((self.x1 - self.x0) * self.L.ppm(self.d0) / self.k, 6) if self.d0 is not None else 0.0
         a['h'] = round((self.z1 - self.z0) * self.L.ppm(self.d0) / self.k, 6) if self.d0 is not None else 0.0
+        a['ppm'] = round(self.L.ppm(self.d0) / self.k, 6) if self.d0 is not None else 1.0
         a['piece'] = self
         return a
 

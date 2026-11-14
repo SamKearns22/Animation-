@@ -1,16 +1,24 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/places-kit-c5` (also on the main line).
+- **Newest work:** `claude/places-kit-c5b` (also on the main line).
 - **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
-- **Done (overnight chat 5, item 5, Opus high, ~2.2%; job ~2.2% of 8%, stop 12%):** the places kit's design (below),
-  its core (`places.py`: language, level cameras, layers from depth, pieces, rule 83 boxes, replicate) and the
-  courtroom's library pieces (`places_parts.py`); Blessed's court_box redrawn from 15 lines at 0.00%.
-- **Next: chat 5b, Opus HIGH, same job:** the other 12 views (step 2 below), then steps 3-5. Handed over on amber.
+- **Done (chat 5b, Opus high, ~2.0%; job ~4.2% of 8%, stop 12%):** court_bench, court_jury, court_dock 0.000%;
+  court_out 0.002%, gates 0.004% (new `places_outside.py`: sky, cloud, brick front, window grid, entrance, sign
+  board, small sign, ground, planted wall, steps, stair rail, tree, lamp post, bollard, pilaster, arched window,
+  arched gate); params may now be several words ('parapet colour'). 7 of 13 views done. Handed over on amber.
+- **Next: chat 5c, Opus HIGH, same job:** step 2's last six views (van, cell (+cell_cot), cot_top, phone, tvroom,
+  tv), then steps 3-5 below.
 - **Needs Sam (morning report):** people kit picks 1-3 (unchanged).
-- **Read:** `notes/overnight-run.md` in full; this file's item 5 section only; `places.py` and `places_parts.py` MAPs;
-  `blessed_sets.py` only the painter being lifted (MAP line numbers).
+- **Read:** `notes/overnight-run.md` in full; this file's item 5 section only; MAPs of `places.py`,
+  `places_parts.py`, `places_outside.py`; `blessed_sets.py` only the painter being lifted (its MAP).
 - **Open rule requests:** none.
-- **For Claude:** convert px to metres with the view's camera: x = (X - 540) * d / lens, z = up - (Y - horizon) * d /
-  lens, 4 places; pick each depth so ppm (lens / d) equals the piece's REF (or its look's ref): then no `detail`.
+- **For Claude:** px to metres as before (x = (X - 540) * d / lens, z = up - (Y - horizon) * d / lens); keep every
+  ppm a 2^a*5^b number (lens 1500: depths 1.5, 1.875, 2.4, 3, 3.75, 6, 7.5, 12) and use `detail` = ref / ppm off
+  Blessed's depth, so k snaps to 1 (any k != 1 also changes line widths). Blessed's FRAME is redefined at line 1004
+  (court_out's windows are red-brown 130 60 40). Rooms: a `room` piece whose side walls run from the back wall's
+  corners to the canvas corners (-300, -400)/(1380, 2400) (`pc.screen(X, Y)` gives screen px in own units); the tv
+  view: `ST.back` calls `tv(..., feed)` directly, so replicate must patch `ST.tv` (and restore it) and pass the
+  feed through the painter to the piece. Quick check: scratch `cmp.py VIEW...` style (painting only, ~2 s) before
+  the full replicate (~3 min with frames: run it in the background).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
@@ -27,7 +35,7 @@ a turned (yawed) camera is not supported by these painted fronts (Blessed has no
 1. **Done:** core, courtroom pieces (panels, block, row, carpet, royal arms, clock, door, chair back, bench,
    microphone, witness box, book, window, panelled, notepad, water jug, papers, gavel block, gavel, glass screen);
    court_box 0.00%.
-2. **Next:** court_bench, court_jury, court_dock (pieces exist; cameras: horizon so the wall's foot is z 0 at depth
+2. **Done (5b):** court_bench, court_jury, court_dock, court_out, gates. **Next:** the rest. Was: court_bench, court_jury, court_dock (pieces exist; cameras: horizon so the wall's foot is z 0 at depth
    6; dock: brand 2.5, guards 3.75), then court_out and gates (already in metres: `OUT`, `GATE` Levels; lift facade,
    entrance, sign band, planted wall, steps, rails, tree, lamp post, pavement, sky; gatehouse pieces), cell, cot_top,
    van (room walls run from the back wall's corners to the canvas corners (-300, -400)/(1380, 2400): a `room` piece
