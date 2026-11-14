@@ -1,15 +1,16 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 11 (sheet sent once: Sam's notes on it are applied, never re-sent), 89 (cast drawn alone, critiqued), 3 (no place drawn without its photos).
-- **Done (13 Nov, chat 4):** pencil sketches of the four re-staged scenes (`source/protest_tiers_roughs.py`, sheet with safe area, eye level, focus by beat, movement); critique hunts 1 and 2 (`protest_tiers_roughs` r1 p1-p2), faults fixed as one list; sheet + framing study sent to Sam. Chat 4's first try (12 Nov) hit the usage limit before drawing; this chat redid it.
-- **Next: the cast (Opus high), only after Sam's answers:** protester, riot officer x4 forces, hooded rioter, moped + riders; drawn alone and critiqued (rule 89). Answers come back to this chat.
-- **Sam (13 Nov):** Q1 Y to the re-staging (T2 crowd on the near pavement, store centre). Hook Text and sound: still pending (his word). Lessons F1-F12: kept as crowd-scene guidelines, not rules (read only when a shot needs them; pointer in the Plan pack).
-- **Sam (13 Nov): Y** to booking the research (4.2% then, 7.1% on the true week) as extra planning: ledger stage 'plan extras' done, the cast keeps its 3%. Its cast is the first test of the people kit (ranking item 4). Helper's 3 checks: critique lines S7-S9 (Sam: Y). Still pending: Hook Text and sound list.
+- **Rules that bite next:** 89 (cast drawn alone, critiqued), 3 (no place drawn without its photos), 11 (sheet sent once: Sam's notes applied, never re-sent).
+- **Done (14 Nov, chat 4668b913, Sonnet-type status chat):** the 13 Nov sketch sheet had NOT reached Sam; it was redrawn (`source/protest_tiers_roughs.py`) and sent in chat. **Sam (14 Nov): Y to the four scenes as sketched** (re-staging confirmed with the pictures).
+- **Hook Text:** "European protests, ranked" as drawn on the sheet; Sam's Y covered the sheet showing it (treat as kept; he can change it at the animatic).
+- **Sound (Sam, 14 Nov):** decided AFTER the animatic ("I need to get a sense of everything moving"). Animatic is voiceless/silent apart from the sign-off slurp; ask Q sound with it.
+- **Next: the cast (Opus high):** protester, riot officer x4 forces, hooded rioter, moped + riders; Glimpses, drawn alone and critiqued (rule 89); first test of the people kit (ranking item 4). Cast keeps its 3% budget.
+- **Needs Sam:** nothing until the cast sheet.
 - **Read:** `guides/job-packs.md` "Build"; this file's "Re-staged", "Action lists"; the estimate table's cast rows.
 - **Lost / Added (Sam Y, 12 Nov):** Lost: yellow vests; pepper spray (now tear gas); the hammer (now a road sign). Added: wet dusk with streetlights (T1); burning newspaper kiosk, burning rental bikes, CGT banners, daytime (T3).
-- **Open rule requests:** "pencil sketches before check sheets" every film (would merge into rule 11); helper's 3 proposed checks (camera height matches the plan; no unbroken mass over half the frame; smoke has volume) to weigh against the critique checklist, not yet proposed.
-- **For Claude:** film `protest-tiers`; roughs = `source/protest_tiers_roughs.py OUTDIR` (critique film name `protest_tiers_roughs`); pencil look patched there (`_apply_soft`: solid fills, no white specks); headline = Anton, same bands as `islamocommunism_set.heading`; sheet at `sketches/protest-tiers-pencil-sketches.jpg` (not on GitHub, a draft).
+- **Open rule requests:** "pencil sketches before check sheets" every film (would merge into rule 11); helper's 3 checks now critique lines S7-S9 (Sam Y). New lesson to propose: a sheet counts as sent only once SendUserFile delivered it in Sam's chat (13 Nov sheet never reached him).
+- **For Claude:** film `protest-tiers`; roughs = `source/protest_tiers_roughs.py OUTDIR` (critique film name `protest_tiers_roughs`); headline = Anton, same bands as `islamocommunism_set.heading`; sheet is a draft (not on GitHub).
 
 ## The reporting: what each tier is based on is in `notes/archive/protest-tiers-reporting.md` (T1 Barcelona 11 Nov, T2 Frankfurt 31 Oct, T3 République 17 Oct, T4 Tirana 13-18 Oct).
 
