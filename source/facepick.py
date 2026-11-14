@@ -15,16 +15,18 @@ push changed, again. The steps that worked are now done by the tool:
                 change moves some readings 0.2), so no step-by-step solve settles: response() measures once how each
                 setting moves the drawing; tune() starts at the photo's measures x GAIN and draws 6 heads a round
                 round the best (one solved on that table, five shaken and pushed at what is still timid or wrong).
-    CLEAN TWIN  the head is measured bare: no glasses, no beard (rule 49.3); they are drawn after, from the photo
+    CLEAN TWIN  the head is measured bare: no glasses, no beard, no age lines (rule 49.3); they are drawn after
+                (age lines: agelines.py, each crease's depth measured in the front photos), from the photo
                 (glasses: each lens's centre, width, top and bottom in eye widths, drawn by the cartoon's eye width;
-                beard: beardkit). Hair: the top's colour and, if the temples are lighter, grey sides; a few strands.
+                beard: beardkit). Hair: the top's colour and, if the temples are lighter, soft grey sides; a few strands,
+                or braids (braid_score: the photo hair's fine ripple; plaits below the brows, lines from a parting).
     THREE HEADS the card's unsure measures (the photos disagree) are drawn three ways: A as the first photo, B half
                 as far, C further (or the other way where that photo does not notice it: the check only judges
                 what it notices). With nothing unsure, the three differ in strength (x1.3, x1.7, x2.3).
     LINE-UP     every film's '*front*' photo, one per person (faces packs, likeness folders, each film's own).
 
     python3 source/facepick.py NAME OUT_DIR FRONT.jpg[:N] ... [--tq PHOTO[:N] ...] [--lineup "A,B,..."]
-                               [--gain 1.6] [--says "beard=yes|no, glasses=yes|no"]
+                               [--gain 1.6] [--says "beard=yes|no, glasses=yes|no, age=N, hair=braids|plain"]
         FRONT photos: straight on, close, not smiling, current (rule 49: 3+); ':N' picks face N (0 = leftmost).
         --tq: three-quarter photos, shown on the sheet only. --lineup: look-alike names for the name test.
         Writes OUT_DIR/NAME-sheet.jpg (Sam's sheet), NAME-A.png .. NAME-C.png (the heads, glasses and beard on),
@@ -32,8 +34,8 @@ push changed, again. The steps that worked are now done by the tool:
     python3 source/facepick.py sheet OUT_DIR NAME     redraw the sheet, adding the name test's answers once in
     python3 source/facepick.py head OUT_DIR NAME A OUT.png [--size 600]   one picked head, for the cast code
 
-Map: pack and card 65 | the frame 84 | traced shapes 131 | the head 242 | glasses 319 | tuning 370 |
-     the sheet 516 | main 607
+Map: pack and card 66 | the frame 85 | traced shapes 132 | the head 284 | glasses 379 | tuning 430 |
+     the sheet 576 | main 706
 """
 import glob
 import json
@@ -224,6 +226,47 @@ def _strands(img, hair, face, colr, top_px):
                     p.line([(x / SC, y / SC) for x, y in seg], colr, 1.5)
 
 
+def braid_score(fr, shapes):
+    """How braided the photo's hair is: the fine light-dark ripple inside the hair below the eyes (each braid's
+    plaits catch the light), as the ripple's strength over the hair's own brightness spread. Braids ~0.5+,
+    straight or short hair under 0.3 (13 Nov: Badenoch 0.6; Burnham, Walliams no hair there)."""
+    from scipy import ndimage
+    g = np.asarray(fr['crop'].convert('L')).astype(float)
+    ey = float(fr['mid'][1])
+    hm = shapes['hair'].copy()
+    hm[:int(ey)] = False
+    hm = ndimage.binary_erosion(hm, iterations=4)
+    if hm.sum() < 1500:
+        return 0.0
+    fine = g - ndimage.gaussian_filter(g, max(1.5, 0.04 * fr['ipd']))
+    return float(np.std(fine[hm]) / max(8.0, np.std(g[hm]) + 1e-6))
+
+
+def _braids(img, hair, face, f, L, light):
+    """Braids, house style: below the brows, columns of small stacked chevrons down the hair (each a plait); over
+    the crown, lines from a middle parting down to the sides. Drawn only on the hair, never on the face."""
+    p = Pen(img, Cam())
+    h, w = hair.shape
+    inside = lambda x, y: 0 <= int(y * SC) < h and 0 <= int(x * SC) < w and hair[int(y * SC), int(x * SC)] \
+        and not face[int(y * SC), int(x * SC)]
+    step, colw = 0.028 * P4.H, 0.042 * P4.H
+    y0 = f.top + (L['brow_y'] - 0.02) * P4.H
+    ys = np.nonzero(hair.any(1))[0]
+    if not len(ys):
+        return
+    ytop, ybot = ys.min() / SC, ys.max() / SC
+    for x in np.arange(f.cx - 1.2 * P4.H, f.cx + 1.2 * P4.H, colw):
+        for y in np.arange(y0, ybot, step):
+            if inside(x, y) and inside(x, y + step):
+                p.line([(x - colw * 0.36, y), (x, y + step * 0.75), (x + colw * 0.36, y)], light, 1.7)
+    for a in np.linspace(-1.0, 1.0, 13):                      # the crown: from the parting down to each side
+        top = (f.cx, ytop + 0.04 * P4.H)
+        pts = [(f.cx + a * 0.62 * P4.H * t, top[1] + (y0 - top[1]) * (t ** 0.8)) for t in np.linspace(0.05, 1, 12)]
+        run = [q for q in pts if inside(*q)]
+        if len(run) > 3:
+            p.line(run, light, 1.3)
+
+
 def _ink_edge(mask, w=2.4):
     """The ink line round a flat shape: the mask grown by a line's width, minus itself."""
     from scipy import ndimage
@@ -246,6 +289,20 @@ class Cam:
 
     def S(self, v):
         return v * SC
+
+
+def _grey_sides(img, hair, f, L, colr):
+    """Greying temples: the lighter colour blended in softly over both sides of the hair below the temples (the
+    photo's lighter sides, mirrored: a hard cut along the photo's temple line drew a square patch on one side)."""
+    from scipy import ndimage
+    h, w = hair.shape
+    u = (np.arange(w)[None, :] / SC - f.cx) / P4.H
+    v = (np.arange(h)[:, None] / SC - f.top) / P4.H
+    wt = np.clip((v - (L['brow_y'] - 0.12)) / 0.12, 0, 1) * np.clip((np.abs(u) - L['fw'] * 0.32) / 0.1, 0, 1)
+    wt = np.clip(ndimage.gaussian_filter(wt * hair, 4 * SC) * 1.8, 0, 0.9) * hair
+    a = np.asarray(img).astype(float)
+    a = a * (1 - wt[..., None]) + np.array(colr, float)[None, None, :] * wt[..., None]
+    img.paste(Image.fromarray(a.astype(np.uint8)))
 
 
 def _face_mask(f, L):
@@ -283,9 +340,11 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
         hair = hair | (ndimage.binary_fill_holes(both) & ~face & (top_half | hair))
     _paint(img, hair & ~face, col['hair'])
     if col.get('hair2') and shapes.get('hair_lt') is not None and shapes['hair_lt'].any():
-        lt = _warp(fr, L, shapes['hair_lt']) & hair & ~face
-        _paint(img, lt, tuple(col['hair2']), ink=False)
-    _strands(img, hair, face, LK._dk(col['hair'], 0.55), f.top * SC)
+        _grey_sides(img, hair & ~face, f, L, col['hair2'])
+    if shapes.get('braids'):
+        _braids(img, hair, face, f, L, tuple(int(min(255, c + 85)) for c in col['hair']))
+    else:
+        _strands(img, hair, face, LK._dk(col['hair'], 0.55), f.top * SC)
     p = Pen(img, Cam())                                       # (the paste replaced the pixels: a fresh pen)
     AV._ears(p, f, L, col['skin'])
     p.poly(curve(f.pts(P4.outline_uv(L)), 4), col['skin'], INK, 2.6)
@@ -295,6 +354,10 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
     P4.eyes(p, f, L, dict(lid4=0.1), (66, 46, 34), P4.dk(col['skin'], 0.8), liner=2.8)
     P4.brows(p, f, L, col['brow'], fr.get('brow_th', 0.04))
     P4.nose(p, f, L, col['skin'])
+    if extras and shapes.get('age'):     # the age lines measured from the photos (agelines), drawn AFTER the check like
+        import agelines                  # a beard (rule 49.3): the face finder reads a cheek fold as the lips (A: chin
+                                         # +0.4 -> -0.3, lip_low -0.35 -> -1.7) and crow's feet as the eyes' width
+        agelines.draw(p, f, L, col['skin'], shapes['age'])
     P4.lips(p, f, L, dict(smile=0.0), col['lip'], f(0.0, L['lip13']))
     # hair over the face: the hairline, a fringe, side curtains; never over the eyes and brows
     xs = np.arange(CW * SC)[None, :] / SC
@@ -304,8 +367,6 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
     front = hair & face & keep
     if front.any():
         _paint(img, front, col['hair'], ink=False)
-        if col.get('hair2') and shapes.get('hair_lt') is not None and shapes['hair_lt'].any():
-            _paint(img, front & _warp(fr, L, shapes['hair_lt']), tuple(col['hair2']), ink=False)
         edge = _ink_edge(front, 2.2) & face
         a = np.asarray(img).copy()
         a[edge] = INK
@@ -667,6 +728,13 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
             log(f'   beardkit skipped: {e}')
     ref = _devs(F[0][0]) if F[0][1] is None else {r['key']: r['dev'] for r in LK.analyse([F[0][0]], [F[0][1]])['diffs']}
     others = _others(name, fronts)
+    shapes['braids'] = says.get('hair') == 'braids' or (says.get('hair') is None and braid_score(fr, shapes) > 0.45)
+    log(f'   braids: {"yes" if shapes["braids"] else "no"} (ripple {braid_score(fr, shapes):.2f}; over 0.45 is braids)')
+    if says.get('age') != 'no':                               # the creases, measured from every front photo
+        import agelines
+        shapes['age'] = agelines.person([(p, n) for p, n in F], others, says.get('age'))
+        log('   age lines: ' + ', '.join(f'{k} {v:.2f} (deeper than {shapes["age"]["rank"].get(k, "-")})'
+                                         for k, v in shapes['age']['strength'].items()))
     others_v = []
     for o in others:
         dv = _devs(o)
@@ -709,7 +777,7 @@ def make(name, out_dir, fronts, tq=(), lineup=(), gain=GAIN, says=None, log=prin
         draw_head(meas, fr, shapes, col, png, extras=True, beard=beard, glasses=g)
         heads[v] = dict(what=what[v], measures=meas, **res)
     meta = dict(title=name, fronts=list(fronts), tq=list(tq), unsure=unsure, gain=gain, glasses=g,
-                beard=bool(beard), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
+                beard=bool(beard), age=shapes.get('age'), colours={k: list(c) for k, c in col.items() if c}, heads=heads,
                 card={k: round(dev[k], 2) for k in KEYS})
     json.dump(meta, open(os.path.join(out_dir, f'{name}-pick.json'), 'w'), indent=1)
     if lineup:
