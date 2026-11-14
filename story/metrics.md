@@ -262,3 +262,14 @@ category tags, one person, one party, nothing naming the story (Hormuz, the war,
 Reading (Claude): Russell Brand is the best YouTube Short of the latest ten by a wide margin, and holds people (62.7%) and draws comments (14).
 Ocarina got normal reach but people left sooner. Elder Scrolls got almost no reach (17 views in 4 days) though the few who saw it stayed (61.1%):
 a reach failure, not a film failure.
+
+## Snapshot: Sat 14 Nov 2026, 18:47-18:50 (TikTok Studio, Video analysis; Sam's phone screens)
+
+| Film (Hook Text) | Posted | Length | Views | Avg watch | Watched to end | Likes | Comments | Shares | Saves | New followers |
+|---|---|---|---|---|---|---|---|---|---|---|
+| Russell Brand ("The 5 stages of feeling blessed") | Fri 13 Nov, 4:48pm | 56.68 s | 15.9K | 23.2 s (41%) | 11.73% | 285 | 30 | 29 | 50 | 23 |
+| Ocarina of Time ("Link's New Adventure…") | Wed 11 Nov, 4:32pm | 41.52 s | 769 | 11.1 s (27%) | 9.09% | 61 | 4 | 4 | 5 | 1 |
+| Elder Scrolls ("Elder Scrolls reveals new location!") | Tue 10 Nov, 4:40pm | 36.63 s | 942 | 9.3 s (25%) | 2.62% | 63 | 2 | 8 | 3 | 0 |
+
+Russell Brand: total play time 104 h 31 m; about 1 day after posting. Per 1,000 views: likes 18, shares 1.8, saves 3.1, followers 1.4.
+Reading (Claude): Russell Brand is the second-biggest film on the channel after Bingo Bingo (20.2K) and the best new-follower film since Patriots 3 (23 vs 45). Same ranking as on YouTube Shorts (5.6K, top of its 10): the one film that works on both platforms. Ocarina and Elder Scrolls are both about 800-950 views with weak watch (9-11 s): on TikTok they stalled at the same level as the low films.
