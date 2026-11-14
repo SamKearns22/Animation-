@@ -23,14 +23,21 @@
   to Andy's." "Careful, you're straying too hard into caricature territory." Done: push held back to 1.15, plaits
   1.2x, her pupils smaller, her lips trimmed; Andy keeps a gentle grin, lashes, heavier brows, burgundy tie (his
   photo). Sheet sent: `notes/morning/facehouse-likeness-c8.jpg`. facepick and agelines kittests pass.
-- **Next (chat 9, Opus HIGH):** blind name test on the held-back heads (neutral packs, line-up step; two namers each);
-  stay inside Sam's caricature limit: more likeness from the face's own shapes (Kemi: cheekbones, face shape, the
-  nose; Andy: the hair's real shape, tousled and pushed up), not bigger features. Then facehouse in people.py, turned
-  views, kittest, catalogue row; then Walliams.
+- **Sam's notes on the sheet (chat 8, 14 Nov evening):** "I prefer the before in both (Andy's grin is poorly drawn
+  with stray lines, is too shit-eating, his eyelashes are too much), except for Kemi's braids and eyes. But even then
+  the eyes are wide and startled. I think before Andy is finished. Kemi is still not quite right especially in face
+  shape and I think looking at your face on references would help." So: (F1) Andy back to chat 7's head exactly (no
+  push, grin, lashes, tie; the brows as before): **Andy is finished.** (F2) Kemi keeps plait_k 1.2 and the new
+  eyes' smaller pupils, but calmer: not wide or startled (less white, eye_scale near 1, a heavier upper lid). (F3)
+  Kemi's face shape: drawn from her FRONT-ON reference photos (k01, k02, k03), outline laid over the photo, not
+  the push; everything else back to the before (no push, mouth, brow raise, forehead lift).
+- **Next (chat 9, Opus HIGH):** F1, F2, F3; a sheet (before / now / her front photo with the outline over it), then
+  her blind name test (neutral pack, line-up step). Then facehouse in people.py, turned views, kittest, catalogue row;
+  then Walliams.
 - **Needs Sam:** (1) Kemi's ears showing, as in pick C: Y keep / N hide. (2) rule 49's check column naming the face-tool
-  tests (Y/N, asked three times). (3) Andy's grin and burgundy tie: Y keep / N back to his straight mouth, no tie.
+  tests (Y/N, asked four times). (Andy's grin and tie: answered N, F1.)
 - **Sam's words kept:** "Please don't limit yourself on budget as this is important and I have spare." Age lines stay,
-  house style, per character. Look 2 ('detail') is the look. Not too far into caricature.
+  house style, per character. Look 2 ('detail') is the look. Not too far into caricature. Andy is finished (chat 7 head).
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS); rule 49.
 - **Open rule requests:** rule 49's check column.
 - **For Claude:** CAST holds the new lines. `nametest.py pack KEYDIR BIG.png --lineup "..."` (quote the list: "de
