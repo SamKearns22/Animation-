@@ -2045,6 +2045,125 @@ def rough_of_every_new_thing():
                                        f'a place and a move (real and draft clock) drawn; the pre-flight line works')
 
 
+def _facepick_burnham():
+    """Burnham's picked heads (references/faces/burnham/pick) as facepick draws them: F, frame, shapes, colours, meta."""
+    import json
+    import facepick as FP
+    meta = json.load(open(os.path.join(FP.ROOT, 'references/faces/burnham/pick/burnham-pick.json')))
+    F = [(FP._find(p, FP.ROOT), n) for p, n in (FP._split(a) for a in meta['fronts'])]
+    fr = FP.photo_frame(*F[0])
+    shapes = FP.traced(fr)
+    return FP, F, fr, shapes, FP.colours(fr, shapes), meta
+
+
+def _ink(png):
+    import numpy as np
+    from PIL import Image
+    return np.asarray(Image.open(png).convert('L'))
+
+
+@test
+def facepick_extras_after_the_check():
+    """Rule 49.3 (face tool, 13-14 Nov): glasses, beard, age lines and the eyes' look are drawn AFTER the likeness
+    check, never into the checked head (the face finder read Burnham's cheek folds as his lips, fuller irises as a brow
+    change: C 62% -> 34%); eye_look gives his dark eyes fuller irises at the house size; `redraw` works from any folder
+    (his pick held '../references': it only ran from source/)."""
+    import json
+    import shutil
+    import tempfile
+    import numpy as np
+    FP, F, fr, shapes, col, meta = _facepick_burnham()
+    tmp = tempfile.mkdtemp()
+    try:
+        meas = meta['heads']['C']['measures']
+        bare = os.path.join(tmp, 'bare.png')
+        FP.draw_head(meas, fr, shapes, col, bare, extras=False)
+        look = FP.eye_look(F)
+        dressed = dict(shapes, age=meta['age'], eyes=look)
+        clean = os.path.join(tmp, 'clean.png')
+        FP.draw_head(meas, fr, dressed, col, clean, extras=False, glasses=meta.get('glasses'))
+        full = os.path.join(tmp, 'full.png')
+        FP.draw_head(meas, fr, dressed, col, full, extras=True, glasses=meta.get('glasses'))
+        clean_same = bool((_ink(bare) == _ink(clean)).all())
+        extras_moved = float((np.abs(_ink(full).astype(int) - _ink(clean)) > 30).mean())
+        # the old fault: the extras drawn into the head the check measures
+        old_caught = extras_moved > 0.002
+        eyes_ok = look and look['scale'] == 1.0 and look['iris_r'] > 1.2
+        # redraw from another folder, from a pick that still holds the old '../' paths
+        m2 = dict(meta, fronts=['../' + a for a in meta['fronts']])
+        json.dump(m2, open(os.path.join(tmp, 'burnham-pick.json'), 'w'))
+        shutil.copy(os.path.join(FP.ROOT, 'references/faces/burnham/pick/burnham-C.png'), tmp)
+        here = os.getcwd()
+        os.chdir(tmp)
+        try:
+            FP.redraw(tmp, 'burnham')
+        finally:
+            os.chdir(here)
+        redrawn = os.path.exists(os.path.join(tmp, 'burnham-C.png')) and \
+            json.load(open(os.path.join(tmp, 'burnham-pick.json')))['heads']['C']['measures'] == meas
+    finally:
+        shutil.rmtree(tmp)
+    ok = clean_same and old_caught and eyes_ok and redrawn
+    return ok, (f'checked head untouched by the extras: {clean_same}; extras change {extras_moved:.1%} of the drawn '
+                f'head; irises {look and look["iris_r"]} at size {look and look["scale"]}; redraw from another '
+                f'folder: {redrawn}')
+
+
+@test
+def facepick_beard_from_any_front():
+    """Face tool chat 5 (Walliams replay, 14 Nov): his first front photo is nearly shaven, and beardkit keeps only
+    what matches its FIRST photo, so the stubble in his other three was dropped (and the redraw crashed). The beard
+    is now read with each photo leading in turn, the fullest kept."""
+    import shutil
+    import tempfile
+    import beardkit
+    import facepick as FP
+    L = os.path.join(FP.ROOT, 'references/blessed/likeness')
+    F = [(os.path.join(L, f), None) for f in ('w06-front-hedge-sam.jpg', 'w07-front-bowtie-sam.jpg',
+                                            'w02-front-bbc2024.jpg')]
+    tmp = tempfile.mkdtemp()
+    try:
+        old = beardkit.analyse('walliams', [f for f, _ in F], tmp)[2]
+        new = FP._beard('walliams', F, tmp)
+    finally:
+        shutil.rmtree(tmp)
+    old_caught = not old.get('base')
+    ok = old_caught and bool(new) and new.get('coverage', 0) > 0.1
+    return ok, (f'shaven photo first: beard {"none" if old_caught else "found"} (the old way); each photo leading: '
+                f'coverage {new.get("coverage", 0) if new else 0:.2f}')
+
+
+@test
+def agelines_by_measure_and_age():
+    """Face tool chat 3 (13 Nov): a 56-year-old came out young and round; the age lines are measured in the photos
+    and scaled by age (Badenoch's top light deepened a 46-year-old's folds past a 56-year-old's): older draws more
+    line, a line under LO draws nothing, and Burnham's crow's feet (11 of 12 in the line-up) are drawn."""
+    import shutil
+    import tempfile
+    import numpy as np
+    import agelines as AG
+    FP, F, fr, shapes, col, meta = _facepick_burnham()
+    meas = meta['heads']['C']['measures']
+    st = meta['age']['strength']
+    tmp = tempfile.mkdtemp()
+    ink = {}
+    try:
+        for tag, age in (('none', None), ('young', {k: v * AG.age_factor(30) for k, v in st.items()}),
+                         ('his', st)):
+            png = os.path.join(tmp, f'{tag}.png')
+            FP.draw_head(meas, fr, dict(shapes, age={'strength': age} if age else None), col, png, extras=True)
+            ink[tag] = _ink(png)
+    finally:
+        shutil.rmtree(tmp)
+    young = float((np.abs(ink['young'].astype(int) - ink['none']) > 20).mean())
+    his = float((np.abs(ink['his'].astype(int) - ink['none']) > 20).mean())
+    order = AG.age_factor(30) < AG.age_factor(46) < AG.age_factor(56) <= AG.age_factor(70)
+    floor = AG.strength({k: AG.LO[k] for k in AG.LO}) == {k: 0.0 for k in AG.LO}
+    ok = order and floor and his > young * 1.3 and his > 0 and st['crows_feet'] > 0.8
+    return ok, (f'lines at 30: {young:.2%} of the head, at his 64: {his:.2%}; age order {order}; faint lines drawn '
+                f'as none {floor}; crow\'s feet {st["crows_feet"]}')
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

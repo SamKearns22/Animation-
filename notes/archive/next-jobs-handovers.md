@@ -578,3 +578,17 @@
 - **For Claude:** blessed.py has `person(shot, who, t)` (pure move, frames 0 diff), `van_seat`, `_handset`; kit hooks
   `gates2_head`, `guard_eyes`; check_list reads `notes/archive/blessed-handovers.md`. kittests: page.py excluded
   from "films using the kit" (it was failing since chat 7).
+
+## Face tool, where things stand (chat 4 of the face chain, 14 Nov; ~1.5%: HARD STOP reached)
+- **Rules that bite next:** 86 (kittest for facepick and agelines), 49.3 (extras after the check), 85 (cost watch).
+- **Done:** Sam's picks saved (`references/faces/{burnham,badenoch}/pick/`: pick json 'picked': 'C', and the head);
+  Burnham's eyes (eye_look: fuller darker irises, socket shade; drawn after the check); Badenoch's plait band gone;
+  `facepick.py redraw`. Sheets sent: `notes/morning/facetool-{burnham,badenoch}-C.jpg`.
+- **Next: face chain chat 5, Opus medium (~0.6%, new stop 0.9%):** Sam: Y to ~0.6% more and to rule 49.3's eyes line (written), 14 Nov. Walliams replay (w06, w07, w01, w02; tries vs his five chats); kittest for facepick + agelines.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
+- **Open rule requests:** none.
+- **For Claude:** P4.eyes and TC.eye got `iris_r`, `pupil_r`, `scale` (defaults unchanged: old films identical).
+  eye_look scale stays 1.0 (1.2 failed: Burnham A 71% -> 23%). Rerun a head: `facepick.py BURNHAM-ARGS --says
+  "glasses=yes, age=64"` (2 min, seeded, same measures) then `redraw`. Parent chat's 3 unanswered lines (07:37,
+  07:54 x2) are the people/places kit questions, the morning chat's own.
+
