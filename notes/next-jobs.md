@@ -34,12 +34,13 @@
 - **Next (chat 9, Opus HIGH):** F1, F2, F3; a sheet (before / now / her front photo with the outline over it), then
   her blind name test (neutral pack, line-up step). Then facehouse in people.py, turned views, kittest, catalogue row;
   then Walliams.
-- **Needs Sam:** (1) Kemi's ears showing, as in pick C: Y keep / N hide. (2) rule 49's check column naming the face-tool
-  tests (Y/N, asked four times). (Andy's grin and tie: answered N, F1.)
+- **Sam answered (chat 8):** Kemi's ears: HIDE ("her hair hides her ears": `ears` off in her CAST line). Rule 49's
+  check column: Y, written. Andy's grin and tie: N (F1).
+- **Needs Sam:** nothing open.
 - **Sam's words kept:** "Please don't limit yourself on budget as this is important and I have spare." Age lines stay,
   house style, per character. Look 2 ('detail') is the look. Not too far into caricature. Andy is finished (chat 7 head).
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS); rule 49.
-- **Open rule requests:** rule 49's check column.
+- **Open rule requests:** none.
 - **For Claude:** CAST holds the new lines. `nametest.py pack KEYDIR BIG.png --lineup "..."` (quote the list: "de
   Cordova" has a space); line-ups as chat 7. AV.vance_mouth and P4.brows took new keyword options; defaults unchanged.
 
