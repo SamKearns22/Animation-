@@ -13,26 +13,31 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 12 of the face chain, 14 Nov)
-- **Rules that bite next:** 49 (the blind name test is the judge), 86 (every tool gets a kittest), 30 (a repeated note).
-- **Done (chat 12):** Sam's note "our 3/4 front poses simply don't work and look gaunt and weird" fixed for every
-  turned head (turnhead): the three-quarter is now 30 degrees on a flat face plan, both eyes and brows show (the far
-  one narrowed, never under half). Why it failed: at 45 degrees the muzzle-shaped plan hid the far eye and hollowed
-  the far cheek. Side and behind unchanged pixel for pixel. Sheet `notes/morning/threequarter-c12.jpg` sent (Andy,
-  Kemi, Vance, before and now). Kittest turned_heads_for_anyone now holds side/behind and counts both 3/4 eyes.
-- **Seen, not fixed:** Kemi's near jaw has a small notch where the plaits meet the neck (there before); the far eye
-  sits close to the far outline (cartoon-normal; for Sam's look).
-- **Next (chat 13, Opus medium):** 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for
-  films (look 'detail'), naming `turns` and the people lines. Then Walliams end to end from his photos
-  (`references/blessed/likeness/` w06, w07, w01, w02 fronts, w09 three-quarter; facepick make, `facehouse.py brows`,
-  his lines in the people file), blind name test, and send Sam a sheet of the Walliams head (with a Checks line).
-- **Needs Sam:** his look at the three-quarter sheet (a no comes back as a note; the chain does not wait on it).
+## Face tool, where things stand (chat 13 of the face chain, 14 Nov)
+- **Rules that bite next:** 49 (the name test cannot judge Walliams: calibrated), 86 (every tool gets a kittest), 30.
+- **Done (chat 13):** 4 facepick's sheet draws A, B, C the house way (facehouse `src`/`variant`); 5 catalogue rows: the
+  house head READY for films (look 'detail', people lines, `turns`). Walliams end to end from w06 w07 w01 w02 (+w09):
+  three heads 85/87/81%, line-up first each; pick B saved (references/faces/walliams/pick, `picked_by` Claude: Sam to
+  confirm); brows measured; lines in facehouse.CAST (swept, smirk, cocked brow 0.025, push 1.1). Faults found and
+  fixed in the tools: beardkit only ran on the face finder's hint (his grey stubble read 0): now always, kept over
+  BEARD_MIN 0.2; the house head had no beard: `stubble()` (Blessed's made general, measured colour and coverage);
+  smiling photos tuned his eyes shut (0.08 open): EYE_OPEN_MIN 0.2; swept sides stood off his narrower temples (white
+  sliver): laid onto the face edge where over 0.015 off. Andy and Kemi held pixel for pixel. Kittests pass.
+- **Name test:** new head not named (Hegseth/Newsom, low), 2nd of 10 in the line-up (after Cowell); a cocked brow and
+  push 1.15 changed nothing. Calibration: Sam's approved Blessed head also not named, 9th of 10. Sheet sent:
+  `notes/morning/walliams-facetool-c13.jpg` (photos, Blessed head, new head, turned).
+- **Seen, not fixed:** the stubble is drawn front-on only (turned views bare); his eyes read smaller and more tired
+  than the Blessed head's.
+- **Next (chat 14, Opus medium):** stubble carried round the turned views (turnhead's beard path, as Vance's goatee);
+  then Sam's notes on the Walliams sheet, if any.
+- **Needs Sam:** Y/N on the new Walliams head (the chain does not wait on it).
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
   caricature. Andy and Kemi finished: do not change their front heads.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (IN THE PEOPLE KIT, TURNED).
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (TURNED) and `stubble`.
 - **Open rule requests:** none.
-- **For Claude:** turnhead YAW['three'] 30, TurnFace.three, PLAN3/KFAR/KMIN (3/4 only); VANCE_TURNED_MD5 now yaws
-  90-180. Kittests critique_helper_kind and round_page fail on the main line before this change too (not face work).
+- **For Claude:** facehouse.load(name, src, variant); CAST['walliams']; stubble() after age_lines; facepick
+  BEARD_MIN, _beard_word (pick 'beard' is now a dict). Scratch run: `facepick.py walliams OUT w06 w07 w01 w02 --tq w09
+  --says "glasses=no, age=55, hair=plain"` (~3 min).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

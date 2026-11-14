@@ -212,3 +212,25 @@
   extended: the house outline's few rows notched the skull), install_turned, turns(); kittest held md5s are the
   chat-10 heads. kittests allowlist gained facehouse.py (a kit, not a film).
 
+
+## Face tool, where things stand (chat 12 of the face chain, 14 Nov)
+- **Rules that bite next:** 49 (the blind name test is the judge), 86 (every tool gets a kittest), 30 (a repeated note).
+- **Done (chat 12):** Sam's note "our 3/4 front poses simply don't work and look gaunt and weird" fixed for every
+  turned head (turnhead): the three-quarter is now 30 degrees on a flat face plan, both eyes and brows show (the far
+  one narrowed, never under half). Why it failed: at 45 degrees the muzzle-shaped plan hid the far eye and hollowed
+  the far cheek. Side and behind unchanged pixel for pixel. Sheet `notes/morning/threequarter-c12.jpg` sent (Andy,
+  Kemi, Vance, before and now). Kittest turned_heads_for_anyone now holds side/behind and counts both 3/4 eyes.
+- **Seen, not fixed:** Kemi's near jaw has a small notch where the plaits meet the neck (there before); the far eye
+  sits close to the far outline (cartoon-normal; for Sam's look).
+- **Next (chat 13, Opus medium):** 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for
+  films (look 'detail'), naming `turns` and the people lines. Then Walliams end to end from his photos
+  (`references/blessed/likeness/` w06, w07, w01, w02 fronts, w09 three-quarter; facepick make, `facehouse.py brows`,
+  his lines in the people file), blind name test, and send Sam a sheet of the Walliams head (with a Checks line).
+- **Needs Sam:** his look at the three-quarter sheet (a no comes back as a note; the chain does not wait on it).
+- **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
+  caricature. Andy and Kemi finished: do not change their front heads.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (IN THE PEOPLE KIT, TURNED).
+- **Open rule requests:** none.
+- **For Claude:** turnhead YAW['three'] 30, TurnFace.three, PLAN3/KFAR/KMIN (3/4 only); VANCE_TURNED_MD5 now yaws
+  90-180. Kittests critique_helper_kind and round_page fail on the main line before this change too (not face work).
+

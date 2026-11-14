@@ -1032,7 +1032,8 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
                      brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
                      lid=0.24, shape=True),
     'walliams': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None,   # chat 13: his
-                     mouth=dict(kind='smirk')),                                           # smirk (Blessed's hand-made)
+                     mouth=dict(kind='smirk'), brow_up=[0.0, 0.025], push=1.1),   # smirk and cocked brow
+                                                                         # (Blessed's hand-made, Sam: "That's him")
 }
 
 
