@@ -43,21 +43,38 @@ def build(film):
     ppl = people.lines(film)
     if ppl:
         parts.append(f'\n## {film}-people.txt ({len(ppl)} people; a note on a person changes their lines)\n' +
-                     '\n'.join(f'- {n}: {txt}' for n, txt in ppl))
+                     '\n'.join(f'- {n}: {_bare(txt)}' for n, txt in ppl))
     import places                                 # item 5: each place's pieces (story/FILM-places.txt), by line
     pcs = places.lines(film)
     if pcs:
         parts.append(f'\n## {film}-places.txt ({len(pcs)} pieces; a note on a place changes its line: open that line)\n' +
-                     '\n'.join(f'- {n}: {txt}' for n, txt in pcs))
+                     '\n'.join(_group(pcs, lambda t: tuple(t.split(': ', 1)) if ': ' in t else (t, ''))))
     import acting                                 # item 7: each shot's moves (story/FILM-moves.txt), by line
     mvs = acting.lines(film)
     if mvs:
         parts.append(f'\n## {film}-moves.txt ({len(mvs)} lines; a note on a move changes its line: open that line)\n' +
-                     '\n'.join(f'- {n}: {acting.gist(txt)}' for n, txt in mvs))
+                     '\n'.join(_group([(n, acting.gist(t)) for n, t in mvs], lambda t: tuple(re.split(r' ?: ', t, maxsplit=1)) if re.search(r' ?: ', t) else (t, ''))))
     page = '\n'.join(parts) + '\n'
     out = os.path.join(ROOT, 'story', f'{film}-page.md')
     open(out, 'w', encoding='utf-8').write(page)
     return out, tokens(page), tokens(code)
+
+
+def _group(rows, split):
+    """Rows (line, text) as '### head' once, then '- line: rest' under it: the shared start of neighbouring lines is
+    said once (find counts the head's words too). split(text) -> (head, rest)."""
+    out, cur = [], None
+    for n, txt in rows:
+        h, r = split(txt)
+        if h != cur:
+            out.append(f'### {h}'); cur = h
+        out.append(f'- {n}: {r}')
+    return out
+
+
+def _bare(txt):
+    """A person's line without its numbers (sizes, colours, seeds): the words a note would name stay."""
+    return re.sub(r'\s+', ' ', re.sub(r'[-+]?\d+\.?\d*(\s*m\b)?|\bseed:?|[|]', ' ', txt)).strip()
 
 
 def _words(s):
@@ -72,15 +89,17 @@ def find(film, note, n=5):
     p = os.path.join(ROOT, 'story', f'{film}-page.md')
     if not os.path.exists(p):
         build(film)
-    want, cur, hits = _words(note), '', []
+    want, cur, grp, hits = _words(note), '', '', []
     for ln in open(p, encoding='utf-8'):
         if ln.startswith('## '):
-            cur = ln[3:].split()[0]
+            cur, grp = ln[3:].split()[0], ''
+        if ln.startswith('### '):
+            grp = ln[4:]
         m = re.match(r'- (\d+): (.*)', ln)
         if m and want:
-            score = len(want & _words(m.group(2).replace('_', ' ')))
+            score = len(want & _words((grp + ' ' + m.group(2)).replace('_', ' ')))
             if score:
-                hits.append((score, f'{cur}:{m.group(1)}', m.group(2)[:100]))
+                hits.append((score, f'{cur}:{m.group(1)}', (grp + ': ' + m.group(2))[:100]))
     return sorted(hits, key=lambda h: -h[0])[:n]
 
 

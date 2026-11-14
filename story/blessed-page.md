@@ -483,307 +483,359 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 339: `faces_sheet` His face large in each mood, two photos beside (rule 76).
 
 ## blessed-people.txt (25 people; a note on a person changes their lines)
-- 4: judge (The judge (invented)): body: 1.72 m, shoulders 164, head 70 x 90; skin: 236 190 168 | hair: none, 240 238 230; face: face_wide -0.02, jaw_wide +0.04, eye_size -0.01, nose_long +0.05, chin_long +0.02, brow_slope -3; eyes: 90 110 130 | lips: 190 122 112 | brows: 150 140 132, width 4.4; glasses: 40 36 34; outfit: suit red, no tie, trousers red, shoes 20 16 14; extras: wig, robe; seed: 92
-- 14: officer (Prison officer): body: 1.8 m, shoulders 168, head 70 x 90, hem 500; skin: 150 100 70 | hair: crop, 30 26 24; face: face_wide +0.04, jaw_wide +0.06, nose_wide +0.12, mouth_wide +0.05, brow_high -0.1; eyes: 46 32 24 | lips: 120 72 62 | brows: 30 26 24, width 4.6; outfit: jumper 244 244 246, shirt 244 244 246, tie 20 20 24, trousers 24 24 28, shoes 16 14 14; extras: officer; seed: 93
-- 23: guard2 (Prison officer): body: 1.68 m, shoulders 150, head 70 x 90, hem 500; skin: 236 196 170 | hair: bob, 170 120 70; face: face_wide -0.04, jaw_wide -0.06, eye_size +0.012, mouth_wide -0.05, chin_long -0.01; eyes: 84 110 80 | lips: 196 120 116 | brows: 150 106 64, width 4.6; lashes; outfit: jumper 244 244 246, shirt 244 244 246, tie 20 20 24, trousers 24 24 28, shoes 16 14 14; extras: officer; seed: 97
-- 33: newsreader (Newsreader): body: 1.76 m, shoulders 146, head 64 x 88; skin: 226 182 156 | hair: side, light brown; face: face_wide -0.03, jaw_wide +0.02, nose_long +0.03, mouth_wide +0.02; eyes: 80 110 140 | lips: 196 124 114 | brows: 110 80 56, width 3.8; outfit: suit 28 34 60, shirt 246 246 248, tie 170 24 36, trousers 28 34 60, shoes 18 16 14; seed: 94
-- 41: inmate1 (Inmate 1): body: 1.78 m, shoulders 156; skin: 196 150 120 | hair: crop, 40 32 28; face: face_wide +0.06, jaw_wide +0.05, eye_size -0.012, nose_wide +0.08, brow_high -0.15, mouth_wide +0.04, chin_long +0.02; eyes: 70 96 120 | lips: 186 120 106 | brows: 52 40 32; beard: stubble 0.82; outfit: jumper grey, no tie, trousers grey, shoes 240 240 240; seed: 301
-- 50: inmate2 (Inmate 2): body: 1.84 m, shoulders 170; skin: 120 82 60 | hair: bald, 30 24 20; face: face_wide +0.03, jaw_wide +0.1, nose_wide +0.2, eyes_apart +0.08, lip_low +0.03, mouth_wide +0.1, brow_slope -4; eyes: 52 34 24 | lips: 110 64 56 | brows: 28 22 20; beard: boxed 46 40 38; outfit: jumper 110 116 124, no tie, trousers grey, shoes 240 240 240; seed: 302
-- 59: inmate3 (Inmate 3): body: 1.72 m, shoulders 156; skin: 232 190 164 | hair: side, 170 120 70; face: face_wide -0.05, jaw_wide -0.04, eye_size +0.01, nose_long +0.02, mouth_wide -0.04, chin_long +0.03, brow_slope +4; eyes: 96 120 90 | lips: 204 132 120 | brows: 160 110 64; freckles; outfit: jumper 150 152 156, no tie, trousers grey, shoes 240 240 240; seed: 303
-- 68: juror1 (Juror 1): body: 1.8 m, shoulders 162, head 64 x 94; skin: olive | hair: crop, 34 28 24; face: face_wide +0.05, jaw_wide +0.08, nose_long +0.02, brow_high -0.1, mouth_wide +0.03; eyes: 60 44 30 | lips: 170 110 96 | brows: 30 26 24; beard: stubble 0.86; outfit: suit navy, tie 120 30 40, trousers 50 50 56, shoes 30 26 24; seed: 701
-- 77: juror2 (Juror 2): body: 1.64 m, shoulders 136, head 60 x 94; skin: pale | hair: bob, 196 176 140; face: face_wide -0.03, chin_long +0.02, eye_size +0.01, mouth_wide -0.05, brow_slope +3; eyes: 90 110 130 | lips: 200 120 120 | brows: 150 130 100; glasses: 150 60 50; outfit: jumper 60 120 120, no tie, trousers 50 50 56, shoes 30 26 24; seed: 702
-- 86: juror3 (Juror 3): body: 1.76 m, shoulders 170, head 70 x 94; skin: pink | hair: receding, silver; face: face_wide +0.03, jaw_wide +0.05, nose_wide +0.12, eye_size -0.014, lip_low +0.02, chin_long -0.02, size 0.86; eyes: 80 96 110 | lips: 196 128 120 | brows: 200 196 190, thick 0.06; outfit: suit 120 100 70, tie 40 70 50, trousers 50 50 56, shoes 30 26 24; seed: 703
-- 94: juror4 (Juror 4): body: 1.66 m, shoulders 134, head 60 x 94; skin: 120 80 58 | hair: long, dark brown; face: face_wide -0.06, jaw_wide -0.06, eye_size +0.014, nose_wide +0.06, mouth_wide +0.06, lip_top +0.01; eyes: 48 30 22 | lips: 120 70 66 | brows: 26 20 18; outfit: jumper 200 150 50, shirt 240 236 226, no tie, trousers 50 50 56, shoes 30 26 24; seed: 704
-- 102: juror5 (Juror 5): body: 1.78 m, shoulders 158, head 64 x 94; skin: 150 100 70 | hair: side, 50 38 30; face: face_wide +0.02, jaw_wide +0.06, eyes_apart -0.06, nose_long +0.04, brow_slope -3; eyes: 70 90 70 | lips: 186 116 104 | brows: 70 52 38; beard: stubble 0.8; outfit: jumper 100 116 90, no tie, trousers 50 50 56, shoes 30 26 24; seed: 705
-- 111: juror6 (Juror 6): body: 1.62 m, shoulders 132, head 60 x 94; skin: 214 172 136 | hair: bun, 24 20 20; face: face_wide -0.02, chin_long +0.03, eye_tilt +3, nose_wide -0.04, mouth_wide -0.02; eyes: 50 36 28 | lips: 170 100 96 | brows: 28 22 20; outfit: dress, no tie, dress 120 40 60, trousers 50 50 56, shoes 30 26 24; seed: 706
-- 119: juror7 (Juror 7): body: 1.66 m, shoulders 138, head 60 x 94; skin: pale | hair: curly, ginger; face: face_wide +0.04, eye_size +0.012, nose_long -0.02, mouth_wide +0.04, chin_long -0.03; eyes: 96 120 90 | lips: 206 130 120 | brows: 140 70 40; freckles; outfit: jumper 196 160 60, no tie, trousers 50 50 56, shoes 30 26 24; seed: 707
-- 128: juror8 (Juror 8): body: 1.74 m, shoulders 154, head 64 x 94; skin: 236 196 176 | hair: crop, 150 148 144; face: face_wide 0, jaw_wide +0.04, nose_wide +0.08, eyes_apart +0.05, brow_high +0.1, lip_low -0.01; eyes: 70 80 96 | lips: 190 120 110 | brows: 110 106 100; glasses: 30 30 34; outfit: suit charcoal, tie 40 60 120, trousers 50 50 56, shoes 30 26 24; seed: 708
-- 137: juror9 (Juror 9): body: 1.64 m, shoulders 132, head 58 x 94; skin: pink | hair: pony, blonde; face: face_wide -0.05, jaw_wide -0.08, eye_size +0.016, nose_long -0.03, mouth_wide -0.06; eyes: 80 110 140 | lips: 212 132 128 | brows: 170 140 90; outfit: blouse 150 180 210, shirt 244 244 240, no tie, trousers 50 50 56, shoes 30 26 24; seed: 709
-- 145: juror10 (Juror 10): body: 1.84 m, shoulders 172, head 70 x 94; skin: 96 64 48 | hair: bald, 30 26 24; face: face_wide +0.03, jaw_wide +0.06, nose_wide +0.18, eye_size -0.01, mouth_wide +0.08, chin_long +0.01, size 0.86; eyes: 44 30 24 | lips: 104 62 56 | brows: 30 26 24; beard: boxed 170 166 160; outfit: suit 150 130 100, no tie, trousers 50 50 56, shoes 30 26 24; seed: 710
-- 154: juror11 (Juror 11): body: 1.62 m, shoulders 136, head 60 x 94; skin: 238 204 186 | hair: curly, 226 224 218; face: face_wide -0.01, chin_long +0.04, nose_long +0.04, eye_size -0.008, brow_slope +4; eyes: 110 110 120 | lips: 190 130 130 | brows: 170 166 160; glasses: 110 60 120; outfit: jumper 110 70 120, no tie, trousers 50 50 56, shoes 30 26 24; seed: 711
-- 163: juror12 (Juror 12): body: 1.72 m, shoulders 150, head 64 x 94; skin: 222 188 150 | hair: side, 22 20 20; face: face_wide +0.03, eyes_apart -0.03, eye_tilt +4, nose_wide +0.02, lip_low +0.01, brow_high -0.08; eyes: 40 30 26 | lips: 180 116 104 | brows: 24 20 18; outfit: jumper 40 50 90, no tie, trousers 50 50 56, shoes 30 26 24; seed: 712
-- 174: brand (Russell Brand (trial: arriving, the gates)): head: measured references/blessed/likeness/brand-card.json, push 1.6; tune: eyes_apart 2.0, nose_wide 2.0, brow_slope 3.0, brow_high 3.0, eye_tilt 8.0, chin_long 4.0, forehead_wide 4.0; tune: eye_open 3.0, jaw_wide 25.0, nose_long 5.0; body: 1.83 m, shoulders 150, head 66 x 96, neck 1.12; skin: 232 176 150 | eyes: 86 62 42 | lips: 196 128 116 | deep set; brows: 48 38 32, width 4.6, thick 0.056; hair: curls, 80 62 48, light 112 90 72, grey 156 146 136; beard: full, moustache 74 58 48, cheeks 140 128 118, chin 206 200 192, grain 226 222 216; outfit: suit 86 88 94, shirt 248 248 246, no tie, trousers 60 61 65, shoes 22 18 16; extras: open shirt, crucifix, scarf; seed: 91
-- 187: brand_stand (Russell Brand (the witness box, sentencing)): look of: brand; outfit: suit 38 38 46, trousers 38 38 46; extras: open shirt, crucifix
-- 192: brand_dock (Russell Brand (the dock: topknot)): look of: brand_stand; hair: knot; outfit: suit 86 88 94
-- 197: brand_prison (Russell Brand (prison: tracksuit, topknot)): look of: brand; hair: knot; outfit: jumper 134 136 140, trousers 134 136 140, shoes 236 236 236; extras: zip
-- 203: walliams (David Walliams (TEST ONLY: never in a film; his head is his own part)): head: part walliams; body: 1.96 m, shoulders 158, head 66 x 96, neck 1.3; skin: 242 190 168 | hair: crop, 66 54 46 | brows: 56 44 38, width 4.6; outfit: jumper 134 136 140, shirt 134 136 140, trousers 134 136 140, shoes 236 236 236; extras: zip; seed: 95
-- 211: press (Journalist (a crowd: member i of the pack; s is the shot's seed; job is what the film has them doing)): crowd: press; body: 1.76 m, head 66 x 96; outfit: suit, shirt white, no tie, shoes 24 20 18; eyes: 80 60 44 | brows: darker hair 0.8; seed: 600 + i; hair (i+2s): short; bob; pony; crop; bald; curly; long; side; face (i+2s): face_wide 0.05, jaw_wide 0.06; face_wide -0.04, chin_long 0.02; ; jaw_wide 0.08; face_wide 0.06; face_wide -0.02; face_wide -0.05, jaw_wide -0.05; jaw_wide 0.03; hair seed (i+2s): 500; 501; 502; 503; 504; 505; 506; 507; hair colour (i+s): 58 44 36; 30 24 22; 150 110 70; 170 166 162; 110 70 46; 196 196 192; skin (i): pale; pink; olive; brown; jacket (3i+s): navy; charcoal; 110 40 50; 70 90 120; 90 96 80; 150 120 90; 60 60 70; trousers (i): 40 40 46; darker jacket 0.6; body (i): shoulders 150; shoulders 156; shoulders 162; taller (7i+s): 0; 0.05; 0.1; when hair bob; pony; long: body: 1.64 m, shoulders 138, head 62 x 96; when hair bald: hair colour: 128 120 114; when job tv; boom: outfit: jumper | jacket (i+s): 40 42 48; 52 56 50; 30 34 44 | trousers (i): 92 90 70; 70 72 64; 60 58 52 | shoes: 40 36 32; when job stills: jacket: 46 48 54 | trousers: 58 72 96 | shirt: 70 74 82
+- 4: judge (The judge (invented)): body: , shoulders , head x ; skin: hair: none, ; face: face_wide , jaw_wide , eye_size , nose_long , chin_long , brow_slope ; eyes: lips: brows: , width ; glasses: ; outfit: suit red, no tie, trousers red, shoes ; extras: wig, robe;
+- 14: officer (Prison officer): body: , shoulders , head x , hem ; skin: hair: crop, ; face: face_wide , jaw_wide , nose_wide , mouth_wide , brow_high ; eyes: lips: brows: , width ; outfit: jumper , shirt , tie , trousers , shoes ; extras: officer;
+- 23: guard (Prison officer): body: , shoulders , head x , hem ; skin: hair: bob, ; face: face_wide , jaw_wide , eye_size , mouth_wide , chin_long ; eyes: lips: brows: , width ; lashes; outfit: jumper , shirt , tie , trousers , shoes ; extras: officer;
+- 33: newsreader (Newsreader): body: , shoulders , head x ; skin: hair: side, light brown; face: face_wide , jaw_wide , nose_long , mouth_wide ; eyes: lips: brows: , width ; outfit: suit , shirt , tie , trousers , shoes ;
+- 41: inmate (Inmate ): body: , shoulders ; skin: hair: crop, ; face: face_wide , jaw_wide , eye_size , nose_wide , brow_high , mouth_wide , chin_long ; eyes: lips: brows: ; beard: stubble ; outfit: jumper grey, no tie, trousers grey, shoes ;
+- 50: inmate (Inmate ): body: , shoulders ; skin: hair: bald, ; face: face_wide , jaw_wide , nose_wide , eyes_apart , lip_low , mouth_wide , brow_slope ; eyes: lips: brows: ; beard: boxed ; outfit: jumper , no tie, trousers grey, shoes ;
+- 59: inmate (Inmate ): body: , shoulders ; skin: hair: side, ; face: face_wide , jaw_wide , eye_size , nose_long , mouth_wide , chin_long , brow_slope ; eyes: lips: brows: ; freckles; outfit: jumper , no tie, trousers grey, shoes ;
+- 68: juror (Juror ): body: , shoulders , head x ; skin: olive hair: crop, ; face: face_wide , jaw_wide , nose_long , brow_high , mouth_wide ; eyes: lips: brows: ; beard: stubble ; outfit: suit navy, tie , trousers , shoes ;
+- 77: juror (Juror ): body: , shoulders , head x ; skin: pale hair: bob, ; face: face_wide , chin_long , eye_size , mouth_wide , brow_slope ; eyes: lips: brows: ; glasses: ; outfit: jumper , no tie, trousers , shoes ;
+- 86: juror (Juror ): body: , shoulders , head x ; skin: pink hair: receding, silver; face: face_wide , jaw_wide , nose_wide , eye_size , lip_low , chin_long , size ; eyes: lips: brows: , thick ; outfit: suit , tie , trousers , shoes ;
+- 94: juror (Juror ): body: , shoulders , head x ; skin: hair: long, dark brown; face: face_wide , jaw_wide , eye_size , nose_wide , mouth_wide , lip_top ; eyes: lips: brows: ; outfit: jumper , shirt , no tie, trousers , shoes ;
+- 102: juror (Juror ): body: , shoulders , head x ; skin: hair: side, ; face: face_wide , jaw_wide , eyes_apart , nose_long , brow_slope ; eyes: lips: brows: ; beard: stubble ; outfit: jumper , no tie, trousers , shoes ;
+- 111: juror (Juror ): body: , shoulders , head x ; skin: hair: bun, ; face: face_wide , chin_long , eye_tilt , nose_wide , mouth_wide ; eyes: lips: brows: ; outfit: dress, no tie, dress , trousers , shoes ;
+- 119: juror (Juror ): body: , shoulders , head x ; skin: pale hair: curly, ginger; face: face_wide , eye_size , nose_long , mouth_wide , chin_long ; eyes: lips: brows: ; freckles; outfit: jumper , no tie, trousers , shoes ;
+- 128: juror (Juror ): body: , shoulders , head x ; skin: hair: crop, ; face: face_wide , jaw_wide , nose_wide , eyes_apart , brow_high , lip_low ; eyes: lips: brows: ; glasses: ; outfit: suit charcoal, tie , trousers , shoes ;
+- 137: juror (Juror ): body: , shoulders , head x ; skin: pink hair: pony, blonde; face: face_wide , jaw_wide , eye_size , nose_long , mouth_wide ; eyes: lips: brows: ; outfit: blouse , shirt , no tie, trousers , shoes ;
+- 145: juror (Juror ): body: , shoulders , head x ; skin: hair: bald, ; face: face_wide , jaw_wide , nose_wide , eye_size , mouth_wide , chin_long , size ; eyes: lips: brows: ; beard: boxed ; outfit: suit , no tie, trousers , shoes ;
+- 154: juror (Juror ): body: , shoulders , head x ; skin: hair: curly, ; face: face_wide , chin_long , nose_long , eye_size , brow_slope ; eyes: lips: brows: ; glasses: ; outfit: jumper , no tie, trousers , shoes ;
+- 163: juror (Juror ): body: , shoulders , head x ; skin: hair: side, ; face: face_wide , eyes_apart , eye_tilt , nose_wide , lip_low , brow_high ; eyes: lips: brows: ; outfit: jumper , no tie, trousers , shoes ;
+- 174: brand (Russell Brand (trial: arriving, the gates)): head: measured references/blessed/likeness/brand-card.json, push ; tune: eyes_apart , nose_wide , brow_slope , brow_high , eye_tilt , chin_long , forehead_wide ; tune: eye_open , jaw_wide , nose_long ; body: , shoulders , head x , neck ; skin: eyes: lips: deep set; brows: , width , thick ; hair: curls, , light , grey ; beard: full, moustache , cheeks , chin , grain ; outfit: suit , shirt , no tie, trousers , shoes ; extras: open shirt, crucifix, scarf;
+- 187: brand_stand (Russell Brand (the witness box, sentencing)): look of: brand; outfit: suit , trousers ; extras: open shirt, crucifix
+- 192: brand_dock (Russell Brand (the dock: topknot)): look of: brand_stand; hair: knot; outfit: suit
+- 197: brand_prison (Russell Brand (prison: tracksuit, topknot)): look of: brand; hair: knot; outfit: jumper , trousers , shoes ; extras: zip
+- 203: walliams (David Walliams (TEST ONLY: never in a film; his head is his own part)): head: part walliams; body: , shoulders , head x , neck ; skin: hair: crop, brows: , width ; outfit: jumper , shirt , trousers , shoes ; extras: zip;
+- 211: press (Journalist (a crowd: member i of the pack; s is the shot's ; job is what the film has them doing)): crowd: press; body: , head x ; outfit: suit, shirt white, no tie, shoes ; eyes: brows: darker hair ; + i; hair (i s): short; bob; pony; crop; bald; curly; long; side; face (i s): face_wide , jaw_wide ; face_wide , chin_long ; ; jaw_wide ; face_wide ; face_wide ; face_wide , jaw_wide ; jaw_wide ; hair (i s): ; ; ; ; ; ; ; ; hair colour (i+s): ; ; ; ; ; ; skin (i): pale; pink; olive; brown; jacket ( i+s): navy; charcoal; ; ; ; ; ; trousers (i): ; darker jacket ; body (i): shoulders ; shoulders ; shoulders ; taller ( i+s): ; ; ; when hair bob; pony; long: body: , shoulders , head x ; when hair bald: hair colour: ; when job tv; boom: outfit: jumper jacket (i+s): ; ; trousers (i): ; ; shoes: ; when job stills: jacket: trousers: shirt:
 
 ## blessed-places.txt (162 pieces; a note on a place changes its line: open that line)
-- 10: court_box (the witness box, the judge behind): panels (the panelled wall)
-- 11: court_box (the witness box, the judge behind): block (the picture rail)
-- 12: court_box (the witness box, the judge behind): the royal arms
-- 13: court_box (the witness box, the judge behind): the clock
-- 14: court_box (the witness box, the judge behind): the door
-- 15: court_box (the witness box, the judge behind): chair back (the judge's chair)
-- 16: court_box (the witness box, the judge behind): block (the dais edge)
-- 17: court_box (the witness box, the judge behind): carpet (the well)
-- 18: court_box (the witness box, the judge behind): the judge's bench
-- 19: court_box (the witness box, the judge behind): the judge's microphone
-- 20: court_box (the witness box, the judge behind): the witness box
-- 21: court_box (the witness box, the judge behind): book (the oath Bible)
-- 22: court_box (the witness box, the judge behind): the witness microphone
-- 27: court_bench (the judge's bench): panels (the panelled wall)
-- 28: court_bench (the judge's bench): the royal arms
-- 29: court_bench (the judge's bench): chair back (the judge's chair)
-- 30: court_bench (the judge's bench): the judge's bench
-- 31: court_bench (the judge's bench): papers (a paper)
-- 32: court_bench (the judge's bench): papers (another paper)
-- 33: court_bench (the judge's bench): the sound block
-- 34: court_bench (the judge's bench): the gavel
-- 35: court_bench (the judge's bench): the judge's microphone
-- 40: court_jury (the jury box): panels (the panelled wall)
-- 41: court_jury (the jury box): block (the picture rail)
-- 42: court_jury (the jury box): the left window
-- 43: court_jury (the jury box): the right window
-- 44: court_jury (the jury box): the jury room door
-- 45: court_jury (the jury box): block (the dado rail)
-- 46: court_jury (the jury box): panelled (the back row's bench back)
-- 47: court_jury (the jury box): panelled (the back row's box)
-- 48: court_jury (the jury box): a notepad
-- 49: court_jury (the jury box): a notepad
-- 50: court_jury (the jury box): a notepad
-- 51: court_jury (the jury box): panelled (the front row's box)
-- 52: court_jury (the jury box): a notepad and pen
-- 53: court_jury (the jury box): a notepad and pen
-- 54: court_jury (the jury box): the water jug
-- 55: court_jury (the jury box): a notepad and pen
-- 56: court_jury (the jury box): a notepad and pen
-- 61: court_dock (the dock): panels (the panelled wall)
-- 62: court_dock (the dock): block (the dado rail)
-- 63: court_dock (the dock): block (the lower wall)
-- 64: court_dock (the dock): row (the dock's back bench)
-- 65: court_dock (the dock): block (the dock's floor)
-- 66: court_dock (the dock): panelled (the bench's front)
-- 67: court_dock (the dock): glass screen (the dock's glass)
-- 68: court_dock (the dock): panelled (the dock's base)
-- 76: court_out (outside the court): the sky
-- 77: court_out (outside the court): a cloud
-- 78: court_out (outside the court): a cloud
-- 79: court_out (outside the court): the court's front
-- 80: court_out (outside the court): window grid (the ribbon windows)
-- 81: court_out (outside the court): window grid (the ground-floor glazing)
-- 82: court_out (outside the court): the entrance
-- 83: court_out (outside the court): brick front (a brick pier)
-- 84: court_out (outside the court): brick front (a brick pier)
-- 85: court_out (outside the court): sign board (the sign band)
-- 86: court_out (outside the court): a red sign
-- 87: court_out (outside the court): ground (the forecourt)
-- 88: court_out (outside the court): the left planted wall
-- 89: court_out (outside the court): the right planted wall
-- 90: court_out (outside the court): the steps
-- 91: court_out (outside the court): the left rail
-- 92: court_out (outside the court): the right rail
-- 93: court_out (outside the court): a tree
-- 94: court_out (outside the court): a tree
-- 95: court_out (outside the court): a tree
-- 96: court_out (outside the court): the lamp post
-- 97: court_out (outside the court): ground (the pavement)
-- 105: gates (the prison gates): the overcast sky
-- 106: gates (the prison gates): a cloud
-- 107: gates (the prison gates): a cloud
-- 108: gates (the prison gates): brick front (the centre block)
-- 109: gates (the prison gates): block (the frieze)
-- 110: gates (the prison gates): row (the frieze's brackets)
-- 111: gates (the prison gates): block (the cornice)
-- 112: gates (the prison gates): brick front (the left tower)
-- 113: gates (the prison gates): a pilaster
-- 114: gates (the prison gates): a pilaster
-- 115: gates (the prison gates): a window
-- 116: gates (the prison gates): a window
-- 117: gates (the prison gates): a window
-- 118: gates (the prison gates): block (the tower's cornice)
-- 119: gates (the prison gates): row (its brackets)
-- 120: gates (the prison gates): brick front (the right tower)
-- 121: gates (the prison gates): a pilaster
-- 122: gates (the prison gates): a pilaster
-- 123: gates (the prison gates): a window
-- 124: gates (the prison gates): a window
-- 125: gates (the prison gates): a window
-- 126: gates (the prison gates): block (the tower's cornice)
-- 127: gates (the prison gates): row (its brackets)
-- 128: gates (the prison gates): the arched gate
-- 129: gates (the prison gates): ground (the forecourt)
-- 130: gates (the prison gates): a bollard
-- 131: gates (the prison gates): a bollard
-- 132: gates (the prison gates): sign board (the prison sign)
-- 140: van (the prison van): room (the cubicle)
-- 141: van (the prison van): oval (the ceiling light)
-- 142: van (the prison van): stroke (a panel seam)
-- 143: van (the prison van): stroke (a panel seam)
-- 144: van (the prison van): the CCTV sticker
-- 145: van (the prison van): the air vent
-- 146: van (the prison van): stroke (the grab rail)
-- 147: van (the prison van): studs (the rivets)
-- 148: van (the prison van): the window, the street going by
-- 149: van (the prison van): the seat
-- 150: van (the prison van): room (the floor)
-- 151: van (the prison van): lines (its ribs)
-- 152: van (the prison van): wash (the dim cold light)
-- 153: van (the prison van): glow (a street light passing)
-- 154: van (the prison van): block (the door frame, left)
-- 155: van (the prison van): block (the door frame, top)
-- 156: van (the prison van): door leaf (the door)
-- 164: cell (the cell): room (the cell)
-- 165: cell (the cell): lines (the brick courses)
-- 166: cell (the cell): brick marks (the painted brick)
-- 167: cell (the cell): block (the dado)
-- 168: cell (the cell): the window
-- 169: cell (the cell): the basin
-- 170: cell (the cell): the toilet
-- 171: cell (the cell): the shelf-desk
-- 172: cell (the cell): the pinboard
-- 173: cell (the cell): block (a plastic mug)
-- 174: cell (the cell): the bed
-- 175: cell (the cell): the open door, the landing
-- 180: cot_top (the cot from above): block (the floor)
-- 181: cot_top (the cot from above): lines (its tiles)
-- 182: cot_top (the cot from above): cot from above (the cot)
-- 183: cot_top (the cot from above): blanket from above (the blanket over him)
-- 188: phone (the phone room): block (the wall)
-- 189: phone (the phone room): brick marks (the painted brick)
-- 190: phone (the phone room): lines (the courses)
-- 191: phone (the phone room): block (the dado)
-- 192: phone (the phone room): block (its rail)
-- 193: phone (the phone room): block (the floor)
-- 194: phone (the phone room): his phone
-- 195: phone (the phone room): the other phone
-- 196: phone (the phone room): the general notice
-- 197: phone (the phone room): the samaritans notice
-- 198: phone (the phone room): the calls notice
-- 199: phone (the phone room): the visits notice
-- 204: tvroom (the TV room): block (the wall)
-- 205: tvroom (the TV room): brick marks (the painted brick)
-- 206: tvroom (the TV room): block (the green dado)
-- 207: tvroom (the TV room): block (its rail)
-- 208: tvroom (the TV room): a high barred window
-- 209: tvroom (the TV room): a high barred window
-- 210: tvroom (the TV room): a high barred window
-- 211: tvroom (the TV room): the noticeboard
-- 212: tvroom (the TV room): the clock
-- 213: tvroom (the TV room): the door
-- 214: tvroom (the TV room): block (the lino)
-- 215: tvroom (the TV room): lines (its joints)
-- 216: tvroom (the TV room): the pool table
-- 217: tvroom (the TV room): flicker (the TV's light on everyone)
-- 221: tv (the TV on the wall): block (the wall)
-- 222: tv (the TV on the wall): brick marks (the painted brick)
-- 223: tv (the TV on the wall): block (the green dado)
-- 224: tv (the TV on the wall): block (its rail)
-- 225: tv (the TV on the wall): wall tv (the TV)
-- 226: tv (the TV on the wall): its glow on the wall
+### court_box (the witness box, the judge behind)
+- 10: panels (the panelled wall)
+- 11: block (the picture rail)
+- 12: the royal arms
+- 13: the clock
+- 14: the door
+- 15: chair back (the judge's chair)
+- 16: block (the dais edge)
+- 17: carpet (the well)
+- 18: the judge's bench
+- 19: the judge's microphone
+- 20: the witness box
+- 21: book (the oath Bible)
+- 22: the witness microphone
+### court_bench (the judge's bench)
+- 27: panels (the panelled wall)
+- 28: the royal arms
+- 29: chair back (the judge's chair)
+- 30: the judge's bench
+- 31: papers (a paper)
+- 32: papers (another paper)
+- 33: the sound block
+- 34: the gavel
+- 35: the judge's microphone
+### court_jury (the jury box)
+- 40: panels (the panelled wall)
+- 41: block (the picture rail)
+- 42: the left window
+- 43: the right window
+- 44: the jury room door
+- 45: block (the dado rail)
+- 46: panelled (the back row's bench back)
+- 47: panelled (the back row's box)
+- 48: a notepad
+- 49: a notepad
+- 50: a notepad
+- 51: panelled (the front row's box)
+- 52: a notepad and pen
+- 53: a notepad and pen
+- 54: the water jug
+- 55: a notepad and pen
+- 56: a notepad and pen
+### court_dock (the dock)
+- 61: panels (the panelled wall)
+- 62: block (the dado rail)
+- 63: block (the lower wall)
+- 64: row (the dock's back bench)
+- 65: block (the dock's floor)
+- 66: panelled (the bench's front)
+- 67: glass screen (the dock's glass)
+- 68: panelled (the dock's base)
+### court_out (outside the court)
+- 76: the sky
+- 77: a cloud
+- 78: a cloud
+- 79: the court's front
+- 80: window grid (the ribbon windows)
+- 81: window grid (the ground-floor glazing)
+- 82: the entrance
+- 83: brick front (a brick pier)
+- 84: brick front (a brick pier)
+- 85: sign board (the sign band)
+- 86: a red sign
+- 87: ground (the forecourt)
+- 88: the left planted wall
+- 89: the right planted wall
+- 90: the steps
+- 91: the left rail
+- 92: the right rail
+- 93: a tree
+- 94: a tree
+- 95: a tree
+- 96: the lamp post
+- 97: ground (the pavement)
+### gates (the prison gates)
+- 105: the overcast sky
+- 106: a cloud
+- 107: a cloud
+- 108: brick front (the centre block)
+- 109: block (the frieze)
+- 110: row (the frieze's brackets)
+- 111: block (the cornice)
+- 112: brick front (the left tower)
+- 113: a pilaster
+- 114: a pilaster
+- 115: a window
+- 116: a window
+- 117: a window
+- 118: block (the tower's cornice)
+- 119: row (its brackets)
+- 120: brick front (the right tower)
+- 121: a pilaster
+- 122: a pilaster
+- 123: a window
+- 124: a window
+- 125: a window
+- 126: block (the tower's cornice)
+- 127: row (its brackets)
+- 128: the arched gate
+- 129: ground (the forecourt)
+- 130: a bollard
+- 131: a bollard
+- 132: sign board (the prison sign)
+### van (the prison van)
+- 140: room (the cubicle)
+- 141: oval (the ceiling light)
+- 142: stroke (a panel seam)
+- 143: stroke (a panel seam)
+- 144: the CCTV sticker
+- 145: the air vent
+- 146: stroke (the grab rail)
+- 147: studs (the rivets)
+- 148: the window, the street going by
+- 149: the seat
+- 150: room (the floor)
+- 151: lines (its ribs)
+- 152: wash (the dim cold light)
+- 153: glow (a street light passing)
+- 154: block (the door frame, left)
+- 155: block (the door frame, top)
+- 156: door leaf (the door)
+### cell (the cell)
+- 164: room (the cell)
+- 165: lines (the brick courses)
+- 166: brick marks (the painted brick)
+- 167: block (the dado)
+- 168: the window
+- 169: the basin
+- 170: the toilet
+- 171: the shelf-desk
+- 172: the pinboard
+- 173: block (a plastic mug)
+- 174: the bed
+- 175: the open door, the landing
+### cot_top (the cot from above)
+- 180: block (the floor)
+- 181: lines (its tiles)
+- 182: cot from above (the cot)
+- 183: blanket from above (the blanket over him)
+### phone (the phone room)
+- 188: block (the wall)
+- 189: brick marks (the painted brick)
+- 190: lines (the courses)
+- 191: block (the dado)
+- 192: block (its rail)
+- 193: block (the floor)
+- 194: his phone
+- 195: the other phone
+- 196: the general notice
+- 197: the samaritans notice
+- 198: the calls notice
+- 199: the visits notice
+### tvroom (the TV room)
+- 204: block (the wall)
+- 205: brick marks (the painted brick)
+- 206: block (the green dado)
+- 207: block (its rail)
+- 208: a high barred window
+- 209: a high barred window
+- 210: a high barred window
+- 211: the noticeboard
+- 212: the clock
+- 213: the door
+- 214: block (the lino)
+- 215: lines (its joints)
+- 216: the pool table
+- 217: flicker (the TV's light on everyone)
+### tv (the TV on the wall)
+- 221: block (the wall)
+- 222: brick marks (the painted brick)
+- 223: block (the green dado)
+- 224: block (its rail)
+- 225: wall tv (the TV)
+- 226: its glow on the wall
 
 ## blessed-moves.txt (113 lines; a note on a move changes its line: open that line)
-- 14: arrive (brand): row: 1 "Yeah, I'm feeling blessed, mate..." | sincere showman | swaggers in, hand to
-- 15: arrive brand : face: showman shades on
-- 16: arrive brand : walk: swagger on OUT phase settle still
-- 17: arrive brand : L: rest feeling | heart feeling mate | point mate mate | wide super blessed. | heart blessed. e
-- 18: arrive brand : R: rest mate | wide fist super blessed. | rest blessed.
-- 19: arrive brand : body: lean in mate super
-- 20: arrive brand : body: dip super blessed.
-- 21: arrive brand : body: chin up super blessed.
-- 22: arrive brand : body: bow blessed. blessed.
-- 23: arrive brand : holds R: beads
-- 24: arrive brand : holds L: sleeve edge feeling mate blessed. end
-- 27: oath (brand): row: 2 "I swear by Almighty God..." | the stiff showman | bolt upright, Bible up, righ
-- 28: oath brand : face: oath | gaze Almighty that the
-- 29: oath brand : L: rest s | bible s s | rest s
-- 30: oath brand : R: rest s | oath mid s | oath hand s s | oath mid s | rest s
-- 31: oath brand : body: chin up blessed evidence blessed evidence
-- 32: oath brand : body: chin up blessed truth blessed truth
-- 33: oath brand : holds L: bible s s
-- 36: oath brand : like: oath
-- 39: dock (brand): row: 3 "Well that doesn't feel very blessed." | quiet, to himself | hands clasped low;
-- 40: dock brand : face: neutral | hollow hollow
-- 41: dock brand : both: clasp low
-- 42: dock brand : body: start bang bang
-- 43: dock brand : body: slump hollow
-- 46: oath (judge): row: (2, behind Brand) the judge | sceptic on each "blessed" | weight shifts and head 
-- 47: oath judge : stance: seated
-- 48: oath judge : face: neutral | sceptic while peer above
-- 49: oath judge : idle: lean shifts
-- 50: oath judge : idle: roll shifts quiet while peer
-- 51: oath judge : idle: nod shifts
-- 52: oath judge : body: peer Almighty God Almighty God
-- 53: oath judge : body: peer blessed evidence blessed evidence
-- 54: oath judge : body: peer blessed truth blessed truth
-- 57: oath judge : like: oath.judge
-- 60: jury (jury): row: (2, the jury shot) the jurors | sceptical glances | a one-off crowd: stays code
-- 61: jury jury : code: JY.draw jury.py: each juror's own glance shift; nothing in the library is a crowd
-- 64: dock (guard1): row: (3) the dock guards | neutral | seated, still either side of him
-- 65: dock guard : stance: seated
-- 66: dock guard : face: neutral
-- 69: dock guard : like: dock.guard
-- 72: van (brand): row: montage, van close-up | empty, numb | bent over himself, fists between his knees, 
-- 73: van brand : stance: seated yaw with van seat # Sam keeps this three-quarter pose note
-- 74: van brand : face: numb | gaze start cut
-- 75: van brand : keys lean:
-- 76: van brand : keys head_dy:
-- 77: van brand : keys nod:
-- 78: van brand : idle: lean sine # the van's sway
-- 79: van brand : both: van fists
-- 82: escort (brand): row: montage, cell walk with officer | numb | walked in by the arm; stops, turns to 
-- 83: escort brand : face: numb | blink off landed landed
-- 84: escort brand : walk: stroll on CELL phase settle landed landed still bob landed sway facing turns landed
-- 85: escort brand : keys look landed : landed | landed | landed | landed | landed | landed | landed | landed
-- 86: escort brand : keys roll landed : landed | landed | landed | landed | landed | landed | landed | landed
-- 87: escort brand : keys head_dx landed : landed | landed | landed | landed | landed | landed | landed | landed
-- 88: escort brand : keys gaze landed : landed | landed | landed | landed | landed | landed
-- 89: escort brand : keys lid landed : landed | landed
-- 90: escort brand : keys nod landed : landed | landed | landed | landed | landed | landed | landed | landed
-- 91: escort brand : keys shoulders landed : landed | landed | landed | landed
-- 94: escort (officer): row: montage, cell walk | neutral | walks him in, a hand on his arm until they sto
-- 95: escort officer : face: neutral
-- 96: escort officer : walk: stroll on CELL phase settle landed landed still bob landed sway facing
-- 100: cot (brand): row: montage, cot | weeping | flat on his back from above, a hand on his heaving chest,
-- 101: cot brand : code: cot_pose cot_face one-off: seen straight above the hand rides the heaving chest the Bible bo
-- 104: phone (brand): row: 4 "Yeah, love..." | dejected, eyes down at the phone | handset at his ear; a slo
-- 105: phone brand : face: phone head down | gaze start cut
-- 106: phone brand : L: ear
-- 107: phone brand : holds L: handset
-- 108: phone brand : keys lean:
-- 109: phone brand : keys roll:
-- 110: phone brand : body: head shake blessed right
-- 114: tvroom (brand): row: (5, watching) Brand in the TV room | dead-eyed | dead still on a plastic chair;
-- 115: tvroom brand : stance: upright on plastic lap
-- 116: tvroom brand : face: deadeyed | gaze eased | blink off start cut
-- 117: tvroom brand : both: seat edge
-- 118: tvroom brand : keys lean: # slouched back as the push starts
-- 119: tvroom brand : keys head_dy:
-- 120: tvroom brand : keys nod:
-- 123: tvroom (inmate1): row: the man asleep in his chair behind on the left | asleep | slumped, head lolle
-- 124: tvroom inmate : code: asleep_pose one-off: the sitting kit's slump with the hands limp on the thighs
-- 127: tvroom (inmate2): row: the inmate at the pool table behind on the right | absorbed | bent over the r
-- 128: tvroom inmate : code: pool_pose pool_cue one-off: side-on the table; the touch check
-- 131: tv (newsreader): row: 5 reporter | neutral | reads the news on the TV: the mouth and head life only
-- 132: tv newsreader : code: ST.studio_feed the TV set draws him; his mouth headlife follow the voice
-- 135: push (brand): row: (face change) 5 "...early release scheme" | dejected to amazed to overjoyed | sit
-- 136: push brand : stance: upright on plastic lap
-- 137: push brand : face: deadeyed | amazed amazed | overjoyed overjoyed | gaze start cut | blink off start amazed | 
-- 138: push brand : both: seat edge
-- 139: push brand : keys lean: amazed | amazed | overjoyed | overjoyed
-- 140: push brand : keys head_dy: amazed | amazed
-- 141: push brand : keys nod: overjoyed | overjoyed
-- 144: gates (brand): row: 6 "Blessed! I'm feeling so blessed..." | full showman | swaggers out; arms flung
-- 145: gates brand : face: overjoyed shades on
-- 146: gates brand : walk: swagger on GATE settle
-- 147: gates brand : both: rest Blessed! | arms out Blessed! | messiah Blessed!
-- 148: gates brand : body: chin up with lean Blessed!
-- 151: gates2 (brand): row: 6 cont. | full showman | a clear stride to his mark; plants, chin up; the sweep
-- 152: gates brand : face: overjoyed shades on
-- 153: gates brand : walk: stride on GATE auto phase settle chest sway
-- 154: gates brand : both: messiah | rest | rest landed everybody | messiah everybody | sweep everybody everybody | m
-- 155: gates brand : R: messiah everybody | hair everybody | hair back everybody everybody | rest everybody
-- 156: gates brand : body: dip with nod lean everybody everybody
-- 157: gates brand : body: chin up with lean everybody everybody
-- 158: gates brand : body: tilt everybody
-- 159: gates brand : body: preen everybody everybody
-- 160: gates brand : body: nod everybody everybody
-- 161: gates brand : body: nod everybody everybody
-- 162: gates brand : body: bask everybody
-- 163: gates brand : keys head_yaw: everybody | everybody | everybody | everybody | everybody | everybody
-- 164: gates brand : keys head_yaw: max everybody end | max everybody end | max everybody end | max everybody end
-- 167: gates2 (guard1): row: 7 "Walliams, you're going away..." | stern, flat | head stays front-on (N9); h
-- 168: gates guard : keys eyes: guard | guard | end | end
-- 172: gates2 (walliams): row: (behind him) Walliams | scared, double-take, pleading, desperate | dragged i
-- 173: gates walliams : code: wal_pose wal_face draw_walliams one-off: a comic struggle; the beats are in blessed.py'
+### arrive (brand)
+- 14: row: 1 "Yeah, I'm feeling blessed, mate..." | sincere showman | swaggers in, hand to
+### arrive brand
+- 15: face: showman shades on
+- 16: walk: swagger on OUT phase settle still
+- 17: L: rest feeling | heart feeling mate | point mate mate | wide super blessed. | heart blessed. e
+- 18: R: rest mate | wide fist super blessed. | rest blessed.
+- 19: body: lean in mate super
+- 20: body: dip super blessed.
+- 21: body: chin up super blessed.
+- 22: body: bow blessed. blessed.
+- 23: holds R: beads
+- 24: holds L: sleeve edge feeling mate blessed. end
+### oath (brand)
+- 27: row: 2 "I swear by Almighty God..." | the stiff showman | bolt upright, Bible up, righ
+### oath brand
+- 28: face: oath | gaze Almighty that the
+- 29: L: rest s | bible s s | rest s
+- 30: R: rest s | oath mid s | oath hand s s | oath mid s | rest s
+- 31: body: chin up blessed evidence blessed evidence
+- 32: body: chin up blessed truth blessed truth
+- 33: holds L: bible s s
+- 36: like: oath
+### dock (brand)
+- 39: row: 3 "Well that doesn't feel very blessed." | quiet, to himself | hands clasped low;
+### dock brand
+- 40: face: neutral | hollow hollow
+- 41: both: clasp low
+- 42: body: start bang bang
+- 43: body: slump hollow
+### oath (judge)
+- 46: row: (2, behind Brand) the judge | sceptic on each "blessed" | weight shifts and head 
+### oath judge
+- 47: stance: seated
+- 48: face: neutral | sceptic while peer above
+- 49: idle: lean shifts
+- 50: idle: roll shifts quiet while peer
+- 51: idle: nod shifts
+- 52: body: peer Almighty God Almighty God
+- 53: body: peer blessed evidence blessed evidence
+- 54: body: peer blessed truth blessed truth
+- 57: like: oath.judge
+### jury (jury)
+- 60: row: (2, the jury shot) the jurors | sceptical glances | a one-off crowd: stays code
+### jury jury
+- 61: code: JY.draw jury.py: each juror's own glance shift; nothing in the library is a crowd
+### dock (guard1)
+- 64: row: (3) the dock guards | neutral | seated, still either side of him
+### dock guard
+- 65: stance: seated
+- 66: face: neutral
+- 69: like: dock.guard
+### van (brand)
+- 72: row: montage, van close-up | empty, numb | bent over himself, fists between his knees, 
+### van brand
+- 73: stance: seated yaw with van seat # Sam keeps this three-quarter pose note
+- 74: face: numb | gaze start cut
+- 75: keys lean:
+- 76: keys head_dy:
+- 77: keys nod:
+- 78: idle: lean sine # the van's sway
+- 79: both: van fists
+### escort (brand)
+- 82: row: montage, cell walk with officer | numb | walked in by the arm; stops, turns to 
+### escort brand
+- 83: face: numb | blink off landed landed
+- 84: walk: stroll on CELL phase settle landed landed still bob landed sway facing turns landed
+- 85: keys look landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 86: keys roll landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 87: keys head_dx landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 88: keys gaze landed : landed | landed | landed | landed | landed | landed
+- 89: keys lid landed : landed | landed
+- 90: keys nod landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 91: keys shoulders landed : landed | landed | landed | landed
+### escort (officer)
+- 94: row: montage, cell walk | neutral | walks him in, a hand on his arm until they sto
+### escort officer
+- 95: face: neutral
+- 96: walk: stroll on CELL phase settle landed landed still bob landed sway facing
+### cot (brand)
+- 100: row: montage, cot | weeping | flat on his back from above, a hand on his heaving chest,
+### cot brand
+- 101: code: cot_pose cot_face one-off: seen straight above the hand rides the heaving chest the Bible bo
+### phone (brand)
+- 104: row: 4 "Yeah, love..." | dejected, eyes down at the phone | handset at his ear; a slo
+### phone brand
+- 105: face: phone head down | gaze start cut
+- 106: L: ear
+- 107: holds L: handset
+- 108: keys lean:
+- 109: keys roll:
+- 110: body: head shake blessed right
+### tvroom (brand)
+- 114: row: (5, watching) Brand in the TV room | dead-eyed | dead still on a plastic chair;
+### tvroom brand
+- 115: stance: upright on plastic lap
+- 116: face: deadeyed | gaze eased | blink off start cut
+- 117: both: seat edge
+- 118: keys lean: # slouched back as the push starts
+- 119: keys head_dy:
+- 120: keys nod:
+### tvroom (inmate1)
+- 123: row: the man asleep in his chair behind on the left | asleep | slumped, head lolle
+### tvroom inmate
+- 124: code: asleep_pose one-off: the sitting kit's slump with the hands limp on the thighs
+### tvroom (inmate2)
+- 127: row: the inmate at the pool table behind on the right | absorbed | bent over the r
+### tvroom inmate
+- 128: code: pool_pose pool_cue one-off: side-on the table; the touch check
+### tv (newsreader)
+- 131: row: 5 reporter | neutral | reads the news on the TV: the mouth and head life only
+### tv newsreader
+- 132: code: ST.studio_feed the TV set draws him; his mouth headlife follow the voice
+### push (brand)
+- 135: row: (face change) 5 "...early release scheme" | dejected to amazed to overjoyed | sit
+### push brand
+- 136: stance: upright on plastic lap
+- 137: face: deadeyed | amazed amazed | overjoyed overjoyed | gaze start cut | blink off start amazed | 
+- 138: both: seat edge
+- 139: keys lean: amazed | amazed | overjoyed | overjoyed
+- 140: keys head_dy: amazed | amazed
+- 141: keys nod: overjoyed | overjoyed
+### gates (brand)
+- 144: row: 6 "Blessed! I'm feeling so blessed..." | full showman | swaggers out; arms flung
+### gates brand
+- 145: face: overjoyed shades on
+- 146: walk: swagger on GATE settle
+- 147: both: rest Blessed! | arms out Blessed! | messiah Blessed!
+- 148: body: chin up with lean Blessed!
+### gates2 (brand)
+- 151: row: 6 cont. | full showman | a clear stride to his mark; plants, chin up; the sweep
+### gates brand
+- 152: face: overjoyed shades on
+- 153: walk: stride on GATE auto phase settle chest sway
+- 154: both: messiah | rest | rest landed everybody | messiah everybody | sweep everybody everybody | m
+- 155: R: messiah everybody | hair everybody | hair back everybody everybody | rest everybody
+- 156: body: dip with nod lean everybody everybody
+- 157: body: chin up with lean everybody everybody
+- 158: body: tilt everybody
+- 159: body: preen everybody everybody
+- 160: body: nod everybody everybody
+- 161: body: nod everybody everybody
+- 162: body: bask everybody
+- 163: keys head_yaw: everybody | everybody | everybody | everybody | everybody | everybody
+- 164: keys head_yaw: max everybody end | max everybody end | max everybody end | max everybody end
+### gates2 (guard1)
+- 167: row: 7 "Walliams, you're going away..." | stern, flat | head stays front-on (N9); h
+### gates guard
+- 168: keys eyes: guard | guard | end | end
+### gates2 (walliams)
+- 172: row: (behind him) Walliams | scared, double-take, pleading, desperate | dragged i
+### gates walliams
+- 173: code: wal_pose wal_face draw_walliams one-off: a comic struggle; the beats are in blessed.py'
