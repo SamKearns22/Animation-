@@ -32,6 +32,7 @@ sys.path.insert(0, HERE)
 import people as PK                  # noqa: E402
 import people_parts as PPt           # noqa: E402
 import moves                         # noqa: E402
+import grips                         # noqa: E402
 from ed import INK, curve, oval      # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
 
@@ -102,12 +103,83 @@ def officer(force='mossos'):
     return sp
 
 
+# ------------------------------------------------------------------------------------------------ fit to the head
+# The kit's heads are drawn larger than hw x hh (about 1.5 hw wide with the ears, the crown about 1.9 hh above the head
+# centre): a helmet or hood sized from hw/hh left the skull or hair showing over it (chat 6). So each is drawn in its
+# own hw/hh design and stretched, per side, to cover the head as it is really drawn in that view (measured once).
+_BOX = {}
+_VIEW_YAW = {'front': 0, 'three': 45, 'side': 90, 'three_back': 135, 'back': 180}
+
+
+def head_box(sp, view):
+    """(left, right, top) of the bare head as drawn in this view, in person units from the head centre."""
+    key = (sp.get('who'), sp.get('hw'), sp.get('hh'), sp.get('head_dy'), view)
+    if key not in _BOX:
+        ss, B.SS = B.SS, 1
+        img = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        cam = B.Cam(1.0, 540, 960)
+        bare = dict(sp, force=None)
+        j = V.standing(bare)
+        j['_dressed'] = True
+        V.person(img, cam, 540, 700, 1.0, dict(bare, full=True, pose='custom'), 0.0, _VIEW_YAW[view], j)
+        B.SS = ss
+        m = (np.abs(np.asarray(img.convert('RGB')).astype(int) - 255).sum(2) > 20)
+        hy = int(700 - 150 + sp.get('head_dy', 10))
+        top = int(np.nonzero(m[:hy].any(1))[0].min())
+        xs = np.nonzero(m[top:hy + 40].any(0))[0]
+        _BOX[key] = (float(xs.min() - 540), float(xs.max() - 540), float(top - hy))
+    return _BOX[key]
+
+
+class FitPen:
+    """A pen that stretches a head prop drawn round (hx, hy): x by kl / kr each side, y by kt above and kb below."""
+    def __init__(self, p, hx, hy, kl, kr, kt, kb):
+        self.p, self.hx, self.hy, self.k = p, hx, hy, (kl, kr, kt, kb)
+        self.img = p.img
+        pen = self
+
+        class _Cam:
+            def P(self, x, y):
+                return p.cam.P(*pen.f((x, y)))
+        self.cam = _Cam()
+
+    def f(self, q):
+        kl, kr, kt, kb = self.k
+        x, y = q[0] - self.hx, q[1] - self.hy
+        return (self.hx + x * (kl if x < 0 else kr), self.hy + y * (kt if y < 0 else kb))
+
+    def poly(self, pts, *a, **k):
+        return self.p.poly([self.f(q) for q in pts], *a, **k)
+
+    def line(self, pts, *a, **k):
+        return self.p.line([self.f(q) for q in pts], *a, **k)
+
+    def ell(self, x, y, rx, ry, *a, **k):
+        return self.p.ell(*self.f((x, y)), rx, ry, *a, **k)
+
+
+def fit(p, sp, view, hx, hy, hw, hh, design, margin=12.0):
+    """A FitPen that makes a prop whose design reaches (L, R, T, B) hw/hh units cover the drawn head plus a margin."""
+    L, R, T, Bt = design[view]
+    l, r, t = head_box(sp, view)
+    kt = max(1.0, (-t + margin) / (T * hh))
+    kb = max(1.0, (1.13 * sp.get('hh', 94) + margin) / (Bt * hh))
+    return FitPen(p, hx, hy, max(1.0, (-l + margin) / (L * hw)), max(1.0, (r + margin) / (R * hw)), kt, kb)
+
+
+HELMET_REACH = {'front': (1.2, 1.2, 1.3, 1.14), 'three': (1.28, 1.28, 1.3, 1.14), 'side': (1.55, 1.48, 1.3, 1.1),
+                'three_back': (1.18, 1.18, 1.28, 1.3), 'back': (1.18, 1.18, 1.28, 1.3)}
+HOOD_REACH = {'front': (1.34, 1.34, 1.32, 1.18), 'three': (1.4, 1.2, 1.3, 1.18), 'side': (1.6, 1.3, 1.28, 1.18),
+              'three_back': (1.3, 1.3, 1.3, 1.5), 'back': (1.3, 1.3, 1.3, 1.5)}
+
+
 def riot_helmet(p, view, sp, hx, hy):
     """The riot helmet, visor down: a round dome over the ears, the clear tinted visor from the brow to below the chin
     (the face shows through, dimmed), a fabric neck guard behind (refs es4, es5, fr5, al3, al4)."""
     f = FORCES[sp['force']]
     hc, dk = f['helmet'], B.dk(f['helmet'], 0.72)
     hw, hh = sp.get('hw', 68) * 1.06, sp.get('hh', 92)
+    p = fit(p, sp, view, hx, hy, hw, hh, HELMET_REACH)
     guard = B.dk(f['uniform'], 0.85)
     if view in ('back', 'three_back'):
         o = -0.18 * hw if view == 'three_back' else 0.0
@@ -219,8 +291,10 @@ def shield(j, sp, centre=(-30.0, 330.0, 175.0), tilt=0.0, turn=0.0):
         x, z = x * math.cos(r) + z * math.sin(r), -x * math.sin(r) + z * math.cos(r)
         return (cx + x, cy + y, cz + z)
 
-    def draw(p, j2):
+    def draw(p, j2, first=False):
         yaw = j2['yaw']
+        if yaw > 100 and not first:
+            return
         q = lambda u, v: P3(dict(j, _yaw=yaw), pt(u, v))           # noqa: E731
         edge = abs(math.sin(math.radians(yaw) + r)) > 0.97          # side on: the shield is a thin slab
         if edge:
@@ -230,12 +304,24 @@ def shield(j, sp, centre=(-30.0, 330.0, 175.0), tilt=0.0, turn=0.0):
             return
         out = [q(-1, -1), q(1, -1), q(1, 1), q(-1, 1)]
         glass(p, out, SHIELD, 92, INK, 2.4)
-        if yaw < 120:                               # the label band and its word, seen through or from the front
-            band = [q(-0.92, -0.62), q(0.92, -0.62), q(0.92, -0.42), q(-0.92, -0.42)]
-            p.poly(band, (244, 244, 240), None)
-            p.poly([q(-0.92, -0.52), q(0.92, -0.52), q(0.92, -0.42), q(-0.92, -0.42)], f['label_c'], None)
+        if yaw < 120:                               # the label: a thin white strip with the force's word in its colour
+            band = [q(-0.86, -0.64), q(0.86, -0.64), q(0.86, -0.52), q(-0.86, -0.52)]   # (chat 6: a two-colour band
+            p.poly(band, (246, 246, 242), f['label_c'], 1.4)                          # read as a flag stripe)
+            px = [p.cam.P(*a) for a in band]
+            xs, ys = [a[0] for a in px], [a[1] for a in px]
+            bw, bh = max(xs) - min(xs), max(ys) - min(ys)
+            if bw > 30:
+                fs = max(6, int(min(bh * 0.8, bw / (0.62 * len(f['label']) + 1))))
+                fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), fs)
+                cxy = p.cam.P(*q(0, -0.58))
+                ImageDraw.Draw(p.img).text(cxy, f['label'], font=fnt, fill=f['label_c'], anchor='mm')
         g0, g1 = q(-0.55, -0.85), q(-0.15, 0.6)
         p.line([g0, g1], (248, 250, 252), 3.0)      # one glint
+    def rear(p, j2, view):                         # from behind it is beyond his whole body, legs too: drawn first
+        if view in ('back', 'three_back'):          # (chat 6: drawn after the legs, it lay over them)
+            draw(p, j2, True)
+
+    j.setdefault('pre', []).append(rear)
     draw.rear_under = True
     return draw
 
@@ -271,6 +357,7 @@ def hood(p, view, sp, hx, hy):
     """Hood up over a black face mask, only a band round the eyes showing (refs de1, de4, es3, fr4). From behind, the
     hood's rounded point and its centre seam."""
     hw, hh = sp.get('hw', 66), sp.get('hh', 94)
+    p = fit(p, sp, view, hx, hy, hw, hh, HOOD_REACH)
     if view in ('back', 'three_back'):
         o = -0.12 * hw if view == 'three_back' else 0.0
         out = [(hx - hw * 1.25, hy + hh * 1.55), (hx - hw * 1.32, hy + hh * 0.2), (hx - hw * 1.05 + o, hy - hh * 0.95),
@@ -377,32 +464,34 @@ def bottle(j, side='R', lit=True):
     return draw
 
 
-def road_sign(j, hands=('R', 'L'), dirn=(0.0, -0.75, -0.66), pole=1.35):
-    """The give-way sign on its ripped-up pole (ref de4): grey pole from the hands, the white triangle point-down
-    with its thick red border at the far end; its corner nearest the pole fixed to it."""
+def road_sign(j, hands=('R', 'L'), dirn=(0.0, -0.75, -0.66), pole=1.1):
+    """The give-way sign on its ripped-up pole (ref de4): grey pole from the hands, the white triangle with its thick red
+    border on the far end, its point towards the hands (point-down as it stood). The triangle's plane holds the pole
+    and lies across the body's front-back plane, so the side view (the swing's shot) sees it full on, the front view
+    edge on (chat 6: it was edge-on in the side view)."""
     def draw(p, j2):
         jj = dict(j, _yaw=j2['yaw'])
         c = (_hand_c(j, hands[0]) + _hand_c(j, hands[1])) / 2
         u = np.asarray(dirn, float)
         u /= np.linalg.norm(u)
         base, top = c - u * 60, c + u * pole * U
+        side = 0.7 * U
+        w = np.cross(u, (1.0, 0.0, 0.0))
+        w = w / (np.linalg.norm(w) or 1)
+        tri = [top - u * side * 0.577, top + u * side * 0.289 + w * side / 2, top + u * side * 0.289 - w * side / 2]
+        tri2 = [P3(jj, tuple(q)) for q in tri]
         a, b = P3(jj, tuple(base)), P3(jj, tuple(top))
         p.line([a, b], INK, 15)
         p.line([a, b], (150, 152, 156), 9)
-        side = 0.7 * U                              # the triangle: its plane holds the pole and the body's x axis
-        n = np.cross(u, (1.0, 0.0, 0.0))
-        n = n / (np.linalg.norm(n) or 1)
-        down = -u                                   # the point (pointing back along the pole) at the pole's end
-        apex = top - u * 30
-        c0 = apex + u * side * 0.866
-        tri = [apex, c0 + np.array((side / 2, 0, 0)), c0 - np.array((side / 2, 0, 0))]
-        tri2 = [P3(jj, tuple(q)) for q in tri]
         cx = sum(q[0] for q in tri2) / 3
         cy = sum(q[1] for q in tri2) / 3
+        if abs(V.project(tuple(np.cross(u, w)), j2['yaw'])[1]) < 0.2 and \
+                math.hypot(tri2[1][0] - tri2[2][0], tri2[1][1] - tri2[2][1]) < 40:
+            p.line([tri2[0], ((tri2[1][0] + tri2[2][0]) / 2, (tri2[1][1] + tri2[2][1]) / 2)], INK, 12)
+            return                                  # edge on: a thin red slab
         p.poly(tri2, (200, 28, 36), INK, 2.4)
         inner = [(cx + (q[0] - cx) * 0.55, cy + (q[1] - cy) * 0.55) for q in tri2]
         p.poly(inner, (246, 246, 242), None)
-        del down, n
     return draw
 
 
@@ -422,7 +511,7 @@ def keys(j, side='R'):
 
 
 def placard(j, text='NEIN!', hands=('R', 'L'), board=(250, 246, 232), w=0.6, h=0.42, pole=0.7):
-    """A placard on a stick held up in both hands, seen from the front or from behind (plain card)."""
+    """A placard on a stick held up in both hands, printed both sides; the hands grip the stick below the board."""
     def draw(p, j2):
         jj = dict(j, _yaw=j2['yaw'])
         c = (_hand_c(j, hands[0]) + _hand_c(j, hands[1])) / 2
@@ -432,8 +521,8 @@ def placard(j, text='NEIN!', hands=('R', 'L'), board=(250, 246, 232), w=0.6, h=0
         p.line([a, b], (170, 130, 80), 8)
         q = [P3(jj, tuple(top + d)) for d in ((-w * U / 2, -h * U, 0), (w * U / 2, -h * U, 0), (w * U / 2, 0, 0),
                                               (-w * U / 2, 0, 0))]
-        p.poly(q, board if j2['yaw'] < 100 else (190, 176, 150), INK, 2.4)
-        if j2['yaw'] < 100 and text:
+        p.poly(q, board, INK, 2.4)                  # printed both sides (the T2 crowd is seen from behind)
+        if text:
             x0, y0 = p.cam.P(*q[0])
             x1, y1 = p.cam.P(*q[2])
             fs = max(6, int(abs(y1 - y0) * 0.42))
@@ -442,6 +531,7 @@ def placard(j, text='NEIN!', hands=('R', 'L'), board=(250, 246, 232), w=0.6, h=0
             except OSError:
                 fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), fs)
             ImageDraw.Draw(p.img).text(((x0 + x1) / 2, (y0 + y1) / 2), text, font=fnt, fill=(30, 28, 30), anchor='mm')
+    draw.held = True
     return draw
 
 
@@ -483,16 +573,26 @@ def flag(j, kind='catalan', side='R', pole=1.6, wave=0.0):
     return draw
 
 
-def phone_light(j, side='R'):
+def phone(j, side='R'):
+    """A phone held up filming, portrait, its screen facing the holder (Sam's note 1): from in front we see its dark
+    back and the camera lens; from behind, the lit screen; side on, a thin slab. Held with grips.held (drawn in front
+    of the face when it is in front of the face)."""
     def draw(p, j2):
         c = P3(dict(j, _yaw=j2['yaw']), tuple(_hand_c(j, side)))
-        p.poly([(c[0] - 22, c[1] - 74), (c[0] + 22, c[1] - 74), (c[0] + 22, c[1] + 4), (c[0] - 22, c[1] + 4)],
-               (40, 44, 54), INK, 2.0)
-        if j2['yaw'] > 90:                           # from behind: we see the lit screen? no: the torch on the back
-            p.ell(c[0] - 10, c[1] - 60, 7, 7, (255, 252, 230), None)
-        else:
-            p.poly([(c[0] - 17, c[1] - 68), (c[0] + 17, c[1] - 68), (c[0] + 17, c[1] - 4), (c[0] - 17, c[1] - 4)],
-                   (190, 220, 255), None)
+        k = abs(math.cos(math.radians(j2['yaw'])))
+        hw = max(5.0, 25.0 * k)
+        top, bot = c[1] - 92, c[1] + 12
+        box = [(c[0] - hw, top), (c[0] + hw, top), (c[0] + hw, bot), (c[0] - hw, bot)]
+        if j2['yaw'] > 95:                          # from behind: the lit screen, a red record dot
+            p.poly(box, (30, 32, 38), INK, 2.0)
+            if hw > 10:
+                p.poly([(c[0] - hw + 4, top + 6), (c[0] + hw - 4, top + 6), (c[0] + hw - 4, bot - 6),
+                        (c[0] - hw + 4, bot - 6)], (196, 226, 255), None)
+                p.ell(c[0], top + 18, 5, 5, (220, 40, 40), None)
+        else:                                       # from in front: the dark back, the lens at its top corner
+            p.poly(box, (52, 56, 66), INK, 2.0)
+            if hw > 10:
+                p.ell(c[0] - hw * 0.45, top + 16, 8, 8, (20, 20, 24), (120, 124, 130), 1.6)
     return draw
 
 
@@ -512,7 +612,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j['props'] = [baton(j, sp, 'R', (0.0, 0.6, 0.8)), shield(j, sp)]
     elif name == 'baton_up':                        # baton raised over the shoulder, shield forward
         V.arm_to(j, 'L', (-30.0, 250.0, 170.0), 'down')
-        V.arm_to(j, 'R', (sw - 20, -120.0, -20.0), 'out')
+        V.arm_to(j, 'R', (j['shR'][0] + 40, -300.0, -60.0), 'out')   # clear above the helmet (chat 6: hand on it)
         j['props'] = [baton(j, sp, 'R', (-0.1, -0.5, -0.86)), shield(j, sp, tilt=-6)]
     elif name == 'pushed':                          # driven back (T4): leaning back, shield knocked askew
         j['lean'] = -9
@@ -531,6 +631,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         back, through = np.array((sw + 70, -40.0, -300.0)), np.array((40.0, 250.0, 260.0))
         V.arm_to(j, 'R', tuple(back + (through - back) * e), 'out' if e < 0.5 else 'down')
         V.arm_to(j, 'L', (-sw + 40 - 140 * e, 120.0 + 200 * e, 260.0 - 160 * e), 'down')
+        if e < 0.6:                                 # the stone in the throwing hand until it leaves
+            grips.held(j, 'R', sp, stone(j, 'R'))
     elif name == 'swing':                           # the road sign: wound up over the right shoulder -> swung down
         e = moves.ease(u)
         j['lean'] = -4 + 16 * e
@@ -541,25 +643,32 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'L', tuple(hand + (-10, 60, 20)), 'down')
         ang = math.radians(-60 + 150 * e)               # pole angle from straight up, swinging forward
         j['props'] = [road_sign(j, dirn=(0.0, -math.cos(ang), math.sin(ang)))]
+        j['grip'] = ('L', 'R')                      # both fists over the pole
     elif name == 'haul':                            # hauling the shutter up (T2): both hands high, leaning back
         j['lean'] = -8
         V.arm_to(j, 'R', (60.0, -330.0, 150.0), 'down')
         V.arm_to(j, 'L', (-60.0, -310.0, 150.0), 'down')
     elif name == 'march':                           # walking away from us (T1, T3)
         j = moves.gait(sp, t, 'walk')
-    elif name == 'keys':                            # keys raised high (T1, ref es6)
-        V.arm_to(j, 'R', (40.0, -470.0, 40.0), 'out')
+    # Held up high: the hand is beside the head or clearly in front of the face, never over or behind it (Sam's
+    # note 1; chat 6: keys, placard, phone and flag all had the arm behind the head)
+    elif name == 'keys':                            # keys raised high beside the head (T1, ref es6)
+        V.arm_to(j, 'R', (j['shR'][0] - 10, -470.0, 70.0), 'out')
         j['props'] = [keys(j)]
-    elif name == 'placard':
-        V.arm_to(j, 'R', (40.0, -150.0, 80.0), 'out')
-        V.arm_to(j, 'L', (-10.0, -40.0, 80.0), 'down')
+        j['grip'] = ('R',)
+    elif name == 'placard':                         # both hands on the stick below the board, out in front, to his right
+        x = j['shR'][0] * 0.75
+        V.arm_to(j, 'R', (x, -60.0, 230.0), 'down')
+        V.arm_to(j, 'L', (x, 70.0, 230.0), 'down')
         j['props'] = [placard(j)]
-    elif name == 'phone':
-        V.arm_to(j, 'R', (50.0, -330.0, 90.0), 'out')
-        j['props'] = [phone_light(j)]
-    elif name == 'flag':
-        V.arm_to(j, 'R', (60.0, -200.0, 50.0), 'out')
+        j['grip'] = ('L', 'R')
+    elif name == 'phone':                           # filming: arm forward, the phone at eye height in front of the face
+        V.arm_to(j, 'R', (j['shR'][0] * 0.65, -175.0, 270.0), 'down')
+        grips.held(j, 'R', sp, phone(j))
+    elif name == 'flag':                            # the pole held up beside him, the fist level with his brow
+        V.arm_to(j, 'R', (j['shR'][0] + 40, -230.0, 70.0), 'out')
         j['props'] = [flag(j, force or 'catalan')]
+        j['grip'] = ('R',)
     return j
 
 
@@ -748,7 +857,12 @@ def tile(fn, w=360, h=640, bg=(232, 228, 222)):
     diff = np.abs(a - np.array(bg)).sum(2) > 12
     ys, xs = np.nonzero(diff)
     if len(xs):
-        box = (max(0, xs.min() - 16), max(0, ys.min() - 16), min(1080, xs.max() + 16), min(1920, ys.max() + 16))
+        box = [max(0, xs.min() - 16), max(0, ys.min() - 16), min(1080, xs.max() + 16), min(1920, ys.max() + 16)]
+        cx = (xs.min() + xs.max()) / 2              # a long prop (the sign's pole) never shrinks the figure: the
+        if box[2] - box[0] > 760:                   # crop is capped round the drawing's middle (chat 6)
+            box[0], box[2] = int(max(0, cx - 380)), int(min(1080, cx + 380))
+        if box[3] - box[1] > 1250:
+            box[1] = box[3] - 1250
         img = img.crop(box)
     img.thumbnail((w, h))
     return img
@@ -772,7 +886,7 @@ def cast_items():
     items.append(('Rioter, front', lambda img, cam: draw(img, cam, 540, 700, 0.62, r, V.standing(r), 0)))
     items.append(('Rioter, running', lambda img, cam: draw(img, cam, 540, 700, 0.62, r, pose(r, 'run', t=0.1), 90)))
     items.append(('Rioter, throwing (wind-up)', lambda img, cam: draw(img, cam, 540, 700, 0.62, r,
-                                                                      pose(r, 'throw', 0.0) | {'props': []}, 90)))
+                                                                      pose(r, 'throw', 0.0), 90)))
     items.append(('Rioter, sign swing', lambda img, cam: draw(img, cam, 540, 700, 0.55, r, pose(r, 'swing', 0.2), 90)))
     items.append(('Rioter, from behind', lambda img, cam: draw(img, cam, 540, 700, 0.62, r, V.standing(r), 180)))
     for i, (tier, nm, kind) in enumerate((('t1', 'keys', None), ('t1', 'flag', 'catalan'), ('t2', 'placard', None),

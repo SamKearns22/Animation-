@@ -1,3 +1,3 @@
-Protests (protest-tiers): cast built (4 police forces, hooded rioter, marchers, moped + RPG); first sheet drawn, 8 faults listed. Face tool: three-quarter heads redrawn for every film (both eyes, full cheeks), sheet sent.
-Now: Protests cast chat 6 (Opus high): fix the 8 faults, glimpse panels, critique twice, cast sheet to Sam. Face tool chat 13 (Opus medium): pick sheet, catalogue row, Walliams.
-Waiting: Sam's look at the three-quarter sheet (does not hold either chain).
+Protests (protest-tiers): cast faults fixed in chat 6 (helmets and hoods fit the new heads, phone held in front with its screen to the holder, signs, flags, placard, shield); sheet redrawn, not sent.
+Now: Protests cast chat 7 (Opus high): the check for things held behind the head, the last kit faults, glimpse panels, critique twice, cast sheet to Sam. Face tool chat 13: Walliams pick.
+Waiting: Sam's answer to chat 5's rule question (held things in front of the face).
