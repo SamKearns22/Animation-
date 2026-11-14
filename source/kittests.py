@@ -1294,14 +1294,24 @@ def turned_heads_for_anyone():
         P.built.clear()
     new_h = hair_share(head(C.MAN, 180))
     out.append(f'hair share of the head from behind: old {old_h:.2f}, now {new_h:.2f}')
-    # 4. Vance's turned heads unchanged (pixel for pixel, as drawn before the shared tool, 8 Nov note 44)
-    vh = hashlib.md5(b''.join(head(C.VANCE, y).astype(np.uint8).tobytes() for y in (45, 90, 135, 180))).hexdigest()
-    out.append(f'Vance unchanged: {vh == VANCE_TURNED_MD5}')
-    ok = caught and fixed and new_g >= old_g + 15 and new_h < old_h - 0.06 and vh == VANCE_TURNED_MD5
+    # 4. Vance's side and behind unchanged (pixel for pixel, as drawn before the shared tool, 8 Nov note 44); his
+    # three-quarter redrawn (face tool chat 12, Sam: "3/4 front poses ... look gaunt and weird"): both eyes now show
+    vh = hashlib.md5(b''.join(head(C.VANCE, y).astype(np.uint8).tobytes() for y in (90, 135, 180))).hexdigest()
+    out.append(f'Vance side and behind unchanged: {vh == VANCE_TURNED_MD5}')
+    import traitors_cast as TCE
+    real, seen = TCE.eye, []
+    TCE.eye = lambda *a, **k: (seen.append(1), real(*a, **k))[1]
+    try:
+        head(C.VANCE, 45)
+    finally:
+        TCE.eye = real
+    out.append(f'three-quarter eyes drawn: {len(seen)} (was 1: the far eye hidden)')
+    ok = (caught and fixed and new_g >= old_g + 15 and new_h < old_h - 0.06 and vh == VANCE_TURNED_MD5
+          and len(seen) == 2)
     return ok, '; '.join(out)
 
 
-VANCE_TURNED_MD5 = 'f17956f352af1555f79635c0fdf11811'   # main line c6b007a, before the shared tool
+VANCE_TURNED_MD5 = 'd060e9f4dd0faec864fb5ea831162aea'   # side, 3/4 behind, behind: as main line c6b007a (yaw 90-180)
 
 
 @test

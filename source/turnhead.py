@@ -8,7 +8,7 @@ from the top of the forehead, in face heights), but the side and three-quarter h
 
 The fix: TurnFace is the same frame as patriots4's Face (f(u, v) -> screen, f.pts), but on a 3D head. Each row v of
 the head is a ring: its widest points are the front outline's edges (so at 0 degrees it IS the front head), a
-flattish face in front (deeper at the muzzle), the skull behind. Turned by yaw (45 three-quarter, 90 side, 135 back
+flattish face in front (deeper at the muzzle), the skull behind. Turned by yaw (30 three-quarter, 90 side, 135 back
 three-quarter, facing our right), every front-design point is carried round the head; a point past the head's edge
 on the far side is held on that edge (never drawn through the head). So the person's own eyes, brows, beard, mouth
 and hair shapes are drawn by their own code, moved and foreshortened round the head; only what has no front-view
@@ -65,6 +65,7 @@ class TurnFace:
         self.cx, self.top = hx + turn * 12, hy - 72 + 10 * down
         self.hx, self.tq, self.L, self.prof = hx, 0.0, L, prof
         self.th = math.radians(yaw)
+        self.three = abs(yaw) < 60                 # the three-quarter front: a flat face plan (PLAN3)
         self.c, self.s = math.cos(self.th), math.sin(self.th)
         self.widths = widths
         self._vis = {}
@@ -86,7 +87,7 @@ class TurnFace:
         psi = np.asarray(psi, float)
         r = np.radians(psi)
         a, zf, zb = self.a(v), _interp(self.prof['front'], v), _interp(self.prof['back'], v)
-        pw = _interp(self.prof['point'], v)
+        pw = PLAN3 if self.three else _interp(self.prof['point'], v)
         cs = np.cos(r)
         x = a * np.sin(r)
         if 'back_w' in self.prof:                  # behind the ears at jaw height it is the neck, not the jaw's width
@@ -436,7 +437,13 @@ def dense(uv, step=0.01):
 # layout, rings and measures) the first time a shot draws it turned, never before; every (person, view) drawn is
 # recorded in SEEN, and one a shot asks for that has no Person yet in MISSING, so pre-flight lists both and puts the
 # turnaround of exactly those on the check sheet.
-YAW = {'three': 45, 'side': 90, 'three_back': 135, 'back': 180}
+# Three-quarter (face tool chat 12, Sam: "our 3/4 front poses simply don't work and look gaunt and weird"). Why: at
+# 45 degrees on a pointed, muzzle-like face plan (point 1.2-1.6) the far half of the face fell behind the nose: the far
+# eye and brow hidden (k < 0.3), the far cheek a hollow line under the cheekbone. Now the cartoon three-quarter: 30
+# degrees, a flat face plan (PLAN3, not the muzzle's point: full cheeks), the far eye and brow shown while they face us at all (KFAR),
+# narrowed but never under half (KMIN). Side and behind keep their old plan and pixels (kittest turned_heads_for_anyone).
+KFAR, KMIN, PLAN3 = 0.05, 0.5, 0.5   # three-quarter only: far eye shown from, narrowed to, the face's plan
+YAW = {'three': 30, 'side': 90, 'three_back': 135, 'back': 180}
 
 # The standard head (Vance's, measured for Ad-Vanced Notice note 44: 1.15 face heights deep, brow to the back of the
 # skull, the ear at its middle), at the rows of his own front layout. fitted() moves it to anyone else's rows.
@@ -573,9 +580,9 @@ def eyes(p, f, L, st, iris, skin, hood=False):
     for sgn in (-1, 1):
         u = sgn * L['ecx']
         k = f.k(u, L['eye_y'])
-        if k < 0.3:                                           # turned away: hidden behind the bridge of the nose
+        if k < (KFAR if f.three else 0.3):                                        # turned away: hidden behind the bridge of the nose
             continue
-        k = max(k, 0.55) if sgn < 0 else k                    # an eye is a ball: from the side it still shows
+        k = max(k, 0.55) if sgn < 0 else max(k, KMIN if f.three else 0.0)  # an eye is a ball: from the side it still shows
         ex, ey = f(u, L['eye_y'])
         with squashed(p, ex, k):
             TC.eye(p, ex, ey, sgn, w, h, iris, st, dk(skin, 0.82), liner=2.6)
@@ -591,7 +598,7 @@ def eyes(p, f, L, st, iris, skin, hood=False):
 def brows(p, f, L, col, raise_, frown, thick=0.05):
     """patriots4.brows on a turned face: the far brow only while it is seen."""
     for sgn in (-1, 1):
-        if f.k(sgn * L['ecx'], L['brow_y']) < 0.3:
+        if f.k(sgn * L['ecx'], L['brow_y']) < (KFAR if f.three else 0.3):
             continue
         ecx, ew = L['ecx'], L['ew']
         xi, xo, xm = ecx - 0.69 * ew, ecx + 0.98 * ew, ecx + 0.21 * ew

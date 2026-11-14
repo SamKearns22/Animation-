@@ -8,7 +8,7 @@
 - **Needs Sam:** nothing until the cast sheet.
 - **Read:** `guides/job-packs.md` "Build"; this section; `source/protest_tiers_cast.py` MAP only.
 - **Open rule requests:** "pencil sketches before check sheets" every film (would merge into rule 11); helper's 3 checks now critique lines S7-S9 (Sam Y). New lesson to propose: a sheet counts as sent only once SendUserFile delivered it in Sam's chat. Kit lesson to propose: a cast tile must set `B.SS = 1` (chat 5's first sheet drew every figure cut in half).
-- **For Claude:** film `protest-tiers`; cast = `source/protest_tiers_cast.py` (`officer(force)`, `rioter()`, `marcher(i, tier)`, `pose(sp, name)`, `draw(img, cam, x, y, s, sp, j, yaw)`, `moped_scene`); roughs = `source/protest_tiers_roughs.py OUTDIR`; Hook Text "European protests, ranked". Another chat's note (face tool, 14 Nov): 3/4 FRONT faces look gaunt: keep cast faces front, side or from behind.
+- **For Claude:** film `protest-tiers`; cast = `source/protest_tiers_cast.py` (`officer(force)`, `rioter()`, `marcher(i, tier)`, `pose(sp, name)`, `draw(img, cam, x, y, s, sp, j, yaw)`, `moped_scene`); roughs = `source/protest_tiers_roughs.py OUTDIR`; Hook Text "European protests, ranked". Face tool (14 Nov) redrew three-quarter heads for every film after Sam called them gaunt: redraw the cast once after merging and check the 3/4 faces.
 
 ## The reporting: what each tier is based on is in `notes/archive/protest-tiers-reporting.md` (T1 Barcelona 11 Nov, T2 Frankfurt 31 Oct, T3 République 17 Oct, T4 Tirana 13-18 Oct).
 

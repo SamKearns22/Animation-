@@ -188,3 +188,27 @@
   0.42}; P4.brow_uv/brows took `peak`; facehouse.face_layout, _brow_gap, LID0, SHARP. Andy's pick has no 'brow'
   (do not run browcheck on him: it would move his finished brows). Name pack key in this chat's scratchpad only.
 
+
+## Face tool, where things stand (chat 11 of the face chain, 14 Nov; handed over at amber)
+- **Rules that bite next:** 49 (the blind name test is the judge), 86 (every tool gets a kittest), 85.
+- **Done (chat 11):** 1 people kit: a people file can say `head: house NAME, hair PIECE, look LOOK` and `house: ...`
+  (`story/facetool-people.txt` holds Andy and Kemi). 2 turned views (three-quarter, side, both behinds) for house
+  heads; sheet `notes/morning/facehouse-turned-c11.jpg`, sent to Sam. 3 kittest facehouse_whole_head: Andy and Kemi
+  held pixel for pixel, the people file builds the same faces, no turned view falls back to the plain head. facehouse
+  and people kittests pass.
+- **Seen, not fixed (taste, for Sam's look):** from behind the neck reads long (the people kit's old turned heads do
+  the same); turned brows are turnhead's plain brows (no arch); Andy's dark top from behind is a plain shape.
+- **Next (chat 12, Opus medium):** 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for
+  films (look 'detail'), naming `turns` and the people lines. Then Walliams end to end from his photos
+  (`references/blessed/likeness/` w06, w07, w01, w02 fronts, w09 three-quarter; facepick make, `facehouse.py brows`,
+  his lines in the people file), blind name test, and send Sam a sheet of the Walliams head (with a Checks line).
+- **Needs Sam:** nothing open.
+- **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
+  caricature. Andy and Kemi finished: do not change their heads.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (IN THE PEOPLE KIT, TURNED).
+- **Open rule requests:** none.
+- **For Claude:** people.py `_house`, head kind 'house', 'house' line -> house_kw; facehouse HAIR, TURN_PROF,
+  _swept_shapes/_swept_strokes (swept split, pixels unchanged), _turned_braids, _outside, _turn_person (crown rows
+  extended: the house outline's few rows notched the skull), install_turned, turns(); kittest held md5s are the
+  chat-10 heads. kittests allowlist gained facehouse.py (a kit, not a film).
+
