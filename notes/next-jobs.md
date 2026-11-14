@@ -20,8 +20,11 @@
   one narrowed, never under half). Why it failed: at 45 degrees the muzzle-shaped plan hid the far eye and hollowed
   the far cheek. Side and behind unchanged pixel for pixel. Sheet `notes/morning/threequarter-c12.jpg` sent (Andy,
   Kemi, Vance, before and now). Kittest turned_heads_for_anyone now holds side/behind and counts both 3/4 eyes.
-- **Seen, not fixed:** Kemi's near jaw has a small notch where the plaits meet the neck (there before); the far eye
-  sits close to the far outline (cartoon-normal; for Sam's look).
+- **Done, round 2 (Sam's notes on the sheet):** the three-quarter outline smoothed (bumps and corners, Kemi's chin hooks:
+  the chin's width jumped from the face's); the neck's top corners no longer poke out under the jaw; the three-quarter
+  jacket fitted (rounded shoulders, no hard shadow panel or seam, the shirt V nearer the middle: it read as a ridge);
+  Kemi's open collar now carries round to three-quarter (was the plain buttoned shirt). Sheet
+  `notes/morning/threequarter-c12b.jpg` sent. Sam: the far temple stays bare skin (line of sight hides it): do not add hair there.
 - **Next (chat 13, Opus medium):** 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for
   films (look 'detail'), naming `turns` and the people lines. Then Walliams end to end from his photos
   (`references/blessed/likeness/` w06, w07, w01, w02 fronts, w09 three-quarter; facepick make, `facehouse.py brows`,
@@ -31,7 +34,7 @@
   caricature. Andy and Kemi finished: do not change their front heads.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (IN THE PEOPLE KIT, TURNED).
 - **Open rule requests:** none.
-- **For Claude:** turnhead YAW['three'] 30, TurnFace.three, PLAN3/KFAR/KMIN (3/4 only); VANCE_TURNED_MD5 now yaws
+- **For Claude:** turnhead YAW["three"] 30, TurnFace.three, PLAN3/KFAR/KMIN, _smoothed, chin ease (3/4 only); views three torso (open_curve top, v_at 0.24, neck to -130); facehouse open_collar_three; VANCE_TURNED_MD5 now yaws
   90-180. Kittests critique_helper_kind and round_page fail on the main line before this change too (not face work).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
