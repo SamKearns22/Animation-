@@ -458,3 +458,21 @@
 - **Open rule requests:** none.
 - **For Claude:** `find` scores by shared words: a note naming a note number ("note 28") hits best; item 4 should add
   each person's description lines to `page.build`.
+
+
+# Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/people-kit-c4` (also on the main line); face tool: its own chain.
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
+- **Done (overnight chat 4, item 4, Opus high, ~2.3%):** `source/people.py` + `people_parts.py` (MAP, catalogue row,
+  kittest `people_from_a_description`); `story/blessed-people.txt`: Blessed's 16 invented people as ~8 lines each,
+  redrawn by the kit to 0.00% pixel difference on 8 finished frames. The page carries each person's lines.
+- **Next: chat 4b, Opus MEDIUM (building from the clear plan below):** steps 2-4 of "Item 4" below (Brand, Walliams,
+  the press pack, turned heads); then the sheets for the morning report. Hard stop: 12% for the job.
+- **Face tool: HARD STOP** (chat 3, ~8.2% of 7.5%): Burnham, Badenoch pass. **Bench left:** animatic 2 case (~0.5%).
+- **Needs Sam (morning report):** pick Burnham and Badenoch A/B/C; Y to ~1% more for the face tool; Y to rule 49.3's
+  age-lines line; Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
+- **Read:** this section; "Item 4" below; `guides/job-packs.md` "A tool job"; `notes/overnight-run.md`; `people.py` MAP.
+- **Open rule requests:** none.
+- **For Claude:** replicate swaps the film's own dicts IN PLACE and pops `BC.FRONT_FACES`; `_front_head` is spied to
+  prove who the kit drew. Bespoke heads join as parts (`EXTRAS`, `install`), never as film imports.
+

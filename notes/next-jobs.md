@@ -1,18 +1,19 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/people-kit-c4` (also on the main line); face tool: its own chain.
+- **Newest work:** `claude/people-kit-c4c` (also on the main line); face tool: its own chain (stopped).
 - **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
-- **Done (overnight chat 4, item 4, Opus high, ~2.3%):** `source/people.py` + `people_parts.py` (MAP, catalogue row,
-  kittest `people_from_a_description`); `story/blessed-people.txt`: Blessed's 16 invented people as ~8 lines each,
-  redrawn by the kit to 0.00% pixel difference on 8 finished frames. The page carries each person's lines.
-- **Next: chat 4b, Opus MEDIUM (building from the clear plan below):** steps 2-4 of "Item 4" below (Brand, Walliams,
-  the press pack, turned heads); then the sheets for the morning report. Hard stop: 12% for the job.
-- **Face tool: HARD STOP** (chat 3, ~8.2% of 7.5%): Burnham, Badenoch pass. **Bench left:** animatic 2 case (~0.5%).
-- **Needs Sam (morning report):** pick Burnham and Badenoch A/B/C; Y to ~1% more for the face tool; Y to rule 49.3's
-  age-lines line; Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
-- **Read:** this section; "Item 4" below; `guides/job-packs.md` "A tool job"; `notes/overnight-run.md`; `people.py` MAP.
+- **Done (overnight chat 4c, item 4, Opus medium, ~2.2%; job ~4.6% of 8%, stop 12%):** step 2. Brand in his four looks
+  (front and turned) and Walliams redrawn from their lines: 13 finished frames at 0.00%. `people_famous.py` (Brand's
+  head made general: card, tune, full beard, curls/knot, deep set, house moods, torso extras), `people_walliams.py`
+  (his head as one part, test only). Kittest extended (18 people, 4 frames); every old kittest passes.
+- **Next: chat 4d, Opus MEDIUM (building from the clear plan below):** steps 3-5: the press pack as a crowd line,
+  turned heads for invented people (one module from blessed_cast's press code), then the morning-report sheets; then
+  the places kit chat (item 5, Opus HIGH). Hard stop: 12% for the job.
+- **Needs Sam (morning report):** as before (face tool picks, bench picks); nothing new from this chat.
+- **Read:** this section; "Item 4" below (steps 3-5 and the chat 4c notes); `notes/overnight-run.md`; `people.py` MAP.
 - **Open rule requests:** none.
-- **For Claude:** replicate swaps the film's own dicts IN PLACE and pops `BC.FRONT_FACES`; `_front_head` is spied to
-  prove who the kit drew. Bespoke heads join as parts (`EXTRAS`, `install`), never as film imports.
+- **For Claude:** replicate swaps the film's dicts IN PLACE, keeping `KEEP` (look_, mood: film staging). TC.HEADS and
+  TORSOS point at `kit_head`/`kit_torso`, which pick per LOOK (Brand's four looks share who='brand'). Turned famous
+  heads go through turnhead under 'kit:WHO' (people_famous.install's head_view), so blessed_cast's Person is unused.
 
 ## Item 4, people from a description (ranking item 4; overnight run; Opus high design, medium build; 8%, stop 12%)
 Design (chat 4, 14 Nov): a person is a block of plain lines in `story/FILM-people.txt` (language in `people.py` MAP);
@@ -22,7 +23,7 @@ No film imports the kit until Sam approves (kittest refuses one). The pass mark 
 finished frames beside the same frames with the kit's people swapped in; 0.05% of pixels is the bar.
 1. **Done:** invented people (front face, 10 haircuts, stubble, boxed beard, glasses, freckles, outfits, wig, robe,
    officer kit): Blessed's 16 at 0.00%. Page lines. Sheet `people.py sheet blessed OUT.jpg`.
-2. **Brand (4 looks) and Walliams, chat 4b:** famous faces as `head: measured CARD` (the likeness card's measures,
+2. **Done (chat 4c): Brand (4 looks) and Walliams:** famous faces as `head: measured CARD` (the likeness card's measures,
    P4.MEASURED/PUSH/TUNE from lines `push 1.6`, `tune eyes_apart 2.0, ...`), `beard: full` (moustache, cheek, chin
    colours: brand_beard lifted, colours from lines), `hair: long curls` with `knot` (brand_hair, bun, turned hair
    lifted), `moods:` lines (a mood = brow, frown, lid, squint, mouth, smile), looks as `like: brand` + outfit lines,
@@ -33,6 +34,15 @@ finished frames beside the same frames with the kit's people swapped in; 0.05% o
 4. **Turned heads for invented people (rule: drawn in every view):** the press pack's turnhead route for any front
    face, so a kit person turns (the sheet's side and back now use the engine's plain heads: curly reads long from
    behind, the wig is front only). Check: the sheet at 0/45/90/135/180.
+   **Chat 4c notes for steps 3-4:** `blessed.press_sp(i, seed)` is looked up at draw time: replicate can swap it for a
+   kit wrapper that keeps the film's staging (`kit`, `yaw`, `eye`) and takes the look from the crowd line. The film
+   registers one turnhead Person per 'press%d' with the FIRST journalist's skin (skins differ per i and seed): key the
+   kit's by who AND skin; if that differs from the film, it is a film fault fixed (report it). Lift PRESS_STYLES,
+   _press_layout/_cap/_profile/_hair/_mood/_rest from blessed_cast (no lift: from behind the neck shows long; Big
+   only; blessed_cast's _th_draw_big passes 'kit:' names through). Colour lists in a crowd line: items split by ';'.
+   Kit hair to turned style: crop crop, bald bald, side side, bob bob, long long, curly curly, bun (new: a knot),
+   receding bald, none (new: no hair). Turned invented people in Blessed frames may now differ from the film's plain
+   turned heads: report which frames, as an improvement, not a fail.
 5. **The morning report:** one sheet per film-frame pair (new beside finished), the cast sheet, the cost; then the
    places kit chat (item 5, Opus high).
 Cost per film once approved: a new invented person ~10 lines (was ~60-120 lines of face table and code); Blessed's

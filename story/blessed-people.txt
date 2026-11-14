@@ -167,3 +167,43 @@ face: face_wide +0.03, eyes_apart -0.03, eye_tilt +4, nose_wide +0.02, lip_low +
 eyes: 40 30 26 | lips: 180 116 104 | brows: 24 20 18
 outfit: jumper 40 50 90, no tie, trousers 50 50 56, shoes 30 26 24
 seed: 712
+
+# The famous faces (chat 4c, 14 Nov): a measured head is the likeness card's measures pushed and tuned
+# (people_famous.py); Brand's four looks are one person (`look of: brand`), the film knows him as 'brand'.
+
+# brand: Russell Brand (trial: arriving, the gates)
+head: measured references/blessed/likeness/brand-card.json, push 1.6
+tune: eyes_apart 2.0, nose_wide 2.0, brow_slope 3.0, brow_high 3.0, eye_tilt 8.0, chin_long 4.0, forehead_wide 4.0
+tune: eye_open 3.0, jaw_wide 25.0, nose_long 5.0
+body: 1.83 m, shoulders 150, head 66 x 96, neck 1.12
+skin: 232 176 150 | eyes: 86 62 42 | lips: 196 128 116 | deep set
+brows: 48 38 32, width 4.6, thick 0.056
+hair: curls, 80 62 48, light 112 90 72, grey 156 146 136
+beard: full, moustache 74 58 48, cheeks 140 128 118, chin 206 200 192, grain 226 222 216
+outfit: suit 86 88 94, shirt 248 248 246, no tie, trousers 60 61 65, shoes 22 18 16
+extras: open shirt, crucifix, scarf
+seed: 91
+
+# brand_stand: Russell Brand (the witness box, sentencing)
+look of: brand
+outfit: suit 38 38 46, trousers 38 38 46
+extras: open shirt, crucifix
+
+# brand_dock: Russell Brand (the dock: topknot)
+look of: brand_stand
+hair: knot
+outfit: suit 86 88 94
+
+# brand_prison: Russell Brand (prison: tracksuit, topknot)
+look of: brand
+hair: knot
+outfit: jumper 134 136 140, trousers 134 136 140, shoes 236 236 236
+extras: zip
+
+# walliams: David Walliams (TEST ONLY: never in a film; his head is his own part)
+head: part walliams
+body: 1.96 m, shoulders 158, head 66 x 96, neck 1.3
+skin: 242 190 168 | hair: crop, 66 54 46 | brows: 56 44 38, width 4.6
+outfit: jumper 134 136 140, shirt 134 136 140, trousers 134 136 140, shoes 236 236 236
+extras: zip
+seed: 95

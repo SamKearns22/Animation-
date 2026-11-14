@@ -29,6 +29,6 @@
 - **Waits for items 4, 5, 7 (people, places, moves kits):** then a person, place or move is a description line on the page itself, so most notes change a line on the page, not code; the full "start near 100k" saving comes then. Today's part saves the code reading (Blessed's rounds read ~60-80k of code each). Nothing to decide.
 
 
-## People from a description (ranking item 4; in progress: chat 4 of the job done, about 2.3% of a week of 8%, stop 12%)
-- **Works so far:** `source/people.py` draws a person from about 8 plain lines (height, build, skin, face, haircut, beard, glasses, clothes). Blessed's 16 invented people (judge, both officers, newsreader, three inmates, twelve jurors) redrawn from their lines match the finished film exactly (0.00% of pixels differ on 8 frames). Kittest passes; every old kittest passes (61); no film uses it.
-- **Left (chat 4b, Opus medium):** Brand in his four looks, Walliams, the press pack, invented people turning their heads; then the new-beside-finished sheets for you. Nothing to decide yet.
+## People from a description (ranking item 4; in progress: chats 4 and 4c done, about 4.6% of a week of 8%, stop 12%)
+- **Works so far:** `source/people.py` draws a person from about 8 plain lines. Blessed's 16 invented people, Brand in all four looks (arriving, witness box, dock, prison; front and turned) and Walliams (test only) redrawn from their lines match the finished film exactly (0.00% of pixels differ on 13 frames). Brand is ~15 lines (his likeness card, beard and curl colours); Walliams' head is his own part (too much his own for lines). Every old kittest passes; no film uses it.
+- **Left (chat 4d, Opus medium):** the press pack, invented people turning their heads; then the new-beside-finished sheets for you. Nothing to decide yet.

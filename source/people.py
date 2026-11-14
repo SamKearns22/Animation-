@@ -15,16 +15,25 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     beard: stubble 0.82 | beard: boxed 46 40 38 | glasses: 40 36 34 | freckles | lashes
     outfit: suit navy, shirt white, tie 120 30 40 (or 'no tie'), trousers 50 50 56, sleeves .., shoes .., dress ..
             (suit, jumper, dress, blouse)
-    extras: wig, robe, officer         (parts that sit on top: EXTRAS)
+    extras: wig, robe, officer, open shirt, crucifix, scarf, zip   (parts that sit on top: EXTRAS)
     seed: 92                           (only to keep an old film's picture exactly; new people leave it out)
+  A real person (chat 4c; people_famous.py: Brand's way, every colour from here):
+    head: measured references/FILM/likeness/NAME-card.json, push 1.6     (the likeness card's measures)
+    tune: jaw_wide 25.0, nose_long 5.0 | deep set                         (how far each measure is pushed)
+    hair: curls, 80 62 48, light 112 90 72, grey 156 146 136 (or: knot)   (long loose curls; pulled into a topknot)
+    beard: full, moustache C, cheeks C, chin C, grain C
+    mood NAME: brow 0.03, frown -0.01, lid 0.14, squint 0.45, mouth grin  (adds to the house moods, people_famous)
+    look of: OTHER                     the same person in another look (Brand's four); the film knows them by one name
+    head: part walliams                a bespoke head too much its own for lines (HEAD_PARTS; test only)
 
     python3 source/people.py sheet FILM OUT.jpg          front, side, back of everyone in the file, true heights
     python3 source/people.py replicate FILM OUT_DIR      the finished film's frames beside the same frames with the
                                                          kit's people swapped in (nothing in the film changes)
     python3 source/people.py describe FILM               the film's people, as the page shows them
 
-Map: colours 37 | steps 50 | parse 61 | the engine's person 188 | install 228 (faults 251) | sheet 261 |
-     replicate 298 | lines for the page 374 | main 386
+Map: colours 45 | steps 59 | parse 70 | the engine's person 230 (a real person 266) |
+     install 291 (each look's head and torso 325; faults 342) | sheet 352 |
+     replicate 389 | lines for the page 482 | main 494
 """
 import os
 import re
@@ -40,9 +49,10 @@ COLOURS = {   # the house's skin tones (burnham) and plain words for clothes and
     'deep': (120, 78, 56), 'navy': (34, 40, 62), 'charcoal': (46, 46, 54), 'black': (22, 20, 22),
     'white': (246, 246, 246), 'grey': (134, 136, 140), 'red': (170, 26, 34), 'blonde': (214, 184, 120),
     'ginger': (150, 70, 40), 'dark brown': (62, 42, 32), 'light brown': (150, 108, 66), 'silver': (196, 192, 186)}
-HAIR_STYLES = ('crop', 'bald', 'side', 'bob', 'long', 'curly', 'bun', 'pony', 'receding', 'none')
+HAIR_STYLES = ('crop', 'bald', 'side', 'bob', 'long', 'curly', 'bun', 'pony', 'receding', 'none', 'curls', 'knot')
+FAMOUS_HAIR = ('curls', 'knot')     # a measured head's hair (people_famous): long loose curls, or pulled into a topknot
 BEHIND = {'crop': 'crop', 'bald': 'bald', 'side': 'side', 'bob': 'bob', 'long': 'long', 'curly': 'wavy', 'bun': 'crop',
-          'pony': 'crop', 'receding': 'bald', 'none': 'bald'}   # the engine's hair for the side and back views
+          'pony': 'crop', 'receding': 'bald', 'none': 'bald', 'curls': 'wavy', 'knot': 'crop'}   # the engine's hair for the side and back views
 OUTFITS = ('suit', 'jumper', 'dress', 'blouse')
 DEFAULTS = dict(hw=66, hh=96, head_dy=10, full=True, pose='custom', shoulders=150, height=1.75, shoe=(30, 26, 24),
                 trousers=(50, 50, 56), shirt=(246, 246, 246), tie=None)
@@ -106,12 +116,37 @@ def parse(text):
 
 def _fact(d, key, val, people):
     parts = [p.strip() for p in val.split(',') if p.strip()]
-    if key == 'like':
+    if key in ('like', 'look of'):
         if val not in people:
-            raise DescriptionError(f'like {val}: no such person above')
+            raise DescriptionError(f'{key} {val}: no such person above')
         for k, v in people[val].items():
             if k not in ('who', 'name', '_lines'):
                 d[k] = dict(v) if isinstance(v, dict) else v
+        if key == 'look of':                       # the same person in another look: the film knows them by one name
+            d['person'] = people[val].get('person', val)
+    elif key == 'head':
+        kind, _, rest = parts[0].partition(' ')
+        if kind == 'measured':
+            d['measured'] = dict(card=rest.strip(), push=1.0)
+            for q in parts[1:]:
+                w, v = q.split(' ')
+                d['measured'][w] = float(v)
+        elif kind == 'part':
+            if rest.strip() not in HEAD_PARTS:
+                raise DescriptionError(f'head part {rest.strip()!r}: one of {", ".join(HEAD_PARTS)}')
+            d['head_part'] = rest.strip()
+        else:
+            raise DescriptionError(f'head {kind!r}: measured CARD or part NAME')
+    elif key == 'tune':
+        d.setdefault('tune', {}).update({w: float(v) for w, v in (q.rsplit(' ', 1) for q in parts)})
+    elif key.startswith('mood '):
+        m = {}
+        for q in parts:
+            w, _, v = q.partition(' ')
+            m[w] = True if not v else (v if w == 'mouth' else float(v))
+        d.setdefault('moods', {})[key[5:].strip()] = m
+    elif key == 'deep set':
+        d['deep_set'] = True
     elif key == 'body':
         for p in parts:
             if p.endswith(' m'):
@@ -130,8 +165,12 @@ def _fact(d, key, val, people):
         if parts[0] not in HAIR_STYLES:
             raise DescriptionError(f'hair {parts[0]!r}: one of {", ".join(HAIR_STYLES)}')
         d['hair_style'] = parts[0]
-        if len(parts) > 1:
-            d['hair_c'] = colour(parts[1])
+        for q in parts[1:]:
+            w, _, c = q.partition(' ')
+            if w in ('light', 'grey') and q.strip().lower() not in COLOURS:     # 'light 112 90 72'; 'light brown' is a colour
+                d['hair_' + w] = colour(c)
+            else:
+                d['hair_c'] = colour(q)
     elif key == 'face':
         m = d.setdefault('face_m', {})
         for p in parts:
@@ -149,13 +188,17 @@ def _fact(d, key, val, people):
             w, v = p.split(' ')
             d['brow_' + {'width': 'w', 'thick': 'thick'}[w]] = float(v)
     elif key == 'beard':
-        kind, _, rest = val.partition(' ')
+        kind, _, rest = parts[0].partition(' ')
         if kind == 'stubble':
             d['stub'] = float(rest or 0.84)
         elif kind == 'boxed':
             d['beard'] = colour(rest)
+        elif kind == 'full':                       # people_famous: moustache, cheeks, chin, grain colours
+            d['full_beard'] = {w: colour(c) for w, _, c in (q.partition(' ') for q in parts[1:])}
+            if set(d['full_beard']) != {'moustache', 'cheeks', 'chin', 'grain'}:
+                raise DescriptionError('beard full: moustache C, cheeks C, chin C, grain C')
         else:
-            raise DescriptionError(f'beard {kind!r}: stubble or boxed')
+            raise DescriptionError(f'beard {kind!r}: stubble, boxed or full')
     elif key == 'glasses':
         d['glasses'] = colour(val or 'black')
     elif key in ('freckles', 'lashes'):
@@ -213,7 +256,28 @@ def person(d):
             fc[fk] = d[k]
     sp['kit_face'] = fc
     sp['kit_extras'] = list(d.get('extras', ()))
+    sp['who'] = d.get('person', d['who'])
+    if d.get('head_part'):
+        sp.update(kit_head=d['head_part'], neck_shade=True)
+    elif d.get('measured'):
+        _famous(d, sp)
     return sp
+
+
+def _famous(d, sp):
+    """A measured head (people_famous): the likeness card, the beard, the curls, the moods, from the lines."""
+    ms = d['measured']
+    hc = sp['hair_c']
+    fm = dict(key='kit:' + sp['who'], card=ms['card'], push=ms.get('push', 1.0), tune=d.get('tune', {}),
+              hair='knot' if d.get('hair_style') == 'knot' else 'curls', iris=d.get('eyes', (70, 60, 50)),
+              lip=d.get('lips', (190, 120, 110)), brow_thick=d.get('brow_thick', 0.05),
+              deep_set=d.get('deep_set', False), moods=d.get('moods', {}),
+              c=dict(hair=hc, light=d.get('hair_light', hc), grey=d.get('hair_grey', hc)))
+    if d.get('full_beard'):
+        b = d['full_beard']
+        fm['beard'] = dict(moust=b['moustache'], mid=b['cheeks'], low=b['chin'], grain=b['grain'])
+        sp.update(beard='full', beard_c=b['cheeks'])
+    sp.update(kit_head='famous', kit_famous=fm, neck_shade=True, hair='kit_' + fm['hair'])
 
 
 def people_file(film):
@@ -228,24 +292,52 @@ def load(film):
 # ---------------------------------------------------------------------------------------------- install
 def _extras():
     import people_parts as PP
-    return {'wig': ('head', PP.wig_head), 'robe': ('torso', PP.robe_torso), 'officer': ('torso', PP.officer_torso)}
+    import people_famous as PF
+    return {'wig': ('head', PP.wig_head), 'robe': ('torso', PP.robe_torso), 'officer': ('torso', PP.officer_torso),
+            'open shirt': ('torso', PF.open_shirt), 'crucifix': ('torso', PF.crucifix), 'scarf': ('torso', PF.scarf),
+            'zip': ('torso', PF.zip_top)}
 
 
-EXTRAS = ('wig', 'robe', 'officer')
+def _head_parts():
+    import people_famous as PF
+    import people_walliams as PW
+    return {'famous': PF.famous_head, 'walliams': PW.walliams_head}
+
+
+
+
+
+EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip')
+HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 
 def install(cast):
     """Hang each person's head and torso parts on the engine (traitors_cast's hooks, read by views.person)."""
     import people_parts as PP
     TC = PP.AV.MC.TC
-    ex = _extras()
-    for w, sp in cast.items():
-        TC.HEADS[w] = PP.front_head
-        TC.TORSOS.pop(w, None)
-        for e in sp.get('kit_extras', ()):
-            where, fn = ex[e]
-            (TC.HEADS if where == 'head' else TC.TORSOS)[w] = fn
+    import people_famous as PF
+    PF.install()
+    for sp in cast.values():                     # one person may have several looks (Brand's four): the head and
+        TC.HEADS[sp['who']] = kit_head           # torso are chosen from the look being drawn, not from the name
+        TC.TORSOS[sp['who']] = kit_torso
     return cast
+
+
+def kit_head(img, p, sp, t, hx, hy):
+    """The look's own head: a head extra (the wig), a measured or named part, or the invented front face."""
+    import people_parts as PP
+    ex = _extras()
+    fn = next((ex[e][1] for e in sp.get('kit_extras', ()) if ex[e][0] == 'head'), None)
+    fn = fn or (_head_parts()[sp['kit_head']] if sp.get('kit_head') else PP.front_head)
+    return fn(img, p, sp, t, hx, hy)
+
+
+def kit_torso(img, p, sp, t):
+    """The look's torso extras, in the order written (open shirt, crucifix, scarf...); none: the plain torso."""
+    ex = _extras()
+    for e in sp.get('kit_extras', ()):
+        if ex[e][0] == 'torso':
+            ex[e][1](img, p, sp, t)
 
 
 def faults(cast):
@@ -253,9 +345,9 @@ def faults(cast):
     kit builds must be drawn by the kit's own face (or a part over it)."""
     import people_parts as PP
     TC = PP.AV.MC.TC
-    ok = {PP.front_head} | {fn for where, fn in _extras().values() if where == 'head'}
+    ok = {kit_head}
     return [f"{sp['name']}: not on the kit's face (no mouth at rest; Blessed notes 5, 13, 15, 45)"
-            for w, sp in cast.items() if TC.HEADS.get(w) not in ok]
+            for w, sp in cast.items() if TC.HEADS.get(sp['who']) not in ok]
 
 
 # ---------------------------------------------------------------------------------------------- sheet
@@ -300,8 +392,10 @@ def cast_sheet(out):
 # film's pictures. The film is imported as it is; each of its people's dicts is emptied and refilled IN PLACE from
 # the kit (every reference to them sees the kit's person), its old face cards are taken away (so any old drawing path
 # left would crash, not pass quietly), and the kit's parts are hung on the engine. Nothing is written to the film.
-FRAMES = {'blessed': [(8.6, 'jury'), (16.0, 'dock'), (24.0, 'escort'), (38.0, 'tvroom'), (41.0, 'tv'),
-                      (5.6, 'oath'), (28.6, 'cot'), (33.0, 'phone')]}
+FRAMES = {'blessed': [(2.0, 'arrive'), (5.6, 'oath'), (8.6, 'jury'), (16.0, 'dock'), (24.0, 'escort'),
+                      (28.6, 'cot'), (33.0, 'phone'), (38.0, 'tvroom'), (41.0, 'tv'), (50.0, 'gates'), (59.5, 'walliams'),
+                      (20.5, 'van'), (60.5, 'gates2')]}   # van, gates2: Brand turned (turnhead)
+KEEP = ('look_', 'mood')     # the film's own staging on a person (which scarf move, a default mood), not their look
 
 
 def _film_people(film):
@@ -310,7 +404,10 @@ def _film_people(film):
         import blessed as BL
         import blessed_cast as BC
         import blessed_jury as JY
-        found = {'judge': BC.JUDGE, 'officer': BC.OFFICER, 'newsreader': BC.NEWSREADER, 'guard2': BL.GUARDS['guard2']}
+        import blessed_walliams as BW
+        found = {'judge': BC.JUDGE, 'officer': BC.OFFICER, 'newsreader': BC.NEWSREADER, 'guard2': BL.GUARDS['guard2'],
+                 'brand': BC.BRAND, 'brand_stand': BC.BRAND_STAND, 'brand_dock': BC.BRAND_DOCK,
+                 'brand_prison': BC.BRAND_PRISON, 'walliams': BW.WALLIAMS}
         found.update({w: BL.CAST[w] for w in ('inmate1', 'inmate2', 'inmate3')})
         found.update(JY.JURORS)
 
@@ -336,22 +433,34 @@ def replicate(film, out_dir, frames=None):
         raise SystemExit(f'replicate: the film has no {missing}')
     for w, sp in kit.items():
         tgt = found[w]
+        keep = {k: tgt[k] for k in KEEP if k in tgt}
         tgt.clear()
-        tgt.update(sp)
+        tgt.update(sp, **keep)
     unhook()
     install(kit)
     import people_parts as PP
-    drawn, real = [], PP._front_head
+    import people_famous as PF
+    import people_walliams as PW
+    import turnhead as TH
+    drawn, real = [], {}
 
-    def spy(img, p, sp, t, hx, hy):                  # proof the kit drew them: who went through the kit's face
-        drawn[-1].add(sp['who'])
-        return real(img, p, sp, t, hx, hy)
-    PP._front_head = spy
+    def spying(mod, name):                           # proof the kit drew them: who went through the kit's faces
+        fn = real[(mod, name)] = getattr(mod, name)
+
+        def spy(img, p, sp, t, hx, hy):
+            drawn[-1].add(sp['who'])
+            return fn(img, p, sp, t, hx, hy)
+        setattr(mod, name, spy)
+    for mod, name in ((PP, '_front_head'), (PF, '_famous_head'), (PW, '_head')):
+        spying(mod, name)
     new = []
     for t, _ in frames:
         drawn.append(set())
+        n0 = len(TH.SEEN)
         new.append(BL.frame_image(t))
-    PP._front_head = real
+        drawn[-1] |= {w[4:] + ' (turned)' for w, _ in TH.SEEN[n0:] if w.startswith('kit:')}
+    for (mod, name), fn in real.items():
+        setattr(mod, name, fn)
     font = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 28)
     tw, th = 405, 720
     sheet_ = Image.new('RGB', (tw * 4 + 30, (th + 50) * ((len(frames) + 1) // 2) + 10), (232, 228, 222))

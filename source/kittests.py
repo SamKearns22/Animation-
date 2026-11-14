@@ -1699,24 +1699,31 @@ def people_from_a_description():
     import people as K
     bad = []
     for txt, why in (('# a: A\nskin: 1 2', 'a colour of two numbers'), ('# a: A\nskin: pale\nhat: red', 'an unknown line'),
-                     ('# a: A\nskin: pale\nhair: mohican', 'an unknown haircut'), ('skin: pale', 'no person yet')):
+                     ('# a: A\nskin: pale\nhair: mohican', 'an unknown haircut'), ('skin: pale', 'no person yet'),
+                     ('# a: A\nskin: pale\nbeard: full, chin pale', 'a full beard missing its colours'),
+                     ('# a: A\nskin: pale\nhead: part nobody', 'an unknown head part'),
+                     ('# a: A\nlook of: b', 'a look of nobody')):
         try:
             K.parse(txt)
             bad.append(why + ' was not refused')
         except K.DescriptionError:
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
-             ('people.py', 'people_parts.py', 'page.py', 'kittests.py') and re.search(r'^\s*(import people\b|from people\b)',
+             ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'page.py',
+              'kittests.py') and re.search(r'^\s*(import people\b|from people\b)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
         bad.append(f'films using the kit before Sam approves it: {users}')
     tmp = os.path.join(HERE, 'data', 'kittest-people')
-    out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath')])
+    out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van')])
     drawn = set().union(*[set(w) for *_, w in scores])
+    for who in ('brand', 'walliams', 'brand (turned)'):        # chat 4c: the famous faces, front and turned
+        if who not in drawn:
+            bad.append(f'{who} not drawn by the kit')
     for t, label, diff, _ in scores:
         if diff > 0.05:
             bad.append(f'{label} {t}s: {diff:.2f}% of pixels differ')
-    if len(drawn) < 13:
+    if len(drawn) < 18:
         bad.append(f'only {len(drawn)} people drawn by the kit')
     import blessed as BL
     import blessed_cast as BC
