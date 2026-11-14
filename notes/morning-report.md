@@ -47,6 +47,7 @@
 - **New check:** every row of the film's acting list must have a block landing on its word. On Blessed it caught two
   drifts: the dock slump comes at the start of line 3, the list says on "blessed"; the face change comes 2.6 s after
   "early release", the list says on it. The film is right (Sam saw it); my pick: correct the list's words, no film change.
-- **Left (chat 9, Sonnet):** the full comparison sheet (30 frames) and the catalogue row; the cost per film.
-- **Decide (at the end of item 7):** Y/N the kit for the next film (my pick Y: all of Blessed but the one-offs matches).
-
+- **Comparison sheet:** `notes/morning/moves-kit-replicate.jpg` (finished frame beside the kit's, 30 frames across all shots): every one 0.000% different.
+- **Cost per film:** Blessed's moves stage was about 1.5% of a week; with the kit a person's moves are a few description lines (Blessed's: 173 lines in one plain file for 16 people-in-shots), so my estimate is ~0.5% per film, to be confirmed on the next film. The kit itself cost ~5% (stop 9%).
+- **Found:** one old test (the round-page size check) now fails: the page is 16.4% of Blessed's code, bar 15% (it was 8% when built; the code grew). Not caused by the moves kit; the film is unchanged. Left for the next page job.
+- **Decide:** Y/N the moves kit for the next film (my pick Y: all of Blessed but four one-offs matches); Y: correct the acting list's two words (dock slump, face change), no film change.

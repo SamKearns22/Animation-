@@ -1,11 +1,8 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-c8-moves` (also on the main line).
+- **Newest work:** `claude/overnight-c9-moves` (also on the main line). Item 7 closed (chat 9).
 - **Rules that bite next:** 74 (the acting list: each block lands on its word), 86 (every tool gets a kittest), 85.
-- **Done (chat 8, Opus medium, ~2.3%; amber hand-over):** item 7 step 2 and step 4's list check. 16 people-in-shots
-  redrawn identical (kittest each 1/12 s; 26 frames 0.000%); one-offs named as code; `check` reads the acting-list table.
-- **Next: chat 9, Sonnet (routine: sheet, filing):** step 3 (`acting.py replicate blessed notes/morning` ~10 min: 30
-  frames; copy the sheet to `notes/morning/moves-kit-replicate.jpg`; catalogue row done), step 4's cost line in the
-  morning report, then item 7's close (handover; next job per `notes/overnight-run.md`). Stop 9% (spent ~4.8%).
+- **Done (chat 9, Sonnet, ~0.6%):** item 7 closed: replicate on all shots 0.000% (30 frames), sheet `notes/morning/moves-kit-replicate.jpg`, report entry with cost line. Total ~5.4% (stop 9%). Found: kittest `round_page` fails (page 16.4% of code, bar 15%), not from the moves kit.
+- **Next: chat 10, Opus medium:** ranking item 1, the rough command (0.5%, stop 0.75%); test on Blessed; per `notes/overnight-run.md`.
 - **Needs Sam:** morning report picks (people kit 1-3; places kit 1-2; moves: list words + kit Y/N).
 - **Read:** this file's "Item 7" section; `acting.py` MAP only.
 - **Open rule requests:** none.

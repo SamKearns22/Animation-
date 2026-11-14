@@ -3,7 +3,7 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## blessed.py (2055 lines)
+## blessed.py (2095 lines)
 - 23: HERE (data)
 - 51: NAME (data)
 - 52: HAS (data)
@@ -102,98 +102,101 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 877: `dock` 
 - 888: VAN_HANDS (data)
 - 891: `van` 
-- 902: VAN_YAW (data)
-- 907: `_seat` Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
-- 935: CELL (data)
-- 937: ESC_GO (data)
-- 938: ESC_STOP (data)
-- 939: OFF_BEHIND (data)
-- 942: `_cell_mark` 
-- 947: `escort` (mark, yaw, joints, head_yaw) for Brand or the officer in the escort.
-- 979: BRAND_BED (data)
-- 981: CELL_LOOK (data)
-- 989: CELL_SHOULDERS (data)
-- 992: GRIP_AT (data)
-- 995: `officer_grip` His near hand ('L', facing left) on Brand's near upper arm until the stop, then back to his side.
-- 1018: `cot_pose` Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), staring up at the ceiling (t
-- 1036: COT_BIBLE_HAND (data)
-- 1039: `_cot_cross` 
-- 1050: `cot_face` Note 41: eyes squeezed shut on each sob, then a tear runs down from each eye (no static streaks).
-- 1057: `phone_extra` 
-- 1065: `asleep_pose` Note 22: asleep in his chair in front of the TV: slumped (the sitting kit's slump, on his red plastic chair),
-- 1080: POOL_TOP (data)
-- 1081: POOL_YAW (data)
-- 1084: `pool_pose` N8 (Sam, 13 Nov, a repeat of 43: 'a squashed person who clips through a pool table'): side-on at the table's
-- 1100: POOL_LEAN (data)
-- 1103: `pool_cue` The cue from his cue hand through the bridge hand on the cloth, its tip at the cue ball.
-- 1123: `pool_body_pts` N8 check: his body's points on the frame (hands and forearms left out: the bridge hand rests on the cloth).
-- 1141: POOL_SEEN (data)
-- 1144: `tv_pose` Chat 5: on the sitting kit (upright, hands on the seat's edges), front-on with knees and lap. Sam, 13 Nov
-- 1163: `tv_blink` Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones.
-- 1172: `_gates_cut` 
-- 1176: GATE_V (data)
-- 1177: GATE_OPEN (data)
-- 1180: `_arms_wide` Both arms flung up and open at t_up: out to the side on the way (figure-rig 3's waypoint), then up.
-- 1189: `gates_wide` 
-- 1207: GATE_D_OUT (data)
-- 1215: G2_WALK (data)
-- 1216: G2_X (data)
-- 1219: `_g2_press` The wide shot's whole pack (both sides, note 32). Anyone whose head would cover Brand (down to his hips) or th
-- 1253: G2_PRESS (data)
-- 1254: G2_NEAR_KIT (data)
-- 1257: `gates_at` Note 46: where Brand stands (x, d) at t in either release shot; the whole pack looks there.
-- 1266: `gates_close` 
-- 1305: `gates2_head` Note 49: his head turns to play to the cameras on one side, then the other (degrees, None = ahead).
-- 1317: WAL_X (data)
-- 1318: WAL_D (data)
-- 1319: DOOR_D (data)
-- 1322: OFF_DX (data)
-- 1323: LEAF_OPEN (data)
-- 1326: `wal_place` (x, d) in metres on the gates' Level camera: Walliams, or an officer at dx from him.
-- 1339: `wal_roll` His whole body tipped (degrees, + leaning to our right): dug in against the drag, wobbling as he fights.
-- 1346: `_blend_specs` A hand's (target, pole, shape) from timed phases [(t0, fn)]: each fn(t) gives a spec; 0.15 s cross-fades.
-- 1359: `wal_pose` His body and arms through the beats (front-on). jamb: the frame's edge in his own units, for the grab.
-- 1403: `wal_face` Scared, darting; the double-take (glance, away, SNAP back, alarmed); pleading; scared at the door.
-- 1427: `_person_pt` A point u of the way from a joint to the next (2D person units) -> screen, on a person drawn front-on.
-- 1435: `_to_person` A screen point -> a hand target in a front-on person's torso frame, z units nearer the lens.
-- 1442: `_reach` A hand target pushed out along its line from the shoulder to at least k of the arm's length (an elbow folded
-- 1452: `_rot` A screen point turned with a layer rotated `deg` (PIL: anticlockwise on screen) about c.
-- 1459: `leaf_angle` 
-- 1465: `_leaf` A point on the wicket's leaf (hinged on its right edge at x 1.15), x along it from the free edge (0) to the
-- 1473: `_gp` 
-- 1477: `door_inside` Note 32: the prison seen through the open wicket: a short lit passage (pale green walls, a lino floor, a strip
-- 1504: `draw_leaf` The wicket's leaf slammed shut (from SLAM): the set's painted open leaf is covered with the gate's timber, the
-- 1522: `_door_clip` A mask (the frame's size) of the wicket doorway, for people past its plane; hand: (x, y, r) also shows a hand
-- 1536: GUARD_SIDES (data)
-- 1539: `draw_walliams` Notes 25, 30, 32: the lit passage behind the wicket; Walliams between two officers on his own layer (tipped as
-- 1603: GUARD_EYES (data)
-- 1606: `guard_look` N9 (Sam, 13 Nov): no head turn. Turned side-on he swapped to the separate profile drawing (another size, hair
-- 1612: `guard_eyes` 0..1: the left officer's eyes on Walliams for the line (note 48), then back to the front.
-- 1619: ARRIVE_CAM (data)
-- 1620: TV_READER (data)
-- 1621: `_cam` The camera on a view; the push is a slow zoom into his face on the tvroom painting (brief 14).
-- 1654: `draw_people` 
-- 1762: DEFER (data)
-- 1765: `handset_pose` The landing phone's steel handset at his ear (moves.phone_at_ear's hold, his near hand: facing left he is
-- 1785: `phone_cord` The handset's armoured steel cord, from under his hand sagging back to the phone (blessed_sets.PHONE_CORD).
-- 1800: `picture` The frame WITHOUT captions (those go on last, so wording notes never re-render a picture).
-- 1818: `set_still` blessed_sets.alone's tile: the view with the cast at their marks, at the middle of its first shot.
-- 1832: `draw_order` 
-- 1836: `caption_at` 
-- 1840: `overlay` 
-- 1847: `frame_image` 
-- 1851: `_gavel_knock` A wooden gavel on a block: a sharp click, a hollow 'tock' and a short ring, about 0.5 s (made here: no sample)
-- 1863: `_gavel_sample` Sam's gavel (13 Nov, audio/sfx-gavel.mp3, two knocks): cut so the first knock lands on the dock's first frame.
-- 1872: MUSIC (data)
-- 1873: MUSIC_GAIN (data)
-- 1877: `music` Sam's note 27: The Mountain under the film from the cell (prison) on: its sad opening, then (joined in the hus
-- 1907: `soundtrack` 
-- 1934: `touch_faults` The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle):
-- 1959: `furniture_faults` N8 (Sam, 13 Nov: 'how did a squashed person who clips through a pool table get through a 40-minute check
-- 1995: `checks` Plan checks: subtitles printed to proofread, mouths on the words, the voice level. Raises on faults.
-- 2017: `_fx_tears` His tears alone, large (rule S7: an effect drawn alone for the shape check).
-- 2023: EFFECTS (data)
-- 2028: `main` 
+- 900: `van_seat` Note 16: the legs and seat are drawn here, before the jumper (the moves kit's 'with van seat').
+- 907: VAN_YAW (data)
+- 912: `_seat` Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
+- 940: CELL (data)
+- 942: ESC_GO (data)
+- 943: ESC_STOP (data)
+- 944: OFF_BEHIND (data)
+- 947: `_cell_mark` 
+- 952: `escort` (mark, yaw, joints, head_yaw) for Brand or the officer in the escort.
+- 984: BRAND_BED (data)
+- 986: CELL_LOOK (data)
+- 994: CELL_SHOULDERS (data)
+- 997: GRIP_AT (data)
+- 1000: `officer_grip` His near hand ('L', facing left) on Brand's near upper arm until the stop, then back to his side.
+- 1023: `cot_pose` Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), staring up at the ceiling (t
+- 1041: COT_BIBLE_HAND (data)
+- 1044: `_cot_cross` 
+- 1055: `cot_face` Note 41: eyes squeezed shut on each sob, then a tear runs down from each eye (no static streaks).
+- 1062: `phone_extra` 
+- 1070: `asleep_pose` Note 22: asleep in his chair in front of the TV: slumped (the sitting kit's slump, on his red plastic chair),
+- 1085: POOL_TOP (data)
+- 1086: POOL_YAW (data)
+- 1089: `pool_pose` N8 (Sam, 13 Nov, a repeat of 43: 'a squashed person who clips through a pool table'): side-on at the table's
+- 1105: POOL_LEAN (data)
+- 1108: `pool_cue` The cue from his cue hand through the bridge hand on the cloth, its tip at the cue ball.
+- 1128: `pool_body_pts` N8 check: his body's points on the frame (hands and forearms left out: the bridge hand rests on the cloth).
+- 1146: POOL_SEEN (data)
+- 1149: `tv_pose` Chat 5: on the sitting kit (upright, hands on the seat's edges), front-on with knees and lap. Sam, 13 Nov
+- 1168: `tv_blink` Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones.
+- 1177: `_gates_cut` 
+- 1181: GATE_V (data)
+- 1182: GATE_OPEN (data)
+- 1185: `_arms_wide` Both arms flung up and open at t_up: out to the side on the way (figure-rig 3's waypoint), then up.
+- 1194: `gates_wide` 
+- 1212: GATE_D_OUT (data)
+- 1220: G2_WALK (data)
+- 1221: G2_X (data)
+- 1224: `_g2_press` The wide shot's whole pack (both sides, note 32). Anyone whose head would cover Brand (down to his hips) or th
+- 1258: G2_PRESS (data)
+- 1259: G2_NEAR_KIT (data)
+- 1262: `gates_at` Note 46: where Brand stands (x, d) at t in either release shot; the whole pack looks there.
+- 1271: `gates_close` 
+- 1310: `gates2_head` Note 49: his head turns to play to the cameras on one side, then the other (degrees, None = ahead).
+- 1322: WAL_X (data)
+- 1323: WAL_D (data)
+- 1324: DOOR_D (data)
+- 1327: OFF_DX (data)
+- 1328: LEAF_OPEN (data)
+- 1331: `wal_place` (x, d) in metres on the gates' Level camera: Walliams, or an officer at dx from him.
+- 1344: `wal_roll` His whole body tipped (degrees, + leaning to our right): dug in against the drag, wobbling as he fights.
+- 1351: `_blend_specs` A hand's (target, pole, shape) from timed phases [(t0, fn)]: each fn(t) gives a spec; 0.15 s cross-fades.
+- 1364: `wal_pose` His body and arms through the beats (front-on). jamb: the frame's edge in his own units, for the grab.
+- 1408: `wal_face` Scared, darting; the double-take (glance, away, SNAP back, alarmed); pleading; scared at the door.
+- 1432: `_person_pt` A point u of the way from a joint to the next (2D person units) -> screen, on a person drawn front-on.
+- 1440: `_to_person` A screen point -> a hand target in a front-on person's torso frame, z units nearer the lens.
+- 1447: `_reach` A hand target pushed out along its line from the shoulder to at least k of the arm's length (an elbow folded
+- 1457: `_rot` A screen point turned with a layer rotated `deg` (PIL: anticlockwise on screen) about c.
+- 1464: `leaf_angle` 
+- 1470: `_leaf` A point on the wicket's leaf (hinged on its right edge at x 1.15), x along it from the free edge (0) to the
+- 1478: `_gp` 
+- 1482: `door_inside` Note 32: the prison seen through the open wicket: a short lit passage (pale green walls, a lino floor, a strip
+- 1509: `draw_leaf` The wicket's leaf slammed shut (from SLAM): the set's painted open leaf is covered with the gate's timber, the
+- 1527: `_door_clip` A mask (the frame's size) of the wicket doorway, for people past its plane; hand: (x, y, r) also shows a hand
+- 1541: GUARD_SIDES (data)
+- 1544: `draw_walliams` Notes 25, 30, 32: the lit passage behind the wicket; Walliams between two officers on his own layer (tipped as
+- 1608: GUARD_EYES (data)
+- 1611: `guard_look` N9 (Sam, 13 Nov): no head turn. Turned side-on he swapped to the separate profile drawing (another size, hair
+- 1617: `guard_eyes` 0..1: the left officer's eyes on Walliams for the line (note 48), then back to the front.
+- 1624: ARRIVE_CAM (data)
+- 1625: TV_READER (data)
+- 1626: `_cam` The camera on a view; the push is a slow zoom into his face on the tvroom painting (brief 14).
+- 1659: `person` (face and look, mark, yaw, joints, head yaw) of one person in a shot: the seam the moves kit stands in for
+- 1716: `draw_people` 
+- 1795: DEFER (data)
+- 1798: `handset_pose` The landing phone's steel handset at his ear (moves.phone_at_ear's hold, his near hand: facing left he is
+- 1809: `_handset` The handset itself, drawn beside the head at the ear (the moves kit's 'handset' prop).
+- 1825: `phone_cord` The handset's armoured steel cord, from under his hand sagging back to the phone (blessed_sets.PHONE_CORD).
+- 1840: `picture` The frame WITHOUT captions (those go on last, so wording notes never re-render a picture).
+- 1858: `set_still` blessed_sets.alone's tile: the view with the cast at their marks, at the middle of its first shot.
+- 1872: `draw_order` 
+- 1876: `caption_at` 
+- 1880: `overlay` 
+- 1887: `frame_image` 
+- 1891: `_gavel_knock` A wooden gavel on a block: a sharp click, a hollow 'tock' and a short ring, about 0.5 s (made here: no sample)
+- 1903: `_gavel_sample` Sam's gavel (13 Nov, audio/sfx-gavel.mp3, two knocks): cut so the first knock lands on the dock's first frame.
+- 1912: MUSIC (data)
+- 1913: MUSIC_GAIN (data)
+- 1917: `music` Sam's note 27: The Mountain under the film from the cell (prison) on: its sad opening, then (joined in the hus
+- 1947: `soundtrack` 
+- 1974: `touch_faults` The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle):
+- 1999: `furniture_faults` N8 (Sam, 13 Nov: 'how did a squashed person who clips through a pool table get through a 40-minute check
+- 2035: `checks` Plan checks: subtitles printed to proofread, mouths on the words, the voice level. Raises on faults.
+- 2057: `_fx_tears` His tears alone, large (rule S7: an effect drawn alone for the shape check).
+- 2063: EFFECTS (data)
+- 2068: `main` 
 
 ## blessed_cast.py (1144 lines)
 - 32: HERE (data)
@@ -670,45 +673,117 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 225: tv (the TV on the wall): wall tv (the TV)
 - 226: tv (the TV on the wall): its glow on the wall
 
-## blessed-moves.txt (41 lines; a note on a move changes its line: open that line)
-- 11: arrive (brand): row: 1 "Yeah, I'm feeling blessed, mate..." | sincere showman | swaggers in, hand to
-- 12: arrive brand : face: showman shades on
-- 13: arrive brand : walk: swagger on OUT phase settle still
-- 14: arrive brand : L: rest feeling | heart feeling mate | point mate mate | wide super blessed. | heart blessed. e
-- 15: arrive brand : R: rest mate | wide fist super blessed. | rest blessed.
-- 16: arrive brand : body: lean in mate super
-- 17: arrive brand : body: dip super blessed.
-- 18: arrive brand : body: chin up super blessed.
-- 19: arrive brand : body: bow blessed. blessed.
-- 20: arrive brand : holds R: beads
-- 21: arrive brand : holds L: sleeve edge feeling mate blessed. end
-- 24: oath (brand): row: 2 "I swear by Almighty God..." | the stiff showman | bolt upright, Bible up, righ
-- 25: oath brand : face: oath | gaze Almighty that the
-- 26: oath brand : L: rest s | bible s s | rest s
-- 27: oath brand : R: rest s | oath mid s | oath hand s s | oath mid s | rest s
-- 28: oath brand : body: chin up blessed evidence blessed evidence
-- 29: oath brand : body: chin up blessed truth blessed truth
-- 30: oath brand : holds L: bible s s
-- 33: oath brand : like: oath
-- 36: dock (brand): row: 3 "Well that doesn't feel very blessed." | quiet, to himself | hands clasped low;
-- 37: dock brand : face: neutral | hollow hollow
-- 38: dock brand : both: clasp low
-- 39: dock brand : body: start bang bang
-- 40: dock brand : body: slump hollow
-- 43: gates (brand): row: 6 "Blessed! I'm feeling so blessed..." | full showman | swaggers out; arms flung
-- 44: gates brand : face: overjoyed shades on
-- 45: gates brand : walk: swagger on GATE settle
-- 46: gates brand : both: rest Blessed! | arms out Blessed! | messiah Blessed!
-- 47: gates brand : body: chin up with lean Blessed!
-- 50: gates2 (brand): row: 6 cont. | full showman | a clear stride to his mark; plants, chin up; the sweep
-- 51: gates brand : face: overjoyed shades on
-- 52: gates brand : walk: stride on GATE auto phase settle chest sway
-- 53: gates brand : both: messiah | rest | rest landed everybody | messiah everybody | sweep everybody everybody | m
-- 54: gates brand : R: messiah everybody | hair everybody | hair back everybody everybody | rest everybody
-- 55: gates brand : body: dip with nod lean everybody everybody
-- 56: gates brand : body: chin up with lean everybody everybody
-- 57: gates brand : body: tilt everybody
-- 58: gates brand : body: preen everybody everybody
-- 59: gates brand : body: nod everybody everybody
-- 60: gates brand : body: nod everybody everybody
-- 61: gates brand : body: bask everybody
+## blessed-moves.txt (113 lines; a note on a move changes its line: open that line)
+- 14: arrive (brand): row: 1 "Yeah, I'm feeling blessed, mate..." | sincere showman | swaggers in, hand to
+- 15: arrive brand : face: showman shades on
+- 16: arrive brand : walk: swagger on OUT phase settle still
+- 17: arrive brand : L: rest feeling | heart feeling mate | point mate mate | wide super blessed. | heart blessed. e
+- 18: arrive brand : R: rest mate | wide fist super blessed. | rest blessed.
+- 19: arrive brand : body: lean in mate super
+- 20: arrive brand : body: dip super blessed.
+- 21: arrive brand : body: chin up super blessed.
+- 22: arrive brand : body: bow blessed. blessed.
+- 23: arrive brand : holds R: beads
+- 24: arrive brand : holds L: sleeve edge feeling mate blessed. end
+- 27: oath (brand): row: 2 "I swear by Almighty God..." | the stiff showman | bolt upright, Bible up, righ
+- 28: oath brand : face: oath | gaze Almighty that the
+- 29: oath brand : L: rest s | bible s s | rest s
+- 30: oath brand : R: rest s | oath mid s | oath hand s s | oath mid s | rest s
+- 31: oath brand : body: chin up blessed evidence blessed evidence
+- 32: oath brand : body: chin up blessed truth blessed truth
+- 33: oath brand : holds L: bible s s
+- 36: oath brand : like: oath
+- 39: dock (brand): row: 3 "Well that doesn't feel very blessed." | quiet, to himself | hands clasped low;
+- 40: dock brand : face: neutral | hollow hollow
+- 41: dock brand : both: clasp low
+- 42: dock brand : body: start bang bang
+- 43: dock brand : body: slump hollow
+- 46: oath (judge): row: (2, behind Brand) the judge | sceptic on each "blessed" | weight shifts and head 
+- 47: oath judge : stance: seated
+- 48: oath judge : face: neutral | sceptic while peer above
+- 49: oath judge : idle: lean shifts
+- 50: oath judge : idle: roll shifts quiet while peer
+- 51: oath judge : idle: nod shifts
+- 52: oath judge : body: peer Almighty God Almighty God
+- 53: oath judge : body: peer blessed evidence blessed evidence
+- 54: oath judge : body: peer blessed truth blessed truth
+- 57: oath judge : like: oath.judge
+- 60: jury (jury): row: (2, the jury shot) the jurors | sceptical glances | a one-off crowd: stays code
+- 61: jury jury : code: JY.draw jury.py: each juror's own glance shift; nothing in the library is a crowd
+- 64: dock (guard1): row: (3) the dock guards | neutral | seated, still either side of him
+- 65: dock guard : stance: seated
+- 66: dock guard : face: neutral
+- 69: dock guard : like: dock.guard
+- 72: van (brand): row: montage, van close-up | empty, numb | bent over himself, fists between his knees, 
+- 73: van brand : stance: seated yaw with van seat # Sam keeps this three-quarter pose note
+- 74: van brand : face: numb | gaze start cut
+- 75: van brand : keys lean:
+- 76: van brand : keys head_dy:
+- 77: van brand : keys nod:
+- 78: van brand : idle: lean sine # the van's sway
+- 79: van brand : both: van fists
+- 82: escort (brand): row: montage, cell walk with officer | numb | walked in by the arm; stops, turns to 
+- 83: escort brand : face: numb | blink off landed landed
+- 84: escort brand : walk: stroll on CELL phase settle landed landed still bob landed sway facing turns landed
+- 85: escort brand : keys look landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 86: escort brand : keys roll landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 87: escort brand : keys head_dx landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 88: escort brand : keys gaze landed : landed | landed | landed | landed | landed | landed
+- 89: escort brand : keys lid landed : landed | landed
+- 90: escort brand : keys nod landed : landed | landed | landed | landed | landed | landed | landed | landed
+- 91: escort brand : keys shoulders landed : landed | landed | landed | landed
+- 94: escort (officer): row: montage, cell walk | neutral | walks him in, a hand on his arm until they sto
+- 95: escort officer : face: neutral
+- 96: escort officer : walk: stroll on CELL phase settle landed landed still bob landed sway facing
+- 100: cot (brand): row: montage, cot | weeping | flat on his back from above, a hand on his heaving chest,
+- 101: cot brand : code: cot_pose cot_face one-off: seen straight above the hand rides the heaving chest the Bible bo
+- 104: phone (brand): row: 4 "Yeah, love..." | dejected, eyes down at the phone | handset at his ear; a slo
+- 105: phone brand : face: phone head down | gaze start cut
+- 106: phone brand : L: ear
+- 107: phone brand : holds L: handset
+- 108: phone brand : keys lean:
+- 109: phone brand : keys roll:
+- 110: phone brand : body: head shake blessed right
+- 114: tvroom (brand): row: (5, watching) Brand in the TV room | dead-eyed | dead still on a plastic chair;
+- 115: tvroom brand : stance: upright on plastic lap
+- 116: tvroom brand : face: deadeyed | gaze eased | blink off start cut
+- 117: tvroom brand : both: seat edge
+- 118: tvroom brand : keys lean: # slouched back as the push starts
+- 119: tvroom brand : keys head_dy:
+- 120: tvroom brand : keys nod:
+- 123: tvroom (inmate1): row: the man asleep in his chair behind on the left | asleep | slumped, head lolle
+- 124: tvroom inmate : code: asleep_pose one-off: the sitting kit's slump with the hands limp on the thighs
+- 127: tvroom (inmate2): row: the inmate at the pool table behind on the right | absorbed | bent over the r
+- 128: tvroom inmate : code: pool_pose pool_cue one-off: side-on the table; the touch check
+- 131: tv (newsreader): row: 5 reporter | neutral | reads the news on the TV: the mouth and head life only
+- 132: tv newsreader : code: ST.studio_feed the TV set draws him; his mouth headlife follow the voice
+- 135: push (brand): row: (face change) 5 "...early release scheme" | dejected to amazed to overjoyed | sit
+- 136: push brand : stance: upright on plastic lap
+- 137: push brand : face: deadeyed | amazed amazed | overjoyed overjoyed | gaze start cut | blink off start amazed | 
+- 138: push brand : both: seat edge
+- 139: push brand : keys lean: amazed | amazed | overjoyed | overjoyed
+- 140: push brand : keys head_dy: amazed | amazed
+- 141: push brand : keys nod: overjoyed | overjoyed
+- 144: gates (brand): row: 6 "Blessed! I'm feeling so blessed..." | full showman | swaggers out; arms flung
+- 145: gates brand : face: overjoyed shades on
+- 146: gates brand : walk: swagger on GATE settle
+- 147: gates brand : both: rest Blessed! | arms out Blessed! | messiah Blessed!
+- 148: gates brand : body: chin up with lean Blessed!
+- 151: gates2 (brand): row: 6 cont. | full showman | a clear stride to his mark; plants, chin up; the sweep
+- 152: gates brand : face: overjoyed shades on
+- 153: gates brand : walk: stride on GATE auto phase settle chest sway
+- 154: gates brand : both: messiah | rest | rest landed everybody | messiah everybody | sweep everybody everybody | m
+- 155: gates brand : R: messiah everybody | hair everybody | hair back everybody everybody | rest everybody
+- 156: gates brand : body: dip with nod lean everybody everybody
+- 157: gates brand : body: chin up with lean everybody everybody
+- 158: gates brand : body: tilt everybody
+- 159: gates brand : body: preen everybody everybody
+- 160: gates brand : body: nod everybody everybody
+- 161: gates brand : body: nod everybody everybody
+- 162: gates brand : body: bask everybody
+- 163: gates brand : keys head_yaw: everybody | everybody | everybody | everybody | everybody | everybody
+- 164: gates brand : keys head_yaw: max everybody end | max everybody end | max everybody end | max everybody end
+- 167: gates2 (guard1): row: 7 "Walliams, you're going away..." | stern, flat | head stays front-on (N9); h
+- 168: gates guard : keys eyes: guard | guard | end | end
+- 172: gates2 (walliams): row: (behind him) Walliams | scared, double-take, pleading, desperate | dragged i
+- 173: gates walliams : code: wal_pose wal_face draw_walliams one-off: a comic struggle; the beats are in blessed.py'
