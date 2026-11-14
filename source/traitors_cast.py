@@ -68,7 +68,7 @@ def clip_convex(subject, window):
     return out
 
 
-def eye(p, ex, ey, sgn, w, h, iris, st, lid_c, liner=2.6, lower=1.4, lashes=False, smoky=None):
+def eye(p, ex, ey, sgn, w, h, iris, st, lid_c, liner=2.6, lower=1.4, lashes=False, smoky=None, iris_r=0.95, pupil_r=0.42):
     """One opening between two lids, the iris cut to it (no line ever crosses the white). st: lid (0 open .. 1 shut),
     look (-1 .. 1 across), gaze_dy (down +), squint (lower lid up), closed."""
     us = np.linspace(-1, 1, 15)
@@ -86,10 +86,10 @@ def eye(p, ex, ey, sgn, w, h, iris, st, lid_c, liner=2.6, lower=1.4, lashes=Fals
     p.poly(opening, (250, 250, 247), None)
     cx, cy = ex + st.get('look', 0.0) * w * 0.38, ey + st.get('gaze_dy', 0.0)
     circ = lambda r: [(cx + r * math.cos(a), cy + r * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 22, endpoint=False)]
-    ir = clip_convex(opening[::-1], circ(h * 0.95))
+    ir = clip_convex(opening[::-1], circ(h * iris_r))
     if len(ir) >= 3:
         p.poly(ir, iris, None)
-    pu = clip_convex(opening[::-1], circ(h * 0.42))
+    pu = clip_convex(opening[::-1], circ(h * pupil_r))
     if len(pu) >= 3:
         p.poly(pu, INK, None)
     if lid > 0.02:

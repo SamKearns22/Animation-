@@ -136,16 +136,16 @@ def outline_uv(L, chin_w=0.36, crown=-0.17):
     return [(-u, v) for u, v in top[::-1]] + top[1:] + right + left + [(-fhw * 0.5 * 0.93, 0.0), (-fhw * 0.5 * 0.7, crown * 0.6)]
 
 
-def eyes(p, f, L, sp, iris, lid_c, liner=2.6, wide=0.0):
+def eyes(p, f, L, sp, iris, lid_c, liner=2.6, wide=0.0, iris_r=0.95, pupil_r=0.42, scale=1.0):
     """Both eyes (traitors_cast.eye: one opening between two lids, the iris cut to it). wide (0..1): the stare."""
-    w = L['ew'] * H / 2
-    h = L['eh'] * H / 1.8 * (1 + 0.55 * wide)
+    w = L['ew'] * H / 2 * scale
+    h = L['eh'] * H / 1.8 * (1 + 0.55 * wide) * scale
     st = dict(lid=sp.get('lid4', 0.08) * (1 - wide), look=sp.get('look', 0.0), squint=sp.get('squint', 0.0),
               closed=sp.get('blink', False), gaze_dy=sp.get('gaze_dy', 0.0))
     for sgn in (-1, 1):
         ex, ey = f(sgn * L['ecx'], L['eye_y'])
         ww = w * (1 - 0.3 * f.tq if sgn < 0 else 1.0)
-        TC.eye(p, ex, ey, sgn, ww, h, iris, st, lid_c, liner=liner)
+        TC.eye(p, ex, ey, sgn, ww, h, iris, st, lid_c, liner=liner, iris_r=iris_r, pupil_r=pupil_r)
 
 
 def brows(p, f, L, c, thick=0.034, raise_=0.0, frown=0.0):

@@ -12,6 +12,22 @@
   Blessed's record `story/blessed-roughs.txt` marks all 60 as seen (the finished film). Old fault: kittest
   `round_page` (page 16.4% of code, bar 15%).
 
+
+## Face tool, where things stand (chat 4 of the face chain, 14 Nov; ~1.5%: HARD STOP reached)
+- **Rules that bite next:** 86 (kittest for facepick and agelines), 49.3 (extras after the check), 85 (cost watch).
+- **Done:** Sam's picks saved (`references/faces/{burnham,badenoch}/pick/`: pick json 'picked': 'C', and the head);
+  Burnham's eyes (eye_look: fuller darker irises, socket shade; drawn after the check); Badenoch's plait band gone;
+  `facepick.py redraw`. Sheets sent: `notes/morning/facetool-{burnham,badenoch}-C.jpg`.
+- **Next: face chain chat 5, Opus medium (~0.6%, new stop 0.9%):** only after Sam's Y to ~0.6% more (morning report question 6;
+  question 5 is the rule). Walliams replay (w06, w07, w01, w02; tries vs his five chats); kittest for facepick + agelines.
+- **Needs Sam:** morning report questions 5 (rule 49.3 adds the eyes) and 6 (~0.6% more).
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
+- **Open rule requests:** rule 49.3's eyes line (question 5).
+- **For Claude:** P4.eyes and TC.eye got `iris_r`, `pupil_r`, `scale` (defaults unchanged: old films identical).
+  eye_look scale stays 1.0 (1.2 failed: Burnham A 71% -> 23%). Rerun a head: `facepick.py BURNHAM-ARGS --says
+  "glasses=yes, age=64"` (2 min, seeded, same measures) then `redraw`. Parent chat's 3 unanswered lines (07:37,
+  07:54 x2) are the people/places kit questions, the morning chat's own.
+
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
 with its colours, then `## view: NAME` per camera (`camera: up, horizon, lens`: a level camera, Blessed's `Level`;

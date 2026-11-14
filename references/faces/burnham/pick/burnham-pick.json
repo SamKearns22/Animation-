@@ -1,0 +1,213 @@
+{
+ "title": "burnham",
+ "fronts": [
+  "../references/faces/burnham/a01-front-parliament2026.jpg",
+  "../references/faces/burnham/a02-front-national2026.jpg",
+  "../references/faces/burnham/a03-front-smiling-ap2026.jpg"
+ ],
+ "tq": [
+  "../references/faces/burnham/a04-threequarter-ap2026.jpg",
+  "../references/faces/burnham/a05-threequarter-national2026.jpg"
+ ],
+ "unsure": [
+  "jaw_wide",
+  "lip_low",
+  "chin_long"
+ ],
+ "gain": 1.6,
+ "glasses": {
+  "cx": 0.3244427238154284,
+  "w": 2.8282392567751202,
+  "top": -0.4460815660216223,
+  "bot": 1.183448155557685,
+  "rim_w": 0.19554356658951685,
+  "colr": [
+   27,
+   13,
+   13
+  ]
+ },
+ "beard": false,
+ "age": {
+  "depth": {
+   "nasolabial": 0.0766,
+   "crows_feet": 0.0773,
+   "eye_bags": 0.1251,
+   "forehead": 0.0281,
+   "marionette": 0.048,
+   "cheek_hollow": 0.0221
+  },
+  "strength": {
+   "nasolabial": 0.61,
+   "crows_feet": 1.13,
+   "eye_bags": 0.31,
+   "forehead": 0.1,
+   "marionette": 0.27,
+   "cheek_hollow": 0.05
+  },
+  "rank": {
+   "nasolabial": "8 of 13",
+   "crows_feet": "11 of 12",
+   "eye_bags": "10 of 13",
+   "forehead": "6 of 12",
+   "marionette": "8 of 13",
+   "cheek_hollow": "5 of 12"
+  },
+  "age": "64",
+  "age_factor": 1.18,
+  "fold_out": 0.12
+ },
+ "colours": {
+  "skin": [
+   217,
+   162,
+   151
+  ],
+  "hair": [
+   54,
+   45,
+   45
+  ],
+  "hair2": [
+   77,
+   70,
+   69
+  ],
+  "lip": [
+   203,
+   125,
+   131
+  ],
+  "brow": [
+   57,
+   38,
+   33
+  ],
+  "cloth": [
+   31,
+   34,
+   58
+  ],
+  "rim": [
+   27,
+   13,
+   13
+  ]
+ },
+ "heads": {
+  "A": {
+   "what": "a broad, square jaw, a thin lower lip, a long chin (as the photo)",
+   "measures": {
+    "face_wide": 0.998231724958506,
+    "jaw_wide": 0.8983228404808156,
+    "forehead_wide": 0.9148983625030912,
+    "eyes_apart": 1.6324253346223059,
+    "eye_size": 0.17342735888451183,
+    "eye_open": 0.24991370311229927,
+    "eye_tilt": -1.6906097123934813,
+    "brow_high": 0.46439024153928027,
+    "brow_slope": -15.578348682474555,
+    "nose_long": 0.5037541664709649,
+    "nose_wide": 0.6206159884151932,
+    "mouth_wide": 0.7644496377141358,
+    "lip_top": 0.07234754958610637,
+    "lip_low": -0.00024614001028283594,
+    "philtrum": 0.20889330468611222,
+    "chin_long": 0.41636136844064814
+   },
+   "score": 70.87975929944665,
+   "good": 5,
+   "timid": 5,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  },
+  "B": {
+   "what": "jaw wide half as far, lip low half as far, chin long half as far",
+   "measures": {
+    "face_wide": 0.9453259837488532,
+    "jaw_wide": 0.8317192002738781,
+    "forehead_wide": 0.9586858578359384,
+    "eyes_apart": 1.459179010244478,
+    "eye_size": 0.17667808566104476,
+    "eye_open": 0.2988689616707126,
+    "eye_tilt": 1.0823519281973208,
+    "brow_high": 0.4250534910608337,
+    "brow_slope": -13.632455530530107,
+    "nose_long": 0.45539974605417477,
+    "nose_wide": 0.6562307781722602,
+    "mouth_wide": 0.7187007517253634,
+    "lip_top": 0.09752639909301179,
+    "lip_low": 0.11028055936604174,
+    "philtrum": 0.17733490255580808,
+    "chin_long": 0.33898991169795123
+   },
+   "score": 80.19645606436832,
+   "good": 2,
+   "timid": 8,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  },
+  "C": {
+   "what": "jaw wide further, lip low further, chin long further",
+   "measures": {
+    "face_wide": 0.9258735331113518,
+    "jaw_wide": 0.8390292348478912,
+    "forehead_wide": 0.9494057736306912,
+    "eyes_apart": 1.7049644780657915,
+    "eye_size": 0.1709947955558302,
+    "eye_open": 0.25747096274567877,
+    "eye_tilt": 0.21354452154288017,
+    "brow_high": 0.479944162940507,
+    "brow_slope": -14.47299520078526,
+    "nose_long": 0.464976120319818,
+    "nose_wide": 0.7333099269024123,
+    "mouth_wide": 0.6216549167715091,
+    "lip_top": 0.06621730955402548,
+    "lip_low": -0.08471330520094161,
+    "philtrum": 0.18344526182145376,
+    "chin_long": 0.5236925800521706
+   },
+   "score": 62.27643036792555,
+   "good": 6,
+   "timid": 4,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  }
+ },
+ "card": {
+  "face_wide": 0.83,
+  "jaw_wide": 1.27,
+  "forehead_wide": 0.38,
+  "eyes_apart": 0.64,
+  "eye_size": -0.15,
+  "eye_open": -0.6,
+  "eye_tilt": -0.29,
+  "brow_high": -0.75,
+  "brow_slope": -0.45,
+  "nose_long": 0.39,
+  "nose_wide": -0.07,
+  "mouth_wide": -0.34,
+  "lip_top": -0.57,
+  "lip_low": -1.49,
+  "philtrum": 1.07,
+  "chin_long": 1.18
+ },
+ "eyes": {
+  "scale": 1.0,
+  "dark": 0.84,
+  "sock": 0.45,
+  "iris_r": 1.44,
+  "pupil_r": 0.62,
+  "iris": [
+   64,
+   45,
+   40
+  ],
+  "shade": 0.77
+ },
+ "picked": "C",
+ "picked_by": "Sam, 14 Nov: C, best for the house style and matching the features"
+}

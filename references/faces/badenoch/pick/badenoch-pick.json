@@ -1,0 +1,197 @@
+{
+ "title": "badenoch",
+ "fronts": [
+  "../references/faces/badenoch/k01-front-parliament.jpg",
+  "../references/faces/badenoch/k02-front-politicshome2025.jpg",
+  "../references/faces/badenoch/k03-front-jc2026.jpg"
+ ],
+ "tq": [
+  "../references/faces/badenoch/k04-talking-nationcymru2026.jpg",
+  "../references/faces/badenoch/k05-threequarter-channel4-2026.jpg"
+ ],
+ "unsure": [
+  "mouth_wide",
+  "nose_wide",
+  "eye_size"
+ ],
+ "gain": 1.6,
+ "glasses": null,
+ "beard": false,
+ "age": {
+  "depth": {
+   "nasolabial": 0.1409,
+   "crows_feet": 0.0311,
+   "eye_bags": 0.2252,
+   "forehead": 0.0209,
+   "marionette": 0.027,
+   "cheek_hollow": 0.0079
+  },
+  "strength": {
+   "nasolabial": 1.23,
+   "crows_feet": 0.19,
+   "eye_bags": 0.85,
+   "forehead": 0.01,
+   "marionette": 0.0,
+   "cheek_hollow": 0.0
+  },
+  "rank": {
+   "nasolabial": "12 of 13",
+   "crows_feet": "6 of 12",
+   "eye_bags": "13 of 13",
+   "forehead": "6 of 12",
+   "marionette": "6 of 13",
+   "cheek_hollow": "0 of 12"
+  },
+  "age": null,
+  "age_factor": 1.0,
+  "fold_out": 0.095
+ },
+ "colours": {
+  "skin": [
+   136,
+   97,
+   68
+  ],
+  "hair": [
+   23,
+   23,
+   23
+  ],
+  "lip": [
+   106,
+   57,
+   44
+  ],
+  "brow": [
+   38,
+   25,
+   15
+  ],
+  "cloth": [
+   27,
+   28,
+   45
+  ],
+  "rim": [
+   30,
+   28,
+   30
+  ]
+ },
+ "heads": {
+  "A": {
+   "what": "a wide mouth, a wide nose, big eyes (as the photo)",
+   "measures": {
+    "face_wide": 0.7653166316273364,
+    "jaw_wide": 0.8587568183086122,
+    "forehead_wide": 0.8986471004959514,
+    "eyes_apart": 1.17974475506051,
+    "eye_size": 0.22478122933463868,
+    "eye_open": 0.37517775683820026,
+    "eye_tilt": 12.844234124037449,
+    "brow_high": 0.6811713007233461,
+    "brow_slope": 2.2948766833177032,
+    "nose_long": 0.38009465882281424,
+    "nose_wide": 0.774822086724641,
+    "mouth_wide": 0.6216005948329513,
+    "lip_top": 0.2518698714028621,
+    "lip_low": 0.354583166779138,
+    "philtrum": 0.16805046547409894,
+    "chin_long": 0.2436209444873818
+   },
+   "score": 75.42909026072921,
+   "good": 5,
+   "timid": 1,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  },
+  "B": {
+   "what": "mouth wide half as far, nose wide half as far, eye size half as far",
+   "measures": {
+    "face_wide": 0.8291039636120209,
+    "jaw_wide": 0.8540799333563986,
+    "forehead_wide": 0.9108429663905794,
+    "eyes_apart": 1.1681763797376001,
+    "eye_size": 0.2118243862019127,
+    "eye_open": 0.43205364489297454,
+    "eye_tilt": 9.765321814083283,
+    "brow_high": 0.7521575716128488,
+    "brow_slope": 0.8693537611031719,
+    "nose_long": 0.39853415847403606,
+    "nose_wide": 0.7353835186639343,
+    "mouth_wide": 0.6692412224498254,
+    "lip_top": 0.2490058306580732,
+    "lip_low": 0.34808048789992296,
+    "philtrum": 0.1555548402502546,
+    "chin_long": 0.23915134100082958
+   },
+   "score": 75.78723893387568,
+   "good": 4,
+   "timid": 2,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  },
+  "C": {
+   "what": "mouth wide the other way, nose wide the other way, eye size further",
+   "measures": {
+    "face_wide": 0.7940462771507693,
+    "jaw_wide": 0.8525184188812306,
+    "forehead_wide": 0.9098876557147577,
+    "eyes_apart": 1.2105654899411404,
+    "eye_size": 0.21894029339691273,
+    "eye_open": 0.5277304357218531,
+    "eye_tilt": 1.0961483027837868,
+    "brow_high": 0.7974372802349929,
+    "brow_slope": 3.4204924328706223,
+    "nose_long": 0.4273558474741546,
+    "nose_wide": 0.6491344598312081,
+    "mouth_wide": 0.5823353274414207,
+    "lip_top": 0.2561141093166909,
+    "lip_low": 0.37144915557495495,
+    "philtrum": 0.10906202026199863,
+    "chin_long": 0.28301671051208493
+   },
+   "score": 72.62401060071929,
+   "good": 4,
+   "timid": 2,
+   "wrong": 0,
+   "rank": "1 of 14",
+   "pass": true
+  }
+ },
+ "card": {
+  "face_wide": -0.19,
+  "jaw_wide": -1.14,
+  "forehead_wide": -0.49,
+  "eyes_apart": 0.23,
+  "eye_size": 0.77,
+  "eye_open": 0.63,
+  "eye_tilt": 1.03,
+  "brow_high": 1.45,
+  "brow_slope": 0.34,
+  "nose_long": -0.29,
+  "nose_wide": 0.82,
+  "mouth_wide": 1.08,
+  "lip_top": 1.21,
+  "lip_low": 1.03,
+  "philtrum": -0.88,
+  "chin_long": -1.12
+ },
+ "eyes": {
+  "scale": 1.0,
+  "dark": 0.58,
+  "sock": 0.64,
+  "iris_r": 1.06,
+  "pupil_r": 0.47,
+  "iris": [
+   33,
+   22,
+   19
+  ],
+  "shade": 0.0
+ },
+ "picked": "C",
+ "picked_by": "Sam, 14 Nov: C, best for the house style and matching the features"
+}

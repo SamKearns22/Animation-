@@ -19,6 +19,14 @@
   facepick and agelines (rule 86); the braid band; Burnham's eyes. Sheets sent to Sam: Burnham, Badenoch.
 - **Decide:** 1) Burnham A/B/C; 2) Badenoch A/B/C; 3) Y/N ~1% more to finish the left list (pick Y); 4) Y/N rule
   49.3 adds: "Age lines (agelines.py) are drawn after the check too: the face finder reads a cheek fold as the lips."
+- **Chat 4 (14 Nov, after your Y; ~1.5% of a week: HARD STOP reached):** your picks saved (Burnham C, Badenoch C,
+  with their heads, where the film will read them). Burnham's eyes: darker, fuller irises and a shaded socket under
+  the brow, measured from his photos (his eyes measure average size; it's the darkness that reads big; bigger eyes
+  failed the likeness check). Badenoch: the plaits now climb unevenly up the sides, no level band. Both sheets resent
+  (`notes/morning/facetool-burnham-C.jpg`, `-badenoch-C.jpg`). Also new: a seconds-long redraw from a saved pick.
+- **Still left (~0.6% more, stop 0.9%):** the Walliams replay; the kittest for facepick and agelines (rule 86).
+- **Decide:** 6) Y/N ~0.6% more to finish those two (pick Y). 5) Y/N rule 49.3 adds the eyes: "The eyes' darkness (eye_look) is drawn after the check too: the face
+  finder reads a socket shade or a fuller iris as a brow or eye change." (pick Y)
 
 ## Critic bench (ranking item 3, chat 2; done, about 2.1% of a week against 1.5% estimate, under the 2.25% stop)
 - **Works:** `source/critbench.py` redraws Blessed's first animatic exactly as you saw it and scores critics against your 12 real notes on it. Plain pictures: Opus caught 5, Sonnet 4. With close-ups of the people added: Sonnet 7, Opus 2 (it spent its answer on acting). Both missed the judge's missing mouth and the neck join every time. Kittest passes.
