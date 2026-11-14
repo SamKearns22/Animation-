@@ -2164,6 +2164,24 @@ def agelines_by_measure_and_age():
                 f'as none {floor}; crow\'s feet {st["crows_feet"]}')
 
 
+@test
+def facehouse_brows_sit_on_hers():
+    """Face tool chat 10 (Sam on Kemi: "her eyebrows are really far from her eyes"): the arch bends the brow's ends
+    down and leaves its middle where it was measured (it used to lift the whole brow a fifth of an eye); a heavier
+    lid moves the brows with it; with the photos measured (browcheck) the drawn brow sits at the photos' height."""
+    import facehouse as FH
+    import patriots4_cast as P4
+    kh = FH.person('badenoch', 'detail', **FH.CAST['badenoch'])['kit_house']
+    L = P4.layout(kh['meas'])
+    flat, arched = (P4.brow_uv(L, 0.032, arch=a) for a in (0.0, 0.03))
+    middle_kept = abs(flat[1][1] - arched[1][1]) < 1e-9 and arched[0][1] > flat[0][1] and arched[2][1] > flat[2][1]
+    gap = FH._brow_gap(FH.face_layout(kh), kh)
+    want = (kh.get('brow') or {}).get('high')
+    fitted = want is not None and abs(gap - want) < 0.01 and 0.4 < want < 0.75
+    ok = middle_kept and fitted
+    return ok, f'arch keeps the middle {middle_kept}; drawn brow {gap:.2f} eye widths above the lid, her photos {want}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

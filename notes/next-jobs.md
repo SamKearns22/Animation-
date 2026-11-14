@@ -13,37 +13,31 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 9 of the face chain, 14 Nov; amber 3.2%: stops on a question for Sam)
-- **Rules that bite next:** 49 (the blind name test is the judge), 86 (facehouse needs its kittest), 85.
-- **Done (chat 9):** F1 Andy = chat 7's head pixel for pixel: **finished**. F2 Kemi: plaits 1.2x; eyes calm (iris
-  0.98, pupil 0.28, iris_c a shade lighter, upper lid 0.24). F3 her outline traced off her 3 front photos
-  (`facehouse.py trace`): rounder, slightly longer chin. Ears hidden (Sam). **Sam's notes on the sheet:** "Try the
-  eyebrows" (Y) and "look closely at the neckline": brows now thin, arched, tapered (0.032, arch 0.03, taper 0.6);
-  her open collar redrawn (`open_collar`: the skin runs down into a V, collar flaps over the lapels; the old foot had
-  a step, white bars at the sides and a floating skin triangle). Smile: not answered, not done.
-  Sheets: `notes/morning/facehouse-kemi-c9.jpg`, `-c9b.jpg`. facepick and agelines kittests pass.
-- **Name tests (neutral pack, chat 7's line-up):** not named in any of 3 runs (Cori Bush / Ketanji Brown Jackson);
-  line-up 5th, 5th, then 7th with the new brows. Namers keep calling her face generic and matching the plaits and
-  navy suit to Ribeiro-Addy.
-- **Sam on c9b:** "Neckline is so much better." "Her eye brows are really far from her eyes?" (a question: answered
-  with the plan, waits for his Y). Why: the face tool measured her brows high (brow_high 0.80 vs 0.59 average,
-  landmark 52, likely thrown by her arch), and chat 9's arch lifted them more; laid over her photo, the drawn brows
-  sit above her real ones. Plan: set the brows' height from the drawing laid over her front photos (tune brow_high
-  down until they sit on hers), peak where hers peaks; a close-up of the eyes with the photo beside it.
-- **Sam answered (chat 9):** brows: Y, fix them AND "investigate why the tool made that judgement" (why the face
-  tool measured her brows so high: landmark 52 vs her arch? the photos? the brow_high measure itself?); the fix and
-  the finding go in likeness/facehouse so the next face does not repeat it. Smile: N ("I don't see a problem with her
-  mouth"): mouth stays as it is. Neckline: kept.
-- **Next (chat 10, Opus medium):** the brow investigation and fix; a close-up sheet (eyes and brows, drawing beside
-  her photo, and the drawing laid over it) with a Checks line; her name test; then facehouse in people.py, turned
-  views, kittest, catalogue row; then Walliams.
-- **Needs Sam:** nothing open.
+## Face tool, where things stand (chat 10 of the face chain, 14 Nov; stops on a question for Sam)
+- **Rules that bite next:** 49 (the blind name test is the judge), 86 (facehouse's kittest), 85.
+- **Done (chat 10):** Kemi's brows lowered onto her own (sheet `notes/morning/facehouse-kemi-c10-brows.jpg`: before,
+  now, her photo, now laid over it). **Why the tool put them high:** its height was honest (on her sharp photo the
+  brow point sits on her brow; her brows ARE a little high), but three things stacked: the pick's push (0.68 -> 0.80),
+  chat 9's arch lifting the WHOLE brow (about 0.2 eye widths) and the heavier lid lowering the lid line. Her two small
+  photos (eyes 18-24 px) put the point mid-brow and read higher still. **Fixed in the tool:** the arch bends the ends
+  down; brows move with a heavier lid; `facehouse.py brows NAME OUT.jpg` measures the brow and its peak in the
+  pixels (small photos only when nothing sharper), saves them in the pick, draws the brows at her height (0.57 eye
+  widths above the lid) and peak, and lays the drawing over each photo. New kittest facehouse_brows_sit_on_hers;
+  facepick and agelines pass. Andy pixel for pixel unchanged. Mouth and neckline untouched.
+- **Name test (neutral pack, chat 7's line-up):** not named (Dawn Butler 12, Ayanna Pressley 10, Diane Abbott 8);
+  line-up 5th of 8 (Ribeiro-Addy first). Namer: "fairly generic"; braids and navy suit fit several MPs.
+- **Needs Sam:** 1. brows right now? 2. her likeness: go on to building (my pick: facehouse into the people kit,
+  turned views, catalogue row, then Walliams) with Kemi's name test still failing, or more likeness work on her first.
+- **Next (on his answer; Opus medium):** as he picks. Build: facehouse in people.py, turned views, kittest,
+  catalogue row; then Walliams (run `facehouse.py brows` on every new face).
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
-  into caricature. Andy is finished. Kemi: bigger plaits, small pupils, calm eyes, face from photos, ears hidden.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS); rule 49.
+  into caricature. Andy is finished. Kemi: bigger plaits, small pupils, calm eyes, face from photos, ears hidden,
+  mouth as it is, neckline kept.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS, brows); rule 49.
 - **Open rule requests:** none.
-- **For Claude:** CAST badenoch: plait_k, iris_r, pupil_r, iris_c, lid, shape, brow_arch/taper (new: iris_c, lid,
-  shape; the trace is 'outline' in her pick JSON). open_collar only in the braids path (Andy's base torso untouched).
+- **For Claude:** CAST badenoch unchanged (brow_arch 0.03 now bends ends); pick JSON gained 'brow' {high 0.568, peak
+  0.42}; P4.brow_uv/brows took `peak`; facehouse.face_layout, _brow_gap, LID0, SHARP. Andy's pick has no 'brow'
+  (do not run browcheck on him: it would move his finished brows). Name pack key in this chat's scratchpad only.
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

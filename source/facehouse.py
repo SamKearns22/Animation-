@@ -34,13 +34,20 @@ LIKENESS (chat 8): the person's lines may also name push/tune (caricature(): eac
     smirk; wide, gap, creases, drop), forehead (hairline lifted), plait_k (each plait bigger).
     shape (chat 9): the face's outline traced off the front photos, row by row (`facehouse.py trace NAME OUT.jpg`
     measures it into the pick and lays it over each photo); the house outline otherwise.
+    brows (chat 10, Sam: Kemi's brows "really far from her eyes"; why: the face tool's height was honest, 52 sat on
+    her sharp photo's brow, but the pick's push (0.68 -> 0.80), chat 9's arch lifting the WHOLE brow and the heavier
+    lid lowering the lid line added up to about twice her gap): `facehouse.py brows NAME OUT.jpg` measures each front
+    photo's brow middle and peak in the pixels (eyes under 40 px wide only when nothing sharper), saves them into the
+    pick ('brow'), and lays the drawn brows over each photo; with 'brow' in the pick the brows are drawn at her
+    height and peak (face_layout), and the arch bends the ends down. Run it on every new face.
 
     python3 source/facehouse.py sheet OUT.jpg NAME [NAME ...]   the design sheet: photo, the pick, both house looks
     python3 source/facehouse.py head NAME LOOK OUT.png             one head-and-shoulders (for the name test)
+    python3 source/facehouse.py brows NAME OUT.jpg                 the brows measured on the photos, the drawing laid over
 
-Map: reading the pick 52 | colours 65 | the head 88 | hair: swept 142, braids 178 (measured hair 179, crown 255,
-     curtains 268, plaits 279, behind the neck 310, the piece 329) | glasses 357 | age lines 387 | the person 437 |
-     sheet 494 | main 569
+Map: reading the pick 67 | the traced outline 81 | the brows checked 156 | colours 270 | the head 290 (layout 294) |
+     hair: swept 400, braids 436 (measured hair 437, crown 528, plaits 552, behind the neck 583, collar 604, the
+     piece 615) | glasses 645 | age lines 675 | the person 725 | sheet 799 | main 874
 """
 import json
 import math
@@ -67,7 +74,8 @@ def load(name):
     d = json.load(open(pick_file(name)))
     h = d['heads'][d.get('picked', 'C')]
     return dict(name=name, meas=dict(h['measures']), col=d['colours'], glasses=d.get('glasses'),
-                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=d.get('picked', 'C'), outline=d.get('outline'))
+                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=d.get('picked', 'C'), outline=d.get('outline'),
+                brow=d.get('brow'))
 
 
 # ---------------------------------------------------------------------------------------------- the traced outline
@@ -142,10 +150,124 @@ def overlay(name, got, tr, out, T=420):
     return out
 
 
-# ---------------------------------------------------------------------------------------------- colours
 HOUSE_SKIN = [(246, 208, 188), (240, 196, 178), (226, 184, 150), (176, 120, 86), (120, 78, 56)]   # people.COLOURS
 
 
+# ---------------------------------------------------------------------------------------------- the brows checked
+def _photo_brows(path):
+    """One front photo's brows: each brow's MIDDLE LINE over the eye's middle above the upper lid (159 / 386), and
+    where the brow PEAKS, found in the pixels (the darkest band in each column, searched round the mesh's brow
+    points, which are a stock shape, not hers), both in eye widths; the points to lay the drawing over. In a small
+    photo (an eye under SHARP pixels wide) the brow is a blur of 3 or 4 pixels: its middle is the mesh's (between 52
+    and 105 / 282 and 334) and the photo counts only when no sharp one does (chat 10: Kemi's two small photos put 52
+    mid-brow). The middle line, not the lower edge: the shadow between brow and lid passes for brow in the pixels."""
+    from scipy import ndimage
+    import likeness as LK
+    im, fc = LK.pick_face(path)
+    P = fc['P'][:, :2]
+    g = ndimage.gaussian_filter(np.asarray(im.convert('L')).astype(float), 1.0)
+    out = []
+    for (low, hi), lid, (i0, i1), top_i, under_i in (((52, 105), 159, (133, 33), (107, 66, 105, 63, 70), (55, 65, 52, 53, 46)),
+                                                     ((282, 334), 386, (362, 263), (336, 296, 334, 293, 300), (285, 295, 282, 283, 276))):
+        ew = float(np.hypot(*(P[i0] - P[i1])))
+        ec = (P[i0] + P[i1]) / 2
+        out_dir = np.sign(P[i1][0] - P[i0][0])
+        tx, ty = P[list(top_i)].T
+        ux, uy = P[list(under_i)].T
+        o = np.argsort(tx)
+        o2 = np.argsort(ux)
+        band = []
+        for x in range(int(min(tx.min(), ux.min())), int(max(tx.max(), ux.max())) + 1):
+            ya = int(np.interp(x, tx[o], ty[o]) - 0.25 * ew)
+            yb = int(np.interp(x, ux[o2], uy[o2]) + 0.15 * ew)
+            col = g[max(0, ya):yb, max(0, x - 1):x + 2].mean(1)
+            if len(col) > 2:
+                c = int(np.argmin(col))
+                half = (col[c] + np.median(col)) / 2
+                e = c
+                while e < len(col) - 1 and col[e] < half:
+                    e += 1
+                band.append((x, max(0, ya) + c, max(0, ya) + e))
+        xs, cs, es = np.array(band, float).T
+        cs = ndimage.uniform_filter1d(cs, max(3, int(0.15 * ew)))
+        k = int(np.argmin(cs))
+        sharp = ew >= SHARP
+        mid = np.abs(xs - ec[0]) < max(2, 0.08 * ew)
+        cm = (P[low] + P[hi]) / 2
+        cy = float(np.median(cs[mid])) if sharp and mid.any() else float(cm[1])
+        out.append(dict(high=float((P[lid][1] - cy) / ew), peak=float(out_dir * (xs[k] - ec[0]) / ew), sharp=sharp,
+                        ew=ew, ec=ec, lid=P[lid], low=(float(ec[0]) if sharp else float(cm[0]), cy),
+                        top=(float(xs[k]), float(cs[k]))))
+    return im, P, out
+
+
+SHARP = 40           # an eye at least this many pixels wide shows the brow's own edges
+
+
+def browcheck(name, out=None):
+    """The drawn brows against the person's own (chat 10, Sam on Kemi: "her eyebrows are really far from her eyes";
+    the arch had lifted the whole brow and a heavier lid had lowered the lid line). Prints, in eye widths, the gap
+    from the upper lid to the brow's middle line on each front photo and in the drawing, and where each peaks; saves
+    the photos' middle values into the pick as 'brow' (the drawing reads the peak). OUT: the drawing's brows and lids
+    (yellow, blue) laid over each photo, eye on eye; red: the photo's brow middle over each eye; white: its peak."""
+    from PIL import Image, ImageDraw
+    f = pick_file(name)
+    d = json.load(open(f))
+    got = [_photo_brows(os.path.join(ROOT, p)) for p in d['fronts']]
+    sides = [b for _, _, bs in got for b in bs]
+    sides = [b for b in sides if b['sharp']] or sides             # the small photos only when nothing sharper
+    photo = dict(high=round(float(np.median([b['high'] for b in sides])), 3),
+                 peak=round(float(np.median([b['peak'] for b in sides])), 3), photos=d['fronts'])
+    d['brow'] = photo
+    json.dump(d, open(f, 'w'), indent=1)
+    sp = person(name, 'detail', **CAST.get(name, {})) if name in CAST else None
+    kh = sp['kit_house'] if sp else dict(load(name), brow=photo)
+    L = face_layout(kh)
+    br = curve(P4.brow_uv(L, kh.get('brow_thick', 0.05), 0.0, 0.0, kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0),
+                          _peak(kh)), 3)
+    lid = kh.get('lid', LID0)
+    drawn = dict(high=round(_brow_gap(L, kh), 3),
+                 peak=round((min(br, key=lambda q: q[1])[0] - L['ecx']) / L['ew'], 3))
+    lines = [f"{os.path.basename(p)}: brows {', '.join(f'{b['high']:.2f}' for b in bs)} eye widths above the lid; "
+             f"peak {', '.join(f'{b['peak']:+.2f}' for b in bs)}{'' if bs[0]['sharp'] else ' (small: eye under 40 px)'}" for (p, (_, _, bs)) in zip(d['fronts'], got)]
+    lines.append(f"photos' middle: {photo['high']:.2f} above the lid, peak {photo['peak']:+.2f}; the drawing: "
+                 f"{drawn['high']:.2f}, peak {drawn['peak']:+.2f} ({drawn['high'] - photo['high']:+.2f} eye widths)")
+    if out:
+        T = 520
+        tiles = []
+        for (im, P, bs) in got:
+            im = im.copy()
+            dr = ImageDraw.Draw(im)
+            (cr, cl) = bs[0]['ec'], bs[1]['ec']                 # the photo's eye centres: person's right, left
+            s = float(np.hypot(*(cl - cr))) / (2 * L['ecx'])
+            ang = math.atan2(cl[1] - cr[1], cl[0] - cr[0])
+            mid = (cr + cl) / 2
+            ca, sa = math.cos(ang), math.sin(ang)
+            to = lambda q: [(mid[0] + s * (u * ca - (v - L['eye_y']) * sa), mid[1] + s * (u * sa + (v - L['eye_y']) * ca)) for u, v in q]  # noqa: E731
+            k = max(1, int(bs[0]['ew'] / 40))
+            for sgn in (-1, 1):                                  # sgn -1: our left on screen = person's right
+                b = to([(sgn * u, v) for u, v in br])
+                dr.line(b + b[:1], fill=(255, 225, 0), width=2 * k)
+                us = np.linspace(-1, 1, 15)
+                ln = to([(sgn * L['ecx'] + L['ew'] / 2 * t, L['eye_y'] - L['eh'] / 1.8 * (1 - t * t) * (1 - lid)) for t in us])
+                dr.line(ln, fill=(60, 170, 255), width=k)
+            for b in bs:
+                x, y = b['low']
+                dr.ellipse((x - 2 * k, y - 2 * k, x + 2 * k, y + 2 * k), fill=(255, 40, 40))
+                px, py = b['top']
+                dr.ellipse((px - 2 * k, py - 2 * k, px + 2 * k, py + 2 * k), outline=(255, 255, 255), width=k)
+            w = float(np.hypot(*(cl - cr)))
+            tiles.append(im.crop((int(mid[0] - 1.25 * w), int(mid[1] - 0.95 * w), int(mid[0] + 1.25 * w), int(mid[1] + 0.45 * w)))
+                         .resize((T, int(T * 1.4 / 2.5))))
+        sheet = Image.new('RGB', (len(tiles) * (T + 8) - 8, tiles[0].height), (255, 255, 255))
+        for i, t in enumerate(tiles):
+            sheet.paste(t, (i * (T + 8), 0))
+        sheet.save(out, quality=90)
+        lines.append(out)
+    return '\n'.join(lines)
+
+
+# ---------------------------------------------------------------------------------------------- colours
 def house_tone(rgb, k):
     """The photo's colour moved k of the way to the nearest house skin tone at the same lightness (the house is
     warmer and cleaner than a photo's grey-pink)."""
@@ -166,6 +288,35 @@ LOOKS = {'house': dict(skin_k=0.65, age_min=0.5, age_k=0.6, sockets=False, fleck
 
 
 # ---------------------------------------------------------------------------------------------- the head
+LID0 = 0.12          # the house's resting upper lid (P4.eyes' lid4) that the measured brow height was laid out against
+
+
+def face_layout(kh):
+    """The layout the head is drawn on: the pick's measures, the brows kept their measured height above the lid AS
+    DRAWN (chat 10: a heavier lid, `lid`, lowers the lid line; the brows used to stay put, so the gap grew)."""
+    L = P4.layout(kh['meas'])
+    L['brow_y'] += L['eh'] / 1.8 * (kh.get('lid', LID0) - LID0)
+    if (kh.get('brow') or {}).get('high'):                 # browcheck() measured the photos: the brows sit as hers
+        L['brow_y'] += (_brow_gap(L, kh) - kh['brow']['high']) * L['ew']
+    return L
+
+
+def _brow_gap(L, kh):
+    """The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths."""
+    br = curve(P4.brow_uv(L, kh.get('brow_thick', 0.05), 0.0, 0.0, kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0),
+                          _peak(kh)), 3)
+    cut = [v0 + (v1 - v0) * (L['ecx'] - u0) / (u1 - u0) for (u0, v0), (u1, v1) in zip(br, br[1:] + br[:1])
+           if (u0 - L['ecx']) * (u1 - L['ecx']) < 0]
+    lid_top = L['eye_y'] - L['eh'] / 1.8 * (1 - kh.get('lid', LID0))
+    return (lid_top - (max(cut) + min(cut)) / 2) / L['ew']
+
+
+def _peak(kh):
+    """Where the brow peaks (eye widths out from the eye's middle): the photos' own (browcheck()) where measured."""
+    b = kh.get('brow') or {}
+    return b.get('peak', 0.21) if kh.get('brow_arch') else 0.21
+
+
 def house_head(img, p, sp, t, hx, hy):
     """The people kit's head part 'house': sp['kit_house'] holds the pick (load()), the look and the hair piece."""
     with PP._Big():
@@ -175,7 +326,7 @@ def house_head(img, p, sp, t, hx, hy):
 def _head(img, p, sp, t, hx, hy):
     kh = sp['kit_house']
     lk = LOOKS[kh['look']]
-    L = P4.layout(kh['meas'])
+    L = face_layout(kh)
     if kh.get('shape') and kh.get('outline'):               # the outline traced off the front photos (trace())
         L['trace'] = kh['outline']
     f = P4.Face(hx, hy)
@@ -197,7 +348,7 @@ def _head(img, p, sp, t, hx, hy):
     if kh.get('lashes'):
         lashes(p, f, L, sp, kh['lashes'], kh.get('eye_scale', 1.0))
     P4.brows(p, f, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0),
-             kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0))
+             kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0), _peak(kh))
     P4.nose(p, f, L, skin)
     age_lines(p, f, L, skin, kh['age'], lk)
     fx, my = f(0.0, L['lip13'])
@@ -727,6 +878,8 @@ if __name__ == '__main__':
         print(sheet(a[1], a[2:] or ['burnham', 'badenoch']))
     elif a and a[0] == 'trace':
         print(trace(a[1], a[2] if len(a) > 2 else None))
+    elif a and a[0] == 'brows':
+        print(browcheck(a[1], a[2] if len(a) > 2 else None))
     elif a and a[0] == 'head':
         print(draw(a[1], a[2], a[3]))
     else:

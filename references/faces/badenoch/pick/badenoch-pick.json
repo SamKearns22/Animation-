@@ -255,5 +255,14 @@
    "references/faces/badenoch/k02-front-politicshome2025.jpg",
    "references/faces/badenoch/k03-front-jc2026.jpg"
   ]
+ },
+ "brow": {
+  "high": 0.568,
+  "peak": 0.423,
+  "photos": [
+   "references/faces/badenoch/k01-front-parliament.jpg",
+   "references/faces/badenoch/k02-front-politicshome2025.jpg",
+   "references/faces/badenoch/k03-front-jc2026.jpg"
+  ]
  }
 }
