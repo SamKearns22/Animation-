@@ -202,6 +202,8 @@ platform. He posts to Instagram, TikTok and YouTube Shorts at the same time (Ins
 the others have not). He does not repeat a joke: a follow-up only comes with new news. The caption is the hook for the joke, and
 he keeps his hashtags. Growth advice must be specific to the film (Elder Swindon: the Swindon audience), never general.
 
+**Facebook (Sam, 14 Nov): do not mention it unless Sam does.** The Facebook Page has no followers; its views are negligible (treat as about 200 on top of a film). Instagram "crossposted to Facebook" figures can be read as Instagram's.
+
 ## Snapshot: Mon 9 Nov 2026, 23:17-23:19 (views, Hook Text and hashtags for 30 films; Sam's TikTok screens)
 
 First record of every film's tags. Views only (no watch data on these screens). Topic: UK = UK politics/news, World = US
