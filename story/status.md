@@ -1,3 +1,3 @@
-Protests (protest-tiers): chat 7 built the check for things held over or behind the head (catches Sam's phone note from every view); Sam said continue on all (fix the kit, ~1-1.5% more for the cast). Face tool: one outfit in every view; Walliams' head proportions pushed to a box; sheet sent. Shadow side (14 Nov): the flat dark side panel is gone from everyone's face and clothes in the shared people code, for new films (before/after sent).
-Now: Protests cast chat 8 (Opus medium): kit fix for a raised hand drawn under the face, last cast faults, glimpse panels, one critique, cast sheet to Sam. Face tool: waits for Sam.
-Waiting: Sam's Y/N on filing research, rule and tool costs apart from the film's. Face tool: Y/N on Walliams' new head, the hair's top, the outfit sheet.
+Protests (protest-tiers): chat 8 fixed the kit so a raised hand in front of the face is drawn over it, made the cast sheet hand-check every picture (found and fixed or named 12 faults), fixed bald heads from behind; cast sheet sent. Shadow side gone from people (14 Nov).
+Now: Protests paused at the cast budget stop (cast ~7.7% of 3%). Face tool: waits for Sam.
+Waiting: Sam's Y/N on ~1% more for the glimpse panels and critique; his Y/N on filing research, rule and tool costs apart. Face tool: Y/N on Walliams' new head, the hair's top, the outfit sheet.

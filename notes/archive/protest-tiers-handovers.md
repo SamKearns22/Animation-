@@ -79,3 +79,15 @@
 - **Open rule requests:** "pencil sketches before check sheets" every film (would merge into rule 11); helper's 3 checks now critique lines S7-S9 (Sam Y). Lessons to propose: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn, never hw/hh (figure-rig 5c).
 - **For Claude:** film `protest-tiers`; cast = `source/protest_tiers_cast.py` (`officer(force)`, `rioter()`, `marcher(i, tier)`, `pose(sp, name)`, `draw(img, cam, x, y, s, sp, j, yaw)`, `moped_scene`, `fit`/`head_box`/`FitPen`); roughs = `source/protest_tiers_roughs.py OUTDIR`; Hook Text "European protests, ranked". Face-tool-c13 merged; 3/4 faces under visors read fine.
 
+
+## Chat 7 handover (archived by chat 8)
+## Where things stand (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 41 (held things in front of or beside the body; the head check now sees it), 89 (one critique pack, two hunts, glimpse panels in the shot's frame + 2x crop + close-up), 24 (stage stop: cast at 5.4% of 3%; Sam Y to ~1-1.5% more, 14 Nov).
+- **Done (chat 7, 14 Nov, Opus high; amber at 2.4%):** (12) `handcheck.head_faults` (behind head / under head; the probe draws the head alone) + the 'no hand' line says when the head covers it; kittest `held_over_or_behind_the_head` (chat 5's phone caught front on; a phone behind the head caught in 6 of 6 views). It found the gallery's 'hands up' side view drawn with the near fist under the face.
+- **Sam, 14 Nov: "Continue on all":** Y to fixing the kit (not avoiding the view) and Y to ~1-1.5% more for the cast stage.
+- **Next: chat 8 (Opus, medium):** (a) kit fix: in `views._person`, a hand above the chin and nearer than the head's middle from this view is drawn after the head (as `on_face` hands are); remove posegallery AVOID 'hands up'/'side'; re-run kittests held_over, pose_gallery, held_prop_touches, hands_round, hands_in_sleeves, point_hand, shoulder_seam. (b) also check `tile`/`sheet` run handcheck per tile and print faults (chat 5's sheet was never checked: why note 1 slipped). Known faults the check now shows: flag at 135 R no hand, placard at 45 L no hand (fix if a glimpse uses those views). (c) (7), (11); `glimpses OUTDIR`; one critique pack, two hunts, `critique.py fixed`; ONE cast sheet to Sam.
+- **Needs Sam:** rule request below (costs filed by kind) is with chat 7.
+- **Read:** job pack "Build"; this section; the cast file's MAP; `handcheck.head_faults`; `views._person` lines around `on_face`.
+- **Open rule requests:** costs filed by kind (Sam 14 Nov: research, new rules, tool work recorded apart from the film; wording proposed by chat 7, rule 24 + ledger.auto); "pencil sketches before check sheets" (rule 11, written af1b471?: check); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn (5c).
+- **For Claude:** film `protest-tiers`; cast = `source/protest_tiers_cast.py`; roughs = `source/protest_tiers_roughs.py OUTDIR`; Hook Text "European protests, ranked"; chat 7 branch `claude/protest-tiers-c7`.
+
