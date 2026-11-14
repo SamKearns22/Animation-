@@ -1,3 +1,3 @@
-Blessed: posted by Sam 14 Nov and closed. Face tool chat 5 done: Walliams replay (one 3-min run vs five chats; tool's head still weaker); 3 tests pass.
-Now: nothing running; next is Sam's next film (planning: Opus, high effort).
-Waiting: Sam on the face tool (morning report): 1) rule 49 names the tests; 2) ~0.4% more for the four Walliams faults.
+Blessed: posted and closed. Face tool: Sam said the Walliams heads aren't him and drift off the house style.
+Now: face chain chat 6 (Opus high): rebuild the face tool on the house head, keep the detail; test Andy and Kemi.
+Waiting: nothing from Sam until chat 6's sheet.

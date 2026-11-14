@@ -100,15 +100,26 @@
   },
   {
    "date": "2026-11-14",
+<<<<<<< HEAD
    "chat": "37300ce2",
+=======
+   "chat": "16b5a7e4",
+>>>>>>> origin/claude/create-claude-md-oe8z4g
    "stage": "auto",
    "round": null,
    "notes": 0,
    "repeats": [],
+<<<<<<< HEAD
    "model": "opus",
    "cost": 1.37,
    "src": "estimate",
    "sid": "session_01J1JB7Ykpd6s4sS9Upwuu2a"
+=======
+   "model": "sonnet",
+   "cost": 3.11,
+   "src": "estimate",
+   "sid": "session_01J1JB7XEQFv5vgSJU75vffk"
+>>>>>>> origin/claude/create-claude-md-oe8z4g
   }
  ],
  "checks": {}

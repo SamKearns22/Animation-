@@ -36,6 +36,8 @@
   facepick and agelines (3, all pass).
 - **Decide (chat 5):** 1) Y/N rule 49's check column names the three face-tool tests (pick Y); 2) Y/N ~0.4% of a week
   more to fix the four Walliams faults (pick Y).
+- **Sam (14 Nov):** not recognisable, drifting off the house style: rebuild on the house head (plan 1), test on Andy and
+  Kemi, keep the detail (Kemi's is "amazing"), blend into the Ad-vanced Notice / Blessed style; age lines stay; no budget limit.
 ## Critic bench (ranking item 3, chat 2; done, about 2.1% of a week against 1.5% estimate, under the 2.25% stop)
 - **Works:** `source/critbench.py` redraws Blessed's first animatic exactly as you saw it and scores critics against your 12 real notes on it. Plain pictures: Opus caught 5, Sonnet 4. With close-ups of the people added: Sonnet 7, Opus 2 (it spent its answer on acting). Both missed the judge's missing mouth and the neck join every time. Kittest passes.
 - **Decide (my picks):** 1) Y: critique packs add a close-up of every person (sheet fault, not wording: misses were too small to see). 2) Y: the critic runs on Sonnet (11 of 24 vs Opus 7, same 19 extras, about 40% cheaper). Lost: the Opus critic. Not switched yet; one film is a small test, so the next chat adds a second Blessed case (animatic 2) first.
@@ -81,15 +83,18 @@
 - **Checks:** budget slipped: 2.8% against the 2.25% stop (the rerun after the false budget stop, and the close-ups build in the same chat).
 
 ## Critic bench, next steps (Sam, 14 Nov: N to Sonnet for now; "know definitively"; acting must be covered)
-Where things stand (critic bench, chat 3 onward):
-- **Rules that bite next:** 89 (critique), 13/83 (set checks), 30. CLAUDE.md: before suggesting or building a check, find the closest rule; an edit beats a new check.
-- **Done:** Remakes test scored; close-ups in every pack; overnight work billed apart (ledger).
-- **Next (Opus, high effort, chat 3):** (1) Acting key: from Sam's face and body notes on Blessed and Remakes (e.g. Remakes 31/58 doubtful look, 53 terrified, 62 tipping to aim, 54/57 KG's moods), scored apart from the checklist faults. (2) Repeat test: Sonnet chat runs each critic 3 times on both films with close-ups, reports the spread, checklist score and acting score; rule: switch to Sonnet only if it matches Opus on both across all runs, else split (Sonnet checklist, Opus acting). Stop at 2.5% of a week.
-- **Place checks (edits, found 14 Nov):** townsfolk in walls = rule 13 / `setcheck.moving_faults` and rule 5 already exist; Remakes' town street has no SET_FEET, so give it SET_FEET (data, no new tool). Banner in one shot = checklist S6 already says "one frame per shot of the set, side by side" but `critique.py pack` never builds that sheet: edit pack to build it per set. Hazed near flower box: nothing in the rulebook; closest rule 83 and `critique.py where`: add one small draw-order check (near things drawn after the haze).
-- **Needs Sam:** Y/N on the wording below (open rule request).
+- **Sam's 08:20-08:30 messages (handover check):** "why would Sonnet catch more" answered in chat 2 (small test; Opus spends its answer on acting; loose matches); "the three place issues" answered (three edits, below, built); "Y, check first that the place checks aren't similar to existing rules" done (two edits, one small check); "Statement 1, always" = the open rule request below.
+- **Built (chat 3):** (1) acting key: `source/bench/blessed-bench.json` and `remakes-bench.json` = the close-up cases plus panels from each film's animatic 2, where Sam's face and body notes were on what he saw (Remakes 44, 53, 54, 57, 58, 62; Blessed 32, 36, 39, 41, 43); strips of 4 moments for his "too static" notes; `critbench score` reports acting apart; `table` shows each critic's spread over repeat runs. Blessed 47 left out (the plead's moment not at 53.5 s). (2) Place edits: rule 13 now says every set anyone stands in lists SET_FEET; Remakes' street has it (`remakes.street_paths`; as Sam saw it, two townsfolk in the house fronts caught; now clear; one in the far doorway named as meant); `critique.py pack` builds sets.jpg (S6: each set's shots side by side; panels name their "set"); `clipcheck.haze_faults` (rule 57: near things after the 'haze'). Kittests pass.
+- **Checks:** budget at risk: this chat about 2.3% of a week at hand-over (the 2.5% stop); the repeat test is its own chat.
+
+Where things stand (critic bench, chat 4 onward):
+- **Rules that bite next:** 89 (critique), 85 (cost watch), 30.
+- **Done:** acting key, both combined cases, three place edits (above).
+- **Next (Sonnet, medium, chat 4): the repeat test.** Packs for run 1 already made (`source/data/critbench/CASE/opus|sonnet`, git-ignored: a fresh container re-makes them with `critbench.py make CASE opus sonnet`). For each case (blessed-bench, remakes-bench), runs 1-3 per critic: `make CASE opus-r2 sonnet-r2` etc., the printed Agent lines (critic kind, model named), then `score CASE MODEL --cost PCT`. Then `table`. Report to Sam: checklist caught, acting caught and the spread per critic. Switch rule: Sonnet only if it matches Opus on both across all runs, else split (Sonnet checklist, Opus acting). Sam decides; nothing switches without his Y. Stop at 2.5% of a week; at amber, finish the run in hand and hand over.
+- **Needs Sam:** Y/N on the rule wording below; after the test, Y/N on the critic.
 - **Open rule request:** CLAUDE.md "Before suggesting anything" line: add "or building": "Before suggesting or building anything (rule, tool, check or idea), search the rulebook and kit catalogue; if an existing rule or tool needs only an edit, edit it; each names the closest one and what is new."
-- **Read:** `guides/job-packs.md` tool jobs; source/critbench.py MAP; source/critique.py closeups.
-- **For Claude:** bench files source/bench/remakes-a3*.json (code at 98cc08d); `critbench.py make CASE`, agent line it prints, `score`.
+- **Read:** `guides/job-packs.md` tool jobs; source/critbench.py MAP only.
+- **For Claude:** score rows go to notes/critic-bench.tsv (new columns acting, acting_key, acting_missed); old rows lack them.
 
 ## Sam's answers (14 Nov, morning)
 - Face tool: 1) Burnham **C**; 2) Badenoch **C** ("best for the house style and matching the features"); 3) **Y**, finish the left list; 4) **Y**, rule 49.3 line written.
@@ -97,3 +102,8 @@ Where things stand (critic bench, chat 3 onward):
 - Places kit: 1) approve after a run-through of the contents; 2) explain the notice question.
 - Critic: 1) explain the close-ups; 2) not yet: test the critic again on Remakes and report back.
 - Second answers (14 Nov): notice on Blessed left as posted (Y); close-ups of every person in critique packs (Y; the Remakes critic test still decides Sonnet); people kit: everyone, famous too, keeps one look in every pose and turn (Y); people kit approved (Y); places kit approved (Y); moves kit approved (Y); acting list's two words corrected (Y); the rough sheet once per film before building, plus a small one for anything new (Y). One look in every pose: written into rule 13 (Sam: Y, 14 Nov), not a new rule.
+
+## Critic bench: repeat test result (chat 4, 14 Nov; scores in notes/critic-bench.tsv)
+- Checklist caught, 3 runs each. Blessed (of 12): Opus 2, 2, 5; Sonnet 4, 9, 7. Remakes (of 7): Opus 2, 4, 3; Sonnet 3, 3, 2.
+- Acting caught. Blessed (of 5): Opus 3, 3, 2; Sonnet 4, 3, 4. Remakes (of 6): Opus 3, 2, 4; Sonnet 4, 2, 3.
+- Extras (unruled): Opus 65 over 6 runs, Sonnet 73. Averages: Sonnet equal or better on both scores; run-to-run spread is as big as the gap, so no real difference. Recommendation: Sonnet for both (Y/N to Sam). Nothing switched. Cost: about 3.1% of a week (amber).

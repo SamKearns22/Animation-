@@ -1975,6 +1975,24 @@ def town_wall(img, p, cam, t):
 
 STREET_LEV = Level(h=1.6, hz=470.0, f=812.0)   # note 56's street: the vanishing point above Link's cap in S11
 
+STREET_FOLK = ((-0.9, 21.0, (90, 120, 150), 21), (0.4, 30.0, (120, 140, 90), 23),   # remakes note 68: on the paving,
+               (-0.5, 15.0, (170, 110, 70), 24), (0.9, 12.5, (110, 80, 140), 25))   # not in the house fronts; two fewer
+
+
+def street_feet(step=0.5):
+    """Rule 13's data for S11's street (critic bench, 14 Nov; note 68: townsfolk stood in the house walls and no check
+    saw it, because only the camp listed SET_FEET): the house fronts _street_side paints (their foot runs straight
+    from x 540 -/+ 310 at y 1000 to 540 -/+ 70 at y 520), as slices in metres on STREET_LEV, and the far row of
+    houses closing the street (note 61). All painted under the townsfolk."""
+    lev, out = STREET_LEV, []
+    d, far = lev.d_at(1000), lev.d_at(520)
+    while d < far:
+        half = (310 - 240 * (1000 - lev.p(0, d)[1]) / 480) * d / lev.f      # the front's x at this depth, metres
+        out += [('left house fronts', -30.0, -half, d, d + step, 8.0, 'under'),
+                ('right house fronts', half, 30.0, d, d + step, 8.0, 'under')]
+        d += step
+    return out + [('far row of houses', -30.0, 30.0, far, 200.0, 8.0, 'under')]
+
 
 def _street_side(p, sg, houses, t, style='timber'):
     """One side of the street (sg -1 left, +1 right) in one-point perspective to (540, 470): house fronts running
@@ -2100,9 +2118,7 @@ def town_reverse(img, p, cam, t):
     _street_side(p, 1, [(0.0, 0.34, PLASTER[2], 2, 4), (0.34, 0.6, PLASTER[4], 3, 5), (0.6, 0.82, PLASTER[3], 2, 6),
                         (0.82, 1.0, PLASTER[1], 3, 7)], t, style='stone')   # critique r3: each side its own build
     _bunting(p, 440, 440, 640, 440, 22, 9, t)
-    for x, d, c, sd in ((-0.9, 21.0, (90, 120, 150), 21), (0.4, 30.0, (120, 140, 90), 23),   # remakes note 68: on
-                        (-0.5, 15.0, (170, 110, 70), 24), (0.9, 12.5, (110, 80, 140), 25)):   # the paving, not in the
-                                                                        # house fronts; two fewer (it was busy)
+    for x, d, c, sd in STREET_FOLK:                                     # note 68: on the paving (street_feet)
         _townsfolk(p, x, d, c, sd, lev=STREET_LEV)
     _swag_wall(p, 200, 400, 800, 900, t)
     _swag_wall(p, 680, 880, 800, 900, t)

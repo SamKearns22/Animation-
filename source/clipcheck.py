@@ -21,6 +21,9 @@ One shared check for every film, run by preflight.py before every animatic. A fi
                  front, or vanishes behind, in one frame (Flying Whales note 16: a smoke column sent behind the rig
                  at one instant). Without draw_order, the names of layers(t) are used.
   ORDER_SWAPS =  [(a, b, t0, t1, why)]: planned swaps (a whale flying round in front of the rig)
+  NEAR        =  names nearer the lens than the cast (or name them 'near ...'): with 'haze' in draw_order(t), each
+                 must come after it (Remakes note 73: the near flower box hazed like the far square). A film that
+                 says 'haze' in its code but never names it in draw_order is named
 
 The checks:
 1. Solids: no two solids of different owners overlap by more than TOUCH, unless the pair is ALLOWED then.
@@ -37,6 +40,7 @@ The checks:
 import importlib
 import math
 import os
+import re
 import sys
 
 import numpy as np
@@ -400,6 +404,35 @@ def flip_faults(film, times):
     return faults
 
 
+def haze_faults(film, times):
+    """Rule 57's draw order, the haze (critic bench, 14 Nov; Remakes note 73: the near flower box was drawn before
+    the haze and hazed like the far square; no critic and no check saw it). A film that hazes or softens a layer
+    names it 'haze' in draw_order(t); anything nearer the lens than the cast (named 'near ...', or listed in NEAR)
+    must come after it. A film whose code says it hazes but whose draw_order never names 'haze' is named."""
+    get = getattr(film, 'draw_order', None)
+    near = set(getattr(film, 'NEAR', ()))
+    faults, seen, hazed = [], set(), False
+    for t in (times if get else ()):
+        order = list(get(t))
+        if 'haze' not in order:
+            continue
+        hazed = True
+        for n in order[:order.index('haze')]:
+            if (n in near or n.startswith('near ')) and (_shot(film, t), n) not in seen:
+                seen.add((_shot(film, t), n))
+                faults.append(f'{t:.2f} s: {n} is near the lens but drawn before the haze, so it is hazed like the '
+                              f'background: draw it after the haze (rule 57)')
+    if not hazed:
+        try:
+            src = open(film.__file__).read()
+        except (AttributeError, OSError):
+            src = ''
+        if re.search(r'\bhaze[ds]?\b', src, re.I):
+            faults.append("the film hazes a layer but its draw_order(t) never names 'haze', so nothing checks that "
+                          "near things are drawn after it (rule 57): name 'haze' and the near things there")
+    return faults
+
+
 def in_shot_faults(film):
     faults = []
     fps = getattr(film, 'FPS', 12)
@@ -428,6 +461,7 @@ def run(film):
         faults += order_faults(film, times, fps)
     if hasattr(film, 'layers') or hasattr(film, 'draw_order'):
         faults += flip_faults(film, times)
+    faults += haze_faults(film, times)
     if hasattr(film, 'IN_SHOT'):
         faults += in_shot_faults(film)
     return faults

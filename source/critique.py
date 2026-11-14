@@ -9,6 +9,7 @@ MAP
   closeups ......... every person in a full panel gets a close-up panel (Sam, 14 Nov): boxes from the panel's
                      "people" or the film's scene(t) (people_boxes); pack adds them after the spec's own panels
   check_sheet ...... each panel beside its references (same height), for step 2
+  set_sheet ........ sets.jpg, line S6: the full frames of each set (the panel's "set") side by side, for step 2
   before / pairs ... a notes round: frames saved before any fix; beforeafter.jpg (marked, before, after, same box)
   pack ............. writes the pack and prints the one-line Agent prompt
   parse / record ... refuses a half answer or a look written after the result; saves into the ledger; tallies line ids.
@@ -42,7 +43,7 @@ Calibration (10 Nov, two helpers on Elder Swindon stills plus two old faults put
 label (O1) and the hand off its phone (P1), and neither flagged them on the clean panels. Limits: a person panel
 with no face reference always gets CAN'T TELL P4; tiny props get named loosely in the cold look.
 
-SPEC: {"round": R, "stage": "cast", "panels": [{"t": 12.3 or "img": PATH, "crop": [x0,y0,x1,y1] or null, "is": "...", "parts": "PO",
+SPEC: {"round": R, "stage": "cast", "panels": [{"t": 12.3 or "img": PATH, "crop": [x0,y0,x1,y1] or null, "is": "...", "parts": "PO", "set": "wall",
 "refs": [PATH...], "beat": "...", "views": [...]}], "notes": [{"n": 61, "words": "...", "line": "O3", "marked": PATH
 or null, "t": 20.1, "box": [x0,y0,x1,y1]}]}. A panel with a crop is a detail (540 px); without, a phone-size frame.
 A panel showing something built new for the film adds "new": "NAME" (and "drawn": "file.function"): a clean pass
@@ -210,7 +211,8 @@ def look_sheets(pics, specs, out_dir, per=12):
     """1-look.jpg (and 1-look-2.jpg...): numbers only, frames 270 px, details 540 px, rows at most 1080 px wide."""
     paths = []
     for k in range(0, len(pics), per):
-        tiles = [_numbered(pics[i], i + 1, 540 if specs[i].get('crop') else 270, bool(specs[i].get('crop'))) for i in range(k, min(k + per, len(pics)))]
+        tiles = [_numbered(pics[i], i + 1, 1080 if specs[i].get('strip') else 540 if specs[i].get('crop') else 270,
+                           bool(specs[i].get('crop')) and not specs[i].get('strip')) for i in range(k, min(k + per, len(pics)))]
         rows, row, w = [], [], 0
         for tl in tiles:
             if row and w + tl.width > 1080:
@@ -268,6 +270,38 @@ def check_sheet(pics, specs, out_dir, h=480, per=6, numbers=None, name='check'):
         sheet.save(p, quality=85)
         paths.append(p)
     return paths
+
+
+def set_sheet(pics, specs, out_dir, h=640):
+    """sets.jpg, line S6 (critic bench, 14 Nov; Remakes note 75: a banner behind Link in one wall shot and not the
+    other; S6 asked for this sheet but no pack built it, so all four critics missed it): one labelled row per set,
+    its full-frame panels side by side at the same height. Panels name their set with "set"; [] when no set has two."""
+    groups = {}
+    for i, (im, p) in enumerate(zip(pics, specs), 1):
+        if p.get('set') and not p.get('crop'):
+            groups.setdefault(p['set'], []).append((i, im))
+    rows = []
+    for name, got in groups.items():
+        if len(got) < 2:
+            continue
+        r = _row([im for _, im in got], h)
+        lab = Image.new('RGB', (max(r.width, 900), h + 44), (255, 255, 255))
+        lab.paste(r, (0, 44))
+        ImageDraw.Draw(lab).text((6, 6), f"set '{name}': panels {', '.join(str(i) for i, _ in got)} side by side "
+                                         f"(line S6: what is in one and not the other?)", font=_font(26), fill=(0, 0, 0))
+        rows.append(lab)
+    if not rows:
+        return []
+    sheet = Image.new('RGB', (max(r.width for r in rows), sum(r.height + 12 for r in rows)), (200, 200, 200))
+    y = 0
+    for r in rows:
+        sheet.paste(r, (0, y))
+        y += r.height + 12
+    if sheet.width > 2160:
+        sheet = sheet.resize((2160, int(sheet.height * 2160 / sheet.width)))
+    path = os.path.join(out_dir, 'sets.jpg')
+    sheet.save(path, quality=85)
+    return [path]
 
 
 # ---- before and after (a notes round) ------------------------------------------------------------------------------
@@ -449,6 +483,10 @@ def pack(film_name, spec_path):
     pics = [_panel(film, p) for p in specs]
     looks = look_sheets(pics, specs, out)
     checks = check_sheet(pics, specs, out)
+    checks += set_sheet(pics, specs, out)
+    if sum(1 for p in specs if not p.get('crop')) > 1 and not any(p.get('set') for p in specs):
+        print('critique: no panel names its "set", so there is no side-by-side sheet for line S6: add "set" to each '
+              'full-frame panel')
     ba = pairs(film, film_name, spec, out) if notes else None
     parts = ''.join(sorted(set(''.join(p.get('parts', '') for p in specs)), key=PARTS.index))
     open(os.path.join(out, 'checklist.md'), 'w').write(checklist_for(parts))
