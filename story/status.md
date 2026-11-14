@@ -1,3 +1,3 @@
-Blessed: posted and closed. Face tool chat 6: Andy and Kemi redrawn on the house head, two looks; sheet sent.
-Now: waiting for Sam's pick of the look (1 house, 2 house + detail); then a fresh Opus high chat pushes the likeness.
-Waiting: Sam's 1 or 2, and Y/N on rule 49's check column.
+Blessed: posted and closed. Face tool: Sam picked look 2 (house + detail); Andy "90% correct".
+Now: face chain chat 7 (Opus high): Kemi's face shape back (K1) and her plaits over the crown (K2), then the likeness push.
+Waiting: Y/N on rule 49's check column.

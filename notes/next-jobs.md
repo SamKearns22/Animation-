@@ -25,13 +25,19 @@
   Burnham 2: 12%; Badenoch 1: 30%; Badenoch 2: 35% (her plaits carry her; the face reads generic). Answers kept
   locally only (review/ is not saved). Fault found in the check: the pack's folder is named after the person and two
   namers said it nudged them: name packs neutrally (fix in nametest.py's pack paths).
-- **Next (the chat Sam's answer opens, Opus HIGH: new building):** with Sam's look, push the likeness until the
+- **Next (chat 7, Opus HIGH: new building):** K1 and K2 first (a clip-size sheet of Kemi: pick C beside look 2
+  before and after; find why her shape was lost: house outline vs C's outline_uv, the layout at the house size), then push the likeness until the
   namer names each blind (neutral folder names, line-up step too): Burnham's heavy dark brows over deep-set eyes,
   longer face, the wide smile with deep folds (his usual expression), thick wavy hair pushed up; Badenoch's high
   rounded forehead (namer: the cap reads as a fringe), wide-set big eyes, full lips, the gap-tooth smile. Keep the
   likeness check as the 'nothing the wrong way' guard. Then: facehouse in people.py (`head: house NAME`), turned
   views (turnhead), kittest, catalogue row, facepick's sheet drawing its heads with facehouse; then Walliams.
-- **Needs Sam:** 1 the look (1 house or 2 house + detail); 2 rule 49's check column naming the face-tool tests.
+- **Sam's answers (14 Nov, after the sheet):** "2 is great" (look 2, house + detail, is the look). Andy: "looks 90%
+  correct, great job". Kemi, two notes: **K1** "we lost the face shape ... Kemi just needs her proportions back" (the
+  pick C's face shape and proportions; "we are allowed to play with face shapes in the house style"); **K2** "her
+  plaits go all the way to the top ... always the way she keeps her hair. You would need to learn how to draw her top
+  plaits too" (plaits from the parting over the crown, not a sleek cap; the namer also read the cap as a fringe).
+- **Needs Sam:** rule 49's check column naming the face-tool tests (Y/N, asked twice).
 - **Sam's words kept:** "Please don't limit yourself on budget as this is important and I have spare." (no % stop;
   rule 85 still hands over between chats). Age lines stay, house style, per character.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP; rule 49.
