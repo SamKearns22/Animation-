@@ -28,7 +28,12 @@
   `notes/morning/walliams-facetool-c13.jpg` (photos, Blessed head, new head, turned).
 - **Seen, not fixed:** the stubble is drawn front-on only (turned views bare); his eyes read smaller and more tired
   than the Blessed head's.
-- **Next (chat 14, Opus medium):** stubble carried round the turned views (turnhead's beard path, as Vance's goatee);
+- **Sam, 14 Nov (after chat 12; passed on by chat 12, its notes were not pushed):** (a) Y: background people on the
+  generic head (views.head_view) move onto the new three-quarter turned head. (b) "clothes remain consistent no
+  matter the pose, as that was the source of the Kemi problem": the outfit described once and drawn by every view;
+  Kemi's open collar out of the braids code, the outfit's own choice; a kittest drawing each outfit from every view
+  that fails when a view drops a piece the front has. Both before more Walliams work.
+- **Next (chat 14, Opus medium):** Sam's (a) and (b) above first; then stubble carried round the turned views (turnhead's beard path, as Vance's goatee);
   then Sam's notes on the Walliams sheet, if any.
 - **Needs Sam:** Y/N on the new Walliams head (the chain does not wait on it).
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
