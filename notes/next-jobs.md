@@ -1,17 +1,40 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/rounds-read-page-c3` (also on the main line); face tool: its own chain.
-- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; now the page).
-- **Done (overnight chat 3, item 6, Opus high, ~0.75%, at the stop):** `source/page.py` (MAP, catalogue row, kittest
-  `round_page`): `story/FILM-page.md` = every film file's codemap (Blessed 8% of the code); `find "note"` gives FILE:LINE.
-  Notes-round pack now reads the page. Handover check: helpers' reports and parent seeds no longer read as Sam's.
-- **Waits for 4, 5, 7:** the page carries the people/places/moves description lines, so notes change the page.
-- **Next: overnight chat 4, Opus HIGH: people from a description (ranking item 4), per `notes/overnight-run.md`.**
+- **Newest work:** `claude/people-kit-c4` (also on the main line); face tool: its own chain.
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
+- **Done (overnight chat 4, item 4, Opus high, ~2.3%):** `source/people.py` + `people_parts.py` (MAP, catalogue row,
+  kittest `people_from_a_description`); `story/blessed-people.txt`: Blessed's 16 invented people as ~8 lines each,
+  redrawn by the kit to 0.00% pixel difference on 8 finished frames. The page carries each person's lines.
+- **Next: chat 4b, Opus MEDIUM (building from the clear plan below):** steps 2-4 of "Item 4" below (Brand, Walliams,
+  the press pack, turned heads); then the sheets for the morning report. Hard stop: 12% for the job.
 - **Needs Sam (morning report):** Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
-- **Bench left (a later chat, Opus medium, ~0.5%):** second case (animatic 2, from 51e8d9f); see `critbench.py` MAP.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `notes/ranking-list.md` item 4; `notes/overnight-run.md`.
+- **Read:** this section; "Item 4" below; `guides/job-packs.md` "A tool job"; `notes/overnight-run.md`; `people.py` MAP.
 - **Open rule requests:** none.
-- **For Claude:** `find` scores by shared words: a note naming a note number ("note 28") hits best; item 4 should add
-  each person's description lines to `page.build`.
+- **For Claude:** replicate swaps the film's own dicts IN PLACE and pops `BC.FRONT_FACES`; `_front_head` is spied to
+  prove who the kit drew. Bespoke heads join as parts (`EXTRAS`, `install`), never as film imports.
+
+## Item 4, people from a description (ranking item 4; overnight run; Opus high design, medium build; 8%, stop 12%)
+Design (chat 4, 14 Nov): a person is a block of plain lines in `story/FILM-people.txt` (language in `people.py` MAP);
+the kit turns it into the engine's person (views.person) and hangs LIFTED parts on it (`people_parts.py`, copied
+unchanged in look from `blessed_cast.py`; the face card rides in the person, `kit_face`, not in a table by name).
+No film imports the kit until Sam approves (kittest refuses one). The pass mark is `people.py replicate FILM`: the
+finished frames beside the same frames with the kit's people swapped in; 0.05% of pixels is the bar.
+1. **Done:** invented people (front face, 10 haircuts, stubble, boxed beard, glasses, freckles, outfits, wig, robe,
+   officer kit): Blessed's 16 at 0.00%. Page lines. Sheet `people.py sheet blessed OUT.jpg`.
+2. **Brand (4 looks) and Walliams, chat 4b:** famous faces as `head: measured CARD` (the likeness card's measures,
+   P4.MEASURED/PUSH/TUNE from lines `push 1.6`, `tune eyes_apart 2.0, ...`), `beard: full` (moustache, cheek, chin
+   colours: brand_beard lifted, colours from lines), `hair: long curls` with `knot` (brand_hair, bun, turned hair
+   lifted), `moods:` lines (a mood = brow, frown, lid, squint, mouth, smile), looks as `like: brand` + outfit lines,
+   torso extras (open shirt and crucifix, scarf, tracksuit zip). Walliams: his own head file is one part
+   (`blessed_walliams`) or lifted the same way; pick by size. Frames: arrive 2.0, oath 5.6, dock 16, phone 33,
+   tvroom 38, gates2 55. Bar 0.05%.
+3. **The press pack:** a crowd line (`crowd: press, 10, styles ..., seed`) using the lifted turned press heads.
+4. **Turned heads for invented people (rule: drawn in every view):** the press pack's turnhead route for any front
+   face, so a kit person turns (the sheet's side and back now use the engine's plain heads: curly reads long from
+   behind, the wig is front only). Check: the sheet at 0/45/90/135/180.
+5. **The morning report:** one sheet per film-frame pair (new beside finished), the cast sheet, the cost; then the
+   places kit chat (item 5, Opus high).
+Cost per film once approved: a new invented person ~10 lines (was ~60-120 lines of face table and code); Blessed's
+cast code 1,661 lines -> about 200 lines of descriptions plus Brand's own parts.
 
 ## Job Q, the handover check (Sam: Y, 13 Nov; Opus medium, ~1.5%; beside the face tool)
 Why: Blessed's handovers dropped things (notes 8-11 sat unread when chat 5 broke before writing them and chat 6 read

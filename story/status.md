@@ -1,3 +1,3 @@
-Rounds read a page built: notes chats read an 8%-size page of a film, not its code (proved on Blessed).
-Now: overnight chat 4 (Opus high) builds people from a description (ranking item 4).
+People kit (ranking item 4) half built: Blessed's 16 invented people redrawn exactly from short descriptions.
+Now: overnight chat 4b (Opus medium) adds Brand, Walliams, the press pack and turned heads.
 Waiting: morning report picks (close-ups in every critique; Sonnet critic).

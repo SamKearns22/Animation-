@@ -443,3 +443,18 @@
   scale lenses by the cartoon eye width, not half the eye gap. 3 hair a flat blob: two tones from the photo (grey
   sides), a few strand lines. 4 skin too pink (`_flat` boosts saturation). 5 line-up only 4: `_others` should find
   every film's front photos. 6 sheet's third phone tile cut off. Badenoch: braids (hair mask down past the jaw).
+
+## Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/rounds-read-page-c3` (also on the main line); face tool: its own chain.
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; now the page).
+- **Done (overnight chat 3, item 6, Opus high, ~0.75%, at the stop):** `source/page.py` (MAP, catalogue row, kittest
+  `round_page`): `story/FILM-page.md` = every film file's codemap (Blessed 8% of the code); `find "note"` gives FILE:LINE.
+  Notes-round pack now reads the page. Handover check: helpers' reports and parent seeds no longer read as Sam's.
+- **Waits for 4, 5, 7:** the page carries the people/places/moves description lines, so notes change the page.
+- **Next: overnight chat 4, Opus HIGH: people from a description (ranking item 4), per `notes/overnight-run.md`.**
+- **Needs Sam (morning report):** Y to people close-ups in every critique pack; Y to the Sonnet critic (Lost: Opus critic).
+- **Bench left (a later chat, Opus medium, ~0.5%):** second case (animatic 2, from 51e8d9f); see `critbench.py` MAP.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `notes/ranking-list.md` item 4; `notes/overnight-run.md`.
+- **Open rule requests:** none.
+- **For Claude:** `find` scores by shared words: a note naming a note number ("note 28") hits best; item 4 should add
+  each person's description lines to `page.build`.

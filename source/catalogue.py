@@ -52,6 +52,7 @@ ENTRIES = [
     ('People', 'Benjamin Netanyahu', 'netanyahu_cast.py', ('cast', 'netanyahu_cast')),
     ('People', 'Darth Maul (hood up or down, saberstaff)', 'maul_cast.py', ('cast', 'maul_cast')),
     ('People', 'News presenter (original; Newsdesk)', 'newsdesk_cast.py', ('cast', 'newsdesk_cast')),
+    ('People', 'People from a description (the kit; Blessed\'s invented 16)', 'people.py', ('cast', 'people')),
     ('People', 'Satan, Epstein, Trump (measured; MidTerminal)', 'midterminal_cast.py', ('cast', 'midterminal_cast')),
     ('People', 'Musk in Master Chief armour, anime Cortana hologram', 'halo_cast.py', ('frame', 'halo_no_no', 27.2)),
     ('Creatures', 'Chrome Centurion robots', 'prepper_robot.py', ('frame', 'prepper', 60.0)),

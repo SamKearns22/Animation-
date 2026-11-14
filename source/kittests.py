@@ -1692,6 +1692,53 @@ def round_page():
     return pg * 100 < code * 15 and 'blessed.py:307' in hit, f'page {pg} tokens, code {code}; note 28 -> {hit}'
 
 
+@test
+def people_from_a_description():
+    """Ranking item 4 (overnight chat 4): the people kit redraws Blessed's people from their descriptions, pixel for pixel."""
+    import glob
+    import people as K
+    bad = []
+    for txt, why in (('# a: A\nskin: 1 2', 'a colour of two numbers'), ('# a: A\nskin: pale\nhat: red', 'an unknown line'),
+                     ('# a: A\nskin: pale\nhair: mohican', 'an unknown haircut'), ('skin: pale', 'no person yet')):
+        try:
+            K.parse(txt)
+            bad.append(why + ' was not refused')
+        except K.DescriptionError:
+            pass
+    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
+             ('people.py', 'people_parts.py', 'page.py', 'kittests.py') and re.search(r'^\s*(import people\b|from people\b)',
+             open(f, encoding='utf-8').read(), re.M)]
+    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
+        bad.append(f'films using the kit before Sam approves it: {users}')
+    tmp = os.path.join(HERE, 'data', 'kittest-people')
+    out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath')])
+    drawn = set().union(*[set(w) for *_, w in scores])
+    for t, label, diff, _ in scores:
+        if diff > 0.05:
+            bad.append(f'{label} {t}s: {diff:.2f}% of pixels differ')
+    if len(drawn) < 13:
+        bad.append(f'only {len(drawn)} people drawn by the kit')
+    import blessed as BL
+    import blessed_cast as BC
+    TC = BC.TC
+    caught = K.faults(dict(judge=BC.JUDGE)) == []
+    keep = TC.HEADS['judge']
+    TC.HEADS['judge'] = TC._head                   # the old fault (notes 13, 15): the judge on the house head
+    caught = caught and bool(K.faults(dict(judge=BC.JUDGE)))
+    TC.HEADS['judge'] = keep
+    if not caught:
+        bad.append('the house head (no mouth) was not caught')
+    a = BL.frame_image(5.6)
+    BC.JUDGE['kit_face']['lip'] = (90, 20, 20)     # one description fact changed: the picture must show it
+    b = BL.frame_image(5.6)
+    import numpy as np
+    seen = float((np.abs(np.asarray(a.convert('RGB'), np.int16) - np.asarray(b.convert('RGB'), np.int16)).max(axis=2) > 24).mean() * 100)
+    if seen <= 0.0:
+        bad.append('a changed lip colour did not change the picture')
+    return not bad, '; '.join(bad) or (f'{len(drawn)} people redrawn from their descriptions, '
+                                        + ', '.join(f'{lb} {d:.2f}%' for _, lb, d, _ in scores) + f' differ; a changed line shows ({seen:.2f}%)')
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

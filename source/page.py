@@ -12,8 +12,8 @@ MAP
     python3 source/page.py FILM                  (writes story/FILM-page.md; prints its size against the code's)
     python3 source/page.py FILM find "the officer's arms clip the van" [-n 5]
 
-Waits for items 4, 5, 7 (people, places, moves kits): then a person, place or move is a description line, and the page
-carries those lines too, so most notes are answered by changing a line on the page itself.
+People (item 4, 14 Nov): the page carries each person's description from story/FILM-people.txt (people.lines), so
+`find` points a note on a person at their block. Waits for items 5, 7 (places, moves kits) to do the same.
 """
 import glob, os, re, subprocess, sys
 
@@ -37,6 +37,11 @@ def build(film):
         code += src
         m = subprocess.run([sys.executable, os.path.join(HERE, 'codemap.py'), f], capture_output=True, text=True).stdout
         parts.append(f'\n## {os.path.basename(f)} ({src.count(chr(10))} lines)\n' + '\n'.join(m.splitlines()[2:]))
+    import people                                 # item 4: each person's description lines (story/FILM-people.txt)
+    ppl = people.lines(film)
+    if ppl:
+        parts.append(f'\n## {film}-people.txt ({len(ppl)} people; a note on a person changes their lines)\n' +
+                     '\n'.join(f'- {n}: {txt}' for n, txt in ppl))
     page = '\n'.join(parts) + '\n'
     out = os.path.join(ROOT, 'story', f'{film}-page.md')
     open(out, 'w', encoding='utf-8').write(page)
