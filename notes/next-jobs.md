@@ -21,8 +21,13 @@
   face and turn kittests pass. Sheet sent: `notes/morning/walliams-turned-c14.jpg`. No notes from Sam on c13's sheet yet.
 - **Seen, not fixed:** side view: the stubble's top edge ends in a straight step behind the jaw (as the front's top
   edge); his eyes read smaller and more tired than the Blessed head's.
-- **Next:** none: the chain stops for Sam's Y/N on the new Walliams head and any notes on the two sheets; his answer
-  comes back to chat 14, which opens the next chat (Opus medium) for the notes.
+- **Next (chat 14, in hand):** Sam's two jobs below; then Sam's notes on the Walliams sheets, if any.
+- **Sam, 14 Nov (to chat 12), two jobs (chat 14 doing them):** (a) Y: background people on the generic head
+  (views.head_view) move onto the new three-quarter turned head. (b) "clothes remain consistent no matter the pose, as
+  that was the source of the Kemi problem": the outfit described once and every view (front, three-quarter, side,
+  behind) draws it; nothing outfit-like hides in a hair piece (Kemi's open collar sits in the braids code: make it the
+  outfit's own choice, e.g. `outfit: suit ..., open collar`). A kittest draws each outfit from every view and fails
+  when a view drops a piece the front has (rule 86).
 - **Needs Sam:** Y/N on the new Walliams head (c13 sheet + turned c14 sheet).
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on
   budget." Age lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
