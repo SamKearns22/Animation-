@@ -29,7 +29,8 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - At the end: each new thing that passed the critique gets a row in the catalogue's "Passed the critique".
 
 ## Notes round (Opus, medium): Sam's notes, fixes, clips
-- Read: the film's notes (open notes and Where things stand only); the code lines the film's MAP points to.
+- Read: the film's notes (open notes and Where things stand only); its page (`python3 source/page.py FILM`, then
+  `page.py FILM find "note words"` for each note); only the lines it points to. Never whole film files.
 - Bite: 30, 87, 89 (with 56, 76, 79 in it), 88. Tools: `critique.py where/before`, `final OUT --small --span T0 T1`.
 
 ## Checks and animatic (Sonnet): pre-flight, check sheet, render, send

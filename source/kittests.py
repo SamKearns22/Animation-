@@ -1648,9 +1648,48 @@ def handover_drops():
          len(then) == 1 and 'face' in then[0], not closed,
          len(H.check(claim, [])) == 1, not H.check(sent, []), any('UNANSWERED' in f for f in H.check(late, [])),
          any('OVERRIDE' in f for f in H.check(over, [])), [x for _, x in own] == ['N8: the pool player clips'],
-         H._not_typed('Overnight run, chat 1', rec), not H._not_typed('N8: the pool player clips', rec)]
+         H._not_typed('Overnight run, chat 1', rec), not H._not_typed('N8: the pool player clips', rec),
+         H._not_typed('not in the record yet', rec) is None,              # the hook's background step waits for it
+         not H._is_sam('<agent-message from="a1">\n[Subagent hand-back] report')]   # overnight chat 3: helpers' reports
     return all(r), f'chat 5 caught {caught}, after N8-N11 written {len(final)}; note 47 then {then}, closed ' \
                     f'{len(closed)}; checks {r}'
+
+
+@test
+def critic_bench_scores():
+    """Ranking item 3: the critic bench scores an answer against Sam's real Blessed notes: a hit by line or words, a miss names its line."""
+    import json, tempfile
+    import critbench as B
+    c = B.case('blessed-a1')
+    d = tempfile.mkdtemp()
+    c['name'] = 'kittest'
+    B.DATA = d
+    out = os.path.join(d, 'kittest', 'x')
+    os.makedirs(out)
+    json.dump({'round': 0, 'stage': 'bench', 'panels': c['panels']}, open(out + '.spec.json', 'w'))
+    open(os.path.join(out, 'look.md'), 'w').write('\n'.join(f'{i}: a picture' for i in range(1, 15)))
+    import time
+    time.sleep(0.01)
+    open(os.path.join(out, 'result.md'), 'w').write(
+        "## Faults\nFAULT P12 [2, 4]: the judge has no mouth\nFAULT A1 [3]: back-row woman's head sits straight on "
+        "her shoulders, no neck\nFAULT P11 [12]: chin to chest join reads wrong\nFAULT O5 [8]: a cup floats\n"
+        "CAN'T TELL P4 [1]: no reference\n## Checked\n1-14\n## Cold look\nfine\n")
+    got, miss, extras, cant, rep = B.score(c, 'x', write=False)
+    keys = {k['id'] for k in c['key']}
+    r = [sorted(got) == ['k13', 'k14a', 'k23'], len(miss) == len(keys) - 3, len(extras) == 1, len(cant) == 1,
+         'improve P5' in rep, all(set(k['panels']) <= set(range(1, 15)) for k in c['key']),
+         len(c['panels']) == len(c['shots'])]
+    return all(r), f'caught {sorted(got)}, {len(miss)} missed, {len(extras)} extra; checks {r}'
+
+
+@test
+def round_page():
+    """Ranking item 6 (overnight chat 3): a round reads Blessed's page (under 15% of its code) and a note finds its lines."""
+    sys.path.insert(0, HERE)
+    import page as P
+    out, pg, code = P.build('blessed')
+    hit = [w for _, w, _ in P.find('blessed', "note 28: the escort should look like an HM Prison officer", 3)]
+    return pg * 100 < code * 15 and 'blessed.py:307' in hit, f'page {pg} tokens, code {code}; note 28 -> {hit}'
 
 
 def main():

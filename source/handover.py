@@ -6,7 +6,8 @@ note 47's second half ("his face still needs work") was marked done with the fir
 Closest before it: CLAUDE.md "Fresh chats and the handover", rule 30, ledger.py; nothing checked a handover.
 
 MAP
-  log .............. UserPromptSubmit hook: each message Sam types is saved to notes/ledger/sam/CHAT.md, committed
+  log .............. UserPromptSubmit hook: each message Sam types is saved to notes/ledger/sam/CHAT.md (a background
+                     step waits up to 20 s for the chat record to drop seeds and notices), committed
                      and pushed at once (in the background), so a chat that breaks mid-turn still leaves his words on
                      GitHub for the next chat. Costs nothing in the chat.
   end .............. before a chat hands over: reads this chat's own record (free, no list_events) and flags
@@ -31,7 +32,7 @@ from datetime import datetime, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOGDIR = os.path.join(ROOT, 'notes', 'ledger', 'sam')
 NOT_SAM = ('<task-notification', '[SYSTEM NOTIFICATION', 'Stop hook feedback', '[Image:', '<system-reminder',
-           '<command-', 'Caveat:', '<local-command', '[Request interrupted')
+           '<command-', 'Caveat:', '<local-command', '[Request interrupted', '<agent-message', '[Subagent hand-back')
 STOP = set('''about above after again also among apart because been before being below between both but can cant
 could does doesnt dont down each even every explain from have having here hers into just keep like make more most much
 must need needs only other over same seem shall should some still such than that thats their them then there these
@@ -66,7 +67,8 @@ def turns(path):
     raw = open(path, encoding='utf-8', errors='replace').read()
     if path.endswith('.md'):                                       # the saved log: '### TIME' then the text
         for m in re.finditer(r'^### (\S+)\n(.*?)(?=^### |\Z)', raw, re.S | re.M):
-            out.append((m.group(1), 'sam', m.group(2).strip(), []))
+            if _is_sam(m.group(2)):                                # older logs kept helpers' reports
+                out.append((m.group(1), 'sam', m.group(2).strip(), []))
         return out
     i = raw.find('{"ccr"')
     if i >= 0:                                                     # list_events result(s)
@@ -289,19 +291,37 @@ def _not_typed(text, transcript):
             continue
         if _text((d.get('message') or {}).get('content') or '').strip() == text:
             return bool((d.get('origin') or {}).get('kind') or d.get('promptSource') == 'system')
-    return False
+    return None
 
 
 def log_hook():
-    """UserPromptSubmit: save Sam's message to notes/ledger/sam/CHAT.md; commit and push it in the background."""
+    """UserPromptSubmit: hand Sam's message to a background step that saves it to notes/ledger/sam/CHAT.md and
+    commits and pushes it. The hook runs before the chat record holds the prompt, so a parent chat's seed or a task
+    notice can only be told apart a moment later: the background step waits for the record (up to 20 s)."""
     try:
         inp = json.load(sys.stdin)
     except ValueError:
         return
     text = (inp.get('prompt') or '').strip()
-    if not _is_sam(text) or _not_typed(text, inp.get('transcript_path')):
+    if not _is_sam(text):
         return
-    sid = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '') or inp.get('session_id', 'local')
+    inp['sid'] = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '') or inp.get('session_id', 'local')
+    inp['at'] = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S')
+    subprocess.Popen([sys.executable, os.path.abspath(__file__), '_late', json.dumps(inp)],
+                     stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+
+
+def _late(inp, wait=20):
+    import time
+    text = inp['prompt'].strip()
+    for _ in range(wait * 2):
+        seen = _not_typed(text, inp.get('transcript_path'))
+        if seen is not None:
+            break
+        time.sleep(0.5)
+    if seen:
+        return
+    sid = inp['sid']
     tail = sid.split('_')[-1][-8:].lower()
     os.makedirs(LOGDIR, exist_ok=True)
     p = os.path.join(LOGDIR, f'{tail}.md')
@@ -309,7 +329,7 @@ def log_hook():
     with open(p, 'a', encoding='utf-8') as f:
         if new:
             f.write(f'# Sam\'s messages, chat {sid} (handover.py log)\n\n')
-        f.write(f'### {datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%S")}\n{text}\n\n')
+        f.write(f'### {inp["at"]}\n{text}\n\n')
     if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
         return
     rel = os.path.relpath(p, ROOT)
@@ -317,8 +337,7 @@ def log_hook():
     dest = 'HEAD' if head else f'HEAD:refs/heads/claude/chat-{tail}'
     sh = (f'cd "{ROOT}" && git add "{rel}" && git commit -q -m "Sam\'s message saved (handover log)" -- "{rel}" '
           f'&& git push -q origin {dest}')
-    subprocess.Popen(['bash', '-c', sh], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
-                     start_new_session=True)
+    subprocess.run(['bash', '-c', sh], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
 
 def main(argv):
@@ -330,6 +349,9 @@ def main(argv):
     pos = [a for i, a in enumerate(rest) if not a.startswith('--') and (i == 0 or not rest[i - 1].startswith('--'))]
     if cmd == 'log':
         log_hook()
+        return 0
+    if cmd == '_late':
+        _late(json.loads(rest[0]))
         return 0
     if cmd == 'end':
         rec = this_record()

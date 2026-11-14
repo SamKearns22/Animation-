@@ -422,6 +422,18 @@
   replay (w06, w07, w01, w02; count tries vs his five chats), the name test (namer helpers), a kittest; send Sam
   both sheets. Then the critic bench (item 3, Opus medium).
 - **Needs Sam:** nothing until the face sheets.
+# Where things stand (project, 13 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/overnight-q-handover-check` (also pushed to the main line). Face tool chain runs on its own.
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 30 (a repeated note: find why first).
+- **Done (overnight chat 1, Job Q, Opus medium, ~2.2%):** `source/handover.py` (MAP; catalogue row; kittest
+  `handover_drops` passes on Blessed's real chat 5 messages and notes files). The `log` hook (UserPromptSubmit) saves
+  Sam's typed messages to `notes/ledger/sam/CHAT.md` and pushes. `end` / `start PARENT --film F` flag his asks not
+  carried by a notes line written after he spoke, unanswered messages, unsent clips, an override he never typed.
+- **Next: overnight chat 2, Opus medium: the critic bench (ranking item 3, `notes/ranking-list.md`).** Test on Blessed.
+- **Needs Sam:** morning report: Y to the CLAUDE.md line that makes chats run `handover.py end`/`start` (pick Y).
+- **OVERNIGHT RUN (Sam, 13 Nov 23:25 UTC): read `notes/overnight-run.md` first.** Order Q, critic bench, rounds-read-a-page,
+  then people, places, moves, rough command; test only on Blessed (never Protest Tiers); each job may reach 150% of its
+  estimate, then hard stop, `notes/morning-report.md`, next job. Face tool chain runs on its own.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facepick.py` MAP; rule 49.
 - **Open rule requests:** none.
 - **For Claude:** run `python3 source/facepick.py burnham OUT references/faces/burnham/a01-front-parliament2026.jpg

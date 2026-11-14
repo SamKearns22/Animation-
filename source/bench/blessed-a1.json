@@ -1,0 +1,301 @@
+{
+ "film": "blessed",
+ "commit": "5c95b9e",
+ "what": "Blessed animatic 1 (12 Nov, sent from 5c95b9e): one frame per shot; key = Sam's round 1 notes a fresh eye could spot on a still (notes table in notes/archive/blessed-notes-animatics-1-2.md). Left out: wishes (more press, flashes, music), taste (3/4 views, camera height), motion (pop-in, sigh, zooms) and the new Walliams shot.",
+ "shots": [
+  [
+   "arrive",
+   0.0,
+   4.48
+  ],
+  [
+   "oath",
+   4.48,
+   7.15
+  ],
+  [
+   "jury",
+   7.15,
+   10.41
+  ],
+  [
+   "oath2",
+   10.41,
+   14.04
+  ],
+  [
+   "dock",
+   14.04,
+   18.15
+  ],
+  [
+   "van",
+   18.15,
+   20.95
+  ],
+  [
+   "escort",
+   20.95,
+   24.15
+  ],
+  [
+   "cot",
+   24.15,
+   26.95
+  ],
+  [
+   "phone",
+   26.95,
+   33.45
+  ],
+  [
+   "tvroom",
+   33.45,
+   36.05
+  ],
+  [
+   "tv",
+   36.05,
+   42.31
+  ],
+  [
+   "push",
+   42.31,
+   47.11
+  ],
+  [
+   "gates",
+   47.11,
+   48.75
+  ],
+  [
+   "gates2",
+   48.75,
+   52.87
+  ]
+ ],
+ "panels": [
+  {
+   "t": 2.46,
+   "is": "Russell Brand (long hair, beard, sunglasses, dark suit) arrives at Crown Court Southwark through a big press pack of journalists and camera crews facing him",
+   "parts": "PSO"
+  },
+  {
+   "t": 5.95,
+   "is": "the courtroom: Brand in the witness box, right hand raised, taking the oath on a Bible; the judge on the bench behind, under the royal arms, looking at him",
+   "parts": "PSO"
+  },
+  {
+   "t": 8.94,
+   "is": "the jury of twelve ordinary members of the public in two rows, staring at him, annoyed",
+   "parts": "PS"
+  },
+  {
+   "t": 12.41,
+   "is": "back on Brand finishing the oath, the judge watching from the bench",
+   "parts": "PSO"
+  },
+  {
+   "t": 16.3,
+   "is": "sentencing: Brand in the glass dock between two dock officers, the judge (heard) sending him down",
+   "parts": "PS"
+  },
+  {
+   "t": 19.69,
+   "is": "inside the prison van's cell: Brand sits alone on the bench, slumped",
+   "parts": "PS"
+  },
+  {
+   "t": 22.71,
+   "is": "a prison officer (HMPPS uniform) escorts Brand, now in a grey prison tracksuit, into his cell; he sighs",
+   "parts": "PSO"
+  },
+  {
+   "t": 25.69,
+   "is": "Brand alone in his cell by the bed, in despair",
+   "parts": "PSO"
+  },
+  {
+   "t": 30.53,
+   "is": "Brand on the prison payphone (PIN phone) to his wife: 'I'm just not feeling very... blessed right now'",
+   "parts": "PSO"
+  },
+  {
+   "t": 34.88,
+   "is": "the prison TV room: Brand sits with other inmates watching the TV, glum",
+   "parts": "PS"
+  },
+  {
+   "t": 39.49,
+   "is": "the TV: a BBC newsreader announces an early release scheme because prisons are full",
+   "parts": "PO"
+  },
+  {
+   "t": 44.95,
+   "is": "the camera pushes in on Brand's face as he hears the news and hope dawns",
+   "parts": "P"
+  },
+  {
+   "t": 48.01,
+   "is": "outside the prison gates: Brand steps out of the wicket door, arms wide, to the press pack waiting for him",
+   "parts": "PSO"
+  },
+  {
+   "t": 51.02,
+   "is": "Brand preens for the press at the gates, the pack around him",
+   "parts": "PS"
+  }
+ ],
+ "key": [
+  {
+   "id": "k13",
+   "note": 13,
+   "panels": [
+    2,
+    4
+   ],
+   "lines": [
+    "P12"
+   ],
+   "words": "mouth",
+   "said": "why no mouth on the judge?"
+  },
+  {
+   "id": "k14a",
+   "note": 14,
+   "panels": [
+    3
+   ],
+   "lines": [
+    "P11"
+   ],
+   "words": "neck",
+   "said": "the woman in the hijab has no neck"
+  },
+  {
+   "id": "k14b",
+   "note": 14,
+   "panels": [
+    3
+   ],
+   "lines": [
+    "P11",
+    "O4"
+   ],
+   "words": "(head|bald).*(big|huge|large|oversized)|(big|huge|large|oversized).*(head|bald)",
+   "said": "the men's bald heads are so huge they look a different species"
+  },
+  {
+   "id": "k15a",
+   "note": 15,
+   "panels": [
+    5
+   ],
+   "lines": [
+    "P12"
+   ],
+   "words": "mouth",
+   "said": "no mouths again (judge and anyone else)"
+  },
+  {
+   "id": "k15b",
+   "note": 15,
+   "panels": [
+    5
+   ],
+   "lines": [
+    "S1",
+    "S8"
+   ],
+   "words": "empty|wall|blank|framing|space",
+   "said": "50% of the frame is empty wall: frame tighter"
+  },
+  {
+   "id": "k16a",
+   "note": 16,
+   "panels": [
+    6
+   ],
+   "lines": [
+    "P5"
+   ],
+   "words": "arm|shoulder|torso",
+   "said": "an arm coming out of the torso"
+  },
+  {
+   "id": "k16b",
+   "note": 16,
+   "panels": [
+    6
+   ],
+   "lines": [
+    "P7"
+   ],
+   "words": "leg|thigh|knee|hip",
+   "said": "legs not attached to the body"
+  },
+  {
+   "id": "k20",
+   "note": 20,
+   "panels": [
+    9
+   ],
+   "lines": [
+    "S5",
+    "S2"
+   ],
+   "words": "crude|set|background|prison|wall|blank",
+   "said": "the crude drawn prison on the right is below standard"
+  },
+  {
+   "id": "k28",
+   "note": 28,
+   "panels": [
+    7
+   ],
+   "lines": [
+    "A1",
+    "A2"
+   ],
+   "words": "officer|uniform|HMPPS|medic|doctor|coat|guard",
+   "said": "the prison guard needs to look more like an HM Prison officer"
+  },
+  {
+   "id": "k21",
+   "note": 21,
+   "panels": [
+    9
+   ],
+   "lines": [
+    "P8",
+    "P4"
+   ],
+   "words": "eye|brow",
+   "said": "3/4 has one eye/eyebrow"
+  },
+  {
+   "id": "k22",
+   "note": 22,
+   "panels": [
+    10
+   ],
+   "lines": [
+    "S2"
+   ],
+   "words": "close|cramp|crowd|bench|squeez|packed",
+   "said": "inmates too close together: plastic chairs, not a bench"
+  },
+  {
+   "id": "k23",
+   "note": 23,
+   "panels": [
+    12
+   ],
+   "lines": [
+    "P11"
+   ],
+   "words": "neck",
+   "said": "his neck join looks wrong"
+  }
+ ]
+}

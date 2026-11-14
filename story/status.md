@@ -1,3 +1,3 @@
-Face tool: Sam added 100% to its budget (stop 7.5%); Burnham passes the check but reads young; face chat 3 opened.
-Now: face chat 3 (Opus high): age lines, name test, Badenoch, Walliams replay, kittest, sheets to Sam. Overnight chain: critic bench.
-Waiting: Sam's Y in notes/morning-report.md (the handover check line).
+Rounds read a page built: notes chats read an 8%-size page of a film, not its code (proved on Blessed).
+Now: overnight chat 4 (Opus high) builds people from a description (ranking item 4).
+Waiting: morning report picks (close-ups in every critique; Sonnet critic).
