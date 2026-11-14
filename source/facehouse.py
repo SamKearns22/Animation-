@@ -595,12 +595,12 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
 
 CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Chat 9, Sam's sheet notes: Andy is
            # finished at chat 7's head (no push, grin, lashes or tie); Kemi back to that head but for the bigger plaits,
-           # the small pupils in her own big dark iris under a heavier, calm upper lid (chat 8's were wide and
+           # her ears hidden (Sam: "her hair hides her ears"), the small pupils in her own big dark iris under a heavier, calm upper lid (chat 8's were wide and
            # startled), and her face's outline traced off her three front photos (shape)
     'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
                     hairline=-0.07, brow_thick=0.058),
     'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
-                     brow_thick=0.052, neck_w=1.2, ears=True, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
+                     brow_thick=0.052, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
                      lid=0.24, shape=True),
 }
 

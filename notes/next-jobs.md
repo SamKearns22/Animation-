@@ -20,17 +20,18 @@
   her face outline traced off her 3 front photos (`facehouse.py trace`, face skin row by row, the middle photo per
   row): close to the old one, but a rounder chin a touch longer (foot 1.04) and fuller jaw. Everything else as chat 7.
   Sheet: `notes/morning/facehouse-kemi-c9.jpg`. facepick and agelines kittests pass.
-- **Name test (neutral pack, chat 7's line-up):** not named (Cori Bush 15, Crockett, Pressley); line-up 5th
-  (Ribeiro-Addy, Butler, de Cordova first). Namer: "generic face ... strong dark straight eyebrows"; wants a
-  rounder softer face, fuller cheeks, her real smile. Her photos: thin arched brows, a closed-mouth half smile.
+- **Name test (neutral pack, chat 7's line-up), twice:** ears showing: not named (Cori Bush 15), line-up 5th;
+  ears hidden (the final): not named (Ketanji Brown Jackson 25), line-up 5th (Ribeiro-Addy, de Cordova, Butler
+  first). Namers: "generic face ... strong dark straight eyebrows"; want her own brows and smile. Her photos:
+  thin arched brows, a closed-mouth half smile.
 - **Next (on Sam's answers, Opus medium):** his picks below; then facehouse in people.py, turned views, kittest,
   catalogue row; then Walliams.
+- **Sam answered (chat 8, merged in chat 9):** Kemi's ears HIDDEN (`ears` off); rule 49's check column: Y, written.
 - **Needs Sam:** (1) Kemi's brows thin and arched as in her photos: Y/N. (2) her closed-mouth half smile: Y/N.
-  (3) ears showing: Y keep / N hide. (4) rule 49's check column naming the face-tool tests: Y/N.
 - **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
   into caricature. Andy is finished (chat 7 head). Kemi: bigger plaits, smaller pupils, calm eyes, face from photos.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS); rule 49.
-- **Open rule requests:** rule 49's check column.
+- **Open rule requests:** none.
 - **For Claude:** CAST badenoch: plait_k, iris_r, pupil_r, iris_c, lid, shape (new: iris_c, lid, shape; the trace
   is saved in her pick JSON as 'outline'). Line-ups as chat 7; `nametest.py pack KEYDIR BIG.png --lineup "..."`.
 
