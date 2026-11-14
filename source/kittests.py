@@ -715,6 +715,59 @@ def held_prop_touches():
 
 
 @test
+def held_over_or_behind_the_head():
+    """Protest Tiers note 1 (chat 7): a held thing up at the head is in front of or beside it (rule 41). Chat 5's phone
+    (hand at the crown, the phone a prop drawn before the head) is caught from the front as covered by the head though
+    in front of it; a phone held up behind the head is caught from every view; the whole pose gallery is clean of both."""
+    import burnham as B
+    import figure as F
+    import handcheck as H
+    import kitchecks
+    import limbs
+    import posegallery as G
+    import views as V
+    from PIL import Image
+    from satire_style import install_circle_hands
+    B.SS = 1
+    F.guard(B)
+    F._ALLOW.append('the pose gallery')
+    install_circle_hands(B)
+    limbs.install(B)
+    kitchecks.install()
+    H.install()
+    kinds = ('behind head', 'under head')
+
+    def found(j, deg):
+        im = Image.new('RGBA', (1200, 1100), G.BG)
+        H.begin()
+        V.person(im, B.Cam(1.0, 540, 960), 600, 330, 0.62, G.MODEL, 0.0, deg, j)
+        return [f for f in H.end(0.0) if any(k in f['kind'] or k in f['text'] for k in kinds)]
+
+    def phone(p, j2):                                # a phone above the hand, drawn as a plain prop (chat 5)
+        x, y = j2['wrR'][0], j2['wrR'][1]
+        p.poly([(x - 22, y - 74), (x + 22, y - 74), (x + 22, y + 4), (x - 22, y + 4)], (40, 44, 54), (20, 20, 24), 2.0)
+
+    def c5():                                        # (the model's head is smaller: the hand at his brow, as the
+        j = V.standing(G.MODEL)                      # marcher's was at his crown)
+        V.arm_to(j, 'R', (40.0, -210.0, 90.0), 'out')
+        j['props'] = [phone]
+        return j
+
+    def back():
+        j = V.standing(G.MODEL)
+        V.arm_to(j, 'R', (30.0, -260.0, -90.0), 'out')
+        j['props'] = [phone]
+        return j
+    gallery = [(n, lb) for n, build, _ in G.GALLERY for deg, lb in G.VIEWS
+               if lb not in G.AVOID.get(n, {}) and found(build(G.MODEL), float(deg))]
+    front = found(c5(), 0.0)
+    behind = [deg for deg, _ in G.VIEWS if found(back(), float(deg))]
+    ok = not gallery and bool(front) and len(behind) == len(G.VIEWS)
+    return ok, f"gallery: {gallery or 'clean'}; chat 5's phone from the front: {'caught' if front else 'MISSED'}; " \
+               f"phone behind the head caught in {len(behind)} of {len(G.VIEWS)} views"
+
+
+@test
 def critique_library():
     """Job J: a clean critique pass files each panel marked "new" in the catalogue's "Passed the critique" table,
     once (a second clean pass adds nothing), and panels not marked new are not filed."""

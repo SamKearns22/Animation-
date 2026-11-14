@@ -113,9 +113,34 @@ def probe(img, args):
             inside.pop()
 
     held = {sd: Image.new('RGBA', size, (0, 0, 0, 0)) for sd in 'LR'}   # a prop in each hand, alone (grips.held)
+    head = Image.new('RGBA', size, (0, 0, 0, 0))    # the head alone, with what is worn on it (rule 41: held over or
+    real_hv = V.head_view                           # behind the head, chat 7 of Protest Tiers)
+    first = []
+
+    def hview(img_, p, sp_, t_, view, hx=0.0, hy=-150.0):
+        r = real_hv(img_, p, sp_, t_, view, hx, hy)
+        if not first:
+            first.append(1)
+            try:
+                real_hv(head, B.Pen(head, p.cam), sp_, t_, view, hx, hy)
+            except Exception:
+                pass
+        return r
+
+    def on_head(d):
+        def both(p, *a):
+            r = d(p, *a)
+            try:
+                d(B.Pen(head, p.cam), *a)
+            except Exception:
+                pass
+            return r
+        return both
+    if joints and joints.get('head_props'):
+        joints = {**joints, 'head_props': [on_head(d) for d in joints['head_props']]}
     V.PROBE.update({'L': KEYS['L'], 'R': KEYS['R'], 'full': {sd: (lambda p, sd=sd: B.Pen(full[sd], p.cam)) for sd in 'LR'},
                     'held': {sd: (lambda p, sd=sd: B.Pen(held[sd], p.cam)) for sd in 'LR'}})
-    B.gesture_hand, V.hand = prop_hand, vhand
+    B.gesture_hand, V.hand, V.head_view = prop_hand, vhand, hview
     n_log = len(F.LOG)
     import limbs
     n_draw = limbs.DRAW[0]                          # an arm the film redraws after this still finds its own body
@@ -140,7 +165,7 @@ def probe(img, args):
     finally:
         limbs.DRAW[0] = n_draw
         V.PROBE.clear()
-        B.gesture_hand, V.hand = real_hand, real_vhand
+        B.gesture_hand, V.hand, V.head_view = real_hand, real_vhand, real_hv
         del F.LOG[n_log:]
     boxes = [b for b in [lay.getbbox()] + [im.getbbox() for im in full.values()] + [o.getbbox() for _, o in props] if b]
     if not boxes:
@@ -150,6 +175,7 @@ def probe(img, args):
     cut = lambda im: im.crop((x0, y0, x1, y1))
     lay, full, props = cut(lay), {sd: cut(im) for sd, im in full.items()}, [(q, cut(o)) for q, o in props]
     held = {sd: np.asarray(cut(im))[:, :, 3] > 40 for sd, im in held.items()}
+    head = np.asarray(cut(head))[:, :, 3] > 40
     if bare is not None:                            # the prop's pixels that show in the real picture
         d = np.abs(np.asarray(lay).astype(np.int16) - np.asarray(cut(bare)).astype(np.int16)).max(axis=2) > 12
         shown = {sd: held[sd] & d for sd in 'LR'}
@@ -167,7 +193,8 @@ def probe(img, args):
                size=size, j3=joints or V.standing(sp), view=V.VIEWS[V.snap(yaw)[0]], yaw=V.snap(yaw)[0],
                sw=sp.get('shoulders', 150), hem=sp.get('bottom', V.JACKET),
                ink=B.Pen(lay, L).w(2.6), tucked=(joints or {}).get('tucked'),
-               behind=set(j2.get('_drawn', {}).get('behind', ())))
+               behind=set(j2.get('_drawn', {}).get('behind', ())), head=head, hw=sp.get('hw', 70), hh=sp.get('hh', 92),
+               head_c=(sp.get('head_dx', 0.0), -150.0 + sp.get('head_dy', 0.0) + (joints or {}).get('head_dy', 0.0), 0.0))
     a_ = np.asarray(lay).astype(np.int16)                       # for the seam check (rule 81): the ink lines, and
     out['inkpx'] = body & (np.abs(a_[:, :, :3] - INK).sum(axis=2) < 60)   # what is neither ink nor his own sleeves
     out['other'] = body & ~out['inkpx'] & ~m(KEYS['L'][1]) & ~m(KEYS['R'][1]) & ~m(PROP_HAND)
@@ -239,8 +266,10 @@ def frame_faults(people):
             if pp['tucked'] and hand.sum() < SHOWN * expect:
                 continue                            # a pose that hides its hands on purpose (arms folded, pockets)
             if _seen(a, sleeve, expect) and hand.sum() < SHOWN * expect:
+                why = [] if a['shape'] == 'none' else head_faults(pp, sd, a)   # covered by his own head: say how
                 out.append(dict(who=pp['name'], side=sd, kind='no hand', box=box,
-                                text=f"an arm with no hand ({'its hand hidden' if a['shape'] == 'none' else 'the hand covered'})"))
+                                text=f"an arm with no hand ({'its hand hidden' if a['shape'] == 'none' else 'the hand covered'})"
+                                     + ''.join(f'; {kd}: {tx}' for kd, tx in why)))
                 continue
             back = a['fore'] * math.cos(math.radians(a['fold']))   # how far the hand comes back towards the shoulder
             if hand.sum() >= SHOWN * expect and a['fore'] < SHORT and back > BACK:
@@ -332,6 +361,7 @@ def body_faults(pp, sd, a, expect):
         ring = binary_dilation(full, iterations=max(4, int(round(11 * pp['k'])))) & ~full
         if (ring & pp['body']).sum() < FLOAT * ring.sum():
             out.append(('floating', 'a hand off its arm: a gap all round it (it touches neither its sleeve nor the body)'))
+    out += head_faults(pp, sd, a)
     if a['shape'] == 'point':
         k = pp['k']
         wr, el = np.array(a['wr'], float), np.array(a['el'], float)
@@ -353,6 +383,65 @@ def body_faults(pp, sd, a, expect):
             out.append(('no finger', 'pointing with no finger drawn (rule 41)'))
         elif seen < FINGER * whole:
             out.append(('finger hidden', f'the pointing finger hidden ({seen * 100 // max(whole, 1)}% shows; rule 41)'))
+    return out
+
+
+CHIN = 0.8                    # the chin, hh below the head's centre: a hand above it is up at the head
+UNDER = 0.4                   # of the forearm and hand above the chin, over this share covered by the head: drawn under it
+
+
+def head_faults(pp, sd, a):
+    """Rule 41 (Sam, 14 Nov, Protest Tiers note 1: the phone held up behind the head, its arm lost behind it; the
+    check saw nothing): anything held is held in front of or beside the body, never behind the head.
+    - behind the head: the hand is up at the head (above the chin), over it from side to side, and behind its middle
+      in his own body (seen from any view: from the front it hides, from behind it shows, both wrong);
+    - under the head: the forearm and hand above the chin are in front of the head's middle from this view, but the
+      head is drawn over a quarter or more of them: it reads as held behind the head (draw the arm after the head).
+    Measured on the picture (the head alone, with what is worn on it, drawn on its own layer by the probe): the share
+    of the hand hidden under the head, or of the forearm's line from its middle to the hand's centre."""
+    j, head = pp['j3'], pp.get('head')
+    if head is None or 'head_c' not in pp:
+        return []
+    hc, hw, hh = np.array(pp['head_c'], float), pp['hw'], pp['hh']
+    chin = hc[1] + CHIN * hh
+    c = _hand_centre(j, sd)
+    el = np.array(j['el' + sd], float)
+    if c[1] > chin:
+        return []
+    out = []
+    if abs(c[0] - hc[0]) < 1.1 * hw and c[2] < hc[2] - 0.3 * hw and c[1] > hc[1] - 2.4 * hh:
+        out.append(('behind head', 'the hand is up behind his head: anything held is in front of or beside the body '
+                                   '(rule 41; HANDS_OK only when the script says so)'))
+    lean, yaw = j.get('lean', 0.0), pp['yaw']
+    dep = lambda q: V.project(V.leaned(tuple(q), lean), yaw)[1]
+    d_head = dep(hc)
+    el2, wr2 = np.array(a['el'], float), np.array(a['wr'], float)
+    u2 = wr2 - el2
+    c2 = wr2 + u2 / (np.linalg.norm(u2) or 1.0) * 12.0 * pp['k']           # the hand's centre on the picture
+    mine = np.zeros(head.shape, bool)              # any arm, hand or held thing on top is not the head covering it
+    for b in pp['arms'].values():
+        mine |= b['sleeve'] | b['hand'] | (b['prop_shown'] if b.get('prop_shown') is not None else False)
+    H, W = head.shape
+    n = cov = 0
+    front = []
+    for f in np.linspace(0.5, 1.0, 13):            # from the forearm's middle to the hand's centre
+        q3 = el + (c - el) * f
+        if q3[1] > chin:
+            continue
+        x, y = (el2 + (c2 - el2) * f).round().astype(int)
+        if not (0 <= x < W and 0 <= y < H):
+            continue
+        n += 1
+        if head[y, x] and not mine[max(0, y - 1):y + 2, max(0, x - 1):x + 2].any():
+            cov += 1
+            front.append(dep(q3) >= d_head)
+    full = a['full']                                # the hand itself: its share hidden under the head
+    hid = (full & head & ~mine).sum() / max(1, full.sum())
+    line = cov / n if n >= 3 else 0.0
+    if not out and max(line, hid) >= UNDER and (dep(c) >= d_head if hid >= line else sum(front) * 2 >= len(front)):
+        out.append(('under head', f"the arm is in front of his head but drawn under it ({100 * max(line, hid):.0f}% "
+                                  "of the hand or forearm up at the head is covered): it reads as held behind the head "
+                                  "(rule 41: draw it after the head, or hold it beside it)"))
     return out
 
 
