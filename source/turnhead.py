@@ -76,7 +76,12 @@ class TurnFace:
         w = self.widths
         chin = self.prof.get('chin')                # the chin's own half widths from below (rounder than the outline's)
         if chin and v >= chin[0][0]:
-            return _interp(chin, v)
+            c = _interp(chin, v)
+            if self.three:                          # three-quarter: the face's own width eased into the chin's (a
+                v0 = chin[0][0]                     # traced face, Kemi's, was wider there: the jump showed as two
+                w0 = float(np.interp(v0, [q[0] for q in w], [q[1] for q in w]))   # hooks; Sam, chat 12)
+                c += (w0 - _interp(chin, v0)) * max(0.0, 1 - (v - v0) / max(chin[-1][0] - v0, 1e-6)) ** 2
+            return c
         crown = self.prof.get('crown')              # the top of the skull: round from behind (the front outline's
         if crown and v <= crown[-1][0]:             # crown is hidden under the hair and comes to a point)
             return max(_interp(crown, v), float(np.interp(v, [q[0] for q in w], [q[1] for q in w])))
@@ -220,7 +225,29 @@ def silhouette(f, step=0.01):
         far.append((f.cx + X.max() * H, y, v, 'far'))
         near.append((f.cx + X.min() * H, y, v, 'near'))
     bot = [(far[-1][0] + (near[-1][0] - far[-1][0]) * t, far[-1][1], f.v1, 'bottom') for t in np.linspace(0, 1, 12)[1:-1]]
-    return far + bot + near[::-1]
+    sil = far + bot + near[::-1]
+    return _smoothed(sil, f) if f.three else sil
+
+
+def _smoothed(sil, f, sigma=0.05):
+    """Three-quarter only (face tool chat 12, Sam: "very strange bumps and shapes ... Kemi's chin"): the outline is
+    the rings' widest points row by row, and the front outline's few straight pieces and the flat chin bottom show as
+    corners and teeth. Smoothed along its own length (sigma in face heights), so the jaw and chin read as one curve."""
+    xy = np.array([(q[0], q[1]) for q in sil], float)
+    seg = np.hypot(*np.diff(np.vstack([xy, xy[:1]]), axis=0).T)
+    t = np.concatenate([[0.0], np.cumsum(seg)])
+    step = H * 0.004
+    n = max(int(t[-1] / step), 16)
+    tu = np.linspace(0, t[-1], n, endpoint=False)
+    loop = np.vstack([xy, xy[:1]])
+    rx, ry = np.interp(tu, t, loop[:, 0]), np.interp(tu, t, loop[:, 1])
+    k = int(sigma * H / step * 3)
+    g = np.exp(-0.5 * (np.arange(-k, k + 1) * step / (sigma * H)) ** 2)
+    g /= g.sum()
+    sm = lambda a: np.convolve(np.concatenate([a[-k:], a, a[:k]]), g, 'valid')   # noqa: E731  (a closed loop)
+    sx, sy = sm(rx), sm(ry)
+    idx = np.clip(np.searchsorted(t, tu, side='right') - 1, 0, len(sil) - 1)
+    return [(float(sx[i]), float(sy[i]), sil[j][2], sil[j][3]) for i, j in enumerate(idx)]
 
 
 def inside(img, p, poly, draw):

@@ -13,26 +13,39 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 12 of the face chain, 14 Nov)
-- **Rules that bite next:** 49 (the blind name test is the judge), 86 (every tool gets a kittest), 30 (a repeated note).
-- **Done (chat 12):** Sam's note "our 3/4 front poses simply don't work and look gaunt and weird" fixed for every
-  turned head (turnhead): the three-quarter is now 30 degrees on a flat face plan, both eyes and brows show (the far
-  one narrowed, never under half). Why it failed: at 45 degrees the muzzle-shaped plan hid the far eye and hollowed
-  the far cheek. Side and behind unchanged pixel for pixel. Sheet `notes/morning/threequarter-c12.jpg` sent (Andy,
-  Kemi, Vance, before and now). Kittest turned_heads_for_anyone now holds side/behind and counts both 3/4 eyes.
-- **Seen, not fixed:** Kemi's near jaw has a small notch where the plaits meet the neck (there before); the far eye
-  sits close to the far outline (cartoon-normal; for Sam's look).
-- **Next (chat 13, Opus medium):** 4 facepick's pick sheet draws its heads with facehouse; 5 catalogue row: ready for
-  films (look 'detail'), naming `turns` and the people lines. Then Walliams end to end from his photos
-  (`references/blessed/likeness/` w06, w07, w01, w02 fronts, w09 three-quarter; facepick make, `facehouse.py brows`,
-  his lines in the people file), blind name test, and send Sam a sheet of the Walliams head (with a Checks line).
-- **Needs Sam:** his look at the three-quarter sheet (a no comes back as a note; the chain does not wait on it).
-- **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
+## Face tool, where things stand (chat 14 of the face chain, 14 Nov)
+- **Rules that bite next:** 49 (the name test cannot judge Walliams: calibrated), 86, 30.
+- **Done (chat 14):** Walliams' stubble carried round his turned views (three-quarter, side; a sliver on the far jaw
+  from three-quarter behind; none from behind), drawn by the front's own `stubble` on the turned face, as Vance's
+  goatee. Andy and Kemi held pixel for pixel (front and turned rows unchanged). Kittest facehouse_beard_turns; the
+  face and turn kittests pass. Sheet sent: `notes/morning/walliams-turned-c14.jpg`. No notes from Sam on c13's sheet yet.
+- **Seen, not fixed:** side view: the stubble's top edge ends in a straight step behind the jaw (as the front's top
+  edge); his eyes read smaller and more tired than the Blessed head's.
+- **Next (chat 14, in hand):** Sam's two jobs below; then Sam's notes on the Walliams sheets, if any.
+- **Sam, 14 Nov (to chat 12), two jobs (chat 14 doing them):** (a) Y: background people on the generic head
+  (views.head_view) move onto the new three-quarter turned head. (b) "clothes remain consistent no matter the pose, as
+  that was the source of the Kemi problem": the outfit described once and every view (front, three-quarter, side,
+  behind) draws it; nothing outfit-like hides in a hair piece (Kemi's open collar sits in the braids code: make it the
+  outfit's own choice, e.g. `outfit: suit ..., open collar`). A kittest draws each outfit from every view and fails
+  when a view drops a piece the front has (rule 86).
+- **Sam on the Walliams sheet (14 Nov, a N):** "I would recognise the original as Walliams a lot more ... Just
+  doesn't look like him. Very different head shape too." Why (chat 13's read): the face tool tuned the inner face to
+  likeness.py's measures off a smiling photo, but the head's OUTLINE is the house's from those measures: narrow
+  temples, long, tapering, where his (Blessed, Sam: "That's him") is a broad box, jaw as wide as the cheeks, long heavy
+  lower face (blessed_walliams.outline, LOW 1.15); the eyes also came out small and tired. Plan for chat 14 (after Sam's
+  two jobs): `facehouse.py trace walliams` (his outline off his photos, `shape`, as Kemi's) and check it against the
+  Blessed outline; bigger, livelier eyes as the Blessed head's; one sheet, Blessed vs new side by side, to Sam. The
+  name test is no judge for him (calibrated); Sam's eye is. **Sam's direction (replaces the lesson chat 13 offered):**
+  "I think it just needs to be able to draw the face shape from the reference a lot more intelligently": the face
+  tool reads the head's whole shape off the photos itself (temples, cheeks, jaw, chin, crown with the hair), for every
+  face, not a house outline from a few measures. That is a new build: design it at Opus HIGH (a chat of its own after
+  Sam's two jobs), judged on Walliams beside the Blessed head Sam knows.
+- **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far into
   caricature. Andy and Kemi finished: do not change their front heads.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (IN THE PEOPLE KIT, TURNED).
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (TURNED) and `stubble`.
 - **Open rule requests:** none.
-- **For Claude:** turnhead YAW['three'] 30, TurnFace.three, PLAN3/KFAR/KMIN (3/4 only); VANCE_TURNED_MD5 now yaws
-  90-180. Kittests critique_helper_kind and round_page fail on the main line before this change too (not face work).
+- **For Claude:** facehouse._turn_face calls stubble(ink=False) (turnhead inks the outline); facehouse.load(name, src,
+  variant); CAST['walliams']. Older code names: notes/archive/facetool-handovers.md (chat 13).
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

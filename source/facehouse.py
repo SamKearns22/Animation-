@@ -391,7 +391,7 @@ def _head(img, p, sp, t, hx, hy):
     return fx
 
 
-def stubble(p, f, L, skin, bd, seed=61):
+def stubble(p, f, L, skin, bd, seed=61, ink=True):
     """A measured beard as the house draws stubble (blessed_walliams.beard made general, chat 13): a shade of the
     beard's colour the skin shows through along the jaw and round the chin, lighter where the photo's is grey-white,
     a darker band over the lip and round the mouth; the cheeks above the jaw stay skin. How far it comes up and how
@@ -422,7 +422,8 @@ def stubble(p, f, L, skin, bd, seed=61):
     goat = [(mw * 0.6, l13 + 0.01), (mw * 0.3, l17 + 0.012), (mw * 0.14, l17 + 0.045), (0.0, l17 + 0.05),
             (-mw * 0.14, l17 + 0.045), (-mw * 0.3, l17 + 0.012), (-mw * 0.6, l13 + 0.01)]
     p.poly(f.pts(mo + AV.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), must, None)
-    p.poly(curve(f.pts(face_outline(L)), 4), None, INK, 2.6)   # the jaw's ink line back over the shade
+    if ink:                                               # turned (turnhead's TurnFace): its own outline inks
+        p.poly(curve(f.pts(face_outline(L)), 4), None, INK, 2.6)   # the jaw's ink line back over the shade
 
 
 def lashes(p, f, L, sp, k, scale=1.0):
@@ -687,6 +688,20 @@ def open_collar(p, cx, yc, nw, skin, sc):
                 (cx + sg * (w + 16), yc - 4)], sc, INK, 2.0)
 
 
+def open_collar_three(p, sp, nw, skin, sc, yc=-11.0):
+    """Kemi's open collar from three-quarter (chat 12, Sam: "Kemi's correct outfit is replaced by her previous one in
+    her 3/4 pose"): the turned body drew the plain buttoned shirt. As open_collar, turned: the skin V from the neck's
+    foot down to the top button on the chest's centre (views' three-quarter V, `v_at`), the near flap over the near
+    lapel, the far one foreshortened."""
+    sw = sp.get('shoulders', 150)
+    o = sp.get('v_at', 0.24 * sw)
+    nl, nr = -20.0 * nw, 44.0 * nw - 8 * (nw - 1)           # the three-quarter neck's foot, at her neck_w
+    p.poly([(nl, yc - 2), (nr, yc - 2), (o + 4, 56), (o - 4, 56)], skin, None)
+    for sg, tx, k in ((-1, nl, 1.0), (1, nr, 0.55)):
+        p.poly([(tx + sg * 1, yc - 3), (o - sg * 1, 62), (o + sg * 22 * k, 70), (tx + sg * 24 * k, 6),
+                (tx + sg * 16 * k, yc - 4)], sc, INK, 2.0)
+
+
 def braids(p, f, L, hc, lk, kh):
     """Box braids, all one piece over the face (K2, Sam 14 Nov: "her plaits go all the way to the top ... always the
     way she keeps her hair"): plaits from the middle parting over the whole crown, down the temples and on into two
@@ -836,6 +851,8 @@ def _turn_mouth(p, f, L, sp, fx, my):
 def _turn_face(pen, f, L, sp):
     kh = sp['kit_house']
     age_lines(pen, f, L, sp['skin'], kh['age'], LOOKS[kh['look']])
+    if kh.get('beard'):                                   # chat 14: the stubble carried round (as Vance's goatee)
+        stubble(pen, f, L, sp['skin'], kh['beard'], ink=False)
 
 
 def _turn_over(img, p, f, L, sp, view):
@@ -894,6 +911,8 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
         bx = back[-1][0] - H * 0.05
         front = [(ex + reach, f.top + v * H) for v in vs]
         curt.append((back + [(bx, foot)], front + [(ex + reach + H * 0.04, foot)]))
+        if yaw < 60 and sp.get('outfit') == 'suit' and not sp.get('tie'):   # her open collar, under the curtains
+            open_collar_three(p, sp, sp.get('neck_w', 1.0), sp['skin'], sp.get('shirt', (246, 246, 246)))
     head = [(x, y) for x, y, v, part in sil]
     for i, (a, b) in enumerate(curt):
         mid = ((a[0][0] + b[0][0]) / 2, a[0][1] - 0.12 * H)       # an arched top under the crown: no sharp
@@ -1032,7 +1051,8 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
                      brow_thick=0.032, brow_arch=0.03, brow_taper=0.6, neck_w=1.2, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
                      lid=0.24, shape=True),
     'walliams': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None,   # chat 13: his
-                     mouth=dict(kind='smirk')),                                           # smirk (Blessed's hand-made)
+                     mouth=dict(kind='smirk'), brow_up=[0.0, 0.025], push=1.1),   # smirk and cocked brow
+                                                                         # (Blessed's hand-made, Sam: "That's him")
 }
 
 

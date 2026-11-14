@@ -519,11 +519,19 @@ def torso_view(img, p, sp, view, seated=False):
     jd = B.dk(jc, 0.72)
     tie = sp.get('tie')
     if view == 'three':
-        o = sp.get('v_at', 0.32 * sw)                     # where the shirt's V sits (a person may set it)
+        o = sp.get('v_at', 0.24 * sw)                     # where the shirt's V sits (a person may set it; was 0.32:
+        #                                                   pushed far round, the front read as a ridge; chat 12)
         if not sp.get('neck_off'):
-            p.poly([(-24, -80), (40, -80), (46, 10), (-20, 10)], skin, INK, 2.6)
-        body = [(-30, -4), (-sw * 0.74, 12), (-sw * 0.92, 50), (-sw * 0.97, 200), (-sw * 0.86 * B.HEM, bottom),
-                (sw * 0.78 * B.HEM, bottom), (sw * 0.84, 200), (sw * 0.8, 50), (sw * 0.62, 12), (52, -4)]
+            # its sides run on up under the head (were cut flat at -80: the top corners showed as hooks under a
+            # rounded jaw; face tool chat 12, Sam: "very strange bumps ... Kemi's chin")
+            p.poly([(-26.2, -130), (36.7, -130), (46, 10), (-20, 10)], skin, INK, 2.6)
+        # Fitted (face tool chat 12, Sam: the clothes "look like they are coming forward and out, like a ridge, rather
+        # than fitting"): the shoulders one soft slope round into the arms (were a flat roof with square corners), the
+        # near side's hard-edged shadow panel and seam line gone (they read as a box's side plane).
+        from ed import open_curve
+        top = open_curve([(-sw * 0.97, 120), (-sw * 0.95, 48), (-sw * 0.84, 18), (-sw * 0.55, 4), (-30, -6),
+                          (52, -6), (sw * 0.5, 4), (sw * 0.78, 20), (sw * 0.88, 52), (sw * 0.89, 120)], 6)
+        body = top + [(sw * 0.88, 200), (sw * 0.78 * B.HEM, bottom), (-sw * 0.86 * B.HEM, bottom), (-sw * 0.97, 200)]
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)
@@ -541,9 +549,6 @@ def torso_view(img, p, sp, view, seated=False):
             p.poly([(o - 34, -4), (o + 30, -4), (o + 18, 46), (o, 62), (o - 22, 46)], skin, INK, 2.0)
         else:
             p.line(oval(o - 4, -2, 40, 18, 20, 0.2, math.pi - 0.2), INK, 2.4)
-        p.line([(-sw * 0.6, 60), (-sw * 0.72, bottom - 10)], jd, 2.0)
-        soft(img, p.cam, [(-sw * 0.97, 50), (-sw * 0.6, 40), (-sw * 0.6, bottom), (-sw * 0.86 * B.HEM, bottom)], (0, 0, 0), 0.25, 10,
-             clip=body)
         if sp.get('rosette'):
             p.ell(o - 70, 120, 20, 20, (40, 156, 72), INK, 2.4)
             p.ell(o - 70, 120, 8, 8, (248, 248, 240), INK, 1.4)
