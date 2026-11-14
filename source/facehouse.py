@@ -30,8 +30,10 @@ HAIR PIECES (named in the person's lines, `head: house NAME, hair PIECE`):
 
 LIKENESS (chat 8): the person's lines may also name push/tune (caricature(): each measure moved further from real
     faces' middle; Sam: "careful, you're straying too hard into caricature territory": keep push near 1.15), lashes,
-    eye_scale, iris_r/pupil_r, brow_up/brow_arch/brow_taper, mouth (the house mouths, AV.vance_mouth: soft, grin,
+    eye_scale, iris_r/pupil_r/iris_c (the iris's colour), lid (a heavier upper lid: calm, not wide), brow_up/brow_arch/brow_taper, mouth (the house mouths, AV.vance_mouth: soft, grin,
     smirk; wide, gap, creases, drop), forehead (hairline lifted), plait_k (each plait bigger).
+    shape (chat 9): the face's outline traced off the front photos, row by row (`facehouse.py trace NAME OUT.jpg`
+    measures it into the pick and lays it over each photo); the house outline otherwise.
 
     python3 source/facehouse.py sheet OUT.jpg NAME [NAME ...]   the design sheet: photo, the pick, both house looks
     python3 source/facehouse.py head NAME LOOK OUT.png             one head-and-shoulders (for the name test)
@@ -65,7 +67,79 @@ def load(name):
     d = json.load(open(pick_file(name)))
     h = d['heads'][d.get('picked', 'C')]
     return dict(name=name, meas=dict(h['measures']), col=d['colours'], glasses=d.get('glasses'),
-                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=d.get('picked', 'C'))
+                age=d.get('age') or {}, eyes=d.get('eyes') or {}, picked=d.get('picked', 'C'), outline=d.get('outline'))
+
+
+# ---------------------------------------------------------------------------------------------- the traced outline
+TV = (0.0, 0.08, 0.16, 0.25, 0.33, 0.43, 0.52, 0.6, 0.7, 0.82, 0.9, 0.965, 1.0)    # the rows traced (face heights)
+
+
+def _skin_rows(path):
+    """One front photo's face, row by row: the face-skin's half width at each TV row and the chin's foot, in the
+    house's fractions (0 the face mesh's forehead point, 1 its chin point; the face turned upright first)."""
+    import likeness as LK
+    from scipy import ndimage
+    im, fc = LK.pick_face(path)
+    crop, mask, (x0, y0, x1, y1) = LK.segment(im, fc)
+    P = (fc['P'][:, :2] - [x0, y0]) * [512 / (x1 - x0), 512 / (y1 - y0)]
+    a, b = P[10], P[152]
+    hh, ang = np.hypot(*(b - a)), math.atan2(b[0] - a[0], b[1] - a[1])
+    lab, _ = ndimage.label(mask == 3)                    # face skin, the piece holding the nose tip
+    ys, xs = np.nonzero(lab == lab[int(P[1][1]), int(P[1][0])])
+    qx, qy = xs - a[0], ys - a[1]
+    u = (qx * math.cos(ang) - qy * math.sin(ang)) / hh
+    v = (qx * math.sin(ang) + qy * math.cos(ang)) / hh
+    rows = []
+    for t in TV:
+        s = np.abs(v - t) < 0.006
+        rows.append(float((u[s].max() - u[s].min()) / 2) if s.sum() > 3 else float('nan'))
+    return dict(rows=rows, foot=float(v.max()), path=path, P=fc['P'], ang=ang)
+
+
+def trace(name, out=None):
+    """The face's outline traced off the person's front photos (Sam, chat 9: "looking at your face on references
+    would help"): each photo's face skin (likeness.segment) measured row by row, the middle value of the photos kept
+    per row (an ear showing, plaits over a temple or an open mouth in one photo is outvoted). Saved into the pick as
+    'outline'; the person's lines draw it with `shape=True`. OUT: the outline laid over each front photo."""
+    f = pick_file(name)
+    d = json.load(open(f))
+    got = [_skin_rows(os.path.join(ROOT, p)) for p in d['fronts']]
+    rows = [float(np.nanmedian([g['rows'][i] for g in got])) for i in range(len(TV))]
+    tr = dict(rows=[[t, round(w, 4)] for t, w in zip(TV, rows)], foot=round(float(np.median([g['foot'] for g in got])), 4),
+              photos=d['fronts'])
+    d['outline'] = tr
+    json.dump(d, open(f, 'w'), indent=1)
+    if out:
+        overlay(name, got, tr, out)
+    return tr
+
+
+def overlay(name, got, tr, out, T=420):
+    """Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over."""
+    from PIL import Image, ImageDraw
+    L = P4.layout(load(name)['meas'])
+    old = PP._outline(L, -0.3)
+    new = face_outline(dict(L, trace=tr), -0.3)
+    tiles = []
+    for g in got:
+        im = Image.open(g['path']).convert('RGB')
+        P = g['P'][:, :2]
+        a, b = P[10], P[152]
+        hh, ca, sa = np.hypot(*(b - a)), math.cos(g['ang']), math.sin(g['ang'])
+        to = lambda uv: [(a[0] + hh * (u * ca + v * sa), a[1] + hh * (-u * sa + v * ca)) for u, v in uv]  # noqa: E731
+        k = max(2, int(hh / 120))
+        dr = ImageDraw.Draw(im)
+        o = to(old)
+        dr.line(o + o[:1], fill=(70, 150, 255), width=k)
+        n = to(curve(new, 4))
+        dr.line(n + n[:1], fill=(255, 220, 0), width=2 * k)
+        c = (a + b) / 2
+        tiles.append(im.crop((int(c[0] - hh), int(c[1] - 1.15 * hh), int(c[0] + hh), int(c[1] + 0.85 * hh))).resize((T, T)))
+    sheet = Image.new('RGB', (len(tiles) * (T + 10) - 10, T), (255, 255, 255))
+    for i, t in enumerate(tiles):
+        sheet.paste(t, (i * (T + 10), 0))
+    sheet.save(out, quality=90)
+    return out
 
 
 # ---------------------------------------------------------------------------------------------- colours
@@ -102,6 +176,8 @@ def _head(img, p, sp, t, hx, hy):
     kh = sp['kit_house']
     lk = LOOKS[kh['look']]
     L = P4.layout(kh['meas'])
+    if kh.get('shape') and kh.get('outline'):               # the outline traced off the front photos (trace())
+        L['trace'] = kh['outline']
     f = P4.Face(hx, hy)
     skin = sp['skin']
     hc = sp['hair_c']
@@ -110,12 +186,12 @@ def _head(img, p, sp, t, hx, hy):
         braids_behind(p, f, L, hc, kh, sp)
     if piece != 'braids':                                 # her plaits cover the ears
         AV._ears(p, f, L, skin)
-    o = curve(f.pts(PP._outline(L, -0.42 if piece != 'braids' else _hair(L, kh)['crown'] + 0.06)), 4)
+    o = curve(f.pts(face_outline(L, -0.42 if piece != 'braids' else _hair(L, kh)['crown'] + 0.06)), 4)
     p.poly(o, skin, INK, 2.6)
     if lk['sockets'] and kh['eyes'].get('shade', 0) >= 0.1:
         sockets(p, f, L, skin, kh['eyes']['shade'])
     ey = kh['eyes']
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.12)), tuple(ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
+    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', kh.get('lid', 0.12))), tuple(kh.get('iris_c') or ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
             liner=2.8 + 1.6 * kh.get('lashes', 0.0), iris_r=kh.get('iris_r', min(1.15, ey.get('iris_r', 0.95))),
             pupil_r=kh.get('pupil_r', min(0.5, ey.get('pupil_r', 0.42))), scale=kh.get('eye_scale', 1.0))
     if kh.get('lashes'):
@@ -241,9 +317,22 @@ def pick_hair(name, picked='C'):
     return dict(crown=float(crown), rows=rows, hairline=hl)
 
 
+def face_outline(L, crown=-0.42):
+    """The face's outline (fractions, crown first, round by our right): the house's (PP._outline, from the measured
+    widths) or, where the person's lines say `shape`, the one traced off their front photos (trace()): its half widths
+    row by row down to the chin's foot, the crown over the top as the house draws it."""
+    tr = L.get('trace')
+    if not tr:
+        return PP._outline(L, crown)
+    rows = [(w, v) for v, w in tr['rows']]
+    w0 = rows[0][0]
+    right = [(w0 * 0.7, crown * 0.6)] + rows + [(0.0, tr['foot'])]
+    return [(0.0, crown)] + right + [(-u, v) for u, v in right[::-1][1:]]
+
+
 def _face_u(L, v):
     """The face outline's half width at row v (our right side)."""
-    r = [q for q in PP._outline(L) if q[0] >= 0]
+    r = [q for q in face_outline(L) if q[0] >= 0]
     r = sorted({round(q[1], 4): q for q in r}.values(), key=lambda q: q[1])
     return float(np.interp(v, [q[1] for q in r], [q[0] for q in r]))
 
@@ -504,17 +593,15 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     return sp
 
 
-CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Chat 8, the likeness push, held back
-           # at Sam's "careful, you're straying too hard into caricature territory": a light push (1.15) on what the
-           # pick measured, plus each one's own cues (his lashes, heavy brows, grin and burgundy tie from his photo;
-           # her big eyes with small pupils, one brow raised, fuller mouth, high forehead, plaits a little bigger)
-    'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=(112, 28, 44), quiff=0.05,
-                    hairline=-0.07, brow_thick=0.066, push=1.15, tune=dict(eyes_apart=0.5, brow_high=1.3, brow_slope=1.5,
-                    mouth_wide=-0.5), lashes=0.5, mouth=dict(kind='grin', wide=1.2, creases=1.3, drop=0.03)),
+CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Chat 9, Sam's sheet notes: Andy is
+           # finished at chat 7's head (no push, grin, lashes or tie); Kemi back to that head but for the bigger plaits,
+           # the small pupils in her own big dark iris under a heavier, calm upper lid (chat 8's were wide and
+           # startled), and her face's outline traced off her three front photos (shape)
+    'burnham': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, quiff=0.05,
+                    hairline=-0.07, brow_thick=0.058),
     'badenoch': dict(hair='braids', outfit=('suit', (30, 32, 58)), shirt=(246, 246, 246), height=1.7,
-                     brow_thick=0.042, neck_w=1.2, ears=True, push=1.15, tune=dict(mouth_wide=0.6, lip_top=0.7, lip_low=0.7), eye_scale=1.08,
-                     iris_r=0.68, pupil_r=0.28, brow_up=(0.02, 0.0), brow_arch=0.02, brow_taper=0.5,
-                     mouth=dict(kind='soft'), forehead=0.08, plait_k=1.2),
+                     brow_thick=0.052, neck_w=1.2, ears=True, plait_k=1.2, iris_r=0.98, pupil_r=0.28, iris_c=(56, 36, 26),
+                     lid=0.24, shape=True),
 }
 
 
@@ -625,6 +712,8 @@ if __name__ == '__main__':
     a = sys.argv[1:]
     if a and a[0] == 'sheet':
         print(sheet(a[1], a[2:] or ['burnham', 'badenoch']))
+    elif a and a[0] == 'trace':
+        print(trace(a[1], a[2] if len(a) > 2 else None))
     elif a and a[0] == 'head':
         print(draw(a[1], a[2], a[3]))
     else:

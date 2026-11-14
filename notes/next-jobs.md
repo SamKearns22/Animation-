@@ -13,35 +13,26 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 8 of the face chain, 14 Nov; amber at ~3%: handed over after Sam's notes)
-- **Rules that bite next:** 49 (likeness: the blind name test is the judge), 86 (facehouse needs its kittest), 85.
-- **Done:** the likeness tools in facehouse (caricature push, lashes, eye size, brow arch/raise, the house mouths with
-  colours, forehead, plait size; MAP "LIKENESS"). Round 1 (push 1.3, Andy's grin, Kemi gap-tooth/smirk) scored no
-  better: Andy named 3rd at 6%, line-up 4th; Kemi not named (Ketanji Brown Jackson), line-up 5th and 6th (namers
-  match her plaits to Ribeiro-Addy, de Cordova). Round 2's tests died on the usage limit. **Sam's notes (chat 8):**
-  "Kemi may need individually bigger braids, slightly slightly bigger. Not too much." "Her pupils are massive compared
-  to Andy's." "Careful, you're straying too hard into caricature territory." Done: push held back to 1.15, plaits
-  1.2x, her pupils smaller, her lips trimmed; Andy keeps a gentle grin, lashes, heavier brows, burgundy tie (his
-  photo). Sheet sent: `notes/morning/facehouse-likeness-c8.jpg`. facepick and agelines kittests pass.
-- **Sam's notes on the sheet (chat 8, 14 Nov evening):** "I prefer the before in both (Andy's grin is poorly drawn
-  with stray lines, is too shit-eating, his eyelashes are too much), except for Kemi's braids and eyes. But even then
-  the eyes are wide and startled. I think before Andy is finished. Kemi is still not quite right especially in face
-  shape and I think looking at your face on references would help." So: (F1) Andy back to chat 7's head exactly (no
-  push, grin, lashes, tie; the brows as before): **Andy is finished.** (F2) Kemi keeps plait_k 1.2 and the new
-  eyes' smaller pupils, but calmer: not wide or startled (less white, eye_scale near 1, a heavier upper lid). (F3)
-  Kemi's face shape: drawn from her FRONT-ON reference photos (k01, k02, k03), outline laid over the photo, not
-  the push; everything else back to the before (no push, mouth, brow raise, forehead lift).
-- **Next (chat 9, Opus HIGH):** F1, F2, F3; a sheet (before / now / her front photo with the outline over it), then
-  her blind name test (neutral pack, line-up step). Then facehouse in people.py, turned views, kittest, catalogue row;
-  then Walliams.
-- **Needs Sam:** (1) Kemi's ears showing, as in pick C: Y keep / N hide. (2) rule 49's check column naming the face-tool
-  tests (Y/N, asked four times). (Andy's grin and tie: answered N, F1.)
-- **Sam's words kept:** "Please don't limit yourself on budget as this is important and I have spare." Age lines stay,
-  house style, per character. Look 2 ('detail') is the look. Not too far into caricature. Andy is finished (chat 7 head).
+## Face tool, where things stand (chat 9 of the face chain, 14 Nov; stopped on questions for Sam)
+- **Rules that bite next:** 49 (the blind name test is the judge), 86 (facehouse needs its kittest), 85.
+- **Done (chat 9):** F1 Andy back to chat 7's head, pixel for pixel (checked): **finished**. F2 Kemi: plaits 1.2x
+  kept; eyes calm (her big dark iris 0.98, small pupil 0.28, iris a shade lighter so it shows, upper lid 0.24); F3
+  her face outline traced off her 3 front photos (`facehouse.py trace`, face skin row by row, the middle photo per
+  row): close to the old one, but a rounder chin a touch longer (foot 1.04) and fuller jaw. Everything else as chat 7.
+  Sheet: `notes/morning/facehouse-kemi-c9.jpg`. facepick and agelines kittests pass.
+- **Name test (neutral pack, chat 7's line-up):** not named (Cori Bush 15, Crockett, Pressley); line-up 5th
+  (Ribeiro-Addy, Butler, de Cordova first). Namer: "generic face ... strong dark straight eyebrows"; wants a
+  rounder softer face, fuller cheeks, her real smile. Her photos: thin arched brows, a closed-mouth half smile.
+- **Next (on Sam's answers, Opus medium):** his picks below; then facehouse in people.py, turned views, kittest,
+  catalogue row; then Walliams.
+- **Needs Sam:** (1) Kemi's brows thin and arched as in her photos: Y/N. (2) her closed-mouth half smile: Y/N.
+  (3) ears showing: Y keep / N hide. (4) rule 49's check column naming the face-tool tests: Y/N.
+- **Sam's words kept:** "Please don't limit yourself on budget." Age lines stay. Look 2 ('detail'). Not too far
+  into caricature. Andy is finished (chat 7 head). Kemi: bigger plaits, smaller pupils, calm eyes, face from photos.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (LIKENESS); rule 49.
 - **Open rule requests:** rule 49's check column.
-- **For Claude:** CAST holds the new lines. `nametest.py pack KEYDIR BIG.png --lineup "..."` (quote the list: "de
-  Cordova" has a space); line-ups as chat 7. AV.vance_mouth and P4.brows took new keyword options; defaults unchanged.
+- **For Claude:** CAST badenoch: plait_k, iris_r, pupil_r, iris_c, lid, shape (new: iris_c, lid, shape; the trace
+  is saved in her pick JSON as 'outline'). Line-ups as chat 7; `nametest.py pack KEYDIR BIG.png --lineup "..."`.
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
