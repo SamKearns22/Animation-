@@ -1,0 +1,22 @@
+# Blessed's places (places kit, ranking item 5; test only: no film reads this until Sam approves the kit).
+# Each view is the film's painting as a level camera; every piece in metres (x across, depth from the lens, z up).
+
+# place: courtroom
+colours: wall 226 214 194 | wall light 236 226 208 | oak 204 166 116 | oak dark 170 130 86 | oak light 222 190 144 | chair red 128 34 40
+
+## view: court_box
+camera: up 1.6, horizon 850, lens 1500
+people: judge 3.571, brand 2.5
+panels: x -3.36 to 3.36, z 0 to 6.6, depth 6, step 0.48, seed 3 (the panelled wall)
+block: x -3.36 to 3.36, z 4.456 to 4.52, depth 6, colour wall * 0.88, line 1.4 (the picture rail)
+royal arms: at -0.96 3.56, depth 6, size 0.95 (the royal arms)
+clock: at 1.28 3.68, depth 6 (the clock)
+door: x 0.64 to 1.84, z 0 to 2.52, depth 6, seed 12 (the door)
+chair back: x -1.025 to -0.175, z 1.025 to 2.125, depth 3.75, seed 11 (the judge's chair)
+block: x -3.36 to 3.36, z -0.16 to 0, depth 6, colour wall * 0.8 (the dais edge)
+carpet: x -3.36 to 3.36, z -4.6 to -0.2, depth 6, first 0.16, every 0.28 (the well)
+bench: x -1.32 to 0.44, z 0.46 to 1.26, depth 3 (the judge's bench)
+microphone: at -0.04 1.292, depth 3, tip -0.22 1.5 (the judge's microphone)
+witness box: x -0.2464 to 1.3440, z -0.88 to 0.5952, depth 2.4 (the witness box)
+book: at 0.512 0.2912, depth 2.4 (the oath Bible)
+microphone: at -0.032 0.2976, depth 2.4, tip 0.112 0.88, detail 0.8 (the witness microphone)

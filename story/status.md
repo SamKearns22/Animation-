@@ -1,3 +1,3 @@
-People kit (ranking item 4): Blessed's 16 invented people, Brand in all four looks and Walliams redrawn exactly from short descriptions.
-Now: overnight chat 4d (Opus medium) adds the press pack and turned heads for invented people, then the sheets. Face tool: at its stop.
-Waiting: morning report picks (close-ups in every critique; Sonnet critic; the face tool's).
+Places kit (ranking item 5): the design and core are built; Blessed's witness-box view redrawn exactly from 15 plain lines.
+Now: overnight chat 5b (Opus high) lifts the other 12 Blessed views, then the kittest and the morning report.
+Waiting: morning report picks (people kit 1-3; close-ups in every critique; Sonnet critic; the face tool's).

@@ -1,18 +1,43 @@
 # Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-people-c4d` (also on the main line); face tool: its own chain (stopped).
+- **Newest work:** `claude/places-kit-c5` (also on the main line).
 - **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
-- **Done (overnight chat 4d, item 4, Opus medium, ~2.2%; job ~6.8% of 8%, stop 12%): item 4 finished.** Steps 3-5:
-  the press pack as a crowd (31 journalists from 16 lines), every invented face turns with its own face
-  (`people_turned.py`), sheets in `notes/morning/people-kit-*.jpg`, morning report written. Kittest extended (20 people,
-  6 frames, the press keyed the film's way at 0.00%); every old kittest passes.
-- **Next: chat 5, Opus HIGH: places from a description (ranking item 5,** `notes/ranking-list.md` row 5): estimate 8%,
-  hard stop 12%; test only on Blessed (its sets in `blessed_sets.py`); replication of Blessed's places is the pass mark.
-- **Needs Sam (morning report):** people kit picks 1-3 (turned heads on, the journalists' own hair, approve the kit).
-- **Read:** `notes/overnight-run.md` in full; `notes/ranking-list.md` row 5; `guides/kit-catalogue.md` "Places"; the
-  MAP of `source/sets.py` and of Blessed's set file; `people.py` MAP only for how replicate is built (the same plan).
+- **Done (overnight chat 5, item 5, Opus high, ~2.2%; job ~2.2% of 8%, stop 12%):** the places kit's design (below),
+  its core (`places.py`: language, level cameras, layers from depth, pieces, rule 83 boxes, replicate) and the
+  courtroom's library pieces (`places_parts.py`); Blessed's court_box redrawn from 15 lines at 0.00%.
+- **Next: chat 5b, Opus HIGH, same job:** the other 12 views (step 2 below), then steps 3-5. Handed over on amber.
+- **Needs Sam (morning report):** people kit picks 1-3 (unchanged).
+- **Read:** `notes/overnight-run.md` in full; this file's item 5 section only; `places.py` and `places_parts.py` MAPs;
+  `blessed_sets.py` only the painter being lifted (MAP line numbers).
 - **Open rule requests:** none.
-- **For Claude:** replicate's turned-head score: each frame drawn again with `people_turned.ON = False` (crowds keep
-  theirs); the pass mark is that score. `--film-keys` keys crowd heads the film's way (first member's colours).
+- **For Claude:** convert px to metres with the view's camera: x = (X - 540) * d / lens, z = up - (Y - horizon) * d /
+  lens, 4 places; pick each depth so ppm (lens / d) equals the piece's REF (or its look's ref): then no `detail`.
+
+## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
+Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
+with its colours, then `## view: NAME` per camera (`camera: up, horizon, lens`: a level camera, Blessed's `Level`;
+`people: who depth` sets the layers), then one line per piece, back to front: `KIND: x A to B, z C to D, depth E,
+params (name)`. Pieces are lifted unchanged in look into `places_parts.py`, each drawn in its own units (px at its
+REF px per metre from its front face's top-left, through `B.Local`), so any level camera draws it at true size (trim
+scales with distance). Looks hold Blessed's exact trims (door 'court' / 'jury room', chair 'witness view' / 'close',
+panelled fronts x5) each with the ref it was drawn at. Layers: back (behind all the view's people), mid, front
+(nearer than all) from depth; overall lights `layer front`. Boxes for rule 83 come from the pieces (bands and pieces
+wider than 80% of the frame are not things); overlaps between pieces 0.2 m apart in depth are meant. Points are
+snapped to 1e-6 px (float noise moved a whole row). Honest scope: level cameras at any height, distance and lens;
+a turned (yawed) camera is not supported by these painted fronts (Blessed has none).
+1. **Done:** core, courtroom pieces (panels, block, row, carpet, royal arms, clock, door, chair back, bench,
+   microphone, witness box, book, window, panelled, notepad, water jug, papers, gavel block, gavel, glass screen);
+   court_box 0.00%.
+2. **Next:** court_bench, court_jury, court_dock (pieces exist; cameras: horizon so the wall's foot is z 0 at depth
+   6; dock: brand 2.5, guards 3.75), then court_out and gates (already in metres: `OUT`, `GATE` Levels; lift facade,
+   entrance, sign band, planted wall, steps, rails, tree, lamp post, pavement, sky; gatehouse pieces), cell, cot_top,
+   van (room walls run from the back wall's corners to the canvas corners (-300, -400)/(1380, 2400): a `room` piece
+   with that mode), phone (booth, notices, signs), tvroom (pool table, chairs, `tv flicker` light), tv (`studio_feed`
+   stays newsdesk_set's; a `tv` piece showing a feed).
+3. `places.py replicate blessed OUT` on all 13 paintings and the 12 frames, bar 0.05%; set_boxes vs the film's
+   hand-made SET_BOXES (every hand box has a piece; report new ones).
+4. Kittest `places_from_a_description` (refusals, no film imports the kit, every view at the bar), catalogue row,
+   page lines (`page.py`), sheet into `notes/morning/places-kit-replicate.jpg`.
+5. Morning report entry (3 lines; cost per film: Blessed's sets 1,491 lines -> about N description lines).
 
 ## Item 4, people from a description (ranking item 4; overnight run; Opus high design, medium build; 8%, stop 12%)
 Design (chat 4, 14 Nov): a person is a block of plain lines in `story/FILM-people.txt` (language in `people.py` MAP);

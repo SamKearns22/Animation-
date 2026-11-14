@@ -495,3 +495,20 @@
   TORSOS point at `kit_head`/`kit_torso`, which pick per LOOK (Brand's four looks share who='brand'). Turned famous
   heads go through turnhead under 'kit:WHO' (people_famous.install's head_view), so blessed_cast's Person is unused.
 
+
+
+# Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
+- **Newest work:** `claude/overnight-people-c4d` (also on the main line); face tool: its own chain (stopped).
+- **Rules that bite next:** 86 (every tool gets a kittest), 85 (cost watch), 61 (MAP; the page).
+- **Done (overnight chat 4d, item 4, Opus medium, ~2.2%; job ~6.8% of 8%, stop 12%): item 4 finished.** Steps 3-5:
+  the press pack as a crowd (31 journalists from 16 lines), every invented face turns with its own face
+  (`people_turned.py`), sheets in `notes/morning/people-kit-*.jpg`, morning report written. Kittest extended (20 people,
+  6 frames, the press keyed the film's way at 0.00%); every old kittest passes.
+- **Next: chat 5, Opus HIGH: places from a description (ranking item 5,** `notes/ranking-list.md` row 5): estimate 8%,
+  hard stop 12%; test only on Blessed (its sets in `blessed_sets.py`); replication of Blessed's places is the pass mark.
+- **Needs Sam (morning report):** people kit picks 1-3 (turned heads on, the journalists' own hair, approve the kit).
+- **Read:** `notes/overnight-run.md` in full; `notes/ranking-list.md` row 5; `guides/kit-catalogue.md` "Places"; the
+  MAP of `source/sets.py` and of Blessed's set file; `people.py` MAP only for how replicate is built (the same plan).
+- **Open rule requests:** none.
+- **For Claude:** replicate's turned-head score: each frame drawn again with `people_turned.ON = False` (crowds keep
+  theirs); the pass mark is that score. `--film-keys` keys crowd heads the film's way (first member's colours).
