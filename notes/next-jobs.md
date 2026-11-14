@@ -13,36 +13,33 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 15 of the face chain, 14 Nov)
-- **Rules that bite next:** 30 (Walliams is a repeated note: say why it failed), 86 (every tool gets a kittest), 49.
-- **Done (chat 15):** (b) one outfit in every view. Every extra (robe, officer, open shirt, crucifix, scarf, zip) and
-  Kemi's open collar (now an outfit choice, `outfit: ..., no tie, open collar`, out of the hair code) is drawn
-  turned: the front's drawing wrapped round the turned body, its own back where it goes round (belt, sash, scarf at
-  the neck, the top's collar); the judge's wig turns with his head. Andy and Kemi front pixel for pixel; Kemi's
-  three-quarter unchanged, her side now keeps the collar. Blessed's frames still match (new turned pieces scored
-  apart). Kittest outfit_every_view (34 piece-views; fails on the old code). Sheet `notes/morning/outfit-every-view-c15.jpg`.
-- **Next (chat 16, Opus high: new building):** Sam's face-shape build (below), judged on Walliams beside the Blessed
-  head; one sheet to Sam with this chat's outfit sheet.
-- **Sam on the Walliams sheet (14 Nov, a N):** "I would recognise the original as Walliams a lot more ... Just
-  doesn't look like him. Very different head shape too." Why (chat 13's read): the inner face was tuned off a smiling
-  photo, but the OUTLINE is the house's: narrow temples, long, tapering, where his (Blessed, "That's him") is a broad
-  box, jaw as wide as the cheeks, long heavy lower face (blessed_walliams.outline, LOW 1.15); eyes small and tired.
-  **Sam's direction:** "I think it just needs to be able to draw the face shape from the reference a lot more
-  intelligently": the face tool reads the head's whole shape off the photos itself (temples, cheeks, jaw, chin, crown
-  with the hair), for every face, not a house outline from a few measures; also bigger, livelier eyes as the Blessed
-  head's. Judged on Walliams beside the Blessed head Sam knows (Sam's eye is the judge). Andy and Kemi's front heads held.
-- **Seen, not fixed:** side view: the stubble's top edge ends in a straight step behind the jaw. Kittest
-  people_from_a_description fails on one thing not this job's: `protest_tiers_cast.py` imports the people kit before
-  Sam approved it for films (protest-tiers chat's work); Blessed's frames themselves pass.
-- **Needs Sam:** nothing open (the outfit sheet is to look at; the Walliams N is being worked).
-- **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on
-  budget." Age lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (the traced outline, `trace`).
+## Face tool, where things stand (chat 16 of the face chain, 14 Nov)
+- **Rules that bite next:** 30 (Walliams is a repeated note: the photos' shape alone did not give his box, below), 86, 85.
+- **Done (chat 16):** the face tool now reads each head's whole shape off the front photos (face edge with ears cut,
+  hair-and-skin silhouette, crown, hairline, side hair) and draws the face outline, the swept hair's cap and sides and
+  bigger eyes from it (on by default; Andy and Kemi held pixel for pixel). Walliams measured. New check sheet
+  `notes/morning/walliams-head-shape-c16-wip.jpg` (not sent: not good enough yet). Kittest facehouse_head_from_photos
+  (fails on the old outline). Sent nothing to Sam this chat.
+- **Why it is not his head yet (rule 30):** drawn true to his photos, the head reads as a light bulb: wide temples,
+  the chin rounding in. The photos say his jaw is only a little wider than average (about as Kemi's, against Andy's);
+  Blessed's box (jaw as wide as the cheeks, face half width 0.50 against his photos' 0.44, the lower face stretched
+  1.15, mouth and eye spacing pushed) is a caricaturist's exaggeration the photos do not show. Pushing the outline
+  from the average face x3 barely moved it (his differences are small) and made the hair a mushroom (capped since).
+- **Next (chat 17, Opus high: still new building):** make the push work on the head's proportions, not its absolute
+  rows: (a) the face's width against its features (Blessed: big face, small features; P4's face_wide push is not yet
+  applied to the measured outline), (b) the jaw-to-cheek ratio and chin squareness pushed against the three faces'
+  middle, (c) the beard's edge counted as jaw. Then judge on Walliams beside Blessed with the compare sheet (one
+  extra critique round), carry the measured widths into the turned views (still the house outline's: unchecked),
+  and send Sam ONE sheet with chat 15's outfit sheet (`notes/morning/outfit-every-view-c15.jpg`, not yet sent).
+- **Seen, not fixed:** the side view's stubble edge ends in a straight step behind the jaw. Kittest
+  people_from_a_description fails on protest-tiers' early import (not this job's).
+- **Needs Sam:** nothing yet.
+- **Sam's words kept:** the far temple of a three-quarter stays bare skin. "Please don't limit yourself on budget." Age
+  lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (WHOLE HEAD).
 - **Open rule requests:** none.
-- **For Claude:** views.WrapPen/torso_outline/TORSO_EXTRAS; people.turned()/pieces()/kit_torso_view, FILM_TURNED,
-  DREW; PP.robe_back/officer_back/open_collar(_three)/collar_torso; PF.scarf_back/zip_back; people_turned 'wig';
-  facehouse sp['neck_redrawn'] (braids re-lay the collar). Older code names: notes/archive/facetool-handovers.md.
-
+- **For Claude:** FH.measure_head/_head_rows/drawn_head/_swept_measured/_Squeeze/compare/STRONG, SHAPE_PUSH, SKIN_BIAS,
+  HEAD_EYES, EYE_OPEN_HEAD; pick key 'head', lines `head`, `shape_push`; `facehouse.py compare OUT walliams blessed:walliams`.
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
 with its colours, then `## view: NAME` per camera (`camera: up, horizon, lens`: a level camera, Blessed's `Level`;

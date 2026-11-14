@@ -349,3 +349,34 @@
   PF.open_shirt/crucifix/scarf/zip_top, PP.robe_torso/officer_torso; views.torso_view(img, p, sp, view). Older code
   names: notes/archive/facetool-handovers.md.
 
+
+## Face tool chat 15 handover (archived by chat 16, 14 Nov)
+- **Rules that bite next:** 30 (Walliams is a repeated note: say why it failed), 86 (every tool gets a kittest), 49.
+- **Done (chat 15):** (b) one outfit in every view. Every extra (robe, officer, open shirt, crucifix, scarf, zip) and
+  Kemi's open collar (now an outfit choice, `outfit: ..., no tie, open collar`, out of the hair code) is drawn
+  turned: the front's drawing wrapped round the turned body, its own back where it goes round (belt, sash, scarf at
+  the neck, the top's collar); the judge's wig turns with his head. Andy and Kemi front pixel for pixel; Kemi's
+  three-quarter unchanged, her side now keeps the collar. Blessed's frames still match (new turned pieces scored
+  apart). Kittest outfit_every_view (34 piece-views; fails on the old code). Sheet `notes/morning/outfit-every-view-c15.jpg`.
+- **Next (chat 16, Opus high: new building):** Sam's face-shape build (below), judged on Walliams beside the Blessed
+  head; one sheet to Sam with this chat's outfit sheet.
+- **Sam on the Walliams sheet (14 Nov, a N):** "I would recognise the original as Walliams a lot more ... Just
+  doesn't look like him. Very different head shape too." Why (chat 13's read): the inner face was tuned off a smiling
+  photo, but the OUTLINE is the house's: narrow temples, long, tapering, where his (Blessed, "That's him") is a broad
+  box, jaw as wide as the cheeks, long heavy lower face (blessed_walliams.outline, LOW 1.15); eyes small and tired.
+  **Sam's direction:** "I think it just needs to be able to draw the face shape from the reference a lot more
+  intelligently": the face tool reads the head's whole shape off the photos itself (temples, cheeks, jaw, chin, crown
+  with the hair), for every face, not a house outline from a few measures; also bigger, livelier eyes as the Blessed
+  head's. Judged on Walliams beside the Blessed head Sam knows (Sam's eye is the judge). Andy and Kemi's front heads held.
+- **Seen, not fixed:** side view: the stubble's top edge ends in a straight step behind the jaw. Kittest
+  people_from_a_description fails on one thing not this job's: `protest_tiers_cast.py` imports the people kit before
+  Sam approved it for films (protest-tiers chat's work); Blessed's frames themselves pass.
+- **Needs Sam:** nothing open (the outfit sheet is to look at; the Walliams N is being worked).
+- **Sam's words kept:** the far temple of a three-quarter stays bare skin (chat 12b). "Please don't limit yourself on
+  budget." Age lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (the traced outline, `trace`).
+- **Open rule requests:** none.
+- **For Claude:** views.WrapPen/torso_outline/TORSO_EXTRAS; people.turned()/pieces()/kit_torso_view, FILM_TURNED,
+  DREW; PP.robe_back/officer_back/open_collar(_three)/collar_torso; PF.scarf_back/zip_back; people_turned 'wig';
+  facehouse sp['neck_redrawn'] (braids re-lay the collar). Older code names: notes/archive/facetool-handovers.md.
+

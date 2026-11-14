@@ -2230,6 +2230,42 @@ def facehouse_whole_head():
 
 
 @test
+def facehouse_head_from_photos():
+    """Face tool chat 16 (Sam on Walliams, 14 Nov: "Very different head shape ... draw the face shape from the
+    reference a lot more intelligently"): a measured head (facehouse.measure_head, saved in the pick) is drawn on its
+    photos' shape: the face's edge within 0.025 face heights of the photos' skin (ears cut) from the cheekbones to the
+    chin, the hair's outer edge within 0.03 of the photos' silhouette over the temples, the crown within 0.04. Fails
+    on the house outline and cap (narrow temples, a crown a tenth too high)."""
+    import numpy as np
+    import facehouse as FH
+    kh = FH.person('walliams', 'detail', **dict(FH.CAST['walliams'], shape_push=1.0))['kit_house']
+    hd = kh.get('head_m') or {}
+    if not hd:
+        return False, 'no measured head in the pick (facehouse.py measure walliams)'
+    L = FH.face_layout(kh)
+    rows = dict((v, (s, b)) for v, s, b in zip(hd['v'], hd['skin'], hd['both']))
+    face = [abs(FH._face_u(L, v) - rows[v][0]) for v in (0.4, 0.5, 0.6, 0.7, 0.8, 0.9) if rows[v][0]]
+    sh = FH._swept_shapes(L, kh, (60, 50, 40))
+    cap = sh['cap'] + [q for sd in sh['sides'] for q in sd]
+
+    pieces = [sh['cap']] + sh['sides']
+
+    def outer(v):                                      # the farthest crossing of row v by any piece's edge
+        r = []
+        for pc in pieces:
+            q = FH.curve(pc, 2)
+            for (u0, v0), (u1, v1) in zip(q, q[1:] + q[:1]):
+                if (v0 - v) * (v1 - v) < 0:
+                    r.append(abs(u0 + (v - v0) / (v1 - v0) * (u1 - u0)))
+        return max(r) if r else 0.0
+    hair = [abs(outer(v) - rows[v][1]) for v in (-0.2, -0.1, 0.0, 0.1) if rows[v][1]]
+    crown = min(w for _, w in cap)
+    errs = (max(face), max(hair), abs(crown - hd['crown']))
+    ok = errs[0] <= 0.025 and errs[1] <= 0.03 and errs[2] <= 0.04
+    return ok, f'face edge off by {errs[0]:.3f}, hair edge {errs[1]:.3f}, crown {errs[2]:.3f} (face heights)'
+
+
+@test
 def kit_people_never_generic():
     """Face tool chat 14 (Sam, 14 Nov, Y: background people move onto the new three-quarter turned head): everyone a
     people file builds, crowds included, turns through turnhead (its 30-degree three-quarter), never views.py's old
