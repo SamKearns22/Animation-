@@ -13,38 +13,31 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 6 of the face chain, 14 Nov; amber at ~2.4%: handed over after the sheet)
-- **Rules that bite next:** 49 (likeness: the name test is the judge now), 86 (facehouse needs its kittest), 85.
-- **Done:** design step of plan 1. New `source/facehouse.py`: the face tool's pick drawn ON THE HOUSE HEAD (people kit
-  body and clothes, house outline, ears, eyes, brows, nose, lips at the house head size) with house pieces: `swept`
-  hair (Walliams' hand-made hair made general), `braids` (middle parting, crown lines, two curtains of plaits that
-  hug the face, chevrons per plait), the measured glasses in house ink, age lines redrawn as the hand-made smile
-  folds and crinkles. Two looks: 1 house (house skin tones, strong lines only), 2 house + detail (skin near the
-  photo, socket shade, every line, more plaits). Sheet sent: `notes/morning/facehouse-design.jpg`.
-- **Blind name test (namer, step 1 only):** Burnham 1: 8% (named Starmer first, 10%: the glasses pull to him);
-  Burnham 2: 12%; Badenoch 1: 30%; Badenoch 2: 35% (her plaits carry her; the face reads generic). Answers kept
-  locally only (review/ is not saved). Fault found in the check: the pack's folder is named after the person and two
-  namers said it nudged them: name packs neutrally (fix in nametest.py's pack paths).
-- **Next (chat 7, Opus HIGH: new building):** K1 and K2 first (a clip-size sheet of Kemi: pick C beside look 2
-  before and after; find why her shape was lost: house outline vs C's outline_uv, the layout at the house size), then push the likeness until the
-  namer names each blind (neutral folder names, line-up step too): Burnham's heavy dark brows over deep-set eyes,
-  longer face, the wide smile with deep folds (his usual expression), thick wavy hair pushed up; Badenoch's high
-  rounded forehead (namer: the cap reads as a fringe), wide-set big eyes, full lips, the gap-tooth smile. Keep the
-  likeness check as the 'nothing the wrong way' guard. Then: facehouse in people.py (`head: house NAME`), turned
-  views (turnhead), kittest, catalogue row, facepick's sheet drawing its heads with facehouse; then Walliams.
-- **Sam's answers (14 Nov, after the sheet):** "2 is great" (look 2, house + detail, is the look). Andy: "looks 90%
-  correct, great job". Kemi, two notes: **K1** "we lost the face shape ... Kemi just needs her proportions back" (the
-  pick C's face shape and proportions; "we are allowed to play with face shapes in the house style"); **K2** "her
-  plaits go all the way to the top ... always the way she keeps her hair. You would need to learn how to draw her top
-  plaits too" (plaits from the parting over the crown, not a sleek cap; the namer also read the cap as a fringe).
-- **Needs Sam:** rule 49's check column naming the face-tool tests (Y/N, asked twice).
+## Face tool, where things stand (chat 7 of the face chain, 14 Nov; amber at ~3.1%: handed over after the sheet)
+- **Rules that bite next:** 49 (likeness: the blind name test is the judge), 86 (facehouse needs its kittest), 85.
+- **Done:** K1: Kemi's face was already pick C's (outlines match); the guessed hair cap made her head a head taller and
+  narrower. Hair now measured off the pick's picture (`pick_hair`), plus her ears (as in C) and a wider neck. K2: plaits
+  from the parting over the whole crown, one rope each down to the tips. Sheet sent: `notes/morning/facehouse-kemi-k1k2.jpg`.
+  Name test now uses neutral folders (`nametest.py`). facepick and agelines kittests pass; Andy unchanged (0 pixels).
+- **Name test, neutral folders (the honest baseline; chat 6's 8-35% were nudged by the folder name):** Kemi look 2:
+  not named (Ketanji Brown Jackson 30%), line-up 6th of 8 ("a generic template ... needs her own features: face shape,
+  nose and mouth"). Andy look 2: named 3rd at 5% (Starmer 15%), line-up 3rd. Both FAIL.
+- **Next (chat 8, Opus HIGH: new building): the likeness push** until each is named blind (neutral packs, line-up
+  step too): Burnham's heavy dark brows over deep-set eyes, longer face, the wide smile with deep folds, thick wavy
+  hair pushed up; Badenoch's high rounded forehead, wide-set big eyes, full lips, the gap-tooth smile (exaggerate:
+  "we are allowed to play with face shapes in the house style"). Keep the likeness check as the 'nothing the wrong
+  way' guard; don't undo K1/K2. Then facehouse in people.py (`head: house NAME`), turned views, kittest, catalogue
+  row, facepick's sheet drawing with facehouse; then Walliams.
+- **Needs Sam:** (1) Kemi's ears showing, as in pick C (her photos hide them): Y keep / N hide. (2) rule 49's check
+  column naming the face-tool tests (Y/N, asked three times).
 - **Sam's words kept:** "Please don't limit yourself on budget as this is important and I have spare." (no % stop;
-  rule 85 still hands over between chats). Age lines stay, house style, per character.
+  rule 85 still hands over between chats). Age lines stay, house style, per character. Look 2 is the look.
 - **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP; rule 49.
-- **Open rule requests:** rule 49's check column (asked again with chat 6's sheet).
-- **For Claude:** `python3 source/facehouse.py sheet OUT.jpg [burnham badenoch]` (~10 s); `head NAME LOOK OUT.png`;
-  per-person lines in facehouse.CAST (hair piece, quiff, hairline, brow_thick, outfit); looks in LOOKS. The sheet's
-  photo tile prints a harmless mediapipe shutdown traceback. nametest packs: scratchpad (lost); rebuild them.
+- **Open rule requests:** rule 49's check column.
+- **For Claude:** `python3 source/facehouse.py head NAME detail OUT.png`; per-person lines in facehouse.CAST (ears,
+  neck_w new). `nametest.py pack KEYDIR BIG.png --lineup "..."` now writes the helper's files to review/np/RANDOM;
+  `score KEYDIR NAME` finds them. Packs used: Kemi line-up Badenoch, Abbott, Butler, Patel, Harris, Obama, de Cordova,
+  Ribeiro-Addy; Andy line-up Burnham, Starmer, Streeting, Miliband, Sunak, Hunt, Gove, Khan.
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`
