@@ -142,3 +142,55 @@ look.md called 1 and 2 "beret"/"cap", so the beret reading is a real fault. I ca
 4. Black outfits on 7 and 8 lose their arms and legs against the hood and trousers. Suggested line: dark clothes keep their silhouette readable.
 5. Panels are cropped at different sizes with a lot of empty space. Suggested line: sheet panels share one scale.
 
+== critique, round 1 pass 4 (2026-11-15): 19 fault(s), 3 can't tell
+-- look.md --
+1: Front view man, red cap, blue shirt, camera on strap, bum bag, khaki shorts, neutral face.
+2: Side view of same man, red cap, camera hanging, hand by shorts, white shoes.
+3: Front woman, blonde bob, sunglasses on white visor, pink top, tote bag "GREE?SS FR? TIR?A" partly covered by hand.
+4: Side view blonde woman, visor, hair block with jagged edge, pink top, white shorts, tote hidden.
+5: Tall side-view old person, purple helmet, dark coat, holds bag of oranges, odd gradient arm.
+6: Small vendor with red-white umbrella, cart of bottles with flame, sign "MOLOTOV 200 LEK".
+7: Hooded masked figure in black, one hand peace sign, other holds phone selfie.
+8: Hooded masked figure in black, thumbs up, other hand holds phone.
+9: Two hooded masked riders on red scooter, one holds spear or rocket launcher.
+10: Two masked riders on red scooter, rear one waves, front one holds launcher.
+-- result.md --
+## Faults
+FAULT P11 [1-4, 7-10]: no neck on tourists and riders; heads sit straight on shoulders. Granny 5 has a short neck stub.
+FAULT P2 [1-4]: tourists show a flat neutral face, no cowering or fear; the brief says cowering and shouting "Hey!".
+FAULT P2 [5]: granny shows no throwing beat; she stands holding oranges, no overarm pose, no Molotov.
+FAULT O3 [5]: granny's bag of oranges is wrong; the brief wants a Molotov, and nothing reads as a bottle.
+FAULT P1 [1-2, 4]: camera, bum bag and tote hover or float beside the body in side views. Camera in 2 hangs off the strap with no hand contact. Hand in 4 sits on a floating white slab.
+FAULT O1 P8 [3]: tote text reads "GREE?SS FR? TIR?A"; the wife's hand covers the lettering and the bag is cut off. In 4 the tote is a blank white slab with no text or strap, so the front and side views disagree.
+FAULT P8 [2, 4]: side views are not the same person as the fronts. In 2 the camera is drawn in front and the belt bag is a detached rectangle; in 4 the hair is a hard jagged block and the visor, sunglasses and hair do not match panel 3.
+FAULT P5 [3, 5]: shoulders. In 3 odd collar and shoulder ticks; in 5 the arm has a gradient smear and a tan strip beside the body, so it does not grow out of the shoulder in one line.
+FAULT P6 [5, 7-8]: granny's hand is lost behind the bag; in 8 the thumbs-up hand is a black blob; in 7 the peace sign reads as a V on a black arm.
+FAULT P11 [5]: the helmet is oversized and the head is a huge block against the body; the face is cut off.
+FAULT O4 [5, 6]: granny is far taller than every other figure, while in the brief she is small and side-on. The seller is tiny against the cart and the umbrella.
+FAULT O4 [9-10]: the moped is too small for two riders; they sit above the seat, with no thighs or lap on it.
+FAULT P7 [9-10]: the front rider's feet float and the seat is a hollow open bowl. The rear rider's legs do not reach the footrest.
+FAULT P2 [7-8]: selfie riders show no feeling; the eyes look forward, not at the phone; the helicopter is missing.
+FAULT P2 [9-10]: heads do not turn to look at anyone; they face front. In 10 the shrug is only a small wave, not a shrug.
+FAULT O3 [9-10]: the RPG reads as a spear or stick; the warhead is a leaf shape.
+FAULT P13 [7-8]: hoodie and trousers are one flat black, with no cuffs and no wrists. The hood is very large against the head.
+FAULT O2 [6]: the seller's body is hidden behind the cart and the bottles overlap his arms, so he has no hands.
+CAN'T TELL P12 [1-10]: no mouths are shown speaking; a frame with the "Hey!" line is needed.
+CAN'T TELL P14 [1-10]: eyes are tiny at phone size; a full-size face crop is needed.
+CAN'T TELL P10 [1-10]: no contact frames; the hand-held phone grip cannot be checked.
+FAULT A2 [1-10]: every tile says "(no reference)"; there is nothing to match against.
+
+## Checked
+1-10
+
+## Cold look
+I read panel 5 as an old person with oranges, not a granny with a Molotov. I read 9 and 10 as a spear or launcher, which is vague. Nothing named a falling helicopter, so it is missing from 7-8. Panel 1 and 2 faces read as a man, not cowering. The tote text was only partly readable.
+
+## Not on the list
+- Missing required background (helicopter, alley): suggested line: "every prop and set piece the beat names is in frame".
+- Black-on-black rioters lose their arms and hands at phone size: suggested line: "dark clothes keep a visible edge or highlight".
+- Front and side views of the same person are not matched: suggested line: "every side view matches its front view in hair, props and clothing".
+- Panel heights and canvases differ, with black fill: suggested line: "all tiles share one scale and one background".
+- Scooter drawn as an empty bowl: suggested line: "vehicles have a seat and body that read from the side".
+
+critique, pass 4: faults fixed as one list: tote worn cross-body so the words show (front); granny oatmeal cardigan sleeve; seller grin + upturned moustache; acting/size/reference lines are false alarms (moves stage, tiles fitted to box, invented people); left open: ['1-4,7-10 P11: no neck on tourists and riders; heads sit straight on shoulders. Granny 5 has a short neck stub.', '1-2,4 P1: camera, bum bag and tote hover or float beside the body in side views. Camera in 2 hangs off the strap with no hand contact. Hand in 4 sits on a float', '2,4 P8: side views are not the same person as the fronts. In 2 the camera is drawn in front and the belt bag is a detached rectangle; in 4 the hair is a hard ja', "5,7-8 P6: granny's hand is lost behind the bag; in 8 the thumbs-up hand is a black blob; in 7 the peace sign reads as a V on a black arm.", '5 P11: the helmet is oversized and the head is a huge block against the body; the face is cut off.', '9-10 O4: the moped is too small for two riders; they sit above the seat, with no thighs or lap on it.', "9-10 P7: the front rider's feet float and the seat is a hollow open bowl. The rear rider's legs do not reach the footrest.", '9-10 O3: the RPG reads as a spear or stick; the warhead is a leaf shape.', '7-8 P13: hoodie and trousers are one flat black, with no cuffs and no wrists. The hood is very large against the head.', "6 O2: the seller's body is hidden behind the cart and the bottles overlap his arms, so he has no hands."]
+

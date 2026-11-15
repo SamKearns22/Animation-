@@ -348,7 +348,10 @@
   {
    "name": "round1 cast",
    "pct": 2.307,
-   "done": null
+   "done": {
+    "date": "2026-11-15",
+    "spent": 37.87
+   }
   },
   {
    "name": "round1 sets",
@@ -528,6 +531,52 @@
      "3-4 P5: shoulder tick/strap lines on the shirts in 1 and 3; arm starts as a step at the sleeve.",
      "1-10 P12: no speaking frames, so mouths cannot be checked."
     ]
+   },
+   {
+    "round": 1,
+    "pass": 4,
+    "stage": "cast",
+    "date": "2026-11-15",
+    "hunt": 2,
+    "faults": 19,
+    "cant_tell": 3,
+    "open": [
+     "1-4,7-10 P11: no neck on tourists and riders; heads sit straight on shoulders. Granny 5 has a short neck stub.",
+     "1-4 P2: tourists show a flat neutral face, no cowering or fear; the brief says cowering and shouting \"Hey!\".",
+     "5 P2: granny shows no throwing beat; she stands holding oranges, no overarm pose, no Molotov.",
+     "5 O3: granny's bag of oranges is wrong; the brief wants a Molotov, and nothing reads as a bottle.",
+     "1-2,4 P1: camera, bum bag and tote hover or float beside the body in side views. Camera in 2 hangs off the strap with no hand contact. Hand in 4 sits on a float",
+     "3 O1 P8: tote text reads \"GREE?SS FR? TIR?A\"; the wife's hand covers the lettering and the bag is cut off. In 4 the tote is a blank white slab with no text or s",
+     "2,4 P8: side views are not the same person as the fronts. In 2 the camera is drawn in front and the belt bag is a detached rectangle; in 4 the hair is a hard ja",
+     "3,5 P5: shoulders. In 3 odd collar and shoulder ticks; in 5 the arm has a gradient smear and a tan strip beside the body, so it does not grow out of the shoulde",
+     "5,7-8 P6: granny's hand is lost behind the bag; in 8 the thumbs-up hand is a black blob; in 7 the peace sign reads as a V on a black arm.",
+     "5 P11: the helmet is oversized and the head is a huge block against the body; the face is cut off.",
+     "5-6 O4: granny is far taller than every other figure, while in the brief she is small and side-on. The seller is tiny against the cart and the umbrella.",
+     "9-10 O4: the moped is too small for two riders; they sit above the seat, with no thighs or lap on it.",
+     "9-10 P7: the front rider's feet float and the seat is a hollow open bowl. The rear rider's legs do not reach the footrest.",
+     "7-8 P2: selfie riders show no feeling; the eyes look forward, not at the phone; the helicopter is missing.",
+     "9-10 P2: heads do not turn to look at anyone; they face front. In 10 the shrug is only a small wave, not a shrug.",
+     "9-10 O3: the RPG reads as a spear or stick; the warhead is a leaf shape.",
+     "7-8 P13: hoodie and trousers are one flat black, with no cuffs and no wrists. The hood is very large against the head.",
+     "6 O2: the seller's body is hidden behind the cart and the bottles overlap his arms, so he has no hands.",
+     "1-10 A2: every tile says \"(no reference)\"; there is nothing to match against.",
+     "1-10 P12: no mouths are shown speaking; a frame with the \"Hey!\" line is needed.",
+     "1-10 P14: eyes are tiny at phone size; a full-size face crop is needed.",
+     "1-10 P10: no contact frames; the hand-held phone grip cannot be checked."
+    ],
+    "fixed": "tote worn cross-body so the words show (front); granny oatmeal cardigan sleeve; seller grin + upturned moustache; acting/size/reference lines are false alarms (moves stage, tiles fitted to box, invent",
+    "left": [
+     "1-4,7-10 P11: no neck on tourists and riders; heads sit straight on shoulders. Granny 5 has a short neck stub.",
+     "1-2,4 P1: camera, bum bag and tote hover or float beside the body in side views. Camera in 2 hangs off the strap with no hand contact. Hand in 4 sits on a float",
+     "2,4 P8: side views are not the same person as the fronts. In 2 the camera is drawn in front and the belt bag is a detached rectangle; in 4 the hair is a hard ja",
+     "5,7-8 P6: granny's hand is lost behind the bag; in 8 the thumbs-up hand is a black blob; in 7 the peace sign reads as a V on a black arm.",
+     "5 P11: the helmet is oversized and the head is a huge block against the body; the face is cut off.",
+     "9-10 O4: the moped is too small for two riders; they sit above the seat, with no thighs or lap on it.",
+     "9-10 P7: the front rider's feet float and the seat is a hollow open bowl. The rear rider's legs do not reach the footrest.",
+     "9-10 O3: the RPG reads as a spear or stick; the warhead is a leaf shape.",
+     "7-8 P13: hoodie and trousers are one flat black, with no cuffs and no wrists. The hood is very large against the head.",
+     "6 O2: the seller's body is hidden behind the cart and the bottles overlap his arms, so he has no hands."
+    ]
    }
   ],
   "lines": {
@@ -540,7 +589,7 @@
     "false": 1
    },
    "P1": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "S9": {
@@ -564,20 +613,20 @@
     "false": 0
    },
    "A2": {
-    "faults": 5,
-    "false": 0
+    "faults": 6,
+    "false": 1
    },
    "S3": {
     "faults": 4,
     "false": 0
    },
    "P2": {
-    "faults": 9,
-    "false": 0
+    "faults": 13,
+    "false": 1
    },
    "O3": {
-    "faults": 8,
-    "false": 0
+    "faults": 10,
+    "false": 1
    },
    "P4": {
     "faults": 4,
@@ -588,8 +637,8 @@
     "false": 0
    },
    "O4": {
-    "faults": 3,
-    "false": 1
+    "faults": 5,
+    "false": 2
    },
    "S2": {
     "faults": 1,
@@ -612,11 +661,11 @@
     "false": 0
    },
    "O2": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "O1": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "S6": {
@@ -624,11 +673,11 @@
     "false": 0
    },
    "P7": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P8": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "M1": {
@@ -636,18 +685,22 @@
     "false": 0
    },
    "P11": {
-    "faults": 1,
+    "faults": 3,
     "false": 1
    },
    "P5": {
-    "faults": 2,
+    "faults": 3,
     "false": 1
    },
    "P6": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P14": {
+    "faults": 1,
+    "false": 0
+   },
+   "P13": {
     "faults": 1,
     "false": 0
    }

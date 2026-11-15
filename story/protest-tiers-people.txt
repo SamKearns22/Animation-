@@ -68,7 +68,7 @@ body: 1.56 m, shoulders 136, head 64 x 90
 skin: olive | hair: bun, 200 196 190
 face: jaw_wide +0.03, chin_long +0.02
 eyes: 60 50 40 | brows: 150 146 140, width 3.6
-outfit: dress, dress 44 40 46, sleeves 130 54 60, shirt 44 40 46, no tie, shoes 30 28 26
+outfit: dress, dress 44 40 46, sleeves 204 184 152, shirt 44 40 46, no tie, shoes 30 28 26
 
 # seller: Molotov seller (Glimpse: front, behind his cart)
 body: 1.74 m, shoulders 174, head 72 x 92

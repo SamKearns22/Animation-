@@ -717,7 +717,7 @@ FLAT, FLAT_D = (96, 90, 78), (70, 64, 56)                 # the seller's tweed f
 APRON, APRON_D = (236, 232, 222), (190, 184, 170)
 BUMBAG, CAMERA = (40, 44, 52), (34, 34, 38)
 TOTE = (232, 222, 196)
-CARDIGAN, CARDIGAN_D = (130, 54, 60), (96, 38, 44)
+CARDIGAN, CARDIGAN_D = (204, 184, 152), (150, 132, 104)   # oatmeal: her sleeve stands off the dark dress (hunt 1)
 
 
 def _side(view):
@@ -860,8 +860,9 @@ def moustache(p, view, sp, hx, hy):
         p.poly(curve([(x0 - 30, my - 6), (x0 + 4, my - 8), (x0 + 6, my + 6), (x0 - 26, my + 10)], 2), col, INK, 1.6)
         return
     o = 0.3 * hw if view == 'three' else 0.0
-    m = [(hx + o - 0.5 * hw, my + 10), (hx + o - 0.42 * hw, my - 6), (hx + o, my - 10), (hx + o + 0.42 * hw, my - 6),
-         (hx + o + 0.5 * hw, my + 10), (hx + o + 0.2 * hw, my + 4), (hx + o, my + 8), (hx + o - 0.2 * hw, my + 4)]
+    m = [(hx + o - 0.56 * hw, my - 10), (hx + o - 0.4 * hw, my - 4), (hx + o, my - 10), (hx + o + 0.4 * hw, my - 4),
+         (hx + o + 0.56 * hw, my - 10), (hx + o + 0.3 * hw, my + 6), (hx + o, my + 4), (hx + o - 0.3 * hw, my + 6)]
+    # the ends turned up, so the mouth under it reads as a grin (hunt 1: the down-turned ends read as a frown)
     p.poly(curve(m, 3), col, INK, 1.6)
 
 
@@ -947,14 +948,14 @@ def tote(p, view, sp):
         p.line([(-10, 4), (-4, 330)], INK, 1.2)
         p.poly([(-50, 330), (40, 330), (46, 470), (-56, 470)], TOTE, INK, 2.0)
         return
-    x = sw * 0.62
-    p.line([(x - 50, 6), (x + 10, 300)], TOTE, 7)
-    p.line([(x - 50, 6), (x + 10, 300)], INK, 1.2)
-    p.poly([(x - 30, 300), (x + 110, 300), (x + 120, 470), (x - 40, 470)], TOTE, INK, 2.0)
-    p.ell(x + 40, 360, 34, 20, (90, 150, 200), None)           # a little sun-and-sea print
-    p.ell(x + 40, 342, 12, 12, (240, 180, 60), None)
+    x = -10                                               # worn cross-body, the bag on her front: her hands at her
+    p.line([(sw * 0.6, 6), (x + 70, 320)], TOTE, 7)        # sides no longer cover the words (hunt 2, line O1)
+    p.line([(sw * 0.6, 6), (x + 70, 320)], INK, 1.2)
+    p.poly([(x - 60, 320), (x + 80, 320), (x + 90, 490), (x - 70, 490)], TOTE, INK, 2.0)
+    p.ell(x + 10, 378, 34, 20, (90, 150, 200), None)           # a little sun-and-sea print
+    p.ell(x + 10, 360, 12, 12, (240, 180, 60), None)
     for k, w in enumerate(('GREETINGS', 'FROM', 'TIRANA')):    # the words, in the pen's own units (hunt 1: dashes)
-        txt(p, x + 40, 402 + k * 24, w, 22 if k < 2 else 30, (200, 40, 50))
+        txt(p, x + 10, 420 + k * 24, w, 22 if k < 2 else 30, (200, 40, 50))
 
 
 def cardigan(p, view, sp):
@@ -1033,6 +1034,8 @@ def tourist(who):
         sp[k] = sp['skin'] if v == 'skin' else v
     if who == 'granny':                                   # under the headscarf: no bun poking through it
         sp['kit_face'] = dict(sp['kit_face'], hair='crop', turned='crop')
+    if who == 'seller':                                   # a seller's patter, not a frown (hunt 1, line O3)
+        sp.update(smile=0.7, brow_up=0.03)
     return sp
 
 
