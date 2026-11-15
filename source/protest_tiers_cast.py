@@ -500,13 +500,15 @@ def keys(j, side='R'):
     def draw(p, j2):
         c = P3(dict(j, _yaw=j2['yaw']), tuple(_hand_c(j, side)))
         x, y = c
-        p.ell(x, y - 34, 12, 12, None, (190, 190, 186), 4)
-        for dx, ang in ((-10, -0.5), (10, 0.4)):
-            bx, by = x + dx, y - 40
-            ex, ey = bx + 40 * math.sin(ang), by - 40 * math.cos(ang)
-            p.line([(bx, by), (ex, ey)], INK, 10)
-            p.line([(bx, by), (ex, ey)], (214, 196, 120), 6)
-        p.ell(x + 10, y - 70, 7, 7, (255, 250, 220), None)
+        # drawn about twice true size so a bunch reads at crowd scale (chat 14: at true size they vanished)
+        p.ell(x, y - 46, 22, 22, None, INK, 9)
+        p.ell(x, y - 46, 22, 22, None, (214, 216, 220), 5)
+        for dx, ang, col in ((-16, -0.55, (214, 190, 96)), (2, 0.05, (200, 204, 210)), (16, 0.6, (214, 190, 96))):
+            bx, by = x + dx, y - 60
+            ex, ey = bx + 80 * math.sin(ang), by - 80 * math.cos(ang)
+            p.line([(bx, by), (ex, ey)], INK, 18)
+            p.line([(bx, by), (ex, ey)], col, 11)
+        p.ell(x + 8, y - 120, 10, 10, (255, 252, 230), None)
     return draw
 
 

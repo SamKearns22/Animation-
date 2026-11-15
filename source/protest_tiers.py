@@ -38,6 +38,7 @@ from PIL.PngImagePlugin import PngInfo
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import protest_tiers_cast as C       # noqa: E402
+import moves                         # noqa: E402
 import protest_tiers_sets as S       # noqa: E402
 import islamocommunism_set as IS     # noqa: E402
 from ed import INK                   # noqa: E402
@@ -135,6 +136,10 @@ def make_pose(sp, state, u=0.0, t=0.0, force=None):
         j['props'] = [C.placard(j, text=parts[1], board=board, w=w)]
         j['grip'] = ('L', 'R')
         return j
+    if state == 'swing' and 0.285 < u < 0.45:           # the same elbow fold mid-swing (chat 14): pass through it
+        u = 0.285 if u < 0.37 else 0.45
+    if state == 'run':                                     # the 'run' gait: 0 of 24 phases fail at three-quarter
+        return moves.gait(sp, t, 'run')
     if state.startswith('flag:'):
         return C.pose(sp, 'flag', force=state.split(':')[1])
     return C.pose(sp, state, u, t, force)
@@ -184,6 +189,29 @@ def paste(img, kind, i, tier, state, yaw, gx, gy, s, force=None, dark=0.0):
     img.paste(im, (int(round(gx - ax)), int(round(gy - ay))), im)
 
 
+@lru_cache(maxsize=6000)
+def _top(kind, i, tier, state, yaw, force, q):
+    """The sprite's highest drawn point relative to its ground anchor (where raised keys are): (dx, dy)."""
+    im, (ax, ay) = _scaled(kind, i, tier, state, yaw, force, q)
+    a = np.asarray(im)[..., 3]
+    ys = np.nonzero(a.max(1) > 128)[0]
+    if not len(ys):
+        return 0.0, 0.0
+    y = ys[0]
+    xs = np.nonzero(a[y] > 128)[0]
+    return float(xs.mean()) - ax, float(y) - ay
+
+
+def glint(img, x, y, r, amt=1.0):
+    """A four-point star: the sparkle off a raised key ring (T1) or a shard (T2)."""
+    dr = ImageDraw.Draw(img)
+    c = (255, 252, 230)
+    w = max(1, int(r / 5))
+    dr.line([(x - r, y), (x + r, y)], fill=c, width=w)
+    dr.line([(x, y - r * 1.3), (x, y + r * 1.3)], fill=c, width=w)
+    dr.ellipse((x - w * 1.5, y - w * 1.5, x + w * 1.5, y + w * 1.5), fill=(255, 255, 255))
+
+
 def _darken(im, k):
     a = np.asarray(im).astype(np.float32)
     a[..., :3] *= (1 - k)
@@ -219,6 +247,8 @@ class Actor:
     """One live-drawn person: kind ('officer', 'rioter', 'marcher'), at (x, d) metres facing yaw, in a pose."""
     def __init__(self, name, kind, x, d, yaw, state='stand', u=0.0, t=0.0, i=0, force=None, extra=None, clip=None,
                  dark=0.0, tier='t1'):
+        if state.startswith('run') and 75 <= abs(yaw) <= 105:   # chat 14: the rig's run fails its arm guard side on
+            yaw = 115 if yaw > 0 else -115                     # (14-17 of 24 phases, either way): three-quarter, away
         self.name, self.kind, self.x, self.d, self.yaw = name, kind, x, d, yaw
         self.state, self.u, self.t, self.i, self.force = state, u, t, i, force
         self.extra, self.clip, self.dark, self.tier = extra, clip, dark, tier
@@ -238,14 +268,7 @@ def draw_actor(img, cam, a):
     gx, gy = cam.p(a.x, a.d)
     sp = a.sp()
     j = a.pose(sp)
-    if a.state.startswith('run') and a.yaw < 0:     # running left: drawn facing right and mirrored (the rig's
-        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))  # left-facing sprint folds the elbow across the chest)
-        C.draw(lay, _cam2(), W - gx, gy - FEET * s, s, sp, j, -a.yaw, a.kind if a.kind != 'marcher' else None)
-        lay = lay.transpose(Image.FLIP_LEFT_RIGHT)
-        if a.dark:
-            lay = _darken(lay, a.dark)
-        img.alpha_composite(lay)
-    elif a.clip or a.dark:
+    if a.clip or a.dark:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         C.draw(lay, _cam2(), gx, gy - FEET * s, s, sp, j, a.yaw, a.kind if a.kind != 'marcher' else None)
         if a.dark:
@@ -276,13 +299,17 @@ def crowd_t1():
     cam = S.CAMS['t1']
     rng = np.random.default_rng(11)
     out = []
-    for d in np.arange(46.0, 156.0, 0.72):
+    for d in np.arange(46.0, 135.0, 0.72):           # stops at 135: the gap shows the knot and the container (chat 14)
         x0 = (0 - cam.VX - 40) * d / cam.F
         x1 = (W - cam.VX + 40) * d / cam.F
         for x in np.arange(x0, x1, 0.62):
             xx = x + rng.uniform(-.2, .2)
             r = rng.uniform()
-            state = 'keys' if r < .42 else 'flag:catalan' if r < .47 else 'placard' if r < .52 else 'stand'
+            # keys are the main thing; ~1% flags (Catalan and UGT), ~1.5% placards (chat 14: 5% read as a sea)
+            state = ('keys' if r < .5 else 'flag:catalan' if r < .506 else 'flag:ugt' if r < .51 else
+                     'placard' if r < .525 else 'stand')
+            if state.startswith('flag') and d < 75:        # near flags filled a quarter of the frame: mid and far only
+                state = 'keys'
             out.append(dict(x=xx, d=d + rng.uniform(-.25, .25), i=int(rng.integers(0, 16)), state=state,
                             ph=rng.uniform(0, 6.28), turn=rng.uniform(0, .35)))
     return out
@@ -313,7 +340,7 @@ def t1_people(img, lt):
             continue
         state = m['state']
         if state == 'keys':                                # the key wave: from the front (far) back toward us
-            if lt < 0.2 + (156 - m['d']) / 110 * 1.1:
+            if lt < 0.2 + (135 - m['d']) / 89 * 1.1:
                 state = 'stand'
         elif state == 'placard':
             state = 'placard:' + T1_PLACARDS[m['i'] % len(T1_PLACARDS)]
@@ -321,7 +348,12 @@ def t1_people(img, lt):
         if lt > 1.55 + m['turn']:                          # heads turn to the bursts over the line (centre)
             yaw = 135 if gx < 470 else -135
         jig = -1 if (m['state'] == 'keys' and state == 'keys' and (int(lt * 12) + m['i']) % 2) else 0
-        paste(img, 'marcher', m['i'], 't1', state, yaw, gx, gy + jig, scale_at(cam, d))
+        sc = scale_at(cam, d)
+        paste(img, 'marcher', m['i'], 't1', state, yaw, gx, gy + jig, sc)
+        if state == 'keys' and (int(lt * 12) + int(m['ph'] * 7)) % 6 == 0:     # the rings glint, twinkling
+            q = max(4, int(round(sc / S_REF * 400)))
+            tx, ty = _top('marcher', m['i'], 't1', state, yaw, None, q)
+            glint(img, gx + tx, gy + jig + ty + 2, max(3.0, 26 * sc))
 
 
 def t1_actors(lt):
@@ -464,10 +496,24 @@ def t2_fx(img, lt):
     bx, by = cam.p(-3.4, 12.6)
     k = cam.ppm(12.6)
     ang = math.radians(85 * ease((tt - 1.4) / 0.25))
-    hgt, wd = 0.9 * k, 0.6 * k
-    pts = [(-wd / 2, 0), (wd / 2, 0), (wd / 2 - 6, -hgt), (-wd / 2 + 6, -hgt)]
-    rot = [(bx + px * math.cos(ang) - py * math.sin(ang), by + px * math.sin(ang) + py * math.cos(ang)) for px, py in pts]
-    IS.poly(img, rot, (240, 236, 220), INK, 2.4)
+    hgt, wd = 1.15 * k, 0.72 * k                           # chat 14: a pavement A-board's true size (was small)
+    pts = [(-wd / 2, 0), (wd / 2, 0), (wd / 2 - 8, -hgt), (-wd / 2 + 8, -hgt)]
+    rot = lambda q: [(bx + px * math.cos(ang) - py * math.sin(ang), by + px * math.sin(ang) + py * math.cos(ang))  # noqa
+                     for px, py in q]
+    IS.poly(img, rot(pts), (60, 52, 44), INK, 2.4)              # the wooden frame, a chalkboard face
+    IS.poly(img, rot([(-wd / 2 + 12, -10), (wd / 2 - 12, -10), (wd / 2 - 18, -hgt + 12), (-wd / 2 + 18, -hgt + 12)]),
+            (34, 38, 36), None, 0)
+    for f in (0.3, 0.45, 0.6, 0.72):                        # chalk lines (prices)
+        IS.poly(img, rot([(-wd * .3, -hgt * f), (wd * (.3 - .25 * (f > .5)), -hgt * f)]), None, (220, 222, 214), 3, 0)
+    # the pry bar (0.45-1.3): hauler 1 levers the shutter's hem up from beside his head; the hem rides up with it
+    if 0.45 <= tt < 1.3:
+        st = t2_state(tt)
+        hem = .45 + (2.9 - .45) * st['shutter']
+        hx = -0.9 + 0.12
+        a, b = cam.p(hx, 13.3, 1.9), cam.p(hx + 0.35, 13.95, hem + 0.02)
+        IS.poly(img, [a, b], None, INK, 9, 0)
+        IS.poly(img, [a, b], None, (150, 40, 36), 5, 0)        # a red-painted crowbar
+        IS.poly(img, [b, (b[0] + 10, b[1] - 8)], None, INK, 7, 0)
     # the impact flash where the sign meets the glass (1.0)
     if 0.98 <= tt < 1.15:
         S.glow_disc(img, 330, 905, 90, (255, 250, 210), amt=.6)
@@ -517,6 +563,29 @@ def phone_lights(img, actors, cam):
 
 # ================================================================================================= T3
 T3_TRUCK_D = S.TRUCK_D3
+class Reframe:
+    """A longer lens from the same spot: the set's painting zoomed k about screen x cx and moved down c px (k*y + c).
+    `cam` is the same lens maths for drawing people and effects sharp onto it; `R(x, y)` maps the set's pixels."""
+    def __init__(self, cam0, k, cx, c):
+        self.k, self.cx, self.c = k, cx, c
+        self.cam = S.Cam(cx + k * (cam0.VX - cx), k * cam0.VY + c, k * cam0.F, cam0.CH)
+
+    def R(self, x, y):
+        return self.cx + self.k * (x - self.cx), self.k * y + self.c
+
+    def image(self, im):
+        k, cx, c = self.k, self.cx, self.c
+        out = im.transform(im.size, Image.AFFINE, (1 / k, 0, cx - cx / k, 0, 1 / k, -c / k), Image.BICUBIC)
+        if im.getpixel((540, 2))[3] > 0:                   # an opaque painting: fill the top strip with its sky
+            out.paste(im.crop((0, 0, W, 1)).resize((W, int(c) + 2)), (0, 0))
+        return out
+
+
+# chat 14: the sets' low cameras left the bottom 45% (T3) and 25% (T4) of the frame bare ground
+RF3 = Reframe(S.CAMS['t3'], 1.2, 540, 68.0)
+RF4 = Reframe(S.CAMS['t4'], 1.15, 250, 80.0)
+T3K, T3CAM, R3, reframe3 = RF3.k, RF3.cam, RF3.R, RF3.image
+T4CAM, R4 = RF4.cam, RF4.R
 
 
 def truck_x(lt):
@@ -524,7 +593,7 @@ def truck_x(lt):
 
 
 def nozzle(lt, aim=12.0):
-    cam = S.CAMS['t3']
+    cam = T3CAM
     k = cam.ppm(T3_TRUCK_D)
     gx, gy = cam.p(truck_x(lt), T3_TRUCK_D)
     bx, by = gx + 1.4 * k, gy - 3.3 * k
@@ -567,7 +636,7 @@ def t3_actors(lt):
 
 
 def t3_crowd(img, lt):
-    cam = S.CAMS['t3']
+    cam = T3CAM
     for m in sorted(crowd_t3(), key=lambda m: -m['d']):
         dx, dd = field('t3', m['x'], m['d'], lt, m['ph'])
         x, d = m['x'] + dx, max(12.6, m['d'] + dd)
@@ -580,13 +649,13 @@ def t3_crowd(img, lt):
 
 
 def t3_fx(img, lt):
-    cam = S.CAMS['t3']
+    cam = T3CAM
     # smoke climbing from the car (left) and the bike heap (mid-right) from 0.0
-    for (sx, sy, sd) in ((110, 860, 1), (760, 1010, 2)):
+    for (sx, sy, sd) in (R3(110, 860) + (1,), R3(760, 1010) + (2,)):
         lumps = []
         for n in range(6):
             a = (lt * 0.9 + n / 6) % 1.0
-            lumps.append((sx + 40 * a + 15 * math.sin(n * 2.1), sy - 520 * a, 40 + 90 * a))
+            lumps.append((sx + 48 * a + 18 * math.sin(n * 2.1), sy - 620 * a, 48 + 108 * a))
         S.smoke(img, lumps, (58, 54, 56), (90, 84, 86), lw=2.5)
     # stones in arcs from the front line to the shields (1.0-2.6)
     for k in range(6):
@@ -602,18 +671,20 @@ def t3_fx(img, lt):
     # the tear-gas canister lands at 1.6 among the front line; the white gas swells over Marianne's base 1.8-2.5+
     if 1.25 <= lt < 1.6:
         a = (lt - 1.25) / 0.35
-        sx, sy = lerp(1100, 470, a), lerp(820, 1000, a) - 160 * math.sin(math.pi * a)
+        sx, sy = R3(lerp(1100, 470, a), lerp(820, 1000, a) - 160 * math.sin(math.pi * a))
         IS.ell(img, sx, sy, 10, 6, (90, 96, 90), INK, 2)
     if lt >= 1.6:
         g = ease((lt - 1.6) / 1.0)
-        lumps = [(480 + dx * g, 1010 - dy * g, (40 + r * g)) for dx, dy, r in
-                 ((0, 0, 80), (-130, 40, 90), (140, 30, 90), (-60, 150, 110), (90, 170, 110), (0, 260, 120),
-                  (-200, 120, 80), (220, 110, 80))]
+        # kept to Marianne's lower half (chat 14: it swallowed all of her): tops at about her waist, set y ~640
+        bx, by = R3(480, 1010)
+        lumps = [(bx + T3K * dx * g, by - T3K * dy * g, T3K * (36 + r * g)) for dx, dy, r in
+                 ((0, 0, 70), (-140, 20, 75), (150, 15, 75), (-70, 120, 80), (80, 135, 80), (0, 220, 85),
+                  (-210, 70, 60), (230, 60, 60), (-30, 300, 60))]
         a = min(1.0, (lt - 1.6) / 0.3)
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         S.smoke(lay, lumps, (232, 234, 232), (250, 250, 248), line=(170, 176, 180), lw=2.5)
         if lt > 2.6:                                       # the jet blows it left
-            lay = lay.transform(lay.size, Image.AFFINE, (1, 0, 160 * (lt - 2.6), 0, 1, 0))
+            lay = lay.transform(lay.size, Image.AFFINE, (1, 0, 190 * (lt - 2.6), 0, 1, 0))
         lay.putalpha(lay.getchannel('A').point(lambda v: int(v * 0.88 * a)))
         img.alpha_composite(lay)
     # the water cannon jet (2.5-4.0): a white tapering stream from the roof cannon, sweeping the front line
@@ -665,7 +736,7 @@ def crowd_t4():
     for d in np.arange(18.5, 48.0, 0.9):
         for x in np.arange(-14.0, 0.8, 0.7):
             r = rng.uniform()
-            state = 'flag:albania' if r < .14 else 'stand'
+            state = 'flag:albania' if r < .018 else 'stand'    # chat 14: 14% made a solid red band
             out.append(dict(x=x + rng.uniform(-.25, .25), d=d + rng.uniform(-.3, .3), i=int(rng.integers(0, 16)),
                             state=state, ph=rng.uniform(0, 6.28)))
     return out
@@ -712,7 +783,7 @@ def t4_under(img, lt):
 
 
 def t4_crowd(img, lt):
-    cam = S.CAMS['t4']
+    cam = T4CAM
     for m in sorted(crowd_t4(), key=lambda m: -m['d']):
         dx, dd = field('t4', m['x'], m['d'], lt, m['ph'])
         x, d = m['x'] + dx, m['d'] + dd
@@ -723,7 +794,7 @@ def t4_crowd(img, lt):
 
 
 def t4_mopeds(img, lt):
-    cam = S.CAMS['t4']
+    cam = T4CAM
     for k in (1, 0):
         x, d = moped_pos(lt, k)
         gx, gy = cam.p(x, d)
@@ -732,7 +803,7 @@ def t4_mopeds(img, lt):
 
 
 def rpg_tip(lt):
-    cam = S.CAMS['t4']
+    cam = T4CAM
     x, d = moped_pos(lt, 0)
     return cam.p(x - 0.1, d, 2.05)
 
@@ -741,28 +812,37 @@ def t4_fx(img, lt):
     # the rocket: fired 0.6, climbs the frame's height to the helicopter, hits 1.0; its smoke trail hangs
     if lt >= 0.6:
         x0, y0 = rpg_tip(0.6)
-        hx, hy = S.HELI_HOME[0], S.HELI_HOME[1]
+        hx, hy = R4(S.HELI_HOME[0], S.HELI_HOME[1])
         u = min(1.0, (lt - 0.6) / 0.4)
-        n = int(18 * u) + 1
+        N = 110                                            # chat 14: close-set lumps that taper to the head, grow
+        n = int(N * u) + 1                                 # with age and drift up and right (no string of beads)
         lumps = []
         for k in range(n):
-            v = k / 18
-            age = lt - 0.6 - v * 0.4
-            lumps.append((lerp(x0, hx, v) + 6 * math.sin(k), lerp(y0, hy, v) - 40 * math.sin(math.pi * v),
-                          8 + 14 * min(age, 1.5)))
-        S.smoke(img, lumps, (190, 176, 170), (226, 214, 206), lw=2)
+            v = k / N
+            age = max(0.0, lt - 0.6 - v * 0.4)
+            g = min(age, 2.0)
+            r = 9 + 16 * g / (1 + 0.5 * g) + 2.5 * math.sin(k * 1.7)
+            lumps.append((lerp(x0, hx, v) + 30 * g + 6 * math.sin(k * 2.3 + g * 3), lerp(y0, hy, v)
+                          - 40 * math.sin(math.pi * v) - 18 * g, r))
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        S.smoke(lay, lumps, (190, 176, 170), (226, 214, 206), lw=2)
+        fade = 1 - 0.75 * ease((lt - 1.4) / 2.0)          # the trail thins out once the helicopter is hit
+        lay.putalpha(lay.getchannel('A').point(lambda v: int(v * fade)))
+        img.alpha_composite(lay)
         if u < 1:
             rx, ry = lerp(x0, hx, u), lerp(y0, hy, u) - 40 * math.sin(math.pi * u)
             S.glow_disc(img, rx, ry, 26, (255, 230, 150), amt=.6)
     if 0.98 <= lt < 1.3:                                   # the hit: a flash and a burst at the helicopter
         a = (lt - 0.98) / 0.32
-        S.glow_disc(img, S.HELI_HOME[0], S.HELI_HOME[1], 160 * (0.5 + a), (255, 230, 160), amt=.55 * (1 - a))
-        S.flames(img, S.HELI_HOME[0], S.HELI_HOME[1] + 40, 140 * (0.6 + a), 120 * (0.6 + a), lt, seed=91, n=6)
+        hx, hy = R4(S.HELI_HOME[0], S.HELI_HOME[1])
+        S.glow_disc(img, hx, hy, 180 * (0.5 + a), (255, 230, 160), amt=.55 * (1 - a))
+        S.flames(img, hx, hy + 46, 160 * (0.6 + a), 138 * (0.6 + a), lt, seed=91, n=6)
     # two Molotovs from the crowd into the bank's ground-floor windows (2.2-2.7), the glass blooming orange
     for k, (t0, sx, sy, ex, ey) in enumerate(((2.2, 330, 1050, 90, 860), (2.35, 380, 1070, 175, 880))):
         a = (lt - t0) / 0.45
+        (sx, sy), (ex, ey) = R4(sx, sy), R4(ex, ey)
         if 0 <= a < 1:
-            x, y = lerp(sx, ex, a), lerp(sy, ey, a) - 140 * math.sin(math.pi * a)
+            x, y = lerp(sx, ex, a), lerp(sy, ey, a) - 160 * math.sin(math.pi * a)
             ang = a * 8
             IS.poly(img, [(x + 14 * math.cos(ang), y + 14 * math.sin(ang)), (x - 14 * math.cos(ang), y - 14 * math.sin(ang))],
                     None, (60, 110, 60), 7, 0)
@@ -773,7 +853,7 @@ def t4_fx(img, lt):
             S.flames(img, ex, ey + 30, 70 + 30 * g, 60 + 50 * g, lt + k, seed=93 + k, n=4)
     # melee dust and shield-impact flashes (1.6-3.0); ground fog and flares through
     if 1.5 < lt < 3.4:
-        cam = S.CAMS['t4']
+        cam = T4CAM
         rng = np.random.default_rng(int(lt * 12))
         for _ in range(4):
             x = rng.uniform(0.5, 4.0) + 1.2 * ease((lt - 2.0) / 1.0)
@@ -782,9 +862,13 @@ def t4_fx(img, lt):
         if int(lt * 12) % 3 == 0 and lt < 2.4:
             sx, sy = cam.p(rng.uniform(1.0, 2.0), 17.4, 1.2)
             S.glow_disc(img, sx, sy, 40, (255, 250, 220), amt=.6)
-    for fx, fy in ((140, 1180), (60, 1230)):                # two red flares held up in the crowd
-        S.glow_disc(img, fx, fy, 50 + 6 * math.sin(lt * 20), (255, 60, 50), amt=.45)
-        IS.ell(img, fx, fy, 6, 6, (255, 220, 200), None)
+    cam = T4CAM
+    for fx, fd in ((-5.2, 24.0), (-7.4, 30.0)):            # two red flares held up in the crowd (chat 14: on sticks,
+        bx, by = cam.p(fx, fd, 1.9)                         # in the crowd, not red balls over the mopeds)
+        tx, ty = cam.p(fx + 0.05, fd, 2.5)
+        IS.poly(img, [(bx, by), (tx, ty)], None, (40, 30, 30), 4, 0)
+        S.glow_disc(img, tx, ty, 34 + 5 * math.sin(lt * 20 + fd), (255, 70, 50), amt=.4)
+        IS.ell(img, tx, ty, 5, 5, (255, 236, 220), None)
 
 
 def backlight(img, lt, ppl):
@@ -819,7 +903,9 @@ def picture(t):
         blue_wash(back, lt)
     elif tier == 't3':
         back, front = S.t3(lt, truck=dict(x=truck_x(lt), aim=12, flash=float(int(lt * 6) % 2)))
-        cam = S.CAMS['t3']
+        back = reframe3(back)
+        front = reframe3(front) if front is not None else None
+        cam = T3CAM
         t3_crowd(back, lt)
         for a in sorted(t3_actors(lt), key=lambda a: -a.d):
             draw_actor(back, cam, a)
@@ -828,7 +914,9 @@ def picture(t):
         h = heli_state(lt)
         h['under'] = lambda img: t4_under(img, lt)
         back, front = S.t4(lt, heli=h)
-        cam = S.CAMS['t4']
+        back = RF4.image(back)
+        front = RF4.image(front) if front is not None else None
+        cam = T4CAM
         ppl = Image.new('RGBA', back.size, (0, 0, 0, 0))
         t4_crowd(ppl, lt)
         for a in sorted(t4_actors(lt), key=lambda a: -a.d):
@@ -837,7 +925,7 @@ def picture(t):
         back.alpha_composite(backlight(back, lt, ppl))
         t4_fx(back, lt)
         if lt > 2.0:
-            haze(back, lt - 2.0, [((x, 1150), 260) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .3, 7)
+            haze(back, lt - 2.0, [(R4(x, 1150), 300) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .3, 7)
     if front is not None:
         back.alpha_composite(front)
     return back
@@ -858,7 +946,8 @@ ACTORS = {'t1': t1_actors, 't2': t2_actors, 't3': t3_actors, 't4': t4_actors}
 
 
 def cam_for(t):
-    return S.CAMS[scene_of(t)[0]]
+    tier = scene_of(t)[0]
+    return {'t3': T3CAM, 't4': T4CAM}.get(tier, S.CAMS[tier])
 
 
 def project(cam, P):
