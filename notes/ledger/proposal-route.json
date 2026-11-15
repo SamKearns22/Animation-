@@ -1,0 +1,19 @@
+{
+ "film": "proposal-route",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-15",
+   "chat": "533f1450",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.01,
+   "src": "estimate",
+   "sid": "session_01GznaAR99eqJSiP8uxJdi5n"
+  }
+ ],
+ "checks": {}
+}
