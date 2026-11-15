@@ -54,3 +54,49 @@ I named smoke trails and blurred police lines but read the tiny dark specks at t
 4. The orange circle in 13 reads as a sun. Suggested line: a fireball reads as a fireball, not a sun or disc.
 5. Panel 10's helicopter sits at the top edge nearly out of frame. Suggested line: a key target stays inside the safe area of the frame.
 
+== critique, round 1 pass 2 (2026-11-15): 15 fault(s), 1 can't tell
+-- look.md --
+1: Dusk boulevard, huge crowd with orange and red signs, burning monument, riot police line, lit lamps.
+2: Same crowd scene; red firework burst above the street, flames at the monument, tense mood.
+3: Same crowd, grey smoke haze rising across the left, flames burning, crowd pressing forward.
+4: Masked people outside shop "WAFFEN", signs "WAFFEN RAUS" and "GEN Z REGELT", rifles in window, crowd watching.
+5: Same shop; "WAFFEN" "WAFFEN RAUS" "GEN Z REGELT"; masked figures in window, crowd looking on, small white sparks.
+6: Shop "WAFFEN" tinted blue by police lights; "WAFFEN RAUS", "GEN Z REGELT"; figures inside, crowd watching.
+7: Daytime square, statue, French-style flags, black smoke, riot police and masked protesters, burning van.
+8: Same square; white puff near statue, smoke columns, police in navy line, flames, burning van left.
+9: Large white smoke cloud, water jet arcs, police behind barrier, man in green jacket, fires.
+10: Red-sky street, burning yellow building, red eagle flag, helicopter, rocket streak, two masked riders on red scooter, "BANKA".
+11: Same burning street; helicopter smaller, smoke trail, riot police shields in line, masked scooter riders, crowd.
+12: Same street; police shields tilting, flames, smoke trail, masked riders on red scooter, crowd behind.
+13: Burning street fading dark; "BAN" sign glowing, flames, red flag, crowd, scooter riders, translucent ghosted overlay.
+-- result.md --
+## Faults
+FAULT A1 P2 [1-3]: crowd - no raised keys anywhere, no hooded figure flicking fireworks; the burning container reads as a burning monument.
+FAULT O6 [2]: one big red wheel burst, not three small bursts; flat, cartoon-like. Crowd heads do not turn.
+CAN'T TELL M2 [3]: a one-pace step of the police line vs panel 1 would need a side-by-side crop.
+FAULT A1 [4]: no shutter being hauled, no red crowbar; the give-way sign is tiny and held, not swung at glass.
+FAULT S1 [4-6]: foreground onlookers fill the pavement and cover the window and the action; the raiders are small black shapes.
+FAULT M5 [5, 6]: glass looks intact, no shards falling, no gap, no kicked A-board; no damage carried into 6.
+FAULT A1 [7]: no stones thrown, one row of police not two; Marianne is thin with a raised torch arm (reference: olive branch, white plinth); the burning car reads as a brown van, cut by the left edge.
+FAULT S9 [7-9]: smoke columns are flat grey lumps, lit evenly, no darker underside.
+FAULT S5 [7-9]: bare grey ground fills the lower third.
+FAULT O6 [8]: canister and gas are tiny; gas does not swell over the lower monument.
+FAULT A1 [9]: water-cannon truck is faint at right; the jet is a thin arc; crowd is not breaking and running left.
+FAULT A1 [10]: one moped with two riders, brief says two mopeds; a grey boulder at the launcher reads as a rock, not an RPG.
+FAULT S1 [10-13]: dark riders merge into the dark road.
+FAULT A1 [11]: helicopter is ghosted behind the ministry, no spin, no trailing fire; no crowd slamming into shields.
+FAULT A1 [12]: melee not readable; no Molotov bursts in the bank windows.
+FAULT O6 [13]: fireball is a flat translucent circle; flares and tear gas missing; the lower half is a washed-out mass (S8).
+
+## Checked
+1-13
+
+## Cold look
+I named the monument as burning, the car as a van, and "rocket" without seeing an RPG or launcher. I missed that panel 4 shows no shutter or crowbar. I named no keys or fireworks-flicker in 1, which is the real fault.
+
+## Not on the list
+Invented sign text ("WAFFEN RAUS", "GEN Z REGELT") not in the brief; suggested line: every word on screen is in the brief or marked as added.
+Hook Text frame not in the sheets; suggested line: A4 cannot be checked without it, so send it with the check.
+
+critique, pass 2: faults fixed as one list: hunt 2 fixed as one list (chat 16): T1 keys glint 2x as often and bigger, long hot firework tail, three small staggered bursts; T2 near crowd to the frame edges, window clear, red crowbar 2x, jagged glass teeth and bigger shards behind the raiders; T3 stones from 0.75 s in high arcs against the sky, gas swells 1.35x in 0.6 s, jet 2x thick, the crowd runs out left, littered ground; T4 helicopter falls slower and spins in view, Molotovs earlier and bigger, melee dust soft, backblast see-through, fireball in frame with a bigger cap, ground haze lighter, tear gas at the line; left open: ['7 A1: no stones thrown, one row of police not two; Marianne is thin with a raised torch arm (reference: olive branch, white plinth); the burning car reads as a ', '7-9 S9: smoke columns are flat grey lumps, lit evenly, no darker underside.', '10-13 S1: dark riders merge into the dark road.', '12 A1: melee not readable; no Molotov bursts in the bank windows.']
+

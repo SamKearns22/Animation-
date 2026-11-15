@@ -387,8 +387,12 @@ def third_hunt(film_name, rnd, stage):
 
 
 def _next_pass(film_name, rnd):
+    """The next pass number: past the pack folders here AND the ledger's recorded passes (chat 16, protest-tiers:
+    pack folders are not carried between chats, so hunt 2 came out as pass 1 and its record overwrote hunt 1)."""
+    import ledger
     done = [int(m.group(1)) for p in glob.glob(os.path.join(PACKS, film_name, f'r{rnd}-p*'))
             if (m := re.search(r'-p(\d+)$', p))]
+    done += [p['pass'] for p in ledger.load(film_name).get('critique', {}).get('passes', []) if p['round'] == rnd]
     return max(done, default=0) + 1
 
 

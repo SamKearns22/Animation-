@@ -2,33 +2,33 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 21.45% of a week; spent 34.62% (+13.17); 17 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 14.97% of a week; spent 30.26% (+15.29); 17 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 34.62% of the 9.3% planned so far; at this rate the film lands at 68.7%.**
+**Forecast: Spent 30.26% of the 6.49% planned so far; at this rate the film lands at 47.9%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
-| plan | 1 | 2026-11-12 | 0 |
-| plan extras (unplanned) | 0 | 2026-11-13 | 14.44 |
-| cast | 3 | 2026-11-15 | 22.98 |
-| sets | 5.3 | 2026-11-15 | 29.77 |
-| moves | 4.4 |  |  |
-| animatic1 | 2 |  |  |
-| round1 | 2.7 |  |  |
-| round2 | 2.7 |  |  |
-| final | 0.35 |  |  |
+| plan | 0.7 | 2026-11-12 | 0.0 |
+| plan extras (unplanned) | 0 | 2026-11-13 | 10.08 |
+| cast | 2.09 | 2026-11-15 | 16.04 |
+| sets | 3.7 | 2026-11-15 | 20.78 |
+| moves | 3.07 |  |  |
+| animatic1 | 1.4 |  |  |
+| round1 | 1.88 |  |  |
+| round2 | 1.88 |  |  |
+| final | 0.24 |  |  |
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
 | date | chat | source | model | stage | round | cost % | $ | notes | repeated |
 |---|---|---|---|---|---|---|---|---|---|
-| 2026-11-12 | 2FapHZwZ | app | opus | European protests satire film |  | 0.29 | 0.49 | 0 | 0 |
-| 2026-11-12 | WjJXBueP | app | opus | Protest tiers: plan (chat 1 of 8) |  | 2.19 | 3.75 | 0 | 0 |
-| 2026-11-12 | CgYaSUFB | app | opus | Protest Tiers: chat 2 of 8 (crowd research, sketches) |  | 4.39 | 7.51 | 0 | 0 |
-| 2026-11-12 | 17XjNRhV | app | opus | Framing research: crowds, vistas, wide action (chat 2 of 8) |  | 2.58 | 4.41 | 0 | 0 |
-| 2026-11-12 | QkukuJUL | app | opus | Framing research chat 3 of 8: lessons + re-staging |  | 1.43 | 2.45 | 0 | 0 |
-| 2026-11-12 | TWFKPUgZ | app | opus | Protest Tiers pencil roughs (chat 4 of 8) |  | 0.33 | 0.56 | 0 | 0 |
-| 2026-11-13 | xQrZzs91 | app | opus | Pencil sketches for scenes |  | 3.23 | 5.52 | 0 | 0 |
+| 2026-11-12 | 2FapHZwZ | app | opus | European protests satire film |  | 0.2 | 0.49 | 0 | 0 |
+| 2026-11-12 | WjJXBueP | app | opus | Protest tiers: plan (chat 1 of 8) |  | 1.53 | 3.75 | 0 | 0 |
+| 2026-11-12 | CgYaSUFB | app | opus | Protest Tiers: chat 2 of 8 (crowd research, sketches) |  | 3.07 | 7.51 | 0 | 0 |
+| 2026-11-12 | 17XjNRhV | app | opus | Framing research: crowds, vistas, wide action (chat 2 of 8) |  | 1.8 | 4.41 | 0 | 0 |
+| 2026-11-12 | QkukuJUL | app | opus | Framing research chat 3 of 8: lessons + re-staging |  | 1.0 | 2.45 | 0 | 0 |
+| 2026-11-12 | TWFKPUgZ | app | opus | Protest Tiers pencil roughs (chat 4 of 8) |  | 0.23 | 0.56 | 0 | 0 |
+| 2026-11-13 | xQrZzs91 | app | opus | Pencil sketches for scenes |  | 2.25 | 5.52 | 0 | 0 |
 | 2026-11-14 | 4668b913 | est | opus | auto |  | 0.22 |  | 0 | 0 |
 | 2026-11-14 | f8531fe4 | est | opus | auto |  | 2.59 |  | 0 | 0 |
 | 2026-11-14 | b4547dcd | est | sonnet | auto |  | 0.24 |  | 0 | 0 |

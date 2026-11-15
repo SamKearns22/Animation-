@@ -367,15 +367,49 @@
      "1-13 P14: whether eyes stay whole; what picture would show it is full-size face crops of the front people.",
      "1-13 M4: whether any background scrolls; what picture would show it is first and last frames of each camera move."
     ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "stage": "moves",
+    "date": "2026-11-15",
+    "hunt": 2,
+    "faults": 15,
+    "cant_tell": 1,
+    "open": [
+     "1-3 A1 P2: crowd - no raised keys anywhere, no hooded figure flicking fireworks; the burning container reads as a burning monument.",
+     "2 O6: one big red wheel burst, not three small bursts; flat, cartoon-like. Crowd heads do not turn.",
+     "4 A1: no shutter being hauled, no red crowbar; the give-way sign is tiny and held, not swung at glass.",
+     "4-6 S1: foreground onlookers fill the pavement and cover the window and the action; the raiders are small black shapes.",
+     "5-6 M5: glass looks intact, no shards falling, no gap, no kicked A-board; no damage carried into 6.",
+     "7 A1: no stones thrown, one row of police not two; Marianne is thin with a raised torch arm (reference: olive branch, white plinth); the burning car reads as a ",
+     "7-9 S9: smoke columns are flat grey lumps, lit evenly, no darker underside.",
+     "7-9 S5: bare grey ground fills the lower third.",
+     "8 O6: canister and gas are tiny; gas does not swell over the lower monument.",
+     "9 A1: water-cannon truck is faint at right; the jet is a thin arc; crowd is not breaking and running left.",
+     "10 A1: one moped with two riders, brief says two mopeds; a grey boulder at the launcher reads as a rock, not an RPG.",
+     "10-13 S1: dark riders merge into the dark road.",
+     "11 A1: helicopter is ghosted behind the ministry, no spin, no trailing fire; no crowd slamming into shields.",
+     "12 A1: melee not readable; no Molotov bursts in the bank windows.",
+     "13 O6: fireball is a flat translucent circle; flares and tear gas missing; the lower half is a washed-out mass (S8).",
+     "3 M2: a one-pace step of the police line vs panel 1 would need a side-by-side crop."
+    ],
+    "fixed": "hunt 2 fixed as one list (chat 16): T1 keys glint 2x as often and bigger, long hot firework tail, three small staggered bursts; T2 near crowd to the frame edges, window clear, red crowbar 2x, jagged g",
+    "left": [
+     "7 A1: no stones thrown, one row of police not two; Marianne is thin with a raised torch arm (reference: olive branch, white plinth); the burning car reads as a ",
+     "7-9 S9: smoke columns are flat grey lumps, lit evenly, no darker underside.",
+     "10-13 S1: dark riders merge into the dark road.",
+     "12 A1: melee not readable; no Molotov bursts in the bank windows."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 20,
+    "faults": 27,
     "false": 0
    },
    "S1": {
-    "faults": 7,
+    "faults": 9,
     "false": 1
    },
    "P1": {
@@ -383,11 +417,11 @@
     "false": 0
    },
    "S9": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "O6": {
-    "faults": 3,
+    "faults": 6,
     "false": 0
    },
    "P3": {
@@ -399,7 +433,7 @@
     "false": 0
    },
    "S5": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "A2": {
@@ -411,7 +445,7 @@
     "false": 0
    },
    "P2": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "O3": {
@@ -435,7 +469,7 @@
     "false": 0
    },
    "M5": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "P10": {

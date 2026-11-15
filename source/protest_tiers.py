@@ -351,10 +351,10 @@ def t1_people(img, lt):
         jig = -1 if (m['state'] == 'keys' and state == 'keys' and (int(lt * 12) + m['i']) % 2) else 0
         sc = scale_at(cam, d)
         paste(img, 'marcher', m['i'], 't1', state, yaw, gx, gy + jig, sc)
-        if state == 'keys' and (int(lt * 12) + int(m['ph'] * 7)) % 6 == 0:     # the rings glint, twinkling
+        if state == 'keys' and (int(lt * 12) + int(m['ph'] * 7)) % 3 == 0:     # chat 16 (hunt 2: no keys at phone size): every 3rd frame, bigger
             q = max(4, int(round(sc / S_REF * 400)))
             tx, ty = _top('marcher', m['i'], 't1', state, yaw, None, q)
-            glint(img, gx + tx, gy + jig + ty + 2, max(3.0, 26 * sc))
+            glint(img, gx + tx, gy + jig + ty + 2, max(5.0, 40 * sc))
 
 
 def t1_actors(lt):
@@ -382,23 +382,24 @@ def t1_fx(img, lt):
         x1, y1 = cam.p(-1.6, T1_LINE_D + 1, 5.0)
         pt = lambda uu: (lerp(x0, x1, uu), lerp(y0, y1, uu) - 120 * math.sin(math.pi * uu))   # noqa: E731
         dr = ImageDraw.Draw(img)
-        tail = [pt(max(0.0, u - k * 0.03)) for k in range(9)]
+        tail = [pt(max(0.0, u - k * 0.03)) for k in range(16)]   # chat 16 (hunt 2: no flick read): a long hot tail
         for k in range(len(tail) - 1):
-            dr.line([tail[k], tail[k + 1]], fill=(255, 230 - 12 * k, 150 - 12 * k), width=max(1, 5 - k // 2))
+            dr.line([tail[k], tail[k + 1]], fill=(255, max(60, 230 - 11 * k), max(40, 150 - 9 * k)), width=max(2, 9 - k // 2))
         hx, hy = tail[0]
-        S.glow_disc(img, hx, hy, 34, (255, 210, 120), amt=.7)
-        IS.ell(img, hx, hy, 6, 6, (255, 255, 235), None)
+        S.glow_disc(img, hx, hy, 60, (255, 200, 110), amt=.8)
+        IS.ell(img, hx, hy, 9, 9, (255, 255, 235), None)
         rng = np.random.default_rng(int(lt * 100))
         for _ in range(8):                                   # sparks shed behind it
             sx, sy = hx + rng.uniform(-22, 22), hy + rng.uniform(-10, 26)
             IS.ell(img, sx, sy, 2, 2, (255, 240, 180), None)
     # three bursts over the line (chat 15: bigger, brighter, one at a time, each with a flash and falling sparks)
-    for k, (t0, x, z, col) in enumerate(((1.55, -2.4, 6.2, (255, 80, 70)), (2.05, 1.6, 7.0, (255, 250, 210)),
-                                         (2.55, 5.0, 5.8, (110, 255, 150)))):
+    # chat 16 (hunt 2: one big red wheel, brief: three SMALL bursts): smaller, staggered 0.15 s so the three show at once
+    for k, (t0, x, z, col) in enumerate(((1.55, -3.4, 6.2, (255, 90, 70)), (1.72, 0.6, 7.4, (255, 250, 210)),
+                                         (1.89, 4.4, 5.6, (110, 255, 150)))):
         a = lt - t0
         if 0 <= a < 0.6:
             cx, cy = cam.p(x, T1_LINE_D + 1, z)
-            r = 24 + 112 * ease(a / 0.3)
+            r = 18 + 62 * ease(a / 0.3)
             fade = 1 - a / 0.6
             S.glow_disc(img, cx, cy, r * 1.6, col, amt=.6 * fade)
             if a < 0.07:                                      # the flash
@@ -411,8 +412,8 @@ def t1_fx(img, lt):
                 droop = 40 * a * a / 0.36
                 ex, ey = cx + r1 * math.cos(ang), cy + r1 * math.sin(ang) + droop
                 dr.line([(cx + r0 * math.cos(ang), cy + r0 * math.sin(ang) + droop * .5), (ex, ey)],
-                        fill=col, width=5)
-                IS.ell(img, ex, ey, 5, 5, (255, 255, 240), None)
+                        fill=col, width=4)
+                IS.ell(img, ex, ey, 4, 4, (255, 255, 240), None)
     # the tear-gas haze drifting left to right through the keys (3.0-4.0)
     if lt > 2.9:
         haze(img, lt - 2.9, [(cam.p(x, d, 1.6), 9 * cam.ppm(d)) for x, d in
@@ -500,8 +501,9 @@ def t2_actors(lt):
     beat = abs(math.sin(math.pi * 2.2 * tt))
     # chat 15 (moves hunt 1: the near crowd at 3.3-5.8 m hid the smash and lost its feet): back to 7-8.6 m, at the
     # two sides only, so the window and the swing stay clear in the middle; whole people, feet on the road
-    crowd = [(-0.72, 7.8, 'placard:WAFFEN RAUS:250,246,232', 0), (-1.5, 8.9, 'phone', 1), (-0.75, 9.3, 'stand', 2),
-             (1.25, 7.7, 'phone', 6), (0.9, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (1.65, 8.7, 'stand', 3)]
+    # chat 16 (hunt 2: the near crowd still covered the window): to the frame's two edges (the window spans x 100-860)
+    crowd = [(-1.38, 7.8, 'placard:WAFFEN RAUS:250,246,232', 0), (-1.75, 8.9, 'phone', 1), (-1.6, 9.6, 'stand', 2),
+             (1.42, 7.7, 'phone', 6), (1.7, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (1.95, 9.5, 'stand', 3)]
     for k, (x, d, st, i) in enumerate(crowd):
         if st.startswith('placard'):
             st = st + ':' + str(int(90 * beat))
@@ -531,12 +533,38 @@ def t2_fx(img, lt):
         hem = .45 + (2.9 - .45) * st['shutter']
         hx = -0.9 + 0.12
         a, b = cam.p(hx, 13.3, 1.9), cam.p(hx + 0.35, 13.95, hem + 0.02)
-        IS.poly(img, [a, b], None, INK, 9, 0)
-        IS.poly(img, [a, b], None, (150, 40, 36), 5, 0)        # a red-painted crowbar
-        IS.poly(img, [b, (b[0] + 10, b[1] - 8)], None, INK, 7, 0)
+        IS.poly(img, [a, b], None, INK, 16, 0)                 # chat 16 (hunt 2: no crowbar read): twice as thick
+        IS.poly(img, [a, b], None, (220, 40, 36), 10, 0)       # a red-painted crowbar
+        IS.poly(img, [b, (b[0] + 18, b[1] - 14)], None, INK, 12, 0)
+        IS.poly(img, [b, (b[0] + 18, b[1] - 14)], None, (220, 40, 36), 6, 0)
     # the impact flash where the sign meets the glass (1.0)
     if 0.98 <= tt < 1.15:
         S.glow_disc(img, *RF2.R(500, 905), 130, (255, 250, 210), amt=.7)
+
+
+def t2_teeth(img, lt):
+    """Drawn before the people (in front of the window they hide it)."""
+    tt = min(lt, 3.2)
+    if tt >= 1.1:                                          # chat 16 (hunt 2: glass looked whole): jagged teeth left
+        x0, y0, x1, y1 = T2_WR                             # in the frame, a star of cracks round the hole
+        rng = np.random.default_rng(9)
+        for side in range(4):
+            n = 9
+            for q in range(n):
+                u0, u1 = q / n, (q + 1) / n
+                dep = rng.uniform(25, 95)
+                um = (u0 + u1) / 2 + rng.uniform(-.03, .03)
+                if side == 0:
+                    tri = [(lerp(x0, x1, u0), y0), (lerp(x0, x1, u1), y0), (lerp(x0, x1, um), y0 + dep)]
+                elif side == 1:
+                    tri = [(lerp(x0, x1, u0), y1), (lerp(x0, x1, u1), y1), (lerp(x0, x1, um), y1 - dep * .7)]
+                elif side == 2:
+                    tri = [(x0, lerp(y0, y1, u0)), (x0, lerp(y0, y1, u1)), (x0 + dep, lerp(y0, y1, um))]
+                else:
+                    tri = [(x1, lerp(y0, y1, u0)), (x1, lerp(y0, y1, u1)), (x1 - dep, lerp(y0, y1, um))]
+                IS.poly(img, tri, (200, 226, 236), (90, 120, 130), 2, 0)
+
+    # chat 16: the falling glass falls in the window's plane, behind the raiders
     # falling glass with glints (1.05-1.6), then shards on the pavement glinting
     rng = np.random.default_rng(5)
     for n in range(60):
@@ -546,7 +574,7 @@ def t2_fx(img, lt):
             continue
         yy = min(RF2.R(0, 1175)[1] + rng.uniform(-20, 15), y0 + 1100 * a * a)
         xx = x0 + rng.uniform(-60, 60) * min(a, .4)
-        r = rng.uniform(6, 17)
+        r = rng.uniform(10, 24)
         sp = rng.uniform(0, 6.28) + a * 9
         tri = [(xx + r * math.cos(sp + q * 2.1), yy + r * .7 * math.sin(sp + q * 2.1)) for q in range(3)]
         IS.poly(img, tri, (210, 230, 238), (120, 150, 160), 1.2, 0)
@@ -653,8 +681,8 @@ def t3_actors(lt):
             u = lt - 2.7 - 0.05 * k
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3 - 4.5 * u, 11.8 - .3 * k % 1, -90, 'run', t=lt,
                              tier='t3'))
-        elif 1.0 <= lt < 2.6:
-            u = ((lt - 1.0) * 1.6 + k * 0.37) % 1.0
+        elif 0.75 <= lt < 2.6:
+            u = ((lt - 0.75) * 1.6 + k * 0.37) % 1.0
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3, 11.8, 90, 'throw', u=u, tier='t3'))
         else:
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3, 11.8, 90, 'stand', tier='t3'))
@@ -673,6 +701,9 @@ def t3_crowd(img, lt):
         if gx < -80 or gx > W + 80:
             continue
         running = lt > 2.6 and m['d'] < 30 and lt - 2.6 - 0.02 * max(0, m['x'] + 2) > 0.1
+        if running:                                         # chat 16 (hunt 2: crowd not breaking): they run out left
+            x -= 3.2 * (lt - 2.7 - 0.02 * max(0, m['x'] + 2))
+            gx, gy = cam.p(x, d)
         yaw = -90 if running else 90
         paste(img, 'marcher', m['i'], 't3', m['state'] if not running else 'stand', yaw, gx, gy, scale_at(cam, d))
 
@@ -688,21 +719,51 @@ def t3_columns(img, lt):
         S.smoke(img, lumps, (58, 54, 56), (138, 128, 124), lw=2.5)
 
 
+def t3_debris(img):
+    """Chat 16 (hunt 2: bare grey ground filled the lower third): the square's near ground littered, as in the
+    references: thrown cobbles, leaflets, a dropped tricolour and a yellow vest."""
+    cam = T3CAM
+    rng = np.random.default_rng(23)
+    for _ in range(22):                                    # cobbles
+        x, d = rng.uniform(-3.2, 3.4), rng.uniform(4.6, 10.8)
+        sx, sy = cam.p(x, d)
+        k = cam.ppm(d)
+        IS.ell(img, sx, sy - .06 * k, .13 * k, .08 * k, (128, 118, 106), INK, 2)
+        IS.ell(img, sx - .03 * k, sy - .09 * k, .05 * k, .03 * k, (170, 160, 146), None)
+    for _ in range(9):                                     # leaflets
+        x, d = rng.uniform(-3.0, 3.2), rng.uniform(4.8, 10.5)
+        k = cam.ppm(d)
+        sx, sy = cam.p(x, d)
+        w_, h_, sk = .32 * k, .1 * k, rng.uniform(-.4, .4) * k * .2
+        IS.poly(img, [(sx - w_, sy), (sx + w_, sy + sk), (sx + w_ * .8, sy - h_ + sk), (sx - w_ * 1.1, sy - h_)],
+                (240, 238, 228), INK, 1.6)
+    # a dropped tricolour (near left) and a yellow vest (near right), lying flat
+    for (x, d, cols) in ((-1.6, 6.2, ((40, 60, 150), (245, 245, 240), (200, 40, 50))),
+                         (1.7, 7.4, ((236, 214, 40),) * 3)):
+        k = cam.ppm(d)
+        sx, sy = cam.p(x, d)
+        w3 = .3 * k
+        for q, col in enumerate(cols):
+            x0 = sx - 1.5 * w3 + q * w3
+            IS.poly(img, [(x0, sy), (x0 + w3, sy + 4), (x0 + w3 + 6, sy - .22 * k + 4), (x0 + 6, sy - .22 * k)], col,
+                    INK, 2)
+
+
 def t3_fx(img, lt):
     cam = T3CAM
     # stones in arcs from the front line to the shields (1.0-2.6); chat 15: bigger (a fist-sized cobble reads at
     # phone size only drawn about twice true), four in the air per thrower, a few already lying at the shields' feet
     for k in range(4):
         for rep in range(4):
-            t0 = 1.0 + ((k * 0.37 + 0.6) % 1.0) / 1.6 + rep / 1.6
+            t0 = 0.75 + ((k * 0.37 + 0.6) % 1.0) / 1.6 + rep / 1.6     # chat 16 (hunt 2: none in the air at 1.2)
             a = (lt - t0) / 0.45
             if 0 <= a < 1 and t0 < 2.6:
                 x0 = -2.0 + 0.7 * k
-                x, z = lerp(x0 + 0.3, 1.25, a), 1.9 + 2.4 * math.sin(math.pi * a) - 0.6 * a
+                x, z = lerp(x0 + 0.3, 1.25, a), 1.9 + 3.6 * math.sin(math.pi * a) - 0.6 * a   # up against the sky
                 d = lerp(11.8, 11.0, a)
                 sx, sy = cam.p(x, d, z)
-                IS.ell(img, sx, sy, 24, 18, (164, 158, 148), INK, 3)
-                IS.ell(img, sx - 6, sy - 6, 10, 7, (204, 200, 190), None)
+                IS.ell(img, sx, sy, 26, 20, (120, 108, 96), INK, 3.5)
+                IS.ell(img, sx - 7, sy - 7, 10, 7, (176, 164, 150), None)
     rng = np.random.default_rng(17)
     for n in range(int(min(9, max(0, (lt - 1.45) * 7)))):
         sx, sy = cam.p(rng.uniform(0.7, 1.2), rng.uniform(10.4, 11.2))
@@ -718,11 +779,11 @@ def t3_fx(img, lt):
         IS.ell(img, sx, sy, 20, 11, (86, 94, 86), INK, 2.5)
         IS.ell(img, sx - 14, sy, 5, 9, (200, 60, 40), None)
     if lt >= 1.6:
-        g = ease((lt - 1.6) / 1.0)
+        g = ease((lt - 1.6) / 0.6)                          # chat 16 (hunt 2: gas tiny): swells in 0.6 s, 1.35x
         bx, by = R3(470, 870)
         if lt < 1.75:                                       # the landing: a quick white burst ring
             S.glow_disc(img, bx, by, 110 * (lt - 1.55) / 0.2, (255, 255, 255), amt=.7)
-        lumps = [(bx + T3K * dx * g, by - T3K * dy * g, T3K * (36 + r * g)) for dx, dy, r in
+        lumps = [(bx + 1.35 * T3K * dx * g, by - 1.35 * T3K * dy * g, 1.35 * T3K * (36 + r * g)) for dx, dy, r in
                  ((0, 0, 70), (-140, 20, 75), (150, 15, 75), (-70, 120, 80), (80, 135, 80), (0, 220, 85),
                   (-210, 70, 60), (230, 60, 60), (-30, 300, 60))]
         a = min(1.0, (lt - 1.6) / 0.3)
@@ -745,7 +806,7 @@ def t3_fx(img, lt):
             u = n / 12
             x = (1 - u) ** 2 * nx + 2 * (1 - u) * u * mx + u * u * ix
             y = (1 - u) ** 2 * ny + 2 * (1 - u) * u * my + u * u * iy
-            w = 6 + 24 * u
+            w = 12 + 40 * u                                 # chat 16 (hunt 2: a thin arc)
             pts_top.append((x, y - w))
             pts_bot.append((x, y + w))
         IS.poly(img, pts_top + pts_bot[::-1], (236, 244, 252), (150, 176, 200), 2.4, 0)
@@ -762,7 +823,7 @@ def heli_state(lt):
         return dict(x=x + 6 * math.sin(lt * 2), y=y + 4 * math.sin(lt * 3), s=HELI_S, turn=0, roll=-4, hit=False)
     u = min(1.0, (lt - 1.0) / 1.0)
     turn = (int(u * 14) * 45) % 360                          # three drawn turns and their mirrors, stepped in 45s
-    return dict(x=x - 60 * u + 30 * math.sin(u * 9), y=y + 520 * u * u + 40 * u, s=HELI_S * (1 - .2 * u),
+    return dict(x=x - 60 * u + 30 * math.sin(u * 9), y=y + 520 * u ** 3 + 40 * u, s=HELI_S * (1 - .2 * u),  # chat 16
                 turn=turn, roll=-4 + 40 * u, hit=True)
 
 
@@ -818,11 +879,11 @@ def t4_under(img, lt):
             S.smoke(img, [(h['x'] + 10, h['y'] - 10 - 30 * a, r)], (60, 40, 40), (96, 70, 66), lw=2)
     if lt >= 3.0:                                          # chat 15: a layered fireball rising (was a flat disc)
         g = ease((lt - 3.0) / 0.7)
-        cx, cy = 820, lerp(640, 400, g)                    # its cap stays below the reframe's top strip
-        S.glow_disc(img, cx, cy, 260 * g + 60, (255, 190, 110), amt=.28)
-        S.smoke(img, [(cx + dx * g, cy - 40 * g + dy * g, r * (0.4 + 0.6 * g)) for dx, dy, r in
+        cx, cy = 720, lerp(640, 400, g)                    # chat 16 (hunt 2: flat disc cut by the edge): in frame,
+        S.glow_disc(img, cx, cy, 160 * g + 60, (255, 190, 110), amt=.22)     # a smaller glow, a bigger smoke cap
+        S.smoke(img, [(cx + 1.3 * dx * g, cy - 40 * g + 1.3 * dy * g, 1.3 * r * (0.4 + 0.6 * g)) for dx, dy, r in
                       ((0, -110, 120), (-130, -60, 90), (130, -70, 100), (-60, -200, 90), (80, -210, 90))],
-                (70, 40, 36), (150, 84, 56), lw=2.5)
+                (70, 40, 36), (170, 96, 60), lw=2.5)
         S.flames(img, cx, cy + 140 * g + 60, 360 * (0.5 + 0.5 * g), 420 * (0.4 + 0.6 * g), lt, seed=95, n=7)
         S.flames(img, cx, cy + 80 * g + 40, 220 * (0.5 + 0.5 * g), 260 * (0.4 + 0.6 * g), lt + .3, seed=97, n=5)
         S.glow_disc(img, cx, cy + 40, 90 * g + 20, (255, 250, 200), amt=.5)
@@ -887,32 +948,42 @@ def t4_fx(img, lt):
         a = (lt - 0.6) / 0.5
         tx, ty = rpg_tip(0.6)
         bx, by = tx - 150, ty + 120                         # behind and below the tube, along its line
-        S.smoke(img, [(bx - 60 * a - 30 * q, by + 40 * a + 20 * q, 26 + 50 * a + 8 * q) for q in range(3)],
-                (190, 182, 172), (232, 226, 218), lw=2)
+        bl = Image.new('RGBA', img.size, (0, 0, 0, 0))     # chat 16 (hunt 2 read it as a boulder): soft, see-through
+        S.smoke(bl, [(bx - 70 * a - 34 * q, by + 40 * a + 22 * q, 22 + 46 * a + 8 * q) for q in range(4)],
+                (226, 220, 210), (250, 246, 240), line=None, lw=1)
+        bl.putalpha(bl.getchannel('A').point(lambda v: int(v * 0.55 * (1 - a))))
+        img.alpha_composite(bl)
         if a < 0.3:
             S.glow_disc(img, tx, ty, 40, (255, 230, 150), amt=.55)
     # two Molotovs from the crowd into the bank's ground-floor windows (2.2-2.7), the glass blooming orange
-    for k, (t0, sx, sy, ex, ey) in enumerate(((2.2, 330, 1050, 90, 860), (2.35, 380, 1070, 175, 880))):
+    for k, (t0, sx, sy, ex, ey) in enumerate(((2.0, 330, 1050, 90, 860), (2.12, 380, 1070, 175, 880))):  # chat 16
         a = (lt - t0) / 0.45
         (sx, sy), (ex, ey) = R4(sx, sy), R4(ex, ey)
         if 0 <= a < 1:
             x, y = lerp(sx, ex, a), lerp(sy, ey, a) - 160 * math.sin(math.pi * a)
             ang = a * 8
-            IS.poly(img, [(x + 14 * math.cos(ang), y + 14 * math.sin(ang)), (x - 14 * math.cos(ang), y - 14 * math.sin(ang))],
-                    None, (60, 110, 60), 7, 0)
-            S.glow_disc(img, x + 14 * math.cos(ang), y + 14 * math.sin(ang), 14, (255, 190, 80), amt=.7)
+            IS.poly(img, [(x + 24 * math.cos(ang), y + 24 * math.sin(ang)), (x - 24 * math.cos(ang), y - 24 * math.sin(ang))],
+                    None, INK, 15, 0)
+            IS.poly(img, [(x + 24 * math.cos(ang), y + 24 * math.sin(ang)), (x - 24 * math.cos(ang), y - 24 * math.sin(ang))],
+                    None, (70, 140, 70), 10, 0)
+            S.glow_disc(img, x + 24 * math.cos(ang), y + 24 * math.sin(ang), 30, (255, 190, 80), amt=.8)
         elif a >= 1:
             g = min(1.0, (a - 1) * 2)
-            S.glow_disc(img, ex, ey, 70 + 40 * g, (255, 160, 60), amt=.45)
-            S.flames(img, ex, ey + 30, 70 + 30 * g, 60 + 50 * g, lt + k, seed=93 + k, n=4)
+            S.glow_disc(img, ex, ey, 90 + 50 * g, (255, 160, 60), amt=.55)
+            S.flames(img, ex, ey + 30, 90 + 40 * g, 80 + 70 * g, lt + k, seed=93 + k, n=5)
     # melee dust and shield-impact flashes (1.6-3.0); ground fog and flares through
     if 1.5 < lt < 3.4:
         cam = T4CAM
         rng = np.random.default_rng(int(lt * 12))
-        for _ in range(4):
+        dl = Image.new('RGBA', img.size, (0, 0, 0, 0))     # chat 16 (hunt 2 read them as boulders): wide, low, soft
+        for _ in range(5):
             x = rng.uniform(0.5, 4.0) + 1.2 * ease((lt - 2.0) / 1.0)
-            sx, sy = cam.p(x, 17.6, 0.3)
-            S.smoke(img, [(sx, sy, rng.uniform(20, 45))], (150, 120, 100), (180, 150, 126), lw=2)
+            sx, sy = cam.p(x, 17.6, 0.5)
+            r = rng.uniform(40, 70)
+            S.smoke(dl, [(sx - r * .6, sy, r * .7), (sx + r * .6, sy + 4, r * .6), (sx, sy - r * .3, r * .8)],
+                    (176, 146, 120), (206, 178, 150), line=None, lw=1)
+        dl.putalpha(dl.getchannel('A').point(lambda v: int(v * 0.5)))
+        img.alpha_composite(dl)
         if int(lt * 12) % 3 == 0 and lt < 2.4:
             sx, sy = cam.p(rng.uniform(1.0, 2.0), 17.4, 1.2)
             S.glow_disc(img, sx, sy, 40, (255, 250, 220), amt=.6)
@@ -950,6 +1021,7 @@ def picture(t):
         front = RF2.image(front) if front is not None else None
         cam = RF2.cam
         acts = sorted(t2_actors(lt), key=lambda a: -a.d)
+        t2_teeth(back, lt)
         for a in acts:
             draw_actor(back, cam, a)
             if a.name == 'runner5':                         # the A-board goes in among the street's depths
@@ -966,6 +1038,7 @@ def picture(t):
         t3_columns(back, lt)                                # chat 15: smoke, then the truck, then its bikes, sharp
         S.truck(back, cam, truck_x(lt), T3_TRUCK_D, lt, 'drive', 'fr', 12, float(int(lt * 6) % 2))
         S._bikes(back, cam, 2.1, 14, lt)
+        t3_debris(back)
         for a in sorted(t3_actors(lt), key=lambda a: -a.d):
             draw_actor(back, cam, a)
         t3_fx(back, lt)
@@ -984,7 +1057,14 @@ def picture(t):
         back.alpha_composite(backlight(back, lt, ppl))
         t4_fx(back, lt)
         if lt > 2.0:
-            haze(back, lt - 2.0, [(R4(x, 1230), 220) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .16, 7)
+            haze(back, lt - 2.0, [(R4(x, 1230), 220) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .1, 7)
+        if lt > 3.0:                                        # chat 16 (hunt 2: no tear gas at the end): white gas at the line
+            g = ease((lt - 3.0) / 0.6)
+            gl = Image.new('RGBA', back.size, (0, 0, 0, 0))
+            S.smoke(gl, [(cam.p(x, 17.0, 0.6)[0] + dx, cam.p(x, 17.0, 0.6)[1], 50 + 60 * g) for x in (2.6, 4.2, 5.6)
+                         for dx in (-40, 40)], (226, 228, 226), (250, 250, 248), line=None, lw=1)
+            gl.putalpha(gl.getchannel('A').point(lambda v: int(v * 0.6)))
+            back.alpha_composite(gl)
     if front is not None:
         back.alpha_composite(front)
     return back
