@@ -1,3 +1,3 @@
-protest-tiers: animatic 2 sent 15 Nov; Sam found 8 black frames (3 spots: arms folded too tight, T2 8.1 s, T3 14.8 s, T4 20.8 s).
-Next: fix them and any other notes, Opus medium; then a Sonnet chat renders animatic 3.
-Needs Sam: Y to the budget for round 2 (film ~50%, his Y was ~51%).
+protest-tiers: the 8 black frames (Sam's note on animatic 2) fixed 15 Nov; clips of the 3 spots sent, no black frames.
+Next: a Sonnet chat renders animatic 3 with a black-frame check and sends it.
+Needs Sam: notes on animatic 3; Y/N to "a stopped drawing never ships".
