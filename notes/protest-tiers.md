@@ -12,6 +12,9 @@
 - **Open rule requests:** costs filed by kind (chat 7 has the wording); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn (5c); a sheet runs the hand check per tile; a rough is drawn at true sizes for its camera; a set's shape helper draws in its own box; set boxes measured by leaving each helper out; the rig's run fails its arm guard side on (both ways; fix in moves.gait/views, then drop the film's three-quarter rule); NEW: a set's camera is checked for bare ground (a low camera left half the frame empty in T3 and a quarter in T4).
 - **For Claude:** film `source/protest_tiers.py`; `Reframe` (RF3, RF4; T3CAM, T4CAM, R3, R4 map set pixels) after T3_TRUCK_D; `Actor.__init__` turns side-on runs to +-115; make_pose: 'run' = gait 'run', swing/throw pass-throughs; sprites rebuild (~2.5 min) when the cast file changes; branch `claude/protest-tiers-c14`.
 
+- Rehearsal clips sent: 15 Nov (chat 14): T1 0.0-2.0, T2 6.8-8.0, T3 10.4-12.0, T4 12.4-14.2, T4 13.6-15.6.
+- Composition sheet sent: 13 Nov (pencil sketches, chat 4).
+
 ## The reporting: what each tier is based on is in `notes/archive/protest-tiers-reporting.md` (T1 Barcelona 11 Nov, T2 Frankfurt 31 Oct, T3 République 17 Oct, T4 Tirana 13-18 Oct).
 
 ## Plan extras (rules 24-26, 54, 55)

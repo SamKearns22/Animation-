@@ -442,11 +442,16 @@ def t2_actors(lt):
         u = (tt - t0) / (t1 - t0)
         return lerp(x0, x1, min(1.0, max(0.0, u))), u < 1.0
 
+    def lane(n, de, x0, x1, t0, t1):                       # chat 14: each runner its own depth lane on the way in
+        u = min(1.0, max(0.0, (tt - t0) / (t1 - t0)))     # (same lane: they ran through each other), easing
+        return lerp((10.4, 10.8, 11.2, 11.6, 12.0, 13.0, 13.4)[n], de, u ** 3)   # to its mark (the swinger runs at 12.6)
+
     # haulers (0.4-1.0), then they slide through the gap into the shop (1.3-1.7)
     for k, (xe, de) in enumerate(((-0.9, 13.3), (0.6, 13.3))):
         x, running = run_in(-4.6 - k * 0.5, xe, 0.0 + k * 0.08, 0.45)
         if running:
-            out.append(Actor(f'hauler{k + 1}', 'rioter', x, 12.0 + k * .4, 90, 'run', t=tt, tier='t2'))
+            out.append(Actor(f'hauler{k + 1}', 'rioter', x, lane(k, de, -4.6 - k * .5, xe, k * .08, .45), 90, 'run',
+                             t=tt, tier='t2'))
         elif tt < 1.3:
             out.append(Actor(f'hauler{k + 1}', 'rioter', x, de, 180, 'haul', tier='t2'))
         else:
@@ -471,7 +476,8 @@ def t2_actors(lt):
     for k, (xe, de) in enumerate(((0.9, 12.4), (-0.2, 12.1), (-2.6, 12.2), (2.2, 12.5), (2.8, 12.0))):
         x, running = run_in(-5.0 - k * .4, xe, 0.05 + k * 0.07, 0.6 + k * .05)
         if running:
-            out.append(Actor(f'runner{k + 1}', 'rioter', x, de, 90, 'run', t=tt + k * .1, tier='t2'))
+            out.append(Actor(f'runner{k + 1}', 'rioter', x, lane(k + 2, de, -5.0 - k * .4, xe, 0.05 + k * 0.07,
+                                                                   0.6 + k * .05), 90, 'run', t=tt + k * .1, tier='t2'))
         else:
             u = ((tt - 0.6) * 1.4 + k * .3) % 1.0
             yaw = 180 if k < 2 else 90 if k == 2 else 135
@@ -619,7 +625,8 @@ def crowd_t3():
 def t3_actors(lt):
     out = []
     jet = lt > 2.6
-    for k, x in enumerate(np.arange(-1.7, 1.05, 0.55)):     # the black-clad front line, facing the police (right)
+    for k, x in enumerate(np.arange(-2.2, 0.65, 0.7)):      # the black-clad front line, facing the police (right);
+        # chat 14: 0.7 m apart (at 0.55 each throwing hand passed into the next one's back)
         dx, _ = field('t3', x, 11.8, lt, k)
         if jet and lt > 2.7 + 0.05 * k:                       # broken by the jet: running out left
             u = lt - 2.7 - 0.05 * k
@@ -663,7 +670,7 @@ def t3_fx(img, lt):
             t0 = 1.0 + ((k * 0.37 + 0.6) % 1.0) / 1.6 + rep / 1.6
             a = (lt - t0) / 0.45
             if 0 <= a < 1 and t0 < 2.6:
-                x0 = -1.7 + 0.55 * k
+                x0 = -2.2 + 0.7 * k
                 x, z = lerp(x0 + 0.3, 2.7, a), 1.9 + 2.2 * math.sin(math.pi * a) - 0.6 * a
                 d = lerp(11.8, 11.0, a)
                 sx, sy = cam.p(x, d, z)
@@ -749,13 +756,14 @@ def t4_actors(lt):
         x = 1.2 + k * 0.55 + push * (1.2 + 0.3 * (k % 3))
         d = 17.5 + (0.6 * push if k % 2 else -0.4 * push)
         state = 'line' if lt < 1.6 else 'pushed' if (k % 3 != 1 or lt < 2.0) else 'baton_up'
-        out.append(Actor(f'policia{k + 1}', 'officer', x, d, -90, state, force='policia', tier='t4'))
+        out.append(Actor(f'policia{k + 1}', 'officer', x, d, -55, state, force='policia', tier='t4'))  # chat 14:
+        # turned toward us a little so the shields show their faces (side on they read as thin lines)
     for k in range(6):                                     # the rioters at the front: surge, slam, swarm through
-        x0 = -1.6 + k * 0.45
+        x0 = -2.0 + k * 0.62                                 # chat 14: 0.62 apart, three ranks (was 0.45: arms in backs)
         dx = 1.6 * ease((lt - 0.9) / 1.0) + 1.4 * push
         state = 'run' if 0.9 < lt < 1.9 else 'throw'
         u = ((lt * 1.8) + k * .29) % 1.0
-        out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx, 17.2 + 0.4 * (k % 3), 90, state, u=u, t=lt, tier='t4'))
+        out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx, 16.9 + 0.65 * (k % 3), 90, state, u=u, t=lt, tier='t4'))
     return out
 
 

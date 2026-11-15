@@ -1,0 +1,177 @@
+{
+ "round": 1,
+ "stage": "moves",
+ "panels": [
+  {
+   "t": 1.0,
+   "crop": null,
+   "is": "T1 Barcelona, dusk: the calm march seen from behind from a balcony, keys rising in a wave; a hooded figure flicks a string of fireworks toward the thin police line by a burning container",
+   "parts": "PMOS",
+   "set": "t1",
+   "refs": [
+    "references/protest-tiers/es1-passeig-de-gracia-march.jpg",
+    "references/protest-tiers/es6-madrid-11nov-raised-keys.jpg",
+    "references/protest-tiers/es3-barcelona-11nov-hooded-firework.jpg"
+   ],
+   "beat": "keys rise, firework flicked",
+   "glimpse": true
+  },
+  {
+   "t": 2.0,
+   "crop": null,
+   "is": "T1: three small firework bursts pop over the police line; the crowd turns its heads",
+   "parts": "PMOS",
+   "set": "t1",
+   "refs": [
+    "references/protest-tiers/es5-barcelona-11nov-mossos-shield-line-fireworks.jpg",
+    "references/protest-tiers/es4-barcelona-11nov-mossos-burning-container.jpg"
+   ],
+   "beat": "bursts, heads turn",
+   "glimpse": true
+  },
+  {
+   "t": 3.7,
+   "crop": null,
+   "is": "T1: the police line has stepped one pace forward; thin tear-gas haze drifts through the keys",
+   "parts": "PMOS",
+   "set": "t1",
+   "refs": [
+    "references/protest-tiers/es4-barcelona-11nov-mossos-burning-container.jpg"
+   ],
+   "beat": "line steps, haze",
+   "glimpse": true
+  },
+  {
+   "t": 4.8,
+   "crop": null,
+   "is": "T2 Frankfurt gun store at night: hooded runners arrive; two haul the steel shutter up with a red crowbar; one swings a ripped-up give-way road sign at the glass",
+   "parts": "PMOS",
+   "set": "t2",
+   "refs": [
+    "references/protest-tiers/de3-frankfurt-gun-shop-window-smashed.jpg",
+    "references/protest-tiers/de4-frankfurt-berliner-str-road-sign-smash.jpg",
+    "references/protest-tiers/de1-frankfurt-black-bloc-cap.jpg"
+   ],
+   "beat": "shutter hauled, sign swung",
+   "glimpse": true
+  },
+  {
+   "t": 5.4,
+   "crop": null,
+   "is": "T2: the glass has gone, shards falling and glinting, two slide in through the gap, an A-board kicked over; young crowd on the near pavement with signs and phones",
+   "parts": "PMOS",
+   "set": "t2",
+   "refs": [
+    "references/protest-tiers/de3-frankfurt-gun-shop-window-smashed.jpg"
+   ],
+   "beat": "smash",
+   "glimpse": true
+  },
+  {
+   "t": 7.6,
+   "crop": null,
+   "is": "T2: blue police light sweeps from the right, everything turns blue, the group frozen mid-swing, crowd holds signs up",
+   "parts": "PMOS",
+   "set": "t2",
+   "refs": [
+    "references/protest-tiers/de5-frankfurt-water-cannon-police-blue.jpg"
+   ],
+   "beat": "blue wash, freeze",
+   "glimpse": true
+  },
+  {
+   "t": 9.2,
+   "crop": null,
+   "is": "T3 Paris, Place de la Republique by day, low angle: black-clad front line throwing paving stones at two rows of riot police; burning car left, burning rental bikes, tricolours, Marianne above",
+   "parts": "PMOS",
+   "set": "t3",
+   "refs": [
+    "references/protest-tiers/fr3-republique-17oct-burning-car-marianne.jpg",
+    "references/protest-tiers/fr4-paris-17oct-burning-rental-bikes.jpg",
+    "references/protest-tiers/fr2-place-de-la-republique-wide.jpg"
+   ],
+   "beat": "stones thrown",
+   "glimpse": true
+  },
+  {
+   "t": 10.0,
+   "crop": null,
+   "is": "T3: a tear-gas canister has landed; white gas swells over the lower half of Marianne's monument",
+   "parts": "PMOS",
+   "set": "t3",
+   "refs": [
+    "references/protest-tiers/fr1-marianne-monument-close.jpg",
+    "references/protest-tiers/fr3-republique-17oct-burning-car-marianne.jpg"
+   ],
+   "beat": "gas",
+   "glimpse": true
+  },
+  {
+   "t": 11.3,
+   "crop": null,
+   "is": "T3: a water cannon truck from the right sweeps a jet across the front line; the crowd breaks and runs out left",
+   "parts": "PMOS",
+   "set": "t3",
+   "refs": [
+    "references/protest-tiers/fr5-paris-17oct-police-fire-lime-bike.jpg"
+   ],
+   "beat": "water cannon, split",
+   "glimpse": true
+  },
+  {
+   "t": 12.9,
+   "crop": null,
+   "is": "T4 Tirana at dusk: two mopeds race in bottom-left, the passenger has fired an RPG, its smoke trail climbing to a police helicopter; the Ministry of Education burning; shield line mid-right",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al1-education-ministry-tirana.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al4-tirana-riot-police-white-helmets.jpg"
+   ],
+   "beat": "rocket fired",
+   "glimpse": true
+  },
+  {
+   "t": 13.6,
+   "crop": null,
+   "is": "T4: the helicopter hit, spinning down trailing fire behind the ministry; the crowd slams into the shields",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al1-education-ministry-tirana.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg"
+   ],
+   "beat": "heli spins, shields buckle",
+   "glimpse": true
+  },
+  {
+   "t": 14.6,
+   "crop": null,
+   "is": "T4: the shield line broken, a melee of rioters and officers; two Molotovs burst in the bank windows (left)",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al4-tirana-riot-police-white-helmets.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "melee, Molotovs",
+   "glimpse": true
+  },
+  {
+   "t": 15.7,
+   "crop": null,
+   "is": "T4 final hold: a fireball rises behind the ministry and backlights the melee; tear gas and flares",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "fireball, final hold",
+   "glimpse": true
+  }
+ ],
+ "checks": [
+  "python3 source/protest_tiers.py check"
+ ]
+}
