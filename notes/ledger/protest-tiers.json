@@ -185,7 +185,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.87,
+   "cost": 1.89,
    "src": "estimate",
    "sid": "session_01GznaAT3eodi813gWvGgNQ1"
   }
@@ -220,7 +220,10 @@
   {
    "name": "sets",
    "pct": 5.3,
-   "done": null
+   "done": {
+    "date": "2026-11-15",
+    "spent": 29.77
+   }
   },
   {
    "name": "moves",
