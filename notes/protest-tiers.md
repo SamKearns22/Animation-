@@ -1,15 +1,15 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 59/67 (pre-flight before animatic 2), 74 (head life on every voiced line), 85 (cost watch: stop at 47% until Q1).
-- **Done (chat 27, 15 Nov, Opus medium):** the ONE critique for steps 4-6 (stage "notes", two hunts, `fixed`). Fixed: T3 tear gas thins as the second volley starts; the four car pushers moved onto the car's visible corner and flank and run in from the left (were 3 of 4 off frame); the selfie's flash moved to T4 1.8 so the helicopter is falling right behind him (at 2.6 it had already gone); a real RPG muzzle flash; shot C has reloaded (the warhead shows, it read as a stick); the mannequin has a stiff saluting arm, hand and nose; the hold's jumps 0.42 m; granny's headscarf red with cream dots (plum read as hair); T4 touch windows end inside the shot. Clips sent: `review/protest-tiers-t3-car-clip.mp4`, `-selfie-clip.mp4`, `-rpg-clip.mp4`. Checks: no new faults (27 lines, all from before, were 31).
-- **Named, left open (critique):** T2 looters and mannequin small and dark under the blue; T4 crowd one dark mass, foreground action small; the wife's tote hidden by the bin, her hand over her face; riders' small heads in hoods; Paris set thinner than the reference; plus chat 26's list (pushers' big dark backs, no second pane, buyers' navy coats, flat fireball glow, flags still sprites).
-- **Next: chat 28, Sonnet:** step 7: `preflight.py protest-tiers OUT --text`, stand-in timing, captions, animatic 2 (36 s, ~30 min render) with `finish.py`; send it; Sam's notes come on it. Only if Q1 is Y or the film is under 47%.
-- **Budget guard:** film ~45.5% of a week after this chat. Sam's Y covers ~47%; Q1 (Y to ~63.5%) still open.
-- **Needs Sam:** Q1; notes on the clips (two T4, two T2/T3 from chat 26, three new); after animatic 2, his recordings of the 4 lines.
-- **Read:** job pack "Animatic"; this section; "## Exceptions".
-- **Open rule requests:** as before (archived lists: chats 15-17, chat 18's (a)-(d)). None new in chat 27.
-- **For Claude:** branch `claude/protest-tiers-c27`. Critique spec `source/data/protest-tiers-notes/spec.json` (round 1, stage notes, passes 5-6). `selfie()` flash 1.8, `rocket_fx` flash, `end_riders` fired only in ea, pushers `spots` + run-in, gas fade on `VOLLEY2`, `_jump` 0.42, sets `prop_mannequin` arm, cast `SCARF_DOT`, `ALLOWED_POPS` buyer*/granny.
+- **Rules that bite next:** 59/67 (one full pre-flight per round), 14 (the checklist and Exceptions are now filled), 85 (cost watch).
+- **Done (chat 28, Sonnet, 15 Nov):** Sam said Y to Q1 (film ends near 51%, not 63.5%: animatic 2 2.5, notes 2.7, final 0.5). Brief rows 34-40 ticked; Exceptions rows written for the 5 ALLOWED_POPS names; quick pre-flight (`python3 source/preflight.py protest_tiers source/data/pf --text`, note the underscore) now runs and lists 107 faults (full list `source/data/pf/pf.txt`, git-ignored; rerun to get it).
+- **The faults, by kind:** (1) 67 "teleport" jumps: T3 back* 12 and pusher* 12 (6.5-7 s of T3: the new run-in and run-off), T4 buyer* 14, selfie 7, rioter* 10 (T4 20-22 s: the throws and vaults), T2 runner* 8, hauler* 4: hands and forearms moving 90-120 cm in one 12 fps frame, so add in-between poses or slow the move; (2) 9 front/back swaps (T4 20.0-23.75: rioters, policia, buyers, selfie; T2 7.67-7.75 runner6/7 and hauler1/2): keep each on its side or list in `ORDER_SWAPS` with why; (3) 11 pass-throughs of 13-21 cm, T4 20-23 s (buyer1 into selfie, buyer2, buyer3, rioter4; policia3 into rioter5); (4) 4 off-style star effects: T2 sign flash, T4 helicopter hit, T4 Molotovs and melee dust, T4 fireball (round them like the T4 flames); (5) the TOUCH/old lines are the known ones. Do not list a fault as allowed unless it truly cannot be seen; fix the cause first (rule: improve the check that missed it).
+- **Next: chat 29, Opus medium:** fix the list above as one pass (the T4 cart queue 20.6-23.7 s is most of it: spread the buyers' x/d so they do not overlap, time the throws), rerun the quick pre-flight to clean, then the full pre-flight and `final source/data/protest-tiers-clean.mp4 --small` chained with `&&`, `finish.py` with Hook Text (`HOOK` is set), send the animatic (about 30 min render; one wait). Sonnet may do the render once the list is clean.
+- **Budget guard:** film ~46% of a week; Sam's Y covers ~51%.
+- **Needs Sam:** notes on the clips; after animatic 2, his recordings of the 4 lines.
+- **Read:** job pack "Checks and animatic"; this section; "## Exceptions".
+- **Open rule requests:** as before (archived lists). None new in chat 28.
+- **For Claude:** branch `claude/protest-tiers-c28`. Quick pre-flight needs module name `protest_tiers`; the render lock refuses until the full one passes. T4 queue code: `buyers()`, `buyer_x`, `SLOT`, `SALES`, `granny()`; T3: pusher block in the actor list (~line 849), `back*`.
 
 ## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals answered (chat 19), planned (chat 20), nothing built yet
 - Q1 (chat 20, open): the honest price of everything asked is ~29.3% more, the film near 63.5% (his Y was ~43-47%). 1 Y go to ~63.5% (my pick); 2 stop at 47% for a look at what exists.
@@ -129,6 +129,11 @@ protesting?", the wife's gasp, "Bro, what's a 'protest'?".
 | camera feel | * | every tier is one locked-off lens (cam_for gives one fixed camera per tier: no pan, zoom or shake to feel); hard cuts only | chat 17: stills 4.4, 4.6, 13.0, 13.3, 14.1, 15.5 full size |
 | LINE_OK | rioter t2 | the flagged "thin lines" are the black-bloc eye slits; the check's house weight reads 60 px because the figure is all black | chat 17: line sheet, all six kinds full size |
 | POPS | runner6, runner7 (T2 3.0-3.5); back* (T3 2.2-2.5) | the looters step out of the dark shop through the glass gap; the back row steps up out of the packed crowd sprites (chat 26, `ALLOWED_POPS`) | chat 26: stills 7.2, 8.1, 13.0 |
+| ALLOWED_POPS | runner6 | T2 looter steps out of the dark shop through the glass gap | chat 26 clip, chat 27 critique panels 1-3 |
+| ALLOWED_POPS | runner7 | T2 looter steps out of the dark shop through the glass gap | chat 26 clip, chat 27 critique panels 1-3 |
+| ALLOWED_POPS | back* | T3 back row steps up out of the packed crowd sprites (2.2-2.5 s) | chat 27 critique panel 4 full size |
+| ALLOWED_POPS | buyer* | T4 cart queue: the buyers step out of the packed crowd into the queue (2.6-2.75 s) | chat 27 critique panels 8-10 full size |
+| ALLOWED_POPS | granny | T4: she steps out of the packed crowd to the cart (5.7-5.85 s) | chat 27 critique panels 9-10 full size |
 | TOUCHES | hauler*, runner*, swinger | T2 run-in 4.25-7.95 s: the raiders crush through one gap in the glass, read as one dark pack (depth capped 10-18 cm) | chat 17: 4.4 and 4.6 s full size |
 | TOUCHES | front* | T3 run-out 10.8-11.0 s: feet 2 cm, the front line breaks as a pack | chat 17: preflight list (2 cm, one frame) |
 | TOUCHES | policia*, rioter* | T4 melee 12-16 s: rioters slam into the shields (brief 26), capped 20 cm; one frame at 22 cm (policia4 into rioter6, 14.72 s) | chat 17: 13.3 and 14.1 s full size |
@@ -150,13 +155,13 @@ the tier a note touches. Timings: "## Round 1 plan" below replaces them.
 ## The brief as a checklist (CLAUDE.md, 18 Oct): rows 1-33 (Sam's first brief, ticked chat 16) are in `notes/archive/protest-tiers-plan-r0.md`; their T2-T4 times are replaced by row 39 (R4) and the round 1 beat list. Recheck them there at the animatic 2 tick.
 | # | from the brief (word for word where it matters) | done? |
 |---|------|------|
-| 34 | R1 The joke: each tier worse until Albania, off the charts; Albania's riot is not a protest, it is how they spend their time | |
-| 35 | R2a A second RPG moped pulls up, two riders, fires at something in the sky off screen; rioters clash with police behind; "Hey!" (the husband, Sam Q1) and they look to the side | built chat 24 (shot A), to tick at animatic 2 |
+| 34 | R1 The joke: each tier worse until Albania, off the charts; Albania's riot is not a protest, it is how they spend their time | ticked chat 28: the tiers escalate 2/4/8/11 and Albania's riot has the gags (cart, selfie, granny) and the end scene ("what's a protest") |
+| 35 | R2a A second RPG moped pulls up, two riders, fires at something in the sky off screen; rioters clash with police behind; "Hey!" (the husband, Sam Q1) and they look to the side | built chat 24 (shot A), ticked chat 28 (shot in the animatic) |
 | 36 | R2b A side alley, two American tourists cowering, husband and wife (cap, shorts, bum bag, camera, "Greetings from Tirana" tote, crouched behind bins: Sam Q4); he says "We're just tourists! Why are y'all protesting?" | built chat 24 (shot B) |
 | 37 | R2c Back to the riders: one says "Bro, what's a 'protest'?"; the other shrugs | built chat 24 (shot C) |
-| 38 | R3 Under each place heading, slightly smaller red text "Intensity Level:" 2, 4, 8, 11 out of ten; Albania at 11 from the start (Sam Q2) | |
-| 39 | R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-paced with new action, never slow motion (Sam Q5: T2 stock carried out, TV or mannequin; T3 second volley, truck pushes forward, a burning car rolls) | |
-| 40 | R5 Albania the showstopper: the most fluid, best-designed effects; gleeful violence and absurdity; gags a (Molotov seller's cart), b (selfie in front of the falling helicopter), c (granny throws a Molotov overarm) (Sam Q3) | |
+| 38 | R3 Under each place heading, slightly smaller red text "Intensity Level:" 2, 4, 8, 11 out of ten; Albania at 11 from the start (Sam Q2) | ticked chat 28: "Intensity Level: N/10" in red under each place name at 1.0 s (overlay); Albania 11/10, no counting up |
+| 39 | R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-paced with new action, never slow motion (Sam Q5: T2 stock carried out, TV or mannequin; T3 second volley, truck pushes forward, a burning car rolls) | ticked chat 28: LENS 4/6/8/10 s; T2 carries stock out, T3 second volley, car shoved into the jet; no slow motion |
+| 40 | R5 Albania the showstopper: the most fluid, best-designed effects; gleeful violence and absurdity; gags a (Molotov seller's cart), b (selfie in front of the falling helicopter), c (granny throws a Molotov overarm) (Sam Q3) | ticked chat 28: round flames, lit smoke, fireball, fireworks, gags a/b/c, hold jumps; critique passes 5-6 (8 smaller faults named in the ledger) |
 | 41 | Captions on the end scene's lines (rule 62); stand-in voices for timing only, never heard (best-practice) | built chat 24 |
 
 ## References as checklists: `references/protest-tiers/checklist.md` (what each photo shows; ticked at each critique, rule 89 A2).

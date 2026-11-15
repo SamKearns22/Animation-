@@ -1,3 +1,3 @@
-protest-tiers: round 1 built and critiqued (two fresh-eye looks); fixed the hidden volley, off-frame car pushers, the selfie timing, the RPG; three clips sent.
-Next: chat 28, Sonnet: checks and animatic 2 (36 s, ~30 min render), once Sam says Y to Q1 (it takes the film past 47%).
-Needs Sam: Q1 (Y to ~63.5% of a week); notes on the clips.
+protest-tiers: Sam said Y; the pre-flight for animatic 2 found 107 faults (mostly new hands jumping between frames in the cart queue and car shove); a fix chat is next.
+Next: chat 29, Opus medium: fix the list, clean pre-flight, then render and send animatic 2 (about 30 min).
+Needs Sam: notes on the clips.

@@ -286,3 +286,16 @@ Plan (chat 19): end scene ~7 s in 3 shots: A closer side-on, moped skids in, pas
 - **Open rule requests:** as before (archived lists: chats 15-17), plus chat 18's (a)-(d) (in the archived handover). None new in chat 25.
 - **For Claude:** branch `claude/protest-tiers-c25`. T4: `MD` (melee nearer), `SELFIE`, `CART`, `SLOT`, `SALES`, `GRANNY_*`, `CHEER`, `HOLD`, `LAND`/`G_LAND`, `selfie()`, `buyers()`/`buyer_x`/`BUYER_I`, `granny()`, `seller_j`, `draw_cart` (drawn in the depth sort as 'cart'), `molotovs`, `_arc`, `flying_shield`, `embers`, `burst`/`FIREWORKS`, `_jump`; Actor gained `lift`, `head`; cast poses `molotov`, `cheer`; sets `flames` round style (`_round_tongues`), `smoke(under=)` (not yet used). End plate (`_PLATE`) skips the gag cast and the cart.
 
+
+
+## Where things stand (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 59/67 (pre-flight before animatic 2), 74 (head life on every voiced line), 85 (cost watch: stop at 47% until Q1).
+- **Done (chat 27, 15 Nov, Opus medium):** the ONE critique for steps 4-6 (stage "notes", two hunts, `fixed`). Fixed: T3 tear gas thins as the second volley starts; the four car pushers moved onto the car's visible corner and flank and run in from the left (were 3 of 4 off frame); the selfie's flash moved to T4 1.8 so the helicopter is falling right behind him (at 2.6 it had already gone); a real RPG muzzle flash; shot C has reloaded (the warhead shows, it read as a stick); the mannequin has a stiff saluting arm, hand and nose; the hold's jumps 0.42 m; granny's headscarf red with cream dots (plum read as hair); T4 touch windows end inside the shot. Clips sent: `review/protest-tiers-t3-car-clip.mp4`, `-selfie-clip.mp4`, `-rpg-clip.mp4`. Checks: no new faults (27 lines, all from before, were 31).
+- **Named, left open (critique):** T2 looters and mannequin small and dark under the blue; T4 crowd one dark mass, foreground action small; the wife's tote hidden by the bin, her hand over her face; riders' small heads in hoods; Paris set thinner than the reference; plus chat 26's list (pushers' big dark backs, no second pane, buyers' navy coats, flat fireball glow, flags still sprites).
+- **Next: chat 28, Sonnet:** step 7: `preflight.py protest-tiers OUT --text`, stand-in timing, captions, animatic 2 (36 s, ~30 min render) with `finish.py`; send it; Sam's notes come on it. Only if Q1 is Y or the film is under 47%.
+- **Budget guard:** film ~45.5% of a week after this chat. Sam's Y covers ~47%; Q1 (Y to ~63.5%) still open.
+- **Needs Sam:** Q1; notes on the clips (two T4, two T2/T3 from chat 26, three new); after animatic 2, his recordings of the 4 lines.
+- **Read:** job pack "Animatic"; this section; "## Exceptions".
+- **Open rule requests:** as before (archived lists: chats 15-17, chat 18's (a)-(d)). None new in chat 27.
+- **For Claude:** branch `claude/protest-tiers-c27`. Critique spec `source/data/protest-tiers-notes/spec.json` (round 1, stage notes, passes 5-6). `selfie()` flash 1.8, `rocket_fx` flash, `end_riders` fired only in ea, pushers `spots` + run-in, gas fade on `VOLLEY2`, `_jump` 0.42, sets `prop_mannequin` arm, cast `SCARF_DOT`, `ALLOWED_POPS` buyer*/granny.
+
