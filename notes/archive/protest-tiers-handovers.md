@@ -191,3 +191,19 @@
 - **Sam, status chat 15 Nov (session ...AUVJ, answered there):** Walliams' new head, the hair's top and the outfit sheet approved (in `notes/next-jobs.md`); "We are done with walking, he's fine"; asked why the old 8-chat limit still exists, and whether the new tools save budget (answered there). Scheduled task to open chat 16 approved if create_session is blocked: "last time the chat did not appear correctly under the scheduled list", so check it appears.
 - Rehearsal clips sent: 15 Nov (chat 14): T1 0.0-2.0, T2 6.8-8.0, T3 10.4-12.0, T4 12.4-14.2, T4 13.6-15.6.
 - Composition sheet sent: 13 Nov (pencil sketches, chat 4).
+
+
+## Where things stood (chat 17) (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 13 (Exceptions rows, looked at full size), 19 (filter printouts to faults), 85 (chat 17 handed over at amber).
+- **Done (chat 17, 15 Nov, Opus medium; amber):** pre-flight now reads the critique (ledger name protest_tiers -> protest-tiers; gate clear: round 1 pass 2 fixed). Added to the film: 'haze' in draw_order, EFFECTS (10, each tier at its peak), JOKE_PROPS (crowbar, WAFFEN, WAFFEN RAUS placard, BANKA), BENCHMARK (from the sets'), PROP_SIZES (A-board; 'pavement a-board' in sizes.py), OUTFIT {}, LINE_SUBJECTS (6 kinds), LINE_OK, TOUCHES + ALLOWED + ORDER_SWAPS for the T2 run-in / T3 run-out / T4 melee, solids(t). BANKA sign 52 px along the bank (was cut to "ANKA"). "## Exceptions" table written (8 rows).
+- **BLOCKER:** the full pre-flight now crashes in linecheck (RecursionError: head_view wraps itself: people_turned -> people_famous -> facehouse -> people_turned...), only inside pre-flight's child after install_probes; `linecheck.py protest_tiers` alone is clean except the LINE_OK row. Fix: make those head_view installs idempotent (or skip re-install), then re-run pre-flight and filter to faults.
+- **Still to name to Sam with the animatic (--faults-named):** WAFFEN RAUS placard reads "RAUS" (cut by the frame edge; moving it in covers the sign swing); T4 Molotov flames are spiky cartoon tongues (also critique-left); the 4 critique faults left in chat 16.
+- **Added:** "WAFFEN RAUS" placard in T2 (not in the brief); name it to Sam.
+- **Sam (chat 11): "continue until animatic 1, I don't want anything to stop you".** Stage stops OFF until animatic 1 is sent.
+- **Next: chat 18, Opus medium (a fix from a clear list):** fix the head_view recursion, re-run `preflight.py protest_tiers OUT`, clear or name what's left, then open Sonnet chat 19 for animatic 1 (`final OUT --small --faults-named`, finish.py, send, push notification).
+- **Budget (15 Nov):** WEEK_USD 245 (provisional); estimate ~15%; re-check the meter at each handover.
+- **Needs Sam:** nothing. **Sam Y (15 Nov, chat 17):** the animatic1 stage may run past its 1.4% share (at 1.7%) to finish animatic 1 (about 0.5% more); later stages keep their shares.
+- **Read:** job pack "Checks and animatic" (preflight.md Stage 3); this section; the "## Exceptions" table; `source/protest_tiers.py` MAP.
+- **Open rule requests:** as chat 15's list (archived), plus chat 16's (critique pass number; kittest to add), plus NEW (chat 17): the ledger's film name and the code name differ (fixed in ledger._paths; a kittest to add); JOKE_PROPS measures only a prop's centre, so a placard half off the frame edge passes.
+- **For Claude:** branch `claude/protest-tiers-c17`; pre-flight logs in /tmp are gone next chat.
+

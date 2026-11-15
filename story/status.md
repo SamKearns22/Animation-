@@ -1,3 +1,3 @@
-Protest Tiers: pre-flight lists and exceptions written (chat 17); a shared drawing-hook crash blocks the full pre-flight.
-Next: chat 18 (Opus medium) fixes it and clears the gate; then a Sonnet chat renders animatic 1.
-Needs Sam: nothing.
+Protest Tiers: pre-flight passes with every fault named (chat 18 fixed the crash and the too-fast runs).
+Next: chat 19 (Sonnet) renders animatic 1 and sends it to Sam.
+Needs Sam: nothing until animatic 1 arrives.
