@@ -1,3 +1,3 @@
-Protests (protest-tiers): chat 16 fixed the second fresh-eye check (16 faults) and ticked the brief checklist.
-Now: chat 17 (Opus medium) clears the last pre-flight checks, then a Sonnet chat renders animatic 1.
-Waiting: nothing from Sam.
+Protest Tiers: pre-flight lists and exceptions written (chat 17); a shared drawing-hook crash blocks the full pre-flight.
+Next: chat 18 (Opus medium) fixes it and clears the gate; then a Sonnet chat renders animatic 1.
+Needs Sam: nothing.

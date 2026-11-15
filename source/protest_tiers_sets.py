@@ -938,7 +938,8 @@ def _bank(img, cam, t):
             quad(img, cam.p(x, d + .4, z), cam.p(x, d + 2.2, z), cam.p(x, d + 2.2, z + 2.6), cam.p(x, d + .4, z + 2.6),
                  (60, 46, 46), None, amt=0)
         poly(img, [cam.p(x, d + 3.8, 0), cam.p(x, d + 3.8, 15)], None, (140, 116, 104), 3, 0)
-    text(img, (cam.p(x, 40, 5.6)[0] + 40, cam.p(x, 40, 5.6)[1] - 4), 'BANKA', 26, (60, 46, 40))
+    # chat 17 (readability check; hunt 1 read a cut-off 'ANKA'): letters ~0.9 m tall, centred along the bank, in frame
+    text(img, cam.p(x, 52, 5.6), 'BANKA', 52, (60, 46, 40))
 
 
 # ================================================================================================= vehicles

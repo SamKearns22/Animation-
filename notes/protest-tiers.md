@@ -1,21 +1,30 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 13 (every check left open has a written reason in "## Exceptions", looked at full size), 19 (clipcheck needs `solids(t)`), 85 (cost watch: chat 16 handed over at amber).
-- **Done (chat 16, 15 Nov, Opus medium; amber):** hunt 2 (16 faults) fixed as one list and `critique.py fixed` run (gate clear; 4 named, not fixed: T3 Marianne thin / car reads as a van, T3 smoke shading, T4 dark riders on the dark road, T4 melee weak at phone size). T1 keys glint 2x, long firework tail, three SMALL staggered bursts; T2 crowd at the frame edges, window clear, crowbar 2x, glass teeth + shards behind the raiders; T3 stones from 0.75 s high against the sky, gas 1.35x and faster, jet 2x, crowd runs out left, littered ground; T4 helicopter seen spinning, Molotovs 2.0 s and bigger, soft dust, see-through backblast, fireball in frame, tear gas at the line. Brief checklist ticked (33 rows). Tool fix: `critique.py` numbers a pass past the ledger's passes (hunt 2 had come out as pass 1 and overwritten hunt 1). SHOT_CAST now patterns of acted names.
-- **Added:** a "WAFFEN RAUS" placard in T2 (not in the brief; from earlier chats); name it to Sam with the animatic.
-- **Pre-flight (full) 44 faults, 1 COULD NOT TEST:** 21 audit pass-throughs + 3 resting (the named kinds: T2 run-in, T3 run-out, T4 melee), 10 drawing, front/back swaps in the T2 run-in and T4 melee, house style 3 (LINE_SUBJECTS, PROP_SIZES, OUTFIT), CAMERA FEEL, EFFECTS, JOKE_PROPS, BENCHMARK, 'haze' not in draw_order, clipcheck has no `solids(t)`, and "critique: round ?: none recorded" (pre-flight does not see round 1's passes). List: `preflight.py protest_tiers OUT` (full), filter to faults.
-- **Sam (chat 11): "continue until animatic 1, I don't want anything to stop you".** Stage stops OFF until animatic 1 is sent; checks and cost-watch handovers still run.
-- **Next: chat 17, Opus medium (a fix round from a clear list):** clear the pre-flight gate: fix what is cheap (draw_order names 'haze'; `solids(t)` from `scene()`; EFFECTS/JOKE_PROPS/PROP_SIZES lists; why pre-flight reads no critique round), name the rest as rows in "## Exceptions" with a reason and a full-size look; then hand to a Sonnet chat 18 for animatic 1 (`final OUT --small`, finish.py, send, push notification).
+- **Rules that bite next:** 13 (Exceptions rows, looked at full size), 19 (filter printouts to faults), 85 (chat 17 handed over at amber).
+- **Done (chat 17, 15 Nov, Opus medium; amber):** pre-flight now reads the critique (ledger name protest_tiers -> protest-tiers; gate clear: round 1 pass 2 fixed). Added to the film: 'haze' in draw_order, EFFECTS (10, each tier at its peak), JOKE_PROPS (crowbar, WAFFEN, WAFFEN RAUS placard, BANKA), BENCHMARK (from the sets'), PROP_SIZES (A-board; 'pavement a-board' in sizes.py), OUTFIT {}, LINE_SUBJECTS (6 kinds), LINE_OK, TOUCHES + ALLOWED + ORDER_SWAPS for the T2 run-in / T3 run-out / T4 melee, solids(t). BANKA sign 52 px along the bank (was cut to "ANKA"). "## Exceptions" table written (8 rows).
+- **BLOCKER:** the full pre-flight now crashes in linecheck (RecursionError: head_view wraps itself: people_turned -> people_famous -> facehouse -> people_turned...), only inside pre-flight's child after install_probes; `linecheck.py protest_tiers` alone is clean except the LINE_OK row. Fix: make those head_view installs idempotent (or skip re-install), then re-run pre-flight and filter to faults.
+- **Still to name to Sam with the animatic (--faults-named):** WAFFEN RAUS placard reads "RAUS" (cut by the frame edge; moving it in covers the sign swing); T4 Molotov flames are spiky cartoon tongues (also critique-left); the 4 critique faults left in chat 16.
+- **Added:** "WAFFEN RAUS" placard in T2 (not in the brief); name it to Sam.
+- **Sam (chat 11): "continue until animatic 1, I don't want anything to stop you".** Stage stops OFF until animatic 1 is sent.
+- **Next: chat 18, Opus medium (a fix from a clear list):** fix the head_view recursion, re-run `preflight.py protest_tiers OUT`, clear or name what's left, then open Sonnet chat 19 for animatic 1 (`final OUT --small --faults-named`, finish.py, send, push notification).
 - **Budget (15 Nov):** WEEK_USD 245 (provisional); estimate ~15%; re-check the meter at each handover.
 - **Needs Sam:** nothing.
-- **Read:** job pack "Checks and animatic" (preflight.md Stage 3); this section; `source/protest_tiers.py` MAP; `source/waivers.py` docstring (the Exceptions table).
-- **Open rule requests:** as chat 15's list (archived in `notes/archive/protest-tiers-handovers.md`), plus NEW (chat 16): a critique pass number counts the ledger's passes, not only the pack folders on disk (tool fixed; a kittest still to add).
-- **For Claude:** `t2_teeth` (window teeth + falling glass, drawn before the people), `t3_debris`; critique pack is `r1-p2` (pass 2); branch `claude/protest-tiers-c16`.
+- **Read:** job pack "Checks and animatic" (preflight.md Stage 3); this section; the "## Exceptions" table; `source/protest_tiers.py` MAP.
+- **Open rule requests:** as chat 15's list (archived), plus chat 16's (critique pass number; kittest to add), plus NEW (chat 17): the ledger's film name and the code name differ (fixed in ledger._paths; a kittest to add); JOKE_PROPS measures only a prop's centre, so a placard half off the frame edge passes.
+- **For Claude:** branch `claude/protest-tiers-c17`; pre-flight logs in /tmp are gone next chat.
 
-- **Sam, status chat 15 Nov (session ...AUVJ, answered there):** Walliams' new head, the hair's top and the outfit sheet approved (in `notes/next-jobs.md`); "We are done with walking, he's fine"; asked why the old 8-chat limit still exists, and whether the new tools save budget (answered there). Scheduled task to open chat 16 approved if create_session is blocked: "last time the chat did not appear correctly under the scheduled list", so check it appears.
-- Rehearsal clips sent: 15 Nov (chat 14): T1 0.0-2.0, T2 6.8-8.0, T3 10.4-12.0, T4 12.4-14.2, T4 13.6-15.6.
-- Composition sheet sent: 13 Nov (pencil sketches, chat 4).
+## Exceptions (rule 13: one row per thing left out of a check; looked at full size)
+| check | who | why | looked at full size |
+|---|---|---|---|
+| camera feel | * | every tier is one locked-off lens (cam_for gives one fixed camera per tier: no pan, zoom or shake to feel); hard cuts only | chat 17: stills 4.4, 4.6, 13.0, 13.3, 14.1, 15.5 full size |
+| LINE_OK | rioter t2 | the flagged "thin lines" are the black-bloc eye slits; the check's house weight reads 60 px because the figure is all black | chat 17: line sheet, all six kinds full size |
+| TOUCHES | hauler*, runner*, swinger | T2 run-in 4.25-7.95 s: the raiders crush through one gap in the glass, read as one dark pack (depth capped 10-18 cm) | chat 17: 4.4 and 4.6 s full size |
+| TOUCHES | front* | T3 run-out 10.8-11.0 s: feet 2 cm, the front line breaks as a pack | chat 17: preflight list (2 cm, one frame) |
+| TOUCHES | policia*, rioter* | T4 melee 12-16 s: rioters slam into the shields (brief 26), capped 20 cm | chat 17: 13.3 and 14.1 s full size |
+| ORDER_SWAPS | the same groups | the people cross in front of each other inside those three crushes | chat 17: same stills |
+| EFFECT SHAPES | T2 flash | the star read is the flash disc plus the red crowbar end in one test layer; the flash alone is a round disc | chat 17: fx_t2 full size |
+| EFFECT SHAPES | T4 Molotov flames | spiky cartoon flame tongues (critique named the same, left open in chat 16): a fire restyle is a drawing job for round 1 | chat 17: fx_t4 full size |
 
 ## The reporting: what each tier is based on is in `notes/archive/protest-tiers-reporting.md` (T1 Barcelona 11 Nov, T2 Frankfurt 31 Oct, T3 République 17 Oct, T4 Tirana 13-18 Oct).
 

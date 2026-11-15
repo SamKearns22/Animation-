@@ -1074,12 +1074,12 @@ def picture(t):
 
 def draw_order(t):
     tier, lt = scene_of(t)
-    names = {'t1': lambda: ['painting', 'police'] + [a.name for a in t1_actors(lt)] + ['march', 'fx'],
+    names = {'t1': lambda: ['painting', 'police'] + [a.name for a in t1_actors(lt)] + ['march', 'fx', 'haze'],
              't2': lambda: ['painting'] + [a.name for a in sorted(t2_actors(lt), key=lambda a: -a.d)] + ['fx', 'blue'],
              't3': lambda: ['painting', 'truck', 'crowd'] + [a.name for a in sorted(t3_actors(lt), key=lambda a: -a.d)]
              + ['fx', 'car'],
              't4': lambda: ['painting', 'helicopter', 'ministry', 'crowd'] +
-             [a.name for a in sorted(t4_actors(lt), key=lambda a: -a.d)] + ['mopeds', 'fx']}
+             [a.name for a in sorted(t4_actors(lt), key=lambda a: -a.d)] + ['mopeds', 'fx', 'haze']}
     return names[tier]()
 
 
@@ -1107,6 +1107,11 @@ def scene(t):
         j = a.pose(sp)
         out.append(audit.Thing(a.name, audit.placed(a.name, j, a.x, a.d, facing(a.yaw), sp.get('height', 1.75), sp=sp)))
     return out
+
+
+def solids(t):
+    """clipcheck (rule 19): the same solids the audit sees (one list: scene()), so speed and teleports are checked."""
+    return [x for th in scene(t) for x in th.solids]
 
 
 # ------------------------------------------------------------------------------------------------- overlay
@@ -1160,6 +1165,66 @@ def soundtrack(stems=False):
     except Exception as e:                                  # the film still renders; the fault is printed
         print('SOUND: siren not placed:', e)
     return mix
+
+
+# Rule S7: each tier's effects drawn alone on a clear frame at the moment they peak, shape-tested (viewchecks)
+def _fx_at(fn, lt):
+    return lambda img: fn(img, lt)
+
+
+EFFECTS = [('T1 firework string', 'trail', _fx_at(t1_fx, 1.2)), ('T1 three bursts', 'burst', _fx_at(t1_fx, 1.95)),
+           ('T1 tear-gas haze', 'smoke', _fx_at(t1_fx, 3.6)), ('T2 sign-on-glass flash', 'flash', _fx_at(t2_fx, 1.05)),
+           ('T3 stones and gas', 'sparks', _fx_at(t3_fx, 1.6)), ('T3 gas and jet', 'smoke', _fx_at(t3_fx, 3.0)),
+           ('T4 rocket trail', 'trail', _fx_at(t4_fx, 0.9)), ('T4 helicopter hit', 'burst', _fx_at(t4_fx, 1.1)),
+           ('T4 Molotovs and melee dust', 'burst', _fx_at(t4_fx, 2.6)), ('T4 fireball', 'burst', _fx_at(t4_fx, 3.5))]
+
+
+# Rule 18: the props a beat needs, measured on screen where they act (world x, height, depth; size in metres)
+JOKE_PROPS = [('red crowbar', [4.6, 5.0], (-0.7, 1.6, 13.6), 1.0),
+              ('WAFFEN sign', [5.0, 7.0], (0.0, 3.6, 14.0), 0.5),
+              ('WAFFEN RAUS placard', [5.5, 6.5], (-1.38, 2.0, 7.8), 0.45),
+              ('BANKA sign', [12.5, 13.5], (-9.0, 5.2, 52.0), 0.95)]
+
+
+# Rule 3: the sets' benchmark (sets stage, ticked on its sheet beside the references) in the form benchmark.py reads
+BENCHMARK = [dict(place=S.TITLES[tier], refs=[f'references/protest-tiers/{r}.jpg' for r in S.REFS_OF[tier]],
+                  at=TIERS.index(tier) * TIER_LEN + 0.4,
+                  items=[(w, 'built: sets stage, ticked on its sheet (critique passes 1-2)') for w in S.BENCHMARK[tier]])
+             for tier in TIERS]
+# real sizes (sizes.py): the one prop drawn from a size in metres that the table knows; everything else is drawn
+# through the set's camera at the reference's size (sets stage)
+PROP_SIZES = [('T2 A-board', 'pavement a-board', 0.72, 1.15, None)]
+LINE_OK = [('rioter t2', 'line weight', 540, 731)]   # notes "## Exceptions": the black-bloc eye slits
+OUTFIT = {}                       # hoodies, jackets, riot kit: no skirt, jacket hem or cuffs to place (as Elder Swindon)
+
+
+def LINE_SUBJECTS():
+    """Each of the cast's kinds alone, large (linecheck.py): the officers of each tier, a rioter, a marcher."""
+    cam = S.Cam(540, 788, 2280, 1.6)
+
+    def one(kind, tier, force):
+        return lambda img: draw_actor(img, cam, Actor(f'{kind} {tier}', kind, 0.0, 4.0, 20, 'stand', tier=tier,
+                                                      force=force))
+    return [(f'{k} {t}' + (f' {f}' if f else ''), one(k, t, f)) for k, t, f in (
+        ('officer', 't1', 'mossos'), ('officer', 't3', 'crs'), ('officer', 't4', 'policia'), ('rioter', 't2', None),
+        ('marcher', 't1', None), ('marcher', 't3', None))]
+
+
+# chat 17 (pre-flight): the three crowd moments the staging means, looked at full size (notes "## Exceptions")
+TOUCHES = [('hauler*', 'runner*', 4.25, 4.85, 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
+           ('hauler*', 'hauler*', 4.25, 4.85, 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
+           ('runner*', 'runner*', 4.25, 7.95, 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),
+           ('runner*', 'swinger', 4.25, 4.85, 'T2 run-in: the swinger is in the crush', 0.10),
+           ('front*', 'front*', 10.8, 11.0, 'T3 run-out: the front line breaks and runs left as a pack', 0.04),
+           ('policia*', 'rioter*', 12.0, 16.0, 'T4 melee: rioters slam into the shields (brief 26)', 0.20),
+           ('policia*', 'policia*', 14.0, 16.0, 'T4 melee: the shield line buckles back into itself', 0.06)]
+ORDER_SWAPS = [('hauler*', 'runner*', 4.25, 4.85, 'T2 run-in: they cross in the crush'),
+               ('hauler*', 'hauler*', 4.25, 4.85, 'T2 run-in'), ('runner*', 'runner*', 4.25, 4.85, 'T2 run-in'),
+               ('runner*', 'swinger', 4.25, 4.85, 'T2 run-in'), ('hauler*', 'swinger', 4.25, 4.85, 'T2 run-in'),
+               ('front*', 'front*', 10.8, 11.0, 'T3 run-out'), ('crs*', 'front*', 10.8, 11.0, 'T3 run-out'),
+               ('policia*', 'policia*', 14.0, 14.3, 'T4 melee: the line buckles'),
+               ('policia*', 'rioter*', 14.0, 14.3, 'T4 melee: rioters break through the line')]
+ALLOWED = [(a, b, t0, t1) for a, b, t0, t1, *_ in TOUCHES]   # clipcheck reads the same meant contacts
 
 
 # ================================================================================================= checks / main

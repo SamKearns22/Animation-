@@ -44,7 +44,7 @@ SIZES = {   # kind: (width m, height m), the face we usually see (UK where it ma
     # the Jackdaw-style rig (source/flying_whales_rig.py): deck block 50 x 35 m, three storeys 24 m in all, jacket legs
     # 1.8 m across and 25 m from the sea to the deck; an enclosed lifeboat 8.5 x 3 m; a helideck about 22 m across
     'rig deck block': (50.0, 24.0), 'rig jacket leg': (1.8, 25.0), 'enclosed lifeboat': (8.5, 3.0), 'helideck': (22.0, 1.2),
-    'protest placard': (0.45, 0.6), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
+    'protest placard': (0.45, 0.6), 'pavement a-board': (0.6, 1.0), 'hand flag': (0.9, 0.6), "Nelson's Column": (5.0, 51.6),
     # Ad-Vanced Notice (8 Nov): a partners' pedestal desk ~1.8 x 0.78 m; a cut-crystal tumbler ~8.5 x 10 cm; a 2 x 3 ft
     # desk flag; a stone fireplace surround ~1.3 m; library bookcases floor to cornice ~3.3 m, bays ~0.8 m; a VLCC
     # 330 m long, ~9 m freeboard laden plus ~27 m of bridge and funnel; a full-size crew-cab pickup 5.9 x 1.95 m; a US

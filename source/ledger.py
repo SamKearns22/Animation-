@@ -52,6 +52,11 @@ CURRENT = os.path.join(DIR, '.current')      # "FILM ROUND": where check results
 
 
 def _paths(film):
+    # chat 17 (protest-tiers): pre-flight passes the code name (protest_tiers) and the ledger is filed under the film's
+    # name (protest-tiers), so the critique read "none recorded"; the hyphen file is used when only it exists
+    if '_' in film and not os.path.exists(os.path.join(DIR, film + '.json')) \
+            and os.path.exists(os.path.join(DIR, film.replace('_', '-') + '.json')):
+        film = film.replace('_', '-')
     return os.path.join(DIR, film + '.json'), os.path.join(DIR, film + '.md'), os.path.join(DIR, film)
 
 
