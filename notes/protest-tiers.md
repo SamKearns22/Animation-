@@ -1,17 +1,17 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 89 (hunt 2 on the moves pack, a NEW helper; fix its list as one; then `critique.py fixed`), 24 (Glimpses read at phone size), 85 (cost watch: chat 15 handed over at amber).
-- **Done (chat 15, 15 Nov, Opus high; amber):** hunt 1's 21-fault list fixed. T1: police line (d 150), burning container (d 142) and the hooded knot (d 123) nearer, march front at d 106, firework with a spark tail, 3 big separate bursts, the line's step 6 m. T2: reframed nearer (`RF2`), near crowd back to the sides (7.7-9.3 m, feet in), swinger mid-window, A-board in frame, blue sweep + strobing edge light, phone glows small. T3: two police rows in frame, stones 2x, canister trail + landing by Marianne's base, truck drives in to x 1.2 and is drawn over the bike smoke. T4: RPG thicker + backblast, helicopter 1.6x, layered fireball, haze and backlight lighter, BANKA and mopeds in frame (`RF4` about x 0). All smoke: shaded side and thinning (sets `smoke()`). Sam's approvals for the Walliams head, hair top and outfit sheet recorded (`notes/next-jobs.md`).
-- **Audit:** 39 lines, all the named kinds: T2 run-in contact (<0.3 s), T4 melee contact (body into body in the push: it is the melee), T3 run-out feet 1 frame. Name, not fix.
-- **Script colour flags (A2)** are the sets' approved palette: name, not fix.
-- **Sam (chat 11): "continue until animatic 1, I don't want anything to stop you".** Stage stops OFF until animatic 1 is sent; checks, critiques and cost-watch handovers still run.
-- **Next: chat 16, Opus medium (a fix round from a clear plan):** `critique.py pack protest-tiers source/data/protest-tiers-moves/spec.json` (hunt 2, NEW helper); fix its list as one; `critique.py fixed`; tick the brief checklist; preflight; animatic 1 (`final OUT --small` then finish.py); send with a push notification. If amber before the animatic, hand to a Sonnet chat for the animatic once the gate is clear.
-- **Budget (15 Nov, recalibrated on the main line):** WEEK_USD 245 (provisional, from Sam's meter); estimate ~15%; the moves stage is under its share. Re-check the meter at each handover.
+- **Rules that bite next:** 13 (every check left open has a written reason in "## Exceptions", looked at full size), 19 (clipcheck needs `solids(t)`), 85 (cost watch: chat 16 handed over at amber).
+- **Done (chat 16, 15 Nov, Opus medium; amber):** hunt 2 (16 faults) fixed as one list and `critique.py fixed` run (gate clear; 4 named, not fixed: T3 Marianne thin / car reads as a van, T3 smoke shading, T4 dark riders on the dark road, T4 melee weak at phone size). T1 keys glint 2x, long firework tail, three SMALL staggered bursts; T2 crowd at the frame edges, window clear, crowbar 2x, glass teeth + shards behind the raiders; T3 stones from 0.75 s high against the sky, gas 1.35x and faster, jet 2x, crowd runs out left, littered ground; T4 helicopter seen spinning, Molotovs 2.0 s and bigger, soft dust, see-through backblast, fireball in frame, tear gas at the line. Brief checklist ticked (33 rows). Tool fix: `critique.py` numbers a pass past the ledger's passes (hunt 2 had come out as pass 1 and overwritten hunt 1). SHOT_CAST now patterns of acted names.
+- **Added:** a "WAFFEN RAUS" placard in T2 (not in the brief; from earlier chats); name it to Sam with the animatic.
+- **Pre-flight (full) 44 faults, 1 COULD NOT TEST:** 21 audit pass-throughs + 3 resting (the named kinds: T2 run-in, T3 run-out, T4 melee), 10 drawing, front/back swaps in the T2 run-in and T4 melee, house style 3 (LINE_SUBJECTS, PROP_SIZES, OUTFIT), CAMERA FEEL, EFFECTS, JOKE_PROPS, BENCHMARK, 'haze' not in draw_order, clipcheck has no `solids(t)`, and "critique: round ?: none recorded" (pre-flight does not see round 1's passes). List: `preflight.py protest_tiers OUT` (full), filter to faults.
+- **Sam (chat 11): "continue until animatic 1, I don't want anything to stop you".** Stage stops OFF until animatic 1 is sent; checks and cost-watch handovers still run.
+- **Next: chat 17, Opus medium (a fix round from a clear list):** clear the pre-flight gate: fix what is cheap (draw_order names 'haze'; `solids(t)` from `scene()`; EFFECTS/JOKE_PROPS/PROP_SIZES lists; why pre-flight reads no critique round), name the rest as rows in "## Exceptions" with a reason and a full-size look; then hand to a Sonnet chat 18 for animatic 1 (`final OUT --small`, finish.py, send, push notification).
+- **Budget (15 Nov):** WEEK_USD 245 (provisional); estimate ~15%; re-check the meter at each handover.
 - **Needs Sam:** nothing.
-- **Read:** job pack "Build" (Critique line); this section; `source/protest_tiers.py` MAP; hunt 1 in `notes/ledger/protest-tiers.json` (critique, last pass).
-- **Open rule requests:** costs filed by kind (WRITTEN into rule 24, 15 Nov; ledger.auto filing still to build); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn (5c); a sheet runs the hand check per tile; a rough is drawn at true sizes for its camera; a set's shape helper draws in its own box; set boxes measured by leaving each helper out; the rig's run fails its arm guard side on; a set's camera is checked for bare ground; every Glimpse beat is checked at phone size before the moves pack (hunt 1: 15 of 21 faults); NEW (chat 15): a Glimpse prop or effect is drawn about twice true size (stones, RPG, bursts only read so).
-- **For Claude:** `RF2/T2_WR` (T2 reframe, after RF4); `T1_FRONT`, `T1_LINE_D`, sets `T1_CONTAINER`; `t3_columns` drawn before `S.truck`/`S._bikes` in picture(); `HELI_S`; sets `SET_BOXES['t1']` container box not re-measured (container moved); branch `claude/protest-tiers-c15` (also on the main line).
+- **Read:** job pack "Checks and animatic" (preflight.md Stage 3); this section; `source/protest_tiers.py` MAP; `source/waivers.py` docstring (the Exceptions table).
+- **Open rule requests:** as chat 15's list (archived in `notes/archive/protest-tiers-handovers.md`), plus NEW (chat 16): a critique pass number counts the ledger's passes, not only the pack folders on disk (tool fixed; a kittest still to add).
+- **For Claude:** `t2_teeth` (window teeth + falling glass, drawn before the people), `t3_debris`; critique pack is `r1-p2` (pass 2); branch `claude/protest-tiers-c16`.
 
 - **Sam, status chat 15 Nov (session ...AUVJ, answered there):** Walliams' new head, the hair's top and the outfit sheet approved (in `notes/next-jobs.md`); "We are done with walking, he's fine"; asked why the old 8-chat limit still exists, and whether the new tools save budget (answered there). Scheduled task to open chat 16 approved if create_session is blocked: "last time the chat did not appear correctly under the scheduled list", so check it appears.
 - Rehearsal clips sent: 15 Nov (chat 14): T1 0.0-2.0, T2 6.8-8.0, T3 10.4-12.0, T4 12.4-14.2, T4 13.6-15.6.
@@ -131,39 +131,39 @@ near figures, 30-60 variants mid, a painted shimmering mass far.
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief, ticked before the first animatic
 | # | from the brief (word for word where it matters) | done? |
 |---|------|------|
-| 1 | Satire style; four European protests, each tier more severe, based on actual reporting | reporting above |
-| 2 | White headlines from Islamocommunism: Country, and underneath Location | |
-| 3 | Tier 1 a quarter showstopper, tier 4 the whole one | |
-| 4 | Find reporting and photos for each event | partly: Q5 |
-| 5 | T1 Spain: Paseo de Gracia, dusk, wide; wet after rain, streetlights on (11 Nov) (Sam Y, 12 Nov Q5-Q7) | |
-| 6 | T1 huge calm march to the vanishing point; raised key rings glint above heads (kept: Madrid that day); union flags and placards from different cities | |
-| 7 | T1 thin police line across the far end; small knot of hooded figures in front of the crowd beside one burning container | |
-| 8 | T1 0.0-1.5 crowd sways forward, keys rise like a wave; a hooded figure flicks a string of fireworks toward the line | |
-| 9 | T1 1.5-3.0 three small bursts pop over the line; the crowd's heads turn | |
-| 10 | T1 3.0-4.0 the line steps one pace forward; a thin TEAR-GAS haze drifts through the keys (was pepper spray; 11 Nov reporting) (Sam Y, 12 Nov Q5-Q7) | |
-| 11 | T2 Germany: Frankfurt gun store, night, locked camera | |
-| 12 | T2 store centre-left, steel shutter half raised over a large glass front; wet street with reflections | |
-| 13 | T2 young crowd fills the right half and mid-ground behind the store, signs incl. a "Gen Z regelt" banner, a few phone lights; far end frame right dark | |
-| 14 | T2 0.0-1.5 eight hooded figures sprint in from the left across the foreground; two haul the shutter up with a pry bar; a third swings a ripped-up give-way ROAD SIGN into the glass (was a hammer; dpa photo de4; shutter kept) (Sam Y, 12 Nov Q5-Q7); the sheet collapses, shards sparkle; two slide through the gap; a sign is kicked to the ground | |
-| 15 | T2 1.5-3.0 smashing continues; crowd chants: signs jab in rhythm, mouths open, phone lights wave; crowd stays on the pavement facing the store | |
-| 16 | T2 3.0-4.0 blue light and sirens at the far right end sweep across crowd and store; faces, signs, wet ground turn blue; the group freezes mid-swing; crowd holds signs up in the glare (final frame) | |
-| 17 | T2 VFX: road-sign impact flash, falling glass with glints, phone lights, moving blue strobe wash reflected on the street, siren cue; three light layers, blue wash last, lighting everything at once | |
-| 18 | T3 France (real top): Place de la République, low angle | |
-| 19 | T3 vast crowd of students and workers with tricolour flags (NO yellow vests, Sam Q4); CGT union banners across the back; Marianne above, graffiti on her base | |
-| 20 | T3 black-clad front line faces two police rows; burning car foreground-left; heaps of burning rental bikes (green Lime, Vélib) mid-right; a burning newspaper kiosk; daytime (17 Oct) (Sam Y, 12 Nov Q5-Q7) | |
-| 21 | T3 0.0-1.0 smoke rises from car and bikes; the crowd surges forward behind the front line | |
-| 22 | T3 1.0-2.5 front line throws paving stones in arcs; a tear gas canister lands among them; white gas swallows Marianne's lower half | |
-| 23 | T3 2.5-4.0 a water cannon sweeps in low from the right; the crowd breaks into two currents, scattering out left while the CGT banners hold at the back | |
-| 24 | T4 Albania (artificially placed top): Tirana avenue, dusk | |
-| 25 | T4 wide avenue under a burning sky; bank left; blazing Education Ministry centre-right; police helicopter high upper right; shield line mid-right; vast furious crowd behind the rioters | |
-| 26 | T4 zones: sky = helicopter and rocket; foreground = mopeds; mid-ground = melee; left buildings = Molotovs | |
-| 27 | T4 0.0-1.0 two mopeds, masked riders, race in from foreground left; lead passenger fires an RPG; smoke trail climbs diagonally toward the helicopter; crowd surges | |
-| 28 | T4 1.0-2.0 rocket hits; helicopter spins out trailing fire, falls behind the ministry; crowd slams into the shield line; shields buckle | |
-| 29 | T4 2.0-3.0 line breaks; rioters swarm over the shields, batons swinging, officers driven back; two Molotovs arc into the bank's ground-floor windows; glass blooms orange | |
-| 30 | T4 3.0-4.0 fireball from the wreck rises behind the ministry, backlights the melee; tear gas, flares, a toppled water cannon truck burning at the line's end hold the final frame | |
-| 31 | T4 VFX: rocket trail, helicopter spiral with fire trail, fireball, shield impact flashes, melee dust, Molotov window bursts, ground fog | |
-| 32 | Violence stylised, no gore | |
-| 33 | (CLAUDE.md) Hook Text; CranbriJoos sign-off; no title; MP4 under 50 MB | Q1 |
+| 1 | Satire style; four European protests, each tier more severe, based on actual reporting | Y, reporting above (ticked chat 16) |
+| 2 | White headlines from Islamocommunism: Country, and underneath Location | Y (ticked chat 16) |
+| 3 | Tier 1 a quarter showstopper, tier 4 the whole one | Y (ticked chat 16) |
+| 4 | Find reporting and photos for each event | Y: reporting per tier (archive); Q5 photos (ticked chat 16) |
+| 5 | T1 Spain: Paseo de Gracia, dusk, wide; wet after rain, streetlights on (11 Nov) (Sam Y, 12 Nov Q5-Q7) | Y (ticked chat 16) |
+| 6 | T1 huge calm march to the vanishing point; raised key rings glint above heads (kept: Madrid that day); union flags and placards from different cities | Y (ticked chat 16) |
+| 7 | T1 thin police line across the far end; small knot of hooded figures in front of the crowd beside one burning container | Y (knot at d 123, line d 150) (ticked chat 16) |
+| 8 | T1 0.0-1.5 crowd sways forward, keys rise like a wave; a hooded figure flicks a string of fireworks toward the line | Y (ticked chat 16) |
+| 9 | T1 1.5-3.0 three small bursts pop over the line; the crowd's heads turn | Y (ticked chat 16) |
+| 10 | T1 3.0-4.0 the line steps one pace forward; a thin TEAR-GAS haze drifts through the keys (was pepper spray; 11 Nov reporting) (Sam Y, 12 Nov Q5-Q7) | Y (ticked chat 16) |
+| 11 | T2 Germany: Frankfurt gun store, night, locked camera | Y (ticked chat 16) |
+| 12 | T2 store centre-left, steel shutter half raised over a large glass front; wet street with reflections | Y (ticked chat 16) |
+| 13 | T2 young crowd fills the right half and mid-ground behind the store, signs incl. a "Gen Z regelt" banner, a few phone lights; far end frame right dark | Y (crowd at the frame edges, chat 16; "WAFFEN RAUS" placard ADDED, not in the brief) (ticked chat 16) |
+| 14 | T2 0.0-1.5 eight hooded figures sprint in from the left across the foreground; two haul the shutter up with a pry bar; a third swings a ripped-up give-way ROAD SIGN into the glass (was a hammer; dpa photo de4; shutter kept) (Sam Y, 12 Nov Q5-Q7); the sheet collapses, shards sparkle; two slide through the gap; a sign is kicked to the ground | Y (ticked chat 16) |
+| 15 | T2 1.5-3.0 smashing continues; crowd chants: signs jab in rhythm, mouths open, phone lights wave; crowd stays on the pavement facing the store | Y (ticked chat 16) |
+| 16 | T2 3.0-4.0 blue light and sirens at the far right end sweep across crowd and store; faces, signs, wet ground turn blue; the group freezes mid-swing; crowd holds signs up in the glare (final frame) | Y (ticked chat 16) |
+| 17 | T2 VFX: road-sign impact flash, falling glass with glints, phone lights, moving blue strobe wash reflected on the street, siren cue; three light layers, blue wash last, lighting everything at once | Y (ticked chat 16) |
+| 18 | T3 France (real top): Place de la République, low angle | Y (ticked chat 16) |
+| 19 | T3 vast crowd of students and workers with tricolour flags (NO yellow vests, Sam Q4); CGT union banners across the back; Marianne above, graffiti on her base | Y (ticked chat 16) |
+| 20 | T3 black-clad front line faces two police rows; burning car foreground-left; heaps of burning rental bikes (green Lime, Vélib) mid-right; a burning newspaper kiosk; daytime (17 Oct) (Sam Y, 12 Nov Q5-Q7) | Y (ticked chat 16) |
+| 21 | T3 0.0-1.0 smoke rises from car and bikes; the crowd surges forward behind the front line | Y (ticked chat 16) |
+| 22 | T3 1.0-2.5 front line throws paving stones in arcs; a tear gas canister lands among them; white gas swallows Marianne's lower half | Y (ticked chat 16) |
+| 23 | T3 2.5-4.0 a water cannon sweeps in low from the right; the crowd breaks into two currents, scattering out left while the CGT banners hold at the back | Y (ticked chat 16) |
+| 24 | T4 Albania (artificially placed top): Tirana avenue, dusk | Y (ticked chat 16) |
+| 25 | T4 wide avenue under a burning sky; bank left; blazing Education Ministry centre-right; police helicopter high upper right; shield line mid-right; vast furious crowd behind the rioters | Y (ticked chat 16) |
+| 26 | T4 zones: sky = helicopter and rocket; foreground = mopeds; mid-ground = melee; left buildings = Molotovs | Y (ticked chat 16) |
+| 27 | T4 0.0-1.0 two mopeds, masked riders, race in from foreground left; lead passenger fires an RPG; smoke trail climbs diagonally toward the helicopter; crowd surges | Y (ticked chat 16) |
+| 28 | T4 1.0-2.0 rocket hits; helicopter spins out trailing fire, falls behind the ministry; crowd slams into the shield line; shields buckle | Y (helicopter seen spinning to the roof line; crowd slam: melee reads weakly at phone size, named) (ticked chat 16) |
+| 29 | T4 2.0-3.0 line breaks; rioters swarm over the shields, batons swinging, officers driven back; two Molotovs arc into the bank's ground-floor windows; glass blooms orange | Y (melee weak at phone size, named; Molotovs bloom 2.45 s) (ticked chat 16) |
+| 30 | T4 3.0-4.0 fireball from the wreck rises behind the ministry, backlights the melee; tear gas, flares, a toppled water cannon truck burning at the line's end hold the final frame | Y (ticked chat 16) |
+| 31 | T4 VFX: rocket trail, helicopter spiral with fire trail, fireball, shield impact flashes, melee dust, Molotov window bursts, ground fog | Y (ticked chat 16) |
+| 32 | Violence stylised, no gore | Y (ticked chat 16) |
+| 33 | (CLAUDE.md) Hook Text; CranbriJoos sign-off; no title; MP4 under 50 MB | Y at the animatic (finish.py: Hook Text + sign-off) (ticked chat 16) |
 
 ## References as checklists: `references/protest-tiers/checklist.md` (what each photo shows; ticked at each critique, rule 89 A2).
 
