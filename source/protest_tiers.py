@@ -283,6 +283,7 @@ class Actor:
         self.state, self.u, self.t, self.i, self.force = state, u, t, i, force
         self.extra, self.clip, self.dark, self.tier = extra, clip, dark, tier
         self.lift, self.head = lift, head           # round 1: off the ground (a vault, a jump), m; head yaw
+        self.prop, self.prop_before = None, False   # round 1: a carried thing drawn with them: prop(img, cam, actor)
 
     def sp(self):
         return make_person(self.kind, self.i, self.tier, self.force)
@@ -509,6 +510,8 @@ def t2_actors(lt):
     # haulers (0.4-1.0), then they slide through the gap into the shop (1.3-1.7)
     for k, (xe, de) in enumerate(((-0.9, 13.3), (0.6, 13.3))):
         x, d, running = dash(k, -3.3 - k * 0.5, xe, de, 0.45)
+        if tt >= WAVE['hauler1'][1]:                      # round 1: back out with the mannequin (second_wave)
+            continue
         if running:
             out.append(Actor(f'hauler{k + 1}', 'rioter', x, d, 90, 'run', t=tt, tier='t2'))
         elif tt < 1.3:
@@ -550,7 +553,62 @@ def t2_actors(lt):
     for k, (x, d, st, i) in enumerate(crowd):
         if st.startswith('placard'):
             st = st + ':' + str(int(90 * beat))
-        out.append(Actor(f'crowd{k + 1}', 'marcher', x + 0.04 * math.sin(tt * 3 + k), d, 180, st, i=i, tier='t2'))
+        yaw = 180
+        if st == 'phone':                                   # round 1: the phones swing round after the looters
+            yaw = 180 - (30 if x < 0 else 45) * ease((tt - 3.1) / 0.5)
+        out.append(Actor(f'crowd{k + 1}', 'marcher', x + 0.04 * math.sin(tt * 3 + k), d, yaw, st, i=i, tier='t2'))
+    return out + second_wave(tt)
+
+
+# Round 1 (T2 3.0-5.2, notes "## Round 1 plan"): the second wave comes back out through the gap and jogs off right
+# with the stock: name -> (x where they step out, out at, lane d, jog m/s, pose, prop). The haulers carry the
+# mannequin between them, 1.4 m apart, so it stays rigid; frozen mid-frame at 5.2.
+WAVE = {'runner6': (0.3, 3.0, 12.9, 3.4, 'carry_front', 'tv'),
+        'runner7': (0.1, 3.2, 12.9, 3.0, 'carry_front', 'boxes'),
+        'hauler2': (0.9, 3.75, 13.4, 1.5, 'carry_up', None),     # in front (each steps out where they went in)
+        'hauler1': (-0.5, 3.75, 13.4, 1.5, 'carry_up', 'mannequin')}
+WAVE_IN = 14.8                                              # the shop floor they come out from
+
+
+def wave_pos(name, tt):
+    """-> (x, d, yaw, inside) or None before they come out."""
+    x0, t0, lane, v, _, _ = WAVE[name]
+    if tt < t0:
+        return None
+    u = (tt - t0) / 0.45
+    if u < 1:                                               # stepping out toward us through the gap
+        d = lerp(WAVE_IN, lane, ease(u))
+        return x0, d, 0, d > 13.9
+    return x0 + v * (tt - t0 - 0.45), lane, 115, False      # jogging right (three-quarter away: the run's safe yaw)
+
+
+def _carried(kind):
+    def draw(img, cam, a):
+        k = cam.ppm(a.d)
+        fwd = 0.28 if a.yaw > 90 else 0.0                   # out in front of them, toward where they go
+        dd = 0.15 if a.yaw > 90 else -0.3
+        if kind == 'tv':
+            S.prop_tv(img, *cam.p(a.x + fwd, a.d + dd, 1.2), k, -6, lit=True)
+        elif kind == 'boxes':
+            S.prop_boxes(img, *cam.p(a.x + fwd * .7, a.d + dd, 0.95), k, 3)
+        else:                                               # the mannequin, flat over both carriers' heads
+            xf = wave_pos('hauler2', a.t)
+            if xf:
+                S.prop_mannequin(img, *cam.p((a.x + xf[0]) / 2, a.d, 2.12), k, 0)
+    return draw
+
+
+def second_wave(tt):
+    out = []
+    for name, (_, _, _, _, st, prop) in WAVE.items():
+        w = wave_pos(name, tt)
+        if w is None:
+            continue
+        x, d, yaw, inside = w
+        a = Actor(name, 'rioter', x, d, yaw, st, t=tt, tier='t2', clip=T2_WR if inside else None)
+        if prop:
+            a.prop, a.prop_before = _carried(prop), yaw > 90 and prop != 'mannequin'
+        out.append(a)
     return out
 
 
@@ -716,6 +774,50 @@ def crowd_t3():
     return out
 
 
+VOLLEY2 = 2.5                       # round 1: the second volley (the back row) starts throwing
+CAR_T0, CAR_LET, CAR_STOP = 6.0, 6.9, 7.6   # the shove starts, they let go, it stops in the jet
+CAR_HIT = 7.2                        # the jet hits the car: a burst of steam, the fire knocked down
+
+
+def car_move(lt):
+    """The T3 car's shove (S.car_pt): (dx, dd, yaw) - 1.6 m right, 3.4 m on toward the police, the nose 12 deg right."""
+    u = min(1.0, max(0.0, (lt - CAR_T0) / (CAR_STOP - CAR_T0)))
+    m = u * u * (2.2 - 1.2 * u) if u < 1 else 1.0          # slow off the mark, rolling freely, then caught by the jet
+    m = min(1.0, m)
+    return 1.6 * m, 3.4 * m, 12.0 * m
+
+
+def car_fire(lt):
+    return 1.0 - 0.75 * ease((lt - CAR_HIT) / 0.5)
+
+
+def car_roof(lt):
+    X0, X1, D0, _ = S.CAR3
+    return S.car_pt(X1 - 0.5, D0 + 2.4, car_move(lt))
+
+
+def car_fx(img, lt):
+    """T3 7.2-8.0: the jet hits the burning car: a burst of white steam boiling up off it, drifting left."""
+    if lt < CAR_HIT:
+        return
+    u = lt - CAR_HIT
+    cx, cy = T3CAM.p(*car_roof(lt), 1.4)
+    k = T3CAM.ppm(car_roof(lt)[1])
+    lumps = []
+    for n in range(9):
+        a = min(1.0, u / 0.8) * (0.4 + 0.6 * ((n * .37) % 1))
+        lumps.append((cx + k * (-.6 + .17 * n) * (0.5 + a) - 120 * u, cy - k * (0.3 + 2.0 * a) + 18 * math.sin(n * 1.7),
+                      k * (0.3 + 0.5 * a)))
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    S.smoke(lay, lumps, (228, 234, 238), (252, 252, 252), line=(170, 178, 186), lw=2.4)
+    img.alpha_composite(lay)
+
+
+def draw_car3(img, lt):
+    mv = car_move(lt)
+    S._car(img, T3CAM, lt, mv, fire=car_fire(lt), roll=mv[1] / 0.34)
+
+
 def t3_actors(lt):
     out = []
     jet = lt > 2.6 + J3
@@ -731,6 +833,36 @@ def t3_actors(lt):
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3, 11.8, 90, 'throw', u=u, tier='t3'))
         else:
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3, 11.8, 90, 'stand', tier='t3'))
+    # round 1 (T3 2.5-4.0): the second volley, twice the throwers: a back row steps up between the front line's gaps
+    for k, x in enumerate(np.arange(-1.65, 0.4, 0.7)):
+        if lt < VOLLEY2 - 0.3:
+            continue
+        if jet and lt > 2.75 + J3 + 0.05 * k:
+            u = lt - 2.75 - J3 - 0.05 * k
+            out.append(Actor(f'back{k + 1}', 'rioter', x - 4.5 * u, 13.0, -90, 'run', t=lt + .3, tier='t3'))
+        elif lt >= VOLLEY2:
+            u = ((lt - VOLLEY2) * 1.6 + k * 0.29) % 1.0
+            out.append(Actor(f'back{k + 1}', 'rioter', x, 13.0, 90, 'throw', u=u, tier='t3'))
+        else:                                               # stepping up from the crowd behind
+            out.append(Actor(f'back{k + 1}', 'rioter', x - 0.6 * (VOLLEY2 - lt) / 0.3, 13.0, 90, 'stand', tier='t3'))
+    # round 1 (T3 6.0-8.0): four rioters shove the burning car into the gap, let go at 6.9, cheer it on, run off left
+    if CAR_T0 - 0.1 <= lt:
+        mv = car_move(lt)
+        X0, X1, D0, _ = S.CAR3
+        xc = (X0 + X1) / 2
+        for k, off in enumerate((-1.0, -0.3, 0.4, 1.1)):
+            if lt < CAR_LET:
+                x, d = S.car_pt(xc + off, D0 - 0.5, mv)
+                out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, 140, 'push', t=lt * 1.6 + k * .3, tier='t3'))
+            else:
+                x, d = S.car_pt(xc + off, D0 - 0.5, car_move(CAR_LET))
+                u = lt - CAR_LET - 0.4 - 0.08 * k
+                if u < 0:
+                    out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, 150, 'cheer', u=abs(math.sin(lt * 9 + k)),
+                                     tier='t3'))
+                else:
+                    out.append(Actor(f'pusher{k + 1}', 'rioter', x - 4.5 * u, d - 0.3 * k * ease(u / .3), -115, 'run',
+                                     t=lt + k * .2, tier='t3'))
     # chat 15 (hunt 1: "no two rows of riot police": they stood at the right edge, off frame): two rows in frame
     for k, (x, d) in enumerate(((1.3, 11.0), (1.9, 11.0), (2.5, 11.0), (1.6, 12.0), (2.2, 12.0), (2.8, 12.0))):
         out.append(Actor(f'crs{k + 1}', 'officer', x, d, -90, 'line', force='crs', tier='t3'))
@@ -756,7 +888,12 @@ def t3_crowd(img, lt):
 def t3_columns(img, lt):
     """Smoke climbing from the car (left) and the bike heap (mid-right) from 0.0. Chat 15: drawn before the truck and
     the people (the bikes burn at d 14, behind the police: their smoke had hidden the water cannon truck)."""
-    for (sx, sy, sd) in (R3(110, 860) + (1,), R3(760, 1010) + (2,)):
+    X0, X1, D0, _ = S.CAR3
+    p0, p1 = T3CAM.p(*S.car_pt(X1 - .5, D0 + 2.4, (0, 0, 0)), 2.5), T3CAM.p(*car_roof(lt), 2.5)
+    cdx, cdy = p1[0] - p0[0], p1[1] - p0[1]                 # round 1: the car's smoke goes where the car goes
+    for (sx, sy, sd) in ((R3(110, 860)[0] + cdx, R3(110, 860)[1] + cdy, 1), R3(760, 1010) + (2,)):
+        if sd == 1 and lt > CAR_HIT + 0.3:                  # the jet put it out: steam (car_fx) instead
+            continue
         lumps = []
         for n in range(6):
             a = (lt * 0.9 + n / 6) % 1.0
@@ -809,6 +946,29 @@ def t3_fx(img, lt):
                 sx, sy = cam.p(x, d, z)
                 IS.ell(img, sx, sy, 26, 20, (120, 108, 96), INK, 3.5)
                 IS.ell(img, sx - 7, sy - 7, 10, 7, (176, 164, 150), None)
+    # round 1 (T3 2.5-4.55): the back row's volley, over the front line's heads: stones, a traffic cone, a bike wheel,
+    # each one flashing off the shields where it lands
+    for k in range(3):
+        for rep in range(5):
+            t0 = VOLLEY2 + ((k * 0.29 + 0.6) % 1.0) / 1.6 + rep / 1.6
+            a = (lt - t0) / 0.5
+            if t0 >= 2.6 + J3 or a < 0:
+                continue
+            x0 = -1.65 + 0.7 * k
+            if a < 1:
+                x, z = lerp(x0 + 0.3, 1.3, a), 2.1 + 4.2 * math.sin(math.pi * a) - 0.7 * a
+                sx, sy = cam.p(x, lerp(13.0, 11.0, a), z)
+                what = 'cone' if (k, rep) == (1, 0) else 'wheel' if (k, rep) == (2, 1) else 'stone'
+                if what == 'cone':
+                    S.prop_cone(img, sx, sy, 1.6 * cam.ppm(11.5), 360 * a * 1.5)
+                elif what == 'wheel':
+                    S.prop_wheel(img, sx, sy, 1.4 * cam.ppm(11.5), 540 * a)
+                else:
+                    IS.ell(img, sx, sy, 26, 20, (120, 108, 96), INK, 3.5)
+                    IS.ell(img, sx - 7, sy - 7, 10, 7, (176, 164, 150), None)
+            elif a < 1.3:                                   # the hit: a white-yellow flash on the shield
+                sx, sy = cam.p(1.3, 11.0, 1.0 + 0.3 * k)
+                S.glow_disc(img, sx, sy, 90 * (1.3 - a) / 0.3 + 30, (255, 246, 200), amt=.8)
     rng = np.random.default_rng(17)
     for n in range(int(min(9, max(0, (lt - 1.45) * 7)))):
         sx, sy = cam.p(rng.uniform(0.7, 1.2), rng.uniform(10.4, 11.2))
@@ -843,6 +1003,10 @@ def t3_fx(img, lt):
         nx, ny = nozzle(lt)
         sweep = ease((lt - 2.55 - J3) / 1.3)
         ix, iy = cam.p(lerp(1.4, -2.0, sweep) - 1.5 * ease((lt - 5.5) / 1.0), 11.6, 1.3)
+        if lt > CAR_HIT - 0.4:                              # round 1: the jet swings onto the rolling car (7.2)
+            cx, cy = cam.p(*car_roof(lt), 1.5)
+            r = ease((lt - CAR_HIT + 0.4) / 0.4)
+            ix, iy = lerp(ix, cx, r), lerp(iy, cy, r)
         g = min(1.0, (lt - 2.55 - J3) / 0.12)
         ix, iy = lerp(nx, ix, g), lerp(ny, iy, g)
         mx, my = (nx + ix) / 2, min(ny, iy) - 70
@@ -1647,14 +1811,16 @@ def picture(t):
         acts = sorted(t2_actors(lt), key=lambda a: -a.d)
         t2_teeth(back, lt)
         for a in acts:
+            if a.prop and a.prop_before:
+                a.prop(back, cam, a)
             draw_actor(back, cam, a)
-            if a.name == 'runner5':                         # the A-board goes in among the street's depths
-                pass
+            if a.prop and not a.prop_before:
+                a.prop(back, cam, a)
         t2_fx(back, lt)
         phone_lights(back, acts, cam)
         blue_wash(back, lt)
     elif tier == 't3':
-        back, front = S.t3(lt)
+        back, front = S.t3(lt, car=False)
         back = reframe3(back)
         front = reframe3(front) if front is not None else None
         cam = T3CAM
@@ -1663,9 +1829,15 @@ def picture(t):
         S.truck(back, cam, truck_x(lt), T3_TRUCK_D, lt, 'drive', 'fr', 12, float(int(lt * 6) % 2))
         S._bikes(back, cam, 2.1, 14, lt)
         t3_debris(back)
-        for a in sorted(t3_actors(lt), key=lambda a: -a.d):
+        rear = S.CAR3[2] + car_move(lt)[1] + 1.0           # round 1: the car is drawn among the people (it rolls)
+        acts = sorted(t3_actors(lt), key=lambda a: -a.d)
+        for a in [a for a in acts if a.d > rear]:
             draw_actor(back, cam, a)
         t3_fx(back, lt)
+        draw_car3(back, lt)
+        car_fx(back, lt)
+        for a in [a for a in acts if a.d <= rear]:
+            draw_actor(back, cam, a)
     else:
         h = heli_state(lt)
         h['under'] = lambda img: t4_under(img, lt)
@@ -1871,6 +2043,10 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
                ('front', range(1, 5), at('t3', 0.7), at('t3', 2.65 + J3)),
                ('rioter', range(1, 9), at('t4', 0.0), at('t4', 10.0)))
               for k in ks for part in ('hand', 'forearm') for sd in 'LR'])
+# round 1 (chat 26, notes "## Exceptions"): who comes on in mid-frame for a reason the audit cannot see
+ALLOWED_POPS = [('runner6', at('t2', 2.95), at('t2', 3.3), 'out of the dark shop, through the gap in the glass'),
+                ('runner7', at('t2', 3.15), at('t2', 3.5), 'out of the dark shop, through the gap in the glass'),
+                ('back*', at('t3', VOLLEY2 - 0.35), at('t3', VOLLEY2), 'step up out of the packed crowd behind')]
 TOUCHES = [('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
            ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
            ('runner*', 'runner*', at('t2', 0), at('t2', T2_FREEZE + .75), 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),

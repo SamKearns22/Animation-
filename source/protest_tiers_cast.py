@@ -631,6 +631,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j = moves.gait(sp, t, 'sprint')
     elif name == 'run_sign':                        # running carrying the sign low (T2 runners)
         j = moves.gait(sp, t, 'run')
+    elif name.startswith('carry') or name == 'push':  # round 1: T2 looters jog with stock; T3 shove the car
+        j = moves.gait(sp, t, 'walk' if name == 'push' else 'run')
     else:
         j = V.standing(sp)
     if name == 'line':                              # in the shield line: shield up in front, baton down by the side
@@ -675,6 +677,16 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j['lean'] = -8
         V.arm_to(j, 'R', (60.0, -330.0, 150.0), 'down')
         V.arm_to(j, 'L', (-60.0, -310.0, 150.0), 'down')
+    elif name == 'carry_front':                     # round 1 (T2): a TV or a tower of boxes held out in front at chest
+        V.arm_to(j, 'R', (j['shR'][0] + 10, 150.0, 260.0), 'down')
+        V.arm_to(j, 'L', (j['shL'][0] - 10, 150.0, 260.0), 'down')
+    elif name == 'carry_up':                        # round 1 (T2): the mannequin held up flat over the head, both hands
+        V.arm_to(j, 'R', (j['shR'][0] - 20, -430.0, 40.0), 'out')
+        V.arm_to(j, 'L', (j['shL'][0] + 20, -430.0, 40.0), 'out')
+    elif name == 'push':                            # round 1 (T3): shoving the car, leaning in, arms out straight
+        j['lean'] = 16
+        V.arm_to(j, 'R', (j['shR'][0] - 20, 60.0, 360.0), 'down')
+        V.arm_to(j, 'L', (j['shL'][0] + 20, 60.0, 360.0), 'down')
     elif name == 'march':                           # walking away from us (T1, T3)
         j = moves.gait(sp, t, 'walk')
     # Held up high: the hand is beside the head or clearly in front of the face, never over or behind it (Sam's

@@ -616,7 +616,7 @@ STONE_P, STONE_S, BRONZE, BRONZE_L = (236, 232, 222), (204, 198, 186), (78, 74, 
 PAVE = (182, 176, 168)
 
 
-def t3(t=0.0, marks=False, truck=None):
+def t3(t=0.0, marks=False, truck=None, car=True):
     cam = CAMS['t3']
     img = Image.new('RGBA', (W, H), T3_SKY[0] + (255,))
     bands(img, 0, cam.VY, T3_SKY, seed=3, amp=14)
@@ -667,7 +667,8 @@ def t3(t=0.0, marks=False, truck=None):
         globals()['truck'](img, cam, truck['x'], TRUCK_D3, t, 'drive', 'fr', truck.get('aim', 18), truck.get('flash', 0))
     _bikes(img, cam, 2.1, 14, t)                            # in the gap between the front line and the police
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-    _car(front, cam, t)
+    if car:                                                 # round 1: the film draws the rolling car itself (car=False)
+        _car(front, cam, t)
     if marks:
         for x in np.arange(-1.7, 1.05, .55):                # the front line, x 200-640 px
             person_mark(img, cam, x, 11.8)
@@ -793,19 +794,37 @@ def _bikes(img, cam, x, d, t):
         IS.ell(img, w1[0], w1[1] - .4 * k, .14 * k, .07 * k, (40, 40, 44), INK, 1.5)    # the saddle
 
 
-def _car(img, cam, t):
+CAR3 = (-3.15, -1.35, 6.0, 10.2)                   # X0, X1, D0, D1 of the T3 car where it stands
+
+
+def car_pt(x, d, move):
+    """A point of the T3 car once shoved: `move` (dx, dd, yaw deg) about its rear centre; yaw > 0 swings the nose right."""
+    X0, X1, D0, _ = CAR3
+    dx, dd, yaw = move
+    xc, dc = (X0 + X1) / 2, D0
+    a = math.radians(yaw)
+    rx, rd = x - xc, d - dc
+    return xc + dx + rx * math.cos(a) + rd * math.sin(a), dc + dd - rx * math.sin(a) + rd * math.cos(a)
+
+
+def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0):
     """The burnt-out estate car, foreground-left (fr3): drawn in the camera (chat 10; the draft was a flat block):
     rear face at d 6 (its right corner at x ~100 px, the rest off frame), the right side running away to d 10.7;
-    charred paint, the glass gone, fire inside showing through the window holes and ~1.2 m over the roof."""
-    X0, X1, D0, D1 = -3.15, -1.35, 6.0, 10.2          # chat 11: 0.15 m left, 0.5 m shorter, fire 1.5 m wide: clear of the monument
-    P = lambda x, d, z: cam.p(x, d, z)                      # noqa: E731
+    charred paint, the glass gone, fire inside showing through the window holes and ~1.2 m over the roof.
+    Round 1 (T3 6.0-8.0): `move` shoves it toward the police (car_pt), `fire` shrinks the flames once the jet hits,
+    `roll` turns the hubs (radians)."""
+    X0, X1, D0, D1 = CAR3                              # chat 11: 0.15 m left, 0.5 m shorter, fire 1.5 m wide: clear of the monument
+    P = lambda x, d, z: cam.p(*car_pt(x, d, move), z)       # noqa: E731
     CH, CH_D, RUST = (74, 66, 64), (54, 48, 48), (128, 76, 52)
     # the fire first, its foot hidden inside the body: it climbs from behind the roofline (we look up at the car)
-    k = cam.ppm(D0 + 1.5)
+    k = cam.ppm(car_pt(X1 - .4, D0 + 1.8, move)[1])
     gx, gy = P(X1 - .4, D0 + 1.8, 1.25)
-    flames(img, gx, gy, 1.3 * k, 1.2 * k, t, seed=11, n=7)
+    if fire > 0.05:
+        flames(img, gx, gy, 1.3 * k * (.6 + .4 * fire), 1.2 * k * fire, t, seed=11, n=7)
+    k0 = cam.ppm(car_pt(X1 - .5, D0 + .2, move)[1])
     gx2, gy2 = P(X1 - .5, D0 + .2, 1.3)
-    flames(img, gx2, gy2, .9 * cam.ppm(D0), .7 * cam.ppm(D0), t + .3, seed=13, n=4)
+    if fire > 0.05:
+        flames(img, gx2, gy2, .9 * k0 * (.6 + .4 * fire), .7 * k0 * fire, t + .3, seed=13, n=4)
     side = [P(X1, D0, .3), P(X1, D1, .3), P(X1, D1, .85), P(X1, D1 - .7, .95), P(X1, D1 - 1.5, 1.45), P(X1, D0 + .3, 1.48), P(X1, D0, .98)]
     shape(img, [side], CH, INK, 3)
     shape(img, [[P(X1, D0 + 1.2, .5), P(X1, D0 + 2.6, .45), P(X1, D0 + 2.4, .85), P(X1, D0 + 1.4, .9)]], RUST, None)
@@ -828,6 +847,9 @@ def _car(img, cam, t):
         hub = [P(X1 + .03, dc + .14 * math.cos(a_), .34 + .14 * math.sin(a_)) for a_ in np.linspace(0, 6.28, 16)]
         shape(img, [tyre], (36, 34, 36), INK, 2.4)
         shape(img, [hub], (110, 104, 100), None)
+        if roll:                                            # round 1: a spoke on the hub shows it turning
+            poly(img, [P(X1 + .04, dc, .34), P(X1 + .04, dc + .13 * math.cos(roll), .34 + .13 * math.sin(roll))],
+                 None, INK, 4, 0)
 
 
 # ================================================================================================= T4
@@ -1392,13 +1414,18 @@ def _turn(pts, x, y, ang):
     return [(x + px * c - py * s, y + px * s + py * c) for px, py in pts]
 
 
-def prop_tv(img, x, y, k, ang=0.0):
-    """A 55-inch flat-screen TV (1.25 x 0.73 m), black bezel, the screen catching a blue streak of light."""
+def prop_tv(img, x, y, k, ang=0.0, lit=False):
+    """A 55-inch flat-screen TV (1.25 x 0.73 m), black bezel, the screen catching a blue streak of light. lit (round
+    1, T2): still showing the shop's demo picture, a bright sky over green hills, so it reads against black clothes."""
     w, h = 1.25 * k, .73 * k
     poly(img, _turn([(-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2)], x, y, ang), (24, 24, 28), INK,
          2.4, 0)
     poly(img, _turn([(-w * .46, -h * .42), (w * .46, -h * .42), (w * .46, h * .42), (-w * .46, h * .42)], x, y, ang),
-         (40, 46, 60), None, 0, 0)
+         (120, 190, 240) if lit else (40, 46, 60), None, 0, 0)
+    if lit:
+        poly(img, _turn([(-w * .46, h * .1), (-w * .1, -h * .05), (w * .2, h * .08), (w * .46, -h * .02),
+                         (w * .46, h * .42), (-w * .46, h * .42)], x, y, ang), (90, 180, 70), None, 0, 0)
+        return
     poly(img, _turn([(-w * .2, -h * .42), (-w * .05, -h * .42), (-w * .3, h * .42), (-w * .45, h * .42)], x, y, ang),
          (90, 110, 150), None, 0, 0)
 

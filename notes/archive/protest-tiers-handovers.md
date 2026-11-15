@@ -259,3 +259,12 @@ Plan (chat 19): end scene ~7 s in 3 shots: A closer side-on, moped skids in, pas
 - **Open rule requests:** as before (archived lists: chats 15-17), plus chat 18's (a)-(d) (in the archived handover). None new in chat 21.
 - **For Claude:** branch `claude/protest-tiers-c21`; `LENS`/`START`/`at(tier, lt)`/`J3` in protest_tiers.py setup; `END`, `end_actors`, `end_picture`, `END_CAM` in the new "end" section (stubs); `T2_WASH/T2_FREEZE`, `T4_FALL/T4_FIRE` constants; people file `story/protest-tiers-people.txt` bottom block (granny: `outfit: dress, dress C` is how the kit takes a dress colour).
 
+
+
+# chat 25 handover (archived by chat 26)
+## Where things stand (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 74 (head life on every voiced line: the acting list), 61 (MAP and the lines a beat touches), 89 (ONE moves critique pack for steps 4-6, after 6 is built).
+- **Done (chat 25, 15 Nov, Opus medium):** step 5, T4: the mopeds rev off right at 1.1 (frees the corner); the melee 3 m nearer, two rioters vault the shields (1.95-2.75), a shield spins up out of the line (2.15-3.15), dust and gas thinned and pushed back; gag b the selfie (back to the falling helicopter from 1.2, peace sign, flash at 2.6, thumbs up, runs off 3.25); gag a the seller wheels his cart in (1.7-2.5), lights and hands over at 3.4/3.8/4.2, three buyers in colour throw at once into the bank's ground floor; gag c the granny walks up 5.7, pays, throws overarm 6.6, the highest arc, the biggest bloom 7.3; seller claps, fists up, everyone jumps from 7.6; fireworks over the headings 7.8-10; round, flickering fire on all of T4 and the end (sets `ROUND_FIRE`), embers throughout. Clips: `review/protest-tiers-t4-selfie-clip.mp4`, `-t4-gags-clip.mp4`.
+- **Known, open (for the moves critique):** the buyers' navy coats still sit dark on the dark crowd; the granny reads small at phone size (d 11); the 7.5 fireball's white glow is a flat disc (older work); NOT built: the toppled water cannon burning at the line's end (beat list, hold) and flags waving (crowd flags are still sprites); the end shots from chat 24 as listed before (riders' heads, visor, shrug size, shot lengths).
+- **Next: chat 26, Opus medium:** step 6 (T2 +2 s second wave, T3 +4 s second volley, truck forward, the burning car into the jet; clip: the car rolling into the jet); the water cannon if it fits; then step 7 (checks, timing, captions, animatic 2) in a Sonnet chat.
+- **Budget guard:** film at ~42.5% of a week (this chat ~1.3%, on amber). Sam's Y covers ~47%; until "
