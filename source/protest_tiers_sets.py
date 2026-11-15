@@ -821,6 +821,8 @@ def t4(t=0.0, marks=False, heli=None):
     if heli:                                                # chat 12: beyond the ministry, so it falls behind it
         helicopter(img, heli['x'], heli['y'], heli.get('s', 17), heli.get('turn', 0), heli.get('roll', 0), t,
                    heli.get('hit', False))
+        if heli.get('under'):                               # chat 13: the film's fire trail and fireball, behind the ministry
+            heli['under'](img)
     _ministry(img, cam, t)
     _bank(img, cam, t)
     # the avenue: dark tarmac in the firelight, a median line, the lane marks
