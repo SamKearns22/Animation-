@@ -9,7 +9,7 @@
 - **Animatic 3 made by splice (chat 31, Sam sent animatic 2 back; no redraw):** the 3 fixed spots (clean 7.5-8.7, 14.3-15.5, 20.2-21.4 s, stamped clips) overlaid on animatic 2 (video only, its sound untouched; animatic time = clean/1.1 + 0.065). No dark frame (816 checked), seams looked at. Saved as `animations/drafts/protest-tiers-animatic.mp4` (rule P16 written; finish.py saves future ones with the clean render). Picture faults still named as in animatic 2 (71 named, not fixed).
 - **Needs Sam:** notes on animatic 3; Y/N to the proposal "a stopped drawing never ships" (chat 31's message).
 - **Read:** job pack "Notes round"; this section; "## Exceptions".
-- **Open rule requests:** the 'a stopped drawing never ships' proposal (film_engine: a stopped drawing refuses the render even with --faults-named; finish.py scans for black frames) awaits Sam's Y. P16 is written.
+- **Open rule requests:** the 'a stopped drawing never ships' proposal (film_engine: a stopped drawing refuses the render even with --faults-named; finish.py scans for black frames) was answered (Sam, Y): written as rule P17, naming not blocking. P16 is written.
 - **For Claude:** branch `claude/protest-tiers-c31` (= main line). finish.py's --film is the module name `protest_tiers`.
 
 ## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals answered (chat 19), planned (chat 20), nothing built yet
