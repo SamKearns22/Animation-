@@ -1,0 +1,43 @@
+5	change	Asks whether sketches-before-check-sheets becomes a rule for every film
+6	change	Asks which crowd-research lessons become rules
+7	change	New rule replacing rule 86
+8	routine	Y/N to run a research job in its own chat
+9	routine	Hook Text wording for this film
+10	routine	Sound choice for this film
+11	routine	Staging choice for Spain scene in this film
+12	routine	Staging choice for Frankfurt scene in this film
+13	routine	Staging choice for Paris scene in this film
+14	change	Pencil sketches before check sheets for every film
+15	change	Picks framing lessons to adopt as rules
+16	routine	Hook Text for this film
+17	routine	Sound for this film
+18	change	Picks framing lessons to adopt as rules
+19	routine	Approval of staging in this film
+20	routine	Hook Text and sound for this film
+21	change	Which lessons become rules for every film
+22	change	Changes how planning costs are accounted so cast keeps its share
+25	routine	Go past this film's budget to fix notes
+26	routine	Voice memo for one line in this film
+27	routine	Voice memo for one line in this film
+28	routine	Voice memo for one line in this film
+29	routine	Approval of a face sheet in this film
+30	change	Adds a test to rule 49
+31	routine	Voice recording needed for this film
+32	routine	Voice memo for one line in this film
+33	routine	Content question about a shot in this film
+34	routine	Content choice about a shot in this film
+35	routine	Choice of next step for this film
+36	routine	Y/N on a still, then animatic follows
+37	change	Adds an automatic check under rule 83
+38	routine	Y/N to hand a fix to a chat in this film
+39	routine	Y/N on timing a single pre-flight run
+42	change	Wording for a rule on how costs are filed
+43	routine	Y to exceed this film's budget
+44	routine	Y to go past a stop for this film's sets
+45	routine	Hook Text and sound decided for this film
+46	routine	Budget stop on this film covered by go-on
+47	routine	Y to exceed one stage's share in this film
+48	routine	Raise this film's budget
+49	routine	Record voice lines for this film
+50	change	List of rule requests for tools, checks and process
+51	change	Proposed new checks S7-S9
