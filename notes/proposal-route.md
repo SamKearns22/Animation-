@@ -5,7 +5,7 @@
 - **Done (15 Nov, chat 533f1450):** problem found and the route designed with Sam (below); Sam's Y to build it and to
   switch it on only if it passes the replay test. The code-tool job (session ...ASHopaiiRWYHwymye6) is PAUSED on Sam's
   word; its `page.py show` commit reached the main line but is wired into no stage, pack or handover. It is redone
-  through the route once the route is on. Protest Tiers waits on Sam's notes for animatic 3 (untouched).
+  through the route once the route is on. Protest Tiers is ON HIATUS (Sam, 15 Nov) until the deeper problems are solved: no film work.
 - **Next: Opus HIGH (building something new): build the route, run the replay test, report to Sam.**
 - **Needs Sam:** nothing until the replay result.
 - **Read:** this file only (plus the code it names).

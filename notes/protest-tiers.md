@@ -1,6 +1,7 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
+- **ON HIATUS (Sam, 15 Nov): no work on this film until the deeper problems are solved** (`notes/proposal-route.md`). Animatic 3 stands as sent; Sam's notes on it come when the film resumes.
 - **Rules that bite next:** 30 (a repeated note: find why the first fix failed), 85 (cost watch), 66 (no old file stands in for a new render).
 - **Done (chat 31, Opus medium, 15 Nov): Sam's note 1 on animatic 2 ("frames missing") fixed.** Why the first fix failed (rule 30): chats 14/25 skipped over mid-throw/mid-swing instead of fixing the arm (a skip sized to one build; blends still folded the elbow), and `--faults-named` let a stopped drawing through as black. Now the throwing/swinging hand swings round clear of the shoulder (`protest_tiers_cast._clear_of_shoulder`), blended arms are re-bent until the guard passes them at the actor's turn (`protest_tiers._resolve_mixed_arms`), skips removed. Tested: the 3 spots draw; all 1,243 throws/blends in t2-t4 at every drawing pass the guard; clips of 7.5-8.7, 14.3-15.5, 20.2-21.4 s: no black frame (darkest mean 73), sent to Sam.
 - **Tool (15 Nov, Sam's Y, film untouched):** a notes round now looks at code in one step per note: `python3 source/page.py protest-tiers show "note words"` (~40 lines; the round pack, rule 61 and `handover.py start` point to it).
