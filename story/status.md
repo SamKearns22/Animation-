@@ -1,3 +1,3 @@
-protest-tiers: ON HIATUS (Sam, 15 Nov) at animatic 3, until the proposal route is built and proven.
-Proposal route: hooked in (chat 6): the guard refuses an unjudged change from the next chat on; prompts locked.
-Next: Sam's numbers on the route's rule wording (notes/proposal-route.md), then the queued jobs go through the route.
+protest-tiers: ON HIATUS (Sam, 15 Nov) at animatic 3; restart asked of Sam (Y/N pending).
+Proposal route: rule written (Sam: 1); guard live from next chat; guard-holes judged (helper B), Sam's pick pending.
+Next: on Sam's pick, Sonnet collects real asks to test the guard, then Opus medium fixes it one piece per yes.
