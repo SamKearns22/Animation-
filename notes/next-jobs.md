@@ -22,9 +22,9 @@
   (fails on chat 16's head); the 4 face kittests and outfit_every_view pass; Andy and Kemi held pixel for pixel.
   Sent Sam `notes/morning/walliams-head-c17.jpg` with chat 15's outfit sheet.
 - **Name test:** not named (Jenrick 12%), line-up 7th of 8; uncalibrated for him (the helper can't name his photo).
-- **Needs Sam:** Y/N on the new Walliams head; the hair's top (his photos' rounded dome, my pick, or Blessed's flat
-  box); the outfit sheet.
-- **Next (on Sam's answer; Opus medium: a round of notes):** his notes on the head; then Walliams into a people file.
+- **Sam approved (15 Nov, relayed by chat 15 of Protests):** the new Walliams head (`walliams-head-c17.jpg`), the hair's
+  top (the pick offered: his photos' rounded dome), and chat 15's outfit sheet. Nothing left for Sam here.
+- **Next (Opus medium):** Walliams into a people file (head, rounded-dome hair, outfit as approved).
 - **Seen, not fixed:** the side view's stubble edge steps behind the jaw; the mouth is the pick's (narrower than
   Blessed's smirk). Kittest people_from_a_description fails on protest-tiers' early import (not this job's).
 - **Sam's words kept:** the far temple of a three-quarter stays bare skin. "Please don't limit yourself on budget." Age

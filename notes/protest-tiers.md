@@ -12,6 +12,7 @@
 - **Open rule requests:** costs filed by kind (chat 7); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn (5c); a sheet runs the hand check per tile; a rough is drawn at true sizes for its camera; a set's shape helper draws in its own box; set boxes measured by leaving each helper out; the rig's run fails its arm guard side on (fix in moves.gait/views); a set's camera is checked for bare ground; NEW: every Glimpse beat is checked at phone size before the moves pack (hunt 1 found 15 of 21 faults were "does not read at phone size").
 - **For Claude:** `Reframe` (RF3/RF4, T3CAM/T4CAM, R3/R4) after T3_TRUCK_D; `Actor.__init__` turns side-on runs to +-115; make_pose 'run' = gait 'run'; t2 `lane()`; moves spec `source/data/protest-tiers-moves/spec.json`; branch `claude/protest-tiers-c14` (also on the main line).
 
+- **Sam, status chat 15 Nov (session ...AUVJ, answered there):** Walliams' new head, the hair's top and the outfit sheet approved (in `notes/next-jobs.md`); "We are done with walking, he's fine"; asked why the old 8-chat limit still exists, and whether the new tools save budget (answered there). Scheduled task to open chat 16 approved if create_session is blocked: "last time the chat did not appear correctly under the scheduled list", so check it appears.
 - Rehearsal clips sent: 15 Nov (chat 14): T1 0.0-2.0, T2 6.8-8.0, T3 10.4-12.0, T4 12.4-14.2, T4 13.6-15.6.
 - Composition sheet sent: 13 Nov (pencil sketches, chat 4).
 
