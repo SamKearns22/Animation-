@@ -23,7 +23,7 @@ PRICE = {  # read, write(1h cache), input, output
     "sonnet": (0.10, 4.0, 3.0, 15.0),
     "haiku":  (0.03, 1.3, 1.0, 5.0),
 }
-WEEK_USD = 171.0
+WEEK_USD = 245.0   # PROVISIONAL (Sam, 15 Nov): 17% on his meter after the 14 Nov 21:00 reset vs ~$34 film + ~$6 other; was 171. Re-check against the meter at the next handover.
 FRESH = 90_000           # tokens a fresh chat starts with (rules, notes, tools)
 CTX_AMBER, CTX_RED = 200_000, 300_000
 CHAT_AMBER, CHAT_RED = 3.0, 5.0   # % of the week spent by this one chat
