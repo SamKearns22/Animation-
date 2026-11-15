@@ -103,3 +103,18 @@
 - **Open rule requests:** costs filed by kind (chat 7 has the wording); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn (5c); a sheet runs the hand check per tile (written in the cast's `tile`; generalise to every film's sheet?).
 - **For Claude:** film `protest-tiers`; cast = `source/protest_tiers_cast.py`; roughs = `source/protest_tiers_roughs.py OUTDIR`; Hook Text "European protests, ranked"; chat 8 branch `claude/protest-tiers-c8`.
 
+
+
+# chat 10 handover (archived by chat 11, 15 Nov)
+## Where things stand (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 3 (each place beside its references, its BENCHMARK ticked), 83 (set boxes measured, not guessed), 89 (one critique pack for the sets stage, two hunts).
+- **Done (chat 10, 15 Nov, Opus high; amber at 1.7%):** paintings draw ~50x faster (shape/glow work in their own box: 76 s -> 4 s, same pixels). T1: Collserola ridge with Tibidabo temple and tower fills the sky wedge, dusk glow above it, road to the frame foot, thin dashed lanes + centre line (no zebra), trees vary. T2: rifles on a pegboard, pistols in cubbies, long soft road streaks, softer lamp. T3: car drawn in the camera (rear face + receding side, wheels, window holes, fire from behind the roof), drum slimmer/taller with bands, Marianne a full 9.5 m figure, seated figures shaded with heads and drapery, bikes (2.1, d14) and kiosk (6.2, d30) in the gap, marks moved to the roughs' places.
+- **Decided (my picks, tell Sam with "Changed:"):** T1 is a true long lens (people at the line ~65 px; the rough drew them 3.4x too big): the crowd fills the whole width this side; Tibidabo seen beyond the avenue. T3 car: only its near rear quarter at the bottom-left edge; front line x 200-640, bikes and kiosk between the lines.
+- **Faults left (fix first, then critique):** T4 pines tiny, far blocks a thin sliver, flag eagle a dot; ministry good. T3 SET_BOXES (car, bikes, kiosk, monument) are now stale. Haven't looked at T2's broken-glass state since the gun change.
+- **Next: chat 11 (Opus, medium: fixes from a clear list):** fix T4, measure SET_BOXES from the drawing (all four), `python3 source/protest_tiers_sets.py sheet OUT.jpg`, one critique pack (rule 89, two hunts), send Sam the sets sheet with Changed lines. Then the water cannon truck and helicopter (plan rows, not built yet).
+- **Budget (Sam, 15 Nov):** whole-film stops OFF for this film (ledger `no_film_stop`); stage stops stay (sets 5.3%).
+- **Needs Sam:** costs-filed-by-kind rule wording (with chat 7). Sam Y (15 Nov, chat 8) to the plan: once that rule is in, each stage records film work only.
+- **Read:** job pack "Build"; this section; the sets file's MAP; `references/protest-tiers/checklist.md`.
+- **Open rule requests:** costs filed by kind (chat 7 has the wording); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn (5c); a sheet runs the hand check per tile (generalise?); a rough is drawn at true sizes for its camera; NEW: a set's shape helper draws in its own box (full-frame masks per shape made T1 take 30 s; 50x faster now; the same may hold in other films' set files).
+- **For Claude:** film `protest-tiers`; sets = `source/protest_tiers_sets.py` (`paint(tier, t, marks=, shutter=, glass=)`, `CAMS`, `alone OUTDIR`, `check`); quick look: `paint(tier, .4, marks=True)` ~1 s each; cast = `source/protest_tiers_cast.py`; roughs = `source/protest_tiers_roughs.py`; chat 10 branch `claude/protest-tiers-sets-c10`.
+

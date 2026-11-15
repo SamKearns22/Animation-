@@ -305,13 +305,23 @@ def set_sheet(pics, specs, out_dir, h=640):
 
 
 # ---- before and after (a notes round) ------------------------------------------------------------------------------
+def _film_module(film_name):
+    """The film's code by its ledger name (protest-tiers -> protest_tiers). A film with no single module (its stages in
+    their own files, e.g. protest_tiers_sets) gets an empty one: its panels must then all be "img" panels."""
+    import types
+    try:
+        return importlib.import_module(film_name.replace('-', '_'))
+    except ModuleNotFoundError:
+        return types.SimpleNamespace(__name__=film_name)
+
+
 def before_dir(film_name, rnd):
     return os.path.join(PACKS, film_name, f'r{rnd}-before')
 
 
 def before(film_name, spec):
     """Save the frames each note touches, before any fix (step 5 of the design)."""
-    film = importlib.import_module(film_name)
+    film = _film_module(film_name)
     d = before_dir(film_name, spec['round'])
     os.makedirs(d, exist_ok=True)
     for n in spec.get('notes', []):
@@ -457,7 +467,7 @@ def agent_line(out, kind=None):
 
 def pack(film_name, spec_path):
     spec = json.load(open(spec_path))
-    film = importlib.import_module(film_name)
+    film = _film_module(film_name)
     specs, notes, rnd = spec['panels'], spec.get('notes', []), spec['round']
     stage = spec.get('stage')
     if not stage:
@@ -850,7 +860,7 @@ def redo(film_name, spec_path, every=False):
     if faults:                                   # a drawing that crashed: nothing after it means anything
         print(f'redo: the drawing failed, nothing checked:' + ''.join(f'\n  {f}' for f in faults))
         return [], faults, []
-    film = importlib.import_module(film_name) if any('t' in p for p in specs) else None
+    film = _film_module(film_name) if any('t' in p for p in specs) else None
     pics = [_panel(film, p) for p in specs]
     base = os.path.join(PACKS, film_name, f'redo-r{rnd}-{stage}')
     os.makedirs(os.path.dirname(base), exist_ok=True)
@@ -881,7 +891,7 @@ def redo(film_name, spec_path, every=False):
 def where(film_name, names=(), film=None, step=None):
     """Every named thing per shot, from the film's draw_order(t), sampled every frame; flags a thing that starts or
     stops mid-shot (unless the film lists it in ENTRANCES {name: why}). Returns (lines, flags)."""
-    film = film or importlib.import_module(film_name)
+    film = film or _film_module(film_name)
     if not hasattr(film, 'draw_order'):
         sys.exit(f'critique where: {film_name} has no draw_order(t) (rule 57)')
     planned = getattr(film, 'ENTRANCES', {})

@@ -315,6 +315,29 @@ def t1(t=0.0, marks=False):
                 bx, by = cam.p(s * 16.5, d)
                 if -60 < bx < W + 60:
                     _falques(img, bx, by, k)
+    # chat 11 (hunt 1: "no wet-after-rain reflections"): each lamp and the container fire laid in the wet road as a
+    # soft broken streak running toward us, about as long as the lamp is tall
+    wet = Image.new('RGBA', img.size, (0, 0, 0, 0))
+
+    def streak(x, y0, L, w, col, seed):                   # one tapering sliver broken into 2-3 lengths
+        r = np.random.default_rng(seed)
+        y = y0
+        while y < y0 + L:
+            l = L * r.uniform(.25, .45)
+            u = (y - y0) / L
+            ww = w * (1 - .6 * u)
+            shape(wet, [[(x - ww, y), (x + ww, y), (x + ww * .5, y + l), (x - ww * .5, y + l)]], col, None)
+            y += l + L * r.uniform(.06, .14)
+    for d in np.arange(1300, 250, -9):
+        if d % 27 < 9:
+            k = cam.ppm(d)
+            for s in (-1, 1):
+                bx, by = cam.p(s * 15.6, d)
+                if -20 < bx < W + 20:
+                    streak(bx, by + 2, 6 * k, max(1.2, .3 * k), (255, 214, 140, 110), int(d) * 3 + s)
+    fx, fy = cam.p(0.6, 165)
+    streak(fx, fy + 6, 5 * cam.ppm(165), .45 * cam.ppm(165), (250, 150, 60, 80), 7)
+    img.alpha_composite(wet)
     # the burning street container just short of the line (d 165), with its fire
     _container(img, cam, 0.6, 165, t)
     if marks:
@@ -455,10 +478,12 @@ def _window(img, X, Y, x0, x1, glass):
                  (170, 166, 156), 1.5, 0)
             if (i * 3 + int(z * 10)) % 5:
                 _pistol(img, X(x + .07), Y(z - .1), k, flip=(i % 2 == 0))
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))         # chat 11: glare and cracks kept inside the glass
     if glass in ('whole', 'starred'):                       # reflections: two pale diagonal bands on the glass
-        for u in (.12, .62):
+        for u in (.22, .7):
             xa = a[0] + (b[0] - a[0]) * u
-            shape(img, [[(xa, a[1]), (xa + 60, a[1]), (xa - 90, b[1]), (xa - 150, b[1])]], (232, 238, 244), None)
+            shape(lay, [[(xa, a[1]), (xa + 60, a[1]), (xa - 90, b[1]), (xa - 150, b[1])]], (232, 238, 244, 255), None)
+    img_, img = img, lay
     if glass == 'starred':
         cx, cy = X(-.2), Y(1.5)
         for i, ang in enumerate(np.linspace(0, 6.28, 11, endpoint=False)):
@@ -468,6 +493,9 @@ def _window(img, X, Y, x0, x1, glass):
         for r in (40, 80):
             poly(img, [(cx + r * math.cos(a_), cy + r * .9 * math.sin(a_)) for a_ in np.linspace(0, 6.28, 12)], None,
                  (90, 100, 110), 1.5, 0)
+    img = img_
+    box = (int(a[0]), int(a[1]), int(b[0]), int(b[1]))
+    img.alpha_composite(lay.crop(box), dest=box[:2])
     if glass == 'gone':                                     # teeth left in the frame
         rng = np.random.default_rng(8)
         for (ya, yb, s) in ((a[1], a[1], 1), (b[1], b[1], -1)):
@@ -555,8 +583,9 @@ def t3(t=0.0, marks=False):
             poly(img, [(ax, cam.p(0, d, z)[1]), (bx, cam.p(0, d, z)[1])], None, (60, 60, 70), 2, 0)
         quad(img, (ax, ay), (bx, ay), (bx, cam.p(0, d, 3.4)[1]), (ax, cam.p(0, d, 3.4)[1]), CREAM_D, INK, 1.5)
     # the black smoke beyond the monument (fires round the square), Marianne pale against it (F3, F5)
-    smoke(img, [(300, 860, 110), (420, 760, 130), (560, 700, 150), (700, 760, 120), (820, 840, 100), (640, 600, 120),
-                (480, 620, 100), (760, 640, 90)], (52, 48, 50), (86, 80, 82))
+    # chat 11 (hunt 2: "Marianne a dark figure in a rock blob"): the smoke rises right of her, her bronze against sky
+    smoke(img, [(640, 880, 100), (720, 780, 120), (850, 700, 150), (980, 770, 120), (1060, 860, 100), (900, 580, 120),
+                (700, 660, 80), (1020, 620, 100)], (52, 48, 50), (86, 80, 82))
     # plane trees in the square (d 95-120), both sides of the monument
     for i, (x, d) in enumerate(((-34, 110), (-24, 100), (-16, 120), (19, 105), (28, 98), (38, 115))):
         bx, by = cam.p(x, d)
@@ -573,7 +602,7 @@ def t3(t=0.0, marks=False):
         poly(img, [cam.p(x, 6), cam.p(x, 300)], None, (160, 154, 146), 1.2, 0)
     for d in (8, 10, 13, 17, 22, 30, 42, 60):
         poly(img, [(0, cam.p(0, d)[1]), (W, cam.p(0, d)[1])], None, (160, 154, 146), 1.2, 0)
-    _kiosk(img, cam, 6.2, 30, t)                            # chat 10: mid-right, behind the bikes (was off frame)
+    _kiosk(img, cam, 7.0, 30, t)                            # chat 10: mid-right, behind the bikes (was off frame)
     _bikes(img, cam, 2.1, 14, t)                            # in the gap between the front line and the police
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     _car(front, cam, t)
@@ -671,7 +700,14 @@ def _kiosk(img, cam, x, d, t):
             (bx + w * .1, by - 3.5 * k), (bx - w * .1, by - 3.5 * k), (bx - w * .36, by - 3.0 * k)]
     poly(img, roof, G, INK, 2)
     poly(img, [(bx, by - 3.5 * k), (bx, by - 3.9 * k)], None, INK, 2, 0)
-    flames(img, bx + .2 * k, by - 2.6 * k, w * 1.1, 1.8 * k, t, seed=9)
+    # chat 11 (hunt 2: "kiosk missing"): its cream poster panels and red PRESSE band make it read as a kiosk
+    for sx in (-1, 1):
+        quad(img, (bx + sx * w * .42, by - .5 * k), (bx + sx * w * .08, by - .5 * k), (bx + sx * w * .08, by - 1.7 * k),
+             (bx + sx * w * .42, by - 1.7 * k), (236, 226, 196), INK, 1.5)
+    quad(img, (bx - w / 2, by - 2.0 * k), (bx + w / 2, by - 2.0 * k), (bx + w / 2, by - 2.4 * k), (bx - w / 2, by - 2.4 * k),
+         (180, 40, 36), INK, 1.5)
+    text(img, (bx, by - 2.2 * k), 'PRESSE', int(.32 * k), (250, 240, 220))
+    flames(img, bx + .35 * k, by - 3.0 * k, w * .8, 1.5 * k, t, seed=9)
 
 
 def _bikes(img, cam, x, d, t):
@@ -699,24 +735,28 @@ def _car(img, cam, t):
     """The burnt-out estate car, foreground-left (fr3): drawn in the camera (chat 10; the draft was a flat block):
     rear face at d 6 (its right corner at x ~100 px, the rest off frame), the right side running away to d 10.7;
     charred paint, the glass gone, fire inside showing through the window holes and ~1.2 m over the roof."""
-    X0, X1, D0, D1 = -3.0, -1.2, 6.0, 10.7
+    X0, X1, D0, D1 = -3.15, -1.35, 6.0, 10.2          # chat 11: 0.15 m left, 0.5 m shorter, fire 1.5 m wide: clear of the monument
     P = lambda x, d, z: cam.p(x, d, z)                      # noqa: E731
     CH, CH_D, RUST = (74, 66, 64), (54, 48, 48), (128, 76, 52)
     # the fire first, its foot hidden inside the body: it climbs from behind the roofline (we look up at the car)
     k = cam.ppm(D0 + 1.5)
     gx, gy = P(X1 - .4, D0 + 1.8, 1.25)
-    flames(img, gx, gy, 1.7 * k, 1.15 * k, t, seed=11, n=7)
+    flames(img, gx, gy, 1.3 * k, 1.2 * k, t, seed=11, n=7)
     gx2, gy2 = P(X1 - .5, D0 + .2, 1.3)
     flames(img, gx2, gy2, .9 * cam.ppm(D0), .7 * cam.ppm(D0), t + .3, seed=13, n=4)
-    side = [P(X1, D0, .3), P(X1, D1, .3), P(X1, D1, .85), P(X1, D1 - .7, .95), P(X1, D1 - 1.5, 1.45), P(X1, D0, 1.5)]
+    side = [P(X1, D0, .3), P(X1, D1, .3), P(X1, D1, .85), P(X1, D1 - .7, .95), P(X1, D1 - 1.5, 1.45), P(X1, D0 + .3, 1.48), P(X1, D0, .98)]
     shape(img, [side], CH, INK, 3)
     shape(img, [[P(X1, D0 + 1.2, .5), P(X1, D0 + 2.6, .45), P(X1, D0 + 2.4, .85), P(X1, D0 + 1.4, .9)]], RUST, None)
-    rear = [P(X0, D0, .3), P(X1, D0, .3), P(X1, D0, 1.5), P(X0, D0, 1.5)]
+    # chat 11 (hunt 1: "an orange van"): the rear is a car's, a body to the belt line and a cabin narrowing to the
+    # roof; the window holes are charred black, the fire glowing only in their lower part
+    rear = [P(X0, D0, .3), P(X1, D0, .3), P(X1, D0, .95), P(X1 - .14, D0, 1.48), P(X0 + .14, D0, 1.48), P(X0, D0, .95)]
     shape(img, [rear], CH_D, INK, 3)
-    # window holes: the fire inside shows through them
     holes = [[P(X1, D0 + .25, 1.0), P(X1, D1 - 1.6, 1.0), P(X1, D1 - 1.6, 1.4), P(X1, D0 + .25, 1.4)],
-             [P(X0 + .15, D0, 1.0), P(X1 - .15, D0, 1.0), P(X1 - .15, D0, 1.42), P(X0 + .15, D0, 1.42)]]
-    shape(img, holes, (250, 150, 50), INK, 2.4)
+             [P(X0 + .22, D0, 1.0), P(X1 - .22, D0, 1.0), P(X1 - .26, D0, 1.4), P(X0 + .26, D0, 1.4)]]
+    m = shape(img, holes, (34, 28, 28), INK, 2.4)
+    glow = [[P(X1, D0 + .25, 1.0), P(X1, D1 - 1.6, 1.0), P(X1, D1 - 1.9, 1.16), P(X1, D0 + 1.2, 1.2), P(X1, D0 + .25, 1.12)],
+            [P(X0 + .22, D0, 1.0), P(X1 - .22, D0, 1.0), P(X1 - .4, D0, 1.15), P(X0 + .5, D0, 1.2)]]
+    shape(img, glow, (250, 150, 50), None, clip=m)
     for xx in (D0 + 1.8, D0 + 3.0):                         # door pillars across the side hole
         shape(img, [[P(X1, xx - .06, 1.0), P(X1, xx + .06, 1.0), P(X1, xx + .06, 1.42), P(X1, xx - .06, 1.42)]], CH, INK, 2)
     shape(img, [[P(X1 - .12, D0, .85), P(X1 - .02, D0, .85), P(X1 - .02, D0, 1.12), P(X1 - .12, D0, 1.12)]],
@@ -744,27 +784,37 @@ def t4(t=0.0, marks=False):
     # the hills at the avenue's end, the far blocks and pines both sides
     shape(img, [[(0, cam.VY + 2), (120, cam.VY - 30), (300, cam.VY - 62), (420, cam.VY - 44), (520, cam.VY - 70),
                  (700, cam.VY - 38), (W, cam.VY - 20), (W, cam.VY + 2)]], (120, 70, 80), INK, 2)
-    for s, x in ((-1, -9.0), (1, 12.0)):
-        for i, d in enumerate(np.arange(420, 120, -32)):
-            if s > 0 and d < 145:
+    # chat 11: the far blocks seen front-on (were side faces only: a thin sliver), 6-11 storeys rising over the
+    # pines (al2); the umbrella pines tall (~17 m) and broad so they make the dark wall down both sides (al2)
+    rng = np.random.default_rng(41)
+    for s, xin in ((-1, -14.0), (1, 15.0)):
+        for i, d in enumerate(np.arange(380, 95, -38)):
+            wd, h = rng.uniform(14, 22), rng.uniform(20, 34)
+            xa = xin + s * rng.uniform(0, 6)
+            xb = xa + s * wd
+            xn = min(xa, xb, key=abs)                          # the edge nearest the avenue
+            col = PASTEL[(i + (s > 0)) % 5]
+            quad(img, cam.p(xn, d + 14), cam.p(xn, d), cam.p(xn, d, h), cam.p(xn, d + 14, h), mix(col, (60, 30, 30), .3),
+                 INK, 1.6)                                    # the side toward the avenue, in shadow
+            quad(img, cam.p(xa, d), cam.p(xb, d), cam.p(xb, d, h), cam.p(xa, d, h), col, INK, 1.6)
+            k = cam.ppm(d)
+            for fl in np.arange(3.2, h - 1.5, 3.0):
+                for xx in np.arange(min(xa, xb) + 1.2, max(xa, xb) - 1.0, 2.6):
+                    q = cam.p(xx, d, fl)
+                    img.paste(mix(col, (40, 26, 30), .55), (int(q[0]), int(q[1] - 1.5 * k), int(q[0] + 1.2 * k) + 1,
+                                                            int(q[1])))
+    for s, x in ((-1, -8.0), (1, 9.0)):                      # umbrella pines down both sides
+        for j, d in enumerate(np.arange(400, 30, -12)):
+            if (s > 0 and d < 130) or (s < 0 and d < 76):
                 continue
             k = cam.ppm(d)
-            a, b = cam.p(x, d), cam.p(x, d + 30)
-            h = 18 + 9 * ((i * 3 + s) % 3)
-            quad(img, a, b, cam.p(x, d + 30, h), cam.p(x, d, h), PASTEL[(i + (s > 0)) % 5], INK, 1.6)
-            for fl in np.arange(3.5, h - 2, 3.0):
-                poly(img, [cam.p(x, d + 2, fl), cam.p(x, d + 28, fl)], None, (100, 70, 70), 1.2, 0)
-    for s, x in ((-1, -7.0), (1, 9.5)):                      # umbrella pines down both sides
-        for d in np.arange(400, 70, -14):
-            if s > 0 and d < 150:
-                continue
-            k = cam.ppm(d)
+            h = 15 + 3 * ((j * 7 + s) % 3)
             bx, by = cam.p(x, d)
-            tx, ty = cam.p(x, d, 9)
-            poly(img, [(bx - .2 * k, by), (bx + .2 * k, by), (tx + .15 * k, ty), (tx - .15 * k, ty)], (60, 40, 36),
+            tx, ty = cam.p(x, d, h - 3)
+            poly(img, [(bx - .25 * k, by), (bx + .25 * k, by), (tx + .18 * k, ty), (tx - .18 * k, ty)], (60, 40, 36),
                  INK, 1.2, 0)
-            m = shape(img, [blob(tx, ty - 1.2 * k, 4.2 * k, int(d) + s * 7, squash=.45)], PINE, INK, 1.8)
-            shape(img, [blob(tx - 1 * k, ty - 1.9 * k, 2.4 * k, int(d) + 3, squash=.4)], PINE_L, None, clip=m)
+            m = shape(img, [blob(tx - s * 1.2 * k, ty - 1.5 * k, 6.5 * k, int(d) + s * 7, squash=.42)], PINE, INK, 1.8)
+            shape(img, [blob(tx - s * 2.2 * k, ty - 2.6 * k, 4.0 * k, int(d) + 3, squash=.38)], PINE_L, None, clip=m)
     _ministry(img, cam, t)
     _bank(img, cam, t)
     # the avenue: dark tarmac in the firelight, a median line, the lane marks
@@ -786,15 +836,15 @@ def t4(t=0.0, marks=False):
 def _ministry(img, cam, t):
     """The Education Ministry (al1): a 3-storey ochre corner block with grey trim; the rounded corner bay toward us
     with stacked grey balconies; the flag on the roof over the corner; burning on the roof."""
-    d, xc = 80, 7.0
+    d, xc = 64, 6.0                                         # chat 11: nearer (was d 80): the brief's centrepiece
     k = cam.ppm(d)
     Z = lambda z: cam.p(0, d, z)[1]                         # noqa: E731
     cx = cam.p(xc, d)[0]
     # the wing along the avenue, going away (x = 7, d 80 -> 125)
-    a, b = cam.p(xc, 125), cam.p(xc, d)
-    quad(img, a, b, cam.p(xc, d, 15), cam.p(xc, 125, 15), OCHRE_D)
+    a, b = cam.p(xc, 110), cam.p(xc, d)
+    quad(img, a, b, cam.p(xc, d, 15), cam.p(xc, 110, 15), OCHRE_D)
     for z in (4.2, 8.0, 11.8):
-        for dd in np.arange(88, 122, 6):
+        for dd in np.arange(d + 6, 106, 6):
             p0, p1 = cam.p(xc, dd, z), cam.p(xc, dd + 2.2, z + 2.4)
             quad(img, p0, (p1[0], p0[1]), p1, (p0[0], p1[1]), (70, 52, 46), None, amt=0)
     # the frontal wing to the right (d 80, x 9.5 -> 30)
@@ -821,13 +871,26 @@ def _ministry(img, cam, t):
             quad(img, (cx + x * k, Z(z + 2.8)), (cx + (x + 1.0) * k, Z(z + 2.8)), (cx + (x + 1.0) * k, Z(z + .2)),
                  (cx + x * k, Z(z + .2)), (66, 50, 48), None, amt=0)
     IS.ell(img, cx, Z(16), r * 1.12, .4 * k, TRIM, INK, 2)
-    poly(img, [(cx, Z(16)), (cx, Z(21))], None, INK, 2.2, 0)
-    fl = [(cx, Z(21)), (cx + 2.4 * k, Z(20.7)), (cx + 2.5 * k, Z(19.4)), (cx, Z(19.3))]
-    poly(img, fl, (200, 30, 36), INK, 1.8)
-    IS.ell(img, cx + 1.25 * k, Z(20.1), .35 * k, .35 * k, (20, 16, 16), None, 0)   # the eagle, small at this size
+    # the flag (chat 11: bigger, 3.6 x 2.4 m, and the black double-headed eagle drawn, not a dot)
+    poly(img, [(cx, Z(16)), (cx, Z(23.5))], None, INK, 2.6, 0)
+    fl = [(cx, Z(23.4)), (cx + 3.6 * k, Z(23.0)), (cx + 3.7 * k, Z(20.6)), (cx, Z(21.0))]
+    poly(img, fl, (206, 28, 34), INK, 2)
+    ex, ey, e = cx + 1.85 * k, Z(22.2), .5 * k
+    eagle = [(ex - .35 * e, ey + 1.5 * e), (ex - .5 * e, ey + .5 * e),                      # tail, left hip
+             (ex - 1.2 * e, ey + .7 * e), (ex - 2.2 * e, ey + .2 * e), (ex - 1.6 * e, ey + .05 * e),   # left wing
+             (ex - 2.3 * e, ey - .4 * e), (ex - 1.6 * e, ey - .45 * e), (ex - 2.1 * e, ey - 1.0 * e),
+             (ex - 1.2 * e, ey - .8 * e), (ex - .5 * e, ey - .3 * e),
+             (ex - .7 * e, ey - 1.0 * e), (ex - 1.1 * e, ey - 1.05 * e), (ex - .7 * e, ey - 1.35 * e),  # left head
+             (ex - .25 * e, ey - .9 * e), (ex, ey - .5 * e), (ex + .25 * e, ey - .9 * e),
+             (ex + .7 * e, ey - 1.35 * e), (ex + 1.1 * e, ey - 1.05 * e), (ex + .7 * e, ey - 1.0 * e),   # right head
+             (ex + .5 * e, ey - .3 * e), (ex + 1.2 * e, ey - .8 * e), (ex + 2.1 * e, ey - 1.0 * e),
+             (ex + 1.6 * e, ey - .45 * e), (ex + 2.3 * e, ey - .4 * e), (ex + 1.6 * e, ey + .05 * e),
+             (ex + 2.2 * e, ey + .2 * e), (ex + 1.2 * e, ey + .7 * e), (ex + .5 * e, ey + .5 * e),
+             (ex + .35 * e, ey + 1.5 * e), (ex, ey + 1.1 * e)]
+    poly(img, eagle, (22, 16, 16), None, 0, 0)
     # the roof alight (the brief's "blazing Education Ministry")
     flames(img, cam.p(xc + 9, d)[0], Z(15.2), 13 * k, 8 * k, t, seed=31, n=7)
-    flames(img, cam.p(xc + .8, 110)[0], cam.p(0, 110, 15)[1], 6 * cam.ppm(110), 5 * cam.ppm(110), t + .4, seed=32)
+    flames(img, cx - .4 * r, Z(16.1), 3.2 * k, 3.4 * k, t + .4, seed=32)    # chat 11: on the bay (the wing is hidden)
 
 
 def _bank(img, cam, t):
@@ -849,21 +912,24 @@ def _bank(img, cam, t):
 
 
 # ------------------------------------------------------------------------------------------------- rule 83, rule 3
-SET_BOXES = {
-    't1': [('container', (452, 846, 572, 912)), ('domed corner', (770, 190, 860, 540))],
-    't2': [('doorway', (0, 793, 140, 1173)), ('gun store window', (180, 760, 780, 1100)),
-           ('shutter', (150, 650, 810, 760)), ('WAFFEN band', (130, 540, 830, 650)), ('closed shop', (821, 670, 1080, 1173)),
-           ('street lamp', (0, 200, 260, 1240))],
-    't3': [('monument', (210, 500, 750, 1155)), ('kiosk', (720, 1050, 830, 1200)), ('bikes', (580, 1100, 900, 1210)),
-           ('car', (0, 920, 260, 1390))],
-    't4': [('ministry', (540, 520, 1080, 1032)), ('bank', (0, 520, 300, 1120))],
+SET_BOXES = {                       # chat 11: all measured from the drawing (each helper left out, the difference)
+    't1': [('container', (446, 719, 578, 902)), ('domed corner', (822, 60, 945, 559))],
+    't2': [('doorway', (0, 783, 113, 1173)), ('gun store window', (174, 754, 786, 1089)),
+           ('shutter', (140, 647, 819, 1105)), ('WAFFEN band', (127, 535, 833, 641)), ('closed shop', (847, 663, 1080, 1173)),
+           ('street lamp', (0, 94, 175, 1231))],
+    't3': [('monument', (234, 453, 688, 1130)), ('kiosk', (848, 901, 1007, 1182)), ('bikes', (533, 1018, 993, 1280)),
+           ('car', (0, 757, 228, 1360))],
+    't4': [('ministry', (565, 313, 1080, 961)), ('bank', (0, 247, 231, 961))],
 }
 SET_MEANT = {
     't2': [('street lamp', 'doorway', 'the lamp stands on the kerb 1.8 m in front of the doorway'),
            ('shutter', 'gun store window', 'the shutter is half down over the window (the brief)'),
            ('shutter', 'WAFFEN band', 'the shutter box sits right under the sign band'),
-           ('street lamp', 'WAFFEN band', 'the lamp arm reaches toward the band, in front of it')],
-    't3': [('kiosk', 'bikes', 'the bike heap burns in front of the kiosk: two fires the brief names together')],
+           ('street lamp', 'WAFFEN band', 'the lamp arm reaches toward the band, in front of it'),
+           ('street lamp', 'gun store window', "the lamp's glow (only) touches the window's left edge"),
+           ('street lamp', 'shutter', "the lamp's glow falls on the shutter's left edge, the lamp in front at the kerb")],
+    't3': [('kiosk', 'bikes', 'the bike heap burns in front of the kiosk: two fires the brief names together'),
+           ('monument', 'bikes', 'the bikes burn in the gap 66 m in front of the base (chat 10 decision; fr4)')],
 }
 
 BENCHMARK = {

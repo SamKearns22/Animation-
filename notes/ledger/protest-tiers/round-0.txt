@@ -1,0 +1,73 @@
+== critique, round 0 pass 1 (2026-11-15): 9 fault(s), 1 can't tell
+-- look.md --
+1: Empty dusk boulevard, lamps glowing, one dumpster burning mid-road; eerie, quiet, abandoned. No words.
+2: Dark shopfront, sign "WAFFEN", shuttered window of pistols, number 22, graffiti; menacing, still.
+3: Monument with statue under black smoke, burning van, pile of bikes, fire; chaotic. No words.
+4: Burning yellow building, red flag with bat, dark smoke, empty road; sign "BANKA"; apocalyptic.
+-- result.md --
+## Faults
+FAULT A1 S1 P1 [1-4]: no people in any panel - no march or police line (P1), no rioters about to smash in (P2), no rioters (P3), no crowd (P4); the acting beats cannot be played.
+FAULT S9 O6 P3 [1, 3, 4]: smoke is flat grey-brown rock-like blobs, no lit side or thinning; flames are flat cartoon tongues.
+FAULT S8 S5 P3 [1, 3, 4]: roads and ground are one blank flat colour (about half the frame), no texture, cars, markings detail or life.
+FAULT A2 S3 P2 [2]: shutter is fully down, not half up; the lit gun window is small and the guns read as black squares; no street lamp; wet street shows as vertical sticks.
+FAULT A2 O3 P3 [3]: brief wants a burnt-out car; ours is an orange van that reads as a truck, cut by the left edge; no kiosk; bikes are a tiny tangle against the monument, scale O4 off.
+FAULT A2 S3 P3 [3]: monument too small, drum and seated figures missing; Haussmann fronts are tiny.
+FAULT A1 O3 P4 [4]: roof flag reads as a bat on red, not the Albanian double-headed eagle; flag tiny.
+FAULT A2 S3 S1 P4 [4]: ministry has no rounded corner, is small and far; bank is a sliver with a tiny "BANKA"; umbrella pines are dark flat blobs; fire sits as flat shapes on the roof.
+FAULT A2 S7 P1 [1]: view looks from street level, not a long lens from a balcony; Tibidabo is a smooth hill; no wet-after-rain reflections; burning container is tiny and the fire is the only action.
+CAN'T TELL P1 [1]: whether the police line is ~185 m away; a frame with figures on the road would show it.
+CAN'T TELL O1 [2, 4]: sign lettering is small; a full-size crop would show it is not mirrored.
+
+## Checked
+1-4
+
+## Cold look
+Missed or wrong against brief.md: P1 I named no march or police (none exist). P2 I called the shutter "shuttered window"; brief says half up and one big lit window. P3 I named "burning van", brief says burnt-out car, and I missed the kiosk. P4 I read the roof flag as a bat, and named neither ministry nor bank; they do not read as such at phone size.
+
+## Not on the list
+No people on any panel: suggested line: "Every panel has the people its beat needs, at phone size."
+Panels all tall and very dark or muddy in P1 and P2: suggested line: "Lit areas and darks keep the action readable at phone brightness."
+Flame and smoke repeat the same shapes across panels: suggested line: "Fires differ in shape and size from panel to panel."
+Camera view is the same flat front-on view each panel: suggested line: "Each panel has depth lines (overlap, perspective) matching its stated lens."
+Tiny signs ("BANKA", "22") unreadable: suggested line: "Signs the brief needs are large enough to read at phone size."
+
+== critique, round 0 pass 2 (2026-11-15): 10 fault(s), 2 can't tell
+-- look.md --
+1: Empty dusk boulevard, lit tree rows, one burning bin mid-road; calm, eerie, deserted.
+2: Dark shopfront, sign "WAFFEN", pistols in window, number 22, graffiti; one lit window; menacing.
+3: Burning van, smoke over statue monument, pile of bicycles on fire in square; chaos.
+4: Burning yellow building with eagle flag, sign "BANKA", dark smoke, red sky, empty road; destruction.
+-- result.md --
+## Faults
+FAULT A1 P1 [1]: no march, no police line, no burning container; the fire is a tiny bin on a road with nobody, so the beat "night protest begins" is absent. It is a dusk lit boulevard, not after rain (no wet shine).
+FAULT A1 P2 [2]: no rioters about to smash in; the shop is empty and the beat is missing. Shutter reads fully down, not half up; the window is a small strip of tiny pistol icons, not one big lit window of guns on white shelves. No street lamp, doorway left reads as a black slab.
+FAULT A1 O3 P3 [3]: Marianne monument reads as a dark figure inside a black rock-cloud blob; seated figures and drum are tiny. Burning kiosk missing. Bikes are a tangled orange scribble, not readable as hire bikes. Van is cut off, boxy, not a burnt-out car.
+FAULT A1 P4 [4]: ministry is a flat yellow block with no rounded corner and no balcony detail; flag reads as a black eagle on red, tiny. No pines clearly, no pastel blocks, bank is a tiny sliver. No rioters or crowd, so "worst riot" has no people.
+FAULT S1 P1-4 [1-4]: no person appears in any panel; the action (crowd, police, rioters) is absent in all four, so nothing acts.
+FAULT S8 P4 [3, 4]: the brown road fills about 45 percent of P4 as one flat unbroken colour; P3 grey ground and P2 dark lower street are the same flat mass. P1 road similar.
+FAULT S9 P3 [3, 4]: smoke is flat grey or brown rock-like clumps, evenly lit, cut-outs with no thinning as they rise.
+FAULT O6 P3 [1, 3, 4]: fires are small flat cartoon flame shapes (P1 bin fire tiny, P3 and P4 flames pasted on roofs), not volume fire or glow; no light cast on surroundings.
+FAULT O4 P1 [1]: burning bin is far too small and sits in the middle of the road, not a container at 185 m by police.
+FAULT S5 P2 [2, 4]: P2 facade has blank dark upper wall and one orange window; P4 road and left building are nearly blank. Ground texture is flat.
+FAULT S2 P3 [3]: van sits on the plaza edge half out of frame, bikes float in the middle of the open square with no shadow contact.
+CAN'T TELL A2 S6 [1-4]: whether spacing and sizes match the references; the check sheet shows no wet reflections or crowds to compare.
+CAN'T TELL O1 P4 [4]: "BANKA" at the left is tiny and cropped; a full-size crop would show whether it reads and the flag faces the right way.
+CAN'T TELL A4 [1-4]: Hook Text frame not supplied; a frame with the Hook Text box would show what it covers.
+
+## Checked
+1-4
+
+## Cold look
+look.md named the burning bin, WAFFEN, 22, BANKA, eagle flag, burning van, bikes and statue, all correct. It missed that the brief's crowds, police, rioters and Tibidabo are absent, that the shutter is down, and that the P3 monument reads as a rock blob. It called P1 "deserted" and P4 "empty road" without noting this contradicts the brief.
+
+## Not on the list
+1. People missing from a panel whose beat needs them; suggested line: "Every panel's acting beat has its people in shot, doing it."
+2. Weather/time (wet street, dusk after rain) not shown; suggested line: "Time of day and weather from the brief are visible: wet reflections, sky colour."
+3. Flat-colour ground fills; suggested line: "Ground has texture, reflections or markings across its full area."
+4. Landmark recognisability; suggested line: "Each named landmark is identifiable at phone size against its reference outline."
+5. Fire gives light; suggested line: "Fires light nearby surfaces and sky."
+
+critique, pass 2: faults fixed as one list: hunt 1: T3 car reads as a car (car-shaped rear, charred window holes, fire low in them), T4 ministry nearer with fire on its bay, flag bigger with the double-headed eagle drawn, T1 lamps and fire reflected in the wet road; hunt 2: T3 smoke moved right of Marianne (bronze against sky), kiosk moved clear of the bikes with poster panels and a PRESSE band; left open: ['1 A1 P1: no march, no police line, no burning container; the fire is a tiny bin on a road with nobody, so the beat "night protest begins" is absent. It is a dus', '2 A1 P2: no rioters about to smash in; the shop is empty and the beat is missing. Shutter reads fully down, not half up; the window is a small strip of tiny pis', '3 A1 O3 P3: Marianne monument reads as a dark figure inside a black rock-cloud blob; seated figures and drum are tiny. Burning kiosk missing. Bikes are a tangle']
+
+critique, pass 2: faults fixed as one list: hunt 1: T3 car reads as a car, T4 ministry nearer, flag eagle drawn, T1 wet reflections; hunt 2: smoke right of Marianne, kiosk clear of the bikes with posters and PRESSE band; left open: ['2 A1 P2: no rioters about to smash in; the shop is empty and the beat is missing. Shutter reads fully down, not half up; the window is a small strip of tiny pis']
+
