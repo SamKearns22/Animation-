@@ -166,12 +166,44 @@ def flames(img, x, y, w, h, t=0.0, seed=0, n=5, line=FIRE_L):
                         (cx + sw, y - hh), (cx + ww * .45 + sw * .5, y - hh * .62), (cx + ww * .95, y - hh * .3),
                         (cx + ww, y)])
         return out
+    if ROUND_FIRE:                                  # round 1 (Sam R5, T4): round, soft tongues, no spikes
+        tongues = lambda k: _round_tongues(x, y, w, h, t, off, hs, ph, n, k)   # noqa: E731
     shape(img, tongues(1.0), FIRE_R, line, max(2, w / 70))
     shape(img, tongues(.7), FIRE_O, None)
     shape(img, tongues(.4), FIRE_Y, None)
 
 
-def smoke(img, lumps, tone, lit, line=INK, lw=3, fade=True):
+ROUND_FIRE = False                                  # set by the film while T4 (and the end shots on it) is drawn
+
+
+def _chaikin(pts, it=3):
+    for _ in range(it):
+        out = []
+        for i in range(len(pts)):
+            (ax, ay), (bx, by) = pts[i], pts[(i + 1) % len(pts)]
+            out += [(.75 * ax + .25 * bx, .75 * ay + .25 * by), (.25 * ax + .75 * bx, .25 * ay + .75 * by)]
+        pts = out
+    return pts
+
+
+def _round_tongues(x, y, w, h, t, off, hs, ph, n, k):
+    """Teardrop tongues: a round belly sat on the base, a soft rounded tip that sways and breathes; the belly
+    bobs a little on its own beat, so the fire flickers without a single point."""
+    out = []
+    for i in range(n):
+        cx = x + off[i] * w
+        hh = h * hs[i] * k * (.82 + .18 * math.sin(6.28 * 2.7 * t + ph[i, 0]))
+        rr = w / n * .62 * (.6 + .4 * k) * (1 + .08 * math.sin(6.28 * 3.1 * t + ph[i, 1]))
+        sw = w * .09 * math.sin(6.28 * 1.7 * t + ph[i, 1])
+        by = y - rr * .55
+        pts = [(cx + sw, y - hh), (cx + rr * .55 + sw * .6, y - hh * .62), (cx + rr, by - rr * .2)]
+        pts += [(cx + rr * math.cos(a), by + rr * .55 * math.sin(a)) for a in np.linspace(0.3, math.pi - 0.3, 5)]
+        pts += [(cx - rr, by - rr * .2), (cx - rr * .55 + sw * .6, y - hh * .62)]
+        out.append(_chaikin(pts))
+    return out
+
+
+def smoke(img, lumps, tone, lit, line=INK, lw=3, fade=True, under=None):
     """Smoke as one lumpy shape (lumps = [(x, y, r)]): a shadowed side down and right, its lit side up and left, all kept inside the outline; with fade, it thins toward the top (chat 15, moves hunt 1: "flat cut-out
     blobs, no lit side, no thinning as they rise")."""
     if not lumps:
@@ -183,6 +215,9 @@ def smoke(img, lumps, tone, lit, line=INK, lw=3, fade=True):
           clip=m)
     shape(lay, [blob(x - r * .25, y - r * .28, r * .55, 50 + i) for i, (x, y, r) in enumerate(lumps)], lit, None,
           clip=m)
+    if under:                                       # round 1 (R5): dark at the base, lit orange from below
+        shape(lay, [blob(x + r * .05, y + r * .42, r * .58, 120 + i) for i, (x, y, r) in enumerate(lumps)], under,
+              None, clip=m)
     if fade:
         top = max(0, int(min(y - r for x, y, r in lumps)))
         bot = min(img.size[1], int(max(y + r for x, y, r in lumps)) + 1)

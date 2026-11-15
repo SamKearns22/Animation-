@@ -649,7 +649,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'R', (sw + 60, 120.0, 80.0), 'out')
         j['props'] = [baton(j, sp, 'R', (0.3, -0.4, 0.86)), shield(j, sp, centre=(-50.0, 300.0, 175.0), tilt=-14,
                                                                      turn=18)]
-    elif name == 'throw':                           # u 0: wound up (arm back high, weight back); 1: thrown through
+    elif name in ('throw', 'molotov'):              # u 0: wound up (arm back high, weight back); 1: thrown through
         e = moves.ease(u)
         j['lean'] = -6 + 18 * e
         j['footL'] = (-60, V.ANKLE_Y, 140.0)
@@ -659,7 +659,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'R', tuple(back + (through - back) * e), 'out' if e < 0.5 else 'down')
         V.arm_to(j, 'L', (-sw + 40 - 140 * e, 120.0 + 200 * e, 260.0 - 160 * e), 'down')
         if e < 0.6:                                 # the stone in the throwing hand until it leaves
-            grips.held(j, 'R', sp, stone(j, 'R'))
+            grips.held(j, 'R', sp, stone(j, 'R') if name == 'throw' else bottle(j, 'R'))
     elif name == 'swing':                           # the road sign: wound up over the right shoulder -> swung down
         e = moves.ease(u)
         j['lean'] = -4 + 16 * e
@@ -699,6 +699,9 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'L', (j['shL'][0] - 60, -250.0 + 120 * e, 90.0), 'out')
         j['props'] = j.get('props', []) + [peace(j, 'L', thumb=e > 0.5)]
         j['head_roll'] = 10 * (1 - e)               # the selfie head tilt
+    elif name == 'cheer':                           # T4 (round 1): a fist punched up high beside the head
+        V.arm_to(j, 'R', (j['shR'][0] + 30, -440.0 + 60 * u, 60.0), 'out')
+        V.arm_to(j, 'L', (j['shL'][0] - 40, -300.0 + 200 * u, 80.0), 'out')
     elif name == 'flag':                            # the pole held up beside him, the fist level with his brow
         V.arm_to(j, 'R', (j['shR'][0] + 40, -230.0, 70.0), 'out')
         j['props'] = [flag(j, force or 'catalan')]
