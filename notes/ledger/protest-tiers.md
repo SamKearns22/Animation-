@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 14.97% of a week; spent 34.19% (+19.22); 20 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 14.97% of a week; spent 34.21% (+19.24); 20 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 34.19% of the 9.57% planned so far; at this rate the film lands at 50.2%.**
+**Forecast: Spent 34.21% of the 10.97% planned so far; at this rate the film lands at 46.7%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -13,7 +13,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | cast | 2.09 | 2026-11-15 | 16.04 |
 | sets | 3.7 | 2026-11-15 | 20.78 |
 | moves | 3.07 | 2026-11-15 | 32.08 |
-| animatic1 | 1.4 |  |  |
+| animatic1 | 1.4 | 2026-11-15 | 34.21 |
 | round1 | 1.88 |  |  |
 | round2 | 1.88 |  |  |
 | final | 0.24 |  |  |
@@ -41,7 +41,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-15 | bee8b9f7 | est | sonnet | auto |  | 0.36 |  | 0 | 0 |
 | 2026-11-15 | 23d742b8 | est | opus | auto |  | 1.82 |  | 0 | 0 |
 | 2026-11-15 | 00175058 | est | opus | auto |  | 1.23 |  | 0 | 0 |
-| 2026-11-15 | 30fc5af7 | est | opus | auto |  | 0.88 |  | 0 | 0 |
+| 2026-11-15 | 30fc5af7 | est | opus | auto |  | 0.9 |  | 0 | 0 |
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
