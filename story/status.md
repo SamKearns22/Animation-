@@ -1,3 +1,3 @@
-Protest Tiers: pre-flight passes with every fault named (chat 18 fixed the crash and the too-fast runs).
-Next: chat 19 (Sonnet) renders animatic 1 and sends it to Sam.
-Needs Sam: nothing until animatic 1 arrives.
+protest-tiers: animatic 1 sent; Sam's round 1 notes answered (end scene, tier lengths 4/6/8/10, intensity line, Albania showstopper).
+Next: chat 20, Opus high, plans round 1.
+Budget: 34.2% of a week spent; Sam Y to ~43-47%.
