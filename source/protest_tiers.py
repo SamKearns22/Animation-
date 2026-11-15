@@ -606,7 +606,7 @@ class Reframe:
 
 # chat 14: the sets' low cameras left the bottom 45% (T3) and 25% (T4) of the frame bare ground
 RF3 = Reframe(S.CAMS['t3'], 1.2, 540, 68.0)
-RF4 = Reframe(S.CAMS['t4'], 1.15, 250, 80.0)
+RF4 = Reframe(S.CAMS['t4'], 1.15, 0, 80.0)   # chat 15: about x 0 (was 250), so BANKA and the mopeds stay in frame
 T3K, T3CAM, R3, reframe3 = RF3.k, RF3.cam, RF3.R, RF3.image
 T4CAM, R4 = RF4.cam, RF4.R
 # chat 15 (moves hunt 1: the runners and the swing too small, the near crowd hid them): T2 nearer too; the near crowd
@@ -759,18 +759,19 @@ def t3_fx(img, lt):
 def heli_state(lt):
     x, y = S.HELI_HOME[0], S.HELI_HOME[1]
     if lt < 1.0:
-        return dict(x=x + 6 * math.sin(lt * 2), y=y + 4 * math.sin(lt * 3), s=S.HELI_HOME[2], turn=0, roll=-4, hit=False)
+        return dict(x=x + 6 * math.sin(lt * 2), y=y + 4 * math.sin(lt * 3), s=HELI_S, turn=0, roll=-4, hit=False)
     u = min(1.0, (lt - 1.0) / 1.0)
     turn = (int(u * 14) * 45) % 360                          # three drawn turns and their mirrors, stepped in 45s
-    return dict(x=x - 60 * u + 30 * math.sin(u * 9), y=y + 520 * u * u + 40 * u, s=S.HELI_HOME[2] * (1 - .2 * u),
+    return dict(x=x - 60 * u + 30 * math.sin(u * 9), y=y + 520 * u * u + 40 * u, s=HELI_S * (1 - .2 * u),
                 turn=turn, roll=-4 + 40 * u, hit=True)
 
 
 MOPED_D = 10.5
+HELI_S = S.HELI_HOME[2] * 1.6     # chat 15 (hunt 1: "helicopter tiny and grey"): drawn larger than its depth
 
 
 def moped_pos(lt, k):
-    x = lerp(-4.2 - k * 1.2, -0.9 - k * 1.6, ease(min(1.0, lt / 0.6)))
+    x = lerp(-4.2 - k * 1.2, -0.7 - k * 1.1, ease(min(1.0, lt / 0.6)))   # chat 15: rear one in frame
     return x, MOPED_D + 2.6 * k
 
 
@@ -815,17 +816,16 @@ def t4_under(img, lt):
             h = heli_state(1.0 + n * 0.1)
             r = 20 + 30 * min(a, 1.2)
             S.smoke(img, [(h['x'] + 10, h['y'] - 10 - 30 * a, r)], (60, 40, 40), (96, 70, 66), lw=2)
-    if lt >= 3.0:
+    if lt >= 3.0:                                          # chat 15: a layered fireball rising (was a flat disc)
         g = ease((lt - 3.0) / 0.7)
-        cx, cy = 820, lerp(700, 420, g)
-        S.glow_disc(img, cx, cy, 340 * g + 60, (255, 200, 120), amt=.35)
-        S.smoke(img, [(cx + dx * g, cy + dy * g, r * (0.4 + 0.6 * g)) for dx, dy, r in
-                      ((0, -80, 120), (-120, -40, 90), (120, -50, 100), (-60, -170, 90), (70, -180, 90))],
-                (70, 40, 36), (110, 60, 46), lw=2.5)
-        IS.poly(img, [(cx + 230 * g * math.cos(a), cy + 30 + 170 * g * math.sin(a)) for a in np.linspace(0, 6.28, 24)],
-                S.FIRE_O, S.FIRE_L, 3, 4)
-        IS.poly(img, [(cx + 140 * g * math.cos(a), cy + 40 + 100 * g * math.sin(a)) for a in np.linspace(0, 6.28, 20)],
-                S.FIRE_Y, None, 0, 4)
+        cx, cy = 820, lerp(640, 400, g)                    # its cap stays below the reframe's top strip
+        S.glow_disc(img, cx, cy, 260 * g + 60, (255, 190, 110), amt=.28)
+        S.smoke(img, [(cx + dx * g, cy - 40 * g + dy * g, r * (0.4 + 0.6 * g)) for dx, dy, r in
+                      ((0, -110, 120), (-130, -60, 90), (130, -70, 100), (-60, -200, 90), (80, -210, 90))],
+                (70, 40, 36), (150, 84, 56), lw=2.5)
+        S.flames(img, cx, cy + 140 * g + 60, 360 * (0.5 + 0.5 * g), 420 * (0.4 + 0.6 * g), lt, seed=95, n=7)
+        S.flames(img, cx, cy + 80 * g + 40, 220 * (0.5 + 0.5 * g), 260 * (0.4 + 0.6 * g), lt + .3, seed=97, n=5)
+        S.glow_disc(img, cx, cy + 40, 90 * g + 20, (255, 250, 200), amt=.5)
 
 
 def t4_crowd(img, lt):
@@ -883,6 +883,14 @@ def t4_fx(img, lt):
         hx, hy = R4(S.HELI_HOME[0], S.HELI_HOME[1])
         S.glow_disc(img, hx, hy, 180 * (0.5 + a), (255, 230, 160), amt=.55 * (1 - a))
         S.flames(img, hx, hy + 46, 160 * (0.6 + a), 138 * (0.6 + a), lt, seed=91, n=6)
+    if 0.6 <= lt < 1.1:                                    # chat 15: the backblast out of the launcher's rear
+        a = (lt - 0.6) / 0.5
+        tx, ty = rpg_tip(0.6)
+        bx, by = tx - 150, ty + 120                         # behind and below the tube, along its line
+        S.smoke(img, [(bx - 60 * a - 30 * q, by + 40 * a + 20 * q, 26 + 50 * a + 8 * q) for q in range(3)],
+                (190, 182, 172), (232, 226, 218), lw=2)
+        if a < 0.3:
+            S.glow_disc(img, tx, ty, 40, (255, 230, 150), amt=.55)
     # two Molotovs from the crowd into the bank's ground-floor windows (2.2-2.7), the glass blooming orange
     for k, (t0, sx, sy, ex, ey) in enumerate(((2.2, 330, 1050, 90, 860), (2.35, 380, 1070, 175, 880))):
         a = (lt - t0) / 0.45
@@ -921,7 +929,7 @@ def backlight(img, lt, ppl):
     """T4 3.0-4.0: the fireball behind the ministry backlights the melee into one silhouette (F5)."""
     if lt < 3.0:
         return ppl
-    k = 0.75 * ease((lt - 3.0) / 0.5)
+    k = 0.5 * ease((lt - 3.0) / 0.5)                     # chat 15: was 0.75 (the melee went to one grey smear)
     a = np.asarray(ppl).astype(np.float32)
     a[..., :3] = a[..., :3] * (1 - k) + np.array((40, 18, 20), np.float32) * k
     return Image.fromarray(a.astype(np.uint8), 'RGBA')
@@ -976,7 +984,7 @@ def picture(t):
         back.alpha_composite(backlight(back, lt, ppl))
         t4_fx(back, lt)
         if lt > 2.0:
-            haze(back, lt - 2.0, [(R4(x, 1150), 300) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .3, 7)
+            haze(back, lt - 2.0, [(R4(x, 1230), 220) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .16, 7)
     if front is not None:
         back.alpha_composite(front)
     return back

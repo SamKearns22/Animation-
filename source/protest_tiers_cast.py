@@ -800,11 +800,12 @@ def rpg(p, j, yaw, fired=False):
     jj = dict(j, _yaw=V.snap(yaw)[0])
     rear, front = sh - u * 0.38 * U, sh + u * 0.57 * U
     a, b = P3(jj, tuple(rear)), P3(jj, tuple(front))
-    p.line([a, b], INK, 30)
-    p.line([a, b], RPG_C, 24)
+    p.line([a, b], INK, 44)                                # chat 15 (moves hunt 1: "no RPG shape" at phone size):
+    p.line([a, b], RPG_C, 36)                              # drawn thicker than true, as a Glimpse prop must read
     mid = P3(jj, tuple(sh + u * 0.05 * U))
     mid2 = P3(jj, tuple(sh + u * 0.25 * U))
-    p.line([mid, mid2], RPG_D, 26)                         # the wooden heat guard (dark band)
+    p.line([mid, mid2], RPG_D, 38)                         # the wooden heat guard (dark band)
+    p.line([a, P3(jj, tuple(rear + u * 0.06 * U))], INK, 52)   # the flared rear venturi
     if not fired:
         w0 = P3(jj, tuple(front))
         w1 = P3(jj, tuple(front + u * 0.32 * U))
