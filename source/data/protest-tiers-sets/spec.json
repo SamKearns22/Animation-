@@ -1,0 +1,63 @@
+{
+ "round": 0,
+ "stage": "sets",
+ "panels": [
+  {
+   "img": "source/data/protest-tiers-sets/t1.png",
+   "crop": null,
+   "is": "T1 Passeig de Gracia, Barcelona, at dusk after rain: long-lens view down the avenue from a balcony; the march fills this side, police line ~185 m away by the burning container; Tibidabo on the ridge beyond",
+   "parts": "SO",
+   "set": "t1",
+   "refs": [
+    "references/protest-tiers/es1-passeig-de-gracia-march.jpg",
+    "references/protest-tiers/es4-barcelona-11nov-mossos-burning-container.jpg"
+   ],
+   "beat": "night protest begins"
+  },
+  {
+   "img": "source/data/protest-tiers-sets/t2.png",
+   "crop": null,
+   "is": "T2 Frankfurt at night, wet street: a gun store square-on, steel shutter half up, one big lit window of guns on white shelves, WAFFEN sign band, doorway left, closed shop right, street lamp",
+   "parts": "SO",
+   "set": "t2",
+   "refs": [
+    "references/protest-tiers/de3-frankfurt-gun-shop-window-smashed.jpg",
+    "references/protest-tiers/de4-frankfurt-berliner-str-road-sign-smash.jpg"
+   ],
+   "beat": "rioters about to smash in"
+  },
+  {
+   "img": "source/data/protest-tiers-sets/t3.png",
+   "crop": null,
+   "is": "T3 Place de la Republique, Paris, by day from 0.8 m: Marianne monument on its drum with seated figures, black smoke behind, Haussmann fronts and trees; a burnt-out car at the bottom-left edge, burning hire bikes and a burning kiosk between the two lines",
+   "parts": "SO",
+   "set": "t3",
+   "refs": [
+    "references/protest-tiers/fr1-marianne-monument-close.jpg",
+    "references/protest-tiers/fr2-place-de-la-republique-wide.jpg",
+    "references/protest-tiers/fr3-republique-17oct-burning-car-marianne.jpg",
+    "references/protest-tiers/fr4-paris-17oct-burning-rental-bikes.jpg"
+   ],
+   "beat": "riot with fires"
+  },
+  {
+   "img": "source/data/protest-tiers-sets/t4.png",
+   "crop": null,
+   "is": "T4 Tirana avenue at dusk under a burning sky: the bank left, the yellow Education Ministry ablaze centre-right with its rounded corner and roof flag, umbrella pines and pastel blocks down the avenue",
+   "parts": "SO",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al1-education-ministry-tirana.jpg",
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "the worst riot: the ministry burns"
+  }
+ ],
+ "draw": [
+  "python3 source/protest_tiers_sets.py alone source/data/protest-tiers-sets"
+ ],
+ "checks": [
+  "python3 source/protest_tiers_sets.py check"
+ ]
+}
