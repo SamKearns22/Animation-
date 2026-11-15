@@ -13,11 +13,14 @@ MAP
                       figures, the lion; Haussmann fronts; plane trees; black smoke beyond; kiosk, bike heap, the car
   t4 ................ Tirana avenue at dusk under a burning sky: the bank (left), the Education Ministry (rounded
                       corner bay, grey balconies, roof flag), pastel blocks and pines down to the hills
+  alley ............. round 1, end shot B: the side alley front on, low; bins are the front layer; _laundry, _bin
+  props ............. round 1: prop_tv, prop_mannequin, prop_boxes, prop_cone, prop_wheel (centre, k px/m, ang)
   SET_BOXES/MEANT ... rule 83, per tier; BENCHMARK (rule 3) per tier, ticked on the sheet
   sheet ............. each painting beside its references with its BENCHMARK list; blue 1.75 m marks where people go
 
     python3 source/protest_tiers_sets.py sheet OUT.jpg     the sets sheet for Sam
     python3 source/protest_tiers_sets.py alone OUTDIR      each painting full size (t1..t4.png)
+    python3 source/protest_tiers_sets.py props OUT.jpg     round 1: the alley and the new props (TV, mannequin, ...)
     python3 source/protest_tiers_sets.py check             rule 83 overlaps
     python3 source/protest_tiers_sets.py vehicles OUT.jpg  the truck and helicopter sheet
 
@@ -1210,6 +1213,252 @@ def vehicles_sheet(out):
 
 
 # ------------------------------------------------------------------------------------------------- rule 83, rule 3
+# ------------------------------------------------------------------------------------------------- the alley (round 1)
+# End shot B (round 1, chat 23): a side alley off the Tirana avenue, front on, low (a crouching eye line). The couple
+# crouch at d ~3.2 behind two wheelie bins at d 2.6 (the bins are the FRONT layer, drawn over them: chest up over
+# the lids). Walls from d 6.7 (where they enter the frame) to the far mouth at d 30, which glows with the avenue's fire.
+ALLEY_CAM = Cam(540, 860, 2000, 1.1)
+CAMS['alley'] = ALLEY_CAM
+ALLEY_W = 1.8                                  # half width (m): a 3.6 m Tirana back lane
+WALL_L, WALL_R = (118, 84, 72), (138, 98, 80)  # old plaster in the fire's reflected light
+BIN_G, BIN_K = (54, 92, 62), (70, 72, 74)      # one green bin, one grey (Tirana's municipal bins)
+
+
+def _laundry(img, cam, d, z, t):
+    """A washing line across the alley at depth d, height z, with clothes that sway a little (the fire's draught)."""
+    a, b = cam.p(-ALLEY_W, d, z), cam.p(ALLEY_W, d, z)
+    k = cam.ppm(d)
+    sag = .25 * k
+    pts = [(a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u + sag * 4 * u * (1 - u)) for u in np.linspace(0, 1, 16)]
+    pen = IS.pen(img)
+    pen.line(pts, (40, 30, 28), 2.4)
+    cols = [(200, 60, 60), (230, 222, 200), (70, 110, 170), (236, 190, 70), (230, 222, 200)]
+    for i, u in enumerate((.16, .3, .46, .62, .8)):
+        x, y = a[0] + (b[0] - a[0]) * u, a[1] + (b[1] - a[1]) * u + sag * 4 * u * (1 - u)
+        sw = .04 * k * math.sin(6.28 * .7 * t + i)
+        w, h = (.42 + .1 * (i % 2)) * k, (.55 + .2 * (i % 3 == 0)) * k
+        if i == 1:                                   # a shirt: shoulders and sleeves
+            poly(img, [(x - w * .7, y), (x + w * .7, y), (x + w * .9, y + h * .3), (x + w * .5, y + h * .35),
+                       (x + w * .5 + sw, y + h), (x - w * .5 + sw, y + h), (x - w * .5, y + h * .35),
+                       (x - w * .9, y + h * .3)], cols[i], INK, 1.8, 0)
+        else:
+            poly(img, [(x - w / 2, y), (x + w / 2, y), (x + w / 2 + sw, y + h), (x - w / 2 + sw, y + h)], cols[i],
+                 INK, 1.8, 0)
+        for dx in (-w * .3, w * .3):
+            pen.line([(x + dx, y - 3), (x + dx, y + 6)], (90, 70, 50), 3)      # pegs
+
+
+def _bin(img, cam, x, d, col, lid_up=0.0):
+    """A 240-litre wheelie bin (0.58 wide, 1.05 tall), front on: body tapering to the base, the lid's lip, the
+    handle bar at the back, two wheels showing under it."""
+    k = cam.ppm(d)
+    bx, by = cam.p(x, d)
+    w, h = .58 * k, 1.05 * k
+    dk = mix(col, (0, 0, 0), .35)
+    for s in (-1, 1):                                # the wheels, behind the base
+        poly(img, [(bx + s * w * .38 - .07 * k, by - .16 * k), (bx + s * w * .38 + .07 * k, by - .16 * k),
+                   (bx + s * w * .38 + .07 * k, by), (bx + s * w * .38 - .07 * k, by)], (26, 26, 28), INK, 2, 0)
+    poly(img, [(bx - w / 2, by - h + .08 * k), (bx + w / 2, by - h + .08 * k), (bx + w * .44, by - .06 * k),
+               (bx - w * .44, by - .06 * k)], col, INK, 2.6, .8)
+    poly(img, [(bx - w * .36, by - h * .62), (bx + w * .36, by - h * .62), (bx + w * .34, by - h * .5),
+               (bx - w * .34, by - h * .5)], dk, None, 0, 0)         # the moulded panel's shadow
+    poly(img, [(bx - w * .1, by - h * .42), (bx + w * .1, by - h * .42), (bx + w * .1, by - h * .36),
+               (bx - w * .1, by - h * .36)], (230, 226, 210), INK, 1.4, 0)   # the council's label
+    lid = [(bx - w * .54, by - h + .08 * k), (bx + w * .54, by - h + .08 * k), (bx + w * .52, by - h - .02 * k),
+           (bx - w * .52, by - h - .02 * k)]
+    poly(img, lid, mix(col, (0, 0, 0), .15), INK, 2.6, .5)
+
+
+def alley(t=0.0, marks=False):
+    """Back: sky strip, walls, far mouth glowing, laundry, drainpipe, graffiti, ground. Front: the two bins."""
+    cam = ALLEY_CAM
+    img = Image.new('RGBA', (W, H), (40, 20, 24, 255))
+    bands(img, 0, cam.VY, [(60, 22, 26), (110, 36, 30), (170, 62, 34)], seed=9, amp=12)   # the burning sky
+    smoke(img, [(380, 160, 150), (620, 120, 170), (820, 220, 130)], (70, 38, 36), (110, 58, 46))
+    # the far mouth: the avenue in fire, a slice of a burning block, people as dark shapes against it
+    dm = 30.0
+    xl, xr = cam.p(-ALLEY_W, dm)[0], cam.p(ALLEY_W, dm)[0]
+    yg = cam.p(0, dm)[1]
+    shape(img, [[(xl, yg - 9 * cam.ppm(dm)), (xr, yg - 9 * cam.ppm(dm)), (xr, yg), (xl, yg)]], (196, 96, 44), None)
+    glow_disc(img, (xl + xr) / 2, yg - 40, 260, (255, 190, 90), steps=4, amt=.25)
+    flames(img, (xl + xr) / 2 + 20, yg, (xr - xl) * .7, 110, t, seed=31, n=6)
+    for i, x in enumerate((-1.0, -.2, .7)):           # far rioters, small silhouettes
+        q = cam.p(x, dm - 1)
+        kk = cam.ppm(dm - 1)
+        sw = 2 * math.sin(6.28 * 1.2 * t + i)
+        poly(img, [(q[0] - .22 * kk + sw, q[1] - 1.5 * kk), (q[0] + .22 * kk + sw, q[1] - 1.5 * kk),
+                   (q[0] + .2 * kk, q[1]), (q[0] - .2 * kk, q[1])], (34, 22, 24), None, 0, 0)
+        IS.pen(img).ell(q[0] + sw, q[1] - 1.66 * kk, .13 * kk, .15 * kk, (34, 22, 24), None)
+    # the ground: wet old paving catching the glow, a gutter down the middle
+    shape(img, [[(0, cam.VY), (W, cam.VY), (W, H), (0, H)]], (64, 44, 42), None)
+    for d in np.arange(3.0, dm, 1.2):                 # paving joints across
+        a, b = cam.p(-ALLEY_W, d), cam.p(ALLEY_W, d)
+        IS.pen(img).line([a, b], (52, 36, 34), max(1.0, 2.2 * 3 / d))
+    for x in (-.9, 0.0, .9):
+        IS.pen(img).line([cam.p(x, 2.0), cam.p(x, dm)], (52, 36, 34), 1.6)
+    g = [cam.p(-.07, 4.0), cam.p(.07, 4.0), cam.p(.03, dm), cam.p(-.03, dm)]
+    poly(img, g, (120, 70, 48), None, 0, 0)           # the gutter's wet line holds the fire's reflection
+    # the walls, 12 m high, each with windows, a door, and one side's drainpipe and graffiti
+    for s, col in ((-1, WALL_L), (1, WALL_R)):
+        x = s * ALLEY_W
+        quad(img, cam.p(x, 1.0), cam.p(x, dm), cam.p(x, dm, 12), cam.p(x, 1.0, 12), col, INK, 2.6, 0)
+        for d0 in (5.0, 10.5, 16.0, 22.0):            # windows: dark, shutters, two floors
+            for z0 in (3.4, 6.6, 9.8):
+                quad(img, cam.p(x, d0), cam.p(x, d0 + 1.0), cam.p(x, d0 + 1.0), cam.p(x, d0), col, None, 0, 0)
+                a, b = cam.p(x, d0, z0), cam.p(x, d0 + 1.0, z0)
+                c, e = cam.p(x, d0 + 1.0, z0 + 1.4), cam.p(x, d0, z0 + 1.4)
+                lit = (d0 + z0 + s) % 3 == 0
+                quad(img, a, b, c, e, (226, 150, 70) if lit else (40, 30, 32), INK, 1.6, 0)
+                q1, q2 = cam.p(x, d0 - .35, z0), cam.p(x, d0 - .35, z0 + 1.4)
+                quad(img, e, a, q1, q2, mix(col, (50, 70, 60), .5), INK, 1.4, 0)     # one shutter folded back
+        dq = (7.8, 13.5) if s < 0 else (8.5, 19.5)
+        for d0 in dq[:1]:                             # a door at ground level, a step
+            quad(img, cam.p(x, d0), cam.p(x, d0 + 1.0), cam.p(x, d0 + 1.0, 2.2), cam.p(x, d0, 2.2), (60, 44, 40),
+                 INK, 2.0, 0)
+        if s > 0:                                     # the drainpipe down the right wall, brackets
+            for d0, w in ((6.2, .1),):
+                quad(img, cam.p(x - .02, d0), cam.p(x - .02, d0 + w), cam.p(x - .02, d0 + w, 12),
+                     cam.p(x - .02, d0, 12), (90, 92, 94), INK, 1.6, 0)
+                for z in (2.0, 5.0, 8.0, 11.0):
+                    IS.pen(img).line([cam.p(x, d0 - .05, z), cam.p(x, d0 + w + .05, z)], INK, 2.0)
+            # an air conditioner box (Tirana's every wall)
+            quad(img, cam.p(x, 12.0, 4.6), cam.p(x, 12.9, 4.6), cam.p(x, 12.9, 5.3), cam.p(x, 12.0, 5.3),
+                 (210, 206, 196), INK, 1.6, 0)
+        else:                                         # graffiti on the left wall at head height: tags and a red star
+            for i, (d0, word, c) in enumerate(((6.9, 'ANARKI', (40, 40, 44)), (9.3, 'KUQ', (200, 40, 50)))):
+                a = cam.p(x, d0, 1.6)
+                kk = cam.ppm(d0)
+                lay = Image.new('RGBA', (int(3.4 * kk), int(.9 * kk)), (0, 0, 0, 0))
+                text(lay, (lay.size[0] // 2, lay.size[1] // 2), word, int(.62 * kk), c + (255,))
+                # sheared onto the wall's slope: the wall runs away from us, so letters shrink with depth
+                b2 = cam.p(x, d0 + 2.6, 1.6)
+                sx = (b2[0] - a[0])
+                lay = lay.resize((max(8, int(abs(sx))), int(.9 * kk)))
+                img.alpha_composite(lay, (int(min(a[0], b2[0])), int(a[1] - .9 * kk)))
+    _laundry(img, cam, 9.0, 4.0, t)                   # inside the frame, above the couple's heads (chat 23)
+    _laundry(img, cam, 15.0, 6.5, t + .5)
+    if marks:
+        for x in (-.4, .4):
+            person_mark(img, cam, x, 3.2)
+    front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    _bin(front, cam, -.36, 2.6, BIN_G)
+    _bin(front, cam, .36, 2.65, BIN_K)
+    kb = cam.ppm(2.65)                                # a spray tag on the grey bin (the walls are too edge-on to carry much)
+    bx, by = cam.p(.36, 2.65)
+    text(front, (bx, by - .3 * kb), 'TIR', int(.16 * kb), (210, 60, 160, 255))
+    return img, front
+
+
+# ------------------------------------------------------------------------------------------------- props (round 1)
+# Carried things, drawn at a point (x, y) = their centre, k px a metre, turned by ang degrees (clockwise). Flat, one
+# view: Glimpses in T2 (TV, mannequin, boxes) and T3 (cone, bike wheel).
+def _turn(pts, x, y, ang):
+    c, s = math.cos(math.radians(ang)), math.sin(math.radians(ang))
+    return [(x + px * c - py * s, y + px * s + py * c) for px, py in pts]
+
+
+def prop_tv(img, x, y, k, ang=0.0):
+    """A 55-inch flat-screen TV (1.25 x 0.73 m), black bezel, the screen catching a blue streak of light."""
+    w, h = 1.25 * k, .73 * k
+    poly(img, _turn([(-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2)], x, y, ang), (24, 24, 28), INK,
+         2.4, 0)
+    poly(img, _turn([(-w * .46, -h * .42), (w * .46, -h * .42), (w * .46, h * .42), (-w * .46, h * .42)], x, y, ang),
+         (40, 46, 60), None, 0, 0)
+    poly(img, _turn([(-w * .2, -h * .42), (-w * .05, -h * .42), (-w * .3, h * .42), (-w * .45, h * .42)], x, y, ang),
+         (90, 110, 150), None, 0, 0)
+
+
+CAMO = [(92, 84, 52), (60, 70, 40), (120, 104, 70), (44, 40, 30)]
+
+
+def prop_mannequin(img, x, y, k, ang=0.0):
+    """A hunting-shop mannequin in camouflage, rigid, lying flat (carried like a plank), 1.8 m, head to the left:
+    bald head, a camo cap, the arms stiff at its sides, boots."""
+    L = 1.8 * k
+    body = [(-L * .38, -.2 * k), (L * .2, -.2 * k), (L * .44, -.14 * k), (L * .44, .14 * k), (L * .2, .2 * k),
+            (-L * .38, .2 * k)]
+    poly(img, _turn(body, x, y, ang), CAMO[0], INK, 2.4, 0)
+    rng = np.random.default_rng(5)                   # camo blotches
+    for i in range(9):
+        cx, cy = rng.uniform(-L * .34, L * .4), rng.uniform(-.14, .14) * k
+        r = rng.uniform(.06, .12) * k
+        poly(img, _turn([(cx + r * math.cos(a), cy + r * .6 * math.sin(a)) for a in np.linspace(0, 6.28, 9)], x, y,
+                        ang), CAMO[1 + i % 3], None, 0, 0)
+    IS.pen(img).line(_turn([(-L * .1, 0), (L * .44, 0)], x, y, ang), INK, 1.4)      # between the legs
+    poly(img, _turn([(L * .44, -.16 * k), (L * .5, -.16 * k), (L * .5, .16 * k), (L * .44, .16 * k)], x, y, ang),
+         (40, 32, 26), INK, 2.0, 0)                  # boots
+    hx = -L * .38 - .13 * k
+    poly(img, _turn([(hx + .13 * k * math.cos(a), .12 * k * math.sin(a)) for a in np.linspace(0, 6.28, 16)], x, y,
+                    ang), (214, 196, 170), INK, 2.0, 0)                       # the blank mannequin head
+    poly(img, _turn([(hx - .14 * k, -.12 * k), (hx + .02 * k, -.12 * k), (hx + .02 * k, .12 * k),
+                     (hx - .14 * k, .12 * k)], x, y, ang), CAMO[2], INK, 1.8, 0)  # cap
+    poly(img, _turn([(hx - .2 * k, -.1 * k), (hx - .12 * k, -.1 * k), (hx - .12 * k, .1 * k),
+                     (hx - .2 * k, .1 * k)], x, y, ang), CAMO[2], INK, 1.6, 0)    # its peak
+
+
+def prop_boxes(img, x, y, k, n=3):
+    """A tower of n cardboard boxes (0.5 m wide, shrinking up), tape across each, a stamped rifle-maker's mark;
+    (x, y) is the bottom centre."""
+    yy = y
+    for i in range(n):
+        w, h = (.5 - .04 * i) * k, (.34 - .03 * i) * k
+        xo = (i % 2 * 2 - 1) * .03 * k
+        poly(img, [(x + xo - w / 2, yy - h), (x + xo + w / 2, yy - h), (x + xo + w / 2, yy), (x + xo - w / 2, yy)],
+             (196, 160, 110), INK, 2.0, .6)
+        poly(img, [(x + xo - .04 * k, yy - h), (x + xo + .04 * k, yy - h), (x + xo + .04 * k, yy),
+                   (x + xo - .04 * k, yy)], (214, 190, 140), None, 0, 0)
+        if i == 0:
+            text(img, (x + xo + w * .26, yy - h / 2), 'AMMO', max(8, int(.08 * k)), (60, 40, 30))
+        yy -= h
+
+
+def prop_cone(img, x, y, k, ang=0.0):
+    """A 0.7 m traffic cone, two white bands, the square base (its centre at x, y)."""
+    h, b = .7 * k, .2 * k
+    poly(img, _turn([(-b * 1.3, h / 2), (b * 1.3, h / 2), (b * 1.3, h / 2 - .05 * k), (-b * 1.3, h / 2 - .05 * k)],
+                    x, y, ang), (40, 40, 40), INK, 1.8, 0)
+    poly(img, _turn([(-b, h / 2 - .05 * k), (b, h / 2 - .05 * k), (.04 * k, -h / 2), (-.04 * k, -h / 2)], x, y, ang),
+         (240, 104, 30), INK, 2.2, 0)
+    for u0, u1 in ((.3, .42), (.58, .68)):
+        def at(u, sg):
+            return sg * (b + (.04 * k - b) * u), h / 2 - .05 * k - (h - .05 * k) * u
+        poly(img, _turn([at(u0, -1), at(u0, 1), at(u1, 1), at(u1, -1)], x, y, ang), (240, 240, 236), None, 0, 0)
+
+
+def prop_wheel(img, x, y, k, ang=0.0):
+    """A rental bike's front wheel (0.66 m), torn off: tyre, rim, spokes, a bent mudguard stub."""
+    r = .33 * k
+    pen = IS.pen(img)
+    pen.ell(x, y, r, r, (28, 28, 30), INK, 2.2)
+    pen.ell(x, y, r * .86, r * .86, (0, 0, 0, 0) if img.mode == 'RGBA' else None, (170, 172, 176), 3.0)
+    for i in range(12):
+        a = math.radians(ang + i * 30)
+        pen.line([(x, y), (x + r * .84 * math.cos(a), y + r * .84 * math.sin(a))], (170, 172, 176), 1.2)
+    pen.ell(x, y, .05 * k, .05 * k, (120, 122, 126), INK, 1.4)
+    poly(img, _turn([(-.06 * k, -r - .02 * k), (.18 * k, -r - .1 * k), (.2 * k, -r - .05 * k),
+                     (-.04 * k, -r + .03 * k)], x, y, ang), (90, 200, 120), INK, 1.6, 0)  # Lime green guard
+
+
+def props_sheet(out):
+    """The alley at phone size (with its 1.75 m marks) and the five props on one sheet."""
+    a = paint('alley', .4, marks=True).resize((405, 720), Image.LANCZOS)
+    S = Image.new('RGB', (1500, 800), (232, 228, 222))
+    S.paste(a, (20, 60))
+    pr = Image.new('RGBA', (1040, 720), (232, 228, 222, 255))
+    prop_tv(pr, 200, 140, 260)
+    prop_mannequin(pr, 620, 140, 300, 0)
+    prop_boxes(pr, 160, 600, 380)
+    prop_cone(pr, 500, 480, 300, 0)
+    prop_cone(pr, 640, 480, 300, 70)
+    prop_wheel(pr, 860, 470, 300, 15)
+    S.paste(pr.convert('RGB'), (440, 60))
+    d = ImageDraw.Draw(S)
+    d.text((20, 14), 'PROTEST TIERS round 1: the alley (blue: 1.75 m, bins in front) and the new props',
+           font=ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 26), fill=(20, 20, 20))
+    S.save(out, quality=88)
+    return out
+
+
 SET_BOXES = {                       # chat 11: all measured from the drawing (each helper left out, the difference)
     't1': [('container', (446, 719, 578, 902)), ('domed corner', (822, 60, 945, 559))],
     't2': [('doorway', (0, 783, 113, 1173)), ('gun store window', (174, 754, 786, 1089)),
@@ -1264,9 +1513,9 @@ def checks():
 
 
 # ------------------------------------------------------------------------------------------------- painting, sheet
-PAINT = {'t1': t1, 't2': t2, 't3': t3, 't4': t4}
+PAINT = {'t1': t1, 't2': t2, 't3': t3, 't4': t4, 'alley': alley}
 TITLES = {'t1': 'T1 Passeig de Gracia, dusk', 't2': 'T2 Frankfurt gun store, night',
-          't3': 'T3 Place de la Republique, day', 't4': 'T4 Tirana avenue, dusk'}
+          't3': 'T3 Place de la Republique, day', 't4': 'T4 Tirana avenue, dusk', 'alley': 'End B: Tirana side alley, dusk'}
 
 
 def paint(tier, t=0.0, look=True, **kw):
@@ -1340,5 +1589,7 @@ if __name__ == '__main__':
         print(alone(sys.argv[2]))
     elif cmd == 'vehicles':
         print(vehicles_sheet(sys.argv[2]))
+    elif cmd == 'props':
+        print(props_sheet(sys.argv[2]))
     elif cmd == 'check':
         print('\n'.join(checks()) or 'rule 83: clean')

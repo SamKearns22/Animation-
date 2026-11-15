@@ -1,3 +1,3 @@
-protest-tiers: round 1 building; the new cast is dressed (tourists, granny, seller + cart, selfie rioter, riders with the shrug), critique hunt 1 fixed.
-Next: chat 23, Opus medium: cast critique hunt 2, then alley, end scene, Albania gags.
+protest-tiers: round 1 building; new cast closed after its second check; the side alley and the new props (TV, mannequin, boxes, cone, wheel) are built.
+Next: chat 24, Opus medium: the end scene (skid and RPG, the tourists behind the bins, the shrug), with clips.
 Needs Sam: Y to ~63.5% of a week (his Y covers ~47%).
