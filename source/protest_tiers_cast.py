@@ -624,6 +624,16 @@ def peace(j, side='L', thumb=False):
 
 
 # ------------------------------------------------------------------------------------------------ poses
+def _clear_of_shoulder(j, side, hand, reach=225.0):
+    """Chat 31 (Sam's note 1 on animatic 2, 'frames missing'): a hand moving in a straight line from wound-up to
+    thrown-through passes right by its own shoulder, and the elbow folds shut (the guard stops the drawing). Push the
+    hand out along shoulder->hand to `reach` (about a 70-degree elbow), so the arm swings round in an arc instead."""
+    sh = np.array(j['sh' + side][:3], float)
+    v = np.array(hand, float) - sh
+    d = float(np.linalg.norm(v))
+    return tuple(sh + v / d * reach) if 1e-6 < d < reach else tuple(hand)
+
+
 def pose(sp, name, u=0.0, t=0.0, force=None):
     """One of the cast's poses (body frame, before lean): u is how far through a move (0-1), t a gait's time."""
     sw = sp.get('shoulders', 160)
@@ -658,7 +668,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j['footR'] = (60, V.ANKLE_Y - 30 * e, -130.0)
         j['toeR'] = 14 * e
         back, through = np.array((sw + 70, -40.0, -300.0)), np.array((40.0, 250.0, 260.0))
-        V.arm_to(j, 'R', tuple(back + (through - back) * e), 'out' if e < 0.5 else 'down')
+        V.arm_to(j, 'R', _clear_of_shoulder(j, 'R', back + (through - back) * e), 'out' if e < 0.5 else 'down')
         V.arm_to(j, 'L', (-sw + 40 - 140 * e, 120.0 + 200 * e, 260.0 - 160 * e), 'down')
         if e < 0.6:                                 # the stone in the throwing hand until it leaves
             grips.held(j, 'R', sp, stone(j, 'R') if name == 'throw' else bottle(j, 'R'))
@@ -668,6 +678,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j['footL'] = (-70, V.ANKLE_Y, 150.0)
         j['footR'] = (70, V.ANKLE_Y, -110.0)
         hand = np.array((sw + 40, 20.0, -170.0)) * (1 - e) + np.array((-20.0, 300.0, 200.0)) * e
+        hand = np.array(_clear_of_shoulder(j, 'R', hand))      # chat 31: the elbow folded shut mid-swing
         V.arm_to(j, 'R', tuple(hand + (0, 0, 10)), 'out')
         V.arm_to(j, 'L', tuple(hand + (30, 60, 40)), 'down')   # on the pole's lower end, beside the body (chat 8: was pushed into its sleeve)
         ang = math.radians(-60 + 150 * e)               # pole angle from straight up, swinging forward

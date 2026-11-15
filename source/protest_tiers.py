@@ -149,10 +149,9 @@ def make_pose(sp, state, u=0.0, t=0.0, force=None):
     """The cast's pose by name, plus the film's own: 'stand', 'placard:TEXT:R,G,B[:lift]', 'flag:KIND', 'keys'."""
     if state == 'stand':
         return V.standing(sp)
-    if state == 'throw' and 0.42 < u < 0.57:          # the rig folds the elbow too tight mid-throw: pass through it
-        u = 0.42 if u < 0.495 else 0.57
-    if state == 'molotov' and 0.40 < u < 0.66:        # the marchers fold it over a wider span (chat 25)
-        u = 0.40 if u < 0.53 else 0.66
+    # chat 31: the skips over mid-throw and mid-swing (chats 14, 25) are gone: they were sized to one build, so other
+    # builds and blends still folded the elbow shut (3 stopped drawings in animatic 2); the cast's pose now swings the
+    # hand round clear of the shoulder (protest_tiers_cast._clear_of_shoulder) for every build
     if state.startswith('placard:'):
         parts = state.split(':')
         j = C.pose(sp, 'placard')
@@ -166,8 +165,6 @@ def make_pose(sp, state, u=0.0, t=0.0, force=None):
         j['props'] = [C.placard(j, text=parts[1], board=board, w=w)]
         j['grip'] = ('L', 'R')
         return j
-    if state == 'swing' and 0.285 < u < 0.45:           # the same elbow fold mid-swing (chat 14): pass through it
-        u = 0.285 if u < 0.37 else 0.45
     if state == 'run':                                     # the 'run' gait: 0 of 24 phases fail at three-quarter
         return moves.gait(sp, t, 'run')
     if state.startswith('flag:'):
@@ -300,9 +297,25 @@ class Actor:
         if self.mix:
             st, u, t, w = self.mix
             j = moves.mix_poses(make_pose(sp, st, u, t, self.force), j, ease(w))
+            _resolve_mixed_arms(j)
         if self.extra:
             self.extra(j)
         return j
+
+
+def _resolve_mixed_arms(j):
+    """Chat 31 (Sam's note 1 on animatic 2, 'frames missing'): mixing two poses slides each joint straight across, so
+    part-way from a run into a throw the arm came out the wrong length or folded back across the body (the guard
+    stopped the drawing at T4 20.75 s). An arm the mix spoiled is re-bent onto its mixed hand."""
+    for s in 'LR':
+        sh, el, wr = (np.array(j[k + s][:3], float) for k in ('sh', 'el', 'wr'))
+        up, fo = np.linalg.norm(el - sh), np.linalg.norm(wr - el)
+        a, b = sh - el, wr - el
+        ang = math.degrees(math.acos(max(-1.0, min(1.0, float(a @ b) / ((up * fo) or 1)))))
+        across = (1 if sh[0] >= 0 else -1) * (el[0] - sh[0]) < -0.3 * C.F.UPPER
+        if abs(up / (C.F.UPPER * .98) - 1) > .05 or abs(fo / (C.F.FORE * .98) - 1) > .05 or ang < 40 or across:
+            hand = C._clear_of_shoulder(j, s, wr)
+            C.V.arm_to(j, s, hand, 'down' if hand[1] > 60 else 'out', shape=j.get('hand', {}).get(s, 'fist'))
 
 
 def draw_actor(img, cam, a):
