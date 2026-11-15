@@ -479,11 +479,36 @@
      "10-13 S1: dark riders merge into the dark road.",
      "12 A1: melee not readable; no Molotov bursts in the bank windows."
     ]
+   },
+   {
+    "round": 1,
+    "pass": 3,
+    "stage": "cast",
+    "date": "2026-11-15",
+    "hunt": 1,
+    "faults": 13,
+    "cant_tell": 1,
+    "open": [
+     "1-2 A1 P2: red hat reads as a flat beret in 1, a cap in 2; brief says baseball cap. Front and side do not match.",
+     "3-4 A1 O1: tote text \"Greetings from Tirana\" not readable, only a sun blob and red dashes; in 4 the bag is a plain white rectangle at the hip with no strap.",
+     "4 P8: hair has a blocky back with a notch that reads as a second face; visor is a flat white bar; wife's side view does not match the front.",
+     "1-8 P11: no neck or a very short one; heads sit straight on shoulders (worst 2, 4, 5); hoods and headscarf oversized.",
+     "5 A1 P1: string bag sits on the torso held in a floating hand, not on the forearm; no arm visible; scarf reads as a purple helmet; cardigan reads as a maroon pa",
+     "5-6 O4: granny is far taller and larger than the other figures, and the seller tiny; sizes unrelated.",
+     "6 O3: bottles have no rags; seller's face reads as a frown, not a seller's patter.",
+     "7-8 P1 P5: phone floats beside the head with no hand or arm holding it; only one arm drawn.",
+     "8 P6 A1: thumbs up reads as a single raised finger, which is a rude or pointing shape.",
+     "9 P2: both riders face forward; brief wants both heads turned back toward us.",
+     "10 P2 P3 P6: passenger does not shrug and shows no palm up: the arm is a stub with no hand. RPG moved to the driver's shoulder, a different prop position from 9",
+     "10 P14: stray mark by the left rider's eye.",
+     "3-4 P5: shoulder tick/strap lines on the shirts in 1 and 3; arm starts as a step at the sleeve.",
+     "1-10 P12: no speaking frames, so mouths cannot be checked."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 27,
+    "faults": 31,
     "false": 0
    },
    "S1": {
@@ -491,7 +516,7 @@
     "false": 1
    },
    "P1": {
-    "faults": 4,
+    "faults": 6,
     "false": 0
    },
    "S9": {
@@ -503,7 +528,7 @@
     "false": 0
    },
    "P3": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "S8": {
@@ -523,11 +548,11 @@
     "false": 0
    },
    "P2": {
-    "faults": 6,
+    "faults": 9,
     "false": 0
    },
    "O3": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "P4": {
@@ -539,8 +564,8 @@
     "false": 0
    },
    "O4": {
-    "faults": 2,
-    "false": 0
+    "faults": 3,
+    "false": 1
    },
    "S2": {
     "faults": 1,
@@ -567,7 +592,7 @@
     "false": 0
    },
    "O1": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "S6": {
@@ -579,10 +604,26 @@
     "false": 0
    },
    "P8": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "M1": {
+    "faults": 1,
+    "false": 0
+   },
+   "P11": {
+    "faults": 1,
+    "false": 1
+   },
+   "P5": {
+    "faults": 2,
+    "false": 1
+   },
+   "P6": {
+    "faults": 2,
+    "false": 0
+   },
+   "P14": {
     "faults": 1,
     "false": 0
    }

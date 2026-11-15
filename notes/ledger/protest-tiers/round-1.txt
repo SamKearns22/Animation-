@@ -100,3 +100,45 @@ Hook Text frame not in the sheets; suggested line: A4 cannot be checked without 
 
 critique, pass 2: faults fixed as one list: hunt 2 fixed as one list (chat 16): T1 keys glint 2x as often and bigger, long hot firework tail, three small staggered bursts; T2 near crowd to the frame edges, window clear, red crowbar 2x, jagged glass teeth and bigger shards behind the raiders; T3 stones from 0.75 s in high arcs against the sky, gas swells 1.35x in 0.6 s, jet 2x thick, the crowd runs out left, littered ground; T4 helicopter falls slower and spins in view, Molotovs earlier and bigger, melee dust soft, backblast see-through, fireball in frame with a bigger cap, ground haze lighter, tear gas at the line; left open: ['7 A1: no stones thrown, one row of police not two; Marianne is thin with a raised torch arm (reference: olive branch, white plinth); the burning car reads as a ', '7-9 S9: smoke columns are flat grey lumps, lit evenly, no darker underside.', '10-13 S1: dark riders merge into the dark road.', '12 A1: melee not readable; no Molotov bursts in the bank windows.']
 
+== critique, round 1 pass 3 (2026-11-15): 13 fault(s), 1 can't tell
+-- look.md --
+1: Front view, man in red beret, blue shirt, camera, fanny pack, tan shorts; neutral.
+2: Side view, same man, red cap, camera on strap, tan shorts; neutral, stiff.
+3: Front view, blonde woman, sunglasses on visor, pink top, tote bag, cream shorts; neutral.
+4: Side view, blonde woman, white visor, pink top, bag; hair looks odd, blocky.
+5: Tall old person, purple hat, maroon coat, long dark skirt, holding bowl of oranges; calm.
+6: Man with mustache, flat cap, behind cart with bottles, umbrella, flame, sign "MOLOTOV 200 LEK".
+7: Hooded masked figure in black, one arm raised making V sign, other holding phone; cheerful.
+8: Hooded masked figure in black, arm raised holding phone selfie, other hand thumb up; pleased.
+9: Two hooded masked figures on red scooter, one holding a long tube over shoulder; riding.
+10: Same two masked figures on red scooter, tube held, slight pose change; riding.
+-- result.md --
+## Faults
+FAULT A1 P2 [1, 2]: red hat reads as a flat beret in 1, a cap in 2; brief says baseball cap. Front and side do not match.
+FAULT A1 O1 [3, 4]: tote text "Greetings from Tirana" not readable, only a sun blob and red dashes; in 4 the bag is a plain white rectangle at the hip with no strap.
+FAULT P8 [4]: hair has a blocky back with a notch that reads as a second face; visor is a flat white bar; wife's side view does not match the front.
+FAULT P11 [1-8]: no neck or a very short one; heads sit straight on shoulders (worst 2, 4, 5); hoods and headscarf oversized.
+FAULT A1 P1 [5]: string bag sits on the torso held in a floating hand, not on the forearm; no arm visible; scarf reads as a purple helmet; cardigan reads as a maroon panel.
+FAULT O4 [5, 6]: granny is far taller and larger than the other figures, and the seller tiny; sizes unrelated.
+FAULT O3 [6]: bottles have no rags; seller's face reads as a frown, not a seller's patter.
+FAULT P1 P5 [7, 8]: phone floats beside the head with no hand or arm holding it; only one arm drawn.
+FAULT P6 A1 [8]: thumbs up reads as a single raised finger, which is a rude or pointing shape.
+FAULT P2 [9]: both riders face forward; brief wants both heads turned back toward us.
+FAULT P2 P3 P6 [10]: passenger does not shrug and shows no palm up: the arm is a stub with no hand. RPG moved to the driver's shoulder, a different prop position from 9.
+FAULT P14 [10]: stray mark by the left rider's eye.
+FAULT P5 [3, 4]: shoulder tick/strap lines on the shirts in 1 and 3; arm starts as a step at the sleeve.
+CAN'T TELL P12 [1-10]: no speaking frames, so mouths cannot be checked.
+
+## Checked
+1-10
+
+## Cold look
+look.md called 1 and 2 "beret"/"cap", so the beret reading is a real fault. I called 8's gesture "thumb up" from the brief; it looks like a finger. I read the 5 headgear as "purple hat", not a headscarf, and the string bag as a "bowl". I read the tote words as none, and 10 as "slight pose change", missing that there is no shrug.
+
+## Not on the list
+1. Shapes are flat and stiff: the figures stand in a rigid A-pose. Suggested line: a pose reads as natural, weight on one leg.
+2. The two riders have identical faces. Suggested line: two people of one kind are told apart.
+3. Panel 9's orange rim light is a thin outline, not a light from one side. Suggested line: rim light has direction.
+4. Black outfits on 7 and 8 lose their arms and legs against the hood and trousers. Suggested line: dark clothes keep their silhouette readable.
+5. Panels are cropped at different sizes with a lot of empty space. Suggested line: sheet panels share one scale.
+
