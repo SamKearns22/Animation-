@@ -45,7 +45,9 @@ hands on every frame, checks captions (2 rows of 42 characters, 700 px, readable
 flagged), and makes a contact sheet with the safe area. A film needs `BLACK_AT` or `DUR`.
 - **The render lock (rule 59):** pre-flight leaves a pass stamp for the code as it is now. The animatic and the final
   refuse to start without it, or after any code change since; faults already named to Sam need `--faults-named`.
-  So a failed pre-flight can never be followed by a render in the same command.
+  So a failed pre-flight can never be followed by a render in the same command. If the animatic's own picture checks
+  stop it, its video is held as `OUT.held.mp4` (Sam's Y, 15 Nov): name every fault to Sam, rename it to OUT and finish
+  it with `--faults-named`; no second render.
 - **Hands (rule 41):** `source/handcheck.py` probes everyone `views.person` draws, every frame. Meant exceptions in the
   film's `HANDS_OK` [(who, side, kind, t0, t1, why)]. Alone: `python3 source/handcheck.py FILM [OUT] [--span T0 T1]`.
 - **Looks (rule 43):** log each look with `filmkit.eyeline(..., aim=YAW_TO_TARGET, drawn=j2, at=NAME)`; meant looks

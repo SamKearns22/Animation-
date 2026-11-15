@@ -167,8 +167,10 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     film = os.path.splitext(os.path.basename(getattr(main, '__file__', '') or ''))[0]
     if lock is None:
         lock = not span
-    if os.path.exists(out):                       # rule 66 (Sam, 3 Nov): never an old file standing in for a new render:
-        os.remove(out)                            # gone before anything else, so a refused or stopped render leaves none
+    held = os.path.splitext(out)[0] + '.held.mp4'  # chat 30 (Sam's Y, 15 Nov): a stopped render's video, kept aside
+    for f in (out, held):                         # rule 66 (Sam, 3 Nov): never an old file standing in for a new render:
+        if os.path.exists(f):                     # gone before anything else, so a refused or stopped render leaves none
+            os.remove(f)
     check = False
     named = '--faults-named' in sys.argv
     full = not span and not reuse and size[0] >= 1080
@@ -240,10 +242,12 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         found = report.group(found, getattr(main, 'SHOTS', []))
         report.summarise(f'picture checks ({film})', found, os.path.join(os.path.dirname(os.path.abspath(out)),
                                                                           f'{film}-picture-checks.txt'))
-        if found and not named:
-            os.remove(out)
-            sys.exit(f'render STOPPED (rule 59): the picture checks found {len(found)} fault(s), listed above; fix them '
-                     f'(or name every one to Sam and add --faults-named), then render again. No video was kept.')
+        if found and not named:                   # chat 30 (Sam's Y, 15 Nov: a stopped 31-minute render was thrown
+            os.replace(out, held)                 # away): kept aside, never under OUT's name, so nothing sends it unnamed
+            sys.exit(f'render STOPPED (rule 59): the picture checks found {len(found)} fault(s), listed above. The video '
+                     f'is held as {held} (not a pass). Fix them and render again, or name every one to Sam, then rename '
+                     f'the held file to {os.path.basename(out)} and run finish.py with --faults-named (no second render). '
+                     f'The final still needs a render whose checks are clean or named.')
         stamp0 = read_pass(film) or {}
         write_pass(film, stamp0.get('faults', 0) + len(found), pictures=True)   # the final may now go ahead
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB)', flush=True)
