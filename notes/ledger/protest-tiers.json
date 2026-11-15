@@ -233,7 +233,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.23,
+   "cost": 1.48,
    "src": "estimate",
    "sid": "session_01GznaAUyS7jrYtRh6sGtqXJ"
   }
@@ -306,7 +306,8 @@
   "1:cast": 1,
   "2:cast": 4,
   "3:sets": 1,
-  "4:moves": 6
+  "4:moves": 6,
+  "5:animatic1": 1
  },
  "budget_stop": 2,
  "no_film_stop": "Sam, 15 Nov: early chats carried research and tool work, so the film budget is not a fair measure; whole-film stops off for this film (stage stops stay)",
