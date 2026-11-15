@@ -17,6 +17,8 @@ MAP
                      file sent, (4) an 'override' Sam never typed (chat 5 read "don't stop for any Y" as one)
   start ............ first thing in the next chat: `start PARENT_SESSION` reads the saved log from (1) and runs (2)
                      against the notes as they stand; a chat with no log falls back to `dump`
+  model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
+                     sending, filing) nor give Sonnet a fix or build (Sam, 15 Nov: chat 30 rendered on Opus)
   dump ............. list_events results saved to files (kinds ["user"], only when there is no log; never page a
                      whole chat: the newest pages, back to the last handover commit's time)
   sam_messages() ... Sam's own typed messages from any of the three sources (no tool results, task or system
@@ -262,6 +264,30 @@ def _run(tr, film, notes=None):
     return check(tr, _film_notes(film, notes), old)
 
 
+ROUTINE = re.compile(r'finish\.py|`final (?![^`]*--span)[^`]*`|final render|\banimatic\b[^.;]{0,12}\brender|\brender[^.;]{0,20}'
+                     r'\banimatic|send(ing)? the (animatic|final)|\bfiling\b', re.I)
+BUILDING = re.compile(r'\bfix(es|ing)?\b|\bbuild|\bplan(ning)?\b|\bnotes? round', re.I)
+
+
+def model_faults(film, notes=None):
+    """Each job on its own model (Sam, 15 Nov: chat 30 ran a fix AND the animatic render on Opus; the 10 Nov rule
+    guarded only the step up to a stronger model, and nothing checked it). The handover's Next line must not join
+    Opus work with Sonnet work (render, finish.py, sending, filing) or give Sonnet a fix or a build."""
+    p = notes or os.path.join(ROOT, 'notes', f'{film}.md')
+    if not film and not notes or not os.path.exists(p):
+        return []
+    nxt = next((ln for ln in open(p, encoding='utf-8') if ln.lstrip('- *').lower().startswith('next')), '')
+    out = []
+    if re.search(r'\bopus\b', nxt, re.I) and not re.search(r'\bsonnet\b', nxt, re.I) and ROUTINE.search(nxt):
+        out.append('MODEL: the Next line gives Opus routine work ("' + ROUTINE.search(nxt).group(0) + '"): split it, '
+                   'Opus for the fix, then a Sonnet chat (opened by the Opus one) for the render, finish.py and sending '
+                   '(CLAUDE.md, Models by stage)')
+    if re.search(r'\bsonnet\b', nxt, re.I) and not re.search(r'\bopus\b', nxt, re.I) and BUILDING.search(nxt):
+        out.append('MODEL: the Next line gives Sonnet a fix or a build ("' + BUILDING.search(nxt).group(0) + '"): '
+                   'Opus (medium for a fix from a clear plan) does that, then opens the Sonnet chat')
+    return out
+
+
 def report(faults, where):
     for f in faults:
         print(f)
@@ -360,10 +386,13 @@ def main(argv):
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             import ledger
             film = ledger.film_of(rec)
-        return report(_run(turns(rec), film, opt('--notes')), f'(end of chat, {film})')
+        return report(_run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')),
+                      f'(end of chat, {film})')
     if cmd == 'start':
         tail = pos[0].split('_')[-1][-8:].lower()
         p = os.path.join(LOGDIR, f'{tail}.md')
+        for f in model_faults(opt('--film'), opt('--notes')):    # a mixed job is split before any work starts
+            print(f)
         if not os.path.exists(p):
             print(f'handover: no saved log for {pos[0]}; list_events kinds ["user"], newest pages only, then `dump`')
             return 2

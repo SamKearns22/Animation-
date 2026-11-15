@@ -79,7 +79,8 @@ at session start (`.claude/hooks/setup.sh`).
   on its job. I never start a chat or type a prompt unless it failed to save.** When a chat ends on a question
   for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
   the chain then goes on. A chat on the wrong model for its next stage opens one on the right model, never
-  carries on. No scheduled check-ins unless I ask. A message never says "start a new chat" or "type ...": it says what
+  carries on, up or down: an Opus fix ends by opening the Sonnet chat for the animatic, finish.py and sending (Sam,
+  15 Nov; `handover.py` flags a Next line that mixes them). No scheduled check-ins unless I ask. A message never says "start a new chat" or "type ...": it says what
   is done and what I'm needed for.
 - **One wait per render;** never check on it repeatedly. **Push notifications** when a render or long job finishes,
   fails or needs me, and at every stage end. Say how long each render will take and took.
