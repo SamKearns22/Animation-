@@ -110,6 +110,20 @@ def _checked(t):
     return pic, rec
 
 
+def _code_print():
+    """A fingerprint of every loaded module in source/ (the film, its kit, this engine): the cache's 'what changed'."""
+    import hashlib
+    here = os.path.dirname(os.path.abspath(__file__))
+    h = hashlib.sha1()
+    for f in sorted({os.path.abspath(m.__file__) for m in list(sys.modules.values())
+                     if getattr(m, '__file__', None) and os.path.abspath(m.__file__).startswith(here)}):
+        if f.endswith('.py') and os.path.exists(f):
+            h.update(f.encode())
+            with open(f, 'rb') as fh:
+                h.update(fh.read())
+    return h.hexdigest()
+
+
 def _frame(args):
     i, reuse = args
     j = _JOB
@@ -117,9 +131,23 @@ def _frame(args):
     j['set_ss'](j['ss'])
     path = os.path.join(j['cache'], f'{i:04d}.png')
     rec = None
-    if j.get('check'):                            # rule 59 (13 Nov): the picture checks run on this one drawing
+    recp = path[:-4] + '.rec.pkl'
+    if j.get('check') and reuse and os.path.exists(path) and os.path.exists(recp):
+        import pickle                             # chat 30 (Sam's Y): an unchanged frame and its check record, reused
+        pic = Image.open(path)
+        pic.load()
+        with open(recp, 'rb') as fh:
+            rec = pickle.load(fh)
+    elif j.get('check'):                          # rule 59 (13 Nov): the picture checks run on this one drawing
         pic, rec = _checked(t)
         pic.save(path, compress_level=1)
+        try:
+            import pickle
+            with open(recp, 'wb') as fh:
+                pickle.dump(rec, fh)
+        except Exception:                         # a record that won't save: this frame is simply drawn again next time
+            if os.path.exists(recp):
+                os.remove(recp)
     elif reuse and os.path.exists(path):
         pic = Image.open(path)
         pic.load()
@@ -188,7 +216,6 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         if check:
             import preflight
             preflight.install_probes(main)
-            reuse = False                         # every frame drawn (and checked): the cache cannot know what changed
             print('picture checks: on, while drawing (rule 59); the video is refused if they find a fault', flush=True)
     import imageio_ffmpeg
     from multiprocessing import Pool
@@ -199,6 +226,23 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     first = 0
     if span:
         first, n = int(round(span[0] * fps)), min(n, int(round(span[1] * fps)))
+    # chat 30 (Sam's Y, 15 Nov: a re-render after a stop redrew all 427 unchanged frames, 30 min): the cache keeps the
+    # code's fingerprint; frames (and their check records) are reused when no code has changed since, or, with
+    # --redo SHOT[,SHOT], for every shot not named. Code changed and no shots named: every frame is drawn.
+    if '--redo' in sys.argv:
+        redo = tuple(redo) + tuple(sys.argv[sys.argv.index('--redo') + 1].split(','))
+    code, keyf = _code_print(), os.path.join(cache, 'code.txt')
+    same = os.path.exists(keyf) and open(keyf).read() == code
+    if same or '--redo' in sys.argv:
+        reuse = True
+        print('picture cache: ' + ('no code changed since it was drawn: unchanged frames reused' if same else
+                                   f'reusing every shot but {list(redo)} (named with --redo)'), flush=True)
+    elif check or reuse:
+        reuse = False
+        print('picture cache: code changed since it was drawn: every frame drawn (--redo SHOT reuses the rest)',
+              flush=True)
+    if os.path.exists(keyf) and not same:
+        os.remove(keyf)                           # the cache is mixed until a whole pass ends
     redo_set = {i for i in range(n) if shot_of(i / fps) in redo}
     if stamp is None:
         stamp = bool(span) or size[0] < 1080 and size[1] < 1920
@@ -235,6 +279,9 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                 os.remove(f)
         raise
     os.remove(wav)
+    if not span:
+        with open(keyf, 'w') as fh:               # every frame in the cache now matches this code
+            fh.write(code)
     if check:                                     # the drawing pass's own checks (pre-flight's picture checks)
         import preflight
         import report

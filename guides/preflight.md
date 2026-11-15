@@ -48,6 +48,8 @@ flagged), and makes a contact sheet with the safe area. A film needs `BLACK_AT` 
   So a failed pre-flight can never be followed by a render in the same command. If the animatic's own picture checks
   stop it, its video is held as `OUT.held.mp4` (Sam's Y, 15 Nov): name every fault to Sam, rename it to OUT and finish
   it with `--faults-named`; no second render.
+  A re-render reuses the cached frames and their check records when no code changed since; after a fix, name the
+  changed shots (`final OUT --small --redo t2,t4`) and only those are drawn again (Sam's Y, 15 Nov).
 - **Hands (rule 41):** `source/handcheck.py` probes everyone `views.person` draws, every frame. Meant exceptions in the
   film's `HANDS_OK` [(who, side, kind, t0, t1, why)]. Alone: `python3 source/handcheck.py FILM [OUT] [--span T0 T1]`.
 - **Looks (rule 43):** log each look with `filmkit.eyeline(..., aim=YAW_TO_TARGET, drawn=j2, at=NAME)`; meant looks
