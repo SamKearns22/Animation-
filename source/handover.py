@@ -288,6 +288,20 @@ def model_faults(film, notes=None):
     return out
 
 
+def draft_faults(film, notes=None):
+    """Rule P16 (Sam, 15 Nov: animatic 2 was lost with its chat, so a 3-second fix meant a 30-minute redraw): once a film's
+    notes say an animatic was sent, its latest animatic and clean render are in animations/drafts/ and pushed."""
+    p = notes or os.path.join(ROOT, 'notes', f'{film}.md')
+    if not film or not os.path.exists(p) or not re.search(r'animatic \d+ sent', open(p, encoding='utf-8').read(), re.I):
+        return []
+    d = os.path.join(ROOT, 'animations', 'drafts')
+    slug = film.replace('_', '-')
+    if all(os.path.exists(os.path.join(d, f'{slug}-{k}.mp4')) for k in ('animatic', 'clean')):
+        return []
+    return ['DRAFT: the notes say an animatic was sent, but animations/drafts/' + slug + '-animatic.mp4 and -clean.mp4 are '
+            'not on file (rule P16): save them (finish.py does it for the next one) and push']
+
+
 def report(faults, where):
     for f in faults:
         print(f)
@@ -386,7 +400,7 @@ def main(argv):
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             import ledger
             film = ledger.film_of(rec)
-        return report(_run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')),
+        return report(_run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes')),
                       f'(end of chat, {film})')
     if cmd == 'start':
         tail = pos[0].split('_')[-1][-8:].lower()

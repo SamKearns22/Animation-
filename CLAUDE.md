@@ -26,7 +26,8 @@ is in `guides/job-packs.md`.
 
 # Files
 Every file **under 50 MB**, aiming for a few MB per animation; tell me the size. Only the **finished version** goes on
-GitHub, in `animations/` with a clear name; drafts stay off. **MP4** by default; a GIF only if I ask. The tools install
+GitHub, in `animations/` with a clear name; drafts stay off, **except the latest animatic and its clean render**, kept in
+`animations/drafts/` (finish.py saves them; push them; emptied when the film is posted; rule P16, Sam 15 Nov). **MP4** by default; a GIF only if I ask. The tools install
 at session start (`.claude/hooks/setup.sh`).
 
 # Asking me before you go on

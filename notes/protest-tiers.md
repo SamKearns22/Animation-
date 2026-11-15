@@ -6,9 +6,10 @@
 - **Ledger:** stages 'round1 moves' and 'animatic2' marked done (both were finished; the hook was reading the old stage). Film 53.2% of a week; Sam's Y covers ~60%.
 - **Next: Sonnet, low effort (routine render + send), chat 32:** animatic 3: `python3 source/protest_tiers.py final source/data/protest-tiers-clean.mp4 --small --faults-named --redo t2,t3,t4` (no cache in a new container: it draws everything, ~16-30 min); black-frame check on the clean video (`python3 -c "import imageio.v3 as iio; print([i/24 for i,f in enumerate(iio.imiter('source/data/protest-tiers-clean.mp4')) if f.mean()<12] or 'none')"`: any inside the film = stop); `python3 source/finish.py source/data/protest-tiers-clean.mp4 source/data/protest-tiers-animatic3.mp4 --film protest_tiers --faults-named`; send; push notification. Any "could not be drawn" line in the picture checks = stop, do not send.
 - **Chain stopped (chat 31):** create_session refused: lineage depth 8 (a platform limit). Sam asked: 1 Opus renders animatic 3 here; 2 he starts the Sonnet chat.
-- **Needs Sam:** notes on animatic 3; Y/N to the proposal "a stopped drawing never ships" (chat 31's message).
+- **Rule P16 written (Sam: Y, chat 31):** latest animatic + clean kept in `animations/drafts/` (finish.py saves; handover.py DRAFT check). Animatic 2 is NOT on file (lost with chat 30; Sam's phone has it, this machine can't reach it), so the DRAFT check fires until animatic 3 is made: that one is a full redraw (~20-30 min) and is the first saved. Sam asked (chat 31) whether to redraw: awaiting his Y.
+- **Needs Sam:** Y to the full redraw for animatic 3; notes on animatic 3; Y/N to the proposal "a stopped drawing never ships" (chat 31's message).
 - **Read:** job pack "Notes round"; this section; "## Exceptions".
-- **Open rule requests:** the proposal above (film_engine: a stopped drawing refuses the render even with --faults-named; finish.py scans for black frames) awaits Sam's Y.
+- **Open rule requests:** the 'a stopped drawing never ships' proposal (film_engine: a stopped drawing refuses the render even with --faults-named; finish.py scans for black frames) awaits Sam's Y. P16 is written.
 - **For Claude:** branch `claude/protest-tiers-c31` (= main line). finish.py's --film is the module name `protest_tiers`.
 
 ## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals answered (chat 19), planned (chat 20), nothing built yet

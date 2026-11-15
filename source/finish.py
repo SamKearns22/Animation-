@@ -224,6 +224,17 @@ def main():
             subprocess.run([sys.executable, os.path.join(HERE, 'hook_text.py'), step, hooked, hook] + extra, check=True)
             step = hooked
         subprocess.run([sys.executable, os.path.join(HERE, 'signoff.py'), 'add', step, dst, follow], check=True)
+    if 'animatic' in os.path.basename(dst):        # rule P16 (Sam, 15 Nov): the latest animatic and its clean render are
+        import shutil                              # kept on GitHub, so a fix to a few seconds is a splice, not a redraw
+        keep = os.path.join(os.path.dirname(HERE), 'animations', 'drafts')
+        os.makedirs(keep, exist_ok=True)
+        slug = str(name[0]).replace('_', '-')
+        for f in os.listdir(keep):
+            if f.startswith(slug + '-'):
+                os.remove(os.path.join(keep, f))   # only the latest is kept
+        shutil.copy(dst, os.path.join(keep, f'{slug}-animatic.mp4'))
+        shutil.copy(src, os.path.join(keep, f'{slug}-clean.mp4'))
+        print(f'kept on GitHub: animations/drafts/{slug}-animatic.mp4 and -clean.mp4 (commit and push them)')
 
 
 if __name__ == '__main__':
