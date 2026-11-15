@@ -149,7 +149,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.79,
+   "cost": 2.83,
    "src": "estimate",
    "sid": "session_01GznaATSCt3EURnvy69nNwE"
   }
@@ -176,7 +176,10 @@
   {
    "name": "cast",
    "pct": 3.0,
-   "done": null
+   "done": {
+    "date": "2026-11-15",
+    "spent": 22.98
+   }
   },
   {
    "name": "sets",
