@@ -2,9 +2,16 @@
 
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 74 (head life on every voiced line: the acting list in "## Round 1 plan"), 61 (read only the MAP and the lines a beat touches), 89 (one moves critique pack for steps 4-6 together, after they are built).
-- **Done (chat 23, 15 Nov, Opus medium):** cast critique hunt 2 recorded and closed (`critique.py fixed`; 4 lines false alarms: acting is the moves stage, tiles fitted to their box, invented people have no photo; 10 small faults left open and named: necks, side-view bags, moped seat, RPG warhead shape, hoodie flat black, seller's hands behind the cart, headscarf size); stage `round1 cast` closed. Fixed before it: granny's oatmeal cardigan sleeve (her arm reads), the seller's grin, the tote worn cross-body so the words show. Step 3 built (stage `round1 sets` closed at 1.28% vs 1% share; the A/C reframe of the T4 painting is a camera crop done with step 4): the side alley (end shot B, bins as the front layer, fire at the far mouth, laundry, graffiti) and the props (TV, camo mannequin, AMMO boxes, cone, bike wheel).
-- **Next: chat 24, Opus medium:** step 4, the end scene (A skid + RPG + "Hey!" + head turn; B the couple behind the bins; C "Bro, what's a 'protest'?" + the shrug) with espeak stand-in voices and captions; clips of A and C (`final OUT --small --span`). Then steps 5-7 (T4 gags/effects/melee; T2/T3 extensions; checks, animatic 2) in later chats.
-- **Budget guard:** film at ~40% of a week. Sam's Y covers ~47%; until "## Round 1 notes" records his Y to ~63.5% (Q1), stop at 47% with what exists.
+- **Done (chat 24, 15 Nov, Opus medium):** step 4 built: the end scene. A: the T4 frame itself (no T4 mopeds) zoomed 2x on the bottom left and softened, a new moped skids in with tyre smoke and skid marks, the RPG raised and fired up out of the top right (backblast, trail), "Hey!" captioned, both heads snap round in three drawings. B: the couple behind the bins (wife's gasp, hand to mouth; husband rises, palms out, the street-side hand flicks out on "protesting", mouth on the take, head life, both looking right; nothing shows under the bins). C: 2.6x on the riders, the driver turns back with a tilt on "protest", the passenger looks to camera and shrugs. Captions (rule 62) on all three lines; espeak stand-ins time them and are never mixed (Sam's takes in `source/audio/protest-tiers-KEY.m4a` replace them). Clips of A and C sent.
+- **Known, open (for the moves critique):** the riders' turned heads read as "to camera" more than "to the left"; the wife's sun visor reads as a white disc; the shrug reads small at phone size (one palm, shoulders); the end shot lengths are fixed (2.4/2.8/2.4 s) and his takes may need them re-timed.
+- **Next: chat 25, Opus medium:** step 5 (T4 effects, the 3 gags, the melee redone; clips: selfie + helicopter, seller to the granny's throw), then 6 and 7 in later chats.
+- **Budget guard:** film at ~41% of a week. Sam's Y covers ~47%; until "## Round 1 notes" records his Y to ~63.5% (Q1), stop at 47% with what exists.
+- **Needs Sam:** Q1 (budget to ~63.5%); after animatic 2, his recordings of the 4 lines under the acting list.
+- **Read:** job pack "Build"; this section; "## Round 1 plan" (the T4 beats); "## Exceptions".
+- **Open rule requests:** as before (archived lists: chats 15-17), plus chat 18's (a)-(d) (in the archived handover). None new in chat 24.
+- **For Claude:** branch `claude/protest-tiers-c24`. End: `t4_plate(lt)` (T4 with no mopeds, `_PLATE`), `Zoom(k, x0, y0)` (`ZA`, `ZC`; `.cam`), `MOPED2_D/X`, `rider_heads`, `skid_fx`, `rocket_fx`, `VOICE_LINES`/`voices()`/`mouth_track`/`head_life`, `Tourist`, `tourist_pose`, `tourist_face`; cast: `rpg_ends`, `moped_scene(drv_roll=)`, `shrug` swings out round the shoulder (the straight path folded the elbow). Clips: `review/protest-tiers-end-A-clip.mp4`, `-C-clip.mp4`.
+
+## Round 1 notes" records his Y to ~63.5% (Q1), stop at 47% with what exists.
 - **Needs Sam:** Q1 (budget to ~63.5%); after animatic 2, his recordings of the 4 lines under the acting list.
 - **Read:** job pack "Build"; this section; "## Round 1 plan" (the end scene beats and the acting list); "## Exceptions".
 - **Open rule requests:** as before (archived lists: chats 15-17), plus chat 18's (a)-(d) (in the archived handover). None new in chat 23.
@@ -149,13 +156,13 @@ the tier a note touches. Timings: "## Round 1 plan" below replaces them.
 | # | from the brief (word for word where it matters) | done? |
 |---|------|------|
 | 34 | R1 The joke: each tier worse until Albania, off the charts; Albania's riot is not a protest, it is how they spend their time | |
-| 35 | R2a A second RPG moped pulls up, two riders, fires at something in the sky off screen; rioters clash with police behind; "Hey!" (the husband, Sam Q1) and they look to the side | |
-| 36 | R2b A side alley, two American tourists cowering, husband and wife (cap, shorts, bum bag, camera, "Greetings from Tirana" tote, crouched behind bins: Sam Q4); he says "We're just tourists! Why are y'all protesting?" | |
-| 37 | R2c Back to the riders: one says "Bro, what's a 'protest'?"; the other shrugs | |
+| 35 | R2a A second RPG moped pulls up, two riders, fires at something in the sky off screen; rioters clash with police behind; "Hey!" (the husband, Sam Q1) and they look to the side | built chat 24 (shot A), to tick at animatic 2 |
+| 36 | R2b A side alley, two American tourists cowering, husband and wife (cap, shorts, bum bag, camera, "Greetings from Tirana" tote, crouched behind bins: Sam Q4); he says "We're just tourists! Why are y'all protesting?" | built chat 24 (shot B) |
+| 37 | R2c Back to the riders: one says "Bro, what's a 'protest'?"; the other shrugs | built chat 24 (shot C) |
 | 38 | R3 Under each place heading, slightly smaller red text "Intensity Level:" 2, 4, 8, 11 out of ten; Albania at 11 from the start (Sam Q2) | |
 | 39 | R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-paced with new action, never slow motion (Sam Q5: T2 stock carried out, TV or mannequin; T3 second volley, truck pushes forward, a burning car rolls) | |
 | 40 | R5 Albania the showstopper: the most fluid, best-designed effects; gleeful violence and absurdity; gags a (Molotov seller's cart), b (selfie in front of the falling helicopter), c (granny throws a Molotov overarm) (Sam Q3) | |
-| 41 | Captions on the end scene's lines (rule 62); stand-in voices for timing only, never heard (best-practice) | |
+| 41 | Captions on the end scene's lines (rule 62); stand-in voices for timing only, never heard (best-practice) | built chat 24 |
 
 ## References as checklists: `references/protest-tiers/checklist.md` (what each photo shows; ticked at each critique, rule 89 A2).
 

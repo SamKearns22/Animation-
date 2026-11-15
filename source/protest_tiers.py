@@ -71,7 +71,11 @@ def at(tier, lt):
     return round(START[tier] + lt, 3)
 HOOK = ('European protests, ranked', {'y': 1300, 'until': 3.6})          # notes: Re-staged, T1 (over the near backs)
 def caption_at(t):
-    return None                        # voices only, none yet (Sam records them): no captions
+    """Rule 62: the end scene's lines captioned (the voices: notes "## Round 1 plan"; stand-ins until Sam records)."""
+    if t < START['ea']:
+        return None
+    import subtitles
+    return subtitles.caption_at(voices(), t)
 
 
 HEADLINES = {'t1': ('SPAIN', 'Barcelona, Passeig de Gràcia'), 't2': ('GERMANY', 'Frankfurt, Berliner Straße'),
@@ -1042,18 +1046,312 @@ def backlight(img, lt, ppl):
 
 # ================================================================================================= end
 END = ('ea', 'eb', 'ec')        # round 1 (Sam R2): A the second moped, B the side alley, C the two riders
+# Notes "## Round 1 plan", End scene + the acting list. A and C: the T4 frame itself (its painting, crowd, melee and
+# fire, no mopeds) zoomed in on the bottom left and softened (a long lens: the riders sharp in front); the riders are
+# drawn sharp through the zoom's own camera. B: the side alley (sets), the couple between the wall and the bins.
+_PLATE = []                      # set while the T4 frame is drawn as the end's background (no T4 mopeds in it)
+END_BG0 = 8.0                    # the T4 moment behind shot A's first frame; it runs on through A, then C
+
+
+def t4_plate(lt):
+    _PLATE.append(1)
+    try:
+        return picture(at('t4', 0.0) + lt) if lt < 10.0 else _t4_late(lt)
+    finally:
+        _PLATE.pop()
+
+
+def _t4_late(lt):
+    """T4 drawn past its own 10 s (the end scene's background runs on after the cut)."""
+    global SHOTS
+    keep = SHOTS
+    SHOTS = [('t4', 0.0, 1e9)]
+    try:
+        return picture(lt)
+    finally:
+        SHOTS = keep
+
+
+class Zoom:
+    """A 2D zoom of a finished T4 frame: window from (x0, y0), k times; `cam` draws sharp people into it."""
+    def __init__(self, k, x0, y0):
+        self.k, self.x0, self.y0 = k, x0, y0
+        c = T4CAM
+        self.cam = S.Cam(k * (c.VX - x0), k * (c.VY - y0), k * c.F, c.CH)
+
+    def image(self, im, blur=2.2):
+        k = self.k
+        out = im.transform(im.size, Image.AFFINE, (1 / k, 0, self.x0, 0, 1 / k, self.y0), Image.BICUBIC)
+        return out.filter(ImageFilter.GaussianBlur(blur)) if blur else out
+
+
+ZA = Zoom(2.0, 330, 930)         # shot A: the bottom left of the T4 frame, the melee at the right behind
+ZC = Zoom(2.6, 373, 1130)        # shot C: tighter on the riders
+MOPED2_D = 10.1                  # the second moped's depth (about 2.1x the T4 riders on screen in A, 2.7x in C)
+MOPED2_X = 0.31                  # where it stops (the driver over x 560 in A, 620 in C; the road at y ~1790)
+
+
+def moped2_x(lt):
+    """Shot A: skids in from the left, stops at 0.5 (ease out: braking hard)."""
+    u = min(1.0, max(0.0, lt / 0.5))
+    return lerp(MOPED2_X - 4.6, MOPED2_X, 1 - (1 - u) ** 3)
+
+
+def rider_heads(tier, lt):
+    """(driver head yaw, passenger head yaw, driver roll): None = with the body (facing right). A: on "Hey!" both
+    snap round to the left in three drawings (1.8-2.1); C: the driver back to the passenger; the passenger to camera
+    for the shrug (the acting list)."""
+    if tier == 'ea':
+        if lt < 1.8:
+            return None, None, 0.0
+        h = 45 if lt < 1.9 else 0 if lt < 2.0 else -45
+        return h, (45 if lt < 1.85 else 0 if lt < 1.95 else -45), 0.0
+    roll = -6.0 * math.sin(math.pi * min(1.0, max(0.0, (lt - 0.75) / 0.5)))   # the small tilt on "protest"
+    return (-45 if lt < 0.1 else -30), (-45 if lt < 1.4 else 0), roll
+
+
+def end_riders(img, tier, lt, z):
+    cam = z.cam
+    x = moped2_x(lt) if tier == 'ea' else MOPED2_X
+    gx, gy = cam.p(x, MOPED2_D)
+    s = scale_at(cam, MOPED2_D)
+    aim = (38 + 24 * ease((lt - 0.3) / 0.4)) if tier == 'ea' else 62.0   # C: the cast sheet's shrug angle (45 folded his arm)
+    dh, gh, roll = rider_heads(tier, lt)
+    shrug_u = ease((lt - 1.4) / 0.6) if tier == 'ec' else 0.0
+    fired = tier == 'ec' or lt >= 0.8
+    C.moped_scene(img, _cam2(), gx, gy - FEET * s, s, yaw=90, aim=aim, fired=fired, both=True, drv_head=dh,
+                  gun_head=gh, shrug_u=shrug_u, rim=C.RIM, drv_roll=roll)
+    return gx, gy, s, aim
+
+
+def skid_fx(img, lt, cam):
+    """Shot A: tyre smoke and dust off the back wheel as it brakes (0.1-1.4), two skid marks left on the road."""
+    x = moped2_x(lt)
+    gx, gy = cam.p(x - 0.55, MOPED2_D)
+    x0 = cam.p(moped2_x(0.25) - 0.55, MOPED2_D)[0]
+    if lt > 0.25:
+        pen = IS.pen(img)
+        for dy in (-6, 6):
+            pen.line([(x0, gy + dy), (gx, gy + dy)], (30, 22, 22), 7)
+    if 0.1 < lt < 1.6:
+        a = (lt - 0.1) / 1.5
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        rng = np.random.default_rng(7)
+        puffs = []
+        for q in range(7):
+            age = a + q * 0.05
+            px = gx - 60 - q * 70 * (0.5 + age) + rng.uniform(-20, 20)
+            puffs.append((px, gy - 30 - 90 * age * (0.6 + 0.1 * q), 50 + 90 * age + 10 * q))
+        S.smoke(lay, puffs, (150, 132, 124), (200, 186, 176), line=None, lw=1)
+        lay.putalpha(lay.getchannel('A').point(lambda v: int(v * 0.7 * (1 - a))))
+        img.alpha_composite(lay)
+
+
+def rocket_fx(img, lt, rear, front):
+    """Shot A: fired at 0.8: the backblast out of the rear, the rocket climbing out of the top right of the frame
+    (gone by 1.05), its smoke trail hanging and drifting."""
+    if lt < 0.8:
+        return
+    (rx, ry), (fx, fy) = rear, front
+    dx, dy = fx - rx, fy - ry
+    n = math.hypot(dx, dy) or 1
+    ux, uy = dx / n, dy / n
+    a = (lt - 0.8) / 0.5
+    if a < 1:                                              # the backblast: soft, see-through, out behind the tube
+        bl = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        S.smoke(bl, [(rx - ux * (60 + 160 * a + 40 * q), ry - uy * (60 + 160 * a + 40 * q) + 30 * q * a,
+                      30 + 80 * a + 12 * q) for q in range(4)], (226, 220, 210), (250, 246, 240), line=None, lw=1)
+        bl.putalpha(bl.getchannel('A').point(lambda v: int(v * 0.6 * (1 - a))))
+        img.alpha_composite(bl)
+        if a < 0.3:
+            S.glow_disc(img, fx, fy, 60, (255, 230, 150), amt=.6)
+    L = 2600.0                                             # the path: straight out along the tube, off the top
+    u = min(1.0, (lt - 0.8) / 0.3)
+    N = 200                                                # close-set lumps (chat 14: never a string of beads)
+    lumps = []
+    for k in range(int(N * u) + 1):
+        v = k / N
+        age = max(0.0, lt - 0.8 - v * 0.3)
+        g = min(age, 2.0)
+        r = 22 + 34 * g / (1 + 0.5 * g) + 4 * math.sin(k * 1.7)
+        lumps.append((fx + ux * L * v + 40 * g + 8 * math.sin(k * 2.3 + g * 3), fy + uy * L * v - 24 * g, r))
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    S.smoke(lay, lumps, (190, 176, 170), (226, 214, 206), lw=2)
+    lay.putalpha(lay.getchannel('A').point(lambda v: int(v * (1 - 0.5 * ease((lt - 1.4) / 1.0)))))
+    img.alpha_composite(lay)
+    if u < 1:
+        S.glow_disc(img, fx + ux * L * u, fy + uy * L * u, 40, (255, 230, 150), amt=.7)
+
+
+# --- the voices: Sam's takes when they exist (source/audio/protest-tiers-KEY.m4a), else espeak-ng stand-ins, for
+# timing only and never heard in anything sent (best-practice "Straight to the animatic"): the captions carry them
+VOICE_LINES = [dict(n=1, key='hey', who='husband', shot='ea', at=1.6, text='Hey!', es=['-v', 'en-us', '-s', '175', '-p', '45']),
+               dict(n=2, key='tourists', who='husband', shot='eb', at=0.3,
+                    text="We're just tourists! Why are y'all protesting?", es=['-v', 'en-us', '-s', '205', '-p', '45']),
+               dict(n=3, key='bro', who='driver', shot='ec', at=0.2, text="Bro, what's a 'protest'?",
+                    say="Bro, what's a protest?", es=['-v', 'en-us', '-s', '200', '-p', '30'])]
+
+
+def _take(ln):
+    import mossad_audio as MA
+    name = 'protest-tiers-' + ln['key']
+    if os.path.exists(os.path.join(HERE, 'audio', name + '.m4a')):
+        return MA.line(name), True
+    import shutil
+    import subprocess
+    path = os.path.join(HERE, 'data', 'standin-' + name + '.wav')
+    if not os.path.exists(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        if not shutil.which('espeak-ng'):
+            return np.zeros(int(MA.SR * len(ln['text'].split()) / 3.0)), False
+        subprocess.run(['espeak-ng'] + ln['es'] + ['-w', path, ln.get('say', ln['text'])], check=True,
+                       stdout=subprocess.DEVNULL)
+    from burnham_film import load
+    x = load(path)
+    return x / (np.abs(x).max() + 1e-9) * 0.4, False
+
+
+@lru_cache(None)
+def voices():
+    """The end scene's lines, each cut to its speech and placed at its moment: start, end, _voice, _stretches."""
+    import mossad_audio as MA
+    out = []
+    for ln in VOICE_LINES:
+        ln = dict(ln)
+        x, real = _take(ln)
+        st = MA.pauses(x, 0.12)
+        a, b = max(0, int((st[0][0] - 0.05) * MA.SR)), min(len(x), int((st[-1][1] + 0.12) * MA.SR))
+        x = x[a:b].copy()
+        ln.update(_voice=x, _dur=len(x) / MA.SR, _stretches=MA.pauses(x, 0.18), real=real)
+        ln['start'] = at(ln['shot'], ln['at'])
+        ln['end'] = ln['start'] + ln['_dur']
+        out.append(ln)
+    return out
+
+
+@lru_cache(None)
+def mouth_track(who):
+    import mouths
+    return [(a + ln['start'], b + ln['start'], sh) for ln in voices() if ln['who'] == who
+            for a, b, sh in mouths.track(ln['text'], ln['_stretches'])]
+
+
+@lru_cache(None)
+def head_life(who):
+    import headlife
+    import mossad_audio as MA
+    env = np.zeros(int((DUR + 1) * FPS))
+    n = MA.SR // FPS
+    for ln in voices():
+        if ln['who'] == who:
+            v = ln['_voice']
+            e = [np.sqrt(np.mean(v[i * n:(i + 1) * n] ** 2)) for i in range(len(v) // n)]
+            i0 = int(round(ln['start'] * FPS))
+            env[i0:i0 + len(e)] = e[:len(env) - i0]
+    return headlife.HeadLife(env, 0.0, seed=17)
+
+
+# --- shot B: the couple behind the bins
+COUPLE = {'husband': (0.42, 3.2), 'wife': (-0.42, 3.2)}    # (x, d): the husband on the street side (screen right)
+
+
+class Tourist(Actor):
+    """The couple: their own dress (cast.tourist) and an acted pose per moment (end shot B)."""
+    def __init__(self, who, lt):
+        x, d = COUPLE[who]
+        super().__init__(who, who, x, d, 18, 'stand', t=lt, tier='eb')
+        self.who = who
+
+    def sp(self):
+        return C.tourist(self.who)
+
+    def pose(self, sp):
+        return tourist_pose(self.who, sp, self.t)
+
+
+def crouch(who, lt):
+    """How far each is sunk behind the bins (m): crouched; the husband rises a little at 0.3 for his line."""
+    if who == 'wife':
+        return 0.22
+    return lerp(0.24, 0.06, ease((lt - 0.3) / 0.3))
+
+
+def tourist_pose(who, sp, lt):
+    j = V.standing(sp)
+    t = at('eb', lt)
+    if who == 'wife':                                      # the gasp at 0.0: her near hand to her mouth, held
+        g = ease(lt / 0.25)
+        hand = (-20.0, -150.0, 150.0)
+        rest = j['wrL']
+        V.arm_to(j, 'L', tuple(np.asarray(rest) + (np.asarray(hand) - np.asarray(rest)) * g), 'down', 'palm')
+        j['head_roll'] = 3.0 * g
+        j['nod'] = 0.0
+        return j
+    # the husband: palms out at "tourists" (0.6), one hand flicks toward the street on "protesting" (about 2.0)
+    pal = ease((lt - 0.35) / 0.3)
+    for side, sg in (('L', -1), ('R', 1)):
+        rest = np.asarray(j['wr' + side])
+        out = np.array((sg * 250.0, 170.0, 230.0))
+        V.arm_to(j, side, tuple(rest + (out - rest) * pal), 'out', 'palm' if pal > 0.5 else 'fist')
+    ln = voices()[1]
+    fl = ease((t - (ln['start'] + ln['_stretches'][-1][0] + 0.35)) / 0.2)
+    if fl > 0:                                             # "protesting": the hand on screen right out to the street
+        rest = np.asarray(j['wrR'])                       # (his right arm is the one on screen right, front on)
+        V.arm_to(j, 'R', tuple(rest + (np.array((430.0, 60.0, 160.0)) - rest) * fl), 'out', 'palm')
+    roll, nod = head_life('husband').at_time(t)
+    j['head_roll'], j['nod'] = roll, nod
+    return j
+
+
+def tourist_face(who, lt):
+    """The acting list's faces: brows up and together, eyes looking right (to the riders); his mouth on his take."""
+    t = at('eb', lt)
+    if who == 'wife':
+        f = dict(brow_up=0.05, frown=0.012, look=0.6 if lt > 0.5 else 0.2, smile=-0.6,
+                 mouth='v:O' if lt < 0.5 else 'rest', blink=1.35 < lt < 1.45)
+    else:
+        import mouths
+        f = dict(brow_up=0.045, frown=0.015, look=0.55, smile=-0.5, blink=0.05 < lt < 0.15)
+        sh = mouths.at(mouth_track('husband'), t)
+        f['mouth'] = 'rest' if sh == 'rest' else 'v:' + sh
+    return f
 
 
 def end_actors(tier, lt):
+    if tier == 'eb':
+        return [Tourist('husband', lt), Tourist('wife', lt)]
     return []
 
 
 def end_picture(tier, lt):
-    """Placeholder until the end scene is built (build order step 4): T4's last frame."""
-    return picture(at('t4', 9.9))
+    if tier == 'eb':
+        back, front = S.alley(lt)
+        cam = S.ALLEY_CAM
+        ppl = Image.new('RGBA', back.size, (0, 0, 0, 0))
+        for a in sorted(end_actors(tier, lt), key=lambda a: -a.d):
+            s = scale_at(cam, a.d)
+            gx, gy = cam.p(a.x, a.d)
+            sp = dict(a.sp(), **tourist_face(a.who, lt))
+            j = a.pose(sp)
+            C.draw(ppl, _cam2(), gx, gy - FEET * s + crouch(a.who, lt) * cam.ppm(a.d), s, sp, j, a.yaw, a.who,
+                   head=40 if a.who == 'husband' else 30)
+        ppl.paste((0, 0, 0, 0), (0, 1300, W, H))            # below the lids they are hidden: no feet under the bins
+        back.alpha_composite(ppl)
+        back.alpha_composite(front)
+        return back
+    z = ZA if tier == 'ea' else ZC
+    bg = END_BG0 + (lt if tier == 'ea' else 2.4 + 2.8 + lt)
+    back = z.image(t4_plate(bg))
+    if tier == 'ea':
+        skid_fx(back, lt, z.cam)
+    gx, gy, s, aim = end_riders(back, tier, lt, z)
+    if tier == 'ea':
+        rear, front = C.rpg_ends(_cam2(), gx, gy - FEET * s, s, 90, aim)
+        rocket_fx(back, lt, rear, front)
+    return back
 
 
-END_CAM = {e: T4CAM for e in END}      # replaced as each end shot is built
+END_CAM = {'ea': ZA.cam, 'eb': S.ALLEY_CAM, 'ec': ZC.cam}
 # ================================================================================================= picture
 def picture(t):
     """The frame WITHOUT the headlines (overlay puts those on last)."""
@@ -1103,7 +1401,8 @@ def picture(t):
         t4_crowd(ppl, lt)
         for a in sorted(t4_actors(lt), key=lambda a: -a.d):
             draw_actor(ppl, cam, a)
-        t4_mopeds(ppl, lt)
+        if not _PLATE:
+            t4_mopeds(ppl, lt)
         back.alpha_composite(backlight(back, lt, ppl))
         t4_fx(back, lt)
         if lt > 2.0:
@@ -1177,7 +1476,11 @@ def overlay(img, t):
     """The headlines (brief 2): white, country on the cut, location 0.5 s later underneath, top-left; round 1 (Sam
     R3): "Intensity Level: N/10" in red under them at 1.0 s; none in the end scene."""
     tier, lt = scene_of(t)
-    if tier not in HEADLINES:                              # the end scene has no headings (round 1 plan)
+    if tier not in HEADLINES:                              # the end scene has no headings (round 1 plan): captions
+        c = caption_at(t)
+        if c:
+            import subtitles
+            subtitles.draw(img, c, ss=img.width / W)
         return img
     country, place = HEADLINES[tier]
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -1224,6 +1527,10 @@ def soundtrack(stems=False):
             filmkit.place(mix, s[:int(1.2 * MA.SR)] * 0.6, at=at('t2', T2_WASH), sr=MA.SR)
     except Exception as e:                                  # the film still renders; the fault is printed
         print('SOUND: siren not placed:', e)
+    for ln in voices():                                     # Sam's takes only: a stand-in is never heard
+        if ln['real']:
+            i = int(ln['start'] * MA.SR)
+            mix[i:i + len(ln['_voice'])] += ln['_voice'][:max(0, n - i)]
     return mix
 
 

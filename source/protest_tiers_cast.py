@@ -1278,7 +1278,8 @@ def shrug(j, sp, u):
         j['sh' + sd] = (x, y - 28 * e, z)
     hold = np.asarray(j['wrR'], float)
     out = np.array((200.0, -20.0, -200.0))           # up and out behind him, palm up at head height: side on, the only
-    V.arm_to(j, 'R', tuple(hold + (out - hold) * e), 'out')   # place it is clear of the driver and the launcher
+    bulge = np.array((150.0, 0.0, 0.0)) * math.sin(math.pi * e)   # chat 24: mid-way the straight path passed the
+    V.arm_to(j, 'R', tuple(hold + (out - hold) * e + bulge), 'out')   # shoulder (elbow folded): swing out round it
     if e > 0.5:
         j.setdefault('hand', {})['R'] = 'palm'
     j['_free'] = 'R'
@@ -1316,7 +1317,7 @@ def rpg(p, j, yaw, fired=False):
 
 
 def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv_head=None, gun_head=None,
-                shrug_u=0.0, rim=None):
+                shrug_u=0.0, rim=None, drv_roll=0.0):
     """The moped racing in with its driver and (both) the RPG passenger. (x, y): the driver's neck base at scale s;
     returns nothing. Side on (90) or three-quarter (45) facing right. drv_head / gun_head: where each one's head faces
     (degrees, as yaw: -30 turned back over his shoulder toward us, 0 to camera; None = with the body). shrug_u: the
@@ -1324,7 +1325,7 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     read against a dark road (round 1 critique: the riders merged into the road)."""
     if rim is not None:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-        moped_scene(lay, cam, x, y, s, yaw, aim, fired, both, drv_head, gun_head, shrug_u, None)
+        moped_scene(lay, cam, x, y, s, yaw, aim, fired, both, drv_head, gun_head, shrug_u, None, drv_roll)
         from PIL import ImageFilter
         a = lay.split()[3]
         w = max(3, int(round(abs(cam.S(1.0) if hasattr(cam, 'S') else 1.0) * s * 14)) | 1)
@@ -1340,6 +1341,8 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     X['bar'] = (928.0 - 1.02 * U, 0.5 * U)        # grip height 1.02 m, 0.5 m ahead of his hips
     X['bob'] = (450.0 - (928.0 - 0.8 * U))        # hips on the seat (0.8 m up): negative = raised
     jd = driver_pose(drv, X)
+    if drv_roll:                                  # end shot C: the driver's small head tilt on "protest"
+        jd['head_roll'] = drv_roll
     jg = gunner_pose(gun, X, aim)
     if shrug_u > 0:
         shrug(jg, gun, shrug_u)
@@ -1357,6 +1360,23 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     if both:
         Lg = B.Local(cam, x + gx * sd, y + jg['bob'] * s * gun['height'] / 1.75, s * gun['height'] / 1.75, 1)
         rpg(B.Pen(img, Lg), jg, yaw, fired)
+
+
+def rpg_ends(cam, x, y, s, yaw=90, aim=38.0):
+    """Where moped_scene draws the launcher's rear and muzzle on screen (the same maths): the end scene's backblast
+    and rocket start there."""
+    gun = rioter('gunner')
+    X = dict(ground=928.0, yaw=V.snap(yaw)[0])
+    X['bar'] = (928.0 - 1.02 * U, 0.5 * U)
+    X['bob'] = (450.0 - (928.0 - 0.8 * U))
+    jg = gunner_pose(gun, X, aim)
+    sd = s * rioter('rider')['height'] / 1.75
+    gx, _ = V.project((0.0, 0.0, -0.42 * U), X['yaw'])[0]
+    sg = s * gun['height'] / 1.75
+    Lg = B.Local(cam, x + gx * sd, y + jg['bob'] * sg, sg, 1)
+    sh, u = jg['_rpg']
+    jj = dict(jg, _yaw=X['yaw'])
+    return Lg.P(*P3(jj, tuple(sh - u * 0.38 * U))), Lg.P(*P3(jj, tuple(sh + u * 0.57 * U)))
 
 
 # ------------------------------------------------------------------------------------------------ sheets
