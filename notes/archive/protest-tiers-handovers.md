@@ -299,3 +299,16 @@ Plan (chat 19): end scene ~7 s in 3 shots: A closer side-on, moped skids in, pas
 - **Open rule requests:** as before (archived lists: chats 15-17, chat 18's (a)-(d)). None new in chat 27.
 - **For Claude:** branch `claude/protest-tiers-c27`. Critique spec `source/data/protest-tiers-notes/spec.json` (round 1, stage notes, passes 5-6). `selfie()` flash 1.8, `rocket_fx` flash, `end_riders` fired only in ea, pushers `spots` + run-in, gas fade on `VOLLEY2`, `_jump` 0.42, sets `prop_mannequin` arm, cast `SCARF_DOT`, `ALLOWED_POPS` buyer*/granny.
 
+
+
+## Chat 28's handover (archived chat 29)
+- **Rules that bite next:** 59/67 (one full pre-flight per round), 14 (the checklist and Exceptions are now filled), 85 (cost watch).
+- **Done (chat 28, Sonnet, 15 Nov):** Sam said Y to Q1 (film ends near 51%, not 63.5%: animatic 2 2.5, notes 2.7, final 0.5). Brief rows 34-40 ticked; Exceptions rows written for the 5 ALLOWED_POPS names; quick pre-flight (`python3 source/preflight.py protest_tiers source/data/pf --text`, note the underscore) now runs and lists 107 faults (full list `source/data/pf/pf.txt`, git-ignored; rerun to get it).
+- **The faults, by kind:** (1) 67 "teleport" jumps: T3 back* 12 and pusher* 12 (6.5-7 s of T3: the new run-in and run-off), T4 buyer* 14, selfie 7, rioter* 10 (T4 20-22 s: the throws and vaults), T2 runner* 8, hauler* 4: hands and forearms moving 90-120 cm in one 12 fps frame, so add in-between poses or slow the move; (2) 9 front/back swaps (T4 20.0-23.75: rioters, policia, buyers, selfie; T2 7.67-7.75 runner6/7 and hauler1/2): keep each on its side or list in `ORDER_SWAPS` with why; (3) 11 pass-throughs of 13-21 cm, T4 20-23 s (buyer1 into selfie, buyer2, buyer3, rioter4; policia3 into rioter5); (4) 4 off-style star effects: T2 sign flash, T4 helicopter hit, T4 Molotovs and melee dust, T4 fireball (round them like the T4 flames); (5) the TOUCH/old lines are the known ones. Do not list a fault as allowed unless it truly cannot be seen; fix the cause first (rule: improve the check that missed it).
+- **Next: chat 29, Opus medium:** fix the list above as one pass (the T4 cart queue 20.6-23.7 s is most of it: spread the buyers' x/d so they do not overlap, time the throws), rerun the quick pre-flight to clean, then the full pre-flight and `final source/data/protest-tiers-clean.mp4 --small` chained with `&&`, `finish.py` with Hook Text (`HOOK` is set), send the animatic (about 30 min render; one wait). Sonnet may do the render once the list is clean.
+- **Budget guard:** film ~46% of a week; Sam's Y covers ~51%.
+- **Needs Sam:** notes on the clips; after animatic 2, his recordings of the 4 lines.
+- **Read:** job pack "Checks and animatic"; this section; "## Exceptions".
+- **Open rule requests:** as before (archived lists). None new in chat 28.
+- **For Claude:** branch `claude/protest-tiers-c28`. Quick pre-flight needs module name `protest_tiers`; the render lock refuses until the full one passes. T4 queue code: `buyers()`, `buyer_x`, `SLOT`, `SALES`, `granny()`; T3: pusher block in the actor list (~line 849), `back*`.
+

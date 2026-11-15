@@ -632,7 +632,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
     elif name == 'run_sign':                        # running carrying the sign low (T2 runners)
         j = moves.gait(sp, t, 'run')
     elif name.startswith('carry') or name == 'push':  # round 1: T2 looters jog with stock; T3 shove the car
-        j = moves.gait(sp, t, 'walk' if name == 'push' else 'run')
+        j = moves.gait(sp, t, 'walk' if name == 'push' else 'brisk')   # chat 29: laden, a brisk walk (run: 9 m/s feet)
     else:
         j = V.standing(sp)
     if name == 'line':                              # in the shield line: shield up in front, baton down by the side

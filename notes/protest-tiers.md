@@ -1,15 +1,15 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 59/67 (one full pre-flight per round), 14 (the checklist and Exceptions are now filled), 85 (cost watch).
-- **Done (chat 28, Sonnet, 15 Nov):** Sam said Y to Q1 (film ends near 51%, not 63.5%: animatic 2 2.5, notes 2.7, final 0.5). Brief rows 34-40 ticked; Exceptions rows written for the 5 ALLOWED_POPS names; quick pre-flight (`python3 source/preflight.py protest_tiers source/data/pf --text`, note the underscore) now runs and lists 107 faults (full list `source/data/pf/pf.txt`, git-ignored; rerun to get it).
-- **The faults, by kind:** (1) 67 "teleport" jumps: T3 back* 12 and pusher* 12 (6.5-7 s of T3: the new run-in and run-off), T4 buyer* 14, selfie 7, rioter* 10 (T4 20-22 s: the throws and vaults), T2 runner* 8, hauler* 4: hands and forearms moving 90-120 cm in one 12 fps frame, so add in-between poses or slow the move; (2) 9 front/back swaps (T4 20.0-23.75: rioters, policia, buyers, selfie; T2 7.67-7.75 runner6/7 and hauler1/2): keep each on its side or list in `ORDER_SWAPS` with why; (3) 11 pass-throughs of 13-21 cm, T4 20-23 s (buyer1 into selfie, buyer2, buyer3, rioter4; policia3 into rioter5); (4) 4 off-style star effects: T2 sign flash, T4 helicopter hit, T4 Molotovs and melee dust, T4 fireball (round them like the T4 flames); (5) the TOUCH/old lines are the known ones. Do not list a fault as allowed unless it truly cannot be seen; fix the cause first (rule: improve the check that missed it).
-- **Next: chat 29, Opus medium:** fix the list above as one pass (the T4 cart queue 20.6-23.7 s is most of it: spread the buyers' x/d so they do not overlap, time the throws), rerun the quick pre-flight to clean, then the full pre-flight and `final source/data/protest-tiers-clean.mp4 --small` chained with `&&`, `finish.py` with Hook Text (`HOOK` is set), send the animatic (about 30 min render; one wait). Sonnet may do the render once the list is clean.
-- **Budget guard:** film ~46% of a week; Sam's Y covers ~51%.
-- **Needs Sam:** notes on the clips; after animatic 2, his recordings of the 4 lines.
-- **Read:** job pack "Checks and animatic"; this section; "## Exceptions".
-- **Open rule requests:** as before (archived lists). None new in chat 28.
-- **For Claude:** branch `claude/protest-tiers-c28`. Quick pre-flight needs module name `protest_tiers`; the render lock refuses until the full one passes. T4 queue code: `buyers()`, `buyer_x`, `SLOT`, `SALES`, `granny()`; T3: pusher block in the actor list (~line 849), `back*`.
+- **Rules that bite next:** S7 (effect shapes), 13 (every exception has a row), 59/67 (one full pre-flight per round), 85 (cost watch).
+- **Done (chat 29, Opus medium, 15 Nov):** 107 pre-flight faults down to 4. T2 second wave: brisk laden walk, 0.9 s step-out, eased turn, own lanes. T3: back row throws come back (no snap), run-outs ease off and leave past the edge; pushers run in over 1.5 s, blend into the shove. T4: queue re-timed (SALES 3.1/4.15/5.2, enter 2.2), each buyer steps toward us and runs off right in front of the queue; selfie 0.6 m nearer; the vaulters stay where they land (0.75 s vault). Checks improved: the audit now sees lift (vaults read as passing through shields); the shape check draws T4 fire round as the film does; crowd crushes moved from TOUCHES to ALLOWED_CONTACTS. Exceptions rows written (marked NOT yet looked at full size).
+- **The 4 left: EFFECT SHAPES** (T2 flash, T4 hit, Molotovs, fireball). Diagnosed: the mask is every pixel with alpha > 0 of the whole fx layer at that moment: glow_disc's faint square boxes, scattered embers, the rocket trail, so the "star" is the scatter, not the burst (sheet: chat 29). Fix in the film: each EFFECTS entry draws only its own effect (or test visible alpha); then look at each burst alone; round any that are still spiky.
+- **Next: chat 30, Opus medium:** that fix, quick pre-flight clean, then the full pre-flight && `final source/data/protest-tiers-clean.mp4 --small`, `finish.py` with Hook Text, send the animatic (~30 min render, one wait). Look at 19.5-24.5 s (the queue) on the animatic and fill the "looked at" column.
+- **Budget guard:** film ~48% of a week; Sam's Y covers ~51%.
+- **Needs Sam:** nothing until the animatic.
+- **Read:** job pack "Checks and animatic"; this section; "## Exceptions" (the new chat 29 rows).
+- **Open rule requests:** none new (proposal for Sam, not yet asked: the shared shape check should test visible pixels per piece, kit-wide).
+- **For Claude:** branch `claude/protest-tiers-c29`. Quick check of a span: set `F.CLIP_SPAN=(t0,t1)`, run `clipcheck.run(F)` and `audit.run(F,t0,t1)` (5 s a tier). New helpers: `Actor.blend`, `_getaway`, `_turn`, `_volley`, `OFF_L`, `ENTER`, `Q_GAP`; `_fx_at` sets `S.ROUND_FIRE`.
 
 ## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals answered (chat 19), planned (chat 20), nothing built yet
 - Q1 (chat 20, open): the honest price of everything asked is ~29.3% more, the film near 63.5% (his Y was ~43-47%). 1 Y go to ~63.5% (my pick); 2 stop at 47% for a look at what exists.
@@ -132,7 +132,7 @@ protesting?", the wife's gasp, "Bro, what's a 'protest'?".
 | ALLOWED_POPS | runner6 | T2 looter steps out of the dark shop through the glass gap | chat 26 clip, chat 27 critique panels 1-3 |
 | ALLOWED_POPS | runner7 | T2 looter steps out of the dark shop through the glass gap | chat 26 clip, chat 27 critique panels 1-3 |
 | ALLOWED_POPS | back* | T3 back row steps up out of the packed crowd sprites (2.2-2.5 s) | chat 27 critique panel 4 full size |
-| ALLOWED_POPS | buyer* | T4 cart queue: the buyers step out of the packed crowd into the queue (2.6-2.75 s) | chat 27 critique panels 8-10 full size |
+| ALLOWED_POPS | buyer* | T4 cart queue: the buyers step out of the packed crowd into the queue (2.2-2.35 s, chat 29: was 2.6) | chat 27 critique panels 8-10 full size |
 | ALLOWED_POPS | granny | T4: she steps out of the packed crowd to the cart (5.7-5.85 s) | chat 27 critique panels 9-10 full size |
 | TOUCHES | hauler*, runner*, swinger | T2 run-in 4.25-7.95 s: the raiders crush through one gap in the glass, read as one dark pack (depth capped 10-18 cm) | chat 17: 4.4 and 4.6 s full size |
 | TOUCHES | front* | T3 run-out 10.8-11.0 s: feet 2 cm, the front line breaks as a pack | chat 17: preflight list (2 cm, one frame) |
@@ -143,6 +143,12 @@ protesting?", the wife's gasp, "Bro, what's a 'protest'?".
 | FAST_OK | front* | T3: stone throws 8.7-10.65 s (hands, forearms); the run-out sprint from the jet 10.7-12.0 s | chat 18: clipcheck speeds (feet 8-12 m/s, hands 13-14); T2 still 4.0 s full size |
 | FAST_OK | rioter* | T4: Molotov and stone throws 12-16 s (hands, forearms); running feet in the surge 12.9-13.9 s | chat 18: clipcheck speeds (feet 8-12 m/s, hands 13-14); T2 still 4.0 s full size |
 | ORDER_SWAPS | the same groups | the people cross in front of each other inside those three crushes | chat 17: same stills |
+| FAST_OK | back* | T3 run-out from the jet 14.7-18.0 s, legs only (thighs, shins, feet at 2-2.8x the body's 4.5 m/s, same sprint as front*); their turn and throw-to-run were snaps, fixed chat 29 (blended, eased off), so arms and bodies are still checked | chat 29: clipcheck speeds (legs 7-9 m/s); NOT yet looked at full size: the animatic |
+| FAST_OK | pusher* | T3 run-in to the car 14.4-16.2 s and run-off 17.3-18.0 s, legs only (same sprint); run-in slowed to 1.5 s and pose changes blended, chat 29 | chat 29: clipcheck speeds (legs 7-9 m/s); NOT yet looked at full size: the animatic |
+| FAST_OK | selfie* | T4 run-off right 21.25-24.0 s, legs only; slowed to 3.2 m/s, set off eased, turn blended, chat 29 | chat 29: clipcheck speeds; NOT yet looked at full size: the animatic |
+| FAST_OK | buyer* | T4 run-off right 21.5-26.0 s, legs and upper arms (pumping at 7.2-7.4 m/s); slowed to 3.2 / 2.8 m/s, set off eased, turn blended, chat 29 | chat 29: clipcheck speeds; NOT yet looked at full size: the animatic |
+| FAST_OK | rioter2* | T4 the vault over the shields 19.9-20.9 s, legs only (leaping strides); named here | chat 29: clipcheck speeds |
+| FAST_OK | rioter5* | the same vault, 0.12 s later | chat 29: clipcheck speeds |
 | EFFECT SHAPES | T2 flash | the star read is the flash disc plus the red crowbar end in one test layer; the flash alone is a round disc | chat 17: fx_t2 full size |
 | EFFECT SHAPES | T4 Molotov flames | spiky cartoon flame tongues (critique named the same, left open in chat 16): a fire restyle is a drawing job for round 1 | chat 17: fx_t4 full size |
 

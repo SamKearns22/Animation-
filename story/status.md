@@ -1,3 +1,3 @@
-protest-tiers: Sam said Y; the pre-flight for animatic 2 found 107 faults (mostly new hands jumping between frames in the cart queue and car shove); a fix chat is next.
-Next: chat 29, Opus medium: fix the list, clean pre-flight, then render and send animatic 2 (about 30 min).
-Needs Sam: notes on the clips.
+protest-tiers: chat 29 fixed 103 of the 107 pre-flight faults (people jumping between frames, walking through each other); the 4 left are false alarms from how bursts are tested.
+Next: chat 30, Opus medium: fix that test, clean pre-flight, then render and send animatic 2 (about 30 min).
+Needs Sam: nothing until animatic 2.

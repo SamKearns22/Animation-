@@ -284,12 +284,22 @@ class Actor:
         self.extra, self.clip, self.dark, self.tier = extra, clip, dark, tier
         self.lift, self.head = lift, head           # round 1: off the ground (a vault, a jump), m; head yaw
         self.prop, self.prop_before = None, False   # round 1: a carried thing drawn with them: prop(img, cam, actor)
+        self.mix = None                             # chat 29: (state, u, t, w): blend from that pose (w 0) to this one
+
+    def blend(self, state, u=0.0, t=0.0, w=1.0):
+        """Chat 29 (pre-flight: 107 teleports and snaps): pass from another pose into this one over a few frames."""
+        if w < 1.0:
+            self.mix = (state, u, t, max(0.0, w))
+        return self
 
     def sp(self):
         return make_person(self.kind, self.i, self.tier, self.force)
 
     def pose(self, sp):
         j = make_pose(sp, self.state, self.u, self.t, self.force)
+        if self.mix:
+            st, u, t, w = self.mix
+            j = moves.mix_poses(make_pose(sp, st, u, t, self.force), j, ease(w))
         if self.extra:
             self.extra(j)
         return j
@@ -518,8 +528,8 @@ def t2_actors(lt):
             out.append(Actor(f'hauler{k + 1}', 'rioter', x, de, 180, 'haul', tier='t2'))
         else:
             u = ease((tt - 1.3) / 0.4)
-            out.append(Actor(f'hauler{k + 1}', 'rioter', xe + 0.3 * u, de + 1.6 * u, 180,
-                             'throw' if u >= 1 else 'stand', u=(tt * 1.7 + k * .5) % 1, tier='t2',
+            out.append(Actor(f'hauler{k + 1}', 'rioter', xe - 0.1 * k * u, de + (1.85 - 0.2 * k) * u, 180,
+                             'throw' if u >= 1 else 'stand', u=_hauler_u(k, tt), tier='t2',
                              clip=T2_WR if u > 0.5 else None))
     # the road-sign swinger: runs in carrying it low, winds up 0.6, swings through the glass at 1.0, keeps swinging
     x, running = run_in(-3.3, -0.5, 0.05, 0.6)            # chat 15: mid-window (was -1.55: the sign at the frame edge)
@@ -563,11 +573,12 @@ def t2_actors(lt):
 # Round 1 (T2 3.0-5.2, notes "## Round 1 plan"): the second wave comes back out through the gap and jogs off right
 # with the stock: name -> (x where they step out, out at, lane d, jog m/s, pose, prop). The haulers carry the
 # mannequin between them, 1.4 m apart, so it stays rigid; frozen mid-frame at 5.2.
-WAVE = {'runner6': (0.3, 3.0, 12.9, 3.4, 'carry_front', 'tv'),
-        'runner7': (0.1, 3.2, 12.9, 3.0, 'carry_front', 'boxes'),
-        'hauler2': (0.9, 3.75, 13.4, 1.5, 'carry_up', None),     # in front (each steps out where they went in)
-        'hauler1': (-0.5, 3.75, 13.4, 1.5, 'carry_up', 'mannequin')}
+WAVE = {'runner6': (-0.2, 3.0, 12.95, 1.2, 'carry_front', 'tv'),       # chat 29 (pre-flight: feet 8-10 m/s, 74 cm a
+        'runner7': (0.1, 3.15, 13.3, 1.8, 'carry_front', 'boxes'),   # frame): a laden brisk walk, not a run; each
+        'hauler2': (0.5, 3.95, 13.55, 1.3, 'carry_up', None),         # its own lane (same lane: they swapped front and
+        'hauler1': (-0.9, 3.95, 13.75, 1.3, 'carry_up', 'mannequin')} # back in one frame), hauler2 in front
 WAVE_IN = 14.8                                              # the shop floor they come out from
+WAVE_OUT, WAVE_TURN = 0.9, 0.3                              # chat 29: step out over 0.9 s (was 0.45: 8 m/s), turn in 0.3
 
 
 def wave_pos(name, tt):
@@ -575,11 +586,15 @@ def wave_pos(name, tt):
     x0, t0, lane, v, _, _ = WAVE[name]
     if tt < t0:
         return None
-    u = (tt - t0) / 0.45
+    u = (tt - t0) / WAVE_OUT
     if u < 1:                                               # stepping out toward us through the gap
-        d = lerp(WAVE_IN, lane, ease(u))
+        d0 = WAVE_IN + (lane - 13.4) * name.startswith('hauler')   # from where each hauler stood (no swap)
+        d = lerp(d0, lane, ease(u))
         return x0, d, 0, d > 13.9
-    return x0 + v * (tt - t0 - 0.45), lane, 115, False      # jogging right (three-quarter away: the run's safe yaw)
+    a = tt - t0 - WAVE_OUT
+    k = min(1.0, a / WAVE_TURN)                             # turning right, then walking off (no snap of 115 degrees)
+    x = x0 + v * (a - WAVE_TURN / 2) if k >= 1 else x0 + v * WAVE_TURN / 2 * k * k
+    return x, lane, 115 * ease(k), False                    # three-quarter away: the run's safe yaw
 
 
 def _carried(kind):
@@ -598,14 +613,24 @@ def _carried(kind):
     return draw
 
 
+def _hauler_u(k, tt):
+    """The haulers' stone throws inside the shop; they stop mid-throw at 3.3 to pick up the mannequin (chat 29)."""
+    return (min(tt, 3.3) * 1.7 + k * .5) % 1
+
+
 def second_wave(tt):
     out = []
-    for name, (_, _, _, _, st, prop) in WAVE.items():
+    for name, (_, t0, _, _, st, prop) in WAVE.items():
         w = wave_pos(name, tt)
         if w is None:
             continue
         x, d, yaw, inside = w
+        if name.startswith('hauler'):                       # chat 29: they turn round and lift it (was a snap of
+            k = (tt - t0) / 0.4                             # 180 degrees and throw -> carry in one frame)
+            yaw = yaw if k >= 1 else 180 * (1 - ease(k))
         a = Actor(name, 'rioter', x, d, yaw, st, t=tt, tier='t2', clip=T2_WR if inside else None)
+        if name.startswith('hauler'):
+            a.blend('throw', _hauler_u(int(name[-1]) - 1, tt), w=(tt - t0) / 0.4)
         if prop:
             a.prop, a.prop_before = _carried(prop), yaw > 90 and prop != 'mannequin'
         out.append(a)
@@ -818,6 +843,28 @@ def draw_car3(img, lt):
     S._car(img, T3CAM, lt, mv, fire=car_fire(lt), roll=mv[1] / 0.34)
 
 
+OFF_L = -4.2                       # chat 29: T3's left edge is x -2.4 at the front line; past this they are gone
+PUSH_IN = 1.5                       # the pushers' run in from the left
+
+
+def _volley(c):
+    """A throwing cycle (0..1) -> the throw's u: through in 0.6 of it, then the arm comes back (it snapped back to
+    wound up in one frame: hands 13 m/s, chat 29)."""
+    return c / 0.6 if c < 0.6 else 1 - (c - 0.6) / 0.4
+
+
+def _getaway(u, v=4.5, acc=0.35):
+    """Metres run u s after setting off: up to speed v over `acc` s (it went 0 -> 4.5 m/s in one frame)."""
+    return v * u * u / (2 * acc) if u < acc else v * (u - acc / 2)
+
+
+def _turn(y0, y1, w):
+    """Yaw turning from y0 to y1 the short way round as w goes 0 -> 1 (eased)."""
+    dy = (y1 - y0 + 180) % 360 - 180
+    y = y0 + dy * ease(min(1.0, max(0.0, w)))
+    return (y + 180) % 360 - 180
+
+
 def t3_actors(lt):
     out = []
     jet = lt > 2.6 + J3
@@ -826,6 +873,8 @@ def t3_actors(lt):
         dx, _ = field('t3', x, 11.8, lt, k)
         if jet and lt > 2.7 + J3 + 0.05 * k:                  # broken by the jet: running out left
             u = lt - 2.7 - J3 - 0.05 * k                          # chat 18: lane step eased (it snapped 0.9 m)
+            if x + dx * .3 - 4.5 * u < OFF_L:                     # chat 29: gone off the left edge (they ran on
+                continue                                          # through each other off screen)
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3 - 4.5 * u, 11.8 - (.3 * k % 1) * ease(min(1.0, u / .35)), -90, 'run', t=lt,
                              tier='t3'))
         elif 0.75 <= lt < 2.6 + J3:
@@ -838,17 +887,21 @@ def t3_actors(lt):
         if lt < VOLLEY2 - 0.3:
             continue
         if jet and lt > 2.75 + J3 + 0.05 * k:
-            u = lt - 2.75 - J3 - 0.05 * k
-            out.append(Actor(f'back{k + 1}', 'rioter', x - 4.5 * u, 13.0, -90, 'run', t=lt + .3, tier='t3'))
+            u = lt - 2.75 - J3 - 0.05 * k                   # chat 29: turns and gets going (snapped throw -> sprint,
+            ut = ((2.75 + J3 + 0.05 * k - VOLLEY2) * 1.6 + k * 0.29) % 1.0   # hands 13 m/s)
+            if x - _getaway(u) < OFF_L:
+                continue
+            out.append(Actor(f'back{k + 1}', 'rioter', x - _getaway(u), 13.0, _turn(90, -115, u / .3), 'run',
+                             t=lt + .3, tier='t3').blend('throw', _volley(ut), w=u / .3))
         elif lt >= VOLLEY2:
             u = ((lt - VOLLEY2) * 1.6 + k * 0.29) % 1.0
-            out.append(Actor(f'back{k + 1}', 'rioter', x, 13.0, 90, 'throw', u=u, tier='t3'))
+            out.append(Actor(f'back{k + 1}', 'rioter', x, 13.0, 90, 'throw', u=_volley(u), tier='t3'))
         else:                                               # stepping up from the crowd behind
             out.append(Actor(f'back{k + 1}', 'rioter', x - 0.6 * (VOLLEY2 - lt) / 0.3, 13.0, 90, 'stand', tier='t3'))
     # round 1 (T3 6.0-8.0): four rioters shove the burning car into the gap, let go at 6.9, cheer it on, run off left
-    if CAR_T0 - 0.75 <= lt < CAR_T0 - 0.1:               # chat 27: they run in from off the left edge (no pop)
-        X0, X1, D0, _ = S.CAR3
-        u = ease((lt - CAR_T0 + 0.75) / 0.65)
+    if CAR_T0 - PUSH_IN - 0.1 <= lt < CAR_T0 - 0.1:     # chat 27: they run in from off the left edge (no pop)
+        X0, X1, D0, _ = S.CAR3                              # chat 29: over 1.5 s (0.65: bodies 7.5 m/s, feet 8)
+        u = ease((lt - CAR_T0 + PUSH_IN + 0.1) / PUSH_IN)
         for k, (px, pd) in enumerate(((X1 - 0.15, D0 - 0.45), (X1 + 0.4, D0 + 0.35), (X1 + 0.45, D0 + 1.25),
                                       (X1 + 0.45, D0 + 2.15))):
             x, d = S.car_pt(px, pd, car_move(lt))
@@ -863,16 +916,20 @@ def t3_actors(lt):
         for k, (px, pd) in enumerate(spots):
             if lt < CAR_LET:
                 x, d = S.car_pt(px, pd, mv)
-                out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, 140, 'push', t=lt * 1.6 + k * .3, tier='t3'))
+                w = (lt - CAR_T0 + 0.1) / 0.25                # chat 29: from the run into the shove, 3 frames
+                out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, _turn(115, 140, w), 'push', t=lt * 1.6 + k * .3,
+                                 tier='t3').blend('run', t=CAR_T0 - 0.1 + k * .2, w=w))
             else:
                 x, d = S.car_pt(px, pd, car_move(CAR_LET))
                 u = lt - CAR_LET - 0.4 - 0.08 * k
                 if u < 0:
                     out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, 150, 'cheer', u=abs(math.sin(lt * 9 + k)),
                                      tier='t3'))
-                else:
-                    out.append(Actor(f'pusher{k + 1}', 'rioter', x - 4.5 * u, d - 0.3 * k * ease(u / .3), -115, 'run',
-                                     t=lt + k * .2, tier='t3'))
+                elif x - _getaway(u) >= OFF_L:            # chat 29: turn and get going (snapped cheer -> sprint)
+                    t0 = CAR_LET + 0.4 + 0.08 * k
+                    out.append(Actor(f'pusher{k + 1}', 'rioter', x - _getaway(u), d - 0.3 * k * ease(u / .3),
+                                     _turn(150, -115, u / .3), 'run', t=lt + k * .2, tier='t3')
+                               .blend('cheer', abs(math.sin(t0 * 9 + k)), w=u / .3))
     # chat 15 (hunt 1: "no two rows of riot police": they stood at the right edge, off frame): two rows in frame
     for k, (x, d) in enumerate(((1.3, 11.0), (1.9, 11.0), (2.5, 11.0), (1.6, 12.0), (2.2, 12.0), (2.8, 12.0))):
         out.append(Actor(f'crs{k + 1}', 'officer', x, d, -90, 'line', force='crs', tier='t3'))
@@ -1074,10 +1131,12 @@ def crowd_t4():
 
 # ---- round 1 (Sam's gags a, b, c and R5): the T4 beats are in notes "## Round 1 plan", Beat list
 MD = 3.0                                           # round 1: the melee 3 m nearer (it read as a grey smear)
-SELFIE = (0.35, 10.9)                              # gag b: front and centre, between the cart and the melee
+SELFIE = (0.35, 10.3)                              # gag b: front and centre, between the cart and the melee
+#                                                    (chat 29: 0.6 m nearer, out of the queue's line: they walked through him)
 CART = (-1.6, 10.6)                               # the seller's cart, by the bank (bottom left)
 SLOT = (-0.3, 11.0)                               # where the buyer at the front of the queue stands
-SALES = (3.4, 3.8, 4.2)                            # gag a: he hands a lit bottle over (each buyer throws at once)
+SALES = (3.1, 4.15, 5.2)                           # gag a: he hands a lit bottle over (each buyer throws at once)
+#                                                    chat 29: 1.05 s apart (0.4: the next one stepped up into the last)
 GRANNY_BUY, GRANNY_THROW, GRANNY_HIT = 6.35, 6.6, 7.3
 CHEER = 7.35                                       # her hit: the seller applauds, fists go up
 HOLD = 8.0                                         # the gleeful hold: jumping, fireworks
@@ -1107,21 +1166,27 @@ def t4_actors(lt):
     for k in range(6):                                     # the rioters at the front: surge, slam, swarm through
         x0 = -2.0 + k * 0.62                                 # chat 14: 0.62 apart, three ranks (was 0.45: arms in backs)
         dx = 1.6 * ease((lt - 0.9) / 1.0) + 1.4 * push + back
-        if k in (1, 4) and 1.95 <= lt < 2.75:              # round 1: two vault the shields (clear silhouettes)
-            u = (lt - 1.95 - 0.12 * (k == 4)) / 0.6
-            u = min(max(u, 0.0), 1.0)
-            out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx + 1.8 * u, 17.2 - MD + 0.4 * (k == 4), 90, 'run',
-                             t=lt * 1.4, tier='t4', lift=1.0 * math.sin(math.pi * u)))
+        vault = k in (1, 4) and lt >= 1.95                 # round 1: two vault the shields (clear silhouettes)
+        t_land = 1.95 + 0.12 * (k == 4) + 0.75            # chat 29: a 0.75 s vault (0.6: landing at 8 m/s)
+        u = min(max((lt - t_land + 0.75) / 0.75, 0.0), 1.0) if vault else 0.0
+        over = 1.8 * u                                     # chat 29: they stay over the line once landed (they
+        d = 16.9 - MD + 0.65 * (k % 3)                     # snapped back 1.8 m at 2.75); their own depth throughout
+        if vault and lt < t_land:
+            out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx + over, d, 90, 'run', t=lt, tier='t4',
+                             lift=1.0 * math.sin(math.pi * u)))
             continue
+        land = (lt - t_land) / 0.25 if vault else 1.0      # from the vault's run into the throw, 3 frames
         if cheer:
             u = 0.5 + 0.5 * math.sin(lt * 9 + k)
-            out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx, 16.9 - MD + 0.65 * (k % 3), 60, 'cheer', u=u,
+            out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx + over, d, 60, 'cheer', u=u,
                              tier='t4', lift=_jump(lt, k)))
             continue
         state = 'run' if 0.9 < lt < 1.9 else 'throw'
-        u = ((lt * 1.8) + k * .29) % 1.0
-        out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx, 16.9 - MD + 0.65 * (k % 3), 90, state, u=u, t=lt + .35,
-                         tier='t4'))   # chat 18: +.35 starts the run on the step nearest the throw stance (feet snapped 68 cm)
+        u = ((lt * 1.8) + (0, .29, .12, .87, 1.16, .99)[k]) % 1.0   # chat 29: 3 and 6 thrown through (arm low)
+        # as the vaulters go over them (wound up, their arms were in the vaulters' bodies)
+        out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx + over, d, 90, state, u=u, t=lt + .35,
+                         tier='t4').blend('run', t=t_land if vault else lt, w=land))
+        # chat 18: +.35 starts the run on the step nearest the throw stance (feet snapped 68 cm)
     if not _PLATE:                                         # the end's background plate: just the riot
         out += selfie(lt) + buyers(lt) + granny(lt)
     return out
@@ -1144,50 +1209,67 @@ def selfie(lt):
     if lt < 1.45:
         yaw = (135, 90, 45)[min(2, int((lt - 1.2) / 0.085))]
         return [Actor('selfie', 'rioter', x, d, -yaw, 'stand', tier='t4')]
-    if lt < 3.25:
+    if lt < 3.25:                                  # chat 29: phone up over 3 frames (it snapped up: hands 14 m/s)
         u = ease((lt - 2.4) / 0.2)
-        return [Actor('selfie', 'rioter', x, d, 0, 'selfie', u=u, tier='t4')]
-    if lt < 4.6:                                   # off into the melee (clear before the queue fills at the cart)
-        return [Actor('selfie', 'rioter', x + 4.0 * (lt - 3.25), d + 2.0 * (lt - 3.25), 90, 'run', t=lt, tier='t4')]
-    return []
+        w = (lt - 1.45) / 0.25
+        return [Actor('selfie', 'rioter', x, d, _turn(-45, 0, w), 'selfie', u=u, tier='t4').blend('stand', w=w)]
+    a = lt - 3.25                                  # off into the melee, right, in front of the queue (chat 29: he
+    if x + _getaway(a, 3.2) > 4.5:                 # set off at 4.5 m/s from a standstill, and ran through the queue)
+        return []
+    return [Actor('selfie', 'rioter', x + _getaway(a, 3.2), d - 0.25 * ease(a / 0.6), _turn(0, 90, a / 0.3), 'run',
+                  t=lt, tier='t4')
+            .blend('selfie', u=1.0, w=a / 0.25)]
 
 
+ENTER = 2.2                                        # chat 29: they walk into the queue 2.2-3.1
+Q_GAP = 0.72                                       # chat 29: the queue's spacing (0.62: strides overlapped)
 BUYER_I = (3, 8, 13)                               # ordinary Tirana lads in colour: they read against the dark crowd
 
 
 def buyer_x(k, lt):
-    """Buyer k (0, 1, 2) in the queue: steps up a place each time one is served (0.25 s shuffle)."""
-    served = sum(1 for t0 in SALES if lt >= t0 + 0.5)
-    place = k - served
-    prev = k - sum(1 for t0 in SALES if lt >= t0 + 0.25)
-    u = 0.0
-    for t0 in SALES:
-        if t0 + 0.25 <= lt < t0 + 0.5:
-            u = ease((lt - t0 - 0.25) / 0.25)
-    p = lerp(prev, place, u) if prev != place else place
-    return SLOT[0] + 0.62 * p, SLOT[1] + 0.12 * p
+    """Buyer k (0, 1, 2) in the queue: steps up a place once the one ahead has thrown and gone (0.3 s, walking)."""
+    gone = [t0 + 0.8 for t0 in SALES]                 # chat 29: the one served throws, steps out of the way
+    place, moving, still = k, False, ENTER + 0.9      # still: when they last stopped walking
+    for j, tg in enumerate(gone[:k]):
+        if lt >= tg + 0.3:
+            place -= 1
+            still = tg + 0.3
+        elif lt >= tg:
+            place -= ease((lt - tg) / 0.3)
+            moving = True
+    return SLOT[0] + Q_GAP * place, SLOT[1] + 0.12 * place, moving, still
 
 
 def buyers(lt):
     """Gag a: three rioters queue at the cart from 2.6; each takes a lit bottle and throws it at once (the bank is
-    to their left: they face it), then runs off right into the melee."""
+    to their left: they face it), then runs off right, in front of the queue (chat 29: they ran back through it and
+    into the melee). They walk in from the crowd at the right over 0.9 s (was a 0.5 s dash: 7 m/s)."""
     out = []
-    if lt < 2.6:
+    if lt < ENTER:
         return out
     for k, t0 in enumerate(SALES):
         name = f'buyer{k + 1}'
         if lt < t0:
-            x, d = buyer_x(k, lt)
-            ent = ease((lt - 2.6) / 0.5)              # they come in from the right, into the queue
-            out.append(Actor(name, 'marcher', x + 2.5 * (1 - ent), d, -90 if ent >= 1 else -115,
-                             'stand' if ent >= 1 else 'run', t=lt, tier='t4', i=BUYER_I[k]))
-        elif lt < t0 + 0.5:
+            x, d, moving, still = buyer_x(k, lt)
+            ent = ease((lt - ENTER) / 0.9)            # they come in from the right, into the queue
+            if ent < 1 or moving:
+                out.append(Actor(name, 'marcher', x + 1.2 * (1 - ent), d, -90, 'march', t=lt, tier='t4',
+                                 i=BUYER_I[k]))
+            else:                                     # feet together over 0.2 s as they stop
+                out.append(Actor(name, 'marcher', x, d, -90, 'stand', tier='t4', i=BUYER_I[k])
+                           .blend('march', t=still, w=(lt - still) / 0.2))
+        elif lt < t0 + 0.45:
             x, d = SLOT
-            out.append(Actor(name, 'marcher', x, d, -90, 'molotov', u=_throw_u(lt, t0), tier='t4', i=BUYER_I[k]))
-        elif lt < t0 + 1.6:
+            out.append(Actor(name, 'marcher', x, d, -90, 'molotov', u=_throw_u(lt, t0), tier='t4', i=BUYER_I[k])
+                       .blend('stand', w=(lt - t0) / 0.12))
+        else:
             x, d = SLOT
-            a = lt - t0 - 0.5
-            out.append(Actor(name, 'marcher', x + 3.5 * a, d + 3.0 * a, 90, 'run', t=lt, tier='t4', i=BUYER_I[k]))
+            a = lt - t0 - 0.45
+            run = _getaway(a, 2.8, 0.25)   # a step toward us out of the queue first, each its own lane
+            if x + run > 4.5:                         # off the right edge
+                continue
+            out.append(Actor(name, 'marcher', x + run, d - (0.8 - 0.1 * k) * ease(a / 0.3), _turn(-90, 90, a / 0.3),
+                             'run', t=lt, tier='t4', i=BUYER_I[k]).blend('molotov', u=1.0, w=a / 0.3))
     return out
 
 
@@ -1198,7 +1280,8 @@ def granny(lt):
     x, d = SLOT
     if lt < 6.2:
         u = ease((lt - 5.7) / 0.5)
-        return [Actor('granny', 'granny', x + 1.6 * (1 - u), d, -90, 'march' if u < 1 else 'stand', t=lt,
+        return [Actor('granny', 'granny', x + 1.6 * (1 - u), d + 0.4 * (1 - u), -90,   # chat 29: from behind the
+                      # last buyer's run-off (same line: they met) 'march' if u < 1 else 'stand', t=lt,
                       tier='t4', extra=_bag)]
     if lt < GRANNY_BUY:
         return [Actor('granny', 'granny', x, d, -90, 'stand', tier='t4', extra=_pay)]
@@ -1923,7 +2006,9 @@ def scene(t):
     for a in ACTORS[tier](lt):
         sp = a.sp()
         j = a.pose(sp)
-        out.append(audit.Thing(a.name, audit.placed(a.name, j, a.x, a.d, facing(a.yaw), sp.get('height', 1.75), sp=sp)))
+        out.append(audit.Thing(a.name, audit.placed(a.name, j, a.x, a.d, facing(a.yaw), sp.get('height', 1.75),
+                                                    lift=getattr(a, 'lift', 0.0), sp=sp)))   # chat 29: the audit
+        # did not see a vault's or a jump's height (bodies in the air read as passing through the shields)
     return out
 
 
@@ -2001,7 +2086,16 @@ def soundtrack(stems=False):
 
 # Rule S7: each tier's effects drawn alone on a clear frame at the moment they peak, shape-tested (viewchecks)
 def _fx_at(fn, lt):
-    return lambda img: fn(img, lt)
+    """An effect drawn alone for the shape check, as the film draws it (chat 29: T4's fire is round only while
+    S.ROUND_FIRE is on, which picture() sets per shot; drawn alone it was left off, so the check saw spiky fire)."""
+    def draw(img):
+        keep = S.ROUND_FIRE
+        S.ROUND_FIRE = fn is t4_fx
+        try:
+            fn(img, lt)
+        finally:
+            S.ROUND_FIRE = keep
+    return draw
 
 
 EFFECTS = [('T1 firework string', 'trail', _fx_at(t1_fx, 1.2)), ('T1 three bursts', 'burst', _fx_at(t1_fx, 1.95)),
@@ -2049,6 +2143,23 @@ def LINE_SUBJECTS():
 FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 'swinger')]
            + [(p, at('t3', 2.7 + J3), at('t3', 8.0)) for p in ('front*',)]   # T3 run-out: the same sprint from the jet
            + [(f'rioter{k}.foot{sd}', at('t4', 0.9), at('t4', 1.9)) for k in range(1, 7) for sd in 'LR']   # T4 surge
+           # chat 29: the T4 runners (the vault's leap, the selfie and the buyers off right): the same sprint legs; a
+           # buyer's upper arm pumps at 7.2-7.4 m/s; their snaps (turns, pose changes) were fixed, bodies still checked
+           + [(f'{w}.{part}{sd}', t0, t1) for w, t0, t1, parts in (
+               ('rioter2', at('t4', 1.9), at('t4', 2.8), ('thigh', 'shin', 'foot')),
+               ('rioter5', at('t4', 1.9), at('t4', 2.9), ('thigh', 'shin', 'foot')),
+               ('selfie', at('t4', 3.25), at('t4', 6.0), ('thigh', 'shin', 'foot')),
+               ('buyer1', at('t4', SALES[0] + 0.45), at('t4', 6.0), ('thigh', 'shin', 'foot', 'arm')),
+               ('buyer2', at('t4', SALES[1] + 0.45), at('t4', 7.0), ('thigh', 'shin', 'foot', 'arm')),
+               ('buyer3', at('t4', SALES[2] + 0.45), at('t4', 8.0), ('thigh', 'shin', 'foot', 'arm')))
+              for part in parts for sd in 'LR']
+           # chat 29: round 1's new runners, the same sprint (legs only: thighs, shins, feet at 2-2.8x the body's
+           # speed; their turns and arms were snaps and are fixed, so arms and bodies are still checked)
+           + [(f'{w}{k}.{part}{sd}', t0, t1) for w, ks, t0, t1 in (
+               ('back', (1, 2, 3), at('t3', 2.75 + J3), at('t3', 8.0)),
+               ('pusher', (1, 2, 3, 4), at('t3', CAR_T0 - PUSH_IN - 0.1), at('t3', CAR_T0 + 0.2)),
+               ('pusher', (1, 2, 3, 4), at('t3', CAR_LET + 0.4), at('t3', 8.0)))
+              for k in ks for part in ('thigh', 'shin', 'foot') for sd in 'LR']
            # the stone throws: a throwing hand really reaches ~20 m/s (clipcheck caps it at 12, the forearm at 10)
            + [(f'{w}{k}.{part}{sd}', t0, t1) for w, ks, t0, t1 in (
                ('runner', range(1, 6), at('t2', 0.6), at('t2', T2_FREEZE + 0.05)),
@@ -2060,9 +2171,11 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
 ALLOWED_POPS = [('runner6', at('t2', 2.95), at('t2', 3.3), 'out of the dark shop, through the gap in the glass'),
                 ('runner7', at('t2', 3.15), at('t2', 3.5), 'out of the dark shop, through the gap in the glass'),
                 ('back*', at('t3', VOLLEY2 - 0.35), at('t3', VOLLEY2), 'step up out of the packed crowd behind'),
-                ('buyer*', at('t4', 2.6), at('t4', 2.75), 'step out of the packed crowd into the queue'),
+                ('buyer*', at('t4', ENTER), at('t4', ENTER + 0.15), 'step out of the packed crowd into the queue'),
                 ('granny', at('t4', 5.7), at('t4', 5.85), 'steps out of the packed crowd to the cart')]
-TOUCHES = [('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
+# chat 29: these were TOUCHES (a hand meant to be ON a thing, checked every frame); they are crowd crushes the
+# audit should allow, not hand contacts, so the touch check found 5-900 cm gaps: allowed contacts, depth-capped
+ALLOWED_CONTACTS = [('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
            ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
            ('runner*', 'runner*', at('t2', 0), at('t2', T2_FREEZE + .75), 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),
            ('runner*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in: the swinger is in the crush', 0.10),
@@ -2077,7 +2190,7 @@ ORDER_SWAPS = [(a, b, t0, t1, w) for a, b, t0, t1, w in (
     ('crs*', 'front*', at('t3', 2.7 + J3), at('t3', 3.3 + J3), 'T3 run-out'),
     ('policia*', 'policia*', at('t4', 2.0), at('t4', 2.3), 'T4 melee: the line buckles'),
     ('policia*', 'rioter*', at('t4', 2.0), at('t4', 2.3), 'T4 melee: rioters break through the line'))]
-ALLOWED = [(a, b, t0, t1) for a, b, t0, t1, *_ in TOUCHES]   # clipcheck reads the same meant contacts
+ALLOWED = [(a, b, t0, t1) for a, b, t0, t1, *_ in ALLOWED_CONTACTS]   # clipcheck reads the same meant contacts
 
 
 # ================================================================================================= checks / main
