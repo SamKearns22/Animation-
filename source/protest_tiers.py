@@ -472,11 +472,11 @@ def t2_actors(lt):
             u = ease((tt - 1.3) / 0.4)
             out.append(Actor(f'hauler{k + 1}', 'rioter', xe + 0.3 * u, de + 1.6 * u, 180,
                              'throw' if u >= 1 else 'stand', u=(tt * 1.7 + k * .5) % 1, tier='t2',
-                             clip=T2_WIN if u > 0.5 else None))
+                             clip=T2_WR if u > 0.5 else None))
     # the road-sign swinger: runs in carrying it low, winds up 0.6, swings through the glass at 1.0, keeps swinging
-    x, running = run_in(-5.2, -1.55, 0.05, 0.6)
+    x, running = run_in(-5.2, -0.5, 0.05, 0.6)            # chat 15: mid-window (was -1.55: the sign at the frame edge)
     if running:
-        out.append(Actor('swinger', 'rioter', x, 12.6, 90, 'run_sign', t=tt, tier='t2'))
+        out.append(Actor('swinger', 'rioter', x, 12.0, 90, 'run_sign', t=tt, tier='t2'))
     else:
         if tt < 0.9:
             u = 0.2 * ease((tt - 0.6) / 0.3)
@@ -485,9 +485,9 @@ def t2_actors(lt):
         else:
             c = ((tt - 1.05) % 0.7) / 0.7
             u = 1 - 0.8 * math.sin(math.pi * c) if tt < 3.0 else 0.55
-        out.append(Actor('swinger', 'rioter', x, 12.6, 90, 'swing', u=u, tier='t2'))
+        out.append(Actor('swinger', 'rioter', x, 12.0, 90, 'swing', u=u, tier='t2'))
     # five more: two throw stones into the shop, one kicks the A-board over (1.4), two by the closed shop
-    for k, (xe, de) in enumerate(((0.9, 12.4), (-0.2, 12.1), (-2.6, 12.2), (2.2, 12.5), (2.8, 12.0))):
+    for k, (xe, de) in enumerate(((0.9, 12.4), (1.55, 11.9), (-2.15, 12.3), (2.25, 12.5), (2.9, 12.0))):
         x, running = run_in(-5.0 - k * .4, xe, 0.05 + k * 0.07, 0.6 + k * .05)
         if running:
             out.append(Actor(f'runner{k + 1}', 'rioter', x, lane(k + 2, de, -5.0 - k * .4, xe, 0.05 + k * 0.07,
@@ -498,10 +498,10 @@ def t2_actors(lt):
             out.append(Actor(f'runner{k + 1}', 'rioter', x, de, yaw, 'throw', u=u if lt < 3.2 else 0.3, tier='t2'))
     # the crowd on the near pavement, seen from behind, all facing the store (chanting: signs jab on the beat)
     beat = abs(math.sin(math.pi * 2.2 * tt))
-    crowd = [(-2.5, 5.6, 'placard:WAFFEN RAUS:250,246,232', 0), (2.6, 5.5, 'phone', 1), (-1.5, 5.7, 'stand', 2),
-             (1.4, 5.6, 'stand', 3), (0.2, 5.8, 'stand', 4),
-             (-1.3, 4.3, 'placard:GEN Z REGELT:240,220,60', 5), (1.35, 4.4, 'phone', 6), (0.1, 4.5, 'stand', 7),
-             (-0.75, 3.35, 'stand', 8), (0.85, 3.4, 'phone', 9)]
+    # chat 15 (moves hunt 1: the near crowd at 3.3-5.8 m hid the smash and lost its feet): back to 7-8.6 m, at the
+    # two sides only, so the window and the swing stay clear in the middle; whole people, feet on the road
+    crowd = [(-0.72, 7.8, 'placard:WAFFEN RAUS:250,246,232', 0), (-1.5, 8.9, 'phone', 1), (-0.75, 9.3, 'stand', 2),
+             (1.25, 7.7, 'phone', 6), (0.9, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (1.65, 8.7, 'stand', 3)]
     for k, (x, d, st, i) in enumerate(crowd):
         if st.startswith('placard'):
             st = st + ':' + str(int(90 * beat))
@@ -510,10 +510,10 @@ def t2_actors(lt):
 
 
 def t2_fx(img, lt):
-    cam = S.CAMS['t2']
+    cam = RF2.cam
     tt = min(lt, 3.2)
     # the A-board by the doorway, kicked over at 1.4
-    bx, by = cam.p(-3.4, 12.6)
+    bx, by = cam.p(-1.6, 12.8)                             # chat 15: in frame after the T2 reframe (was -3.4)
     k = cam.ppm(12.6)
     ang = math.radians(85 * ease((tt - 1.4) / 0.25))
     hgt, wd = 1.15 * k, 0.72 * k                           # chat 14: a pavement A-board's true size (was small)
@@ -536,17 +536,17 @@ def t2_fx(img, lt):
         IS.poly(img, [b, (b[0] + 10, b[1] - 8)], None, INK, 7, 0)
     # the impact flash where the sign meets the glass (1.0)
     if 0.98 <= tt < 1.15:
-        S.glow_disc(img, 330, 905, 90, (255, 250, 210), amt=.6)
+        S.glow_disc(img, *RF2.R(500, 905), 130, (255, 250, 210), amt=.7)
     # falling glass with glints (1.05-1.6), then shards on the pavement glinting
     rng = np.random.default_rng(5)
     for n in range(60):
-        x0, y0 = rng.uniform(T2_WIN[0] + 10, T2_WIN[2] - 10), rng.uniform(T2_WIN[1] + 10, T2_WIN[3] - 20)
+        x0, y0 = rng.uniform(T2_WR[0] + 10, T2_WR[2] - 10), rng.uniform(T2_WR[1] + 10, T2_WR[3] - 20)
         a = tt - 1.05 - rng.uniform(0, .15)
         if a < 0:
             continue
-        yy = min(1175.0 + rng.uniform(-20, 15), y0 + 900 * a * a)
+        yy = min(RF2.R(0, 1175)[1] + rng.uniform(-20, 15), y0 + 1100 * a * a)
         xx = x0 + rng.uniform(-60, 60) * min(a, .4)
-        r = rng.uniform(5, 14)
+        r = rng.uniform(6, 17)
         sp = rng.uniform(0, 6.28) + a * 9
         tri = [(xx + r * math.cos(sp + q * 2.1), yy + r * .7 * math.sin(sp + q * 2.1)) for q in range(3)]
         IS.poly(img, tri, (210, 230, 238), (120, 150, 160), 1.2, 0)
@@ -566,11 +566,14 @@ def blue_wash(img, lt):
     band = np.exp(-((xs - sweep) / 220.0) ** 2)
     strobe = 0.75 + 0.25 * (int(lt * 8) % 2)
     tint = np.array((0.42, 0.55, 1.05), np.float32)
-    k = (0.65 * u * strobe + 0.35 * band * u)[..., None]
+    k = (0.32 * u * strobe + 0.62 * band * u)[..., None]   # chat 15: the sweep, not a flat tint, carries it
     out = a * (1 - k) + (a * tint + np.array((10, 30, 90), np.float32)) * k
     ys = np.arange(H, dtype=np.float32)[:, None]
-    wet = ((ys > 1140) & (ys < 1300)).astype(np.float32) * band * u * 0.5
+    wet = ((ys > 1420) & (ys < 1630)).astype(np.float32) * band * u * 0.5
     out += wet[..., None] * np.array((40, 80, 200), np.float32)
+    on = 1.0 if int(lt * 8) % 2 == 0 else 0.45               # the van's light bar just off the right edge, strobing
+    edge = np.exp(-((W - xs) / 260.0) ** 2) * np.exp(-((ys - 1050) / 700.0) ** 2) * on * u * 0.8
+    out += edge[..., None] * np.array((60, 110, 255), np.float32)
     img.paste(Image.fromarray(np.clip(out, 0, 255).astype(np.uint8)).convert('RGBA'), (0, 0))
 
 
@@ -578,7 +581,7 @@ def phone_lights(img, actors, cam):
     for a in actors:
         if a.state == 'phone':
             gx, gy = cam.p(a.x + 0.12, a.d, 1.62)
-            S.glow_disc(img, gx, gy, 0.25 * cam.ppm(a.d), (230, 240, 255), amt=.35)
+            S.glow_disc(img, gx, gy, 0.09 * cam.ppm(a.d), (235, 245, 255), amt=.55)   # chat 15: was 0.25 (a grey disc)
 
 
 # ================================================================================================= T3
@@ -596,7 +599,7 @@ class Reframe:
     def image(self, im):
         k, cx, c = self.k, self.cx, self.c
         out = im.transform(im.size, Image.AFFINE, (1 / k, 0, cx - cx / k, 0, 1 / k, -c / k), Image.BICUBIC)
-        if im.getpixel((540, 2))[3] > 0:                   # an opaque painting: fill the top strip with its sky
+        if c > 0 and im.getpixel((540, 2))[3] > 0:         # an opaque painting: fill the top strip with its sky
             out.paste(im.crop((0, 0, W, 1)).resize((W, int(c) + 2)), (0, 0))
         return out
 
@@ -606,6 +609,10 @@ RF3 = Reframe(S.CAMS['t3'], 1.2, 540, 68.0)
 RF4 = Reframe(S.CAMS['t4'], 1.15, 250, 80.0)
 T3K, T3CAM, R3, reframe3 = RF3.k, RF3.cam, RF3.R, RF3.image
 T4CAM, R4 = RF4.cam, RF4.R
+# chat 15 (moves hunt 1: the runners and the swing too small, the near crowd hid them): T2 nearer too; the near crowd
+# moved back to the two sides, so the bottom of the frame is them, not bare road
+RF2 = Reframe(S.CAMS['t2'], 1.25, 480, -5.0)
+T2_WR = (*RF2.R(T2_WIN[0], T2_WIN[1]), *RF2.R(T2_WIN[2], T2_WIN[3]))
 
 
 def truck_x(lt):
@@ -914,7 +921,9 @@ def picture(t):
         t1_fx(back, lt)
     elif tier == 't2':
         back, front = S.t2(lt, **t2_state(lt))
-        cam = S.CAMS['t2']
+        back = RF2.image(back)
+        front = RF2.image(front) if front is not None else None
+        cam = RF2.cam
         acts = sorted(t2_actors(lt), key=lambda a: -a.d)
         for a in acts:
             draw_actor(back, cam, a)
@@ -969,7 +978,7 @@ ACTORS = {'t1': t1_actors, 't2': t2_actors, 't3': t3_actors, 't4': t4_actors}
 
 def cam_for(t):
     tier = scene_of(t)[0]
-    return {'t3': T3CAM, 't4': T4CAM}.get(tier, S.CAMS[tier])
+    return {'t2': RF2.cam, 't3': T3CAM, 't4': T4CAM}.get(tier, S.CAMS[tier])
 
 
 def project(cam, P):
