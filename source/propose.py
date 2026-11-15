@@ -14,7 +14,8 @@ MAP
   judge ............ step 3: both helpers written after the pack; the three versions copied blind and shuffled to
                      NAME/judge/V1..V3.md (the key stays in state.json); prints the judge's line
   parse ............ the judge's file in the fixed shape of judge.md (every version scored 1-5 on quality, notes,
-                     cost, risk, undo; Q1-Q8; one pick; each fault [fixed] or [named]; two options with Lost/Added)
+                     cost, risk, undo; Q1-Q8; one pick, or V0 = the judge's own when none passes; each fault
+                     [fixed] or [named]; two options with Lost/Added)
   record ........... parse, then the verdict word for word into NAME.md with its hash (problem + versions + verdict)
   verdict_ok ....... the verdict exists and its hash still matches (an edit after the verdict makes it stale)
   show ............. step 5: what Sam sees: the two options, Lost/Added, "Critiqued: N found, N fixed, N named"
@@ -238,13 +239,13 @@ def parse(text, versions):
             if len(nums) != 5 or not all(1 <= n <= 5 for n in nums):
                 raise ValueError(f'scores for {cells[0]} are not five numbers from 1 to 5')
             scores[cells[0]] = dict(zip(CRITERIA, nums))
-    if sorted(scores) != sorted(versions):
+    if sorted(k for k in scores if k != 'V0') != sorted(versions):     # a V0 row is the judge's own (judge.md 5)
         raise ValueError(f'scores cover {sorted(scores)}, not every version {sorted(versions)}')
     qs = set(re.findall(r'^\s*\**Q([1-8])\**\s*[:.]', sec['Sam test'], re.M))
     if len(qs) < 8:
         raise ValueError('the Sam test does not answer Q' + ', Q'.join(str(i) for i in range(1, 9) if str(i) not in qs))
     pick = re.findall(r'\bV\d+\b', sec['Pick'])
-    if not pick or pick[0] not in versions:
+    if not pick or pick[0] not in list(versions) + ['V0']:     # V0: the judge's own better-still version (judge.md 5)
         raise ValueError(f'no valid pick (got {sec["Pick"][:40]!r})')
     faults = []
     for ln in sec['Faults in the pick'].splitlines():
@@ -264,6 +265,10 @@ def parse(text, versions):
     if not sec['Final version'].strip():
         raise ValueError('the final version is empty')
     return {'scores': scores, 'pick': pick[0], 'faults': faults, 'leak': sec['Leak'], 'options': opts[:2]}
+
+
+def who_wrote(key, pick):
+    return key.get(pick, 'the judge (V0: no version passed, so it wrote a better one)')
 
 
 def critiqued(faults):
@@ -290,12 +295,12 @@ def record(name):
         sys.exit(f'propose: the verdict is refused ({e}); send the judge back to judge.md\'s shape')
     key = ', '.join(f'{k} = {w}' for k, w in sorted(st['key'].items()))
     block = (f'{VERDICT}\n<!-- verdict-hash: {_verdict_hash(name, raw)} -->\n'
-             f'Who wrote which (hidden from the judge): {key}. Picked: {v["pick"]} ({st["key"][v["pick"]]}). '
+             f'Who wrote which (hidden from the judge): {key}. Picked: {v["pick"]} ({who_wrote(st["key"], v["pick"])}). '
              f'{critiqued(v["faults"])}.\n\n{raw.strip()}\n')
     f = _p(name + '.md')
     text = problem_text(name) + '\n' + block    # read BEFORE open(f, 'w') truncates it (15 Nov: wiped the problem)
     open(f, 'w').write(text)
-    _state(name, {'recorded': datetime.now(timezone.utc).timestamp(), 'pick': st['key'][v['pick']]})
+    _state(name, {'recorded': datetime.now(timezone.utc).timestamp(), 'pick': who_wrote(st['key'], v['pick'])})
     show(name)
 
 
@@ -323,7 +328,7 @@ def show(name):
     ok, v = verdict_ok(name)
     if not ok:
         sys.exit('propose: ' + v)
-    who = _state(name)['key'][v['pick']]
+    who = who_wrote(_state(name)['key'], v['pick'])
     print(f'Proposal {name}: the judge picked {who}\'s version (judged blind).')
     for o in v['options']:
         print('### ' + o.strip())
@@ -337,7 +342,7 @@ def status():
             continue
         st = re.search(r'^Status: (.*)$', _read(f), re.M)
         ok, v = verdict_ok(name)
-        print(f'{name}: {st.group(1) if st else "?"}; ' + (f'verdict ok, picked {_state(name)["key"][v["pick"]]}' if ok
+        print(f'{name}: {st.group(1) if st else "?"}; ' + (f'verdict ok, picked {who_wrote(_state(name)["key"], v["pick"])}' if ok
                                                            else v))
 
 

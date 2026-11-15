@@ -2570,6 +2570,15 @@ def proposal_route_hook():
             bad.append('a verdict missing Q8 parsed')
         except ValueError:
             pass
+        # 5b. V0 (judge.md: no version passes, the judge writes its own) parses; V9 (no such file) does not
+        v0 = raw.replace('## Pick\nV2', '## Pick\nV0').replace('| V3 | 3 | 3 | 3 | 3 | 3 | 15 |', '| V3 | 3 | 3 | 3 | 3 | 3 | 15 |\n| V0 | 4 | 4 | 4 | 4 | 4 | 20 |')
+        if P.parse(v0, ['V1', 'V2', 'V3'])['pick'] != 'V0':
+            bad.append('a V0 pick did not parse')
+        try:
+            P.parse(raw.replace('## Pick\nV2', '## Pick\nV9'), ['V1', 'V2', 'V3'])
+            bad.append('a pick of a missing version parsed')
+        except ValueError:
+            pass
         open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md'), 'w').write(raw)
         with contextlib.redirect_stdout(io.StringIO()):
             P.record('t1')
@@ -2584,7 +2593,7 @@ def proposal_route_hook():
         open(f, 'a').write('\nmore')
         if not P.verdict_ok('t1')[0] is False:
             bad.append('edit after verdict not stale')
-        return not bad, '; '.join(bad) or 'blocks the 15 Nov asks, passes 5 routine ones, stale and missing verdicts, Critiqued line, stop_hook_active'
+        return not bad, '; '.join(bad) or 'blocks the 15 Nov asks, passes 5 routine ones, stale and missing verdicts, V0 pick, Critiqued line, stop_hook_active'
     finally:
         P.PROPS = old
         shutil.rmtree(tmp, ignore_errors=True)
