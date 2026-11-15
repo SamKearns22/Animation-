@@ -5,9 +5,10 @@
 - **Done (chat 6):** `propose.py hook` in the Stop list (live from the next chat); blocks all 5 replay replies, passes
   routine Y/N, stop_hook_active, empty input; kittests pass. Prompts locked. Catalogue row. `handover.py end` now
   flags unrouted entries (the MAP claimed it; nothing called `unrouted_for`).
-- **Needs Sam:** Q1 Y/N on "The rule as sent" below; Q2 place (1 = CLAUDE.md "Rules are permanent", replacing the
-  12 Nov "Before suggesting anything" bullet, listed in the rulebook's last table, check `propose.py hook`; 2 = rule 90).
-- **Next (on Sam's answer, this chat, Opus):** write it word for word in the place he picks (CLAUDE.md + the rulebook's
+- **Needs Sam:** Sam asked "Is installing this tool the right thing to do? Use the tool to answer": routed as
+  `notes/proposals/install-route.md` (judge picked helper A, 20/19/15, chat lowest; checked: hook misses "change the
+  render tool" and "gate before every clip"; 57 ledger rows, 0 with notes). Q1 option 1 or 2; Q2 resume Protest Tiers.
+- **Next (on Sam's answer, this chat, Opus):** option 1 = the verdict's wording (supersedes "The rule as sent") (CLAUDE.md + the rulebook's
   last table row "Rules are permanent", check `propose.py hook`), mark the open rule request closed; then the queued
   jobs go through the route (paused code-tool job, results-first review of Protest Tiers, per-chat measuring), Opus high.
 - **Read:** this file only; `source/propose.py` MAP.
@@ -15,7 +16,7 @@
 - **For Claude:** rule-wording asks are blocked from next chat (no verdict); ~1.5% of a week per route run (run 2:
   4.76% / 10 helpers + 2.12% / 5 judges). Named: helpers ran 800-1300 words; case 2 near-miss.
 
-## The rule as sent to Sam (15 Nov, chat 6; waiting for his numbers)
+## The rule as first sent to Sam (15 Nov, chat 6; superseded by the install-route verdict's wording)
 "Every change goes to helpers before it comes to me (Sam, 15 Nov; takes in 'search before suggesting', 12 Nov). Any change to rules, tools, checks, kits or how the films are built, however small (not animatics, renders, clips or film notes): first the problem and the facts are written down with no answer, after searching the rulebook and kit list for the closest rule or tool; two fresh helpers, from fixed prompts nobody edits, each write their own answer without seeing Claude's; a fresh judge scores all three blind (quality, fewer notes and faults, cost against 15% of a week, risk, can it be undone), asks my eight questions of each, and picks one. I see the top two in plain English with Lost/Added lines and 'Critiqued: N found, N fixed, N named'. A guard refuses any message asking me to approve a change without the judge's verdict. No trials: when I call a film complete, every change since the last film is checked against its results, and any that needs changing goes through this again."
 
 ## Replay run 2 scores (15 Nov, chat 5; one line per case)
