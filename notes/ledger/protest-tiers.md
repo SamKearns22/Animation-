@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 54.55% (-8.96); 32 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 50.14% (-13.37); 31 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 54.55% of the 60.31% planned so far; at this rate the film lands at 56%.**
+**Forecast: Spent 50.14% of the 60.31% planned so far; at this rate the film lands at 56%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -35,29 +35,28 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-13 | xQrZzs91 | app | opus | Pencil sketches for scenes |  | 2.25 | 5.52 | 0 | 0 |
 | 2026-11-14 | 4668b913 | est | opus | auto |  | 0.22 |  | 0 | 0 |
 | 2026-11-14 | f8531fe4 | est | opus | auto |  | 2.59 |  | 0 | 0 |
-| 2026-11-14 | b4547dcd | est | sonnet | auto |  | 0.24 |  | 0 | 0 |
-| 2026-11-14 | 963eb0a4 | est | opus | auto |  | 2.66 |  | 0 | 0 |
-| 2026-11-14 | 88587b71 | est | opus | auto |  | 3.22 |  | 0 | 0 |
-| 2026-11-15 | bed18e90 | est | opus | auto |  | 2.6 |  | 0 | 0 |
-| 2026-11-15 | deea8d43 | est | opus | auto |  | 1.91 |  | 0 | 0 |
-| 2026-11-15 | 264e577a | est | opus | auto |  | 1.89 |  | 0 | 0 |
-| 2026-11-15 | afd0d9f4 | est | opus | auto |  | 4.49 |  | 0 | 0 |
-| 2026-11-15 | bee8b9f7 | est | sonnet | auto |  | 0.36 |  | 0 | 0 |
-| 2026-11-15 | 23d742b8 | est | opus | auto |  | 1.82 |  | 0 | 0 |
-| 2026-11-15 | 00175058 | est | opus | auto |  | 1.23 |  | 0 | 0 |
-| 2026-11-15 | 30fc5af7 | est | opus | auto |  | 0.9 |  | 0 | 0 |
-| 2026-11-15 | b64fa925 | est | opus | auto |  | 1.63 |  | 0 | 0 |
-| 2026-11-15 | 0553c1fc | est | opus | auto |  | 1.84 |  | 0 | 0 |
-| 2026-11-15 | a620dad4 | est | sonnet | auto |  | 0.19 |  | 0 | 0 |
-| 2026-11-15 | 57235ba4 | est | opus | auto |  | 1.3 |  | 0 | 0 |
-| 2026-11-15 | 2d158a0b | est | opus | auto |  | 2.43 |  | 0 | 0 |
-| 2026-11-15 | 11687c62 | est | opus | auto |  | 1.83 |  | 0 | 0 |
-| 2026-11-15 | a5f619de | est | opus | auto |  | 1.5 |  | 0 | 0 |
-| 2026-11-15 | 0edf1dfd | est | sonnet | auto |  | 2.22 |  | 0 | 0 |
-| 2026-11-15 | 3c9ddbae | est | opus | auto |  | 2.51 |  | 0 | 0 |
-| 2026-11-15 | 6ddbddb2 | est | sonnet | auto |  | 2.19 |  | 0 | 0 |
-| 2026-11-15 | 7a6f14c1 | est | sonnet | auto |  | 2.31 |  | 0 | 0 |
-| 2026-11-15 | 533f1450 | est | sonnet | auto |  | 0.39 |  | 0 | 0 |
+| 2026-11-14 | xQDM8iTN | app | sonnet | Catch up |  | 0.37 | 0.9 | 0 | 0 |
+| 2026-11-14 | 34R5mkDm | app | opus | Protests cast chat 7 |  | 1.87 | 4.58 | 0 | 0 |
+| 2026-11-14 | vy69nNwE | app | opus | Protests cast chat 8 |  | 2.45 | 6.0 | 0 | 0 |
+| 2026-11-15 | ybTh1KsF | app | opus | Protests: sets (chat 9) |  | 1.89 | 4.64 | 0 | 0 |
+| 2026-11-15 | PYcX2VRw | app | opus | Protests chat 10: sets fixes, critique, sets sheet |  | 1.3 | 3.18 | 0 | 0 |
+| 2026-11-15 | gWvGgNQ1 | app | opus | Protest Tiers: chat 12 (truck, helicopter, then moves to ani |  | 1.33 | 3.27 | 0 | 0 |
+| 2026-11-15 | vEV8PEFy | app | opus | Protests chat 14: moves fixes, rehearsal clips, animatic 1 |  | 3.22 | 7.9 | 0 | 0 |
+| 2026-11-15 | swHqHr7K | app | sonnet | Night's work summary |  | 0.33 | 0.8 | 0 | 0 |
+| 2026-11-15 | jbHNKEgj | app | opus | Protests chat 16: second check, fixes, animatic 1 |  | 1.78 | 4.37 | 0 | 0 |
+| 2026-11-15 | h6sGtqXJ | app | opus | Protest Tiers: chat 18 (pre-flight crash fix, gate) |  | 1.6 | 3.91 | 0 | 0 |
+| 2026-11-15 | AKoHBNTw | app | opus | Protests chat 19: animatic 1 (Sonnet) |  | 1.01 | 2.47 | 0 | 0 |
+| 2026-11-15 | oq33r3jC | app | opus | Protests chat 20: plan round 1 |  | 1.6 | 3.92 | 0 | 0 |
+| 2026-11-15 | e4yqkWtL | app | opus | Protests chat 22 (Opus medium): round 1 build, cast props on |  | 1.85 | 4.54 | 0 | 0 |
+| 2026-11-15 | bhKpgyWE | app | sonnet | Protests session 23 handover |  | 0.19 | 0.46 | 0 | 0 |
+| 2026-11-15 | fk3MCRjr | app | opus | Protests chat 23 (Opus medium) |  | 1.3 | 3.18 | 0 | 0 |
+| 2026-11-15 | xB4jU2qj | app | opus | Protests chat 24: end scene |  | 2.5 | 6.13 | 0 | 0 |
+| 2026-11-15 | K5d1GwHB | app | opus | Protests chat 25 (Opus medium): Albania gags, effects, melee |  | 1.83 | 4.49 | 0 | 0 |
+| 2026-11-15 | SwHTUH3R | app | opus | Protests chat 26: Germany and France extra seconds |  | 1.48 | 3.62 | 0 | 0 |
+| 2026-11-15 | woGivzHp | app | sonnet | Protests chat 27 (Opus medium): moves critique |  | 2.18 | 5.34 | 0 | 0 |
+| 2026-11-15 | y3EjD6Wx | app | opus | Protests: chat 29 (fix pre-flight faults, animatic 2) |  | 2.57 | 6.29 | 0 | 0 |
+| 2026-11-15 | DivKv5RD | app | sonnet | Protests chat 30 (Opus, medium) |  | 2.24 | 5.48 | 0 | 0 |
+| 2026-11-15 | yFv2o6E5 | app | sonnet | Protests chat 31 (Opus medium): fix black frames, notes roun |  | 2.36 | 5.78 | 0 | 0 |
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
