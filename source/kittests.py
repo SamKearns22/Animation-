@@ -2486,6 +2486,110 @@ def head_view_installs_idempotent():
     return depth() == d0, f'head_view layers {d0} -> {depth()} after 5 more rounds of installs'
 
 
+# ------------------------------------------------------------------------------------------------ the proposal route
+@test
+def proposal_route_hook():
+    """The proposal route (Sam, 15 Nov): the Stop hook blocks a change put to Sam without a judge's verdict, passes one with it, passes routine Y/N, never blocks twice."""
+    import json as J
+    import shutil
+    import tempfile
+    import propose as P
+    tmp = tempfile.mkdtemp()
+    old = P.PROPS
+    P.PROPS = tmp
+    try:
+        def transcript(reply, tool=None):
+            f = os.path.join(tmp, 'chat.jsonl')
+            ents = [{'type': 'user', 'message': {'content': 'go on'}}]
+            if tool:
+                ents.append({'type': 'assistant', 'message': {'content': [tool]}})
+            ents.append({'type': 'assistant', 'message': {'content': [{'type': 'text', 'text': reply}]}})
+            open(f, 'w').write('\n'.join(J.dumps(e) for e in ents))
+            return f
+
+        def run(reply, tool=None, active=False):
+            import io
+            import contextlib
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                P.hook(J.dumps({'transcript_path': transcript(reply, tool), 'stop_hook_active': active}))
+            return buf.getvalue()
+
+        bad = []
+        # 1. the real 15 Nov ask (case 1): a tool change, Y/N, no proposal -> blocked
+        ask1 = ('So the proposal is to make those two tools easier to use, not to add another.\n'
+                'Need: Y or N, make that change and test it on the next round of notes? (I\'d say Y.)')
+        if 'block' not in run(ask1):
+            bad.append('case-1 tool change not blocked')
+        if 'block' not in run('Need:\n1. Y or N: write the rule above, in that place? (I\'d say Y.)'):
+            bad.append('rule ask not blocked')
+        # 2. routine Y/N passes
+        for r in ('Need: Y or N for the animatic', 'Need: Y or N, the final render? (I\'d say Y.)',
+                  'Answer Q1: Y to raise the budget to about 63.5% of a week, or N to stop at 47%',
+                  '8: fixed - the whale now knocks the helideck away. Clip sent.',
+                  'Checks: the tool check slipped (looked: fine). Need: Y or N for the animatic?'):
+            if run(r):
+                bad.append(f'routine blocked: {r[:40]}')
+        # 3. a named proposal without a verdict -> blocked, even if the wording is plain
+        P.new('t1', 'test')
+        f = os.path.join(tmp, 't1.md')
+        txt = open(f).read()
+        open(f, 'w').write(txt.replace('(what is wrong, in plain words; NO solution: the chat\'s own idea goes in t1/chat.md)', 'X is slow.')
+                           .replace('(the raw facts, each with its source: file, ledger, chat record; numbers as counted, "unchecked" where not)', '- 3 s (timer)')
+                           .replace('(paths the helpers may search, one per line, e.g. notes/ledger/FILM.md)', 'CLAUDE.md'))
+        open(os.path.join(tmp, 't1', 'chat.md'), 'w').write('do Y')
+        ask = 'Full plan in notes/proposals/t1.md. Need: Y or N, go ahead? (I\'d say Y.)'
+        if 'block' not in run(ask):
+            bad.append('named proposal without verdict not blocked')
+        # written this turn (not named) -> blocked
+        w = {'type': 'tool_use', 'name': 'Write', 'input': {'file_path': os.path.join('notes/proposals', 't1.md')}}
+        if 'block' not in run('Need: Y or N, go ahead? (I\'d say Y.)', w):
+            bad.append('proposal written this turn not blocked')
+        # 4. stop_hook_active: never block twice; logged instead
+        if run(ask1, active=True):
+            bad.append('blocked although stop_hook_active')
+        if not open(os.path.join(tmp, P.UNROUTED)).read().strip():
+            bad.append('stop_hook_active case not logged')
+        # 5. with a verdict: passes only with the Critiqued line
+        import io
+        import contextlib
+        with contextlib.redirect_stdout(io.StringIO()):
+            P.pack('t1')
+            for who in 'ab':
+                open(os.path.join(tmp, 't1', f'helper-{who}.md'), 'w').write(f'helper {who}')
+            P.judge('t1', seed=1)
+        rows = '\n'.join(f'| V{i} | 3 | 3 | 3 | 3 | 3 | 15 |' for i in (1, 2, 3))
+        raw = ('## Leak\nnone\n## Scores\n| version | quality | notes | cost | risk | undo | total |\n|---|---|---|---|---|---|---|\n'
+               + rows + '\n## Sam test\n' + '\n'.join(f'Q{i}: ok' for i in range(1, 9)) +
+               '\n## Pick\nV2\n## Why\nbest\n## Faults in the pick\n- F1 [fixed] a\n- F2 [named] b\n'
+               '## Final version\ndo it\n## For Sam\n### Option 1: a\ntext\nLost: x\nAdded: y\n'
+               '### Option 2: b\ntext\nLost: x\nAdded: y\n')
+        open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md'), 'w').write(raw.replace('## Sam test\n', '## Sam test\nQ1: only\n').replace('Q8: ok', ''))
+        try:
+            P.parse(open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md')).read(), ['V1', 'V2', 'V3'])
+            bad.append('a verdict missing Q8 parsed')
+        except ValueError:
+            pass
+        open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md'), 'w').write(raw)
+        with contextlib.redirect_stdout(io.StringIO()):
+            P.record('t1')
+        if 'block' not in run(ask):
+            bad.append('verdict but no Critiqued line: not blocked')
+        if run(ask + '\nCritiqued: 2 found, 1 fixed, 1 named.'):
+            bad.append('valid verdict + Critiqued line blocked')
+        # 6. an edit after the verdict makes it stale; `mark` does not
+        P.mark('t1', 'adopted')
+        if run(ask + '\nCritiqued: 2 found, 1 fixed, 1 named.'):
+            bad.append('mark made the verdict stale')
+        open(f, 'a').write('\nmore')
+        if not P.verdict_ok('t1')[0] is False:
+            bad.append('edit after verdict not stale')
+        return not bad, '; '.join(bad) or 'blocks the 15 Nov asks, passes 5 routine ones, stale and missing verdicts, Critiqued line, stop_hook_active'
+    finally:
+        P.PROPS = old
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

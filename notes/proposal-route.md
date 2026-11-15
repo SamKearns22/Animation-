@@ -2,15 +2,31 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 30 (find why the first fix failed), 85 (cost watch), 89 (fresh-eye helpers).
-- **Done (15 Nov, chat 533f1450):** problem found and the route designed with Sam (below); Sam's Y to build it and to
-  switch it on only if it passes the replay test. The code-tool job (session ...ASHopaiiRWYHwymye6) is PAUSED on Sam's
-  word; its `page.py show` commit reached the main line but is wired into no stage, pack or handover. It is redone
-  through the route once the route is on. Protest Tiers is ON HIATUS (Sam, 15 Nov) until the deeper problems are solved: no film work.
-- **Next: Opus HIGH (building something new): build the route, run the replay test, report to Sam.**
+- **Done (15 Nov, chat 1, session ...MBu, stopped at red):** built `source/propose.py` (steps 1-6: new, pack, judge
+  blind and shuffled, record with hash, show, Stop `hook`, review, mark, lock) and the fixed prompts
+  `guides/proposal-route/` (helper.md, judge.md, sam-test.md: Sam's 8 pushes word for word, glosses kept generic so
+  they never carry a replay case's answer). Kittest `proposal_route_hook` written: 2 sub-checks FAIL ("valid verdict
+  + Critiqued line blocked", "mark made the verdict stale"), not yet debugged. The five replay cases are written
+  (problem + facts as before each push, chat.md = the parent chat's own first answer, word for word) in
+  `notes/proposals/replay/`; 10 helpers were started; outputs copied there as they finished. NOT switched on: the
+  hook is not in `.claude/settings.json`, no LOCK.
+- **Next: Opus HIGH (building something new):** (1) fix the 2 kittest failures (debug `verdict_ok` after `record`
+  in a temp PROPS); (2) rebuild the clean replay tree: `git worktree add --detach SCRATCH/replay-tree 5a670b0`
+  (the main line at 19:44, before the brief existed: no leak), copy `guides/proposal-route/`, `source/propose.py`
+  and `notes/proposals/replay/*` into its `notes/proposals/`; (3) for each case missing a helper file, `propose.py
+  pack replay-N` there and start the helpers; then `judge` and one judge per case, `record`; (4) compare each pick
+  with the "Better" answers below (case 3 passes if the pick covers 6+ of its 8 faults and does not rely on naming a
+  tool in a pack); pass = 4 of 5; on a fail, rule 30, fix prompts, rerun once; (5) on a pass: add `python3
+  source/propose.py hook` to the Stop hooks, `propose.py lock`, catalogue row, rule wording to Sam; report one plain
+  line per case. Budget: helpers cost ~0.4% of a week each (chat 1: 4.3% on 10 helpers): run them from a FRESH chat,
+  never a long one.
 - **Needs Sam:** nothing until the replay result.
-- **Read:** this file only (plus the code it names).
-- **Open rule requests:** the route itself is written as a rule (with its check) only once the replay passes.
-- **For Claude:** Stop hooks already present: `source/ledger.py auto`. handover.py reads a chat's own .jsonl free.
+- **Read:** this file only (plus `source/propose.py` MAP and the kittest).
+- **Open rule requests:** the route itself becomes a rule (with its check) only once the replay passes.
+- **For Claude:** handover.py `start` already prints a `page.py show` line when --film is given (the paused job's
+  commit): the brief said it was wired into nothing; leave it, note it to Sam with the route. Replay limit to tell
+  Sam: the judge's questions are Sam's own past pushes, so the replay shows the route asks them for him; it cannot
+  show it catches a new kind of push.
 
 ## The problem (evidence from this chat, 15 Nov)
 Claude's proposals are a first plausible idea, sized small and cheap, anchored on that idea; they only got better
