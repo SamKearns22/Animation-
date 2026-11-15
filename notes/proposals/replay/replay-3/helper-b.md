@@ -17,12 +17,12 @@ A change counts as done once written or built; nothing makes chats use it or mea
 4. **Chosen:** the harness enforces each change, and the transcripts measure it.
 
 ## Proposal
-**"Wired, measured, or not done."** A rule, tool or check change counts only when three things hold:
+**"Wired, measured, or not done."** A rule, tool or check change counts only when:
 - **(a) Wired:** runs where no chat chooses (a settings.json hook, or a step in handover.py, preflight or finish).
 - **(b) Measured:** a number to beat, computed from transcripts and printed by `handover.py end` every chat.
 - **(c) Reviewed:** against the film's results when it is complete (`propose.py review`).
 
-`propose.py record` refuses any proposal without an "Enforced by: FILE, point" line and a "Measure: baseline → target" line. A check at session start fails if anything the catalogue marks "enforced" is missing from settings.json. It catches the unwired Stop hook today.
+`propose.py record` refuses any proposal without an "Enforced by: FILE, point" line and a "Measure: baseline → target" line. A check at session start fails if anything the catalogue marks "enforced" is missing from settings.json. It catches the unwired Stop hook.
 
 Applied now:
 1. **Code reading.** A PreToolUse hook on Bash and Read refuses a grep across a film file or a whole-file read of one. Its refusal gives the `page.py find` answer. Reads of 80 lines or fewer pass. A `# need: reason` suffix passes and is counted. `handover.py start` builds the page. Rule 61's warning becomes a fault for new files.
@@ -38,7 +38,7 @@ Applied now:
 - Q1: An expert enforces in the harness and measures adoption.
 - Q2: Evidence: every call of two whole chats plus the wiring; the review covers the whole film.
 - Q3: Hooks don't rely on reading; the measure shows whether it worked.
-- Q4: Four different approaches were weighed. The rejected ones are in place and failing.
+- Q4: Four different approaches were weighed. Rejected ones already fail.
 - Q5: The hook could block real work: the `# need` suffix lets it through, and one settings.json line undoes it. Replayed on chats 29/31 before Sam's Y.
 - Q6: Facts sourced; gaps below.
 - Q7: Sized to enforce every change, not patch one.
