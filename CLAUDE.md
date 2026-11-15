@@ -64,8 +64,10 @@ at session start (`.claude/hooks/setup.sh`).
   speed makes new things better, cheaper or faster: smarter tools, faults caught before Sam sees them, reading less.
   Never suggest doing less, making it worse, trimming the joke, or repeating old characters, places or material. Reuse
   means the means (rig, hands, poses, house look, checks), never the content.
-  **Before suggesting or building anything** (rule, tool, check or idea), search the rulebook and `guides/kit-catalogue.md`;
-  if an existing rule or tool needs only an edit, edit it; each names the closest one and says what is new, or is dropped (Sam, 12 Nov; "or building" 14 Nov).
+- **The proposal route (Sam, 15 Nov; replaces "search before suggesting or building", 12/14 Nov):** "Every change to
+  rules, tools, checks, kits or how films are built that is put to Sam goes through the proposal route first (helpers,
+  blind judge, top two in plain English with Lost/Added and Critiqued). The guard refuses an unjudged ask. Changes made
+  without asking are listed and judged in the end-of-film review against the film's results." (`source/propose.py`)
 - **Before every handover, search the film's notes for rule requests not yet written** and list them.
 
 # Models and chats

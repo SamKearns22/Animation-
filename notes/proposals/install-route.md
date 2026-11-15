@@ -1,6 +1,6 @@
 # Proposal: Is installing the proposal route the right thing to do?
 
-Status: open
+Status: adopted (2026-11-15)
 
 ## Problem
 Sam (15 Nov, chat 6), word for word: "Is installing this tool the right thing to do? Use the tool to answer".
