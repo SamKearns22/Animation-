@@ -407,6 +407,9 @@ def main(argv):
         p = os.path.join(LOGDIR, f'{tail}.md')
         for f in model_faults(opt('--film'), opt('--notes')):    # a mixed job is split before any work starts
             print(f)
+        if opt('--film'):                                        # Sam's Y, 15 Nov: chats 29/31 grepped instead
+            print(f'handover: for each note, look at the code with ONE step: python3 source/page.py {opt("--film")} '
+                  'show "the note\'s words" (~40 lines, the functions it touches); never grep or sed a film file first')
         if not os.path.exists(p):
             print(f'handover: no saved log for {pos[0]}; list_events kinds ["user"], newest pages only, then `dump`')
             return 2

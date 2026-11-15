@@ -8,7 +8,13 @@ MAP
   find() ..... a note's words against the page: the defs whose name or docstring hold most of them, best first, as
                FILE:LINE, so the chat opens 40 lines, not a file. Words of 3+ letters; plurals folded.
   tokens() ... rough size (characters / 4), printed so the saving is seen.
+  show() ..... THE ONE STEP A ROUND TAKES PER NOTE (Sam's Y, 15 Nov; chats 29/31 spent a third of their steps on
+               greps and sed ranges): the note's words -> the code itself, ~40 numbered lines: the best def whole
+               (or its head plus every line holding the note's words), then the runners-up' heads, then FILE:LINE
+               for the rest. Rebuilds a stale page first. Words also count inside a def's comments and names.
+  film names . `protest-tiers` and `protest_tiers` both work (code files use _, story files use -).
 
+    python3 source/page.py FILM show "note words" [-n 40]   (a round's one look per note: the code it touches)
     python3 source/page.py FILM                  (writes story/FILM-page.md; prints its size against the code's)
     python3 source/page.py FILM find "the officer's arms clip the van" [-n 5]
 
@@ -23,7 +29,13 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 
 
+def names(film):
+    """(code name, story name): code files are protest_tiers*.py, story files protest-tiers-*.txt; either works."""
+    return film.replace('-', '_'), film.replace('_', '-')
+
+
 def files(film):
+    film = names(film)[0]
     return sorted(f for f in glob.glob(os.path.join(HERE, f'{film}*.py')) if re.match(rf'{film}(_\w+)?\.py$', os.path.basename(f)))
 
 
@@ -32,6 +44,7 @@ def tokens(text):
 
 
 def build(film):
+    film = names(film)[1]
     parts, code = [f'# {film}: the page a notes round reads (python3 source/page.py {film}; regenerate after any edit)\n',
                    'Read this, then only the lines a note points to (`page.py FILM find "note words"`).\n'], ''
     for f in files(film):
@@ -85,9 +98,22 @@ STOP = set('the and with for not but his her its are was one two too from that t
            'just still more less very then than when where should could would can has have had all any him she they'.split())
 
 
-def find(film, note, n=5):
-    p = os.path.join(ROOT, 'story', f'{film}-page.md')
+def page_path(film):
+    return os.path.join(ROOT, 'story', f'{names(film)[1]}-page.md')
+
+
+def stale(film):
+    """True when the page is missing or older than any film file or story list it is made from."""
+    p = page_path(film)
     if not os.path.exists(p):
+        return True
+    src = files(film) + glob.glob(os.path.join(ROOT, 'story', f'{names(film)[1]}-*.txt'))
+    return any(os.path.getmtime(f) > os.path.getmtime(p) for f in src)
+
+
+def find(film, note, n=5):
+    p = page_path(film)
+    if stale(film):
         build(film)
     want, cur, grp, hits = _words(note), '', '', []
     for ln in open(p, encoding='utf-8'):
@@ -103,9 +129,76 @@ def find(film, note, n=5):
     return sorted(hits, key=lambda h: -h[0])[:n]
 
 
+def _defs(path):
+    """{start line: (end line, name)} for the file's top-level defs and classes (and methods inside classes)."""
+    import ast
+    out = {}
+    for n in ast.walk(ast.parse(open(path, encoding='utf-8').read())):
+        if isinstance(n, (ast.FunctionDef, ast.ClassDef)):
+            out[n.lineno] = (n.end_lineno, n.name)
+    return out
+
+
+def show(film, note, budget=40):
+    """A note's words -> the code to read: [(header, [(line number, text)])], at most ~budget code lines in all.
+    The best hit gets the lion's share: the whole def if it fits, else its first lines plus every line holding the
+    note's words (one line either side). Runners-up get their first lines; the rest are listed as FILE:LINE."""
+    want = _words(note)
+    hits = find(film, note, 12)
+    # words inside a def's body (comments, names) break ties and lift a def whose docstring missed the note
+    rescored = []
+    for score, where, what in hits:
+        f, ln = where.rsplit(':', 1)
+        path, ln = os.path.join(HERE, f) if f.endswith('.py') else os.path.join(ROOT, 'story', f), int(ln)
+        body = 0
+        if f.endswith('.py'):
+            end = _defs(path).get(ln, (ln, ''))[0]
+            src = open(path, encoding='utf-8').read().splitlines()[ln - 1:end]
+            body = len(want & _words(' '.join(src).replace('_', ' ')))
+        rescored.append((score * 2 + body, where, what, path, ln))
+    rescored.sort(key=lambda h: -h[0])
+    out, left = [], budget
+    for i, (score, where, what, path, ln) in enumerate(rescored):
+        if left <= 2:
+            out.append((f'also {where}  {what}', []))
+            continue
+        lines = open(path, encoding='utf-8').read().splitlines()
+        if not path.endswith('.py'):
+            take = list(range(max(1, ln), min(len(lines), ln + 2) + 1))
+        else:
+            end = _defs(path).get(ln, (ln + 10, ''))[0]
+            span = list(range(ln, end + 1))
+            room = left - 6 if i == 0 else min(8, left)
+            if len(span) <= room:
+                take = span
+            else:
+                keep = set(span[:min(6, room)])
+                for k in span:
+                    if want & _words(lines[k - 1].replace('_', ' ')):
+                        keep |= {k - 1, k, k + 1}
+                take = sorted(k for k in keep if ln <= k <= end)[:room]
+        out.append((f'{where}  {what}', [(k, lines[k - 1]) for k in take]))
+        left -= len(take)
+    return out
+
+
 def main(a):
     if not a or a[0] in ('-h', '--help'):
         print(__doc__); return 0
+    if len(a) > 2 and a[1] == 'show':
+        b = int(a[a.index('-n') + 1]) if '-n' in a else 40
+        res = show(a[0], a[2], b)
+        if not res:
+            print('no code matches those words: try the thing on screen (who, what object), or `page.py FILM` and read the page')
+        for head, rows in res:
+            print(f'== {head}' if rows else f'   {head}')
+            last = None
+            for k, t in rows:
+                if last is not None and k != last + 1:
+                    print('      ...')
+                print(f'{k:6}  {t}')
+                last = k
+        return 0
     if len(a) > 2 and a[1] == 'find':
         n = int(a[a.index('-n') + 1]) if '-n' in a else 5
         for s, where, what in find(a[0], a[2], n):

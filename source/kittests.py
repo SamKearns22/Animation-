@@ -1822,7 +1822,14 @@ def round_page():
     import page as P
     out, pg, code = P.build('blessed')
     hit = [w for _, w, _ in P.find('blessed', "note 28: the escort should look like an HM Prison officer", 3)]
-    return pg * 100 < code * 15 and 'blessed.py:307' in hit, f'page {pg} tokens, code {code}; note 28 -> {hit}'
+    # show (Sam's Y, 15 Nov): one command, a note -> ~40 numbered lines of the code it touches, either film spelling
+    sh = P.show('protest-tiers', "frames missing: a stopped drawing mid-throw, the picture goes black")
+    got = [h.split()[0] for h, rows in sh if rows][:2]
+    n = sum(len(rows) for _, rows in sh)
+    ok_show = (set(got) == {'protest_tiers.py:306', 'protest_tiers_cast.py:627'} and n <= 44 and
+               any('def _resolve_mixed_arms' in t for _, rows in sh for _, t in rows))
+    return (pg * 100 < code * 15 and 'blessed.py:307' in hit and ok_show,
+            f'page {pg} tokens, code {code}; note 28 -> {hit}; show "frames missing" -> {got} ({n} lines)')
 
 
 @test
