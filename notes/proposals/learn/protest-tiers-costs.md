@@ -54,3 +54,7 @@
 ## Were the 13 Nov cost-diagnosis fixes in force, and did cost fall? (from handovers; partly unchecked)
 - Real-money ledger and stage budget stop: in force (stage stop fired end of chat 14; chats handed over at amber). Chain no longer stopped for Y: in force ('Sam's overnight don't stop'). Model by stage: partly (Sonnet chats 19, 22 for animatic/handover: $2.5 and $0.5; but chats labelled 'Opus medium' ran 2.2-2.4% and may have been Opus). 'Just go never skips hand-over', one-step-one-command round script: in force for animatics (`final OUT --small --faults-`), unchecked elsewhere. COULD NOT TEST: in force (pre-flight stopped chat 17 and 18's work).
 - Per-chat cost did not visibly fall: Opus film chats still ~1.3-3.2% (Blessed's median was 1.5-3%). What differed is the count: 33 chats, 24 of them in 2 days, versus Blessed's ~22. No stage came in under plan. Cost per chat history (200-300k) could not be checked for chats 9-32.
+
+## Added on Sam's note (15 Nov): two causes for chat 3 to measure first
+- **Re-reading history:** about 49% of an Opus chat's cost (notes/cost-diagnosis.md, 13 Nov); each action re-reads the whole chat so far.
+- **Hand code searches instead of page.py:** chats 29 and 31 ran page.py 0 times and searched code by hand 25 and 26 times (notes/proposal-route.md, problem section); looking at code was ~30% of a chat's steps. Chats 29 and 31 are on the unreadable account: unchecked here.
