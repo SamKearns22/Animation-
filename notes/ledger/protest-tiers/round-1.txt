@@ -194,3 +194,101 @@ I read panel 5 as an old person with oranges, not a granny with a Molotov. I rea
 
 critique, pass 4: faults fixed as one list: tote worn cross-body so the words show (front); granny oatmeal cardigan sleeve; seller grin + upturned moustache; acting/size/reference lines are false alarms (moves stage, tiles fitted to box, invented people); left open: ['1-4,7-10 P11: no neck on tourists and riders; heads sit straight on shoulders. Granny 5 has a short neck stub.', '1-2,4 P1: camera, bum bag and tote hover or float beside the body in side views. Camera in 2 hangs off the strap with no hand contact. Hand in 4 sits on a float', '2,4 P8: side views are not the same person as the fronts. In 2 the camera is drawn in front and the belt bag is a detached rectangle; in 4 the hair is a hard ja', "5,7-8 P6: granny's hand is lost behind the bag; in 8 the thumbs-up hand is a black blob; in 7 the peace sign reads as a V on a black arm.", '5 P11: the helmet is oversized and the head is a huge block against the body; the face is cut off.', '9-10 O4: the moped is too small for two riders; they sit above the seat, with no thighs or lap on it.', "9-10 P7: the front rider's feet float and the seat is a hollow open bowl. The rear rider's legs do not reach the footrest.", '9-10 O3: the RPG reads as a spear or stick; the warhead is a leaf shape.', '7-8 P13: hoodie and trousers are one flat black, with no cuffs and no wrists. The hood is very large against the head.', "6 O2: the seller's body is hidden behind the cart and the bottles overlap his arms, so he has no hands."]
 
+== critique, round 1 pass 5 (2026-11-15): 14 fault(s), 2 can't tell
+-- look.md --
+1: Night gun shop sign "WAFFEN", yellow sign "GEN Z REGELT", "RAUS"; masked dark silhouettes smash window, tension.
+2: Same shop, "WAFFEN", "GEN Z REGELT", "RAUS"; silhouettes raise arms, red triangle, camouflage object, aggression.
+3: Blue-tinted shop, "WAFFEN", "GEN Z REGELT", "RAUS"; silhouettes at window, police-light glow, tension.
+4: Smoke-filled street, burning car, riot police, protesters, statue in smoke, black fan; chaos.
+5: Masked figure in black walks toward riot police, police van, statue, smoke, burning bicycles; confrontation.
+6: Black-clad figure kicks near dark burning car, riot police line, van, smoke, statue; violence.
+7: Burning street, "BANKA", red eagle flag, "MOLOTOV 200 LEK" cart vendor, crowd, riot police, masked man; chaos.
+8: Same burning street, "BANKA", "MOLOTOV 200 LEK" cart, man walks toward riot police shields; unrest.
+9: Fires spreading, "MOLOTOV 200 LEK" vendor, purple-haired person, riot police, crowd; escalating fear and excitement.
+10: Larger fires, "MOLOTOV 200 LEK" vendor, purple-haired figure, crowd, police shields; chaos.
+11: Fireworks above burning street, "MOLOTOV 200 LEK" vendor, crowd, flames; celebration amid destruction.
+12: Two masked figures on red scooter, one holding long pole, crowd behind, smoke; escape.
+13: Blonde woman in pink and man in red cap peek from bins, "TIR", "ANARKI", laundry; hiding, comic.
+14: Two masked hooded figures on red scooter, one raising stick, dense crowd, fire above; fleeing.
+-- result.md --
+## Faults
+FAULT A1 P2 [4, 5, 6]: no throwers lobbing cone/stones, no four rioters shoving the car, no water-cannon jet, no steam, fire not knocked down, no rioters cheering or running left; only one figure walks in.
+FAULT A1 [2]: the mannequin reads as a flat camo blob, not a mannequin carried overhead; ammo tower in 1 is unclear.
+FAULT A1 [12, 14]: the pole reads as a stick, not an RPG; no flash, backblast or target in the sky; no police clash behind.
+FAULT A1 [7]: no helicopter shown (only a smoke streak); peace-sign selfie does not read, only a white ball.
+FAULT A1 P2 [8, 10]: no queue and no lit bottle handed over; buyer just walks past. No applause or raised fists readable in 10.
+FAULT A1 [9]: the granny has no readable headscarf and cardigan; the purple-haired figure holds the bottle low, not overarm.
+FAULT A1 [11]: nobody is jumping; the crowd is a still dark mass.
+FAULT A1 [13]: no visor-and-tote wife (the tote and "Greetings from Tirana" are missing); neither is crouched, both stand behind bins; she hides her face.
+FAULT A2 S3 [4, 5, 6]: the car is a dark box with an orange hole, not the grey burning estate in the reference; the Paris statue lacks its plinth and monument.
+FAULT S8 S9 [4, 5, 6]: flat pale cut-out smoke clumps cover over half of panel 4 and hide the action; smoke is not lit or shaded.
+FAULT S8 [7-12, 14]: the dark crowd is one unbroken mass over the lower half.
+FAULT S4 O1 [1, 3, 14]: "RAUS" and "GEN Z REGELT" are cut at the frame edges; the moped wheels are cut in 14.
+FAULT A1 [1-3]: the looters are flat black silhouettes without faces, so their acting cannot be read.
+FAULT S6 [4, 5, 6]: the car and crowd are placed differently in each panel (car left, then centre); green-uniformed people appear in the background only in 5.
+CAN'T TELL P4 [7-11]: whether the eagle on the flag faces the right way; a full-size flag would show it.
+CAN'T TELL P14 [13]: whether the eyes stay whole; a full-size face would show it.
+
+## Checked
+1-14
+
+## Cold look
+Wrong or missed: I read 4's bike wheel as "black fan"; the cone is not visible. I read 12's pole as "pole" and 7's trail as smoke, so no RPG or helicopter. I missed the TV and ammo boxes in 1. I saw no peace sign, granny or queue. I named 13's visor but not the tote.
+
+## Not on the list
+- Panels 1-3 repeat nearly one picture; suggested line: each beat changes something big enough to read at phone size.
+- Panel 13 has no reference; suggested line: a reference is required for every set.
+- Signs cropped at the edges; suggested line: any word is whole in frame.
+- Moped riders are masked, hooded and neckless; suggested line: faces and heads must show some acting.
+- The check sheet hides the text; suggested line: the Hook Text box covers no action.
+
+== critique, round 1 pass 6 (2026-11-15): 14 fault(s), 2 can't tell
+-- look.md --
+1: Dark gun shop sign "WAFFEN", yellow sign "GEN Z REGELT", "RAUS" sign, black-clad crowd, smashed window
+2: Same shop; "WAFFEN", "GEN Z REGELT", "RAUS"; red triangle sign, tank toy lifted, masked crowd
+3: Same shop tinted blue, "WAFFEN", "GEN Z REGELT", "RAUS", police-light glow, crowd silhouettes
+4: Statue on plinth, French flags, black smoke, riot police line, burning car, thrown stones, fan
+5: Riot police van, helmeted police line, hooded dark figures running, statue, smoke, water spray, rubble
+6: Hooded figures charge toward police van and police, white smoke cloud, statue, stones, yellow barriers
+7: Burning yellow building, red flag, "BANKA" sign, riot police shields, crowd, plane, rocket trail
+8: Burning street, "BANKA", vendor cart "MOLOTOV 200 LEK" with bottles, riot shields, crowd, red flag
+9: Fires on left, vendor "MOLOTOV 200 LEK" cart, purple-haired person, riot police, crowd, burning building
+10: Larger fire glow left, molotov vendor cart, purple-haired person, riot police, crowd, burning yellow building
+11: Fireworks above, fire left, molotov cart vendor, purple-haired person, riot police, crowd
+12: Two masked figures on red scooter, one holding launcher, glowing flash, crowd, burning building
+13: Blonde woman in sunglasses hand to face, man in red cap, binoculars, green and grey bins, "TIR", "ANARKI"
+14: Two masked scooter riders, one holding rocket launcher upright, large crowd, flames, red flags
+-- result.md --
+## Faults
+FAULT A1 O3 [1-3]: shop - the "camo hunting mannequin" reads as a flat olive blob/tank toy; the TV and AMMO tower are tiny and the AMMO text is unreadable; panel 1 shows no jogging off right
+FAULT A1 S1 [1-3]: shop - the haulers are black silhouettes among a black-clad crowd, so the second wave and the phones swinging cannot be told apart
+FAULT A1 [4]: the "bike wheel" reads as a black fan or disc; no traffic cone and no four-thrower back row visible; the white flash reads as a yellow ball, not a flash on shields
+FAULT A1 P2 [5, 6]: the car is a dark brown blob with a faint orange stripe, not a burning car; the four rioters shoving read as a running black mass; no cheering, no clear water jet or steam
+FAULT A1 P2 [7]: no clear selfie, no phone, no peace sign; the helicopter is a tiny plane on a rocket-like trail rather than spiralling down; no camera flash
+FAULT A1 O3 [8]: the buyer takes no clear lit bottle from the seller; the seller's striped umbrella is small and half hidden; the queue is not visible
+FAULT A1 P2 [9, 10]: the granny is a small purple-haired figure with no headscarf or cardigan, no clear overarm throw; in 10 no seller applause and no raised fists
+FAULT A1 P2 [11]: no jumping rioters, only a static dim crowd
+FAULT A1 O1 O3 [12, 14]: the RPG looks like a long stick or spear, with no clear muzzle flash or backblast; in 12 the flash is a white-yellow ball, an O6 nuclear-flash fault; in 14 the RPG is not clearly "reloaded"; no question or shrug acting
+FAULT A1 P2 [13]: the husband's speaking pose is unclear; the wife's visor reads as a white brim and her hand covers her face; no Greetings from Tirana tote visible; the tourists' bins stand in an alley with tiny set detail
+FAULT S6 S3 [4-6]: the statue and the Paris set are a thin sketch of the reference (no building, no plinth detail); the police van and the car change position between panels
+FAULT S8 S1 [7-11]: the crowd fills the whole lower band as one dark mass; the foreground action is small
+FAULT S5 [13]: the alley background is a dark blank block with clothesline only
+FAULT P13 P11 [12, 14]: hooded riders have no neck and tiny heads inside the hood
+CAN'T TELL P12 [13]: which person speaks; a picture with the mouths labelled would show it
+CAN'T TELL M1 M2 M3 M5 [1-14]: movement and hits cannot be judged from one frame per panel; strips would show it
+
+## Checked
+1-14
+
+## Cold look
+look.md named the signs and counts correctly but missed or misnamed: the mannequin (not seen), the selfie, helicopter (read as a plane), granny, fireworks, bike wheel (named "fan"), burning car (named "burning car" from the reference, though it reads as a dark blob). That means the brief details were not readable at phone size.
+
+## Not on the list
+- The Hook Text box on the vertical frame may cover the signs in panels 1-3; suggested line: A4 on every panel, the top 20% of the frame.
+- The blue freeze in panel 3 washes out the mannequin; suggested line: the freeze must still show the held prop.
+- Scooter size against the crowd is oversized in 12; suggested line: O4 for the vehicle against the crowd behind.
+- Panel 13 has a different art style from the other panels (the flat bins); suggested line: S6 across shots of the end sequence.
+- Weapons and violence content shown as "gun shop" text; suggested line: platform-safety check for the weapons shown.
+
+critique, pass 6: faults fixed as one list: hunt 1: T3 gas thinned for the second volley; car pushers moved into frame and run in (no pop); selfie flash moved to 1.8 with the helicopter falling behind him; RPG muzzle flash; shot C reloaded (warhead shows); mannequin stiff arm, hand, nose; hold jumps 0.42 m. hunt 2: granny's headscarf red with cream dots (plum read as hair); muzzle flash core smaller; left open: ['1-3 A1 O3: shop - the "camo hunting mannequin" reads as a flat olive blob/tank toy; the TV and AMMO tower are tiny and the AMMO text is unreadable; panel 1 show', '1-3 A1 S1: shop - the haulers are black silhouettes among a black-clad crowd, so the second wave and the phones swinging cannot be told apart', '7 A1 P2: no clear selfie, no phone, no peace sign; the helicopter is a tiny plane on a rocket-like trail rather than spiralling down; no camera flash', '11 A1 P2: no jumping rioters, only a static dim crowd', "13 A1 P2: the husband's speaking pose is unclear; the wife's visor reads as a white brim and her hand covers her face; no Greetings from Tirana tote visible; th", '4-6 S6 S3: the statue and the Paris set are a thin sketch of the reference (no building, no plinth detail); the police van and the car change position between p', '7-11 S8 S1: the crowd fills the whole lower band as one dark mass; the foreground action is small', '12,14 P13 P11: hooded riders have no neck and tiny heads inside the hood']
+

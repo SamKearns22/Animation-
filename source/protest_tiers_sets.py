@@ -1456,6 +1456,15 @@ def prop_mannequin(img, x, y, k, ang=0.0):
                      (hx - .14 * k, .12 * k)], x, y, ang), CAMO[2], INK, 1.8, 0)  # cap
     poly(img, _turn([(hx - .2 * k, -.1 * k), (hx - .12 * k, -.1 * k), (hx - .12 * k, .1 * k),
                      (hx - .2 * k, .1 * k)], x, y, ang), CAMO[2], INK, 1.6, 0)    # its peak
+    # chat 27 (notes hunt 1: "a flat camo blob, not a mannequin"): a stiff arm saluting up out of the plank, its pale
+    # shop-dummy hand, and the blank face's nose pointing at the sky, so it reads as a person-shaped dummy at phone size
+    sx = -L * .27
+    poly(img, _turn([(sx - .05 * k, -.18 * k), (sx + .05 * k, -.18 * k), (sx + .17 * k, -.62 * k),
+                     (sx + .08 * k, -.65 * k)], x, y, ang), CAMO[1], INK, 2.0, 0)          # the sleeve, stiff, up
+    poly(img, _turn([(sx + .12 * k + .07 * k * math.cos(t_), -.72 * k + .09 * k * math.sin(t_))
+                     for t_ in np.linspace(0, 6.28, 12)], x, y, ang), (214, 196, 170), INK, 2.0, 0)  # the hand
+    poly(img, _turn([(hx - .03 * k, -.11 * k), (hx + .05 * k, -.11 * k), (hx + .01 * k, -.2 * k)], x, y, ang),
+         (214, 196, 170), INK, 1.8, 0)                                                    # the nose
 
 
 def prop_boxes(img, x, y, k, n=3):

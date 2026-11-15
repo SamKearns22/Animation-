@@ -629,15 +629,80 @@
      "7-8 P13: hoodie and trousers are one flat black, with no cuffs and no wrists. The hood is very large against the head.",
      "6 O2: the seller's body is hidden behind the cart and the bottles overlap his arms, so he has no hands."
     ]
+   },
+   {
+    "round": 1,
+    "pass": 5,
+    "stage": "notes",
+    "date": "2026-11-15",
+    "hunt": 1,
+    "faults": 14,
+    "cant_tell": 2,
+    "open": [
+     "4-6 A1 P2: no throwers lobbing cone/stones, no four rioters shoving the car, no water-cannon jet, no steam, fire not knocked down, no rioters cheering or runnin",
+     "2 A1: the mannequin reads as a flat camo blob, not a mannequin carried overhead; ammo tower in 1 is unclear.",
+     "12,14 A1: the pole reads as a stick, not an RPG; no flash, backblast or target in the sky; no police clash behind.",
+     "7 A1: no helicopter shown (only a smoke streak); peace-sign selfie does not read, only a white ball.",
+     "8,10 A1 P2: no queue and no lit bottle handed over; buyer just walks past. No applause or raised fists readable in 10.",
+     "9 A1: the granny has no readable headscarf and cardigan; the purple-haired figure holds the bottle low, not overarm.",
+     "11 A1: nobody is jumping; the crowd is a still dark mass.",
+     "13 A1: no visor-and-tote wife (the tote and \"Greetings from Tirana\" are missing); neither is crouched, both stand behind bins; she hides her face.",
+     "4-6 A2 S3: the car is a dark box with an orange hole, not the grey burning estate in the reference; the Paris statue lacks its plinth and monument.",
+     "4-6 S8 S9: flat pale cut-out smoke clumps cover over half of panel 4 and hide the action; smoke is not lit or shaded.",
+     "7-12,14 S8: the dark crowd is one unbroken mass over the lower half.",
+     "1,3,14 S4 O1: \"RAUS\" and \"GEN Z REGELT\" are cut at the frame edges; the moped wheels are cut in 14.",
+     "1-3 A1: the looters are flat black silhouettes without faces, so their acting cannot be read.",
+     "4-6 S6: the car and crowd are placed differently in each panel (car left, then centre); green-uniformed people appear in the background only in 5.",
+     "7-11 P4: whether the eagle on the flag faces the right way; a full-size flag would show it.",
+     "13 P14: whether the eyes stay whole; a full-size face would show it."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 6,
+    "stage": "notes",
+    "date": "2026-11-15",
+    "hunt": 2,
+    "faults": 14,
+    "cant_tell": 2,
+    "open": [
+     "1-3 A1 O3: shop - the \"camo hunting mannequin\" reads as a flat olive blob/tank toy; the TV and AMMO tower are tiny and the AMMO text is unreadable; panel 1 show",
+     "1-3 A1 S1: shop - the haulers are black silhouettes among a black-clad crowd, so the second wave and the phones swinging cannot be told apart",
+     "4 A1: the \"bike wheel\" reads as a black fan or disc; no traffic cone and no four-thrower back row visible; the white flash reads as a yellow ball, not a flash o",
+     "5-6 A1 P2: the car is a dark brown blob with a faint orange stripe, not a burning car; the four rioters shoving read as a running black mass; no cheering, no cl",
+     "7 A1 P2: no clear selfie, no phone, no peace sign; the helicopter is a tiny plane on a rocket-like trail rather than spiralling down; no camera flash",
+     "8 A1 O3: the buyer takes no clear lit bottle from the seller; the seller's striped umbrella is small and half hidden; the queue is not visible",
+     "9-10 A1 P2: the granny is a small purple-haired figure with no headscarf or cardigan, no clear overarm throw; in 10 no seller applause and no raised fists",
+     "11 A1 P2: no jumping rioters, only a static dim crowd",
+     "12,14 A1 O1 O3: the RPG looks like a long stick or spear, with no clear muzzle flash or backblast; in 12 the flash is a white-yellow ball, an O6 nuclear-flash f",
+     "13 A1 P2: the husband's speaking pose is unclear; the wife's visor reads as a white brim and her hand covers her face; no Greetings from Tirana tote visible; th",
+     "4-6 S6 S3: the statue and the Paris set are a thin sketch of the reference (no building, no plinth detail); the police van and the car change position between p",
+     "7-11 S8 S1: the crowd fills the whole lower band as one dark mass; the foreground action is small",
+     "13 S5: the alley background is a dark blank block with clothesline only",
+     "12,14 P13 P11: hooded riders have no neck and tiny heads inside the hood",
+     "13 P12: which person speaks; a picture with the mouths labelled would show it",
+     "1-14 M1 M2 M3 M5: movement and hits cannot be judged from one frame per panel; strips would show it"
+    ],
+    "fixed": "hunt 1: T3 gas thinned for the second volley; car pushers moved into frame and run in (no pop); selfie flash moved to 1.8 with the helicopter falling behind him; RPG muzzle flash; shot C reloaded (war",
+    "left": [
+     "1-3 A1 O3: shop - the \"camo hunting mannequin\" reads as a flat olive blob/tank toy; the TV and AMMO tower are tiny and the AMMO text is unreadable; panel 1 show",
+     "1-3 A1 S1: shop - the haulers are black silhouettes among a black-clad crowd, so the second wave and the phones swinging cannot be told apart",
+     "7 A1 P2: no clear selfie, no phone, no peace sign; the helicopter is a tiny plane on a rocket-like trail rather than spiralling down; no camera flash",
+     "11 A1 P2: no jumping rioters, only a static dim crowd",
+     "13 A1 P2: the husband's speaking pose is unclear; the wife's visor reads as a white brim and her hand covers her face; no Greetings from Tirana tote visible; th",
+     "4-6 S6 S3: the statue and the Paris set are a thin sketch of the reference (no building, no plinth detail); the police van and the car change position between p",
+     "7-11 S8 S1: the crowd fills the whole lower band as one dark mass; the foreground action is small",
+     "12,14 P13 P11: hooded riders have no neck and tiny heads inside the hood"
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 31,
+    "faults": 50,
     "false": 0
    },
    "S1": {
-    "faults": 9,
+    "faults": 11,
     "false": 1
    },
    "P1": {
@@ -645,7 +710,7 @@
     "false": 0
    },
    "S9": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "O6": {
@@ -657,27 +722,27 @@
     "false": 0
    },
    "S8": {
-    "faults": 4,
+    "faults": 7,
     "false": 0
    },
    "S5": {
-    "faults": 3,
-    "false": 0
-   },
-   "A2": {
-    "faults": 6,
-    "false": 1
-   },
-   "S3": {
     "faults": 4,
     "false": 0
    },
+   "A2": {
+    "faults": 7,
+    "false": 1
+   },
+   "S3": {
+    "faults": 6,
+    "false": 0
+   },
    "P2": {
-    "faults": 13,
+    "faults": 20,
     "false": 1
    },
    "O3": {
-    "faults": 10,
+    "faults": 13,
     "false": 1
    },
    "P4": {
@@ -717,11 +782,11 @@
     "false": 0
    },
    "O1": {
-    "faults": 3,
+    "faults": 5,
     "false": 0
    },
    "S6": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "P7": {
@@ -737,7 +802,7 @@
     "false": 0
    },
    "P11": {
-    "faults": 3,
+    "faults": 4,
     "false": 1
    },
    "P5": {
@@ -753,6 +818,10 @@
     "false": 0
    },
    "P13": {
+    "faults": 2,
+    "false": 0
+   },
+   "S4": {
     "faults": 1,
     "false": 0
    }

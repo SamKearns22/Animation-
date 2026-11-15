@@ -727,7 +727,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
 # 928); TOURIST_DRESS names who wears what and draw() puts them on. Sized from head_box (the head as really drawn).
 CAP, CAP_D = (200, 44, 52), (150, 30, 38)                 # his red baseball cap
 VISOR_C, SHADES = (250, 250, 246), (30, 30, 34)
-SCARF, SCARF_D = (124, 84, 120), (90, 58, 88)             # her headscarf: plum, a darker print
+SCARF, SCARF_D = (206, 62, 58), (150, 40, 38)             # chat 27 (notes hunt 2: plum read as purple hair): a red babushka scarf
+SCARF_DOT = (246, 234, 206)                                # its cream polka dots
 FLAT, FLAT_D = (96, 90, 78), (70, 64, 56)                 # the seller's tweed flat cap
 APRON, APRON_D = (236, 232, 222), (190, 184, 170)
 BUMBAG, CAMERA = (40, 44, 52), (34, 34, 38)
@@ -817,7 +818,7 @@ def headscarf(p, view, sp, hx, hy):
         p.line(curve([(hx + l + 10, hy + 1.2 * hh), (hx + l - 4, hy + 1.55 * hh)], 1), SCARF_D, 9)   # the tail
         p.ell(hx + 0.3 * hw, hy + 1.12 * hh, 14, 11, SCARF_D, INK, 1.6)          # the knot under her chin
         for k in range(4):
-            p.ell(hx - 0.2 * hw + k * 0.0, top + (0.35 + 0.3 * k) * hh, 4, 4, SCARF_D, None)
+            p.ell(hx - 0.2 * hw + k * 0.0, top + (0.35 + 0.3 * k) * hh, 6, 6, SCARF_DOT, None)
         return
     if view in ('back', 'three_back'):
         out = [(hx + l - 6, hy + 0.9 * hh), (hx + l - 8, top + 0.5 * hh), (hx, top - 4), (hx + r + 8, top + 0.5 * hh),
@@ -834,7 +835,7 @@ def headscarf(p, view, sp, hx, hy):
     p.poly(ring, None, INK, 2.4)
     p.poly(hole, None, INK, 2.0)
     for k in range(5):                                    # a little printed pattern: dots on the top
-        p.ell(hx + o * 0.5 + (k - 2) * 0.35 * hw, top + 0.32 * hh + abs(k - 2) * 8, 4, 4, SCARF_D, None)
+        p.ell(hx + o * 0.5 + (k - 2) * 0.35 * hw, top + 0.32 * hh + abs(k - 2) * 8, 6, 6, SCARF_DOT, None)
     kx, ky = hx + o, hy + 1.18 * hh                       # the knot under the chin
     p.ell(kx, ky, 16, 12, SCARF_D, INK, 1.8)
     p.poly([(kx - 6, ky + 6), (kx - 22, ky + 40), (kx - 4, ky + 34)], SCARF, INK, 1.6)

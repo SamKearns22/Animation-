@@ -1,0 +1,192 @@
+{
+ "round": 1,
+ "stage": "notes",
+ "panels": [
+  {
+   "t": 7.5,
+   "crop": null,
+   "is": "T2 Frankfurt: the second wave steps back out of the smashed gun shop and jogs off right, one carrying a lit flat-screen TV, one a tower of AMMO boxes; the crowd swings its phones after them",
+   "parts": "PMOS",
+   "set": "t2",
+   "refs": [
+    "references/protest-tiers/de3-frankfurt-gun-shop-window-smashed.jpg",
+    "references/protest-tiers/de5-frankfurt-water-cannon-police-blue.jpg"
+   ],
+   "beat": "second wave out",
+   "glimpse": true
+  },
+  {
+   "t": 8.7,
+   "crop": null,
+   "is": "T2: two haulers carry a camo hunting mannequin flat over their heads off to the right",
+   "parts": "PMOS",
+   "set": "t2",
+   "refs": [
+    "references/protest-tiers/de3-frankfurt-gun-shop-window-smashed.jpg",
+    "references/protest-tiers/de5-frankfurt-water-cannon-police-blue.jpg"
+   ],
+   "beat": "mannequin carried",
+   "glimpse": true
+  },
+  {
+   "t": 9.3,
+   "crop": null,
+   "is": "T2: blue police light, everything frozen mid-run, the mannequin held up",
+   "parts": "PMOS",
+   "set": "t2",
+   "refs": [
+    "references/protest-tiers/de3-frankfurt-gun-shop-window-smashed.jpg",
+    "references/protest-tiers/de5-frankfurt-water-cannon-police-blue.jpg"
+   ],
+   "beat": "blue freeze",
+   "glimpse": true
+  },
+  {
+   "t": 13.6,
+   "crop": null,
+   "is": "T3 Paris, Place de la Republique: a back row of four throwers lobs stones, a traffic cone and a bike wheel over the front line; white flashes on the police shields",
+   "parts": "PMOS",
+   "set": "t3",
+   "refs": [
+    "references/protest-tiers/fr3-republique-17oct-burning-car-marianne.jpg",
+    "references/protest-tiers/fr2-place-de-la-republique-wide.jpg"
+   ],
+   "beat": "second volley",
+   "glimpse": true
+  },
+  {
+   "t": 16.3,
+   "crop": null,
+   "is": "T3: four rioters shove the burning car; it rolls toward the police, nose right, hubs turning",
+   "parts": "PMOS",
+   "set": "t3",
+   "refs": [
+    "references/protest-tiers/fr3-republique-17oct-burning-car-marianne.jpg",
+    "references/protest-tiers/fr2-place-de-la-republique-wide.jpg"
+   ],
+   "beat": "car shoved",
+   "glimpse": true
+  },
+  {
+   "t": 17.7,
+   "crop": null,
+   "is": "T3: the water cannon jet hits the rolling burning car: steam boils up, the fire knocked down; rioters cheer and run off left",
+   "parts": "PMOS",
+   "set": "t3",
+   "refs": [
+    "references/protest-tiers/fr3-republique-17oct-burning-car-marianne.jpg",
+    "references/protest-tiers/fr2-place-de-la-republique-wide.jpg"
+   ],
+   "beat": "jet on car, steam",
+   "glimpse": true
+  },
+  {
+   "t": 19.85,
+   "crop": null,
+   "is": "T4 Tirana: a rioter takes a selfie with a peace sign, his back to the police helicopter spiralling down behind him over the ministry; small camera flash",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "selfie flash",
+   "glimpse": true
+  },
+  {
+   "t": 21.8,
+   "crop": null,
+   "is": "T4: a Molotov seller at his cart (striped umbrella, crates of bottles, sign MOLOTOV 200 LEK) hands a lit bottle to the buyer at the front of a queue",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "cart sale",
+   "glimpse": true
+  },
+  {
+   "t": 24.7,
+   "crop": null,
+   "is": "T4: a granny in headscarf and cardigan throws a Molotov overarm",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "granny throw",
+   "glimpse": true
+  },
+  {
+   "t": 25.5,
+   "crop": null,
+   "is": "T4: her bottle hits; the seller applauds, fists go up in the crowd",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "hit, cheer",
+   "glimpse": true
+  },
+  {
+   "t": 26.55,
+   "crop": null,
+   "is": "T4: the gleeful hold: rioters jumping, fireworks over the avenue, fires burning",
+   "parts": "PMOS",
+   "set": "t4",
+   "refs": [
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "hold, fireworks",
+   "glimpse": true
+  },
+  {
+   "t": 28.85,
+   "crop": null,
+   "is": "End shot A: two riders on a moped; the passenger fires an RPG at something in the sky off screen (muzzle flash, backblast); rioters clash with police behind",
+   "parts": "PMOS",
+   "set": "ea",
+   "refs": [
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "RPG fired",
+   "glimpse": true
+  },
+  {
+   "t": 31.6,
+   "crop": null,
+   "is": "End shot B: a side alley, two American tourists (husband in cap with camera, wife with visor and Greetings from Tirana tote) crouched behind wheelie bins; he speaks",
+   "parts": "PMOS",
+   "set": "eb",
+   "refs": [],
+   "beat": "tourists speak",
+   "glimpse": true
+  },
+  {
+   "t": 34.4,
+   "crop": null,
+   "is": "End shot C: back to the moped riders, the RPG already reloaded: one asks a question, the other shrugs",
+   "parts": "PMOS",
+   "set": "ec",
+   "refs": [
+    "references/protest-tiers/al2-tirana-boulevard.jpg",
+    "references/protest-tiers/al3-tirana-shield-line-water-cannon.jpg",
+    "references/protest-tiers/al5-tirana-flag-against-fire.jpg"
+   ],
+   "beat": "the shrug",
+   "glimpse": true
+  }
+ ]
+}

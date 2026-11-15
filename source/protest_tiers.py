@@ -846,16 +846,26 @@ def t3_actors(lt):
         else:                                               # stepping up from the crowd behind
             out.append(Actor(f'back{k + 1}', 'rioter', x - 0.6 * (VOLLEY2 - lt) / 0.3, 13.0, 90, 'stand', tier='t3'))
     # round 1 (T3 6.0-8.0): four rioters shove the burning car into the gap, let go at 6.9, cheer it on, run off left
+    if CAR_T0 - 0.75 <= lt < CAR_T0 - 0.1:               # chat 27: they run in from off the left edge (no pop)
+        X0, X1, D0, _ = S.CAR3
+        u = ease((lt - CAR_T0 + 0.75) / 0.65)
+        for k, (px, pd) in enumerate(((X1 - 0.15, D0 - 0.45), (X1 + 0.4, D0 + 0.35), (X1 + 0.45, D0 + 1.25),
+                                      (X1 + 0.45, D0 + 2.15))):
+            x, d = S.car_pt(px, pd, car_move(lt))
+            out.append(Actor(f'pusher{k + 1}', 'rioter', x - 3.2 * (1 - u), d, 115, 'run', t=lt + k * .2, tier='t3'))
     if CAR_T0 - 0.1 <= lt:
         mv = car_move(lt)
         X0, X1, D0, _ = S.CAR3
         xc = (X0 + X1) / 2
-        for k, off in enumerate((-1.0, -0.3, 0.4, 1.1)):
+        # chat 27 (notes hunt 1: three of four pushers stood off the left edge): one at the rear's right corner, three
+        # down the right flank leaning into it, all in frame; (x, d) in the car's own frame, moved with it by car_pt
+        spots = ((X1 - 0.15, D0 - 0.45), (X1 + 0.4, D0 + 0.35), (X1 + 0.45, D0 + 1.25), (X1 + 0.45, D0 + 2.15))
+        for k, (px, pd) in enumerate(spots):
             if lt < CAR_LET:
-                x, d = S.car_pt(xc + off, D0 - 0.5, mv)
+                x, d = S.car_pt(px, pd, mv)
                 out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, 140, 'push', t=lt * 1.6 + k * .3, tier='t3'))
             else:
-                x, d = S.car_pt(xc + off, D0 - 0.5, car_move(CAR_LET))
+                x, d = S.car_pt(px, pd, car_move(CAR_LET))
                 u = lt - CAR_LET - 0.4 - 0.08 * k
                 if u < 0:
                     out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, 150, 'cheer', u=abs(math.sin(lt * 9 + k)),
@@ -996,6 +1006,7 @@ def t3_fx(img, lt):
         S.smoke(lay, lumps, (226, 230, 230), (252, 252, 250), line=(170, 176, 180), lw=2.5)
         if lt > 2.6 + J3:                                  # the jet blows it left
             lay = lay.transform(lay.size, Image.AFFINE, (1, 0, 190 * (lt - 2.6 - J3), 0, 1, 0))
+        a *= 1.0 - 0.55 * ease((lt - VOLLEY2 + 0.5) / 0.5)   # chat 27 (notes hunt 1: the gas hid the second volley)
         lay.putalpha(lay.getchannel('A').point(lambda v: int(v * 0.88 * a)))
         img.alpha_composite(lay)
     # the water cannon jet (2.5-4.0): a white tapering stream from the roof cannon, sweeping the front line
@@ -1120,12 +1131,13 @@ def _jump(lt, k):
     """The gleeful hold: everyone bouncing on their own beat (m off the ground)."""
     if lt < HOLD - 0.4:
         return 0.0
-    return 0.22 * abs(math.sin(lt * 7.5 + k * 1.3)) * ease((lt - HOLD + 0.4) / 0.4)
+    return 0.42 * abs(math.sin(lt * 7.5 + k * 1.3)) * ease((lt - HOLD + 0.4) / 0.4)   # chat 27: was 0.22 ("nobody jumping")
 
 
 def selfie(lt):
     """Gag b: watching the helicopter (back to us), turns his back on it at 1.2, phone up, peace sign; the flash
-    at 2.6 as it lands; checks the photo, thumbs up; runs off to the melee at 3.6."""
+    at 1.8 with it spiralling down right behind his head (chat 27, notes hunt 1: at 2.6 it had already gone behind the
+    ministry, so the gag was lost); checks the photo, thumbs up at 2.4; runs off to the melee at 3.25."""
     x, d = SELFIE
     if lt < 1.2:
         return [Actor('selfie', 'rioter', x, d, 180, 'stand', tier='t4')]
@@ -1133,7 +1145,7 @@ def selfie(lt):
         yaw = (135, 90, 45)[min(2, int((lt - 1.2) / 0.085))]
         return [Actor('selfie', 'rioter', x, d, -yaw, 'stand', tier='t4')]
     if lt < 3.25:
-        u = ease((lt - 2.75) / 0.2)
+        u = ease((lt - 2.4) / 0.2)
         return [Actor('selfie', 'rioter', x, d, 0, 'selfie', u=u, tier='t4')]
     if lt < 4.6:                                   # off into the melee (clear before the queue fills at the cart)
         return [Actor('selfie', 'rioter', x + 4.0 * (lt - 3.25), d + 2.0 * (lt - 3.25), 90, 'run', t=lt, tier='t4')]
@@ -1357,10 +1369,10 @@ def t4_fx(img, lt):
         S.glow_disc(img, tx, ty, 34 + 5 * math.sin(lt * 20 + fd), (255, 70, 50), amt=.4)
         IS.ell(img, tx, ty, 5, 5, (255, 236, 220), None)
     flying_shield(img, lt)
-    if 2.55 <= lt < 2.75:                                  # gag b: the selfie's flash as the helicopter lands
-        x, d = SELFIE
+    if 1.8 <= lt < 1.95:                                   # gag b: the selfie's flash, the helicopter falling behind him
+        x, d = SELFIE                                      # chat 27: smaller, so his peace sign still reads through it
         fx, fy = cam.p(x - 0.05, d, 2.25)
-        S.glow_disc(img, fx, fy, 50 * (1 - (lt - 2.55) / 0.2) + 20, (255, 255, 245), amt=.9)
+        S.glow_disc(img, fx, fy, 30 * (1 - (lt - 1.8) / 0.15) + 12, (255, 255, 245), amt=.85)
     embers(img, lt)
     if lt >= HOLD - 0.2:
         for k, (t0, x, y, col) in enumerate(FIREWORKS):
@@ -1557,7 +1569,7 @@ def end_riders(img, tier, lt, z):
     aim = (38 + 24 * ease((lt - 0.3) / 0.4)) if tier == 'ea' else 62.0   # C: the cast sheet's shrug angle (45 folded his arm)
     dh, gh, roll = rider_heads(tier, lt)
     shrug_u = ease((lt - 1.4) / 0.6) if tier == 'ec' else 0.0
-    fired = tier == 'ec' or lt >= 0.8
+    fired = tier == 'ea' and lt >= 0.8                     # chat 27: shot C has already reloaded (the warhead reads as an RPG)
     C.moped_scene(img, _cam2(), gx, gy - FEET * s, s, yaw=90, aim=aim, fired=fired, both=True, drv_head=dh,
                   gun_head=gh, shrug_u=shrug_u, rim=C.RIM, drv_roll=roll)
     return gx, gy, s, aim
@@ -1602,8 +1614,9 @@ def rocket_fx(img, lt, rear, front):
                       30 + 80 * a + 12 * q) for q in range(4)], (226, 220, 210), (250, 246, 240), line=None, lw=1)
         bl.putalpha(bl.getchannel('A').point(lambda v: int(v * 0.6 * (1 - a))))
         img.alpha_composite(bl)
-        if a < 0.3:
-            S.glow_disc(img, fx, fy, 60, (255, 230, 150), amt=.6)
+        if a < 0.45:                                       # chat 27 (notes hunt 1: "a stick, no flash"): a big muzzle flash
+            S.glow_disc(img, fx, fy, 110 * (1 - a), (255, 150, 50), amt=.7)   # hunt 2: smaller white core (O6)
+            S.glow_disc(img, fx, fy, 34 * (1 - a), (255, 240, 190), amt=.85)
     L = 2600.0                                             # the path: straight out along the tube, off the top
     u = min(1.0, (lt - 0.8) / 0.3)
     N = 200                                                # close-set lumps (chat 14: never a string of beads)
@@ -2046,14 +2059,16 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
 # round 1 (chat 26, notes "## Exceptions"): who comes on in mid-frame for a reason the audit cannot see
 ALLOWED_POPS = [('runner6', at('t2', 2.95), at('t2', 3.3), 'out of the dark shop, through the gap in the glass'),
                 ('runner7', at('t2', 3.15), at('t2', 3.5), 'out of the dark shop, through the gap in the glass'),
-                ('back*', at('t3', VOLLEY2 - 0.35), at('t3', VOLLEY2), 'step up out of the packed crowd behind')]
+                ('back*', at('t3', VOLLEY2 - 0.35), at('t3', VOLLEY2), 'step up out of the packed crowd behind'),
+                ('buyer*', at('t4', 2.6), at('t4', 2.75), 'step out of the packed crowd into the queue'),
+                ('granny', at('t4', 5.7), at('t4', 5.85), 'steps out of the packed crowd to the cart')]
 TOUCHES = [('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
            ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
            ('runner*', 'runner*', at('t2', 0), at('t2', T2_FREEZE + .75), 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),
            ('runner*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in: the swinger is in the crush', 0.10),
            ('front*', 'front*', at('t3', 2.7 + J3), at('t3', 3.3 + J3), 'T3 run-out: the front line breaks and runs left as a pack', 0.04),
-           ('policia*', 'rioter*', at('t4', 0), at('t4', 10), 'T4 melee: rioters slam into the shields (brief 26)', 0.20),
-           ('policia*', 'policia*', at('t4', 2), at('t4', 10), 'T4 melee: the shield line buckles back into itself', 0.06)]
+           ('policia*', 'rioter*', at('t4', 0), at('t4', 9.95), 'T4 melee: rioters slam into the shields (brief 26)', 0.20),
+           ('policia*', 'policia*', at('t4', 2), at('t4', 9.95), 'T4 melee: the shield line buckles back into itself', 0.06)]
 ORDER_SWAPS = [(a, b, t0, t1, w) for a, b, t0, t1, w in (
     ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: they cross in the crush'),
     ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in'), ('runner*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in'),
