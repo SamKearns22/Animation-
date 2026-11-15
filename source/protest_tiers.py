@@ -297,25 +297,34 @@ class Actor:
         if self.mix:
             st, u, t, w = self.mix
             j = moves.mix_poses(make_pose(sp, st, u, t, self.force), j, ease(w))
-            _resolve_mixed_arms(j)
+            _resolve_mixed_arms(j, self.yaw)
         if self.extra:
             self.extra(j)
         return j
 
 
-def _resolve_mixed_arms(j):
+def _resolve_mixed_arms(j, yaw):
     """Chat 31 (Sam's note 1 on animatic 2, 'frames missing'): mixing two poses slides each joint straight across, so
     part-way from a run into a throw the arm came out the wrong length or folded back across the body (the guard
-    stopped the drawing at T4 20.75 s). An arm the mix spoiled is re-bent onto its mixed hand."""
+    stopped the drawing at T4 20.75 s). Each mixed arm is re-bent onto its mixed hand by the rig, the elbow pointing
+    the way the mix put it (so it still looks like the blend); if the guard would still stop it as seen at this turn,
+    the next elbow direction that it passes."""
+    def seen(q):
+        return C.V.project(C.V.leaned(q, j.get('lean', 0.0)), yaw)[0]
     for s in 'LR':
+        sg = -1 if s == 'L' else 1
         sh, el, wr = (np.array(j[k + s][:3], float) for k in ('sh', 'el', 'wr'))
-        up, fo = np.linalg.norm(el - sh), np.linalg.norm(wr - el)
-        a, b = sh - el, wr - el
-        ang = math.degrees(math.acos(max(-1.0, min(1.0, float(a @ b) / ((up * fo) or 1)))))
-        across = (1 if sh[0] >= 0 else -1) * (el[0] - sh[0]) < -0.3 * C.F.UPPER
-        if abs(up / (C.F.UPPER * .98) - 1) > .05 or abs(fo / (C.F.FORE * .98) - 1) > .05 or ang < 40 or across:
-            hand = C._clear_of_shoulder(j, s, wr)
-            C.V.arm_to(j, s, hand, 'down' if hand[1] > 60 else 'out', shape=j.get('hand', {}).get(s, 'fist'))
+        pole = el - (sh + wr) / 2
+        pole[0] = max(sg * pole[0], 0.35 * (np.linalg.norm(pole) or 1.0))   # the elbow out to his side, never across
+        n = np.linalg.norm(pole)
+        hand = C._clear_of_shoulder(j, s, wr)
+        for p in ((tuple(pole / n),) if n > 1e-6 else ()) + ('down', 'out', 'front', 'back'):
+            C.V.arm_to(j, s, hand, p, shape=j.get('hand', {}).get(s, 'fist'))
+            try:
+                C.F.audit_arm(*(seen(j[k + s]) for k in ('sh', 'el', 'wr')))
+                break
+            except Exception:
+                continue
 
 
 def draw_actor(img, cam, a):
