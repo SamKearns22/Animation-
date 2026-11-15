@@ -2454,6 +2454,31 @@ def cast_tile_scale_is_one():
     return B.SS == 1, f'B.SS after a tile = {B.SS}'
 
 
+@test
+def head_view_installs_idempotent():
+    """Chat 18, 15 Nov: installing the turned/famous/house head kits again (in any order) adds no layer (pre-flight's
+    child re-installed them and head_view wrapped itself to a RecursionError)."""
+    import inspect
+    import people_turned as A
+    import people_famous as Fm
+    import facehouse as Hs
+    V = A.PP.AV.MC.V
+
+    def depth():
+        n, f = 0, V.head_view
+        while f and n < 500:
+            f = inspect.getclosurevars(f).nonlocals.get('old')
+            n += 1
+        return n
+    for m in (A, Fm, Hs):
+        m.install()
+    d0 = depth()
+    for _ in range(5):
+        for m in (Hs, A, Fm):
+            m.install()
+    return depth() == d0, f'head_view layers {d0} -> {depth()} after 5 more rounds of installs'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

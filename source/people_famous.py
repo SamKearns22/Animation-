@@ -556,5 +556,6 @@ def install():
             with PP._Big():
                 return TH.draw(img, p, dict(sp, who=fm['key']), t, view, hx, PP._lift(hy))
         return old(img, p, sp, t, view, hx, hy)
+    head_view.__dict__.update(getattr(old, '__dict__', {}))   # carry the earlier kits' flags: a second install is a no-op
     head_view.kit_famous = head_view.turnhead = True
     V.head_view = head_view
