@@ -216,3 +216,21 @@
 (chat 19 round 1 lines, replaced by "## Round 1 plan", archived chat 20)
 Plan (chat 19): end scene ~7 s in 3 shots: A closer side-on, moped skids in, passenger fires up out of frame, fight behind, "Hey!" off, both turn; B side alley, the couple behind bins, his line; C two-shot of the masked riders, "Bro, what's a 'protest'?", big shrug (masks: no mouths). Wife gasps only. Stand-in voices until Sam records. Captions for the lines. Albania: round flickering flames, smoke darker below and lit by fire, Molotov bursts in the bank windows. Intensity Level line: red, a little smaller, under the place line; no heading in the end scene.
 - Budget (Sam): his week's use is 23% today, up from 17%. The film's ledger reads 33.6% of a week (estimate 21.5%).
+
+## Chat 20 handover (archived chat 21)
+## Where things stand (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 89 (one critique pack per stage, a Glimpse's panel is its shot's frame), 74 (head life on every voiced line, the acting list in "## Round 1 plan"), 61 (read only the MAP and the lines a beat touches).
+- **Done (chat 20, 15 Nov, Opus high):** round 1 planned: "## Round 1 plan" (estimate table, build order, beat list for 4/6/8/10 s + the 7.6 s end scene, acting list); brief rows 34-41; ledger stages `round1 plan/cast/sets/moves`, `animatic2`, `round2`, `final` (estimate 63.5%, `round1 plan` closed). Old plan and brief rows 1-33 archived (`notes/archive/protest-tiers-plan-r0.md`).
+- **Next: chat 21, Opus medium (building from a clear plan):** follow "Build order" steps 1-7 in "## Round 1 plan"; fix the 4 picture-check singles (COPIES t1 0.0, CUT arm t1 4.0, PROP TURN t2 4.67, PASSES THROUGH 22 cm) and the open critique faults (Marianne, flat smoke, dark riders, melee) inside it. Rehearsal clips (rule 8) to Sam as they pass: end A, end C, T4 selfie, T4 seller-to-granny, T3 car. Then chat on Sonnet: animatic 2.
+- **Budget guard:** Sam's Y covers the film to ~47%. Until "## Round 1 notes" records his Y to ~63.5% (Q1, asked chat 20), stop at 47% with what exists (the order puts the end scene and Albania first).
+- **Needs Sam:** Q1 (budget to ~63.5%); after animatic 2, his recordings of the 4 lines listed under the acting list.
+- **Read:** job pack "Build"; this section; "## Round 1 plan"; "## Exceptions"; first plan's bands only for a tier you touch.
+- **Open rule requests:** as before (archived lists: chats 15-17), plus chat 18's (a) clipcheck's 7 m/s cap is a walking cap; (b) clipcheck reports each body part once, hiding others; (c) archiving must never move the "## Record" lines; (d) kittests `people_from_a_description` and `facehouse_whole_head` fail on the main line. None new in chat 20.
+- **For Claude:** branch `claude/protest-tiers-c20`; per-tier lengths replace `TIER_LEN` in `scene_of`/`SHOTS` (protest_tiers.py setup); `overlay()` draws the headings; FAST_OK just above TOUCHES; the ledger's new stage shares are scaled (see `estimate_note` in the ledger json).
+
+## Round 1 notes": new estimate (rule 24-26) for the end scene, the 3 new people, the alley, the longer tiers and the 3 gags; the staging and a beat list for 4/6/8/10 s + ~7 s; brief checklist rows for R1-R5; then hand building to Opus medium. Fix the 4 picture-check singles with it.
+- **Needs Sam:** nothing until the plan's animatic (his answers are in).
+- **Read:** job pack for planning (brief, staging); this section; "## Round 1 notes"; "## Exceptions".
+- **Open rule requests:** as before (archived lists: chats 15-17), plus NEW (chat 18): (a) clipcheck's 7 m/s cap is a walking cap: running feet and throwing hands need a state-aware limit, so films stop writing FAST_OK rows for every sprint; (b) clipcheck reports each body part once, so fixing one fault uncovers hidden ones (the throws hid behind the run-in); (c) archiving must never move the "## Record" lines (pre-flight reads them); (d) kittests `people_from_a_description` and `facehouse_whole_head` fail on the main line (failed before chat 18 too).
+- **For Claude:** branch `claude/protest-tiers-c19`; `dash()` in t2_actors; FAST_OK just above TOUCHES.
+

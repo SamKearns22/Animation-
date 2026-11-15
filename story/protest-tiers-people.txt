@@ -45,3 +45,34 @@ when job t1: jacket (3i+s): 26 28 34; 40 44 56; 70 30 34; 50 56 48; 30 30 32; 90
 when job t2: jacket (3i+s): 30 30 34; 186 70 40; 60 90 140; 220 210 190; 40 44 40; 120 40 90
 when job t3: jacket (3i+s): 40 50 80; 150 40 40; 230 226 216; 80 90 70; 120 100 70; 34 34 40
 when job t4: jacket (3i+s): 30 30 32; 60 56 50; 80 30 30; 44 50 60; 90 80 66; 26 26 28
+
+# Round 1 (chat 21, 15 Nov): the end scene's tourists and T4's two gag people. What sits on top (cap, visor,
+# sunglasses, bum bag, camera, tote, headscarf, cardigan, shopping bag, flat cap, moustache, apron) is drawn by
+# source/protest_tiers_cast.py (TOURIST_DRESS).
+
+# husband: American tourist (Lead: speaks; seen front, chest up over a wheelie bin)
+body: 1.80 m, shoulders 168, head 70 x 94
+skin: pink | hair: short, 120 88 58
+face: jaw_wide +0.05, face_wide +0.04
+eyes: 80 110 140 | brows: 110 80 54, width 4.8
+outfit: jumper 92 160 210, shirt 92 160 210, no tie, trousers 196 176 128, shoes 240 240 236
+
+# wife: American tourist (Support: gasps; front, chest up beside him)
+body: 1.66 m, shoulders 140, head 64 x 94
+skin: pale | hair: bob, 214 184 120
+eyes: 90 120 100 | lips: 200 96 110 | brows: 150 116 70, width 4.0
+outfit: blouse 236 120 150, shirt 236 120 150, no tie, trousers 240 236 226, shoes 240 240 236
+
+# granny: Albanian granny (Glimpse: side-on, the overarm throw)
+body: 1.56 m, shoulders 136, head 64 x 90
+skin: olive | hair: bun, 200 196 190
+face: jaw_wide +0.03, chin_long +0.02
+eyes: 60 50 40 | brows: 150 146 140, width 3.6
+outfit: dress, dress 44 40 46, sleeves 130 54 60, shirt 44 40 46, no tie, shoes 30 28 26
+
+# seller: Molotov seller (Glimpse: front, behind his cart)
+body: 1.74 m, shoulders 174, head 72 x 92
+skin: olive | hair: short, 40 34 30
+face: jaw_wide +0.06, face_wide +0.05
+eyes: 60 50 40 | brows: 40 34 30, width 5.4
+outfit: jumper 226 220 204, shirt 226 220 204, no tie, trousers 54 50 48, shoes 30 28 26
