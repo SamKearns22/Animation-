@@ -1,0 +1,14 @@
+{
+ "packed": 1794774366.175936,
+ "problem": "687e7e6ead2b7342",
+ "chat": "417708e0f3b6e182",
+ "prompts": "a7dae66236320510",
+ "key": {
+  "V1": "helper A",
+  "V2": "chat",
+  "V3": "helper B"
+ },
+ "judged": 1794774916.616374,
+ "recorded": 1794775078.118103,
+ "pick": "helper B"
+}
