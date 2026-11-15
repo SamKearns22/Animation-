@@ -9,7 +9,7 @@
 - **Sam (chat 11): "continue until animatic 1, I don't want anything to stop you".** Stage stops OFF until animatic 1 is sent.
 - **Next: chat 18, Opus medium (a fix from a clear list):** fix the head_view recursion, re-run `preflight.py protest_tiers OUT`, clear or name what's left, then open Sonnet chat 19 for animatic 1 (`final OUT --small --faults-named`, finish.py, send, push notification).
 - **Budget (15 Nov):** WEEK_USD 245 (provisional); estimate ~15%; re-check the meter at each handover.
-- **Needs Sam:** nothing.
+- **Needs Sam:** nothing. **Sam Y (15 Nov, chat 17):** the animatic1 stage may run past its 1.4% share (at 1.7%) to finish animatic 1 (about 0.5% more); later stages keep their shares.
 - **Read:** job pack "Checks and animatic" (preflight.md Stage 3); this section; the "## Exceptions" table; `source/protest_tiers.py` MAP.
 - **Open rule requests:** as chat 15's list (archived), plus chat 16's (critique pass number; kittest to add), plus NEW (chat 17): the ledger's film name and the code name differ (fixed in ledger._paths; a kittest to add); JOKE_PROPS measures only a prop's centre, so a placard half off the frame edge passes.
 - **For Claude:** branch `claude/protest-tiers-c17`; pre-flight logs in /tmp are gone next chat.
