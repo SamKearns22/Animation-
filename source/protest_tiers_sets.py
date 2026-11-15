@@ -78,15 +78,25 @@ def _mask(polys, size=(W, H)):
 
 def shape(img, polys, fill, line=INK, lw=3, clip=None):
     """One flat shape: the union of polys filled, with ONE outline round the whole (none inside). clip: a mask it
-    stays inside (a lit patch on smoke). Returns the mask."""
-    m = _mask(polys)
+    stays inside (a lit patch on smoke). Returns the mask. Draws in the shape's own box only (chat 10: speed)."""
+    pts = [q for p in polys if len(p) > 2 for q in p]
+    if not pts:
+        return Image.new('L', (W, H), 0)
+    pad = int(lw) + 4
+    x0 = max(0, int(min(q[0] for q in pts)) - pad); y0 = max(0, int(min(q[1] for q in pts)) - pad)
+    x1 = min(img.size[0], int(max(q[0] for q in pts)) + pad + 1); y1 = min(img.size[1], int(max(q[1] for q in pts)) + pad + 1)
+    full = Image.new('L', (W, H), 0)
+    if x1 <= x0 or y1 <= y0:
+        return full
+    m = _mask([[(x - x0, y - y0) for x, y in p] for p in polys], (x1 - x0, y1 - y0))
     if clip is not None:
-        m = Image.fromarray(np.minimum(np.asarray(m), np.asarray(clip)))
+        m = Image.fromarray(np.minimum(np.asarray(m), np.asarray(clip.crop((x0, y0, x1, y1)))))
     if line:
         k = 2 * int(round(lw / 2)) + 1
-        img.paste(line, mask=m.filter(ImageFilter.MaxFilter(k)))
-    img.paste(fill, mask=m)
-    return m
+        img.paste(line, (x0, y0, x1, y1), mask=m.filter(ImageFilter.MaxFilter(k)))
+    img.paste(fill, (x0, y0, x1, y1), mask=m)
+    full.paste(m, (x0, y0))
+    return full
 
 
 def quad(img, a, b, c, d, fill, line=INK, lw=2.4, amt=1.2):
@@ -106,15 +116,20 @@ def bands(img, y0, y1, colours, seed=0, amp=10, line=None):
         shape(img, [top + [(W + 10, y1), (-10, y1)]], colours[i], line)
 
 
-def glow_disc(img, x, y, r, colour, steps=3):
-    """A flat light halo (lamps): a few stepped rings, lighter to the middle, no outline."""
-    base = np.asarray(img.convert('RGB'), np.float32)
+def glow_disc(img, x, y, r, colour, steps=3, amt=0.22):
+    """A flat light halo (lamps): a few stepped rings, lighter to the middle, no outline. Works on the disc's own box
+    only (chat 10: repainting the whole frame per lamp made a painting take ~75 s)."""
+    x0, y0, x1, y1 = int(max(0, x - r - 2)), int(max(0, y - r - 2)), int(min(W, x + r + 3)), int(min(H, y + r + 3))
+    if x1 <= x0 or y1 <= y0:
+        return
+    box = img.crop((x0, y0, x1, y1))
+    base = np.asarray(box.convert('RGB'), np.float32)
     for k in range(steps):
         rr = r * (1 - k / steps)
-        m = np.asarray(_mask([[(x + rr * math.cos(a), y + rr * math.sin(a)) for a in np.linspace(0, 6.28, 28)]]),
-                       np.float32)[..., None] / 255 * 0.22
+        m = np.asarray(_mask([[(x - x0 + rr * math.cos(a), y - y0 + rr * math.sin(a))
+                               for a in np.linspace(0, 6.28, 28)]], (x1 - x0, y1 - y0)), np.float32)[..., None] / 255 * amt
         base = base * (1 - m) + np.array(colour, np.float32) * m
-    img.paste(Image.fromarray(base.astype(np.uint8)).convert('RGBA'))
+    img.paste(Image.fromarray(base.astype(np.uint8)).convert(img.mode), (x0, y0))
 
 
 def mix(a, b, u):
@@ -202,25 +217,56 @@ def _t1_block(img, cam, s, d0, d1, h, tone, seed):
 def t1(t=0.0, marks=False):
     cam = CAMS['t1']
     img = Image.new('RGBA', (W, H), T1_SKY[0] + (255,))
-    bands(img, 0, cam.VY + 30, T1_SKY, seed=1, amp=12)
+    bands(img, 0, 240, T1_SKY, seed=1, amp=12)          # the dusk glow sits above the ridge, not behind it
+    img.paste(T1_SKY[-1], (0, 230, W, int(cam.VY) + 30))
     # lit clouds low in the sky wedge
     for i, (x, y, r) in enumerate(((350, 250, 70), (470, 236, 60), (610, 262, 74), (560, 205, 40))):
         shape(img, [blob(x, y, r, 30 + i, squash=.45)], (226, 150, 140), (120, 80, 110), 2)
-    # far end (Diagonal, ~1.3 km): a low line of fronts across the horizon, and far trees
-    shape(img, [[(0, cam.VY + 4)] + [(x, cam.VY - 22 - 10 * math.sin(x / 37) - 6 * (x % 90 < 30))
+    # beyond the far end: the Collserola ridge (~7 km, 400-512 m) with Tibidabo's temple and the Collserola tower,
+    # as seen up the Passeig (chat 10: fills the sky wedge the long lens leaves; the real view up the avenue)
+    ridge = [(-10, cam.VY + 4)]
+    for x in np.linspace(-10, W + 10, 40):
+        hm = 300 + 170 * math.exp(-((x - 600) / 260) ** 2) + 18 * math.sin(x / 140) + 6 * math.sin(x / 41 + 1)
+        ridge.append((x, cam.VY - cam.F * hm / 11000))
+    shape(img, [ridge + [(W + 10, cam.VY + 4)]], (98, 76, 118), (62, 48, 84), 2)
+    ridge2 = [(-10, cam.VY + 4)] + [(x, cam.VY - cam.F * (120 + 35 * math.sin(x / 150 + 2) + 10 * math.sin(x / 53)) /
+                                     6000) for x in np.linspace(-10, W + 10, 40)] + [(W + 10, cam.VY + 4)]
+    shape(img, [ridge2], (78, 68, 108), (56, 46, 80), 2)
+    tx, ty = 600, cam.VY - cam.F * 462 / 11000
+    k = cam.F / 11000                                      # px per m at the ridge
+    shape(img, [[(tx - 22 * k, ty + 4), (tx - 22 * k, ty - 30 * k), (tx - 9 * k, ty - 30 * k), (tx - 9 * k, ty - 52 * k),
+                 (tx + 9 * k, ty - 52 * k), (tx + 9 * k, ty - 30 * k), (tx + 22 * k, ty - 30 * k), (tx + 22 * k, ty + 4)],
+                [(tx - 3 * k, ty - 52 * k), (tx + 3 * k, ty - 52 * k), (tx, ty - 72 * k)]], (70, 60, 96), (50, 42, 74), 1.6)
+    cx2, cy2 = 455, cam.VY - cam.F * 400 / 10500
+    k2 = cam.F / 10500
+    shape(img, [[(cx2 - 2 * k2, cy2 + 4), (cx2 + 2 * k2, cy2 + 4), (cx2 + 1.2 * k2, cy2 - 288 * k2),
+                 (cx2 - 1.2 * k2, cy2 - 288 * k2)],
+                [(cx2 - 13 * k2, cy2 - 150 * k2), (cx2 + 13 * k2, cy2 - 150 * k2), (cx2 + 9 * k2, cy2 - 175 * k2),
+                 (cx2 - 9 * k2, cy2 - 175 * k2)]], (70, 60, 96), (50, 42, 74), 1.4)
+    glow_disc(img, cx2, cy2 - 290 * k2, 5, (255, 90, 80), steps=2, amt=.6)
+    # far end (Diagonal, ~1.3 km): a line of fronts across the horizon
+    shape(img, [[(0, cam.VY + 4)] + [(x, cam.VY - 48 - 14 * math.sin(x / 37) - 10 * (x % 90 < 30))
                                      for x in range(0, W + 30, 30)] + [(W, cam.VY + 4)]], (110, 90, 118), INK, 2)
+    rng0 = np.random.default_rng(5)
+    for x in range(8, W, 22):
+        if rng0.random() < .4:
+            y = cam.VY - rng0.uniform(12, 40)
+            img.paste(WIN_L, (x, int(y), x + 5, int(y) + 5))
     # the avenue: wet road (it holds the dusk sky), pavements under the trees
     far = 1600
-    quad(img, cam.p(-30.5, 60), cam.p(30.5, 60), cam.p(30.5, far), cam.p(-30.5, far), ROAD_W, None, amt=0)
+    img.paste(mix(ROAD_W, (70, 60, 90), .4), (0, int(cam.VY) - 2, W, int(cam.p(0, far)[1]) + 2))   # the far avenue
+    quad(img, cam.p(-30.5, 40), cam.p(30.5, 40), cam.p(30.5, far), cam.p(-30.5, far), ROAD_W, None, amt=0)
     for s in (-1, 1):
-        quad(img, cam.p(s * 30.5, 60), cam.p(s * 18, 60), cam.p(s * 18, far), cam.p(s * 30.5, far), (104, 96, 112),
+        quad(img, cam.p(s * 30.5, 40), cam.p(s * 18, 40), cam.p(s * 18, far), cam.p(s * 30.5, far), (104, 96, 112),
              None, amt=0)
     # the dusk sky in the wet road (long soft streaks) and the lane lines
-    for k, xx in enumerate((-9, -3.5, 3.5, 9)):
-        quad(img, cam.p(xx - .08, 186), cam.p(xx + .08, 186), cam.p(xx + .08, far), cam.p(xx - .08, far),
-             (196, 186, 206), None, amt=0)
-    for xx in (-14, -6, 1, 7, 13):
-        quad(img, cam.p(xx - 1.4, 200), cam.p(xx + 1.4, 200), cam.p(xx + .9, 700), cam.p(xx - .9, 700), ROAD_L, None)
+    for xx in (-12.5, -6.5, 6.5, 12.5):                   # dashed lane lines, 0.15 m wide, 4.5 m dashes, 7.5 m gaps
+        for d in np.arange(42, 1200, 12):
+            quad(img, cam.p(xx - .08, d), cam.p(xx + .08, d), cam.p(xx + .08, d + 4.5), cam.p(xx - .08, d + 4.5),
+                 ROAD_L, None, amt=0)
+    for xx in (-.25, .25):                                # the solid double centre line
+        quad(img, cam.p(xx - .07, 42), cam.p(xx + .07, 42), cam.p(xx + .07, far), cam.p(xx - .07, far),
+             mix(ROAD_W, ROAD_L, .6), None, amt=0)
     # fronts both sides, blocks of 113 m with 20 m cross streets (Eixample), nearest first hidden off frame
     for s in (-1, 1):
         blocks = [(d, min(d + 113, 1400)) for d in np.arange(254, 1400, 133)]
@@ -253,12 +299,16 @@ def t1(t=0.0, marks=False):
                 bx, by = cam.p(s * xx, d)
                 if bx < -80 or bx > W + 80:
                     continue
-                tx, ty = cam.p(s * xx, d, 8.5)
+                tr = np.random.default_rng(int(d) * 7 + xx + 3 * s)
+                th, r = tr.uniform(7.5, 10.5), tr.uniform(3.2, 5.0)
+                tx, ty = cam.p(s * xx + tr.uniform(-.6, .6), d, th)
                 poly(img, [(bx - .25 * k, by), (bx + .25 * k, by), (tx + .2 * k, ty), (tx - .2 * k, ty)], (96, 86, 78),
                      INK, 1.4, 0)
-                r = 4.0 * k
-                m = shape(img, [blob(tx, ty - r * .5, r, int(d) + xx + s, squash=.8)], TREE_D, INK, 2)
-                shape(img, [blob(tx - r * .3, ty - r * .85, r * .6, int(d) + 3)], TREE_L, None, clip=m)
+                r = r * k
+                td = mix(TREE_D, (30, 44, 40), tr.uniform(0, .5))
+                tl = mix(TREE_L, (150, 140, 90), tr.uniform(0, .35))   # some caught by the lamps, some by the dusk
+                m = shape(img, [blob(tx, ty - r * .5, r, int(d) + xx + s, squash=tr.uniform(.65, .9))], td, INK, 2)
+                shape(img, [blob(tx - r * .3, ty - r * .85, r * .6, int(d) + 3)], tl, None, clip=m)
         if d % 27 < 9:
             for s in (-1, 1):
                 k = cam.ppm(d)
