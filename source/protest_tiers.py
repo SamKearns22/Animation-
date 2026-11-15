@@ -616,7 +616,7 @@ T2_WR = (*RF2.R(T2_WIN[0], T2_WIN[1]), *RF2.R(T2_WIN[2], T2_WIN[3]))
 
 
 def truck_x(lt):
-    return lerp(9.0, 2.8, ease((lt - 2.0) / 0.6))
+    return lerp(9.0, 1.2, ease((lt - 1.9) / 0.7))      # chat 15: drives right into frame (was 2.8: a cropped block)
 
 
 def nozzle(lt, aim=12.0):
@@ -646,7 +646,7 @@ def crowd_t3():
 def t3_actors(lt):
     out = []
     jet = lt > 2.6
-    for k, x in enumerate(np.arange(-2.2, 0.65, 0.7)):      # the black-clad front line, facing the police (right);
+    for k, x in enumerate(np.arange(-2.0, 0.15, 0.7)):      # the black-clad front line, facing the police (right);
         # chat 14: 0.7 m apart (at 0.55 each throwing hand passed into the next one's back)
         dx, _ = field('t3', x, 11.8, lt, k)
         if jet and lt > 2.7 + 0.05 * k:                       # broken by the jet: running out left
@@ -658,7 +658,8 @@ def t3_actors(lt):
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3, 11.8, 90, 'throw', u=u, tier='t3'))
         else:
             out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3, 11.8, 90, 'stand', tier='t3'))
-    for k, (x, d) in enumerate(((2.55, 11.0), (3.15, 11.0), (3.75, 11.0), (2.85, 12.0), (3.45, 12.0), (4.05, 12.0))):
+    # chat 15 (hunt 1: "no two rows of riot police": they stood at the right edge, off frame): two rows in frame
+    for k, (x, d) in enumerate(((1.3, 11.0), (1.9, 11.0), (2.5, 11.0), (1.6, 12.0), (2.2, 12.0), (2.8, 12.0))):
         out.append(Actor(f'crs{k + 1}', 'officer', x, d, -90, 'line', force='crs', tier='t3'))
     return out
 
@@ -676,41 +677,57 @@ def t3_crowd(img, lt):
         paste(img, 'marcher', m['i'], 't3', m['state'] if not running else 'stand', yaw, gx, gy, scale_at(cam, d))
 
 
-def t3_fx(img, lt):
-    cam = T3CAM
-    # smoke climbing from the car (left) and the bike heap (mid-right) from 0.0
+def t3_columns(img, lt):
+    """Smoke climbing from the car (left) and the bike heap (mid-right) from 0.0. Chat 15: drawn before the truck and
+    the people (the bikes burn at d 14, behind the police: their smoke had hidden the water cannon truck)."""
     for (sx, sy, sd) in (R3(110, 860) + (1,), R3(760, 1010) + (2,)):
         lumps = []
         for n in range(6):
             a = (lt * 0.9 + n / 6) % 1.0
             lumps.append((sx + 48 * a + 18 * math.sin(n * 2.1), sy - 620 * a, 48 + 108 * a))
-        S.smoke(img, lumps, (58, 54, 56), (90, 84, 86), lw=2.5)
-    # stones in arcs from the front line to the shields (1.0-2.6)
-    for k in range(6):
-        for rep in range(3):
+        S.smoke(img, lumps, (58, 54, 56), (138, 128, 124), lw=2.5)
+
+
+def t3_fx(img, lt):
+    cam = T3CAM
+    # stones in arcs from the front line to the shields (1.0-2.6); chat 15: bigger (a fist-sized cobble reads at
+    # phone size only drawn about twice true), four in the air per thrower, a few already lying at the shields' feet
+    for k in range(4):
+        for rep in range(4):
             t0 = 1.0 + ((k * 0.37 + 0.6) % 1.0) / 1.6 + rep / 1.6
             a = (lt - t0) / 0.45
             if 0 <= a < 1 and t0 < 2.6:
-                x0 = -2.2 + 0.7 * k
-                x, z = lerp(x0 + 0.3, 2.7, a), 1.9 + 2.2 * math.sin(math.pi * a) - 0.6 * a
+                x0 = -2.0 + 0.7 * k
+                x, z = lerp(x0 + 0.3, 1.25, a), 1.9 + 2.4 * math.sin(math.pi * a) - 0.6 * a
                 d = lerp(11.8, 11.0, a)
                 sx, sy = cam.p(x, d, z)
-                IS.ell(img, sx, sy, 9, 7, (150, 146, 138), INK, 2)
-    # the tear-gas canister lands at 1.6 among the front line; the white gas swells over Marianne's base 1.8-2.5+
-    if 1.25 <= lt < 1.6:
-        a = (lt - 1.25) / 0.35
-        sx, sy = R3(lerp(1100, 470, a), lerp(820, 1000, a) - 160 * math.sin(math.pi * a))
-        IS.ell(img, sx, sy, 10, 6, (90, 96, 90), INK, 2)
+                IS.ell(img, sx, sy, 24, 18, (164, 158, 148), INK, 3)
+                IS.ell(img, sx - 6, sy - 6, 10, 7, (204, 200, 190), None)
+    rng = np.random.default_rng(17)
+    for n in range(int(min(9, max(0, (lt - 1.45) * 7)))):
+        sx, sy = cam.p(rng.uniform(0.7, 1.2), rng.uniform(10.4, 11.2))
+        IS.ell(img, sx, sy - 6, 15, 10, (150, 146, 138), INK, 2)
+    # the tear-gas canister lands at 1.6 by Marianne's base, trailing white; the gas swells over her lower half
+    # (chat 15: hunt 1 saw no landing and the gas over the crowd: it lands nearer her base, set y 870, with a puff)
+    if 1.2 <= lt < 1.6:
+        a = (lt - 1.2) / 0.4
+        pos = lambda u: R3(lerp(1100, 470, u), lerp(760, 870, u) - 220 * math.sin(math.pi * u))   # noqa: E731
+        trail = [pos(max(0.0, a - q * 0.06)) + (10 + 7 * q,) for q in range(1, 6)]
+        S.smoke(img, trail, (226, 228, 226), (250, 250, 248), line=(170, 176, 180), lw=2, fade=False)
+        sx, sy = pos(a)
+        IS.ell(img, sx, sy, 20, 11, (86, 94, 86), INK, 2.5)
+        IS.ell(img, sx - 14, sy, 5, 9, (200, 60, 40), None)
     if lt >= 1.6:
         g = ease((lt - 1.6) / 1.0)
-        # kept to Marianne's lower half (chat 14: it swallowed all of her): tops at about her waist, set y ~640
-        bx, by = R3(480, 1010)
+        bx, by = R3(470, 870)
+        if lt < 1.75:                                       # the landing: a quick white burst ring
+            S.glow_disc(img, bx, by, 110 * (lt - 1.55) / 0.2, (255, 255, 255), amt=.7)
         lumps = [(bx + T3K * dx * g, by - T3K * dy * g, T3K * (36 + r * g)) for dx, dy, r in
                  ((0, 0, 70), (-140, 20, 75), (150, 15, 75), (-70, 120, 80), (80, 135, 80), (0, 220, 85),
                   (-210, 70, 60), (230, 60, 60), (-30, 300, 60))]
         a = min(1.0, (lt - 1.6) / 0.3)
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-        S.smoke(lay, lumps, (232, 234, 232), (250, 250, 248), line=(170, 176, 180), lw=2.5)
+        S.smoke(lay, lumps, (226, 230, 230), (252, 252, 250), line=(170, 176, 180), lw=2.5)
         if lt > 2.6:                                       # the jet blows it left
             lay = lay.transform(lay.size, Image.AFFINE, (1, 0, 190 * (lt - 2.6), 0, 1, 0))
         lay.putalpha(lay.getchannel('A').point(lambda v: int(v * 0.88 * a)))
@@ -933,11 +950,14 @@ def picture(t):
         phone_lights(back, acts, cam)
         blue_wash(back, lt)
     elif tier == 't3':
-        back, front = S.t3(lt, truck=dict(x=truck_x(lt), aim=12, flash=float(int(lt * 6) % 2)))
+        back, front = S.t3(lt)
         back = reframe3(back)
         front = reframe3(front) if front is not None else None
         cam = T3CAM
         t3_crowd(back, lt)
+        t3_columns(back, lt)                                # chat 15: smoke, then the truck, then its bikes, sharp
+        S.truck(back, cam, truck_x(lt), T3_TRUCK_D, lt, 'drive', 'fr', 12, float(int(lt * 6) % 2))
+        S._bikes(back, cam, 2.1, 14, lt)
         for a in sorted(t3_actors(lt), key=lambda a: -a.d):
             draw_actor(back, cam, a)
         t3_fx(back, lt)

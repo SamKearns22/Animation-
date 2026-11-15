@@ -168,11 +168,28 @@ def flames(img, x, y, w, h, t=0.0, seed=0, n=5, line=FIRE_L):
     shape(img, tongues(.4), FIRE_Y, None)
 
 
-def smoke(img, lumps, tone, lit, line=INK, lw=3):
-    """Smoke as one lumpy shape (lumps = [(x, y, r)]), its lit side up and left kept inside the outline."""
-    m = shape(img, [blob(x, y, r, 7 + i) for i, (x, y, r) in enumerate(lumps)], tone, line, lw)
-    shape(img, [blob(x - r * .25, y - r * .28, r * .55, 50 + i) for i, (x, y, r) in enumerate(lumps)], lit, None,
+def smoke(img, lumps, tone, lit, line=INK, lw=3, fade=True):
+    """Smoke as one lumpy shape (lumps = [(x, y, r)]): a shadowed side down and right, its lit side up and left, all kept inside the outline; with fade, it thins toward the top (chat 15, moves hunt 1: "flat cut-out
+    blobs, no lit side, no thinning as they rise")."""
+    if not lumps:
+        return
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    m = shape(lay, [blob(x, y, r, 7 + i) for i, (x, y, r) in enumerate(lumps)], tone, line, lw)
+    dark = tuple(int(c * .72) for c in tone)
+    shape(lay, [blob(x + r * .24, y + r * .3, r * .62, 80 + i) for i, (x, y, r) in enumerate(lumps)], dark, None,
           clip=m)
+    shape(lay, [blob(x - r * .25, y - r * .28, r * .55, 50 + i) for i, (x, y, r) in enumerate(lumps)], lit, None,
+          clip=m)
+    if fade:
+        top = max(0, int(min(y - r for x, y, r in lumps)))
+        bot = min(img.size[1], int(max(y + r for x, y, r in lumps)) + 1)
+        if bot - top > 40:
+            a = np.asarray(lay.getchannel('A'), np.float32)
+            ramp = np.ones(img.size[1], np.float32)
+            ramp[top:bot] = 0.5 + 0.5 * np.linspace(0, 1, bot - top) ** 0.7
+            ramp[:top] = 0.5
+            lay.putalpha(Image.fromarray((a * ramp[:, None]).astype(np.uint8)))
+    img.alpha_composite(lay)
 
 
 def person_mark(img, cam, x, d, label=None):
