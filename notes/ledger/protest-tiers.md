@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 44.93% (-18.58); 27 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 46.53% (-16.98); 28 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 44.93% of the 43.91% planned so far; at this rate the film lands at 56.7%.**
+**Forecast: Spent 46.53% of the 43.91% planned so far; at this rate the film lands at 56.7%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -53,6 +53,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-15 | 2d158a0b | est | opus | auto |  | 2.43 |  | 0 | 0 |
 | 2026-11-15 | 11687c62 | est | opus | auto |  | 1.83 |  | 0 | 0 |
 | 2026-11-15 | a5f619de | est | opus | auto |  | 1.5 |  | 0 | 0 |
+| 2026-11-15 | 0edf1dfd | est | opus | auto |  | 1.6 |  | 0 | 0 |
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
