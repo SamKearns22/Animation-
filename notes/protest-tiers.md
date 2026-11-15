@@ -2,14 +2,13 @@
 
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 13 (every fault named: the Exceptions table), 85 (cost watch), CLAUDE.md "Every animatic carries the Hook Text and the CranbriJoos sign-off" (finish.py).
-- **Done (chat 18, 15 Nov, Opus medium):** pre-flight crash fixed (the turned/famous/house head kits wrapped head_view again on each install; now a second install is a no-op; kittest `head_view_installs_idempotent`). The "Composition sheet sent" / "Rehearsal clips sent" lines were archived by chat 17 and pre-flight refused: restored under "## Record". Motion: the T2 raiders ran 4-6 m in half a second (9-14 m/s): now each starts just off frame, a real sprint (6.2 m/s), arriving at the same times (already running at the cut); T3 front line's 0.9 m depth snap eased; T4 rioters' throw-to-run foot snap gone (run step offset). Sprinting feet and throwing hands written as FAST_OK rows. clipcheck clean. **Pre-flight: 70 -> 10 faults, all 10 named** (7 TOUCH rows, 2 effect shapes, the 22 cm melee frame).
-- **Name to Sam with animatic 1 (--faults-named):** the 4 critique faults left (pre-flight prints the "Checks:" line); T4 Molotov flames are spiky cartoon tongues; T2 sign flash reads as a star; WAFFEN RAUS placard reads "RAUS" (cut by the frame edge). **Added:** the "WAFFEN RAUS" placard in T2 (not in the brief).
-- **Sam (chat 11): "continue until animatic 1, I don't want anything to stop you".** Sam Y (chat 17): the animatic1 stage may run ~0.5% past its share to finish animatic 1.
-- **Next: chat 19, Sonnet (routine: render, finish, send):** `python3 source/protest_tiers.py final OUT --small --faults-named` (or the job pack's animatic command), then `python3 source/finish.py CLEAN.mp4 animations/... --film protest-tiers` (draft: keep it off GitHub's animations/ unless the pack says otherwise), send the MP4 in chat with its size, push notification; name the faults above. Then stop for Sam's notes (unattended runs stop after one animatic).
-- **Needs Sam:** nothing until animatic 1 lands.
-- **Read:** job pack "Checks and animatic"; this section; "## Exceptions".
+- **Done (chat 19, 15 Nov, Sonnet):** animatic 1 rendered (--small, ~14 min) and finished (Hook Text + sign-off), 2.2 MB, sent to Sam: `source/data/protest-tiers-animatic1.mp4` (kept off GitHub: draft). Added `caption_at` (returns nothing: no voices yet) so finish.py stops refusing. Picture checks found 57 faults at render (46 hands covered in crowds, 7 touches already in the Exceptions table, 1 same-copy marchers t1 0.0 s, 1 t1 cut arm drop at 4.0 s, 1 prop turn t2 4.67 s, 1 22 cm pass-through): named, not fixed.
+- **Told Sam:** 4 critique faults, spiky Molotov flames, star-shaped sign flash, "RAUS" placard cut by the frame; Added: WAFFEN RAUS placard.
+- **Next: wait for Sam's notes on animatic 1 (a round of notes: Opus, medium).** Then round 1; fix the 4 picture-check singles (COPIES, CUT, PROP TURN, PASSES THROUGH) with it. Stage animatic1 is at ~1.5% of 1.4% (Sam's chat-17 Y covers ~0.5% over).
+- **Needs Sam:** notes on animatic 1.
+- **Read:** job pack "A round of notes"; this section; "## Exceptions".
 - **Open rule requests:** as before (archived lists: chats 15-17), plus NEW (chat 18): (a) clipcheck's 7 m/s cap is a walking cap: running feet and throwing hands need a state-aware limit, so films stop writing FAST_OK rows for every sprint; (b) clipcheck reports each body part once, so fixing one fault uncovers hidden ones (the throws hid behind the run-in); (c) archiving must never move the "## Record" lines (pre-flight reads them); (d) kittests `people_from_a_description` and `facehouse_whole_head` fail on the main line (failed before chat 18 too).
-- **For Claude:** branch `claude/protest-tiers-c18` (merged to the main line); `dash()` in t2_actors; FAST_OK just above TOUCHES.
+- **For Claude:** branch `claude/protest-tiers-c19`; `dash()` in t2_actors; FAST_OK just above TOUCHES.
 
 ## Record (pre-flight reads these lines here; never archive them)
 - Composition sheet sent: 13 Nov (pencil sketches, chat 4).

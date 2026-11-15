@@ -59,6 +59,10 @@ BLACK_AT = DUR
 TIERS = ('t1', 't2', 't3', 't4')
 SHOTS = [(t, i * TIER_LEN, (i + 1) * TIER_LEN) for i, t in enumerate(TIERS)]
 HOOK = ('European protests, ranked', {'y': 1300, 'until': 3.6})          # notes: Re-staged, T1 (over the near backs)
+def caption_at(t):
+    return None                        # voices only, none yet (Sam records them): no captions
+
+
 HEADLINES = {'t1': ('SPAIN', 'Barcelona, Passeig de Gràcia'), 't2': ('GERMANY', 'Frankfurt, Berliner Straße'),
              't3': ('FRANCE', 'Paris, Place de la République'), 't4': ('ALBANIA', 'Tirana, Ministry of Education')}
 # chat 16: patterns of the acted names the audit sees (the group words matched no one); the crowds, T1's police line
