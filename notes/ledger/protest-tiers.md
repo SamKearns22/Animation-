@@ -42,3 +42,6 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-15 | 23d742b8 | est | opus | auto |  | 1.82 |  | 0 | 0 |
 | 2026-11-15 | 00175058 | est | opus | auto |  | 1.23 |  | 0 | 0 |
 | 2026-11-15 | 30fc5af7 | est | sonnet | auto |  | 0.24 |  | 0 | 0 |
+
+## After the film
+protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.

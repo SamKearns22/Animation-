@@ -10,6 +10,14 @@
 - **Open rule requests:** as before (archived lists: chats 15-17), plus NEW (chat 18): (a) clipcheck's 7 m/s cap is a walking cap: running feet and throwing hands need a state-aware limit, so films stop writing FAST_OK rows for every sprint; (b) clipcheck reports each body part once, so fixing one fault uncovers hidden ones (the throws hid behind the run-in); (c) archiving must never move the "## Record" lines (pre-flight reads them); (d) kittests `people_from_a_description` and `facehouse_whole_head` fail on the main line (failed before chat 18 too).
 - **For Claude:** branch `claude/protest-tiers-c19`; `dash()` in t2_actors; FAST_OK just above TOUCHES.
 
+## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals sent, waiting for his numbers; nothing changed yet
+- [ ] R1 The joke: each tier is worse until Albania, which is off the charts; Albania's riot is not a protest, it is how they spend their time.
+- [ ] R2 New end scene: (a) a second RPG moped pulls up, two riders, fires at something in the sky off screen; rioters clash with police behind; someone says "Hey!" and they look to the side. (b) a side alley: two American tourists cowering, husband and wife; he says "We're just tourists! Why are y'all protesting?" (c) back to the riders: one says "Bro, what's a 'protest'?"; the other shrugs.
+- [ ] R3 Under each place heading, slightly smaller red text "Intensity Level:" 2, 4, 8, 11 out of ten.
+- [ ] R4 Tier lengths 4 / 6 / 8 / 10 s (Spain, Germany, Paris, Albania); re-pace each scene to fit.
+- [ ] R5 Albania is the showstopper: the most fluid, best-designed effects; lean into gleeful violence and absurdity.
+- Budget (Sam): his week's use is 23% today, up from 17%. The film's ledger reads 33.6% of a week (estimate 21.5%).
+
 ## Record (pre-flight reads these lines here; never archive them)
 - Composition sheet sent: 13 Nov (pencil sketches, chat 4).
 - Rehearsal clips sent: 15 Nov (chat 14): T1 0.0-2.0, T2 6.8-8.0, T3 10.4-12.0, T4 12.4-14.2, T4 13.6-15.6.
