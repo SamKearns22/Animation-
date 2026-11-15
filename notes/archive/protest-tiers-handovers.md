@@ -207,3 +207,12 @@
 - **Open rule requests:** as chat 15's list (archived), plus chat 16's (critique pass number; kittest to add), plus NEW (chat 17): the ledger's film name and the code name differ (fixed in ledger._paths; a kittest to add); JOKE_PROPS measures only a prop's centre, so a placard half off the frame edge passes.
 - **For Claude:** branch `claude/protest-tiers-c17`; pre-flight logs in /tmp are gone next chat.
 
+
+## Where things stand (chat 19, archived chat 20) (the ONE handover, 15 lines at most)
+- **Rules that bite next:** 13 (every fault named: the Exceptions table), 85 (cost watch), CLAUDE.md "Every animatic carries the Hook Text and the CranbriJoos sign-off" (finish.py).
+- **Done (chat 19, 15 Nov, Sonnet):** animatic 1 rendered (--small, ~14 min) and finished (Hook Text + sign-off), 2.2 MB, sent to Sam: `source/data/protest-tiers-animatic1.mp4` (kept off GitHub: draft). Added `caption_at` (returns nothing: no voices yet) so finish.py stops refusing. Picture checks found 57 faults at render (46 hands covered in crowds, 7 touches already in the Exceptions table, 1 same-copy marchers t1 0.0 s, 1 t1 cut arm drop at 4.0 s, 1 prop turn t2 4.67 s, 1 22 cm pass-through): named, not fixed.
+- **Told Sam:** 4 critique faults, spiky Molotov flames, star-shaped sign flash, "RAUS" placard cut by the frame; Added: WAFFEN RAUS placard.
+- **Next: chat 20, Opus high (planning a new scene, cast and set):** plan round 1 from "
+(chat 19 round 1 lines, replaced by "## Round 1 plan", archived chat 20)
+Plan (chat 19): end scene ~7 s in 3 shots: A closer side-on, moped skids in, passenger fires up out of frame, fight behind, "Hey!" off, both turn; B side alley, the couple behind bins, his line; C two-shot of the masked riders, "Bro, what's a 'protest'?", big shrug (masks: no mouths). Wife gasps only. Stand-in voices until Sam records. Captions for the lines. Albania: round flickering flames, smoke darker below and lit by fire, Molotov bursts in the bank windows. Intensity Level line: red, a little smaller, under the place line; no heading in the end scene.
+- Budget (Sam): his week's use is 23% today, up from 17%. The film's ledger reads 33.6% of a week (estimate 21.5%).
