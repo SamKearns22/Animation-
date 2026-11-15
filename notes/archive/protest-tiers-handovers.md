@@ -312,3 +312,15 @@ Plan (chat 19): end scene ~7 s in 3 shots: A closer side-on, moped skids in, pas
 - **Open rule requests:** as before (archived lists). None new in chat 28.
 - **For Claude:** branch `claude/protest-tiers-c28`. Quick pre-flight needs module name `protest_tiers`; the render lock refuses until the full one passes. T4 queue code: `buyers()`, `buyer_x`, `SLOT`, `SALES`, `granny()`; T3: pusher block in the actor list (~line 849), `back*`.
 
+
+## Where things stand (chat 29, archived chat 30) (the ONE handover, 15 lines at most)
+- **Rules that bite next:** S7 (effect shapes), 13 (every exception has a row), 59/67 (one full pre-flight per round), 85 (cost watch).
+- **Done (chat 29, Opus medium, 15 Nov):** 107 pre-flight faults down to 4. T2 second wave: brisk laden walk, 0.9 s step-out, eased turn, own lanes. T3: back row throws come back (no snap), run-outs ease off and leave past the edge; pushers run in over 1.5 s, blend into the shove. T4: queue re-timed (SALES 3.1/4.15/5.2, enter 2.2), each buyer steps toward us and runs off right in front of the queue; selfie 0.6 m nearer; the vaulters stay where they land (0.75 s vault). Checks improved: the audit now sees lift (vaults read as passing through shields); the shape check draws T4 fire round as the film does; crowd crushes moved from TOUCHES to ALLOWED_CONTACTS. Exceptions rows written (marked NOT yet looked at full size).
+- **The 4 left: EFFECT SHAPES** (T2 flash, T4 hit, Molotovs, fireball). Diagnosed: the mask is every pixel with alpha > 0 of the whole fx layer at that moment: glow_disc's faint square boxes, scattered embers, the rocket trail, so the "star" is the scatter, not the burst (sheet: chat 29). Fix in the film: each EFFECTS entry draws only its own effect (or test visible alpha); then look at each burst alone; round any that are still spiky.
+- **Next: chat 30, Opus medium:** that fix, quick pre-flight clean, then the full pre-flight && `final source/data/protest-tiers-clean.mp4 --small`, `finish.py` with Hook Text, send the animatic (~30 min render, one wait). Look at 19.5-24.5 s (the queue) on the animatic and fill the "looked at" column.
+- **Budget guard:** film ~48% of a week; Sam's Y covers ~51%.
+- **Needs Sam:** nothing until the animatic.
+- **Read:** job pack "Checks and animatic"; this section; "## Exceptions" (the new chat 29 rows).
+- **Open rule requests:** none new (proposal for Sam, not yet asked: the shared shape check should test visible pixels per piece, kit-wide).
+- **For Claude:** branch `claude/protest-tiers-c29`. Quick check of a span: set `F.CLIP_SPAN=(t0,t1)`, run `clipcheck.run(F)` and `audit.run(F,t0,t1)` (5 s a tier). New helpers: `Actor.blend`, `_getaway`, `_turn`, `_volley`, `OFF_L`, `ENTER`, `Q_GAP`; `_fx_at` sets `S.ROUND_FIRE`.
+
