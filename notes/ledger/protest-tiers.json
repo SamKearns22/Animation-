@@ -221,7 +221,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.8,
+   "cost": 1.82,
    "src": "estimate",
    "sid": "session_01GznaAV1DWTiEC6jbHNKEgj"
   }
@@ -264,7 +264,10 @@
   {
    "name": "moves",
    "pct": 3.07,
-   "done": null
+   "done": {
+    "date": "2026-11-15",
+    "spent": 32.08
+   }
   },
   {
    "name": "animatic1",
