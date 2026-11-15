@@ -293,7 +293,8 @@ def record(name):
              f'Who wrote which (hidden from the judge): {key}. Picked: {v["pick"]} ({st["key"][v["pick"]]}). '
              f'{critiqued(v["faults"])}.\n\n{raw.strip()}\n')
     f = _p(name + '.md')
-    open(f, 'w').write(problem_text(name) + '\n' + block)
+    text = problem_text(name) + '\n' + block    # read BEFORE open(f, 'w') truncates it (15 Nov: wiped the problem)
+    open(f, 'w').write(text)
     _state(name, {'recorded': datetime.now(timezone.utc).timestamp(), 'pick': st['key'][v['pick']]})
     show(name)
 
@@ -309,6 +310,8 @@ def verdict_ok(name):
     raw = _read(_p(name, 'judge', 'verdict-raw.md'))
     if not m or m.group(1) != _verdict_hash(name, raw):
         return False, f'notes/proposals/{name}.md changed after its verdict (stale): pack and judge it again'
+    if not text.split(VERDICT)[1].rstrip().endswith(raw.strip()):    # the copy in NAME.md must stay word for word
+        return False, f'notes/proposals/{name}.md: its verdict was edited after `record` (stale): record it again'
     try:
         return True, parse(raw, list(_state(name).get('key', {})))
     except ValueError as e:

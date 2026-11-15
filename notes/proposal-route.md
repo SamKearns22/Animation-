@@ -80,6 +80,10 @@ shows is better still) in at least 4 of 5 without Sam's push. Report each case t
 find why (rule 30), fix the prompts, rerun once; then report either way.
 
 ## Build notes
+- **Kittest fixes (15 Nov, chat 2; rule 30, why):** (a) `record` wrote `open(f,'w').write(problem_text(name)...)`:
+  Python opens (truncates) the file before reading it, so every recorded proposal lost its problem and read as stale.
+  Fixed by reading first. (b) `verdict_ok` hashed the raw verdict, not the copy in NAME.md, so an edit below the
+  verdict went unseen; it now checks the copy is word for word. kittest `proposal_route_hook` passes.
 - Reuse: rule 89's critic helper (`.claude/agents/critic.md`, `source/critique.py`) for how helpers are started
   and their reports saved; handover.py's .jsonl reading; the Stop hook list in `.claude/settings.json`.
 - Kittests for the hook (blocks a change proposal without a verdict, passes one with it, passes a routine animatic
