@@ -290,7 +290,8 @@ def facing(yaw):
 
 
 # ================================================================================================= T1
-T1_LINE_D = 185.0
+T1_LINE_D = 150.0      # chat 15: was 185; the line, container and knot come nearer so the beats read at phone size
+T1_FRONT = 106.0       # the march's front rank (was 135): a clear stretch of lit road for the knot
 
 
 @lru_cache(None)
@@ -299,7 +300,7 @@ def crowd_t1():
     cam = S.CAMS['t1']
     rng = np.random.default_rng(11)
     out = []
-    for d in np.arange(46.0, 135.0, 0.72):           # stops at 135: the gap shows the knot and the container (chat 14)
+    for d in np.arange(46.0, T1_FRONT, 0.72):        # stops short: the gap shows the knot and the container
         x0 = (0 - cam.VX - 40) * d / cam.F
         x1 = (W - cam.VX + 40) * d / cam.F
         for x in np.arange(x0, x1, 0.62):
@@ -324,9 +325,9 @@ def t1_people(img, lt):
     # the police line across the far end (front on), one pace forward at 3.0
     step = ease((lt - 3.0) / 0.4)
     for k, x in enumerate(np.arange(-10.0, 14.0, 1.7)):
-        d = T1_LINE_D - 2.5 * step
+        d = T1_LINE_D - 6.0 * step                        # chat 15: one long pace (6 m) so the step reads
         gx, gy = cam.p(x, d)
-        bob = 3 * math.sin(math.pi * min(1, max(0, (lt - 3.0) / 0.4)))
+        bob = 9 * math.sin(math.pi * min(1, max(0, (lt - 3.0) / 0.4)))
         paste(img, 'officer', 0, 't1', 'line', 0, gx, gy - bob, scale_at(cam, d), force='mossos')
     # the knot by the container (live), then the march (sprites), far to near
     for a in t1_actors(lt):
@@ -340,7 +341,7 @@ def t1_people(img, lt):
             continue
         state = m['state']
         if state == 'keys':                                # the key wave: from the front (far) back toward us
-            if lt < 0.2 + (135 - m['d']) / 89 * 1.1:
+            if lt < 0.2 + (T1_FRONT - m['d']) / (T1_FRONT - 46) * 1.1:
                 state = 'stand'
         elif state == 'placard':
             state = 'placard:' + T1_PLACARDS[m['i'] % len(T1_PLACARDS)]
@@ -358,7 +359,7 @@ def t1_people(img, lt):
 
 def t1_actors(lt):
     out = []
-    knot = [(-2.6, 161.0), (-1.7, 162.5), (-1.0, 160.5), (3.0, 162.0), (3.7, 160.8)]
+    knot = [(-2.4, 123.0), (-1.5, 124.5), (-0.6, 122.5), (2.6, 124.0), (3.3, 122.8)]   # chat 15: was d 161
     for k, (x, d) in enumerate(knot):
         state, u, yaw = 'stand', 0.0, 180
         if k == 2:                                         # the firework string: wound up 0.5, flicked 0.85
@@ -374,36 +375,49 @@ def t1_actors(lt):
 
 def t1_fx(img, lt):
     cam = S.CAMS['t1']
-    # the firework string flying from the flicker's hand to over the line (0.85-1.5)
+    # the firework string flying from the flicker's hand to over the line (0.85-1.55): a fizzing head and a spark tail
     if 0.85 <= lt < 1.55:
         u = (lt - 0.85) / 0.7
-        x0, y0 = cam.p(-0.8, 160.5, 1.7)
-        x1, y1 = cam.p(0.5, 186, 4.5)
-        for k in range(4):
-            uu = max(0.0, u - k * 0.06)
-            x, y = lerp(x0, x1, uu), lerp(y0, y1, uu) - 60 * math.sin(math.pi * uu)
-            S.glow_disc(img, x, y, 10, (255, 220, 140), amt=.45)
-            IS.ell(img, x, y, 2.5, 2.5, (255, 250, 220), None)
-    # three bursts over the line
-    for k, (t0, x, z, col) in enumerate(((1.55, -2.0, 6.0, (255, 90, 80)), (1.95, 1.6, 7.2, (255, 255, 230)),
-                                         (2.35, 4.2, 5.4, (120, 255, 160)))):
+        x0, y0 = cam.p(-0.4, 122.5, 1.7)
+        x1, y1 = cam.p(-1.6, T1_LINE_D + 1, 5.0)
+        pt = lambda uu: (lerp(x0, x1, uu), lerp(y0, y1, uu) - 120 * math.sin(math.pi * uu))   # noqa: E731
+        dr = ImageDraw.Draw(img)
+        tail = [pt(max(0.0, u - k * 0.03)) for k in range(9)]
+        for k in range(len(tail) - 1):
+            dr.line([tail[k], tail[k + 1]], fill=(255, 230 - 12 * k, 150 - 12 * k), width=max(1, 5 - k // 2))
+        hx, hy = tail[0]
+        S.glow_disc(img, hx, hy, 34, (255, 210, 120), amt=.7)
+        IS.ell(img, hx, hy, 6, 6, (255, 255, 235), None)
+        rng = np.random.default_rng(int(lt * 100))
+        for _ in range(8):                                   # sparks shed behind it
+            sx, sy = hx + rng.uniform(-22, 22), hy + rng.uniform(-10, 26)
+            IS.ell(img, sx, sy, 2, 2, (255, 240, 180), None)
+    # three bursts over the line (chat 15: bigger, brighter, one at a time, each with a flash and falling sparks)
+    for k, (t0, x, z, col) in enumerate(((1.55, -2.4, 6.2, (255, 80, 70)), (2.05, 1.6, 7.0, (255, 250, 210)),
+                                         (2.55, 5.0, 5.8, (110, 255, 150)))):
         a = lt - t0
-        if 0 <= a < 0.45:
+        if 0 <= a < 0.6:
             cx, cy = cam.p(x, T1_LINE_D + 1, z)
-            r = 14 + 70 * ease(a / 0.25)
-            S.glow_disc(img, cx, cy, r * 1.4, col, amt=.35 * (1 - a / 0.45))
+            r = 24 + 112 * ease(a / 0.3)
+            fade = 1 - a / 0.6
+            S.glow_disc(img, cx, cy, r * 1.6, col, amt=.6 * fade)
+            if a < 0.07:                                      # the flash
+                S.glow_disc(img, cx, cy, 60, (255, 255, 255), amt=.8)
+                IS.ell(img, cx, cy, 12, 12, (255, 255, 255), None)
             dr = ImageDraw.Draw(img)
-            for n in range(12):
-                ang = n * math.pi / 6 + k
-                r0, r1 = r * 0.35, r
-                dr.line([(cx + r0 * math.cos(ang), cy + r0 * math.sin(ang)),
-                         (cx + r1 * math.cos(ang), cy + r1 * math.sin(ang) + 8 * a)], fill=col, width=3)
-            if a < 0.08:
-                IS.ell(img, cx, cy, 10, 10, (255, 255, 255), None)
+            for n in range(16):
+                ang = n * math.pi / 8 + k * 0.3
+                r0, r1 = r * 0.4, r
+                droop = 40 * a * a / 0.36
+                ex, ey = cx + r1 * math.cos(ang), cy + r1 * math.sin(ang) + droop
+                dr.line([(cx + r0 * math.cos(ang), cy + r0 * math.sin(ang) + droop * .5), (ex, ey)],
+                        fill=col, width=5)
+                IS.ell(img, ex, ey, 5, 5, (255, 255, 240), None)
     # the tear-gas haze drifting left to right through the keys (3.0-4.0)
     if lt > 2.9:
         haze(img, lt - 2.9, [(cam.p(x, d, 1.6), 9 * cam.ppm(d)) for x, d in
-                             ((-4, 150), (-1, 140), (2, 155), (5, 135), (-6, 128), (1, 120))], 0.9, (232, 232, 222))
+                             ((-4, 128), (-1, 118), (2, 135), (5, 108), (-6, 100), (1, 92), (-3, 84))], 0.9,
+             (232, 232, 222))
 
 
 def haze(img, age, centres, speed, col, alpha=0.42, seed=3):

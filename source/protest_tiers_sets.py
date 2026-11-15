@@ -215,6 +215,9 @@ def _t1_block(img, cam, s, d0, d1, h, tone, seed):
     quad(img, cam.p(x, d0, h - .8), cam.p(x, d1, h - .8), c, e, mix(tone, (255, 230, 200), .18), INK, 2)
 
 
+T1_CONTAINER = (0.8, 142.0)   # chat 15 (moves hunt 1: the container and knot did not read at phone size): was 165
+
+
 def t1(t=0.0, marks=False):
     cam = CAMS['t1']
     img = Image.new('RGBA', (W, H), T1_SKY[0] + (255,))
@@ -336,16 +339,17 @@ def t1(t=0.0, marks=False):
                 bx, by = cam.p(s * 15.6, d)
                 if -20 < bx < W + 20:
                     streak(bx, by + 2, 6 * k, max(1.2, .3 * k), (255, 214, 140, 110), int(d) * 3 + s)
-    fx, fy = cam.p(0.6, 165)
-    streak(fx, fy + 6, 5 * cam.ppm(165), .45 * cam.ppm(165), (250, 150, 60, 80), 7)
+    cx_, cd_ = T1_CONTAINER
+    fx, fy = cam.p(cx_, cd_)
+    streak(fx, fy + 6, 5 * cam.ppm(cd_), .45 * cam.ppm(cd_), (250, 150, 60, 80), 7)
     img.alpha_composite(wet)
-    # the burning street container just short of the line (d 165), with its fire
-    _container(img, cam, 0.6, 165, t)
+    # the burning street container just short of the line, with its fire (chat 15: nearer, d 142, so it reads)
+    _container(img, cam, cx_, cd_, t)
     if marks:
         for x in np.arange(-11, 15, 2.8):
-            person_mark(img, cam, x, 185)
+            person_mark(img, cam, x, 150)
         for x in (-3, -1.6, 2.4, 3.6):
-            person_mark(img, cam, x, 160)
+            person_mark(img, cam, x, 124)
         for x in (-4, 0, 4):
             person_mark(img, cam, x, 110)
     return img, None
