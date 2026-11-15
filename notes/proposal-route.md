@@ -1,24 +1,25 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 30 (find why first), 85 (cost watch), 89 (fresh-eye helpers).
-- **Done (15 Nov, chat 3 cd5f898 = prompt fix; chat 4 = this, amber):** helper.md and judge.md fixed (results first,
-  question the frame, size both ways, learn then change; judge may write V0). Replay run 2: clean tree from 5a670b0,
-  10 NEW helpers all written; `propose.py judge` run for all five (blind V1-V3 shuffled, key in state.json). All saved
-  in `notes/proposals/replay/run2/` (replay-N.md, replay-N/ with chat.md, helper-a/b.md, judge/V1-3.md, state.json).
-  Helpers ran 800-1300 words (asked under 800): named, not fixed (the prompt is fixed until this run is scored).
-- **Next: Opus MEDIUM (running a clear plan; the judges are opus helpers):** (1) clean tree again: `git worktree add
-  --detach SCRATCH/clean 5a670b0`; copy `guides/proposal-route/*.md` and `source/propose.py` in; copy
-  `notes/proposals/replay/replay-record` to clean `notes/proposals/`, and run2's replay-N.md and replay-N/ to clean
-  `notes/proposals/`. Do NOT run `judge` again (it reshuffles); write each judge line by hand as propose.py prints it
-  (root = the clean tree; versions judge/V1-V3; out judge/verdict-raw.md). (2) 5 NEW judges in one message (~2%).
-  (3) `propose.py record replay-N` each; copy back to run2; score each pick against "The problem" Better answers above
-  (blind; one plain line per case). (4) pass = 4 of 5: hook into `.claude/settings.json` Stop list, `propose.py lock`,
-  catalogue row, rule wording to Sam (Opus high for the hook-up). Fail: report to Sam, route stays off, why (rule 30).
-- **Needs Sam:** nothing yet (the rerun is the approved plan).
-- **Read:** this file only; `guides/proposal-route/judge.md`; the run2 verdicts.
-- **Open rule requests:** the route becomes a rule (with its check) only once a replay passes.
-- **For Claude:** replay-record/ files hold Sam's messages up to each case, never its own push (checked chat 2).
+- **Rules that bite next:** 85 (cost watch), 89 (fresh-eye helpers), 30 (find why first).
+- **Done (15 Nov, chat 5):** replay run 2 judged (5 new judges, recorded, in `notes/proposals/replay/run2/`).
+  **PASS, 4 of 5** against "The problem" Better answers (scored below). Every pick was a helper's; the chat's own
+  version scored lowest in all five (10-14 of 25 against 20-22).
+- **Next: Opus HIGH (building the hook-up):** hook `propose.py hook` into `.claude/settings.json` Stop list (honour
+  stop_hook_active, routine Y/N passes; test on the 5 replay replies), `propose.py lock`, a `guides/kit-catalogue.md`
+  row, then the rule wording to Sam (place: rulebook, with its check) and wait for his number.
+- **Needs Sam:** the rule's wording, once the hook-up is built (the next chat asks).
+- **Read:** this file only; `guides/proposal-route/judge.md`; `source/propose.py` MAP (hook, lock).
+- **Open rule requests:** the proposal route as a permanent rule (now earned by the replay).
+- **For Claude:** named, not fixed: helpers ran 800-1300 words (asked under 800); case 2 near-miss (judge added two
+  older films and picked the dearest chats; Sam's better answer was this film, a spread, not extremes).
+
+## Replay run 2 scores (15 Nov, chat 5; one line per case)
+1. PASS: number of chats is the lever (32 chats, 1.6% each); measure every chat's cause across the film first.
+2. MISS: covers kinds of work, but adds two older films and picks the dearest chats (Sam: this film, a spread, not extremes).
+3. PASS: root cause "tools reach a chat only as text"; counts use, tests whether page.py lands, enforced by refusal, numbers.
+4. PASS: results first, trace to the rule that should have caught it, self-filling ledger row, 3-5% of a week.
+5. PASS: read-only learning step apart; one change per Y, each with its evidence and number to beat.
 
 ## The problem (evidence from this chat, 15 Nov)
 Claude's proposals are a first plausible idea, sized small and cheap, anchored on that idea; they only got better

@@ -59,3 +59,24 @@
   1787a2f is wired in; leave it (first real review once the route passes). Replay limit for Sam: the Sam test is his
   own past pushes, so it shows the route asks them for him, not that it catches a new kind of push.
 
+
+## Where things stand (chat 4, 15 Nov)
+- **Rules that bite next:** 30 (find why first), 85 (cost watch), 89 (fresh-eye helpers).
+- **Done (15 Nov, chat 3 cd5f898 = prompt fix; chat 4 = this, amber):** helper.md and judge.md fixed (results first,
+  question the frame, size both ways, learn then change; judge may write V0). Replay run 2: clean tree from 5a670b0,
+  10 NEW helpers all written; `propose.py judge` run for all five (blind V1-V3 shuffled, key in state.json). All saved
+  in `notes/proposals/replay/run2/` (replay-N.md, replay-N/ with chat.md, helper-a/b.md, judge/V1-3.md, state.json).
+  Helpers ran 800-1300 words (asked under 800): named, not fixed (the prompt is fixed until this run is scored).
+- **Next: Opus MEDIUM (running a clear plan; the judges are opus helpers):** (1) clean tree again: `git worktree add
+  --detach SCRATCH/clean 5a670b0`; copy `guides/proposal-route/*.md` and `source/propose.py` in; copy
+  `notes/proposals/replay/replay-record` to clean `notes/proposals/`, and run2's replay-N.md and replay-N/ to clean
+  `notes/proposals/`. Do NOT run `judge` again (it reshuffles); write each judge line by hand as propose.py prints it
+  (root = the clean tree; versions judge/V1-V3; out judge/verdict-raw.md). (2) 5 NEW judges in one message (~2%).
+  (3) `propose.py record replay-N` each; copy back to run2; score each pick against "The problem" Better answers above
+  (blind; one plain line per case). (4) pass = 4 of 5: hook into `.claude/settings.json` Stop list, `propose.py lock`,
+  catalogue row, rule wording to Sam (Opus high for the hook-up). Fail: report to Sam, route stays off, why (rule 30).
+- **Needs Sam:** nothing yet (the rerun is the approved plan).
+- **Read:** this file only; `guides/proposal-route/judge.md`; the run2 verdicts.
+- **Open rule requests:** the route becomes a rule (with its check) only once a replay passes.
+- **For Claude:** replay-record/ files hold Sam's messages up to each case, never its own push (checked chat 2).
+
