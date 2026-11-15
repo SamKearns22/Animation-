@@ -1,6 +1,6 @@
 {
  "film": "protest-tiers",
- "estimate": 21.45,
+ "estimate": 14.97,
  "chats": [
   {
    "notes": 0,
@@ -12,7 +12,7 @@
    "src": "app",
    "stage": "European protests satire film",
    "model": "opus",
-   "cost": 0.29,
+   "cost": 0.2,
    "usd": 0.49
   },
   {
@@ -25,7 +25,7 @@
    "src": "app",
    "stage": "Protest tiers: plan (chat 1 of 8)",
    "model": "opus",
-   "cost": 2.19,
+   "cost": 1.53,
    "usd": 3.75
   },
   {
@@ -38,7 +38,7 @@
    "src": "app",
    "stage": "Protest Tiers: chat 2 of 8 (crowd research, sketches)",
    "model": "opus",
-   "cost": 4.39,
+   "cost": 3.07,
    "usd": 7.51
   },
   {
@@ -51,7 +51,7 @@
    "src": "app",
    "stage": "Framing research: crowds, vistas, wide action (chat 2 of 8)",
    "model": "opus",
-   "cost": 2.58,
+   "cost": 1.8,
    "usd": 4.41
   },
   {
@@ -64,7 +64,7 @@
    "src": "app",
    "stage": "Framing research chat 3 of 8: lessons + re-staging",
    "model": "opus",
-   "cost": 1.43,
+   "cost": 1.0,
    "usd": 2.45
   },
   {
@@ -77,7 +77,7 @@
    "src": "app",
    "stage": "Protest Tiers pencil roughs (chat 4 of 8)",
    "model": "opus",
-   "cost": 0.33,
+   "cost": 0.23,
    "usd": 0.56
   },
   {
@@ -90,7 +90,7 @@
    "src": "app",
    "stage": "Pencil sketches for scenes",
    "model": "opus",
-   "cost": 3.23,
+   "cost": 2.25,
    "usd": 5.52
   },
   {
@@ -209,7 +209,7 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.1,
+   "cost": 0.36,
    "src": "estimate",
    "sid": "session_01GznaAUVJSXrwbJswHqHr7K"
   }
@@ -218,10 +218,10 @@
  "stages": [
   {
    "name": "plan",
-   "pct": 1.0,
+   "pct": 0.7,
    "done": {
     "date": "2026-11-12",
-    "spent": 0
+    "spent": 0.0
    }
   },
   {
@@ -229,49 +229,49 @@
    "pct": 0.0,
    "done": {
     "date": "2026-11-13",
-    "spent": 14.44
+    "spent": 10.08
    },
    "unplanned": true
   },
   {
    "name": "cast",
-   "pct": 3.0,
+   "pct": 2.09,
    "done": {
     "date": "2026-11-15",
-    "spent": 22.98
+    "spent": 16.04
    }
   },
   {
    "name": "sets",
-   "pct": 5.3,
+   "pct": 3.7,
    "done": {
     "date": "2026-11-15",
-    "spent": 29.77
+    "spent": 20.78
    }
   },
   {
    "name": "moves",
-   "pct": 4.4,
+   "pct": 3.07,
    "done": null
   },
   {
    "name": "animatic1",
-   "pct": 2.0,
+   "pct": 1.4,
    "done": null
   },
   {
    "name": "round1",
-   "pct": 2.7,
+   "pct": 1.88,
    "done": null
   },
   {
    "name": "round2",
-   "pct": 2.7,
+   "pct": 1.88,
    "done": null
   },
   {
    "name": "final",
-   "pct": 0.35,
+   "pct": 0.24,
    "done": null
   }
  ],
