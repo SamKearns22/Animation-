@@ -57,3 +57,4 @@ source/data/kittest-people/
 # kittest outputs (regenerated each run)
 source/data/kittest-*/
 source/data/protest-tiers-sets/*.png
+source/data/pf/
