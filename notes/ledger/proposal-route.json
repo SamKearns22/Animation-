@@ -61,6 +61,18 @@
    "cost": 4.41,
    "src": "estimate",
    "sid": "session_01J1JB7Xzeo1azBroTkgSr1b"
+  },
+  {
+   "date": "2026-11-15",
+   "chat": "7e532a65",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.42,
+   "src": "estimate",
+   "sid": "session_01J1JB7XtwFXhz2R85df5gdb"
   }
  ],
  "checks": {}
