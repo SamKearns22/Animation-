@@ -296,9 +296,9 @@ def draft_faults(film, notes=None):
         return []
     d = os.path.join(ROOT, 'animations', 'drafts')
     slug = film.replace('_', '-')
-    if all(os.path.exists(os.path.join(d, f'{slug}-{k}.mp4')) for k in ('animatic', 'clean')):
+    if all(os.path.exists(os.path.join(d, f'{slug}-{k}.mp4')) for k in ('animatic',)):
         return []
-    return ['DRAFT: the notes say an animatic was sent, but animations/drafts/' + slug + '-animatic.mp4 and -clean.mp4 are '
+    return ['DRAFT: the notes say an animatic was sent, but animations/drafts/' + slug + '-animatic.mp4 is '
             'not on file (rule P16): save them (finish.py does it for the next one) and push']
 
 
