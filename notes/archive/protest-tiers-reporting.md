@@ -6,3 +6,22 @@
 - **France, Paris, Sat 17 Oct 2026 (tier 3, re-based on Sam's Q4):** cost-of-living + student day (CGT and student unions; 550,000 nationwide by police count, 800,000 by organisers; 110,000 in Paris). Place de la République: hooded, masked groups threw fireworks, paving stones and other objects; police answered with tear gas and water cannon; thick black smoke from cars, bicycles and other vehicles, and bins on fire; a car and a newspaper kiosk set ablaze; burning heaps of rental bikes (Lime green, Vélib) as barricades; 1,200-2,000 detained nationwide. Daytime into night (photo fr3: afternoon, the car burning right beside the monument). Note: Al Jazeera's captions say the day was called by the yellow vests ("yellow and youth") and a few vests are in the photos; Sam's Q4 answer (no vests) stands unless he changes it. (Al Jazeera 17-18 Oct gallery and articles, AP via PBS, CNN)
 - **Albania, Tirana, 13-18 Oct 2026:** student protests (education, cost of living, corruption; Rama to resign); the Education Ministry's windows smashed, fence torn down, billboards burned and the building set alight; Molotovs, firecrackers and stones thrown; tear gas, water cannon, later rubber bullets. Police: white helmets with visors, black uniforms, clear shields marked POLICIA, an armoured water-cannon truck behind the line (al3, al4). The RPG, helicopter, bank Molotovs and toppled water cannon are Sam's deliberate exaggeration. (Al Jazeera galleries 14 and 18 Oct, Reuters, AP, EFE)
 
+
+
+# Archived from the notes (chat 12): the first staging, superseded by "Re-staged"
+## The world (rule 1): four locked cameras, one painting each (metres)
+- **Tier 1 Passeig de Gràcia (61 m wide), dusk:** camera 12 m up (a balcony) behind the march, centre of the avenue, looking down it toward Gran Via; long lens so the far end reads. Crowd from the camera to the far end (seen from behind: heads, raised keys, flags); hooded knot + burning container 5 m in front of the crowd's front; thin police line across the avenue 15 m beyond them (front on). Fireworks pop over the line.
+- **Tier 2 Frankfurt street, night, wet:** camera 1.7 m, square to the shopfronts, locked, as the brief draws it: gun store centre-left; crowd on the far pavement right half and mid-ground behind the store; far end of the street frame right, dark, where the blue light arrives. Runners cross the foreground left to right.
+- **Tier 3 Place de la République:** camera 0.8 m (low), at the square's south corner looking toward the monument; Marianne top centre. Police two rows on the right facing left; black front line facing them mid-frame; the crowd behind filling to the monument, banners at the back; burning car foreground-left, bikes mid-right between the lines. Water cannon enters from the right, the crowd splits out left.
+- **Tier 4 Tirana avenue, dusk:** camera 3 m, down the avenue as the brief zones it: bank on the left, ministry centre-right, helicopter upper right; shield line mid-right facing left; rioters and crowd fill the avenue left and behind; mopeds enter foreground left.
+
+Rehearsal clips sent: none yet (after the cast sheet).
+Composition sheet sent: 13 Nov (pencil sketches, chat 4).
+
+
+
+# Archived from the notes (chat 12)
+| 1 | cast sheet | Marcher t2, phone | Sam, 14 Nov: "arm in the wrong place / holding something wrong": the phone is held backwards BEHIND the head, not forwards in front; and it shows its screen to us, not its camera. Fix: hand in front of the face at about eye height, arm forward; the screen faces the holder (from the front we see the dark back and camera lens; from behind, the lit screen). Why it slipped: `pose("phone")` put the hand at z 90 behind the head line and `phone_light` had the faces swapped; no check looks for a held thing behind the holder's head (handcheck only asks that the hand shows). Same look for placard, flag, keys. Chat 6: fixed in the pose (phone at eye height in front, grips.held; back + lens from the front, lit screen from behind; keys, flag, placard hands beside the head or on the stick); the check (12) still to improve. | protest_tiers_cast.pose/phone | fixed, check open |
+
+Showstopper elements (rule 8): every VFX line of the brief (rows 17, 31) plus T1 fireworks, keys, haze and T3 fires, stones, gas, water cannon; Sam approves or trims (Q6).
+Rehearsal clips (rule 8): 1 tier 4 rocket to helicopter spiral; 2 tier 4 shield line break into melee; 3 tier 3 water cannon splitting the crowd; 4 tier 2 smash with the blue wash arriving. Sound effects: Q2.

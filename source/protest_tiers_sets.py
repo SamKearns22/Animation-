@@ -19,6 +19,7 @@ MAP
     python3 source/protest_tiers_sets.py sheet OUT.jpg     the sets sheet for Sam
     python3 source/protest_tiers_sets.py alone OUTDIR      each painting full size (t1..t4.png)
     python3 source/protest_tiers_sets.py check             rule 83 overlaps
+    python3 source/protest_tiers_sets.py vehicles OUT.jpg  the truck and helicopter sheet
 
 Every painting is drawn fresh for a time t (fires flicker); `paint(tier, t, **state)` returns (back, front): front is
 an RGBA layer drawn over the people (T3: the car's near corner), or None.
@@ -556,7 +557,7 @@ STONE_P, STONE_S, BRONZE, BRONZE_L = (236, 232, 222), (204, 198, 186), (78, 74, 
 PAVE = (182, 176, 168)
 
 
-def t3(t=0.0, marks=False):
+def t3(t=0.0, marks=False, truck=None):
     cam = CAMS['t3']
     img = Image.new('RGBA', (W, H), T3_SKY[0] + (255,))
     bands(img, 0, cam.VY, T3_SKY, seed=3, amp=14)
@@ -603,6 +604,8 @@ def t3(t=0.0, marks=False):
     for d in (8, 10, 13, 17, 22, 30, 42, 60):
         poly(img, [(0, cam.p(0, d)[1]), (W, cam.p(0, d)[1])], None, (160, 154, 146), 1.2, 0)
     _kiosk(img, cam, 7.0, 30, t)                            # chat 10: mid-right, behind the bikes (was off frame)
+    if truck:                                               # chat 12: the water cannon, behind the police (d 11), the bikes
+        globals()['truck'](img, cam, truck['x'], TRUCK_D3, t, 'drive', 'fr', truck.get('aim', 18), truck.get('flash', 0))
     _bikes(img, cam, 2.1, 14, t)                            # in the gap between the front line and the police
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     _car(front, cam, t)
@@ -775,7 +778,7 @@ PASTEL = [(200, 150, 140), (214, 186, 140), (170, 170, 150), (206, 160, 120), (1
 PINE, PINE_L = (40, 46, 34), (62, 66, 42)
 
 
-def t4(t=0.0, marks=False):
+def t4(t=0.0, marks=False, heli=None):
     cam = CAMS['t4']
     img = Image.new('RGBA', (W, H), T4_SKY[0] + (255,))
     bands(img, 0, cam.VY, T4_SKY, seed=4, amp=16)
@@ -815,6 +818,9 @@ def t4(t=0.0, marks=False):
                  INK, 1.2, 0)
             m = shape(img, [blob(tx - s * 1.2 * k, ty - 1.5 * k, 6.5 * k, int(d) + s * 7, squash=.42)], PINE, INK, 1.8)
             shape(img, [blob(tx - s * 2.2 * k, ty - 2.6 * k, 4.0 * k, int(d) + 3, squash=.38)], PINE_L, None, clip=m)
+    if heli:                                                # chat 12: beyond the ministry, so it falls behind it
+        helicopter(img, heli['x'], heli['y'], heli.get('s', 17), heli.get('turn', 0), heli.get('roll', 0), t,
+                   heli.get('hit', False))
     _ministry(img, cam, t)
     _bank(img, cam, t)
     # the avenue: dark tarmac in the firelight, a median line, the lane marks
@@ -824,6 +830,7 @@ def t4(t=0.0, marks=False):
         for d in np.arange(9, 400, 9):
             quad(img, cam.p(xx - .1, d), cam.p(xx + .1, d), cam.p(xx + .1, d + 4), cam.p(xx - .1, d + 4), (150, 110, 80),
                  None, amt=0)
+    truck(img, cam, TRUCK_X4, TRUCK_D4, t, 'toppled', 'al')     # chat 12: overturned at the shield line's right end
     if marks:
         for j in range(8):
             person_mark(img, cam, 1.2 + j * .55, 17.5)
@@ -911,6 +918,273 @@ def _bank(img, cam, t):
     text(img, (cam.p(x, 40, 5.6)[0] + 40, cam.p(x, 40, 5.6)[1] - 4), 'BANKA', 26, (60, 46, 40))
 
 
+# ================================================================================================= vehicles
+# Chat 12 (sets stage, the plan's two rows): the water cannon truck (T3 driving in, French white and blue; T4
+# overturned and burning, Albanian navy) and the police helicopter (T4; any turn, the moves stage steps it in 45-degree
+# turns: side, three-quarter, front and their mirrors). Both flat, one outline each piece, drawn by the moves stage.
+TRUCK_LIVERY = {'fr': dict(body=(236, 236, 232), band=(36, 70, 150), cab=(226, 228, 226), word='POLICE', ink=(36, 70, 150)),
+                'al': dict(body=(44, 50, 70), band=(70, 80, 104), cab=(52, 58, 78), word='POLICIA', ink=(226, 226, 230))}
+TRUCK_LEN, TRUCK_H = 9.8, 3.35
+TRUCK_X4, TRUCK_D4 = 2.5, 30.0       # T4: cab end at screen ~640, behind the shield line's right half, rest off frame
+HELI_HOME = (800, 290, 22)           # T4: where it hangs (x, y, px a metre): over the flag (top y 325), upper right
+TRUCK_D3 = 16.0                      # T3: behind the police rows (d 11) and the bikes (d 14), in front of the kiosk
+
+
+def truck(img, cam, x, d, t=0.0, state='drive', livery='fr', aim=18.0, flash=0.0):
+    """The water cannon truck side-on at depth d, facing left, its front bumper at x (m). state 'drive': upright, the
+    roof cannon at `aim` degrees above level; 'toppled': rolled over onto its roof, wheels up, charred and burning.
+    flash 0..1: the blue roof lights lit. Returns the nozzle tip on screen (drive) or the fire's centre (toppled)."""
+    L = TRUCK_LIVERY[livery]
+    k = cam.ppm(d)
+    flip = state == 'toppled'
+    gx, gy = cam.p(x, d)
+
+    def P(u, z):                                             # u back along the truck (m), z up (m): to screen
+        if flip:
+            z = TRUCK_H + .1 - z
+        return gx + u * k, gy - z * k
+    char = (lambda c: mix(c, (30, 24, 24), .62)) if flip else (lambda c: c)
+    body, cab, band = char(L['body']), char(L['cab']), char(L['band'])
+    # wheels first when upright (the body's skirt hides their tops); last when toppled (they stick up)
+    def wheels():
+        for u in (1.35, 6.25, 7.65):
+            cx, cy = P(u, .55)
+            IS.ell(img, cx, cy, .55 * k, .55 * k, (34, 32, 34), INK, max(2, k / 30))
+            IS.ell(img, cx, cy, .24 * k, .24 * k, char((150, 150, 150)), None)
+    # the chassis rail and bumper
+    shape(img, [[P(-.08, .45), P(TRUCK_LEN, .45), P(TRUCK_LEN, .95), P(-.08, .95)]], char((60, 62, 66)), INK, max(2, k / 28))
+    # the tank body: a long box, its rear top rounded
+    tank = [P(2.45, .85), P(TRUCK_LEN, .85), P(TRUCK_LEN, 2.75), P(TRUCK_LEN - .25, 3.0), P(2.45, 3.0)]
+    shape(img, [tank], body, INK, max(2.4, k / 24))
+    if not flip:
+        wheels()
+    shape(img, [[P(2.45, 1.45), P(TRUCK_LEN, 1.45), P(TRUCK_LEN, 1.75), P(2.45, 1.75)]], band, None)
+    for u in np.arange(3.6, TRUCK_LEN - .4, 1.55):          # panel seams
+        poly(img, [P(u, .9), P(u, 2.95)], None, mix(body, INK, .35), max(1.2, k / 60), 0)
+    f = max(12, int(.62 * k))
+    cxw, cyw = P(6.2, 2.3)
+    if flip:                                                 # rolled over: the word reads upside down, sooted
+        lay = Image.new('L', (int(f * len(L['word']) * .8), int(f * 1.5)), 0)
+        ImageDraw.Draw(lay).text((lay.width / 2, lay.height / 2), L['word'], anchor='mm', fill=255,
+                                 font=ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), f))
+        lay = lay.rotate(180)
+        img.paste(mix(L['ink'], (40, 34, 34), .5), (int(cxw - lay.width / 2), int(cyw - lay.height / 2)), mask=lay)
+    else:
+        text(img, (cxw, cyw), L['word'], f, L['ink'])
+    # the cab: flat armoured nose, a raked windscreen behind mesh, the door window
+    cabp = [P(0, .55), P(0, 1.75), P(.38, 2.95), P(2.4, 3.05), P(2.4, .55)]
+    shape(img, [cabp], cab, INK, max(2.4, k / 24))
+    shape(img, [[P(0, 1.38), P(2.4, 1.38), P(2.4, 1.68), P(0, 1.68)]], band, None)
+    glassc = (60, 74, 92) if not flip else (40, 26, 22)
+    for win in ([P(.18, 1.95), P(.48, 2.8), P(1.45, 2.84), P(1.45, 1.95)], [P(1.62, 1.95), P(1.62, 2.84), P(2.22, 2.86), P(2.22, 1.95)]):
+        m = shape(img, [win], glassc, INK, max(2, k / 30))
+        if flip:                                              # the windows burnt out: fire glowing low inside
+            lo = [win[0], win[3], (win[3][0], win[3][1] + (win[1][1] - win[0][1]) * .45),
+                  (win[0][0], win[0][1] + (win[1][1] - win[0][1]) * .45)]
+            shape(img, [lo], (250, 150, 50), None, clip=m)
+        else:                                                 # the mesh: a few diagonal wires inside the glass
+            x0_, x1_ = min(q[0] for q in win), max(q[0] for q in win)
+            y0_, y1_ = min(q[1] for q in win), max(q[1] for q in win)
+            sub = Image.new('L', (W, H), 0)
+            dr = ImageDraw.Draw(sub)
+            step = max(6, .22 * k)
+            for xx in np.arange(x0_ - (y1_ - y0_), x1_, step):
+                dr.line([(xx, y1_), (xx + (y1_ - y0_), y0_)], fill=255, width=max(1, int(k / 70)))
+                dr.line([(xx, y0_), (xx + (y1_ - y0_), y1_)], fill=255, width=max(1, int(k / 70)))
+            img.paste((96, 110, 124), (0, 0), mask=Image.fromarray(np.minimum(np.asarray(sub), np.asarray(m))))
+    shape(img, [[P(-.1, .62), P(.22, .62), P(.22, .98), P(-.1, .98)]], char((70, 70, 74)), INK, 2)       # bumper end
+    shape(img, [[P(.02, 1.12), P(.2, 1.12), P(.2, 1.32), P(.02, 1.32)]], char((250, 236, 170)), INK, 1.5)  # headlamp
+    # the blue lights on the cab roof
+    for u in (.55, 2.05):
+        on = flash > .5 and not flip
+        shape(img, [[P(u - .2, 3.0), P(u + .2, 3.0), P(u + .16, 3.2), P(u - .16, 3.2)]],
+              (120, 170, 255) if on else char((40, 70, 160)), INK, 2)
+        if on:
+            lx, ly = P(u, 3.1)
+            glow_disc(img, lx, ly, .55 * k, (150, 190, 255), amt=.3)
+    # the roof cannon: a turret on the cab roof, the barrel aimed forward (left) and up
+    tb = [P(.95, 3.02), P(1.95, 3.02), P(1.85, 3.38), P(1.05, 3.38)]
+    shape(img, [tb], char((150, 152, 156)), INK, max(2, k / 30))
+    a = math.radians(aim) * (-1 if flip else 1)
+    bx, by = P(1.4, 3.3)
+    tip = (bx - 1.45 * k * math.cos(a), by - 1.45 * k * math.sin(a))
+    nx, ny = math.sin(a) * .13 * k, -math.cos(a) * .13 * k
+    poly(img, [(bx + nx, by + ny), (tip[0] + nx * .8, tip[1] + ny * .8), (tip[0] - nx * .8, tip[1] - ny * .8),
+               (bx - nx, by - ny)], char((120, 122, 128)), INK, max(2, k / 34), 0)
+    if flip:
+        wheels()
+        # burning: the engine under the cab and the tank's belly, smoke from the wreck (the moves stage drives t)
+        fx, fy = P(1.0, .6)
+        flames(img, fx, fy + .2 * k, 2.6 * k, 2.2 * k, t, seed=71, n=6)
+        fx2, fy2 = P(5.0, .45)
+        flames(img, fx2, fy2 + .1 * k, 3.6 * k, 1.6 * k, t + .5, seed=72, n=7)
+        return P(2.6, 1.0)
+    return tip
+
+
+def _hull(pts):
+    pts = sorted(set((round(a, 2), round(b, 2)) for a, b in pts))
+    if len(pts) < 3:
+        return pts
+    def cross(o, a, b):
+        return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0])
+    lo, up = [], []
+    for q in pts:
+        while len(lo) >= 2 and cross(lo[-2], lo[-1], q) <= 0:
+            lo.pop()
+        lo.append(q)
+    for q in reversed(pts):
+        while len(up) >= 2 and cross(up[-2], up[-1], q) <= 0:
+            up.pop()
+        up.append(q)
+    return lo[:-1] + up[:-1]
+
+
+HELI_BODY, HELI_BELLY, HELI_GLASS = (232, 234, 236), (34, 60, 130), (70, 96, 120)
+
+
+def helicopter(img, cx, cy, s, turn=0.0, roll=0.0, t=0.0, hit=False, look=-10.0):
+    """The police helicopter (a light twin like the Policia's AW109): white over a blue belly, POLICIA on the boom.
+    (cx, cy): the cabin's centre on screen; s px a metre; turn 0 = side-on facing left, 90 = nose to us, 180 =
+    facing right (the moves stage steps it in 45s: three drawn turns and their mirrors); roll tilts it in the frame
+    (degrees, + = clockwise); look: we see it from below by this many degrees (the rotor disc opens). hit: the
+    engine blackened and burning. Every part is a flat shape (the hull of its corners at this turn), one outline."""
+    c, sn = math.cos(math.radians(turn)), math.sin(math.radians(turn))
+    ce, se = math.cos(math.radians(look)), math.sin(math.radians(look))
+    cr, sr = math.cos(math.radians(roll)), math.sin(math.radians(roll))
+
+    def Q(x, y, z):                                         # x forward, y to its left, z up (m) -> screen, depth
+        u = -x * c + y * sn
+        dep = x * sn + y * c                                 # toward us
+        v = z * ce + dep * se
+        X, Y = u * s, -(v - 1.0) * s
+        return cx + X * cr - Y * sr, cy + X * sr + Y * cr, dep
+
+    def solid(pts3, fill, lw=None, clip=None, line=INK):
+        q = [Q(*p)[:2] for p in pts3]
+        return shape(img, [_hull(q)], fill, line, lw or max(2, s / 9), clip=clip)
+
+    def ring(x, ry, z0, z1, n=10):                           # a cross-section loop at x
+        return [(x, ry * math.cos(a), (z0 + z1) / 2 + (z1 - z0) / 2 * math.sin(a)) for a in np.linspace(0, 6.28, n, endpoint=False)]
+    cabin = (ring(-1.7, .72, .4, 1.95) + ring(-.4, .9, .22, 2.1) + ring(1.0, .86, .25, 2.0) + ring(2.0, .6, .42, 1.62)
+             + ring(2.75, .22, .8, 1.15))
+    boom = ring(-1.4, .38, 1.0, 1.75, 8) + ring(-6.3, .14, 1.5, 1.8, 8)
+    fin = [(-6.9, -.05, 1.45), (-6.9, .05, 1.45), (-6.2, -.05, 1.65), (-6.2, .05, 1.65), (-7.1, .05, 3.0),
+           (-7.1, -.05, 3.0), (-6.75, .05, 3.0), (-6.75, -.05, 3.0)]
+    tailr = [(-6.95 + .75 * math.cos(a), .32, 2.45 + .75 * math.sin(a)) for a in np.linspace(0, 6.28, 16, endpoint=False)]
+    cowl = [(x, y, z) for x, zt in ((-2.0, 2.05), (-1.5, 2.45), (.5, 2.5), (1.0, 2.1)) for y in (-.62, .62) for z in (1.8, zt)]
+    skids = [[(-1.3, sy, .02), (1.9, sy, .02), (2.2, sy, .18), (-1.3, sy, .1)] for sy in (-.95, .95)]
+    struts = [[(x, sy * .95, .06), (x, sy * .55, .5)] for x in (-.7, 1.1) for sy in (-1, 1)]
+    disc = [(5.6 * math.cos(a), 5.6 * math.sin(a), 2.75) for a in np.linspace(0, 6.28, 36, endpoint=False)]
+    # parts drawn far to near: depth of each part's centre
+    parts = [('boom', -3.9, 0.0), ('fin', -6.8, 0.0), ('tailr', -6.95, .32), ('skidL', .3, .95), ('skidR', .3, -.95),
+             ('cabin', .3, 0.0)]
+    parts.sort(key=lambda p: p[1] * sn + p[2] * c)
+    lw = max(2, s / 9)
+    for name, _, _ in parts:
+        if name == 'boom':
+            m = solid(boom, HELI_BODY)
+            solid([(x, y, z) for x, y, z in boom if z < 1.38] + [(-6.3, 0, 1.5)], HELI_BELLY, clip=m, line=None)
+            if abs(c) > .6:                                   # POLICIA on the boom when we see its side
+                bx, by, _ = Q(-3.6, 0, 1.4)
+                fs = max(8, int(.42 * s))
+                lay = Image.new('L', (int(fs * 5), int(fs * 1.6)), 0)
+                ImageDraw.Draw(lay).text((lay.width / 2, lay.height / 2), 'POLICIA', anchor='mm', fill=255,
+                                         font=ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), fs))
+                lay = lay.resize((max(1, int(lay.width * abs(c))), lay.height)).rotate(-roll, expand=True)
+                img.paste((30, 50, 110), (int(bx - lay.width / 2), int(by - lay.height / 2)), mask=lay)
+        elif name == 'fin':
+            solid(fin, HELI_BELLY)
+        elif name == 'tailr':
+            q = [Q(*p)[:2] for p in tailr]
+            if abs(sn) > .2 or True:
+                hl = _hull(q)
+                if len(hl) > 2:
+                    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+                    ImageDraw.Draw(lay).polygon(hl, fill=(200, 205, 210, 120), outline=(60, 60, 64, 200))
+                    img.alpha_composite(lay) if img.mode == 'RGBA' else img.paste(lay, (0, 0), lay)
+        elif name.startswith('skid'):
+            sy = .95 if name == 'skidL' else -.95
+            for st in struts:
+                if st[0][1] * sy > 0:
+                    poly(img, [Q(*st[0])[:2], Q(*st[1])[:2]], None, (60, 62, 66), max(2, s / 7), 0)
+            sk = skids[0] if sy < 0 else skids[1]
+            solid(sk + [(x, y, z + .12) for x, y, z in sk], (70, 72, 76))
+        else:
+            solid(cowl, HELI_BODY if not hit else (46, 38, 38))
+            m = solid(cabin, HELI_BODY)
+            solid([(x, y, z) for x, y, z in cabin if z < .8] + [(2.75, 0, .8), (-1.7, 0, .8), (2.75, .3, .8), (-1.7, .3, .8),
+                                                                (2.75, -.3, .8), (-1.7, -.3, .8)], HELI_BELLY, clip=m, line=None)
+            gl = [(x, y, z) for x, y, z in cabin if x >= 1.0 and z > 1.0] + [(1.0, .82, 1.0), (1.0, -.82, 1.0), (2.3, .4, .9), (2.3, -.4, .9)]
+            gm = solid(gl, HELI_GLASS, lw=max(1.5, s / 14), clip=m)
+            if c > -.2 or True:                               # the cabin door window on the side toward us
+                side = 1 if c >= 0 else -1
+                dw = [(-.9, side * .84, 1.05), (.6, side * .84, 1.05), (.6, side * .84, 1.75), (-.9, side * .84, 1.7)]
+                if abs(c) > .3:
+                    solid(dw, HELI_GLASS, lw=max(1.5, s / 14), clip=m)
+            poly(img, [Q(.2, 0, 2.35)[:2], Q(.2, 0, 2.78)[:2]], None, (60, 62, 66), max(2, s / 6), 0)   # the mast
+            for e in (-1.5, -.6):                             # exhaust stubs
+                pass
+    # the main rotor: a pale disc (the blur) and two blades whose sweep the moves stage turns with t
+    q = _hull([Q(*p)[:2] for p in disc])
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    dl = ImageDraw.Draw(lay)
+    dl.polygon(q, fill=(200, 206, 214, 105), outline=(90, 96, 104, 150))
+    for k_ in range(2):
+        a = 6.28 * (t * 5.0) + k_ * math.pi
+        p0, p1 = Q(5.5 * math.cos(a), 5.5 * math.sin(a), 2.78), Q(-5.5 * math.cos(a), -5.5 * math.sin(a), 2.78)
+        dl.line([p0[:2], p1[:2]], fill=(40, 40, 44, 230), width=max(2, int(s / 7)))
+    img.alpha_composite(lay) if img.mode == 'RGBA' else img.paste(lay, (0, 0), lay)
+    if hit:                                                   # the engine alight (the trail is the moves stage's)
+        ex, ey, _ = Q(-.6, 0, 2.3)
+        flames(img, ex, ey + .4 * s, 1.8 * s, 1.6 * s, t, seed=81, n=5)
+    return Q(-.6, 0, 2.3)[:2]
+
+
+def vehicles_sheet(out):
+    """The two new vehicles drawn alone at size beside their references, and each in its shot (phone size)."""
+    bg = (244, 240, 232)
+    B.SS = 1
+    S = Image.new('RGB', (2000, 2280), bg)
+    d = ImageDraw.Draw(S)
+    fb = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), 30)
+    fr = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans.ttf'), 21)
+    d.text((20, 16), 'PROTEST TIERS: the water cannon truck and the police helicopter (sets stage, chat 12)', font=fb, fill=(20, 20, 20))
+    # row 1: the truck, upright (T3, French) and overturned burning (T4, Albanian), drawn alone
+    cam = Cam(0, 0, 1000, 0)
+    for i, (st, lv, lab) in enumerate((('drive', 'fr', 'T3: driving in, cannon up, lights on'),
+                                       ('toppled', 'al', 'T4: overturned, burning'))):
+        im = Image.new('RGBA', (W, 560), bg + (255,))
+        c2 = Cam(80, 470, 1000, 0.0)
+        truck(im, c2, 0, 10.0, t=.4, state=st, livery=lv, flash=1.0)
+        im = im.convert('RGB').resize((810, 420))
+        S.paste(im, (20 + i * 830, 70))
+        d.text((20 + i * 830, 494), lab, font=fr, fill=(50, 50, 50))
+    # row 2: the helicopter's drawn turns and the hit
+    for i, (tn, rl, hit, lab) in enumerate(((0, 0, False, 'side'), (45, 0, False, 'three-quarter'), (90, 0, False, 'front'),
+                                             (135, 8, False, '3/4 (mirror)'), (200, 25, True, 'hit, spinning'))):
+        im = Image.new('RGBA', (380, 330), bg + (255,))
+        helicopter(im, 190, 175, 27, turn=tn, roll=rl, t=.13, hit=hit)
+        S.paste(im.convert('RGB'), (20 + i * 392, 540))
+        d.text((30 + i * 392, 872), lab, font=fr, fill=(50, 50, 50))
+    # row 3: the references, then each in its shot at phone size
+    x = 20
+    for ref in ('al3-tirana-shield-line-water-cannon', 'de5-frankfurt-water-cannon-police-blue'):
+        im = Image.open(os.path.join(REFS, ref + '.jpg')).convert('RGB')
+        im.thumbnail((470, 360))
+        S.paste(im, (x, 920))
+        d.text((x, 920 + im.height + 4), ref.split('-')[0], font=fr, fill=(60, 60, 60))
+        x += im.width + 14
+    shot3 = paint('t3', .4, truck=dict(x=2.8, aim=20, flash=1.0)).resize((405, 720), Image.LANCZOS)
+    shot4 = paint('t4', .4, heli=dict(x=HELI_HOME[0], y=HELI_HOME[1], s=HELI_HOME[2], turn=0)).resize((405, 720), Image.LANCZOS)
+    S.paste(shot3, (x + 10, 920)); S.paste(shot4, (x + 430, 920))
+    d.text((x + 10, 1645), 'T3 with the truck', font=fr, fill=(50, 50, 50))
+    d.text((x + 430, 1645), 'T4 with both', font=fr, fill=(50, 50, 50))
+    S = S.crop((0, 0, 2000, 1690))
+    S.save(out, quality=88)
+    return out
+
+
 # ------------------------------------------------------------------------------------------------- rule 83, rule 3
 SET_BOXES = {                       # chat 11: all measured from the drawing (each helper left out, the difference)
     't1': [('container', (446, 719, 578, 902)), ('domed corner', (822, 60, 945, 559))],
@@ -919,7 +1193,7 @@ SET_BOXES = {                       # chat 11: all measured from the drawing (ea
            ('street lamp', (0, 94, 175, 1231))],
     't3': [('monument', (234, 453, 688, 1130)), ('kiosk', (848, 901, 1007, 1182)), ('bikes', (533, 1018, 993, 1280)),
            ('car', (0, 757, 228, 1360))],
-    't4': [('ministry', (565, 313, 1080, 961)), ('bank', (0, 247, 231, 961))],
+    't4': [('ministry', (565, 313, 1080, 961)), ('bank', (0, 247, 231, 961)), ('toppled truck', (608, 823, 1079, 1174))],
 }
 SET_MEANT = {
     't2': [('street lamp', 'doorway', 'the lamp stands on the kerb 1.8 m in front of the doorway'),
@@ -930,6 +1204,7 @@ SET_MEANT = {
            ('street lamp', 'shutter', "the lamp's glow falls on the shutter's left edge, the lamp in front at the kerb")],
     't3': [('kiosk', 'bikes', 'the bike heap burns in front of the kiosk: two fires the brief names together'),
            ('monument', 'bikes', 'the bikes burn in the gap 66 m in front of the base (chat 10 decision; fr4)')],
+    't4': [('toppled truck', 'ministry', 'the overturned truck burns on the avenue 34 m in front of the ministry (brief 30)')],
 }
 
 BENCHMARK = {
@@ -1039,5 +1314,7 @@ if __name__ == '__main__':
         print(sheet(sys.argv[2]))
     elif cmd == 'alone':
         print(alone(sys.argv[2]))
+    elif cmd == 'vehicles':
+        print(vehicles_sheet(sys.argv[2]))
     elif cmd == 'check':
         print('\n'.join(checks()) or 'rule 83: clean')

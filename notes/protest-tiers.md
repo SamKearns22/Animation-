@@ -1,15 +1,16 @@
 # Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 24 (sets stop 5.3% reached: Sam's Y before more sets work), 30 (a repeated note: find why the first fix failed), 83 (set boxes measured: re-measure after any move).
-- **Done (chat 11, 15 Nov, Opus medium):** T4: pines 15-21 m in dark walls both sides, far blocks seen front-on over the trees, ministry nearer (d 64) with fire on its bay, flag 3.6 m with the double-headed eagle drawn. T2: glare and cracks kept inside the glass (they spilled past the frame); broken states checked. T3: car reads as a car (car-shaped rear, charred window holes, fire low in them), clear of the monument; smoke moved right so Marianne's bronze is against sky; kiosk clear of the bikes with poster panels and a PRESSE band. T1: lamps and the container fire reflected in the wet road. SET_BOXES measured from the drawing (each helper left out, the difference), check clean. Critique r0 hunts 1+2 recorded, `fixed`; sheet sent to Sam with Changed lines.
-- **Checks (named, not fixed):** hunt 2 read T2's half-raised shutter as "down" (it covers the top half, as a raised shutter does; looked: fine). Both hunts' "no people", "flat smoke/flames/ground" are the stage and the house look (S1 marked false alarm).
-- **Sam Y (15 Nov, chat 11): go past the sets stop** for the water cannon truck and helicopter. Still needs Sam: his notes on the sets sheet (none yet). Costs-filed-by-kind rule wording (with chat 7).
-- **Sam (15 Nov, chat 11, going to bed): "continue until animatic 1, I don't want anything to stop you".** Stage stops are OFF until animatic 1 is sent (whole-film stops already off); never stop for a Y or a budget stop before it. Checks, critiques, the cost-watch handovers and the chain still run; the run stops after animatic 1 is sent (CLAUDE.md: one animatic unattended).
-- **Next: chat 12, Opus high (new builds), opened by chat 11:** water cannon truck (2 states) and helicopter (3 drawn turns) per the plan rows; then the moves stage. His sheet notes first (Opus medium if only notes).
-- **Read:** job pack "Build"; this section; the sets file's MAP.
-- **Open rule requests:** costs filed by kind (chat 7 has the wording); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1`; a head prop fits the head as drawn (5c); a sheet runs the hand check per tile (generalise?); a rough is drawn at true sizes for its camera; a set's shape helper draws in its own box; NEW: set boxes measured by leaving each helper out and taking the difference (a `measure` command in setcheck would make rule 83 automatic).
-- **For Claude:** sets = `source/protest_tiers_sets.py`; critique spec `source/data/protest-tiers-sets/spec.json` (round 0, stage sets: two hunts used); critique.py now imports a film by its ledger name with `-` -> `_` and works with img-only panels when no film module exists; chat 11 branch `claude/protest-tiers-sets-c11`.
+- **Rules that bite next:** 89 (moves stage: ONE pack, two hunts; the truck and helicopter are judged in it), 41 (every held thing in front of or beside the body), 74 (moves checked against the action lists before the animatic).
+- **Done (chat 12, 15 Nov, Opus high):** sets stage finished. Water cannon truck, side-on: T3 French white with a blue band and POLICE, mesh windows, roof cannon (aim set by the moves), blue lights (flash); T4 Albanian navy, overturned wheels-up, charred, burning, POLICIA upside down, behind the shield line's right half. Police helicopter (white over a blue belly, POLICIA on the boom) drawn at any turn and roll, three drawn turns + mirrors, a hit state with the engine alight; hangs at HELI_HOME over the flag. Rule 83 check clean (truck box measured).
+- **Decided (chat 12, Sam's "don't stop"):** the T4 truck lies wheels-up, not on its side (on its side, from this camera, only its flat roof or belly would show and it would not read as a truck). The vehicles get no sets hunt of their own (the sets stage's two are spent; a third is refused): they are panels in the moves stage's pack. The helicopter hangs at y ~290, higher than the plan's 450, so it clears the ministry flag.
+- **Sam (15 Nov, 01:03): "The session resets at 3:50. Continue work then if you run out."** If a chat hits the usage limit, the next carries on after 3:50.
+- **Sam (15 Nov, chat 11): "continue until animatic 1, I don't want anything to stop you".** Stage stops OFF until animatic 1 is sent; never stop for a Y, a question or a budget stop before it. Checks, critiques, the cost-watch handovers and the chain still run; the run stops after animatic 1 is sent.
+- **Next: chat 13, Opus high (the moves stage is new builds):** build the film per "Moves plan (chat 12)" below, rehearsal clips for its risky moves, the moves pack (two hunts), then animatic 1 (or hand to Sonnet for the render if the build ends a chat).
+- **Needs Sam:** nothing before animatic 1. Costs-filed-by-kind rule wording (with chat 7).
+- **Read:** job pack "Build"; this section and "Moves plan"; the MAPs of the sets and cast files.
+- **Open rule requests:** costs filed by kind (chat 7 has the wording); lessons: a sheet is sent only once SendUserFile delivered it; a cast tile sets `B.SS = 1` (chat 12 hit it again: a sheet that draws outside paint() must set it); a head prop fits the head as drawn (5c); a sheet runs the hand check per tile; a rough is drawn at true sizes for its camera; a set's shape helper draws in its own box; set boxes measured by leaving each helper out (a `measure` command in setcheck).
+- **For Claude:** sets = `source/protest_tiers_sets.py` (truck(), helicopter(), t3(truck=), t4(heli=), `vehicles OUT`); cast = `source/protest_tiers_cast.py` (draw(), pose(), moped_scene()); no film module yet; chat 12 branch `claude/protest-tiers-c12`.
 
 ## The reporting: what each tier is based on is in `notes/archive/protest-tiers-reporting.md` (T1 Barcelona 11 Nov, T2 Frankfurt 31 Oct, T3 République 17 Oct, T4 Tirana 13-18 Oct).
 
@@ -43,17 +44,9 @@ Estimate: **21.5% of a week, of which 8.1% unmeasured** (crowd-field moves, vehi
 | Final (Sonnet) | | | final | 0.35 | starting unit 0.35 | |
 | **Total** | | | | **21.45** | stages: plan 1, cast 3, sets 5.3, moves 4.4, animatic1 2, round1 2.7, round2 2.7, final 0.35 | |
 
-Showstopper elements (rule 8): every VFX line of the brief (rows 17, 31) plus T1 fireworks, keys, haze and T3 fires, stones, gas, water cannon; Sam approves or trims (Q6).
-Rehearsal clips (rule 8): 1 tier 4 rocket to helicopter spiral; 2 tier 4 shield line break into melee; 3 tier 3 water cannon splitting the crowd; 4 tier 2 smash with the blue wash arriving. Sound effects: Q2.
+Showstopper elements and rehearsal clips: archived (the clips are in "Moves plan").
 
-## The world (rule 1): four locked cameras, one painting each (metres)
-- **Tier 1 Passeig de Gràcia (61 m wide), dusk:** camera 12 m up (a balcony) behind the march, centre of the avenue, looking down it toward Gran Via; long lens so the far end reads. Crowd from the camera to the far end (seen from behind: heads, raised keys, flags); hooded knot + burning container 5 m in front of the crowd's front; thin police line across the avenue 15 m beyond them (front on). Fireworks pop over the line.
-- **Tier 2 Frankfurt street, night, wet:** camera 1.7 m, square to the shopfronts, locked, as the brief draws it: gun store centre-left; crowd on the far pavement right half and mid-ground behind the store; far end of the street frame right, dark, where the blue light arrives. Runners cross the foreground left to right.
-- **Tier 3 Place de la République:** camera 0.8 m (low), at the square's south corner looking toward the monument; Marianne top centre. Police two rows on the right facing left; black front line facing them mid-frame; the crowd behind filling to the monument, banners at the back; burning car foreground-left, bikes mid-right between the lines. Water cannon enters from the right, the crowd splits out left.
-- **Tier 4 Tirana avenue, dusk:** camera 3 m, down the avenue as the brief zones it: bank on the left, ministry centre-right, helicopter upper right; shield line mid-right facing left; rioters and crowd fill the avenue left and behind; mopeds enter foreground left.
-
-Rehearsal clips sent: none yet (after the cast sheet).
-Composition sheet sent: 13 Nov (pencil sketches, chat 4).
+## The world: first staging archived in `notes/archive/protest-tiers-reporting.md`; "Re-staged" below is the one built (cameras in the sets MAP).
 
 ## Re-staged with the framing lessons (PROPOSAL, framing research chat 3, 12 Nov; F-numbers: `research/crowds-and-big-action.md`)
 Frame 1080 x 1920, safe area x 60-900, y 310-1500. Every tier, the same bands (F1): **headline** (country, then
@@ -108,6 +101,28 @@ near figures, 30-60 variants mid, a painted shimmering mass far.
 - **T3:** smoke climbs from car and bikes from 0.0; crowd surges one step behind the front line 0.2-1.0 | front line (10) throws stones in arcs 1.0-2.0 | canister lands 1.6, gas swells over Marianne's base 1.8-2.5 | police rows hold, shields up | water cannon jet from the right 2.5-4.0: the crowd splits, scattering left; yellow vests at the back hold.
 - **T4:** mopeds race in 0.0-0.6; passenger fires 0.6; rocket climbs 0.6-1.0, hits 1.0; helicopter spins down behind the ministry 1.0-2.0 | crowd surges into the shields 1.0-2.0, shields buckle | line breaks 2.0, melee 2.0-3.0, officers pushed back; 2 Molotovs arc 2.2-2.7 into the bank's ground floor | fireball rises behind the ministry 3.0, backlights all; final hold 3.0-4.0. No blood, no one shown hurt.
 
+## Moves plan (chat 12, for the moves stage)
+- **One film module, `source/protest_tiers.py`** with a MAP: `scene(t)` -> (tier, local time); `picture(t)` = the
+  tier's painting `S.paint(tier, lt, ...)` with its people drawn in depth order (far to near) between the painting's
+  back and its front layer; `draw_order(t)` for `critique.py where`. 4.0 s a tier, hard cuts; 16 s + 1.6 s sign-off.
+- **Crowds in three bands (F12):** far = a painted shimmering mass (heads as flat dots moving on one noise field);
+  mid = 30-60 small figures from `CROWD` variants, one pose each, swayed by the field; near = ~10 acted figures
+  (cast.draw with a pose per the action lists). The field drives sway, surge, the T1 key wave (front to back), the
+  T3 split into two currents (left), all from one function of (x, d, t).
+- **Per tier, what moves (action lists above):** T1 key wave, firework string + 3 bursts, heads turn, the line's one
+  pace, haze. T2 runners L->R, shutter haul (shutter 0.5->1), road-sign swing, glass 'whole'->'starred'->'gone' with
+  glints, blue wash from the right 3.0-4.0 and freeze. T3 smoke, stones (`launch` arcs), canister + gas over
+  Marianne's base, truck drives in from the right (x 9 -> 2.8, d 16) and its jet (a white tapering stream from
+  truck()'s returned nozzle, spray at the end), the crowd splits left. T4 mopeds (moped_scene) in from bottom-left,
+  RPG fired 0.6, trail to the heli (HELI_HOME), hit 1.0, heli spins (turn steps of 45, roll, hit=True, fire trail)
+  and falls behind the ministry by 2.0, shield line buckles and breaks, melee, two Molotovs into the bank windows,
+  fireball behind the ministry 3.0.
+- **Light layers last:** dusk grades, phone lights (T2), the blue strobe wash (T2), firelight backlight (T4).
+- **Headlines** (brief 2): white, country then location 0.5 s later, top-left y 330-540; Hook Text 0.5-3.6 s at
+  y ~1300 (T1), via `hook_text`; sign-off by `finish.py` on the clean render in `source/data/`.
+- **Rehearsal clips (rule 8):** T4 rocket -> helicopter spiral; T4 shield break into melee; T3 water cannon split;
+  T2 smash with the blue wash (`final OUT --small --span T0 T1`).
+
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief, ticked before the first animatic
 | # | from the brief (word for word where it matters) | done? |
 |---|------|------|
@@ -150,7 +165,7 @@ near figures, 30-60 variants mid, a painted shimmering mass far.
 ## Notes
 | # | shot | time | note | line | status |
 |---|------|------|------|------|--------|
-| 1 | cast sheet | Marcher t2, phone | Sam, 14 Nov: "arm in the wrong place / holding something wrong": the phone is held backwards BEHIND the head, not forwards in front; and it shows its screen to us, not its camera. Fix: hand in front of the face at about eye height, arm forward; the screen faces the holder (from the front we see the dark back and camera lens; from behind, the lit screen). Why it slipped: `pose("phone")` put the hand at z 90 behind the head line and `phone_light` had the faces swapped; no check looks for a held thing behind the holder's head (handcheck only asks that the hand shows). Same look for placard, flag, keys. Chat 6: fixed in the pose (phone at eye height in front, grips.held; back + lens from the front, lit screen from behind; keys, flag, placard hands beside the head or on the stick); the check (12) still to improve. | protest_tiers_cast.pose/phone | fixed, check open |
+| 1 | cast sheet | Marcher t2, phone | Sam, 14 Nov: the phone held behind the head (full note archived) | protest_tiers_cast.pose/phone | fixed (chat 6), check 12 still to improve |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - 12 Nov (my picks, told to Sam): hard cuts between tiers, 4.0 s each, 16 s + 1.6 s sign-off; headline country on the cut, location 0.5 s later, both held through the tier; T1 camera high behind the march (the police line really at the far end, a long lens so it reads); T3 police on the right so the water cannon enters from their side; gun store sign "WAFFEN" (no real shop name in the reporting); the helicopter falls behind the ministry with no crew shown.
