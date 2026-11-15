@@ -300,8 +300,8 @@ def budget_stop(d):
     step (the step is kept in the ledger, so answering it lets the chain go on to the next). Returns the message or
     None. On the real figures: app rows, plus the running figure of a chat not yet imported."""
     spent, est = totals(d)[0], d.get('estimate')
-    if not est or spent < est:
-        return None
+    if not est or spent < est or d.get('no_film_stop'):   # Sam, 15 Nov (Protest Tiers): a film whose early chats
+        return None                                        # carried research and tool work turns the film stop off
     step = int(round((spent / est - 1) / STEP, 6)) + 1
     if step <= d.get('budget_stop', 0):
         return None
