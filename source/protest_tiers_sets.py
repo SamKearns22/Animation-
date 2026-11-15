@@ -403,7 +403,7 @@ def t2(t=0.0, shutter=0.5, glass='whole', marks=False):
          (40, 40, 48), INK, 1.5, 0)
     lh = cam.p(0, 12.2, 6)[1]
     poly(img, [(lx, lh), (lx + 70, lh - 10)], None, (40, 40, 48), 5, 0)
-    glow_disc(img, lx + 70, lh + 8, 120, (255, 220, 150))
+    glow_disc(img, lx + 70, lh + 8, 90, (255, 220, 150), amt=.12)
     shape(img, [[(lx + 48, lh - 6), (lx + 92, lh - 14), (lx + 86, lh + 6), (lx + 54, lh + 8)]], (255, 232, 170), INK, 2)
     # far pavement (wet), kerb, road; the window and lamp mirrored in the wet as broken streaks
     pv0, pv1 = cam.p(0, 14)[1], cam.p(0, 12)[1]
@@ -411,16 +411,20 @@ def t2(t=0.0, shutter=0.5, glass='whole', marks=False):
     quad(img, (0, pv1), (W, pv1), (W, pv1 + 10), (0, pv1 + 10), (110, 110, 124), INK, 2)
     img.paste((40, 40, 52), (0, int(pv1 + 10), W, H))
     rng = np.random.default_rng(5)
-    for xx in np.arange(X(x0) + 12, X(x1) - 12, 26):
-        for y in np.arange(pv0 + 6, 1500, 34):
-            if rng.random() < .55:
-                L = rng.uniform(10, 26)
-                shape(img, [[(xx - 3, y), (xx + 3, y), (xx + 2, y + L), (xx - 2, y + L)]],
-                      mix((236, 226, 196), (40, 40, 52), (y - pv0) / 560), None)
-    for y in np.arange(pv0 + 4, 1480, 30):
-        if rng.random() < .7:
-            shape(img, [[(lx + 64, y), (lx + 76, y), (lx + 74, y + 16), (lx + 66, y + 16)]],
-                  mix((246, 214, 150), (40, 40, 52), (y - pv0) / 500), None)
+    # chat 10: long broken streaks (dots read as rain on the lens): each a tall wobbly sliver, fading downward
+    def streak(xc, w, y0, y1, col, seed):
+        r = np.random.default_rng(seed)
+        y = y0
+        while y < y1:
+            L = r.uniform(60, 180)
+            ww = w * r.uniform(.5, 1)
+            jit = r.uniform(-4, 4)
+            shape(img, [[(xc - ww + jit, y), (xc + ww + jit, y), (xc + ww * .85 + jit, y + L), (xc - ww * .85 + jit, y + L)]],
+                  mix(col, (40, 40, 52), min(1, .45 + (y - y0) / (y1 - y0) * .8)), None)
+            y += L + r.uniform(8, 30)
+    for i, xx in enumerate(np.arange(X(x0) + 30, X(x1) - 20, 48)):
+        streak(xx + rng.uniform(-8, 8), rng.uniform(4, 9), pv1 + 14 + rng.uniform(0, 40), 1500, (226, 218, 192), 40 + i)
+    streak(lx + 70, 12, pv1 + 14, 1500, (246, 214, 150), 7)
     if marks:
         for x in (-2.6, -1.2, -.3, 1.0, 1.9):
             person_mark(img, cam, x, 13.4)
@@ -434,15 +438,23 @@ def _window(img, X, Y, x0, x1, glass):
     jagged teeth in the frame."""
     a, b = (X(x0), Y(2.75)), (X(x1), Y(.6))
     img.paste(INSIDE, (int(a[0]), int(a[1]), int(b[0]), int(b[1])))
-    for z in (2.2, 1.6, 1.0):
-        quad(img, (X(x0 + .1), Y(z)), (X(x1 - .1), Y(z)), (X(x1 - .1), Y(z - .08)), (X(x0 + .1), Y(z - .08)), SHELF,
-             (150, 146, 136), 1.5)
-        for g in np.arange(x0 + .25, x1 - .4, .5):          # a long gun lying on each shelf, stock right
-            gy = Y(z + .1)
-            gx0, gx1 = X(g), X(g + .38)
-            poly(img, [(gx0, gy), (gx1, gy - 4), (gx1 + 12, gy + 6), (gx1 - 4, gy + 6), (gx0, gy + 4)], GUN, INK, 1.2)
-    for x in (x0 + 1.3, x0 + 2.7):                          # two uprights holding the shelves
-        quad(img, (X(x), Y(2.7)), (X(x) + 8, Y(2.7)), (X(x) + 8, Y(.6)), (X(x), Y(.6)), (200, 196, 184), None, amt=0)
+    # chat 10: the guns read as guns at phone size (were thin flat dashes): rifles hung on a pegboard above,
+    # pistols in white cubbies below (de3)
+    k = X(1) - X(0)                                         # px per m on the shop front
+    for z in np.arange(1.5, 2.75, .12):                     # the pegboard's holes
+        for x in np.arange(x0 + .08, x1 - .05, .12):
+            img.paste((214, 212, 204), (int(X(x)), int(Y(z)), int(X(x)) + 3, int(Y(z)) + 3))
+    for row, z in enumerate((2.45, 1.95)):
+        for i, g in enumerate(np.arange(x0 + .15, x1 - 1.0, 1.25)):
+            _rifle(img, X(g + .06 * row), Y(z), k, scope=(i + row) % 2 == 0, kind=(i + 2 * row) % 3)
+    quad(img, (X(x0 + .05), Y(1.45)), (X(x1 - .05), Y(1.45)), (X(x1 - .05), Y(1.38)), (X(x0 + .05), Y(1.38)), SHELF,
+         (150, 146, 136), 1.5)
+    for z in (1.35, .98):                                   # two rows of cubbies, a pistol in most
+        for i, x in enumerate(np.arange(x0 + .1, x1 - .3, .42)):
+            quad(img, (X(x), Y(z)), (X(x + .38), Y(z)), (X(x + .38), Y(z - .33)), (X(x), Y(z - .33)), (250, 250, 246),
+                 (170, 166, 156), 1.5, 0)
+            if (i * 3 + int(z * 10)) % 5:
+                _pistol(img, X(x + .07), Y(z - .1), k, flip=(i % 2 == 0))
     if glass in ('whole', 'starred'):                       # reflections: two pale diagonal bands on the glass
         for u in (.12, .62):
             xa = a[0] + (b[0] - a[0]) * u
@@ -466,6 +478,30 @@ def _window(img, X, Y, x0, x1, glass):
             shape(img, [pts], (210, 226, 236), (90, 100, 110), 2)
     quad(img, (a[0] - 6, a[1] - 6), (b[0] + 6, a[1] - 6), (b[0] + 6, b[1] + 6), (a[0] - 6, b[1] + 6), None,
          (150, 150, 160), 5, 0)
+
+
+def _rifle(img, x, y, k, scope=False, kind=0):
+    """A long gun side on, 1.0-1.1 m, muzzle left: barrel, receiver, magazine, grip, stock (a filled silhouette)."""
+    L = (1.05, .95, 1.1)[kind] * k
+    u = lambda a, b: (x + a * L, y + b * k)                 # noqa: E731  a along the gun 0..1, b metres down
+    body = [u(0, -.01), u(.42, -.015), u(.45, -.035), u(.72, -.035), u(.74, -.02), u(1, -.03), u(1, .11),
+            u(.93, .12), u(.78, .03), u(.72, .035), u(.70, .1), u(.665, .1), u(.67, .035), u(.6, .035),
+            u(.57, .13 if kind == 1 else .02), u(.53, .13 if kind == 1 else .02), u(.53, .03), u(.42, .025), u(0, .015)]
+    shape(img, [body], GUN, INK, 2)
+    if kind == 2:                                           # a wooden stock and fore-end on the hunting rifle
+        shape(img, [[u(.74, -.02), u(1, -.03), u(1, .11), u(.93, .12), u(.78, .03)]], (122, 78, 46), INK, 1.5)
+    if scope:
+        shape(img, [[u(.47, -.045), u(.7, -.045), u(.7, -.085), u(.47, -.085)]], (40, 42, 48), INK, 1.5)
+        shape(img, [[u(.44, -.04), u(.48, -.04), u(.48, -.095), u(.44, -.095)]], (40, 42, 48), INK, 1.5)
+
+
+def _pistol(img, x, y, k, flip=False):
+    """A pistol side on (~0.2 m): slide, grip, trigger guard."""
+    f = -1 if flip else 1
+    ox = x + (.24 * k if flip else 0)
+    u = lambda a, b: (ox + f * a * k, y + b * k)            # noqa: E731
+    shape(img, [[u(0, -.04), u(.2, -.04), u(.2, .0), u(.17, .0), u(.165, .12), u(.12, .12), u(.115, .03),
+                 u(.09, .03), u(.08, .05), u(.06, .05), u(.06, .0), u(0, .0)]], GUN, INK, 1.6)
 
 
 def _shutter(img, X, Y, x0, x1, up):
@@ -537,14 +573,14 @@ def t3(t=0.0, marks=False):
         poly(img, [cam.p(x, 6), cam.p(x, 300)], None, (160, 154, 146), 1.2, 0)
     for d in (8, 10, 13, 17, 22, 30, 42, 60):
         poly(img, [(0, cam.p(0, d)[1]), (W, cam.p(0, d)[1])], None, (160, 154, 146), 1.2, 0)
-    _kiosk(img, cam, 9.5, 32, t)
-    _bikes(img, cam, 6.6, 21, t)
+    _kiosk(img, cam, 6.2, 30, t)                            # chat 10: mid-right, behind the bikes (was off frame)
+    _bikes(img, cam, 2.1, 14, t)                            # in the gap between the front line and the police
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     _car(front, cam, t)
     if marks:
-        for x in np.arange(-4.6, -.5, 1.0):
+        for x in np.arange(-1.7, 1.05, .55):                # the front line, x 200-640 px
             person_mark(img, cam, x, 11.8)
-        for x in (5.4, 6.2, 7.0, 7.8):
+        for x in (2.5, 3.0, 3.5):                           # the police, x 900-1080 px
             person_mark(img, cam, x, 11)
     return img, front
 
@@ -568,35 +604,57 @@ def _marianne(img, cam):
     poly(img, [(cx + 2.0 * k, Z(2.0)), (cx + 2.8 * k, Z(3.1)), (cx + 3.6 * k, Z(2.1))], None, (40, 40, 40), 3, 0)
     quad(img, (cx - 7.6 * k, Z(4.2)), (cx + 7.6 * k, Z(4.2)), (cx + 7.0 * k, Z(5.0)), (cx - 7.0 * k, Z(5.0)), STONE_P)
     # the drum (tapering) with its cornice
-    quad(img, (cx - 3.6 * k, Z(5.0)), (cx + 3.6 * k, Z(5.0)), (cx + 3.0 * k, Z(14.6)), (cx - 3.0 * k, Z(14.6)), STONE_P)
-    poly(img, [(cx + 2.2 * k, Z(5.2)), (cx + 1.8 * k, Z(14.4))], None, STONE_S, 6, 0)
-    quad(img, (cx - 3.5 * k, Z(14.6)), (cx + 3.5 * k, Z(14.6)), (cx + 3.2 * k, Z(15.6)), (cx - 3.2 * k, Z(15.6)), STONE_S)
+    # chat 10: the drum slimmer and taller (fr1/fr2: about a third as wide as it is tall), its shadow side shaded
+    quad(img, (cx - 2.7 * k, Z(5.0)), (cx + 2.7 * k, Z(5.0)), (cx + 2.2 * k, Z(15.4)), (cx - 2.2 * k, Z(15.4)), STONE_P)
+    quad(img, (cx + 1.3 * k, Z(5.0)), (cx + 2.7 * k, Z(5.0)), (cx + 2.2 * k, Z(15.4)), (cx + 1.0 * k, Z(15.4)), STONE_S,
+         None, amt=0)
+    for z in (7.5, 12.8):                                   # carved bands round the drum
+        quad(img, (cx - 2.6 * k, Z(z)), (cx + 2.6 * k, Z(z)), (cx + 2.6 * k, Z(z + .35)), (cx - 2.6 * k, Z(z + .35)),
+             STONE_S, INK, 1.2, 0)
+    quad(img, (cx - 2.8 * k, Z(15.4)), (cx + 2.8 * k, Z(15.4)), (cx + 2.5 * k, Z(16.2)), (cx - 2.5 * k, Z(16.2)), STONE_S)
     # three seated stone figures round the drum, and the bronze lion in front
-    for (x, z, s) in ((-4.6, 5.0, 1), (4.6, 5.0, -1), (0, 6.6, 1)):
-        body = [(cx + (x - 1.4) * k, Z(z)), (cx + (x + 1.4) * k, Z(z)), (cx + (x + 1.1) * k, Z(z + 2.6)),
-                (cx + (x + .3 * s) * k, Z(z + 4.6)), (cx + (x - .9) * k, Z(z + 3.4))]
-        poly(img, body, STONE_P, INK, 2)
-        IS.ell(img, cx + (x + .2 * s) * k, Z(z + 5.1), .55 * k, .6 * k, STONE_P, INK, 2)
-        poly(img, [(cx + (x - .7) * k, Z(z + 2.4)), (cx + (x + .9) * k, Z(z + 2.0))], None, STONE_S, 2, 0)
+    FIG, FIG_S, FIG_D = (224, 216, 200), (184, 174, 158), (150, 140, 126)   # chat 10: shaded, not white ghosts
+    for (x, z, s) in ((-3.6, 5.0, 1), (3.6, 5.0, -1), (0, 7.8, 1)):
+        X_ = lambda u: cx + (x + u * s) * k                 # noqa: E731  u mirrored so each figure faces out
+        lap = [(X_(-1.5), Z(z)), (X_(1.5), Z(z)), (X_(1.4), Z(z + 1.6)), (X_(.2), Z(z + 2.0)), (X_(-1.2), Z(z + 1.8))]
+        torso = [(X_(-1.1), Z(z + 1.6)), (X_(.5), Z(z + 1.8)), (X_(.4), Z(z + 3.6)), (X_(-.2), Z(z + 3.9)),
+                 (X_(-1.0), Z(z + 3.5))]
+        m = shape(img, [lap, torso], FIG, INK, 2)
+        shape(img, [[(X_(.1), Z(z)), (X_(1.6), Z(z)), (X_(1.6), Z(z + 4)), (X_(.0), Z(z + 4))]], FIG_S, None, clip=m)
+        for u in (-.7, .3, 1.0):                            # drapery folds falling over the knees
+            poly(img, [(X_(u), Z(z + 1.7)), (X_(u + .15), Z(z + .9)), (X_(u - .05), Z(z + .1))], None, FIG_D, 2, 0)
+        poly(img, [(X_(-.9), Z(z + 3.3)), (X_(.9), Z(z + 2.0)), (X_(1.3), Z(z + 1.4))], None, INK, 6, 0)   # the arm
+        poly(img, [(X_(-.9), Z(z + 3.3)), (X_(.9), Z(z + 2.0)), (X_(1.3), Z(z + 1.4))], None, FIG_S, 3.5, 0)
+        hx, hy = X_(-.4), Z(z + 4.45)
+        IS.ell(img, hx, hy, .5 * k, .58 * k, FIG, INK, 2)
+        shape(img, [[(hx - .52 * k, hy), (hx - .45 * k, hy - .5 * k), (hx + .1 * k, hy - .68 * k),
+                     (hx + .5 * k, hy - .35 * k), (hx + .3 * k, hy - .15 * k), (hx - .3 * k, hy + .4 * k)]], FIG_D, INK, 1.5)
     poly(img, [(cx - 1.6 * k, Z(5.0)), (cx + 1.8 * k, Z(5.0)), (cx + 1.7 * k, Z(6.2)), (cx + .6 * k, Z(6.6)),
                (cx - 1.0 * k, Z(6.4)), (cx - 1.7 * k, Z(5.8))], BRONZE, INK, 2)       # the lion lying by the urn
     IS.ell(img, cx - 1.35 * k, Z(6.5), .55 * k, .5 * k, BRONZE, INK, 2)
     # Marianne: robe, Phrygian cap, the right arm up holding the olive branch, the tablet against her left side
-    body = [(cx - 1.4 * k, Z(15.6)), (cx + 1.4 * k, Z(15.6)), (cx + 1.0 * k, Z(19.5)), (cx + .9 * k, Z(22.5)),
-            (cx + .5 * k, Z(23.4)), (cx - .5 * k, Z(23.4)), (cx - 1.0 * k, Z(21.5)), (cx - 1.1 * k, Z(18.5))]
+    # chat 10: a full figure, 9.5 m (fr1): wide robe flaring at the feet, shoulders, head ~1.2 m
+    body = [(cx - 2.0 * k, Z(16.2)), (cx + 2.0 * k, Z(16.2)), (cx + 1.5 * k, Z(18.5)), (cx + 1.25 * k, Z(21.5)),
+            (cx + 1.4 * k, Z(22.9)), (cx + .6 * k, Z(23.6)), (cx - .6 * k, Z(23.6)), (cx - 1.4 * k, Z(22.8)),
+            (cx - 1.5 * k, Z(20.5)), (cx - 1.7 * k, Z(18.0))]
     poly(img, body, BRONZE, INK, 2.4)
-    poly(img, [(cx - .2 * k, Z(16)), (cx + .3 * k, Z(20)), (cx - .1 * k, Z(22.6))], None, BRONZE_L, 2, 0)
-    IS.ell(img, cx, Z(24.1), .55 * k, .65 * k, BRONZE, INK, 2.4)
-    poly(img, [(cx - .55 * k, Z(24.3)), (cx + .2 * k, Z(25.4)), (cx + .8 * k, Z(24.9)), (cx + .6 * k, Z(24.3))],
+    for (xa, xb) in ((-.9, -.4), (.1, .3), (.8, .5)):      # robe folds
+        poly(img, [(cx + xa * k, Z(16.4)), (cx + (xa + xb) / 2 * k, Z(19.5)), (cx + xb * k, Z(22.6))], None, BRONZE_L,
+             2.4, 0)
+    poly(img, [(cx - 1.3 * k, Z(21.2)), (cx + 1.2 * k, Z(21.6))], None, BRONZE_L, 3, 0)    # the belt
+    IS.ell(img, cx, Z(24.3), .62 * k, .72 * k, BRONZE, INK, 2.4)
+    poly(img, [(cx - .66 * k, Z(24.4)), (cx - .1 * k, Z(25.6)), (cx + .9 * k, Z(25.3)), (cx + .7 * k, Z(24.5))],
          BRONZE, INK, 2)                                     # the cap, its tip forward
-    arm = [(cx + .5 * k, Z(23.0)), (cx + 1.3 * k, Z(25.5)), (cx + 1.6 * k, Z(27.2))]
-    poly(img, arm, None, INK, 9.5, 0)
-    poly(img, arm, None, BRONZE, 6, 0)
-    for j in range(5):                                      # the olive branch above her fist
-        a = -1.9 + j * .32
-        poly(img, [(cx + 1.6 * k, Z(27.2)), (cx + 1.6 * k + 1.0 * k * math.cos(a), Z(27.2) + 1.0 * k * math.sin(a))],
-             None, (70, 84, 56), 3, 0)
-    quad(img, (cx - 1.5 * k, Z(18.4)), (cx - .7 * k, Z(18.6)), (cx - .6 * k, Z(20.6)), (cx - 1.4 * k, Z(20.4)),
+    arm = [(cx + .9 * k, Z(23.0)), (cx + 1.5 * k, Z(25.4)), (cx + 1.7 * k, Z(27.6))]
+    poly(img, arm, None, INK, 12, 0)
+    poly(img, arm, None, BRONZE, 8, 0)
+    IS.ell(img, cx + 1.7 * k, Z(27.6), .3 * k, .3 * k, BRONZE, INK, 2)    # the fist
+    for j in range(6):                                      # the olive branch above her fist
+        a = -2.0 + j * .3
+        ex, ey = cx + 1.7 * k + 1.3 * k * math.cos(a), Z(27.6) + 1.3 * k * math.sin(a)
+        poly(img, [(cx + 1.7 * k, Z(27.6)), (ex, ey)], None, (70, 84, 56), 3, 0)
+        IS.ell(img, ex, ey, .18 * k, .1 * k, (96, 116, 70), INK, 1)
+    quad(img, (cx - 1.9 * k, Z(18.2)), (cx - .8 * k, Z(18.4)), (cx - .7 * k, Z(21.0)), (cx - 1.8 * k, Z(20.8)),
          BRONZE_L, INK, 2)                                   # the tablet of the Rights of Man
 
 
@@ -620,37 +678,54 @@ def _bikes(img, cam, x, d, t):
     """A heap of rental bikes (green Lime, Velib), tumbled in the road between the lines, burning (fr4)."""
     k = cam.ppm(d)
     bx, by = cam.p(x, d)
-    flames(img, bx, by - .3 * k, 3.6 * k, 2.6 * k, t, seed=7, n=6)
+    flames(img, bx, by - .2 * k, 2.2 * k, 1.4 * k, t, seed=7, n=7)
     rng = np.random.default_rng(12)
     for i in range(7):
-        cx, cy = bx + (i - 3) * .45 * k + rng.uniform(-.1, .1) * k, by - (.25 + .35 * (i % 3)) * k
+        cx, cy = bx + (i - 3) * .3 * k + rng.uniform(-.1, .1) * k, by - (.3 + .3 * (i % 3)) * k
         a = math.radians(rng.uniform(-35, 35))
         ca, sa = math.cos(a), math.sin(a)
         colr = [(92, 196, 70), (120, 150, 170), (246, 130, 40)][i % 3]
         w1, w2 = (cx - .5 * k * ca, cy - .5 * k * sa), (cx + .5 * k * ca, cy + .5 * k * sa)
         for (wx, wy) in (w1, w2):
-            IS.ell(img, wx, wy, .32 * k, .32 * k, None, (30, 30, 34), 3)
+            IS.ell(img, wx, wy, .32 * k, .32 * k, None, (30, 30, 34), 5)
         top = (cx - .05 * k * sa, cy - .45 * k)
-        poly(img, [w1, top, w2], None, INK, 6, 0)
-        poly(img, [w1, top, w2], None, colr, 3.5, 0)
-        poly(img, [top, (top[0] + .3 * k, top[1] - .25 * k)], None, INK, 3, 0)
+        poly(img, [w1, top, w2, w1], None, INK, 10, 0)
+        poly(img, [w1, top, w2, w1], None, colr, 6, 0)
+        poly(img, [top, (top[0] + .3 * k, top[1] - .25 * k)], None, INK, 5, 0)
+        IS.ell(img, w1[0], w1[1] - .4 * k, .14 * k, .07 * k, (40, 40, 44), INK, 1.5)    # the saddle
 
 
 def _car(img, cam, t):
-    """The burnt-out estate car, foreground-left (d 6): its near rear quarter only, the rest out of frame; the
-    frame of it is dark, the glass gone, fire through the windows and over the roof."""
-    k = cam.ppm(6)
-    gx, gy = cam.p(-1.0, 6)
-    flames(img, gx - 1.2 * k, gy - 1.25 * k, 2.4 * k, 1.9 * k, t, seed=11, n=6)
-    body = [(-20, gy - .3 * k), (gx, gy - .3 * k), (gx + .08 * k, gy - .95 * k), (gx - .25 * k, gy - 1.05 * k),
-            (gx - .55 * k, gy - 1.45 * k), (-20, gy - 1.5 * k)]
-    poly(img, body, (66, 60, 60), INK, 3)
-    win = [(gx - .62 * k, gy - 1.08 * k), (gx - .4 * k, gy - 1.35 * k), (-20, gy - 1.38 * k), (-20, gy - 1.08 * k)]
-    poly(img, win, (250, 150, 50), INK, 2)
-    poly(img, [(gx - .1 * k, gy - .95 * k), (gx - .1 * k, gy - .7 * k)], None, (150, 40, 30), 6, 0)  # the tail light
-    IS.ell(img, gx - .9 * k, gy - .3 * k, .34 * k, .34 * k, (36, 34, 36), INK, 2.4)
-    IS.ell(img, gx - .9 * k, gy - .3 * k, .14 * k, .14 * k, (90, 86, 86), None, 0)
-    flames(img, gx - .55 * k, gy - 1.05 * k, .9 * k, .7 * k, t + .3, seed=13, n=3)
+    """The burnt-out estate car, foreground-left (fr3): drawn in the camera (chat 10; the draft was a flat block):
+    rear face at d 6 (its right corner at x ~100 px, the rest off frame), the right side running away to d 10.7;
+    charred paint, the glass gone, fire inside showing through the window holes and ~1.2 m over the roof."""
+    X0, X1, D0, D1 = -3.0, -1.2, 6.0, 10.7
+    P = lambda x, d, z: cam.p(x, d, z)                      # noqa: E731
+    CH, CH_D, RUST = (74, 66, 64), (54, 48, 48), (128, 76, 52)
+    # the fire first, its foot hidden inside the body: it climbs from behind the roofline (we look up at the car)
+    k = cam.ppm(D0 + 1.5)
+    gx, gy = P(X1 - .4, D0 + 1.8, 1.25)
+    flames(img, gx, gy, 1.7 * k, 1.15 * k, t, seed=11, n=7)
+    gx2, gy2 = P(X1 - .5, D0 + .2, 1.3)
+    flames(img, gx2, gy2, .9 * cam.ppm(D0), .7 * cam.ppm(D0), t + .3, seed=13, n=4)
+    side = [P(X1, D0, .3), P(X1, D1, .3), P(X1, D1, .85), P(X1, D1 - .7, .95), P(X1, D1 - 1.5, 1.45), P(X1, D0, 1.5)]
+    shape(img, [side], CH, INK, 3)
+    shape(img, [[P(X1, D0 + 1.2, .5), P(X1, D0 + 2.6, .45), P(X1, D0 + 2.4, .85), P(X1, D0 + 1.4, .9)]], RUST, None)
+    rear = [P(X0, D0, .3), P(X1, D0, .3), P(X1, D0, 1.5), P(X0, D0, 1.5)]
+    shape(img, [rear], CH_D, INK, 3)
+    # window holes: the fire inside shows through them
+    holes = [[P(X1, D0 + .25, 1.0), P(X1, D1 - 1.6, 1.0), P(X1, D1 - 1.6, 1.4), P(X1, D0 + .25, 1.4)],
+             [P(X0 + .15, D0, 1.0), P(X1 - .15, D0, 1.0), P(X1 - .15, D0, 1.42), P(X0 + .15, D0, 1.42)]]
+    shape(img, holes, (250, 150, 50), INK, 2.4)
+    for xx in (D0 + 1.8, D0 + 3.0):                         # door pillars across the side hole
+        shape(img, [[P(X1, xx - .06, 1.0), P(X1, xx + .06, 1.0), P(X1, xx + .06, 1.42), P(X1, xx - .06, 1.42)]], CH, INK, 2)
+    shape(img, [[P(X1 - .12, D0, .85), P(X1 - .02, D0, .85), P(X1 - .02, D0, 1.12), P(X1 - .12, D0, 1.12)]],
+          (150, 40, 30), INK, 1.5)                          # the tail light
+    for dc in (D0 + .75, D1 - .95):                         # wheels: circles in the side's own plane
+        tyre = [P(X1 + .02, dc + .34 * math.cos(a_), .34 + .34 * math.sin(a_)) for a_ in np.linspace(0, 6.28, 24)]
+        hub = [P(X1 + .03, dc + .14 * math.cos(a_), .34 + .14 * math.sin(a_)) for a_ in np.linspace(0, 6.28, 16)]
+        shape(img, [tyre], (36, 34, 36), INK, 2.4)
+        shape(img, [hub], (110, 104, 100), None)
 
 
 # ================================================================================================= T4
