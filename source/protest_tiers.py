@@ -455,20 +455,28 @@ def t2_actors(lt):
     tt = min(lt, 3.2)                                       # 3.2: everyone freezes mid-swing in the blue
     out = []
 
-    def run_in(x0, x1, t0, t1):
-        u = (tt - t0) / (t1 - t0)
-        return lerp(x0, x1, min(1.0, max(0.0, u))), u < 1.0
+    LANES = (10.4, 10.8, 11.2, 11.6, 12.0, 13.0, 13.4)      # chat 14: each runner its own depth lane on the way in
+    SPRINT = 6.2                                            # (same lane: they ran through each other)
 
-    def lane(n, de, x0, x1, t0, t1):                       # chat 14: each runner its own depth lane on the way in
-        u = min(1.0, max(0.0, (tt - t0) / (t1 - t0)))     # (same lane: they ran through each other), easing
-        return lerp((10.4, 10.8, 11.2, 11.6, 12.0, 13.0, 13.4)[n], de, u ** 3)   # to its mark (the swinger runs at 12.6)
+    def dash(n, x0, x1, de, t1):
+        """chat 18 (pre-flight: 9-14 m/s, they ran 4-6 m in half a second): the run's length is set by a real sprint
+        (SPRINT m/s at its fastest), arriving at t1 as before; x even, the depth lane eased smoothly to the mark.
+        -> (x, d, running). t0 may be before the cut: they are already running when the tier opens."""
+        dl = LANES[n] if n is not None else de
+        T = math.hypot(x1 - x0, 1.5 * (de - dl)) / SPRINT
+        u = (tt - (t1 - T)) / T
+        v = min(1.0, max(0.0, u))
+        return lerp(x0, x1, v), lerp(dl, de, ease(v)), u < 1.0
+
+    def run_in(x0, x1, t0, t1):
+        x, _, running = dash(None, x0, x1, 0.0, t1)
+        return x, running
 
     # haulers (0.4-1.0), then they slide through the gap into the shop (1.3-1.7)
     for k, (xe, de) in enumerate(((-0.9, 13.3), (0.6, 13.3))):
-        x, running = run_in(-4.6 - k * 0.5, xe, 0.0 + k * 0.08, 0.45)
+        x, d, running = dash(k, -3.3 - k * 0.5, xe, de, 0.45)
         if running:
-            out.append(Actor(f'hauler{k + 1}', 'rioter', x, lane(k, de, -4.6 - k * .5, xe, k * .08, .45), 90, 'run',
-                             t=tt, tier='t2'))
+            out.append(Actor(f'hauler{k + 1}', 'rioter', x, d, 90, 'run', t=tt, tier='t2'))
         elif tt < 1.3:
             out.append(Actor(f'hauler{k + 1}', 'rioter', x, de, 180, 'haul', tier='t2'))
         else:
@@ -477,7 +485,7 @@ def t2_actors(lt):
                              'throw' if u >= 1 else 'stand', u=(tt * 1.7 + k * .5) % 1, tier='t2',
                              clip=T2_WR if u > 0.5 else None))
     # the road-sign swinger: runs in carrying it low, winds up 0.6, swings through the glass at 1.0, keeps swinging
-    x, running = run_in(-5.2, -0.5, 0.05, 0.6)            # chat 15: mid-window (was -1.55: the sign at the frame edge)
+    x, running = run_in(-3.3, -0.5, 0.05, 0.6)            # chat 15: mid-window (was -1.55: the sign at the frame edge)
     if running:
         out.append(Actor('swinger', 'rioter', x, 12.0, 90, 'run_sign', t=tt, tier='t2'))
     else:
@@ -491,10 +499,9 @@ def t2_actors(lt):
         out.append(Actor('swinger', 'rioter', x, 12.0, 90, 'swing', u=u, tier='t2'))
     # five more: two throw stones into the shop, one kicks the A-board over (1.4), two by the closed shop
     for k, (xe, de) in enumerate(((0.9, 12.4), (1.55, 11.9), (-2.15, 12.3), (2.25, 12.5), (2.9, 12.0))):
-        x, running = run_in(-5.0 - k * .4, xe, 0.05 + k * 0.07, 0.6 + k * .05)
+        x, d, running = dash(k + 2, -3.3 - k * .3, xe, de, 0.6 + k * .05)
         if running:
-            out.append(Actor(f'runner{k + 1}', 'rioter', x, lane(k + 2, de, -5.0 - k * .4, xe, 0.05 + k * 0.07,
-                                                                   0.6 + k * .05), 90, 'run', t=tt + k * .1, tier='t2'))
+            out.append(Actor(f'runner{k + 1}', 'rioter', x, d, 90, 'run', t=tt + k * .1, tier='t2'))
         else:
             u = ((tt - 0.6) * 1.4 + k * .3) % 1.0
             yaw = 180 if k < 2 else 90 if k == 2 else 135
@@ -680,8 +687,8 @@ def t3_actors(lt):
         # chat 14: 0.7 m apart (at 0.55 each throwing hand passed into the next one's back)
         dx, _ = field('t3', x, 11.8, lt, k)
         if jet and lt > 2.7 + 0.05 * k:                       # broken by the jet: running out left
-            u = lt - 2.7 - 0.05 * k
-            out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3 - 4.5 * u, 11.8 - .3 * k % 1, -90, 'run', t=lt,
+            u = lt - 2.7 - 0.05 * k                          # chat 18: lane step eased (it snapped 0.9 m)
+            out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3 - 4.5 * u, 11.8 - (.3 * k % 1) * ease(min(1.0, u / .35)), -90, 'run', t=lt,
                              tier='t3'))
         elif 0.75 <= lt < 2.6:
             u = ((lt - 0.75) * 1.6 + k * 0.37) % 1.0
@@ -865,7 +872,8 @@ def t4_actors(lt):
         dx = 1.6 * ease((lt - 0.9) / 1.0) + 1.4 * push
         state = 'run' if 0.9 < lt < 1.9 else 'throw'
         u = ((lt * 1.8) + k * .29) % 1.0
-        out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx, 16.9 + 0.65 * (k % 3), 90, state, u=u, t=lt, tier='t4'))
+        out.append(Actor(f'rioter{k + 1}', 'rioter', x0 + dx, 16.9 + 0.65 * (k % 3), 90, state, u=u, t=lt + .35,
+                         tier='t4'))   # chat 18: +.35 starts the run on the step nearest the throw stance (feet snapped 68 cm)
     return out
 
 
@@ -1211,17 +1219,28 @@ def LINE_SUBJECTS():
 
 
 # chat 17 (pre-flight): the three crowd moments the staging means, looked at full size (notes "## Exceptions")
-TOUCHES = [('hauler*', 'runner*', 4.25, 4.85, 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
-           ('hauler*', 'hauler*', 4.25, 4.85, 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
-           ('runner*', 'runner*', 4.25, 7.95, 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),
-           ('runner*', 'swinger', 4.25, 4.85, 'T2 run-in: the swinger is in the crush', 0.10),
-           ('front*', 'front*', 10.8, 11.0, 'T3 run-out: the front line breaks and runs left as a pack', 0.04),
+# chat 18: the run-in is a real sprint (bodies 6.2 m/s at most, dash()); a sprinter's feet, shins and arms swing at up
+# to twice the body's speed, past clipcheck's 7 m/s walking cap (Exceptions row 'FAST_OK')
+FAST_OK = ([(p, 4.0, 4.9) for p in ('hauler*', 'runner*', 'swinger')]
+           + [(p, 10.7, 12.0) for p in ('front*',)]          # T3 run-out: the same sprint from the jet
+           + [(f'rioter{k}.foot{sd}', 12.9, 13.9) for k in range(1, 7) for sd in 'LR']   # T4 surge: running feet
+           # the stone throws: a throwing hand really reaches ~20 m/s (clipcheck caps it at 12, the forearm at 10)
+           + [(f'{w}{k}.{part}{sd}', t0, t1) for w, ks, t0, t1 in (('runner', range(1, 6), 4.6, 7.25),
+                                                                  ('hauler', (1, 2), 5.2, 7.25),
+                                                                  ('front', range(1, 5), 8.7, 10.65),
+                                                                  ('rioter', range(1, 9), 12.0, 16.0))
+              for k in ks for part in ('hand', 'forearm') for sd in 'LR'])
+TOUCHES = [('hauler*', 'runner*', 4.0, 4.85, 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
+           ('hauler*', 'hauler*', 4.0, 4.85, 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
+           ('runner*', 'runner*', 4.0, 7.95, 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),
+           ('runner*', 'swinger', 4.0, 4.85, 'T2 run-in: the swinger is in the crush', 0.10),
+           ('front*', 'front*', 10.7, 11.3, 'T3 run-out: the front line breaks and runs left as a pack', 0.04),
            ('policia*', 'rioter*', 12.0, 16.0, 'T4 melee: rioters slam into the shields (brief 26)', 0.20),
            ('policia*', 'policia*', 14.0, 16.0, 'T4 melee: the shield line buckles back into itself', 0.06)]
-ORDER_SWAPS = [('hauler*', 'runner*', 4.25, 4.85, 'T2 run-in: they cross in the crush'),
-               ('hauler*', 'hauler*', 4.25, 4.85, 'T2 run-in'), ('runner*', 'runner*', 4.25, 4.85, 'T2 run-in'),
-               ('runner*', 'swinger', 4.25, 4.85, 'T2 run-in'), ('hauler*', 'swinger', 4.25, 4.85, 'T2 run-in'),
-               ('front*', 'front*', 10.8, 11.0, 'T3 run-out'), ('crs*', 'front*', 10.8, 11.0, 'T3 run-out'),
+ORDER_SWAPS = [('hauler*', 'runner*', 4.0, 4.85, 'T2 run-in: they cross in the crush'),
+               ('hauler*', 'hauler*', 4.0, 4.85, 'T2 run-in'), ('runner*', 'runner*', 4.0, 4.85, 'T2 run-in'),
+               ('runner*', 'swinger', 4.0, 4.85, 'T2 run-in'), ('hauler*', 'swinger', 4.0, 4.85, 'T2 run-in'),
+               ('front*', 'front*', 10.7, 11.3, 'T3 run-out'), ('crs*', 'front*', 10.7, 11.3, 'T3 run-out'),
                ('policia*', 'policia*', 14.0, 14.3, 'T4 melee: the line buckles'),
                ('policia*', 'rioter*', 14.0, 14.3, 'T4 melee: rioters break through the line')]
 ALLOWED = [(a, b, t0, t1) for a, b, t0, t1, *_ in TOUCHES]   # clipcheck reads the same meant contacts
