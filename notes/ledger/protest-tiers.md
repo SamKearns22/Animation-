@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 21.45% of a week; spent 27.88% (+6.43); 14 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 21.45% of a week; spent 29.75% (+8.30); 15 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 27.88% of the 4% planned so far; at this rate the film lands at 123.2%.**
+**Forecast: Spent 29.75% of the 4% planned so far; at this rate the film lands at 123.2%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -36,3 +36,4 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-14 | 88587b71 | est | opus | auto |  | 3.22 |  | 0 | 0 |
 | 2026-11-15 | bed18e90 | est | opus | auto |  | 2.6 |  | 0 | 0 |
 | 2026-11-15 | deea8d43 | est | opus | auto |  | 1.91 |  | 0 | 0 |
+| 2026-11-15 | 264e577a | est | opus | auto |  | 1.87 |  | 0 | 0 |
