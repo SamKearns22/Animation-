@@ -663,7 +663,11 @@ def t2_fx(img, lt):
         IS.poly(img, [a, b], None, (220, 40, 36), 10, 0)       # a red-painted crowbar
         IS.poly(img, [b, (b[0] + 18, b[1] - 14)], None, INK, 12, 0)
         IS.poly(img, [b, (b[0] + 18, b[1] - 14)], None, (220, 40, 36), 6, 0)
-    # the impact flash where the sign meets the glass (1.0)
+    t2_flash(img, tt)
+
+
+def t2_flash(img, tt):
+    """The impact flash where the sign meets the glass (1.0); its own function so the shape check draws it alone."""
     if 0.98 <= tt < 1.15:
         S.glow_disc(img, *RF2.R(500, 905), 130, (255, 250, 210), amt=.7)
 
@@ -1349,6 +1353,11 @@ def t4_under(img, lt):
             h = heli_state(1.0 + n * 0.1)
             r = 20 + 30 * min(a, 1.2)
             S.smoke(img, [(h['x'] + 10, h['y'] - 10 - 30 * a, r)], (60, 40, 40), (96, 70, 66), lw=2)
+    t4_fireball(img, lt)
+
+
+def t4_fireball(img, lt):
+    """The big fireball rising behind the ministry (7.5); its own function so the shape check draws it alone."""
     if lt >= T4_FIRE:                                      # chat 15: a layered fireball rising (was a flat disc)
         g = ease((lt - T4_FIRE) / 0.7)
         cx, cy = 720, lerp(640, 400, g)                    # chat 16 (hunt 2: flat disc cut by the edge): in frame,
@@ -1411,11 +1420,7 @@ def t4_fx(img, lt):
         if u < 1:
             rx, ry = lerp(x0, hx, u), lerp(y0, hy, u) - 40 * math.sin(math.pi * u)
             S.glow_disc(img, rx, ry, 26, (255, 230, 150), amt=.6)
-    if 0.98 <= lt < 1.3:                                   # the hit: a flash and a burst at the helicopter
-        a = (lt - 0.98) / 0.32
-        hx, hy = R4(S.HELI_HOME[0], S.HELI_HOME[1])
-        S.glow_disc(img, hx, hy, 180 * (0.5 + a), (255, 230, 160), amt=.55 * (1 - a))
-        S.flames(img, hx, hy + 46, 160 * (0.6 + a), 138 * (0.6 + a), lt, seed=91, n=6)
+    t4_hit(img, lt)
     if 0.6 <= lt < 1.1:                                    # chat 15: the backblast out of the launcher's rear
         a = (lt - 0.6) / 0.5
         tx, ty = rpg_tip(0.6)
@@ -1467,6 +1472,15 @@ FIREWORKS = ((HOLD - 0.2, 260, 230, (255, 90, 70)), (HOLD + 0.05, 760, 150, (255
              (HOLD + 0.3, 520, 290, (110, 255, 150)), (HOLD + 0.5, 930, 300, (255, 200, 60)))    # headings
 
 
+def t4_hit(img, lt):
+    """The hit (0.98-1.3): a flash and a burst at the helicopter; its own function so the shape check draws it alone."""
+    if 0.98 <= lt < 1.3:
+        a = (lt - 0.98) / 0.32
+        hx, hy = R4(S.HELI_HOME[0], S.HELI_HOME[1])
+        S.glow_disc(img, hx, hy, 180 * (0.5 + a), (255, 230, 160), amt=.55 * (1 - a))
+        S.flames(img, hx, hy + 46, 160 * (0.6 + a), 138 * (0.6 + a), lt, seed=91, n=6)
+
+
 def burst(img, cx, cy, a, col, k):
     """One firework burst a seconds after it goes off: a flash, sixteen rays drooping as they fade (as T1's)."""
     if not 0 <= a < 0.6:
@@ -1511,7 +1525,7 @@ def _arc(p0, p1, apex, u):
     return x, yb - 4 * (min(p0[1], p1[1]) - top) * u * (1 - u)
 
 
-def molotovs(img, lt):
+def molotovs(img, lt, only=None):
     """Gag a (three buyers) and gag c (the granny): each bottle leaves the thrower's hand, tumbles along its arc
     into the bank and blooms orange; the fires stay, round and flickering; the granny's is the biggest."""
     cam = T4CAM
@@ -1522,6 +1536,8 @@ def molotovs(img, lt):
     hx, hy = cam.p(SLOT[0] - 0.2, SLOT[1], 1.95)
     shots.append((GRANNY_THROW, GRANNY_HIT, (hx, hy), G_LAND, 820, 1.9, 3))
     for t0, t1, p0, p1, apex, big, k in shots:
+        if only is not None and k != only:                 # the shape check draws one bottle alone
+            continue
         if t0 <= lt < t1:
             u = (lt - t0) / (t1 - t0)
             x, y = _arc(p0, p1, apex, u)
@@ -2085,24 +2101,37 @@ def soundtrack(stems=False):
 
 
 # Rule S7: each tier's effects drawn alone on a clear frame at the moment they peak, shape-tested (viewchecks)
-def _fx_at(fn, lt):
-    """An effect drawn alone for the shape check, as the film draws it (chat 29: T4's fire is round only while
-    S.ROUND_FIRE is on, which picture() sets per shot; drawn alone it was left off, so the check saw spiky fire)."""
+def _fx_at(fn, lt, *args):
+    """One effect drawn alone for the shape check, as the film draws it, and only what shows (chat 30).
+    T4's fire is round only while S.ROUND_FIRE is on (chat 29). Each entry draws only its own effect (chat 30: the
+    whole fx layer's scatter of embers, flares and trails read as a star), and the test sees only visible pixels:
+    glow_disc leaves an opaque, unchanged square round each disc on a clear layer, so the effect is drawn on black and
+    on white and kept where either changed."""
     def draw(img):
         keep = S.ROUND_FIRE
-        S.ROUND_FIRE = fn is t4_fx
+        S.ROUND_FIRE = fn in (t4_hit, molotovs, t4_fireball)
+        seen = np.zeros((img.size[1], img.size[0]), bool)
         try:
-            fn(img, lt)
+            for bg in ((0, 0, 0, 255), (255, 255, 255, 255)):
+                lay = Image.new('RGBA', img.size, bg)
+                fn(lay, lt, *args)
+                d = np.abs(np.asarray(lay.convert('RGB'), np.int16) - np.array(bg[:3], np.int16)).max(-1)
+                seen |= d > 24
         finally:
             S.ROUND_FIRE = keep
+        out = np.zeros((img.size[1], img.size[0], 4), np.uint8)
+        out[seen] = (255, 255, 255, 255)
+        img.alpha_composite(Image.fromarray(out, 'RGBA'))
     return draw
 
 
 EFFECTS = [('T1 firework string', 'trail', _fx_at(t1_fx, 1.2)), ('T1 three bursts', 'burst', _fx_at(t1_fx, 1.95)),
-           ('T1 tear-gas haze', 'smoke', _fx_at(t1_fx, 3.6)), ('T2 sign-on-glass flash', 'flash', _fx_at(t2_fx, 1.05)),
+           ('T1 tear-gas haze', 'smoke', _fx_at(t1_fx, 3.6)), ('T2 sign-on-glass flash', 'flash', _fx_at(t2_flash, 1.05)),
            ('T3 stones and gas', 'sparks', _fx_at(t3_fx, 1.6)), ('T3 gas and jet', 'smoke', _fx_at(t3_fx, 3.0)),
-           ('T4 rocket trail', 'trail', _fx_at(t4_fx, 0.9)), ('T4 helicopter hit', 'burst', _fx_at(t4_fx, 1.1)),
-           ('T4 Molotovs and melee dust', 'burst', _fx_at(t4_fx, 2.6)), ('T4 fireball', 'burst', _fx_at(t4_fx, 3.5))]
+           ('T4 rocket trail', 'trail', _fx_at(t4_fx, 0.9)), ('T4 helicopter hit', 'burst', _fx_at(t4_hit, 1.1)),
+           ('T4 first Molotov bloom', 'burst', _fx_at(molotovs, SALES[0] + 0.95, 0)),
+           ("T4 granny's Molotov", 'burst', _fx_at(molotovs, GRANNY_HIT + 0.1, 3)),
+           ('T4 fireball', 'burst', _fx_at(t4_fireball, T4_FIRE + 0.5))]
 
 
 # Rule 18: the props a beat needs, measured on screen where they act (world x, height, depth; size in metres)
