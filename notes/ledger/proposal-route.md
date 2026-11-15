@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 18.93%; 5 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate ?% of a week; spent 19.24%; 5 chats, 0 rounds, 0 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -12,4 +12,4 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-15 | cc56a2bc | est | opus | auto |  | 8.33 |  | 0 | 0 |
 | 2026-11-15 | 7cd4fe42 | est | opus | auto |  | 3.23 |  | 0 | 0 |
 | 2026-11-15 | fc8ee5af | est | opus | auto |  | 0.59 |  | 0 | 0 |
-| 2026-11-15 | 03420c9e | est | opus | auto |  | 3.77 |  | 0 | 0 |
+| 2026-11-15 | 03420c9e | est | opus | auto |  | 4.08 |  | 0 | 0 |
