@@ -1,3 +1,3 @@
-protest-tiers: ON HIATUS (Sam, 15 Nov) at animatic 3; restart asked of Sam (Y/N pending).
-Proposal route: rule written (Sam: 1); guard live from next chat; guard-holes judged (helper B), Sam's pick pending.
-Next: on Sam's pick, Sonnet collects real asks to test the guard, then Opus medium fixes it one piece per yes.
+protest-tiers: PAUSED (Sam, 15 Nov) until the budget problems are solved; 53% of a week spent at animatic 3.
+Proposal route: rule written; guard live from next chat; guard fix approved (measure first). Aim: cut every stage's cost.
+Next: Sonnet chat 2 of 8 measures where Protest Tiers' cost went and collects real asks; then Opus high routes fixes.

@@ -1,20 +1,38 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 85 (cost watch), the "rules are permanent" section (write on Sam's number, same chat), 30.
-- **Done (chat 6):** `propose.py hook` in the Stop list (live from the next chat); blocks all 5 replay replies, passes
-  routine Y/N, stop_hook_active, empty input; kittests pass. Prompts locked. Catalogue row. `handover.py end` now
-  flags unrouted entries (the MAP claimed it; nothing called `unrouted_for`).
-- **Done (later, chat 6):** Sam picked install-route option 1; rule written (CLAUDE.md "Rules are permanent",
-  rulebook last table). guard-holes routed: judge picked helper B (22/21, chat 14); checked: numbered "Y/N" with no
-  "?" passes, and one judged proposal shields every other ask in the reply.
-- **Needs Sam:** guard-holes option 1 or 2; restart Protest Tiers Y/N (asked twice, unanswered).
-- **Next (on Sam's answer):** Sonnet chat runs the verdict's Learn step (collect real asks from Protest Tiers and
-  Blessed via list_events, blind helper labels them), then Opus medium builds A, B, C, E one per yes.
-- **Read:** this file only; `source/propose.py` MAP.
-- **Open rule requests:** none (the route rule written 15 Nov, Sam: 1).
-- **For Claude:** rule-wording asks are blocked from next chat (no verdict); ~1.5% of a week per route run (run 2:
-  4.76% / 10 helpers + 2.12% / 5 judges). Named: helpers ran 800-1300 words; case 2 near-miss; helpers twice published their file as a private page (unasked).
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 6):** route rule written (Sam: install-route 1); Stop hook live from chat 7; guard-holes judged (Sam:
+  option 1, Y). Sam: Protest Tiers stays paused "whilst our essential budget problems are unsolved"; the aim now is
+  to cut the cost of every stage as far as possible without harming quality. "Learn step brief" below.
+- **Next: chat 2 of 8, Sonnet** (collecting, routine): the Learn step, parts A and B below, read-only, cap 3% of a
+  week. Then chat 3, Opus high: trace the biggest causes and route the first change (one per yes).
+- **Needs Sam:** nothing until chat 3's first judged option.
+- **Read:** "Learn step brief" below only; `notes/proposals/guard-holes.md` verdict ("Final version", Learn).
+- **Open rule requests:** none.
+- **For Claude:** helpers twice published their file as a private page unasked (named to Sam). Ledger "sonnet" on
+  chats 27, 30, 31 titled "Opus medium" (which is right is unchecked). ~1.3% of a week per route run.
+
+## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
+without harming quality"; read-only, changes nothing outside notes/proposals/learn/)
+Protest Tiers, from notes/ledger/protest-tiers.json (stage spend vs plan, % of a week): plan + unplanned extras 10.1
+(0.7 planned), cast 6.0 (2.1), sets 4.7 (3.7), moves 11.3 (3.1), animatic 1 2.1 (1.4), round 1: cast 3.7, sets 1.3,
+moves 14.0 (4.5). Total 53.2 of ~20 planned, 33 chats at 0.2-3.2% each. Moves (both passes) 25.3, nearly half.
+Prior work to reuse, not redo: notes/cost-diagnosis.md (Job A/B: re-reading history ~49% of an Opus chat; chats
+over 200k cost most; rework of returned faults), notes/budget-job.md (Remakes).
+- **A (guard-holes Learn):** every decision put to Sam (Y/N, numbered choice, "Need", "Decide") in the Protest
+  Tiers and Blessed chats: list_events kinds ["result"] (the turn's final reply), never a whole chat's every kind;
+  then notes/, notes/archive/, notes/morning-report.md where no reply exists. One line each with chat and source, in
+  notes/proposals/learn/asks.md. Then ONE fresh blind helper labels each "change" (rules, tools, checks, kits, how
+  films are built, anything that outlives this film) or "routine", one-line reason; split by a fixed seed into a
+  tuning half and a test half. Say the count of change asks (under 30 in the test half: say so).
+- **B (cost by cause):** for each Protest Tiers chat (sid in the ledger json): get_session usage (cache read/write,
+  output, history at end; no event paging), its stage, and from its result events: the round's notes, repeats,
+  renders. Table in notes/proposals/learn/protest-tiers-costs.md: chat, stage, % of a week, history at end, and for
+  moves and plan stages the cause per chat (rework of a returned fault, re-render, critique helpers, code finding,
+  start-up reading, bookkeeping), "unchecked" where the record does not show it. Also: which of the 13 Nov
+  cost-diagnosis fixes were in force and whether that stage's cost fell.
+- **Stop:** at 3% of a week, or done; commit, push, hand over to chat 3 (Opus high) via create_session.
 
 ## The rule as first sent to Sam (15 Nov, chat 6; superseded by the install-route verdict's wording)
 "Every change goes to helpers before it comes to me (Sam, 15 Nov; takes in 'search before suggesting', 12 Nov). Any change to rules, tools, checks, kits or how the films are built, however small (not animatics, renders, clips or film notes): first the problem and the facts are written down with no answer, after searching the rulebook and kit list for the closest rule or tool; two fresh helpers, from fixed prompts nobody edits, each write their own answer without seeing Claude's; a fresh judge scores all three blind (quality, fewer notes and faults, cost against 15% of a week, risk, can it be undone), asks my eight questions of each, and picks one. I see the top two in plain English with Lost/Added lines and 'Critiqued: N found, N fixed, N named'. A guard refuses any message asking me to approve a change without the judge's verdict. No trials: when I call a film complete, every change since the last film is checked against its results, and any that needs changing goes through this again."

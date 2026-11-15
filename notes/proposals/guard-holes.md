@@ -1,6 +1,6 @@
 # Proposal: The guard misses most change questions and stops some routine ones
 
-Status: open
+Status: adopted (2026-11-15)
 
 ## Problem
 The proposal route's guard (the Stop hook, `propose.py hook` / `reply_faults`) is meant to refuse any reply that asks
