@@ -340,8 +340,8 @@
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 1.6,
+   "model": "sonnet",
+   "cost": 1.89,
    "src": "estimate",
    "sid": "session_01GznaAUsK1QYZrWwoGivzHp"
   }
