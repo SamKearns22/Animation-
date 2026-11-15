@@ -80,3 +80,18 @@
 - **Open rule requests:** the route becomes a rule (with its check) only once a replay passes.
 - **For Claude:** replay-record/ files hold Sam's messages up to each case, never its own push (checked chat 2).
 
+
+## Chat 5 handover (15 Nov), archived by chat 6
+- **Rules that bite next:** 85 (cost watch), 89 (fresh-eye helpers), 30 (find why first).
+- **Done (15 Nov, chat 5):** replay run 2 judged (5 new judges, recorded, in `notes/proposals/replay/run2/`).
+  **PASS, 4 of 5** against "The problem" Better answers (scored below). Every pick was a helper's; the chat's own
+  version scored lowest in all five (10-14 of 25 against 20-22).
+- **Next: Opus HIGH (building the hook-up):** hook `propose.py hook` into `.claude/settings.json` Stop list (honour
+  stop_hook_active, routine Y/N passes; test on the 5 replay replies), `propose.py lock`, a `guides/kit-catalogue.md`
+  row, then the rule wording to Sam (place: rulebook, with its check) and wait for his number.
+- **Needs Sam:** the rule's wording, once the hook-up is built (the next chat asks).
+- **Read:** this file only; `guides/proposal-route/judge.md`; `source/propose.py` MAP (hook, lock).
+- **Open rule requests:** the proposal route as a permanent rule (now earned by the replay).
+- **For Claude:** named, not fixed: helpers ran 800-1300 words (asked under 800); case 2 near-miss (judge added two
+  older films and picked the dearest chats; Sam's better answer was this film, a spread, not extremes).
+

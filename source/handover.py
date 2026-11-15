@@ -302,6 +302,15 @@ def draft_faults(film, notes=None):
             'not on file (rule P16): save them (finish.py does it for the next one) and push']
 
 
+def unrouted_faults(rec):
+    """The proposal route (Sam, 15 Nov): a change put to Sam that the Stop hook blocked once and then let through
+    (stop_hook_active) is logged by propose.py; the handover names each one so it is routed, not forgotten."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import propose
+    return ['UNROUTED: ' + ln + ' (put it through propose.py new/pack/judge/record, or tell Sam it went unjudged)'
+            for ln in propose.unrouted_for(os.path.basename(rec or '')[:8])] if rec else []
+
+
 def report(faults, where):
     for f in faults:
         print(f)
@@ -400,7 +409,8 @@ def main(argv):
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             import ledger
             film = ledger.film_of(rec)
-        return report(_run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes')),
+        return report(_run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
+                      + unrouted_faults(rec),
                       f'(end of chat, {film})')
     if cmd == 'start':
         tail = pos[0].split('_')[-1][-8:].lower()
