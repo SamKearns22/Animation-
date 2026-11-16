@@ -55,7 +55,7 @@ HAS = {'people', 'effects', 'props'}
 FPS = 12
 # round 1 (Sam R4, 15 Nov): tiers 4 / 6 / 8 / 10 s, then the end scene's three shots (notes "## Round 1 plan")
 # round 2 (A2, Sam: Albania 2-3 s longer, new action at full speed): T4 10 -> 12.5 s; the end scene starts later
-LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 12.5), ('ea', 2.4), ('eb', 2.8), ('ec', 3.4))   # A12: C +1 s for the shrug after the line
+LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 12.5), ('ea', 2.4), ('eb', 3.6), ('ec', 3.4))   # A12: C +1 s for the shrug after the line; A23: B 3.6 s (Sam's take runs 3.06 s from 0.3)
 TIERS = ('t1', 't2', 't3', 't4')
 SHOTS, _t = [], 0.0
 for _n, _l in LENS:
@@ -2028,7 +2028,7 @@ SELFIE = (1.7, 10.4)
 MELEE_D = (12.2, 13.6, 15.0, 16.4)               # A4 FRONT: four rows, rioters left, police right
 WALL_D, WALL_X, WALL_Z = 26.3, (1.5, 9.0), 1.05  # A16: the sandbag wall (no raised terrace)
 COVER_D = 27.2
-GRANNY = (-4.3, 17.6)                            # A8: in front of the middle crowd (no cart, no buying)
+GRANNY = (-4.6, 17.5)                            # A8: in front of the middle crowd (no cart, no buying)
 GRANNY_THROW, GRANNY_HIT = 3.4, 4.1
 CROUCH = -0.6                                    # behind the wall: sunk so only the helmet peeps (cut at the wall top)
 
@@ -2117,14 +2117,16 @@ def melee(lt):
             jit = 0.08 * math.sin(lt * 2.1 + n)
             if c == 0 and r % 2 == 0 or (c == 1 and r in (1, 3)):          # fists
                 u = 1 - abs(2 * _cyc(lt, 1.6, off) - 1)
-                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.62 * c + 0.12 * u + jit, d, 90, 'punch', u))
+                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.74 * c - (0.4 if c else 0) + 0.12 * u + jit, d, 90,
+                               'punch', u))   # check (chat 6): a second-rank puncher stands off the machete man's back
             elif c == 0:                                                    # machetes
                 k = _cyc(lt, 1.1, off)
                 u = min(1.0, k / 0.3) if k < 0.3 else 1 - (k - 0.3) / 0.7
                 out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 + jit, d, 90, 'machete', u))
             else:                                                           # stones at the police from behind
                 u = _throw_u(_cyc(lt, 0.7, off))
-                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.62 * c + jit, d, 90, 'throw', u))
+                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.74 * c - (0.4 if r in (1, 3) else 0) + jit, d, 90,
+                               'throw', u))
             off2 = (n * 0.53 + 0.2) % 1.0
             px = cx + 0.42 + 0.6 * c - 0.05 * math.sin(lt * 1.7 + n)
             if c == 0:                                                      # batons v fists: hit, then driven back
@@ -2150,7 +2152,7 @@ def melee_stones(lt):
                 t0 = (q + 0.62 - off) * per
                 if 0 <= lt - t0 < THROW_P[1]:
                     cx = melee_cx(d, t0)
-                    out.append((t0, (cx - 0.42 - 0.62 * c, d, 2.0), (cx + 0.5 + 0.3 * (n % 3), d + 0.1, 1.5)))
+                    out.append((t0, (cx - 0.42 - 0.74 * c, d, 2.0), (cx + 0.5 + 0.3 * (n % 3), d + 0.1, 1.5)))
     return out
 
 
@@ -2253,10 +2255,11 @@ POP_P, POP_W = 2.0, 0.6
 
 def cover_lift(i, lt):
     """How high officer i stands behind the wall (m): CROUCH hidden, 0 up and firing; the pop takes 0.12 s."""
-    if lt >= CHEER - 0.4:
+    if lt >= CHEER - 0.15:
         return CROUCH, False
     c = (lt / POP_P + (i * 0.43) % 1.0) % 1.0 * POP_P
-    up = ease(min(c, POP_W - c) / 0.12) if c < POP_W else 0.0
+    up = ease(min(c, POP_W - c) / 0.25) if c < POP_W else 0.0   # check (chat 6): up over 3 frames, no 0.5 m snap
+    up *= 1 - ease((lt - (CHEER - 0.4)) / 0.25)                # and down by the crash, not snapped out of sight
     return lerp(CROUCH, 0.0, up), up > 0.9
 
 
@@ -2549,6 +2552,40 @@ def t4_mopeds(img, lt):
                       fired=(k == 0 and lt >= MOPED0 + 0.6), both=True)
 
 
+# A21 (Sam 16 Nov): two more mopeds zoom across BEFORE the RPG one, each pillion firing into the air; their own
+# sizes and colours (a big silver maxi-scooter, a small blue one), the riders in Tirana's street mix.
+ZOOMERS = (dict(who='zm1', t=(3.4, 4.5), d=11.2, x=(-8.5, 8.5), pill='rifle',
+                bike=dict(col=(222, 224, 228), dark=(150, 154, 162), k=1.18)),
+           dict(who='zm2', t=(4.25, 5.05), d=9.8, x=(-8.0, 8.0), pill='pistol',
+                bike=dict(col=(36, 96, 176), dark=(22, 60, 120), k=0.86)))
+
+
+def zoomers(lt):
+    """The passing mopeds on screen now, as depth-sorted items ('zoom', z, x, d)."""
+    out = []
+    for z in ZOOMERS if not _PLATE else ():
+        t0, t1 = z['t']
+        if t0 <= lt < t1:
+            out.append(('zoom', z, lerp(z['x'][0], z['x'][1], (lt - t0) / (t1 - t0)), z['d']))
+    return out
+
+
+def draw_zoomer(img, item, lt):
+    _, z, x, d = item
+    cam = T4CAM
+    gx, gy = cam.p(x, d)
+    s = scale_at(cam, d)
+    k = cam.ppm(d)
+    for q, (dz, ln) in enumerate(((0.35, 2.2), (0.75, 1.6), (1.25, 1.1))):    # speed streaks behind it
+        a, b = cam.p(x - 1.1 - ln, d, dz), cam.p(x - 1.1, d, dz)
+        IS.poly(img, [a, b], None, (196, 176, 160), max(1.5, k * .03), 0)
+    fl = int(round(lt * FPS)) % 2 == 0
+    C.moped_scene(img, _cam2(), gx, gy - FEET * s, s, yaw=90, both=True, bike=z['bike'],
+                  drv_sp=C.rioter('rioter', seed=z['who'] + 'd', tier='t4'),
+                  gun_sp=C.rioter('rioter', seed=z['who'] + 'p', tier='t4'), pillion=z['pill'],
+                  kick=1.0 if fl else 0.0, flash=fl)
+
+
 def rpg_tip():
     x, d = moped_pos(MOPED0 + 0.6, 0)
     return T4CAM.p(x - 0.1, d, 2.05)
@@ -2648,6 +2685,7 @@ def t4_fx(img, lt):
         if a < 0.3:
             S.glow_disc(img, tx, ty, 40, (255, 230, 150), amt=.55)
     molotovs(img, lt)
+    S.bank_sign(img, cam, lt)                            # A20: the fascia over the fires (never washed out)
     stones(img, lt)
     gunfire(img, lt)
     rng = np.random.default_rng(int(lt * 12))              # A4: the melee's dust, all through (low, soft, see-through)
@@ -2764,12 +2802,16 @@ def molotovs(img, lt, only=None):
                 IS.ell(img, ex, ey, (40 * big * (1 - g) + 6) * k, (40 * big * (1 - g) + 6) * k, (255, 252, 230), None)
             key = tag[1]
             lit[key] = max(lit.get(key, (0, 0))[0], big), max(lit.get(key, (0, 0))[1], min(1.0, a / 0.6))
-    for (x, d, z), (big, g) in lit.items():
-        k = cam.ppm(d) / 40.0
-        ex, ey = cam.p(x, d, z)
-        S.glow_disc(img, ex, ey - 20 * k, (80 + 40 * g) * big * k, (255, 150, 50), amt=.35)
-        S.flames(img, ex, ey + 34 * big * k, (90 + 50 * g) * big * k, (70 + 90 * g) * big * k, lt + x * .37,
-                 seed=93 + int(d), n=5)
+    for (x, d, z), (big, g) in lit.items():                # A27: the hit window itself alight, flames out of it
+        if x < 0:                                           # the bank's side face (x -9): the window along d
+            z0, z1 = (.6, 4.2) if z < 5 else (z - 1.3, z + 1.3)
+            a, b, c, e = cam.p(x, d - .9, z0), cam.p(x, d + .9, z0), cam.p(x, d + .9, z1), cam.p(x, d - .9, z1)
+            out = 1.0
+        else:                                               # the ministry's front (d 64): the window along x
+            a, b, c, e = cam.p(x - .65, d, z - 1.3), cam.p(x + .65, d, z - 1.3), cam.p(x + .65, d, z + 1.3), \
+                cam.p(x - .65, d, z + 1.3)
+            out = 0.0
+        S.window_fire(img, a, b, c, e, cam.ppm(d), lt + x * .37, seed=93 + int(d), heat=g * min(1.5, big), out=out)
 
 
 def flying_shield(img, lt):
@@ -3217,9 +3259,12 @@ def picture(t):
         front = RF4.image(front) if front is not None else None
         cam = T4CAM
         ppl = Image.new('RGBA', back.size, (0, 0, 0, 0))
-        dep = lambda a: WALL_D if a == 'wall' else a['d'] if isinstance(a, dict) else a.d   # noqa: E731
-        for a in sorted(t4_actors(lt) + ['wall'] + list(crowd_t4()), key=lambda a: -dep(a)):
-            if a == 'wall':
+        dep = lambda a: (WALL_D if a == 'wall' else a['d'] if isinstance(a, dict) else a[3] if isinstance(a, tuple)   # noqa: E731
+                         else a.d)
+        for a in sorted(t4_actors(lt) + ['wall'] + list(crowd_t4()) + zoomers(lt), key=lambda a: -dep(a)):
+            if isinstance(a, tuple):
+                draw_zoomer(ppl, a, lt)                     # A21: the mopeds passing before the RPG one
+            elif a == 'wall':
                 draw_wall(ppl)                              # A16: the sandbags in their place among the people
             elif isinstance(a, dict):
                 crowd_draw(ppl, a, lt)                      # A17: the crowd mass among them
@@ -3637,7 +3682,10 @@ ALLOWED_CONTACTS = [('swinger', 'GLASS', at('t2', T2_HIT - 0.1), at('t2', T2_SHA
            ('mp*', 'mp*', at('t4', 0), at('t4', T4_LEN), 'A4 melee: the police ranks packed behind their shields', 0.08),
            ('mr*', 'mr*', at('t4', 0), at('t4', T4_LEN), 'A4 melee: the rioters packed behind the front rank', 0.08),
            ('carrier*', 'surfer', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the carriers hold the surf shield up', 0.2),
-           ('carrier*', 'carrier*', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the carriers shoulder to shoulder under it', 0.08)]
+           ('carrier*', 'carrier*', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the carriers shoulder to shoulder under it, arms up', 0.09),
+           ('mid*', 'surfer', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the crowd hands up under the surfer', 0.1),
+           ('mid*', 'mid*', at('t4', 0), at('t4', T4_LEN), 'A4: the packed middle crowd, arms brushing', 0.04),
+           ('carrier*', 'mid*', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the surf pushed through the packed middle crowd (looked at: reads as the press round the shield)', 0.2)]
 ORDER_SWAPS = [(a, b, t0, t1, w) for a, b, t0, t1, w in (
     ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: they cross in the crush'),
     ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in'), ('runner*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in'),

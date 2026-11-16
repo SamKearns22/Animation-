@@ -18,7 +18,8 @@
 - **ALBANIA chat 4 (16 Nov, Opus; stopped at amber):** A17 crowd mix BUILT (one still looked at), A18 police varied DONE, A24 hair DONE (T4), A25 arms-through-long-hair OPEN (diagnosis in A25). The sprite cache key is 'v2-hair-clear' (first render redraws sprites: slower). Germany G20-G22 were never pushed by Germany chat 6: Germany chat 6b (session_01GznaATrmF2ZZWRhTSQHptf, branch claude/germany-chat6b, merges itself) rebuilds them.
 - **ALBANIA chat 5 (16 Nov, Opus; stopped at amber):** A25 FIXED (arms over long hair drawn whole; rule 30 reason in A25), A19 BUILT (holes/craters worked into the wall; still 28.0 looked at). Sprites redraw once (views.py changed).
 - **Stage-stop hook (end of Albania chat 5):** fired again (round2 stage); not raised with Sam, per X1.
-- **ALBANIA next: Opus high, Albania chat 6:** A20 (BANKA on a real fascia sign: sets _bank, the text() at d 52), A21 (two more mopeds before the RPG one, pillion firing in the air, sizes/colours/riders' clothes varied), A22 (RPG riders: black/grey hoodies, different eyes), A23 (shot B 2.8 -> ~3.6 s, LENS 'eb'), A17 look (far rows: many gold beanies in still 28.0), then step 11 (stills full size, check, acting list, clip 22.5-END to Sam, one line per note incl. A19/A25).
+- **ALBANIA chat 6 (16 Nov, Opus; Sam: 'continue here until done'):** A20, A21, A22, A23, A26, A27 BUILT, A17 look fixed (hats); stills 23.0-42.6 looked at; `check` T4/end: 0 faults (cover pops eased, melee ranks spaced, granny moved; crowd-press contacts named in Exceptions); T4 + end beat/acting list rewritten; clip 22.5-44.4 sent to Sam.
+- **ALBANIA next: Opus medium, Albania chat 7:** Sam's notes on the chat 6 clip; on his Y, the back-half animatic (Sonnet chat). A15 sound is in (t4_sound) but not yet heard by Sam.
 - **Sam (16 Nov, ~94% of his usage): stay in Albania chat 3, it carries on at 18:19 when his usage resets; build A17-A23 there, then step 11.** Previously: **ALBANIA next: Opus high, Albania chat 4:** step 11: stills 22.5-43.6 full size and fix the list above, `check` (new T4 table rows: mp*/mr*/carrier* contacts, FAST_OK for sprite steps; tune to the real faults), T4 + end beat/acting list (rule 74), clip `final OUT --small --span 22.5 43.6` to Sam with one line per note A4-A16 (Lost: the seller's queue, the police rout; the granny throws without buying). Old 67 T4 faults (the rout) are gone with it.
 - **Quick-check faults (handover check, back-half chat 6):** ALLOWED_POPS hauler1 has no Exceptions row: Germany's (t2 door), for the Germany chat. T3 not yet checked after the F12-F23 build.
 - **Needs Sam (one numbered list per chat):** Germany clips Y/N; Overall+Spain still Y/N; France still sheet / clip. Diagonal Hook Text rule: through propose.py first.
@@ -71,15 +72,17 @@ Sam's answers to chat 1's questions are carried by these notes (wider view kept;
 - [ ] A13 Sam's Albanian take of the driver's line: source/audio/protest-tiers-bro.m4a (speech 1.1-3.0 s of the file); the English line stays as its subtitle.
 - [ ] A14 (Sam 16 Nov) Music for the Albania scene: `sounds/protest-tiers/heavy-metal.mp3` (his track, 129 s), from 20 s into the file (where the heavy riff starts: check by ear/loudness and start on the riff's first hit), under T4 and on through the end scene; ducked (muffled: quieter + low-pass) under each dialogue line so the voices are clear, back up between lines.
 - [ ] A16 (Sam 16 Nov, Albania chat 3) There is no 'raised part' of the square: the middle police hide behind sandbags / a low wall instead. Plan step 5 changed: no terrace; a low sandbag wall (~1.0 m, two courses of bags) on the ground across x 1.5-9 at d 26.3 with a short return along x 1.5; the officers crouch behind it and pop up to fire.
-- [~] A17 (Albania chat 4: BUILT, seen in one still 28.5: crowd_t4 mass back (Tirana mix, 64 looks, fists, flags, jumps in the hold); about 2 in 5 group members bare-headed marchers (spr), the rest rioters in DRESS['t4'] (Germany pack + colour); a build whose arm fails in a pose falls back to the hooded rioter. To look at: far rows show many gold beanies; check the whole shot.) (Sam 16 Nov, on chat 3's stills) The original crowd was deleted and everyone is a hooded man: it must be a HUGE MIX as before (the Germany clothes pack: street clothes, colours, hair, hats). Plan: bring back the crowd_t4 mass (painted sprites, marchers' mix) around and behind the three groups; the three groups' rioters drawn from the street-clothes mix (C.rioter street_clothes / marcher looks), not all black bloc.
+- [x] A17 (Albania chat 6: crowd hat colours go round a 10-colour list by look; gold was 70 of 147 hats, now 5) (Albania chat 4: BUILT, seen in one still 28.5: crowd_t4 mass back (Tirana mix, 64 looks, fists, flags, jumps in the hold); about 2 in 5 group members bare-headed marchers (spr), the rest rioters in DRESS['t4'] (Germany pack + colour); a build whose arm fails in a pose falls back to the hooded rioter. To look at: far rows show many gold beanies; check the whole shot.) (Sam 16 Nov, on chat 3's stills) The original crowd was deleted and everyone is a hooded man: it must be a HUGE MIX as before (the Germany clothes pack: street clothes, colours, hair, hats). Plan: bring back the crowd_t4 mass (painted sprites, marchers' mix) around and behind the three groups; the three groups' rioters drawn from the street-clothes mix (C.rioter street_clothes / marcher looks), not all black bloc.
 - [x] A18 (Albania chat 4: each T4 officer his own build/skin/kit via 'policia|NAME' sprites; helmets one shade of white each, France untouched) Police are identical: vary them as the France pack does (each officer his own build and kit: officer(seed=name, tier) as T3's F5/F13).
 - [x] A19 (Albania chat 5: BUILT, looked at full size on still 28.0: holes take the wall's own colour (paler scar, dark pit, half-soft), in burst sprays + strays; 4 craters 0.55-0.75 m, raw brick + courses, ragged hole, chunks at the lip, soft soot rising, no star spikes) RPG craters and bullet holes look pasted on top: blend them into the building (softer edges, scorch fading into the ochre, smaller/irregular craters with broken masonry, holes following the facade's light).
-- [ ] A20 'BANKA' is words pasted on the image: put it on a real sign on the bank (a fascia board / lettered panel on the building's face, in its perspective).
-- [ ] A21 Two more mopeds zoom by BEFORE the RPG one, the pillion firing into the air; different sizes and colours; the riders in varied clothes.
-- [ ] A22 Keep the RPG riders in the black/grey hoodies but give them different eyes (eye sets) from each other.
-- [ ] A23 Sam's American tourist take saved: source/audio/protest-tiers-hey.m4a (0.43 s) and protest-tiers-tourists.m4a (3.06 s; raw in references/protest-tiers/takes/). The tourists line now runs past shot B's end (37.7 + 3.06 > 40.2): B 2.8 -> ~3.6 s.
+- [x] A20 (Albania chat 6: a navy fascia board with brass trim and cream capitals, mapped onto the bank's face in its perspective, drawn after the fires) 'BANKA' is words pasted on the image: put it on a real sign on the bank (a fascia board / lettered panel on the building's face, in its perspective).
+- [x] A21 (Albania chat 6: a big silver maxi-scooter 3.4-4.5 s, pillion firing an AK up; a small blue one 4.25-5.05 s, pillion firing a pistol up; riders in the T4 street mix; speed streaks; drawn in the depth sort, not in the audit) Two more mopeds zoom by BEFORE the RPG one, the pillion firing into the air; different sizes and colours; the riders in varied clothes.
+- [x] A22 (Albania chat 6: driver narrow, heavy-lidded, close-set, dark; passenger big, round, wide-set, hazel-green; same hoodies) Keep the RPG riders in the black/grey hoodies but give them different eyes (eye sets) from each other.
+- [x] A23 (Albania chat 6: B 3.6 s; the take ends 40.76, C starts 41.0) Sam's American tourist take saved: source/audio/protest-tiers-hey.m4a (0.43 s) and protest-tiers-tourists.m4a (3.06 s; raw in references/protest-tiers/takes/). The tourists line now runs past shot B's end (37.7 + 3.06 > 40.2): B 2.8 -> ~3.6 s.
 - [ ] A24 (Sam 16 Nov, on chat 4's test sheet) Women's hairstyles only on women, men's styles on men (unless stated); no natural blond on darker skin. DONE for T4 (Albania chat 4): the crowd file's women are its bob/pony/long members: they now get lashes and lip colour; men keep men's cuts; hair colour follows skin (cast.t4_street). The other tiers' marchers were NOT changed (ask Sam if he wants it for every film: a rule request).
 - [x] A25 (Albania chat 5: FIXED. Why chat 4's fix failed (rule 30): the blur was not the hair covering the arm but the arm's own shoulder fade: an arm drawn over the head (on_face / raised-over) looked for 'its body' and found the long-hair shape (big enough to pass as a torso), so its sleeve top faded into the hair. Now: hair is never an arm's body (limbs.HEAD), and for long/bob/curly hair, the arm drawn over the head is whole (outline, no fade) where it crosses what the head painted (views arm_over_head). Test sheet: throw 90/60, cheer +-60 on marchers 5, 13, 21: the arm reads in front of the hair. Engine change limited to long-haired people; kittests pass.) (Sam 16 Nov) Arms must not pass through hair (long hair: the wound-up throwing arm, the cheer's arm behind the head sink into it with a soft blur). Long hair kept (Sam: don't exclude it); the arm should go slightly round it. Tried (chat 4): film hair_clear() drops the elbow below the hair's lower edge (y 95 long / 40 bob, person units) when an arm's line crosses the hair behind the head: works for bob (machete), but long hair covers the shoulder itself, so every backward arm still enters it and the reroute reverts. Next: draw the far arm OVER long hair with its ink outline (or clip the hair's mass where the arm passes), and find the soft fade at the sleeve top (it is the 'blend'); test on scratch sheet t_mix2 (marchers 5, 13 long; throw 0.0 yaw 90, cheer 0.6 yaw 60).
+- [x] A26 (Albania chat 6: warm flickering light on the board from the windows below and above) (Sam 16 Nov, Albania chat 6, on A20) The fire glow must also light the BANKA sign (warm light on the board near the burning windows).
+- [x] A27 (Albania chat 6: window_fire: the window alight, flames from its opening, sized to it; the Molotov hits' floating teardrops gone) (Sam 16 Nov, Albania chat 6) Flames placed logically: coming out of windows or at the tops of buildings, never pasted on a wall. Plan: every window fire (the bank's own and each Molotov hit) drawn as the window alight, flames leaving its opening and licking up past its top, sized to the window; the Molotov hits' huge floating teardrops go.
 - [ ] A15 (Sam 16 Nov) The helicopter crash's sound: the explosions from the Blue Planet film (Flying Whales: `source/audio/flying-whales-sfx/explosion-major.mp3` for the big explosion at the landing T4_FIRE, `explosion-minor.mp3` for the RPG hit); see flying_whales_sound.clip() for how they were levelled.
 
 ## Round 5 France notes (Sam, 16 Nov, on the France round 4 clip)
@@ -263,32 +266,24 @@ headings in the end scene. Check: the third line stays over sky or dark building
   sway; police: shields up while missiles fly, each jolts toward the hit near him, the rear file holds shields
   overhead, small shuffles and turns, then the lockstep advance (F18); truck: up the lane, jet on the throwers; cars:
   no one near (people keep off a fire). Checked against the moves (chat 7 stills 14.6-21.8): matches.
-- **T4 Albania (12.5 s since round 2, A2; 11/10; the showstopper):** (round 2, A1: camera 6 m up, wider; the end's A and C keep the old street-level lens) 0.0-1.0 as now (mopeds, RPG at 0.6, hit at 1.0).
-  **1.0-2.6** the helicopter spins down at its present rate with more turns (longer fall, same speed), fire trail,
-  drops behind the ministry at 2.6 with a small fireball. **1.2-2.8 gag b:** mid-ground, a rioter turns his back to
-  it, phone up at arm's length, peace sign; the phone flashes at 2.6 as it lands; he checks the photo, thumbs up.
-  **1.0-4.0** crowd slams the shields (1.0-2.0), the line breaks 2.0; melee redone to read at phone size: rioters
-  vault the shields, one shield spins up into the air, officers shoved back, clear silhouettes against the fire;
-  no one hurt. **3.0-6.0 gag a:** by the bank, the seller's cart; three rioters queue; he lights a rag and hands
-  over a bottle at 3.4, 3.8, 4.2; each buyer throws at once; arcs 3.6-5.6 into the bank's ground-floor windows,
-  round orange blooms. **6.0-7.4 gag c:** a granny steps up, pays, takes one, throws overarm at 6.6: the highest,
-  longest arc of the film, over the melee into the bank's first floor at 7.3, the biggest bloom; the seller
-  applauds; rioters cheer, fists up. **7.5** the fireball rolls up behind the ministry and backlights everyone.
-  **7.9-10.4 (round 2, A2, new):** a rioter is hoisted out of the near crowd on a captured riot shield, flag up, and
-  passed hand to hand left to right over the heads (lurching, lit by the fire); from 8.0 the beaten police turn and
-  run off right, each at his own moment and pace (F9); fireworks go up from 7.8. **10.4-12.5** the gleeful hold:
-  crowd jumping, the surfer tossed up and down on the shield, fireworks again, the toppled water cannon burning.
-- **End scene (7.6 s, no headings), Sam's R2:**
-  **A (2.4 s), the T4 avenue reframed tight on the bottom-left, side-on:** 0.0-0.5 a second moped skids in from the
-  left and stops (dust and tyre smoke); 0.8 the passenger fires the RPG up and out of the top of frame (backblast,
-  trail climbing off the top right); behind, rioters clash with police at mid distance. 1.6 **"Hey!"** (the
-  husband, off screen left, captioned); 1.8-2.1 both riders snap their heads round to the left.
-  **B (2.8 s), the side alley, front on:** the couple crouched behind two wheelie bins, chest up over the lids.
-  0.0 the wife gasps (hand to mouth). 0.3 the husband rises a little, palms out: **"We're just tourists!"**
-  (0.3-1.4), **"Why are y'all protesting?"** (1.5-2.6). Both look screen right (where the riders are).
-  **C (2.4 s), tighter reframe of A, the two riders:** 0.1 the driver turns his head back to the passenger:
-  **"Bro, what's a 'protest'?"** (0.2-1.3); 1.4-2.0 the passenger looks to camera and shrugs, big, one palm up, the
-  RPG on his shoulder; hold to 2.4. Hard cut to the sign-off.
+- **T4 Albania (12.5 s; round 3 rewrite, Albania chat 6; camera 6 m up, wide):** all through: FRONT melee (d 12-16:
+  fists and machetes v batons and shields, the ranks behind throwing stones; a shield knocked spinning 3.0-4.0);
+  MIDDLE gunmen (AKs, pistols, bursts) and stone throwers v police crouched behind a sandbag wall, who pop up to fire
+  (easing up and down) and are down by 7.9; BACK dancers and Molotov throwers: each hit window burns, flames out of
+  the window (A27); the bank's BANKA board lit by the fires (A20/A26). **3.4-4.1** the granny's overarm Molotov into the
+  bank's first floor. **3.4-4.5** a big silver maxi-scooter zooms across behind the selfie man, its pillion firing
+  an AK into the air; **4.25-5.05** a small blue one zooms across in front of him, the pillion firing a pistol up
+  (A21; riders in Tirana's street mix). **4.6-5.6** the helicopter flies in. **5.5** the RPG moped brakes in from the
+  left; **6.1** fires; **6.5** hit; **6.5-8.1** spins down behind the ministry; the selfie man turns, peace sign,
+  flash with the fall. **8.1** the huge explosion (white flash); **8.3** the cheer, guns up; **8.6-11.8** the shield
+  surf over the middle crowd on four carriers; fireworks; hold to 12.5. Metal from the riff, explosions on hit/landing.
+- **End scene (9.4 s):** **A (2.4 s)** the second RPG moped skids in, fires up out of frame; 1.6 "Hey!" off screen;
+  both riders' heads snap left. **B (3.6 s, A23)** the alley, the couple behind the bins: 0.0 her gasp; 0.3-3.36
+  Sam's take "We're just tourists! Why are y'all protesting?" (palms out, the flick to the street on "protesting").
+  **C (3.4 s)** 0.2 "Bro, what's a 'protest'?" (Sam's Albanian take, English subtitle), the driver's eyes on the
+  passenger; ~2.25-2.85 the passenger's shrug, eyes on the driver, brows up and knit, palm up (A11/A12); each rider his
+  own eyes (A22: driver narrow, heavy-lidded, dark; passenger big, round, hazel-green). Hard cut to the sign-off.
+  Checked against the moves (chat 6 stills 23.0-42.6 and the clip): matches.
   Times are set by the stand-in voices (espeak, for timing only, never heard in anything sent: best-practice
   "Straight to the animatic"); Sam's takes replace them line by line.
 
@@ -299,7 +294,7 @@ headings in the end scene. Check: the third line stays over sky or dark building
 | 2 "We're just tourists! Why are y'all protesting?" | husband | B: front on, chest up over the bin: his fear is the set-up | brows up and together, eyes wide, looking right; mouth on the take | rises from the crouch, palms out at "tourists", one hand flicks toward the street on "protesting"; head life on the voice | "tourists", "protesting" |
 | (gasp) | wife | B: beside him | eyes wide, brows up | hand to mouth, clutching the tote | 0.0 |
 | 3 "Bro, what's a 'protest'?" | driver (masked) | C: two-shot: the sincere puzzle is the punchline | masked: eyes squint, brows knit (the mask hides the mouth) | head turns to the passenger, a small tilt on "protest" | "protest" |
-| (shrug) | passenger | C | brows up, blank eyes to camera | big shrug, one palm up, RPG on the shoulder | 1.4, after the line |
+| (shrug) | passenger | C | brows up and knit, eyes on the driver (A12) | big shrug, palm up at chest height, RPG on the shoulder | ~2.25, after the line |
 
 Lines for Sam to record after animatic 2 (he records every voice): "Hey!", "We're just tourists! Why are y'all
 protesting?", the wife's gasp, "Bro, what's a 'protest'?".
@@ -309,6 +304,8 @@ protesting?", the wife's gasp, "Bro, what's a 'protest'?".
 - Rehearsal clips sent: 15 Nov (chat 14): T1 0.0-2.0, T2 6.8-8.0, T3 10.4-12.0, T4 12.4-14.2, T4 13.6-15.6.
 
 ## Exceptions (rule 13: one row per thing left out of a check; looked at full size)
+- (Albania chat 6) T4 contacts allowed: carriers through the packed middle crowd up to 0.2 m, carriers' raised arms 0.09, middle-crowd arms brushing 0.04, hands under the surfer 0.1; looked at on stills 33.5 and the clip: they read as the press round the shield.
+- (Albania chat 6) The two passing mopeds (A21) are drawn in the depth sort but are not audit Actors (their riders are seated moped drawings, like the RPG moped); looked at on stills 26.3-27.2 at full size: no one passes through them.
 | check | who | why | looked at full size |
 |---|---|---|---|
 | ALLOWED_POPS | carrier* | A7: the four carriers step up out of the middle crowd under the surf shield at 8.6 s | NOT yet looked at full size: Albania chat 4 (step 11) |
