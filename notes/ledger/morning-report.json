@@ -205,6 +205,34 @@
    "cost": 2.33,
    "src": "estimate",
    "sid": "session_01GznaATRRzCvSVFSXdo5WRX"
+  },
+  {
+   "date": "2026-11-16",
+   "chat": "2cec4bf1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 4.11,
+   "src": "estimate",
+   "sid": "session_01GznaAVQT1ane6SYyRcPDVb",
+   "steps": 72,
+   "hist_k": 186,
+   "kinds": {
+    "tool search": 19.5,
+    "renders": 2.8,
+    "other": 77.7
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 42,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 2,
+    "pictures": 0,
+    "other": 13
+   }
   }
  ],
  "checks": {}
