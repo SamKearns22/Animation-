@@ -737,6 +737,68 @@ def pistol(j, side='R'):
     return draw
 
 
+
+# Round 3 Albania (A4, Sam 16 Nov): the gunfight and the melee's weapons. Each drawn along a body-frame direction
+# (x his right, y down, z the way he faces), like the RPG, so it points where he aims at any turn.
+AK_WOOD, AK_METAL = (138, 84, 44), (40, 40, 44)
+
+
+def _line3(p, jj, a, b, col, w):
+    pa, pb = P3(jj, tuple(a)), P3(jj, tuple(b))
+    p.line([pa, pb], INK, w + 6)
+    p.line([pa, pb], col, w)
+
+
+def rifle(j, base, u):
+    """An AK47: base the butt (at the right shoulder), u its unit direction; the wooden stock and handguard, the
+    black receiver and barrel, the curved magazine hanging under it (drawn thick: a Glimpse prop must read)."""
+    u = np.asarray(u, float) / (np.linalg.norm(u) or 1)
+    base = np.asarray(base, float)
+    down = np.cross(u, (1.0, 0.0, 0.0))
+    if down[1] < 0:
+        down = -down
+    def draw(p, j2):
+        jj = dict(j, _yaw=j2['yaw'])
+        L = lambda m: base + u * m * U                     # noqa: E731
+        _line3(p, jj, L(0.0), L(0.28), AK_WOOD, 26)
+        _line3(p, jj, L(0.26), L(0.52), AK_METAL, 22)
+        _line3(p, jj, L(0.50), L(0.68), AK_WOOD, 20)
+        _line3(p, jj, L(0.66), L(0.92), AK_METAL, 10)
+        m0, m1 = L(0.42), L(0.47) + down * 0.2 * U - u * 0.05 * U
+        _line3(p, jj, m0, m1, AK_METAL, 16)
+    return draw
+
+
+def gun_aimed(j, side, u, length=0.24):
+    """A pistol held out at arm's length, pointing along u (body frame) from the fist."""
+    u = np.asarray(u, float) / (np.linalg.norm(u) or 1)
+    def draw(p, j2):
+        jj = dict(j, _yaw=j2['yaw'])
+        c = np.asarray(_hand_c(j, side), float)
+        _line3(p, jj, c - u * 20, c + u * length * U, (34, 34, 38), 18)
+        g = P3(jj, tuple(c))
+        p.ell(g[0], g[1], 24, 24, sp_glove(j), INK, 2.2)
+    return draw
+
+
+def sp_glove(j):
+    return j.get('_glove', (24, 24, 26))
+
+
+def machete(j, side, u):
+    """A machete from the fist along u: a long pale blade, a dark grip."""
+    u = np.asarray(u, float) / (np.linalg.norm(u) or 1)
+    def draw(p, j2):
+        jj = dict(j, _yaw=j2['yaw'])
+        c = np.asarray(_hand_c(j, side), float)
+        _line3(p, jj, c - u * 30, c + u * 0.1 * U, (50, 36, 30), 14)
+        a, b = P3(jj, tuple(c + u * 0.1 * U)), P3(jj, tuple(c + u * 0.62 * U))
+        p.line([a, b], INK, 26)
+        p.line([a, b], (206, 210, 214), 20)
+        p.line([a, (a[0] + (b[0] - a[0]) * .9, a[1] + (b[1] - a[1]) * .9)], (240, 242, 244), 6)
+    return draw
+
+
 def road_sign(j, hands=('R', 'L'), dirn=(0.0, -0.75, -0.66), pole=1.1, face=False):
     """The give-way sign on its ripped-up pole (ref de4): grey pole from the hands, the white triangle with its thick red
     border on the far end, its point towards the hands (point-down as it stood). The triangle's plane holds the pole
@@ -937,6 +999,10 @@ def _clear_of_shoulder(j, side, hand, reach=225.0):
     return tuple(sh + v / d * reach) if 1e-6 < d < reach else tuple(hand)
 
 
+def lerp_(a, b, u):
+    return a + (b - a) * u
+
+
 def pose(sp, name, u=0.0, t=0.0, force=None):
     """One of the cast's poses (body frame, before lean): u is how far through a move (0-1), t a gait's time."""
     sw = sp.get('shoulders', 160)
@@ -1009,6 +1075,50 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'L', (-sw + 40 - 140 * e, 120.0 + 200 * e, 260.0 - 160 * e), 'down')
         if e < 0.6:                                 # the stone in the throwing hand until it leaves
             grips.held(j, 'R', sp, stone(j, 'R', r=sp.get('stone_r', 26)) if name != 'molotov' else bottle(j, 'R'))
+    elif name == 'punch':                           # round 3 Albania (A4): u 0 the fist cocked at the chin, 1 a
+        e = moves.ease(u)                           # straight right thrown at head height, weight forward
+        j['lean'] = 4 + 8 * e
+        j['footL'] = (-70, V.ANKLE_Y, 160.0)
+        j['footR'] = (70, V.ANKLE_Y, -110.0)
+        V.arm_to(j, 'R', _clear_of_shoulder(j, 'R', np.array((sw - 40, -40.0, 120.0)) * (1 - e) +
+                                            np.array((40.0, -10.0, 520.0)) * e), 'down')
+        V.arm_to(j, 'L', (-sw + 70, -30.0, 180.0), 'down')
+    elif name == 'machete':                         # A4: u 0 raised behind the head, 1 chopped down in front
+        e = moves.ease(u)
+        j['lean'] = -4 + 16 * e
+        j['footL'] = (-70, V.ANKLE_Y, 160.0)
+        j['footR'] = (70, V.ANKLE_Y, -110.0)
+        hand = np.array((sw + 20, -330.0, -60.0)) * (1 - e) + np.array((30.0, 230.0, 330.0)) * e
+        V.arm_to(j, 'R', _clear_of_shoulder(j, 'R', hand), 'out')
+        V.arm_to(j, 'L', (-sw + 30, 160.0, 200.0), 'down')
+        a = math.radians(lerp_(-150, 60, e))        # the blade's angle above forward, swung over
+        j['props'] = [machete(j, 'R', (0.0, -math.sin(a), math.cos(a)))]
+    elif name in ('aim_rifle', 'rifle_up'):         # A4: the AK at the shoulder, aimed level (u: the kick of a shot
+        a = math.radians(4 if name == 'aim_rifle' else 62)   # 0..1); 'rifle_up': fired into the air (the cheer)
+        k = math.sin(math.pi * min(1.0, max(0.0, u)))
+        j['lean'] = 3 - 6 * k
+        j['footL'] = (-70, V.ANKLE_Y, 140.0)
+        j['footR'] = (70, V.ANKLE_Y, -90.0)
+        dirn = np.array((0.0, -math.sin(a), math.cos(a)))
+        base = np.array((sw - 60.0, 60.0, 30.0)) - dirn * 40 * k
+        V.arm_to(j, 'R', tuple(base + dirn * 0.24 * U + (0, 60, 0)), 'down')
+        V.arm_to(j, 'L', tuple(base + dirn * 0.58 * U + (-50, 40, 0)), 'down')
+        j['props'] = [rifle(j, base, dirn)]
+    elif name == 'aim_pistol':                      # A4: arm out straight at shoulder height, the pistol along it
+        k = math.sin(math.pi * min(1.0, max(0.0, u)))
+        a = math.radians(6 + 14 * k)
+        dirn = np.array((-0.12, -math.sin(a), math.cos(a)))
+        V.arm_to(j, 'R', tuple(np.array((sw - 30, -20.0, 40.0)) + dirn * 560), 'down')
+        V.arm_to(j, 'L', (-sw + 40, 200.0, 160.0), 'down')
+        j['props'] = [gun_aimed(j, 'R', dirn)]
+    elif name == 'dance':                           # A4 (the back crowd): both hands up, swaying side to side
+        e = math.sin(math.pi * 2 * u)
+        j['lean'] = 0
+        j['head_roll'] = 9 * e
+        V.arm_to(j, 'R', (j['shR'][0] + 80 + 90 * e, -400.0 + 60 * abs(e), 40.0), 'out')
+        V.arm_to(j, 'L', (j['shL'][0] - 80 + 90 * e, -400.0 + 60 * abs(e), 40.0), 'out')
+        j['footL'] = (-90 + 30 * e, V.ANKLE_Y - 40 * max(0, e), 20.0)
+        j['footR'] = (90 + 30 * e, V.ANKLE_Y - 40 * max(0, -e), -20.0)
     elif name == 'pickup':                          # round 4 (F16): bending for the next stone off the cobbles (u 0
         e = math.sin(math.pi * max(0.0, min(1.0, u)))   # -> 1 -> 0: down and up again); the stone in hand after 0.5
         j['lean'] = 34 * e

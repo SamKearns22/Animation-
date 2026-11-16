@@ -1,3 +1,3 @@
-European Protests, Ranked: REOPENED 16 Nov; round 2. Germany chat 4: Frankfurt clothing, hats, four sign hits + fling built (checks clean); France round 4 (F12-F23) BUILT in back-half chat 6, not yet checked; Albania A1-A3 built, clip sent.
-Next: Germany chat 5 (Opus medium) builds G12, G14, G15, G17-G19, sends the Germany clip; back-half chat 7 checks and sends the France clip.
-Needs Sam: Germany clip (coming), Overall+Spain still, Albania clip Y/N.
+European Protests, Ranked: REOPENED 16 Nov; round 2. Albania round 3 notes (A4-A13) in; chat 2 built the new poses + saved Sam's Albanian take; plan written. Germany chat 5 and back-half chat 8 running.
+Next: Albania chat 3 (Opus high) builds the plan, checks, sends the Albania clip.
+Needs Sam: Albania clip (coming), Germany clip, Overall+Spain still.
