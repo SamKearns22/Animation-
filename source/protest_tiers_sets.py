@@ -1082,13 +1082,36 @@ def _ministry(img, cam, t):
 
 
 def _riddled(img, cam, d, xc, cx, r, x0, x1, Z):
-    """Round 3 (A6): the ministry shot to pieces: ~250 bullet holes (a dark dot in a pale chipped ring) over the
-    front wing, the corner bay and the wing along the avenue, and five RPG craters (a jagged dark hole, scorch streaks
-    out of it). Fixed (seeded): the same holes every frame."""
+    """Round 3 (A6, A19): the ministry shot to pieces, worked INTO the wall, not stuck on it (Sam, 16 Nov: 'pasted
+    on top'). Every mark takes its colours from the wall under it, so it follows the facade's light: ~250 bullet holes
+    (a chipped scar a little paler than the stone round a dark pit, in sprays and lines as bursts hit; small, varied,
+    half-soft) over the front wing, the corner bay and the wing along the avenue; four RPG craters (an irregular blown
+    patch of raw broken brick round a ragged dark hole, chunks hanging at its lip, soot fading softly out into the
+    ochre, streaked upward by the heat). Fixed (seeded): the same marks every frame."""
     rng = np.random.default_rng(64)
     k = cam.ppm(d)
+    px = img.load()
+    Wd, Ht = img.size
+
+    def wall(x, y):
+        x, y = int(min(max(x, 0), Wd - 1)), int(min(max(y, 0), Ht - 1))
+        return px[x, y][:3]
+
+    def tint(c, f, to=(255, 246, 226)):
+        return tuple(int(a + (b - a) * f) for a, b in zip(c, to))
+
+    def dark(c, f):
+        return tuple(int(a * (1 - f)) for a in c)
+
     pts = []
-    for _ in range(150):                                   # the front wing
+    for _ in range(18):                                    # the front wing: bursts, each a short spray of hits
+        bx, bz = rng.uniform(x0 + 4, x1 - 4), rng.uniform(0.8, 13.5)
+        ang, n = rng.uniform(-0.5, 0.5), int(rng.integers(4, 11))
+        for m in range(n):
+            u = m / max(1, n - 1) - 0.5
+            pts.append((bx + u * rng.uniform(2.0, 4.0) * k * math.cos(ang) + rng.normal(0, .25 * k),
+                        Z(bz + u * 2.0 * math.sin(ang) + rng.normal(0, .25)), 1.0))
+    for _ in range(25):                                    # strays
         pts.append((rng.uniform(x0 + 4, x1 - 4), Z(rng.uniform(0.6, 14.0)), 1.0))
     for _ in range(60):                                    # the bay (a drum: squeezed toward its edges)
         a = rng.uniform(0.15, math.pi - 0.15)
@@ -1097,21 +1120,58 @@ def _riddled(img, cam, d, xc, cx, r, x0, x1, Z):
         dd = rng.uniform(d + 1, 104)
         q = cam.p(xc, dd, rng.uniform(0.6, 14.0))
         pts.append((q[0], q[1], d / dd))
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    dr = ImageDraw.Draw(lay)
     for x, y, f in pts:
-        rr = max(1.4, 0.07 * k * f * rng.uniform(0.7, 1.3))
-        IS.ell(img, x, y, rr * 2.1, rr * 1.9, (238, 214, 160), None)
-        IS.ell(img, x, y, rr, rr, (40, 28, 26), None)
-    for q, (x, z) in enumerate(((x0 + 3.5 * k, 9.5), (cx - 0.3 * r, 6.0), (x0 + 9.0 * k, 3.0), (x0 + 6.0 * k, 12.5),
-                                (min(x1 - 60, x0 + 13.0 * k), 6.5))):
-        y = Z(z)
-        R = (0.95 + 0.25 * (q % 2)) * k
-        for n in range(9):                                 # scorch streaks fanning out
-            a = n * 2 * math.pi / 9 + q
-            poly(img, [(x, y), (x + 2.3 * R * math.cos(a), y + 1.8 * R * math.sin(a))], None, (60, 40, 34), 0.35 * R, 0)
-        IS.ell(img, x, y, R * 1.25, R * 1.1, (96, 70, 56), None)
-        hole = [(x + R * (0.75 + 0.3 * ((n * 7 + q) % 3) / 2) * math.cos(n * math.pi / 6),
-                 y + R * (0.7 + 0.3 * ((n * 5 + q) % 3) / 2) * math.sin(n * math.pi / 6)) for n in range(12)]
-        poly(img, hole, (26, 18, 18), INK, 1.6, 0)
+        c = wall(x, y)
+        rr = max(1.0, 0.05 * k * f * rng.uniform(0.6, 1.4))
+        sx = rr * rng.uniform(1.5, 2.2)
+        sy = sx * rng.uniform(0.75, 1.0)
+        dr.ellipse([x - sx, y - sy, x + sx, y + sy], fill=tint(c, .28) + (150,))       # the chipped scar
+        dr.ellipse([x - rr + .4, y - rr + .6, x + rr + .4, y + rr + .6], fill=dark(c, .35) + (170,))   # its shadow
+        dr.ellipse([x - rr, y - rr, x + rr, y + rr], fill=dark(c, .72) + (235,))       # the pit
+    img.alpha_composite(lay.filter(ImageFilter.GaussianBlur(0.6)))
+    # the RPG craters: smaller than before (0.5-0.8 m), never star-shaped
+    craters = ((x0 + 3.5 * k, 9.5, .75), (cx - 0.3 * r, 6.0, .6), (x0 + 9.0 * k, 3.2, .55),
+               (min(x1 - 60, x0 + 13.0 * k), 6.8, .7))
+    soot = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    sd = ImageDraw.Draw(soot)
+    for q, (x, z, m) in enumerate(craters):
+        y, R = Z(z), m * k
+        for n in range(14):                                # soot: soft lumps round it, more above (the heat rose)
+            a = rng.uniform(0, 2 * math.pi)
+            rr = R * rng.uniform(.9, 1.9)
+            ox, oy = math.cos(a) * rr * .8, math.sin(a) * rr * .6 - abs(math.sin(a)) * R * .5
+            g = R * rng.uniform(.7, 1.3)
+            sd.ellipse([x + ox - g, y + oy - g, x + ox + g, y + oy + g], fill=(34, 24, 20, int(rng.uniform(70, 130))))
+        sd.polygon([(x - .6 * R, y - .3 * R), (x + .6 * R, y - .3 * R), (x + .2 * R, y - 3.4 * R),
+                    (x - .3 * R, y - 3.0 * R)], fill=(34, 24, 20, 90))                 # a streak up the stone
+    img.alpha_composite(soot.filter(ImageFilter.GaussianBlur(max(2.0, .45 * k))))
+    for q, (x, z, m) in enumerate(craters):
+        y, R = Z(z), m * k
+        c = wall(x + 2.2 * R, y)                           # the stone beside it (outside the soot's middle)
+        brick = (150, 92, 70)
+        def ragged(rad, jit, n=22):
+            out = []
+            for i in range(n):
+                a = i * 2 * math.pi / n
+                rr = rad * (1 + rng.uniform(-jit, jit))
+                out.append((x + rr * math.cos(a) * 1.15, y + rr * math.sin(a) * .9))
+            return out
+        IS.poly(img, ragged(1.25 * R, .28), mix(brick, c, .45), None, 0, 0)               # rendered skin blown off
+        IS.poly(img, ragged(1.0 * R, .25), brick, None, 0, 0)                            # the raw brick
+        for n in range(7):                                                               # brick courses showing
+            yy = y - .8 * R + n * .27 * R
+            w = .9 * R * math.sqrt(max(0.0, 1 - ((yy - y) / (.95 * R)) ** 2))
+            poly(img, [(x - w, yy), (x + w, yy)], None, dark(brick, .3), max(1.0, .05 * R), 0)
+        IS.poly(img, ragged(.62 * R, .35), (22, 16, 16), None, 0, 0)                     # the hole, ragged
+        IS.poly(img, ragged(.42 * R, .3), (8, 6, 6), None, 0, 0)
+        for n in range(5):                                                               # broken chunks at the lip
+            a = rng.uniform(0, 2 * math.pi)
+            bx, by = x + .78 * R * math.cos(a) * 1.15, y + .78 * R * math.sin(a) * .9
+            g = R * rng.uniform(.10, .18)
+            IS.poly(img, [(bx - g, by - g * .6), (bx + g * .8, by - g), (bx + g, by + g * .5), (bx - g * .4, by + g)],
+                    mix(brick, (200, 180, 160), .3), dark(brick, .5), 1.0, 0)
 
 
 def _bank(img, cam, t):
