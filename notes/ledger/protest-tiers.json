@@ -1124,24 +1124,25 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.19,
+   "cost": 0.5,
    "src": "estimate",
    "sid": "session_01GznaAVEcfn2dswNWQNbC13",
-   "steps": 5,
-   "hist_k": 103,
+   "steps": 35,
+   "hist_k": 154,
    "kinds": {
-    "film-file search": 0.8,
-    "tool search": 3.7,
-    "other": 95.4
+    "film-file search": 10.0,
+    "tool search": 7.7,
+    "renders": 1.6,
+    "other": 80.7
    },
    "calls": {
-    "film-file search": 1,
-    "tool search": 3,
+    "film-file search": 14,
+    "tool search": 14,
     "whole-file .py read": 0,
     "page.py": 0,
-    "renders": 0,
+    "renders": 3,
     "pictures": 0,
-    "other": 1
+    "other": 2
    }
   }
  ],
