@@ -1170,9 +1170,14 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
             V.arm_to(j, 'R', (j['shR'][0] - 30 + 70 * e, y + (-250 - y) * e, z + (90 - z) * e), 'down' if e < .5 else 'out')
             grips.held(j, 'R', sp, pistol(j, 'R'))
         V.arm_to(j, 'L', (-sw + 30, 230.0, 140.0), 'down')
-    elif name in ('gun_up', 'gun_run'):             # round 2 (G9): walking off with the pistol held up by the head
+    elif name == 'gun_up':                          # round 2 (G9): walking off with the pistol held up by the head
         V.arm_to(j, 'R', (j['shR'][0] + 40, -250.0, 90.0), 'out')
         grips.held(j, 'R', sp, pistol(j, 'R'))
+    elif name == 'gun_run':                         # G21: sprinting, the pistol brandished up and forward, elbow down
+        V.arm_to(j, 'R', (j['shR'][0] + 20, -220.0, 170.0), 'down')
+        grips.held(j, 'R', sp, pistol(j, 'R'))
+        sw_l = math.sin(2 * math.pi * 2.6 * t)      # the free arm pumps with the stride, bent, kept out by his side
+        V.arm_to(j, 'L', (-sw - 10, 230.0 - 40.0 * sw_l, 120.0 + 100.0 * sw_l), 'out')
     elif name == 'haul':                            # hauling the shutter up (T2): both hands high, leaning back
         j['lean'] = -8
         V.arm_to(j, 'R', (60.0, -330.0, 150.0), 'down')

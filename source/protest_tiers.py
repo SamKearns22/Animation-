@@ -589,7 +589,7 @@ T2_STONES = ((0.35, -1.4, 1.6), (0.5, 0.6, 2.0), (0.62, -0.4, 1.2), (0.8, 1.3, 1
 UP_STONES = ((3.9, 2.6, 6.7), (4.5, 3.15, 5.6), (5.2, 2.8, 6.2))
 UP_FROM = (4.8, 9.2, 1.8)            # off the frame's right edge, near us: where they are thrown from
 # G9 (FAZ 31 Oct: two weapons taken): who takes which pistol: (cubby column, row height, when it leaves its cubby)
-GUN_RUN = {'runner1': ((0.9, 12.0), (-4.0, 9.9)), 'runner2': ((4.5, 10.0),), 'swinger': ((-5.0, 13.5),)}   # G21: each one's way out (off frame); runner1 clear of the swinger first
+GUN_RUN = {'runner1': ((0.9, 12.0), (-4.0, 9.9)), 'runner2': ((4.5, 10.0),), 'swinger': ((-5.0, 13.0),)}   # G21: each one's way out (off frame); runner1 clear of the swinger first
 TAKE = {'runner1': (6, 0.98, 3.6), 'runner2': (8, 1.35, 3.75), 'swinger': (4, 0.98, 4.85)}   # G13: after the shatter
 # G4/G5: the four who go in through the door come back out of it with stock: (in at, out at, lane, prop)
 # chat 3: out 1 s apart in one lane clear of the wall and the swinger (0.5 s apart, they walked into each other)
@@ -717,6 +717,8 @@ def t2_actors(lt):
             v = ease((tt - t0) / 0.25)
             a = A(name, 'rioter', lerp(xr, bx, v), lerp(13.45, bd, v), lerp(180, _heading(keys, 0), v), 'gun_up', t=tt)
             a.blend(reach, 2.0, w=v * 1.5)
+            return
+        if tt >= keys[-1][0]:                               # off frame: gone (not jogging on the spot out of view)
             return
         x, d, i, u = _keys(tt, keys)
         A(name, 'rioter', x, d, _heading(keys, min(max(i, 0), len(keys) - 2)), 'gun_run', t=tt)
