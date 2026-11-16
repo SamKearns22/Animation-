@@ -65,6 +65,7 @@ Sam's answers to chat 1's questions are carried by these notes (wider view kept;
 - [ ] A12 End shot C: the other one's shrug must read: a real shrug, genuinely perplexed, eye contact with the driver (no idea what a 'protest' is: this is just another day in Albania).
 - [ ] A13 Sam's Albanian take of the driver's line: source/audio/protest-tiers-bro.m4a (speech 1.1-3.0 s of the file); the English line stays as its subtitle.
 - [ ] A14 (Sam 16 Nov) Music for the Albania scene: `sounds/protest-tiers/heavy-metal.mp3` (his track, 129 s), from 20 s into the file (where the heavy riff starts: check by ear/loudness and start on the riff's first hit), under T4 and on through the end scene; ducked (muffled: quieter + low-pass) under each dialogue line so the voices are clear, back up between lines.
+- [ ] A16 (Sam 16 Nov, Albania chat 3) There is no 'raised part' of the square: the middle police hide behind sandbags / a low wall instead. Plan step 5 changed: no terrace; a low sandbag wall (~1.0 m, two courses of bags) on the ground across x 1.5-9 at d 26.3 with a short return along x 1.5; the officers crouch behind it and pop up to fire.
 - [ ] A15 (Sam 16 Nov) The helicopter crash's sound: the explosions from the Blue Planet film (Flying Whales: `source/audio/flying-whales-sfx/explosion-major.mp3` for the big explosion at the landing T4_FIRE, `explosion-minor.mp3` for the RPG hit); see flying_whales_sound.clip() for how they were levelled.
 
 ## Round 5 France notes (Sam, 16 Nov, on the France round 4 clip)
