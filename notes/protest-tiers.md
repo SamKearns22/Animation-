@@ -14,6 +14,7 @@
 - **Branches named (not merged, waiting on Sam):** claude/beautiful-brown-vutd0l, claude/blessed-c2-mics-wip, claude/audit-honest-checker; claude/bald-heads-fix merged only after Sam's Y there.
 - **X1:** no budget, cost or estimate talk to Sam for the rest of this film.
 - **Budget stop Y (Sam, 16 Nov, in chat R2-2, at 15.22% of a week for round 2):** finish ONLY Germany (faults, placard off the door, sign meets glass, shop front in the clip check + rule 30 line, O7 hats), send the Germany clips with one numbered list (incl. Overall+Spain still Y/N), then STOP and wait for Sam before any France or Albania work.
+- **Budget stop again (end of chat 3, 16 Nov):** round 2 at 20.13% of a week vs 2.7%. Not raised with Sam (X1: no budget talk this film); work stopped at his questions; the next chat settles it with chat 2 / the ledger before more work.
 - **For Claude:** main line claude/create-claude-md-oe8z4g; back-half branch claude/protest-back-half. T2: t2_actors, _door_walk, board_pose, t2_door, t2_stones/chips; sets t2() door + prop_crate; cast kick/reach_lo/reach_hi/gun_up/swing_face. T3: FRONT3/BACK3/CRS_X/CRS_D/crs_adv/crs_guard/_missile/t3_fx; sets MON_X, BIKES3, CAR3, CAMS t3 (420, 900, 1550, 4.5), RF3 identity; cast shield_up, line_walk.
 
 ## Round 2 notes"; back half's notes to come.
