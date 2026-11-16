@@ -1625,7 +1625,7 @@ def shopping_bag(j, side='L'):
 
 TOURIST_DRESS = {   # who -> (head props, body props, sp changes): what draw() puts on them
     'husband': ([baseball_cap], [shorts, polo_collar, bum_bag, camera], dict(trousers='skin', shorts=(196, 176, 128))),
-    'wife': ([sun_visor], [shorts, tote], dict(trousers='skin', shorts=(240, 236, 226))),
+    'wife': ([], [shorts, tote], dict(trousers='skin', shorts=(240, 236, 226))),
     'granny': ([headscarf], [long_skirt, cardigan], {}),
     'seller': ([flat_cap, moustache], [apron], {}),
 }
@@ -1907,24 +1907,35 @@ def open_palm(j, side='R'):
 
 
 def shrug(j, sp, u):
-    """The passenger's shrug (end shot C), u 0..1 eased in: his near (right) hand lets go of the launcher's grip and
-    opens palm up, raised out behind him at head height, both shoulders lift, the head tips; the RPG stays on his shoulder, steadied by
-    his far hand (the near hand: side on, the far one is hidden behind him)."""
+    """Round 4 (A30, Sam: 'barely legible'; his plan: the RPG in his right hand as part of the shrug, both arms up,
+    'beats me!'): u 0..1 eased in. Both shoulders right up; the RPG comes off the shoulder, gripped in his right hand
+    and lifted out to his right, tube nearly upright; the left hand opens palm up, out to his left at head height;
+    the elbows bent out. moped_scene turns him three-quarter to camera for it, so both arms read. Rule 30: the first
+    shrug was side on with one palm behind the launcher: nothing read at phone size."""
     e = moves.ease(min(1.0, max(0.0, u)))
     if e <= 0:
         return j
     sw = sp.get('shoulders', 150)
-    for sd in 'LR':                                  # A12: a real shrug: the shoulders right up (was 28)
+    for sd in 'LR':
         x, y, z = j['sh' + sd]
-        j['sh' + sd] = (x, y - 60 * e, z)
+        j['sh' + sd] = (x, y - 80 * e, z)
+    sh0, u0 = j['_rpg']
     hold = np.asarray(j['wrR'], float)
-    out = np.array((220.0, 150.0, -140.0))           # A12: palm up at chest height (was head height)           # up and out behind him, palm up at head height: side on, the only
-    bulge = np.array((150.0, 0.0, 0.0)) * math.sin(math.pi * e)   # chat 24: mid-way the straight path passed the
-    V.arm_to(j, 'R', tuple(hold + (out - hold) * e + bulge), 'out')   # shoulder (elbow folded): swing out round it
-    if e > 0.5:
-        j.setdefault('hand', {})['R'] = 'palm'
-    j['_free'] = 'R'
-    j['head_roll'] = -12 * e
+    hand = np.array((sw + 60.0, -170.0, 20.0))                         # up by his own right shoulder, off the driver
+    V.arm_to(j, 'R', tuple(hold + (hand - hold) * e), 'out')
+    up = np.array((-0.32, -0.94, 0.05))                                # upright, leaning back off the driver's head
+    up = up / np.linalg.norm(up)
+    ud = np.asarray(u0) + (up - np.asarray(u0)) * e
+    ud = ud / np.linalg.norm(ud)
+    grip = np.asarray(_hand_c(j, 'R'), float)
+    j['_rpg'] = (grip + ud * 0.33 * U, ud)                             # held near its rear: all of it above his fist
+    holdL = np.asarray(j['wrL'], float)
+    handL = np.array((-sw - 250.0, -110.0, 60.0))                      # palm up, out to his left
+    V.arm_to(j, 'L', tuple(holdL + (handL - holdL) * e), 'out')
+    if e > 0.4:
+        j.setdefault('hand', {})['L'] = 'palm'
+    j['_free'] = 'L'
+    j['head_roll'] = -10 * e
     return j
 
 
@@ -1988,9 +1999,11 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     if drv_roll:                                  # end shot C: the driver's small head tilt on "protest"
         jd['head_roll'] = drv_roll
     jg = gunner_pose(gun, X, aim) if pillion == 'rpg' else pillion_fire(gun, X, pillion, kick, flash)
+    gyaw = yaw
     if shrug_u > 0:
         shrug(jg, gun, shrug_u)
-        jg['props'] = jg.get('props', []) + [open_palm(jg, 'R')]
+        jg['props'] = jg.get('props', []) + [open_palm(jg, 'L')]
+        gyaw = yaw - 45 if shrug_u > 0.25 else yaw                    # A30: turned three-quarter to camera
     sd = s * drv['height'] / 1.75
     L = B.Local(cam, x, y, sd, 1)
     pen = B.Pen(img, L)
@@ -1998,13 +2011,13 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     gz = -0.42 * U                                # the passenger sits 0.42 m behind the driver
     gx, _ = V.project((0.0, 0.0, gz), X['yaw'])[0]
     if both:
-        draw(img, cam, x + gx * sd, y, s, gun, jg, yaw, 'rioter', head=gun_head)
+        draw(img, cam, x + gx * sd, y, s, gun, jg, gyaw, 'rioter', head=gun_head)
     jd['mid'] = [lambda p, j2, view: moped_front(p, jd, X)]
     draw(img, cam, x, y, s, drv, jd, yaw, 'rioter', head=drv_head)
     if both:
         if pillion == 'rpg':
             Lg = B.Local(cam, x + gx * sd, y + jg['bob'] * s * gun['height'] / 1.75, s * gun['height'] / 1.75, 1)
-            rpg(B.Pen(img, Lg), jg, yaw, fired)
+            rpg(B.Pen(img, Lg), jg, gyaw, fired)
 
 
 def rpg_ends(cam, x, y, s, yaw=90, aim=38.0):

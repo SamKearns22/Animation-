@@ -2410,7 +2410,7 @@ def t4_actors(lt):
     if _PLATE:
         out = [a for a in out if a.name != 'granny']
     else:
-        out += selfie(lt)
+        pass  # out += selfie(lt)       A31 (Sam 16 Nov: 'remove this guy, he's just standing there')
     return out + surfer(lt)
 
 
@@ -2553,9 +2553,9 @@ def t4_mopeds(img, lt):
 
 # A21 (Sam 16 Nov): two more mopeds zoom across BEFORE the RPG one, each pillion firing into the air; their own
 # sizes and colours (a big silver maxi-scooter, a small blue one), the riders in Tirana's street mix.
-ZOOMERS = (dict(who='zm1', t=(3.4, 4.5), d=11.2, x=(-8.5, 8.5), pill='rifle',
+ZOOMERS = (dict(who='zm1', t=(2.4, 4.6), d=11.2, x=(-8.5, 8.5), pill='rifle',
                 bike=dict(col=(222, 224, 228), dark=(150, 154, 162), k=1.18)),
-           dict(who='zm2', t=(4.25, 5.05), d=9.8, x=(-8.0, 8.0), pill='pistol',
+           dict(who='zm2', t=(3.7, 5.3), d=9.8, x=(-8.0, 8.0), pill='pistol',
                 bike=dict(col=(36, 96, 176), dark=(22, 60, 120), k=0.86)))
 
 
@@ -2708,7 +2708,7 @@ def t4_fx(img, lt):
         S.glow_disc(img, tx, ty, 34 + 5 * math.sin(lt * 20 + fd), (255, 70, 50), amt=.4)
         IS.ell(img, tx, ty, 5, 5, (255, 236, 220), None)
     flying_shield(img, lt)
-    if 1.8 <= hl < 1.95 and not _PLATE:                    # gag b: the selfie's flash, the helicopter falling behind him
+    if False and 1.8 <= hl < 1.95 and not _PLATE:          # A31: the selfie man is gone; gag b: the selfie's flash, the helicopter falling behind him
         x, d = SELFIE
         fx, fy = cam.p(x - 0.05, d, 2.25)
         S.glow_disc(img, fx, fy, 30 * (1 - (hl - 1.8) / 0.15) + 12, (255, 255, 245), amt=.85)
@@ -2925,10 +2925,14 @@ def rider_heads(tier, lt):
         h = 45 if lt < 1.9 else 0 if lt < 2.0 else -45
         return h, (45 if lt < 1.85 else 0 if lt < 1.95 else -45), 0.0
     roll = -6.0 * math.sin(math.pi * min(1.0, max(0.0, (lt - 0.75) / 0.5)))   # the small tilt on "protest"
-    return -45, 45, roll                           # A11/A12: each turned to the other (eye contact), not to camera
+    g = 45
+    k = int((lt - SHRUG[0] - 0.35) / 0.17)          # A30 (Sam: 'shake his head a little, like no idea'): after the
+    if 0 <= k < 6:                                  # shrug is up, the head goes 45-0-45-90-45-0 (two shakes)
+        g = (45, 0, 45, 90, 45, 0)[k]
+    return -45, g, roll                            # A11/A12: each turned to the other (eye contact), not to camera
 
 
-SHRUG = (2.25, 0.6)                                # A12: the shrug AFTER the line (Sam's take ends ~2.05)
+SHRUG = (2.25, 0.3)                                # A30: up in 0.3 s (was 0.6); A12: the shrug AFTER the line (Sam's take ends ~2.05)
 
 
 def rider_faces(tier, lt):
@@ -3403,10 +3407,52 @@ def overlay(img, t):
             u = min(1.0, (lt - INTENSITY_AT) / 0.12)
             fn = _font(max(8, int(81 * k * (0.6 + 0.4 * u + 0.15 * math.sin(math.pi * u)))))
             x = 72 * k + d.textlength(lab, font=f)
+            if tier == 't4':                               # A32 (Sam): the 11/10 flashes like a game's JACKPOT
+                img.alpha_composite(lay)
+                jackpot(img, x, 514 * k + 27 * k, k, lt - INTENSITY_AT)
+                return img
             d.text((x, 514 * k + 27 * k), f'{INTENSITY[tier]}/10', font=fn, fill=INTENSITY_COL[tier],
                    stroke_width=int(5 * k), stroke_fill=(0, 0, 0), anchor='lm')
     img.alpha_composite(lay)
     return img
+
+
+JACKPOT_COLS = ((255, 214, 40), (255, 60, 50), (255, 255, 255), (255, 140, 20), (80, 230, 255), (255, 70, 200))
+
+
+def jackpot(img, x, y, k, a):
+    """A32: '11/10' slams in huge and bounces down to size, then flashes colours every other frame on a spinning
+    sunburst with a pulsing glow and sparkles, like a slot machine's jackpot; a stays lively all through T4."""
+    if a < 0:
+        return
+    f = int(a * FPS)
+    sl = 1.0 + 1.6 * max(0.0, 1 - a / 0.25) ** 2 + 0.18 * math.sin(min(a, 0.6) * 26) * max(0.0, 1 - a / 0.6)
+    pulse = 1.0 + 0.07 * math.sin(a * 14)
+    size = max(8, int(81 * k * sl * pulse))
+    txt = '11/10'
+    fn = _font(size)
+    tw = ImageDraw.Draw(img).textlength(txt, font=fn)
+    cx, cy = x + tw / 2, y
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(lay)
+    col = JACKPOT_COLS[(f // 2) % len(JACKPOT_COLS)]
+    alt = JACKPOT_COLS[(f // 2 + 3) % len(JACKPOT_COLS)]
+    R = tw * 0.95
+    for q in range(16):                                    # the sunburst behind, turning
+        a0 = q * math.pi / 8 + a * 1.6
+        pts = [(cx, cy), (cx + R * math.cos(a0 - .09), cy + R * .62 * math.sin(a0 - .09)),
+               (cx + R * math.cos(a0 + .09), cy + R * .62 * math.sin(a0 + .09))]
+        d.polygon(pts, fill=(col if q % 2 else alt) + (110,))
+    lay = lay.filter(ImageFilter.GaussianBlur(3 * k))
+    img.alpha_composite(lay)
+    rng = np.random.default_rng(f)
+    d = ImageDraw.Draw(img)
+    for _ in range(10):                                    # sparkles round it
+        sx, sy = cx + rng.uniform(-1, 1) * R, cy + rng.uniform(-.6, .6) * R
+        r = rng.uniform(5, 14) * k
+        d.polygon([(sx, sy - r), (sx + r * .25, sy - r * .25), (sx + r, sy), (sx + r * .25, sy + r * .25), (sx, sy + r),
+                   (sx - r * .25, sy + r * .25), (sx - r, sy), (sx - r * .25, sy - r * .25)], fill=(255, 255, 230))
+    d.text((x, y), txt, font=fn, fill=col, stroke_width=int(7 * k), stroke_fill=(0, 0, 0), anchor='lm')
 
 
 def frame_image(t):
@@ -3496,7 +3542,7 @@ def t3_sound(mix, sr, load):
 
 METAL = os.path.join(SFX, 'heavy-metal.mp3')
 RIFF_AT = 19.88              # A14: the riff's first hit in Sam's track (loudness jumps 0.11 -> 0.43 at 19.88 s)
-METAL_LUFS, DUCK = -21.0, (0.35, 1800.0)   # under the scene; under each line: 35% and muffled above 1.8 kHz
+METAL_LUFS, DUCK = -21.0, (0.6, 1800.0)    # under the scene; under each line: 60% (A29: no muffle)
 
 
 def t4_sound(mix, sr):
@@ -3519,7 +3565,7 @@ def t4_sound(mix, sr):
         w[max(0, a):max(0, b)] = 1.0
     k = int(0.12 * sr)                                       # 0.12 s in and out
     w = np.convolve(w, np.ones(k) / k, 'same')
-    m = m * (1 - w) + low * DUCK[0] * w
+    m = m * (1 - w * (1 - DUCK[0]))                         # A29 (Sam): no muffle; only a dip so the words stay clear
     i = int(t0 * sr)
     mix[i:i + len(m)] += m[:max(0, len(mix) - i)]
     import flying_whales_sound as FW
