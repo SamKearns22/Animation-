@@ -214,6 +214,7 @@ def hair_clear(j, sp, yaw):
     def ok(s):
         try:
             C.F.audit_arm(*(seen(j[k + s])[0] for k in ('sh', 'el', 'wr')))
+            C.V.check_arm3(j, s)                      # the 3D test the draw applies (elbow never under 25 degrees)
             return True
         except Exception:
             return False
