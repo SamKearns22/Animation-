@@ -36,7 +36,7 @@
 - [ ] F7 Too little distance between protesters and police: open the gap.
 - [ ] F8 Remove the burning bikes. The water cannon approaches through two separate groups of police (the block split, a lane between).
 - [ ] F9 No group moves uniformly (robotic): every group, the police lockstep included, gets small per-person variance in timing, stride, angle.
-- [ ] F10 Q (answered, waiting for Y): was the car shove in the reporting? Answer: no. fr3 (17 Oct) shows a silver estate car burning where it stood near Marianne, roof on; the shove was our way of doing round 1's "a burning car rolls". Sam: "the car has no roof" = ours is drawn roofless. Plan if Y: car burns in place as in fr3, roof drawn, no pushers.
+- [ ] F10 Q (answered, waiting for Y): was the car shove in the reporting? Answer: no. fr3 (17 Oct) shows a silver estate car burning where it stood near Marianne, roof on; the shove was our way of doing round 1's "a burning car rolls". Sam: "the car has no roof" = ours is drawn roofless. Plan if Y: car burns in place as in fr3, roof drawn, no pushers. SAM: Y, "Include a burning car in the upper left of the scene, burning near the statue and behind the protestors."
 - [ ] F11 Vary the missiles: some fruit, a firework or two, a few bottles that smash on the shields.
 - [ ] A0 (Sam 16 Nov: hold off on Albania, then: start Albania in a separate chat) Albania chat 1 does A1-A3 in t4/end code.
 
