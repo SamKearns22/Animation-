@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 81.04% (+17.53); 48 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 82.65% (+19.14); 49 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 81.04% of the 60.31% planned so far; at this rate the film lands at 81.5%.**
+**Forecast: Spent 82.65% of the 60.31% planned so far; at this rate the film lands at 83.1%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -74,6 +74,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-16 | 7dacafe0 | est | opus | auto |  | 1.93 |  | 0 | 0 |
 | 2026-11-16 | 681dab74 | est | opus | auto |  | 1.84 |  | 0 | 0 |
 | 2026-11-16 | 48332425 | est | opus | auto |  | 0.97 |  | 0 | 0 |
+| 2026-11-16 | 0f8e6e9f | est | opus | auto |  | 1.61 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 0007a586 (auto): 71 steps, history 227k at the end; other 72.2%, film-file search 16.2%, tool search 5.5%, renders 2.9%, pictures 2.1%, page.py 1.1%
@@ -87,6 +88,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-16 7dacafe0 (auto): 60 steps, history 233k at the end; other 57.1%, film-file search 36.2%, tool search 3.4%, pictures 2%, renders 1.4%
 - 2026-11-16 681dab74 (auto): 86 steps, history 212k at the end; other 67.2%, film-file search 18%, tool search 9.3%, pictures 3.7%, renders 1.2%, page.py 0.5%
 - 2026-11-16 48332425 (auto): 33 steps, history 209k at the end; other 68.1%, film-file search 23.4%, tool search 7.6%, pictures 0.8%
+- 2026-11-16 0f8e6e9f (auto): 53 steps, history 208k at the end; other 66.3%, film-file search 24.6%, tool search 7%, pictures 1.7%, renders 0.4%
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
