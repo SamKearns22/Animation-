@@ -105,6 +105,21 @@ the end by section.
 | Drafts kept | P16 (Sam, 15 Nov): the latest animatic (and its clean render when there is one) are kept on GitHub in `animations/drafts/` (the older ones replaced, the whole folder emptied the day the film is posted); a fix to a few seconds is redrawn as a clip and spliced in, never a full redraw | finish.py saves them; handover.py's DRAFT check |
 | Making the films | Start with the Animation- project selected (P13); list all branches at the start, push to the main line at the end (P11); reference photos: 2-3 from Sam, else one slow search, 3 per place at most (P12) | P13 automatic (no cost-watch line means it isn't); the rest by hand |
 
+## Dates moved from CLAUDE.md (startup fixes 4, Sam's Y, 16 Nov; word for word; `source/sentences.py` checks each row)
+| CLAUDE.md rule (its first words) | Its date and history, as it stood in CLAUDE.md |
+|---|---|
+| Back-end proposals are explained plainly | (Sam, 16 Nov; replaces 14 Nov) |
+| emptied when the film is posted | rule P16, Sam 15 Nov |
+| No check sheet before an animatic unless I ask | (Sam, 12 Nov) |
+| A question about the film is answered, not acted on | (Sam, 13 Nov) |
+| Every stage aims at three things | (Sam, 13 Nov) |
+| The channel is topical, absurdist news-of-the-week satire | (Sam, 13 Nov) |
+| The proposal route | (Sam, 15 Nov; replaces "search before suggesting or building", 12/14 Nov) |
+| Chats open the next chat themselves | (Sam, 13 Nov; was 8 in a row) |
+| and the reply must list it before I'm told the chat is working | (12 Nov: one opened without it and could do nothing) |
+| A chat on the wrong model for its next stage | (Sam, 15 Nov; `handover.py` flags a Next line that mixes them) |
+| The handover check | (Sam, 13 Nov) |
+
 ## Merged numbers (Job C, 9 Nov: the same rule written twice became one; nothing was dropped)
 12 → 5 · 15 → S7 · 23 → 61 · 33 → 8 · 35 → 1 · 45 → 11 · 46 → 79 · 51 → 49 · 53 → 32 · 55 → 24 and 44 ·
 the old second 62 (estimates checked against past films) → 24 · 60 → S3 · 68 → 38 · 69 → 41 · 71 → 62 · 73 → 59 ·
