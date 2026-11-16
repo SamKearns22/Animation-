@@ -563,7 +563,7 @@ def end(t, where=''):
     ACTIVE[0] = False
     got = [dict(f, t=t, where=where) for f in frame_faults(FRAME)]
     if 'posecheck' in sys.modules:                  # the poses drawn against the gallery (rule 42; posecheck.py)
-        got += [dict(f, t=t, where=where) for f in sys.modules['posecheck'].take()]
+        got += [dict(f, t=t, where=where) for f in sys.modules['posecheck'].take(t)]
     del FRAME[:]
     FOUND.extend(got)
     return got

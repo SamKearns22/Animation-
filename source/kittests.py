@@ -1852,7 +1852,7 @@ def people_from_a_description():
             pass
     users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
              ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'people_turned.py', 'page.py', 'facehouse.py',
-              'kittests.py', 'rough.py') and not os.path.basename(f).startswith('places')   # a kit, not a film (5d)
+              'kittests.py', 'rough.py', 'kitchecks.py') and not os.path.basename(f).startswith('places')   # a kit, not a film (5d); kitchecks reads crowds (craft change 1)
              and re.search(r'^\s*(import people\b|from people\b)',
              open(f, encoding='utf-8').read(), re.M)]
     if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
@@ -2890,6 +2890,68 @@ def claude_md_sentences_never_lost():
         got.append(real[:3])
     return ok, f'good move lost {got[0]}; tag with no row lost {len(got[1])}; reworded lost {len(got[2])}; ' \
                f'the real move: {got[3] if len(got) > 3 else "old copy not in this shallow clone"}'
+
+
+@test
+def phone_size_poses():
+    """Craft change 2 (Sam, 16 Nov): pre-flight refuses a film with people and no SHOT_MARKS, and every acting-list body
+    move or never-looked-at gallery pose with no 'Pose looked at:' line; replayed on EPR (its shrug failed twice);
+    the drawing-pass facing check flags a named person turned off the lens in a film with no rooms plan."""
+    import posecheck as P
+    src = '\n'.join(open(p).read() for p in P._film_files('protest-tiers'))
+    notes = open(P._notes_of('protest-tiers')).read()
+    epr = P.gate_faults(src, notes, {'people'}, None)
+    caught = any('SHOT_MARKS' in x for x in epr) and any('shrug' in x for x in epr)
+    fixed = notes + '\n- Pose looked at: passenger, C | 2.40 s | phone size: shoulders up, palm up, reads\n'
+    cleared = not any('shrug' in x for x in P.gate_faults(src, fixed, {'people'}, {'C': ['passenger']}))
+    gal = P.gate_faults("j = moves.pose(sp, 'shrug')", '', {'people'}, {'a': ['x']})
+    nopeople = P.gate_faults('', '', {'props'}, None)
+
+    class Film:
+        SHOTS = [('a', 0, 2)]
+        SHOT_MARKS = {'a': ['bob']}
+        THREE_QUARTER_OK = ()
+    P.set_marks(Film)
+    P.FACING[:] = [('Bob', 90), ('Ann', 90)]
+    side = P.take(1.0)
+    P.FACING[:] = [('Bob', 10)]
+    front = P.take(1.0)
+    P.MARKS.clear()
+    ok = caught and cleared and len(gal) == 1 and not nopeople and len(side) == 1 and not front
+    return ok, f'EPR refusals {len(epr)} (shrug and no marks caught: {caught}); cleared by its line: {cleared}; ' \
+               f'gallery shrug refused: {len(gal)}; side-on Bob flagged: {len(side)}, front Bob: {len(front)}'
+
+
+@test
+def crowds_varied():
+    """Craft change 1 (Sam, 16 Nov): the sameness check: EPR's gold hats (9 of 20 hats), one-model police and one-face
+    rioters, the bald share, a place's skin mix, a crowd step that skips list items, and neighbours in step."""
+    import kitchecks as K
+    gold, other = (186, 146, 52), [(24, 24, 26), (80, 82, 86), (34, 40, 62), (156, 34, 38), (40, 92, 70)]
+
+    def p(i, **kw):
+        sp = dict(skin=[(236, 200, 176), (204, 160, 120)][i % 2], hair='crop', hair_c=(30 + i * 9, 20, 10),
+                  jacket=(20 + 13 * i, 60, 90), height=1.7 + i / 100)
+        sp.update(kw)
+        return sp
+    hats = [p(i, headwear='beanie', hat_c=gold if i < 9 else other[i % 5]) for i in range(20)]
+    spread = [p(i, headwear='beanie', hat_c=other[i % 5]) for i in range(20)]
+    police = [dict(p(0), hair='none') for _ in range(12)]
+    bald = [p(i, hair='bald' if i % 4 == 0 else 'crop') for i in range(24)]
+    mix = {'light': .5, 'olive': .5}
+    pale = [p(i, skin=(236, 200, 176)) for i in range(24)]
+    got = dict(gold=K.same_faults('a', hats), spread=K.same_faults('a', spread), police=K.same_faults('a', police),
+               bald=K.same_faults('a', bald), mix=K.same_faults('a', pale, mix), mixok=K.same_faults('a', spread, mix))
+    rec = []
+    for f in range(6):                                   # three marchers swinging together, a fourth on its own beat
+        for w in ('m1', 'm2', 'm3', 'm4'):
+            rec.append(('t4', w, dict(_t=f / 12, _pose=(('wrL', (f if w != 'm4' else 5 - f, 0)),))))
+    step = K.in_step(object(), rec)
+    apart = K.in_step(object(), [r for r in rec if r[1] in ('m1', 'm4')])
+    ok = (any('hat' in x for x in got['gold']) and not got['spread'] and any('look' in x for x in got['police'])
+          and any('bald' in x for x in got['bald']) and any('skins' in x for x in got['mix']) and not got['mixok']
+          and step and not apart)
+    return ok, {k: len(v) for k, v in got.items()} | {'in step': len(step), 'apart': len(apart)}
 
 
 def main():

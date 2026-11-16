@@ -255,3 +255,17 @@
 - **For Claude:** page.show.deep (FINDER_DEEP=0 off), show.gate, --who; `code-finder/change2-replay.py`; kittests
   `code_finder`. Old handovers: `notes/archive/proposal-route-handovers.md`.
 
+
+
+## Superseded 16 Nov (craft chat 2)
+- **Rules that bite next:** the proposal route (every change through it), 30 (say why a first fix failed), 85 (cost watch).
+- **Done (craft chat, Sonnet, 16 Nov):** EPR lessons proposal declined by Sam; craft-first-round judged blind (helper B's version) and ADOPTED: Sam said "1". Record: `notes/proposals/craft-first-round.md` "Final version".
+- **Next (Opus medium, two changes, each its own Y and its own build, then Sonnet for any send):** (1) crowds varied by default: move EPR's city mix/outfits/hats/builds/faces into the people kit's crowd lines; widen the copies check in `source/kitchecks.py` (a share cap on one hat/hair/skin/colour, skins vs the place's mix, neighbours in step). Number to beat: at most 2 sameness notes, none repeated, on the next two crowd films. (2) poses at phone size: a film with people and no shot marks is refused; a gallery pose not yet looked at by eye is refused until its sheet is viewed at phone size in its own angle, with any held prop (`posegallery.py`, `posecheck.py`, rule 38). Number: no pose note returned twice on the next two films. Replay both on EPR's notes before switching on. Then, own Y: the craft census (notes only, EPR/Blessed/Remakes) for sets, effects, framing, cameras.
+- **Needs Sam:** Y to approve the people kit for films (the crowd change cannot go in without it); the pose change does not need it, start there.
+- **Read:** `notes/proposals/craft-first-round.md` (Final version, Faults), `guides/kit-catalogue.md` line 44, `source/kitchecks.py`, `source/posecheck.py`, `guides/pose-gallery.md`; job pack "A tool job".
+- **Open rule requests:** none. EPR lessons proposal: declined.
+- **Branches named (not merged, waiting on Sam, also in the EPR notes):** claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **Unrouted entry (21:05, chat 2cec4bf1):** a false alarm: the stop hook demanded the Critiqued lines of seven older proposals the reply never asked Sam to approve; the reply was a routed pick between options of epr-lessons / craft-first-round (both judged). Nothing unjudged was put to Sam.
+- **For Claude:** F6 named: cameras get nothing now (moving rough declined). Old handovers: `notes/archive/proposal-route-handovers.md`.
+
+

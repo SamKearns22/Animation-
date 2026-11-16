@@ -403,3 +403,6 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 
 
 ## Sam's brief: word for word in `notes/archive/protest-tiers-brief.md` (every detail is in the checklist above).
+
+## Fault found by the crowd check (craft chat 2, 16 Nov; for the EPR chat before the final is posted)
+- [ ] Marchers' jackets: `story/protest-tiers-people.txt` lines 44-47, `jacket (3i+s)` over 6 colours: member i only ever takes 2 of each city's 6 (3 and 6 share 3), so about half the marchers in each tier wear one dark top. Fix: `(5i+s)` (5 and 6 share nothing); look at one still per tier; tell Sam in one line (Added: all 6 colours per city).

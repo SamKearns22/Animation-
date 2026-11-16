@@ -167,6 +167,8 @@ def picture_faults(film, name, recs, fps, new_template=False):
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
         problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
+        if kitchecks.SAMENESS_ON[0]:            # craft change 1: crowds varied (share caps, skins, in step)
+            problems += kitchecks.sameness(film, drawn) + kitchecks.crowd_list_faults(film)
         problems += kitchecks.mouths(film, drawn)   # rule 13 (notes 5, 15, 45): every face on screen has a mouth
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
         problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut
@@ -382,6 +384,18 @@ def main():
     wf, wlist = waivers.gate_faults(film)
     print(f'exceptions: {len(wlist)}' + (' (every one in the report file)' if wlist else ''))
     stop += wf
+    import posecheck                            # craft change 2 (Sam, 16 Nov): poses read at phone size, rules 38, 41
+    pnotes = open(notes_path(film, name)).read() if os.path.exists(notes_path(film, name)) else ''
+    psrc = '\n'.join(open(p).read() for p in posecheck._film_files(film.__name__) or
+                     [getattr(film, '__file__', '')] if p and os.path.exists(p))
+    pf = posecheck.gate_faults(psrc, pnotes, has, posecheck.shot_marks(film))
+    if name.replace('_', '-') in posecheck.BEFORE:
+        for x in pf:
+            print('WARNING:', x, '(' + posecheck.BEFORE[name.replace('_', '-')] + ')')
+    else:
+        stop += pf
+    if 'people' in has and 'rooms' not in has and posecheck.shot_marks(film):
+        posecheck.set_marks(film)               # no rooms plan: SHOT_MARKS checked on the drawing pass (rule 38)
     warn = gate_warnings(film, name, has)      # Job J: rules 8, 61, 74
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
