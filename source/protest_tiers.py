@@ -3457,7 +3457,7 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
            # round 3 (A4): the selfie's turn and cheer; the crowds' sprites step their moves in sixths (punches,
            # machetes, throws, dances, bursts): hands and arms jump a step a frame by design
            + [(f'{w}.{part}{sd}', at('t4', 0.0), at('t4', T4_LEN)) for w in
-              ('mr*', 'mp*', 'gun*', 'mid*', 'mol*', 'dan*', 'cov*', 'carrier*', 'granny', 'selfie')
+              ('mr*', 'mp*', 'gun*', 'mid*', 'mol*', 'dan*', 'cov*', 'carrier*', 'granny*', 'selfie*')
               for part in ('hand', 'forearm', 'arm', 'thigh', 'shin', 'foot') for sd in 'LR']
            # chat 29: round 1's new runners, the same sprint (legs only: thighs, shins, feet at 2-2.8x the body's
            # speed; their turns and arms were snaps and are fixed, so arms and bodies are still checked)
