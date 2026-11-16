@@ -574,27 +574,58 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.56,
+   "cost": 1.86,
    "src": "estimate",
    "sid": "session_01GznaAVhf7PwZd8dexWX6xo",
-   "steps": 41,
-   "hist_k": 223,
+   "steps": 52,
+   "hist_k": 251,
    "kinds": {
-    "film-file search": 31.4,
-    "tool search": 5.2,
+    "film-file search": 27.2,
+    "tool search": 4.9,
     "page.py": 0.4,
-    "renders": 10.3,
-    "pictures": 1.1,
-    "other": 51.6
+    "renders": 8.6,
+    "pictures": 1.0,
+    "other": 57.8
    },
    "calls": {
     "film-file search": 18,
-    "tool search": 11,
+    "tool search": 12,
     "whole-file .py read": 0,
     "page.py": 1,
     "renders": 3,
     "pictures": 2,
-    "other": 5
+    "other": 10
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "chat": "5ded903b",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.72,
+   "src": "estimate",
+   "sid": "session_01GznaASbTxRAsw4ptNupK7h",
+   "steps": 50,
+   "hist_k": 216,
+   "kinds": {
+    "film-file search": 23.8,
+    "tool search": 2.8,
+    "page.py": 0.5,
+    "renders": 3.0,
+    "pictures": 2.3,
+    "other": 67.7
+   },
+   "calls": {
+    "film-file search": 25,
+    "tool search": 6,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "renders": 3,
+    "pictures": 5,
+    "other": 12
    }
   }
  ],
