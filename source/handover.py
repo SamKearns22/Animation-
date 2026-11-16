@@ -450,6 +450,16 @@ def branch_faults(film, notes=None):
     return [f'BRANCH not merged or named in the notes: {branches.line(b).strip()}' for b in left]
 
 
+
+def sentence_faults():
+    """startup fixes 4 (Sam's Y, 16 Nov): no CLAUDE.md sentence lost; text leaves only word for word (sentences.py)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import sentences
+    try:
+        return sentences.faults()
+    except Exception as e:
+        return [f'SENTENCE: the check failed ({e}); run python3 source/sentences.py check']
+
 def report(faults, where):
     for f in faults:
         print(f)
@@ -553,6 +563,7 @@ def main(argv):
             film = ledger.film_of(rec)
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
+                      + sentence_faults()
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
     if cmd == 'start':

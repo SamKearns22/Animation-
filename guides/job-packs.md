@@ -18,6 +18,11 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
   multipliers; the plan's stages go in with `ledger.py estimate FILM PCT --stages`, and each stage's end runs
   `ledger.py stage FILM NAME`, whose forecast line opens that reply (rule 24).
 - Bite: 24, 74, 1, 38, 8. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`.
+- Moved from CLAUDE.md word for word (startup fixes 4, 16 Nov): **Reference photos and reporting (full network access since 12 Nov):** I send 2-3 when I have them; otherwise search
+  once, slowly, 3 per place at most: **news pages and press photo galleries first** (Al Jazeera galleries, AP, Reuters,
+  euronews, dpa, local papers), free libraries (Wikimedia, Geograph, Openverse, Pexels, Unsplash) only when the news
+  has nothing. **One failed try per source, then stop** and give me one numbered list of what to find, which angle and
+  why.
 
 ## Build (Opus, high for new things; medium from a clear plan)
 - Read: `guides/figure-rig.md` 2-4, 5c (people); `guides/satire.md` Movement, One set one plan; `guides/pose-gallery.md`
@@ -37,10 +42,20 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 ## Checks and animatic (Sonnet): pre-flight, check sheet, render, send
 - Read: `guides/satire.md` Before every render, Render, If a check fails; `guides/preflight.md` Stage 3.
 - Bite: 59, 67, 14, 89 (the critique gate), 75. Tools: `preflight.py NAME OUT --text`, then in full; `finish.py`.
+- The sign-off, moved from CLAUDE.md word for word (startup fixes 4, 16 Nov): **Every video
+  ends with the CranbriJoos sign-off** (the beaver sipping from the carton, my slurp, 1.6 s): `python3
+  source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 --film NAME` (or `["Hook Text"]` for a film with no
+  `HOOK`), from the clean render in `source/data/`.
 
 ## Final and posting (Sonnet)
 - Read: `guides/tiktok-design.md` The video file, Sign-off, Posting; `guides/preflight.md` Stage 5.
 - Bite: 70, 75, 52, 47, 37. Tools: `finish.py CLEAN OUT --film NAME`, `ledger.py log/audit`.
+
+### My accounts (Sam, 26 Oct)
+(Moved from CLAUDE.md word for word, startup fixes 4, 16 Nov.)
+- Channel and brand name on every platform: **CranbriJoos**. TikTok (main platform): `www.tiktok.com/@cranbrijoos`.
+- YouTube Shorts is the second platform: same name and profile picture (`profile/cranbrijoos-tiktok-1080-eyes-open.png`,
+  the beaver's face); every Short's description and pinned comment points back to the TikTok link.
 
 ## A tool job (Opus, high to design; medium to build)
 - Read: the job's own section in `notes/next-jobs.md`; the tool's MAP; `source/kittests.py` for its tests.

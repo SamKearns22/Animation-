@@ -13,7 +13,7 @@ is in `guides/job-packs.md`.
 - **No code names or file internals** (they go in the film's notes). Name only files I'll open, and send them.
 - **One line per note:** "8: fixed – the whale now knocks the helideck away. Clip sent." Anything a fix takes away or
   you add gets its own "Lost: …" / "Added: …" line, so I can say no before it costs a round.
-- **Back-end proposals are explained plainly (Sam, 16 Nov; replaces 14 Nov).** Anything I propose that you can't see (a
+- **Back-end proposals are explained plainly.** Anything I propose that you can't see (a
   check, a tool, a rule, a change to how the films are built): the problem in one or two plain sentences, then what's
   proposed as numbered steps, then why, what you'd notice, and the other option. One "Lost:" / "Added:" line each. No
   code names; any technical word is explained where it appears. This may run over the 10-line limit; never skipped.
@@ -27,7 +27,7 @@ is in `guides/job-packs.md`.
 # Files
 Every file **under 50 MB**, aiming for a few MB per animation; tell me the size. Only the **finished version** goes on
 GitHub, in `animations/` with a clear name; drafts stay off, **except the latest animatic and its clean render**, kept in
-`animations/drafts/` (finish.py saves them; push them; emptied when the film is posted; rule P16, Sam 15 Nov). **MP4** by default; a GIF only if I ask. The tools install
+`animations/drafts/` (finish.py saves them; push them; emptied when the film is posted). **MP4** by default; a GIF only if I ask. The tools install
 at session start (`.claude/hooks/setup.sh`).
 
 # Asking me before you go on
@@ -35,7 +35,7 @@ at session start (`.claude/hooks/setup.sh`).
   before a final render and wait for a clear yes**; "fix this before the final" is not a go-ahead.
 - **Every animatic carries the Hook Text and the CranbriJoos sign-off**, made as the final is (`finish.py` on its
   clean render); a check sheet, when I ask for one, shows the Hook Text frame.
-- **No check sheet before an animatic unless I ask** (Sam, 12 Nov): once the checks pass (every fault fixed or named),
+- **No check sheet before an animatic unless I ask**: once the checks pass (every fault fixed or named),
   render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.
 - **"Just go" (or any override) skips waiting for my yes, never the checks or the hand-over:** every fault is fixed
@@ -43,7 +43,7 @@ at session start (`.claude/hooks/setup.sh`).
 - **Unattended runs stop after one animatic:** render, send, wait; never stack rounds I haven't seen.
 - **Notes on movement get a short clip** of just those seconds (`final OUT --small --span T0 T1`); clips need no yes;
   a full animatic once the clips look right.
-- **A question about the film is answered, not acted on** (Sam, 13 Nov): reply with the answer and the plan (what I'd
+- **A question about the film is answered, not acted on**: reply with the answer and the plan (what I'd
   change and how), then wait for his Y before changing anything.
 - **"Hold" means collect, don't act:** reply to each note with how you understood it and how you'll fix it, change
   nothing, do it all when I say go. **"Hold responses until all my notes are through": no replies at all** until then.
@@ -57,14 +57,14 @@ at session start (`.claude/hooks/setup.sh`).
 - **"I want a rule" (or "every film", "from now on", "always") means a permanent rule for all films:** reply with the
   exact wording and place; on my yes, write it in that same chat. Each rule is written once: in the rulebook with its
   check, or here if it's about working with me (listed in the rulebook's last table).
-- **Every stage aims at three things (Sam, 13 Nov): high quality, fewer notes and faults, a film within 15% of a
+- **Every stage aims at three things: high quality, fewer notes and faults, a film within 15% of a
   week; its checks are made smarter, improved and condensed toward them. Something new? First improve the check that missed it; then merge overlapping checks; remove a step only if it
   caught nothing in three films, with my Y on a "Lost:" line.** It stays if the next film is cheaper or gets fewer notes.
-- **The channel is topical, absurdist news-of-the-week satire; every film is new (Sam, 13 Nov).** Every idea for cost or
+- **The channel is topical, absurdist news-of-the-week satire; every film is new.** Every idea for cost or
   speed makes new things better, cheaper or faster: smarter tools, faults caught before Sam sees them, reading less.
   Never suggest doing less, making it worse, trimming the joke, or repeating old characters, places or material. Reuse
   means the means (rig, hands, poses, house look, checks), never the content.
-- **The proposal route (Sam, 15 Nov; replaces "search before suggesting or building", 12/14 Nov):** "Every change to
+- **The proposal route:** "Every change to
   rules, tools, checks, kits or how films are built that is put to Sam goes through the proposal route first (helpers,
   blind judge, top two in plain English with Lost/Added and Critiqued). The guard refuses an unjudged ask. Changes made
   without asking are listed and judged in the end-of-film review against the film's results." (`source/propose.py`)
@@ -74,16 +74,16 @@ at session start (`.claude/hooks/setup.sh`).
 - **Models by stage:** planning (brief, staging, questions) and building anything new: **Opus, high effort**. A round
   of my notes (deciding, fixing, clips) and building from a clear plan or sound: **Opus, medium effort**. Routine work
   (checks, check sheet, animatic, filing, final render, sending, saving), status questions: **Sonnet**.
-- **Chats open the next chat themselves (create_session), with no count (Sam, 13 Nov; was 8 in a row):** each gets the
+- **Chats open the next chat themselves (create_session), with no count:** each gets the
   handover's model, effort and its place ("chat 3"); first it checks it can save to GitHub, else it stops and tells me.
   **The Animation- project is always attached** (`source_url` of the repo, revision the main line), and the reply must
-  list it before I'm told the chat is working (12 Nov: one opened without it and could do nothing).
+  list it before I'm told the chat is working.
   **The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work
   on its job. I never start a chat or type a prompt unless it failed to save.** When a chat ends on a question
   for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
   the chain then goes on. A chat on the wrong model for its next stage opens one on the right model, never
-  carries on, up or down: an Opus fix ends by opening the Sonnet chat for the animatic, finish.py and sending (Sam,
-  15 Nov; `handover.py` flags a Next line that mixes them). No scheduled check-ins unless I ask. A message never says "start a new chat" or "type ...": it says what
+  carries on, up or down: an Opus fix ends by opening the Sonnet chat for the animatic, finish.py and sending.
+  No scheduled check-ins unless I ask. A message never says "start a new chat" or "type ...": it says what
   is done and what I'm needed for.
 - **One wait per render;** never check on it repeatedly. **Push notifications** when a render or long job finishes,
   fails or needs me, and at every stage end. Say how long each render will take and took.
@@ -96,7 +96,7 @@ at session start (`.claude/hooks/setup.sh`).
 - **The handover** is the film's ONE "Where things stand" (old ones to `notes/archive/NAME-handovers.md`), **15 lines at
   most**, in order: Rules that bite next (3, by number); Done; Next (model, effort, what it does); Needs Sam; Read
   (the pack in `guides/job-packs.md`, and any extra sections); Open rule requests; a "For Claude" line for code names.
-  Update `story/status.md` (3 lines), commit and push. **The handover check (Sam, 13 Nov):** `python3 source/handover.py end
+  Update `story/status.md` (3 lines), commit and push. **The handover check:** `python3 source/handover.py end
   --film NAME` before every handover; first thing in a chat, `handover.py start PARENT_SESSION --film NAME`; every
   fault it lists is fixed, written in the notes or answered first. **The 3 lines at the bottom** say what's done and what's
   next; "what to type" only when the chain has stopped for good (no save). **Every handover names the next
@@ -119,21 +119,11 @@ at session start (`.claude/hooks/setup.sh`).
   say so; the handover's first line names the branch with the newest work, and the next chat merges it first.
 - **Which film, which guide** (satire film, motion-led, flat people, Yuletide): `guides/job-packs.md`,
   "Film types". **Reuse before building** (`guides/kit-catalogue.md`); build new only where nothing fits, and say so.
-- **Reference photos and reporting (full network access since 12 Nov):** I send 2-3 when I have them; otherwise search
-  once, slowly, 3 per place at most: **news pages and press photo galleries first** (Al Jazeera galleries, AP, Reuters,
-  euronews, dpa, local papers), free libraries (Wikimedia, Geograph, Openverse, Pexels, Unsplash) only when the news
-  has nothing. **One failed try per source, then stop** and give me one numbered list of what to find, which angle and
-  why.
+- **Reference photos:** the search order is in `guides/job-packs.md`, Plan.
 - **Earlier chats can be read** (`list_sessions`, `list_events`): before asking me anything I may have answered
   already, or when a handover is unclear, look in that film's earlier chats first and say what you found.
 - **Sound:** voices only, no sound effects unless the script names them or I ask. **I record every voice; never ask
   who voices them.**
 - **TikTok** (`guides/tiktok-design.md`): no title by default; Hook Text in TikTok's white-box style. **Every video
-  ends with the CranbriJoos sign-off** (the beaver sipping from the carton, my slurp, 1.6 s): `python3
-  source/finish.py CLEAN.mp4 animations/NAME-vertical.mp4 --film NAME` (or `["Hook Text"]` for a film with no
-  `HOOK`), from the clean render in `source/data/`.
-
-# My accounts (Sam, 26 Oct)
-- Channel and brand name on every platform: **CranbriJoos**. TikTok (main platform): `www.tiktok.com/@cranbrijoos`.
-- YouTube Shorts is the second platform: same name and profile picture (`profile/cranbrijoos-tiktok-1080-eyes-open.png`,
-  the beaver's face); every Short's description and pinned comment points back to the TikTok link.
+  ends with the CranbriJoos sign-off**: the command is in `guides/job-packs.md`, Checks and animatic.
+- **My accounts** (CranbriJoos, TikTok first, YouTube Shorts second): `guides/job-packs.md`, Final and posting.
