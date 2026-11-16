@@ -55,7 +55,7 @@ HAS = {'people', 'effects', 'props'}
 FPS = 12
 # round 1 (Sam R4, 15 Nov): tiers 4 / 6 / 8 / 10 s, then the end scene's three shots (notes "## Round 1 plan")
 # round 2 (A2, Sam: Albania 2-3 s longer, new action at full speed): T4 10 -> 12.5 s; the end scene starts later
-LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 12.5), ('ea', 2.4), ('eb', 2.8), ('ec', 3.4))   # A12: C +1 s for the shrug after the line
+LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 12.5), ('ea', 2.4), ('eb', 3.6), ('ec', 3.4))   # A12: C +1 s for the shrug after the line; A23: B 3.6 s (Sam's take runs 3.06 s from 0.3)
 TIERS = ('t1', 't2', 't3', 't4')
 SHOTS, _t = [], 0.0
 for _n, _l in LENS:
@@ -2517,6 +2517,40 @@ def t4_mopeds(img, lt):
                       fired=(k == 0 and lt >= MOPED0 + 0.6), both=True)
 
 
+# A21 (Sam 16 Nov): two more mopeds zoom across BEFORE the RPG one, each pillion firing into the air; their own
+# sizes and colours (a big silver maxi-scooter, a small blue one), the riders in Tirana's street mix.
+ZOOMERS = (dict(who='zm1', t=(3.4, 4.5), d=11.2, x=(-8.5, 8.5), pill='rifle',
+                bike=dict(col=(222, 224, 228), dark=(150, 154, 162), k=1.18)),
+           dict(who='zm2', t=(4.25, 5.05), d=9.8, x=(-8.0, 8.0), pill='pistol',
+                bike=dict(col=(36, 96, 176), dark=(22, 60, 120), k=0.86)))
+
+
+def zoomers(lt):
+    """The passing mopeds on screen now, as depth-sorted items ('zoom', z, x, d)."""
+    out = []
+    for z in ZOOMERS if not _PLATE else ():
+        t0, t1 = z['t']
+        if t0 <= lt < t1:
+            out.append(('zoom', z, lerp(z['x'][0], z['x'][1], (lt - t0) / (t1 - t0)), z['d']))
+    return out
+
+
+def draw_zoomer(img, item, lt):
+    _, z, x, d = item
+    cam = T4CAM
+    gx, gy = cam.p(x, d)
+    s = scale_at(cam, d)
+    k = cam.ppm(d)
+    for q, (dz, ln) in enumerate(((0.35, 2.2), (0.75, 1.6), (1.25, 1.1))):    # speed streaks behind it
+        a, b = cam.p(x - 1.1 - ln, d, dz), cam.p(x - 1.1, d, dz)
+        IS.poly(img, [a, b], None, (196, 176, 160), max(1.5, k * .03), 0)
+    fl = int(round(lt * FPS)) % 2 == 0
+    C.moped_scene(img, _cam2(), gx, gy - FEET * s, s, yaw=90, both=True, bike=z['bike'],
+                  drv_sp=C.rioter('rioter', seed=z['who'] + 'd', tier='t4'),
+                  gun_sp=C.rioter('rioter', seed=z['who'] + 'p', tier='t4'), pillion=z['pill'],
+                  kick=1.0 if fl else 0.0, flash=fl)
+
+
 def rpg_tip():
     x, d = moped_pos(MOPED0 + 0.6, 0)
     return T4CAM.p(x - 0.1, d, 2.05)
@@ -3190,9 +3224,12 @@ def picture(t):
         front = RF4.image(front) if front is not None else None
         cam = T4CAM
         ppl = Image.new('RGBA', back.size, (0, 0, 0, 0))
-        dep = lambda a: WALL_D if a == 'wall' else a['d'] if isinstance(a, dict) else a.d   # noqa: E731
-        for a in sorted(t4_actors(lt) + ['wall'] + list(crowd_t4()), key=lambda a: -dep(a)):
-            if a == 'wall':
+        dep = lambda a: (WALL_D if a == 'wall' else a['d'] if isinstance(a, dict) else a[3] if isinstance(a, tuple)   # noqa: E731
+                         else a.d)
+        for a in sorted(t4_actors(lt) + ['wall'] + list(crowd_t4()) + zoomers(lt), key=lambda a: -dep(a)):
+            if isinstance(a, tuple):
+                draw_zoomer(ppl, a, lt)                     # A21: the mopeds passing before the RPG one
+            elif a == 'wall':
                 draw_wall(ppl)                              # A16: the sandbags in their place among the people
             elif isinstance(a, dict):
                 crowd_draw(ppl, a, lt)                      # A17: the crowd mass among them

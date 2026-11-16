@@ -393,11 +393,23 @@ CITY_MIX = {'t1': {'light': .72, 'olive': .16, 'tan': .07, 'brown': .03, 'dark':
             't4': {'light': .55, 'olive': .40, 'tan': .05}}                                    # Tirana
 
 
+RIDER_EYES = {   # A22 (Sam: 'keep the RPG riders in the black/grey hoodies, different eyes from each other')
+    'rider': dict(m=dict(eye_size=-.022, eye_open=-.08, eye_tilt=-4.0, eyes_apart=-.12, brow_high=-.07), lid4=.36,
+                  iris=(40, 26, 18), brow_thick=.075),          # the driver: narrow, heavy-lidded, close-set, dark
+    'gunner': dict(m=dict(eye_size=.03, eye_open=.09, eye_tilt=3.0, eyes_apart=.12, brow_high=.08), lid4=.04,
+                   iris=(104, 124, 70), brow_thick=.035)}       # the passenger: big, round, wide-set, hazel-green
+
+
 def rioter(who='rioter', seed=None, tier='t2'):
     """One black-bloc rioter. seed (the actor's name) picks, the same every frame, a skin from the tier's city mix,
     eye and brow colour, height and head shape, so no two in a group are the same face (Sam O4)."""
     sp = dict(CAST[who])
     sp['glove'] = (24, 24, 26)                      # black gloves (ref de4: one orange, most dark)
+    if who in RIDER_EYES:                           # A22: the two RPG riders, same hoodies, each his own eyes
+        e = RIDER_EYES[who]
+        sp['kit_face'] = dict(sp['kit_face'], m=dict(sp['kit_face']['m'], **e['m']), iris=e['iris'],
+                              brow_thick=e['brow_thick'])
+        sp['lid4'] = e['lid4']
     if seed is None:
         return sp
     import zlib
@@ -509,8 +521,14 @@ def t4_street(sp, i):
     sp['brow_c'] = _DK(sp['hair_c'], .8)
     if r.random() < .22 and hair not in ('bob', 'pony'):
         sp['headwear'] = 'beanie' if r.random() < .5 else 'cap'
-        sp['hat_c'] = (lambda c: (c, _DK(c)))(_pick(r, D['hat']))
+        # A17 look (still 28.0: the far rows full of gold beanies; the few looks repeat): the colour goes round
+        # the list by look, so no one colour takes over
+        sp['hat_c'] = (lambda c: (c, _DK(c)))(T4_HATS[i % len(T4_HATS)])
     return sp
+
+
+T4_HATS = ((24, 24, 26), (80, 82, 86), (34, 40, 62), (156, 34, 38), (226, 224, 216), (110, 32, 40), (66, 68, 54),
+           (186, 146, 52), (40, 92, 70), (150, 118, 76))
 
 
 def _pick(r, opts):
@@ -745,7 +763,8 @@ def marcher(i, tier='t1', s=0):
     hair = sp['kit_face'].get('hair', '')
     if hair == 'bald' or (hair in ('short', 'crop', 'side', 'curly') and (i * 7 + s) % 4 == 1):
         sp = dict(sp, headwear='beanie' if (i + s) % 3 else 'cap',
-                  hat_c=(lambda c: (c, _DK(c)))(MARCH_HATS[(i * 3 + s) % len(MARCH_HATS)]))
+                  hat_c=(lambda c: (c, _DK(c)))(T4_HATS[(i * 7 + s) % len(T4_HATS)] if tier == 't4'   # A17 look
+                                                 else MARCH_HATS[(i * 3 + s) % len(MARCH_HATS)]))
     return sp
 
 
@@ -1731,8 +1750,9 @@ def _moped_parts(X):
     """The scooter in the driver's body frame (units; z forward, y down; ground at y = X['ground']). About 1.8 m
     long, 12-inch wheels, a step-through floor, a front apron, the seat, the handlebar with its headlight."""
     g = X['ground']
-    r = 0.22 * U
-    fz, bz = 0.62 * U, -0.66 * U                     # wheel centres (front, back) relative to the driver's hips
+    kb = X.get('k', 1.0)                             # A21: a bigger or smaller scooter (wheels and wheelbase)
+    r = 0.22 * U * kb
+    fz, bz = 0.62 * U * kb, -0.66 * U * kb           # wheel centres (front, back) relative to the driver's hips
     seat = g - 0.78 * U
     return dict(r=r, front=(0.0, g - r, fz), back=(0.0, g - r, bz), seat=seat, g=g, fz=fz, bz=bz)
 
@@ -1757,9 +1777,9 @@ def moped_back(p, j, X):
     body = [(bz - 0.22 * U, s + 30), (bz - 0.12 * U, s - 10), (0.12 * U, s - 10), (0.18 * U, s + 60),
             (0.16 * U, g - 0.3 * U), (0.42 * U, g - 0.28 * U), (0.46 * U, g - 0.2 * U), (-0.1 * U, g - 0.16 * U),
             (bz + 0.1 * U, g - 0.2 * U), (bz - 0.12 * U, g - 0.34 * U)]
-    p.poly(curve([q(0, y, z) for z, y in body], 2), MOPED, INK, 2.6)
+    p.poly(curve([q(0, y, z) for z, y in body], 2), X.get('col', MOPED), INK, 2.6)
     p.poly(curve([q(0, y, z) for z, y in [(bz - 0.18 * U, s + 20), (bz - 0.08 * U, s - 4), (bz + 0.1 * U, s + 40),
-                                         (bz - 0.12 * U, s + 70)]], 2), MOPED_D, None)           # side panel shade
+                                         (bz - 0.12 * U, s + 70)]], 2), X.get('dark', MOPED_D), None)           # side panel shade
     seat = [(bz - 0.14 * U, s - 6), (bz - 0.06 * U, s - 36), (0.14 * U, s - 36), (0.18 * U, s - 4)]
     p.poly(curve([q(0, y, z) for z, y in seat], 2), (26, 24, 26), INK, 2.2)
     p.ell(*q(0, s + 10, bz - 0.24 * U), 12, 9, (220, 40, 30), INK, 1.4)                         # tail light
@@ -1780,12 +1800,12 @@ def moped_front(p, j, X):
     p.line([q(0, y, z) for z, y in col], (60, 60, 64), 11)
     apron = [(0.34 * U, g - 0.26 * U), (0.42 * U, g - 0.5 * U), (hb[1] - 0.04 * U, hb[0] + 60), (hb[1] + 0.06 * U, hb[0] + 40),
              (fz + 0.02 * U, g - 0.52 * U), (fz - 0.04 * U, g - 0.3 * U), (0.5 * U, g - 0.2 * U)]
-    p.poly(curve([q(0, y, z) for z, y in apron], 2), MOPED, INK, 2.6)
+    p.poly(curve([q(0, y, z) for z, y in apron], 2), X.get('col', MOPED), INK, 2.6)
     p.poly(curve([q(0, y, z) for z, y in [(fz - 0.08 * U, g - m['r'] - 40), (fz, g - m['r'] - 70), (fz + 0.12 * U, g - m['r'] - 40),
-                                         (fz + 0.06 * U, g - m['r'] - 10)]], 2), MOPED, INK, 2.2)   # mudguard
+                                         (fz + 0.06 * U, g - m['r'] - 10)]], 2), X.get('col', MOPED), INK, 2.2)   # mudguard
     head = [(hb[1] - 0.02 * U, hb[0] - 10), (hb[1] + 0.12 * U, hb[0] - 4), (hb[1] + 0.14 * U, hb[0] + 50),
             (hb[1] - 0.02 * U, hb[0] + 60)]
-    p.poly(curve([q(0, y, z) for z, y in head], 2), MOPED, INK, 2.4)
+    p.poly(curve([q(0, y, z) for z, y in head], 2), X.get('col', MOPED), INK, 2.4)
     p.ell(*q(0, hb[0] + 24, hb[1] + 0.14 * U), 10, 18, (250, 246, 200), INK, 1.6)               # headlight
     p.line([q(-90, hb[0], hb[1]), q(90, hb[0], hb[1])], INK, 12)                                 # the bar
 
@@ -1822,6 +1842,40 @@ def gunner_pose(sp, X, aim=38.0):
     j['_rpg'] = (sh, u)
     V.arm_to(j, 'R', tuple(sh + u * 150 + (0, 70, 0)), 'down')
     V.arm_to(j, 'L', tuple(sh + u * 330 + (-30, 50, 0)), 'down')
+    return j
+
+
+def pillion_fire(sp, X, kind='rifle', kick=0.0, flash=False):
+    """A21: the pillion of a passing moped firing into the air: 'rifle' (the AK up at 70 degrees, butt at the
+    shoulder) or 'pistol' (the right arm straight up); the other hand holds on. kick 0..1 the recoil; flash: the
+    muzzle flash this frame."""
+    j = gunner_pose(sp, X, 38.0)
+    j.pop('_rpg', None)
+    sw = sp.get('shoulders', 150)
+    if kind == 'rifle':
+        a = math.radians(70)
+        dirn = np.array((0.0, -math.sin(a), math.cos(a)))
+        base = np.array((sw - 60.0, 60.0, 30.0)) - dirn * 40 * kick
+        V.arm_to(j, 'R', tuple(base + dirn * 0.24 * U + (0, 60, 0)), 'down')
+        V.arm_to(j, 'L', tuple(base + dirn * 0.58 * U + (-50, 40, 0)), 'down')
+        tip = lambda: base + dirn * 0.95 * U                               # noqa: E731
+        j['props'] = [rifle(j, base, dirn)]
+    else:
+        dirn = np.array((0.15, -0.86, 0.5))
+        dirn = dirn / np.linalg.norm(dirn)
+        V.arm_to(j, 'R', tuple(np.array((sw - 30.0, -40.0 - 30 * kick, 20.0)) + dirn * 540), 'down')
+        V.arm_to(j, 'L', (-sw + 60, 230.0, 190.0), 'down')                   # holding on at the driver's waist
+        tip = lambda: np.asarray(_hand_c(j, 'R'), float) + dirn * (0.26 * U)   # noqa: E731
+        j['props'] = [gun_aimed(j, 'R', dirn)]
+    if flash:
+        def fl(p, j2):
+            jj = dict(j, _yaw=j2['yaw'])
+            fx, fy = P3(jj, tuple(tip()))
+            for q, (r, col) in enumerate(((120, (255, 200, 80)), (72, (255, 236, 150)), (30, (255, 255, 236)))):
+                pts = [(fx + r * (1.0 if k % 2 == 0 else .38) * math.cos(k * math.pi / 5 + q * .3),
+                        fy + r * (1.0 if k % 2 == 0 else .38) * math.sin(k * math.pi / 5 + q * .3)) for k in range(10)]
+                p.poly(pts, col, INK if q == 0 else None, 1.6)
+        j['props'].append(fl)
     return j
 
 
@@ -1895,7 +1949,8 @@ def rpg(p, j, yaw, fired=False):
 
 
 def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv_head=None, gun_head=None,
-                shrug_u=0.0, rim=None, drv_roll=0.0, drv_face=None, gun_face=None):
+                shrug_u=0.0, rim=None, drv_roll=0.0, drv_face=None, gun_face=None, bike=None, drv_sp=None,
+                gun_sp=None, pillion='rpg', kick=0.0, flash=False):
     """The moped racing in with its driver and (both) the RPG passenger. (x, y): the driver's neck base at scale s;
     returns nothing. Side on (90) or three-quarter (45) facing right. drv_head / gun_head: where each one's head faces
     (degrees, as yaw: -30 turned back over his shoulder toward us, 0 to camera; None = with the body). shrug_u: the
@@ -1904,7 +1959,7 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     if rim is not None:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         moped_scene(lay, cam, x, y, s, yaw, aim, fired, both, drv_head, gun_head, shrug_u, None, drv_roll, drv_face,
-                    gun_face)
+                    gun_face, bike, drv_sp, gun_sp, pillion, kick, flash)
         from PIL import ImageFilter
         a = lay.split()[3]
         w = max(3, int(round(abs(cam.S(1.0) if hasattr(cam, 'S') else 1.0) * s * 14)) | 1)
@@ -1914,15 +1969,16 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
         img.alpha_composite(glow)
         img.alpha_composite(lay)
         return
-    drv, gun = dict(rioter('rider'), **(drv_face or {})), dict(rioter('gunner'), **(gun_face or {}))   # A11/A12: eyes
-    X = dict(ground=928.0 - (-30.0), bob=-30.0, yaw=V.snap(yaw)[0])
+    drv = dict(drv_sp or rioter('rider'), **(drv_face or {}))                  # A11/A12: eyes; A21: other riders
+    gun = dict(gun_sp or rioter('gunner'), **(gun_face or {}))
+    X = dict(ground=928.0 - (-30.0), bob=-30.0, yaw=V.snap(yaw)[0], **(bike or {}))
     X['ground'] = 928.0 + 0.0                     # in the driver's body frame: soles of a standing driver
     X['bar'] = (928.0 - 1.02 * U, 0.5 * U)        # grip height 1.02 m, 0.5 m ahead of his hips
     X['bob'] = (450.0 - (928.0 - 0.8 * U))        # hips on the seat (0.8 m up): negative = raised
     jd = driver_pose(drv, X)
     if drv_roll:                                  # end shot C: the driver's small head tilt on "protest"
         jd['head_roll'] = drv_roll
-    jg = gunner_pose(gun, X, aim)
+    jg = gunner_pose(gun, X, aim) if pillion == 'rpg' else pillion_fire(gun, X, pillion, kick, flash)
     if shrug_u > 0:
         shrug(jg, gun, shrug_u)
         jg['props'] = jg.get('props', []) + [open_palm(jg, 'R')]
@@ -1937,8 +1993,9 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     jd['mid'] = [lambda p, j2, view: moped_front(p, jd, X)]
     draw(img, cam, x, y, s, drv, jd, yaw, 'rioter', head=drv_head)
     if both:
-        Lg = B.Local(cam, x + gx * sd, y + jg['bob'] * s * gun['height'] / 1.75, s * gun['height'] / 1.75, 1)
-        rpg(B.Pen(img, Lg), jg, yaw, fired)
+        if pillion == 'rpg':
+            Lg = B.Local(cam, x + gx * sd, y + jg['bob'] * s * gun['height'] / 1.75, s * gun['height'] / 1.75, 1)
+            rpg(B.Pen(img, Lg), jg, yaw, fired)
 
 
 def rpg_ends(cam, x, y, s, yaw=90, aim=38.0):
