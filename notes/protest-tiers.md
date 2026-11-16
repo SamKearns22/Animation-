@@ -63,6 +63,14 @@
 - [ ] S6 (Sam 16 Nov) Spain: the police advance once more, in the middle, between the opening second and the existing advance (line steps 4.0).
 - [ ] S7 (Sam 16 Nov) Spain fireworks sound: `sounds/protest-tiers/fireworks.mp3` (freesound community 29629), timed to the rockets/bursts (Sam asked: sound effect allowed).
 - [ ] Q1 still open: Germany Y/N on the 0-14.5 clip.
+- [ ] G12 (Sam 16 Nov, on the 0-14.5 clip) More foreground protesters (some were lost moving them off the door) while the action stays clear.
+- [ ] G13 The road-sign man breaks the window, then just flaps the sign about: he hits the glass in several places (more cracks each time) until it all shatters; then he throws the sign to the ground and celebrates or loots.
+- [ ] G14 The looters who run into the shop vanish mid-frame: they go round a corner inside, out of sight (not a pop).
+- [ ] G15 Some thrown rocks hit the upper (first-floor) window: chip it / shatter through.
+- [ ] G16 Reference photo of the Frankfurt looting (Sam attached it; it did not come through: ask again): diversify the rioters' clothing from it, and note anything else it teaches.
+- [ ] G17 The looters leaving the shop sprint out in different directions, fleeing (not a calm walk off left).
+- [ ] G18 The kicked A-board flies further across the scene.
+- [ ] G19 Sounds (Sam's files, sounds/protest-tiers/): wood-smash.mp3 for the sign hits; glass-smash.mp3 for the shatter; stone-hit.mp3 for the rocks; protest-crowd.mp3 under the scene, taken from 15 s into the file onwards (it has voices from there).
 - [ ] G1 Germany 2-3 s longer, so the action breathes.
 - [ ] G2 Stones pelted from off camera at the shop first.
 - [ ] G3 The glass attacker turns and hits the glass (contact), not a flat swing at the air.
