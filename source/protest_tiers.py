@@ -1996,7 +1996,7 @@ SELFIE = (1.7, 10.4)
 MELEE_D = (12.2, 13.6, 15.0, 16.4)               # A4 FRONT: four rows, rioters left, police right
 WALL_D, WALL_X, WALL_Z = 26.3, (1.5, 9.0), 1.05  # A16: the sandbag wall (no raised terrace)
 COVER_D = 27.2
-GRANNY = (-4.3, 17.6)                            # A8: in front of the middle crowd (no cart, no buying)
+GRANNY = (-4.6, 17.5)                            # A8: in front of the middle crowd (no cart, no buying)
 GRANNY_THROW, GRANNY_HIT = 3.4, 4.1
 CROUCH = -0.6                                    # behind the wall: sunk so only the helmet peeps (cut at the wall top)
 
@@ -2085,14 +2085,16 @@ def melee(lt):
             jit = 0.08 * math.sin(lt * 2.1 + n)
             if c == 0 and r % 2 == 0 or (c == 1 and r in (1, 3)):          # fists
                 u = 1 - abs(2 * _cyc(lt, 1.6, off) - 1)
-                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.62 * c + 0.12 * u + jit, d, 90, 'punch', u))
+                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.74 * c - (0.4 if c else 0) + 0.12 * u + jit, d, 90,
+                               'punch', u))   # check (chat 6): a second-rank puncher stands off the machete man's back
             elif c == 0:                                                    # machetes
                 k = _cyc(lt, 1.1, off)
                 u = min(1.0, k / 0.3) if k < 0.3 else 1 - (k - 0.3) / 0.7
                 out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 + jit, d, 90, 'machete', u))
             else:                                                           # stones at the police from behind
                 u = _throw_u(_cyc(lt, 0.7, off))
-                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.62 * c + jit, d, 90, 'throw', u))
+                out.append(spr(f'mr{n + 1}', 'rioter', cx - 0.42 - 0.74 * c - (0.4 if r in (1, 3) else 0) + jit, d, 90,
+                               'throw', u))
             off2 = (n * 0.53 + 0.2) % 1.0
             px = cx + 0.42 + 0.6 * c - 0.05 * math.sin(lt * 1.7 + n)
             if c == 0:                                                      # batons v fists: hit, then driven back
@@ -2118,7 +2120,7 @@ def melee_stones(lt):
                 t0 = (q + 0.62 - off) * per
                 if 0 <= lt - t0 < THROW_P[1]:
                     cx = melee_cx(d, t0)
-                    out.append((t0, (cx - 0.42 - 0.62 * c, d, 2.0), (cx + 0.5 + 0.3 * (n % 3), d + 0.1, 1.5)))
+                    out.append((t0, (cx - 0.42 - 0.74 * c, d, 2.0), (cx + 0.5 + 0.3 * (n % 3), d + 0.1, 1.5)))
     return out
 
 
@@ -2221,10 +2223,11 @@ POP_P, POP_W = 2.0, 0.6
 
 def cover_lift(i, lt):
     """How high officer i stands behind the wall (m): CROUCH hidden, 0 up and firing; the pop takes 0.12 s."""
-    if lt >= CHEER - 0.4:
+    if lt >= CHEER - 0.15:
         return CROUCH, False
     c = (lt / POP_P + (i * 0.43) % 1.0) % 1.0 * POP_P
-    up = ease(min(c, POP_W - c) / 0.12) if c < POP_W else 0.0
+    up = ease(min(c, POP_W - c) / 0.25) if c < POP_W else 0.0   # check (chat 6): up over 3 frames, no 0.5 m snap
+    up *= 1 - ease((lt - (CHEER - 0.4)) / 0.25)                # and down by the crash, not snapped out of sight
     return lerp(CROUCH, 0.0, up), up > 0.9
 
 
@@ -3647,7 +3650,10 @@ ALLOWED_CONTACTS = [('swinger', 'GLASS', at('t2', T2_HIT - 0.1), at('t2', T2_SHA
            ('mp*', 'mp*', at('t4', 0), at('t4', T4_LEN), 'A4 melee: the police ranks packed behind their shields', 0.08),
            ('mr*', 'mr*', at('t4', 0), at('t4', T4_LEN), 'A4 melee: the rioters packed behind the front rank', 0.08),
            ('carrier*', 'surfer', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the carriers hold the surf shield up', 0.2),
-           ('carrier*', 'carrier*', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the carriers shoulder to shoulder under it', 0.08)]
+           ('carrier*', 'carrier*', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the carriers shoulder to shoulder under it, arms up', 0.09),
+           ('mid*', 'surfer', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the crowd hands up under the surfer', 0.1),
+           ('mid*', 'mid*', at('t4', 0), at('t4', T4_LEN), 'A4: the packed middle crowd, arms brushing', 0.04),
+           ('carrier*', 'mid*', at('t4', SURF[0]), at('t4', T4_LEN), 'A7: the surf pushed through the packed middle crowd (looked at: reads as the press round the shield)', 0.2)]
 ORDER_SWAPS = [(a, b, t0, t1, w) for a, b, t0, t1, w in (
     ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: they cross in the crush'),
     ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in'), ('runner*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in'),

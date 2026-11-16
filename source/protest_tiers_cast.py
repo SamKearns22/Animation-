@@ -396,7 +396,7 @@ CITY_MIX = {'t1': {'light': .72, 'olive': .16, 'tan': .07, 'brown': .03, 'dark':
 RIDER_EYES = {   # A22 (Sam: 'keep the RPG riders in the black/grey hoodies, different eyes from each other')
     'rider': dict(m=dict(eye_size=-.022, eye_open=-.08, eye_tilt=-4.0, eyes_apart=-.12, brow_high=-.07), lid4=.36,
                   iris=(40, 26, 18), brow_thick=.075),          # the driver: narrow, heavy-lidded, close-set, dark
-    'gunner': dict(m=dict(eye_size=.03, eye_open=.09, eye_tilt=3.0, eyes_apart=.12, brow_high=.08), lid4=.04,
+    'gunner': dict(m=dict(eye_size=.016, eye_open=.07, eye_tilt=3.0, eyes_apart=.12, brow_high=.08), lid4=.04,
                    iris=(104, 124, 70), brow_thick=.035)}       # the passenger: big, round, wide-set, hazel-green
 
 
