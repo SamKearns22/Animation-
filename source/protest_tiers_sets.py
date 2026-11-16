@@ -474,8 +474,9 @@ T2_WALL, T2_TRIM, T2_DARK = (58, 56, 70), (82, 80, 96), (28, 28, 36)
 SHELF, GUN, INSIDE = (236, 232, 216), (44, 44, 50), (250, 246, 228)
 
 
-def t2(t=0.0, shutter=0.5, glass='whole', marks=False):
-    """shutter: how far up the steel shutter is (0.5 half, as the scene opens; 1 hauled right up)."""
+def t2(t=0.0, shutter=0.5, glass='whole', marks=False, taken=(), star=(-0.2, 1.5)):
+    """shutter: how far up the steel shutter is (0.5 half, as the scene opens; 1 hauled right up). Round 2: taken,
+    the pistols lifted out of their cubbies ((column, row) pairs, G9); star, where the sign meets the glass (x, z)."""
     cam = CAMS['t2']
     img = Image.new('RGBA', (W, H), T2_WALL + (255,))
     k = cam.ppm(14)
@@ -491,11 +492,11 @@ def t2(t=0.0, shutter=0.5, glass='whole', marks=False):
     quad(img, (X(-3.4), Y(0)), (X(-2.45), Y(0)), (X(-2.45), Y(2.6)), (X(-3.4), Y(2.6)), T2_DARK)
     quad(img, (X(-2.8), Y(1.5)), (X(-2.6), Y(1.5)), (X(-2.6), Y(1.0)), (X(-2.8), Y(1.0)), (150, 150, 160), INK, 1.5)
     text(img, (X(-2.9), Y(2.95)), '22', int(.32 * k), (220, 220, 230))
-    # right neighbour: a closed shop, its roller shutter down, tags sprayed on it
-    quad(img, (X(2.45), Y(0)), (X(4.4), Y(0)), (X(4.4), Y(3.4)), (X(2.45), Y(3.4)), (112, 114, 124))
+    # right neighbour: a closed shop, its roller shutter down, tags sprayed on it (round 2: a metre right, for the door)
+    quad(img, (X(3.45), Y(0)), (X(5.4), Y(0)), (X(5.4), Y(3.4)), (X(3.45), Y(3.4)), (112, 114, 124))
     for z in np.arange(.2, 3.3, .18):
-        poly(img, [(X(2.45), Y(z)), (X(4.4), Y(z))], None, (88, 90, 100), 1.2, 0)
-    for i, (x, z) in enumerate(((2.8, 1.4), (3.5, 2.1), (3.1, .7))):
+        poly(img, [(X(3.45), Y(z)), (X(5.4), Y(z))], None, (88, 90, 100), 1.2, 0)
+    for i, (x, z) in enumerate(((3.8, 1.4), (4.5, 2.1), (4.1, .7))):
         poly(img, [(X(x + .25 * j), Y(z + .25 * math.sin(j * 2.1 + i))) for j in range(5)], None,
              [(220, 70, 150), (70, 200, 220), (240, 220, 80)][i], 4, 0)
     # the gun store: dark mosaic-tiled base (de3), the big window, the shutter box, the WAFFEN band
@@ -506,7 +507,16 @@ def t2(t=0.0, shutter=0.5, glass='whole', marks=False):
     for x in np.arange(x0 - .2, x1 + .2, .15):
         poly(img, [(X(x), Y(0)), (X(x), Y(.45))], None, (60, 66, 72), 1, 0)
     quad(img, (X(x0 - .2), Y(2.9)), (X(x1 + .2), Y(2.9)), (X(x1 + .2), Y(.45)), (X(x0 - .2), Y(.45)), (30, 30, 34))
-    _window(img, X, Y, x0, x1, glass)
+    # round 2 (G4): the shop's own door, right of the window; inside, the dim shop (the film draws the glass leaf,
+    # kicked open on its hinge)
+    dx0, dx1, dh = DOOR2
+    quad(img, (X(dx0 - .09), Y(0)), (X(dx1 + .09), Y(0)), (X(dx1 + .09), Y(dh + .09)), (X(dx0 - .09), Y(dh + .09)),
+         (40, 40, 46), INK, 2.4)
+    quad(img, (X(dx0), Y(0)), (X(dx1), Y(0)), (X(dx1), Y(dh)), (X(dx0), Y(dh)), (58, 52, 46))
+    for z in (.9, 1.5):                                     # the shop's racks inside, in the dark
+        quad(img, (X(dx0), Y(z)), (X(dx1), Y(z)), (X(dx1), Y(z - .06)), (X(dx0), Y(z - .06)), (96, 88, 74))
+    quad(img, (X(dx0), Y(0)), (X(dx1), Y(0)), (X(dx1 - .1), Y(.25)), (X(dx0 + .1), Y(.25)), (120, 110, 92))   # lit floor
+    _window(img, X, Y, x0, x1, glass, taken, star)
     _shutter(img, X, Y, x0, x1, shutter)
     quad(img, (X(x0 - .35), Y(3.55)), (X(x1 + .35), Y(3.55)), (X(x1 + .35), Y(4.25)), (X(x0 - .35), Y(4.25)),
          (26, 52, 46), INK, 3)
@@ -548,7 +558,7 @@ def t2(t=0.0, shutter=0.5, glass='whole', marks=False):
     return img, None
 
 
-def _window(img, X, Y, x0, x1, glass):
+def _window(img, X, Y, x0, x1, glass, taken=(), star=(-0.2, 1.5)):
     """The lit window (de3): white shelves of guns behind one big sheet of glass; 'starred' cracks, 'gone' leaves
     jagged teeth in the frame."""
     a, b = (X(x0), Y(2.75)), (X(x1), Y(.6))
@@ -568,7 +578,7 @@ def _window(img, X, Y, x0, x1, glass):
         for i, x in enumerate(np.arange(x0 + .1, x1 - .3, .42)):
             quad(img, (X(x), Y(z)), (X(x + .38), Y(z)), (X(x + .38), Y(z - .33)), (X(x), Y(z - .33)), (250, 250, 246),
                  (170, 166, 156), 1.5, 0)
-            if (i * 3 + int(z * 10)) % 5:
+            if (i * 3 + int(z * 10)) % 5 and (i, z) not in taken:
                 _pistol(img, X(x + .07), Y(z - .1), k, flip=(i % 2 == 0))
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))         # chat 11: glare and cracks kept inside the glass
     if glass in ('whole', 'starred'):                       # reflections: two pale diagonal bands on the glass
@@ -577,7 +587,7 @@ def _window(img, X, Y, x0, x1, glass):
             shape(lay, [[(xa, a[1]), (xa + 60, a[1]), (xa - 90, b[1]), (xa - 150, b[1])]], (232, 238, 244, 255), None)
     img_, img = img, lay
     if glass == 'starred':
-        cx, cy = X(-.2), Y(1.5)
+        cx, cy = X(star[0]), Y(star[1])
         for i, ang in enumerate(np.linspace(0, 6.28, 11, endpoint=False)):
             r = 120 + 70 * ((i * 5) % 3)
             poly(img, [(cx, cy), (cx + r * .5 * math.cos(ang + .2), cy + r * .5 * math.sin(ang + .2)),
@@ -1463,6 +1473,28 @@ def prop_tv(img, x, y, k, ang=0.0, lit=False):
         return
     poly(img, _turn([(-w * .2, -h * .42), (-w * .05, -h * .42), (-w * .3, h * .42), (-w * .45, h * .42)], x, y, ang),
          (90, 110, 150), None, 0, 0)
+
+
+DOOR2 = (2.35, 3.25, 2.3)        # round 2 (G4): the gun shop's door on the shop front (x from, x to, height; d 14)
+
+
+def prop_crate(img, x, y, k, ang=0.0):
+    """Round 2 (G5, Sam: 'a crate of beer'): a red plastic crate of 20 (0.4 x 0.3 m side on), its hand hole and ribs,
+    brown bottle necks with gold caps standing above the rim; (x, y) its centre."""
+    w, h = .42 * k, .3 * k
+    for q in range(5):                                       # the bottles' necks and caps behind the front wall
+        bx = -w * .4 + q * w * .2
+        poly(img, _turn([(bx - .02 * k, -h / 2 + 2), (bx + .02 * k, -h / 2 + 2), (bx + .016 * k, -h / 2 - .1 * k),
+                         (bx - .016 * k, -h / 2 - .1 * k)], x, y, ang), (110, 64, 26), INK, 1.4, 0)
+        poly(img, _turn([(bx - .02 * k, -h / 2 - .1 * k), (bx + .02 * k, -h / 2 - .1 * k), (bx + .02 * k, -h / 2 - .125 * k),
+                         (bx - .02 * k, -h / 2 - .125 * k)], x, y, ang), (230, 190, 60), INK, 1.2, 0)
+    poly(img, _turn([(-w / 2, -h / 2), (w / 2, -h / 2), (w / 2, h / 2), (-w / 2, h / 2)], x, y, ang), (200, 40, 36), INK,
+         2.4, 0)
+    for f in (-.25, 0, .25):                                 # the ribs
+        poly(img, _turn([(w * f, -h * .1), (w * f, h * .42)], x, y, ang), None, (150, 26, 24), 2, 0)
+    poly(img, _turn([(-w * .18, -h * .38), (w * .18, -h * .38), (w * .18, -h * .2), (-w * .18, -h * .2)], x, y, ang),
+         (60, 14, 14), None, 0, 0)                           # the hand hole
+    text(img, _turn([(0, h * .14)], x, y, ang)[0], 'BIER', max(8, int(.1 * k)), (250, 236, 200))
 
 
 CAMO = [(92, 84, 52), (60, 70, 40), (120, 104, 70), (44, 40, 30)]

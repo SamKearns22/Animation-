@@ -1,0 +1,5 @@
+# Sam's messages, chat cse_01GznaASsimQuBPKPxHVscKG (handover.py log)
+
+### 2026-11-16T13:32:27
+Chat 3 of European Protests, Ranked (protest-tiers), round 2. Opus, medium effort (CLAUDE.md: a round of Sam's notes). First check you can save to GitHub (push to the main line claude/create-claude-md-oe8z4g); if not, stop and tell Sam. Then run `python3 source/handover.py start session_01GznaAVhf7PwZd8dexWX6xo --film protest-tiers` and follow notes/protest-tiers.md "Where things stand": finish Germany G1-G10 (first pass is built and renders, not checked): still sheet, move the right crowd off the door, tune the sign-meets-glass point, add the shop front to the clip check (rule 83 automatic; tell Sam in one line why the hand check missed the plinth), fix the audit tables and quick-check faults, acting list, O7 hats on the crowd, then clips of Germany to Sam with one numbered list (include Y/N on the Overall+Spain still). Sam asked for no budget talk for the rest of this film. The diagonal Hook Text rule goes through propose.py before Sam sees it.
+

@@ -502,7 +502,18 @@ def bottle(j, side='R', lit=True):
     return draw
 
 
-def road_sign(j, hands=('R', 'L'), dirn=(0.0, -0.75, -0.66), pole=1.1):
+def pistol(j, side='R'):
+    """Round 2 (G9; FAZ 31 Oct: two weapons taken): a black pistol held by its grip, the muzzle up: the slide, a
+    light edge, the front sight."""
+    def draw(p, j2):
+        x, y = P3(dict(j, _yaw=j2['yaw']), tuple(_hand_c(j, side)))
+        p.poly([(x - 16, y - 140), (x + 14, y - 140), (x + 14, y - 8), (x - 16, y - 8)], (34, 34, 38), INK, 2.4)
+        p.line([(x - 8, y - 132), (x - 8, y - 20)], (110, 112, 120), 3.0)
+        p.poly([(x - 4, y - 152), (x + 6, y - 152), (x + 6, y - 140), (x - 4, y - 140)], (34, 34, 38), INK, 1.6)
+    return draw
+
+
+def road_sign(j, hands=('R', 'L'), dirn=(0.0, -0.75, -0.66), pole=1.1, face=False):
     """The give-way sign on its ripped-up pole (ref de4): grey pole from the hands, the white triangle with its thick red
     border on the far end, its point towards the hands (point-down as it stood). The triangle's plane holds the pole
     and lies across the body's front-back plane, so the side view (the swing's shot) sees it full on, the front view
@@ -514,7 +525,7 @@ def road_sign(j, hands=('R', 'L'), dirn=(0.0, -0.75, -0.66), pole=1.1):
         u /= np.linalg.norm(u)
         base, top = c - u * 60, c + u * pole * U
         side = 0.7 * U
-        w = np.cross(u, (1.0, 0.0, 0.0))
+        w = np.array((1.0, 0.0, 0.0)) if face else np.cross(u, (1.0, 0.0, 0.0))   # face: flat to a back view
         w = w / (np.linalg.norm(w) or 1)
         tri = [top - u * side * 0.577, top + u * side * 0.289 + w * side / 2, top + u * side * 0.289 - w * side / 2]
         tri2 = [P3(jj, tuple(q)) for q in tri]
@@ -711,7 +722,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j = moves.gait(sp, t, 'run')
     elif name == 'line_walk':                       # round 2 (F2): the shield line stepping forward in lockstep
         j = moves.gait(sp, t, 'walk')
-    elif name.startswith('carry') or name == 'push':  # round 1: T2 looters jog with stock; T3 shove the car
+    elif name.startswith('carry') or name in ('push', 'gun_up'):  # round 1: T2 looters jog with stock; T3 shove the car
         j = moves.gait(sp, t, 'walk' if name == 'push' else 'brisk')   # chat 29: laden, a brisk walk (run: 9 m/s feet)
     else:
         j = V.standing(sp)
@@ -750,7 +761,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'L', (-sw + 40 - 140 * e, 120.0 + 200 * e, 260.0 - 160 * e), 'down')
         if e < 0.6:                                 # the stone in the throwing hand until it leaves
             grips.held(j, 'R', sp, stone(j, 'R') if name == 'throw' else bottle(j, 'R'))
-    elif name == 'swing':                           # the road sign: wound up over the right shoulder -> swung down
+    elif name in ('swing', 'swing_face'):           # the road sign: wound up over the right shoulder -> swung down
+        # round 2 (G3): 'swing_face' is the same swing seen from behind, at the glass: the triangle turned flat to us
         e = moves.ease(u)
         j['lean'] = -4 + 16 * e
         j['footL'] = (-70, V.ANKLE_Y, 150.0)
@@ -760,8 +772,38 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'R', tuple(hand + (0, 0, 10)), 'out')
         V.arm_to(j, 'L', tuple(hand + (30, 60, 40)), 'down')   # on the pole's lower end, beside the body (chat 8: was pushed into its sleeve)
         ang = math.radians(-60 + 150 * e)               # pole angle from straight up, swinging forward
-        j['props'] = [road_sign(j, dirn=(0.0, -math.cos(ang), math.sin(ang)))]
+        j['props'] = [road_sign(j, dirn=(0.0, -math.cos(ang), math.sin(ang)), face=name == 'swing_face')]
         j['grip'] = ('L', 'R')                      # both fists over the pole
+    elif name == 'kick':                            # round 2 (G4, G7): a hard front kick; u 0 -> 1: knee up (0.4),
+        if u < 0.4:                                 # the foot driven out (0.5, the strike), then back down
+            s = moves.ease(u / 0.4)
+            lift, fwd = 330 * s, 60 + 140 * s
+        elif u < 0.6:
+            s = moves.ease((u - 0.4) / 0.2)
+            lift, fwd = 330 + 40 * s, 200 + 330 * s
+        else:
+            s = moves.ease((u - 0.6) / 0.4)
+            lift, fwd = 370 * (1 - s), 530 * (1 - s) + 6 * s
+        j['lean'] = -10 * min(1.0, lift / 330)
+        j['footR'] = (60, V.ANKLE_Y - lift, fwd)
+        j['footL'] = (-60, V.ANKLE_Y, -60.0)
+        V.arm_to(j, 'R', (sw + 50, 250.0, -110.0), 'out')   # arms out for balance
+        V.arm_to(j, 'L', (-sw - 30, 170.0, 150.0), 'out')
+    elif name in ('reach_lo', 'reach_hi'):          # round 2 (G9): in through the smashed window to a pistol in its
+        y, z = (500.0, 330.0) if name == 'reach_lo' else (250.0, 400.0)   # cubby (u 0-1), out with it raised (1-2)
+        if u < 1:
+            e = moves.ease(u)
+            j['lean'] = (22 if name == 'reach_lo' else 10) * e
+            V.arm_to(j, 'R', (j['shR'][0] - 30 * e, 200 + (y - 200) * e, 120 + (z - 120) * e), 'down')
+        else:
+            e = moves.ease(min(1.0, u - 1))
+            j['lean'] = (22 if name == 'reach_lo' else 10) * (1 - e)
+            V.arm_to(j, 'R', (j['shR'][0] - 30 + 70 * e, y + (-250 - y) * e, z + (90 - z) * e), 'down' if e < .5 else 'out')
+            grips.held(j, 'R', sp, pistol(j, 'R'))
+        V.arm_to(j, 'L', (-sw + 30, 230.0, 140.0), 'down')
+    elif name == 'gun_up':                          # round 2 (G9): walking off with the pistol held up by the head
+        V.arm_to(j, 'R', (j['shR'][0] + 40, -250.0, 90.0), 'out')
+        grips.held(j, 'R', sp, pistol(j, 'R'))
     elif name == 'haul':                            # hauling the shutter up (T2): both hands high, leaning back
         j['lean'] = -8
         V.arm_to(j, 'R', (60.0, -330.0, 150.0), 'down')
