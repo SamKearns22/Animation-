@@ -3,7 +3,7 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## protest_tiers.py (2320 lines)
+## protest_tiers.py (2583 lines)
 - 38: HERE (data)
 - 48: CAM2 (data)
 - 51: NAME (data)
@@ -62,149 +62,175 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 447: `_t1_actors_old` 
 - 463: `t1_fx` 
 - 511: `haze` Soft drifting gas: blurred lumps on a quarter-size layer (cheap), fading in over 0.6 s.
-- 530: T2_WIN (data)
-- 534: `t2_state` 
-- 540: `t2_actors` 
-- 617: WAVE (data)
-- 621: WAVE_IN (data)
-- 625: `wave_pos` -> (x, d, yaw, inside) or None before they come out.
-- 641: `_carried` 
-- 657: `_hauler_u` The haulers' stone throws inside the shop; they stop mid-throw at 3.3 to pick up the mannequin (chat 29).
-- 662: `second_wave` 
-- 681: `t2_fx` 
-- 710: `t2_flash` The impact flash where the sign meets the glass (1.0); its own function so the shape check draws it alone.
-- 716: `t2_teeth` Drawn before the people (in front of the window they hide it).
-- 756: `blue_wash` T2 5.0-6.0 (round 1; was 3.0-4.0): the blue light from the far right end of the street sweeping across crowd a
-- 780: `phone_lights` 
-- 788: T3_TRUCK_D (data)
-- 789: `class Reframe` A longer lens from the same spot: the set's painting zoomed k about screen x cx and moved down c px (k*y + c).
-- 808: RF3 (data)
-- 809: RF4 (data)
-- 814: RF2 (data)
-- 815: T2_WR (data)
-- 818: `truck_x` 
-- 823: `nozzle` 
-- 833: `crowd_t3` 
-- 847: VOLLEY2 (data)
-- 849: CAR_HIT (data)
-- 852: `car_move` The T3 car's shove (S.car_pt): (dx, dd, yaw) - 1.6 m right, 3.4 m on toward the police, the nose 12 deg right.
-- 860: `car_fire` 
-- 864: `car_roof` 
-- 869: `car_fx` T3 7.2-8.0: the jet hits the burning car: a burst of white steam boiling up off it, drifting left.
-- 886: `draw_car3` 
-- 891: OFF_L (data)
-- 892: PUSH_IN (data)
-- 895: `_volley` A throwing cycle (0..1) -> the throw's u: through in 0.6 of it, then the arm comes back (it snapped back to
-- 901: `_getaway` Metres run u s after setting off: up to speed v over `acc` s (it went 0 -> 4.5 m/s in one frame).
-- 906: `_turn` Yaw turning from y0 to y1 the short way round as w goes 0 -> 1 (eased).
-- 913: `t3_actors` 
-- 984: `t3_crowd` 
-- 1000: `t3_columns` Smoke climbing from the car (left) and the bike heap (mid-right) from 0.0. Chat 15: drawn before the truck and
-- 1016: `t3_debris` Chat 16 (hunt 2: bare grey ground filled the lower third): the square's near ground littered, as in the
-- 1046: `t3_fx` 
-- 1142: `heli_state` 
-- 1152: MOPED_D (data)
-- 1154: HELI_S (data)
-- 1157: `moped_pos` 
-- 1165: `crowd_t4` 
-- 1178: MD (data)
-- 1179: SELFIE (data)
-- 1181: CART (data)
-- 1182: SLOT (data)
-- 1183: SALES (data)
-- 1186: CHEER (data)
-- 1187: HOLD (data)
-- 1189: LAND (data)
-- 1190: G_LAND (data)
-- 1193: `_throw_u` A throw's u (0 wound up .. 1 through) for a bottle handed over at t0: wound 0.1 s, through by +0.4.
-- 1198: `t4_actors` 
-- 1240: `_jump` The gleeful hold: everyone bouncing on their own beat (m off the ground).
-- 1247: `selfie` Gag b: watching the helicopter (back to us), turns his back on it at 1.2, phone up, peace sign; the flash
-- 1269: ENTER (data)
-- 1270: Q_GAP (data)
-- 1271: BUYER_I (data)
-- 1274: `buyer_x` Buyer k (0, 1, 2) in the queue: steps up a place once the one ahead has thrown and gone (0.3 s, walking).
-- 1288: `buyers` Gag a: three rioters queue at the cart from 2.6; each takes a lit bottle and throws it at once (the bank is
-- 1321: `granny` Gag c: she steps up (5.7), pays, takes one (6.35), throws overarm (6.6): the highest arc of the film.
-- 1340: `_bag` 
-- 1344: `_pay` 
-- 1349: `seller_j` The seller, front on behind his cart: lights each rag at the tin (his right hand), hands the bottle over to
-- 1372: `sold` 
-- 1376: `draw_cart` 
-- 1387: `t4_under` Drawn in the painting behind the ministry: the helicopter's fire trail and the fireball rising (3.0).
-- 1400: `t4_fireball` The big fireball rising behind the ministry (7.5); its own function so the shape check draws it alone.
-- 1414: `t4_crowd` 
-- 1425: `t4_mopeds` 
-- 1434: `rpg_tip` 
-- 1440: `t4_fx` 
-- 1512: FIREWORKS (data)
-- 1516: `t4_hit` The hit (0.98-1.3): a flash and a burst at the helicopter; its own function so the shape check draws it alone.
-- 1525: `burst` One firework burst a seconds after it goes off: a flash, sixteen rays drooping as they fade (as T1's).
-- 1544: `embers` R5: sparks rising off the fires all through T4, drifting and flickering out (each loops on its own beat).
-- 1560: `_arc` A thrown thing's screen path: straight in x, a parabola in y peaking `apex` px above the higher end.
-- 1569: `molotovs` Gag a (three buyers) and gag c (the granny): each bottle leaves the thrower's hand, tumbles along its arc
-- 1605: `flying_shield` The melee's one clear gag: a riot shield knocked spinning up out of the line (2.15) and down behind it.
-- 1628: `backlight` T4 3.0-4.0: the fireball behind the ministry backlights the melee into one silhouette (F5).
-- 1639: END (data)
-- 1643: _PLATE (data)
-- 1644: END_BG0 (data)
-- 1647: `t4_plate` 
-- 1655: `_t4_late` T4 drawn past its own 10 s (the end scene's background runs on after the cut).
-- 1666: `class Zoom` A 2D zoom of a finished T4 frame: window from (x0, y0), k times; `cam` draws sharp people into it.
-- 1679: ZA (data)
-- 1680: ZC (data)
-- 1681: MOPED2_D (data)
-- 1682: MOPED2_X (data)
-- 1685: `moped2_x` Shot A: skids in from the left, stops at 0.5 (ease out: braking hard).
-- 1691: `rider_heads` (driver head yaw, passenger head yaw, driver roll): None = with the body (facing right). A: on "Hey!" both
-- 1704: `end_riders` 
-- 1718: `skid_fx` Shot A: tyre smoke and dust off the back wheel as it brakes (0.1-1.4), two skid marks left on the road.
-- 1741: `rocket_fx` Shot A: fired at 0.8: the backblast out of the rear, the rocket climbing out of the top right of the frame
-- 1780: VOICE_LINES (data)
-- 1787: `_take` 
-- 1807: `voices` The end scene's lines, each cut to its speech and placed at its moment: start, end, _voice, _stretches.
-- 1825: `mouth_track` 
-- 1832: `head_life` 
-- 1847: COUPLE (data)
-- 1850: `class Tourist` The couple: their own dress (cast.tourist) and an acted pose per moment (end shot B).
-- 1864: `crouch` How far each is sunk behind the bins (m): crouched; the husband rises a little at 0.3 for his line.
-- 1871: `tourist_pose` 
-- 1898: `tourist_face` The acting list's faces: brows up and together, eyes looking right (to the riders); his mouth on his take.
-- 1912: `end_actors` 
-- 1918: `end_picture` 
-- 1946: END_CAM (data)
-- 1948: `picture` The frame WITHOUT the headlines (overlay puts those on last).
-- 2027: `draw_order` 
-- 2040: ACTORS (data)
-- 2045: `cam_for` 
-- 2052: `project` 
-- 2058: `scene` Everyone live-drawn at time t as the audit's solids (the crowds are painted sprites: not in the audit).
-- 2072: `solids` clipcheck (rule 19): the same solids the audit sees (one list: scene()), so speed and teleports are checked.
-- 2078: `_font` 
-- 2082: `overlay` The headlines (brief 2): white, country on the cut, location 0.5 s later underneath, top-left; round 1 (Sam
-- 2115: `frame_image` 
-- 2120: `_box_t1` 
-- 2126: KEEP_CLEAR (data)
-- 2132: `ding` A soft bell: two sine partials (E6 and its bright overtone), a 6 ms rise and a 0.9 s fade; quiet (peak 0.22).
-- 2139: `soundtrack` The siren (the brief names it, on the T2 blue wash) and the intensity dings (Sam O1); no other effects.
-- 2163: `_fx_at` One effect drawn alone for the shape check, as the film draws it, and only what shows (chat 30).
-- 2187: EFFECTS (data)
-- 2197: JOKE_PROPS (data)
-- 2204: BENCHMARK (data)
-- 2210: PROP_SIZES (data)
-- 2211: LINE_OK (data)
-- 2212: OUTFIT (data)
-- 2215: `LINE_SUBJECTS` Each of the cast's kinds alone, large (linecheck.py): the officers of each tier, a rioter, a marcher.
-- 2231: FAST_OK (data)
-- 2259: ALLOWED_POPS (data)
-- 2266: ALLOWED_CONTACTS (data)
-- 2273: ORDER_SWAPS (data)
-- 2281: ALLOWED (data)
-- 2285: `checks` 
-- 2290: `audits` 
-- 2295: `main` 
+- 535: T2_WIN (data)
+- 536: T2_END (data)
+- 537: T2_WASH (data)
+- 538: T2_FREEZE (data)
+- 539: T2_HIT (data)
+- 540: T2_DOOR (data)
+- 543: T2_SW (data)
+- 544: T2_STAR (data)
+- 545: BOARD (data)
+- 548: T2_STONES (data)
+- 550: TAKE (data)
+- 552: DOOR_IN (data)
+- 554: WALK_OUT (data)
+- 557: `t2_state` 
+- 563: `door_angle` G4: degrees the door's leaf is open (0 shut): flung open by the kick, it bounces back a little off the rack.
+- 570: `_keys` keys [(t, x, d), ...] -> (x, d, i, u): where someone is at tt, moving at an even speed between keys; i is the
+- 584: `_heading` 
+- 589: DOOR_CLIP (data)
+- 592: `_door_walk` G4: in through the door and, later, out of it with the stock and off left along the shop front. -> (x, d, yaw,
+- 611: `t2_actors` 
+- 756: `_carried` 
+- 769: `board_pose` G7: the A-board's (x, d, height, tilt degrees): stands, kicked over and through the air, lands face down.
+- 783: `_board_sprite` G7 (Sam: 'the sign drawn clearer'): a pavement A-board seen from the front, px tall: a wooden frame with two
+- 799: `t2_board` 
+- 817: `t2_door` G4: the door's glass leaf on its hinge (the far jamb, x DOOR_X1), swinging in (drawn behind the people).
+- 838: `t2_stones` G2: stones hurled from off frame left and near, arcing onto the glass; each bounces off to the plinth (the
+- 863: `t2_chips` G2: each stone's small star of cracks on the glass, until the sign takes the glass out.
+- 880: `t2_fx` 
+- 897: `t2_flash` The impact flash where the sign meets the glass (T2_HIT); its own function so the shape check draws it alone.
+- 903: `t2_teeth` Drawn before the people (in front of the window they hide it).
+- 952: `blue_wash` T2 from T2_WASH (round 2: 6.8; was 5.0): the blue light from the far right end of the street sweeping across
+- 976: `phone_lights` G8 (Sam: 'white glints on the backs of heads?'): the glow was drawn at eye height for every phone, so a phone
+- 987: T3_TRUCK_D (data)
+- 988: `class Reframe` A longer lens from the same spot: the set's painting zoomed k about screen x cx and moved down c px (k*y + c).
+- 1007: RF3 (data)
+- 1008: RF4 (data)
+- 1015: RF2 (data)
+- 1016: T2_WR (data)
+- 1017: DOOR_CLIP (data)
+- 1020: `truck_x` 
+- 1025: `nozzle` 
+- 1035: `crowd_t3` 
+- 1049: VOLLEY2 (data)
+- 1051: CAR_HIT (data)
+- 1054: `car_move` The T3 car's shove (S.car_pt): (dx, dd, yaw) - 1.6 m right, 3.4 m on toward the police, the nose 12 deg right.
+- 1062: `car_fire` 
+- 1066: `car_roof` 
+- 1071: `car_fx` T3 7.2-8.0: the jet hits the burning car: a burst of white steam boiling up off it, drifting left.
+- 1088: `draw_car3` 
+- 1093: OFF_L (data)
+- 1094: PUSH_IN (data)
+- 1097: `_volley` A throwing cycle (0..1) -> the throw's u: through in 0.6 of it, then the arm comes back (it snapped back to
+- 1103: `_getaway` Metres run u s after setting off: up to speed v over `acc` s (it went 0 -> 4.5 m/s in one frame).
+- 1108: `_turn` Yaw turning from y0 to y1 the short way round as w goes 0 -> 1 (eased).
+- 1115: FRONT3 (data)
+- 1116: BACK3 (data)
+- 1117: CRS_YAW (data)
+- 1119: SHIELD_X (data)
+- 1123: `crs_adv` The block's advance (m, toward the crowd) and whether it is mid-step: one step every 0.5 s, all together.
+- 1134: `crs_guard` Shields up (0..1): raised as the first stones come over (0.8), lowered once the cannon takes over.
+- 1139: `t3_actors` 
+- 1227: `t3_crowd` 
+- 1245: `t3_columns` Smoke climbing from the car (left) and the bike heap (mid-right) from 0.0. Chat 15: drawn before the truck and
+- 1261: `t3_debris` Chat 16 (hunt 2: bare grey ground filled the lower third): the square's near ground littered, as in the
+- 1291: `_missile` Round 2 (F2): one thrown thing from (x0, d0) at the police block's shields (d1): up in an arc, hits the raised
+- 1320: `t3_fx` 
+- 1398: `heli_state` 
+- 1408: MOPED_D (data)
+- 1410: HELI_S (data)
+- 1413: `moped_pos` 
+- 1421: `crowd_t4` 
+- 1434: MD (data)
+- 1435: SELFIE (data)
+- 1437: CART (data)
+- 1438: SLOT (data)
+- 1439: SALES (data)
+- 1442: CHEER (data)
+- 1443: HOLD (data)
+- 1445: LAND (data)
+- 1446: G_LAND (data)
+- 1449: `_throw_u` A throw's u (0 wound up .. 1 through) for a bottle handed over at t0: wound 0.1 s, through by +0.4.
+- 1454: `t4_actors` 
+- 1496: `_jump` The gleeful hold: everyone bouncing on their own beat (m off the ground).
+- 1503: `selfie` Gag b: watching the helicopter (back to us), turns his back on it at 1.2, phone up, peace sign; the flash
+- 1525: ENTER (data)
+- 1526: Q_GAP (data)
+- 1527: BUYER_I (data)
+- 1530: `buyer_x` Buyer k (0, 1, 2) in the queue: steps up a place once the one ahead has thrown and gone (0.3 s, walking).
+- 1544: `buyers` Gag a: three rioters queue at the cart from 2.6; each takes a lit bottle and throws it at once (the bank is
+- 1577: `granny` Gag c: she steps up (5.7), pays, takes one (6.35), throws overarm (6.6): the highest arc of the film.
+- 1596: `_bag` 
+- 1600: `_pay` 
+- 1605: `seller_j` The seller, front on behind his cart: lights each rag at the tin (his right hand), hands the bottle over to
+- 1628: `sold` 
+- 1632: `draw_cart` 
+- 1643: `t4_under` Drawn in the painting behind the ministry: the helicopter's fire trail and the fireball rising (3.0).
+- 1656: `t4_fireball` The big fireball rising behind the ministry (7.5); its own function so the shape check draws it alone.
+- 1670: `t4_crowd` 
+- 1681: `t4_mopeds` 
+- 1690: `rpg_tip` 
+- 1696: `t4_fx` 
+- 1768: FIREWORKS (data)
+- 1772: `t4_hit` The hit (0.98-1.3): a flash and a burst at the helicopter; its own function so the shape check draws it alone.
+- 1781: `burst` One firework burst a seconds after it goes off: a flash, sixteen rays drooping as they fade (as T1's).
+- 1800: `embers` R5: sparks rising off the fires all through T4, drifting and flickering out (each loops on its own beat).
+- 1816: `_arc` A thrown thing's screen path: straight in x, a parabola in y peaking `apex` px above the higher end.
+- 1825: `molotovs` Gag a (three buyers) and gag c (the granny): each bottle leaves the thrower's hand, tumbles along its arc
+- 1861: `flying_shield` The melee's one clear gag: a riot shield knocked spinning up out of the line (2.15) and down behind it.
+- 1884: `backlight` T4 3.0-4.0: the fireball behind the ministry backlights the melee into one silhouette (F5).
+- 1895: END (data)
+- 1899: _PLATE (data)
+- 1900: END_BG0 (data)
+- 1903: `t4_plate` 
+- 1911: `_t4_late` T4 drawn past its own 10 s (the end scene's background runs on after the cut).
+- 1922: `class Zoom` A 2D zoom of a finished T4 frame: window from (x0, y0), k times; `cam` draws sharp people into it.
+- 1935: ZA (data)
+- 1936: ZC (data)
+- 1937: MOPED2_D (data)
+- 1938: MOPED2_X (data)
+- 1941: `moped2_x` Shot A: skids in from the left, stops at 0.5 (ease out: braking hard).
+- 1947: `rider_heads` (driver head yaw, passenger head yaw, driver roll): None = with the body (facing right). A: on "Hey!" both
+- 1960: `end_riders` 
+- 1974: `skid_fx` Shot A: tyre smoke and dust off the back wheel as it brakes (0.1-1.4), two skid marks left on the road.
+- 1997: `rocket_fx` Shot A: fired at 0.8: the backblast out of the rear, the rocket climbing out of the top right of the frame
+- 2036: VOICE_LINES (data)
+- 2043: `_take` 
+- 2063: `voices` The end scene's lines, each cut to its speech and placed at its moment: start, end, _voice, _stretches.
+- 2081: `mouth_track` 
+- 2088: `head_life` 
+- 2103: COUPLE (data)
+- 2106: `class Tourist` The couple: their own dress (cast.tourist) and an acted pose per moment (end shot B).
+- 2120: `crouch` How far each is sunk behind the bins (m): crouched; the husband rises a little at 0.3 for his line.
+- 2127: `tourist_pose` 
+- 2154: `tourist_face` The acting list's faces: brows up and together, eyes looking right (to the riders); his mouth on his take.
+- 2168: `end_actors` 
+- 2174: `end_picture` 
+- 2202: END_CAM (data)
+- 2204: `picture` The frame WITHOUT the headlines (overlay puts those on last).
+- 2290: `draw_order` 
+- 2303: ACTORS (data)
+- 2308: `cam_for` 
+- 2315: `project` 
+- 2321: `scene` Everyone live-drawn at time t as the audit's solids (the crowds are painted sprites: not in the audit).
+- 2335: `solids` clipcheck (rule 19): the same solids the audit sees (one list: scene()), so speed and teleports are checked.
+- 2341: `_font` 
+- 2345: `overlay` The headlines (brief 2): white, country on the cut, location 0.5 s later underneath, top-left; round 1 (Sam
+- 2378: `frame_image` 
+- 2383: `_box_t1` 
+- 2389: KEEP_CLEAR (data)
+- 2395: `ding` A soft bell: two sine partials (E6 and its bright overtone), a 6 ms rise and a 0.9 s fade; quiet (peak 0.22).
+- 2402: `soundtrack` The siren (the brief names it, on the T2 blue wash) and the intensity dings (Sam O1); no other effects.
+- 2426: `_fx_at` One effect drawn alone for the shape check, as the film draws it, and only what shows (chat 30).
+- 2450: EFFECTS (data)
+- 2460: JOKE_PROPS (data)
+- 2467: BENCHMARK (data)
+- 2473: PROP_SIZES (data)
+- 2474: LINE_OK (data)
+- 2475: OUTFIT (data)
+- 2478: `LINE_SUBJECTS` Each of the cast's kinds alone, large (linecheck.py): the officers of each tier, a rioter, a marcher.
+- 2494: FAST_OK (data)
+- 2522: ALLOWED_POPS (data)
+- 2529: ALLOWED_CONTACTS (data)
+- 2536: ORDER_SWAPS (data)
+- 2544: ALLOWED (data)
+- 2548: `checks` 
+- 2553: `audits` 
+- 2558: `main` 
 
-## protest_tiers_cast.py (1632 lines)
+## protest_tiers_cast.py (1684 lines)
 - 33: HERE (data)
 - 34: ROOT (data)
 - 44: B (data)
@@ -245,60 +271,61 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 475: `_hand_c` 
 - 481: `stone` 
 - 489: `bottle` A Molotov: a green bottle, a rag at its neck, a small flame (house fire colours).
-- 505: `road_sign` The give-way sign on its ripped-up pole (ref de4): grey pole from the hands, the white triangle with its thick
-- 536: `keys` A bunch of house keys held up (ref es6): two small grey keys and the ring above the fist, a glint.
-- 553: MARKER (data)
-- 556: `fit_lines` Sam O2 (16 Nov): the words always fit their board. One line or, if that would be too small, two (split at the
-- 582: `sign_text` Hand-lettered words centred on a board (box = two opposite screen corners), always inside it.
-- 592: `placard` A placard on a stick held up in both hands, printed both sides; the hands grip the stick below the board.
-- 612: `flag` A flag on a pole held up in one hand: Catalan senyera (es2), UGT red (es2), tricolour (T3), Albania (al5).
-- 650: `phone` A phone held up filming, portrait, its screen facing the holder (Sam's note 1): from in front we see its dark
-- 673: `peace` Two fingers up in a V over the fist (the selfie's peace sign), or a thumb up (checking the photo). A gloved
-- 695: `_clear_of_shoulder` Chat 31 (Sam's note 1 on animatic 2, 'frames missing'): a hand moving in a straight line from wound-up to
-- 705: `pose` One of the cast's poses (body frame, before lean): u is how far through a move (0-1), t a gait's time.
-- 810: SCARF_DOT (data)
-- 814: TOTE (data)
-- 818: `_side` 
-- 822: `baseball_cap` A red baseball cap: a crown over the top of the head, the peak out over the brow (front: a flat band below the
-- 857: `sun_visor` A white sun visor (a band round the head, no crown, the hair showing over it) and sunglasses pushed up on the
-- 886: `headscarf` A plum headscarf over the hair, framing the face, tied under the chin (the knot shows in front).
-- 924: `flat_cap` A tweed flat cap: low and flat, the short peak over the brow.
-- 945: `moustache` A thick dark moustache over the mouth.
-- 964: `polo_collar` The polo shirt's collar and placket (front).
-- 977: `shorts` Knee-length shorts over the legs (the legs below are bare: the kit's trousers set to skin).
-- 989: `bum_bag` A black bum bag on its strap at the belly, the zip across it.
-- 1005: `camera` A camera on a strap round his neck, resting on his chest.
-- 1024: `txt` Text centred at (x, y) in a pen's own units (scaled with the person).
-- 1036: `tote` A canvas tote on her left shoulder (screen right from the front): GREETINGS FROM TIRANA.
-- 1056: `cardigan` An open cardigan over her dress: two fronts, buttons down one edge.
-- 1071: `long_skirt` Her dress carries on to a long skirt, mid-calf.
-- 1082: `apron` A white apron from the chest to the knee, its neck strap and a pocket with a lighter in it.
-- 1101: `shopping_bag` A string shopping bag of oranges hanging off her forearm (a prop at the elbow, drawn over the arm).
-- 1117: TOURIST_DRESS (data)
-- 1125: `tourist` The new cast's sp, with their dress's changes (bare legs under shorts: the trousers in skin colour).
-- 1137: `dress_new` 
-- 1145: `draw` One of the cast at neck base (x, y), scale s for a 1.75 m person (their own height applied here).
-- 1166: BOTTLE_G (data)
-- 1169: `cart` The Molotov seller's street cart, front on, in the seller's frame (neck base (x, y), scale s for 1.75 m; the
-- 1233: `seller_scene` The seller behind his cart: the umbrella, him, then the cart over his legs.
-- 1247: `_moped_parts` The scooter in the driver's body frame (units; z forward, y down; ground at y = X['ground']). About 1.8 m
-- 1257: `moped_back` Wheels, the rear body under the seat, the floor (drawn before the riders).
-- 1285: `moped_front` The apron in front of the driver's shins, the steering column, the handlebar and the headlight (drawn after
-- 1310: `driver_pose` 
-- 1325: `gunner_pose` Sitting behind the driver, the RPG on his right shoulder aimed up and forward (aim degrees above level).
-- 1345: `open_palm` An open gloved hand, palm up, fingers spread (the shrug): a black glove with a grey palm so it reads.
-- 1363: `shrug` The passenger's shrug (end shot C), u 0..1 eased in: his near (right) hand lets go of the launcher's grip and
-- 1385: `rpg` The RPG launcher on the shoulder: an olive tube about 0.95 m, the bulbous warhead in front (none once fired),
-- 1414: `moped_scene` The moped racing in with its driver and (both) the RPG passenger. (x, y): the driver's neck base at scale s;
-- 1460: `rpg_ends` Where moped_scene draws the launcher's rear and muzzle on screen (the same maths): the end scene's backblast
-- 1478: `font` 
-- 1482: TILE_FAULTS (data)
-- 1488: HANDS_OK (data)
-- 1506: `tile` Draw fn(img, cam) on a 1080 x 1920 canvas and return the tight crop around what was drawn, fitted to w x h.
-- 1540: `cast_items` (label, fn) for everyone alone, large: each force in the line, the rioter's poses, the marchers, the moped.
-- 1571: `new_cast_items` Round 1's cast (chat 22): the tourists, the granny, the seller and his cart, the selfie rioter, the riders.
-- 1596: RIM (data)
-- 1599: `sheet` 
+- 505: `pistol` Round 2 (G9; FAZ 31 Oct: two weapons taken): a black pistol held by its grip, the muzzle up: the slide, a
+- 516: `road_sign` The give-way sign on its ripped-up pole (ref de4): grey pole from the hands, the white triangle with its thick
+- 547: `keys` A bunch of house keys held up (ref es6): two small grey keys and the ring above the fist, a glint.
+- 564: MARKER (data)
+- 567: `fit_lines` Sam O2 (16 Nov): the words always fit their board. One line or, if that would be too small, two (split at the
+- 593: `sign_text` Hand-lettered words centred on a board (box = two opposite screen corners), always inside it.
+- 603: `placard` A placard on a stick held up in both hands, printed both sides; the hands grip the stick below the board.
+- 623: `flag` A flag on a pole held up in one hand: Catalan senyera (es2), UGT red (es2), tricolour (T3), Albania (al5).
+- 661: `phone` A phone held up filming, portrait, its screen facing the holder (Sam's note 1): from in front we see its dark
+- 684: `peace` Two fingers up in a V over the fist (the selfie's peace sign), or a thumb up (checking the photo). A gloved
+- 706: `_clear_of_shoulder` Chat 31 (Sam's note 1 on animatic 2, 'frames missing'): a hand moving in a straight line from wound-up to
+- 716: `pose` One of the cast's poses (body frame, before lean): u is how far through a move (0-1), t a gait's time.
+- 862: SCARF_DOT (data)
+- 866: TOTE (data)
+- 870: `_side` 
+- 874: `baseball_cap` A red baseball cap: a crown over the top of the head, the peak out over the brow (front: a flat band below the
+- 909: `sun_visor` A white sun visor (a band round the head, no crown, the hair showing over it) and sunglasses pushed up on the
+- 938: `headscarf` A plum headscarf over the hair, framing the face, tied under the chin (the knot shows in front).
+- 976: `flat_cap` A tweed flat cap: low and flat, the short peak over the brow.
+- 997: `moustache` A thick dark moustache over the mouth.
+- 1016: `polo_collar` The polo shirt's collar and placket (front).
+- 1029: `shorts` Knee-length shorts over the legs (the legs below are bare: the kit's trousers set to skin).
+- 1041: `bum_bag` A black bum bag on its strap at the belly, the zip across it.
+- 1057: `camera` A camera on a strap round his neck, resting on his chest.
+- 1076: `txt` Text centred at (x, y) in a pen's own units (scaled with the person).
+- 1088: `tote` A canvas tote on her left shoulder (screen right from the front): GREETINGS FROM TIRANA.
+- 1108: `cardigan` An open cardigan over her dress: two fronts, buttons down one edge.
+- 1123: `long_skirt` Her dress carries on to a long skirt, mid-calf.
+- 1134: `apron` A white apron from the chest to the knee, its neck strap and a pocket with a lighter in it.
+- 1153: `shopping_bag` A string shopping bag of oranges hanging off her forearm (a prop at the elbow, drawn over the arm).
+- 1169: TOURIST_DRESS (data)
+- 1177: `tourist` The new cast's sp, with their dress's changes (bare legs under shorts: the trousers in skin colour).
+- 1189: `dress_new` 
+- 1197: `draw` One of the cast at neck base (x, y), scale s for a 1.75 m person (their own height applied here).
+- 1218: BOTTLE_G (data)
+- 1221: `cart` The Molotov seller's street cart, front on, in the seller's frame (neck base (x, y), scale s for 1.75 m; the
+- 1285: `seller_scene` The seller behind his cart: the umbrella, him, then the cart over his legs.
+- 1299: `_moped_parts` The scooter in the driver's body frame (units; z forward, y down; ground at y = X['ground']). About 1.8 m
+- 1309: `moped_back` Wheels, the rear body under the seat, the floor (drawn before the riders).
+- 1337: `moped_front` The apron in front of the driver's shins, the steering column, the handlebar and the headlight (drawn after
+- 1362: `driver_pose` 
+- 1377: `gunner_pose` Sitting behind the driver, the RPG on his right shoulder aimed up and forward (aim degrees above level).
+- 1397: `open_palm` An open gloved hand, palm up, fingers spread (the shrug): a black glove with a grey palm so it reads.
+- 1415: `shrug` The passenger's shrug (end shot C), u 0..1 eased in: his near (right) hand lets go of the launcher's grip and
+- 1437: `rpg` The RPG launcher on the shoulder: an olive tube about 0.95 m, the bulbous warhead in front (none once fired),
+- 1466: `moped_scene` The moped racing in with its driver and (both) the RPG passenger. (x, y): the driver's neck base at scale s;
+- 1512: `rpg_ends` Where moped_scene draws the launcher's rear and muzzle on screen (the same maths): the end scene's backblast
+- 1530: `font` 
+- 1534: TILE_FAULTS (data)
+- 1540: HANDS_OK (data)
+- 1558: `tile` Draw fn(img, cam) on a 1080 x 1920 canvas and return the tight crop around what was drawn, fitted to w x h.
+- 1592: `cast_items` (label, fn) for everyone alone, large: each force in the line, the rioter's poses, the marchers, the moped.
+- 1623: `new_cast_items` Round 1's cast (chat 22): the tourists, the granny, the seller and his cart, the selfie rioter, the riders.
+- 1648: RIM (data)
+- 1651: `sheet` 
 
 ## protest_tiers_roughs.py (699 lines)
 - 25: HERE (data)
@@ -326,82 +353,86 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 635: `overlay` 
 - 656: `sheet` 
 
-## protest_tiers_sets.py (1695 lines)
+## protest_tiers_sets.py (1733 lines)
 - 37: HERE (data)
 - 38: ROOT (data)
 - 45: REFS (data)
-- 52: `class Cam` A level pinhole camera: horizon at VY, centre line at VX, focal F px, height CH m.
-- 68: CAMS (data)
-- 70: SET_CAM (data)
-- 74: `_mask` 
-- 83: `shape` One flat shape: the union of polys filled, with ONE outline round the whole (none inside). clip: a mask it
-- 106: `quad` 
-- 110: `bands` Flat sky (or water) bands top to bottom with hand-cut wavy edges between them.
-- 123: `glow_disc` A flat light halo (lamps): a few stepped rings, lighter to the middle, no outline. Works on the disc's own box
-- 139: `mix` 
-- 143: `text` maxw (Sam O2, 16 Nov): the widest the words may be (their sign's width less a margin); the size shrinks to fit
-- 153: `flames` A fire standing on (x - w/2 .. x + w/2, y), h tall: red tongues with one dark-red outline, an orange body, a
-- 180: ROUND_FIRE (data)
-- 183: `_chaikin` 
-- 193: `_round_tongues` Teardrop tongues: a round belly sat on the base, a soft rounded tip that sways and breathes; the belly
-- 210: `smoke` Smoke as one lumpy shape (lumps = [(x, y, r)]): a shadowed side down and right, its lit side up and left, all 
-- 237: `person_mark` A blue 1.75 m outline where a person stands (rough.py's mark): shows the true size at that depth.
-- 247: T1_SKY (data)
-- 248: STONE (data)
-- 254: `_t1_block` One block of fronts on side s (-1 left, +1 right) at x = 30.5 s, depths d0-d1: floors, bays, lit windows.
-- 277: T1_CONTAINER (data)
-- 280: `t1` 
-- 417: `_falques` The Passeig's ornate double lamp (Falques): a dark iron post 5.5 m, a scrolled arm, two lantern heads, lit.
-- 430: `_container` Sam S4 (16 Nov): a Barcelona street container (grey-green, 2.2 x 1.5 m), seen a little from above: the front,
-- 474: `t2` shutter: how far up the steel shutter is (0.5 half, as the scene opens; 1 hauled right up).
-- 548: `_window` The lit window (de3): white shelves of guns behind one big sheet of glass; 'starred' cracks, 'gone' leaves
-- 600: `_rifle` A long gun side on, 1.0-1.1 m, muzzle left: barrel, receiver, magazine, grip, stock (a filled silhouette).
-- 615: `_pistol` A pistol side on (~0.2 m): slide, grip, trigger guard.
-- 624: `_shutter` The steel roller shutter: its box under the sign band, slats down to the hem; up = 1 hides nothing, 0.5 covers
-- 642: T3_SKY (data)
-- 645: PAVE (data)
-- 648: `t3` 
-- 709: `_marianne` The monument (fr1, fr2, fr3): round stepped base, the plinth ringed with bronze reliefs, the tall pale drum wi
-- 782: `_kiosk` A Paris newspaper kiosk (dark green, round onion roof with a finial), burning.
-- 805: `_bikes` A heap of rental bikes (green Lime, Velib), tumbled in the road between the lines, burning (fr4).
-- 826: CAR3 (data)
-- 829: `car_pt` A point of the T3 car once shoved: `move` (dx, dd, yaw deg) about its rear centre; yaw > 0 swings the nose rig
-- 839: `_car` The burnt-out estate car, foreground-left (fr3): drawn in the camera (chat 10; the draft was a flat block):
-- 885: T4_SKY (data)
-- 887: PASTEL (data)
-- 891: `t4` 
-- 955: `_ministry` The Education Ministry (al1): a 3-storey ochre corner block with grey trim; the rounded corner bay toward us
-- 1015: `_bank` The bank on the left (x -9, d 38 -> 70), its face toward the avenue: pale stone, pilasters, the tall
-- 1038: TRUCK_LIVERY (data)
-- 1042: HELI_HOME (data)
-- 1043: TRUCK_D3 (data)
-- 1046: `truck` The water cannon truck side-on at depth d, facing left, its front bumper at x (m). state 'drive': upright, the
-- 1138: `_hull` 
-- 1159: `helicopter` The police helicopter (a light twin like the Policia's AW109): white over a blue belly, POLICIA on the boom.
-- 1257: `vehicles_sheet` The two new vehicles drawn alone at size beside their references, and each in its shot (phone size).
-- 1306: ALLEY_CAM (data)
-- 1308: ALLEY_W (data)
-- 1313: `_laundry` A washing line across the alley at depth d, height z, with clothes that sway a little (the fire's draught).
-- 1337: `_bin` A 240-litre wheelie bin (0.58 wide, 1.05 tall), front on: body tapering to the base, the lid's lip, the
-- 1358: `alley` Back: sky strip, walls, far mouth glowing, laundry, drainpipe, graffiti, ground. Front: the two bins.
-- 1441: `_turn` 
-- 1446: `prop_tv` A 55-inch flat-screen TV (1.25 x 0.73 m), black bezel, the screen catching a blue streak of light. lit (round
-- 1462: CAMO (data)
-- 1465: `prop_mannequin` A hunting-shop mannequin in camouflage, rigid, lying flat (carried like a plank), 1.8 m, head to the left:
-- 1499: `prop_boxes` A tower of n cardboard boxes (0.5 m wide, shrinking up), tape across each, a stamped rifle-maker's mark;
-- 1515: `prop_cone` A 0.7 m traffic cone, two white bands, the square base (its centre at x, y).
-- 1528: `prop_wheel` A rental bike's front wheel (0.66 m), torn off: tyre, rim, spokes, a bent mudguard stub.
-- 1542: `props_sheet` The alley at phone size (with its 1.75 m marks) and the five props on one sheet.
-- 1562: SET_BOXES (data)
-- 1571: SET_MEANT (data)
-- 1583: BENCHMARK (data)
-- 1601: REFS_OF (data)
-- 1607: `checks` 
-- 1616: PAINT (data)
-- 1617: TITLES (data)
-- 1621: `paint` The painting with its front layer laid on, through the house look (paper, light edges, soft shadows).
-- 1633: `alone` 
-- 1641: `sheet` One row per place: the painting (phone size), the same with blue 1.75 m marks where the people go, the
+- 52: MON_X (data)
+- 53: BIKES3 (data)
+- 54: `class Cam` A level pinhole camera: horizon at VY, centre line at VX, focal F px, height CH m.
+- 71: CAMS (data)
+- 73: SET_CAM (data)
+- 77: `_mask` 
+- 86: `shape` One flat shape: the union of polys filled, with ONE outline round the whole (none inside). clip: a mask it
+- 109: `quad` 
+- 113: `bands` Flat sky (or water) bands top to bottom with hand-cut wavy edges between them.
+- 126: `glow_disc` A flat light halo (lamps): a few stepped rings, lighter to the middle, no outline. Works on the disc's own box
+- 142: `mix` 
+- 146: `text` maxw (Sam O2, 16 Nov): the widest the words may be (their sign's width less a margin); the size shrinks to fit
+- 156: `flames` A fire standing on (x - w/2 .. x + w/2, y), h tall: red tongues with one dark-red outline, an orange body, a
+- 183: ROUND_FIRE (data)
+- 186: `_chaikin` 
+- 196: `_round_tongues` Teardrop tongues: a round belly sat on the base, a soft rounded tip that sways and breathes; the belly
+- 213: `smoke` Smoke as one lumpy shape (lumps = [(x, y, r)]): a shadowed side down and right, its lit side up and left, all 
+- 240: `person_mark` A blue 1.75 m outline where a person stands (rough.py's mark): shows the true size at that depth.
+- 250: T1_SKY (data)
+- 251: STONE (data)
+- 257: `_t1_block` One block of fronts on side s (-1 left, +1 right) at x = 30.5 s, depths d0-d1: floors, bays, lit windows.
+- 280: T1_CONTAINER (data)
+- 283: `t1` 
+- 420: `_falques` The Passeig's ornate double lamp (Falques): a dark iron post 5.5 m, a scrolled arm, two lantern heads, lit.
+- 433: `_container` Sam S4 (16 Nov): a Barcelona street container (grey-green, 2.2 x 1.5 m), seen a little from above: the front,
+- 477: `t2` shutter: how far up the steel shutter is (0.5 half, as the scene opens; 1 hauled right up). Round 2: taken,
+- 561: `_window` The lit window (de3): white shelves of guns behind one big sheet of glass; 'starred' cracks, 'gone' leaves
+- 613: `_rifle` A long gun side on, 1.0-1.1 m, muzzle left: barrel, receiver, magazine, grip, stock (a filled silhouette).
+- 628: `_pistol` A pistol side on (~0.2 m): slide, grip, trigger guard.
+- 637: `_shutter` The steel roller shutter: its box under the sign band, slats down to the hem; up = 1 hides nothing, 0.5 covers
+- 655: T3_SKY (data)
+- 658: PAVE (data)
+- 661: `t3` 
+- 725: `_marianne` The monument (fr1, fr2, fr3): round stepped base, the plinth ringed with bronze reliefs, the tall pale drum wi
+- 798: `_kiosk` A Paris newspaper kiosk (dark green, round onion roof with a finial), burning.
+- 821: `_bikes` A heap of rental bikes (green Lime, Velib), tumbled in the road between the lines, burning (fr4).
+- 842: CAR3 (data)
+- 845: `car_pt` A point of the T3 car once shoved: `move` (dx, dd, yaw deg) about its rear centre; yaw > 0 swings the nose rig
+- 855: `_car` The burnt-out estate car, foreground-left (fr3): drawn in the camera (chat 10; the draft was a flat block):
+- 901: T4_SKY (data)
+- 903: PASTEL (data)
+- 907: `t4` 
+- 971: `_ministry` The Education Ministry (al1): a 3-storey ochre corner block with grey trim; the rounded corner bay toward us
+- 1031: `_bank` The bank on the left (x -9, d 38 -> 70), its face toward the avenue: pale stone, pilasters, the tall
+- 1054: TRUCK_LIVERY (data)
+- 1058: HELI_HOME (data)
+- 1059: TRUCK_D3 (data)
+- 1062: `truck` The water cannon truck side-on at depth d, facing left, its front bumper at x (m). state 'drive': upright, the
+- 1154: `_hull` 
+- 1175: `helicopter` The police helicopter (a light twin like the Policia's AW109): white over a blue belly, POLICIA on the boom.
+- 1273: `vehicles_sheet` The two new vehicles drawn alone at size beside their references, and each in its shot (phone size).
+- 1322: ALLEY_CAM (data)
+- 1324: ALLEY_W (data)
+- 1329: `_laundry` A washing line across the alley at depth d, height z, with clothes that sway a little (the fire's draught).
+- 1353: `_bin` A 240-litre wheelie bin (0.58 wide, 1.05 tall), front on: body tapering to the base, the lid's lip, the
+- 1374: `alley` Back: sky strip, walls, far mouth glowing, laundry, drainpipe, graffiti, ground. Front: the two bins.
+- 1457: `_turn` 
+- 1462: `prop_tv` A 55-inch flat-screen TV (1.25 x 0.73 m), black bezel, the screen catching a blue streak of light. lit (round
+- 1478: DOOR2 (data)
+- 1481: `prop_crate` Round 2 (G5, Sam: 'a crate of beer'): a red plastic crate of 20 (0.4 x 0.3 m side on), its hand hole and ribs,
+- 1500: CAMO (data)
+- 1503: `prop_mannequin` A hunting-shop mannequin in camouflage, rigid, lying flat (carried like a plank), 1.8 m, head to the left:
+- 1537: `prop_boxes` A tower of n cardboard boxes (0.5 m wide, shrinking up), tape across each, a stamped rifle-maker's mark;
+- 1553: `prop_cone` A 0.7 m traffic cone, two white bands, the square base (its centre at x, y).
+- 1566: `prop_wheel` A rental bike's front wheel (0.66 m), torn off: tyre, rim, spokes, a bent mudguard stub.
+- 1580: `props_sheet` The alley at phone size (with its 1.75 m marks) and the five props on one sheet.
+- 1600: SET_BOXES (data)
+- 1609: SET_MEANT (data)
+- 1621: BENCHMARK (data)
+- 1639: REFS_OF (data)
+- 1645: `checks` 
+- 1654: PAINT (data)
+- 1655: TITLES (data)
+- 1659: `paint` The painting with its front layer laid on, through the house look (paper, light edges, soft shadows).
+- 1671: `alone` 
+- 1679: `sheet` One row per place: the painting (phone size), the same with blue 1.75 m marks where the people go, the
 
 ## protest-tiers-people.txt (9 people; a note on a person changes their lines)
 - 7: officer (Riot officer (one build; four forces recolour him in protest_tiers_cast.FORCES)): body: , shoulders , head x , hem ; skin: hair: none, ; face: jaw_wide , face_wide ; eyes: lips: brows: , width ; outfit: jumper , shirt , no tie, trousers , shoes
