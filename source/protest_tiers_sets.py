@@ -49,6 +49,8 @@ FIRE_R, FIRE_O, FIRE_Y, FIRE_L = (214, 62, 30), (246, 142, 36), (255, 222, 110),
 
 
 # ------------------------------------------------------------------------------------------------- cameras
+MON_X = 2.0                         # round 2 (F1): Marianne's monument, x m (the raised T3 camera's centre is x 0)
+BIKES3 = (2.6, 20.0)                # round 2: the burning bike heap, in the gap behind the truck's path
 class Cam:
     """A level pinhole camera: horizon at VY, centre line at VX, focal F px, height CH m."""
     def __init__(self, VX, VY, F, CH):
@@ -63,10 +65,11 @@ class Cam:
 
 # T1: long lens from a 12 m balcony; the police line at d 185 (officers ~65 px), frame 29 m wide there.
 # T2: a phone held up at 2.6 m on the near pavement, square to the gun store 14 m away (150 px a metre there).
-# T3: 0.8 m off the paving; Marianne's monument 80 m away (24 px a metre), her head at y ~550.
+# T3 (round 2, F1): raised to 4.5 m, above the heads (Sam: 'not aerial'), a little wider; the two sides face each
+#   other across the frame (crowd left, police right), Marianne 80 m off between them (19 px a metre).
 # T4: 2.8 m, down the avenue; the shield line at d ~17 (115 px a metre), the ministry's corner at d 80.
 CAMS = {'t1': Cam(480, 400, 6882, 12.0), 't2': Cam(480, 783, 2100, 2.6),
-        't3': Cam(480, 1130, 1920, 0.8), 't4': Cam(470, 960, 2000, 2.8)}
+        't3': Cam(420, 900, 1550, 4.5), 't4': Cam(470, 960, 2000, 2.8)}
 SET_CAM = CAMS
 
 
@@ -683,8 +686,11 @@ def t3(t=0.0, marks=False, truck=None, car=True):
         quad(img, (ax, ay), (bx, ay), (bx, cam.p(0, d, 3.4)[1]), (ax, cam.p(0, d, 3.4)[1]), CREAM_D, INK, 1.5)
     # the black smoke beyond the monument (fires round the square), Marianne pale against it (F3, F5)
     # chat 11 (hunt 2: "Marianne a dark figure in a rock blob"): the smoke rises right of her, her bronze against sky
-    smoke(img, [(640, 880, 100), (720, 780, 120), (850, 700, 150), (980, 770, 120), (1060, 860, 100), (900, 580, 120),
-                (700, 660, 80), (1020, 620, 100)], (52, 48, 50), (86, 80, 82))
+    hx, hy = cam.p(MON_X, 80, 22.5)                         # round 2: laid out from her head (was set pixels)
+    g = cam.ppm(80) / 24.0
+    smoke(img, [(hx + (x - 480) * g, hy + (y - 550) * g, r * g) for x, y, r in
+                ((640, 880, 100), (720, 780, 120), (850, 700, 150), (980, 770, 120), (1060, 860, 100), (900, 580, 120),
+                 (700, 660, 80), (1020, 620, 100))], (52, 48, 50), (86, 80, 82))
     # plane trees in the square (d 95-120), both sides of the monument
     for i, (x, d) in enumerate(((-34, 110), (-24, 100), (-16, 120), (19, 105), (28, 98), (38, 115))):
         bx, by = cam.p(x, d)
@@ -704,15 +710,15 @@ def t3(t=0.0, marks=False, truck=None, car=True):
     _kiosk(img, cam, 7.0, 30, t)                            # chat 10: mid-right, behind the bikes (was off frame)
     if truck:                                               # chat 12: the water cannon, behind the police (d 11), the bikes
         globals()['truck'](img, cam, truck['x'], TRUCK_D3, t, 'drive', 'fr', truck.get('aim', 18), truck.get('flash', 0))
-    _bikes(img, cam, 2.1, 14, t)                            # in the gap between the front line and the police
+    _bikes(img, cam, BIKES3[0], BIKES3[1], t)               # round 2: in the gap, behind the truck's path
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     if car:                                                 # round 1: the film draws the rolling car itself (car=False)
         _car(front, cam, t)
     if marks:
-        for x in np.arange(-1.7, 1.05, .55):                # the front line, x 200-640 px
-            person_mark(img, cam, x, 11.8)
-        for x in (2.5, 3.0, 3.5):                           # the police, x 900-1080 px
-            person_mark(img, cam, x, 11)
+        for d in (10.4, 11.4, 12.4, 13.4):                  # round 2: the front line, facing right
+            person_mark(img, cam, -1.2, d)
+        for d in (9.9, 11.9, 13.9):                         # the police block's front rank
+            person_mark(img, cam, 1.9, d)
     return img, front
 
 
@@ -721,7 +727,7 @@ def _marianne(img, cam):
     three seated stone figures and the bronze lion, and Marianne in bronze, olive branch raised, the tablet held."""
     d = 80
     k = cam.ppm(d)
-    cx = cam.p(0, d)[0]
+    cx = cam.p(MON_X, d)[0]
     Z = lambda z: cam.p(0, d, z)[1]                         # noqa: E731
     for (r, z0, z1, c) in ((11, 0, .5, STONE_S), (10.2, .5, 1.0, STONE_P), (9.4, 1.0, 1.5, STONE_S)):
         quad(img, (cx - r * k, Z(z0)), (cx + r * k, Z(z0)), (cx + r * k, Z(z1)), (cx - r * k, Z(z1)), c, INK, 2)
@@ -833,7 +839,7 @@ def _bikes(img, cam, x, d, t):
         IS.ell(img, w1[0], w1[1] - .4 * k, .14 * k, .07 * k, (40, 40, 44), INK, 1.5)    # the saddle
 
 
-CAR3 = (-3.15, -1.35, 6.0, 10.2)                   # X0, X1, D0, D1 of the T3 car where it stands
+CAR3 = (-3.1, -1.3, 6.4, 9.6)                      # X0, X1, D0, D1 of the T3 car where it stands
 
 
 def car_pt(x, d, move):

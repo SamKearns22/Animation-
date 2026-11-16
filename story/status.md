@@ -1,3 +1,3 @@
-European Protests, Ranked: REOPENED 16 Nov; round 2: Overall + Spain built; Germany G1-G10 first pass built (not yet checked); France/Albania notes in, not built.
-Bald-heads kit fix in its own chat (Sam's Y there, then this film only). Cost cuts: startup-fixes 1-4 built. Held for the next film: the estimates proposal (that film is its test).
-Next: Opus medium chat finishes Germany (shop-front clip check, tuning, O7 hats), sends clips; then France, then Albania.
+European Protests, Ranked: REOPENED 16 Nov; round 2. Germany first pass built (its own chats); France fixed and clip sent to Sam (shields readable, no run-through); Albania not built.
+Next: Germany chats finish Germany; back half: Opus medium chat does Sam's France round 3 notes (F4-F11). Albania: its own Opus high chat (wider view, +2-3 s).
+Needs Sam: Germany clips, Overall+Spain still, France car Y/N (F10).

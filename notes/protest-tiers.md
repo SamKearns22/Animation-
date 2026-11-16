@@ -1,16 +1,21 @@
 # Notes for protest-tiers, now named **European Protests, Ranked** (Sam, 16 Nov; the old name stays only inside file and tool names; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **Rules that bite next:** 30 (G4: say why the hand check missed the plinth), 74 (acting list before the animatic), 83 (clipping, now automatic for the shop front).
-- **Done (chat R2-2, 16 Nov, Opus; stopped at amber):** Germany G1-G10 BUILT FIRST PASS, renders, NOT yet checked or tuned: new 8.5 s timeline (no freeze, sirens 6.8), stones from off left with chips, swinger yaw 160 'swing_face' (sign flat to us), shop door (S.DOOR2, kicked open by hauler1 at 2.45, leaf t2_door), four in (DOOR_IN) and out with beer crates/ammo boxes walking off left, two pistols taken (TAKE, reach_lo/hi, gun_up, cast pistol()), A-board sprite with legs/ANGEBOT kicked by runner3 (board_pose), shards lie still, phone glow only for phones facing us, camera RF2 cx 750.
-- **Next: Opus medium, finish Germany:** (1) still sheet 6.6/7.65/8.5/9.2/11.4/13.6 (scratch sheet looked: GEN Z REGELT placard holder covers the door: move right crowd out or nearer the edge; check sign meets glass at T2_HIT and tune T2_SW/T2_STAR; kick poses read). (2) Add the shop front (plinth, walls, door jambs, glass until hit, door leaf until kick) to scene() as an audit.Thing kind 'set' 'SHOPFRONT' (G4 automatic; why it missed: the audit's solids were only people); allowed contacts: swinger sign at hit, hauler1 foot at kick. (3) Fix audit tables: ALLOWED_POPS runner6/7 gone -> door in/out pops for hauler1/2, runner4/5; FAST_OK/contacts times; JOKE_PROPS A-board/crowbar times (crowbar now 1.0-1.55). (4) `check`, acting list + beat list in notes for Germany, O7 hats (cast crowd looks; clear ~/.cache/protest-tiers-sprites). (5) clips `final OUT --small --span 6 14.5` to Sam with the numbered questions.
-- **Quick-check faults (handover end, 16 Nov):** ~50 in T2 from the first pass (crossings in the door queue 7.2-9.4 s, hauler1 kick legs 7.83-9.0 s, order swaps at the window 8.4-12.8 s): the next chat's step (4) fixes them; T4 rioter5/6 22.58 s, buyer1 26.25 s stay for the back-half round.
-- **Sam's back-half notes (16 Nov, other chat): F1-F3 France, A1-A3 Albania + end, X1 (no budget talk for the rest of this film); nothing built.** After Germany: France, then Albania.
-- **Needs Sam (ask with the Germany clips, one numbered list):** Y/N on the Overall+Spain still; G-clips Y/N. Diagonal Hook Text rule: through propose.py first.
-- **Read:** job pack "Notes round"; "## Round 2 notes"; this section.
+- **Rules that bite next:** 30 (say why a first fix failed: G4 plinth), 74 (acting list before the animatic), 83 (people through set/props).
+- **Two lines of chats (Sam, 16 Nov):** GERMANY chats (t2 code only) and BACK-HALF chats (France + Albania, t3/t4/end code only). Each merges the main line before every push and keeps to its own lines below.
+- **GERMANY done (chat 3 of R2, 16 Nov, Opus):** right crowd moved off the door (GEN Z REGELT group out of frame, Lost line to Sam); swinger yaw 125, sign meets glass high (us 0.55 at T2_HIT), T2_STAR (0.8, 1.92), flash r70; shop front in scene() as set Things SHOPFRONT/GLASS/DOOR (rule 83 automatic) + allowed contacts; ALLOWED_POPS from DOOR_IN; looters out 1 s apart, lane 13.4; run-in re-routed (hauler2 leads, runner1/2/4/5 pass in front of the swinger, hauler2 waits right of the door); runner5 wait (3.0, 12.2) (arm fold). `check`: 0 Germany faults. Clip 0-14.5 sent to Sam (his change of plan: one clip from the start).
+- **GERMANY next (Opus medium):** wait for Sam's numbered answers; then O7 hats (Sam's words now in the notes: beanies and caps on part of the crowd), acting list + beat list for Germany in notes (rule 74), diagonal Hook Text rule through propose.py, then Sonnet animatic of the front half once Sam says Y.
+- **BACK-HALF done (back-half chat 2, 16 Nov, Opus):** France clip sent to Sam (animations/drafts/protest-tiers-france-clip.mp4). Fixed: police turned three-quarters to camera (CRS_YAW -60) so shields show their face and POLICE label (they were edge-on sticks); back row breaks from the jet first (was running through the front line 19.36-19.83). T3 check clean. Left as is (told Sam): pushers overlap the advanced police block on screen 21-22 s (nearer camera, no pass-through).
+- **BACK-HALF next: Opus medium (France round 3).** Fix F4-F9, F11 in "## Round 3 France notes"; F10 (car) waits for Sam's Y. SET_BOXES['t3'] re-measure. `check` (T3 faults), acting list (rule 74), clip `final OUT --small --span 14.5 22.5` to Sam. Albania: its own chat (Albania chat 1, t4/end code). Stray branch claude/protest-back-half-2 (= main line; delete refused 403).
+- **Quick-check faults:** Germany: ~50 T2 first-pass faults (its step 4). Back half: T3 back row runs through the front line breaking left 19.36-20.0 (stagger getaways / lanes in d); pusher4 and crs1 swap front/back 21.42, 22.17 (pushers too near the advanced block); T4 rioter5/6 22.5-23.2, buyer1 jump 26.25.
+- **Needs Sam (one numbered list per chat):** Germany clips Y/N; Overall+Spain still Y/N; France still sheet / clip. Diagonal Hook Text rule: through propose.py first.
+- **Read:** job pack "Notes round"; "## Round 2 notes" (your chat's lines); this section.
 - **Open rule requests:** diagonal Hook Text for every film (proposed 16 Nov; on Y: guides/tiktok-design.md Hook Text + hook_text.py default --tilt -7).
 - **Branches named (not merged, waiting on Sam):** claude/beautiful-brown-vutd0l, claude/blessed-c2-mics-wip, claude/audit-honest-checker; claude/bald-heads-fix merged only after Sam's Y there.
-- **For Claude:** main line claude/create-claude-md-oe8z4g. T2 code: protest_tiers.py "# ==== T2" block (t2_actors, _door_walk, board_pose, t2_door, t2_stones/chips); sets t2() door + prop_crate; cast kick/reach_lo/reach_hi/gun_up/swing_face.
+- **X1:** no budget, cost or estimate talk to Sam for the rest of this film.
+- **Budget stop Y (Sam, 16 Nov, in chat R2-2, at 15.22% of a week for round 2):** finish ONLY Germany (faults, placard off the door, sign meets glass, shop front in the clip check + rule 30 line, O7 hats), send the Germany clips with one numbered list (incl. Overall+Spain still Y/N), then STOP and wait for Sam before any France or Albania work.
+- **Budget stop again (end of chat 3, 16 Nov):** round 2 at 20.13% of a week vs 2.7%. Not raised with Sam (X1: no budget talk this film); work stopped at his questions; the next chat settles it with chat 2 / the ledger before more work.
+- **For Claude:** main line claude/create-claude-md-oe8z4g; back-half branch claude/protest-back-half. T2: t2_actors, _door_walk, board_pose, t2_door, t2_stones/chips; sets t2() door + prop_crate; cast kick/reach_lo/reach_hi/gun_up/swing_face. T3: FRONT3/BACK3/CRS_X/CRS_D/crs_adv/crs_guard/_missile/t3_fx; sets MON_X, BIKES3, CAR3, CAMS t3 (420, 900, 1550, 4.5), RF3 identity; cast shield_up, line_walk.
 
 ## Round 2 notes"; back half's notes to come.
 - **Rules that bite next:** 30 (a repeated note: find why the first fix failed), 85 (cost watch), 66 (no old file stands in for a new render).
@@ -26,6 +31,17 @@
 - **Open rule requests:** the 'a stopped drawing never ships' proposal (film_engine: a stopped drawing refuses the render even with --faults-named; finish.py scans for black frames) was answered (Sam, Y): written as rule P17, naming not blocking. P16 is written.
 - **For Claude:** branch `claude/protest-tiers-c31` (= main line). finish.py's --film is the module name `protest_tiers`.
 
+## Round 3 France notes (Sam, 16 Nov, on the France clip; Albania on hold)
+- [ ] F4 Move the France action closer to Marianne; protesters clambering up and celebrating on the statue (fr3 photo shows people on the plinth).
+- [ ] F5 The police are all the same model: vary them (height, build, skin, kit details, stance).
+- [ ] F6 Stones too big and too shiny: smaller, matt.
+- [ ] F7 Too little distance between protesters and police: open the gap.
+- [ ] F8 Remove the burning bikes. The water cannon approaches through two separate groups of police (the block split, a lane between).
+- [ ] F9 No group moves uniformly (robotic): every group, the police lockstep included, gets small per-person variance in timing, stride, angle.
+- [ ] F10 Q (answered, waiting for Y): was the car shove in the reporting? Answer: no. fr3 (17 Oct) shows a silver estate car burning where it stood near Marianne, roof on; the shove was our way of doing round 1's "a burning car rolls". Sam: "the car has no roof" = ours is drawn roofless. Plan if Y: car burns in place as in fr3, roof drawn, no pushers. SAM: Y, "Include a burning car in the upper left of the scene, burning near the statue and behind the protestors."
+- [ ] F11 Vary the missiles: some fruit, a firework or two, a few bottles that smash on the shields.
+- [ ] A0 (Sam 16 Nov: hold off on Albania, then: start Albania in a separate chat) Albania chat 1 does A1-A3 in t4/end code.
+
 ## Round 2 notes (Sam, 16 Nov, on animatic 2; film reopened; this chat: Overall, Spain, Germany; back half's notes to come)
 - [x] O1 (chat R2-1: label white 54 px at 1 s, number in tier colour pops at 2 s, ding in soundtrack) Intensity heading bigger; numbers coloured by tier: Spain green, Germany orange, France red, Albania dark red; the numbers appear 2 s into each scene with a gentle ding.
 - [x] O2 (fit_lines/sign_text in cast; S.text maxw on WAFFEN, PRESSE; T2 'WAFFEN RAUS' placard's holder stands at the frame edge: G4 re-staging moves her in) Sign, placard and shopfront text always fits neatly inside its board (some spills off now).
@@ -38,6 +54,7 @@
 - [x] S3 (t1_actors empty; T1_ROCKETS: 10 throws from the front ranks 0.45-5.3 s, arcs 5-6.7 m, bursts over the line; CHECK: rockets cross the heading block y 350-560 on the left) No black-clad figures; fireworks thrown from the crowd mass, higher, more of them across the crowd's front at different times.
 - [x] S4 (T1_CONTAINER (-7, 176) behind the line's left; new _container: lid upright, ribs, soot, flames only in the mouth, smoke column) Burning skip: back-left of the police line (not on it), better drawn, flames not spilling far over the lid.
 - [x] S5 (second rank d +1.6, x +0.85) Second rank of police two paces behind the first, standing in the gaps.
+- [ ] O7 (Sam 16 Nov, chat 3) Too many bald heads in one place looks strange: put common hats on part of the crowd: beanies and caps (crowd sprites and acted rioters where it suits; clear ~/.cache/protest-tiers-sprites).
 - [ ] G1 Germany 2-3 s longer, so the action breathes.
 - [ ] G2 Stones pelted from off camera at the shop first.
 - [ ] G3 The glass attacker turns and hits the glass (contact), not a flat swing at the air.
