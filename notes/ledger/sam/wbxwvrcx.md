@@ -1,0 +1,5 @@
+# Sam's messages, chat cse_01J1JB7XhUfxHwuKwbXWvRcX (handover.py log)
+
+### 2026-11-16T15:13:22
+Germany chat 5 of Protest Tiers round 2 (Opus, medium effort). First check you can save to GitHub (push to your own branch); if not, stop and tell Sam. Run `python3 source/handover.py start session_01J1JB7Yi8PjJg5ZZ8MkgqgJ --film protest-tiers`. Read the job pack "Notes round" and, in notes/protest-tiers.md, "Where things stand" (the GERMANY lines) and "## Round 2 notes" (G12-G19, O8, O9). Chat 4 built G16 (clothing), O7 (hats) and G13 (four sign hits, shatter at 2.95, sign flung 3.2, swinger loots). Build the rest, t2 code only: G12, G14, G15, G17, G18, G19, plus O8 and O9 (the plan for each is in the GERMANY next line). Then `check` (0 Germany faults), acting/beat list (rule 74), and send Sam the clip `python3 source/protest_tiers.py final OUT --small --span 6 14.5` with one line per note (G12-G19, O7, O8, O9). No budget talk (X1). End with the handover; push to your branch and the main line.
+
