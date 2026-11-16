@@ -481,8 +481,8 @@ def crowd_t1():
         for x in np.arange(x0, x1, 0.62):
             xx = x + rng.uniform(-.2, .2)
             r = rng.uniform()
-            # keys are the main thing; ~1% flags (Catalan and UGT), ~1.5% placards (chat 14: 5% read as a sea)
-            state = ('keys' if r < .5 else 'flag:catalan' if r < .506 else 'flag:ugt' if r < .51 else
+            # keys are the main thing; ~1% flags (Sam 16 Nov: all the Spanish national flag), ~1.5% placards
+            state = ('keys' if r < .5 else 'flag:spain' if r < .51 else
                      'placard' if r < .525 else 'stand')
             if state.startswith('flag') and d < 75:        # near flags filled a quarter of the frame: mid and far only
                 state = 'keys'

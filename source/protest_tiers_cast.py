@@ -984,6 +984,10 @@ def flag(j, kind='catalan', side='R', pole=1.6, wave=0.0):
                 yy = y + fh * (1 + 2 * k) / 9
                 p.poly([(x, yy), (x + sx * fw, yy + 6), (x + sx * fw, yy + 6 + fh / 9), (x, yy + fh / 9)],
                        (200, 30, 36), None)
+        elif kind == 'spain':                       # rojigualda: red, yellow (twice as tall), red
+            for (u0, u1), col in (((0, .25), (198, 11, 30)), ((.25, .75), (255, 196, 0)), ((.75, 1), (198, 11, 30))):
+                p.poly([(x, y + fh * u0), (x + sx * fw, y + 6 + fh * u0), (x + sx * fw, y + 6 + fh * u1),
+                        (x, y + fh * u1)], col, None)
         elif kind == 'tricolour':
             for k, col in enumerate(((30, 50, 140), (246, 246, 242), (210, 36, 44))):
                 x0, x1 = x + sx * fw * k / 3, x + sx * fw * (k + 1) / 3
