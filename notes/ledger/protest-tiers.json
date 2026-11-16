@@ -782,6 +782,35 @@
     "pictures": 8,
     "other": 9
    }
+  },
+  {
+   "date": "2026-11-16",
+   "chat": "48332425",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.97,
+   "src": "estimate",
+   "sid": "session_01GznaAUxqe5NA15bvTFaxZg",
+   "steps": 33,
+   "hist_k": 209,
+   "kinds": {
+    "film-file search": 23.4,
+    "tool search": 7.6,
+    "pictures": 0.8,
+    "other": 68.1
+   },
+   "calls": {
+    "film-file search": 18,
+    "tool search": 10,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 0,
+    "pictures": 1,
+    "other": 4
+   }
   }
  ],
  "checks": {},
