@@ -55,7 +55,7 @@ HAS = {'people', 'effects', 'props'}
 FPS = 12
 # round 1 (Sam R4, 15 Nov): tiers 4 / 6 / 8 / 10 s, then the end scene's three shots (notes "## Round 1 plan")
 # round 2 (A2, Sam: Albania 2-3 s longer, new action at full speed): T4 10 -> 12.5 s; the end scene starts later
-LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 12.5), ('ea', 2.4), ('eb', 3.6), ('ec', 3.4))   # A12: C +1 s for the shrug after the line; A23: B 3.6 s (Sam's take runs 3.06 s from 0.3)
+LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 12.5), ('ea', 2.4), ('eb', 3.6), ('ec', 4.4))   # A12: C +1 s for the shrug after the line; A35: +1 s more to linger on it; A23: B 3.6 s (Sam's take runs 3.06 s from 0.3)
 TIERS = ('t1', 't2', 't3', 't4')
 SHOTS, _t = [], 0.0
 for _n, _l in LENS:
@@ -2926,11 +2926,17 @@ def rider_heads(tier, lt):
         h = 45 if lt < 1.9 else 0 if lt < 2.0 else -45
         return h, (45 if lt < 1.85 else 0 if lt < 1.95 else -45), 0.0
     roll = -6.0 * math.sin(math.pi * min(1.0, max(0.0, (lt - 0.75) / 0.5)))   # the small tilt on "protest"
-    g = 45
-    k = int((lt - SHRUG[0] - 0.35) / 0.17)          # A30 (Sam: 'shake his head a little, like no idea'): after the
-    if 0 <= k < 6:                                  # shrug is up, the head goes 45-0-45-90-45-0 (two shakes)
-        g = (45, 0, 45, 90, 45, 0)[k]
+    ph = shake_ph(lt)                               # A35 (Sam: 'a more gentle shaking of the head'): slow, two
+    g = 45 if ph >= 0 else 0                        # shakes; the turn rides the eyes and a soft tilt (shake_ph)
     return -45, g, roll                            # A11/A12: each turned to the other (eye contact), not to camera
+
+
+def shake_ph(lt):
+    """A35: the passenger's head shake after his shrug is up: a sine, 1.3 a second, two shakes, easing in and out."""
+    a = lt - SHRUG[0] - 0.45
+    if not 0 <= a < 1.55:
+        return 0.0
+    return math.sin(2 * math.pi * 1.3 * a) * math.sin(math.pi * a / 1.55)
 
 
 SHRUG = (2.25, 0.3)                                # A30: up in 0.3 s (was 0.6); A12: the shrug AFTER the line (Sam's take ends ~2.05)
@@ -2942,8 +2948,13 @@ def rider_faces(tier, lt):
     if tier != 'ec':
         return None, None
     e = ease((lt - SHRUG[0]) / SHRUG[1])
-    return (dict(look=-0.6),
-            dict(look=0.6, brow_up=0.02 + 0.05 * e, frown=0.004 + 0.016 * e, smile=-0.2 - 0.4 * e))
+    import mouths                                          # A34: the driver visibly says the line: his mask's jaw
+    sh = mouths.at(mouth_track('driver'), at('ec', lt))   # moves with the take, his head bobs with it
+    op = {'rest': 0.0, 'MBP': 0.0, 'FV': 0.3, 'WQ': 0.45, 'E': 0.6, 'etc': 0.55, 'O': 0.8, 'AI': 1.0, 'U': 0.5,
+          'L': 0.5}.get(sh, 0.5)
+    return (dict(look=-0.6, talk=op, nod_=7.0 * op),
+            dict(look=0.6 - 0.5 * shake_ph(lt), brow_up=0.02 + 0.05 * e, frown=0.004 + 0.016 * e,
+                 smile=-0.2 - 0.4 * e, shake_=shake_ph(lt)))
 
 
 def end_riders(img, tier, lt, z):

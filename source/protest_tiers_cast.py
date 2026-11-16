@@ -687,6 +687,11 @@ def hood(p, view, sp, hx, hy):
             (mx + hw * 0.3, hy + hh * 0.02), (mx + hw * 0.86, hy + hh * 0.1), (mx + hw * 0.8, hy + hh * 1.2),
             (mx - hw * 0.8, hy + hh * 1.2)]
     p.poly(curve(mask, 3), MASK, None)
+    tk = sp.get('talk', 0.0)
+    if tk > 0:                                    # A34: the mouth working under the mask (the fabric pulled in)
+        p.poly(oval(mx + (hw * 0.12 if three else 0.0), hy + hh * 0.72, hw * 0.26 * (0.6 + 0.4 * tk), hh * 0.2 * tk, 18),
+               tuple(min(255, int(v * 0.4 + 70)) for v in MASK) if sum(MASK) < 120 else tuple(int(v * .6) for v in MASK),
+               None)
     ring = curve(out, 4)
     p.poly(_holed(ring, hole[::-1]), HOOD, None)
     p.poly(ring, None, INK, 2.6)
@@ -709,7 +714,9 @@ def hoodie(p, view, sp):
         return
     if view in ('front', 'three'):
         o = 20 if view == 'three' else 0
-        p.poly([(-sw * 0.62 + o, 320), (sw * 0.62 + o, 320), (sw * 0.75 + o, 440), (-sw * 0.75 + o, 440)], HOOD_D, INK, 1.8)
+        pk = tuple(int(v * .82) for v in sp.get('jacket', HOOD_D))      # A36: the pocket in the hoodie's own shade
+        p.poly([(-sw * 0.62 + o, 320), (sw * 0.62 + o, 320), (sw * 0.75 + o, 440), (-sw * 0.75 + o, 440)], pk,
+               tuple(int(v * .55) for v in pk), 1.4)                          # (a black box read as a square on his lap)
         for sg in (-1, 1):
             p.line([(sg * 26 + o, 6), (sg * 30 + o, 120)], (200, 200, 196), 3.0)
     elif view == 'side':
@@ -1998,10 +2005,13 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     jd = driver_pose(drv, X)
     if drv_roll:                                  # end shot C: the driver's small head tilt on "protest"
         jd['head_roll'] = drv_roll
+    if drv.get('nod_'):                           # A34: his head bobs with the words
+        jd['nod'] = drv['nod_']
     jg = gunner_pose(gun, X, aim) if pillion == 'rpg' else pillion_fire(gun, X, pillion, kick, flash)
     gyaw = yaw
     if shrug_u > 0:
         shrug(jg, gun, shrug_u)
+        jg['head_roll'] = jg.get('head_roll', 0) + 7 * gun.get('shake_', 0.0)   # A35: the soft side-to-side
         jg['props'] = jg.get('props', []) + [open_palm(jg, 'L')]
         gyaw = yaw - 45 if shrug_u > 0.25 else yaw                    # A30: turned three-quarter to camera
     sd = s * drv['height'] / 1.75
