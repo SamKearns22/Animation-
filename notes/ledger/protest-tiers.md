@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 53.56% (-9.95); 33 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 61.99% (-1.52); 37 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 53.56% of the 60.31% planned so far; at this rate the film lands at 56%.**
+**Forecast: Spent 61.99% of the 60.31% planned so far; at this rate the film lands at 62.4%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -38,6 +38,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-14 | xQDM8iTN | app | sonnet | Catch up |  | 0.37 | 0.9 | 0 | 0 |
 | 2026-11-14 | 34R5mkDm | app | opus | Protests cast chat 7 |  | 1.87 | 4.58 | 0 | 0 |
 | 2026-11-14 | vy69nNwE | app | opus | Protests cast chat 8 |  | 2.45 | 6.0 | 0 | 0 |
+| 2026-11-14 | ace89b7b | est | opus | auto |  | 2.43 |  | 0 | 0 |
 | 2026-11-15 | ybTh1KsF | app | opus | Protests: sets (chat 9) |  | 1.89 | 4.64 | 0 | 0 |
 | 2026-11-15 | PYcX2VRw | app | opus | Protests chat 10: sets fixes, critique, sets sheet |  | 1.3 | 3.18 | 0 | 0 |
 | 2026-11-15 | gWvGgNQ1 | app | opus | Protest Tiers: chat 12 (truck, helicopter, then moves to ani |  | 1.33 | 3.27 | 0 | 0 |
@@ -59,6 +60,9 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-15 | yFv2o6E5 | app | sonnet | Protests chat 31 (Opus medium): fix black frames, notes roun |  | 2.36 | 5.78 | 0 | 0 |
 | 2026-11-15 | 533f1450 | est | opus | auto |  | 2.78 |  | 0 | 0 |
 | 2026-11-15 | c27a00af | est | opus | auto |  | 0.64 |  | 0 | 0 |
+| 2026-11-15 | 6c92dfee | est | opus | auto |  | 1.3 |  | 0 | 0 |
+| 2026-11-15 | af35cb12 | est | opus | auto |  | 1.89 |  | 0 | 0 |
+| 2026-11-15 | 3938f512 | est | opus | auto |  | 2.81 |  | 0 | 0 |
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
