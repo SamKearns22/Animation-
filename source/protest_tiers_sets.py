@@ -665,7 +665,7 @@ STONE_P, STONE_S, BRONZE, BRONZE_L = (236, 232, 222), (204, 198, 186), (78, 74, 
 PAVE = (182, 176, 168)
 
 
-def t3(t=0.0, marks=False, truck=None, car=True):
+def t3(t=0.0, marks=False, truck=None, car=True, kiosk=True, drift=False):
     cam = CAMS['t3']
     img = Image.new('RGBA', (W, H), T3_SKY[0] + (255,))
     bands(img, 0, cam.VY, T3_SKY, seed=3, amp=14)
@@ -695,9 +695,11 @@ def t3(t=0.0, marks=False, truck=None, car=True):
     # chat 11 (hunt 2: "Marianne a dark figure in a rock blob"): the smoke rises right of her, her bronze against sky
     hx, hy = cam.p(MON_X, MON_D, 22.5)                      # round 2: laid out from her head (was set pixels)
     g = 0.9                                                 # round 3: far smoke, its size not the monument's
-    smoke(img, [(hx + (x - 480) * g, hy + (y - 550) * g, r * g) for x, y, r in
-                ((640, 880, 100), (720, 780, 120), (850, 700, 150), (980, 770, 120), (1060, 860, 100), (900, 580, 120),
-                 (700, 660, 80), (1020, 620, 100))], (52, 48, 50), (86, 80, 82))
+    lumps = ((640, 880, 100), (720, 780, 120), (850, 700, 150), (980, 770, 120), (1060, 860, 100), (900, 580, 120),
+             (700, 660, 80), (1020, 620, 100))
+    if drift:                                               # round 4 (F21, Sam: 'the smoke hangs limply'): the wind
+        lumps = drift_smoke(lumps, t)                       # rolls it right to left, each lump climbing, thinning
+    smoke(img, [(hx + (x - 480) * g, hy + (y - 550) * g, r * g) for x, y, r in lumps], (52, 48, 50), (86, 80, 82))
     # plane trees in the square (d 95-120), both sides of the monument
     for i, (x, d) in enumerate(((-34, 110), (-24, 100), (-16, 120), (19, 105), (28, 98), (38, 115))):
         bx, by = cam.p(x, d)
@@ -716,7 +718,8 @@ def t3(t=0.0, marks=False, truck=None, car=True):
     _marianne(img, cam)                                     # round 3 (F4): after the paving, which hid her base's steps
     if truck:                                               # chat 12: the water cannon, behind the police (d 11), the bikes
         globals()['truck'](img, cam, truck['x'], TRUCK_D3, t, 'drive', 'fr', truck.get('aim', 18), truck.get('flash', 0))
-    _kiosk(img, cam, KIOSK3[0], KIOSK3[1], t)               # round 3: the bikes gone (F8); the kiosk in front of the base
+    if kiosk:                                               # round 4 (F17): the film draws a second car in its place
+        _kiosk(img, cam, KIOSK3[0], KIOSK3[1], t)           # round 3: the bikes gone (F8); the kiosk in front of the base
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     if car:                                                 # round 1: the film draws the rolling car itself (car=False)
         _car(front, cam, t)
@@ -726,6 +729,19 @@ def t3(t=0.0, marks=False, truck=None, car=True):
         for d in (9.9, 11.9, 13.9):                         # the police block's front rank
             person_mark(img, cam, 1.9, d)
     return img, front
+
+
+def drift_smoke(lumps, t, speed=46.0, rise=22.0, span=520.0):
+    """Round 4 (F21): a smoke cloud's lumps (x, y, r px) carried left by the wind at `speed` px/s and climbing,
+    each rolling (its own wobble); a lump that has drifted `span` px starts again at its source, small, so the cloud
+    streams instead of sliding off whole. Every frame differs."""
+    out = []
+    for n, (x, y, r) in enumerate(lumps):
+        a = ((t * speed + n * span / len(lumps)) % span) / span          # 0 -> 1 along its drift
+        out.append((x + 160 - span * a + 14 * math.sin(t * 1.3 + n * 2.1),
+                    y - rise * a * 4 + 10 * math.cos(t * 1.1 + n),
+                    r * (0.55 + 0.75 * min(1.0, a * 3)) * (1.0 - 0.35 * max(0.0, a - 0.7) / 0.3)))
+    return out
 
 
 def _marianne(img, cam):
@@ -849,9 +865,13 @@ CAR3 = (-5.2, -3.4, 31.0, 34.2)                    # X0, X1, D0, D1 of the T3 ca
 #                                                    upper left, near Marianne, behind the protesters; was the near left)
 
 
-def car_pt(x, d, move):
+CAR3B = (7.0, 8.8, 22.0, 25.2)                     # round 4 (F17, Sam: 'replace the press hut with another burning
+CAR3B_COL = ((128, 36, 34), (92, 28, 28), (70, 50, 44))   # car'): a red hatchback on the police side, its own angle
+
+
+def car_pt(x, d, move, box=None):
     """A point of the T3 car once shoved: `move` (dx, dd, yaw deg) about its rear centre; yaw > 0 swings the nose right."""
-    X0, X1, D0, _ = CAR3
+    X0, X1, D0, _ = box or CAR3
     dx, dd, yaw = move
     xc, dc = (X0 + X1) / 2, D0
     a = math.radians(yaw)
@@ -859,17 +879,20 @@ def car_pt(x, d, move):
     return xc + dx + rx * math.cos(a) + rd * math.sin(a), dc + dd - rx * math.sin(a) + rd * math.cos(a)
 
 
-def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0):
+def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0, box=None, col=None):
     """The burnt-out estate car, foreground-left (fr3): drawn in the camera (chat 10; the draft was a flat block):
     rear face at d 6 (its right corner at x ~100 px, the rest off frame), the right side running away to d 10.7;
     charred paint, the glass gone, fire inside showing through the window holes and ~1.2 m over the roof.
     Round 1 (T3 6.0-8.0): `move` shoves it toward the police (car_pt), `fire` shrinks the flames once the jet hits,
     `roll` turns the hubs (radians)."""
-    X0, X1, D0, D1 = CAR3                              # chat 11: 0.15 m left, 0.5 m shorter, fire 1.5 m wide: clear of the monument
+    X0, X1, D0, D1 = box or CAR3                       # chat 11: 0.15 m left, 0.5 m shorter, fire 1.5 m wide: clear of the monument
+    car_pt = lambda x, d, mv: globals()['car_pt'](x, d, mv, box)   # noqa: E731  (round 4, F17: the second car)
     P = lambda x, d, z: cam.p(*car_pt(x, d, move), z)       # noqa: E731
     CH, CH_D, RUST = (74, 66, 64), (54, 48, 48), (128, 76, 52)
     if move[2] > 45:                                        # round 3 (F10, Sam: 'a silver estate car', fr3): silver,
         CH, CH_D, RUST = (172, 174, 178), (128, 130, 136), (96, 84, 80)   # sooted along the sill (RUST band)
+    if col:
+        CH, CH_D, RUST = col
     # the fire first, its foot hidden inside the body: it climbs from behind the roofline (we look up at the car)
     k = cam.ppm(car_pt(X1 - .4, D0 + 1.8, move)[1])
     gx, gy = P(X1 - .4, D0 + 1.8, 1.25)
@@ -911,7 +934,7 @@ def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0):
         if roll:                                            # round 1: a spoke on the hub shows it turning
             poly(img, [P(X1 + .04, dc, .34), P(X1 + .04, dc + .13 * math.cos(roll), .34 + .13 * math.sin(roll))],
                  None, INK, 4, 0)
-    if side_on:                                             # F10 (Sam: 'the car has no roof'; fr3: roof on): from
+    if side_on or box:                                      # F10 (Sam: 'the car has no roof'; fr3: roof on): from
         # above the heads the tops show: the bonnet, then the charred roof, the fire breaking through a hole in it
         shape(img, [[P(X0, D1 - .7, .95), P(X1, D1 - .7, .95), P(X1, D1, .85), P(X0, D1, .85)]], CH_D, INK, 2.4)
         roof = [P(X0 + .14, D0 + .3, 1.48), P(X1 - .14, D0 + .3, 1.48), P(X1 - .14, D1 - 1.5, 1.45),

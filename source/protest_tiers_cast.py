@@ -372,8 +372,8 @@ def baton(j, sp, side='R', dirn=(0.0, 0.55, 0.85), length=0.55):
 
 
 # ------------------------------------------------------------------------------------------------ the rioter
-HOOD, HOOD_D, MASK = (30, 30, 34), (20, 20, 22), (16, 16, 18)
-_HOOD3 = (HOOD, HOOD_D, MASK)
+HOOD_C, MASK_C = (30, 30, 34), (16, 16, 18)
+HOOD, HOOD_D, MASK = HOOD_C, (20, 20, 22), MASK_C
 
 
 # Sam O4 (16 Nov): the rioters were one face copied; each city's black bloc now drawn from its own population
@@ -414,6 +414,28 @@ def rioter(who='rioter', seed=None, tier='t2'):
         sp['height'] = sp['height'] * r.uniform(.95, 1.04)
     if tier in DRESS and who == 'rioter':
         _dress(sp, DRESS[tier], np.random.default_rng(zlib.crc32(f'{seed}-{tier}-dress'.encode())))
+    if tier == 't3':                                # round 4 (F19 = Germany's G16, ref de5): not all black bloc
+        street_clothes(sp, r)
+    return sp
+
+
+# Round 4 (F19, Sam: 'the different-clothes logic from the Germany notes' = G16, ref de5 Frankfurt): mostly young
+# men, not all black bloc: black and dark-grey puffers, hoods up, black balaclavas or blue/white face masks, a white
+# hockey-style mask; grey joggers, light-grey trackies, a light-grey hoodie under a black coat, white trainers.
+# (coat, hood, mask, trousers, shoes, puffer quilting); the shares keep the black bloc the biggest group
+STREET = ((.30, (26, 26, 30), (30, 30, 34), (16, 16, 18), (30, 30, 34), (20, 20, 22), False),        # black bloc
+          (.18, (30, 30, 34), (30, 30, 34), (16, 16, 18), (112, 112, 116), (238, 238, 234), True),   # black puffer
+          (.16, (70, 72, 78), (70, 72, 78), (150, 192, 224), (96, 96, 100), (236, 236, 232), True),  # grey puffer
+          (.14, (28, 28, 32), (176, 176, 178), (16, 16, 18), (170, 170, 172), (238, 238, 234), False),  # grey hoodie
+          (.12, (32, 36, 50), (32, 36, 50), (244, 244, 238), (40, 40, 44), (236, 236, 232), True),   # navy, white mask
+          (.10, (44, 46, 40), (44, 46, 40), (150, 192, 224), (136, 136, 138), (30, 30, 32), False))  # olive, blue mask
+
+
+def street_clothes(sp, r):
+    k = int(r.choice(len(STREET), p=np.array([o[0] for o in STREET]) / sum(o[0] for o in STREET)))
+    _, coat, hood_c, mask_c, legs, shoe, puff = STREET[k]
+    sp.update(shirt=coat, jacket=coat, sleeve=coat, trousers=legs, shoe=shoe, hood_c=hood_c, mask_c=mask_c,
+              puffer=puff, stone_r=17)                # F20: a smaller stone in the hand (was 26)
     return sp
 
 
@@ -446,7 +468,7 @@ def _dress(sp, D, r):
     sp['trousers'], sp['shoe'] = _pick(r, D['legs']), _pick(r, D['shoes'])
     sp['headwear'] = _pick(r, D['head'])
     sp['mask_c'] = _pick(r, D['mask'])
-    sp['hood_c'] = (top, _DK(top), sp['mask_c'])
+    sp['hood_c'] = top
     sp['hat_c'] = (lambda c: (c, _DK(c)))(_pick(r, D['hat']))
     sp['puffer'] = r.random() < D['puffer']
     sp['pack'] = _pick(r, D['pack'])
@@ -530,16 +552,6 @@ def hat_cap(p, view, sp, hx, hy):
     p.poly(curve(peak, 2), dk, INK, 2.2)
 
 
-def puffer(p, view, sp):
-    """G16: a puffer jacket's quilting: three stitched bands across the body (front and back); no hoodie pocket."""
-    sw = sp.get('shoulders', 156)
-    dk = _DK(sp.get('jacket', HOOD), .62)
-    o = 20 if view == 'three' else -20 if view == 'three_back' else 0
-    w = 0.78 if view != 'side' else 0.45
-    for y in (120, 215, 310, 405):
-        p.line([(-sw * w + o, y), (o, y + 10), (sw * w + o, y)], dk, 2.4)
-
-
 def backpack(p, view, sp):
     """G16 (ref de5: a teal backpack): on his back from behind; the straps over the shoulders from the front."""
     col = sp.get('pack')
@@ -561,7 +573,8 @@ def hood(p, view, sp, hx, hy):
     """Hood up over a black face mask, only a band round the eyes showing (refs de1, de4, es3, fr4). From behind, the
     hood's rounded point and its centre seam."""
     hw, hh = sp.get('hw', 66), sp.get('hh', 94)
-    HOOD, HOOD_D, MASK = sp.get('hood_c', _HOOD3)          # G16: the hood is the jacket's colour, the mask its own
+    HOOD, MASK = sp.get('hood_c', HOOD_C), sp.get('mask_c', MASK_C)    # round 4 (F19): the clothes vary
+    HOOD_D = tuple(int(v * .7) for v in HOOD)
     p = fit(p, sp, view, hx, hy, hw, hh, HOOD_REACH)
     if view in ('back', 'three_back'):
         o = -0.12 * hw if view == 'three_back' else 0.0
@@ -608,8 +621,18 @@ def hood(p, view, sp, hx, hy):
 
 
 def hoodie(p, view, sp):
-    """The hoodie's front pocket and drawstrings (front); the pocket's edge from the side."""
+    """The hoodie's front pocket and drawstrings (front); the pocket's edge from the side. Round 4 (F19): a puffer's
+    quilting instead on those who wear one."""
     sw = sp.get('shoulders', 156)
+    if sp.get('puffer'):
+        q = tuple(max(0, int(v * .55)) for v in sp.get('jacket', (26, 26, 30)))
+        for y in (110.0, 210.0, 310.0, 410.0):
+            if view == 'side':
+                p.line([(-60, y), (60, y + 6)], q if sum(q) > 40 else (70, 70, 76), 2.4)
+            else:
+                o = 20 if view in ('three', 'three_back') else 0
+                p.line([(-sw * .72 + o, y), (o, y + 10), (sw * .72 + o, y)], q if sum(q) > 40 else (70, 70, 76), 2.4)
+        return
     if view in ('front', 'three'):
         o = 20 if view == 'three' else 0
         p.poly([(-sw * 0.62 + o, 320), (sw * 0.62 + o, 320), (sw * 0.75 + o, 440), (-sw * 0.75 + o, 440)], HOOD_D, INK, 1.8)
@@ -622,7 +645,7 @@ def hoodie(p, view, sp):
 def dress_rioter(j, sp=None):
     hw = (sp or {}).get('headwear', 'hood')
     heads = [hood] if hw == 'hood' else [face_mask, beanie] if hw == 'beanie' else [face_mask, hat_cap]
-    bodies = [puffer if (sp or {}).get('puffer') else hoodie, backpack]
+    bodies = [hoodie, backpack]                    # hoodie() draws a puffer's quilting when sp['puffer']
     j['head_props'] = heads + j.get('head_props', [])
     j['body_props'] = bodies + j.get('body_props', [])
     return j
@@ -649,6 +672,15 @@ def dress_officer(j):
 # ------------------------------------------------------------------------------------------------ the marchers
 def marcher(i, tier='t1', s=0):
     sp = PK.crowd_person(CROWD, i, s, tier)
+    if tier == 't3':                                # round 4 (F15, rule 30: O4 skipped the crowd): Paris's own mix
+        import zlib
+        r = np.random.default_rng(zlib.crc32(f'm{i}-{tier}'.encode()))
+        mix = CITY_MIX['t3']
+        names = list(mix)
+        g = names[int(r.choice(len(names), p=np.array([mix[n] for n in names]) / sum(mix.values())))]
+        sp['skin'] = SKINS[g][int(r.integers(len(SKINS[g])))]
+        if g != 'light' and sp.get('hair_c') and sum(sp['hair_c']) > 300:   # no blond hair on a dark-skinned face
+            sp['hair_c'] = (34, 28, 24)
     PK.install({'m': sp})
     # O7 (Sam 16 Nov: too many bald heads in one place looks strange): every bald marcher and about one in four of
     # the short-haired ones wears a beanie or a cap, its colour from the member number
@@ -912,8 +944,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j = moves.gait(sp, t, 'sprint')
     elif name == 'run_sign':                        # running carrying the sign low (T2 runners)
         j = moves.gait(sp, t, 'run')
-    elif name == 'line_walk':                       # round 2 (F2): the shield line stepping forward in lockstep
-        j = moves.gait(sp, t, 'walk')
+    elif name in ('line_walk', 'shield_walk'):      # round 2 (F2): the shield line stepping forward in lockstep
+        j = moves.gait(sp, t, 'walk')               # round 4 (F18): 'shield_walk' keeps the shield up as they step
     elif name.startswith('carry') or name in ('push', 'gun_up'):  # round 1: T2 looters jog with stock; T3 shove the car
         j = moves.gait(sp, t, 'walk' if name == 'push' else 'brisk')   # chat 29: laden, a brisk walk (run: 9 m/s feet)
     else:
@@ -922,14 +954,24 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'L', (-30.0, 250.0, 160.0), 'down')
         V.arm_to(j, 'R', (sw - 6, 420.0, 70.0), 'out')
         j['props'] = [baton(j, sp, 'R', (0.0, 0.6, 0.8)), shield(j, sp)]
-    elif name == 'shield_up':                       # round 2 (F2): braced, the shield lifted to head height and
-        e = moves.ease(u)                           # tipped back to take a missile (u 0: in the line, 1: up)
-        j['lean'] = 6 * e
-        j['footL'] = (-70, V.ANKLE_Y, 120.0 * e)
-        V.arm_to(j, 'L', (-30.0, 250.0 - 170 * e, 160.0 + 30 * e), 'down')
+    elif name in ('shield_up', 'shield_walk'):      # round 2 (F2): braced, the shield lifted to head height and
+        e = moves.ease(u) if name == 'shield_up' else 1.0   # tipped back to take a missile (u 0: in the line, 1: up)
+        k = t if name == 'shield_up' else 0.0      # round 4 (F18): t is the jolt of a hit (0..1): the shield driven
+        j['lean'] = 6 * e - 9 * k                   # back into him, its top knocked back, his weight rocked back
+        if name == 'shield_up':
+            j['footL'] = (-70, V.ANKLE_Y, 120.0 * e)
+        V.arm_to(j, 'L', (-30.0, 250.0 - 170 * e - 30 * k, 160.0 + 30 * e - 70 * k), 'down')
         V.arm_to(j, 'R', (sw - 6, 420.0, 70.0), 'out')
         j['props'] = [baton(j, sp, 'R', (0.0, 0.6, 0.8)),
-                      shield(j, sp, centre=(-30.0, 330.0 - 170 * e, 175.0 + 30 * e), tilt=-12 * e)]
+                      shield(j, sp, centre=(-30.0, 330.0 - 170 * e - 30 * k, 175.0 + 30 * e - 70 * k),
+                             tilt=-12 * e - 16 * k)]
+    elif name == 'shield_over':                     # round 4 (F18): the rear ranks hold their shields up over their
+        e = moves.ease(u)                           # heads against the stones dropping in (u 0: in the line, 1: over)
+        j['lean'] = 3 * e - 6 * t
+        V.arm_to(j, 'L', (-20.0, 250.0 - 470 * e, 160.0 - 40 * e), 'down' if e < 0.5 else 'out')
+        V.arm_to(j, 'R', (sw - 6, 420.0, 70.0), 'out')
+        j['props'] = [baton(j, sp, 'R', (0.0, 0.6, 0.8)),
+                      shield(j, sp, centre=(-20.0, 330.0 - 600 * e, 175.0 - 80 * e), tilt=-62 * e - 10 * t)]
     elif name == 'baton_up':                        # baton raised over the shoulder, shield forward
         V.arm_to(j, 'L', (-30.0, 250.0, 170.0), 'down')
         V.arm_to(j, 'R', (j['shR'][0] + 40, -300.0, -60.0), 'out')   # clear above the helmet (chat 6: hand on it)
@@ -942,17 +984,40 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         V.arm_to(j, 'R', (sw + 60, 120.0, 80.0), 'out')
         j['props'] = [baton(j, sp, 'R', (0.3, -0.4, 0.86)), shield(j, sp, centre=(-50.0, 300.0, 175.0), tilt=-14,
                                                                      turn=18)]
-    elif name in ('throw', 'molotov'):              # u 0: wound up (arm back high, weight back); 1: thrown through
-        e = moves.ease(u)
-        j['lean'] = -6 + 18 * e
+    elif name in ('throw', 'molotov', 'throw_side', 'throw_lob'):   # u 0: wound up (arm back, weight back); 1: through
+        e = moves.ease(u)                           # round 4 (F16): three ways of throwing, each its own arc
         j['footL'] = (-60, V.ANKLE_Y, 140.0)
         j['footR'] = (60, V.ANKLE_Y - 30 * e, -130.0)
         j['toeR'] = 14 * e
-        back, through = np.array((sw + 70, -40.0, -300.0)), np.array((40.0, 250.0, 260.0))
-        V.arm_to(j, 'R', _clear_of_shoulder(j, 'R', back + (through - back) * e), 'out' if e < 0.5 else 'down')
+        if name == 'throw_side':                    # sidearm: the hand low and wide behind, whipped round at the hip
+            j['lean'] = -2 + 10 * e
+            back, through = np.array((sw + 150, 200.0, -220.0)), np.array((-60.0, 300.0, 250.0))
+            arm = 'out'
+        elif name == 'throw_lob':                   # underarm lob: bent forward, the hand swung up from the knee
+            j['lean'] = 14 - 6 * e
+            j['footL'] = (-70, V.ANKLE_Y, 200.0)
+            back, through = np.array((sw + 30, 600.0, -200.0)), np.array((50.0, 0.0, 280.0))
+            arm = 'out'
+        else:
+            j['lean'] = -6 + 18 * e
+            back, through = np.array((sw + 70, -40.0, -300.0)), np.array((40.0, 250.0, 260.0))
+            arm = 'out' if e < 0.5 else 'down'
+        hand = back + (through - back) * e
+        if name == 'throw_lob':                     # swung forward of the hip in an arc, not past the thigh
+            hand = hand + np.array((60.0, 0.0, 220.0)) * math.sin(math.pi * e)
+        V.arm_to(j, 'R', _clear_of_shoulder(j, 'R', hand), arm)
         V.arm_to(j, 'L', (-sw + 40 - 140 * e, 120.0 + 200 * e, 260.0 - 160 * e), 'down')
         if e < 0.6:                                 # the stone in the throwing hand until it leaves
-            grips.held(j, 'R', sp, stone(j, 'R') if name == 'throw' else bottle(j, 'R'))
+            grips.held(j, 'R', sp, stone(j, 'R', r=sp.get('stone_r', 26)) if name != 'molotov' else bottle(j, 'R'))
+    elif name == 'pickup':                          # round 4 (F16): bending for the next stone off the cobbles (u 0
+        e = math.sin(math.pi * max(0.0, min(1.0, u)))   # -> 1 -> 0: down and up again); the stone in hand after 0.5
+        j['lean'] = 34 * e
+        j['footL'] = (-70, V.ANKLE_Y, 150.0)
+        j['footR'] = (70, V.ANKLE_Y, -90.0)
+        V.arm_to(j, 'R', (sw - 20, 420.0 + 320 * e, 90.0 + 180 * e), 'out')
+        V.arm_to(j, 'L', (-sw + 10, 380.0 + 120 * e, 120.0 + 60 * e), 'down')
+        if u > 0.5:
+            grips.held(j, 'R', sp, stone(j, 'R', r=sp.get('stone_r', 26)))
     elif name in ('swing', 'swing_face'):           # the road sign: wound up over the right shoulder -> swung down
         # round 2 (G3): 'swing_face' is the same swing seen from behind, at the glass: the triangle turned flat to us
         e = moves.ease(u)
