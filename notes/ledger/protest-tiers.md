@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 61.99% (-1.52); 37 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 65.82% (+2.31); 39 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 61.99% of the 60.31% planned so far; at this rate the film lands at 62.4%.**
+**Forecast: Spent 65.82% of the 60.31% planned so far; at this rate the film lands at 66.3%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -63,6 +63,12 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-15 | 6c92dfee | est | opus | auto |  | 1.3 |  | 0 | 0 |
 | 2026-11-15 | af35cb12 | est | opus | auto |  | 1.89 |  | 0 | 0 |
 | 2026-11-15 | 3938f512 | est | opus | auto |  | 2.81 |  | 0 | 0 |
+| 2026-11-16 | 0007a586 | est | opus | auto |  | 1.72 |  | 0 | 0 |
+| 2026-11-16 | 5614ab16 | est | opus | auto |  | 2.11 |  | 0 | 0 |
+
+## Cost by kind of step (share of each chat; measured from its transcript)
+- 2026-11-16 0007a586 (auto): 57 steps, history 214k at the end; other 69.9%, film-file search 17.8%, tool search 5.4%, renders 3.5%, pictures 2.1%, page.py 1.2%
+- 2026-11-16 5614ab16 (auto): 72 steps, history 234k at the end; other 67.2%, tool search 26.8%, pictures 4.8%, film-file search 1.2%
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
