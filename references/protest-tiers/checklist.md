@@ -25,3 +25,4 @@
 | al4 Albanian riot police | white helmets with visors, black kit, red shoulder badges, grappling at close range | |
 | al5 flag against fire | Albanian flag (black eagle on red) silhouetted against flames | |
 
+- de5-frankfurt-crowd-clothing (Sam, 16 Nov; AP/dpa video still, for G-note clothing): mostly young men, NOT all black bloc: black and dark-grey puffer jackets, hoods up, black balaclavas or blue/white face masks, a white hockey-style mask; grey joggers, light-grey tracksuit bottoms, one light-grey hoodie under a black coat, white trainers, a teal backpack, a beige cap; phones out; one in a black puffer throwing at the glass, the window's tiled side wall.
