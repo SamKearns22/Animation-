@@ -6,9 +6,10 @@
   cost totals, 7 of 9 rows missing today); (2) branch printout by the start hook, 2.0k -> under 0.2k tokens a chat,
   ~0.5% a film; (3) notes printout, 3.6k -> under 2.5k, ~0.35%; (4) CLAUDE.md moved word for word, 5.5k -> under 4.8k,
   ~0.2%. Critiqued: 6 found, 3 fixed, 3 named.
-- **Next (on Sam's answer):** Opus medium builds each change Sam says Y to, in order 1-2-3, each with a kittest; change 4
-  starts with a read-only Sonnet mapping chat. On N to all: `propose.py mark startup-fixes declined`, nothing built.
-- **Needs Sam:** Y/N on changes 1-4.
+- **Sam (16 Nov): "Y to all."** startup-fixes marked adopted.
+- **Next (chat 4, Opus, medium):** build changes 1, 2, 3 of the verdict's "Final version" in that order, each with a
+  kittest, each pushed and checked before the next; then open chat 5 (Sonnet, medium): change 4's read-only mapping.
+- **Needs Sam:** nothing; change 2's first run asks him about the 3 stranded items.
 - **Read:** `notes/proposals/startup-fixes.md` (Verdict, "Final version"); `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
 - **For Claude:** the problem file's fact "~1,500 commits = rewritten histories" is wrong: this copy is shallow (history

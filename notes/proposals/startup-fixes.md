@@ -1,6 +1,6 @@
 # Proposal: Startup fixes: the three measured start-up savings
 
-Status: open
+Status: adopted (2026-11-16)
 
 ## Problem
 Every chat reads the same text before it works, and pays for it again on every later step and in every new chat.
