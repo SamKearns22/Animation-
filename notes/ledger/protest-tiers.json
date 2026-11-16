@@ -1153,27 +1153,27 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 4.01,
+   "cost": 4.71,
    "src": "estimate",
    "sid": "session_01GznaAStUu1hrhzvjkRpdfh",
-   "steps": 144,
-   "hist_k": 321,
+   "steps": 164,
+   "hist_k": 343,
    "kinds": {
-    "film-file search": 11.8,
+    "film-file search": 10.7,
     "tool search": 16.5,
     "page.py": 0.6,
-    "renders": 1.4,
-    "pictures": 3.8,
-    "other": 65.9
+    "renders": 1.9,
+    "pictures": 3.9,
+    "other": 66.5
    },
    "calls": {
-    "film-file search": 40,
-    "tool search": 70,
+    "film-file search": 41,
+    "tool search": 81,
     "whole-file .py read": 0,
     "page.py": 2,
-    "renders": 4,
-    "pictures": 15,
-    "other": 13
+    "renders": 6,
+    "pictures": 16,
+    "other": 16
    }
   }
  ],
