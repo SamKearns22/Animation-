@@ -1467,6 +1467,10 @@ def crowd_t3():
                 m['state'] = state
             if not _on_base(m['x'], m['d']) and not car_clear(m['x'], m['d']):
                 out.append(m)
+    # chat 7 (full-size look): one marcher stood alone in the gap before the base (her neighbours fell in the car's
+    # clearing); anyone with no one within 1.3 m is dropped
+    out = [m for m in out if any(o is not m and abs(o['x'] - m['x']) < 1.3 and abs(o['d'] - m['d']) < 1.3
+                                 for o in out)]
     # F4: more of them up on the base, sprites standing along the top step and the ledge (the painting's front face)
     for n, (x, z) in enumerate(((-9.6, 1.5), (-7.2, 1.5), (-4.6, 1.5), (-2.4, 1.5), (1.4, 1.5), (3.6, 1.5),
                                 (8.4, 1.5), (-6.6, 5.0), (-3.2, 5.0), (1.9, 5.0), (5.9, 5.0))):
@@ -1556,12 +1560,13 @@ def t3_columns(img, lt):
                             (T3CAM.p(*S.car_pt(8.0, 23.6, CAR2_MOVE, S.CAR3B), 2.0), 3, 0.8)):
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         lumps = []
-        for n in range(9):
-            a = (lt * 0.32 + n / 9 + n0 * .07) % 1.0                # each puff 3 s from the fire to gone
+        for n in range(18):                                     # chat 7: 18 puffs (was 9), so the column is unbroken:
+            a = (lt * 0.32 + n / 18 + n0 * .07) % 1.0               # 9 left lone round puffs that read as rocks
+
             lumps.append((sx - 700 * a * k + 26 * math.sin(lt * 1.7 + n * 2.1),
                           sy - 70 - (260 * min(1.0, a * 2.5) + 120 * a) * k + 14 * math.cos(lt * 1.3 + n),
                           (26 + 120 * a) * k, a))
-        for lo, hi, f in ((0.85, 1.01, .3), (0.65, 0.85, .62), (0.0, 0.65, 1.0)):   # thinning as it drifts: oldest
+        for lo, hi, f in ((0.85, 1.01, .3), (0.65, 0.85, .62), (0.0, 0.07, .45), (0.07, 0.65, 1.0)):   # thinning: oldest
             band = [q[:3] for q in lumps if lo <= q[3] < hi]                       # puffs first, faintest
             if band:
                 one = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -1644,7 +1649,7 @@ def _missile(img, cam, what, x0, d0, d1, t0, lt, flight=0.45, spin=0, seed=0, lo
     if what == 'cone':
         S.prop_cone(img, sx, sy, 1.4 * k, rot)
     elif what == 'wheel':
-        S.prop_wheel(img, sx, sy, 1.25 * k, rot)
+        S.prop_wheel(img, sx, sy, .8 * k, rot)        # chat 7: .8 (was 1.25: read bigger than the officers' heads x3)
     elif what == 'fruit':
         col = FRUIT3[seed % 3]
         if a < 1:
@@ -3033,7 +3038,7 @@ def LINE_SUBJECTS():
 # to twice the body's speed, past clipcheck's 7 m/s walking cap (Exceptions row 'FAST_OK')
 # round 1: written in shot time (at()), so the re-time to 4/6/8/10 s moved them with the action
 FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 'swinger')]
-           + [(p, at('t3', 2.7 + J3), at('t3', 8.0)) for p in ('front*',)]   # T3 run-out: the same sprint from the jet
+           + [(p, at('t3', SWEEP[0]), at('t3', 8.0)) for p in ('front*',)]   # T3 run-out: each from when the jet reaches him (F23, chat 7)
            + [(f'rioter{k}.foot{sd}', at('t4', 0.9), at('t4', 1.9)) for k in range(1, 7) for sd in 'LR']   # T4 surge
            # chat 29: the T4 runners (the vault's leap, the selfie and the buyers off right): the same sprint legs; a
            # buyer's upper arm pumps at 7.2-7.4 m/s; their snaps (turns, pose changes) were fixed, bodies still checked
@@ -3055,7 +3060,7 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
            + [(f'{w}{k}.{part}{sd}', t0, t1) for w, ks, t0, t1 in (
                ('runner', range(1, 6), at('t2', 0.6), at('t2', T2_FREEZE + 0.05)),
                ('hauler', (1, 2), at('t2', 1.2), at('t2', T2_FREEZE + 0.05)),
-               ('front', range(1, 5), at('t3', 0.7), at('t3', 2.65 + J3)),
+               ('front', range(1, 5), at('t3', 0.0), at('t3', SWEEP[1] + 0.2)),   # F12/F23 (chat 7): throws from frame 0 till the jet
                ('rioter', range(1, 9), at('t4', 0.0), at('t4', T4_LEN)))
               for k in ks for part in ('hand', 'forearm') for sd in 'LR'])
 # round 1 (chat 26, notes "## Exceptions"): who comes on in mid-frame for a reason the audit cannot see
@@ -3075,15 +3080,15 @@ ALLOWED_CONTACTS = [('swinger', 'GLASS', at('t2', T2_HIT - 0.1), at('t2', T2_SHA
            ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
            ('runner*', 'runner*', at('t2', 0), at('t2', T2_FREEZE + .75), 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),
            ('runner*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in: the swinger is in the crush', 0.10),
-           ('front*', 'front*', at('t3', 2.7 + J3), at('t3', 3.3 + J3), 'T3 run-out: the front line breaks and runs left as a pack', 0.04),
+           ('front*', 'front*', at('t3', SWEEP[0]), at('t3', SWEEP[1] + 0.6), 'T3 run-out: the front line breaks and runs left as a pack', 0.04),
            ('policia*', 'rioter*', at('t4', 0), at('t4', T4_LEN - .05), 'T4 melee: rioters slam into the shields (brief 26)', 0.20),
            ('policia*', 'policia*', at('t4', 2), at('t4', T4_LEN - .05), 'T4 melee: the shield line buckles back into itself', 0.06)]
 ORDER_SWAPS = [(a, b, t0, t1, w) for a, b, t0, t1, w in (
     ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: they cross in the crush'),
     ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in'), ('runner*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in'),
     ('runner*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in'), ('hauler*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in'),
-    ('front*', 'front*', at('t3', 2.7 + J3), at('t3', 3.3 + J3), 'T3 run-out'),
-    ('crs*', 'front*', at('t3', 2.7 + J3), at('t3', 3.3 + J3), 'T3 run-out'),
+    ('front*', 'front*', at('t3', SWEEP[0]), at('t3', SWEEP[1] + 0.6), 'T3 run-out'),
+    ('crs*', 'front*', at('t3', SWEEP[0]), at('t3', SWEEP[1] + 0.6), 'T3 run-out'),
     ('policia*', 'policia*', at('t4', 2.0), at('t4', 2.3), 'T4 melee: the line buckles'),
     ('policia*', 'rioter*', at('t4', 2.0), at('t4', 2.3), 'T4 melee: rioters break through the line'))]
 ALLOWED = [(a, b, t0, t1) for a, b, t0, t1, *_ in ALLOWED_CONTACTS]   # clipcheck reads the same meant contacts
