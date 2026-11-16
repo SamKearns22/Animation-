@@ -9,7 +9,7 @@
   held-out code-finder set at its first round; code-finder change 2 shown on the replay before Sam is asked; late-faults
   changes 2-3 only on the replay's split. The guard stays stopped until Sam asks.
 - **Needs Sam:** nothing; the next job is his to name.
-- **Read:** `notes/proposals/code-finder.md` and `late-faults.md`, "Built"; `guides/job-packs.md` "A tool job".
+- **Read:** `notes/proposals/code-finder.md` and `late-faults.md`, with their `built.md` (moved there 16 Nov); `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
 - **For Claude:** kittests `code_finder`; `handover.quick_faults/changed_films/end_stamp/finder_faults`; replay
   `learn/replay-show.py`. Old handovers: `notes/archive/proposal-route-handovers.md`.

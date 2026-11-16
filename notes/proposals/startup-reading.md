@@ -1,6 +1,6 @@
 # Proposal: Startup reading: condense what every chat reads before it works
 
-Status: open
+Status: adopted (2026-11-16)
 
 ## Problem
 Every chat reads a fixed set of text before it does any work: CLAUDE.md (loaded by the app itself), the stage's pack
