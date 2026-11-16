@@ -149,6 +149,36 @@
    "cost": 2.34,
    "src": "estimate",
    "sid": "session_01J1JB7YZxGyth9t1txWGu2s"
+  },
+  {
+   "date": "2026-11-16",
+   "chat": "a19b01a1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.82,
+   "src": "estimate",
+   "sid": "session_01J1JB7Yhjq1QCEp73BMVcLY",
+   "steps": 23,
+   "hist_k": 111,
+   "kinds": {
+    "tool search": 18.9,
+    "whole-file .py read": 0.7,
+    "page.py": 7.8,
+    "renders": 1.4,
+    "other": 71.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 16,
+    "whole-file .py read": 1,
+    "page.py": 3,
+    "renders": 1,
+    "pictures": 0,
+    "other": 4
+   }
   }
  ],
  "checks": {}
