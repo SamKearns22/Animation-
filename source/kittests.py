@@ -1850,13 +1850,7 @@ def people_from_a_description():
             bad.append(why + ' was not refused')
         except K.DescriptionError:
             pass
-    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in
-             ('people.py', 'people_parts.py', 'people_famous.py', 'people_walliams.py', 'people_turned.py', 'page.py', 'facehouse.py',
-              'kittests.py', 'rough.py', 'kitchecks.py') and not os.path.basename(f).startswith('places')   # a kit, not a film (5d); kitchecks reads crowds (craft change 1)
-             and re.search(r'^\s*(import people\b|from people\b)',
-             open(f, encoding='utf-8').read(), re.M)]
-    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
-        bad.append(f'films using the kit before Sam approves it: {users}')
+    # Sam approved the kit for films (16 Nov): the old 'no film uses the kit yet' clause is gone
     tmp = os.path.join(HERE, 'data', 'kittest-people')
     import blessed as BL0
     press = K.crowds('blessed')['press']                # chat 4d: the press pack, a crowd of 31 from 16 lines
@@ -2948,10 +2942,24 @@ def crowds_varied():
             rec.append(('t4', w, dict(_t=f / 12, _pose=(('wrL', (f if w != 'm4' else 5 - f, 0)),))))
     step = K.in_step(object(), rec)
     apart = K.in_step(object(), [r for r in rec if r[1] in ('m1', 'm4')])
+    import people as PK                                  # the kit's crowd defaults (craft chat 3): EPR's cities
+    dflt = {}                                            # from a bare 'crowd:' line pass; a 'same:' line is let be
+    for city in ('barcelona', 'frankfurt', 'paris', 'tirana'):
+        d = PK.parse(f'# m: M\ncrowd: m\nmix: {city}\n')['m']
+        d['crowd_defaults'] = True
+        dflt[city] = K.same_faults(city, [PK.crowd_person(d, i) for i in range(64)], d.get('crowd_mix'))
+    one = PK.parse('# m: M\ncrowd: m\noutfit: jumper 26 26 30\n')['m']
+    same = PK.parse('# m: M\ncrowd: m\noutfit: jumper 26 26 30\nsame: top because one club strip\n')['m']
+    one['crowd_defaults'] = same['crowd_defaults'] = True
+    told = K.same_faults('m', [PK.crowd_person(one, i) for i in range(24)])
+    let = K.same_faults('m', [PK.crowd_person(same, i) for i in range(24)],
+                        ok=[('*', k, w) for ks, w in same['crowd_same'] for k in ks])
     ok = (any('hat' in x for x in got['gold']) and not got['spread'] and any('look' in x for x in got['police'])
           and any('bald' in x for x in got['bald']) and any('skins' in x for x in got['mix']) and not got['mixok']
-          and step and not apart)
-    return ok, {k: len(v) for k, v in got.items()} | {'in step': len(step), 'apart': len(apart)}
+          and step and not apart and not any(dflt.values()) and any('top' in x for x in told)
+          and not any('top' in x for x in let) and K.SAMENESS_ON[0])
+    return ok, {k: len(v) for k, v in got.items()} | {'in step': len(step), 'apart': len(apart)} | \
+        {f'default {c}': len(v) for c, v in dflt.items()} | {'one top told': len(told), 'same: let be': len(let)}
 
 
 def main():

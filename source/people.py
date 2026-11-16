@@ -35,6 +35,9 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     when hair bob; long: body: 1.64 m  facts for the members that fit (when hair ..., when job tv; boom: ...)
     taller (7i+s): 0; 0.05 | seed: 600 + i | hair seed: 500 | hair colour: C | jacket: C | brows: darker hair 0.8
     trousers: darker jacket 0.6
+  Crowds varied by default (craft change 1, 16 Nov): what a crowd's lines leave unsaid comes per member from EPR's
+    mix (skin, haircut, build, hair colour, face, tops, trousers, shoes, a hat on some: varied() below). Its own lines:
+    mix: paris | hats: 0.3 | count: 40 | same: top because WHY   (MIXES; a hat share; the crowd's size; alike on purpose)
   Turned heads (chat 4d; people_turned.py): every invented face turns with its own face card, colours, haircut,
     beard and glasses (Blessed's press pack's way); before, the side and back were the engine's plain head.
 
@@ -167,11 +170,127 @@ def _crowd_line(cur, line, n):
     return False
 
 
+# ------------------------------------------------------------------------------- crowds varied by default
+# Craft change 1 (Sam's Y on the kit, 16 Nov; 11+ sameness notes, F15/F16 repeated, Blessed's bald heads): every crowd
+# comes out varied unless its lines say otherwise. What a crowd's lines leave unsaid is filled per member from
+# European Protests, Ranked's tested mix (protest_tiers_cast: SKINS, CITY_MIX, DRESS['t4'], T4_HATS, the marchers'
+# faces and builds), the same member the same in every shot. Lines a crowd may add:
+#     mix: paris        (or: light .5, olive .3, brown .2)   the place's skins (MIXES), else 'mixed'; the check tests it
+#     hats: 0.3         the share in a beanie or cap (default .22; bald heads always hatted, EPR O7); 'hats: 0' none
+#     count: 40         how many the film draws (the check's crowd size; default 24)
+#     same: hat, top because riot police wear one uniform    keys left alike on purpose (the check lets them be)
+SKIN_TONES = {'light': [(236, 200, 176), (226, 186, 158)], 'olive': [(204, 160, 120), (190, 146, 106)],
+              'tan': [(172, 124, 88)], 'brown': [(140, 96, 66)], 'dark': [(108, 72, 50), (86, 58, 42)],
+              'sasian': [(160, 112, 78)]}
+MIXES = {'barcelona': {'light': .72, 'olive': .16, 'tan': .07, 'brown': .03, 'dark': .02},
+         'frankfurt': {'light': .46, 'olive': .24, 'tan': .12, 'brown': .06, 'dark': .07, 'sasian': .05},
+         'paris': {'light': .55, 'olive': .17, 'tan': .07, 'brown': .07, 'dark': .12, 'sasian': .02},
+         'tirana': {'light': .55, 'olive': .40, 'tan': .05},
+         'london': {'light': .54, 'olive': .1, 'tan': .06, 'brown': .06, 'dark': .13, 'sasian': .11},
+         'mixed': {'light': .55, 'olive': .15, 'tan': .08, 'brown': .07, 'dark': .1, 'sasian': .05}}
+TOPS = [((26, 26, 30), .2), ((54, 56, 60), .12), ((34, 38, 56), .08), ((88, 90, 94), .08), ((168, 168, 164), .07),
+        ((66, 68, 54), .07), ((156, 34, 38), .09), ((226, 224, 216), .06), ((62, 86, 128), .07), ((150, 118, 76), .06),
+        ((96, 36, 48), .05), ((40, 92, 70), .05)]
+LEGS = [((30, 30, 34), .3), ((58, 74, 110), .3), ((88, 88, 92), .18), ((156, 156, 154), .12), ((96, 84, 62), .1)]
+SHOES = [((236, 236, 232), .45), ((22, 22, 24), .4), ((120, 120, 124), .08), ((150, 40, 40), .07)]
+HATS = ((24, 24, 26), (80, 82, 86), (34, 40, 62), (156, 34, 38), (226, 224, 216), (110, 32, 40), (66, 68, 54),
+        (186, 146, 52), (40, 92, 70), (150, 118, 76))      # the 10-colour round (A17): 3 steps round it per member
+FACES = ['face_wide 0.04, jaw_wide 0.05', 'face_wide -0.04, chin_long 0.02', '', 'jaw_wide 0.07', 'face_wide 0.05',
+         'face_wide -0.03', 'jaw_wide 0.03', 'face_wide -0.05, jaw_wide -0.05']
+MEN_HAIR = [('short', .26), ('crop', .22), ('side', .16), ('curly', .1), ('receding', .1), ('bald', .08), ('long', .08)]
+WOMEN_HAIR = [('bob', .3), ('long', .3), ('pony', .2), ('bun', .1), ('curly', .1)]
+WOMEN = ('bob', 'pony', 'bun')          # cuts the kit gives women (long and curly: either)
+SAID = {'skin': 'skin', 'hair': 'hair', 'hair colour': 'hair_c', 'face': 'face', 'body': 'body', 'taller': 'taller',
+        'outfit': 'outfit', 'jacket': 'outfit', 'trousers': 'trousers', 'shoes': 'shoes', 'hair seed': 'hair_seed',
+        'brows': 'brows', 'glasses': 'glasses', 'beard': 'beard', 'lashes': 'lashes', 'lips': 'lips'}
+BEFORE_DEFAULTS = {'blessed': 'posted before the defaults (its press pack is redrawn pixel for pixel)',
+                   'protest-tiers': 'in its final rounds when they came in (16 Nov): the film dresses its own crowds'}
+
+
+def _said(d):
+    """The facts a crowd's own lines give (plain, cycled or per 'when'): the defaults leave these alone."""
+    out = set()
+    for line in d.get('_lines', ()):
+        w = WHEN.match(line)
+        for fact in (w.group(3) if w else line).split(' | '):
+            c = CYCLE.match(fact.strip())
+            key = c.group(1).strip() if c else fact.partition(':')[0].strip().lower()
+            out.add(SAID.get(key, key))
+    return out | {k for keys, _ in d.get('crowd_same', ()) for k in keys}
+
+
+def _pick(r, opts):
+    return opts[int(r.choice(len(opts), p=[w for _, w in opts]))][0] if abs(sum(w for _, w in opts) - 1) < 1e-6 \
+        else opts[int(r.choice(len(opts), p=[w / sum(q for _, q in opts) for _, w in opts]))][0]
+
+
+def varied(d, m, i):
+    """Member i's defaults for what the crowd's lines leave unsaid (EPR's mix; the same member in every shot)."""
+    import zlib
+    import numpy as np
+    said = _said(d)
+    r = np.random.default_rng(zlib.crc32(f"{d['crowd']['kind']}-{i}".encode()))
+    mix = d.get('crowd_mix') or MIXES['mixed']
+    g = list(mix)[int(r.choice(len(mix), p=np.array(list(mix.values())) / sum(mix.values())))]
+    if 'skin' not in said:
+        m['skin'] = SKIN_TONES[g][int(r.integers(len(SKIN_TONES[g])))]
+    woman = r.random() < .45
+    if 'hair' not in said:
+        m['hair_style'] = _pick(r, WOMEN_HAIR if woman else MEN_HAIR)
+    woman = m.get('hair_style') in WOMEN or (woman and m.get('hair_style') in ('long', 'curly'))
+    if 'hair_c' not in said:
+        darker = g != 'light' or m.get('skin', (0,))[0] < 215
+        q = r.random()
+        m['hair_c'] = ((22, 18, 16) if q < .6 else (40, 30, 24)) if darker else \
+            (34, 28, 24) if q < .4 else (70, 50, 34) if q < .72 else (110, 80, 50) if q < .86 else \
+            (196, 160, 96) if q < .94 else (150, 146, 140)
+    if 'hair_seed' not in said and 'strand_seed' not in m:
+        m['strand_seed'] = 500 + i % 40
+    if 'brows' not in said:
+        m['brows_dk'] = .8
+    if 'face' not in said:
+        f = FACES[(3 * i) % len(FACES)]
+        if f:
+            _fact(m, 'face', f, {})
+        m.setdefault('face_m', {})['nose_long'] = round(float(r.uniform(-.04, .05)), 3)
+    if 'body' not in said:
+        if woman:
+            m.update(height=round(float(r.uniform(1.56, 1.72)), 2), shoulders=int(r.integers(134, 146)), hw=62, hh=94)
+        else:
+            m.update(height=round(float(r.uniform(1.66, 1.88)), 2), shoulders=int(r.integers(146, 166)), hw=66, hh=94)
+    if 'taller' not in said and 'body' in said:
+        m['taller'] = float(r.choice([-.05, -.02, 0, .03, .06]))
+    if woman and 'lashes' not in said:
+        m['lashes'] = True
+        if 'lips' not in said:
+            m['lips'] = (178, 84, 86)
+    if not woman and 'beard' not in said and r.random() < .2:
+        m['stub'] = .84
+    if 'glasses' not in said and r.random() < .08:
+        m['glasses'] = (40, 36, 34)
+    if 'outfit' not in said:
+        top = _pick(r, TOPS)
+        m.update(outfit='jumper', jacket=top, sleeve=top, shirt=top if r.random() < .5 else (236, 236, 232), tie=None)
+    if 'trousers' not in said:
+        m['trousers'] = _pick(r, LEGS)
+    if 'shoes' not in said:
+        m['shoe'] = _pick(r, SHOES)
+    share = d.get('crowd_hats', .22)
+    if 'hat' not in said and share and (m.get('hair_style') == 'bald' or
+                                        (m.get('hair_style') not in ('bob', 'pony', 'bun', 'long') and r.random() < share)):
+        m['kit_hat'] = 'beanie' if r.random() < .55 else 'cap'
+        c = HATS[(3 * i) % len(HATS)]
+        m['hat_c'] = (c, tuple(int(v * .72) for v in c))
+    return m
+
+
 def member(d, i, s=0, job=None):
     """Crowd member i (s: the shot's seed; job: what the film has them doing) -> their own description."""
     cr = d['crowd']
     m = {k: (dict(v) if isinstance(v, dict) else v) for k, v in d.items() if k != 'crowd'}
     m["name"] = f"{d['name'].split('(')[0].strip()} {i + 1}"
+    if d.get('crowd_defaults', True):
+        varied(d, m, i)
 
     def apply(key, form, items):
         val = items[0] if form is None else items[(form[0] * i + form[1] * s) % len(items)]
@@ -193,6 +312,26 @@ def _fact(d, key, val, people):
     parts = [p.strip() for p in val.split(',') if p.strip()]
     if key == 'crowd':
         d['crowd'] = dict(kind=val, cycle=[], when=[])
+    elif key in ('mix', 'hats', 'count', 'same') and d.get('crowd') is None:
+        raise DescriptionError(f'{key}: a crowd\'s line (after "crowd: ...")')
+    elif key == 'mix':
+        if val.strip().lower() in MIXES:
+            d['crowd_mix'] = dict(MIXES[val.strip().lower()])
+        else:
+            mx = {w: float(v) for w, v in (q.rsplit(' ', 1) for q in parts)}
+            if set(mx) - set(SKIN_TONES):
+                raise DescriptionError(f'mix: a place ({", ".join(MIXES)}) or shares of {", ".join(SKIN_TONES)}')
+            d['crowd_mix'] = mx
+    elif key == 'hats':
+        d['crowd_hats'] = float(val)
+    elif key == 'count':
+        d['crowd_n'] = int(val)
+    elif key == 'same':
+        keys, _, why = val.partition(' because ')
+        keys = [k.strip() for k in keys.split(',') if k.strip()]
+        if not why.strip() or set(keys) - {'hat', 'hair', 'top', 'skin', 'look', 'step', 'outfit'}:
+            raise DescriptionError('same: hat, top because WHY (keys: hat hair top skin look step outfit)')
+        d.setdefault('crowd_same', []).append(({'outfit' if k == 'top' else k for k in keys} | set(keys), why.strip()))
     elif key == 'hair colour':
         d['hair_c'] = colour(val)
     elif key == 'hair seed':
@@ -349,7 +488,8 @@ def person(d):
     sp = dict(DEFAULTS)
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
-              'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar'):
+              'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
+              'hat_c'):
         if k in d:
             sp[k] = d[k]
     if 'skin' not in sp:
@@ -434,8 +574,12 @@ def load(film):
 
 
 def crowds(film):
-    """The film's crowds -> {who: description}; crowd_person(d, i, s, job) draws member i."""
-    return {w: d for w, d in parse(open(people_file(film)).read()).items() if 'crowd' in d}
+    """The film's crowds -> {who: description}; crowd_person(d, i, s, job) draws member i. A film built before the
+    crowd defaults (BEFORE_DEFAULTS) keeps its crowds exactly as drawn."""
+    out = {w: d for w, d in parse(open(people_file(film)).read()).items() if 'crowd' in d}
+    for d in out.values():
+        d['crowd_defaults'] = film not in BEFORE_DEFAULTS
+    return out
 
 
 def crowd_person(d, i, s=0, job=None):
@@ -519,6 +663,9 @@ def install(cast):
     V = PP.AV.MC.V
     if kit_torso_view not in V.TORSO_EXTRAS:
         V.TORSO_EXTRAS.append(kit_torso_view)
+    import people_hats as PH                     # craft change 1: a crowd member's beanie or cap, every view
+    if PH.draw not in V.HEAD_WEAR:
+        V.HEAD_WEAR.append(PH.draw)
     for sp in cast.values():                     # one person may have several looks (Brand's four): the head and
         TC.HEADS[sp['who']] = kit_head           # torso are chosen from the look being drawn, not from the name
         TC.TORSOS[sp['who']] = kit_torso

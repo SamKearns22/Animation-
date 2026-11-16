@@ -269,3 +269,18 @@
 - **For Claude:** F6 named: cameras get nothing now (moving rough declined). Old handovers: `notes/archive/proposal-route-handovers.md`.
 
 
+
+
+# Craft chat 2 handover (archived by craft chat 3, 16 Nov)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (every change through it), 30 (say why a first fix failed), 85 (cost watch).
+- **Done (craft chat 2, Opus medium, 16 Nov):** change 2 (poses at phone size) BUILT and ON: pre-flight refuses a film with people and no SHOT_MARKS, and every acting-list body move or never-looked-at gallery pose with no "Pose looked at:" line (`posecheck.py look/seen/replay`; no-rooms films get the front-on check on the drawing pass). EPR replay: 5 refusals incl. the shrug (A12/A30) and no SHOT_MARKS; EPR itself only warned (in its final). Change 1's CHECK half built, OFF (`kitchecks.SAMENESS_ON`): share caps (one look/hat/hair/top/skin), bald share, skins vs place mix, crowd steps that skip list items, neighbours in step. EPR replay on old code: caught A17 gold hats, O4 one-face rioters, F5/A18 one-model police, O7 bald (cap 10%); F16 in step only by kittest (not replayed: needs the drawing pass). Kittests: 2 failures already there before this chat (round_page, facehouse_whole_head); people_from_a_description fails on protest_tiers_cast using the kit unapproved (already so). Found live in EPR: marchers' jacket (3i+s) over 6 colours uses only 2 (half in one dark top), and Blessed's 24 stills press in one top.
+- **Sam's Y (16 Nov, came in on the main line): the people kit is approved for films and must be LISTED AS IMPROVED** in `guides/kit-catalogue.md` line 44 once the crowd change is built (what changed and when).
+- **Next (craft chat 3, Opus medium, building from a clear plan):** put EPR's city mix, outfits, hats (10-colour round), builds and face pushes into the people kit's crowd defaults (`people.py` member(): `mix:`/`hats:`/`same:` lines, varied unless `same:` says why), flip `SAMENESS_ON`, list it as improved (catalogue line 44), drop the kit-approval clause from kittest people_from_a_description, kittest; replay on EPR's crowds before flipping on. Then the craft census needs its own Y (ask in one numbered message). EPR's jacket step fault is written in notes/protest-tiers.md for its chat.
+- **Needs Sam:** nothing now.
+- **Numbers to beat:** change 2: no pose note returned twice on the next two films. Change 1: at most 2 sameness notes, none repeated, on the next two crowd films.
+- **Read:** `notes/proposals/craft-first-round.md` (Final version); `source/kitchecks.py` sameness block; `source/people.py` lines 129-200; job pack "A tool job".
+- **Open rule requests:** none. Changes made without asking (for the end-of-film review): bald cap 10%; the crowd-step warning; front-on check on the drawing pass for no-rooms films; EPR exempted from the pose refusal (`posecheck.BEFORE`).
+- **Branches named (not merged, waiting on Sam):** claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** kittests `phone_size_poses`, `crowds_varied`; old handovers `notes/archive/proposal-route-handovers.md`.
+

@@ -600,6 +600,7 @@ def torso_view(img, p, sp, view, seated=False):
 
 
 # ------------------------------------------------------------------------------------- one outfit in every view
+HEAD_WEAR = []       # draw(p, view, sp, hx, hy) on every head after its head_props (people.install: the kit's hats)
 TORSO_EXTRAS = []    # draw(img, p, sp, view, seated) after each turned torso (people.install hangs the kit's on it)
 
 
@@ -1174,7 +1175,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
             lay.putalpha(Image.fromarray(a))
             img.alpha_composite(lay, hair_box[:2])
 
-    for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
+    for draw in j.get('head_props', []) + HEAD_WEAR:   # worn on the head (a cap, a helmet, curls; the kit's hats)
         draw(B.Pen(img, up_head), hv, sp_draw, hdx, -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
         if view in ('back', 'three_back') and depth['wr' + sd] < -10:

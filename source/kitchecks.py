@@ -380,7 +380,8 @@ def copies(film, records):
     return out
 
 
-SAMENESS_ON = [False]   # craft change 1: switched on with the people kit's crowd defaults (Sam's Y on the kit)
+SAMENESS_ON = [True]    # craft change 1: ON 16 Nov (craft chat 3) with the people kit's crowd defaults (Sam's Y on the kit)
+SAME_BEFORE = {'protest-tiers': 'in its final rounds when this was switched on (16 Nov): warned, not refused'}
 SAME_CAP = {'look': .3, 'hat': .3, 'hair': .3, 'top': .4, 'skin': .6}   # hat: of the hats (EPR's gold: 70 of 147, .48; after A17 .15);
 #                                                 hair: of the bare heads; look (one copy), top, skin
 #                                                 (one tone, when no place mix is listed): of everyone
@@ -399,7 +400,7 @@ def _col(c):
 
 def traits(sp):
     """What makes a crowd look varied or the same: hat colour (None bare-headed), hair, top, skin."""
-    hw = sp.get('headwear')
+    hw = sp.get('headwear') or sp.get('kit_hat')
     hair = (sp.get('kit_face') or {}).get('hair') or sp.get('hair')
     return dict(look=look(sp), hat=_col(sp.get('hat_c')) if hw else None,
                 hair=None if hw or hair in (None, 'none') else (hair, None if hair == 'bald' else _col(sp.get('hair_c'))),
@@ -454,7 +455,7 @@ def same_faults(name, sps, mix=None, ok=()):
 def crowd_list_faults(film):
     """Every crowd the film can make, member by member: CROWDS and the people kit's crowds (no drawing)."""
     out = []
-    ok = getattr(film, 'SAME_OK', ())
+    ok = tuple(getattr(film, 'SAME_OK', ()))
     for name, (make, n, mix) in dict(getattr(film, 'CROWDS', {}) or {}).items():
         out += same_faults(name, [make(i) for i in range(n)], mix, ok)
     import people as PK
@@ -463,6 +464,7 @@ def crowd_list_faults(film):
     if os.path.exists(PK.people_file(fname)):
         for name, d in PK.crowds(fname).items():
             n = int(d.get('crowd_n', 24))
+            ok_d = ok + tuple(('*', k, why) for keys, why in d.get('crowd_same', ()) for k in keys)   # its same: lines
             cyc = list(d['crowd']['cycle']) + [f for _, _, fs in d['crowd']['when'] for f in fs]
             said = set()
             for key, form, items in cyc:          # EPR: jacket (3i+s) over 6 colours only ever gave 2 of them
@@ -474,8 +476,8 @@ def crowd_list_faults(film):
                                f'{len(items)} share {g})')
             jobs = sorted({j for what, among, _ in d['crowd']['when'] if what == 'job' for j in among}) or [None]
             for job in jobs:                      # each job the film gives them (EPR: t1..t4, each city's jackets)
-                out += same_faults(f'{name}' + (f' ({job})' if job else ''), [PK.member(d, i, 0, job) for i in
-                                                                             range(n)], d.get('crowd_mix'), ok)
+                out += same_faults(f'{name}' + (f' ({job})' if job else ''), [PK.crowd_person(d, i, 0, job) for i
+                                                                             in range(n)], d.get('crowd_mix'), ok_d)
     return out
 
 
