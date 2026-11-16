@@ -942,6 +942,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
     sw = sp.get('shoulders', 160)
     if name == 'run':
         j = moves.gait(sp, t, 'sprint')
+    elif name == 'carry_run':                       # round 2 (G17): fleeing the shop with stock, a flat-out sprint
+        j = moves.gait(sp, t, 'sprint')
     elif name == 'run_sign':                        # running carrying the sign low (T2 runners)
         j = moves.gait(sp, t, 'run')
     elif name in ('line_walk', 'shield_walk'):      # round 2 (F2): the shield line stepping forward in lockstep
@@ -1065,7 +1067,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j['lean'] = -8
         V.arm_to(j, 'R', (60.0, -330.0, 150.0), 'down')
         V.arm_to(j, 'L', (-60.0, -310.0, 150.0), 'down')
-    elif name == 'carry_front':                     # round 1 (T2): a TV or a tower of boxes held out in front at chest
+    elif name in ('carry_front', 'carry_run'):      # round 1 (T2): a TV or a tower of boxes held out in front at chest
         V.arm_to(j, 'R', (j['shR'][0] + 10, 150.0, 260.0), 'down')
         V.arm_to(j, 'L', (j['shL'][0] - 10, 150.0, 260.0), 'down')
     elif name == 'carry_up':                        # round 1 (T2): the mannequin held up flat over the head, both hands

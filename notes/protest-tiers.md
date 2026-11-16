@@ -3,8 +3,9 @@
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 30 (say why a first fix failed: G4 plinth), 74 (acting list before the animatic), 83 (people through set/props).
 - **Two lines of chats (Sam, 16 Nov):** GERMANY chats (t2 code only) and BACK-HALF chats (France + Albania, t3/t4/end code only). Each merges the main line before every push and keeps to its own lines below.
-- **GERMANY done (Germany chat 4, 16 Nov, Opus; stopped at amber):** G16 clothing (DRESS t2 in the cast, from de5), O7 hats (crowd + rioters), G13 four hits / growing cracks / shatter at 2.95 / sign flung 3.2 / cheer / swinger loots a pistol; runner1/2 takes 3.6/3.75. `check`: 0 Germany faults. Stills looked at; no clip sent yet.
-- **GERMANY next (Opus medium, a fresh chat):** build G12 (foreground: heads-and-shoulders at the frame's left/right edges, d 4-5, middle and door kept clear: near heads at d<6 cover the pavement line y~1480), G14 (inside the door: walk in to d 15.2 then sideways behind the wall, out the same way, never a pop), G15 (stones from off right-near at the lit upper-right window x 2.2-3.5, z 5-7.4: chip 3.9, chip 4.5, through 5.2), G17 (out of the door bursting 0.5 s, then sprint with stock in four directions: pose 'carry_run' = sprint gait + carry arms), G18 (BOARD_TO about (1.6, 10.4), 0.75 s flight, 1.5 m arc, 2 turns), G19 (sounds: wood-smash at each SIGN_HITS, glass-smash at T2_SHATTER, stone-hit per stone, protest-crowd from 15 s in under T2; MA.load works). Then `check`, acting/beat list (rule 74), clip `final OUT --small --span 6 14.5` to Sam, one line per note (G12-G19, O7). O8/O9 (numbers bigger, Sam's ding) are quick: do them too.
+- **GERMANY done (Germany chat 5, 16 Nov, Opus medium):** G12 near crowd at both edges, G14 round the corner inside, G15 upstairs window (chip, chip, through), G17 sprint out four ways, G18 board 3.4 m, G19 Sam's sounds, O8 numbers 81 px, O9 Sam's ding. Earlier (chat 4): G16, O7, G13. `check`: 0 Germany faults. T2 beat + acting list written. Clip 6-14.5 sent to Sam.
+- **GERMANY handover check (chat 5), named not fixed:** T2 limb speeds 7-13 m/s (runner1 0.92 run-in, unchanged code; hauler1/swinger/looters: sprint gait feet and the swing's hands at 12 fps) and front/back swaps (people passing in separate lanes: runners, swinger, looters); 'WAFFEN RAUS placard not on screen 7.5-8.5' (its holder at the frame edge, O2/G4); 'T2 sign-on-glass flash draws nothing in its test' (the test's time 1.05 is before the first hit 1.6: move it). Looked at stills 7.6-14.4 and the clip frame 8.58: they read fine. The next Germany chat sets ORDER_SWAPS and the flash test time.
+- **GERMANY next (Opus medium):** Sam's notes on the Germany clip (Q1: Y/N); then G11: once Spain and Germany are Y, an animatic of the front half (Sonnet chat for the render).
 - **BACK-HALF done (back-half chat 4, 16 Nov, Opus medium):** F10 built (car up-left by Marianne, burning in place, silver, roof on; crowd keeps a clearing; pushers/steam gone); SET_BOXES t3 re-measured (bikes out, car in, car/monument meant); police files 0.75 m apart, rear files a beat later (check: T3 clean); T3 beat + acting list in the beat list; France clip 14.5-22.5 sent to Sam. Earlier (chat 3): F4-F9, F11 built.
 - **BACK-HALF done (back-half chat 6, 16 Nov, Opus medium; stopped at amber):** F12-F23 BUILT (t3 code + cast/sets t3-only pieces), see "Build plan" under F23; draws without a fault at 14.6/16/18.5/20.5; not yet looked at full size or checked.
 - **BACK-HALF next: Opus medium, back-half chat 7:** look at stills full size and fix (car 2, bare right paving, anything else), `check` (T3 clean), T3 acting/beat list (rule 74), then clip `final OUT --small --span 14.5 22.5` to Sam with one line per note, the rule 30 lines for F15, F16, F18, F20 (in each note), Lost/Added lines (Lost: the walk-in; the kiosk; the run-up throw style not built). Albania: its own chat.
@@ -89,20 +90,20 @@
 - [x] S4 (T1_CONTAINER (-7, 176) behind the line's left; new _container: lid upright, ribs, soot, flames only in the mouth, smoke column) Burning skip: back-left of the police line (not on it), better drawn, flames not spilling far over the lid.
 - [x] S5 (second rank d +1.6, x +0.85) Second rank of police two paces behind the first, standing in the gaps.
 - [x] O7 (built Germany chat 4: cast beanie/hat_cap; marchers: every bald one + 1 in 4 short-haired (marcher()); t2 rioters via DRESS) (Sam 16 Nov, chat 3) Too many bald heads in one place looks strange: put common hats on part of the crowd: beanies and caps (crowd sprites and acted rioters where it suits; clear ~/.cache/protest-tiers-sprites).
-- [ ] O8 (Sam 16 Nov, chat 3) Intensity numbers 50% bigger.
-- [ ] O9 (Sam 16 Nov) Use Sam's ding for the numbers: `sounds/protest-tiers/ding.mp3` (freesound community 101492; replaces the made ding).
+- [x] O8 (built Germany chat 5: 81 px, was 54) (Sam 16 Nov, chat 3) Intensity numbers 50% bigger.
+- [x] O9 (built Germany chat 5: sfx('ding') in soundtrack; the made ding removed) (Sam 16 Nov) Use Sam's ding for the numbers: `sounds/protest-tiers/ding.mp3` (freesound community 101492; replaces the made ding).
 - [x] S0 (Sam 16 Nov, on the 0-14.5 clip) Spain: "really good" (the Overall+Spain still question answered).
 - [ ] S6 (Sam 16 Nov) Spain: the police advance once more, in the middle, between the opening second and the existing advance (line steps 4.0).
 - [ ] S7 (Sam 16 Nov) Spain fireworks sound: `sounds/protest-tiers/fireworks.mp3` (freesound community 29629), timed to the rockets/bursts (Sam asked: sound effect allowed).
 - [ ] Q1 still open: Germany Y/N on the 0-14.5 clip.
-- [ ] G12 (Sam 16 Nov, on the 0-14.5 clip) More foreground protesters (some were lost moving them off the door) while the action stays clear.
+- [x] G12 (built Germany chat 5: five more in the t2 crowd list, d 4.4-6.4 at both edges, heads below the pavement line) (Sam 16 Nov, on the 0-14.5 clip) More foreground protesters (some were lost moving them off the door) while the action stays clear.
 - [x] G13 (built Germany chat 4: SIGN_HITS 1.6/2.05/2.5/2.95 in four places, cracks grow (t2_chips), shatter T2_SHATTER 2.95; t2_sign flung at SIGN_DROP 3.2; cheer; loots pistol TAKE swinger 4.85, off left lane 13.4; runner1/2 takes moved to 3.6/3.75) The road-sign man breaks the window, then just flaps the sign about: he hits the glass in several places (more cracks each time) until it all shatters; then he throws the sign to the ground and celebrates or loots.
-- [ ] G14 The looters who run into the shop vanish mid-frame: they go round a corner inside, out of sight (not a pop).
-- [ ] G15 Some thrown rocks hit the upper (first-floor) window: chip it / shatter through.
+- [x] G14 (built Germany chat 5: _door_walk: in to IN_D 15.2, sideways to IN_SIDE behind the wall, back at OUT_D 16.0; props clipped too (draw_prop); ALLOWED_POPS moved to the corner) The looters who run into the shop vanish mid-frame: they go round a corner inside, out of sight (not a pop).
+- [x] G15 (built Germany chat 5: UP_STONES 3.9/4.5 chip, 5.2 through; t2_upstairs: hole, cracks, glass falls and lies still) Some thrown rocks hit the upper (first-floor) window: chip it / shatter through.
 - [x] G16 (built Germany chat 4: photo arrived as de5; cast DRESS['t2']: tops black/dark-grey/navy/grey/light-grey/khaki, puffers, grey joggers, light-grey trousers, white trainers, hood/beanie/cap, black/blue/white/grey masks, teal backpack; per rioter from his name; F19 adds DRESS['t3']) Reference photo of the Frankfurt looting: diversify the rioters' clothing from it, and note anything else it teaches.
-- [ ] G17 The looters leaving the shop sprint out in different directions, fleeing (not a calm walk off left).
-- [ ] G18 The kicked A-board flies further across the scene.
-- [ ] G19 Sounds (Sam's files, sounds/protest-tiers/): wood-smash.mp3 for the sign hits; glass-smash.mp3 for the shatter; stone-hit.mp3 for the rocks; protest-crowd.mp3 under the scene, taken from 15 s into the file onwards (it has voices from there).
+- [x] G17 (built Germany chat 5: pose carry_run (sprint gait + carry arms, cast); EXIT per looter: right, near right, near left, at us) The looters leaving the shop sprint out in different directions, fleeing (not a calm walk off left).
+- [x] G18 (built Germany chat 5: BOARD_TO (1.0, 9.8), 0.75 s, 1 m arc (1.5 m hid the third hit), two turns: 3.4 m, was 1.9) The kicked A-board flies further across the scene.
+- [x] G19 (built Germany chat 5: sfx() in soundtrack: crowd from 15 s under T2, wood x4, glass at 2.95, stone per stone, glass upstairs 5.2) Sounds (Sam's files, sounds/protest-tiers/): wood-smash.mp3 for the sign hits; glass-smash.mp3 for the shatter; stone-hit.mp3 for the rocks; protest-crowd.mp3 under the scene, taken from 15 s into the file onwards (it has voices from there).
 - [ ] G1 Germany 2-3 s longer, so the action breathes.
 - [ ] G2 Stones pelted from off camera at the shop first.
 - [ ] G3 The glass attacker turns and hits the glass (contact), not a flat swing at the air.
@@ -120,6 +121,7 @@
 - [ ] A1 (built, Albania chat 1: camera 6 m up (was 2.8), wider (10 m across the line, was 6.6); bank wall drawn to the frame's edge; crowd deeper and nearer; Molotov landings now on the bank's windows in any view; clip sent) (Sam 16 Nov, Albania + end scene) Perspective flattens everything: keep the same angle but draw back and up: wider, slightly more aerial view of the square.
 - [ ] A2 (built, Albania chat 1: 12.5 s; shield surf + police rout 7.9-10.4, hold 10.4-12.5; beat list updated; clip sent) Extend the Albania action by 2-3 seconds (new action at full speed, no slow motion). Time goes in the beat list; the end scene shifts later.
 - [ ] A3 (built, Albania chat 1: shots A and C keep the old street-level long lens, a cut to a close-up (from 6 m up the riders had only crowd and road behind them); background now runs straight on from the cut; clip sent) (Sam: 'Albania and Conclusion' are one note) Check the end scene (the A/B/C parts) against the wider framing so it still reads.
+- [x] S8 Sam's Y to carry on past the round2 stage stop (16 Nov).
 - [ ] X1 (Sam 16 Nov) Never mention budget, cost or estimates to Sam for the rest of this film (budget work is going on elsewhere; the figures are off). The cost-watch lines in handovers and messages are left out for this film.
 
 ## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals answered (chat 19), planned (chat 20), nothing built yet
@@ -180,11 +182,20 @@ blue-strobe-safe red of the T4 fire, about 220 40 40), about 80% of the place li
 left-aligned with it, held to the cut; T4 reads **11/10** from its first frame like the others (no count-up); no
 headings in the end scene. Check: the third line stays over sky or dark building in all four (T1: above the line at y 600).
 - **T1 Spain (4 s, Intensity 2/10): unchanged.** Hook Text 0.5-3.6 as now.
-- **T2 Germany (6 s, 4/10):** 0.0-3.0 as now (runners, shutter, road sign, glass, slide through, A-board, smashing).
-  **3.0-5.0 NEW:** the second wave comes back out through the gap jogging right: one with a flat-screen TV, two
-  carrying a camo hunting mannequin like a plank, one with a tower of boxes; two smashers start on the second pane;
-  the crowd's phones swing to follow them. **5.0-6.0** the blue wash sweeps in from the right (was 3.0-4.0); all
-  freeze at 5.2, the mannequin frozen in the same pose as its carriers; crowd holds signs up.
+- **T2 Germany (8.5 s since round 2, 4/10; Germany chat 5):** 0.35-1.1 stones from off left chip the glass; 0.2-1.55
+  the haulers sprint in and lever the shutter up; the swinger hits the glass four times (1.6, 2.05, 2.5, 2.95), more
+  cracks each time, through at 2.95, flings the sign down 3.2, cheers, loots a pistol 4.85 and goes off left; runners
+  1-2 throw, take a pistol each 3.6/3.75, walk off left guns up; runner3's run-up and kick 2.3: the A-board flies 3.4 m
+  toward us, two turns, lands 3.05 (G18); hauler1 kicks the door 2.45; four go in 2.75-3.75 and round the corner inside
+  (G14); upstairs: stones 3.9 and 4.5 chip the lit window, 5.2 goes through, its glass falls and lies still (G15); out
+  with stock at 4.6/5.6/6.6/7.6, a burst out of the door then a sprint: right, toward us right, toward us left, straight
+  at us (G17); the blue at 6.8, everything carries on to the cut. Near us at both edges, heads and shoulders (G12).
+  Sound (G19, O9): the crowd under it all (its file from 15 s), wood at each hit, glass at the shatter and upstairs,
+  a stone for each stone, Sam's ding at 2.0, the siren at 6.8.
+  **T2 acting list (rule 74; no lines in Germany, so the moves):** the swinger winds up and jolts back off the glass
+  each hit, then fists pumped, half turned to us, before he loots; runners eye the cubbies and reach; looters come out
+  heads down at a flat-out sprint, stock hugged; the near crowd faces the shop, signs jab on the chant, phones swing
+  round after the looters at 4.7. Checked against the stills 7.6-14.4 (Germany chat 5).
 - **T3 France (8 s, 8/10):** 0.0-2.5 as now (smoke, surge, first volley, canister 1.6, gas on Marianne).
   **2.5-4.0 NEW** second volley, twice the throwers: stones, a traffic cone, a bike wheel; impact flashes on the
   shields; gas keeps spreading. **4.0-5.5** the water cannon drives in from the right, jet on at 4.5, the crowd
