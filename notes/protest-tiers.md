@@ -13,6 +13,7 @@
 - **Stage stop (end of back-half chat 6):** Sam said Y in chat 7 (16 Nov); chat 7 carried on.
 - **ALBANIA done (Albania chat 2, 16 Nov, Opus; stopped at amber):** Sam's round 3 Albania notes A4-A13 written (his answers: wider view kept; rout replaced by his new staging). Built: the new cast poses (punch, machete, AK, pistol, dance) and Sam's Albanian take saved. Full build plan under "## Round 3 Albania notes". Chat 1's A1-A3 stand.
 - **Stage stop (ledger, end of Albania chat 2): round2 at 36.04% of a week vs 2.7%.** Not raised with Sam (X1, his standing order: no budget talk this film); Sam's own round 3 notes are the go-ahead for Albania; chat 3 already started. The budget chat settles the ledger.
+- **Handover check (Albania chat 2): 67 T4 faults** (policia1-5 jumps and swaps 30.6-31.3 s: the old police rout), named not fixed: plan step 7 removes the rout; chat 3 re-runs `check` after the build.
 - **ALBANIA next: Opus high, Albania chat 3:** build the plan steps 1-10 in t4/end code (+ sets t4/_bank/_ministry/alley camera), then step 11 (stills, `check`, acting list, clip 22.5-end to Sam, one line per note A4-A13).
 - **Quick-check faults (handover check, back-half chat 6):** ALLOWED_POPS hauler1 has no Exceptions row: Germany's (t2 door), for the Germany chat. T3 not yet checked after the F12-F23 build.
 - **Needs Sam (one numbered list per chat):** Germany clips Y/N; Overall+Spain still Y/N; France still sheet / clip. Diagonal Hook Text rule: through propose.py first.
