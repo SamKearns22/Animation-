@@ -275,8 +275,8 @@ def t1():
             if -20 < px < W + 20 and py < 1960:
                 heads.append((z, px, py, x))
     heads.sort(key=lambda t: -t[0])
-    flags = [((-6, 120), [CAT_Y, CAT_R, CAT_Y, CAT_R, CAT_Y]), ((5, 90), [CAT_R, CAT_R, col(.9, .9, .9)]),
-             ((-3.0, 60), [CAT_Y, CAT_R, CAT_Y, CAT_R, CAT_Y]), ((4, 45), [CAT_R, CAT_R])]
+    ES = [CAT_R, CAT_Y, CAT_Y, CAT_R]                  # Spanish flag: red, yellow (double height), red
+    flags = [((-6, 120), ES), ((5, 90), ES), ((-3.0, 60), ES), ((4, 45), ES)]
     fi = 0
     band = []
     for i, (z, px, py, x) in enumerate(heads):

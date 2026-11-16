@@ -135,7 +135,7 @@ def _cast_hash():
         p = os.path.join(HERE, f)
         if os.path.exists(p):
             h.update(open(p, 'rb').read())
-    h.update(b'v1')
+    h.update(b'v2-hair-clear')             # Sam 16 Nov: arms round long hair (hair_clear) redraws the sprites
     return h.hexdigest()[:10]
 
 
@@ -143,6 +143,8 @@ def make_person(kind, i=0, tier='t1', force=None, seed=None):
     if kind in C.TOURIST_DRESS:                     # round 1: granny, seller, the tourists
         return C.tourist(kind)
     if kind == 'officer':
+        if force and '|' in force:                          # A18: a T4 sprite officer, his own man ('policia|NAME')
+            force, seed = force.split('|')
         if not seed and tier == 't3' and i >= 10:           # round 4 (F13): the reserve's sprites each their own man
             seed = f'reserve{i}'
         return C.officer(force, seed=seed, tier=tier) if seed else C.officer(force)
@@ -183,6 +185,59 @@ def make_pose(sp, state, u=0.0, t=0.0, force=None):
     return C.pose(sp, state, u, t, force)
 
 
+def hair_clear(j, sp, yaw):
+    """Sam (16 Nov: an arm went into a woman's long hair): an arm whose drawn line crosses long or bob hair BEHIND
+    the head is routed round it: the elbow drops below the hair's lower edge (and the hand, if it was in it too).
+    Head centre (0, -150), hair down to about the neck base (views.head_view, LONG_HAIR), in person units."""
+    st = sp.get('kit_face', {}).get('hair', '')
+    if st not in ('long', 'bob'):
+        return j
+    hw = sp.get('hw', 66)
+    a = math.radians(yaw)
+    lean = j.get('lean', 0.0)
+    seen = lambda q: C.V.project(C.V.leaned(q, lean), yaw)            # noqa: E731
+    (cx, _), cdep = seen((0.0, -150.0, 0.0))
+    (bx, _), _ = seen((0.0, -150.0, -1.1 * hw))
+    half = 1.1 * hw * abs(math.cos(a)) + 0.25 * hw
+    x0, x1 = min(cx, bx) - half * (abs(math.cos(a)) > .3) - 0.2 * hw, max(cx, bx) + 0.2 * hw
+    if abs(math.cos(a)) > .3:
+        x0, x1 = min(x0, cx - half), max(x1, cx + half)
+    y1 = {'long': 95.0, 'bob': 40.0}[st]                       # the hair's lower edge as drawn (measured on the sheet)
+    def hits(s):
+        pts = [np.array(j[k + s][:3], float) for k in ('sh', 'el', 'wr')]
+        for p0, p1 in ((pts[0], pts[1]), (pts[1], pts[2])):
+            for u in np.linspace(0.15, 1.0, 7):
+                (x, y), dep = seen(tuple(p0 + (p1 - p0) * u))
+                if x0 < x < x1 and -280 < y < y1 and dep < cdep:
+                    return True
+        return False
+    def ok(s):
+        try:
+            C.F.audit_arm(*(seen(j[k + s])[0] for k in ('sh', 'el', 'wr')))
+            return True
+        except Exception:
+            return False
+    for s in 'LR':
+        if not hits(s):
+            continue
+        keep = {k + s: j[k + s] for k in ('sh', 'el', 'wr')}
+        shape = j.get('hand', {}).get(s, 'fist')
+        wr0 = np.array(j['wr' + s][:3], float)
+        done = False
+        for drop in (0.0, 30.0, 60.0, 90.0, 130.0):             # the hand comes down a step at a time if it must
+            hand = (wr0[0], max(wr0[1], y1 - 20) + drop if drop else wr0[1], wr0[2])
+            for pole in ('down', 'out', 'back', 'front'):
+                C.V.arm_to(j, s, hand, pole, shape=shape)
+                if ok(s) and not hits(s):
+                    done = True
+                    break
+            if done:
+                break
+        if not done:
+            j.update(keep)
+    return j
+
+
 def sprite(kind, i, tier, state, yaw, force=None):
     """(RGBA image at S_REF, (ax, ay) the ground point under the neck in the image). Drawn once, cached on disk."""
     key = f'{_cast_hash()}-{kind}-{i}-{tier}-{state}-{yaw}-{force}'.replace('/', '_').replace(' ', '_').replace(':', '~')
@@ -196,7 +251,7 @@ def sprite(kind, i, tier, state, yaw, force=None):
     cam = _cam2()
     img = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     sp = make_person(kind, i, tier, force)
-    j = make_pose(sp, state, force=force)
+    j = hair_clear(make_pose(sp, state, force=force), sp, yaw)
     C.draw(img, cam, 540, 700, S_REF, sp, j, yaw, None if kind != 'officer' else 'officer')
     box = img.getbbox() or (0, 0, 1, 1)
     im = img.crop(box)
@@ -303,8 +358,8 @@ class Actor:
     def sp(self):
         if self.kind == 'rioter':                   # Sam O4: each rioter their own face, from their city's mix
             return make_person('rioter', self.i, self.tier, force=self.name)
-        if self.kind == 'officer' and self.tier == 't3':   # round 3 (F5): each French officer his own build and kit
-            return make_person('officer', self.i, 't3', self.force, seed=self.name)
+        if self.kind == 'officer' and self.tier in ('t3', 't4'):   # F5 / A18: each officer his own build and kit
+            return make_person('officer', self.i, self.tier, self.force, seed=self.name)
         return make_person(self.kind, self.i, self.tier, self.force)
 
     def pose(self, sp):
@@ -347,7 +402,14 @@ def draw_actor(img, cam, a):
     gx, gy = cam.p(a.x, a.d, getattr(a, 'lift', 0.0))
     if a.spr:                                       # round 3 (A4): a crowd member pasted from its cached sprite
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0)) if a.clip else img
-        paste(lay, a.kind, a.i, a.tier, a.state, a.yaw, gx, gy, s, force=a.name if a.kind == 'rioter' else a.force)
+        f = a.name if a.kind == 'rioter' else f'{a.force}|{a.name}' if a.kind == 'officer' and a.tier == 't4' else a.force
+        try:
+            paste(lay, a.kind, a.i, a.tier, a.state, a.yaw, gx, gy, s, force=f)   # A18: T4 officers each his own
+        except Exception:
+            if a.kind != 'marcher':
+                raise
+            # A17: a street-clothes build whose arm fails the guard in this pose: the same person as a hooded rioter
+            paste(lay, 'rioter', 0, a.tier, a.state, a.yaw, gx, gy, s, force=a.name)
         if a.clip:
             m = Image.new('L', img.size, 0)
             ImageDraw.Draw(m).rectangle(a.clip, fill=255)
@@ -355,7 +417,7 @@ def draw_actor(img, cam, a):
             img.alpha_composite(lay)
         return None
     sp = a.sp()
-    j = a.pose(sp)
+    j = hair_clear(a.pose(sp), sp, a.yaw)
     if a.clip or a.dark:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         C.draw(lay, _cam2(), gx, gy - FEET * s, s, sp, j, a.yaw, _kind(a), head=a.head)
@@ -419,8 +481,8 @@ def crowd_t1():
         for x in np.arange(x0, x1, 0.62):
             xx = x + rng.uniform(-.2, .2)
             r = rng.uniform()
-            # keys are the main thing; ~1% flags (Catalan and UGT), ~1.5% placards (chat 14: 5% read as a sea)
-            state = ('keys' if r < .5 else 'flag:catalan' if r < .506 else 'flag:ugt' if r < .51 else
+            # keys are the main thing; ~1% flags (Sam 16 Nov: all the Spanish national flag), ~1.5% placards
+            state = ('keys' if r < .5 else 'flag:spain' if r < .51 else
                      'placard' if r < .525 else 'stand')
             if state.startswith('flag') and d < 75:        # near flags filled a quarter of the frame: mid and far only
                 state = 'keys'
@@ -2011,8 +2073,13 @@ def _cyc(lt, rate, off):
 
 def spr(name, kind, x, d, yaw, pose, u=0.0, lift=0.0, clip=None):
     """A crowd member drawn from a cached sprite of the cast's pose `pose` at step u (A4, build plan step 1)."""
+    i = 0
+    if kind == 'rioter':                     # A17 (Sam: 'everyone is a hooded man'): about two in five are bare-headed
+        h = int(hashlib.md5(name.encode()).hexdigest()[:6], 16)   # marchers in Tirana's street mix, the rest rioters
+        if h % 5 < 2 and not name.startswith('rpg'):              # in the Germany pack's hoods, hats and masks
+            kind, i = 'marcher', h // 5 % 64
     a = Actor(name, kind, x, d, int(round(yaw)), f'p:{pose}:{_q(u):.1f}', tier='t4', lift=lift, clip=clip,
-              force='policia' if kind == 'officer' else None)
+              force='policia' if kind == 'officer' else None, i=i)
     a.spr = True
     return a
 
@@ -2291,6 +2358,46 @@ def throws():
     x, d = GRANNY
     out.append((GRANNY_THROW, GRANNY_HIT, (x - 0.2, d, 2.0), GRANNY_TO, 11.0, 1.9, ('granny', GRANNY_TO)))
     return out
+
+
+@lru_cache(None)
+def crowd_t4():
+    """A17 (Sam 16 Nov: 'the original crowd has been deleted'): the crowd mass back, painted sprites of marchers in
+    Tirana's street mix (64 looks), filling the square round and behind the three groups: never in the gunmen's line
+    of fire (x > -1.7 nearer than the wall), the melee, beside the truck, or on a group member's spot."""
+    rng = np.random.default_rng(41)
+    guns, rest = middle_spots()
+    taken = [(x, d) for x, d, *_ in guns + rest] + [(x, d) for x, d, _ in back_spots()] + [GRANNY]
+    out = []
+    for d in np.arange(17.6, 62.0, 0.9):
+        lo = max(-8.4, onscreen_x(d, -0.4)[0])
+        for x in np.arange(-8.4, 0.8, 0.7):
+            x, dd = x + rng.uniform(-.25, .25), d + rng.uniform(-.3, .3)
+            r, i, ph = rng.uniform(), int(rng.integers(0, 64)), rng.uniform(0, 6.28)
+            if x < lo or (dd < 27.0 and x > -1.7) or (dd > 41.5 and x > -1.6):
+                continue
+            if any(abs(x - a) < 0.55 and abs(dd - b) < 0.75 for a, b in taken):
+                continue
+            state = 'flag:albania' if r < .02 else 'fist' if r < .3 else 'stand'
+            out.append(dict(x=x, d=dd, i=i, state=state, ph=ph))
+    return out
+
+
+def crowd_draw(img, m, lt):
+    """One mass member: standing or pumping a fist at the police (three drawings), jumping in the hold."""
+    cam = T4CAM
+    x, d = m['x'] + 0.05 * math.sin(lt * 1.7 + m['ph']), m['d']
+    gx, gy = cam.p(x, d, _jump(lt, m['ph'] * 3) * (0.6 + 0.4 * (m['ph'] > 3)))
+    if gx < -80 or gx > W + 80:
+        return
+    st = m['state']
+    if st == 'fist' or (lt >= CHEER and st == 'stand' and m['ph'] > 2.0):
+        st = f"p:cheer:{_q(0.5 + 0.5 * math.sin(lt * 7 + m['ph'] * 2)):.1f}"
+    yaw = (70 if m['ph'] < 4.2 else 100) if st.startswith('p:') else (90 if m['ph'] < 4.2 else 60)
+    try:
+        paste(img, 'marcher', m['i'], 't4', st, yaw, gx, gy, scale_at(cam, d))
+    except Exception:                                      # a build whose fist pump fails the arm guard stands instead
+        paste(img, 'marcher', m['i'], 't4', 'stand', yaw, gx, gy, scale_at(cam, d))
 
 
 def t4_actors(lt):
@@ -3107,9 +3214,12 @@ def picture(t):
         front = RF4.image(front) if front is not None else None
         cam = T4CAM
         ppl = Image.new('RGBA', back.size, (0, 0, 0, 0))
-        for a in sorted(t4_actors(lt) + ['wall'], key=lambda a: -(WALL_D if a == 'wall' else a.d)):
+        dep = lambda a: WALL_D if a == 'wall' else a['d'] if isinstance(a, dict) else a.d   # noqa: E731
+        for a in sorted(t4_actors(lt) + ['wall'] + list(crowd_t4()), key=lambda a: -dep(a)):
             if a == 'wall':
                 draw_wall(ppl)                              # A16: the sandbags in their place among the people
+            elif isinstance(a, dict):
+                crowd_draw(ppl, a, lt)                      # A17: the crowd mass among them
             elif a.name == 'surfer':
                 pass                                        # drawn after the backlight (he is lit: the new action)
             else:
