@@ -1003,6 +1003,10 @@ def flag(j, kind='catalan', side='R', pole=1.6, wave=0.0):
                 yy = y + fh * (1 + 2 * k) / 9
                 p.poly([(x, yy), (x + sx * fw, yy + 6), (x + sx * fw, yy + 6 + fh / 9), (x, yy + fh / 9)],
                        (200, 30, 36), None)
+        elif kind == 'spain':                       # rojigualda: red, yellow (twice as tall), red
+            for (u0, u1), col in (((0, .25), (198, 11, 30)), ((.25, .75), (255, 196, 0)), ((.75, 1), (198, 11, 30))):
+                p.poly([(x, y + fh * u0), (x + sx * fw, y + 6 + fh * u0), (x + sx * fw, y + 6 + fh * u1),
+                        (x, y + fh * u1)], col, None)
         elif kind == 'tricolour':
             for k, col in enumerate(((30, 50, 140), (246, 246, 242), (210, 36, 44))):
                 x0, x1 = x + sx * fw * k / 3, x + sx * fw * (k + 1) / 3
@@ -1085,8 +1089,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
     sw = sp.get('shoulders', 160)
     if name == 'run':
         j = moves.gait(sp, t, 'sprint')
-    elif name == 'carry_run':                       # round 2 (G17): fleeing the shop with stock, a flat-out sprint
-        j = moves.gait(sp, t, 'sprint')
+    elif name in ('carry_run', 'gun_run'):          # round 2 (G17): fleeing the shop with stock, a flat-out sprint
+        j = moves.gait(sp, t, 'sprint')             # G21: 'gun_run' the same sprint, the pistol held up
     elif name == 'run_sign':                        # running carrying the sign low (T2 runners)
         j = moves.gait(sp, t, 'run')
     elif name in ('line_walk', 'shield_walk'):      # round 2 (F2): the shield line stepping forward in lockstep
@@ -1250,6 +1254,11 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
     elif name == 'gun_up':                          # round 2 (G9): walking off with the pistol held up by the head
         V.arm_to(j, 'R', (j['shR'][0] + 40, -250.0, 90.0), 'out')
         grips.held(j, 'R', sp, pistol(j, 'R'))
+    elif name == 'gun_run':                         # G21: sprinting, the pistol brandished up and forward, elbow down
+        V.arm_to(j, 'R', (j['shR'][0] + 20, -220.0, 170.0), 'down')
+        grips.held(j, 'R', sp, pistol(j, 'R'))
+        sw_l = math.sin(2 * math.pi * 2.6 * t)      # the free arm pumps with the stride, bent, kept out by his side
+        V.arm_to(j, 'L', (-sw - 10, 230.0 - 40.0 * sw_l, 120.0 + 100.0 * sw_l), 'out')
     elif name == 'haul':                            # hauling the shutter up (T2): both hands high, leaning back
         j['lean'] = -8
         V.arm_to(j, 'R', (60.0, -330.0, 150.0), 'down')
