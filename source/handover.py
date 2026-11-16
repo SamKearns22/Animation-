@@ -209,7 +209,7 @@ def note_lines(notes_path):
     return out
 
 
-DONE = re.compile(r'(?i)^\s*(fixed|done|ticked|built|answered|dropped|merged|kept off|n/?a|yes|y)\b|\[x\]|✓')
+TICKED = re.compile(r'(?i)^\s*(fixed|done|ticked|built|answered|dropped|merged|kept off|n/?a|yes|y)\b|\[x\]|✓')
 
 
 def open_notes(notes_path):
@@ -236,7 +236,7 @@ def open_notes(notes_path):
             cells = [c.strip() for c in ln.strip().strip('|').split('|')]
             if head is None:
                 head, col = cells, bool(re.match(r'(?i)(done\??|status)$', cells[-1]))
-            elif col and not set(''.join(cells)) <= set('-: ') and any(cells[:-1]) and not DONE.search(cells[-1]):
+            elif col and not set(''.join(cells)) <= set('-: ') and any(cells[:-1]) and not TICKED.search(cells[-1]):
                 row = '| ' + ' | '.join(cells) + ' |'
         elif not ln.strip():
             head, col = None, False
