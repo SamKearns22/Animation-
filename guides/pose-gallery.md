@@ -18,6 +18,11 @@ hands on it from the same numbers; `grips.Carry` checks a prop handed over never
 `moves.pose` (not yet in the table below: test before use). `python3 source/kittests.py gallery` checks that every
 pose still passes wherever this table says it does.
 
+**Looked at at phone size (craft change 2, Sam 16 Nov):** pre-flight refuses every acting-list body move, and every
+row below marked "not yet looked at by eye" that a film uses, until its frame has been looked at at phone size in its
+own shot (with any held prop): `python3 source/posecheck.py look FILM T`, look at the sheet, then
+`posecheck.py seen FILM "who, shot" T "what reads"` writes the "Pose looked at:" line in the notes' Record.
+
 **Use one:** `posegallery.pose('salute', sp)` (or the function named below) returns the joints for
 `views.person(..., joints)`; each fits anyone's shoulders. Key two poses with `moves.keyed` for movement.
 

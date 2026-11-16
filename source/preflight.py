@@ -382,6 +382,18 @@ def main():
     wf, wlist = waivers.gate_faults(film)
     print(f'exceptions: {len(wlist)}' + (' (every one in the report file)' if wlist else ''))
     stop += wf
+    import posecheck                            # craft change 2 (Sam, 16 Nov): poses read at phone size, rules 38, 41
+    pnotes = open(notes_path(film, name)).read() if os.path.exists(notes_path(film, name)) else ''
+    psrc = '\n'.join(open(p).read() for p in posecheck._film_files(film.__name__) or
+                     [getattr(film, '__file__', '')] if p and os.path.exists(p))
+    pf = posecheck.gate_faults(psrc, pnotes, has, posecheck.shot_marks(film))
+    if name.replace('_', '-') in posecheck.BEFORE:
+        for x in pf:
+            print('WARNING:', x, '(' + posecheck.BEFORE[name.replace('_', '-')] + ')')
+    else:
+        stop += pf
+    if 'people' in has and 'rooms' not in has and posecheck.shot_marks(film):
+        posecheck.set_marks(film)               # no rooms plan: SHOT_MARKS checked on the drawing pass (rule 38)
     warn = gate_warnings(film, name, has)      # Job J: rules 8, 61, 74
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template

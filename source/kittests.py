@@ -2892,6 +2892,36 @@ def claude_md_sentences_never_lost():
                f'the real move: {got[3] if len(got) > 3 else "old copy not in this shallow clone"}'
 
 
+@test
+def phone_size_poses():
+    """Craft change 2 (Sam, 16 Nov): pre-flight refuses a film with people and no SHOT_MARKS, and every acting-list body
+    move or never-looked-at gallery pose with no 'Pose looked at:' line; replayed on EPR (its shrug failed twice);
+    the drawing-pass facing check flags a named person turned off the lens in a film with no rooms plan."""
+    import posecheck as P
+    src = '\n'.join(open(p).read() for p in P._film_files('protest-tiers'))
+    notes = open(P._notes_of('protest-tiers')).read()
+    epr = P.gate_faults(src, notes, {'people'}, None)
+    caught = any('SHOT_MARKS' in x for x in epr) and any('shrug' in x for x in epr)
+    fixed = notes + '\n- Pose looked at: passenger, C | 2.40 s | phone size: shoulders up, palm up, reads\n'
+    cleared = not any('shrug' in x for x in P.gate_faults(src, fixed, {'people'}, {'C': ['passenger']}))
+    gal = P.gate_faults("j = moves.pose(sp, 'shrug')", '', {'people'}, {'a': ['x']})
+    nopeople = P.gate_faults('', '', {'props'}, None)
+
+    class Film:
+        SHOTS = [('a', 0, 2)]
+        SHOT_MARKS = {'a': ['bob']}
+        THREE_QUARTER_OK = ()
+    P.set_marks(Film)
+    P.FACING[:] = [('Bob', 90), ('Ann', 90)]
+    side = P.take(1.0)
+    P.FACING[:] = [('Bob', 10)]
+    front = P.take(1.0)
+    P.MARKS.clear()
+    ok = caught and cleared and len(gal) == 1 and not nopeople and len(side) == 1 and not front
+    return ok, f'EPR refusals {len(epr)} (shrug and no marks caught: {caught}); cleared by its line: {cleared}; ' \
+               f'gallery shrug refused: {len(gal)}; side-on Bob flagged: {len(side)}, front Bob: {len(front)}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
