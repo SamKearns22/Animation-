@@ -40,6 +40,7 @@ import grips                         # noqa: E402
 from ed import INK, curve, oval      # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
 
+PPt.TRUE_SKULL = True               # O5 (Sam's Y, 16 Nov): bald heads drawn as a true round skull, this film only
 B = PPt.B
 V = PPt.AV.MC.V
 import figure as F                   # noqa: E402

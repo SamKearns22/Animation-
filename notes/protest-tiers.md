@@ -30,7 +30,7 @@
 - [x] O2 (fit_lines/sign_text in cast; S.text maxw on WAFFEN, PRESSE; T2 'WAFFEN RAUS' placard's holder stands at the frame edge: G4 re-staging moves her in) Sign, placard and shopfront text always fits neatly inside its board (some spills off now).
 - [~] O3 (HOOK tilt -7, until 2.0; rule wording proposed to Sam, waiting) Hook Text in Blessed's diagonal style, gone after 2 s (rule request: diagonal style standard for every future film; wording proposed, waiting for Sam's number).
 - [x] O4 (C.rioter(seed=name, tier): skin from CITY_MIX, iris, brows, head size; check faces in the Germany still) Black-clad rioters: not all the same face/skin; each city's groups reflect its population (e.g. Paris's Black and Middle Eastern share); faces reused from kit or randomised sensibly; rioters stay young.
-- [ ] O5 Bald heads kit fix: separate chat (session_01GznaAR2kvwNTJMiqBvraau, Opus high); Sam's Y there, then used in this film only.
+- [x] O5 (people_parts.TRUE_SKULL, switched on in protest_tiers_cast.py only; Sam's Y 16 Nov, hair/fringe left as is; on the main line) Bald heads: a round skull the size of the same person's head under hair (Blessed's jury had the same fault); every haired head and every other film unchanged. Sprite cache cleared; check the bald protester at Germany 6.2 s in the next render.
 - [x] O6 (Permanent Marker, Apache licence, source/fonts; research: heavy hand-drawn marker caps, condensed to fit) Protest-sign font: handwritten marker style researched from real signs, not computer text.
 - [x] S1 (LENS t1 6.0; T1_KEYS 3.0, 50% of members, a 0.7 s wave; line steps 4.0, gas 4.2) Spain 6 s; keys raised at 3 s, by half the crowd.
 - [x] S2 (blocks 133.5 m, no cross-street gaps) Join the gaps between the flat buildings along the avenue.
