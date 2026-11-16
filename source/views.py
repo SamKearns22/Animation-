@@ -22,6 +22,7 @@ import os
 import sys
 
 import numpy as np
+from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -1117,7 +1118,30 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
                         held_over_back=rear and held and not held_behind and bool(reach) and
                         not (under and len(under) == len(j.get('props', []))),
                         seated=_sits(j), lap=bool(j.get('lap')))   # rule 80 (waivers.lap_faults)
-    head_view(img, head_pen, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])
+    # Protest Tiers A25 (Sam, 16 Nov): an arm raised over long hair sank into it with a soft blur (the sleeve's top
+    # faded to join a body the hair now covers). The hair is never an arm's body, and what the head paints is kept
+    # (hair_box/hair_was) so an arm drawn over the head afterwards is whole (outline, no fade) where it crosses it.
+    hair_box, hair_was = None, None
+    longish = sp_draw.get('hair') in LONG_HAIR or (sp_draw.get('kit_face') or {}).get('hair') in ('long', 'bob', 'curly')
+    try:
+        if not longish:
+            raise ValueError('no long hair')
+        bx0, by0 = L0.P(hdx - 4.0 * sp_draw.get('hw', 70), -480.0)
+        bx1, by1 = L0.P(hdx + 4.0 * sp_draw.get('hw', 70), 260.0)
+        hair_box = tuple(int(v) for v in (max(0, min(bx0, bx1)), max(0, min(by0, by1)),
+                                          min(img.size[0], max(bx0, bx1) + 1), min(img.size[1], max(by0, by1) + 1)))
+        hair_was = img.crop(hair_box) if hair_box[2] > hair_box[0] and hair_box[3] > hair_box[1] else None
+    except Exception:
+        hair_was = None
+    limbs.HEAD[0] += 1
+    try:
+        head_view(img, head_pen, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])
+    finally:
+        limbs.HEAD[0] -= 1
+    head_paint = None
+    if hair_was is not None:
+        d = np.abs(np.asarray(img.crop(hair_box), np.int16) - np.asarray(hair_was, np.int16)).max(-1) > 0
+        head_paint = d if d.any() else None
     j2['_drawn']['eyes'] = head_pen.found         # each eye's white and pupil on screen, for the look check (rule 43)
     j2['_drawn']['mouth'] = head_pen.mouth_seen(sp_draw, hv)   # rule 13
     j2['_drawn']['head_mirror'] = head_mirror
@@ -1131,6 +1155,25 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         j2['_drawn']['lap_in'] = 0 <= lx < img.size[0] and 0 <= ly < H
     except Exception:
         pass
+    def arm_over_head(sd):
+        """An arm drawn over the head: where it crosses what the head painted (long hair), drawn whole (outline, no
+        shoulder fade), so it reads as going round in front of the hair (A25), never melting into it."""
+        whole = None
+        if head_paint is not None and img.mode == 'RGBA':
+            whole = Image.new('RGBA', img.size, (0, 0, 0, 0))
+            limbs.NOJOIN[0] += 1
+            try:
+                arm(B.Pen(whole, L), j2, sd, sp)
+            finally:
+                limbs.NOJOIN[0] -= 1
+        arm(p, j2, sd, sp)
+        if whole is not None:
+            lay = whole.crop(hair_box)
+            a = np.asarray(lay.getchannel('A')).copy()
+            a[~head_paint] = 0
+            lay.putalpha(Image.fromarray(a))
+            img.alpha_composite(lay, hair_box[:2])
+
     for draw in j.get('head_props', []):          # worn on the head (a cap, a helmet, curls): the head's frame and view
         draw(B.Pen(img, up_head), hv, sp_draw, hdx, -150.0 + sp_draw['head_dy'])
     for sd in sorted(j.get('on_face', ())):       # a hand touching the face is in front of it, never inside the skull
@@ -1139,7 +1182,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         import grips                               # a hand at the far cheek (a phone at the ear seen side on) is
         if grips.hidden_by(grips.hand_centre(j, sd), view_deg, sp) == 'head':   # beyond the head: the head hides it
             continue                               # (Job G chat 3: the arm was drawn across his face)
-        arm(p, j2, sd, sp)
+        arm_over_head(sd)
     # a hand raised in front of the face (fists up, seen side on) is nearer than the head: drawn over it, as a hand on
     # the face is (Sam, 14 Nov, Protest Tiers: the gallery's 'hands up' side view had the near fist under his face).
     # Only up at the head (above the chin, across its width) and nearer than its middle from this view; never an arm
@@ -1155,7 +1198,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         (cx, cy), dc = project(leaned(c, lean), view_deg)
         hx = project(leaned(hc, lean), view_deg)[0][0]
         if RAISED_OVER and c[1] < hc[1] + 0.8 * hh and abs(cx - hx) < 1.1 * hw + 15 and dc > d_head + 0.3 * hw:
-            arm(p, j2, sd, sp)
+            arm_over_head(sd)
             grip = j.get('grip') or ()             # what that hand holds stays in it, over the arm: a prop naming
             mine = [d for d in j.get('props', []) if getattr(d, 'side', None) == sd or   # its side, or any plain prop
                     (getattr(d, 'side', None) is None and (not grip or sd in grip))]   # held by this hand
