@@ -17,6 +17,8 @@ MAP
                      file sent, (4) an 'override' Sam never typed (chat 5 read "don't stop for any Y" as one)
   start ............ first thing in the next chat: `start PARENT_SESSION` reads the saved log from (1) and runs (2)
                      against the notes as they stand; a chat with no log falls back to `dump`
+  branches ......... in end (startup-fixes 2, 16 Nov): every branch source/branches.py lists (work never on the main
+                     line, last 7 days) must be merged or named in the notes
   model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
                      sending, filing) nor give Sonnet a fix or build (Sam, 15 Nov: chat 30 rendered on Opus)
   dump ............. list_events results saved to files (kinds ["user"], only when there is no log; never page a
@@ -390,6 +392,21 @@ def unrouted_faults(rec):
             for ln in propose.unrouted_for(os.path.basename(rec or '')[:8])] if rec else []
 
 
+def branch_faults(film, notes=None):
+    """startup-fixes 2 (Sam's Y, 16 Nov): CLAUDE.md "merge or name every branch the start lists". A fresh scan
+    (source/branches.py: work from the last 7 days whose newest version never reached the main line or this copy);
+    each branch still listed must be named in the film's notes (with what was decided), else it is a fault."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import branches
+    p = notes or os.path.join(ROOT, 'notes', f'{film}.md')
+    text = open(p, encoding='utf-8').read() if film and os.path.exists(p) else ''
+    try:
+        left = branches.unsettled(text)
+    except Exception as e:
+        return [f'BRANCH: the branch scan failed ({e}); run python3 source/branches.py scan']
+    return [f'BRANCH not merged or named in the notes: {branches.line(b).strip()}' for b in left]
+
+
 def report(faults, where):
     for f in faults:
         print(f)
@@ -492,7 +509,8 @@ def main(argv):
             import ledger
             film = ledger.film_of(rec)
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
-                      + finder_faults(film) + unrouted_faults(rec) + (end_stamp(rec) or []),
+                      + finder_faults(film) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
+                      + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
     if cmd == 'start':
         tail = pos[0].split('_')[-1][-8:].lower()

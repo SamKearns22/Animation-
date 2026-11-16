@@ -113,8 +113,8 @@ at session start (`.claude/hooks/setup.sh`).
 
 # Making the films
 - **Every chat starts with the Animation- project selected**; without it, add it before any work and say so.
-- **One main line:** `claude/create-claude-md-oe8z4g` holds everything. **At the start, list every branch (`git fetch
-  --all; git branch -r`) and merge any newer work on the film or tool before building. At the end, push to the main
+- **One main line:** `claude/create-claude-md-oe8z4g` holds everything. **At the start, merge or name (in the notes) every
+  branch the start lists (only branches with work not on the main line; `source/branches.py scan`) before building. At the end, push to the main
   line as well as the chat's own branch** (this file is my standing permission). If the main-line push is refused,
   say so; the handover's first line names the branch with the newest work, and the next chat merges it first.
 - **Which film, which guide** (satire film, motion-led, flat people, Yuletide): `guides/job-packs.md`,

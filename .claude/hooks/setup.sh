@@ -22,6 +22,8 @@ command -v ldconfig >/dev/null && (ldconfig -p | grep -q libEGL.so.1 || timeout 
    echo "NOTE: this copy is not the newest main line. Before any work: if 'git status' is clean, run"
    echo "  git checkout --detach origin/$MAIN"
    echo "and push with: git push origin HEAD:$MAIN (merge first if this copy holds work not on GitHub)."
- fi)
+ fi
+ # startup-fixes 2 (Sam's Y, 16 Nov): only the branches holding work the main line lacks (was: chats read all ~254)
+ timeout 90 python3 source/branches.py start 2>/dev/null || echo "BRANCHES: the scan did not finish; run: python3 source/branches.py scan")
 (cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || cd "$(dirname "$0")/../.."; python3 -c "import sys; sys.path.insert(0, 'source'); import likeness as K; [K._model(n) for n in K.URLS]" >/dev/null 2>&1) &
 exit 0

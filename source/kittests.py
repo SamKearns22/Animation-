@@ -2752,6 +2752,44 @@ def cost_rows_reach_the_main_line():
     return not bad, '; '.join(bad) or 'rows on the main line alone, a race survived, merges by row, gather once each'
 
 
+
+@test
+def branch_printout_lists_only_real_work():
+    """startup-fixes 2 (Sam, 16 Nov): chats read all ~254 branches at start; the start now lists only branches whose
+    newest work never reached the main line, judged by content (the main line was rewritten once and this copy is
+    shallow, so shared commits mean nothing; the first try listed 190 branches); the end refuses an unnamed one."""
+    import subprocess
+    import branches
+    import mainline
+    bare, copy, git = _repo_pair()
+    top = os.path.dirname(bare)
+    side = os.path.join(top, 'side')
+    git(top, 'clone', '-q', '-b', mainline.MAIN, bare, side)
+    git(side, 'config', 'user.email', 'k@t'); git(side, 'config', 'user.name', 'kt')
+
+    def branch(name, files, base=mainline.MAIN):
+        git(side, 'checkout', '-q', '-B', name, f'origin/{base}')
+        for f, text in files.items():
+            os.makedirs(os.path.dirname(os.path.join(side, f)) or side, exist_ok=True)
+            open(os.path.join(side, f), 'w').write(text)
+        git(side, 'add', '-A'); git(side, 'commit', '-q', '-m', name)
+        git(side, 'push', '-q', '-f', 'origin', f'HEAD:refs/heads/{name}')
+    branch('claude/real-work', {'source/new.py': 'new tool'})
+    branch('claude/ledger-only', {'notes/ledger/kt.json': '{"film": "kt", "chats": []}'})
+    branch('claude/merged-by-copy', {'notes/done.md': 'already on the main line'})
+    git(side, 'checkout', '-q', '-B', 'rewrite', f'origin/{mainline.MAIN}')   # the main line gets the same text by
+    open(os.path.join(side, 'notes', 'done.md'), 'w').write('already on the main line')   # another commit
+    git(side, 'add', '-A'); git(side, 'commit', '-q', '-m', 'same text, other history')
+    git(side, 'push', '-q', 'origin', f'HEAD:refs/heads/{mainline.MAIN}')
+    branches.fetch(copy)
+    names = [b[0] for b in branches.scan(copy)]
+    old = [b[0] for b in branches.scan(copy, now=__import__('time').time() + 9 * 86400)]
+    left = [b[0] for b in branches.unsettled('notes: claude/real-work kept off (Sam, 16 Nov)', copy)]
+    left2 = [b[0] for b in branches.unsettled('nothing named', copy)]
+    ok = names == ['claude/real-work'] and not old and not left and left2 == ['claude/real-work']
+    return ok, f'listed {names}; after 9 days {old}; named -> {left}; unnamed -> {left2}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
