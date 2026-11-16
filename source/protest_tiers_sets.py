@@ -845,7 +845,8 @@ def _bikes(img, cam, x, d, t):
         IS.ell(img, w1[0], w1[1] - .4 * k, .14 * k, .07 * k, (40, 40, 44), INK, 1.5)    # the saddle
 
 
-CAR3 = (-3.1, -1.3, 6.4, 9.6)                      # X0, X1, D0, D1 of the T3 car where it stands
+CAR3 = (-5.2, -3.4, 31.0, 34.2)                    # X0, X1, D0, D1 of the T3 car where it stands (round 3, F10:
+#                                                    upper left, near Marianne, behind the protesters; was the near left)
 
 
 def car_pt(x, d, move):
@@ -867,6 +868,8 @@ def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0):
     X0, X1, D0, D1 = CAR3                              # chat 11: 0.15 m left, 0.5 m shorter, fire 1.5 m wide: clear of the monument
     P = lambda x, d, z: cam.p(*car_pt(x, d, move), z)       # noqa: E731
     CH, CH_D, RUST = (74, 66, 64), (54, 48, 48), (128, 76, 52)
+    if move[2] > 45:                                        # round 3 (F10, Sam: 'a silver estate car', fr3): silver,
+        CH, CH_D, RUST = (172, 174, 178), (128, 130, 136), (96, 84, 80)   # sooted along the sill (RUST band)
     # the fire first, its foot hidden inside the body: it climbs from behind the roofline (we look up at the car)
     k = cam.ppm(car_pt(X1 - .4, D0 + 1.8, move)[1])
     gx, gy = P(X1 - .4, D0 + 1.8, 1.25)
@@ -881,8 +884,14 @@ def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0):
     shape(img, [[P(X1, D0 + 1.2, .5), P(X1, D0 + 2.6, .45), P(X1, D0 + 2.4, .85), P(X1, D0 + 1.4, .9)]], RUST, None)
     # chat 11 (hunt 1: "an orange van"): the rear is a car's, a body to the belt line and a cabin narrowing to the
     # roof; the window holes are charred black, the fire glowing only in their lower part
-    rear = [P(X0, D0, .3), P(X1, D0, .3), P(X1, D0, .95), P(X1 - .14, D0, 1.48), P(X0 + .14, D0, 1.48), P(X0, D0, .95)]
-    shape(img, [rear], CH_D, INK, 3)
+    side_on = move[2] > 45                                  # round 3 (F10): turned side-on up by Marianne, we see
+    if side_on:                                             # its nose end, not its rear, and look down on its roof
+        nose = [P(X0, D1, .3), P(X1, D1, .3), P(X1, D1, .85), P(X0, D1, .85)]
+        shape(img, [nose], CH_D, INK, 3)
+    else:
+        rear = [P(X0, D0, .3), P(X1, D0, .3), P(X1, D0, .95), P(X1 - .14, D0, 1.48), P(X0 + .14, D0, 1.48),
+                P(X0, D0, .95)]
+        shape(img, [rear], CH_D, INK, 3)
     holes = [[P(X1, D0 + .25, 1.0), P(X1, D1 - 1.6, 1.0), P(X1, D1 - 1.6, 1.4), P(X1, D0 + .25, 1.4)],
              [P(X0 + .22, D0, 1.0), P(X1 - .22, D0, 1.0), P(X1 - .26, D0, 1.4), P(X0 + .26, D0, 1.4)]]
     m = shape(img, holes, (34, 28, 28), INK, 2.4)
@@ -891,8 +900,9 @@ def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0):
     shape(img, glow, (250, 150, 50), None, clip=m)
     for xx in (D0 + 1.8, D0 + 3.0):                         # door pillars across the side hole
         shape(img, [[P(X1, xx - .06, 1.0), P(X1, xx + .06, 1.0), P(X1, xx + .06, 1.42), P(X1, xx - .06, 1.42)]], CH, INK, 2)
-    shape(img, [[P(X1 - .12, D0, .85), P(X1 - .02, D0, .85), P(X1 - .02, D0, 1.12), P(X1 - .12, D0, 1.12)]],
-          (150, 40, 30), INK, 1.5)                          # the tail light
+    if not side_on:
+        shape(img, [[P(X1 - .12, D0, .85), P(X1 - .02, D0, .85), P(X1 - .02, D0, 1.12), P(X1 - .12, D0, 1.12)]],
+              (150, 40, 30), INK, 1.5)                      # the tail light
     for dc in (D0 + .75, D1 - .95):                         # wheels: circles in the side's own plane
         tyre = [P(X1 + .02, dc + .34 * math.cos(a_), .34 + .34 * math.sin(a_)) for a_ in np.linspace(0, 6.28, 24)]
         hub = [P(X1 + .03, dc + .14 * math.cos(a_), .34 + .14 * math.sin(a_)) for a_ in np.linspace(0, 6.28, 16)]
@@ -901,6 +911,19 @@ def _car(img, cam, t, move=(0.0, 0.0, 0.0), fire=1.0, roll=0.0):
         if roll:                                            # round 1: a spoke on the hub shows it turning
             poly(img, [P(X1 + .04, dc, .34), P(X1 + .04, dc + .13 * math.cos(roll), .34 + .13 * math.sin(roll))],
                  None, INK, 4, 0)
+    if side_on:                                             # F10 (Sam: 'the car has no roof'; fr3: roof on): from
+        # above the heads the tops show: the bonnet, then the charred roof, the fire breaking through a hole in it
+        shape(img, [[P(X0, D1 - .7, .95), P(X1, D1 - .7, .95), P(X1, D1, .85), P(X0, D1, .85)]], CH_D, INK, 2.4)
+        roof = [P(X0 + .14, D0 + .3, 1.48), P(X1 - .14, D0 + .3, 1.48), P(X1 - .14, D1 - 1.5, 1.45),
+                P(X0 + .14, D1 - 1.5, 1.45)]
+        shape(img, [roof], CH, INK, 2.6)
+        hole = [P(X0 + .5, D0 + 1.2, 1.48), P(X1 - .45, D0 + 1.0, 1.48), P(X1 - .5, D0 + 2.2, 1.47),
+                P(X0 + .55, D0 + 2.4, 1.47)]
+        shape(img, [hole], (250, 150, 50), INK, 2)
+        if fire > 0.05:                                     # the flames on top of it, out through the hole
+            k1 = cam.ppm(car_pt(X0 + .9, D0 + 1.7, move)[1])
+            hx, hy = P((X0 + X1) / 2, D0 + 1.7, 1.45)
+            flames(img, hx, hy, 1.5 * k1 * fire, 1.8 * k1 * fire, t + .6, seed=17, n=7)
 
 
 # ================================================================================================= T4
@@ -1608,8 +1631,8 @@ SET_BOXES = {                       # chat 11: all measured from the drawing (ea
     't2': [('doorway', (0, 783, 113, 1173)), ('gun store window', (174, 754, 786, 1089)),
            ('shutter', (140, 647, 819, 1105)), ('WAFFEN band', (127, 535, 833, 641)), ('closed shop', (847, 663, 1080, 1173)),
            ('street lamp', (0, 94, 175, 1231))],
-    't3': [('monument', (234, 453, 688, 1130)), ('kiosk', (848, 901, 1007, 1182)), ('bikes', (533, 1018, 993, 1280)),
-           ('car', (0, 757, 228, 1360))],
+    't3': [('monument', (51, 43, 822, 1059)), ('kiosk', (818, 916, 994, 1225)),   # round 3: re-measured (F4: 40 m;
+           ('car', (216, 969, 377, 1110))],                                          # F8 bikes gone; F10 car moved)
     't4': [('ministry', (565, 313, 1080, 961)), ('bank', (0, 247, 231, 961)), ('toppled truck', (608, 823, 1079, 1174))],
 }
 SET_MEANT = {
@@ -1619,7 +1642,8 @@ SET_MEANT = {
            ('street lamp', 'WAFFEN band', 'the lamp arm reaches toward the band, in front of it'),
            ('street lamp', 'gun store window', "the lamp's glow (only) touches the window's left edge"),
            ('street lamp', 'shutter', "the lamp's glow falls on the shutter's left edge, the lamp in front at the kerb")],
-    't3': [('kiosk', 'monument', 'the kiosk burns 9 m in front of the base, right of it (round 3: Marianne nearer)')],
+    't3': [('kiosk', 'monument', 'the kiosk burns 9 m in front of the base, right of it (round 3: Marianne nearer)'),
+           ('car', 'monument', 'F10 (Sam Y, fr3): the car burns 6 m in front of the base, upper left, its fire against it')],
     't4': [('toppled truck', 'ministry', 'the overturned truck burns on the avenue 34 m in front of the ministry (brief 30)')],
 }
 

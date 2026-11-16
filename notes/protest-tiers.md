@@ -40,7 +40,7 @@
 - [x] F7 (built back-half chat 3, first pass, not yet checked) Too little distance between protesters and police: open the gap.
 - [x] F8 (built back-half chat 3, first pass, not yet checked) Remove the burning bikes. The water cannon approaches through two separate groups of police (the block split, a lane between).
 - [x] F9 (built back-half chat 3, first pass, not yet checked) No group moves uniformly (robotic): every group, the police lockstep included, gets small per-person variance in timing, stride, angle.
-- [ ] F10 (Sam: Y, 16 Nov, via parent: "Include a burning car in the upper left of the scene, burning near the statue and behind the protestors." So: no pushers, no shove; a silver estate car, roof on (fr3), burns where it stands, upper left, near Marianne, behind the protesters. Lost: the shove and the pushers. TO BUILD, back-half chat 4) Q: was the car shove in the reporting? Answer: no. fr3 (17 Oct) shows a silver estate car burning where it stood near Marianne, roof on; the shove was our way of doing round 1's "a burning car rolls". Sam: "the car has no roof" = ours is drawn roofless. Plan if Y: car burns in place as in fr3, roof drawn, no pushers.
+- [x] F10 (built back-half chat 4: car at x -5..-3, d 31-34, side-on, silver, roof with a burning hole; crowd keeps a clearing in front of it, no flags over it; jet stays on the crowd; pushers and steam gone) (Sam: Y, 16 Nov, via parent: "Include a burning car in the upper left of the scene, burning near the statue and behind the protestors." So: no pushers, no shove; a silver estate car, roof on (fr3), burns where it stands, upper left, near Marianne, behind the protesters. Lost: the shove and the pushers. TO BUILD, back-half chat 4) Q: was the car shove in the reporting? Answer: no. fr3 (17 Oct) shows a silver estate car burning where it stood near Marianne, roof on; the shove was our way of doing round 1's "a burning car rolls". Sam: "the car has no roof" = ours is drawn roofless. Plan if Y: car burns in place as in fr3, roof drawn, no pushers.
 - [x] F11 (built back-half chat 3, first pass, not yet checked) Vary the missiles: some fruit, a firework or two, a few bottles that smash on the shields.
 - [ ] A0 (Sam 16 Nov: hold off on Albania, then: start Albania in a separate chat) Albania chat 1 does A1-A3 in t4/end code.
 
@@ -142,9 +142,15 @@ headings in the end scene. Check: the third line stays over sky or dark building
 - **T3 France (8 s, 8/10):** 0.0-2.5 as now (smoke, surge, first volley, canister 1.6, gas on Marianne).
   **2.5-4.0 NEW** second volley, twice the throwers: stones, a traffic cone, a bike wheel; impact flashes on the
   shields; gas keeps spreading. **4.0-5.5** the water cannon drives in from the right, jet on at 4.5, the crowd
-  splits (was 2.5-4.0). **5.5-6.5 NEW** the truck pushes forward about 1.5 m, the jet sweeping. **6.0-8.0 NEW** four
-  rioters shove the burning car (foreground left) into the gap; it rolls toward the police; the jet hits it at 7.2,
-  a burst of steam; the crowd flows away left (so T4 opens bottom-left, as now).
+  splits (was 2.5-4.0). **5.5-6.5 NEW** the truck pushes forward about 1.5 m, the jet sweeping. **6.0-8.0** (round 3,
+  F10: the shove is gone) the jet keeps sweeping, the police step forward in lockstep, the crowd flows away left (so T4
+  opens bottom-left, as now). The silver estate car burns where it stands the whole shot, upper left, 6 m in front of
+  Marianne's base, behind the protesters, its black smoke leaning left (fr3).
+  **T3 acting list (rule 74; no lines in France, so the moves):** front line: each throws on his own beat (_jit), runs
+  out left when the jet hits; back row: steps up into the gaps at 2.5, throws; on the base: cheerers wave, two climb,
+  flags sway; police: shields up, flinch on each hit, rear files step forward a beat after the front (no lockstep
+  robots, F9; no feet into the man ahead); truck: drives up the lane between the two groups, jet on the front line;
+  car: no one near it (people keep off a fire), flames and smoke only.
 - **T4 Albania (12.5 s since round 2, A2; 11/10; the showstopper):** (round 2, A1: camera 6 m up, wider; the end's A and C keep the old street-level lens) 0.0-1.0 as now (mopeds, RPG at 0.6, hit at 1.0).
   **1.0-2.6** the helicopter spins down at its present rate with more turns (longer fall, same speed), fire trail,
   drops behind the ministry at 2.6 with a small fireball. **1.2-2.8 gag b:** mid-ground, a rioter turns his back to
