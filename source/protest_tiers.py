@@ -2373,7 +2373,7 @@ def crowd_t4():
     of fire (x > -1.7 nearer than the wall), the melee, beside the truck, or on a group member's spot."""
     rng = np.random.default_rng(41)
     guns, rest = middle_spots()
-    taken = [(x, d) for x, d, *_ in guns + rest] + [(x, d) for x, d, _ in back_spots()] + [GRANNY]
+    taken = [(x, d) for x, d, *_ in guns + rest] + [(x, d) for x, d, _ in back_spots()] + [GRANNY] + list(FLARES)
     out = []
     for d in np.arange(17.6, 62.0, 0.9):
         lo = max(-8.4, onscreen_x(d, -0.4)[0])
@@ -2412,7 +2412,25 @@ def t4_actors(lt):
         out = [a for a in out if a.name != 'granny']
     else:
         pass  # out += selfie(lt)       A31 (Sam 16 Nov: 'remove this guy, he's just standing there')
-    return out + surfer(lt)
+    return out + surfer(lt) + flare_holders(lt)
+
+
+FLARES = ((-5.2, 24.0), (-7.4, 30.0))              # A37 (Sam: 'fix the flares'): each held up and waved by a rioter
+
+
+def flare_u(lt, k):
+    return 0.5 + 0.5 * math.sin(lt * 5.0 + k * 2.1)
+
+
+def flare_holders(lt):
+    return [spr(f'flare{k + 1}', 'rioter', x, d, 0, 'cheer', flare_u(lt, k)) for k, (x, d) in enumerate(FLARES)]
+
+
+def flare_hand(lt, k):
+    """Where the holder's raised right fist is (world): the cheer pose's hand, his right (screen left), facing us."""
+    x, d = FLARES[k]
+    u = _q(flare_u(lt, k))
+    return x - 0.12, d, 2.12 - 0.09 * u
 
 
 # ---- the surf (A7): a rioter on a captured riot shield carried over the middle crowd by four cheering carriers
@@ -2702,12 +2720,30 @@ def t4_fx(img, lt):
         d = MELEE_D[int(rng.integers(0, 4))]
         sx, sy = cam.p(melee_cx(d, lt) + 0.3, d, 1.2)
         S.glow_disc(img, sx, sy, 30, (255, 250, 220), amt=.5)
-    for fx, fd in ((-5.2, 24.0), (-7.4, 30.0)):            # two red flares held up in the crowd
-        bx, by = cam.p(fx, fd, 1.9)
-        tx, ty = cam.p(fx + 0.05, fd, 2.5)
-        IS.poly(img, [(bx, by), (tx, ty)], None, (40, 30, 30), 4, 0)
-        S.glow_disc(img, tx, ty, 34 + 5 * math.sin(lt * 20 + fd), (255, 70, 50), amt=.4)
-        IS.ell(img, tx, ty, 5, 5, (255, 236, 220), None)
+    for k in range(len(FLARES)):                           # A37: two red flares, each in a rioter's raised fist,
+        hx, hd, hz = flare_hand(lt, k)                     # waved, red smoke pouring up off them and drifting
+        sw = 0.12 * math.sin(lt * 5.0 + k * 2.1)
+        bx, by = cam.p(hx, hd, hz)
+        tx, ty = cam.p(hx + sw, hd, hz + 0.42)
+        ppm = cam.ppm(hd)
+        sm = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        lumps = []
+        for q in range(9):                                 # puffs born at the tip, rising and spreading as they age
+            age = ((lt * 1.6 + q / 9 + k * .37) % 1.0) * 1.8
+            px, py = cam.p(hx + sw * (1 - age) + 0.35 * age + 0.08 * math.sin(age * 5 + q), hd, hz + 0.45 + 1.4 * age)
+            lumps.append((px, py, (0.12 + 0.3 * age) * ppm))
+        S.smoke(sm, lumps, (196, 70, 64), (236, 120, 104), line=None, lw=1)
+        sm.putalpha(sm.getchannel('A').point(lambda v: int(v * .6)))
+        img.alpha_composite(sm)
+        IS.poly(img, [(bx, by), (tx, ty)], None, INK, max(5, .07 * ppm), 0)
+        IS.poly(img, [(bx, by), (tx, ty)], None, (150, 40, 36), max(3, .045 * ppm), 0)
+        S.glow_disc(img, tx, ty, 0.9 * ppm + 4 * math.sin(lt * 20 + k), (255, 70, 50), amt=.4)
+        IS.ell(img, tx, ty, .09 * ppm, .09 * ppm, (255, 236, 220), None)
+        rng2 = np.random.default_rng(int(lt * FPS) * 7 + k)
+        for _ in range(5):                                 # sparks spitting off it
+            a_ = rng2.uniform(0, 6.28)
+            r_ = rng2.uniform(.1, .35) * ppm
+            IS.ell(img, tx + r_ * math.cos(a_), ty + r_ * math.sin(a_), 2, 2, (255, 220, 160), None)
     flying_shield(img, lt)
     if False and 1.8 <= hl < 1.95 and not _PLATE:          # A31: the selfie man is gone; gag b: the selfie's flash, the helicopter falling behind him
         x, d = SELFIE
@@ -2952,7 +2988,7 @@ def rider_faces(tier, lt):
     sh = mouths.at(mouth_track('driver'), at('ec', lt))   # moves with the take, his head bobs with it
     op = {'rest': 0.0, 'MBP': 0.0, 'FV': 0.3, 'WQ': 0.45, 'E': 0.6, 'etc': 0.55, 'O': 0.8, 'AI': 1.0, 'U': 0.5,
           'L': 0.5}.get(sh, 0.5)
-    return (dict(look=-0.6, talk=op, nod_=7.0 * op),
+    return (dict(look=-0.6, talk=op, nod_=-4.0 * op),   # A39: the head lifts on the words (a dip hid his eyes)
             dict(look=0.6 - 0.5 * shake_ph(lt), brow_up=0.02 + 0.05 * e, frown=0.004 + 0.016 * e,
                  smile=-0.2 - 0.4 * e, shake_=shake_ph(lt)))
 

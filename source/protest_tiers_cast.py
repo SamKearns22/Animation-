@@ -688,10 +688,10 @@ def hood(p, view, sp, hx, hy):
             (mx - hw * 0.8, hy + hh * 1.2)]
     p.poly(curve(mask, 3), MASK, None)
     tk = sp.get('talk', 0.0)
-    if tk > 0:                                    # A34: the mouth working under the mask (the fabric pulled in)
-        p.poly(oval(mx + (hw * 0.12 if three else 0.0), hy + hh * 0.72, hw * 0.26 * (0.6 + 0.4 * tk), hh * 0.2 * tk, 18),
-               tuple(min(255, int(v * 0.4 + 70)) for v in MASK) if sum(MASK) < 120 else tuple(int(v * .6) for v in MASK),
-               None)
+    if tk > 0.05:                                 # A34/A38 (Sam: 'like the Patriot's in Patriots 3'): the knit pulled
+        mcx, mcy = mx + (hw * 0.1 if three else 0.0), hy + hh * 0.66                          # in and out over his mouth
+        p.poly(oval(mcx, mcy, hw * 0.27, hh * (0.035 + 0.09 * tk), 18), (56, 56, 64), None)
+        p.line(oval(mcx, mcy, hw * 0.27, hh * (0.035 + 0.09 * tk), 18, 0.25, math.pi - 0.25), (16, 16, 20), 1.6)
     ring = curve(out, 4)
     p.poly(_holed(ring, hole[::-1]), HOOD, None)
     p.poly(ring, None, INK, 2.6)
