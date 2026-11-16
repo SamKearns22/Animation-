@@ -155,3 +155,22 @@
 - **For Claude:** history-and-search key in state.json (V1=B, V2=A, V3=chat); F4: whether the Stop hook's transcript
   holds per-step usage is unchecked, check first. Sessions 01Gzna... (Protest Tiers 9-32) cannot be opened.
 
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 6b, Opus medium):** history-and-search Learn, measuring part only. F4 checked: yes, every reply in a
+  chat's transcript carries its own usage, so cost by kind is read, not estimated. `source/stepcost.py` sorts each
+  tool call (film-file search, tool search, whole-file .py read, page.py, renders, pictures, other; helpers apart)
+  and charges each what it added plus its re-reading at every later step; `ledger.py auto` (the Stop hook) writes
+  steps, history at the end and the kinds' shares onto every chat's row, kept when the app's real row replaces it;
+  the ledger page lists them. 16 checks pass (`python3 source/stepcost.py test`, on a real transcript trimmed to
+  usage and tool calls, `tests/stepcost-transcript.jsonl`). Nothing built for the guard.
+- **Next:** chat 7 (session_01J1JB7WqAzsNsr5m9KQj8DY), Sonnet medium, already opened: read-only backfill into
+  `notes/proposals/learn/search-cost.md` (searching's share, targets, whole-file reads, the ~80k start, `show`
+  replayed on old notes), then the two gate numbers (search >=10% of a round chat, `show` hits >=80%).
+- **Needs Sam:** nothing now. The guard is a later, separate yes, put to Sam only if both gates pass.
+- **Read:** this file's route sections; `notes/proposals/history-and-search.md` Final version; `guides/job-packs.md` "A tool job".
+- **Open rule requests:** none.
+- **For Claude:** chat 6a (late-faults replay, Sonnet) is a separate chat. Sessions 01Gzna... (Protest Tiers 9-32)
+  cannot be opened.
+

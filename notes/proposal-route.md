@@ -2,21 +2,16 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
-- **Done (chat 6b, Opus medium):** history-and-search Learn, measuring part only. F4 checked: yes, every reply in a
-  chat's transcript carries its own usage, so cost by kind is read, not estimated. `source/stepcost.py` sorts each
-  tool call (film-file search, tool search, whole-file .py read, page.py, renders, pictures, other; helpers apart)
-  and charges each what it added plus its re-reading at every later step; `ledger.py auto` (the Stop hook) writes
-  steps, history at the end and the kinds' shares onto every chat's row, kept when the app's real row replaces it;
-  the ledger page lists them. 16 checks pass (`python3 source/stepcost.py test`, on a real transcript trimmed to
-  usage and tool calls, `tests/stepcost-transcript.jsonl`). Nothing built for the guard.
-- **Next:** chat 7 (session_01J1JB7WqAzsNsr5m9KQj8DY), Sonnet medium, already opened: read-only backfill into
-  `notes/proposals/learn/search-cost.md` (searching's share, targets, whole-file reads, the ~80k start, `show`
-  replayed on old notes), then the two gate numbers (search >=10% of a round chat, `show` hits >=80%).
-- **Needs Sam:** nothing now. The guard is a later, separate yes, put to Sam only if both gates pass.
-- **Read:** this file's route sections; `notes/proposals/history-and-search.md` Final version; `guides/job-packs.md` "A tool job".
+- **Done (chat 7, Sonnet medium):** the backfill, in `notes/proposals/learn/search-cost.md` (read-only, nothing built). Gate 2
+  FAILS: the code finder `show` held the lines a fix needed in 50% (strict) to 69% (loose) of 26 Blessed notes; gate is 80%.
+  Gate 1 (searching >= 10% of a round chat) is estimated ~15% (range 7-30%), not proven: the history can be read only a page
+  at a time, so no chat was costed step by step. Protest Tiers 9-32 cannot be opened. Replay script: `learn/replay-show.py`.
+- **Next:** the guard stops. Fixing `show` comes first, as its own proposal through the proposal route (Opus, medium, one
+  chat): rank values in tables and shot names, show the lines in a function that hold a note's words; replay again, aim >= 80%.
+- **Needs Sam:** nothing yet; the `show` fix goes to Sam as a plain-English proposal first.
+- **Read:** `learn/search-cost.md` (e) and "The two gate numbers"; `source/page.py` MAP; `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** chat 6a (late-faults replay, Sonnet) is a separate chat. Sessions 01Gzna... (Protest Tiers 9-32)
-  cannot be opened.
+- **For Claude:** replay's loose/strict token lists are in `learn/replay-show.py` (T). Old handovers: `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)
