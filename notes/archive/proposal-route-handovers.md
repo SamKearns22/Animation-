@@ -174,3 +174,21 @@
 - **For Claude:** chat 6a (late-faults replay, Sonnet) is a separate chat. Sessions 01Gzna... (Protest Tiers 9-32)
   cannot be opened.
 
+
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 7, Sonnet medium):** the backfill, in `notes/proposals/learn/search-cost.md` (read-only, nothing built). Gate 2
+  FAILS: the code finder `show` held the lines a fix needed in 50% (strict) to 69% (loose) of 26 Blessed notes; gate is 80%.
+  Gate 1 (searching >= 10% of a round chat) is estimated ~15% (range 7-30%), not proven: the history can be read only a page
+  at a time, so no chat was costed step by step. Protest Tiers 9-32 cannot be opened. Replay script: `learn/replay-show.py`.
+- **Done (chat 6a, Sonnet, 16 Nov):** late-faults Learn replay (`learn/late-faults-replay.md`): today's quick check on the code of
+  c13, c15-17, c21-26: 42 of gate 1's 44 and all 107 of gate 2's faults were already listed when the building chat ended
+  (~99%; bar 60%); clipcheck COULD NOT TEST hid 56 teleports until c17. Blessed not replayed. Change 1 put to Sam (Q1).
+- **Next:** the guard stops. Fixing `show` comes first, as its own proposal through the proposal route (Opus, medium, one
+  chat): rank values in tables and shot names, show the lines in a function that hold a note's words; replay again, aim >= 80%.
+- **Needs Sam:** Q1: late-faults change 1, 1 (yes) or 2 (no); on 1, Opus medium builds it and tests that c26's code lists 107. The `show` fix goes to Sam as a plain-English proposal first.
+- **Read:** `learn/search-cost.md` (e) and "The two gate numbers"; `source/page.py` MAP; `guides/job-packs.md` "A tool job".
+- **Open rule requests:** none.
+- **For Claude:** replay's loose/strict token lists are in `learn/replay-show.py` (T). Old handovers: `notes/archive/proposal-route-handovers.md`.
+
