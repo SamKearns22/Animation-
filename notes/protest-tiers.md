@@ -3,16 +3,20 @@
 ## Where things stand (the ONE handover, 15 lines at most)
 - **Rules that bite next:** 30 (say why a first fix failed: G4 plinth), 74 (acting list before the animatic), 83 (people through set/props).
 - **Two lines of chats (Sam, 16 Nov):** GERMANY chats (t2 code only) and BACK-HALF chats (France + Albania, t3/t4/end code only). Each merges the main line before every push and keeps to its own lines below.
-- **GERMANY done (chat R2-2, 16 Nov, Opus; stopped at amber):** Germany G1-G10 BUILT FIRST PASS, renders, NOT yet checked or tuned: new 8.5 s timeline (no freeze, sirens 6.8), stones from off left with chips, swinger yaw 160 'swing_face' (sign flat to us), shop door (S.DOOR2, kicked open by hauler1 at 2.45, leaf t2_door), four in (DOOR_IN) and out with beer crates/ammo boxes walking off left, two pistols taken (TAKE, reach_lo/hi, gun_up, cast pistol()), A-board sprite with legs/ANGEBOT kicked by runner3 (board_pose), shards lie still, phone glow only for phones facing us, camera RF2 cx 750.
-- **GERMANY next: Opus medium, finish Germany:** (1) still sheet 6.6/7.65/8.5/9.2/11.4/13.6 (scratch sheet looked: GEN Z REGELT placard holder covers the door: move right crowd out or nearer the edge; check sign meets glass at T2_HIT and tune T2_SW/T2_STAR; kick poses read). (2) Add the shop front (plinth, walls, door jambs, glass until hit, door leaf until kick) to scene() as an audit.Thing kind 'set' 'SHOPFRONT' (G4 automatic; why it missed: the audit's solids were only people); allowed contacts: swinger sign at hit, hauler1 foot at kick. (3) Fix audit tables: ALLOWED_POPS runner6/7 gone -> door in/out pops for hauler1/2, runner4/5; FAST_OK/contacts times; JOKE_PROPS A-board/crowbar times (crowbar now 1.0-1.55). (4) `check`, acting list + beat list in notes for Germany, O7 hats (cast crowd looks; clear ~/.cache/protest-tiers-sprites). (5) clips `final OUT --small --span 6 14.5` to Sam with the numbered questions.
+- **GERMANY done (chat 3 of R2, 16 Nov, Opus):** right crowd moved off the door (GEN Z REGELT group out of frame, Lost line to Sam); swinger yaw 125, sign meets glass high (us 0.55 at T2_HIT), T2_STAR (0.8, 1.92), flash r70; shop front in scene() as set Things SHOPFRONT/GLASS/DOOR (rule 83 automatic) + allowed contacts; ALLOWED_POPS from DOOR_IN; looters out 1 s apart, lane 13.4; run-in re-routed (hauler2 leads, runner1/2/4/5 pass in front of the swinger, hauler2 waits right of the door); runner5 wait (3.0, 12.2) (arm fold). `check`: 0 Germany faults. Clip 0-14.5 sent to Sam (his change of plan: one clip from the start).
+- **GERMANY next (Opus medium):** wait for Sam's numbered answers; then O7 hats (Sam's words now in the notes: beanies and caps on part of the crowd), acting list + beat list for Germany in notes (rule 74), diagonal Hook Text rule through propose.py, then Sonnet animatic of the front half once Sam says Y.
 - **BACK-HALF done (back-half chat 3, 16 Nov, Opus; stopped at amber):** France F4-F9, F11 BUILT FIRST PASS, renders 15.2-19.6, NOT yet checked: Marianne at 40 m (MON_D, F 1400 lens), base drawn after the paving, 11 sprites + 3 cheerers + 2 climbers on the base (mon_actors, crowd 'on'); gap 4.6 m (FRONT3/BACK3/CRS_X); bikes gone, kiosk KIOSK3 (6.8, 19.5); police two groups CRS_D 9.3-11.1 | 15.3-17.1, truck up the lane TRUCK_D3 13.2, far group drawn before the truck; officers seeded (cast officer seed: skin, height, build, shades, gloves, helmet_stripe); _jit per-person timing/stride/lean/yaw (run heading kept -115: other headings trip the arm guard); per-thrower rates, missiles now leave the hand on the throw (_throws; the old t0 formula was off for k>0); MISSILES: fruit splat, bottles smash, 2 fireworks burst; stones .10 matt STONE3.
 - **BACK-HALF next: Opus medium (France round 3, finish).** (1) (frame sweep of every T3 actor 0-8 s: clean, no arm-guard stops); (2) SET_BOXES['t3'] re-measure (monument/kiosk; car); (3) `check` T3 faults incl. audit tables for mon*/climb*, far-group pops behind truck; (4) acting list (rule 74); (5) clip `final OUT --small --span 14.5 22.5` to Sam. F10 (car) still waits for Sam's Y. Albania: its own chat.
+- **ALBANIA done (Albania chat 1, 16 Nov, Opus high; stopped at amber):** A1-A3 built: T4 camera 6 m up and wider (sets CAMS t4, RF4 identity), road drawn before buildings, bank from d 24, crowd 13.7-62 m clear of the bank, Molotov landings world points (LAND_W/land()); LENS t4 12.5: shield surf (SURF, surf_pos, draw_surf_shield, drawn lit after backlight) + police rout (ROUT_LAG/V/LANE) 7.9-10.4, HOLD 10.4, fireworks FW0 8.0; end A/C on the old lens (low_cam, RF4_LOW, S.CAM4_LOW), END_BG0 = T4_LEN. Clip sent: animations/drafts/protest-tiers-albania-clip.mp4 (rout lanes fixed after it rendered).
+- **ALBANIA next: Opus medium, Sam's notes on the Albania clip** (Needs Sam: 1 Y/N wider view; 2 Y/N shield surf + rout; 3 Y/N end shots keep the street-level lens). Then acting list (rule 74) for 7.9-12.5, `check` (T4 faults: rioter5/6 22.5-23.2, policia6/7 24.8 old), SET_BOXES/KEEP_CLEAR t4 re-measure if the check asks.
 - **Quick-check faults (handover check, back-half chat 3):** Germany's T2 faults are the Germany chats'. T3 (new staging, for next chat's step 3): back3/back2 swap with crs4/truck 19.42 (they run off left across the lane: draw by d, or list in ORDER_SWAPS); crs11 shin through crs17 foot 19.58-19.75 (stepping officers too close: per-officer x jitter); front2 arm through back1 19.75; pusher4 vs crs7/crs1 21.08, 22.25 (old, car pushers near the advanced block; F10 may remove them). T4 rioter5/6 22.58, buyer1 26.25: Albania chat's.
 - **Needs Sam (one numbered list per chat):** Germany clips Y/N; Overall+Spain still Y/N; France still sheet / clip. Diagonal Hook Text rule: through propose.py first.
 - **Read:** job pack "Notes round"; "## Round 2 notes" (your chat's lines); this section.
 - **Open rule requests:** diagonal Hook Text for every film (proposed 16 Nov; on Y: guides/tiktok-design.md Hook Text + hook_text.py default --tilt -7).
 - **Branches named (not merged, waiting on Sam):** claude/beautiful-brown-vutd0l, claude/blessed-c2-mics-wip, claude/audit-honest-checker; claude/bald-heads-fix merged only after Sam's Y there.
 - **X1:** no budget, cost or estimate talk to Sam for the rest of this film.
+- **Budget stop Y (Sam, 16 Nov, in chat R2-2, at 15.22% of a week for round 2):** finish ONLY Germany (faults, placard off the door, sign meets glass, shop front in the clip check + rule 30 line, O7 hats), send the Germany clips with one numbered list (incl. Overall+Spain still Y/N), then STOP and wait for Sam before any France or Albania work.
+- **Budget stop again (end of chat 3, 16 Nov):** round 2 at 20.13% of a week vs 2.7%. Not raised with Sam (X1: no budget talk this film); work stopped at his questions; the next chat settles it with chat 2 / the ledger before more work.
 - **For Claude:** main line claude/create-claude-md-oe8z4g; back-half branch claude/protest-back-half. T2: t2_actors, _door_walk, board_pose, t2_door, t2_stones/chips; sets t2() door + prop_crate; cast kick/reach_lo/reach_hi/gun_up/swing_face. T3: FRONT3/BACK3/CRS_X/CRS_D/crs_adv/crs_guard/_missile/t3_fx; sets MON_X, BIKES3, CAR3, CAMS t3 (420, 900, 1550, 4.5), RF3 identity; cast shield_up, line_walk.
 
 ## Round 2 notes"; back half's notes to come.
@@ -52,6 +56,7 @@
 - [x] S3 (t1_actors empty; T1_ROCKETS: 10 throws from the front ranks 0.45-5.3 s, arcs 5-6.7 m, bursts over the line; CHECK: rockets cross the heading block y 350-560 on the left) No black-clad figures; fireworks thrown from the crowd mass, higher, more of them across the crowd's front at different times.
 - [x] S4 (T1_CONTAINER (-7, 176) behind the line's left; new _container: lid upright, ribs, soot, flames only in the mouth, smoke column) Burning skip: back-left of the police line (not on it), better drawn, flames not spilling far over the lid.
 - [x] S5 (second rank d +1.6, x +0.85) Second rank of police two paces behind the first, standing in the gaps.
+- [ ] O7 (Sam 16 Nov, chat 3) Too many bald heads in one place looks strange: put common hats on part of the crowd: beanies and caps (crowd sprites and acted rioters where it suits; clear ~/.cache/protest-tiers-sprites).
 - [ ] G1 Germany 2-3 s longer, so the action breathes.
 - [ ] G2 Stones pelted from off camera at the shop first.
 - [ ] G3 The glass attacker turns and hits the glass (contact), not a flat swing at the air.
@@ -66,9 +71,9 @@
 - [ ] F1 (Sam 16 Nov, France) Camera too low: everything is a mess of movement. Raise it to an 'above the head' view, not aerial, so the crowd, the thrown objects, the statue, the water cannon and the burning car each have room. References (3 photos, saved in `references/protest-tiers/r2-france/`): the crowd seen over heads, water jet crossing frame, police shield line from above shoulder height.
 - [ ] F2 Police are static: a thicker cluster (more ranks, more officers), actively defending against missiles with the riot shields (shields up, thrown things hit and bounce), then advancing in practised lockstep when the water cannon arrives.
 - [ ] F3 With the camera raised, re-stage the French pieces so each has its own moment (advancing crowd, thrown objects, statue, cannon, burning car).
-- [ ] A1 (Sam 16 Nov, Albania + end scene) Perspective flattens everything: keep the same angle but draw back and up: wider, slightly more aerial view of the square.
-- [ ] A2 Extend the Albania action by 2-3 seconds (new action at full speed, no slow motion). Time goes in the beat list; the end scene shifts later.
-- [ ] A3 (Sam: 'Albania and Conclusion' are one note) Check the end scene (the A/B/C parts) against the wider framing so it still reads.
+- [ ] A1 (built, Albania chat 1: camera 6 m up (was 2.8), wider (10 m across the line, was 6.6); bank wall drawn to the frame's edge; crowd deeper and nearer; Molotov landings now on the bank's windows in any view; clip sent) (Sam 16 Nov, Albania + end scene) Perspective flattens everything: keep the same angle but draw back and up: wider, slightly more aerial view of the square.
+- [ ] A2 (built, Albania chat 1: 12.5 s; shield surf + police rout 7.9-10.4, hold 10.4-12.5; beat list updated; clip sent) Extend the Albania action by 2-3 seconds (new action at full speed, no slow motion). Time goes in the beat list; the end scene shifts later.
+- [ ] A3 (built, Albania chat 1: shots A and C keep the old street-level long lens, a cut to a close-up (from 6 m up the riders had only crowd and road behind them); background now runs straight on from the cut; clip sent) (Sam: 'Albania and Conclusion' are one note) Check the end scene (the A/B/C parts) against the wider framing so it still reads.
 - [ ] X1 (Sam 16 Nov) Never mention budget, cost or estimates to Sam for the rest of this film (budget work is going on elsewhere; the figures are off). The cost-watch lines in handovers and messages are left out for this film.
 
 ## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals answered (chat 19), planned (chat 20), nothing built yet
@@ -140,7 +145,7 @@ headings in the end scene. Check: the third line stays over sky or dark building
   splits (was 2.5-4.0). **5.5-6.5 NEW** the truck pushes forward about 1.5 m, the jet sweeping. **6.0-8.0 NEW** four
   rioters shove the burning car (foreground left) into the gap; it rolls toward the police; the jet hits it at 7.2,
   a burst of steam; the crowd flows away left (so T4 opens bottom-left, as now).
-- **T4 Albania (10 s, 11/10; the showstopper):** 0.0-1.0 as now (mopeds, RPG at 0.6, hit at 1.0).
+- **T4 Albania (12.5 s since round 2, A2; 11/10; the showstopper):** (round 2, A1: camera 6 m up, wider; the end's A and C keep the old street-level lens) 0.0-1.0 as now (mopeds, RPG at 0.6, hit at 1.0).
   **1.0-2.6** the helicopter spins down at its present rate with more turns (longer fall, same speed), fire trail,
   drops behind the ministry at 2.6 with a small fireball. **1.2-2.8 gag b:** mid-ground, a rioter turns his back to
   it, phone up at arm's length, peace sign; the phone flashes at 2.6 as it lands; he checks the photo, thumbs up.
@@ -151,8 +156,10 @@ headings in the end scene. Check: the third line stays over sky or dark building
   round orange blooms. **6.0-7.4 gag c:** a granny steps up, pays, takes one, throws overarm at 6.6: the highest,
   longest arc of the film, over the melee into the bank's first floor at 7.3, the biggest bloom; the seller
   applauds; rioters cheer, fists up. **7.5** the fireball rolls up behind the ministry and backlights everyone.
-  **8.0-10.0** the gleeful hold: crowd jumping, flags waving, fireworks bursting overhead, the toppled water cannon
-  burning at the line's end; round flickering flames and embers everywhere.
+  **7.9-10.4 (round 2, A2, new):** a rioter is hoisted out of the near crowd on a captured riot shield, flag up, and
+  passed hand to hand left to right over the heads (lurching, lit by the fire); from 8.0 the beaten police turn and
+  run off right, each at his own moment and pace (F9); fireworks go up from 7.8. **10.4-12.5** the gleeful hold:
+  crowd jumping, the surfer tossed up and down on the shield, fireworks again, the toppled water cannon burning.
 - **End scene (7.6 s, no headings), Sam's R2:**
   **A (2.4 s), the T4 avenue reframed tight on the bottom-left, side-on:** 0.0-0.5 a second moped skids in from the
   left and stops (dust and tyre smoke); 0.8 the passenger fires the RPG up and out of the top of frame (backblast,
@@ -192,6 +199,7 @@ protesting?", the wife's gasp, "Bro, what's a 'protest'?".
 | ALLOWED_POPS | runner6 | T2 looter steps out of the dark shop through the glass gap | chat 26 clip, chat 27 critique panels 1-3 |
 | ALLOWED_POPS | runner7 | T2 looter steps out of the dark shop through the glass gap | chat 26 clip, chat 27 critique panels 1-3 |
 | ALLOWED_POPS | back* | T3 back row steps up out of the packed crowd sprites (2.2-2.5 s) | chat 27 critique panel 4 full size |
+| ALLOWED_POPS | surfer | T4 (A2): hoisted up out of the packed near crowd on the shield at 7.9 s (he is one of the crowd sprites, drawn live from then) | Albania chat 1: stills 30.6, 31.3 full-size crops |
 | ALLOWED_POPS | buyer* | T4 cart queue: the buyers step out of the packed crowd into the queue (2.2-2.35 s, chat 29: was 2.6) | chat 27 critique panels 8-10 full size |
 | ALLOWED_POPS | granny | T4: she steps out of the packed crowd to the cart (5.7-5.85 s) | chat 27 critique panels 9-10 full size |
 | TOUCHES | hauler*, runner*, swinger | T2 run-in 4.25-7.95 s: the raiders crush through one gap in the glass, read as one dark pack (depth capped 10-18 cm) | chat 17: 4.4 and 4.6 s full size |

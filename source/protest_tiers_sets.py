@@ -72,7 +72,11 @@ class Cam:
 #   Marianne 40 m off between them (35 px a metre), the crowd reaching her base.
 # T4: 2.8 m, down the avenue; the shield line at d ~17 (115 px a metre), the ministry's corner at d 80.
 CAMS = {'t1': Cam(480, 400, 6882, 12.0), 't2': Cam(480, 783, 2100, 2.6),
-        't3': Cam(420, 900, 1400, 4.5), 't4': Cam(470, 960, 2000, 2.8)}
+        't3': Cam(420, 900, 1400, 4.5), 't4': Cam(540, 840, 1700, 6.0)}
+# round 2 (A1, Sam: 'perspective flattens everything: same angle, draw back and up'): T4 raised from 2.8 m to 6 m and
+#   widened (115 px a metre at the line -> 105, the frame 10 m wide there, was 6.6), so the rows of the square stand
+#   apart on screen. The end scene's shots A and C keep the old street-level long lens (a cut to a close-up):
+CAM4_LOW = Cam(470, 960, 2000, 2.8)
 SET_CAM = CAMS
 
 
@@ -915,6 +919,13 @@ def t4(t=0.0, marks=False, heli=None):
     # the hills at the avenue's end, the far blocks and pines both sides
     shape(img, [[(0, cam.VY + 2), (120, cam.VY - 30), (300, cam.VY - 62), (420, cam.VY - 44), (520, cam.VY - 70),
                  (700, cam.VY - 38), (W, cam.VY - 20), (W, cam.VY + 2)]], (120, 70, 80), INK, 2)
+    # the avenue (round 2, A1: before the buildings; seen from 6 m their bases stand below the horizon): dark tarmac in the firelight, a median line, the lane marks
+    y0 = cam.VY + 1
+    shape(img, [[(0, y0), (W, y0), (W, H), (0, H)]], (76, 50, 46), None)
+    for xx in (-3.0, 3.0):
+        for d in np.arange(9, 400, 9):
+            quad(img, cam.p(xx - .1, d), cam.p(xx + .1, d), cam.p(xx + .1, d + 4), cam.p(xx - .1, d + 4), (150, 110, 80),
+                 None, amt=0)
     # chat 11: the far blocks seen front-on (were side faces only: a thin sliver), 6-11 storeys rising over the
     # pines (al2); the umbrella pines tall (~17 m) and broad so they make the dark wall down both sides (al2)
     rng = np.random.default_rng(41)
@@ -953,13 +964,6 @@ def t4(t=0.0, marks=False, heli=None):
             heli['under'](img)
     _ministry(img, cam, t)
     _bank(img, cam, t)
-    # the avenue: dark tarmac in the firelight, a median line, the lane marks
-    y0 = cam.VY + 1
-    shape(img, [[(0, y0), (W, y0), (W, H), (0, H)]], (76, 50, 46), None)
-    for xx in (-3.0, 3.0):
-        for d in np.arange(9, 400, 9):
-            quad(img, cam.p(xx - .1, d), cam.p(xx + .1, d), cam.p(xx + .1, d + 4), cam.p(xx - .1, d + 4), (150, 110, 80),
-                 None, amt=0)
     truck(img, cam, TRUCK_X4, TRUCK_D4, t, 'toppled', 'al')     # chat 12: overturned at the shield line's right end
     if marks:
         for j in range(8):
@@ -1034,7 +1038,7 @@ def _bank(img, cam, t):
     """The bank on the left (x -9, d 38 -> 70), its face toward the avenue: pale stone, pilasters, the tall
     ground-floor windows the Molotovs hit (lit warm), upper windows dark."""
     x = -9.0
-    da, db = 34, 74
+    da, db = 24, 74                                         # round 2 (A1): from d 24 (was 34): the wider T4 saw its end
     a, b = cam.p(x, da), cam.p(x, db)
     quad(img, a, b, cam.p(x, db, 16), cam.p(x, da, 16), (176, 150, 132))
     quad(img, a, b, cam.p(x, db, 5), cam.p(x, da, 5), (156, 128, 114))

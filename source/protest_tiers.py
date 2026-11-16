@@ -54,7 +54,8 @@ NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'protest-tiers.md')
 HAS = {'people', 'effects', 'props'}
 FPS = 12
 # round 1 (Sam R4, 15 Nov): tiers 4 / 6 / 8 / 10 s, then the end scene's three shots (notes "## Round 1 plan")
-LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 10.0), ('ea', 2.4), ('eb', 2.8), ('ec', 2.4))
+# round 2 (A2, Sam: Albania 2-3 s longer, new action at full speed): T4 10 -> 12.5 s; the end scene starts later
+LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 12.5), ('ea', 2.4), ('eb', 2.8), ('ec', 2.4))
 TIERS = ('t1', 't2', 't3', 't4')
 SHOTS, _t = [], 0.0
 for _n, _l in LENS:
@@ -267,7 +268,8 @@ def field(tier, x, d, t, seed=0.0):
             dx -= (2.6 if d < 18 else 1.4) * max(0.0, u) ** 1.2
             dd += (-1.5 if d < 18 else 2.0) * ease(u / 1.4)
     elif tier == 't4':
-        dx += 1.2 * ease((t - 0.8) / 1.2) + 0.9 * ease((t - 2.0) / 1.0)   # the surge into the shields, then through
+        lag, amt = 0.22 * math.sin(seed * 2.3), 1 + 0.18 * math.sin(seed * 3.1)   # round 2 (F9): each their own
+        dx += amt * (1.2 * ease((t - 0.8 - lag) / 1.2) + 0.9 * ease((t - 2.0 - lag) / 1.0))   # the surge, then through
     return dx, dd
 
 
@@ -543,7 +545,7 @@ T2_DOOR = 2.45                      # G4: hauler1's foot on the door
 DOOR_X0, DOOR_X1, DOOR_H = S.DOOR2
 DOOR_C, FRONT_D = (DOOR_X0 + DOOR_X1) / 2, 14.0
 T2_SW = (0.2, 12.7)                 # the swinger's mark (the sign's head reaches the glass at T2_HIT)
-T2_STAR = (0.35, 1.55)              # where it meets the glass (x, height)
+T2_STAR = (0.8, 1.92)               # where it meets the glass (x, height); chat 3: on the sign's head at T2_HIT
 BOARD = (-0.7, 12.75)               # G7: the A-board, kicked at BOARD_KICK, lands at BOARD_LAND
 BOARD_KICK, BOARD_LAND, BOARD_TO = 2.3, 2.8, (-0.15, 11.0)
 # G2: stones thrown from off frame left and near: (hits the glass at, x, height)
@@ -551,8 +553,9 @@ T2_STONES = ((0.35, -1.4, 1.6), (0.5, 0.6, 2.0), (0.62, -0.4, 1.2), (0.8, 1.3, 1
 # G9 (FAZ 31 Oct: two weapons taken): who takes which pistol: (cubby column, row height, when it leaves its cubby)
 TAKE = {'runner1': (6, 0.98, 2.95), 'runner2': (8, 1.35, 3.05)}
 # G4/G5: the four who go in through the door come back out of it with stock: (in at, out at, lane, prop)
-DOOR_IN = {'hauler1': (2.75, 4.6, 13.45, 'crate'), 'hauler2': (3.0, 5.6, 13.6, 'crate'),
-           'runner4': (3.3, 5.1, 13.1, 'boxes'), 'runner5': (3.6, 6.1, 13.25, 'boxes')}
+# chat 3: out 1 s apart in one lane clear of the wall and the swinger (0.5 s apart, they walked into each other)
+DOOR_IN = {'hauler1': (2.75, 4.6, 13.4, 'crate'), 'hauler2': (3.15, 6.6, 13.4, 'crate'),
+           'runner4': (3.5, 5.6, 13.4, 'boxes'), 'runner5': (3.75, 7.6, 13.4, 'boxes')}
 WALK_OUT = 1.5                       # m/s: laden, a brisk walk off left along the shop front
 
 
@@ -626,7 +629,7 @@ def t2_actors(lt):
         return A(name, 'rioter', x, d, yaw, st, u=uu, t=tt, **k)
 
     # the haulers: sprint in, lever the shutter up (1.0-1.5), run to the door; hauler1 kicks it in (G4)
-    for k, (xs, xh) in enumerate(((-3.8, -0.9), (-4.2, 0.6))):
+    for k, (xs, xh) in enumerate(((-3.8, -0.9), (-3.3, 0.9))):
         name = f'hauler{k + 1}'
         if tt >= DOOR_IN[name][0]:
             w = _door_walk(name, tt)
@@ -636,8 +639,8 @@ def t2_actors(lt):
                 if st == 'carry_front':
                     a.prop, a.prop_before = _carried(DOOR_IN[name][3]), abs(yaw) > 90
             continue
-        wait = (DOOR_C, 13.3) if k == 0 else (2.0, 12.95)
-        keys = [(0.2 + 0.1 * k, xs, 13.3), (0.95, xh, 13.3)]
+        wait = (DOOR_C, 13.3) if k == 0 else (3.6, 13.25)       # chat 3: hauler2 waits right of the door (hauler1 ran through him)
+        keys = [(0.2, xs, 13.3 + 0.15 * k), (0.95 - 0.13 * k, xh, 13.3)]     # chat 3: hauler2 leads (he overtook through people)
         x, d, i, u = _keys(tt, keys)
         if i < len(keys) - 1:
             if i >= 0:
@@ -654,10 +657,13 @@ def t2_actors(lt):
             uk = (tt - (T2_DOOR - 0.12)) / 0.3 * 0.5 + 0.0 if tt < T2_DOOR else 0.5 + (tt - T2_DOOR) / 0.3 * 0.5
             A(name, 'rioter', x, d, 180, 'kick' if tt > T2_DOOR - 0.25 else 'stand',
               u=min(1.0, max(0.0, uk)))
+        elif tt > DOOR_IN[name][0] - 0.3:                   # chat 3: his dash to the door (he jumped there)
+            v = (tt - DOOR_IN[name][0] + 0.3) / 0.3
+            A(name, 'rioter', lerp(x, DOOR_C, v), lerp(d, 13.35, v), _heading([(0, x, d), (1, DOOR_C, 13.35)], 0), 'run', t=tt)
         else:                                               # waiting his turn, egging them on
             A(name, 'rioter', x, d, 160, 'throw', u=((tt - 2.25) * 1.6) % 1)
     # the swinger (G3): runs in, turns to the glass, winds up, the sign's head meets the glass at T2_HIT; swings on
-    keys = [(0.15, -3.8, 11.9), (0.75, -0.4, 12.0), (0.95, *T2_SW)]
+    keys = [(0.15, -3.8, 11.9), (0.65, -0.4, 12.2), (0.85, *T2_SW)]     # chat 3: on his mark before the runners pass
     x, d, i, u = _keys(tt, keys)
     if 0 <= i < len(keys) - 1:
         A('swinger', 'rioter', x, d, _heading(keys, i), 'run_sign', t=tt)
@@ -665,22 +671,23 @@ def t2_actors(lt):
         if tt < 1.35:
             us = 0.25 * ease((tt - 0.95) / 0.4)
         elif tt < T2_HIT:
-            us = 0.25 + 0.6 * ease((tt - 1.35) / (T2_HIT - 1.35))
+            us = 0.25 + 0.3 * ease((tt - 1.35) / (T2_HIT - 1.35))    # chat 3: the head meets the glass at 0.55, high
         elif tt < 1.75:
-            us = 0.85 + 0.15 * ease((tt - T2_HIT) / 0.15)
+            us = 0.55 + 0.45 * ease((tt - T2_HIT) / 0.15)
         elif tt < 3.85:                                     # knocks the teeth out of the frame: three more swings
             c = ((tt - 1.75) % 0.7) / 0.7
             us = 1 - 0.75 * math.sin(math.pi * c)
         else:                                               # then the sign up on his shoulder, bouncing to the chant
             us = lerp(1.0, 0.15, ease((tt - 3.85) / 0.5)) + 0.04 * math.sin(tt * 2 * math.pi * 1.1)
-        a = A('swinger', 'rioter', x, d, 160, 'swing_face', u=us)
+        a = A('swinger', 'rioter', x, d, 125, 'swing_face', u=us)     # chat 3: angled, so the sign lands beside him, not behind his back
         a.blend('run_sign', 0, tt, w=(tt - 0.95) / 0.25)
     # runner1, runner2 (G9): run in, throw stones into the shop, step up to the window and each take a pistol, then
     # walk off left with it held up
     for k, (xm, dm, xr, take_t) in enumerate(((1.05, 12.35, 0.95, TAKE['runner1'][2]),
                                                (1.75, 12.3, 1.7, TAKE['runner2'][2]))):
         name = f'runner{k + 1}'
-        keys = [(0.45 + 0.1 * k, -3.8, 12.25 - 0.1 * k), (1.05 + 0.1 * k, xm, dm)]
+        keys = [(0.45 + 0.1 * k, -3.8, 12.25 - 0.1 * k), (0.92 + 0.1 * k, 0.2, 11.75 - 0.1 * k),   # chat 3: in front of
+                (1.1 + 0.1 * k, xm, dm)]                    # the swinger (they ran through him)
         x, d, i, u = _keys(tt, keys)
         if 0 <= i < len(keys) - 1:
             A(name, 'rioter', x, d, _heading(keys, i), 'run', t=tt + k * .1)
@@ -700,7 +707,7 @@ def t2_actors(lt):
         if tt < take_t + 0.45:
             A(name, 'rioter', xr, 13.45, 180, reach, u=(tt - (t_up + 0.3)) / 0.35 if tt < take_t else 1 + (tt - take_t) / 0.45)
             continue
-        lane = 12.0 - 0.2 * k                               # back off the window, turn, walk off left
+        lane = 11.8 - 0.2 * k                               # chat 3: clear of the swinger; back off the window, turn, walk off left
         keys2 = [(take_t + 0.45, xr, 13.45), (take_t + 0.95, xr - 0.3, lane), (take_t + 6.0, xr - 0.3 - 7.6, lane)]
         x, d, i, u = _keys(tt, keys2)
         yaw = lerp(180, -115, ease((tt - take_t - 0.45) / 0.5))
@@ -718,7 +725,7 @@ def t2_actors(lt):
             a = A('runner3', 'rioter', x, d, 160, 'throw', u=((tt - 2.62) * 1.3) % 1.0)
             a.blend('kick', 1.0, w=(tt - 2.62) / 0.25)
     # runner4, runner5: run in and wait by the door, egging it on; in after the haulers (G4)
-    for k, (wx, wd, tin) in enumerate(((2.5, 12.3, 1.55), (3.05, 12.55, 1.7))):
+    for k, (wx, wd, tin) in enumerate(((2.5, 12.3, 1.55), (3.0, 12.2, 1.7))):
         name = f'runner{k + 4}'
         if tt >= DOOR_IN[name][0]:
             w = _door_walk(name, tt)
@@ -731,20 +738,21 @@ def t2_actors(lt):
             if st == 'carry_front':
                 a.prop, a.prop_before = _carried(DOOR_IN[name][3]), abs(yaw) > 90
             continue
-        keys = [(tin - 1.1, -3.6, 12.6 - 0.25 * k), (tin, wx, wd), (DOOR_IN[name][0], DOOR_C, 13.35)]
+        keys = [(tin - 1.1, -3.6, 11.35 - 0.3 * k), (tin - 0.5, 0.3, 11.35 - 0.3 * k),   # chat 3: in front of the swinger
+                (tin, wx, wd), (DOOR_IN[name][0], DOOR_C, 13.35)]
         x, d, i, u = _keys(tt, keys)
-        if i == 0 or (i == 1 and tt > DOOR_IN[name][0] - 0.3):
-            ii = 0 if i == 0 else 1
-            if i == 1:                                      # his dash to the door
+        if i in (0, 1) or (i == 2 and tt > DOOR_IN[name][0] - 0.3):
+            ii = min(i, 2) if i < 2 else 2
+            if i == 2:                                      # his dash to the door
                 x, d = lerp(wx, DOOR_C, (tt - DOOR_IN[name][0] + 0.3) / 0.3), lerp(wd, 13.35, (tt - DOOR_IN[name][0] + 0.3) / 0.3)
             A(name, 'rioter', x, d, _heading(keys, ii), 'run', t=tt)
-        elif i == 1:
+        elif i == 2:
             A(name, 'rioter', wx, wd, 150, 'throw', u=((tt - tin) * 1.5 + k * .4) % 1.0)
     # the crowd on the near pavement, seen from behind, all facing the store (chanting: signs jab on the beat)
     beat = abs(math.sin(math.pi * 2.2 * tt))
-    # round 2 (G4: the camera moved right): the left side 0.2 m in, the right 0.3 m out, clear of the door
+    # round 2 (G4: the camera moved right): the left side 0.2 m in; the right group out at the frame's edge, clear of the door (chat 3)
     crowd = [(-1.18, 7.8, 'placard:WAFFEN RAUS:250,246,232', 0), (-1.55, 8.9, 'phone', 1), (-1.4, 9.6, 'stand', 2),
-             (1.72, 7.7, 'phone', 6), (2.0, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (2.25, 9.5, 'stand', 3)]
+             (2.3, 7.7, 'phone', 6), (2.95, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (3.2, 9.5, 'stand', 3)]
     for k, (x, d, st, i) in enumerate(crowd):
         if st.startswith('placard'):
             st = st + ':' + str(int(90 * beat))
@@ -899,7 +907,7 @@ def t2_fx(img, lt):
 def t2_flash(img, tt):
     """The impact flash where the sign meets the glass (T2_HIT); its own function so the shape check draws it alone."""
     if T2_HIT - 0.02 <= tt < T2_HIT + 0.15:
-        S.glow_disc(img, *RF2.cam.p(T2_STAR[0], FRONT_D, T2_STAR[1]), 130, (255, 250, 210), amt=.7)
+        S.glow_disc(img, *RF2.cam.p(T2_STAR[0], FRONT_D, T2_STAR[1]), 70, (255, 250, 210), amt=.5)     # chat 3: small, so the contact reads
 
 
 def t2_teeth(img, lt):
@@ -1007,7 +1015,8 @@ class Reframe:
 
 # chat 14: the sets' low cameras left the bottom 45% (T3) and 25% (T4) of the frame bare ground
 RF3 = Reframe(S.CAMS['t3'], 1.0, 540, 0.0)   # round 2 (F1): the raised camera needs no zoom
-RF4 = Reframe(S.CAMS['t4'], 1.15, 0, 80.0)   # chat 15: about x 0 (was 250), so BANKA and the mopeds stay in frame
+RF4 = Reframe(S.CAMS['t4'], 1.0, 540, 0.0)   # round 2 (A1): the raised, wider camera needs no zoom
+RF4_LOW = Reframe(S.CAM4_LOW, 1.15, 0, 80.0)  # the old street-level T4 (chat 15): the end scene's shots A and C
 T3K, T3CAM, R3, reframe3 = RF3.k, RF3.cam, RF3.R, RF3.image
 T4CAM, R4 = RF4.cam, RF4.R
 # chat 15 (moves hunt 1: the runners and the swing too small, the near crowd hid them): T2 nearer too; the near crowd
@@ -1564,6 +1573,7 @@ def heli_state(lt):
                 turn=turn, roll=-4 + 40 * u, hit=True)
 
 
+T4_LEN = dict(LENS)['t4']
 MOPED_D = 10.5
 T4_FALL, T4_FIRE = 1.6, 7.5        # round 1 (T4 10 s): the fall 1.0-2.6 (was 1 s), the big fireball at 7.5 (was 3.0)
 HELI_S = S.HELI_HOME[2] * 1.6     # chat 15 (hunt 1: "helicopter tiny and grey"): drawn larger than its depth
@@ -1580,8 +1590,10 @@ def moped_pos(lt, k):
 def crowd_t4():
     rng = np.random.default_rng(41)
     out = []
-    for d in np.arange(18.5, 48.0, 0.9):
-        for x in np.arange(-14.0, 0.8, 0.7):
+    for d in np.arange(13.7, 62.0, 0.9):          # round 2 (A1): the wider T4 sees deeper and nearer: 13.7-62 m
+        for x in np.arange(-14.0, 0.8, 0.7):          # (was 18.5-48), x to the bank's face at -9 (people were in it)
+            if x < -8.4 or (d < 18.5 and x > -2.7):     # the near rows: left of the melee's rioters (x -2 on)
+                continue
             r = rng.uniform()
             state = 'flag:albania' if r < .018 else 'stand'    # chat 14: 14% made a solid red band
             out.append(dict(x=x + rng.uniform(-.25, .25), d=d + rng.uniform(-.3, .3), i=int(rng.integers(0, 16)),
@@ -1599,10 +1611,23 @@ SALES = (3.1, 4.15, 5.2)                           # gag a: he hands a lit bottl
 #                                                    chat 29: 1.05 s apart (0.4: the next one stepped up into the last)
 GRANNY_BUY, GRANNY_THROW, GRANNY_HIT = 6.35, 6.6, 7.3
 CHEER = 7.35                                       # her hit: the seller applauds, fists go up
-HOLD = 8.0                                         # the gleeful hold: jumping, fireworks
-# where each Molotov lands (screen, after the reframe): the bank's ground-floor windows, then (granny) its first floor
-LAND = [R4(70, 845), R4(160, 870), R4(235, 860)]
-G_LAND = R4(140, 640)
+# round 2 (A2): 7.9-10.4 the new action: a rioter hoisted on a captured riot shield and carried over the crowd
+# with the flag (SURF), while the beaten police turn and run off right, each in his own time (ROUT); then the hold
+SURF, SURF_D, SURF_X = (7.9, 10.4), 16.6, (-5.4, -1.0)   # over the near rows (bigger on screen than the main crowd)
+ROUT = 8.0
+ROUT_LAG = (0.0, 0.22, 0.08, 0.35, 0.15, 0.41, 0.27, 0.05)   # F9: no group moves as one
+ROUT_V = (4.4, 3.8, 4.7, 3.6, 4.1, 3.9, 4.5, 4.2)
+ROUT_LANE = (-0.2, 0.4, -0.35, -0.6, -0.2, 0.3, -0.45, 0.15)   # each his own lane (2 ran through 4 at 8.45)
+FW0 = 8.0                                          # the fireworks start with the new action (were with the hold)
+HOLD = 10.4                                        # the gleeful hold: jumping (was 8.0, round 2: after the surf)
+# where each Molotov lands: the bank's ground-floor windows, then (granny) its first floor. Round 2 (A1): world
+# points on the bank's face (x -9, a window's middle), so they stay on it through any camera (were screen pixels)
+LAND_W = [(-9.0, 37.3, 2.4), (-9.0, 47.3, 2.4), (-9.0, 57.3, 2.4), (-9.0, 42.3, 11.8)]
+
+
+def land(k):
+    """Molotov k's landing on screen (k 3: the granny's), through whichever T4 camera is drawing."""
+    return T4CAM.p(*LAND_W[k])
 
 
 def _throw_u(lt, t0):
@@ -1620,6 +1645,15 @@ def t4_actors(lt):
         x = 1.2 + k * 0.55 + push * (0.8 + 0.25 * (k % 3)) + back * (1 + 0.2 * (k % 2))
         d = 17.5 - MD + (0.6 * push if k % 2 else -0.4 * push)
         state = 'line' if lt < 1.6 else 'pushed' if (k % 3 != 1 or lt < 2.0) else 'baton_up'
+        a = lt - ROUT - ROUT_LAG[k]
+        if a > 0:                                          # round 2 (A2): routed, off right, each his own pace
+            x += _getaway(a, ROUT_V[k], 0.3)
+            if x > 0.33 * d + 1.2:                         # off the right edge
+                continue
+            out.append(Actor(f'policia{k + 1}', 'officer', x, d + ROUT_LANE[k] * ease(a / 0.3),
+                             -55 if a < 0.08 else 10 if a < 0.17 else 115, 'run', t=lt + 0.13 * k, force='policia', tier='t4')
+                       .blend(state, w=a / 0.12))   # the turn in 3 drawings: mid-turn run yaws fold the arm
+            continue
         out.append(Actor(f'policia{k + 1}', 'officer', x, d, -55, state, force='policia', tier='t4'))  # chat 14:
         # turned toward us a little so the shields show their faces (side on they read as thin lines)
     cheer = lt >= CHEER
@@ -1649,7 +1683,57 @@ def t4_actors(lt):
         # chat 18: +.35 starts the run on the step nearest the throw stance (feet snapped 68 cm)
     if not _PLATE:                                         # the end's background plate: just the riot
         out += selfie(lt) + buyers(lt) + granny(lt)
+    out += surfer(lt)
     return out
+
+
+def surf_pos(lt):
+    """(x, z) of the riot shield under the surfer (depth SURF_D): hoisted out of the crowd 7.9-8.2, passed hand to
+    hand left to right (lurching, not a glide), then tossed up and down on it through the hold."""
+    t0, t1 = SURF
+    rise = ease((lt - t0) / 0.3)
+    u = ease(min(1.0, max(0.0, (lt - t0 - 0.2) / (t1 - t0 - 0.2))))
+    x = lerp(SURF_X[0], SURF_X[1], u) + 0.12 * math.sin(lt * 9.0) * min(u * 8, 1.0)
+    z = 1.95 * rise + 0.07 * math.sin(lt * 14 + 1)
+    if lt > HOLD - 0.3:
+        z += 0.55 * abs(math.sin((lt - HOLD + 0.3) * 6.2)) * ease((lt - HOLD + 0.3) / 0.3)   # the blanket toss
+    return x, z
+
+
+def surfer(lt):
+    """The shield surfer: one of the crowd, flag up, riding a captured riot shield over everyone's heads."""
+    if lt < SURF[0]:
+        return []
+    x, z = surf_pos(lt)
+    return [Actor('surfer', 'rioter', x, SURF_D, 25 + 18 * math.sin(lt * 4.3), 'flag:albania', tier='t4', lift=z)]
+
+
+def draw_surf_shield(img, lt):
+    """The riot shield flat over the crowd, the arms of the people under it raised to hold it (drawn just before
+    the surfer, after the crowd: from 6 m up the shield sits clear above the nearer rows' heads)."""
+    if lt < SURF[0]:
+        return
+    cam = T4CAM
+    x, z = surf_pos(lt)
+    pen = IS.pen(img)
+    for m in crowd_t4():
+        dx, dd = field('t4', m['x'], m['d'], lt, m['ph'])
+        mx, md = m['x'] + dx, m['d'] + dd
+        if abs(mx - x) > 0.65 or abs(md - SURF_D) > 0.5 or z < 1.6:
+            continue
+        mz = _jump(lt, m['ph'] * 3) * (0.6 + 0.4 * (m['ph'] > 3))
+        for sd in (-1, 1):
+            sh = cam.p(mx + 0.17 * sd, md, 1.42 + mz)
+            hand = cam.p(min(max(mx + 0.1 * sd, x - 0.5), x + 0.5), min(max(md, SURF_D - 0.28), SURF_D + 0.28), z)
+            pen.line([sh, hand], INK, 9)
+            pen.line([sh, hand], (44, 42, 50), 6)
+            IS.ell(img, hand[0], hand[1], 4, 4, (226, 178, 146), INK)
+    pts = [cam.p(x + px, SURF_D + pd, z) for px, pd in ((-0.55, 0.3), (0.55, 0.3), (0.55, -0.3), (-0.55, -0.3))]
+    lip = [pts[3], pts[2], cam.p(x + 0.55, SURF_D - 0.3, z - 0.05), cam.p(x - 0.55, SURF_D - 0.3, z - 0.05)]
+    S.shape(img, [lip], (150, 166, 180), INK, 2)
+    S.shape(img, [pts], (206, 222, 232), INK, 2.5)
+    band = [cam.p(x + px, SURF_D + pd, z) for px, pd in ((-0.55, 0.05), (0.55, 0.05), (0.55, -0.07), (-0.55, -0.07))]
+    S.shape(img, [band], (40, 50, 120), None)
 
 
 def _jump(lt, k):
@@ -1918,14 +2002,16 @@ def t4_fx(img, lt):
         fx, fy = cam.p(x - 0.05, d, 2.25)
         S.glow_disc(img, fx, fy, 30 * (1 - (lt - 1.8) / 0.15) + 12, (255, 255, 245), amt=.85)
     embers(img, lt)
-    if lt >= HOLD - 0.2:
+    if lt >= FW0 - 0.2:
         for k, (t0, x, y, col) in enumerate(FIREWORKS):
-            for rep_ in range(3):                            # each one bursts again every 0.75 s through the hold
-                burst(img, x + 40 * rep_, y + 30 * (rep_ % 2), lt - t0 - 0.75 * rep_, col, k + rep_)
+            n = int((lt - t0) // 0.75)                       # each one bursts again every 0.75 s to the end
+            for rep_ in (n - 1, n):                          # two rounds with the surf, then again for the hold
+                if rep_ >= 0 and (rep_ < 2 or t0 + 0.75 * rep_ >= HOLD - 0.3):
+                    burst(img, x + 40 * (rep_ % 3), y + 30 * (rep_ % 2), lt - t0 - 0.75 * rep_, col, k + rep_)
 
 
-FIREWORKS = ((HOLD - 0.2, 260, 230, (255, 90, 70)), (HOLD + 0.05, 760, 150, (255, 250, 210)),   # over the
-             (HOLD + 0.3, 520, 290, (110, 255, 150)), (HOLD + 0.5, 930, 300, (255, 200, 60)))    # headings
+FIREWORKS = ((FW0 - 0.2, 260, 230, (255, 90, 70)), (FW0 + 0.05, 760, 150, (255, 250, 210)),   # over the
+             (FW0 + 0.3, 520, 290, (110, 255, 150)), (FW0 + 0.5, 930, 300, (255, 200, 60)))    # headings
 
 
 def t4_hit(img, lt):
@@ -1988,9 +2074,9 @@ def molotovs(img, lt, only=None):
     shots = []
     for k, t0 in enumerate(SALES):
         hx, hy = cam.p(SLOT[0] - 0.25, SLOT[1], 2.15)
-        shots.append((t0 + 0.27, t0 + 0.85, (hx, hy), LAND[k], 260, 1.0, k))
+        shots.append((t0 + 0.27, t0 + 0.85, (hx, hy), land(k), 260, 1.0, k))
     hx, hy = cam.p(SLOT[0] - 0.2, SLOT[1], 1.95)
-    shots.append((GRANNY_THROW, GRANNY_HIT, (hx, hy), G_LAND, 820, 1.9, 3))
+    shots.append((GRANNY_THROW, GRANNY_HIT, (hx, hy), land(3), 820, 1.9, 3))
     for t0, t1, p0, p1, apex, big, k in shots:
         if only is not None and k != only:                 # the shape check draws one bottle alone
             continue
@@ -2056,13 +2142,29 @@ END = ('ea', 'eb', 'ec')        # round 1 (Sam R2): A the second moped, B the si
 # fire, no mopeds) zoomed in on the bottom left and softened (a long lens: the riders sharp in front); the riders are
 # drawn sharp through the zoom's own camera. B: the side alley (sets), the couple between the wall and the bins.
 _PLATE = []                      # set while the T4 frame is drawn as the end's background (no T4 mopeds in it)
-END_BG0 = 8.0                    # the T4 moment behind shot A's first frame; it runs on through A, then C
+END_BG0 = T4_LEN                 # the T4 moment behind shot A's first frame; it runs on through A, then C
+#                                  (round 2: straight on from the cut, was 2 s back to the hold's start)
+
+
+class low_cam:
+    """Round 2 (A3): the end scene's shots A and C look at the T4 riot through the old street-level long lens (a cut
+    to a close-up; the wide T4 from 6 m up left only crowd and road behind the riders). Same world, other camera."""
+    def __enter__(self):
+        global RF4, T4CAM, R4
+        self.keep = RF4, T4CAM, R4, S.CAMS['t4']
+        RF4, T4CAM, R4 = RF4_LOW, RF4_LOW.cam, RF4_LOW.R
+        S.CAMS['t4'] = S.CAM4_LOW
+
+    def __exit__(self, *a):
+        global RF4, T4CAM, R4
+        RF4, T4CAM, R4, S.CAMS['t4'] = self.keep
 
 
 def t4_plate(lt):
     _PLATE.append(1)
     try:
-        return picture(at('t4', 0.0) + lt) if lt < 10.0 else _t4_late(lt)
+        with low_cam():
+            return picture(at('t4', 0.0) + lt) if lt < T4_LEN else _t4_late(lt)
     finally:
         _PLATE.pop()
 
@@ -2082,7 +2184,7 @@ class Zoom:
     """A 2D zoom of a finished T4 frame: window from (x0, y0), k times; `cam` draws sharp people into it."""
     def __init__(self, k, x0, y0):
         self.k, self.x0, self.y0 = k, x0, y0
-        c = T4CAM
+        c = RF4_LOW.cam                                    # round 2 (A3): the street-level lens (low_cam)
         self.cam = S.Cam(k * (c.VX - x0), k * (c.VY - y0), k * c.F, c.CH)
 
     def image(self, im, blur=2.2):
@@ -2423,18 +2525,28 @@ def picture(t):
         cam = T4CAM
         ppl = Image.new('RGBA', back.size, (0, 0, 0, 0))
         t4_crowd(ppl, lt)
-        for a in sorted(t4_actors(lt) + ([] if _PLATE else ['cart']),
-                        key=lambda a: -(CART[1] + 0.05 if a == 'cart' else a.d)):
+        for a in sorted(t4_actors(lt) + ([] if _PLATE else ['cart']) + ['shield'],
+                        key=lambda a: -(CART[1] + 0.05 if a == 'cart' else SURF_D + 0.01 if a == 'shield' else a.d)):
             if a == 'cart':
                 draw_cart(ppl, lt)
+            elif a == 'shield' or a.name == 'surfer':
+                pass                                        # drawn after the backlight (he is lit: the new action)
             else:
                 draw_actor(ppl, cam, a)
         if not _PLATE:
             t4_mopeds(ppl, lt)
         back.alpha_composite(backlight(back, lt, ppl))
+        if lt >= SURF[0]:                                   # round 2 (A2): the surfer lit, warm glow behind him
+            sx, sz = surf_pos(lt)
+            gx, gy = cam.p(sx, SURF_D, sz + 1.2)
+            S.glow_disc(back, gx, gy, 2.2 * cam.ppm(SURF_D), (255, 190, 110), amt=.3)
+            draw_surf_shield(back, lt)
+            for a in surfer(lt):
+                draw_actor(back, cam, a)
         t4_fx(back, lt)
         if lt > 2.0:
-            haze(back, lt - 2.0, [(R4(x, 1230), 220) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .1, 7)
+            hy = 1230 if RF4 is RF4_LOW else 1477           # round 2 (A1): at the melee's feet in the raised T4
+            haze(back, lt - 2.0, [(R4(x, hy), 220) for x in (100, 400, 700, 1000)], 0.3, (200, 170, 150), .1, 7)
         if lt > 3.0:                                        # chat 16 (hunt 2: no tear gas at the end): white gas at the line
             g = ease((lt - 3.0) / 0.6)
             gl = Image.new('RGBA', back.size, (0, 0, 0, 0))
@@ -2491,6 +2603,29 @@ def scene(t):
         out.append(audit.Thing(a.name, audit.placed(a.name, j, a.x, a.d, facing(a.yaw), sp.get('height', 1.75),
                                                     lift=getattr(a, 'lift', 0.0), sp=sp)))   # chat 29: the audit
         # did not see a vault's or a jump's height (bodies in the air read as passing through the shields)
+    if tier == 't2':
+        out += shopfront(lt)
+    return out
+
+
+def shopfront(lt):
+    """Round 2 (G4, chat 3): the gun shop's front as the audit's set pieces, so a person or a carried thing passing
+    through the plinth, the walls, the door's frame, the glass (until the sign takes it) or the door (until the kick)
+    is a fault every frame (rule 83, automatic). Before this the audit's solids were only people."""
+    import audit
+    import clipcheck as CC
+    F, B = FRONT_D, FRONT_D + 0.3                       # the shop front's face and its back (metres from the camera)
+    bx = lambda nm, x0, x1, y0, y1, z0=F, z1=B: CC.box('SHOPFRONT', nm, np.array((x0, y0, z0)),    # noqa: E731
+                                                       np.array((x1, y1, z1)))
+    parts = [bx('plinth', -2.2, 2.2, 0.0, 0.45), bx('wall left', -5.0, -2.2, 0.0, 3.55),
+             bx('pier', 2.2, DOOR_X0 - 0.09, 0.0, 3.55), bx('jamb left', DOOR_X0 - 0.09, DOOR_X0, 0.0, DOOR_H + 0.09),
+             bx('jamb right', DOOR_X1, DOOR_X1 + 0.09, 0.0, DOOR_H + 0.09), bx('wall right', DOOR_X1 + 0.09, 5.4, 0.0, 3.55),
+             bx('lintel', DOOR_X0 - 0.09, DOOR_X1 + 0.09, DOOR_H + 0.09, 3.55), bx('fascia', -2.2, 2.2, 2.9, 3.55)]
+    out = [audit.Thing('SHOPFRONT', parts, 'set')]
+    if lt < T2_HIT + 0.1:
+        out.append(audit.Thing('GLASS', [bx('glass', -2.0, 2.0, 0.45, 2.9, F, F + 0.03)], 'set'))
+    if lt < T2_DOOR:
+        out.append(audit.Thing('DOOR', [bx('door leaf', DOOR_X0, DOOR_X1, 0.0, DOOR_H, F, F + 0.05)], 'set'))
     return out
 
 
@@ -2678,23 +2813,28 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
                ('runner', range(1, 6), at('t2', 0.6), at('t2', T2_FREEZE + 0.05)),
                ('hauler', (1, 2), at('t2', 1.2), at('t2', T2_FREEZE + 0.05)),
                ('front', range(1, 5), at('t3', 0.7), at('t3', 2.65 + J3)),
-               ('rioter', range(1, 9), at('t4', 0.0), at('t4', 10.0)))
+               ('rioter', range(1, 9), at('t4', 0.0), at('t4', T4_LEN)))
               for k in ks for part in ('hand', 'forearm') for sd in 'LR'])
 # round 1 (chat 26, notes "## Exceptions"): who comes on in mid-frame for a reason the audit cannot see
-ALLOWED_POPS = [('runner6', at('t2', 2.95), at('t2', 3.3), 'out of the dark shop, through the gap in the glass'),
-                ('runner7', at('t2', 3.15), at('t2', 3.5), 'out of the dark shop, through the gap in the glass'),
+ALLOWED_POPS = [(n, at('t2', tin + 0.3), at('t2', tin + 0.5), 'into the dark shop through its door (G4)')
+                for n, (tin, tout, *_) in DOOR_IN.items()] + [
+                (n, at('t2', tout - 0.05), at('t2', tout + 0.15), 'out of the dark shop through its door (G4)')
+                for n, (tin, tout, *_) in DOOR_IN.items()] + [
                 ('back*', at('t3', VOLLEY2 - 0.35), at('t3', VOLLEY2), 'step up out of the packed crowd behind'),
                 ('buyer*', at('t4', ENTER), at('t4', ENTER + 0.15), 'step out of the packed crowd into the queue'),
-                ('granny', at('t4', 5.7), at('t4', 5.85), 'steps out of the packed crowd to the cart')]
+                ('granny', at('t4', 5.7), at('t4', 5.85), 'steps out of the packed crowd to the cart'),
+                ('surfer', at('t4', SURF[0]), at('t4', SURF[0] + 0.15), 'hoisted up out of the packed crowd (A2)')]
 # chat 29: these were TOUCHES (a hand meant to be ON a thing, checked every frame); they are crowd crushes the
 # audit should allow, not hand contacts, so the touch check found 5-900 cm gaps: allowed contacts, depth-capped
-ALLOWED_CONTACTS = [('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
+ALLOWED_CONTACTS = [('swinger', 'GLASS', at('t2', T2_HIT - 0.1), at('t2', T2_HIT + 0.1), 'G3: the sign meets the glass', 0.30),
+           ('hauler1', 'DOOR', at('t2', T2_DOOR - 0.1), at('t2', T2_DOOR), 'G4: the kick on the door', 0.25),
+           ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
            ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in: the haulers drop the shutter and pile in', 0.12),
            ('runner*', 'runner*', at('t2', 0), at('t2', T2_FREEZE + .75), 'T2 run-in: the raiders crush through one gap; packed inside', 0.18),
            ('runner*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in: the swinger is in the crush', 0.10),
            ('front*', 'front*', at('t3', 2.7 + J3), at('t3', 3.3 + J3), 'T3 run-out: the front line breaks and runs left as a pack', 0.04),
-           ('policia*', 'rioter*', at('t4', 0), at('t4', 9.95), 'T4 melee: rioters slam into the shields (brief 26)', 0.20),
-           ('policia*', 'policia*', at('t4', 2), at('t4', 9.95), 'T4 melee: the shield line buckles back into itself', 0.06)]
+           ('policia*', 'rioter*', at('t4', 0), at('t4', T4_LEN - .05), 'T4 melee: rioters slam into the shields (brief 26)', 0.20),
+           ('policia*', 'policia*', at('t4', 2), at('t4', T4_LEN - .05), 'T4 melee: the shield line buckles back into itself', 0.06)]
 ORDER_SWAPS = [(a, b, t0, t1, w) for a, b, t0, t1, w in (
     ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: they cross in the crush'),
     ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in'), ('runner*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in'),
