@@ -1066,7 +1066,9 @@ def t2_chips(img, lt):
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     _t2_chips_draw(lay, lt)
     x0, y0, x1, y1 = T2_WR
-    box = (max(0, int(min(x0, x1))), max(0, int(min(y0, y1))),
+    hem = .45 + (2.9 - .45) * t2_state(lt)['shutter']      # Sam (16 Nov): no crack drawn over the metal shutter
+    y0 = max(min(y0, y1), RF2.cam.p(0.0, FRONT_D, hem)[1])
+    box = (max(0, int(min(x0, x1))), max(0, int(y0)),
            min(img.size[0], int(max(x0, x1))), min(img.size[1], int(max(y0, y1))))
     if box[2] > box[0] and box[3] > box[1]:
         img.alpha_composite(lay.crop(box), dest=box[:2])
@@ -1091,7 +1093,7 @@ def _t2_chips_draw(img, lt):
         IS.poly(img, [(cx + 14 * math.cos(a), cy + 14 * math.sin(a)) for a in np.linspace(0, 6.28, 9)], (236, 244, 248),
                 (70, 88, 100), 1.4, 0)
     for n, (th, x, z) in enumerate(T2_STONES):
-        if lt < th:
+        if lt < th or z > .45 + (2.9 - .45) * t2_state(th)['shutter'] - 0.1:   # it hit the shutter, not the glass
             continue
         cx, cy = cam.p(x, FRONT_D, z)
         for q in range(7):
