@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 100.99% (+37.48); 61 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 101.28% (+37.77); 61 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 100.99% of the 63.01% planned so far; at this rate the film lands at 101.6%.**
+**Forecast: Spent 101.28% of the 63.01% planned so far; at this rate the film lands at 101.6%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -84,7 +84,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-16 | 080ba45d | est | opus | auto |  | 2.08 |  | 0 | 0 |
 | 2026-11-16 | cbb93021 | est | opus | auto |  | 1.58 |  | 0 | 0 |
 | 2026-11-16 | 974d63c4 | est | sonnet | auto |  | 0.27 |  | 0 | 0 |
-| 2026-11-16 | af2465a6 | est | sonnet | auto |  | 0.5 |  | 0 | 0 |
+| 2026-11-16 | af2465a6 | est | sonnet | auto |  | 0.79 |  | 0 | 0 |
 | 2026-11-16 | aafb201f | est | opus | auto |  | 5.48 |  | 0 | 0 |
 | 2026-11-16 | de5c7662 | est | sonnet | auto |  | 0.21 |  | 0 | 0 |
 
@@ -110,7 +110,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-16 080ba45d (auto): 74 steps, history 227k at the end; other 69.5%, film-file search 15.3%, tool search 6.8%, renders 5%, pictures 3.4%
 - 2026-11-16 cbb93021 (auto): 68 steps, history 209k at the end; other 62.6%, tool search 21.2%, film-file search 9.5%, pictures 4.8%, renders 1%, page.py 0.9%
 - 2026-11-16 974d63c4 (auto): 14 steps, history 111k at the end; other 86.7%, film-file search 7.3%, tool search 4.7%, pictures 1.3%
-- 2026-11-16 af2465a6 (auto): 35 steps, history 154k at the end; other 80.7%, film-file search 10%, tool search 7.7%, renders 1.6%
+- 2026-11-16 af2465a6 (auto): 64 steps, history 174k at the end; other 80.2%, film-file search 8.9%, tool search 8.4%, renders 2.2%, pictures 0.3%
 - 2026-11-16 aafb201f (auto): 185 steps, history 367k at the end; other 67.3%, tool search 16.2%, film-file search 10.4%, pictures 4%, renders 1.6%, page.py 0.6%
 - 2026-11-16 de5c7662 (auto): 8 steps, history 101k at the end; other 91.7%, tool search 5.3%, film-file search 3.1%
 
