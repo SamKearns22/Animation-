@@ -176,7 +176,7 @@ def _crowd_line(cur, line, n):
 # European Protests, Ranked's tested mix (protest_tiers_cast: SKINS, CITY_MIX, DRESS['t4'], T4_HATS, the marchers'
 # faces and builds), the same member the same in every shot. Lines a crowd may add:
 #     mix: paris        (or: light .5, olive .3, brown .2)   the place's skins (MIXES), else 'mixed'; the check tests it
-#     hats: 0.3         the share in a beanie or cap (default .22; bald heads always hatted, EPR O7); 'hats: 0' none
+#     hats: 0.3         the share in a beanie or cap (default .22; bald heads may go bare: Sam, 16 Nov); 'hats: 0' none
 #     count: 40         how many the film draws (the check's crowd size; default 24)
 #     same: hat, top because riot police wear one uniform    keys left alike on purpose (the check lets them be)
 SKIN_TONES = {'light': [(236, 200, 176), (226, 186, 158)], 'olive': [(204, 160, 120), (190, 146, 106)],
@@ -276,8 +276,7 @@ def varied(d, m, i):
     if 'shoes' not in said:
         m['shoe'] = _pick(r, SHOES)
     share = d.get('crowd_hats', .22)
-    if 'hat' not in said and share and (m.get('hair_style') == 'bald' or
-                                        (m.get('hair_style') not in ('bob', 'pony', 'bun', 'long') and r.random() < share)):
+    if 'hat' not in said and share and m.get('hair_style') not in ('bob', 'pony', 'bun', 'long') and r.random() < share:
         m['kit_hat'] = 'beanie' if r.random() < .55 else 'cap'
         c = HATS[(3 * i) % len(HATS)]
         m['hat_c'] = (c, tuple(int(v * .72) for v in c))
