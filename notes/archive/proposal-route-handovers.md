@@ -208,3 +208,19 @@
 - **For Claude:** verdict in `code-finder/judge/verdict-raw.md`; replay `learn/replay-show.py` reads the fix from column 7 (empty;
   status is column 6), harmless since T is hand-written. Old handovers: `notes/archive/proposal-route-handovers.md`.
 
+
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 8, Opus medium, 16 Nov):** Sam's 1 1. Code-finder change 1 built (`page.py show --shot --at`, use log, handover
+  flag, kit test): replay 23/26 loose (88%), 12/14 strict (86%), under 45 lines (was 18/26, 7/14). Gate 2 now passes.
+  Details: `notes/proposals/code-finder.md` "Built". Both proposals marked adopted.
+- **Next:** chat 9, Opus medium: build late-faults change 1 (`notes/proposals/late-faults.md` "Final version"), test that
+  Protest Tiers c26's code lists the 107 faults. Then: code-finder change 2 shown on the replay before Sam is asked; the held-out
+  set at the next film's first round.
+- **Needs Sam:** nothing now.
+- **Read:** `notes/proposals/late-faults.md` "Final version" and "Faults in the pick"; `guides/job-packs.md` "A tool job".
+- **Open rule requests:** none.
+- **For Claude:** replay `learn/replay-show.py` (also `--words-only`); kittests `code_finder`. Old handovers:
+  `notes/archive/proposal-route-handovers.md`.
+
