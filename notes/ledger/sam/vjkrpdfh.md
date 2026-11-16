@@ -24,3 +24,6 @@ Have the 11/10 flash like you're playing a high energy video game and you just h
 ### 2026-11-16T17:50:36
 If he holds the RPG in his right hand and shrugs, he can use it as part of the shrug motion. Both arms can raise up like 'beats me!' He can also shake his head a little bit back and forth, like, 'no idea'
 
+### 2026-11-16T17:51:21
+Remove the wife's sunglasses and white hat, they haven't come out right and we don't have time to fix
+
