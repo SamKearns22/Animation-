@@ -122,8 +122,13 @@ def officer(force='mossos', seed=None, tier='t3'):
     sh = r.uniform(.84, 1.16)
     u = tuple(int(min(255, c * sh)) for c in f['uniform'])
     sp.update(jacket=u, sleeve=u, trousers=u)
-    sp['armour_c'] = tuple(int(min(255, c * r.uniform(.86, 1.18))) for c in f['armour'])
-    sp['helmet_c'] = tuple(int(min(255, c * r.uniform(.85, 1.2))) for c in f['helmet'])
+    if tier == 't4':                                # A18: one shade per officer (each channel apart tinted the white
+        ka, kh = r.uniform(.86, 1.12), r.uniform(.84, 1.0)      # helmets pink and green); France keeps its own below
+        sp['armour_c'] = tuple(int(min(255, c * ka)) for c in f['armour'])
+        sp['helmet_c'] = tuple(int(min(255, c * kh)) for c in f['helmet'])
+    else:
+        sp['armour_c'] = tuple(int(min(255, c * r.uniform(.86, 1.18))) for c in f['armour'])
+        sp['helmet_c'] = tuple(int(min(255, c * r.uniform(.85, 1.2))) for c in f['helmet'])
     if r.random() < .3:
         sp['glove'] = (70, 56, 42)                  # tan leather gloves on some
     sp['stripe'] = r.random() < .45                 # a light number band round the helmet
@@ -457,6 +462,57 @@ DRESS = {'t2': dict(
     pack=[(None, .82), ((40, 128, 128), .1), ((24, 24, 26), .08)])}
 
 
+# A17 (Sam 16 Nov, Albania: 'everyone is a hooded man; a HUGE MIX as before, as the Germany clothes pack'): Tirana's
+# own mix on the Germany pack: the same hoods, beanies, caps and masks, with more colour (red, white, denim, tan, olive,
+# maroon) and some faces bare. Used for the T4 rioters (_dress) and to recolour the T4 marchers (T4_STREET).
+DRESS['t4'] = dict(
+    top=[((26, 26, 30), .2), ((54, 56, 60), .12), ((34, 38, 56), .08), ((88, 90, 94), .08), ((168, 168, 164), .07),
+         ((66, 68, 54), .07), ((156, 34, 38), .09), ((226, 224, 216), .06), ((62, 86, 128), .07), ((150, 118, 76), .06),
+         ((96, 36, 48), .05), ((40, 92, 70), .05)],
+    puffer=.4,
+    legs=[((30, 30, 34), .3), ((58, 74, 110), .3), ((88, 88, 92), .18), ((156, 156, 154), .12), ((96, 84, 62), .1)],
+    shoes=[((236, 236, 232), .45), ((22, 22, 24), .4), ((120, 120, 124), .08), ((150, 40, 40), .07)],
+    head=[('hood', .45), ('beanie', .28), ('cap', .27)],
+    mask=[((16, 16, 18), .5), ((150, 192, 222), .2), ((236, 236, 234), .08), ((70, 72, 76), .07), ((156, 34, 38), .15)],
+    hat=DRESS['t2']['hat'] + [((156, 34, 38), .12), ((226, 224, 216), .06)],
+    pack=[(None, .78), ((40, 128, 128), .06), ((24, 24, 26), .1), ((150, 40, 40), .06)])
+
+
+def t4_street(sp, i):
+    """A17: a T4 marcher (bare head, own hair) in Tirana's mix: top, trousers, shoes from DRESS['t4'], its skin from
+    the city's mix; a beanie or cap on some. The same every frame (from i)."""
+    import zlib
+    r = np.random.default_rng(zlib.crc32(f'm{i}-t4-street'.encode()))
+    D = DRESS['t4']
+    top = _pick(r, D['top'])
+    sp['jacket'] = sp['sleeve'] = top
+    if r.random() < .5:
+        sp['shirt'] = top
+    sp['trousers'], sp['shoe'] = _pick(r, D['legs']), _pick(r, D['shoes'])
+    mix = CITY_MIX['t4']
+    names = list(mix)
+    g = names[int(r.choice(len(names), p=np.array([mix[n] for n in names]) / sum(mix.values())))]
+    sp['skin'] = SKINS[g][int(r.integers(len(SKINS[g])))]
+    # Sam (16 Nov, on the test sheet): women's hair only on women, men's cuts on men; no arm through the hair; no
+    # natural blond on darker skin. The crowd file's women are its bob / pony / long members (smaller build): they
+    # get lashes and lip colour so they read as women; arms are routed round long hair (hair_clear, in pose()). Hair colour follows the skin (black / dark brown; on fair skin blond rarely).
+    hair = sp['kit_face'].get('hair', '')
+    if hair in ('bob', 'pony', 'long'):
+        sp['lashes'] = True
+        sp['kit_face'] = dict(sp['kit_face'], lip=(178, 84, 86))
+        sp['headwear'] = None
+    if g != 'light':
+        sp['hair_c'] = (22, 18, 16) if r.random() < .6 else (40, 30, 24)
+    else:
+        q = r.random()
+        sp['hair_c'] = (34, 28, 24) if q < .45 else (70, 50, 34) if q < .8 else (110, 80, 50) if q < .94 else (196, 160, 96)
+    sp['brow_c'] = _DK(sp['hair_c'], .8)
+    if r.random() < .22 and hair not in ('bob', 'pony'):
+        sp['headwear'] = 'beanie' if r.random() < .5 else 'cap'
+        sp['hat_c'] = (lambda c: (c, _DK(c)))(_pick(r, D['hat']))
+    return sp
+
+
 def _pick(r, opts):
     w = np.array([o[1] for o in opts], float)
     return opts[int(r.choice(len(opts), p=w / w.sum()))][0]
@@ -681,6 +737,8 @@ def marcher(i, tier='t1', s=0):
         sp['skin'] = SKINS[g][int(r.integers(len(SKINS[g])))]
         if g != 'light' and sp.get('hair_c') and sum(sp['hair_c']) > 300:   # no blond hair on a dark-skinned face
             sp['hair_c'] = (34, 28, 24)
+    if tier == 't4':                                # A17: Tirana's street mix (i runs 0..63: each its own look)
+        sp = t4_street(dict(sp), i)
     PK.install({'m': sp})
     # O7 (Sam 16 Nov: too many bald heads in one place looks strange): every bald marcher and about one in four of
     # the short-haired ones wears a beanie or a cap, its colour from the member number
