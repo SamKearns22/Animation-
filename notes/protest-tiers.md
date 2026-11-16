@@ -1,7 +1,7 @@
 # Notes for protest-tiers, now named **European Protests, Ranked** (Sam, 16 Nov; the old name stays only inside file and tool names; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
-- **ON HIATUS (Sam, 15 Nov): no work on this film until the deeper problems are solved** (`notes/proposal-route.md`). Animatic 3 stands as sent; Sam's notes on it come when the film resumes.
+- **REOPENED (Sam, 16 Nov):** round 2 notes on animatic 2 (front half: Overall, Spain, Germany) in "## Round 2 notes"; back half's notes to come.
 - **Rules that bite next:** 30 (a repeated note: find why the first fix failed), 85 (cost watch), 66 (no old file stands in for a new render).
 - **Done (chat 31, Opus medium, 15 Nov): Sam's note 1 on animatic 2 ("frames missing") fixed.** Why the first fix failed (rule 30): chats 14/25 skipped over mid-throw/mid-swing instead of fixing the arm (a skip sized to one build; blends still folded the elbow), and `--faults-named` let a stopped drawing through as black. Now the throwing/swinging hand swings round clear of the shoulder (`protest_tiers_cast._clear_of_shoulder`), blended arms are re-bent until the guard passes them at the actor's turn (`protest_tiers._resolve_mixed_arms`), skips removed. Tested: the 3 spots draw; all 1,243 throws/blends in t2-t4 at every drawing pass the guard; clips of 7.5-8.7, 14.3-15.5, 20.2-21.4 s: no black frame (darkest mean 73), sent to Sam.
 - **Paused (15 Nov, Sam via parent chat):** the page.py `show` job is paused, to be redone through the new proposal route (notes/proposal-route.md). Its work is on branch `claude/page-tool-c1946` and was ALREADY on the main line (1787a2f, wired into the round pack, rule 61 and handover start) before the pause; not reverted, waiting on Sam.
@@ -14,6 +14,30 @@
 - **Read:** job pack "Notes round"; this section; "## Exceptions".
 - **Open rule requests:** the 'a stopped drawing never ships' proposal (film_engine: a stopped drawing refuses the render even with --faults-named; finish.py scans for black frames) was answered (Sam, Y): written as rule P17, naming not blocking. P16 is written.
 - **For Claude:** branch `claude/protest-tiers-c31` (= main line). finish.py's --film is the module name `protest_tiers`.
+
+## Round 2 notes (Sam, 16 Nov, on animatic 2; film reopened; this chat: Overall, Spain, Germany; back half's notes to come)
+- [ ] O1 Intensity heading bigger; numbers coloured by tier: Spain green, Germany orange, France red, Albania dark red; the numbers appear 2 s into each scene with a gentle ding.
+- [ ] O2 Sign, placard and shopfront text always fits neatly inside its board (some spills off now).
+- [ ] O3 Hook Text in Blessed's diagonal style, gone after 2 s (rule request: diagonal style standard for every future film; wording proposed, waiting for Sam's number).
+- [ ] O4 Black-clad rioters: not all the same face/skin; each city's groups reflect its population (e.g. Paris's Black and Middle Eastern share); faces reused from kit or randomised sensibly; rioters stay young.
+- [ ] O5 Bald heads kit fix: separate chat (session_01GznaAR2kvwNTJMiqBvraau, Opus high); Sam's Y there, then used in this film only.
+- [ ] O6 Protest-sign font: handwritten marker style researched from real signs, not computer text.
+- [ ] S1 Spain 6 s; keys raised at 3 s, by half the crowd.
+- [ ] S2 Join the gaps between the flat buildings along the avenue.
+- [ ] S3 No black-clad figures; fireworks thrown from the crowd mass, higher, more of them across the crowd's front at different times.
+- [ ] S4 Burning skip: back-left of the police line (not on it), better drawn, flames not spilling far over the lid.
+- [ ] S5 Second rank of police two paces behind the first, standing in the gaps.
+- [ ] G1 Germany 2-3 s longer, so the action breathes.
+- [ ] G2 Stones pelted from off camera at the shop first.
+- [ ] G3 The glass attacker turns and hits the glass (contact), not a flat swing at the air.
+- [ ] G4 Camera a little right: window's left edge on the screen's left edge; a shop door in the space on the right; rioters kick it open and flood in; looters come back out through the same door, stolen things not clipping (they walked through the wall at the window's centre: answer why the clipping check missed it).
+- [ ] G5 Q: the mannequin of a military man? (answer: Sam's round 1 "TV or mannequin"; the camo was invented, a hunting/gun-shop guess)
+- [ ] G6 Q: why does the broken glass dance on the ground? (answer: fix so landed shards lie still)
+- [ ] G7 Street-sign kick: a run-up and a hard kick; the sign drawn clearer.
+- [ ] G8 Q: white glints on the backs of heads? (answer and fix)
+- [ ] G9 Right-side rioters mime taking with nothing in hand: reporting (FAZ 31 Oct: two weapons taken) -> they take two guns.
+- [ ] G10 No freeze when the sirens start: the action carries on.
+- [ ] G11 Stills and clips to Sam for each part; once all Y, an animatic of the front half (Spain + Germany).
 
 ## Round 1 notes (Sam, 15 Nov, on animatic 1): proposals answered (chat 19), planned (chat 20), nothing built yet
 - Q1 (chat 20, open): the honest price of everything asked is ~29.3% more, the film near 63.5% (his Y was ~43-47%). 1 Y go to ~63.5% (my pick); 2 stop at 47% for a look at what exists.
