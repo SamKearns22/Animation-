@@ -27,3 +27,6 @@ If he holds the RPG in his right hand and shrugs, he can use it as part of the s
 ### 2026-11-16T17:51:21
 Remove the wife's sunglasses and white hat, they haven't come out right and we don't have time to fix
 
+### 2026-11-16T18:04:06
+Time left until next Albania animatic?
+
