@@ -3,9 +3,10 @@
 - **Done (chat 1, Opus high, 16 Nov):** problem + measured facts (notes/proposals/estimates.md), the chat's idea, helpers
   A and B, blind judge (picked helper A), verdict recorded; Sam shown the top two. Helpers paused once on the 5-hour
   usage limit (reset 13:20 UTC) and were resumed.
-- **Needs Sam:** 1 = option 1 (learn, then ranges + priced extra rounds + price record), 2 = option 2 (no surprise
-  pricing), N = neither. Answer comes back to this chat.
-- **Next (on his number): Opus, medium:** the measuring chat first (changes nothing), then each change with its own yes.
+- **Sam's answer (16 Nov): HELD.** Not built now; the next film is the learning apparatus (no measures on European
+  Protests or Blessed: too mixed with other work). Raise at the next film's plan, without the past-film measuring step
+  (reminder in notes/_template.md and story/status.md). Re-pack and re-judge then, since the plan has changed.
+- **Next:** nothing in this job's chain; waits for the next film.
 - **Read:** notes/proposals/estimates.md (Verdict); guides/job-packs.md "A tool job".
 - **Branches (named, not merged; Sam's answer is with chat 4 of startup-reading):** claude/beautiful-brown-vutd0l,
   claude/blessed-c2-mics-wip, claude/audit-honest-checker.

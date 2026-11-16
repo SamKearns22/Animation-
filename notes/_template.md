@@ -1,5 +1,10 @@
 # Notes for FILM (one file, numbered; mark each done as it is fixed)
 
+> **Held for the next film (Sam, 16 Nov), raise at the plan, then delete this note from the template:** the estimates
+> proposal (`notes/proposals/estimates.md`, options 1 and 2). Sam: use this film as the learning apparatus for budget
+> and costliness; no price tests or measures on European Protests or Blessed (too mixed with other work). Put it to
+> Sam again in the plan's questions, without the past-film measuring step, before `ledger.py estimate`.
+
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/FILM-handovers.md)
 - **Rules that bite next:** (3, by number from guides/film-quality-rules.md)
 - **Done:**
