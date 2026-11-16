@@ -8,3 +8,6 @@ Ensure flame placements are logical -- coming out windows or at the top of build
 ### 2026-11-16T17:32:40
 Rush a clip to me.
 
+### 2026-11-16T17:50:14
+Remove this guy, he's just standing there
+
