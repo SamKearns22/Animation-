@@ -2533,7 +2533,8 @@ def picture(t):
         if not _PLATE:
             t4_mopeds(ppl, lt)
         back.alpha_composite(backlight(back, lt, ppl))
-        if lt >= SURF[0]:                                   # round 2 (A2): the surfer lit, warm glow behind him
+        if lt >= SURF[0] and not _PLATE:                    # round 2 (A2): the surfer lit (not in the end's A/C:
+            # from street level he floated huge in the top corner)
             sx, sz = surf_pos(lt)
             gx, gy = cam.p(sx, SURF_D, sz + 1.2)
             S.glow_disc(back, gx, gy, 2.2 * cam.ppm(SURF_D), (255, 190, 110), amt=.3)
