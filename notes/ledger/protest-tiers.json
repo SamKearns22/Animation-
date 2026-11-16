@@ -1124,7 +1124,7 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.79,
+   "cost": 0.8,
    "src": "estimate",
    "sid": "session_01GznaAVEcfn2dswNWQNbC13",
    "steps": 64,
@@ -1308,7 +1308,10 @@
   {
    "name": "final",
    "pct": 0.16,
-   "done": null
+   "done": {
+    "date": "2026-11-16",
+    "spent": 101.29
+   }
   }
  ],
  "stage_alarm": {

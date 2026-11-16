@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 101.28% (+37.77); 61 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 101.29% (+37.78); 61 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 101.28% of the 63.01% planned so far; at this rate the film lands at 101.6%.**
+**Forecast: Spent 101.29% of the 63.51% planned so far; at this rate the film lands at 101.3%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -20,7 +20,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | round1 moves | 4.453 | 2026-11-15 | 53.21 |
 | animatic2 | 0.801 | 2026-11-15 | 53.21 |
 | round2 | 0.865 | 2026-11-16 | 100.78 |
-| final | 0.16 |  |  |
+| final | 0.16 | 2026-11-16 | 101.29 |
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -84,7 +84,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-16 | 080ba45d | est | opus | auto |  | 2.08 |  | 0 | 0 |
 | 2026-11-16 | cbb93021 | est | opus | auto |  | 1.58 |  | 0 | 0 |
 | 2026-11-16 | 974d63c4 | est | sonnet | auto |  | 0.27 |  | 0 | 0 |
-| 2026-11-16 | af2465a6 | est | sonnet | auto |  | 0.79 |  | 0 | 0 |
+| 2026-11-16 | af2465a6 | est | sonnet | auto |  | 0.8 |  | 0 | 0 |
 | 2026-11-16 | aafb201f | est | opus | auto |  | 5.48 |  | 0 | 0 |
 | 2026-11-16 | de5c7662 | est | sonnet | auto |  | 0.21 |  | 0 | 0 |
 
