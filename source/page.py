@@ -140,14 +140,65 @@ def find(film, note, n=5):
     return sorted(hits, key=lambda h: -h[0])[:n]
 
 
-def _defs(path):
-    """{start line: (end line, name)} for the file's top-level defs and classes (and methods inside classes)."""
+_CACHE = {}
+
+
+def _parsed(path):
+    """(lines, defs, blocks, line words) for a file, kept until it changes. blocks: the module-level statements outside
+    any def (tables, constants, X['k'] = ...): {start: (end, name)} (code-finder change 2)."""
     import ast
-    out = {}
-    for n in ast.walk(ast.parse(open(path, encoding='utf-8').read())):
-        if isinstance(n, (ast.FunctionDef, ast.ClassDef)):
-            out[n.lineno] = (n.end_lineno, n.name)
+    key = (path, os.path.getmtime(path))
+    if key not in _CACHE:
+        src = open(path, encoding='utf-8').read()
+        tree, defs, blocks = ast.parse(src), {}, {}
+        for n in ast.walk(tree):
+            if isinstance(n, (ast.FunctionDef, ast.ClassDef)):
+                defs[n.lineno] = (n.end_lineno, n.name)
+        for n in tree.body:
+            if isinstance(n, (ast.Assign, ast.AugAssign, ast.AnnAssign)):
+                tg = n.targets[0] if isinstance(n, ast.Assign) else n.target
+                blocks[n.lineno] = (n.end_lineno, ast.unparse(tg)[:40])
+        lines = src.splitlines()
+        _CACHE[key] = (lines, defs, blocks, [_words(x.replace('_', ' ')) for x in lines])
+    return _CACHE[key]
+
+
+def _defs(path):
+    """{start line: (end line, name)} for the file's top-level defs and classes (and methods inside classes); with
+    show.deep (change 2) the module-level tables and constants too."""
+    _, defs, blocks, _ = _parsed(path)
+    return {**blocks, **defs} if show.deep else defs
+
+
+# a note asking for more or less of a thing ("chin still big") wants a number: the thing's setting in a table
+SIZE = set('big bigger small smaller long longer short shorter wide wider narrow high higher low lower tall thin fat '
+           'fast faster slow slower loud quiet dark darker light lighter bright close far large tiny huge'.split())
+
+
+def _deep(film, want, seen):
+    """Change 2: every def and table, scored by its best single line (the note's words met on one line: a comment
+    naming the fix, a key like chin_long). A def or table joins the hits when one line holds 2+ of the note's words,
+    or, when the note asks for more or less of something, a table's key holds one of its words. -> [(0, where, name)]."""
+    size, things = want & SIZE, want - SIZE
+    out = []
+    for f in files(film):
+        lines, defs, blocks, lw = _parsed(f)
+        for ln, (end, name) in {**blocks, **defs}.items():
+            where = f'{os.path.basename(f)}:{ln}'
+            if where in seen:
+                continue
+            best = max((len(want & lw[k - 1]) for k in range(ln, min(end, len(lw)) + 1)), default=0)
+            keyed = ln in blocks and size and any(things & _words(' '.join(re.findall(r'(\w+)\s*=', lines[k - 1])).replace('_', ' '))
+                                                  for k in range(ln, end + 1))
+            if best >= 2 or keyed:
+                out.append((0, where, name))
     return out
+
+
+def _line_score(path, ln, end, want):
+    """The best single line's count of the note's words (change 2), and its line number."""
+    lw = _parsed(path)[3]
+    return max(((len(want & lw[k - 1]), k) for k in range(ln, min(end, len(lw)) + 1)), default=(0, ln))
 
 
 def shots(film):
@@ -230,6 +281,8 @@ def show(film, note, budget=40, shot=None, at=None):
                 own = any(name == n or name.startswith(n + '_') or name.endswith('_' + n) for n in sh)
                 if (own or any(quoted.search(x) for x in lines[ln - 1:end])) and f'{os.path.basename(f)}:{ln}' not in seen:
                     hits.append((0, f'{os.path.basename(f)}:{ln}', name))
+    if show.deep:                                 # change 2: tables, and defs whose one line names the note's thing
+        hits += _deep(film, want, {w for _, w, _ in hits})
     # words inside a def's body (comments, names) break ties and lift a def whose docstring missed the note
     rescored = []
     for score, where, what in hits:
@@ -244,6 +297,12 @@ def show(film, note, budget=40, shot=None, at=None):
                 name = _defs(path).get(ln, (0, ''))[1]
                 own = any(name == n or name.startswith(n + '_') or name.endswith('_' + n) for n in sh)
                 body += 3 * own + min(3, sum(1 for x in src if quoted.search(x)))
+            if show.deep:                         # one line holding several of the note's words is the fix's line
+                best = _line_score(path, ln, end, want)[0]
+                body += 2 * best if best >= 2 else 0
+                if ln in _parsed(path)[2] and want & SIZE:       # a settings table a more-or-less note may want
+                    keys = ' '.join(re.findall(r'(\w+)\s*=', ' '.join(src))).replace('_', ' ')
+                    body += 3 * len((want - SIZE) & _words(keys))
         if score or body:
             rescored.append((score * 2 + body, where, what, path, ln))
     rescored.sort(key=lambda h: -h[0])
@@ -269,6 +328,10 @@ def show(film, note, budget=40, shot=None, at=None):
                         keep |= {k - 1, k, k + 1}
                 first = [k for k in span if quoted and quoted.search(lines[k - 1])][:max(1, room // 2)]
                 must = {ln} | {k for k in first} | {k + 1 for k in first}     # the shot's own lines before the head
+                if show.deep:                     # change 2: the def's best line (and its neighbours) before the head
+                    b, k = _line_score(path, ln, end, want)
+                    if b:
+                        must |= {k - 1, k, k + 1} if b >= 2 or room > 5 else {k}
                 rest = sorted(k for k in keep - must if ln <= k <= end)
                 take = sorted((sorted(k for k in must if ln <= k <= end) + rest)[:room])
         out.append((f'{where}  {what}', [(k, lines[k - 1]) for k in take]))
@@ -277,6 +340,7 @@ def show(film, note, budget=40, shot=None, at=None):
 
 
 show.first, show.rest, show.head = 16, 5, 3     # lines for the best def, each runner-up, a def's head
+show.deep = os.environ.get('FINDER_DEEP') == '1'  # code-finder change 2: built 16 Nov, NOT adopted (awaits Sam's yes)
 
 
 def main(a):

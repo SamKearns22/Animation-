@@ -1,18 +1,16 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
-- **Done (chat 8, Opus medium, 16 Nov; Sam's 1 1):** code-finder change 1 (`page.py show --shot --at`; replay 23/26 loose,
-  12/14 strict, under 45 lines; was 18/26, 7/14) and late-faults change 1 (one film name in every tool; `handover.py end` runs
-  the quick check on changed films; on chat 26's code it lists the same 107). Details: each proposal's "Built" section.
-- **Next:** the chain stopped (chat 8 is at the limit of chats opened in a row, 8). When a new film or job starts: the
-  held-out code-finder set at its first round; code-finder change 2 shown on the replay before Sam is asked; late-faults
-  changes 2-3 only on the replay's split. The guard stays stopped until Sam asks.
-- **Needs Sam:** nothing; the next job is his to name.
-- **Read:** `notes/proposals/code-finder.md` and `late-faults.md`, with their `built.md` (moved there 16 Nov); `guides/job-packs.md` "A tool job".
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 30 (find why first), 85 (cost watch).
+- **Done (code-finder change 2 chat, Opus medium, 16 Nov):** change 2 built switched off and shown on the frozen replay:
+  23/26 -> 25/26 loose, 12/14 -> 14/14 strict, under 45 lines; kittest passes on and off. Details: code-finder/built.md.
+- **Next:** on Sam's Y: Sonnet (routine: one default flipped, kittest bar raised to 25/26, 14/14), in this chat's
+  answer turn. On N: nothing. Held-out set still at the next film's first round.
+- **Needs Sam:** Y/N on adopting change 2.
+- **Read:** `notes/proposals/code-finder.md`, `code-finder/built.md`; `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** kittests `code_finder`; `handover.quick_faults/changed_films/end_stamp/finder_faults`; replay
-  `learn/replay-show.py`. Old handovers: `notes/archive/proposal-route-handovers.md`.
+- **For Claude:** page.show.deep / FINDER_DEEP=1; `code-finder/change2-replay.py`; kittests `code_finder`.
+  Old handovers: `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

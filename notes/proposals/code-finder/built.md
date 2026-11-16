@@ -11,3 +11,21 @@
 - Still missed: 2 (chin_long in a TUNE table), 9 (ears_hidden, one line in a long def), 24 (flash). Change 2 (tables and
   long-def lines) targets 2 and 9; not built: it is its own yes, asked only after it is shown working on the replay.
 - Still to do: the held-out set from the next film's first round, frozen before any tuning (targets: lines edited, from git).
+
+## Built (change 2, chat "code finder change 2", Opus medium, 16 Nov; Sam said proceed; NOT adopted, awaits his yes)
+- Why the two notes missed (rule 30, looked first): note 2's chin_long sits in a module-level `P4.TUNE['brand'] = dict(...)`
+  line, never on the page; note 9's ears_hidden is in `press_person` (blessed_cast.py:663-671), a SHORT def whose
+  docstring has none of the note's words, so it was never a candidate; its one line ("hair over the ears: none drawn on
+  top of it") holds four. The plan's "long def" guess was wrong: the cause was the candidate pool, not the cut.
+- In `source/page.py`, behind `show.deep` (off; `FINDER_DEEP=1` turns it on): module-level assignments are units like
+  defs; every def and table whose best single line holds 2+ of the note's words joins the hits (+2 per word on that
+  line); a note with a more-or-less word (SIZE: big, long, wide, dark...) lifts tables whose keys name its thing
+  (+3 each); the best line and its neighbours are shown before the head. Off: answers identical to change 1.
+- Also on now (speed only, answers unchanged, made without asking; listed for the end-of-film review): each file is
+  parsed once and kept until it changes; the 26-note replay ran 52 s, now 0.5 s.
+- Replay (`notes/proposals/code-finder/change2-replay.py`): before 23/26 loose, 12/14 strict; **after 25/26, 14/14**,
+  41-44 lines; words only 21/26, 10/14 -> 23/26, 12/14. kittest code_finder_replay passes either way.
+- Named: note 2's answer shows six chin settings (Brand's is third, labelled `P4.TUNE['brand']`); SIZE is a hand list
+  tuned on one note; still missed 24 (flash). Proof on a new film is the held-out set at the next film's first round.
+- On Sam's yes: show.deep defaults on, the kittest bar goes to 25/26, 14/14.
+- Sam's 16 Nov question (separate job or part of the rule-location one?): answered by his "proceed" as its own job.
