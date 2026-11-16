@@ -5,3 +5,6 @@ Ensure the fire glow also effects Banka sign.
 
 Ensure flame placements are logical -- coming out windows or at the top of buildings, not just pasted onto building walls.
 
+### 2026-11-16T17:32:40
+Rush a clip to me.
+
