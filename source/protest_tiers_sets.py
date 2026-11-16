@@ -1652,7 +1652,7 @@ def prop_crate(img, x, y, k, ang=0.0):
         poly(img, _turn([(w * f, -h * .1), (w * f, h * .42)], x, y, ang), None, (150, 26, 24), 2, 0)
     poly(img, _turn([(-w * .18, -h * .38), (w * .18, -h * .38), (w * .18, -h * .2), (-w * .18, -h * .2)], x, y, ang),
          (60, 14, 14), None, 0, 0)                           # the hand hole
-    text(img, _turn([(0, h * .14)], x, y, ang)[0], 'BIER', max(8, int(.1 * k)), (250, 236, 200))
+    text(img, _turn([(0, h * .14)], x, y, ang)[0], 'BIRRA', max(8, int(.085 * k)), (250, 236, 200))
 
 
 CAMO = [(92, 84, 52), (60, 70, 40), (120, 104, 70), (44, 40, 30)]
