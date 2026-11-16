@@ -2719,8 +2719,9 @@ def cost_rows_reach_the_main_line():
         d = _j.load(open(sp))
         d['chats'] += [{'date': '2026-11-14', 'chat': 'ffff6666', 'cost': 1.1, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'sid': 'session_F'},
                        {'date': '2026-11-14', 'chat': 'gggg7777', 'cost': 0.9, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'sid': 'session_G'}]
+        d['alarms_off'] = 'an old switch a later chat removed'
         open(sp, 'w').write(_j.dumps(d, indent=1))
-        open(os.path.join(side, 'notes', 'ledger', 'other.json'), 'w').write(_j.dumps({'film': 'other', 'chats': [
+        open(os.path.join(side, 'notes', 'ledger', 'other.json'), 'w').write(_j.dumps({'film': 'other', 'estimate': None, 'checks': {}, 'chats': [
             {'date': '2026-11-14', 'chat': 'gggg7777', 'cost': 0.9, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'sid': 'session_G'}]}))
         git(side, 'add', '-A'); git(side, 'commit', '-q', '-m', 'stranded'); git(side, 'push', '-q', 'origin', 'HEAD')
         git(copy, 'fetch', '-q', 'origin')
@@ -2732,6 +2733,8 @@ def cost_rows_reach_the_main_line():
         oth = [c['chat'] for c in _j.loads(main('notes/ledger/other.json') or '{"chats": []}')['chats']]
         if before != 2 or after or kt.count('ffff6666') != 1 or kt.count('gggg7777') + oth.count('gggg7777') != 1:
             bad.append(f'gather: missing {before} -> {after}; kt {kt}; other {oth}')
+        if 'alarms_off' in main() or 'ffff6666' not in main('notes/ledger/kt.md'):
+            bad.append('gather brought back a removed key, or left the .md behind')
         # Sam's saved messages go the same way (two chats' logs were stranded on claude/chat-XXXX branches)
         import handover as HO
         hk = HO.ROOT, HO.LOGDIR, HO._not_typed

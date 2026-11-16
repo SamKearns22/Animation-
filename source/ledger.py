@@ -250,19 +250,12 @@ def merge_row(d, row):
 
 
 def union(a, b):
-    """Two copies of one film's ledger as one: every chat's row once (merge_row), the other keys from a, missing
-    ones from b; check results and finished stages from both."""
+    """Two copies of one film's ledger as one: every chat's row once (merge_row); everything else is a's (never
+    brought back from b: a key a later chat removed, like Blessed's alarms_off, stays removed)."""
     out = json.loads(json.dumps(a))
-    for k, v in b.items():
-        out.setdefault(k, v)
+    out.setdefault('chats', [])
     for row in b.get('chats', []):
         merge_row(out, row)
-    for k, v in (b.get('checks') or {}).items():
-        out.setdefault('checks', {}).setdefault(k, v)
-    done = {x['name'] for x in b.get('stages') or [] if x.get('done')}
-    for x in out.get('stages') or []:
-        if x['name'] in done and not x.get('done'):
-            x.update(next(y for y in b['stages'] if y['name'] == x['name'] and y.get('done')))
     return out
 
 
@@ -428,10 +421,17 @@ def gather(root=None, remote='origin'):
                 away = _elsewhere(ids, path)
                 b['chats'] = [c for c in b.get('chats', []) if not away(c)]
                 d = union(d, b) if d else b
-            added[path] = len(d['chats']) - n0
-            return json.dumps(d, indent=1) if added[path] or old is None else None
+            new = box[path] = json.dumps(d, indent=1)
+            added[path] = len(d['chats']) - n0 or (new != old and 'updated')
+            return new if new != old else None
         return fn
     ups = {p: fn_for(p, ts) for p, ts in found.items()}
+    for p in [p for p in ups if p.endswith('.json')]:          # each film's .md written from its gathered .json
+        def md(old, p=p):
+            new = render(json.loads(box[p])) if p in box else None
+            return new if new != old else None
+        ups[p[:-5] + '.md'] = md
+    box = {}
     res = mainline.to_main(ups, 'Ledger: stranded cost rows from every branch, each chat once (startup-fixes 1)',
                            root=root, remote=remote)
     return res, {p: n for p, n in added.items() if n}
@@ -751,7 +751,7 @@ def main():
     if o.cmd == 'gather':
         res, added = gather()
         for p_, n in added.items():
-            print(f'ledger gather: {p_}: {n} rows added')
+            print(f'ledger gather: {p_}: {n} rows' + ('' if n == 'updated' else ' added'))
         print(f'ledger gather: {res or "could not push"}')
         return
     if o.cmd == 'audit':                          # startup-fixes 1: rows a branch holds and the main line lacks
