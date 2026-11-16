@@ -1,4 +1,4 @@
-# Notes for protest-tiers (one file, numbered; mark each done as it is fixed)
+# Notes for protest-tiers, now named **European Protests, Ranked** (Sam, 16 Nov; the old name stays only inside file and tool names; one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover, 15 lines at most)
 - **ON HIATUS (Sam, 15 Nov): no work on this film until the deeper problems are solved** (`notes/proposal-route.md`). Animatic 3 stands as sent; Sam's notes on it come when the film resumes.

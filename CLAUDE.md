@@ -13,10 +13,10 @@ is in `guides/job-packs.md`.
 - **No code names or file internals** (they go in the film's notes). Name only files I'll open, and send them.
 - **One line per note:** "8: fixed – the whale now knocks the helideck away. Clip sent." Anything a fix takes away or
   you add gets its own "Lost: …" / "Added: …" line, so I can say no before it costs a round.
-- **Back-end proposals get a plain explanation (Sam, 14 Nov).** Anything I propose that you can't see (a check, a tool, a
-  rule, a change to how the films are built) comes with three things in plain English: what it is, why I'm proposing it
-  (what went wrong or cost too much), and what difference you'll notice (fewer notes, a better picture, a cheaper film).
-  Where it helps, one example from a real film. This may run over the 10-line limit; it is never skipped to save lines.
+- **Back-end proposals are explained plainly (Sam, 16 Nov; replaces 14 Nov).** Anything I propose that you can't see (a
+  check, a tool, a rule, a change to how the films are built): the problem in one or two plain sentences, then what's
+  proposed as numbered steps, then why, what you'd notice, and the other option. One "Lost:" / "Added:" line each. No
+  code names; any technical word is explained where it appears. This may run over the 10-line limit; never skipped.
 - **Questions are numbered,** each answered by a number or Y/N, your pick first. **Every open decision, across all
   jobs, goes in one message.**
 - **A "Checks:" line only when a check slipped or was at risk** ("Checks: X slipped (looked: fine because …)"). Never

@@ -7,10 +7,14 @@
   chat's ledger row + a read-only Sonnet backfill (search cost share, `show` replayed on old notes), ~1.5-2% once;
   then a guard on hand film-file searches as its own yes, only if searching is >=10% of a round chat and `show` hits
   >=80%. Critiqued 7 found, 3 fixed, 4 named. Both questions put to Sam in one message (chat 4's Q1 had no answer).
-- **Next (on Sam's answers):** Q1=1 -> late-faults replay (Sonnet medium, own chat). Q2=1 -> history-and-search
-  Learn: ledger.py fields (Opus medium, building from a clear plan) then the backfill (Sonnet). Both Ys: one Opus
-  medium chat builds the ledger fields, then opens a Sonnet chat for both read-only replays. `propose.py mark` each.
-- **Needs Sam:** Q1 late-faults 1/2/N; Q2 history-and-search 1/2/N (my pick 1 on both).
+- **Next (Sam, 16 Nov: 1 on both; both adopted as Learn steps):** chat 6a, Sonnet medium: late-faults replay (reruns
+  today's checks on the code each old building chat left, counts what was catchable; read-only; ~1%; then change 1
+  returns to Sam as its own yes with the numbers). Chat 6b, Opus medium: history-and-search Learn: ledger.py Stop
+  hook adds steps, end history, cost by kind (check F4 first: does the transcript hold per-step usage?), then opens
+  a Sonnet chat for the read-only backfill (`notes/proposals/learn/search-cost.md`, `show` replayed on old notes).
+- **Needs Sam:** nothing open. Done 16 Nov: plain-proposal rule written (CLAUDE.md); protest film renamed European
+  Protests, Ranked (display name only; file and tool names keep protest_tiers: renaming them would break the checks).
+  `propose.py show` does not yet print in the new order: its prompts are locked, so that is its own proposal.
 - **Read:** this file's route sections; `notes/proposals/history-and-search.md` Verdict; `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
 - **For Claude:** history-and-search key in state.json (V1=B, V2=A, V3=chat); F4: whether the Stop hook's transcript

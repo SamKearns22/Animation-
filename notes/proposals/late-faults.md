@@ -1,6 +1,6 @@
 # Proposal: Faults made while building are found chats later, at the gate, and each costs a whole fix chat
 
-Status: open
+Status: adopted (2026-11-16)
 
 ## Problem
 Sam's aim (15 Nov): cut the cost of every stage of production as far as possible without harming quality. On

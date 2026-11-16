@@ -1,6 +1,6 @@
 # Proposal: Every step re-reads the whole chat, and a third of a film chat's steps are spent finding code by hand
 
-Status: open
+Status: adopted (2026-11-16)
 
 ## Problem
 Sam's aim (15 Nov): cut the cost of every stage of production as far as possible without harming quality. Most of
