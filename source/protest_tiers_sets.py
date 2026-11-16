@@ -1189,8 +1189,7 @@ def _bank(img, cam, t):
             quad(img, cam.p(x, d + .4, z), cam.p(x, d + 2.2, z), cam.p(x, d + 2.2, z + 2.6), cam.p(x, d + .4, z + 2.6),
                  (60, 46, 46), None, amt=0)
         poly(img, [cam.p(x, d + 3.8, 0), cam.p(x, d + 3.8, 15)], None, (140, 116, 104), 3, 0)
-    # chat 17 (readability check; hunt 1 read a cut-off 'ANKA'): letters ~0.9 m tall, centred along the bank, in frame
-    text(img, cam.p(x, 52, 5.6), 'BANKA', 52, (60, 46, 40))
+    # round 3 (A20): the name is on a fascia board (bank_sign), drawn by the film after the window fires
     # round 3 (A5): six windows on fire, flames streaking out and up the stone, scorched above
     for q, (d, z) in enumerate(((36, .6), (46, .6), (31, 6.5), (41, 10.5), (56, 6.5), (61, .6))):
         h = 3.6 if z < 1 else 2.6
@@ -1204,6 +1203,77 @@ def _bank(img, cam, t):
         flames(img, (e[0] + c[0]) / 2 + 0.25 * w, (e[1] + c[1]) / 2 + 0.25 * (a[1] - e[1]), w, 2.6 * cam.ppm(d + 1.3),
                t + q * .41, seed=60 + q, n=4)
 
+
+
+SIGN_D, SIGN_Z = (39.5, 65.0), (4.45, 6.15)        # A20: the BANKA fascia along the bank's face (x -9), over the ground floor
+
+
+def _homography(src, dst):
+    """The 8 PERSPECTIVE coefficients that send each dst point (output) to its src point (input), for Image.transform."""
+    A, bb = [], []
+    for (u, v), (x, y) in zip(src, dst):
+        A.append([x, y, 1, 0, 0, 0, -u * x, -u * y]); bb.append(u)
+        A.append([0, 0, 0, x, y, 1, -v * x, -v * y]); bb.append(v)
+    return np.linalg.solve(np.array(A, float), np.array(bb, float))
+
+
+def bank_sign(img, cam, t=0.0, soot=((47.3, .5), (61.6, .35), (37.3, .3))):
+    """A20 (Sam: 'BANKA is words pasted on the image'): a real fascia board on the bank, lying in the wall's own
+    perspective (the flat board mapped onto the face through the camera): navy panel, brass trim, cream capitals,
+    bolted on; soot smudged up its lower edge over the burning windows (soot: (d, strength)). Drawn after the fires,
+    so their glow never washes it out."""
+    x = -9.0
+    (d0, d1), (z0, z1) = SIGN_D, SIGN_Z
+    corners = [cam.p(x, d0, z1), cam.p(x, d1, z1), cam.p(x, d1, z0), cam.p(x, d0, z0)]
+    bw, bh = 1500, int(1500 * (z1 - z0) / (d1 - d0))
+    bh = max(bh, 60)
+    pad = 6
+    board = Image.new('RGBA', (bw + 2 * pad, bh + 2 * pad), (0, 0, 0, 0))
+    dr = ImageDraw.Draw(board)
+    dr.rectangle((pad - 4, pad - 4, bw + pad + 4, bh + pad + 4), fill=INK + (255,))
+    dr.rectangle((pad, pad, bw + pad, bh + pad), fill=(182, 146, 74, 255))                    # brass trim
+    tr = max(4, bh // 11)
+    dr.rectangle((pad + tr, pad + tr, bw + pad - tr, bh + pad - tr), fill=(30, 44, 78, 255))  # the navy panel
+    f = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), int(bh * .66))
+    word = 'BANKA'
+    span = bw * .86
+    for i, ch in enumerate(word):                                       # wide capitals along the board: the wall's
+        cx = pad + bw * .07 + span * (i + .5) / len(word)               # slant squeezes them back to normal on screen
+        g = Image.new('L', (int(bh * 1.2), int(bh * 1.1)), 0)
+        ImageDraw.Draw(g).text((g.width / 2, g.height / 2), ch, font=f, anchor='mm', fill=255)
+        g = g.resize((int(span / len(word) * .8), g.height), Image.LANCZOS)
+        ox, oy = int(cx - g.width / 2), int(pad + bh / 2 - g.height / 2)
+        board.paste((14, 20, 36, 255), (ox + 5, oy + 3), g)              # a shadow: raised letters
+        board.paste((244, 232, 200, 255), (ox, oy), g)
+    for u in (.025, .975):                                              # the fixing bolts
+        for v in (.25, .75):
+            dr.ellipse((pad + bw * u - 5, pad + bh * v - 5, pad + bw * u + 5, pad + bh * v + 5), fill=(120, 96, 52, 255))
+    if soot:                                                            # smoke from the windows below, up the board
+        sl = Image.new('L', board.size, 0)
+        sd = ImageDraw.Draw(sl)
+        for d, a in soot:
+            if not d0 - 1 < d < d1 + 1:
+                continue
+            u = pad + bw * (d + 0.9 - d0) / (d1 - d0)
+            w = bw * 3.4 / (d1 - d0)
+            sd.ellipse((u - w / 2, pad + bh * .35, u + w / 2, pad + bh * 1.6), fill=int(255 * a))
+        sl = sl.filter(ImageFilter.GaussianBlur(bh * .18))
+        board.paste((26, 18, 16, 255), (0, 0), mask=Image.fromarray(
+            (np.asarray(sl, np.float32) * (np.asarray(board.getchannel('A'), np.float32) / 255)).astype(np.uint8)))
+    # map the flat board onto the face
+    xs, ys = [c[0] for c in corners], [c[1] for c in corners]
+    x0, y0 = int(math.floor(min(xs))) - 2, int(math.floor(min(ys))) - 2
+    x1, y1 = int(math.ceil(max(xs))) + 3, int(math.ceil(max(ys))) + 3
+    if x1 <= 0 or y1 <= 0 or x0 >= W or y0 >= H:
+        return
+    src = [(pad, pad), (pad + bw, pad), (pad + bw, pad + bh), (pad, pad + bh)]
+    dst = [(cx - x0, cy - y0) for cx, cy in corners]
+    co = _homography(src, dst)
+    ss = 3                                                              # drawn 3x and shrunk: clean letter edges
+    big = board.transform(((x1 - x0) * ss, (y1 - y0) * ss), Image.PERSPECTIVE,
+                          tuple(co * np.array([1 / ss, 1 / ss, 1, 1 / ss, 1 / ss, 1, 1 / ss, 1 / ss])), Image.BICUBIC)
+    lay = big.resize((x1 - x0, y1 - y0), Image.LANCZOS)
+    img.alpha_composite(lay, (x0, y0)) if img.mode == 'RGBA' else img.paste(lay, (x0, y0), lay)
 
 # ================================================================================================= vehicles
 # Chat 12 (sets stage, the plan's two rows): the water cannon truck (T3 driving in, French white and blue; T4

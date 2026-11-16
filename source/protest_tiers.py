@@ -2616,6 +2616,7 @@ def t4_fx(img, lt):
         if a < 0.3:
             S.glow_disc(img, tx, ty, 40, (255, 230, 150), amt=.55)
     molotovs(img, lt)
+    S.bank_sign(img, cam, lt)                            # A20: the fascia over the fires (never washed out)
     stones(img, lt)
     gunfire(img, lt)
     rng = np.random.default_rng(int(lt * 12))              # A4: the melee's dust, all through (low, soft, see-through)
