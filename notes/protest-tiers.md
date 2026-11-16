@@ -55,6 +55,12 @@
 - [x] S4 (T1_CONTAINER (-7, 176) behind the line's left; new _container: lid upright, ribs, soot, flames only in the mouth, smoke column) Burning skip: back-left of the police line (not on it), better drawn, flames not spilling far over the lid.
 - [x] S5 (second rank d +1.6, x +0.85) Second rank of police two paces behind the first, standing in the gaps.
 - [ ] O7 (Sam 16 Nov, chat 3) Too many bald heads in one place looks strange: put common hats on part of the crowd: beanies and caps (crowd sprites and acted rioters where it suits; clear ~/.cache/protest-tiers-sprites).
+- [ ] O8 (Sam 16 Nov, chat 3) Intensity numbers 50% bigger.
+- [ ] O9 (Sam 16 Nov) Use Sam's ding for the numbers: `sounds/protest-tiers/ding.mp3` (freesound community 101492; replaces the made ding).
+- [x] S0 (Sam 16 Nov, on the 0-14.5 clip) Spain: "really good" (the Overall+Spain still question answered).
+- [ ] S6 (Sam 16 Nov) Spain: the police advance once more, in the middle, between the opening second and the existing advance (line steps 4.0).
+- [ ] S7 (Sam 16 Nov) Spain fireworks sound: `sounds/protest-tiers/fireworks.mp3` (freesound community 29629), timed to the rockets/bursts (Sam asked: sound effect allowed).
+- [ ] Q1 still open: Germany Y/N on the 0-14.5 clip.
 - [ ] G1 Germany 2-3 s longer, so the action breathes.
 - [ ] G2 Stones pelted from off camera at the shop first.
 - [ ] G3 The glass attacker turns and hits the glass (contact), not a flat swing at the air.
