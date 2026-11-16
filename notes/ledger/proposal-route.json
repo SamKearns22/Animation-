@@ -218,23 +218,24 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.53,
+   "cost": 1.26,
    "src": "estimate",
    "sid": "session_01J1JB7ZHBjx7G23d675UK2u",
-   "steps": 32,
-   "hist_k": 117,
+   "steps": 69,
+   "hist_k": 159,
    "kinds": {
-    "tool search": 27.3,
-    "other": 72.7
+    "tool search": 30.7,
+    "whole-file .py read": 0.5,
+    "other": 68.8
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 26,
-    "whole-file .py read": 0,
+    "tool search": 53,
+    "whole-file .py read": 1,
     "page.py": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 5
+    "other": 11
    }
   }
  ],
