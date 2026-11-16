@@ -1047,16 +1047,18 @@ CAR_T0, CAR_LET, CAR_STOP = 6.0, 6.9, 7.6   # the shove starts, they let go, it 
 CAR_HIT = 7.2                        # the jet hits the car: a burst of steam, the fire knocked down
 
 
+NEAR3 = 7.4                          # the nearest people are drawn over the jet (the old car's rear + 1 m)
+CAR_YAW = 80.0                       # round 3 (F10): the car stands where it was set alight (S.CAR3), turned this far
+
+
 def car_move(lt):
-    """The T3 car's shove (S.car_pt): (dx, dd, yaw) - 1.6 m right, 3.4 m on toward the police, the nose 12 deg right."""
-    u = min(1.0, max(0.0, (lt - CAR_T0) / (CAR_STOP - CAR_T0)))
-    m = u * u * (2.2 - 1.2 * u) if u < 1 else 1.0          # slow off the mark, rolling freely, then caught by the jet
-    m = min(1.0, m)
-    return 0.9 * m, 3.2 * m, 10.0 * m
+    """Round 3 (F10, Sam Y 16 Nov: 'a burning car in the upper left, near the statue, behind the protesters', as fr3):
+    no shove now; the car stands still (S.car_pt with no move but its own turn)."""
+    return 0.0, 0.0, CAR_YAW
 
 
 def car_fire(lt):
-    return 1.0 - 0.75 * ease((lt - CAR_HIT) / 0.5)
+    return 1.0                                              # F10: it burns the whole shot (the jet never reaches it)
 
 
 def car_roof(lt):
@@ -1066,8 +1068,7 @@ def car_roof(lt):
 
 def car_fx(img, lt):
     """T3 7.2-8.0: the jet hits the burning car: a burst of white steam boiling up off it, drifting left."""
-    if lt < CAR_HIT:
-        return
+    return                                                  # F10: the jet never reaches the car now: no steam
     u = lt - CAR_HIT
     cx, cy = T3CAM.p(*car_roof(lt), 1.4)
     k = T3CAM.ppm(car_roof(lt)[1])
@@ -1121,7 +1122,7 @@ FR_RATE, BK_RATE = (1.6, 1.47, 1.71, 1.54), (1.58, 1.69, 1.5)   # F9: each throw
 FR_PH, BK_PH = (0.0, 0.41, 0.77, 0.18), (0.0, 0.33, 0.62)
 CRS_YAW = -60   # round 2 (F2): turned three-quarters to the camera so the raised shields show their face, not an edge
 # round 3 (F8): the block split in two, a lane between (d 11.4-15.0) that the water cannon drives up
-CRS_X, CRS_D = (2.6, 3.25, 3.9), (9.3, 10.2, 11.1, 15.3, 16.2, 17.1)
+CRS_X, CRS_D = (2.6, 3.35, 4.1), (9.3, 10.2, 11.1, 15.3, 16.2, 17.1)
 SHIELD_X = CRS_X[0] - 0.42                             # the front rank's shield face (x m), before the advance
 ADV_T, ADV_STEP, ADV_N = 4.7, 0.5, 3                    # F2: when the cannon opens up, 3 steps of 0.4 m in lockstep
 JET_T = 2.6 + J3                                       # the jet reaches the front line
@@ -1232,49 +1233,19 @@ def t3_actors(lt):
                        .blend('march', t=t_up, w=(lt - t_up) / 0.2))
         else:                                               # stepping up from the crowd behind
             out.append(Actor(n, 'rioter', x - 0.6 * (t_up - lt) / 0.3, d, 90, 'march', t=lt, tier='t3'))
-    # round 1 (T3 6.0-8.0): four rioters shove the burning car into the gap, let go at 6.9, cheer it on, run off left
-    if CAR_T0 - PUSH_IN - 0.1 <= lt < CAR_T0 - 0.1:     # chat 27: they run in from off the left edge (no pop)
-        X0, X1, D0, _ = S.CAR3                              # chat 29: over 1.5 s (0.65: bodies 7.5 m/s, feet 8)
-        u = ease((lt - CAR_T0 + PUSH_IN + 0.1) / PUSH_IN)
-        for k, (px, pd) in enumerate(((X1 - 0.15, D0 - 0.45), (X1 + 0.4, D0 + 0.35), (X1 + 0.45, D0 + 1.25),
-                                      (X1 + 0.45, D0 + 2.15))):
-            x, d = S.car_pt(px, pd, car_move(lt))
-            out.append(Actor(f'pusher{k + 1}', 'rioter', x - 3.2 * (1 - u), d, 115, 'run', t=lt + k * .2, tier='t3'))
-    if CAR_T0 - 0.1 <= lt:
-        mv = car_move(lt)
-        X0, X1, D0, _ = S.CAR3
-        # chat 27 (notes hunt 1: three of four pushers stood off the left edge): one at the rear's right corner, three
-        # down the right flank leaning into it, all in frame; (x, d) in the car's own frame, moved with it by car_pt
-        spots = ((X1 - 0.15, D0 - 0.45), (X1 + 0.4, D0 + 0.35), (X1 + 0.45, D0 + 1.25), (X1 + 0.45, D0 + 2.15))
-        for k, (px, pd) in enumerate(spots):
-            if lt < CAR_LET:
-                x, d = S.car_pt(px, pd, mv)
-                w = (lt - CAR_T0 + 0.1) / 0.25                # chat 29: from the run into the shove, 3 frames
-                out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, _turn(115, 140, w), 'push', t=lt * 1.6 + k * .3,
-                                 tier='t3').blend('run', t=CAR_T0 - 0.1 + k * .2, w=w))
-            else:
-                x, d = S.car_pt(px, pd, car_move(CAR_LET))
-                u = lt - CAR_LET - 0.4 - 0.08 * k
-                if u < 0:
-                    out.append(Actor(f'pusher{k + 1}', 'rioter', x, d, 150, 'cheer', u=abs(math.sin(lt * 9 + k)),
-                                     tier='t3'))
-                elif x - _getaway(u) >= OFF_L:            # chat 29: turn and get going (snapped cheer -> sprint)
-                    t0 = CAR_LET + 0.4 + 0.08 * k
-                    out.append(Actor(f'pusher{k + 1}', 'rioter', x - _getaway(u), d - 0.3 * k * ease(u / .3),
-                                     _turn(150, -115, u / .3), 'run', t=lt + k * .2, tier='t3')
-                               .blend('cheer', abs(math.sin(t0 * 9 + k)), w=u / .3))
+    # F10 (Sam Y, 16 Nov): no pushers; the car burns where it stands (draw_car3)
     # round 2 (F2): the police: shields up against the missiles, then forward together when the cannon opens up.
     # Round 3: two groups, a lane between (F8); each officer a beat off the others, his own stride and stance (F9)
     for c, x in enumerate(CRS_X):
         for r, d in enumerate(CRS_D):
             k = c * len(CRS_D) + r
             n = f'crs{k + 1}'
-            o = _jit(n + 'o', -0.09, 0.09)
-            adv, stepping = crs_adv(lt - o)
+            o = 0.05 * c + _jit(n + 'o', -0.05, 0.05)       # check (round 3): rear files set off a beat after the
+            adv, stepping = crs_adv(lt - o)                 # ones in front, so their feet never step into them
             g = crs_guard(lt - 1.5 * o) * _jit(n + 'g', .78, 1.0)
             yaw = CRS_YAW + _jit(n + 'y', -7, 7)
             lean = _jit(n + 'l', -3.5, 3.5)
-            x1, d1 = x - adv + _jit(n + 'x', -0.09, 0.09), d + _jit(n + 'd', -0.12, 0.12)
+            x1, d1 = x - adv + _jit(n + 'x', -0.06, 0.06), d + _jit(n + 'd', -0.12, 0.12)   # files 0.75 m apart (check)
             if stepping:
                 a = Actor(n, 'officer', x1, d1, yaw, 'line_walk', t=(lt - ADV_T - o) * _jit(n + 's', .9, 1.1),
                           force='crs', tier='t3')
@@ -1309,7 +1280,10 @@ def crowd_t3():
             m = dict(x=x + rng.uniform(-.25, .25), d=d + rng.uniform(-.3, .3), i=int(rng.integers(0, 16)),
                      state=state, ph=rng.uniform(0, 6.28), v=rng.uniform(.75, 1.25), dl=rng.uniform(0, .3),
                      su=rng.uniform(.65, 1.2))
-            if not _on_base(m['x'], m['d']):
+            if state != 'stand' and car_clear(m['x'], m['d'], pad=3.0, front=17.0):
+                state = 'stand'                             # F10: no flag over the car from the people beside it
+                m['state'] = state
+            if not _on_base(m['x'], m['d']) and not car_clear(m['x'], m['d']):
                 out.append(m)
     # F4: more of them up on the base, sprites standing along the top step and the ledge (the painting's front face)
     for n, (x, z) in enumerate(((-9.6, 1.5), (-7.2, 1.5), (-4.6, 1.5), (-2.4, 1.5), (1.4, 1.5), (3.6, 1.5),
@@ -1319,9 +1293,32 @@ def crowd_t3():
     return out
 
 
-def t3_crowd(img, lt):
+def car_clear(x, d, pad=1.4, front=7.0):
+    """F10: the burning car's own ground (its corners as stood, padded) and a clearing in front of it, widening toward
+    us (people keep off a fire; and from this height the heads in front hid it): the crowd keeps off both."""
+    X0, X1, D0, D1 = S.CAR3
+    pts = [S.car_pt(a, b, car_move(0)) for a in (X0, X1) for b in (D0, D1)]
+    xa, xb = min(p[0] for p in pts) - pad, max(p[0] for p in pts) + pad
+    da, db = min(p[1] for p in pts), max(p[1] for p in pts) + pad
+    if da - front <= d < da:
+        w = 1.6 * (da - d) / front                          # the clearing fans out a little toward the camera
+        return xa - w <= x <= xb + w
+    return xa <= x <= xb and da - pad <= d <= db
+
+
+def car_depth():
+    """F10: the depth the car is drawn at among the crowd: its nearest point (people nearer are drawn over it)."""
+    X0, X1, D0, D1 = S.CAR3
+    return min(S.car_pt(a, b, car_move(0))[1] for a in (X0, X1) for b in (D0, D1))
+
+
+def t3_crowd(img, lt, part=None):
+    """part: None every one, 'far' those beyond the car (drawn before it), 'near' the rest (F10)."""
     cam = T3CAM
+    cd = car_depth()
     for m in sorted(crowd_t3(), key=lambda m: -m['d']):
+        if part and (m['d'] > cd) != (part == 'far'):
+            continue
         if m.get('on'):                                     # up on the monument: they stay, swaying
             gx, gy = cam.p(m['x'] + 0.08 * math.sin(lt * 2 + m['ph']), m['d'], m['z'])
             paste(img, 'marcher', m['i'], 't3', m['state'], 90 if m['x'] < S.MON_X else -90, gx, gy,
@@ -1345,12 +1342,10 @@ def t3_columns(img, lt):
     """Smoke climbing from the car (left) from 0.0, drawn before the truck and the people. Round 3 (F8): the bike heap
     and its smoke are gone."""
     sx, sy = T3CAM.p(*car_roof(lt), 2.0)                    # round 1: the car's smoke goes where the car goes
-    if lt > CAR_HIT + 0.3:                                  # the jet put it out: steam (car_fx) instead
-        return
     lumps = []
     for n in range(6):
         a = (lt * 0.9 + n / 6) % 1.0
-        lumps.append((sx - 150 * a + 18 * math.sin(n * 2.1), sy - 520 * a, 40 + 90 * a))   # leans left, clear of her
+        lumps.append((sx - 330 * a + 18 * math.sin(n * 2.1), sy - 90 - 560 * a, 30 + 80 * a))   # leans left, clear of her (F10)
     S.smoke(img, lumps, (58, 54, 56), (138, 128, 124), lw=2.5)
 
 
@@ -1540,7 +1535,7 @@ def t3_fx(img, lt):
         nx, ny = nozzle(lt)
         sweep = ease((lt - 2.55 - J3) / 1.3)
         ix, iy = cam.p(lerp(-0.6, -3.0, sweep) - 1.0 * ease((lt - 5.5) / 1.0), 13.2, 1.3)   # round 3: up the lane
-        if lt > CAR_HIT - 0.4:                              # round 1: the jet swings onto the rolling car (7.2)
+        if False:                                           # F10: the car stands far off now; the jet stays on the crowd
             cx, cy = cam.p(*car_roof(lt), 1.5)
             r = ease((lt - CAR_HIT + 0.4) / 0.4)
             ix, iy = lerp(ix, cx, r), lerp(iy, cy, r)
@@ -2501,20 +2496,22 @@ def picture(t):
         back = reframe3(back)
         front = reframe3(front) if front is not None else None
         cam = T3CAM
-        t3_crowd(back, lt)
+        acts = sorted(t3_actors(lt), key=lambda a: -a.d)
+        rear = car_depth()                                  # F10: the car stands among the crowd, up by Marianne
+        t3_crowd(back, lt, 'far')
+        for a in [a for a in acts if a.d > rear]:           # the people on the base, beyond the car
+            draw_actor(back, cam, a)
+        draw_car3(back, lt)
+        t3_crowd(back, lt, 'near')
         t3_columns(back, lt)                                # chat 15: smoke, then the people beyond the truck
         t3_debris(back)
-        rear = S.CAR3[2] + car_move(lt)[1] + 1.0           # round 1: the car is drawn among the people (it rolls)
-        acts = sorted(t3_actors(lt), key=lambda a: -a.d)
-        for a in [a for a in acts if a.d > T3_TRUCK_D]:    # round 3 (F8): the far police group behind the truck,
+        for a in [a for a in acts if rear >= a.d > T3_TRUCK_D]:   # round 3 (F8): the far police group behind the truck,
             draw_actor(back, cam, a)                        # which drives up the lane between the two groups
         S.truck(back, cam, truck_x(lt), T3_TRUCK_D, lt, 'drive', 'fr', 12, float(int(lt * 6) % 2))
-        for a in [a for a in acts if rear < a.d <= T3_TRUCK_D]:
+        for a in [a for a in acts if NEAR3 < a.d <= T3_TRUCK_D]:
             draw_actor(back, cam, a)
-        t3_fx(back, lt)
-        draw_car3(back, lt)
-        car_fx(back, lt)
-        for a in [a for a in acts if a.d <= rear]:
+        t3_fx(back, lt)                                     # the jet and the missiles over them,
+        for a in [a for a in acts if a.d <= NEAR3]:         # under the nearest (where the car's rear stood till F10)
             draw_actor(back, cam, a)
     else:
         h = heli_state(lt)
@@ -2536,7 +2533,8 @@ def picture(t):
         if not _PLATE:
             t4_mopeds(ppl, lt)
         back.alpha_composite(backlight(back, lt, ppl))
-        if lt >= SURF[0]:                                   # round 2 (A2): the surfer lit, warm glow behind him
+        if lt >= SURF[0] and not _PLATE:                    # round 2 (A2): the surfer lit (not in the end's A/C:
+            # from street level he floated huge in the top corner)
             sx, sz = surf_pos(lt)
             gx, gy = cam.p(sx, SURF_D, sz + 1.2)
             S.glow_disc(back, gx, gy, 2.2 * cam.ppm(SURF_D), (255, 190, 110), amt=.3)
@@ -2805,8 +2803,7 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
            # speed; their turns and arms were snaps and are fixed, so arms and bodies are still checked)
            + [(f'{w}{k}.{part}{sd}', t0, t1) for w, ks, t0, t1 in (
                ('back', (1, 2, 3), at('t3', 2.75 + J3), at('t3', 8.0)),
-               ('pusher', (1, 2, 3, 4), at('t3', CAR_T0 - PUSH_IN - 0.1), at('t3', CAR_T0 + 0.2)),
-               ('pusher', (1, 2, 3, 4), at('t3', CAR_LET + 0.4), at('t3', 8.0)))
+               )
               for k in ks for part in ('thigh', 'shin', 'foot') for sd in 'LR']
            # the stone throws: a throwing hand really reaches ~20 m/s (clipcheck caps it at 12, the forearm at 10)
            + [(f'{w}{k}.{part}{sd}', t0, t1) for w, ks, t0, t1 in (
