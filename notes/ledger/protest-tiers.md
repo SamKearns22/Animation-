@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 94.04% (+30.53); 57 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 94.31% (+30.80); 58 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 94.04% of the 60.31% planned so far; at this rate the film lands at 94.5%.**
+**Forecast: Spent 94.31% of the 60.31% planned so far; at this rate the film lands at 94.8%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -83,6 +83,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-16 | e374ed79 | est | opus | auto |  | 1.13 |  | 0 | 0 |
 | 2026-11-16 | 080ba45d | est | opus | auto |  | 2.08 |  | 0 | 0 |
 | 2026-11-16 | cbb93021 | est | opus | auto |  | 1.58 |  | 0 | 0 |
+| 2026-11-16 | 974d63c4 | est | sonnet | auto |  | 0.27 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 0007a586 (auto): 71 steps, history 227k at the end; other 72.2%, film-file search 16.2%, tool search 5.5%, renders 2.9%, pictures 2.1%, page.py 1.1%
@@ -105,6 +106,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-16 e374ed79 (auto): 45 steps, history 158k at the end; other 74%, film-file search 15.5%, tool search 7.2%, page.py 1.8%, pictures 1.4%
 - 2026-11-16 080ba45d (auto): 74 steps, history 227k at the end; other 69.5%, film-file search 15.3%, tool search 6.8%, renders 5%, pictures 3.4%
 - 2026-11-16 cbb93021 (auto): 68 steps, history 209k at the end; other 62.6%, tool search 21.2%, film-file search 9.5%, pictures 4.8%, renders 1%, page.py 0.9%
+- 2026-11-16 974d63c4 (auto): 14 steps, history 111k at the end; other 86.7%, film-file search 7.3%, tool search 4.7%, pictures 1.3%
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
