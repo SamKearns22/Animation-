@@ -2733,12 +2733,16 @@ def molotovs(img, lt, only=None):
                 IS.ell(img, ex, ey, (40 * big * (1 - g) + 6) * k, (40 * big * (1 - g) + 6) * k, (255, 252, 230), None)
             key = tag[1]
             lit[key] = max(lit.get(key, (0, 0))[0], big), max(lit.get(key, (0, 0))[1], min(1.0, a / 0.6))
-    for (x, d, z), (big, g) in lit.items():
-        k = cam.ppm(d) / 40.0
-        ex, ey = cam.p(x, d, z)
-        S.glow_disc(img, ex, ey - 20 * k, (80 + 40 * g) * big * k, (255, 150, 50), amt=.35)
-        S.flames(img, ex, ey + 34 * big * k, (90 + 50 * g) * big * k, (70 + 90 * g) * big * k, lt + x * .37,
-                 seed=93 + int(d), n=5)
+    for (x, d, z), (big, g) in lit.items():                # A27: the hit window itself alight, flames out of it
+        if x < 0:                                           # the bank's side face (x -9): the window along d
+            z0, z1 = (.6, 4.2) if z < 5 else (z - 1.3, z + 1.3)
+            a, b, c, e = cam.p(x, d - .9, z0), cam.p(x, d + .9, z0), cam.p(x, d + .9, z1), cam.p(x, d - .9, z1)
+            out = 1.0
+        else:                                               # the ministry's front (d 64): the window along x
+            a, b, c, e = cam.p(x - .65, d, z - 1.3), cam.p(x + .65, d, z - 1.3), cam.p(x + .65, d, z + 1.3), \
+                cam.p(x - .65, d, z + 1.3)
+            out = 0.0
+        S.window_fire(img, a, b, c, e, cam.ppm(d), lt + x * .37, seed=93 + int(d), heat=g * min(1.5, big), out=out)
 
 
 def flying_shield(img, lt):

@@ -1197,12 +1197,7 @@ def _bank(img, cam, t):
         c, e = cam.p(x, d + 2.2, z + h), cam.p(x, d + .4, z + h)
         quad(img, cam.p(x, d - .2, z + h), cam.p(x, d + 2.8, z + h), cam.p(x, d + 2.8, z + h + 3.2),
              cam.p(x, d - .2, z + h + 3.2), (70, 50, 46), None, amt=0)            # the scorch up the stone
-        quad(img, a, b, c, e, (255, 170, 60), INK, 1.6, 0)                          # the room alight
-        glow_disc(img, (a[0] + c[0]) / 2, (a[1] + c[1]) / 2, 2.4 * cam.ppm(d + 1.3), (255, 160, 60), amt=.3)
-        w = abs(b[0] - a[0]) * 1.5 + 0.9 * cam.ppm(d + 1.3)
-        flames(img, (e[0] + c[0]) / 2 + 0.25 * w, (e[1] + c[1]) / 2 + 0.25 * (a[1] - e[1]), w, 2.6 * cam.ppm(d + 1.3),
-               t + q * .41, seed=60 + q, n=4)
-
+        window_fire(img, a, b, c, e, cam.ppm(d + 1.3), t + q * .41, seed=60 + q, out=1.0)   # A27: out of the window
 
 
 SIGN_D, SIGN_Z = (39.5, 65.0), (4.45, 6.15)        # A20: the BANKA fascia along the bank's face (x -9), over the ground floor
@@ -1217,7 +1212,10 @@ def _homography(src, dst):
     return np.linalg.solve(np.array(A, float), np.array(bb, float))
 
 
-def bank_sign(img, cam, t=0.0, soot=((47.3, .5), (61.6, .35), (37.3, .3))):
+BANK_FIRES = ((37.3, .8, False), (47.3, 1.0, False), (62.3, .8, False), (57.3, .9, True), (42.3, .5, True))
+
+
+def bank_sign(img, cam, t=0.0, soot=((47.3, .5), (61.6, .35), (37.3, .3)), lights=BANK_FIRES):
     """A20 (Sam: 'BANKA is words pasted on the image'): a real fascia board on the bank, lying in the wall's own
     perspective (the flat board mapped onto the face through the camera): navy panel, brass trim, cream capitals,
     bolted on; soot smudged up its lower edge over the burning windows (soot: (d, strength)). Drawn after the fires,
@@ -1248,6 +1246,21 @@ def bank_sign(img, cam, t=0.0, soot=((47.3, .5), (61.6, .35), (37.3, .3))):
     for u in (.025, .975):                                              # the fixing bolts
         for v in (.25, .75):
             dr.ellipse((pad + bw * u - 5, pad + bh * v - 5, pad + bw * u + 5, pad + bh * v + 5), fill=(120, 96, 52, 255))
+    if lights:                                                          # A26: the fires' warm light on the board
+        lm = np.zeros((board.height, board.width), np.float32)
+        yy, xx = np.mgrid[0:board.height, 0:board.width].astype(np.float32)
+        for d, a, above in lights:
+            if not d0 - 4 < d < d1 + 4:
+                continue
+            u = pad + bw * (d - d0) / (d1 - d0)
+            v = pad if above else pad + bh
+            f_ = a * (.85 + .15 * math.sin(t * 9 + d))
+            lm += f_ * np.exp(-(((xx - u) / (bw * 4.5 / (d1 - d0))) ** 2 + ((yy - v) / (bh * 1.1)) ** 2))
+        lm = np.clip(lm, 0, 1)[..., None]
+        arr = np.asarray(board, np.float32)
+        arr[..., :3] = np.minimum(255, arr[..., :3] * (1 + .35 * lm) + lm * np.array((150, 74, 14), np.float32))
+        board = Image.fromarray(arr.astype(np.uint8), 'RGBA')
+        dr = ImageDraw.Draw(board)
     if soot:                                                            # smoke from the windows below, up the board
         sl = Image.new('L', board.size, 0)
         sd = ImageDraw.Draw(sl)
@@ -1274,6 +1287,23 @@ def bank_sign(img, cam, t=0.0, soot=((47.3, .5), (61.6, .35), (37.3, .3))):
                           tuple(co * np.array([1 / ss, 1 / ss, 1, 1 / ss, 1 / ss, 1, 1 / ss, 1 / ss])), Image.BICUBIC)
     lay = big.resize((x1 - x0, y1 - y0), Image.LANCZOS)
     img.alpha_composite(lay, (x0, y0)) if img.mode == 'RGBA' else img.paste(lay, (x0, y0), lay)
+
+def window_fire(img, a, b, c, e, k, t=0.0, seed=0, heat=1.0, out=0.0):
+    """A27 (Sam: 'flames coming out of windows, not pasted onto walls'): one window alight. a, b its bottom corners,
+    c, e its top corners (c above b, e above a) on screen; k pixels a metre there. The room inside burns (a deep
+    orange opening, brighter low), the flames leave the opening's upper half and lick up past its head, sized to the
+    window (heat 0..1.5 grows them); out: how far they lean off a side wall toward the avenue (1 = the bank's face)."""
+    cx, cy = (a[0] + b[0] + c[0] + e[0]) / 4, (a[1] + b[1] + c[1] + e[1]) / 4
+    glow_disc(img, cx, cy, (1.2 + .5 * heat) * k, (255, 160, 60), amt=.22)
+    quad(img, a, b, c, e, (232, 112, 40), INK, 1.6, 0)                                  # the room alight
+    lo = lambda p, q, u: (p[0] + (q[0] - p[0]) * u, p[1] + (q[1] - p[1]) * u)           # noqa: E731
+    quad(img, lo(a, e, .08), lo(b, c, .08), lo(b, c, .55), lo(a, e, .55), (255, 196, 90), None, amt=0)   # fire within
+    ww = math.hypot(b[0] - a[0], b[1] - a[1])
+    wh = math.hypot(e[0] - a[0], e[1] - a[1])
+    w = ww * 1.25 + (.22 + .16 * heat) * k * (1 + .4 * out)        # rooted in the opening: no wider than it reads
+    top = ((e[0] + c[0]) / 2, (e[1] + c[1]) / 2)
+    flames(img, top[0] + out * .18 * w, top[1] + .6 * wh, w, .6 * wh + (1.0 + .9 * heat) * k, t, seed=seed, n=4)
+
 
 # ================================================================================================= vehicles
 # Chat 12 (sets stage, the plan's two rows): the water cannon truck (T3 driving in, French white and blue; T4
