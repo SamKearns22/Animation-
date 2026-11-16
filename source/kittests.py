@@ -6,6 +6,7 @@ check catches the old version AND passes the fixed one.
     python3 source/kittests.py            all of them (a few minutes)
     python3 source/kittests.py hands      only the tests whose name contains 'hands'
 """
+import json
 import math
 import re
 import os
@@ -2610,6 +2611,142 @@ def code_finder_replay():
     r = u.module_from_spec(sp); sp.loader.exec_module(r)
     lo, st, mx, _ = r.run()
     return lo >= 23 and st >= 12 and mx < 45, f'loose {lo}/26, strict {st}/14, longest {mx} lines (bar 23, 12, <45)'
+
+
+
+def _repo_pair():
+    """A pretend GitHub (a bare repo) with the main line holding one ledger row, and a chat's copy of it on its own
+    branch: (bare, copy, git)."""
+    import subprocess
+    import tempfile
+    import mainline
+    top = tempfile.mkdtemp()
+    bare, copy = os.path.join(top, 'gh.git'), os.path.join(top, 'chat')
+    git = lambda root, *a: subprocess.run(['git', '-C', root] + list(a), capture_output=True, text=True)
+    subprocess.run(['git', 'init', '-q', '--bare', bare])
+    subprocess.run(['git', 'init', '-q', copy])
+    git(copy, 'config', 'user.email', 'k@t'); git(copy, 'config', 'user.name', 'kt')
+    os.makedirs(os.path.join(copy, 'notes', 'ledger'))
+    row = {'date': '2026-11-10', 'chat': 'aaaa1111', 'cost': 1.0, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'sid': 'session_A'}
+    open(os.path.join(copy, 'notes', 'ledger', 'kt.json'), 'w').write(json.dumps(
+        {'film': 'kt', 'estimate': None, 'chats': [row], 'checks': {}}, indent=1))
+    open(os.path.join(copy, '.gitattributes'), 'w').write(open(os.path.join(HERE, '..', '.gitattributes')).read())
+    git(copy, 'add', '-A'); git(copy, 'commit', '-q', '-m', 'start')
+    git(copy, 'remote', 'add', 'origin', bare)
+    git(copy, 'push', '-q', 'origin', f'HEAD:refs/heads/{mainline.MAIN}')
+    git(copy, 'checkout', '-q', '-b', 'claude/chat-work')
+    return bare, copy, git
+
+
+@test
+def cost_rows_reach_the_main_line():
+    """startup-fixes 1 (Sam, 16 Nov): 7 of 9 chats' cost rows sat on side branches; each row now goes onto the main
+    line alone (never the chat's half-done work), survives another chat pushing first, merges row by row, and the
+    one-off gather brings stranded rows in with each chat once."""
+    import json as _j
+    import ledger
+    import mainline
+    bare, copy, git = _repo_pair()
+    keep = ledger.ROOT, ledger.DIR, ledger.CURRENT
+    ledger.ROOT, ledger.DIR = copy, os.path.join(copy, 'notes', 'ledger')
+    ledger.CURRENT = os.path.join(ledger.DIR, '.current')
+    main = lambda p='notes/ledger/kt.json': git(bare, 'show', f'{mainline.MAIN}:{p}').stdout
+    bad = []
+    try:
+        open(os.path.join(copy, 'work.txt'), 'w').write('half-done film work')
+        git(copy, 'add', 'work.txt'); git(copy, 'commit', '-q', '-m', 'half-done')
+        open(os.path.join(copy, 'dirty.txt'), 'w').write('unsaved')
+        # another chat pushes its row first: to_main must build on it, not overwrite it
+        real = mainline._git
+        state = {'n': 0}
+
+        def racing(root, *a, **k):
+            if a[:1] == ('push',) and state['n'] == 0:
+                state['n'] = 1
+                other = os.path.join(os.path.dirname(bare), 'other')
+                real(os.path.dirname(bare), 'clone', '-q', '-b', mainline.MAIN, bare, other)
+                git(other, 'config', 'user.email', 'k@t'); git(other, 'config', 'user.name', 'kt')
+                p = os.path.join(other, 'notes', 'ledger', 'kt.json')
+                d = _j.load(open(p))
+                d['chats'].append({'date': '2026-11-11', 'chat': 'cccc3333', 'cost': 0.5, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': []})
+                open(p, 'w').write(_j.dumps(d, indent=1))
+                git(other, 'commit', '-q', '-am', 'other chat'); git(other, 'push', '-q', 'origin', 'HEAD')
+            return real(root, *a, **k)
+        mainline._git = racing
+        try:
+            res = ledger.push_row('kt', {'date': '2026-11-12', 'chat': 'bbbb2222', 'cost': 2.0, 'src': 'estimate',
+                                         'sid': 'session_B', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': []})
+        finally:
+            mainline._git = real
+        on = {c['chat'] for c in _j.loads(main())['chats']}
+        if res != 'pushed' or on != {'aaaa1111', 'bbbb2222', 'cccc3333'}:
+            bad.append(f'main line rows {sorted(on)} ({res})')
+        if 'work.txt' in git(bare, 'ls-tree', '--name-only', mainline.MAIN).stdout:
+            bad.append("the chat's own work reached the main line")
+        if git(bare, 'rev-parse', '-q', '--verify', 'refs/heads/claude/chat-work').returncode == 0:
+            bad.append("the chat's branch was pushed")
+        if git(copy, 'status', '--porcelain', 'notes').stdout.strip():
+            bad.append('the ledger left uncommitted here')
+        # merge driver: the chat's copy and the main line both grew; a merge keeps every row, no clash
+        git(copy, 'rm', '-q', '--cached', 'dirty.txt')
+        p = os.path.join(copy, 'notes', 'ledger', 'kt.json')
+        d = _j.load(open(p))
+        d['chats'].append({'date': '2026-11-13', 'chat': 'dddd4444', 'cost': 0.3, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': []})
+        open(p, 'w').write(_j.dumps(d, indent=1)); git(copy, 'commit', '-q', '-am', 'local row')
+        ledger.push_row('kt', {'date': '2026-11-13', 'chat': 'eeee5555', 'cost': 0.4, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [],
+                               'notes': 0, 'repeats': []})
+        git(copy, 'reset', '-q', '--hard', 'HEAD~1')    # drop the local copy of eeee5555: only the main line has it
+        git(copy, 'fetch', '-q', 'origin')
+        m = git(copy, 'merge', '-q', '--no-edit', f'origin/{mainline.MAIN}')
+        rows = {c['chat'] for c in _j.load(open(p))['chats']}
+        if m.returncode or not {'dddd4444', 'eeee5555', 'cccc3333'} <= rows:
+            bad.append(f'merge: {m.stderr.strip()[:80]} rows {sorted(rows)}')
+        # rules: an app row beats an estimate; two app reads keep the larger dollars at today's price; an estimate
+        # with no app id after the film's first app row is the same chat and stays out
+        L = {'chats': [{'date': '2026-11-10', 'chat': 'x', 'sid': 's1', 'src': 'app', 'cost': 1, 'usd': 2.45}]}
+        ledger.merge_row(L, {'date': '2026-11-10', 'chat': 'y', 'sid': 's1', 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'cost': 9})
+        ledger.merge_row(L, {'date': '2026-11-11', 'chat': 'z', 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'cost': 3})
+        ledger.merge_row(L, {'date': '2026-11-10', 'chat': 'x', 'sid': 's1', 'src': 'app', 'cost': 9, 'usd': 4.9})
+        if len(L['chats']) != 1 or L['chats'][0]['usd'] != 4.9 or L['chats'][0]['cost'] != ledger._pct(4.9):
+            bad.append(f'row rules: {L["chats"]}')
+        # gather: a stranded row on a side branch comes in once; a chat the main line files under another film
+        # does not come back under this one
+        side = os.path.join(os.path.dirname(bare), 'side')
+        git(os.path.dirname(bare), 'clone', '-q', '-b', mainline.MAIN, bare, side)
+        git(side, 'config', 'user.email', 'k@t'); git(side, 'config', 'user.name', 'kt')
+        git(side, 'checkout', '-q', '-b', 'claude/old-side')
+        sp = os.path.join(side, 'notes', 'ledger', 'kt.json')
+        d = _j.load(open(sp))
+        d['chats'] += [{'date': '2026-11-14', 'chat': 'ffff6666', 'cost': 1.1, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'sid': 'session_F'},
+                       {'date': '2026-11-14', 'chat': 'gggg7777', 'cost': 0.9, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'sid': 'session_G'}]
+        open(sp, 'w').write(_j.dumps(d, indent=1))
+        open(os.path.join(side, 'notes', 'ledger', 'other.json'), 'w').write(_j.dumps({'film': 'other', 'chats': [
+            {'date': '2026-11-14', 'chat': 'gggg7777', 'cost': 0.9, 'src': 'estimate', 'round': None, 'model': 'opus', 'stage': 'auto', 'notes': 0, 'repeats': [], 'sid': 'session_G'}]}))
+        git(side, 'add', '-A'); git(side, 'commit', '-q', '-m', 'stranded'); git(side, 'push', '-q', 'origin', 'HEAD')
+        git(copy, 'fetch', '-q', 'origin')
+        before = sum(len(v) for v in ledger.missing(copy).values())
+        res, added = ledger.gather(copy)
+        git(copy, 'fetch', '-q', 'origin')
+        after = sum(len(v) for v in ledger.missing(copy).values())
+        kt = [c['chat'] for c in _j.loads(main())['chats']]
+        oth = [c['chat'] for c in _j.loads(main('notes/ledger/other.json') or '{"chats": []}')['chats']]
+        if before != 2 or after or kt.count('ffff6666') != 1 or kt.count('gggg7777') + oth.count('gggg7777') != 1:
+            bad.append(f'gather: missing {before} -> {after}; kt {kt}; other {oth}')
+        # Sam's saved messages go the same way (two chats' logs were stranded on claude/chat-XXXX branches)
+        import handover as HO
+        hk = HO.ROOT, HO.LOGDIR, HO._not_typed
+        HO.ROOT, HO.LOGDIR = copy, os.path.join(copy, 'notes', 'ledger', 'sam')
+        HO._not_typed = lambda *a: False
+        try:
+            HO._late({'prompt': 'Y to all', 'sid': 'session_01KTKTKT', 'at': '10:00'})
+        finally:
+            HO.ROOT, HO.LOGDIR, HO._not_typed = hk
+        if 'Y to all' not in main('notes/ledger/sam/01ktktkt.md'):
+            bad.append("Sam's message did not reach the main line")
+    finally:
+        ledger.ROOT, ledger.DIR, ledger.CURRENT = keep
+        mainline.config(ledger.ROOT)
+    return not bad, '; '.join(bad) or 'rows on the main line alone, a race survived, merges by row, gather once each'
 
 
 def main():

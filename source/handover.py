@@ -461,11 +461,14 @@ def _late(inp, wait=20):
     if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
         return
     rel = os.path.relpath(p, ROOT)
-    head = subprocess.run(['git', '-C', ROOT, 'symbolic-ref', '-q', 'HEAD'], capture_output=True).returncode == 0
-    dest = 'HEAD' if head else f'HEAD:refs/heads/claude/chat-{tail}'
-    sh = (f'cd "{ROOT}" && git add "{rel}" && git commit -q -m "Sam\'s message saved (handover log)" -- "{rel}" '
-          f'&& git push -q origin {dest}')
-    subprocess.run(['bash', '-c', sh], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    block = f'### {inp["at"]}\n{text}\n\n'
+    import mainline                              # startup-fixes 1 (16 Nov): straight onto the main line, never via
+    add = lambda old: None if old and block in old else (old + block if old else open(p, encoding='utf-8').read())
+    mainline.to_main({rel: add}, "Sam's message saved (handover log)", root=ROOT)   # a claude/chat-XXXX branch
+    # (5t3vj4eb and phxjozvs never reached the main line that way)
+    subprocess.run(['git', '-C', ROOT, 'add', rel], capture_output=True)
+    subprocess.run(['git', '-C', ROOT, 'commit', '-q', '-m', "Sam's message saved (handover log)", '--', rel],
+                   capture_output=True)
 
 
 def main(argv):

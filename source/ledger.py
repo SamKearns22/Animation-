@@ -27,6 +27,11 @@ MAP
                      Checked by auto after every reply, by `app` when the real figures come in, and at each stage
   stage_alarm() .... rule 24 (Sam, 11 Nov): auto stops the chat when the stage being worked on reaches its share, and
                      at each half share beyond (before: only when the whole film was a quarter over its estimate)
+  push_row() ....... startup-fixes 1 (Sam, 16 Nov): every row goes onto the main line as its own commit holding only
+                     the ledger files (mainline.to_main: fetch, commit, push, 3 tries); the chat's HEAD is never pushed
+  union() .......... two copies of a ledger as one, each chat once (sid, then transcript id; an app row beats an
+                     estimate); used by gather, the merge driver (mergefile, .gitattributes) and push_row
+  gather ........... one-off: every row stranded on any branch onto the main line; `audit` lists rows still missing
   audit ............ after the film (rule 24, Sam 13 Nov; replaced the 10-line audit): one line, its real cost
                      against the last three films' (ledgers with an estimate); over 1.5x their average, the next chat
                      finds why before any film work
@@ -40,7 +45,8 @@ MAP
     python3 source/ledger.py save FILM SHEET.txt          (or: save FILM - "text", a line straight in)
     python3 source/ledger.py note FILM "false alarm: handcheck 12.3 s, the hand is behind the mug on purpose"
     python3 source/ledger.py log FILM --stage "round 2 notes" --notes 9 --repeat "arm join at 4 s | shoulder test"
-    python3 source/ledger.py audit FILM
+    python3 source/ledger.py audit FILM                 (also: rows missing from the main line; no FILM: all films)
+    python3 source/ledger.py gather
     python3 source/ledger.py kept                       (also run by every log)
 
 A chat is tagged by its transcript; logging the same chat again replaces its row, so nothing is counted twice.
@@ -178,6 +184,7 @@ def auto(transcript):
         if meas and meas['steps'] - real.get('steps', 0) >= 20:   # but its measure still grows
             _put_measure(real, meas)
             store(d)
+            push_row(film, real)
         return
     old = next((c for c in d['chats'] if c['chat'] == chat), None)
     if old and abs(old['cost'] - cost) < 0.25:
@@ -194,26 +201,258 @@ def auto(transcript):
     store(d)
     if alarm:                                     # never switched off (Sam, 13 Nov: Blessed's alarms_off hid 45%)
         print(json.dumps({'decision': 'block', 'reason': alarm}))
-    if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
-        return                                    # mid-merge: the chat's own next commit carries it
+    push_row(film, row)                           # startup-fixes 1 (Sam, 16 Nov): straight onto the main line
 
-    def git(*a):
-        return subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True, timeout=60)
+
+def same_row(a, b):
+    """One chat's row twice: the same app session id, or the same transcript id."""
+    return bool(a.get('sid') and a.get('sid') == b.get('sid')) or a.get('chat') == b.get('chat')
+
+
+def better(a, b):
+    """Of two rows for one chat: the app's real figure, else the larger running cost; measures kept from either."""
+    if (a.get('src') == 'app') != (b.get('src') == 'app'):
+        win, lose = (a, b) if a.get('src') == 'app' else (b, a)
+    elif a.get('src') == 'app' and 'usd' in a and 'usd' in b:   # two reads of the app: the later (larger) dollar
+        win, lose = (a, b) if a['usd'] >= b['usd'] else (b, a)   # figure, its % at today's week price (the old
+        win = dict(win, cost=_pct(win['usd']))                   # branches priced a week lower: 0.27 vs 0.19)
+    else:
+        win, lose = (a, b) if a.get('cost', 0) >= b.get('cost', 0) else (b, a)
+    win = dict(win)
+    if lose.get('steps', 0) > win.get('steps', 0):
+        win.update({k: lose[k] for k in ('steps', 'hist_k', 'kinds', 'calls') if k in lose})
+    return win
+
+
+def _pct(usd):
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.claude', 'hooks'))
+    import costwatch
+    return round(usd / costwatch.WEEK_USD * 100, 2)
+
+
+def merge_row(d, row):
+    """Puts one row into a ledger: replaces the same chat's row (never an app row by an estimate), or adds it.
+    An estimate row with no app session id is left out once the film has app rows from that date (app_import drops
+    those as the same chats under the transcript's id; F3: no chat counted twice). True if the ledger changed."""
+    old = next((c for c in d['chats'] if same_row(c, row)), None)
+    if old is None:
+        if not row.get('sid') and row.get('src') != 'app' and not row.get('keep') and any(
+                c.get('src') == 'app' and c['date'] <= row['date'] for c in d['chats']):
+            return False
+        d['chats'].append(row)
+        d['chats'].sort(key=lambda c: c['date'])
+        return True
+    new = better(old, row)
+    if new == old:
+        return False
+    d['chats'][d['chats'].index(old)] = new
+    return True
+
+
+def union(a, b):
+    """Two copies of one film's ledger as one: every chat's row once (merge_row), the other keys from a, missing
+    ones from b; check results and finished stages from both."""
+    out = json.loads(json.dumps(a))
+    for k, v in b.items():
+        out.setdefault(k, v)
+    for row in b.get('chats', []):
+        merge_row(out, row)
+    for k, v in (b.get('checks') or {}).items():
+        out.setdefault('checks', {}).setdefault(k, v)
+    done = {x['name'] for x in b.get('stages') or [] if x.get('done')}
+    for x in out.get('stages') or []:
+        if x['name'] in done and not x.get('done'):
+            x.update(next(y for y in b['stages'] if y['name'] == x['name'] and y.get('done')))
+    return out
+
+
+def _ledger_updates(film, change):
+    """to_main updates for one film: its .json changed by change(d) on the main line's copy, its .md written from it."""
     j, md, _ = _paths(film)
+    rj, rmd = os.path.relpath(j, ROOT), os.path.relpath(md, ROOT)
+    box = {}
+
+    def fj(old):
+        d = json.loads(old) if old else {'film': film, 'estimate': None, 'chats': [], 'checks': {}}
+        if not change(d):
+            return None
+        box['d'] = d
+        return json.dumps(d, indent=1)
+    return {rj: fj, rmd: lambda old: render(box['d']) if 'd' in box else None}, box
+
+
+def push_row(film, row):
+    """This chat's row onto the main line as its own commit (mainline.to_main); the chat's HEAD is never pushed.
+    The main line's merged copy is then written here too and committed alone (only these two files), so the chat's
+    branch stays clean and later merges go row by row (the ledger merge driver)."""
+    import subprocess
+    import mainline
+    up, box = _ledger_updates(film, lambda d: merge_row(d, row))
+    res = mainline.to_main(up, root=ROOT,
+                           msg=f'Ledger: {film}, chat {row["chat"]} at {row["cost"]}% of a week (automatic)')
+    if res is None:
+        print(f'ledger auto: the row for {film} could not reach the main line (3 tries); it is kept here',
+              file=sys.stderr)
+    mainline.config(ROOT)
+    if any(os.path.exists(os.path.join(ROOT, '.git', x)) for x in ('MERGE_HEAD', 'rebase-merge', 'rebase-apply')):
+        return res                                # mid-merge: the chat's own next commit carries it
+    if 'd' in box:
+        store(union(box['d'], load(film)))
+    j, md, _ = _paths(film)
+    git = lambda *a: subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True, timeout=60)
     git('add', j, md)
-    if git('commit', '-q', '-m', f'Ledger: {film}, chat {chat} at {cost}% of a week (automatic)', '--', j,
-           md).returncode != 0:
-        return
-    if git('symbolic-ref', '-q', 'HEAD').returncode != 0:   # detached (setup.sh's advice): `push origin HEAD` fails
-        tail = (sid or chat).split('_')[-1][-8:].lower()     # (13 Nov: rows lost), so push to this chat's own branch,
-        git('push', '-q', 'origin', f'HEAD:refs/heads/claude/chat-{tail}')   # which the next chat's branch scan merges
-        return
-    if git('push', '-q', 'origin', 'HEAD').returncode != 0:
-        br = git('rev-parse', '--abbrev-ref', 'HEAD').stdout.strip()      # another chat pushed first: merge its
-        if git('pull', '-q', '--no-rebase', 'origin', br).returncode == 0:  # work (git refuses if it would touch
-            git('push', '-q', 'origin', 'HEAD')                              # this chat's unsaved files)
-        elif os.path.exists(os.path.join(ROOT, '.git', 'MERGE_HEAD')):
-            git('merge', '--abort')                                          # a clash: leave it to the chat
+    git('commit', '-q', '-m', f'Ledger: {film}, chat {row["chat"]} (automatic, also on the main line)', '--', j, md)
+    return res
+
+
+def _branch_ledgers(root=None, remote='origin'):
+    """Every ledger file on every branch tip: {path: [text, ...]}, each distinct copy once."""
+    import subprocess
+    root = root or ROOT
+    git = lambda *a: subprocess.run(['git', '-C', root] + list(a), capture_output=True, text=True, timeout=60)
+    tips = git('for-each-ref', '--format=%(objectname)', f'refs/remotes/{remote}/').stdout.split()
+    blobs = {}
+    for t in set(tips):
+        for ln in git('ls-tree', t, 'notes/ledger/').stdout.splitlines():
+            meta, path = ln.split('\t', 1)
+            if path.endswith('.json') or path == 'notes/ledger/app-costs.tsv':
+                blobs.setdefault(path, set()).add(meta.split()[2])
+    return {p: [git('cat-file', 'blob', b).stdout for b in sorted(bs)] for p, bs in blobs.items()}
+
+
+def _tsv_union(a, b):
+    """app-costs.tsv: a's lines, then b's rows for sessions a lacks."""
+    have = {ln.split('\t')[1] for ln in a.splitlines() if ln.strip() and not ln.startswith('#') and '\t' in ln}
+    add = [ln for ln in b.splitlines() if ln.strip() and not ln.startswith('#') and '\t' in ln
+           and ln.split('\t')[1] not in have]
+    return a if not add else a.rstrip('\n') + '\n' + '\n'.join(add) + '\n'
+
+
+def _main_ids(root, remote):
+    """{sid or transcript id: ledger path} for every row on the main line, any film (a chat filed under another
+    film there, e.g. a Blessed chat moved to cost-diagnosis, is not brought back under the first; F3)."""
+    import subprocess
+    import mainline
+    ref = f'refs/remotes/{remote}/{mainline.MAIN}'
+    git = lambda *a: subprocess.run(['git', '-C', root] + list(a), capture_output=True, text=True, timeout=60)
+    ids = {}
+    for ln in git('ls-tree', '--name-only', ref, 'notes/ledger/').stdout.split():
+        if ln.endswith('.json'):
+            try:
+                for c in json.loads(git('show', f'{ref}:{ln}').stdout).get('chats', []):
+                    for k in (c.get('sid'), c.get('chat')):
+                        if k:
+                            ids.setdefault(k, ln)
+            except (ValueError, AttributeError):
+                pass
+    return ids
+
+
+def _claim(ids, found):
+    """Chats on no main-line ledger but under two films on the branches go to the copy with the larger running cost
+    (the later write: 1f73e167 was re-filed from blessed to cost-diagnosis); added to ids."""
+    best = {}
+    for path, texts in found.items():
+        for t in texts if path.endswith('.json') else ():
+            try:
+                rows = json.loads(t).get('chats', [])
+            except ValueError:
+                continue
+            for c in rows:
+                k = c.get('sid') or c.get('chat')
+                if k and k not in ids and c.get('cost', 0) >= best.get(k, ('', -1))[1]:
+                    best[k] = (path, c.get('cost', 0))
+    for k, (path, _) in best.items():
+        ids[k] = path
+    return ids
+
+
+def _elsewhere(ids, path):
+    """A filter for rows held on the main line under another film's ledger."""
+    return lambda c: any(ids.get(k) not in (None, path) for k in (c.get('sid'), c.get('chat')) if k)
+
+
+def missing(root=None, remote='origin'):
+    """Rows held on some branch but not on the main line: {path: [chat, ...]} (`audit`; 0 is the aim at film end)."""
+    import subprocess
+    import mainline
+    root = root or ROOT
+    out = {}
+    found = _branch_ledgers(root, remote)
+    ids = _claim(_main_ids(root, remote), found)
+    for path, texts in found.items():
+        away = _elsewhere(ids, path)
+        r = subprocess.run(['git', '-C', root, 'show', f'refs/remotes/{remote}/{mainline.MAIN}:{path}'],
+                           capture_output=True, text=True)
+        main = r.stdout if r.returncode == 0 else ''
+        for t in texts:
+            if path.endswith('.tsv'):
+                extra = _tsv_union('' if not main else main, t)[len(main):]
+                lost = [ln.split('\t')[1][-8:] for ln in extra.splitlines() if ln.strip()]
+            else:
+                try:
+                    d, m = json.loads(t), json.loads(main) if main else {'chats': []}
+                except ValueError:
+                    continue
+                lost = [c['chat'] for c in d.get('chats', []) if not away(c) and merge_row(m, dict(c))]
+            for x in lost:
+                if x not in out.setdefault(path, []):
+                    out[path].append(x)
+    return {p: v for p, v in out.items() if v}
+
+
+def gather(root=None, remote='origin'):
+    """One-off (startup-fixes 1): every row stranded on a branch onto the main line, each chat once (matched on the
+    app session id first, across all branches; F3). Returns {path: rows added}."""
+    import mainline
+    root = root or ROOT
+    found = _branch_ledgers(root, remote)
+    ids = _claim(_main_ids(root, remote), found)
+    added = {}
+
+    def fn_for(path, texts):
+        def fn(old):
+            if path.endswith('.tsv'):
+                new = old or ''
+                for t in texts:
+                    new = _tsv_union(new, t)
+                added[path] = len(new.splitlines()) - len((old or '').splitlines())
+                return new if added[path] else None
+            d = json.loads(old) if old else None
+            n0 = len(d['chats']) if d else 0
+            for t in texts:
+                try:
+                    b = json.loads(t)
+                except ValueError:
+                    continue
+                away = _elsewhere(ids, path)
+                b['chats'] = [c for c in b.get('chats', []) if not away(c)]
+                d = union(d, b) if d else b
+            added[path] = len(d['chats']) - n0
+            return json.dumps(d, indent=1) if added[path] or old is None else None
+        return fn
+    ups = {p: fn_for(p, ts) for p, ts in found.items()}
+    res = mainline.to_main(ups, 'Ledger: stranded cost rows from every branch, each chat once (startup-fixes 1)',
+                           root=root, remote=remote)
+    return res, {p: n for p, n in added.items() if n}
+
+
+def mergefile(o, a, b, path):
+    """git's merge driver for the ledger (.gitattributes): rows from both sides, each chat once; .md written from
+    ours (the next row pushed rewrites it from the
+    .json); app-costs.tsv by session. Exit 0 (never a clash)."""
+    ta, tb = open(a, encoding='utf-8').read(), open(b, encoding='utf-8').read()
+    if path.endswith('.json'):
+        try:
+            out = json.dumps(union(json.loads(ta), json.loads(tb)), indent=1)
+        except ValueError:
+            return 1
+    elif path.endswith('.tsv'):
+        out = _tsv_union(ta, tb)
+    else:
+        out = ta
+    open(a, 'w', encoding='utf-8').write(out)
+    return 0
 
 
 def _put_measure(row, m):
@@ -496,7 +735,9 @@ def main():
     p = s.add_parser('log'); p.add_argument('film'); p.add_argument('--stage', default='')
     p.add_argument('--notes', type=int, default=0)
     p.add_argument('--repeat', action='append', default=[], help='"the note | what would have caught it"')
-    p = s.add_parser('audit'); p.add_argument('film')
+    p = s.add_parser('audit'); p.add_argument('film', nargs='?')
+    s.add_parser('gather', help='one-off: rows stranded on branches onto the main line, each chat once')
+    p = s.add_parser('mergefile'); [p.add_argument(x) for x in ('o', 'a', 'b', 'path')]
     s.add_parser('kept')
     s.add_parser('auto')
     s.add_parser('app', help='rebuild film rows from notes/ledger/app-costs.tsv (the app\'s real per-chat costs)')
@@ -505,6 +746,23 @@ def main():
         for film, (n, pct) in app_import().items():
             print(f'ledger: {film}: {n} chats from the app; film total now {pct}% of a week')
         return
+    if o.cmd == 'mergefile':
+        sys.exit(mergefile(o.o, o.a, o.b, o.path))
+    if o.cmd == 'gather':
+        res, added = gather()
+        for p_, n in added.items():
+            print(f'ledger gather: {p_}: {n} rows added')
+        print(f'ledger gather: {res or "could not push"}')
+        return
+    if o.cmd == 'audit':                          # startup-fixes 1: rows a branch holds and the main line lacks
+        lost = missing()
+        if o.film:
+            lost = {p_: v for p_, v in lost.items() if os.path.basename(p_).split('.')[0] in (o.film, 'app-costs')}
+        n = sum(len(v) for v in lost.values())
+        print(f'ledger audit: {n} rows missing from the main line' + ''.join(
+            f'\n  {p_}: {", ".join(v)}' for p_, v in lost.items()) + (' (fix: ledger.py gather)' if n else ''))
+        if not o.film:
+            return
     if o.cmd == 'kept':
         print('\n'.join(kept_lines()))
         return
