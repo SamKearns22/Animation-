@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 100.74% (+37.23); 60 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 100.99% (+37.48); 61 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 100.74% of the 60.31% planned so far; at this rate the film lands at 101.2%.**
+**Forecast: Spent 100.99% of the 63.01% planned so far; at this rate the film lands at 101.6%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -19,7 +19,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | round1 sets | 0.32 | 2026-11-15 | 39.17 |
 | round1 moves | 4.453 | 2026-11-15 | 53.21 |
 | animatic2 | 0.801 | 2026-11-15 | 53.21 |
-| round2 | 0.865 |  |  |
+| round2 | 0.865 | 2026-11-16 | 100.78 |
 | final | 0.16 |  |  |
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
@@ -85,7 +85,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-16 | cbb93021 | est | opus | auto |  | 1.58 |  | 0 | 0 |
 | 2026-11-16 | 974d63c4 | est | sonnet | auto |  | 0.27 |  | 0 | 0 |
 | 2026-11-16 | af2465a6 | est | sonnet | auto |  | 0.5 |  | 0 | 0 |
-| 2026-11-16 | aafb201f | est | opus | auto |  | 5.44 |  | 0 | 0 |
+| 2026-11-16 | aafb201f | est | opus | auto |  | 5.48 |  | 0 | 0 |
+| 2026-11-16 | de5c7662 | est | sonnet | auto |  | 0.21 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 0007a586 (auto): 71 steps, history 227k at the end; other 72.2%, film-file search 16.2%, tool search 5.5%, renders 2.9%, pictures 2.1%, page.py 1.1%
@@ -111,6 +112,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-16 974d63c4 (auto): 14 steps, history 111k at the end; other 86.7%, film-file search 7.3%, tool search 4.7%, pictures 1.3%
 - 2026-11-16 af2465a6 (auto): 35 steps, history 154k at the end; other 80.7%, film-file search 10%, tool search 7.7%, renders 1.6%
 - 2026-11-16 aafb201f (auto): 185 steps, history 367k at the end; other 67.3%, tool search 16.2%, film-file search 10.4%, pictures 4%, renders 1.6%, page.py 0.6%
+- 2026-11-16 de5c7662 (auto): 8 steps, history 101k at the end; other 91.7%, tool search 5.3%, film-file search 3.1%
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.

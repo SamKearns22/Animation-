@@ -1153,7 +1153,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 5.44,
+   "cost": 5.48,
    "src": "estimate",
    "sid": "session_01GznaAStUu1hrhzvjkRpdfh",
    "steps": 185,
@@ -1174,6 +1174,34 @@
     "renders": 6,
     "pictures": 18,
     "other": 18
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "chat": "de5c7662",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.21,
+   "src": "estimate",
+   "sid": "session_01GznaAUzqwZ7pqvpDfSHUb8",
+   "steps": 8,
+   "hist_k": 101,
+   "kinds": {
+    "film-file search": 3.1,
+    "tool search": 5.3,
+    "other": 91.7
+   },
+   "calls": {
+    "film-file search": 2,
+    "tool search": 6,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 1
    }
   }
  ],
@@ -1271,7 +1299,10 @@
   {
    "name": "round2",
    "pct": 0.865,
-   "done": null
+   "done": {
+    "date": "2026-11-16",
+    "spent": 100.78
+   }
   },
   {
    "name": "final",
