@@ -1120,6 +1120,7 @@ def _turn(y0, y1, w):
 
 FRONT3 = ((-0.95, 10.4), (-0.75, 11.4), (-1.0, 12.4), (-0.8, 13.4))   # round 2 (F1): the front line runs away from
 BACK3 = ((-1.6, 10.9), (-1.55, 11.9), (-1.65, 12.9))     # us (a wall facing right); the back row steps up in its gaps
+CRS_YAW = -60   # round 2 (F2): turned three-quarters to the camera so the raised shields show their face, not an edge
 CRS_X, CRS_D = (1.9, 2.55, 3.2), (9.9, 10.9, 11.9, 12.9, 13.9)   # round 2 (F2): the police block, 3 ranks of 5
 SHIELD_X = 1.9 - 0.42                                  # the front rank's shield face (x m), before the advance
 ADV_T, ADV_STEP, ADV_N = 4.7, 0.5, 3                    # F2: when the cannon opens up, 3 steps of 0.4 m in lockstep
@@ -1164,9 +1165,9 @@ def t3_actors(lt):
     for k, (x, d) in enumerate(BACK3):
         if lt < VOLLEY2 - 0.3:
             continue
-        if jet and lt > 2.75 + J3 + 0.05 * k:
-            u = lt - 2.75 - J3 - 0.05 * k
-            ut = ((2.75 + J3 + 0.05 * k - VOLLEY2) * 1.6 + k * 0.29) % 1.0
+        if jet and lt > 2.6 + J3 + 0.05 * k:                  # round 2: the back row breaks first (it ran through the front line)
+            u = lt - 2.6 - J3 - 0.05 * k
+            ut = ((2.6 + J3 + 0.05 * k - VOLLEY2) * 1.6 + k * 0.29) % 1.0
             if x - _getaway(u) < OFF_L:
                 continue
             out.append(Actor(f'back{k + 1}', 'rioter', x - _getaway(u), d, _turn(90, -115, u / .3), 'run',
@@ -1218,12 +1219,12 @@ def t3_actors(lt):
         for r, d in enumerate(CRS_D):
             k = c * len(CRS_D) + r
             if stepping:
-                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, -90, 'line_walk', t=lt - ADV_T, force='crs', tier='t3')
+                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, CRS_YAW, 'line_walk', t=lt - ADV_T, force='crs', tier='t3')
             elif c < 2 and g > 0:
-                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, -90, 'shield_up', u=g * (1.0 if c == 0 else .5),
+                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, CRS_YAW, 'shield_up', u=g * (1.0 if c == 0 else .5),
                           force='crs', tier='t3')
             else:
-                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, -90, 'line', force='crs', tier='t3')
+                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, CRS_YAW, 'line', force='crs', tier='t3')
             a.i = (k * 5) % 7
             out.append(a)
     return out
