@@ -23,6 +23,12 @@ From the drawing (pre-flight's pass over every 3rd frame; every views.py person 
   copies      no two people in one frame drawn from one copy (Job K, Sam: Y, 10 Nov; the crowds-from-behind rule made
               automatic): the same build, height, hair, skin and clothes is flagged; meant copies (twins, a reflection)
               in the film's COPIES_OK = [(name, name, why)]. The fix: each one a different build, height and kit detail
+  sameness    (craft change 1, 16 Nov; EPR's 70 gold hats of 147, Blessed's bald heads): in a frame of 8 or more people,
+              or a crowd's members (CROWDS = {name: (make(i) -> sp, n, mix)} and every people-kit crowd), one hat
+              colour on more than SAME_CAP['hat'] of the heads, one hair (cut and colour) or one top colour past its
+              cap, skins far off the place's mix ({group: share}, SKIN_GROUPS), and three or more people drawn in one
+              moving pose frame after frame (neighbours in step). Meant sameness (a uniform, a choir): SAME_OK =
+              [(crowd or '*', 'hat'|'hair'|'top'|'skin'|'step', why)]
   rests       rule 78 for flat films: each RESTS arm, as drawn, against 'desk' (the sitting kit's desk in the
               pose), 'armrest', 'seat' or a number (a height above the floor, person units: Ad-Vanced Notice's
               painted desk is 500): the forearm and elbow never more than 4 units (about 1 cm) below the surface,
@@ -304,6 +310,15 @@ def install():
             if ft is not None:
                 d['_t'] = ft              # the film's time (pre-flight's drawing pass), for cut_rests and faces
             d['_look'] = look(sp)
+            d['_sp'] = {k: sp.get(k) for k in ('headwear', 'hat_c', 'kit_face', 'hair', 'hair_c', 'jacket', 'shirt',
+                                               'skin')}
+            if joints:                    # neighbours in step: the pose, rounded, relative to the hips
+                try:
+                    d['_pose'] = tuple(sorted((k, tuple(int(round(v / 6.0)) for v in p[:2])) for k, p in
+                                              joints.items() if k in ('elL', 'elR', 'wrL', 'wrR', 'footL', 'footR',
+                                                                      )))
+                except Exception:
+                    pass
             d['_who'] = sp.get('who')     # waivers.unseen_faults: CAST keys
             DRAWN.append((where, sp.get('name', 'someone'), d))
         if joints and joints.get('props'):
@@ -363,6 +378,142 @@ def copies(film, records):
                                f"clothes): give each a different build, height and kit detail, or list them in "
                                f"COPIES_OK (first of these)")
     return out
+
+
+SAMENESS_ON = [False]   # craft change 1: switched on with the people kit's crowd defaults (Sam's Y on the kit)
+SAME_CAP = {'look': .3, 'hat': .3, 'hair': .3, 'top': .4, 'skin': .6}   # hat: of the hats (EPR's gold: 70 of 147, .48; after A17 .15);
+#                                                 hair: of the bare heads; look (one copy), top, skin
+#                                                 (one tone, when no place mix is listed): of everyone
+BALD_CAP = .1                                    # EPR O7 (8 of 64 bald was too many) and Blessed's bald heads
+SKIN_GROUPS = {'light': [(236, 200, 176), (226, 186, 158)], 'olive': [(204, 160, 120), (190, 146, 106)],
+               'tan': [(172, 124, 88)], 'brown': [(140, 96, 66)], 'dark': [(108, 72, 50), (86, 58, 42)],
+               'sasian': [(160, 112, 78)]}   # EPR's city skins (protest_tiers_cast.SKINS), the kit's crowd groups
+
+
+def _col(c):
+    if c is None:
+        return None
+    c = c[0] if isinstance(c, (tuple, list)) and c and isinstance(c[0], (tuple, list)) else c
+    return tuple(int(round(v / 12.0)) for v in c[:3])      # colours within 12 of each other count as one
+
+
+def traits(sp):
+    """What makes a crowd look varied or the same: hat colour (None bare-headed), hair, top, skin."""
+    hw = sp.get('headwear')
+    hair = (sp.get('kit_face') or {}).get('hair') or sp.get('hair')
+    return dict(look=look(sp), hat=_col(sp.get('hat_c')) if hw else None,
+                hair=None if hw or hair in (None, 'none') else (hair, None if hair == 'bald' else _col(sp.get('hair_c'))),
+                top=_col(sp.get('jacket') or sp.get('shirt')), skin=sp.get('skin'))
+
+
+def skin_group(c):
+    if c is None:
+        return None
+    return min(((g, sum((a - b) ** 2 for a, b in zip(c, x))) for g, xs in SKIN_GROUPS.items() for x in xs),
+               key=lambda q: q[1])[0]
+
+
+def same_faults(name, sps, mix=None, ok=()):
+    """One crowd's (or one frame's) people: the share caps and the place's skin mix. Strings."""
+    ok = {k for c, k, *_ in ok if c in ('*', name)}
+    n = len(sps)
+    if n < 8:
+        return []
+    out = []
+    tr = [traits(sp) for sp in sps]
+    for key, cap in SAME_CAP.items():
+        if key in ok:
+            continue
+        vals = [t[key] for t in tr if t[key] is not None and t[key] != (None, None)]
+        if len(vals) < 6:
+            continue
+        top, k = max(((v, vals.count(v)) for v in set(vals)), key=lambda q: q[1])
+        if k / len(vals) > cap:
+            if key == 'skin' and mix:
+                continue                  # a place's listed mix is tested below instead
+            of = {'hat': 'hats', 'hair': 'bare heads'}.get(key, 'people')
+            if key == 'look':
+                top = 'build, hair, skin and clothes'
+            out.append(f'SAMENESS: {name}: {k} of {len(vals)} {of} share one {key} ({top}): over {cap:.0%}; spread '
+                       f'it, or SAME_OK with the reason')
+    bare = [t['hair'] for t in tr if t['hair'] is not None]
+    bald = sum(1 for h in bare if h[0] == 'bald')
+    if 'hair' not in ok and len(bare) >= 6 and bald / len(bare) > BALD_CAP:   # O7 (EPR) and Blessed: bald heads
+        out.append(f'SAMENESS: {name}: {bald} of {len(bare)} bare heads are bald: over {BALD_CAP:.0%} reads as one '
+                   'bald crowd (Sam, EPR O7); hats or hair on some')
+    if mix and 'skin' not in ok:
+        got = [skin_group(t['skin']) for t in tr if t['skin'] is not None]
+        for g, share in mix.items():
+            have = got.count(g) / max(1, len(got))
+            slack = max(.1, 4 * math.sqrt(share * (1 - share) / max(1, len(got))))   # chance, for this many people
+            if (share >= .1 and have < min(share / 2, share - slack)) or have > share + slack:
+                out.append(f'SAMENESS: {name}: skins: {have:.0%} {g} where the place is {share:.0%} (its listed mix)')
+    return out
+
+
+def crowd_list_faults(film):
+    """Every crowd the film can make, member by member: CROWDS and the people kit's crowds (no drawing)."""
+    out = []
+    ok = getattr(film, 'SAME_OK', ())
+    for name, (make, n, mix) in dict(getattr(film, 'CROWDS', {}) or {}).items():
+        out += same_faults(name, [make(i) for i in range(n)], mix, ok)
+    import people as PK
+    fname = film if isinstance(film, str) else getattr(film, 'NAME', None) or \
+        getattr(film, '__name__', '').replace('_', '-')
+    if os.path.exists(PK.people_file(fname)):
+        for name, d in PK.crowds(fname).items():
+            n = int(d.get('crowd_n', 24))
+            cyc = list(d['crowd']['cycle']) + [f for _, _, fs in d['crowd']['when'] for f in fs]
+            said = set()
+            for key, form, items in cyc:          # EPR: jacket (3i+s) over 6 colours only ever gave 2 of them
+                if form and form[0] and math.gcd(form[0], len(items)) > 1 and (key, form[0], len(items)) not in said:
+                    said.add((key, form[0], len(items)))
+                    g = math.gcd(form[0], len(items))
+                    out.append(f'SAMENESS: {name}: {key} ({form[0]}i+...) over {len(items)} items: members only ever '
+                               f'take {len(items) // g} of them; use a step with no common factor ({form[0]} and '
+                               f'{len(items)} share {g})')
+            jobs = sorted({j for what, among, _ in d['crowd']['when'] if what == 'job' for j in among}) or [None]
+            for job in jobs:                      # each job the film gives them (EPR: t1..t4, each city's jackets)
+                out += same_faults(f'{name}' + (f' ({job})' if job else ''), [PK.member(d, i, 0, job) for i in
+                                                                             range(n)], d.get('crowd_mix'), ok)
+    return out
+
+
+def in_step(film, records):
+    """Three or more people drawn in one moving pose frame after frame (the march where every arm swings together)."""
+    if any(k == 'step' for c, k, *_ in getattr(film, 'SAME_OK', ())):
+        return []
+    by_t = {}
+    for where, name, d in records:
+        if d.get('_pose') is not None and d.get('_t') is not None:
+            by_t.setdefault(d['_t'], {}).setdefault(d['_pose'], set()).add(name)
+    runs, out, last = 0, [], None
+    for t in sorted(by_t):
+        big = {sig: names for sig, names in by_t[t].items() if len(names) >= 3}
+        moving = big and last is not None and not (set(big) & set(last))
+        runs = runs + 1 if moving else 0
+        last = big or {}
+        if runs >= 3:
+            names = sorted(next(iter(big.values())))
+            out.append(f'SAMENESS: {t:.2f} s: {", ".join(names[:4])} move in step (one pose, frame after frame): '
+                       'offset each one\'s timing or pose, or SAME_OK with the reason')
+            break
+    return out
+
+
+def sameness(film, records):
+    """The share caps per drawn frame (8 or more people) and neighbours in step; once per kind."""
+    frames, out, seen = {}, [], set()
+    for where, name, d in records:
+        if d.get('_sp') is not None:
+            frames.setdefault(where, {})[name] = d['_sp']
+    for where, ppl in frames.items():
+        for x in same_faults(where, list(ppl.values()), getattr(film, 'SAME_MIX', None), getattr(film, 'SAME_OK', ())):
+            key = x.split(' share one ')[-1][:8] if ' share one ' in x else x.split(': ', 2)[-1][:20]
+            if key not in seen:
+                seen.add(key)
+                out.append(x + ' (first of these)')
+    return out + in_step(film, records)
 
 
 def mouths(film, records):

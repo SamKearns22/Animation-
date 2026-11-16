@@ -167,6 +167,8 @@ def picture_faults(film, name, recs, fps, new_template=False):
     if people:
         problems += kitchecks.facing(drawn)     # rule 13: heads never turned past the body; nothing held over a back
         problems += kitchecks.copies(film, drawn)   # Job K: no group drawn from one copy
+        if kitchecks.SAMENESS_ON[0]:            # craft change 1: crowds varied (share caps, skins, in step)
+            problems += kitchecks.sameness(film, drawn) + kitchecks.crowd_list_faults(film)
         problems += kitchecks.mouths(film, drawn)   # rule 13 (notes 5, 15, 45): every face on screen has a mouth
         problems += kitchecks.rests(film, drawn)   # rule 78: resting forearms and elbows never below their surface
         problems += kitchecks.cut_rests(film, drawn)   # rule 72: no pose drops back to rest just before a cut

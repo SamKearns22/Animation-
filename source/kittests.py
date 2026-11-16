@@ -2922,6 +2922,38 @@ def phone_size_poses():
                f'gallery shrug refused: {len(gal)}; side-on Bob flagged: {len(side)}, front Bob: {len(front)}'
 
 
+@test
+def crowds_varied():
+    """Craft change 1 (Sam, 16 Nov): the sameness check: EPR's gold hats (9 of 20 hats), one-model police and one-face
+    rioters, the bald share, a place's skin mix, a crowd step that skips list items, and neighbours in step."""
+    import kitchecks as K
+    gold, other = (186, 146, 52), [(24, 24, 26), (80, 82, 86), (34, 40, 62), (156, 34, 38), (40, 92, 70)]
+
+    def p(i, **kw):
+        sp = dict(skin=[(236, 200, 176), (204, 160, 120)][i % 2], hair='crop', hair_c=(30 + i * 9, 20, 10),
+                  jacket=(20 + 13 * i, 60, 90), height=1.7 + i / 100)
+        sp.update(kw)
+        return sp
+    hats = [p(i, headwear='beanie', hat_c=gold if i < 9 else other[i % 5]) for i in range(20)]
+    spread = [p(i, headwear='beanie', hat_c=other[i % 5]) for i in range(20)]
+    police = [dict(p(0), hair='none') for _ in range(12)]
+    bald = [p(i, hair='bald' if i % 4 == 0 else 'crop') for i in range(24)]
+    mix = {'light': .5, 'olive': .5}
+    pale = [p(i, skin=(236, 200, 176)) for i in range(24)]
+    got = dict(gold=K.same_faults('a', hats), spread=K.same_faults('a', spread), police=K.same_faults('a', police),
+               bald=K.same_faults('a', bald), mix=K.same_faults('a', pale, mix), mixok=K.same_faults('a', spread, mix))
+    rec = []
+    for f in range(6):                                   # three marchers swinging together, a fourth on its own beat
+        for w in ('m1', 'm2', 'm3', 'm4'):
+            rec.append(('t4', w, dict(_t=f / 12, _pose=(('wrL', (f if w != 'm4' else 5 - f, 0)),))))
+    step = K.in_step(object(), rec)
+    apart = K.in_step(object(), [r for r in rec if r[1] in ('m1', 'm4')])
+    ok = (any('hat' in x for x in got['gold']) and not got['spread'] and any('look' in x for x in got['police'])
+          and any('bald' in x for x in got['bald']) and any('skins' in x for x in got['mix']) and not got['mixok']
+          and step and not apart)
+    return ok, {k: len(v) for k, v in got.items()} | {'in step': len(step), 'apart': len(apart)}
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
