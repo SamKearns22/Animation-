@@ -302,6 +302,63 @@ def draft_faults(film, notes=None):
             'not on file (rule P16): save them (finish.py does it for the next one) and push']
 
 
+def changed_films():
+    """Film modules (source/NAME.py with SHOTS) whose code this chat changed: uncommitted, or committed on this branch
+    and not yet on the main line (so `end` runs before the main-line push, as the handover order says)."""
+    main = 'origin/claude/create-claude-md-oe8z4g'
+    out = subprocess.run(['git', '-C', ROOT, 'diff', '--name-only', f'{main}...HEAD'], capture_output=True, text=True).stdout
+    out += subprocess.run(['git', '-C', ROOT, 'status', '--porcelain'], capture_output=True, text=True).stdout
+    films = set()
+    for m in re.finditer(r'source/([a-z][a-z0-9]*(?:_[a-z0-9]+)*)\.py', out):
+        parts = m.group(1).split('_')
+        for k in range(len(parts), 0, -1):          # protest_tiers_sets -> protest_tiers (the film's main module)
+            base = '_'.join(parts[:k])
+            f = os.path.join(ROOT, 'source', base + '.py')
+            if os.path.exists(f) and re.search(r'^SHOTS\b', open(f, encoding='utf-8').read(), re.M):
+                films.add(base); break
+    return sorted(films)
+
+
+def quick_faults(films=None):
+    """Late-faults change 1 (Sam's 1, 16 Nov; notes/proposals/late-faults.md): a chat that changed a film's code runs its
+    quick check (preflight --text) before it hands over; each fault is fixed, or waived in the notes' "## Exceptions"
+    with a reason (pre-flight then drops it). COULD NOT TEST (an undeclared list) counts as a fault. At red the
+    handover still goes, these listed first."""
+    out = []
+    for film in (changed_films() if films is None else films):
+        tmp = os.path.join('/tmp', f'handover-quick-{film}')
+        try:
+            r = subprocess.run([sys.executable, os.path.join(ROOT, 'source', 'preflight.py'), film, tmp, '--text'],
+                               cwd=os.path.join(ROOT, 'source'), capture_output=True, text=True, timeout=600)
+            txt = r.stdout + r.stderr
+        except subprocess.TimeoutExpired:
+            out.append(f'QUICK CHECK: {film}: did not finish in 10 minutes (run preflight.py {film} OUT --text by hand)')
+            continue
+        lines = [ln.strip()[2:] for ln in txt.splitlines() if ln.startswith(' - ')]
+        lines += [ln.strip() for ln in txt.splitlines() if 'COULD NOT TEST' in ln.upper() and not ln.startswith(' - ')]
+        if r.returncode not in (0, 1) and not lines:
+            lines = ['the quick check stopped: ' + (txt.strip().splitlines() or ['no output'])[-1][:160]]
+        out += [f'QUICK CHECK {film}: {x[:220]}' for x in lines]
+        try:
+            sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            import ledger
+            d = ledger.load(film)
+            d.setdefault('quick_checks', []).append({'at': datetime.now(timezone.utc).isoformat(timespec='minutes'),
+                                                     'faults': len(lines)})
+            ledger.store(d)
+        except Exception:
+            pass
+    return out
+
+
+def end_stamp(rec):
+    """`end` ran in this chat: one line in notes/logs/handover-end.log, so the next chat's `start` can tell."""
+    os.makedirs(os.path.join(ROOT, 'notes', 'logs'), exist_ok=True)
+    with open(os.path.join(ROOT, 'notes', 'logs', 'handover-end.log'), 'a', encoding='utf-8') as f:
+        sid = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1] or os.path.basename(rec or '-')[:8]
+        f.write(f'{datetime.now(timezone.utc).isoformat(timespec="minutes")}\t{sid}\n')
+
+
 def finder_faults(film):
     """Code-finder change 1 (Sam's 1, 16 Nov): a chat that changed the film's code today with no `page.py show` call
     logged today (notes/logs/FILM-show.log) went hunting by hand; say so, so the miss is seen."""
@@ -431,8 +488,8 @@ def main(argv):
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             import ledger
             film = ledger.film_of(rec)
-        return report(_run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
-                      + finder_faults(film) + unrouted_faults(rec),
+        return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
+                      + finder_faults(film) + unrouted_faults(rec) + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
     if cmd == 'start':
         tail = pos[0].split('_')[-1][-8:].lower()
@@ -443,6 +500,11 @@ def main(argv):
             print(f'handover: for each note, look at the code with ONE step: python3 source/page.py {opt("--film")} '
                   'show "the note\'s words" --shot SHOT --at SECONDS (shot and time from the notes table; ~40 lines, '
                   'the functions it touches); never grep or sed a film file first')
+        ends = os.path.join(ROOT, 'notes', 'logs', 'handover-end.log')
+        parent = pos[0].split('_')[-1]
+        if not (os.path.exists(ends) and any(ln.split('\t')[-1].strip() == parent for ln in open(ends, encoding='utf-8'))):
+            print(f'handover: the last chat ({pos[0][-8:]}) has no `handover.py end` on record: run '
+                  '`python3 source/handover.py end --film FILM` now and settle what it lists before new work')
         if not os.path.exists(p):
             print(f'handover: no saved log for {pos[0]}; list_events kinds ["user"], newest pages only, then `dump`')
             return 2

@@ -36,7 +36,7 @@ BG = (232, 228, 222)
 
 # ---------------------------------------------------------------------------------------------- items
 def _path(film, kind):
-    return os.path.join(ROOT, 'story', f'{film}-{kind}.txt')
+    return os.path.join(ROOT, 'story', f'{film.replace("_", "-")}-{kind}.txt')   # story files use - (either spelling in)
 
 
 def _blocks(text, head):
