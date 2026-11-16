@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 89.25% (+25.74); 54 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 90.38% (+26.87); 55 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 89.25% of the 60.31% planned so far; at this rate the film lands at 89.7%.**
+**Forecast: Spent 90.38% of the 60.31% planned so far; at this rate the film lands at 90.8%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -80,6 +80,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-16 | a0692b21 | est | opus | auto |  | 0.5 |  | 0 | 0 |
 | 2026-11-16 | 0582db4b | est | opus | auto |  | 1.67 |  | 0 | 0 |
 | 2026-11-16 | da2f9e0a | est | opus | auto |  | 1.39 |  | 0 | 0 |
+| 2026-11-16 | e374ed79 | est | opus | auto |  | 1.13 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 0007a586 (auto): 71 steps, history 227k at the end; other 72.2%, film-file search 16.2%, tool search 5.5%, renders 2.9%, pictures 2.1%, page.py 1.1%
@@ -99,6 +100,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-16 a0692b21 (auto): 29 steps, history 118k at the end; other 74.4%, tool search 13.2%, film-file search 7.4%, renders 3.8%, page.py 1.1%
 - 2026-11-16 0582db4b (auto): 72 steps, history 197k at the end; other 62.9%, film-file search 18.8%, tool search 8%, renders 7.5%, pictures 2.3%, page.py 0.5%
 - 2026-11-16 da2f9e0a (auto): 44 steps, history 215k at the end; other 57.4%, film-file search 29.1%, tool search 10%, whole-file .py read 1.8%, pictures 1.2%, renders 0.6%
+- 2026-11-16 e374ed79 (auto): 45 steps, history 158k at the end; other 74%, film-file search 15.5%, tool search 7.2%, page.py 1.8%, pictures 1.4%
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
