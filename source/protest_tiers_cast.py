@@ -1008,8 +1008,8 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
     sw = sp.get('shoulders', 160)
     if name == 'run':
         j = moves.gait(sp, t, 'sprint')
-    elif name == 'carry_run':                       # round 2 (G17): fleeing the shop with stock, a flat-out sprint
-        j = moves.gait(sp, t, 'sprint')
+    elif name in ('carry_run', 'gun_run'):          # round 2 (G17): fleeing the shop with stock, a flat-out sprint
+        j = moves.gait(sp, t, 'sprint')             # G21: 'gun_run' the same sprint, the pistol held up
     elif name == 'run_sign':                        # running carrying the sign low (T2 runners)
         j = moves.gait(sp, t, 'run')
     elif name in ('line_walk', 'shield_walk'):      # round 2 (F2): the shield line stepping forward in lockstep
@@ -1170,7 +1170,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
             V.arm_to(j, 'R', (j['shR'][0] - 30 + 70 * e, y + (-250 - y) * e, z + (90 - z) * e), 'down' if e < .5 else 'out')
             grips.held(j, 'R', sp, pistol(j, 'R'))
         V.arm_to(j, 'L', (-sw + 30, 230.0, 140.0), 'down')
-    elif name == 'gun_up':                          # round 2 (G9): walking off with the pistol held up by the head
+    elif name in ('gun_up', 'gun_run'):             # round 2 (G9): walking off with the pistol held up by the head
         V.arm_to(j, 'R', (j['shR'][0] + 40, -250.0, 90.0), 'out')
         grips.held(j, 'R', sp, pistol(j, 'R'))
     elif name == 'haul':                            # hauling the shutter up (T2): both hands high, leaning back

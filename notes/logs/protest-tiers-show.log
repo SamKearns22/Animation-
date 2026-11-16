@@ -14,3 +14,6 @@
 2026-11-16T15:21:43	t3	2.0	protest_tiers.py:1519	crowd_t3 sprites extras reserve cordon
 2026-11-16T15:39:56	t3	3.5	protest_tiers.py:1523	sound effects for France: crowd bed, water cannon, stone hits
 2026-11-16T15:18:31	t2	-	protest_tiers.py:648	foreground protesters heads-and-shoulders at frame edges
+2026-11-16T16:29:59	-	-	protest_tiers_sets.py:568	glass cracks t2_chips window pane T2_WR
+2026-11-16T16:30:22	t2	-	protest_tiers.py:689	runner1 runner2 swinger pistol take run off gun_up
+2026-11-16T16:30:53	t2	-	protest_tiers.py:878	A-board BOARD kick tilt BOARD_KICK BOARD_LAND BOARD_TO

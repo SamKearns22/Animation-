@@ -580,8 +580,8 @@ DOOR_X0, DOOR_X1, DOOR_H = S.DOOR2
 DOOR_C, FRONT_D = (DOOR_X0 + DOOR_X1) / 2, 14.0
 T2_SW = (0.2, 12.7)                 # the swinger's mark (the sign's head reaches the glass at T2_HIT)
 T2_STAR = (0.8, 1.92)               # where it meets the glass (x, height); chat 3: on the sign's head at T2_HIT
-BOARD = (-0.7, 12.75)               # G7: the A-board, kicked at BOARD_KICK, lands at BOARD_LAND
-BOARD_KICK, BOARD_LAND, BOARD_TO = 2.3, 3.05, (1.0, 9.8)    # G18 (Sam: "flies further"): 0.75 s, 3.4 m (was 1.9), toward us and right, low past the swinger
+BOARD = (-0.4, 12.75)               # G22 (Sam: 'move the sign right a little'): was -0.7. G7: the A-board, kicked at BOARD_KICK, lands at BOARD_LAND
+BOARD_KICK, BOARD_LAND, BOARD_TO = 2.42, 3.17, (1.3, 9.8)   # G22: leaves on the foot's strike (u 0.6 of the kick); G18 (Sam: "flies further"): 0.75 s, 3.4 m (was 1.9), toward us and right, low past the swinger
 # G2: stones thrown from off frame left and near: (hits the glass at, x, height)
 T2_STONES = ((0.35, -1.4, 1.6), (0.5, 0.6, 2.0), (0.62, -0.4, 1.2), (0.8, 1.3, 1.7), (0.95, -1.0, 2.2), (1.1, 0.2, 1.4))
 # G15 (Sam: 'some rocks hit the upper window'): three thrown from off right and near at the lit first-floor window
@@ -589,6 +589,7 @@ T2_STONES = ((0.35, -1.4, 1.6), (0.5, 0.6, 2.0), (0.62, -0.4, 1.2), (0.8, 1.3, 1
 UP_STONES = ((3.9, 2.6, 6.7), (4.5, 3.15, 5.6), (5.2, 2.8, 6.2))
 UP_FROM = (4.8, 9.2, 1.8)            # off the frame's right edge, near us: where they are thrown from
 # G9 (FAZ 31 Oct: two weapons taken): who takes which pistol: (cubby column, row height, when it leaves its cubby)
+GUN_RUN = {'runner1': ((0.9, 12.0), (-4.0, 9.9)), 'runner2': ((4.5, 10.0),), 'swinger': ((-5.0, 13.5),)}   # G21: each one's way out (off frame); runner1 clear of the swinger first
 TAKE = {'runner1': (6, 0.98, 3.6), 'runner2': (8, 1.35, 3.75), 'swinger': (4, 0.98, 4.85)}   # G13: after the shatter
 # G4/G5: the four who go in through the door come back out of it with stock: (in at, out at, lane, prop)
 # chat 3: out 1 s apart in one lane clear of the wall and the swinger (0.5 s apart, they walked into each other)
@@ -701,6 +702,25 @@ def t2_actors(lt):
         yaw, st, uu = after(tt - keys[-1][0])
         return A(name, 'rioter', x, d, yaw, st, u=uu, t=tt, **k)
 
+    def gun_flee(name, xr, take_t, way, reach):
+        """G21 (Sam: 'they pace off with the same movements in the same direction'): after the take a 0.25 s step back
+        off the glass, turning toward his way out, then a flat-out sprint (gun_run) through the points `way`, the pistol
+        held up."""
+        t0, to = take_t + 0.45, way[0]
+        along = abs(to[1] - 13.45) < 0.5                    # off along the shop front: the step back is a turn sideways
+        bx, bd = (xr + 0.25 * math.copysign(1, to[0] - xr), 13.45) if along else (xr, 13.15)
+        keys, tk = [(t0 + 0.25, bx, bd)], t0 + 0.25
+        for p in way:
+            tk += math.hypot(p[0] - keys[-1][1], p[1] - keys[-1][2]) / moves.speed('sprint')
+            keys.append((tk, *p))
+        if tt < t0 + 0.25:                                  # the step back, turning
+            v = ease((tt - t0) / 0.25)
+            a = A(name, 'rioter', lerp(xr, bx, v), lerp(13.45, bd, v), lerp(180, _heading(keys, 0), v), 'gun_up', t=tt)
+            a.blend(reach, 2.0, w=v * 1.5)
+            return
+        x, d, i, u = _keys(tt, keys)
+        A(name, 'rioter', x, d, _heading(keys, min(max(i, 0), len(keys) - 2)), 'gun_run', t=tt)
+
     # the haulers: sprint in, lever the shutter up (1.0-1.5), run to the door; hauler1 kicks it in (G4)
     for k, (xs, xh) in enumerate(((-3.8, -0.9), (-3.3, 0.9))):
         name = f'hauler{k + 1}'
@@ -761,11 +781,8 @@ def t2_actors(lt):
         elif tt < take_t + 0.45:
             A('swinger', 'rioter', xr, 13.45, 180, 'reach_lo',
               u=(tt - take_t + 0.35) / 0.35 if tt < take_t else 1 + (tt - take_t) / 0.45)
-        else:                                               # off left with it, like the runners
-            keys2 = [(take_t + 0.45, xr, 13.45), (take_t + 0.95, xr - 0.3, 13.4), (take_t + 6.0, xr - 7.9, 13.4)]   # along the glass, behind runner3
-            x, d2, i2, u2 = _keys(tt, keys2)
-            a = A('swinger', 'rioter', x, d2, lerp(180, -115, ease((tt - take_t - 0.45) / 0.5)), 'gun_up', t=tt)
-            a.blend('reach_lo', 2.0, w=(tt - take_t - 0.45) / 0.3)
+        else:                                               # G21: a step back and turn, then a sprint off left along the shop front
+            gun_flee('swinger', xr, take_t, GUN_RUN['swinger'], 'reach_lo')
     # runner1, runner2 (G9): run in, throw stones into the shop, step up to the window and each take a pistol, then
     # walk off left with it held up
     for k, (xm, dm, xr, take_t) in enumerate(((1.05, 12.35, 0.95, TAKE['runner1'][2]),
@@ -792,14 +809,9 @@ def t2_actors(lt):
         if tt < take_t + 0.45:
             A(name, 'rioter', xr, 13.45, 180, reach, u=(tt - (t_up + 0.3)) / 0.35 if tt < take_t else 1 + (tt - take_t) / 0.45)
             continue
-        lane = 11.8 - 0.2 * k                               # chat 3: clear of the swinger; back off the window, turn, walk off left
-        keys2 = [(take_t + 0.45, xr, 13.45), (take_t + 0.95, xr - 0.3, lane), (take_t + 6.0, xr - 0.3 - 7.6, lane)]
-        x, d, i, u = _keys(tt, keys2)
-        yaw = lerp(180, -115, ease((tt - take_t - 0.45) / 0.5))
-        a = A(name, 'rioter', x, d, yaw, 'gun_up', t=tt)
-        a.blend(reach, 2.0, w=(tt - take_t - 0.45) / 0.3)
+        gun_flee(name, xr, take_t, GUN_RUN[name], reach)   # G21: each sprints off his own way
     # runner3 (G7): the A-board: a sprint in, three steps' run-up, a hard kick; then he throws stones into the shop
-    keys = [(1.35, -3.6, 12.7), (1.85, -2.25, 12.7), (2.12, -1.5, 12.7)]
+    keys = [(1.35, -3.3, 12.7), (1.85, -1.95, 12.7), (2.12, -1.2, 12.7)]   # G22: 0.3 m right with the board
     x, d, i, u = _keys(tt, keys)
     if 0 <= i < len(keys) - 1:
         A('runner3', 'rioter', x, d, 90, 'run', t=tt)
@@ -873,10 +885,13 @@ def board_pose(lt):
     u = min(1.0, (lt - BOARD_KICK) / (BOARD_LAND - BOARD_KICK))
     x, d = lerp(BOARD[0], BOARD_TO[0], u), lerp(BOARD[1], BOARD_TO[1], u)
     z = 1.0 * 4 * u * (1 - u)                               # G18: a 1 m arc (1.5 m hid the third hit)
-    if u >= 1:                                              # down: a skid, then flat
-        s = ease(min(1.0, (lt - BOARD_LAND) / 0.25))
-        return x + 0.25 * s, d, 0.0, 90.0
-    return x, d, z, 90 + 720 * ease(u)                      # G18: two turns, flat on its face
+    if u >= 1:                                              # down: G22 a 0.1 m bounce, then a skid, then flat
+        b = (lt - BOARD_LAND) / 0.15
+        if b < 1:
+            return x, d, 0.1 * 4 * b * (1 - b), 810.0
+        s = ease(min(1.0, (lt - BOARD_LAND - 0.15) / 0.25))
+        return x + 0.25 * s, d, 0.0, 810.0
+    return x, d, z, 810 * ease(u)                           # G22: from standing, two and a quarter turns, face down (was a snap 0 -> 90)
 
 
 @lru_cache(maxsize=4)
@@ -901,16 +916,17 @@ def t2_board(img, lt):
     cam = RF2.cam
     k = cam.ppm(d)
     spr = _board_sprite(int(1.15 * k))
+    lift = 0.5 * (1 - min(1.0, tilt / 810))                 # G22: the pivot slides from its foot (standing) to its middle
     if tilt >= 90 and lt >= BOARD_LAND:                     # lying face down: its back, the frame, squashed flat
         spr = spr.resize((spr.width, max(6, int(spr.height * .22))))
         spr = Image.eval(spr, lambda v: v)
         dk = Image.new('RGBA', spr.size, (110, 78, 46, 255))
         dk.putalpha(spr.getchannel('A'))
         spr = dk
-        tilt = 0.0
+        tilt, lift = 0.0, 0.5
     r = spr.rotate(-tilt, expand=True, resample=Image.BICUBIC)
     gx, gy = cam.p(x, d, z)
-    cy = gy - (spr.height / 2 if tilt == 0 else 0)
+    cy = gy - spr.height * lift
     img.alpha_composite(r, (int(gx - r.width / 2), int(cy - r.height / 2)))
 
 
@@ -979,9 +995,20 @@ def t2_stones(img, lt):
 
 
 def t2_chips(img, lt):
-    """G2: each stone's small star of cracks on the glass, until the sign takes the glass out."""
+    """G2: each stone's small star of cracks on the glass, until the sign takes the glass out. G20 (Sam: 'some of the
+    fractures spread beyond the frame'): drawn on their own layer and kept inside the pane T2_WR."""
     if lt >= T2_SHATTER + 0.1:
         return
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    _t2_chips_draw(lay, lt)
+    x0, y0, x1, y1 = T2_WR
+    box = (max(0, int(min(x0, x1))), max(0, int(min(y0, y1))),
+           min(img.size[0], int(max(x0, x1))), min(img.size[1], int(max(y0, y1))))
+    if box[2] > box[0] and box[3] > box[1]:
+        img.alpha_composite(lay.crop(box), dest=box[:2])
+
+
+def _t2_chips_draw(img, lt):
     cam = RF2.cam
     # G13: each sign hit leaves a bigger star, the later ones' cracks running across the pane toward the earlier ones
     for k, (th, _x, _u, _y, (sx, sz)) in enumerate(SIGN_HITS[:-1]):
@@ -3408,7 +3435,7 @@ def _fx_at(fn, lt, *args):
 
 
 EFFECTS = [('T1 firework string', 'trail', _fx_at(t1_fx, 1.2)), ('T1 three bursts', 'burst', _fx_at(t1_fx, 1.95)),
-           ('T1 tear-gas haze', 'smoke', _fx_at(t1_fx, 3.6)), ('T2 sign-on-glass flash', 'flash', _fx_at(t2_flash, 1.05)),
+           ('T1 tear-gas haze', 'smoke', _fx_at(t1_fx, 3.6)), ('T2 sign-on-glass flash', 'flash', _fx_at(t2_flash, SIGN_HITS[0][0] + 0.05)),
            ('T3 stones and gas', 'sparks', _fx_at(t3_fx, 1.6)), ('T3 gas and jet', 'smoke', _fx_at(t3_fx, 3.0)),
            ('T4 rocket trail', 'trail', _fx_at(t4_fx, MOPED0 + 0.9)),
            ('T4 helicopter hit', 'burst', _fx_at(t4_hit, MOPED0 + 1.1)),
@@ -3500,6 +3527,11 @@ ORDER_SWAPS = [(a, b, t0, t1, w) for a, b, t0, t1, w in (
     ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: they cross in the crush'),
     ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in'), ('runner*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in'),
     ('runner*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in'), ('hauler*', 'swinger', at('t2', 0), at('t2', .85), 'T2 run-in'),
+    # Germany chat 6b (G17/G21): the gun runners and the looters sprint off in their own lanes, passing in front of/behind each other
+    ('runner*', 'swinger', at('t2', 3.9), at('t2', 8.5), 'G21: gun runners pass the swinger in separate lanes'),
+    ('runner*', 'runner*', at('t2', 3.9), at('t2', 8.5), 'G17/G21: runners and looters flee in separate lanes'),
+    ('hauler*', 'runner*', at('t2', 3.9), at('t2', 8.5), 'G17: looters out the door pass the runners'),
+    ('hauler*', 'swinger', at('t2', 3.9), at('t2', 8.5), 'G17: looters out the door pass the swinger'),
     ('front*', 'front*', at('t3', SWEEP[0]), at('t3', SWEEP[1] + 0.6), 'T3 run-out'),
     ('crs*', 'front*', at('t3', SWEEP[0]), at('t3', SWEEP[1] + 0.6), 'T3 run-out'),
     ('mp*', 'mr*', at('t4', 0), at('t4', T4_LEN), 'A4 melee: the contact line wanders'),
