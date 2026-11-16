@@ -2,17 +2,17 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
-- **Done (chat 8, Opus medium, 16 Nov):** proposal `code-finder` through the route (problem, chat's idea, helpers A and B,
-  blind judge: picked helper B's version, 21/25; Critiqued 6 found, 3 fixed, 3 named). Nothing built. Replay re-run: 18 of 26.
-  Found: the notes table has shot + time for every note; the replay never fed them.
-- **Next (on Sam's 1 for code-finder):** Opus medium, one chat: the judge's "Final version": Learn (freeze replay with shot/time
-  into kittests), then Change 1 only (`show --shot/--at`, shot scored apart from words, use log); show Change 2 working on the
-  replay (strict >= 12/14, loose >= 22/26, under 45 lines) before asking Sam for it. On 2: build both at once, replay, report.
-- **Needs Sam:** Q1 code-finder option 1 or 2. Q2 late-faults change 1, 1 (yes) or 2 (no) (open since chat 6a).
-- **Read:** `notes/proposals/code-finder.md` (verdict, "Final version"); `source/page.py` MAP; `guides/job-packs.md` "A tool job".
+- **Done (chat 8, Opus medium, 16 Nov):** Sam's 1 1. Code-finder change 1 built (`page.py show --shot --at`, use log, handover
+  flag, kit test): replay 23/26 loose (88%), 12/14 strict (86%), under 45 lines (was 18/26, 7/14). Gate 2 now passes.
+  Details: `notes/proposals/code-finder.md` "Built". Both proposals marked adopted.
+- **Next:** chat 9, Opus medium: build late-faults change 1 (`notes/proposals/late-faults.md` "Final version"), test that
+  Protest Tiers c26's code lists the 107 faults. Then: code-finder change 2 shown on the replay before Sam is asked; the held-out
+  set at the next film's first round.
+- **Needs Sam:** nothing now.
+- **Read:** `notes/proposals/late-faults.md` "Final version" and "Faults in the pick"; `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** verdict in `code-finder/judge/verdict-raw.md`; replay `learn/replay-show.py` reads the fix from column 7 (empty;
-  status is column 6), harmless since T is hand-written. Old handovers: `notes/archive/proposal-route-handovers.md`.
+- **For Claude:** replay `learn/replay-show.py` (also `--words-only`); kittests `code_finder`. Old handovers:
+  `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

@@ -192,3 +192,19 @@
 - **Open rule requests:** none.
 - **For Claude:** replay's loose/strict token lists are in `learn/replay-show.py` (T). Old handovers: `notes/archive/proposal-route-handovers.md`.
 
+
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 8, Opus medium, 16 Nov):** proposal `code-finder` through the route (problem, chat's idea, helpers A and B,
+  blind judge: picked helper B's version, 21/25; Critiqued 6 found, 3 fixed, 3 named). Nothing built. Replay re-run: 18 of 26.
+  Found: the notes table has shot + time for every note; the replay never fed them.
+- **Next (on Sam's 1 for code-finder):** Opus medium, one chat: the judge's "Final version": Learn (freeze replay with shot/time
+  into kittests), then Change 1 only (`show --shot/--at`, shot scored apart from words, use log); show Change 2 working on the
+  replay (strict >= 12/14, loose >= 22/26, under 45 lines) before asking Sam for it. On 2: build both at once, replay, report.
+- **Needs Sam:** Q1 code-finder option 1 or 2. Q2 late-faults change 1, 1 (yes) or 2 (no) (open since chat 6a).
+- **Read:** `notes/proposals/code-finder.md` (verdict, "Final version"); `source/page.py` MAP; `guides/job-packs.md` "A tool job".
+- **Open rule requests:** none.
+- **For Claude:** verdict in `code-finder/judge/verdict-raw.md`; replay `learn/replay-show.py` reads the fix from column 7 (empty;
+  status is column 6), harmless since T is hand-written. Old handovers: `notes/archive/proposal-route-handovers.md`.
+

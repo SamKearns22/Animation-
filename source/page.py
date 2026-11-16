@@ -104,7 +104,9 @@ def _words(s):
 
 
 STOP = set('the and with for not but his her its are was one two too from that this what who into onto off out now '
-           'just still more less very then than when where should could would can has have had all any him she they'.split())
+           'just still more less very then than when where should could would can has have had all any him she they '
+           # bookkeeping words: the code's comments are full of "Sam, 13 Nov, note 18, chat 5", which never name a thing
+           'sam oct nov dec jan note animatic chat brief round warning again'.split())
 
 
 def page_path(film):
@@ -265,13 +267,16 @@ def show(film, note, budget=40, shot=None, at=None):
                 for k in span:
                     if want & _words(lines[k - 1].replace('_', ' ')) or (quoted and quoted.search(lines[k - 1])):
                         keep |= {k - 1, k, k + 1}
-                take = sorted(k for k in keep if ln <= k <= end)[:room]
+                first = [k for k in span if quoted and quoted.search(lines[k - 1])][:max(1, room // 2)]
+                must = {ln} | {k for k in first} | {k + 1 for k in first}     # the shot's own lines before the head
+                rest = sorted(k for k in keep - must if ln <= k <= end)
+                take = sorted((sorted(k for k in must if ln <= k <= end) + rest)[:room])
         out.append((f'{where}  {what}', [(k, lines[k - 1]) for k in take]))
         left -= len(take) + 1
     return out
 
 
-show.first, show.rest, show.head = 34, 8, 6     # lines for the best def, each runner-up, a def's head
+show.first, show.rest, show.head = 16, 5, 3     # lines for the best def, each runner-up, a def's head
 
 
 def main(a):

@@ -302,6 +302,28 @@ def draft_faults(film, notes=None):
             'not on file (rule P16): save them (finish.py does it for the next one) and push']
 
 
+def finder_faults(film):
+    """Code-finder change 1 (Sam's 1, 16 Nov): a chat that changed the film's code today with no `page.py show` call
+    logged today (notes/logs/FILM-show.log) went hunting by hand; say so, so the miss is seen."""
+    if not film:
+        return []
+    from datetime import date
+    code = film.replace('-', '_')
+    day = date.today().isoformat()
+    try:
+        ch = subprocess.run(['git', 'log', f'--since={day} 00:00', '--name-only', '--format='], cwd=ROOT,
+                            capture_output=True, text=True).stdout
+    except Exception:
+        return []
+    if not re.search(rf'source/{code}(_\w+)?\.py', ch):
+        return []
+    log = os.path.join(ROOT, 'notes', 'logs', f'{film.replace("_", "-")}-show.log')
+    if os.path.exists(log) and any(ln.startswith(day) for ln in open(log, encoding='utf-8')):
+        return []
+    return [f'FINDER: the film\'s code changed today with no `page.py {film} show` call logged: each note looks first with '
+            'show --shot --at (or say in the notes why not)']
+
+
 def unrouted_faults(rec):
     """The proposal route (Sam, 15 Nov): a change put to Sam that the Stop hook blocked once and then let through
     (stop_hook_active) is logged by propose.py; the handover names each one so it is routed, not forgotten."""
@@ -410,7 +432,7 @@ def main(argv):
             import ledger
             film = ledger.film_of(rec)
         return report(_run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
-                      + unrouted_faults(rec),
+                      + finder_faults(film) + unrouted_faults(rec),
                       f'(end of chat, {film})')
     if cmd == 'start':
         tail = pos[0].split('_')[-1][-8:].lower()
@@ -419,7 +441,8 @@ def main(argv):
             print(f)
         if opt('--film'):                                        # Sam's Y, 15 Nov: chats 29/31 grepped instead
             print(f'handover: for each note, look at the code with ONE step: python3 source/page.py {opt("--film")} '
-                  'show "the note\'s words" (~40 lines, the functions it touches); never grep or sed a film file first')
+                  'show "the note\'s words" --shot SHOT --at SECONDS (shot and time from the notes table; ~40 lines, '
+                  'the functions it touches); never grep or sed a film file first')
         if not os.path.exists(p):
             print(f'handover: no saved log for {pos[0]}; list_events kinds ["user"], newest pages only, then `dump`')
             return 2
