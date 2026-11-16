@@ -21,3 +21,6 @@ Remove this guy, he's just standing there
 ### 2026-11-16T17:50:15
 Have the 11/10 flash like you're playing a high energy video game and you just hit a jackpot
 
+### 2026-11-16T17:50:36
+If he holds the RPG in his right hand and shrugs, he can use it as part of the shrug motion. Both arms can raise up like 'beats me!' He can also shake his head a little bit back and forth, like, 'no idea'
+
