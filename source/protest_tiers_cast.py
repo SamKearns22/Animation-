@@ -1793,17 +1793,17 @@ def shrug(j, sp, u):
     if e <= 0:
         return j
     sw = sp.get('shoulders', 150)
-    for sd in 'LR':
+    for sd in 'LR':                                  # A12: a real shrug: the shoulders right up (was 28)
         x, y, z = j['sh' + sd]
-        j['sh' + sd] = (x, y - 28 * e, z)
+        j['sh' + sd] = (x, y - 60 * e, z)
     hold = np.asarray(j['wrR'], float)
-    out = np.array((200.0, -20.0, -200.0))           # up and out behind him, palm up at head height: side on, the only
+    out = np.array((220.0, 150.0, -140.0))           # A12: palm up at chest height (was head height)           # up and out behind him, palm up at head height: side on, the only
     bulge = np.array((150.0, 0.0, 0.0)) * math.sin(math.pi * e)   # chat 24: mid-way the straight path passed the
     V.arm_to(j, 'R', tuple(hold + (out - hold) * e + bulge), 'out')   # shoulder (elbow folded): swing out round it
     if e > 0.5:
         j.setdefault('hand', {})['R'] = 'palm'
     j['_free'] = 'R'
-    j['head_roll'] = -8 * e
+    j['head_roll'] = -12 * e
     return j
 
 
@@ -1837,7 +1837,7 @@ def rpg(p, j, yaw, fired=False):
 
 
 def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv_head=None, gun_head=None,
-                shrug_u=0.0, rim=None, drv_roll=0.0):
+                shrug_u=0.0, rim=None, drv_roll=0.0, drv_face=None, gun_face=None):
     """The moped racing in with its driver and (both) the RPG passenger. (x, y): the driver's neck base at scale s;
     returns nothing. Side on (90) or three-quarter (45) facing right. drv_head / gun_head: where each one's head faces
     (degrees, as yaw: -30 turned back over his shoulder toward us, 0 to camera; None = with the body). shrug_u: the
@@ -1845,7 +1845,8 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
     read against a dark road (round 1 critique: the riders merged into the road)."""
     if rim is not None:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-        moped_scene(lay, cam, x, y, s, yaw, aim, fired, both, drv_head, gun_head, shrug_u, None, drv_roll)
+        moped_scene(lay, cam, x, y, s, yaw, aim, fired, both, drv_head, gun_head, shrug_u, None, drv_roll, drv_face,
+                    gun_face)
         from PIL import ImageFilter
         a = lay.split()[3]
         w = max(3, int(round(abs(cam.S(1.0) if hasattr(cam, 'S') else 1.0) * s * 14)) | 1)
@@ -1855,7 +1856,7 @@ def moped_scene(img, cam, x, y, s, yaw=90, aim=38.0, fired=False, both=True, drv
         img.alpha_composite(glow)
         img.alpha_composite(lay)
         return
-    drv, gun = rioter('rider'), rioter('gunner')
+    drv, gun = dict(rioter('rider'), **(drv_face or {})), dict(rioter('gunner'), **(gun_face or {}))   # A11/A12: eyes
     X = dict(ground=928.0 - (-30.0), bob=-30.0, yaw=V.snap(yaw)[0])
     X['ground'] = 928.0 + 0.0                     # in the driver's body frame: soles of a standing driver
     X['bar'] = (928.0 - 1.02 * U, 0.5 * U)        # grip height 1.02 m, 0.5 m ahead of his hips

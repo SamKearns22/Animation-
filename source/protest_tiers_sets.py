@@ -1078,6 +1078,40 @@ def _ministry(img, cam, t):
     # the roof alight (the brief's "blazing Education Ministry")
     flames(img, cam.p(xc + 9, d)[0], Z(15.2), 13 * k, 8 * k, t, seed=31, n=7)
     flames(img, cx - .4 * r, Z(16.1), 3.2 * k, 3.4 * k, t + .4, seed=32)    # chat 11: on the bay (the wing is hidden)
+    _riddled(img, cam, d, xc, cx, r, x0, x1, Z)
+
+
+def _riddled(img, cam, d, xc, cx, r, x0, x1, Z):
+    """Round 3 (A6): the ministry shot to pieces: ~250 bullet holes (a dark dot in a pale chipped ring) over the
+    front wing, the corner bay and the wing along the avenue, and five RPG craters (a jagged dark hole, scorch streaks
+    out of it). Fixed (seeded): the same holes every frame."""
+    rng = np.random.default_rng(64)
+    k = cam.ppm(d)
+    pts = []
+    for _ in range(150):                                   # the front wing
+        pts.append((rng.uniform(x0 + 4, x1 - 4), Z(rng.uniform(0.6, 14.0)), 1.0))
+    for _ in range(60):                                    # the bay (a drum: squeezed toward its edges)
+        a = rng.uniform(0.15, math.pi - 0.15)
+        pts.append((cx + r * math.cos(a), Z(rng.uniform(0.6, 15.5)), 0.6 + 0.4 * math.sin(a)))
+    for _ in range(40):                                    # the wing going away
+        dd = rng.uniform(d + 1, 104)
+        q = cam.p(xc, dd, rng.uniform(0.6, 14.0))
+        pts.append((q[0], q[1], d / dd))
+    for x, y, f in pts:
+        rr = max(1.4, 0.07 * k * f * rng.uniform(0.7, 1.3))
+        IS.ell(img, x, y, rr * 2.1, rr * 1.9, (238, 214, 160), None)
+        IS.ell(img, x, y, rr, rr, (40, 28, 26), None)
+    for q, (x, z) in enumerate(((x0 + 3.5 * k, 9.5), (cx - 0.3 * r, 6.0), (x0 + 9.0 * k, 3.0), (x0 + 6.0 * k, 12.5),
+                                (min(x1 - 60, x0 + 13.0 * k), 6.5))):
+        y = Z(z)
+        R = (0.95 + 0.25 * (q % 2)) * k
+        for n in range(9):                                 # scorch streaks fanning out
+            a = n * 2 * math.pi / 9 + q
+            poly(img, [(x, y), (x + 2.3 * R * math.cos(a), y + 1.8 * R * math.sin(a))], None, (60, 40, 34), 0.35 * R, 0)
+        IS.ell(img, x, y, R * 1.25, R * 1.1, (96, 70, 56), None)
+        hole = [(x + R * (0.75 + 0.3 * ((n * 7 + q) % 3) / 2) * math.cos(n * math.pi / 6),
+                 y + R * (0.7 + 0.3 * ((n * 5 + q) % 3) / 2) * math.sin(n * math.pi / 6)) for n in range(12)]
+        poly(img, hole, (26, 18, 18), INK, 1.6, 0)
 
 
 def _bank(img, cam, t):
@@ -1097,6 +1131,18 @@ def _bank(img, cam, t):
         poly(img, [cam.p(x, d + 3.8, 0), cam.p(x, d + 3.8, 15)], None, (140, 116, 104), 3, 0)
     # chat 17 (readability check; hunt 1 read a cut-off 'ANKA'): letters ~0.9 m tall, centred along the bank, in frame
     text(img, cam.p(x, 52, 5.6), 'BANKA', 52, (60, 46, 40))
+    # round 3 (A5): six windows on fire, flames streaking out and up the stone, scorched above
+    for q, (d, z) in enumerate(((36, .6), (46, .6), (31, 6.5), (41, 10.5), (56, 6.5), (61, .6))):
+        h = 3.6 if z < 1 else 2.6
+        a, b = cam.p(x, d + .4, z), cam.p(x, d + 2.2, z)
+        c, e = cam.p(x, d + 2.2, z + h), cam.p(x, d + .4, z + h)
+        quad(img, cam.p(x, d - .2, z + h), cam.p(x, d + 2.8, z + h), cam.p(x, d + 2.8, z + h + 3.2),
+             cam.p(x, d - .2, z + h + 3.2), (70, 50, 46), None, amt=0)            # the scorch up the stone
+        quad(img, a, b, c, e, (255, 170, 60), INK, 1.6, 0)                          # the room alight
+        glow_disc(img, (a[0] + c[0]) / 2, (a[1] + c[1]) / 2, 2.4 * cam.ppm(d + 1.3), (255, 160, 60), amt=.3)
+        w = abs(b[0] - a[0]) * 1.5 + 0.9 * cam.ppm(d + 1.3)
+        flames(img, (e[0] + c[0]) / 2 + 0.25 * w, (e[1] + c[1]) / 2 + 0.25 * (a[1] - e[1]), w, 2.6 * cam.ppm(d + 1.3),
+               t + q * .41, seed=60 + q, n=4)
 
 
 # ================================================================================================= vehicles
@@ -1106,7 +1152,7 @@ def _bank(img, cam, t):
 TRUCK_LIVERY = {'fr': dict(body=(236, 236, 232), band=(36, 70, 150), cab=(226, 228, 226), word='POLICE', ink=(36, 70, 150)),
                 'al': dict(body=(44, 50, 70), band=(70, 80, 104), cab=(52, 58, 78), word='POLICIA', ink=(226, 226, 230))}
 TRUCK_LEN, TRUCK_H = 9.8, 3.35
-TRUCK_X4, TRUCK_D4 = 2.5, 30.0       # T4: cab end at screen ~640, behind the shield line's right half, rest off frame
+TRUCK_X4, TRUCK_D4 = 2.5, 44.0       # T4 round 3 (A16): back to 44 m, behind the police's sandbag wall (was 30)
 HELI_HOME = (800, 290, 22)           # T4: where it hangs (x, y, px a metre): over the flag (top y 325), upper right
 TRUCK_D3 = 13.2                      # T3 round 3 (F8): up the lane between the two police groups (d 11.1 | 15.3)
 
@@ -1371,7 +1417,7 @@ def vehicles_sheet(out):
 # End shot B (round 1, chat 23): a side alley off the Tirana avenue, front on, low (a crouching eye line). The couple
 # crouch at d ~3.2 behind two wheelie bins at d 2.6 (the bins are the FRONT layer, drawn over them: chest up over
 # the lids). Walls from d 6.7 (where they enter the frame) to the far mouth at d 30, which glows with the avenue's fire.
-ALLEY_CAM = Cam(540, 860, 2000, 1.1)
+ALLEY_CAM = Cam(540, 860, 1450, 1.1)      # A10 (Sam: 'draw the camera back'): F 2000 -> 1450
 CAMS['alley'] = ALLEY_CAM
 ALLEY_W = 1.8                                  # half width (m): a 3.6 m Tirana back lane
 WALL_L, WALL_R = (118, 84, 72), (138, 98, 80)  # old plaster in the fire's reflected light
