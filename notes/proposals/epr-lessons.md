@@ -1,6 +1,6 @@
 # Proposal: Statement One lessons from building European Protests Ranked (EPR)
 
-Status: open
+Status: declined (2026-11-16)
 
 ## Problem
 Sam (16 Nov): "Acknowledging that EPR was a non standard film that required research, new crowd technique, and was
