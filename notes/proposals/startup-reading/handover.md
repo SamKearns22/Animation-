@@ -13,8 +13,10 @@
   is the 10-situation test (a fresh helper answers 10 past situations with old and new CLAUDE.md; any change refuses).
   sentences.py must gain an allowance for the merged sentences (each removed copy names its kept twin). Build only on
   Sam's Y to the judged proposal. Duplicates: map section "What the map shows chat 7", point 3.
-- **Needs Sam:** the 3 stranded branches (asked again chat 7, not yet answered): claude/beautiful-brown-vutd0l merge;
-  claude/blessed-c2-mics-wip keep off; claude/audit-honest-checker keep off (picks offered; left alone until he answers).
+- **Branches settled (Sam, 16 Nov, chat 7):** claude/beautiful-brown-vutd0l: the slurp profile picture merged into
+  profile/ beside the eyes-open one; claude/blessed-c2-mics-wip and claude/audit-honest-checker: disregarded (left on
+  GitHub, not merged; they drop off the start list within 4 days).
+- **Needs Sam:** chat 8's judged proposal (Half A).
 - **Read:** `notes/proposals/startup-fixes.md` ("Final version"); this file; the map `claude-md-map.md` (duplicates section).
 - **Open rule requests:** none.
 - **For Claude:** a rewording must add an allowance to sentences.py first (none exists; the check refuses any loss).
