@@ -142,21 +142,62 @@ def chat_cost():
 SKIP = {'archive', 'next-jobs', '_template', 'sheets', 'ledger'}
 
 
+PROCESS = 'proposal-route'      # tool, kit and process upgrades (notes/proposals/...): never a film's cost (Sam, 16 Nov)
+NAMED = r'(?:notes|source)/(proposals/|[A-Za-z0-9_-]+\.(?:md|py))'
+
+
+def _jobs(text, names, count=None):
+    """{job: times named} in text: notes/NAME.md or source/NAME*.py with a notes file; notes/proposals/... = PROCESS."""
+    count = {} if count is None else count
+    for m in re.finditer(NAMED, text):
+        n = m.group(1)
+        if n == 'proposals/':
+            n = PROCESS
+        else:
+            n = os.path.splitext(n)[0]
+            n = n if n in names else n.split('_')[0]
+        if n in names:
+            count[n] = count.get(n, 0) + 1
+    return count
+
+
+def _task(transcript):
+    """The chat's task: its first typed message (the seed from the last chat's handover, or Sam's own)."""
+    for raw in open(transcript, encoding='utf-8', errors='replace'):
+        if '"user"' not in raw:
+            continue
+        try:
+            r = json.loads(raw)
+        except ValueError:
+            continue
+        c = (r.get('message') or {}).get('content') if r.get('type') == 'user' else None
+        if isinstance(c, list):
+            c = '' if any(x.get('type') == 'tool_result' for x in c) else ' '.join(x.get('text', '') for x in c)
+        if c and c.strip():
+            return c
+    return ''
+
+
 def film_of(transcript):
-    """The film or job this chat worked on: the notes/NAME.md (or source/NAME*.py with a notes file) its own tool
-    calls named most; any chat that names notes/morning-report.md is overnight work, recorded there (Sam, 14 Nov)."""
+    """The film or job this chat worked on, in this order: (1) a task (its first message) under notes/proposals/ is
+    process work (named more than any film), billed to the proposal-route ledger (Sam, 16 Nov: chat 7406486e built a startup fix
+    but was billed to a film on hiatus, because it tested on that film's notes 14 times); (2) any chat that names
+    notes/morning-report.md is overnight work, recorded there (Sam, 14 Nov); (3) the film its task names most; (4) the
+    notes/NAME.md (or source/NAME*.py with a notes file) its own tool calls named most."""
     names = {os.path.splitext(f)[0] for f in os.listdir(os.path.join(ROOT, 'notes')) if f.endswith('.md')} - SKIP
+    names.add(PROCESS)
+    task = _jobs(_task(transcript), names)
+    films = [v for k, v in task.items() if k != PROCESS]
+    if task.get(PROCESS, 0) > max(films, default=0):   # a film's task that also cites a proposal stays the film's
+        return PROCESS
     count = {}
     for raw in open(transcript, encoding='utf-8', errors='replace'):
-        if '"tool_use"' not in raw:
-            continue
-        for m in re.finditer(r'(?:notes|source)/([A-Za-z0-9_-]+)\.(?:md|py)', raw):
-            n = m.group(1)
-            n = n if n in names else n.split('_')[0]
-            if n in names:
-                count[n] = count.get(n, 0) + 1
-    if count.get('morning-report'):               # Sam, 14 Nov: overnight builds and tests are recorded apart from
-        return 'morning-report'                   # the films they test on (a Remakes bench was billed to Remakes)
+        if '"tool_use"' in raw:
+            _jobs(raw, names, count)
+    if count.get('morning-report') or task.get('morning-report'):   # overnight builds and tests are recorded
+        return 'morning-report'                   # apart from the films they test on (a Remakes bench was billed to Remakes)
+    if task:
+        return max(task, key=task.get)
     return max(count, key=count.get) if count else None
 
 
@@ -173,6 +214,7 @@ def auto(transcript):
     _, pct = costwatch.level(st)
     chat, cost, model = os.path.basename(transcript)[:8], round(pct, 2), costwatch.fam(st['model'])
     sid = this_sid()
+    drop_elsewhere(film, sid, chat)
     d = load(film)
     try:                                          # history-and-search Learn (Sam's 1, 16 Nov): steps, history at
         import stepcost                           # the end, and cost by kind of step, on every chat's row
@@ -202,6 +244,40 @@ def auto(transcript):
     if alarm:                                     # never switched off (Sam, 13 Nov: Blessed's alarms_off hid 45%)
         print(json.dumps({'decision': 'block', 'reason': alarm}))
     push_row(film, row)                           # startup-fixes 1 (Sam, 16 Nov): straight onto the main line
+
+
+def drop_elsewhere(film, sid, chat):
+    """One chat, one ledger (Sam, 16 Nov): this chat's estimate rows under any other film are taken out, here and on
+    the main line, so a chat whose billing moved is never counted twice. The app's real figures are left alone."""
+    import glob
+    import subprocess
+    import mainline
+    me = {'sid': sid, 'chat': chat}
+    mine = lambda c: same_row(c, me) and c.get('src') != 'app'
+    for f in sorted(glob.glob(os.path.join(DIR, '*.json'))):
+        other = os.path.splitext(os.path.basename(f))[0]
+        if other == film:
+            continue
+        try:
+            d = json.load(open(f))
+        except (ValueError, OSError):
+            continue
+        if not isinstance(d, dict) or not any(mine(c) for c in d.get('chats', [])):
+            continue
+
+        def cut(x):
+            n = len(x.get('chats', []))
+            x['chats'] = [c for c in x.get('chats', []) if not mine(c)]
+            return len(x['chats']) != n
+        cut(d)
+        store(d)
+        up, _ = _ledger_updates(other, cut)
+        mainline.to_main(up, root=ROOT, msg=f'Ledger: {other}, chat {chat} moved to {film} (automatic)')
+        j, md, _ = _paths(other)
+        subprocess.run(['git', '-C', ROOT, 'add', j, md], capture_output=True)
+        subprocess.run(['git', '-C', ROOT, 'commit', '-q', '-m', f'Ledger: {other}, chat {chat} moved to {film}',
+                        '--', j, md], capture_output=True)
+        print(f'ledger auto: chat {chat} was also under {other}; taken out there (billed to {film})', file=sys.stderr)
 
 
 def same_row(a, b):

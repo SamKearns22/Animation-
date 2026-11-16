@@ -2827,6 +2827,44 @@ def notes_printout_reads_only_open_notes():
     return not miss and held, f'missing/extra {miss}; carried() on a ticked line: {held}'
 
 
+@test
+def process_work_is_never_billed_to_a_film():
+    """Sam, 16 Nov: chat 7406486e built a startup fix but was billed to European Protests, Ranked (on hiatus), because
+    it tested on that film's notes 14 times; then billed again under proposal-route. A task under notes/proposals/
+    now bills process work; a film's task that cites a proposal stays the film's; one chat sits in one ledger."""
+    import json as _j
+    import tempfile
+    import ledger
+    import mainline
+    bare, copy, git = _repo_pair()
+    for n in ('kt', 'proposal-route', 'protest-tiers'):
+        open(os.path.join(copy, 'notes', f'{n}.md'), 'w').write('# notes\n')
+    git(copy, 'add', '-A'); git(copy, 'commit', '-q', '-m', 'notes')
+    keep = ledger.ROOT, ledger.DIR, ledger.CURRENT
+    ledger.ROOT, ledger.DIR = copy, os.path.join(copy, 'notes', 'ledger')
+    ledger.CURRENT = os.path.join(ledger.DIR, '.current')
+
+    def chat(task, calls):
+        p = os.path.join(tempfile.mkdtemp(), 't.jsonl')
+        rows = [{'type': 'user', 'message': {'content': task}}]
+        rows += [{'type': 'assistant', 'message': {'content': [{'type': 'tool_use', 'input': {'command': c}}]}}
+                 for c in calls]
+        open(p, 'w').write('\n'.join(_j.dumps(r) for r in rows))
+        return p
+    tests = 14 * ['python3 -c "open_notes(\'notes/protest-tiers.md\')"']
+    try:
+        got = [ledger.film_of(chat('Startup fixes, chat 5: read notes/proposals/startup-reading/handover.md', tests)),
+               ledger.film_of(chat('Notes round: notes/protest-tiers.md; the rule is in notes/proposals/x.md', [])),
+               ledger.film_of(chat('carry on', tests))]
+        ledger.drop_elsewhere('proposal-route', 'session_A', 'aaaa1111')
+        here = _j.load(open(os.path.join(copy, 'notes', 'ledger', 'kt.json')))['chats']
+        main = _j.loads(git(bare, 'show', f'{mainline.MAIN}:notes/ledger/kt.json').stdout)['chats']
+    finally:
+        ledger.ROOT, ledger.DIR, ledger.CURRENT = keep
+    ok = got == ['proposal-route', 'protest-tiers', 'protest-tiers'] and not here and not main
+    return ok, f'billed to {got}; rows left under the other film: here {len(here)}, main line {len(main)}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
