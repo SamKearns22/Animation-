@@ -51,6 +51,7 @@ def video_info(path):
 
 def load_film(name):
     sys.path.insert(0, HERE)
+    name = name.replace('-', '_')                 # either spelling of the film's name (late-faults change 1)
     print(f'reading the film ({name}.py) ...', flush=True)
     return importlib.import_module(name)
 

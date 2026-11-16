@@ -181,6 +181,9 @@ def picture_faults(film, name, recs, fps, new_template=False):
 
 
 def _notes_file(name):
+    for n in (name, name.replace('_', '-'), name.replace('-', '_')):   # either spelling of the film's name
+        if os.path.exists(os.path.join(ROOT, 'notes', f'{n}.md')):
+            return os.path.join(ROOT, 'notes', f'{n}.md')
     return os.path.join(ROOT, 'notes', f'{name}.md')
 
 
@@ -364,7 +367,8 @@ def main():
     audit = '--audit' in sys.argv              # list every fault instead of stopping at the first
     if audit:
         F._ALLOW.append('audit of a finished film')
-    film = importlib.import_module(name)        # module-level checks (set plans, overlaps) run on import
+    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:
+    # `protest-tiers` and `protest_tiers` both work (code files use _, notes and story files use -)
     has = set(getattr(film, 'HAS', KINDS))      # rule 58: only the checks for what the film contains
     unknown = has - set(KINDS)
     if unknown:

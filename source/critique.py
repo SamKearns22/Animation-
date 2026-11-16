@@ -715,7 +715,7 @@ def _last(film_name):
     d = ledger.load(film_name)
     passes = d.get('critique', {}).get('passes', [])
     film, cur = ledger.current()
-    rnd = cur if film == film_name else max((p['round'] for p in passes), default=None)
+    rnd = cur if (film or '').replace('_', '-') == film_name.replace('_', '-') else max((p['round'] for p in passes), default=None)
     mine = sorted((p for p in passes if p['round'] == rnd), key=lambda p: p['pass'])
     return d, rnd, (mine[-1] if mine else None)
 
