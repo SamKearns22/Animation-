@@ -54,7 +54,7 @@ NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'protest-tiers.md')
 HAS = {'people', 'effects', 'props'}
 FPS = 12
 # round 1 (Sam R4, 15 Nov): tiers 4 / 6 / 8 / 10 s, then the end scene's three shots (notes "## Round 1 plan")
-LENS = (('t1', 4.0), ('t2', 6.0), ('t3', 8.0), ('t4', 10.0), ('ea', 2.4), ('eb', 2.8), ('ec', 2.4))
+LENS = (('t1', 6.0), ('t2', 8.5), ('t3', 8.0), ('t4', 10.0), ('ea', 2.4), ('eb', 2.8), ('ec', 2.4))
 TIERS = ('t1', 't2', 't3', 't4')
 SHOTS, _t = [], 0.0
 for _n, _l in LENS:
@@ -69,7 +69,7 @@ J3 = 1.95                    # T3: the water cannon's whole beat moved this much
 def at(tier, lt):
     """Film time of a moment in a shot (check tables are written in shot time, so a re-time moves them too)."""
     return round(START[tier] + lt, 3)
-HOOK = ('European protests, ranked', {'y': 1300, 'until': 3.6})          # notes: Re-staged, T1 (over the near backs)
+HOOK = ('European protests, ranked', {'y': 1300, 'until': 2.0, 'tilt': -7})   # Sam O3 (16 Nov): Blessed's diagonal, gone at 2 s
 def caption_at(t):
     """Rule 62: the end scene's lines captioned (the voices: notes "## Round 1 plan"; stand-ins until Sam records)."""
     if t < START['ea']:
@@ -84,7 +84,9 @@ HEADLINES = {'t1': ('SPAIN', 'Barcelona, Passeig de Gràcia'), 't2': ('GERMANY',
 # and the mopeds are sprites the audit does not list (seen on every frame of their shot)
 INTENSITY = {'t1': 2, 't2': 4, 't3': 8, 't4': 11}      # Sam R3 / Q2: Albania reads 11 from its first frame
 INTENSITY_RED = (220, 40, 40)                             # the blue-strobe-safe red of the T4 fire
-SHOT_CAST = {'t1': ['hooded*'], 't2': ['hauler*', 'swinger', 'runner*', 'crowd*'], 't3': ['front*', 'crs*'],
+INTENSITY_COL = {'t1': (60, 200, 80), 't2': (255, 150, 30), 't3': (230, 40, 40), 't4': (150, 0, 10)}   # Sam O1 (16 Nov)
+INTENSITY_AT = 2.0                                        # Sam O1: the number appears 2 s into the scene, with a ding
+SHOT_CAST = {'t1': [], 't2': ['hauler*', 'swinger', 'runner*', 'crowd*'], 't3': ['front*', 'crs*'],
              't4': ['policia*', 'rioter*']}
 SIREN = os.path.join(HERE, 'audio', 'power-crime-siren.mp3')
 
@@ -141,7 +143,7 @@ def make_person(kind, i=0, tier='t1', force=None):
     if kind == 'officer':
         return C.officer(force)
     if kind == 'rioter':
-        return C.rioter()
+        return C.rioter(seed=force, tier=tier) if force else C.rioter()
     return C.marcher(i, tier)
 
 
@@ -290,6 +292,8 @@ class Actor:
         return self
 
     def sp(self):
+        if self.kind == 'rioter':                   # Sam O4: each rioter their own face, from their city's mix
+            return make_person('rioter', self.i, self.tier, force=self.name)
         return make_person(self.kind, self.i, self.tier, self.force)
 
     def pose(self, sp):
@@ -360,6 +364,15 @@ def facing(yaw):
 # ================================================================================================= T1
 T1_LINE_D = 150.0      # chat 15: was 185; the line, container and knot come nearer so the beats read at phone size
 T1_FRONT = 106.0       # the march's front rank (was 135): a clear stretch of lit road for the knot
+T1_KEYS, T1_STEP, T1_HAZE = 3.0, 4.0, 4.2   # Sam S1 (16 Nov, T1 6 s): keys up at 3 s; the line's pace; the gas
+# Sam S3 (16 Nov): no black bloc; fireworks lobbed out of the crowd's front ranks, high, at their own times, across
+# the width: (launch time, x where thrown, x where it bursts, peak height above the line m, colour)
+T1_ROCKETS = [(0.45, -3.0, -4.0, 5.5, (255, 90, 70)), (1.05, 2.5, 1.0, 6.3, (255, 250, 210)),
+              (1.5, -6.5, -6.0, 5.0, (110, 255, 150)), (2.1, 5.5, 6.5, 5.9, (255, 200, 60)),
+              (2.6, -1.0, 0.5, 6.7, (255, 120, 220)), (3.25, 7.5, 9.0, 5.0, (255, 90, 70)),
+              (3.8, -5.0, -3.0, 6.3, (110, 220, 255)), (4.35, 1.5, 3.0, 5.5, (255, 250, 210)),
+              (4.85, -8.0, -7.5, 5.9, (110, 255, 150)), (5.3, 4.0, 4.5, 6.7, (255, 200, 60))]
+T1_FLY = 0.8                                        # seconds in the air
 
 
 @lru_cache(None)
@@ -390,13 +403,15 @@ T1_PLACARDS = ['VIVIENDA DIGNA:250,246,232', 'BAJAD ALQUILERES:210,40,40', 'CCOO
 
 def t1_people(img, lt):
     cam = S.CAMS['t1']
-    # the police line across the far end (front on), one pace forward at 3.0
-    step = ease((lt - 3.0) / 0.4)
-    for k, x in enumerate(np.arange(-10.0, 14.0, 1.7)):
-        d = T1_LINE_D - 6.0 * step                        # chat 15: one long pace (6 m) so the step reads
-        gx, gy = cam.p(x, d)
-        bob = 9 * math.sin(math.pi * min(1, max(0, (lt - 3.0) / 0.4)))
-        paste(img, 'officer', 0, 't1', 'line', 0, gx, gy - bob, scale_at(cam, d), force='mossos')
+    # the police line across the far end (front on), one pace forward at T1_STEP; Sam S5 (16 Nov): a second rank two
+    # paces (1.6 m) behind, each officer in a gap of the first; drawn first (further away)
+    step = ease((lt - T1_STEP) / 0.4)
+    bob = 9 * math.sin(math.pi * min(1, max(0, (lt - T1_STEP) / 0.4)))
+    for rank, off, back in ((1, 0.85, 1.6), (0, 0.0, 0.0)):
+        for k, x in enumerate(np.arange(-10.0 + off, 14.0, 1.7)):
+            d = T1_LINE_D + back - 6.0 * step                 # chat 15: one long pace (6 m) so the step reads
+            gx, gy = cam.p(x, d)
+            paste(img, 'officer', 0, 't1', 'line', 0, gx, gy - bob, scale_at(cam, d), force='mossos')
     # the knot by the container (live), then the march (sprites), far to near
     for a in t1_actors(lt):
         draw_actor(img, cam, a)
@@ -409,12 +424,12 @@ def t1_people(img, lt):
             continue
         state = m['state']
         if state == 'keys':                                # the key wave: from the front (far) back toward us
-            if lt < 0.2 + (T1_FRONT - m['d']) / (T1_FRONT - 46) * 1.1:
+            if lt < T1_KEYS + (T1_FRONT - m['d']) / (T1_FRONT - 46) * 0.7:   # Sam S1: up at 3 s, half the crowd
                 state = 'stand'
         elif state == 'placard':
             state = 'placard:' + T1_PLACARDS[m['i'] % len(T1_PLACARDS)]
         yaw = 180
-        if lt > 1.55 + m['turn']:                          # heads turn to the bursts over the line (centre)
+        if lt > 1.3 + m['turn']:                           # heads turn to the bursts over the line (centre)
             yaw = 135 if gx < 470 else -135
         jig = -1 if (m['state'] == 'keys' and state == 'keys' and (int(lt * 12) + m['i']) % 2) else 0
         sc = scale_at(cam, d)
@@ -426,6 +441,10 @@ def t1_people(img, lt):
 
 
 def t1_actors(lt):
+    return []                                      # Sam S3 (16 Nov): no black-clad knot in Spain
+
+
+def _t1_actors_old(lt):
     out = []
     knot = [(-2.4, 123.0), (-1.5, 124.5), (-0.6, 122.5), (2.6, 124.0), (3.3, 122.8)]   # chat 15: was d 161
     for k, (x, d) in enumerate(knot):
@@ -443,48 +462,48 @@ def t1_actors(lt):
 
 def t1_fx(img, lt):
     cam = S.CAMS['t1']
-    # the firework string flying from the flicker's hand to over the line (0.85-1.55): a fizzing head and a spark tail
-    if 0.85 <= lt < 1.55:
-        u = (lt - 0.85) / 0.7
-        x0, y0 = cam.p(-0.4, 122.5, 1.7)
-        x1, y1 = cam.p(-1.6, T1_LINE_D + 1, 5.0)
-        pt = lambda uu: (lerp(x0, x1, uu), lerp(y0, y1, uu) - 120 * math.sin(math.pi * uu))   # noqa: E731
-        dr = ImageDraw.Draw(img)
-        tail = [pt(max(0.0, u - k * 0.03)) for k in range(16)]   # chat 16 (hunt 2: no flick read): a long hot tail
-        for k in range(len(tail) - 1):
-            dr.line([tail[k], tail[k + 1]], fill=(255, max(60, 230 - 11 * k), max(40, 150 - 9 * k)), width=max(2, 9 - k // 2))
-        hx, hy = tail[0]
-        S.glow_disc(img, hx, hy, 60, (255, 200, 110), amt=.8)
-        IS.ell(img, hx, hy, 9, 9, (255, 255, 235), None)
-        rng = np.random.default_rng(int(lt * 100))
-        for _ in range(8):                                   # sparks shed behind it
-            sx, sy = hx + rng.uniform(-22, 22), hy + rng.uniform(-10, 26)
-            IS.ell(img, sx, sy, 2, 2, (255, 240, 180), None)
-    # three bursts over the line (chat 15: bigger, brighter, one at a time, each with a flash and falling sparks)
-    # chat 16 (hunt 2: one big red wheel, brief: three SMALL bursts): smaller, staggered 0.15 s so the three show at once
-    for k, (t0, x, z, col) in enumerate(((1.55, -3.4, 6.2, (255, 90, 70)), (1.72, 0.6, 7.4, (255, 250, 210)),
-                                         (1.89, 4.4, 5.6, (110, 255, 150)))):
+    dr = ImageDraw.Draw(img)
+    for k, (t0, xa, xb, peak, col) in enumerate(T1_ROCKETS):
         a = lt - t0
-        if 0 <= a < 0.6:
-            cx, cy = cam.p(x, T1_LINE_D + 1, z)
-            r = 18 + 62 * ease(a / 0.3)
-            fade = 1 - a / 0.6
+        if 0 <= a < 0.12:                                  # the throw: a spark in a hand over the front ranks
+            hx, hy = cam.p(xa, T1_FRONT - 2.0, 2.3 + 2.0 * a)
+            S.glow_disc(img, hx, hy, 34, (255, 210, 120), amt=.8)
+            IS.ell(img, hx, hy, 6, 6, (255, 255, 235), None)
+        if 0 <= a < T1_FLY:                                # the flight: a high arc, a fizzing head, a spark tail
+            def pt(u):
+                d = lerp(T1_FRONT - 2.0, T1_LINE_D + 2.0, u)
+                z = lerp(2.3, 7.0, u) + 4 * peak * u * (1 - u)
+                return cam.p(lerp(xa, xb, u), d, z)
+            u = a / T1_FLY
+            tail = [pt(max(0.0, u - q * 0.025)) for q in range(14)]
+            for q in range(len(tail) - 1):
+                dr.line([tail[q], tail[q + 1]], fill=(255, max(60, 230 - 12 * q), max(40, 150 - 9 * q)),
+                        width=max(2, 8 - q // 2))
+            hx, hy = tail[0]
+            S.glow_disc(img, hx, hy, 44, (255, 200, 110), amt=.75)
+            IS.ell(img, hx, hy, 7, 7, (255, 255, 235), None)
+            rng = np.random.default_rng(int(lt * 100) + k)
+            for _ in range(6):
+                IS.ell(img, hx + rng.uniform(-18, 18), hy + rng.uniform(-8, 22), 2, 2, (255, 240, 180), None)
+        b = a - T1_FLY                                     # the burst over the line
+        if 0 <= b < 0.6:
+            cx, cy = cam.p(xb, T1_LINE_D + 2.0, 7.0)
+            r = 18 + 62 * ease(b / 0.3)
+            fade = 1 - b / 0.6
             S.glow_disc(img, cx, cy, r * 1.6, col, amt=.6 * fade)
-            if a < 0.07:                                      # the flash
+            if b < 0.07:
                 S.glow_disc(img, cx, cy, 60, (255, 255, 255), amt=.8)
                 IS.ell(img, cx, cy, 12, 12, (255, 255, 255), None)
-            dr = ImageDraw.Draw(img)
             for n in range(16):
                 ang = n * math.pi / 8 + k * 0.3
                 r0, r1 = r * 0.4, r
-                droop = 40 * a * a / 0.36
+                droop = 40 * b * b / 0.36
                 ex, ey = cx + r1 * math.cos(ang), cy + r1 * math.sin(ang) + droop
-                dr.line([(cx + r0 * math.cos(ang), cy + r0 * math.sin(ang) + droop * .5), (ex, ey)],
-                        fill=col, width=4)
+                dr.line([(cx + r0 * math.cos(ang), cy + r0 * math.sin(ang) + droop * .5), (ex, ey)], fill=col, width=4)
                 IS.ell(img, ex, ey, 4, 4, (255, 255, 240), None)
     # the tear-gas haze drifting left to right through the keys (3.0-4.0)
-    if lt > 2.9:
-        haze(img, lt - 2.9, [(cam.p(x, d, 1.6), 9 * cam.ppm(d)) for x, d in
+    if lt > T1_HAZE:
+        haze(img, lt - T1_HAZE, [(cam.p(x, d, 1.6), 9 * cam.ppm(d)) for x, d in
                              ((-4, 128), (-1, 118), (2, 135), (5, 108), (-6, 100), (1, 92), (-3, 84))], 0.9,
              (232, 232, 222))
 
@@ -2079,9 +2098,16 @@ def overlay(img, t):
     if lt >= 0.5:
         d.text((72 * k, 452 * k), place, font=_font(int(44 * k)), fill=(255, 255, 255), stroke_width=int(4 * k),
                stroke_fill=(0, 0, 0))
-    if lt >= 1.0:                                          # Sam R3: the Intensity line, red, a little smaller
-        d.text((72 * k, 514 * k), f'Intensity Level: {INTENSITY[tier]}/10', font=_font(int(36 * k)), fill=INTENSITY_RED,
-               stroke_width=int(4 * k), stroke_fill=(0, 0, 0))
+    if lt >= 1.0:                                          # Sam R3 / O1 (16 Nov): bigger; the label at 1 s, white
+        f = _font(int(54 * k))
+        lab = 'Intensity Level: '
+        d.text((72 * k, 514 * k), lab, font=f, fill=(255, 255, 255), stroke_width=int(5 * k), stroke_fill=(0, 0, 0))
+        if lt >= INTENSITY_AT:                             # the number pops in (a short grow) in its tier's colour
+            u = min(1.0, (lt - INTENSITY_AT) / 0.12)
+            fn = _font(max(8, int(54 * k * (0.6 + 0.4 * u + 0.15 * math.sin(math.pi * u)))))
+            x = 72 * k + d.textlength(lab, font=f)
+            d.text((x, 514 * k + 27 * k), f'{INTENSITY[tier]}/10', font=fn, fill=INTENSITY_COL[tier],
+                   stroke_width=int(5 * k), stroke_fill=(0, 0, 0), anchor='lm')
     img.alpha_composite(lay)
     return img
 
@@ -2097,14 +2123,21 @@ def _box_t1(x, d, z0, z1, w):
     return (ax, ay, ax + w * cam.ppm(d), by)
 
 
-KEEP_CLEAR = [('the knot and the burning container', lambda t: _box_t1(0.6, 162, 0, 3.0, 8.0) if t < 4 else None),
-              ('the bursts over the line', lambda t: _box_t1(1.0, 186, 4.0, 8.5, 9.0) if 1.5 < t < 3.0 else None),
+KEEP_CLEAR = [('the burning skip', lambda t: _box_t1(-7.0, 176, 0, 5.0, 3.0) if t < 6 else None),
+              ('the bursts over the line', lambda t: _box_t1(0.0, 152, 4.0, 9.5, 20.0) if 1.2 < t < 2.0 else None),
               ('the police line', lambda t: _box_t1(2.0, 185, 0, 2.0, 26.0) if t < 4 else None)]
 
 
 # ------------------------------------------------------------------------------------------------- sound
+def ding(sr):
+    """A soft bell: two sine partials (E6 and its bright overtone), a 6 ms rise and a 0.9 s fade; quiet (peak 0.22)."""
+    t = np.arange(int(0.9 * sr)) / sr
+    env = np.minimum(1.0, t / 0.006) * np.exp(-t * 5.5)
+    return 0.22 * env * (np.sin(2 * np.pi * 1318.5 * t) + 0.35 * np.sin(2 * np.pi * 3955.5 * t) * np.exp(-t * 6))
+
+
 def soundtrack(stems=False):
-    """Siren only (the brief names the siren cue, on the T2 blue wash); no other effects."""
+    """The siren (the brief names it, on the T2 blue wash) and the intensity dings (Sam O1); no other effects."""
     import mossad_audio as MA
     n = int((DUR + 0.3) * MA.SR)
     mix = np.zeros(n)
@@ -2115,6 +2148,10 @@ def soundtrack(stems=False):
             filmkit.place(mix, s[:int(1.2 * MA.SR)] * 0.6, at=at('t2', T2_WASH), sr=MA.SR)
     except Exception as e:                                  # the film still renders; the fault is printed
         print('SOUND: siren not placed:', e)
+    dg = ding(MA.SR)                                        # Sam O1 (16 Nov): a gentle ding as each number appears
+    for tr in TIERS:
+        i = int(at(tr, INTENSITY_AT) * MA.SR)
+        mix[i:i + len(dg)] += dg[:max(0, n - i)]
     for ln in voices():                                     # Sam's takes only: a stand-in is never heard
         if ln['real']:
             i = int(ln['start'] * MA.SR)

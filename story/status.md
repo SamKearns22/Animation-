@@ -1,3 +1,3 @@
-European Protests, Ranked (was Protest Tiers): PAUSED (Sam, 15 Nov) until the budget problems are solved; 53% of a week spent at animatic 3.
-Cost cuts (16 Nov): startup-fixes 1-3 built: cost rows reach the main line, the start lists only branches with real work, chats read only open notes (~1.1k vs ~6.3k tokens).
-Next: Sonnet chat 6 maps CLAUDE.md (change 4, read-only); Sam: 3 stranded branches (notes/proposals/startup-reading/handover.md).
+European Protests, Ranked: REOPENED 16 Nov; round 2 notes (front half) in progress: Overall + Spain built, Germany next.
+Bald-heads kit fix running in its own chat (Sam's Y there, then this film only).
+Next: Opus medium chat does Germany G1-G10, sends clips; then Sonnet renders the front-half animatic.
