@@ -36,6 +36,9 @@
 - **Open rule requests:** the 'a stopped drawing never ships' proposal (film_engine: a stopped drawing refuses the render even with --faults-named; finish.py scans for black frames) was answered (Sam, Y): written as rule P17, naming not blocking. P16 is written.
 - **For Claude:** branch `claude/protest-tiers-c31` (= main line). finish.py's --film is the module name `protest_tiers`.
 
+## Round 5 France notes (Sam, 16 Nov, on the France round 4 clip)
+- [ ] F24 Sam: "FANTASTIC WORK" (F12-F23: Y). Sound for France: "I have added a video of a Parisian riot which you can take sound from, alongside other banked sound effects -- you will hear the water cannon distinctly." - Sam's recording's sound saved as `sounds/protest-tiers/paris-riot.mp3` (14.7 s, from his screen recording). Listen through it (loudness over time; find the water cannon's hiss/roar and the crowd); lay France's sound: crowd bed from it under all of T3, the water cannon's sound from JET_ON 3.5 to the sweep's end 7.0 (truck engine 2.0-3.4 if it has one), and the banked effects (stone-hit.mp3 on shield hits, glass/other where the moves call for it). Clip `final OUT --small --span 14.5 22.5` to Sam.
+
 ## Round 4 France notes (Sam, 16 Nov, on the France round 3 clip; word for word in the bullets; plan after the dash)
 - [x] F12 (built chat 6, looked/checked chat 7; clip sent) Start with the crowds already throwing; the approach walk does not look good. - Cut the walk-in: frame 0 has the front and back rows in place, mid-throw at their own phases (no surge-in for actors or sprites).
 - [x] F13 (built chat 6, looked/checked chat 7; clip sent) More police and more crowds in the background around the statue; "I don't want to see empty space in this mass riot." - Fill the empty paving: crowd right of the base and behind the police (sprites), a third police group/reserve behind the truck lane and a line along the base's right; no bare paving band left on screen.
