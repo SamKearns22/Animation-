@@ -2,20 +2,19 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
-- **Done (chat 4 of 8, Opus high; chat 3 hit the usage limit with no handover):** late-faults judged blind (picked
-  helper A; Critiqued 6 found, 3 fixed, 3 named), verdict recorded; options put to Sam (Q1). Code-search count
-  done: `notes/proposals/learn/code-search-count.md`: 7 chats, 169 of 564 steps (30%) hand code searches, page.py run
-  0 times, including the one readable chat after page.py existed (Protest Tiers cast chat 5).
-- **Next: chat 5 of 8, Opus high:** route the second proposal through propose.py (new, chat.md first, pack, two helpers,
-  judge, record, show): "chats re-read their history (~49% of an Opus chat) and find code by hand (30% of steps) instead
-  of page.py". Evidence: code-search-count.md, notes/cost-diagnosis.md, notes/proposals/learn/protest-tiers-costs.md.
-  Put its top two to Sam together with Q1 if still open. On Sam's Y to late-faults option 1: the learn-first replay
-  is Sonnet work (its own chat), then change 1 comes back to Sam as its own yes with the replay's numbers.
-- **Needs Sam:** Q1, late-faults: 1 (check before handing over, measured first; my pick) / 2 (checks on every clip) / N.
-- **Read:** this file's route sections; `notes/proposals/late-faults.md` (Verdict); `guides/job-packs.md` "A tool job".
+- **Done (chat 5 of 8, Opus high):** second proposal routed: `notes/proposals/history-and-search.md` (problem, facts,
+  chat.md first, two helpers, blind judge, recorded). Judge picked helper B (V1): measure cost by kind of step in every
+  chat's ledger row + a read-only Sonnet backfill (search cost share, `show` replayed on old notes), ~1.5-2% once;
+  then a guard on hand film-file searches as its own yes, only if searching is >=10% of a round chat and `show` hits
+  >=80%. Critiqued 7 found, 3 fixed, 4 named. Both questions put to Sam in one message (chat 4's Q1 had no answer).
+- **Next (on Sam's answers):** Q1=1 -> late-faults replay (Sonnet medium, own chat). Q2=1 -> history-and-search
+  Learn: ledger.py fields (Opus medium, building from a clear plan) then the backfill (Sonnet). Both Ys: one Opus
+  medium chat builds the ledger fields, then opens a Sonnet chat for both read-only replays. `propose.py mark` each.
+- **Needs Sam:** Q1 late-faults 1/2/N; Q2 history-and-search 1/2/N (my pick 1 on both).
+- **Read:** this file's route sections; `notes/proposals/history-and-search.md` Verdict; `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** sessions 01Gzna... (Protest Tiers chats 9-32) cannot be opened here. Chat 3's first judge wrote a
-  verdict that was lost to the limit; chat 4 re-packed and judged afresh (V-key in late-faults/state.json).
+- **For Claude:** history-and-search key in state.json (V1=B, V2=A, V3=chat); F4: whether the Stop hook's transcript
+  holds per-step usage is unchecked, check first. Sessions 01Gzna... (Protest Tiers 9-32) cannot be opened.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

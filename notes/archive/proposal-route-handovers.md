@@ -117,3 +117,21 @@
   claude/create-claude-md-oe8z4g here has unrelated history, so work was on `chat2-learn` pushed to the main line.
   Ledger "sonnet" on chats 27, 29, 30 titled "Opus medium" still unchecked.
 
+
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 4 of 8, Opus high; chat 3 hit the usage limit with no handover):** late-faults judged blind (picked
+  helper A; Critiqued 6 found, 3 fixed, 3 named), verdict recorded; options put to Sam (Q1). Code-search count
+  done: `notes/proposals/learn/code-search-count.md`: 7 chats, 169 of 564 steps (30%) hand code searches, page.py run
+  0 times, including the one readable chat after page.py existed (Protest Tiers cast chat 5).
+- **Next: chat 5 of 8, Opus high:** route the second proposal through propose.py (new, chat.md first, pack, two helpers,
+  judge, record, show): "chats re-read their history (~49% of an Opus chat) and find code by hand (30% of steps) instead
+  of page.py". Evidence: code-search-count.md, notes/cost-diagnosis.md, notes/proposals/learn/protest-tiers-costs.md.
+  Put its top two to Sam together with Q1 if still open. On Sam's Y to late-faults option 1: the learn-first replay
+  is Sonnet work (its own chat), then change 1 comes back to Sam as its own yes with the replay's numbers.
+- **Needs Sam:** Q1, late-faults: 1 (check before handing over, measured first; my pick) / 2 (checks on every clip) / N.
+- **Read:** this file's route sections; `notes/proposals/late-faults.md` (Verdict); `guides/job-packs.md` "A tool job".
+- **Open rule requests:** none.
+- **For Claude:** sessions 01Gzna... (Protest Tiers chats 9-32) cannot be opened here. Chat 3's first judge wrote a
+  verdict that was lost to the limit; chat 4 re-packed and judged afresh (V-key in late-faults/state.json).
+
