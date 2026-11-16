@@ -378,7 +378,7 @@ def finder_faults(film):
     if os.path.exists(log) and any(ln.startswith(day) for ln in open(log, encoding='utf-8')):
         return []
     return [f'FINDER: the film\'s code changed today with no `page.py {film} show` call logged: each note looks first with '
-            'show --shot --at (or say in the notes why not)']
+            'show --shot --at --who (or say in the notes why not)']
 
 
 def unrouted_faults(rec):
@@ -498,7 +498,7 @@ def main(argv):
             print(f)
         if opt('--film'):                                        # Sam's Y, 15 Nov: chats 29/31 grepped instead
             print(f'handover: for each note, look at the code with ONE step: python3 source/page.py {opt("--film")} '
-                  'show "the note\'s words" --shot SHOT --at SECONDS (shot and time from the notes table; ~40 lines, '
+                  'show "the note\'s words" --shot SHOT --at SECONDS --who WHO (shot, time and who from the notes table; ~40 lines, '
                   'the functions it touches); never grep or sed a film file first')
         ends = os.path.join(ROOT, 'notes', 'logs', 'handover-end.log')
         parent = pos[0].split('_')[-1]

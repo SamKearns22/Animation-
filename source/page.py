@@ -18,12 +18,16 @@ MAP
                go in apart from the note's words. Defs named for the shot and lines naming it in quotes score as a
                second count, so a shot the code does not know ("cast sheet") cannot push out a word hit; an unknown
                shot falls to the shot playing at --at, else the nearest name, said so.
+  change 2 ... (Sam's yes, 16 Nov) module-level tables and constants are found like defs; any def or table whose one
+               line holds 2+ of the note's words joins; tables whose keys name the note's thing are lifted (chin ->
+               chin_long); the best line is shown before the head. --who (the notes table's who column) lifts a def or
+               table named for them. Files are parsed once and kept until they change (the replay: 52 s -> 0.5 s).
   log ........ every show call writes one line to notes/logs/FILM-show.log; handover.py end flags a chat that changed
                the film's code today with no show call.
   film names . `protest-tiers` and `protest_tiers` both work (code files use _, story files use -).
 
-    python3 source/page.py FILM show "note words" --shot SHOT --at SECONDS [-n 40]   (one look per note; shot and time
-                                                  from the notes table; either may be left out)
+    python3 source/page.py FILM show "note words" --shot SHOT --at SECONDS --who WHO [-n 40]   (one look per note;
+                                                  shot, time and who from the notes table; any may be left out)
     python3 source/page.py FILM                  (writes story/FILM-page.md; prints its size against the code's)
     python3 source/page.py FILM find "the officer's arms clip the van" [-n 5]
 
@@ -179,7 +183,7 @@ def _deep(film, want, seen):
     """Change 2: every def and table, scored by its best single line (the note's words met on one line: a comment
     naming the fix, a key like chin_long). A def or table joins the hits when one line holds 2+ of the note's words,
     or, when the note asks for more or less of something, a table's key holds one of its words. -> [(0, where, name)]."""
-    size, things = want & SIZE, want - SIZE
+    size, things = (want & SIZE) or not show.gate, want - SIZE
     out = []
     for f in files(film):
         lines, defs, blocks, lw = _parsed(f)
@@ -263,7 +267,7 @@ def _log(film, note, shot, at, res):
                 f'{top}\t{" ".join(note.split())[:100]}\n')
 
 
-def show(film, note, budget=40, shot=None, at=None):
+def show(film, note, budget=40, shot=None, at=None, who=None):
     """A note's words -> the code to read: [(header, [(line number, text)])], at most ~budget code lines in all.
     The best hit gets the lion's share: the whole def if it fits, else its first lines plus every line holding the
     note's words (one line either side). Runners-up get their first lines; the rest are listed as FILE:LINE.
@@ -297,10 +301,13 @@ def show(film, note, budget=40, shot=None, at=None):
                 name = _defs(path).get(ln, (0, ''))[1]
                 own = any(name == n or name.startswith(n + '_') or name.endswith('_' + n) for n in sh)
                 body += 3 * own + min(3, sum(1 for x in src if quoted.search(x)))
+            if show.deep and who:                 # the notes table's who column: a def or table named for them
+                name = _defs(path).get(ln, (0, ''))[1].lower()
+                body += 2 * len(_words(who) & _words(name.replace('_', ' ').replace("'", ' ')))
             if show.deep:                         # one line holding several of the note's words is the fix's line
                 best = _line_score(path, ln, end, want)[0]
                 body += 2 * best if best >= 2 else 0
-                if ln in _parsed(path)[2] and want & SIZE:       # a settings table a more-or-less note may want
+                if ln in _parsed(path)[2] and (want & SIZE or not show.gate):       # a settings table a more-or-less note may want
                     keys = ' '.join(re.findall(r'(\w+)\s*=', ' '.join(src))).replace('_', ' ')
                     body += 3 * len((want - SIZE) & _words(keys))
         if score or body:
@@ -340,7 +347,9 @@ def show(film, note, budget=40, shot=None, at=None):
 
 
 show.first, show.rest, show.head = 16, 5, 3     # lines for the best def, each runner-up, a def's head
-show.deep = os.environ.get('FINDER_DEEP') == '1'  # code-finder change 2: built 16 Nov, NOT adopted (awaits Sam's yes)
+show.gate = False                                # True: tables lifted only for a more-or-less note (SIZE words);
+                                                 # off since 16 Nov: same replay score without the hand list
+show.deep = os.environ.get('FINDER_DEEP', '1') == '1'  # code-finder change 2 (Sam's yes, 16 Nov); FINDER_DEEP=0 turns it off
 
 
 def main(a):
@@ -350,7 +359,8 @@ def main(a):
         b = int(a[a.index('-n') + 1]) if '-n' in a else 40
         shot = a[a.index('--shot') + 1] if '--shot' in a else None
         at = _at(a[a.index('--at') + 1]) if '--at' in a else None
-        res = show(a[0], a[2], b, shot, at)
+        who = a[a.index('--who') + 1] if '--who' in a else None
+        res = show(a[0], a[2], b, shot, at, who)
         _log(a[0], a[2], shot, at, res)
         if getattr(show, 'msg', ''):
             print('note: ' + show.msg)

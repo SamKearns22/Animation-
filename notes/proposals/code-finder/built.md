@@ -12,7 +12,7 @@
   long-def lines) targets 2 and 9; not built: it is its own yes, asked only after it is shown working on the replay.
 - Still to do: the held-out set from the next film's first round, frozen before any tuning (targets: lines edited, from git).
 
-## Built (change 2, chat "code finder change 2", Opus medium, 16 Nov; Sam said proceed; NOT adopted, awaits his yes)
+## Built (change 2, chat "code finder change 2", Opus medium, 16 Nov; Sam said proceed; ADOPTED 16 Nov, Sam: "Switch it on")
 - Why the two notes missed (rule 30, looked first): note 2's chin_long sits in a module-level `P4.TUNE['brand'] = dict(...)`
   line, never on the page; note 9's ears_hidden is in `press_person` (blessed_cast.py:663-671), a SHORT def whose
   docstring has none of the note's words, so it was never a candidate; its one line ("hair over the ears: none drawn on
@@ -27,5 +27,17 @@
   41-44 lines; words only 21/26, 10/14 -> 23/26, 12/14. kittest code_finder_replay passes either way.
 - Named: note 2's answer shows six chin settings (Brand's is third, labelled `P4.TUNE['brand']`); SIZE is a hand list
   tuned on one note; still missed 24 (flash). Proof on a new film is the held-out set at the next film's first round.
-- On Sam's yes: show.deep defaults on, the kittest bar goes to 25/26, 14/14.
 - Sam's 16 Nov question (separate job or part of the rule-location one?): answered by his "proceed" as its own job.
+
+## Weak spots (Sam, 16 Nov: "Switch it on. And can you address the weak spots?")
+- Switched on: show.deep defaults on (FINDER_DEEP=0 turns it off); kittest code_finder_replay bar 25/26, 14/14, <45 lines.
+- Hand list of more-or-less words: dropped (show.gate False). Without it the replay is the same 25/26, 14/14 and the top
+  answer is the same on all 26 notes; on 11 notes another settings table appears among the runner-ups.
+- Brand's chin line third of seven: `--who` added (the notes table's who column; a def or table named for them +2 per
+  word). With it: second (first is Walliams's `outline`, whose docstring says "big face ... long, broad, rounded chin");
+  scores unchanged. handover.py start and the FINDER fault now print --who. change2-replay.py prints all three runs.
+- Note 24 (flash): not a finder miss. The flash code (`_stills`, blessed.py:476, "note 24" in its docstring) was written
+  by that fix; the answer shows press_sp/press_pose/press, where the clothes and cameras went. Tried folding -ing/-ed
+  endings: no change on the replay, not kept.
+- The next film's test: cannot be run before there is a next film. Protest Tiers has no round notes with fixes in git
+  (its round 1 was a re-staging), so no held-out set exists yet; it is frozen at the next film's first round as planned.

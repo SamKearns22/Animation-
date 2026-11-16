@@ -2603,13 +2603,13 @@ def proposal_route_hook():
 @test
 def code_finder_replay():
     """The frozen 26-note Blessed replay (notes/proposals/learn/replay-show.py): page.py show, given each note's words,
-    shot and time, must keep at least 23/26 loose, 12/14 strict, every answer under 45 lines (code-finder change 1)."""
+    shot and time, must keep at least 25/26 loose, 14/14 strict, every answer under 45 lines (code-finder change 2)."""
     import importlib.util as u
     sp = u.spec_from_file_location('replay_show', os.path.join(os.path.dirname(HERE), 'notes', 'proposals', 'learn',
                                                                'replay-show.py'))
     r = u.module_from_spec(sp); sp.loader.exec_module(r)
     lo, st, mx, _ = r.run()
-    return lo >= 23 and st >= 12 and mx < 45, f'loose {lo}/26, strict {st}/14, longest {mx} lines (bar 23, 12, <45)'
+    return lo >= 25 and st >= 14 and mx < 45, f'loose {lo}/26, strict {st}/14, longest {mx} lines (bar 25, 14, <45)'
 
 
 def main():
