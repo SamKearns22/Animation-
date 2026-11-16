@@ -2,22 +2,20 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
-- **Done (chat 2 of 8, Sonnet):** Learn step A and B written in `notes/proposals/learn/` (asks.md, asks-labelled.tsv,
-  asks-split.md, protest-tiers-costs.md). Sam: guard-holes option 1 Y; Protest Tiers paused until the budget problems
-  are solved; aim: cut every stage's cost without harming quality. LIMIT: this chat could read only Protest Tiers
-  chats 0-8 (the 01J1JB7 ids); chats 9-32 (~38 of 53.6%) are on another account, so their cause rows come from the
-  ledger titles and archived handovers, marked unchecked. Finding: 43 asks, 13 "change" (6 tuning, 7 test: too few to
-  score firmly). Cost by cause (title-level): rework/critique/re-render/code-finding chats 16.0% (30%), planning+research
-  11.7%, bookkeeping-only 0.9%, building 24%; moves 25.3% vs 7.6% plan; per-chat cost did not fall after the 13 Nov
-  fixes (Opus ~1.3-3.2%); the count (33 chats) and fix rounds on repeat faults are the lever.
-- **Next: chat 3 of 8, Opus high:** trace the biggest causes (fix-round chats 13, 15, 17, 18, 27-30; chat 2's research)
-  to the rule or tool that should have stopped them, and route the first change through the proposal route (one per yes).
-- **Needs Sam:** nothing until chat 3's first judged option.
-- **Read:** `notes/proposals/learn/protest-tiers-costs.md`, `asks-split.md`; this file's problem and route sections.
+- **Done (chat 4 of 8, Opus high; chat 3 hit the usage limit with no handover):** late-faults judged blind (picked
+  helper A; Critiqued 6 found, 3 fixed, 3 named), verdict recorded; options put to Sam (Q1). Code-search count
+  done: `notes/proposals/learn/code-search-count.md`: 7 chats, 169 of 564 steps (30%) hand code searches, page.py run
+  0 times, including the one readable chat after page.py existed (Protest Tiers cast chat 5).
+- **Next: chat 5 of 8, Opus high:** route the second proposal through propose.py (new, chat.md first, pack, two helpers,
+  judge, record, show): "chats re-read their history (~49% of an Opus chat) and find code by hand (30% of steps) instead
+  of page.py". Evidence: code-search-count.md, notes/cost-diagnosis.md, notes/proposals/learn/protest-tiers-costs.md.
+  Put its top two to Sam together with Q1 if still open. On Sam's Y to late-faults option 1: the learn-first replay
+  is Sonnet work (its own chat), then change 1 comes back to Sam as its own yes with the replay's numbers.
+- **Needs Sam:** Q1, late-faults: 1 (check before handing over, measured first; my pick) / 2 (checks on every clip) / N.
+- **Read:** this file's route sections; `notes/proposals/late-faults.md` (Verdict); `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** helpers on this account cannot open session ids starting 01Gzna (get_session "not found"); local branch
-  claude/create-claude-md-oe8z4g here has unrelated history, so work was on `chat2-learn` pushed to the main line.
-  Ledger "sonnet" on chats 27, 29, 30 titled "Opus medium" still unchecked.
+- **For Claude:** sessions 01Gzna... (Protest Tiers chats 9-32) cannot be opened here. Chat 3's first judge wrote a
+  verdict that was lost to the limit; chat 4 re-packed and judged afresh (V-key in late-faults/state.json).
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

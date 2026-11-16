@@ -95,3 +95,25 @@
 - **For Claude:** named, not fixed: helpers ran 800-1300 words (asked under 800); case 2 near-miss (judge added two
   older films and picked the dearest chats; Sam's better answer was this film, a spread, not extremes).
 
+
+
+# Chat 2 of 8 (Sonnet), archived by chat 4, 16 Nov
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 2 of 8, Sonnet):** Learn step A and B written in `notes/proposals/learn/` (asks.md, asks-labelled.tsv,
+  asks-split.md, protest-tiers-costs.md). Sam: guard-holes option 1 Y; Protest Tiers paused until the budget problems
+  are solved; aim: cut every stage's cost without harming quality. LIMIT: this chat could read only Protest Tiers
+  chats 0-8 (the 01J1JB7 ids); chats 9-32 (~38 of 53.6%) are on another account, so their cause rows come from the
+  ledger titles and archived handovers, marked unchecked. Finding: 43 asks, 13 "change" (6 tuning, 7 test: too few to
+  score firmly). Cost by cause (title-level): rework/critique/re-render/code-finding chats 16.0% (30%), planning+research
+  11.7%, bookkeeping-only 0.9%, building 24%; moves 25.3% vs 7.6% plan; per-chat cost did not fall after the 13 Nov
+  fixes (Opus ~1.3-3.2%); the count (33 chats) and fix rounds on repeat faults are the lever.
+- **Next: chat 3 of 8, Opus high:** trace the biggest causes (fix-round chats 13, 15, 17, 18, 27-30; chat 2's research)
+  to the rule or tool that should have stopped them, and route the first change through the proposal route (one per yes).
+- **Needs Sam:** nothing until chat 3's first judged option.
+- **Read:** `notes/proposals/learn/protest-tiers-costs.md`, `asks-split.md`; this file's problem and route sections.
+- **Open rule requests:** none.
+- **For Claude:** helpers on this account cannot open session ids starting 01Gzna (get_session "not found"); local branch
+  claude/create-claude-md-oe8z4g here has unrelated history, so work was on `chat2-learn` pushed to the main line.
+  Ledger "sonnet" on chats 27, 29, 30 titled "Opus medium" still unchecked.
+
