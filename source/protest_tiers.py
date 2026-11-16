@@ -359,6 +359,18 @@ def draw_actor(img, cam, a):
     return j
 
 
+def draw_prop(img, cam, a):
+    """What someone carries, cut to the door's opening while they are inside (G14: the stock showed through the wall)."""
+    if not a.clip:
+        return a.prop(img, cam, a)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    a.prop(lay, cam, a)
+    m = Image.new('L', img.size, 0)
+    ImageDraw.Draw(m).rectangle(a.clip, fill=255)
+    lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.getchannel('A')), np.asarray(m))))
+    img.alpha_composite(lay)
+
+
 def _kind(a):
     return a.kind if a.kind in ('officer', 'rioter') else None
 
@@ -556,16 +568,24 @@ DOOR_C, FRONT_D = (DOOR_X0 + DOOR_X1) / 2, 14.0
 T2_SW = (0.2, 12.7)                 # the swinger's mark (the sign's head reaches the glass at T2_HIT)
 T2_STAR = (0.8, 1.92)               # where it meets the glass (x, height); chat 3: on the sign's head at T2_HIT
 BOARD = (-0.7, 12.75)               # G7: the A-board, kicked at BOARD_KICK, lands at BOARD_LAND
-BOARD_KICK, BOARD_LAND, BOARD_TO = 2.3, 2.8, (-0.15, 11.0)
+BOARD_KICK, BOARD_LAND, BOARD_TO = 2.3, 3.05, (1.0, 9.8)    # G18 (Sam: "flies further"): 0.75 s, 3.4 m (was 1.9), toward us and right, low past the swinger
 # G2: stones thrown from off frame left and near: (hits the glass at, x, height)
 T2_STONES = ((0.35, -1.4, 1.6), (0.5, 0.6, 2.0), (0.62, -0.4, 1.2), (0.8, 1.3, 1.7), (0.95, -1.0, 2.2), (1.1, 0.2, 1.4))
+# G15 (Sam: 'some rocks hit the upper window'): three thrown from off right and near at the lit first-floor window
+# (x 2.2-3.5, height 5.0-7.4 on the front): two chip it, the third goes through. (hits at, x, height)
+UP_STONES = ((3.9, 2.6, 6.7), (4.5, 3.15, 5.6), (5.2, 2.8, 6.2))
+UP_FROM = (4.8, 9.2, 1.8)            # off the frame's right edge, near us: where they are thrown from
 # G9 (FAZ 31 Oct: two weapons taken): who takes which pistol: (cubby column, row height, when it leaves its cubby)
 TAKE = {'runner1': (6, 0.98, 3.6), 'runner2': (8, 1.35, 3.75), 'swinger': (4, 0.98, 4.85)}   # G13: after the shatter
 # G4/G5: the four who go in through the door come back out of it with stock: (in at, out at, lane, prop)
 # chat 3: out 1 s apart in one lane clear of the wall and the swinger (0.5 s apart, they walked into each other)
 DOOR_IN = {'hauler1': (2.75, 4.6, 13.4, 'crate'), 'hauler2': (3.15, 6.6, 13.4, 'crate'),
            'runner4': (3.5, 5.6, 13.4, 'boxes'), 'runner5': (3.75, 7.6, 13.4, 'boxes')}
-WALK_OUT = 1.5                       # m/s: laden, a brisk walk off left along the shop front
+IN_D, IN_SIDE = 15.2, DOOR_X0 - 0.7     # G14: how far in they run, and where they go to behind the wall
+OUT_D = 16.0                         # G14: they come back further in (0.8 m behind anyone still going in)
+# G17: each one's own way out, four directions: right along the shop front, toward us and right, toward us and left,
+# and straight at us (hauler2 and runner5 are still in sight as the scene cuts)
+EXIT = {'hauler1': (6.5, 13.2), 'runner4': (5.2, 10.4), 'hauler2': (-4.2, 10.9), 'runner5': (0.6, 9.9)}
 
 
 def swinger_swing(tt):
@@ -627,22 +647,30 @@ DOOR_CLIP = None                     # the door's opening on screen (set once RF
 
 
 def _door_walk(name, tt):
-    """G4: in through the door and, later, out of it with the stock and off left along the shop front. -> (x, d, yaw,
-    state, inside) or None while they are in the shop."""
+    """G4: in through the door and, later, out of it with the stock. G14 (Sam: they vanished mid-frame): in, they run
+    on to IN_D and then sideways behind the wall to the door's left (the opening's clip hides them as they pass the
+    jamb), and come back the same way. G17 (Sam: 'sprint out in different directions, fleeing'): out of the door at
+    a burst, then a flat-out sprint to their own EXIT. -> (x, d, yaw, state, inside) or None while out of sight."""
     t_in, t_out, lane, _ = DOOR_IN[name]
-    if t_in <= tt < t_in + 0.45:                            # through the doorway, away from us
-        d = lerp(13.35, 14.9, (tt - t_in) / 0.45)
+    if t_in <= tt < t_in + 0.5:                             # through the doorway, away from us
+        d = lerp(13.35, IN_D, (tt - t_in) / 0.5)
         return DOOR_C, d, 180, 'run', d > FRONT_D - 0.2
-    if t_in + 0.45 <= tt < t_out:
+    if t_in + 0.5 <= tt < t_in + 0.9:                       # G14: round the corner inside, behind the wall
+        return lerp(DOOR_C, IN_SIDE, ease((tt - t_in - 0.5) / 0.4)), IN_D, -100, 'run', True
+    if tt < t_out - 0.4:
         return None
+    if tt < t_out:                                          # G14: back from behind the wall to the doorway, laden
+        return lerp(IN_SIDE, DOOR_C, ease((tt - t_out + 0.4) / 0.4)), OUT_D, 100, 'carry_run', True
     a = tt - t_out
-    if a < 0.9:                                             # stepping out toward us, laden
-        d = lerp(14.9, lane, ease(a / 0.9))
-        return DOOR_C, d, 0, 'carry_front', d > FRONT_D - 0.2
-    b = a - 0.9
-    k = min(1.0, b / 0.3)                                   # turning left, then walking off along the shop front
-    x = DOOR_C - WALK_OUT * (b - 0.15) if k >= 1 else DOOR_C - WALK_OUT * 0.15 * k * k
-    return x, lane, -115 * ease(k), 'carry_front', False
+    if a < 0.5:                                             # G17: bursting out of the door toward us
+        d = lerp(OUT_D, lane, a / 0.5)
+        return DOOR_C, d, 0, 'carry_run', d > FRONT_D - 0.2
+    b = a - 0.5                                             # the sprint: 5.5 m/s (the gait's own speed) to their exit
+    ex, ed = EXIT[name]
+    L = math.hypot(ex - DOOR_C, ed - lane)
+    v = min(1.0, b * moves.speed('sprint') / L)
+    yaw = math.degrees(math.atan2(ex - DOOR_C, -(ed - lane)))
+    return lerp(DOOR_C, ex, v), lerp(lane, ed, v), yaw * ease(min(1.0, b / 0.2)), 'carry_run', False
 
 
 def t2_actors(lt):
@@ -668,7 +696,7 @@ def t2_actors(lt):
             if w:
                 x, d, yaw, st, inside = w
                 a = A(name, 'rioter', x, d, yaw, st, t=tt, clip=DOOR_CLIP if inside else None)
-                if st == 'carry_front':
+                if st.startswith('carry'):
                     a.prop, a.prop_before = _carried(DOOR_IN[name][3]), abs(yaw) > 90
             continue
         wait = (DOOR_C, 13.3) if k == 0 else (3.6, 13.25)       # chat 3: hauler2 waits right of the door (hauler1 ran through him)
@@ -779,7 +807,7 @@ def t2_actors(lt):
                 pass
             x, d, yaw, st, inside = w
             a = A(name, 'rioter', x, d, yaw, st, t=tt, clip=DOOR_CLIP if inside else None)
-            if st == 'carry_front':
+            if st.startswith('carry'):
                 a.prop, a.prop_before = _carried(DOOR_IN[name][3]), abs(yaw) > 90
             continue
         keys = [(tin - 1.1, -3.6, 11.35 - 0.3 * k), (tin - 0.5, 0.3, 11.35 - 0.3 * k),   # chat 3: in front of the swinger
@@ -796,7 +824,12 @@ def t2_actors(lt):
     beat = abs(math.sin(math.pi * 2.2 * tt))
     # round 2 (G4: the camera moved right): the left side 0.2 m in; the right group out at the frame's edge, clear of the door (chat 3)
     crowd = [(-1.18, 7.8, 'placard:WAFFEN RAUS:250,246,232', 0), (-1.55, 8.9, 'phone', 1), (-1.4, 9.6, 'stand', 2),
-             (2.3, 7.7, 'phone', 6), (2.95, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (3.2, 9.5, 'stand', 3)]
+             (2.3, 7.7, 'phone', 6), (2.95, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (3.2, 9.5, 'stand', 3),
+             # G12 (Sam: more foreground protesters, the action kept clear): heads and shoulders cut by the frame's left
+             # and right edges, near us (d 4.4-5.6: their heads stay below the pavement line, so the door, the window
+             # and everyone in front of the shop are clear)
+             (-0.55, 4.5, 'stand', 7), (-0.75, 5.7, 'phone', 8), (1.05, 4.4, 'stand', 9), (1.5, 5.4, 'phone', 10),
+             (1.85, 6.4, 'stand', 11)]
     for k, (x, d, st, i) in enumerate(crowd):
         if st.startswith('placard'):
             st = st + ':' + str(int(90 * beat))
@@ -826,11 +859,11 @@ def board_pose(lt):
         return BOARD[0], BOARD[1], 0.0, 0.0
     u = min(1.0, (lt - BOARD_KICK) / (BOARD_LAND - BOARD_KICK))
     x, d = lerp(BOARD[0], BOARD_TO[0], u), lerp(BOARD[1], BOARD_TO[1], u)
-    z = 0.9 * 4 * u * (1 - u)
+    z = 1.0 * 4 * u * (1 - u)                               # G18: a 1 m arc (1.5 m hid the third hit)
     if u >= 1:                                              # down: a skid, then flat
         s = ease(min(1.0, (lt - BOARD_LAND) / 0.25))
         return x + 0.25 * s, d, 0.0, 90.0
-    return x, d, z, 90 + 270 * ease(u)                      # one and a quarter turns, flat on its face
+    return x, d, z, 90 + 720 * ease(u)                      # G18: two turns, flat on its face
 
 
 @lru_cache(maxsize=4)
@@ -912,6 +945,24 @@ def t2_stones(img, lt):
                       for a in np.linspace(0, 6.28, 9)[:-1]], (150, 146, 138), INK, 2)
         if th <= lt < th + 0.08:
             S.glow_disc(img, *cam.p(x, FRONT_D, z), 34, (255, 255, 240), amt=.6)
+    for n, (th, x, z) in enumerate(UP_STONES):              # G15: up at the first-floor window
+        t0 = th - 0.6
+        if lt < t0 or (n == len(UP_STONES) - 1 and lt >= th):   # the last one goes in through the glass
+            continue
+        if lt < th:                                         # in the air: up from off right, an arc 0.9 m over the line
+            u = (lt - t0) / 0.6
+            p = (lerp(UP_FROM[0], x, u), lerp(UP_FROM[1], FRONT_D - 0.05, u), lerp(UP_FROM[2], z, u) + 0.9 * 4 * u * (1 - u))
+        elif lt < th + 0.7:                                 # off the glass and down to the pavement
+            u = (lt - th) / 0.7
+            p = (x + 0.3 * u, FRONT_D - 0.05 - 0.6 * u, max(0.0, z * (1 - u * u)))
+        else:
+            p = (x + 0.3, FRONT_D - 0.65, 0.0)
+        gx, gy = cam.p(*p)
+        rr = 0.07 * cam.ppm(p[1])
+        IS.poly(img, [(gx + rr * math.cos(a) * (1 + .25 * math.sin(3 * a + n)), gy + rr * .8 * math.sin(a))
+                      for a in np.linspace(0, 6.28, 9)[:-1]], (150, 146, 138), INK, 2)
+        if th <= lt < th + 0.08:
+            S.glow_disc(img, *cam.p(x, FRONT_D, z), 30, (255, 255, 240), amt=.6)
 
 
 def t2_chips(img, lt):
@@ -1005,10 +1056,54 @@ def t2_flash(img, tt):
             S.glow_disc(img, *RF2.cam.p(sx, FRONT_D, sz), 70, (255, 250, 210), amt=.5)     # chat 3: small, so the contact reads     # chat 3: small, so the contact reads
 
 
+def t2_upstairs(img, lt):
+    """G15: the lit first-floor window: a small star of cracks for each stone that bounces off; the third goes through
+    (a jagged hole, the room's light behind it, a ring of cracks) and its glass falls to the pavement and lies still."""
+    cam = RF2.cam
+    for n, (th, x, z) in enumerate(UP_STONES[:-1]):
+        if lt < th:
+            continue
+        cx, cy = cam.p(x, FRONT_D, z)
+        for q in range(8):
+            a = q * 0.8 + n * 1.3
+            r = 18 + 10 * ((q * 3 + n) % 3)
+            IS.poly(img, [(cx, cy), (cx + r * math.cos(a), cy + r * math.sin(a))], None, (90, 70, 40), 1.8, 0)
+        IS.poly(img, [(cx + 7 * math.cos(a), cy + 7 * math.sin(a)) for a in np.linspace(0, 6.28, 8)], (255, 246, 214),
+                (90, 70, 40), 1.4, 0)
+    th, x, z = UP_STONES[-1]
+    if lt < th:
+        return
+    cx, cy = cam.p(x, FRONT_D, z)
+    k = cam.ppm(FRONT_D)
+    rng = np.random.default_rng(15)
+    hole = [(cx + k * (.13 + .13 * (q % 2)) * rng.uniform(.8, 1.2) * math.cos(a),
+             cy + k * (.15 + .15 * (q % 2)) * rng.uniform(.8, 1.2) * math.sin(a))
+            for q, a in enumerate(np.linspace(0, 6.28, 17)[:-1])]   # jagged: glass teeth pointing in
+    IS.poly(img, hole, (255, 236, 186), INK, 2.4)                # the lit room behind, brighter than the blind
+    IS.poly(img, [(cx + (p[0] - cx) * .5, cy + (p[1] - cy) * .5 + 4) for p in hole], (250, 214, 140), None, 0)
+    for q in range(12):                                       # cracks out from the hole's edge across the pane
+        a = q * 2 * math.pi / 12 + rng.uniform(-.2, .2)
+        r0, r1 = k * .26, k * rng.uniform(.5, .8)
+        IS.poly(img, [(cx + r0 * math.cos(a), cy + r0 * math.sin(a)),
+                      (cx + r1 * math.cos(a + .1), cy + r1 * math.sin(a + .1))], None, (90, 70, 40), 1.8, 0)
+    for q in range(9):                                        # the glass falling (1 s from 6 m), then lying still
+        sx, sz = x + rng.uniform(-.4, .4), z + rng.uniform(-.4, .4)
+        tl = math.sqrt(2 * sz / 9.8)
+        u = min(1.0, (lt - th - 0.05 * q) / tl) if lt >= th + 0.05 * q else 0.0
+        px, pd, pz = sx + 0.25 * u * rng.uniform(-1, 1), FRONT_D - 0.1 - 0.5 * u, sz * (1 - u * u)
+        gx, gy = cam.p(px, pd, pz)
+        r = 0.06 * cam.ppm(pd)
+        spin = (lt - th) * 9 * (q % 3 - 1) if u < 1 else q
+        tri = [(gx + r * math.cos(spin + j * 2.2), gy + r * (0.35 if u >= 1 else 1) * math.sin(spin + j * 2.2))
+               for j in range(3)]
+        IS.poly(img, tri, (226, 238, 244), (80, 96, 108), 1.4)
+
+
 def t2_teeth(img, lt):
     """Drawn before the people (in front of the window they hide it)."""
     tt = lt
     t2_chips(img, lt)
+    t2_upstairs(img, lt)
     if tt >= T2_SHATTER + 0.1:                             # chat 16 (hunt 2: glass looked whole): jagged teeth left
         x0, y0, x1, y1 = T2_WR                             # in the frame, a star of cracks round the hole
         rng = np.random.default_rng(9)
@@ -2730,10 +2825,10 @@ def picture(t):
                 t2_board(back, lt)
                 board = True
             if a.prop and a.prop_before:
-                a.prop(back, cam, a)
+                draw_prop(back, cam, a)
             draw_actor(back, cam, a)
             if a.prop and not a.prop_before:
-                a.prop(back, cam, a)
+                draw_prop(back, cam, a)
         if not board:
             t2_board(back, lt)
         t2_fx(back, lt)
@@ -2911,9 +3006,9 @@ def overlay(img, t):
         f = _font(int(54 * k))
         lab = 'Intensity Level: '
         d.text((72 * k, 514 * k), lab, font=f, fill=(255, 255, 255), stroke_width=int(5 * k), stroke_fill=(0, 0, 0))
-        if lt >= INTENSITY_AT:                             # the number pops in (a short grow) in its tier's colour
+        if lt >= INTENSITY_AT:                             # O8: 50% bigger (81 px). The number pops in (a short grow) in its tier's colour
             u = min(1.0, (lt - INTENSITY_AT) / 0.12)
-            fn = _font(max(8, int(54 * k * (0.6 + 0.4 * u + 0.15 * math.sin(math.pi * u)))))
+            fn = _font(max(8, int(81 * k * (0.6 + 0.4 * u + 0.15 * math.sin(math.pi * u)))))
             x = 72 * k + d.textlength(lab, font=f)
             d.text((x, 514 * k + 27 * k), f'{INTENSITY[tier]}/10', font=fn, fill=INTENSITY_COL[tier],
                    stroke_width=int(5 * k), stroke_fill=(0, 0, 0), anchor='lm')
@@ -2938,15 +3033,77 @@ KEEP_CLEAR = [('the burning skip', lambda t: _box_t1(-7.0, 176, 0, 5.0, 3.0) if 
 
 
 # ------------------------------------------------------------------------------------------------- sound
-def ding(sr):
-    """A soft bell: two sine partials (E6 and its bright overtone), a 6 ms rise and a 0.9 s fade; quiet (peak 0.22)."""
-    t = np.arange(int(0.9 * sr)) / sr
-    env = np.minimum(1.0, t / 0.006) * np.exp(-t * 5.5)
-    return 0.22 * env * (np.sin(2 * np.pi * 1318.5 * t) + 0.35 * np.sin(2 * np.pi * 3955.5 * t) * np.exp(-t * 6))
+SFX = os.path.join(os.path.dirname(HERE), 'sounds', 'protest-tiers')
+
+
+def sfx(name, a=0.0, b=None, peak=0.5, fade=0.08):
+    """Sam's sound file `name` (sounds/protest-tiers/NAME.mp3) cut to a-b seconds, scaled to `peak`, a short fade out
+    (O9, G19)."""
+    import mossad_audio as MA
+    x = MA.load(os.path.join(SFX, name + '.mp3'))
+    x = x[int(a * MA.SR):None if b is None else int(b * MA.SR)].astype(float)
+    x = x / (np.abs(x).max() or 1) * peak
+    nf = min(len(x), int(fade * MA.SR))
+    if nf:
+        x[-nf:] *= np.linspace(1, 0, nf)
+    return x
+
+
+PARIS = os.path.join(HERE, '..', 'sounds', 'protest-tiers')
+T3_CROWD = (0.4, 6.4)        # F24: paris-riot.mp3 by loudness over time: 0.4-6.4 shouting/chanting crowd (voiced,
+T3_CANNON = (9.6, 13.4)      # mid-heavy); 7.0-14.7 the water cannon's broadband hiss (loudest spray 10.5-12.75); no engine
+
+
+def _cut(x, sr, a, b, fade=0.03):
+    """x[a:b] seconds with short fades so no slice clicks."""
+    y = x[int(a * sr):int(b * sr)].copy()
+    k = min(int(fade * sr), len(y) // 2)
+    if k:
+        y[:k] *= np.linspace(0, 1, k)
+        y[-k:] *= np.linspace(1, 0, k)
+    return y
+
+
+def t3_sound(mix, sr, load):
+    """Round 5 (F24, Sam: 'take sound from' his Paris riot recording + banked effects): T3's crowd bed (looped with a
+    crossfade under all 8 s), the water cannon JET_ON -> SWEEP end, stone-hit on each stone's shield hit, glass-smash on
+    each bottle's, a firework crackle on each firework's. Fruit lands soft: no sound."""
+    t0, L = START['t3'], dict(LENS)['t3']
+    riot = load(os.path.join(PARIS, 'paris-riot.mp3'))
+    bed, xf = _cut(riot, sr, *T3_CROWD, fade=0.5), int(0.5 * sr)
+    out = bed.copy()
+    while len(out) < (L + 0.6) * sr:                       # loop with a 0.5 s overlap (fades cross)
+        out = np.concatenate([out[:-xf], out[-xf:] + bed[:xf], bed[xf:]])
+    bed = out[:int((L + 0.3) * sr)]
+    bed[-int(0.3 * sr):] *= np.linspace(1, 0, int(0.3 * sr))   # out under the cut to T4
+    i = int(t0 * sr)
+    mix[i:i + len(bed)] += 0.35 * bed[:max(0, len(mix) - i)]
+    jet = _cut(riot, sr, T3_CANNON[0], T3_CANNON[0] + SWEEP[1] - JET_ON + 0.4, fade=0.08)
+    jet[-int(0.4 * sr):] *= np.linspace(1, 0, int(0.4 * sr))   # the jet shuts off at the sweep's end
+    i = int(at('t3', JET_ON) * sr)
+    mix[i:i + len(jet)] += 0.5 * jet[:max(0, len(mix) - i)]
+    stone, glass = load(os.path.join(PARIS, 'stone-hit.mp3')), load(os.path.join(PARIS, 'glass-smash.mp3'))
+    fw = load(os.path.join(PARIS, 'fireworks.mp3'))
+    kits = {'stone': ([_cut(stone, sr, s, s + 0.3) for s in (0.0, 1.0, 2.0)], 0.28),
+            'bottle': ([_cut(glass, sr, 0.0, 0.9, 0.05), _cut(glass, sr, 1.5, 2.4, 0.05)], 0.25),
+            'firework': ([_cut(fw, sr, 0.0, 0.7, 0.05), _cut(fw, sr, 14.0, 14.7, 0.05)], 0.4)}
+    n = {}
+    for row, k, rep, what, x0, d0, d1, th, fl in sorted(_throws(), key=lambda r: r[7] + r[8]):
+        land = th + fl
+        if what not in kits or not 0 <= land < L:
+            continue
+        clips, g = kits[what]
+        c = clips[n.get(what, 0) % len(clips)]
+        n[what] = n.get(what, 0) + 1
+        g *= 0.75 if d1 > 14 else 1.0                       # the far police block a touch quieter
+        i = int(at('t3', land) * sr)
+        mix[i:i + len(c)] += g * c[:max(0, len(mix) - i)]
+    return mix
 
 
 def soundtrack(stems=False):
-    """The siren (the brief names it, on the T2 blue wash) and the intensity dings (Sam O1); no other effects."""
+    """The siren (the brief names it, on the T2 blue wash), the intensity dings (Sam O1, O9), Germany's sounds (G19:
+    Sam asked for them) and T3's sound (F24)."""
     import mossad_audio as MA
     n = int((DUR + 0.3) * MA.SR)
     mix = np.zeros(n)
@@ -2957,10 +3114,26 @@ def soundtrack(stems=False):
             filmkit.place(mix, s[:int(1.2 * MA.SR)] * 0.6, at=at('t2', T2_WASH), sr=MA.SR)
     except Exception as e:                                  # the film still renders; the fault is printed
         print('SOUND: siren not placed:', e)
-    dg = ding(MA.SR)                                        # Sam O1 (16 Nov): a gentle ding as each number appears
+    import filmkit
+    t3_sound(mix, MA.SR, MA.load)                           # F24: France (Sam's Paris recording + banked effects)
+    dg = sfx('ding', 0.0, 1.6, peak=0.3, fade=0.4)         # O9 (Sam 16 Nov): Sam's ding (it replaces the made one)
     for tr in TIERS:
-        i = int(at(tr, INTENSITY_AT) * MA.SR)
-        mix[i:i + len(dg)] += dg[:max(0, n - i)]
+        filmkit.place(mix, dg, at=at(tr, INTENSITY_AT) - 0.06, sr=MA.SR)
+    # G19 (Sam 16 Nov): Germany's sounds. The crowd from 15 s into its file (voices from there), under the whole scene
+    t0, t1 = at('t2', 0.0), at('t2', T2_END)
+    cr = sfx('protest-crowd', 15.0, 15.0 + (t1 - t0), peak=0.35, fade=0.25)
+    nf = int(0.25 * MA.SR)
+    cr[:nf] *= np.linspace(0, 1, nf)
+    filmkit.place(mix, cr, at=t0, sr=MA.SR)
+    wood = sfx('wood-smash', 0.0, 0.9, peak=0.55, fade=0.3)
+    for th, *_ in SIGN_HITS:                                # every sign hit on the glass
+        filmkit.place(mix, wood, at=at('t2', th) - 0.04, sr=MA.SR)
+    filmkit.place(mix, sfx('glass-smash', 0.0, 1.4, peak=0.75, fade=0.3), at=at('t2', T2_SHATTER) - 0.02, sr=MA.SR)
+    stones = [sfx('stone-hit', a, a + 0.45, peak=0.42, fade=0.15) for a in (0.0, 1.0, 2.0)]   # the file's three hits
+    for q, th in enumerate([q[0] for q in T2_STONES] + [q[0] for q in UP_STONES]):
+        filmkit.place(mix, stones[q % 3], at=at('t2', th) - 0.035, sr=MA.SR)
+    filmkit.place(mix, sfx('glass-smash', 0.0, 1.0, peak=0.4, fade=0.3), at=at('t2', UP_STONES[-1][0]) - 0.02,
+                  sr=MA.SR)                                 # G15: the upstairs window goes
     for ln in voices():                                     # Sam's takes only: a stand-in is never heard
         if ln['real']:
             i = int(ln['start'] * MA.SR)
@@ -3064,9 +3237,11 @@ FAST_OK = ([(p, at('t2', 0.0), at('t2', 0.9)) for p in ('hauler*', 'runner*', 's
                ('rioter', range(1, 9), at('t4', 0.0), at('t4', T4_LEN)))
               for k in ks for part in ('hand', 'forearm') for sd in 'LR'])
 # round 1 (chat 26, notes "## Exceptions"): who comes on in mid-frame for a reason the audit cannot see
-ALLOWED_POPS = [(n, at('t2', tin + 0.3), at('t2', tin + 0.5), 'into the dark shop through its door (G4)')
+# G14: they go out of sight round the corner inside, behind the wall (drawn clipped to the doorway; the audit sees
+# the spot, not the clip): gone at tin + 0.9, back at tout - 0.4
+ALLOWED_POPS = [(n, at('t2', tin + 0.8), at('t2', tin + 0.95), 'round the corner inside the shop, behind the wall (G14)')
                 for n, (tin, tout, *_) in DOOR_IN.items()] + [
-                (n, at('t2', tout - 0.05), at('t2', tout + 0.15), 'out of the dark shop through its door (G4)')
+                (n, at('t2', tout - 0.45), at('t2', tout - 0.3), 'back from behind the wall inside the shop (G14)')
                 for n, (tin, tout, *_) in DOOR_IN.items()] + [
                 ('back*', at('t3', VOLLEY2 - 0.35), at('t3', VOLLEY2), 'step up out of the packed crowd behind'),
                 ('buyer*', at('t4', ENTER), at('t4', ENTER + 0.15), 'step out of the packed crowd into the queue'),

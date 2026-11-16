@@ -1,3 +1,3 @@
-European Protests, Ranked: REOPENED 16 Nov; round 2. Albania round 3 notes (A4-A13) in; chat 2 built the new poses + saved Sam's Albanian take; plan written. Germany chat 5 and back-half chat 8 running.
-Next: Albania chat 3 (Opus high) builds the plan, checks, sends the Albania clip.
-Needs Sam: Albania clip (coming), Germany clip, Overall+Spain still.
+European Protests, Ranked: REOPENED 16 Nov; round 2. Germany chat 5 built Sam's Germany round 2 notes, clip sent. Albania round 3 notes (A4-A13) in; Albania chat 2 built the new poses, saved Sam's Albanian take, wrote the plan.
+Next: Germany chat 6 (Opus medium) fixes the last three Germany notes; Albania chat 3 (Opus high) builds the Albania plan and sends the clip.
+Needs Sam: Germany clip after chat 6; Albania clip (coming); Overall+Spain still.
