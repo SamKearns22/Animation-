@@ -979,5 +979,11 @@
   }
  },
  "compare": "protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.",
- "estimate_note": "chat 20 (15 Nov): round 1 re-plan from this film's real costs; done stages keep their first-plan shares, the new ones are scaled by 0.3204 so each stage's share equals its priced % of a week and the forecast rate is 1 (the prices already carry the real costs). Priced: round1 plan 1.5, round1 cast 7.2, round1 sets 1.0, round1 moves 13.9, animatic2 2.5, round2 2.7, final 0.5"
+ "estimate_note": "chat 20 (15 Nov): round 1 re-plan from this film's real costs; done stages keep their first-plan shares, the new ones are scaled by 0.3204 so each stage's share equals its priced % of a week and the forecast rate is 1 (the prices already carry the real costs). Priced: round1 plan 1.5, round1 cast 7.2, round1 sets 1.0, round1 moves 13.9, animatic2 2.5, round2 2.7, final 0.5",
+ "quick_checks": [
+  {
+   "at": "2026-11-16T12:54+00:00",
+   "faults": 5
+  }
+ ]
 }

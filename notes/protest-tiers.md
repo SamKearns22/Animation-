@@ -8,6 +8,7 @@
 - **Needs Sam:** Y/N on Overall+Spain still; rule wording (diagonal Hook Text); then Germany clips.
 - **Read:** job pack "Notes round"; "## Round 2 notes"; this section.
 - **Open rule requests:** diagonal Hook Text for every film (proposed 16 Nov, wording in the chat; on Y: guides/tiktok-design.md Hook Text + hook_text.py default --tilt -7).
+- **Branches named (not merged, waiting on Sam per notes/proposals/startup-reading/handover.md):** claude/beautiful-brown-vutd0l, claude/blessed-c2-mics-wip, claude/audit-honest-checker. **Quick-check faults left:** T2 runner1/runner2 arm overlap 12.0 s (Germany is being re-staged: the next chat re-checks), T4 rioter5/6 3-8 cm and buyer1 teleport 26.25 s (back half: Sam's back-half notes round).
 - **For Claude:** branch claude/magical-sagan-4o3nfy; main line claude/create-claude-md-oe8z4g. Sprite cache cleared (~/.cache/protest-tiers-sprites) after the cast change.
 
 ## Round 2 notes"; back half's notes to come.
