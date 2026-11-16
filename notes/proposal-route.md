@@ -1,24 +1,21 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
-- **Done (chat 5 of 8, Opus high):** second proposal routed: `notes/proposals/history-and-search.md` (problem, facts,
-  chat.md first, two helpers, blind judge, recorded). Judge picked helper B (V1): measure cost by kind of step in every
-  chat's ledger row + a read-only Sonnet backfill (search cost share, `show` replayed on old notes), ~1.5-2% once;
-  then a guard on hand film-file searches as its own yes, only if searching is >=10% of a round chat and `show` hits
-  >=80%. Critiqued 7 found, 3 fixed, 4 named. Both questions put to Sam in one message (chat 4's Q1 had no answer).
-- **Next (Sam, 16 Nov: 1 on both; both adopted as Learn steps):** chat 6a, Sonnet medium: late-faults replay (reruns
-  today's checks on the code each old building chat left, counts what was catchable; read-only; ~1%; then change 1
-  returns to Sam as its own yes with the numbers). Chat 6b, Opus medium: history-and-search Learn: ledger.py Stop
-  hook adds steps, end history, cost by kind (check F4 first: does the transcript hold per-step usage?), then opens
-  a Sonnet chat for the read-only backfill (`notes/proposals/learn/search-cost.md`, `show` replayed on old notes).
-- **Needs Sam:** nothing open. Done 16 Nov: plain-proposal rule written (CLAUDE.md); protest film renamed European
-  Protests, Ranked (display name only; file and tool names keep protest_tiers: renaming them would break the checks).
-  `propose.py show` does not yet print in the new order: its prompts are locked, so that is its own proposal.
-- **Read:** this file's route sections; `notes/proposals/history-and-search.md` Verdict; `guides/job-packs.md` "A tool job".
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent", "Back-end proposals are explained plainly"), 85, 30.
+- **Done (chat 6a, Sonnet, 16 Nov):** late-faults Learn step run, read-only: today's quick check replayed on the code of
+  c13, c15-17, c21-26. 42 of the 44 faults of gate 1 and all 107 of gate 2 were already listed when the building chat
+  ended (about 99%; bar 60%); clipcheck's COULD NOT TEST hid 56 teleports until c17. Numbers: `notes/proposals/learn/late-faults-replay.md`.
+  Blessed not replayed. Change 1 put to Sam as its own yes (Q1 below).
+- **Next:** on Sam's Q1 answer 1: Opus medium builds change 1 (one film name for every tool; `handover.py end` runs the
+  quick check when the film's code changed; fix or write each fault in Exceptions; record counts in the ledger),
+  tested on the c26 code (must list 107). Chat 6b, Opus medium, history-and-search Learn (named in the earlier
+  handover): not opened by this chat; open it if no chat has.
+- **Needs Sam:** Q1: change 1 of late-faults, 1 (yes) or 2 (no, other option). Asked 16 Nov.
+- **Read:** this section; `notes/proposals/late-faults.md` Final version; `notes/proposals/learn/late-faults-replay.md`; "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** history-and-search key in state.json (V1=B, V2=A, V3=chat); F4: whether the Stop hook's transcript
-  holds per-step usage is unchecked, check first. Sessions 01Gzna... (Protest Tiers 9-32) cannot be opened.
+- **For Claude:** replay method: copy of the repo at HEAD, overlay `source/protest_tiers*.py` from each branch
+  claude/protest-tiers-cNN, run `preflight.py protest_tiers OUT --text`. kittests takes over 280 s and today fails
+  `people_from_a_description` (policy line about protest_tiers_cast.py). F4 of history-and-search still unchecked.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)
