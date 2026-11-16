@@ -46,6 +46,34 @@ def _lift(hy):
     return hy - (HEAD_K - 1) * 172.0 * 0.85
 
 
+# Bald heads (Sam, 16 Nov: "their heads end up massive and strange-looking"; Blessed's jury, Protest Tiers' Germany).
+# Why: a bald head showed the skull drawn for hair. Its top was the face outline's crown, a narrow point made to sit
+# hidden under a haircut (a tall egg), and the whole skull was the hair's outer size (crown -0.42, where a crop's hair
+# ends). Blessed patched it by shrinking the whole face 14% (note 14's 'k'). The fix: a bald or receding head's skull
+# is a round dome as wide as the temples (turnhead's own dome, the shape the turned views already use) whose crown sits
+# a crop's thickness lower (SKULL_CROWN); ears, jaw and face unchanged; a gentle shine. Opt-in: a film turns it on with
+# TRUE_SKULL = True (Protest Tiers, chat O5); off, every film draws exactly as before.
+TRUE_SKULL = False
+SKULL_CROWN = -0.30          # the bare skull's crown (face heights above the top of the forehead); hair's is -0.42
+BARE = ('bald', 'receding')
+
+
+def bare_skull(fc):
+    return TRUE_SKULL and fc.get('hair') in BARE
+
+
+def _dome_outline(L, crown=SKULL_CROWN):
+    """_outline with its top replaced by the skull's round dome: turnhead's crown (a near-circle to the temples),
+    squeezed to this crown and widened to this face's temples, joined to the face's own sides at the forehead."""
+    side = [q for q in _outline(L) if q[1] >= 0.0 and q[0] > 0]          # the right side from the temple down
+    w0 = L['fhw'] * 0.5 * 0.93                                             # the temple: outline_uv's (fhw/2*.93, 0)
+    T = TH.TEMPLATE['crown']
+    t0, tw = T[0][0], T[-1][1]
+    top = [(w0 * z / tw, v / t0 * crown) for v, z in T if v < 0.0]       # crown (u=0) to just above the temple
+    right = top + side                                                     # crown, round the right, to the chin
+    return right + [(0.0, 1.0)] + [(-u, v) for u, v in right[::-1] if u > 1e-6]
+
+
 def _outline(L, crown=-0.42):
     """P4.outline_uv without its fold: that list runs out to the upper-left temple and back and repeats the left
     temple point, so the smoothing folds the left forehead into a notch (Sam, 11 Nov: "strange ridges on the left
@@ -204,7 +232,8 @@ def _front_head(img, p, sp, t, hx, hy):
         _hair_mass(p, f, L, fc, hc)
     if fc['hair'] not in ('bob', 'long', 'curly'):
         AV._ears(p, f, L, skin)
-    p.poly(curve(f.pts(_outline(L)), 4), skin, INK, 2.6)
+    outl = _dome_outline(L) if bare_skull(fc) else _outline(L)
+    p.poly(curve(f.pts(outl), 4), skin, INK, 2.6)
     jaw = [(-e, 0.5), (-L['jw'] * 0.5, 0.82), (-0.08, 0.98), (0.0, 1.0), (0.08, 0.98), (L['jw'] * 0.5, 0.82), (e, 0.5),
            (e * 0.7, 0.62), (L['mw'] * 0.75, L['lip17'] + 0.04), (0.0, L['lip17'] + 0.03),
            (-L['mw'] * 0.75, L['lip17'] + 0.04), (-e * 0.7, 0.62)]
@@ -217,7 +246,7 @@ def _front_head(img, p, sp, t, hx, hy):
             u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.7, 0.96)
             if abs(u) < L['jw'] * 0.5 * (1.0 - (v - 0.82) * 2.2):
                 p.poly(oval(*f(u, v), 1.6, 1.6, 6), dk(skin, fc['stub'] - 0.12), None)
-        o = curve(f.pts(_outline(L)), 4)                      # the face's ink back over the stubble's edge (line-work
+        o = curve(f.pts(outl), 4)                             # the face's ink back over the stubble's edge (line-work
         p.line(o + o[:1], INK, 2.6)                           # check, chat 3: the jaw lost its outline)
     if fc.get('beard'):                                       # a short boxed beard and a moustache
         b = fc['beard']
@@ -274,7 +303,10 @@ def _front_head(img, p, sp, t, hx, hy):
             side = [(sgn * (e + 0.015), 0.46), (sgn * (e + 0.02), 0.1), (sgn * (c + 0.01), -0.12),
                     (sgn * (c - 0.04), -0.08), (sgn * (e - 0.03), 0.12), (sgn * (e - 0.02), 0.4)]
             p.poly(curve(f.pts(side), 3), hc, INK, 1.6)
-        p.poly(oval(*f(0.1, -0.3), 18, 9, 16, -0.3), B.lt(skin, 1.3), None)
+        if bare_skull(fc):                                    # the shine where the lower dome turns over
+            p.poly(oval(*f(0.1, SKULL_CROWN * 0.72), 15, 7, 16, -0.3), B.lt(skin, 1.18), None)
+        else:
+            p.poly(oval(*f(0.1, -0.3), 18, 9, 16, -0.3), B.lt(skin, 1.3), None)
     else:                                                     # side parting on our left, the fringe swept across
         cap = [(-e - 0.01, 0.32), (-e - 0.025, 0.02), (-e + 0.03, -0.26), (-0.22, -0.43), (0.02, -0.47), (0.26, -0.41),
                (e - 0.02, -0.22), (e + 0.025, 0.04), (e + 0.01, 0.32), (e - 0.025, 0.3), (c, 0.08), (c * 0.6, 0.0),
@@ -335,7 +367,12 @@ def _hair_front(p, f, L, fc, hc, skin):
             side = [(sgn * (e + 0.02), 0.44), (sgn * (e + 0.03), 0.08), (sgn * (c + 0.02), -0.16),
                     (sgn * (c - 0.06), -0.12), (sgn * (e - 0.03), 0.12), (sgn * (e - 0.02), 0.42)]
             p.poly(curve(f.pts(side), 3), hc, INK, 1.6)
-        p.line(curve(f.pts([(-0.12, -0.3), (0.0, -0.33), (0.12, -0.3)]), 3), dk(skin, 0.86), 1.4)
+        if bare_skull(fc):                                    # the crown's crease, moved down with the dome
+            k = SKULL_CROWN / -0.42
+            p.line(curve(f.pts([(-0.12, -0.3 * k), (0.0, -0.33 * k), (0.12, -0.3 * k)]), 3), dk(skin, 0.86), 1.4)
+            p.poly(oval(*f(0.1, SKULL_CROWN * 0.6), 13, 6, 16, -0.3), B.lt(skin, 1.14), None)
+        else:
+            p.line(curve(f.pts([(-0.12, -0.3), (0.0, -0.33), (0.12, -0.3)]), 3), dk(skin, 0.86), 1.4)
         return
     hl = {'bob': -0.02, 'long': -0.08, 'curly': -0.1, 'bun': -0.1, 'pony': -0.1}[st]
     cap = _press_cap(L, hl)

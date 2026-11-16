@@ -55,15 +55,32 @@ def _cap(L, hl):
             (c * 0.7, hl), (0.0, hl - 0.012), (-c * 0.7, hl), (-c + 0.03, 0.02), (-c - 0.01, 0.12), (-e + 0.03, 0.34)]
 
 
+def _crown(style):
+    """The skull's crown: the hair's outer size (-0.42), or a bare skull's own lower dome (people_parts.TRUE_SKULL,
+    Sam 16 Nov: bald heads 'massive and strange-looking'; turned with the front face's dome)."""
+    return PP.SKULL_CROWN if PP.TRUE_SKULL and style == 'bald' else -0.42
+
+
 def _profile(style):
     st = STYLES[style]
-    return lambda L: TH.fitted(L, -0.42, 1.06, **st['prof'])
+    return lambda L: TH.fitted(L, _crown(style), 1.06, **st['prof'])
+
+
+def _shine(p, f, skin):
+    """A bare skull's gentle shine, on the dome where it faces us most (the visible arc's middle)."""
+    v = PP.SKULL_CROWN * 0.72
+    lo, hi = f.visible(v)
+    x, z = f.ring((lo + hi) / 2, v)
+    X, _ = f.view(float(x), float(z))
+    p.poly(oval(f.cx + X * TH.H, f.top + v * TH.H, 15, 7, 16, -0.3), PP.B.lt(skin, 1.18), None)
 
 
 def _hair(img, p, f, L, sp, look):
     st, hc, style = STYLES[look['style']], look['hair_c'], look['style']
     if st.get('bare'):
         return
+    if _crown(style) != -0.42:
+        _shine(p, f, sp['skin'])
     H = TH.H
     if st.get('long'):
         import people_famous as PF
@@ -170,7 +187,7 @@ def register(sp, key=None):
         fc = sp['kit_face']
         face = (lambda pen, f, L, sp2: _marks(pen, f, L, sp)) if (fc.get('stub') or fc.get('beard')
                                                                   or fc.get('freckles')) else None
-        TH.register(TH.Person(lk['key'], lambda sp2, _sp=sp: _layout(_sp), -0.42, 0.4, _profile(lk['style']),
+        TH.register(TH.Person(lk['key'], lambda sp2, _sp=sp: _layout(_sp), _crown(lk['style']), 0.4, _profile(lk['style']),
                               sp['skin'], fc['iris'], fc['brow'], fc['lip'], _mood,
                               lambda p, f, L, sp2, fx, my, _l=fc['lip']: _rest(p, f, L, sp2, fx, my, _l),
                               lambda img, p, f, L, sp2, _lk=lk: _hair(img, p, f, L, sp2, _lk),

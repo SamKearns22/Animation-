@@ -476,6 +476,67 @@
    "cost": 2.81,
    "src": "estimate",
    "sid": "session_01GznaAR6ioVkYKk1wykHwGU"
+  },
+  {
+   "date": "2026-11-16",
+   "chat": "0007a586",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.04,
+   "src": "estimate",
+   "sid": "session_01GznaARaKy4K5YdZjMsCU2X",
+   "steps": 71,
+   "hist_k": 227,
+   "kinds": {
+    "film-file search": 16.2,
+    "tool search": 5.5,
+    "page.py": 1.1,
+    "renders": 2.9,
+    "pictures": 2.1,
+    "other": 72.2
+   },
+   "calls": {
+    "film-file search": 27,
+    "tool search": 16,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "renders": 3,
+    "pictures": 4,
+    "other": 20
+   }
+  },
+  {
+   "date": "2026-11-16",
+   "chat": "5614ab16",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 2.6,
+   "src": "estimate",
+   "sid": "session_01GznaAR2kvwNTJMiqBvraau",
+   "steps": 79,
+   "hist_k": 241,
+   "kinds": {
+    "film-file search": 1.3,
+    "tool search": 22.5,
+    "renders": 0.1,
+    "pictures": 4.4,
+    "other": 71.7
+   },
+   "calls": {
+    "film-file search": 6,
+    "tool search": 50,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 1,
+    "pictures": 12,
+    "other": 10
+   }
   }
  ],
  "checks": {},
@@ -979,5 +1040,11 @@
   }
  },
  "compare": "protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.",
- "estimate_note": "chat 20 (15 Nov): round 1 re-plan from this film's real costs; done stages keep their first-plan shares, the new ones are scaled by 0.3204 so each stage's share equals its priced % of a week and the forecast rate is 1 (the prices already carry the real costs). Priced: round1 plan 1.5, round1 cast 7.2, round1 sets 1.0, round1 moves 13.9, animatic2 2.5, round2 2.7, final 0.5"
+ "estimate_note": "chat 20 (15 Nov): round 1 re-plan from this film's real costs; done stages keep their first-plan shares, the new ones are scaled by 0.3204 so each stage's share equals its priced % of a week and the forecast rate is 1 (the prices already carry the real costs). Priced: round1 plan 1.5, round1 cast 7.2, round1 sets 1.0, round1 moves 13.9, animatic2 2.5, round2 2.7, final 0.5",
+ "quick_checks": [
+  {
+   "at": "2026-11-16T12:54+00:00",
+   "faults": 5
+  }
+ ]
 }

@@ -40,6 +40,7 @@ import grips                         # noqa: E402
 from ed import INK, curve, oval      # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
 
+PPt.TRUE_SKULL = True               # O5 (Sam's Y, 16 Nov): bald heads drawn as a true round skull, this film only
 B = PPt.B
 V = PPt.AV.MC.V
 import figure as F                   # noqa: E402
@@ -351,9 +352,42 @@ def baton(j, sp, side='R', dirn=(0.0, 0.55, 0.85), length=0.55):
 HOOD, HOOD_D, MASK = (30, 30, 34), (20, 20, 22), (16, 16, 18)
 
 
-def rioter(who='rioter'):
+# Sam O4 (16 Nov): the rioters were one face copied; each city's black bloc now drawn from its own population
+# (shares rounded from city statistics: Frankfurt over half with a migrant background, Paris's Maghrebi and Black
+# share, Tirana almost wholly Albanian). (skin, brow/eye) per group; all young: dark brows, no grey.
+SKINS = {'light': [(236, 200, 176), (226, 186, 158)], 'olive': [(204, 160, 120), (190, 146, 106)],
+         'tan': [(172, 124, 88)], 'brown': [(140, 96, 66)], 'dark': [(108, 72, 50), (86, 58, 42)],
+         'sasian': [(160, 112, 78)]}
+CITY_MIX = {'t1': {'light': .72, 'olive': .16, 'tan': .07, 'brown': .03, 'dark': .02},          # Barcelona
+            't2': {'light': .46, 'olive': .24, 'tan': .12, 'brown': .06, 'dark': .07, 'sasian': .05},   # Frankfurt
+            't3': {'light': .55, 'olive': .17, 'tan': .07, 'brown': .07, 'dark': .12, 'sasian': .02},   # Paris
+            't4': {'light': .55, 'olive': .40, 'tan': .05}}                                    # Tirana
+
+
+def rioter(who='rioter', seed=None, tier='t2'):
+    """One black-bloc rioter. seed (the actor's name) picks, the same every frame, a skin from the tier's city mix,
+    eye and brow colour, height and head shape, so no two in a group are the same face (Sam O4)."""
     sp = dict(CAST[who])
     sp['glove'] = (24, 24, 26)                      # black gloves (ref de4: one orange, most dark)
+    if seed is None:
+        return sp
+    import zlib
+    r = np.random.default_rng(zlib.crc32(f'{seed}-{tier}'.encode()))
+    mix = CITY_MIX.get(tier, CITY_MIX['t2'])
+    names = list(mix)
+    g = names[int(r.choice(len(names), p=np.array([mix[n] for n in names]) / sum(mix.values())))]
+    skin = SKINS[g][int(r.integers(len(SKINS[g])))]
+    sp['skin'] = skin
+    dark = g not in ('light',) or r.random() < .6
+    iris = (50, 36, 28) if dark else ((80, 110, 140) if r.random() < .5 else (90, 100, 70))
+    sp['brow_c'] = (24, 20, 18) if dark else ((120, 84, 50) if r.random() < .4 else (40, 32, 26))
+    sp['brow_w'] = sp.get('brow_w', 4.4) * r.uniform(.85, 1.25)
+    sp['kit_face'] = dict(sp['kit_face'], iris=iris, brow=sp['brow_c'])
+    for key, lo, hi in (('hw', .93, 1.08), ('hh', .95, 1.05)):
+        if key in sp:
+            sp[key] = sp[key] * r.uniform(lo, hi)
+    if 'height' in sp:
+        sp['height'] = sp['height'] * r.uniform(.95, 1.04)
     return sp
 
 
@@ -516,6 +550,45 @@ def keys(j, side='R'):
     return draw
 
 
+MARKER = os.path.join(HERE, 'fonts', 'PermanentMarker-Regular.ttf')   # Sam O6 (16 Nov): hand-lettered marker
+
+
+def fit_lines(text, box, fontfile=MARKER, fill=0.84, hfill=0.78, top=None):
+    """Sam O2 (16 Nov): the words always fit their board. One line or, if that would be too small, two (split at the
+    middle space); the biggest size whose every line sits inside `fill` of the width and `hfill` of the height.
+    Returns (font, lines, line height)."""
+    x0, y0, x1, y1 = box
+    bw, bh = abs(x1 - x0) * fill, abs(y1 - y0) * hfill
+    words = text.split()
+    tries = [[text]]
+    if len(words) > 1:
+        best = min(range(1, len(words)), key=lambda i: abs(len(' '.join(words[:i])) - len(' '.join(words[i:]))))
+        tries.append([' '.join(words[:best]), ' '.join(words[best:])])
+    pick = None
+    for lines in tries:
+        n = len(lines)
+        size = int(min(top or 1e9, bh / n / 1.05))
+        while size > 5:
+            f = ImageFont.truetype(fontfile, size)
+            if max(f.getlength(ln) for ln in lines) <= bw:
+                break
+            size -= 1
+        if pick is None or size > pick[0] * 1.15:
+            pick = (size, lines)
+    size, lines = pick
+    return ImageFont.truetype(fontfile, max(5, size)), lines, max(5, size) * 1.05
+
+
+def sign_text(img, box, text, col=(30, 28, 30), fontfile=MARKER):
+    """Hand-lettered words centred on a board (box = two opposite screen corners), always inside it."""
+    x0, y0, x1, y1 = box
+    f, lines, lh = fit_lines(text, box, fontfile)
+    cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+    d = ImageDraw.Draw(img)
+    for i, ln in enumerate(lines):
+        d.text((cx, cy + (i - (len(lines) - 1) / 2) * lh), ln, font=f, fill=col, anchor='mm')
+
+
 def placard(j, text='NEIN!', hands=('R', 'L'), board=(250, 246, 232), w=0.6, h=0.42, pole=0.7):
     """A placard on a stick held up in both hands, printed both sides; the hands grip the stick below the board."""
     def draw(p, j2):
@@ -531,12 +604,7 @@ def placard(j, text='NEIN!', hands=('R', 'L'), board=(250, 246, 232), w=0.6, h=0
         if text:
             x0, y0 = p.cam.P(*q[0])
             x1, y1 = p.cam.P(*q[2])
-            fs = max(6, int(abs(y1 - y0) * 0.42))
-            try:
-                fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'Anton-Regular.ttf'), fs)
-            except OSError:
-                fnt = ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), fs)
-            ImageDraw.Draw(p.img).text(((x0 + x1) / 2, (y0 + y1) / 2), text, font=fnt, fill=(30, 28, 30), anchor='mm')
+            sign_text(p.img, (x0, y0, x1, y1), text)
     draw.held = True
     return draw
 
