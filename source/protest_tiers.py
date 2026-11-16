@@ -214,6 +214,7 @@ def hair_clear(j, sp, yaw):
     def ok(s):
         try:
             C.F.audit_arm(*(seen(j[k + s])[0] for k in ('sh', 'el', 'wr')))
+            C.V.check_arm3(j, s)                      # the 3D test the draw applies (elbow never under 25 degrees)
             return True
         except Exception:
             return False
@@ -3503,6 +3504,16 @@ def _cut(x, sr, a, b, fade=0.03):
     return y
 
 
+def t1_sound(mix, sr):
+    """Spain's fireworks (Sam 16 Nov: 'it looks like the fireworks weren't added to Spain'): his fireworks recording,
+    a bang on each rocket's burst over the police line (launch + T1_FLY), a different cut of the file each time."""
+    import filmkit
+    starts = (0.0, 3.0, 6.0, 10.25, 14.0)
+    bangs = [sfx('fireworks', a, a + 0.8, peak=0.4, fade=0.2) for a in starts]
+    for k, (t0, *_r) in enumerate(T1_ROCKETS):
+        filmkit.place(mix, bangs[k % len(bangs)], at=at('t1', t0 + T1_FLY) - 0.03, sr=sr)
+
+
 def t3_sound(mix, sr, load):
     """Round 5 (F24, Sam: 'take sound from' his Paris riot recording + banked effects): T3's crowd bed (looped with a
     crossfade under all 8 s), the water cannon JET_ON -> SWEEP end, stone-hit on each stone's shield hit, glass-smash on
@@ -3587,6 +3598,7 @@ def soundtrack(stems=False):
     except Exception as e:                                  # the film still renders; the fault is printed
         print('SOUND: siren not placed:', e)
     import filmkit
+    t1_sound(mix, MA.SR)                                    # Spain's fireworks (Sam's recording)
     t3_sound(mix, MA.SR, MA.load)                           # F24: France (Sam's Paris recording + banked effects)
     dg = sfx('ding', 0.0, 1.6, peak=0.3, fade=0.4)         # O9 (Sam 16 Nov): Sam's ding (it replaces the made one)
     for tr in TIERS:
