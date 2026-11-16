@@ -1,6 +1,6 @@
 # Proposal: Craft lessons from EPR to get crowds, sets, people, poses, framing, effects and cameras right in a first build
 
-Status: open
+Status: adopted (2026-11-16)
 
 ## Problem
 Sam (16 Nov), after the end-of-film lessons proposal for European Protests Ranked (EPR) was declined, because EPR was

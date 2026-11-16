@@ -239,3 +239,19 @@
 - **For Claude:** kittests `code_finder`; `handover.quick_faults/changed_films/end_stamp/finder_faults`; replay
   `learn/replay-show.py`. Old handovers: `notes/archive/proposal-route-handovers.md`.
 
+
+
+(archived 16 Nov, craft-first-round chat)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 30 (find why first), 85 (cost watch).
+- **Done (code-finder change 2 chat, Opus medium, 16 Nov; Sam: "Switch it on" + weak spots):** change 2 on (replay
+  25/26, 14/14, <45 lines; kittest bar raised); hand word list dropped (same score); `--who` added (Brand's chin line 3rd
+  -> 2nd); note 24 shown not a finder miss. Details: `notes/proposals/code-finder/built.md`.
+- **Next:** none on this job. At the next film's first round: freeze its held-out set (lines edited, from git) before any
+  tuning; round chats pass --shot --at --who.
+- **Needs Sam:** nothing.
+- **Read:** `notes/proposals/code-finder.md`, `code-finder/built.md`; `guides/job-packs.md` "A tool job".
+- **Open rule requests:** none.
+- **For Claude:** page.show.deep (FINDER_DEEP=0 off), show.gate, --who; `code-finder/change2-replay.py`; kittests
+  `code_finder`. Old handovers: `notes/archive/proposal-route-handovers.md`.
+
