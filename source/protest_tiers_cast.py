@@ -709,14 +709,24 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
         j = moves.gait(sp, t, 'sprint')
     elif name == 'run_sign':                        # running carrying the sign low (T2 runners)
         j = moves.gait(sp, t, 'run')
+    elif name == 'line_walk':                       # round 2 (F2): the shield line stepping forward in lockstep
+        j = moves.gait(sp, t, 'walk')
     elif name.startswith('carry') or name == 'push':  # round 1: T2 looters jog with stock; T3 shove the car
         j = moves.gait(sp, t, 'walk' if name == 'push' else 'brisk')   # chat 29: laden, a brisk walk (run: 9 m/s feet)
     else:
         j = V.standing(sp)
-    if name == 'line':                              # in the shield line: shield up in front, baton down by the side
+    if name in ('line', 'line_walk'):               # in the shield line: shield up in front, baton down by the side
         V.arm_to(j, 'L', (-30.0, 250.0, 160.0), 'down')
         V.arm_to(j, 'R', (sw - 6, 420.0, 70.0), 'out')
         j['props'] = [baton(j, sp, 'R', (0.0, 0.6, 0.8)), shield(j, sp)]
+    elif name == 'shield_up':                       # round 2 (F2): braced, the shield lifted to head height and
+        e = moves.ease(u)                           # tipped back to take a missile (u 0: in the line, 1: up)
+        j['lean'] = 6 * e
+        j['footL'] = (-70, V.ANKLE_Y, 120.0 * e)
+        V.arm_to(j, 'L', (-30.0, 250.0 - 170 * e, 160.0 + 30 * e), 'down')
+        V.arm_to(j, 'R', (sw - 6, 420.0, 70.0), 'out')
+        j['props'] = [baton(j, sp, 'R', (0.0, 0.6, 0.8)),
+                      shield(j, sp, centre=(-30.0, 330.0 - 170 * e, 175.0 + 30 * e), tilt=-12 * e)]
     elif name == 'baton_up':                        # baton raised over the shoulder, shield forward
         V.arm_to(j, 'L', (-30.0, 250.0, 170.0), 'down')
         V.arm_to(j, 'R', (j['shR'][0] + 40, -300.0, -60.0), 'out')   # clear above the helmet (chat 6: hand on it)
