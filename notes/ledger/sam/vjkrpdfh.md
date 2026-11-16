@@ -8,3 +8,16 @@ Ensure flame placements are logical -- coming out windows or at the top of build
 ### 2026-11-16T17:32:40
 Rush a clip to me.
 
+### 2026-11-16T17:50:14
+Slow first two mopeds by 50% so we can better see them and the gun firing.
+
+Remove the sound muffle around the dialogue.
+
+The most important thing to fix is the shrug. It doesn't look right at all. It is barely legible to the eye.
+
+### 2026-11-16T17:50:14
+Remove this guy, he's just standing there
+
+### 2026-11-16T17:50:15
+Have the 11/10 flash like you're playing a high energy video game and you just hit a jackpot
+
