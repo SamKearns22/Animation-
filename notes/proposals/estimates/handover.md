@@ -11,4 +11,6 @@
 - **Branches (named, not merged; Sam's answer is with chat 4 of startup-reading):** claude/beautiful-brown-vutd0l,
   claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 - **Open rule requests:** none.
+- **Unrouted 13:26 (settled):** the hook named startup-fixes because a merge brought its file in that turn; the reply was
+  about the estimates proposal, which had a valid verdict and carried its Critiqued line (8 found, 5 fixed, 3 named).
 - **For Claude:** `propose.py mark estimates adopted|declined` on Sam's answer.
