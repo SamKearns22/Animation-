@@ -1,1 +1,2 @@
 - 2026-11-15 22:23 chat 13a4cda5: sent after one block: this asks Sam to approve a change to the system with no proposal behind it: "Need: Y or N to add those two as chat 3's first causes?". Put it through the route  | "Need: Y or N to add those two as chat 3's first causes?"
+- 2026-11-16 09:26 chat e992c7dc: sent after one block: proposal code-finder: the reply must carry "Critiqued: 6 found, 3 fixed, 3 named" (counted from its file; `propose.py show code-finder` prints what Sam sees) | "Need: 1 or 2 below."
