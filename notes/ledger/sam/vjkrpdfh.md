@@ -18,3 +18,6 @@ Remove the sound muffle around the dialogue.
 
 The most important thing to fix is the shrug. It doesn't look right at all. It is barely legible to the eye.
 
+### 2026-11-16T17:50:15
+Have the 11/10 flash like you're playing a high energy video game and you just hit a jackpot
+
