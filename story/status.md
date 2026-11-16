@@ -1,3 +1,3 @@
-European Protests, Ranked: REOPENED 16 Nov; round 2 notes (front half) in progress: Overall + Spain built, Germany next.
-Bald-heads kit fix running in its own chat (Sam's Y there, then this film only).
-Next: Opus medium chat does Germany G1-G10, sends clips; then Sonnet renders the front-half animatic.
+European Protests, Ranked: REOPENED 16 Nov; round 2 notes: Overall + Spain built; Germany G1-G10 first pass built (not yet checked).
+Bald-heads kit fix in its own chat (Sam's Y there, then this film only).
+Next: Opus medium chat finishes Germany (clip check of shop front, tuning, O7 hats), sends clips; then Sonnet animatic.

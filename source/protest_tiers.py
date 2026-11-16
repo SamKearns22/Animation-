@@ -527,175 +527,361 @@ def haze(img, age, centres, speed, col, alpha=0.42, seed=3):
 
 
 # ================================================================================================= T2
+# Round 2 (Sam's G notes, 16 Nov; notes "## Round 2 notes"): 8.5 s, no freeze. Stones from off frame left hit the
+# glass (0.3-1.1); the swinger, facing the glass, smashes it at T2_HIT; the haulers lift the shutter; the A-board is
+# kicked across the pavement; the shop door (right of the window) is kicked open and four go in; two take a pistol
+# each from the window; the four come back out of the door with stock and walk off left; the sirens at T2_WASH, and
+# everyone keeps going.
 T2_WIN = (174, 754, 786, 1089)
-T2_WASH, T2_FREEZE = 5.0, 5.2       # round 1 (T2 6 s): the blue wash and the freeze, 2 s later (was 3.0, 3.2)
+T2_END = 8.5
+T2_WASH = 6.8                       # G1/G10: the blue at 6.8 s, the action carries on
+T2_FREEZE = T2_END                  # G10: no freeze; the old name is kept by the audit tables as the shot's end
+T2_HIT = 1.6                        # G3: the sign meets the glass
+T2_DOOR = 2.45                      # G4: hauler1's foot on the door
+DOOR_X0, DOOR_X1, DOOR_H = S.DOOR2
+DOOR_C, FRONT_D = (DOOR_X0 + DOOR_X1) / 2, 14.0
+T2_SW = (0.2, 12.7)                 # the swinger's mark (the sign's head reaches the glass at T2_HIT)
+T2_STAR = (0.35, 1.55)              # where it meets the glass (x, height)
+BOARD = (-0.7, 12.75)               # G7: the A-board, kicked at BOARD_KICK, lands at BOARD_LAND
+BOARD_KICK, BOARD_LAND, BOARD_TO = 2.3, 2.8, (-0.15, 11.0)
+# G2: stones thrown from off frame left and near: (hits the glass at, x, height)
+T2_STONES = ((0.35, -1.4, 1.6), (0.5, 0.6, 2.0), (0.62, -0.4, 1.2), (0.8, 1.3, 1.7), (0.95, -1.0, 2.2), (1.1, 0.2, 1.4))
+# G9 (FAZ 31 Oct: two weapons taken): who takes which pistol: (cubby column, row height, when it leaves its cubby)
+TAKE = {'runner1': (6, 0.98, 2.95), 'runner2': (8, 1.35, 3.05)}
+# G4/G5: the four who go in through the door come back out of it with stock: (in at, out at, lane, prop)
+DOOR_IN = {'hauler1': (2.75, 4.6, 13.45, 'crate'), 'hauler2': (3.0, 5.6, 13.6, 'crate'),
+           'runner4': (3.3, 5.1, 13.1, 'boxes'), 'runner5': (3.6, 6.1, 13.25, 'boxes')}
+WALK_OUT = 1.5                       # m/s: laden, a brisk walk off left along the shop front
 
 
 def t2_state(lt):
-    shutter = 0.5 + 0.5 * ease((lt - 0.45) / 0.55)
-    glass = 'whole' if lt < 1.0 else 'starred' if lt < 1.1 else 'gone'
-    return dict(shutter=shutter, glass=glass)
+    return dict(shutter=0.5 + 0.5 * ease((lt - 1.0) / 0.5),
+                glass='whole' if lt < T2_HIT else 'starred' if lt < T2_HIT + 0.1 else 'gone',
+                taken=tuple((i, z) for i, z, t in TAKE.values() if lt >= t), star=T2_STAR)
+
+
+def door_angle(lt):
+    """G4: degrees the door's leaf is open (0 shut): flung open by the kick, it bounces back a little off the rack."""
+    if lt < T2_DOOR:
+        return 0.0
+    return 100 * ease((lt - T2_DOOR) / 0.2) - 14 * math.sin(math.pi * min(1.0, max(0.0, (lt - T2_DOOR - 0.2) / 0.5)))
+
+
+def _keys(tt, keys):
+    """keys [(t, x, d), ...] -> (x, d, i, u): where someone is at tt, moving at an even speed between keys; i is the
+    segment (-1 before the first key, len - 1 after the last), u how far through it."""
+    if tt <= keys[0][0]:
+        return keys[0][1], keys[0][2], -1, 0.0
+    for i in range(len(keys) - 1):
+        t0, x0, d0 = keys[i]
+        t1, x1, d1 = keys[i + 1]
+        if tt < t1:
+            u = (tt - t0) / (t1 - t0)
+            return lerp(x0, x1, u), lerp(d0, d1, u), i, u
+    return keys[-1][1], keys[-1][2], len(keys) - 1, 1.0
+
+
+def _heading(keys, i):
+    (_, x0, d0), (_, x1, d1) = keys[i], keys[i + 1]
+    return math.degrees(math.atan2(x1 - x0, -(d1 - d0)))   # yaw: 0 toward us, 90 right, 180 away
+
+
+DOOR_CLIP = None                     # the door's opening on screen (set once RF2 exists, below)
+
+
+def _door_walk(name, tt):
+    """G4: in through the door and, later, out of it with the stock and off left along the shop front. -> (x, d, yaw,
+    state, inside) or None while they are in the shop."""
+    t_in, t_out, lane, _ = DOOR_IN[name]
+    if t_in <= tt < t_in + 0.45:                            # through the doorway, away from us
+        d = lerp(13.35, 14.9, (tt - t_in) / 0.45)
+        return DOOR_C, d, 180, 'run', d > FRONT_D - 0.2
+    if t_in + 0.45 <= tt < t_out:
+        return None
+    a = tt - t_out
+    if a < 0.9:                                             # stepping out toward us, laden
+        d = lerp(14.9, lane, ease(a / 0.9))
+        return DOOR_C, d, 0, 'carry_front', d > FRONT_D - 0.2
+    b = a - 0.9
+    k = min(1.0, b / 0.3)                                   # turning left, then walking off along the shop front
+    x = DOOR_C - WALK_OUT * (b - 0.15) if k >= 1 else DOOR_C - WALK_OUT * 0.15 * k * k
+    return x, lane, -115 * ease(k), 'carry_front', False
 
 
 def t2_actors(lt):
-    tt = min(lt, T2_FREEZE)                                 # everyone freezes mid-swing in the blue (round 1: 5.2)
+    tt = lt
     out = []
+    A = lambda *a, **k: out.append(Actor(*a, tier='t2', **k)) or out[-1]   # noqa: E731
 
-    LANES = (10.4, 10.8, 11.2, 11.6, 12.0, 13.0, 13.4)      # chat 14: each runner its own depth lane on the way in
-    SPRINT = 6.2                                            # (same lane: they ran through each other)
+    def run_keys(name, keys, after, **k):
+        """Run along keys; once there, `after(i, u)` gives (yaw, state, u) for the time since the last key."""
+        x, d, i, u = _keys(tt, keys)
+        if 0 <= i < len(keys) - 1:
+            return A(name, 'rioter', x, d, _heading(keys, i), 'run', t=tt, **k)
+        if i < 0:
+            return None
+        yaw, st, uu = after(tt - keys[-1][0])
+        return A(name, 'rioter', x, d, yaw, st, u=uu, t=tt, **k)
 
-    def dash(n, x0, x1, de, t1):
-        """chat 18 (pre-flight: 9-14 m/s, they ran 4-6 m in half a second): the run's length is set by a real sprint
-        (SPRINT m/s at its fastest), arriving at t1 as before; x even, the depth lane eased smoothly to the mark.
-        -> (x, d, running). t0 may be before the cut: they are already running when the tier opens."""
-        dl = LANES[n] if n is not None else de
-        T = math.hypot(x1 - x0, 1.5 * (de - dl)) / SPRINT
-        u = (tt - (t1 - T)) / T
-        v = min(1.0, max(0.0, u))
-        return lerp(x0, x1, v), lerp(dl, de, ease(v)), u < 1.0
-
-    def run_in(x0, x1, t0, t1):
-        x, _, running = dash(None, x0, x1, 0.0, t1)
-        return x, running
-
-    # haulers (0.4-1.0), then they slide through the gap into the shop (1.3-1.7)
-    for k, (xe, de) in enumerate(((-0.9, 13.3), (0.6, 13.3))):
-        x, d, running = dash(k, -3.3 - k * 0.5, xe, de, 0.45)
-        if tt >= WAVE['hauler1'][1]:                      # round 1: back out with the mannequin (second_wave)
+    # the haulers: sprint in, lever the shutter up (1.0-1.5), run to the door; hauler1 kicks it in (G4)
+    for k, (xs, xh) in enumerate(((-3.8, -0.9), (-4.2, 0.6))):
+        name = f'hauler{k + 1}'
+        if tt >= DOOR_IN[name][0]:
+            w = _door_walk(name, tt)
+            if w:
+                x, d, yaw, st, inside = w
+                a = A(name, 'rioter', x, d, yaw, st, t=tt, clip=DOOR_CLIP if inside else None)
+                if st == 'carry_front':
+                    a.prop, a.prop_before = _carried(DOOR_IN[name][3]), abs(yaw) > 90
             continue
-        if running:
-            out.append(Actor(f'hauler{k + 1}', 'rioter', x, d, 90, 'run', t=tt, tier='t2'))
-        elif tt < 1.3:
-            out.append(Actor(f'hauler{k + 1}', 'rioter', x, de, 180, 'haul', tier='t2'))
+        wait = (DOOR_C, 13.3) if k == 0 else (2.0, 12.95)
+        keys = [(0.2 + 0.1 * k, xs, 13.3), (0.95, xh, 13.3)]
+        x, d, i, u = _keys(tt, keys)
+        if i < len(keys) - 1:
+            if i >= 0:
+                A(name, 'rioter', x, d, 90, 'run', t=tt)
+            continue
+        if tt < 1.55:                                       # hauling the shutter up
+            A(name, 'rioter', xh, 13.3, 180, 'haul')
+            continue
+        keys2 = [(1.55, xh, 13.3), (2.25 + 0.05 * k, *wait)]
+        x, d, i, u = _keys(tt, keys2)
+        if i == 0:
+            A(name, 'rioter', x, d, _heading(keys2, 0), 'run', t=tt)
+        elif k == 0:                                        # the kick: knee up 2.25, foot on the door at T2_DOOR
+            uk = (tt - (T2_DOOR - 0.12)) / 0.3 * 0.5 + 0.0 if tt < T2_DOOR else 0.5 + (tt - T2_DOOR) / 0.3 * 0.5
+            A(name, 'rioter', x, d, 180, 'kick' if tt > T2_DOOR - 0.25 else 'stand',
+              u=min(1.0, max(0.0, uk)))
+        else:                                               # waiting his turn, egging them on
+            A(name, 'rioter', x, d, 160, 'throw', u=((tt - 2.25) * 1.6) % 1)
+    # the swinger (G3): runs in, turns to the glass, winds up, the sign's head meets the glass at T2_HIT; swings on
+    keys = [(0.15, -3.8, 11.9), (0.75, -0.4, 12.0), (0.95, *T2_SW)]
+    x, d, i, u = _keys(tt, keys)
+    if 0 <= i < len(keys) - 1:
+        A('swinger', 'rioter', x, d, _heading(keys, i), 'run_sign', t=tt)
+    elif i >= 0:
+        if tt < 1.35:
+            us = 0.25 * ease((tt - 0.95) / 0.4)
+        elif tt < T2_HIT:
+            us = 0.25 + 0.6 * ease((tt - 1.35) / (T2_HIT - 1.35))
+        elif tt < 1.75:
+            us = 0.85 + 0.15 * ease((tt - T2_HIT) / 0.15)
+        elif tt < 3.85:                                     # knocks the teeth out of the frame: three more swings
+            c = ((tt - 1.75) % 0.7) / 0.7
+            us = 1 - 0.75 * math.sin(math.pi * c)
+        else:                                               # then the sign up on his shoulder, bouncing to the chant
+            us = lerp(1.0, 0.15, ease((tt - 3.85) / 0.5)) + 0.04 * math.sin(tt * 2 * math.pi * 1.1)
+        a = A('swinger', 'rioter', x, d, 160, 'swing_face', u=us)
+        a.blend('run_sign', 0, tt, w=(tt - 0.95) / 0.25)
+    # runner1, runner2 (G9): run in, throw stones into the shop, step up to the window and each take a pistol, then
+    # walk off left with it held up
+    for k, (xm, dm, xr, take_t) in enumerate(((1.05, 12.35, 0.95, TAKE['runner1'][2]),
+                                               (1.75, 12.3, 1.7, TAKE['runner2'][2]))):
+        name = f'runner{k + 1}'
+        keys = [(0.45 + 0.1 * k, -3.8, 12.25 - 0.1 * k), (1.05 + 0.1 * k, xm, dm)]
+        x, d, i, u = _keys(tt, keys)
+        if 0 <= i < len(keys) - 1:
+            A(name, 'rioter', x, d, _heading(keys, i), 'run', t=tt + k * .1)
+            continue
+        if i < 0:
+            continue
+        t_up = take_t - 0.65                                # step up 0.3 s, reach 0.35 s, the pistol out at take_t
+        if tt < t_up:
+            A(name, 'rioter', xm, dm, 180, 'throw', u=((tt - 1.05) * 1.4 + k * .3) % 1.0)
+            continue
+        reach = 'reach_lo' if k == 0 else 'reach_hi'
+        if tt < t_up + 0.3:
+            v = ease((tt - t_up) / 0.3)
+            a = A(name, 'rioter', lerp(xm, xr, v), lerp(dm, 13.45, v), 180, 'stand')
+            a.blend('throw', 0.0, w=v * 3)
+            continue
+        if tt < take_t + 0.45:
+            A(name, 'rioter', xr, 13.45, 180, reach, u=(tt - (t_up + 0.3)) / 0.35 if tt < take_t else 1 + (tt - take_t) / 0.45)
+            continue
+        lane = 12.0 - 0.2 * k                               # back off the window, turn, walk off left
+        keys2 = [(take_t + 0.45, xr, 13.45), (take_t + 0.95, xr - 0.3, lane), (take_t + 6.0, xr - 0.3 - 7.6, lane)]
+        x, d, i, u = _keys(tt, keys2)
+        yaw = lerp(180, -115, ease((tt - take_t - 0.45) / 0.5))
+        a = A(name, 'rioter', x, d, yaw, 'gun_up', t=tt)
+        a.blend(reach, 2.0, w=(tt - take_t - 0.45) / 0.3)
+    # runner3 (G7): the A-board: a sprint in, three steps' run-up, a hard kick; then he throws stones into the shop
+    keys = [(1.35, -3.6, 12.7), (1.85, -2.25, 12.7), (2.12, -1.5, 12.7)]
+    x, d, i, u = _keys(tt, keys)
+    if 0 <= i < len(keys) - 1:
+        A('runner3', 'rioter', x, d, 90, 'run', t=tt)
+    elif i >= 0:
+        if tt < 2.62:
+            A('runner3', 'rioter', x, d, 90, 'kick', u=min(1.0, (tt - 2.12) / 0.5))
         else:
-            u = ease((tt - 1.3) / 0.4)
-            out.append(Actor(f'hauler{k + 1}', 'rioter', xe - 0.1 * k * u, de + (1.85 - 0.2 * k) * u, 180,
-                             'throw' if u >= 1 else 'stand', u=_hauler_u(k, tt), tier='t2',
-                             clip=T2_WR if u > 0.5 else None))
-    # the road-sign swinger: runs in carrying it low, winds up 0.6, swings through the glass at 1.0, keeps swinging
-    x, running = run_in(-3.3, -0.5, 0.05, 0.6)            # chat 15: mid-window (was -1.55: the sign at the frame edge)
-    if running:
-        out.append(Actor('swinger', 'rioter', x, 12.0, 90, 'run_sign', t=tt, tier='t2'))
-    else:
-        if tt < 0.9:
-            u = 0.2 * ease((tt - 0.6) / 0.3)
-        elif tt < 1.05:
-            u = 0.2 + 0.8 * ease((tt - 0.9) / 0.15)
-        else:
-            c = ((tt - 1.05) % 0.7) / 0.7
-            u = 1 - 0.8 * math.sin(math.pi * c) if tt < T2_WASH else 0.55
-        out.append(Actor('swinger', 'rioter', x, 12.0, 90, 'swing', u=u, tier='t2'))
-    # five more: two throw stones into the shop, one kicks the A-board over (1.4), two by the closed shop
-    for k, (xe, de) in enumerate(((0.9, 12.4), (1.55, 11.9), (-2.15, 12.3), (2.25, 12.5), (2.9, 12.0))):
-        x, d, running = dash(k + 2, -3.3 - k * .3, xe, de, 0.6 + k * .05)
-        if running:
-            out.append(Actor(f'runner{k + 1}', 'rioter', x, d, 90, 'run', t=tt + k * .1, tier='t2'))
-        else:
-            u = ((tt - 0.6) * 1.4 + k * .3) % 1.0
-            yaw = 180 if k < 2 else 90 if k == 2 else 135
-            out.append(Actor(f'runner{k + 1}', 'rioter', x, de, yaw, 'throw', u=u if lt < T2_FREEZE else 0.3, tier='t2'))
+            a = A('runner3', 'rioter', x, d, 160, 'throw', u=((tt - 2.62) * 1.3) % 1.0)
+            a.blend('kick', 1.0, w=(tt - 2.62) / 0.25)
+    # runner4, runner5: run in and wait by the door, egging it on; in after the haulers (G4)
+    for k, (wx, wd, tin) in enumerate(((2.5, 12.3, 1.55), (3.05, 12.55, 1.7))):
+        name = f'runner{k + 4}'
+        if tt >= DOOR_IN[name][0]:
+            w = _door_walk(name, tt)
+            if not w:
+                continue
+            if w[2] == 180 and tt < DOOR_IN[name][0] + 0.45:
+                pass
+            x, d, yaw, st, inside = w
+            a = A(name, 'rioter', x, d, yaw, st, t=tt, clip=DOOR_CLIP if inside else None)
+            if st == 'carry_front':
+                a.prop, a.prop_before = _carried(DOOR_IN[name][3]), abs(yaw) > 90
+            continue
+        keys = [(tin - 1.1, -3.6, 12.6 - 0.25 * k), (tin, wx, wd), (DOOR_IN[name][0], DOOR_C, 13.35)]
+        x, d, i, u = _keys(tt, keys)
+        if i == 0 or (i == 1 and tt > DOOR_IN[name][0] - 0.3):
+            ii = 0 if i == 0 else 1
+            if i == 1:                                      # his dash to the door
+                x, d = lerp(wx, DOOR_C, (tt - DOOR_IN[name][0] + 0.3) / 0.3), lerp(wd, 13.35, (tt - DOOR_IN[name][0] + 0.3) / 0.3)
+            A(name, 'rioter', x, d, _heading(keys, ii), 'run', t=tt)
+        elif i == 1:
+            A(name, 'rioter', wx, wd, 150, 'throw', u=((tt - tin) * 1.5 + k * .4) % 1.0)
     # the crowd on the near pavement, seen from behind, all facing the store (chanting: signs jab on the beat)
     beat = abs(math.sin(math.pi * 2.2 * tt))
-    # chat 15 (moves hunt 1: the near crowd at 3.3-5.8 m hid the smash and lost its feet): back to 7-8.6 m, at the
-    # two sides only, so the window and the swing stay clear in the middle; whole people, feet on the road
-    # chat 16 (hunt 2: the near crowd still covered the window): to the frame's two edges (the window spans x 100-860)
-    crowd = [(-1.38, 7.8, 'placard:WAFFEN RAUS:250,246,232', 0), (-1.75, 8.9, 'phone', 1), (-1.6, 9.6, 'stand', 2),
-             (1.42, 7.7, 'phone', 6), (1.7, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (1.95, 9.5, 'stand', 3)]
+    # round 2 (G4: the camera moved right): the left side 0.2 m in, the right 0.3 m out, clear of the door
+    crowd = [(-1.18, 7.8, 'placard:WAFFEN RAUS:250,246,232', 0), (-1.55, 8.9, 'phone', 1), (-1.4, 9.6, 'stand', 2),
+             (1.72, 7.7, 'phone', 6), (2.0, 8.8, 'placard:GEN Z REGELT:240,220,60', 5), (2.25, 9.5, 'stand', 3)]
     for k, (x, d, st, i) in enumerate(crowd):
         if st.startswith('placard'):
             st = st + ':' + str(int(90 * beat))
         yaw = 180
-        if st == 'phone':                                   # round 1: the phones swing round after the looters
-            yaw = 180 - (30 if x < 0 else 45) * ease((tt - 3.1) / 0.5)
+        if st == 'phone':                                   # the phones swing round after the looters out the door
+            yaw = 180 + (25 if x < 0 else 35) * ease((tt - 4.7) / 0.6)
         out.append(Actor(f'crowd{k + 1}', 'marcher', x + 0.04 * math.sin(tt * 3 + k), d, yaw, st, i=i, tier='t2'))
-    return out + second_wave(tt)
-
-
-# Round 1 (T2 3.0-5.2, notes "## Round 1 plan"): the second wave comes back out through the gap and jogs off right
-# with the stock: name -> (x where they step out, out at, lane d, jog m/s, pose, prop). The haulers carry the
-# mannequin between them, 1.4 m apart, so it stays rigid; frozen mid-frame at 5.2.
-WAVE = {'runner6': (-0.2, 3.0, 12.95, 1.2, 'carry_front', 'tv'),       # chat 29 (pre-flight: feet 8-10 m/s, 74 cm a
-        'runner7': (0.1, 3.15, 13.3, 1.8, 'carry_front', 'boxes'),   # frame): a laden brisk walk, not a run; each
-        'hauler2': (0.5, 3.95, 13.55, 1.3, 'carry_up', None),         # its own lane (same lane: they swapped front and
-        'hauler1': (-0.9, 3.95, 13.75, 1.3, 'carry_up', 'mannequin')} # back in one frame), hauler2 in front
-WAVE_IN = 14.8                                              # the shop floor they come out from
-WAVE_OUT, WAVE_TURN = 0.9, 0.3                              # chat 29: step out over 0.9 s (was 0.45: 8 m/s), turn in 0.3
-
-
-def wave_pos(name, tt):
-    """-> (x, d, yaw, inside) or None before they come out."""
-    x0, t0, lane, v, _, _ = WAVE[name]
-    if tt < t0:
-        return None
-    u = (tt - t0) / WAVE_OUT
-    if u < 1:                                               # stepping out toward us through the gap
-        d0 = WAVE_IN + (lane - 13.4) * name.startswith('hauler')   # from where each hauler stood (no swap)
-        d = lerp(d0, lane, ease(u))
-        return x0, d, 0, d > 13.9
-    a = tt - t0 - WAVE_OUT
-    k = min(1.0, a / WAVE_TURN)                             # turning right, then walking off (no snap of 115 degrees)
-    x = x0 + v * (a - WAVE_TURN / 2) if k >= 1 else x0 + v * WAVE_TURN / 2 * k * k
-    return x, lane, 115 * ease(k), False                    # three-quarter away: the run's safe yaw
+    return out
 
 
 def _carried(kind):
     def draw(img, cam, a):
         k = cam.ppm(a.d)
-        fwd = 0.28 if a.yaw > 90 else 0.0                   # out in front of them, toward where they go
-        dd = 0.15 if a.yaw > 90 else -0.3
-        if kind == 'tv':
-            S.prop_tv(img, *cam.p(a.x + fwd, a.d + dd, 1.2), k, -6, lit=True)
-        elif kind == 'boxes':
+        dirn = -1 if a.yaw < -45 else 1 if a.yaw > 45 else 0   # out in front of them, toward where they go
+        fwd = 0.3 * dirn
+        dd = 0.0 if dirn else -0.3
+        if kind == 'crate':
+            S.prop_crate(img, *cam.p(a.x + fwd, a.d + dd, 1.05), k)
+        else:
             S.prop_boxes(img, *cam.p(a.x + fwd * .7, a.d + dd, 0.95), k, 3)
-        else:                                               # the mannequin, flat over both carriers' heads
-            xf = wave_pos('hauler2', a.t)
-            if xf:
-                S.prop_mannequin(img, *cam.p((a.x + xf[0]) / 2, a.d, 2.12), k, 0)
     return draw
 
 
-def _hauler_u(k, tt):
-    """The haulers' stone throws inside the shop; they stop mid-throw at 3.3 to pick up the mannequin (chat 29)."""
-    return (min(tt, 3.3) * 1.7 + k * .5) % 1
+def board_pose(lt):
+    """G7: the A-board's (x, d, height, tilt degrees): stands, kicked over and through the air, lands face down."""
+    if lt < BOARD_KICK:
+        return BOARD[0], BOARD[1], 0.0, 0.0
+    u = min(1.0, (lt - BOARD_KICK) / (BOARD_LAND - BOARD_KICK))
+    x, d = lerp(BOARD[0], BOARD_TO[0], u), lerp(BOARD[1], BOARD_TO[1], u)
+    z = 0.9 * 4 * u * (1 - u)
+    if u >= 1:                                              # down: a skid, then flat
+        s = ease(min(1.0, (lt - BOARD_LAND) / 0.25))
+        return x + 0.25 * s, d, 0.0, 90.0
+    return x, d, z, 90 + 270 * ease(u)                      # one and a quarter turns, flat on its face
 
 
-def second_wave(tt):
-    out = []
-    for name, (_, t0, _, _, st, prop) in WAVE.items():
-        w = wave_pos(name, tt)
-        if w is None:
+@lru_cache(maxsize=4)
+def _board_sprite(px):
+    """G7 (Sam: 'the sign drawn clearer'): a pavement A-board seen from the front, px tall: a wooden frame with two
+    legs, a chalkboard face, ANGEBOT in chalk and two prices."""
+    h, w = px, int(px * .62)
+    im = Image.new('RGBA', (w + 8, h + 8), (0, 0, 0, 0))
+    pts = lambda q: [(4 + x * w, 4 + y * h) for x, y in q]          # noqa: E731
+    IS.poly(im, pts([(.06, 1), (.16, 1), (.2, .8), (.1, .8)]), (120, 84, 50), INK, 2)   # legs
+    IS.poly(im, pts([(.84, 1), (.94, 1), (.9, .8), (.8, .8)]), (120, 84, 50), INK, 2)
+    IS.poly(im, pts([(.04, .84), (.96, .84), (.9, 0), (.1, 0)]), (150, 106, 62), INK, 2.4)   # frame
+    IS.poly(im, pts([(.12, .78), (.88, .78), (.84, .07), (.16, .07)]), (34, 44, 40), None, 0)  # chalkboard
+    S.text(im, (4 + w * .5, 4 + h * .2), 'ANGEBOT', max(7, int(h * .13)), (244, 244, 236), maxw=w * .64)
+    S.text(im, (4 + w * .5, 4 + h * .42), '9,99 €', max(7, int(h * .12)), (250, 220, 90), maxw=w * .6)
+    S.text(im, (4 + w * .5, 4 + h * .62), '24,90 €', max(7, int(h * .12)), (230, 232, 226), maxw=w * .6)
+    return im
+
+
+def t2_board(img, lt):
+    x, d, z, tilt = board_pose(lt)
+    cam = RF2.cam
+    k = cam.ppm(d)
+    spr = _board_sprite(int(1.15 * k))
+    if tilt >= 90 and lt >= BOARD_LAND:                     # lying face down: its back, the frame, squashed flat
+        spr = spr.resize((spr.width, max(6, int(spr.height * .22))))
+        spr = Image.eval(spr, lambda v: v)
+        dk = Image.new('RGBA', spr.size, (110, 78, 46, 255))
+        dk.putalpha(spr.getchannel('A'))
+        spr = dk
+        tilt = 0.0
+    r = spr.rotate(-tilt, expand=True, resample=Image.BICUBIC)
+    gx, gy = cam.p(x, d, z)
+    cy = gy - (spr.height / 2 if tilt == 0 else 0)
+    img.alpha_composite(r, (int(gx - r.width / 2), int(cy - r.height / 2)))
+
+
+def t2_door(img, lt):
+    """G4: the door's glass leaf on its hinge (the far jamb, x DOOR_X1), swinging in (drawn behind the people)."""
+    cam = RF2.cam
+    th = math.radians(door_angle(lt))
+    L = DOOR_X1 - DOOR_X0
+    hx = DOOR_X1
+    fx, fd = hx - L * math.cos(th), FRONT_D + L * math.sin(th)
+    q = [cam.p(hx, FRONT_D, 0), cam.p(fx, fd, 0), cam.p(fx, fd, DOOR_H), cam.p(hx, FRONT_D, DOOR_H)]
+    IS.poly(img, q, (40, 42, 48), INK, 2.4)                 # the steel frame
+    inn = [(lerp(q[0][0], q[1][0], a), lerp(q[0][1], q[1][1], a)) for a in (.1, .9)]
+    top = [(lerp(q[3][0], q[2][0], a), lerp(q[3][1], q[2][1], a)) for a in (.1, .9)]
+    g = [(inn[0][0], inn[0][1] - .06 * (q[0][1] - q[3][1])), (inn[1][0], inn[1][1] - .06 * (q[1][1] - q[2][1])),
+         (top[1][0], top[1][1] + .06 * (q[1][1] - q[2][1])), (top[0][0], top[0][1] + .06 * (q[0][1] - q[3][1]))]
+    IS.poly(img, g, (150, 176, 186) if th < 0.05 else (96, 112, 120), None, 0)   # the glass panel
+    hb = [cam.p(lerp(hx, fx, .82), lerp(FRONT_D, fd, .82), z) for z in (0.95, 1.1)]
+    IS.poly(img, hb, None, (200, 200, 206), 5, 0)          # the push bar's handle
+    if th < 0.05:                                           # shut: the opening hours sticker
+        c = cam.p(lerp(hx, fx, .5), FRONT_D, 1.55)
+        S.text(img, c, 'GEÖFFNET', max(7, int(.09 * cam.ppm(FRONT_D))), (250, 250, 240))
+
+
+def t2_stones(img, lt):
+    """G2: stones hurled from off frame left and near, arcing onto the glass; each bounces off to the plinth (the
+    glass holds until the sign); each leaves a small star of cracks (t2_chips)."""
+    cam = RF2.cam
+    for n, (th, x, z) in enumerate(T2_STONES):
+        t0 = th - 0.55
+        if lt < t0:
             continue
-        x, d, yaw, inside = w
-        if name.startswith('hauler'):                       # chat 29: they turn round and lift it (was a snap of
-            k = (tt - t0) / 0.4                             # 180 degrees and throw -> carry in one frame)
-            yaw = yaw if k >= 1 else 180 * (1 - ease(k))
-        a = Actor(name, 'rioter', x, d, yaw, st, t=tt, tier='t2', clip=T2_WR if inside else None)
-        if name.startswith('hauler'):
-            a.blend('throw', _hauler_u(int(name[-1]) - 1, tt), w=(tt - t0) / 0.4)
-        if prop:
-            a.prop, a.prop_before = _carried(prop), yaw > 90 and prop != 'mannequin'
-        out.append(a)
-    return out
+        r = 0.07 * cam.ppm(13)
+        if lt < th:                                         # in the air: from (-4.2, 9.5, 1.7), an arc 1.1 m high
+            u = (lt - t0) / 0.55
+            p = (lerp(-4.2, x, u), lerp(9.5, FRONT_D - 0.05, u), lerp(1.7, z, u) + 1.1 * 4 * u * (1 - u))
+        elif lt < th + 0.35:                                # off the glass and down onto the pavement
+            u = (lt - th) / 0.35
+            p = (x - 0.2 * u, FRONT_D - 0.05 - 0.5 * u, max(0.0, z * (1 - u * u)))
+        else:
+            p = (x - 0.2, FRONT_D - 0.55, 0.0)
+        gx, gy = cam.p(*p)
+        rr = r * cam.ppm(p[1]) / cam.ppm(13)
+        IS.poly(img, [(gx + rr * math.cos(a) * (1 + .25 * math.sin(3 * a + n)), gy + rr * .8 * math.sin(a))
+                      for a in np.linspace(0, 6.28, 9)[:-1]], (150, 146, 138), INK, 2)
+        if th <= lt < th + 0.08:
+            S.glow_disc(img, *cam.p(x, FRONT_D, z), 34, (255, 255, 240), amt=.6)
+
+
+def t2_chips(img, lt):
+    """G2: each stone's small star of cracks on the glass, until the sign takes the glass out."""
+    if lt >= T2_HIT + 0.1:
+        return
+    cam = RF2.cam
+    for n, (th, x, z) in enumerate(T2_STONES):
+        if lt < th:
+            continue
+        cx, cy = cam.p(x, FRONT_D, z)
+        for q in range(7):
+            a = q * 0.9 + n
+            r = 26 + 14 * ((q * 3 + n) % 3)
+            IS.poly(img, [(cx, cy), (cx + r * math.cos(a), cy + r * math.sin(a))], None, (80, 96, 108), 1.8, 0)
+        IS.poly(img, [(cx + 9 * math.cos(a), cy + 9 * math.sin(a)) for a in np.linspace(0, 6.28, 8)], (236, 244, 248),
+                (80, 96, 108), 1.4, 0)
 
 
 def t2_fx(img, lt):
     cam = RF2.cam
-    tt = min(lt, T2_FREEZE)
-    # the A-board by the doorway, kicked over at 1.4
-    bx, by = cam.p(-1.6, 12.8)                             # chat 15: in frame after the T2 reframe (was -3.4)
-    k = cam.ppm(12.6)
-    ang = math.radians(85 * ease((tt - 1.4) / 0.25))
-    hgt, wd = 1.15 * k, 0.72 * k                           # chat 14: a pavement A-board's true size (was small)
-    pts = [(-wd / 2, 0), (wd / 2, 0), (wd / 2 - 8, -hgt), (-wd / 2 + 8, -hgt)]
-    rot = lambda q: [(bx + px * math.cos(ang) - py * math.sin(ang), by + px * math.sin(ang) + py * math.cos(ang))  # noqa
-                     for px, py in q]
-    IS.poly(img, rot(pts), (60, 52, 44), INK, 2.4)              # the wooden frame, a chalkboard face
-    IS.poly(img, rot([(-wd / 2 + 12, -10), (wd / 2 - 12, -10), (wd / 2 - 18, -hgt + 12), (-wd / 2 + 18, -hgt + 12)]),
-            (34, 38, 36), None, 0)
-    for f in (0.3, 0.45, 0.6, 0.72):                        # chalk lines (prices)
-        IS.poly(img, rot([(-wd * .3, -hgt * f), (wd * (.3 - .25 * (f > .5)), -hgt * f)]), None, (220, 222, 214), 3, 0)
-    # the pry bar (0.45-1.3): hauler 1 levers the shutter's hem up from beside his head; the hem rides up with it
-    if 0.45 <= tt < 1.3:
+    tt = lt
+    # the pry bar (1.0-1.55): hauler 1 levers the shutter's hem up from beside his head; the hem rides up with it
+    if 1.0 <= tt < 1.55:
         st = t2_state(tt)
         hem = .45 + (2.9 - .45) * st['shutter']
         hx = -0.9 + 0.12
@@ -704,27 +890,33 @@ def t2_fx(img, lt):
         IS.poly(img, [a, b], None, (220, 40, 36), 10, 0)       # a red-painted crowbar
         IS.poly(img, [b, (b[0] + 18, b[1] - 14)], None, INK, 12, 0)
         IS.poly(img, [b, (b[0] + 18, b[1] - 14)], None, (220, 40, 36), 6, 0)
+    t2_stones(img, lt)
     t2_flash(img, tt)
 
 
 def t2_flash(img, tt):
-    """The impact flash where the sign meets the glass (1.0); its own function so the shape check draws it alone."""
-    if 0.98 <= tt < 1.15:
-        S.glow_disc(img, *RF2.R(500, 905), 130, (255, 250, 210), amt=.7)
+    """The impact flash where the sign meets the glass (T2_HIT); its own function so the shape check draws it alone."""
+    if T2_HIT - 0.02 <= tt < T2_HIT + 0.15:
+        S.glow_disc(img, *RF2.cam.p(T2_STAR[0], FRONT_D, T2_STAR[1]), 130, (255, 250, 210), amt=.7)
 
 
 def t2_teeth(img, lt):
     """Drawn before the people (in front of the window they hide it)."""
-    tt = min(lt, T2_FREEZE)
-    if tt >= 1.1:                                          # chat 16 (hunt 2: glass looked whole): jagged teeth left
+    tt = lt
+    t2_chips(img, lt)
+    if tt >= T2_HIT + 0.1:                                 # chat 16 (hunt 2: glass looked whole): jagged teeth left
         x0, y0, x1, y1 = T2_WR                             # in the frame, a star of cracks round the hole
         rng = np.random.default_rng(9)
+        # G3: the swinger knocks the teeth out as he goes on (1.75-3.85): fewer are left after each swing
+        left = 1.0 - 0.5 * min(1.0, max(0.0, (tt - 1.75) / 2.1))
         for side in range(4):
             n = 9
             for q in range(n):
                 u0, u1 = q / n, (q + 1) / n
                 dep = rng.uniform(25, 95)
                 um = (u0 + u1) / 2 + rng.uniform(-.03, .03)
+                if rng.uniform() > left:
+                    continue
                 if side == 0:
                     tri = [(lerp(x0, x1, u0), y0), (lerp(x0, x1, u1), y0), (lerp(x0, x1, um), y0 + dep)]
                 elif side == 1:
@@ -735,18 +927,22 @@ def t2_teeth(img, lt):
                     tri = [(x1, lerp(y0, y1, u0)), (x1, lerp(y0, y1, u1)), (x1 - dep, lerp(y0, y1, um))]
                 IS.poly(img, tri, (200, 226, 236), (90, 120, 130), 2, 0)
 
-    # chat 16: the falling glass falls in the window's plane, behind the raiders
-    # falling glass with glints (1.05-1.6), then shards on the pavement glinting
+    # chat 16: the falling glass falls in the window's plane, behind the raiders; then shards on the pavement glinting
+    # G6 (Sam: 'why does the broken glass dance on the ground?'): a landed shard lies still (it spun for ever)
     rng = np.random.default_rng(5)
+    ground = RF2.R(0, 1175)[1]
     for n in range(60):
         x0, y0 = rng.uniform(T2_WR[0] + 10, T2_WR[2] - 10), rng.uniform(T2_WR[1] + 10, T2_WR[3] - 20)
-        a = tt - 1.05 - rng.uniform(0, .15)
+        a = tt - (T2_HIT + 0.05) - rng.uniform(0, .15)
+        gy = ground + rng.uniform(-20, 15)
+        dx, r, sp0 = rng.uniform(-60, 60), rng.uniform(10, 24), rng.uniform(0, 6.28)
         if a < 0:
             continue
-        yy = min(RF2.R(0, 1175)[1] + rng.uniform(-20, 15), y0 + 1100 * a * a)
-        xx = x0 + rng.uniform(-60, 60) * min(a, .4)
-        r = rng.uniform(10, 24)
-        sp = rng.uniform(0, 6.28) + a * 9
+        land = math.sqrt(max(0.0, gy - y0) / 1100)
+        a = min(a, land)
+        yy = min(gy, y0 + 1100 * a * a)
+        xx = x0 + dx * min(a, .4)
+        sp = sp0 + a * 9
         tri = [(xx + r * math.cos(sp + q * 2.1), yy + r * .7 * math.sin(sp + q * 2.1)) for q in range(3)]
         IS.poly(img, tri, (210, 230, 238), (120, 150, 160), 1.2, 0)
         if (n + int(lt * 12)) % 7 == 0:
@@ -754,8 +950,8 @@ def t2_teeth(img, lt):
 
 
 def blue_wash(img, lt):
-    """T2 5.0-6.0 (round 1; was 3.0-4.0): the blue light from the far right end of the street sweeping across crowd and store; faces,
-    signs and the wet ground turn blue (the last light layer, over everything)."""
+    """T2 from T2_WASH (round 2: 6.8; was 5.0): the blue light from the far right end of the street sweeping across
+    crowd and store; faces, signs and the wet ground turn blue (the last light layer, over everything)."""
     if lt < T2_WASH:
         return
     lt = lt - (T2_WASH - 3.0)                              # the sweep's own clock, as it was
@@ -778,10 +974,13 @@ def blue_wash(img, lt):
 
 
 def phone_lights(img, actors, cam):
+    """G8 (Sam: 'white glints on the backs of heads?'): the glow was drawn at eye height for every phone, so a phone
+    held in front of the face by someone seen from behind put a white disc on the back of their head. The phone's lit
+    screen is drawn by the cast's phone itself; the glow only for a phone turned to us (its torch), at the hand."""
     for a in actors:
-        if a.state == 'phone':
+        if a.state == 'phone' and math.cos(math.radians(a.yaw)) > 0.5:
             gx, gy = cam.p(a.x + 0.12, a.d, 1.62)
-            S.glow_disc(img, gx, gy, 0.09 * cam.ppm(a.d), (235, 245, 255), amt=.55)   # chat 15: was 0.25 (a grey disc)
+            S.glow_disc(img, gx, gy, 0.09 * cam.ppm(a.d), (235, 245, 255), amt=.55)
 
 
 # ================================================================================================= T3
@@ -811,8 +1010,11 @@ T3K, T3CAM, R3, reframe3 = RF3.k, RF3.cam, RF3.R, RF3.image
 T4CAM, R4 = RF4.cam, RF4.R
 # chat 15 (moves hunt 1: the runners and the swing too small, the near crowd hid them): T2 nearer too; the near crowd
 # moved back to the two sides, so the bottom of the frame is them, not bare road
-RF2 = Reframe(S.CAMS['t2'], 1.25, 480, -5.0)
+# round 2 (G4, Sam: 'camera a little right, the window's left edge on the screen's left edge'): about x 750 (was 480),
+# so the window's frame (x -2.2 m) sits at screen x 0 and the shop door fits on the right
+RF2 = Reframe(S.CAMS['t2'], 1.25, 750, -5.0)
 T2_WR = (*RF2.R(T2_WIN[0], T2_WIN[1]), *RF2.R(T2_WIN[2], T2_WIN[3]))
+DOOR_CLIP = (*RF2.cam.p(DOOR_X0, FRONT_D, DOOR_H), *RF2.cam.p(DOOR_X1, FRONT_D, 0))   # G4: inside shows only here
 
 
 def truck_x(lt):
@@ -1962,13 +2164,20 @@ def picture(t):
         front = RF2.image(front) if front is not None else None
         cam = RF2.cam
         acts = sorted(t2_actors(lt), key=lambda a: -a.d)
+        t2_door(back, lt)
         t2_teeth(back, lt)
+        bd, board = board_pose(lt)[1], False
         for a in acts:
+            if not board and a.d < bd:                     # G7: the A-board in its place among the people
+                t2_board(back, lt)
+                board = True
             if a.prop and a.prop_before:
                 a.prop(back, cam, a)
             draw_actor(back, cam, a)
             if a.prop and not a.prop_before:
                 a.prop(back, cam, a)
+        if not board:
+            t2_board(back, lt)
         t2_fx(back, lt)
         phone_lights(back, acts, cam)
         blue_wash(back, lt)
