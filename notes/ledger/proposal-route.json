@@ -357,24 +357,24 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.67,
+   "cost": 2.04,
    "src": "estimate",
    "sid": "session_01GznaAVQT1ane6SYyRcPDVb",
-   "steps": 21,
-   "hist_k": 137,
+   "steps": 26,
+   "hist_k": 139,
    "kinds": {
-    "tool search": 19.2,
-    "renders": 4.8,
-    "other": 75.9
+    "tool search": 19.0,
+    "renders": 4.4,
+    "other": 76.6
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 17,
+    "tool search": 19,
     "whole-file .py read": 0,
     "page.py": 0,
     "renders": 1,
     "pictures": 0,
-    "other": 3
+    "other": 4
    }
   }
  ],
