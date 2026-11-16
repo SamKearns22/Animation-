@@ -100,11 +100,33 @@ VISOR = (70, 86, 104)
 SHIELD = (200, 214, 226)
 
 
-def officer(force='mossos'):
+def officer(force='mossos', seed=None, tier='t3'):
+    """One riot officer. Round 3 (F5, Sam: 'the police are all the same model'): with a seed (the actor's name), the
+    same every frame, his own height, build, head, skin (the city's mix) and kit: the uniform's and plates' shade,
+    gloves, a helmet number band on some."""
     f = FORCES[force]
     sp = dict(CAST['officer'])
     sp.update(jacket=f['uniform'], sleeve=f['uniform'], trousers=f['uniform'], glove=(26, 26, 28), force=force,
               name=f"Riot officer, {f['name']}")
+    if seed is None:
+        return sp
+    import zlib
+    r = np.random.default_rng(zlib.crc32(f'{seed}-{tier}'.encode()))
+    mix = CITY_MIX.get(tier, CITY_MIX['t3'])
+    names = list(mix)
+    g = names[int(r.choice(len(names), p=np.array([mix[n] for n in names]) / sum(mix.values())))]
+    sp['skin'] = SKINS[g][int(r.integers(len(SKINS[g])))]
+    sp['height'] = sp['height'] * r.uniform(.92, 1.07)
+    sp['shoulders'] = sp['shoulders'] * r.uniform(.9, 1.13)
+    sp['hw'], sp['hh'] = sp['hw'] * r.uniform(.94, 1.07), sp['hh'] * r.uniform(.95, 1.05)
+    sh = r.uniform(.84, 1.16)
+    u = tuple(int(min(255, c * sh)) for c in f['uniform'])
+    sp.update(jacket=u, sleeve=u, trousers=u)
+    sp['armour_c'] = tuple(int(min(255, c * r.uniform(.86, 1.18))) for c in f['armour'])
+    sp['helmet_c'] = tuple(int(min(255, c * r.uniform(.85, 1.2))) for c in f['helmet'])
+    if r.random() < .3:
+        sp['glove'] = (70, 56, 42)                  # tan leather gloves on some
+    sp['stripe'] = r.random() < .45                 # a light number band round the helmet
     return sp
 
 
@@ -182,7 +204,8 @@ def riot_helmet(p, view, sp, hx, hy):
     """The riot helmet, visor down: a round dome over the ears, the clear tinted visor from the brow to below the chin
     (the face shows through, dimmed), a fabric neck guard behind (refs es4, es5, fr5, al3, al4)."""
     f = FORCES[sp['force']]
-    hc, dk = f['helmet'], B.dk(f['helmet'], 0.72)
+    hc = sp.get('helmet_c', f['helmet'])                # round 3 (F5): each officer's own shade
+    dk = B.dk(hc, 0.72)
     hw, hh = sp.get('hw', 68) * 1.06, sp.get('hh', 92)
     p = fit(p, sp, view, hx, hy, hw, hh, HELMET_REACH)
     guard = B.dk(f['uniform'], 0.85)
@@ -244,7 +267,7 @@ def riot_helmet(p, view, sp, hx, hy):
 def armour(p, view, sp):
     """Chest and back plates over the uniform, and the belt (ref de2, es4, al4)."""
     f = FORCES[sp['force']]
-    a = f['armour']
+    a = sp.get('armour_c', f['armour'])                 # round 3 (F5): each officer's own shade
     sw = sp.get('shoulders', 170)
     if view in ('front', 'back'):
         plate = [(-sw + 40, 40), (sw - 40, 40), (sw - 34, 300), (sw - 50, 340), (-sw + 50, 340), (-sw + 34, 300)]
@@ -458,8 +481,20 @@ def dress_rioter(j):
     return j
 
 
+def helmet_stripe(p, view, sp, hx, hy):
+    """Round 3 (F5): a light number band round the helmet's dome on some officers (only when sp['stripe'])."""
+    if not sp.get('stripe') or view == 'side':
+        return
+    hw, hh = sp.get('hw', 68) * 1.06, sp.get('hh', 92)
+    p = fit(p, sp, view, hx, hy, hw, hh, HELMET_REACH)
+    o = (-0.18 if view == 'three_back' else 0.18 if view == 'three' else 0.0) * hw
+    y = hy - hh * 0.72
+    p.line([(hx - hw * 1.08 + o * .5, y + hh * .1), (hx + o, y - hh * .04), (hx + hw * 1.08 + o * .5, y + hh * .1)],
+           (226, 222, 204), 5.0)
+
+
 def dress_officer(j):
-    j['head_props'] = [riot_helmet] + j.get('head_props', [])
+    j['head_props'] = [riot_helmet, helmet_stripe] + j.get('head_props', [])
     j['body_props'] = [armour] + j.get('body_props', [])
     return j
 

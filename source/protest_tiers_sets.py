@@ -49,8 +49,10 @@ FIRE_R, FIRE_O, FIRE_Y, FIRE_L = (214, 62, 30), (246, 142, 36), (255, 222, 110),
 
 
 # ------------------------------------------------------------------------------------------------- cameras
-MON_X = 2.0                         # round 2 (F1): Marianne's monument, x m (the raised T3 camera's centre is x 0)
-BIKES3 = (2.6, 20.0)                # round 2: the burning bike heap, in the gap behind the truck's path
+MON_X = 0.5                         # round 2 (F1): Marianne's monument, x m (the raised T3 camera's centre is x 0)
+MON_D = 40.0                        # round 3 (F4, Sam: 'move the action closer to Marianne'): 40 m (was 80), so the
+                                    # crowd reaches her base and climbs it; the bike heap is gone (F8)
+KIOSK3 = (6.8, 19.5)                # round 3: the burning kiosk, right, in front of the base (it stood inside it)
 class Cam:
     """A level pinhole camera: horizon at VY, centre line at VX, focal F px, height CH m."""
     def __init__(self, VX, VY, F, CH):
@@ -66,10 +68,11 @@ class Cam:
 # T1: long lens from a 12 m balcony; the police line at d 185 (officers ~65 px), frame 29 m wide there.
 # T2: a phone held up at 2.6 m on the near pavement, square to the gun store 14 m away (150 px a metre there).
 # T3 (round 2, F1): raised to 4.5 m, above the heads (Sam: 'not aerial'), a little wider; the two sides face each
-#   other across the frame (crowd left, police right), Marianne 80 m off between them (19 px a metre).
+#   other across the frame (crowd left, police right); round 3 (F4, F7): a wider lens (F 1400) for the opened gap,
+#   Marianne 40 m off between them (35 px a metre), the crowd reaching her base.
 # T4: 2.8 m, down the avenue; the shield line at d ~17 (115 px a metre), the ministry's corner at d 80.
 CAMS = {'t1': Cam(480, 400, 6882, 12.0), 't2': Cam(480, 783, 2100, 2.6),
-        't3': Cam(420, 900, 1550, 4.5), 't4': Cam(540, 840, 1700, 6.0)}
+        't3': Cam(420, 900, 1400, 4.5), 't4': Cam(540, 840, 1700, 6.0)}
 # round 2 (A1, Sam: 'perspective flattens everything: same angle, draw back and up'): T4 raised from 2.8 m to 6 m and
 #   widened (115 px a metre at the line -> 105, the frame 10 m wide there, was 6.6), so the rows of the square stand
 #   apart on screen. The end scene's shots A and C keep the old street-level long lens (a cut to a close-up):
@@ -690,8 +693,8 @@ def t3(t=0.0, marks=False, truck=None, car=True):
         quad(img, (ax, ay), (bx, ay), (bx, cam.p(0, d, 3.4)[1]), (ax, cam.p(0, d, 3.4)[1]), CREAM_D, INK, 1.5)
     # the black smoke beyond the monument (fires round the square), Marianne pale against it (F3, F5)
     # chat 11 (hunt 2: "Marianne a dark figure in a rock blob"): the smoke rises right of her, her bronze against sky
-    hx, hy = cam.p(MON_X, 80, 22.5)                         # round 2: laid out from her head (was set pixels)
-    g = cam.ppm(80) / 24.0
+    hx, hy = cam.p(MON_X, MON_D, 22.5)                      # round 2: laid out from her head (was set pixels)
+    g = 0.9                                                 # round 3: far smoke, its size not the monument's
     smoke(img, [(hx + (x - 480) * g, hy + (y - 550) * g, r * g) for x, y, r in
                 ((640, 880, 100), (720, 780, 120), (850, 700, 150), (980, 770, 120), (1060, 860, 100), (900, 580, 120),
                  (700, 660, 80), (1020, 620, 100))], (52, 48, 50), (86, 80, 82))
@@ -704,17 +707,16 @@ def t3(t=0.0, marks=False, truck=None, car=True):
         r = 5.5 * k
         m = shape(img, [blob(tx, ty - r * .6, r, 80 + i, squash=.85)], (88, 120, 76), INK, 2)
         shape(img, [blob(tx - r * .3, ty - r * .9, r * .6, 90 + i)], (124, 156, 96), None, clip=m)
-    _marianne(img, cam)
     # the paved square: joints running to the horizon
     img.paste(PAVE, (0, int(cam.VY), W, H))
     for x in np.arange(-60, 61, 4):
         poly(img, [cam.p(x, 6), cam.p(x, 300)], None, (160, 154, 146), 1.2, 0)
     for d in (8, 10, 13, 17, 22, 30, 42, 60):
         poly(img, [(0, cam.p(0, d)[1]), (W, cam.p(0, d)[1])], None, (160, 154, 146), 1.2, 0)
-    _kiosk(img, cam, 7.0, 30, t)                            # chat 10: mid-right, behind the bikes (was off frame)
+    _marianne(img, cam)                                     # round 3 (F4): after the paving, which hid her base's steps
     if truck:                                               # chat 12: the water cannon, behind the police (d 11), the bikes
         globals()['truck'](img, cam, truck['x'], TRUCK_D3, t, 'drive', 'fr', truck.get('aim', 18), truck.get('flash', 0))
-    _bikes(img, cam, BIKES3[0], BIKES3[1], t)               # round 2: in the gap, behind the truck's path
+    _kiosk(img, cam, KIOSK3[0], KIOSK3[1], t)               # round 3: the bikes gone (F8); the kiosk in front of the base
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     if car:                                                 # round 1: the film draws the rolling car itself (car=False)
         _car(front, cam, t)
@@ -729,7 +731,7 @@ def t3(t=0.0, marks=False, truck=None, car=True):
 def _marianne(img, cam):
     """The monument (fr1, fr2, fr3): round stepped base, the plinth ringed with bronze reliefs, the tall pale drum with
     three seated stone figures and the bronze lion, and Marianne in bronze, olive branch raised, the tablet held."""
-    d = 80
+    d = MON_D
     k = cam.ppm(d)
     cx = cam.p(MON_X, d)[0]
     Z = lambda z: cam.p(0, d, z)[1]                         # noqa: E731
@@ -1060,7 +1062,7 @@ TRUCK_LIVERY = {'fr': dict(body=(236, 236, 232), band=(36, 70, 150), cab=(226, 2
 TRUCK_LEN, TRUCK_H = 9.8, 3.35
 TRUCK_X4, TRUCK_D4 = 2.5, 30.0       # T4: cab end at screen ~640, behind the shield line's right half, rest off frame
 HELI_HOME = (800, 290, 22)           # T4: where it hangs (x, y, px a metre): over the flag (top y 325), upper right
-TRUCK_D3 = 16.0                      # T3: behind the police rows (d 11) and the bikes (d 14), in front of the kiosk
+TRUCK_D3 = 13.2                      # T3 round 3 (F8): up the lane between the two police groups (d 11.1 | 15.3)
 
 
 def truck(img, cam, x, d, t=0.0, state='drive', livery='fr', aim=18.0, flash=0.0):
@@ -1617,8 +1619,7 @@ SET_MEANT = {
            ('street lamp', 'WAFFEN band', 'the lamp arm reaches toward the band, in front of it'),
            ('street lamp', 'gun store window', "the lamp's glow (only) touches the window's left edge"),
            ('street lamp', 'shutter', "the lamp's glow falls on the shutter's left edge, the lamp in front at the kerb")],
-    't3': [('kiosk', 'bikes', 'the bike heap burns in front of the kiosk: two fires the brief names together'),
-           ('monument', 'bikes', 'the bikes burn in the gap 66 m in front of the base (chat 10 decision; fr4)')],
+    't3': [('kiosk', 'monument', 'the kiosk burns 9 m in front of the base, right of it (round 3: Marianne nearer)')],
     't4': [('toppled truck', 'ministry', 'the overturned truck burns on the avenue 34 m in front of the ministry (brief 30)')],
 }
 
