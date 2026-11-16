@@ -1,0 +1,35 @@
+{
+ "film": "job-e-measurements",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-16",
+   "chat": "badecdc1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.54,
+   "src": "estimate",
+   "sid": "session_01J1JB7WtpXXCuXv9M6Rqtre",
+   "steps": 38,
+   "hist_k": 180,
+   "kinds": {
+    "tool search": 18.0,
+    "whole-file .py read": 4.0,
+    "other": 78.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 17,
+    "whole-file .py read": 2,
+    "page.py": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 26
+   }
+  }
+ ],
+ "checks": {}
+}
