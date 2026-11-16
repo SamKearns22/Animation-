@@ -2945,8 +2945,60 @@ def ding(sr):
     return 0.22 * env * (np.sin(2 * np.pi * 1318.5 * t) + 0.35 * np.sin(2 * np.pi * 3955.5 * t) * np.exp(-t * 6))
 
 
+PARIS = os.path.join(HERE, '..', 'sounds', 'protest-tiers')
+T3_CROWD = (0.4, 6.4)        # F24: paris-riot.mp3 by loudness over time: 0.4-6.4 shouting/chanting crowd (voiced,
+T3_CANNON = (9.6, 13.4)      # mid-heavy); 7.0-14.7 the water cannon's broadband hiss (loudest spray 10.5-12.75); no engine
+
+
+def _cut(x, sr, a, b, fade=0.03):
+    """x[a:b] seconds with short fades so no slice clicks."""
+    y = x[int(a * sr):int(b * sr)].copy()
+    k = min(int(fade * sr), len(y) // 2)
+    if k:
+        y[:k] *= np.linspace(0, 1, k)
+        y[-k:] *= np.linspace(1, 0, k)
+    return y
+
+
+def t3_sound(mix, sr, load):
+    """Round 5 (F24, Sam: 'take sound from' his Paris riot recording + banked effects): T3's crowd bed (looped with a
+    crossfade under all 8 s), the water cannon JET_ON -> SWEEP end, stone-hit on each stone's shield hit, glass-smash on
+    each bottle's, a firework crackle on each firework's. Fruit lands soft: no sound."""
+    t0, L = START['t3'], dict(LENS)['t3']
+    riot = load(os.path.join(PARIS, 'paris-riot.mp3'))
+    bed, xf = _cut(riot, sr, *T3_CROWD, fade=0.5), int(0.5 * sr)
+    out = bed.copy()
+    while len(out) < (L + 0.6) * sr:                       # loop with a 0.5 s overlap (fades cross)
+        out = np.concatenate([out[:-xf], out[-xf:] + bed[:xf], bed[xf:]])
+    bed = out[:int((L + 0.3) * sr)]
+    bed[-int(0.3 * sr):] *= np.linspace(1, 0, int(0.3 * sr))   # out under the cut to T4
+    i = int(t0 * sr)
+    mix[i:i + len(bed)] += 0.35 * bed[:max(0, len(mix) - i)]
+    jet = _cut(riot, sr, T3_CANNON[0], T3_CANNON[0] + SWEEP[1] - JET_ON + 0.4, fade=0.08)
+    jet[-int(0.4 * sr):] *= np.linspace(1, 0, int(0.4 * sr))   # the jet shuts off at the sweep's end
+    i = int(at('t3', JET_ON) * sr)
+    mix[i:i + len(jet)] += 0.5 * jet[:max(0, len(mix) - i)]
+    stone, glass = load(os.path.join(PARIS, 'stone-hit.mp3')), load(os.path.join(PARIS, 'glass-smash.mp3'))
+    fw = load(os.path.join(PARIS, 'fireworks.mp3'))
+    kits = {'stone': ([_cut(stone, sr, s, s + 0.3) for s in (0.0, 1.0, 2.0)], 0.28),
+            'bottle': ([_cut(glass, sr, 0.0, 0.9, 0.05), _cut(glass, sr, 1.5, 2.4, 0.05)], 0.25),
+            'firework': ([_cut(fw, sr, 0.0, 0.7, 0.05), _cut(fw, sr, 14.0, 14.7, 0.05)], 0.4)}
+    n = {}
+    for row, k, rep, what, x0, d0, d1, th, fl in sorted(_throws(), key=lambda r: r[7] + r[8]):
+        land = th + fl
+        if what not in kits or not 0 <= land < L:
+            continue
+        clips, g = kits[what]
+        c = clips[n.get(what, 0) % len(clips)]
+        n[what] = n.get(what, 0) + 1
+        g *= 0.75 if d1 > 14 else 1.0                       # the far police block a touch quieter
+        i = int(at('t3', land) * sr)
+        mix[i:i + len(c)] += g * c[:max(0, len(mix) - i)]
+    return mix
+
+
 def soundtrack(stems=False):
-    """The siren (the brief names it, on the T2 blue wash) and the intensity dings (Sam O1); no other effects."""
+    """The siren (the brief names it, on the T2 blue wash) and the intensity dings (Sam O1); T3's sound (F24)."""
     import mossad_audio as MA
     n = int((DUR + 0.3) * MA.SR)
     mix = np.zeros(n)
@@ -2957,7 +3009,8 @@ def soundtrack(stems=False):
             filmkit.place(mix, s[:int(1.2 * MA.SR)] * 0.6, at=at('t2', T2_WASH), sr=MA.SR)
     except Exception as e:                                  # the film still renders; the fault is printed
         print('SOUND: siren not placed:', e)
-    dg = ding(MA.SR)                                        # Sam O1 (16 Nov): a gentle ding as each number appears
+    t3_sound(mix, MA.SR, MA.load)                           # F24: France (Sam's Paris recording + banked effects)
+    dg = ding(MA.SR)                                       # Sam O1 (16 Nov): a gentle ding as each number appears
     for tr in TIERS:
         i = int(at(tr, INTENSITY_AT) * MA.SR)
         mix[i:i + len(dg)] += dg[:max(0, n - i)]
