@@ -2865,6 +2865,33 @@ def process_work_is_never_billed_to_a_film():
     return ok, f'billed to {got}; rows left under the other film: here {len(here)}, main line {len(main)}'
 
 
+
+@test
+def claude_md_sentences_never_lost():
+    """startup fixes 4 (Sam's Y, 16 Nov): CLAUDE.md text may move only word for word (to the rulebook or a pack); a
+    dated tag may leave its sentence only with a row in the rulebook's "Dates moved from CLAUDE.md" table."""
+    import subprocess
+    import sentences as S
+    old = "# A\n- **Rule one (Sam, 13 Nov):** do X. Do Y.\n# B\n- **Photos:** news first,\n  then libraries.\n"
+    book = "# Rules\n## Dates moved from CLAUDE.md\n| CLAUDE.md rule (its first words) | date |\n|---|---|\n" \
+           "| Rule one | (Sam, 13 Nov) |\n"
+    good = {'CLAUDE.md': "# A\n- **Rule one:** do X. Do Y.\n# B\n- Photos: see the pack.\n",
+            'guides/film-quality-rules.md': book,
+            'guides/job-packs.md': "## Plan\n- **Photos:** news first, then\n  libraries.\n"}
+    no_row = dict(good, **{'guides/film-quality-rules.md': '# Rules\n'})
+    reworded = dict(good, **{'CLAUDE.md': "# A\n- **Rule one:** do X. Do Z.\n# B\n"})
+    got = [S.lost(old, good), S.lost(old, no_row), S.lost(old, reworded)]
+    ok = got[0] == [] and any('Rule one' in s for s in got[1]) and got[2] == ['Do Y.']
+    r = subprocess.run(['git', '-C', S.ROOT, 'show', 'f16bf306:CLAUDE.md'], capture_output=True, text=True)
+    if r.returncode == 0:      # the real move (chat 7): the CLAUDE.md before it against today's files
+        now = {f: open(os.path.join(S.ROOT, f), encoding='utf-8').read() for f in S.FILES}
+        real = S.lost(r.stdout, now)
+        ok = ok and not real
+        got.append(real[:3])
+    return ok, f'good move lost {got[0]}; tag with no row lost {len(got[1])}; reworded lost {len(got[2])}; ' \
+               f'the real move: {got[3] if len(got) > 3 else "old copy not in this shallow clone"}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
