@@ -12,9 +12,18 @@ MAP
                greps and sed ranges): the note's words -> the code itself, ~40 numbered lines: the best def whole
                (or its head plus every line holding the note's words), then the runners-up' heads, then FILE:LINE
                for the rest. Rebuilds a stale page first. Words also count inside a def's comments and names.
+  shots() .... the film's shots and times (its SHOTS list), saved to story/FILM-shots.json beside the page (importing
+               a big film takes ~20 s, so once per code change); shot names are also read from `shot ==`/`in` lines.
+  --shot/--at  code-finder change 1 (Sam's 1, 16 Nov; notes/proposals/code-finder.md): the notes table's shot and time
+               go in apart from the note's words. Defs named for the shot and lines naming it in quotes score as a
+               second count, so a shot the code does not know ("cast sheet") cannot push out a word hit; an unknown
+               shot falls to the shot playing at --at, else the nearest name, said so.
+  log ........ every show call writes one line to notes/logs/FILM-show.log; handover.py end flags a chat that changed
+               the film's code today with no show call.
   film names . `protest-tiers` and `protest_tiers` both work (code files use _, story files use -).
 
-    python3 source/page.py FILM show "note words" [-n 40]   (a round's one look per note: the code it touches)
+    python3 source/page.py FILM show "note words" --shot SHOT --at SECONDS [-n 40]   (one look per note; shot and time
+                                                  from the notes table; either may be left out)
     python3 source/page.py FILM                  (writes story/FILM-page.md; prints its size against the code's)
     python3 source/page.py FILM find "the officer's arms clip the van" [-n 5]
 
@@ -139,12 +148,86 @@ def _defs(path):
     return out
 
 
-def show(film, note, budget=40):
+def shots(film):
+    """[(name, start, end)] from the film's SHOTS list, cached in story/FILM-shots.json until a code file is newer."""
+    import json
+    code, story = names(film)
+    cache = os.path.join(ROOT, 'story', f'{story}-shots.json')
+    fs = files(film)
+    if os.path.exists(cache) and all(os.path.getmtime(f) <= os.path.getmtime(cache) for f in fs):
+        return [tuple(x) for x in json.load(open(cache))]
+    got = []
+    try:
+        r = subprocess.run([sys.executable, '-c', f'import json,{code} as m;print(json.dumps([[str(x[0]),float(x[1]),'
+                            f'float(x[2])] for x in m.SHOTS]))'], cwd=HERE, capture_output=True, text=True, timeout=180)
+        got = [tuple(x) for x in json.loads(r.stdout.strip().splitlines()[-1])]
+    except Exception:
+        pass
+    names_ = {n for n, _, _ in got}
+    for f in fs:                                  # shots only branched on (`shot in ('tvroom', 'push')`)
+        for ln in open(f, encoding='utf-8'):
+            m = re.search(r'\b(?:shot|s|shot_of\([^)]*\))\s*(?:==|in)\s*\(?([^:\n]*)', ln)
+            if m:
+                for n in re.findall(r"'([a-z][a-z0-9_]*)'", m.group(1)):
+                    if n not in names_:
+                        names_.add(n); got.append((n, -1.0, -1.0))
+    if fs:
+        json.dump(got, open(cache, 'w'))
+    return got
+
+
+def _shot_of(film, shot, at):
+    """The code's shot names the notes table's shot text means: ([names], message or '')."""
+    import difflib
+    table = shots(film)
+    known = [n for n, _, _ in table]
+    named = [w for w in re.findall(r'[a-z][a-z0-9_]*', (shot or '').lower()) if w in known]
+    if named:
+        return list(dict.fromkeys(named)), ''
+    if at is not None:
+        playing = [n for n, a, b in table if a <= at < b]
+        if playing:
+            return playing, f'shot "{shot}" is not a name in the code; at {at:g} s the code plays {playing[0]}' if shot else ''
+    near = difflib.get_close_matches((shot or '').lower().split(',')[0].strip(), known, 1, 0.5) if shot else []
+    if near:
+        return near, f'shot "{shot}" is not a name in the code; nearest name: {near[0]}'
+    return [], (f'shot "{shot}" is not in the code (a new shot? add it beside the nearest like one)' if shot else '')
+
+
+def _at(txt):
+    """The notes table's time column ('49.45-53.6', '36.8', 'all', '-') -> one second or None."""
+    nums = [float(x) for x in re.findall(r'\d+(?:\.\d+)?', txt or '')]
+    return sum(nums[:2]) / len(nums[:2]) if nums else None
+
+
+def _log(film, note, shot, at, res):
+    from datetime import datetime
+    d = os.path.join(ROOT, 'notes', 'logs')
+    os.makedirs(d, exist_ok=True)
+    top = res[0][0].split()[0] if res else '-'
+    with open(os.path.join(d, f'{names(film)[1]}-show.log'), 'a', encoding='utf-8') as f:
+        f.write(f'{datetime.now().isoformat(timespec="seconds")}\t{shot or "-"}\t{at if at is not None else "-"}\t'
+                f'{top}\t{" ".join(note.split())[:100]}\n')
+
+
+def show(film, note, budget=40, shot=None, at=None):
     """A note's words -> the code to read: [(header, [(line number, text)])], at most ~budget code lines in all.
     The best hit gets the lion's share: the whole def if it fits, else its first lines plus every line holding the
-    note's words (one line either side). Runners-up get their first lines; the rest are listed as FILE:LINE."""
+    note's words (one line either side). Runners-up get their first lines; the rest are listed as FILE:LINE.
+    shot/at (the notes table's columns) add a second count: defs named for the shot, lines naming it in quotes."""
     want = _words(note)
     hits = find(film, note, 12)
+    sh, msg = _shot_of(film, shot, at) if (shot or at is not None) else ([], '')
+    show.msg = msg
+    quoted = re.compile('|'.join(rf"""['"]{re.escape(n)}['"]""" for n in sh)) if sh else None
+    if sh:                                        # the shot's own defs and the defs that branch on it join the hits
+        seen = {w for _, w, _ in hits}
+        for f in files(film):
+            lines = open(f, encoding='utf-8').read().splitlines()
+            for ln, (end, name) in _defs(f).items():
+                own = any(name == n or name.startswith(n + '_') or name.endswith('_' + n) for n in sh)
+                if (own or any(quoted.search(x) for x in lines[ln - 1:end])) and f'{os.path.basename(f)}:{ln}' not in seen:
+                    hits.append((0, f'{os.path.basename(f)}:{ln}', name))
     # words inside a def's body (comments, names) break ties and lift a def whose docstring missed the note
     rescored = []
     for score, where, what in hits:
@@ -155,12 +238,18 @@ def show(film, note, budget=40):
             end = _defs(path).get(ln, (ln, ''))[0]
             src = open(path, encoding='utf-8').read().splitlines()[ln - 1:end]
             body = len(want & _words(' '.join(src).replace('_', ' ')))
-        rescored.append((score * 2 + body, where, what, path, ln))
+            if sh:                                # the shot's count: its own def 3, each line naming it 1 (at most 3)
+                name = _defs(path).get(ln, (0, ''))[1]
+                own = any(name == n or name.startswith(n + '_') or name.endswith('_' + n) for n in sh)
+                body += 3 * own + min(3, sum(1 for x in src if quoted.search(x)))
+        if score or body:
+            rescored.append((score * 2 + body, where, what, path, ln))
     rescored.sort(key=lambda h: -h[0])
     out, left = [], budget
     for i, (score, where, what, path, ln) in enumerate(rescored):
-        if left <= 2:
-            out.append((f'also {where}  {what}', []))
+        if left <= 2:                             # each def's header is a line too; at most 3 more as FILE:LINE
+            if sum(1 for _, r in out if not r) < 3:
+                out.append((f'also {where}  {what}', []))
             continue
         lines = open(path, encoding='utf-8').read().splitlines()
         if not path.endswith('.py'):
@@ -168,18 +257,21 @@ def show(film, note, budget=40):
         else:
             end = _defs(path).get(ln, (ln + 10, ''))[0]
             span = list(range(ln, end + 1))
-            room = left - 6 if i == 0 else min(8, left)
+            room = min(show.first, left - 6) if i == 0 else min(show.rest, left)
             if len(span) <= room:
                 take = span
             else:
-                keep = set(span[:min(6, room)])
+                keep = set(span[:min(show.head, room)])
                 for k in span:
-                    if want & _words(lines[k - 1].replace('_', ' ')):
+                    if want & _words(lines[k - 1].replace('_', ' ')) or (quoted and quoted.search(lines[k - 1])):
                         keep |= {k - 1, k, k + 1}
                 take = sorted(k for k in keep if ln <= k <= end)[:room]
         out.append((f'{where}  {what}', [(k, lines[k - 1]) for k in take]))
-        left -= len(take)
+        left -= len(take) + 1
     return out
+
+
+show.first, show.rest, show.head = 34, 8, 6     # lines for the best def, each runner-up, a def's head
 
 
 def main(a):
@@ -187,7 +279,12 @@ def main(a):
         print(__doc__); return 0
     if len(a) > 2 and a[1] == 'show':
         b = int(a[a.index('-n') + 1]) if '-n' in a else 40
-        res = show(a[0], a[2], b)
+        shot = a[a.index('--shot') + 1] if '--shot' in a else None
+        at = _at(a[a.index('--at') + 1]) if '--at' in a else None
+        res = show(a[0], a[2], b, shot, at)
+        _log(a[0], a[2], shot, at, res)
+        if getattr(show, 'msg', ''):
+            print('note: ' + show.msg)
         if not res:
             print('no code matches those words: try the thing on screen (who, what object), or `page.py FILM` and read the page')
         for head, rows in res:

@@ -1,6 +1,6 @@
 # Proposal: The code finder shows the wrong lines for a third to half of Sam's notes
 
-Status: open
+Status: adopted (2026-11-16)
 
 ## Problem
 In a round of Sam's notes, the chat looks at the code for each note with one step, the code finder
