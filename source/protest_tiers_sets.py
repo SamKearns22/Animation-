@@ -140,8 +140,12 @@ def mix(a, b, u):
     return tuple(int(a[i] + (b[i] - a[i]) * u) for i in range(3))
 
 
-def text(img, xy, s, size, fill, anchor='mm', font='DejaVuSans-Bold.ttf'):
+def text(img, xy, s, size, fill, anchor='mm', font='DejaVuSans-Bold.ttf', maxw=None):
+    """maxw (Sam O2, 16 Nov): the widest the words may be (their sign's width less a margin); the size shrinks to fit."""
     f = ImageFont.truetype(os.path.join(HERE, 'fonts', font), size)
+    while maxw and size > 6 and f.getlength(s) > maxw:
+        size -= 1
+        f = ImageFont.truetype(os.path.join(HERE, 'fonts', font), size)
     ImageDraw.Draw(img).text(xy, s, font=f, fill=fill, anchor=anchor)
 
 
@@ -270,7 +274,7 @@ def _t1_block(img, cam, s, d0, d1, h, tone, seed):
     quad(img, cam.p(x, d0, h - .8), cam.p(x, d1, h - .8), c, e, mix(tone, (255, 230, 200), .18), INK, 2)
 
 
-T1_CONTAINER = (0.8, 142.0)   # chat 15 (moves hunt 1: the container and knot did not read at phone size): was 165
+T1_CONTAINER = (-7.0, 176.0)  # Sam S4 (16 Nov): back left of the police line (was on it, 0.8, 142): clear over their helmets
 
 
 def t1(t=0.0, marks=False):
@@ -328,7 +332,7 @@ def t1(t=0.0, marks=False):
              mix(ROAD_W, ROAD_L, .6), None, amt=0)
     # fronts both sides, blocks of 113 m with 20 m cross streets (Eixample), nearest first hidden off frame
     for s in (-1, 1):
-        blocks = [(d, min(d + 113, 1400)) for d in np.arange(254, 1400, 133)]
+        blocks = [(d, min(d + 133.5, 1400)) for d in np.arange(254, 1400, 133)]   # Sam S2 (16 Nov): no gaps between
         for i, (d0, d1) in enumerate(reversed(blocks)):
             _t1_block(img, cam, s, d0, d1, 24 + 3 * ((i + (s > 0)) % 3), STONE[(i * 2 + (s > 0)) % 5], 10 * i + s + 1)
     # the domed corner (es1): a round tower on the right-hand corner at d 520, its dome over the roofline
@@ -424,17 +428,42 @@ def _falques(img, bx, by, k):
 
 
 def _container(img, cam, x, d, t):
-    """A Barcelona street container (grey-green, 2.2 x 1.5 m), side on, wheels, the lid thrown open; burning."""
+    """Sam S4 (16 Nov): a Barcelona street container (grey-green, 2.2 x 1.5 m), seen a little from above: the front,
+    its top edge and the open mouth, ribs, the lid flung back upright on its hinge, two wheels, soot, the city's
+    stencil; the fire comes out of the mouth and stays over it (no tongues across the lid), a smoke column above."""
     k = cam.ppm(d)
     bx, by = cam.p(x, d)
-    w, h = 2.2 * k, 1.45 * k
-    flames(img, bx + .1 * k, by - h * .9, w * 1.25, 3.4 * k, t, seed=4)
-    quad(img, (bx - w / 2, by - .2 * k), (bx + w / 2, by - .2 * k), (bx + w / 2 * .94, by - h), (bx - w / 2 * .94, by - h),
-         (78, 98, 84))
-    poly(img, [(bx - w / 2 * .94, by - h), (bx - w / 2 * 1.15, by - h - .6 * k)], None, (60, 78, 66), 4, 0)
-    for s in (-1, 1):
-        IS.ell(img, bx + s * w * .34, by - .12 * k, .14 * k, .14 * k, (30, 28, 34), INK, 1.5)
-    poly(img, [(bx - w * .4, by - h * .55), (bx + w * .4, by - h * .55)], None, (56, 72, 62), 1.6, 0)
+    w, h, dep = 2.2 * k, 1.45 * k, .32 * k                   # dep: the top face seen from the high camera
+    body, dark, lite = (74, 96, 82), (52, 68, 58), (98, 122, 104)
+    # smoke first (behind everything): a dark column leaning right with the wind
+    lumps = [(bx + (.15 + .5 * i) * k + .3 * k * math.sin(t * 1.3 + i), by - h - (1.4 + 1.25 * i) * k, (.75 + .32 * i) * k)
+             for i in range(6)]
+    smoke(img, lumps, (70, 64, 66), (120, 106, 100))
+    # the lid, flung back upright behind the mouth (hinged at the back edge), its inside face sooty
+    lid = [(bx - w * .5, by - h - dep), (bx + w * .5, by - h - dep), (bx + w * .46, by - h - dep - 1.1 * k),
+           (bx - w * .46, by - h - dep - 1.05 * k)]
+    shape(img, [lid], mix(dark, (30, 28, 30), .45), INK, max(1.4, k / 22))
+    poly(img, [(bx - w * .4, by - h - dep - .55 * k), (bx + w * .4, by - h - dep - .58 * k)], None, mix(dark, INK, .4),
+         max(1, k / 30), 0)
+    # the fire, standing in the mouth: as wide as the mouth, no wider, its base hidden by the front lip
+    flames(img, bx, by - h - dep * .4, w * .82, 2.3 * k, t, seed=4, n=6)
+    glow_disc(img, bx, by - h - .6 * k, 1.6 * k, (255, 170, 80), amt=.35)
+    # the mouth's back rim (seen over the fire's base) and the top face
+    shape(img, [[(bx - w * .5, by - h), (bx + w * .5, by - h), (bx + w * .5, by - h - dep * .55),
+                 (bx - w * .5, by - h - dep * .55)]], (40, 30, 26), None)
+    # the front face: slightly tapered, ribbed, sooted at the top edge
+    front = [(bx - w * .47, by - .22 * k), (bx + w * .47, by - .22 * k), (bx + w * .5, by - h), (bx - w * .5, by - h)]
+    m = shape(img, [front], body, INK, max(1.6, k / 20))
+    for u in (-.3, -.1, .1, .3):                                        # vertical ribs
+        poly(img, [(bx + u * w, by - .26 * k), (bx + u * w, by - h + .1 * k)], None, dark, max(1, k / 34), 0)
+    shape(img, [[(bx - w * .5, by - h), (bx + w * .5, by - h), (bx + w * .5, by - h + .32 * k), (bx + w * .2, by - h + .2 * k),
+                 (bx - w * .1, by - h + .38 * k), (bx - w * .5, by - h + .26 * k)]], (40, 40, 40), None, clip=m)   # soot
+    poly(img, [(bx - w * .5, by - h), (bx + w * .5, by - h)], None, lite, max(1.4, k / 24), 0)              # the lip
+    shape(img, [[(bx - w * .2, by - h * .52), (bx + w * .2, by - h * .52), (bx + w * .2, by - h * .38),
+                 (bx - w * .2, by - h * .38)]], (230, 230, 220), None)                                   # the stencil
+    for s in (-1, 1):                                                    # wheels and the foot pedal
+        IS.ell(img, bx + s * w * .36, by - .12 * k, .13 * k, .13 * k, (30, 28, 34), INK, 1.5)
+    poly(img, [(bx - w * .1, by - .2 * k), (bx + w * .1, by - .2 * k)], None, (40, 40, 44), max(2, k / 16), 0)
 
 
 # ================================================================================================= T2
@@ -478,7 +507,7 @@ def t2(t=0.0, shutter=0.5, glass='whole', marks=False):
     _shutter(img, X, Y, x0, x1, shutter)
     quad(img, (X(x0 - .35), Y(3.55)), (X(x1 + .35), Y(3.55)), (X(x1 + .35), Y(4.25)), (X(x0 - .35), Y(4.25)),
          (26, 52, 46), INK, 3)
-    text(img, ((X(x0) + X(x1)) / 2, Y(3.9)), 'WAFFEN', int(.5 * k), (238, 236, 226))
+    text(img, ((X(x0) + X(x1)) / 2, Y(3.9)), 'WAFFEN', int(.5 * k), (238, 236, 226), maxw=.86 * (X(x1 + .35) - X(x0 - .35)))
     # the street lamp at the near kerb, left, and its light on the wet pavement
     lx = X(-2.9) - 30
     _, lb = cam.p(0, 12.2)
@@ -769,7 +798,7 @@ def _kiosk(img, cam, x, d, t):
              (bx + sx * w * .42, by - 1.7 * k), (236, 226, 196), INK, 1.5)
     quad(img, (bx - w / 2, by - 2.0 * k), (bx + w / 2, by - 2.0 * k), (bx + w / 2, by - 2.4 * k), (bx - w / 2, by - 2.4 * k),
          (180, 40, 36), INK, 1.5)
-    text(img, (bx, by - 2.2 * k), 'PRESSE', int(.32 * k), (250, 240, 220))
+    text(img, (bx, by - 2.2 * k), 'PRESSE', int(.32 * k), (250, 240, 220), maxw=.86 * w)
     flames(img, bx + .35 * k, by - 3.0 * k, w * .8, 1.5 * k, t, seed=9)
 
 
