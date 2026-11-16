@@ -7,10 +7,14 @@
   and unsaved edits); `handover.py end` runs it; kittest `claude_md_sentences_never_lost` (checks the real move too).
 - **Beat:** no sentence lost (checked). Size 12,891 -> 11,726 characters, ~5.0k tokens at learn.md's ratio: **missed the
   4.8k beat by ~0.2k.** The rest needs rewording (the 5 duplicates), which is the later proposal.
-- **Startup fixes 1-4 all built.** Next (if Sam says Y): a proposal chat (Opus, high) for the 5 duplicates with the
-  10-situation test, and the estimates-vs-complete-ledger comparison. Chain stopped for Sam's pick.
-- **Needs Sam:** the pick above; the 3 stranded branches, left alone (asked chat 4; answer goes
-  to chat 4): claude/beautiful-brown-vutd0l merge; claude/blessed-c2-mics-wip keep off; claude/audit-honest-checker keep off.
+- **Startup fixes 1-4 all built.** Sam (16 Nov, chat 7): "Only do Half A" = the 5 duplicates proposal; Half B
+  (estimates vs complete ledger) not asked for. **Next (chat 8, Opus, high):** run the proposal route on Half A only
+  (`notes/proposals/claude-md-duplicates.md`: helpers, blind judge, top two for Sam with Lost/Added/Critiqued); the guard
+  is the 10-situation test (a fresh helper answers 10 past situations with old and new CLAUDE.md; any change refuses).
+  sentences.py must gain an allowance for the merged sentences (each removed copy names its kept twin). Build only on
+  Sam's Y to the judged proposal. Duplicates: map section "What the map shows chat 7", point 3.
+- **Needs Sam:** the 3 stranded branches (asked again chat 7, not yet answered): claude/beautiful-brown-vutd0l merge;
+  claude/blessed-c2-mics-wip keep off; claude/audit-honest-checker keep off (picks offered; left alone until he answers).
 - **Read:** `notes/proposals/startup-fixes.md` ("Final version"); this file; the map `claude-md-map.md` (duplicates section).
 - **Open rule requests:** none.
 - **For Claude:** a rewording must add an allowance to sentences.py first (none exists; the check refuses any loss).
