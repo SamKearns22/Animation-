@@ -540,7 +540,13 @@ T2_WIN = (174, 754, 786, 1089)
 T2_END = 8.5
 T2_WASH = 6.8                       # G1/G10: the blue at 6.8 s, the action carries on
 T2_FREEZE = T2_END                  # G10: no freeze; the old name is kept by the audit tables as the shot's end
-T2_HIT = 1.6                        # G3: the sign meets the glass
+T2_HIT = 1.6                        # G3: the sign meets the glass (the first of four hits, G13)
+# G13 (Sam: he broke it in one, then just flapped the sign about): four hits in four places, more cracks each time,
+# the fourth goes through. (time, his x, u at contact, yaw, star (x, height) measured off the sign's head at contact)
+SIGN_HITS = ((1.6, 0.2, 0.55, 125, (0.8, 1.92)), (2.05, 0.0, 0.45, 125, (0.05, 2.06)),
+             (2.5, 0.3, 0.65, 125, (1.13, 1.63)), (2.95, -0.3, 0.6, 125, (0.4, 1.79)))
+T2_SHATTER = SIGN_HITS[-1][0]       # the glass goes (it was T2_HIT)
+SIGN_DROP = 3.2                     # G13: he flings the sign down, then celebrates and loots
 T2_DOOR = 2.45                      # G4: hauler1's foot on the door
 DOOR_X0, DOOR_X1, DOOR_H = S.DOOR2
 DOOR_C, FRONT_D = (DOOR_X0 + DOOR_X1) / 2, 14.0
@@ -551,7 +557,7 @@ BOARD_KICK, BOARD_LAND, BOARD_TO = 2.3, 2.8, (-0.15, 11.0)
 # G2: stones thrown from off frame left and near: (hits the glass at, x, height)
 T2_STONES = ((0.35, -1.4, 1.6), (0.5, 0.6, 2.0), (0.62, -0.4, 1.2), (0.8, 1.3, 1.7), (0.95, -1.0, 2.2), (1.1, 0.2, 1.4))
 # G9 (FAZ 31 Oct: two weapons taken): who takes which pistol: (cubby column, row height, when it leaves its cubby)
-TAKE = {'runner1': (6, 0.98, 2.95), 'runner2': (8, 1.35, 3.05)}
+TAKE = {'runner1': (6, 0.98, 3.6), 'runner2': (8, 1.35, 3.75), 'swinger': (4, 0.98, 4.85)}   # G13: after the shatter
 # G4/G5: the four who go in through the door come back out of it with stock: (in at, out at, lane, prop)
 # chat 3: out 1 s apart in one lane clear of the wall and the swinger (0.5 s apart, they walked into each other)
 DOOR_IN = {'hauler1': (2.75, 4.6, 13.4, 'crate'), 'hauler2': (3.15, 6.6, 13.4, 'crate'),
@@ -559,9 +565,32 @@ DOOR_IN = {'hauler1': (2.75, 4.6, 13.4, 'crate'), 'hauler2': (3.15, 6.6, 13.4, '
 WALK_OUT = 1.5                       # m/s: laden, a brisk walk off left along the shop front
 
 
+def swinger_swing(tt):
+    """G13: (his x, the swing's u, yaw) from his mark (0.85 s) to SIGN_DROP: wind up, then each hit: the swing in to
+    the contact u, a jolt back off the glass and round again, a half step to the next place; the last goes through."""
+    if tt < 1.35:
+        return T2_SW[0], 0.25 * ease((tt - 0.95) / 0.4), 125
+    prev = (1.35, T2_SW[0], 0.25, 125)
+    for th, x, uc, yaw, _ in SIGN_HITS:
+        t0, x0, u0, _y = prev
+        if tt < th:                                         # winding back to 0.1 then swinging in to the glass
+            w = (tt - t0) / (th - t0)
+            if w < 0.45:
+                return lerp(x0, x, ease(w / 0.45)), lerp(u0, 0.1, ease(w / 0.45)), yaw
+            return x, lerp(0.1, uc, ease((w - 0.45) / 0.55) ** 1.6), yaw
+        if th == T2_SHATTER:
+            if tt < th + 0.15:                              # through: the follow-through
+                return x, uc + (1 - uc) * ease((tt - th) / 0.15), yaw
+            return x, 1.0 - 0.1 * ease((tt - th - 0.15) / 0.2), yaw
+        if tt < th + 0.06:                                  # the jolt: held on the glass a beat
+            return x, uc, yaw
+        prev = (th + 0.06, x, uc - 0.08, yaw)
+    return SIGN_HITS[-1][1], 0.9, 125
+
+
 def t2_state(lt):
     return dict(shutter=0.5 + 0.5 * ease((lt - 1.0) / 0.5),
-                glass='whole' if lt < T2_HIT else 'starred' if lt < T2_HIT + 0.1 else 'gone',
+                glass='whole' if lt < T2_SHATTER else 'starred' if lt < T2_SHATTER + 0.1 else 'gone',
                 taken=tuple((i, z) for i, z, t in TAKE.values() if lt >= t), star=T2_STAR)
 
 
@@ -662,25 +691,37 @@ def t2_actors(lt):
             A(name, 'rioter', lerp(x, DOOR_C, v), lerp(d, 13.35, v), _heading([(0, x, d), (1, DOOR_C, 13.35)], 0), 'run', t=tt)
         else:                                               # waiting his turn, egging them on
             A(name, 'rioter', x, d, 160, 'throw', u=((tt - 2.25) * 1.6) % 1)
-    # the swinger (G3): runs in, turns to the glass, winds up, the sign's head meets the glass at T2_HIT; swings on
+    # the swinger (G3, G13): runs in, turns to the glass, and hits it four times in four places (more cracks each
+    # time, SIGN_HITS); the fourth goes through. He flings the sign down (SIGN_DROP), celebrates, then loots a pistol.
     keys = [(0.15, -3.8, 11.9), (0.65, -0.4, 12.2), (0.85, *T2_SW)]     # chat 3: on his mark before the runners pass
     x, d, i, u = _keys(tt, keys)
     if 0 <= i < len(keys) - 1:
         A('swinger', 'rioter', x, d, _heading(keys, i), 'run_sign', t=tt)
-    elif i >= 0:
-        if tt < 1.35:
-            us = 0.25 * ease((tt - 0.95) / 0.4)
-        elif tt < T2_HIT:
-            us = 0.25 + 0.3 * ease((tt - 1.35) / (T2_HIT - 1.35))    # chat 3: the head meets the glass at 0.55, high
-        elif tt < 1.75:
-            us = 0.55 + 0.45 * ease((tt - T2_HIT) / 0.15)
-        elif tt < 3.85:                                     # knocks the teeth out of the frame: three more swings
-            c = ((tt - 1.75) % 0.7) / 0.7
-            us = 1 - 0.75 * math.sin(math.pi * c)
-        else:                                               # then the sign up on his shoulder, bouncing to the chant
-            us = lerp(1.0, 0.15, ease((tt - 3.85) / 0.5)) + 0.04 * math.sin(tt * 2 * math.pi * 1.1)
-        a = A('swinger', 'rioter', x, d, 125, 'swing_face', u=us)     # chat 3: angled, so the sign lands beside him, not behind his back
+    elif i >= 0 and tt < SIGN_DROP:
+        sx, us, yaw = swinger_swing(tt)
+        a = A('swinger', 'rioter', sx, d, yaw, 'swing_face', u=us)
         a.blend('run_sign', 0, tt, w=(tt - 0.95) / 0.25)
+    elif i >= 0:
+        xs = SIGN_HITS[-1][1]
+        xr, take_t = -0.2, TAKE['swinger'][2]
+        if tt < SIGN_DROP + 0.25:                           # the fling: arms thrown down and out, the sign gone
+            a = A('swinger', 'rioter', xs, d, 125, 'cheer', u=1.0)
+            a.blend('swing_face', 1.0, w=1 - (tt - SIGN_DROP) / 0.25)
+        elif tt < take_t - 0.65:                            # celebrating: turned half to us, fists pumped up
+            yaw = lerp(125, 30, ease((tt - SIGN_DROP - 0.25) / 0.4))
+            A('swinger', 'rioter', xs, d, yaw, 'cheer', u=0.5 + 0.5 * math.sin((tt - SIGN_DROP) * 2 * math.pi * 1.6))
+        elif tt < take_t - 0.35:                            # to the window
+            v = ease((tt - take_t + 0.65) / 0.3)
+            a = A('swinger', 'rioter', lerp(xs, xr, v), lerp(d, 13.45, v), 180, 'stand')
+            a.blend('cheer', 0.5, w=1 - v)
+        elif tt < take_t + 0.45:
+            A('swinger', 'rioter', xr, 13.45, 180, 'reach_lo',
+              u=(tt - take_t + 0.35) / 0.35 if tt < take_t else 1 + (tt - take_t) / 0.45)
+        else:                                               # off left with it, like the runners
+            keys2 = [(take_t + 0.45, xr, 13.45), (take_t + 0.95, xr - 0.3, 13.4), (take_t + 6.0, xr - 7.9, 13.4)]   # along the glass, behind runner3
+            x, d2, i2, u2 = _keys(tt, keys2)
+            a = A('swinger', 'rioter', x, d2, lerp(180, -115, ease((tt - take_t - 0.45) / 0.5)), 'gun_up', t=tt)
+            a.blend('reach_lo', 2.0, w=(tt - take_t - 0.45) / 0.3)
     # runner1, runner2 (G9): run in, throw stones into the shop, step up to the window and each take a pistol, then
     # walk off left with it held up
     for k, (xm, dm, xr, take_t) in enumerate(((1.05, 12.35, 0.95, TAKE['runner1'][2]),
@@ -872,9 +913,25 @@ def t2_stones(img, lt):
 
 def t2_chips(img, lt):
     """G2: each stone's small star of cracks on the glass, until the sign takes the glass out."""
-    if lt >= T2_HIT + 0.1:
+    if lt >= T2_SHATTER + 0.1:
         return
     cam = RF2.cam
+    # G13: each sign hit leaves a bigger star, the later ones' cracks running across the pane toward the earlier ones
+    for k, (th, _x, _u, _y, (sx, sz)) in enumerate(SIGN_HITS[:-1]):
+        if lt < th:
+            continue
+        cx, cy = cam.p(sx, FRONT_D, sz)
+        rng = np.random.default_rng(40 + k)
+        for q in range(9 + 4 * k):
+            a = q * 2 * math.pi / (9 + 4 * k) + rng.uniform(-.2, .2)
+            r = rng.uniform(60, 150) * (1 + 0.5 * k)
+            mid = (cx + r * .5 * math.cos(a + .15), cy + r * .5 * math.sin(a + .15))
+            IS.poly(img, [(cx, cy), mid, (cx + r * math.cos(a), cy + r * math.sin(a))], None, (70, 88, 100), 2.2, 0)
+        for rr in (22, 48 + 10 * k):                        # the rings of the star
+            IS.poly(img, [(cx + rr * math.cos(a) * rng.uniform(.8, 1.2), cy + rr * math.sin(a) * rng.uniform(.8, 1.2))
+                          for a in np.linspace(0, 6.28, 10)], None, (70, 88, 100), 1.8, 0)
+        IS.poly(img, [(cx + 14 * math.cos(a), cy + 14 * math.sin(a)) for a in np.linspace(0, 6.28, 9)], (236, 244, 248),
+                (70, 88, 100), 1.4, 0)
     for n, (th, x, z) in enumerate(T2_STONES):
         if lt < th:
             continue
@@ -902,23 +959,58 @@ def t2_fx(img, lt):
         IS.poly(img, [b, (b[0] + 18, b[1] - 14)], None, (220, 40, 36), 6, 0)
     t2_stones(img, lt)
     t2_flash(img, tt)
+    t2_sign(img, lt)
+
+
+def t2_sign(img, lt):
+    """G13: the road sign flung down at SIGN_DROP: out of his hands, a turn in the air, then lying on the pavement."""
+    if lt < SIGN_DROP:
+        return
+    cam = RF2.cam
+    x0, d0 = SIGN_HITS[-1][1] + 0.4, T2_SW[1] - 0.3         # from his hands, down to his right, by his feet
+    x1, d1 = x0 + 0.5, d0 - 0.35
+    u = min(1.0, (lt - SIGN_DROP) / 0.35)
+    x, d = lerp(x0, x1, u), lerp(d0, d1, u)
+    z = lerp(1.2, 0.03, u) + 0.4 * 4 * u * (1 - u)
+    L = 1.1
+    if u < 1:                                               # turning in the street's plane, pole end leading
+        ang = math.radians(100 - 150 * ease(u))
+        base = (x - 0.5 * L * math.cos(ang), d, z - 0.5 * L * math.sin(ang) * 0.5)
+        top = (x + 0.5 * L * math.cos(ang), d, z + 0.5 * L * math.sin(ang) * 0.5)
+    else:                                                   # flat on the pavement, the sign end to the right
+        base, top = (x - 0.5 * L, d + 0.1, 0.03), (x + 0.5 * L, d - 0.1, 0.03)
+    a, b = cam.p(*base), cam.p(*top)
+    k = cam.ppm(d)
+    IS.poly(img, [a, b], None, INK, max(4, .07 * k), 0)
+    IS.poly(img, [a, b], None, (150, 152, 156), max(2, .045 * k), 0)
+    side, sq = 0.7 * k, (0.3 if u >= 1 else 1.0)            # the triangle, squashed flat once it lies on the ground
+    dx, dy = (b[0] - a[0]), (b[1] - a[1])
+    n = math.hypot(dx, dy) or 1
+    ux, uy = dx / n, dy / n
+    tri = [b, (b[0] + ux * side * .87 - uy * side * .5 * sq, b[1] + uy * side * .87 * sq + ux * side * .5 * sq),
+           (b[0] + ux * side * .87 + uy * side * .5 * sq, b[1] + uy * side * .87 * sq - ux * side * .5 * sq)]
+    IS.poly(img, tri, (200, 28, 36), INK, 2.4)
+    cx, cy = sum(q[0] for q in tri) / 3, sum(q[1] for q in tri) / 3
+    IS.poly(img, [(cx + (q[0] - cx) * .55, cy + (q[1] - cy) * .55) for q in tri], (246, 246, 242), None, 0)
 
 
 def t2_flash(img, tt):
-    """The impact flash where the sign meets the glass (T2_HIT); its own function so the shape check draws it alone."""
-    if T2_HIT - 0.02 <= tt < T2_HIT + 0.15:
-        S.glow_disc(img, *RF2.cam.p(T2_STAR[0], FRONT_D, T2_STAR[1]), 70, (255, 250, 210), amt=.5)     # chat 3: small, so the contact reads
+    """The impact flash where the sign meets the glass (each of G13's four hits); its own function so the shape check
+    draws it alone."""
+    for th, _x, _u, _y, (sx, sz) in SIGN_HITS:
+        if th - 0.02 <= tt < th + 0.15:
+            S.glow_disc(img, *RF2.cam.p(sx, FRONT_D, sz), 70, (255, 250, 210), amt=.5)     # chat 3: small, so the contact reads     # chat 3: small, so the contact reads
 
 
 def t2_teeth(img, lt):
     """Drawn before the people (in front of the window they hide it)."""
     tt = lt
     t2_chips(img, lt)
-    if tt >= T2_HIT + 0.1:                                 # chat 16 (hunt 2: glass looked whole): jagged teeth left
+    if tt >= T2_SHATTER + 0.1:                             # chat 16 (hunt 2: glass looked whole): jagged teeth left
         x0, y0, x1, y1 = T2_WR                             # in the frame, a star of cracks round the hole
         rng = np.random.default_rng(9)
         # G3: the swinger knocks the teeth out as he goes on (1.75-3.85): fewer are left after each swing
-        left = 1.0 - 0.5 * min(1.0, max(0.0, (tt - 1.75) / 2.1))
+        left = 1.0                                         # G13: he flings the sign down after the shatter
         for side in range(4):
             n = 9
             for q in range(n):
@@ -943,7 +1035,7 @@ def t2_teeth(img, lt):
     ground = RF2.R(0, 1175)[1]
     for n in range(60):
         x0, y0 = rng.uniform(T2_WR[0] + 10, T2_WR[2] - 10), rng.uniform(T2_WR[1] + 10, T2_WR[3] - 20)
-        a = tt - (T2_HIT + 0.05) - rng.uniform(0, .15)
+        a = tt - (T2_SHATTER + 0.05) - rng.uniform(0, .15)
         gy = ground + rng.uniform(-20, 15)
         dx, r, sp0 = rng.uniform(-60, 60), rng.uniform(10, 24), rng.uniform(0, 6.28)
         if a < 0:
@@ -2620,7 +2712,7 @@ def shopfront(lt):
              bx('jamb right', DOOR_X1, DOOR_X1 + 0.09, 0.0, DOOR_H + 0.09), bx('wall right', DOOR_X1 + 0.09, 5.4, 0.0, 3.55),
              bx('lintel', DOOR_X0 - 0.09, DOOR_X1 + 0.09, DOOR_H + 0.09, 3.55), bx('fascia', -2.2, 2.2, 2.9, 3.55)]
     out = [audit.Thing('SHOPFRONT', parts, 'set')]
-    if lt < T2_HIT + 0.1:
+    if lt < T2_SHATTER + 0.1:
         out.append(audit.Thing('GLASS', [bx('glass', -2.0, 2.0, 0.45, 2.9, F, F + 0.03)], 'set'))
     if lt < T2_DOOR:
         out.append(audit.Thing('DOOR', [bx('door leaf', DOOR_X0, DOOR_X1, 0.0, DOOR_H, F, F + 0.05)], 'set'))
@@ -2823,7 +2915,7 @@ ALLOWED_POPS = [(n, at('t2', tin + 0.3), at('t2', tin + 0.5), 'into the dark sho
                 ('surfer', at('t4', SURF[0]), at('t4', SURF[0] + 0.15), 'hoisted up out of the packed crowd (A2)')]
 # chat 29: these were TOUCHES (a hand meant to be ON a thing, checked every frame); they are crowd crushes the
 # audit should allow, not hand contacts, so the touch check found 5-900 cm gaps: allowed contacts, depth-capped
-ALLOWED_CONTACTS = [('swinger', 'GLASS', at('t2', T2_HIT - 0.1), at('t2', T2_HIT + 0.1), 'G3: the sign meets the glass', 0.30),
+ALLOWED_CONTACTS = [('swinger', 'GLASS', at('t2', T2_HIT - 0.1), at('t2', T2_SHATTER + 0.1), 'G3/G13: the sign hits the glass four times', 0.30),
            ('hauler1', 'DOOR', at('t2', T2_DOOR - 0.1), at('t2', T2_DOOR), 'G4: the kick on the door', 0.25),
            ('hauler*', 'runner*', at('t2', 0), at('t2', .85), 'T2 run-in: the raiders crush through one gap in the glass', 0.18),
            ('hauler*', 'hauler*', at('t2', 0), at('t2', .85), 'T2 run-in: the haulers drop the shutter and pile in', 0.12),

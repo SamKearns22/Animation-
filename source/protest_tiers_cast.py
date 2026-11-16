@@ -373,6 +373,7 @@ def baton(j, sp, side='R', dirn=(0.0, 0.55, 0.85), length=0.55):
 
 # ------------------------------------------------------------------------------------------------ the rioter
 HOOD, HOOD_D, MASK = (30, 30, 34), (20, 20, 22), (16, 16, 18)
+_HOOD3 = (HOOD, HOOD_D, MASK)
 
 
 # Sam O4 (16 Nov): the rioters were one face copied; each city's black bloc now drawn from its own population
@@ -411,13 +412,156 @@ def rioter(who='rioter', seed=None, tier='t2'):
             sp[key] = sp[key] * r.uniform(lo, hi)
     if 'height' in sp:
         sp['height'] = sp['height'] * r.uniform(.95, 1.04)
+    if tier in DRESS and who == 'rioter':
+        _dress(sp, DRESS[tier], np.random.default_rng(zlib.crc32(f'{seed}-{tier}-dress'.encode())))
     return sp
+
+
+# G16 (Sam 16 Nov, ref de5 Frankfurt): not all black bloc. Mostly young men in black and dark-grey puffers, hoods up,
+# black balaclavas or blue/white face masks; grey joggers, light-grey tracksuit bottoms, a light-grey hoodie, white
+# trainers, a teal backpack, a beige cap. O7: beanies and caps on part of them. Per tier (F19 adds Paris here).
+# Each list: (value, weight). Picked once per rioter from his name, the same every frame.
+_DK = lambda c, k=.72: tuple(int(v * k) for v in c)                                   # noqa: E731
+DRESS = {'t2': dict(
+    top=[((26, 26, 30), .34), ((54, 56, 60), .22), ((34, 38, 56), .12), ((88, 90, 94), .12), ((168, 168, 164), .1),
+         ((66, 68, 54), .1)],
+    puffer=.55,
+    legs=[((30, 30, 34), .38), ((88, 88, 92), .3), ((156, 156, 154), .2), ((44, 52, 72), .12)],
+    shoes=[((236, 236, 232), .45), ((22, 22, 24), .45), ((120, 120, 124), .1)],
+    head=[('hood', .52), ('beanie', .26), ('cap', .22)],
+    mask=[((16, 16, 18), .6), ((150, 192, 222), .24), ((236, 236, 234), .09), ((70, 72, 76), .07)],
+    hat=[((24, 24, 26), .34), ((80, 82, 86), .2), ((34, 40, 62), .14), ((110, 32, 40), .1), ((196, 176, 136), .14),
+         ((186, 146, 52), .08)],
+    pack=[(None, .82), ((40, 128, 128), .1), ((24, 24, 26), .08)])}
+
+
+def _pick(r, opts):
+    w = np.array([o[1] for o in opts], float)
+    return opts[int(r.choice(len(opts), p=w / w.sum()))][0]
+
+
+def _dress(sp, D, r):
+    top = _pick(r, D['top'])
+    sp['jacket'] = sp['sleeve'] = sp['shirt'] = top
+    sp['trousers'], sp['shoe'] = _pick(r, D['legs']), _pick(r, D['shoes'])
+    sp['headwear'] = _pick(r, D['head'])
+    sp['mask_c'] = _pick(r, D['mask'])
+    sp['hood_c'] = (top, _DK(top), sp['mask_c'])
+    sp['hat_c'] = (lambda c: (c, _DK(c)))(_pick(r, D['hat']))
+    sp['puffer'] = r.random() < D['puffer']
+    sp['pack'] = _pick(r, D['pack'])
+    if sp['headwear'] != 'hood':                    # under a hat: short dark hair at the back and sides, not a bald head
+        sp['hair'] = 'crop'
+        sp['hair_c'] = (34, 28, 24) if r.random() < .8 else (96, 70, 44)
+        sp['kit_face'] = dict(sp['kit_face'], hair='crop', turned='crop')
+
+
+def face_mask(p, view, sp, hx, hy):
+    """G16: a balaclava / face mask under a beanie or cap: over the nose and mouth to under the chin (none from
+    behind). Its colour is sp['mask_c'] (black, surgical blue, white, grey)."""
+    if view in ('back', 'three_back'):
+        return
+    hw, hh = sp.get('hw', 66), sp.get('hh', 94)
+    p = fit(p, sp, view, hx, hy, hw, hh, HOOD_REACH)
+    col = sp.get('mask_c', MASK)
+    if view == 'side':
+        m = [(hx + hw * 0.1, hy + hh * 0.14), (hx + hw * 1.25, hy + hh * 0.1), (hx + hw * 1.3, hy + hh * 0.42),
+             (hx + hw * 1.1, hy + hh * 1.0), (hx + hw * 0.5, hy + hh * 1.12), (hx + hw * 0.0, hy + hh * 0.9)]
+        p.poly(curve(m, 3), col, INK, 2.2)
+        p.line([(hx + hw * 0.1, hy + hh * 0.3), (hx - hw * 0.7, hy + hh * 0.1)], _DK(col, .6), 2.2)   # the strap
+        return
+    mx = hx + (0.42 * hw if view == 'three' else 0.0)
+    m = [(mx - hw * 0.84, hy + hh * 0.16), (mx - hw * 0.3, hy + hh * 0.08), (mx, hy + hh * 0.14),
+         (mx + hw * 0.3, hy + hh * 0.08), (mx + hw * 0.84, hy + hh * 0.16), (mx + hw * 0.78, hy + hh * 0.86),
+         (mx, hy + hh * 1.16), (mx - hw * 0.78, hy + hh * 0.86)]
+    p.poly(curve(m, 3), col, INK, 2.2)
+    if col[2] > 180:                                # a surgical mask's pleats
+        for k in (0.4, 0.62):
+            p.line([(mx - hw * 0.7, hy + hh * k), (mx + hw * 0.7, hy + hh * k)], _DK(col, .82), 1.6)
+
+
+def beanie(p, view, sp, hx, hy):
+    """O7: a knitted beanie pulled down to the brow, a turned-up cuff; colour sp['hat_c']. Sized from the head as
+    drawn (head_box): the crown just over the top of the head, the cuff 60% of the way down to the head's centre."""
+    col, dk = sp.get('hat_c', ((24, 24, 26), (16, 16, 18)))
+    l, r, t = head_box(sp, view)
+    H = -t
+    top, brow = hy + t - 0.07 * H, hy + t + 0.6 * H
+    w = r - l
+    o = 0.06 * w if view == 'three' else -0.06 * w if view == 'three_back' else 0.0
+    dome = [(hx + l - 7, brow + 4), (hx + l - 9, top + 0.42 * H), (hx + l + 0.16 * w, top + 0.07 * H),
+            (hx + (l + r) / 2 + o, top), (hx + r - 0.16 * w, top + 0.07 * H), (hx + r + 9, top + 0.42 * H),
+            (hx + r + 7, brow + 4)]
+    p.poly(curve(dome, 3), col, INK, 2.4)
+    cuff = [(hx + l - 9, brow - 0.2 * H), (hx + r + 9, brow - 0.2 * H), (hx + r + 8, brow + 6), (hx + l - 8, brow + 6)]
+    p.poly(cuff, dk, INK, 2.2)
+    for k in range(1, 7):                           # the rib knit on the cuff
+        x = hx + l - 6 + k * (w + 12) / 7
+        p.line([(x, brow - 0.17 * H), (x, brow + 3)], _DK(dk, .75), 1.4)
+
+
+def hat_cap(p, view, sp, hx, hy):
+    """O7: a baseball cap in sp['hat_c'] (beige, black, navy ...), sized from the head as drawn: a round crown down to
+    60% of the way to the head's centre, the peak forward (front: a band below the crown; side: out over the brow;
+    back: the strap gap)."""
+    col, dk = sp.get('hat_c', ((24, 24, 26), (16, 16, 18)))
+    l, r, t = head_box(sp, view)
+    H, w = -t, r - l
+    top, brow = hy + t - 0.05 * H, hy + t + 0.55 * H
+    if view == 'side':
+        crown = [(hx + l - 6, brow + 4), (hx + l - 8, top + 0.4 * H), (hx + (l + r) / 2 - 6, top),
+                 (hx + r + 4, top + 0.4 * H), (hx + r + 6, brow)]
+        p.poly(curve(crown, 3), col, INK, 2.4)
+        p.poly([(hx + r - 10, brow - 8), (hx + r + 0.42 * w, brow + 2), (hx + r + 0.4 * w, brow + 12),
+                (hx + r - 6, brow + 8)], dk, INK, 2.2)
+        return
+    crown = [(hx + l - 7, brow + 4), (hx + l - 9, top + 0.42 * H), (hx + l + 0.16 * w, top + 0.07 * H), (hx, top),
+             (hx + r - 0.16 * w, top + 0.07 * H), (hx + r + 9, top + 0.42 * H), (hx + r + 7, brow + 4)]
+    p.poly(curve(crown, 3), col, INK, 2.4)
+    if view in ('back', 'three_back'):
+        p.poly([(hx - 0.1 * w, brow - 0.16 * H), (hx + 0.1 * w, brow - 0.16 * H), (hx + 0.08 * w, brow + 2),
+                (hx - 0.08 * w, brow + 2)], (236, 228, 214), INK, 1.4)
+        return
+    o = 0.12 * w if view == 'three' else 0.0
+    for k in (-0.2, 0.2):                           # the crown's seams
+        p.line([(hx + k * 0.3 * w + o * .3, top + 0.04 * H), (hx + k * w + o * .3, brow - 2)], dk, 1.8)
+    peak = [(hx + l + 0.06 * w + o, brow), (hx + r - 0.06 * w + o, brow), (hx + r + 0.08 * w + o, brow + 0.14 * H),
+            (hx + o, brow + 0.22 * H), (hx + l - 0.08 * w + o, brow + 0.14 * H)]
+    p.poly(curve(peak, 2), dk, INK, 2.2)
+
+
+def puffer(p, view, sp):
+    """G16: a puffer jacket's quilting: three stitched bands across the body (front and back); no hoodie pocket."""
+    sw = sp.get('shoulders', 156)
+    dk = _DK(sp.get('jacket', HOOD), .62)
+    o = 20 if view == 'three' else -20 if view == 'three_back' else 0
+    w = 0.78 if view != 'side' else 0.45
+    for y in (120, 215, 310, 405):
+        p.line([(-sw * w + o, y), (o, y + 10), (sw * w + o, y)], dk, 2.4)
+
+
+def backpack(p, view, sp):
+    """G16 (ref de5: a teal backpack): on his back from behind; the straps over the shoulders from the front."""
+    col = sp.get('pack')
+    if not col:
+        return
+    sw = sp.get('shoulders', 156)
+    if view in ('back', 'three_back'):
+        o = -18 if view == 'three_back' else 0
+        p.poly(curve([(-sw * .55 + o, 40), (sw * .55 + o, 40), (sw * .6 + o, 380), (-sw * .6 + o, 380)], 2), col, INK, 2.4)
+        p.poly([(-sw * .4 + o, 230), (sw * .4 + o, 230), (sw * .42 + o, 340), (-sw * .42 + o, 340)], _DK(col), INK, 1.8)
+    elif view == 'side':
+        p.poly(curve([(-60, 40), (-150, 60), (-160, 360), (-60, 380)], 2), col, INK, 2.4)
+    else:
+        for sg in (-1, 1):
+            p.line([(sg * sw * .55, 0), (sg * sw * .5, 260)], _DK(col), 7.0)
 
 
 def hood(p, view, sp, hx, hy):
     """Hood up over a black face mask, only a band round the eyes showing (refs de1, de4, es3, fr4). From behind, the
     hood's rounded point and its centre seam."""
     hw, hh = sp.get('hw', 66), sp.get('hh', 94)
+    HOOD, HOOD_D, MASK = sp.get('hood_c', _HOOD3)          # G16: the hood is the jacket's colour, the mask its own
     p = fit(p, sp, view, hx, hy, hw, hh, HOOD_REACH)
     if view in ('back', 'three_back'):
         o = -0.12 * hw if view == 'three_back' else 0.0
@@ -475,9 +619,12 @@ def hoodie(p, view, sp):
         p.line([(40, 320), (70, 440)], INK, 1.8)
 
 
-def dress_rioter(j):
-    j['head_props'] = [hood] + j.get('head_props', [])
-    j['body_props'] = [hoodie] + j.get('body_props', [])
+def dress_rioter(j, sp=None):
+    hw = (sp or {}).get('headwear', 'hood')
+    heads = [hood] if hw == 'hood' else [face_mask, beanie] if hw == 'beanie' else [face_mask, hat_cap]
+    bodies = [puffer if (sp or {}).get('puffer') else hoodie, backpack]
+    j['head_props'] = heads + j.get('head_props', [])
+    j['body_props'] = bodies + j.get('body_props', [])
     return j
 
 
@@ -503,7 +650,17 @@ def dress_officer(j):
 def marcher(i, tier='t1', s=0):
     sp = PK.crowd_person(CROWD, i, s, tier)
     PK.install({'m': sp})
+    # O7 (Sam 16 Nov: too many bald heads in one place looks strange): every bald marcher and about one in four of
+    # the short-haired ones wears a beanie or a cap, its colour from the member number
+    hair = sp['kit_face'].get('hair', '')
+    if hair == 'bald' or (hair in ('short', 'crop', 'side', 'curly') and (i * 7 + s) % 4 == 1):
+        sp = dict(sp, headwear='beanie' if (i + s) % 3 else 'cap',
+                  hat_c=(lambda c: (c, _DK(c)))(MARCH_HATS[(i * 3 + s) % len(MARCH_HATS)]))
     return sp
+
+
+MARCH_HATS = ((24, 24, 26), (80, 82, 86), (34, 40, 62), (110, 32, 40), (196, 176, 136), (186, 146, 52), (60, 96, 70),
+              (200, 200, 196))
 
 
 # ------------------------------------------------------------------------------------------------ props
@@ -892,6 +1049,7 @@ def pose(sp, name, u=0.0, t=0.0, force=None):
 # head prop (p, view, sp, hx, hy) or a body prop (p, view, sp) in the torso's frame (neck base 0, hips 450, soles
 # 928); TOURIST_DRESS names who wears what and draw() puts them on. Sized from head_box (the head as really drawn).
 CAP, CAP_D = (200, 44, 52), (150, 30, 38)                 # his red baseball cap
+_CAP_R, _CAP_RD = CAP, CAP_D
 VISOR_C, SHADES = (250, 250, 246), (30, 30, 34)
 SCARF, SCARF_D = (206, 62, 58), (150, 40, 38)             # chat 27 (notes hunt 2: plum read as purple hair): a red babushka scarf
 SCARF_DOT = (246, 234, 206)                                # its cream polka dots
@@ -911,6 +1069,7 @@ def baseball_cap(p, view, sp, hx, hy):
     crown; side: sticking forward)."""
     l, r, t = head_box(sp, view)
     hh = sp.get('hh', 94)
+    CAP, CAP_D = sp.get('cap_c') or (_CAP_R, _CAP_RD)       # O7: the crowd's caps take their own colour
     top, brow = hy + t - 6, hy + t + 0.62 * hh
     if view == 'side':
         crown = [(hx + l + 6, brow + 6), (hx + l - 2, top + 0.45 * hh), (hx + (l + r) * 0.5 - 10, top - 2),
@@ -1237,9 +1396,11 @@ def draw(img, cam, x, y, s, sp, j, yaw, kind=None, head=None):
         if kind == 'officer':
             dress_officer(j)
         elif kind == 'rioter':
-            dress_rioter(j)
+            dress_rioter(j, sp)
         elif sp.get('who') in TOURIST_DRESS:
             dress_new(j, sp)
+        elif sp.get('headwear') in ('beanie', 'cap'):      # O7: the marchers' hats
+            j['head_props'] = [beanie if sp['headwear'] == 'beanie' else hat_cap] + j.get('head_props', [])
         j['_dressed'] = True
     j['_yaw'] = V.snap(yaw)[0]
     s2 = s * sp.get('height', 1.75) / 1.75
