@@ -2,15 +2,16 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 30 (find why first), 85 (cost watch).
-- **Done (code-finder change 2 chat, Opus medium, 16 Nov):** change 2 built switched off and shown on the frozen replay:
-  23/26 -> 25/26 loose, 12/14 -> 14/14 strict, under 45 lines; kittest passes on and off. Details: code-finder/built.md.
-- **Next:** on Sam's Y: Sonnet (routine: one default flipped, kittest bar raised to 25/26, 14/14), in this chat's
-  answer turn. On N: nothing. Held-out set still at the next film's first round.
-- **Needs Sam:** Y/N on adopting change 2.
+- **Done (code-finder change 2 chat, Opus medium, 16 Nov; Sam: "Switch it on" + weak spots):** change 2 on (replay
+  25/26, 14/14, <45 lines; kittest bar raised); hand word list dropped (same score); `--who` added (Brand's chin line 3rd
+  -> 2nd); note 24 shown not a finder miss. Details: `notes/proposals/code-finder/built.md`.
+- **Next:** none on this job. At the next film's first round: freeze its held-out set (lines edited, from git) before any
+  tuning; round chats pass --shot --at --who.
+- **Needs Sam:** nothing.
 - **Read:** `notes/proposals/code-finder.md`, `code-finder/built.md`; `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** page.show.deep / FINDER_DEEP=1; `code-finder/change2-replay.py`; kittests `code_finder`.
-  Old handovers: `notes/archive/proposal-route-handovers.md`.
+- **For Claude:** page.show.deep (FINDER_DEEP=0 off), show.gate, --who; `code-finder/change2-replay.py`; kittests
+  `code_finder`. Old handovers: `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)
