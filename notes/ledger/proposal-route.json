@@ -158,26 +158,26 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.6,
+   "cost": 2.02,
    "src": "estimate",
    "sid": "session_01J1JB7Yhjq1QCEp73BMVcLY",
-   "steps": 38,
-   "hist_k": 122,
+   "steps": 56,
+   "hist_k": 153,
    "kinds": {
-    "tool search": 19.2,
-    "whole-file .py read": 0.5,
-    "page.py": 7.2,
-    "renders": 0.9,
-    "other": 72.2
+    "tool search": 16.4,
+    "whole-file .py read": 0.3,
+    "page.py": 16.5,
+    "renders": 0.5,
+    "other": 66.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 25,
+    "tool search": 34,
     "whole-file .py read": 1,
-    "page.py": 4,
+    "page.py": 11,
     "renders": 1,
     "pictures": 0,
-    "other": 5
+    "other": 6
    }
   }
  ],
