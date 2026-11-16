@@ -4,9 +4,11 @@
  "chat": "9ed3807c03aa7177",
  "prompts": "16880929b1246068",
  "key": {
-  "V1": "helper A",
+  "V1": "helper B",
   "V2": "chat",
-  "V3": "helper B"
+  "V3": "helper A"
  },
- "judged": 1794862996.492627
+ "judged": 1794863050.211928,
+ "recorded": 1794863120.781488,
+ "pick": "chat"
 }
