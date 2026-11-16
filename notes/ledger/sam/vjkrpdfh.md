@@ -33,3 +33,6 @@ Remove the wife's sunglasses and white hat, they haven't come out right and we d
 ### 2026-11-16T18:04:06
 Time left until next Albania animatic?
 
+### 2026-11-16T18:36:44
+Fix the flares
+
