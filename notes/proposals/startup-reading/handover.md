@@ -9,7 +9,8 @@
   4.8k beat by ~0.2k.** The rest needs rewording (the 5 duplicates), which is the later proposal.
 - **Startup fixes 1-4 all built.** Next (if Sam says Y): a proposal chat (Opus, high) for the 5 duplicates with the
   10-situation test, and the estimates-vs-complete-ledger comparison. Chain stopped for Sam's pick.
-- **Needs Sam:** the pick above; the 3 stranded branches (asked chat 4; answer goes to chat 4).
+- **Needs Sam:** the pick above; the 3 stranded branches, left alone (asked chat 4; answer goes
+  to chat 4): claude/beautiful-brown-vutd0l merge; claude/blessed-c2-mics-wip keep off; claude/audit-honest-checker keep off.
 - **Read:** `notes/proposals/startup-fixes.md` ("Final version"); this file; the map `claude-md-map.md` (duplicates section).
 - **Open rule requests:** none.
 - **For Claude:** a rewording must add an allowance to sentences.py first (none exists; the check refuses any loss).
