@@ -137,11 +137,11 @@ def _cast_hash():
     return h.hexdigest()[:10]
 
 
-def make_person(kind, i=0, tier='t1', force=None):
+def make_person(kind, i=0, tier='t1', force=None, seed=None):
     if kind in C.TOURIST_DRESS:                     # round 1: granny, seller, the tourists
         return C.tourist(kind)
     if kind == 'officer':
-        return C.officer(force)
+        return C.officer(force, seed=seed, tier=tier) if seed else C.officer(force)
     if kind == 'rioter':
         return C.rioter(seed=force, tier=tier) if force else C.rioter()
     return C.marcher(i, tier)
@@ -294,6 +294,8 @@ class Actor:
     def sp(self):
         if self.kind == 'rioter':                   # Sam O4: each rioter their own face, from their city's mix
             return make_person('rioter', self.i, self.tier, force=self.name)
+        if self.kind == 'officer' and self.tier == 't3':   # round 3 (F5): each French officer his own build and kit
+            return make_person('officer', self.i, 't3', self.force, seed=self.name)
         return make_person(self.kind, self.i, self.tier, self.force)
 
     def pose(self, sp):
@@ -1031,21 +1033,6 @@ def nozzle(lt, aim=12.0):
     return bx - 1.45 * k * math.cos(a), by - 1.45 * k * math.sin(a)
 
 
-@lru_cache(None)
-def crowd_t3():
-    rng = np.random.default_rng(31)
-    out = []
-    for d in np.arange(9.0, 44.0, 0.9):                     # round 2 (F1): from 9 m, left of the front line
-        for x in np.arange(-12.0, (-2.3 if d < 13.5 else -1.6) + (d - 13) * .03, 0.7):
-            r = rng.uniform()
-            state = 'flag:tricolour' if r < .12 else 'stand'
-            if d > 33 and r > .8:
-                state = 'placard:CGT:200,30,40'
-            out.append(dict(x=x + rng.uniform(-.25, .25), d=d + rng.uniform(-.3, .3), i=int(rng.integers(0, 16)),
-                            state=state, ph=rng.uniform(0, 6.28)))
-    return out
-
-
 VOLLEY2 = 2.5                       # round 1: the second volley (the back row) starts throwing
 CAR_T0, CAR_LET, CAR_STOP = 6.0, 6.9, 7.6   # the shove starts, they let go, it stops in the jet
 CAR_HIT = 7.2                        # the jet hits the car: a burst of steam, the fire knocked down
@@ -1090,8 +1077,14 @@ def draw_car3(img, lt):
     S._car(img, T3CAM, lt, mv, fire=car_fire(lt), roll=mv[1] / 0.34)
 
 
-OFF_L = -4.2                       # chat 29: T3's left edge is x -2.4 at the front line; past this they are gone
+OFF_L = -4.8                       # round 3 (F7): the front line further left; past this they are gone (was -4.2)
 PUSH_IN = 1.5                       # the pushers' run in from the left
+
+
+def _jit(name, lo, hi):
+    """Round 3 (F9, Sam: 'no group moves uniformly'): one person's own fixed value in lo..hi (timing, stride, angle)."""
+    import zlib
+    return lo + (hi - lo) * (zlib.crc32(name.encode()) % 10007) / 10006.0
 
 
 def _volley(c):
@@ -1112,12 +1105,22 @@ def _turn(y0, y1, w):
     return (y + 180) % 360 - 180
 
 
-FRONT3 = ((-0.95, 10.4), (-0.75, 11.4), (-1.0, 12.4), (-0.8, 13.4))   # round 2 (F1): the front line runs away from
-BACK3 = ((-1.6, 10.9), (-1.55, 11.9), (-1.65, 12.9))     # us (a wall facing right); the back row steps up in its gaps
+# round 3 (F7, Sam: 'too little distance between protesters and police'): the gap opened from 2.4 m to 4.6 m
+FRONT3 = ((-2.0, 10.0), (-1.85, 12.0), (-2.05, 14.0), (-1.9, 16.0))   # the front line runs away from us (a wall
+BACK3 = ((-2.65, 11.0), (-2.6, 13.0), (-2.7, 15.0))     # facing right); the back row steps up in its gaps
+FR_RATE, BK_RATE = (1.6, 1.47, 1.71, 1.54), (1.58, 1.69, 1.5)   # F9: each thrower his own pace (throws a second)
+FR_PH, BK_PH = (0.0, 0.41, 0.77, 0.18), (0.0, 0.33, 0.62)
 CRS_YAW = -60   # round 2 (F2): turned three-quarters to the camera so the raised shields show their face, not an edge
-CRS_X, CRS_D = (1.9, 2.55, 3.2), (9.9, 10.9, 11.9, 12.9, 13.9)   # round 2 (F2): the police block, 3 ranks of 5
-SHIELD_X = 1.9 - 0.42                                  # the front rank's shield face (x m), before the advance
+# round 3 (F8): the block split in two, a lane between (d 11.4-15.0) that the water cannon drives up
+CRS_X, CRS_D = (2.6, 3.25, 3.9), (9.3, 10.2, 11.1, 15.3, 16.2, 17.1)
+SHIELD_X = CRS_X[0] - 0.42                             # the front rank's shield face (x m), before the advance
 ADV_T, ADV_STEP, ADV_N = 4.7, 0.5, 3                    # F2: when the cannon opens up, 3 steps of 0.4 m in lockstep
+JET_T = 2.6 + J3                                       # the jet reaches the front line
+# round 3 (F11): what each throw is (row, thrower, throw number); the rest are stones
+MISSILES = {('f', 1, 2): 'firework', ('b', 0, 1): 'firework',
+            ('f', 0, 3): 'bottle', ('f', 2, 1): 'bottle', ('f', 3, 5): 'bottle', ('b', 2, 3): 'bottle',
+            ('f', 0, 1): 'fruit', ('f', 1, 4): 'fruit', ('f', 2, 5): 'fruit', ('f', 3, 2): 'fruit',
+            ('b', 0, 2): 'fruit', ('b', 1, 3): 'fruit', ('b', 1, 0): 'cone', ('b', 2, 1): 'wheel'}
 
 
 def crs_adv(lt):
@@ -1136,43 +1139,90 @@ def crs_guard(lt):
     return ease((lt - 0.8) / 0.3) * (1 - ease((lt - 2.6 - J3) / 0.3))
 
 
-def t3_actors(lt):
+def _break(name, k):
+    """F9: when this rioter breaks from the jet, how fast he runs and where he heads (his own, not the row's)."""
+    # (the heading stays -115: other run headings blended from a throw fold the elbow back, the rig's guard stops them)
+    return JET_T + 0.1 + _jit(name + 'b', 0.0, 0.32), 4.5 * _jit(name + 'v', 0.82, 1.16), -115
+
+
+# round 3 (F4, Sam: 'protesters clambering up and celebrating on the statue', fr3): on Marianne's base (the painting's
+# front face at d MON_D: the top step at z 1.5, the ledge round the drum at z 5.0). (name, x off her centre, z, start)
+MON_CHEER = (('mon1', -5.6, 5.0, 0.0), ('mon2', 3.9, 5.0, 0.0), ('mon3', -1.8, 5.0, 0.0), ('mon4', 6.4, 1.5, 0.0),
+             ('mon5', -8.2, 1.5, 0.0))
+MON_CLIMB = (('climb1', -3.6, 0.6, 1.5), ('climb2', 5.4, 2.4, 1.4))     # (name, x, starts hauling, takes s)
+
+
+def mon_actors(lt):
     out = []
-    jet = lt > 2.6 + J3
+    d = S.MON_D - 0.8
+    for k, (n, x, z, _) in enumerate(MON_CHEER):
+        rate = _jit(n + 'r', 4.5, 7.5)
+        if k == 2:                                          # one waves the tricolour from the ledge
+            out.append(Actor(n, 'marcher', S.MON_X + x, d, -10 + 20 * math.sin(lt * 2.1), 'flag:tricolour',
+                             i=k + 3, tier='t3', lift=z))
+        else:
+            out.append(Actor(n, 'marcher', S.MON_X + x, d, _jit(n + 'y', -25, 25), 'cheer',
+                             u=abs(math.sin(lt * rate + k)), i=k + 5, tier='t3', lift=z))
+    for k, (n, x, t0, dur) in enumerate(MON_CLIMB):     # hauling himself up the plinth face (back to us), then on
+        u = (lt - t0) / dur                                 # the ledge, turning round to punch the air
+        if u < 0:
+            out.append(Actor(n, 'marcher', S.MON_X + x, d + 0.2, 180, 'reach_hi', u=0.9 * ease(min(1.0, lt / 0.4)),
+                             i=k + 11, tier='t3', lift=1.5))
+        elif u < 1:
+            z = 1.5 + 3.5 * ease(u)
+            out.append(Actor(n, 'marcher', S.MON_X + x, d + 0.2, 180, 'reach_hi', u=0.9 + 0.1 * math.sin(u * 9),
+                             i=k + 11, tier='t3', lift=z, ))
+        else:
+            w = (lt - t0 - dur) / 0.35
+            out.append(Actor(n, 'marcher', S.MON_X + x, d + 0.2, _turn(180, 10, w), 'cheer',
+                             u=abs(math.sin(lt * 6 + k)), i=k + 11, tier='t3', lift=5.0)
+                       .blend('reach_hi', 1.0, w=w))
+    return out
+
+
+def t3_actors(lt):
+    out = mon_actors(lt)
     walk_in = 1.4 * (1 - ease(min(1.0, lt / 0.75)))        # round 2 (F3): the front line advances 0-0.75 s
     for k, (x, d) in enumerate(FRONT3):                     # the black-clad front line, facing the police (right)
+        n = f'front{k + 1}'
         dx, _ = field('t3', x, d, lt, k)
-        if jet and lt > 2.7 + J3 + 0.05 * k:                  # broken by the jet: running out left
-            u = lt - 2.7 - J3 - 0.05 * k
-            if x + dx * .3 - _getaway(u) < OFF_L:
+        tb, v, yb = _break(n, k)
+        t_in = 0.75 + _jit(n + 'i', -0.12, 0.12)            # F9: they reach the line at their own moment
+        if lt > tb:                                         # broken by the jet: running out left
+            u = lt - tb
+            if x + dx * .3 - _getaway(u, v) < OFF_L:
                 continue
-            ut = ((2.7 + J3 + 0.05 * k - 0.75) * 1.6 + k * 0.37) % 1.0
-            out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3 - _getaway(u), d, _turn(90, -115, u / .3), 'run',
-                             t=lt, tier='t3').blend('throw', _volley(ut), w=u / .3))
-        elif 0.75 <= lt:
-            u = ((lt - 0.75) * 1.6 + k * 0.37) % 1.0
-            out.append(Actor(f'front{k + 1}', 'rioter', x + dx * .3, d, 90, 'throw', u=_volley(u), tier='t3')
-                       .blend('march', t=0.75, w=(lt - 0.75) / 0.2))
+            ut = ((tb - 0.75) * FR_RATE[k] + FR_PH[k]) % 1.0
+            out.append(Actor(n, 'rioter', x + dx * .3 - _getaway(u, v), d - 0.25 * k * ease(u / .5), _turn(90, yb, u / .3),
+                             'run', t=lt * _jit(n + 's', .92, 1.08), tier='t3').blend('throw', _volley(ut), w=u / .3))
+        elif t_in <= lt:
+            u = ((lt - 0.75) * FR_RATE[k] + FR_PH[k]) % 1.0
+            out.append(Actor(n, 'rioter', x + dx * .3, d, 90 + _jit(n + 'a', -8, 8), 'throw', u=_volley(u), tier='t3')
+                       .blend('march', t=t_in, w=(lt - t_in) / 0.2))
         else:
-            out.append(Actor(f'front{k + 1}', 'rioter', x - walk_in, d, 90, 'march', t=lt, tier='t3'))
+            out.append(Actor(n, 'rioter', x - walk_in * _jit(n + 'w', .8, 1.2), d, 90, 'march',
+                             t=lt * _jit(n + 's', .9, 1.1), tier='t3'))
     # round 1 (T3 2.5-4.0): the second volley, twice the throwers: a back row steps up between the front line's gaps
     for k, (x, d) in enumerate(BACK3):
-        if lt < VOLLEY2 - 0.3:
+        n = f'back{k + 1}'
+        t_up = VOLLEY2 + _jit(n + 'i', -0.1, 0.1)
+        if lt < t_up - 0.3:
             continue
-        if jet and lt > 2.6 + J3 + 0.05 * k:                  # round 2: the back row breaks first (it ran through the front line)
-            u = lt - 2.6 - J3 - 0.05 * k
-            ut = ((2.6 + J3 + 0.05 * k - VOLLEY2) * 1.6 + k * 0.29) % 1.0
-            if x - _getaway(u) < OFF_L:
+        tb, v, yb = _break(n, k)
+        tb -= 0.12                                          # round 2: the back row breaks first
+        if lt > tb:
+            u = lt - tb
+            ut = ((tb - VOLLEY2) * BK_RATE[k] + BK_PH[k]) % 1.0
+            if x - _getaway(u, v) < OFF_L:
                 continue
-            out.append(Actor(f'back{k + 1}', 'rioter', x - _getaway(u), d, _turn(90, -115, u / .3), 'run',
-                             t=lt + .3, tier='t3').blend('throw', _volley(ut), w=u / .3))
-        elif lt >= VOLLEY2:
-            u = ((lt - VOLLEY2) * 1.6 + k * 0.29) % 1.0
-            out.append(Actor(f'back{k + 1}', 'rioter', x, d, 90, 'throw', u=_volley(u), tier='t3')
-                       .blend('march', t=VOLLEY2, w=(lt - VOLLEY2) / 0.2))
+            out.append(Actor(n, 'rioter', x - _getaway(u, v), d + 0.3 * ease(u / .5), _turn(90, yb, u / .3), 'run',
+                             t=lt * _jit(n + 's', .92, 1.08) + .3, tier='t3').blend('throw', _volley(ut), w=u / .3))
+        elif lt >= t_up:
+            u = ((lt - VOLLEY2) * BK_RATE[k] + BK_PH[k]) % 1.0
+            out.append(Actor(n, 'rioter', x, d, 90 + _jit(n + 'a', -8, 8), 'throw', u=_volley(u), tier='t3')
+                       .blend('march', t=t_up, w=(lt - t_up) / 0.2))
         else:                                               # stepping up from the crowd behind
-            out.append(Actor(f'back{k + 1}', 'rioter', x - 0.6 * (VOLLEY2 - lt) / 0.3, d, 90, 'march', t=lt,
-                             tier='t3'))
+            out.append(Actor(n, 'rioter', x - 0.6 * (t_up - lt) / 0.3, d, 90, 'march', t=lt, tier='t3'))
     # round 1 (T3 6.0-8.0): four rioters shove the burning car into the gap, let go at 6.9, cheer it on, run off left
     if CAR_T0 - PUSH_IN - 0.1 <= lt < CAR_T0 - 0.1:     # chat 27: they run in from off the left edge (no pop)
         X0, X1, D0, _ = S.CAR3                              # chat 29: over 1.5 s (0.65: bodies 7.5 m/s, feet 8)
@@ -1184,7 +1234,6 @@ def t3_actors(lt):
     if CAR_T0 - 0.1 <= lt:
         mv = car_move(lt)
         X0, X1, D0, _ = S.CAR3
-        xc = (X0 + X1) / 2
         # chat 27 (notes hunt 1: three of four pushers stood off the left edge): one at the rear's right corner, three
         # down the right flank leaning into it, all in frame; (x, d) in the car's own frame, moved with it by car_pt
         spots = ((X1 - 0.15, D0 - 0.45), (X1 + 0.4, D0 + 0.35), (X1 + 0.45, D0 + 1.25), (X1 + 0.45, D0 + 2.15))
@@ -1205,70 +1254,107 @@ def t3_actors(lt):
                     out.append(Actor(f'pusher{k + 1}', 'rioter', x - _getaway(u), d - 0.3 * k * ease(u / .3),
                                      _turn(150, -115, u / .3), 'run', t=lt + k * .2, tier='t3')
                                .blend('cheer', abs(math.sin(t0 * 9 + k)), w=u / .3))
-    # round 2 (F2, Sam: 'police are static'): a block 3 deep, 5 wide; the front ranks' shields up against the
-    # missiles, then the whole block steps forward together when the cannon opens up
-    adv, stepping = crs_adv(lt)
-    g = crs_guard(lt)
+    # round 2 (F2): the police: shields up against the missiles, then forward together when the cannon opens up.
+    # Round 3: two groups, a lane between (F8); each officer a beat off the others, his own stride and stance (F9)
     for c, x in enumerate(CRS_X):
         for r, d in enumerate(CRS_D):
             k = c * len(CRS_D) + r
+            n = f'crs{k + 1}'
+            o = _jit(n + 'o', -0.09, 0.09)
+            adv, stepping = crs_adv(lt - o)
+            g = crs_guard(lt - 1.5 * o) * _jit(n + 'g', .78, 1.0)
+            yaw = CRS_YAW + _jit(n + 'y', -7, 7)
+            lean = _jit(n + 'l', -3.5, 3.5)
+            x1, d1 = x - adv + _jit(n + 'x', -0.09, 0.09), d + _jit(n + 'd', -0.12, 0.12)
             if stepping:
-                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, CRS_YAW, 'line_walk', t=lt - ADV_T, force='crs', tier='t3')
-            elif c < 2 and g > 0:
-                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, CRS_YAW, 'shield_up', u=g * (1.0 if c == 0 else .5),
+                a = Actor(n, 'officer', x1, d1, yaw, 'line_walk', t=(lt - ADV_T - o) * _jit(n + 's', .9, 1.1),
                           force='crs', tier='t3')
+            elif c < 2 and g > 0:
+                a = Actor(n, 'officer', x1, d1, yaw, 'shield_up', u=g * (1.0 if c == 0 else .5), force='crs', tier='t3')
             else:
-                a = Actor(f'crs{k + 1}', 'officer', x - adv, d, CRS_YAW, 'line', force='crs', tier='t3')
+                a = Actor(n, 'officer', x1, d1, yaw, 'line', force='crs', tier='t3')
+            a.extra = (lambda j, lean=lean: j.__setitem__('lean', j.get('lean', 0) + lean))
             a.i = (k * 5) % 7
             out.append(a)
+    return out
+
+
+def _on_base(x, d, pad=0.4):
+    """Round 3 (F4): is ground point (x, d) inside Marianne's round stepped base (radius 11 m)?"""
+    dx = x - S.MON_X
+    return abs(dx) < 11.0 and d > S.MON_D - math.sqrt(max(0.0, 11.0 ** 2 - dx * dx)) - pad
+
+
+@lru_cache(None)
+def crowd_t3():
+    rng = np.random.default_rng(31)
+    out = []
+    for d in np.arange(9.0, 44.0, 0.9):                     # round 2 (F1): from 9 m, left of the front line
+        # round 3 (F7: the gap opened; F4: the crowd fills the square up to Marianne's base and round its front)
+        xmax = (-3.3 if d < 16.5 else -2.6) + (d - 13) * .03 + max(0.0, d - 20) * 0.45
+        for x in np.arange(-12.0, xmax, 0.7):
+            r = rng.uniform()
+            state = 'flag:tricolour' if r < .12 else 'stand'
+            if d > 22 and r > .86:
+                state = 'placard:CGT:200,30,40'
+            m = dict(x=x + rng.uniform(-.25, .25), d=d + rng.uniform(-.3, .3), i=int(rng.integers(0, 16)),
+                     state=state, ph=rng.uniform(0, 6.28), v=rng.uniform(.75, 1.25), dl=rng.uniform(0, .3),
+                     su=rng.uniform(.65, 1.2))
+            if not _on_base(m['x'], m['d']):
+                out.append(m)
+    # F4: more of them up on the base, sprites standing along the top step and the ledge (the painting's front face)
+    for n, (x, z) in enumerate(((-9.6, 1.5), (-7.2, 1.5), (-4.6, 1.5), (-2.4, 1.5), (1.4, 1.5), (3.6, 1.5),
+                                (8.4, 1.5), (-6.6, 5.0), (-3.2, 5.0), (1.9, 5.0), (5.9, 5.0))):
+        out.append(dict(x=S.MON_X + x, d=S.MON_D - 0.9, z=z, i=(n * 7) % 16, state='flag:tricolour' if n % 3 == 0
+                        else 'stand', ph=n * 1.3, v=1.0, dl=0.0, su=1.0, on=True))
     return out
 
 
 def t3_crowd(img, lt):
     cam = T3CAM
     for m in sorted(crowd_t3(), key=lambda m: -m['d']):
+        if m.get('on'):                                     # up on the monument: they stay, swaying
+            gx, gy = cam.p(m['x'] + 0.08 * math.sin(lt * 2 + m['ph']), m['d'], m['z'])
+            paste(img, 'marcher', m['i'], 't3', m['state'], 90 if m['x'] < S.MON_X else -90, gx, gy,
+                  scale_at(cam, m['d']))
+            continue
         dx, dd = field('t3', m['x'], m['d'], lt, m['ph'])
         x, d = m['x'] + dx, max(8.8, m['d'] + dd)
+        x -= 0.9 * (1 - ease(lt / (0.9 * m['su'])))        # round 2 (F3): the surge in behind its front line; F9: own pace
+        t_run = JET_T + 0.1 + 0.02 * max(0, m['x'] + 2) + m['dl']
+        running = lt > t_run and m['d'] < 20
+        if running:                                         # chat 16 (hunt 2: crowd not breaking): they run out left
+            x -= 3.2 * m['v'] * (lt - t_run)               # F9: each at his own speed, setting off at his own moment
         gx, gy = cam.p(x, d)
         if gx < -80 or gx > W + 80:
             continue
-        x -= 0.9 * (1 - ease(lt / 0.9))                     # round 2 (F3): the crowd surges in behind its front line
-        gx, gy = cam.p(x, d)
-        running = lt > 2.6 + J3 and m['d'] < 30 and lt - 2.6 - J3 - 0.02 * max(0, m['x'] + 2) > 0.1
-        if running:                                         # chat 16 (hunt 2: crowd not breaking): they run out left
-            x -= 3.2 * (lt - 2.7 - J3 - 0.02 * max(0, m['x'] + 2))
-            gx, gy = cam.p(x, d)
         yaw = -90 if running else 90
         paste(img, 'marcher', m['i'], 't3', m['state'] if not running else 'stand', yaw, gx, gy, scale_at(cam, d))
 
 
 def t3_columns(img, lt):
-    """Smoke climbing from the car (left) and the bike heap (mid-right) from 0.0. Chat 15: drawn before the truck and
-    the people (the bikes burn at d 14, behind the police: their smoke had hidden the water cannon truck)."""
-    cx, cy = T3CAM.p(*car_roof(lt), 2.0)                    # round 2 (F1): from the car and the bikes where they are
-    bx, by = T3CAM.p(*S.BIKES3, 1.2)                        # (round 1: the car's smoke goes where the car goes)
-    for (sx, sy, sd) in ((cx, cy, 1), (bx, by, 2)):
-        if sd == 1 and lt > CAR_HIT + 0.3:                  # the jet put it out: steam (car_fx) instead
-            continue
-        lumps = []
-        for n in range(6):
-            a = (lt * 0.9 + n / 6) % 1.0
-            drift = -150 if sd == 1 else 130                 # round 2: the car's smoke leans left, the bikes' right,
-            lumps.append((sx + drift * a + 18 * math.sin(n * 2.1), sy - 520 * a, 40 + 90 * a))   # clear of Marianne
-        S.smoke(img, lumps, (58, 54, 56), (138, 128, 124), lw=2.5)
+    """Smoke climbing from the car (left) from 0.0, drawn before the truck and the people. Round 3 (F8): the bike heap
+    and its smoke are gone."""
+    sx, sy = T3CAM.p(*car_roof(lt), 2.0)                    # round 1: the car's smoke goes where the car goes
+    if lt > CAR_HIT + 0.3:                                  # the jet put it out: steam (car_fx) instead
+        return
+    lumps = []
+    for n in range(6):
+        a = (lt * 0.9 + n / 6) % 1.0
+        lumps.append((sx - 150 * a + 18 * math.sin(n * 2.1), sy - 520 * a, 40 + 90 * a))   # leans left, clear of her
+    S.smoke(img, lumps, (58, 54, 56), (138, 128, 124), lw=2.5)
 
 
 def t3_debris(img):
     """Chat 16 (hunt 2: bare grey ground filled the lower third): the square's near ground littered, as in the
-    references: thrown cobbles, leaflets, a dropped tricolour and a yellow vest."""
+    references: thrown cobbles, leaflets, a dropped tricolour and a yellow vest. Round 3 (F6): cobbles smaller, matt."""
     cam = T3CAM
     rng = np.random.default_rng(23)
     for _ in range(22):                                    # cobbles
         x, d = rng.uniform(-2.6, 3.6), rng.uniform(6.6, 9.4)     # round 2: the near ground in the raised frame
         sx, sy = cam.p(x, d)
         k = cam.ppm(d)
-        IS.ell(img, sx, sy - .06 * k, .13 * k, .08 * k, (128, 118, 106), INK, 2)
-        IS.ell(img, sx - .03 * k, sy - .09 * k, .05 * k, .03 * k, (170, 160, 146), None)
+        IS.ell(img, sx, sy - .04 * k, .085 * k, .055 * k, STONE3, INK, 1.8)
     for _ in range(9):                                     # leaflets
         x, d = rng.uniform(-2.6, 3.6), rng.uniform(6.6, 9.4)
         k = cam.ppm(d)
@@ -1288,62 +1374,137 @@ def t3_debris(img):
                     INK, 2)
 
 
-def _missile(img, cam, what, x0, d0, d1, t0, lt, flight=0.45, spin=0):
-    """Round 2 (F2): one thrown thing from (x0, d0) at the police block's shields (d1): up in an arc, hits the raised
-    shield face (a flash), bounces back off it and drops to the paving in front of the line, where it lies."""
+STONE3 = (112, 104, 94)                 # round 3 (F6): a matt grey-brown cobble, no shine
+FRUIT3 = ((206, 48, 38), (238, 134, 32), (126, 166, 58))      # tomato, orange, apple
+BOTTLE3 = ((58, 104, 62), (112, 70, 34))                       # green, brown glass
+
+
+def _rot(cx, cy, pts, a):
+    ca, sa = math.cos(a), math.sin(a)
+    return [(cx + x * ca - y * sa, cy + x * sa + y * ca) for x, y in pts]
+
+
+def _missile(img, cam, what, x0, d0, d1, t0, lt, flight=0.45, spin=0, seed=0):
+    """Round 2 (F2): one thrown thing from (x0, d0) at the police's shields (d1): up in an arc, hits the raised
+    shield face (a flash). Stones, cones and wheels bounce back off it and lie in front of the line. Round 3 (F11):
+    fruit splats on the shield and drops; a bottle smashes there (shards fly and lie); a firework trails sparks and
+    bursts on it."""
     a = (lt - t0) / flight
     if a < 0:
         return
     hx = SHIELD_X - crs_adv(t0 + flight)[0]                    # the shield face where it gets there
     k = cam.ppm(d1)
+    path = lambda q: (lerp(x0 + 0.3, hx, q), 1.9 + 2.4 * math.sin(math.pi * q) - 0.3 * q, lerp(d0, d1, q))  # noqa
+    hsx, hsy = cam.p(hx, d1, 1.6)
     if a < 1:                                                  # in the air
-        x, z = lerp(x0 + 0.3, hx, a), 1.9 + 2.4 * math.sin(math.pi * a) - 0.3 * a
-        d = lerp(d0, d1, a)
+        x, z, d = path(a)
+    elif what in ('fruit', 'bottle', 'firework'):              # F11: they do not bounce
+        b = min(1.0, (a - 1) / 0.6)
+        x, z, d = hx - 0.15 * b, max(0.0, 1.6 - 1.6 * b * b), d1
     else:                                                      # off the shield: back 0.7 m, down to the ground
         b = min(1.0, (a - 1) / 0.8)
         x, z, d = hx - 0.7 * b, max(0.0, 1.6 + 0.5 * math.sin(math.pi * b * .6) - 1.75 * b * b), d1
-        if a < 1.25:                                           # the hit: a white flash on the shield
-            sx, sy = cam.p(hx, d1, 1.6)
-            S.glow_disc(img, sx, sy, k * (0.55 * (1.25 - a) / 0.25 + .2), (255, 246, 200), amt=.8)
+    if 1 <= a < 1.25 and what != 'firework':                    # the hit: a white flash on the shield
+        S.glow_disc(img, hsx, hsy, k * (0.45 * (1.25 - a) / 0.25 + .15), (255, 246, 200), amt=.7)
     sx, sy = cam.p(x, d, z)
     k = cam.ppm(d)
     rot = spin * min(a, 1.0) + spin * .3 * max(0.0, min(a, 1.8) - 1)
+    rng = np.random.default_rng(seed)
     if what == 'cone':
         S.prop_cone(img, sx, sy, 1.4 * k, rot)
     elif what == 'wheel':
         S.prop_wheel(img, sx, sy, 1.25 * k, rot)
+    elif what == 'fruit':
+        col = FRUIT3[seed % 3]
+        if a < 1:
+            IS.ell(img, sx, sy, .1 * k, .09 * k, col, INK, 2.2)
+            IS.poly(img, [(sx, sy - .09 * k), (sx + .03 * k, sy - .15 * k)], None, (70, 100, 40), 3, 0)
+        else:                                                  # splat: juice on the shield, the squashed fruit drops
+            if a < 2.2:
+                f = 1 - (a - 1) / 1.2
+                for q in range(6):
+                    ang = q * 1.05 + seed
+                    IS.ell(img, hsx + math.cos(ang) * .14 * k, hsy + math.sin(ang) * .1 * k + (a - 1) * .2 * k,
+                           .05 * k * f + 1, .04 * k * f + 1, col, None)
+            IS.ell(img, sx, sy - .03 * k, .13 * k, .05 * k, col, INK, 2)
+    elif what == 'bottle':
+        col = BOTTLE3[seed % 2]
+        if a < 1:
+            ang = math.radians(rot + 720 * a)
+            body = [(-.06, -.14), (.06, -.14), (.06, .08), (.025, .12), (.025, .2), (-.025, .2), (-.025, .12),
+                    (-.06, .08)]
+            IS.poly(img, _rot(sx, sy, [(u * k, v * k) for u, v in body], ang), col, INK, 2)
+        else:                                                  # smashed: shards burst off the shield and fall still
+            b = min(1.0, (a - 1) / 0.7)
+            for q in range(8):
+                ox, oz = rng.uniform(-.6, -.05), rng.uniform(-.2, .5)
+                qd = d1 + rng.uniform(-.4, .4)
+                px, pz = hx + ox * b, max(0.0, 1.6 + oz * b * 2 - 2.6 * b * b)
+                qx, qy = cam.p(px, qd, pz)
+                r = rng.uniform(.03, .06) * cam.ppm(qd)
+                IS.poly(img, _rot(qx, qy, [(-r, 0), (r * .3, -r), (r, r * .4)], rng.uniform(0, 6) + 8 * b * (pz > 0)),
+                        (200, 226, 214) if q % 2 else col, INK, 1.2)
+    elif what == 'firework':
+        if a < 1:
+            ang = math.atan2(*(np.array(cam.p(*path(min(1, a + .05)))[::-1]) - (sy, sx)))
+            for q in range(1, 7):                              # the spark trail behind it
+                tx, tz, td = path(max(0.0, a - q * 0.045))
+                px, py = cam.p(tx, td, tz)
+                IS.ell(img, px + rng.uniform(-4, 4), py + rng.uniform(-4, 4), 7 - q * .7, 7 - q * .7,
+                       (255, 214, 90) if q % 2 else (255, 140, 50), None)
+            IS.poly(img, _rot(sx, sy, [(-.14 * k, -.035 * k), (.1 * k, -.035 * k), (.16 * k, 0), (.1 * k, .035 * k),
+                                       (-.14 * k, .035 * k)], ang), (200, 36, 40), INK, 1.8)
+        elif a < 1.9:                                          # the burst on the shield: sparks flying out, fading
+            b = (a - 1) / 0.9
+            S.glow_disc(img, hsx, hsy, k * (.7 * (1 - b) + .2), (255, 236, 170), amt=.8 * (1 - b))
+            for q in range(14):
+                ang = q / 14 * 6.283 + seed
+                r0, r1 = .2 * k + .9 * k * b, .35 * k + 1.2 * k * b
+                col = ((255, 226, 100), (255, 120, 60), (150, 210, 255))[q % 3]
+                IS.poly(img, [(hsx + math.cos(ang) * r0, hsy + math.sin(ang) * r0 + 40 * b * b),
+                              (hsx + math.cos(ang) * r1, hsy + math.sin(ang) * r1 + 60 * b * b)], None, col,
+                        max(1.0, 4 * (1 - b)), 0)
     else:
-        IS.ell(img, sx, sy, .18 * k, .14 * k, (120, 108, 96), INK, 3)     # drawn ~3x true to read at phone size
-        IS.ell(img, sx - .05 * k, sy - .05 * k, .07 * k, .05 * k, (176, 164, 150), None)
+        IS.ell(img, sx, sy, .1 * k, .075 * k, STONE3, INK, 2.2)      # F6: smaller (was .18) and matt (no shine)
+
+
+def _throws():
+    """Every throw: (row, k, rep, kind, x0, d0, d1, t0, flight). Round 3 (F9): each thrower at his own pace, and the
+    missile leaves his hand as his arm comes through (u 0.6 of his cycle)."""
+    out = []
+    for row, line, rates, phs, start, nrep, fl in (('f', FRONT3, FR_RATE, FR_PH, 0.75, 8, 0.45),
+                                                   ('b', BACK3, BK_RATE, BK_PH, VOLLEY2, 6, 0.5)):
+        for k, (x0, d0) in enumerate(line):
+            near = sorted(CRS_D, key=lambda d: abs(d - d0))[:2]     # the nearer of the two police groups
+            for rep in range(nrep):
+                t0 = start + (((0.6 - phs[k]) % 1.0) + rep) / rates[k]
+                if t0 >= JET_T:
+                    break
+                what = MISSILES.get((row, k, rep), 'stone')
+                out.append((row, k, rep, what, x0, d0, near[rep % 2], t0, fl))
+    return out
 
 
 def t3_fx(img, lt):
     cam = T3CAM
-    # the front line's stones (0.75-4.5), each at the shield facing its thrower; round 2: they hit and bounce off
-    for k, (x0, d0) in enumerate(FRONT3):
-        for rep in range(7):
-            t0 = 0.75 + ((k * 0.37 + 0.6) % 1.0) / 1.6 + rep / 1.6
-            if t0 < 2.6 + J3 and lt < t0 + 0.45 + 0.8 * 0.45 + 0.05:
-                _missile(img, cam, 'stone', x0, d0, CRS_D[min(4, k + (rep % 2))], t0, lt)
-    # round 1 (T3 2.5-4.55): the back row's volley, over the front line's heads: stones, a traffic cone, a bike wheel
-    for k, (x0, d0) in enumerate(BACK3):
-        for rep in range(5):
-            t0 = VOLLEY2 + ((k * 0.29 + 0.6) % 1.0) / 1.6 + rep / 1.6
-            if t0 >= 2.6 + J3 or lt > t0 + 0.5 + 0.8 * 0.5 + 0.05:
-                continue
-            what = 'cone' if (k, rep) == (1, 0) else 'wheel' if (k, rep) == (2, 1) else 'stone'
-            _missile(img, cam, what, x0, d0, CRS_D[k + 1], t0, lt, flight=0.5, spin=540 if what != 'stone' else 0)
-    # the spent missiles lying in front of the shields (they pile up as the volleys land)
+    # the front line's and the back row's throws (0.75-4.5): stones, fruit, bottles, two fireworks, a cone, a wheel
+    for row, k, rep, what, x0, d0, d1, t0, fl in _throws():
+        if lt < t0 + fl * 2.9:
+            _missile(img, cam, what, x0, d0, d1, t0, lt, flight=fl, spin=540 if what in ('cone', 'wheel') else 0,
+                     seed=k * 7 + rep)
+    # the spent missiles lying in front of each group's shields (they pile up as the volleys land)
     rng = np.random.default_rng(17)
-    for n in range(int(min(12, max(0, (lt - 1.45) * 5)))):
-        sx, sy = cam.p(SHIELD_X - rng.uniform(0.5, 0.9), rng.uniform(9.6, 14.2))
-        k = cam.ppm(11)
-        IS.ell(img, sx, sy - .03 * k, .11 * k, .07 * k, (150, 146, 138), INK, 2)
-    # the tear-gas canister lands at 1.6 by Marianne's base, trailing white; the gas swells over her lower half
-    # (chat 15: hunt 1 saw no landing and the gas over the crowd: it lands nearer her base, set y 870, with a puff)
+    for n in range(int(min(14, max(0, (lt - 1.45) * 5)))):
+        d = rng.choice(CRS_D) + rng.uniform(-.4, .4)
+        sx, sy = cam.p(SHIELD_X - rng.uniform(0.5, 0.9), d)
+        k = cam.ppm(d)
+        IS.ell(img, sx, sy - .03 * k, .07 * k, .045 * k, STONE3, INK, 1.6)
+    # the tear-gas canister lands at 1.6 by Marianne's base, trailing white; the gas swells over the base's right side
+    # (round 3: her base nearer; the gas lands right of centre so the people up on the left stay clear)
+    bx, by = cam.p(S.MON_X + 5.5, S.MON_D - 9.0, 1.0)
+    G3 = 1.25
     if 1.2 <= lt < 1.6:
         a = (lt - 1.2) / 0.4
-        bx, by = cam.p(S.MON_X - 0.4, 74, 2.0)            # round 2: lands at her base, wherever the camera puts it
         pos = lambda u: (lerp(W + 20, bx, u), lerp(by - 110, by, u) - 160 * math.sin(math.pi * u))   # noqa: E731
         trail = [pos(max(0.0, a - q * 0.06)) + (10 + 7 * q,) for q in range(1, 6)]
         S.smoke(img, trail, (226, 228, 226), (250, 250, 248), line=(170, 176, 180), lw=2, fade=False)
@@ -1351,9 +1512,7 @@ def t3_fx(img, lt):
         IS.ell(img, sx, sy, 20, 11, (86, 94, 86), INK, 2.5)
         IS.ell(img, sx - 14, sy, 5, 9, (200, 60, 40), None)
     if lt >= 1.6:
-        g = ease((lt - 1.6) / 0.6)                          # chat 16 (hunt 2: gas tiny): swells in 0.6 s, 1.35x
-        bx, by = cam.p(S.MON_X - 0.4, 74, 2.0)
-        G3 = 1.35 * cam.ppm(80) / 24.0                      # round 2: the gas's size, from the monument's scale
+        g = ease((lt - 1.6) / 0.6)                          # chat 16 (hunt 2: gas tiny): swells in 0.6 s
         if lt < 1.75:                                       # the landing: a quick white burst ring
             S.glow_disc(img, bx, by, 110 * G3 / 1.6 * (lt - 1.55) / 0.2, (255, 255, 255), amt=.7)
         lumps = [(bx + G3 * dx * g, by - G3 * dy * g, G3 * (36 + r * g)) for dx, dy, r in
@@ -1367,11 +1526,11 @@ def t3_fx(img, lt):
         a *= 1.0 - 0.55 * ease((lt - VOLLEY2 + 0.5) / 0.5)   # chat 27 (notes hunt 1: the gas hid the second volley)
         lay.putalpha(lay.getchannel('A').point(lambda v: int(v * 0.88 * a)))
         img.alpha_composite(lay)
-    # the water cannon jet (2.5-4.0): a white tapering stream from the roof cannon, sweeping the front line
+    # the water cannon jet: a white tapering stream from the roof cannon, sweeping the front line
     if lt >= 2.55 + J3:
         nx, ny = nozzle(lt)
         sweep = ease((lt - 2.55 - J3) / 1.3)
-        ix, iy = cam.p(lerp(0.4, -2.2, sweep) - 1.0 * ease((lt - 5.5) / 1.0), 11.8, 1.3)   # round 2: from the gap
+        ix, iy = cam.p(lerp(-0.6, -3.0, sweep) - 1.0 * ease((lt - 5.5) / 1.0), 13.2, 1.3)   # round 3: up the lane
         if lt > CAR_HIT - 0.4:                              # round 1: the jet swings onto the rolling car (7.2)
             cx, cy = cam.p(*car_roof(lt), 1.5)
             r = ease((lt - CAR_HIT + 0.4) / 0.4)
@@ -2241,13 +2400,14 @@ def picture(t):
         front = reframe3(front) if front is not None else None
         cam = T3CAM
         t3_crowd(back, lt)
-        t3_columns(back, lt)                                # chat 15: smoke, then the truck, then its bikes, sharp
-        S.truck(back, cam, truck_x(lt), T3_TRUCK_D, lt, 'drive', 'fr', 12, float(int(lt * 6) % 2))
-        S._bikes(back, cam, 2.1, 14, lt)
+        t3_columns(back, lt)                                # chat 15: smoke, then the people beyond the truck
         t3_debris(back)
         rear = S.CAR3[2] + car_move(lt)[1] + 1.0           # round 1: the car is drawn among the people (it rolls)
         acts = sorted(t3_actors(lt), key=lambda a: -a.d)
-        for a in [a for a in acts if a.d > rear]:
+        for a in [a for a in acts if a.d > T3_TRUCK_D]:    # round 3 (F8): the far police group behind the truck,
+            draw_actor(back, cam, a)                        # which drives up the lane between the two groups
+        S.truck(back, cam, truck_x(lt), T3_TRUCK_D, lt, 'drive', 'fr', 12, float(int(lt * 6) % 2))
+        for a in [a for a in acts if rear < a.d <= T3_TRUCK_D]:
             draw_actor(back, cam, a)
         t3_fx(back, lt)
         draw_car3(back, lt)
@@ -2291,7 +2451,9 @@ def draw_order(t):
     tier, lt = scene_of(t)
     names = {'t1': lambda: ['painting', 'police'] + [a.name for a in t1_actors(lt)] + ['march', 'fx', 'haze'],
              't2': lambda: ['painting'] + [a.name for a in sorted(t2_actors(lt), key=lambda a: -a.d)] + ['fx', 'blue'],
-             't3': lambda: ['painting', 'truck', 'crowd'] + [a.name for a in sorted(t3_actors(lt), key=lambda a: -a.d)]
+             't3': lambda: ['painting', 'crowd'] + [a.name for a in sorted(t3_actors(lt), key=lambda a: -a.d)
+                                                    if a.d > T3_TRUCK_D] + ['truck'] +
+                           [a.name for a in sorted(t3_actors(lt), key=lambda a: -a.d) if a.d <= T3_TRUCK_D]
              + ['fx', 'car'],
              't4': lambda: ['painting', 'helicopter', 'ministry', 'crowd'] +
              [a.name for a in sorted(t4_actors(lt), key=lambda a: -a.d)] + ['mopeds', 'fx', 'haze']}
