@@ -740,7 +740,7 @@ def drift_smoke(lumps, t, speed=46.0, rise=22.0, span=520.0):
         a = ((t * speed + n * span / len(lumps)) % span) / span          # 0 -> 1 along its drift
         out.append((x + 160 - span * a + 14 * math.sin(t * 1.3 + n * 2.1),
                     y - rise * a * 4 + 10 * math.cos(t * 1.1 + n),
-                    r * (0.55 + 0.75 * min(1.0, a * 3)) * (1.0 - 0.35 * max(0.0, a - 0.7) / 0.3)))
+                    r * (0.25 + 1.05 * min(1.0, a * 3)) * (1.0 - 0.35 * max(0.0, a - 0.7) / 0.3)))
     return out
 
 
@@ -865,7 +865,7 @@ CAR3 = (-5.2, -3.4, 31.0, 34.2)                    # X0, X1, D0, D1 of the T3 ca
 #                                                    upper left, near Marianne, behind the protesters; was the near left)
 
 
-CAR3B = (7.0, 8.8, 22.0, 25.2)                     # round 4 (F17, Sam: 'replace the press hut with another burning
+CAR3B = (6.8, 8.7, 21.8, 26.0)                     # round 4 (F17, Sam: 'replace the press hut with another burning  # chat 7: 4.2 m (was 3.2: read small, boxy)
 CAR3B_COL = ((128, 36, 34), (92, 28, 28), (70, 50, 44))   # car'): a red hatchback on the police side, its own angle
 
 

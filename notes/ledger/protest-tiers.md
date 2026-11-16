@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 63.51% of a week; spent 84.58% (+21.07); 50 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 63.51% of a week; spent 86.19% (+22.68); 52 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 84.58% of the 60.31% planned so far; at this rate the film lands at 85%.**
+**Forecast: Spent 86.19% of the 60.31% planned so far; at this rate the film lands at 86.6%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -76,6 +76,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-16 | 48332425 | est | opus | auto |  | 0.97 |  | 0 | 0 |
 | 2026-11-16 | 0f8e6e9f | est | opus | auto |  | 1.61 |  | 0 | 0 |
 | 2026-11-16 | 74cff725 | est | opus | auto |  | 1.93 |  | 0 | 0 |
+| 2026-11-16 | e382af47 | est | opus | auto |  | 1.11 |  | 0 | 0 |
+| 2026-11-16 | a0692b21 | est | opus | auto |  | 0.5 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 0007a586 (auto): 71 steps, history 227k at the end; other 72.2%, film-file search 16.2%, tool search 5.5%, renders 2.9%, pictures 2.1%, page.py 1.1%
@@ -91,6 +93,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-16 48332425 (auto): 33 steps, history 209k at the end; other 68.1%, film-file search 23.4%, tool search 7.6%, pictures 0.8%
 - 2026-11-16 0f8e6e9f (auto): 53 steps, history 208k at the end; other 66.3%, film-file search 24.6%, tool search 7%, pictures 1.7%, renders 0.4%
 - 2026-11-16 74cff725 (auto): 66 steps, history 232k at the end; other 57.1%, film-file search 30.7%, tool search 6.7%, pictures 3.8%, renders 1.3%, whole-file .py read 0.4%
+- 2026-11-16 e382af47 (auto): 55 steps, history 162k at the end; other 68.5%, tool search 10.8%, film-file search 9.8%, pictures 8.5%, page.py 1.4%, renders 0.9%
+- 2026-11-16 a0692b21 (auto): 29 steps, history 118k at the end; other 74.4%, tool search 13.2%, film-file search 7.4%, renders 3.8%, page.py 1.1%
 
 ## After the film
 protest-tiers: 33.55% of a week, against the last 2 films' average 65.8% (remakes 51.54, blessed 80.02): 0.5x.
