@@ -30,6 +30,8 @@ MAP
   audit ............ after the film (rule 24, Sam 13 Nov; replaced the 10-line audit): one line, its real cost
                      against the last three films' (ledgers with an estimate); over 1.5x their average, the next chat
                      finds why before any film work
+  stepcost ......... (history-and-search Learn, 16 Nov) auto also writes each chat's steps, history at the end
+                     and cost by kind of step (source/stepcost.py) onto its row, kept when the app row replaces it
   kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
 
     python3 source/ledger.py estimate FILM 10 --stages "cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5"
@@ -44,6 +46,7 @@ MAP
 A chat is tagged by its transcript; logging the same chat again replaces its row, so nothing is counted twice.
 """
 import argparse, glob, json, os, re, sys
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from datetime import date
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -165,13 +168,24 @@ def auto(transcript):
     chat, cost, model = os.path.basename(transcript)[:8], round(pct, 2), costwatch.fam(st['model'])
     sid = this_sid()
     d = load(film)
-    if sid and any(c.get('sid') == sid and c.get('src') == 'app' for c in d['chats']):
-        return                                    # the real figure is in already; an estimate never replaces it
+    try:                                          # history-and-search Learn (Sam's 1, 16 Nov): steps, history at
+        import stepcost                           # the end, and cost by kind of step, on every chat's row
+        meas = stepcost.measure(transcript, film)
+    except Exception:
+        meas = None
+    real = next((c for c in d['chats'] if sid and c.get('sid') == sid and c.get('src') == 'app'), None)
+    if real:                                      # the real figure is in already; an estimate never replaces it,
+        if meas and meas['steps'] - real.get('steps', 0) >= 20:   # but its measure still grows
+            _put_measure(real, meas)
+            store(d)
+        return
     old = next((c for c in d['chats'] if c['chat'] == chat), None)
     if old and abs(old['cost'] - cost) < 0.25:
         return
     row = dict(old or {'date': str(date.today()), 'chat': chat, 'stage': 'auto', 'round': None, 'notes': 0,
                        'repeats': []}, model=model, cost=cost, src='estimate', sid=sid)
+    if meas:
+        _put_measure(row, meas)
     if old:
         d['chats'][d['chats'].index(old)] = row
     else:
@@ -202,6 +216,11 @@ def auto(transcript):
             git('merge', '--abort')                                          # a clash: leave it to the chat
 
 
+def _put_measure(row, m):
+    """stepcost's figures onto a ledger row: steps, history at the end (k tokens), each kind's share of the chat (%)."""
+    row.update(steps=m['steps'], hist_k=m['hist'] // 1000, kinds=m['kinds'], calls=m['calls'])
+
+
 def this_sid():
     """This chat's id in the app ('session_...'), from the cloud session's environment; None elsewhere."""
     r = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '')
@@ -229,6 +248,7 @@ def app_import(path=APP):
         d = load(film)
         first = min(r[2][:10] for r in rs)
         sids = {'session_' + r[1] for r in rs}
+        meas = {c['sid']: c for c in d['chats'] if c.get('sid') in sids and c.get('steps')}  # kept onto the app row
         d['chats'] = [c for c in d['chats'] if c.get('keep') or (c.get('sid') not in sids and
                       (c.get('src') == 'app' or c['date'] < first))]
         have = {c.get('sid'): c for c in d['chats']}
@@ -237,6 +257,8 @@ def app_import(path=APP):
             row = have.get(sid) or {'notes': 0, 'repeats': [], 'round': None}
             row.update(date=r[2][:10], chat=r[1][-8:], sid=sid, src='app', stage=r[3][:60],
                        model=r[9], cost=round(float(r[4]) / costwatch.WEEK_USD * 100, 2), usd=float(r[4]))
+            if sid in meas and not row.get('steps'):
+                row.update({k: meas[sid][k] for k in ('steps', 'hist_k', 'kinds', 'calls') if k in meas[sid]})
             if sid not in have:
                 d['chats'].append(row)
         d['chats'].sort(key=lambda c: c['date'])
@@ -410,6 +432,12 @@ def render(d):
     out += [f"| {c['date']} | {c['chat']} | {'app' if c.get('src') == 'app' else 'est'} | {c['model']} | "
             f"{c['stage']} | {c['round'] or ''} | {c['cost']} | {c.get('usd', '')} | {c['notes']} | "
             f"{len(c['repeats'])} |" for c in d['chats']]
+    meas = [c for c in d['chats'] if c.get('steps')]
+    if meas:                                      # history-and-search Learn (16 Nov): where each chat's cost went
+        out += ['', '## Cost by kind of step (share of each chat; measured from its transcript)']
+        out += [f"- {c['date']} {c['chat']} ({c['stage']}): {c['steps']} steps, history {c['hist_k']}k at the end; "
+                + ', '.join(f'{k} {v:g}%' for k, v in sorted(c['kinds'].items(), key=lambda kv: -kv[1]))
+                for c in meas]
     if reps:
         out += ['', '## Repeated notes (what would have caught them)']
         out += [f'- {r}' for r in reps]

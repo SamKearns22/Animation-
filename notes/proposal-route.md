@@ -1,21 +1,20 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent", "Back-end proposals are explained plainly"), 85, 30.
-- **Done (chat 6a, Sonnet, 16 Nov):** late-faults Learn step run, read-only: today's quick check replayed on the code of
-  c13, c15-17, c21-26. 42 of the 44 faults of gate 1 and all 107 of gate 2 were already listed when the building chat
-  ended (about 99%; bar 60%); clipcheck's COULD NOT TEST hid 56 teleports until c17. Numbers: `notes/proposals/learn/late-faults-replay.md`.
-  Blessed not replayed. Change 1 put to Sam as its own yes (Q1 below).
-- **Next:** on Sam's Q1 answer 1: Opus medium builds change 1 (one film name for every tool; `handover.py end` runs the
-  quick check when the film's code changed; fix or write each fault in Exceptions; record counts in the ledger),
-  tested on the c26 code (must list 107). Chat 6b, Opus medium, history-and-search Learn (named in the earlier
-  handover): not opened by this chat; open it if no chat has.
-- **Needs Sam:** Q1: change 1 of late-faults, 1 (yes) or 2 (no, other option). Asked 16 Nov.
-- **Read:** this section; `notes/proposals/late-faults.md` Final version; `notes/proposals/learn/late-faults-replay.md`; "A tool job".
+- **Rules that bite next:** the proposal route (CLAUDE.md "Rules are permanent"), 85 (cost watch), 30 (find why first).
+- **Done (chat 7, Sonnet medium):** the backfill, in `notes/proposals/learn/search-cost.md` (read-only, nothing built). Gate 2
+  FAILS: the code finder `show` held the lines a fix needed in 50% (strict) to 69% (loose) of 26 Blessed notes; gate is 80%.
+  Gate 1 (searching >= 10% of a round chat) is estimated ~15% (range 7-30%), not proven: the history can be read only a page
+  at a time, so no chat was costed step by step. Protest Tiers 9-32 cannot be opened. Replay script: `learn/replay-show.py`.
+- **Done (chat 6a, Sonnet, 16 Nov):** late-faults Learn replay (`learn/late-faults-replay.md`): today's quick check on the code of
+  c13, c15-17, c21-26: 42 of gate 1's 44 and all 107 of gate 2's faults were already listed when the building chat ended
+  (~99%; bar 60%); clipcheck COULD NOT TEST hid 56 teleports until c17. Blessed not replayed. Change 1 put to Sam (Q1).
+- **Next:** the guard stops. Fixing `show` comes first, as its own proposal through the proposal route (Opus, medium, one
+  chat): rank values in tables and shot names, show the lines in a function that hold a note's words; replay again, aim >= 80%.
+- **Needs Sam:** Q1: late-faults change 1, 1 (yes) or 2 (no); on 1, Opus medium builds it and tests that c26's code lists 107. The `show` fix goes to Sam as a plain-English proposal first.
+- **Read:** `learn/search-cost.md` (e) and "The two gate numbers"; `source/page.py` MAP; `guides/job-packs.md` "A tool job".
 - **Open rule requests:** none.
-- **For Claude:** replay method: copy of the repo at HEAD, overlay `source/protest_tiers*.py` from each branch
-  claude/protest-tiers-cNN, run `preflight.py protest_tiers OUT --text`. kittests takes over 280 s and today fails
-  `people_from_a_description` (policy line about protest_tiers_cast.py). F4 of history-and-search still unchecked.
+- **For Claude:** replay's loose/strict token lists are in `learn/replay-show.py` (T). Old handovers: `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

@@ -1,0 +1,306 @@
+#!/usr/bin/env python3
+"""stepcost: what each kind of step cost a chat (history-and-search Learn, Sam's 1 on 16 Nov; chat 6b).
+
+MAP
+  KINDS ........ film-file search, tool search, whole-file .py read, page.py, renders, pictures, other (+ helpers,
+                 the chat's critique and other agents, kept apart so they are not hidden in "other")
+  kind_of() .... one tool call -> its kind. A search is Grep/Glob, a Read with offset/limit, or a shell grep/rg/
+                 find/awk/sed -n/head/tail; it is a film-file search when it names the film's own files
+                 (source/FILM*.py, story/FILM*), a tool search otherwise. page.py first, so `page.py show` is never
+                 counted as a search
+  measure() .... a transcript -> steps (API calls of the main chat), history at the end (tokens), and each kind's
+                 share of the chat's cost (%). F4 checked 16 Nov: every assistant line carries its own usage, so
+                 cost is read, not guessed. Each tool call is charged what it added (its result, written to the
+                 cache once at the write price) plus re-reading it at every later step until a compaction, plus
+                 the output that asked for it. What no call explains (the start-up reading, Claude's own words,
+                 reminders) is "other"
+  test ......... `python3 source/stepcost.py test`: on tests/stepcost-transcript.jsonl (a real chat's transcript,
+                 trimmed to usage and tool calls) and on this chat's own transcript when there is one
+
+    python3 source/stepcost.py TRANSCRIPT.jsonl [--film FILM]     (prints the measure)
+    python3 source/stepcost.py test
+
+Called by ledger.py auto (the Stop hook) on every chat; the figures go into the chat's ledger row.
+"""
+import glob, json, os, re, shlex, sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
+import costwatch  # noqa: E402
+
+KINDS = ['film-file search', 'tool search', 'whole-file .py read', 'page.py', 'renders', 'pictures', 'other',
+         'helpers']
+SEARCH_CMDS = {'grep', 'egrep', 'rg', 'ack', 'find', 'awk', 'head', 'tail', 'ls'}
+IMG = re.compile(r'\.(png|jpe?g|gif|webp)$', re.I)
+RENDER = re.compile(r'\b(final|animatic|render|clip|sheet|finish\.py|ffmpeg|blender)\b')
+COMPACT = 0.6            # a step whose history is under 60% of the one before follows a compaction
+
+
+def _film_paths(film):
+    code = (film or '').replace('-', '_')
+    if not code:
+        return re.compile(r'(?!x)x')
+    return re.compile(r'(?:source/%s[A-Za-z0-9_]*\.py|story/(?:%s|%s)[^\s\'"]*)' % (
+        re.escape(code), re.escape(code), re.escape(code.replace('_', '-'))))
+
+
+def _segments(cmd):
+    """The commands in a shell line (split on && ; || | and newlines), each as its words."""
+    out = []
+    for part in re.split(r'&&|\|\||[;|\n]', cmd):
+        try:
+            w = shlex.split(part, comments=True)
+        except ValueError:
+            w = part.split()
+        while w and ('=' in w[0] and not w[0].startswith('-')):
+            w = w[1:]                              # VAR=x cmd
+        if w:
+            out.append(w)
+    return out
+
+
+def kind_of(name, inp, film_re):
+    """One tool call -> its kind."""
+    inp = inp or {}
+    if name == 'Bash':
+        cmd = inp.get('command', '')
+        if 'page.py' in cmd:
+            return 'page.py'
+        segs = _segments(cmd)
+        heads = [w[0].split('/')[-1] for w in segs]
+        search = any(h in SEARCH_CMDS or (h == 'sed' and '-n' in w) for h, w in zip(heads, segs))
+        if search and not any(h in ('python3', 'python') for h in heads):
+            return 'film-file search' if film_re.search(cmd) else 'tool search'
+        if RENDER.search(cmd) and (re.search(r'source/\S+\.py', cmd) or 'ffmpeg' in cmd or 'blender' in cmd):
+            return 'renders'
+        if any(h == 'cat' and any(a.endswith('.py') for a in w) for h, w in zip(heads, segs)) and not search:
+            return 'whole-file .py read'
+        if search:
+            return 'film-file search' if film_re.search(cmd) else 'tool search'
+        return 'other'
+    if name in ('Grep', 'Glob'):
+        where = ' '.join(str(inp.get(k, '')) for k in ('path', 'glob', 'pattern'))
+        return 'film-file search' if film_re.search(where) else 'tool search'
+    if name == 'Read':
+        p = inp.get('file_path', '')
+        if IMG.search(p):
+            return 'pictures'
+        if p.endswith('.py'):
+            if inp.get('offset') or inp.get('limit'):
+                return 'film-file search' if film_re.search(p) else 'tool search'
+            return 'whole-file .py read'
+        return 'other'
+    return 'other'
+
+
+def _result_tokens(block):
+    """Rough tokens a tool result adds: text at 4 characters a token, a picture ~1,600."""
+    c = block.get('content')
+    if isinstance(c, str):
+        return len(c) / 4
+    n = 0
+    for x in c or []:
+        if isinstance(x, dict) and x.get('type') == 'image':
+            n += 1600
+        elif isinstance(x, dict):
+            n += len(x.get('text', '') or json.dumps(x)) / 4
+    return n
+
+
+def _has_image(block):
+    c = block.get('content')
+    return isinstance(c, list) and any(isinstance(x, dict) and x.get('type') == 'image' for x in c)
+
+
+def measure(path, film=None, helpers=True):
+    """steps, history at the end (tokens), total $ (main chat + helpers) and each kind's share (% of that total)."""
+    film_re = _film_paths(film)
+    steps, calls, results = [], {}, {}      # steps: [usage, model, [tool_use ids]]; results: id -> (step, tokens)
+    byid = {}
+    for raw in open(path, encoding='utf-8', errors='replace'):
+        try:
+            d = json.loads(raw)
+        except Exception:
+            continue
+        if d.get('isSidechain'):
+            continue
+        m = d.get('message')
+        if not isinstance(m, dict):
+            continue
+        if d.get('type') == 'assistant' and m.get('usage'):
+            mid = m.get('id')
+            if mid not in byid:
+                byid[mid] = len(steps)
+                steps.append([m['usage'], m.get('model'), []])
+            k = byid[mid]
+            for b in m.get('content') or []:
+                if isinstance(b, dict) and b.get('type') == 'tool_use':
+                    calls[b['id']] = (k, kind_of(b.get('name'), b.get('input'), film_re))
+                    steps[k][2].append(b['id'])
+        elif d.get('type') == 'user' and isinstance(m.get('content'), list):
+            for b in m['content']:
+                if isinstance(b, dict) and b.get('type') == 'tool_result':
+                    results[b.get('tool_use_id')] = (len(steps), _result_tokens(b), _has_image(b))
+    if not steps:
+        return None
+    ctx = [u.get('cache_read_input_tokens', 0) + u.get('cache_creation_input_tokens', 0) + u.get('input_tokens', 0)
+           for u, _, _ in steps]
+    seg, s = [], 0
+    for i, c in enumerate(ctx):
+        if i and c < COMPACT * ctx[i - 1]:
+            s += 1
+        seg.append(s)
+    price = [costwatch.PRICE[costwatch.fam(mo)] for _, mo, _ in steps]
+    cost = [(u.get('cache_read_input_tokens', 0) * p[0] + u.get('cache_creation_input_tokens', 0) * p[1]
+             + u.get('input_tokens', 0) * p[2] + u.get('output_tokens', 0) * p[3]) / 1e6
+            for (u, _, _), p in zip(steps, price)]
+    main = sum(cost)
+    by = dict.fromkeys(KINDS, 0.0)
+    arrive = {}                                      # step a result is first read at -> [(id, tokens)]
+    for tid, (k, tok, _) in results.items():
+        if tid in calls and k < len(steps):
+            arrive.setdefault(k, []).append((tid, tok))
+    for k, rs in arrive.items():
+        u = steps[k][0]
+        avail = max(0.0, u.get('cache_creation_input_tokens', 0) + u.get('input_tokens', 0)
+                    - (steps[k - 1][0].get('output_tokens', 0) if k else 0))
+        est = sum(t for _, t in rs) or 1.0
+        scale = min(1.0, avail / est)
+        later = sum(1 for j in range(k + 1, len(steps)) if seg[j] == seg[k])
+        r, w = price[k][0], price[k][1]
+        for tid, tok in rs:
+            add = tok * scale
+            kind = calls[tid][1]
+            if results[tid][2] and kind == 'other':
+                kind = 'pictures'
+            by[kind] += add * (w + r * later) / 1e6
+    for k, (u, _, ids) in enumerate(steps):          # the output that asked for each call, shared between them
+        if ids:
+            share = u.get('output_tokens', 0) * price[k][3] / 1e6 / len(ids)
+            for tid in ids:
+                by[calls[tid][1]] += share
+    named = sum(by.values())
+    if named > main:                                 # estimates never claim more than the chat spent
+        for kk in by:
+            by[kk] *= main / named
+        named = main
+    by['other'] += main - named
+    if helpers:
+        for h in costwatch.helper_files(path):
+            hm = measure(h, film, helpers=False)
+            if hm:
+                by['helpers'] += hm['usd']
+    total = sum(by.values())
+    return {'steps': len(steps), 'hist': ctx[-1], 'usd': round(total, 4),
+            'kinds': {k: round(100 * v / total, 1) for k, v in by.items() if total and round(100 * v / total, 1)},
+            'calls': {k: sum(1 for _, kk in calls.values() if kk == k) for k in KINDS if k != 'helpers'}}
+
+
+def line(m):
+    """One line for the ledger page."""
+    if not m:
+        return ''
+    ks = ', '.join(f'{k} {v:g}%' for k, v in sorted(m['kinds'].items(), key=lambda kv: -kv[1]))
+    return f"{m['steps']} steps, history {m['hist'] // 1000}k at the end; {ks}"
+
+
+def test():
+    """Checks on a real transcript (trimmed) and on this chat's own, when there is one."""
+    ok = True
+
+    def check(name, cond):
+        nonlocal ok
+        ok &= bool(cond)
+        print(('PASS ' if cond else 'FAIL ') + name)
+    fr = _film_paths('blessed')
+    check('page.py show is page.py, not a search',
+          kind_of('Bash', {'command': 'python3 source/page.py blessed show "arm clips the mic"'}, fr) == 'page.py')
+    check('grep on the film file is a film-file search',
+          kind_of('Bash', {'command': 'grep -n "def arm" source/blessed_cast.py | head'}, fr) == 'film-file search')
+    check('sed -n on a shared tool is a tool search',
+          kind_of('Bash', {'command': 'cd x && sed -n 10,60p source/ledger.py'}, fr) == 'tool search')
+    check('Read of a .py with no range is a whole-file read',
+          kind_of('Read', {'file_path': '/r/source/moves.py'}, fr) == 'whole-file .py read')
+    check('Read of a film .py with a range is a film-file search',
+          kind_of('Read', {'file_path': '/r/source/blessed.py', 'offset': 40, 'limit': 40}, fr) == 'film-file search')
+    check('a render is a render',
+          kind_of('Bash', {'command': 'python3 source/blessed.py final /tmp/a.mp4 --small --span 3 6'}, fr) == 'renders')
+    check('Read of a .png is a picture', kind_of('Read', {'file_path': '/tmp/sheet.png'}, fr) == 'pictures')
+    check('cat of a whole .py is a whole-file read',
+          kind_of('Bash', {'command': 'cat source/blessed.py'}, fr) == 'whole-file .py read')
+    fx = os.path.join(ROOT, 'tests', 'stepcost-transcript.jsonl')
+    m = measure(fx, 'proposal-route')
+    print('  real transcript (trimmed):', line(m))
+    check('steps counted once per reply (one reply is several lines)', m and m['steps'] == FIXTURE_STEPS)
+    check('history at the end is the last step\'s', m and m['hist'] == FIXTURE_HIST)
+    check('the kinds add to 100%', m and abs(sum(m['kinds'].values()) - 100) < 1)
+    check('the total matches the cost watch', m and abs(m['usd'] - _watch_usd(fx)) < 0.01)
+    check('this fixture\'s searches are tool searches (no film files in a tool job)',
+          m and m['kinds'].get('tool search', 0) > 0 and 'film-file search' not in m['kinds'])
+    own = sorted(glob.glob(os.path.expanduser('~/.claude/projects/**/*.jsonl'), recursive=True),
+                 key=os.path.getmtime)
+    if own:
+        mo = measure(own[-1], 'proposal-route')
+        print('  this chat:', line(mo))
+        check('this chat measures', mo and mo['steps'] > 0 and abs(sum(mo['kinds'].values()) - 100) < 1)
+    import tempfile                                  # the ledger keeps the measure, and keeps it when the app's
+    import ledger                                    # real figure replaces the estimate row
+    tmp = tempfile.mkdtemp()
+    ledger.DIR, ledger.CURRENT = tmp, os.path.join(tmp, '.current')
+    d = ledger.load('testfilm')
+    row = {'date': '2026-11-16', 'chat': 'abcd1234', 'stage': 'auto', 'round': None, 'notes': 0, 'repeats': [],
+           'model': 'opus', 'cost': 1.0, 'src': 'estimate', 'sid': 'session_XYZ'}
+    ledger._put_measure(row, m)
+    d['chats'].append(row)
+    ledger.store(d)
+    check('the ledger page shows the chat\'s cost by kind',
+          'Cost by kind of step' in open(os.path.join(tmp, 'testfilm.md')).read())
+    tsv = os.path.join(tmp, 'app.tsv')
+    open(tsv, 'w').write('\t'.join(['testfilm', 'XYZ', '2026-11-16T09:00', 'chat title', '2.45'] + [''] * 4
+                                    + ['opus']) + '\n')
+    ledger.app_import(tsv)
+    rows = ledger.load('testfilm')['chats']
+    check('the app row replaces the estimate and keeps its measure',
+          len(rows) == 1 and rows[0]['src'] == 'app' and rows[0].get('steps') == m['steps'])
+    print('ALL PASS' if ok else 'SOME FAILED')
+    return ok
+
+
+FIXTURE_STEPS, FIXTURE_HIST = None, None   # set from the fixture's own record (tests/stepcost-transcript.json)
+
+
+def _watch_usd(path):
+    tot, seen = 0.0, set()
+    for raw in open(path):
+        d = json.loads(raw)
+        m = d.get('message')
+        if d.get('type') != 'assistant' or not isinstance(m, dict) or not m.get('usage') or m.get('id') in seen:
+            continue
+        seen.add(m['id'])
+        u, p = m['usage'], costwatch.PRICE[costwatch.fam(m.get('model'))]
+        tot += (u.get('cache_read_input_tokens', 0) * p[0] + u.get('cache_creation_input_tokens', 0) * p[1]
+                + u.get('input_tokens', 0) * p[2] + u.get('output_tokens', 0) * p[3]) / 1e6
+    return tot
+
+
+def _load_fixture_facts():
+    global FIXTURE_STEPS, FIXTURE_HIST
+    try:
+        f = json.load(open(os.path.join(ROOT, 'tests', 'stepcost-transcript.json')))
+        FIXTURE_STEPS, FIXTURE_HIST = f['steps'], f['hist']
+    except Exception:
+        pass
+
+
+if __name__ == '__main__':
+    a = sys.argv[1:]
+    if a and a[0] == 'test':
+        _load_fixture_facts()
+        sys.exit(0 if test() else 1)
+    if not a:
+        print(__doc__)
+        sys.exit(1)
+    film = a[a.index('--film') + 1] if '--film' in a else None
+    m = measure(a[0], film)
+    print(line(m))
+    print(json.dumps(m, indent=1))
