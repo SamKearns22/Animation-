@@ -2790,6 +2790,43 @@ def branch_printout_lists_only_real_work():
     return ok, f'listed {names}; after 9 days {old}; named -> {left}; unnamed -> {left2}'
 
 
+@test
+def notes_printout_reads_only_open_notes():
+    """startup-fixes 3 (Sam, 16 Nov): chats read the whole notes file at start (~3.6k tokens); `handover.py start
+    --film` now prints "Where things stand" and only the unticked notes, while carried() still checks the whole file."""
+    import tempfile
+    import handover
+    p = os.path.join(tempfile.mkdtemp(), 'kt.md')
+    open(p, 'w').write("""# Notes for kt
+## Where things stand (the ONE handover)
+- **Next:** the bin lid note.
+## Round notes
+- [ ] R1 the whale knocks the helideck away
+- [x] R2 the moped is red
+## The brief as a checklist
+| # | from the brief | done? |
+|---|---|---|
+| 1 | the granny throws a shoe | |
+| 2 | the hook text frame | ticked chat 3 |
+## Plan
+| thing | est | measured from |
+|---|---|---|
+| tourist | 1.2 | |
+## Notes
+| # | shot | time | note | line | status |
+|---|---|---|---|---|---|
+| 1 | A | 3.0 | the bin lid flaps | C4 | fixed (chat 4) |
+| 2 | B | 5.1 | his face still needs work | C9 | open |
+| 3 | C | 7.0 | the cart wheels skid | C2 | |
+""")
+    t = handover.open_notes(p)
+    want = ['the bin lid note', 'R1 the whale', 'granny throws', 'face still needs', 'cart wheels skid']
+    gone = ['R2 the moped', 'hook text frame', 'tourist', 'bin lid flaps']
+    miss = [w for w in want if w not in t] + [f'shown: {w}' for w in gone if w in t]
+    held = handover.carried('the moped is red', handover.note_lines(p))   # carried() still sees ticked lines
+    return not miss and held, f'missing/extra {miss}; carried() on a ticked line: {held}'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

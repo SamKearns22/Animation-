@@ -17,6 +17,8 @@ MAP
                      file sent, (4) an 'override' Sam never typed (chat 5 read "don't stop for any Y" as one)
   start ............ first thing in the next chat: `start PARENT_SESSION` reads the saved log from (1) and runs (2)
                      against the notes as they stand; a chat with no log falls back to `dump`
+  open_notes() ..... in start (startup-fixes 3, 16 Nov): prints "Where things stand" and the unticked notes, which
+                     the chat reads in place of the notes file
   branches ......... in end (startup-fixes 2, 16 Nov): every branch source/branches.py lists (work never on the main
                      line, last 7 days) must be merged or named in the notes
   model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
@@ -205,6 +207,47 @@ def note_lines(notes_path):
     if cur:
         out.append(cur)
     return out
+
+
+DONE = re.compile(r'(?i)^\s*(fixed|done|ticked|built|answered|dropped|merged|kept off|n/?a|yes|y)\b|\[x\]|✓')
+
+
+def open_notes(notes_path):
+    """startup-fixes 3 (Sam, 16 Nov): what a chat reads of the notes at start, in place of the whole file (~3.6k
+    tokens a chat): the "Where things stand" section word for word, then every unticked note: a '- [ ]' line, or a
+    table row (under a 'done?' or 'status' column) whose last cell is blank or not done. carried() still checks the
+    whole file."""
+    out, cur, sec, stand, head, col = [], None, '', [], None, False
+    lines = open(notes_path, encoding='utf-8').read().split('\n')
+    for ln in lines:
+        if ln.startswith('#'):
+            sec, head, col = ln.lstrip('#').strip(), None, False
+            cur = 'stand' if re.match(r'(?i)where things stand', sec) else None
+            if cur:
+                stand.append(ln)
+            continue
+        if cur == 'stand':
+            stand.append(ln)
+            continue
+        row = None
+        if re.match(r'\s*[-*] \[ \]', ln):
+            row = ln.strip()
+        elif ln.startswith('|'):
+            cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+            if head is None:
+                head, col = cells, bool(re.match(r'(?i)(done\??|status)$', cells[-1]))
+            elif col and not set(''.join(cells)) <= set('-: ') and any(cells[:-1]) and not DONE.search(cells[-1]):
+                row = '| ' + ' | '.join(cells) + ' |'
+        elif not ln.strip():
+            head, col = None, False
+        if row:
+            if not out or out[-1][0] != sec:
+                out.append((sec, []))
+            out[-1][1].append(row)
+    text = '\n'.join(stand).rstrip()
+    for s, rows in out:
+        text += f'\n\n## Unticked: {s[:80]}\n' + '\n'.join(rows)
+    return text + ('' if out else '\n\n## Unticked: none')
 
 
 # ------------------------------------------------------------------------------------------------ the checks
@@ -517,6 +560,10 @@ def main(argv):
         p = os.path.join(LOGDIR, f'{tail}.md')
         for f in model_faults(opt('--film'), opt('--notes')):    # a mixed job is split before any work starts
             print(f)
+        nf = opt('--notes') or (opt('--film') and os.path.join(ROOT, 'notes', f"{opt('--film')}.md"))
+        if nf and os.path.exists(nf):                            # startup-fixes 3: read this, not the whole file
+            print(f'handover: the notes to read ({os.path.relpath(nf, ROOT)}; nothing else of it unless a note names it):')
+            print(open_notes(nf))
         if opt('--film'):                                        # Sam's Y, 15 Nov: chats 29/31 grepped instead
             print(f'handover: for each note, look at the code with ONE step: python3 source/page.py {opt("--film")} '
                   'show "the note\'s words" --shot SHOT --at SECONDS --who WHO (shot, time and who from the notes table; ~40 lines, '

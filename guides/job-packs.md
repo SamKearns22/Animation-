@@ -29,7 +29,7 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - At the end: each new thing that passed the critique gets a row in the catalogue's "Passed the critique".
 
 ## Notes round (Opus, medium): Sam's notes, fixes, clips
-- Read: the film's notes (open notes and Where things stand only); then, for each note, ONE look at the code:
+- Read: the notes printout `handover.py start --film` gives (Where things stand and the unticked notes; startup-fixes 3), not the file; then, for each note, ONE look at the code:
   `python3 source/page.py FILM show "note words"` (~40 numbered lines of the functions it touches). No greps or sed
   ranges on film files first; only if `show` misses, `page.py FILM find` or a second `show` in the thing's own words.
 - Bite: 30, 87, 89 (with 56, 76, 79 in it), 88. Tools: `critique.py where/before`, `final OUT --small --span T0 T1`.
