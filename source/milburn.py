@@ -463,6 +463,128 @@ def field_level_shot(t):
     return img.convert('RGB')
 
 
+# ================================================================================================= scene 6: the forest
+import milburn_forest as MF          # noqa: E402
+import moves as MO                   # noqa: E402
+FOREST6 = [('goth', 0.5, 3.8), ('swindon', -0.25, 4.3), ('rangy', -1.0, 4.8), ('waif', -1.75, 5.3)]   # single
+# file walking right, leader first; staggered back in depth so all four read in the tall frame (0.75 m apart, not
+# the plan's 1.4: the plan's spacing puts the last one off the left edge)
+CLOSE6 = {'rangy': 0.12, 'waif': 0.25}   # m: the back two close up on "unit"
+HALT = 0.25                              # s: they stop dead on the gunfire (the camera takes MF.STOP)
+
+
+def _ramp(t, a, b):
+    return MS.ease(min(1.0, max(0.0, (t - a) / (b - a))))
+
+
+def walked(who, t):
+    """How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
+    the gunfire, plus the back two closing up on "unit"."""
+    v = MF.V_EFF
+    if t <= MF.T_GUN:
+        d = v * (t - MF.T0)
+    else:
+        u = min(1.0, (t - MF.T_GUN) / HALT)
+        d = v * (MF.T_GUN - MF.T0) + v * HALT * (u - u * u / 2)
+    a = word_at(8, 'unit')
+    return d + CLOSE6.get(who, 0.0) * _ramp(t, a - 0.3, a + 0.4)
+
+
+def _crouch(j, amt, lean):
+    """Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward."""
+    j['bob'] = j.get('bob', 0.0) + amt
+    for side in 'LR':
+        if 'foot' + side in j:
+            fx, fy, fz = j['foot' + side]
+            j['foot' + side] = (fx, fy - amt, fz)
+    j['lean'] = j.get('lean', 0.0) + lean
+
+
+def forest_pose(who, t):
+    """(face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
+    gunfire, everyone ducking the flame, then each one's own answer; `firing`: Swindon's guns going off."""
+    sp = CAST[who]
+    k = MP.units_per_m(sp)
+    tau = walked(who, t) / MF.V_EFF
+    j = MO.gait(sp, tau, 'walk', stride=0.45 * k)
+    stop = _ramp(t, MF.T_GUN, MF.T_GUN + HALT)
+    if stop > 0:
+        j = MO.mix_poses(j, V.standing(sp), stop)
+    sw = sp.get('shoulders', 150) / 2.0
+    unit = word_at(8, 'unit')
+    jolt = max(0.0, 1 - abs(t - (MF.T_GUN + 0.08)) / 0.12)
+    duck = _ramp(t, MF.T_FLAME - 0.05, MF.T_FLAME + 0.2) * (1 - 0.4 * _ramp(t, MF.T_FLAME + 1.0, MF.T_FLAME + 1.6))
+    after = _ramp(t, MF.T_FLAME + 0.3, MF.T_FLAME + 0.7)        # each one's own answer to the ambush
+    shock = MF.T_GUN < t < MF.T_FLAME + 0.4
+    firing = []
+    if who == 'goth':                                   # crossbow shouldered, pleased; then swings it up to aim
+        V.arm_to(j, 'R', _mix((sw * 0.35, 50, 150), (sw * 0.3, -10, 170), after), 'down', 'fist')
+        V.arm_to(j, 'L', _mix((-sw * 0.1, 70, 430), (-sw * 0.05, -150, 430), after), 'down', 'fist')
+        MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
+        mood = 'aghast' if shock else ('grim' if t > MF.T_GUN else 'pleased')
+    elif who == 'rangy':                                # the katana out in front like a torch; then flat over his head
+        V.arm_to(j, 'R', _mix((60, 150, 210), (110, -250, 60), after), 'down', 'fist')
+        V.arm_to(j, 'L', _mix((40, -30, 300), (-130, -255, 60), after), 'down', 'palm')
+        MP.in_hands(j, sp, 'katana', 'R', 'L', along=0.0)
+        mood = 'aghast' if t > MF.T_GUN else 'nervous'
+    elif who == 'swindon':                              # uzis up at his chest swinging side to side; forward on "unit";
+        sway = math.sin((t - MF.T0) * 3.0)              # sprays back wildly once the flame has passed
+        fwd = _ramp(t, unit - 0.25, unit + 0.1) * (1 - _ramp(t, unit + 0.5, unit + 0.9))
+        kick = [0.0, 0.0]
+        spray = MF.T_FLAME + 0.45 < t < 40.6
+        if spray:
+            for i, tt in enumerate(np.arange(MF.T_FLAME + 0.45, 40.6, 0.14)):
+                kick[i % 2] = max(kick[i % 2], max(0.0, 1 - abs(t - tt) / 0.07))
+            sway = math.sin(t * 7.0)
+        for side, sg, kk in (('R', 1, kick[0]), ('L', -1, kick[1])):
+            V.arm_to(j, side, (sg * sw * 0.55, 130 - 40 * sway * sg - 30 * kk - 40 * fwd,
+                               330 + 120 * fwd - 50 * kk), 'down', 'fist')
+            ang = -12 * sway * sg - 25 * kk - 10 * fwd - (38 if spray else 0)
+            MP.in_hands(j, sp, 'uzi', side, None, ang=ang, along=-0.02)
+            if kk > 0.5:
+                firing.append((side, ang))
+        mood = 'aghast' if shock else 'thrilled'
+    else:                                               # hugs the grenade, terrified, eyes darting; then curls up
+        for side, sg in (('R', 1), ('L', -1)):
+            V.arm_to(j, side, (sg * 55, 200, 150), 'down', 'palm')
+        MP.in_hands(j, sp, 'grenade', 'R', None, ang=-90, along=-0.0)
+        mood = 'eyes shut' if t > MF.T_FLAME + 0.3 else 'terrified'
+    _crouch(j, -40 * jolt, 0.0)
+    deep = {'waif': 1.3, 'rangy': 0.8}.get(who, 1.0)
+    _crouch(j, 190 * duck * deep + (50 * after if who == 'waif' else 0), 18 * duck * deep)
+    d = face_sp('6', who, t, mood)
+    if who == 'rangy' and t < MF.T_GUN:
+        d['gaze_dy'] = 0.5 * (math.sin(t * 2.3) > 0)        # glancing down at the blade
+    if who == 'waif':
+        if t < MF.T_GUN:
+            d['look'] = 0.5 * math.sin(t * 5.0)             # eyes darting
+        j['shake_x'] = 4.0 * math.sin(t * 2 * math.pi * 9)
+    return d, j, firing
+
+
+def forest_shot(t):
+    img = MF.behind(t)
+    MF.gunfire(img, t)
+    cx = MF.cam_x(t)
+    for who, x0, dd in sorted(FOREST6, key=lambda q: -q[2]):
+        look, j, firing = forest_pose(who, t)
+        pxm = MF.CAM.ppm(dd)
+        s = scale_at(pxm, CAST[who])
+        X, Y = MF.CAM.p(x0 + walked(who, t) - cx, dd, 0.0)
+        X += j.pop('shake_x', 0.0) * s
+        pts = person(img, who, X, Y, pxm, YAW3, t, j, look)
+        for side, ang in firing:                        # Swindon's muzzles: the hand plus the gun's length
+            hx, hy = pts['wr' + side]
+            a = math.radians(ang)
+            gx = X + hx * s + math.cos(a) * 0.4 * pxm
+            gy = Y - FEET * s + (hy + j.get('bob', 0.0)) * s + math.sin(a) * 0.4 * pxm - 0.05 * pxm
+            MF.muzzle(img, gx, gy, pxm, int(t * 97) + (side == 'L'), 0.16)
+    MF.flame(img, t)
+    MF.stars(img, t)
+    img.alpha_composite(MF.in_front(t))
+    return img.convert('RGB')
+
+
 # ================================================================================================= picture
 def picture(t):
     n = shot_of(t)
