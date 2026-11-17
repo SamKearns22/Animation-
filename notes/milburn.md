@@ -23,13 +23,22 @@
 | 2a | lift shaft | level, head height, medium (to bottom of torso, room above heads) | 4 NEETs on the rising platform, 4 depths | 2 (Milburn heard over) | ~4 s; light sweeps down, all look up |
 | 2b | field | high, looking down ~45 deg (my pick: keeps the peaks in the tall frame) | platform rising out of the ground at the centre | 2 ends | ~4 s; grass waving, forest ring, alpine peaks; tiny figures (F8) |
 | 3 | field, ~150 m further in (forest ring ~150 m behind) | level, standing head height 1.6 m, mid shot (the nearest to the waist) | 4 NEETs by grey waist-high plinths at 3.0, 4.2, 5.4, 7.0 m, staggered across; 2 more plinths behind still holding weapons (Q3) | 3 (Milburn heard; Swindon's pow-pows under, Q4) | 11.0-15.3; cut on Milburn's dash |
-| 5 | Cabinet Room, the reverse (places view `reverse`, built chat 5) | from Milburn's seat, level 1.2 m, lens 1500 | Andy in the PM's chair (left of centre), Pat on his left (screen right); fireplace and old portrait behind Andy | 4 | 15.3-20.6 |
-| 6 | Cabinet Room (shot 1's camera) | as shot 1 | Milburn | 5 | 20.6-27.6 |
-| 7 | the reverse | as 5 | Pat speaks, eyes on Andy; then Andy arms up, folds them, leans back | 6, 7 | 27.6-34.0 |
+| 4a | Cabinet Room, the reverse (places view `reverse`, built chat 5) | from Milburn's seat, level 1.2 m, lens 1500 | Andy in the PM's chair (left of centre), Pat on his left (screen right); the fireplace behind Andy, no portrait (Sam Q7) | 4 | 15.3-20.6 |
+| 4b | Cabinet Room (shot 1's camera) | as shot 1 | Milburn | 5 | 20.6-27.6 |
+| 4c | the reverse | as 4a | Pat speaks, eyes on Andy; then Andy arms up, folds them, leans back | 6, 7 | 27.6-34.0 |
+| 6 | the forest (NEW place, chat 6 plan) | level 1.4 m, side on, TRAVELLING right with them at walking pace (foreground ferns and trunks race past, far trunks crawl: 4 depth layers); the camera eases to a stop on the gunfire | the four in single file walking right, turned three-quarter to us (yaw 35: faces read, weapons read): goth, Swindon, rangy, waif last; the attackers never seen, only their weapons from the greenery ahead (screen right) | 8, 9 | 34.0-41.6; cut on Milburn's dash |
+| 7a | the reverse | as 4a | Andy explodes: up out of the lean, both fists on the table, then the point | 10 | 41.6-45.9 |
+| 7b | shot 1's camera | as 4b | Milburn | 11 | 45.9-49.2 |
+| 7c | the reverse | as 4a | Andy, despairing and angry | 12 | 49.2-54.4 |
+| 7d | shot 1's camera | as 4b | Milburn: eyes to the side and back, then line 13 | 13 | 54.4-63.4 |
+| 7e | the reverse | as 4a | Andy frozen, mouth open in outrage; Pat, eyes on Andy, line 14 | 14 | 63.4-68.4 (the end for now) |
 
-Timing (stand-in, about 3.2 words a second): line 3 11.4-15.1; line 3b (Swindon's pow-pows) 12.6-14.6; line 4 (Andy)
-15.4-20.1; line 5 (Milburn) 21.0-27.2; line 6 (Pat) 27.8-30.6; line 7 (Andy) 31.2-32.4. **The film is ~34 s so far**
-(the first estimate said ~45 s for the whole film; with more screenplay to come it will run to about a minute).
+Timing (stand-in, about 3.2 words a second): line 3 11.4-15.1 (Swindon mouths his pow-pows silently, Sam Q4 N);
+line 4 (Andy) 15.4-20.1; line 5 (Milburn) 21.0-27.2; line 6 (Pat) 27.8-30.6; line 7 (Andy) 31.2-32.4; line 8 (Milburn
+heard) 34.5-36.4; gunfire 36.7; flame 37.5; morning stars 38.2; line 9 (Milburn heard) 38.9-41.5, cut on the dash;
+line 10 (Andy) 41.8-45.5; line 11 (Milburn) 46.2-48.7; line 12 (Andy) 49.5-54.0; Milburn's glance 54.6-55.3; line 13
+(Milburn) 55.6-63.0; Andy's mouth falls open 63.5; line 14 (Pat) 64.8-67.6. **The film is ~68 s** (stand-in; Sam's
+takes re-time it).
 
 ## Plan extras: estimate (rule 24; not yet entered in the ledger: waits on Q10)
 Unmeasured share: sets and moves rows (nothing like a rising shaft or alpine vista measured yet).
@@ -69,6 +78,21 @@ look-ups and the rise 1.0; board 0.3; this part's share of animatic 0.3 = **abou
 | notes rounds (2) and final | | round, final | 3.0 |
 | **total from here** | | | **about 8.5** (film so far ~10.6% incl. chat 5) = **~19% of a week**: over the 15% aim; why: this part doubles the cast (2 likeness heads) and adds 6 held props |
 
+## Plan extras: estimate redone with scenes 6 and 7 (chat 6; spent before chat 6: 12.2%)
+| thing | KNOWN or NEW | stage | estimate (% of a week) |
+|---|---|---|---|
+| field level + 6 grey plinths (scene 3) | NEW painting view (milburn_sets) | sets | 0.8 |
+| props: crossbow KNOWN (prepper_fx); katana, twin uzis, grenade, spiked mace, "DLC" stapler NEW (flat 2D, held by grips) | props | 0.8 |
+| table scenes 4 and 7 (Andy, Pat seated in the reverse; Milburn reused) | KNOWN cameras, NEW seated pair | build | 0.8 |
+| the forest (scene 6): 4 parallax layers, travelling | NEW place | sets | 1.0 |
+| walking three-quarter with weapons (4 walks; the goth's turned shag) | walk KNOWN (moves kit gaits), turned shag NEW | moves | 1.5 |
+| gunfire flashes, a flame jet, two swinging morning stars | NEW effects | fx | 0.8 |
+| table moves: point, steeple, arms up/fold/lean, fists, despair, eye glance, mouth open | pointing, folded, lean back KNOWN; the rest NEW | moves | 2.0 |
+| critique (one pack) | | critique | 0.5 |
+| animatic 1 (Sonnet) | KNOWN | animatic1 | 0.4 |
+| notes rounds (2) and final | | round, final | 3.0 |
+| **from here** | | | **about 11.6** = film **~24% of a week**: over the 15% aim; why: the screenplay doubled (34 s to 68 s) with a new travelling action scene and a second cast of two likeness heads |
+
 ## The world (rule 1): plans to come (`plan.py`) once the people and places lines exist
 - Cabinet Room: green-baize table, Milburn mid-side facing camera; empty chair left and right of him; cream panelled
   wall behind with green damask curtains at a tall window (from the reference). On the table: red leather folders,
@@ -80,6 +104,12 @@ look-ups and the rise 1.0; board 0.3; this part's share of animatic 0.3 = **abou
   (marble fireplace centred on the PM's chair, the portrait above); red folders, his Vimto, Pat's tall glass, name cards.
 - Field further in (shot 3): 150 m from the shaft towards the forest (ring 150 m beyond); six grey plinths 1.0 m high,
   0.5 m square, staggered at 3.0-9 m from the lens, never in a line.
+- Forest (scene 6): thick growth, deep green, shafts of light; the four walk a narrow track 4.5 m from the lens,
+  left to right, 1.4 m apart; the camera travels with them at 1.2 m/s, then eases to a stop (36.7). Layers: ferns
+  and trunks 1.5 m (race past, partly over them), the track and its undergrowth 4.5 m (they walk here), trunks 9 m
+  and 18 m (crawl). The greenery ahead (screen right, 3-6 m beyond the leader): gunfire flashes in the leaves, a
+  flame jet whips out of a bush across the track, two morning stars on chains swing down out of the trees. The
+  attackers are never seen (the VO names them: "teams of their erstwhile colleagues").
 
 Rehearsal clips sent: none yet: why: no moves exist yet; chat 3 makes the light sweep + look-up and the rise as clips first
 
@@ -163,6 +193,14 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 5 "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | Milburn | single, as shot 1: the calm is the joke | nonplussed, soft, attentive: neutral, slow blink, small head tilt | hands folded on the folder, still | "interrupt" (the tilt) |
 | 6 "I'd like to hear where this goes, Prime Minister" | Pat | the reverse: he quietly sides with Milburn | patient; eyes sideways to Andy, never the lens | fingers steepled, elbows on the table; a small nod | "Prime Minister" |
 | 7 "Fine! Continue." | Andy | the reverse | exasperated, then sulky | arms flung up on "Fine!", then folds them and leans back in the chair | "Fine", "Continue" |
+| 8 "The NEETs will form a unit." | Milburn (heard), NEETs (seen) | travelling beside them: four misfits as a "unit" is the joke | goth: pleased, crossbow on her shoulder; rangy: uneasy, glancing at the blade; Swindon: grinning, gung-ho; waif: terrified, eyes darting | walking in single file; goth's crossbow shouldered, Swindon's uzis up at his chest swinging side to side, rangy holds the katana out in front like a torch, waif hugs the grenade in both hands at her chest | "unit" (Swindon swings the uzis forward, the others close up) |
+| 9 "And will encounter teams of their erstwhile colleagues—" (after the gunfire 36.7, the flame 37.5, the morning stars 38.2) | Milburn (heard), the greenery (heard: gunfire) | the camera stops: what is ahead is the joke | shock on the gunfire; then goth grim and pleased, Swindon thrilled, rangy aghast, waif terrified, eyes shut | a jolt on the gunfire; all duck on the flame; Swindon sprays back wildly; goth swings the crossbow up; rangy raises the katana flat over his head; waif curls round the grenade; the morning stars swing over their heads | "colleagues" (the second swing) |
+| 10 "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | Andy | the reverse: his explosion beside Pat's calm | rage: brows down hard, mouth wide | up out of the lean, both fists down on the table on "fucker", then jabs the point at Milburn (the lens) | "fucker" (fists), "Fortnite" (the point) |
+| 11 "I am sorry that you feel that way." | Milburn | single, as shot 1: the non-apology is the joke | soft, sorry-not-sorry: small sympathetic frown with the faint smile | hands folded, a slow small nod | "feel" (the nod) |
+| 12 "Are you or are you not sending NEETs to kill each other on live TV?" | Andy | the reverse | despairing and angry: brows up in the middle, mouth wide | both hands out, palms up, then shaking them | "live TV" (hands out) |
+| 13 "My report is nuanced and multifaceted. I also suggest taking away PIP..." | Milburn | single: the shifty glance then the calm cruelty | eyes slide to the side and back first (54.6-55.3), then calm, faintly pleased | hands folded, still; small nods | "multifaceted" (nod), "Blood Dome" (smile) |
+| (silent) | Andy | the reverse | outrage: mouth hanging open, eyes wide | frozen mid-lean | 63.5 (the mouth drops) |
+| 14 "I think the backbenchers will like this one, sir." | Pat | the reverse, Andy frozen beside him | patient, a small approving smile; eyes on Andy | fingers steepled; a small nod | "like this one" (the nod) |
 
 ## Exceptions (rule 13)
 | check | who | why | looked at full size |

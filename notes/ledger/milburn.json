@@ -1,6 +1,6 @@
 {
  "film": "milburn",
- "estimate": null,
+ "estimate": 24.0,
  "chats": [
   {
    "date": "2026-11-17",
@@ -517,6 +517,53 @@
   {
    "at": "2026-11-17T21:05+00:00",
    "faults": 0
+  }
+ ],
+ "stages": [
+  {
+   "name": "sets",
+   "pct": 1.8,
+   "done": null
+  },
+  {
+   "name": "props",
+   "pct": 0.8,
+   "done": null
+  },
+  {
+   "name": "build",
+   "pct": 0.8,
+   "done": null
+  },
+  {
+   "name": "moves",
+   "pct": 3.5,
+   "done": null
+  },
+  {
+   "name": "fx",
+   "pct": 0.8,
+   "done": null
+  },
+  {
+   "name": "critique",
+   "pct": 0.5,
+   "done": null
+  },
+  {
+   "name": "animatic1",
+   "pct": 0.4,
+   "done": null
+  },
+  {
+   "name": "round",
+   "pct": 2.6,
+   "done": null
+  },
+  {
+   "name": "final",
+   "pct": 0.4,
+   "done": null
   }
  ]
 }

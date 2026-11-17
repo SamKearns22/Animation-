@@ -52,16 +52,46 @@ LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: t
     dict(who='milburn', text='The essence of my proposal is quite simple.', start=0.4, end=2.9),
     dict(who='milburn', text='Those not in education, employment or training will be presented with a unique '
                              'opportunity to serve their country.', start=3.5, end=9.0),
+    dict(who='milburn', text='Each NEET must arm themselves before heading further into the Zone.', start=11.4,
+         end=15.1),
+    dict(who='andy', text="God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?",
+         start=15.4, end=20.1),
+    dict(who='milburn', text='This report has been long in the making. Would you care to hear the findings or would '
+                             'you prefer to interrupt?', start=21.0, end=27.2),
+    dict(who='pat', text="I'd like to hear where this goes, Prime Minister.", start=27.8, end=30.6),
+    dict(who='andy', text='Fine! Continue.', start=31.2, end=32.4),
+    dict(who='milburn', text='The NEETs will form a unit.', start=34.5, end=36.4),
+    dict(who='milburn', text='And will encounter teams of their erstwhile colleagues.', start=38.9, end=41.5),
+    dict(who='andy', text="You fucker! You're pulling a Maze Runner, Squid Games, Fortnite on me!", start=41.8,
+         end=45.5),
+    dict(who='milburn', text='I am sorry that you feel that way.', start=46.2, end=48.7),
+    dict(who='andy', text='Are you or are you not sending NEETs to kill each other on live TV?', start=49.5, end=54.0),
+    dict(who='milburn', text='My report is nuanced and multifaceted. I also suggest taking away PIP after they obtain '
+                             'their life-changing injuries in the Blood Dome.', start=55.6, end=63.0),
+    dict(who='pat', text='I think the backbenchers will like this one, sir.', start=64.8, end=67.6),
 ]
-SHOTS = [('1', 0.0, 3.3), ('2a', 3.3, 6.5), ('2b', 6.5, 11.0)]    # cut to the aerial on "unique opportunity"
-DUR = 11.0
+SHOTS = [('1', 0.0, 3.3), ('2a', 3.3, 6.5), ('2b', 6.5, 11.0),     # cut to the aerial on "unique opportunity"
+         ('3', 11.0, 15.3),                                          # cut on Milburn's dash
+         ('4a', 15.3, 20.6), ('4b', 20.6, 27.6), ('4c', 27.6, 34.0),   # scene 4: the table (Sam's Q1)
+         ('6', 34.0, 41.6),                                          # the forest; cut on the dash
+         ('7a', 41.6, 45.9), ('7b', 45.9, 49.2), ('7c', 49.2, 54.4), ('7d', 54.4, 63.4), ('7e', 63.4, 68.4)]
+DUR = 68.4
 T = {'simple': 2.5,          # shot 1 lands on "simple"
      'light_on_them': 5.6,   # 2a: the light reaches their heads; all four look up ("training")
-     'locks': 9.4}           # 2b: the deck locks level with the grass ("country")
-SHOT_CAST = {'1': ['milburn'], '2a': ['goth', 'rangy', 'swindon', 'waif'], '2b': ['goth', 'rangy', 'swindon', 'waif']}
+     'locks': 9.4,           # 2b: the deck locks level with the grass ("country")
+     'gunfire': 36.7,        # 6: gunfire rips from the greenery ahead; the camera stops
+     'flame': 37.5,          # 6: the flamethrower's blast whips out
+     'stars': 38.2,          # 6: morning stars swing down out of the trees
+     'glance': 54.6,         # 7d: Milburn's eyes slide aside (back by 55.3)
+     'gape': 63.5}           # 7e: Andy's mouth falls open
+_FOUR = ['goth', 'rangy', 'swindon', 'waif']
+REVERSE = ('4a', '4c', '7a', '7c', '7e')            # the reverse: Andy and Pat across the table
+ACROSS = ('1', '4b', '7b', '7d')                     # shot 1's camera: Milburn
+SHOT_CAST = dict({'2a': _FOUR, '2b': _FOUR, '3': _FOUR, '6': _FOUR}, **{n: ['milburn'] for n in ACROSS},
+                 **{n: ['andy', 'pat'] for n in REVERSE})
 KEEP_CLEAR = {'1': [(60, 330, 1020, 560)]}    # the Hook Text's band above Milburn's head (never over his face)
 HOOK = ('The Milburn Report is released 😬', {'y': 420, 'until': 3.0})   # rule 75: the band above his head
-SHOT_MARKS = {'1': ['milburn'], '2a': ['goth', 'rangy', 'swindon', 'waif'], '2b': []}   # rule 38: front on (2b: tiny, from above)
+SHOT_MARKS = dict(SHOT_CAST, **{'2b': []})          # rule 38: front on (2b: tiny, from above)
 
 
 def scene_of(t):
@@ -137,6 +167,22 @@ MOODS = {
     'proud up': dict(smile=0.2, squint=0.9, lid4=0.18, frown=0.012),   # squinting up into the light
     'awe': dict(brow_up=0.04, lid4=0.0, smile=-0.3, mouth='v:U'),               # looking up into the light
     'awe open': dict(brow_up=0.04, lid4=0.0, mouth='v:O'),         # ... mouth falling open
+    # chat 6: the table (scenes 4 and 7)
+    'furious': dict(smile=-0.7, frown=0.14, lid4=0.12, squint=0.4),          # Andy: brows hard down
+    'rage': dict(smile=-0.9, frown=0.16, lid4=0.0, squint=0.3),             # ... angrier still (scene 7)
+    'exasperated': dict(smile=-0.5, brow_up=0.03, frown=-0.01, lid4=0.05),   # "Fine!"
+    'sulky': dict(smile=-0.6, lid4=0.34, frown=0.012),                      # arms folded, leaning back
+    'despair': dict(smile=-0.7, brow_up=0.035, frown=-0.02, lid4=0.04),     # brows up in the middle
+    'gape': dict(smile=-0.4, brow_up=0.03, lid4=0.0, mouth='v:O'),          # mouth hanging open in outrage
+    'patient': dict(smile=0.12, lid4=0.3),                                  # Pat: calm, a little heavy-lidded
+    'approving': dict(smile=0.4, lid4=0.3),                                 # ... the backbenchers will like it
+    'attentive': dict(smile=0.15, lid4=0.2, brow_up=0.006),                 # Milburn: nonplussed, soft
+    'sorry': dict(smile=0.2, lid4=0.24, brow_up=0.02, frown=-0.012),        # sorry-not-sorry
+    'grim': dict(smile=0.25, lid4=0.3, frown=0.02),                         # the goth, pleased and dangerous
+    'thrilled': dict(smile=0.8, squint=0.6, lid4=0.1),                      # Swindon, firing back
+    'aghast': dict(smile=-0.6, brow_up=0.05, lid4=0.0, mouth='v:O'),        # the rangy lad
+    'terrified': dict(smile=-0.7, brow_up=0.05, frown=-0.02, lid4=0.0),     # the waif
+    'eyes shut': dict(smile=-0.7, frown=0.02, blink_hold=True),             # the waif, curled up
 }
 
 
@@ -173,7 +219,7 @@ def head_life():
 def face_sp(shot, who, t, mood, shades=None):
     """The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks."""
     d = dict(CAST[who], **MOODS[mood])
-    if who in TRACK and shot == '1':
+    if who in TRACK:
         shape = mouths.at(TRACK[who], t)
         if shape != 'rest':
             d['mouth'] = 'v:' + shape
@@ -223,7 +269,7 @@ def cabinet(t):
     neck_y = L.p(0.0, d, _seated_neck)[1]
     if _PAINT['mid']:
         _PAINT['mid'](img, cam, t)
-    look, j = acted('1', 'milburn', t)
+    look, j = acted(shot_of(t), 'milburn', t)
     j['chair_draw'] = lambda *a, **k: None            # the room paints his chair
     j['pre'] = []
     j['mid'] = [lambda p, j2, view: p.img.alpha_composite(_table_layer(t))]   # the table between body and arms,
@@ -232,6 +278,45 @@ def cabinet(t):
     person(img, 'milburn', 540, neck_y + FEET * scale_at(pxm, sp), pxm, 0.0, t, j, look)
     cut = int(L.p(0.0, 1.62, 0.76)[1]) + 60            # below the folder's near edge only the table shows: his
     img.alpha_composite(_table_layer(t).crop((0, cut, W, H)), (0, cut))   # shins drawn after it are covered again
+    return img.convert('RGB')
+
+
+# ================================================================================================= scenes 4 and 7: the reverse
+_RPAINT = {layer: PL.painter(_DESC, 'reverse', layer) for layer in ('back', 'mid', 'front')}
+SEATS = {'andy': (-0.3, 2.15), 'pat': (0.36, 2.15)}     # (x, depth) from the reverse's lens (its chairs' middles)
+SPLIT = 560                                              # screen x between them: each one's table strip
+
+
+def reverse(t):
+    """Andy and Pat across the table from Milburn's seat (places view `reverse`), seated as Milburn is in shot 1: the
+    table's front layer between each one's body and arms (cropped to their own side, so one never covers the other's
+    hands), then the table's near part over both."""
+    img = Image.new('RGBA', (W, H), (255, 255, 255, 255))
+    cam = B.Cam(1.0, 540, 960)
+    B.SS = 1
+    v = _DESC['views']['reverse']['camera']
+    L = MS.LevelCam(v['up'], v['horizon'], v['lens'])
+    _RPAINT['back'](img, cam, t)
+    if _RPAINT['mid']:
+        _RPAINT['mid'](img, cam, t)
+    front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    _RPAINT['front'](front, cam, t)
+    shot = shot_of(t)
+    for who in ('andy', 'pat'):
+        x, d = SEATS[who]
+        pxm = L.ppm(d)
+        sp = CAST[who]
+        X, neck_y = L.p(x, d, _seated_neck)
+        look, j = acted(shot, who, t)
+        j['chair_draw'] = lambda *a, **k: None
+        j['pre'] = []
+        side = front.crop((0, 0, SPLIT, H)) if who == 'andy' else front.crop((SPLIT, 0, W, H))
+        ox = 0 if who == 'andy' else SPLIT
+        j['mid'] = [lambda p, j2, view, side=side, ox=ox: p.img.alpha_composite(side, (ox, 0))]
+        neck_y -= j.get('bob', 0.0) * scale_at(pxm, sp)
+        person(img, who, X, neck_y + FEET * scale_at(pxm, sp), pxm, 0.0, t, j, look)
+    cut = int(L.p(0.0, 1.62, 0.76)[1]) + 60
+    img.alpha_composite(front.crop((0, cut, W, H)), (0, cut))
     return img.convert('RGB')
 
 
@@ -289,8 +374,10 @@ def field_shot(t):
 # ================================================================================================= picture
 def picture(t):
     n = shot_of(t)
-    if n == '1':
+    if n in ACROSS:
         return cabinet(t)
+    if n in REVERSE:
+        return reverse(t)
     if n == '2a':
         return shaft_shot(t)
     return field_shot(t)
