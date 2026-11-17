@@ -286,6 +286,62 @@
     "ticked": 0,
     "edited film code": true
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "3fbce046",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.64,
+   "src": "estimate",
+   "sid": "session_01J1JB7YTL9grCNvat3CUdFk",
+   "steps": 92,
+   "hist_k": 261,
+   "kinds": {
+    "film-file search": 8.0,
+    "tool search": 16.3,
+    "whole-file .py read": 0.2,
+    "page.py": 0.2,
+    "renders": 8.1,
+    "pictures": 5.1,
+    "other": 62.1
+   },
+   "calls": {
+    "film-file search": 14,
+    "tool search": 36,
+    "whole-file .py read": 1,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 11,
+    "pictures": 16,
+    "other": 13
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 1,
+     "miss": 1,
+     "after show": 12
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 2,
+     "film notes": 6,
+     "shared:facehouse.py": 7,
+     "shared:people.py": 2,
+     "shared:acting.py": 5,
+     "shared:grips.py": 2,
+     "shared:ledger.py": 2,
+     "shared:views.py": 2,
+     "shared:moves.py": 2,
+     "shared:posegallery.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
   }
  ],
  "checks": {},
