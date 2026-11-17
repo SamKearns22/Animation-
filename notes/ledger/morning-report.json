@@ -262,6 +262,61 @@
     "pictures": 0,
     "other": 12
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "20721d48",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.09,
+   "src": "estimate",
+   "sid": "session_01J1JB7Zq8cFSqPvJqxMKrnY",
+   "steps": 85,
+   "hist_k": 209,
+   "kinds": {
+    "tool search": 22.4,
+    "page.py": 5.6,
+    "renders": 3.9,
+    "other": 68.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 53,
+    "whole-file .py read": 0,
+    "page.py": 11,
+    "routine": 0,
+    "renders": 6,
+    "pictures": 0,
+    "other": 18
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 0,
+     "after show": 0
+    },
+    "other": {
+     "shared:handover.py": 7,
+     "film notes": 6,
+     "shared:costwatch.py": 2,
+     "shared:mainline.py": 1,
+     "other": 15,
+     "shared:stepcost.py": 5,
+     "guides": 2,
+     "shared:film_engine.py": 2,
+     "shared:protest_tiers.py": 1,
+     "shared:modelguard.py": 2,
+     "shared:kittests.py": 5,
+     "shared:propose.py": 1,
+     "shared:watcher.py": 4
+    },
+    "ticked": 0,
+    "edited film code": false
+   }
   }
  ],
  "checks": {}
