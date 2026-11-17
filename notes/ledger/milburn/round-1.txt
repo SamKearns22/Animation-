@@ -1,0 +1,81 @@
+== critique, round 1 pass 1 (2026-11-17): 11 fault(s), 2 can't tell
+-- look.md --
+1: Man with glasses in navy suit sits at green desk, calm; name card "Alan Milburn", red folder.
+2: Four people stand in grey round tower: purple-haired woman, girl, red-shirted boy, tall man in grey; solemn.
+3: Same four people, same pose, tower now cream-coloured; solemn, still.
+4: Green grassy field, mountains, sky; small grey round hatch in distance.
+5: Same field, hatch slightly different position, mountains; quiet, empty.
+6: Overhead view: grey circular pad, yellow ring, four tiny figures standing in the middle.
+7: Close-up of seated bearded-less man with glasses, navy suit, tie, red folder; neutral, stern.
+8: Close-up purple-haired woman, dark lips, neutral; girl and red-shirted boy behind, cropped.
+9: Red-shirted boy with shield badge, neutral; tall man in grey partly cropped beside.
+10: Tall man in grey sweater, dark hair, neutral; red sleeve at left edge.
+-- result.md --
+## Faults
+FAULT P2 [1, 2, 3, 7-10]: every face is a blank neutral stare; Milburn's mouth is shut on his spoken line, and the four NEETs show no feeling or rising-towards-light reaction.
+FAULT P4 [1, 7]: Milburn's glasses are thin dark wire frames; references show thick black frames. Hair is sandy-light, references grey-brown.
+FAULT A2 P4 [2, 3, 8-10]: the red-shirt lad is slim, not stout; the grey-sweatshirt lad is broad and tallest, not thin.
+FAULT P6 [1, 7]: Milburn's hands are hidden behind the table; neither resting hand shows.
+FAULT S7 [4, 5]: brief says aerial, high, tilted down; both frames are a near-level view with horizon and mountains.
+FAULT A1 [4, 5]: the shaft mouth reads as a small manhole lid; no platform is visible going up (panel 4 "deep in shaft", panel 5 "level with grass, four on it"). Panels 4 and 5 are near-identical.
+FAULT S1 [3]: the light "has reached them" but the people are unlit and unchanged; only the wall changed colour.
+FAULT S5 [2, 3, 8-10]: no platform or floor under the people, no opening above; the wall is a plain block with a few tiny windows.
+FAULT S8 [2, 3, 4, 5, 6]: one flat colour (grey, cream or green) fills over half the frame.
+FAULT S1 [8, 9, 10]: the close-ups are crops of panel 2 that slice other people in half at the frame edge; panel 7 cuts the name card ("Milburn") and chair. Crops are soft, not redrawn.
+FAULT S2 [2]: medium shot "to the bottom of the torso" asked; the sheet shows the red lad's full legs and shoes, and the goth is cut at the hips.
+CAN'T TELL P12 [1, 7]: is the mouth meant to move on "The essence of my proposal..."; a moving frame would show it.
+CAN'T TELL P1 [1]: whether the red folder is touched; a full-size frame with hands would show it.
+
+## Checked
+1-10
+
+## Cold look
+I called panel 4 a "hatch" and said panel 5 had a "slightly different position": I missed that no platform or people are seen. I wrote "bearded-less" for Milburn, clumsy, and called panel 3 "cream-coloured" without noting the unlit people. Everything else the brief names (purple hair, red shirt, grey sweatshirt, flowered jumper, glasses, name card) I read right.
+
+## Not on the list
+- Panel 6 is overhead, not the brief's "detail"; suggested line: the framing type (overhead, detail) matches the brief's wording.
+- Panels 2 and 3 are identical poses; suggested line: a "later" shot shows visible change in the people, not just the set.
+- Rising motion is unprovable from stills; suggested line: a motion cue (platform edge, shaft wall moving) shows in each rising frame.
+
+== critique, round 1 pass 2 (2026-11-17): 10 fault(s), 2 can't tell
+-- look.md --
+1: Neutral man in glasses and suit at green desk, red folder, glasses of water, sign "Alan Milburn".
+2: Four stiff people stand in grey circular tower: purple-haired woman, girl, red-shirt boy, tall man. Blank faces.
+3: Same four people, same pose, warm cream tower walls instead of grey. Blank faces.
+4: Green grass field, mountains, small grey round pit with tiny figures. No people close.
+5: Same field, pit far smaller and further away, mountains. Empty, calm.
+6: Top view of grey circle with yellow ring, four tiny figures standing in centre.
+7: Close-up man in glasses, navy suit, blue tie, red folder, name sign cut off "Milburn".
+8: Close-up purple-haired woman, dark top, expressionless; girl and red-shirt boy beside, cropped.
+9: Close-up red-shirt boy, expressionless; tall man cropped at edge, grey wall behind.
+10: Tall man in grey sweater, standing stiff, blank face, red-shirt person cropped left edge.
+-- result.md --
+## Faults
+FAULT S1 P3 [2, 8-10]: no rising platform or floor edge or movement cue; the four stand on plain grey floor, so "rising towards the light" does not read.
+FAULT S1 P3 [3]: light has reached them per brief, but only the upper wall changes, with a hard horizontal band edge mid-wall; the people keep identical colours and no light falls on them.
+FAULT P4 P5 [2, 8-10]: goth girl and stout lad do not read as overweight/stout; red-shirt lad is narrow, the goth's body is plain dark slab. Pencil moustache on the lad is not readable (8-10: panel 10 face).
+FAULT P4 [1, 7]: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes tiny.
+FAULT S8 S1 [4, 5]: grass fills over half the frame, flat sawtooth stripes, no life; the shaft mouth is a tiny blob at phone size, the four people on it are invisible.
+FAULT S7 S6 [6]: top-down view with the ring cropped at the edges, against the oblique view of 4-5; figures drawn standing front-on, not seen from above. Set does not match.
+FAULT S4 [2, 3, 8-10]: stray dark streak on the wall at right, hip height, behind the tall lad (visible again in 10 beside his arm).
+FAULT A3 P2 [1-3, 7-10]: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.
+FAULT O3 [1, 7]: name sign is unreadable at phone size in 1, and cut to "Milburn" in 7; glasses and sign are the same tiny scale.
+FAULT S1 [7-10]: close-ups are enlarged crops of 2 and 1; soft, with neighbours' heads sliced at the frame edge (8, 9, 10).
+CAN'T TELL P12 [1, 7]: mouth closed in the still; a frame mid-word would show it moves.
+CAN'T TELL P1 [1, 7]: hands are hidden behind the table; a wider frame would show them.
+
+## Checked
+1-10
+
+## Cold look
+I read the people correctly but missed: the tall man's Arabic look and moustache; the goth and stout lad not looking overweight or stout; "platform rising" and "light reaching them" (I saw only a wall colour change); the shaft mouth in 4-6 (I called it a "pit"); and the stray streak.
+
+## Not on the list
+- Stills show no sign of movement or a rising platform: suggested line: "a rising or moving thing shows a cue (rail, edge, shadow) in a still".
+- Crops enlarged from another panel look soft: suggested line: "close-ups are drawn at close-up size, not enlarged crops".
+- Every person has the same blank pose: suggested line: "each person has their own posture and attitude".
+
+critique, pass 2: faults fixed as one list: soft light edge on the shaft wall; the four go from shaded to lit; wider hazard edge reads as the platform; long soft grass gusts; goth and Swindon lad broader; heavier glasses, greyer hair; steeper closer aerial; left open: ['2,8-10 S1 P3: no rising platform or floor edge or movement cue; the four stand on plain grey floor, so "rising towards the light" does not read.', "1,7 P4: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes t", '4-5 S8 S1: grass fills over half the frame, flat sawtooth stripes, no life; the shaft mouth is a tiny blob at phone size, the four people on it are invisible.', '1-3,7-10 A3 P2: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.', '1,7 O3: name sign is unreadable at phone size in 1, and cut to "Milburn" in 7; glasses and sign are the same tiny scale.']
+
+critique, pass 2: faults fixed as one list: soft light edge on the shaft wall; the four go from shaded to lit; wider hazard edge reads as the platform; long soft grass gusts; goth and Swindon lad broader; heavier glasses, greyer hair; steeper closer aerial; left open: ["1,7 P4: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes t", '1-3,7-10 A3 P2: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.', '1,7 O3: name sign is unreadable at phone size in 1, and cut to "Milburn" in 7; glasses and sign are the same tiny scale.', '1,7 P12: mouth closed in the still; a frame mid-word would show it moves.', '1,7 P1: hands are hidden behind the table; a wider frame would show them.']
+
