@@ -518,6 +518,43 @@
     "pictures": 2,
     "other": 10
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "aa9b4f37",
+   "model": "opus",
+   "stage": "rule 11 gate build",
+   "round": null,
+   "cost": 0.99,
+   "notes": 0,
+   "repeats": []
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "10ea2689",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.3,
+   "src": "estimate",
+   "sid": "session_01J1JB7WZxDnQsDTvnbMGv5T",
+   "steps": 11,
+   "hist_k": 116,
+   "kinds": {
+    "tool search": 27.0,
+    "other": 73.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 10,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 1
+   }
   }
  ],
  "checks": {}
