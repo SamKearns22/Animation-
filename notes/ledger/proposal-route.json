@@ -434,6 +434,34 @@
     "pictures": 0,
     "other": 11
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "91bf0cd1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.39,
+   "src": "estimate",
+   "sid": "session_01GznaAR6rixtQ8qoMiQupJq",
+   "steps": 17,
+   "hist_k": 142,
+   "kinds": {
+    "tool search": 26.3,
+    "renders": 1.7,
+    "other": 72.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 16,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 3
+   }
   }
  ],
  "checks": {}
