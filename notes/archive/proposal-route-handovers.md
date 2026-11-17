@@ -284,3 +284,18 @@
 - **Branches named (not merged, waiting on Sam):** claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 - **For Claude:** kittests `phone_size_poses`, `crowds_varied`; old handovers `notes/archive/proposal-route-handovers.md`.
 
+
+
+## Craft chat 3 handover (archived by craft chat 4, 17 Nov)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (every change through it), 30 (say why a first fix failed), 85 (cost watch).
+- **Done (craft chat 3, Opus medium, 16 Nov):** change 1 BUILT and ON. People kit crowds varied by default (`people.varied`): EPR's city skins (`mix:` barcelona/frankfurt/paris/tirana/london/mixed), men's and women's cuts and builds, hair colour by skin, face pushes, stubble/glasses on some, tops/trousers/shoes from EPR's Tirana pack, beanie or cap on ~22% (10-colour round, bald always hatted; `people_hats.py`, hung on new `views.HEAD_WEAR`); `count:`, `hats:`, `same: KEYS because WHY`. `SAMENESS_ON` True; EPR warned not refused (`kitchecks.SAME_BEFORE`); Blessed and EPR crowds kept exactly (`people.BEFORE_DEFAULTS`). Replay: EPR's crowd as written caught (jacket step, one top 12/24, bald 3/24); bare `crowd:` + each city's mix, 64 people: 0 faults. Sheet looked at by eye (16 marchers, 3 turns): varied, hats sit right. Catalogue line 44 lists it as improved. Kittests `crowds_varied` (defaults + `same:`), `people_from_a_description` (approval clause dropped) PASS.
+- **Sam (16 Nov, after chat 3):** Y to the craft census; bald people allowed in crowds (the kit no longer hats every bald head; the 10% bald cap stays against an all-bald crowd); EPR posted and closed (notes to notes/archive/protest-tiers.md, drafts cleared).
+- **Next (craft chat 4, Opus medium: sorting notes from a clear plan):** the craft census (`notes/proposals/craft-first-round.md` Final version, item 3): craft notes only, EPR (notes/archive/protest-tiers.md), Blessed and Remakes, tagged by area, cause, repeat and fix cost; output a ranked list per area to notes/proposals/; then put the top next yes to Sam through the proposal route.
+- **Needs Sam:** nothing now.
+- **Numbers to beat:** change 2: no pose note returned twice on the next two films. Change 1: at most 2 sameness notes, none repeated, on the next two crowd films.
+- **Read:** `notes/proposals/craft-first-round.md` (Final version); job pack "A tool job".
+- **Open rule requests:** none. Changes made without asking (end-of-film review): bald cap 10%; crowd-step warning; front-on check for no-rooms films; EPR exempted from both refusals; chat 3: women ~45% of a default crowd, stubble 20%, glasses 8%, hats 22%, a London mix added, `same:` syntax.
+- **Branches named (not merged, waiting on Sam):** claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** EPR still has its own copies of beanie/hat_cap (`protest_tiers_cast`); EPR is posted: leave its code as is. Old handovers `notes/archive/proposal-route-handovers.md`.
+
