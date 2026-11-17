@@ -1,15 +1,15 @@
 # Notes for Milburn (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 24 (estimate, tiers, must-haves, showstoppers before go), 74 (acting list asked first), 1 (one plan in metres per place).
-- **Done:** plan chat 1 (17 Nov): brief checklist, first estimate table, shot list, acting list draft, references found (Milburn x3, Cabinet Room x1). Questions sent to Sam.
-- **Spent against the estimate:** no estimate set yet (waits on Q10, the estimates proposal).
-- **Next:** this chat carries on with Sam's answers (Opus, high): `ledger.py estimate`, people lines for the 4 NEETs and Milburn (likeness card), places lines for the Cabinet Room, then the shaft and field (new), then the shot board.
-- **Needs Sam:** questions 1-10 below (sent 17 Nov).
-- **Read:** job pack Plan; `research/crowds-and-big-action.md` F1, F2, F8 for the aerial.
-- **Lost / Added:** none yet.
-- **Open rule requests:** none.
-- **For Claude:** branches named, not merged (waiting on Sam, as before): claude/blessed-c2-mics-wip, claude/audit-honest-checker. Refs in `references/milburn/`. Burnham already exists (`source/burnham.py`) for later scenes.
+- **Rules that bite next:** 89 (each new thing critiqued alone before the cast sheet), 1 (one plan in metres), 38 (front on).
+- **Done:** plan answered (Sam, 17 Nov: all my picks; no new photos, use what we have; NO showstopper shots; estimates Option 1). People kit: all 5 drawn from `story/milburn-people.txt`; kit grew (flowers, crest, skirt extras; pencil moustache; thick glasses; big curly hair); kittests pass. First look sent to Sam (`notes/sheets/milburn-cast-first-look.jpg`), not yet critiqued (named to Sam).
+- **Spent against the estimate:** plan chat ~2.5% (transcript guess); new estimate for this quarter about 5% more (table below, rewritten).
+- **Next:** chat 2, Opus high: `handover.py start`; copy satire_template to source/milburn.py (people from the kit as Protest Tiers does), Cabinet Room in `story/milburn-places.txt`, the shaft and the field from above (new paintings, F1/F8), critique pack (rule 89), cast sheet, shot board. Sam's notes on the first look, if any, come first.
+- **Needs Sam:** nothing (notes on the first look welcome).
+- **Read:** job pack Build; `research/crowds-and-big-action.md` F1, F2, F8.
+- **Lost / Added:** Added: 5 small kit parts (any film can use them). Lost: none.
+- **Open rule requests:** none. Estimates Option 1 (Sam's Y, 17 Nov) is a tool job: changes 1-3 in notes/proposals/estimates.md, not built yet.
+- **For Claude:** branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker. Turned views of the big hair and skirt fall back to the engine's (front only is used: rule 38). Milburn's head is invented with the card's pushes (measured heads only do Brand's curls).
 
 ## The screenplay so far (Sam, 17 Nov: about 25% of the film)
 - Title: Milburn. Hook Text: "The Milburn Report is released 😬"
@@ -40,6 +40,12 @@ Unmeasured share: sets and moves rows (nothing like a rising shaft or alpine vis
 | notes round | | | round | 2.7 | rule 24 unit (past films: ~9 per round) | |
 | final | KNOWN | | final | 0.35 | | |
 | **total (old way)** | | | | **17.5** | past films landed 2.5-3.3x their old-way price | |
+
+Rewritten after Sam (17 Nov: "if these two parts cost 17.5% something has gone terribly wrong"). Why the old figure was
+wrong: it charged this quarter with the whole film's notes round, animatic and final (4%); it priced the five people at
+hand-built rates (7%), but the people kit drew all five in about ten steps; the set lines were guesses. New, this part:
+people done (in the plan chat's ~2.5%); Cabinet Room on the places kit 0.5; shaft + field paintings 1.5; critique 0.5;
+look-ups and the rise 1.0; board 0.3; this part's share of animatic 0.3 = **about 4-5% more** (unmeasured: sets, moves).
 
 ## The world (rule 1): plans to come (`plan.py`) once the people and places lines exist
 - Cabinet Room: green-baize table, Milburn mid-side facing camera; empty chair left and right of him; cream panelled
@@ -102,4 +108,5 @@ Shot board sent: (to come)
 
 Decisions made:
 - Hook Text sits in the band above Milburn's head in shot 1 (never over his face).
-- Line 2 is Milburn's voice over the shaft and field shots.
+- Line 2 is Milburn's voice over the shaft and field shots; cut to the aerial on "unique opportunity".
+- Sam, 17 Nov: all recommended answers taken (tone calm and reasonable with a faint pleased smile; aerial high and tilted; bright midday; red Swindon Town shirt, simple robin badge; the four faces as proposed). No new photos. No showstopper shots. Estimates Option 1.

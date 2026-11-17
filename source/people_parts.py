@@ -276,8 +276,12 @@ def _front_head(img, p, sp, t, hx, hy):
             p.poly(oval(*f(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up)), fc['iris'], dk(skin, 0.8),
             liner=2.6)
+    if fc.get('pencil'):                                      # a pencil moustache: one thin line above the lip
+        y = (L['lip0'] + L['nose_y']) * 0.5 + 0.008
+        p.poly(curve(f.pts([(-L['mw'] * 0.62, y + 0.01), (0.0, y - 0.004), (L['mw'] * 0.62, y + 0.01),
+                            (0.0, y + 0.008)]), 3), fc['pencil'], None)
     if fc.get('glasses'):
-        _glasses(p, f, L, fc['glasses'])
+        _glasses(p, f, L, fc['glasses'], fc.get('glasses_thick'))
     P4.brows(p, f, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
              sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
     P4.nose(p, f, L, skin)
@@ -332,12 +336,12 @@ def _hair_mass(p, f, L, fc, hc):
                (e + 0.09, 0.2), (e + 0.13, 0.9), (e + 0.1, 1.5), (e - 0.1, 1.42), (e * 0.62, 0.92), (e * 0.4, 0.6),
                (-e * 0.4, 0.6), (-e * 0.62, 0.92), (-e + 0.1, 1.42)]
     elif st == 'curly':
-        n, pts = 22, []
+        n, pts, big = 22, [], fc.get('hair_big', 1.0)
         for k in range(n + 1):
             a = math.pi * (0.92 + 1.16 * k / n)
-            r = 1.0 + 0.06 * math.sin(k * 2.7)
-            pts.append(((e + 0.17) * r * math.cos(a), 0.22 + 0.62 * r * math.sin(a)))
-        pts += [(e + 0.1, 0.62), (-e - 0.1, 0.62)]
+            r = 1.0 + 0.04 * math.sin(k * 2.7)
+            pts.append(((e + 0.17) * big * r * math.cos(a), 0.22 + 0.62 * big * r * math.sin(a)))
+        pts += [(e + 0.1 * big, 0.62 + 0.2 * (big - 1)), (-e - 0.1 * big, 0.62 + 0.2 * (big - 1))]
     else:                                                     # bun: a knot on the crown
         p.poly(curve(f.pts([(-0.13, -0.46), (-0.12, -0.62), (0.0, -0.68), (0.12, -0.62), (0.13, -0.46)]), 3), hc, INK,
                2.2)
@@ -354,7 +358,8 @@ def _hair_mass(p, f, L, fc, hc):
         for _ in range(26):
             a = rng.uniform(math.pi * 0.95, math.pi * 2.05)
             r = rng.uniform(0.75, 0.95)
-            x, y = f((e + 0.17) * r * math.cos(a), 0.22 + 0.62 * r * math.sin(a))
+            big = fc.get('hair_big', 1.0)
+            x, y = f((e + 0.17) * big * r * math.cos(a), 0.22 + 0.62 * big * r * math.sin(a))
             p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
 
 
@@ -397,9 +402,20 @@ def _hair_front(p, f, L, fc, hc, skin):
             p.line(curve(f.pts([(u, hl - 0.02), (u * 0.7, -0.24), (u * 0.3, -0.42)]), 3), dk(hc, 0.72), 1.3)
 
 
-def _glasses(p, f, L, col):
-    """Thin-framed glasses round both eyes, a bridge across the nose."""
+def _glasses(p, f, L, col, thick=False):
+    """Thin-framed glasses round both eyes, a bridge across the nose; thick: heavy rectangular frames (Milburn)."""
     w, h = L['ew'] * 0.78, L['eh'] * 1.15
+    if thick:
+        w, h = L['ew'] * 0.86, L['eh'] * 1.05
+        for sgn in (-1, 1):
+            cx, cy = sgn * L['ecx'], L['eye_y'] + 0.004
+            box = [(cx - w, cy - h), (cx + w, cy - h * 1.05), (cx + w * 0.96, cy + h * 0.8), (cx, cy + h),
+                   (cx - w * 0.96, cy + h * 0.8)]
+            p.poly(curve(f.pts(box), 2), None, INK, 6.0)
+            p.poly(curve(f.pts(box), 2), None, col, 3.6)
+        p.line(curve(f.pts([(-L['ecx'] + w, L['eye_y'] - 0.01), (0.0, L['eye_y'] - 0.02), (L['ecx'] - w, L['eye_y'] - 0.01)]),
+                     3), col, 3.6)
+        return
     for sgn in (-1, 1):
         cx, cy = sgn * L['ecx'], L['eye_y'] + 0.004
         x0, y0 = f(cx - w, cy - h)
@@ -408,3 +424,44 @@ def _glasses(p, f, L, col):
     p.line(curve(f.pts([(-L['ecx'] + w, L['eye_y'] - 0.01), (0.0, L['eye_y'] - 0.03), (L['ecx'] - w, L['eye_y'] - 0.01)]),
                  3), col, 2.4)
 
+
+
+# ------------------------------------------------------------------- Milburn (17 Nov): two tops, kit extras for any film
+def flowers_torso(img, p, sp, t):
+    """A woollen jumper's knitted flowers: small five-petal flowers in a loose grid down the front (or back)."""
+    bot = int(sp.get('bottom', 505)) - 30
+    rng = np.random.default_rng(11)
+    cols = [(206, 92, 110), (232, 170, 70), (120, 150, 200), (150, 110, 170)]
+    for row, y in enumerate(range(60, bot, 70)):
+        for k, x in enumerate(range(-50 + (row % 2) * 25, 60, 50)):
+            c = cols[(row + k) % len(cols)]
+            cx, cy = x + rng.uniform(-4, 4), y + rng.uniform(-4, 4)
+            for a in range(5):
+                ang = a * 2 * math.pi / 5 + row
+                p.poly(oval(cx + 7 * math.cos(ang), cy + 7 * math.sin(ang), 5.5, 5.5, 8), c, dk(c, 0.6), 1.0)
+            p.poly(oval(cx, cy, 3.5, 3.5, 8), (246, 226, 140), None)
+
+
+def crest_torso(img, p, sp, t):
+    """A football shirt: white trim round the collar and a small crest on the wearer's left chest."""
+    outer = curve([(-46, -4), (-24, 34), (0, 44), (24, 34), (46, -4)], 3)
+    inner = curve([(34, -4), (18, 22), (0, 30), (-18, 22), (-34, -4)], 3)
+    p.poly(outer + inner, (246, 246, 246), INK, 1.8)          # a white V collar band
+    x, y = 36, 86
+    shield = [(x - 20, y - 22), (x + 20, y - 22), (x + 20, y + 6), (x, y + 26), (x - 20, y + 6)]
+    p.poly(shield, (246, 246, 246), INK, 1.6)
+    p.poly(oval(x, y - 2, 9, 9, 12), sp.get('jacket', (196, 22, 36)), None)        # the robin's red breast
+    p.poly(oval(x + 6, y - 10, 5, 5, 10), (90, 60, 40), None)
+
+
+def skirt_torso(img, p, sp, t):
+    """A full, flared ('blooming') skirt from the waist to just below the knee, with soft folds (Milburn, 17 Nov)."""
+    c = sp.get('dress', sp.get('jacket', (30, 26, 34)))
+    sw = sp.get('shoulders', 150) * 0.5
+    top, hem = 300, int(sp.get('bottom', 505)) + 260
+    pts = [(-sw * 0.95, top), (sw * 0.95, top), (sw * 1.5, top + 140), (sw * 2.3, hem - 24), (sw * 1.2, hem + 8),
+           (0, hem - 4), (-sw * 1.2, hem + 8), (-sw * 2.3, hem - 24), (-sw * 1.5, top + 140)]
+    p.poly(curve(pts, 3), c, INK, 2.6)
+    for u in (-0.9, -0.3, 0.3, 0.9):                       # folds falling from the waist
+        p.line(curve([(u * sw * 0.6, top + 30), (u * sw * 0.9, top + 160), (u * sw * 1.2, hem - 20)], 3),
+               B.lt(c, 1.9), 1.6)

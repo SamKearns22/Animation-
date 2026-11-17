@@ -15,7 +15,9 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     beard: stubble 0.82 | beard: boxed 46 40 38 | glasses: 40 36 34 | freckles | lashes
     outfit: suit navy, shirt white, tie 120 30 40 (or 'no tie'), trousers 50 50 56, sleeves .., shoes .., dress ..
             (suit, jumper, dress, blouse); 'open collar': the shirt open at the neck (chat 15)
-    extras: wig, robe, officer, open shirt, crucifix, scarf, zip   (parts that sit on top: EXTRAS)
+    extras: wig, robe, officer, open shirt, crucifix, scarf, zip, flowers, crest, skirt   (parts that sit on top: EXTRAS)
+    (Milburn, 17 Nov: `hair: curly, C, big` | `beard: pencil C` | `glasses: C, thick` | extras flowers (a jumper's
+    knitted flowers), crest (a football shirt's badge and white collar trim))
   One outfit in every view (face tool chat 15): each extra and the open collar is drawn turned too (TURNED below):
     its front drawing wrapped round the turned body (views.WrapPen), its own back where it shows from behind (the
     belt, the sash, the scarf round the neck, the top's collar), a bespoke view where Sam has seen one (the open
@@ -403,6 +405,9 @@ def _fact(d, key, val, people):
         d['hair_style'] = parts[0]
         for q in parts[1:]:
             w, _, c = q.partition(' ')
+            if q.strip() == 'big':                     # Milburn (17 Nov): a big mass of curls, half as big again
+                d['hair_big'] = 1.5
+                continue
             if w in ('light', 'grey') and q.strip().lower() not in COLOURS:     # 'light 112 90 72'; 'light brown' is a colour
                 d['hair_' + w] = colour(c)
             else:
@@ -432,14 +437,18 @@ def _fact(d, key, val, people):
             d['stub'] = float(rest or 0.84)
         elif kind == 'boxed':
             d['beard'] = colour(rest)
+        elif kind == 'pencil':                     # Milburn (17 Nov): a thin pencil moustache, nothing else
+            d['pencil'] = colour(rest or 'black')
         elif kind == 'full':                       # people_famous: moustache, cheeks, chin, grain colours
             d['full_beard'] = {w: colour(c) for w, _, c in (q.partition(' ') for q in parts[1:])}
             if set(d['full_beard']) != {'moustache', 'cheeks', 'chin', 'grain'}:
                 raise DescriptionError('beard full: moustache C, cheeks C, chin C, grain C')
         else:
-            raise DescriptionError(f'beard {kind!r}: stubble, boxed or full')
+            raise DescriptionError(f'beard {kind!r}: stubble, boxed, pencil or full')
     elif key == 'glasses':
-        d['glasses'] = colour(val or 'black')
+        d['glasses'] = colour(parts[0] if parts and parts[0] else 'black')
+        if 'thick' in parts[1:]:                   # Milburn (17 Nov): thick rectangular frames, the first thing seen
+            d['glasses_thick'] = True
     elif key in ('freckles', 'lashes'):
         d[key] = True
     elif key == 'outfit':
@@ -507,7 +516,8 @@ def person(d):
     fc = dict(m=dict(d.get('face_m', {})), iris=d.get('eyes', (70, 60, 50)), lip=d.get('lips', (190, 120, 110)),
               brow=sp['brow_c'], hair='crop' if style == 'short' else style, turned=style)
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
-                  ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes')):
+                  ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes'), ('pencil', 'pencil'),
+                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big')):
         if k in d:
             fc[fk] = d[k]
     sp['kit_face'] = fc
@@ -592,7 +602,9 @@ def _extras():
     import people_famous as PF
     return {'wig': ('head', PP.wig_head), 'robe': ('torso', PP.robe_torso), 'officer': ('torso', PP.officer_torso),
             'open shirt': ('torso', PF.open_shirt), 'crucifix': ('torso', PF.crucifix), 'scarf': ('torso', PF.scarf),
-            'zip': ('torso', PF.zip_top), 'open collar': ('torso', PP.collar_torso)}
+            'zip': ('torso', PF.zip_top), 'open collar': ('torso', PP.collar_torso),
+            'flowers': ('torso', PP.flowers_torso), 'crest': ('torso', PP.crest_torso),
+            'skirt': ('torso', PP.skirt_torso)}
 
 
 def turned():
@@ -602,7 +614,8 @@ def turned():
     import people_famous as PF
     return {'robe': dict(back=PP.robe_back), 'officer': dict(back=PP.officer_back), 'open shirt': dict(back=None),
             'crucifix': dict(back=None), 'scarf': dict(back=PF.scarf_back), 'zip': dict(back=PF.zip_back),
-            'open collar': dict(back=None, own={'three': PP.collar_three})}
+            'open collar': dict(back=None, own={'three': PP.collar_three}), 'flowers': dict(back=PP.flowers_torso),
+            'crest': dict(back=None), 'skirt': dict(back=PP.skirt_torso)}
 
 
 def pieces(sp):
@@ -645,7 +658,7 @@ def _head_parts():
 
 
 
-EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip')
+EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 
