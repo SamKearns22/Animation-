@@ -433,6 +433,64 @@
     "ticked": 0,
     "edited film code": false
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "ce8f146c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.59,
+   "src": "estimate",
+   "sid": "session_01GznaARwPjyVgxbyunDVnSs",
+   "steps": 73,
+   "hist_k": 184,
+   "kinds": {
+    "film-file search": 6.2,
+    "tool search": 8.6,
+    "page.py": 0.5,
+    "routine": 2.0,
+    "renders": 0.5,
+    "pictures": 1.9,
+    "other": 80.3
+   },
+   "calls": {
+    "film-file search": 16,
+    "tool search": 28,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 8,
+    "renders": 1,
+    "pictures": 4,
+    "other": 19
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 1,
+     "miss": 4,
+     "after show": 11
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 1,
+     "film notes": 1,
+     "shared:preflight.py": 7,
+     "guides": 2,
+     "shared:people_parts.py": 1,
+     "shared:ad_vanced_notice_cast.py": 1,
+     "shared:patriots4_cast.py": 2,
+     "shared:mouths.py": 3,
+     "shared:film_engine.py": 1,
+     "shared:plan.py": 2,
+     "shared:blessed.py": 1,
+     "shared:hookcheck.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
   }
  ],
  "checks": {},
