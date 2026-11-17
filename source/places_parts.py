@@ -434,3 +434,4 @@ def glass_screen(p, img, cam, a, t):
 
 import places_outside   # noqa: E402,F401  (registers the outdoor pieces into KINDS)
 import places_rooms     # noqa: E402,F401  (registers the indoor pieces into KINDS)
+import places_tables    # noqa: E402,F401  (registers the meeting-table pieces into KINDS: Milburn, 17 Nov)

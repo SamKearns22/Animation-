@@ -1,0 +1,27 @@
+# Milburn's places (places kit). Each view is a level camera; every piece in metres (x across, depth from the lens, z up).
+# The lift shaft and the field from above are paintings of their own (source/milburn_sets.py): the field's camera
+# looks down, which the kit's level cameras do not do.
+
+# place: cabinet room (10 Downing Street; reference references/milburn/cabinet-room-burnham.jpg)
+colours: wall 234 224 192 | wall light 244 236 210 | oak 120 72 44 | oak dark 92 52 32 | oak light 150 98 62 | chair red 104 46 36 | baize 46 108 94 | green 38 116 72
+
+## view: cabinet (Milburn across the table, straight to lens)
+camera: up 1.2, horizon 900, lens 1700
+people: milburn 2.2
+panels: x -2.4 to 2.4, z 0 to 4.6, depth 3.4, step 0.62, seed 5 (the panelled wall)
+block: x -2.4 to 2.4, z 3.3 to 3.36, depth 3.4, colour wall * 0.9, line 1.4 (the picture rail)
+block: x -2.4 to 2.4, z 0.86 to 0.92, depth 3.4, colour wall * 0.88, line 1.4 (the dado rail)
+window: x 0.56 to 1.2, z 1.0 to 3.1, depth 3.42, bars 2, glass 240 244 236, frame 246 244 236, seed 7 (the tall window)
+curtain: x 0.36 to 0.66, z 0.4 to 3.28, depth 3.3, colour green, folds 4, tie 0.55, seed 8 (the left curtain)
+chair back: x -0.27 to 0.27, z 0.74 to 1.26, depth 2.5, look close, seed 11 (Milburn's chair)
+chair back: x -0.86 to -0.38, z 0.74 to 1.2, depth 2.3, look close, seed 12 (the empty chair, left)
+chair back: x 0.38 to 0.86, z 0.74 to 1.2, depth 2.3, look close, seed 13 (the empty chair, right)
+table top: x -2.6 to 2.6, z 0 to 0.76, depth 1.95, near 0.3, colour baize, rim oak, streaks 0, seed 3 (the green-baize table)
+folder: x -0.16 to 0.16, z 0 to 0.76, depth 1.9, near 1.62 (Milburn's red folder)
+folder: x -0.78 to -0.5, z 0 to 0.76, depth 1.9, near 1.66 (the left place's folder)
+folder: x 0.5 to 0.78, z 0 to 0.76, depth 1.9, near 1.66 (the right place's folder)
+papers: at 0.2 0.76, depth 1.62, width 0.2 (a paper)
+tumbler: at 0.3 0.76, depth 1.72 (Milburn's water glass)
+tumbler: at -0.42 0.76, depth 1.76, full 0.75 (the left place's glass)
+tumbler: at 0.86 0.76, depth 1.76, full 0.75 (the right place's glass)
+name card: at -0.27 0.76, depth 1.5, text "Alan Milburn" (his name card)
