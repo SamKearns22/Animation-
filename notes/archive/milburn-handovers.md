@@ -31,3 +31,15 @@
 - **Read:** job pack Checks and animatic.
 - **Open rule requests:** none.
 - **For Claude:** moves critique left open: look-up still faint to the helpers at panel size (strengthened twice; Sam judges the clip), Swindon's chest out not visible front on, mouths open without words (rangy's is the joke), glasses thin at panel size (thick in code, cast stage), young faces lined, shaft reads as a hall (set, chat 2), name card cut at the left edge, goth's neck line. Acting list's aerial row is "2 cont." (block 2b is `code: field_shot`). Kittests round_page and facehouse_whole_head fail from before this film. Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+
+
+# (archived chat 5)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 59 (pre-flight before the animatic), 75 (Hook Text in the band above his head), 74 (re-time moves on Sam's takes).
+- **Done (chat 4):** note 2 fixed (the goth's silver brow bar, lip ring, nose stud; people kit `piercings: brow, lip, nose`); still and 2a clip sent. Sam then held the animatic and sent scenes 3 and 5 (brief rows 22-37).
+- **Spent:** chat 4 about 0.6% (Opus medium, ~30 steps); this film ~8% of a week so far; the estimate needs re-doing for the new scenes.
+- **Next:** chat 5, Opus HIGH (planning and building new): plan scenes 3 and 5 from brief rows 22-37: shots and timing, the estimate redone, reference photos of Andy Burnham and Pat McFadden (search order: job pack Plan) and their likeness heads (face tool + house head), the Cabinet Room reverse (Milburn's side of the table), the field further in with grey plinths at varied distances, the props (crossbow, katana, twin uzis, a large hand grenade, a Vimto, a tall glass of sparkling water), and the moves on the acting list. Then the animatic of the whole film so far (Sonnet). Ask Sam only what the brief leaves open, in one message.
+- **Needs Sam:** notes on the piercings clip; his recordings of lines 1-2 (and the new lines) when ready.
+- **Read:** job pack Plan; then Build.
+- **Open rule requests:** none.
+- **For Claude:** moves critique left open: look-up still faint to the helpers at panel size (strengthened twice; Sam judges the clip), Swindon's chest out not visible front on, mouths open without words (rangy's is the joke), glasses thin at panel size (thick in code, cast stage), young faces lined, shaft reads as a hall (set, chat 2), name card cut at the left edge, goth's neck line. Acting list's aerial row is "2 cont." (block 2b is `code: field_shot`). Kittests all pass (chat 4). Piercings are front head only (no turned view of the goth in this film). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
