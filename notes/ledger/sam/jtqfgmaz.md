@@ -38,3 +38,10 @@ Action: the characters stand at the centre of a large lift shaft upon the rising
 
 “Those not in education, employment or training will be presented with a unique opportunity to serve their country.”
 
+### 2026-11-17T20:12:51
+If these two parts cost 17.5% then something has gone terribly terribly wrong somewhere 
+
+I agree with all your recommended notes except I can't get photos right now so use what you have, and I'm not sure any of this needs to be a showstopper scene.
+
+Go ahead with the rest
+
