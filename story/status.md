@@ -1,3 +1,3 @@
-Cost fixes: model guard, search reminder and watcher built and tested (17 Nov, chat D).
-Message saver fixed; watcher found and fixed two out-of-date kit lines.
-Next: nothing queued; first Opus chat proves the guard live. Stray page deleted (Sam's Y).
+Milburn: plan started (17 Nov); brief checklist, shot list, estimate draft and refs in notes/milburn.md.
+Waiting on Sam: questions 1-10 (photos, tone, aerial, estimates option).
+Next: same chat on his answers: estimate, people and places lines, shot board.
