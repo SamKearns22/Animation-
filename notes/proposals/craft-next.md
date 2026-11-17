@@ -84,6 +84,55 @@ V2 and V1 reach the same real decision: every shot gets one agreed, measurable f
 ## Final version
 **Step 1, learn (changes nothing, about 0.5% of a week, Sonnet).** One chat reads the 36 shot-design notes (census tags composition, camera height, frame check, continuity) and, for each, what the plan, sheet or code said for that shot before the note. Two columns: cause (plan wrong or silent / build drifted from a right plan / Sam's late choice) and seen (on a still / only moving). Output: counts and the shots, in the proposal file. If more than a third are movement-only, Sam is told that cards alone cannot reach the number.
 
+### Step 1 results (craft chat 5, 17 Nov; one chat's reading of the notes and plans, so causes are judgments, counts exact)
+Cause: P = plan wrong or silent, D = build drifted from a right plan, S = Sam's late choice or changed mind. Seen: still = a still of the planned frame with people placed would have shown it; moving = only on a clip or animatic.
+
+**Counts (36):** P 20 (56%), S 11 (31%), D 5 (14%). Still 20 (56%), moving-only 16 (44%).
+By film: EPR 13 (P 8, S 4, D 1; moving-only 10). Blessed 13 (P 7, S 4, D 2; moving-only 4). Remakes 10 (P 5, S 3, D 2; moving-only 2).
+Moving-only, by what it was: camera height or distance judged right on stills, wrong when moving (F1, A1: both passed the framing research and pencil roughs); timing and order (F23, A7, F3, F4, A4, A31, F7); cuts and drift in time (17a, 46, 47, 63, 18, 32, G12).
+Reading: more than a third are moving-only, so cards alone cannot reach "at most 3 per film". Build drift is under a third, so the Step 2 measuring branch is not triggered; plan faults dominate, so Step 2 is the full card sheet and its gate only.
+
+| film | note | shot | what the plan or code said before | cause | seen |
+|---|---|---|---|---|---|
+| EPR | G12 | Germany | plan: crowd on the near pavement, heads low; the crowd was then moved off the door and some were lost | D | moving |
+| EPR | F1 | France | plan: camera 0.8 m (low, so the line towers); passed two still checks | P | moving |
+| EPR | F3 | France | plan: beats timed on a 4 s tier for the low camera; no slot per piece | P | moving |
+| EPR | F4 | France | plan: action around the base; Sam's new photo put people on the plinth | S | moving |
+| EPR | F7 | France | plan: a gap drawn in bands, no metres | P | moving |
+| EPR | F13 | France | plan: crowds in bands; paving left bare once the camera rose | P | still |
+| EPR | F23 | France | plan: jet at 2.5-4.0 of 4 s, so water and truck bunch at the end of the longer film | P | moving |
+| EPR | A1 | Albania | plan: camera 3 m (2.8 built); passed stills | P | moving |
+| EPR | A3 | Albania end | end scene A/B/C planned for the old camera; follows A1 | S | still |
+| EPR | A4 | Albania | Sam's three-crowd restage came as a new brief | S | moving |
+| EPR | A7 | Albania | plan: helicopter hit 1.0-2.0 of 4 s; Sam re-ordered the story | S | moving |
+| EPR | A10 | Albania end | alley camera set in code with no plan line | P | still |
+| EPR | A31 | Albania | selfie man had no action on the acting list | P | moving |
+| Blessed | 7 | gates | plan: gatehouse at 18 m; no pack distance | P | still |
+| Blessed | 11 | arrive | plan: camera 2.4 m, no reason given | P | still |
+| Blessed | 12 | arrive, gates | plan: no press count | P | still |
+| Blessed | 15b | dock | plan: a painted wall, no fill for half the frame | P | still |
+| Blessed | 17a | cell | wall detail added in a later fix, popping in | D | moving |
+| Blessed | 18 | cot | plan: Brand sitting; Sam's new idea, lie flat, camera above | S | moving |
+| Blessed | 22 | tv room | plan: inmates on a bench, close together | P | still |
+| Blessed | 30 | gates2 | plan: Walliams his own shot; Sam wanted him in the established shot | S | still |
+| Blessed | 32 | gates2 | the first fix emptied the pack's left side and framed the door, not Brand | P | moving |
+| Blessed | 33 | arrive | plan: pack behind and beside; Sam wanted them in front | S | still |
+| Blessed | 37 | dock | frame a quarter screen higher (Sam: "perfect now") | S | still |
+| Blessed | 42 | phone | plan: no focus point per shot | P | still |
+| Blessed | 46 | release | plan: second camera on the same painting; the pack was rebuilt per shot | D | moving |
+| Remakes | 32 | camp | plan: gunmen standing behind KG in the yard | P | still |
+| Remakes | 33 | wall | plan: KG's face and Link's turn not specified | S | still |
+| Remakes | 47 | camp | plan: the grenade man in frame the whole time | P | moving |
+| Remakes | 49 | line-up | plan: camera distance with no reason; later reversed by 71 | P | still |
+| Remakes | 56 | square | plan: Link in the line-up's own view, no reverse | P | still |
+| Remakes | 61 | reverse | a castle in the painted background (build) | D | still |
+| Remakes | 63 | camp | Sam changed his own decision from 47 | S | moving |
+| Remakes | 67a | camp | plan: no safe-area line for the strike | P | still |
+| Remakes | 71 | line-up | Sam: 25% further out, reversing 49 | S | still |
+| Remakes | 75 | wall | banner in one shot, not the other (build) | D | still |
+
+Thin evidence (read from the notes' fix lines, not the original plan text): G12, F7, A31, 33, 17a. Changing any of them does not alter the headline.
+
 **Step 2, one change, its own yes through the route.** Rule 11 is rewritten, not added to: every shot (not 3-4) gets a shot card: camera height and distance and why (F2), the lead's height on screen, which band of the tall frame each layer sits in (F1), the focus point and where the next shot's focus sits (F10), set pieces that must match across cuts. The rule 11 sheet is drawn from the cards with people placed; the gate refuses a sheet made after building began or with no people on it. Rule 10 names the card's fields.
 - If build drift is a third or more of the notes: pre-flight also measures each shot's key frames against its card (focus person's height within 20%, focus within a tenth of the frame of its card, inside the safe area, clear of the app's buttons, no band over a third empty) and refuses the animatic until each miss is fixed or named on the "Checks:" line.
 - If plan faults dominate: the full card sheet and its gate only; the match check is not built.

@@ -1,17 +1,15 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** the proposal route (every change through it), 30 (say why a first fix failed), 85 (cost watch).
-- **Done (craft chat 4, Opus medium, 16-17 Nov):** craft census: 159 craft notes from EPR, Blessed, Remakes tagged by area, cause, repeat, cost; ranked per area and across areas in `notes/proposals/craft-census.md` (table: `craft-census/notes.tsv`). Top open lever: shot design (composition 19, camera height 8, frame check 5, continuity 4 = 36 notes). Then proposal `craft-next` through the route: verdict recorded, judge picked helper B (blind), Critiqued 6 found, 3 fixed, 3 named.
-- **Unrouted entry (chat 97c3cead, answered):** the guard flagged craft-census.md as an unjudged proposal; it is a findings file that changes nothing (no verdict needed); the question Sam got was craft-next, which has a valid verdict and the Critiqued line.
-- **Sam (17 Nov): 'Start with the census.'** Taken as Option 1 of craft-next (the look back first; adopted).
+- **Rules that bite next:** the proposal route (Step 2 goes through it: `source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
+- **Done (craft chat 5, Sonnet, 17 Nov):** craft-next Step 1: 36 shot-design notes read against what the plan said; results in `notes/proposals/craft-next.md` under "Step 1 results". Cause: plan wrong or silent 20, Sam's late choice 11, build drift 5. Seen: on a still 20, only moving 16 (44%, over a third: cards alone cannot reach the number). Changed nothing else.
+- **Next (craft chat 6, Opus, medium effort):** put craft-next Step 2 through the proposal route. Plan faults dominate and drift is under a third, so Step 2 is the full card sheet and its gate; the measuring branch is not triggered. The 16 moving-only notes are not covered by cards (camera height judged on stills, timing, cuts): say so in the Lost/Added lines and offer the other option plainly.
 - **Needs Sam:** nothing now.
-- **Next (craft chat 5, Sonnet, normal effort: reading and counting from a clear plan):** craft-next Final version, Step 1 only: for each of the 36 shot-design notes (craft-census/notes.tsv fixes F-plan, C-height, F-frame, F-cont) find what the plan, sheet or code said for that shot before the note; tag cause (plan wrong or silent / build drifted / Sam's late choice) and seen (still / only moving); counts and shots into craft-next.md under 'Step 1 results'. If more than a third are movement-only, say so to Sam. Then hand to Opus medium for Step 2 through the route.
-- **Numbers to beat:** craft-next: at most 3 shot-design notes per film on the next two films, none returned twice. Change 2: no pose note returned twice on the next two films. Change 1: at most 2 sameness notes, none repeated, on the next two crowd films.
-- **Read:** `notes/proposals/craft-next.md` (Final version); job pack "A tool job".
-- **Open rule requests:** none. Changes made without asking (end-of-film review): as chat 3's list (archived); none new in chat 4.
-- **Branches named (not merged, waiting on Sam):** claude/blessed-c2-mics-wip, claude/audit-honest-checker.
-- **For Claude:** re-rank: edit craft-census/notes.tsv, then `python3 notes/proposals/craft-census/rank.py notes/proposals/craft-census/notes.tsv notes/proposals/craft-census.md` (it rewrites the file from scratch). Old handovers `notes/archive/proposal-route-handovers.md`.
+- **Numbers to beat:** craft-next: at most 3 shot-design notes per film on the next two films, none returned twice. Change 2: no pose note returned twice. Change 1: at most 2 sameness notes, none repeated.
+- **Read:** `notes/proposals/craft-next.md` (Step 1 results, Step 2); job pack "A tool job".
+- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** causes are one reading from fix lines, thin on G12, F7, A31, 33, 17a. Re-rank tool: `notes/proposals/craft-census/rank.py`. Old handovers `notes/archive/proposal-route-handovers.md`.
+
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)
 Protest Tiers, from notes/ledger/protest-tiers.json (stage spend vs plan, % of a week): plan + unplanned extras 10.1
