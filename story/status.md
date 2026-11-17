@@ -1,3 +1,3 @@
 No film in progress.
-Done: rule 11's board gate built and tested (the pre-flight refuses a film until every shot's board has reached Sam). Sam: Q2 = N.
-Next: nothing queued; the next film's plan uses the board (board notes counted apart from "at most 3").
+Done: chat size measured and judged (Sam's Y); model-switch failure found; code finder found barely used.
+Next: chat A (Opus medium) builds the chat-size change; chat B (Opus high) routes 3 proposals; craft chat 8 still queued.
