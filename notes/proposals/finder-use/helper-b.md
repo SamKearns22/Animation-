@@ -41,7 +41,7 @@ Chosen: E, then A; B, C, D each wait for E's number.
 
 **Cost:** ~1% once vs 15% per film; one day spent 9.87% searching; halving locate searches saves an estimated 2-3% per round day.
 
-**Sam notices:** nothing in films; handover names any chat that skipped the finder.
+**Sam notices:** nothing in films.
 
 ## Sam test
 - Q1: measures the right unit first, enforces at use.
@@ -57,4 +57,4 @@ Chosen: E, then A; B, C, D each wait for E's number.
 Lost: day-level flag. Added: split measure, session id, one-line reminder.
 
 ## Unchecked
-16 Nov transcripts for re-measure; when change 2 went on; real split by purpose; the saving estimate; result sizes.
+16 Nov transcripts; when change 2 went on; split by purpose; saving; result sizes.
