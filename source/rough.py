@@ -23,10 +23,14 @@ about anything built that never went on a rough.
                                  first frame; app-safe box and frame thirds drawn over; under each shot its row
                                  (story/FILM-board.txt: camera, lead, focus, next focus, match, choices; a field
                                  missing is printed red "not planned"). --root: a checkout of an older commit (the
-                                 learn step draws from a film's first plan). Draws only; records and gates nothing.
+                                 learn step draws from a film's first plan). Leaves OUT.jpg.json beside it.
+    python3 source/rough.py sent FILM OUT.jpg --delivered --board   after sending the board: records each shot and
+                                 its frames' digest (story/FILM-board-sent.txt) and ends the ledger's "board" stage;
+                                 the pre-flight refuses without it (board_gate: a shot on no board, a shot with nobody
+                                 in it, a board after the first move)
 
 Map: items 40 | the record 85 | people 110 | places 135 | moves (draft clock 170, key times 210, tiles 240) |
-     the sheet 310 | the board 420 | main 551
+     the sheet 310 | the board 420 | the board's record and gate 558 | main 712
 """
 import datetime
 import hashlib
@@ -547,7 +551,157 @@ def board(film, out, root=ROOT):
         sheet_im.paste(p, (0, y))
         y += p.height
     sheet_im.save(out, quality=82)
+    _board_note(film, out, got, root)
     return out, got, missing
+
+
+# ---------------------------------------------------------------------------------------------- the board's record
+# Rule 11's gate (craft chat 8, 18 Nov). `board` leaves a note beside the picture (OUT.jpg.json: each shot, its cast,
+# a digest of its four frames, the commit drawn from, how many move blocks the film had then); `sent FILM OUT.jpg
+# --delivered --board` copies it into story/FILM-board-sent.txt with the time it reached Sam; the pre-flight's
+# board_gate refuses a film whose shot is on no delivered board, whose shot has nobody in it, or whose first board
+# reached Sam after its first move was written (the earliest commit adding a block to story/FILM-moves.txt, or a
+# board drawn while the film already had blocks). Films begun before the rule keep the old "Composition sheet sent:"
+# line. Not covered: moves written only in a film's code (not in its moves file).
+RULE_COMMIT = 'fbfe83b9'                            # rule 11 rewritten (Sam's Y, 18 Nov): films older than it keep the old line
+MOVE_BLOCK = r'^## *[a-z0-9_]+: *[a-z0-9_]+'
+
+
+def _git(root, *args):
+    import subprocess
+    r = subprocess.run(['git', '-C', root, *args], capture_output=True, text=True)
+    return r.stdout.strip() if r.returncode == 0 else None
+
+
+def _story(film, kind, root=ROOT):
+    return os.path.join(root, 'story', f'{film.replace("_", "-")}-{kind}')
+
+
+def move_blocks(film, root=ROOT):
+    p = _story(film, 'moves.txt', root)
+    return len(re.findall(MOVE_BLOCK, open(p).read(), re.M)) if os.path.exists(p) else 0
+
+
+def first_move(film, root=ROOT):
+    """(epoch, where) of the film's first move: the earliest commit adding a block to its moves file; blocks not yet
+    committed count from the file's last change. None: no moves yet."""
+    p = _story(film, 'moves.txt', root)
+    rel = os.path.relpath(p, root)
+    got = _git(root, 'log', '--reverse', '--format=%at %h', '-G', MOVE_BLOCK, '--', rel)
+    if got:
+        t, h = got.splitlines()[0].split()
+        return int(t), f'commit {h}'
+    if move_blocks(film, root):
+        return int(os.path.getmtime(p)), 'the moves file (not yet committed)'
+    return None
+
+
+def _board_note(film, out, got, root):
+    """The note beside the picture, so `sent --board` records exactly what was drawn (never a redraw)."""
+    import json
+    import time
+    digests = {}
+    for n, _, _ in got['shots']:
+        h = hashlib.sha1()
+        for _lab, _t, f, err in got['frames'][n]:
+            h.update(open(f, 'rb').read() if not err and os.path.exists(f) else err.encode())
+        digests[n] = h.hexdigest()[:10]
+    json.dump(dict(film=film, drawn=int(time.time()), commit=_git(root, 'rev-parse', '--short', 'HEAD') or 'none',
+                   moves=move_blocks(film, root), shots=got['shots'], cast=got['cast'], digests=digests),
+              open(out + '.json', 'w'))
+
+
+def board_record_path(film, root=ROOT):
+    return _story(film, 'board-sent.txt', root)
+
+
+def board_record(film, root=ROOT):
+    """[{delivered, drawn, commit, moves, file, shots: {name: (digest, cast)}}] for every board delivered, oldest first."""
+    out = []
+    p = board_record_path(film, root)
+    if os.path.exists(p):
+        for ln in open(p):
+            f = ln.split()
+            if ln.startswith('board '):
+                kv = dict(x.split('=', 1) for x in f[2:] if '=' in x)
+                out.append(dict(file=f[1], delivered=int(kv['delivered']), drawn=int(kv['drawn']),
+                                commit=kv.get('commit'), moves=int(kv.get('moves', 0)), shots={}))
+            elif ln.startswith('shot ') and out and len(f) >= 3:
+                out[-1]['shots'][f[1]] = (f[2], [c for c in (f[3] if len(f) > 3 else '').split(',') if c])
+    return out
+
+
+def mark_board_sent(film, out, root=ROOT):
+    """Records the board drawn into OUT as delivered now (its note must exist: draw it with `board` first)."""
+    import json
+    import time
+    note = out + '.json'
+    if not os.path.exists(note):
+        raise SystemExit(f'NOT recorded: {out} has no board note ({note}); draw it with rough.py board {film} {out}')
+    b = json.load(open(note))
+    if b['film'].replace('_', '-') != film.replace('_', '-'):
+        raise SystemExit(f'NOT recorded: {out} is the board of {b["film"]}, not {film}')
+    now = int(time.time())
+    p = board_record_path(film, root)
+    new = not os.path.exists(p)
+    with open(p, 'a') as f:
+        if new:
+            f.write('# The shot boards that reached Sam (rule 11; source/rough.py sent FILM OUT.jpg --delivered --board).\n'
+                    '# board FILE delivered=EPOCH drawn=EPOCH commit=C moves=N (move blocks when drawn); '
+                    'then one line per shot: shot NAME FRAMES-DIGEST CAST\n')
+        f.write(f'board {os.path.basename(out)} delivered={now} drawn={b["drawn"]} commit={b["commit"]} '
+                f'moves={b["moves"]} ({datetime.datetime.fromtimestamp(now):%d %b %H:%M})\n')
+        for n, _a, _b in b['shots']:
+            f.write(f'shot {n} {b["digests"][n]} {",".join(b["cast"].get(n) or []) or "-"}\n')
+    return b
+
+
+def _before_rule(film_mod, name, root):
+    """A film begun before rule 11's board (its code already there at RULE_COMMIT, or its notes archived)."""
+    src = getattr(film_mod, '__file__', '') or ''
+    if src and os.path.abspath(src).startswith(os.path.abspath(root) + os.sep):
+        if _git(root, 'cat-file', '-e', f'{RULE_COMMIT}:{os.path.relpath(src, root)}') is not None:
+            return True
+    return os.path.exists(os.path.join(root, 'notes', 'archive', f'{name}.md'))
+
+
+def board_gate(film_mod, name, notes_text='', root=ROOT):
+    """Rule 11's refusals for the pre-flight (empty: go)."""
+    send = (f'python3 source/rough.py board {name} OUT.jpg, send it with SendUserFile, then '
+            f'python3 source/rough.py sent {name} OUT.jpg --delivered --board')
+    boards = board_record(name, root)
+    if not boards:
+        if _before_rule(film_mod, name, root):              # begun before the board: the old line still counts
+            if re.search(r'^\s*[-*]?\s*\**Composition sheet sent\**:\**[ \t]*[^\s(*]', notes_text, re.M | re.I):
+                return []
+            return ['no record of the composition sheet being sent (rule 11, a film begun before the shot board): '
+                    'add "Composition sheet sent: DATE, FILE" to the notes, or ' + send]
+        return [f'no shot board has reached Sam (rule 11): {send}']
+    out = []
+    shots = [n for n, a, b in film_mod.SHOTS if float(b) > float(a)]
+    seen = set().union(*(b['shots'] for b in boards))
+    gone = [n for n in shots if n not in seen]
+    if gone:
+        out.append(f'{len(gone)} shot(s) on no delivered board (rule 11): {", ".join(gone[:8])}'
+                   f'{" ..." if len(gone) > 8 else ""}: draw the board again, send it, then `sent --board`')
+    cast = getattr(film_mod, 'SHOT_CAST', None)
+    if cast is None:
+        out.append('the film has no SHOT_CAST (rule 11): the board must show who is in every shot')
+    else:
+        empty = [n for n in shots if not cast.get(n)]
+        if empty:
+            out.append(f'{len(empty)} shot(s) with nobody in SHOT_CAST (rule 11): {", ".join(empty[:8])}')
+    first = boards[0]
+    when = datetime.datetime.fromtimestamp(first['delivered']).strftime('%d %b %H:%M')
+    if first['moves']:
+        out.append(f'the first board ({first["file"]}, {when}) was drawn after {first["moves"]} move block(s) were '
+                   'written (rule 11: every shot on the board before any movement is built)')
+    else:
+        fm = first_move(name, root)
+        if fm and fm[0] < first['delivered']:
+            out.append(f'the first move ({fm[1]}, {datetime.datetime.fromtimestamp(fm[0]):%d %b %H:%M}) came before '
+                       f'the first board reached Sam ({when}) (rule 11: the board before any movement)')
+    return out
 
 
 def _films():
@@ -565,7 +719,11 @@ def main(argv):
         out, got, missing = board(film, argv[2], root)
         print(f'{out}: {len(got["shots"])} shots; plan rows missing fields on {len(missing)} shot(s)'
               + ''.join(f'\n  {n}: {", ".join(m)}' for n, m in list(missing.items())[:3])
-              + (f'\n  ... and {len(missing) - 3} more' if len(missing) > 3 else ''))
+              + (f'\n  ... and {len(missing) - 3} more' if len(missing) > 3 else '')
+              + (f'\n  nobody in: {", ".join(n for n, _, _ in got["shots"] if not got["cast"].get(n))}'
+                 if any(not got['cast'].get(n) for n, _, _ in got['shots']) else '')
+              + (f'\nafter SendUserFile has delivered it: python3 source/rough.py sent {film} {out} --delivered --board'
+                 if root == ROOT else ''))
         return 0
     if argv[0] == 'check':
         f = gate_faults(film)
@@ -576,6 +734,20 @@ def main(argv):
             print('NOT recorded: add --delivered once SendUserFile has delivered the sheet (a sheet is "sent" only when it arrived).')
             return 1
         rest = [a for a in argv[2:] if not a.startswith('--')]
+        if '--board' in argv:
+            if not rest:
+                print('NOT recorded: name the board picture: rough.py sent FILM OUT.jpg --delivered --board')
+                return 1
+            b = mark_board_sent(film, rest[0])
+            print(f'{film}: the board of {len(b["shots"])} shots recorded as seen '
+                  f'({os.path.relpath(board_record_path(film), ROOT)})')
+            import subprocess
+            import ledger
+            if ledger.load(film).get('stages'):            # the plan's "board" stage ends here (rule 24)
+                r = subprocess.run([sys.executable, os.path.join(HERE, 'ledger.py'), 'stage', film, 'board'],
+                                   capture_output=True, text=True)
+                print((r.stdout + r.stderr).strip())
+            return 0
         n = mark_sent(film, rest[0] if rest else '')
         print(f'{film}: {n} things recorded as seen on a rough ({os.path.relpath(record_path(film), ROOT)})')
         return 0

@@ -16,7 +16,7 @@ MAP
                      into the ledger of the film or job it worked on (found from the files it touched); committed and
                      pushed when it has moved by 0.25% of a week, so the record survives the chat
   estimate ......... the film's estimate (% of a week), for estimate versus actual; --stages gives the plan's stages
-                     and shares (Job M, rule 24): "cast 2, sets 2.5, moves 3, animatic1 1, round 1.5, final 0.5"
+                     and shares (Job M, rule 24): "cast 2, sets 2.5, board 0.5, moves 3, animatic1 1, round 1.5, final 0.5"
   stage ............ marks a stage done at its end (the first open one of that name; one not in the plan is added
                      with no share) and prints the forecast line for Sam's first line
   forecast() ....... spent / (share of the plan done) x estimate; mid-stage, never less than spent so far plus the
@@ -39,8 +39,8 @@ MAP
                      and cost by kind of step (source/stepcost.py) onto its row, kept when the app row replaces it
   kept() ........... rule 37 (Job L): sounds and references not yet on GitHub, at every log (handover) and `kept`
 
-    python3 source/ledger.py estimate FILM 10 --stages "cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5"
-    python3 source/ledger.py stage FILM cast          (at the end of each stage)
+    python3 source/ledger.py estimate FILM 10 --stages "cast 3, sets 2, board 0.5, moves 2, animatic1 1, round 1.5, final 0.5"
+    python3 source/ledger.py stage FILM cast          (at the end of each stage; "board" ends itself: rough.py sent --board)
     python3 source/ledger.py round FILM 2
     python3 source/ledger.py save FILM SHEET.txt          (or: save FILM - "text", a line straight in)
     python3 source/ledger.py note FILM "false alarm: handcheck 12.3 s, the hand is behind the mug on purpose"
@@ -803,7 +803,7 @@ def main():
     a = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     s = a.add_subparsers(dest='cmd', required=True)
     p = s.add_parser('estimate'); p.add_argument('film'); p.add_argument('pct', type=float)
-    p.add_argument('--stages', help='"cast 2, sets 2.5, moves 3, animatic1 1, round 1.5, final 0.5"')
+    p.add_argument('--stages', help='"cast 2, sets 2.5, board 0.5, moves 3, animatic1 1, round 1.5, final 0.5"')
     p = s.add_parser('stage'); p.add_argument('film'); p.add_argument('name')
     p = s.add_parser('round'); p.add_argument('film'); p.add_argument('n', type=int)
     p = s.add_parser('save'); p.add_argument('film'); p.add_argument('path'); p.add_argument('text', nargs='?')

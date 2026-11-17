@@ -17,8 +17,9 @@ and BLACK_AT / DUR. It:
    here instead, with 5. a contact sheet (one frame a second, safe-area guides drawn on).
 Every list is one line per fault, grouped by check, shot and who, with its time span and count (report.group).
 Before any of it, it REFUSES to run (rule 14) while the film's brief checklist (notes/NAME.md, "The brief as a
-checklist") has a blank "done?" row, or before the composition sheet has been sent (a line "Composition sheet sent:
-DATE, FILE" in the notes, rule 11); and it fails a film whose shot is missing anyone the brief puts in it (SHOT_CAST,
+checklist") has a blank "done?" row, or before the shot board has reached Sam (rule 11, rough.board_gate: every shot
+on a delivered board, nobody missing from SHOT_CAST, the first board before the first move; films begun before 18 Nov
+keep the old "Composition sheet sent: DATE, FILE" line); and it fails a film whose shot is missing anyone the brief puts in it (SHOT_CAST,
 against the audit's roster). It prints a short summary; the full list goes to OUT_DIR/NAME-preflight.txt (rule 19).
 The shared kit's checks (kitchecks.py, rule 13) run here on every film: facing on the drawing pass, marks, sounds,
 and (inside the audit) hands on what they touch, props held, resting hands clear. handcheck.py (rule 41) probes
@@ -202,8 +203,8 @@ def notes_path(film, name):
 
 
 def gates(film, name):
-    """Rule 14: what stops pre-flight before it starts: a blank row in the brief checklist, no record of the
-    composition sheet being sent; rule 75: no Hook Text plan (HOOK and KEEP_CLEAR). Returns the reasons (empty: go)."""
+    """Rule 14: what stops pre-flight before it starts: a blank row in the brief checklist, rule 11's shot board
+    (rough.board_gate); rule 75: no Hook Text plan (HOOK and KEEP_CLEAR). Returns the reasons (empty: go)."""
     path = notes_path(film, name)
     if not os.path.exists(path):
         return [f'no notes file ({os.path.relpath(path, ROOT)}): the brief checklist lives there (notes/_template.md)']
@@ -227,9 +228,8 @@ def gates(film, name):
         elif blank:
             out.append(f'the brief checklist has {len(blank)} blank "done?" row(s): ' + '; '.join(blank[:8]) +
                        (' ...' if len(blank) > 8 else '') + ' (tick each against the film, or say why not)')
-    if not re.search(r'^\s*[-*]?\s*\**Composition sheet sent\**:\**[ \t]*[^\s(*]', text, re.M | re.I):   # not the (...)
-        out.append('no record of the composition sheet being sent (rule 11): send Sam the 3-4 key shots, then add '
-                   '"Composition sheet sent: DATE, FILE" to the notes file')
+    import rough                                            # rule 11: the shot board reached Sam before any move
+    out += rough.board_gate(film, name, text)
     import hookcheck
     out += hookcheck.plan_faults(film)                      # rule 75: the Hook Text planned at the first animatic
     return out

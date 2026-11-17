@@ -17,7 +17,7 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 - Estimate costs come from the ledgers' real costs per thing and per round (`notes/ledger/`), no padding, no
   multipliers; the plan's stages go in with `ledger.py estimate FILM PCT --stages`, and each stage's end runs
   `ledger.py stage FILM NAME`, whose forecast line opens that reply (rule 24).
-- Bite: 24, 74, 1, 38, 8. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`.
+- Bite: 24, 74, 1, 38, 8, 11. Tools: `ledger.py estimate`, `plan.py`, `catalogue.py`, `rough.py board` (then `sent --board`).
 - Moved from CLAUDE.md word for word (startup fixes 4, 16 Nov): **Reference photos and reporting (full network access since 12 Nov):** I send 2-3 when I have them; otherwise search
   once, slowly, 3 per place at most: **news pages and press photo galleries first** (Al Jazeera galleries, AP, Reuters,
   euronews, dpa, local papers), free libraries (Wikimedia, Geograph, Openverse, Pexels, Unsplash) only when the news

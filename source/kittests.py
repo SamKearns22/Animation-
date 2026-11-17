@@ -3013,6 +3013,104 @@ def shot_board_every_shot():
     return not bad, '; '.join(bad) or 'every shot drawn, key beat, next shot, failures and plan gaps named'
 
 
+
+@test
+def board_gate_refusals():
+    """Rule 11's gate (craft chat 8, 18 Nov): the pre-flight refuses a new film until its shot board has reached Sam
+    (rough.py sent FILM OUT.jpg --delivered --board); then refuses a shot on no delivered board, a shot with nobody
+    in SHOT_CAST, and a first board delivered after the first move (a moves block committed before it, or a board
+    drawn while blocks existed). A made-up film in a throwaway git repo shows each; Blessed passes with a record
+    of every shot, and without one keeps the old "Composition sheet sent:" line (begun before the rule)."""
+    import importlib
+    import shutil
+    import subprocess
+    import tempfile
+    import time
+    import rough as R
+    tmp = tempfile.mkdtemp()
+    bad = []
+
+    def git(*a, when=None):
+        env = dict(os.environ, GIT_AUTHOR_NAME='t', GIT_AUTHOR_EMAIL='t@t', GIT_COMMITTER_NAME='t',
+                   GIT_COMMITTER_EMAIL='t@t')
+        if when:
+            env['GIT_AUTHOR_DATE'] = env['GIT_COMMITTER_DATE'] = f'@{int(when)} +0000'
+        subprocess.run(['git', '-C', tmp, *a], env=env, capture_output=True, check=True)
+
+    def has(faults, words):
+        return any(words in f for f in faults)
+    try:
+        os.makedirs(os.path.join(tmp, 'source'))
+        os.makedirs(os.path.join(tmp, 'story'))
+        src = os.path.join(tmp, 'source', 'fake_gate.py')
+        open(src, 'w').write(
+            "from PIL import Image\n"
+            "SHOTS = [('A', 0.0, 2.0), ('B', 2.0, 4.0), ('C', 4.0, 6.0)]\n"
+            "SHOT_CAST = {'A': ['kid'], 'B': ['kid', 'dog'], 'C': []}\n"
+            "def picture(t):\n"
+            "    return Image.new('RGB', (1080, 1920), (int(t * 30), 90, 120))\n")
+        git('init', '-q')
+        git('add', '-A')
+        git('commit', '-qm', 'film', when=time.time() - 9000)
+        sys.path.insert(0, os.path.join(tmp, 'source'))
+        F = importlib.import_module('fake_gate')
+        if not has(R.board_gate(F, 'fake-gate', '', tmp), 'no shot board has reached Sam'):
+            bad.append('a new film with no board was not refused')
+        if R.board_gate(F, 'fake-gate', 'Composition sheet sent: 1 Nov, x.jpg', tmp) == []:
+            bad.append('the old "Composition sheet sent:" line let a new film through')
+        out = os.path.join(tmp, 'board.jpg')
+        R.board('fake-gate', out, tmp)
+        R.mark_board_sent('fake-gate', out, tmp)
+        rec = R.board_record('fake-gate', tmp)
+        if len(rec) != 1 or set(rec[0]['shots']) != {'A', 'B', 'C'} or rec[0]['shots']['B'][1] != ['kid', 'dog']:
+            bad.append(f'the record does not hold each shot and its cast: {rec}')
+        g = R.board_gate(F, 'fake-gate', '', tmp)
+        if not has(g, 'nobody in SHOT_CAST') or len(g) != 1:
+            bad.append(f'shot C (nobody in it) should be the only refusal: {g}')
+        F.SHOT_CAST['C'] = ['dog']
+        F.SHOTS.append(('D', 6.0, 8.0))
+        F.SHOT_CAST['D'] = ['kid']
+        if not has(R.board_gate(F, 'fake-gate', '', tmp), 'on no delivered board'):
+            bad.append('shot D, added after the board, was not refused')
+        F.SHOTS.pop()
+        if R.board_gate(F, 'fake-gate', '', tmp):
+            bad.append(f'a delivered board of every shot, cast in each, was refused: {R.board_gate(F, "fake-gate", "", tmp)}')
+        mv = os.path.join(tmp, 'story', 'fake-gate-moves.txt')
+        open(mv, 'w').write('gait amble: like walk, sps 1.5\n## a: kid\nrow: waves\n')
+        git('add', '-A')
+        git('commit', '-qm', 'moves', when=rec[0]['delivered'] + 60)
+        if R.board_gate(F, 'fake-gate', '', tmp):
+            bad.append('a move written after the board was refused')
+        os.remove(R.board_record_path('fake-gate', tmp))
+        R.mark_board_sent('fake-gate', out, tmp)                    # the same board, now delivered after the move
+        git('commit', '-q', '--amend', '--no-edit', '--date', f'@{int(time.time()) - 600} +0000',
+            when=time.time() - 600)
+        if not has(R.board_gate(F, 'fake-gate', '', tmp), 'came before the first board'):
+            bad.append('a move committed before the board reached Sam was not refused')
+        os.remove(R.board_record_path('fake-gate', tmp))
+        R.board('fake-gate', out, tmp)                              # drawn while the moves file has a block
+        R.mark_board_sent('fake-gate', out, tmp)
+        if not has(R.board_gate(F, 'fake-gate', '', tmp), 'drawn after 1 move block'):
+            bad.append('a board drawn after a move was written was not refused')
+        import blessed as BL                                        # a real film: every shot recorded, so it passes
+        os.remove(R.board_record_path('fake-gate', tmp))
+        p = R.board_record_path('blessed', tmp)
+        with open(p, 'w') as f:
+            f.write(f'board b.jpg delivered={int(time.time())} drawn={int(time.time())} commit=x moves=0\n')
+            for n, a, b in BL.SHOTS:
+                f.write(f'shot {n} 0123456789 {",".join(BL.SHOT_CAST.get(n) or []) or "-"}\n')
+        g = R.board_gate(BL, 'blessed', '', tmp)
+        if g:
+            bad.append(f'Blessed with a record of every shot was refused: {g}')
+        if R.board_gate(BL, 'blessed', 'Composition sheet sent: 4 Nov, comp.jpg') != []:
+            bad.append('Blessed (begun before the rule) lost its old "Composition sheet sent:" line')
+    finally:
+        sys.path[:] = [x for x in sys.path if not x.startswith(tmp)]
+        sys.modules.pop('fake_gate', None)
+        shutil.rmtree(tmp, ignore_errors=True)
+    return not bad, '; '.join(bad) or 'no board, a missing shot, an empty shot and a board after a move all refused'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
