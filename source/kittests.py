@@ -2962,6 +2962,57 @@ def crowds_varied():
         {f'default {c}': len(v) for c, v in dflt.items()} | {'one top told': len(told), 'same: let be': len(let)}
 
 
+@test
+def shot_board_every_shot():
+    """Craft-step2 learn step (craft chat 7, 17 Nov): rough.py's board draws EVERY shot of a film's SHOTS through the
+    film's own picture(t), in its own process (so an older checkout draws with its own kits): start, the key beat
+    (a named time inside the shot), end, and the next shot's first frame; a shot with nobody in its cast is shown,
+    a frame that fails is named (never dropped), and the plan row's missing fields are listed."""
+    import shutil
+    import tempfile
+    import rough as R
+    tmp = tempfile.mkdtemp()
+    bad = []
+    try:
+        os.makedirs(os.path.join(tmp, 'source'))
+        os.makedirs(os.path.join(tmp, 'story'))
+        open(os.path.join(tmp, 'source', 'fake_board.py'), 'w').write(
+            "from PIL import Image\n"
+            "SHOTS = [('A', 0.0, 2.0), ('B', 2.0, 5.0), ('gone', 5.0, 5.0), ('C', 5.0, 7.0)]\n"
+            "SHOT_CAST = {'A': ['kid'], 'B': ['kid', 'dog'], 'C': []}\n"
+            "BANG = 3.1\n"
+            "def picture(t):\n"
+            "    if 6.5 < t < 7.0: raise ValueError('no end frame')\n"
+            "    return Image.new('RGB', (1080, 1920), (int(t * 30), 90, 120))\n")
+        open(os.path.join(tmp, 'story', 'fake-board-board.txt'), 'w').write(
+            'shot A\ncamera: 1.6 m, eye level, to see the face\nlead: half the frame\nfocus: the kid\n'
+            'next focus: the dog\nmatch: the red ball\nchoices: 1. ball or stick?\n')
+        out = os.path.join(tmp, 'board.jpg')
+        _, got, missing = R.board('fake-board', out, tmp)
+        names = [n for n, _, _ in got['shots']]
+        if names != ['A', 'B', 'C']:
+            bad.append(f'shots {names} (a zero-length shot is left out, every other drawn)')
+        labs = {n: [f[0] for f in got['frames'][n]] for n in names}
+        if labs.get('B', [None, None])[1] != 'BANG':
+            bad.append(f'key beat of B: {labs.get("B")} (BANG at 3.1 s is inside it)')
+        if labs.get('A', [None])[1:2] != ['middle']:
+            bad.append(f'A has no beat inside, so its key frame is the middle: {labs.get("A")}')
+        if labs.get('A', [])[-1:] != ['next: B'] or any(x.startswith('next') for x in labs.get('C', [])):
+            bad.append(f'next-shot frames wrong: {labs}')
+        if not any(f[3] for f in got['frames'].get('C', [])):
+            bad.append('a frame that failed to draw was not named')
+        if 'A' in missing or set(missing) != {'B', 'C'}:
+            bad.append(f'plan-row gaps: {missing} (A is fully planned)')
+        if got['cast'].get('C') != []:
+            bad.append('a shot with nobody in it was not kept as nobody')
+        from PIL import Image
+        if Image.open(out).height < 3 * 400:
+            bad.append('the board is not one row per shot')
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return not bad, '; '.join(bad) or 'every shot drawn, key beat, next shot, failures and plan gaps named'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

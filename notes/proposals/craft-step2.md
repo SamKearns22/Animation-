@@ -116,3 +116,26 @@ Added: a sheet of every real shot with people, timing and choices; a check that 
 Each shot gets a short written card (camera height and why, how big the lead is, where the eye goes, what must match the next shot) and one still picture drawn from it, sent before building, with a check that the card sheet was sent. Cheaper to build, but one still per shot cannot show order or timing, so it reaches fewer of your notes, about a third.
 Lost: about a third of a percent of a week per film; timing problems still wait for the animatic.
 Added: a written card and one still for every shot before building.
+
+## Learn step results (craft chat 7, 17 Nov; changes nothing)
+- **Built:** `rough.py board FILM OUT.jpg [--root DIR]` draws every shot in the film's SHOTS through its own picture(t)
+  (in its own process, so an older checkout draws with its own kits): start, key beat, end, next shot's first frame;
+  app-safe box and thirds drawn over; a plan row per shot from story/FILM-board.txt (missing fields printed "not
+  planned"). Kittest `shot_board_every_shot` passes; `rough_of_every_new_thing` still passes. No rule, gate or
+  preflight changed.
+- **Drawn from:** Remakes at 3a820183 (the film file, 14 shots, before animatic 1's notes); Blessed at fcf09cda (moves
+  built, before notes 4-46; only cast notes 1-3 came before). Times: Remakes 1 min 49 s, Blessed 1 min 22 s.
+- **Count** (a fresh helper that did not draw them, the 23 census notes for these films; table in
+  `craft-step2-learn/judge.md`, 1 min 40 s): shown 15, flagged 2 (11, Remakes 63), not shown 6 (17a pop-in, 30
+  Walliams not yet in the plan, Remakes 47 duration, 61 reverse added later, 71 change of mind, 75 banner from a later
+  version). Blessed 10 of 13, Remakes 5 of 10. Step 1 forecast for these two films: 11 (still+plan 10, plus Remakes 47);
+  the board also showed 18, 32, 33, 37, 46 (the next-shot frame showed the gates jump) and missed 47.
+- **Limit (named):** the helper knew each note before looking, so 15 is the most the board could have shown, not what
+  Sam would have spotted unprompted. EPR (13 notes, 10 moving-only) was not drawn; across all 36 the reach stays about
+  half.
+- **F8 [found in building, named]:** the board uses the film's own drawing, so it cannot exist before the film file;
+  the gate's "sent after the film's code was first committed" cannot be met. Changed in the wording for Sam: the board
+  is drawn once people are placed, and must be delivered before the first move is built.
+- **Chat cost:** about 0.7% of a week at the count (estimate was 0.5%; most is reading, not drawing).
+- **The helper's gaps (for the build after Sam's yes):** cast against the brief per row; camera height and direction
+  marked; measured subject size, off-centre and empty share; a continuity strip for repeated props.

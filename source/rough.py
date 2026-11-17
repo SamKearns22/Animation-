@@ -18,9 +18,15 @@ about anything built that never went on a rough.
                                                                     --draft: the draft clock even with film code)
     python3 source/rough.py sent FILM [OUT.jpg] --delivered                  after sending: records everything on the sheet
     python3 source/rough.py check FILM                             what is built but never sent on a rough (rule 11)
+    python3 source/rough.py board FILM OUT.jpg [--root DIR]        the shot board (craft-step2): every shot in the
+                                 film's SHOTS through its own picture(t): start, key beat, end, and the next shot's
+                                 first frame; app-safe box and frame thirds drawn over; under each shot its row
+                                 (story/FILM-board.txt: camera, lead, focus, next focus, match, choices; a field
+                                 missing is printed red "not planned"). --root: a checkout of an older commit (the
+                                 learn step draws from a film's first plan). Draws only; records and gates nothing.
 
 Map: items 40 | the record 85 | people 110 | places 135 | moves (draft clock 170, key times 210, tiles 240) |
-     the sheet 290 | main 345
+     the sheet 310 | the board 420 | main 551
 """
 import datetime
 import hashlib
@@ -411,16 +417,156 @@ def sheet(film, out, every=False, draft=False):
     return out, todo
 
 
+# ---------------------------------------------------------------------------------------------- the board
+BOARD_FIELDS = ('camera', 'lead', 'focus', 'next focus', 'match', 'choices')
+SAFE = (60, 310, 900, 1500)                       # the app's safe area at 1080 x 1920 (preflight.SAFE)
+_GRAB = r"""
+import json, os, sys
+root, mod, out = sys.argv[1], sys.argv[2], sys.argv[3]
+sys.path.insert(0, os.path.join(root, 'source')); os.chdir(root)
+import importlib; F = importlib.import_module(mod)
+shots = [(n, float(a), float(b)) for n, a, b in F.SHOTS if float(b) > float(a)]
+beats = {k: float(v) for k, v in vars(F).items() if k.isupper() and isinstance(v, (int, float))
+         and not isinstance(v, bool) and k not in ('FPS', 'SR', 'W', 'H', 'DUR', 'BLACK_AT')}
+beats.update({k: float(v) for k, v in (getattr(F, 'T', None) or {}).items() if isinstance(v, (int, float))})
+starts = {round(a, 3) for _, a, _ in shots}
+want = {}
+for i, (n, a, b) in enumerate(shots):
+    mid = (a + b) / 2
+    inside = [(abs(t - mid), k, t) for k, t in beats.items() if a + 0.3 < t < b - 0.3 and round(t, 3) not in starts]
+    key = min(inside)[1:] if inside else ('middle', mid)
+    want[n] = [('start', a + 0.04), (key[0], key[1]), ('end', b - 0.06)]
+    if i + 1 < len(shots):
+        want[n].append(('next: ' + shots[i + 1][0], shots[i + 1][1] + 0.04))
+done, cache = {}, {}
+for n, moments in want.items():
+    done[n] = []
+    for lab, t in moments:
+        f = os.path.join(out, f'{t:.3f}.jpg')
+        if f not in cache:
+            try:
+                im = F.picture(t).convert('RGB'); im.thumbnail((360, 640)); im.save(f, quality=86); cache[f] = ''
+            except Exception as e:
+                cache[f] = f'{type(e).__name__}: {str(e)[:50]}'
+        done[n].append((lab, round(t, 2), f, cache[f]))
+cast = getattr(F, 'SHOT_CAST', {})
+print('BOARD' + json.dumps(dict(shots=shots, frames=done, cast={n: cast.get(n) for n, _, _ in shots})))
+"""
+
+
+def _commit(root):
+    import subprocess
+    r = subprocess.run(['git', '-C', root, 'log', '-1', '--format=commit %h, %ad', '--date=format:%d %b %H:%M'],
+                       capture_output=True, text=True)
+    return r.stdout.strip() or 'the film now'
+
+
+def board_rows(film, root=ROOT):
+    """{shot: {field: text}} from story/FILM-board.txt: a block per shot ('shot NAME'), one 'field: text' line each."""
+    p = os.path.join(root, 'story', f'{film.replace("_", "-")}-board.txt')
+    rows = {}
+    if os.path.exists(p):
+        for name, text in _blocks(open(p).read(), r'^shot\s+(\S+)'):
+            rows[name] = {k.strip().lower(): v.strip() for k, v in
+                          (ln.split(':', 1) for ln in text.splitlines()[1:] if ':' in ln)}
+    return rows
+
+
+def board_frames(film, root=ROOT, tmp=None):
+    """Runs the film's own code (at ROOT, or an older checkout) in its own process: its shots, cast and frames."""
+    import json
+    import subprocess
+    import tempfile
+    tmp = tmp or tempfile.mkdtemp(prefix='board-')
+    r = subprocess.run([sys.executable, '-c', _GRAB, os.path.abspath(root), film.replace('-', '_'), tmp],
+                       capture_output=True, text=True, timeout=3600)
+    line = next((ln for ln in r.stdout.splitlines() if ln.startswith('BOARD')), None)
+    if not line:
+        raise RuntimeError(f'the film did not draw: {(r.stderr or r.stdout).strip().splitlines()[-1:]}')
+    return json.loads(line[5:])
+
+
+def board(film, out, root=ROOT):
+    """The shot board: one row per shot, four frames (start, key beat, end, next shot's first) and its plan row."""
+    from PIL import Image, ImageDraw, ImageFont
+    font = lambda n: ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), n)      # noqa: E731
+    got = board_frames(film, root)
+    rows = board_rows(film, root)
+    tw, th, gap = 216, 384, 10
+    W = 40 + 4 * (tw + gap) + 30 + 640
+    sx, sy = tw / 1080, th / 1920
+    parts, missing = [], {}
+    for n, a, b in got['shots']:
+        im = Image.new('RGB', (W, th + 70), BG)
+        d = ImageDraw.Draw(im)
+        cast = got['cast'].get(n)
+        d.text((20, 8), f'{n}  {a:.1f}-{b:.1f}s ({b - a:.1f}s)  cast: {", ".join(cast) if cast else "NOBODY"}',
+               font=font(22), fill=(150, 30, 30) if not cast else (20, 20, 20))
+        for i, (lab, t, f, err) in enumerate(got['frames'][n]):
+            x, y = 20 + i * (tw + gap) + (30 if i == 3 else 0), 44
+            if err or not os.path.exists(f):
+                d.text((x, y + 40), f'not drawn: {err}'[:30], font=font(13), fill=(150, 30, 30))
+                continue
+            fr = Image.open(f).convert('RGB').resize((tw, th))
+            fd = ImageDraw.Draw(fr)
+            for k in (1, 2):                                            # thirds of the tall frame
+                fd.line([(0, th * k / 3), (tw, th * k / 3)], fill=(255, 255, 255), width=1)
+            x0, y0, x1, y1 = SAFE                                       # the app's safe area, dashed
+            box = [(x0 * sx, y0 * sy), (x1 * sx, y0 * sy), (x1 * sx, y1 * sy), (x0 * sx, y1 * sy), (x0 * sx, y0 * sy)]
+            for (p0, q0), (p1, q1) in zip(box, box[1:]):
+                L = max(abs(p1 - p0), abs(q1 - q0))
+                for s0 in range(0, int(L), 8):
+                    e0 = min(L, s0 + 4)
+                    fd.line([(p0 + (p1 - p0) * s0 / L, q0 + (q1 - q0) * s0 / L),
+                             (p0 + (p1 - p0) * e0 / L, q0 + (q1 - q0) * e0 / L)], fill=(255, 40, 40), width=1)
+            im.paste(fr, (x, y))
+            d.text((x, y + th + 2), f'{lab} {t:.1f}s'[:30], font=font(13), fill=(60, 60, 60))
+        if True:
+            x = 20 + 4 * (tw + gap) + 50
+            plan = rows.get(n, {})
+            yy = 50
+            for k in BOARD_FIELDS:
+                v = plan.get(k)
+                if not v:
+                    missing.setdefault(n, []).append(k)
+                txt = f'{k}: {v or "not planned"}'
+                for ln in [txt[i:i + 46] for i in range(0, len(txt), 46)][:3]:
+                    d.text((x, yy), ln, font=font(17), fill=(20, 20, 20) if v else (170, 40, 40))
+                    yy += 22
+                yy += 6
+        parts.append(im)
+    top = Image.new('RGB', (W, 80), BG)
+    ImageDraw.Draw(top).text((20, 10), f'{film}: the shot board, {len(got["shots"])} shots: start, key beat, end, '
+                             f'next shot (red dashes: the app-safe area; white: thirds)', font=font(24), fill=(20, 20, 20))
+    ImageDraw.Draw(top).text((20, 44), f'drawn from {_commit(root)}, '
+                             f'{datetime.date.today()}', font=font(18), fill=(80, 80, 80))
+    parts.insert(0, top)
+    sheet_im = Image.new('RGB', (W, sum(p.height for p in parts)), BG)
+    y = 0
+    for p in parts:
+        sheet_im.paste(p, (0, y))
+        y += p.height
+    sheet_im.save(out, quality=82)
+    return out, got, missing
+
+
 def _films():
     import acting
     return acting.FILMS
 
 
 def main(argv):
-    if len(argv) < 2 or argv[0] not in ('sheet', 'sent', 'check'):
+    if len(argv) < 2 or argv[0] not in ('sheet', 'sent', 'check', 'board'):
         print(__doc__.split('Map:')[0])
         return 2
     film = argv[1]
+    if argv[0] == 'board':
+        root = argv[argv.index('--root') + 1] if '--root' in argv else ROOT
+        out, got, missing = board(film, argv[2], root)
+        print(f'{out}: {len(got["shots"])} shots; plan rows missing fields on {len(missing)} shot(s)'
+              + ''.join(f'\n  {n}: {", ".join(m)}' for n, m in list(missing.items())[:3])
+              + (f'\n  ... and {len(missing) - 3} more' if len(missing) > 3 else ''))
+        return 0
     if argv[0] == 'check':
         f = gate_faults(film)
         print('\n'.join(f) if f else f'{film}: everything built has been on a rough')

@@ -1,16 +1,16 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** the proposal route (any change goes through `source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
-- **Done (craft chat 6, Opus medium, 17 Nov):** craft-next Step 2 put through the route as `notes/proposals/craft-step2.md`: two helpers, blind judge. No version passed; the judge wrote its own (V0): a drawn board of every shot (real camera, people at their marks, three moments, next shot beside it, numbered choices per shot), a gate reading rough.py's record, and a learn step first (board drawn from Remakes' and Blessed's first-commit plans, a separate chat counts which old notes it shows). Reach about 17 of 36; about 6 per film may remain. Critiqued: 7 found, 3 fixed, 4 named. Nothing changed in rules, checks or tools.
-- **Sam (17 Nov):** Q1 = 1 (the drawn board). Q2 (board notes counted apart from "at most 3", pick N) not answered yet: ask it again with the learn-step count.
-- **Needs Sam:** Q2 only, with the learn-step count and the rule-11 rewrite.
-- **Next (craft chat 7, Opus, high effort):** build rough.py's board mode (with a kittest) and run the learn step from craft-step2's Final version: boards from Remakes' and Blessed's first-commit plans, a fresh helper counts which census notes each shows, time it. Changes no rule or gate. Send Sam the count, the board pictures, the rule-11 rewrite wording, and Q2 again.
-- **Not covered, said to Sam:** camera height felt only when moving (F1, A1), Sam's mind changing on moving shots (5), build drift (5).
-- **Numbers to beat:** craft-next: at most 3 shot-design notes per film on the next two films, none returned twice. Change 2: no pose note returned twice. Change 1: at most 2 sameness notes, none repeated.
-- **Read:** `notes/proposals/craft-step2.md` (Final version); job pack "A tool job".
-- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
-- **For Claude:** craft-next shows "stale" only because Step 1 results were appended after its verdict (expected). Board build cost (2-3% of a week) unchecked; add a ledger "board" stage. Old handovers `notes/archive/proposal-route-handovers.md`.
+- **Rules that bite next:** the proposal route (`source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
+- **Done (craft chat 7, Opus high, 17 Nov):** `rough.py board` built (kittest `shot_board_every_shot` passes) and the learn step run: boards from Remakes (3a820183) and Blessed (fcf09cda); a fresh helper found 15 of their 23 shot-design notes shown, 2 flagged, 6 not (forecast was 11). Drawing 3 min 11 s, count 1 min 40 s. Results: `notes/proposals/craft-step2.md`, "Learn step results". No rule, gate or preflight changed.
+- **Needs Sam (sent 17 Nov):** Q1 yes to the rule-11 rewrite (wording below); Q2 board notes counted apart from "at most 3" (pick N).
+- **Next, on Sam's yes (Opus, high: new build):** write rule 11 and rule 10's line as sent; build the gate (preflight reads a board record: every shot delivered, nobody-cast refused, delivered before the first move); `rough.py board ... --delivered` record; ledger "board" stage; the helper's gaps (cast vs brief, camera height marked) only if cheap. On N to Q1: nothing changes; tell Sam what is left.
+- **Rule-11 wording sent:** in the proposal file's "Learn step results" and in the chat message of 17 Nov (same text as the rulebook row to write).
+- **Not covered, said to Sam:** pop-ins and durations (17a, 47), later additions (30, 61, 75), changed minds (71).
+- **Numbers to beat:** at most 3 shot-design notes per film on the next two films, none returned twice.
+- **Read:** `notes/proposals/craft-step2.md` (Final version, Learn step results); job pack "A tool job".
+- **Open rule requests:** rule 11 rewrite and rule 10 line (Q1). Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** F8: the board draws through the film's own picture(t), so it can't precede the film file; gate is "before the first move is built". Board pictures not on GitHub (drafts); redraw with `rough.py board FILM OUT --root <git worktree at the commit>`. Old handovers `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

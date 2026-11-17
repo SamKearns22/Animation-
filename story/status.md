@@ -1,3 +1,3 @@
 No film in progress (European Protests, Ranked posted and closed, 16 Nov).
-Next: craft chat 7 (Opus high) builds the shot board and tests it on Remakes' and Blessed's old plans.
-Needs Sam: Q2 (board notes counted apart) comes back with the test count.
+Done: shot board built and tried on Remakes and Blessed: 15 of 23 old framing notes visible on it.
+Needs Sam: Y/N to the rule-11 rewrite and Q2 (board notes counted apart); then a build chat (Opus high).
