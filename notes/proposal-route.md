@@ -1,14 +1,15 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** the proposal route (Step 2 goes through it: `source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
-- **Done (craft chat 5, Sonnet, 17 Nov):** craft-next Step 1: 36 shot-design notes read against what the plan said; results in `notes/proposals/craft-next.md` under "Step 1 results". Cause: plan wrong or silent 20, Sam's late choice 11, build drift 5. Seen: on a still 20, only moving 16 (44%, over a third: cards alone cannot reach the number). Changed nothing else.
-- **Next (craft chat 6, Opus, medium effort):** put craft-next Step 2 through the proposal route. Plan faults dominate and drift is under a third, so Step 2 is the full card sheet and its gate; the measuring branch is not triggered. The 16 moving-only notes are not covered by cards (camera height judged on stills, timing, cuts): say so in the Lost/Added lines and offer the other option plainly.
-- **Needs Sam:** nothing now.
+- **Rules that bite next:** the proposal route (any change goes through `source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
+- **Done (craft chat 6, Opus medium, 17 Nov):** craft-next Step 2 put through the route as `notes/proposals/craft-step2.md`: two helpers, blind judge. No version passed; the judge wrote its own (V0): a drawn board of every shot (real camera, people at their marks, three moments, next shot beside it, numbered choices per shot), a gate reading rough.py's record, and a learn step first (board drawn from Remakes' and Blessed's first-commit plans, a separate chat counts which old notes it shows). Reach about 17 of 36; about 6 per film may remain. Critiqued: 7 found, 3 fixed, 4 named. Nothing changed in rules, checks or tools.
+- **Needs Sam:** Q1 Option 1 (board) / Option 2 (written cards, one still each) / N; Q2 board notes counted apart from "at most 3" (judge's pick N).
+- **Next (on Sam's answer):** Option 1: Opus, high effort: build rough.py's board mode and run the learn step (changes no rule); bring the count to Sam with the rule-11 rewrite. Option 2: Opus, medium. N: none; mark craft-step2 declined.
+- **Not covered, said to Sam:** camera height felt only when moving (F1, A1), Sam's mind changing on moving shots (5), build drift (5).
 - **Numbers to beat:** craft-next: at most 3 shot-design notes per film on the next two films, none returned twice. Change 2: no pose note returned twice. Change 1: at most 2 sameness notes, none repeated.
-- **Read:** `notes/proposals/craft-next.md` (Step 1 results, Step 2); job pack "A tool job".
+- **Read:** `notes/proposals/craft-step2.md` (Final version); job pack "A tool job".
 - **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
-- **For Claude:** causes are one reading from fix lines, thin on G12, F7, A31, 33, 17a. Re-rank tool: `notes/proposals/craft-census/rank.py`. Old handovers `notes/archive/proposal-route-handovers.md`.
+- **For Claude:** craft-next shows "stale" only because Step 1 results were appended after its verdict (expected). Board build cost (2-3% of a week) unchecked; add a ledger "board" stage. Old handovers `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

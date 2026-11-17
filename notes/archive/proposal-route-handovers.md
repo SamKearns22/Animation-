@@ -314,3 +314,16 @@
 - **Open rule requests:** none. Changes made without asking (end-of-film review): as chat 3's list (archived); none new in chat 4.
 - **Branches named (not merged, waiting on Sam):** claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 - **For Claude:** re-rank: edit craft-census/notes.tsv, then `python3 notes/proposals/craft-census/rank.py notes/proposals/craft-census/notes.tsv notes/proposals/craft-census.md` (it rewrites the file from scratch). Old handovers `notes/archive/proposal-route-handovers.md`.
+
+
+## Archived 17 Nov (craft chat 6)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (Step 2 goes through it: `source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
+- **Done (craft chat 5, Sonnet, 17 Nov):** craft-next Step 1: 36 shot-design notes read against what the plan said; results in `notes/proposals/craft-next.md` under "Step 1 results". Cause: plan wrong or silent 20, Sam's late choice 11, build drift 5. Seen: on a still 20, only moving 16 (44%, over a third: cards alone cannot reach the number). Changed nothing else.
+- **Next (craft chat 6, Opus, medium effort):** put craft-next Step 2 through the proposal route. Plan faults dominate and drift is under a third, so Step 2 is the full card sheet and its gate; the measuring branch is not triggered. The 16 moving-only notes are not covered by cards (camera height judged on stills, timing, cuts): say so in the Lost/Added lines and offer the other option plainly.
+- **Needs Sam:** nothing now.
+- **Numbers to beat:** craft-next: at most 3 shot-design notes per film on the next two films, none returned twice. Change 2: no pose note returned twice. Change 1: at most 2 sameness notes, none repeated.
+- **Read:** `notes/proposals/craft-next.md` (Step 1 results, Step 2); job pack "A tool job".
+- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** causes are one reading from fix lines, thin on G12, F7, A31, 33, 17a. Re-rank tool: `notes/proposals/craft-census/rank.py`. Old handovers `notes/archive/proposal-route-handovers.md`.
+
