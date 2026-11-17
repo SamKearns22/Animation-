@@ -321,7 +321,48 @@ def _front_head(img, p, sp, t, hx, hy):
             u0 = -0.12 + 0.07 * k
             p.line(curve(f.pts([(u0, -0.36 + 0.02 * k), (u0 + 0.08, -0.2), (u0 + 0.13, -0.04 + 0.01 * k)]), 3),
                    dk(hc, 0.72), 1.4)
+    if fc.get('piercings'):                                   # Milburn note 2 (17 Nov): drawn last, over the fringe
+        piercings(p, f, L, fc, sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
     return fx
+
+
+SILVER = (214, 218, 226)
+
+
+def _bead(p, xy, r):
+    """One silver ball: ink rim, a white glint up-left (reads as metal at phone size)."""
+    p.poly(oval(*xy, r, r, 10), SILVER, INK, 1.0)
+    p.poly(oval(xy[0] - r * 0.35, xy[1] - r * 0.35, r * 0.4, r * 0.4, 6), (255, 255, 255), None)
+
+
+def piercings(p, f, L, fc, raise_=0.0, frown=0.0):
+    """`piercings: brow, lip, nose` (any of them; bare `piercings` = all three), silver, front head (Milburn note 2):
+    a bar through the outer end of her left brow (our right) with a ball each side, a hoop through the lower lip off
+    centre (our left), a stud on the nostril wing (our right)."""
+    which = fc['piercings']
+    thick = fc.get('brow_thick', 0.05)
+    k = max(1.0, abs(f(1.0, 0.0)[0] - f(0.0, 0.0)[0]) / 100.0)   # sizes grow with the face (phone size, 2a's close)
+    if 'brow' in which:
+        up = raise_[1] if isinstance(raise_, (tuple, list)) else raise_
+        uv = P4.brow_uv(L, thick, up, frown)
+        (xm, ym), (xo, yo) = uv[1], uv[2]
+        u = xm + (xo - xm) * 0.62
+        v = ym + (yo - ym) * 0.62
+        a, b = f(u - 0.008, v - thick * 0.75), f(u + 0.008, v + thick * 1.05)
+        p.line([a, b], INK, 2.6 * k)
+        p.line([a, b], SILVER, 1.4 * k)
+        _bead(p, a, 2.8 * k)
+        _bead(p, b, 2.8 * k)
+    if 'lip' in which:
+        r = 4.2 * k
+        cx, cy = f(-L['mw'] * 0.26, L['lip17'])
+        cy -= r * 0.25                               # the ring's top runs into the lower lip, the rest hangs below
+        ring = [(cx + r * math.sin(a), cy + r * math.cos(a)) for a in np.linspace(-2.5, 2.5, 20)]
+        p.line(ring, INK, 3.2 * k)
+        p.line(ring, SILVER, 1.8 * k)
+        p.poly(oval(cx - r * 0.5, cy + r * 0.6, 0.8 * k, 0.8 * k, 6), (255, 255, 255), None)
+    if 'nose' in which:
+        _bead(p, f(L['nw'] * 0.46, L['nose_y'] - 0.04), 2.6 * k)
 
 
 def _hair_mass(p, f, L, fc, hc):

@@ -13,7 +13,7 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
                                        second colour through the first (the goth's blue in purple, Milburn note 1)
     face: jaw_wide +0.04, nose_long ++, size 0.86   (pushes on the average face; + is one step, ++ two: STEPS)
     eyes: 90 110 130 | lips: 190 122 112 | brows: 150 140 132, width 4.4, thick 0.06
-    beard: stubble 0.82 | beard: boxed 46 40 38 | glasses: 40 36 34 | freckles | lashes
+    beard: stubble 0.82 | beard: boxed 46 40 38 | glasses: 40 36 34 | freckles | lashes | piercings: brow, lip, nose
     outfit: suit navy, shirt white, tie 120 30 40 (or 'no tie'), trousers 50 50 56, sleeves .., shoes .., dress ..
             (suit, jumper, dress, blouse); 'open collar': the shirt open at the neck (chat 15)
     extras: wig, robe, officer, open shirt, crucifix, scarf, zip, flowers, crest, skirt   (parts that sit on top: EXTRAS)
@@ -455,6 +455,12 @@ def _fact(d, key, val, people):
             d['glasses_thick'] = True
     elif key in ('freckles', 'lashes'):
         d[key] = True
+    elif key == 'piercings':                       # Milburn note 2 (17 Nov): silver, front head
+        got = [w for w in parts if w] or ['brow', 'lip', 'nose']
+        bad = [w for w in got if w not in ('brow', 'lip', 'nose')]
+        if bad:
+            raise DescriptionError(f'piercings {bad[0]!r}: brow, lip or nose')
+        d['piercings'] = tuple(got)
     elif key == 'outfit':
         kind, _, c = parts[0].partition(' ')
         if kind not in OUTFITS:
@@ -521,7 +527,8 @@ def person(d):
               brow=sp['brow_c'], hair='crop' if style == 'short' else style, turned=style)
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
                   ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes'), ('pencil', 'pencil'),
-                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak')):
+                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'),
+                  ('piercings', 'piercings')):
         if k in d:
             fc[fk] = d[k]
     sp['kit_face'] = fc
