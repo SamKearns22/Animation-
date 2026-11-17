@@ -85,3 +85,15 @@
 - **Found earlier:** Sam's message log has saved nothing since 16 Nov; its error output is thrown away (in early-warning).
 - **For Claude:** proposals notes/proposals/{model-switch,finder-use,early-warning}.md; verdicts recorded.
 
+
+## Chat C handover (17 Nov)
+- **Rules that bite next:** the proposal route (`source/propose.py`), 85 (cost watch), 24 (budget stop).
+- **Done (chat C, Opus medium, 17 Nov):** early-warning judged; all three sent; Sam picked 1, 1, 1 (see answers above).
+- **Next (Opus, high: building new tools):** build in order: model guard, finder reminder, watcher (adapts to new
+  systems). Kittest each; "Added/Lost" per piece in the message. Fix the message-log save fault early.
+- **Needs Sam:** Y/N delete the stray page (re-ask once in the next message).
+- **Read:** "Sam's answers" and this section; the three proposal files; `guides/proposal-route/` only if a step fails.
+- **Open rule requests:** none unwritten. Branches named (not merged, waiting on Sam, as in notes/proposal-route.md):
+  claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** proposals notes/proposals/{model-switch,finder-use,early-warning}.md; handover.py MODEL flag,
+  .claude/hooks/costwatch.py fam(); settings.json has no PreToolUse hook yet.
