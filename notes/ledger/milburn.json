@@ -60,5 +60,140 @@
    }
   }
  ],
- "checks": {}
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "stage": "sets",
+    "date": "2026-11-17",
+    "hunt": 1,
+    "faults": 11,
+    "cant_tell": 2,
+    "open": [
+     "1-3,7-10 P2: every face is a blank neutral stare; Milburn's mouth is shut on his spoken line, and the four NEETs show no feeling or rising-towards-light reactio",
+     "1,7 P4: Milburn's glasses are thin dark wire frames; references show thick black frames. Hair is sandy-light, references grey-brown.",
+     "2-3,8-10 A2 P4: the red-shirt lad is slim, not stout; the grey-sweatshirt lad is broad and tallest, not thin.",
+     "1,7 P6: Milburn's hands are hidden behind the table; neither resting hand shows.",
+     "4-5 S7: brief says aerial, high, tilted down; both frames are a near-level view with horizon and mountains.",
+     "4-5 A1: the shaft mouth reads as a small manhole lid; no platform is visible going up (panel 4 \"deep in shaft\", panel 5 \"level with grass, four on it\"). Panels ",
+     "3 S1: the light \"has reached them\" but the people are unlit and unchanged; only the wall changed colour.",
+     "2-3,8-10 S5: no platform or floor under the people, no opening above; the wall is a plain block with a few tiny windows.",
+     "2-6 S8: one flat colour (grey, cream or green) fills over half the frame.",
+     "8-10 S1: the close-ups are crops of panel 2 that slice other people in half at the frame edge; panel 7 cuts the name card (\"Milburn\") and chair. Crops are soft,",
+     "2 S2: medium shot \"to the bottom of the torso\" asked; the sheet shows the red lad's full legs and shoes, and the goth is cut at the hips.",
+     "1,7 P12: is the mouth meant to move on \"The essence of my proposal...\"; a moving frame would show it.",
+     "1 P1: whether the red folder is touched; a full-size frame with hands would show it."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "stage": "sets",
+    "date": "2026-11-17",
+    "hunt": 2,
+    "faults": 10,
+    "cant_tell": 2,
+    "open": [
+     "2,8-10 S1 P3: no rising platform or floor edge or movement cue; the four stand on plain grey floor, so \"rising towards the light\" does not read.",
+     "3 S1 P3: light has reached them per brief, but only the upper wall changes, with a hard horizontal band edge mid-wall; the people keep identical colours and no ",
+     "2,8-10 P4 P5: goth girl and stout lad do not read as overweight/stout; red-shirt lad is narrow, the goth's body is plain dark slab. Pencil moustache on the lad ",
+     "1,7 P4: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes t",
+     "4-5 S8 S1: grass fills over half the frame, flat sawtooth stripes, no life; the shaft mouth is a tiny blob at phone size, the four people on it are invisible.",
+     "6 S7 S6: top-down view with the ring cropped at the edges, against the oblique view of 4-5; figures drawn standing front-on, not seen from above. Set does not m",
+     "2-3,8-10 S4: stray dark streak on the wall at right, hip height, behind the tall lad (visible again in 10 beside his arm).",
+     "1-3,7-10 A3 P2: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.",
+     "1,7 O3: name sign is unreadable at phone size in 1, and cut to \"Milburn\" in 7; glasses and sign are the same tiny scale.",
+     "7-10 S1: close-ups are enlarged crops of 2 and 1; soft, with neighbours' heads sliced at the frame edge (8, 9, 10).",
+     "1,7 P12: mouth closed in the still; a frame mid-word would show it moves.",
+     "1,7 P1: hands are hidden behind the table; a wider frame would show them."
+    ],
+    "fixed": "soft light edge on the shaft wall; the four go from shaded to lit; wider hazard edge reads as the platform; long soft grass gusts; goth and Swindon lad broader; heavier glasses, greyer hair; steeper c",
+    "left": [
+     "1,7 P4: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes t",
+     "1-3,7-10 A3 P2: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.",
+     "1,7 O3: name sign is unreadable at phone size in 1, and cut to \"Milburn\" in 7; glasses and sign are the same tiny scale.",
+     "1,7 P12: mouth closed in the still; a frame mid-word would show it moves.",
+     "1,7 P1: hands are hidden behind the table; a wider frame would show them."
+    ]
+   }
+  ],
+  "lines": {
+   "P2": {
+    "faults": 2,
+    "false": 0
+   },
+   "P4": {
+    "faults": 4,
+    "false": 0
+   },
+   "A2": {
+    "faults": 1,
+    "false": 0
+   },
+   "P6": {
+    "faults": 1,
+    "false": 0
+   },
+   "S7": {
+    "faults": 2,
+    "false": 0
+   },
+   "A1": {
+    "faults": 1,
+    "false": 0
+   },
+   "S1": {
+    "faults": 6,
+    "false": 1
+   },
+   "S5": {
+    "faults": 1,
+    "false": 0
+   },
+   "S8": {
+    "faults": 2,
+    "false": 0
+   },
+   "S2": {
+    "faults": 1,
+    "false": 0
+   },
+   "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "S6": {
+    "faults": 1,
+    "false": 0
+   },
+   "S4": {
+    "faults": 1,
+    "false": 0
+   },
+   "A3": {
+    "faults": 1,
+    "false": 0
+   },
+   "O3": {
+    "faults": 1,
+    "false": 0
+   }
+  }
+ },
+ "quick_checks": [
+  {
+   "at": "2026-11-17T20:49+00:00",
+   "faults": 8
+  },
+  {
+   "at": "2026-11-17T20:50+00:00",
+   "faults": 4
+  }
+ ]
 }

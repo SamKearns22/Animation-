@@ -1,0 +1,25 @@
+# Milburn: the shot board's plan rows (rule 11). One block per shot.
+
+shot 1
+camera: level at seated eye height (1.2 m), straight across the Cabinet table, lens 1700; Milburn 2.2 m away
+lead: Milburn, centre, straight to lens
+focus: his face, under the Hook Text band
+next focus: the four faces at the bottom of 2a (eyes drop from his face to theirs)
+match: his voice runs on over the cut (line 2 starts in 2a)
+choices: empty chair each side; window and green curtain right; red folder, glass and his name card on the baize
+
+shot 2a
+camera: level at standing head height (1.6 m), lens 2000; every head on one line (F2); medium shot to the torso, room above
+lead: the goth (nearest, left); the others at 3.6, 4.8 and 6.2 m
+focus: the four faces; then the light sweeping down the wall to them ("training")
+next focus: the shaft's mouth at the middle of 2b
+match: the platform rising (wall slides down) carries into the platform rising into the field
+choices: wall lit warm from above as the light comes down; they go from shaded to lit; caged lamps slide past
+
+shot 2b
+camera: high and tilted down 33 deg (45 m up), lens 1000; peaks, forest ring and meadow as bands of the tall frame (F1)
+lead: the platform at the centre, the four tiny on it (F8)
+focus: the deck coming up and locking level with the grass ("country")
+next focus: (the next part of the screenplay, not yet written)
+match: same four, same colours, tiny
+choices: grass gusts in the wind; snow on the peaks; lots of empty ground on purpose

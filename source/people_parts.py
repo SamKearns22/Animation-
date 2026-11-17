@@ -411,10 +411,10 @@ def _glasses(p, f, L, col, thick=False):
             cx, cy = sgn * L['ecx'], L['eye_y'] + 0.004
             box = [(cx - w, cy - h), (cx + w, cy - h * 1.05), (cx + w * 0.96, cy + h * 0.8), (cx, cy + h),
                    (cx - w * 0.96, cy + h * 0.8)]
-            p.poly(curve(f.pts(box), 2), None, INK, 6.0)
-            p.poly(curve(f.pts(box), 2), None, col, 3.6)
+            p.poly(curve(f.pts(box), 2), None, INK, 9.0)            # critique r1: read as thin wire: heavier
+            p.poly(curve(f.pts(box), 2), None, col, 6.0)
         p.line(curve(f.pts([(-L['ecx'] + w, L['eye_y'] - 0.01), (0.0, L['eye_y'] - 0.02), (L['ecx'] - w, L['eye_y'] - 0.01)]),
-                     3), col, 3.6)
+                     3), col, 5.0)
         return
     for sgn in (-1, 1):
         cx, cy = sgn * L['ecx'], L['eye_y'] + 0.004

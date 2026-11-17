@@ -98,8 +98,8 @@ def shaft(t, lit_z=14.0, travelled=None):
     # the wall in vertical strips: dark below the lit edge, warm above it, a soft band between
     for i in range(len(phis) - 1):
         a0, a1 = phis[i], phis[i + 1]
-        for z0, z1, col in ((zs_bot, lit_z - 0.6, CONCRETE), (lit_z - 0.6, lit_z, mix(CONCRETE, CONCRETE_LIT, 0.5)),
-                            (lit_z, zs_top, CONCRETE_LIT)):
+        soft = [(lit_z - 2.0 + 0.5 * k, lit_z - 1.5 + 0.5 * k, mix(CONCRETE, CONCRETE_LIT, (k + 1) / 5)) for k in range(4)]
+        for z0, z1, col in [(zs_bot, lit_z - 2.0, CONCRETE)] + soft + [(lit_z, zs_top, CONCRETE_LIT)]:  # a soft edge
             if z1 <= z0:
                 continue
             shade = 0.9 + 0.1 * math.cos((a0 + a1) / 2)            # the wall facing us is a touch lighter
@@ -165,12 +165,12 @@ def shaft(t, lit_z=14.0, travelled=None):
     for k in range(1, 9):                                         # tread lines running away from us
         x = -6 + k * 1.5
         _line(d, [cam.p(x, 2.4, 0), cam.p(x * 1.0, 14.0, 0)], (76, 80, 86), 1.0)
-    band = [cam.p(R_SHAFT * 0.9 * math.sin(a), C_BACK + R_SHAFT * 0.9 * math.cos(a), 0) for a in phis]
+    band = [cam.p(R_SHAFT * 0.8 * math.sin(a), C_BACK + R_SHAFT * 0.8 * math.cos(a), 0) for a in phis]   # wide: reads as the deck's edge
     _poly(d, rim + band[::-1], (226, 186, 40), line=1.6)
     for i in range(0, len(phis) - 1, 2):                          # black chevrons on the rim
         a0, a1 = phis[i], phis[i + 1]
         q = [cam.p(R_SHAFT * r * math.sin(a), C_BACK + R_SHAFT * r * math.cos(a), 0)
-             for r, a in ((0.97, a0), (0.97, a1), (0.9, (a0 + a1) / 2 + 0.03), (0.9, (a0 + a1) / 2 - 0.03))]
+             for r, a in ((0.97, a0), (0.97, a1), (0.8, (a0 + a1) / 2 + 0.03), (0.8, (a0 + a1) / 2 - 0.03))]
         _poly(d, q, (30, 30, 30), line=0)
     lit = max(0.0, min(1.0, (5.0 - lit_z) / 3.0))               # the light reaching the deck at the end
     out = big.resize((W, H), Image.LANCZOS)
@@ -209,7 +209,7 @@ class TiltCam:
         return dirx * s, diry * s - self.back
 
 
-FIELD_CAM = TiltCam(70.0, 79.0, 28.0, 1000.0)
+FIELD_CAM = TiltCam(45.0, 46.9, 33.0, 1000.0)   # critique r1: steeper, closer
 R_RING = 300.0                         # the forest ring's inner edge (m from the shaft)
 GRASS = ((84, 150, 62), (104, 172, 72), (132, 194, 86))
 FOREST = (36, 86, 52)
@@ -312,7 +312,7 @@ def meadow(t):
     a = math.radians(-30)
     u = gx * math.cos(a) + gy * math.sin(a)
     w = (np.sin(u * 0.045 - t * 1.9) + 0.45 * np.sin(u * 0.13 + gy * 0.03 - t * 2.9)
-         + 0.25 * np.sin(gx * 0.9 + gy * 0.6 - t * 4.0))
+         + 0.2 * np.sin(gx * 0.07 + gy * 0.05 - t * 1.3))          # critique r1: no fine sawtooth, long soft gusts
     tone = np.where(w > 1.0, 2, np.where(w > -0.9, 1, 0))
     pal = np.array(GRASS, np.uint8)
     img = pal[tone]

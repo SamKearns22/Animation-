@@ -5,14 +5,14 @@
 
 # milburn: Alan Milburn (Lead: speaks, straight to lens)
 body: 1.80 m, shoulders 160, head 66 x 98
-skin: 228 176 150 | hair: side, 138 112 86
+skin: 228 176 150 | hair: side, 122 106 94
 face: brow_high -0.16, nose_wide +0.07, brow_slope +3.5, nose_long -0.03, eye_tilt +2.6, chin_long +0.04, face_wide -0.06, lip_top -0.024, eye_size -0.01
 eyes: 90 104 110 | lips: 186 120 110 | brows: 92 74 60, width 5.6, thick 0.08
 glasses: 44 42 46, thick
 outfit: suit navy, shirt white, tie 34 44 92, trousers navy, shoes 20 18 16
 
 # goth: The goth girl (NEET 1: big blue-purple hair, blooming black dress, pudgy nose, overweight)
-body: 1.63 m, shoulders 170, head 70 x 92
+body: 1.63 m, shoulders 186, head 70 x 92
 skin: pale | hair: curly, 96 70 190, big
 face: face_wide ++, jaw_wide ++, nose_wide ++, nose_long -, eye_size +
 eyes: 70 60 50 | lips: 120 60 90 | brows: 40 34 40, width 4.8 | lashes
@@ -20,7 +20,7 @@ outfit: dress 30 26 34, dress 30 26 34, sleeves 30 26 34, trousers 30 26 34, sho
 extras: skirt
 
 # rangy: The thin lad (NEET 2: Arabic, pencil moustache, grey sweatshirt and trackies)
-body: 1.85 m, shoulders 138, head 62 x 98
+body: 1.85 m, shoulders 124, head 62 x 98
 skin: 196 146 108 | hair: crop, 24 20 18
 face: face_wide --, jaw_wide -, nose_long ++, chin_long +
 eyes: 50 36 26 | lips: 150 96 84 | brows: 24 20 18, width 4.8
@@ -28,7 +28,7 @@ beard: pencil 26 20 18
 outfit: jumper 140 142 146, shirt 140 142 146, no tie, trousers 120 122 128, shoes 236 236 236
 
 # swindon: The Swindon lad (NEET 3: stout, good build, Swindon Town home shirt, sports-casual)
-body: 1.77 m, shoulders 178, head 70 x 92
+body: 1.77 m, shoulders 204, head 70 x 92
 skin: pink | hair: crop, 150 108 66
 face: face_wide ++, jaw_wide ++, nose_wide +, eye_size -, brow_high -
 eyes: 90 110 130 | lips: 190 122 112 | brows: 140 100 64, width 4.8

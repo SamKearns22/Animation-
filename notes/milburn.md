@@ -1,16 +1,14 @@
 # Notes for Milburn (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 89 (each new thing critiqued alone before the cast sheet), 1 (one plan in metres), 38 (front on).
-- **Done:** plan answered (Sam, 17 Nov: all my picks; no new photos, use what we have; NO showstopper shots; estimates Option 1). People kit: all 5 drawn from `story/milburn-people.txt`; kit grew (flowers, crest, skirt extras; pencil moustache; thick glasses; big curly hair); kittests pass. First look sent to Sam (`notes/sheets/milburn-cast-first-look.jpg`), not yet critiqued (named to Sam).
-- **Spent against the estimate:** plan chat ~2.5% (transcript guess); new estimate for this quarter about 5% more (table below, rewritten).
-- **Next:** chat 2, Opus high: `handover.py start`; copy satire_template to source/milburn.py (people from the kit as Protest Tiers does), Cabinet Room in `story/milburn-places.txt`, the shaft and the field from above (new paintings, F1/F8), critique pack (rule 89), cast sheet, shot board. Sam's notes on the first look, if any, come first.
-- **Needs Sam:** nothing (notes on the first look welcome).
-- **Read:** job pack Build; `research/crowds-and-big-action.md` F1, F2, F8.
-- **Lost / Added:** Added: 5 small kit parts (any film can use them). Lost: none.
-- **Open rule requests:** none. Estimates Option 1 (Sam's Y, 17 Nov) is a tool job: changes 1-3 in notes/proposals/estimates.md, not built yet.
-- **For Claude:** branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker. Turned views of the big hair and skirt fall back to the engine's (front only is used: rule 38). Milburn's head is invented with the card's pushes (measured heads only do Brand's curls).
-
+- **Rules that bite next:** 74 (moves checked against the acting list), 11 (board seen: moves may start), 89 (moves critique).
+- **Done (chat 2):** `source/milburn.py` (3 shots, 11 s), Cabinet Room on the places kit (+5 meeting-table pieces: table top, curtain, tumbler, name card, folder), lift shaft and field paintings (`milburn_sets.py`), critique 2 hunts (fixed 13, named 5), cast sheet and shot board sent to Sam (board recorded).
+- **Spent:** chat 2 about 2.5% (Opus, ~95 steps, 2 helpers); this quarter ~5% of a week so far, on estimate.
+- **Next:** chat 3, Opus medium (from a clear plan): `story/milburn-moves.txt` from the acting list (Milburn's calm pleased look, lips on line 1, hands folded on the folder; the four's faces and the look-up on "training"), then a rehearsal clip of 2a. Sam's notes on the board come first.
+- **Needs Sam:** notes on the board and cast sheet (welcome, not blocking); his recordings of lines 1-2 when ready.
+- **Read:** job pack Build (Moves rows); `guides/pose-gallery.md` seated rows; acting list below.
+- **Open rule requests:** none.
+- **For Claude:** critique left open: blank faces and lips (moves stage), hands hidden (moves: hands on folder), name card small at phone size (taste), Milburn's hair colour read differently from refs (kept: light brown greying, per the plan chat's read). Kittests round_page and facehouse_whole_head fail from before this film (named, not this film's). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker. No clean critique pass, so nothing filed in the catalogue's passed list.
 ## The screenplay so far (Sam, 17 Nov: about 25% of the film)
 - Title: Milburn. Hook Text: "The Milburn Report is released 😬"
 - Context: Alan Milburn's report on NEETs (not in employment, education or training). Joke: the report advocates a
@@ -54,34 +52,34 @@ look-ups and the rise 1.0; board 0.3; this part's share of animatic 0.3 = **abou
 - Shaft: round, platform ~17 m across (10 people holding hands); the 4 stand near the centre at 4 depths.
 - Field: shaft mouth at the centre of an open meadow; forest ring at ~300 m; alpine peaks far off.
 
-Rehearsal clips sent: (to come: the rise into the field and the light sweep)
+Rehearsal clips sent: none yet: why: no moves exist yet; chat 3 makes the light sweep + look-up and the rise as clips first
 
-Shot board sent: (to come)
+Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-board-sent.txt)
 
 ## The brief as a checklist
 | # | from the brief (word for word) | done? |
 |---|------|------|
-| 1 | Title: Milburn. | |
-| 2 | Hook Text: The Milburn Report is released 😬 | |
-| 3 | Scene 1. Location: The Cabinet room. | |
-| 4 | New Character: Ex-Minister Alan Milburn | |
-| 5 | Camera: Sat directly opposite Milburn at head height. | |
-| 6 | Milburn sits opposite, an empty chair at each side. He stares directly into the camera. | |
-| 7 | "The essence of my proposal is quite simple." | |
-| 8 | Scene 2 Location: a large lift vent that is raising up through the earth and rising up into a wide field, with forest encircling and mountains in the distance. | |
-| 9 | Camera shot 1: head level, medium shot down to bottom of torso and leaving space above the head | |
-| 10 | New characters: 4 NEETS, aged 17-20 | |
-| 11 | 1. Alternative, overweight girl with big blue/purple hair, goth-adjacent clothing, blooming black dress, pudgy nose | |
-| 12 | 2. Thin rangy Arabic guy with pencil moustache, grey sweatshirt and trackies | |
-| 13 | 3. A stout lad in a Swindon FC shirt, sports-casual attire, not very handsome but good build. | |
-| 14 | 4. A waif of a girl, woollen jumper with flowers on, glasses, nervous, clearly diagnosed with Autism and Anxiety, pale as if she never leaves her room. | |
-| 15 | the characters stand at the centre of a large lift shaft upon the rising platform. | |
-| 16 | The platform is ten people across if they were holding hands. | |
-| 17 | It is rising towards the light. | |
-| 18 | All four characters look up as the light sweeps down. | |
-| 19 | They are standing at four different distances to the camera. | |
-| 20 | An aerial shot shows the lift rise into the centre of an open natural space — a wide field, lush green grass flowing in the wind, distant encircling forest and tall alpine peaks. | |
-| 21 | "Those not in education, employment or training will be presented with a unique opportunity to serve their country." | |
+| 1 | Title: Milburn. | yes (NAME) |
+| 2 | Hook Text: The Milburn Report is released 😬 | planned (HOOK, band above his head); drawn by finish.py at the animatic |
+| 3 | Scene 1. Location: The Cabinet room. | yes: places kit view `cabinet` |
+| 4 | New Character: Ex-Minister Alan Milburn | yes (people kit) |
+| 5 | Camera: Sat directly opposite Milburn at head height. | yes: lens 1.2 m, across the table |
+| 6 | Milburn sits opposite, an empty chair at each side. He stares directly into the camera. | yes: chairs both sides; facing lens (gaze: moves stage) |
+| 7 | "The essence of my proposal is quite simple." | stand-in timing until Sam records |
+| 8 | Scene 2 Location: a large lift vent that is raising up through the earth and rising up into a wide field, with forest encircling and mountains in the distance. | yes: shaft + field paintings |
+| 9 | Camera shot 1: head level, medium shot down to bottom of torso and leaving space above the head | yes: lens 2000, torso, room above |
+| 10 | New characters: 4 NEETS, aged 17-20 | yes |
+| 11 | 1. Alternative, overweight girl with big blue/purple hair, goth-adjacent clothing, blooming black dress, pudgy nose | yes (broader after critique) |
+| 12 | 2. Thin rangy Arabic guy with pencil moustache, grey sweatshirt and trackies | yes (thinner after critique) |
+| 13 | 3. A stout lad in a Swindon FC shirt, sports-casual attire, not very handsome but good build. | yes (broader after critique) |
+| 14 | 4. A waif of a girl, woollen jumper with flowers on, glasses, nervous, clearly diagnosed with Autism and Anxiety, pale as if she never leaves her room. | yes |
+| 15 | the characters stand at the centre of a large lift shaft upon the rising platform. | yes, near the centre |
+| 16 | The platform is ten people across if they were holding hands. | yes: 17 m across |
+| 17 | It is rising towards the light. | yes: wall slides down, light above |
+| 18 | All four characters look up as the light sweeps down. | light sweeps: yes; look-up: moves stage |
+| 19 | They are standing at four different distances to the camera. | yes: 2.6, 3.6, 4.8, 6.2 m |
+| 20 | An aerial shot shows the lift rise into the centre of an open natural space — a wide field, lush green grass flowing in the wind, distant encircling forest and tall alpine peaks. | yes: 33 deg down; grass gusts; forest ring; peaks |
+| 21 | "Those not in education, employment or training will be presented with a unique opportunity to serve their country." | stand-in timing until Sam records |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
@@ -107,6 +105,9 @@ Shot board sent: (to come)
 |---|------|------|------|------|--------|
 
 Decisions made:
+- Handover check (chat 2, end) settled: poses (rule 41) and head life (rule 74) wait for the moves stage (chat 3: no moves exist yet); FINDER: this chat built the film's code new, on purpose (no notes to look up).
+- Sam, 17 Nov 20:12: "Go ahead with the rest" = build this part (chat 2 did: board and cast sheet sent).
+- Chat 2: the aerial is tilted 33 deg, not 45 (critique: 28 read as level; 45 loses the peaks in the tall frame).
 - Hook Text sits in the band above Milburn's head in shot 1 (never over his face).
 - Line 2 is Milburn's voice over the shaft and field shots; cut to the aerial on "unique opportunity".
 - Sam, 17 Nov: all recommended answers taken (tone calm and reasonable with a faint pleased smile; aerial high and tilted; bright midday; red Swindon Town shirt, simple robin badge; the four faces as proposed). No new photos. No showstopper shots. Estimates Option 1.

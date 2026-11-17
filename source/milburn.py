@@ -58,6 +58,8 @@ T = {'simple': 2.5,          # shot 1 lands on "simple"
      'locks': 9.4}           # 2b: the deck locks level with the grass ("country")
 SHOT_CAST = {'1': ['milburn'], '2a': ['goth', 'rangy', 'swindon', 'waif'], '2b': ['goth', 'rangy', 'swindon', 'waif']}
 KEEP_CLEAR = {'1': [(60, 330, 1020, 560)]}    # the Hook Text's band above Milburn's head (never over his face)
+HOOK = ('The Milburn Report is released 😬', {'y': 420, 'until': 3.0})   # rule 75: the band above his head
+SHOT_MARKS = {'1': ['milburn'], '2a': ['goth', 'rangy', 'swindon', 'waif'], '2b': []}   # rule 38: front on (2b: tiny, from above)
 
 
 def scene_of(t):
@@ -119,7 +121,7 @@ def person(img, who, X, sole_y, pxm, yaw=0.0, t=0.0, joints=None):
 # ================================================================================================= shot 1
 _DESC = PL.load(FILM)
 _PAINT = {layer: PL.painter(_DESC, 'cabinet', layer) for layer in ('back', 'mid', 'front')}
-SEATED_NECK = 1.06                   # m above the floor: seat 0.46, hips 0.5, hips to neck 0.56
+_seated_neck = 1.06                   # m above the floor: seat 0.46, hips 0.5, hips to neck 0.56
 
 
 def cabinet(t):
@@ -133,7 +135,7 @@ def cabinet(t):
     d = PLAN['PEOPLE']['milburn']['at'][1]
     pxm = L.ppm(d)
     sp = CAST['milburn']
-    neck_y = L.p(0.0, d, SEATED_NECK)[1]
+    neck_y = L.p(0.0, d, _seated_neck)[1]
     person(img, 'milburn', 540, neck_y + FEET * scale_at(pxm, sp), pxm, 0.0, t)
     for layer in ('mid', 'front'):
         if _PAINT[layer]:
@@ -151,14 +153,17 @@ def shaft_shot(t):
     lit = MS.light_line(lt, t0, t1)
     img = MS.shaft(lt, lit).convert('RGBA')
     L = MS.SHAFT_CAM
+    ppl = Image.new('RGBA', img.size, (0, 0, 0, 0))
     for who, x, d in NEETS:
         X, Y = L.p(x, d, 0.0)
-        person(img, who, X, Y, L.ppm(d), 0.0, t)
-    u = max(0.0, min(1.0, (2.2 - lit) / 1.2))       # the light reaching them: a warm wash over everyone
-    out = img.convert('RGB')
-    if u > 0:
-        out = Image.blend(out, Image.new('RGB', out.size, (255, 238, 196)), 0.16 * u)
-    return out
+        person(ppl, who, X, Y, L.ppm(d), 0.0, t)
+    u = max(0.0, min(1.0, (2.4 - lit) / 1.0))       # the light reaching them (critique r1: they must change):
+    rgb = ppl.convert('RGB')                         # in the shaft's shade, cool and dim; then lit warm
+    dim = Image.blend(rgb, Image.new('RGB', rgb.size, (34, 40, 66)), 0.45 * (1 - u))
+    lit_im = Image.blend(dim, Image.new('RGB', rgb.size, (255, 230, 170)), 0.24 * u)
+    ppl = Image.merge('RGBA', (*lit_im.split(), ppl.split()[3]))
+    img.alpha_composite(ppl)
+    return img.convert('RGB')
 
 
 # ================================================================================================= shot 2b

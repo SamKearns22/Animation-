@@ -1,3 +1,3 @@
-Milburn: plan answered; all five people drawn on the people kit (first look sent, 17 Nov).
-Next: chat 2 (Opus high): film file, Cabinet Room, the shaft and field, critique, cast sheet, shot board.
-Needs Sam: nothing.
+Milburn: film file built; Cabinet Room, lift shaft and field painted; critiqued; cast sheet and shot board sent (17 Nov).
+Next: chat 3 (Opus medium): the moves (faces, lips, hands, the look-up), then a rehearsal clip.
+Needs Sam: notes on the board (welcome); his recordings when ready.
