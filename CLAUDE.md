@@ -83,6 +83,9 @@ at session start (`.claude/hooks/setup.sh`).
   for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
   the chain then goes on. A chat on the wrong model for its next stage opens one on the right model, never
   carries on, up or down: an Opus fix ends by opening the Sonnet chat for the animatic, finish.py and sending.
+  **Chat size:** a chat aims at about 100 steps, up to 150 to finish a stage, and never hands over mid-fix. No chat
+  ends under about 40 steps, except notes after more than an hour's gap or a whole routine stage on Sonnet;
+  routine stages always go on Sonnet.
   No scheduled check-ins unless I ask. A message never says "start a new chat" or "type ...": it says what
   is done and what I'm needed for.
 - **One wait per render;** never check on it repeatedly. **Push notifications** when a render or long job finishes,

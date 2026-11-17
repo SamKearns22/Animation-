@@ -3111,6 +3111,51 @@ def board_gate_refusals():
     return not bad, '; '.join(bad) or 'no board, a missing shot, an empty shot and a board after a move all refused'
 
 
+# ------------------------------------------------------------------------------------------------ rule 85
+@test
+def cost_watch_lines():
+    """Rule 85 (Sam's Y, 17 Nov): amber at 250k of history, red at 370k; the warning lines count steps and say aim
+    ~100, up to 150 to finish, never mid-fix."""
+    import importlib.util, io, contextlib, tempfile, shutil
+    spec = importlib.util.spec_from_file_location('costwatch', os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                                  '..', '.claude', 'hooks', 'costwatch.py'))
+    C = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(C)
+    bad = []
+    tmp = tempfile.mkdtemp()
+    C.STATE_DIR = os.path.join(tmp, 'state')
+    try:
+        def run(ctx, steps, event):
+            path = os.path.join(tmp, f'c{ctx}-{event}.jsonl')
+            with open(path, 'w') as f:
+                for n in range(steps):
+                    f.write(json.dumps({'type': 'assistant', 'timestamp': '2099-01-01T00:00:00Z', 'message': {
+                        'id': f'm{n}', 'model': 'claude-sonnet', 'usage': {'cache_read_input_tokens': ctx}}}) + '\n')
+            out = io.StringIO()
+            stdin = sys.stdin
+            sys.stdin = io.StringIO(json.dumps({'transcript_path': path, 'hook_event_name': event, 'prompt': 'x'}))
+            try:
+                with contextlib.redirect_stdout(out):
+                    C.main()
+            finally:
+                sys.stdin = stdin
+            return out.getvalue()
+        if run(240_000, 3, 'PostToolUse'):
+            bad.append('warned below 250k')
+        a = run(260_000, 3, 'PostToolUse')
+        if 'AMBER' not in a or 'RED' in a:
+            bad.append('no amber at 260k')
+        if '3 steps' not in a or '100 steps' not in a or '150' not in a or 'mid-fix' not in a:
+            bad.append(f'amber line lacks steps / aim 100 / 150 / mid-fix: {a[:200]}')
+        if 'RED' in run(360_000, 3, 'UserPromptSubmit'):
+            bad.append('red below 370k')
+        if 'Cost: red' not in run(380_000, 3, 'UserPromptSubmit'):
+            bad.append('no red at 380k')
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return not bad, '; '.join(bad) or 'quiet at 240k, amber at 260k with steps and the ~100/150/mid-fix line, red at 380k'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
