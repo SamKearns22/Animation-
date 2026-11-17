@@ -1,14 +1,14 @@
 # Notes for Milburn (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 59 (pre-flight before the animatic), 75 (Hook Text in the band above his head), 74 (re-time moves on Sam's takes).
-- **Done (chat 4):** note 2 fixed (the goth's silver brow bar, lip ring, nose stud; people kit `piercings: brow, lip, nose`); still and 2a clip sent. Sam then held the animatic and sent scenes 3 and 5 (brief rows 22-37).
-- **Spent:** chat 4 about 0.6% (Opus medium, ~30 steps); this film ~8% of a week so far; the estimate needs re-doing for the new scenes.
-- **Next:** chat 5, Opus HIGH (planning and building new): plan scenes 3 and 5 from brief rows 22-37: shots and timing, the estimate redone, reference photos of Andy Burnham and Pat McFadden (search order: job pack Plan) and their likeness heads (face tool + house head), the Cabinet Room reverse (Milburn's side of the table), the field further in with grey plinths at varied distances, the props (crossbow, katana, twin uzis, a large hand grenade, a Vimto, a tall glass of sparkling water), and the moves on the acting list. Then the animatic of the whole film so far (Sonnet). Ask Sam only what the brief leaves open, in one message.
-- **Needs Sam:** notes on the piercings clip; his recordings of lines 1-2 (and the new lines) when ready.
-- **Read:** job pack Plan; then Build.
+- **Rules that bite next:** 41 (every new pose looked at from the views it is seen), 89 (one critique pack for the build), 74 (moves land on their words).
+- **Done (chat 5):** scenes 3 and 5 planned (shots 3, 5, 6, 7; timing; acting list rows 3-7; estimate); McFadden's head (face tool pick B, 62%; house head gains a bald piece, round glasses, bigger ears); Andy (Sam's finished head) and Pat in the people file; the Cabinet Room reverse built (places view `reverse`: fireplace, portrait, Vimto can, tall glass, name cards). Questions Q1-Q7 sent to Sam.
+- **Spent:** chat 5 about 2.8% (Opus high, ~115 steps); film ~10.9% so far; estimate from here ~8.5 (total ~19%, over the 15% aim: two likeness heads, six held props).
+- **Next:** chat 6, Opus HIGH (building new): the field turned level and further in with six grey plinths (`milburn_sets`: a level TiltCam at 1.6 m, the ring 150 m away); the props (crossbow from prepper_cast; katana, twin uzis, grenade new, flat); Andy and Pat seated in `reverse` (milburn.py: `reverse_shot` like `cabinet`); shots 3, 5, 6, 7 and lines 3-7 in SHOTS/LINES/SHOT_CAST; the moves in story/milburn-moves.txt (acting list rows 3-7); one critique pack; then Sonnet for the animatic of the whole film. Take Sam's answers to Q1-Q7 first if in.
+- **Needs Sam:** answers Q1-Q7; recordings (lines 1-7 and 3b) when ready.
+- **Read:** job pack Build; this file's Shots, acting list, estimate.
 - **Open rule requests:** none.
-- **For Claude:** moves critique left open: look-up still faint to the helpers at panel size (strengthened twice; Sam judges the clip), Swindon's chest out not visible front on, mouths open without words (rangy's is the joke), glasses thin at panel size (thick in code, cast stage), young faces lined, shaft reads as a hall (set, chat 2), name card cut at the left edge, goth's neck line. Acting list's aerial row is "2 cont." (block 2b is `code: field_shot`). Kittests all pass (chat 4). Piercings are front head only (no turned view of the goth in this film). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** facehouse: `hair: bald` (bald_shapes, bald, dome arc via L['round_top'], `L['dome']` caps it at -0.44), `ear_k`, glasses `round`/`w_k` (in the pick json); McFadden's pick at references/faces/mcfadden/pick (picked B, by Claude: Sam to confirm Q6); CAST['mcfadden']. places_tables gains fireplace, portrait, tall glass, can. The reverse view puts the lens 0.3 m right of Milburn's seat so both fit. Kittests failing before this film (named, not from it): facehouse_whole_head, round_page. Moves critique items from chat 3 still open (see archive). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 
 ## The screenplay so far (Sam, 17 Nov: about 25% of the film)
 - Title: Milburn. Hook Text: "The Milburn Report is released 😬"
@@ -22,6 +22,14 @@
 | 1 | Cabinet Room | level, head height, straight opposite Milburn across the table | Milburn seated, empty chair each side | 1 | 3.0 s; Hook Text 0.5-3.0 s in the band above his head |
 | 2a | lift shaft | level, head height, medium (to bottom of torso, room above heads) | 4 NEETs on the rising platform, 4 depths | 2 (Milburn heard over) | ~4 s; light sweeps down, all look up |
 | 2b | field | high, looking down ~45 deg (my pick: keeps the peaks in the tall frame) | platform rising out of the ground at the centre | 2 ends | ~4 s; grass waving, forest ring, alpine peaks; tiny figures (F8) |
+| 3 | field, ~150 m further in (forest ring ~150 m behind) | level, standing head height 1.6 m, mid shot (the nearest to the waist) | 4 NEETs by grey waist-high plinths at 3.0, 4.2, 5.4, 7.0 m, staggered across; 2 more plinths behind still holding weapons (Q3) | 3 (Milburn heard; Swindon's pow-pows under, Q4) | 11.0-15.3; cut on Milburn's dash |
+| 5 | Cabinet Room, the reverse (places view `reverse`, built chat 5) | from Milburn's seat, level 1.2 m, lens 1500 | Andy in the PM's chair (left of centre), Pat on his left (screen right); fireplace and old portrait behind Andy | 4 | 15.3-20.6 |
+| 6 | Cabinet Room (shot 1's camera) | as shot 1 | Milburn | 5 | 20.6-27.6 |
+| 7 | the reverse | as 5 | Pat speaks, eyes on Andy; then Andy arms up, folds them, leans back | 6, 7 | 27.6-34.0 |
+
+Timing (stand-in, about 3.2 words a second): line 3 11.4-15.1; line 3b (Swindon's pow-pows) 12.6-14.6; line 4 (Andy)
+15.4-20.1; line 5 (Milburn) 21.0-27.2; line 6 (Pat) 27.8-30.6; line 7 (Andy) 31.2-32.4. **The film is ~34 s so far**
+(the first estimate said ~45 s for the whole film; with more screenplay to come it will run to about a minute).
 
 ## Plan extras: estimate (rule 24; not yet entered in the ledger: waits on Q10)
 Unmeasured share: sets and moves rows (nothing like a rising shaft or alpine vista measured yet).
@@ -46,12 +54,32 @@ hand-built rates (7%), but the people kit drew all five in about ten steps; the 
 people done (in the plan chat's ~2.5%); Cabinet Room on the places kit 0.5; shaft + field paintings 1.5; critique 0.5;
 look-ups and the rise 1.0; board 0.3; this part's share of animatic 0.3 = **about 4-5% more** (unmeasured: sets, moves).
 
+## Plan extras: estimate for scenes 3 and 5 (chat 5; from this film's real chats: build 2.8%, moves 3.1%)
+| thing | KNOWN or NEW | stage | estimate (% of a week) |
+|---|---|---|---|
+| Andy Burnham | KNOWN (face tool pick, Sam: "Andy is finished"; people kit) | cast | 0 |
+| Pat McFadden | NEW head, done chat 5 (face tool B; house head's new bald piece, round glasses, ears) | cast | done (in chat 5) |
+| Cabinet Room reverse | KNOWN room + NEW fireplace, portrait, tall glass, can (places kit), done chat 5 | sets | done (in chat 5) |
+| field, level, further in + 6 grey plinths | NEW: the field painting turned level (milburn_sets TiltCam), plinths | sets | 0.8 |
+| crossbow, katana, twin uzis, grenade (+ longbow, mace if Q3) | crossbow KNOWN (prepper_cast); the rest NEW, flat 2D props | props | 0.8 |
+| moves: hoist, lift and stare, aim and recoil, shake; point, steeple, arms up, fold, lean back (seated) | pointing, arms folded, lean back, hands folded KNOWN; holding props, steeple, arms up NEW | moves | 2.5 |
+| shots 3, 5, 6, 7 wired into the film | | build | 0.5 |
+| critique | | critique | 0.5 |
+| animatic 1 (Sonnet) | KNOWN | animatic1 | 0.4 |
+| notes rounds (2) and final | | round, final | 3.0 |
+| **total from here** | | | **about 8.5** (film so far ~10.6% incl. chat 5) = **~19% of a week**: over the 15% aim; why: this part doubles the cast (2 likeness heads) and adds 6 held props |
+
 ## The world (rule 1): plans to come (`plan.py`) once the people and places lines exist
 - Cabinet Room: green-baize table, Milburn mid-side facing camera; empty chair left and right of him; cream panelled
   wall behind with green damask curtains at a tall window (from the reference). On the table: red leather folders,
   cut-glass water glasses, name cards, papers, pens.
 - Shaft: round, platform ~17 m across (10 people holding hands); the 4 stand near the centre at 4 depths.
 - Field: shaft mouth at the centre of an open meadow; forest ring at ~300 m; alpine peaks far off.
+- Cabinet Room turned round (shots 5, 7): from Milburn's seat (shot 1's depth 2.2) back across the table: Andy at
+  shot 1's lens (directly opposite Milburn) in the PM's chair, Pat on his left; the fireplace wall 1.25 m behind them
+  (marble fireplace centred on the PM's chair, the portrait above); red folders, his Vimto, Pat's tall glass, name cards.
+- Field further in (shot 3): 150 m from the shaft towards the forest (ring 150 m beyond); six grey plinths 1.0 m high,
+  0.5 m square, staggered at 3.0-9 m from the lens, never in a line.
 
 Rehearsal clips sent: none yet: why: no moves exist yet; chat 3 makes the light sweep + look-up and the rise as clips first
 
@@ -82,21 +110,21 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 20 | An aerial shot shows the lift rise into the centre of an open natural space — a wide field, lush green grass flowing in the wind, distant encircling forest and tall alpine peaks. | yes: 33 deg down; grass gusts; forest ring; peaks |
 | 21 | "Those not in education, employment or training will be presented with a unique opportunity to serve their country." | stand-in timing until Sam records |
 | 22 | (Sam, 17 Nov, chat 4) Wait for the animatic: it comes once scenes 3 and 5 are built | open |
-| 23 | Scene 3. Camera: mid shot. Location: further into the field | open |
-| 24 | The NEETs have found a series of weapons on grey plinths; like the lift, vary the positions to avoid a flat look | open |
-| 25 | 1 (goth): hoisting a heavy crossbow, pleased with her choice | open |
-| 26 | 2 (rangy): picking up a katana from the plinth and staring at it, unsure | open |
-| 27 | 3 (Swindon): picking up twin uzis, 'pow, pow' motions and mouth noises, aiming at invisible targets | open |
-| 28 | 4 (waif): shaking, clutching a single large hand grenade like she's been charged with looking after an ostrich egg | open |
-| 29 | "Each NEET must arm themselves before heading further into the Zone.—" (Milburn, voice over) | open |
-| 30 | Shot 5 (Sam's numbering; no shot 4 given). Cut suddenly to the opposite side of the table from Milburn: the 180 of shot 1 | open |
-| 31 | New character: Andy Burnham (the Prime Minister in this film), angrily accusing, pointing furiously, clearly incensed; a Vimto before him | open |
-| 32 | New character: Pat McFadden, Work and Pensions Secretary, beside Andy, listening patiently, fingers steepled; sparkling water in a tall glass | open |
-| 33 | Andy: "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | open |
-| 34 | 180 back to Milburn: nonplussed, softly spoken, attentive | open |
-| 35 | Milburn: "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | open |
-| 36 | 180 again. Pat (eyes on Andy): "I'd like to hear where this goes, Prime Minister" | open |
-| 37 | Andy throws his arms up, then folds them and leans back: "Fine! Continue." | open |
+| 23 | Scene 3. Camera: mid shot. Location: further into the field | planned: shot 3, level mid shot, 150 m in (field painting turned level: next chat) |
+| 24 | The NEETs have found a series of weapons on grey plinths; like the lift, vary the positions to avoid a flat look | planned: 6 plinths staggered 3-9 m, never in a row |
+| 25 | 1 (goth): hoisting a heavy crossbow, pleased with her choice | planned (acting list row 3) |
+| 26 | 2 (rangy): picking up a katana from the plinth and staring at it, unsure | planned (acting list row 3) |
+| 27 | 3 (Swindon): picking up twin uzis, 'pow, pow' motions and mouth noises, aiming at invisible targets | planned (row 3; pow-pows Q4) |
+| 28 | 4 (waif): shaking, clutching a single large hand grenade like she's been charged with looking after an ostrich egg | planned (row 3; grenade size Q2) |
+| 29 | "Each NEET must arm themselves before heading further into the Zone.—" (Milburn, voice over) | planned: line 3, cut on the dash |
+| 30 | Shot 5 (Sam's numbering; no shot 4 given). Cut suddenly to the opposite side of the table from Milburn: the 180 of shot 1 | built: places view `reverse` (Q1: no shot 4) |
+| 31 | New character: Andy Burnham (the Prime Minister in this film), angrily accusing, pointing furiously, clearly incensed; a Vimto before him | head ready (Sam's finished Andy); Vimto can built; pointing on the acting list |
+| 32 | New character: Pat McFadden, Work and Pensions Secretary, beside Andy, listening patiently, fingers steepled; sparkling water in a tall glass | head built (pick B, Q6); tall glass built; steeple on the acting list |
+| 33 | Andy: "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | planned (line 4) |
+| 34 | 180 back to Milburn: nonplussed, softly spoken, attentive | planned (shot 6 = shot 1 camera) |
+| 35 | Milburn: "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | planned (line 5) |
+| 36 | 180 again. Pat (eyes on Andy): "I'd like to hear where this goes, Prime Minister" | planned (line 6; eyes on Andy) |
+| 37 | Andy throws his arms up, then folds them and leans back: "Fine! Continue." | planned (line 7) |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
@@ -104,6 +132,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | references/milburn/milburn-official.jpg | front, slight smile; short swept side-parted light brown hair greying at sides; dark grey-tortoiseshell rectangular glasses; long face, strong straight nose, thin lips; navy suit, white shirt, navy patterned tie | |
 | references/milburn/milburn-2014.jpg | three-quarter, talking; black thick-rimmed glasses; same hair swept up and back; navy suit, white shirt, dark tie | |
 | references/milburn/milburn-1.jpg | older, small; no glasses; hair darker | (low use) |
+| references/faces/mcfadden/a01, a02 (official, no glasses), a03 (2026, talking, glasses), b01 (2026, three-quarter) | bald dome, short grey-ginger sides, ears standing out, round dark tortoiseshell glasses, long face, thin lips; navy suit, white or pale blue shirt, blue patterned tie | yes (pick B; sheet notes/sheets/mcfadden/mcfadden-sheet.jpg) |
 | references/milburn/cabinet-room-burnham.jpg | cream panelled walls; green damask curtains at a tall bright window; green-baize table; red leather folders; cut-glass water tumblers; white name cards; dark wood chairs with leather backs | |
 
 ## The acting list (rule 74, draft: faces wait on Sam's answers)
@@ -112,6 +141,11 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 1 "The essence of my proposal is quite simple." | Milburn | single, straight to lens: he is addressing us like a broadcast | ask Sam (Q4) | seated upright, hands folded on the folder, tiny lean in | "simple" |
 | 2 "Those not in education, employment or training..." | Milburn (heard), NEETs (seen) | medium on the four: their faces are the joke | goth: unimpressed; rangy lad: mouth open; Swindon lad: chest out, squint; waif: shrinks, grips her sleeves | all four look up as the light sweeps down | "training" (heads up) |
 | 2 cont. "...a unique opportunity to serve their country." | Milburn (heard) | aerial: the size of the arena is the joke | (tiny figures) | platform locks level with the grass | "country" |
+| 3 "Each NEET must arm themselves before heading further into the Zone.—" | Milburn (heard), NEETs (seen) | mid on the four: their choices are the joke | goth: pleased, small smile; rangy: unsure, staring at the blade; Swindon: grinning, mouthing "pow"; waif: terrified, wide eyes | goth hoists the heavy crossbow to her shoulder; rangy lifts the katana off its plinth, holds it out flat and stares; Swindon grabs both uzis, swings them at invisible targets, recoil jerks; waif clutches the grenade to her chest in both hands, shaking | "arm themselves" |
+| 4 "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | Andy | two-shot reverse: his outburst beside Pat's calm | furious: brows down hard, mouth wide, eyes on Milburn (the lens) | leans in, jabs a pointing finger at Milburn (a touch to the side, so the point reads) | "Milburn", again on "aren't you" |
+| 5 "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | Milburn | single, as shot 1: the calm is the joke | nonplussed, soft, attentive: neutral, slow blink, small head tilt | hands folded on the folder, still | "interrupt" (the tilt) |
+| 6 "I'd like to hear where this goes, Prime Minister" | Pat | the reverse: he quietly sides with Milburn | patient; eyes sideways to Andy, never the lens | fingers steepled, elbows on the table; a small nod | "Prime Minister" |
+| 7 "Fine! Continue." | Andy | the reverse | exasperated, then sulky | arms flung up on "Fine!", then folds them and leans back in the chair | "Fine", "Continue" |
 
 ## Exceptions (rule 13)
 | check | who | why | looked at full size |
@@ -124,6 +158,10 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 1 | 2a, 2b | all | Goth's hair: blue and purple as different strands, not one block (Sam, 17 Nov) | people kit: `hair: ... streaks C` | fixed: wavy strands from the crown, blue and purple in turn (front on; side and back views not built, not used in this film); stills sent |
 
 Decisions made:
+- Handover check (chat 5, end) settled: FINDER: no notes this chat; it built new things (people and places lines, facehouse's bald piece, four places pieces) and read the film's code to plan the new shots, on purpose.
+- Handover check (chat 5, start) settled: BROKEN kittests facehouse_whole_head and round_page failed before this film (since 15 Nov, named in protest-tiers' notes); Andy's head is drawn as the kit draws it now and is looked at in the cast sheet. NOT CARRIED (the goth's hair: "crest of an alien monster", "purple/blue dyed alternative hair") is note 1, fixed chat 4.
+- Chat 5: no photo of the Cabinet Room's fireplace side could be fetched (Wikimedia refused; the tour page has none): the reverse is drawn from the room's known pieces and is Q7 to Sam.
+- Chat 5: McFadden wears round dark glasses in his 2026 photos (not in the official portraits): the head has them.
 - Handover check (chat 3, end) settled: FINDER: this chat built the moves and the film's face, clip and head-life code new, on purpose (no notes yet to look up).
 - Handover check (chat 2, end) settled: poses (rule 41) and head life (rule 74) wait for the moves stage (chat 3: no moves exist yet); FINDER: this chat built the film's code new, on purpose (no notes to look up).
 - Sam, 17 Nov 20:12: "Go ahead with the rest" = build this part (chat 2 did: board and cast sheet sent).

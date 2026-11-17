@@ -10,8 +10,14 @@ outline) at its true size through any level camera.
   name card ...... a white folded name card on a table (the point: its foot, middle), its lettering scaled to width
   folder ......... a leather folder lying flat on a table, in perspective: `x A to B, z TOP, depth FAR, near NEAR`;
                    a gold crest stamped in the middle
+  fireplace ...... (Milburn chat 5) a marble chimneypiece on a wall: jambs, frieze, mantel shelf, the dark firebox and
+                   an iron grate, a hearth stone
+  portrait ....... (chat 5) an old oil portrait in a gilt frame: a gentleman of the 1700s in a powdered wig (nobody real)
+  tall glass ..... (chat 5) a tall glass of sparkling water on a table: bubbles rising (moving), a slice of lemon
+  can ............ (chat 5) a drinks can standing on a table: its colour, a band and its name across it
 
-Map: table top 30 | curtain 70 | tumbler 115 | name card 140 | folder 160
+Map: table top 30 | curtain 70 | tumbler 115 | name card 140 | folder 160 | fireplace 190 | portrait 230 |
+     tall glass 270 | can 300
 """
 import math
 import random
@@ -151,3 +157,113 @@ def folder(p, img, cam, a, t):
     ry = abs(P(cx, z + th, cd - 0.03)[1] - Y)
     p.ell(X, Y, rx, max(1.5, ry), a['crest'], None)
 
+
+
+# ================================================================================================ fireplace
+@kind('fireplace', ref=300, params={'marble': 'c', 'vein': 'c'},
+      defaults={'marble': (240, 236, 226), 'vein': (206, 200, 190)})
+def fireplace(p, img, cam, a, t):
+    """A marble chimneypiece standing on the floor against the wall (`x A to B, z 0 to TOP`): two jambs, a frieze with
+    a raised middle tablet, the mantel shelf proud of it, the dark firebox with an iron grate, a hearth stone."""
+    w, h = a['w'], a['h']
+    m, vein = a['marble'], a['vein']
+    shade = dk(m, 0.86)
+    jw = w * 0.16                                        # the jambs
+    fb_top = h * 0.36                                    # the firebox's top (from the top of the piece)
+    p.poly(quad(-w * 0.04, h - h * 0.05, w * 1.04, h), dk(m, 0.8), INK, 2.2)        # the hearth stone
+    p.poly(quad(0, h * 0.12, w, h - h * 0.05), m, INK, 2.6)                        # the whole surround
+    p.poly(quad(jw, fb_top, w - jw, h - h * 0.05), (34, 30, 30), INK, 2.4)        # the firebox
+    p.poly(quad(jw + w * 0.04, fb_top + h * 0.05, w - jw - w * 0.04, h - h * 0.05), (22, 20, 20), None)
+    gx0, gx1, gy = jw + w * 0.12, w - jw - w * 0.12, h * 0.8                         # the iron grate and its coals
+    p.poly([(gx0, gy), (gx1, gy), (gx1 - w * 0.03, h - h * 0.07), (gx0 + w * 0.03, h - h * 0.07)], (52, 48, 46), INK, 1.8)
+    for k in range(6):
+        x = gx0 + (gx1 - gx0) * (k + 0.5) / 6
+        p.ell(x, gy - h * 0.012, w * 0.03, h * 0.02, (64, 58, 56), None)
+    for x in (gx0, gx1):
+        p.line([(x, gy), (x, h - h * 0.05)], INK, 2.0)
+    p.poly(quad(0, h * 0.12, w, fb_top), mix(m, (255, 255, 255), 0.2), INK, 2.2)  # the frieze
+    p.poly(quad(w * 0.38, h * 0.16, w * 0.62, fb_top - h * 0.04), shade, INK, 1.8)  # its middle tablet
+    for x in (jw * 0.5, w - jw * 0.5):                                                # the jambs' fluting
+        for dx in (-jw * 0.22, 0, jw * 0.22):
+            p.line([(x + dx, fb_top + h * 0.04), (x + dx, h - h * 0.1)], shade, 1.6)
+    p.poly(quad(-w * 0.06, h * 0.07, w * 1.06, h * 0.12), m, INK, 2.4)              # the mantel shelf
+    p.poly(quad(-w * 0.06, h * 0.105, w * 1.06, h * 0.12), shade, None)
+    r = random.Random(a['seed'])
+    for _ in range(5):                                                                # a few soft veins
+        x, y = r.uniform(0.05, 0.95) * w, r.uniform(0.15, 0.9) * h
+        if jw < x < w - jw and y > fb_top:
+            continue
+        p.line([(x, y), (x + r.uniform(-20, 20), y + r.uniform(8, 26)), (x + r.uniform(-24, 24), y + r.uniform(20, 40))],
+               vein, 1.2)
+
+
+# ================================================================================================ portrait
+@kind('portrait', ref=300, params={'gilt': 'c', 'ground': 'c', 'coat': 'c'},
+      defaults={'gilt': (196, 156, 70), 'ground': (58, 54, 40), 'coat': (110, 30, 34)})
+def portrait(p, img, cam, a, t):
+    """An old oil portrait on the wall in a deep gilt frame: a gentleman of the 1700s, half length, in a powdered
+    wig and a red coat, on a dark ground (nobody real; the Cabinet Room's first-minister portrait as an idea)."""
+    w, h = a['w'], a['h']
+    g = a['gilt']
+    fr = min(w, h) * 0.11
+    p.poly(quad(0, 0, w, h), g, INK, 2.6)
+    p.poly(quad(fr * 0.45, fr * 0.45, w - fr * 0.45, h - fr * 0.45), dk(g, 0.8), INK, 1.4)
+    p.poly(quad(fr, fr, w - fr, h - fr), a['ground'], INK, 2.0)
+    cx = w / 2
+    iw, ih = w - 2 * fr, h - 2 * fr
+    sh_y = fr + ih * 0.62                                                             # the shoulders and coat
+    p.poly([(cx - iw * 0.42, h - fr), (cx - iw * 0.4, sh_y + ih * 0.08), (cx - iw * 0.18, sh_y),
+            (cx + iw * 0.18, sh_y), (cx + iw * 0.4, sh_y + ih * 0.08), (cx + iw * 0.42, h - fr)], a['coat'], INK, 1.8)
+    p.poly([(cx - iw * 0.07, sh_y), (cx + iw * 0.07, sh_y), (cx, h - fr - ih * 0.1)], (238, 232, 220), INK, 1.4)
+    hy = fr + ih * 0.42                                                               # the wig, then the face
+    p.ell(cx, hy, iw * 0.2, ih * 0.2, (226, 222, 214), INK, 1.8)
+    for sgn in (-1, 1):
+        p.ell(cx + sgn * iw * 0.18, hy + ih * 0.12, iw * 0.07, ih * 0.08, (220, 216, 208), INK, 1.4)
+    p.ell(cx, hy + ih * 0.03, iw * 0.11, ih * 0.13, (226, 186, 160), INK, 1.6)
+    for sgn in (-1, 1):
+        p.ell(cx + sgn * iw * 0.04, hy, iw * 0.012, ih * 0.01, (40, 30, 26), None)
+    p.line([(cx - iw * 0.03, hy + ih * 0.09), (cx + iw * 0.03, hy + ih * 0.09)], (150, 90, 80), 1.4)
+
+
+# ================================================================================================ tall glass
+@kind('tall glass', ref=1000, params={'full': 'n', 'lemon': 'n'}, defaults={'full': 0.8, 'lemon': 1},
+      box=lambda a: (-36, -164, 36, 4))
+def tall_glass(p, img, cam, a, t):
+    """A tall glass of sparkling water on a table (the point: its foot, middle; 7 cm across, 16 cm tall): the water
+    `full` of the way up, bubbles rising all the time (t), a slice of lemon, a glint."""
+    glass, water = (216, 232, 238), (186, 216, 228)
+    p.poly([(-30, 0), (30, 0), (34, -160), (-34, -160)], glass, INK, 2.0)
+    wy = -160 * a['full']
+    p.poly([(-30, 0), (30, 0), (30 + 4 * a['full'], wy), (-30 - 4 * a['full'], wy)], water, None)
+    p.ell(0, wy, 31 + 4 * a['full'], 4, mix(water, (255, 255, 255), 0.35), None)
+    r = random.Random(a['seed'])
+    for k in range(14):                                  # bubbles: each its own column and speed, looping
+        x = r.uniform(-22, 22)
+        sp = r.uniform(40, 80)
+        y = -4 - ((t * sp + r.uniform(0, 200)) % (-wy - 8))
+        rr = r.uniform(1.8, 3.4)
+        p.ell(x, y, rr, rr, (246, 252, 255), (150, 180, 196), 1.0)
+    if a['lemon']:                                       # a lemon slice on the rim
+        p.ell(-34, -150, 14, 14, (246, 214, 70), INK, 1.6)
+        p.ell(-34, -150, 10, 10, (252, 236, 150), None)
+    p.ell(0, -160, 34, 5, mix(glass, (255, 255, 255), 0.4), INK, 1.6)
+    p.line([(-22, -146), (-20, -30)], (255, 255, 255), 3.0)
+
+
+# ================================================================================================ can
+@kind('can', ref=1000, params={'colour': 'c', 'band': 'c', 'text': 's', 'ink': 'c'},
+      defaults={'colour': (110, 38, 120), 'band': (236, 70, 120), 'text': '', 'ink': (255, 255, 255)},
+      box=lambda a: (-36, -126, 36, 4))
+def can(p, img, cam, a, t):
+    """A drinks can standing on a table (the point: its foot, middle; 6.6 cm across, 12 cm tall): its colour, a
+    bright band, its name across it, the silver top and foot, a glint."""
+    import blessed_sets as BS
+    silver = (198, 200, 206)
+    p.poly([(-33, -4), (33, -4), (33, -114), (-33, -114)], a['colour'], INK, 2.2)
+    p.poly([(-33, -46), (33, -46), (33, -66), (-33, -66)], a['band'], None)
+    p.poly([(-28, 0), (28, 0), (33, -6), (-33, -6)], silver, INK, 1.6)            # the foot
+    p.poly([(-33, -114), (33, -114), (28, -122), (-28, -122)], silver, INK, 1.6)  # the shoulder and top
+    p.ell(0, -122, 28, 4, dk(silver, 0.9), INK, 1.2)
+    if a['text']:
+        BS.sign(img, cam, a['text'], 0, -84, 60, tuple(a['ink']))
+    p.line([(-24, -108), (-24, -12)], mix(a['colour'], (255, 255, 255), 0.4), 3.0)
