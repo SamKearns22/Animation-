@@ -1,6 +1,6 @@
 # Proposal: Craft-next Step 2: what to change, given Step 1's causes
 
-Status: open
+Status: adopted (2026-11-17)
 
 ## Problem
 Sam gives 8-13 notes per film about shot design: where the camera sits, how big people are, where the eye goes, what

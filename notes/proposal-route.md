@@ -3,8 +3,9 @@
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (any change goes through `source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
 - **Done (craft chat 6, Opus medium, 17 Nov):** craft-next Step 2 put through the route as `notes/proposals/craft-step2.md`: two helpers, blind judge. No version passed; the judge wrote its own (V0): a drawn board of every shot (real camera, people at their marks, three moments, next shot beside it, numbered choices per shot), a gate reading rough.py's record, and a learn step first (board drawn from Remakes' and Blessed's first-commit plans, a separate chat counts which old notes it shows). Reach about 17 of 36; about 6 per film may remain. Critiqued: 7 found, 3 fixed, 4 named. Nothing changed in rules, checks or tools.
-- **Needs Sam:** Q1 Option 1 (board) / Option 2 (written cards, one still each) / N; Q2 board notes counted apart from "at most 3" (judge's pick N).
-- **Next (on Sam's answer):** Option 1: Opus, high effort: build rough.py's board mode and run the learn step (changes no rule); bring the count to Sam with the rule-11 rewrite. Option 2: Opus, medium. N: none; mark craft-step2 declined.
+- **Sam (17 Nov):** Q1 = 1 (the drawn board). Q2 (board notes counted apart from "at most 3", pick N) not answered yet: ask it again with the learn-step count.
+- **Needs Sam:** Q2 only, with the learn-step count and the rule-11 rewrite.
+- **Next (craft chat 7, Opus, high effort):** build rough.py's board mode (with a kittest) and run the learn step from craft-step2's Final version: boards from Remakes' and Blessed's first-commit plans, a fresh helper counts which census notes each shows, time it. Changes no rule or gate. Send Sam the count, the board pictures, the rule-11 rewrite wording, and Q2 again.
 - **Not covered, said to Sam:** camera height felt only when moving (F1, A1), Sam's mind changing on moving shots (5), build drift (5).
 - **Numbers to beat:** craft-next: at most 3 shot-design notes per film on the next two films, none returned twice. Change 2: no pose note returned twice. Change 1: at most 2 sameness notes, none repeated.
 - **Read:** `notes/proposals/craft-step2.md` (Final version); job pack "A tool job".

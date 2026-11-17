@@ -1,3 +1,3 @@
 No film in progress (European Protests, Ranked posted and closed, 16 Nov).
-Next: on Sam's answer, build the shot board and its learn step (Opus high), or written cards (Opus medium).
-Needs Sam: Q1 board / cards / no; Q2 count board notes apart (pick N).
+Next: craft chat 7 (Opus high) builds the shot board and tests it on Remakes' and Blessed's old plans.
+Needs Sam: Q2 (board notes counted apart) comes back with the test count.
