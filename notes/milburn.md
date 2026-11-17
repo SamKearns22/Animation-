@@ -2,10 +2,10 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 59 (pre-flight before the animatic), 75 (Hook Text in the band above his head), 74 (re-time moves on Sam's takes).
-- **Done (chat 4):** note 2 fixed (the goth's silver brow bar, lip ring, nose stud; people kit `piercings: brow, lip, nose`); still and 2a clip sent. Sam then held the animatic and sent scenes 3 and 5 (brief rows 22-37).
+- **Done (chat 4):** note 2 fixed (the goth's silver brow bar, lip ring, nose stud; people kit `piercings: brow, lip, nose`); still and 2a clip sent. Sam then held the animatic and sent scenes 3 and 5 (brief rows 22-37). Note 3 (the goth's hair read as an alien crest) fixed: people kit `hair: shag`, front only.
 - **Spent:** chat 4 about 0.6% (Opus medium, ~30 steps); this film ~8% of a week so far; the estimate needs re-doing for the new scenes.
 - **Next:** chat 5, Opus HIGH (planning and building new): plan scenes 3 and 5 from brief rows 22-37: shots and timing, the estimate redone, reference photos of Andy Burnham and Pat McFadden (search order: job pack Plan) and their likeness heads (face tool + house head), the Cabinet Room reverse (Milburn's side of the table), the field further in with grey plinths at varied distances, the props (crossbow, katana, twin uzis, a large hand grenade, a Vimto, a tall glass of sparkling water), and the moves on the acting list. Then the animatic of the whole film so far (Sonnet). Ask Sam only what the brief leaves open, in one message.
-- **Needs Sam:** notes on the piercings clip; his recordings of lines 1-2 (and the new lines) when ready.
+- **Needs Sam:** notes on the piercings and new-hair clips (note 3: the goth's hair redone as a shag); his recordings of lines 1-2 (and the new lines) when ready.
 - **Read:** job pack Plan; then Build.
 - **Open rule requests:** none.
 - **For Claude:** moves critique left open: look-up still faint to the helpers at panel size (strengthened twice; Sam judges the clip), Swindon's chest out not visible front on, mouths open without words (rangy's is the joke), glasses thin at panel size (thick in code, cast stage), young faces lined, shaft reads as a hall (set, chat 2), name card cut at the left edge, goth's neck line. Acting list's aerial row is "2 cont." (block 2b is `code: field_shot`). Kittests all pass (chat 4). Piercings are front head only (no turned view of the goth in this film). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
@@ -120,6 +120,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 ## Notes
 | # | shot | time | note | line | status |
 |---|------|------|------|------|--------|
+| 3 | 2a, 2b, 3 | all | Goth's hair shape looks like the crest of an alien monster, not real hair; look into purple/blue dyed alternative hair and try again (Sam, 17 Nov; repeat of note 1's area) | why note 1's fix failed: strands fanned OUT from the crown like spokes, hair falls DOWN. New people-kit cut `hair: shag` (wolf cut from alt-hair photos: crown volume, choppy layers to the shoulders, heavy choppy fringe, dark roots, blue peekaboo panels and a blue fringe chunk) | fixed chat 4: still + 2a clip sent; front only (turned views fall back to long hair: build the turned shag if scene 3 turns her) |
 | 2 | 2a | all | Goth: give her an eyebrow, lip and nose piercing (Sam, 17 Nov) | people kit: `piercings: brow, lip, nose` (silver, front head, sized to the face) | fixed chat 4: still + 2a clip sent |
 | 1 | 2a, 2b | all | Goth's hair: blue and purple as different strands, not one block (Sam, 17 Nov) | people kit: `hair: ... streaks C` | fixed: wavy strands from the crown, blue and purple in turn (front on; side and back views not built, not used in this film); stills sent |
 

@@ -36,8 +36,9 @@ STYLES = {
     'wig': dict(hl=-0.2, prof=dict(hair_low=0.7, nape=0.82, volume=0.16), curls=True, rolls=True),   # chat 15:
 }   # the judge's white bench wig turned (the front's extra 'wig': rolled curls over the crown, a roll over each ear)
 TURNED = {'crop': 'crop', 'bald': 'bald', 'side': 'side', 'bob': 'bob', 'long': 'long', 'curly': 'curly',
-          'bun': 'knot', 'receding': 'bald', 'none': 'none', 'pony': 'pony', 'short': 'short'}   # kit hair -> from behind
-HIDES_EARS = ('bob', 'long', 'curly', 'wig')       # hair over the ears: none drawn on top of it
+          'bun': 'knot', 'receding': 'bald', 'none': 'none', 'pony': 'pony', 'short': 'short',
+          'shag': 'long'}   # shag (Milburn note 3) turns as long hair: front only so far   # kit hair -> from behind
+HIDES_EARS = ('bob', 'long', 'curly', 'wig', 'shag')       # hair over the ears: none drawn on top of it
 
 
 # ---------------------------------------------------------------------------------------------- the press pack's pieces

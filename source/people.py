@@ -69,10 +69,11 @@ COLOURS = {   # the house's skin tones (burnham) and plain words for clothes and
     'white': (246, 246, 246), 'grey': (134, 136, 140), 'red': (170, 26, 34), 'blonde': (214, 184, 120),
     'ginger': (150, 70, 40), 'dark brown': (62, 42, 32), 'light brown': (150, 108, 66), 'silver': (196, 192, 186)}
 HAIR_STYLES = ('crop', 'bald', 'side', 'bob', 'long', 'curly', 'bun', 'pony', 'receding', 'none', 'curls', 'knot',
-               'short')
+               'short', 'shag')
 FAMOUS_HAIR = ('curls', 'knot')     # a measured head's hair (people_famous): long loose curls, or pulled into a topknot
 BEHIND = {'crop': 'crop', 'bald': 'bald', 'side': 'side', 'bob': 'bob', 'long': 'long', 'curly': 'wavy', 'bun': 'crop',
-          'pony': 'crop', 'receding': 'bald', 'none': 'bald', 'curls': 'wavy', 'knot': 'crop', 'short': 'crop'}   # the engine's hair for the side and back views
+          'pony': 'crop', 'receding': 'bald', 'none': 'bald', 'curls': 'wavy', 'knot': 'crop', 'short': 'crop',
+          'shag': 'long'}   # the engine's hair for the side and back views
 OUTFITS = ('suit', 'jumper', 'dress', 'blouse')
 DEFAULTS = dict(hw=66, hh=96, head_dy=10, full=True, pose='custom', shoulders=150, height=1.75, shoe=(30, 26, 24),
                 trousers=(50, 50, 56), shirt=(246, 246, 246), tie=None)
