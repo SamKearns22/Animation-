@@ -1,3 +1,3 @@
-No film in progress (European Protests, Ranked posted and closed, 16 Nov).
-Done: shot board built and tried on Remakes and Blessed: 15 of 23 old framing notes visible on it.
-Needs Sam: Y/N to the rule-11 rewrite and Q2 (board notes counted apart); then a build chat (Opus high).
+No film in progress.
+Done: shot board built and tested (15 of 23 old notes shown); Sam's Y, rule 11 rewritten.
+Next: craft chat 8 (Opus high) builds the board's check. Needs Sam: Q2 (board notes counted apart).
