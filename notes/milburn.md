@@ -110,3 +110,6 @@ Decisions made:
 - Hook Text sits in the band above Milburn's head in shot 1 (never over his face).
 - Line 2 is Milburn's voice over the shaft and field shots; cut to the aerial on "unique opportunity".
 - Sam, 17 Nov: all recommended answers taken (tone calm and reasonable with a faint pleased smile; aerial high and tilted; bright midday; red Swindon Town shirt, simple robin badge; the four faces as proposed). No new photos. No showstopper shots. Estimates Option 1.
+- Handover check settled (17 Nov, plan chat): FINDER: no film code exists yet; the edits were new kit parts (people.py,
+  people_parts.py), built on purpose. UNROUTED: the estimates proposal was judged (notes/proposals/estimates.md);
+  the first ask lacked its "Critiqued: 8 found, 5 fixed, 3 named" line, given to Sam in the next reply.
