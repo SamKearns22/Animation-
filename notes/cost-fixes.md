@@ -28,7 +28,7 @@
 - **Live proof (first Opus chat after this, step 1; in chat D the search reminder and watcher ran live, the guard did not load mid-chat):** run `python3 source/finish.py /none.mp4 /tmp/x.mp4 --film none`:
   it must be refused with MODEL GUARD (hooks load at chat start, so chat D could only prove it on its own record).
   If not refused, the watcher flags "guard" at that chat's Stop.
-- **Next:** nothing queued: the chain stops for Sam's answer below.
+- **Next:** nothing queued: the chain stops for Sam's answer below. Broken list (notes/logs/broken.md) holds 2 kittests failing before chat D (round_page, facehouse_whole_head): the next code-finder or face-tool chat owns them.
 - **Needs Sam:** Y/N delete the stray page claude.ai/artifact/BsPpuixgT8nQZy6h2LvMnn (asked again, chat D).
 - **Open, own route later:** whether clips and sound are routine (Sonnet) work (model-switch F5): through propose.py
   with the guard's log and the routine figures, not asked unjudged. Finder later changes wait for Learn's numbers.
