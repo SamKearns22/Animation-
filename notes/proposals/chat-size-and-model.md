@@ -1,33 +1,45 @@
-# Chat size and model switching: the measured answer (17 Nov, for Sam's "definitive answer")
+# Proposal: Chat size and model switching: one definitive rule
 
-## Problem (Sam, 17 Nov)
-Advice has swung between more/fewer/longer/shorter chats. Model switching is failing: renders and clips run on Opus.
+Status: open
 
-## Facts (measured, ledger rows with steps, 42 Opus chats, % of a week)
-- Fit: chat cost = 1.04 + 0.0063*steps + 0.0000934*steps^2 (fixed start-and-handover cost ~0.5-1.0, noisy).
-- Cost per 100 steps by chat length: <40 steps 4.2; 40-60 3.4; 60-80 2.7; 80-100 2.4; 100+ 3.0 (history 280k).
-  Cheapest at ~100 steps (s* = sqrt(a/c) = 106), history ~220-260k. Flat between 60 and 150 steps.
-- Protest Tiers 16 Nov: 24 chats, 1,479 steps, 39.3% of a week in one day; 10 chats under 60 steps.
-  Same steps in ~15 chats of ~100: fit says ~15% cheaper (about 6% of a week). Steps themselves are the big lever.
-- Earlier advice reconciled: "short chats" (13 Nov) came from 300-414k chats (chat 5, $27.7) -> true above ~300k;
-  "fewer chats" (11 Nov, budget job) -> true below ~40 steps. Both are the two ends of the same U-curve.
-- A fresh chat after Sam's notes come back hours later is still right: the 1-hour cache has expired, so the old
-  chat re-pays its whole history at write price.
+## Problem
+Sam has been told, at different times, to use more chats, fewer chats, longer chats and shorter chats; he wants one
+answer that holds. Separately, routine work (renders, clips, checks, sound) is running on Opus when it was meant to
+run on Sonnet, and the check meant to catch that did not.
 
-## Model switching: why it "fails"
-1. CLAUDE.md puts clips on Opus ("A round of my notes (deciding, fixing, clips): Opus medium"), and
-   handover.py ROUTINE deliberately skips `final --span` (clips). Clip renders on Opus are by the rule.
-2. handover.py model_faults only reads the film notes' Next line; ROUTINE lacks "check", "look", "sound", "clip".
-   16 Nov: "back-half chat 7 (France round 4 look, check, clip)" and "chat 8 (France sound)" were created on
-   Opus medium (get_session configured_model claude-opus-5-5); nothing flagged them.
-3. When a parent names Sonnet in create_session it works (Startup reading chat 2, Learn chat 2: configured and
-   served Sonnet). The platform switch is not broken; the choice is.
-4. A Sonnet chat for a ~10-step job pays a full chat start (~0.5-1%), more than it saves; so a separate Sonnet
-   chat pays only for a whole routine stage (animatic, final, finish.py, sending, filing), not a clip.
+## Facts
+- 42 Opus chats with a step count (notes/ledger/*.json, rows with `steps`, % of a week). Least-squares fit:
+  cost = 1.04 + 0.0063*steps + 0.0000934*steps^2 (the fixed term is noisy; a linear fit gives 0.42 + 0.0235*steps).
+- Cost per 100 steps by chat length: <40 steps 4.2 (6 chats, history ~134k); 40-60 3.4 (11, ~181k); 60-80 2.7 (10,
+  ~215k); 80-100 2.4 (3, ~226k); 100+ 3.0 (2, ~281k). Fit minimum near 106 steps.
+- Protest Tiers, 16 Nov (notes/ledger/protest-tiers.json): 24 chats, 1,479 steps, 39.3% of a week in one day; 10
+  chats under 60 steps; Albania, Germany and France chains ran side by side (list_sessions, 16 Nov 14:50-16:18).
+- 13 Nov (notes/cost-diagnosis.md): Blessed chat 5 ran to 414k history, $27.73; splitting it into chats of 200k or
+  less estimated to save ~$11. Model switches inside a chat re-paid the whole history ($5.80).
+- 11 Nov (notes/budget-job.md): ~25 Remakes chats; "too many chats, too many small steps"; a chat start measured
+  0.15-0.3% of a week then (corrected figure).
+- Cost watch (rule 85): amber at 200k history or 3% a chat, red at 300k or 5%. CLAUDE.md: a fresh chat for every
+  round and every cost warning. The prompt cache lasts one hour; a chat resumed after longer re-writes its history.
+- Models (CLAUDE.md "Models by stage"): "A round of my notes (deciding, fixing, clips): Opus, medium"; routine
+  (checks, check sheet, animatic, filing, final render, sending, saving): Sonnet.
+- source/handover.py model_faults (built 15 Nov after chat 30 rendered on Opus) reads only the film notes' Next line;
+  its ROUTINE pattern matches finish.py, `final` without --span, final render, animatic render, sending the
+  animatic/final, filing. It does not match check, look, sound or clip, and clips (--span) are deliberately excluded.
+- 16 Nov, get_session: "back-half chat 7 (France round 4 look, check, clip)" and "back-half chat 8 (France sound)"
+  configured and served claude-opus-5-5, medium. Chats whose parent asked for Sonnet ran on Sonnet (Startup reading
+  chat 2, Learn chat 2: configured and served claude-sonnet-5-5). The platform switch works.
+- Measured Sonnet chats (ledger): 8-17 steps cost 0.21-0.39; 64 steps 0.8; two labelled Sonnet at 72-79 steps cost
+  2.6-4.1 (the label is doubted in notes/proposals/learn/protest-tiers-costs.md).
 
-## Proposed (to go through the proposal route before Sam's Y)
-- Hand over at ~100 steps or ~250k history (amber 250k, red 350k); never open a chat for under ~40 steps of
-  work except: notes after a gap of more than an hour, or a whole routine stage on Sonnet.
-- One chain per film at a time (16 Nov ran Albania, Germany and France chains side by side, each paying starts).
-- Model check: routine = animatic, final, finish.py, sending, filing, check sheet; a clip stays with the Opus fix
-  chat. The check also runs on the create_session prompt (model vs job), not just the notes' Next line.
+## Record
+notes/ledger/protest-tiers.json
+notes/ledger/proposal-route.json
+notes/cost-diagnosis.md
+notes/budget-job.md
+notes/proposals/learn/protest-tiers-costs.md
+notes/proposals/learn/search-cost.md
+notes/job-e-measurements.md
+source/handover.py
+.claude/hooks/costwatch.py
+guides/film-quality-rules.md
+CLAUDE.md
