@@ -433,7 +433,7 @@ def arming(who, t):
     if who == 'rangy':
         d['gaze_dy'] = 0.6
     if who == 'swindon' and word_at(3, 'Each') + 1.2 < t < 14.6:   # mouths "pow" silently (Sam Q4 N)
-        d['mouth'] = 'v:O' if int((t - 12.0) / 0.21) % 2 == 0 else 'v:M'
+        d['mouth'] = 'v:O' if int((t - 12.0) / 0.21) % 2 == 0 else 'v:grin'   # note 6: was 'v:M' (no such shape)
     if who == 'waif':
         d['head_roll'] = 2.0 * math.sin(t * 2 * math.pi * 7)
         j['shake_x'] = 4.0 * math.sin(t * 2 * math.pi * 9)
@@ -555,6 +555,8 @@ def forest_pose(who, t):
     d = face_sp('6', who, t, mood)
     if who == 'rangy' and t < MF.T_GUN:
         d['gaze_dy'] = 0.5 * (math.sin(t * 2.3) > 0)        # glancing down at the blade
+    if who == 'swindon' and not shock:                  # note 6: his grin must read (closed lips read as no mouth)
+        d['mouth'] = ('v:O' if int(t / 0.21) % 2 == 0 else 'v:grin') if spray else 'v:grin'
     if who == 'waif':
         if t < MF.T_GUN:
             d['look'] = 0.5 * math.sin(t * 5.0)             # eyes darting

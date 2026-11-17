@@ -8,7 +8,7 @@ views film by film in `story/metrics.md`.
 ## Batch 1 (12 Nov)
 - [x] Next one's worse. Follow 👉 — blessed (12 Nov)
 - [x] Follow if you got that 👉 — protest_tiers (15 Nov)
-- [ ] Follow. It's free 👉
+- [x] Follow. It's free 👉 — milburn (17 Nov)
 - [ ] Feed the beaver. Follow 👉
 - [ ] A crow says follow 👉
 - [ ] Follow. We ruin the news 👉
