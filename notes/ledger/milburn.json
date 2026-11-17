@@ -58,6 +58,63 @@
     "ticked": 0,
     "edited film code": true
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "a6692140",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.8,
+   "src": "estimate",
+   "sid": "session_01J1JB7WXD1TDYTQafreiGz7",
+   "steps": 92,
+   "hist_k": 256,
+   "kinds": {
+    "film-file search": 1.7,
+    "tool search": 22.1,
+    "renders": 2.4,
+    "pictures": 3.4,
+    "other": 70.4
+   },
+   "calls": {
+    "film-file search": 6,
+    "tool search": 48,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 5,
+    "pictures": 12,
+    "other": 22
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 6
+    },
+    "other": {
+     "other": 6,
+     "shared:handover.py": 3,
+     "film notes": 3,
+     "shared:kittests.py": 4,
+     "guides": 3,
+     "shared:satire_template.py": 1,
+     "shared:protest_tiers.py": 1,
+     "shared:places.py": 4,
+     "shared:people.py": 4,
+     "shared:views.py": 1,
+     "shared:rough.py": 3,
+     "shared:critique.py": 9,
+     "shared:places_parts.py": 3,
+     "shared:places_outside.py": 1,
+     "shared:places_tables.py": 1,
+     "shared:people_parts.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
   }
  ],
  "checks": {},
