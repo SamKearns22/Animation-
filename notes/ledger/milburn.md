@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 24.0% of a week; spent 16.68% (-7.32); 8 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 24.0% of a week; spent 18.27% (-5.73); 9 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 16.68% of the 3.72% planned so far; at this rate the film lands at 107.5%.**
+**Forecast: Spent 18.27% of the 3.72% planned so far; at this rate the film lands at 107.5%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -30,6 +30,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-17 | 3fbce046 | est | opus | auto |  | 2.64 |  | 0 | 0 |
 | 2026-11-17 | 4ee174a9 | est | opus | auto |  | 1.52 |  | 0 | 0 |
 | 2026-11-17 | 5c55685c | est | sonnet | auto |  | 0.28 |  | 0 | 0 |
+| 2026-11-17 | ce8f146c | est | opus | auto |  | 1.59 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-17 a58b9d21 (auto): 68 steps, history 203k at the end; other 65.1%, tool search 25.9%, renders 4.1%, pictures 3.6%, film-file search 1.3%
@@ -40,3 +41,4 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-17 3fbce046 (auto): 92 steps, history 261k at the end; other 62.1%, tool search 16.3%, renders 8.1%, film-file search 8%, pictures 5.1%, whole-file .py read 0.2%, page.py 0.2%
 - 2026-11-17 4ee174a9 (auto): 49 steps, history 203k at the end; other 60.7%, film-file search 20.8%, tool search 14.1%, pictures 4.2%, renders 0.2%
 - 2026-11-17 5c55685c (auto): 14 steps, history 113k at the end; other 87.3%, tool search 10.8%, film-file search 1.9%
+- 2026-11-17 ce8f146c (auto): 73 steps, history 184k at the end; other 80.3%, tool search 8.6%, film-file search 6.2%, routine 2%, pictures 1.9%, page.py 0.5%, renders 0.5%
