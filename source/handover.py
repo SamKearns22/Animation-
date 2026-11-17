@@ -488,8 +488,18 @@ def _not_typed(text, transcript):
         except ValueError:
             continue
         if _text((d.get('message') or {}).get('content') or '').strip() == text:
-            return bool((d.get('origin') or {}).get('kind') or d.get('promptSource') == 'system')
+            kind = (d.get('origin') or {}).get('kind')
+            if kind in TYPED:
+                return False
+            return bool(kind in ROBOT or d.get('promptSource') == 'system')
     return None
+
+
+# cost-fixes chat D (17 Nov): nothing Sam typed was saved after 16 Nov 19:02. The app (2.1.x) now stamps a typed
+# message with an origin too ("human", "person", "remote" ...), and any origin at all read as "not typed". Only these
+# kinds are robots; an unknown kind with no promptSource "system" counts as Sam (the watcher compares saved vs record).
+TYPED = {'human', 'person', 'remote', 'composer', 'voice-call', 'suggestion', 'channel'}
+ROBOT = {'task-notification', 'peer', 'coordinator', 'auto-continuation', 'plugin', 'observer-activity'}
 
 
 def log_hook():
@@ -519,6 +529,8 @@ def _late(inp, wait=20):
         time.sleep(0.5)
     if seen:
         return
+    if seen is None:                           # never found in the record: saved anyway, marked (watcher counts it)
+        text += '\n(handover log: not found in the chat record after 20 s; saved as Sam\'s)'
     sid = inp['sid']
     tail = sid.split('_')[-1][-8:].lower()
     os.makedirs(LOGDIR, exist_ok=True)

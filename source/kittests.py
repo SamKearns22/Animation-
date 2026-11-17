@@ -3156,6 +3156,65 @@ def cost_watch_lines():
     return not bad, '; '.join(bad) or 'quiet at 240k, amber at 260k with steps and the ~100/150/mid-fix line, red at 380k'
 
 
+# ------------------------------------------------------------------------------------------------ cost-fixes (17 Nov)
+def _hook(name):
+    import importlib.util
+    spec = importlib.util.spec_from_file_location(name, os.path.join(HERE, '..', '.claude', 'hooks', name + '.py'))
+    M = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(M)
+    return M
+
+
+@test
+def model_guard_stops_routine_on_opus():
+    """Model guard (Sam's 1, 17 Nov): on 16 Nov the Opus fix chats spliced the animatic with the word check silent;
+    the guard refuses finish.py / whole-film render / splice on Opus, allows them on Sonnet, allows --span clips."""
+    import io, contextlib
+    G = _hook('modelguard')
+    out = io.StringIO()
+    with contextlib.redirect_stdout(out):
+        ok = G.test() == 0
+    import handover as H
+    import tempfile
+    tmp = tempfile.mkdtemp()
+    nf = os.path.join(tmp, 'n.md')
+    with open(nf, 'w') as f:      # 16 Nov 12:46 Next line, word for word in its routine part (why-model-switch-failed)
+        f.write('- **Next (Opus, medium):** clips with `final --span` of each fixed note, then splice fixed seconds '
+                'into animations/drafts/protest-tiers-animatic.mp4 and send\n')
+    old_silent = H.model_faults('x', nf) == []
+    caught = G.routine('ffmpeg -i a.mp4 -i b.mp4 -filter_complex concat=n=2 '
+                       'animations/drafts/protest-tiers-animatic.mp4') is not None
+    bad = ([] if ok else [out.getvalue().strip()]) + ([] if caught else ['the 16 Nov splice is not caught'])
+    note = 'the old word check stays silent on the 16 Nov line, ' if old_silent else 'the old word check now fires too, '
+    return not bad, '; '.join(bad) or note + 'the guard refuses it on Opus and allows Sonnet, clips and a logged escape'
+
+
+@test
+def message_saver_keeps_typed_messages():
+    """Message saver (handover.py log): nothing Sam typed was saved after 16 Nov 19:02, because the app began stamping
+    typed messages with an origin and any origin read as "not typed". Typed kinds are saved; robots are not."""
+    import handover as H
+    import tempfile
+    tmp = tempfile.mkdtemp()
+    bad = []
+    for kind, robot in (('human', False), ('remote', False), (None, False), ('task-notification', True),
+                        ('peer', True)):
+        p = os.path.join(tmp, f'{kind}.jsonl')
+        d = {'type': 'user', 'message': {'role': 'user', 'content': 'Fix the whale please'}}
+        if kind:
+            d['origin'] = {'kind': kind}
+        if kind == 'task-notification':
+            d['promptSource'] = 'system'
+        with open(p, 'w') as f:
+            f.write(json.dumps(d) + '\n')
+        if H._not_typed('Fix the whale please', p) is not robot:
+            bad.append(f'origin {kind}: read as {"robot" if not robot else "typed"}')
+    old = lambda d: bool((d.get('origin') or {}).get('kind') or d.get('promptSource') == 'system')   # before 17 Nov
+    if not old({'origin': {'kind': 'human'}}):
+        bad.append('the old version no longer shows the fault')
+    return not bad, '; '.join(bad) or 'typed (human, remote, none) saved; task notices and peers skipped; old one dropped "human"'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

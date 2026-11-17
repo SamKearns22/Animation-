@@ -2,7 +2,7 @@
 """stepcost: what each kind of step cost a chat (history-and-search Learn, Sam's 1 on 16 Nov; chat 6b).
 
 MAP
-  KINDS ........ film-file search, tool search, whole-file .py read, page.py, renders, pictures, other (+ helpers,
+  KINDS ........ film-file search, tool search, whole-file .py read, page.py, routine (modelguard.routine), renders, pictures, other (+ helpers,
                  the chat's critique and other agents, kept apart so they are not hidden in "other")
   kind_of() .... one tool call -> its kind. A search is Grep/Glob, a Read with offset/limit, or a shell grep/rg/
                  find/awk/sed -n/head/tail; it is a film-file search when it names the film's own files
@@ -28,8 +28,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
 import costwatch  # noqa: E402
 
-KINDS = ['film-file search', 'tool search', 'whole-file .py read', 'page.py', 'renders', 'pictures', 'other',
+KINDS = ['film-file search', 'tool search', 'whole-file .py read', 'page.py', 'routine', 'renders', 'pictures', 'other',
          'helpers']
+import modelguard  # noqa: E402  (cost-fixes, model guard: 'routine' = what the guard stops on Opus; its share on an
+#                    Opus row is the film's routine-on-Opus figure, number to beat under 0.5% of a week a film)
 SEARCH_CMDS = {'grep', 'egrep', 'rg', 'ack', 'find', 'awk', 'head', 'tail', 'ls'}
 IMG = re.compile(r'\.(png|jpe?g|gif|webp)$', re.I)
 RENDER = re.compile(r'\b(final|animatic|render|clip|sheet|finish\.py|ffmpeg|blender)\b')
@@ -66,6 +68,8 @@ def kind_of(name, inp, film_re):
         cmd = inp.get('command', '')
         if 'page.py' in cmd:
             return 'page.py'
+        if modelguard.routine(cmd):
+            return 'routine'
         segs = _segments(cmd)
         heads = [w[0].split('/')[-1] for w in segs]
         search = any(h in SEARCH_CMDS or (h == 'sed' and '-n' in w) for h, w in zip(heads, segs))
