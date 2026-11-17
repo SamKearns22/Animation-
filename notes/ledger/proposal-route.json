@@ -557,6 +557,50 @@
     "pictures": 0,
     "other": 26
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "a58b9d21",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.58,
+   "src": "estimate",
+   "sid": "session_01J1JB7WBDESh1YRjtQfGmaz",
+   "steps": 24,
+   "hist_k": 132,
+   "kinds": {
+    "tool search": 23.9,
+    "pictures": 2.3,
+    "other": 73.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 14,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 3,
+    "other": 7
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 7,
+     "guides": 4,
+     "other": 1,
+     "shared:branches.py": 1,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false
+   }
   }
  ],
  "checks": {}
