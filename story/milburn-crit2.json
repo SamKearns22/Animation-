@@ -1,0 +1,156 @@
+{
+ "round": 2,
+ "stage": "moves",
+ "panels": [
+  {
+   "t": 12.6,
+   "crop": null,
+   "parts": "PO",
+   "set": "field",
+   "refs": [],
+   "beat": "taking the weapons",
+   "is": "Scene 3, a field: four young people by grey plinths, seen side by side, turned three-quarter to screen right; each takes a weapon (goth: crossbow; lanky lad: katana; lad in red football shirt: two uzis; small anxious woman: a grenade the size of an ostrich egg)"
+  },
+  {
+   "t": 14.6,
+   "crop": null,
+   "parts": "PO",
+   "set": "field",
+   "refs": [],
+   "beat": "arm themselves",
+   "is": "Scene 3, same: the goth has the crossbow up on her shoulder, pleased; lanky lad stares unsure at the katana held out flat; red-shirt lad sprays the uzis grinning; the woman clutches the grenade, terrified"
+  },
+  {
+   "t": 17.6,
+   "crop": null,
+   "parts": "PO",
+   "set": "reverse",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg",
+    "references/faces/burnham/a01-front-parliament2026.jpg",
+    "references/faces/mcfadden/b01-threequarter-glasses-lbc2026.jpg"
+   ],
+   "beat": "jab on 'Milburn'",
+   "is": "Scene 4a, Cabinet Room turned round: Andy Burnham (Prime Minister) furious, jabbing a pointing finger at the camera; Pat McFadden (bald, round dark glasses) calm beside him; fireplace behind"
+  },
+  {
+   "t": 24.5,
+   "crop": null,
+   "parts": "P",
+   "set": "cabinet",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg",
+    "references/milburn/milburn-official.jpg"
+   ],
+   "beat": "calm",
+   "is": "Scene 4b: Alan Milburn across the green table, calm and nonplussed, hands folded on a folder, talking"
+  },
+  {
+   "t": 29.0,
+   "crop": null,
+   "parts": "P",
+   "set": "reverse",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg",
+    "references/faces/mcfadden/a03-front-glasses-gbnews2026.jpg"
+   ],
+   "beat": "Prime Minister",
+   "is": "Scene 4c: Pat speaks, fingers steepled, eyes on Andy (never the camera)"
+  },
+  {
+   "t": 32.2,
+   "crop": null,
+   "parts": "P",
+   "set": "reverse",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg",
+    "references/faces/burnham/a04-threequarter-ap2026.jpg"
+   ],
+   "beat": "Continue",
+   "is": "Scene 4c: Andy has flung his arms up and now folds them, leaning back, sulky"
+  },
+  {
+   "t": 35.6,
+   "crop": null,
+   "parts": "POS",
+   "set": "forest",
+   "refs": [],
+   "beat": "form a unit",
+   "is": "Scene 6, a thick forest: the four walk right in single file, turned three-quarter; the camera travels with them (near ferns race past): goth with crossbow on her shoulder, red-shirt lad with uzis at his chest, lanky lad holding the katana up in front like a torch, woman hugging the grenade"
+  },
+  {
+   "t": 37.75,
+   "crop": null,
+   "parts": "POS",
+   "set": "forest",
+   "refs": [],
+   "beat": "the flame",
+   "is": "Scene 6: a flamethrower's jet whips out of the bush ahead, over their heads; all four duck"
+  },
+  {
+   "t": 39.55,
+   "crop": null,
+   "parts": "POS",
+   "set": "forest",
+   "refs": [],
+   "beat": "spraying back",
+   "is": "Scene 6: the red-shirt lad sprays back wildly; goth swings the crossbow up; lanky lad holds the katana flat over his head; the woman curls round the grenade, eyes shut"
+  },
+  {
+   "t": 40.97,
+   "crop": null,
+   "parts": "POS",
+   "set": "forest",
+   "refs": [],
+   "beat": "colleagues",
+   "is": "Scene 6: two spiked morning stars on chains swing down out of the trees over their heads"
+  },
+  {
+   "t": 43.0,
+   "crop": null,
+   "parts": "P",
+   "set": "reverse",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg",
+    "references/faces/burnham/a01-front-parliament2026.jpg"
+   ],
+   "beat": "fucker",
+   "is": "Scene 7a: Andy explodes, up out of his lean, both fists down on the table; Pat calm"
+  },
+  {
+   "t": 52.6,
+   "crop": null,
+   "parts": "P",
+   "set": "reverse",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg"
+   ],
+   "beat": "live TV",
+   "is": "Scene 7c: Andy despairing and angry, both hands out, palms up"
+  },
+  {
+   "t": 54.9,
+   "crop": null,
+   "parts": "P",
+   "set": "cabinet",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg",
+    "references/milburn/milburn-official.jpg"
+   ],
+   "beat": "the glance",
+   "is": "Scene 7d: Milburn's eyes slide to the side"
+  },
+  {
+   "t": 65.5,
+   "crop": null,
+   "parts": "P",
+   "set": "reverse",
+   "refs": [
+    "references/milburn/cabinet-room-burnham.jpg"
+   ],
+   "beat": "like this one",
+   "is": "Scene 7e: Andy frozen, mouth hanging open in outrage; Pat, eyes on Andy, small approving smile"
+  }
+ ],
+ "notes": []
+}
