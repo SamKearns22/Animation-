@@ -11,3 +11,8 @@ Remove the words 'DLC' too
 
 But part of the problem is that our 3/4 characters still look like shit compared to our other poses. The direction is now correct but the actual models themselves have an immediate reduction in quality and fidelity. This is probably a wider tool issue, so if this is the best you can do for now then please proceed as I'm hoping for an animatic soon and we can schedule a 3/4 tool improvement for the morning.
 
+### 2026-11-17T22:56:09
+Y
+
+I will find the sound effects in time for animatic 2, along with the dialogue.
+
