@@ -3245,6 +3245,77 @@ def finder_reminder_per_chat():
     return not bad, '; '.join(bad) or 'one line at the first film search with no show; end names only the chat that skipped it'
 
 
+@test
+def watcher_catches_last_weeks_four():
+    """early-warning (Sam's 1, 17 Nov): the number to beat. Last week's four silent failures, each from its own kind
+    of record: the message saver (chat C, 17 Nov), routine work on Opus (16 Nov splice), the finder skipped (16 Nov),
+    the kit list behind Sam's Y (people kit, before 16 Nov). Quiet on a clean record; a new system with no promise
+    is flagged (Sam: "it needs to adapt to new systems we build too")."""
+    import tempfile, shutil, subprocess
+    from datetime import datetime, timezone, timedelta
+    import watcher as W
+    tmp = tempfile.mkdtemp()
+    bad = []
+
+    def rec(tag, lines):
+        p = os.path.join(tmp, tag + '.jsonl')
+        with open(p, 'w') as f:
+            for d in lines:
+                f.write(json.dumps(d) + '\n')
+        return p
+    use = lambda i, c, model='claude-opus-5-5': {'type': 'assistant', 'message': {'model': model, 'content': [
+        {'type': 'tool_use', 'id': f't{i}', 'name': 'Bash', 'input': {'command': c}}]}}
+    res = lambda i, text: {'type': 'user', 'message': {'content': [{'type': 'tool_result', 'tool_use_id': f't{i}',
+                                                                      'content': text}]}}
+    try:
+        then = (datetime.now(timezone.utc) - timedelta(minutes=5)).isoformat()
+        typed = {'type': 'user', 'timestamp': then, 'origin': {'kind': 'human'},
+                 'message': {'role': 'user', 'content': '1. This guard should already exist in the code somewhere'}}
+        os.makedirs(os.path.join(tmp, 'sam'))
+        if not W.saver_faults(rec('saver', [typed]), sid='session_01TESTCHATC', logdir=os.path.join(tmp, 'sam')):
+            bad.append('saver: a typed message missing from the log was not flagged')
+        splice = 'ffmpeg -i a.mp4 -i b.mp4 -filter_complex concat=n=2 animations/drafts/protest-tiers-animatic.mp4'
+        if not W.guard_faults(rec('guard', [use(1, splice), res(1, 'done')])):
+            bad.append('guard: a 16 Nov splice on Opus was not flagged')
+        if W.guard_faults(rec('guard2', [use(1, splice), res(1, 'MODEL GUARD: this chat runs on Opus')])):
+            bad.append('guard: a refused splice was flagged')
+        grep, edit = 'grep -n "def flag" source/protest_tiers.py', "sed -i 's/a/b/' source/protest_tiers.py"
+        if not W.finder_faults(rec('finder', [use(1, grep), use(2, grep), use(3, edit)]), 'protest-tiers'):
+            bad.append('finder: a chat that skipped the finder was not flagged')
+        old = subprocess.run(['git', 'show', '2362763f:guides/kit-catalogue.md'], cwd=W.ROOT, capture_output=True,
+                             text=True).stdout
+        if not any('people kit' in f for f in W.kit_faults(text=old)):
+            bad.append('kits: the 14-16 Nov people kit line was not flagged')
+        if W.kit_faults():
+            bad.append(f'kits: false alarm on today\'s list: {W.kit_faults()}')
+        clean = rec('clean', [use(1, 'python3 source/page.py protest-tiers show "flag"'), res(1, 'ok'),
+                              use(2, 'python3 source/protest_tiers.py final /tmp/c.mp4 --small --span 3 5'), res(2, 'ok')])
+        if W.saver_faults(clean, sid='session_01CLEAN', logdir=os.path.join(tmp, 'sam')) + W.guard_faults(clean) \
+                + W.finder_faults(clean, 'protest-tiers'):
+            bad.append('false alarm on a clean record')
+        root = os.path.join(tmp, 'root')            # a system built tomorrow, with no promise
+        for d in ('.claude', 'source', 'guides'):
+            os.makedirs(os.path.join(root, d))
+        json.dump({'hooks': {'Stop': [{'hooks': [{'command': 'python3 "$CLAUDE_PROJECT_DIR"/source/newthing.py hook'}]}]}},
+                  open(os.path.join(root, '.claude', 'settings.json'), 'w'))
+        open(os.path.join(root, 'source', 'handover.py'), 'w').write('def new_faults(film):\n    pass\n')
+        open(os.path.join(root, 'source', 'newtool.py'), 'w').write('')
+        open(os.path.join(root, 'guides', 'job-packs.md'), 'w').write('Tools: `newtool.py OUT`\n')
+        real, W.ROOT = W.ROOT, root
+        try:
+            u = W.unlisted()
+        finally:
+            W.ROOT = real
+        if set(u) != {'newthing.py hook', 'new_faults', 'newtool.py'}:
+            bad.append(f'adapting: new systems not all flagged: {u}')
+        if W.unlisted():
+            bad.append(f'a system today has no promise: {W.unlisted()}')
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return not bad, '; '.join(bad) or ('all four caught (saver, guard, finder, kit list); quiet on a clean record and '
+                                       'today\'s kit list; a new hook, check and tool with no promise flagged')
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

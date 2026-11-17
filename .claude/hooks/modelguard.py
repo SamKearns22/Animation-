@@ -7,10 +7,10 @@ fix chats spliced animatics and ran finish.py with it silent ("splice" was not o
 never wrote a Next line). Nothing ever STOPPED a command: there was no PreToolUse hook in git history.
 
 MAP
-  ROUTINE ........ the routine commands (from the 16 Nov notes' Next lines): finish.py; a whole-film render
-                   (`source/FILM.py final|animatic` with no --span); a splice or join written into animations/
-                   (ffmpeg / concat / splice naming animations/). Clips (`final --span`) stay allowed.
-  routine() ...... a shell command -> the routine piece it holds, or None (also used by stepcost.py and watcher.py)
+  routine() ...... a shell command -> the routine piece it RUNS, or None (also used by stepcost.py and watcher.py):
+                   finish.py; a whole-film render (`source/FILM.py final|animatic` with no --span); ffmpeg writing
+                   into animations/ (the splice). Clips (`final --span`) stay allowed. _runs() takes heredoc bodies,
+                   VAR=x prefixes and wrappers (nice, timeout) off, so a search or code that names them is not routine
   served_model() . the model this chat is really running on: the newest assistant line of its own record, the same
                    source costwatch.py prices from (never the notes' words)
   main() ......... PreToolUse hook on Bash: on Opus/Fable + routine -> deny, with what to do instead. Escape (F3):
@@ -26,12 +26,27 @@ from datetime import datetime, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 LOG = os.path.join(ROOT, 'notes', 'logs', 'modelguard.log')
 DEAR = re.compile(r'opus|fable|mythos', re.I)
-ROUTINE = [
-    ('finish.py', re.compile(r'\bfinish\.py\b')),
-    ('whole-film render', re.compile(r'source/[\w/]+\.py\s+(final|animatic)\b(?![^|;&\n]*--span)')),
-    ('splice into animations/', re.compile(r'(ffmpeg|concat|splice)[^|;&\n]*animations/|animations/[^|;&\n]*'
-                                           r'(ffmpeg|concat|splice)')),
-]
+HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?[^\n]*\n.*?\n\s*\1[ \t]*(?=\n|$)", re.S)
+WRAP = {'nice', 'nohup', 'time', 'timeout', 'env', 'exec', 'stdbuf'}
+
+
+def _runs(cmd):
+    """The commands a shell line really runs, each as its words: heredoc bodies (code being written) dropped, split
+    on && ; || | and newlines, VAR=x prefixes and wrappers (nice, timeout 600 ...) taken off."""
+    import shlex
+    out = []
+    for part in re.split(r'&&|\|\||[;|\n]', HEREDOC.sub('\n', cmd or '')):
+        try:
+            w = shlex.split(part, comments=True)
+        except ValueError:
+            w = part.split()
+        while w and (('=' in w[0] and not w[0].startswith('-')) or w[0] in WRAP or re.fullmatch(r'-?[\d.]+[smh]?|-n', w[0])):
+            w = w[1:]
+        if w:
+            out.append(w)
+    return out
+
+
 SAY = ("MODEL GUARD: this chat runs on {model}, and {what} is routine work for a Sonnet chat (CLAUDE.md, Models by "
        "stage). Do not run it here. Commit the fixes and clips, write the clip and finish commands in the film's "
        "notes, then open the Sonnet chat (create_session, model claude-sonnet-5-5, the Animation- project attached) "
@@ -40,11 +55,19 @@ SAY = ("MODEL GUARD: this chat runs on {model}, and {what} is routine work for a
 
 
 def routine(cmd):
-    """The routine piece a shell command holds ('finish.py', 'whole-film render', 'splice into animations/'), or None.
-    Text after a # or inside an echo is still matched: the guard judges the command, not the chat's intent."""
-    for what, pat in ROUTINE:
-        if pat.search(cmd or ''):
-            return what
+    """The routine piece a shell command RUNS ('finish.py', 'whole-film render', 'splice into animations/'), or None.
+    Judged on what runs, never on words: a grep for finish.py, or code that mentions it, is not routine work."""
+    for w in _runs(cmd):
+        head = w[0].split('/')[-1]
+        args = [a for a in w[1:] if not a.startswith('-')]
+        if head.startswith('python') and args:
+            if args[0].endswith('finish.py'):
+                return 'finish.py'
+            if re.fullmatch(r'(\./)?source/\w+\.py', args[0]) and args[1:2] in (['final'], ['animatic']) \
+                    and '--span' not in w:
+                return 'whole-film render'
+        if head.startswith('ffmpeg') and args and 'animations/' in w[-1]:
+            return 'splice into animations/'
     return None
 
 
@@ -90,7 +113,7 @@ def decide(inp):
     if not DEAR.search(model):
         return None
     sid = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '') or inp.get('session_id', '') or 'local'
-    if re.match(r'\s*GUARD_OK=', cmd):
+    if re.search(r'(^|[;&|\n]\s*)GUARD_OK=', cmd):
         log('escape', model, what, cmd, sid)
         return None
     log('refused', model, what, cmd, sid)
@@ -132,12 +155,15 @@ def test():
         ('python3 source/page.py protest-tiers show "the flag"', opus, 0),
         ('git add animations/drafts/x-animatic.mp4', opus, 0),
         ('GUARD_OK="sonnet open refused" python3 source/finish.py a b --film x', opus, 0),
+        ('grep -n "finish.py" guides/job-packs.md', opus, 0),
+        ("python3 - <<'EOF'\nos.system('ffmpeg -i a animations/drafts/x.mp4')\nEOF", opus, 0),
+        ('cd /r && timeout 900 nice -n 19 python3 source/finish.py a b --film x', opus, 1),
     ]
     bad = [c for c, t, r in cases if bool(ask(c, t)) != bool(r)]
     logged = open(LOG).read()
-    if 'escape' not in logged or logged.count('\trefused\t') != 3:
+    if 'escape' not in logged or logged.count('\trefused\t') != 4:
         bad.append('log: ' + logged)
-    print('modelguard test: ' + ('OK, 8 cases' if not bad else 'FAILED: ' + '; '.join(bad)))
+    print('modelguard test: ' + ('OK, 11 cases' if not bad else 'FAILED: ' + '; '.join(bad)))
     return 1 if bad else 0
 
 

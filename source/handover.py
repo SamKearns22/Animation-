@@ -24,6 +24,7 @@ MAP
   finder ........... in end (finder-use, 17 Nov): this chat edited the film's code with no page.py show call
   model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
                      sending, filing) nor give Sonnet a fix or build (Sam, 15 Nov: chat 30 rendered on Opus)
+  watcher .......... in start: the watcher's standing BROKEN list and any system with no promise (source/watcher.py)
   dump ............. list_events results saved to files (kinds ["user"], only when there is no log; never page a
                      whole chat: the newest pages, back to the last handover commit's time)
   sam_messages() ... Sam's own typed messages from any of the three sources (no tool results, task or system
@@ -580,6 +581,12 @@ def main(argv):
         p = os.path.join(LOGDIR, f'{tail}.md')
         for f in model_faults(opt('--film'), opt('--notes')):    # a mixed job is split before any work starts
             print(f)
+        try:                                                     # early-warning (Sam's 1, 17 Nov): broken first
+            import watcher
+            for ln in watcher.start_lines():
+                print(ln)
+        except Exception as e:
+            print(f'BROKEN (watcher): the watcher could not run at start ({e})')
         nf = opt('--notes') or (opt('--film') and os.path.join(ROOT, 'notes', f"{opt('--film')}.md"))
         if nf and os.path.exists(nf):                            # startup-fixes 3: read this, not the whole file
             print(f'handover: the notes to read ({os.path.relpath(nf, ROOT)}; nothing else of it unless a note names it):')
