@@ -31,3 +31,4 @@
   is missing from a delivered board, a shot has nobody in its cast, or the board was delivered after the first move was
   built; `rough.py board FILM OUT.jpg`.
 - **Q2 sent:** board notes counted apart from "at most 3" (pick N, counted apart).
+- **Sam's answers (18 Nov):** Q1 Y (rule 11 written); Q2 N: board notes counted apart from "at most 3".
