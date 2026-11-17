@@ -12,3 +12,6 @@ The vimto and sparkling water should come forward diagonal of Andy and Pat and s
 
 Please trim the pacing gaps between scenes so there is no interruption in the scene flow.
 
+### 2026-11-17T23:54:50
+One more ask. Change the sign off text to ‘Click Follow to claim PIP’
+
