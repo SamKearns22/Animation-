@@ -442,29 +442,29 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.59,
+   "cost": 1.93,
    "src": "estimate",
    "sid": "session_01GznaARwPjyVgxbyunDVnSs",
-   "steps": 73,
-   "hist_k": 184,
+   "steps": 91,
+   "hist_k": 195,
    "kinds": {
-    "film-file search": 6.2,
-    "tool search": 8.6,
+    "film-file search": 5.6,
+    "tool search": 8.8,
     "page.py": 0.5,
-    "routine": 2.0,
+    "routine": 1.9,
     "renders": 0.5,
-    "pictures": 1.9,
-    "other": 80.3
+    "pictures": 1.8,
+    "other": 81.0
    },
    "calls": {
     "film-file search": 16,
-    "tool search": 28,
+    "tool search": 34,
     "whole-file .py read": 0,
     "page.py": 1,
-    "routine": 8,
+    "routine": 9,
     "renders": 1,
     "pictures": 4,
-    "other": 19
+    "other": 25
    },
    "search": {
     "show": 1,
@@ -474,9 +474,9 @@
      "after show": 11
     },
     "other": {
-     "other": 5,
+     "other": 7,
      "shared:handover.py": 1,
-     "film notes": 1,
+     "film notes": 3,
      "shared:preflight.py": 7,
      "guides": 2,
      "shared:people_parts.py": 1,
@@ -486,7 +486,9 @@
      "shared:film_engine.py": 1,
      "shared:plan.py": 2,
      "shared:blessed.py": 1,
-     "shared:hookcheck.py": 1
+     "shared:hookcheck.py": 1,
+     "shared:finish.py": 1,
+     "shared:follow_line.py": 1
     },
     "ticked": 0,
     "edited film code": true
