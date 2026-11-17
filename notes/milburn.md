@@ -2,11 +2,11 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 59 (pre-flight before the animatic), 75 (Hook Text in the band above his head), 74 (re-time moves on Sam's takes).
-- **Done (chat 4):** note 2 fixed: the goth's silver brow bar (her left brow), lip ring and nose stud (people kit `piercings: brow, lip, nose`, sized to the face so they read at phone size); close-up still and 2a clip sent. Chat 3: moves written, rehearsal clips sent, note 1 (hair streaks) fixed.
-- **Spent:** chat 4 under 1% (Opus medium, ~25 steps); this film ~8% of a week so far, on estimate.
-- **Next:** on Sam's Y: Sonnet chat: pre-flight, animatic (`milburn.py final` small, then finish.py with the Hook Text and sign-off), send. On notes instead: Opus medium notes round, clips.
-- **Needs Sam:** Y or N for the animatic (still open); notes on the piercings and clips; his recordings of lines 1-2 when ready.
-- **Read:** job pack Checks and animatic.
+- **Done (chat 4):** note 2 fixed (the goth's silver brow bar, lip ring, nose stud; people kit `piercings: brow, lip, nose`); still and 2a clip sent. Sam then held the animatic and sent scenes 3 and 5 (brief rows 22-37).
+- **Spent:** chat 4 about 0.6% (Opus medium, ~30 steps); this film ~8% of a week so far; the estimate needs re-doing for the new scenes.
+- **Next:** chat 5, Opus HIGH (planning and building new): plan scenes 3 and 5 from brief rows 22-37: shots and timing, the estimate redone, reference photos of Andy Burnham and Pat McFadden (search order: job pack Plan) and their likeness heads (face tool + house head), the Cabinet Room reverse (Milburn's side of the table), the field further in with grey plinths at varied distances, the props (crossbow, katana, twin uzis, a large hand grenade, a Vimto, a tall glass of sparkling water), and the moves on the acting list. Then the animatic of the whole film so far (Sonnet). Ask Sam only what the brief leaves open, in one message.
+- **Needs Sam:** notes on the piercings clip; his recordings of lines 1-2 (and the new lines) when ready.
+- **Read:** job pack Plan; then Build.
 - **Open rule requests:** none.
 - **For Claude:** moves critique left open: look-up still faint to the helpers at panel size (strengthened twice; Sam judges the clip), Swindon's chest out not visible front on, mouths open without words (rangy's is the joke), glasses thin at panel size (thick in code, cast stage), young faces lined, shaft reads as a hall (set, chat 2), name card cut at the left edge, goth's neck line. Acting list's aerial row is "2 cont." (block 2b is `code: field_shot`). Kittests all pass (chat 4). Piercings are front head only (no turned view of the goth in this film). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 
@@ -81,6 +81,22 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 19 | They are standing at four different distances to the camera. | yes: 2.6, 3.6, 4.8, 6.2 m |
 | 20 | An aerial shot shows the lift rise into the centre of an open natural space — a wide field, lush green grass flowing in the wind, distant encircling forest and tall alpine peaks. | yes: 33 deg down; grass gusts; forest ring; peaks |
 | 21 | "Those not in education, employment or training will be presented with a unique opportunity to serve their country." | stand-in timing until Sam records |
+| 22 | (Sam, 17 Nov, chat 4) Wait for the animatic: it comes once scenes 3 and 5 are built | open |
+| 23 | Scene 3. Camera: mid shot. Location: further into the field | open |
+| 24 | The NEETs have found a series of weapons on grey plinths; like the lift, vary the positions to avoid a flat look | open |
+| 25 | 1 (goth): hoisting a heavy crossbow, pleased with her choice | open |
+| 26 | 2 (rangy): picking up a katana from the plinth and staring at it, unsure | open |
+| 27 | 3 (Swindon): picking up twin uzis, 'pow, pow' motions and mouth noises, aiming at invisible targets | open |
+| 28 | 4 (waif): shaking, clutching a single large hand grenade like she's been charged with looking after an ostrich egg | open |
+| 29 | "Each NEET must arm themselves before heading further into the Zone.—" (Milburn, voice over) | open |
+| 30 | Shot 5 (Sam's numbering; no shot 4 given). Cut suddenly to the opposite side of the table from Milburn: the 180 of shot 1 | open |
+| 31 | New character: Andy Burnham (the Prime Minister in this film), angrily accusing, pointing furiously, clearly incensed; a Vimto before him | open |
+| 32 | New character: Pat McFadden, Work and Pensions Secretary, beside Andy, listening patiently, fingers steepled; sparkling water in a tall glass | open |
+| 33 | Andy: "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | open |
+| 34 | 180 back to Milburn: nonplussed, softly spoken, attentive | open |
+| 35 | Milburn: "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | open |
+| 36 | 180 again. Pat (eyes on Andy): "I'd like to hear where this goes, Prime Minister" | open |
+| 37 | Andy throws his arms up, then folds them and leans back: "Fine! Continue." | open |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
