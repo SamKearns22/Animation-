@@ -1,3 +1,3 @@
-No film in progress.
-Done: chat size measured and judged (Sam's Y); model-switch failure found; code finder found barely used.
-Next: chat A (Opus medium) builds the chat-size change; chat B (Opus high) routes 3 proposals; craft chat 8 still queued.
+Cost fixes: chat B routed proposals 2-4; model switch and code finder judged, early warning awaits its judge.
+Next: Opus medium chat judges early warning and sends Sam all three.
+Chat A builds the chat-size rule side by side.
