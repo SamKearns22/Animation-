@@ -13,7 +13,7 @@ outfit: suit navy, shirt white, tie 34 44 92, trousers navy, shoes 20 18 16
 
 # goth: The goth girl (NEET 1: big blue-purple hair, blooming black dress, pudgy nose, overweight)
 body: 1.63 m, shoulders 186, head 70 x 92
-skin: pale | hair: curly, 118 56 168, big, streaks 46 92 214
+skin: pale | hair: shag, 118 56 168, big, streaks 46 92 214
 face: face_wide ++, jaw_wide ++, nose_wide ++, nose_long -, eye_size +
 eyes: 70 60 50 | lips: 120 60 90 | brows: 40 34 40, width 4.8 | lashes | piercings: brow, lip, nose
 outfit: dress 30 26 34, dress 30 26 34, sleeves 30 26 34, trousers 30 26 34, shoes 20 20 22

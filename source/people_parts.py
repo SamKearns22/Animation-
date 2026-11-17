@@ -17,7 +17,7 @@ from midterminal_cast import B, P4, dk   # noqa: E402
 from ed import INK, curve, oval  # noqa: E402
 import turnhead as TH  # noqa: E402
 
-LONG_STYLES = ('bob', 'long', 'curly', 'bun')   # hair that has a mass behind the head, drawn before it
+LONG_STYLES = ('bob', 'long', 'curly', 'bun', 'shag')   # hair that has a mass behind the head, drawn before it
 
 
 def gaze(L, g):
@@ -230,7 +230,7 @@ def _front_head(img, p, sp, t, hx, hy):
     e, c = fw * 0.5, fhw * 0.5
     if fc['hair'] in LONG_STYLES:
         _hair_mass(p, f, L, fc, hc)
-    if fc['hair'] not in ('bob', 'long', 'curly'):
+    if fc['hair'] not in ('bob', 'long', 'curly', 'shag'):
         AV._ears(p, f, L, skin)
     outl = _dome_outline(L) if bare_skull(fc) else _outline(L)
     p.poly(curve(f.pts(outl), 4), skin, INK, 2.6)
@@ -369,6 +369,8 @@ def _hair_mass(p, f, L, fc, hc):
     """The hair seen round and below the head from the front (drawn before the face): a bob to the jaw, long hair
     over the shoulders, a mass of curls, a bun on the crown (the press pack's haircuts, seen from the front)."""
     e, st = L['fw'] * 0.5, fc['hair']
+    if st == 'shag':
+        return shag_mass(p, f, L, fc, hc)
     if st == 'bob':
         pts = [(-e - 0.05, 0.92), (-e - 0.1, 0.5), (-e - 0.08, 0.05), (-e + 0.02, -0.33), (0.0, -0.5), (e - 0.02, -0.33),
                (e + 0.08, 0.05), (e + 0.1, 0.5), (e + 0.05, 0.92), (e - 0.06, 0.88), (-e + 0.06, 0.88)]
@@ -439,6 +441,89 @@ def streaked_front(p, f, c, hl, fc, hc, rng):
         _strand(p, curve(pts, 3), sc if k % 2 == 0 else B.lt(hc, 1.12), 13)
 
 
+# ---- Milburn note 3 (Sam, 17 Nov: the streaked curls "look like the crest of an alien monster"; look at real dyed
+# alternative hair). Why notes 1's fix failed: its strands fanned OUT from the crown like spokes, and hair falls DOWN.
+# The house shag (a wolf cut, the alt look in the photos): volume on the crown, choppy layers to the shoulders, pointed
+# ends, a heavy choppy fringe to the brows, dark roots, panels of the second colour falling through (peekaboo).
+def _shag_dims(L, fc):
+    e, b = L['fw'] * 0.5, fc.get('hair_big', 1.0)
+    return e, 1.0 + 0.35 * (b - 1.0)
+
+
+def _jag(x0, x1, v_hi, v_lo, n, seed=0):
+    """A choppy edge from x0 to x1: tips and notches at uneven spacing and depth (note 3 r1: even teeth read as a
+    saw blade); each tip a narrow point, each notch a wider curve."""
+    rng = np.random.default_rng(17 + seed)
+    xs = np.cumsum(rng.uniform(0.6, 1.4, n + 1))
+    xs = (xs - xs[0]) / (xs[-1] - xs[0])
+    out = []
+    for i, t in enumerate(xs):
+        if i % 2:
+            out.append((x0 + (x1 - x0) * t, v_hi + (v_lo - v_hi) * rng.uniform(0.55, 1.15)))
+        else:
+            out.append((x0 + (x1 - x0) * t, v_hi + (v_lo - v_hi) * rng.uniform(0.0, 0.25)))
+    return out
+
+
+def shag_mass(p, f, L, fc, hc):
+    """The shag behind and round the head: crown, cheeks wider, two curtains to the shoulders, the neck between."""
+    e, w = _shag_dims(L, fc)
+    o = e + 0.15 * w
+    left = [(-o + 0.02, 1.22), (-o - 0.02, 0.86), (-o + 0.03, 0.62), (-o - 0.05, 0.5), (-o + 0.01, 0.4),
+            (-o + 0.0, 0.08), (-e - 0.02, -0.32), (-0.26, -0.53), (0.0, -0.59), (0.26, -0.53), (e + 0.02, -0.32),
+            (o - 0.0, 0.08), (o - 0.01, 0.36), (o + 0.06, 0.47), (o - 0.02, 0.6), (o + 0.02, 0.86), (o - 0.02, 1.22)]
+    # the wolf cut's layers: a short layer flicking out at the cheek on each side, the crown a touch fuller
+    pts = left + _jag(o - 0.02, e * 0.5, 1.2, 1.33, 7, 1)[1:] + [(e * 0.46, 0.96), (e * 0.4, 0.64),
+                                                               (-e * 0.4, 0.64), (-e * 0.46, 0.96)] + \
+        _jag(-e * 0.5, -o + 0.02, 1.33, 1.2, 7, 2)[:-1]
+    p.poly(curve(f.pts(pts), 2), hc, INK, 2.4)
+    sc = fc.get('hair_streak')
+    if sc:                                                   # peekaboo panels: one each side, falling down
+        for sgn, u0 in ((1, e + 0.02), (-1, e + 0.07)):
+            u1 = u0 + 0.07
+            pan = [(sgn * u0, 0.18), (sgn * u1, 0.16), (sgn * (u1 + 0.02), 0.7), (sgn * (u1 + 0.01), 1.27),
+                   (sgn * (u0 + 0.035), 1.17), (sgn * (u0 - 0.01), 1.29), (sgn * (u0 - 0.02), 0.7)]
+            p.poly(curve(f.pts(pan), 2), sc, None)
+    for k in range(12):                                      # strands falling down each curtain, dark and light
+        sgn = -1 if k % 2 else 1
+        u = sgn * (e + 0.015 + 0.012 * (k // 2))
+        col = dk(hc, 0.62) if k % 3 else B.lt(hc, 1.35)
+        p.line(curve(f.pts([(u, 0.1 + 0.03 * k), (u + sgn * 0.03, 0.6), (u + sgn * 0.01, 1.15)]), 3), col, 1.5)
+    o2 = curve(f.pts(pts), 2)
+    p.line(o2 + o2[:1], INK, 2.4)
+
+
+def shag_front(p, f, L, fc, hc):
+    """Over the forehead: dark roots on the crown, a heavy choppy fringe to the brows (a chunk of the second colour
+    in it), and a layer falling past each temple to the cheek, so the hair hangs round the face."""
+    e, w = _shag_dims(L, fc)
+    c = L['fhw'] * 0.5
+    fb = L['brow_y'] - 0.05                                  # the fringe's ends sit just above the brows
+    cap = [(-e - 0.03, 0.5), (-e - 0.04, 0.05), (-e + 0.02, -0.3), (-0.24, -0.47), (0.0, -0.52), (0.24, -0.47),
+           (e - 0.02, -0.3), (e + 0.04, 0.05), (e + 0.03, 0.5)]
+    cap += [(e - 0.01, 0.62), (e - 0.05, 0.36), (c + 0.0, 0.06)] + _jag(c - 0.02, -c + 0.02, fb - 0.05, fb, 9, 3) + \
+        [(-c, 0.06), (-e + 0.05, 0.36), (-e + 0.01, 0.62)]
+    p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
+    roots = [(-e + 0.02, -0.3), (-0.24, -0.47), (0.0, -0.52), (0.24, -0.47), (e - 0.02, -0.3)] + \
+        _jag(e - 0.04, -e + 0.04, -0.38, -0.33, 7, 4)
+    p.poly(curve(f.pts(roots), 2), dk(hc, 0.42), None)       # dark roots, growing out
+    sc = fc.get('hair_streak')
+    if sc:                                                   # a blue chunk in the fringe, our left of the middle
+        u0, u1 = -c * 0.55, -c * 0.12
+        chunk = [(u0 + 0.03, -0.36), (u1, -0.36), (u1 + 0.01, fb - 0.04), (u1 - 0.04, fb + 0.0),
+                 (u0 + 0.06, fb - 0.04), (u0, fb + 0.0)]
+        p.poly(curve(f.pts(chunk), 2), sc, None)
+    for k in range(10):                                      # the fringe's strands: down from the crown, a slight sweep
+        u = -c + 2 * c * (k + 0.5) / 10
+        col = dk(hc, 0.6) if k % 2 else B.lt(hc, 1.3)
+        p.line(curve(f.pts([(u * 0.6, -0.44), (u * 0.9, -0.2), (u + 0.01, fb - 0.06)]), 3), col, 1.4)
+    for sgn in (-1, 1):                                      # the temple layers' strands
+        p.line(curve(f.pts([(sgn * (c + 0.02), -0.05), (sgn * (e - 0.02), 0.25), (sgn * e, 0.55)]), 3),
+               dk(hc, 0.6), 1.4)
+    o = curve(f.pts(cap), 2)
+    p.line(o + o[:1], INK, 2.4)
+
+
 def _hair_front(p, f, L, fc, hc, skin):
     """The hair over the forehead (after the face): a fringe for the bob and long hair, curls for the curly mass,
     hair drawn back to the bun or a ponytail, a grey horseshoe round a bald crown (receding)."""
@@ -455,6 +540,8 @@ def _hair_front(p, f, L, fc, hc, skin):
         else:
             p.line(curve(f.pts([(-0.12, -0.3), (0.0, -0.33), (0.12, -0.3)]), 3), dk(skin, 0.86), 1.4)
         return
+    if st == 'shag':
+        return shag_front(p, f, L, fc, hc)
     hl = {'bob': -0.02, 'long': -0.08, 'curly': -0.1, 'bun': -0.1, 'pony': -0.1}[st]
     cap = _press_cap(L, hl)
     if st == 'bob':                                           # a straight fringe to the brows

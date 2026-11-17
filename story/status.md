@@ -1,3 +1,3 @@
-Milburn: scenes 3 and 5 planned; McFadden's head made (pick B), Burnham reused; the Cabinet Room reverse built (17 Nov, chat 5).
-Next: Opus high chat 6: the field with weapon plinths, the props, Andy and Pat seated, the moves; then Sonnet for the animatic.
-Needs Sam: note 3 (Pat's dome) still when made; recordings.
+Milburn: scenes 3-4 planned, McFadden's head and the Cabinet reverse built; Sam answered Q1-Q7 and added scenes 6 (forest hunt) and 7 (Andy v Milburn) (17 Nov).
+Next: Opus high chat 6: note 4 (Pat's dome), plan scenes 6-7, build scenes 3, 4, 6, 7; then Sonnet for the animatic.
+Needs Sam: notes on the goth's new hair (note 3); recordings when ready.

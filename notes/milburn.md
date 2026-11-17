@@ -2,10 +2,10 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 41 (every new pose looked at from the views it is seen), 89 (one critique pack for the build), 74 (moves land on their words).
-- **Done (chat 5):** scenes 3 and 5 planned (shots 3, 5, 6, 7; timing; acting list rows 3-7; estimate); McFadden's head (face tool pick B, 62%; house head gains a bald piece, round glasses, bigger ears); Andy (Sam's finished head) and Pat in the people file; the Cabinet Room reverse built (places view `reverse`: fireplace, portrait, Vimto can, tall glass, name cards). Questions Q1-Q7 sent to Sam.
+- **Done (chat 5):** scenes 3 and 5 planned (shots 3, 5, 6, 7; timing; acting list rows 3-7; estimate); McFadden's head (face tool pick B, 62%; house head gains a bald piece, round glasses, bigger ears); Andy (Sam's finished head) and Pat in the people file; the Cabinet Room reverse built (places view `reverse`: fireplace, portrait, Vimto can, tall glass, name cards). Questions Q1-Q7 sent to Sam. Chat 4 (alongside): note 3, the goth's hair read as an alien crest: redone as a shag (people kit `hair: shag`: wolf cut, fringe, dark roots, blue panels), front only; still and 2a clip sent.
 - **Spent:** chat 5 about 2.8% (Opus high, ~115 steps); film ~10.9% so far; estimate from here ~8.5 (total ~19%, over the 15% aim: two likeness heads, six held props).
-- **Next:** chat 6, Opus HIGH (building new): first note 3 (Pat's dome too tall: lower and widen it, phone size beside the photos, still) and Sam's answers (Decisions: scene 4 = shots 4a/4b/4c, mace + "DLC" stapler plinths, no pow-pow take, no portrait); then the field turned level and further in with six grey plinths (`milburn_sets`: a level TiltCam at 1.6 m, the ring 150 m away); the props (crossbow from prepper_cast; katana, twin uzis, grenade new, flat); Andy and Pat seated in `reverse` (milburn.py: `reverse_shot` like `cabinet`); shots 3, 5, 6, 7 and lines 3-7 in SHOTS/LINES/SHOT_CAST; the moves in story/milburn-moves.txt (acting list rows 3-7); one critique pack; then Sonnet for the animatic of the whole film. Take Sam's answers to Q1-Q7 first if in.
-- **Needs Sam:** note 3's still; recordings (lines 1-7) when ready.
+- **Next:** chat 6, Opus HIGH: first note 4 (Pat's dome too tall: lower and widen it; still at phone size beside the photos) and Sam's answers (Decisions: scene 4 = shots 4a/4b/4c; mace + "DLC" stapler plinths; no pow-pow take; fireplace, no portrait); then PLAN scenes 6 and 7 (brief rows 38-52: a NEW forest place, a travelling camera, gunfire, flamethrower, morning stars; four more table exchanges; shots, timing, acting list, estimate redone) before building; then build scenes 3, 4, 6, 7: the field turned level with plinths (`milburn_sets`: a level TiltCam at 1.6 m), the props (crossbow from prepper_cast; katana, uzis, grenade, mace, stapler new), Andy and Pat seated in `reverse`, SHOTS/LINES/SHOT_CAST, the moves (acting list rows), one critique pack; the goth's turned shag if a shot turns her; then Sonnet for the animatic.
+- **Needs Sam:** notes on the goth's new hair (note 3); note 4's still when made; recordings (lines 1-7 onwards) when ready.
 - **Read:** job pack Build; this file's Shots, acting list, estimate.
 - **Open rule requests:** none.
 - **For Claude:** facehouse: `hair: bald` (bald_shapes, bald, dome arc via L['round_top'], `L['dome']` caps it at -0.44), `ear_k`, glasses `round`/`w_k` (in the pick json); McFadden's pick at references/faces/mcfadden/pick (picked B, by Claude: Sam to confirm Q6); CAST['mcfadden']. places_tables gains fireplace, portrait, tall glass, can. The reverse view puts the lens 0.3 m right of Milburn's seat so both fit. Kittests failing before this film (named, not from it): facehouse_whole_head, round_page. Moves critique items from chat 3 still open (see archive). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
@@ -117,16 +117,31 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 27 | 3 (Swindon): picking up twin uzis, 'pow, pow' motions and mouth noises, aiming at invisible targets | planned (row 3; mouthed silently, Sam Q4 N) |
 | 28 | 4 (waif): shaking, clutching a single large hand grenade like she's been charged with looking after an ostrich egg | planned (row 3; ostrich-egg size, Sam Q2 Y) |
 | 29 | "Each NEET must arm themselves before heading further into the Zone.—" (Milburn, voice over) | planned: line 3, cut on the dash |
-| 30 | Scene 4 (Sam renamed it from shot 5, 17 Nov). Cut suddenly to the opposite side of the table from Milburn: the 180 of shot 1 | built: places view `reverse` (Q1: no shot 4) |
+| 30 | Scene 4 (Sam, 17 Nov: "Scene 4, not shot 5"; Q1 answered). Cut suddenly to the opposite side of the table from Milburn: the 180 of shot 1 | built: places view `reverse` (Q1: no shot 4) |
 | 31 | New character: Andy Burnham (the Prime Minister in this film), angrily accusing, pointing furiously, clearly incensed; a Vimto before him | head ready (Sam's finished Andy); Vimto can built; pointing on the acting list |
 | 32 | New character: Pat McFadden, Work and Pensions Secretary, beside Andy, listening patiently, fingers steepled; sparkling water in a tall glass | head built (pick B, Q6); tall glass built; steeple on the acting list |
 | 33 | Andy: "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | planned (line 4) |
 | 34 | 180 back to Milburn: nonplussed, softly spoken, attentive | planned (shot 6 = shot 1 camera) |
 | 35 | Milburn: "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | planned (line 5) |
 | 36 | 180 again. Pat (eyes on Andy): "I'd like to hear where this goes, Prime Minister" | planned (line 6; eyes on Andy) |
-| 38 | (Sam, Q3) the extra plinths: a spiked mace and a stapler "from DLC" | open |
-| 39 | (Sam, Q7) the fireplace only, no portrait over it | open |
+| 53 | (Sam, Q3) the extra plinths: a spiked mace and a stapler "from DLC" | open |
+| 54 | (Sam, Q7) the fireplace only, no portrait over it | open |
 | 37 | Andy throws his arms up, then folds them and leans back: "Fine! Continue." | planned (line 7) |
+| 38 | (Sam, 17 Nov) Scene 6. Cut: travelling alongside the NEETs as they hunt through the thick growth of a forest | open |
+| 39 | Weapons gripped in ways that show each one's personality (goth pleased with the crossbow, rangy unsure with the katana, Swindon gung-ho with the uzis, waif terrified nursing the grenade), with matching faces and acting | open |
+| 40 | Milburn VO: "The NEETs will form a unit." | open |
+| 41 | Gunfire rips from the greenery ahead | open (sound effect named by the script) |
+| 42 | A blast of flamethrower fire whips outward | open |
+| 43 | Morning stars whip from the trees | open |
+| 44 | Milburn VO: "And will encounter teams of their erstwhile colleagues—" | open |
+| 45 | Scene 7. Back on Andy: "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | open |
+| 46 | 180 on Milburn: "I am sorry that you feel that way." | open |
+| 47 | 180 on Andy, despairing and angry: "Are you or are you not sending NEETs to kill each other on live TV?" | open |
+| 48 | 180 on Milburn: he looks briefly to the side with his eyes, then back to Andy | open |
+| 49 | Milburn: "My report is nuanced and multifaceted. I also suggest taking away PIP after they obtain their life-changing injuries in the Blood Dome." | open |
+| 50 | 180 on Andy: mouth open in angry outrage | open |
+| 51 | Pat: "I think the backbenchers will like this one, sir." | open |
+| 52 | (Scene 5 not given: Sam numbered 3, 4, 6, 7; taken as his numbering, not a missing scene, as Q1) | open |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
@@ -156,7 +171,8 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 ## Notes
 | # | shot | time | note | line | status |
 |---|------|------|------|------|--------|
-| 3 | 4a, 4c | all | Pat: good likeness, but the bald dome is too tall and narrow: "alien carrot man" (Sam, 17 Nov) | facehouse bald piece: dome height (`L['dome']` -0.44) and its width over the temples | open: lower and widen the dome to the photos' skull (crown about 0.36 above the brows, as wide as the cheeks); check at phone size beside the photos |
+| 4 | 4a, 4c | all | Pat: good likeness, but the bald dome is too tall and narrow: "alien carrot man" (Sam, 17 Nov) | facehouse bald piece: dome height (`L['dome']` -0.44) and its width over the temples | open: lower and widen the dome to the photos' skull (crown about 0.36 above the brows, as wide as the cheeks); check at phone size beside the photos |
+| 3 | 2a, 2b, 3 | all | Goth's hair shape looks like the crest of an alien monster, not real hair; look into purple/blue dyed alternative hair and try again (Sam, 17 Nov; repeat of note 1's area) | why note 1's fix failed: strands fanned OUT from the crown like spokes, hair falls DOWN. New people-kit cut `hair: shag` (wolf cut from alt-hair photos: crown volume, choppy layers to the shoulders, heavy choppy fringe, dark roots, blue peekaboo panels and a blue fringe chunk) | fixed chat 4: still + 2a clip sent; front only (turned views fall back to long hair: build the turned shag if scene 3 turns her) |
 | 2 | 2a | all | Goth: give her an eyebrow, lip and nose piercing (Sam, 17 Nov) | people kit: `piercings: brow, lip, nose` (silver, front head, sized to the face) | fixed chat 4: still + 2a clip sent |
 | 1 | 2a, 2b | all | Goth's hair: blue and purple as different strands, not one block (Sam, 17 Nov) | people kit: `hair: ... streaks C` | fixed: wavy strands from the crown, blue and purple in turn (front on; side and back views not built, not used in this film); stills sent |
 
@@ -166,7 +182,7 @@ Decisions made:
   3: the extra plinths hold **a spiked mace and a stapler "from DLC"** (my reading: a plain office stapler on its own
   plinth with a small bright "DLC" tag, the video-game extra-content joke). 4 N: no pow-pow take; Swindon mouths it
   silently. 5 Y: purple Vimto can. 6: likeness good, but the bald dome is too tall: "the bald person 'extended head'
-  problem ... alien carrot man" (note 3). 7 Y, "just do the fireplace": the portrait over it comes off.
+  problem ... alien carrot man" (note 4). 7 Y, "just do the fireplace": the portrait over it comes off.
 - Handover check (chat 5, end) settled: FINDER: no notes this chat; it built new things (people and places lines, facehouse's bald piece, four places pieces) and read the film's code to plan the new shots, on purpose.
 - Handover check (chat 5, start) settled: BROKEN kittests facehouse_whole_head and round_page failed before this film (since 15 Nov, named in protest-tiers' notes); Andy's head is drawn as the kit draws it now and is looked at in the cast sheet. NOT CARRIED (the goth's hair: "crest of an alien monster", "purple/blue dyed alternative hair") is note 1, fixed chat 4.
 - Chat 5: no photo of the Cabinet Room's fireplace side could be fetched (Wikimedia refused; the tour page has none): the reverse is drawn from the room's known pieces and is Q7 to Sam.
