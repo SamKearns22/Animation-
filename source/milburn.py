@@ -91,7 +91,7 @@ REVERSE = ('4a', '4c', '7a', '7c', '7e')            # the reverse: Andy and Pat 
 ACROSS = ('1', '4b', '7b', '7d')                     # shot 1's camera: Milburn
 SHOT_CAST = dict({'2a': _FOUR, '2b': _FOUR, '3': _FOUR, '6': _FOUR}, **{n: ['milburn'] for n in ACROSS},
                  **{n: ['andy', 'pat'] for n in REVERSE})
-KEEP_CLEAR = {'1': [(60, 330, 1020, 560)]}    # the Hook Text's band above Milburn's head (never over his face)
+KEEP_CLEAR = [("Milburn's face", lambda t: (420, 580, 680, 960) if t < 3.3 else None)]   # rule 75: the Hook Text sits above it
 HOOK = ('The Milburn Report is released 😬', {'y': 420, 'until': 3.0})   # rule 75: the band above his head
 SHOT_MARKS = dict(SHOT_CAST, **{'2b': []})          # rule 38: front on (2b: tiny, from above)
 
@@ -674,3 +674,9 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv)
+
+
+def caption_at(t):
+    """The subtitle on screen at t (finish.py burns them in; rule 62), from LINES."""
+    import subtitles as SUB
+    return SUB.caption_at(LINES, t)
