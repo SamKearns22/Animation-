@@ -396,6 +396,84 @@ def field_point(x, y, z):
     return X, Y, FIELD_CAM.L / fw
 
 
+# ================================================================================================= field, level (scene 3)
+LEVEL_CAM = LevelCam(1.6, 1000, 2000)     # standing head height, ~150 m from the shaft towards the forest (chat 6)
+R_AHEAD = 150.0                           # the forest's edge straight ahead (the ring is 300 m from the shaft)
+
+
+class _Level3:
+    """LevelCam in TiltCam's terms (p -> X, Y, depth; horizon) so the peaks and trees draw with the same code."""
+    def __init__(self, c):
+        self.c, self.L = c, c.L
+
+    def p(self, x, y, z):
+        X, Y = self.c.p(x, max(y, 0.1), z)
+        return X, Y, y
+
+    def horizon(self):
+        return self.c.hz
+
+
+@lru_cache(None)
+def _level_back():
+    """Sky, two ranges of peaks, foothills and the forest's edge 150 m ahead (rows of trees), for the level camera."""
+    cam = _Level3(LEVEL_CAM)
+    hz = cam.horizon()
+    back = Image.new('RGB', (W * SS, H * SS), (150, 200, 236))
+    d = ImageDraw.Draw(back)
+    for k, c in enumerate(((120, 178, 228), (138, 192, 234), (160, 206, 238), (184, 220, 240))):
+        y0 = k * hz / 4
+        _poly(d, [(0, y0), (W, y0), (W, hz + 60), (0, hz + 60)], c, line=0)
+    for cx, cy, s in ((220, 260, 1.1), (820, 420, 0.8), (600, 140, 0.6)):
+        for dx, dy, r in ((0, 0, 50), (46, -16, 38), (-44, 6, 34), (86, 8, 30)):
+            d.ellipse([((cx + dx * s) - r * s) * SS, ((cy + dy * s) - r * s * 0.7) * SS,
+                       ((cx + dx * s) + r * s) * SS, ((cy + dy * s) + r * s * 0.7) * SS], fill=(246, 250, 252))
+    _peak_range(d, cam, 18000, 3900, 15, 4, (150, 166, 196), (246, 248, 252), 1.6)
+    _peak_range(d, cam, 11000, 2500, 11, 9, (106, 124, 158), (236, 242, 250), 2.0)
+    for dist, col in ((3200, (54, 98, 82)), (1600, (44, 90, 64))):
+        r = random.Random(dist)
+        xs = np.linspace(-dist * 1.2, dist * 1.2, 40)
+        pts = [cam.p(x, dist, 160 * (dist / 3200) * (0.5 + 0.5 * math.sin(x / dist * 7 + r.random())))[:2]
+               for x in xs]
+        _poly(d, pts + [(pts[-1][0], hz + 40), (pts[0][0], hz + 40)], col, 1.6)
+    trees = []
+    rr = random.Random(17)
+    for row, dist in enumerate((R_AHEAD + 30, R_AHEAD + 18, R_AHEAD + 8, R_AHEAD)):
+        for i in range(70):
+            x = -110 + 220 * (i + rr.random()) / 70
+            X, Y, fw = cam.p(x, dist + 0.0006 * x * x, 0)
+            trees.append((fw, X, Y, cam.L / fw, 'fir' if rr.random() < 0.6 else 'oak', i * 13 + row))
+    _poly(d, [(0, hz - 30), (W, hz - 30), (W, hz + 4), (0, hz + 4)], FOREST, line=0)
+    for fw, X, Y, s, kind, seed in sorted(trees, reverse=True):
+        _tree(d, X, Y, s, kind, mix(FOREST, (70, 130, 80), random.Random(seed).random() * 0.5), seed)
+    return back.resize((W, H), Image.LANCZOS)
+
+
+@lru_cache(None)
+def _level_grid():
+    ys, xs = np.mgrid[0:H, 0:W].astype(np.float32)
+    below = ys > LEVEL_CAM.hz + 2
+    with np.errstate(divide='ignore', invalid='ignore'):
+        dd = np.where(below, LEVEL_CAM.up * LEVEL_CAM.L / (ys - LEVEL_CAM.hz), np.nan)
+    gx = (xs - 540) * dd / LEVEL_CAM.L
+    return gx, dd, below & (dd < R_AHEAD)
+
+
+def field_level(t):
+    """Scene 3's ground: the meadow with the same long gusts as the aerial, seen level (RGB)."""
+    img = np.asarray(_level_back()).copy()
+    gx, gy, inside = _level_grid()
+    a = math.radians(-30)
+    u = gx * math.cos(a) + gy * math.sin(a)
+    w = (np.sin(u * 0.45 - t * 1.9) + 0.45 * np.sin(u * 1.3 + gy * 0.3 - t * 2.9) + 0.2 * np.sin(gx * 0.7 - t * 1.3))
+    tone = np.where(w > 1.0, 2, np.where(w > -0.9, 1, 0))
+    g = np.array(GRASS, np.uint8)[tone]
+    far = np.clip(np.nan_to_num(gy, nan=0) / R_AHEAD, 0, 1)[..., None] ** 0.5
+    g = (g * (1 - 0.22 * far) + np.array((150, 190, 170)) * 0.22 * far).astype(np.uint8)
+    img[inside] = g[inside]
+    return Image.fromarray(img)
+
+
 def sheet(out):
     tiles = [shaft(0.0, 14.0), shaft(1.5, 8.0), shaft(3.0, 2.6),
              field(0.0, deck_z(0.0)), field(1.5, deck_z(0.5)), field(3.0, deck_z(1.0))]

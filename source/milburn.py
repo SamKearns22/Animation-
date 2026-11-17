@@ -27,6 +27,8 @@ import math
 import os
 import sys
 
+import numpy as np
+
 from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -371,6 +373,96 @@ def field_shot(t):
     return MS.field(lt, MS.deck_z(u), _tiny())
 
 
+# ================================================================================================= scene 3: arming
+import milburn_props as MP           # noqa: E402
+FIELD3 = [('rangy', -0.86, 5.0), ('waif', -0.32, 5.4), ('swindon', 0.22, 4.7), ('goth', 0.74, 4.4)]   # Sam (chat
+# 6): seen side by side, a loose row across the frame (each a little nearer or further), still turned to us; the goth
+# at the right end aims out of the frame, the rangy lad's blade points out at the left
+PLINTHS3 = [(-0.55, 6.7, None), (0.02, 7.5, None), (0.58, 6.5, None), (1.22, 7.1, None),   # the four emptied, behind
+            (-0.62, 3.9, 'stapler'), (0.72, 4.1, 'mace')]  # near corners: the stapler ("DLC") and the mace still on theirs
+
+
+def _hoist(t):
+    """0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves")."""
+    a = word_at(3, 'arm themselves')
+    return MS.ease(min(1.0, max(0.0, (t - (a - 0.45)) / 0.65)))
+
+
+def _mix(a, b, u):
+    return tuple(x + (y - x) * u for x, y in zip(a, b))
+
+
+def arming(who, t):
+    """(face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3."""
+    sp = CAST[who]
+    j = V.standing(sp)
+    sw = sp.get('shoulders', 150) / 2.0
+    if who == 'goth':                                   # raises the heavy crossbow to her shoulder, aiming off
+        u = _hoist(t)                                   # the right of the frame, pleased
+        V.arm_to(j, 'R', _mix((70, 330, 120), (sw * 0.35, 50, 150), u), 'down', 'fist')
+        V.arm_to(j, 'L', _mix((-130, 330, 160), (-sw * 0.1, 70, 430), u), 'down', 'fist')
+        MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
+        j['lean'] = 3.0 * u
+        mood = 'pleased' if u < 0.9 else 'grim'
+    elif who == 'rangy':                                # holds the katana out flat in front and stares at it, unsure
+        a = word_at(3, 'arm themselves')
+        u = MS.ease(min(1.0, max(0.0, (t - (a - 0.3)) / 0.7)))
+        V.arm_to(j, 'R', _mix((90, 360, 80), (70, 220, 190), u), 'down', 'fist')
+        V.arm_to(j, 'L', _mix((-60, 380, 90), (10, 215, 430), u), 'down', 'palm')
+        MP.in_hands(j, sp, 'katana', 'R', 'L', along=0.0)
+        j['nod'] = 5.0 * u
+        mood = 'nervous'
+    elif who == 'swindon':                              # twin uzis out in front, spraying at invisible targets
+        a0 = word_at(3, 'Each')
+        kick = [0.0, 0.0]
+        for i, tt in enumerate(np.arange(a0 + 0.9, 15.0, 0.42)):
+            k = i % 2
+            kick[k] = max(kick[k], max(0.0, 1 - abs(t - tt) / 0.12))
+        sway = math.sin((t - a0) * 2.6)
+        for side, sg, kk in (('R', 1, kick[0]), ('L', -1, kick[1])):
+            V.arm_to(j, side, (sg * (sw * 0.55), 130 - 40 * sway * sg - 30 * kk, 330 - 50 * kk), 'down', 'fist')
+            MP.in_hands(j, sp, 'uzi', side, None, ang=-12 * sway * sg - 25 * kk, along=-0.02)
+        mood = 'thrilled'
+    else:                                               # the waif clutches the grenade to her chest, shaking
+        for side, sg in (('R', 1), ('L', -1)):
+            V.arm_to(j, side, (sg * 55, 200, 150), 'down', 'palm')
+        MP.in_hands(j, sp, 'grenade', 'R', None, ang=-90, along=-0.0)
+        j['lean'] = 2.0
+        mood = 'terrified'
+    d = face_sp('3', who, t, mood)
+    if who == 'rangy':
+        d['gaze_dy'] = 0.6
+    if who == 'swindon' and word_at(3, 'Each') + 1.2 < t < 14.6:   # mouths "pow" silently (Sam Q4 N)
+        d['mouth'] = 'v:O' if int((t - 12.0) / 0.21) % 2 == 0 else 'v:M'
+    if who == 'waif':
+        d['head_roll'] = 2.0 * math.sin(t * 2 * math.pi * 7)
+        j['shake_x'] = 4.0 * math.sin(t * 2 * math.pi * 9)
+    return d, j
+
+
+YAW3 = 40.0                          # Sam (chat 6, the BoJack frames): turned three-quarter to screen right, the
+#                                     camera at their side; faces still read, their focus off the right edge
+
+
+def field_level_shot(t):
+    from PIL import ImageDraw
+    img = MS.field_level(t).convert('RGBA')
+    L = MS.LEVEL_CAM
+    things = [(d, 'plinth', (x, d, pr)) for x, d, pr in PLINTHS3] + [(d, 'who', (w, x, d)) for w, x, d in FIELD3]
+    for d, kind, a in sorted(things, key=lambda q: -q[0]):
+        if kind == 'plinth':
+            lay = Image.new('RGBA', (W * 2, H * 2), (0, 0, 0, 0))
+            MP.plinth(ImageDraw.Draw(lay), L, a[0], a[1], a[2], ss=2)   # Sam (chat 6): no "DLC" sign
+            img.alpha_composite(lay.resize((W, H), Image.LANCZOS))
+        else:
+            who, x, dd = a
+            X, Y = L.p(x, dd, 0.0)
+            look, j = arming(who, t)
+            X += j.pop('shake_x', 0.0) * scale_at(L.ppm(dd), CAST[who])
+            person(img, who, X, Y, L.ppm(dd), YAW3, t, j, look)
+    return img.convert('RGB')
+
+
 # ================================================================================================= picture
 def picture(t):
     n = shot_of(t)
@@ -380,6 +472,10 @@ def picture(t):
         return reverse(t)
     if n == '2a':
         return shaft_shot(t)
+    if n == '3':
+        return field_level_shot(t)
+    if n == '6':
+        return forest_shot(t)
     return field_shot(t)
 
 

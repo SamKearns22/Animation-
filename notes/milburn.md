@@ -1,14 +1,14 @@
 # Notes for Milburn (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 41 (every new pose looked at from the views it is seen), 89 (one critique pack for the build), 74 (moves land on their words).
-- **Done (chat 5):** scenes 3 and 5 planned (shots 3, 5, 6, 7; timing; acting list rows 3-7; estimate); McFadden's head (face tool pick B, 62%; house head gains a bald piece, round glasses, bigger ears); Andy (Sam's finished head) and Pat in the people file; the Cabinet Room reverse built (places view `reverse`: fireplace, portrait, Vimto can, tall glass, name cards). Questions Q1-Q7 sent to Sam. Chat 4 (alongside): note 3, the goth's hair read as an alien crest: redone as a shag (people kit `hair: shag`: wolf cut, fringe, dark roots, blue panels), front only; still and 2a clip sent.
-- **Spent:** chat 5 about 2.8% (Opus high, ~115 steps); film ~10.9% so far; estimate from here ~8.5 (total ~19%, over the 15% aim: two likeness heads, six held props).
-- **Next:** chat 6, Opus HIGH: first note 4 (Pat's dome too tall: lower and widen it; still at phone size beside the photos) and Sam's answers (Decisions: scene 4 = shots 4a/4b/4c; mace + "DLC" stapler plinths; no pow-pow take; fireplace, no portrait); then PLAN scenes 6 and 7 (brief rows 38-52: a NEW forest place, a travelling camera, gunfire, flamethrower, morning stars; four more table exchanges; shots, timing, acting list, estimate redone) before building; then build scenes 3, 4, 6, 7: the field turned level with plinths (`milburn_sets`: a level TiltCam at 1.6 m), the props (crossbow from prepper_cast; katana, uzis, grenade, mace, stapler new), Andy and Pat seated in `reverse`, SHOTS/LINES/SHOT_CAST, the moves (acting list rows), one critique pack; the goth's turned shag if a shot turns her; then Sonnet for the animatic.
-- **Needs Sam:** notes on the goth's new hair (note 3); note 4's still when made; recordings (lines 1-7 onwards) when ready.
-- **Read:** job pack Build; this file's Shots, acting list, estimate.
+- **Rules that bite next:** 89 (one critique pack for scenes 3, 4, 6, 7), 41 (every new pose from the views it is seen: the three-quarter ones), 74 (moves land on their words).
+- **Done (chat 6):** note 4 (Pat's dome, still sent); scenes 6-7 planned (shots 6, 7a-7e, timing to ~68 s, acting rows 8-14, estimate ~24%); built: scenes 4 and 7 at the table (Andy and Pat seated in the reverse, portrait gone, every move on the acting list) and scene 3 (field level, row of four turned three-quarter to screen right per Sam, six plinths, crossbow, katana, uzis, grenade, mace, stapler; no "DLC" sign).
+- **Spent:** chat 6 ~2.6%; film ~14.8%; from here ~9 (total ~24%).
+- **Next:** chat 7, Opus HIGH: build scene 6 (the forest: travelling camera, the four walking three-quarter to screen right with their weapons, gunfire flashes, a flame jet, two morning stars; plan in Shots and The world), then ONE critique pack for scenes 3, 4, 6, 7 (fix or name every fault), then open the Sonnet chat for the whole-film animatic (finish.py, Hook Text, sign-off).
+- **Needs Sam:** Q1 (sound effects) in chat 6's message; the three-quarter tool job for the morning (Sam: three-quarter people "look like shit" next to the front ones: a tool job, Opus high, after the animatic).
+- **Read:** job pack Build; this file's Shots (row 6), The world (Forest), acting list rows 8-9, notes 5-6.
 - **Open rule requests:** none.
-- **For Claude:** facehouse: `hair: bald` (bald_shapes, bald, dome arc via L['round_top'], `L['dome']` caps it at -0.44), `ear_k`, glasses `round`/`w_k` (in the pick json); McFadden's pick at references/faces/mcfadden/pick (picked B, by Claude: Sam to confirm Q6); CAST['mcfadden']. places_tables gains fireplace, portrait, tall glass, can. The reverse view puts the lens 0.3 m right of Milburn's seat so both fit. Kittests failing before this film (named, not from it): facehouse_whole_head, round_page. Moves critique items from chat 3 still open (see archive). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** milburn.py: REVERSE/ACROSS shot lists, reverse() (table strips split at SPLIT), arming()/field_level_shot() (YAW3 40), forest_shot not yet written (picture() calls it for shot '6'); milburn_sets: LEVEL_CAM, field_level; milburn_props: SHAPES, in_hands, plinth (tag unused); facehouse bald `dome_wide`. Moves: table blocks in story/milburn-moves.txt (places steeple, fold, flung, fists, plead, jab). Kittests failing before this film (named): facehouse_whole_head, round_page. Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 
 ## The screenplay so far (Sam, 17 Nov: about 25% of the film)
 - Title: Milburn. Hook Text: "The Milburn Report is released 😬"
@@ -140,38 +140,38 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 20 | An aerial shot shows the lift rise into the centre of an open natural space — a wide field, lush green grass flowing in the wind, distant encircling forest and tall alpine peaks. | yes: 33 deg down; grass gusts; forest ring; peaks |
 | 21 | "Those not in education, employment or training will be presented with a unique opportunity to serve their country." | stand-in timing until Sam records |
 | 22 | (Sam, 17 Nov, chat 4) Wait for the animatic: it comes once scenes 3 and 5 are built | open |
-| 23 | Scene 3. Camera: mid shot. Location: further into the field | planned: shot 3, level mid shot, 150 m in (field painting turned level: next chat) |
-| 24 | The NEETs have found a series of weapons on grey plinths; like the lift, vary the positions to avoid a flat look | planned: 6 plinths staggered 3-9 m, never in a row |
-| 25 | 1 (goth): hoisting a heavy crossbow, pleased with her choice | planned (acting list row 3) |
-| 26 | 2 (rangy): picking up a katana from the plinth and staring at it, unsure | planned (acting list row 3) |
-| 27 | 3 (Swindon): picking up twin uzis, 'pow, pow' motions and mouth noises, aiming at invisible targets | planned (row 3; mouthed silently, Sam Q4 N) |
-| 28 | 4 (waif): shaking, clutching a single large hand grenade like she's been charged with looking after an ostrich egg | planned (row 3; ostrich-egg size, Sam Q2 Y) |
+| 23 | Scene 3. Camera: mid shot. Location: further into the field | built chat 6 (level field, a row across the frame, Sam note 5) |
+| 24 | The NEETs have found a series of weapons on grey plinths; like the lift, vary the positions to avoid a flat look | built: 6 plinths staggered, stapler and mace in the near corners |
+| 25 | 1 (goth): hoisting a heavy crossbow, pleased with her choice | built (raises it to aim off the right edge) |
+| 26 | 2 (rangy): picking up a katana from the plinth and staring at it, unsure | built (holds it out flat, stares down) |
+| 27 | 3 (Swindon): picking up twin uzis, 'pow, pow' motions and mouth noises, aiming at invisible targets | built (mouths silently) |
+| 28 | 4 (waif): shaking, clutching a single large hand grenade like she's been charged with looking after an ostrich egg | built (grenade 1.6x, shaking) |
 | 29 | "Each NEET must arm themselves before heading further into the Zone.—" (Milburn, voice over) | planned: line 3, cut on the dash |
 | 30 | Scene 4 (Sam, 17 Nov: "Scene 4, not shot 5"; Q1 answered). Cut suddenly to the opposite side of the table from Milburn: the 180 of shot 1 | built: places view `reverse` (Q1: no shot 4) |
-| 31 | New character: Andy Burnham (the Prime Minister in this film), angrily accusing, pointing furiously, clearly incensed; a Vimto before him | head ready (Sam's finished Andy); Vimto can built; pointing on the acting list |
-| 32 | New character: Pat McFadden, Work and Pensions Secretary, beside Andy, listening patiently, fingers steepled; sparkling water in a tall glass | head built (pick B, Q6); tall glass built; steeple on the acting list |
-| 33 | Andy: "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | planned (line 4) |
+| 31 | New character: Andy Burnham (the Prime Minister in this film), angrily accusing, pointing furiously, clearly incensed; a Vimto before him | built (fists, the point) |
+| 32 | New character: Pat McFadden, Work and Pensions Secretary, beside Andy, listening patiently, fingers steepled; sparkling water in a tall glass | built (steepled, eyes on Andy) |
+| 33 | Andy: "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | built (line 4) |
 | 34 | 180 back to Milburn: nonplussed, softly spoken, attentive | planned (shot 6 = shot 1 camera) |
-| 35 | Milburn: "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | planned (line 5) |
-| 36 | 180 again. Pat (eyes on Andy): "I'd like to hear where this goes, Prime Minister" | planned (line 6; eyes on Andy) |
-| 53 | (Sam, Q3) the extra plinths: "Spiked Mace and a stapler from DLC" | open |
-| 54 | (Sam, Q7) the fireplace only, no portrait over it | open |
-| 37 | Andy throws his arms up, then folds them and leans back: "Fine! Continue." | planned (line 7) |
-| 38 | (Sam, 17 Nov) Scene 6. Cut: travelling alongside the NEETs as they hunt through the thick growth of a forest | open |
-| 39 | Weapons gripped in ways that show each one's personality (goth pleased with the crossbow, rangy unsure with the katana, Swindon gung-ho with the uzis, waif terrified nursing the grenade), with matching faces and acting | open |
-| 40 | Milburn VO: "The NEETs will form a unit." | open |
-| 41 | Gunfire rips from the greenery ahead | open (sound effect named by the script) |
-| 42 | A blast of flamethrower fire whips outward | open |
-| 43 | Morning stars whip from the trees | open |
-| 44 | Milburn VO: "And will encounter teams of their erstwhile colleagues—" | open |
-| 45 | Scene 7. Back on Andy: "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | open |
-| 46 | 180 on Milburn: "I am sorry that you feel that way." | open |
-| 47 | 180 on Andy, despairing and angry: "Are you or are you not sending NEETs to kill each other on live TV?" | open |
-| 48 | 180 on Milburn: he looks briefly to the side with his eyes, then back to Andy | open |
-| 49 | Milburn: "My report is nuanced and multifaceted. I also suggest taking away PIP after they obtain their life-changing injuries in the Blood Dome." | open |
-| 50 | 180 on Andy: mouth open in angry outrage | open |
-| 51 | Pat: "I think the backbenchers will like this one, sir." | open |
-| 52 | (Scene 5 not given: Sam numbered 3, 4, 6, 7; taken as his numbering, not a missing scene, as Q1) | open |
+| 35 | Milburn: "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | built (line 5) |
+| 36 | 180 again. Pat (eyes on Andy): "I'd like to hear where this goes, Prime Minister" | built (line 6) |
+| 53 | (Sam, Q3) the extra plinths: "Spiked Mace and a stapler from DLC" | built (no "DLC" sign, Sam note 6) |
+| 54 | (Sam, Q7) the fireplace only, no portrait over it | done (portrait gone) |
+| 37 | Andy throws his arms up, then folds them and leans back: "Fine! Continue." | built (line 7) |
+| 38 | (Sam, 17 Nov) Scene 6. Cut: travelling alongside the NEETs as they hunt through the thick growth of a forest | planned (shot 6, chat 7 builds) |
+| 39 | Weapons gripped in ways that show each one's personality (goth pleased with the crossbow, rangy unsure with the katana, Swindon gung-ho with the uzis, waif terrified nursing the grenade), with matching faces and acting | planned (acting row 8) |
+| 40 | Milburn VO: "The NEETs will form a unit." | planned (line 8) |
+| 41 | Gunfire rips from the greenery ahead | planned (Q1 sound) |
+| 42 | A blast of flamethrower fire whips outward | planned |
+| 43 | Morning stars whip from the trees | planned |
+| 44 | Milburn VO: "And will encounter teams of their erstwhile colleagues—" | planned (line 9) |
+| 45 | Scene 7. Back on Andy: "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | built (7a) |
+| 46 | 180 on Milburn: "I am sorry that you feel that way." | built (7b) |
+| 47 | 180 on Andy, despairing and angry: "Are you or are you not sending NEETs to kill each other on live TV?" | built (7c) |
+| 48 | 180 on Milburn: he looks briefly to the side with his eyes, then back to Andy | built (7d: look keys) |
+| 49 | Milburn: "My report is nuanced and multifaceted. I also suggest taking away PIP after they obtain their life-changing injuries in the Blood Dome." | built (7d) |
+| 50 | 180 on Andy: mouth open in angry outrage | built (7e) |
+| 51 | Pat: "I think the backbenchers will like this one, sir." | built (7e) |
+| 52 | (Scene 5 not given: Sam numbered 3, 4, 6, 7; taken as his numbering, not a missing scene, as Q1) | answered (Sam Q1: Scene 4) |
 
 ## References as checklists
 | reference | what it shows | ours matches? |
@@ -215,6 +215,8 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 1 | 2a, 2b | all | Goth's hair: blue and purple as different strands, not one block (Sam, 17 Nov) | people kit: `hair: ... streaks C` | fixed: wavy strands from the crown, blue and purple in turn (front on; side and back views not built, not used in this film); stills sent |
 
 Decisions made:
+- Handover check (chat 6, end) settled by handing on to chat 7, in its build and critique: the board redrawn for the new shots (3, 4a-4c, 6, 7a-7e) and sent with `sent --board`; every table and field pose looked at with posecheck.py at phone size (rule 41; chat 6 looked only at its own stills); head life for Andy and Pat from the voice (rule 74, HEAD_LIFE like Milburn's); scene 6's poses once built.
+- Handover check (chat 6, start) settled: BROKEN kittests (facehouse_whole_head, round_page) failed before this film, named again; NOT CARRIED quotes (note 1 = Sam's chat-5 answers) now carried word for word in note 4 and brief row 53.
 - Sam, 17 Nov (chat 5's Q1-Q7): 1 Y, and the table scene is called **Scene 4** (not shot 5): shots 4a (Andy), 4b
   (Milburn), 4c (Pat, then Andy); cut straight from the field on Milburn's dash. 2 Y: the grenade ostrich-egg size.
   3: the extra plinths hold **a spiked mace and a stapler "from DLC"** (my reading: a plain office stapler on its own
