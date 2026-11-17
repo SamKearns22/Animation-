@@ -354,13 +354,48 @@ def _hair_mass(p, f, L, fc, hc):
         v0 = rng.uniform(0.1, 0.4)
         p.line(curve(f.pts([(u, v0), (u * 1.03, v0 + 0.25), (u * 0.99, v0 + (0.45 if st == 'bob' else 0.9))]), 3),
                dk(hc, 1.6) if st == 'long' else dk(hc, 0.75), 1.3)   # long: light strands (hunt 1: a black block)
-    if st == 'curly':
+    if st == 'curly' and fc.get('hair_streak'):
+        _streaked_mass(p, f, e, fc, hc, rng)
+    elif st == 'curly':
         for _ in range(26):
             a = rng.uniform(math.pi * 0.95, math.pi * 2.05)
             r = rng.uniform(0.75, 0.95)
             big = fc.get('hair_big', 1.0)
             x, y = f((e + 0.17) * big * r * math.cos(a), 0.22 + 0.62 * big * r * math.sin(a))
             p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+
+
+def _strand(p, pts, col, w):
+    """One wavy strand of hair: a thick ribbon with a dark edge and a lighter line along it."""
+    p.line(pts, dk(col, 0.5), w + 3)
+    p.line(pts, col, w)
+    p.line(pts, B.lt(col, 1.3), max(1.2, w * 0.18))
+
+
+def _streaked_mass(p, f, e, fc, hc, rng):
+    """Milburn note 1 (Sam, 17 Nov: "blue and purple as different strands, not a single block"): the curly mass
+    drawn as wavy strands from the crown to the edge, blue and purple in turn, so both colours read at phone size."""
+    big, sc = fc.get('hair_big', 1.0), fc['hair_streak']
+    w = 24 * big / 1.5
+    for k in range(14):
+        a0 = math.pi * (0.95 + 1.1 * (k + 0.5) / 14)
+        col = sc if k % 2 == 0 else B.lt(hc, 1.12)
+        pts = []
+        for i in range(9):
+            r = 0.45 + 0.46 * i / 8
+            aa = a0 + 0.045 * math.sin(i * 0.9 + k * 1.3)
+            pts.append(f((e + 0.17) * big * r * math.cos(aa), 0.22 + 0.62 * big * r * math.sin(aa)))
+        _strand(p, curve(pts, 3), col, w)
+
+
+def streaked_front(p, f, c, hl, fc, hc, rng):
+    """The hair over the forehead as short wavy strands in both colours (the fringe of the streaked mass)."""
+    sc = fc['hair_streak']
+    for k in range(9):
+        u = -c + 2 * c * (k + 0.5) / 9
+        pts = [f(u * 0.55 + 0.01 * math.sin(i * 0.9 + k), -0.42 + (hl + 0.36) * i / 7) for i in range(8)]
+        pts = [(x + (j / 7) * (f(u, 0)[0] - f(u * 0.55, 0)[0]), y) for j, (x, y) in enumerate(pts)]
+        _strand(p, curve(pts, 3), sc if k % 2 == 0 else B.lt(hc, 1.12), 13)
 
 
 def _hair_front(p, f, L, fc, hc, skin):
@@ -387,7 +422,9 @@ def _hair_front(p, f, L, fc, hc, skin):
                (c * 0.6, L['brow_y'] - 0.07), (-c * 0.6, L['brow_y'] - 0.07), (-c + 0.02, 0.1), (-e + 0.03, 0.34)]
     p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
     rng = np.random.default_rng(len(fc['m']) + 3)
-    if st == 'curly':
+    if st == 'curly' and fc.get('hair_streak'):
+        streaked_front(p, f, c, hl, fc, hc, rng)
+    elif st == 'curly':
         for _ in range(16):
             u, v = rng.uniform(-c, c), rng.uniform(-0.38, hl - 0.04)
             x, y = f(u, v)

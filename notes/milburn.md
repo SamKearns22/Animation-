@@ -2,8 +2,8 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 59 (pre-flight before the animatic), 75 (Hook Text in the band above his head), 74 (re-time moves on Sam's takes).
-- **Done (chat 3):** `story/milburn-moves.txt` (moves kit, `acting check` clean): Milburn seated, pleased, lips on line 1, hands on the folder, nod on "essence", lean in and nod on "simple"; the four's faces (goth unimpressed, rangy lad mouth hanging, Swindon lad chest out and squinting, waif shrinking) and the look-up on "training" (head lifts, eyes up). Rehearsal clips of shot 1, 2a, 2b sent (2 re-sent after the critique). `milburn.py final` added (stand-in robot voice for timing). Moves critique 2 hunts: fixed 8, named 9.
-- **Spent:** chat 3 about 2% (Opus medium, ~95 steps, 2 helpers); this film ~7% of a week so far, on estimate.
+- **Done (chat 3):** `story/milburn-moves.txt` (moves kit, `acting check` clean): Milburn seated, pleased, lips on line 1, hands on the folder, nod on "essence", lean in and nod on "simple"; the four's faces (goth unimpressed, rangy lad mouth hanging, Swindon lad chest out and squinting, waif shrinking) and the look-up on "training" (head lifts, eyes up). Rehearsal clips of shot 1, 2a, 2b sent (2 re-sent after the critique). `milburn.py final` added (stand-in robot voice for timing). Moves critique 2 hunts: fixed 8, named 9. Note 1 (the goth's hair in blue and purple strands): fixed, stills sent (people kit: `hair: ... streaks C`).
+- **Spent:** chat 3 about 3% (Opus medium, ~130 steps, 2 helpers; ended on amber); this film ~7% of a week so far, on estimate.
 - **Next:** on Sam's Y: Sonnet chat: pre-flight, animatic (`milburn.py final` small, then finish.py with the Hook Text and sign-off), send. On notes instead: Opus medium notes round, clips.
 - **Needs Sam:** Y or N for the animatic; notes on the clips; his recordings of lines 1-2 when ready.
 - **Read:** job pack Checks and animatic.
@@ -104,6 +104,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 ## Notes
 | # | shot | time | note | line | status |
 |---|------|------|------|------|--------|
+| 1 | 2a, 2b | all | Goth's hair: blue and purple as different strands, not one block (Sam, 17 Nov) | people kit: `hair: ... streaks C` | fixed: wavy strands from the crown, blue and purple in turn (front on; side and back views not built, not used in this film); stills sent |
 
 Decisions made:
 - Handover check (chat 3, end) settled: FINDER: this chat built the moves and the film's face, clip and head-life code new, on purpose (no notes yet to look up).

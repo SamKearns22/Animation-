@@ -9,7 +9,8 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     # who: Their name                  starts a person (who: one word, used in the film's code)
     like: OTHER                        start from another person in the file, then change what follows
     body: 1.78 m, shoulders 156, head 66 x 96, neck 1.1, hem 500, legs 1.2   (only the height is needed)
-    skin: olive                        hair: crop, 40 32 28    (crop bald side bob long curly bun pony receding none)
+    skin: olive                        hair: crop, 40 32 28    (crop bald side bob long curly bun pony receding none); 'streaks C': curly strands of a
+                                       second colour through the first (the goth's blue in purple, Milburn note 1)
     face: jaw_wide +0.04, nose_long ++, size 0.86   (pushes on the average face; + is one step, ++ two: STEPS)
     eyes: 90 110 130 | lips: 190 122 112 | brows: 150 140 132, width 4.4, thick 0.06
     beard: stubble 0.82 | beard: boxed 46 40 38 | glasses: 40 36 34 | freckles | lashes
@@ -408,6 +409,9 @@ def _fact(d, key, val, people):
             if q.strip() == 'big':                     # Milburn (17 Nov): a big mass of curls, half as big again
                 d['hair_big'] = 1.5
                 continue
+            if w == 'streaks':                         # Milburn note (Sam, 17 Nov): strands of a second colour
+                d['hair_streak'] = colour(c)
+                continue
             if w in ('light', 'grey') and q.strip().lower() not in COLOURS:     # 'light 112 90 72'; 'light brown' is a colour
                 d['hair_' + w] = colour(c)
             else:
@@ -517,7 +521,7 @@ def person(d):
               brow=sp['brow_c'], hair='crop' if style == 'short' else style, turned=style)
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
                   ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes'), ('pencil', 'pencil'),
-                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big')):
+                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak')):
         if k in d:
             fc[fk] = d[k]
     sp['kit_face'] = fc
