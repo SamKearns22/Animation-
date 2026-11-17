@@ -29,7 +29,7 @@
   it must be refused with MODEL GUARD (hooks load at chat start, so chat D could only prove it on its own record).
   If not refused, the watcher flags "guard" at that chat's Stop.
 - **Next:** nothing queued: the chain stops for Sam's answer below. Broken list (notes/logs/broken.md) holds 2 kittests failing before chat D (round_page, facehouse_whole_head): the next code-finder or face-tool chat owns them.
-- **Needs Sam:** Y/N delete the stray page claude.ai/artifact/BsPpuixgT8nQZy6h2LvMnn (asked again, chat D).
+- **Needs Sam:** nothing. Stray page deleted on Sam's Y (17 Nov, chat D). His Y was saved by the fixed message saver (commit 5144e8d0): the saver proven live.
 - **Open, own route later:** whether clips and sound are routine (Sonnet) work (model-switch F5): through propose.py
   with the guard's log and the routine figures, not asked unjudged. Finder later changes wait for Learn's numbers.
 - **Read:** this section only.
