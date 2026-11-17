@@ -178,6 +178,56 @@
     "ticked": 0,
     "edited film code": true
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "e33e3e79",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.55,
+   "src": "estimate",
+   "sid": "session_01J1JB7YBXPnoLsQGLnhHAxi",
+   "steps": 29,
+   "hist_k": 123,
+   "kinds": {
+    "film-file search": 5.0,
+    "tool search": 15.5,
+    "page.py": 1.2,
+    "renders": 5.5,
+    "pictures": 6.8,
+    "other": 66.0
+   },
+   "calls": {
+    "film-file search": 4,
+    "tool search": 10,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 6,
+    "pictures": 7,
+    "other": 5
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 1,
+     "after show": 3
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "shared:people.py": 3,
+     "shared:people_parts.py": 2,
+     "shared:patriots4_cast.py": 1,
+     "other": 2,
+     "film notes": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
   }
  ],
  "checks": {},
