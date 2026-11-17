@@ -124,7 +124,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 34 | 180 back to Milburn: nonplussed, softly spoken, attentive | planned (shot 6 = shot 1 camera) |
 | 35 | Milburn: "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | planned (line 5) |
 | 36 | 180 again. Pat (eyes on Andy): "I'd like to hear where this goes, Prime Minister" | planned (line 6; eyes on Andy) |
-| 53 | (Sam, Q3) the extra plinths: a spiked mace and a stapler "from DLC" | open |
+| 53 | (Sam, Q3) the extra plinths: "Spiked Mace and a stapler from DLC" | open |
 | 54 | (Sam, Q7) the fireplace only, no portrait over it | open |
 | 37 | Andy throws his arms up, then folds them and leans back: "Fine! Continue." | planned (line 7) |
 | 38 | (Sam, 17 Nov) Scene 6. Cut: travelling alongside the NEETs as they hunt through the thick growth of a forest | open |
@@ -171,7 +171,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 ## Notes
 | # | shot | time | note | line | status |
 |---|------|------|------|------|--------|
-| 4 | 4a, 4c | all | Pat: good likeness, but the bald dome is too tall and narrow: "alien carrot man" (Sam, 17 Nov) | facehouse bald piece: dome height (`L['dome']` -0.44) and its width over the temples | open: lower and widen the dome to the photos' skull (crown about 0.36 above the brows, as wide as the cheeks); check at phone size beside the photos |
+| 4 | 4a, 4c | all | Pat: good likeness, but the bald dome is too tall and narrow: "alien carrot man" (Sam, 17 Nov) | facehouse bald piece: dome height (`L['dome']` -0.44) and its width over the temples | fixed chat 6: measured off a01 (skull widest at the temples, 1.1x the cheeks, a near half-circle over the top); facehouse bald dome now `dome_wide` 0.405, `dome` -0.33 (CAST mcfadden); still sent (notes/sheets/milburn/pat-dome-note4.jpg). Sam's words: "Good likeness", "suffering from the bald person 'extended head' problem where they look like an alien carrot man." |
 | 3 | 2a, 2b, 3 | all | Goth's hair shape looks like the crest of an alien monster, not real hair; look into purple/blue dyed alternative hair and try again (Sam, 17 Nov; repeat of note 1's area) | why note 1's fix failed: strands fanned OUT from the crown like spokes, hair falls DOWN. New people-kit cut `hair: shag` (wolf cut from alt-hair photos: crown volume, choppy layers to the shoulders, heavy choppy fringe, dark roots, blue peekaboo panels and a blue fringe chunk) | fixed chat 4: still + 2a clip sent; front only (turned views fall back to long hair: build the turned shag if scene 3 turns her) |
 | 2 | 2a | all | Goth: give her an eyebrow, lip and nose piercing (Sam, 17 Nov) | people kit: `piercings: brow, lip, nose` (silver, front head, sized to the face) | fixed chat 4: still + 2a clip sent |
 | 1 | 2a, 2b | all | Goth's hair: blue and purple as different strands, not one block (Sam, 17 Nov) | people kit: `hair: ... streaks C` | fixed: wavy strands from the crown, blue and purple in turn (front on; side and back views not built, not used in this film); stills sent |

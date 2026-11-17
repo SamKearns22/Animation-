@@ -617,6 +617,8 @@ def _head(img, p, sp, t, hx, hy):
     L = face_layout(kh)
     if kh['hair'] == 'bald':
         L['round_top'] = True
+        L['dome'] = kh.get('dome', -0.44)                 # Milburn note 4: the crown's height and the skull's
+        L['dome_wide'] = kh.get('dome_wide')              # half width over the temples (face units), the photos'
     if kh.get('shape') and kh.get('outline'):               # the outline traced off the front photos (trace())
         L['trace'] = kh['outline']
     f = P4.Face(hx, hy)
@@ -953,9 +955,20 @@ def face_outline(L, crown=-0.42):
             if u:
                 right.append((round(u, 4), v))
         if L.get('round_top'):                            # a bald crown (McFadden): a round dome, not a peak
-            u1, v1 = right[0]
-            right = [(u1 * math.sin(a), v1 - (v1 - top) * math.cos(a)) for a in np.linspace(0.12, 1.5, 9)] + \
-                [q for q in right if q[1] >= v1] + [(0.0, hd['foot'])]
+            wd = L.get('dome_wide')
+            if wd:                                        # Milburn note 4 ("alien carrot man"): the photos' skull
+                right = [q for q in right if q[1] >= 0.1]  # (a01 measured): widest at the temples, 1.1x the
+                u1, v1 = right[0]                         # cheeks, then a near half-circle over the top whose
+                vc = v1 - 0.12                            # height is its half width; no egg, no waist
+                up = [(wd * max(0.0, 1 - ((vc - v) / (vc - top)) ** 2.2) ** (1 / 2.2), v)
+                      for v in np.linspace(top + 0.003, vc, 14)]
+                up += [(wd + (u1 - wd) * (0.5 - 0.5 * math.cos(math.pi * (v - vc) / (v1 - vc))), v)
+                       for v in np.linspace(vc, v1, 5)[1:-1]]
+                right = up + right + [(0.0, hd['foot'])]
+            else:
+                u1, v1 = right[0]
+                right = [(u1 * math.sin(a), v1 - (v1 - top) * math.cos(a)) for a in np.linspace(0.12, 1.5, 9)] + \
+                    [q for q in right if q[1] >= v1] + [(0.0, hd['foot'])]
         else:
             right = [(right[0][0] * 0.55, top + 0.005)] + right + [(0.0, hd['foot'])]
         return [(0.0, top)] + right + [(-u, v) for u, v in right[::-1][1:]]
@@ -1464,7 +1477,7 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
                      mouth=dict(kind='smirk'), brow_up=[0.0, 0.025], push=1.1),   # smirk and cocked brow
                                                                          # (Blessed's hand-made, Sam: "That's him")
     'mcfadden': dict(hair='bald', outfit=('suit', (40, 42, 56)), shirt=(246, 246, 246), tie=(70, 96, 140),   # Milburn
-                     grey=(184, 170, 156), ear_k=1.3, side_proud=0.034),   # chat 5: bald, grey-ginger sides, his ears
+                     grey=(184, 170, 156), ear_k=1.3, side_proud=0.034, dome=-0.33, dome_wide=0.405),   # chat 5: bald, grey-ginger sides, his ears
 }
 
 
