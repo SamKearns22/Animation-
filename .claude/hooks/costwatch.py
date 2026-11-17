@@ -5,7 +5,7 @@ MAP
   prices/limits ..... PRICE, WEEK_USD, CTX_AMBER/RED, CHAT_AMBER/RED, GAP_MIN
   read_usage() ...... sums this chat's cost from the transcript (cached by byte offset), and its helpers'
                       (helper_files: the records beside the chat's own); Fable has its own price row
-  level() ........... green / amber / red from history size and chat cost
+  level() ........... green / amber / red from history size and chat cost; describe() counts steps (replies)
   main() ............ hook entry (UserPromptSubmit, PostToolUse); --report for handovers
 
 Runs as a Claude Code hook. Every step re-reads the whole chat, so cost per step grows
@@ -25,8 +25,10 @@ PRICE = {  # read, write(1h cache), input, output
 }
 WEEK_USD = 245.0   # PROVISIONAL (Sam, 15 Nov): 17% on his meter after the 14 Nov 21:00 reset vs ~$34 film + ~$6 other; was 171. Re-check against the meter at the next handover.
 FRESH = 90_000           # tokens a fresh chat starts with (rules, notes, tools)
-CTX_AMBER, CTX_RED = 200_000, 300_000
+CTX_AMBER, CTX_RED = 250_000, 370_000   # Sam's Y, 17 Nov (chat-size-and-model): ~100 steps reach about 250k
 CHAT_AMBER, CHAT_RED = 3.0, 5.0   # % of the week spent by this one chat
+AMBER_DO = ("Chats aim at about 100 steps: finish the stage or fix in hand (up to about 150 steps), "
+            "never hand over mid-fix, then hand over")
 GAP_MIN = 55             # cache lasts an hour; after that the history reloads
 LEVELS = ["green", "amber", "red"]
 STATE_DIR = os.path.expanduser("~/.claude/costwatch")
@@ -50,7 +52,7 @@ def read_usage(path, helper_of=None):
     name = (os.path.basename(helper_of)[:8] + "-" if helper_of else "") + os.path.basename(path)
     sp = os.path.join(STATE_DIR, name + ".json")
     st = {"offset": 0, "usd": 0.0, "ctx": 0, "last_ts": None, "seen": [], "said": "green",
-          "model": ""}
+          "model": "", "steps": 0}
     try:
         st.update(json.load(open(sp)))
     except Exception:
@@ -80,6 +82,7 @@ def read_usage(path, helper_of=None):
                           + u.get("output_tokens", 0) * o) / 1e6
             if not d.get("isSidechain"):
                 st["ctx"] = rd + wr + u.get("input_tokens", 0)
+                st["steps"] = st.get("steps", 0) + 1
                 st["last_ts"] = d.get("timestamp")
                 st["model"] = m.get("model", "")
     st["seen"] = list(seen)[-3000:]
@@ -111,7 +114,8 @@ def describe(st, pct):
     extra = ""
     if st.get("helpers_usd"):
         extra = f" ({100 * st['helpers_usd'] / WEEK_USD:.1f} of it its helpers)"
-    return (f"this chat has cost about {pct:.1f}% of the week{extra}; its history is about "
+    return (f"this chat has taken {st.get('steps', 0)} steps and cost about {pct:.1f}% of the week{extra}; "
+            f"its history is about "
             f"{words // 1000}k words, so every step costs about {times:.1f}x a fresh chat's")
 
 
@@ -158,14 +162,14 @@ def main():
             msgs.append(f"COST WATCH RED (Sam said override): {describe(st, pct)}. Do only what Sam asked, "
                         "then hand over.")
         elif lv == 1:
-            msgs.append(f"COST WATCH AMBER: {describe(st, pct)}. Finish the step in hand, then hand over; "
-                        "start no new round of notes or new build here. Put a 'Cost: amber' line in your reply.")
+            msgs.append(f"COST WATCH AMBER: {describe(st, pct)}. {AMBER_DO}; start no new round of notes "
+                        "or new build here. Put a 'Cost: amber' line in your reply.")
     elif lv > said:  # PostToolUse: speak only when the level goes up
         if lv == 2:
             msgs.append(f"COST WATCH RED: {describe(st, pct)}. Finish the command in hand, save, then write "
                         "the handover and stop; tell Sam 'Cost: red. New chat needed.'")
         else:
-            msgs.append(f"COST WATCH AMBER: {describe(st, pct)}. Finish the step in hand, then hand over.")
+            msgs.append(f"COST WATCH AMBER: {describe(st, pct)}. {AMBER_DO}.")
 
     st["said"] = LEVELS[max(lv, said if event != "UserPromptSubmit" else lv)]
     json.dump(st, open(sp, "w"))
