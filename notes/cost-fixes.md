@@ -20,5 +20,7 @@
 - **Read:** this section; for A, rule 85 row and costwatch.py's MAP; for B, `guides/proposal-route/` and the files named.
 - **Open rule requests:** none unwritten (1 is A's job).
 - **Settled:** handover check's UNROUTED line (07:54): that ask was later put through the route (verdict recorded).
+- **Settled (chat B):** Sam's "Why not handover at 150 if the number doesn't matter at that stage" was answered by
+  the amended option 2 (aim ~100, up to 150 to finish a stage; sam.md line 7).
 - **For Claude:** stepcost kinds in ledger rows (`kinds`); show log `notes/logs/*-show.log`; get_session
   configured_model vs last_served_model for the model check.
