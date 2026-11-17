@@ -28,6 +28,33 @@
     "pictures": 0,
     "other": 3
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "bca6d6ef",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.55,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZQ9ByBsRzBT6UnfMR",
+   "steps": 10,
+   "hist_k": 90,
+   "kinds": {
+    "tool search": 15.2,
+    "other": 84.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 4
+   }
   }
  ],
  "checks": {}
