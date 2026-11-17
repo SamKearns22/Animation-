@@ -43,3 +43,14 @@ eyes: 110 120 120 | lips: 206 150 146 | brows: 150 120 90, width 3.8
 glasses: 120 100 90
 outfit: jumper 222 208 180, shirt 222 208 180, no tie, trousers 70 84 110, shoes 120 100 90
 extras: flowers
+
+# andy: Andy Burnham, the Prime Minister (scenes 5-7: angry, pointing; Sam's finished face-tool head, unchanged)
+head: house burnham, hair swept, look detail
+outfit: suit 31 34 58, shirt white, no tie
+body: 1.75 m
+
+# pat: Pat McFadden, Work and Pensions Secretary (scenes 5-7: patient, fingers steepled). Face tool pick B
+# (62% likeness, 1st of 15), bald with grey-ginger sides, round dark glasses (2026 photos), ears out: facehouse CAST.
+head: house mcfadden, hair bald, look detail
+outfit: suit 40 42 56, shirt white, tie 70 96 140
+body: 1.75 m

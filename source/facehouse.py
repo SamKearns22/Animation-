@@ -615,6 +615,8 @@ def _head(img, p, sp, t, hx, hy):
     kh = sp['kit_house']
     lk = LOOKS[kh['look']]
     L = face_layout(kh)
+    if kh['hair'] == 'bald':
+        L['round_top'] = True
     if kh.get('shape') and kh.get('outline'):               # the outline traced off the front photos (trace())
         L['trace'] = kh['outline']
     f = P4.Face(hx, hy)
@@ -624,7 +626,7 @@ def _head(img, p, sp, t, hx, hy):
     if piece == 'braids':
         braids_behind(p, f, L, hc, kh, sp)
     if piece != 'braids':                                 # her plaits cover the ears
-        AV._ears(p, f, _ear_L(L), skin)
+        ears(p, f, _ear_L(L), skin, kh.get('ear_k', 1.0))
     o = curve(f.pts(face_outline(L, -0.42 if piece != 'braids' else _hair(L, kh)['crown'] + 0.06)), 4)
     p.poly(o, skin, INK, 2.6)
     if lk['sockets'] and kh['eyes'].get('shade', 0) >= 0.1:
@@ -650,6 +652,8 @@ def _head(img, p, sp, t, hx, hy):
         P4.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0)), kh['lip'], (fx, my - 6))
     if piece == 'swept':
         swept(p, f, L, hc, kh, lk)
+    elif piece == 'bald':
+        bald(p, f, L, hc, kh, skin)
     elif piece == 'braids':
         braids(p, f, L, hc, lk, kh)
         if kh.get('ears'):                                # over the plaits, as the pick drew them (K1: her width)
@@ -657,6 +661,19 @@ def _head(img, p, sp, t, hx, hy):
     if kh.get('glasses'):
         glasses(p, f, L, kh['glasses'])
     return fx
+
+
+def ears(p, f, L, skin, k=1.0):
+    """The house ears (AV._ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
+    from the head by as much again."""
+    if k == 1.0:
+        return AV._ears(p, f, L, skin)
+    for sgn in (-1, 1):
+        if sgn < 0 and f.tq > 0.5:
+            continue
+        ex, ey = f(sgn * (L['fw'] * 0.5 + 0.01 + 0.03 * (k - 1)), 0.42)
+        p.poly(oval(ex, ey, 11 * k * 1.15, 24 * k, 20), skin, INK, 2.4)
+        p.line([(ex - sgn * 2 * k, ey - 10 * k), (ex + sgn * 3 * k, ey), (ex - sgn * 1 * k, ey + 10 * k)], dk(skin, 0.7), 1.4)
 
 
 def _ear_L(L):
@@ -855,6 +872,33 @@ def swept(p, f, L, hc, kh, lk):
     _swept_strokes(p, f, hc, sh, lk)
 
 
+# ---------------------------------------------------------------------------------------------- hair: bald
+def bald_shapes(L, kh, hc):
+    """Milburn chat 5 (McFadden): a bald crown, the hair a short clipped fringe at each side from the temple
+    (`side_top`, face units) down to the ear's top (`side_low`), laid on the face's own edge and standing a little
+    proud of it; its colour `grey` (the person's lines), else the hair colour greyed."""
+    grey = tuple(kh.get('grey') or blend(hc, (150, 146, 142), 0.35))
+    v0, v1 = kh.get('side_top', 0.0), kh.get('side_low', 0.3)
+    vs = np.linspace(v0, v1, 12)
+    proud = kh.get('side_proud', 0.026)
+    out = [(_face_u(L, v) + proud * math.sin(math.pi * (v - v0) / (v1 - v0)) ** 0.7, v) for v in vs]
+    inn = [(_face_u(L, v) - 0.006 - 0.012 * math.sin(math.pi * (v - v0) / (v1 - v0)), v) for v in vs[::-1]]
+    right = out + inn
+    return dict(grey=grey, sides=[right, [(-u, v) for u, v in right]])
+
+
+def bald(p, f, L, hc, kh, skin):
+    """The bald piece: the side fringes (bald_shapes) and a soft shine high on the dome, to our left."""
+    sh = bald_shapes(L, kh, hc)
+    for sd in sh['sides']:
+        p.poly(curve(f.pts(sd), 2), sh['grey'], INK, 1.8)
+    top = face_outline(L)[0][1]
+    w = _face_u(L, top + 0.12)
+    cx, cy = -w * 0.42, top + 0.1
+    shine = [(cx + w * 0.26 * math.cos(a), cy + 0.045 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 24)]
+    p.poly(f.pts(shine), blend(skin, (255, 250, 244), 0.32), None)
+
+
 # ---------------------------------------------------------------------------------------------- hair: braids
 def pick_hair(name, picked='C', src=None):
     """The hair Sam picked, measured off the pick's picture (facepick traced it from the photos; chat 7, K1: the
@@ -898,14 +942,22 @@ def face_outline(L, crown=-0.42):
     hd = L.get('head')
     if hd:                                                # chat 16: the measured head; under the hair, just inside
         top = hd['crown'] + 0.035                         # the hair's edge (no white between hair and face)
+        bare = L.get('round_top')                         # bald (McFadden): the photos' dome reads as hair, so
+        if bare:                                          # the skull is the silhouette's own top and edge
+            top = max(min(v for v, s, b in hd['rows'] if b is not None) + 0.01, L.get('dome', -0.44))
         right = []
         for v, s, b in hd['rows']:
-            if v <= top + 0.02 or v > hd['foot'] - 0.01:
-                continue
+            if v <= (-0.05 if bare else top + 0.02) or v > hd['foot'] - 0.01:   # bald: the dome is an arc
+                continue                                                         # (its rows read hair: noisy)
             u = s if s is not None else (b - 0.06 if b is not None else None)
             if u:
                 right.append((round(u, 4), v))
-        right = [(right[0][0] * 0.55, top + 0.005)] + right + [(0.0, hd['foot'])]
+        if L.get('round_top'):                            # a bald crown (McFadden): a round dome, not a peak
+            u1, v1 = right[0]
+            right = [(u1 * math.sin(a), v1 - (v1 - top) * math.cos(a)) for a in np.linspace(0.12, 1.5, 9)] + \
+                [q for q in right if q[1] >= v1] + [(0.0, hd['foot'])]
+        else:
+            right = [(right[0][0] * 0.55, top + 0.005)] + right + [(0.0, hd['foot'])]
         return [(0.0, top)] + right + [(-u, v) for u, v in right[::-1][1:]]
     if not tr:
         return PP._outline(L, crown)
@@ -1079,13 +1131,19 @@ def glasses(p, f, L, g):
     y1 = L['eye_y'] + min(g['bot'], 1.0) * ew
     xi = max(half + g['cx'] * ew - g['w'] * ew / 2, 0.035)
     for sgn in (-1, 1):
-        c, w = half + g['cx'] * ew, g['w'] * ew
+        c, w = half + g['cx'] * ew, g['w'] * ew * g.get('w_k', 1.0)
         x0, x1 = sorted((sgn * max(c - w / 2, 0.035), sgn * min(c + w / 2, L['fw'] * 0.5)))
-        r = 0.16
+        r = g.get('round', 0.16)                             # 0.16 a rounded box; ~0.45 round lenses
         box = [(x0, y0 + (y1 - y0) * r), (x0 + (x1 - x0) * r, y0), (x1 - (x1 - x0) * r, y0), (x1, y0 + (y1 - y0) * r),
                (x1, y1 - (y1 - y0) * r * 1.2), (x1 - (x1 - x0) * r * 1.4, y1), (x0 + (x1 - x0) * r * 1.4, y1),
                (x0, y1 - (y1 - y0) * r * 1.2)]
-        pts = curve(f.pts(box), 3)
+        if g.get('round'):                                 # round lenses (McFadden's): a soft superellipse,
+            n = 2.0 + 3.0 * (0.5 - min(0.5, g['round']))    # 2 a true oval, towards 3.5 a rounded square
+            mx, my, rx, ry = (x0 + x1) / 2, (y0 + y1) / 2, (x1 - x0) / 2, (y1 - y0) / 2
+            sg = lambda a: math.copysign(abs(a) ** (2 / n), a)   # noqa: E731
+            pts = f.pts([(mx + rx * sg(math.cos(a)), my + ry * sg(math.sin(a))) for a in np.linspace(0, 2 * math.pi, 40)[:-1]])
+        else:
+            pts = curve(f.pts(box), 3)
         p.line(pts + pts[:1], INK, lw + 2.4)
         p.line(pts + pts[:1], colr, lw)
         xo = x1 if sgn > 0 else x0
@@ -1149,9 +1207,10 @@ def age_lines(p, f, L, skin, age, lk):
 
 
 # ---------------------------------------------------------------------------------------------- turned views
-HAIR = ('swept', 'braids')
+HAIR = ('swept', 'braids', 'bald')
 TURN_PROF = {'swept': dict(hair_low=0.36, nape=0.62, volume=0.015),         # clipped short at the back
-             'braids': dict(hair_low=0.5, nape=0.78, volume=0.05)}          # the plaits' bulk over the skull
+             'braids': dict(hair_low=0.5, nape=0.78, volume=0.05),
+             'bald': dict(hair_low=0.3, nape=0.6, volume=0.0)}               # bald: the skull is the head's own          # the plaits' bulk over the skull
 
 
 class _Screen:
@@ -1202,6 +1261,10 @@ def _turn_hair(img, p, f, L, sp):
     kh, hc = sp['kit_house'], sp['hair_c']
     lk = LOOKS[kh['look']]
     yaw = round(math.degrees(f.th))
+    if kh['hair'] == 'bald':                                     # Milburn chat 5: the bare skull; a clipped band
+        TH.hair(img, p, f, [], tuple(kh.get('grey') or hc), dict(f.prof, hair_low=0.3, nape=0.6, volume=0.0,
+                                                                  hair_top=0.0, hair_top_back=0.12, hair_ragged=0.006))
+        return
     if kh['hair'] == 'swept':
         sh = _swept_shapes(L, kh, hc)
         TH.hair(img, p, f, [], sh['grey'], f.prof, 2.2)        # the clipped back and sides, greying
@@ -1400,6 +1463,8 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
     'walliams': dict(hair='swept', outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None,   # chat 13: his
                      mouth=dict(kind='smirk'), brow_up=[0.0, 0.025], push=1.1),   # smirk and cocked brow
                                                                          # (Blessed's hand-made, Sam: "That's him")
+    'mcfadden': dict(hair='bald', outfit=('suit', (40, 42, 56)), shirt=(246, 246, 246), tie=(70, 96, 140),   # Milburn
+                     grey=(184, 170, 156), ear_k=1.3, side_proud=0.034),   # chat 5: bald, grey-ginger sides, his ears
 }
 
 

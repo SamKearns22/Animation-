@@ -1,0 +1,3 @@
+Step 2: keep your step-1 guesses as they are. Now rank this line-up, best match first: Pat McFadden, John Healey, Peter Kyle, Wes Streeting, Ed Miliband.
+Rewrite /home/user/Animation-/review/np/e414d4d9/answer.json adding "ranking": [all names in order] and "what_would_make_it_obvious": "one sentence". Reply with the
+JSON only.
