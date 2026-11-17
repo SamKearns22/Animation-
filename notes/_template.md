@@ -24,8 +24,8 @@ Every person, set, prop, pose and move in the brief gets a row: KNOWN (its kit-c
 "Passed the critique" row: almost free) or NEW (priced; drawn alone and critiqued before the cast sheet, rule 89).
 
 First line: how much of the total is unmeasured. Each cost is the nearest measured past cost in `notes/ledger/`
-(name the film and row), or 'unmeasured'; no padding, no multipliers. Each row names its stage (cast, sets, moves,
-animatic1, round, final; one 'round' row per notes round, priced from past films' real rounds); the stage totals go
+(name the film and row), or 'unmeasured'; no padding, no multipliers. Each row names its stage (cast, sets, board, moves,
+animatic1, round, final; board: the shot board of rule 11, ended by `rough.py sent FILM OUT.jpg --delivered --board`; one 'round' row per notes round, priced from past films' real rounds); the stage totals go
 into `ledger.py estimate FILM PCT --stages "cast 2, sets 2.5, ..."` and each stage's end runs `ledger.py stage FILM NAME`.
 
 | thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | estimate (% of a week) | measured from | spent |
@@ -38,8 +38,10 @@ benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark
 Rehearsal clips sent: (rule 8: the 3-4 riskiest moves as 2-3 s clips, before building the rest; the date and file,
 or "none: why". Pre-flight warns until this line is filled)
 
-Composition sheet sent: (rule 11: the 3-4 key shots, before building; write the date and file here once Sam has it.
-Pre-flight refuses to run until this line has them, and while any "done?" box below is blank: rule 14)
+Shot board sent: (rule 11: every shot on one board before any move is written: `rough.py board FILM OUT.jpg`, send
+it, then `rough.py sent FILM OUT.jpg --delivered --board`, which records it. Pre-flight refuses to run until the record
+holds every shot, each with someone in SHOT_CAST, sent before the first move; and while any "done?" box below is blank:
+rule 14)
 
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |

@@ -1,16 +1,16 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 11 (new: the shot board), the proposal route (`source/propose.py`), 85 (cost watch).
-- **Done (craft chat 7, Opus high):** `rough.py board` built (kittest `shot_board_every_shot`); learn step: 15 of 23 old notes shown on boards from Remakes' and Blessed's first plans (`notes/proposals/craft-step2/learn-results.md`). **Sam's Y to Q1:** rule 11 rewritten and rule 10's line written in the rulebook, word for word as sent; its check column says the gate is being built (craft chat 8).
-- **Next (craft chat 8, Opus, high: a new build):** build rule 11's gate: `rough.py board FILM OUT.jpg` then `rough.py sent FILM OUT.jpg --delivered --board` records each shot's name and a digest of its frames; `preflight.gates` refuses when a shot in SHOTS is missing from a delivered board, a shot has an empty SHOT_CAST, or the board was delivered after the first move was built (the earliest commit adding moves to the film or its acting list); the old "Composition sheet sent:" line stops counting. Kittest that catches each refusal on a made-up film and passes Blessed with a record. Ledger "board" stage. Then update rule 11's check column (no wording change) and `guides/kit-catalogue.md`.
-- **Sam (18 Nov): Q2 = N:** notes given on the board are counted apart; only notes after building count toward "at most 3" (end-of-film review).
-- **Settled (handover check):** the 17 Nov ask left out "Critiqued: 7 found, 3 fixed, 4 named" (craft-step2); told Sam 18 Nov, after his Y.
-- **Not covered, said to Sam:** pop-ins and durations (17a, 47), later additions (30, 61, 75), changed minds (71).
-- **Numbers to beat:** at most 3 shot-design notes per film on the next two films, none returned twice.
-- **Read:** job pack "A tool job"; `source/rough.py` MAP (board 420); `source/preflight.py` gates (~230); rule 11 row.
-- **Open rule requests:** none (rule 11 written). Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
-- **For Claude:** the board draws through the film's own picture(t), so it can't precede the film file (F8): the gate is "before the first move". Old handovers `notes/archive/proposal-route-handovers.md`.
+- **Rules that bite next:** 11 (the shot board, now refused by the pre-flight), the proposal route (`source/propose.py`), 85 (cost watch).
+- **Done (craft chat 8, Opus high):** rule 11's gate built: `rough.py board` leaves a note beside the picture; `rough.py sent FILM OUT.jpg --delivered --board` records each shot, its cast and a digest of its frames (`story/FILM-board-sent.txt`) and ends the ledger's "board" stage; `preflight.gates` calls `rough.board_gate`: refuses no board, a shot on no delivered board, a shot with nobody in SHOT_CAST, a first board drawn or delivered after the first move block (earliest commit adding a `## shot: who` block to `story/FILM-moves.txt`). Films begun before 18 Nov (code there at commit fbfe83b9, or notes archived) keep "Composition sheet sent:". Kittest `board_gate_refusals` (passes; `shot_board_every_shot`, `rough_of_every_new_thing` still pass). Rule 11's check column, kit catalogue row, notes template line ("Shot board sent:"), ledger stage examples, Plan pack tools updated; no rule wording changed.
+- **Changes made without asking (judged at the end-of-film review):** the Plan pack now lists `rough.py board` and bites 11; the template's "Composition sheet sent:" line became "Shot board sent:".
+- **Next:** nothing queued: the job is done and no build is left, so the chain stops (no chat to open). The next film's Plan chat (Opus high) uses the board.
+- **Sam (18 Nov): Q2 = N:** notes given on the board are counted apart; only notes after building count toward "at most 3" (end-of-film review). Needs Sam: nothing.
+- **Not covered, said to Sam:** pop-ins and durations (17a, 47), later additions (30, 61, 75), changed minds (71); moves written only in a film's code (no moves file) are not timed by the gate.
+- **Numbers to beat:** at most 3 shot-design notes per film after building (board notes apart, Q2) on the next two films, none returned twice.
+- **Read:** job pack "Plan" for the next film (its tools now include the board).
+- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **For Claude:** handover check "NOT SENT 07:45 and 07:48" are false alarms (it read the old gate's name, "Composition sheet sent"; nothing was claimed sent). `notes/proposals/craft-next.md` verdict reads stale (edited after `record`), found 18 Nov, not this chat's; re-record before it is used. Old handovers `notes/archive/proposal-route-handovers.md`.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)

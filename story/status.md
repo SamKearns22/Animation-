@@ -1,3 +1,3 @@
 No film in progress.
-Done: shot board built and tested (15 of 23 old notes shown); Sam's Y, rule 11 rewritten.
-Next: craft chat 8 (Opus high) builds the board's check. Sam: Q2 = N (board notes counted apart).
+Done: rule 11's board gate built and tested (the pre-flight refuses a film until every shot's board has reached Sam). Sam: Q2 = N.
+Next: nothing queued; the next film's plan uses the board (board notes counted apart from "at most 3").
