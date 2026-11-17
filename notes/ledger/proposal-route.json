@@ -462,6 +462,33 @@
     "pictures": 0,
     "other": 3
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "b4f1eb0b",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.76,
+   "src": "estimate",
+   "sid": "session_01GznaAUKAzL22EEmPcFDvtv",
+   "steps": 12,
+   "hist_k": 112,
+   "kinds": {
+    "tool search": 21.8,
+    "other": 78.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 9,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 4
+   }
   }
  ],
  "checks": {}
