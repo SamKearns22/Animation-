@@ -2,13 +2,13 @@
 
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (`source/propose.py`), 30 (say why a first fix failed), 85 (cost watch).
-- **Done (craft chat 7, Opus high, 17 Nov):** `rough.py board` built (kittest `shot_board_every_shot` passes) and the learn step run: boards from Remakes (3a820183) and Blessed (fcf09cda); a fresh helper found 15 of their 23 shot-design notes shown, 2 flagged, 6 not (forecast was 11). Drawing 3 min 11 s, count 1 min 40 s. Results: `notes/proposals/craft-step2.md`, "Learn step results". No rule, gate or preflight changed.
+- **Done (craft chat 7, Opus high, 17 Nov):** `rough.py board` built (kittest `shot_board_every_shot` passes) and the learn step run: boards from Remakes (3a820183) and Blessed (fcf09cda); a fresh helper found 15 of their 23 shot-design notes shown, 2 flagged, 6 not (forecast was 11). Drawing 3 min 11 s, count 1 min 40 s. Results: `notes/proposals/craft-step2/learn-results.md`. No rule, gate or preflight changed.
 - **Needs Sam (sent 17 Nov):** Q1 yes to the rule-11 rewrite (wording below); Q2 board notes counted apart from "at most 3" (pick N).
 - **Next, on Sam's yes (Opus, high: new build):** write rule 11 and rule 10's line as sent; build the gate (preflight reads a board record: every shot delivered, nobody-cast refused, delivered before the first move); `rough.py board ... --delivered` record; ledger "board" stage; the helper's gaps (cast vs brief, camera height marked) only if cheap. On N to Q1: nothing changes; tell Sam what is left.
-- **Rule-11 wording sent:** in the proposal file's "Learn step results" and in the chat message of 17 Nov (same text as the rulebook row to write).
+- **Rule-11 wording sent:** in `notes/proposals/craft-step2/learn-results.md` and in the chat message of 17 Nov (same text as the rulebook row to write).
 - **Not covered, said to Sam:** pop-ins and durations (17a, 47), later additions (30, 61, 75), changed minds (71).
 - **Numbers to beat:** at most 3 shot-design notes per film on the next two films, none returned twice.
-- **Read:** `notes/proposals/craft-step2.md` (Final version, Learn step results); job pack "A tool job".
+- **Read:** `notes/proposals/craft-step2.md` (Final version) and `craft-step2/learn-results.md`; job pack "A tool job".
 - **Open rule requests:** rule 11 rewrite and rule 10 line (Q1). Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 - **For Claude:** F8: the board draws through the film's own picture(t), so it can't precede the film file; gate is "before the first move is built". Board pictures not on GitHub (drafts); redraw with `rough.py board FILM OUT --root <git worktree at the commit>`. Old handovers `notes/archive/proposal-route-handovers.md`.
 
