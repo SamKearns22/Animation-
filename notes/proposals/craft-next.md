@@ -1,6 +1,6 @@
 # Proposal: The next craft change after the census: which one, and how
 
-Status: open
+Status: adopted (2026-11-17)
 
 ## Problem
 Sam said Y (16 Nov) to a craft census: every craft note from the last three films sorted by area (sets, effects,

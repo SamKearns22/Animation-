@@ -3,8 +3,9 @@
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** the proposal route (every change through it), 30 (say why a first fix failed), 85 (cost watch).
 - **Done (craft chat 4, Opus medium, 16-17 Nov):** craft census: 159 craft notes from EPR, Blessed, Remakes tagged by area, cause, repeat, cost; ranked per area and across areas in `notes/proposals/craft-census.md` (table: `craft-census/notes.tsv`). Top open lever: shot design (composition 19, camera height 8, frame check 5, continuity 4 = 36 notes). Then proposal `craft-next` through the route: verdict recorded, judge picked helper B (blind), Critiqued 6 found, 3 fixed, 3 named.
-- **Needs Sam:** Option 1 or 2 on `craft-next` (sent in chat 4's message): 1 = a look back at the 36 notes (~0.5%, changes nothing), then every shot gets a frame card checked against the build; 2 = framing lessons F1, F2, F10 into the rulebook with a still check.
-- **Next (on Sam's answer):** Option 1: step 1 learn, **Sonnet** (reading and counting, a clear plan), writes the counts into craft-next.md, then step 2 goes through the route on Opus medium. Option 2: Opus medium writes the rule and builds the still check.
+- **Sam (17 Nov): 'Start with the census.'** Taken as Option 1 of craft-next (the look back first; adopted).
+- **Needs Sam:** nothing now.
+- **Next (craft chat 5, Sonnet, normal effort: reading and counting from a clear plan):** craft-next Final version, Step 1 only: for each of the 36 shot-design notes (craft-census/notes.tsv fixes F-plan, C-height, F-frame, F-cont) find what the plan, sheet or code said for that shot before the note; tag cause (plan wrong or silent / build drifted / Sam's late choice) and seen (still / only moving); counts and shots into craft-next.md under 'Step 1 results'. If more than a third are movement-only, say so to Sam. Then hand to Opus medium for Step 2 through the route.
 - **Numbers to beat:** craft-next: at most 3 shot-design notes per film on the next two films, none returned twice. Change 2: no pose note returned twice on the next two films. Change 1: at most 2 sameness notes, none repeated, on the next two crowd films.
 - **Read:** `notes/proposals/craft-next.md` (Final version); job pack "A tool job".
 - **Open rule requests:** none. Changes made without asking (end-of-film review): as chat 3's list (archived); none new in chat 4.
