@@ -271,27 +271,27 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.39,
+   "cost": 2.98,
    "src": "estimate",
    "sid": "session_01J1JB7Zq8cFSqPvJqxMKrnY",
-   "steps": 99,
-   "hist_k": 217,
+   "steps": 103,
+   "hist_k": 221,
    "kinds": {
-    "tool search": 21.7,
-    "page.py": 4.9,
-    "routine": 0.4,
-    "renders": 3.8,
-    "other": 69.2
+    "tool search": 17.9,
+    "page.py": 4.0,
+    "routine": 0.3,
+    "renders": 3.0,
+    "other": 74.8
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 59,
+    "tool search": 62,
     "whole-file .py read": 0,
     "page.py": 11,
     "routine": 2,
     "renders": 7,
     "pictures": 0,
-    "other": 20
+    "other": 21
    },
    "search": {
     "show": 1,
@@ -302,10 +302,10 @@
     },
     "other": {
      "shared:handover.py": 7,
-     "film notes": 6,
+     "film notes": 7,
      "shared:costwatch.py": 2,
      "shared:mainline.py": 1,
-     "other": 19,
+     "other": 20,
      "shared:stepcost.py": 5,
      "guides": 2,
      "shared:film_engine.py": 2,
@@ -313,7 +313,7 @@
      "shared:modelguard.py": 2,
      "shared:kittests.py": 6,
      "shared:propose.py": 1,
-     "shared:watcher.py": 5
+     "shared:watcher.py": 6
     },
     "ticked": 0,
     "edited film code": false
