@@ -5,7 +5,7 @@
 - **Done (chat 6):** note 4 (Pat's dome, still sent); scenes 6-7 planned (shots 6, 7a-7e, timing to ~68 s, acting rows 8-14, estimate ~24%); built: scenes 4 and 7 at the table (Andy and Pat seated in the reverse, portrait gone, every move on the acting list) and scene 3 (field level, row of four turned three-quarter to screen right per Sam, six plinths, crossbow, katana, uzis, grenade, mace, stapler; no "DLC" sign).
 - **Spent:** chat 6 ~2.6%; film ~14.8%; from here ~9 (total ~24%).
 - **Next:** chat 7, Opus HIGH: build scene 6 (the forest: travelling camera, the four walking three-quarter to screen right with their weapons, gunfire flashes, a flame jet, two morning stars; plan in Shots and The world), then ONE critique pack for scenes 3, 4, 6, 7 (fix or name every fault), then open the Sonnet chat for the whole-film animatic (finish.py, Hook Text, sign-off).
-- **Needs Sam:** Q1 (sound effects) in chat 6's message; the three-quarter tool job for the morning (Sam: three-quarter people "look like shit" next to the front ones: a tool job, Opus high, after the animatic).
+- **Needs Sam:** his recordings and sound effects for animatic 2; the three-quarter tool job for the morning (Sam: three-quarter people "look like shit" next to the front ones: a tool job, Opus high, after the animatic).
 - **Read:** job pack Build; this file's Shots (row 6), The world (Forest), acting list rows 8-9, notes 5-6.
 - **Open rule requests:** none.
 - **For Claude:** milburn.py: REVERSE/ACROSS shot lists, reverse() (table strips split at SPLIT), arming()/field_level_shot() (YAW3 40), forest_shot not yet written (picture() calls it for shot '6'); milburn_sets: LEVEL_CAM, field_level; milburn_props: SHAPES, in_hands, plinth (tag unused); facehouse bald `dome_wide`. Moves: table blocks in story/milburn-moves.txt (places steeple, fold, flung, fists, plead, jab). Kittests failing before this film (named): facehouse_whole_head, round_page. Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
@@ -160,7 +160,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 38 | (Sam, 17 Nov) Scene 6. Cut: travelling alongside the NEETs as they hunt through the thick growth of a forest | planned (shot 6, chat 7 builds) |
 | 39 | Weapons gripped in ways that show each one's personality (goth pleased with the crossbow, rangy unsure with the katana, Swindon gung-ho with the uzis, waif terrified nursing the grenade), with matching faces and acting | planned (acting row 8) |
 | 40 | Milburn VO: "The NEETs will form a unit." | planned (line 8) |
-| 41 | Gunfire rips from the greenery ahead | planned (Q1 sound) |
+| 41 | Gunfire rips from the greenery ahead | planned (sound: Sam supplies for animatic 2) |
 | 42 | A blast of flamethrower fire whips outward | planned |
 | 43 | Morning stars whip from the trees | planned |
 | 44 | Milburn VO: "And will encounter teams of their erstwhile colleagues—" | planned (line 9) |
@@ -215,6 +215,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 1 | 2a, 2b | all | Goth's hair: blue and purple as different strands, not one block (Sam, 17 Nov) | people kit: `hair: ... streaks C` | fixed: wavy strands from the crown, blue and purple in turn (front on; side and back views not built, not used in this film); stills sent |
 
 Decisions made:
+- Sam, 17 Nov (chat 6): "Y" to the budget stop (rule 24, 'sets' 14.88% against 3.72%: mostly the whole film's spend counted against sets, the estimate entered late): carry on, the forest built as flat sliding layers (~1%). Sound effects: "I will find the sound effects in time for animatic 2, along with the dialogue": animatic 1 has stand-in voices and no sound effects.
 - Handover check (chat 6, end) settled by handing on to chat 7, in its build and critique: the board redrawn for the new shots (3, 4a-4c, 6, 7a-7e) and sent with `sent --board`; every table and field pose looked at with posecheck.py at phone size (rule 41; chat 6 looked only at its own stills); head life for Andy and Pat from the voice (rule 74, HEAD_LIFE like Milburn's); scene 6's poses once built.
 - Handover check (chat 6, start) settled: BROKEN kittests (facehouse_whole_head, round_page) failed before this film, named again; NOT CARRIED quotes (note 1 = Sam's chat-5 answers) now carried word for word in note 4 and brief row 53.
 - Sam, 17 Nov (chat 5's Q1-Q7): 1 Y, and the table scene is called **Scene 4** (not shot 5): shots 4a (Andy), 4b
