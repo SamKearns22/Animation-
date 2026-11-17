@@ -1,0 +1,160 @@
+film	note	area	cause	repeat	cost	fix	what
+EPR	O2	sets	tool default	N	S	S-text	sign/shop text spills off its board
+EPR	O4	people	tool default	Y	M	P-same	rioters one face and skin; city mix
+EPR	O5	people	tool default	Y	S	P-same	bald heads wrong size (Blessed 14 too)
+EPR	O6	sets	tool default	N	S	S-text	sign font reads as computer text
+EPR	O7	people	tool default	Y	S	P-same	too many bald heads in one place
+EPR	S2	sets	missing check	N	S	S-ref	gaps between the flat buildings
+EPR	S3	effects	taste	N	S	E-var	fireworks: from the crowd, higher, more, spread in time
+EPR	S4	effects	no composition	N	M	E-size	burning skip on the police line, flames spill far over the lid
+EPR	S5	people	taste	N	S	P-stage	second police rank two paces back in the gaps
+EPR	G3	people	missing check	N	M	P-contact	glass attacker swings at air, no contact
+EPR	G4	sets	missing check	Y	L	S-clip	looters walk through the wall; camera edge on window
+EPR	G5	sets	taste	N	S	-	mannequin swapped for a beer crate
+EPR	G6	effects	missing check	N	S	E-life	landed glass dances on the ground
+EPR	G7	people	taste	N	S	P-contact	street-sign kick: no run-up, weak
+EPR	G8	people	tool default	N	S	P-draw	white glints on backs of heads
+EPR	G9	people	missing check	N	S	P-contact	looters mime taking with nothing in hand
+EPR	G10	people	taste	N	S	-	action freezes when sirens start
+EPR	G12	framing	taste	N	S	F-plan	more foreground protesters
+EPR	G13	people	no composition	N	M	P-stage	sign man flaps the sign after the window
+EPR	G14	people	missing check	N	M	S-clip	looters vanish mid-frame (pop)
+EPR	G15	effects	taste	N	S	-	rocks also hit the upper window
+EPR	G16	people	tool default	Y	M	P-same	rioter clothing all alike (Frankfurt photo)
+EPR	G17	people	tool default	Y	M	P-motion	looters leave with the same calm walk
+EPR	G18	effects	taste	N	S	-	kicked board should fly further
+EPR	G20	effects	missing check	N	S	E-place	glass cracks spread beyond the pane
+EPR	G21	people	tool default	Y	M	P-motion	gun collectors same moves, same direction
+EPR	G22	people	missing check	Y	M	P-contact	kick does not land: board leaves before the foot
+EPR	G23	effects	missing check	Y	S	E-place	glass impacts drawn over the metal shutter
+EPR	F1	cameras	no composition	N	L	C-height	France camera too low: a mess of movement
+EPR	F2	people	tool default	Y	M	P-alive	police static, not defending
+EPR	F3	framing	no composition	N	L	F-plan	restage France so each piece has its moment
+EPR	F4	framing	no composition	N	M	F-plan	action closer to the statue, people on the plinth
+EPR	F5	people	tool default	Y	M	P-same	police all the same model
+EPR	F6	effects	tool default	N	S	E-size	stones too big and shiny
+EPR	F7	framing	no composition	N	S	F-plan	too little gap between crowd and police
+EPR	F8	sets	taste	N	M	-	remove burning bikes; cannon through a split
+EPR	F9	people	tool default	Y	M	P-motion	every group moves in lockstep
+EPR	F10	sets	missing check	N	M	S-ref	burning car drawn without a roof (photo has one)
+EPR	F11	effects	tool default	N	S	E-var	every missile the same stone
+EPR	F12	people	taste	N	S	-	approach walk looks bad
+EPR	F13	framing	no composition	Y	M	F-plan	empty paving in a mass riot
+EPR	F14	effects	missing check	N	S	E-place	gas canister lands among the police
+EPR	F15	people	tool default	Y	M	P-same	city mix missing from crowd sprites (repeat O4)
+EPR	F16	people	tool default	Y	M	P-motion	throws in sync (repeat F9)
+EPR	F17	sets	tool default	N	M	S-ref	press hut low detail, its fire wrong
+EPR	F18	people	missing check	Y	M	P-alive	police absorb hits without shields (repeat F2)
+EPR	F19	people	tool default	Y	S	P-same	Germany's clothes logic not applied to France
+EPR	F20	effects	tool default	Y	S	E-size	rocks still too big (repeat F6)
+EPR	F21	effects	tool default	N	S	E-life	smoke hangs limply
+EPR	F22	people	missing check	N	S	P-contact	crowd slides backwards at the cannon
+EPR	F23	framing	no composition	N	S	F-plan	truck and water bunched at the end
+EPR	A1	cameras	no composition	N	M	C-height	perspective flattens: draw back and up
+EPR	A3	framing	no composition	N	M	F-frame	end scene re-checked against the wider framing
+EPR	A4	framing	no composition	N	L	F-plan	three crowds restaged in the square
+EPR	A5	effects	taste	N	S	E-place	flames streak out of the windows
+EPR	A6	sets	no composition	N	M	-	ministry covered in bullet holes and craters
+EPR	A7	framing	no composition	N	M	F-plan	helicopter arrives too early
+EPR	A9	people	tool default	N	S	P-draw	odd highlight round the rider
+EPR	A10	cameras	no composition	N	S	C-height	alley camera too close
+EPR	A11	people	missing check	N	S	P-contact	speaker's eyes not on the other rider
+EPR	A12	people	missing check	Y	M	P-pose	shrug does not read
+EPR	A16	sets	missing check	N	S	S-ref	no raised part of the square in reality
+EPR	A17	people	tool default	Y	M	P-same	crowd all hooded men; gold hats 70 of 147
+EPR	A18	people	tool default	Y	S	P-same	police identical
+EPR	A19	effects	tool default	N	M	E-place	craters and holes pasted on, not in the wall
+EPR	A20	sets	tool default	N	S	S-text	BANKA pasted words, not a sign
+EPR	A22	people	tool default	Y	S	P-same	both riders same eyes
+EPR	A24	people	tool default	N	S	P-same	women's hair on men; blond on dark skin
+EPR	A25	people	tool default	Y	M	P-draw	arms sink into long hair
+EPR	A26	effects	missing check	N	S	E-place	fire glow does not light the sign
+EPR	A27	effects	tool default	Y	M	E-place	flames pasted on walls, not out of windows
+EPR	A28	framing	taste	N	S	-	first two mopeds too fast
+EPR	A30	people	missing check	Y	M	P-pose	shrug barely legible (repeat A12)
+EPR	A31	people	no composition	N	S	F-plan	selfie man just standing there
+EPR	A33	people	taste	N	S	-	wife's sunglasses and visor
+EPR	A34	people	missing check	N	S	P-contact	driver's mouth and head not moving on his line
+EPR	A35	people	taste	Y	S	P-pose	linger on the shrug, gentler head shake
+EPR	A36	people	tool default	N	S	P-draw	black square on the rider's lap
+EPR	A37	effects	missing check	N	S	E-life	flares look frozen in the air
+EPR	AN2-1	people	missing check	Y	M	P-draw	frames missing (arms folded, black frames)
+Blessed	1	people	tool default	N	M	P-like	small head, double-size chin
+Blessed	2	people	tool default	Y	S	P-like	chin still big (repeat 1)
+Blessed	4	people	tool default	N	M	P-extras	journalists from behind are blobs
+Blessed	5	people	tool default	N	M	P-extras	prisoners wrong scale, no mouths
+Blessed	6	people	missing check	N	M	P-pose	lying pose wrong
+Blessed	7	framing	no composition	N	M	F-plan	press far from the gate; Brand a speck
+Blessed	8	people	missing check	N	S	P-contact	press face walls, not him
+Blessed	9	people	tool default	N	S	P-extras	ears drawn over long hair from behind
+Blessed	11	cameras	no composition	N	S	C-height	camera lower, among the journalists
+Blessed	12	framing	no composition	N	M	F-plan	press crowd far too thin
+Blessed	13	people	tool default	N	M	P-face	three-quarter Brand; judge has no mouth
+Blessed	14	people	tool default	N	S	P-same	hijab no neck; bald heads huge
+Blessed	15a	people	missing check	Y	S	P-face	no mouths again
+Blessed	15b	framing	no composition	N	S	F-frame	half the frame is empty wall
+Blessed	16	people	missing check	N	M	P-pose	van pose: limbs detached
+Blessed	17a	sets	missing check	N	S	F-cont	wall detail pops in
+Blessed	17b	people	taste	N	S	P-pose	sigh too brief to read
+Blessed	18	cameras	taste	N	M	C-height	lie flat, camera from above
+Blessed	20	sets	tool default	N	M	S-ref	crude drawn prison set
+Blessed	21	people	tool default	Y	S	P-face	three-quarter shows one eye (repeat 13)
+Blessed	22	framing	no composition	N	M	F-plan	TV room: inmates crammed, set restaged
+Blessed	23a	cameras	taste	N	S	C-move	zoom lands on torso, not face
+Blessed	23b	people	tool default	N	S	P-draw	neck join wrong
+Blessed	24	people	tool default	Y	M	P-extras	press pack generic: no cameras, no work clothes
+Blessed	28	people	missing check	N	S	S-ref	guard does not look like an HM Prison officer
+Blessed	29	people	missing check	Y	L	P-like	Walliams not recognisable
+Blessed	30	framing	no composition	N	M	F-plan	Walliams belongs in the established shot
+Blessed	31	cameras	taste	N	S	C-move	camera should approach the pack more
+Blessed	32	framing	no composition	Y	L	F-plan	r2 clip terrible: staging, Brand small, black square
+Blessed	33	framing	no composition	N	S	F-plan	pack should be in front of him like an audience
+Blessed	34	people	missing check	N	S	P-pose	gesture reads as smelling his elbow
+Blessed	36	people	tool default	N	S	P-alive	judge static
+Blessed	37	cameras	taste	N	S	F-frame	dock frame a quarter screen higher
+Blessed	39	people	tool default	Y	L	P-pose	sitting pose still horrible (open)
+Blessed	40	people	taste	Y	S	P-pose	sigh deeper (repeat 17b)
+Blessed	41	effects	tool default	N	S	E-life	streaked tears look like snot
+Blessed	42	framing	missing check	Y	S	F-frame	subject not centred in every shot
+Blessed	43	sets	missing check	N	M	S-ref	pool room should never have passed
+Blessed	45	people	missing check	Y	S	P-face	newsreader loses his mouth (repeat)
+Blessed	46	framing	missing check	N	M	F-cont	at the cut everything moves around
+Blessed	47	people	missing check	N	S	P-pose	plea reads as strangling himself
+Blessed	49	people	taste	N	S	P-alive	Brand should preen at the cameras
+Blessed	51	cameras	tool default	N	S	C-move	zoom sudden and violent
+Blessed	52	people	missing check	Y	S	P-face	newsreader off the house face
+Remakes	30	people	tool default	N	S	P-draw	Link's corner head fractured
+Remakes	31	people	taste	N	S	P-pose	face more sceptical
+Remakes	32	framing	no composition	N	L	F-plan	camp staging wrong: men behind KG
+Remakes	33	framing	taste	N	M	F-plan	KG's face lifted; Link side on
+Remakes	34	people	missing check	N	S	P-contact	wings miss the neck
+Remakes	41	people	taste	N	S	-	Link stares terrified into KG's eyes
+Remakes	44	people	tool default	N	M	P-alive	KG too static: eyes and arms frozen
+Remakes	46	effects	tool default	N	M	E-life	blast: one frame fine, next all on the ground
+Remakes	47	framing	no composition	N	M	F-plan	soldier fires in KG's face for seconds
+Remakes	48	effects	tool default	N	M	E-life	bullet impacts and blood rudimentary
+Remakes	49	cameras	no composition	N	S	C-height	zoom in on the line-up
+Remakes	53	people	taste	N	S	-	front-on Link, fuller mouth
+Remakes	54	people	tool default	Y	M	P-alive	KG needs more dynamic faces (repeat 44)
+Remakes	56	cameras	no composition	N	M	C-height	reverse shot needed (camera 180)
+Remakes	57	people	tool default	Y	S	P-alive	KG too still at the wall (repeat 44)
+Remakes	58	people	taste	Y	S	P-pose	Link's face and Navi's bounce (changed decision)
+Remakes	60	sets	no composition	N	M	S-ref	street modelled on Sam's picture
+Remakes	61	sets	missing check	N	S	F-cont	a second castle in the reverse shot
+Remakes	62	people	tool default	N	S	P-pose	KG's whole body tips to aim
+Remakes	63	framing	no composition	Y	S	F-plan	right soldier kneels off the main shot (changed decision)
+Remakes	65	people	taste	Y	S	-	dead gunman looks like a laid-down model
+Remakes	67a	framing	missing check	N	S	F-frame	grenade strike under the app's buttons
+Remakes	67b	people	tool default	N	S	P-draw	2D swivel on turns
+Remakes	67c	effects	missing check	N	S	E-place	dirt kicks where nothing lands
+Remakes	68a	cameras	taste	N	S	C-move	zoom out halfway
+Remakes	68b	sets	missing check	N	S	S-clip	townsfolk stood in house walls
+Remakes	69a	effects	taste	N	S	E-size	gentle puff, not a dust burst
+Remakes	69b	people	taste	N	S	-	KG works Link up and down the wall
+Remakes	70	people	missing check	N	S	P-contact	kneeling man lifts off the ground
+Remakes	71	cameras	taste	Y	S	C-height	line-up 25% further out (reverses 49)
+Remakes	72	people	missing check	Y	S	P-contact	grip sits on the respirator (repeat 34)
+Remakes	73	sets	tool default	N	S	-	near flower box hazed like the background
+Remakes	75	sets	missing check	N	S	F-cont	banner in one shot, not the other
+Remakes	76	sets	missing check	N	S	S-clip	boots poke out under the tower box
+Remakes	77	people	missing check	N	S	P-pose	man wipes in; legs one stiff tube
