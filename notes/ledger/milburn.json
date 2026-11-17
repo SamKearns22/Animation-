@@ -115,6 +115,69 @@
     "ticked": 0,
     "edited film code": true
    }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "866dad74",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.74,
+   "src": "estimate",
+   "sid": "session_01J1JB7WLTrNZ2uiTahT7kqM",
+   "steps": 118,
+   "hist_k": 219,
+   "kinds": {
+    "film-file search": 7.1,
+    "tool search": 19.8,
+    "renders": 1.9,
+    "pictures": 4.2,
+    "other": 67.0
+   },
+   "calls": {
+    "film-file search": 20,
+    "tool search": 61,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 5,
+    "pictures": 15,
+    "other": 19
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 20
+    },
+    "other": {
+     "other": 3,
+     "shared:handover.py": 3,
+     "film notes": 4,
+     "shared:acting.py": 9,
+     "shared:blessed.py": 4,
+     "shared:mouths.py": 2,
+     "shared:people_parts.py": 7,
+     "shared:people.py": 3,
+     "shared:sitting.py": 1,
+     "shared:ad_vanced_notice_sets.py": 1,
+     "shared:patriots4_cast.py": 1,
+     "shared:moves.py": 1,
+     "shared:views.py": 1,
+     "shared:film_engine.py": 1,
+     "shared:mixaudio.py": 1,
+     "shared:series.py": 1,
+     "shared:burnham_film.py": 1,
+     "shared:critique.py": 10,
+     "guides": 1,
+     "shared:posecheck.py": 4,
+     "shared:headlife.py": 1,
+     "shared:preflight.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
   }
  ],
  "checks": {},
