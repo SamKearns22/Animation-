@@ -32,7 +32,7 @@ KINDS = ['film-file search', 'tool search', 'whole-file .py read', 'page.py', 'r
          'helpers']
 import modelguard  # noqa: E402  (cost-fixes, model guard: 'routine' = what the guard stops on Opus; its share on an
 #                    Opus row is the film's routine-on-Opus figure, number to beat under 0.5% of a week a film)
-SEARCH_CMDS = {'grep', 'egrep', 'rg', 'ack', 'find', 'awk', 'head', 'tail', 'ls'}
+SEARCH_CMDS = {'grep', 'egrep', 'rg', 'ack', 'find', 'awk', 'head', 'tail'}   # ls is not a search (finder-use, 17 Nov)
 IMG = re.compile(r'\.(png|jpe?g|gif|webp)$', re.I)
 RENDER = re.compile(r'\b(final|animatic|render|clip|sheet|finish\.py|ffmpeg|blender)\b')
 COMPACT = 0.6            # a step whose history is under 60% of the one before follows a compaction
@@ -195,9 +195,91 @@ def measure(path, film=None, helpers=True):
             if hm:
                 by['helpers'] += hm['usd']
     total = sum(by.values())
-    return {'steps': len(steps), 'hist': ctx[-1], 'usd': round(total, 4),
+    try:
+        srch = search_record(path, film)
+    except Exception:
+        srch = None
+    return {'steps': len(steps), 'hist': ctx[-1], 'usd': round(total, 4), 'search': srch,
             'kinds': {k: round(100 * v / total, 1) for k, v in by.items() if total and round(100 * v / total, 1)},
             'calls': {k: sum(1 for _, kk in calls.values() if kk == k) for k in KINDS if k != 'helpers'}}
+
+
+SHOW = re.compile(r'(?:^|[;&|\n(]\s*)(?:cd \S+ && )?python3?\s+\S*page\.py\s+[\w-]+\s+show\b')    # a finder call (page.py FILM show ...)
+MISS = 10                                            # film searches within 10 calls after a show: the show missed
+NOTES_RE = re.compile(r'notes/[\w./-]*\.md')
+
+
+def _target(name, inp):
+    """Where a search that is not on the film's code looks: 'shared:FILE.py', 'film notes', 'guides', 'other'."""
+    t = ' '.join(str((inp or {}).get(k, '')) for k in ('command', 'path', 'glob', 'pattern', 'file_path'))
+    m = re.search(r'(?:source|\.claude/hooks)/([A-Za-z0-9_]+\.py)', t)
+    if m:
+        return 'shared:' + m.group(1)
+    if NOTES_RE.search(t) or 'story/' in t:
+        return 'film notes'
+    if 'guides/' in t or 'CLAUDE.md' in t:
+        return 'guides'
+    return 'other'
+
+
+def _edits_film(name, inp, film_re):
+    inp = inp or {}
+    if name in ('Edit', 'Write', 'MultiEdit', 'NotebookEdit'):
+        return bool(film_re.search(inp.get('file_path', '')))
+    cmd = inp.get('command', '') if name == 'Bash' else ''
+    return bool(film_re.search(cmd) and re.search(r"sed -i|open\([^)]*['\"]w['\"]|>\s*source/", cmd))
+
+
+def _ticked(name, inp):
+    """'[x]' lines a call adds to a notes file (approximate: Edit new vs old text; a shell line naming notes/)."""
+    inp = inp or {}
+    if name in ('Edit', 'Write') and NOTES_RE.search(inp.get('file_path', '')):
+        return max(0, (inp.get('new_string') or inp.get('content') or '').count('[x]')
+                   - (inp.get('old_string') or '').count('[x]'))
+    if name == 'Bash' and NOTES_RE.search(inp.get('command', '')):
+        return max(0, inp['command'].count('[x]') - inp['command'].count('[ ]'))
+    return 0
+
+
+def search_record(path, film=None):
+    """finder-use Learn (Sam's 1, 17 Nov): per chat, in call order: show calls; film-code searches split into before
+    the first show / a miss (within MISS calls after a show) / later after a show / in a chat with no show; other
+    searches by target (shared tools named per file); notes ticked; whether the chat edited the film's code."""
+    film_re = _film_paths(film)
+    seq = []
+    for raw in open(path, encoding='utf-8', errors='replace'):
+        if '"tool_use"' not in raw:
+            continue
+        try:
+            d = json.loads(raw)
+        except ValueError:
+            continue
+        if d.get('isSidechain') or d.get('type') != 'assistant':
+            continue
+        for b in (d.get('message') or {}).get('content') or []:
+            if isinstance(b, dict) and b.get('type') == 'tool_use':
+                seq.append((b.get('name'), b.get('input') or {}))
+    out = {'show': 0, 'film': {'before show': 0, 'miss': 0, 'after show': 0}, 'other': {}, 'ticked': 0,
+           'edited film code': False}
+    last_show = None
+    for i, (name, inp) in enumerate(seq):
+        cmd = inp.get('command', '') if name == 'Bash' else ''
+        if SHOW.search(cmd):
+            out['show'] += 1
+            last_show = i
+            continue
+        k = kind_of(name, inp, film_re)
+        if k == 'film-file search':
+            key = 'before show' if last_show is None else 'miss' if i - last_show <= MISS else 'after show'
+            out['film'][key] += 1
+        elif k == 'tool search':
+            t = _target(name, inp)
+            out['other'][t] = out['other'].get(t, 0) + 1
+        out['ticked'] += _ticked(name, inp)
+        out['edited film code'] |= _edits_film(name, inp, film_re)
+    if not out['show']:
+        out['film'] = {'no show': out['film']['before show']}
+    return out
 
 
 def line(m):

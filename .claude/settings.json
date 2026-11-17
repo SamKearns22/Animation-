@@ -52,6 +52,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "Bash|Grep|Glob|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/finderwarn.py",
+            "timeout": 10
+          }
+        ]
       }
     ]
   }

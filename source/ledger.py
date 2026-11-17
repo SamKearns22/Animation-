@@ -534,6 +534,8 @@ def mergefile(o, a, b, path):
 def _put_measure(row, m):
     """stepcost's figures onto a ledger row: steps, history at the end (k tokens), each kind's share of the chat (%)."""
     row.update(steps=m['steps'], hist_k=m['hist'] // 1000, kinds=m['kinds'], calls=m['calls'])
+    if m.get('search'):                           # finder-use Learn (Sam's 1, 17 Nov): the chat's search record
+        row['search'] = m['search']
 
 
 def this_sid():

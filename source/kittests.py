@@ -3215,6 +3215,36 @@ def message_saver_keeps_typed_messages():
     return not bad, '; '.join(bad) or 'typed (human, remote, none) saved; task notices and peers skipped; old one dropped "human"'
 
 
+@test
+def finder_reminder_per_chat():
+    """finder-use (Sam's 1, 17 Nov): the per-day flag went silent for every chat once any chat called show (16 Nov:
+    6 of 19 chats never did). Now: one line at a chat's first film-code search with no show; the end check names
+    THIS chat when it edited the film's code with no show."""
+    import io, contextlib, tempfile
+    import handover as H
+    W = _hook('finderwarn')
+    out = io.StringIO()
+    with contextlib.redirect_stdout(out):
+        ok = W.test() == 0
+    bad = [] if ok else [out.getvalue().strip()]
+    tmp = tempfile.mkdtemp()
+
+    def rec(tag, cmds):
+        p = os.path.join(tmp, tag + '.jsonl')
+        with open(p, 'w') as f:
+            for c in cmds:
+                f.write(json.dumps({'type': 'assistant', 'message': {'content': [
+                    {'type': 'tool_use', 'name': 'Bash', 'input': {'command': c}}]}}) + '\n')
+        return p
+    grep, edit = 'grep -n "def flag" source/protest_tiers.py', "sed -i 's/a/b/' source/protest_tiers.py"
+    show = 'python3 source/page.py protest-tiers show "the flag" --shot 3'
+    if not H.finder_faults('protest-tiers', rec('noshow', [grep, grep, edit])):
+        bad.append('a chat that edited film code with no show was not named')
+    if H.finder_faults('protest-tiers', rec('show', [show, grep, edit])):
+        bad.append('a chat that used show was named')
+    return not bad, '; '.join(bad) or 'one line at the first film search with no show; end names only the chat that skipped it'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

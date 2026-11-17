@@ -264,7 +264,8 @@ def _log(film, note, shot, at, res):
     top = res[0][0].split()[0] if res else '-'
     with open(os.path.join(d, f'{names(film)[1]}-show.log'), 'a', encoding='utf-8') as f:
         f.write(f'{datetime.now().isoformat(timespec="seconds")}\t{shot or "-"}\t{at if at is not None else "-"}\t'
-                f'{top}\t{" ".join(note.split())[:100]}\n')
+                f'{top}\t{" ".join(note.split())[:100]}\t'
+                f'{os.environ.get("CLAUDE_CODE_REMOTE_SESSION_ID", "local").split("_")[-1][-8:]}\n')   # finder-use: the chat
 
 
 def show(film, note, budget=40, shot=None, at=None, who=None):

@@ -21,6 +21,7 @@ MAP
                      the chat reads in place of the notes file
   branches ......... in end (startup-fixes 2, 16 Nov): every branch source/branches.py lists (work never on the main
                      line, last 7 days) must be merged or named in the notes
+  finder ........... in end (finder-use, 17 Nov): this chat edited the film's code with no page.py show call
   model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
                      sending, filing) nor give Sonnet a fix or build (Sam, 15 Nov: chat 30 rendered on Opus)
   dump ............. list_events results saved to files (kinds ["user"], only when there is no log; never page a
@@ -404,26 +405,22 @@ def end_stamp(rec):
         f.write(f'{datetime.now(timezone.utc).isoformat(timespec="minutes")}\t{sid}\n')
 
 
-def finder_faults(film):
-    """Code-finder change 1 (Sam's 1, 16 Nov): a chat that changed the film's code today with no `page.py show` call
-    logged today (notes/logs/FILM-show.log) went hunting by hand; say so, so the miss is seen."""
-    if not film:
+def finder_faults(film, rec=None):
+    """finder-use change 1 (Sam's 1, 17 Nov), replacing the per-day flag (one show call anywhere that day silenced it
+    for every chat; it never fired on 16 Nov): THIS chat edited the film's code with no `page.py show` call: say so,
+    with its count of hand searches of the film's code (stepcost.search_record, from the chat's own record)."""
+    if not film or not rec:
         return []
-    from datetime import date
-    code = film.replace('-', '_')
-    day = date.today().isoformat()
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import stepcost
     try:
-        ch = subprocess.run(['git', 'log', f'--since={day} 00:00', '--name-only', '--format='], cwd=ROOT,
-                            capture_output=True, text=True).stdout
+        r = stepcost.search_record(rec, film)
     except Exception:
         return []
-    if not re.search(rf'source/{code}(_\w+)?\.py', ch):
+    if not r['edited film code'] or r['show']:
         return []
-    log = os.path.join(ROOT, 'notes', 'logs', f'{film.replace("_", "-")}-show.log')
-    if os.path.exists(log) and any(ln.startswith(day) for ln in open(log, encoding='utf-8')):
-        return []
-    return [f'FINDER: the film\'s code changed today with no `page.py {film} show` call logged: each note looks first with '
-            'show --shot --at --who (or say in the notes why not)']
+    return [f'FINDER: this chat edited the film\'s code with no `page.py {film} show` call ({r["film"].get("no show", 0)} '
+            'hand searches of its code): each note looks first with show --shot --at --who (or say in the notes why not)']
 
 
 def unrouted_faults(rec):
@@ -574,7 +571,7 @@ def main(argv):
             import ledger
             film = ledger.film_of(rec)
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
-                      + finder_faults(film) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
+                      + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
                       + sentence_faults()
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
