@@ -415,15 +415,15 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.67,
+   "cost": 2.13,
    "src": "estimate",
    "sid": "session_01GznaARX5kbcSwMuCjDpSbc",
-   "steps": 25,
-   "hist_k": 179,
+   "steps": 26,
+   "hist_k": 180,
    "kinds": {
-    "tool search": 20.9,
+    "tool search": 20.7,
     "whole-file .py read": 3.3,
-    "other": 75.8
+    "other": 76.0
    },
    "calls": {
     "film-file search": 0,
