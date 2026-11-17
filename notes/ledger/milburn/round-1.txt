@@ -79,3 +79,92 @@ critique, pass 2: faults fixed as one list: soft light edge on the shaft wall; t
 
 critique, pass 2: faults fixed as one list: soft light edge on the shaft wall; the four go from shaded to lit; wider hazard edge reads as the platform; long soft grass gusts; goth and Swindon lad broader; heavier glasses, greyer hair; steeper closer aerial; left open: ["1,7 P4: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes t", '1-3,7-10 A3 P2: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.', '1,7 O3: name sign is unreadable at phone size in 1, and cut to "Milburn" in 7; glasses and sign are the same tiny scale.', '1,7 P12: mouth closed in the still; a frame mid-word would show it moves.', '1,7 P1: hands are hidden behind the table; a wider frame would show them.']
 
+== critique, round 1 pass 3 (2026-11-17): 7 fault(s), 2 can't tell
+-- look.md --
+1: bearded-free man in suit, glasses, hands clasped at green desk; small name card "Alan Milburn"; calm.
+2: same man, mouth open speaking; name card "Alan Milburn"; green curtain, red chairs.
+3: four people stand in grey round room: purple-afro person, red-sweater man, grey-sweater man, small girl; neutral.
+4: same group, grey-sweater man mouth open; purple-afro person, red-sweater man; yellow window behind; neutral.
+5: same group wider, grey-sweater man mouth open; blank black strip below; neutral faces.
+6: close on suited man, glasses, smiling, hands clasped; card reads "Milburn"; green curtain.
+7: same close shot, mouth wide open speaking; card reads "Milburn"; cheerful.
+8: close purple-afro person, dull stare, girl in flower dress and red-sweater man behind; grim.
+9: close grey-sweater man, dark hair, smiling mouth open showing teeth; grey wall.
+10: red-sweater man with shield badge, flat expression; grey-sweater man behind, mouth open.
+11: purple-afro person close, blank tired stare; girl and red-sweater man behind; cream wall.
+12: grey-sweater man, small round open mouth, tired eyes; yellow window, pole behind.
+13: red-sweater man with apple shield badge, flat stare; grey-sweater man edge, mouth open.
+14: purple-afro person, blank stare; girl with glasses and flower dress; red-sweater man beside.
+15: grey-sweater man, round open mouth, tired eyes; yellow window, grey pole.
+16: red-sweater man flat stare, apple badge; grey-sweater man at right edge, mouth open.
+-- result.md --
+## Faults
+FAULT P2 [4, 5, 11-16]: the brief says they start to look up (4) and all four look up on 'training' (5); every face stares straight at camera, heads level, no upward glance in any close-up.
+FAULT P2 [3, 10, 13, 16]: Swindon lad should be chest out and squinting; he has a flat, slack face with open eyes and no puffed chest.
+FAULT P2 [2, 7]: the beat is a tiny lean in and nod on 'simple' with the smile growing; the pose matches panel 1/6 (same lean, same head height), only the mouth changes.
+FAULT P2 [9]: rangy lad's mouth should hang open vacant; here it is a toothy grin, reading cheerful, not blank.
+FAULT P1 [1, 2, 6, 7]: Milburn's folded hands hover above the red folder with a visible gap of desk; they do not rest on it.
+FAULT P4 [1, 2, 6, 7]: reference has thick, dark, chunky frames, deep lines and an older face; ours has thin light rectangular glasses and a smooth young face.
+FAULT A1 [3-5]: the brief's lift platform rising up a shaft is not visible; people stand on a flat grey floor with a hazard stripe, and shots 3-5 show no rise.
+CAN'T TELL P2 [3, 8, 11, 14]: shy girl "nervous" - she is tiny or half hidden; a full-size crop of her face is needed.
+CAN'T TELL P14 [12, 15]: heavy lids and tiny pupils; pupil-in-outline can't be confirmed without a larger crop.
+CAN'T TELL A4 [1-16]: no Hook Text frame supplied; a frame with the Hook Text box is needed.
+
+## Checked
+1-16
+
+## Cold look
+Look.md named the right things but called the look-up beat nothing: I wrote "neutral" and "tired" for 4, 5, 11-16 and never noticed no one looks up. I read the lad's open mouth as speaking, though only Milburn speaks. I missed that the platform and the lift movement are absent, and wrote "bearded-free" for panel 1, an odd phrase that adds nothing.
+
+## Not on the list
+- Faces stay the same tone when the light arrives (3 vs 4, 5); suggested line: lit shot must light the people, not only the wall.
+- Goth girl's hair has a second inner outline reading as a shower cap or hood; suggested line: hair reads as one mass.
+- Panel 9 close-up shows a hard step in wall colour at its left edge; suggested line: crops show no seams.
+- Panels 3-5 are nearly identical; suggested line: each beat differs visibly from the previous at phone size.
+
+== critique, round 1 pass 4 (2026-11-17): 10 fault(s), 2 can't tell
+-- look.md --
+1: Man with glasses, suit, blue tie, red sash, hands clasped at green table; name card "Alan Milburn"; calm.
+2: Same bearded-free man, glasses, mouth open talking; red sash with gold badge; name card text tiny.
+3: Four people stand in grey round hall: purple-haired woman, girl, red-sweater boy, grey-sweater man singing.
+4: Same four standing, wider crop, cream wall, windows; man in grey mouth open; neutral faces.
+5: Same group smaller, left-aligned, black bar beside; purple-haired woman, red boy, grey man.
+6: Close on glasses man, suit, blue tie, red sash, clasped hands; smiling; "Milburn" card cut off.
+7: Same close shot, mouth wide open, eyebrows raised, red sash gold badge; "Milburn" card.
+8: Close purple-haired woman, flat stare; girl in flowered dress and red-sweater boy behind.
+9: Dark-haired man in grey sweater, mouth open small "o", neutral stare, grey wall.
+10: Red-sweater boy with shield badge, mouth closed, grey-sweater man partly at right.
+11: Purple-haired woman, closed mouth, tired eyes; girl with glasses, red boy behind; cream wall.
+12: Dark-haired man in grey sweater, mouth open "o", window behind, cream wall.
+13: Red-sweater boy, shield badge, closed mouth, grey man partly right edge, cream wall.
+14: Purple-haired woman, closed lips, flowered-dress girl with glasses, red boy at right.
+15: Dark-haired man grey sweater, mouth open "o", window and pole behind.
+16: Red-sweater boy with badge, closed mouth; grey-sweater man partly right, mouth open.
+-- result.md --
+## Faults
+FAULT P2 [4, 5, 11-16]: all four face camera; nobody looks up; 4 and 5 match 3.
+FAULT A1 P1 [1, 2, 6, 7]: red folder reads as a sash; hands sit below it, not on it.
+FAULT M3 M1 [1, 2, 6, 7]: folder thin in 1, wide with gold clasp in 2; clasp pops in.
+FAULT P4 [1, 2, 6, 7]: thin glasses; reference has thick dark frames; face too young.
+FAULT P2 [3, 8, 10, 13, 16]: Swindon lad has no chest out or squint; shy girl not nervous.
+FAULT P12 [9, 11, 12, 14, 15]: rangy lad's mouth always open; shy girl's opens in 11, 14 only, with no words.
+FAULT A1 [3-5, 8-16]: shaft reads as a round hall; no platform or rising.
+FAULT P4 [3-5, 8-16]: young people have middle-aged face lines.
+FAULT A4 [6, 7]: "Milburn" card cut by left edge.
+FAULT P11 [8, 11, 14]: line across goth girl neck base reads as a choker.
+CAN'T TELL P5 [1, 2, 6, 7]: no arms visible; a shoulder crop would show.
+CAN'T TELL P14 [8-16]: heavy-lidded tiny eyes; a larger eye crop would show.
+
+## Checked
+1-16
+
+## Cold look
+I called the folder a "red sash" with a "gold badge": unreadable (A1). I wrote "singing" for a hanging-open mouth. I missed that nobody looks up, and read the shaft as a hall.
+
+## Not on the list
+Hair cut by the frame edge, goth girl in 3-5, 8, 11, 14; suggested line: nothing important is cropped by the frame.
+Lit window at chest height behind the goth girl in 8; suggested line: set details do not collide with a body.
+Light shows only on the wall, not on skin or clothes; suggested line: lighting changes show on people too.
+
+critique, pass 4: faults fixed as one list: hunt 2: hands now rest on the folder at rest and on the lean (hands placed lower, the table laid back only below his hands); left open: ['4-5,11-16 P2: all four face camera; nobody looks up; 4 and 5 match 3.', '1-2,6-7 M3 M1: folder thin in 1, wide with gold clasp in 2; clasp pops in.', '1-2,6-7 P4: thin glasses; reference has thick dark frames; face too young.', '3,8,10,13,16 P2: Swindon lad has no chest out or squint; shy girl not nervous.', "9,11-12,14-15 P12: rangy lad's mouth always open; shy girl's opens in 11, 14 only, with no words.", '3-5,8-16 A1: shaft reads as a round hall; no platform or rising.', '3-5,8-16 P4: young people have middle-aged face lines.', '6-7 A4: "Milburn" card cut by left edge.', '8,11,14 P11: line across goth girl neck base reads as a choker.']
+

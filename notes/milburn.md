@@ -1,14 +1,15 @@
 # Notes for Milburn (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 74 (moves checked against the acting list), 11 (board seen: moves may start), 89 (moves critique).
-- **Done (chat 2):** `source/milburn.py` (3 shots, 11 s), Cabinet Room on the places kit (+5 meeting-table pieces: table top, curtain, tumbler, name card, folder), lift shaft and field paintings (`milburn_sets.py`), critique 2 hunts (fixed 13, named 5), cast sheet and shot board sent to Sam (board recorded).
-- **Spent:** chat 2 about 2.5% (Opus, ~95 steps, 2 helpers); this quarter ~5% of a week so far, on estimate.
-- **Next:** chat 3, Opus medium (from a clear plan): `story/milburn-moves.txt` from the acting list (Milburn's calm pleased look, lips on line 1, hands folded on the folder; the four's faces and the look-up on "training"), then a rehearsal clip of 2a. Sam's notes on the board come first.
-- **Needs Sam:** notes on the board and cast sheet (welcome, not blocking); his recordings of lines 1-2 when ready.
-- **Read:** job pack Build (Moves rows); `guides/pose-gallery.md` seated rows; acting list below.
+- **Rules that bite next:** 59 (pre-flight before the animatic), 75 (Hook Text in the band above his head), 74 (re-time moves on Sam's takes).
+- **Done (chat 3):** `story/milburn-moves.txt` (moves kit, `acting check` clean): Milburn seated, pleased, lips on line 1, hands on the folder, nod on "essence", lean in and nod on "simple"; the four's faces (goth unimpressed, rangy lad mouth hanging, Swindon lad chest out and squinting, waif shrinking) and the look-up on "training" (head lifts, eyes up). Rehearsal clips of shot 1, 2a, 2b sent (2 re-sent after the critique). `milburn.py final` added (stand-in robot voice for timing). Moves critique 2 hunts: fixed 8, named 9.
+- **Spent:** chat 3 about 2% (Opus medium, ~95 steps, 2 helpers); this film ~7% of a week so far, on estimate.
+- **Next:** on Sam's Y: Sonnet chat: pre-flight, animatic (`milburn.py final` small, then finish.py with the Hook Text and sign-off), send. On notes instead: Opus medium notes round, clips.
+- **Needs Sam:** Y or N for the animatic; notes on the clips; his recordings of lines 1-2 when ready.
+- **Read:** job pack Checks and animatic.
 - **Open rule requests:** none.
-- **For Claude:** critique left open: blank faces and lips (moves stage), hands hidden (moves: hands on folder), name card small at phone size (taste), Milburn's hair colour read differently from refs (kept: light brown greying, per the plan chat's read). Kittests round_page and facehouse_whole_head fail from before this film (named, not this film's). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker. No clean critique pass, so nothing filed in the catalogue's passed list.
+- **For Claude:** moves critique left open: look-up still faint to the helpers at panel size (strengthened twice; Sam judges the clip), Swindon's chest out not visible front on, mouths open without words (rangy's is the joke), glasses thin at panel size (thick in code, cast stage), young faces lined, shaft reads as a hall (set, chat 2), name card cut at the left edge, goth's neck line. Acting list's aerial row is "2 cont." (block 2b is `code: field_shot`). Kittests round_page and facehouse_whole_head fail from before this film. Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+
 ## The screenplay so far (Sam, 17 Nov: about 25% of the film)
 - Title: Milburn. Hook Text: "The Milburn Report is released 😬"
 - Context: Alan Milburn's report on NEETs (not in employment, education or training). Joke: the report advocates a
@@ -76,7 +77,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 | 15 | the characters stand at the centre of a large lift shaft upon the rising platform. | yes, near the centre |
 | 16 | The platform is ten people across if they were holding hands. | yes: 17 m across |
 | 17 | It is rising towards the light. | yes: wall slides down, light above |
-| 18 | All four characters look up as the light sweeps down. | light sweeps: yes; look-up: moves stage |
+| 18 | All four characters look up as the light sweeps down. | ticked: light sweeps; all four lift their heads and look up on "training" (moves file) |
 | 19 | They are standing at four different distances to the camera. | yes: 2.6, 3.6, 4.8, 6.2 m |
 | 20 | An aerial shot shows the lift rise into the centre of an open natural space — a wide field, lush green grass flowing in the wind, distant encircling forest and tall alpine peaks. | yes: 33 deg down; grass gusts; forest ring; peaks |
 | 21 | "Those not in education, employment or training will be presented with a unique opportunity to serve their country." | stand-in timing until Sam records |
@@ -94,7 +95,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 |---|---|---|---|---|---|
 | 1 "The essence of my proposal is quite simple." | Milburn | single, straight to lens: he is addressing us like a broadcast | ask Sam (Q4) | seated upright, hands folded on the folder, tiny lean in | "simple" |
 | 2 "Those not in education, employment or training..." | Milburn (heard), NEETs (seen) | medium on the four: their faces are the joke | goth: unimpressed; rangy lad: mouth open; Swindon lad: chest out, squint; waif: shrinks, grips her sleeves | all four look up as the light sweeps down | "training" (heads up) |
-| 2 "...a unique opportunity to serve their country." | Milburn (heard) | aerial: the size of the arena is the joke | (tiny figures) | platform locks level with the grass | "country" |
+| 2 cont. "...a unique opportunity to serve their country." | Milburn (heard) | aerial: the size of the arena is the joke | (tiny figures) | platform locks level with the grass | "country" |
 
 ## Exceptions (rule 13)
 | check | who | why | looked at full size |
@@ -105,6 +106,7 @@ Shot board sent: notes/sheets/milburn-board.jpg (17 Nov, chat 2; story/milburn-b
 |---|------|------|------|------|--------|
 
 Decisions made:
+- Handover check (chat 3, end) settled: FINDER: this chat built the moves and the film's face, clip and head-life code new, on purpose (no notes yet to look up).
 - Handover check (chat 2, end) settled: poses (rule 41) and head life (rule 74) wait for the moves stage (chat 3: no moves exist yet); FINDER: this chat built the film's code new, on purpose (no notes to look up).
 - Sam, 17 Nov 20:12: "Go ahead with the rest" = build this part (chat 2 did: board and cast sheet sent).
 - Chat 2: the aerial is tilted 33 deg, not 45 (critique: 28 read as level; 45 loses the peaks in the tall frame).
@@ -114,3 +116,8 @@ Decisions made:
 - Handover check settled (17 Nov, plan chat): FINDER: no film code exists yet; the edits were new kit parts (people.py,
   people_parts.py), built on purpose. UNROUTED: the estimates proposal was judged (notes/proposals/estimates.md);
   the first ask lacked its "Critiqued: 8 found, 5 fixed, 3 named" line, given to Sam in the next reply.
+
+## Record (pre-flight reads these lines here; never archive them)
+- Pose looked at: Milburn (heard), aerial | 9.60 s | phone size, 17 Nov: deck level with the grass, tiny figures on it: reads
+- Pose looked at: Milburn (heard), NEETs (seen), medium on the four | 6.30 s | phone size, 17 Nov: heads lifted, necks long, eyes up: reads as looking up, if gently
+- Pose looked at: Milburn, single | 2.70 s | phone size, 17 Nov: seated upright, hands on the folder, leaned in on 'simple': reads

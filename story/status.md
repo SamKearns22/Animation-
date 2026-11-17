@@ -1,3 +1,3 @@
-Milburn: film file built; Cabinet Room, lift shaft and field painted; critiqued; cast sheet and shot board sent (17 Nov).
-Next: chat 3 (Opus medium): the moves (faces, lips, hands, the look-up), then a rehearsal clip.
-Needs Sam: notes on the board (welcome); his recordings when ready.
+Milburn: moves written (faces, lips, hands on folder, the look-up); rehearsal clips sent (17 Nov).
+Next: Sonnet chat: the animatic on Sam's Y (or a notes round on his clip notes).
+Needs Sam: Y or N for the animatic; notes on the clips; recordings when ready.

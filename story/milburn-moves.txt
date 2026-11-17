@@ -1,0 +1,53 @@
+# Milburn's moves, from its acting list (the moves kit: source/acting.py; the language is in its MAP).
+# One block per person per shot; each block is one acting-list row: who, the line, the word the move lands on.
+# Stand-in timing until Sam records (the words spread evenly over each line's span): re-timed on his takes.
+
+# --- the library this film adds
+place folder: 14, 228, 215, out, fist        # both hands folded on the folder in front of him (forearms on the table)
+body look up: nod -8, head_dy -14                # the head tipped back and lifted (the neck shows): looking up into the light
+body lean close: lean 7, head_dy 16, roll 3          # a small lean towards us: the head comes down and in (front on)
+place sleeves: 12, 330, 100, out, fist        # hands clutched together low in front, gripping her cuffs (the waif)
+
+## 1: milburn, line 1, lands on "simple"
+row: 1 "The essence of my proposal is quite simple." | calm, reasonable, faintly pleased, straight to lens | seated upright, hands folded on the folder, a small nod on "essence", tiny lean in and nod on "simple", the smile grows
+stance: seated
+face: pleased | smug from "simple" +0.05
+both: folder at 0
+body: nod 0.6 from "essence" -0.05 to "essence" +0.4, rise 0.12, fall 0.22
+body: lean close from "simple" -0.3 over 0.5
+body: nod 1.6 from "simple" -0.05 to "simple" +0.55, rise 0.15, fall 0.3
+idle: roll 1.4 shifts 51 0.9 1.6
+idle: nod 0.5 shifts 52 1.0 1.8
+
+## 2a: goth, line 2, lands on "training"
+row: 2 "Those not in education, employment or training..." | the goth: unimpressed, even looking up | still; looks up as the light reaches her
+face: unimpressed | unimpressed up from "training" -0.2 | gaze -0.65 eased from "training" -0.2 over 0.45
+body: look up 1.3 from "training" -0.2 over 0.5
+idle: lean 1.2 shifts 61 0.9 1.6
+idle: roll 2 shifts 62 1.0 1.7
+
+## 2a: rangy, line 2, lands on "training"
+row: 2 (the rangy lad) | mouth hanging open | looks up first, mouth falls wider
+face: gormless | awe open from "training" -0.15 | gaze -0.8 eased from "training" -0.3 over 0.4
+body: look up 1.6 from "training" -0.3 over 0.45
+idle: roll 2.5 shifts 63 0.8 1.4
+
+## 2a: swindon, line 2, lands on "training"
+row: 2 (the Swindon lad) | chest out, squinting | chest out the whole shot; squints up into the light
+face: proud | proud up from "training" -0.1 | gaze -0.75 eased from "training" -0.1 over 0.5
+keys lean: -3 at 0
+keys shoulders: 8 at 0                    # shoulders set back and broad (front on, the chest out shows as width)
+body: look up 1.5 from "training" -0.1 over 0.5
+idle: lean 1 shifts 64 1.0 1.8
+
+## 2a: waif, line 2, lands on "training"
+row: 2 (the waif) | nervous, shrinking | shoulders up, gripping her sleeves; looks up last, wide-eyed
+face: nervous | awe from "training" +0.1 | gaze -0.8 eased from "training" +0.05 over 0.45
+keys shoulders: -12 at 0
+both: sleeves at 0
+body: look up 1.4 from "training" +0.05 over 0.5
+idle: roll 2 shifts 65 0.7 1.2
+
+## 2b: goth, line 2, lands on "country"
+row: 2 cont. "...a unique opportunity to serve their country." | the aerial: tiny figures on the deck as it locks level with the grass
+code: field_shot (tiny figures, a few pixels tall: no faces or limbs to act at this size)

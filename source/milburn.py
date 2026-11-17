@@ -16,10 +16,12 @@ MAP (rule 61)
   shot 2b ........... field_shot(t): milburn_sets.field; the deck rises from 9 m down and locks level with the grass;
                       the four as tiny figures on it (F8)
   picture ........... picture(t) -> the clean frame (no captions, no Hook Text: finish.py adds those)
-  main .............. stills, cast
+  sound, render ..... soundtrack() (espeak stand-ins until Sam records), final(out, small, span)
+  main .............. stills, cast, final
 
     python3 source/milburn.py stills OUT_DIR T [T ...]
     python3 source/milburn.py cast OUT.jpg
+    python3 source/milburn.py final OUT.mp4 [--small] [--span T0 T1]    (a clip: --small --span; stand-in voice)
 """
 import math
 import os
@@ -110,12 +112,95 @@ def scale_at(pxm, sp):
     return pxm * sp['height'] * 0.84 / FEET
 
 
-def person(img, who, X, sole_y, pxm, yaw=0.0, t=0.0, joints=None):
+def person(img, who, X, sole_y, pxm, yaw=0.0, t=0.0, joints=None, look=None):
+    """Draw `who` standing on sole_y; their face and pose come from story/milburn-moves.txt (the moves kit) when the
+    shot has a block for them (`look`: the kit's face sp), else the plain standing pose."""
     sp = CAST[who]
     s = scale_at(pxm, sp)
     B.SS = 1
     cam = B.Cam(1.0, 540, 960)
-    return V.person(img, cam, X, sole_y - FEET * s, s, dict(sp), t, yaw, joints)
+    return V.person(img, cam, X, sole_y - FEET * s, s, dict(look or sp), t, yaw, joints)
+
+
+# ================================================================================================= faces and moves
+# The house face's channels (people_parts.front_head): smile (-1 down .. +1 up), lid4 (upper lid, 0 open), brow_up
+# (raised), frown (inner ends down), squint, look (eyes sideways), gaze_dy (- up), mouth ('v:SHAPE' while talking).
+MOODS = {
+    'neutral': dict(),
+    'pleased': dict(smile=0.35, lid4=0.26, brow_up=0.004),         # Milburn: calm, reasonable, faintly pleased
+    'smug': dict(smile=0.6, lid4=0.3, brow_up=0.01),               # ... a touch more on "simple"
+    'unimpressed': dict(smile=-0.7, lid4=0.24),                    # the goth: heavy lids, mouth down
+    'unimpressed up': dict(smile=-0.7, lid4=0.06),                 # ... looking up (lids lifted, or the pupils hide)
+    'gormless': dict(smile=-0.5, lid4=0.2, brow_up=0.0, mouth='v:O'),   # the rangy lad: mouth hanging open
+    'proud': dict(smile=0.3, squint=0.75, lid4=0.3, frown=0.01),              # the Swindon lad: chest out, squinting
+    'nervous': dict(smile=-0.55, brow_up=0.03, frown=-0.012, lid4=0.04, look=0.35),   # the waif: worried, glancing
+    'proud up': dict(smile=0.2, squint=0.9, lid4=0.18, frown=0.012),   # squinting up into the light
+    'awe': dict(brow_up=0.04, lid4=0.0, smile=-0.3, mouth='v:U'),               # looking up into the light
+    'awe open': dict(brow_up=0.04, lid4=0.0, mouth='v:O'),         # ... mouth falling open
+}
+
+
+def word_at(n, words):
+    """When line n reaches `words` (stand-in timing: the text spread evenly by letters over the line's span)."""
+    ln = LINES[n - 1]
+    return ln['start'] + ln['text'].index(words) / len(ln['text']) * (ln['end'] - ln['start'])
+
+
+import mouths                        # noqa: E402  (the house lip sync: shapes from the words, on the stand-in timing)
+import figure as F                   # noqa: E402
+TRACK = {}
+for _ln in LINES:
+    TRACK.setdefault(_ln['who'], []).extend((a + _ln['start'], b + _ln['start'], sh) for a, b, sh in
+                                            mouths.track(_ln['text'], [(0.0, _ln['end'] - _ln['start'])]))
+BLINKS = {w: F.blinks(11 + 4 * i, 0.0, DUR, talking=(w == 'milburn')) for i, w in enumerate(CAST)}
+
+
+HEAD_LIFE = {}
+
+
+def head_life():
+    """Rule 74: Milburn's head tilts and nods on his voice (headlife, from the stand-in's loudness per drawing)."""
+    if not HEAD_LIFE:
+        import numpy as np
+        import headlife
+        x = soundtrack()
+        n = 48000 // FPS
+        env = np.array([np.sqrt(np.mean(x[i * n:(i + 1) * n] ** 2)) for i in range(len(x) // n)])
+        HEAD_LIFE['milburn'] = headlife.HeadLife(env, 0.0, fps=FPS, seed=21)
+    return HEAD_LIFE['milburn']
+
+
+def face_sp(shot, who, t, mood, shades=None):
+    """The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks."""
+    d = dict(CAST[who], **MOODS[mood])
+    if who in TRACK and shot == '1':
+        shape = mouths.at(TRACK[who], t)
+        if shape != 'rest':
+            d['mouth'] = 'v:' + shape
+    d['blink'] = F.blinking(t, BLINKS[who])
+    if who == 'milburn':
+        d['head_life'] = head_life()
+    return d
+
+
+_MOVES = {}
+
+
+def moves():
+    """(the moves file, the film's side) for the kit, read once."""
+    if not _MOVES:
+        import acting as AC
+        _MOVES.update(AC=AC, desc=AC.load(FILM), film=AC.film_side(FILM))
+    return _MOVES
+
+
+def acted(shot, who, t):
+    """(face sp, joints) for who's block in shot at film time t (story/milburn-moves.txt)."""
+    m = moves()
+    key = m['AC'].block_key(shot, who, m['desc']['shots']) if m['desc']['shots'].get(shot, {}).get('who') != who \
+        else shot
+    sp, _, _, j, _ = m['AC'].person(m['desc'], m['film'], key, t)
+    return sp, j
 
 
 # ================================================================================================= shot 1
@@ -136,11 +221,26 @@ def cabinet(t):
     pxm = L.ppm(d)
     sp = CAST['milburn']
     neck_y = L.p(0.0, d, _seated_neck)[1]
-    person(img, 'milburn', 540, neck_y + FEET * scale_at(pxm, sp), pxm, 0.0, t)
-    for layer in ('mid', 'front'):
-        if _PAINT[layer]:
-            _PAINT[layer](img, cam, t)
+    if _PAINT['mid']:
+        _PAINT['mid'](img, cam, t)
+    look, j = acted('1', 'milburn', t)
+    j['chair_draw'] = lambda *a, **k: None            # the room paints his chair
+    j['pre'] = []
+    j['mid'] = [lambda p, j2, view: p.img.alpha_composite(_table_layer(t))]   # the table between body and arms,
+    neck_y -= j.get('bob', 0.0) * scale_at(pxm, sp)      # so his hands lie on the folder (study_pose's way);
+    # seated drops the body by bob: his neck stays put
+    person(img, 'milburn', 540, neck_y + FEET * scale_at(pxm, sp), pxm, 0.0, t, j, look)
+    cut = int(L.p(0.0, 1.62, 0.76)[1]) + 60            # below the folder's near edge only the table shows: his
+    img.alpha_composite(_table_layer(t).crop((0, cut, W, H)), (0, cut))   # shins drawn after it are covered again
     return img.convert('RGB')
+
+
+def _table_layer(t):
+    """The front layer (table, folders, glasses, name card) on its own, to lay between Milburn's body and arms."""
+    im = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+    if _PAINT['front']:
+        _PAINT['front'](im, B.Cam(1.0, 540, 960), t)
+    return im
 
 
 # ================================================================================================= shot 2a
@@ -156,7 +256,8 @@ def shaft_shot(t):
     ppl = Image.new('RGBA', img.size, (0, 0, 0, 0))
     for who, x, d in NEETS:
         X, Y = L.p(x, d, 0.0)
-        person(ppl, who, X, Y, L.ppm(d), 0.0, t)
+        look, j = acted('2a', who, t)
+        person(ppl, who, X, Y, L.ppm(d), 0.0, t, j, look)
     u = max(0.0, min(1.0, (2.4 - lit) / 1.0))       # the light reaching them (critique r1: they must change):
     rgb = ppl.convert('RGB')                         # in the shaft's shade, cool and dim; then lit warm
     dim = Image.blend(rgb, Image.new('RGB', rgb.size, (34, 40, 66)), 0.45 * (1 - u))
@@ -195,12 +296,66 @@ def picture(t):
     return field_shot(t)
 
 
+def frame_image(t):
+    return picture(t)
+
+
 def cast(out):
     return PK.sheet(FILM, out)
 
 
+# ================================================================================================= sound and render
+def _standin(i, ln):
+    """A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
+    the line's stand-in span, cached in source/data. Sam's take replaces it (then 'audio' on the line)."""
+    import shutil
+    import subprocess
+    import numpy as np
+    from burnham_film import load
+    want = ln['end'] - ln['start']
+    path = os.path.join(HERE, 'data', f'standin-milburn-{i + 1}.wav')
+    if not os.path.exists(path) and shutil.which('espeak-ng'):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        rate = 150
+        for _ in range(3):                          # a word rate that fills the span
+            subprocess.run(['espeak-ng', '-v', 'en-gb', '-s', str(rate), '-p', '35', '-w', path, ln['text']],
+                           check=True, stdout=subprocess.DEVNULL)
+            got = len(load(path)) / 48000
+            rate = int(rate * got / want)
+    if not os.path.exists(path):
+        return np.zeros(int(48000 * want))
+    x = load(path)
+    return x / (np.abs(x).max() + 1e-9) * 0.4
+
+
+def soundtrack():
+    import numpy as np
+    n = int((DUR + 0.3) * 48000)
+    mix = np.zeros(n)
+    for i, ln in enumerate(LINES):
+        x = _standin(i, ln)
+        s = int(ln['start'] * 48000)
+        mix[s:s + len(x)] += x[:max(0, n - s)]
+    return mix
+
+
+def final(out, small=False, span=None):
+    import film_engine as E
+    import mossad_audio as MA
+    E.render(NAME, out, size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
+             picture=picture, overlay=lambda img, t: img, shot_of=shot_of, sound=soundtrack, write_wav=MA.write_wav,
+             set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, span=span)
+
+
+head_life()                          # rule 74: filled at load, so the checks see it
+
+
 def main(argv):
-    if len(argv) >= 3 and argv[1] == 'stills':
+    if len(argv) >= 3 and argv[1] == 'final':
+        a = argv
+        final(a[2], '--small' in a, (float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2]))
+              if '--span' in a else None)
+    elif len(argv) >= 3 and argv[1] == 'stills':
         os.makedirs(argv[2], exist_ok=True)
         for v in argv[3:]:
             p = os.path.join(argv[2], f'milburn-{float(v):05.2f}.jpg')

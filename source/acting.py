@@ -876,7 +876,19 @@ def _blessed_sp(BL, shot, who, t, mood, shades):
     raise KeyError(f'moves: Blessed has no {who}')
 
 
-FILMS = {'blessed': _blessed}
+def _milburn():
+    """Milburn's side of the kit: stand-in timing until Sam records; nobody walks, holds or sits on a kit seat (his
+    chair is painted by the room); the film places everyone itself, so marks are not used."""
+    import milburn as M
+    spans = {s: (a, b) for s, a, b in M.SHOTS}
+    return dict(
+        module=M, T=M.T, word_at=M.word_at, line_end=lambda n: M.LINES[n - 1]['end'],
+        line_start=lambda n: M.LINES[n - 1]['start'], span=lambda shot: spans[shot],
+        ground=lambda on, x, d: None, props={}, extras={}, seats={}, sp=M.face_sp,
+        mark=lambda shot, who: None, people=set(), acting_list='notes/milburn.md', hooks={}, stands_in={})
+
+
+FILMS = {'blessed': _blessed, 'milburn': _milburn}
 FRAMES = {'blessed': [1.0, 2.3, 2.9, 3.6, 4.1, 5.0, 5.6, 6.6, 12.0, 12.6, 14.2, 15.6, 16.8, 18.5, 21.5, 23.9, 26.4,
                       31.0, 34.6, 37.0, 46.2, 48.3, 49.6, 50.3, 51.6, 52.6, 53.5, 54.6, 54.9, 57.0]}
 
