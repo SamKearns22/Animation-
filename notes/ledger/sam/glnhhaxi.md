@@ -40,3 +40,6 @@ Pat(eyes looking at Andy): I’d like to hear where this goes, Prime Minister
 
 Andy (Throwing his arms up and then folding them and leaning back): Fine! Continue.
 
+### 2026-11-17T22:06:44
+The shape of 1's hair doesn't look like real hair, it looks like the crest of an alien monster. Please have a look into purple/blue dyed alternative hair and try again.
+
