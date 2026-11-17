@@ -25,7 +25,7 @@
   moves kits "NOT for films" though Sam said Y on 14 Nov: lines corrected.
 - **Learn step, honest:** only 1 of 4 checked 16 Nov chats can still be opened (list_events: not found), so the
   look-back used the ledger and the notes' Next lines; the guard's command list comes from those (F6/F7 named).
-- **Live proof (first Opus chat after this, step 1):** run `python3 source/finish.py /none.mp4 /tmp/x.mp4 --film none`:
+- **Live proof (first Opus chat after this, step 1; in chat D the search reminder and watcher ran live, the guard did not load mid-chat):** run `python3 source/finish.py /none.mp4 /tmp/x.mp4 --film none`:
   it must be refused with MODEL GUARD (hooks load at chat start, so chat D could only prove it on its own record).
   If not refused, the watcher flags "guard" at that chat's Stop.
 - **Next:** nothing queued: the chain stops for Sam's answer below.
