@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 41.79%; 19 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate ?% of a week; spent 43.2%; 19 chats, 0 rounds, 0 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -26,8 +26,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-15 | 13a4cda5 | est | sonnet | auto |  | 1.57 |  | 0 | 0 |
 | 2026-11-15 | d58e0dd9 | est | opus | auto |  | 2.33 |  | 0 | 0 |
 | 2026-11-16 | 2cec4bf1 | est | sonnet | auto |  | 4.11 |  | 0 | 0 |
-| 2026-11-17 | dbebd85f | est | opus | auto |  | 2.12 |  | 0 | 0 |
+| 2026-11-17 | dbebd85f | est | opus | auto |  | 3.53 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 2cec4bf1 (auto): 72 steps, history 186k at the end; other 77.7%, tool search 19.5%, renders 2.8%
-- 2026-11-17 dbebd85f (auto): 32 steps, history 121k at the end; other 66%, tool search 22.9%, page.py 6.6%, renders 4.4%
+- 2026-11-17 dbebd85f (auto): 33 steps, history 122k at the end; other 66.9%, tool search 22.4%, page.py 6.5%, renders 4.3%
