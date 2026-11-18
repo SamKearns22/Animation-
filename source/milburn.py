@@ -707,8 +707,36 @@ def cast(out):
 
 
 # ================================================================================================= sound and render
+SFX_GAIN = 0.6                      # Sam (18 Nov): the effects at 60% so they don't overwhelm the dialogue
+_SFX = {}
+
+
+def _sfx(name):
+    """One of Sam's sound effects (source/audio/milburn-sfx-NAME.mp3), as supplied."""
+    if name not in _SFX:
+        from burnham_film import load
+        _SFX[name] = load(os.path.join(HERE, 'audio', f'milburn-sfx-{name}.mp3'))
+    return _SFX[name]
+
+
+def sfx_cues():
+    """[(effect, film second it starts, seconds it may run or None, fade out)]: where each effect lands (Sam, 18 Nov:
+    the lift as the deck rises, Swindon's uzis in scene 3 and again in the forest, the gunfire, the flamethrower, the
+    morning stars' blades, the goth's crossbow bolts)."""
+    a0 = word_at(3, 'Each') + 0.9                                      # Swindon starts spraying
+    end3 = SHOTS[3][2] - 0.3                                           # ... and stops when the shot ends
+    cues = [('lift', SHOTS[1][1], T['locks'] + 0.3 - SHOTS[1][1], 0.6),
+            ('uzi', a0, end3 - a0, 0.3),
+            ('crossbow', SKY_SHOT, None, 0.1)]
+    cues += [('ak47', MF.T_GUN, None, 0.2), ('ak47', MF.T_GUN + 2.1, MF.T1 - 2.0 - (MF.T_GUN + 2.1), 0.3),
+             ('flamethrower', MF.T_FLAME - 0.3, 2.4, 0.5), ('uzi', MF.T_FLAME + 0.45, MF.T1 - 1.0 - MF.T_FLAME - 0.45, 0.4),
+             ('dagger', MF.T_STARS - 0.2, None, 0.1), ('dagger', MF.T_STARS + 0.1, None, 0.1)]
+    cues += [('crossbow', tt, None, 0.1) for tt in GOTH_SHOTS]
+    return cues
+
+
 def soundtrack():
-    """Sam's recordings, cleaned and matched, each where its line starts (the swear bleeped)."""
+    """Sam's recordings, cleaned and matched, each where its line starts (the swear bleeped), then the effects at 60%."""
     import numpy as np
     n = int((DUR + 0.3) * 48000)
     mix = np.zeros(n)
@@ -716,6 +744,19 @@ def soundtrack():
         x = V_.bleeped(i + 1)
         st = int(ln['start'] * 48000)
         mix[st:st + len(x)] += x[:max(0, n - st)]
+    for name, t, span, fade in sfx_cues():
+        x = _sfx(name)
+        if span is not None:
+            x = x[:int(span * 48000)].copy()
+        else:
+            x = x.copy()
+        k = min(len(x), int(fade * 48000))
+        if k:
+            x[-k:] *= np.linspace(1, 0, k)
+        st = int(t * 48000)
+        mix[st:st + len(x)] += SFX_GAIN * x[:max(0, n - st)]
+    hot = np.abs(mix) > 0.9                                            # never clip: bend only what goes over 0.9
+    mix[hot] = np.sign(mix[hot]) * (0.9 + 0.1 * np.tanh((np.abs(mix[hot]) - 0.9) / 0.1))
     return mix
 
 
