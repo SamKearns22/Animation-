@@ -75,6 +75,7 @@ LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: t
 import milburn_voice as V_       # noqa: E402  Sam's recordings (18 Nov): the lines' real times, every cut and beat
 for _i, _ln in enumerate(LINES):    # the stand-in times above are only the old film's; the takes set the clock now
     _ln.update(start=V_.START[_i + 1], end=V_.END[_i + 1], audio='milburn-' + '+'.join(V_.TAKES[_i + 1]))
+    _ln.update(_voice=V_.VOICES[_i + 1], _stretches=V_.LINES_TIMED[_i + 1]['stretches'], n=_i + 1)   # the checks measure the cleaned take the film plays, not the raw file
 LINES[9]['bleep'] = V_.LINES_TIMED[10]['bleep']             # "fucker": Sam says it, a tone goes over "fuck" (rule 26)
 SHOTS, T, _FOREST, DUR = V_.shots_and_beats({_i + 1: _ln['text'] for _i, _ln in enumerate(LINES)})
 #   T: 'simple' shot 1 lands on "simple"; 'light_on_them' 2a: the light reaches their heads ("training"); 'locks' 2b:
