@@ -617,36 +617,40 @@
    "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "sonnet",
-   "cost": 0.13,
+   "model": "opus",
+   "cost": 0.51,
    "src": "estimate",
    "sid": "session_01J1JB7ZcnxMwvpxNHfhpT4Y",
-   "steps": 11,
-   "hist_k": 103,
+   "steps": 27,
+   "hist_k": 125,
    "kinds": {
-    "film-file search": 12.4,
-    "tool search": 13.0,
-    "pictures": 2.5,
-    "other": 72.0
+    "film-file search": 7.5,
+    "tool search": 5.3,
+    "page.py": 1.2,
+    "pictures": 3.4,
+    "other": 82.6
    },
    "calls": {
-    "film-file search": 7,
-    "tool search": 4,
+    "film-file search": 11,
+    "tool search": 7,
     "whole-file .py read": 0,
-    "page.py": 0,
+    "page.py": 2,
     "routine": 0,
     "renders": 0,
-    "pictures": 1,
-    "other": 1
+    "pictures": 3,
+    "other": 2
    },
    "search": {
-    "show": 0,
+    "show": 2,
     "film": {
-     "no show": 7
+     "before show": 7,
+     "miss": 4,
+     "after show": 0
     },
     "other": {
      "film notes": 3,
-     "shared:places.py": 1
+     "shared:places.py": 3,
+     "other": 1
     },
     "ticked": 0,
     "edited film code": true
