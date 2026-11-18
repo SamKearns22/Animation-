@@ -502,7 +502,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 3.99,
+   "cost": 4.02,
    "src": "estimate",
    "sid": "session_01J1JB7ZsAtQ4zBsN2F9oPoi",
    "steps": 98,
@@ -828,7 +828,10 @@
   {
    "name": "build",
    "pct": 0.8,
-   "done": null
+   "done": {
+    "date": "2026-11-18",
+    "spent": 23.58
+   }
   },
   {
    "name": "moves",
