@@ -762,6 +762,47 @@
     "ticked": 0,
     "edited film code": true
    }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "a3a53ca2",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.08,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZmTrSU4NvegQyvBnB",
+   "steps": 6,
+   "hist_k": 91,
+   "kinds": {
+    "film-file search": 5.0,
+    "tool search": 15.3,
+    "other": 79.7
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "other": 2,
+     "film notes": 3
+    },
+    "ticked": 0,
+    "edited film code": false
+   }
   }
  ],
  "checks": {},
