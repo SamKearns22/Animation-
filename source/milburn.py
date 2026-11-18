@@ -523,7 +523,7 @@ def forest_pose(who, t):
     sw = sp.get('shoulders', 150) / 2.0
     unit = word_at(8, 'unit')
     jolt = max(0.0, 1 - abs(t - (MF.T_GUN + 0.08)) / 0.12)
-    duck = _ramp(t, MF.T_FLAME - 0.05, MF.T_FLAME + 0.2) * (1 - 0.4 * _ramp(t, MF.T_FLAME + 1.0, MF.T_FLAME + 1.6))
+    duck = _ramp(t, MF.T_FLAME - 0.05, MF.T_FLAME + 0.2) * (1 - 0.4 * _ramp(t, MF.T_FLAME + 1.45, MF.T_FLAME + 2.0))   # held till the flame dies (critique r2)
     after = _ramp(t, MF.T_FLAME + 0.3, MF.T_FLAME + 0.7)        # each one's own answer to the ambush
     shock = MF.T_GUN < t < MF.T_FLAME + 0.4
     firing = []
@@ -548,7 +548,7 @@ def forest_pose(who, t):
         else:                                           # one-handed hacks: up-back to chopping forward
             V.arm_to(j, 'R', (-20 - 50 * hack, -260 + 50 * hack, 180), 'down', 'fist')   # (figures drawn mirrored: -x is ahead)
             V.arm_to(j, 'L', (-120, -60, 160), 'down', 'palm')
-            MP.in_hands(j, sp, 'katana', 'R', None, ang=-110 - 50 * hack, along=0.0)
+            MP.in_hands(j, sp, 'katana', 'R', None, ang=-125 - 35 * hack, along=0.0)   # critique r2: never across his face
         j['head_roll'] = j.get('head_roll', 0.0) + 6 * hack
         mood = 'aghast' if t > MF.T_GUN else 'nervous'
     elif who == 'swindon':                              # uzis up at his chest swinging side to side; forward on "unit";
@@ -578,8 +578,9 @@ def forest_pose(who, t):
         MP.in_hands(j, sp, 'grenade', 'R', None, ang=-90 + 50 * w1 * flail, along=-0.0)
         mood = 'terrified'
     _crouch(j, -40 * jolt, 0.0)
-    deep = {'waif': 0.6, 'rangy': 1.1, 'goth': 0.35, 'swindon': 0.4}.get(who, 1.0)   # note 9: each dodges in character
-    _crouch(j, 190 * duck * deep, 18 * duck * deep)
+    deep, lean = {'waif': (0.7, 10), 'rangy': (1.25, 26), 'goth': (1.0, -10), 'swindon': (0.95, 30)}[who]   # note 9:
+    _crouch(j, 190 * duck * deep, lean * duck)          # goth sinks and leans back, cool; Swindon dives forward; rangy
+                                                        # ducks deepest; all clear of the flame (critique r2)
     if who == 'swindon':                                # a cocky bob under the morning star, still firing (note 9)
         _crouch(j, 150 * max(0.0, 1 - abs(t - 36.85) / 0.3), 10 * max(0.0, 1 - abs(t - 36.85) / 0.3))
     d = face_sp('6', who, t, mood)
@@ -617,10 +618,10 @@ def forest_shot(t):
         if who == 'goth':                               # note 9: her bolts streak off ahead, into the trees
             for tt in GOTH_SHOTS:
                 u = t - tt
-                if 0.0 <= u < 0.3:
+                if 0.0 <= u < 0.4:
                     hx, hy = pts['wrR']
-                    bx = X + hx * s + (0.45 + 14.0 * u) * pxm
-                    by = Y - FEET * s + (hy + j.get('bob', 0.0)) * s - 0.06 * pxm - 0.5 * u * pxm
+                    bx = X + hx * s + (0.45 + 6.0 * u) * pxm
+                    by = Y - FEET * s + (hy + j.get('bob', 0.0)) * s - 0.06 * pxm - 0.3 * u * pxm
                     dr = ImageDraw.Draw(img)
                     dr.line([(bx - 0.4 * pxm, by + 0.02 * pxm), (bx, by)], fill=(70, 50, 34),
                             width=max(3, int(0.02 * pxm)))

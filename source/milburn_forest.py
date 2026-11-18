@@ -387,13 +387,13 @@ def flame(img, t):
     d = ImageDraw.Draw(lay)
     X0, Y0 = _P(nx, nd, nz, cx)
     k = CAM.ppm(nd) * SS
-    a0 = math.radians(199)                                   # aimed left, a little up: over their ducked heads
+    a0 = math.radians(205)                                   # aimed left and up: over their ducked heads (Milburn critique r2: 199 lashed across the goth)
     _poly(d, [(X0 + 0.12 * k, Y0 - 0.025 * k), (X0 - 0.06 * k, Y0 - 0.02 * k), (X0 - 0.06 * k, Y0 + 0.02 * k),
               (X0 + 0.12 * k, Y0 + 0.025 * k)], (60, 62, 68), 1.8)   # the nozzle poking out of the leaves
     if u > 0:
         reach = 1.6 * min(1.0, u / 0.16) * (1.0 if u < 1.0 else max(0.0, 1 - (u - 1.0) / 0.45))
         f = int(t * 24)
-        whip = 0.16 * math.sin(u * 9.0) + 0.05 * math.sin(u * 23.0)
+        whip = 0.11 * math.sin(u * 9.0) + 0.04 * math.sin(u * 23.0)   # (critique r2: less lash down onto their heads)
         if reach > 0.02:
             n = 16
             rr = random.Random(f)

@@ -668,15 +668,37 @@
      "6-7 A4: \"Milburn\" card cut by left edge.",
      "8,11,14 P11: line across goth girl neck base reads as a choker."
     ]
+   },
+   {
+    "round": 2,
+    "pass": 2,
+    "stage": "moves",
+    "date": "2026-11-18",
+    "hunt": 1,
+    "faults": 10,
+    "cant_tell": 1,
+    "open": [
+     "3,11-14,16,20,23,38,40,42-44 P2: Andy is smiling in 3 (brief: furious) and 11 (brief: explodes); mouth flat in 14 (brief: hanging open); Pat's mouth open in 14 ",
+     "1-2,15-17,19-22 A1 P1: red-shirt lad holds no uzis; the grenade reads as a green shield/disc; the goth's mace handle runs through the red shirt; no one is shown",
+     "3,6,11-12,23,28,38,40,43 P6: Andy's pointing hand is a ball with no finger (3); in 11 and 12 the ball hands float at his sides, off the table and not palms up; ",
+     "1-2,15-22 P8: the four face the camera, not three-quarter to screen right.",
+     "5,26 P12: Andy's mouth is round while Pat speaks; Pat's mouth is closed in 5 (brief: Pat speaks).",
+     "8-9,33,35 O2 S1 S8: the orange flame sits in front of and covers the goth's head and the red lad; it appears to come from the goth's weapon, not from ahead in t",
+     "8-9,32-34 P2: the dodges are alike (all crouch; goth does not lean aside); in 9 no bolt and no uzi spray can be seen.",
+     "18,22 P4: stray blue strip of hair hangs outside the goth's hair; Pat's grey ear patch looks like a stain (24, 27); Milburn's glasses are thin, the reference's ",
+     "9-10,36-37 O3: morning-star chains are thin dashed lines.",
+     "36-37 P14: the katana blade crosses the lanky lad's face and eyes.",
+     "5,27,39 P2: Pat's eyes look toward the camera, not Andy; a larger face crop would show it."
+    ]
    }
   ],
   "lines": {
    "P2": {
-    "faults": 8,
+    "faults": 10,
     "false": 0
    },
    "P4": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "A2": {
@@ -684,7 +706,7 @@
     "false": 0
    },
    "P6": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "S7": {
@@ -692,11 +714,11 @@
     "false": 0
    },
    "A1": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "S1": {
-    "faults": 6,
+    "faults": 7,
     "false": 1
    },
    "S5": {
@@ -704,7 +726,7 @@
     "false": 0
    },
    "S8": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "S2": {
@@ -732,11 +754,11 @@
     "false": 0
    },
    "O3": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P1": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "M3": {
@@ -748,7 +770,7 @@
     "false": 0
    },
    "P12": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "A4": {
@@ -756,6 +778,18 @@
     "false": 0
    },
    "P11": {
+    "faults": 1,
+    "false": 0
+   },
+   "P8": {
+    "faults": 1,
+    "false": 0
+   },
+   "O2": {
+    "faults": 1,
+    "false": 0
+   },
+   "P14": {
     "faults": 1,
     "false": 0
    }

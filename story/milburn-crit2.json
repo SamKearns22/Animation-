@@ -3,25 +3,101 @@
  "stage": "moves",
  "panels": [
   {
-   "t": 12.6,
+   "t": 10.3,
    "crop": null,
    "parts": "PO",
    "set": "field",
    "refs": [],
    "beat": "taking the weapons",
-   "is": "Scene 3, a field: four young people by grey plinths, seen side by side, turned three-quarter to screen right; each takes a weapon (goth: crossbow; lanky lad: katana; lad in red football shirt: two uzis; small anxious woman: a grenade the size of an ostrich egg)"
+   "is": "Scene 3, a field: four young people by grey plinths, seen side by side, turned three-quarter to screen right; each takes a weapon (goth: crossbow; lanky lad: katana; lad in red football shirt: two uzis; small anxious woman: a grenade the size of an ostrich egg)",
+   "people": [
+    {
+     "name": "rangy",
+     "box": [
+      80,
+      800,
+      300,
+      1320
+     ]
+    },
+    {
+     "name": "waif",
+     "box": [
+      320,
+      920,
+      510,
+      1620
+     ]
+    },
+    {
+     "name": "swindon",
+     "box": [
+      480,
+      830,
+      770,
+      1720
+     ]
+    },
+    {
+     "name": "goth",
+     "box": [
+      730,
+      880,
+      1010,
+      1320
+     ]
+    }
+   ]
   },
   {
-   "t": 14.6,
+   "t": 12.6,
    "crop": null,
    "parts": "PO",
    "set": "field",
    "refs": [],
    "beat": "arm themselves",
-   "is": "Scene 3, same: the goth has the crossbow up on her shoulder, pleased; lanky lad stares unsure at the katana held out flat; red-shirt lad sprays the uzis grinning; the woman clutches the grenade, terrified"
+   "is": "Scene 3, same: the goth has the crossbow up on her shoulder, pleased; lanky lad stares unsure at the katana held out flat; red-shirt lad sprays the uzis grinning; the woman clutches the grenade, terrified",
+   "people": [
+    {
+     "name": "rangy",
+     "box": [
+      80,
+      800,
+      300,
+      1320
+     ]
+    },
+    {
+     "name": "waif",
+     "box": [
+      320,
+      920,
+      510,
+      1620
+     ]
+    },
+    {
+     "name": "swindon",
+     "box": [
+      480,
+      830,
+      770,
+      1720
+     ]
+    },
+    {
+     "name": "goth",
+     "box": [
+      730,
+      880,
+      1010,
+      1320
+     ]
+    }
+   ]
   },
   {
-   "t": 17.6,
+   "t": 15.0,
    "crop": null,
    "parts": "PO",
    "set": "reverse",
@@ -31,10 +107,30 @@
     "references/faces/mcfadden/b01-threequarter-glasses-lbc2026.jpg"
    ],
    "beat": "jab on 'Milburn'",
-   "is": "Scene 4a, Cabinet Room turned round: Andy Burnham (Prime Minister) furious, jabbing a pointing finger at the camera; Pat McFadden (bald, round dark glasses) calm beside him; fireplace behind"
+   "is": "Scene 4a, Cabinet Room turned round: Andy Burnham (Prime Minister) leaning in, furious, jabbing a pointing finger at the camera; Pat McFadden (bald, round dark glasses) sat back a step behind him, head turned to Andy; the fireplace between their heads; Andy's Vimto and Pat's sparkling water near the camera on coasters",
+   "people": [
+    {
+     "name": "andy",
+     "box": [
+      0,
+      180,
+      600,
+      1160
+     ]
+    },
+    {
+     "name": "pat",
+     "box": [
+      570,
+      300,
+      1080,
+      1120
+     ]
+    }
+   ]
   },
   {
-   "t": 24.5,
+   "t": 22.0,
    "crop": null,
    "parts": "P",
    "set": "cabinet",
@@ -43,10 +139,21 @@
     "references/milburn/milburn-official.jpg"
    ],
    "beat": "calm",
-   "is": "Scene 4b: Alan Milburn across the green table, calm and nonplussed, hands folded on a folder, talking"
+   "is": "Scene 4b: Alan Milburn across the green table, calm and nonplussed, hands folded on a folder, talking",
+   "people": [
+    {
+     "name": "milburn",
+     "box": [
+      330,
+      560,
+      890,
+      1420
+     ]
+    }
+   ]
   },
   {
-   "t": 29.0,
+   "t": 28.3,
    "crop": null,
    "parts": "P",
    "set": "reverse",
@@ -55,10 +162,30 @@
     "references/faces/mcfadden/a03-front-glasses-gbnews2026.jpg"
    ],
    "beat": "Prime Minister",
-   "is": "Scene 4c: Pat speaks, fingers steepled, eyes on Andy (never the camera)"
+   "is": "Scene 4c: Pat speaks, fingers steepled, eyes on Andy (never the camera)",
+   "people": [
+    {
+     "name": "andy",
+     "box": [
+      0,
+      180,
+      600,
+      1160
+     ]
+    },
+    {
+     "name": "pat",
+     "box": [
+      570,
+      300,
+      1080,
+      1120
+     ]
+    }
+   ]
   },
   {
-   "t": 32.2,
+   "t": 30.5,
    "crop": null,
    "parts": "P",
    "set": "reverse",
@@ -67,46 +194,218 @@
     "references/faces/burnham/a04-threequarter-ap2026.jpg"
    ],
    "beat": "Continue",
-   "is": "Scene 4c: Andy has flung his arms up and now folds them, leaning back, sulky"
+   "is": "Scene 4c: Andy has flung his arms up and now folds them, leaning back, sulky",
+   "people": [
+    {
+     "name": "andy",
+     "box": [
+      0,
+      180,
+      600,
+      1160
+     ]
+    },
+    {
+     "name": "pat",
+     "box": [
+      570,
+      300,
+      1080,
+      1120
+     ]
+    }
+   ]
   },
   {
-   "t": 35.6,
+   "t": 33.4,
    "crop": null,
    "parts": "POS",
    "set": "forest",
    "refs": [],
    "beat": "form a unit",
-   "is": "Scene 6, a thick forest: the four walk right in single file, turned three-quarter; the camera travels with them (near ferns race past): goth with crossbow on her shoulder, red-shirt lad with uzis at his chest, lanky lad holding the katana up in front like a torch, woman hugging the grenade"
+   "is": "Scene 6, a thick forest: the four walk right in single file, turned three-quarter; the camera travels with them (near ferns race past): goth with crossbow on her shoulder, red-shirt lad with uzis at his chest, lanky lad holding the katana up in front like a torch, woman hugging the grenade",
+   "people": [
+    {
+     "name": "waif",
+     "box": [
+      0,
+      700,
+      280,
+      1500
+     ]
+    },
+    {
+     "name": "rangy",
+     "box": [
+      160,
+      700,
+      440,
+      1460
+     ]
+    },
+    {
+     "name": "swindon",
+     "box": [
+      320,
+      780,
+      720,
+      1660
+     ]
+    },
+    {
+     "name": "goth",
+     "box": [
+      580,
+      780,
+      1020,
+      1720
+     ]
+    }
+   ]
   },
   {
-   "t": 37.75,
+   "t": 34.85,
    "crop": null,
    "parts": "POS",
    "set": "forest",
    "refs": [],
    "beat": "the flame",
-   "is": "Scene 6: a flamethrower's jet whips out of the bush ahead, over their heads; all four duck"
+   "is": "Scene 6: a flamethrower's jet whips out of the bush ahead over their heads; each dodges in character: the goth barely leans aside, the lanky lad ducks too deep, the red-shirt lad a token dip, the small woman flails",
+   "people": [
+    {
+     "name": "waif",
+     "box": [
+      0,
+      700,
+      280,
+      1500
+     ]
+    },
+    {
+     "name": "rangy",
+     "box": [
+      160,
+      700,
+      440,
+      1460
+     ]
+    },
+    {
+     "name": "swindon",
+     "box": [
+      320,
+      780,
+      720,
+      1660
+     ]
+    },
+    {
+     "name": "goth",
+     "box": [
+      580,
+      780,
+      1020,
+      1720
+     ]
+    }
+   ]
   },
   {
-   "t": 39.55,
+   "t": 36.0,
    "crop": null,
    "parts": "POS",
    "set": "forest",
    "refs": [],
-   "beat": "spraying back",
-   "is": "Scene 6: the red-shirt lad sprays back wildly; goth swings the crossbow up; lanky lad holds the katana flat over his head; the woman curls round the grenade, eyes shut"
+   "beat": "hitting back",
+   "is": "Scene 6: each hits back in character: the goth looses a crossbow bolt, pleased; the red-shirt lad sprays both uzis back wildly; the lanky lad hacks his katana about over his head; the small woman waves the grenade over her head, screaming",
+   "people": [
+    {
+     "name": "waif",
+     "box": [
+      0,
+      700,
+      280,
+      1500
+     ]
+    },
+    {
+     "name": "rangy",
+     "box": [
+      160,
+      700,
+      440,
+      1460
+     ]
+    },
+    {
+     "name": "swindon",
+     "box": [
+      320,
+      780,
+      720,
+      1660
+     ]
+    },
+    {
+     "name": "goth",
+     "box": [
+      580,
+      780,
+      1020,
+      1720
+     ]
+    }
+   ]
   },
   {
-   "t": 40.97,
+   "t": 36.9,
    "crop": null,
    "parts": "POS",
    "set": "forest",
    "refs": [],
    "beat": "colleagues",
-   "is": "Scene 6: two spiked morning stars on chains swing down out of the trees over their heads"
+   "is": "Scene 6: two spiked morning stars on chains swing down out of the trees over their heads; the red-shirt lad bobs under one still firing; the lanky lad hacks at them",
+   "people": [
+    {
+     "name": "waif",
+     "box": [
+      0,
+      700,
+      280,
+      1500
+     ]
+    },
+    {
+     "name": "rangy",
+     "box": [
+      160,
+      700,
+      440,
+      1460
+     ]
+    },
+    {
+     "name": "swindon",
+     "box": [
+      320,
+      780,
+      720,
+      1660
+     ]
+    },
+    {
+     "name": "goth",
+     "box": [
+      580,
+      780,
+      1020,
+      1720
+     ]
+    }
+   ]
   },
   {
-   "t": 43.0,
+   "t": 39.5,
    "crop": null,
    "parts": "P",
    "set": "reverse",
@@ -115,10 +414,30 @@
     "references/faces/burnham/a01-front-parliament2026.jpg"
    ],
    "beat": "fucker",
-   "is": "Scene 7a: Andy explodes, up out of his lean, both fists down on the table; Pat calm"
+   "is": "Scene 7a: Andy explodes, up out of his lean, both fists down on the table; Pat calm",
+   "people": [
+    {
+     "name": "andy",
+     "box": [
+      0,
+      180,
+      600,
+      1160
+     ]
+    },
+    {
+     "name": "pat",
+     "box": [
+      570,
+      300,
+      1080,
+      1120
+     ]
+    }
+   ]
   },
   {
-   "t": 52.6,
+   "t": 51.0,
    "crop": null,
    "parts": "P",
    "set": "reverse",
@@ -126,10 +445,30 @@
     "references/milburn/cabinet-room-burnham.jpg"
    ],
    "beat": "live TV",
-   "is": "Scene 7c: Andy despairing and angry, both hands out, palms up"
+   "is": "Scene 7c: Andy despairing and angry, both hands out, palms up",
+   "people": [
+    {
+     "name": "andy",
+     "box": [
+      0,
+      180,
+      600,
+      1160
+     ]
+    },
+    {
+     "name": "pat",
+     "box": [
+      570,
+      300,
+      1080,
+      1120
+     ]
+    }
+   ]
   },
   {
-   "t": 54.9,
+   "t": 52.1,
    "crop": null,
    "parts": "P",
    "set": "cabinet",
@@ -138,10 +477,21 @@
     "references/milburn/milburn-official.jpg"
    ],
    "beat": "the glance",
-   "is": "Scene 7d: Milburn's eyes slide to the side"
+   "is": "Scene 7d: Milburn's eyes slide to the side",
+   "people": [
+    {
+     "name": "milburn",
+     "box": [
+      330,
+      560,
+      890,
+      1420
+     ]
+    }
+   ]
   },
   {
-   "t": 65.5,
+   "t": 63.5,
    "crop": null,
    "parts": "P",
    "set": "reverse",
@@ -149,7 +499,27 @@
     "references/milburn/cabinet-room-burnham.jpg"
    ],
    "beat": "like this one",
-   "is": "Scene 7e: Andy frozen, mouth hanging open in outrage; Pat, eyes on Andy, small approving smile"
+   "is": "Scene 7e: Andy frozen, mouth hanging open in outrage; Pat, eyes on Andy, small approving smile",
+   "people": [
+    {
+     "name": "andy",
+     "box": [
+      0,
+      180,
+      600,
+      1160
+     ]
+    },
+    {
+     "name": "pat",
+     "box": [
+      570,
+      300,
+      1080,
+      1120
+     ]
+    }
+   ]
   }
  ],
  "notes": []
