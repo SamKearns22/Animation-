@@ -20,3 +20,6 @@ You can find crossbow firing in Prepper Minister.
 Please have them at 60% volume so they don't overwhelm the dialogue
 @"/root/.claude/uploads/d34bde53-591c-5438-8011-623bac5a0dac/948fc22b-arunangshubanerjee-heavy-duty-underground-car-elevator-mechanical-lift-327686.mp3" Lift rising noise
 
+### 2026-11-18T08:59:48
+Portrait of Robert Walpole in cabinet room. Doesn't have to be exact but needs to look better than the crude drawing you've done
+
