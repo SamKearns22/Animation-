@@ -351,7 +351,7 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.52,
+   "cost": 2.05,
    "src": "estimate",
    "sid": "session_01J1JB7VR2AZvXqJvQMQm3zn",
    "steps": 49,
@@ -746,6 +746,15 @@
     "date": "2026-11-18",
     "spent": 18.66
    }
+  },
+  {
+   "name": "sets",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-18",
+    "spent": 19.19
+   },
+   "unplanned": true
   },
   {
    "name": "build",
