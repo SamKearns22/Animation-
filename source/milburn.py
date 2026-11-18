@@ -29,7 +29,7 @@ import sys
 
 import numpy as np
 
-from PIL import Image
+from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -479,6 +479,7 @@ FOREST6 = [('goth', 0.5, 3.8), ('swindon', -0.25, 4.3), ('rangy', -1.0, 4.8), ('
 # file walking right, leader first; staggered back in depth so all four read in the tall frame (0.75 m apart, not
 # the plan's 1.4: the plan's spacing puts the last one off the left edge)
 CLOSE6 = {'rangy': 0.12, 'waif': 0.25}   # m: the back two close up on "unit"
+GOTH_SHOTS = (MF.T_FLAME + 1.0, MF.T_FLAME + 2.6)   # note 9: the goth looses a bolt, cocks, looses another
 HALT = 0.25                              # s: they stop dead on the gunfire (the camera takes MF.STOP)
 
 
@@ -526,15 +527,29 @@ def forest_pose(who, t):
     after = _ramp(t, MF.T_FLAME + 0.3, MF.T_FLAME + 0.7)        # each one's own answer to the ambush
     shock = MF.T_GUN < t < MF.T_FLAME + 0.4
     firing = []
-    if who == 'goth':                                   # crossbow shouldered, pleased; then swings it up to aim
-        V.arm_to(j, 'R', _mix((sw * 0.35, 50, 150), (sw * 0.3, -10, 170), after), 'down', 'fist')
-        V.arm_to(j, 'L', _mix((-sw * 0.1, 70, 430), (-sw * 0.05, -150, 430), after), 'down', 'fist')
+    flail = _ramp(t, MF.T_GUN + 0.05, MF.T_GUN + 0.3)           # note 9: the waif flails from the first shots
+    if who == 'goth':                                   # crossbow shouldered, pleased; a cool sway aside from the flame,
+        kick = max([max(0.0, 1 - abs(t - tt) / 0.12) for tt in GOTH_SHOTS])      # then aims and looses bolts (note 9)
+        V.arm_to(j, 'R', _mix((sw * 0.35, 50, 150), (sw * 0.3 - 20 * kick, -10 + 25 * kick, 170 - 40 * kick), after),
+                 'down', 'fist')
+        V.arm_to(j, 'L', _mix((-sw * 0.1, 70, 430), (-sw * 0.05, -150 + 20 * kick, 430 - 40 * kick), after),
+                 'down', 'fist')
         MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
-        mood = 'aghast' if shock else ('grim' if t > MF.T_GUN else 'pleased')
-    elif who == 'rangy':                                # the katana out in front like a torch; then flat over his head
-        V.arm_to(j, 'R', _mix((60, 150, 210), (110, -250, 60), after), 'down', 'fist')
-        V.arm_to(j, 'L', _mix((40, -30, 300), (-130, -255, 60), after), 'down', 'palm')
-        MP.in_hands(j, sp, 'katana', 'R', 'L', along=0.0)
+        j['head_roll'] = j.get('head_roll', 0.0) - 9 * duck     # she leans aside, barely bothered
+        mood = 'aghast' if MF.T_GUN < t < MF.T_FLAME else ('pleased' if t > GOTH_SHOTS[0] else
+                                                             ('grim' if t > MF.T_GUN else 'pleased'))
+    elif who == 'rangy':                                # the katana out in front like a torch; ducks too deep, then
+        sw_t = t - MF.T_STARS                           # hacks wildly at the morning stars over his head (note 9)
+        hack = math.sin(sw_t * 2 * math.pi * 1.6) if 0.0 < sw_t < 2.2 else 0.0
+        if after < 0.5:                                 # the torch hold (both hands, blade up)
+            V.arm_to(j, 'R', _mix((60, 150, 210), (40, -120, 200), after * 2), 'down', 'fist')
+            V.arm_to(j, 'L', _mix((40, -30, 300), (40, -170, 200), after * 2), 'down', 'palm')
+            MP.in_hands(j, sp, 'katana', 'R', 'L', along=0.0)
+        else:                                           # one-handed hacks: up-back to chopping forward
+            V.arm_to(j, 'R', (-20 - 50 * hack, -260 + 50 * hack, 180), 'down', 'fist')   # (figures drawn mirrored: -x is ahead)
+            V.arm_to(j, 'L', (-120, -60, 160), 'down', 'palm')
+            MP.in_hands(j, sp, 'katana', 'R', None, ang=-110 - 50 * hack, along=0.0)
+        j['head_roll'] = j.get('head_roll', 0.0) + 6 * hack
         mood = 'aghast' if t > MF.T_GUN else 'nervous'
     elif who == 'swindon':                              # uzis up at his chest swinging side to side; forward on "unit";
         sway = math.sin((t - MF.T0) * 3.0)              # sprays back wildly once the flame has passed
@@ -553,14 +568,20 @@ def forest_pose(who, t):
             if kk > 0.5:
                 firing.append((side, ang))
         mood = 'aghast' if shock else 'thrilled'
-    else:                                               # hugs the grenade, terrified, eyes darting; then curls up
-        for side, sg in (('R', 1), ('L', -1)):
-            V.arm_to(j, side, (sg * 55, 200, 150), 'down', 'palm')
-        MP.in_hands(j, sp, 'grenade', 'R', None, ang=-90, along=-0.0)
-        mood = 'eyes shut' if t > MF.T_FLAME + 0.3 else 'terrified'
+    else:                                               # hugs the grenade, terrified, eyes darting; from the gunfire
+        w1 = math.sin((t - MF.T_GUN) * 2 * math.pi * 2.3)          # she waves it over her head, freaking out
+        w2 = math.sin((t - MF.T_GUN) * 2 * math.pi * 3.1 + 1.0)    # (note 9: no curling round it)
+        Rh = _mix((55, 200, 150), (280 + 80 * w1, -330 + 40 * abs(w1), 40), flail)   # up to her side: face clear
+        Lh = _mix((-55, 200, 150), (-190 - 50 * w2, -230 + 70 * w2, -10), flail)
+        V.arm_to(j, 'R', Rh, 'down', 'palm')
+        V.arm_to(j, 'L', Lh, 'down', 'palm')
+        MP.in_hands(j, sp, 'grenade', 'R', None, ang=-90 + 50 * w1 * flail, along=-0.0)
+        mood = 'terrified'
     _crouch(j, -40 * jolt, 0.0)
-    deep = {'waif': 1.3, 'rangy': 0.8}.get(who, 1.0)
-    _crouch(j, 190 * duck * deep + (50 * after if who == 'waif' else 0), 18 * duck * deep)
+    deep = {'waif': 0.6, 'rangy': 1.1, 'goth': 0.35, 'swindon': 0.4}.get(who, 1.0)   # note 9: each dodges in character
+    _crouch(j, 190 * duck * deep, 18 * duck * deep)
+    if who == 'swindon':                                # a cocky bob under the morning star, still firing (note 9)
+        _crouch(j, 150 * max(0.0, 1 - abs(t - 36.85) / 0.3), 10 * max(0.0, 1 - abs(t - 36.85) / 0.3))
     d = face_sp('6', who, t, mood)
     if who == 'rangy' and t < MF.T_GUN:
         d['gaze_dy'] = 0.5 * (math.sin(t * 2.3) > 0)        # glancing down at the blade
@@ -569,7 +590,10 @@ def forest_pose(who, t):
     if who == 'waif':
         if t < MF.T_GUN:
             d['look'] = 0.5 * math.sin(t * 5.0)             # eyes darting
-        j['shake_x'] = 4.0 * math.sin(t * 2 * math.pi * 9)
+        else:                                               # screaming, eyes everywhere (note 9)
+            d['look'] = 0.7 * math.sin(t * 7.0)
+            d['mouth'] = 'v:O'
+        j['shake_x'] = (4.0 + 6.0 * flail) * math.sin(t * 2 * math.pi * 9)
     return d, j, firing
 
 
@@ -590,6 +614,18 @@ def forest_shot(t):
             gx = X + hx * s + math.cos(a) * 0.4 * pxm
             gy = Y - FEET * s + (hy + j.get('bob', 0.0)) * s + math.sin(a) * 0.4 * pxm - 0.05 * pxm
             MF.muzzle(img, gx, gy, pxm, int(t * 97) + (side == 'L'), 0.16)
+        if who == 'goth':                               # note 9: her bolts streak off ahead, into the trees
+            for tt in GOTH_SHOTS:
+                u = t - tt
+                if 0.0 <= u < 0.3:
+                    hx, hy = pts['wrR']
+                    bx = X + hx * s + (0.45 + 14.0 * u) * pxm
+                    by = Y - FEET * s + (hy + j.get('bob', 0.0)) * s - 0.06 * pxm - 0.5 * u * pxm
+                    dr = ImageDraw.Draw(img)
+                    dr.line([(bx - 0.4 * pxm, by + 0.02 * pxm), (bx, by)], fill=(70, 50, 34),
+                            width=max(3, int(0.02 * pxm)))
+                    dr.polygon([(bx + 0.06 * pxm, by), (bx - 0.02 * pxm, by - 0.025 * pxm),
+                                (bx - 0.01 * pxm, by + 0.03 * pxm)], fill=(170, 176, 186), outline=(20, 20, 24))
     MF.flame(img, t)
     MF.stars(img, t)
     img.alpha_composite(MF.in_front(t))
