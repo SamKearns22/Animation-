@@ -33,7 +33,7 @@ name card: at -0.27 0.76, depth 1.5, text "Alan Milburn" (his name card)
 # (chat 10, notes 5 and 10: Sam's second word on this framing (rule 30). Chat 6's two equal busts side by side, dead
 # centre, over 40% empty baize, the fireplace hidden, the name cards cut: now the lens lower, Andy leaning in at the
 # table, Pat sat back a step behind him, the fireplace between their heads, the drinks forward on coasters.)
-camera: up 1.02, horizon 760, lens 2000, centre 570
+camera: up 1.2, horizon 760, lens 2000, centre 570
 people: andy 2.0, pat 2.42
 panels: x -2.4 to 2.4, z 0 to 4.6, depth 3.4, step 0.62, seed 21 (the panelled wall behind them)
 block: x -2.4 to 2.4, z 3.3 to 3.36, depth 3.4, colour wall * 0.9, line 1.4 (the picture rail)
