@@ -23,7 +23,7 @@ folder: x 0.5 to 0.78, z 0 to 0.76, depth 1.9, near 1.66 (the right place's fold
 papers: at 0.2 0.76, depth 1.62, width 0.2 (a paper)
 tumbler: at 0.3 0.76, depth 1.72 (Milburn's water glass)
 tumbler: at 0.86 0.76, depth 1.76, full 0.75 (the right place's glass)
-name card: at -0.27 0.76, depth 1.5, text "Alan Milburn" (his name card)
+name card: at -0.27 0.76, depth 1.32, width 0.15, text "Alan Milburn", layer over (his name card; Sam 18 Nov: forward, his sleeve clipped its edge at 3 s)
 
 ## view: reverse (the 180 of shot 1: from Milburn's seat across the table to Andy and Pat; shots 5 and 7)
 # The same room turned round: the fireplace wall behind the Prime Minister's chair (no photo of this side found

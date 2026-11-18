@@ -3,7 +3,7 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## milburn.py (784 lines)
+## milburn.py (804 lines)
 - 34: HERE (data)
 - 42: B (data)
 - 43: V (data)
@@ -13,119 +13,119 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 51: HAS (data)
 - 52: FPS (data)
 - 53: LINES (data)
-- 75: SHOTS (data)
-- 80: CUTS_N11 (data)
-- 83: DUR (data)
-- 84: T (data)
-- 92: _FOUR (data)
-- 93: REVERSE (data)
-- 94: ACROSS (data)
-- 95: SHOT_CAST (data)
-- 97: KEEP_CLEAR (data)
-- 98: HOOK (data)
-- 99: SHOT_MARKS (data)
-- 102: `scene_of` 
-- 110: `shot_of` 
-- 115: PLAN (data)
-- 130: BENCHMARK (data)
-- 141: CAST (data)
-- 142: FEET (data)
-- 145: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
-- 150: `person` Draw `who` standing on sole_y; their face and pose come from story/milburn-moves.txt (the moves kit) when the
-- 164: MOODS (data)
-- 197: `word_at` When line n reaches `words` (stand-in timing: the text spread evenly by letters over the line's span).
-- 205: TRACK (data)
-- 209: BLINKS (data)
-- 212: HEAD_LIFE (data)
-- 215: `head_life` Rule 74: Milburn's head tilts and nods on his voice (headlife, from the stand-in's loudness per drawing).
-- 232: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks.
-- 246: _MOVES (data)
-- 249: `moves` (the moves file, the film's side) for the kit, read once.
-- 257: `acted` (face sp, joints) for who's block in shot at film time t (story/milburn-moves.txt).
-- 269: _DESC (data)
-- 270: _PAINT (data)
-- 274: `cabinet` 
-- 301: _RPAINT (data)
-- 302: SEATS (data)
-- 303: SPLIT (data)
-- 306: `reverse` Andy and Pat across the table from Milburn's seat (places view `reverse`), seated as Milburn is in shot 1: the
-- 341: `_table_layer` The front layer (table, folders, glasses, name card) on its own, to lay between Milburn's body and arms.
-- 350: NEETS (data)
-- 353: `shaft_shot` 
-- 374: TINY (data)
-- 377: `_tiny` 
-- 386: `field_shot` 
-- 394: FIELD3 (data)
-- 396: PLINTHS3 (data)
-- 400: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
-- 406: `_mix` 
-- 410: `_picked` 0 -> 1: how far `who` has lifted their weapon off the plinth (0: it still lies there, their hands on it).
-- 422: ON_PLINTH (data)
-- 425: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
-- 479: YAW3 (data)
-- 483: `field_level_shot` 
-- 506: FOREST6 (data)
-- 509: CLOSE6 (data)
-- 510: GOTH_SHOTS (data)
-- 511: SKY_SHOT (data)
-- 515: `_sky` 0 -> 1 -> 0: the goth's crossbow jerked up skyward on the first gunfire, then lowered again.
-- 518: HALT (data)
-- 521: `_ramp` 
-- 525: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
-- 538: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
-- 548: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
-- 642: `forest_shot` 
-- 691: `picture` 
-- 706: `frame_image` 
-- 710: `cast` 
-- 715: `_standin` A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
-- 738: `soundtrack` 
-- 749: `final` 
-- 760: `main` 
-- 781: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
+- 84: _FOUR (data)
+- 85: REVERSE (data)
+- 86: ACROSS (data)
+- 87: SHOT_CAST (data)
+- 89: KEEP_CLEAR (data)
+- 90: HOOK (data)
+- 91: SHOT_MARKS (data)
+- 94: `scene_of` 
+- 102: `shot_of` 
+- 107: PLAN (data)
+- 122: BENCHMARK (data)
+- 133: CAST (data)
+- 134: FEET (data)
+- 137: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
+- 142: `person` Draw `who` standing on sole_y; their face and pose come from story/milburn-moves.txt (the moves kit) when the
+- 156: MOODS (data)
+- 190: `word_at` When line n reaches `words`: its syllables spread over where the recording really speaks.
+- 199: TRACK (data)
+- 204: BLINKS (data)
+- 207: HEAD_LIFE (data)
+- 210: `head_life` Rule 74: Milburn's head tilts and nods on his voice (headlife, from the stand-in's loudness per drawing).
+- 227: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks.
+- 241: _MOVES (data)
+- 244: `moves` (the moves file, the film's side) for the kit, read once.
+- 252: `acted` (face sp, joints) for who's block in shot at film time t (story/milburn-moves.txt).
+- 264: _DESC (data)
+- 265: _PAINT (data)
+- 269: `cabinet` 
+- 296: _RPAINT (data)
+- 297: SEATS (data)
+- 298: SPLIT (data)
+- 301: `reverse` Andy and Pat across the table from Milburn's seat (places view `reverse`), seated as Milburn is in shot 1: the
+- 336: `_table_layer` The front layer (table, folders, glasses, name card) on its own, to lay between Milburn's body and arms.
+- 345: NEETS (data)
+- 348: `shaft_shot` 
+- 369: TINY (data)
+- 372: `_tiny` 
+- 381: `field_shot` 
+- 389: FIELD3 (data)
+- 391: PLINTHS3 (data)
+- 395: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
+- 401: `_mix` 
+- 405: `_picked` 0 -> 1: how far `who` has lifted their weapon off the plinth (0: it still lies there, their hands on it).
+- 417: ON_PLINTH (data)
+- 420: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
+- 475: YAW3 (data)
+- 479: `field_level_shot` 
+- 502: FOREST6 (data)
+- 505: CLOSE6 (data)
+- 506: GOTH_SHOTS (data)
+- 507: SKY_SHOT (data)
+- 511: `_sky` 0 -> 1 -> 0: the goth's crossbow jerked up skyward on the first gunfire, then lowered again.
+- 514: HALT (data)
+- 517: `_ramp` 
+- 521: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
+- 534: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
+- 544: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
+- 638: `forest_shot` 
+- 687: `picture` 
+- 702: `frame_image` 
+- 706: `cast` 
+- 711: DUCK_TO (data)
+- 712: SFX_GAIN (data)
+- 713: _SFX (data)
+- 716: `_sfx` One of Sam's sound effects (source/audio/milburn-sfx-NAME.mp3), as supplied.
+- 724: `sfx_cues` [(effect, film second it starts, seconds it may run or None, fade out)]: where each effect lands (Sam, 18 Nov:
+- 740: `soundtrack` Sam's recordings, cleaned and matched, each where its line starts (the swear bleeped), then the effects at 60%
+- 769: `final` 
+- 780: `main` 
+- 801: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
 
-## milburn_forest.py (496 lines)
+## milburn_forest.py (497 lines)
 - 29: HERE (data)
 - 35: CAM (data)
-- 37: YAW_VIEW (data)
-- 38: V_EFF (data)
-- 39: STOP (data)
-- 42: `cam_x` The camera's travel (m, to the right) since the shot began: walking pace, then easing to a stop.
-- 51: END_X (data)
-- 54: HAZE (data)
-- 55: CANOPY (data)
-- 56: LEAF (data)
-- 57: BARK (data)
-- 58: BARK_D (data)
-- 59: EARTH (data)
-- 60: EARTH_D (data)
-- 61: FLOOR (data)
-- 64: `fog` Colour c at depth d: hazier and paler the further off (flat steps, not a gradient per pixel).
-- 70: `_P` 
-- 76: `items` Every piece of the forest in metres: (depth, kind, x, args, seed).
-- 110: AHEAD_GUNS (data)
-- 111: NOZZLE (data)
-- 112: STAR_PIVOTS (data)
-- 116: `_poly` 
-- 120: `_blob` 
-- 134: `trunk` 
-- 161: `clump` 
-- 174: `bush` 
-- 188: `fern` 
-- 217: `mark` 
-- 243: `_backdrop` The deep, hazy green behind every trunk: darker up in the canopy (flat bands).
-- 253: `_shafts` Shafts of light slanting down through the canopy (flat, pale, see-through).
-- 264: `behind` Everything behind the four (RGBA, full size).
-- 301: NEAR (data)
-- 305: `in_front` The nearest layer at about 1.5 m (RGBA): the undergrowth just in front of the track, ferns and a trunk that
-- 323: `class _FxCam` The level camera in prepper_fx's terms: points are (x, up, depth) in metres; px per metre as k.
-- 338: `_fx` 
-- 343: `gunfire` Flashes in the leaves ahead (screen right) from the gunfire on, one frame each, never all at once; tracers
-- 364: `muzzle` A muzzle flash at a gun's mouth (screen X, Y; k px per metre there): the house's lumpy flash.
-- 377: `flame` The flamethrower's blast (37.5): a jet whips out of the nearest bush ahead, left across the track at their
-- 425: `star_at` (pivot X, Y, ball X, Y, radius px, k px/m) for morning star i at film time t, or None before it drops.
-- 445: `stars` The two morning stars: spiked steel balls on chains swinging down out of the trees over their heads.
-- 477: `sheet` 
+- 38: YAW_VIEW (data)
+- 39: V_EFF (data)
+- 40: STOP (data)
+- 43: `cam_x` The camera's travel (m, to the right) since the shot began: walking pace, then easing to a stop.
+- 52: END_X (data)
+- 55: HAZE (data)
+- 56: CANOPY (data)
+- 57: LEAF (data)
+- 58: BARK (data)
+- 59: BARK_D (data)
+- 60: EARTH (data)
+- 61: EARTH_D (data)
+- 62: FLOOR (data)
+- 65: `fog` Colour c at depth d: hazier and paler the further off (flat steps, not a gradient per pixel).
+- 71: `_P` 
+- 77: `items` Every piece of the forest in metres: (depth, kind, x, args, seed).
+- 111: AHEAD_GUNS (data)
+- 112: NOZZLE (data)
+- 113: STAR_PIVOTS (data)
+- 117: `_poly` 
+- 121: `_blob` 
+- 135: `trunk` 
+- 162: `clump` 
+- 175: `bush` 
+- 189: `fern` 
+- 218: `mark` 
+- 244: `_backdrop` The deep, hazy green behind every trunk: darker up in the canopy (flat bands).
+- 254: `_shafts` Shafts of light slanting down through the canopy (flat, pale, see-through).
+- 265: `behind` Everything behind the four (RGBA, full size).
+- 302: NEAR (data)
+- 306: `in_front` The nearest layer at about 1.5 m (RGBA): the undergrowth just in front of the track, ferns and a trunk that
+- 324: `class _FxCam` The level camera in prepper_fx's terms: points are (x, up, depth) in metres; px per metre as k.
+- 339: `_fx` 
+- 344: `gunfire` Flashes in the leaves ahead (screen right) from the gunfire on, one frame each, never all at once; tracers
+- 365: `muzzle` A muzzle flash at a gun's mouth (screen X, Y; k px per metre there): the house's lumpy flash.
+- 378: `flame` The flamethrower's blast (37.5): a jet whips out of the nearest bush ahead, left across the track at their
+- 426: `star_at` (pivot X, Y, ball X, Y, radius px, k px/m) for morning star i at film time t, or None before it drops.
+- 446: `stars` The two morning stars: spiked steel balls on chains swinging down out of the trees over their heads.
+- 478: `sheet` 
 
 ## milburn_props.py (197 lines)
 - 20: HERE (data)
@@ -183,6 +183,26 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 462: `field_level` Scene 3's ground: the meadow with the same long gusts as the aerial, seen level (RGB).
 - 477: `sheet` 
 
+## milburn_voice.py (176 lines)
+- 22: HERE (data)
+- 23: SR (data)
+- 24: LUFS (data)
+- 27: TAKES (data)
+- 31: GAP (data)
+- 32: FUCK (data)
+- 33: ORDER (data)
+- 36: `_trim` The take with hum and hiss out, cut to the speech (50 ms before, 80 ms after); also where it started.
+- 45: `_match_tone` Make the takes sound like one session: each line's tone nudged towards the average, at most 4 dB, no echo.
+- 65: `_build` 
+- 89: DUR_OF (data)
+- 92: `bleeped` The sound of line n: where Sam swears, a 1 kHz tone goes over the word (rule 26).
+- 104: `_timeline` Film seconds for every line, shot cut and beat. Gaps between lines are the old film's (dead air already
+- 121: LINES_TIMED (data)
+- 129: FOREST (data)
+- 132: `word_times` [(word, film seconds it is reached)] for line n: the words' syllables spread over where the line speaks.
+- 153: `_after` When line n reaches the first word of `find` (a snippet of its text).
+- 160: `shots_and_beats` (SHOTS, T, forest times, DUR) from the lines. texts: {n: the line's text}.
+
 ## milburn-people.txt (7 people; a note on a person changes their lines)
 - 6: milburn (Alan Milburn (Lead: speaks, straight to lens)): body: , shoulders , head x ; skin: hair: side, ; face: brow_high , nose_wide , brow_slope , nose_long , eye_tilt , chin_long , face_wide , lip_top , eye_size ; eyes: lips: brows: , width , thick ; glasses: , thick; outfit: suit navy, shirt white, tie , trousers navy, shoes
 - 14: goth (The goth girl (NEET : big blue-purple hair, blooming black dress, pudgy nose, overweight)): body: , shoulders , head x ; skin: pale hair: shag, , big, streaks ; face: face_wide ++, jaw_wide ++, nose_wide ++, nose_long -, eye_size +; eyes: lips: brows: , width lashes piercings: brow, lip, nose; outfit: dress , dress , sleeves , trousers , shoes ; extras: skirt
@@ -192,7 +212,7 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 47: andy (Andy Burnham, the Prime Minister (scenes : angry, pointing; Sam's finished face-tool head, unchanged)): head: house burnham, hair swept, look detail; outfit: suit , shirt white, no tie; body:
 - 52: pat (Pat McFadden, Work and Pensions Secretary (scenes : patient, fingers steepled). Face tool pick B): head: house mcfadden, hair bald, look detail; outfit: suit , shirt white, tie ; body:
 
-## milburn-places.txt (32 pieces; a note on a place changes its line: open that line)
+## milburn-places.txt (36 pieces; a note on a place changes its line: open that line)
 ### cabinet (Milburn across the table, straight to lens)
 - 11: panels (the panelled wall)
 - 12: block (the picture rail)
@@ -215,18 +235,22 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 39: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the picture rail)
 - 40: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the dado rail)
 - 41: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the marble fireplace behind the PM's chair
-- 43: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
-- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
-- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
-- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
-- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
-- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
-- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card
-- 50: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card
-- 52: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Andy's Vimto: front-left of him, chat 11)
-- 53: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto, note 10; chat 11 nearer him)
-- 54: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Pat's water: front-left of him, chat 11)
-- 55: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water, note 10; chat 11 nearer him)
+- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the first-minister portrait over the fireplace
+- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the bracket clock, middle of the mantel
+- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): candlestick (gilt candelabrum, left end)
+- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): candlestick (gilt candelabrum, right end)
+- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
+- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
+- 50: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
+- 51: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
+- 52: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
+- 53: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
+- 54: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card; Sam 18 Nov: forward on the table, clear of his hands
+- 55: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card; Sam 18 Nov: forward, clear of his arms
+- 57: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Andy's Vimto: front-left of him, chat 11)
+- 58: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto, note 10; chat 11 nearer him)
+- 59: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Pat's water: front-left of him, chat 11)
+- 60: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water, note 10; chat 11 nearer him; Sam 18 Nov: no lemon slice)
 
 ## milburn-moves.txt (124 lines; a note on a move changes its line: open that line)
 ### 1 (milburn)

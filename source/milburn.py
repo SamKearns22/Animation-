@@ -51,16 +51,16 @@ NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'milburn.md')
 HAS = {'people', 'rooms', 'voices', 'props'}
 FPS = 12
 LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: then 'audio': 'milburn-1' ...
-    dict(who='milburn', text='The essence of my proposal is quite simple.', start=0.4, end=2.9),
+    dict(who='milburn', text='The essence of my report is quite simple.', start=0.4, end=2.9),
     dict(who='milburn', text='Those not in education, employment or training will be presented with a unique '
                              'opportunity to serve their country.', start=3.5, end=9.0),
-    dict(who='milburn', text='Each NEET must arm themselves before heading further into the Zone.', start=10.1,
+    dict(who='milburn', text='Each NEET will have to arm themselves before heading further into the Zone.', start=10.1,
          end=13.8),
-    dict(who='andy', text="God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?",
+    dict(who='andy', text="God damnit, Milburn. You're pulling a Hunger Games slash Battle Royale on us, aren't you?",
          start=14.1, end=18.8),
     dict(who='milburn', text='This report has been long in the making. Would you care to hear the findings or would '
                              'you prefer to interrupt?', start=19.3, end=25.5),
-    dict(who='pat', text="I'd like to hear where this goes, Prime Minister.", start=26.1, end=28.9),
+    dict(who='pat', text="I'd like to hear where this one goes, Prime Minister.", start=26.1, end=28.9),
     dict(who='andy', text='Fine! Continue.', start=29.5, end=30.7),
     dict(who='milburn', text='The NEETs will form a unit.', start=31.8, end=33.7),
     dict(who='milburn', text='And will encounter teams of their erstwhile colleagues.', start=36.2, end=38.8),
@@ -68,7 +68,7 @@ LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: t
          end=42.8),
     dict(who='milburn', text='I am sorry that you feel that way.', start=43.5, end=46.0),
     dict(who='andy', text='Are you or are you not sending NEETs to kill each other on live TV?', start=46.8, end=51.3),
-    dict(who='milburn', text='My report is nuanced and multifaceted. I also suggest taking away PIP after they obtain '
+    dict(who='milburn', text='My report is nuanced and multifaceted. I also recommend taking away PIP after they obtain '
                              'their life-changing injuries in the Blood Dome.', start=52.9, end=60.3),
     dict(who='pat', text='I think the backbenchers will like this one, sir.', start=61.5, end=64.3),
 ]
@@ -87,7 +87,7 @@ ACROSS = ('1', '4b', '7b', '7d')                     # shot 1's camera: Milburn
 SHOT_CAST = dict({'2a': _FOUR, '2b': _FOUR, '3': _FOUR, '6': _FOUR}, **{n: ['milburn'] for n in ACROSS},
                  **{n: ['andy', 'pat'] for n in REVERSE})
 KEEP_CLEAR = [("Milburn's face", lambda t: (420, 580, 680, 960) if t < SHOTS[0][2] else None)]   # rule 75: the Hook Text sits above it
-HOOK = ('The Milburn Report is released 😬', {'y': 420, 'until': 3.0})   # rule 75: the band above his head
+HOOK = ('The Milburn Report is released 😬', {'y': 420, 'until': 3.0, 'tilt': -7})   # rule 75: the band above his head
 SHOT_MARKS = dict(SHOT_CAST, **{'2b': []})          # rule 38: front on (2b: tiny, from above)
 
 
@@ -262,7 +262,7 @@ def acted(shot, who, t):
 
 # ================================================================================================= shot 1
 _DESC = PL.load(FILM)
-_PAINT = {layer: PL.painter(_DESC, 'cabinet', layer) for layer in ('back', 'mid', 'front')}
+_PAINT = {layer: PL.painter(_DESC, 'cabinet', layer) for layer in ('back', 'mid', 'front', 'over')}
 _seated_neck = 1.06                   # m above the floor: seat 0.46, hips 0.5, hips to neck 0.56
 
 
@@ -289,6 +289,8 @@ def cabinet(t):
     person(img, 'milburn', 540, neck_y + FEET * scale_at(pxm, sp), pxm, 0.0, t, j, look)
     cut = int(L.p(0.0, 1.62, 0.76)[1]) + 60            # below the folder's near edge only the table shows: his
     img.alpha_composite(_table_layer(t).crop((0, cut, W, H)), (0, cut))   # shins drawn after it are covered again
+    if _PAINT['over']:                                 # the name card, nearest of all: no sleeve or hand over it
+        _PAINT['over'](img, cam, t)
     return img.convert('RGB')
 
 
@@ -511,6 +513,8 @@ SKY_SHOT = MF.T_GUN + 0.1                           # Sam (chat 11): the first g
 def _sky(t):
     """0 -> 1 -> 0: the goth's crossbow jerked up skyward on the first gunfire, then lowered again."""
     return _ramp(t, MF.T_GUN, SKY_SHOT) * (1 - _ramp(t, SKY_SHOT + 0.35, SKY_SHOT + 0.8))
+RETREAT = 0.5                           # m the goth backs off (leftwards on screen), from the flame's first lick to the end of the shot
+RET0, RET1 = MF.T_FLAME + 0.4, MF.T1 - 0.2
 HALT = 0.25                              # s: they stop dead on the gunfire (the camera takes MF.STOP)
 
 
@@ -528,7 +532,10 @@ def walked(who, t):
         u = min(1.0, (t - MF.T_GUN) / HALT)
         d = v * (MF.T_GUN - MF.T0) + v * HALT * (u - u * u / 2)
     a = word_at(8, 'unit')
-    return d + CLOSE6.get(who, 0.0) * _ramp(t, a - 0.3, a + 0.4)
+    d += CLOSE6.get(who, 0.0) * _ramp(t, a - 0.3, a + 0.4)
+    if who == 'goth':                                # Sam (18 Nov): under fire she backs off along the line, loosing bolts
+        d -= RETREAT * _ramp(t, RET0, RET1)          # as she goes (the others are staggered in depth, so none is walked through)
+    return d
 
 
 def _crouch(j, amt, lean):
@@ -550,6 +557,8 @@ def forest_pose(who, t):
     j = MO.gait(sp, tau, 'walk', stride=0.45 * k)
     stop = _ramp(t, MF.T_GUN, MF.T_GUN + HALT)
     if stop > 0:
+        if who == 'goth':                              # she keeps walking, backwards, once the flame comes
+            stop *= 1 - _ramp(t, RET0 - 0.2, RET0 + 0.1)
         j = MO.mix_poses(j, V.standing(sp), stop)
     sw = sp.get('shoulders', 150) / 2.0
     unit = word_at(8, 'unit')
@@ -573,8 +582,14 @@ def forest_pose(who, t):
         empty = any(tt <= t < (nxt - 0.6 if nxt else 99) for tt, nxt in zip(shots, shots[1:] + (None,)))   # before the next
         MP.in_hands(j, sp, 'crossbow_empty' if empty else 'crossbow', 'R', 'L', along=-0.06)
         j['head_roll'] = j.get('head_roll', 0.0) - 9 * duck     # she leans aside, barely bothered
-        mood = 'aghast' if MF.T_GUN < t < MF.T_FLAME else ('pleased' if t > GOTH_SHOTS[0] else
-                                                             ('grim' if t > MF.T_GUN else 'pleased'))
+        if RET0 < t < RET1:                             # Sam (18 Nov): backing off, ducking and weaving as she fires
+            wv = math.sin((t - RET0) * 2 * math.pi * 1.5)
+            j['bob'] = j.get('bob', 0.0) + 22 * max(0.0, -wv)         # dips under the fire
+            j['lean'] = j.get('lean', 0.0) - 5 - 5 * wv                # leaning back and weaving
+            j['head_roll'] = j.get('head_roll', 0.0) + 5 * wv
+        near = min(abs(t - tt) for tt in GOTH_SHOTS)
+        mood = ('stoked' if near < 0.45 else 'aghast' if (MF.T_GUN < t < MF.T_FLAME + 0.4) else
+                'grim' if t > MF.T_GUN else 'pleased')
     elif who == 'rangy':                                # the katana out in front like a torch; ducks too deep, then
         sw_t = t - MF.T_STARS                           # hacks wildly at the morning stars over his head (note 9)
         hack = math.sin(sw_t * 2 * math.pi * 1.6) if 0.0 < sw_t < 2.2 else 0.0
@@ -723,12 +738,9 @@ def _sfx(name):
 
 def sfx_cues():
     """[(effect, film second it starts, seconds it may run or None, fade out)]: where each effect lands (Sam, 18 Nov:
-    the lift as the deck rises, Swindon's uzis in scene 3 and again in the forest, the gunfire, the flamethrower, the
+    the lift as the deck rises, Swindon's uzis in the forest only (scene 3 he mimes 'pow pow': no sound, Sam 18 Nov), the gunfire, the flamethrower, the
     morning stars' blades, the goth's crossbow bolts)."""
-    a0 = word_at(3, 'Each') + 0.9                                      # Swindon starts spraying
-    end3 = SHOTS[3][2] - 0.3                                           # ... and stops when the shot ends
     cues = [('lift', SHOTS[1][1], T['locks'] + 0.3 - SHOTS[1][1], 0.6),
-            ('uzi', a0, end3 - a0, 0.3),
             ('crossbow', SKY_SHOT, None, 0.1)]
     cues += [('ak47', MF.T_GUN, None, 0.2), ('ak47', MF.T_GUN + 2.1, MF.T1 - 2.0 - (MF.T_GUN + 2.1), 0.3),
              ('flamethrower', MF.T_FLAME - 0.3, 2.4, 0.5), ('uzi', MF.T_FLAME + 0.45, MF.T1 - 1.0 - MF.T_FLAME - 0.45, 0.4),

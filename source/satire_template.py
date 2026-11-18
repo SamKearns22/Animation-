@@ -81,7 +81,7 @@ DUR = 5.6
 THUMP = filmkit.Beats([(1.0, 'set-up', (150, 300)), (1.45, 'wind-up', (300, -40)),
                        (1.6, 'contact', (175, 335), 'fast'), (2.1, 'settle', (150, 310), 'slow')])
 # What the shared checks need (preflight.py runs them all; guides/satire.md, 'Getting it right first time'):
-HOOK = ('Hook Text here', {'y': 880})               # finish.py --film NAME reads it (rule 75): y, x, w, until, centre
+HOOK = ('Hook Text here', {'y': 880, 'tilt': -7})               # finish.py --film NAME reads it (rule 75): y, x, w, until, centre
 SUBS_IN_PICTURE = True                              # rule 70: finish.py --film NAME burns the captions in (whole renders
                                                     # leave them out; stills and --span clips keep them)
 PIECE_FIX = {}                                      # {line n: {piece index: seconds}}: only where a take fools the timing
