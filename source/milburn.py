@@ -179,6 +179,7 @@ MOODS = {
     'attentive': dict(smile=0.15, lid4=0.2, brow_up=0.006),                 # Milburn: nonplussed, soft
     'sorry': dict(smile=0.2, lid4=0.24, brow_up=0.02, frown=-0.012),        # sorry-not-sorry
     'stoked': dict(smile=0.85, squint=0.45, lid4=0.14, brow_up=0.015, mouth='v:grin'),   # the goth, crossbow up: "sick, this one's mine"
+    'focused': dict(smile=-0.1, squint=0.7, lid4=0.12, frown=0.1),          # the goth in combat: jaw set, eyes narrowed on the target
     'grim': dict(smile=0.25, lid4=0.3, frown=0.02),                         # the goth, pleased and dangerous
     'thrilled': dict(smile=0.8, squint=0.6, lid4=0.1),                      # Swindon, firing back
     'aghast': dict(smile=-0.6, brow_up=0.05, lid4=0.0, mouth='v:O'),        # the rangy lad
@@ -587,9 +588,8 @@ def forest_pose(who, t):
             j['bob'] = j.get('bob', 0.0) + 22 * max(0.0, -wv)         # dips under the fire
             j['lean'] = j.get('lean', 0.0) - 5 - 5 * wv                # leaning back and weaving
             j['head_roll'] = j.get('head_roll', 0.0) + 5 * wv
-        near = min(abs(t - tt) for tt in GOTH_SHOTS)
-        mood = ('stoked' if near < 0.45 else 'aghast' if (MF.T_GUN < t < MF.T_FLAME + 0.4) else
-                'grim' if t > MF.T_GUN else 'pleased')
+        mood = ('aghast' if (MF.T_GUN < t < MF.T_FLAME + 0.4) else          # Sam (18 Nov): in combat she concentrates,
+                'focused' if t > MF.T_GUN else 'pleased')                   # no grin, once the flame is on
     elif who == 'rangy':                                # the katana out in front like a torch; ducks too deep, then
         sw_t = t - MF.T_STARS                           # hacks wildly at the morning stars over his head (note 9)
         hack = math.sin(sw_t * 2 * math.pi * 1.6) if 0.0 < sw_t < 2.2 else 0.0
@@ -634,7 +634,8 @@ def forest_pose(who, t):
     _crouch(j, 190 * duck * deep, lean * duck)          # goth sinks and leans back, cool; Swindon dives forward; rangy
                                                         # ducks deepest; all clear of the flame (critique r2)
     if who == 'swindon':                                # a cocky bob under the morning star, still firing (note 9)
-        _crouch(j, 150 * max(0.0, 1 - abs(t - 36.85) / 0.3), 10 * max(0.0, 1 - abs(t - 36.85) / 0.3))
+        _bob = max(0.0, 1 - abs(t - (MF.T_STARS + 0.25)) / 0.3)        # on the morning star's pass (was a fixed 36.85 s from the old
+        _crouch(j, 150 * _bob, 10 * _bob)                               # clock: it fired while they were still walking; Sam 18 Nov)
     d = face_sp('6', who, t, mood)
     if who == 'rangy' and t < MF.T_GUN:
         d['gaze_dy'] = 0.5 * (math.sin(t * 2.3) > 0)        # glancing down at the blade
