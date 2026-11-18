@@ -803,6 +803,47 @@
     "ticked": 0,
     "edited film code": false
    }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "7f941448",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.09,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZDeRUXyAPbaEZurfA",
+   "steps": 5,
+   "hist_k": 93,
+   "kinds": {
+    "tool search": 24.5,
+    "other": 75.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 4,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 1,
+     "film notes": 2,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false
+   }
   }
  ],
  "checks": {},
