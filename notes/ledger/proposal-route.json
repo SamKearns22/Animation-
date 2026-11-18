@@ -566,15 +566,15 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.65,
+   "cost": 1.97,
    "src": "estimate",
    "sid": "session_01J1JB7ZDeRUXyAPbaEZurfA",
-   "steps": 43,
+   "steps": 44,
    "hist_k": 138,
    "kinds": {
-    "tool search": 21.9,
-    "page.py": 7.1,
-    "other": 71.0
+    "tool search": 21.7,
+    "page.py": 7.0,
+    "other": 71.2
    },
    "calls": {
     "film-file search": 0,
