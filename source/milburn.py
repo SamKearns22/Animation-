@@ -186,6 +186,7 @@ MOODS = {
     'approving': dict(smile=0.4, lid4=0.3),                                 # ... the backbenchers will like it
     'attentive': dict(smile=0.15, lid4=0.2, brow_up=0.006),                 # Milburn: nonplussed, soft
     'sorry': dict(smile=0.2, lid4=0.24, brow_up=0.02, frown=-0.012),        # sorry-not-sorry
+    'stoked': dict(smile=0.85, squint=0.45, lid4=0.14, brow_up=0.015, mouth='v:grin'),   # the goth, crossbow up: "sick, this one's mine"
     'grim': dict(smile=0.25, lid4=0.3, frown=0.02),                         # the goth, pleased and dangerous
     'thrilled': dict(smile=0.8, squint=0.6, lid4=0.1),                      # Swindon, firing back
     'aghast': dict(smile=-0.6, brow_up=0.05, lid4=0.0, mouth='v:O'),        # the rangy lad
@@ -434,7 +435,8 @@ def arming(who, t):
         if u > 0.04:                                    # it to her shoulder, and (till then it lies on the plinth)
             MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
         j['lean'] = 8.0 * (1 - u) + 3.0 * u                                             # is satisfied with it
-        mood = 'pleased'
+        j['nod'] = 6.0 * u * (1 - _ramp(t, word_at(3, 'arm themselves') + 0.5, word_at(3, 'arm themselves') + 0.9) * 0.5)
+        mood = 'stoked' if u > 0.3 else 'pleased'       # Sam (18 Nov): "yeah, sick, this is the weapon for me"
     elif who == 'rangy':                                # holds the katana out flat in front and stares at it, unsure
         a = word_at(3, 'arm themselves')
         u = MS.ease(min(1.0, max(0.0, (t - (a - 0.3)) / 0.7)))

@@ -3,7 +3,7 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## milburn.py (783 lines)
+## milburn.py (784 lines)
 - 34: HERE (data)
 - 42: B (data)
 - 43: V (data)
@@ -33,56 +33,56 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 145: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
 - 150: `person` Draw `who` standing on sole_y; their face and pose come from story/milburn-moves.txt (the moves kit) when the
 - 164: MOODS (data)
-- 196: `word_at` When line n reaches `words` (stand-in timing: the text spread evenly by letters over the line's span).
-- 204: TRACK (data)
-- 208: BLINKS (data)
-- 211: HEAD_LIFE (data)
-- 214: `head_life` Rule 74: Milburn's head tilts and nods on his voice (headlife, from the stand-in's loudness per drawing).
-- 231: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks.
-- 245: _MOVES (data)
-- 248: `moves` (the moves file, the film's side) for the kit, read once.
-- 256: `acted` (face sp, joints) for who's block in shot at film time t (story/milburn-moves.txt).
-- 268: _DESC (data)
-- 269: _PAINT (data)
-- 273: `cabinet` 
-- 300: _RPAINT (data)
-- 301: SEATS (data)
-- 302: SPLIT (data)
-- 305: `reverse` Andy and Pat across the table from Milburn's seat (places view `reverse`), seated as Milburn is in shot 1: the
-- 340: `_table_layer` The front layer (table, folders, glasses, name card) on its own, to lay between Milburn's body and arms.
-- 349: NEETS (data)
-- 352: `shaft_shot` 
-- 373: TINY (data)
-- 376: `_tiny` 
-- 385: `field_shot` 
-- 393: FIELD3 (data)
-- 395: PLINTHS3 (data)
-- 399: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
-- 405: `_mix` 
-- 409: `_picked` 0 -> 1: how far `who` has lifted their weapon off the plinth (0: it still lies there, their hands on it).
-- 421: ON_PLINTH (data)
-- 424: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
-- 478: YAW3 (data)
-- 482: `field_level_shot` 
-- 505: FOREST6 (data)
-- 508: CLOSE6 (data)
-- 509: GOTH_SHOTS (data)
-- 510: SKY_SHOT (data)
-- 514: `_sky` 0 -> 1 -> 0: the goth's crossbow jerked up skyward on the first gunfire, then lowered again.
-- 517: HALT (data)
-- 520: `_ramp` 
-- 524: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
-- 537: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
-- 547: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
-- 641: `forest_shot` 
-- 690: `picture` 
-- 705: `frame_image` 
-- 709: `cast` 
-- 714: `_standin` A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
-- 737: `soundtrack` 
-- 748: `final` 
-- 759: `main` 
-- 780: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
+- 197: `word_at` When line n reaches `words` (stand-in timing: the text spread evenly by letters over the line's span).
+- 205: TRACK (data)
+- 209: BLINKS (data)
+- 212: HEAD_LIFE (data)
+- 215: `head_life` Rule 74: Milburn's head tilts and nods on his voice (headlife, from the stand-in's loudness per drawing).
+- 232: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks.
+- 246: _MOVES (data)
+- 249: `moves` (the moves file, the film's side) for the kit, read once.
+- 257: `acted` (face sp, joints) for who's block in shot at film time t (story/milburn-moves.txt).
+- 269: _DESC (data)
+- 270: _PAINT (data)
+- 274: `cabinet` 
+- 301: _RPAINT (data)
+- 302: SEATS (data)
+- 303: SPLIT (data)
+- 306: `reverse` Andy and Pat across the table from Milburn's seat (places view `reverse`), seated as Milburn is in shot 1: the
+- 341: `_table_layer` The front layer (table, folders, glasses, name card) on its own, to lay between Milburn's body and arms.
+- 350: NEETS (data)
+- 353: `shaft_shot` 
+- 374: TINY (data)
+- 377: `_tiny` 
+- 386: `field_shot` 
+- 394: FIELD3 (data)
+- 396: PLINTHS3 (data)
+- 400: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
+- 406: `_mix` 
+- 410: `_picked` 0 -> 1: how far `who` has lifted their weapon off the plinth (0: it still lies there, their hands on it).
+- 422: ON_PLINTH (data)
+- 425: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
+- 479: YAW3 (data)
+- 483: `field_level_shot` 
+- 506: FOREST6 (data)
+- 509: CLOSE6 (data)
+- 510: GOTH_SHOTS (data)
+- 511: SKY_SHOT (data)
+- 515: `_sky` 0 -> 1 -> 0: the goth's crossbow jerked up skyward on the first gunfire, then lowered again.
+- 518: HALT (data)
+- 521: `_ramp` 
+- 525: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
+- 538: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
+- 548: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
+- 642: `forest_shot` 
+- 691: `picture` 
+- 706: `frame_image` 
+- 710: `cast` 
+- 715: `_standin` A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
+- 738: `soundtrack` 
+- 749: `final` 
+- 760: `main` 
+- 781: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
 
 ## milburn_forest.py (496 lines)
 - 29: HERE (data)
