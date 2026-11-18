@@ -42,3 +42,22 @@ Please disable budget alarms and budget readings permanently until system fixed 
 Please centralise and give equal space to A and P in frame, please note that their chairs seem different size?
 The bolt itself needs to leave the crossbow, in your images a second bolt fires whilst the crossbow image doesn't change
 
+### 2026-11-18T06:10:43
+First of all what unapproved building tools?
+
+Wait for go for these notes: 
+
+The weapon scene shot is still poorly composed.
+
+Front left character 1 picking up crossbow from plinth and looking satisfied, like screenplay says 
+
+Pure middle character 2 holding katana and inspecting as described in screenplay
+
+Back right character 3 aiming according to screenplay
+
+Character 4 according to screenplay according to logical gap presented in new composition
+
+Remove stapler and mace plinths for now as shot too busy.
+
+Pat 3/4 pose -- not needed, looked better when he was facing forward throughout.
+
