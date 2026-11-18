@@ -707,6 +707,7 @@ def cast(out):
 
 
 # ================================================================================================= sound and render
+DUCK_TO = 0.3                       # ... and 30% of that (about -10 dB) while anyone speaks (Sam, 18 Nov: Y)
 SFX_GAIN = 0.6                      # Sam (18 Nov): the effects at 60% so they don't overwhelm the dialogue
 _SFX = {}
 
@@ -744,17 +745,21 @@ def soundtrack():
         x = V_.bleeped(i + 1)
         st = int(ln['start'] * 48000)
         mix[st:st + len(x)] += x[:max(0, n - st)]
+    fx = np.zeros(n)                                                   # the effects on their own, then ducked
     for name, t, span, fade in sfx_cues():
         x = _sfx(name)
-        if span is not None:
-            x = x[:int(span * 48000)].copy()
-        else:
-            x = x.copy()
+        x = x[:int(span * 48000)].copy() if span is not None else x.copy()
         k = min(len(x), int(fade * 48000))
         if k:
             x[-k:] *= np.linspace(1, 0, k)
         st = int(t * 48000)
-        mix[st:st + len(x)] += SFX_GAIN * x[:max(0, n - st)]
+        fx[st:st + len(x)] += SFX_GAIN * x[:max(0, n - st)]
+    duck = np.ones(n)                                                  # Sam (18 Nov, Y): under a speaking voice the
+    for ln in LINES:                                                   # effects drop to DUCK_TO, and come back after
+        duck[max(0, int((ln['start'] - 0.1) * 48000)):int((ln['end'] + 0.15) * 48000)] = DUCK_TO
+    w = int(0.15 * 48000)                                              # eased over 150 ms so it never pumps or clicks
+    duck = np.convolve(np.pad(duck, (w, w), mode='edge'), np.ones(w) / w, 'same')[w:-w]
+    mix += fx * duck
     hot = np.abs(mix) > 0.9                                            # never clip: bend only what goes over 0.9
     mix[hot] = np.sign(mix[hot]) * (0.9 + 0.1 * np.tanh((np.abs(mix[hot]) - 0.9) / 0.1))
     return mix
