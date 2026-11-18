@@ -493,6 +493,67 @@
     "ticked": 0,
     "edited film code": true
    }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "d2dd63d4",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.99,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZsAtQ4zBsN2F9oPoi",
+   "steps": 98,
+   "hist_k": 267,
+   "kinds": {
+    "film-file search": 10.4,
+    "tool search": 23.5,
+    "whole-file .py read": 0.6,
+    "page.py": 1.3,
+    "renders": 1.3,
+    "pictures": 4.6,
+    "other": 58.2
+   },
+   "calls": {
+    "film-file search": 24,
+    "tool search": 50,
+    "whole-file .py read": 1,
+    "page.py": 2,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 11,
+    "other": 13
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 4,
+     "miss": 8,
+     "after show": 12
+    },
+    "other": {
+     "other": 9,
+     "shared:handover.py": 2,
+     "film notes": 6,
+     "shared:propose.py": 6,
+     "shared:views.py": 3,
+     "guides": 1,
+     "shared:places.py": 1,
+     "shared:acting.py": 4,
+     "shared:facehouse.py": 2,
+     "shared:people_parts.py": 5,
+     "shared:people_turned.py": 3,
+     "shared:turnhead.py": 1,
+     "shared:people.py": 1,
+     "shared:people_famous.py": 1,
+     "shared:preflight.py": 4,
+     "shared:kittests.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
   }
  ],
  "checks": {},
