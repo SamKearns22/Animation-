@@ -771,34 +771,41 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.08,
+   "cost": 0.34,
    "src": "estimate",
    "sid": "session_01J1JB7ZmTrSU4NvegQyvBnB",
-   "steps": 6,
-   "hist_k": 91,
+   "steps": 28,
+   "hist_k": 126,
    "kinds": {
-    "film-file search": 5.0,
-    "tool search": 15.3,
-    "other": 79.7
+    "film-file search": 4.8,
+    "tool search": 10.4,
+    "renders": 2.5,
+    "pictures": 5.2,
+    "other": 77.1
    },
    "calls": {
-    "film-file search": 1,
-    "tool search": 5,
+    "film-file search": 4,
+    "tool search": 14,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
-    "pictures": 0,
-    "other": 0
+    "renders": 2,
+    "pictures": 4,
+    "other": 4
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 1
+     "no show": 4
     },
     "other": {
-     "other": 2,
-     "film notes": 3
+     "other": 6,
+     "film notes": 3,
+     "shared:finish.py": 1,
+     "guides": 1,
+     "shared:halo_story.py": 1,
+     "shared:film_engine.py": 1,
+     "shared:hook_text.py": 1
     },
     "ticked": 0,
     "edited film code": false
