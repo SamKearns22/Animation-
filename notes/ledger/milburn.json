@@ -351,37 +351,37 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.05,
+   "cost": 2.42,
    "src": "estimate",
    "sid": "session_01J1JB7VR2AZvXqJvQMQm3zn",
-   "steps": 49,
-   "hist_k": 203,
+   "steps": 71,
+   "hist_k": 224,
    "kinds": {
-    "film-file search": 20.8,
-    "tool search": 14.1,
-    "renders": 0.2,
-    "pictures": 4.2,
-    "other": 60.7
+    "film-file search": 13.9,
+    "tool search": 10.1,
+    "renders": 0.5,
+    "pictures": 2.7,
+    "other": 72.9
    },
    "calls": {
-    "film-file search": 17,
-    "tool search": 20,
+    "film-file search": 18,
+    "tool search": 27,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 1,
+    "renders": 3,
     "pictures": 6,
-    "other": 9
+    "other": 16
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 17
+     "no show": 18
     },
     "other": {
-     "other": 8,
-     "shared:handover.py": 1,
-     "film notes": 4,
+     "other": 10,
+     "shared:handover.py": 2,
+     "film notes": 8,
      "shared:acting.py": 1,
      "shared:moves.py": 2,
      "shared:prepper_fx.py": 2,
