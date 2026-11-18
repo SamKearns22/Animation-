@@ -56,11 +56,11 @@ def _line(d, pts, fill, w):
 # ================================================================================================= the shaft
 class LevelCam:
     """A level camera: height `up` m, horizon row, lens px; x across, d forward from the lens, z up (metres)."""
-    def __init__(self, up, horizon, lens):
-        self.up, self.hz, self.L = up, horizon, lens
+    def __init__(self, up, horizon, lens, centre=540.0):
+        self.up, self.hz, self.L, self.c = up, horizon, lens, centre
 
     def p(self, x, d, z):
-        return 540 + x * self.L / d, self.hz - (z - self.up) * self.L / d
+        return self.c + x * self.L / d, self.hz - (z - self.up) * self.L / d
 
     def ppm(self, d):
         return self.L / d

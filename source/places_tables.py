@@ -15,9 +15,11 @@ outline) at its true size through any level camera.
   portrait ....... (chat 5) an old oil portrait in a gilt frame: a gentleman of the 1700s in a powdered wig (nobody real)
   tall glass ..... (chat 5) a tall glass of sparkling water on a table: bubbles rising (moving), a slice of lemon
   can ............ (chat 5) a drinks can standing on a table: its colour, a band and its name across it
+  coaster ........ (chat 10) a round coaster lying flat on a table, in perspective: `at X Z, depth D, width W`
+                   (metres); a thin edge, a lighter inner ring (put a drink at the same point after it)
 
 Map: table top 30 | curtain 70 | tumbler 115 | name card 140 | folder 160 | fireplace 190 | portrait 230 |
-     tall glass 270 | can 300
+     tall glass 270 | can 300 | coaster 320
 """
 import math
 import random
@@ -267,3 +269,19 @@ def can(p, img, cam, a, t):
     if a['text']:
         BS.sign(img, cam, a['text'], 0, -84, 60, tuple(a['ink']))
     p.line([(-24, -108), (-24, -12)], mix(a['colour'], (255, 255, 255), 0.4), 3.0)
+
+
+# ================================================================================================ coaster
+@kind('coaster', params={'colour': 'c', 'width': 'n'}, defaults={'colour': (120, 72, 44), 'width': 0.1})
+def coaster(p, img, cam, a, t):
+    """A round coaster lying flat on a table (Milburn note 10): `at X Z, depth D` its middle, `width W` across in
+    metres; drawn as a true circle in perspective, its thickness, a lighter inner ring. Draw it before the drink."""
+    pc = a['piece']
+    P = pc.P
+    cx, z, cd = (pc.x0 + pc.x1) / 2, pc.z1, pc.d0
+    r, th = float(a["width"]) / 2, 0.01
+    ring = lambda rr, zz: [P(cx + rr * math.cos(k * math.pi / 16), zz, cd + rr * math.sin(k * math.pi / 16))
+                           for k in range(32)]
+    p.poly(ring(r, z), dk(a['colour'], 0.7), INK, 1.8)                # its edge (shows below the top)
+    p.poly(ring(r, z + th), a['colour'], INK, 1.8)
+    p.poly(ring(r * 0.78, z + th), mix(a['colour'], (255, 255, 255), 0.14), None)

@@ -30,20 +30,26 @@ name card: at -0.27 0.76, depth 1.5, text "Alan Milburn" (his name card)
 # The same room turned round: the fireplace wall behind the Prime Minister's chair (no photo of this side found
 # (chat 5): drawn from the room's known pieces, the panels and rails as the shot-1 side, a marble fireplace with the
 # first minister's portrait over it). The lens sits at Milburn's eyes, a step to his right (x' = -x of shot 1).
-camera: up 1.2, horizon 820, lens 2000
-people: andy 2.15, pat 2.15
+# (chat 10, notes 5 and 10: Sam's second word on this framing (rule 30). Chat 6's two equal busts side by side, dead
+# centre, over 40% empty baize, the fireplace hidden, the name cards cut: now the lens lower, Andy leaning in at the
+# table, Pat sat back a step behind him, the fireplace between their heads, the drinks forward on coasters.)
+camera: up 1.02, horizon 760, lens 2000, centre 570
+people: andy 2.0, pat 2.42
 panels: x -2.4 to 2.4, z 0 to 4.6, depth 3.4, step 0.62, seed 21 (the panelled wall behind them)
 block: x -2.4 to 2.4, z 3.3 to 3.36, depth 3.4, colour wall * 0.9, line 1.4 (the picture rail)
 block: x -2.4 to 2.4, z 0.86 to 0.92, depth 3.4, colour wall * 0.88, line 1.4 (the dado rail)
-fireplace: x -1.02 to 0.42, z 0 to 1.32, depth 3.36, seed 22 (the marble fireplace behind the PM's chair)
+fireplace: x -0.62 to 0.82, z 0 to 1.32, depth 3.36, seed 22 (the marble fireplace behind the PM's chair)
 # (Sam Q7, chat 6: "just do the fireplace": the portrait over it is gone)
-chair back: x -1.18 to -0.7, z 0.74 to 1.2, depth 2.35, look close, seed 24 (the empty chair, left)
-chair back: x -0.6 to 0.0, z 0.74 to 1.3, depth 2.45, look close, seed 25 (the Prime Minister's chair)
-chair back: x 0.1 to 0.62, z 0.74 to 1.24, depth 2.45, look close, seed 26 (Pat's chair)
+chair back: x -1.3 to -0.84, z 0.74 to 1.2, depth 2.3, look close, seed 24 (the empty chair, left)
+chair back: x -0.62 to -0.02, z 0.74 to 1.3, depth 2.3, look close, seed 25 (the Prime Minister's chair)
+chair back: x 0.12 to 0.64, z 0.74 to 1.24, depth 2.72, look close, seed 26 (Pat's chair)
 table top: x -2.6 to 2.6, z 0 to 0.76, depth 1.9, near 0.25, colour baize, rim oak, streaks 0, seed 27 (the green-baize table)
-folder: x -0.46 to -0.14, z 0 to 0.76, depth 1.86, near 1.58 (Andy's red folder)
-folder: x 0.22 to 0.52, z 0 to 0.76, depth 1.86, near 1.6 (Pat's red folder)
-can: at 0.04 0.76, depth 1.74, text "Vimto", seed 28 (Andy's Vimto)
-tall glass: at 0.56 0.76, depth 1.8, seed 29 (Pat's sparkling water)
-name card: at -0.44 0.76, depth 1.6, width 0.15, text "Prime Minister" (his name card)
-name card: at 0.46 0.76, depth 1.56, width 0.15, text "Work and Pensions" (Pat's name card)
+folder: x -0.52 to -0.2, z 0 to 0.76, depth 1.86, near 1.58 (Andy's red folder)
+folder: x 0.2 to 0.5, z 0 to 0.76, depth 1.88, near 1.62 (Pat's red folder)
+name card: at -0.36 0.76, depth 1.62, width 0.15, text "Prime Minister" (his name card)
+name card: at 0.27 0.76, depth 1.58, width 0.15, text "Work and Pensions" (Pat's name card)
+# the drinks (note 10): near the lens, each diagonally in front of its owner, drawn over everyone (layer over)
+coaster: at -0.1 0.76, depth 0.78, width 0.1, layer over, seed 30 (under Andy's Vimto)
+can: at -0.1 0.77, depth 0.78, text "Vimto", layer over, seed 28 (Andy's Vimto, note 10)
+coaster: at 0.08 0.76, depth 0.95, width 0.1, layer over, seed 31 (under Pat's water)
+tall glass: at 0.08 0.77, depth 0.95, layer over, seed 29 (Pat's sparkling water, note 10)

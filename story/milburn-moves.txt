@@ -69,6 +69,7 @@ code: field_level_shot (scene 3's moves are drawn by the film's code: props held
 row: 4 "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | furious, eyes on Milburn (the lens) | leans in, jabs the point on "Milburn" and again on "aren't you"
 stance: seated
 face: furious
+keys head_yaw: 5 at 0 | -5 at "Milburn" | 6 at "Battle" | -3 at "Hunger" +0.2 | -6 at "aren't"   # head life (chat 10, rule 74): the head works the rant
 R: fists at 0
 L: fists at 0 | jab from "Milburn" -0.2 to "Hunger" | fists at "Hunger" +0.3 | jab from "aren't" -0.2 to end
 body: lean in 1.2 from "Milburn" -0.3 over 0.4
@@ -81,6 +82,7 @@ row: 4 (Pat) | patient, listening, eyes on Andy | fingers steepled, still; a slo
 stance: seated
 face: patient
 keys look: -0.7 at 0
+keys head_yaw: -18 at 0 | -26 at "Milburn" | -20 at "Hunger" +0.4   # head life (chat 10): turned to Andy, a touch further as he jabs
 both: steeple at 0
 body: nod 0.6 from "Milburn" -0.1 to "Milburn" +0.6, rise 0.2, fall 0.3
 idle: roll 1 shifts 72 1.0 1.8
@@ -100,6 +102,7 @@ row: 6 "I'd like to hear where this goes, Prime Minister" | patient; eyes sidewa
 stance: seated
 face: patient
 keys look: -0.7 at 0
+keys head_yaw: -20 at 0 | -28 at "Prime" | -18 at "Minister" +0.5   # chat 10: says it to Andy
 both: steeple at 0
 body: nod 1 from "Prime" -0.05 to "Prime" +0.5, rise 0.15, fall 0.25
 idle: roll 1 shifts 73 1.0 1.8
@@ -126,6 +129,7 @@ code: forest_shot (the reactions are the film's code: timed to the gunfire, flam
 row: 10 "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | rage | fists down on "fucker", then the point on "Fortnite"
 stance: seated
 face: rage
+keys head_yaw: 0 at 0 | -6 at "fucker" | 6 at "Maze" | -2 at "Squid" | -7 at "Fortnite"   # head life (chat 10)
 both: fists at 0
 body: slam 1 from "fucker" -0.1 to "fucker" +0.35, rise 0.08, fall 0.25
 L: fists from 0 to "Fortnite" -0.55 | jab from "Fortnite" -0.25 to end
@@ -179,6 +183,7 @@ row: 14 "I think the backbenchers will like this one, sir." | patient, a small a
 stance: seated
 face: patient | approving from "backbenchers"
 keys look: -0.7 at 0
+keys head_yaw: -18 at 0 | -27 at "backbenchers" | -20 at "sir"   # chat 10: to Andy
 both: steeple at 0
 body: nod 1 from "like" -0.05 to "like" +0.5, rise 0.15, fall 0.25
 idle: roll 1 shifts 77 1.0 1.8

@@ -291,8 +291,8 @@ def cabinet(t):
 
 
 # ================================================================================================= scenes 4 and 7: the reverse
-_RPAINT = {layer: PL.painter(_DESC, 'reverse', layer) for layer in ('back', 'mid', 'front')}
-SEATS = {'andy': (-0.3, 2.15), 'pat': (0.36, 2.15)}     # (x, depth) from the reverse's lens (its chairs' middles)
+_RPAINT = {layer: PL.painter(_DESC, 'reverse', layer) for layer in ('back', 'mid', 'front', 'over')}
+SEATS = {'andy': (-0.32, 2.0), 'pat': (0.38, 2.42)}      # (x, depth) from the reverse's lens: Andy leans in, Pat sat back (notes 5, 10)
 SPLIT = 560                                              # screen x between them: each one's table strip
 
 
@@ -304,7 +304,7 @@ def reverse(t):
     cam = B.Cam(1.0, 540, 960)
     B.SS = 1
     v = _DESC['views']['reverse']['camera']
-    L = MS.LevelCam(v['up'], v['horizon'], v['lens'])
+    L = MS.LevelCam(v['up'], v['horizon'], v['lens'], v.get('centre', 540.0))
     _RPAINT['back'](img, cam, t)
     if _RPAINT['mid']:
         _RPAINT['mid'](img, cam, t)
@@ -326,6 +326,8 @@ def reverse(t):
         person(img, who, X, neck_y + FEET * scale_at(pxm, sp), pxm, 0.0, t, j, look)
     cut = int(L.p(0.0, 1.62, 0.76)[1]) + 60
     img.alpha_composite(front.crop((0, cut, W, H)), (0, cut))
+    if _RPAINT['over']:                               # note 10: the drinks on their coasters, nearest of all
+        _RPAINT['over'](img, cam, t)
     return img.convert('RGB')
 
 
