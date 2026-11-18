@@ -660,6 +660,55 @@
     "ticked": 0,
     "edited film code": true
    }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "b54e8334",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.34,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZMGJdhkG11oCmSw6q",
+   "steps": 40,
+   "hist_k": 125,
+   "kinds": {
+    "film-file search": 6.5,
+    "tool search": 17.0,
+    "routine": 1.7,
+    "renders": 4.8,
+    "pictures": 0.8,
+    "other": 69.1
+   },
+   "calls": {
+    "film-file search": 10,
+    "tool search": 18,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 3,
+    "renders": 4,
+    "pictures": 1,
+    "other": 3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 10
+    },
+    "other": {
+     "other": 1,
+     "shared:handover.py": 1,
+     "film notes": 3,
+     "shared:posecheck.py": 6,
+     "shared:preflight.py": 2,
+     "shared:rough.py": 3,
+     "shared:plan.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
   }
  ],
  "checks": {},
