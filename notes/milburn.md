@@ -4,7 +4,8 @@
 - **Rules that bite next:** 59 (pre-flight pass before the animatic), 89 (the 7 named critique faults still go in the Checks line), 41 (posecheck look/seen at phone size for scene 3's new moves and scene 6's sky shot).
 - **Done (chat 11, Sam's notes 18 Nov):** reverse (4a/4c/7a/7c/7e): Andy and Pat equal and centred, same chairs, same depth 2.2 m, camera up 1.2 like Milburn's (lens 1450); Andy drawn after Pat (arm no longer half under the table); drinks smaller, front-left of each; chair buttons kept on the chair (kit); Pat faces forward throughout, eyes only to Andy. Shot 1: the extra left glass gone. Scene 3 re-staged: four plinths only (stapler and mace gone), goth front left lifts the crossbow off her plinth, pleased; rangy dead centre lifts and stares at the katana; Swindon back right takes the uzis and pow-pows; waif back left shaking with the grenade (35% smaller). Scene 6: goth jerks and fires a bolt into the air on the first gunfire, the bolt leaves the crossbow (empty until reloaded). House legs: knee holes on a bend fixed (views.py). Budget alarms paused by Sam (ledger ALARMS_PAUSED; rule 24 note); tracking continues. Clips and pictures sent for all.
 - **Checks (for the animatic message):** the 7 chat 10 critique faults still named, not fixed (Andy's soft mouths; scene 3 four facing camera (Q1 torsos); round mouths on listeners; goth's stray blue strip, Pat's grey ear patch, Milburn's thin glasses; dashed morning-star chains; Andy's ball hands). Kittests: round_page, facehouse_whole_head failing before this film; places/moves "before Sam approves" tests are stale (Sam approved both 14 Nov), not a film fault; claude_md test passes once CLAUDE.md is unchanged.
-- **Next:** chat 12, Sonnet (routine): pre-flight, render the updated animatic 1 (small whole film), finish.py on its clean render (Hook Text, CranbriJoos sign-off), stand-in voices, no sound effects; save in animations/drafts/; send to Sam with size and the Checks line; stop and wait.
+- **Done (chat 12, Sonnet):** rule 41 poses looked at and recorded; rule 11 board (rows filled for the 10 new shots) sent and recorded; plan's window given a size (pre-flight crashed on it); animatic 1 rendered small (8 min), finished (Hook Text, sign-off), 3.8 MB, sent, kept in animations/drafts/.
+- **Next:** WAIT for Sam's notes on the animatic (Opus medium for the notes round, fresh chat).
 - **Needs Sam:** his notes on the animatic; Q1 torsos, Q2 cast sheet tile (still open); recordings and sound effects for animatic 2.
 - **Read:** job pack Checks and animatic; this section.
 - **Handover check (chat 11 end) settled:** rule 11 (10 shots, no delivered board: the animatic stands in, as before) and rule 41 (11 body moves: `posecheck.py look` then `seen` at phone size) are chat 12's first routine items, before pre-flight; the stale-test question was withdrawn and Sam told it went unjudged (06:11), listed for the end-of-film review.
@@ -253,6 +254,12 @@ Decisions made:
   the first ask lacked its "Critiqued: 8 found, 5 fixed, 3 named" line, given to Sam in the next reply.
 
 ## Record (pre-flight reads these lines here; never archive them)
+- Pose looked at: Milburn (heard), the greenery (heard: gunfire), the camera stops | 37.50 s | phone size, 18 Nov: flame and a crouching dodge read; goth firing
+- Pose looked at: Milburn (heard), NEETs (seen), travelling beside them | 32.00 s | phone size, 18 Nov: four in single file walking right, weapons read
+- Pose looked at: Andy, the reverse | 29.00 s | phone size, 18 Nov: Andy leaning back, arms folded; reads as sulk
+- Pose looked at: Pat, the reverse | 17.50 s | phone size, 18 Nov: Pat upright, hands steepled at the chest, still; the nod is small
+- Pose looked at: Andy, two-shot reverse | 14.50 s | phone size, 18 Nov: Andy's arm out jabbing toward the lens side reads, mouth open
+- Pose looked at: Milburn (heard), NEETs (seen), mid on the four | 12.50 s | phone size, 18 Nov: goth lifts crossbow, pleased; the four read in a row
 - Pose looked at: Milburn (heard), aerial | 9.60 s | phone size, 17 Nov: deck level with the grass, tiny figures on it: reads
 - Pose looked at: Milburn (heard), NEETs (seen), medium on the four | 6.30 s | phone size, 17 Nov: heads lifted, necks long, eyes up: reads as looking up, if gently
 - Pose looked at: Milburn, single | 2.70 s | phone size, 17 Nov: seated upright, hands on the folder, leaned in on 'simple': reads

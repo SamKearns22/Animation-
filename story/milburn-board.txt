@@ -23,3 +23,83 @@ focus: the deck coming up and locking level with the grass ("country")
 next focus: (the next part of the screenplay, not yet written)
 match: same four, same colours, tiny
 choices: grass gusts in the wind; snow on the peaks; lots of empty ground on purpose
+
+shot 3
+camera: level, standing head height 1.6 m, mid shot, four plinths at 3.0-7.0 m, staggered
+lead: the goth front left with the crossbow; the rangy dead centre; Swindon back right; the waif back left
+focus: each face and what each holds (pleased, inspecting, gung-ho, terrified)
+next focus: Andy's face in the reverse
+match: Milburn's voice runs on over the cut; same four, same colours
+choices: four plinths only; weapons lifted off their plinths
+
+shot 4a
+camera: level 1.2 m from Milburn's seat, lens 1450-1500; Andy and Pat 2.2 m away, equal and centred
+lead: Andy, left of centre, in the PM's chair
+focus: Andy's face and jabbing finger
+next focus: Milburn, shot 1's camera
+match: the same chairs, depth and camera height as Milburn's shot
+choices: Pat on his left, eyes only to Andy; fireplace behind, no portrait
+
+shot 4b
+camera: shot 1's camera: level 1.2 m straight across the table, lens 1700
+lead: Milburn, centre
+focus: his face, nonplussed and soft
+next focus: the reverse two-shot
+match: same camera as shot 1
+choices: glass and name card as shot 1
+
+shot 4c
+camera: level 1.2 m from Milburn's seat, lens 1450-1500; Andy and Pat 2.2 m away, equal and centred
+lead: Pat, then Andy folding his arms
+focus: Pat's mouth, then Andy leaning back
+next focus: Milburn's face
+match: same as 4a
+choices: Pat steepled hands; Andy sulking
+
+shot 6
+camera: level 1.4 m, side on, travelling right with them at walking pace, four depth layers; eases to a stop on the gunfire
+lead: the four in single file: goth, Swindon, rangy, waif
+focus: their weapons and faces, then the flame and morning stars from the right
+next focus: Andy exploding in the reverse
+match: Milburn's voice over; the attackers never seen
+choices: ferns race past, far trunks crawl; goth fires a bolt into the air
+
+shot 7a
+camera: level 1.2 m from Milburn's seat, lens 1450-1500; Andy and Pat 2.2 m away, equal and centred
+lead: Andy rising, fists on the table
+focus: his fists and open mouth
+next focus: Milburn
+match: same as 4a
+choices: the point on the line
+
+shot 7b
+camera: shot 1's camera: level 1.2 m straight across the table, lens 1700
+lead: Milburn
+focus: his face
+next focus: the reverse
+match: same as shot 1
+choices: calm against Andy's anger
+
+shot 7c
+camera: level 1.2 m from Milburn's seat, lens 1450-1500; Andy and Pat 2.2 m away, equal and centred
+lead: Andy despairing and angry
+focus: his open palms, then shaking
+next focus: Milburn
+match: same as 4a
+choices: palms up
+
+shot 7d
+camera: shot 1's camera: level 1.2 m straight across the table, lens 1700
+lead: Milburn: eyes to the side and back, then his line
+focus: the glance
+next focus: the final reverse
+match: same as shot 1
+choices: the glance is the joke
+
+shot 7e
+camera: level 1.2 m from Milburn's seat, lens 1450-1500; Andy and Pat 2.2 m away, equal and centred
+lead: Andy frozen mid-lean, mouth open; Pat steepled
+focus: Andy's frozen outrage
+next focus: (the end for now)
+match: same as 4a
+choices: Pat's small nod

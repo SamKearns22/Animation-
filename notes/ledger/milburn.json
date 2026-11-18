@@ -1018,6 +1018,15 @@
    }
   },
   {
+   "name": "board",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-18",
+    "spent": 29.43
+   },
+   "unplanned": true
+  },
+  {
    "name": "moves",
    "pct": 3.5,
    "done": null
@@ -1047,5 +1056,6 @@
    "pct": 0.4,
    "done": null
   }
- ]
+ ],
+ "budget_stop": 3
 }

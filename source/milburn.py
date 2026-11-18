@@ -116,7 +116,7 @@ PLAN = dict(
     ROOMS={'cabinet room': (-2.6, 0.0, 2.6, 3.4),          # x0, depth0, x1, depth1 from the shot-1 lens (m)
            'shaft': (-8.5, -2.5, 8.5, 14.5),               # 17 m across; the lens 6 m from its middle
            'field': (-300.0, -300.0, 300.0, 300.0)},       # the meadow inside the forest ring, the shaft at (0, 0)
-    THINGS={'table': dict(at=(0.0, 1.12), size=(5.2, 1.65, 0.76)), 'window': dict(at=(0.88, 3.42)),
+    THINGS={'table': dict(at=(0.0, 1.12), size=(5.2, 1.65, 0.76)), 'window': dict(at=(0.88, 3.42), size=(1.2, 0.1, 2.0), outside=True),
             'platform': dict(at=(0.0, 6.0), size=(17.0, 17.0, 0.0))},
     PEOPLE={'milburn': dict(at=(0.0, 2.2), facing=180, seated=True),
             'goth': dict(at=(-0.44, 2.6)), 'rangy': dict(at=(0.58, 3.6)), 'swindon': dict(at=(0.26, 4.8)),
