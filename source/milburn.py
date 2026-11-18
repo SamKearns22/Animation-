@@ -175,11 +175,12 @@ MOODS = {
     'awe open': dict(brow_up=0.04, lid4=0.0, mouth='v:O'),         # ... mouth falling open
     # chat 6: the table (scenes 4 and 7)
     'furious': dict(smile=-0.7, frown=0.14, lid4=0.12, squint=0.4),          # Andy: brows hard down
-    'rage': dict(smile=-0.9, frown=0.16, lid4=0.0, squint=0.3),             # ... angrier still (scene 7)
+    'rage': dict(smile=-0.9, frown=0.14, lid4=0.08, squint=0.4),            # ... angrier still (scene 7); Sam note 1
+    #       (18 Nov): brows at furious's 0.14 (0.16 tipped them into steep slashes through the glasses)
     'exasperated': dict(smile=-0.5, brow_up=0.03, frown=-0.01, lid4=0.05),   # "Fine!"
     'sulky': dict(smile=-0.6, lid4=0.34, frown=0.012),                      # arms folded, leaning back
     'despair': dict(smile=-0.7, brow_up=0.035, frown=-0.02, lid4=0.04),     # brows up in the middle
-    'gape': dict(smile=-1.0, brow_up=-0.012, frown=0.22, squint=0.6, lid4=0.0),   # note 8: cross, not
+    'gape': dict(smile=-1.0, frown=0.14, squint=0.6, lid4=0.04),   # Sam note 1: brows as furious (frown 0.22 = a cartoon V)   # note 8: cross, not
     #       surprised: brows hard down and knitted, eyes narrowed, mouth open in outrage (was brows up: read as shock)
     'patient': dict(smile=0.12, lid4=0.3),                                  # Pat: calm, a little heavy-lidded
     'approving': dict(smile=0.4, lid4=0.3),                                 # ... the backbenchers will like it

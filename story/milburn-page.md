@@ -3,7 +3,7 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## milburn.py (736 lines)
+## milburn.py (783 lines)
 - 34: HERE (data)
 - 42: B (data)
 - 43: V (data)
@@ -56,29 +56,33 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 376: `_tiny` 
 - 385: `field_shot` 
 - 393: FIELD3 (data)
-- 396: PLINTHS3 (data)
-- 400: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
-- 406: `_mix` 
-- 410: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
-- 458: YAW3 (data)
-- 462: `field_level_shot` 
-- 484: FOREST6 (data)
-- 487: CLOSE6 (data)
-- 488: GOTH_SHOTS (data)
-- 489: HALT (data)
-- 492: `_ramp` 
-- 496: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
-- 509: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
-- 519: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
-- 607: `forest_shot` 
-- 643: `picture` 
-- 658: `frame_image` 
-- 662: `cast` 
-- 667: `_standin` A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
-- 690: `soundtrack` 
-- 701: `final` 
-- 712: `main` 
-- 733: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
+- 395: PLINTHS3 (data)
+- 399: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
+- 405: `_mix` 
+- 409: `_picked` 0 -> 1: how far `who` has lifted their weapon off the plinth (0: it still lies there, their hands on it).
+- 421: ON_PLINTH (data)
+- 424: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
+- 478: YAW3 (data)
+- 482: `field_level_shot` 
+- 505: FOREST6 (data)
+- 508: CLOSE6 (data)
+- 509: GOTH_SHOTS (data)
+- 510: SKY_SHOT (data)
+- 514: `_sky` 0 -> 1 -> 0: the goth's crossbow jerked up skyward on the first gunfire, then lowered again.
+- 517: HALT (data)
+- 520: `_ramp` 
+- 524: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
+- 537: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
+- 547: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
+- 641: `forest_shot` 
+- 690: `picture` 
+- 705: `frame_image` 
+- 709: `cast` 
+- 714: `_standin` A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
+- 737: `soundtrack` 
+- 748: `final` 
+- 759: `main` 
+- 780: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
 
 ## milburn_forest.py (496 lines)
 - 29: HERE (data)
@@ -123,20 +127,20 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 445: `stars` The two morning stars: spiked steel balls on chains swinging down out of the trees over their heads.
 - 477: `sheet` 
 
-## milburn_props.py (196 lines)
+## milburn_props.py (197 lines)
 - 20: HERE (data)
 - 29: `_rect` 
 - 33: `_ell` 
 - 37: `_spikes` 
 - 48: SHAPES (data)
-- 74: SCALE (data)
-- 76: LENGTH (data)
-- 79: `draw` The prop's parts turned `ang` degrees (0: along +x on screen, + clockwise as y runs down), k per metre.
-- 89: `units_per_m` 
-- 93: `in_hands` The prop held in hand `a` (its grip in that hand) pointing at hand `b` (or at `ang` degrees when b is None);
-- 123: `j2_3` The 2D drawn joints as 3D points (depth 0) for grips.hand_centre.
-- 132: `plinth` A grey plinth (1.0 m high, 0.5 m square) at (x, dep) seen by a level camera `cam` (cam.p(x, d, z) in
-- 173: `sheet` 
+- 75: SCALE (data)
+- 77: LENGTH (data)
+- 80: `draw` The prop's parts turned `ang` degrees (0: along +x on screen, + clockwise as y runs down), k per metre.
+- 90: `units_per_m` 
+- 94: `in_hands` The prop held in hand `a` (its grip in that hand) pointing at hand `b` (or at `ang` degrees when b is None);
+- 124: `j2_3` The 2D drawn joints as 3D points (depth 0) for grips.hand_centre.
+- 133: `plinth` A grey plinth (1.0 m high, 0.5 m square) at (x, dep) seen by a level camera `cam` (cam.p(x, d, z) in
+- 174: `sheet` 
 
 ## milburn_sets.py (491 lines)
 - 28: HERE (data)
@@ -207,24 +211,24 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 25: tumbler (the right place's glass)
 - 26: his name card
 ### reverse (the 180 of shot 1
-- 37: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): panels (the panelled wall behind them)
-- 38: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the picture rail)
-- 39: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the dado rail)
-- 40: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the marble fireplace behind the PM's chair
-- 42: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
-- 43: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
-- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
-- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
-- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
-- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
-- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card
-- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card
-- 51: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Andy's Vimto: front-left of him, chat 11)
-- 52: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto, note 10; chat 11 nearer him)
-- 53: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Pat's water: front-left of him, chat 11)
-- 54: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water, note 10; chat 11 nearer him)
+- 38: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): panels (the panelled wall behind them)
+- 39: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the picture rail)
+- 40: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the dado rail)
+- 41: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the marble fireplace behind the PM's chair
+- 43: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
+- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
+- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
+- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
+- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
+- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
+- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card
+- 50: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card
+- 52: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Andy's Vimto: front-left of him, chat 11)
+- 53: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto, note 10; chat 11 nearer him)
+- 54: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Pat's water: front-left of him, chat 11)
+- 55: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water, note 10; chat 11 nearer him)
 
-## milburn-moves.txt (127 lines; a note on a move changes its line: open that line)
+## milburn-moves.txt (124 lines; a note on a move changes its line: open that line)
 ### 1 (milburn)
 - 21: row: 1 "The essence of my proposal is quite simple." | calm, reasonable, faintly please
 ### milburn
@@ -291,7 +295,6 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 82: stance: seated
 - 83: face: patient
 - 84: keys look:
-- 85: keys head_yaw: | Milburn | Hunger # head life chat : turned Andy a touch further as he jabs
 - 86: both: steeple
 - 87: body: nod Milburn Milburn
 - 88: idle: roll shifts
@@ -311,7 +314,6 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 102: stance: seated
 - 103: face: patient
 - 104: keys look:
-- 105: keys head_yaw: | Prime | Minister # chat : says it Andy
 - 106: both: steeple
 - 107: body: nod Prime Prime
 - 108: idle: roll shifts
@@ -392,7 +394,6 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 183: stance: seated
 - 184: face: patient | approving backbenchers
 - 185: keys look:
-- 186: keys head_yaw: | backbenchers | sir # chat : Andy
 - 187: both: steeple
 - 188: body: nod like like
 - 189: idle: roll shifts
