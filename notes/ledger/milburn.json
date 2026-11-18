@@ -718,45 +718,46 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.91,
+   "cost": 2.29,
    "src": "estimate",
    "sid": "session_01J1JB7WoHQ8mi9TagnAgzD2",
-   "steps": 96,
-   "hist_k": 211,
+   "steps": 117,
+   "hist_k": 244,
    "kinds": {
-    "film-file search": 11.7,
-    "tool search": 6.9,
-    "page.py": 1.1,
-    "renders": 1.6,
-    "pictures": 5.9,
-    "other": 72.9
+    "film-file search": 12.7,
+    "tool search": 7.6,
+    "page.py": 1.0,
+    "renders": 2.2,
+    "pictures": 6.2,
+    "other": 70.2
    },
    "calls": {
-    "film-file search": 30,
-    "tool search": 25,
+    "film-file search": 35,
+    "tool search": 31,
     "whole-file .py read": 0,
     "page.py": 2,
     "routine": 0,
-    "renders": 4,
-    "pictures": 14,
-    "other": 23
+    "renders": 5,
+    "pictures": 17,
+    "other": 31
    },
    "search": {
     "show": 2,
     "film": {
      "before show": 0,
      "miss": 14,
-     "after show": 16
+     "after show": 21
     },
     "other": {
-     "other": 10,
+     "other": 12,
      "shared:handover.py": 2,
-     "film notes": 6,
-     "shared:places_tables.py": 2,
+     "film notes": 8,
+     "shared:places_tables.py": 3,
      "shared:places_parts.py": 1,
      "guides": 1,
      "shared:cryminister.py": 2,
-     "shared:mouths.py": 1
+     "shared:mouths.py": 1,
+     "shared:prepper.py": 1
     },
     "ticked": 0,
     "edited film code": true
