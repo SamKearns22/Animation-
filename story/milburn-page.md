@@ -3,7 +3,7 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## milburn.py (691 lines)
+## milburn.py (736 lines)
 - 34: HERE (data)
 - 42: B (data)
 - 43: V (data)
@@ -38,46 +38,47 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 208: BLINKS (data)
 - 211: HEAD_LIFE (data)
 - 214: `head_life` Rule 74: Milburn's head tilts and nods on his voice (headlife, from the stand-in's loudness per drawing).
-- 226: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks.
-- 239: _MOVES (data)
-- 242: `moves` (the moves file, the film's side) for the kit, read once.
-- 250: `acted` (face sp, joints) for who's block in shot at film time t (story/milburn-moves.txt).
-- 262: _DESC (data)
-- 263: _PAINT (data)
-- 267: `cabinet` 
-- 294: _RPAINT (data)
-- 295: SEATS (data)
-- 296: SPLIT (data)
-- 299: `reverse` Andy and Pat across the table from Milburn's seat (places view `reverse`), seated as Milburn is in shot 1: the
-- 332: `_table_layer` The front layer (table, folders, glasses, name card) on its own, to lay between Milburn's body and arms.
-- 341: NEETS (data)
-- 344: `shaft_shot` 
-- 365: TINY (data)
-- 368: `_tiny` 
-- 377: `field_shot` 
-- 385: FIELD3 (data)
-- 388: PLINTHS3 (data)
-- 392: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
-- 398: `_mix` 
-- 402: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
-- 450: YAW3 (data)
-- 454: `field_level_shot` 
-- 476: FOREST6 (data)
-- 479: CLOSE6 (data)
-- 480: HALT (data)
-- 483: `_ramp` 
-- 487: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
-- 500: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
-- 510: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
-- 574: `forest_shot` 
-- 598: `picture` 
-- 613: `frame_image` 
-- 617: `cast` 
-- 622: `_standin` A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
-- 645: `soundtrack` 
-- 656: `final` 
-- 667: `main` 
-- 688: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
+- 231: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own lines, blinks.
+- 245: _MOVES (data)
+- 248: `moves` (the moves file, the film's side) for the kit, read once.
+- 256: `acted` (face sp, joints) for who's block in shot at film time t (story/milburn-moves.txt).
+- 268: _DESC (data)
+- 269: _PAINT (data)
+- 273: `cabinet` 
+- 300: _RPAINT (data)
+- 301: SEATS (data)
+- 302: SPLIT (data)
+- 305: `reverse` Andy and Pat across the table from Milburn's seat (places view `reverse`), seated as Milburn is in shot 1: the
+- 340: `_table_layer` The front layer (table, folders, glasses, name card) on its own, to lay between Milburn's body and arms.
+- 349: NEETS (data)
+- 352: `shaft_shot` 
+- 373: TINY (data)
+- 376: `_tiny` 
+- 385: `field_shot` 
+- 393: FIELD3 (data)
+- 396: PLINTHS3 (data)
+- 400: `_hoist` 0 -> 1: the goth's crossbow from across her hips up onto her shoulder (lands on "arm themselves").
+- 406: `_mix` 
+- 410: `arming` (face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3.
+- 458: YAW3 (data)
+- 462: `field_level_shot` 
+- 484: FOREST6 (data)
+- 487: CLOSE6 (data)
+- 488: GOTH_SHOTS (data)
+- 489: HALT (data)
+- 492: `_ramp` 
+- 496: `walked` How far `who` has walked (m, across the screen) since the shot began: the camera's pace, stopping dead on
+- 509: `_crouch` Lower the body `amt` person units with the feet kept on the floor (knees bend), leaning forward.
+- 519: `forest_pose` (face sp, joints, firing) for scene 6 (acting rows 8 and 9): walking with their weapons, the jolt on the
+- 607: `forest_shot` 
+- 643: `picture` 
+- 658: `frame_image` 
+- 662: `cast` 
+- 667: `_standin` A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
+- 690: `soundtrack` 
+- 701: `final` 
+- 712: `main` 
+- 733: `caption_at` The subtitle on screen at t (finish.py burns them in; rule 62), from LINES.
 
 ## milburn_forest.py (496 lines)
 - 29: HERE (data)
@@ -187,7 +188,7 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 47: andy (Andy Burnham, the Prime Minister (scenes : angry, pointing; Sam's finished face-tool head, unchanged)): head: house burnham, hair swept, look detail; outfit: suit , shirt white, no tie; body:
 - 52: pat (Pat McFadden, Work and Pensions Secretary (scenes : patient, fingers steepled). Face tool pick B): head: house mcfadden, hair bald, look detail; outfit: suit , shirt white, tie ; body:
 
-## milburn-places.txt (31 pieces; a note on a place changes its line: open that line)
+## milburn-places.txt (33 pieces; a note on a place changes its line: open that line)
 ### cabinet (Milburn across the table, straight to lens)
 - 11: panels (the panelled wall)
 - 12: block (the picture rail)
@@ -207,22 +208,24 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 26: tumbler (the right place's glass)
 - 27: his name card
 ### reverse (the 180 of shot 1
-- 35: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): panels (the panelled wall behind them)
-- 36: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the picture rail)
-- 37: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the dado rail)
-- 38: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the marble fireplace behind the PM's chair
-- 40: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
-- 41: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
-- 42: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
-- 43: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
-- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
-- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
-- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto)
-- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water)
-- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card
-- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card
+- 38: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): panels (the panelled wall behind them)
+- 39: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the picture rail)
+- 40: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the dado rail)
+- 41: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the marble fireplace behind the PM's chair
+- 43: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
+- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
+- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
+- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
+- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
+- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
+- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card
+- 50: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card
+- 52: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Andy's Vimto)
+- 53: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto, note 10)
+- 54: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Pat's water)
+- 55: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water, note 10)
 
-## milburn-moves.txt (122 lines; a note on a move changes its line: open that line)
+## milburn-moves.txt (127 lines; a note on a move changes its line: open that line)
 ### 1 (milburn)
 - 21: row: 1 "The essence of my proposal is quite simple." | calm, reasonable, faintly please
 ### milburn
@@ -276,116 +279,121 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 ### a andy
 - 70: stance: seated
 - 71: face: furious
-- 72: R: fists
-- 73: L: fists | jab Milburn Hunger | fists Hunger | jab aren't end
-- 74: body: lean in Milburn
-- 75: body: nod Milburn Milburn
-- 76: body: nod aren't aren't
-- 77: idle: roll shifts
+- 72: keys head_yaw: | Milburn | Battle | Hunger | aren't # head life chat rule : the head works the rant
+- 73: R: fists
+- 74: L: fists | jab Milburn Hunger | fists Hunger | jab aren't end
+- 75: body: lean in Milburn
+- 76: body: nod Milburn Milburn
+- 77: body: nod aren't aren't
+- 78: idle: roll shifts
 ### 4a (pat)
-- 80: row: 4 (Pat) | patient, listening, eyes on Andy | fingers steepled, still; a slow blink
+- 81: row: 4 (Pat) | patient, listening, eyes on Andy | fingers steepled, still; a slow blink
 ### a pat
-- 81: stance: seated
-- 82: face: patient
-- 83: keys look:
-- 84: both: steeple
-- 85: body: nod Milburn Milburn
-- 86: idle: roll shifts
+- 82: stance: seated
+- 83: face: patient
+- 84: keys look:
+- 85: keys head_yaw: | Milburn | Hunger # head life chat : turned Andy a touch further as he jabs
+- 86: both: steeple
+- 87: body: nod Milburn Milburn
+- 88: idle: roll shifts
 ### 4b (milburn)
-- 89: row: 5 "This report has been long in the making. Would you care to hear the findings o
+- 91: row: 5 "This report has been long in the making. Would you care to hear the findings o
 ### b milburn
-- 90: stance: seated
-- 91: face: attentive | pleased interrupt
-- 92: both: folder
-- 93: body: tilt interrupt
-- 94: body: nod making making
-- 95: idle: roll shifts
-- 96: idle: nod shifts
+- 92: stance: seated
+- 93: face: attentive | pleased interrupt
+- 94: both: folder
+- 95: body: tilt interrupt
+- 96: body: nod making making
+- 97: idle: roll shifts
+- 98: idle: nod shifts
 ### 4c (pat)
-- 99: row: 6 "I'd like to hear where this goes, Prime Minister" | patient; eyes sideways to Andy
+- 101: row: 6 "I'd like to hear where this goes, Prime Minister" | patient; eyes sideways to Andy
 ### c pat
-- 100: stance: seated
-- 101: face: patient
-- 102: keys look:
-- 103: both: steeple
-- 104: body: nod Prime Prime
-- 105: idle: roll shifts
+- 102: stance: seated
+- 103: face: patient
+- 104: keys look:
+- 105: keys head_yaw: | Prime | Minister # chat : says it Andy
+- 106: both: steeple
+- 107: body: nod Prime Prime
+- 108: idle: roll shifts
 ### 4c (andy)
-- 108: row: 7 "Fine! Continue." | exasperated, then sulky; eyes and head go over to Pat (note 7:
+- 111: row: 7 "Fine! Continue." | exasperated, then sulky; eyes and head go over to Pat (note 7:
 ### c andy
-- 109: stance: seated
-- 110: face: furious | exasperated Fine | sulky Continue
-- 111: keys look: | Fine | Continue | Continue
-- 112: keys head_yaw: | Fine | Continue | Continue
-- 113: both: fists Fine | flung Fine Fine | fold Continue
-- 114: body: lean back Continue
-- 115: idle: roll shifts
+- 112: stance: seated
+- 113: face: furious | exasperated Fine | sulky Continue
+- 114: keys look: | Fine | Continue | Continue
+- 115: keys head_yaw: | Fine | Continue | Continue
+- 116: both: fists Fine | flung Fine Fine | fold Continue
+- 117: body: lean back Continue
+- 118: idle: roll shifts
 ### 6 (goth)
-- 118: row: 8 "The NEETs will form a unit." | travelling with the four | walking in single file, 
+- 121: row: 8 "The NEETs will form a unit." | travelling with the four | walking in single file, 
 ### goth
-- 119: code: forest_shot the walk the camera's travel the props are the film's code
+- 122: code: forest_shot the walk the camera's travel the props are the film's code
 ### 6 (swindon)
-- 122: row: 9 (gunfire, flame, morning stars) "And will encounter teams of their erstwhile col
+- 125: row: 9 (gunfire, flame, morning stars) "And will encounter teams of their erstwhile col
 ### swindon
-- 123: code: forest_shot the reactions are the film's code: timed the gunfire flame morning stars beats
+- 126: code: forest_shot the reactions are the film's code: timed the gunfire flame morning stars beats
 ### 7a (andy)
-- 126: row: 10 "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | rage | f
+- 129: row: 10 "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | rage | f
 ### a andy
-- 127: stance: seated
-- 128: face: rage
-- 129: both: fists
-- 130: body: slam fucker fucker
-- 131: L: fists Fortnite | jab Fortnite end
-- 132: body: lean in fucker
-- 133: idle: roll shifts
+- 130: stance: seated
+- 131: face: rage
+- 132: keys head_yaw: | fucker | Maze | Squid | Fortnite # head life chat
+- 133: both: fists
+- 134: body: slam fucker fucker
+- 135: L: fists Fortnite | jab Fortnite end
+- 136: body: lean in fucker
+- 137: idle: roll shifts
 ### 7a (pat)
-- 136: row: 10 (Pat) | patient, eyes on Andy | steepled; a blink at "fucker"
+- 140: row: 10 (Pat) | patient, eyes on Andy | steepled; a blink at "fucker"
 ### a pat
-- 137: like: a.pat
+- 141: like: a.pat
 ### 7b (milburn)
-- 140: row: 11 "I am sorry that you feel that way." | sorry-not-sorry: a small sympathetic fr
+- 144: row: 11 "I am sorry that you feel that way." | sorry-not-sorry: a small sympathetic fr
 ### b milburn
-- 141: stance: seated
-- 142: face: sorry
-- 143: both: folder
-- 144: body: nod feel feel
-- 145: idle: roll shifts
+- 145: stance: seated
+- 146: face: sorry
+- 147: both: folder
+- 148: body: nod feel feel
+- 149: idle: roll shifts
 ### 7c (andy)
-- 148: row: 12 "Are you or are you not sending NEETs to kill each other on live TV?" | despairin
+- 152: row: 12 "Are you or are you not sending NEETs to kill each other on live TV?" | despairin
 ### c andy
-- 149: stance: seated
-- 150: face: despair
-- 151: both: fists sending | plead sending end
-- 152: body: head shake live
-- 153: idle: roll shifts
+- 153: stance: seated
+- 154: face: despair
+- 155: both: fists sending | plead sending end
+- 156: body: head shake live
+- 157: idle: roll shifts
 ### 7c (pat)
-- 156: row: 12 (Pat) | patient | steepled
+- 160: row: 12 (Pat) | patient | steepled
 ### c pat
-- 157: like: a.pat
+- 161: like: a.pat
 ### 7d (milburn)
-- 160: row: 13 "My report is nuanced and multifaceted. I also suggest taking away PIP after t
+- 164: row: 13 "My report is nuanced and multifaceted. I also suggest taking away PIP after t
 ### d milburn
-- 161: stance: seated
-- 162: face: attentive | pleased multifaceted | smug Blood
-- 163: keys look: glance | glance | glance | glance
-- 164: both: folder
-- 165: body: nod multifaceted multifaceted
-- 166: body: nod Blood Blood
-- 167: idle: roll shifts
+- 165: stance: seated
+- 166: face: attentive | pleased multifaceted | smug Blood
+- 167: keys look: glance | glance | glance | glance
+- 168: both: folder
+- 169: body: nod multifaceted multifaceted
+- 170: body: nod Blood Blood
+- 171: idle: roll shifts
 ### 7e (andy)
-- 170: row: (silent) | outrage, visibly cross (note 8): brows hard down, eyes narrowed, mouth op
+- 174: row: (silent) | outrage, visibly cross (note 8): brows hard down, eyes narrowed, mouth op
 ### e andy
-- 171: stance: seated
-- 172: face: rage | gape gape
-- 173: both: plead end
-- 174: body: lean in
-- 175: body: nod gape
+- 175: stance: seated
+- 176: face: rage | gape gape
+- 177: both: plead end
+- 178: body: lean in
+- 179: body: nod gape
 ### 7e (pat)
-- 178: row: 14 "I think the backbenchers will like this one, sir." | patient, a small approving s
+- 182: row: 14 "I think the backbenchers will like this one, sir." | patient, a small approving s
 ### e pat
-- 179: stance: seated
-- 180: face: patient | approving backbenchers
-- 181: keys look:
-- 182: both: steeple
-- 183: body: nod like like
-- 184: idle: roll shifts
+- 183: stance: seated
+- 184: face: patient | approving backbenchers
+- 185: keys look:
+- 186: keys head_yaw: | backbenchers | sir # chat : Andy
+- 187: both: steeple
+- 188: body: nod like like
+- 189: idle: roll shifts
