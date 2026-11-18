@@ -566,25 +566,25 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.4,
+   "cost": 1.65,
    "src": "estimate",
    "sid": "session_01J1JB7ZDeRUXyAPbaEZurfA",
-   "steps": 36,
-   "hist_k": 131,
+   "steps": 43,
+   "hist_k": 138,
    "kinds": {
-    "tool search": 23.7,
-    "page.py": 4.5,
-    "other": 71.8
+    "tool search": 21.9,
+    "page.py": 7.1,
+    "other": 71.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 21,
+    "tool search": 23,
     "whole-file .py read": 0,
-    "page.py": 2,
+    "page.py": 3,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 4
+    "other": 6
    },
    "search": {
     "show": 0,
@@ -592,7 +592,7 @@
      "no show": 0
     },
     "other": {
-     "other": 5,
+     "other": 7,
      "film notes": 6,
      "shared:ledger.py": 1,
      "guides": 2,
