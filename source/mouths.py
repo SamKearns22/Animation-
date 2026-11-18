@@ -197,6 +197,8 @@ def draw(p, sp, fx, my, shape, ink=(24, 20, 22)):
         p.poly(curve([(fx - 15, my - 2), (fx + 15, my - 3), (fx + 10, my + 15), (fx - 10, my + 15)], 3), dark, ink, 2.2)
         p.poly([(fx - 12, my - 1), (fx + 12, my - 2), (fx + 11, my + 2), (fx - 11, my + 2)], teeth, None)
         p.ell(fx, my + 5, 6, 5, tongue, None)
+    else:   # Milburn note 6 (17 Nov): 'v:M' drew no mouth at all for half of Swindon's "pow"; a wrong name now stops
+        raise ValueError(f'mouths.draw: no mouth shape {shape!r} (shapes: {SHAPES + ["grin"]})')
 
 
 _installed = {}
