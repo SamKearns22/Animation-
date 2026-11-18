@@ -222,6 +222,21 @@ def _target(name, inp):
     return 'other'
 
 
+def _what(name, inp):
+    """finder-first Learn, step 4 (Sam's Option 1, 18 Nov): the file and the pattern one search asked about, short
+    enough to keep on the ledger row. A shell line gives its first quoted pattern and the files it names."""
+    inp = inp or {}
+    if name in ('Grep', 'Glob'):
+        return (str(inp.get('path') or inp.get('glob') or '')[:80], str(inp.get('pattern', ''))[:80])
+    if name == 'Read':
+        return (str(inp.get('file_path', ''))[:80], 'lines %s+%s' % (inp.get('offset', 0), inp.get('limit', '')))
+    cmd = inp.get('command', '')
+    files = re.findall(r'[\w./-]*(?:source|guides|notes|story|research|\.claude)/[\w./*-]+', cmd)
+    q = re.search(r"""(?:grep|rg|ack)\b[^|;&]*?(?:-\w+\s+)*(?:'([^']+)'|"([^"]+)")""", cmd)
+    pat = (q.group(1) or q.group(2)) if q else re.sub(r'\s+', ' ', cmd)[:80]
+    return (' '.join(dict.fromkeys(files))[:80], pat[:80])
+
+
 def _edits_film(name, inp, film_re):
     inp = inp or {}
     if name in ('Edit', 'Write', 'MultiEdit', 'NotebookEdit'):
@@ -260,7 +275,7 @@ def search_record(path, film=None):
             if isinstance(b, dict) and b.get('type') == 'tool_use':
                 seq.append((b.get('name'), b.get('input') or {}))
     out = {'show': 0, 'film': {'before show': 0, 'miss': 0, 'after show': 0}, 'other': {}, 'ticked': 0,
-           'edited film code': False}
+           'edited film code': False, 'list': []}     # list: [call number, kind, target, file, pattern] per search
     last_show = None
     for i, (name, inp) in enumerate(seq):
         cmd = inp.get('command', '') if name == 'Bash' else ''
@@ -272,9 +287,11 @@ def search_record(path, film=None):
         if k == 'film-file search':
             key = 'before show' if last_show is None else 'miss' if i - last_show <= MISS else 'after show'
             out['film'][key] += 1
+            out['list'].append([i, 'film', key] + list(_what(name, inp)))
         elif k == 'tool search':
             t = _target(name, inp)
             out['other'][t] = out['other'].get(t, 0) + 1
+            out['list'].append([i, 'other', t] + list(_what(name, inp)))
         out['ticked'] += _ticked(name, inp)
         out['edited film code'] |= _edits_film(name, inp, film_re)
     if not out['show']:
@@ -319,6 +336,12 @@ def test():
     print('  real transcript (trimmed):', line(m))
     check('steps counted once per reply (one reply is several lines)', m and m['steps'] == FIXTURE_STEPS)
     check('history at the end is the last step\'s', m and m['hist'] == FIXTURE_HIST)
+    sr = (m or {}).get('search') or {}
+    check('every search is listed with its file and pattern',
+          sr.get('list') and len(sr['list']) == sum(sr['film'].values()) + sum(sr['other'].values())
+          and all(len(x) == 5 for x in sr['list']))
+    check('the file and pattern of a shell grep are read',
+          _what('Bash', {'command': 'grep -n "def arm" source/blessed_cast.py | head'}) == ('source/blessed_cast.py', 'def arm'))
     check('the kinds add to 100%', m and abs(sum(m['kinds'].values()) - 100) < 1)
     check('the total matches the cost watch', m and abs(m['usd'] - _watch_usd(fx)) < 0.01)
     check('this fixture\'s searches are tool searches (no film files in a tool job)',
