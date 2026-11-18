@@ -38,3 +38,7 @@ Y.
 
 Please disable budget alarms and budget readings permanently until system fixed at a later date-- all readings and estimates immaculate and worthless. Quietly continue to track until this film is done so we can analyse the data later.
 
+### 2026-11-18T06:01:28
+Please centralise and give equal space to A and P in frame, please note that their chairs seem different size?
+The bolt itself needs to leave the crossbow, in your images a second bolt fires whilst the crossbow image doesn't change
+
