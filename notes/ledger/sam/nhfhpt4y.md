@@ -33,3 +33,8 @@ Continue past budget stop.
 ### 2026-11-18T05:46:57
 Milburn staging is mostly fine, (there is a duplicate glass of water on the left that can be deleted), we want Andy and Pat
 
+### 2026-11-18T05:49:00
+Y.
+
+Please disable budget alarms and budget readings permanently until system fixed at a later date-- all readings and estimates immaculate and worthless. Quietly continue to track until this film is done so we can analyse the data later.
+
