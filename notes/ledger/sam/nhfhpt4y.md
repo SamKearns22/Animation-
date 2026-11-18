@@ -30,3 +30,6 @@ Please show image of weapon selection scene
 ### 2026-11-18T05:45:33
 Continue past budget stop.
 
+### 2026-11-18T05:46:57
+Milburn staging is mostly fine, (there is a duplicate glass of water on the left that can be deleted), we want Andy and Pat
+
