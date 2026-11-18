@@ -71,3 +71,78 @@ Weapon props cross bodies in close-ups; suggested line: a weapon's handle never 
 Orange effect covers a face (35); suggested line: an effect never covers a speaking or acting face.
 Who holds the prop before the beat (1): suggested line: a prop the brief hands over is in the hand on the beat.
 
+== critique, round 2 pass 3 (2026-11-18): 10 fault(s), 1 can't tell
+-- look.md --
+1: Grassy meadow, mountains; four people at grey blocks: man grey top, woman patterned top, red-shirt man, purple-haired woman with spiked mace.
+2: Same meadow; red-shirt man smiling, purple-haired woman holds weapon, others at grey blocks.
+3: Meeting room; man dark hair glasses suit, "Prime Minister" sign, Vimto can; bald man glasses, "Work and Pensions", fizzy drink.
+4: Man grey hair glasses suit, hands clasped, sign "Alan Milburn", green curtain, empty glasses on table.
+5: Dark-haired man glasses, pursed lips, "Prime Minister" sign; bald man glasses, "Work and Pensions", Vimto can, drink with lemon.
+6: Prime Minister man small round mouth, arms down; bald man glasses calm, Vimto can, drink with lemon.
+7: Forest path; woman raises sword-shield, grey-top man, red-shirt man, purple-haired woman aims crossbow gun, walking.
+8: Forest; purple-haired woman fires gun with big orange flash; others crouch, woman raises arm.
+9: Forest; orange flame beside purple-haired woman's head; chains with spiked balls swing above; others crouching.
+10: Forest; spiked mace swings on chain, sword raised, purple-haired woman aims gun, muzzle flash.
+11: Prime Minister man smiling, hands on table, Vimto can; bald man glasses, drink.
+12: Prime Minister man brows raised worried, fists up; bald man glasses, drink, Vimto can.
+13: Man grey hair glasses seated, "Alan Milburn" sign, green curtain, glasses on table.
+14: Prime Minister man glasses frowning, arms bent; bald man glasses, "Work and Pensions", Vimto can.
+15: Close up man short dark hair, grey top, red-black block, sword blade, meadow mountains.
+16: Woman patterned top, long hair, eyes closed, holds green shield, red-shirt man beside.
+17: Red-shirt man with shield badge, calm face, meadow, spiked weapon handle.
+18: Purple-blue haired woman, black top, dark lipstick, spiked mace, grey block, meadow.
+19: Dark-haired man grey top, pushing sword handle, red-black block, meadow.
+20: Woman patterned top, eyes closed, sword blade, green shield, red-shirt man edge.
+21: Red-shirt man laughing open mouth, meadow, spiked handle.
+22: Purple-haired woman, nose ring, aims wooden gun, mace head, grey block.
+23: Prime Minister man glasses, smiling, pointing hand, "Prime Minister" sign, Vimto can.
+24: Bald man glasses, hands clasped, "Work and Pensions" sign, drink with lemon, slight smile.
+25: Grey-haired man glasses, tie, small smile, green curtain, glass, sign partly cut "lburn".
+26: Prime Minister man glasses looking sideways, "Prime Minister" sign, Vimto can.
+27: Bald man glasses smiling, hands clasped, "Work and Pensions", drink with lemon.
+28: Prime Minister man glasses sideways glance, round mouth, arms folded, Vimto can.
+29: Bald man glasses looking sideways, "Work and Pensions", drink with lemon.
+30: Forest; woman with shield, grey-top man raising sword, red-shirt man laughing at edge.
+31: Forest; red-shirt man smiling, purple-haired woman with gun, grey man edge.
+32: Forest; woman raises shield shouting, grey man, red-shirt man surprised mouth.
+33: Forest; purple-haired woman fires gun, orange flash, red-shirt man surprised.
+34: Forest; woman shield raised worried, grey man shouting, sword raised, red-shirt man edge.
+35: Forest; huge orange flash over woman's head, mace swings, red-shirt man crouching.
+36: Forest; man raises sword across face, woman with shield, spiked mace swinging.
+37: Forest; man with sword at face, red-shirt man crouched, purple-haired woman fires gun, maces swinging.
+38: Prime Minister man glasses, grin showing teeth, "Prime Minister" sign, Vimto can.
+39: Bald man glasses, neutral mouth, hands clasped, "Work and Pensions", drink.
+40: Prime Minister man worried brows, fists at sides, "Prime Minister" sign, Vimto can.
+41: Bald man glasses looking sideways, hands clasped, "Work and Pensions", drink.
+42: Grey-haired man glasses, eyes half closed, green curtain, partly cut sign "lburn".
+43: Prime Minister man glasses, flat mouth, arms down, Vimto can.
+44: Bald man glasses, open mouth red tongue, hands clasped, "Work and Pensions", drink.
+-- result.md --
+## Faults
+FAULT P2 [3, 23, 11, 38, 14, 43, 44, 12, 40, 13, 42, 16, 20]: Andy smiles in 3 (brief: furious) and 11/38 (brief: explodes); his mouth is flat in 14/43 (brief: hanging open); Pat's mouth is open and his eyes off Andy in 14/44 (brief: small smile); Milburn's eyes are half shut with no sideways slide in 13/42; the small woman's eyes are closed in 16/20 (brief: terrified).
+FAULT A1 P1 [1, 2, 15-17, 19-22]: red-shirt lad holds no uzis; grenade reads as a green shield/disc; the goth's mace handle runs through the red shirt; nobody visibly takes a weapon.
+FAULT P6 [3, 23, 11, 12, 38, 40, 43, 6, 28]: Andy's pointing hand is a ball, no finger; in 11/12 the ball hands float at his sides, off the table, not palms up; in 6/28 the folded arms are lost.
+FAULT P8 [1, 2, 15-22]: all four face the camera, not three-quarter to screen right.
+FAULT P12 [5, 26]: Andy's mouth is round while Pat speaks; Pat's mouth is closed in 5.
+FAULT O2 S1 S8 [9, 35, 8, 33]: the orange flame covers the goth's head and the red lad; it seems to leave the goth's weapon, not a bush ahead.
+FAULT P2 [8, 32, 33, 9, 34, 35]: the dodges look alike; the goth does not lean aside; in 9 no bolt and no uzi spray are seen; in 9/10/35/37 the red lad is crouched under the goth, bodies overlapping (P10).
+FAULT P4 [18, 22, 24, 27]: stray blue strip hangs outside the goth's hair; Pat has a grey ear patch like a stain; Milburn's glasses are thin where the reference's are thick black.
+FAULT O3 [9, 10, 35, 36, 37]: morning-star chains are thin dashed lines.
+FAULT P14 [36, 37]: the katana blade crosses the lanky lad's eyes.
+CAN'T TELL A4 [all]: no Hook Text frame; a frame with the box would show it.
+CAN'T TELL P2 [5, 27, 39]: Pat's eyes seem toward the camera, not Andy; a bigger face crop would show it.
+
+## Checked
+1-44
+
+## Cold look
+Missed or wrong: no uzis on the red lad (1); grenade read as a shield; Andy smiling in 11/38 (brief: exploding); 43 wrote "flat mouth" (brief: open); 44 wrote "open mouth red tongue" (brief: smile); no bolt seen in 9; 34 the lanky lad "shouting", not hacking.
+
+## Not on the list
+Crop cuts the Milburn sign to "lburn" (25, 42); suggested line: close-ups keep every sign word whole.
+Weapon handles cross bodies in close-ups; suggested line: a handle never runs through a person.
+Effect covers a face (35); suggested line: an effect never covers an acting face.
+Prop already held before the handover beat (1); suggested line: a handed-over prop is in the hand on the beat.
+
+critique, pass 3: faults fixed as one list: flame clear of every face (aim up, less lash, ducks held till it dies, goth deepest); dodges distinct (goth sinks and leans back, Swindon dives forward, rangy deepest); bolts slowed so they show; katana kept off rangy's face; angry talking mouths for furious faces (kit: mouths); left open: ["3,11-14,16,20,23,38,40,42-44 P2: Andy smiles in 3 (brief: furious) and 11/38 (brief: explodes); his mouth is flat in 14/43 (brief: hanging open); Pat's mouth is", "1-2,15-17,19-22 A1 P1: red-shirt lad holds no uzis; grenade reads as a green shield/disc; the goth's mace handle runs through the red shirt; nobody visibly take", "3,6,11-12,23,28,38,40,43 P6: Andy's pointing hand is a ball, no finger; in 11/12 the ball hands float at his sides, off the table, not palms up; in 6/28 the fol", '1-2,15-22 P8: all four face the camera, not three-quarter to screen right.', "5,26 P12: Andy's mouth is round while Pat speaks; Pat's mouth is closed in 5.", "18,22,24,27 P4: stray blue strip hangs outside the goth's hair; Pat has a grey ear patch like a stain; Milburn's glasses are thin where the reference's are thic", '9-10,35-37 O3: morning-star chains are thin dashed lines.']
+

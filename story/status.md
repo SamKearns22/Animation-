@@ -1,3 +1,3 @@
-Milburn: chat 9 built the three-quarter fix (turned people keep every part; LOST PART check) and fixed notes 6-8, 11; clips sent.
-Next: chat 10 (Opus medium) notes 5, 9, 10, the critique pack; then Sonnet animatic 1 updated.
-Sam: at 09:00 the ONE numbered list (torso Y/N, cast sheet tile Y/N); recordings and sound effects for animatic 2.
+Milburn: chat 10 fixed notes 5, 9, 10 (the table shot re-staged with drinks on coasters; scene 6 dodges and return fire), critique round 2 closed (7 faults named).
+Next: chat 11 (Sonnet) renders and sends the updated animatic 1.
+Sam: at 09:00 the ONE numbered list (Q1 torso, Q2 cast sheet tile, Q3 the 7 named faults); recordings and sound effects for animatic 2.

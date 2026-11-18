@@ -219,7 +219,12 @@ def head_life():
         x = soundtrack()
         n = 48000 // FPS
         env = np.array([np.sqrt(np.mean(x[i * n:(i + 1) * n] ** 2)) for i in range(len(x) // n)])
-        HEAD_LIFE['milburn'] = headlife.HeadLife(env, 0.0, fps=FPS, seed=21)
+        for k, who in enumerate(('milburn', 'andy', 'pat')):    # each on their own lines' loudness only
+            mask = np.zeros(len(env))                           # (chat 10: Andy and Pat too, rule 74)
+            for ln in LINES:
+                if ln['who'] == who:
+                    mask[int(ln['start'] * FPS):int(ln['end'] * FPS) + 1] = 1.0
+            HEAD_LIFE[who] = headlife.HeadLife(env * mask, 0.0, fps=FPS, seed=21 + k)
     return HEAD_LIFE['milburn']
 
 
@@ -231,8 +236,9 @@ def face_sp(shot, who, t, mood, shades=None):
         if shape != 'rest':
             d['mouth'] = 'v:' + shape
     d['blink'] = F.blinking(t, BLINKS[who])
-    if who == 'milburn':
-        d['head_life'] = head_life()
+    if who in ('milburn', 'andy', 'pat'):
+        head_life()
+        d['head_life'] = HEAD_LIFE[who]
     return d
 
 
@@ -578,7 +584,7 @@ def forest_pose(who, t):
         MP.in_hands(j, sp, 'grenade', 'R', None, ang=-90 + 50 * w1 * flail, along=-0.0)
         mood = 'terrified'
     _crouch(j, -40 * jolt, 0.0)
-    deep, lean = {'waif': (0.7, 10), 'rangy': (1.25, 26), 'goth': (1.0, -10), 'swindon': (0.95, 30)}[who]   # note 9:
+    deep, lean = {'waif': (0.7, 10), 'rangy': (1.25, 26), 'goth': (1.3, -10), 'swindon': (0.95, 30)}[who]   # note 9:
     _crouch(j, 190 * duck * deep, lean * duck)          # goth sinks and leans back, cool; Swindon dives forward; rangy
                                                         # ducks deepest; all clear of the flame (critique r2)
     if who == 'swindon':                                # a cocky bob under the morning star, still firing (note 9)
