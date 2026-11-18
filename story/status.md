@@ -1,4 +1,3 @@
-Milburn: chat 10 fixed notes 5, 9, 10 (the table shot re-staged with drinks on coasters; scene 6 dodges and return fire), critique round 2 closed (7 faults named).
-Next: chat 11 (Sonnet) renders and sends the updated animatic 1.
-Sam: at 09:00 the ONE numbered list (Q1 torso, Q2 cast sheet tile, Q3 the 7 named faults); recordings and sound effects for animatic 2.
-Chain stopped: chat 10 could not open chat 11 (8-chats-deep limit); Sam starts it.
+Milburn: chat 11 fixed Sam's 18 Nov notes (table shot centred, weapon scene re-staged, bolt into the air, knee holes, grenade, drinks); budget alarms paused.
+Next: chat 12 (Sonnet) renders and sends the updated animatic 1.
+Sam: notes on the animatic; Q1 torsos, Q2 cast sheet tile; recordings and sound effects for animatic 2.

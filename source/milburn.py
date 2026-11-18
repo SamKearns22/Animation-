@@ -390,11 +390,10 @@ def field_shot(t):
 
 # ================================================================================================= scene 3: arming
 import milburn_props as MP           # noqa: E402
-FIELD3 = [('rangy', -0.86, 5.0), ('waif', -0.32, 5.4), ('swindon', 0.22, 4.7), ('goth', 0.74, 4.4)]   # Sam (chat
-# 6): seen side by side, a loose row across the frame (each a little nearer or further), still turned to us; the goth
-# at the right end aims out of the frame, the rangy lad's blade points out at the left
-PLINTHS3 = [(-0.55, 6.7, None), (0.02, 7.5, None), (0.58, 6.5, None), (1.22, 7.1, None),   # the four emptied, behind
-            (-0.62, 3.9, 'stapler'), (0.72, 4.1, 'mace')]  # near corners: the stapler ("DLC") and the mace still on theirs
+FIELD3 = [('goth', -0.55, 3.0), ('rangy', 0.05, 5.6), ('swindon', 1.05, 7.4), ('waif', -0.46, 6.6)]   # Sam (chat 11):
+# a clear diagonal: the goth front left, the rangy lad dead centre, Swindon back right, the waif in the gap at back left
+PLINTHS3 = [(-0.12, 3.3, 'goth'), (0.55, 5.9, 'rangy'), (1.5, 7.7, 'swindon'), (-0.95, 6.9, None)]   # each one's own, just
+#   in front of them on the side they face (the weapon taken off it); the stapler and mace plinths gone (Sam, chat 11)
 
 
 def _hoist(t):
@@ -407,6 +406,21 @@ def _mix(a, b, u):
     return tuple(x + (y - x) * u for x, y in zip(a, b))
 
 
+def _picked(who, t):
+    """0 -> 1: how far `who` has lifted their weapon off the plinth (0: it still lies there, their hands on it)."""
+    if who == 'goth':
+        return _hoist(t)
+    if who == 'rangy':
+        a = word_at(3, 'arm themselves')
+        return MS.ease(min(1.0, max(0.0, (t - (a - 0.3)) / 0.7)))
+    if who == 'swindon':
+        return MS.ease(min(1.0, max(0.0, (t - (word_at(3, 'Each') + 0.1)) / 0.6)))
+    return 1.0
+
+
+ON_PLINTH = {'goth': 'crossbow', 'rangy': 'katana', 'swindon': 'uzi'}
+
+
 def arming(who, t):
     """(face sp, joints) for scene 3 (acting list row 3): the weapons in their hands, the moves on line 3."""
     sp = CAST[who]
@@ -414,18 +428,21 @@ def arming(who, t):
     sw = sp.get('shoulders', 150) / 2.0
     if who == 'goth':                                   # raises the heavy crossbow to her shoulder, aiming off
         u = _hoist(t)                                   # the right of the frame, pleased
-        V.arm_to(j, 'R', _mix((70, 330, 120), (sw * 0.35, 50, 150), u), 'down', 'fist')
-        V.arm_to(j, 'L', _mix((-130, 330, 160), (-sw * 0.1, 70, 430), u), 'down', 'fist')
-        MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
-        j['lean'] = 3.0 * u
-        mood = 'pleased' if u < 0.9 else 'grim'
+        V.arm_to(j, 'R', _mix((sw * 0.35, 150, 170), (sw * 0.35, 50, 150), u), 'down', 'fist')   # Sam (chat 11): lifts it
+        V.arm_to(j, 'L', _mix((-sw * 0.1, 170, 450), (-sw * 0.1, 70, 430), u), 'down', 'fist')  # off the plinth beside her,
+        if u > 0.04:                                    # it to her shoulder, and (till then it lies on the plinth)
+            MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
+        j['lean'] = 8.0 * (1 - u) + 3.0 * u                                             # is satisfied with it
+        mood = 'pleased'
     elif who == 'rangy':                                # holds the katana out flat in front and stares at it, unsure
         a = word_at(3, 'arm themselves')
         u = MS.ease(min(1.0, max(0.0, (t - (a - 0.3)) / 0.7)))
-        V.arm_to(j, 'R', _mix((90, 360, 80), (70, 220, 190), u), 'down', 'fist')
-        V.arm_to(j, 'L', _mix((-60, 380, 90), (10, 215, 430), u), 'down', 'palm')
-        MP.in_hands(j, sp, 'katana', 'R', 'L', along=0.0)
+        V.arm_to(j, 'R', _mix((90, 300, 330), (70, 220, 190), u), 'down', 'fist')   # Sam (chat 11): off the plinth,
+        V.arm_to(j, 'L', _mix((110, 300, 560), (10, 215, 430), u), 'down', 'palm')  # then held up and stared at
+        if u > 0.04:
+            MP.in_hands(j, sp, 'katana', 'R', 'L', along=0.0)
         j['nod'] = 5.0 * u
+        j['lean'] = 7.0 * (1 - u)
         mood = 'nervous'
     elif who == 'swindon':                              # twin uzis out in front, spraying at invisible targets
         a0 = word_at(3, 'Each')
@@ -434,9 +451,12 @@ def arming(who, t):
             k = i % 2
             kick[k] = max(kick[k], max(0.0, 1 - abs(t - tt) / 0.12))
         sway = math.sin((t - a0) * 2.6)
+        up = MS.ease(min(1.0, max(0.0, (t - (a0 + 0.1)) / 0.6)))   # Sam (chat 11): both uzis off the plinth, then aimed
         for side, sg, kk in (('R', 1, kick[0]), ('L', -1, kick[1])):
-            V.arm_to(j, side, (sg * (sw * 0.55), 130 - 40 * sway * sg - 30 * kk, 330 - 50 * kk), 'down', 'fist')
-            MP.in_hands(j, sp, 'uzi', side, None, ang=-12 * sway * sg - 25 * kk, along=-0.02)
+            V.arm_to(j, side, _mix((sg * sw * 0.45, 400, 280), (sg * (sw * 0.55), 130 - 40 * sway * sg - 30 * kk,
+                                                                   330 - 50 * kk), up), 'down', 'fist')
+            if up > 0.04:
+                MP.in_hands(j, sp, 'uzi', side, None, ang=-12 * sway * sg - 25 * kk, along=-0.02)
         mood = 'thrilled'
     else:                                               # the waif clutches the grenade to her chest, shaking
         for side, sg in (('R', 1), ('L', -1)):
@@ -467,7 +487,8 @@ def field_level_shot(t):
     for d, kind, a in sorted(things, key=lambda q: -q[0]):
         if kind == 'plinth':
             lay = Image.new('RGBA', (W * 2, H * 2), (0, 0, 0, 0))
-            MP.plinth(ImageDraw.Draw(lay), L, a[0], a[1], a[2], ss=2)   # Sam (chat 6): no "DLC" sign
+            prop = ON_PLINTH.get(a[2]) if a[2] and _picked(a[2], t) <= 0.04 else None   # still lying there
+            MP.plinth(ImageDraw.Draw(lay), L, a[0], a[1], prop, ss=2)   # Sam (chat 6): no "DLC" sign
             img.alpha_composite(lay.resize((W, H), Image.LANCZOS))
         else:
             who, x, dd = a
