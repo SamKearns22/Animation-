@@ -12,3 +12,6 @@ Hashtag plans are only useful if they are supported with live verified data and 
 Story post -- remove subtitle. Add hook text in centre line against the lift shaft above their heads, centralised. Text "Tonight: NEETS Learn About Milburn's Proposals 👀"
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-18T12:31:23
+Text up a bit more, diagonal as consistent with our new hose style. Cranberry text colour on Tonight, up all text size by two points
+
