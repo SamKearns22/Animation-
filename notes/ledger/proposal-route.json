@@ -566,25 +566,25 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.97,
+   "cost": 2.33,
    "src": "estimate",
    "sid": "session_01J1JB7ZDeRUXyAPbaEZurfA",
-   "steps": 44,
-   "hist_k": 138,
+   "steps": 54,
+   "hist_k": 145,
    "kinds": {
-    "tool search": 21.7,
-    "page.py": 7.0,
-    "other": 71.2
+    "tool search": 21.2,
+    "page.py": 6.1,
+    "other": 72.7
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 23,
+    "tool search": 28,
     "whole-file .py read": 0,
     "page.py": 3,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 6
+    "other": 7
    },
    "search": {
     "show": 0,
@@ -592,12 +592,12 @@
      "no show": 0
     },
     "other": {
-     "other": 7,
+     "other": 10,
      "film notes": 6,
      "shared:ledger.py": 1,
      "guides": 2,
      "shared:sheet.py": 1,
-     "shared:propose.py": 6
+     "shared:propose.py": 8
     },
     "ticked": 0,
     "edited film code": false
