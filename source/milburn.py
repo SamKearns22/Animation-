@@ -68,7 +68,7 @@ LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: t
          end=42.8),
     dict(who='milburn', text='I am sorry that you feel that way.', start=43.5, end=46.0),
     dict(who='andy', text='Are you or are you not sending NEETs to kill each other on live TV?', start=46.8, end=51.3),
-    dict(who='milburn', text='My report is nuanced and multifaceted. I also recommend taking away PIP after they obtain '
+    dict(who='milburn', text='My report is nuanced and multifaceted. I also recommend taking away PIP after they receive '
                              'their life-changing injuries in the Blood Dome.', start=52.9, end=60.3),
     dict(who='pat', text='I think the backbenchers will like this one, sir.', start=61.5, end=64.3),
 ]
