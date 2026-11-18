@@ -8,3 +8,7 @@ I think your hashtag plans are not evidenced based. AlanMilburn is not a hashtag
 
 Hashtag plans are only useful if they are supported with live verified data and an analysis of top posts.
 
+### 2026-11-18T12:24:09
+Story post -- remove subtitle. Add hook text in centre line against the lift shaft above their heads, centralised. Text "Tonight: NEETS Learn About Milburn's Proposals 👀"
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
