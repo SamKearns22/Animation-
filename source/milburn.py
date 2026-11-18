@@ -298,8 +298,8 @@ def cabinet(t):
 
 # ================================================================================================= scenes 4 and 7: the reverse
 _RPAINT = {layer: PL.painter(_DESC, 'reverse', layer) for layer in ('back', 'mid', 'front', 'over')}
-SEATS = {'andy': (-0.32, 2.0), 'pat': (0.38, 2.42)}      # (x, depth) from the reverse's lens: Andy leans in, Pat sat back (notes 5, 10)
-SPLIT = 560                                              # screen x between them: each one's table strip
+SEATS = {'andy': (-0.35, 2.2), 'pat': (0.35, 2.2)}       # (x, depth) from the reverse's lens: equal and centred (Sam, chat 11)
+SPLIT = 540                                              # screen x between them: each one's table strip
 
 
 def reverse(t):
@@ -551,7 +551,9 @@ def forest_pose(who, t):
         if sky > 0:
             V.arm_to(j, 'R', _mix((sw * 0.35, 50, 150), (sw * 0.3, -30, 210), sky), 'down', 'fist')
             V.arm_to(j, 'L', _mix((-sw * 0.1, 70, 430), (-sw * 0.05, -290, 440), sky), 'down', 'fist')
-        MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
+        shots = (SKY_SHOT,) + tuple(GOTH_SHOTS)          # Sam (chat 11): the bolt leaves the crossbow; she reloads
+        empty = any(tt <= t < (nxt - 0.6 if nxt else 99) for tt, nxt in zip(shots, shots[1:] + (None,)))   # before the next
+        MP.in_hands(j, sp, 'crossbow_empty' if empty else 'crossbow', 'R', 'L', along=-0.06)
         j['head_roll'] = j.get('head_roll', 0.0) - 9 * duck     # she leans aside, barely bothered
         mood = 'aghast' if MF.T_GUN < t < MF.T_FLAME else ('pleased' if t > GOTH_SHOTS[0] else
                                                              ('grim' if t > MF.T_GUN else 'pleased'))
@@ -636,7 +638,7 @@ def forest_shot(t):
             u = t - SKY_SHOT
             hx, hy = pts['wrL']
             bx = X + hx * s + (0.15 + 1.2 * u) * pxm
-            by = Y - FEET * s + (hy + j.get('bob', 0.0)) * s - (0.25 + 9.0 * u) * pxm
+            by = Y - FEET * s + (hy + j.get('bob', 0.0)) * s - (0.55 + 9.0 * u) * pxm
             dx, dy = 0.13 * pxm, -0.39 * pxm                # the bolt's length, pointing up the crossbow's line
             dr = ImageDraw.Draw(img)
             dr.line([(bx - dx, by - dy), (bx, by)], fill=(70, 50, 34), width=max(3, int(0.02 * pxm)))

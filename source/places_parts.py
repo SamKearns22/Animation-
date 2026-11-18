@@ -208,7 +208,9 @@ def chair_back(p, img, cam, a, t):
     nx, ny = a['buttons']
     for k in range(nx):
         for j in range(ny):
-            p.ell(a['first'][0] + k * a['every'][0], a['first'][1] + j * a['every'][1], a['r'], a['r'], dk(c, 0.6), None)
+            bx, by = a['first'][0] + k * a['every'][0], a['first'][1] + j * a['every'][1]
+            if bx + a['r'] < w - ix * 0.5 and by + a['r'] < h:      # Milburn chat 11: a narrow chair's buttons
+                p.ell(bx, by, a['r'], a['r'], dk(c, 0.6), None)     # floated off its edge, on the wall
 
 
 @kind('bench', ref=500, params={'colour': 'c', 'dark': 'c', 'light': 'c', 'papers': 'n'},
