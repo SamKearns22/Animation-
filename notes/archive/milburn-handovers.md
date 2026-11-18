@@ -56,3 +56,15 @@
 - **Open rule requests:** none.
 - **For Claude:** facehouse: `hair: bald` (bald_shapes, bald, dome arc via L['round_top'], `L['dome']` caps it at -0.44), `ear_k`, glasses `round`/`w_k` (in the pick json); McFadden's pick at references/faces/mcfadden/pick (picked B, by Claude: Sam to confirm Q6); CAST['mcfadden']. places_tables gains fireplace, portrait, tall glass, can. The reverse view puts the lens 0.3 m right of Milburn's seat so both fit. Kittests failing before this film (named, not from it): facehouse_whole_head, round_page. Moves critique items from chat 3 still open (see archive). Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 
+
+
+## Where things stand (chat 6, archived chat 7)
+- **Rules that bite next:** 89 (one critique pack for scenes 3, 4, 6, 7), 41 (every new pose from the views it is seen: the three-quarter ones), 74 (moves land on their words).
+- **Done (chat 6):** note 4 (Pat's dome, still sent); scenes 6-7 planned (shots 6, 7a-7e, timing to ~68 s, acting rows 8-14, estimate ~24%); built: scenes 4 and 7 at the table (Andy and Pat seated in the reverse, portrait gone, every move on the acting list) and scene 3 (field level, row of four turned three-quarter to screen right per Sam, six plinths, crossbow, katana, uzis, grenade, mace, stapler; no "DLC" sign).
+- **Spent:** chat 6 ~2.6%; film ~14.8%; from here ~9 (total ~24%).
+- **Next:** chat 7, Opus HIGH: build scene 6 (the forest: travelling camera, the four walking three-quarter to screen right with their weapons, gunfire flashes, a flame jet, two morning stars; plan in Shots and The world), then ONE critique pack for scenes 3, 4, 6, 7 (fix or name every fault), then open the Sonnet chat for the whole-film animatic (finish.py, Hook Text, sign-off).
+- **Needs Sam:** his recordings and sound effects for animatic 2; the three-quarter tool job for the morning (Sam: three-quarter people "look like shit" next to the front ones: a tool job, Opus high, after the animatic).
+- **Read:** job pack Build; this file's Shots (row 6), The world (Forest), acting list rows 8-9, notes 5-6.
+- **Open rule requests:** none.
+- **For Claude:** milburn.py: REVERSE/ACROSS shot lists, reverse() (table strips split at SPLIT), arming()/field_level_shot() (YAW3 40), forest_shot not yet written (picture() calls it for shot '6'); milburn_sets: LEVEL_CAM, field_level; milburn_props: SHAPES, in_hands, plinth (tag unused); facehouse bald `dome_wide`. Moves: table blocks in story/milburn-moves.txt (places steeple, fold, flung, fists, plead, jab). Kittests failing before this film (named): facehouse_whole_head, round_page. Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+
