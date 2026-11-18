@@ -1,0 +1,20 @@
+# The shot boards that reached Sam (rule 11; source/rough.py sent FILM OUT.jpg --delivered --board).
+# board FILE delivered=EPOCH drawn=EPOCH commit=C moves=N (move blocks when drawn); then one line per shot: shot NAME FRAMES-DIGEST CAST
+board milburn-board.jpg delivered=1794948567 drawn=1794948559 commit=540e3bcd moves=0 (17 Nov 20:49)
+shot 1 f4d2dd81dd milburn
+shot 2a 32d3f30fa9 goth,rangy,swindon,waif
+shot 2b 7fb6745200 goth,rangy,swindon,waif
+board milburn-board.jpg delivered=1794982967 drawn=1794982963 commit=0a3d3950 moves=22 (18 Nov 06:22)
+shot 1 c14edd80a2 milburn
+shot 2a ebfaa8e7fa goth,rangy,swindon,waif
+shot 2b 35547c561c goth,rangy,swindon,waif
+shot 3 2a0a569976 goth,rangy,swindon,waif
+shot 4a 102ef16d5c andy,pat
+shot 4b d8afef2cd6 milburn
+shot 4c f2eb596e76 andy,pat
+shot 6 8a9cafd8d8 goth,rangy,swindon,waif
+shot 7a 006e02f510 andy,pat
+shot 7b b05972e6c4 milburn
+shot 7c 32a04eec45 andy,pat
+shot 7d 5701a4be64 milburn
+shot 7e 90677c41e6 andy,pat

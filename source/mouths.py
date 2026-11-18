@@ -169,6 +169,21 @@ def draw(p, sp, fx, my, shape, ink=(24, 20, 22)):
                dark, ink, 2.4)
         p.poly([(fx - 15, my - 2), (fx + 15, my - 2), (fx + 13, my + 3), (fx - 13, my + 3)], teeth, None)
         p.ell(fx, my + 17, 9, 4, tongue, None)
+    elif shape == 'etc!':     # (Milburn chat 10) angry: slightly open, teeth clenched, corners down
+        p.poly([(fx - 16, my + 4), (fx, my - 3), (fx + 16, my + 4), (fx + 12, my + 9), (fx - 12, my + 9)], dark, ink, 2.2)
+        p.poly([(fx - 12, my + 3), (fx, my - 1), (fx + 12, my + 3), (fx + 11, my + 7), (fx - 11, my + 7)], teeth, None)
+    elif shape == 'E!':       # angry: wide, top lip arched, corners pulled down, both rows of teeth (a snarl)
+        p.poly(curve([(fx - 23, my + 6), (fx - 10, my - 4), (fx + 10, my - 4), (fx + 23, my + 6), (fx + 14, my + 12),
+                      (fx - 14, my + 12)], 3), dark, ink, 2.4)
+        p.poly([(fx - 15, my + 1), (fx - 8, my - 2), (fx + 8, my - 2), (fx + 15, my + 1), (fx + 14, my + 4), (fx - 14, my + 4)],
+               teeth, None)
+        p.poly([(fx - 12, my + 9), (fx + 12, my + 9), (fx + 11, my + 11), (fx - 11, my + 11)], teeth, None)
+    elif shape == 'AI!':      # angry: shouting, a squared mouth whose corners pull down, top teeth bared
+        p.poly(curve([(fx - 21, my + 6), (fx - 10, my - 5), (fx + 10, my - 5), (fx + 21, my + 6), (fx + 15, my + 21),
+                      (fx, my + 23), (fx - 15, my + 21)], 3), dark, ink, 2.6)
+        p.poly([(fx - 15, my + 1), (fx - 8, my - 3), (fx + 8, my - 3), (fx + 15, my + 1), (fx + 14, my + 5), (fx - 14, my + 5)],
+               teeth, None)
+        p.ell(fx, my + 18, 9, 4, tongue, None)
     elif shape == 'grin':     # a big happy open smile, the corners up (Sam, 5 Nov: Alex's 😀)
         out = curve([(fx - 30, my - 8), (fx - 12, my - 3), (fx + 12, my - 3), (fx + 30, my - 8), (fx + 18, my + 14),
                      (fx, my + 20), (fx - 18, my + 14)], 3)
@@ -197,6 +212,8 @@ def draw(p, sp, fx, my, shape, ink=(24, 20, 22)):
         p.poly(curve([(fx - 15, my - 2), (fx + 15, my - 3), (fx + 10, my + 15), (fx - 10, my + 15)], 3), dark, ink, 2.2)
         p.poly([(fx - 12, my - 1), (fx + 12, my - 2), (fx + 11, my + 2), (fx - 11, my + 2)], teeth, None)
         p.ell(fx, my + 5, 6, 5, tongue, None)
+    else:   # Milburn note 6 (17 Nov): 'v:M' drew no mouth at all for half of Swindon's "pow"; a wrong name now stops
+        raise ValueError(f'mouths.draw: no mouth shape {shape!r} (shapes: {SHAPES + ["grin"]})')
 
 
 _installed = {}
@@ -212,7 +229,10 @@ def install(B):
     def mouth(p, sp, t, fx, my):
         m = sp.get('mouth', 'line')
         if isinstance(m, str) and m.startswith('v:'):
-            return draw(p, sp, fx, my, m[2:])
+            shape = m[2:]
+            if sp.get('smile', 0.0) <= -0.6 and shape in ('etc', 'E', 'AI'):   # an angry face talks angrily (Milburn
+                shape += '!'                                                      # critique r2: rage read as a laugh)
+            return draw(p, sp, fx, my, shape)
         return inner(p, sp, t, fx, my)
     B.mouth = mouth
 

@@ -1,0 +1,189 @@
+# Milburn's moves, from its acting list (the moves kit: source/acting.py; the language is in its MAP).
+# One block per person per shot; each block is one acting-list row: who, the line, the word the move lands on.
+# Stand-in timing until Sam records (the words spread evenly over each line's span): re-timed on his takes.
+
+# --- the library this film adds
+place folder: 14, 228, 215, out, fist        # both hands folded on the folder in front of him (forearms on the table)
+body look up: nod -8, head_dy -14                # the head tipped back and lifted (the neck shows): looking up into the light
+body lean close: lean 7, head_dy 16, roll 3          # a small lean towards us: the head comes down and in (front on)
+place sleeves: 12, 330, 100, out, fist        # hands clutched together low in front, gripping her cuffs (the waif)
+# chat 6: the table scenes (Andy and Pat seated across from Milburn)
+place steeple: 18, 120, 190, pole 0.6 1 0.1, palm      # elbows on the table, fingertips meeting under the chin (Pat)
+place fold: -95, 175, 110, pole 0.4 1 -0.1, fist       # arms folded across the chest (the arms_folded pose's hands)
+place flung: 120, -230, 40, down, palm                 # both arms flung up past the head ("Fine!")
+place fists: 50, 205, 220, out, fist                   # both fists down on the table top
+place plead: 120, 60, 220, down, palm                  # both hands out, palms up: despair
+place jab: 110, 10, 280, out, point                     # the point at Milburn (the lens), a touch to the side so it reads
+body lean back: lean -6, head_dy -4                    # back in the chair, sulking
+body slam: bob 6, lean 5, nod 1                        # the fists landing
+
+## 1: milburn, line 1, lands on "simple"
+row: 1 "The essence of my proposal is quite simple." | calm, reasonable, faintly pleased, straight to lens | seated upright, hands folded on the folder, a small nod on "essence", tiny lean in and nod on "simple", the smile grows
+stance: seated
+face: pleased | smug from "simple" +0.05
+both: folder at 0
+body: nod 0.6 from "essence" -0.05 to "essence" +0.4, rise 0.12, fall 0.22
+body: lean close from "simple" -0.3 over 0.5
+body: nod 1.6 from "simple" -0.05 to "simple" +0.55, rise 0.15, fall 0.3
+idle: roll 1.4 shifts 51 0.9 1.6
+idle: nod 0.5 shifts 52 1.0 1.8
+
+## 2a: goth, line 2, lands on "training"
+row: 2 "Those not in education, employment or training..." | the goth: unimpressed, even looking up | still; looks up as the light reaches her
+face: unimpressed | unimpressed up from "training" -0.2 | gaze -0.65 eased from "training" -0.2 over 0.45
+body: look up 1.3 from "training" -0.2 over 0.5
+idle: lean 1.2 shifts 61 0.9 1.6
+idle: roll 2 shifts 62 1.0 1.7
+
+## 2a: rangy, line 2, lands on "training"
+row: 2 (the rangy lad) | mouth hanging open | looks up first, mouth falls wider
+face: gormless | awe open from "training" -0.15 | gaze -0.8 eased from "training" -0.3 over 0.4
+body: look up 1.6 from "training" -0.3 over 0.45
+idle: roll 2.5 shifts 63 0.8 1.4
+
+## 2a: swindon, line 2, lands on "training"
+row: 2 (the Swindon lad) | chest out, squinting | chest out the whole shot; squints up into the light
+face: proud | proud up from "training" -0.1 | gaze -0.75 eased from "training" -0.1 over 0.5
+keys lean: -3 at 0
+keys shoulders: 8 at 0                    # shoulders set back and broad (front on, the chest out shows as width)
+body: look up 1.5 from "training" -0.1 over 0.5
+idle: lean 1 shifts 64 1.0 1.8
+
+## 2a: waif, line 2, lands on "training"
+row: 2 (the waif) | nervous, shrinking | shoulders up, gripping her sleeves; looks up last, wide-eyed
+face: nervous | awe from "training" +0.1 | gaze -0.8 eased from "training" +0.05 over 0.45
+keys shoulders: -12 at 0
+both: sleeves at 0
+body: look up 1.4 from "training" +0.05 over 0.5
+idle: roll 2 shifts 65 0.7 1.2
+
+## 2b: goth, line 2, lands on "country"
+row: 2 cont. "...a unique opportunity to serve their country." | the aerial: tiny figures on the deck as it locks level with the grass
+code: field_shot (tiny figures, a few pixels tall: no faces or limbs to act at this size)
+
+## 3: goth, line 3, lands on "arm themselves"
+row: 3 "Each NEET must arm themselves..." | the goth: pleased | hoists the heavy crossbow to her shoulder
+code: field_level_shot (scene 3's moves are drawn by the film's code: props held in both hands)
+
+## 4a: andy, line 4, lands on "Milburn"
+row: 4 "God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?" | furious, eyes on Milburn (the lens) | leans in, jabs the point on "Milburn" and again on "aren't you"
+stance: seated
+face: furious
+keys head_yaw: 5 at 0 | -5 at "Milburn" | 6 at "Battle" | -3 at "Hunger" +0.2 | -6 at "aren't"   # head life (chat 10, rule 74): the head works the rant
+R: fists at 0
+L: fists at 0 | jab from "Milburn" -0.2 to "Hunger" | fists at "Hunger" +0.3 | jab from "aren't" -0.2 to end
+body: lean in 1.2 from "Milburn" -0.3 over 0.4
+body: nod 1.5 from "Milburn" -0.05 to "Milburn" +0.4, rise 0.12, fall 0.2
+body: nod 1.5 from "aren't" -0.05 to "aren't" +0.4, rise 0.12, fall 0.2
+idle: roll 2 shifts 71 0.6 1.1
+
+## 4a: pat, line 4, lands on "Milburn"
+row: 4 (Pat) | patient, listening, eyes on Andy | fingers steepled, still; a slow blink
+stance: seated
+face: patient
+keys look: -0.7 at 0
+# (Sam, chat 11: Pat faces forward throughout, no head turn; only his eyes go to Andy)
+both: steeple at 0
+body: nod 0.6 from "Milburn" -0.1 to "Milburn" +0.6, rise 0.2, fall 0.3
+idle: roll 1 shifts 72 1.0 1.8
+
+## 4b: milburn, line 5, lands on "interrupt"
+row: 5 "This report has been long in the making. Would you care to hear the findings or would you prefer to interrupt?" | nonplussed, soft, attentive | hands folded on the folder; a small head tilt on "interrupt"
+stance: seated
+face: attentive | pleased from "interrupt" +0.1
+both: folder at 0
+body: tilt 1.6 from "interrupt" -0.2 over 0.5
+body: nod 0.5 from "making" -0.05 to "making" +0.4, rise 0.12, fall 0.22
+idle: roll 1.2 shifts 53 0.9 1.6
+idle: nod 0.5 shifts 54 1.0 1.8
+
+## 4c: pat, line 6, lands on "Prime Minister"
+row: 6 "I'd like to hear where this goes, Prime Minister" | patient; eyes sideways to Andy | fingers steepled; a small nod
+stance: seated
+face: patient
+keys look: -0.7 at 0
+# (Sam, chat 11: Pat faces forward throughout, no head turn; only his eyes go to Andy)
+both: steeple at 0
+body: nod 1 from "Prime" -0.05 to "Prime" +0.5, rise 0.15, fall 0.25
+idle: roll 1 shifts 73 1.0 1.8
+
+## 4c: andy, line 7, lands on "Fine"
+row: 7 "Fine! Continue." | exasperated, then sulky; eyes and head go over to Pat (note 7: Pat just sided with Milburn), back to the lens as he sulks | arms flung up on "Fine!", then folds them and leans back
+stance: seated
+face: furious | exasperated from "Fine" -0.1 | sulky from "Continue" +0.3
+keys look: 0 at 0 | 0.9 at "Fine" -0.35 | 0.9 at "Continue" +0.5 | 0.2 at "Continue" +0.9
+keys head_yaw: 0 at 0 | 30 at "Fine" -0.3 | 30 at "Continue" +0.45 | 0 at "Continue" +0.85
+both: fists from 0 to "Fine" -0.45 | flung from "Fine" -0.2 to "Fine" +0.35 | fold at "Continue" +0.2
+body: lean back 1 from "Continue" -0.1 over 0.6
+idle: roll 1.5 shifts 74 0.8 1.4
+
+## 6: goth, line 8, lands on "unit"
+row: 8 "The NEETs will form a unit." | travelling with the four | walking in single file, weapons gripped by personality
+code: forest_shot (the walk, the camera's travel and the props are the film's code)
+
+## 6: swindon, line 9, lands on "colleagues"
+row: 9 (gunfire, flame, morning stars) "And will encounter teams of their erstwhile colleagues" | shock, then each in character | the jolt, the duck, Swindon sprays back
+code: forest_shot (the reactions are the film's code: timed to the gunfire, flame and morning stars beats)
+
+## 7a: andy, line 10, lands on "fucker"
+row: 10 "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | rage | fists down on "fucker", then the point on "Fortnite"
+stance: seated
+face: rage
+keys head_yaw: 0 at 0 | -6 at "fucker" | 6 at "Maze" | -2 at "Squid" | -7 at "Fortnite"   # head life (chat 10)
+both: fists at 0
+body: slam 1 from "fucker" -0.1 to "fucker" +0.35, rise 0.08, fall 0.25
+L: fists from 0 to "Fortnite" -0.55 | jab from "Fortnite" -0.25 to end
+body: lean in 1.4 from "fucker" -0.3 over 0.3
+idle: roll 2 shifts 75 0.6 1.1
+
+## 7a: pat, line 10, lands on "fucker"
+row: 10 (Pat) | patient, eyes on Andy | steepled; a blink at "fucker"
+like: 4a.pat
+
+## 7b: milburn, line 11, lands on "feel"
+row: 11 "I am sorry that you feel that way." | sorry-not-sorry: a small sympathetic frown with the faint smile | hands folded; a slow small nod on "feel"
+stance: seated
+face: sorry
+both: folder at 0
+body: nod 1.2 from "feel" -0.05 to "feel" +0.6, rise 0.2, fall 0.3
+idle: roll 1.2 shifts 55 0.9 1.6
+
+## 7c: andy, line 12, lands on "live TV"
+row: 12 "Are you or are you not sending NEETs to kill each other on live TV?" | despairing and angry | both hands out, palms up, shaking them
+stance: seated
+face: despair
+both: fists from 0 to "sending" -0.6 | plead from "sending" -0.3 to end
+body: head shake 1 from "live" -0.1 over 0.8
+idle: roll 2 shifts 76 0.6 1.1
+
+## 7c: pat, line 12, lands on "live TV"
+row: 12 (Pat) | patient | steepled
+like: 4a.pat
+
+## 7d: milburn, line 13, lands on "multifaceted"
+row: 13 "My report is nuanced and multifaceted. I also suggest taking away PIP after they obtain their life-changing injuries in the Blood Dome." | eyes slide aside and back first; then calm, faintly pleased | hands folded, still; small nods
+stance: seated
+face: attentive | pleased from "multifaceted" | smug from "Blood" -0.1
+keys look: 0 at glance | 0.8 at glance +0.25 | 0.8 at glance +0.5 | 0 at glance +0.75
+both: folder at 0
+body: nod 0.8 from "multifaceted" -0.05 to "multifaceted" +0.5, rise 0.15, fall 0.25
+body: nod 0.8 from "Blood" -0.05 to "Blood" +0.5, rise 0.15, fall 0.25
+idle: roll 1.2 shifts 56 0.9 1.6
+
+## 7e: andy, line 14, lands on gape
+row: (silent) | outrage, visibly cross (note 8): brows hard down, eyes narrowed, mouth open; chin dropped into a glare | frozen mid-lean
+stance: seated
+face: rage | gape from gape
+both: plead from 0 to end
+body: lean in 1 from 0 over 0.1
+body: nod 1.2 from gape over 0.35
+
+## 7e: pat, line 14, lands on "like this one"
+row: 14 "I think the backbenchers will like this one, sir." | patient, a small approving smile; eyes on Andy | steepled; a small nod
+stance: seated
+face: patient | approving from "backbenchers"
+keys look: -0.7 at 0
+# (Sam, chat 11: Pat faces forward throughout, no head turn; only his eyes go to Andy)
+both: steeple at 0
+body: nod 1 from "like" -0.05 to "like" +0.5, rise 0.15, fall 0.25
+idle: roll 1 shifts 77 1.0 1.8

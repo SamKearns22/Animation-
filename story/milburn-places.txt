@@ -1,0 +1,60 @@
+# Milburn's places (places kit). Each view is a level camera; every piece in metres (x across, depth from the lens, z up).
+# The lift shaft and the field from above are paintings of their own (source/milburn_sets.py): the field's camera
+# looks down, which the kit's level cameras do not do.
+
+# place: cabinet room (10 Downing Street; reference references/milburn/cabinet-room-burnham.jpg)
+colours: wall 234 224 192 | wall light 244 236 210 | oak 120 72 44 | oak dark 92 52 32 | oak light 150 98 62 | chair red 104 46 36 | baize 46 108 94 | green 38 116 72
+
+## view: cabinet (Milburn across the table, straight to lens)
+camera: up 1.2, horizon 900, lens 1700
+people: milburn 2.2
+panels: x -2.4 to 2.4, z 0 to 4.6, depth 3.4, step 0.62, seed 5 (the panelled wall)
+block: x -2.4 to 2.4, z 3.3 to 3.36, depth 3.4, colour wall * 0.9, line 1.4 (the picture rail)
+block: x -2.4 to 2.4, z 0.86 to 0.92, depth 3.4, colour wall * 0.88, line 1.4 (the dado rail)
+window: x 0.56 to 1.2, z 1.0 to 3.1, depth 3.42, bars 2, glass 240 244 236, frame 246 244 236, seed 7 (the tall window)
+curtain: x 0.36 to 0.66, z 0.4 to 3.28, depth 3.3, colour green, folds 4, tie 0.55, seed 8 (the left curtain)
+chair back: x -0.27 to 0.27, z 0.74 to 1.26, depth 2.5, look close, seed 11 (Milburn's chair)
+chair back: x -0.86 to -0.38, z 0.74 to 1.2, depth 2.3, look close, seed 12 (the empty chair, left)
+chair back: x 0.38 to 0.86, z 0.74 to 1.2, depth 2.3, look close, seed 13 (the empty chair, right)
+table top: x -2.6 to 2.6, z 0 to 0.76, depth 1.95, near 0.3, colour baize, rim oak, streaks 0, seed 3 (the green-baize table)
+folder: x -0.16 to 0.16, z 0 to 0.76, depth 1.9, near 1.62 (Milburn's red folder)
+folder: x -0.78 to -0.5, z 0 to 0.76, depth 1.9, near 1.66 (the left place's folder)
+folder: x 0.5 to 0.78, z 0 to 0.76, depth 1.9, near 1.66 (the right place's folder)
+papers: at 0.2 0.76, depth 1.62, width 0.2 (a paper)
+tumbler: at 0.3 0.76, depth 1.72 (Milburn's water glass)
+tumbler: at 0.86 0.76, depth 1.76, full 0.75 (the right place's glass)
+name card: at -0.3 0.76, depth 1.44, width 0.15, text "Alan Milburn", layer over (his name card; Sam 18 Nov: forward, his sleeve clipped its edge at 3 s)
+
+## view: reverse (the 180 of shot 1: from Milburn's seat across the table to Andy and Pat; shots 5 and 7)
+# The same room turned round: the fireplace wall behind the Prime Minister's chair (no photo of this side found
+# (chat 5): drawn from the room's known pieces, the panels and rails as the shot-1 side, a marble fireplace with the
+# first minister's portrait over it). The lens sits at Milburn's eyes, a step to his right (x' = -x of shot 1).
+# (chat 10, notes 5 and 10: Sam's second word on this framing (rule 30). Chat 6's two equal busts side by side, dead
+# centre, over 40% empty baize, the fireplace hidden, the name cards cut: now the lens lower, Andy leaning in at the
+# table, Pat sat back a step behind him, the fireplace between their heads, the drinks forward on coasters.)
+# (chat 11, Sam: "centralise and give equal space to A and P", chairs the same size: side by side, equal, centred.)
+camera: up 1.2, horizon 900, lens 1450
+people: andy 2.2, pat 2.2
+panels: x -2.4 to 2.4, z 0 to 4.6, depth 3.4, step 0.62, seed 21 (the panelled wall behind them)
+block: x -2.4 to 2.4, z 3.3 to 3.36, depth 3.4, colour wall * 0.9, line 1.4 (the picture rail)
+block: x -2.4 to 2.4, z 0.86 to 0.92, depth 3.4, colour wall * 0.88, line 1.4 (the dado rail)
+fireplace: x -1.0 to 1.0, z 0 to 1.75, depth 3.36, scrolls 1, marble 228 224 216, vein 176 170 162, seed 22 (the marble fireplace behind the PM's chair)
+# (Sam, 18 Nov, with the room's photo: "bigger and grander, objects on top; include the portrait if needs be":
+# scroll consoles on the jambs, a bracket clock and two gilt candelabra on the mantel, the portrait back above it)
+portrait: x -0.48 to 0.48, z 2.05 to 3.18, depth 3.38, seed 23 (the first-minister portrait over the fireplace)
+mantel clock: at 0 1.63, depth 3.3, seed 32 (the bracket clock, middle of the mantel)
+candlestick: at -0.9 1.63, depth 3.3, seed 33 (gilt candelabrum, left end)
+candlestick: at 0.9 1.63, depth 3.3, seed 34 (gilt candelabrum, right end)
+chair back: x -1.4 to -0.94, z 0.74 to 1.2, depth 2.5, look close, seed 24 (the empty chair, left)
+chair back: x -0.63 to -0.07, z 0.74 to 1.28, depth 2.5, look close, seed 25 (the Prime Minister's chair)
+chair back: x 0.07 to 0.63, z 0.74 to 1.28, depth 2.5, look close, seed 26 (Pat's chair)
+table top: x -2.6 to 2.6, z 0 to 0.76, depth 1.9, near 0.25, colour baize, rim oak, streaks 0, seed 27 (the green-baize table)
+folder: x -0.5 to -0.2, z 0 to 0.76, depth 1.87, near 1.6 (Andy's red folder)
+folder: x 0.2 to 0.5, z 0 to 0.76, depth 1.87, near 1.6 (Pat's red folder)
+name card: at -0.28 0.76, depth 1.4, width 0.15, text "Prime Minister", layer over (his name card; Sam 18 Nov: forward on the table, clear of his hands)
+name card: at 0.3 0.76, depth 1.4, width 0.15, text "Work and Pensions", layer over (Pat's name card; Sam 18 Nov: forward, clear of his arms)
+# the drinks (note 10): near the lens, each diagonally in front of its owner, drawn over everyone (layer over)
+coaster: at -0.45 0.76, depth 1.42, width 0.1, layer over, seed 30 (under Andy's Vimto: front-left of him, chat 11)
+can: at -0.45 0.77, depth 1.42, text "Vimto", layer over, seed 28 (Andy's Vimto, note 10; chat 11 nearer him)
+coaster: at 0.03 0.76, depth 1.5, width 0.1, layer over, seed 31 (under Pat's water: front-left of him, chat 11)
+tall glass: at 0.03 0.77, depth 1.5, lemon 0, layer over, seed 29 (Pat's sparkling water, note 10; chat 11 nearer him; Sam 18 Nov: no lemon slice)

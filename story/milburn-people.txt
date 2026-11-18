@@ -1,0 +1,56 @@
+# Milburn's people (17 Nov, plan chat 1), for the people kit (source/people.py).
+# Milburn is drawn as an invented head with the likeness card's pushes (x1.6) because the measured-head kit has only
+# long curly hair (Brand's); his short swept side hair needs `hair: side`. Card: references/milburn/likeness/.
+# `python3 source/people.py sheet milburn OUT.jpg`
+
+# milburn: Alan Milburn (Lead: speaks, straight to lens)
+body: 1.80 m, shoulders 160, head 66 x 98
+skin: 228 176 150 | hair: side, 122 106 94
+face: brow_high -0.16, nose_wide +0.07, brow_slope +3.5, nose_long -0.03, eye_tilt +2.6, chin_long +0.04, face_wide -0.06, lip_top -0.024, eye_size -0.01
+eyes: 90 104 110 | lips: 186 120 110 | brows: 92 74 60, width 5.6, thick 0.08
+glasses: 44 42 46, thick
+outfit: suit navy, shirt white, tie 34 44 92, trousers navy, shoes 20 18 16
+
+# goth: The goth girl (NEET 1: big blue-purple hair, blooming black dress, pudgy nose, overweight)
+body: 1.63 m, shoulders 186, head 70 x 92
+skin: pale | hair: shag, 118 56 168, big, streaks 46 92 214
+face: face_wide ++, jaw_wide ++, nose_wide ++, nose_long -, eye_size +
+eyes: 70 60 50 | lips: 120 60 90 | brows: 40 34 40, width 4.8 | lashes | piercings: brow, lip, nose
+outfit: dress 30 26 34, dress 30 26 34, sleeves 30 26 34, trousers 30 26 34, shoes 20 20 22
+extras: skirt
+
+# rangy: The thin lad (NEET 2: Arabic, pencil moustache, grey sweatshirt and trackies)
+body: 1.85 m, shoulders 124, head 62 x 98
+skin: 196 146 108 | hair: crop, 24 20 18
+face: face_wide --, jaw_wide -, nose_long ++, chin_long +
+eyes: 50 36 26 | lips: 150 96 84 | brows: 24 20 18, width 4.8
+beard: pencil 26 20 18
+outfit: jumper 140 142 146, shirt 140 142 146, no tie, trousers 120 122 128, shoes 236 236 236
+
+# swindon: The Swindon lad (NEET 3: stout, good build, Swindon Town home shirt, sports-casual)
+body: 1.77 m, shoulders 204, head 70 x 92
+skin: pink | hair: crop, 150 108 66
+face: face_wide ++, jaw_wide ++, nose_wide +, eye_size -, brow_high -
+eyes: 90 110 130 | lips: 190 122 112 | brows: 140 100 64, width 4.8
+outfit: jumper 196 22 36, shirt 196 22 36, no tie, trousers 40 42 50, shoes 236 236 236
+extras: crest
+
+# waif: The shy girl (NEET 4: woollen jumper with flowers, glasses, very pale, nervous)
+body: 1.58 m, shoulders 124, head 62 x 90
+skin: 250 228 216 | hair: long, 150 120 90
+face: face_wide -, chin_long -, eye_size +
+eyes: 110 120 120 | lips: 206 150 146 | brows: 150 120 90, width 3.8
+glasses: 120 100 90
+outfit: jumper 222 208 180, shirt 222 208 180, no tie, trousers 70 84 110, shoes 120 100 90
+extras: flowers
+
+# andy: Andy Burnham, the Prime Minister (scenes 5-7: angry, pointing; Sam's finished face-tool head, unchanged)
+head: house burnham, hair swept, look detail
+outfit: suit 31 34 58, shirt white, no tie
+body: 1.75 m
+
+# pat: Pat McFadden, Work and Pensions Secretary (scenes 5-7: patient, fingers steepled). Face tool pick B
+# (62% likeness, 1st of 15), bald with grey-ginger sides, round dark glasses (2026 photos), ears out: facehouse CAST.
+head: house mcfadden, hair bald, look detail
+outfit: suit 40 42 56, shirt white, tie 70 96 140
+body: 1.75 m

@@ -1,3 +1,3 @@
-Cost fixes: model guard, search reminder and watcher built and tested (17 Nov, chat D).
-Message saver fixed; watcher found and fixed two out-of-date kit lines.
-Next: nothing queued; first Opus chat proves the guard live. Stray page deleted (Sam's Y).
+Milburn: chat 13 fixed Sam's 5 notes (Andy's brows, goth's grin, lemon gone, name cards clear, grand fireplace); clips sent.
+Next: chat 15 (Sonnet) renders, finishes and sends animatic 2 (Sam's voices in).
+Sam: notes on animatic 2; Q1 torsos, Q2 cast sheet tile; recordings and sound effects.

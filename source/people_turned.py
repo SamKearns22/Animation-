@@ -36,8 +36,9 @@ STYLES = {
     'wig': dict(hl=-0.2, prof=dict(hair_low=0.7, nape=0.82, volume=0.16), curls=True, rolls=True),   # chat 15:
 }   # the judge's white bench wig turned (the front's extra 'wig': rolled curls over the crown, a roll over each ear)
 TURNED = {'crop': 'crop', 'bald': 'bald', 'side': 'side', 'bob': 'bob', 'long': 'long', 'curly': 'curly',
-          'bun': 'knot', 'receding': 'bald', 'none': 'none', 'pony': 'pony', 'short': 'short'}   # kit hair -> from behind
-HIDES_EARS = ('bob', 'long', 'curly', 'wig')       # hair over the ears: none drawn on top of it
+          'bun': 'knot', 'receding': 'bald', 'none': 'none', 'pony': 'pony', 'short': 'short',
+          'shag': 'long'}   # shag (Milburn note 3) turns as long hair: front only so far   # kit hair -> from behind
+HIDES_EARS = ('bob', 'long', 'curly', 'wig', 'shag')       # hair over the ears: none drawn on top of it
 
 
 # ---------------------------------------------------------------------------------------------- the press pack's pieces
@@ -82,10 +83,15 @@ def _hair(img, p, f, L, sp, look):
     if _crown(style) != -0.42:
         _shine(p, f, sp['skin'])
     H = TH.H
+    fc = sp['kit_face']
+    own = sp.get('_faithful') and fc['hair'] in OWN_FRONT       # one source: the front's own hairline
     if st.get('long'):
         import people_famous as PF
-        PF._turned_long(p, f, hc, st['long'])
-    fronts = [] if st['hl'] is None else [f.pts(TH.dense(curve(_cap(L, st['hl']), 2)))]
+        PF._turned_long(p, f, hc, st['long'], wavy=not (own and fc['hair'] in STRAIGHT))
+    cap = _cap(L, st['hl']) if st['hl'] is not None else None
+    if own:
+        cap = OWN_FRONT[fc['hair']](L, fc)
+    fronts = [] if cap is None else [f.pts(TH.dense(curve(cap, 2)))]
     prof = TH.PEOPLE[look['key']].build(sp)[1]
     mask = TH.hair(img, p, f, fronts, hc, prof)
     rng = np.random.default_rng(look['strand_seed'])
@@ -93,6 +99,9 @@ def _hair(img, p, f, L, sp, look):
     bx = f.hx + (0.0 if yaw >= 170 else -0.18 * H)            # the back of the skull on screen
 
     def strands(pen):                                          # the hair's fall: strokes down from the crown
+        if own and fc['hair'] == 'crop':                       # a crop's own texture, not long strands
+            PP.crop_front(pen, f, L, hc, fill=False)
+            return
         for k in range(14 if not st.get('curls') else 0):
             u = rng.uniform(-0.42, 0.42)
             x0, y0 = bx + u * H * 0.8, f.top - 0.36 * H + abs(u) * 0.2 * H
@@ -127,11 +136,46 @@ def _hair(img, p, f, L, sp, look):
         for k in range(3):
             p.line(curve([(x - 16 + 12 * k, y - 14), (x - 10 + 12 * k, y), (x - 15 + 12 * k, y + 12)], 3), dk(hc, 0.7), 1.4)
         p.line([(x - 12, y + 22), (x + 12, y + 22)], (40, 40, 44), 3.4)
+    if own and math.degrees(f.th) < 120:                       # the front's fringe, streaks and layers, on the head
+        _own_front(p, f, L, fc, hc, sp['skin'])
+    if sp.get('_faithful') and fc.get('piercings') and math.degrees(f.th) < 120:
+        PP.piercings(p, f, L, fc, sp.get('brow_up', 0.0), sp.get('frown', 0.0), seen=seen(f, 0.3))
     _ = style
 
 
+STRAIGHT = ('long', 'shag')                                    # turned long hair hangs straight, as from the front
+OWN_FRONT = {                                                  # kit hair -> its front hairline (the cap, design units)
+    'crop': lambda L, fc: PP.crop_cap(L),
+    'long': lambda L, fc: PP._press_cap(L, -0.08),
+    'shag': lambda L, fc: [(-L['fw'] * 0.5 - 0.03, 0.5), (-L['fw'] * 0.5 - 0.04, 0.05), (-0.26, -0.47), (0.0, -0.52),
+                           (0.26, -0.47), (L['fw'] * 0.5 + 0.04, 0.05), (L['fw'] * 0.5 + 0.03, 0.5),
+                           (L['fhw'] * 0.5, 0.06), (0.0, L['brow_y'] - 0.06), (-L['fhw'] * 0.5, 0.06)],
+}
+
+
+def _own_front(p, f, L, fc, hc, skin):
+    """The front head's own hair-over-the-face piece drawn on the turned head (shag: fringe, roots, the blue chunk,
+    temple layers; long: the cap and its strands), then the shag's near peekaboo panel down the side."""
+    if fc['hair'] == 'crop':
+        return
+    PP._hair_front(p, f, L, fc, hc, skin)
+    sc = fc.get('hair_streak')
+    if fc['hair'] == 'shag' and sc:                            # the near peekaboo panel: blue strands down the curtain
+        H, yaw = TH.H, math.degrees(f.th)
+        ex, ey = f.at(-L['fw'] * 0.5 - 0.02, 0.2)
+        for k in range(3):
+            x = ex - (0.05 + 0.035 * k) * H * (1.0 if yaw < 60 else 1.6)
+            p.line(curve([(x, ey), (x - 0.02 * H, ey + 0.5 * H), (x - 0.01 * H, ey + 1.0 * H)], 3), sc, 7 - k)
+
+
 def _mood(sp, f):
-    return dict(lid=0.1, look=0.3, squint=0.0, closed=False, gaze_dy=-0.2), 0.0, 0.0
+    """The eyes and brows from the person's own face channels (one source: the front's lid4, look, squint, blink,
+    brow_up and frown; before 18 Nov a turned kit head ignored them and kept one fixed look)."""
+    if not sp.get('_faithful'):
+        return dict(lid=0.1, look=0.3, squint=0.0, closed=False, gaze_dy=-0.2), 0.0, 0.0
+    return (dict(lid=sp.get('lid4', 0.1), look=0.3 + sp.get('look', 0.0), squint=sp.get('squint', 0.0),
+                 closed=bool(sp.get('blink')), gaze_dy=sp.get('gaze_dy', -0.2)),
+            sp.get('brow_up', 0.0), sp.get('frown', 0.0))
 
 
 def _rest(p, f, L, sp, fx, my, lip):
@@ -161,6 +205,20 @@ def _marks(pen, f, L, sp):
             sgn = 1 if rng.random() < 0.5 else -1
             u, v = sgn * rng.uniform(L['nw'] * 0.4, L['ecx'] + 0.04), rng.uniform(L['eye_y'] + 0.08, L['nose_y'])
             pen.poly(oval(*f(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
+    if sp2_faithful(sp):                                       # one source: the front's own detail and moustache
+        PP.face_detail(pen, f, L, fc, skin, seen=seen(f))
+        if fc.get('pencil'):
+            PP.pencil(pen, f, L, fc)
+
+
+def sp2_faithful(sp):
+    return bool(sp.get('_faithful'))
+
+
+def seen(f, k=0.18):
+    """A mark at front-design (u, v) shows only where that part of the head faces us (TurnFace.k), so a far-side
+    mark is left out rather than squashed onto the head's edge."""
+    return lambda u, v: f.k(u, v) > k
 
 
 def _over(img, p, f, L, sp, view):
@@ -176,7 +234,7 @@ def look(sp):
     hc = tuple(sp.get('hair_c', (40, 32, 28)))
     key = 'kit:%s:%s:%s:%s:%s' % (sp['who'], style, tuple(sp['skin']), hc, sorted(fc['m'].items()))
     return dict(key=key, style=style, hair_c=hc, strand_seed=sp.get('strand_seed', 1),
-                ears_hidden=style in HIDES_EARS)
+                ears_hidden=style in HIDES_EARS, faithful=FAITHFUL)
 
 
 def register(sp, key=None):
@@ -185,8 +243,8 @@ def register(sp, key=None):
     lk['key'] = key or lk['key']
     if lk['key'] not in TH.PEOPLE:
         fc = sp['kit_face']
-        face = (lambda pen, f, L, sp2: _marks(pen, f, L, sp)) if (fc.get('stub') or fc.get('beard')
-                                                                  or fc.get('freckles')) else None
+        face = (lambda pen, f, L, sp2: _marks(pen, f, L, sp2)) if (fc.get('stub') or fc.get('beard')
+                                                                   or fc.get('freckles') or lk['faithful']) else None
         TH.register(TH.Person(lk['key'], lambda sp2, _sp=sp: _layout(_sp), _crown(lk['style']), 0.4, _profile(lk['style']),
                               sp['skin'], fc['iris'], fc['brow'], fc['lip'], _mood,
                               lambda p, f, L, sp2, fx, my, _l=fc['lip']: _rest(p, f, L, sp2, fx, my, _l),
@@ -195,6 +253,7 @@ def register(sp, key=None):
     return lk
 
 
+FAITHFUL = True  # one source (18 Nov): the front's own parts on the turned head; keyed looks (old films' replicas) off
 ON = True        # replicate turns this off to score a frame without the new turned heads (crowds keep theirs: the film's)
 KEYED = {}       # who -> a function(sp) -> key, to key a look another way (replicate keys the press the film's way)
 
@@ -212,9 +271,57 @@ def install():
         if (ON or sp.get('kit_crowd')) and sp.get('kit_face') and not sp.get('kit_head') and not sp.get('kit_famous') and view in TH.YAW:
             k = KEYED.get(sp['who'])
             lk = register(sp, k(sp) if k else None)
+            faithful = lk['faithful'] and not k
             with PP._Big():
-                return TH.draw(img, p, dict(sp, who=lk['key'], ears_hidden=lk['ears_hidden']), t, view, hx, hy)
+                return TH.draw(img, p, dict(sp, who=lk['key'], ears_hidden=lk['ears_hidden'], _faithful=faithful), t,
+                               view, hx, hy)
         return old(img, p, sp, t, view, hx, hy)
     head_view.__dict__.update(getattr(old, '__dict__', {}))   # carry the earlier kits' flags: a second install is a no-op
     head_view.kit_turned = head_view.turnhead = True
     V.head_view = head_view
+
+
+# ---------------------------------------------------------------------------------------------- the lost-parts check
+PARTS = ('pencil', 'piercings', 'hair_streak', 'beard', 'stub', 'freckles', 'glasses')   # face-card parts to carry
+
+
+def _head_png(sp, yaw):
+    from PIL import Image
+    V = PP.AV.MC.V
+    B = PP.B
+    img = Image.new('RGBA', (360, 420), (255, 255, 255, 255))
+    B.SS = 1
+    for k in [k for k in TH.PEOPLE if k.startswith('kit:')]:      # the look is keyed by its parts' absence too
+        del TH.PEOPLE[k]
+    V.person(img, B.Cam(1.0, 540, 960), 180, 330, 0.9, dict(sp), 0.0, yaw)
+    return np.asarray(img.convert('L'), dtype=np.int16)
+
+
+def lost_parts(cast, views):
+    """One source, enforced (proposal three-quarter-people, 18 Nov): every face-card part a kit person has must change
+    the picture of their turned head in each turned view a film draws (three-quarter, side). Drawn with and without
+    each part: identical means the turn lost it (the fault Sam found: the moustache, piercings and streaks gone).
+    `views`: {who: set of views}. Returns fault lines."""
+    out = []
+    yaws = {'three': 45, 'side': 90}
+    for who, vs in sorted(views.items()):
+        sp = cast.get(who)
+        if not sp or not sp.get('kit_face') or sp.get('kit_famous') or sp.get('kit_head'):
+            continue
+        fc = sp['kit_face']
+        for view in sorted(v for v in vs if v in yaws):
+            full = _head_png(sp, yaws[view])
+            for part in PARTS:
+                if not fc.get(part):
+                    continue
+                if part == 'piercings' and view == 'side' and set(fc['piercings']) <= {'brow', 'nose'}:
+                    continue                                   # both on the far side from the side: hidden, as meant
+                less = dict(sp, kit_face={k: v for k, v in fc.items() if k != part})
+                if part == 'hair_streak':
+                    less['hair_streak'] = None
+                if (np.abs(_head_png(less, yaws[view]) - full) > 24).sum() < 12:
+                    out.append(f'LOST PART: {who} turned {view} draws no {part} (the front has it): carry it round '
+                               '(people_turned: the front\'s own part code on the turned head)')
+    for k in [k for k in TH.PEOPLE if k.startswith('kit:')]:
+        del TH.PEOPLE[k]
+    return out

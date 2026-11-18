@@ -1,0 +1,1253 @@
+{
+ "film": "milburn",
+ "estimate": 24.0,
+ "chats": [
+  {
+   "date": "2026-11-17",
+   "chat": "a58b9d21",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.62,
+   "src": "estimate",
+   "sid": "session_01J1JB7WBDESh1YRjtQfGmaz",
+   "steps": 68,
+   "hist_k": 203,
+   "kinds": {
+    "film-file search": 1.3,
+    "tool search": 25.9,
+    "renders": 4.1,
+    "pictures": 3.6,
+    "other": 65.1
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 41,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 6,
+    "pictures": 10,
+    "other": 10
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "film notes": 7,
+     "guides": 4,
+     "other": 2,
+     "shared:branches.py": 1,
+     "shared:ledger.py": 1,
+     "shared:satire_template.py": 2,
+     "shared:people.py": 10,
+     "shared:likeness.py": 2,
+     "shared:views.py": 2,
+     "shared:people_parts.py": 2,
+     "shared:people_famous.py": 1,
+     "shared:burnham.py": 1,
+     "shared:traitors_cast.py": 2,
+     "shared:critique.py": 1,
+     "shared:kittests.py": 1,
+     "shared:handover.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "a6692140",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.8,
+   "src": "estimate",
+   "sid": "session_01J1JB7WXD1TDYTQafreiGz7",
+   "steps": 92,
+   "hist_k": 256,
+   "kinds": {
+    "film-file search": 1.7,
+    "tool search": 22.1,
+    "renders": 2.4,
+    "pictures": 3.4,
+    "other": 70.4
+   },
+   "calls": {
+    "film-file search": 6,
+    "tool search": 48,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 5,
+    "pictures": 12,
+    "other": 22
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 6
+    },
+    "other": {
+     "other": 6,
+     "shared:handover.py": 3,
+     "film notes": 3,
+     "shared:kittests.py": 4,
+     "guides": 3,
+     "shared:satire_template.py": 1,
+     "shared:protest_tiers.py": 1,
+     "shared:places.py": 4,
+     "shared:people.py": 4,
+     "shared:views.py": 1,
+     "shared:rough.py": 3,
+     "shared:critique.py": 9,
+     "shared:places_parts.py": 3,
+     "shared:places_outside.py": 1,
+     "shared:places_tables.py": 1,
+     "shared:people_parts.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "866dad74",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.08,
+   "src": "estimate",
+   "sid": "session_01J1JB7WLTrNZ2uiTahT7kqM",
+   "steps": 130,
+   "hist_k": 236,
+   "kinds": {
+    "film-file search": 8.2,
+    "tool search": 19.0,
+    "renders": 1.7,
+    "pictures": 4.8,
+    "other": 66.3
+   },
+   "calls": {
+    "film-file search": 24,
+    "tool search": 65,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 5,
+    "pictures": 18,
+    "other": 21
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 24
+    },
+    "other": {
+     "other": 4,
+     "shared:handover.py": 3,
+     "film notes": 4,
+     "shared:acting.py": 9,
+     "shared:blessed.py": 4,
+     "shared:mouths.py": 2,
+     "shared:people_parts.py": 9,
+     "shared:people.py": 4,
+     "shared:sitting.py": 1,
+     "shared:ad_vanced_notice_sets.py": 1,
+     "shared:patriots4_cast.py": 1,
+     "shared:moves.py": 1,
+     "shared:views.py": 1,
+     "shared:film_engine.py": 1,
+     "shared:mixaudio.py": 1,
+     "shared:series.py": 1,
+     "shared:burnham_film.py": 1,
+     "shared:critique.py": 10,
+     "guides": 1,
+     "shared:posecheck.py": 4,
+     "shared:headlife.py": 1,
+     "shared:preflight.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "e33e3e79",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.2,
+   "src": "estimate",
+   "sid": "session_01J1JB7YBXPnoLsQGLnhHAxi",
+   "steps": 59,
+   "hist_k": 166,
+   "kinds": {
+    "film-file search": 8.7,
+    "tool search": 13.6,
+    "page.py": 0.7,
+    "renders": 5.8,
+    "pictures": 5.7,
+    "other": 65.5
+   },
+   "calls": {
+    "film-file search": 9,
+    "tool search": 19,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 10,
+    "pictures": 10,
+    "other": 14
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 1,
+     "after show": 8
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "shared:people.py": 4,
+     "shared:people_parts.py": 5,
+     "shared:patriots4_cast.py": 1,
+     "other": 3,
+     "film notes": 3,
+     "shared:kittests.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "10232ef9",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.54,
+   "src": "estimate",
+   "sid": "session_01J1JB7Ybv6Qrxf8M4njLiNi",
+   "steps": 136,
+   "hist_k": 299,
+   "kinds": {
+    "film-file search": 6.1,
+    "tool search": 26.2,
+    "whole-file .py read": 0.7,
+    "renders": 0.2,
+    "pictures": 4.8,
+    "other": 62.0
+   },
+   "calls": {
+    "film-file search": 13,
+    "tool search": 82,
+    "whole-file .py read": 2,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 18,
+    "other": 26
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 13
+    },
+    "other": {
+     "other": 21,
+     "shared:handover.py": 3,
+     "film notes": 11,
+     "guides": 6,
+     "shared:burnham.py": 1,
+     "shared:kittests.py": 3,
+     "shared:facehouse.py": 21,
+     "shared:facepick.py": 6,
+     "shared:ledger.py": 2,
+     "shared:ad_vanced_notice_cast.py": 1,
+     "shared:people.py": 2,
+     "shared:turnhead.py": 1,
+     "shared:places_rooms.py": 1,
+     "shared:places_parts.py": 1,
+     "shared:places_tables.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "3fbce046",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.64,
+   "src": "estimate",
+   "sid": "session_01J1JB7YTL9grCNvat3CUdFk",
+   "steps": 92,
+   "hist_k": 261,
+   "kinds": {
+    "film-file search": 8.0,
+    "tool search": 16.3,
+    "whole-file .py read": 0.2,
+    "page.py": 0.2,
+    "renders": 8.1,
+    "pictures": 5.1,
+    "other": 62.1
+   },
+   "calls": {
+    "film-file search": 14,
+    "tool search": 36,
+    "whole-file .py read": 1,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 11,
+    "pictures": 16,
+    "other": 13
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 1,
+     "miss": 1,
+     "after show": 12
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 2,
+     "film notes": 6,
+     "shared:facehouse.py": 7,
+     "shared:people.py": 2,
+     "shared:acting.py": 5,
+     "shared:grips.py": 2,
+     "shared:ledger.py": 2,
+     "shared:views.py": 2,
+     "shared:moves.py": 2,
+     "shared:posegallery.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "4ee174a9",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.42,
+   "src": "estimate",
+   "sid": "session_01J1JB7VR2AZvXqJvQMQm3zn",
+   "steps": 71,
+   "hist_k": 224,
+   "kinds": {
+    "film-file search": 13.9,
+    "tool search": 10.1,
+    "renders": 0.5,
+    "pictures": 2.7,
+    "other": 72.9
+   },
+   "calls": {
+    "film-file search": 18,
+    "tool search": 27,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 6,
+    "other": 16
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 18
+    },
+    "other": {
+     "other": 10,
+     "shared:handover.py": 2,
+     "film notes": 8,
+     "shared:acting.py": 1,
+     "shared:moves.py": 2,
+     "shared:prepper_fx.py": 2,
+     "shared:critique.py": 1,
+     "guides": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "5c55685c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.28,
+   "src": "estimate",
+   "sid": "session_01GznaATzhErD14VUm51iY4k",
+   "steps": 14,
+   "hist_k": 113,
+   "kinds": {
+    "film-file search": 1.9,
+    "tool search": 10.8,
+    "other": 87.3
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 11,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "other": 2,
+     "film notes": 7,
+     "shared:preflight.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false
+   }
+  },
+  {
+   "date": "2026-11-17",
+   "chat": "ce8f146c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.98,
+   "src": "estimate",
+   "sid": "session_01GznaARwPjyVgxbyunDVnSs",
+   "steps": 91,
+   "hist_k": 195,
+   "kinds": {
+    "film-file search": 5.6,
+    "tool search": 8.8,
+    "page.py": 0.5,
+    "routine": 1.9,
+    "renders": 0.5,
+    "pictures": 1.8,
+    "other": 81.0
+   },
+   "calls": {
+    "film-file search": 16,
+    "tool search": 34,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 9,
+    "renders": 1,
+    "pictures": 4,
+    "other": 25
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 1,
+     "miss": 4,
+     "after show": 11
+    },
+    "other": {
+     "other": 7,
+     "shared:handover.py": 1,
+     "film notes": 3,
+     "shared:preflight.py": 7,
+     "guides": 2,
+     "shared:people_parts.py": 1,
+     "shared:ad_vanced_notice_cast.py": 1,
+     "shared:patriots4_cast.py": 2,
+     "shared:mouths.py": 3,
+     "shared:film_engine.py": 1,
+     "shared:plan.py": 2,
+     "shared:blessed.py": 1,
+     "shared:hookcheck.py": 1,
+     "shared:finish.py": 1,
+     "shared:follow_line.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "d2dd63d4",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 4.02,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZsAtQ4zBsN2F9oPoi",
+   "steps": 98,
+   "hist_k": 267,
+   "kinds": {
+    "film-file search": 10.4,
+    "tool search": 23.5,
+    "whole-file .py read": 0.6,
+    "page.py": 1.3,
+    "renders": 1.3,
+    "pictures": 4.6,
+    "other": 58.2
+   },
+   "calls": {
+    "film-file search": 24,
+    "tool search": 50,
+    "whole-file .py read": 1,
+    "page.py": 2,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 11,
+    "other": 13
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 4,
+     "miss": 8,
+     "after show": 12
+    },
+    "other": {
+     "other": 9,
+     "shared:handover.py": 2,
+     "film notes": 6,
+     "shared:propose.py": 6,
+     "shared:views.py": 3,
+     "guides": 1,
+     "shared:places.py": 1,
+     "shared:acting.py": 4,
+     "shared:facehouse.py": 2,
+     "shared:people_parts.py": 5,
+     "shared:people_turned.py": 3,
+     "shared:turnhead.py": 1,
+     "shared:people.py": 1,
+     "shared:people_famous.py": 1,
+     "shared:preflight.py": 4,
+     "shared:kittests.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "ba98bbef",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.15,
+   "src": "estimate",
+   "sid": "session_01J1JB7Z6ES5Rr8KvEYgPVZD",
+   "steps": 123,
+   "hist_k": 241,
+   "kinds": {
+    "film-file search": 13.4,
+    "tool search": 10.2,
+    "page.py": 0.8,
+    "renders": 5.4,
+    "pictures": 9.9,
+    "other": 60.3
+   },
+   "calls": {
+    "film-file search": 36,
+    "tool search": 35,
+    "whole-file .py read": 0,
+    "page.py": 2,
+    "routine": 0,
+    "renders": 11,
+    "pictures": 24,
+    "other": 16
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 0,
+     "miss": 6,
+     "after show": 30
+    },
+    "other": {
+     "other": 7,
+     "shared:handover.py": 1,
+     "guides": 2,
+     "shared:places_tables.py": 5,
+     "shared:places.py": 2,
+     "shared:acting.py": 1,
+     "shared:critique.py": 8,
+     "shared:mouths.py": 3,
+     "shared:kittests.py": 1,
+     "film notes": 3,
+     "shared:preflight.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "5b682f67",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.7,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZcnxMwvpxNHfhpT4Y",
+   "steps": 122,
+   "hist_k": 244,
+   "kinds": {
+    "film-file search": 11.4,
+    "tool search": 6.0,
+    "page.py": 1.0,
+    "renders": 1.0,
+    "pictures": 8.2,
+    "other": 72.4
+   },
+   "calls": {
+    "film-file search": 40,
+    "tool search": 29,
+    "whole-file .py read": 0,
+    "page.py": 3,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 21,
+    "other": 19
+   },
+   "search": {
+    "show": 3,
+    "film": {
+     "before show": 7,
+     "miss": 9,
+     "after show": 24
+    },
+    "other": {
+     "film notes": 6,
+     "shared:places.py": 3,
+     "other": 10,
+     "shared:ledger.py": 3,
+     "shared:views.py": 2,
+     "shared:kittests.py": 4,
+     "shared:places_parts.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "b54e8334",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.34,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZMGJdhkG11oCmSw6q",
+   "steps": 40,
+   "hist_k": 125,
+   "kinds": {
+    "film-file search": 6.5,
+    "tool search": 17.0,
+    "routine": 1.7,
+    "renders": 4.8,
+    "pictures": 0.8,
+    "other": 69.1
+   },
+   "calls": {
+    "film-file search": 10,
+    "tool search": 18,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 3,
+    "renders": 4,
+    "pictures": 1,
+    "other": 3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 10
+    },
+    "other": {
+     "other": 1,
+     "shared:handover.py": 1,
+     "film notes": 3,
+     "shared:posecheck.py": 6,
+     "shared:preflight.py": 2,
+     "shared:rough.py": 3,
+     "shared:plan.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "d34bde53",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 2.29,
+   "src": "estimate",
+   "sid": "session_01J1JB7WoHQ8mi9TagnAgzD2",
+   "steps": 117,
+   "hist_k": 244,
+   "kinds": {
+    "film-file search": 12.7,
+    "tool search": 7.6,
+    "page.py": 1.0,
+    "renders": 2.2,
+    "pictures": 6.2,
+    "other": 70.2
+   },
+   "calls": {
+    "film-file search": 35,
+    "tool search": 31,
+    "whole-file .py read": 0,
+    "page.py": 2,
+    "routine": 0,
+    "renders": 5,
+    "pictures": 17,
+    "other": 31
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 0,
+     "miss": 14,
+     "after show": 21
+    },
+    "other": {
+     "other": 12,
+     "shared:handover.py": 2,
+     "film notes": 8,
+     "shared:places_tables.py": 3,
+     "shared:places_parts.py": 1,
+     "guides": 1,
+     "shared:cryminister.py": 2,
+     "shared:mouths.py": 1,
+     "shared:prepper.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
+   }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "a3a53ca2",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.08,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZmTrSU4NvegQyvBnB",
+   "steps": 6,
+   "hist_k": 91,
+   "kinds": {
+    "film-file search": 5.0,
+    "tool search": 15.3,
+    "other": 79.7
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "other": 2,
+     "film notes": 3
+    },
+    "ticked": 0,
+    "edited film code": false
+   }
+  },
+  {
+   "date": "2026-11-18",
+   "chat": "7f941448",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.09,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZDeRUXyAPbaEZurfA",
+   "steps": 5,
+   "hist_k": 93,
+   "kinds": {
+    "tool search": 24.5,
+    "other": 75.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 4,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 1,
+     "film notes": 2,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false
+   }
+  }
+ ],
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "stage": "sets",
+    "date": "2026-11-17",
+    "hunt": 1,
+    "faults": 11,
+    "cant_tell": 2,
+    "open": [
+     "1-3,7-10 P2: every face is a blank neutral stare; Milburn's mouth is shut on his spoken line, and the four NEETs show no feeling or rising-towards-light reactio",
+     "1,7 P4: Milburn's glasses are thin dark wire frames; references show thick black frames. Hair is sandy-light, references grey-brown.",
+     "2-3,8-10 A2 P4: the red-shirt lad is slim, not stout; the grey-sweatshirt lad is broad and tallest, not thin.",
+     "1,7 P6: Milburn's hands are hidden behind the table; neither resting hand shows.",
+     "4-5 S7: brief says aerial, high, tilted down; both frames are a near-level view with horizon and mountains.",
+     "4-5 A1: the shaft mouth reads as a small manhole lid; no platform is visible going up (panel 4 \"deep in shaft\", panel 5 \"level with grass, four on it\"). Panels ",
+     "3 S1: the light \"has reached them\" but the people are unlit and unchanged; only the wall changed colour.",
+     "2-3,8-10 S5: no platform or floor under the people, no opening above; the wall is a plain block with a few tiny windows.",
+     "2-6 S8: one flat colour (grey, cream or green) fills over half the frame.",
+     "8-10 S1: the close-ups are crops of panel 2 that slice other people in half at the frame edge; panel 7 cuts the name card (\"Milburn\") and chair. Crops are soft,",
+     "2 S2: medium shot \"to the bottom of the torso\" asked; the sheet shows the red lad's full legs and shoes, and the goth is cut at the hips.",
+     "1,7 P12: is the mouth meant to move on \"The essence of my proposal...\"; a moving frame would show it.",
+     "1 P1: whether the red folder is touched; a full-size frame with hands would show it."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "stage": "sets",
+    "date": "2026-11-17",
+    "hunt": 2,
+    "faults": 10,
+    "cant_tell": 2,
+    "open": [
+     "2,8-10 S1 P3: no rising platform or floor edge or movement cue; the four stand on plain grey floor, so \"rising towards the light\" does not read.",
+     "3 S1 P3: light has reached them per brief, but only the upper wall changes, with a hard horizontal band edge mid-wall; the people keep identical colours and no ",
+     "2,8-10 P4 P5: goth girl and stout lad do not read as overweight/stout; red-shirt lad is narrow, the goth's body is plain dark slab. Pencil moustache on the lad ",
+     "1,7 P4: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes t",
+     "4-5 S8 S1: grass fills over half the frame, flat sawtooth stripes, no life; the shaft mouth is a tiny blob at phone size, the four people on it are invisible.",
+     "6 S7 S6: top-down view with the ring cropped at the edges, against the oblique view of 4-5; figures drawn standing front-on, not seen from above. Set does not m",
+     "2-3,8-10 S4: stray dark streak on the wall at right, hip height, behind the tall lad (visible again in 10 beside his arm).",
+     "1-3,7-10 A3 P2: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.",
+     "1,7 O3: name sign is unreadable at phone size in 1, and cut to \"Milburn\" in 7; glasses and sign are the same tiny scale.",
+     "7-10 S1: close-ups are enlarged crops of 2 and 1; soft, with neighbours' heads sliced at the frame edge (8, 9, 10).",
+     "1,7 P12: mouth closed in the still; a frame mid-word would show it moves.",
+     "1,7 P1: hands are hidden behind the table; a wider frame would show them."
+    ],
+    "fixed": "soft light edge on the shaft wall; the four go from shaded to lit; wider hazard edge reads as the platform; long soft grass gusts; goth and Swindon lad broader; heavier glasses, greyer hair; steeper c",
+    "left": [
+     "1,7 P4: glasses are thin and small against the references' thick dark frames; hair is lighter, greyer and a flat fringe versus the dark side-parted hair; eyes t",
+     "1-3,7-10 A3 P2: every face is the same blank stare; no feeling shows, no mouth shape for the spoken line in 1 and 7.",
+     "1,7 O3: name sign is unreadable at phone size in 1, and cut to \"Milburn\" in 7; glasses and sign are the same tiny scale.",
+     "1,7 P12: mouth closed in the still; a frame mid-word would show it moves.",
+     "1,7 P1: hands are hidden behind the table; a wider frame would show them."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 3,
+    "stage": "moves",
+    "date": "2026-11-17",
+    "hunt": 1,
+    "faults": 7,
+    "cant_tell": 2,
+    "open": [
+     "4-5,11-16 P2: the brief says they start to look up (4) and all four look up on 'training' (5); every face stares straight at camera, heads level, no upward glan",
+     "3,10,13,16 P2: Swindon lad should be chest out and squinting; he has a flat, slack face with open eyes and no puffed chest.",
+     "2,7 P2: the beat is a tiny lean in and nod on 'simple' with the smile growing; the pose matches panel 1/6 (same lean, same head height), only the mouth changes.",
+     "9 P2: rangy lad's mouth should hang open vacant; here it is a toothy grin, reading cheerful, not blank.",
+     "1-2,6-7 P1: Milburn's folded hands hover above the red folder with a visible gap of desk; they do not rest on it.",
+     "1-2,6-7 P4: reference has thick, dark, chunky frames, deep lines and an older face; ours has thin light rectangular glasses and a smooth young face.",
+     "3-5 A1: the brief's lift platform rising up a shaft is not visible; people stand on a flat grey floor with a hazard stripe, and shots 3-5 show no rise.",
+     "3,8,11,14 P2: shy girl \"nervous\" - she is tiny or half hidden; a full-size crop of her face is needed.",
+     "12,15 P14: heavy lids and tiny pupils; pupil-in-outline can't be confirmed without a larger crop."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 4,
+    "stage": "moves",
+    "date": "2026-11-17",
+    "hunt": 2,
+    "faults": 10,
+    "cant_tell": 2,
+    "open": [
+     "4-5,11-16 P2: all four face camera; nobody looks up; 4 and 5 match 3.",
+     "1-2,6-7 A1 P1: red folder reads as a sash; hands sit below it, not on it.",
+     "1-2,6-7 M3 M1: folder thin in 1, wide with gold clasp in 2; clasp pops in.",
+     "1-2,6-7 P4: thin glasses; reference has thick dark frames; face too young.",
+     "3,8,10,13,16 P2: Swindon lad has no chest out or squint; shy girl not nervous.",
+     "9,11-12,14-15 P12: rangy lad's mouth always open; shy girl's opens in 11, 14 only, with no words.",
+     "3-5,8-16 A1: shaft reads as a round hall; no platform or rising.",
+     "3-5,8-16 P4: young people have middle-aged face lines.",
+     "6-7 A4: \"Milburn\" card cut by left edge.",
+     "8,11,14 P11: line across goth girl neck base reads as a choker.",
+     "1-2,6-7 P5: no arms visible; a shoulder crop would show.",
+     "8-16 P14: heavy-lidded tiny eyes; a larger eye crop would show."
+    ],
+    "fixed": "hunt 2: hands now rest on the folder at rest and on the lean (hands placed lower, the table laid back only below his hands)",
+    "left": [
+     "4-5,11-16 P2: all four face camera; nobody looks up; 4 and 5 match 3.",
+     "1-2,6-7 M3 M1: folder thin in 1, wide with gold clasp in 2; clasp pops in.",
+     "1-2,6-7 P4: thin glasses; reference has thick dark frames; face too young.",
+     "3,8,10,13,16 P2: Swindon lad has no chest out or squint; shy girl not nervous.",
+     "9,11-12,14-15 P12: rangy lad's mouth always open; shy girl's opens in 11, 14 only, with no words.",
+     "3-5,8-16 A1: shaft reads as a round hall; no platform or rising.",
+     "3-5,8-16 P4: young people have middle-aged face lines.",
+     "6-7 A4: \"Milburn\" card cut by left edge.",
+     "8,11,14 P11: line across goth girl neck base reads as a choker."
+    ]
+   },
+   {
+    "round": 2,
+    "pass": 2,
+    "stage": "moves",
+    "date": "2026-11-18",
+    "hunt": 1,
+    "faults": 10,
+    "cant_tell": 1,
+    "open": [
+     "3,11-14,16,20,23,38,40,42-44 P2: Andy is smiling in 3 (brief: furious) and 11 (brief: explodes); mouth flat in 14 (brief: hanging open); Pat's mouth open in 14 ",
+     "1-2,15-17,19-22 A1 P1: red-shirt lad holds no uzis; the grenade reads as a green shield/disc; the goth's mace handle runs through the red shirt; no one is shown",
+     "3,6,11-12,23,28,38,40,43 P6: Andy's pointing hand is a ball with no finger (3); in 11 and 12 the ball hands float at his sides, off the table and not palms up; ",
+     "1-2,15-22 P8: the four face the camera, not three-quarter to screen right.",
+     "5,26 P12: Andy's mouth is round while Pat speaks; Pat's mouth is closed in 5 (brief: Pat speaks).",
+     "8-9,33,35 O2 S1 S8: the orange flame sits in front of and covers the goth's head and the red lad; it appears to come from the goth's weapon, not from ahead in t",
+     "8-9,32-34 P2: the dodges are alike (all crouch; goth does not lean aside); in 9 no bolt and no uzi spray can be seen.",
+     "18,22 P4: stray blue strip of hair hangs outside the goth's hair; Pat's grey ear patch looks like a stain (24, 27); Milburn's glasses are thin, the reference's ",
+     "9-10,36-37 O3: morning-star chains are thin dashed lines.",
+     "36-37 P14: the katana blade crosses the lanky lad's face and eyes.",
+     "5,27,39 P2: Pat's eyes look toward the camera, not Andy; a larger face crop would show it."
+    ]
+   },
+   {
+    "round": 2,
+    "pass": 3,
+    "stage": "moves",
+    "date": "2026-11-18",
+    "hunt": 2,
+    "faults": 10,
+    "cant_tell": 1,
+    "open": [
+     "3,11-14,16,20,23,38,40,42-44 P2: Andy smiles in 3 (brief: furious) and 11/38 (brief: explodes); his mouth is flat in 14/43 (brief: hanging open); Pat's mouth is",
+     "1-2,15-17,19-22 A1 P1: red-shirt lad holds no uzis; grenade reads as a green shield/disc; the goth's mace handle runs through the red shirt; nobody visibly take",
+     "3,6,11-12,23,28,38,40,43 P6: Andy's pointing hand is a ball, no finger; in 11/12 the ball hands float at his sides, off the table, not palms up; in 6/28 the fol",
+     "1-2,15-22 P8: all four face the camera, not three-quarter to screen right.",
+     "5,26 P12: Andy's mouth is round while Pat speaks; Pat's mouth is closed in 5.",
+     "8-9,33,35 O2 S1 S8: the orange flame covers the goth's head and the red lad; it seems to leave the goth's weapon, not a bush ahead.",
+     "8-9,32-35 P2: the dodges look alike; the goth does not lean aside; in 9 no bolt and no uzi spray are seen; in 9/10/35/37 the red lad is crouched under the goth,",
+     "18,22,24,27 P4: stray blue strip hangs outside the goth's hair; Pat has a grey ear patch like a stain; Milburn's glasses are thin where the reference's are thic",
+     "9-10,35-37 O3: morning-star chains are thin dashed lines.",
+     "36-37 P14: the katana blade crosses the lanky lad's eyes.",
+     "5,27,39 P2: Pat's eyes seem toward the camera, not Andy; a bigger face crop would show it."
+    ],
+    "fixed": "flame clear of every face (aim up, less lash, ducks held till it dies, goth deepest); dodges distinct (goth sinks and leans back, Swindon dives forward, rangy deepest); bolts slowed so they show; kata",
+    "left": [
+     "3,11-14,16,20,23,38,40,42-44 P2: Andy smiles in 3 (brief: furious) and 11/38 (brief: explodes); his mouth is flat in 14/43 (brief: hanging open); Pat's mouth is",
+     "1-2,15-17,19-22 A1 P1: red-shirt lad holds no uzis; grenade reads as a green shield/disc; the goth's mace handle runs through the red shirt; nobody visibly take",
+     "3,6,11-12,23,28,38,40,43 P6: Andy's pointing hand is a ball, no finger; in 11/12 the ball hands float at his sides, off the table, not palms up; in 6/28 the fol",
+     "1-2,15-22 P8: all four face the camera, not three-quarter to screen right.",
+     "5,26 P12: Andy's mouth is round while Pat speaks; Pat's mouth is closed in 5.",
+     "18,22,24,27 P4: stray blue strip hangs outside the goth's hair; Pat has a grey ear patch like a stain; Milburn's glasses are thin where the reference's are thic",
+     "9-10,35-37 O3: morning-star chains are thin dashed lines."
+    ]
+   }
+  ],
+  "lines": {
+   "P2": {
+    "faults": 12,
+    "false": 0
+   },
+   "P4": {
+    "faults": 9,
+    "false": 0
+   },
+   "A2": {
+    "faults": 1,
+    "false": 0
+   },
+   "P6": {
+    "faults": 3,
+    "false": 0
+   },
+   "S7": {
+    "faults": 2,
+    "false": 0
+   },
+   "A1": {
+    "faults": 6,
+    "false": 0
+   },
+   "S1": {
+    "faults": 8,
+    "false": 1
+   },
+   "S5": {
+    "faults": 1,
+    "false": 0
+   },
+   "S8": {
+    "faults": 4,
+    "false": 0
+   },
+   "S2": {
+    "faults": 1,
+    "false": 0
+   },
+   "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "S6": {
+    "faults": 1,
+    "false": 0
+   },
+   "S4": {
+    "faults": 1,
+    "false": 0
+   },
+   "A3": {
+    "faults": 1,
+    "false": 0
+   },
+   "O3": {
+    "faults": 3,
+    "false": 0
+   },
+   "P1": {
+    "faults": 4,
+    "false": 0
+   },
+   "M3": {
+    "faults": 1,
+    "false": 0
+   },
+   "M1": {
+    "faults": 1,
+    "false": 0
+   },
+   "P12": {
+    "faults": 3,
+    "false": 0
+   },
+   "A4": {
+    "faults": 1,
+    "false": 0
+   },
+   "P11": {
+    "faults": 1,
+    "false": 0
+   },
+   "P8": {
+    "faults": 2,
+    "false": 0
+   },
+   "O2": {
+    "faults": 2,
+    "false": 0
+   },
+   "P14": {
+    "faults": 2,
+    "false": 0
+   }
+  }
+ },
+ "quick_checks": [
+  {
+   "at": "2026-11-17T20:49+00:00",
+   "faults": 8
+  },
+  {
+   "at": "2026-11-17T20:50+00:00",
+   "faults": 4
+  },
+  {
+   "at": "2026-11-17T21:04+00:00",
+   "faults": 4
+  },
+  {
+   "at": "2026-11-17T21:04+00:00",
+   "faults": 1
+  },
+  {
+   "at": "2026-11-17T21:04+00:00",
+   "faults": 1
+  },
+  {
+   "at": "2026-11-17T21:05+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-17T22:54+00:00",
+   "faults": 13
+  },
+  {
+   "at": "2026-11-18T01:21+00:00",
+   "faults": 13
+  },
+  {
+   "at": "2026-11-18T01:21+00:00",
+   "faults": 13
+  },
+  {
+   "at": "2026-11-18T01:45+00:00",
+   "faults": 13
+  },
+  {
+   "at": "2026-11-18T01:46+00:00",
+   "faults": 11
+  },
+  {
+   "at": "2026-11-18T06:18+00:00",
+   "faults": 11
+  },
+  {
+   "at": "2026-11-18T08:18+00:00",
+   "faults": 48
+  },
+  {
+   "at": "2026-11-18T08:18+00:00",
+   "faults": 48
+  }
+ ],
+ "stages": [
+  {
+   "name": "sets",
+   "pct": 1.8,
+   "done": {
+    "date": "2026-11-17",
+    "spent": 16.68
+   }
+  },
+  {
+   "name": "props",
+   "pct": 0.8,
+   "done": {
+    "date": "2026-11-18",
+    "spent": 18.66
+   }
+  },
+  {
+   "name": "sets",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-18",
+    "spent": 19.19
+   },
+   "unplanned": true
+  },
+  {
+   "name": "build",
+   "pct": 0.8,
+   "done": {
+    "date": "2026-11-18",
+    "spent": 23.58
+   }
+  },
+  {
+   "name": "board",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-18",
+    "spent": 29.43
+   },
+   "unplanned": true
+  },
+  {
+   "name": "moves",
+   "pct": 3.5,
+   "done": null
+  },
+  {
+   "name": "fx",
+   "pct": 0.8,
+   "done": null
+  },
+  {
+   "name": "critique",
+   "pct": 0.5,
+   "done": null
+  },
+  {
+   "name": "animatic1",
+   "pct": 0.4,
+   "done": null
+  },
+  {
+   "name": "round",
+   "pct": 2.6,
+   "done": null
+  },
+  {
+   "name": "final",
+   "pct": 0.4,
+   "done": null
+  }
+ ],
+ "budget_stop": 3
+}

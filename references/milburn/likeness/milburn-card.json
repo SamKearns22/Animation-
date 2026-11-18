@@ -1,0 +1,194 @@
+{
+ "name": "Milburn",
+ "photos": [
+  "references/milburn/likeness/m01-front-official.jpg",
+  "references/milburn/likeness/m02-talking-2014.jpg"
+ ],
+ "measures": {
+  "face_wide": 0.835574386464841,
+  "jaw_wide": 0.8221947289963636,
+  "forehead_wide": 0.9543907786506427,
+  "eyes_apart": 1.3593779768061247,
+  "eye_size": 0.18151719496505336,
+  "eye_open": 0.3072494884366159,
+  "eye_tilt": 4.116172362395495,
+  "brow_high": 0.48450563204508823,
+  "brow_slope": -7.207173712672681,
+  "nose_long": 0.3963676968035668,
+  "nose_wide": 0.6850728155777133,
+  "mouth_wide": 0.8147604358802101,
+  "lip_top": 0.10540415205861864,
+  "lip_low": 0.18094321518761963,
+  "philtrum": 0.1338802964713864,
+  "chin_long": 0.3193907220737928
+ },
+ "average": {
+  "face_wide": 0.8717709228699967,
+  "jaw_wide": 0.8197130358936273,
+  "forehead_wide": 0.9420335520221841,
+  "eyes_apart": 1.3251304134564346,
+  "eye_size": 0.18604615413389317,
+  "eye_open": 0.3134028843754331,
+  "eye_tilt": 2.4741000518286085,
+  "brow_high": 0.5858307925480619,
+  "brow_slope": -9.371461324406877,
+  "nose_long": 0.41709146436872896,
+  "nose_wide": 0.641054695644114,
+  "mouth_wide": 0.8016076904497511,
+  "lip_top": 0.12057608224727724,
+  "lip_low": 0.18286999403665744,
+  "philtrum": 0.1325448247947855,
+  "chin_long": 0.2952975630170475
+ },
+ "diffs": [
+  {
+   "key": "brow_high",
+   "dev": -1.0598701154907342,
+   "words": "brows low and heavy over the eyes",
+   "warn": "",
+   "value": 0.48450563204508823,
+   "avg": 0.5858307925480619
+  },
+  {
+   "key": "nose_wide",
+   "dev": 0.9031807202204982,
+   "words": "a wide nose",
+   "warn": "",
+   "value": 0.6850728155777133,
+   "avg": 0.641054695644114
+  },
+  {
+   "key": "brow_slope",
+   "dev": 0.8378935595639818,
+   "words": "brows rising to the outside",
+   "warn": "",
+   "value": -7.207173712672681,
+   "avg": -9.371461324406877
+  },
+  {
+   "key": "nose_long",
+   "dev": -0.7560037826350305,
+   "words": "a short nose",
+   "warn": "",
+   "value": 0.3963676968035668,
+   "avg": 0.41709146436872896
+  },
+  {
+   "key": "eye_tilt",
+   "dev": 0.6780110840553839,
+   "words": "eyes tilting up at the outer corners",
+   "warn": "",
+   "value": 4.116172362395495,
+   "avg": 2.4741000518286085
+  },
+  {
+   "key": "chin_long",
+   "dev": 0.6321103828882172,
+   "words": "a long chin",
+   "warn": "the photos disagree",
+   "value": 0.3193907220737928,
+   "avg": 0.2952975630170475
+  },
+  {
+   "key": "forehead_wide",
+   "dev": 0.606820978730906,
+   "words": "a wide forehead",
+   "warn": "",
+   "value": 0.9543907786506427,
+   "avg": 0.9420335520221841
+  },
+  {
+   "key": "face_wide",
+   "dev": -0.6029820072105797,
+   "words": "a long, narrow face",
+   "warn": "",
+   "value": 0.835574386464841,
+   "avg": 0.8717709228699967
+  },
+  {
+   "key": "lip_top",
+   "dev": -0.5035364022923243,
+   "words": "a thin upper lip",
+   "warn": "",
+   "value": 0.10540415205861864,
+   "avg": 0.12057608224727724
+  },
+  {
+   "key": "eye_size",
+   "dev": -0.33688660253301733,
+   "words": "small eyes",
+   "warn": "",
+   "value": 0.18151719496505336,
+   "avg": 0.18604615413389317
+  },
+  {
+   "key": "eyes_apart",
+   "dev": 0.2809535303270214,
+   "words": "eyes set wide apart",
+   "warn": "",
+   "value": 1.3593779768061247,
+   "avg": 1.3251304134564346
+  },
+  {
+   "key": "mouth_wide",
+   "dev": 0.15555357495145292,
+   "words": "a wide mouth",
+   "warn": "",
+   "value": 0.8147604358802101,
+   "avg": 0.8016076904497511
+  },
+  {
+   "key": "jaw_wide",
+   "dev": 0.11541271095941266,
+   "words": "a broad, square jaw",
+   "warn": "",
+   "value": 0.8221947289963636,
+   "avg": 0.8197130358936273
+  },
+  {
+   "key": "eye_open",
+   "dev": -0.09338016226844244,
+   "words": "narrow, hooded eyes",
+   "warn": "",
+   "value": 0.3072494884366159,
+   "avg": 0.3134028843754331
+  },
+  {
+   "key": "philtrum",
+   "dev": 0.07058466532284353,
+   "words": "a long gap from nose to lip",
+   "warn": "the photos disagree",
+   "value": 0.1338802964713864,
+   "avg": 0.1325448247947855
+  },
+  {
+   "key": "lip_low",
+   "dev": -0.04318303524566904,
+   "words": "a thin lower lip",
+   "warn": "the photos disagree",
+   "value": 0.18094321518761963,
+   "avg": 0.18286999403665744
+  }
+ ],
+ "shapes": {
+  "hair_top": 0.36648476194135504,
+  "hair_wide": 1.130796486878115,
+  "hairline": 0.19485188375078333,
+  "fringe": 0.06777763959706504,
+  "hair_rgb": [
+   119,
+   100,
+   80
+  ],
+  "hair_below_ears": -0.16383784963230233,
+  "skin_rgb": [
+   218,
+   165,
+   136
+  ],
+  "beard": 0.0,
+  "moustache": 0.09,
+  "glasses": 0.15
+ },
+ "smile": 0.004168673302046955
+}

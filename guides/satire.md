@@ -300,6 +300,7 @@ The list is shown to Sam with the brief questions, and ticked on the check sheet
 ## Overlays and Hook Text (Roadster, 16 Oct)
 - On-screen readouts (dials, scores) sit inside the safe area and are big enough to read on a phone; no decorative icons
   beside them (Sam: cluttering). A number too long for its dial shows short (1.3M) with the full figure on a plate.
+- **Hook Text style (Sam, 18 Nov): the diagonal card, `'tilt': -7`, in every film's `HOOK`** (as Blessed and European protests); only `y`, `x`, `w`, `until` change per film.
 - Check the frames under the Hook Text: it must not cover the action of the opening seconds (`finish.py ... --y`).
   Emoji at the end of the Hook Text are drawn as Noto pictures (`source/fonts/emoji/<hex>.png`; download new ones from
   fonts.gstatic.com/s/e/notoemoji/latest/<hex>/512.png).
