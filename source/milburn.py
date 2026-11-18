@@ -64,7 +64,7 @@ LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: t
     dict(who='andy', text='Fine! Continue.', start=29.5, end=30.7),
     dict(who='milburn', text='The NEETs will form a unit.', start=31.8, end=33.7),
     dict(who='milburn', text='And will encounter teams of their erstwhile colleagues.', start=36.2, end=38.8),
-    dict(who='andy', text="You fucker! You're pulling a Maze Runner, Squid Games, Fortnite on me!", start=39.1,
+    dict(who='andy', text="You f***er! You're pulling a Maze Runner, Squid Games, Fortnite on me!", start=39.1,
          end=42.8),
     dict(who='milburn', text='I am sorry that you feel that way.', start=43.5, end=46.0),
     dict(who='andy', text='Are you or are you not sending NEETs to kill each other on live TV?', start=46.8, end=51.3),

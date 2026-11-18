@@ -125,19 +125,19 @@ code: forest_shot (the walk, the camera's travel and the props are the film's co
 row: 9 (gunfire, flame, morning stars) "And will encounter teams of their erstwhile colleagues" | shock, then each in character | the jolt, the duck, Swindon sprays back
 code: forest_shot (the reactions are the film's code: timed to the gunfire, flame and morning stars beats)
 
-## 7a: andy, line 10, lands on "fucker"
-row: 10 "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | rage | fists down on "fucker", then the point on "Fortnite"
+## 7a: andy, line 10, lands on "f***er"
+row: 10 "You fucker! You're pulling a Maze Runner-Squid Games-Fortnite on me!" | rage | fists down on "f***er", then the point on "Fortnite"
 stance: seated
 face: rage
-keys head_yaw: 0 at 0 | -6 at "fucker" | 6 at "Maze" | -2 at "Squid" | -7 at "Fortnite"   # head life (chat 10)
+keys head_yaw: 0 at 0 | -6 at "f***er" | 6 at "Maze" | -2 at "Squid" | -7 at "Fortnite"   # head life (chat 10)
 both: fists at 0
-body: slam 1 from "fucker" -0.1 to "fucker" +0.35, rise 0.08, fall 0.25
+body: slam 1 from "f***er" -0.1 to "f***er" +0.35, rise 0.08, fall 0.25
 L: fists from 0 to "Fortnite" -0.55 | jab from "Fortnite" -0.25 to end
-body: lean in 1.4 from "fucker" -0.3 over 0.3
+body: lean in 1.4 from "f***er" -0.3 over 0.3
 idle: roll 2 shifts 75 0.6 1.1
 
-## 7a: pat, line 10, lands on "fucker"
-row: 10 (Pat) | patient, eyes on Andy | steepled; a blink at "fucker"
+## 7a: pat, line 10, lands on "f***er"
+row: 10 (Pat) | patient, eyes on Andy | steepled; a blink at "f***er"
 like: 4a.pat
 
 ## 7b: milburn, line 11, lands on "feel"
