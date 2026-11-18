@@ -72,29 +72,20 @@ LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: t
                              'their life-changing injuries in the Blood Dome.', start=52.9, end=60.3),
     dict(who='pat', text='I think the backbenchers will like this one, sir.', start=61.5, end=64.3),
 ]
-SHOTS = [('1', 0.0, 3.3), ('2a', 3.3, 6.5), ('2b', 6.5, 9.7),     # cut to the aerial on "unique opportunity"
-         ('3', 9.7, 14.0),                                          # cut on Milburn's dash
-         ('4a', 14.0, 18.9), ('4b', 18.9, 25.9), ('4c', 25.9, 31.3),   # scene 4: the table (Sam's Q1)
-         ('6', 31.3, 38.9),                                          # the forest; cut on the dash
-         ('7a', 38.9, 43.2), ('7b', 43.2, 46.5), ('7c', 46.5, 51.7), ('7d', 51.7, 60.7), ('7e', 60.7, 65.1)]
-CUTS_N11 = [(9.65, 1.3), (20.2, 0.4), (32.95, 1.0), (64.1, 0.6)]   # (old start, seconds removed): the
-#   dead air after the deck locks, after Andy's first rant, after "Fine! Continue.", after Andy's cross face; every
-#   time below was moved by it (stand-in timing; Sam's recordings re-time the lines)
-DUR = 65.1   # note 11 (18 Nov): 3.3 s of dead air at the cuts taken out (CUTS_N11)
-T = {'simple': 2.5,          # shot 1 lands on "simple"
-     'light_on_them': 5.6,   # 2a: the light reaches their heads; all four look up ("training")
-     'locks': 9.4,           # 2b: the deck locks level with the grass ("country")
-     'gunfire': 34.0,        # 6: gunfire rips from the greenery ahead; the camera stops
-     'flame': 34.8,          # 6: the flamethrower's blast whips out
-     'stars': 35.5,          # 6: morning stars swing down out of the trees
-     'glance': 51.9,         # 7d: Milburn's eyes slide aside (back by 52.6)
-     'gape': 60.8}           # 7e: Andy's mouth falls open
+import milburn_voice as V_       # noqa: E402  Sam's recordings (18 Nov): the lines' real times, every cut and beat
+for _i, _ln in enumerate(LINES):    # the stand-in times above are only the old film's; the takes set the clock now
+    _ln.update(start=V_.START[_i + 1], end=V_.END[_i + 1], audio='milburn-' + '+'.join(V_.TAKES[_i + 1]))
+LINES[9]['bleep'] = V_.LINES_TIMED[10]['bleep']             # "fucker": Sam says it, a tone goes over "fuck" (rule 26)
+SHOTS, T, _FOREST, DUR = V_.shots_and_beats({_i + 1: _ln['text'] for _i, _ln in enumerate(LINES)})
+#   T: 'simple' shot 1 lands on "simple"; 'light_on_them' 2a: the light reaches their heads ("training"); 'locks' 2b:
+#   the deck locks level with the grass; 'gunfire' / 'flame' / 'stars' scene 6 beats; 'glance' 7d: Milburn's eyes
+#   slide aside; 'gape' 7e: Andy's mouth falls open
 _FOUR = ['goth', 'rangy', 'swindon', 'waif']
 REVERSE = ('4a', '4c', '7a', '7c', '7e')            # the reverse: Andy and Pat across the table
 ACROSS = ('1', '4b', '7b', '7d')                     # shot 1's camera: Milburn
 SHOT_CAST = dict({'2a': _FOUR, '2b': _FOUR, '3': _FOUR, '6': _FOUR}, **{n: ['milburn'] for n in ACROSS},
                  **{n: ['andy', 'pat'] for n in REVERSE})
-KEEP_CLEAR = [("Milburn's face", lambda t: (420, 580, 680, 960) if t < 3.3 else None)]   # rule 75: the Hook Text sits above it
+KEEP_CLEAR = [("Milburn's face", lambda t: (420, 580, 680, 960) if t < SHOTS[0][2] else None)]   # rule 75: the Hook Text sits above it
 HOOK = ('The Milburn Report is released 😬', {'y': 420, 'until': 3.0})   # rule 75: the band above his head
 SHOT_MARKS = dict(SHOT_CAST, **{'2b': []})          # rule 38: front on (2b: tiny, from above)
 
@@ -196,17 +187,19 @@ MOODS = {
 
 
 def word_at(n, words):
-    """When line n reaches `words` (stand-in timing: the text spread evenly by letters over the line's span)."""
+    """When line n reaches `words`: its syllables spread over where the recording really speaks."""
     ln = LINES[n - 1]
-    return ln['start'] + ln['text'].index(words) / len(ln['text']) * (ln['end'] - ln['start'])
+    k = len(ln['text'][:ln['text'].index(words)].split())
+    return V_.word_times(n, ln['text'])[k][1]
 
 
 import mouths                        # noqa: E402  (the house lip sync: shapes from the words, on the stand-in timing)
 import figure as F                   # noqa: E402
 TRACK = {}
 for _ln in LINES:
+    _lt = V_.LINES_TIMED[LINES.index(_ln) + 1]
     TRACK.setdefault(_ln['who'], []).extend((a + _ln['start'], b + _ln['start'], sh) for a, b, sh in
-                                            mouths.track(_ln['text'], [(0.0, _ln['end'] - _ln['start'])]))
+                                            mouths.track(_ln['text'], _lt['stretches'], _lt['env']))
 BLINKS = {w: F.blinks(11 + 4 * i, 0.0, DUR, talking=(w == 'milburn')) for i, w in enumerate(CAST)}
 
 
@@ -450,7 +443,7 @@ def arming(who, t):
     elif who == 'swindon':                              # twin uzis out in front, spraying at invisible targets
         a0 = word_at(3, 'Each')
         kick = [0.0, 0.0]
-        for i, tt in enumerate(np.arange(a0 + 0.9, 13.7, 0.42)):
+        for i, tt in enumerate(np.arange(a0 + 0.9, SHOTS[3][1] - 0.3, 0.42)):
             k = i % 2
             kick[k] = max(kick[k], max(0.0, 1 - abs(t - tt) / 0.12))
         sway = math.sin((t - a0) * 2.6)
@@ -470,7 +463,7 @@ def arming(who, t):
     d = face_sp('3', who, t, mood)
     if who == 'rangy':
         d['gaze_dy'] = 0.6
-    if who == 'swindon' and word_at(3, 'Each') + 1.2 < t < 13.3:   # mouths "pow" silently (Sam Q4 N)
+    if who == 'swindon' and word_at(3, 'Each') + 1.2 < t < SHOTS[3][1] - 0.7:   # mouths "pow" silently (Sam Q4 N)
         d['mouth'] = 'v:O' if int((t - 10.7) / 0.21) % 2 == 0 else 'v:grin'   # note 6: was 'v:M' (no such shape)
     if who == 'waif':
         d['head_roll'] = 2.0 * math.sin(t * 2 * math.pi * 7)
@@ -598,9 +591,9 @@ def forest_pose(who, t):
         sway = math.sin((t - MF.T0) * 3.0)              # sprays back wildly once the flame has passed
         fwd = _ramp(t, unit - 0.25, unit + 0.1) * (1 - _ramp(t, unit + 0.5, unit + 0.9))
         kick = [0.0, 0.0]
-        spray = MF.T_FLAME + 0.45 < t < 37.9
+        spray = MF.T_FLAME + 0.45 < t < MF.T1 - 1.0
         if spray:
-            for i, tt in enumerate(np.arange(MF.T_FLAME + 0.45, 37.9, 0.14)):
+            for i, tt in enumerate(np.arange(MF.T_FLAME + 0.45, MF.T1 - 1.0, 0.14)):
                 kick[i % 2] = max(kick[i % 2], max(0.0, 1 - abs(t - tt) / 0.07))
             sway = math.sin(t * 7.0)
         for side, sg, kk in (('R', 1, kick[0]), ('L', -1, kick[1])):
@@ -714,37 +707,15 @@ def cast(out):
 
 
 # ================================================================================================= sound and render
-def _standin(i, ln):
-    """A robotic stand-in for line i (espeak-ng), only for timing until Sam records: spoken at the rate that fills
-    the line's stand-in span, cached in source/data. Sam's take replaces it (then 'audio' on the line)."""
-    import shutil
-    import subprocess
-    import numpy as np
-    from burnham_film import load
-    want = ln['end'] - ln['start']
-    path = os.path.join(HERE, 'data', f'standin-milburn-{i + 1}.wav')
-    if not os.path.exists(path) and shutil.which('espeak-ng'):
-        os.makedirs(os.path.dirname(path), exist_ok=True)
-        rate = 150
-        for _ in range(3):                          # a word rate that fills the span
-            subprocess.run(['espeak-ng', '-v', 'en-gb', '-s', str(rate), '-p', '35', '-w', path, ln['text']],
-                           check=True, stdout=subprocess.DEVNULL)
-            got = len(load(path)) / 48000
-            rate = int(rate * got / want)
-    if not os.path.exists(path):
-        return np.zeros(int(48000 * want))
-    x = load(path)
-    return x / (np.abs(x).max() + 1e-9) * 0.4
-
-
 def soundtrack():
+    """Sam's recordings, cleaned and matched, each where its line starts (the swear bleeped)."""
     import numpy as np
     n = int((DUR + 0.3) * 48000)
     mix = np.zeros(n)
     for i, ln in enumerate(LINES):
-        x = _standin(i, ln)
-        s = int(ln['start'] * 48000)
-        mix[s:s + len(x)] += x[:max(0, n - s)]
+        x = V_.bleeped(i + 1)
+        st = int(ln['start'] * 48000)
+        mix[st:st + len(x)] += x[:max(0, n - st)]
     return mix
 
 
