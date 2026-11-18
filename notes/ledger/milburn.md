@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 24.0% of a week; spent 30.94% (+6.94); 14 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 24.0% of a week; spent 31.68% (+7.68); 14 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 30.94% of the 7.03% planned so far; at this rate the film lands at 100.4%.**
+**Forecast: Spent 31.68% of the 7.03% planned so far; at this rate the film lands at 100.4%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -37,7 +37,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-18 | ba98bbef | est | opus | auto |  | 3.15 |  | 0 | 0 |
 | 2026-11-18 | 5b682f67 | est | opus | auto |  | 2.7 |  | 0 | 0 |
 | 2026-11-18 | b54e8334 | est | sonnet | auto |  | 0.34 |  | 0 | 0 |
-| 2026-11-18 | d34bde53 | est | opus | auto |  | 1.17 |  | 0 | 0 |
+| 2026-11-18 | d34bde53 | est | sonnet | auto |  | 1.91 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-17 a58b9d21 (auto): 68 steps, history 203k at the end; other 65.1%, tool search 25.9%, renders 4.1%, pictures 3.6%, film-file search 1.3%
@@ -53,4 +53,4 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-18 ba98bbef (auto): 123 steps, history 241k at the end; other 60.3%, film-file search 13.4%, tool search 10.2%, pictures 9.9%, renders 5.4%, page.py 0.8%
 - 2026-11-18 5b682f67 (auto): 122 steps, history 244k at the end; other 72.4%, film-file search 11.4%, pictures 8.2%, tool search 6%, page.py 1%, renders 1%
 - 2026-11-18 b54e8334 (auto): 40 steps, history 125k at the end; other 69.1%, tool search 17%, film-file search 6.5%, renders 4.8%, routine 1.7%, pictures 0.8%
-- 2026-11-18 d34bde53 (auto): 67 steps, history 159k at the end; other 72.5%, film-file search 11.8%, tool search 7.1%, pictures 6.9%, page.py 1.4%, renders 0.4%
+- 2026-11-18 d34bde53 (auto): 96 steps, history 211k at the end; other 72.9%, film-file search 11.7%, tool search 6.9%, pictures 5.9%, renders 1.6%, page.py 1.1%
