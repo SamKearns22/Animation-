@@ -267,30 +267,87 @@ def candlestick(p, img, cam, a, t):
 
 # ================================================================================================ portrait
 @kind('portrait', ref=300, params={'gilt': 'c', 'ground': 'c', 'coat': 'c'},
-      defaults={'gilt': (196, 156, 70), 'ground': (58, 54, 40), 'coat': (110, 30, 34)})
+      defaults={'gilt': (196, 156, 70), 'ground': (46, 34, 30), 'coat': (142, 70, 52)})
 def portrait(p, img, cam, a, t):
-    """An old oil portrait on the wall in a deep gilt frame: a gentleman of the 1700s, half length, in a powdered
-    wig and a red coat, on a dark ground (nobody real; the Cabinet Room's first-minister portrait as an idea)."""
+    """An old oil portrait in a deep gilt frame, after Sam's reference (Sir Robert Walpole, the first prime minister:
+    Milburn, 18 Nov): a heavy man in a long grey-white wig and lace cravat, a red-brown velvet coat heavy with gold
+    embroidery, a blue sash, one hand on a crested despatch box, a scroll in the other, a dark ground with a red drape."""
     w, h = a['w'], a['h']
     g = a['gilt']
-    fr = min(w, h) * 0.11
-    p.poly(quad(0, 0, w, h), g, INK, 2.6)
-    p.poly(quad(fr * 0.45, fr * 0.45, w - fr * 0.45, h - fr * 0.45), dk(g, 0.8), INK, 1.4)
-    p.poly(quad(fr, fr, w - fr, h - fr), a['ground'], INK, 2.0)
-    cx = w / 2
+    fr = min(w, h) * 0.09
     iw, ih = w - 2 * fr, h - 2 * fr
-    sh_y = fr + ih * 0.62                                                             # the shoulders and coat
-    p.poly([(cx - iw * 0.42, h - fr), (cx - iw * 0.4, sh_y + ih * 0.08), (cx - iw * 0.18, sh_y),
-            (cx + iw * 0.18, sh_y), (cx + iw * 0.4, sh_y + ih * 0.08), (cx + iw * 0.42, h - fr)], a['coat'], INK, 1.8)
-    p.poly([(cx - iw * 0.07, sh_y), (cx + iw * 0.07, sh_y), (cx, h - fr - ih * 0.1)], (238, 232, 220), INK, 1.4)
-    hy = fr + ih * 0.42                                                               # the wig, then the face
-    p.ell(cx, hy, iw * 0.2, ih * 0.2, (226, 222, 214), INK, 1.8)
-    for sgn in (-1, 1):
-        p.ell(cx + sgn * iw * 0.18, hy + ih * 0.12, iw * 0.07, ih * 0.08, (220, 216, 208), INK, 1.4)
-    p.ell(cx, hy + ih * 0.03, iw * 0.11, ih * 0.13, (226, 186, 160), INK, 1.6)
-    for sgn in (-1, 1):
-        p.ell(cx + sgn * iw * 0.04, hy, iw * 0.012, ih * 0.01, (40, 30, 26), None)
-    p.line([(cx - iw * 0.03, hy + ih * 0.09), (cx + iw * 0.03, hy + ih * 0.09)], (150, 90, 80), 1.4)
+    X = lambda u: fr + u * iw                                                      # noqa: E731 (0-1 across the canvas)
+    Y = lambda v: fr + v * ih                                                      # noqa: E731
+    P = lambda *pts: [(X(u), Y(v)) for u, v in pts]                                # noqa: E731
+    E = lambda u, v, ru, rv, c, ln=INK, lw=1.6: p.ell(X(u), Y(v), ru * iw, rv * ih, c, ln, lw)   # noqa: E731
+    p.poly(quad(0, 0, w, h), g, INK, 2.6)                                          # the gilt frame, stepped
+    p.poly(quad(fr * 0.4, fr * 0.4, w - fr * 0.4, h - fr * 0.4), dk(g, 0.78), INK, 1.4)
+    p.poly(quad(fr * 0.75, fr * 0.75, w - fr * 0.75, h - fr * 0.75), mix(g, (255, 255, 255), 0.18), INK, 1.2)
+    p.poly(quad(fr, fr, w - fr, h - fr), a['ground'], INK, 2.0)
+    p.poly(P((0.78, 0), (1, 0), (1, 1), (0.84, 1)), dk(a['ground'], 0.8), None)    # a pillar in the shade, right
+    p.poly(P((0, 0), (0.3, 0), (0.22, 0.12), (0.1, 0.3), (0, 0.4)), (112, 38, 34), None)       # the red drape, top left
+    for u0, u1 in ((0.04, 0.14), (0.12, 0.2)):
+        p.line(P((u0, 0), (u1 - 0.04, 0.3)), (84, 26, 26), 1.6)
+    coat, dkc = a['coat'], dk(a['coat'], 0.72)
+    gold, gold_d = (206, 164, 74), (150, 112, 44)
+    lace, skin = (240, 236, 226), (232, 190, 162)
+    # the despatch box with the crest, lower left, under his hand
+    p.poly(P((0.0, 0.78), (0.3, 0.74), (0.34, 1.0), (0.0, 1.0)), (74, 44, 36), INK, 1.8)
+    p.poly(P((0.0, 0.78), (0.3, 0.74), (0.31, 0.78), (0.0, 0.82)), gold_d, INK, 1.2)
+    E(0.12, 0.9, 0.1, 0.07, (34, 50, 96), INK, 1.4)                                # the crest: a shield on a gold seal
+    E(0.12, 0.9, 0.065, 0.045, gold, INK, 1.2)
+    p.poly(P((0.095, 0.875), (0.145, 0.875), (0.145, 0.915), (0.12, 0.935), (0.095, 0.915)), (150, 30, 40), INK, 1.0)
+    # the body: shoulders, the coat, one sleeve down to the box, the other holding the scroll
+    p.poly(P((0.08, 0.56), (0.2, 0.48), (0.8, 0.48), (0.94, 0.58), (0.98, 1.0), (0.3, 1.0), (0.22, 0.86), (0.06, 0.74)),
+           coat, INK, 2.0)
+    p.poly(P((0.04, 0.58), (0.2, 0.48), (0.3, 0.5), (0.2, 0.72), (0.12, 0.8), (0.03, 0.76)), dkc, INK, 1.6)    # left sleeve
+    p.poly(P((0.9, 0.58), (0.98, 0.7), (0.98, 0.96), (0.86, 0.94), (0.84, 0.66)), dkc, INK, 1.6)             # right sleeve
+    p.poly(P((0.44, 0.48), (0.56, 0.48), (0.7, 1.0), (0.4, 1.0)), mix(coat, (255, 255, 255), 0.08), None)    # the waistcoat
+    for pts in (P((0.06, 0.58), (0.16, 0.5), (0.2, 0.52), (0.1, 0.66)), P((0.82, 0.5), (0.9, 0.58), (0.93, 0.7), (0.86, 0.62))):
+        p.poly(pts, gold, INK, 1.2)                                                # gold-embroidered shoulders
+    for k in range(7):
+        E(0.09 + 0.018 * k, 0.6 + 0.013 * k, 0.014, 0.01, gold_d, None)
+        E(0.84 + 0.012 * k, 0.55 + 0.02 * k, 0.014, 0.01, gold_d, None)
+    p.poly(P((0.32, 0.5), (0.4, 0.48), (0.44, 1.0), (0.36, 1.0)), gold, INK, 1.4)    # the embroidered front edges
+    p.poly(P((0.6, 0.48), (0.68, 0.5), (0.72, 1.0), (0.64, 1.0)), gold, INK, 1.4)
+    for k in range(9):                                                             # ... worked in rows of studs
+        E(0.38 + 0.008 * k, 0.55 + 0.05 * k, 0.012, 0.012, gold_d, None)
+        E(0.66 + 0.008 * k, 0.55 + 0.05 * k, 0.012, 0.012, gold_d, None)
+    p.poly(P((0.7, 0.48), (0.8, 0.48), (0.36, 0.9), (0.3, 0.84)), (44, 66, 132), INK, 1.6)    # the blue sash, shoulder to hip
+    for k in range(7):                                                             # the row of gold buttons
+        E(0.5, 0.58 + 0.06 * k, 0.014, 0.012, gold, INK, 1.0)
+    # the hand on the box and the scroll in the other hand
+    p.poly(P((0.02, 0.74), (0.1, 0.7), (0.16, 0.76), (0.1, 0.82)), lace, INK, 1.2)           # the lace cuff
+    E(0.1, 0.8, 0.065, 0.045, skin, INK, 1.4)
+    for k in range(3):
+        p.line(P((0.07 + 0.025 * k, 0.8), (0.075 + 0.025 * k, 0.85)), dk(skin, 0.8), 1.2)
+    p.poly(P((0.88, 0.9), (0.99, 0.9), (0.99, 0.97), (0.88, 0.97)), lace, INK, 1.2)           # the cuff
+    p.poly(P((0.9, 0.8), (0.97, 0.78), (0.985, 1.0), (0.92, 1.0)), (222, 214, 190), INK, 1.4)  # the scroll
+    p.line(P((0.91, 0.92), (0.98, 0.9)), (44, 66, 132), 2.4)
+    E(0.935, 0.89, 0.04, 0.035, skin, INK, 1.2)
+    # the cravat, the face and the great wig
+    wig, wig_d = (216, 212, 206), (186, 182, 176)
+    p.poly(P((0.27, 0.16), (0.32, 0.06), (0.5, 0.0), (0.68, 0.06), (0.73, 0.16), (0.8, 0.4), (0.84, 0.58), (0.16, 0.58),
+             (0.2, 0.4)), wig, INK, 1.8)                                           # the wig: a great mass to the shoulders
+    for sg in (-1, 1):
+        for k in range(6):                                                         # rolled curls down each side, overlapping
+            E(0.5 + sg * (0.235 + 0.012 * (k % 2) + 0.012 * k), 0.2 + 0.07 * k, 0.065, 0.05, wig if k % 2 else wig_d, INK, 1.4)
+        for k in range(3):
+            E(0.5 + sg * (0.19 + 0.04 * k), 0.1 + 0.03 * k, 0.05, 0.04, wig_d, INK, 1.2)
+    p.poly(P((0.42, 0.38), (0.58, 0.38), (0.64, 0.56), (0.5, 0.6), (0.36, 0.56)), lace, INK, 1.4)    # the lace cravat
+    for k in range(4):
+        p.line(P((0.42 + 0.04 * k, 0.45), (0.44 + 0.04 * k, 0.56)), (200, 196, 186), 1.2)
+    E(0.5, 0.375, 0.1, 0.05, dk(skin, 0.94), INK, 1.2)                              # the second chin: a stout man
+    E(0.5, 0.27, 0.13, 0.155, skin, INK, 1.6)                                      # the face: broad, rosy, pleased
+    for sg in (-1, 1):
+        E(0.5 + sg * 0.085, 0.32, 0.03, 0.025, (226, 150, 130), None)              # cheeks
+        E(0.5 + sg * 0.055, 0.25, 0.03, 0.017, (250, 246, 238), INK, 1.0)           # eyes: whites, heavy lids, pupils
+        E(0.5 + sg * 0.055, 0.253, 0.012, 0.012, (60, 40, 30), None)
+        p.line(P((0.5 + sg * 0.085, 0.238), (0.5 + sg * 0.025, 0.236)), (92, 72, 62), 2.2)       # heavy lids
+        p.line(P((0.5 + sg * 0.09, 0.218), (0.5 + sg * 0.03, 0.212)), (150, 130, 120), 1.6)      # brows
+    p.line(P((0.5, 0.25), (0.495, 0.3), (0.51, 0.31)), dk(skin, 0.78), 1.4)                       # nose
+    p.line(P((0.455, 0.345), (0.5, 0.355), (0.55, 0.34)), (168, 96, 84), 1.8)                      # a small smile
+    p.line(P((0.5, 0.075), (0.5, 0.12)), (176, 172, 166), 1.2)                                     # the wig's parting
 
 
 # ================================================================================================ tall glass
