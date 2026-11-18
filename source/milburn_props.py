@@ -71,7 +71,7 @@ SHAPES = {
     'stapler': [(_rect(-0.09, 0.09, 0.0, 0.016), BLACK, 1.6),               # the base
                 ([(-0.09, 0.0), (-0.09, -0.04), (0.09, -0.03), (0.09, -0.012), (-0.07, -0.01)], (200, 40, 40), 1.8)],
 }
-SCALE = {'uzi': 1.6, 'grenade': 1.6}            # cartoon sizes so they read at phone size (the grenade an
+SCALE = {'uzi': 1.6, 'grenade': 1.04}           # cartoon sizes so they read at phone size (the grenade 35% smaller, Sam chat 11; an
 #                                                    ostrich egg, Sam Q2)
 LENGTH = {'crossbow': 0.95, 'katana': 1.0, 'uzi': 0.32, 'grenade': 0.22, 'mace': 0.7, 'stapler': 0.18}
 

@@ -188,7 +188,7 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 47: andy (Andy Burnham, the Prime Minister (scenes : angry, pointing; Sam's finished face-tool head, unchanged)): head: house burnham, hair swept, look detail; outfit: suit , shirt white, no tie; body:
 - 52: pat (Pat McFadden, Work and Pensions Secretary (scenes : patient, fingers steepled). Face tool pick B): head: house mcfadden, hair bald, look detail; outfit: suit , shirt white, tie ; body:
 
-## milburn-places.txt (33 pieces; a note on a place changes its line: open that line)
+## milburn-places.txt (32 pieces; a note on a place changes its line: open that line)
 ### cabinet (Milburn across the table, straight to lens)
 - 11: panels (the panelled wall)
 - 12: block (the picture rail)
@@ -204,26 +204,25 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 22: the right place's folder
 - 23: papers (a paper)
 - 24: tumbler (Milburn's water glass)
-- 25: tumbler (the left place's glass)
-- 26: tumbler (the right place's glass)
-- 27: his name card
+- 25: tumbler (the right place's glass)
+- 26: his name card
 ### reverse (the 180 of shot 1
-- 38: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): panels (the panelled wall behind them)
-- 39: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the picture rail)
-- 40: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the dado rail)
-- 41: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the marble fireplace behind the PM's chair
-- 43: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
-- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
-- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
-- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
-- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
-- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
-- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card
-- 50: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card
-- 52: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Andy's Vimto)
-- 53: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto, note 10)
-- 54: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Pat's water)
-- 55: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water, note 10)
+- 37: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): panels (the panelled wall behind them)
+- 38: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the picture rail)
+- 39: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): block (the dado rail)
+- 40: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): the marble fireplace behind the PM's chair
+- 42: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the empty chair, left)
+- 43: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (the Prime Minister's chair)
+- 44: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): chair back (Pat's chair)
+- 45: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): table top (the green-baize table)
+- 46: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Andy's red folder
+- 47: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's red folder
+- 48: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): his name card
+- 49: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): Pat's name card
+- 51: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Andy's Vimto: front-left of him, chat 11)
+- 52: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): can (Andy's Vimto, note 10; chat 11 nearer him)
+- 53: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): coaster (under Pat's water: front-left of him, chat 11)
+- 54: from Milburn's seat across the table to Andy and Pat; shots 5 and 7): tall glass (Pat's sparkling water, note 10; chat 11 nearer him)
 
 ## milburn-moves.txt (127 lines; a note on a move changes its line: open that line)
 ### 1 (milburn)

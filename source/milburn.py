@@ -317,8 +317,8 @@ def reverse(t):
     front = Image.new('RGBA', (W, H), (0, 0, 0, 0))
     _RPAINT['front'](front, cam, t)
     shot = shot_of(t)
-    for who in ('andy', 'pat'):
-        x, d = SEATS[who]
+    for who in ('pat', 'andy'):                    # Sam's note (chat 11): Andy, the nearer, drawn last, so Pat's
+        x, d = SEATS[who]                         # table strip never covers the half of Andy's arm that crosses it
         pxm = L.ppm(d)
         sp = CAST[who]
         X, neck_y = L.p(x, d, _seated_neck)
@@ -486,6 +486,13 @@ FOREST6 = [('goth', 0.5, 3.8), ('swindon', -0.25, 4.3), ('rangy', -1.0, 4.8), ('
 # the plan's 1.4: the plan's spacing puts the last one off the left edge)
 CLOSE6 = {'rangy': 0.12, 'waif': 0.25}   # m: the back two close up on "unit"
 GOTH_SHOTS = (MF.T_FLAME + 1.0, MF.T_FLAME + 2.6)   # note 9: the goth looses a bolt, cocks, looses another
+SKY_SHOT = MF.T_GUN + 0.1                           # Sam (chat 11): the first gunfire makes her jerk and loose a bolt
+#                                                     straight up into the air in surprise
+
+
+def _sky(t):
+    """0 -> 1 -> 0: the goth's crossbow jerked up skyward on the first gunfire, then lowered again."""
+    return _ramp(t, MF.T_GUN, SKY_SHOT) * (1 - _ramp(t, SKY_SHOT + 0.35, SKY_SHOT + 0.8))
 HALT = 0.25                              # s: they stop dead on the gunfire (the camera takes MF.STOP)
 
 
@@ -540,6 +547,10 @@ def forest_pose(who, t):
                  'down', 'fist')
         V.arm_to(j, 'L', _mix((-sw * 0.1, 70, 430), (-sw * 0.05, -150 + 20 * kick, 430 - 40 * kick), after),
                  'down', 'fist')
+        sky = _sky(t)                                   # Sam (chat 11): jerked skyward, a bolt straight up
+        if sky > 0:
+            V.arm_to(j, 'R', _mix((sw * 0.35, 50, 150), (sw * 0.3, -30, 210), sky), 'down', 'fist')
+            V.arm_to(j, 'L', _mix((-sw * 0.1, 70, 430), (-sw * 0.05, -290, 440), sky), 'down', 'fist')
         MP.in_hands(j, sp, 'crossbow', 'R', 'L', along=-0.06)
         j['head_roll'] = j.get('head_roll', 0.0) - 9 * duck     # she leans aside, barely bothered
         mood = 'aghast' if MF.T_GUN < t < MF.T_FLAME else ('pleased' if t > GOTH_SHOTS[0] else
@@ -621,6 +632,19 @@ def forest_shot(t):
             gx = X + hx * s + math.cos(a) * 0.4 * pxm
             gy = Y - FEET * s + (hy + j.get('bob', 0.0)) * s + math.sin(a) * 0.4 * pxm - 0.05 * pxm
             MF.muzzle(img, gx, gy, pxm, int(t * 97) + (side == 'L'), 0.16)
+        if who == 'goth' and 0.0 <= t - SKY_SHOT < 0.5:   # Sam (chat 11): the surprised bolt, straight up
+            u = t - SKY_SHOT
+            hx, hy = pts['wrL']
+            bx = X + hx * s + (0.15 + 1.2 * u) * pxm
+            by = Y - FEET * s + (hy + j.get('bob', 0.0)) * s - (0.25 + 9.0 * u) * pxm
+            dx, dy = 0.13 * pxm, -0.39 * pxm                # the bolt's length, pointing up the crossbow's line
+            dr = ImageDraw.Draw(img)
+            dr.line([(bx - dx, by - dy), (bx, by)], fill=(70, 50, 34), width=max(3, int(0.02 * pxm)))
+            nx, ny = dx / 0.41 / pxm, dy / 0.41 / pxm         # unit along the bolt, then its tip
+            px_, py_ = -ny, nx
+            dr.polygon([(bx + 0.06 * pxm * nx, by + 0.06 * pxm * ny),
+                        (bx + 0.025 * pxm * px_, by + 0.025 * pxm * py_),
+                        (bx - 0.025 * pxm * px_, by - 0.025 * pxm * py_)], fill=(170, 176, 186), outline=(20, 20, 24))
         if who == 'goth':                               # note 9: her bolts streak off ahead, into the trees
             for tt in GOTH_SHOTS:
                 u = t - tt

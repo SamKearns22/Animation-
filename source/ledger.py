@@ -201,6 +201,12 @@ def film_of(transcript):
     return max(count, key=count.get) if count else None
 
 
+# Sam, 18 Nov (Milburn chat 11): "disable budget alarms and budget readings permanently until system fixed at a later
+# date; all readings and estimates [are] worthless. Quietly continue to track until this film is done so we can analyse
+# the data later." Rows and marks are still written and pushed; no alarm reaches the chat. Undo: False, on Sam's word.
+ALARMS_PAUSED = True
+
+
 def auto(transcript):
     """Stop hook: this chat's running cost into its film's ledger (one row per chat, replaced as it grows); committed
     and pushed to the chat's branch when it moved by 0.25% of a week or the chat is new to the ledger."""
@@ -241,7 +247,7 @@ def auto(transcript):
         d['chats'].append(row)
     alarm = budget_stop(d) or stage_alarm(d)      # each marks its own step, so none repeats on the next reply
     store(d)
-    if alarm:                                     # never switched off (Sam, 13 Nov: Blessed's alarms_off hid 45%)
+    if alarm and not ALARMS_PAUSED:               # once never switched off (Sam, 13 Nov); paused 18 Nov, see ALARMS_PAUSED
         print(json.dumps({'decision': 'block', 'reason': alarm}))
     push_row(film, row)                           # startup-fixes 1 (Sam, 16 Nov): straight onto the main line
 
