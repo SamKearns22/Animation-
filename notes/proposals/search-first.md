@@ -1,6 +1,6 @@
 # Proposal: Chats search by hand and re-load tools instead of using the finder; cost is a guess, not the app's figure
 
-Status: open
+Status: open (SHELVED by Sam 18 Nov: not decided, not declined; to be re-asked after the finder work)
 
 ## Problem
 Sam's goal is that every film costs 15% of a week or less. Milburn came in at 22% by Sam's own reading of the app

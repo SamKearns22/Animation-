@@ -1,6 +1,6 @@
 # Proposal: Chats search by hand about 65 times for every finder use, in every chat, despite two earlier fixes
 
-Status: open
+Status: adopted (2026-11-18)
 
 ## Problem
 Sam's goal is a film within 15% of a week. Searching is the one cost that is meant to be already solved: the code
