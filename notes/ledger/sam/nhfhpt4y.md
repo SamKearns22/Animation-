@@ -61,3 +61,8 @@ Remove stapler and mace plinths for now as shot too busy.
 
 Pat 3/4 pose -- not needed, looked better when he was facing forward throughout.
 
+### 2026-11-18T06:12:55
+YY
+
+Once fixed ask sonnet chat to render new animatic
+
