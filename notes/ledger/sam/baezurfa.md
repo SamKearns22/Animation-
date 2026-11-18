@@ -37,3 +37,6 @@ For the rules, read rule 11 in guides/film-quality-rules.md. For where it sits i
 
 The Milburn film’s board is a working example: story/milburn-board.txt and story/milburn-board-sent.txt.
 
+### 2026-11-18T11:49:56
+The key thing missing from your proposal is that almost all of the searches did not use the code search tool developed for it, which surely has been our biggest and most damming overspend.
+
