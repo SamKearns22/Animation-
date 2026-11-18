@@ -43,6 +43,24 @@ def _hand_faults(film, times, who=None):
     return out
 
 
+# ------------------------------------------------------------------------------------------------ one source for every view
+@test
+def turned_parts_kept():
+    """Milburn (Sam, 17 Nov: "our 3/4 characters still look like shit"): turned, the thin lad lost his pencil
+    moustache and the goth her piercings and blue streaks (people_turned drew a borrowed copy). The check refuses
+    the old drawing (6 lost parts) and passes the front's own parts on the turned head (proposal three-quarter-people)."""
+    import milburn as M
+    import people_turned as PT
+    views = {w: {'three', 'side'} for w in M.CAST}
+    now = PT.lost_parts(M.CAST, views)
+    PT.FAITHFUL = False
+    try:
+        old = PT.lost_parts(M.CAST, views)
+    finally:
+        PT.FAITHFUL = True
+    return not now and len(old) >= 6, f'now {len(now)} lost, before the fix {len(old)}'
+
+
 # ------------------------------------------------------------------------------------------------ rule 41: hands
 @test
 def hands_round_the_head():

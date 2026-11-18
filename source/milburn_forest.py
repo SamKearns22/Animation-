@@ -33,7 +33,7 @@ import milburn_sets as MS          # noqa: E402
 
 W, H, SS = 1080, 1920, 2
 CAM = MS.LevelCam(1.4, 990, 1450)
-T0, T_GUN, T_FLAME, T_STARS, T1 = 34.0, 36.7, 37.5, 38.2, 41.6
+T0, T_GUN, T_FLAME, T_STARS, T1 = 31.3, 34.0, 34.8, 35.5, 38.9   # note 11: 2.7 s earlier
 YAW_VIEW = 45.0                      # the three-quarter view the kit draws for yaw 40
 V_EFF = 0.9 * math.sin(math.radians(YAW_VIEW))   # m/s across the screen: a walker's planted foot on the ground
 STOP = 0.5                           # s: the camera eases to rest after the gunfire
@@ -349,7 +349,7 @@ def gunfire(img, t):
     cam = _FxCam(t)
     f = int(round(t * 12))
     for i, (x, d, z) in enumerate(AHEAD_GUNS):
-        if (f + i * 2) % 3 == 0 and (t < 39.6 or (f + i) % 5 == 0):
+        if (f + i * 2) % 3 == 0 and (t < 36.9 or (f + i) % 5 == 0):
             PF.flash(img, cam, (END_X + x, z, d), 0.42 if t < T_GUN + 0.25 else 0.32, seed=f * 7 + i)
     for i in range(10):                                      # tracers: start in the leaves, fly left over them
         t0 = T_GUN + 0.05 + i * 0.27

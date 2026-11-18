@@ -260,14 +260,7 @@ def _front_head(img, p, sp, t, hx, hy):
             u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.72, 0.95)
             if abs(u) < L['jw'] * 0.5 * (1.0 - (v - 0.82) * 2.2) and abs(u) > L['mw'] * 0.6:
                 p.line([f(u, v), f(u + 0.004, v + 0.02)], (120, 116, 112), 1.4)       # flecks of grey
-    sh = dk(skin, 0.84)                                       # detail: eye bags, the smile folds, a chin dimple
-    for sgn in (-1, 1):
-        cx, ey, w = sgn * L['ecx'], L['eye_y'], L['ew'] * 0.6
-        p.line(curve(f.pts([(cx - w * 0.6, ey + 0.05), (cx, ey + 0.064), (cx + w * 0.7, ey + 0.046)]), 3), sh, 1.5)
-        p.line(curve(f.pts([(sgn * L['nw'] * 0.62, L['nose_y'] - 0.03), (sgn * L['mw'] * 0.7, L['lip0'] + 0.01),
-                            (sgn * L['mw'] * 0.76, L['lip13'] + 0.03)]), 3), dk(skin, 0.78), 1.6)
-    if not fc.get('beard'):
-        p.line(curve(f.pts([(-0.025, 0.93), (0.0, 0.94), (0.025, 0.93)]), 3), dk(skin, 0.8), 1.4)
+    face_detail(p, f, L, fc, skin)
     if fc.get('freckles'):
         rng = np.random.default_rng(31)
         for _ in range(22):
@@ -277,9 +270,7 @@ def _front_head(img, p, sp, t, hx, hy):
     P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up)), fc['iris'], dk(skin, 0.8),
             liner=2.6)
     if fc.get('pencil'):                                      # a pencil moustache: one thin line above the lip
-        y = (L['lip0'] + L['nose_y']) * 0.5 + 0.008
-        p.poly(curve(f.pts([(-L['mw'] * 0.62, y + 0.01), (0.0, y - 0.004), (L['mw'] * 0.62, y + 0.01),
-                            (0.0, y + 0.008)]), 3), fc['pencil'], None)
+        pencil(p, f, L, fc)
     if fc.get('glasses'):
         _glasses(p, f, L, fc['glasses'], fc.get('glasses_thick'))
     P4.brows(p, f, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
@@ -291,15 +282,7 @@ def _front_head(img, p, sp, t, hx, hy):
     if fc['hair'] in LONG_STYLES + ('receding', 'pony'):
         _hair_front(p, f, L, fc, hc, skin)
     elif fc['hair'] == 'crop':                                  # a short crop: a low straight hairline, the skull's shape
-        cap = [(-e - 0.01, 0.3), (-e - 0.02, 0.04), (-e + 0.04, -0.22), (-0.24, -0.38), (0.0, -0.43), (0.24, -0.38),
-               (e - 0.04, -0.22), (e + 0.02, 0.04), (e + 0.01, 0.3), (e - 0.02, 0.3), (c + 0.01, 0.12), (c - 0.03, 0.02),
-               (c * 0.7, hl), (0.0, hl - 0.012), (-c * 0.7, hl), (-c + 0.03, 0.02), (-c - 0.01, 0.12), (-e + 0.02, 0.3)]
-        p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
-        rng = np.random.default_rng(5)
-        for _ in range(36):                                   # the crop's texture: short strokes
-            u, v = rng.uniform(-c, c), rng.uniform(-0.36, hl - 0.03)
-            if abs(u) < c * (1.0 - max(0.0, -v - 0.25) * 2.0):
-                p.line([f(u, v), f(u + 0.008, v + 0.025)], B.lt(hc, 1.7), 1.4)
+        crop_front(p, f, L, hc, hl)
     elif fc['hair'] == 'none':                                # under a wig (the judge): the wig is drawn after
         pass
     elif fc['hair'] == 'bald':                                # shaved: a shine on the dome, dark short sides
@@ -326,6 +309,53 @@ def _front_head(img, p, sp, t, hx, hy):
     return fx
 
 
+# ---- One source for every view (proposal three-quarter-people, adopted 18 Nov): the front's own part code, called
+# by the front head here and by the turned head (people_turned) on its 3D head (turnhead.TurnFace has the same
+# f(u, v) / f.pts as the front's Face). `seen(u, v)` (turned only) leaves out a mark on the far side of the head.
+def _all_seen(u, v):
+    return True
+
+
+def face_detail(p, f, L, fc, skin, seen=_all_seen):
+    """Eye bags, the smile folds, a chin dimple."""
+    sh = dk(skin, 0.84)
+    for sgn in (-1, 1):
+        cx, ey, w = sgn * L['ecx'], L['eye_y'], L['ew'] * 0.6
+        if seen(cx, ey + 0.06):
+            p.line(curve(f.pts([(cx - w * 0.6, ey + 0.05), (cx, ey + 0.064), (cx + w * 0.7, ey + 0.046)]), 3), sh, 1.5)
+        if seen(sgn * L['mw'] * 0.7, L['lip0']):
+            p.line(curve(f.pts([(sgn * L['nw'] * 0.62, L['nose_y'] - 0.03), (sgn * L['mw'] * 0.7, L['lip0'] + 0.01),
+                                (sgn * L['mw'] * 0.76, L['lip13'] + 0.03)]), 3), dk(skin, 0.78), 1.6)
+    if not fc.get('beard') and seen(0.0, 0.93):
+        p.line(curve(f.pts([(-0.025, 0.93), (0.0, 0.94), (0.025, 0.93)]), 3), dk(skin, 0.8), 1.4)
+
+
+def pencil(p, f, L, fc):
+    """A pencil moustache: one thin line above the lip."""
+    y = (L['lip0'] + L['nose_y']) * 0.5 + 0.008
+    p.poly(curve(f.pts([(-L['mw'] * 0.62, y + 0.01), (0.0, y - 0.004), (L['mw'] * 0.62, y + 0.01),
+                        (0.0, y + 0.008)]), 3), fc['pencil'], None)
+
+
+def crop_cap(L, hl=-0.06):
+    e, c = L['fw'] * 0.5, L['fhw'] * 0.5
+    return [(-e - 0.01, 0.3), (-e - 0.02, 0.04), (-e + 0.04, -0.22), (-0.24, -0.38), (0.0, -0.43), (0.24, -0.38),
+            (e - 0.04, -0.22), (e + 0.02, 0.04), (e + 0.01, 0.3), (e - 0.02, 0.3), (c + 0.01, 0.12), (c - 0.03, 0.02),
+            (c * 0.7, hl), (0.0, hl - 0.012), (-c * 0.7, hl), (-c + 0.03, 0.02), (-c - 0.01, 0.12), (-e + 0.02, 0.3)]
+
+
+def crop_front(p, f, L, hc, hl=-0.06, fill=True):
+    """A short crop: a low straight hairline, the skull's shape, its texture in short strokes."""
+    c = L['fhw'] * 0.5
+    if fill:
+        p.poly(curve(f.pts(crop_cap(L, hl)), 2), hc, INK, 2.4)
+    rng = np.random.default_rng(5)
+    for _ in range(36):                                   # the crop's texture: short strokes
+        u, v = rng.uniform(-c, c), rng.uniform(-0.36, hl - 0.03)
+        if abs(u) < c * (1.0 - max(0.0, -v - 0.25) * 2.0):
+            p.line([f(u, v), f(u + 0.008, v + 0.025)], B.lt(hc, 1.7), 1.4)
+
+
 SILVER = (214, 218, 226)
 
 
@@ -335,7 +365,7 @@ def _bead(p, xy, r):
     p.poly(oval(xy[0] - r * 0.35, xy[1] - r * 0.35, r * 0.4, r * 0.4, 6), (255, 255, 255), None)
 
 
-def piercings(p, f, L, fc, raise_=0.0, frown=0.0):
+def piercings(p, f, L, fc, raise_=0.0, frown=0.0, seen=_all_seen):
     """`piercings: brow, lip, nose` (any of them; bare `piercings` = all three), silver, front head (Milburn note 2):
     a bar through the outer end of her left brow (our right) with a ball each side, a hoop through the lower lip off
     centre (our left), a stud on the nostril wing (our right)."""
@@ -348,12 +378,15 @@ def piercings(p, f, L, fc, raise_=0.0, frown=0.0):
         (xm, ym), (xo, yo) = uv[1], uv[2]
         u = xm + (xo - xm) * 0.62
         v = ym + (yo - ym) * 0.62
+        if not seen(u, v):
+            which = [w for w in which if w != 'brow']
+    if 'brow' in which:
         a, b = f(u - 0.008, v - thick * 0.75), f(u + 0.008, v + thick * 1.05)
         p.line([a, b], INK, 2.6 * k)
         p.line([a, b], SILVER, 1.4 * k)
         _bead(p, a, 2.8 * k)
         _bead(p, b, 2.8 * k)
-    if 'lip' in which:
+    if 'lip' in which and seen(-L['mw'] * 0.26, L['lip17']):
         r = 4.2 * k
         cx, cy = f(-L['mw'] * 0.26, L['lip17'])
         cy -= r * 0.25                               # the ring's top runs into the lower lip, the rest hangs below
@@ -361,7 +394,7 @@ def piercings(p, f, L, fc, raise_=0.0, frown=0.0):
         p.line(ring, INK, 3.2 * k)
         p.line(ring, SILVER, 1.8 * k)
         p.poly(oval(cx - r * 0.5, cy + r * 0.6, 0.8 * k, 0.8 * k, 6), (255, 255, 255), None)
-    if 'nose' in which:
+    if 'nose' in which and seen(L['nw'] * 0.46, L['nose_y'] - 0.04):
         _bead(p, f(L['nw'] * 0.46, L['nose_y'] - 0.04), 2.6 * k)
 
 

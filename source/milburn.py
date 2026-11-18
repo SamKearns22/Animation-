@@ -54,38 +54,41 @@ LINES = [   # stand-in timing (about 3 words a second) until Sam's recordings: t
     dict(who='milburn', text='The essence of my proposal is quite simple.', start=0.4, end=2.9),
     dict(who='milburn', text='Those not in education, employment or training will be presented with a unique '
                              'opportunity to serve their country.', start=3.5, end=9.0),
-    dict(who='milburn', text='Each NEET must arm themselves before heading further into the Zone.', start=11.4,
-         end=15.1),
+    dict(who='milburn', text='Each NEET must arm themselves before heading further into the Zone.', start=10.1,
+         end=13.8),
     dict(who='andy', text="God damnit, Milburn. You're pulling a Battle Royale slash Hunger Games on us, aren't you?",
-         start=15.4, end=20.1),
+         start=14.1, end=18.8),
     dict(who='milburn', text='This report has been long in the making. Would you care to hear the findings or would '
-                             'you prefer to interrupt?', start=21.0, end=27.2),
-    dict(who='pat', text="I'd like to hear where this goes, Prime Minister.", start=27.8, end=30.6),
-    dict(who='andy', text='Fine! Continue.', start=31.2, end=32.4),
-    dict(who='milburn', text='The NEETs will form a unit.', start=34.5, end=36.4),
-    dict(who='milburn', text='And will encounter teams of their erstwhile colleagues.', start=38.9, end=41.5),
-    dict(who='andy', text="You fucker! You're pulling a Maze Runner, Squid Games, Fortnite on me!", start=41.8,
-         end=45.5),
-    dict(who='milburn', text='I am sorry that you feel that way.', start=46.2, end=48.7),
-    dict(who='andy', text='Are you or are you not sending NEETs to kill each other on live TV?', start=49.5, end=54.0),
+                             'you prefer to interrupt?', start=19.3, end=25.5),
+    dict(who='pat', text="I'd like to hear where this goes, Prime Minister.", start=26.1, end=28.9),
+    dict(who='andy', text='Fine! Continue.', start=29.5, end=30.7),
+    dict(who='milburn', text='The NEETs will form a unit.', start=31.8, end=33.7),
+    dict(who='milburn', text='And will encounter teams of their erstwhile colleagues.', start=36.2, end=38.8),
+    dict(who='andy', text="You fucker! You're pulling a Maze Runner, Squid Games, Fortnite on me!", start=39.1,
+         end=42.8),
+    dict(who='milburn', text='I am sorry that you feel that way.', start=43.5, end=46.0),
+    dict(who='andy', text='Are you or are you not sending NEETs to kill each other on live TV?', start=46.8, end=51.3),
     dict(who='milburn', text='My report is nuanced and multifaceted. I also suggest taking away PIP after they obtain '
-                             'their life-changing injuries in the Blood Dome.', start=55.6, end=63.0),
-    dict(who='pat', text='I think the backbenchers will like this one, sir.', start=64.8, end=67.6),
+                             'their life-changing injuries in the Blood Dome.', start=52.9, end=60.3),
+    dict(who='pat', text='I think the backbenchers will like this one, sir.', start=61.5, end=64.3),
 ]
-SHOTS = [('1', 0.0, 3.3), ('2a', 3.3, 6.5), ('2b', 6.5, 11.0),     # cut to the aerial on "unique opportunity"
-         ('3', 11.0, 15.3),                                          # cut on Milburn's dash
-         ('4a', 15.3, 20.6), ('4b', 20.6, 27.6), ('4c', 27.6, 34.0),   # scene 4: the table (Sam's Q1)
-         ('6', 34.0, 41.6),                                          # the forest; cut on the dash
-         ('7a', 41.6, 45.9), ('7b', 45.9, 49.2), ('7c', 49.2, 54.4), ('7d', 54.4, 63.4), ('7e', 63.4, 68.4)]
-DUR = 68.4
+SHOTS = [('1', 0.0, 3.3), ('2a', 3.3, 6.5), ('2b', 6.5, 9.7),     # cut to the aerial on "unique opportunity"
+         ('3', 9.7, 14.0),                                          # cut on Milburn's dash
+         ('4a', 14.0, 18.9), ('4b', 18.9, 25.9), ('4c', 25.9, 31.3),   # scene 4: the table (Sam's Q1)
+         ('6', 31.3, 38.9),                                          # the forest; cut on the dash
+         ('7a', 38.9, 43.2), ('7b', 43.2, 46.5), ('7c', 46.5, 51.7), ('7d', 51.7, 60.7), ('7e', 60.7, 65.1)]
+CUTS_N11 = [(9.65, 1.3), (20.2, 0.4), (32.95, 1.0), (64.1, 0.6)]   # (old start, seconds removed): the
+#   dead air after the deck locks, after Andy's first rant, after "Fine! Continue.", after Andy's cross face; every
+#   time below was moved by it (stand-in timing; Sam's recordings re-time the lines)
+DUR = 65.1   # note 11 (18 Nov): 3.3 s of dead air at the cuts taken out (CUTS_N11)
 T = {'simple': 2.5,          # shot 1 lands on "simple"
      'light_on_them': 5.6,   # 2a: the light reaches their heads; all four look up ("training")
      'locks': 9.4,           # 2b: the deck locks level with the grass ("country")
-     'gunfire': 36.7,        # 6: gunfire rips from the greenery ahead; the camera stops
-     'flame': 37.5,          # 6: the flamethrower's blast whips out
-     'stars': 38.2,          # 6: morning stars swing down out of the trees
-     'glance': 54.6,         # 7d: Milburn's eyes slide aside (back by 55.3)
-     'gape': 63.5}           # 7e: Andy's mouth falls open
+     'gunfire': 34.0,        # 6: gunfire rips from the greenery ahead; the camera stops
+     'flame': 34.8,          # 6: the flamethrower's blast whips out
+     'stars': 35.5,          # 6: morning stars swing down out of the trees
+     'glance': 51.9,         # 7d: Milburn's eyes slide aside (back by 52.6)
+     'gape': 60.8}           # 7e: Andy's mouth falls open
 _FOUR = ['goth', 'rangy', 'swindon', 'waif']
 REVERSE = ('4a', '4c', '7a', '7c', '7e')            # the reverse: Andy and Pat across the table
 ACROSS = ('1', '4b', '7b', '7d')                     # shot 1's camera: Milburn
@@ -151,7 +154,8 @@ def person(img, who, X, sole_y, pxm, yaw=0.0, t=0.0, joints=None, look=None):
     s = scale_at(pxm, sp)
     B.SS = 1
     cam = B.Cam(1.0, 540, 960)
-    return V.person(img, cam, X, sole_y - FEET * s, s, dict(look or sp), t, yaw, joints)
+    hy = joints.pop('_head_yaw', None) if joints else None
+    return V.person(img, cam, X, sole_y - FEET * s, s, dict(look or sp), t, yaw, joints, head_yaw=hy)
 
 
 # ================================================================================================= faces and moves
@@ -175,7 +179,8 @@ MOODS = {
     'exasperated': dict(smile=-0.5, brow_up=0.03, frown=-0.01, lid4=0.05),   # "Fine!"
     'sulky': dict(smile=-0.6, lid4=0.34, frown=0.012),                      # arms folded, leaning back
     'despair': dict(smile=-0.7, brow_up=0.035, frown=-0.02, lid4=0.04),     # brows up in the middle
-    'gape': dict(smile=-0.4, brow_up=0.03, lid4=0.0, mouth='v:O'),          # mouth hanging open in outrage
+    'gape': dict(smile=-1.0, brow_up=-0.012, frown=0.22, squint=0.6, lid4=0.0),   # note 8: cross, not
+    #       surprised: brows hard down and knitted, eyes narrowed, mouth open in outrage (was brows up: read as shock)
     'patient': dict(smile=0.12, lid4=0.3),                                  # Pat: calm, a little heavy-lidded
     'approving': dict(smile=0.4, lid4=0.3),                                 # ... the backbenchers will like it
     'attentive': dict(smile=0.15, lid4=0.2, brow_up=0.006),                 # Milburn: nonplussed, soft
@@ -247,7 +252,9 @@ def acted(shot, who, t):
     m = moves()
     key = m['AC'].block_key(shot, who, m['desc']['shots']) if m['desc']['shots'].get(shot, {}).get('who') != who \
         else shot
-    sp, _, _, j, _ = m['AC'].person(m['desc'], m['film'], key, t)
+    sp, _, _, j, hy = m['AC'].person(m['desc'], m['film'], key, t)
+    if hy is not None:
+        j['_head_yaw'] = hy                       # note 7: `keys head_yaw` turns the head (person() passes it on)
     return sp, j
 
 
@@ -415,7 +422,7 @@ def arming(who, t):
     elif who == 'swindon':                              # twin uzis out in front, spraying at invisible targets
         a0 = word_at(3, 'Each')
         kick = [0.0, 0.0]
-        for i, tt in enumerate(np.arange(a0 + 0.9, 15.0, 0.42)):
+        for i, tt in enumerate(np.arange(a0 + 0.9, 13.7, 0.42)):
             k = i % 2
             kick[k] = max(kick[k], max(0.0, 1 - abs(t - tt) / 0.12))
         sway = math.sin((t - a0) * 2.6)
@@ -432,8 +439,8 @@ def arming(who, t):
     d = face_sp('3', who, t, mood)
     if who == 'rangy':
         d['gaze_dy'] = 0.6
-    if who == 'swindon' and word_at(3, 'Each') + 1.2 < t < 14.6:   # mouths "pow" silently (Sam Q4 N)
-        d['mouth'] = 'v:O' if int((t - 12.0) / 0.21) % 2 == 0 else 'v:grin'   # note 6: was 'v:M' (no such shape)
+    if who == 'swindon' and word_at(3, 'Each') + 1.2 < t < 13.3:   # mouths "pow" silently (Sam Q4 N)
+        d['mouth'] = 'v:O' if int((t - 10.7) / 0.21) % 2 == 0 else 'v:grin'   # note 6: was 'v:M' (no such shape)
     if who == 'waif':
         d['head_roll'] = 2.0 * math.sin(t * 2 * math.pi * 7)
         j['shake_x'] = 4.0 * math.sin(t * 2 * math.pi * 9)
@@ -531,9 +538,9 @@ def forest_pose(who, t):
         sway = math.sin((t - MF.T0) * 3.0)              # sprays back wildly once the flame has passed
         fwd = _ramp(t, unit - 0.25, unit + 0.1) * (1 - _ramp(t, unit + 0.5, unit + 0.9))
         kick = [0.0, 0.0]
-        spray = MF.T_FLAME + 0.45 < t < 40.6
+        spray = MF.T_FLAME + 0.45 < t < 37.9
         if spray:
-            for i, tt in enumerate(np.arange(MF.T_FLAME + 0.45, 40.6, 0.14)):
+            for i, tt in enumerate(np.arange(MF.T_FLAME + 0.45, 37.9, 0.14)):
                 kick[i % 2] = max(kick[i % 2], max(0.0, 1 - abs(t - tt) / 0.07))
             sway = math.sin(t * 7.0)
         for side, sg, kk in (('R', 1, kick[0]), ('L', -1, kick[1])):

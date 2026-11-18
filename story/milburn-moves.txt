@@ -105,9 +105,11 @@ body: nod 1 from "Prime" -0.05 to "Prime" +0.5, rise 0.15, fall 0.25
 idle: roll 1 shifts 73 1.0 1.8
 
 ## 4c: andy, line 7, lands on "Fine"
-row: 7 "Fine! Continue." | exasperated, then sulky | arms flung up on "Fine!", then folds them and leans back
+row: 7 "Fine! Continue." | exasperated, then sulky; eyes and head go over to Pat (note 7: Pat just sided with Milburn), back to the lens as he sulks | arms flung up on "Fine!", then folds them and leans back
 stance: seated
 face: furious | exasperated from "Fine" -0.1 | sulky from "Continue" +0.3
+keys look: 0 at 0 | 0.9 at "Fine" -0.35 | 0.9 at "Continue" +0.5 | 0.2 at "Continue" +0.9
+keys head_yaw: 0 at 0 | 30 at "Fine" -0.3 | 30 at "Continue" +0.45 | 0 at "Continue" +0.85
 both: fists from 0 to "Fine" -0.45 | flung from "Fine" -0.2 to "Fine" +0.35 | fold at "Continue" +0.2
 body: lean back 1 from "Continue" -0.1 over 0.6
 idle: roll 1.5 shifts 74 0.8 1.4
@@ -165,11 +167,12 @@ body: nod 0.8 from "Blood" -0.05 to "Blood" +0.5, rise 0.15, fall 0.25
 idle: roll 1.2 shifts 56 0.9 1.6
 
 ## 7e: andy, line 14, lands on gape
-row: (silent) | outrage: mouth hanging open, eyes wide | frozen mid-lean
+row: (silent) | outrage, visibly cross (note 8): brows hard down, eyes narrowed, mouth open; chin dropped into a glare | frozen mid-lean
 stance: seated
 face: rage | gape from gape
 both: plead from 0 to end
 body: lean in 1 from 0 over 0.1
+body: nod 1.2 from gape over 0.35
 
 ## 7e: pat, line 14, lands on "like this one"
 row: 14 "I think the backbenchers will like this one, sir." | patient, a small approving smile; eyes on Andy | steepled; a small nod

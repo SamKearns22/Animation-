@@ -327,7 +327,7 @@ def _scr(f, psi, v):
     return f.cx + float(X) * TH.H, f.top + v * TH.H
 
 
-def _turned_long(p, f, colour, length=1.85):
+def _turned_long(p, f, colour, length=1.85, wavy=True):
     """His curls from the side and behind: hanging from the back of the skull, over the ear and the nape, down past
     the shoulders (v 1.9); from three-quarter front a strip also shows past the far cheek."""
     H = TH.H
@@ -337,7 +337,8 @@ def _turned_long(p, f, colour, length=1.85):
     far = {round(v, 2): x for x, y, v, part in sil if part == 'far'}
     vs = sorted(near)
     top_v = vs[0]
-    wv = lambda pts, sd: waves(pts, 11, 80, out=-1.0, seed=sd, step=5)
+    wv = (lambda pts, sd: waves(pts, 11, 80, out=-1.0, seed=sd, step=5)) if wavy else \
+        (lambda pts, sd: waves(pts, 2.5, 220, out=-1.0, seed=sd, step=5))   # straight hair (18 Nov): as the front hangs
     # a full mass of curls, not a narrow band (hunt 1, 12 Nov: from the side it read as a plait)
     back = [(near[v] - H * (0.06 + 0.3 * max(0.0, v - top_v)), f.top + v * H) for v in vs if v <= 0.75]
     bx = back[-1][0]

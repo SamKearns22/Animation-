@@ -157,6 +157,13 @@ def picture_faults(film, name, recs, fps, new_template=False):
     for (who, view), t in sorted(heads_missing.items()):   # Job I faces: built only when a shot needs it
         problems.append(f'{t:6.2f} s: {who} is drawn turned ({view}) with the old generic head: their front design is '
                         'measured, so give them a turned head (turnhead.register, as the Ad-Vanced Notice cast does)')
+    kit_turned = {}                                   # proposal three-quarter-people (18 Nov): one source, enforced:
+    for key, view in heads_seen:                      # every face-card part a kit person has shows in each turned view
+        if key.startswith('kit:'):
+            kit_turned.setdefault(key.split(':')[1], set()).add(view)
+    if kit_turned and getattr(film, 'CAST', None):
+        import people_turned as PT
+        problems += PT.lost_parts(film.CAST, kit_turned)
     own = {n for n, w, house, _ in looks if not house}   # proposal 5 (N9): a head keeps its design through a turn
     for (who, view), t in sorted(generic.items()):
         if who in own and view != 'back' and not any(w == who for w, _ in heads_missing):

@@ -68,3 +68,16 @@
 - **Open rule requests:** none.
 - **For Claude:** milburn.py: REVERSE/ACROSS shot lists, reverse() (table strips split at SPLIT), arming()/field_level_shot() (YAW3 40), forest_shot not yet written (picture() calls it for shot '6'); milburn_sets: LEVEL_CAM, field_level; milburn_props: SHAPES, in_hands, plinth (tag unused); facehouse bald `dome_wide`. Moves: table blocks in story/milburn-moves.txt (places steeple, fold, flung, fists, plead, jab). Kittests failing before this film (named): facehouse_whole_head, round_page. Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
 
+
+
+# chat 7 handover (archived chat 9, 18 Nov)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** 41 (every new pose from the views it is seen: the three-quarter ones), 89 (ONE critique pack for scenes 3, 4, 6, 7), 30 (note 6 is a repeat: chat 8's fix must show in every shot).
+- **Done (chat 7):** scene 6 built (milburn_forest.py: flat layers at real depths slide with the camera; the four walk right, planted feet locked to the ground (measured 0 px slide); gunfire flashes and tracers, the flame jet over their ducked heads, two morning stars); rough clip sent; sets stage closed (16.4% vs 3.72%; Sam overruled stops until 09:00); chat 8's note-6 branch merged.
+- **Spent:** film ~19.2% (ledger); chat 7 ~1.5%.
+- **Next:** chat 9, Opus HIGH (new kit): (1) the three-quarter kit through `propose.py` (Sam's Y to the top pick in advance, Decisions 23:07), build it, remodel the cast, small clips of the poses moving in scenes 4 and 6; (2) notes 5, 7, 8, 9, 10, 11 (all "the 1 am run"; 9 changes scene 6's acting: the waif flails the grenade, all dodge and fire back in character), check note 6 in shots 3 and 6; (3) the critique pack (draft story/milburn-crit2.json; drop the half-made r2-p1); (4) open the Sonnet chat for animatic 1 updated (finish.py, Hook Text, sign-off, stand-in voices, no sound effects).
+- **Needs Sam:** nothing until 09:00; every Y/N goes in ONE numbered list at the end of the run (his 00:05 words). His recordings and sound effects for animatic 2.
+- **Read:** job pack Build; this file's notes 5-11, acting rows 8-9, Decisions (the two Sam entries of 17-18 Nov night); `guides/figure-rig.md` 5c for the three-quarter views.
+- **Open rule requests:** none.
+- **For Claude:** milburn.py: forest_pose/forest_shot/walked (scene 6; FOREST6 at 0.75 m spacing, not the plan's 1.4: the last one fell off the frame), YAW3 40 snaps to the kit's 45 view (views.snap), REVERSE/ACROSS, reverse(), arming(); milburn_forest.py MAP (CAM, cam_x, V_EFF, items, behind, in_front, gunfire, flame, stars, muzzle). Kittests failing before this film: facehouse_whole_head, round_page. Branches named, not merged: claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+
