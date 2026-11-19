@@ -611,25 +611,26 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.0,
+   "cost": 1.25,
    "src": "estimate",
    "sid": "session_01J1JB7Z7mD4vxSGH3AKQ5Qv",
-   "steps": 61,
-   "hist_k": 214,
+   "steps": 79,
+   "hist_k": 232,
    "kinds": {
-    "tool search": 13.2,
-    "page.py": 1.0,
-    "other": 85.8
+    "tool search": 13.6,
+    "page.py": 0.8,
+    "renders": 0.3,
+    "other": 85.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 27,
+    "tool search": 35,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
-    "renders": 0,
+    "renders": 1,
     "pictures": 0,
-    "other": 16
+    "other": 19
    },
    "search": {
     "show": 0,
@@ -637,10 +638,10 @@
      "no show": 0
     },
     "other": {
-     "other": 13,
+     "other": 15,
      "shared:stepcost.py": 4,
-     "shared:ledger.py": 2,
-     "film notes": 3,
+     "shared:ledger.py": 6,
+     "film notes": 5,
      "shared:kittests.py": 2,
      "shared:facehouse.py": 1,
      "shared:people_turned.py": 1,
@@ -837,6 +838,62 @@
       "other",
       "",
       "git fetch -q origin claude/create-claude-md-oe8z4g; git rebase -q origin/claude/"
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g; git status -sb | head -2; gi"
+     ],
+     [
+      47,
+      "other",
+      "shared:ledger.py",
+      "guides/job-packs.md source/ledger.py notes/archive",
+      "Final and posting|end-of-film|film review|archive"
+     ],
+     [
+      48,
+      "other",
+      "shared:ledger.py",
+      "guides/job-packs.md source/ledger.py notes/archive",
+      "complete|film done|end of film|review"
+     ],
+     [
+      49,
+      "other",
+      "shared:ledger.py",
+      "notes/archive notes/milburn.md story/status.md source/ledger.py",
+      "open rule requests"
+     ],
+     [
+      50,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/ledger/milburn.json",
+      "'note'\\|\\"
+     ],
+     [
+      51,
+      "other",
+      "film notes",
+      "notes/milburn.md notes/archive/milburn.md story/status.md",
+      "Milburn: posted 19 Nov, final cost 22%% of a week (estimate 24%%, aim 15%%). Not"
+     ],
+     [
+      52,
+      "other",
+      "film notes",
+      "notes/milburn.md",
+      "archive/milburn.md|notes/milburn.md|drafts/milburn"
+     ],
+     [
+      55,
+      "other",
+      "other",
+      "",
+      "git status --short | head -4; git checkout -q -B claude/milburn-posted && git ad"
      ]
     ]
    }
