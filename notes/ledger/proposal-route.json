@@ -1106,6 +1106,149 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-19",
+   "chat": "87a9ac49",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.16,
+   "src": "estimate",
+   "sid": "session_01J1JB7XQCcHnzbB7r62524n",
+   "steps": 16,
+   "hist_k": 102,
+   "kinds": {
+    "tool search": 23.6,
+    "other": 76.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 14,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:branches.py": 1,
+     "other": 2,
+     "film notes": 9,
+     "shared:handover.py": 1,
+     "shared:blessed.py": 1
+    },
+    "ticked": 1,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:branches.py",
+      "story/status.md source/branches.py",
+      "git branch --show-current && git status --short | head && cat story/status.md 2>"
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "",
+      "17:01"
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/ledger/sam/h3akq5qv.md notes/proposals/unrouted.md",
+      "17:01"
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/ledger/sam/h3akq5qv.md notes/ledger/sam/7r62524n.md notes/next-jobs.md",
+      "job 1\\|job 2\\|job 3\\|job 4"
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/*.md",
+      "17:01\\|characters/best\\|finder\\|measuring\\|real cost"
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposals notes/archive notes/*.md notes/proposal-route.md",
+      "Where things stand"
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md",
+      "sed -n 1,80p notes/proposals/milburn-review.md"
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md notes/proposals/three-quarter-people notes/led",
+      "17:01\\|1 characters\\|best tools"
+     ],
+     [
+      10,
+      "other",
+      "shared:handover.py",
+      "source/handover.py story/status.md notes/*.md",
+      "halo\\|no-no"
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin && git rev-list --left-right --count HEAD...origin/claude/cr"
+     ],
+     [
+      12,
+      "other",
+      "film notes",
+      "story/follow-lines.md",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>"
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "story/follow-lines.md notes/ledger/halo-no-no.json notes/ledger/halo-no-no.md",
+      "python3 - <<'E' p='story/follow-lines.md' s=open(p).read() s=s.replace(\"<<<<<<< "
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/ledger/milburn.json notes/ledger/milburn.md",
+      "git checkout --ours notes/ledger/milburn.json notes/ledger/milburn.md && git add"
+     ],
+     [
+      15,
+      "other",
+      "shared:blessed.py",
+      "source/blessed.py story/status.md",
+      "printf '%s\\n' \"Blessed WIP branch (claude/blessed-c2-mics-wip, source/blessed.py"
+     ]
+    ]
+   }
   }
  ],
  "checks": {}
