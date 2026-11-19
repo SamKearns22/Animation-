@@ -52,3 +52,6 @@ Is the 1.1x rule applying? Were our last two films built at 1x1 speed as was pro
 ### 2026-11-19T11:13:18
 Yes make sure it did that
 
+### 2026-11-19T17:36:46
+Fix the simple communication tool now as I am struggling to follow all the other chats
+
