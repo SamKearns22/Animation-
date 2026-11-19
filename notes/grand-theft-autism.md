@@ -46,8 +46,8 @@
 - Done: the 3.5 s opening, `source/gta_opener.py` (MAP at the top). Renders in about 1 minute.
 - Next (00:30 UK, 20 Nov): Opus, high effort, a fresh chat: the Plan stage: game references (search order in
   job-packs Plan, but game-only per Sam), staging of every shot, acting list, cast and car as NEW rows; the estimate
-  waits for Sam's word that the screenplay is final (ask it in the plan's one question message).
-- Needs Sam: word that the screenplay is final (for the estimate).
+  is ALLOWED now (Sam, 19 Nov: "You can do the budget estimate"): make it from the ledgers in the Plan stage.
+- Needs Sam: nothing before the plan; the open questions (1-4, 6) only when a stage needs them.
 - Read: guides/job-packs.md, Plan.
 - Open rule requests: none.
 - Branch claude/blessed-c2-mics-wip (source/blessed.py, unfinished Blessed work) stays off the main line, as named in
