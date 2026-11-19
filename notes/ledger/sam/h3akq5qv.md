@@ -60,3 +60,8 @@ Y.
 
 But also, this could impact far more than just people, couldn't it? It could be a problem on every level of our production process
 
+### 2026-11-19T09:09:52
+Y.
+
+Frankly, if weaker tools, processes and checks that we have long disregarded are sitting throughout our tools, confusing our system and creating waste, I'm not sure why they shouldn't be found and deleted so that we only have our best and most effective work all the time. Everything must be working towards statement one at all times.
+
