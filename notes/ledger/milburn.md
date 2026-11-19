@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 24.0% of a week; spent 21.99% (-2.01); 17 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 24.0% of a week; spent 32.85% (+8.85); 17 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 21.99% of the 7.03% planned so far; at this rate the film lands at 100.4%.**
+**Forecast: Spent 32.85% of the 7.03% planned so far; at this rate the film lands at 100.4%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -24,23 +24,23 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 
 | date | chat | source | model | stage | round | cost % | $ | notes | repeated |
 |---|---|---|---|---|---|---|---|---|---|
-| 2026-11-17 | jtQfGmaz | app | opus | Milburn screenplay |  | 1.14 | 4.155 | 0 | 0 |
-| 2026-11-17 | afreiGz7 | app | opus | Milburn chat 2 |  | 1.82 | 6.646 | 0 | 0 |
-| 2026-11-17 | TahT7kqM | app | opus | Milburn chat 3 (moves) |  | 2.12 | 7.755 | 0 | 0 |
-| 2026-11-17 | GLnhHAxi | app | opus | Milburn chat 4 |  | 0.86 | 3.134 | 0 | 0 |
-| 2026-11-17 | M4njLiNi | app | opus | Milburn chat 5 |  | 2.42 | 8.846 | 0 | 0 |
-| 2026-11-17 | at3CUdFk | app | opus | Milburn chat 6 |  | 1.9 | 6.948 | 0 | 0 |
-| 2026-11-17 | vQMQm3zn | app | opus | Milburn chat 7 |  | 1.6 | 5.858 | 0 | 0 |
-| 2026-11-18 | N2F9oPoi | app | opus | Milburn chat 9 |  | 2.5 | 9.156 | 0 | 0 |
-| 2026-11-18 | vEYgPVZD | app | opus | Milburn chat 10 |  | 2.17 | 7.938 | 0 | 0 |
-| 2026-11-18 | NHfhpT4Y | app | opus | Milburn animatic update (chat 11) |  | 1.82 | 6.679 | 0 | 0 |
-| 2026-11-18 | 1oCmSw6q | app | sonnet | Milburn chat 12 |  | 0.32 | 1.174 | 0 | 0 |
-| 2026-11-18 | agnAgzD2 | app | sonnet | Milburn chat 13 |  | 1.5 | 5.508 | 0 | 0 |
-| 2026-11-18 | xaMMfsRE | app | sonnet | Milburn chat 14 |  | 0.09 | 0.313 | 0 | 0 |
-| 2026-11-18 | f2TpDUJ5 | app | sonnet | Milburn chat 15 |  | 0.35 | 1.284 | 0 | 0 |
-| 2026-11-18 | 2WfSNa9d | app | sonnet | Milburn chat 16 |  | 0.08 | 0.276 | 0 | 0 |
-| 2026-11-18 | pb2WfzRA | app | sonnet | Milburn chat 17 |  | 0.03 | 0.118 | 0 | 0 |
-| 2026-11-18 | JQKei1yW | app | sonnet | Milburn chat 18 |  | 1.27 | 4.654 | 0 | 0 |
+| 2026-11-17 | jtQfGmaz | app | opus | Milburn screenplay |  | 1.7 | 4.155 | 0 | 0 |
+| 2026-11-17 | afreiGz7 | app | opus | Milburn chat 2 |  | 2.71 | 6.646 | 0 | 0 |
+| 2026-11-17 | TahT7kqM | app | opus | Milburn chat 3 (moves) |  | 3.17 | 7.755 | 0 | 0 |
+| 2026-11-17 | GLnhHAxi | app | opus | Milburn chat 4 |  | 1.28 | 3.134 | 0 | 0 |
+| 2026-11-17 | M4njLiNi | app | opus | Milburn chat 5 |  | 3.61 | 8.846 | 0 | 0 |
+| 2026-11-17 | at3CUdFk | app | opus | Milburn chat 6 |  | 2.84 | 6.948 | 0 | 0 |
+| 2026-11-17 | vQMQm3zn | app | opus | Milburn chat 7 |  | 2.39 | 5.858 | 0 | 0 |
+| 2026-11-18 | N2F9oPoi | app | opus | Milburn chat 9 |  | 3.74 | 9.156 | 0 | 0 |
+| 2026-11-18 | vEYgPVZD | app | opus | Milburn chat 10 |  | 3.24 | 7.938 | 0 | 0 |
+| 2026-11-18 | NHfhpT4Y | app | opus | Milburn animatic update (chat 11) |  | 2.73 | 6.679 | 0 | 0 |
+| 2026-11-18 | 1oCmSw6q | app | sonnet | Milburn chat 12 |  | 0.48 | 1.174 | 0 | 0 |
+| 2026-11-18 | agnAgzD2 | app | sonnet | Milburn chat 13 |  | 2.25 | 5.508 | 0 | 0 |
+| 2026-11-18 | xaMMfsRE | app | sonnet | Milburn chat 14 |  | 0.13 | 0.313 | 0 | 0 |
+| 2026-11-18 | f2TpDUJ5 | app | sonnet | Milburn chat 15 |  | 0.52 | 1.284 | 0 | 0 |
+| 2026-11-18 | 2WfSNa9d | app | sonnet | Milburn chat 16 |  | 0.11 | 0.276 | 0 | 0 |
+| 2026-11-18 | pb2WfzRA | app | sonnet | Milburn chat 17 |  | 0.05 | 0.118 | 0 | 0 |
+| 2026-11-18 | JQKei1yW | app | sonnet | Milburn chat 18 |  | 1.9 | 4.654 | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-17 jtQfGmaz (Milburn screenplay): 68 steps, history 203k at the end; other 65.1%, tool search 25.9%, renders 4.1%, pictures 3.6%, film-file search 1.3%
