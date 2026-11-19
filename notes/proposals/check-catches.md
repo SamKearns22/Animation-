@@ -1,6 +1,6 @@
 # Proposal: Record what every check catches, so retiring a check is decided on evidence
 
-Status: open
+Status: adopted (2026-11-19)
 
 ## Problem
 Sam's rule is to remove a step only if it caught nothing in three films, with his Y. That cannot be followed: there

@@ -11,3 +11,4 @@
 - Branch claude/blessed-c2-mics-wip (source/blessed.py only): named, not merged; left for the Blessed film's chat to decide.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 32.85% of 15%; forecast 100.4% (2026-11-19)
+- 19 Nov: Sam chose aim-check option 1 (fresh reviewer, after a study). Step 1 only: the study (about 1% of a week, changes nothing: count, over the last two films, how often a cheaper same-quality way was already in the kit and missed, and what it cost). Step 2, the reviewer itself, comes back to Sam as one yes with the learned numbers. Nothing written to CLAUDE.md yet.

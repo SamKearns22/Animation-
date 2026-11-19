@@ -1,0 +1,314 @@
+{
+ "film": "real-cost",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-19",
+   "chat": "61535545",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.93,
+   "src": "estimate",
+   "sid": "session_01J1JB7YdycZUP5duJ5MaEVZ",
+   "steps": 38,
+   "hist_k": 154,
+   "kinds": {
+    "tool search": 31.7,
+    "renders": 2.7,
+    "other": 65.6
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 32,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:branches.py": 1,
+     "film notes": 10,
+     "guides": 6,
+     "other": 7,
+     "shared:milburn_forest.py": 2,
+     "shared:milburn.py": 1,
+     "shared:ad_vanced_notice_sets.py": 1,
+     "shared:ledger.py": 1,
+     "shared:milburn_props.py": 1,
+     "shared:propose.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:branches.py",
+      "source/branches.py",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/proposals/aim-check.md notes/real-cost.md notes/ledger/ notes/proposals/",
+      "git checkout -b claude/aim-check-study-oe8z4g && git push -u origin claude/aim-c",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/real-cost.md notes/proposals/aim-check notes/ledger/milburn.md notes/ledge",
+      "cat notes/real-cost.md; ls notes/proposals/aim-check; wc -w notes/ledger/milburn",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md",
+      "cat notes/proposals/milburn-review.md | head -120",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/proposals/search-first.md notes/archive",
+      "milburn|blessed",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/archive/milburn*.md notes/archive/blessed*.md notes/elder-swindon.md notes",
+      "build new|new:|NEW |reuse|catalogue|re-stag|rebuil|restag|estimate|kit has|alrea",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "^#",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "git log --format=\"%h %ad %s\" --date=iso -- guides/kit-catalogue.md | head -40",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "timeout 300 git fetch --deepen=3000 origin claude/create-claude-md-oe8z4g 2>&1 |",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "timeout 300 git fetch --deepen=3000 origin claude/create-claude-md-oe8z4g 2>&1 |",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "",
+      "pgrep -a git | head; ",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "rm -f .git/shallow.lock && timeout 400 git fetch --deepen=3000 origin claude/cre",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "git log --format=\"%h %ad %s\" --date=iso origin/claude/create-claude-md-oe8z4g --",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "lift|tree|wind |layer|muzzle|flash|flame|gun|crossbow|seated|three-quarter|firep",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "source/milburn*.py",
+      "milburn|blessed",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "source/milburn*.py source/blessed*.py source/places*.py",
+      "def .*(flash|flame|fire|muzzle|seat|chair|coaster|clock|candle|fireplace|portrai",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:milburn_forest.py",
+      "source/milburn_forest.py source/prepper_fx.py source/patriots3_fx.py source/*fx*",
+      "def (lumpy_flash|muzzle|flash|fireball|flame)",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "sed -n 30p /tmp/claude-0/-home-user-Animation-/61535545-44bf-56da-91a2-15fccd536",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py source/places*.py",
+      "sitting|seated|seat",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:ad_vanced_notice_sets.py",
+      "source/ad_vanced_notice_sets.py",
+      "^def ",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "notes/archive/blessed*.md",
+      "KNOWN|NEW",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "notes/archive/blessed-handovers.md notes/archive/blessed-notes-animatics-1-2.md ",
+      "rebuil|re-buil|again|from scratch|already (in|had)|could have|kit had|reuse",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "source/blessed*.py notes/archive/blessed-handovers.md",
+      "sitting kit",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "film notes",
+      "notes/cost-diagnosis.md notes/budget-job.md notes/cost-fixes.md",
+      "blessed",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "film notes",
+      "notes/cost-diagnosis.md",
+      "sed -n 36,60p notes/cost-diagnosis.md; sed -n 78,92p notes/cost-diagnosis.md",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:milburn_forest.py",
+      "source/milburn_forest.py",
+      "sed -n 39p /tmp/claude-0/-home-user-Animation-/61535545-44bf-56da-91a2-15fccd536",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/ source/ledger.py",
+      "week_usd|WEEK",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:milburn_props.py",
+      "source/milburn_props.py source/milburn.py",
+      "lift",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/_template.md notes/proposals/aim-check/judge n",
+      "sed -n 1,80p source/propose.py | cut -c1-200; cat notes/proposals/_template.md 2",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/aim-check/study.md source/propose.py notes/proposals/aim-check-r",
+      "sed -i 's/52151252/52151262/' notes/proposals/aim-check/study.md && python3 sour",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "film notes",
+      "notes/real-cost.md notes/proposals/aim-check/study.md notes/proposals/aim-check-",
+      "python3 - <<'EOF' p='notes/real-cost.md' s=open(p).read() s+=\"\"\"- 19 Nov (aim-ch",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "guides",
+      "guides/proposal-route/helper.md",
+      "sed -n 1,40p guides/proposal-route/helper.md | cut -c1-200 | head -20",
+      ""
+     ]
+    ]
+   }
+  }
+ ],
+ "checks": {}
+}
