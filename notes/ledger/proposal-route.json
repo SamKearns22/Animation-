@@ -2480,6 +2480,84 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-19",
+   "chat": "7d6b30b4",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.07,
+   "src": "estimate",
+   "sid": "session_01J1JB7Wo7EmuVeuySLqg6aH",
+   "steps": 6,
+   "hist_k": 88,
+   "kinds": {
+    "tool search": 14.5,
+    "other": 85.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 2,
+     "shared:propose.py": 1,
+     "film notes": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status -sb | head -5; git fetch origin claude/create-claude-md-oe8z4g 2>&1 |"
+     ],
+     [
+      1,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "git checkout -B claude/create-claude-md-oe8z4g 2>&1|tail -1; for n in cost-other"
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposal-route.md story/status.md",
+      "Needs Sam"
+     ],
+     [
+      4,
+      "other",
+      "shared:handover.py",
+      "notes/proposal-route.md story/status.md source/handover.py",
+      "python3 - <<'E' p='notes/proposal-route.md' s=open(p).read() s=s.replace(\"- **Ne"
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposal-route.md story/status.md",
+      "python3 - <<'E' p='notes/proposal-route.md' s=open(p).read() s=s.replace(\"claude"
+     ]
+    ]
+   }
   }
  ],
  "checks": {}
