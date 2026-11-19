@@ -12,3 +12,4 @@
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 32.85% of 15%; forecast 100.4% (2026-11-19)
 - 19 Nov: Sam chose aim-check option 1 (fresh reviewer, after a study). Step 1 only: the study (about 1% of a week, changes nothing: count, over the last two films, how often a cheaper same-quality way was already in the kit and missed, and what it cost). Step 2, the reviewer itself, comes back to Sam as one yes with the learned numbers. Nothing written to CLAUDE.md yet.
+- 19 Nov (aim-check study chat): study done (notes/proposals/aim-check/study.md). Missed same-quality kit reuse: 2 clear + 1 partial, all Milburn, about 0.1-0.2% of a week over both films; 0 in Blessed; none challenged; 2 of 3 mid-stage. The money went on rework, re-stages, long chats and scope. Ledger ratio now about 1.00 at 366 USD a week (the 0.68 was the old week price). Follow-up sent through the proposal route: notes/proposals/aim-check-reviewer.md.
