@@ -83,6 +83,8 @@ def install_probes(film):
     handcheck.install()                         # rule 41: every views.py person drawn is probed for hands
     waivers.install()                           # rule 13: the house look (who each front head is drawn on)
     turnhead.install(views)                     # turned heads: who keeps their own design round a turn
+    if 'people' in set(getattr(film, 'HAS', KINDS)):   # rule 38 (C1, 19 Nov): the DRAWN angle on every film, rooms
+        posecheck.set_marks(film)               # plan or not, in pre-flight's sample and the animatic's drawing pass
 
 
 def probe(t, draw):
@@ -121,6 +123,43 @@ def probe(t, draw):
 
 def _check_frame(i):
     return probe(i / _FPS, _FILM.frame_image)[1]
+
+
+def _turn_frame(t):
+    import posecheck
+    fs = [f for f in probe(t, _FILM.frame_image)[1][5] if f['kind'] == 'turned from the lens']
+    return fs, sorted(posecheck.HIT)
+
+
+TURN_SAMPLES = (0.15, 0.5, 0.85)    # where in each marked shot the quick pass draws a frame
+
+
+def turn_sample(film):
+    """Rule 38 (C1, front-on focus, 19 Nov): before the animatic, three frames of every shot with people marks are
+    drawn and each marked person's DRAWN face and body angle read; anyone past 25 degrees off the lens without a
+    THREE_QUARTER_OK reason is a fault, so the animatic is refused. The animatic's drawing pass checks every frame.
+    A mark never matched to anyone drawn is printed (could not test), not refused."""
+    import posecheck
+    times = [s[1] + f * (s[2] - s[1]) for s in getattr(film, 'SHOTS', []) if posecheck.MARKS.get(str(s[0]))
+             for f in TURN_SAMPLES]
+    if not times:
+        return []
+    from multiprocessing import Pool
+    with Pool(min(len(times), os.cpu_count())) as pool:
+        got = pool.map(_turn_frame, times, chunksize=1)
+    rows = {}
+    for t, (fs, hits) in zip(times, got):
+        posecheck.HIT.update(tuple(h) for h in hits)
+        for f in fs:
+            rows.setdefault(f['text'].split(' is seen')[0], []).append((t, f['text']))
+    out = [f'rule 38 (drawn angle): {v[0][0]:.2f} s: {v[0][1]}' + (f' (and {len(v) - 1} more sampled frame(s))'
+                                                                   if len(v) > 1 else '') for v in rows.values()]
+    print(f'drawn angle (rule 38): {len(times)} frames sampled, ' + ('clean' if not out else f'{len(out)} turned'))
+    miss = posecheck.unmatched()
+    if miss:
+        print('drawn angle: COULD NOT TEST (no one drawn by that name in the shot; rule 19): '
+              + ', '.join(f'{s} {lb}' for s, lb in miss))
+    return out
 
 
 def picture_faults(film, name, recs, fps, new_template=False):
@@ -406,8 +445,6 @@ def main():
             print('WARNING:', x, '(' + posecheck.BEFORE[name.replace('_', '-')] + ')')
     else:
         stop += pf
-    if 'people' in has and 'rooms' not in has and posecheck.shot_marks(film):
-        posecheck.set_marks(film)               # no rooms plan: SHOT_MARKS checked on the drawing pass (rule 38)
     warn = gate_warnings(film, name, has)      # Job J: rules 8, 61, 74
     path = notes_path(film, name)
     new_template = os.path.exists(path) and 'KNOWN (where) or NEW' in open(path).read()   # started from 10 Nov's template
@@ -501,6 +538,8 @@ def main():
     pictures = audit or any(a in sys.argv for a in ('--pictures', '--full', '--sheet'))
     global _FILM, _FPS
     _FILM, _FPS = film, fps
+    if people and not pictures:                 # rule 38 (C1): the drawn angle, before any animatic is drawn
+        problems += turn_sample(film)
     n_frames = int(end * fps)
     heads = []
     if pictures:

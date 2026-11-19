@@ -150,7 +150,10 @@ def take(t=None):
 MARKS = {}           # film without a rooms plan: {shot: [names]} (set by preflight via set_marks)
 SHOT_OF = [None]     # t -> shot name
 OK_TURN = {}         # (shot, label) -> reason (the film's THREE_QUARTER_OK)
-FACING = []          # (who, yaw) drawn this frame
+FACING = []          # (who, face yaw, body yaw) drawn this frame
+ALIAS = {}           # drawn name (lower case) -> the film's CAST key
+HIT = set()          # (shot, label) matched to someone drawn (unmatched() lists the rest)
+TURN_MAX = 25        # rule 38: degrees off the lens before a face counts as turned
 LOOK_W = 390         # an iPhone's width in points: what Sam sees
 LOOKED = 'Pose looked at:'
 BEFORE = {'protest-tiers': 'in its final render when this was switched on (16 Nov): warned, not refused'}
@@ -158,8 +161,15 @@ UNSEEN = 'not yet looked at by eye'
 
 
 def set_marks(film):
-    """A film with people and no rooms plan: its SHOT_MARKS are checked here on the drawing pass (rule 38)."""
+    """Every film with people: its SHOT_MARKS are checked here on the drawing pass (rule 38). Until 19 Nov only films
+    with no rooms plan were (C1, front-on focus: Milburn's rooms plan let YAW3 = 40 through in scenes 3 and 6)."""
     MARKS.clear()
+    HIT.clear()
+    ALIAS.clear()                    # a mark may be the film's CAST key ('rangy') while the drawn name is 'The thin lad'
+    cast = getattr(film, 'CAST', None)
+    if isinstance(cast, dict):
+        ALIAS.update({str(sp['name']).lower(): str(k).lower() for k, sp in cast.items()
+                      if isinstance(sp, dict) and sp.get('name')})
     MARKS.update({str(k): [str(x).lower() for x in v] for k, v in (shot_marks(film) or {}).items()})
     shots = list(getattr(film, 'SHOTS', []))
     SHOT_OF[0] = lambda t: next((str(s[0]) for s in shots if s[1] <= t < s[2]), None)
@@ -170,15 +180,26 @@ def set_marks(film):
 def _facing_faults(t):
     shot = SHOT_OF[0](t) if SHOT_OF[0] else None
     out = []
-    for who, yaw in FACING:
+    for who, face, *body in FACING:
         for lb in MARKS.get(shot, ()):
-            if lb in who.lower() and (shot, lb) not in OK_TURN:
-                off = abs(((float(yaw) + 180.0) % 360.0) - 180.0)
-                if off > 25:
+            if lb in who.lower() or ALIAS.get(who.lower()) == lb:
+                HIT.add((shot, lb))
+                if (shot, lb) in OK_TURN:
+                    continue
+                offs = [(abs(((float(a) + 180.0) % 360.0) - 180.0), a, part)
+                        for a, part in ((face, 'face'), (body[0] if body else face, 'body'))]
+                off, yaw, part = max(offs)
+                if off > TURN_MAX:
                     out.append(dict(who=who, side='both', kind='turned from the lens', rule=38,
-                                    text=f'shot {shot}: {who} is seen {view_label(yaw)} ({off:.0f} degrees off the lens): '
-                                         'turn them, or list it in THREE_QUARTER_OK with the reason'))
+                                    text=f'shot {shot}: {who.split(" (")[0]} is seen {view_label(yaw)} ({part} {off:.0f} degrees off '
+                                         'the lens): draw them front on and show where they look with focus (focus, '
+                                         'not turn), or list it in THREE_QUARTER_OK with the reason (a walk, exit or back)'))
     return out
+
+
+def unmatched():
+    """SHOT_MARKS labels never matched to anyone drawn in their shot (the drawing-pass check could not test them)."""
+    return sorted((s, lb) for s, lbs in MARKS.items() for lb in lbs if (s, lb) not in HIT)
 
 
 def shot_marks(film):
@@ -346,8 +367,8 @@ def install():
     def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None):
         if joints is not None and not V.PROBE:
             seen(sp, yaw, joints)
-        if MARKS and not V.PROBE:
-            FACING.append(((sp or {}).get('name', 'someone'), yaw))
+        if MARKS and not V.PROBE:             # C1 (front-on focus, 19 Nov): the face's drawn angle, head turn included
+            FACING.append(((sp or {}).get('name', 'someone'), yaw if head_yaw is None else head_yaw, yaw))
         return real_person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, tilt=tilt)
     person.__dict__.update(real_person.__dict__)
     _swap(real_person, person)
