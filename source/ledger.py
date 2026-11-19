@@ -581,7 +581,7 @@ def app_import(path=APP):
             row.update(date=r[2][:10], chat=r[1][-8:], sid=sid, src='app', stage=r[3][:60],
                        model=r[9], cost=round(float(r[4]) / costwatch.WEEK_USD * 100, 2), usd=float(r[4]))
             if sid in meas and not row.get('steps'):
-                row.update({k: meas[sid][k] for k in ('steps', 'hist_k', 'kinds', 'calls') if k in meas[sid]})
+                row.update({k: meas[sid][k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'search') if k in meas[sid]})
             if sid not in have:
                 d['chats'].append(row)
         d['chats'].sort(key=lambda c: c['date'])

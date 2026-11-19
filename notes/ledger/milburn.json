@@ -3,16 +3,17 @@
  "estimate": 24.0,
  "chats": [
   {
-   "date": "2026-11-17",
-   "chat": "a58b9d21",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 1.62,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-17",
+   "chat": "jtQfGmaz",
    "sid": "session_01J1JB7WBDESh1YRjtQfGmaz",
+   "src": "app",
+   "stage": "Milburn screenplay",
+   "model": "opus",
+   "cost": 1.7,
+   "usd": 4.155,
    "steps": 68,
    "hist_k": 203,
    "kinds": {
@@ -60,16 +61,17 @@
    }
   },
   {
-   "date": "2026-11-17",
-   "chat": "a6692140",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 2.8,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-17",
+   "chat": "afreiGz7",
    "sid": "session_01J1JB7WXD1TDYTQafreiGz7",
+   "src": "app",
+   "stage": "Milburn chat 2",
+   "model": "opus",
+   "cost": 2.71,
+   "usd": 6.646,
    "steps": 92,
    "hist_k": 256,
    "kinds": {
@@ -117,16 +119,17 @@
    }
   },
   {
-   "date": "2026-11-17",
-   "chat": "866dad74",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 3.08,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-17",
+   "chat": "TahT7kqM",
    "sid": "session_01J1JB7WLTrNZ2uiTahT7kqM",
+   "src": "app",
+   "stage": "Milburn chat 3 (moves)",
+   "model": "opus",
+   "cost": 3.17,
+   "usd": 7.755,
    "steps": 130,
    "hist_k": 236,
    "kinds": {
@@ -180,16 +183,17 @@
    }
   },
   {
-   "date": "2026-11-17",
-   "chat": "e33e3e79",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 1.2,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-17",
+   "chat": "GLnhHAxi",
    "sid": "session_01J1JB7YBXPnoLsQGLnhHAxi",
+   "src": "app",
+   "stage": "Milburn chat 4",
+   "model": "opus",
+   "cost": 1.28,
+   "usd": 3.134,
    "steps": 59,
    "hist_k": 166,
    "kinds": {
@@ -231,16 +235,17 @@
    }
   },
   {
-   "date": "2026-11-17",
-   "chat": "10232ef9",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 3.54,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-17",
+   "chat": "M4njLiNi",
    "sid": "session_01J1JB7Ybv6Qrxf8M4njLiNi",
+   "src": "app",
+   "stage": "Milburn chat 5",
+   "model": "opus",
+   "cost": 3.61,
+   "usd": 8.846,
    "steps": 136,
    "hist_k": 299,
    "kinds": {
@@ -288,16 +293,17 @@
    }
   },
   {
-   "date": "2026-11-17",
-   "chat": "3fbce046",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 2.64,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-17",
+   "chat": "at3CUdFk",
    "sid": "session_01J1JB7YTL9grCNvat3CUdFk",
+   "src": "app",
+   "stage": "Milburn chat 6",
+   "model": "opus",
+   "cost": 2.84,
+   "usd": 6.948,
    "steps": 92,
    "hist_k": 261,
    "kinds": {
@@ -344,16 +350,17 @@
    }
   },
   {
-   "date": "2026-11-17",
-   "chat": "4ee174a9",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 2.42,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-17",
+   "chat": "vQMQm3zn",
    "sid": "session_01J1JB7VR2AZvXqJvQMQm3zn",
+   "src": "app",
+   "stage": "Milburn chat 7",
+   "model": "opus",
+   "cost": 2.39,
+   "usd": 5.858,
    "steps": 71,
    "hist_k": 224,
    "kinds": {
@@ -393,118 +400,17 @@
    }
   },
   {
-   "date": "2026-11-17",
-   "chat": "5c55685c",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "sonnet",
-   "cost": 0.28,
-   "src": "estimate",
-   "sid": "session_01GznaATzhErD14VUm51iY4k",
-   "steps": 14,
-   "hist_k": 113,
-   "kinds": {
-    "film-file search": 1.9,
-    "tool search": 10.8,
-    "other": 87.3
-   },
-   "calls": {
-    "film-file search": 1,
-    "tool search": 11,
-    "whole-file .py read": 0,
-    "page.py": 0,
-    "routine": 0,
-    "renders": 0,
-    "pictures": 0,
-    "other": 2
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 1
-    },
-    "other": {
-     "other": 2,
-     "film notes": 7,
-     "shared:preflight.py": 2
-    },
-    "ticked": 0,
-    "edited film code": false
-   }
-  },
-  {
-   "date": "2026-11-17",
-   "chat": "ce8f146c",
-   "stage": "auto",
    "round": null,
-   "notes": 0,
-   "repeats": [],
-   "model": "opus",
-   "cost": 1.98,
-   "src": "estimate",
-   "sid": "session_01GznaARwPjyVgxbyunDVnSs",
-   "steps": 91,
-   "hist_k": 195,
-   "kinds": {
-    "film-file search": 5.6,
-    "tool search": 8.8,
-    "page.py": 0.5,
-    "routine": 1.9,
-    "renders": 0.5,
-    "pictures": 1.8,
-    "other": 81.0
-   },
-   "calls": {
-    "film-file search": 16,
-    "tool search": 34,
-    "whole-file .py read": 0,
-    "page.py": 1,
-    "routine": 9,
-    "renders": 1,
-    "pictures": 4,
-    "other": 25
-   },
-   "search": {
-    "show": 1,
-    "film": {
-     "before show": 1,
-     "miss": 4,
-     "after show": 11
-    },
-    "other": {
-     "other": 7,
-     "shared:handover.py": 1,
-     "film notes": 3,
-     "shared:preflight.py": 7,
-     "guides": 2,
-     "shared:people_parts.py": 1,
-     "shared:ad_vanced_notice_cast.py": 1,
-     "shared:patriots4_cast.py": 2,
-     "shared:mouths.py": 3,
-     "shared:film_engine.py": 1,
-     "shared:plan.py": 2,
-     "shared:blessed.py": 1,
-     "shared:hookcheck.py": 1,
-     "shared:finish.py": 1,
-     "shared:follow_line.py": 1
-    },
-    "ticked": 0,
-    "edited film code": true
-   }
-  },
-  {
    "date": "2026-11-18",
-   "chat": "d2dd63d4",
-   "stage": "auto",
-   "round": null,
-   "notes": 0,
-   "repeats": [],
-   "model": "opus",
-   "cost": 4.02,
-   "src": "estimate",
+   "chat": "N2F9oPoi",
    "sid": "session_01J1JB7ZsAtQ4zBsN2F9oPoi",
+   "src": "app",
+   "stage": "Milburn chat 9",
+   "model": "opus",
+   "cost": 3.74,
+   "usd": 9.156,
    "steps": 98,
    "hist_k": 267,
    "kinds": {
@@ -556,16 +462,17 @@
    }
   },
   {
-   "date": "2026-11-18",
-   "chat": "ba98bbef",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 3.15,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "vEYgPVZD",
    "sid": "session_01J1JB7Z6ES5Rr8KvEYgPVZD",
+   "src": "app",
+   "stage": "Milburn chat 10",
+   "model": "opus",
+   "cost": 3.24,
+   "usd": 7.938,
    "steps": 123,
    "hist_k": 241,
    "kinds": {
@@ -611,16 +518,17 @@
    }
   },
   {
-   "date": "2026-11-18",
-   "chat": "5b682f67",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 2.7,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "NHfhpT4Y",
    "sid": "session_01J1JB7ZcnxMwvpxNHfhpT4Y",
+   "src": "app",
+   "stage": "Milburn animatic update (chat 11)",
+   "model": "opus",
+   "cost": 2.73,
+   "usd": 6.679,
    "steps": 122,
    "hist_k": 244,
    "kinds": {
@@ -662,16 +570,17 @@
    }
   },
   {
-   "date": "2026-11-18",
-   "chat": "b54e8334",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "sonnet",
-   "cost": 0.34,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "1oCmSw6q",
    "sid": "session_01J1JB7ZMGJdhkG11oCmSw6q",
+   "src": "app",
+   "stage": "Milburn chat 12",
+   "model": "sonnet",
+   "cost": 0.48,
+   "usd": 1.174,
    "steps": 40,
    "hist_k": 125,
    "kinds": {
@@ -711,16 +620,17 @@
    }
   },
   {
-   "date": "2026-11-18",
-   "chat": "d34bde53",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
-   "model": "sonnet",
-   "cost": 2.29,
-   "src": "estimate",
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "agnAgzD2",
    "sid": "session_01J1JB7WoHQ8mi9TagnAgzD2",
+   "src": "app",
+   "stage": "Milburn chat 13",
+   "model": "sonnet",
+   "cost": 2.25,
+   "usd": 5.508,
    "steps": 117,
    "hist_k": 244,
    "kinds": {
@@ -764,52 +674,69 @@
    }
   },
   {
-   "date": "2026-11-18",
-   "chat": "a3a53ca2",
-   "stage": "auto",
-   "round": null,
    "notes": 0,
    "repeats": [],
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "xaMMfsRE",
+   "sid": "session_01J1JB7Wi4ciUnrHxaMMfsRE",
+   "src": "app",
+   "stage": "Milburn chat 14",
    "model": "sonnet",
-   "cost": 0.34,
-   "src": "estimate",
-   "sid": "session_01J1JB7ZmTrSU4NvegQyvBnB",
-   "steps": 28,
-   "hist_k": 126,
-   "kinds": {
-    "film-file search": 4.8,
-    "tool search": 10.4,
-    "renders": 2.5,
-    "pictures": 5.2,
-    "other": 77.1
-   },
-   "calls": {
-    "film-file search": 4,
-    "tool search": 14,
-    "whole-file .py read": 0,
-    "page.py": 0,
-    "routine": 0,
-    "renders": 2,
-    "pictures": 4,
-    "other": 4
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 4
-    },
-    "other": {
-     "other": 6,
-     "film notes": 3,
-     "shared:finish.py": 1,
-     "guides": 1,
-     "shared:halo_story.py": 1,
-     "shared:film_engine.py": 1,
-     "shared:hook_text.py": 1
-    },
-    "ticked": 0,
-    "edited film code": false
-   }
+   "cost": 0.13,
+   "usd": 0.313
+  },
+  {
+   "notes": 0,
+   "repeats": [],
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "f2TpDUJ5",
+   "sid": "session_01J1JB7Ymzp6EVeGf2TpDUJ5",
+   "src": "app",
+   "stage": "Milburn chat 15",
+   "model": "sonnet",
+   "cost": 0.52,
+   "usd": 1.284
+  },
+  {
+   "notes": 0,
+   "repeats": [],
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "2WfSNa9d",
+   "sid": "session_01J1JB7ZTkEfVVXd2WfSNa9d",
+   "src": "app",
+   "stage": "Milburn chat 16",
+   "model": "sonnet",
+   "cost": 0.11,
+   "usd": 0.276
+  },
+  {
+   "notes": 0,
+   "repeats": [],
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "pb2WfzRA",
+   "sid": "session_01J1JB7VPFFkGxcFpb2WfzRA",
+   "src": "app",
+   "stage": "Milburn chat 17",
+   "model": "sonnet",
+   "cost": 0.05,
+   "usd": 0.118
+  },
+  {
+   "notes": 0,
+   "repeats": [],
+   "round": null,
+   "date": "2026-11-18",
+   "chat": "JQKei1yW",
+   "sid": "session_01J1JB7WWJhTy43iJQKei1yW",
+   "src": "app",
+   "stage": "Milburn chat 18",
+   "model": "sonnet",
+   "cost": 1.9,
+   "usd": 4.654
   }
  ],
  "checks": {},
@@ -1215,11 +1142,39 @@
    "done": null
   }
  ],
- "budget_stop": 3,
+ "budget_stop": 4,
  "final": {
   "pct": 22.0,
   "date": "2026-11-19",
   "src": "Sam (app)",
   "posted": true
- }
+ },
+ "cost_flagged": [
+  "sets",
+  "props",
+  "build",
+  "forecast"
+ ],
+ "cost_log": [
+  {
+   "date": "2026-11-19",
+   "spent": 32.85,
+   "forecast": 100.4
+  },
+  {
+   "date": "2026-11-19",
+   "spent": 32.85,
+   "forecast": 100.4
+  },
+  {
+   "date": "2026-11-19",
+   "spent": 32.85,
+   "forecast": 100.4
+  },
+  {
+   "date": "2026-11-19",
+   "spent": 32.85,
+   "forecast": 100.4
+  }
+ ]
 }

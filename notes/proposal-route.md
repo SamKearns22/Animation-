@@ -1,16 +1,13 @@
 # The proposal route (Sam, 15 Nov): build brief
 
 ## Where things stand (the ONE handover)
-- **Rules that bite next:** 11 (the shot board, now refused by the pre-flight), the proposal route (`source/propose.py`), 85 (cost watch).
-- **Done (craft chat 8, Opus high):** rule 11's gate built: `rough.py board` leaves a note beside the picture; `rough.py sent FILM OUT.jpg --delivered --board` records each shot, its cast and a digest of its frames (`story/FILM-board-sent.txt`) and ends the ledger's "board" stage; `preflight.gates` calls `rough.board_gate`: refuses no board, a shot on no delivered board, a shot with nobody in SHOT_CAST, a first board drawn or delivered after the first move block (earliest commit adding a `## shot: who` block to `story/FILM-moves.txt`). Films begun before 18 Nov (code there at commit fbfe83b9, or notes archived) keep "Composition sheet sent:". Kittest `board_gate_refusals` (passes; `shot_board_every_shot`, `rough_of_every_new_thing` still pass). Rule 11's check column, kit catalogue row, notes template line ("Shot board sent:"), ledger stage examples, Plan pack tools updated; no rule wording changed.
-- **Changes made without asking (judged at the end-of-film review):** the Plan pack now lists `rough.py board` and bites 11; the template's "Composition sheet sent:" line became "Shot board sent:".
-- **Next:** nothing queued: the job is done and no build is left, so the chain stops (no chat to open). The next film's Plan chat (Opus high) uses the board.
-- **Sam (18 Nov): Q2 = N:** notes given on the board are counted apart; only notes after building count toward "at most 3" (end-of-film review). Needs Sam: nothing.
-- **Not covered, said to Sam:** pop-ins and durations (17a, 47), later additions (30, 61, 75), changed minds (71); moves written only in a film's code (no moves file) are not timed by the gate.
-- **Numbers to beat:** at most 3 shot-design notes per film after building (board notes apart, Q2) on the next two films, none returned twice.
-- **Read:** job pack "Plan" for the next film (its tools now include the board).
-- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
-- **For Claude:** handover check "NOT SENT 07:45 and 07:48" are false alarms (it read the old gate's name, "Composition sheet sent"; nothing was claimed sent). `notes/proposals/craft-next.md` verdict reads stale (edited after `record`), found 18 Nov, not this chat's; re-record before it is used. Old handovers `notes/archive/proposal-route-handovers.md`.
+- **Rules that bite next:** the proposal route (`source/propose.py`), 85 (cost watch), CLAUDE.md "Rules are permanent" (retire only after three films, Sam's Y).
+- **Done (job 4, Opus high, 19 Nov):** Sam's "All 3" put through the route: notes/proposals/cost-other.md, cold-start.md, check-catches.md (each: problem, facts, two helpers, blind judge). All three verdicts recorded (propose.py status: verdict ok). Side finding: notes/proposals/cost-other/milburn-usage.md (app's own usage, 13 of 15 Milburn chats: $74.59 real vs $73.84 estimated; re-read 45%, write 30%, output 25%), so the gap from 32.4% to Sam's 22% is the week-size figure (WEEK_USD 245, provisional), not the step estimate; the brief's "$32.40" was 32.4% of a week. Nothing built, no tool changed.
+- **Next (Sonnet, default effort; routine: recording, showing, sending):** `propose.py show cost-other`, `show cold-start`, `show check-catches`; one message to Sam: Need line, each idea's top two in plain English with Lost/Added and its Critiqued line, numbered questions (CLAUDE.md "Back-end proposals"); push notification; stop for his numbers.
+- **Needs Sam:** SENT 19 Nov (job 4 chat 2): his numbers 1-3 (cost-other, cold-start, check-catches: option 1 or 2 each) and 4 (cold-start vs chat-size-and-model). Change no tool until then.
+- **Read:** this section; then `propose.py show NAME` output only. No pack needed.
+- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker, claude/job1-front-on-focus (job 1's own work, not mine; left for job 1). Ledger flag: system job, no film estimate (expected).
+- **For Claude:** job 1's retire proposal was not in notes/proposals/ at 17:30; check-catches feeds it. cold-start overlaps chat-size-and-model (open): say so to Sam. Judging cost ~4.3% of a week (6 helpers + 3 judges). Handover check's one flag (no ledger estimate for proposal-route) is expected: system jobs carry no film estimate.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)
