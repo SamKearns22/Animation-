@@ -1,6 +1,6 @@
 # Proposal: Checks that are always red or always "named" are noise, so real faults hide among them
 
-Status: open
+Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
 
 ## Problem
 Before every animatic, pre-flight (the checks run before an animatic) printed 48 lines on Milburn that chats "named"

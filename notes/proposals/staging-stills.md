@@ -1,6 +1,6 @@
 # Proposal: Framing and staging notes take several rounds to land
 
-Status: open
+Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
 
 ## Problem
 On Milburn the reverse shot (the Cabinet Room table, Andy and Pat) was staged three times: chat 6 staged it, Sam

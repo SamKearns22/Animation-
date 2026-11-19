@@ -1,6 +1,6 @@
 # Proposal: The guard stops plain film questions as if they were system changes
 
-Status: open
+Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
 
 ## Problem
 The guard (the Stop hook in source/propose.py: a script that reads each reply before Sam sees it and sends it back

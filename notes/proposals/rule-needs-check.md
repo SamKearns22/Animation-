@@ -1,6 +1,6 @@
 # Proposal: Rules are written without a working check, so they fail without anyone seeing
 
-Status: open
+Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
 
 ## Problem
 Several of Sam's rules have nothing that makes them happen; they rely on a chat reading them and choosing to follow

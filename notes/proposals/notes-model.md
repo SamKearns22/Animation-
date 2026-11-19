@@ -1,6 +1,6 @@
 # Proposal: Every notes round goes on the dearest model, even rounds of text, timing and sound
 
-Status: open
+Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
 
 ## Problem
 CLAUDE.md "Models by stage" puts every round of Sam's notes on Opus at medium effort. On Milburn, chat 18 ran on

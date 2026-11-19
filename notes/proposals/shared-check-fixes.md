@@ -1,6 +1,6 @@
 # Proposal: Check fixes made inside one film's code are lost to the next film
 
-Status: open
+Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
 
 ## Problem
 On Milburn, chat 18 removed 60 false lines from pre-flight (the checks run before every animatic) by making the film's
