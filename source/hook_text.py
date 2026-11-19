@@ -50,7 +50,7 @@ def _rows(d, words, f, n):
     return best[1]
 
 
-def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None, tilt=0.0):
+def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None, tilt=0.0, accent=None):
     """`width`: the card's widest row (at 1080 wide) when it sits beside someone (Netan-Yahoo!): up to three rows."""
     k = w / 1080
     room_w = (width if width else SAFE_X1 - SAFE_X0 - 80) * k
@@ -97,7 +97,12 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None,
     for i, r in enumerate(rows):
         last = i == len(rows) - 1
         tw = d.textlength(r, font=f) + (emw if last else 0)
-        d.text((cx - tw / 2, top + i * lh + int(2 * k)), r, font=f, fill=(0, 0, 0, 255))
+        x0, y0 = cx - tw / 2, top + i * lh + int(2 * k)
+        if accent and r.startswith(accent):        # accent: the row's first word(s) in cranberry (Sam, 18 Nov)
+            d.text((x0, y0), accent, font=f, fill=(178, 24, 52, 255))
+            d.text((x0 + d.textlength(accent, font=f), y0), r[len(accent):], font=f, fill=(0, 0, 0, 255))
+        else:
+            d.text((x0, y0), r, font=f, fill=(0, 0, 0, 255))
         if last:
             ex = cx - tw / 2 + d.textlength(r, font=f) + int(10 * k) + d.textlength(' ', font=f) / 2   # a gap after the word
             for ch in tail:
