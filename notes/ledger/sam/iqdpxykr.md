@@ -46,3 +46,6 @@ Can this important statement be built into our project in any meaningful way?
 ### 2026-11-19T11:07:27
 Y
 
+### 2026-11-19T11:07:55
+Is the 1.1x rule applying? Were our last two films built at 1x1 speed as was proposed in Remakes?
+
