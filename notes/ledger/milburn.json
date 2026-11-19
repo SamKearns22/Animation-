@@ -1215,5 +1215,11 @@
    "done": null
   }
  ],
- "budget_stop": 3
+ "budget_stop": 3,
+ "final": {
+  "pct": 22.0,
+  "date": "2026-11-19",
+  "src": "Sam (app)",
+  "posted": true
+ }
 }

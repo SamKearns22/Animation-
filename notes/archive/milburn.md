@@ -1,3 +1,5 @@
+# Milburn: POSTED 19 Nov 2026. Final cost 22% of a week (Sam, from the app); estimate 24%; aim 15%.
+
 # Notes for Milburn (one file, numbered; mark each done as it is fixed)
 
 ## Where things stand (the ONE handover)
