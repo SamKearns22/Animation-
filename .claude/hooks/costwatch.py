@@ -23,7 +23,7 @@ PRICE = {  # read, write(1h cache), input, output
     "sonnet": (0.10, 4.0, 3.0, 15.0),
     "haiku":  (0.03, 1.3, 1.0, 5.0),
 }
-WEEK_USD = 245.0   # PROVISIONAL (Sam, 15 Nov): 17% on his meter after the 14 Nov 21:00 reset vs ~$34 film + ~$6 other; was 171. Re-check against the meter at the next handover.
+WEEK_USD = 366.0   # Sam, 19 Nov: Milburn moved his meter 71% to 93% (22 points) = 80.44 USD of app cost, so one week = 366 USD. Re-check against the meter at the next film.
 FRESH = 90_000           # tokens a fresh chat starts with (rules, notes, tools)
 CTX_AMBER, CTX_RED = 250_000, 370_000   # Sam's Y, 17 Nov (chat-size-and-model): ~100 steps reach about 250k
 CHAT_AMBER, CHAT_RED = 3.0, 5.0   # % of the week spent by this one chat
