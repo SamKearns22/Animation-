@@ -6,3 +6,6 @@
 ### 2026-11-19T20:35:01
 Our title will be Grand Theft Autism
 
+### 2026-11-19T20:40:24
+I will send a screenplay at a later point with full details. For now, I just want you to focus on getting this right.
+
