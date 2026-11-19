@@ -1,6 +1,6 @@
 # Proposal: Measure what each new chat costs before its first real work, and set chat size from it
 
-Status: open
+Status: adopted (2026-11-19)
 
 ## Problem
 A film is a chain of about 15 chats. Every new chat pays to load the app's own instructions, CLAUDE.md, the

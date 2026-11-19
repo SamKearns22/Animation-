@@ -12,3 +12,6 @@ To reply, call the send_message tool of the Claude Code Remote MCP server with s
 ### 2026-11-19T17:36:01
 Please summarise again. Our simple communication tool isn't working and I am just not following your explanations
 
+### 2026-11-19T20:14:58
+Y to all. Do we have a plan for if we actually do need a 3/4 pose?
+

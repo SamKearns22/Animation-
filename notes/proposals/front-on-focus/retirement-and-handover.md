@@ -12,11 +12,14 @@
 | R7 | long-red kittests facehouse_whole_head, round_page | red since 15 Nov | fix, not retire (job 3 takes round_page; F5 above) |
 Not tools: park.py, duel.py are finished film files and stay (corrections.md).
 
-## Where things stand (job 1, 19 Nov)
+## Sam's answer (19 Nov, evening)
+"Y to all. Do we have a plan for if we actually do need a 3/4 pose?" Read as: Y to L1-L3, C1-C5, and the retirement list (archive, never delete; R3-R5 kept, marked "kept for Blessed / Milburn / Protest Tiers"; R7 fixed, not retired). His 3/4 question was answered, not acted on: the real turn stays for walks, exits, backs and any shot with a written reason; a 10-15 degree turn comes free with C2; a true 45-degree turn still uses the face tool's turned head, which keeps the faults in famous-turned-now.jpg (thin far glasses, flat hair, long neck from behind). Proposed fix (needs its own Y): the first film that truly needs one fixes those three faults on the turned head, critiqued alone first (rule 89), and the 18 Nov three-quarter steps 2 (torso) and 3 (cast-sheet tile) are done with it.
+
+## Where things stand (job 1, 19 Nov, evening)
 - Rules that bite next: 38 (front on), 89 (new pieces critiqued alone), 13 (exceptions listed).
-- Done: BoJack sheet, Andy/Kemi test, famous heads turned now, Sam's question (d) answered, light survey, route run (helper B picked; Critiqued 6/3/3).
-- Next: Sam picks by number (L1-L3, C1-C5, R1-R7). On his Y: L-steps on Sonnet medium; C1-C2 Opus high (new build).
-- Needs Sam: the numbered picks.
-- Read: job pack "A tool job"; this file's Final version.
-- Open rule requests: none found.
-- For Claude: corrections.md (park/duel are films); test scripts fronton.py, slide.py; rule 38 hole at preflight.py:409.
+- Done: proposal adopted (Sam: Y to all). Nothing built yet.
+- Next: chat 2, Opus high: build C1 (the drawn-angle check on every film) and C2 (focus on both front heads; test on Andy and Kemi, one sheet to Sam). Then a Sonnet chat: L1-L3 (turned seconds; blind route-pick test; the goth on both heads). Then C3, C4 from their results; then archive R1, R2, R6 after a last search.
+- Needs Sam: the 3/4 question's proposed fix (Y or N); the goth sheet (L3) when it comes.
+- Read: job pack "A tool job"; notes/proposals/front-on-focus.md "Final version"; this file.
+- Open rule requests: none.
+- For Claude: rule 38 hole at preflight.py:409 (drawn angle checked only with no rooms plan); test scripts fronton.py, slide.py; corrections.md (park, duel are films). Branches named, not merged: claude/aim-check-study-oe8z4g (another chat's live work, 2 h old), claude/blessed-c2-mics-wip (unfinished Blessed, stays off). Cost: job 1 took about 4.1% of a week (cost watch); the shared proposal-route ledger has no estimate, so no forecast line (named, not this job's to set).

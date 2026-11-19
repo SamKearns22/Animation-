@@ -1,4 +1,4 @@
-Job 1 (19 Nov): front-on focus proposal judged (notes/proposals/front-on-focus.md); waiting for Sam by number (L1-L3, C1-C5, R1-R7).
-proposal-route (19 Nov): three proposals sent to Sam; waiting on his numbers 1-4. Nothing built, no tool changed.
-Next: Opus builds whichever options he picks.
+Job 1 (19 Nov): front-on people adopted (Sam: Y to all); building starts in the next chat (Opus high: the drawn-angle check and the focus setting).
+Other proposals (aim check, check catches): see their files; waiting on Sam where they say so.
+Sam: Y or N to the fix for a true 3/4 pose when a film needs one.
 Blessed WIP branch (claude/blessed-c2-mics-wip, source/blessed.py) is unfinished and stays off the main line: named here (19 Nov).

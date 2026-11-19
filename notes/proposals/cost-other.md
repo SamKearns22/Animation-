@@ -1,6 +1,6 @@
 # Proposal: Name what is in the unexplained two thirds of each chat's cost
 
-Status: open
+Status: adopted (2026-11-19)
 
 ## Problem
 Sam's aim is a film within 15% of a week. The tool that splits each chat's cost into kinds of step (searches,
