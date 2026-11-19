@@ -1,6 +1,6 @@
 # Proposal: Turned people lose detail, and better tools sit unused
 
-Status: open
+Status: adopted (2026-11-19)
 
 ## Problem
 Two linked faults, both against statement one (high quality, fewer notes and faults, a film within 15% of a week).
