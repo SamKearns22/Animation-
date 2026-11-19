@@ -2053,19 +2053,19 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.66,
+   "cost": 2.91,
    "src": "estimate",
    "sid": "session_01J1JB7ZPv3wYxu8yAH6EYJT",
-   "steps": 81,
-   "hist_k": 241,
+   "steps": 84,
+   "hist_k": 243,
    "kinds": {
-    "tool search": 25.1,
+    "tool search": 24.8,
     "pictures": 5.9,
-    "other": 69.0
+    "other": 69.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 53,
+    "tool search": 54,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
@@ -2079,7 +2079,7 @@
      "no show": 0
     },
     "other": {
-     "other": 15,
+     "other": 16,
      "shared:branches.py": 1,
      "film notes": 10,
      "guides": 4,
@@ -2470,6 +2470,13 @@
       "other",
       "notes/proposals/front-on-focus",
       "git add -A notes/proposals/front-on-focus && git commit -q -m \"Job 1: both helpe"
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "notes/proposals",
+      "git status --short | head; git add -A notes/proposals && git commit -q -m \"Job 1"
      ]
     ]
    }
