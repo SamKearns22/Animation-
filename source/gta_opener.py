@@ -3,8 +3,8 @@
 
 MAP
 - sky set-up (top): the Flying Whales dusk sea, re-coloured pink, the sun right of centre, its orange caps removed
-- logo(): our own V + I shield (blue-purple-pink-orange, faint palm leaves, pink outer line), chunky lettering with a
-  dark drop under each letter
+- logo(): our own V + I shield (blue-purple-pink-orange, faint palm leaves, pink outer line); the lettering in the
+  game-title font, stretched and stacked as the reference (font fetched by _title_font, never committed)
 - clouds(): big two-tier clouds, lit warm from below near the sun
 - skyline(): the waterfront city in three depths (pale far, mid, dark near): towers with window grids and a lit edge
   on the sun's side, the big wheel, a seafront shelter, boats, a shaded tree, palms with full fronds; sun path dashes
@@ -24,6 +24,7 @@ import sys
 
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
+from scipy import ndimage as nd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -48,10 +49,30 @@ DUR = 3.5
 INK = (40, 12, 56)
 DARK = (27, 26, 36)
 OL = 3
-FONT = os.path.join(HERE, 'fonts', 'Montserrat-Black.ttf')
+TITLE_FONT = os.path.join(HERE, 'fonts', 'Pricedown-Bl.otf')   # free for rendered video; the file may not be shared,
+TITLE_URL = 'https://dl.dafont.com/dl/?f=pricedown'            # so it is not on GitHub: fetched here when missing
 HY = S.horizon_y()
 SUNX = S._sun_x()
 WARM = (255, 214, 196)                            # the sun's light on edges that face it
+
+
+def _title_font():
+    """The title font's file, downloaded once (Typodermic's free desktop licence: rendered video is fine, sharing the
+    file is not, so it stays out of the repository)."""
+    if not os.path.exists(TITLE_FONT):
+        import io
+        import urllib.request
+        import zipfile
+        req = urllib.request.Request(TITLE_URL, headers={'User-Agent': 'Mozilla/5.0'})
+        z = zipfile.ZipFile(io.BytesIO(urllib.request.urlopen(req, timeout=60).read()))
+        name = next(n for n in z.namelist() if n.lower().endswith(('.otf', '.ttf')))
+        open(TITLE_FONT, 'wb').write(z.read(name))
+    return TITLE_FONT
+
+
+def _disk(r):
+    y, x = np.mgrid[-r:r + 1, -r:r + 1]
+    return x * x + y * y <= r * r
 
 
 def _ease(x):
@@ -116,6 +137,7 @@ def logo(ss=2):
     Wd, Hd = 920 * s, 780 * s
     V = [(30, 40), (285, 40), (452, 500), (605, 40), (700, 40), (522, 740), (372, 740)]
     I = [(730, 40), (890, 40), (890, 740), (730, 740)]
+    V, I = [[(x, 40 + (y - 40) * 646 / 700) for x, y in P] for P in (V, I)]     # the reference's proportions (4:3)
     shapes = [[(x * s, y * s) for x, y in P] for P in (V, I)]
     mask = Image.new('L', (Wd, Hd), 0)
     md = ImageDraw.Draw(mask)
@@ -142,34 +164,82 @@ def logo(ss=2):
     wd = ImageDraw.Draw(img)
     for P in shapes:
         wd.line(P + [P[0]], fill=(255, 250, 252, 255), width=6 * s, joint='curve')
-    # lettering: chunky, white, thick dark outline, a dark drop down-right, each letter bobbed and tipped a little
-    rnd = random.Random(6)
-    f = ImageFont.truetype(FONT, 168 * s)
-    fR = ImageFont.truetype(FONT, 184 * s)
-    for word, x0, y0 in (('grand', 95, 255), ('theft', 190, 425), ('autism', 85, 595)):
-        x = x0 * s
-        for ch in word:
-            big = ch == 'r' and word == 'grand'            # the reference's odd capital R
-            fc, c = (fR, 'R') if big else (f, ch)
-            lay = Image.new('RGBA', (300 * s, 320 * s), (0, 0, 0, 0))
-            dl = ImageDraw.Draw(lay)
-            dl.text((48 * s, 40 * s), c, font=fc, fill=INK + (255,), stroke_width=14 * s, stroke_fill=INK + (255,))
-            dl.text((40 * s, 30 * s), c, font=fc, fill=(255, 255, 255, 255), stroke_width=14 * s,
-                    stroke_fill=INK + (255,))
-            # a pale lilac foot on each letter (the reference's white lettering is shaded low down)
-            g = Image.new('L', lay.size, 0)
-            ImageDraw.Draw(g).text((40 * s, 30 * s), c, font=fc, fill=255)
-            g = np.asarray(g).copy()
-            ys = np.nonzero(g.any(1))[0]
-            if len(ys):
-                g[:ys[0] + int((ys[-1] - ys[0]) * 0.62)] = 0
-            arr = np.asarray(lay).copy()
-            arr[g > 127, :3] = (242, 234, 250)
-            lay = Image.fromarray(arr, 'RGBA')
-            lay = lay.rotate(rnd.uniform(-3, 3), resample=Image.BICUBIC, center=(110 * s, 160 * s))
-            dy = rnd.uniform(-6, 6) * s - (8 * s if big else 0)
-            img.alpha_composite(lay, (int(x - 40 * s), int(y0 * s - 190 * s + dy)))
-            x += fc.getlength(c) * 0.9
+    # lettering, measured off the reference on a 10 x 10 grid over the shield (19 Nov): the game-title font with its
+    # tall letters cut down so they stand only a little above the short ones (as the logo's do), three rows packed
+    # tight and stepped, the whole block in ONE thick dark outline with a thin pink line round it (the trailer's
+    # glow, kept flat), the letters pure white
+    sx = lambda g: (30 + g * 86) * s                   # grid units -> px (shield 30-890 wide, 40-686 tall)
+    sy = lambda g: (40 + g * 64.6) * s
+    # (word, left, baseline, size): 'autism' is two letters longer than the reference's 'auto', so that row is 8% smaller
+    # and starts further left to stay on the shield
+    words = (('gRand', 2.4, 2.95, 1.0), ('theft', 3.5, 5.6, 1.0), ('autism', 2.05, 8.2, 0.92))
+    xh_px = (sy(8.2) - sy(6.2))                        # the short letters' height: 2.0 grid units
+    f = ImageFont.truetype(_title_font(), 100)
+    base, xh, asc = f.getbbox('a')[3], f.getbbox('a')[1], f.getbbox('d')[1]
+    k = xh_px / (base - xh)
+    f = ImageFont.truetype(_title_font(), int(round(100 * k)))
+    base, xh, asc = f.getbbox('a')[3], f.getbbox('a')[1], f.getbbox('d')[1]
+    asc_new = xh - 0.16 * (base - xh)                  # the tall letters stand 16% above the short ones
+    block = np.zeros((Hd, Wd), bool)
+    placed = {}
+    full = f
+    for word, gx, gb, sz in words:
+        f = full if sz == 1.0 else ImageFont.truetype(_title_font(), int(round(100 * k * sz)))
+        base, xh, asc = f.getbbox('a')[3], f.getbbox('a')[1], f.getbbox('d')[1]
+        asc_new = xh - 0.16 * (base - xh)
+        m = Image.new('L', (int(f.getlength(word)) + 40, f.getbbox(word)[3] + 40), 0)   # tall enough for the g's tail
+        ImageDraw.Draw(m).text((20, 20), word, font=f, fill=255)
+        a0 = np.asarray(m).astype(np.float32)
+        out = a0.copy()
+        top, x_top = asc + 20, xh + 20
+        nt = asc_new + 20
+        for y in range(0, x_top):                      # remap the rows above the short letters' top
+            if y < nt:
+                out[y] = 0
+            else:
+                src = top + (y - nt) * (x_top - top) / (x_top - nt)
+                out[y] = a0[int(min(x_top - 1, max(0, round(src))))]
+        mm = out > 127
+        h, w = mm.shape
+        oy = int(sy(gb) - (base + 20))
+        ox = int(sx(gx) - 20)
+        block[max(0, oy):oy + h, max(0, ox):ox + w] |= mm[max(0, -oy):Hd - oy, max(0, -ox):Wd - ox]
+        placed[word] = (ox + 20, f)
+    # the reference joins the R's leg straight down into the h of the row below: one white stem through both rows
+    (gx0, gf), (tx0, tf) = placed['gRand'], placed['theft']
+    r0, r1 = gx0 + gf.getlength('g'), gx0 + gf.getlength('gR')
+    h0, h1 = tx0 + tf.getlength('t'), tx0 + tf.getlength('th')
+    yR = int(sy(2.95)) - 3
+    cols_h = [x for x in range(int(h0), int(h1)) if block[:, x].any()]
+    yH = min(np.nonzero(block[:, x])[0][np.nonzero(block[:, x])[0] > yR + 6].min() for x in cols_h
+             if (np.nonzero(block[:, x])[0] > yR + 6).any())
+    stem = [x for x in cols_h if block[yH + 4 * s, x]]
+    stem = [x for x in stem if x < stem[0] + (r1 - r0) * 0.45]        # the h's left stem only
+    leg = [x for x in range(int(r0), int(r1)) if block[yR, x]]
+    xa, xb = min(stem), max(stem)
+    if leg:                                            # the joint spans from the R's leg to the h's stem
+        xa, xb = min(xa, max(leg[0], xa - 4 * s)), max(xb, min(leg[-1], xb + 4 * s))
+    block[yR - 2 * s:yH + 6 * s, xa:xb + 1] = True
+    # the g's tail, as the reference's: a thick bar under the g, joined to its right stem, a thin dark slit above it open to the left
+    g0, g1 = int(gx0), int(gx0 + gf.getlength('g'))
+    yB = int(sy(2.95))
+    gc = [x for x in range(g0, g1) if block[yB - 30 * s:yB - 4 * s, x].any()]
+    gl, gr = min(gc), max(gc)
+    run = [x for x in range(gl, gr + 1) if block[yB - 40 * s, x]]
+    gaps = [nx for x, nx in zip(run, run[1:]) if nx != x + 1]
+    stem_l = gaps[-1] if gaps else run[0]              # where the g's right-hand stem starts
+    block[yB:yB + 40 * s, gl:gr + 1] = False           # clear the font's own thin tail
+    block[yB + 5 * s:yB + 26 * s, gl:gr + 1] = True    # the tail bar, 0.33 grid tall
+    block[yB - 6 * s:yB + 26 * s, stem_l:gr + 1] = True   # joined on the RIGHT: the slit opens to the left
+    ring = nd.binary_fill_holes(nd.binary_dilation(block, structure=_disk(13 * s)))   # no specks between rows
+    pink = nd.binary_dilation(ring, structure=_disk(3 * s))
+    rows = np.nonzero(block.any(1))[0]
+    rgb = np.zeros((Hd, Wd, 3))
+    rgb[pink] = (236, 96, 196)
+    rgb[ring] = INK
+    rgb[block] = (255, 255, 255)                       # pure white, as the reference
+    L = Image.fromarray(np.dstack([rgb.astype(np.uint8), (pink * 255).astype(np.uint8)]), 'RGBA')
+    img.alpha_composite(L)
     return img.resize((Wd // ss, Hd // ss), Image.LANCZOS)
 
 
