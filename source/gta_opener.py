@@ -2,10 +2,16 @@
 """Grand Theft Autism: the 3.5 s opening, a send-up of a game-trailer logo reveal (Sam, 19 Nov).
 
 MAP
-- sky set-up (top): the Flying Whales dusk sea, re-coloured pink and the sun moved right of centre (as the reference)
-- logo(): our own V + I shield (blue-purple-pink-orange, faint palm leaves inside), 'grand / theft / autism'
-- clouds(), skyline(): big flat clouds; the waterfront city (towers, pergola, big tree, palms, big wheel, boats)
+- sky set-up (top): the Flying Whales dusk sea, re-coloured pink, the sun right of centre, its orange caps removed
+- logo(): our own V + I shield (blue-purple-pink-orange, faint palm leaves, pink outer line), chunky lettering with a
+  dark drop under each letter
+- clouds(): big two-tier clouds, lit warm from below near the sun
+- skyline(): the waterfront city in three depths (pale far, mid, dark near): towers with window grids and a lit edge
+  on the sun's side, the big wheel, a seafront shelter, boats, a shaded tree, palms with full fronds; sun path dashes
+- reflection(): the city mirrored in the water, darker, broken into rippling rows
 - frame(t): dark -> logo wipes in top to bottom and grows -> city fades in -> logo washes pale and dissolves -> city
+- house look: the city drawing gets paper edges and shadows (house_look.edges); every frame is laid on paper; drawn on
+  twos (12 drawings a second, each held 2 frames at 24 fps)
 - python3 source/gta_opener.py OUT.mp4 [--small]      python3 source/gta_opener.py still OUT.png T [T ...]
 
 Reference: Sam's screen recording (19 Nov), 3.4 s. House look: flat colours, one ink outline, no glows.
@@ -22,6 +28,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import flying_whales_sea as S                     # noqa: E402
+import house_look as HL                           # noqa: E402
 
 # ---- the sky and sea, re-coloured before anything is baked (the painter caches its first bake)
 S.SUN_AZ = math.atan(100 / 1400)                  # the sun a little right of centre, as in the reference
@@ -32,9 +39,11 @@ S.GOLD = (255, 248, 232)
 S.SEA_DEEP = (70, 36, 82)
 S.SEA = [S._mix(c, S.SEA_DEEP, 0.30 + 0.08 * k) for k, (_, c) in enumerate(S.SKY)]
 S.CLOUDS = []                                     # our own big clouds instead (clouds())
+S._caps = lambda d, t, ss, hy: None               # no orange wave caps: the reference's water is open and calm
 
 W, H = S.SIZE
-FPS = 30
+FPS = 24
+DRAW_FPS = 12                                     # on twos
 DUR = 3.5
 INK = (40, 12, 56)
 DARK = (27, 26, 36)
@@ -42,11 +51,16 @@ OL = 3
 FONT = os.path.join(HERE, 'fonts', 'Montserrat-Black.ttf')
 HY = S.horizon_y()
 SUNX = S._sun_x()
+WARM = (255, 214, 196)                            # the sun's light on edges that face it
 
 
 def _ease(x):
     x = min(1.0, max(0.0, x))
     return x * x * (3 - 2 * x)
+
+
+def _mixc(a, b, k):
+    return tuple(int(round(a[i] + (b[i] - a[i]) * k)) for i in range(3))
 
 
 def _grad(size, stops):
@@ -62,34 +76,38 @@ def _grad(size, stops):
     return Image.fromarray(out.astype(np.uint8))
 
 
-def _frond(d, x, y, ang, L, wid, col, s, droop=0.55):
-    """One palm leaf: a tapered curve from (x, y) out along ang (degrees), drooping at the tip."""
+def _frond(d, x, y, ang, L, wid, col, s, droop=0.55, notches=0):
+    """One palm leaf: a tapered curve from (x, y) out along ang (degrees), drooping at the tip; notches cut the
+    edge into leaflets."""
     r = math.radians(ang)
-    pts = []
-    for i in range(9):
-        u = i / 8
-        pts.append((x + math.cos(r) * L * u, y + math.sin(r) * L * u + droop * L * u * u))
+    n = 16
+    pts = [(x + math.cos(r) * L * i / n, y + math.sin(r) * L * i / n + droop * L * (i / n) ** 2) for i in range(n + 1)]
     left, right = [], []
     for i, (px, py) in enumerate(pts):
-        u = i / 8
+        u = i / n
         w = wid * math.sin(math.pi * min(0.95, u * 0.9 + 0.08))
-        if i < 8:
-            dx, dy = pts[i + 1][0] - px, pts[i + 1][1] - py
-        else:
-            dx, dy = px - pts[i - 1][0], py - pts[i - 1][1]
-        n = math.hypot(dx, dy) or 1
-        left.append(((px - dy / n * w) * s, (py + dx / n * w) * s))
-        right.append(((px + dy / n * w) * s, (py - dx / n * w) * s))
+        if notches and 0.15 < u < 0.95 and i % 2:
+            w *= 0.45
+        j = min(i, n - 1)
+        dx, dy = pts[j + 1][0] - pts[j][0], pts[j + 1][1] - pts[j][1]
+        m = math.hypot(dx, dy) or 1
+        left.append(((px - dy / m * w) * s, (py + dx / m * w) * s))
+        right.append(((px + dy / m * w) * s, (py - dx / m * w) * s))
     d.polygon(left + right[::-1], fill=col)
 
 
-def _palm(d, x, base, h, lean, col, s, size=1.0):
-    pts = [(x + lean * (i / 8) ** 1.6, base - h * i / 8) for i in range(9)]
-    for (ax, ay), (bx, by) in zip(pts, pts[1:]):
-        d.line([ax * s, ay * s, bx * s, by * s], fill=col, width=int(6 * s * size))
+def _palm(d, x, base, h, lean, col, s, size=1.0, seed=0):
+    rnd = random.Random(seed)
+    pts = [(x + lean * (i / 10) ** 1.6, base - h * i / 10) for i in range(11)]
+    for i, ((ax, ay), (bx, by)) in enumerate(zip(pts, pts[1:])):
+        d.line([ax * s, ay * s, bx * s, by * s], fill=col, width=int((8 - 3 * i / 10) * s * size))
     tx, ty = pts[-1]
-    for a in (-170, -140, -110, -75, -40, -10, 150, 30):
-        _frond(d, tx, ty, a, 70 * size, 9 * size, col, s)
+    for a in (-172, -152, -128, -104, -80, -56, -32, -10, 12, 168):   # fronds fanning out, arching, tips drooping
+        a += rnd.uniform(-7, 7)
+        up = math.sin(math.radians(a))
+        down = 0.18 if up < -0.6 else 0.42
+        _frond(d, tx, ty, a, rnd.uniform(80, 104) * size, 12 * size, col, s, droop=down)
+    d.ellipse([(tx - 7 * size) * s, (ty - 6 * size) * s, (tx + 7 * size) * s, (ty + 6 * size) * s], fill=col)
 
 
 def logo(ss=2):
@@ -108,11 +126,13 @@ def logo(ss=2):
     leaves = Image.new('RGBA', (Wd, Hd), (0, 0, 0, 0))     # faint palm leaves inside, as in the reference
     ld = ImageDraw.Draw(leaves)
     for x, y, a0 in ((180, 120, 0), (640, 200, 40), (820, 520, -20), (420, 650, 10)):
-        for a in range(-170, 180, 34):
-            _frond(ld, x, y, a + a0, 190, 20, (60, 20, 120, 60), s, droop=0.35)
+        for a in range(-170, 180, 30):
+            _frond(ld, x, y, a + a0, 200, 22, (60, 20, 120, 56), s, droop=0.35)
     fill.alpha_composite(leaves)
     img = Image.new('RGBA', (Wd, Hd), (0, 0, 0, 0))
     rd = ImageDraw.Draw(img)
+    for P in shapes:                                   # pink outer line (the trailer's neon edge, kept flat), dark rim
+        rd.line(P + [P[0]], fill=(236, 96, 196, 255), width=44 * s, joint='curve')
     for P in shapes:
         rd.line(P + [P[0]], fill=INK + (255,), width=30 * s, joint='curve')
         rd.polygon(P, fill=INK + (255,))
@@ -122,7 +142,7 @@ def logo(ss=2):
     wd = ImageDraw.Draw(img)
     for P in shapes:
         wd.line(P + [P[0]], fill=(255, 250, 252, 255), width=6 * s, joint='curve')
-    # lettering: chunky, white, thick dark outline, each letter bobbed and tipped a little (the game-title look)
+    # lettering: chunky, white, thick dark outline, a dark drop down-right, each letter bobbed and tipped a little
     rnd = random.Random(6)
     f = ImageFont.truetype(FONT, 168 * s)
     fR = ImageFont.truetype(FONT, 184 * s)
@@ -132,8 +152,20 @@ def logo(ss=2):
             big = ch == 'r' and word == 'grand'            # the reference's odd capital R
             fc, c = (fR, 'R') if big else (f, ch)
             lay = Image.new('RGBA', (300 * s, 320 * s), (0, 0, 0, 0))
-            ImageDraw.Draw(lay).text((40 * s, 30 * s), c, font=fc, fill=(255, 255, 255, 255), stroke_width=14 * s,
-                                     stroke_fill=INK + (255,))
+            dl = ImageDraw.Draw(lay)
+            dl.text((48 * s, 40 * s), c, font=fc, fill=INK + (255,), stroke_width=14 * s, stroke_fill=INK + (255,))
+            dl.text((40 * s, 30 * s), c, font=fc, fill=(255, 255, 255, 255), stroke_width=14 * s,
+                    stroke_fill=INK + (255,))
+            # a pale lilac foot on each letter (the reference's white lettering is shaded low down)
+            g = Image.new('L', lay.size, 0)
+            ImageDraw.Draw(g).text((40 * s, 30 * s), c, font=fc, fill=255)
+            g = np.asarray(g).copy()
+            ys = np.nonzero(g.any(1))[0]
+            if len(ys):
+                g[:ys[0] + int((ys[-1] - ys[0]) * 0.62)] = 0
+            arr = np.asarray(lay).copy()
+            arr[g > 127, :3] = (242, 234, 250)
+            lay = Image.fromarray(arr, 'RGBA')
             lay = lay.rotate(rnd.uniform(-3, 3), resample=Image.BICUBIC, center=(110 * s, 160 * s))
             dy = rnd.uniform(-6, 6) * s - (8 * s if big else 0)
             img.alpha_composite(lay, (int(x - 40 * s), int(y0 * s - 190 * s + dy)))
@@ -153,81 +185,114 @@ def _blob(d, lumps, fill, s):
         d.ellipse([(x - r) * s, (y - r) * s, (x + r) * s, (y + r) * s], fill=fill)
 
 
+def _shift(a, k):
+    """a moved up by k rows (down if k < 0), empty rows filled False."""
+    if k > 0:
+        return np.vstack([a[k:], np.zeros((k, a.shape[1]), bool)])
+    return np.vstack([np.zeros((-k, a.shape[1]), bool), a[:k]])
+
+
 def clouds(ss=2):
-    """Big flat clouds: lavender bodies, pale tops, pink undersides, one ink outline."""
+    """Big clouds: a wide base of lumps with smaller lumps piled on top; lavender body, a shaded middle, a pale top,
+    the underside lit pink (warm peach near the sun); one ink outline. """
     s = ss
     rnd = random.Random(4)
     rgb = np.zeros((H * s, W * s, 3), np.uint8)
     alpha = np.zeros((H * s, W * s), np.uint8)
-    for cx, cy, wid, sc in ((180, 330, 520, 1.0), (820, 520, 600, 1.15), (330, 760, 460, 0.8),
-                            (900, 180, 420, 0.9), (640, 930, 300, 0.55)):
+    spec = ((170, 300, 560, 1.0), (840, 500, 640, 1.15), (300, 720, 480, 0.8), (930, 150, 420, 0.9),
+            (600, 880, 340, 0.6), (110, 960, 260, 0.45), (980, 830, 220, 0.4))
+    for cx, cy, wid, sc in spec:
         lumps = []
-        n = int(wid / 55)
-        for i in range(n):
+        n = int(wid / 50)
+        for i in range(n):                             # the base
             u = i / (n - 1) - 0.5
-            r = (60 + rnd.uniform(0, 45)) * sc * (1 - abs(u) ** 2 * 1.4)
-            lumps.append((cx + u * wid, cy - r * 0.35 + rnd.uniform(-12, 12), max(18, r)))
+            r = (50 + rnd.uniform(0, 30)) * sc * (1 - abs(u) ** 2 * 1.3)
+            lumps.append((cx + u * wid, cy - r * 0.3 + rnd.uniform(-8, 8), max(16, r)))
+        for i in range(max(2, n // 3)):                # the piled tops
+            u = rnd.uniform(-0.3, 0.3)
+            r = (60 + rnd.uniform(0, 40)) * sc
+            lumps.append((cx + u * wid, cy - r * 0.9 - rnd.uniform(10, 40) * sc, r))
         m = Image.new('L', (W * s, H * s), 0)
         _blob(ImageDraw.Draw(m), lumps, 255, s)
-        ImageDraw.Draw(m).rectangle([0, int((cy + 40 * sc) * s), W * s, H * s], fill=0)   # flat-ish bottoms
+        ImageDraw.Draw(m).rectangle([0, int((cy + 34 * sc) * s), W * s, H * s], fill=0)   # flat-ish bottoms
         full = np.asarray(m) > 127
         ring = np.asarray(m.filter(ImageFilter.MaxFilter(2 * OL * s + 1))) > 127
-        k1, k2 = int(22 * sc * s), int(26 * sc * s)
-        below = np.zeros_like(full)
-        below[:-k1] = full[k1:]
-        above = np.zeros_like(full)
-        above[k2:] = full[:-k2]
+        below1 = _shift(full, int(20 * sc * s))        # still cloud 20 px below: not the lit underside
+        below2 = _shift(full, int(60 * sc * s))        # still cloud 60 px below: above the shaded band
+        above = _shift(full, -int(24 * sc * s))
+        near = math.exp(-((cx - SUNX) / 380) ** 2) * max(0.0, 1 - (HY - cy) / 1100)
         rgb[ring] = INK
-        rgb[full] = (240, 172, 204)
-        rgb[full & below] = (226, 196, 230)
-        rgb[full & ~above] = (250, 232, 244)
+        rgb[full] = _mixc((242, 170, 204), (255, 206, 176), near)
+        rgb[full & below1] = (214, 176, 222)
+        rgb[full & below2] = (228, 198, 234)
+        rgb[full & ~above] = (250, 234, 246)
         alpha[ring] = 255
-    return Image.fromarray(np.dstack([rgb, alpha]), 'RGBA').resize((W, H), Image.LANCZOS)
+    img = Image.fromarray(np.dstack([rgb, alpha]), 'RGBA')
+    return img.resize((W, H), Image.LANCZOS)
 
 
 def skyline(ss=2):
-    """The waterfront city on the horizon, hazy pinks far to dark mauve near, as an RGBA layer."""
+    """The waterfront city on the horizon in three depths, as an RGBA layer (sun path included)."""
     s = ss
     hy = HY
     lay = Image.new('RGBA', (W * s, H * s), (0, 0, 0, 0))
     d = ImageDraw.Draw(lay)
     ink = INK + (255,)
+    rnd = random.Random(21)
 
-    def tower(x, w, h, col, steps=False):
+    def tower(x, w, h, col, steps=0, mast=False, grid=True, setback=False):
         top = hy - h
-        d.rectangle([x * s, top * s, (x + w) * s, (hy + 4) * s], fill=col + (255,), outline=ink, width=OL * s)
-        if steps:
-            for k, f in enumerate((0.8, 0.62, 0.45)):
-                cw = w * f
-                yy = top - 26 * (k + 1)
-                d.rectangle([(x + (w - cw) / 2) * s, yy * s, (x + (w + cw) / 2) * s, (yy + 26) * s],
-                            fill=col + (255,), outline=ink, width=OL * s)
-            d.line([(x + w * 0.5) * s, (top - 140) * s, (x + w * 0.5) * s, (top - 78) * s], fill=ink, width=OL * s)
-        lit = tuple(min(255, c + 14) for c in col) + (255,)
-        for yy in np.arange(top + 20, hy - 14, 24):
-            d.line([(x + 8) * s, yy * s, (x + w - 8) * s, yy * s], fill=lit, width=3 * s)
+        body = [(x, top, x + w, hy + 4)]
+        if setback:                                     # a narrower upper block
+            body = [(x, top + h * 0.3, x + w, hy + 4), (x + w * 0.15, top, x + w * 0.85, top + h * 0.3 + 2)]
+        for (a, b, c2, e) in body:
+            d.rectangle([a * s, b * s, c2 * s, e * s], fill=col + (255,), outline=ink, width=OL * s)
+            lit = _mixc(col, WARM, 0.45)                # the edge facing the sun
+            ex = (c2 - 8, c2 - 2) if (a + c2) / 2 < SUNX else (a + 2, a + 8)
+            d.rectangle([ex[0] * s, (b + 3) * s, ex[1] * s, (e - 2) * s], fill=lit + (255,))
+            if grid:                                    # windows: a grid of small panes, a few lit
+                win = _mixc(col, (255, 255, 255), 0.16)
+                lw = _mixc(col, WARM, 0.7)
+                cols = max(2, int((c2 - a - 16) / 16))
+                for yy in np.arange(b + 16, e - 20, 22):
+                    for k in range(cols):
+                        wx = a + 10 + k * (c2 - a - 20) / cols
+                        cw = (c2 - a - 20) / cols - 6
+                        c = lw if rnd.random() < 0.06 else win
+                        d.rectangle([wx * s, yy * s, (wx + cw) * s, (yy + 10) * s], fill=c + (255,))
+        tt = body[-1][1]
+        for k in range(steps):                         # a stepped crown
+            f = (0.8, 0.62, 0.45)[k]
+            cw = w * f
+            yy = tt - 26 * (k + 1)
+            d.rectangle([(x + (w - cw) / 2) * s, yy * s, (x + (w + cw) / 2) * s, (yy + 26) * s],
+                        fill=col + (255,), outline=ink, width=OL * s)
+        if mast:
+            yy = tt - 26 * steps
+            d.line([(x + w * 0.5) * s, (yy - 70) * s, (x + w * 0.5) * s, yy * s], fill=ink, width=OL * s)
 
-    far, mid, near = (234, 184, 206), (214, 158, 192), (190, 132, 176)
-    d.ellipse([(SUNX - 46) * s, (hy - 70) * s, (SUNX + 46) * s, (hy + 22) * s], fill=(255, 250, 238, 255))
-    for x, w, h in ((700, 90, 250), (420, 110, 340), (250, 80, 260)):
-        tower(x, w, h, far)
-    for x, w, h, st in ((-20, 120, 560, False), (95, 70, 470, False), (300, 150, 640, True), (470, 90, 380, False),
-                        (960, 140, 600, False)):
-        tower(x, w, h, mid, steps=st)
+    far, mid, near = (238, 196, 214), (220, 168, 198), (196, 138, 180)
+    d.ellipse([(SUNX - 50) * s, (hy - 80) * s, (SUNX + 50) * s, (hy + 20) * s], fill=(255, 250, 238, 255))
+    for x, w, h in ((-10, 90, 300), (130, 70, 240), (250, 80, 280), (420, 110, 340), (700, 90, 260),
+                    (840, 80, 300), (1000, 90, 280)):
+        tower(x, w, h, far, grid=False)
+    for x, w, h, st, sb in ((-20, 120, 560, 0, False), (95, 70, 470, 0, True), (300, 150, 620, 3, False),
+                            (470, 90, 380, 0, True), (960, 140, 600, 0, True)):
+        tower(x, w, h, mid, steps=st, mast=st > 0, setback=sb)
     tower(150, 90, 400, near)
     # the sun's path on the water: pale dashes, widening towards us
-    rnd = random.Random(12)
+    rp = random.Random(12)
     for k in range(46):
         u = (k / 46) ** 1.4
-        yy = hy + 8 + u * 430 + rnd.uniform(-4, 4)
+        yy = hy + 8 + u * 430 + rp.uniform(-4, 4)
         half = 12 + u * 70
-        x = SUNX - half * rnd.uniform(0.8, 1.2)
-        while x < SUNX + half:                     # each row broken into a few dashes with gaps
-            seg = half * rnd.uniform(0.25, 0.7)
+        x = SUNX - half * rp.uniform(0.8, 1.2)
+        while x < SUNX + half:
+            seg = half * rp.uniform(0.25, 0.7)
             d.line([x * s, yy * s, min(x + seg, SUNX + half) * s, yy * s], fill=(255, 244, 230, 230),
                    width=int((2 + u * 5) * s))
-            x += seg + half * rnd.uniform(0.1, 0.35)
-    # the big wheel, right of the sun, backlit
+            x += seg + half * rp.uniform(0.1, 0.35)
+    # the big wheel, right of the sun, backlit: rim, inner rim, spokes, cabins, legs
     cx, cy, r = 790, hy - 190, 160
     wc = (150, 92, 140, 255)
     d.ellipse([(cx - r) * s, (cy - r) * s, (cx + r) * s, (cy + r) * s], outline=wc, width=6 * s)
@@ -236,11 +301,13 @@ def skyline(ss=2):
         a = 2 * math.pi * k / 24
         ex, ey = cx + math.cos(a) * r, cy + math.sin(a) * r
         d.line([cx * s, cy * s, ex * s, ey * s], fill=wc, width=2 * s)
-        d.ellipse([(ex - 8) * s, (ey - 8) * s, (ex + 8) * s, (ey + 8) * s], fill=wc)
-    d.line([((cx - 60) * s, hy * s), (cx * s, cy * s), ((cx + 60) * s, hy * s)], fill=wc, width=6 * s)
-    # the waterfront: a dark low band, a pergola on the left, moored boats
+        d.rounded_rectangle([(ex - 8) * s, (ey - 2) * s, (ex + 8) * s, (ey + 14) * s], radius=4 * s, fill=wc)
+    d.ellipse([(cx - 14) * s, (cy - 14) * s, (cx + 14) * s, (cy + 14) * s], fill=wc)
+    d.line([((cx - 70) * s, hy * s), (cx * s, cy * s), ((cx + 70) * s, hy * s)], fill=wc, width=7 * s)
+    # the waterfront: a dark low band with a lit top edge, a seafront shelter on the left, moored boats
     dark = (104, 58, 106, 255)
     d.rectangle([0, (hy - 34) * s, W * s, (hy + 6) * s], fill=dark)
+    d.line([0, (hy - 32) * s, W * s, (hy - 32) * s], fill=_mixc(dark[:3], WARM, 0.35) + (255,), width=3 * s)
     d.line([0, (hy - 34) * s, W * s, (hy - 34) * s], fill=ink, width=OL * s)
     px0, px1, ptop = 190, 420, hy - 120
     for px in np.linspace(px0, px1, 6):
@@ -248,28 +315,61 @@ def skyline(ss=2):
     for k in range(3):
         yy = ptop - 4 + k * 12
         d.rectangle([(px0 - 20) * s, yy * s, (px1 + 20) * s, (yy + 8) * s], fill=dark, outline=ink, width=2 * s)
-    boat = (236, 196, 214, 255)
+    for px in np.linspace(px0 - 10, px1 + 10, 14):     # the slats on top
+        d.line([px * s, (ptop - 12) * s, px * s, (ptop - 2) * s], fill=dark, width=4 * s)
+    boat = (236, 196, 214)
     for bx, bw in ((20, 110), (150, 80), (470, 90), (860, 120)):
         d.polygon([(bx * s, (hy - 14) * s), ((bx + bw) * s, (hy - 14) * s), ((bx + bw - 14) * s, (hy + 4) * s),
-                   ((bx + 10) * s, (hy + 4) * s)], fill=boat, outline=ink)
+                   ((bx + 10) * s, (hy + 4) * s)], fill=boat + (255,), outline=ink)
+        d.line([(bx + 8) * s, (hy - 8) * s, (bx + bw - 8) * s, (hy - 8) * s], fill=_mixc(boat, INK, 0.4) + (255,),
+               width=2 * s)
         d.rectangle([(bx + bw * 0.3) * s, (hy - 30) * s, (bx + bw * 0.6) * s, (hy - 14) * s],
-                    fill=boat, outline=ink, width=2 * s)
-    # the big tree, left of the sun
-    rnd = random.Random(8)
-    lumps = [(470 + rnd.uniform(-110, 110), hy - 170 + rnd.uniform(-70, 50), rnd.uniform(40, 70)) for _ in range(16)]
+                    fill=boat + (255,), outline=ink, width=2 * s)
+        d.line([(bx + bw * 0.45) * s, (hy - 70) * s, (bx + bw * 0.45) * s, (hy - 30) * s], fill=ink, width=2 * s)
+    # the big tree, left of the sun: a lumpy crown, darker lumps inside, warm-lit lumps on the sun side
+    rt = random.Random(8)
+    lumps = [(470 + rt.uniform(-110, 110), hy - 170 + rt.uniform(-70, 50), rt.uniform(40, 70)) for _ in range(18)]
     tm = Image.new('L', lay.size, 0)
     _blob(ImageDraw.Draw(tm), lumps, 255, s)
-    ImageDraw.Draw(tm).polygon([(455 * s, hy * s), (485 * s, hy * s), (478 * s, (hy - 140) * s),
-                                (462 * s, (hy - 140) * s)], fill=255)
+    trunk = [(455, hy), (485, hy), (478, hy - 140), (500, hy - 190), (490, hy - 196), (470, hy - 150),
+             (450, hy - 200), (440, hy - 194), (462, hy - 140)]
+    ImageDraw.Draw(tm).polygon([(x * s, y * s) for x, y in trunk], fill=255)
     lay.paste(ink, (0, 0), tm.filter(ImageFilter.MaxFilter(2 * OL * s + 1)))
     lay.paste((96, 52, 100, 255), (0, 0), tm)
+    inner = Image.new('L', lay.size, 0)
+    _blob(ImageDraw.Draw(inner), [(x - 10, y + 14, r * 0.6) for x, y, r in lumps[::2]], 255, s)
+    lay.paste((88, 47, 93, 255), (0, 0), Image.fromarray(np.minimum(np.asarray(inner), np.asarray(tm))))
+    litm = Image.new('L', lay.size, 0)
+    _blob(ImageDraw.Draw(litm), [(x + 14, y - 16, r * 0.45) for x, y, r in lumps if x > 480], 255, s)
+    lay.paste((116, 66, 112, 255), (0, 0), Image.fromarray(np.minimum(np.asarray(litm), np.asarray(tm))))
     # palms, darkest, in front
     pc = (84, 44, 92, 255)
-    for x, h, lean, sz in ((30, 260, 20, 1.1), (95, 220, -15, 1.0), (165, 250, 25, 1.1), (240, 200, -10, 0.9),
-                           (575, 180, 15, 0.8), (690, 210, -20, 0.9), (740, 170, 10, 0.7), (900, 230, -25, 1.0),
-                           (1050, 260, -35, 1.1)):
-        _palm(d, x, hy + 2, h, lean, pc, s, sz)
+    for i, (x, h, lean, sz) in enumerate(((30, 260, 20, 1.1), (95, 220, -15, 1.0), (165, 250, 25, 1.1),
+                                          (240, 200, -10, 0.9), (575, 180, 15, 0.8), (690, 210, -20, 0.9),
+                                          (740, 170, 10, 0.7), (900, 230, -25, 1.0), (1050, 260, -35, 1.1))):
+        _palm(d, x, hy + 2, h, lean, pc, s, sz, seed=i)
     return lay.resize((W, H), Image.LANCZOS)
+
+
+def reflection(city):
+    """The city upside down in the water: squashed, darker and pinker, see-through, fading with distance."""
+    hy = int(HY)
+    src = np.asarray(city).astype(np.float32)[hy - 680:hy][::-1]
+    ref = Image.fromarray(src.astype(np.uint8), 'RGBA').resize((W, int(src.shape[0] * 0.45)), Image.LANCZOS)
+    a = np.asarray(ref).astype(np.float32)
+    a[..., :3] = a[..., :3] * 0.55 + np.array([110, 58, 110]) * 0.45
+    a[..., 3] *= np.linspace(0.42, 0.0, a.shape[0])[:, None]
+    return a
+
+
+def _ripple(ref, t):
+    """The reflection broken into rows, each nudged sideways by a slow wave; every third band dropped (the gaps)."""
+    out = np.zeros_like(ref)
+    for y in range(ref.shape[0]):
+        if (y // 7 + int(t * 4)) % 5 == 0:
+            continue
+        out[y] = np.roll(ref[(y // 3) * 3], int(round(math.sin(y // 3 * 0.5 + t * 2.4) * (1 + y * 0.03))), axis=0)
+    return Image.fromarray(out.astype(np.uint8), 'RGBA')
 
 
 def _place(img, layer, scale, cx, cy, alpha, reveal=1.0):
@@ -287,14 +387,17 @@ def _place(img, layer, scale, cx, cy, alpha, reveal=1.0):
     img.alpha_composite(L, (int(cx - L.size[0] / 2), int(cy - L.size[1] / 2)))
 
 
-def frame(t, LOGO, PALE, CITY):
+def frame(t, LOGO, PALE, CITY, REF):
     # the city: fades in 1.25-2.0 s, a slow push in all the way (the camera drifting forward over the water)
     city_a = _ease((t - 1.25) / 0.75)
     img = Image.new('RGBA', (W, H), DARK + (255,))
     if city_a > 0:
         push = 1.0 + 0.06 * (t - 1.25) / (DUR - 1.25)
         bg = S.paint(t).convert('RGBA')
+        bg.alpha_composite(_ripple(REF, t), (0, int(HY) + 6))
         bg.alpha_composite(CITY)
+        e = HL.edges(np.asarray(bg.convert('RGB'), np.float32) / 255)       # paper edges and shadows
+        bg = Image.fromarray((np.clip(e, 0, 1) * 255 + 0.5).astype(np.uint8)).convert('RGBA')
         bw, bh = int(W * push), int(H * push)
         ox, oy = (bw - W) // 2, int((bh - H) * 0.58)
         bg = bg.resize((bw, bh), Image.LANCZOS).crop((ox, oy, ox + W, oy + H))
@@ -308,34 +411,40 @@ def frame(t, LOGO, PALE, CITY):
     cx, cy = W / 2, 860
     _place(img, LOGO, scale, cx, cy, a_out * (1 - pale), reveal)
     _place(img, PALE, scale, cx, cy, a_out * pale, reveal)
-    return img.convert('RGB')
+    a = HL.lay_on_paper(np.asarray(img.convert('RGB'), np.float32) / 255, HL.LOOK['paper'])
+    return Image.fromarray((np.clip(a, 0, 1) * 255 + 0.5).astype(np.uint8))
 
 
 def layers():
     L = logo()
     city = clouds()
-    city.alpha_composite(skyline())
-    return L, _pale(L), city
+    sky = skyline()
+    city.alpha_composite(sky)
+    return L, _pale(L), city, reflection(sky)
 
 
 def main():
     out = sys.argv[1]
     small = '--small' in sys.argv
-    L, P, C = layers()
+    L, P, C, R = layers()
     size = '540x960' if small else '1080x1920'
     p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}',
-                          '-r', str(FPS), '-i', '-', '-vf', f'scale={size}', '-c:v', 'libx264', '-crf', '20',
-                          '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
-    for i in range(int(DUR * FPS)):
-        p.stdin.write(frame(i / FPS, L, P, C).tobytes())
+                          '-r', str(FPS), '-i', '-', '-vf', f'scale={size}', '-c:v', 'libx264', '-crf', '18',
+                          '-preset', 'slow', '-pix_fmt', 'yuv420p', '-movflags', '+faststart', out],
+                         stdin=subprocess.PIPE)
+    step = FPS // DRAW_FPS
+    for i in range(0, int(DUR * FPS), step):          # on twos: each drawing held for 2 frames
+        fr = frame(i / FPS, L, P, C, R).tobytes()
+        for _ in range(step):
+            p.stdin.write(fr)
     p.stdin.close()
     p.wait()
 
 
 if __name__ == '__main__':
     if len(sys.argv) > 2 and sys.argv[1] == 'still':
-        L, P, C = layers()
+        L, P, C, R = layers()
         for tt in map(float, sys.argv[3:]):
-            frame(tt, L, P, C).resize((540, 960)).save(sys.argv[2].replace('.png', f'_{tt}.png'))
+            frame(tt, L, P, C, R).save(sys.argv[2].replace('.png', f'_{tt}.png'))
     else:
         main()
