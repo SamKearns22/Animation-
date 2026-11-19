@@ -41,3 +41,10 @@ Any other learnings from the Milburn build we need to queue? Keep statement one 
 
 3. Show me
 
+### 2026-11-19T09:01:41
+2. This check seems to be just for Kemi and Andy, that's why it's failing
+
+Round_page info seems important for the code fixing job we have just scheduled
+
+We have already moved past the 3/4 heads you just posted. A better model and process was built in the long Face Checker tool, completed in chat Fafe Checker Status Update. See reference. Why were they not used?
+
