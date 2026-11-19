@@ -10,25 +10,26 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.27,
+   "cost": 0.54,
    "src": "estimate",
    "sid": "session_01J1JB7XvoNMnKfot6e3v1E1",
-   "steps": 26,
-   "hist_k": 105,
+   "steps": 66,
+   "hist_k": 122,
    "kinds": {
-    "film-file search": 12.6,
+    "film-file search": 8.6,
     "tool search": 10.0,
-    "renders": 1.5,
-    "other": 76.0
+    "renders": 3.6,
+    "pictures": 1.4,
+    "other": 76.4
    },
    "calls": {
-    "film-file search": 12,
-    "tool search": 9,
+    "film-file search": 16,
+    "tool search": 26,
     "whole-file .py read": 0,
     "page.py": 0,
-    "renders": 2,
-    "pictures": 0,
-    "other": 1
+    "renders": 7,
+    "pictures": 3,
+    "other": 3
    }
   }
  ],
