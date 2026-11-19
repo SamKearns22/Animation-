@@ -1332,22 +1332,22 @@
    "cost": 1.66,
    "src": "estimate",
    "sid": "session_01J1JB7VQkJBtMyeAvAPd5rb",
-   "steps": 53,
-   "hist_k": 179,
+   "steps": 56,
+   "hist_k": 181,
    "kinds": {
-    "tool search": 16.3,
-    "renders": 5.5,
-    "other": 78.2
+    "tool search": 16.4,
+    "renders": 5.3,
+    "other": 78.4
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 36,
+    "tool search": 37,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
     "pictures": 0,
-    "other": 25
+    "other": 26
    },
    "search": {
     "show": 0,
