@@ -897,6 +897,141 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-19",
+   "chat": "86bc5e6a",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.32,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZUimqTBbLiqdPxYKr",
+   "steps": 18,
+   "hist_k": 148,
+   "kinds": {
+    "tool search": 33.2,
+    "other": 66.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 13,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 1,
+     "film notes": 9,
+     "shared:propose.py": 2,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "notes/archive notes/ledger notes/proposals",
+      "git status --short | head; git branch --show-current; git fetch -q origin claude"
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/archive/milburn*.md notes/ledger/milburn.json notes/proposals/unrouted.md ",
+      "wc -c notes/archive/milburn*.md notes/ledger/milburn.json notes/proposals/unrout"
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/archive/milburn-handovers.md",
+      "cat notes/archive/milburn-handovers.md | head -150"
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/archive/milburn-handovers.md",
+      "sed -n 150,400p notes/archive/milburn-handovers.md"
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/archive/milburn*.md notes/archive/milburn-handovers.md",
+      "wc -l notes/archive/milburn*.md; sed -n 60,200p notes/archive/milburn-handovers."
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md",
+      "^#|^## |without ask|unasked|changed .*(tool|check|rule|kit)|tool job|new check|p"
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md",
+      "sed -n 1,27p notes/archive/milburn.md | cut -c1-2500; echo ======; sed -n 220,27"
+     ],
+     [
+      8,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals",
+      "^$"
+     ],
+     [
+      9,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py review milburn --since 2026-11-17 2>&1 | cut -c1-400 |"
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposals/review-milburn.md notes/ledger/milburn.json notes/archive/milbur",
+      "rm notes/proposals/review-milburn.md && python3 - <<'E' import json d=json.load("
+     ],
+     [
+      12,
+      "other",
+      "shared:ledger.py",
+      "guides/film-quality-rules.md guides/satire.md source/ledger.py notes/archive/mil",
+      "^[+-]"
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "guides/film-quality-rules.md notes/proposals/three-quarter-people.md",
+      "^| 56 "
+     ],
+     [
+      15,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md",
+      "python3 - <<'E' p='notes/proposals/milburn-review.md' s=open(p).read() s=s.repla"
+     ]
+    ]
+   }
   }
  ],
  "checks": {}
