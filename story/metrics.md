@@ -285,3 +285,56 @@ Reading (Claude): Russell Brand is the second-biggest film on the channel after 
 | Elder Scrolls | Tue 10 Nov | 23,117 | 20,787 | 15 s | 753 | 20 | 20 | 1,266 (post screen) | 133 | 7 |
 
 Reading (Claude): Elder Scrolls, which stalled at 942 on TikTok and 17 on YouTube, is the biggest film on Instagram (23.1K views, 1,266 shares, the most shared film we have recorded on any platform). Russell Brand is also strong on Instagram (17.6K, 30 s average watch, 25 follows), so it worked on all three platforms. Ocarina flopped everywhere (769 TikTok, 529 Instagram, 1.2K YouTube). Same film, very different platform result: Elder Scrolls is a share-driven Instagram hit, in line with the 11 Nov note that Instagram is where the films that stall elsewhere sometimes take off.
+
+## Snapshot: Thu 19 Nov 2026, 21:03 (Facebook Page reels grid, CranbriJoos; Sam's phone screen)
+
+First Facebook reel with real reach. Sam: "happened today, from nowhere", about 200 new Page followers from zero and still
+counting (his count; the follower number is not on this screen). Views only on the screen:
+
+| Film (Hook Text on screen) | Posted | Facebook views |
+|---|---|---|
+| Russell Brand ("The 5 stages of feeling blessed"), pinned | Fri 13 Nov | 51.5K |
+| Reel with a man in a suit and an explosion behind him | not known | 406 |
+| Alan Milburn report | not known | 216 |
+| Riot, "Intensity Level 11/10" | not known | 270 |
+| R2 Grenades (Zelda / owl) | not known | 272 |
+| Elder Scrolls VI Swindon | 10 Nov | 257 |
+| Tesla Kills Two Birds With One Stone | 17 Oct | 10 |
+| Space / Jupiter | not known | 3 |
+
+Every other Facebook reel is 3-406 views (typical about 250). Russell Brand is about 130 times that.
+
+Same film elsewhere (14 Nov, day 1): TikTok 15.9K, Instagram 17.6K, YouTube Shorts 5.6K. Facebook is now its biggest platform.
+About 200 followers on 51.5K views is about 3.9 per 1,000 (TikTok 1.4, Instagram 1.4).
+
+Reading (Claude, 19 Nov): Facebook's own insights page was not sent, so the cause is a best guess. Most likely a normal
+Facebook Reels push: it shows a reel to a small test group, and if people watch it through, shows it to a bigger group,
+again and again, for days. The Page had no followers, so all of it is strangers. Why this film: the 5-stages hook, and
+Russell Brand's name is searched and followed by an older Facebook audience. The 14 Nov note ("Facebook views negligible")
+is out of date for this one film; it still holds for the other reels. Next time: send Reel insights for this film
+(plays by day, watch time, where people found it, who they are) to confirm.
+
+## Snapshot: Thu 19 Nov 2026, 21:50 (Russell Brand film, Facebook Post details; Sam's phone screens)
+
+The same reel as the 21:03 snapshot, now with Meta's own breakdown. Shown as Facebook (crossposted from Instagram).
+
+- Views 51,805; 3-second views 31,749 (61%); viewers 41K; "Instagram views" listed separately at 23K (14 Nov: 17.6K). It is not clear
+  whether 51.8K includes the Instagram 23K; if it does, Facebook alone is about 29K. The daily chart tops out near 40K.
+- **Shape of the chart: flat at about the usual level for about 5 days, then a near-vertical jump at the very end (today).** Not a launch-day push.
+- Engagement 1.2K: reactions 516 (like 411, love 6, care 1, haha 84, wow 4, sad 1, angry 9), clicks 396, comments 186, saves 73, shares 54.
+- Followers vs not: 99% non-followers, 1% followers.
+- Age: 55-64 33.8%, 65+ 25.7%, 45-54 23.8%, other 16.7% (so about 83% are 45+). Gender: men the bigger share in every age band (by eye).
+- Countries: UK 67.7%, US 9.4%, Australia 6.5%, other 16.4%.
+- Retention (by eye): about 55% still watching at 15 s, about 40% at 30 s, about 28% at 45 s, then a drop at the very end. Smooth, no cliff.
+- Traffic sources: "not enough data yet".
+- Meta's note: "This reel has higher views than usual. Your 45 to 60-second reels tend to perform 213% better than other reels." (film is 56.68 s).
+
+Context (Claude, 19 Nov, web search): Russell Brand was sentenced on 9 Nov (guilty of rape and sexual assault; reports say over 10
+years); since then his wife read a statement from him on their YouTube show and the UK government is looking into whether that broke
+prison rules; Netflix has announced a quick documentary. The film went up 13 Nov; the trigger for today's jump was not found.
+
+Reading (Claude, 19 Nov): Facebook's crowd for this film is the opposite of TikTok's: UK, 45+, mostly men, all strangers, who stayed
+(61% past 3 s, about 1 in 4 near the end) and talked (186 comments, 84 laughs). Same film: TikTok 15.9K at day 1 with an 18-34 crowd.
+Other UK-politics reels on the same Page (Milburn 216, riot 270) did not move, so "UK figure" alone is not the cause: a person in
+the headlines this week is the common thread, with the film sitting there when Facebook went looking. Elder Scrolls did the same on
+Instagram (stalled elsewhere, 23.1K there): a film can break out on one platform, days after posting.
