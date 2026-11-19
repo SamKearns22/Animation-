@@ -48,3 +48,10 @@ Round_page info seems important for the code fixing job we have just scheduled
 
 We have already moved past the 3/4 heads you just posted. A better model and process was built in the long Face Checker tool, completed in chat Fafe Checker Status Update. See reference. Why were they not used?
 
+### 2026-11-19T09:04:52
+build the four on the face tool's heads" against front-on and "both".
+
+The goal isn't to fix it for those characters, it's to fix it for all characters in the future so it doesn't happen again. We should always use our best tools and it's concerning that you found and chose a weaker tool. Could this be a systemic problem? Are expensive fixes and tools sitting unused and ignored throughout our two months of making films?
+
+N
+
