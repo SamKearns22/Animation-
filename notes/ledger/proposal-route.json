@@ -1115,18 +1115,18 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.74,
+   "cost": 1.05,
    "src": "estimate",
    "sid": "session_01J1JB7XQCcHnzbB7r62524n",
-   "steps": 32,
-   "hist_k": 128,
+   "steps": 35,
+   "hist_k": 129,
    "kinds": {
-    "tool search": 17.1,
-    "other": 82.9
+    "tool search": 16.8,
+    "other": 83.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 20,
+    "tool search": 21,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
@@ -1141,7 +1141,7 @@
     },
     "other": {
      "shared:branches.py": 1,
-     "other": 5,
+     "other": 6,
      "film notes": 9,
      "shared:handover.py": 1,
      "shared:blessed.py": 1,
@@ -1289,6 +1289,13 @@
       "shared:propose.py",
       "notes/proposals/scheduled-jobs-attach.md notes/ledger/sam/7r62524n.md notes/ledg",
       "python3 - <<'E' p='notes/proposals/scheduled-jobs-attach.md' s=open(p).read() s="
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Proposal scheduled-jobs-attach: problem, facts, my"
      ]
     ]
    }
