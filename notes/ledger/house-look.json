@@ -11,6 +11,219 @@
    "repeats": [],
    "model": "opus",
    "cost": 3.93
+  },
+  {
+   "date": "2026-11-19",
+   "chat": "c079f576",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.17,
+   "src": "estimate",
+   "sid": "session_01J1JB7ZdmzPQqSmkpoDgFWX",
+   "steps": 52,
+   "hist_k": 202,
+   "kinds": {
+    "film-file search": 1.4,
+    "tool search": 6.1,
+    "renders": 14.2,
+    "pictures": 7.9,
+    "other": 70.4
+   },
+   "calls": {
+    "film-file search": 2,
+    "tool search": 11,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 14,
+    "pictures": 17,
+    "other": 17
+   },
+   "split": {
+    "usd": 4.2826,
+    "total": 4.2826,
+    "floor_k": 80,
+    "blocks": {
+     "Claude's words": 44.7,
+     "new writes": 22.5,
+     "start-up floor": 21.4,
+     "carried history": 11.3
+    },
+    "origins": {
+     "Claude's words": 58.9,
+     "start-up floor": 21.4,
+     "result: pictures": 6.9,
+     "Claude's edits": 5.8,
+     "result: tool search": 5.1,
+     "messages and reminders": 0.8,
+     "result: other": 0.5,
+     "result: film-file search": 0.4,
+     "result: renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 80,
+    "work_step": 12,
+    "work_pct": 0.21,
+    "reads": [
+     [
+      "guides/kit-catalogue.md",
+      2.1,
+      0.0332
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/vid/s4.jpg",
+      1.6,
+      0.0266
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/sea.png",
+      1.6,
+      0.0243
+     ],
+     [
+      "guides/job-packs.md",
+      1.2,
+      0.0193
+     ],
+     [
+      "source/flying_whales_sea.py",
+      1.2,
+      0.0186
+     ],
+     [
+      "story/status.md",
+      0.3,
+      0.0051
+     ]
+    ],
+    "base_pct": 17.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 2
+    },
+    "other": {
+     "film notes": 3,
+     "guides": 1,
+     "shared:satire_template.py": 1,
+     "shared:flying_whales_sea.py": 4,
+     "shared:gta_opener.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      3,
+      "other",
+      "film notes",
+      "story/status.md guides/job-packs.md",
+      "^#",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "guides",
+      "guides/job-packs.md guides/kit-catalogue.md",
+      "^#\\|title\\|logo\\|skyline\\|city",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:satire_template.py",
+      "guides/kit-catalogue.md source/satire_template.py",
+      "sed -n 11,40p guides/kit-catalogue.md | cut -c1-220; sed -n 100,110p guides/kit-",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:flying_whales_sea.py",
+      "source/fonts guides/kit-catalogue.md source/flying_whales_sea.py source/satire_t",
+      "Dusk sky",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:flying_whales_sea.py",
+      "source/flying_whales_sea.py",
+      "sed -n 1,47p source/flying_whales_sea.py | cut -c1-200; sed -n 317,366p source/f",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:flying_whales_sea.py",
+      "source/flying_whales_sea.py source/whale.py",
+      "class Cam",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:flying_whales_sea.py",
+      "source/flying_whales_sea.py",
+      "sed -n 55,80p source/flying_whales_sea.py; sed -n 141,180p source/flying_whales_",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:gta_opener.py",
+      "/home/user/Animation-/source/gta_opener.py",
+      "lines 0+5",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "film notes",
+      "notes/house-look.md notes/house-look",
+      "^#\\|^- \\*\\*",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "film notes",
+      "notes/house-look.md source/*.py",
+      "def \\(paper\\|grain\\|wobble\\|edge\\|house\\)",
+      ""
+     ],
+     [
+      41,
+      "film",
+      "before show",
+      "source/house_look.py",
+      "^def \\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      42,
+      "film",
+      "before show",
+      "source/house_look.py",
+      "sed -n 40,70p source/house_look.py; sed -n 154,200p source/house_look.py",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:gta_opener.py",
+      "/home/user/Animation-/source/gta_opener.py",
+      "lines 0+3",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {}
