@@ -302,7 +302,7 @@ def better(a, b):
         win, lose = (a, b) if a.get('cost', 0) >= b.get('cost', 0) else (b, a)
     win = dict(win)
     if lose.get('steps', 0) > win.get('steps', 0):
-        win.update({k: lose[k] for k in ('steps', 'hist_k', 'kinds', 'calls') if k in lose})
+        win.update({k: lose[k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'split') if k in lose})
     return win
 
 
@@ -540,6 +540,8 @@ def mergefile(o, a, b, path):
 def _put_measure(row, m):
     """stepcost's figures onto a ledger row: steps, history at the end (k tokens), each kind's share of the chat (%)."""
     row.update(steps=m['steps'], hist_k=m['hist'] // 1000, kinds=m['kinds'], calls=m['calls'])
+    if m.get('split'):                            # cost-other change 1 (Sam's Y, 19 Nov): the exact split
+        row['split'] = m['split']
     if m.get('search'):                           # finder-use Learn (Sam's 1, 17 Nov): the chat's search record
         row['search'] = m['search']
 
@@ -581,7 +583,7 @@ def app_import(path=APP):
             row.update(date=r[2][:10], chat=r[1][-8:], sid=sid, src='app', stage=r[3][:60],
                        model=r[9], cost=round(float(r[4]) / costwatch.WEEK_USD * 100, 2), usd=float(r[4]))
             if sid in meas and not row.get('steps'):
-                row.update({k: meas[sid][k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'search') if k in meas[sid]})
+                row.update({k: meas[sid][k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'search', 'split') if k in meas[sid]})
             if sid not in have:
                 d['chats'].append(row)
         d['chats'].sort(key=lambda c: c['date'])
@@ -761,6 +763,11 @@ def render(d):
         out += [f"- {c['date']} {c['chat']} ({c['stage']}): {c['steps']} steps, history {c['hist_k']}k at the end; "
                 + ', '.join(f'{k} {v:g}%' for k, v in sorted(c['kinds'].items(), key=lambda kv: -kv[1]))
                 for c in meas]
+    sps = [c for c in d['chats'] if c.get('split')]
+    if sps:                                       # cost-other change 1 (19 Nov): exact split, leftover under 5%
+        import stepcost
+        out += ['', '## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)']
+        out += [f"- {c['date']} {c['chat']} ({c['stage']}): " + stepcost.split_line(c['split']) for c in sps]
     if reps:
         out += ['', '## Repeated notes (what would have caught them)']
         out += [f'- {r}' for r in reps]

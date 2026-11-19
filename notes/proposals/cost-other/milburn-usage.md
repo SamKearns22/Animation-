@@ -23,3 +23,30 @@ Totals (13 chats): app $74.59; ledger estimate at $245/week $73.84. By token typ
 The ledger's per-chat estimates match the app's dollars within a few % (sum $73.84 vs $74.59). So the gap to Sam's meter
 (32.4% estimated vs 22.0% on his app) is the dollars-to-%-of-a-week conversion (WEEK_USD 245, marked provisional), not
 the per-step estimate. If Milburn's ~$79 real spend is 22% of a week, a week is about $361, not $245.
+
+## Where Milburn's money went, by block (cost-other Learn, job 4 chat 3, 19 Nov)
+From the table above and the ledger's step counts (12 chats with both). Start-up floor = the step-1 context re-read at
+every later step: ~90k tokens x (steps - 1) x read price, an ESTIMATE (step-1 size was not stored for Milburn; the new
+meter stores it from now on). Carried history = the rest of the re-read. New writes = everything put in the cache once
+(tool results, Claude's own earlier words, reminders; not split here: the transcripts are gone). Claude's words =
+output (text, thinking, tool-call text). Purpose per chat is not in the record beyond the chat titles.
+
+| chat | title | steps | start-up floor | carried history | new writes | Claude's words | $ app |
+|---|---|---|---|---|---|---|---|
+| 1 | screenplay | 68 | 26% | 21% | 28% | 25% | 4.16 |
+| 2 | | 92 | 20% | 20% | 28% | 31% | 6.65 |
+| 3 | moves | 130 | 25% | 27% | 28% | 21% | 7.75 |
+| 4 | | 59 | 30% | 15% | 27% | 28% | 3.13 |
+| 5 | | 136 | 25% | 30% | 23% | 23% | 8.85 |
+| 6 | | 92 | 21% | 25% | 23% | 31% | 6.95 |
+| 7 | | 71 | 19% | 15% | 41% | 25% | 5.86 |
+| 9 | | 98 | 16% | 23% | 38% | 23% | 9.16 |
+| 10 | | 123 | 23% | 26% | 27% | 24% | 7.94 |
+| 11 | animatic update | 122 | 28% | 23% | 27% | 22% | 6.68 |
+| 12 | | 40 | 29% | 12% | 44% | 16% | 1.17 |
+| 13 | | 117 | 23% | 19% | 31% | 27% | 5.51 |
+| all 12 | | | 23% ($17.29) | 23% ($17.58) | 30% ($22.54) | 25% ($18.97) | 73.81 |
+
+Ranked: new writes 30%, Claude's words 25%, carried history 23%, start-up floor 23%. No one block dominates; the
+biggest (new writes) is what each step brings in, which the new meter splits by origin (which tool, Claude's own
+edits, reminders) on every chat from now on. The cut is proposed against whichever origin ranks first on the next film.
