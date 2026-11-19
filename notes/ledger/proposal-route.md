@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 81.29%; 36 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate ?% of a week; spent 82.17%; 37 chats, 0 rounds, 0 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -44,6 +44,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-19 | 6561bc9b | est | opus | auto |  | 4.14 |  | 0 | 0 |
 | 2026-11-19 | 7d6b30b4 | est | sonnet | auto |  | 0.07 |  | 0 | 0 |
 | 2026-11-19 | d6d03814 | est | opus | auto |  | 2.59 |  | 0 | 0 |
+| 2026-11-19 | 3a437266 | est | opus | auto |  | 0.88 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 83ccf353 (auto): 18 steps, history 141k at the end; other 60.5%, page.py 26.5%, tool search 13%
@@ -71,3 +72,11 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-19 6561bc9b (auto): 116 steps, history 270k at the end; other 75.8%, tool search 18.9%, pictures 4.5%, renders 0.8%
 - 2026-11-19 7d6b30b4 (auto): 6 steps, history 88k at the end; other 85.5%, tool search 14.5%
 - 2026-11-19 d6d03814 (auto): 61 steps, history 180k at the end; other 79.2%, tool search 20.8%
+- 2026-11-19 3a437266 (auto): 58 steps, history 166k at the end; other 66.9%, tool search 26.6%, renders 6.6%
+
+## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
+- 2026-11-19 3a437266 (auto): Claude's words 33%, start-up floor 30.8%, new writes 20.8%, carried history 15.3%. Biggest origins: Claude's words 49.3%, start-up floor 30.8%, result: tool search 16.2%. Leftover 0%
+
+## Starting each chat
+A new chat's start and re-learning cost 0% of the film (0.26% of a week over 1 chats: start 0.26, re-learning 0.00; 0.26% a chat; step-1 context re-read is 26% of a chat on average).
+- 2026-11-19 3a437266: step-1 context 82k; first real work at step 15 (0.26% of a week); read before it: source/stepcost.py 4.6k, notes/proposals/cost-other/milburn-usage.md 1.6k, source/propose.py 1.1k, notes/proposals/cost-other.md 0.9k, notes/proposals/cold-start.md 0.9k, source/ledger.py 0.7k
