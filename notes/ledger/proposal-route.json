@@ -1724,26 +1724,26 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 5.61,
+   "cost": 6.09,
    "src": "estimate",
    "sid": "session_01J1JB7YKoy2Nfx7Nsi8i8BA",
-   "steps": 60,
-   "hist_k": 182,
+   "steps": 64,
+   "hist_k": 189,
    "kinds": {
-    "tool search": 19.4,
-    "whole-file .py read": 2.2,
-    "page.py": 4.3,
-    "other": 74.2
+    "tool search": 14.8,
+    "whole-file .py read": 1.6,
+    "page.py": 3.1,
+    "other": 80.5
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 40,
+    "tool search": 41,
     "whole-file .py read": 1,
     "page.py": 1,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 32
+    "other": 35
    },
    "search": {
     "show": 0,
@@ -1752,7 +1752,7 @@
     },
     "other": {
      "other": 12,
-     "shared:propose.py": 11,
+     "shared:propose.py": 12,
      "shared:stepcost.py": 4,
      "film notes": 5,
      "shared:costwatch.py": 1,
@@ -2041,6 +2041,13 @@
       "other",
       "",
       "for i in 1 2 3; do git merge -q --no-edit origin/claude/create-claude-md-oe8z4g "
+     ],
+     [
+      76,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "for n in cost-other cold-start check-catches; do echo \"== $n\"; python3 source/pr"
      ]
     ]
    }
