@@ -1,4 +1,3 @@
-Job 1 (19 Nov): front-on focus proposal judged (notes/proposals/front-on-focus.md); waiting for Sam by number (L1-L3, C1-C5, R1-R7).
-proposal-route (19 Nov): three proposals sent to Sam; waiting on his numbers 1-4. Nothing built, no tool changed.
-Next: Opus builds whichever options he picks.
-Blessed WIP branch (claude/blessed-c2-mics-wip, source/blessed.py) is unfinished and stays off the main line: named here (19 Nov).
+plain-check (19 Nov, route item 11, Sam's "fix now"): judged (helper B's version picked blind; Critiqued 7/3/4); sent to Sam as option 1 or 2. Nothing built yet.
+Next: on Sam's number, this chat (Opus high) builds and tests it (review lessons must be blocked, a full plain ask must pass).
+Parked (Sam: "just the communication problem for now"): could-not-test, staging-stills, shared-check-fixes, notes-model, named-lines, guard-film-questions, brow-limit, rule-needs-check (packed, no helpers run). Branches named, not merged: claude/blessed-c2-mics-wip (unfinished Blessed work), claude/aim-check-study-oe8z4g (another chat's live aim-check study). Cost line: proposal-route has no ledger estimate (named, as in earlier route chats).
