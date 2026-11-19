@@ -68,6 +68,6 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-19 689989ae (auto): 61 steps, history 184k at the end; other 83.9%, tool search 12.2%, renders 3.9%
 - 2026-11-19 479f8e85 (auto): 49 steps, history 135k at the end; other 77.9%, tool search 18.2%, page.py 3.8%
 - 2026-11-19 f879fe96 (auto): 64 steps, history 189k at the end; other 80.5%, tool search 14.8%, page.py 3.1%, whole-file .py read 1.6%
-- 2026-11-19 6561bc9b (auto): 103 steps, history 261k at the end; other 76.1%, tool search 18.9%, pictures 4.6%, renders 0.4%
+- 2026-11-19 6561bc9b (auto): 109 steps, history 267k at the end; other 75.7%, tool search 19%, pictures 4.5%, renders 0.8%
 - 2026-11-19 7d6b30b4 (auto): 6 steps, history 88k at the end; other 85.5%, tool search 14.5%
 - 2026-11-19 d6d03814 (auto): 61 steps, history 180k at the end; other 79.2%, tool search 20.8%

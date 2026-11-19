@@ -2189,23 +2189,23 @@
    "cost": 4.14,
    "src": "estimate",
    "sid": "session_01J1JB7ZPv3wYxu8yAH6EYJT",
-   "steps": 103,
-   "hist_k": 261,
+   "steps": 109,
+   "hist_k": 267,
    "kinds": {
-    "tool search": 18.9,
-    "renders": 0.4,
-    "pictures": 4.6,
-    "other": 76.1
+    "tool search": 19.0,
+    "renders": 0.8,
+    "pictures": 4.5,
+    "other": 75.7
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 64,
+    "tool search": 67,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 1,
+    "renders": 2,
     "pictures": 10,
-    "other": 28
+    "other": 29
    },
    "search": {
     "show": 0,
