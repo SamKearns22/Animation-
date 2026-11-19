@@ -1,0 +1,365 @@
+{
+ "film": "milburn",
+ "runs": [
+  {
+   "branch": "claude/milburn-c2",
+   "ref": "72b55c9b",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "poses": [
+     "poses (rule 41): the body move \"seated upright, hands folded on the folder, tiny lean in\" (Milburn, single) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck",
+     "poses (rule 41): the body move \"all four look up as the light sweeps down\" (Milburn (heard), NEETs (seen), medium on the four) is not yet looked at at phone size in its own shot: posecheck.py look FIL",
+     "poses (rule 41): the body move \"platform locks level with the grass\" (Milburn (heard), aerial) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM"
+    ],
+    "HEAD LIFE": [
+     "HEAD LIFE: milburn speaks (line ?) with no head acting (rule 74: HEAD_LIFE['milburn'] = headlife.HeadLife from the voice, used in the drawing)"
+    ]
+   },
+   "tail": ", NEETs (seen), medium on the four) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Milburn (heard), NEETs (seen), medium on the four\" T \"what reads\"\n - poses (rule 41): the body move \"platform locks level with the grass\" (Milburn (heard), aerial) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Milburn (heard), aerial\" T \"what reads\"\n - HEAD LIFE: milburn speaks (line ?) with no head acting (rule 74: HEAD_LIFE['milburn'] = headlife.HeadLife from the voice, used in the drawing)\n"
+  },
+  {
+   "branch": "claude/milburn-chat3",
+   "ref": "c11a832b",
+   "files": 8,
+   "secs": 2,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "/preflight.py\", line 576, in <module>\n    main()\n    ~~~~^^\n  File \"/tmp/replay-2ov8sht1/source/preflight.py\", line 435, in main\n    shared += plan.faults(film)         # rule 1: one plan of the world in metres, joined up, a camera per shot\n              ~~~~~~~~~~~^^^^^^\n  File \"/tmp/replay-2ov8sht1/source/plan.py\", line 211, in faults\n    fx0, fz0, fx1, fz1 = footprint(th)\n                         ~~~~~~~~~^^^^\n  File \"/tmp/replay-2ov8sht1/source/plan.py\", line 98, in footprint\n    (cx, cz), (sx, sz, _) = th['at'], th['size']\n                                      ~~^^^^^^^^\nKeyError: 'size'\n"
+  },
+  {
+   "branch": "claude/milburn-chat8-swindon-mouth",
+   "ref": "7c8fbead",
+   "files": 13,
+   "secs": 2,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "10 shot": [
+     "10 shot(s) on no delivered board (rule 11): 3, 4a, 4b, 4c, 6, 7a, 7b, 7c ...: draw the board again, send it, then `sent --board`"
+    ],
+    "poses": [
+     "poses (rule 41): the body move \"goth hoists the heavy crossbow to her shoulder; rangy lifts \" (Milburn (heard), NEETs (seen), mid on the four) is not yet looked at at phone size in its own shot: posec",
+     "poses (rule 41): the body move \"leans in, jabs a pointing finger at Milburn (a touch to the \" (Andy, two-shot reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, the",
+     "poses (rule 41): the body move \"fingers steepled, elbows on the table; a small nod\" (Pat, the reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py s",
+     "poses (rule 41): the body move \"arms flung up on \"Fine!\", then folds them and leans back in \" (Andy, the reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then pos",
+     "poses (rule 41): the body move \"walking in single file; goth's crossbow shouldered, Swindon'\" (Milburn (heard), NEETs (seen), travelling beside them) is not yet looked at at phone size in its own shot",
+     "poses (rule 41): the body move \"a jolt on the gunfire; all duck on the flame; Swindon sprays\" (Milburn (heard), the greenery (heard: gunfire), the camera stops) is not yet looked at at phone size in i",
+     "poses (rule 41): the body move \"up out of the lean, both fists down on the table on \"fucker\"\" (Andy, the reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then pos",
+     "poses (rule 41): the body move \"both hands out, palms up, then shaking them\" (Andy, the reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FI",
+     "poses (rule 41): the body move \"frozen mid-lean\" (Andy, the reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Andy, the reverse\" T \"wh",
+     "poses (rule 41): the body move \"fingers steepled; a small nod\" (Pat, the reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Pat, the re"
+    ],
+    "HEAD LIFE": [
+     "HEAD LIFE: andy speaks (line ?) with no head acting (rule 74: HEAD_LIFE['andy'] = headlife.HeadLife from the voice, used in the drawing)",
+     "HEAD LIFE: pat speaks (line ?) with no head acting (rule 74: HEAD_LIFE['pat'] = headlife.HeadLife from the voice, used in the drawing)"
+    ]
+   },
+   "tail": "n shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Andy, the reverse\" T \"what reads\"\n - poses (rule 41): the body move \"fingers steepled; a small nod\" (Pat, the reverse) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Pat, the reverse\" T \"what reads\"\n - HEAD LIFE: andy speaks (line ?) with no head acting (rule 74: HEAD_LIFE['andy'] = headlife.HeadLife from the voice, used in the drawing)\n - HEAD LIFE: pat speaks (line ?) with no head acting (rule 74: HEAD_LIFE['pat'] = headlife.HeadLife from the voice, used in the drawing)\n"
+  },
+  {
+   "branch": "claude/milburn-chat12",
+   "ref": "c91d682f",
+   "files": 16,
+   "secs": 2,
+   "exit": 1,
+   "refused": false,
+   "faults": {
+    "CAMERA FEEL": [
+     "CAMERA FEEL: shot *: the film gives no camera the check can read (cam_for(t) returning a B.Cam or a sets.Cam): rule 72 not checked (give it one, or a row in the exceptions: | camera feel | * | why | l"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule S7"
+    ],
+    "READABILITY": [
+     "READABILITY: the film has no JOKE_PROPS ([(name, [times], where, size m)], [] for none): rule 18"
+    ],
+    "SHOT CAST": [
+     "SHOT CAST: shot 2a: goth is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: rangy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: swindon is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: waif is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: goth is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: rangy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: swindon is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: waif is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 3: goth is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: rangy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: swindon is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: waif is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 1: milburn is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 4b: milburn is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 7d: milburn is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 4a: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4a: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4c: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4c: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 7e: andy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 7e: pat is never on screen (the brief puts them in it; SHOT_CAST)"
+    ],
+    "caption": [
+     "caption \"long in the making.\": 1.06 s on screen at 1.1x for 4 words (too fast to read)",
+     "caption \"findings or would you\": 1.06 s on screen at 1.1x for 4 words (too fast to read)"
+    ],
+    "clipcheck": [
+     "clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing checks that no one passes through anyone or teleports (clipcheck.py; rule 19)"
+    ],
+    "house style": [
+     "house style: the film has no audits: the general audit (each body alone: in pieces, popping, stretching, frozen): start from the template",
+     "house style: the film has no LINE_SUBJECTS: the line-work check (every shape outlined, one weight)",
+     "house style: the film has no PROP_SIZES: the real-size check for props and set pieces",
+     "house style: the film has no OUTFIT: the clothes check (skirts from the waist, jackets to the hips)"
+    ],
+    "the collision and pop-in tests did not r": [
+     "the collision and pop-in tests did not run: the film has no scene(t) (audit.py; rules 5 and 6; a film with no people or props says so in HAS)"
+    ],
+    "plan": [
+     "plan: rooms cabinet room and shaft overlap",
+     "plan: rooms cabinet room and field overlap",
+     "plan: rooms shaft and field overlap",
+     "plan: milburn stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: goth has no facing (which way they face)",
+     "plan: goth stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: rangy has no facing (which way they face)",
+     "plan: rangy stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: swindon has no facing (which way they face)",
+     "plan: swindon stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: waif has no facing (which way they face)",
+     "plan: waif stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: camera 2b looks at nothing (give look=)",
+     "plan (rule 38): no SHOT_MARKS {shot: [people marks]}, so the front-on check cannot run",
+     "plan: no camera in the plan for shot(s) 3, 4a, 4b, 4c, 6, 7a, 7b, 7c, 7d, 7e"
+    ],
+    "script/mouth": [
+     "script/mouth: line ? (andy): 1 swear(s) (fucker) but 0 bleep(s) (rule 26: every swear is bleeped, asterisks or not; give the line bleep=(start, end) from the sound)"
+    ]
+   },
+   "tail": ""
+  },
+  {
+   "branch": "claude/milburn-chat15",
+   "ref": "75f2a5bc",
+   "files": 16,
+   "secs": 2,
+   "exit": 1,
+   "refused": false,
+   "faults": {
+    "CAMERA FEEL": [
+     "CAMERA FEEL: shot *: the film gives no camera the check can read (cam_for(t) returning a B.Cam or a sets.Cam): rule 72 not checked (give it one, or a row in the exceptions: | camera feel | * | why | l"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule S7"
+    ],
+    "READABILITY": [
+     "READABILITY: the film has no JOKE_PROPS ([(name, [times], where, size m)], [] for none): rule 18"
+    ],
+    "SHOT CAST": [
+     "SHOT CAST: shot 2a: goth is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: rangy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: swindon is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: waif is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: goth is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: rangy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: swindon is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: waif is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 3: goth is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: rangy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: swindon is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: waif is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 1: milburn is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 4b: milburn is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 7d: milburn is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 4a: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4a: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4c: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4c: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 7e: andy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 7e: pat is never on screen (the brief puts them in it; SHOT_CAST)"
+    ],
+    "caption": [
+     "caption \"long in the making.\": 1.06 s on screen at 1.1x for 4 words (too fast to read)",
+     "caption \"findings or would you\": 1.06 s on screen at 1.1x for 4 words (too fast to read)"
+    ],
+    "clipcheck": [
+     "clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing checks that no one passes through anyone or teleports (clipcheck.py; rule 19)"
+    ],
+    "house style": [
+     "house style: the film has no audits: the general audit (each body alone: in pieces, popping, stretching, frozen): start from the template",
+     "house style: the film has no LINE_SUBJECTS: the line-work check (every shape outlined, one weight)",
+     "house style: the film has no PROP_SIZES: the real-size check for props and set pieces",
+     "house style: the film has no OUTFIT: the clothes check (skirts from the waist, jackets to the hips)"
+    ],
+    "the collision and pop-in tests did not r": [
+     "the collision and pop-in tests did not run: the film has no scene(t) (audit.py; rules 5 and 6; a film with no people or props says so in HAS)"
+    ],
+    "plan": [
+     "plan: rooms cabinet room and shaft overlap",
+     "plan: rooms cabinet room and field overlap",
+     "plan: rooms shaft and field overlap",
+     "plan: milburn stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: goth has no facing (which way they face)",
+     "plan: goth stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: rangy has no facing (which way they face)",
+     "plan: rangy stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: swindon has no facing (which way they face)",
+     "plan: swindon stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: waif has no facing (which way they face)",
+     "plan: waif stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: camera 2b looks at nothing (give look=)",
+     "plan (rule 38): no SHOT_MARKS {shot: [people marks]}, so the front-on check cannot run",
+     "plan: no camera in the plan for shot(s) 3, 4a, 4b, 4c, 6, 7a, 7b, 7c, 7d, 7e"
+    ],
+    "script/mouth": [
+     "script/mouth: line ? (andy): 1 swear(s) (fucker) but 0 bleep(s) (rule 26: every swear is bleeped, asterisks or not; give the line bleep=(start, end) from the sound)"
+    ]
+   },
+   "tail": ""
+  },
+  {
+   "branch": "claude/milburn-chat13",
+   "ref": "1028e686",
+   "files": 17,
+   "secs": 14,
+   "exit": 1,
+   "refused": false,
+   "faults": {
+    "CAMERA FEEL": [
+     "CAMERA FEEL: shot *: the film gives no camera the check can read (cam_for(t) returning a B.Cam or a sets.Cam): rule 72 not checked (give it one, or a row in the exceptions: | camera feel | * | why | l"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule S7"
+    ],
+    "READABILITY": [
+     "READABILITY: the film has no JOKE_PROPS ([(name, [times], where, size m)], [] for none): rule 18"
+    ],
+    "SHOT CAST": [
+     "SHOT CAST: shot 2a: goth is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: rangy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: swindon is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2a: waif is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: goth is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: rangy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: swindon is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 2b: waif is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 3: goth is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: rangy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: swindon is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 3: waif is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 1: milburn is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 4b: milburn is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 7d: milburn is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 4a: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4a: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4c: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 4c: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]",
+     "SHOT CAST: shot 7e: andy is never on screen (the brief puts them in it; SHOT_CAST)",
+     "SHOT CAST: shot 7e: pat is never on screen (the brief puts them in it; SHOT_CAST)"
+    ],
+    "caption": [
+     "caption \"to kill each\": 0.68 s on screen at 1.1x for 3 words (too fast to read)",
+     "caption \"where this goes,\": 0.76 s on screen at 1.1x for 3 words (too fast to read)",
+     "caption \"I am sorry that\": 0.83 s on screen at 1.1x for 4 words (too fast to read)",
+     "caption \"Are you or are\": 0.98 s on screen at 1.1x for 4 words (too fast to read)",
+     "caption \"you not sending NEETs\": 0.98 s on screen at 1.1x for 4 words (too fast to read)",
+     "caption \"I'd like to hear\": 1.06 s on screen at 1.1x for 4 words (too fast to read)",
+     "caption \"I think the backbenchers\": 1.06 s on screen at 1.1x for 4 words (too fast to read)"
+    ],
+    "clipcheck": [
+     "clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing checks that no one passes through anyone or teleports (clipcheck.py; rule 19)"
+    ],
+    "house style": [
+     "house style: the film has no audits: the general audit (each body alone: in pieces, popping, stretching, frozen): start from the template",
+     "house style: the film has no LINE_SUBJECTS: the line-work check (every shape outlined, one weight)",
+     "house style: the film has no PROP_SIZES: the real-size check for props and set pieces",
+     "house style: the film has no OUTFIT: the clothes check (skirts from the waist, jackets to the hips)"
+    ],
+    "the collision and pop-in tests did not r": [
+     "the collision and pop-in tests did not run: the film has no scene(t) (audit.py; rules 5 and 6; a film with no people or props says so in HAS)"
+    ],
+    "plan": [
+     "plan: rooms cabinet room and shaft overlap",
+     "plan: rooms cabinet room and field overlap",
+     "plan: rooms shaft and field overlap",
+     "plan: milburn stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: goth has no facing (which way they face)",
+     "plan: goth stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: rangy has no facing (which way they face)",
+     "plan: rangy stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: swindon has no facing (which way they face)",
+     "plan: swindon stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: waif has no facing (which way they face)",
+     "plan: waif stands inside the platform (sitting on it? give on=\"platform\")",
+     "plan: camera 2b looks at nothing (give look=)",
+     "plan (rule 38): no SHOT_MARKS {shot: [people marks]}, so the front-on check cannot run",
+     "plan: no camera in the plan for shot(s) 3, 4a, 4b, 4c, 6, 7a, 7b, 7c, 7d, 7e"
+    ],
+    "script/mouth": [
+     "script/mouth: line ? (milburn): in the script, not the subtitles: \"the essence of my\"",
+     "script/mouth: line ? (milburn): in the subtitles, not the script: \"those not in education\"",
+     "script/mouth: line ? (milburn): in the script, not the subtitles: \"those not in education\"",
+     "script/mouth: line ? (milburn): in the subtitles, not the script: \"each neet must arm\"",
+     "script/mouth: line ? (milburn): in the script, not the subtitles: \"each neet must arm\"",
+     "script/mouth: line ? (milburn): in the subtitles, not the script: \"god damnit milburn\"",
+     "script/mouth: line ? (andy): in the script, not the subtitles: \"god damnit milburn\"",
+     "script/mouth: line ? (andy): in the subtitles, not the script: \"this report has been\"",
+     "script/mouth: line ? (milburn): in the script, not the subtitles: \"this report has been\"",
+     "script/mouth: line ? (milburn): in the subtitles, not the script: \"i'd like to hear\"",
+     "script/mouth: line ? (pat): in the script, not the subtitles: \"i'd like to hear\"",
+     "script/mouth: line ? (pat): in the subtitles, not the script: \"fine continue\"",
+     "script/mouth: line ? (andy): script \"fine continue\", subtitles \"the neets will\"",
+     "script/mouth: line ? (milburn): in the script, not the subtitles: \"the neets will\"",
+     "script/mouth: line ? (milburn): in the script, not the subtitles: \"and will encounter teams\"",
+     "script/mouth: line ? (andy): in the subtitles, not the script: \"i am sorry that\"",
+     "script/mouth: line ? (milburn): in the script, not the subtitles: \"i am sorry that\"",
+     "script/mouth: line ? (milburn): in the subtitles, not the script: \"are you or are\"",
+     "script/mouth: line ? (andy): in the script, not the subtitles: \"are you or are\"",
+     "script/mouth: line ? (pat): in the script, not the subtitles: \"i think the backbenchers\"",
+     "script/mouth: subtitle \"The essence of my\" at 0.25-1.60 s, when no line is being spoken",
+     "script/mouth: line ? (milburn): subtitle \"Would you care\" comes up at 25.05 s, 1.00 s before \"would\" is said (about 26.05 s; rule 62: within 0.3 s here; listen there)",
+     "script/mouth: milburn: mouth open in silence at 0.33-0.83 s; it should shut when the voice stops",
+     "script/mouth: line ? (milburn): subtitle \"be presented with\" comes up at 6.95 s, 0.62 s before \"be\" is said (about 7.57 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed from count",
+     "script/mouth: line ? (milburn): subtitle \"to serve their country.\" comes up at 9.55 s, 1.09 s before \"to\" is said (about 10.64 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed fro",
+     "script/mouth: line ? (milburn): subtitle \"further into the Zone.\" comes up at 15.25 s, 0.84 s before \"further\" is said (about 16.09 s; rule 62: within 0.6 s here; listen there) (inside a phrase: place",
+     "script/mouth: line ? (andy): subtitle \"You're pulling a\" comes up at 18.20 s, 1.25 s before \"you're\" is said (about 19.45 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed from cou",
+     "script/mouth: line ? (andy): subtitle \"Battle Royale slash Hunger\" comes up at 19.15 s, 0.96 s before \"battle\" is said (about 20.11 s; rule 62: within 0.6 s here; listen there) (inside a phrase: place",
+     "script/mouth: line ? (andy): subtitle \"Games on us,\" comes up at 20.45 s, 0.96 s before \"games\" is said (about 21.42 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed from counted ",
+     "script/mouth: line ? (andy): subtitle \"aren't you?\" comes up at 21.40 s, 1.04 s before \"aren't\" is said (about 22.44 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed from counted ",
+     "script/mouth: line ? (milburn): subtitle \"to hear the\" comes up at 26.00 s, 0.98 s before \"to\" is said (about 26.98 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed from counted s",
+     "script/mouth: line ? (milburn): subtitle \"findings or would you\" comes up at 26.95 s, 0.68 s before \"findings\" is said (about 27.64 s; rule 62: within 0.6 s here; listen there) (inside a phrase: place",
+     "script/mouth: line ? (milburn): subtitle \"you feel that way.\" comes up at 50.75 s, 1.02 s before \"you\" is said (about 51.77 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed from c",
+     "script/mouth: line ? (pat): subtitle \"will like this one, sir.\" comes up at 69.60 s, 0.88 s before \"will\" is said (about 70.48 s; rule 62: within 0.6 s here; listen there) (inside a phrase: placed fro",
+     "script/mouth: line ? (milburn), 0.8-8.3 s into the recording: the voice says about 46 syllables, the script about 32 (\"Those not in education, employment or training will be presented with a unique op",
+     "script/mouth: milburn: mouth still and shut at 2.75-3.42 s while the voice speaks",
+     "script/mouth: milburn: mouth open in silence at 3.58-4.17 s; it should shut when the voice stops",
+     "script/mouth: milburn: mouth still and shut at 11.00-11.83 s while the voice speaks",
+     "script/mouth: milburn: mouth open in silence at 12.25-12.75 s; it should shut when the voice stops  [2 like it: shot 3, 12.25-13.08 s]",
+     "script/mouth: milburn: mouth still and shut at 16.75-17.75 s while the voice speaks",
+     "script/mouth: andy: mouth open in silence at 17.25-17.58 s; it should shut when the voice stops  [2 like it: shot 4a, 17.25-17.83 s]",
+     "script/mouth: andy: mouth still and shut at 21.92-23.00 s while the voice speaks",
+     "script/mouth: milburn: mouth open in silence at 22.50-22.83 s; it should shut when the voice stops  [3 like it: shot 4b, 22.50-26.00 s]",
+     "script/mouth: milburn: mouth still and shut at 24.75-25.25 s while the voice speaks  [2 like it: shot 4b, 24.75-29.83 s]",
+     "script/mouth: pat: mouth open in silence at 29.75-30.17 s; it should shut when the voice stops",
+     "script/mouth: pat: mouth still and shut at 32.00-32.58 s while the voice speaks",
+     "script/mouth: andy: mouth open in silence at 32.92-33.17 s; it should shut when the voice stops",
+     "script/mouth: andy: mouth still and shut at 34.17-34.83 s while the voice speaks",
+     "script/mouth: milburn: mouth open in silence at 35.33-35.75 s; it should shut when the voice stops  [2 like it: shot 6, 35.33-41.17 s]",
+     "script/mouth: milburn: mouth still and shut at 38.08-38.67 s while the voice speaks  [2 like it: shot 6, 38.08-44.83 s]",
+     "script/mouth: subtitle \"And will encounter teams\" at 40.70-42.60 s, when no line is being spoken",
+     "script/mouth: andy: mouth still and shut at 45.50-46.00 s while the voice speaks",
+     "script/mouth: milburn: mouth open in silence at 49.83-50.08 s; it should shut when the voice stops  [2 like it: shot 7b, 49.83-50.67 s]",
+     "script/mouth: milburn: mouth still and shut at 51.50-52.50 s while the voice speaks",
+     "script/mouth: andy: mouth open in silence at 52.50-52.83 s; it should shut when the voice stops",
+     "script/mouth: andy: mouth still and shut at 56.17-56.67 s while the voice speaks",
+     "script/mouth: milburn: mouth still and shut at 61.17-61.67 s while the voice speaks",
+     "script/mouth: subtitle \"I think the backbenchers\" at 68.45-69.60 s, when no line is being spoken",
+     "script/mouth: pat: mouth open in silence at 68.50-69.17 s; it should shut when the voice stops",
+     "script/mouth: pat: mouth still and shut at 70.83-71.67 s while the voice speaks"
+    ]
+   },
+   "tail": ""
+  }
+ ]
+}

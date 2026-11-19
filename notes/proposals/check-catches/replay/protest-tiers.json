@@ -1,0 +1,1004 @@
+{
+ "film": "protest-tiers",
+ "runs": [
+  {
+   "branch": "claude/protest-tiers-c2",
+   "ref": "a070d491",
+   "files": 1,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-roughs-c4",
+   "ref": "4922f4a5",
+   "files": 1,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c5",
+   "ref": "bac8d049",
+   "files": 4,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c6",
+   "ref": "1d82d59d",
+   "files": 4,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c7",
+   "ref": "e1dedec3",
+   "files": 4,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-sets-c9",
+   "ref": "e02b6c34",
+   "files": 5,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c8",
+   "ref": "0bb53b6e",
+   "files": 5,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-sets-c10",
+   "ref": "93aabe98",
+   "files": 5,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-sets-c11",
+   "ref": "ef34b1b6",
+   "files": 5,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c12",
+   "ref": "a625cf2b",
+   "files": 5,
+   "secs": 0,
+   "exit": 1,
+   "refused": true,
+   "faults": {},
+   "tail": "n\n    film = importlib.import_module(name.replace('-', '_'))   # module-level checks run on import; late-faults change 1:\n  File \"/usr/local/lib/python3.13/importlib/__init__.py\", line 88, in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"<frozen importlib._bootstrap>\", line 1404, in _gcd_import\n  File \"<frozen importlib._bootstrap>\", line 1369, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1333, in _find_and_load_unlocked\nModuleNotFoundError: No module named 'protest_tiers'\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c13",
+   "ref": "4e8a44a1",
+   "files": 6,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 30 blank": [
+     "the brief checklist has 30 blank \"done?\" row(s): 2 (White headlines from Islamocommunism: Country, and); 3 (Tier 1 a quarter showstopper, tier 4 the whole one); 5 (T1 Spain: Paseo de Gracia, dusk, wid"
+    ],
+    "no record of the composition sheet being": [
+     "no record of the composition sheet being sent (rule 11, a film begun before the shot board): add \"Composition sheet sent: DATE, FILE\" to the notes, or python3 source/rough.py board protest-tiers OUT.j"
+    ],
+    "no": [
+     "no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)"
+    ]
+   },
+   "tail": ".0 three small bursts pop over the line; t); 10 (T1 3.0-4.0 the line steps one pace forward; a thin) ... (tick each against the film, or say why not)\n - no record of the composition sheet being sent (rule 11, a film begun before the shot board): add \"Composition sheet sent: DATE, FILE\" to the notes, or python3 source/rough.py board protest-tiers OUT.jpg, send it with SendUserFile, then python3 source/rough.py sent protest-tiers OUT.jpg --delivered --board\n - no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c14",
+   "ref": "49f1a6eb",
+   "files": 6,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 30 blank": [
+     "the brief checklist has 30 blank \"done?\" row(s): 2 (White headlines from Islamocommunism: Country, and); 3 (Tier 1 a quarter showstopper, tier 4 the whole one); 5 (T1 Spain: Paseo de Gracia, dusk, wid"
+    ]
+   },
+   "tail": "ES to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 30 blank \"done?\" row(s): 2 (White headlines from Islamocommunism: Country, and); 3 (Tier 1 a quarter showstopper, tier 4 the whole one); 5 (T1 Spain: Paseo de Gracia, dusk, wide; wet after r); 6 (T1 huge calm march to the vanishing point; raised ); 7 (T1 thin police line across the far end; small knot); 8 (T1 0.0-1.5 crowd sways forward, keys rise like a w); 9 (T1 1.5-3.0 three small bursts pop over the line; t); 10 (T1 3.0-4.0 the line steps one pace forward; a thin) ... (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c15",
+   "ref": "227bdff8",
+   "files": 6,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 30 blank": [
+     "the brief checklist has 30 blank \"done?\" row(s): 2 (White headlines from Islamocommunism: Country, and); 3 (Tier 1 a quarter showstopper, tier 4 the whole one); 5 (T1 Spain: Paseo de Gracia, dusk, wid"
+    ]
+   },
+   "tail": "ES to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 30 blank \"done?\" row(s): 2 (White headlines from Islamocommunism: Country, and); 3 (Tier 1 a quarter showstopper, tier 4 the whole one); 5 (T1 Spain: Paseo de Gracia, dusk, wide; wet after r); 6 (T1 huge calm march to the vanishing point; raised ); 7 (T1 thin police line across the far end; small knot); 8 (T1 0.0-1.5 crowd sways forward, keys rise like a w); 9 (T1 1.5-3.0 three small bursts pop over the line; t); 10 (T1 3.0-4.0 the line steps one pace forward; a thin) ... (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c16",
+   "ref": "400115e5",
+   "files": 6,
+   "secs": 4,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: PASSES THROUGH: 4.28-4.31 s (t2): hauler1.thighR passes 10 cm into hauler2.shinL",
+     "AUDIT: PASSES THROUGH: 4.33-4.36 s (t2): hauler1.armR passes 14 cm into runner1.body",
+     "AUDIT: PASSES THROUGH: 4.36-4.47 s (t2): runner1.body passes 15 cm into runner2.handR  [2 like it: shot t2, 4.36-4.78 s]",
+     "AUDIT: PASSES THROUGH: 4.39-4.42 s (t2): runner2.armL passes 7 cm into swinger.forearmR",
+     "AUDIT: PASSES THROUGH: 4.53-4.58 s (t2): runner1.thighR passes 12 cm into runner2.thighL",
+     "AUDIT: PASSES THROUGH: 4.56 s (t2): hauler1.body passes 14 cm into runner4.armL",
+     "AUDIT: PASSES THROUGH: 4.61 s (t2): hauler1.body passes 16 cm into runner5.body",
+     "AUDIT: PASSES THROUGH: 4.64 s (t2): hauler2.body passes 8 cm into runner4.handL",
+     "AUDIT: PASSES THROUGH: 4.67 s (t2): runner1.shinL passes 9 cm into runner4.shinR  [2 like it: shot t2, 4.67-4.75 s]",
+     "AUDIT: PASSES THROUGH: 4.72 s (t2): runner1.thighR passes 7 cm into runner5.shinR",
+     "AUDIT: PASSES THROUGH: 10.86 s (t3): front1.shinR passes 2 cm into front2.footL  [3 like it: shot t3, 10.86 s]",
+     "AUDIT: PASSES THROUGH: 12.00 s (t4): policia1.armR passes 8 cm into rioter6.armR  [8 like it: shot t4, 12.00-15.83 s]",
+     "AUDIT: PASSES THROUGH: 13.06-13.47 s (t4): policia1.body passes 18 cm into rioter5.body  [3 like it: shot t4, 13.06-15.97 s]",
+     "AUDIT: PASSES THROUGH: 13.47-13.58 s (t4): policia1.body passes 7 cm into rioter4.handL",
+     "AUDIT: PASSES THROUGH: 13.53 s (t4): policia1.thighL passes 3 cm into rioter5.shinL",
+     "AUDIT: PASSES THROUGH: 13.64-14.56 s (t4): policia3.body passes 15 cm into rioter5.forearmR",
+     "AUDIT: PASSES THROUGH: 14.00 s (t4): policia3.armR passes 3 cm into rioter6.forearmR",
+     "AUDIT: PASSES THROUGH: 14.11-14.22 s (t4): policia2.shinL passes 3 cm into rioter5.shinR",
+     "AUDIT: PASSES THROUGH: 14.44-14.47 s (t4): policia3.shinR passes 5 cm into policia4.footL",
+     "AUDIT: PASSES THROUGH: 14.69-14.75 s (t4): policia3.armR passes 4 cm into rioter5.handL",
+     "AUDIT: PASSES THROUGH: 14.69-14.78 s (t4): policia2.armL passes 4 cm into rioter5.armL",
+     "AUDIT: RESTING: 7.75 s (t2): runner2's resting handL sits 0 cm from runner1 (keep 3 cm clear, or list the touch in TOUCHES) (3 frames, to 7.92 s)",
+     "AUDIT: RESTING: 13.25 s (t4): policia1's resting handL sits 2 cm from rioter5 (keep 3 cm clear, or list the touch in TOUCHES) (one frame)  [2 like it: shot t4, 13.25-13.42 s]",
+     "AUDIT: RESTING: 13.33 s (t4): policia1's resting handR sits 0 cm from rioter5 (keep 3 cm clear, or list the touch in TOUCHES) (one frame)  [2 like it: shot t4, 13.33-13.58 s]"
+    ],
+    "CAMERA FEEL": [
+     "CAMERA FEEL: shot *: the film gives no camera the check can read (cam_for(t) returning a B.Cam or a sets.Cam): rule 72 not checked (give it one, or a row in the exceptions: | camera feel | * | why | l"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule S7"
+    ],
+    "READABILITY": [
+     "READABILITY: the film has no JOKE_PROPS ([(name, [times], where, size m)], [] for none): rule 18"
+    ],
+    "benchmark": [
+     "benchmark (rule 3): the film has no BENCHMARK (8-10 things per place, our picture beside the references; source/benchmark.py)"
+    ],
+    "clipcheck": [
+     "clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing checks that no one passes through anyone or teleports (clipcheck.py; rule 19)"
+    ],
+    "4.25 s": [
+     "4.25 s: runner3 and swinger swap front and back in one frame (swinger is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [2 like it: shot t2, 4.25-4.58 s]"
+    ],
+    "4.33 s": [
+     "4.33 s: hauler2 and runner1 swap front and back in one frame (runner1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [10 like it: shot t2, 4.33-4.58 s]"
+    ],
+    "4.42 s": [
+     "4.42 s: hauler1 and hauler2 swap front and back in one frame (hauler2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why",
+     "4.42 s: hauler1 and swinger swap front and back in one frame (swinger is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [2 like it: shot t2, 4.42 s]"
+    ],
+    "4.50 s": [
+     "4.50 s: runner1 and runner2 swap front and back in one frame (runner2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [5 like it: shot t2, 4.50-4.83 s]"
+    ],
+    "4.83 s": [
+     "4.83 s: swinger and runner5 swap front and back in one frame (runner5 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why"
+    ],
+    "10.83 s": [
+     "10.83 s: front4 and front2 swap front and back in one frame (front2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t3, 10.83-10.92 s]"
+    ],
+    "10.92 s": [
+     "10.92 s: crs1 and front4 swap front and back in one frame (front4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t3, 10.92 s]"
+    ],
+    "14.08 s": [
+     "14.08 s: policia2 and policia1 swap front and back in one frame (policia1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [10 like it: shot t4, 14.08 s]"
+    ],
+    "14.25 s": [
+     "14.25 s: policia2 and rioter2 swap front and back in one frame (rioter2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [8 like it: shot t4, 14.25 s]"
+    ],
+    "house style": [
+     "house style: the film has no LINE_SUBJECTS: the line-work check (every shape outlined, one weight)",
+     "house style: the film has no PROP_SIZES: the real-size check for props and set pieces",
+     "house style: the film has no OUTFIT: the clothes check (skirts from the waist, jackets to the hips)"
+    ],
+    "the film hazes a layer but its draw_orde": [
+     "the film hazes a layer but its draw_order(t) never names 'haze', so nothing checks that near things are drawn after it (rule 57): name 'haze' and the near things there"
+    ]
+   },
+   "tail": "e, or list the swap in ORDER_SWAPS with why  [8 like it: shot t4, 14.25 s]\n - house style: the film has no LINE_SUBJECTS: the line-work check (every shape outlined, one weight)\n - house style: the film has no PROP_SIZES: the real-size check for props and set pieces\n - house style: the film has no OUTFIT: the clothes check (skirts from the waist, jackets to the hips)\n - the film hazes a layer but its draw_order(t) never names 'haze', so nothing checks that near things are drawn after it (rule 57): name 'haze' and the near things there\n(no pass stamp: the render still needs the full pre-flight)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c17",
+   "ref": "4adb9660",
+   "files": 6,
+   "secs": 34,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: PASSES THROUGH: 14.72-14.75 s (t4): policia4.body passes 22 cm into rioter6.body",
+     "AUDIT: TOUCH: 4.25 s (t2): hauler* is 900 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap in the glass) (8 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.33 s (t2): hauler* is 34 cm off hauler* (TOUCHES: T2 run-in: the haulers drop the shutter and pile in) (7 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.33 s (t2): runner* is 6 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap; packed inside) (30 frames, to 7.17 s)",
+     "AUDIT: TOUCH: 4.33 s (t2): runner* is 9 cm off swinger (TOUCHES: T2 run-in: the swinger is in the crush) (7 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 10.83 s (t3): front* is 900 cm off front* (TOUCHES: T3 run-out: the front line breaks and runs left as a pack) (3 frames, to 11.00 s)",
+     "AUDIT: TOUCH: 12.00 s (t4): policia* is 37 cm off rioter* (TOUCHES: T4 melee: rioters slam into the shields (brief 26)) (29 frames, to 15.92 s)",
+     "AUDIT: TOUCH: 14.00 s (t4): policia* is 11 cm off policia* (TOUCHES: T4 melee: the shield line buckles back into itself) (18 frames, to 15.92 s)"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: T2 sign-on-glass flash (flash) is a star (4 points, 2.5x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (7 points, 2.0x deeper than its gaps): off-style (guides/satire.md, The look)"
+    ],
+    "4.00 s": [
+     "4.00 s: hauler1.forearmL passes through hauler2.armR (by 2 cm)",
+     "4.00 s: runner1.armL passes through runner2.armR (by 5 cm)"
+    ],
+    "4.08 s": [
+     "4.08 s: runner4.armL passes through runner5.forearmR (by 5 cm)",
+     "4.08 s: hauler1.body jumps 69 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: hauler1.head jumps 69 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: hauler1.armL jumps 73 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: hauler1.thighL jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: hauler1.armR jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: hauler1.thighR jumps 88 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: hauler1.shinR jumps 104 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: hauler1.footR jumps 102 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.08-4.17 s]",
+     "4.08 s: swinger.shinR jumps 64 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.08 s: swinger.footR jumps 64 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.08 s: runner1.shinR jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.08-4.42 s]",
+     "4.08 s: runner1.footR jumps 70 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.08-4.42 s]"
+    ],
+    "4.17 s": [
+     "4.17 s: hauler2.body passes through runner1.armR (by 9 cm)",
+     "4.17 s: hauler1.forearmL jumps 89 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.17 s]",
+     "4.17 s: hauler2.handL jumps 147 cm in one frame (18 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: hauler2.shinL jumps 110 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.17-4.25 s]",
+     "4.17 s: hauler2.footL jumps 104 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.17-4.25 s]",
+     "4.17 s: hauler2.forearmR jumps 111 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.17-4.33 s]",
+     "4.17 s: hauler2.handR jumps 112 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 4.17-4.33 s]",
+     "4.17 s: swinger.body jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.17 s: swinger.head jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.17 s: swinger.armL jumps 81 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.17 s: swinger.forearmL jumps 90 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.17 s: swinger.thighL jumps 65 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.17 s: swinger.armR jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.17 s: swinger.thighR jumps 82 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.17 s: runner1.body jumps 90 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.head jumps 90 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.armL jumps 99 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.forearmL jumps 108 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.handL jumps 108 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.thighL jumps 83 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.67 s]",
+     "4.17 s: runner1.shinL jumps 71 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.footL jumps 65 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.armR jumps 81 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.42 s]",
+     "4.17 s: runner1.thighR jumps 100 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.17-4.42 s]"
+    ],
+    "4.25 s": [
+     "4.25 s: swinger.shinL jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.25 s: swinger.footL jumps 60 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "4.25 s: runner2.forearmR jumps 116 cm in one frame (14 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.25-4.92 s]",
+     "4.25 s: runner2.handR jumps 118 cm in one frame (14 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 4.25-4.92 s]"
+    ],
+    "4.42 s": [
+     "4.42 s: swinger.forearmR jumps 88 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "8.92 s": [
+     "8.92 s: front3.handR jumps 108 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 8.92-9.42 s]"
+    ],
+    "9.17 s": [
+     "9.17 s: front2.forearmR jumps 84 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 9.17-9.58 s]"
+    ],
+    "10.75 s": [
+     "10.75 s: front1.armL jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 10.75-10.92 s]"
+    ],
+    "10.83 s": [
+     "10.83 s: front1.shinL jumps 76 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 10.83-10.92 s]",
+     "10.83 s: front1.footL jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 10.83-10.92 s]",
+     "10.83 s: front2.head jumps 61 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 10.83-10.92 s]",
+     "10.83 s: front2.forearmL jumps 96 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 10.83-10.92 s]",
+     "10.83 s: front2.handL jumps 102 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 10.83-10.92 s]",
+     "10.83 s: front2.thighL jumps 76 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 10.83-11.33 s]"
+    ],
+    "10.92 s": [
+     "10.92 s: front4.body jumps 81 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)",
+     "10.92 s: front4.thighR jumps 83 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 10.92-11.00 s]",
+     "10.92 s: front4.shinR jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 10.92-11.00 s]",
+     "10.92 s: front4.footR jumps 98 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 10.92-11.00 s]"
+    ],
+    "12.08 s": [
+     "12.08 s: rioter4.handR jumps 109 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [6 like it: shot t4, 12.08-12.58 s]"
+    ],
+    "12.33 s": [
+     "12.33 s: rioter6.forearmR jumps 84 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [6 like it: shot t4, 12.33-12.83 s]"
+    ],
+    "12.92 s": [
+     "12.92 s: rioter1.footL jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [6 like it: shot t4, 12.92 s]"
+    ]
+   },
+   "tail": "; add in-between poses or slow the move)  [4 like it: shot t3, 10.92-11.00 s]\n - 12.08 s: rioter4.handR jumps 109 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [6 like it: shot t4, 12.08-12.58 s]\n - 12.33 s: rioter6.forearmR jumps 84 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [6 like it: shot t4, 12.33-12.83 s]\n - 12.92 s: rioter1.footL jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [6 like it: shot t4, 12.92 s]\n(no pass stamp: the render still needs the full pre-flight)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c18",
+   "ref": "e1555942",
+   "files": 6,
+   "secs": 34,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: PASSES THROUGH: 14.72-14.75 s (t4): policia4.body passes 22 cm into rioter6.body",
+     "AUDIT: TOUCH: 4.00 s (t2): hauler* is 5 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap in the glass) (9 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.00 s (t2): hauler* is 900 cm off hauler* (TOUCHES: T2 run-in: the haulers drop the shutter and pile in) (11 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.00 s (t2): runner* is 18 cm off swinger (TOUCHES: T2 run-in: the swinger is in the crush) (11 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.75 s (t2): runner* is 5 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap; packed inside) (30 frames, to 7.17 s)",
+     "AUDIT: TOUCH: 10.75 s (t3): front* is 900 cm off front* (TOUCHES: T3 run-out: the front line breaks and runs left as a pack) (7 frames, to 11.25 s)",
+     "AUDIT: TOUCH: 12.00 s (t4): policia* is 37 cm off rioter* (TOUCHES: T4 melee: rioters slam into the shields (brief 26)) (29 frames, to 15.92 s)",
+     "AUDIT: TOUCH: 14.00 s (t4): policia* is 11 cm off policia* (TOUCHES: T4 melee: the shield line buckles back into itself) (18 frames, to 15.92 s)"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: T2 sign-on-glass flash (flash) is a star (4 points, 2.5x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (7 points, 2.0x deeper than its gaps): off-style (guides/satire.md, The look)"
+    ]
+   },
+   "tail": "licia* is 37 cm off rioter* (TOUCHES: T4 melee: rioters slam into the shields (brief 26)) (29 frames, to 15.92 s)\n - AUDIT: TOUCH: 14.00 s (t4): policia* is 11 cm off policia* (TOUCHES: T4 melee: the shield line buckles back into itself) (18 frames, to 15.92 s)\n - EFFECT SHAPES: T2 sign-on-glass flash (flash) is a star (4 points, 2.5x deeper than its gaps): off-style (guides/satire.md, The look)\n - EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (7 points, 2.0x deeper than its gaps): off-style (guides/satire.md, The look)\n(no pass stamp: the render still needs the full pre-flight)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c19",
+   "ref": "5186f47b",
+   "files": 7,
+   "secs": 35,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: PASSES THROUGH: 14.72-14.75 s (t4): policia4.body passes 22 cm into rioter6.body",
+     "AUDIT: TOUCH: 4.00 s (t2): hauler* is 5 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap in the glass) (9 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.00 s (t2): hauler* is 900 cm off hauler* (TOUCHES: T2 run-in: the haulers drop the shutter and pile in) (11 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.00 s (t2): runner* is 18 cm off swinger (TOUCHES: T2 run-in: the swinger is in the crush) (11 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.75 s (t2): runner* is 5 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap; packed inside) (30 frames, to 7.17 s)",
+     "AUDIT: TOUCH: 10.75 s (t3): front* is 900 cm off front* (TOUCHES: T3 run-out: the front line breaks and runs left as a pack) (7 frames, to 11.25 s)",
+     "AUDIT: TOUCH: 12.00 s (t4): policia* is 37 cm off rioter* (TOUCHES: T4 melee: rioters slam into the shields (brief 26)) (29 frames, to 15.92 s)",
+     "AUDIT: TOUCH: 14.00 s (t4): policia* is 11 cm off policia* (TOUCHES: T4 melee: the shield line buckles back into itself) (18 frames, to 15.92 s)"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: T2 sign-on-glass flash (flash) is a star (4 points, 2.5x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (7 points, 2.0x deeper than its gaps): off-style (guides/satire.md, The look)"
+    ]
+   },
+   "tail": "licia* is 37 cm off rioter* (TOUCHES: T4 melee: rioters slam into the shields (brief 26)) (29 frames, to 15.92 s)\n - AUDIT: TOUCH: 14.00 s (t4): policia* is 11 cm off policia* (TOUCHES: T4 melee: the shield line buckles back into itself) (18 frames, to 15.92 s)\n - EFFECT SHAPES: T2 sign-on-glass flash (flash) is a star (4 points, 2.5x deeper than its gaps): off-style (guides/satire.md, The look)\n - EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (7 points, 2.0x deeper than its gaps): off-style (guides/satire.md, The look)\n(no pass stamp: the render still needs the full pre-flight)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c20",
+   "ref": "56d9a426",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 8 blank": [
+     "the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tou"
+    ]
+   },
+   "tail": " to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tourists cowering, ); 37 (R2c Back to the riders: one says \"Bro, what's a 'p); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d); 41 (Captions on the end scene's lines (rule 62); stand) (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c21",
+   "ref": "d0ef0b21",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 8 blank": [
+     "the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tou"
+    ]
+   },
+   "tail": " to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tourists cowering, ); 37 (R2c Back to the riders: one says \"Bro, what's a 'p); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d); 41 (Captions on the end scene's lines (rule 62); stand) (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c22",
+   "ref": "342c522d",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 8 blank": [
+     "the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tou"
+    ]
+   },
+   "tail": " to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tourists cowering, ); 37 (R2c Back to the riders: one says \"Bro, what's a 'p); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d); 41 (Captions on the end scene's lines (rule 62); stand) (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c23",
+   "ref": "3bd678ce",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 8 blank": [
+     "the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tou"
+    ]
+   },
+   "tail": " to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 8 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 35 (R2a A second RPG moped pulls up, two riders, fires); 36 (R2b A side alley, two American tourists cowering, ); 37 (R2c Back to the riders: one says \"Bro, what's a 'p); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d); 41 (Captions on the end scene's lines (rule 62); stand) (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c24",
+   "ref": "a3c52520",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 4 blank": [
+     "the brief checklist has 4 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; "
+    ]
+   },
+   "tail": "erson husband, person wife, person granny ...: python3 source/rough.py sheet protest-tiers OUT.jpg, send it, then `sent`\nWARNING: protest_tiers.py is 1648 lines: split it, one file per group of shots (rule 61)\npre-flight REFUSES to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 4 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d) (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c25",
+   "ref": "8d5b00a8",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 4 blank": [
+     "the brief checklist has 4 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; "
+    ]
+   },
+   "tail": "erson husband, person wife, person granny ...: python3 source/rough.py sheet protest-tiers OUT.jpg, send it, then `sent`\nWARNING: protest_tiers.py is 1928 lines: split it, one file per group of shots (rule 61)\npre-flight REFUSES to run (guides/film-quality-rules.md, rule 14):\n - the brief checklist has 4 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d) (tick each against the film, or say why not)\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c26",
+   "ref": "190a4490",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 4 blank": [
+     "the brief checklist has 4 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; "
+    ],
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 3 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLOW"
+    ]
+   },
+   "tail": "ef checklist has 4 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d) (tick each against the film, or say why not)\n - EXCEPTIONS: 3 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLOWED_POPS | runner6 | | | | ALLOWED_POPS | runner7 | | | | ALLOWED_POPS | back* | | |\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c27",
+   "ref": "4be09963",
+   "files": 7,
+   "secs": 1,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 4 blank": [
+     "the brief checklist has 4 blank \"done?\" row(s): 34 (R1 The joke: each tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; "
+    ],
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 5 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLOW"
+    ]
+   },
+   "tail": "ch tier worse until Albania, off th); 38 (R3 Under each place heading, slightly smaller red ); 39 (R4 Tier lengths 4 / 6 / 8 / 10 s; each scene re-pa); 40 (R5 Albania the showstopper: the most fluid, best-d) (tick each against the film, or say why not)\n - EXCEPTIONS: 5 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLOWED_POPS | runner6 | | | | ALLOWED_POPS | runner7 | | | | ALLOWED_POPS | back* | | | | ALLOWED_POPS | buyer* | | | | ALLOWED_POPS | granny | | |\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c28",
+   "ref": "7d8e6c1c",
+   "files": 7,
+   "secs": 94,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: JUMPS: 20.75 s (t4): rioter2 jumps 1.75 m in one frame (the frames either side: 0.22 m)  [2 like it: shot t4, 20.75 s]",
+     "AUDIT: PASSES THROUGH: 20.11 s (t4): policia3.body passes 21 cm into rioter5.body  [2 like it: shot t4, 20.11-20.28 s]",
+     "AUDIT: PASSES THROUGH: 20.19-20.28 s (t4): rioter5.body passes 13 cm into rioter6.forearmR",
+     "AUDIT: PASSES THROUGH: 20.25 s (t4): rioter2.handR passes 2 cm into rioter4.body",
+     "AUDIT: PASSES THROUGH: 20.31-20.53 s (t4): rioter2.armR passes 15 cm into rioter4.body",
+     "AUDIT: PASSES THROUGH: 20.61-20.69 s (t4): buyer1.body passes 3 cm into buyer2.handL",
+     "AUDIT: PASSES THROUGH: 20.72 s (t4): rioter2.shinL passes 4 cm into rioter4.thighL",
+     "AUDIT: PASSES THROUGH: 20.89-21.00 s (t4): buyer1.body passes 18 cm into selfie.body  [3 like it: shot t4, 20.89-21.50 s]",
+     "AUDIT: PASSES THROUGH: 21.67-21.75 s (t4): buyer1.body passes 20 cm into buyer2.body  [4 like it: shot t4, 21.67-22.39 s]",
+     "AUDIT: PASSES THROUGH: 21.94-22.03 s (t4): buyer1.forearmR passes 14 cm into buyer3.body",
+     "AUDIT: PASSES THROUGH: 22.81-22.94 s (t4): buyer1.body passes 19 cm into rioter4.body  [3 like it: shot t4, 22.81-23.69 s]",
+     "AUDIT: TOUCH: 4.00 s (t2): hauler* is 5 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap in the glass) (9 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.00 s (t2): hauler* is 900 cm off hauler* (TOUCHES: T2 run-in: the haulers drop the shutter and pile in) (11 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.00 s (t2): runner* is 18 cm off swinger (TOUCHES: T2 run-in: the swinger is in the crush) (11 frames, to 4.83 s)",
+     "AUDIT: TOUCH: 4.75 s (t2): runner* is 5 cm off runner* (TOUCHES: T2 run-in: the raiders crush through one gap; packed inside) (46 frames, to 9.17 s)",
+     "AUDIT: TOUCH: 14.67 s (t3): front* is 900 cm off front* (TOUCHES: T3 run-out: the front line breaks and runs left as a pack) (8 frames, to 15.25 s)",
+     "AUDIT: TOUCH: 18.00 s (t4): policia* is 37 cm off rioter* (TOUCHES: T4 melee: rioters slam into the shields (brief 26)) (19 frames, to 25.08 s)",
+     "AUDIT: TOUCH: 20.00 s (t4): policia* is 11 cm off policia* (TOUCHES: T4 melee: the shield line buckles back into itself) (93 frames, to 27.92 s)"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: T2 sign-on-glass flash (flash) is a star (4 points, 2.5x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 helicopter hit (burst) is a star (7 points, 3.3x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (8 points, 3.9x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 fireball (burst) is a star (8 points, 7.9x deeper than its gaps): off-style (guides/satire.md, The look)"
+    ],
+    "caption": [
+     "caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)"
+    ],
+    "7.17 s": [
+     "7.17 s: runner6.footR jumps 74 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.17-7.58 s]"
+    ],
+    "7.33 s": [
+     "7.33 s: runner6.thighL jumps 66 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.33-7.42 s]",
+     "7.33 s: runner6.shinL jumps 82 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.33 s]",
+     "7.33 s: runner6.footL jumps 81 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.33 s]"
+    ],
+    "7.50 s": [
+     "7.50 s: runner6.armR jumps 69 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "7.50 s: runner6.forearmR jumps 88 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)",
+     "7.50 s: runner6.handR jumps 103 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)",
+     "7.50 s: runner6.shinR jumps 59 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.50-7.58 s]"
+    ],
+    "7.67 s": [
+     "7.67 s: runner6 and runner7 swap front and back in one frame (runner7 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why"
+    ],
+    "7.75 s": [
+     "7.75 s: hauler2.armL jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.75 s]",
+     "7.75 s: hauler2.armR jumps 64 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "7.75 s: hauler2 and hauler1 swap front and back in one frame (hauler1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why"
+    ],
+    "7.92 s": [
+     "7.92 s: hauler2.shinL jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.92 s]",
+     "7.92 s: hauler2.footL jumps 67 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.92 s]"
+    ],
+    "12.83 s": [
+     "12.83 s: back3.forearmR jumps 84 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 12.83-13.17 s]",
+     "12.83 s: back3.handR jumps 110 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 12.83-13.17 s]"
+    ],
+    "14.75 s": [
+     "14.75 s: back1.armL jumps 65 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t3, 14.75-14.83 s]",
+     "14.75 s: back1.forearmL jumps 89 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t3, 14.75-14.83 s]",
+     "14.75 s: back1.handL jumps 111 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t3, 14.75-14.83 s]",
+     "14.75 s: back1.armR jumps 58 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 14.75-14.83 s]"
+    ],
+    "14.83 s": [
+     "14.83 s: back1.shinL jumps 65 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 14.83-15.33 s]",
+     "14.83 s: back1.footL jumps 65 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 14.83 s]",
+     "14.83 s: back2.head jumps 66 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "14.83 s: back2.thighL jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "15.08 s": [
+     "15.08 s: back1.shinR jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 15.08 s]",
+     "15.08 s: back1.footR jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 15.08 s]"
+    ],
+    "15.42 s": [
+     "15.42 s: pusher1.shinR jumps 65 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 15.42-15.75 s]",
+     "15.42 s: pusher1.footR jumps 65 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 15.42-15.75 s]",
+     "15.42 s: pusher3.footL jumps 66 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 15.42-15.67 s]"
+    ],
+    "15.50 s": [
+     "15.50 s: pusher1.armL jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 15.50-15.67 s]",
+     "15.50 s: pusher1.thighR jumps 58 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 15.50-15.67 s]",
+     "15.50 s: pusher2.thighL jumps 66 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 15.50-15.58 s]",
+     "15.50 s: pusher2.shinL jumps 80 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 15.50-15.83 s]",
+     "15.50 s: pusher2.armR jumps 60 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t3, 15.50-15.58 s]"
+    ],
+    "15.58 s": [
+     "15.58 s: pusher1.body jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 15.58 s]",
+     "15.58 s: pusher1.head jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 15.58 s]"
+    ],
+    "17.33 s": [
+     "17.33 s: pusher1.handR jumps 107 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t3, 17.33-17.58 s]"
+    ],
+    "17.42 s": [
+     "17.42 s: pusher2.forearmR jumps 98 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t3, 17.42-17.58 s]"
+    ],
+    "17.58 s": [
+     "17.58 s: front1.shinR passes through front2.footL (by 3 cm)  [2 like it: shot t3, 17.58 s]"
+    ],
+    "19.50 s": [
+     "19.50 s: selfie.handL jumps 108 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)",
+     "19.50 s: selfie.forearmR jumps 91 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)",
+     "19.50 s: selfie.handR jumps 118 cm in one frame (14 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "20.00 s": [
+     "20.00 s: rioter5 and rioter2 swap front and back in one frame (rioter2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [2 like it: shot t4, 20.00-20.75 s]"
+    ],
+    "20.17 s": [
+     "20.17 s: rioter2.shinR jumps 70 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.17 s]",
+     "20.17 s: rioter2.footR jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.17 s]"
+    ],
+    "20.25 s": [
+     "20.25 s: rioter2.handR passes through rioter4.body (by 2 cm)",
+     "20.25 s: rioter5.armL passes through rioter6.armR (by 9 cm)"
+    ],
+    "20.33 s": [
+     "20.33 s: policia2 and rioter5 swap front and back in one frame (rioter5 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t4, 20.33 s]"
+    ],
+    "20.42 s": [
+     "20.42 s: rioter2.thighL jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.42 s]",
+     "20.42 s: rioter2.shinL jumps 87 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.42 s]",
+     "20.42 s: rioter2.footL jumps 89 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.42 s]"
+    ],
+    "20.58 s": [
+     "20.58 s: rioter5.thighR jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.58-20.75 s]"
+    ],
+    "20.67 s": [
+     "20.67 s: buyer1.body passes through buyer2.handL (by 3 cm)  [2 like it: shot t4, 20.67 s]"
+    ],
+    "20.75 s": [
+     "20.75 s: rioter2.body jumps 179 cm in one frame (21 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.75 s]",
+     "20.75 s: rioter2.head jumps 185 cm in one frame (22 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.75 s]",
+     "20.75 s: rioter2.armL jumps 169 cm in one frame (20 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.75 s]",
+     "20.75 s: rioter2.armR jumps 190 cm in one frame (23 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t4, 20.75 s]",
+     "20.75 s: buyer1.shinL jumps 69 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.75 s]",
+     "20.75 s: buyer1.footL jumps 70 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.75 s]",
+     "20.75 s: rioter2 and policia1 swap front and back in one frame (policia1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t4, 20.75 s]"
+    ],
+    "20.83 s": [
+     "20.83 s: buyer1.body jumps 59 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.83 s]",
+     "20.83 s: buyer1.head jumps 59 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.83 s]",
+     "20.83 s: buyer1.thighL jumps 67 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.83 s]",
+     "20.83 s: buyer1.armR jumps 67 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.83 s]"
+    ],
+    "20.92 s": [
+     "20.92 s: selfie.body passes through buyer1.body (by 18 cm)  [3 like it: shot t4, 20.92-21.33 s]",
+     "20.92 s: buyer1.armL jumps 61 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.92 s]",
+     "20.92 s: buyer1.thighR jumps 60 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 20.92 s]"
+    ],
+    "21.00 s": [
+     "21.00 s: buyer1.shinR jumps 75 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 21.00 s]",
+     "21.00 s: buyer1.footR jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t4, 21.00 s]"
+    ],
+    "21.33 s": [
+     "21.33 s: selfie.shinL jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)",
+     "21.33 s: selfie.footL jumps 72 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)",
+     "21.33 s: selfie and buyer1 swap front and back in one frame (buyer1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t4, 21.33-21.50 s]"
+    ],
+    "21.58 s": [
+     "21.58 s: selfie.shinR jumps 64 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "21.58 s: selfie.footR jumps 60 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "21.83 s": [
+     "21.83 s: buyer1 and buyer2 swap front and back in one frame (buyer2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t4, 21.83-22.25 s]"
+    ],
+    "22.00 s": [
+     "22.00 s: buyer1.body passes through buyer3.body (by 4 cm)"
+    ],
+    "22.33 s": [
+     "22.33 s: buyer2.forearmL jumps 97 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)",
+     "22.33 s: buyer2.handL jumps 120 cm in one frame (14 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "22.75 s": [
+     "22.75 s: buyer3.forearmR jumps 87 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)",
+     "22.75 s: buyer3.handR jumps 112 cm in one frame (13 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "22.83 s": [
+     "22.83 s: rioter4.body passes through buyer1.body (by 3 cm)  [2 like it: shot t4, 22.83-23.67 s]"
+    ],
+    "22.92 s": [
+     "22.92 s: rioter5.armR passes through buyer1.head (by 3 cm)",
+     "22.92 s: buyer1 and rioter1 swap front and back in one frame (rioter1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [6 like it: shot t4, 22.92-23.67 s]"
+    ],
+    "23.17 s": [
+     "23.17 s: rioter4.armR passes through buyer2.body (by 3 cm)"
+    ],
+    "23.75 s": [
+     "23.75 s: buyer3 and policia1 swap front and back in one frame (policia1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t4, 23.75 s]"
+    ]
+   },
+   "tail": " in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [6 like it: shot t4, 22.92-23.67 s]\n - 23.17 s: rioter4.armR passes through buyer2.body (by 3 cm)\n - 23.75 s: buyer3 and policia1 swap front and back in one frame (policia1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t4, 23.75 s]\n(no pass stamp: the render still needs the full pre-flight)\n/tmp/replay-9exilu8u/source/preflight.py:336: DeprecationWarning: This process (pid=4576) is multi-threaded, use of fork() may lead to deadlocks in the child.\n  pid = os.fork()\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c29",
+   "ref": "49493b83",
+   "files": 7,
+   "secs": 86,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: T2 sign-on-glass flash (flash) is a star (4 points, 2.5x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 helicopter hit (burst) is a star (7 points, 3.3x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (8 points, 3.9x deeper than its gaps): off-style (guides/satire.md, The look)",
+     "EFFECT SHAPES: T4 fireball (burst) is a star (8 points, 3.0x deeper than its gaps): off-style (guides/satire.md, The look)"
+    ],
+    "caption": [
+     "caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)"
+    ]
+   },
+   "tail": " - EFFECT SHAPES: T4 Molotovs and melee dust (burst) is a star (8 points, 3.9x deeper than its gaps): off-style (guides/satire.md, The look)\n - EFFECT SHAPES: T4 fireball (burst) is a star (8 points, 3.0x deeper than its gaps): off-style (guides/satire.md, The look)\n - caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)\n(no pass stamp: the render still needs the full pre-flight)\n/tmp/replay-13ogjsm8/source/preflight.py:336: DeprecationWarning: This process (pid=5344) is multi-threaded, use of fork() may lead to deadlocks in the child.\n  pid = os.fork()\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c30",
+   "ref": "78a03afb",
+   "files": 7,
+   "secs": 91,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "caption": [
+     "caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)"
+    ]
+   },
+   "tail": "ython3 source/rough.py sheet protest-tiers OUT.jpg, send it, then `sent`\nWARNING: protest_tiers.py is 2261 lines: split it, one file per group of shots (rule 61)\nshared checks: clean\ninfo: shots over 8 s (fine when chosen): t4 10.0 s\nquick check (--text): 1 fault(s)\n - caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)\n(no pass stamp: the render still needs the full pre-flight)\n/tmp/replay-_jh088kx/source/preflight.py:336: DeprecationWarning: This process (pid=5462) is multi-threaded, use of fork() may lead to deadlocks in the child.\n  pid = os.fork()\n"
+  },
+  {
+   "branch": "claude/protest-tiers-c31",
+   "ref": "2dde1e79",
+   "files": 7,
+   "secs": 93,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: PASSES THROUGH: 18.00-18.03 s (t4): rioter1.handL passes 3 cm into rioter2.forearmR  [4 like it: shot t4, 18.00-18.64 s]"
+    ],
+    "caption": [
+     "caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)"
+    ],
+    "18.00 s": [
+     "18.00 s: rioter1.handL passes through rioter2.forearmR (by 3 cm)  [2 like it: shot t4, 18.00-18.08 s]"
+    ],
+    "21.75 s": [
+     "21.75 s: buyer1.forearmR jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)"
+    ]
+   },
+   "tail": "armR  [4 like it: shot t4, 18.00-18.64 s]\n - caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)\n - 18.00 s: rioter1.handL passes through rioter2.forearmR (by 3 cm)  [2 like it: shot t4, 18.00-18.08 s]\n - 21.75 s: buyer1.forearmR jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)\n(no pass stamp: the render still needs the full pre-flight)\n/tmp/replay-vrnk8ali/source/preflight.py:336: DeprecationWarning: This process (pid=5579) is multi-threaded, use of fork() may lead to deadlocks in the child.\n  pid = os.fork()\n"
+  },
+  {
+   "branch": "claude/protest-back-half-2",
+   "ref": "33f3c07d",
+   "files": 9,
+   "secs": 118,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: JUMPS: 9.00 s (t2): hauler2 jumps 0.94 m in one frame (the frames either side: 0.29 m)",
+     "AUDIT: PASSES THROUGH: 6.64 s (t2): hauler1.forearmR passes 13 cm into hauler2.body",
+     "AUDIT: PASSES THROUGH: 6.86-6.97 s (t2): runner1.forearmL passes 14 cm into swinger.body",
+     "AUDIT: PASSES THROUGH: 7.03-7.06 s (t2): runner2.forearmL passes 3 cm into swinger.armR",
+     "AUDIT: PASSES THROUGH: 7.06-7.19 s (t2): runner4.body passes 14 cm into swinger.armL",
+     "AUDIT: PASSES THROUGH: 7.08 s (t2): runner1.body passes 21 cm into runner2.body  [3 like it: shot t2, 7.08-7.42 s]",
+     "AUDIT: PASSES THROUGH: 7.17-7.28 s (t2): runner5.armL passes 13 cm into swinger.body",
+     "AUDIT: PASSES THROUGH: 7.81-8.08 s (t2): hauler1.body passes 19 cm into hauler2.body",
+     "AUDIT: PASSES THROUGH: 8.56-8.67 s (t2): hauler2.armL passes 16 cm into runner2.body",
+     "AUDIT: PASSES THROUGH: 11.58-11.61 s (t2): hauler1.body passes 3 cm into runner4.handR",
+     "AUDIT: PASSES THROUGH: 11.67-11.78 s (t2): hauler1.body passes 18 cm into runner4.body  [2 like it: shot t2, 11.67-12.97 s]",
+     "AUDIT: PASSES THROUGH: 12.25-12.39 s (t2): hauler2.forearmR passes 8 cm into runner4.armR",
+     "AUDIT: PASSES THROUGH: 13.69-14.11 s (t2): runner4.shinL passes 9 cm into swinger.shinL",
+     "AUDIT: PASSES THROUGH: 22.53-22.61 s (t4): rioter5.handL passes 8 cm into rioter6.armR  [2 like it: shot t4, 22.53-23.17 s]",
+     "AUDIT: POPS: 9.17 s (t2): hauler1 vanishes in the middle of the frame (next frame: gone)  [2 like it: shot t2, 9.17-9.42 s]",
+     "AUDIT: POPS: 9.67 s (t2): runner4 vanishes in the middle of the frame (next frame: gone)  [2 like it: shot t2, 9.67-10.00 s]",
+     "AUDIT: POPS: 10.67 s (t2): hauler1 appears from nothing in the middle of the frame  [2 like it: shot t2, 10.67-11.67 s]",
+     "AUDIT: POPS: 11.17 s (t2): runner4 appears from nothing in the middle of the frame  [2 like it: shot t2, 11.17-12.17 s]"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: T2 sign-on-glass flash draws nothing in its test"
+    ],
+    "READABILITY": [
+     "READABILITY: 7.50 s: the WAFFEN RAUS placard is not on screen  [2 like it: shot t2, 7.50-8.50 s]"
+    ],
+    "caption": [
+     "caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)"
+    ],
+    "6.92 s": [
+     "6.92 s: swinger.body passes through runner1.armL (by 14 cm)",
+     "6.92 s: hauler2.body jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.head jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.armL jumps 60 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.thighL jumps 70 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.shinL jumps 74 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92-7.67 s]",
+     "6.92 s: hauler2.footL jumps 71 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92-7.67 s]",
+     "6.92 s: hauler2.armR jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92-8.25 s]",
+     "6.92 s: runner1.body jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92 s]",
+     "6.92 s: runner1.head jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92 s]",
+     "6.92 s: runner1.armL jumps 66 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t2, 6.92-7.33 s]",
+     "6.92 s: runner1.thighL jumps 76 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92-7.00 s]",
+     "6.92 s: runner1.shinL jumps 81 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92 s]",
+     "6.92 s: runner1.footL jumps 77 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 6.92-7.67 s]",
+     "6.92 s: runner1.armR jumps 69 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92-9.08 s]",
+     "6.92 s: runner1.thighR jumps 59 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92-7.25 s]",
+     "6.92 s: swinger and runner4 swap front and back in one frame (runner4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t2, 6.92-9.75 s]"
+    ],
+    "7.00 s": [
+     "7.00 s: hauler1.handR jumps 102 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)",
+     "7.00 s: runner2.shinR jumps 61 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t2, 7.00-7.25 s]"
+    ],
+    "7.08 s": [
+     "7.08 s: swinger.body passes through runner4.thighL (by 13 cm)",
+     "7.08 s: runner2.footR jumps 73 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t2, 7.08-7.25 s]",
+     "7.08 s: runner5 and runner4 swap front and back in one frame (runner4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [18 like it: shot t2, 7.08-10.00 s]"
+    ],
+    "7.17 s": [
+     "7.17 s: swinger.forearmL passes through runner5.forearmR (by 6 cm)"
+    ],
+    "7.83 s": [
+     "7.83 s: hauler1.forearmR passes through hauler2.body (by 7 cm)",
+     "7.83 s: hauler1.thighR jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.83-9.00 s]",
+     "7.83 s: hauler1.shinR jumps 77 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.83-9.00 s]",
+     "7.83 s: hauler1.footR jumps 73 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.83-9.00 s]"
+    ],
+    "8.42 s": [
+     "8.42 s: runner1 and swinger swap front and back in one frame (swinger is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t2, 8.42-9.42 s]"
+    ],
+    "8.50 s": [
+     "8.50 s: runner1 and hauler2 swap front and back in one frame (hauler2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t2, 8.50-8.67 s]"
+    ],
+    "8.58 s": [
+     "8.58 s: hauler2.body passes through runner2.body (by 10 cm)"
+    ],
+    "8.83 s": [
+     "8.83 s: hauler1 and runner1 swap front and back in one frame (runner1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [7 like it: shot t2, 8.83-12.83 s]"
+    ],
+    "11.58 s": [
+     "11.58 s: hauler1.body passes through runner4.forearmR (by 2 cm)"
+    ],
+    "12.25 s": [
+     "12.25 s: hauler2.forearmR passes through runner4.armR (by 3 cm)"
+    ],
+    "12.58 s": [
+     "12.58 s: hauler2.body passes through runner5.handR (by 2 cm)"
+    ],
+    "19.42 s": [
+     "19.42 s: back3.armR jumps 59 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "21.42 s": [
+     "21.42 s: pusher4 and crs1 swap front and back in one frame (crs1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t3, 21.42 s]"
+    ],
+    "22.17 s": [
+     "22.17 s: crs1 and pusher4 swap front and back in one frame (pusher4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t3, 22.17 s]"
+    ],
+    "22.58 s": [
+     "22.58 s: rioter5.forearmL passes through rioter6.armR (by 3 cm)"
+    ],
+    "26.25 s": [
+     "26.25 s: buyer1.forearmR jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)"
+    ]
+   },
+   "tail": " s: crs1 and pusher4 swap front and back in one frame (pusher4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t3, 22.17 s]\n - 22.58 s: rioter5.forearmL passes through rioter6.armR (by 3 cm)\n - 26.25 s: buyer1.forearmR jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)\n(no pass stamp: the render still needs the full pre-flight)\n/tmp/replay-1hazfc3x/source/preflight.py:336: DeprecationWarning: This process (pid=5721) is multi-threaded, use of fork() may lead to deadlocks in the child.\n  pid = os.fork()\n"
+  },
+  {
+   "branch": "claude/protest-back-half",
+   "ref": "98adbd5d",
+   "files": 9,
+   "secs": 118,
+   "exit": 1,
+   "refused": true,
+   "faults": {
+    "AUDIT": [
+     "AUDIT: JUMPS: 9.00 s (t2): hauler2 jumps 0.94 m in one frame (the frames either side: 0.29 m)",
+     "AUDIT: PASSES THROUGH: 6.64 s (t2): hauler1.forearmR passes 13 cm into hauler2.body",
+     "AUDIT: PASSES THROUGH: 6.86-6.97 s (t2): runner1.forearmL passes 14 cm into swinger.body",
+     "AUDIT: PASSES THROUGH: 7.03-7.06 s (t2): runner2.forearmL passes 3 cm into swinger.armR",
+     "AUDIT: PASSES THROUGH: 7.06-7.19 s (t2): runner4.body passes 14 cm into swinger.armL",
+     "AUDIT: PASSES THROUGH: 7.08 s (t2): runner1.body passes 21 cm into runner2.body  [3 like it: shot t2, 7.08-7.42 s]",
+     "AUDIT: PASSES THROUGH: 7.17-7.28 s (t2): runner5.armL passes 13 cm into swinger.body",
+     "AUDIT: PASSES THROUGH: 7.81-8.08 s (t2): hauler1.body passes 19 cm into hauler2.body",
+     "AUDIT: PASSES THROUGH: 8.56-8.67 s (t2): hauler2.armL passes 16 cm into runner2.body",
+     "AUDIT: PASSES THROUGH: 11.58-11.61 s (t2): hauler1.body passes 3 cm into runner4.handR",
+     "AUDIT: PASSES THROUGH: 11.67-11.78 s (t2): hauler1.body passes 18 cm into runner4.body  [2 like it: shot t2, 11.67-12.97 s]",
+     "AUDIT: PASSES THROUGH: 12.25-12.39 s (t2): hauler2.forearmR passes 8 cm into runner4.armR",
+     "AUDIT: PASSES THROUGH: 13.69-14.11 s (t2): runner4.shinL passes 9 cm into swinger.shinL",
+     "AUDIT: PASSES THROUGH: 22.53-22.61 s (t4): rioter5.handL passes 8 cm into rioter6.armR  [2 like it: shot t4, 22.53-23.17 s]",
+     "AUDIT: POPS: 9.17 s (t2): hauler1 vanishes in the middle of the frame (next frame: gone)  [2 like it: shot t2, 9.17-9.42 s]",
+     "AUDIT: POPS: 9.67 s (t2): runner4 vanishes in the middle of the frame (next frame: gone)  [2 like it: shot t2, 9.67-10.00 s]",
+     "AUDIT: POPS: 10.67 s (t2): hauler1 appears from nothing in the middle of the frame  [2 like it: shot t2, 10.67-11.67 s]",
+     "AUDIT: POPS: 11.17 s (t2): runner4 appears from nothing in the middle of the frame  [2 like it: shot t2, 11.17-12.17 s]"
+    ],
+    "EFFECT SHAPES": [
+     "EFFECT SHAPES: T2 sign-on-glass flash draws nothing in its test"
+    ],
+    "READABILITY": [
+     "READABILITY: 7.50 s: the WAFFEN RAUS placard is not on screen  [2 like it: shot t2, 7.50-8.50 s]"
+    ],
+    "caption": [
+     "caption \"Why are y'all protesting?\": 0.91 s on screen at 1.1x for 4 words (too fast to read)"
+    ],
+    "6.92 s": [
+     "6.92 s: swinger.body passes through runner1.armL (by 14 cm)",
+     "6.92 s: hauler2.body jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.head jumps 62 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.armL jumps 60 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.thighL jumps 70 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)",
+     "6.92 s: hauler2.shinL jumps 74 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92-7.67 s]",
+     "6.92 s: hauler2.footL jumps 71 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92-7.67 s]",
+     "6.92 s: hauler2.armR jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92-8.25 s]",
+     "6.92 s: runner1.body jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92 s]",
+     "6.92 s: runner1.head jumps 68 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 6.92 s]",
+     "6.92 s: runner1.armL jumps 66 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t2, 6.92-7.33 s]",
+     "6.92 s: runner1.thighL jumps 76 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92-7.00 s]",
+     "6.92 s: runner1.shinL jumps 81 cm in one frame (10 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92 s]",
+     "6.92 s: runner1.footL jumps 77 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [5 like it: shot t2, 6.92-7.67 s]",
+     "6.92 s: runner1.armR jumps 69 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92-9.08 s]",
+     "6.92 s: runner1.thighR jumps 59 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [4 like it: shot t2, 6.92-7.25 s]",
+     "6.92 s: swinger and runner4 swap front and back in one frame (runner4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t2, 6.92-9.75 s]"
+    ],
+    "7.00 s": [
+     "7.00 s: hauler1.handR jumps 102 cm in one frame (12 m/s: it has teleported; add in-between poses or slow the move)",
+     "7.00 s: runner2.shinR jumps 61 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t2, 7.00-7.25 s]"
+    ],
+    "7.08 s": [
+     "7.08 s: swinger.body passes through runner4.thighL (by 13 cm)",
+     "7.08 s: runner2.footR jumps 73 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [3 like it: shot t2, 7.08-7.25 s]",
+     "7.08 s: runner5 and runner4 swap front and back in one frame (runner4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [18 like it: shot t2, 7.08-10.00 s]"
+    ],
+    "7.17 s": [
+     "7.17 s: swinger.forearmL passes through runner5.forearmR (by 6 cm)"
+    ],
+    "7.83 s": [
+     "7.83 s: hauler1.forearmR passes through hauler2.body (by 7 cm)",
+     "7.83 s: hauler1.thighR jumps 63 cm in one frame (8 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.83-9.00 s]",
+     "7.83 s: hauler1.shinR jumps 77 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.83-9.00 s]",
+     "7.83 s: hauler1.footR jumps 73 cm in one frame (9 m/s: it has teleported; add in-between poses or slow the move)  [2 like it: shot t2, 7.83-9.00 s]"
+    ],
+    "8.42 s": [
+     "8.42 s: runner1 and swinger swap front and back in one frame (swinger is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t2, 8.42-9.42 s]"
+    ],
+    "8.50 s": [
+     "8.50 s: runner1 and hauler2 swap front and back in one frame (hauler2 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [4 like it: shot t2, 8.50-8.67 s]"
+    ],
+    "8.58 s": [
+     "8.58 s: hauler2.body passes through runner2.body (by 10 cm)"
+    ],
+    "8.83 s": [
+     "8.83 s: hauler1 and runner1 swap front and back in one frame (runner1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [7 like it: shot t2, 8.83-12.83 s]"
+    ],
+    "11.58 s": [
+     "11.58 s: hauler1.body passes through runner4.forearmR (by 2 cm)"
+    ],
+    "12.25 s": [
+     "12.25 s: hauler2.forearmR passes through runner4.armR (by 3 cm)"
+    ],
+    "12.58 s": [
+     "12.58 s: hauler2.body passes through runner5.handR (by 2 cm)"
+    ],
+    "19.42 s": [
+     "19.42 s: back3.armR jumps 59 cm in one frame (7 m/s: it has teleported; add in-between poses or slow the move)"
+    ],
+    "21.42 s": [
+     "21.42 s: pusher4 and crs1 swap front and back in one frame (crs1 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t3, 21.42 s]"
+    ],
+    "22.17 s": [
+     "22.17 s: crs1 and pusher4 swap front and back in one frame (pusher4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t3, 22.17 s]"
+    ],
+    "22.58 s": [
+     "22.58 s: rioter5.forearmL passes through rioter6.armR (by 3 cm)"
+    ],
+    "26.25 s": [
+     "26.25 s: buyer1.forearmR jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)"
+    ]
+   },
+   "tail": " s: crs1 and pusher4 swap front and back in one frame (pusher4 is now in front): keep each on its side, or list the swap in ORDER_SWAPS with why  [3 like it: shot t3, 22.17 s]\n - 22.58 s: rioter5.forearmL passes through rioter6.armR (by 3 cm)\n - 26.25 s: buyer1.forearmR jumps 93 cm in one frame (11 m/s: it has teleported; add in-between poses or slow the move)\n(no pass stamp: the render still needs the full pre-flight)\n/tmp/replay-d9gngfra/source/preflight.py:336: DeprecationWarning: This process (pid=5842) is multi-threaded, use of fork() may lead to deadlocks in the child.\n  pid = os.fork()\n"
+  }
+ ]
+}

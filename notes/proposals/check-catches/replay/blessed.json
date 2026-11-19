@@ -1,0 +1,518 @@
+{
+ "film": "blessed",
+ "runs": [
+  {
+   "branch": "claude/blessed-moves-c5",
+   "ref": "df8942e6",
+   "files": 4,
+   "secs": 19,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 17 blank": [
+     "the brief checklist has 17 blank \"done?\" row(s): 1 (Title: Blessed. News: Russell Brand sentenced to t); 2 (Joke: he repeats his overly Christian \"feeling ble); 3 (Brand loquacious and ostentatious in"
+    ],
+    "no record of the composition sheet being": [
+     "no record of the composition sheet being sent (rule 11, a film begun before the shot board): add \"Composition sheet sent: DATE, FILE\" to the notes, or python3 source/rough.py board blessed OUT.jpg, se"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swagger in, hand to heart, beads in the other hand\" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised\" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py s",
+     "poses (rule 41): the body move \"gavel down\" (judge, close on the judge) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"judge, close on the j",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"arms flung wide, scarf flying\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Bra"
+    ],
+    "HEAD LIFE": [
+     "HEAD LIFE: brand speaks (line 1) with no head acting (rule 74: HEAD_LIFE['brand'] = headlife.HeadLife from the voice, used in the drawing)",
+     "HEAD LIFE: newsreader speaks (line 5) with no head acting (rule 74: HEAD_LIFE['newsreader'] = headlife.HeadLife from the voice, used in the drawing)"
+    ],
+    "no": [
+     "no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)"
+    ]
+   },
+   "tail": "ide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n - HEAD LIFE: brand speaks (line 1) with no head acting (rule 74: HEAD_LIFE['brand'] = headlife.HeadLife from the voice, used in the drawing)\n - HEAD LIFE: newsreader speaks (line 5) with no head acting (rule 74: HEAD_LIFE['newsreader'] = headlife.HeadLife from the voice, used in the drawing)\n - no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)\n"
+  },
+  {
+   "branch": "claude/blessed-moves-c6",
+   "ref": "12b9e2e5",
+   "files": 4,
+   "secs": 19,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 17 blank": [
+     "the brief checklist has 17 blank \"done?\" row(s): 1 (Title: Blessed. News: Russell Brand sentenced to t); 2 (Joke: he repeats his overly Christian \"feeling ble); 3 (Brand loquacious and ostentatious in"
+    ],
+    "no record of the composition sheet being": [
+     "no record of the composition sheet being sent (rule 11, a film begun before the shot board): add \"Composition sheet sent: DATE, FILE\" to the notes, or python3 source/rough.py board blessed OUT.jpg, se"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swagger in, hand to heart, beads in the other hand\" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised\" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py s",
+     "poses (rule 41): the body move \"gavel down\" (judge, close on the judge) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"judge, close on the j",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"arms flung wide, scarf flying\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Bra"
+    ],
+    "HEAD LIFE": [
+     "HEAD LIFE: brand speaks (line 1) with no head acting (rule 74: HEAD_LIFE['brand'] = headlife.HeadLife from the voice, used in the drawing)",
+     "HEAD LIFE: newsreader speaks (line 5) with no head acting (rule 74: HEAD_LIFE['newsreader'] = headlife.HeadLife from the voice, used in the drawing)"
+    ],
+    "no": [
+     "no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)"
+    ]
+   },
+   "tail": "ide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n - HEAD LIFE: brand speaks (line 1) with no head acting (rule 74: HEAD_LIFE['brand'] = headlife.HeadLife from the voice, used in the drawing)\n - HEAD LIFE: newsreader speaks (line 5) with no head acting (rule 74: HEAD_LIFE['newsreader'] = headlife.HeadLife from the voice, used in the drawing)\n - no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)\n"
+  },
+  {
+   "branch": "claude/blessed-moves-c7",
+   "ref": "11097916",
+   "files": 4,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the brief checklist has 17 blank": [
+     "the brief checklist has 17 blank \"done?\" row(s): 1 (Title: Blessed. News: Russell Brand sentenced to t); 2 (Joke: he repeats his overly Christian \"feeling ble); 3 (Brand loquacious and ostentatious in"
+    ],
+    "no record of the composition sheet being": [
+     "no record of the composition sheet being sent (rule 11, a film begun before the shot board): add \"Composition sheet sent: DATE, FILE\" to the notes, or python3 source/rough.py board blessed OUT.jpg, se"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swagger in, hand to heart, beads in the other hand\" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised\" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py s",
+     "poses (rule 41): the body move \"gavel down\" (judge, close on the judge) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"judge, close on the j",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"arms flung wide, scarf flying\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Bra"
+    ],
+    "HEAD LIFE": [
+     "HEAD LIFE: brand speaks (line 1) with no head acting (rule 74: HEAD_LIFE['brand'] = headlife.HeadLife from the voice, used in the drawing)",
+     "HEAD LIFE: newsreader speaks (line 5) with no head acting (rule 74: HEAD_LIFE['newsreader'] = headlife.HeadLife from the voice, used in the drawing)"
+    ],
+    "no": [
+     "no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)"
+    ]
+   },
+   "tail": "ide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n - HEAD LIFE: brand speaks (line 1) with no head acting (rule 74: HEAD_LIFE['brand'] = headlife.HeadLife from the voice, used in the drawing)\n - HEAD LIFE: newsreader speaks (line 5) with no head acting (rule 74: HEAD_LIFE['newsreader'] = headlife.HeadLife from the voice, used in the drawing)\n - no \"Rehearsal clips sent: DATE, FILE\" (or \"none: why\") line in the notes (rule 8: the 3-4 riskiest moves as 2-3 s clips before the rest)\n"
+  },
+  {
+   "branch": "claude/blessed-moves-c10",
+   "ref": "e91953a7",
+   "files": 4,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-jury-c11",
+   "ref": "3daa1ccc",
+   "files": 5,
+   "secs": 19,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-chat2",
+   "ref": "8611d95c",
+   "files": 5,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-checks-c3",
+   "ref": "dd0b10bf",
+   "files": 6,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 7 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | LINE_"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-notes-r1-c3",
+   "ref": "3f8e44d1",
+   "files": 6,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 10 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | HAND"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-notes-r1",
+   "ref": "d1cb55d8",
+   "files": 6,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 10 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | HAND"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-notes-r1-c2",
+   "ref": "6826168b",
+   "files": 6,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 10 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | HAND"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-notes-r1-c4",
+   "ref": "79bbfb0e",
+   "files": 6,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 10 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | HAND"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-notes-r2",
+   "ref": "9f8f2328",
+   "files": 7,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 10 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | HAND"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t"
+    ]
+   },
+   "tail": "k.py look FILM T, then posecheck.py seen FILM \"Brand, close-up at the wall phone\" T \"what reads\"\n - poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to a close-up\" T \"what reads\"\n - poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, wide at the gates\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-gates2-c2",
+   "ref": "1ebda883",
+   "files": 7,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 10 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | HAND"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t",
+     "poses (rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T",
+     "poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own sho"
+    ]
+   },
+   "tail": "rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, camera framed ON him\" T \"what reads\"\n - poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Walliams + 2 officers, the background of the same shot\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-c3-anim2",
+   "ref": "627cafe0",
+   "files": 7,
+   "secs": 19,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 11 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLO"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t",
+     "poses (rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T",
+     "poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own sho"
+    ]
+   },
+   "tail": "rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, camera framed ON him\" T \"what reads\"\n - poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Walliams + 2 officers, the background of the same shot\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-notes-r2-c1",
+   "ref": "ceb024b1",
+   "files": 7,
+   "secs": 18,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 11 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLO"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t",
+     "poses (rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T",
+     "poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own sho"
+    ]
+   },
+   "tail": "rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, camera framed ON him\" T \"what reads\"\n - poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Walliams + 2 officers, the background of the same shot\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-notes-r2-c2",
+   "ref": "c725b962",
+   "files": 7,
+   "secs": 19,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 11 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLO"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t",
+     "poses (rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T",
+     "poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own sho"
+    ]
+   },
+   "tail": "rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, camera framed ON him\" T \"what reads\"\n - poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Walliams + 2 officers, the background of the same shot\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-walliams-face",
+   "ref": "22d392c9",
+   "files": 7,
+   "secs": 19,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 11 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLO"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t",
+     "poses (rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T",
+     "poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own sho"
+    ]
+   },
+   "tail": "rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, camera framed ON him\" T \"what reads\"\n - poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Walliams + 2 officers, the background of the same shot\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-walliams-face-c4",
+   "ref": "689092bf",
+   "files": 7,
+   "secs": 20,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t",
+     "poses (rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T",
+     "poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own sho",
+     "poses (rule 41): the body move \"turns his head to Walliams (body stays, still gripping his a\" (left officer, the same gates2 shot) is not yet looked at at phone size in its own shot: posecheck.py look"
+    ]
+   },
+   "tail": "body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Walliams + 2 officers, the background of the same shot\" T \"what reads\"\n - poses (rule 41): the body move \"turns his head to Walliams (body stays, still gripping his a\" (left officer, the same gates2 shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"left officer, the same gates2 shot\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-seated-c5",
+   "ref": "cdffdf44",
+   "files": 7,
+   "secs": 19,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 1 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | STILL"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)",
+     "poses (rule 41): the body move \"swaggers in (sway per step), beads in the R hand; L hand to \" (Brand, medium) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then poseche",
+     "poses (rule 41): the body move \"bolt upright, Bible up, right hand raised (the showman held \" (Brand, side-on in the box) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, ",
+     "poses (rule 41): the body move \"shoulders drop\" (Brand, close-up in the dock) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, close-up",
+     "poses (rule 41): the body move \"bent over; looks round; curled on the cot, shaking\" (Brand, van close-up; cell walk with officer; cot) is not yet looked at at phone size in its own shot: posecheck.py ",
+     "poses (rule 41): the body move \"forehead to the wall, phone at ear\" (Brand, close-up at the wall phone) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py ",
+     "poses (rule 41): the body move \"sits up\" (Brand, slow zoom to a close-up) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Brand, slow zoom to",
+     "poses (rule 41): the body move \"swaggers out; arms flung up and open, palms out (the messiah\" (Brand, wide at the gates) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, t",
+     "poses (rule 41): the body move \"49.45-50.7 a clear stride straight out of the wicket towards\" (Brand, camera framed ON him) is not yet looked at at phone size in its own shot: posecheck.py look FILM T",
+     "poses (rule 41): the body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own sho",
+     "poses (rule 41): the body move \"turns his head to Walliams (body stays, still gripping his a\" (left officer, the same gates2 shot) is not yet looked at at phone size in its own shot: posecheck.py look"
+    ]
+   },
+   "tail": "body move \"49.8-51.2 dragged in from the right, leaning back, his whole\" (Walliams + 2 officers, the background of the same shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"Walliams + 2 officers, the background of the same shot\" T \"what reads\"\n - poses (rule 41): the body move \"turns his head to Walliams (body stays, still gripping his a\" (left officer, the same gates2 shot) is not yet looked at at phone size in its own shot: posecheck.py look FILM T, then posecheck.py seen FILM \"left officer, the same gates2 shot\" T \"what reads\"\n"
+  },
+  {
+   "branch": "claude/blessed-c5-anim4",
+   "ref": "2f59b797",
+   "files": 7,
+   "secs": 20,
+   "exit": 2,
+   "refused": true,
+   "faults": {
+    "the notes file has no": [
+     "the notes file has no \"The brief as a checklist\" section (notes/_template.md)"
+    ],
+    "EXCEPTIONS": [
+     "EXCEPTIONS: 14 exception(s) with no written reason in the notes (rule 13: a row in \"## Exceptions\": | check | who | why | looked at full size |; a code comment is never a reason). Rows to fill: | ALLO"
+    ],
+    "poses": [
+     "poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)"
+    ]
+   },
+   "tail": "omment is never a reason). Rows to fill: | ALLOWED_POPS | walliams | | | | HANDS_OK | Journalist* | | | | HANDS_OK | Russell Brand | | | | HANDS_OK | Prison officer | | | | LINE_OK | brand | | | | LINE_OK | walliams | | | | LINE_OK | officer | | | | LINE_OK | judge | | | | LINE_OK | juror4 | | | | LINE_OK | juror9 | | | | LINE_OK | juror7 | | | | LINE_OK | juror11 | | | | LINE_OK | juror8 | | | | STILL_OK | brand [tvroom 36.5] | | |\n - poses (rule 38): a film with people has no SHOT_MARKS {shot: [who]}, so the front-on check cannot run: add it (people's names, or plan marks with a rooms plan)\n"
+  }
+ ]
+}
