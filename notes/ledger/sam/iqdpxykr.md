@@ -49,3 +49,6 @@ Y
 ### 2026-11-19T11:07:55
 Is the 1.1x rule applying? Were our last two films built at 1x1 speed as was proposed in Remakes?
 
+### 2026-11-19T11:13:18
+Yes make sure it did that
+
