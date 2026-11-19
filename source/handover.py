@@ -449,6 +449,16 @@ def branch_faults(film, notes=None):
 
 
 
+def cost_faults(film, notes=None):
+    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem (costline.py)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import costline
+    try:
+        return costline.faults(film, notes)
+    except Exception as e:
+        return [f'COST: the cost line could not be recorded ({e})']
+
+
 def sentence_faults():
     """startup fixes 4 (Sam's Y, 16 Nov): no CLAUDE.md sentence lost; text leaves only word for word (sentences.py)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -573,7 +583,7 @@ def main(argv):
             film = ledger.film_of(rec)
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
-                      + sentence_faults()
+                      + sentence_faults() + cost_faults(film, opt('--notes'))
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
     if cmd == 'start':

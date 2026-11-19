@@ -1202,6 +1202,21 @@ def sounds_and_references_kept():
 
 
 @test
+def quiet_cost_line():
+    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem, once, never for
+    a forecast over 15% alone, and never with a cut to the content."""
+    import costline, ledger
+    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
+         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 5')}
+    d['chats'][0]['cost'] = 3.0; ledger.mark_stage(d, 'cast')
+    calm = costline.problems(d)                                    # on plan: nothing to show
+    d['chats'][0]['cost'] = 9.0; ledger.mark_stage(d, 'sets')      # sets cost 6 against 2 planned
+    first = costline.problems(d); again = costline.problems(d)
+    ok = calm == [] and len(first) >= 1 and 'sets' in first[0] and again == [] and 'cut' not in costline.SAVE.lower()
+    return ok, f'quiet on plan {calm == []}, overrun shown {bool(first)}, once only {again == []}'
+
+
+@test
 def estimate_forecast_and_alarm():
     """Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned
     round pushes it up; the budget stop fires at the budget and at every 10% over it, once each, and cannot be
