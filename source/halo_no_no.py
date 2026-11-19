@@ -482,9 +482,7 @@ def place_caption(img, t):
 def overlay(img, t):
     if t < BLACK_AT:
         place_caption(img, t)
-        c = caption_at(t)
-        if c:
-            PP.caption(img, c)
+        # subtitles are drawn by finish.py from caption_at (19 Nov: drawing them here too doubled them)
     return img
 
 
