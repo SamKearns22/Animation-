@@ -1,5 +1,7 @@
 # Working with me
 
+**Plain words, always.** Every message to me is in plain words. Any technical word is explained where it appears, or replaced by a simpler one. I can't follow code names, file names or jargon. Read this again before every message that asks me to decide something. (Sam, 19 Nov. If this isn't followed, the next step is a checker that sends a message back: notes/proposals/plain-check.md, option 1.)
+
 I don't know how to code. **Explain in plain English** (say what any technical word means). **Make choices for me**:
 pick what's best, do it, say briefly what and why. **Always say where the finished file is** and how to open it. I
 have only an iPhone and this app: **send finished animations in the chat** so I can save them to Photos; never give
