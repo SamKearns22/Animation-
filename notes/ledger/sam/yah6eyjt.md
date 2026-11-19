@@ -15,3 +15,6 @@ Please summarise again. Our simple communication tool isn't working and I am jus
 ### 2026-11-19T20:14:58
 Y to all. Do we have a plan for if we actually do need a 3/4 pose?
 
+### 2026-11-19T20:17:12
+What would it cost of my current session usage to fix these three faults now? It is at 44%
+
