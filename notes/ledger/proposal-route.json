@@ -1538,25 +1538,25 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.8,
+   "cost": 1.14,
    "src": "estimate",
    "sid": "session_01J1JB7VJ1z2bHmM7UUJM8RG",
-   "steps": 23,
-   "hist_k": 112,
+   "steps": 32,
+   "hist_k": 118,
    "kinds": {
-    "tool search": 22.1,
-    "page.py": 8.4,
-    "other": 69.5
+    "tool search": 21.1,
+    "page.py": 6.7,
+    "other": 72.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 15,
+    "tool search": 20,
     "whole-file .py read": 0,
     "page.py": 4,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 4
+    "other": 7
    },
    "search": {
     "show": 0,
@@ -1564,9 +1564,9 @@
      "no show": 0
     },
     "other": {
-     "other": 4,
-     "shared:propose.py": 2,
-     "film notes": 4,
+     "other": 5,
+     "shared:propose.py": 4,
+     "film notes": 6,
      "shared:kittests.py": 3,
      "shared:facehouse.py": 2
     },
@@ -1677,6 +1677,41 @@
       "film notes",
       "story/show-page.md",
       "rm story/show-page.md; git status --short | head -3; git log origin/claude/creat"
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add notes/proposals && git commit -qm \"finder-learn-finish: helper A written"
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "story/test-page.md notes/proposals/finder-learn-finish/",
+      "rm -f story/test-page.md; git status --short | head -3; ls notes/proposals/finde"
+     ],
+     [
+      25,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge finder-learn-finish 2>&1 | tail -8"
+     ],
+     [
+      27,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record finder-learn-finish 2>&1 | tail -5; python3 sou"
+     ],
+     [
+      28,
+      "other",
+      "film notes",
+      "notes/proposals/finder-first/learn.md notes/proposals/finder-learn-finish.md",
+      "cat >> notes/proposals/finder-first/learn.md <<'E' ## 19 Nov update (job 3) - Ch"
      ]
     ]
    }
@@ -1689,26 +1724,26 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 5.05,
+   "cost": 5.61,
    "src": "estimate",
    "sid": "session_01J1JB7YKoy2Nfx7Nsi8i8BA",
-   "steps": 50,
-   "hist_k": 172,
+   "steps": 60,
+   "hist_k": 182,
    "kinds": {
-    "tool search": 18.6,
-    "whole-file .py read": 2.6,
-    "page.py": 5.1,
-    "other": 73.8
+    "tool search": 19.4,
+    "whole-file .py read": 2.2,
+    "page.py": 4.3,
+    "other": 74.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 33,
+    "tool search": 40,
     "whole-file .py read": 1,
     "page.py": 1,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 30
+    "other": 32
    },
    "search": {
     "show": 0,
@@ -1716,13 +1751,13 @@
      "no show": 0
     },
     "other": {
-     "other": 11,
-     "shared:propose.py": 6,
+     "other": 12,
+     "shared:propose.py": 11,
      "shared:stepcost.py": 4,
      "film notes": 5,
      "shared:costwatch.py": 1,
      "shared:ledger.py": 5,
-     "shared:handover.py": 1
+     "shared:handover.py": 2
     },
     "ticked": 0,
     "edited film code": false,
@@ -1957,6 +1992,55 @@
       "other",
       "notes/proposals",
       "git add notes/proposals && git commit -qm \"cost-other: judge copies ready Co-Aut"
+     ],
+     [
+      65,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/cold-start/judge notes/proposals/cost-other/ju",
+      "python3 source/propose.py record check-catches 2>&1 | tail -3; ls notes/proposal"
+     ],
+     [
+      66,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposal-route.md",
+      "python3 source/propose.py record cold-start 2>&1 | tail -3; sed -n '/## Where th"
+     ],
+     [
+      67,
+      "other",
+      "shared:propose.py",
+      "notes/archive/proposal-route-handovers.md notes/proposal-route.md source/propose",
+      "); push notification; stop for his numbers.\n- **Needs Sam:** his pick by number "
+     ],
+     [
+      68,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/handover.py",
+      "^COST"
+     ],
+     [
+      69,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "def end\\|print(.*settle"
+     ],
+     [
+      70,
+      "other",
+      "shared:propose.py",
+      "notes/proposal-route.md notes/proposals/cost-other/judge/verdict-raw.md source/p",
+      "cost-other|cold-start|check-catches"
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "",
+      "for i in 1 2 3; do git merge -q --no-edit origin/claude/create-claude-md-oe8z4g "
      ]
     ]
    }
@@ -1969,25 +2053,25 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.18,
+   "cost": 2.66,
    "src": "estimate",
    "sid": "session_01J1JB7ZPv3wYxu8yAH6EYJT",
-   "steps": 73,
-   "hist_k": 237,
+   "steps": 81,
+   "hist_k": 241,
    "kinds": {
-    "tool search": 25.8,
-    "pictures": 6.0,
-    "other": 68.2
+    "tool search": 25.1,
+    "pictures": 5.9,
+    "other": 69.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 48,
+    "tool search": 53,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 10,
-    "other": 22
+    "other": 23
    },
    "search": {
     "show": 0,
@@ -1995,9 +2079,9 @@
      "no show": 0
     },
     "other": {
-     "other": 13,
+     "other": 15,
      "shared:branches.py": 1,
-     "film notes": 8,
+     "film notes": 10,
      "guides": 4,
      "shared:milburn.py": 3,
      "shared:facehouse.py": 2,
@@ -2009,7 +2093,7 @@
      "shared:kittests.py": 1,
      "shared:signoff.py": 1,
      "shared:posecheck.py": 1,
-     "shared:propose.py": 4,
+     "shared:propose.py": 5,
      "shared:handover.py": 1,
      "shared:thepark.py": 1
     },
@@ -2351,6 +2435,41 @@
       "shared:propose.py",
       "notes/proposals/front-on-focus/ source/propose.py",
       "ls notes/proposals/front-on-focus/; python3 source/propose.py status 2>&1 | grep"
+     ],
+     [
+      80,
+      "other",
+      "film notes",
+      "notes/proposals/front-on-focus notes/proposals/front-on-focus.md",
+      "git checkout -q -b claude/job1-front-on-focus && git add notes/proposals/front-o"
+     ],
+     [
+      81,
+      "other",
+      "other",
+      "notes/proposals/front-on-focus/ notes/proposals/front-on-focus/helper-*.md",
+      "ls notes/proposals/front-on-focus/ | grep helper; wc -w notes/proposals/front-on"
+     ],
+     [
+      82,
+      "other",
+      "film notes",
+      "notes/proposals/front-on-focus/helper-a.md",
+      "tail -5 notes/proposals/front-on-focus/helper-a.md | cut -c1-200"
+     ],
+     [
+      83,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge front-on-focus 2>&1 | tail -4"
+     ],
+     [
+      85,
+      "other",
+      "other",
+      "notes/proposals/front-on-focus",
+      "git add -A notes/proposals/front-on-focus && git commit -q -m \"Job 1: both helpe"
      ]
     ]
    }
