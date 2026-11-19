@@ -55,3 +55,8 @@ The goal isn't to fix it for those characters, it's to fix it for all characters
 
 N
 
+### 2026-11-19T09:07:26
+Y.
+
+But also, this could impact far more than just people, couldn't it? It could be a problem on every level of our production process
+
