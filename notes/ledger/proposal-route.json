@@ -2189,17 +2189,17 @@
    "cost": 4.14,
    "src": "estimate",
    "sid": "session_01J1JB7ZPv3wYxu8yAH6EYJT",
-   "steps": 111,
-   "hist_k": 268,
+   "steps": 113,
+   "hist_k": 269,
    "kinds": {
-    "tool search": 19.0,
+    "tool search": 18.9,
     "renders": 0.8,
     "pictures": 4.5,
-    "other": 75.7
+    "other": 75.8
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 68,
+    "tool search": 69,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
