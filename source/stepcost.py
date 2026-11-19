@@ -19,6 +19,9 @@ MAP
                  edits, messages and reminders, cache re-write, the floor), exact: the parts add to the chat's bill;
                  'unexplained' (leftover) is only growth with nothing arriving. Number to beat: leftover under 5% on
                  every chat of the next film; three chats within 5% of the app's figure
+  start() ...... cold-start change (Sam's Y, 19 Nov): four start figures per chat: step-1 context, steps and % of a
+                 week to the first real work, the files read before it (with sizes and cost), base share. ledger.py
+                 coldstart FILM turns them into the film-end line (start + re-learning as % of the film)
   test ......... `python3 source/stepcost.py test`: on tests/stepcost-transcript.jsonl (a real chat's transcript,
                  trimmed to usage and tool calls) and on this chat's own transcript when there is one
 
@@ -208,7 +211,11 @@ def measure(path, film=None, helpers=True):
         sp = split(path, film) if helpers else None
     except Exception:
         sp = None
-    return {'steps': len(steps), 'hist': ctx[-1], 'usd': round(total, 4), 'search': srch, 'split': sp,
+    try:
+        cs = start(path, film) if helpers else None
+    except Exception:
+        cs = None
+    return {'steps': len(steps), 'hist': ctx[-1], 'usd': round(total, 4), 'search': srch, 'split': sp, 'start': cs,
             'kinds': {k: round(100 * v / total, 1) for k, v in by.items() if total and round(100 * v / total, 1)},
             'calls': {k: sum(1 for _, kk in calls.values() if kk == k) for k in KINDS if k != 'helpers'}}
 
@@ -367,6 +374,115 @@ def split_line(sp):
     b = ', '.join(f'{k} {v:g}%' for k, v in sp['blocks'].items())
     o = ', '.join(f'{k} {v:g}%' for k, v in list(sp['origins'].items())[:3])
     return f"{b}. Biggest origins: {o}. Leftover {sp['leftover']:g}%"
+
+
+FILE_RE = re.compile(r'[\w./-]*(?:source|guides|notes|story|research|tests|\.claude)/[\w./-]+|[\w./-]*CLAUDE\.md')
+CHECK_RE = re.compile(r'\b(preflight|check|checks|critique|sheet)\b')
+
+
+def _real_work(name, inp, film_re):
+    """cold-start, figure 2: the chat's first real work: an edit or write outside notes/ (and outside the scratchpad),
+    or a render or check on the film's own files. A rule of thumb (F6): some chats start differently."""
+    inp = inp or {}
+    if name in EDIT_TOOLS:
+        f = inp.get('file_path', '')
+        return bool(f) and '/notes/' not in f and not f.startswith('notes/') and not re.search(r'^/tmp/|scratchpad', f)
+    if name != 'Bash':
+        return False
+    cmd = inp.get('command', '')
+    if film_re.search(cmd) and (RENDER.search(cmd) or CHECK_RE.search(cmd)):
+        return True
+    if re.search(r"(?:sed -i[^|;&]*|open\(\s*['\"]|>\s*)(?:\S*/)?(?:source|story|guides|animations|\.claude)/", cmd):
+        return True
+    return bool(re.search(r",\s*['\"][wa]['\"]\s*\)", cmd) and re.search(r"['\"](?:\S*/)?(?:source|story|guides|\.claude)/", cmd))
+
+
+def _read_files(name, inp):
+    """The files one call reads in (a Read, or a shell cat / sed -n / head / tail): repo paths, short."""
+    inp = inp or {}
+    if name == 'Read':
+        f = inp.get('file_path', '')
+        return [re.sub(r'^.*?/(?=(?:source|guides|notes|story|research|tests|\.claude)/|CLAUDE\.md)', '', f)] if f else []
+    if name != 'Bash':
+        return []
+    cmd = inp.get('command', '')
+    out = []
+    for w in _segments(cmd):
+        h = w[0].split('/')[-1]
+        if h in ('cat', 'head', 'tail') or (h == 'sed' and '-n' in w) or (h.startswith('python') and 'show' in w):
+            out += [x for x in w[1:] if FILE_RE.fullmatch(x)]
+    return list(dict.fromkeys(out))
+
+
+def start(path, film=None):
+    """cold-start change (Sam's Y, 19 Nov): what it cost this chat to get going.
+
+    1 floor_k: the context at step 1 (k tokens).
+    2 work_step / work_pct: steps, and % of a week, up to the first real work (None if there was none).
+    3 reads: the files read before the first real work, [file, k tokens, $ to read and carry them]; re-learning is
+      worked out at the film level (ledger.coldstart) against the previous chat's list.
+    4 base_pct: step-1 context x steps x re-read price, as % of the chat's own cost."""
+    film_re = _film_paths(film)
+    steps, byid, calls, res = [], {}, {}, {}
+    work = None
+    for raw in open(path, encoding='utf-8', errors='replace'):
+        try:
+            d = json.loads(raw)
+        except Exception:
+            continue
+        if d.get('isSidechain'):
+            continue
+        m = d.get('message')
+        if not isinstance(m, dict):
+            continue
+        if d.get('type') == 'assistant' and m.get('usage'):
+            if m.get('id') not in byid:
+                byid[m.get('id')] = len(steps)
+                steps.append((m['usage'], costwatch.PRICE[costwatch.fam(m.get('model'))]))
+            k = byid[m.get('id')]
+            for b in m.get('content') or []:
+                if isinstance(b, dict) and b.get('type') == 'tool_use':
+                    if work is None and _real_work(b.get('name'), b.get('input'), film_re):
+                        work = k
+                    if work is None:
+                        fs = _read_files(b.get('name'), b.get('input'))
+                        if fs:
+                            calls[b['id']] = (k, fs)
+        elif d.get('type') == 'user' and isinstance(m.get('content'), list):
+            for b in m['content']:
+                if isinstance(b, dict) and b.get('type') == 'tool_result' and b.get('tool_use_id') in calls:
+                    res[b['tool_use_id']] = (len(steps), _result_tokens(b))
+    if not steps:
+        return None
+    ctx = [u.get('cache_read_input_tokens', 0) + u.get('cache_creation_input_tokens', 0) + u.get('input_tokens', 0)
+           for u, _ in steps]
+    cost = [(u.get('cache_read_input_tokens', 0) * p[0] + u.get('cache_creation_input_tokens', 0) * p[1]
+             + u.get('input_tokens', 0) * p[2] + u.get('output_tokens', 0) * p[3]) / 1e6 for u, p in steps]
+    end = len(steps)                                   # carried until the first compaction
+    for i in range(1, len(steps)):
+        if ctx[i] < COMPACT * ctx[i - 1]:
+            end = i
+            break
+    reads = {}
+    for tid, (k, fs) in calls.items():
+        if tid not in res:
+            continue
+        at, tok = res[tid]
+        if at >= len(steps):
+            continue
+        r, w = steps[at][1][0], steps[at][1][1]
+        usd = tok * (w + r * max(0, end - at - 1)) / 1e6
+        for f in fs:
+            a = reads.setdefault(f, [f, 0.0, 0.0])
+            a[1] += tok / len(fs) / 1000
+            a[2] += usd / len(fs)
+    total = sum(cost)
+    base = ctx[0] * steps[0][1][0] * (len(steps) - 1) / 1e6
+    return {'floor_k': ctx[0] // 1000,
+            'work_step': None if work is None else work + 1,
+            'work_pct': None if work is None else round(100 * sum(cost[:work + 1]) / costwatch.WEEK_USD, 2),
+            'reads': [[f, round(t, 1), round(u, 4)] for f, t, u in sorted(reads.values(), key=lambda x: -x[2])][:40],
+            'base_pct': round(100 * base / total, 1) if total else 0.0}
 
 
 SHOW = re.compile(r'(?:^|[;&|\n(]\s*)(?:cd \S+ && )?python3?\s+\S*page\.py\s+[\w-]+\s+show\b')    # a finder call (page.py FILM show ...)
@@ -546,6 +662,20 @@ def test():
     check('split: a made-up chat lands where it should (floor, tool result, Claude\'s words, cache re-write)',
           sk and sk['leftover'] == 0 and sk['floor_k'] == 1 and set(sk['origins']) ==
           {'start-up floor', 'result: tool search', "Claude's words", 'cache re-write'})
+    cs = (m or {}).get('start') or {}                # cold-start change: the four start figures
+    print('  start:', {k: v for k, v in cs.items() if k != 'reads'}, 'read first:', [r[0] for r in cs.get('reads', [])][:4])
+    check('start: step-1 context, first real work, files read before it, base share all recorded',
+          cs and cs['floor_k'] == sp.get('floor_k') and cs['work_step'] and cs['work_pct'] > 0 and cs['reads']
+          and 0 < cs['base_pct'] < 100 and all(len(r) == 3 for r in cs['reads']))
+    check('start: the first real work is the first edit outside notes, never before it',
+          all(not _real_work('Read', {'file_path': f}, fr) for f in ('source/ledger.py',)) and
+          _real_work('Edit', {'file_path': '/r/source/blessed.py'}, fr) and
+          not _real_work('Edit', {'file_path': '/r/notes/blessed.md'}, fr) and
+          _real_work('Bash', {'command': 'python3 source/blessed.py final /tmp/a.mp4 --small'}, fr) and
+          _real_work('Bash', {'command': "python3 - <<'X'\np='source/ledger.py'; open(p,'w').write(s)\nX"}, fr) and
+          not _real_work('Bash', {'command': 'cat >> notes/blessed.md <<X'}, fr))
+    check('start: shell reads name their files', _read_files('Bash', {'command': 'sed -n 1,40p source/ledger.py | head'})
+          == ['source/ledger.py'])
     own = sorted(glob.glob(os.path.expanduser('~/.claude/projects/**/*.jsonl'), recursive=True),
                  key=os.path.getmtime)
     if own:
@@ -575,6 +705,16 @@ def test():
     rows = ledger.load('testfilm')['chats']
     check('the app row replaces the estimate and keeps its measure',
           len(rows) == 1 and rows[0]['src'] == 'app' and rows[0].get('steps') == m['steps'])
+    check('the app row keeps the split and start figures', rows and rows[0].get('split') and rows[0].get('start'))
+    d2 = ledger.load('testfilm')                     # a second chat re-reads the first one's files: re-learning
+    r2 = dict(rows[0], chat='efgh5678', sid='session_ABC', src='estimate')
+    d2['chats'].append(r2)
+    cl = ledger.coldstart(d2) or ''
+    print('  film-end line:', cl)
+    check('the film-end line gives start and re-learning as % of the film, checked against the app',
+          "A new chat's start and re-learning cost" in cl and 're-learning 0.00' not in cl and 'checked against the app' in cl)
+    ledger.store(d2)
+    check('the ledger page shows starting each chat', 'Starting each chat' in open(os.path.join(tmp, 'testfilm.md')).read())
     print('ALL PASS' if ok else 'SOME FAILED')
     return ok
 

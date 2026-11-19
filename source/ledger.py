@@ -302,7 +302,7 @@ def better(a, b):
         win, lose = (a, b) if a.get('cost', 0) >= b.get('cost', 0) else (b, a)
     win = dict(win)
     if lose.get('steps', 0) > win.get('steps', 0):
-        win.update({k: lose[k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'split') if k in lose})
+        win.update({k: lose[k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'split', 'start') if k in lose})
     return win
 
 
@@ -542,6 +542,8 @@ def _put_measure(row, m):
     row.update(steps=m['steps'], hist_k=m['hist'] // 1000, kinds=m['kinds'], calls=m['calls'])
     if m.get('split'):                            # cost-other change 1 (Sam's Y, 19 Nov): the exact split
         row['split'] = m['split']
+    if m.get('start'):                            # cold-start change (Sam's Y, 19 Nov): four start figures
+        row['start'] = m['start']
     if m.get('search'):                           # finder-use Learn (Sam's 1, 17 Nov): the chat's search record
         row['search'] = m['search']
 
@@ -583,7 +585,7 @@ def app_import(path=APP):
             row.update(date=r[2][:10], chat=r[1][-8:], sid=sid, src='app', stage=r[3][:60],
                        model=r[9], cost=round(float(r[4]) / costwatch.WEEK_USD * 100, 2), usd=float(r[4]))
             if sid in meas and not row.get('steps'):
-                row.update({k: meas[sid][k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'search', 'split') if k in meas[sid]})
+                row.update({k: meas[sid][k] for k in ('steps', 'hist_k', 'kinds', 'calls', 'search', 'split', 'start') if k in meas[sid]})
             if sid not in have:
                 d['chats'].append(row)
         d['chats'].sort(key=lambda c: c['date'])
@@ -733,6 +735,39 @@ def totals(d):
     return spent, rounds, notes, reps
 
 
+def coldstart(d):
+    """cold-start change (Sam's Y, 19 Nov): the film-end line. Each chat's start (its cost up to the first real work)
+    plus its re-learning (re-reading files the film's previous chat also read before ITS first real work), as % of
+    the film. Checked against the app: a chat with the app's figure has its measured dollars set beside it."""
+    sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
+    import costwatch
+    rows = [c for c in d['chats'] if c.get('start')]
+    if not rows:
+        return None
+    spent = sum(c['cost'] for c in d['chats']) or 1
+    st = rl = 0.0
+    prev = set()
+    for c in rows:
+        s_ = c['start']
+        st += s_.get('work_pct') or 0
+        mine = {f: u for f, _, u in s_.get('reads', [])}
+        rl += 100 * sum(u for f, u in mine.items() if f in prev) / costwatch.WEEK_USD
+        prev = set(mine)
+    app = [c for c in rows if c.get('src') == 'app' and (c.get('split') or {}).get('total')]
+    chk = ''
+    if app:
+        meas = sum(100 * c['split']['total'] / costwatch.WEEK_USD for c in app)
+        real = sum(c['cost'] for c in app)
+        chk = (f"; checked against the app on {len(app)} chats: measured {meas:.2f}% vs app {real:.2f}% "
+               f"({100 * (meas - real) / real:+.0f}%)" if real else '')
+    per = (st + rl) / len(rows)
+    base = sum(c['start'].get('base_pct', 0) for c in rows) / len(rows)
+    flag = (' Over 0.5% a chat: a warm handover goes to Sam through the proposal route.' if per > 0.5 else '')
+    return (f"A new chat's start and re-learning cost {100 * (st + rl) / spent:.0f}% of the film "
+            f"({st + rl:.2f}% of a week over {len(rows)} chats: start {st:.2f}, re-learning {rl:.2f}; "
+            f"{per:.2f}% a chat; step-1 context re-read is {base:.0f}% of a chat on average){chk}.{flag}")
+
+
 def render(d):
     spent, rounds, notes, reps = totals(d)
     est = d['estimate']
@@ -768,6 +803,13 @@ def render(d):
         import stepcost
         out += ['', '## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)']
         out += [f"- {c['date']} {c['chat']} ({c['stage']}): " + stepcost.split_line(c['split']) for c in sps]
+    cs = coldstart(d)
+    if cs:                                        # cold-start change (19 Nov): the film-end line
+        out += ['', '## Starting each chat', cs]
+        out += [f"- {c['date']} {c['chat']}: step-1 context {c['start']['floor_k']}k; first real work at step "
+                f"{c['start']['work_step']} ({c['start']['work_pct']}% of a week); read before it: "
+                + ', '.join(f'{f} {k:g}k' for f, k, _ in c['start'].get('reads', [])[:6])
+                for c in d['chats'] if c.get('start')]
     if reps:
         out += ['', '## Repeated notes (what would have caught them)']
         out += [f'- {r}' for r in reps]
@@ -831,8 +873,13 @@ def main():
     p = s.add_parser('mergefile'); [p.add_argument(x) for x in ('o', 'a', 'b', 'path')]
     s.add_parser('kept')
     s.add_parser('auto')
+    p = s.add_parser('coldstart', help='the film-end line: what starting new chats cost the film')
+    p.add_argument('film')
     s.add_parser('app', help='rebuild film rows from notes/ledger/app-costs.tsv (the app\'s real per-chat costs)')
     o = a.parse_args()
+    if o.cmd == 'coldstart':
+        print(coldstart(load(o.film)) or f'ledger coldstart: {o.film} has no start figures yet (recorded from 19 Nov)')
+        return
     if o.cmd == 'app':
         for film, (n, pct) in app_import().items():
             print(f'ledger: {film}: {n} chats from the app; film total now {pct}% of a week')
