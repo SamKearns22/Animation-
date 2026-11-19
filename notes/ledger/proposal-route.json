@@ -1724,26 +1724,26 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 5.05,
+   "cost": 5.61,
    "src": "estimate",
    "sid": "session_01J1JB7YKoy2Nfx7Nsi8i8BA",
-   "steps": 50,
-   "hist_k": 172,
+   "steps": 60,
+   "hist_k": 182,
    "kinds": {
-    "tool search": 18.6,
-    "whole-file .py read": 2.6,
-    "page.py": 5.1,
-    "other": 73.8
+    "tool search": 19.4,
+    "whole-file .py read": 2.2,
+    "page.py": 4.3,
+    "other": 74.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 33,
+    "tool search": 40,
     "whole-file .py read": 1,
     "page.py": 1,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 30
+    "other": 32
    },
    "search": {
     "show": 0,
@@ -1751,13 +1751,13 @@
      "no show": 0
     },
     "other": {
-     "other": 11,
-     "shared:propose.py": 6,
+     "other": 12,
+     "shared:propose.py": 11,
      "shared:stepcost.py": 4,
      "film notes": 5,
      "shared:costwatch.py": 1,
      "shared:ledger.py": 5,
-     "shared:handover.py": 1
+     "shared:handover.py": 2
     },
     "ticked": 0,
     "edited film code": false,
@@ -1992,6 +1992,55 @@
       "other",
       "notes/proposals",
       "git add notes/proposals && git commit -qm \"cost-other: judge copies ready Co-Aut"
+     ],
+     [
+      65,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/cold-start/judge notes/proposals/cost-other/ju",
+      "python3 source/propose.py record check-catches 2>&1 | tail -3; ls notes/proposal"
+     ],
+     [
+      66,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposal-route.md",
+      "python3 source/propose.py record cold-start 2>&1 | tail -3; sed -n '/## Where th"
+     ],
+     [
+      67,
+      "other",
+      "shared:propose.py",
+      "notes/archive/proposal-route-handovers.md notes/proposal-route.md source/propose",
+      "); push notification; stop for his numbers.\n- **Needs Sam:** his pick by number "
+     ],
+     [
+      68,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/handover.py",
+      "^COST"
+     ],
+     [
+      69,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "def end\\|print(.*settle"
+     ],
+     [
+      70,
+      "other",
+      "shared:propose.py",
+      "notes/proposal-route.md notes/proposals/cost-other/judge/verdict-raw.md source/p",
+      "cost-other|cold-start|check-catches"
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "",
+      "for i in 1 2 3; do git merge -q --no-edit origin/claude/create-claude-md-oe8z4g "
      ]
     ]
    }
