@@ -56,3 +56,14 @@ Small pause, both looking forward, cops catching up in rear view mirror
 
 Autistic woman: my safe food is nitroglycerin.
 
+### 2026-11-19T22:34:04
+1. Y
+
+2. Y
+
+3. Copy the model
+
+4. Y.
+
+Game is released now and 1.4 billion copies are sold so there are references everywhere for anything you need in this screenplay. Only take references from the game except for the autistic woman which, you know, anywhere.
+
