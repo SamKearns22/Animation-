@@ -15,3 +15,12 @@ Post lessons here
 9. Isn't one of these the 3/4 job? The brow change, is that for bald people? That should have been permanently fixed in EPR. You fixed it then. But it repeated here.
 10. Getting annoying because this is yet something else we have already fixed. You only draw the 3/4 pose if you believe the screenplay demands it. Again, fixed almost four films ago Al why have you forgot
 
+### 2026-11-19T09:50:52
+9. I guess I don't know what you mean by brow cap! If it's the eyebrow mood change, then yes please
+
+7. No. Whatever. Just leave it as a manual changeover unless I tell you otherwise.
+
+2. I still don't understand. Are you suggesting permanently deleting checks?
+
+6. Fix and test
+
