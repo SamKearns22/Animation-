@@ -2,5 +2,11 @@
  "packed": 1795108988.065061,
  "problem": "112357316bde5ef1",
  "chat": "5fda327739f0babc",
- "prompts": "16880929b1246068"
+ "prompts": "16880929b1246068",
+ "key": {
+  "V1": "helper A",
+  "V2": "helper B",
+  "V3": "chat"
+ },
+ "judged": 1795109188.739218
 }
