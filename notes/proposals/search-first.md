@@ -115,10 +115,3 @@ Added: a cost figure that matches your app during the film, a warning before the
 Same look-back and real-cost line at each handover, plus a rule that blocks chats from searching code by hand once the look-back shows which kind of searching cost most. Searching is only about a quarter of the spend, so this saves less.
 Lost: one extra step per handover; chats blocked from some hand searches, which can slow building.
 Added: a real cost line, and fewer repeated searches of the shared tools.
-
-## Sam's answer (19 Nov, relayed by the queued job 2)
-Sam picked Option 1, "Real cost, steered during the film", and asked for it to be queued. His changes override the option:
-1. The "film so far X% of 15%; forecast Y%" line is recorded in the notes and ledger at every handover but shown to Sam only when something is wrong (once per problem, with a way to save cost that keeps the quality).
-2. A forecast over 15% because Sam added things is not a problem and triggers no re-plan demand or repeated warning; the chat's job is always to ask how to make it at maximum quality for minimum cost, never cutting a joke or content.
-3. The "Aim check" rule is a separate proposal (aim-check), put through the route and waiting for his number.
-Built 19 Nov (job 2): look-back (17 Milburn chats read from the app into the ledger) and source/costline.py with its handover check and test.
