@@ -68,3 +68,8 @@ Frankly, if weaker tools, processes and checks that we have long disregarded are
 ### 2026-11-19T09:11:08
 Great. Explain listed jobs and their final aims in very plain language below.
 
+### 2026-11-19T09:14:45
+At every handover it adds a line like "film so far X% of 15%; forecast Y%". If the forecast is over 15%, the next chat must re-plan how to build the rest, or ask you. It never cuts jokes or content.
+
+It may make suggestions if usage cost problems are noticed but I don't want to see that message all the time. Sometimes I will want to add things that inevitably take the cost past 15%, your job is to always be asking yourself, as statement one says (and which you should always be reffeding to), how can I make this work at maximum quality for minimum cost. If you aren't referring to statement one when you're planning and building, then that needs fixing.
+
