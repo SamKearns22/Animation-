@@ -4,15 +4,14 @@
 The title and the "prototype split" fact give away the idea (split "other" inside the step-cost tool). Ignored.
 
 ## Results
-- **The dollar estimate is right; the % is not.** Real app cost (get_session usage, read this chat) for 13 of 15 Milburn chats: $74.59; the ledger's transcript estimate for the same 13: $73.84 (within 1%; every chat within ~10% except b54e8334, 30%). Two sessions (5c55685c, ce8f146c) were not found. So the ~47% gap to Sam's 22% sits in the week size (WEEK_USD 245, "PROVISIONAL", costwatch.py:26) or the meter window, not in the estimate. Other jobs ran on 17-18 Nov too (morning-report, proposal-route, cost-fixes ledgers), so Sam's 71→93% may not be Milburn alone.
+- **The dollar estimate is right; the % is not.** Real app cost (get_session usage, read this chat) for 13 of 15 Milburn chats: $74.59; the ledger's transcript estimate for the same 13: $73.84 (within 1%). Two sessions (5c55685c, ce8f146c) were not found. So the ~47% gap to Sam's 22% sits in the week size (WEEK_USD 245, "PROVISIONAL", costwatch.py:26) or the meter window, not in the estimate. Other jobs ran on 17-18 Nov too (morning-report, proposal-route, cost-fixes ledgers), so Sam's 71→93% may not be Milburn alone.
 - **Real split of those 13 chats** (app token counts x costwatch prices): re-reading 45%, writing new context 30%, output (Claude's words, thinking, code it writes) 25%. Output is 16-31% in every chat.
 - **Start-up floor (estimate):** ~90k at step 1 (costwatch FRESH; 83k in this chat; step-1 size is not stored per chat) re-read over 1,176 steps ≈ $17.7, plus writing it once a chat ≈ $8: about a third of the film.
 - **Rework is invisible.** Titles show at least 6 of 15 chats were note fixes (chats 4, 6, 9, 10, 11, 13), yet the ledger says "0 rounds, 0 notes, 0 repeated" (milburn.md). The record cannot say what fixes cost: a gap.
 - Plan was 24% before work began; sets stage spent 16.7% against 1.8% planned (milburn.json stages).
-- Chat 11 was set Sonnet and ran Opus; chat 13, titled Opus, ran Sonnet (get_session "user_switched_model").
 
 ## The real decision
-Not "label the leftover" but: which block sets a film's cost (start-up floor, Claude's own output, or fix chats), measured for the whole film, so the next change hits the biggest. Fix chats and the floor are bigger levers than searches (searches were 25%).
+Not "label the leftover" but: which block sets a film's cost (start-up floor, Claude's own output, or fix chats), measured for the whole film, so the next change hits the biggest. Fix chats and the floor outweigh searches (25%).
 
 ## Root cause
 "Other" is a leftover by design: stepcost.py measure() charges only tool results and the output that asked for calls. It never names the start-up context re-read at every step, Claude's own messages re-read later, or calls kind_of() does not know (Edit, Write, python, git). The 13 Nov diagnosis found the same blocks; the 16 Nov start-up trim was never shown to work because step-1 size is not recorded.
@@ -33,7 +32,7 @@ Chosen: 2 first, then 1, then the purpose record, one at a time.
 
 ## Sam test
 - Q1: an expert measures real dollars by block before cutting; done here.
-- Q2: whole film, real app figures, all chats; the earlier Blessed split as cross-check.
+- Q2: whole film, real app figures, all chats.
 - Q3: root cause named; enforced by hooks, not chat choice; numbers to beat set.
 - Q4: four different approaches; the leftover-label alone is rejected as too narrow.
 - Q5: learning changes nothing; each change undoes alone; Sam trusts no untested cut.
