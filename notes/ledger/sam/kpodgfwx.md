@@ -73,3 +73,6 @@ Notify this work to continue at 00:30. Proceed.
 ### 2026-11-19T22:36:59
 Anything else you think you should ask in advance? This is an ambitious build.
 
+### 2026-11-19T22:38:37
+The only ones I'm going to answer bow is 5, y, and 7, N. GTA is a violent satire and there's no reason to pretend otherwise.
+
