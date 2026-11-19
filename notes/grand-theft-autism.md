@@ -32,10 +32,14 @@
 ## Where things stand (19 Nov)
 - Rules that bite next: 24 (estimate before building), 74 (acting list before the animatic), 28 (reuse before building).
 - Done: the 3.5 s opening, `source/gta_opener.py` (MAP at the top). Renders in about 1 minute.
-- Next: Opus, high effort: plan the film from Sam's screenplay; the opening goes in as KNOWN (built).
-- Needs Sam: the screenplay.
+- Next: Opus, high effort: once Sam confirms the screenplay (and answers the 4 questions sent 19 Nov), estimate and
+  plan; the opening goes in as KNOWN (built). This chat is on amber: Sam's answer opens a fresh chat.
+- Needs Sam: the confirmed screenplay; answers to: light (sunset), 'bought'->'brought', her name, the car look.
 - Read: guides/job-packs.md, Plan.
 - Open rule requests: none.
+- Branch claude/blessed-c2-mics-wip (source/blessed.py, unfinished Blessed work) stays off the main line, as named in
+  story/status.md (19 Nov).
+- No estimate yet on purpose: Sam asked to hold estimates until the screenplay is confirmed (19 Nov).
 - For Claude: the title font (Pricedown, Typodermic free desktop licence: rendered video fine, sharing the file not)
   is fetched by `_title_font()` into source/fonts and is in .gitignore; never commit it. Sea painter re-coloured by
   overriding flying_whales_sea globals before the first bake.
