@@ -906,22 +906,23 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.32,
+   "cost": 0.59,
    "src": "estimate",
    "sid": "session_01J1JB7ZUimqTBbLiqdPxYKr",
-   "steps": 18,
-   "hist_k": 148,
+   "steps": 42,
+   "hist_k": 171,
    "kinds": {
-    "tool search": 33.2,
-    "other": 66.8
+    "tool search": 26.7,
+    "renders": 0.4,
+    "other": 72.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 13,
+    "tool search": 23,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
+    "renders": 1,
     "pictures": 0,
     "other": 5
    },
@@ -931,10 +932,13 @@
      "no show": 0
     },
     "other": {
-     "other": 1,
-     "film notes": 9,
-     "shared:propose.py": 2,
-     "shared:ledger.py": 1
+     "other": 4,
+     "film notes": 12,
+     "shared:propose.py": 3,
+     "shared:ledger.py": 1,
+     "shared:moods.py": 1,
+     "guides": 1,
+     "shared:milburn.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -1029,6 +1033,76 @@
       "film notes",
       "notes/proposals/milburn-review.md",
       "python3 - <<'E' p='notes/proposals/milburn-review.md' s=open(p).read() s=s.repla"
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "guides/film-quality-rules.md notes/proposals/epr-lessons.md guides/job-packs.md ",
+      "three-quarter\\|3/4"
+     ],
+     [
+      19,
+      "other",
+      "shared:moods.py",
+      "guides/film-quality-rules.md guides/*.md notes/archive/protest-tiers*.md notes/a",
+      "^| 56\\|^| 5[5-7] "
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current"
+     ],
+     [
+      21,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md",
+      "git add notes/proposals/unrouted.md && git commit -q -m \"Guard record: review ch"
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git rebase -q origin/claud"
+     ],
+     [
+      23,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/handover.py .claude/hooks/*.py .claude/hooks/*.sh .clau",
+      "plain"
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md notes/proposals",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git checkout -q --detach o"
+     ],
+     [
+      25,
+      "other",
+      "guides",
+      "notes/remakes*.md notes/archive/*.md source/*.py",
+      "1\\.1x\\|1\\.1 x\\|1x1\\|1\u00d71\\|1\\.1\u00d7"
+     ],
+     [
+      27,
+      "other",
+      "shared:milburn.py",
+      "notes/logs/milburn* source/milburn.py notes/archive/milburn.md",
+      "delivered at\\|1\\.1x\\|SPEED"
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "def signoff\\|SIGNOFF\\|1.6"
      ]
     ]
    }
