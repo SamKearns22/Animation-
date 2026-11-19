@@ -32,3 +32,6 @@ Anything else outstanding
 ### 2026-11-19T10:03:27
 We have a communication rule about explaining back-end topics to me in plain language don't we
 
+### 2026-11-19T10:03:48
+Why did you break a 'rule'
+
