@@ -2189,17 +2189,17 @@
    "cost": 4.14,
    "src": "estimate",
    "sid": "session_01J1JB7ZPv3wYxu8yAH6EYJT",
-   "steps": 109,
-   "hist_k": 267,
+   "steps": 116,
+   "hist_k": 270,
    "kinds": {
-    "tool search": 19.0,
+    "tool search": 18.9,
     "renders": 0.8,
     "pictures": 4.5,
-    "other": 75.7
+    "other": 75.8
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 67,
+    "tool search": 71,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
@@ -3143,6 +3143,461 @@
       "film notes",
       "story/status.md notes/proposals/plain-check*",
       "hint\\|autostash",
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "date": "2026-11-19",
+   "chat": "3a437266",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.88,
+   "src": "estimate",
+   "sid": "session_01J1JB7VM14rqFhFmo9fVyj1",
+   "steps": 58,
+   "hist_k": 166,
+   "kinds": {
+    "tool search": 26.6,
+    "renders": 6.6,
+    "other": 66.9
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 43,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 5,
+    "pictures": 0,
+    "other": 11
+   },
+   "split": {
+    "usd": 3.2259,
+    "total": 3.2259,
+    "floor_k": 82,
+    "blocks": {
+     "Claude's words": 33.0,
+     "start-up floor": 30.8,
+     "new writes": 20.8,
+     "carried history": 15.3
+    },
+    "origins": {
+     "Claude's words": 49.3,
+     "start-up floor": 30.8,
+     "result: tool search": 16.2,
+     "messages and reminders": 1.5,
+     "Claude's edits": 1.0,
+     "result: other": 0.8,
+     "result: renders": 0.4
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 15,
+    "work_pct": 0.26,
+    "reads": [
+     [
+      "source/stepcost.py",
+      4.6,
+      0.0765
+     ],
+     [
+      "notes/proposals/cost-other/milburn-usage.md",
+      1.6,
+      0.0257
+     ],
+     [
+      "source/propose.py",
+      1.1,
+      0.0187
+     ],
+     [
+      "notes/proposals/cost-other.md",
+      0.9,
+      0.0148
+     ],
+     [
+      "notes/proposals/cold-start.md",
+      0.9,
+      0.0148
+     ],
+     [
+      "source/ledger.py",
+      0.7,
+      0.0104
+     ]
+    ],
+    "base_pct": 26.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 2,
+     "shared:propose.py": 5,
+     "film notes": 8,
+     "shared:stepcost.py": 8,
+     "shared:costwatch.py": 2,
+     "shared:kittests.py": 4,
+     "shared:watcher.py": 2,
+     "shared:ledger.py": 2,
+     "shared:preflight.py": 1,
+     "shared:checkreplay.py": 4
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git fetch -q origin claude/create-claude-md-oe8z4g &&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git branch -a | head; python3 source/handover.py start session_01J1JB7Wo7EmuVeuy",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "for n in cost-other cold-start check-catches; do echo \"=== $n\"; python3 source/p",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/ notes/proposals/cost-other notes/proposals/co",
+      "beat",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/proposals/cost-other.md notes/proposals/cold-start.md",
+      "sed -n 80,110p notes/proposals/cost-other.md; echo ======; sed -n 75,100p notes/",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/ledger.py source/watcher.py source/tests",
+      "^def \\|^MAP\\|^# ",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "sed -n 1,40p source/stepcost.py; sed -n 100,212p source/stepcost.py",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/ledger.py",
+      "stepcost\\|kinds",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "/.claude/projects/**/*.jsonl notes/proposals/cost-other/ notes/proposals/cost-ot",
+      "python3 - <<'EOF' import json,collections,glob,os for p in ['tests/stepcost-tran",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/proposals/cost-other/milburn-usage.md notes/ledger/ notes/ledger/milburn.j",
+      "cat notes/proposals/cost-other/milburn-usage.md | sed -n 5,60p; ls notes/ledger/",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py",
+      "PRICE\\s*=\\|def fam",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/ledger.py",
+      "Cost by kind of step",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/ledger.py",
+      "}}]}},\n                   {",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/ledger.py notes/proposals/cost-other/milburn-usage.md ",
+      "PROMISES",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/watcher.py",
+      "def quiet_cost_line\\|def round_page\\|def facehouse_whole_head",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py source/kittests.py",
+      "python3 source/watcher.py unlisted; python3 source/watcher.py check 2>&1 | tail ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def ",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/ledger.py",
+      "timeout 300 python3 source/kittests.py quiet_cost_line handover_drops cost_rows_",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:costwatch.py",
+      "guides/job-packs.md source/*.py .claude/hooks/costwatch.py",
+      "end-of-film review\\|film-end review\\|film's end review",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 495,540p source/propose.py",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "sed -n '/^def _target/,/^def _ticked/p' source/stepcost.py",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py /.claude/projects/**/*.jsonl",
+      "def _real_work",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "add_parser\\|args.cmd ==\\|def totals",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "sed -n 725,745p source/ledger.py; sed -n 834,860p source/ledger.py",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/propose.py notes/proposals/chat-size-and-model.md note",
+      "^Status",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "'mark'",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/chat-size-and-model.md source/stepcost.py sour",
+      "python3 source/propose.py mark chat-size-and-model replaced:cold-start && head -",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "film notes",
+      "notes/proposals/check-catches.md notes/proposals/late-faults*",
+      "replay",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "film notes",
+      "notes/proposals/late-faults/built.md notes/proposals/late-faults/",
+      "replay",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/proposals/late-faults/built.md notes/*.md guides/*.md",
+      "replay",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "sed -n 1,45p source/preflight.py | cut -c1-200; wc -l source/preflight.py",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "",
+      "milburn|protest|blessed|tiers",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "mkdir -p /tmp/claude-0/-home-user-Animation-/3a437266-a643-5464-9c22-ab60dc932b6",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "other",
+      ".claude/hooks/setup.sh notes/logs/",
+      "scipy\\|pip",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && S=/tmp/claude-0/-home-user-Animation-/3a43726",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      "timeout 400 python3 source/checkreplay.py run milburn --only claude/milburn-chat",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py /tmp/r/source/plan.py notes/proposals/check-catches/replay",
+      "python3 - <<'EOF' p='source/checkreplay.py'; s=open(p).read() s=s.replace(\"\"\" ou",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:checkreplay.py",
+      "/home/user/Animation-/source/checkreplay.py",
+      "lines 142+12",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py notes/proposals/check-catches/replay/milburn.*",
+      "python3 source/checkreplay.py test | tail -3; rm -f notes/proposals/check-catche",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "python3 source/watcher.py unlisted; python3 source/watcher.py name kittests \"job",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/archive/ story/status.md",
+      "^## ",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:handover.py",
+      "notes/proposal-route.md source/handover.py",
+      "sed -i 's/Then Sam gets the two fixes (record that always saves; notes tagged) e",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "git add -A notes/proposal-route.md && git commit -qm \"job 4 chat 3: handover wor",
       ""
      ]
     ]

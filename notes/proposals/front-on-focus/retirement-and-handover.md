@@ -26,7 +26,7 @@ Not tools: park.py, duel.py are finished film files and stay (corrections.md).
 - Rules that bite next: 38 (front on: the drawn-angle check now refuses), 89 (critique), 13 (exceptions listed).
 - Done: C1 and C2 built and tested; sheet focus-sheet.jpg sent to Sam with the phone-size fault named.
 - Next: chat 3, Sonnet medium: L1 (Milburn and Protest Tiers turned seconds), L2 (blind route-pick test), L3 (the goth on both heads, now with focus; sheet to Sam). Then Opus: C3, C4 from their results; archive R1, R2, R6 after a last search.
-- Needs Sam: (1) stronger look or add a body cue (from the focus sheet); (2) the 3/4 fix (Y or N, still open from chat 1).
+- Needs Sam: stronger look, or add a body cue (from the focus sheet). RESERVE JOB "Fix the half-turn heads" (Sam, 19 Nov: keep in reserve): the turned head's three faults (thin far glasses, flat hair, long neck from behind), critiqued alone; about 2-3% of a week, Opus high; starts only when Sam says "Fix the half-turn heads".
 - Read: job pack "A tool job"; notes/proposals/front-on-focus.md "Final version"; this file's chat 2 record.
 - Open rule requests: none found.
 - For Claude: focus.py MAP; posecheck.turn check in preflight.turn_sample; kittests drawn_angle_every_film, focus_front_heads. Main-line branch claude/create-claude-md-oe8z4g; this chat's branch claude/front-on-chat2. Branches named, not merged: claude/aim-check-study-oe8z4g (another chat's), claude/blessed-c2-mics-wip (stays off). The shared proposal-route ledger has no estimate, so no cost line (named, not this job's to set); this chat about 2% of a week.

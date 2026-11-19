@@ -1,6 +1,6 @@
 # Proposal: Chat size and model switching: one definitive rule
 
-Status: open
+Status: replaced:cold-start (2026-11-19)
 
 ## Problem
 Sam has been told, at different times, to use more chats, fewer chats, longer chats and shorter chats; he wants one

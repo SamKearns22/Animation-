@@ -508,6 +508,8 @@ def review(film, since=None):
     out = [f'# End-of-film review: {film} (the proposal route, step 6)', '',
            f'Results: spent {spent}% of a week against an estimate of {d.get("estimate")}%; {rounds} rounds, {notes} '
            f'notes, {len(reps)} repeated notes. Proposals later replaced: {len(replaced)} {replaced or ""}.', '',
+           'Starting chats (cold-start, for Sam in one line): ' + (ledger.coldstart(d) or 'no start figures recorded'),
+           '',
            f'## Every change to the system since {since} ({len(changes)} commits)',
            'For each: did it help THIS film (its notes, faults Sam caught, cost)? keep / needs changing (-> '
            '`propose.py new`, the route). Nothing temporary: a change is kept or properly replaced.', '']
