@@ -2695,24 +2695,24 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.09,
+   "cost": 2.59,
    "src": "estimate",
    "sid": "session_01J1JB7YjahoRFuehrM7cxWW",
-   "steps": 50,
-   "hist_k": 170,
+   "steps": 61,
+   "hist_k": 180,
    "kinds": {
-    "tool search": 20.6,
-    "other": 79.4
+    "tool search": 20.8,
+    "other": 79.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 30,
+    "tool search": 34,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 40
+    "other": 46
    },
    "search": {
     "show": 0,
@@ -2721,10 +2721,10 @@
     },
     "other": {
      "other": 6,
-     "shared:handover.py": 2,
-     "film notes": 10,
+     "shared:handover.py": 4,
+     "film notes": 11,
      "shared:branches.py": 1,
-     "shared:propose.py": 6,
+     "shared:propose.py": 7,
      "shared:costwatch.py": 1,
      "guides": 2,
      "shared:kittests.py": 2
@@ -2969,6 +2969,38 @@
       "other",
       "film notes",
       "notes/proposals/plain-check/helper-a.md",
+      "hint\\|autostash",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record plain-check 2>&1 | tail -30",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py notes/proposals/plain-check.md",
+      "cat > story/status.md <<'EOF' plain-check (19 Nov, route item 11, Sam's \"fix now",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py",
+      "sed -i 's/Blessed WIP branch and aim-check-study branch named, not merged (anoth",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "film notes",
+      "story/status.md notes/proposals/plain-check*",
       "hint\\|autostash",
       ""
      ]
