@@ -32,3 +32,12 @@ Currently all budget estimates and cost warnings are off and therefore are worse
 
 Any other learnings from the Milburn build we need to queue? Keep statement one in mind.
 
+### 2026-11-19T08:54:14
+3/4 job: I recommend looking at varied references from the show 'BoJack Horseman', who use this pose style all the time in order to learn from how they draw dynamic directionality, before starting. Please run any tests on Andy and Kemi.
+
+1. N
+
+2. What are the checks for?
+
+3. Show me
+
