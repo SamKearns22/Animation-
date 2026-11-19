@@ -51,7 +51,7 @@ under 5% on every new chat (now 58-87%). ~1% of a week, Opus medium.
 **Then, each separately:** a WEEK_USD fix if that is the cause, and the lever the table ranks first, each through
 the route with its own number, held to the next film. None of these is in this yes.
 
-What Sam would notice: one message saying where Milburn's 22% went and why the meter read 32. After that, no big "other" on any chat.
+Sam would notice: one message on where Milburn's 22% went and why the meter read 32; then no big "other".
 
 ## Sam test
 Q1: Yes. An expert splits cost exactly by token origin before choosing a lever.
@@ -59,7 +59,7 @@ Q2: All 15 chats on real app figures; it adds the rework count.
 Q3: The test needs the parts to add up and the remainder under 5%, so it cannot pass on paper; it runs on every chat.
 Q4: Five approaches weighed; only this one removes the remainder.
 Q5: Learning changes nothing; Change 1 is one file, guarded by its test, and undone by reverting it.
-Q6: Sources named; estimates marked.
+Q6: Sources named.
 Q7: Sized for a full split, not a relabelling; ~1.5% once.
 Q8: Permanent once made; reviewed at the next film's end.
 

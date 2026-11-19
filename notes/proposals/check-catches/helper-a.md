@@ -1,19 +1,19 @@
 # Helper A: check-catches
 
 ## Leak
-The title gives the answer ("Record what every check catches"). I ignored it.
+The title names the answer (record what every check catches); ignored.
 
 ## Results
 - No check result is on record. `checks: {}` in all 27 ledgers. No round file has a `#### Round` header or a pre-flight entry; every entry is a critique pass (notes/ledger/*/round-*.txt). `ledger.py round` has never run, and nothing names it outside its own help text.
 - Only 3 call sites feed the counter (preflight.py, audit.py, film_engine.py). Pre-flight sends about 12 check files through one "pre-flight" title, so it can only split faults by check from how each fault line starts (report.kind).
-- Misses are not recorded either. The ledger "notes" field is 0 for every chat of every film. Yet notes/archive/milburn.md holds Sam's 9 + 4 + 2 notes (18 Nov), and Blessed has 28+ numbered notes (notes/archive/blessed-notes-animatics-1-2.md). "Milburn: 0 notes" in the problem file is a recording gap, not a fact.
+- Misses are not recorded either. The ledger "notes" field is 0 for every chat of every film. Yet notes/archive/milburn.md holds Sam's 9 + 4 + 2 notes (18 Nov), and Blessed has 28+ numbered notes. "Milburn: 0 notes" in the problem file is a recording gap, not a fact.
 - Some record exists. The critique already counts faults and false alarms per rulebook line (ledger critique.lines). On 13 Nov a chat sorted pre-flight's results on 10 films by hand into real catches, noise and misses (notes/preflight-audit.md), at 3.24% of a week (ledger). Noise costs: Blessed's 99-fault pre-flight stage cost 9.8% against 2% planned.
 
 ## The real decision
 What each check is worth across the whole film: faults it stops before Sam, notes it missed, and its cost (minutes, false alarms, chat steps). Catches alone only decide what to retire. Misses and noise move "fewer notes" and cost more.
 
 ## Root cause
-1. Recording depends on a manual switch (`ledger.py round`) that no pack names. Its marker file is never pushed, so every fresh chat starts with it off, and it fails silently.
+1. Recording depends on a manual switch (`ledger.py round`) that no pack names. Its marker file is never pushed, so each fresh chat starts with it off, silently.
 2. Sam's notes are filed as prose, never tied to a check, so a miss cannot be counted.
 3. Nothing records what happened to a fault after it was flagged (fixed, named, let through), so "would Sam have seen it" has no evidence.
 
@@ -21,7 +21,7 @@ What each check is worth across the whole film: faults it stops before Sam, note
 1. **Learn first, by hand:** score every check on the last three finished films from the existing record with the 13 Nov method. Job 1 gets an answer now.
 2. **Automatic catch record:** every check run records itself with no switch. Comparing each run with the next gives each fault's fate: gone after a fix is a real catch; named or allowed means let through.
 3. **Reframe to misses:** each of Sam's notes is tagged with the check that should have caught it, or "none". That is the lever for fewer notes.
-4. **Replay:** run today's checks on past films' code from git. Heavy; old code often fails. Rejected.
+4. **Replay:** today's checks on past films' code from git. Heavy, brittle. Rejected.
 
 Chosen: 1, then 2, then 3, each on its own Y.
 
