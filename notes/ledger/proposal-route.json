@@ -1332,22 +1332,22 @@
    "cost": 1.66,
    "src": "estimate",
    "sid": "session_01J1JB7VQkJBtMyeAvAPd5rb",
-   "steps": 35,
-   "hist_k": 166,
+   "steps": 61,
+   "hist_k": 184,
    "kinds": {
-    "tool search": 15.2,
-    "renders": 7.7,
-    "other": 77.1
+    "tool search": 12.2,
+    "renders": 3.9,
+    "other": 83.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 23,
+    "tool search": 37,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
     "pictures": 0,
-    "other": 25
+    "other": 28
    },
    "search": {
     "show": 0,
@@ -1538,25 +1538,25 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.14,
+   "cost": 1.4,
    "src": "estimate",
    "sid": "session_01J1JB7VJ1z2bHmM7UUJM8RG",
-   "steps": 32,
-   "hist_k": 118,
+   "steps": 49,
+   "hist_k": 135,
    "kinds": {
-    "tool search": 21.1,
-    "page.py": 6.7,
-    "other": 72.2
+    "tool search": 18.2,
+    "page.py": 3.8,
+    "other": 77.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 20,
+    "tool search": 33,
     "whole-file .py read": 0,
     "page.py": 4,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 7
+    "other": 9
    },
    "search": {
     "show": 0,
@@ -1564,11 +1564,13 @@
      "no show": 0
     },
     "other": {
-     "other": 5,
+     "other": 8,
      "shared:propose.py": 4,
      "film notes": 6,
      "shared:kittests.py": 3,
-     "shared:facehouse.py": 2
+     "shared:facehouse.py": 2,
+     "shared:ledger.py": 2,
+     "shared:stepcost.py": 8
     },
     "ticked": 0,
     "edited film code": false,
@@ -1578,140 +1580,264 @@
       "other",
       "other",
       "",
-      "git status --short | head; git remote -v | head -2; git branch --show-current"
+      "git status --short | head; git remote -v | head -2; git branch --show-current",
+      ""
      ],
      [
       2,
       "other",
       "other",
       "notes/proposals/finder-first/ notes/proposals/finder-first/*",
-      "git fetch origin claude/create-claude-md-oe8z4g 2>&1 | tail -2; git checkout --d"
+      "git fetch origin claude/create-claude-md-oe8z4g 2>&1 | tail -2; git checkout --d",
+      ""
      ],
      [
       3,
       "other",
       "shared:propose.py",
       "/home/user/Animation-/notes/proposals/finder-first ../../../source/propose.py",
-      "cd /home/user/Animation-/notes/proposals/finder-first && cat handover.md learn.m"
+      "cd /home/user/Animation-/notes/proposals/finder-first && cat handover.md learn.m",
+      ""
      ],
      [
       4,
       "other",
       "film notes",
       "notes/proposals/finder-first.md",
-      "round_page\\|facehouse_whole_head"
+      "round_page\\|facehouse_whole_head",
+      ""
      ],
      [
       5,
       "other",
       "shared:kittests.py",
       "source/kittests.py",
-      "sed -n 1830,1900p source/kittests.py; sed -n 2265,2330p source/kittests.py; pyth"
+      "sed -n 1830,1900p source/kittests.py; sed -n 2265,2330p source/kittests.py; pyth",
+      ""
      ],
      [
       7,
       "other",
       "shared:kittests.py",
       "source/kittests.py source/facehouse.py source/turnhead.py",
-      "python3 source/kittests.py facehouse_whole_head 2>&1 | tail -5; git log --onelin"
+      "python3 source/kittests.py facehouse_whole_head 2>&1 | tail -5; git log --onelin",
+      ""
      ],
      [
       8,
       "other",
       "shared:facehouse.py",
       "source/facehouse.py source/turnhead.py source/people_parts.py",
-      "for c in 9ad40d9a^ 9ad40d9a b1ce2506; do rm -rf /tmp/wt; git worktree add -f --d"
+      "for c in 9ad40d9a^ 9ad40d9a b1ce2506; do rm -rf /tmp/wt; git worktree add -f --d",
+      ""
      ],
      [
       9,
       "other",
       "shared:facehouse.py",
       "source/facehouse.py source/people_parts.py source/turnhead.py source/people.py",
-      "for c in $(git log --format=%h -12 -- source/facehouse.py source/people_parts.py"
+      "for c in $(git log --format=%h -12 -- source/facehouse.py source/people_parts.py",
+      ""
      ],
      [
       10,
       "other",
       "shared:kittests.py",
       "source/kittests.py",
-      "git log -S\"54c5610fc43be94833e0df2d429d1370\" --format='%h %ad %s' --date=short -"
+      "git log -S\"54c5610fc43be94833e0df2d429d1370\" --format='%h %ad %s' --date=short -",
+      ""
      ],
      [
       11,
       "other",
       "other",
       "",
-      "for c in $(git log --format=%h af158cc7..3859e029 -- source/ ); do rm -rf /tmp/w"
+      "for c in $(git log --format=%h af158cc7..3859e029 -- source/ ); do rm -rf /tmp/w",
+      ""
      ],
      [
       14,
       "other",
       "shared:propose.py",
       "source/propose.py notes/proposals/finder-learn-finish* guides/proposal-route/hel",
-      "python3 source/propose.py new finder-learn-finish 2>&1 | tail -15; ls notes/prop"
+      "python3 source/propose.py new finder-learn-finish 2>&1 | tail -15; ls notes/prop",
+      ""
      ],
      [
       15,
       "other",
       "film notes",
       "notes/proposals/finder-learn-finish.md notes/ledger notes/ledger/milburn.json",
-      "cat notes/proposals/finder-learn-finish.md; ls notes/ledger | head -3; python3 -"
+      "cat notes/proposals/finder-learn-finish.md; ls notes/ledger | head -3; python3 -",
+      ""
      ],
      [
       19,
       "other",
       "other",
       "notes/proposals",
-      "git add notes/proposals && git commit -qm \"finder-learn-finish: proposal opened "
+      "git add notes/proposals && git commit -qm \"finder-learn-finish: proposal opened ",
+      ""
      ],
      [
       20,
       "other",
       "film notes",
       "story/show-page.md",
-      "git fetch -q origin claude/create-claude-md-oe8z4g && git rebase origin/claude/c"
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git rebase origin/claude/c",
+      ""
      ],
      [
       21,
       "other",
       "film notes",
       "story/show-page.md",
-      "rm story/show-page.md; git status --short | head -3; git log origin/claude/creat"
+      "rm story/show-page.md; git status --short | head -3; git log origin/claude/creat",
+      ""
      ],
      [
       23,
       "other",
       "other",
       "notes/proposals",
-      "git add notes/proposals && git commit -qm \"finder-learn-finish: helper A written"
+      "git add notes/proposals && git commit -qm \"finder-learn-finish: helper A written",
+      ""
      ],
      [
       24,
       "other",
       "film notes",
       "story/test-page.md notes/proposals/finder-learn-finish/",
-      "rm -f story/test-page.md; git status --short | head -3; ls notes/proposals/finde"
+      "rm -f story/test-page.md; git status --short | head -3; ls notes/proposals/finde",
+      ""
      ],
      [
       25,
       "other",
       "shared:propose.py",
       "source/propose.py",
-      "python3 source/propose.py judge finder-learn-finish 2>&1 | tail -8"
+      "python3 source/propose.py judge finder-learn-finish 2>&1 | tail -8",
+      ""
      ],
      [
       27,
       "other",
       "shared:propose.py",
       "source/propose.py",
-      "python3 source/propose.py record finder-learn-finish 2>&1 | tail -5; python3 sou"
+      "python3 source/propose.py record finder-learn-finish 2>&1 | tail -5; python3 sou",
+      ""
      ],
      [
       28,
       "other",
       "film notes",
       "notes/proposals/finder-first/learn.md notes/proposals/finder-learn-finish.md",
-      "cat >> notes/proposals/finder-first/learn.md <<'E' ## 19 Nov update (job 3) - Ch"
+      "cat >> notes/proposals/finder-first/learn.md <<'E' ## 19 Nov update (job 3) - Ch",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:ledger.py",
+      "notes/proposals/finder-learn-finish/helper-b.md source/ledger.py",
+      "Change 1\\|Change 2\\|number to beat",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py notes/ledger/milburn.json",
+      "search",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py .claude/hooks/*.sh .claude/settings.json source/ledger.py",
+      "stepcost",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/stepcost.py",
+      "whys\\|WHY",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "python3 source/stepcost.py test 2>&1 | grep -v PASS | head; git stash -q; python",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "every search is listed",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "sed -n 346,356p source/stepcost.py",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py notes/ledger/milburn.json source/ledger.py",
+      "python3 - <<'E' p='source/stepcost.py'; s=open(p).read() s=s.replace(\"and all(le",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "python3 source/stepcost.py test 2>&1 | grep FAIL",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "\"type\": *\"thinking\"",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/blessed_cast.py",
+      ")\nnew=",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "other",
+      "",
+      "git add -A source notes && git commit -qm \"finder-learn-finish option 1 (Sam's Y",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git rebase -q origin/claud",
+      ""
      ]
     ]
    }
@@ -1724,26 +1850,26 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 5.61,
+   "cost": 6.09,
    "src": "estimate",
    "sid": "session_01J1JB7YKoy2Nfx7Nsi8i8BA",
-   "steps": 60,
-   "hist_k": 182,
+   "steps": 64,
+   "hist_k": 189,
    "kinds": {
-    "tool search": 19.4,
-    "whole-file .py read": 2.2,
-    "page.py": 4.3,
-    "other": 74.2
+    "tool search": 14.8,
+    "whole-file .py read": 1.6,
+    "page.py": 3.1,
+    "other": 80.5
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 40,
+    "tool search": 41,
     "whole-file .py read": 1,
     "page.py": 1,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 32
+    "other": 35
    },
    "search": {
     "show": 0,
@@ -1752,7 +1878,7 @@
     },
     "other": {
      "other": 12,
-     "shared:propose.py": 11,
+     "shared:propose.py": 12,
      "shared:stepcost.py": 4,
      "film notes": 5,
      "shared:costwatch.py": 1,
@@ -2041,6 +2167,13 @@
       "other",
       "",
       "for i in 1 2 3; do git merge -q --no-edit origin/claude/create-claude-md-oe8z4g "
+     ],
+     [
+      76,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "for n in cost-other cold-start check-catches; do echo \"== $n\"; python3 source/pr"
      ]
     ]
    }
@@ -2053,25 +2186,26 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.91,
+   "cost": 4.14,
    "src": "estimate",
    "sid": "session_01J1JB7ZPv3wYxu8yAH6EYJT",
-   "steps": 84,
-   "hist_k": 243,
+   "steps": 103,
+   "hist_k": 261,
    "kinds": {
-    "tool search": 24.8,
-    "pictures": 5.9,
-    "other": 69.3
+    "tool search": 18.9,
+    "renders": 0.4,
+    "pictures": 4.6,
+    "other": 76.1
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 54,
+    "tool search": 64,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
+    "renders": 1,
     "pictures": 10,
-    "other": 23
+    "other": 28
    },
    "search": {
     "show": 0,
@@ -2079,9 +2213,9 @@
      "no show": 0
     },
     "other": {
-     "other": 16,
+     "other": 18,
      "shared:branches.py": 1,
-     "film notes": 10,
+     "film notes": 14,
      "guides": 4,
      "shared:milburn.py": 3,
      "shared:facehouse.py": 2,
@@ -2093,9 +2227,10 @@
      "shared:kittests.py": 1,
      "shared:signoff.py": 1,
      "shared:posecheck.py": 1,
-     "shared:propose.py": 5,
+     "shared:propose.py": 8,
      "shared:handover.py": 1,
-     "shared:thepark.py": 1
+     "shared:thepark.py": 1,
+     "shared:blessed.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -2105,378 +2240,512 @@
       "other",
       "other",
       "",
-      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&"
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
      ],
      [
       2,
       "other",
       "other",
       "",
-      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git log --onel"
+      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git log --onel",
+      ""
      ],
      [
       3,
       "other",
       "shared:branches.py",
       "source/branches.py source/handover.py",
-      "python3 source/branches.py scan 2>&1 | tail -20; echo ---; python3 source/handov"
+      "python3 source/branches.py scan 2>&1 | tail -20; echo ---; python3 source/handov",
+      ""
      ],
      [
       4,
       "other",
       "film notes",
       "notes/proposals/ notes/ledger/sam/ notes/*.md notes/ledger/sam/h3akq5qv.md",
-      "ls notes/ notes/proposals/ notes/ledger/sam/ | head -80; ls notes/*.md 2>/dev/nu"
+      "ls notes/ notes/proposals/ notes/ledger/sam/ | head -80; ls notes/*.md 2>/dev/nu",
+      ""
      ],
      [
       5,
       "other",
       "film notes",
       "notes/proposals/ notes/proposals/milburn-review.md",
-      "ls notes/proposals/; find . -iname \"*milburn*\" -not -path \"./.git/*\" | head -30;"
+      "ls notes/proposals/; find . -iname \"*milburn*\" -not -path \"./.git/*\" | head -30;",
+      ""
      ],
      [
       6,
       "other",
       "film notes",
       "notes/proposals/milburn-review.md notes/archive notes/milburn.md",
-      "cat notes/proposals/milburn-review.md; ls notes/archive | grep -i milb; git log "
+      "cat notes/proposals/milburn-review.md; ls notes/archive | grep -i milb; git log ",
+      ""
      ],
      [
       7,
       "other",
       "guides",
       "guides/job-packs.md",
-      "^#"
+      "^#",
+      ""
      ],
      [
       8,
       "other",
       "guides",
       "guides/job-packs.md",
-      "sed -n 9,35p guides/job-packs.md; sed -n 60,63p guides/job-packs.md"
+      "sed -n 9,35p guides/job-packs.md; sed -n 60,63p guides/job-packs.md",
+      ""
      ],
      [
       9,
       "other",
       "film notes",
       "notes/archive/milburn.md",
-      "front.on\\|front-on\\|facing the camera\\|square to\\|focus left\\|eyes left\\|people_"
+      "front.on\\|front-on\\|facing the camera\\|square to\\|focus left\\|eyes left\\|people_",
+      ""
      ],
      [
       10,
       "other",
       "film notes",
       "notes/archive/milburn.md",
-      "faces forward\\|face forward\\|facing camera\\|facing us\\|look_dir\\|gaze\\|eyes to\\|"
+      "faces forward\\|face forward\\|facing camera\\|facing us\\|look_dir\\|gaze\\|eyes to\\|",
+      ""
      ],
      [
       11,
       "other",
       "shared:milburn.py",
       "source/milburn.py",
-      "look=\\|eye_x\\|eyes=\\|'look'\\|gaze\\|yaw"
+      "look=\\|eye_x\\|eyes=\\|'look'\\|gaze\\|yaw",
+      ""
      ],
      [
       12,
       "other",
       "shared:milburn.py",
       "source/milburn.py",
-      "bojack"
+      "bojack",
+      ""
      ],
      [
       13,
       "other",
       "film notes",
       "notes/proposals/three-quarter-people.md",
-      "sed -n 1,200p notes/proposals/three-quarter-people.md | cut -c1-600 | head -90"
+      "sed -n 1,200p notes/proposals/three-quarter-people.md | cut -c1-600 | head -90",
+      ""
      ],
      [
       14,
       "other",
       "shared:facehouse.py",
       "source/facehouse.py story/milburn-people.txt source/people.py",
-      "head:"
+      "head:",
+      ""
      ],
      [
       16,
       "other",
       "shared:people_turned.py",
       "story/milburn-people.txt source/people_turned.py",
-      "Claude-Session"
+      "Claude-Session",
+      ""
      ],
      [
       17,
       "other",
       "film notes",
       "notes/ledger/ notes/ledger/*.tsv notes/ledger/*.md notes/archive/milburn-handove",
-      "milburn"
+      "milburn",
+      ""
      ],
      [
       18,
       "other",
       "film notes",
       "notes/archive/milburn-handovers.md notes/ledger/milburn.md",
-      "cse_[A-Za-z0-9]*\\|session_[A-Za-z0-9]*"
+      "cse_[A-Za-z0-9]*\\|session_[A-Za-z0-9]*",
+      ""
      ],
      [
       19,
       "other",
       "guides",
       "guides/film-quality-rules.md",
-      "^| *38 \\|^38\\.\\|rule 38\\|^| 38"
+      "^| *38 \\|^38\\.\\|rule 38\\|^| 38",
+      ""
      ],
      [
       20,
       "other",
       "shared:milburn.py",
       "source/milburn.py",
-      "THREE_QUARTER_OK\\|SHOT_MARKS"
+      "THREE_QUARTER_OK\\|SHOT_MARKS",
+      ""
      ],
      [
       21,
       "other",
       "other",
       "source/*.py source/milburn",
-      "THREE_QUARTER_OK"
+      "THREE_QUARTER_OK",
+      ""
      ],
      [
       22,
       "other",
       "shared:plan.py",
       "source/plan.py",
-      "sed -n 265,320p source/plan.py"
+      "sed -n 265,320p source/plan.py",
+      ""
      ],
      [
       36,
       "other",
       "shared:people.py",
       "source/people.py",
-      "^def \\|^    python3"
+      "^def \\|^    python3",
+      ""
      ],
      [
       37,
       "other",
       "shared:people.py",
       "story/*.txt source/people.py source/facehouse.py",
-      "house badenoch\\|house burnham"
+      "house badenoch\\|house burnham",
+      ""
      ],
      [
       38,
       "other",
       "shared:views.py",
       "source/views.py",
-      "^def snap\\|^def person\\|head_yaw\\|head_roll\\|def _view_of\\|VIEWS *="
+      "^def snap\\|^def person\\|head_yaw\\|head_roll\\|def _view_of\\|VIEWS *=",
+      ""
      ],
      [
       39,
       "other",
       "shared:views.py",
       "source/views.py source/facehouse.py source/turnhead.py",
-      "def install_turned\\|def _turn_person\\|exact yaw\\|any yaw\\|yaw_exact\\|TurnFace("
+      "def install_turned\\|def _turn_person\\|exact yaw\\|any yaw\\|yaw_exact\\|TurnFace(",
+      ""
      ],
      [
       40,
       "other",
       "shared:turnhead.py",
       "source/turnhead.py source/facehouse.py",
-      "'turn'\\|turn=\\|\\bturn\\b"
+      "'turn'\\|turn=\\|\\bturn\\b",
+      ""
      ],
      [
       41,
       "other",
       "other",
       "source/fonts/DejaVuSans-Bold.ttf",
-      "mkdir -p /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f0396"
+      "mkdir -p /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f0396",
+      ""
      ],
      [
       42,
       "other",
       "shared:views.py",
       "source/views.py",
-      "sed -n 968,990p source/views.py"
+      "sed -n 968,990p source/views.py",
+      ""
      ],
      [
       43,
       "other",
       "other",
       "",
-      "cd /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f03962/scra"
+      "cd /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f03962/scra",
+      ""
      ],
      [
       45,
       "other",
       "other",
       "",
-      "cd /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f03962/scra"
+      "cd /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f03962/scra",
+      ""
      ],
      [
       47,
       "other",
       "other",
       "source/fonts/DejaVuSans-Bold.ttf",
-      "s nudge) done as a picture warp on the finished front head.\nThe face"
+      "s nudge) done as a picture warp on the finished front head.\nThe face",
+      ""
      ],
      [
       49,
       "other",
       "other",
       "notes/proposals/front-on-focus source/fonts/DejaVuSans-Bold.ttf notes/proposals/",
-      "\nF=lambda n: ImageFont.truetype("
+      "\nF=lambda n: ImageFont.truetype(",
+      ""
      ],
      [
       50,
       "other",
       "shared:facehouse.py",
       "source/facehouse.py notes/proposals/front-on-focus/famous-turned-now.jpg",
-      "timeout 300 python3 source/facehouse.py turns notes/proposals/front-on-focus/fam"
+      "timeout 300 python3 source/facehouse.py turns notes/proposals/front-on-focus/fam",
+      ""
      ],
      [
       59,
       "other",
       "guides",
       "guides/kit-catalogue.md",
-      "facehouse\\|house head\\|head: house\\|people_turned\\|people kit\\|people_famous"
+      "facehouse\\|house head\\|head: house\\|people_turned\\|people kit\\|people_famous",
+      ""
      ],
      [
       60,
       "other",
       "other",
       "",
-      "python3 - <<'EOF' > /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-"
+      "python3 - <<'EOF' > /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-",
+      ""
      ],
      [
       61,
       "other",
       "other",
       "source/*.py",
-      "^DUR\\b\\|^DUR *=\\|^SHOTS *=\\|^FPS *="
+      "^DUR\\b\\|^DUR *=\\|^SHOTS *=\\|^FPS *=",
+      ""
      ],
      [
       62,
       "other",
       "other",
       "",
-      "S=/tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f03962/scrat"
+      "S=/tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083f03962/scrat",
+      ""
      ],
      [
       63,
       "other",
       "other",
       "",
-      "sed -n 2,200p /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083"
+      "sed -n 2,200p /tmp/claude-0/-home-user-Animation-/6561bc9b-9f19-5c96-95f0-ff9083",
+      ""
      ],
      [
       64,
       "other",
       "other",
       "source/*.py",
-      "^(facehouse|facepick|beardkit|agelines|likeness|people|people_parts|people_turne"
+      "^(facehouse|facepick|beardkit|agelines|likeness|people|people_parts|people_turne",
+      ""
      ],
      [
       65,
       "other",
       "shared:kittests.py",
       "source/kittests.py notes/archive",
-      "$m\\.py\\|source/$m"
+      "$m\\.py\\|source/$m",
+      ""
      ],
      [
       66,
       "other",
       "shared:signoff.py",
       "guides/*.md source/signoff.py source/mossad_audio.py",
-      "signoff\\.py\\|horror_preflight\\|hands3d\\|mhuman\\|graphite"
+      "signoff\\.py\\|horror_preflight\\|hands3d\\|mhuman\\|graphite",
+      ""
      ],
      [
       67,
       "other",
       "shared:posecheck.py",
       "source/posecheck.py source/preflight.py",
-      "38\\|_drawn\\|three-quarter"
+      "38\\|_drawn\\|three-quarter",
+      ""
      ],
      [
       68,
       "other",
       "shared:propose.py",
       "source/propose.py",
-      "sed -n 1,70p source/propose.py | cut -c1-230"
+      "sed -n 1,70p source/propose.py | cut -c1-230",
+      ""
      ],
      [
       69,
       "other",
       "shared:propose.py",
       "source/propose.py notes/proposals/front-on-focus.md",
-      "python3 source/propose.py new front-on-focus \"Turned people lose detail, and bet"
+      "python3 source/propose.py new front-on-focus \"Turned people lose detail, and bet",
+      ""
      ],
      [
       72,
       "other",
       "shared:propose.py",
       "source/propose.py",
-      "python3 source/propose.py pack front-on-focus 2>&1 | tail -20"
+      "python3 source/propose.py pack front-on-focus 2>&1 | tail -20",
+      ""
      ],
      [
       75,
       "other",
       "shared:handover.py",
       "source/handover.py",
-      "mother|daught|horror|kitchen|park|duel|series|professional"
+      "mother|daught|horror|kitchen|park|duel|series|professional",
+      ""
      ],
      [
       76,
       "other",
       "shared:thepark.py",
       "source/thepark.py source/park.py source/duel.py source/series.py source/ll_looks",
-      "^import\\|^from"
+      "^import\\|^from",
+      ""
      ],
      [
       79,
       "other",
       "shared:propose.py",
       "notes/proposals/front-on-focus/ source/propose.py",
-      "ls notes/proposals/front-on-focus/; python3 source/propose.py status 2>&1 | grep"
+      "ls notes/proposals/front-on-focus/; python3 source/propose.py status 2>&1 | grep",
+      ""
      ],
      [
       80,
       "other",
       "film notes",
       "notes/proposals/front-on-focus notes/proposals/front-on-focus.md",
-      "git checkout -q -b claude/job1-front-on-focus && git add notes/proposals/front-o"
+      "git checkout -q -b claude/job1-front-on-focus && git add notes/proposals/front-o",
+      ""
      ],
      [
       81,
       "other",
       "other",
       "notes/proposals/front-on-focus/ notes/proposals/front-on-focus/helper-*.md",
-      "ls notes/proposals/front-on-focus/ | grep helper; wc -w notes/proposals/front-on"
+      "ls notes/proposals/front-on-focus/ | grep helper; wc -w notes/proposals/front-on",
+      ""
      ],
      [
       82,
       "other",
       "film notes",
       "notes/proposals/front-on-focus/helper-a.md",
-      "tail -5 notes/proposals/front-on-focus/helper-a.md | cut -c1-200"
+      "tail -5 notes/proposals/front-on-focus/helper-a.md | cut -c1-200",
+      ""
      ],
      [
       83,
       "other",
       "shared:propose.py",
       "source/propose.py",
-      "python3 source/propose.py judge front-on-focus 2>&1 | tail -4"
+      "python3 source/propose.py judge front-on-focus 2>&1 | tail -4",
+      ""
      ],
      [
       85,
       "other",
       "other",
       "notes/proposals/front-on-focus",
-      "git add -A notes/proposals/front-on-focus && git commit -q -m \"Job 1: both helpe"
+      "git add -A notes/proposals/front-on-focus && git commit -q -m \"Job 1: both helpe",
+      ""
      ],
      [
       86,
       "other",
       "other",
       "notes/proposals",
-      "git status --short | head; git add -A notes/proposals && git commit -q -m \"Job 1"
+      "git status --short | head; git add -A notes/proposals && git commit -q -m \"Job 1",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record front-on-focus 2>&1 | tail -5 && python3 source",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "film notes",
+      "notes/proposals/front-on-focus.md",
+      "^## Faults in the pick",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "story/status.md notes/proposals/front-on-focus.md",
+      "Where things stand",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py status 2>&1 | grep front",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/front-on-focus.md notes/proposals/front-on-focus/retirement-and-",
+      "python3 - <<'EOF' p='notes/proposals/front-on-focus.md' t=open(p).read() i=t.ind",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "film notes",
+      "notes/proposals story/status.md",
+      "git add -A notes/proposals story/status.md && git commit -q -m \"Job 1: front-on ",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "notes/logs/handover-end.log",
+      "git add notes/logs/handover-end.log && git commit -q -m \"handover end log Co-Aut",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "film notes",
+      "story/status.md",
+      "git diff --name-only --diff-filter=A HEAD MERGE_HEAD | head -20; git show MERGE_",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "shared:blessed.py",
+      "notes/proposals/front-on-focus.md source/blessed.py story/status.md notes/logs/h",
+      "<<<<<<<\\|>>>>>>>",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "",
+      "git status --short | head -3; git push origin claude/job1-front-on-focus 2>&1 | ",
+      ""
      ]
     ]
    }
@@ -2555,6 +2824,326 @@
       "film notes",
       "notes/proposal-route.md story/status.md",
       "python3 - <<'E' p='notes/proposal-route.md' s=open(p).read() s=s.replace(\"claude"
+     ]
+    ]
+   }
+  },
+  {
+   "date": "2026-11-19",
+   "chat": "d6d03814",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.59,
+   "src": "estimate",
+   "sid": "session_01J1JB7YjahoRFuehrM7cxWW",
+   "steps": 61,
+   "hist_k": 180,
+   "kinds": {
+    "tool search": 20.8,
+    "other": 79.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 34,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 46
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 6,
+     "shared:handover.py": 4,
+     "film notes": 11,
+     "shared:branches.py": 1,
+     "shared:propose.py": 7,
+     "shared:costwatch.py": 1,
+     "guides": 2,
+     "shared:kittests.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -20 && git log --oneline -8 && git branch --show-current; git ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "notes/proposals/ source/handover.py",
+      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git log -1 --o",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "story/status.md notes/proposals/milburn-review.md",
+      "^#",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md",
+      "sed -n 47,200p notes/proposals/milburn-review.md",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:branches.py",
+      "source/branches.py source/propose.py",
+      "python3 source/branches.py scan 2>&1 | tail -15; sed -n 1,80p source/propose.py",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "notes/ledger/sam/ notes/ledger/sam notes/proposals",
+      "01J1JB7Y",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/ledger/sam/hrm7cxww.md",
+      "cat notes/ledger/sam/hrm7cxww.md | head -60",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "timeout 300 python3 source/handover.py start session_01J1JB7ZUimqTBbLiqdPxYKr --",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:propose.py",
+      "source/propose.py .claude/settings.json",
+      "^def \\|^    def ",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 270,500p source/propose.py",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "/root/.claude/projects/-home-user-Animation-/d6d03814-a2af-5581-90dd-2c904864f70",
+      "guard[^\\",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py notes/ledger/ source/propose.py",
+      "python3 .claude/hooks/costwatch.py --help 2>&1 | head -5; ls notes/ledger/ | hea",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "film notes",
+      "notes/proposals/guard-holes.md notes/proposals/guard-holes/ guides/proposal-rout",
+      "cat notes/proposals/guard-holes.md | head -40; ls notes/proposals/guard-holes/; ",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/guard-holes/chat.md",
+      "sed -n 96,230p source/propose.py; cat notes/proposals/guard-holes/chat.md | head",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "guides",
+      "guides/proposal-route/judge.md guides/proposal-route/sam-test.md",
+      "For Sam",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:propose.py",
+      "source/propose.py guides/film-quality-rules.md notes/proposals/unrouted.md",
+      "python3 source/propose.py new plain-check \"The plain-language rule has no check,",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py show front-on-focus 2>&1 | head -30",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "film notes",
+      "notes/proposals/plain-check.md notes/proposals/plain-check/",
+      "git add notes/proposals/plain-check.md notes/proposals/plain-check/ && git commi",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "source/*.py notes/archive/ notes/archive/milburn*.md",
+      "COULD NOT TEST",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md notes/ledger/milburn.md source/people*.py guides/film-q",
+      "cleaned\\|false lines\\|60 false\\|move to shared",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "film notes",
+      "notes/ledger/milburn.md",
+      "^| date\\|^| Date\\|^|---",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md guides/film-quality-rules.md",
+      "guard\\|block\\|named\\|red\\|kittest",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md notes/proposals/ notes/proposals/guard-record*",
+      "2026-11-1[78]",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "guides",
+      "notes/proposals/ guides/film-quality-rules.md",
+      "^| ",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "Agent (",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "notes/proposals/",
+      "git add notes/proposals/ && git commit -qm \"Route queue: problem files and the c",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:kittests.py",
+      "notes/proposals/ source/kittests.py",
+      "^Status",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 2519,2600p source/kittests.py",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "",
+      "git pull -q --rebase --autostash origin claude/create-claude-md-oe8z4g 2>&1 | gr",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "film notes",
+      "notes/proposals/plain-check/helper-a.md",
+      "hint\\|autostash",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record plain-check 2>&1 | tail -30",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py notes/proposals/plain-check.md",
+      "cat > story/status.md <<'EOF' plain-check (19 Nov, route item 11, Sam's \"fix now",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py",
+      "sed -i 's/Blessed WIP branch and aim-check-study branch named, not merged (anoth",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "film notes",
+      "story/status.md notes/proposals/plain-check*",
+      "hint\\|autostash",
+      ""
      ]
     ]
    }

@@ -1,6 +1,6 @@
 # Proposal: Sam wants every planning and building stage to refer back to the cost aim
 
-Status: open
+Status: adopted (2026-11-19)
 
 ## Problem
 Sam, 19 Nov: "If you aren't referring to statement one when you're planning and building, then that needs fixing." Statement one is CLAUDE.md's aim: every stage aims at high quality, fewer notes and faults, and a film within 15% of a week, and every idea for cost or speed makes new things better, cheaper or faster (smarter tools, faults caught before Sam sees them, reading less), never less or worse. Today nothing makes a chat look back at that aim while it plans or builds, or says so in its plan and handover, so cost and quality are weighed only when Sam pushes. Sam wants it to be a habit of every planning and building stage, with a check that notices when it is missing.
