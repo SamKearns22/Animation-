@@ -1,0 +1,1 @@
+Idea: timed jobs become a reminder bound to the queuing chat (persistent_session_id); on waking it starts the job chat with create_session (project attached, model, effort). "Queued" is only said after a check that the project is attached and saving works; the handover line says "attached: yes". Other: keep timed jobs, add only the warning check.
