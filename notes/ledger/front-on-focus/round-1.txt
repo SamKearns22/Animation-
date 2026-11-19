@@ -1,0 +1,69 @@
+== critique, round 1 pass 1 (2026-11-19): 5 fault(s), 3 can't tell
+-- look.md --
+1: Man, glasses, dark hair, navy suit, white shirt, neutral stern face, arms down, standing front-on. No words.
+2: Same glasses man, navy suit, neutral face, arms down, front-on; near identical to 1. No words.
+3: Same glasses man, navy suit, slight head tilt, flat stern expression, arms down. No words.
+4: Woman, long grey braids, brown skin, navy suit, white shirt, neutral face, arms down. No words.
+5: Braids woman, eyes wide open, pursed lips, navy suit, arms down, front-on. No words.
+6: Braids woman, head slightly turned, eyes glancing sideways, navy suit, arms down. No words.
+7: Person, purple and blue fringe hair, face piercings, tongue stud, black dress, arms down, deadpan. No words.
+8: Purple-haired person, piercings, mouth slightly open, black dress, arms down, nearly same as 7. No words.
+9: Purple-haired person, piercings, tongue stud, black dress, smaller panel, deadpan face. No words.
+-- result.md --
+## Faults
+FAULT P2 [1, 3, 4, 6, 7, 9]: head and eyes - the focus panels barely differ from the straight-out baseline (2, 5, 8); at phone size the look direction does not read. No clear pupils in the corners, no lifted brow, no visible head tilt, so the brief's "must read which way they look" fails.
+FAULT P14 [1, 3, 7, 9]: eyes - glasses and heavy brows hide the pupils; the pupil position cannot be seen, so the gaze is unreadable and pupils sit near or on the lens rim. Hardest glance not shown inside the outline.
+FAULT P4 [7, 9]: face - the purple-haired person's piercings and face detail shift between panels (the eyebrow stud and mouth stud move or vanish), so the design does not stay front-on.
+FAULT P11 [7, 8, 9]: neck - a thin choker-like line at the neck and a very short neck; the head sits almost on the shoulders.
+FAULT P8 [3, 6, 9]: mirrored panels - the mirrored (right) versions look like copies of the left ones with only slight shifts; the nose tip turn and brow lift are not mirrored visibly.
+CAN'T TELL P10 [1-9]: no contact in any panel; nothing to check.
+CAN'T TELL P12 [1-9]: mouths are closed or still in all panels; no speech labelled.
+CAN'T TELL P1 [1-9]: no props held.
+
+## Checked
+1-9
+
+## Cold look
+look.md named the men and women correctly, with no words in any panel. I wrote "head slightly turned" and "glancing sideways" for 3 and 6, and "wide open eyes" for 5, but 5 is the baseline, so I read gaze into panels where the brief says straight out. I also wrote 7 and 8 as nearly the same, which is the real fault: I could not tell the focus panel 7 from the baseline 8. I missed the intended beat "listening to someone off screen" entirely, on every panel. I could not name the glance directions at all.
+
+## Not on the list
+1. The focus panels' glance direction cannot be told apart from the baseline in the cold look - suggested line: "The cold look names the gaze direction (left, right, front) of every focus panel correctly."
+2. Panel 9 is smaller or cropped differently on the look sheet - suggested line: "All panels on one sheet share size and framing."
+3. Bodies are identical across all three views, so the head is the only cue - suggested line: "Show a body cue (shoulder or tilt) with each gaze."
+4. Feet or legs cut off by the bottom edge of each panel - suggested line: "No panel crops feet or hands unless the brief says so."
+
+== critique, round 1 pass 2 (2026-11-19): 6 fault(s), 2 can't tell
+-- look.md --
+1: Bearded-free man, dark hair, glasses, navy suit, white shirt, neutral stare, arms down, front-on.
+2: Same man, glasses, neutral flat expression, eyes slightly different, stiff pose, arms down.
+3: Same man, glasses tilted slightly, neutral expression, standing stiffly, arms at sides.
+4: Woman, long grey braids, dark skin, navy suit, glancing sideways, neutral, arms down.
+5: Same woman, eyes looking forward, stern neutral face, arms down, stiff.
+6: Same woman, eyes glancing right, frowning slightly, head turned a little, arms down.
+7: Person, purple and blue fringe hair, face piercings, black top, eyes half-closed, bored, arms down.
+8: Same purple-haired person, eyes half-closed, mouth open slightly, tongue piercing, arms down.
+9: Same purple-haired person, head tilted, sneering, tongue stud, body cropped lower, arms down.
+-- result.md --
+## Faults
+FAULT A1 P2 [1, 3, 4, 6, 7, 9]: whole sheet at phone size - gaze direction does not read. My cold look called 1 and 3 "neutral stare", 7 and 9 "bored/sneering"; the left/right glance and "listening off screen" beat was not named. The brief's must-read-at-phone-size is not met; shift is far weaker than the BoJack reference and the mock's right-hand columns.
+FAULT P2 [1, 3, 4, 6, 7, 9]: face - the brief asks for features slid left/right inside the outline, a lifted side brow and a slight head tilt. Only the pupils and a faint brow change; features sit centred, outline and nose tip look unchanged, so it reads as a blank face, not listening. Panel 3 does not read as a clean mirror of 1 (glasses sit crooked/tilted, panel 1 does not).
+FAULT P4 [7, 8, 9]: face - brief lists nose, brow and lip piercings; I see a lip/chin stud and a nose ring, the brow piercing is hard to find and tiny. Hair design (purple/blue fringe) is fine but the piercings are not clearly kept on every glance.
+FAULT P11 [7, 8, 9]: neck - a thin line or choker-like strip between head and black top, neck very short and dark-on-dark; head looks sunk into the collar. Check Andy and Kemi too: necks are short but readable.
+FAULT P13 [7, 8, 9]: sleeves/body - black top on black skirt/dress merges, no visible cuff or sleeve end, a lower panel of folds that stops short; sleeves read as one slab.
+FAULT P7 [1-9]: bottom edge - bodies are cropped at the knees/shins; feet and ground not shown (only slivers of shoes on 1-3), so weight and footing cannot be judged.
+CAN'T TELL P14 [1, 3, 4, 6, 7, 9]: whether pupil, iris and shine stay inside the eye outline at the hardest glance; a full-size face crop of each glance would show it.
+CAN'T TELL P12 [1-9]: single mouth at all glances; mouths look closed, one mouth each, but a mouth crop on the glance panels would confirm no doubled lip.
+
+## Checked
+1-9
+
+## Cold look
+Against brief.md (line A1): I wrote "Bearded-free man", a pointless and wrong phrase (no beard was in the brief). I named the purple person's piercing as a "tongue piercing/tongue stud" - brief says lip; and I missed the nose and brow piercings. I read the glances as "eyes slightly different" and "tilted glasses" rather than the intended left/right focus, so the beat "listening off screen" was missed on every shifted panel. Panel 9 "body cropped lower" was only the sheet layout.
+
+## Not on the list
+- Sheet crops the bodies at different heights (9 is lower than the rest): suggested line: all panels in a sheet share one crop and scale.
+- Black clothing on a dark body has no readable shape: suggested line: clothes keep a visible edge against skin and background at phone size.
+- Panel 3 is meant to mirror 1 but differs in glasses angle: suggested line: a mirrored panel is the flipped pair of its partner, compared side by side.
+- Hair is shown thin and pixelated on braids/fringe edges (jagged edges): suggested line: no stair-step edges on hair at full size.
+- Background of the reference column is too small to read the BoJack labels: suggested line: the reference is legible at the size the director sees it.
+

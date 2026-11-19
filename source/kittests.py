@@ -2298,7 +2298,9 @@ def facehouse_whole_head():
     import facehouse as FH
     import people
     import turnhead as TH
-    held = {'burnham': '54c5610fc43be94833e0df2d429d1370', 'badenoch': '13b8b16bcc3911dbf81494eb1bee2315'}
+    held = {'burnham': '840197c25a2801e6cde010a48eb1797d', 'badenoch': 'de6b4e6f7ca6c106e5626a65be453c41'}
+    # re-held 19 Nov (front-on focus chat 2): both changed at 594f94ba only (Sam, 14 Nov: the flat dark shadow side
+    # taken off people), found by bisecting; unchanged from then to today, so today's heads are the finished ones
     tmp = tempfile.mkdtemp()
     got = {}
     try:
@@ -2947,6 +2949,127 @@ def phone_size_poses():
     ok = caught and cleared and len(gal) == 1 and not nopeople and len(side) == 1 and not front
     return ok, f'EPR refusals {len(epr)} (shrug and no marks caught: {caught}); cleared by its line: {cleared}; ' \
                f'gallery shrug refused: {len(gal)}; side-on Bob flagged: {len(side)}, front Bob: {len(front)}'
+
+
+@test
+def drawn_angle_every_film():
+    """C1 (front-on focus, Sam: Y to all, 19 Nov): pre-flight reads the DRAWN angle on every film, rooms plan or not
+    (until then only films with no rooms plan were read, so Milburn's YAW3 = 40 passed). Replayed on Milburn: its
+    scenes 3 and 6 (all four drawn 40 degrees off the lens) are flagged; a film with a rooms plan drawing someone at
+    40 degrees is flagged, a reason in THREE_QUARTER_OK clears it, a head turned past 25 counts, a mark named by its
+    CAST key matches the drawn name, and a front-on film (midterminal's shot 'two') passes."""
+    import importlib
+    import burnham as B
+    import figure as F
+    import posecheck as P
+    import preflight
+    if 'kittests' not in F._ALLOW:
+        F._ALLOW.append('kittests')
+    B.SS = 1
+
+    class Film:
+        HAS = {'people', 'rooms'}
+        SHOTS = [('a', 0, 2)]
+        SHOT_MARKS = {'a': ['bob']}
+        CAST = {'bob': {'name': 'The tall man (extra)'}}
+        THREE_QUARTER_OK = ()
+    P.set_marks(Film)
+    P.FACING[:] = [('The tall man (extra)', 40, 40)]
+    rooms_turned = len(P.take(1.0))
+    P.FACING[:] = [('The tall man (extra)', 0, 30)]
+    body_turned = len(P.take(1.0))
+    P.FACING[:] = [('The tall man (extra)', 30, 0)]
+    head_turned = len(P.take(1.0))
+    P.FACING[:] = [('The tall man (extra)', 12, 0)]
+    front = len(P.take(1.0))
+    Film.THREE_QUARTER_OK = (('a', 'bob', 'he walks out of shot'),)
+    P.set_marks(Film)
+    P.FACING[:] = [('The tall man (extra)', 90, 90)]
+    reasoned = len(P.take(1.0))
+    flagged = {}
+    for name, times in (('milburn', (12.62, 36.25)), ('midterminal', ())):
+        film = importlib.import_module(name)
+        preflight.install_probes(film)
+        preflight._FILM, preflight._FPS = film, getattr(film, 'FPS', 12)
+        if not times:
+            s = next(s for s in film.SHOTS if s[0] == 'two')
+            times = ((s[1] + s[2]) / 2,)
+        got = [preflight._turn_frame(t) for t in times]
+        flagged[name] = sorted({f['who'].split(' (')[0] for fs, _ in got for f in fs})
+    matched = ('two', 'satan') in {tuple(h) for _, hs in got for h in hs}    # midterminal's pass is a real one
+    P.MARKS.clear()
+    ok = (rooms_turned == 1 and body_turned == 1 and head_turned == 1 and not front and not reasoned
+          and len(flagged['milburn']) == 4 and not flagged['midterminal'] and matched)
+    return ok, (f'rooms film at 40: {rooms_turned}; body 30: {body_turned}; head 30: {head_turned}; 12: {front}; '
+                f'reasoned: {reasoned}; Milburn 3 and 6 flagged: {flagged["milburn"]}; '
+                f'midterminal front on: {flagged["midterminal"] or "clean"} (Satan matched: {matched})')
+
+
+@test
+def focus_front_heads():
+    """C2 (front-on focus, Sam: Y to all, 19 Nov): the focus setting on both front heads (focus.py). At focus 0 every
+    finished film draws exactly as before: Andy and Kemi on the house head, a Milburn frame of invented kit faces
+    (5 s), one of Andy and Pat (32 s), a Protest Tiers frame (3 s), pixel for pixel (held the moment before focus was
+    put in). At full focus every piece is MOVED, never warped: each piece keeps every distance between its points on
+    one side of the face (the tilt only turns it), and the face outline stays where it was (tilt off)."""
+    import hashlib
+    import importlib
+    import math as M
+    import shutil
+    import tempfile
+    import burnham as B
+    import facehouse as FH
+    import figure as F
+    import focus as FO
+    if 'kittests' not in F._ALLOW:
+        F._ALLOW.append('kittests')
+    held = {('milburn', 5.0): '43bc2edeac0c1b05fb6c82c9db1d6506', ('milburn', 32.0): 'a09b39a210cd9a0d57b1ac98321ef4c5',
+            ('protest_tiers', 3.0): '179c6924fa812ef9c7ab7e9fcf570a97'}
+    heads = {'burnham': '840197c25a2801e6cde010a48eb1797d', 'badenoch': 'de6b4e6f7ca6c106e5626a65be453c41'}
+    B.SS = 1
+    same = []
+    for (name, t), h in held.items():
+        if hashlib.md5(importlib.import_module(name).frame_image(t).tobytes()).hexdigest() == h:
+            same.append(f'{name} {t:g}')
+    tmp = tempfile.mkdtemp()
+    try:
+        for n, h in heads.items():
+            if hashlib.md5(open(FH.draw(n, 'detail', os.path.join(tmp, n + '.png')), 'rb').read()).hexdigest() == h:
+                same.append(n)
+    finally:
+        shutil.rmtree(tmp)
+
+    class Face:
+        tq = 0.0
+
+        def __call__(self, u, v):
+            return (540 + u * 172, 300 + v * 172)
+    L = dict(eye_y=0.42, nose_y=0.66, fw=0.8)
+    pts = [(-0.3, 0.4), (-0.12, 0.45), (-0.2, 0.36), (0.12, 0.44), (0.3, 0.38), (0.2, 0.47)]
+    rigid = True
+    for sp in (dict(focus=1.0), dict(focus=-0.7), dict(focus=1.0, focus_tilt=0.0)):
+        Fo = FO.Focus(Face(), sp, L, room=0.03)
+        for piece in (Fo.eyes, Fo.brows, Fo.lens, Fo.mouth, Fo.lines, Fo.ears, Fo.whole):
+            for side in ([p for p in pts if p[0] < 0], [p for p in pts if p[0] > 0]):
+                a = [Face()(*p) for p in side]
+                b = piece.pts(side)
+                for i in range(len(a)):
+                    for j in range(i):
+                        if abs(M.dist(a[i], a[j]) - M.dist(b[i], b[j])) > 1e-6:
+                            rigid = False
+    cast, B2, V = FO._cast('facetool', ('andy', 'kemi'))
+    kept = moved = 0
+    import numpy as np
+    for w in ('andy', 'kemi'):
+        base = np.asarray(FO.bust(cast[w], 0.0, B2, V))
+        look = np.asarray(FO.bust(cast[w], 1.0, B2, V, extra=dict(focus_tilt=0.0)))
+        sil = lambda a: np.argwhere((np.abs(a.astype(int) - (236, 232, 226)).sum(2) > 30)[:200])   # noqa: E731
+        moved += int((np.abs(base.astype(int) - look.astype(int)).sum(2) > 60).sum() > 300)
+        sb, sl = sil(base), sil(look)
+        kept += int(abs(sb[:, 1].min() - sl[:, 1].min()) <= 6 and abs(sb[:, 1].max() - sl[:, 1].max()) <= 6)
+    ok = len(same) == 5 and rigid and moved == 2 and kept == 2
+    return ok, (f'held at focus 0: {same}; pieces moved not warped: {rigid}; faces changed at full focus: {moved}/2; '
+                f'head outline kept: {kept}/2')
 
 
 @test
