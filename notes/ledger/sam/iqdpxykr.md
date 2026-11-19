@@ -35,3 +35,6 @@ We have a communication rule about explaining back-end topics to me in plain lan
 ### 2026-11-19T10:03:48
 Why did you break a 'rule'
 
+### 2026-11-19T10:05:14
+A rule should function. If it doesn't function, you built it wrong.
+
