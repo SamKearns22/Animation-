@@ -1115,24 +1115,24 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.16,
+   "cost": 0.74,
    "src": "estimate",
    "sid": "session_01J1JB7XQCcHnzbB7r62524n",
-   "steps": 16,
-   "hist_k": 102,
+   "steps": 32,
+   "hist_k": 128,
    "kinds": {
-    "tool search": 23.6,
-    "other": 76.4
+    "tool search": 17.1,
+    "other": 82.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 14,
+    "tool search": 20,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 3
+    "other": 12
    },
    "search": {
     "show": 0,
@@ -1141,10 +1141,11 @@
     },
     "other": {
      "shared:branches.py": 1,
-     "other": 2,
+     "other": 5,
      "film notes": 9,
      "shared:handover.py": 1,
-     "shared:blessed.py": 1
+     "shared:blessed.py": 1,
+     "shared:propose.py": 3
     },
     "ticked": 1,
     "edited film code": false,
@@ -1246,6 +1247,48 @@
       "shared:blessed.py",
       "source/blessed.py story/status.md",
       "printf '%s\\n' \"Blessed WIP branch (claude/blessed-c2-mics-wip, source/blessed.py"
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "git status --short | head -5; git log --oneline origin/claude/modest-darwin-e2bh"
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit origin"
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin && git merge --no-edit origin/claude/create-claude-md-oe8z4g"
+     ],
+     [
+      27,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "git push -q origin HEAD:claude/modest-darwin-e2bhmd 2>&1|tail -1; python3 source"
+     ],
+     [
+      28,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/scheduled-jobs-attach.md",
+      "python3 source/propose.py new scheduled-jobs-attach 2>&1 | tail -15; cat notes/p"
+     ],
+     [
+      29,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/scheduled-jobs-attach.md notes/ledger/sam/7r62524n.md notes/ledg",
+      "python3 - <<'E' p='notes/proposals/scheduled-jobs-attach.md' s=open(p).read() s="
      ]
     ]
    }
