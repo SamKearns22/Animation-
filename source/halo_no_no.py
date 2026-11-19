@@ -118,7 +118,7 @@ BENCHMARK = [   # rule 3: the full lists are in the notes ("Benchmarks"); the sh
                 ('rear window onto space', 'with a Roadster drifting past'), ('doors and dash detail', 'yes')]),
 ]
 HOOK = ('Elon Finishes The Fight', {'y': 330, 'until': 3.5})   # Sam, 29 Oct: upper middle, 0-3.5 s
-CAPTION_1 = ('Halo Ringworld', 'Russia - Ukraine War')         # white bold, lower third, 0.5-4 s (the brief)
+CAPTION_1 = ('Halo Ringworld',)         # white bold, lower third, 0.5-4 s (Sam, 19 Nov: no 'Russia - Ukraine War' line)
 KEEP_CLEAR = []
 PROP_SIZES = []
 OUTFIT, HEIGHTS = {}, {'musk': 2.1, 'cortana': 0.85}
@@ -514,10 +514,10 @@ def music_gain(n):
     k = np.hanning(int(0.3 * SR))
     g = np.convolve(g, k / k.sum(), 'same')
     for ln in LINES:
-        space = CAMS[shot_of(ln['start'])] in ('space', 'ring')
+        space = CAMS[shot_of(ln['start'])] in ('space', 'ring') or CAMS[shot_of(ln['start'] + 0.4)] in ('space', 'ring')   # 19 Nov: the music swells at the cut into space, so a line just before it ducks hard
         if True:
             duck = np.ones(n)
-            duck[int((ln['start'] - 0.2) * SR):int((ln['end'] + 0.2) * SR)] = 10 ** ((-10 if space else -4) / 20)
+            duck[int((ln['start'] - 0.2) * SR):int((ln['end'] + 0.2) * SR)] = 10 ** (((-17 if 35.5 < ln['start'] < 36.5 else -10) if space else -4) / 20)
             g *= np.convolve(duck, k / k.sum(), 'same')
     return g
 
