@@ -1538,25 +1538,25 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.8,
+   "cost": 1.14,
    "src": "estimate",
    "sid": "session_01J1JB7VJ1z2bHmM7UUJM8RG",
-   "steps": 23,
-   "hist_k": 112,
+   "steps": 32,
+   "hist_k": 118,
    "kinds": {
-    "tool search": 22.1,
-    "page.py": 8.4,
-    "other": 69.5
+    "tool search": 21.1,
+    "page.py": 6.7,
+    "other": 72.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 15,
+    "tool search": 20,
     "whole-file .py read": 0,
     "page.py": 4,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 4
+    "other": 7
    },
    "search": {
     "show": 0,
@@ -1564,9 +1564,9 @@
      "no show": 0
     },
     "other": {
-     "other": 4,
-     "shared:propose.py": 2,
-     "film notes": 4,
+     "other": 5,
+     "shared:propose.py": 4,
+     "film notes": 6,
      "shared:kittests.py": 3,
      "shared:facehouse.py": 2
     },
@@ -1677,6 +1677,41 @@
       "film notes",
       "story/show-page.md",
       "rm story/show-page.md; git status --short | head -3; git log origin/claude/creat"
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add notes/proposals && git commit -qm \"finder-learn-finish: helper A written"
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "story/test-page.md notes/proposals/finder-learn-finish/",
+      "rm -f story/test-page.md; git status --short | head -3; ls notes/proposals/finde"
+     ],
+     [
+      25,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge finder-learn-finish 2>&1 | tail -8"
+     ],
+     [
+      27,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record finder-learn-finish 2>&1 | tail -5; python3 sou"
+     ],
+     [
+      28,
+      "other",
+      "film notes",
+      "notes/proposals/finder-first/learn.md notes/proposals/finder-learn-finish.md",
+      "cat >> notes/proposals/finder-first/learn.md <<'E' ## 19 Nov update (job 3) - Ch"
      ]
     ]
    }
