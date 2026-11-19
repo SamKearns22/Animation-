@@ -1332,12 +1332,12 @@
    "cost": 1.66,
    "src": "estimate",
    "sid": "session_01J1JB7VQkJBtMyeAvAPd5rb",
-   "steps": 56,
-   "hist_k": 181,
+   "steps": 58,
+   "hist_k": 182,
    "kinds": {
-    "tool search": 16.4,
-    "renders": 5.3,
-    "other": 78.4
+    "tool search": 12.6,
+    "renders": 4.1,
+    "other": 83.3
    },
    "calls": {
     "film-file search": 0,
