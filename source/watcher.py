@@ -60,6 +60,7 @@ PROMISES = {
     'finder_faults': ('a chat that edited a film\'s code without the finder is named at handover', 'kittest finder_reminder_per_chat'),
     'unrouted_faults': ('a change that slipped the proposal route is named at handover', 'named: reads propose.py\'s log'),
     'branch_faults': ('every branch with work off the main line is merged or named', 'named: branches.py scan at every start'),
+    'cost_faults': ('the film\'s cost line is recorded at every handover and shown only on a problem', 'kittest quiet_cost_line'),
     'sentence_faults': ('no CLAUDE.md sentence is lost', 'kittest claude_md_sentences_never_lost'),
     # pack tools (guides/job-packs.md)
     'catalogue.py': ('the kit list is current', 'live kits'),

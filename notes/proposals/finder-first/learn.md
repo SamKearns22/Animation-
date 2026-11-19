@@ -32,3 +32,14 @@ note-placing remain unmeasured. This ranking by count is not yet a ranking by co
    writing a short labelled list). Pick: Y. Added: a finished, measured result. Lost: the extra reading, roughly the
    plan's 1.5% of a week or a little over it (not measured). Other option: N, skip the labels and take the
    count-based remedy above through the proposal route as it stands (cheaper, but chosen on counts, not cost).
+
+## 19 Nov update (job 3)
+- Choice of how to finish Learn went through the proposal route (notes/proposals/finder-learn-finish.md): judge picked
+  helper B (record the reason at chat end, fix the lost record, label at the next film). Waiting for Sam's number.
+- round_page fails because the film code grew (the two target defs moved from protest_tiers.py:306 / _cast:627 to
+  :377 / :1080) and the test pins exact line numbers; the right defs are still found, but ranked 3rd and 4th, behind
+  two defs (P3, front_person) that share loose words. Repair for the finder-first work: rank a note's exact phrase
+  ("frames missing" is in both target docstrings) above scattered single words; make the test follow def names.
+- facehouse_whole_head: the held fingerprints stopped matching on 14 Nov (commit 594f94ba, "remove the flat dark
+  shadow side from people", Sam's own request), not 17 Nov. The heads are drawn as intended; the fingerprints are stale.
+  Not changed.
