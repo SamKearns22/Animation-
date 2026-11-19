@@ -69,6 +69,9 @@ WHOLE HEAD (chat 16, Sam: "draw the face shape from the reference a lot more int
     the turned views go round on the drawn outline (_turn_widths). The beard is face skin to the segmenter already
     (it counts as jaw). Kittest facehouse_head_proportions. shape_push 1 draws the photos' shape as measured.
 
+FOCUS (front-on focus C2, 19 Nov): sp['focus'] -1 .. +1 moves the front head's pieces toward where they look
+    (focus.py); 0 draws exactly as before.
+
 Map: reading the pick 67 | the traced outline 81 | the brows checked 156 | colours 270 | the head 290 (layout 294) |
      hair: swept 400, braids 436 (measured hair 437, crown 528, plaits 552, behind the neck 583, collar 604, the
      piece 615) | glasses 645 | age lines 675 | the person 725 | sheet 799 | main 874
@@ -87,6 +90,7 @@ import people_parts as PP                        # noqa: E402  (the house head s
 from people_parts import AV, P4, dk, INK, curve, oval  # noqa: E402
 from midterminal_cast import blend               # noqa: E402
 from ed import open_curve                        # noqa: E402
+import focus as FO                               # noqa: E402  (C2: where a front-on head looks)
 
 # ---------------------------------------------------------------------------------------------- reading the pick
 def pick_dir(name, src=None):
@@ -621,37 +625,38 @@ def _head(img, p, sp, t, hx, hy):
         L['dome_wide'] = kh.get('dome_wide')              # half width over the temples (face units), the photos'
     if kh.get('shape') and kh.get('outline'):               # the outline traced off the front photos (trace())
         L['trace'] = kh['outline']
-    f = P4.Face(hx, hy)
+    FF = FO.Focus(P4.Face(hx, hy), sp, L, _focus_room(L, kh))   # C2 (19 Nov): where they look; off at focus 0
+    f = FF.whole
     skin = sp['skin']
     hc = sp['hair_c']
     piece = kh['hair']
     if piece == 'braids':
         braids_behind(p, f, L, hc, kh, sp)
     if piece != 'braids':                                 # her plaits cover the ears
-        ears(p, f, _ear_L(L), skin, kh.get('ear_k', 1.0))
+        ears(p, FF.ears, _ear_L(L), skin, kh.get('ear_k', 1.0))
     o = curve(f.pts(face_outline(L, -0.42 if piece != 'braids' else _hair(L, kh)['crown'] + 0.06)), 4)
     p.poly(o, skin, INK, 2.6)
     if lk['sockets'] and kh['eyes'].get('shade', 0) >= 0.1:
-        sockets(p, f, L, skin, kh['eyes']['shade'])
+        sockets(p, FF.eyes, L, skin, kh['eyes']['shade'])
     ey = kh['eyes']
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', kh.get('lid', 0.12))), tuple(kh.get('iris_c') or ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
+    P4.eyes(p, FF.eyes, L, dict(sp, lid4=sp.get('lid4', kh.get('lid', 0.12)), look=FO.look(sp)), tuple(kh.get('iris_c') or ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
             liner=_eye(kh, 'liner', 2.8) + 1.6 * kh.get('lashes', 0.0), iris_r=kh.get('iris_r', min(1.15, ey.get('iris_r', 0.95))),
             pupil_r=kh.get('pupil_r', min(0.5, ey.get('pupil_r', 0.42))), scale=_eye(kh, 'eye_scale', 1.0))
     if kh.get('lashes'):
-        lashes(p, f, L, sp, kh['lashes'], _eye(kh, 'eye_scale', 1.0))
-    P4.brows(p, f, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0),
+        lashes(p, FF.eyes, L, sp, kh['lashes'], _eye(kh, 'eye_scale', 1.0))
+    P4.brows(p, FF.brows, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0),
              kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0), _peak(kh))
-    P4.nose(p, f, L, skin)
-    age_lines(p, f, L, skin, kh['age'], lk)
+    P4.nose(p, FF.nose, L, skin)
+    age_lines(p, FF.lines, L, skin, kh['age'], lk)
     if kh.get('beard'):
         stubble(p, f, L, skin, kh['beard'])
-    fx, my = f(0.0, L['lip13'])
+    fx, my = FF.mouth(0.0, L['lip13'])
     m = kh.get('mouth')
     if m:                                                 # the person's own resting mouth (chat 8: the likeness push)
         PP.AV.MC.TC.talk_or(p, dict(sp, lips=True, lip_c=kh['lip']), 0.0, fx, my - 6, lambda: PP.AV.vance_mouth(
-            p, f, L, m['kind'], kh['lip'], skin, m.get('wide', 1.12), m.get('gap', 0.0), m.get('creases', 1.0), m.get('drop')))
+            p, FF.mouth, L, m['kind'], kh['lip'], skin, m.get('wide', 1.12), m.get('gap', 0.0), m.get('creases', 1.0), m.get('drop')))
     else:
-        P4.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0)), kh['lip'], (fx, my - 6))
+        P4.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', 0.0)), kh['lip'], (fx, my - 6))
     if piece == 'swept':
         swept(p, f, L, hc, kh, lk)
     elif piece == 'bald':
@@ -659,10 +664,23 @@ def _head(img, p, sp, t, hx, hy):
     elif piece == 'braids':
         braids(p, f, L, hc, lk, kh)
         if kh.get('ears'):                                # over the plaits, as the pick drew them (K1: her width)
-            AV._ears(p, f, _ear_L(L), skin)
+            AV._ears(p, FF.ears, _ear_L(L), skin)
     if kh.get('glasses'):
-        glasses(p, f, L, kh['glasses'])
+        glasses(p, FF.lens, L, kh['glasses'])
     return fx
+
+
+def _focus_room(L, kh):
+    """How far the far eye, brow and lens may slide under focus: the outline's half width at the eye line less the
+    outermost of the eye's corner and the glasses' outer rim (glasses()' own sums), less a hair."""
+    if not kh.get('focus_room', True):
+        return None
+    ew = L['ew']
+    outer = L['ecx'] + ew * 0.5 * _eye(kh, 'eye_scale', 1.0)
+    g = kh.get('glasses')
+    if g:
+        outer = max(outer, min(L['ecx'] + g['cx'] * ew + g['w'] * ew * g.get('w_k', 1.0) / 2, L['fw'] * 0.5))
+    return _face_u(L, L['eye_y']) - outer - 0.012
 
 
 def ears(p, f, L, skin, k=1.0):

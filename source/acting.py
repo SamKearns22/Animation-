@@ -33,7 +33,9 @@ THE LANGUAGE (story/FILM-moves.txt; '#' starts a comment)
     keys CH [from T]: V at T | V at T          a channel eased through values (first line for a channel sets it, a
                                                second adds); 'from T': only after T. CH: lean, nod, roll, head_dy,
                                                shoulders (sh/arms ride, lean follows), head_yaw, and the eyes: look,
-                                               gaze, lid, head_dx (moved onto the face)
+                                               gaze, lid, head_dx (moved onto the face), focus (-1 screen left ..
+                                               1 right: where a front-on listener looks; the eyes lead by 0.17 s,
+                                               the face's slide and tilt follow: focus, not turn; focus.py)
     idle: CH A sine P | CH A shifts SEED H0 H1 | CH A pulse P W [, quiet while MOVE]     life that is always on
     face: ..., head down 8 | gaze V eased from A over D | blink off|shut from A to B | MOOD while MOVE above X
     walk: ... facing -90, turns 0 at T, still bob from T, settle T to T (times allowed), sway 0
@@ -604,7 +606,8 @@ def walk_time(w):
     return math.hypot(w['b'][0] - w['a'][0], w['b'][1] - w['a'][1]) / moves.speed(w['gait'])
 
 
-EYES = ('look', 'gaze', 'lid', 'head_dx')            # channels the face draws (views.person reads them from sp)
+EYES = ('look', 'gaze', 'lid', 'head_dx', 'focus', 'focus_eyes')   # channels the face draws (from sp); focus:
+EYES_LEAD = 0.17                                     # front-on focus (focus.py), the eyes two drawings ahead
 ALIAS = {'roll': 'head_roll'}
 
 
@@ -639,6 +642,9 @@ def channels(b, clock, t, table):
         v = _keys_at(t, [(clock(at), x) for x, at in kl['keys']])
         c = ALIAS.get(kl['ch'], kl['ch'])
         put[c] = put.get(c, 0.0) + v
+        if c == 'focus':                         # C2 (19 Nov): the eyes lead, the face's slide and tilt follow
+            put['focus_eyes'] = put.get('focus_eyes', 0.0) + _keys_at(t + EYES_LEAD,
+                                                                       [(clock(at), x) for x, at in kl['keys']])
     curve, add = {}, {}
     for m in b['body']:
         vals, u = body_value(m, t, clock, table, with_u=True)
@@ -815,6 +821,9 @@ def person(desc, film, key, t):
         sp['gaze_dy'] = eyes['gaze']
     if 'lid' in eyes:
         sp['lid4'] = eyes['lid']
+    for c in ('focus', 'focus_eyes'):                # front-on focus (C2): 'keys focus: 0 at A | 1 at B'
+        if c in eyes:
+            sp[c] = eyes[c]
     sp.update(ex)
     hy = j.pop('head_yaw', None)
     hy = hy if hy is not None and abs(hy) > 0.5 else None

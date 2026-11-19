@@ -1,0 +1,82 @@
+{
+ "film": "front-on-focus",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "stage": "cast",
+    "date": "2026-11-19",
+    "hunt": 1,
+    "faults": 5,
+    "cant_tell": 3,
+    "open": [
+     "1,3-4,6-7,9 P2: head and eyes - the focus panels barely differ from the straight-out baseline (2, 5, 8); at phone size the look direction does not read. No clea",
+     "1,3,7,9 P14: eyes - glasses and heavy brows hide the pupils; the pupil position cannot be seen, so the gaze is unreadable and pupils sit near or on the lens rim",
+     "7,9 P4: face - the purple-haired person's piercings and face detail shift between panels (the eyebrow stud and mouth stud move or vanish), so the design does no",
+     "7-9 P11: neck - a thin choker-like line at the neck and a very short neck; the head sits almost on the shoulders.",
+     "3,6,9 P8: mirrored panels - the mirrored (right) versions look like copies of the left ones with only slight shifts; the nose tip turn and brow lift are not mir",
+     "1-9 P10: no contact in any panel; nothing to check.",
+     "1-9 P12: mouths are closed or still in all panels; no speech labelled.",
+     "1-9 P1: no props held."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 2,
+    "stage": "cast",
+    "date": "2026-11-19",
+    "hunt": 2,
+    "faults": 6,
+    "cant_tell": 2,
+    "open": [
+     "1,3-4,6-7,9 A1 P2: whole sheet at phone size - gaze direction does not read. My cold look called 1 and 3 \"neutral stare\", 7 and 9 \"bored/sneering\"; the left/rig",
+     "1,3-4,6-7,9 P2: face - the brief asks for features slid left/right inside the outline, a lifted side brow and a slight head tilt. Only the pupils and a faint br",
+     "7-9 P4: face - brief lists nose, brow and lip piercings; I see a lip/chin stud and a nose ring, the brow piercing is hard to find and tiny. Hair design (purple/",
+     "7-9 P11: neck - a thin line or choker-like strip between head and black top, neck very short and dark-on-dark; head looks sunk into the collar. Check Andy and K",
+     "7-9 P13: sleeves/body - black top on black skirt/dress merges, no visible cuff or sleeve end, a lower panel of folds that stops short; sleeves read as one slab.",
+     "1-9 P7: bottom edge - bodies are cropped at the knees/shins; feet and ground not shown (only slivers of shoes on 1-3), so weight and footing cannot be judged.",
+     "1,3-4,6-7,9 P14: whether pupil, iris and shine stay inside the eye outline at the hardest glance; a full-size face crop of each glance would show it.",
+     "1-9 P12: single mouth at all glances; mouths look closed, one mouth each, but a mouth crop on the glance panels would confirm no doubled lip."
+    ]
+   }
+  ],
+  "lines": {
+   "P2": {
+    "faults": 3,
+    "false": 0
+   },
+   "P14": {
+    "faults": 1,
+    "false": 0
+   },
+   "P4": {
+    "faults": 2,
+    "false": 0
+   },
+   "P11": {
+    "faults": 2,
+    "false": 0
+   },
+   "P8": {
+    "faults": 1,
+    "false": 0
+   },
+   "A1": {
+    "faults": 1,
+    "false": 0
+   },
+   "P13": {
+    "faults": 1,
+    "false": 0
+   },
+   "P7": {
+    "faults": 1,
+    "false": 0
+   }
+  }
+ }
+}

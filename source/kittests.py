@@ -3006,6 +3006,73 @@ def drawn_angle_every_film():
 
 
 @test
+def focus_front_heads():
+    """C2 (front-on focus, Sam: Y to all, 19 Nov): the focus setting on both front heads (focus.py). At focus 0 every
+    finished film draws exactly as before: Andy and Kemi on the house head, a Milburn frame of invented kit faces
+    (5 s), one of Andy and Pat (32 s), a Protest Tiers frame (3 s), pixel for pixel (held the moment before focus was
+    put in). At full focus every piece is MOVED, never warped: each piece keeps every distance between its points on
+    one side of the face (the tilt only turns it), and the face outline stays where it was (tilt off)."""
+    import hashlib
+    import importlib
+    import math as M
+    import shutil
+    import tempfile
+    import burnham as B
+    import facehouse as FH
+    import figure as F
+    import focus as FO
+    if 'kittests' not in F._ALLOW:
+        F._ALLOW.append('kittests')
+    held = {('milburn', 5.0): '43bc2edeac0c1b05fb6c82c9db1d6506', ('milburn', 32.0): 'a09b39a210cd9a0d57b1ac98321ef4c5',
+            ('protest_tiers', 3.0): '179c6924fa812ef9c7ab7e9fcf570a97'}
+    heads = {'burnham': '840197c25a2801e6cde010a48eb1797d', 'badenoch': 'de6b4e6f7ca6c106e5626a65be453c41'}
+    B.SS = 1
+    same = []
+    for (name, t), h in held.items():
+        if hashlib.md5(importlib.import_module(name).frame_image(t).tobytes()).hexdigest() == h:
+            same.append(f'{name} {t:g}')
+    tmp = tempfile.mkdtemp()
+    try:
+        for n, h in heads.items():
+            if hashlib.md5(open(FH.draw(n, 'detail', os.path.join(tmp, n + '.png')), 'rb').read()).hexdigest() == h:
+                same.append(n)
+    finally:
+        shutil.rmtree(tmp)
+
+    class Face:
+        tq = 0.0
+
+        def __call__(self, u, v):
+            return (540 + u * 172, 300 + v * 172)
+    L = dict(eye_y=0.42, nose_y=0.66, fw=0.8)
+    pts = [(-0.3, 0.4), (-0.12, 0.45), (-0.2, 0.36), (0.12, 0.44), (0.3, 0.38), (0.2, 0.47)]
+    rigid = True
+    for sp in (dict(focus=1.0), dict(focus=-0.7), dict(focus=1.0, focus_tilt=0.0)):
+        Fo = FO.Focus(Face(), sp, L, room=0.03)
+        for piece in (Fo.eyes, Fo.brows, Fo.lens, Fo.mouth, Fo.lines, Fo.ears, Fo.whole):
+            for side in ([p for p in pts if p[0] < 0], [p for p in pts if p[0] > 0]):
+                a = [Face()(*p) for p in side]
+                b = piece.pts(side)
+                for i in range(len(a)):
+                    for j in range(i):
+                        if abs(M.dist(a[i], a[j]) - M.dist(b[i], b[j])) > 1e-6:
+                            rigid = False
+    cast, B2, V = FO._cast('facetool', ('andy', 'kemi'))
+    kept = moved = 0
+    import numpy as np
+    for w in ('andy', 'kemi'):
+        base = np.asarray(FO.bust(cast[w], 0.0, B2, V))
+        look = np.asarray(FO.bust(cast[w], 1.0, B2, V, extra=dict(focus_tilt=0.0)))
+        sil = lambda a: np.argwhere((np.abs(a.astype(int) - (236, 232, 226)).sum(2) > 30)[:200])   # noqa: E731
+        moved += int((np.abs(base.astype(int) - look.astype(int)).sum(2) > 60).sum() > 300)
+        sb, sl = sil(base), sil(look)
+        kept += int(abs(sb[:, 1].min() - sl[:, 1].min()) <= 6 and abs(sb[:, 1].max() - sl[:, 1].max()) <= 6)
+    ok = len(same) == 5 and rigid and moved == 2 and kept == 2
+    return ok, (f'held at focus 0: {same}; pieces moved not warped: {rigid}; faces changed at full focus: {moved}/2; '
+                f'head outline kept: {kept}/2')
+
+
+@test
 def crowds_varied():
     """Craft change 1 (Sam, 16 Nov): the sameness check: EPR's gold hats (9 of 20 hats), one-model police and one-face
     rioters, the bald share, a place's skin mix, a crowd step that skips list items, and neighbours in step."""

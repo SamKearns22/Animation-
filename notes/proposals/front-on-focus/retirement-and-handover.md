@@ -15,11 +15,18 @@ Not tools: park.py, duel.py are finished film files and stay (corrections.md).
 ## Sam's answer (19 Nov, evening)
 "Y to all. Do we have a plan for if we actually do need a 3/4 pose?" Read as: Y to L1-L3, C1-C5, and the retirement list (archive, never delete; R3-R5 kept, marked "kept for Blessed / Milburn / Protest Tiers"; R7 fixed, not retired). His 3/4 question was answered, not acted on: the real turn stays for walks, exits, backs and any shot with a written reason; a 10-15 degree turn comes free with C2; a true 45-degree turn still uses the face tool's turned head, which keeps the faults in famous-turned-now.jpg (thin far glasses, flat hair, long neck from behind). Proposed fix (needs its own Y): the first film that truly needs one fixes those three faults on the turned head, critiqued alone first (rule 89), and the 18 Nov three-quarter steps 2 (torso) and 3 (cast-sheet tile) are done with it.
 
-## Where things stand (job 1, 19 Nov, evening)
-- Rules that bite next: 38 (front on), 89 (new pieces critiqued alone), 13 (exceptions listed).
-- Done: proposal adopted (Sam: Y to all). Nothing built yet.
-- Next: chat 2, Opus high: build C1 (the drawn-angle check on every film) and C2 (focus on both front heads; test on Andy and Kemi, one sheet to Sam). Then a Sonnet chat: L1-L3 (turned seconds; blind route-pick test; the goth on both heads). Then C3, C4 from their results; then archive R1, R2, R6 after a last search.
-- Needs Sam: the 3/4 question's proposed fix (Y or N); the goth sheet (L3) when it comes.
-- Read: job pack "A tool job"; notes/proposals/front-on-focus.md "Final version"; this file.
-- Open rule requests: none.
-- For Claude: rule 38 hole at preflight.py:409 (drawn angle checked only with no rooms plan); test scripts fronton.py, slide.py; corrections.md (park, duel are films). Branches named, not merged: claude/aim-check-study-oe8z4g (another chat's live work, 2 h old), claude/blessed-c2-mics-wip (unfinished Blessed, stays off). Cost: job 1 took about 4.1% of a week (cost watch); the shared proposal-route ledger has no estimate, so no forecast line (named, not this job's to set).
+## Chat 2 record (19 Nov, Opus high)
+- C1 built: pre-flight reads the drawn angle on every film (posecheck.set_marks now in install_probes, so the animatic's drawing pass checks it too; before, it was never set during a render); three frames per marked shot drawn before any animatic; a CAST key matches the drawn name; head turns count. Milburn: all four in scenes 3 and 6 flagged at 40 degrees, plus Andy at 29 in 4c. Clean and matched: ad_vanced_notice, midterminal, patriots4, terfwarts. halo_no_no: COULD NOT TEST (Musk not drawn by name through the kit). Kittest drawn_angle_every_film.
+- C2 built: focus.py (focus -1..+1, focus_tilt, focus_turn, focus_eyes) in facehouse._head and people_parts._front_head; the far eye and lens stop at the outline (Andy's glasses); acting.py `keys focus` (eyes lead 0.17 s). focus 0 identical (kittest focus_front_heads: Andy, Kemi, Milburn 5 s and 32 s, Protest Tiers 3 s).
+- Critique (rule 89), two hunts, no third: both said the look does not read at phone size in a whole-body medium shot. Hunt 1 at 60% of a real turn; raised to 85% with stronger pupils; hunt 2 still "barely". Named to Sam with the sheet (focus-sheet.jpg). Not focus faults (existing designs, named): goth's short neck and black sleeves, crop at the shins.
+- Kittests: facehouse_whole_head green again (re-held: both heads changed only at 594f94ba, Sam's 14 Nov shadow removal). places_from_a_description and moves_from_the_acting_list fail only because milburn.py uses those kits without a recorded Y (named in the watcher).
+- Start check settled: the 17:18 cross-session correction (chat 1's brief was in a scheduled task) and Sam's 17:36 "simple communication tool isn't working, not following your explanations" were chat 1's; the plain-words rule now at the top of CLAUDE.md answers the second.
+
+## Where things stand (job 1, 19 Nov, chat 2 end)
+- Rules that bite next: 38 (front on: the drawn-angle check now refuses), 89 (critique), 13 (exceptions listed).
+- Done: C1 and C2 built and tested; sheet focus-sheet.jpg sent to Sam with the phone-size fault named.
+- Next: chat 3, Sonnet medium: L1 (Milburn and Protest Tiers turned seconds), L2 (blind route-pick test), L3 (the goth on both heads, now with focus; sheet to Sam). Then Opus: C3, C4 from their results; archive R1, R2, R6 after a last search.
+- Needs Sam: (1) stronger look or add a body cue (from the focus sheet); (2) the 3/4 fix (Y or N, still open from chat 1).
+- Read: job pack "A tool job"; notes/proposals/front-on-focus.md "Final version"; this file's chat 2 record.
+- Open rule requests: none found.
+- For Claude: focus.py MAP; posecheck.turn check in preflight.turn_sample; kittests drawn_angle_every_film, focus_front_heads. Main-line branch claude/create-claude-md-oe8z4g; this chat's branch claude/front-on-chat2. Branches named, not merged: claude/aim-check-study-oe8z4g (another chat's), claude/blessed-c2-mics-wip (stays off). The shared proposal-route ledger has no estimate, so no cost line (named, not this job's to set); this chat about 2% of a week.

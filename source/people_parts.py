@@ -16,6 +16,7 @@ import ad_vanced_notice_cast as AV     # noqa: E402  (installs midterminal's hoo
 from midterminal_cast import B, P4, dk   # noqa: E402
 from ed import INK, curve, oval  # noqa: E402
 import turnhead as TH  # noqa: E402
+import focus as FO  # noqa: E402  (C2, 19 Nov: where a front-on face looks)
 
 LONG_STYLES = ('bob', 'long', 'curly', 'bun', 'shag')   # hair that has a mass behind the head, drawn before it
 
@@ -224,14 +225,17 @@ def _front_head(img, p, sp, t, hx, hy):
     fc = sp['kit_face']
     L = face_layout(fc)
     up = max(0.0, -sp.get('gaze_dy', 0.0))                 # looking up at the TV: the face tips up a little
-    f = P4.Face(hx, hy, down=-0.8 * up)
+    gw = (L['ew'] * (0.86 if fc.get('glasses_thick') else 0.78)) if fc.get('glasses') else L['ew'] * 0.5
+    FF = FO.Focus(P4.Face(hx, hy, down=-0.8 * up), sp, L, L['fw'] * 0.5 - L['ecx'] - gw - 0.012)   # C2 (19 Nov): where
+    #                                                         they look (focus.py); off at focus 0
+    f = FF.whole
     skin, hc = sp['skin'], sp.get('hair_c', (40, 32, 28))
     fw, fhw = L['fw'], L['fhw']
     e, c = fw * 0.5, fhw * 0.5
     if fc['hair'] in LONG_STYLES:
         _hair_mass(p, f, L, fc, hc)
     if fc['hair'] not in ('bob', 'long', 'curly', 'shag'):
-        AV._ears(p, f, L, skin)
+        AV._ears(p, FF.ears, L, skin)
     outl = _dome_outline(L) if bare_skull(fc) else _outline(L)
     p.poly(curve(f.pts(outl), 4), skin, INK, 2.6)
     jaw = [(-e, 0.5), (-L['jw'] * 0.5, 0.82), (-0.08, 0.98), (0.0, 1.0), (0.08, 0.98), (L['jw'] * 0.5, 0.82), (e, 0.5),
@@ -239,7 +243,7 @@ def _front_head(img, p, sp, t, hx, hy):
            (-L['mw'] * 0.75, L['lip17'] + 0.04), (-e * 0.7, 0.62)]
     if fc.get('stub'):                                        # stubble: a shade over the jaw and the upper lip
         p.poly(curve(f.pts(jaw), 3), dk(skin, fc['stub']), None)
-        p.poly(curve(f.pts([(-L['mw'] * 0.6, L['lip0'] - 0.005), (0.0, L['nose_y'] + 0.01),
+        p.poly(curve(FF.mouth.pts([(-L['mw'] * 0.6, L['lip0'] - 0.005), (0.0, L['nose_y'] + 0.01),
                             (L['mw'] * 0.6, L['lip0'] - 0.005), (0.0, L['lip0'] + 0.01)]), 3), dk(skin, fc['stub']), None)
         rng = np.random.default_rng(len(who))
         for _ in range(60):
@@ -251,7 +255,7 @@ def _front_head(img, p, sp, t, hx, hy):
     if fc.get('beard'):                                       # a short boxed beard and a moustache
         b = fc['beard']
         p.poly(curve(f.pts(jaw), 3), b, INK, 1.6)
-        p.poly(curve(f.pts([(-L['mw'] * 0.72, L['lip13'] + 0.02), (-L['mw'] * 0.6, L['lip0'] - 0.01),
+        p.poly(curve(FF.mouth.pts([(-L['mw'] * 0.72, L['lip13'] + 0.02), (-L['mw'] * 0.6, L['lip0'] - 0.01),
                             (0.0, L['nose_y'] + 0.012), (L['mw'] * 0.6, L['lip0'] - 0.01),
                             (L['mw'] * 0.72, L['lip13'] + 0.02), (L['mw'] * 0.5, L['lip0'] + 0.006),
                             (0.0, L['lip0'] - 0.002), (-L['mw'] * 0.5, L['lip0'] + 0.006)]), 3), b, INK, 1.4)
@@ -260,24 +264,24 @@ def _front_head(img, p, sp, t, hx, hy):
             u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.72, 0.95)
             if abs(u) < L['jw'] * 0.5 * (1.0 - (v - 0.82) * 2.2) and abs(u) > L['mw'] * 0.6:
                 p.line([f(u, v), f(u + 0.004, v + 0.02)], (120, 116, 112), 1.4)       # flecks of grey
-    face_detail(p, f, L, fc, skin)
+    face_detail(p, FF.lines, L, fc, skin)
     if fc.get('freckles'):
         rng = np.random.default_rng(31)
         for _ in range(22):
             sgn = 1 if rng.random() < 0.5 else -1
             u, v = sgn * rng.uniform(L['nw'] * 0.4, L['ecx'] + 0.04), rng.uniform(L['eye_y'] + 0.08, L['nose_y'])
-            p.poly(oval(*f(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up)), fc['iris'], dk(skin, 0.8),
+            p.poly(oval(*FF.lines(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
+    P4.eyes(p, FF.eyes, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up), look=FO.look(sp)), fc['iris'], dk(skin, 0.8),
             liner=2.6)
     if fc.get('pencil'):                                      # a pencil moustache: one thin line above the lip
-        pencil(p, f, L, fc)
+        pencil(p, FF.mouth, L, fc)
     if fc.get('glasses'):
-        _glasses(p, f, L, fc['glasses'], fc.get('glasses_thick'))
-    P4.brows(p, f, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
+        _glasses(p, FF.lens, L, fc['glasses'], fc.get('glasses_thick'))
+    P4.brows(p, FF.brows, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
              sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
-    P4.nose(p, f, L, skin)
-    fx, my = f(0.0, L['lip13'])
-    P4.lips(p, f, L, dict(sp, smile=sp.get('smile', -0.4)), fc['lip'], (fx, my - 6))
+    P4.nose(p, FF.nose, L, skin)
+    fx, my = FF.mouth(0.0, L['lip13'])
+    P4.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', -0.4)), fc['lip'], (fx, my - 6))
     hl = -0.06
     if fc['hair'] in LONG_STYLES + ('receding', 'pony'):
         _hair_front(p, f, L, fc, hc, skin)
@@ -305,7 +309,7 @@ def _front_head(img, p, sp, t, hx, hy):
             p.line(curve(f.pts([(u0, -0.36 + 0.02 * k), (u0 + 0.08, -0.2), (u0 + 0.13, -0.04 + 0.01 * k)]), 3),
                    dk(hc, 0.72), 1.4)
     if fc.get('piercings'):                                   # Milburn note 2 (17 Nov): drawn last, over the fringe
-        piercings(p, f, L, fc, sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
+        piercings(p, FF.marks, L, fc, sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
     return fx
 
 
