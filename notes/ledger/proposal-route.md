@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 80.24%; 36 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate ?% of a week; spent 80.5%; 36 chats, 0 rounds, 0 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -39,7 +39,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-19 | 86bc5e6a | est | sonnet | auto |  | 0.59 |  | 0 | 0 |
 | 2026-11-19 | 87a9ac49 | est | sonnet | auto |  | 1.38 |  | 0 | 0 |
 | 2026-11-19 | 689989ae | est | sonnet | auto |  | 1.66 |  | 0 | 0 |
-| 2026-11-19 | 479f8e85 | est | sonnet | auto |  | 1.14 |  | 0 | 0 |
+| 2026-11-19 | 479f8e85 | est | sonnet | auto |  | 1.4 |  | 0 | 0 |
 | 2026-11-19 | f879fe96 | est | opus | auto |  | 6.09 |  | 0 | 0 |
 | 2026-11-19 | 6561bc9b | est | opus | auto |  | 3.35 |  | 0 | 0 |
 | 2026-11-19 | 7d6b30b4 | est | sonnet | auto |  | 0.07 |  | 0 | 0 |
@@ -66,7 +66,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-19 86bc5e6a (auto): 42 steps, history 171k at the end; other 72.9%, tool search 26.7%, renders 0.4%
 - 2026-11-19 87a9ac49 (auto): 43 steps, history 133k at the end; other 83.9%, tool search 16.1%
 - 2026-11-19 689989ae (auto): 61 steps, history 184k at the end; other 83.9%, tool search 12.2%, renders 3.9%
-- 2026-11-19 479f8e85 (auto): 32 steps, history 118k at the end; other 72.2%, tool search 21.1%, page.py 6.7%
+- 2026-11-19 479f8e85 (auto): 49 steps, history 135k at the end; other 77.9%, tool search 18.2%, page.py 3.8%
 - 2026-11-19 f879fe96 (auto): 64 steps, history 189k at the end; other 80.5%, tool search 14.8%, page.py 3.1%, whole-file .py read 1.6%
 - 2026-11-19 6561bc9b (auto): 96 steps, history 253k at the end; other 69.3%, tool search 24.4%, pictures 5.7%, renders 0.6%
 - 2026-11-19 7d6b30b4 (auto): 6 steps, history 88k at the end; other 85.5%, tool search 14.5%
