@@ -1,0 +1,36 @@
+{
+ "film": "halo-no-no",
+ "estimate": null,
+ "chats": [
+  {
+   "date": "2026-11-19",
+   "chat": "36aa6e17",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.27,
+   "src": "estimate",
+   "sid": "session_01J1JB7XvoNMnKfot6e3v1E1",
+   "steps": 26,
+   "hist_k": 105,
+   "kinds": {
+    "film-file search": 12.6,
+    "tool search": 10.0,
+    "renders": 1.5,
+    "other": 76.0
+   },
+   "calls": {
+    "film-file search": 12,
+    "tool search": 9,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "renders": 2,
+    "pictures": 0,
+    "other": 1
+   }
+  }
+ ],
+ "checks": {}
+}
