@@ -4,9 +4,9 @@
 - **Rules that bite next:** the proposal route (`source/propose.py`), 85 (cost watch), CLAUDE.md "Rules are permanent" (retire only after three films, Sam's Y).
 - **Done (job 4, Opus high, 19 Nov):** Sam's "All 3" put through the route: notes/proposals/cost-other.md, cold-start.md, check-catches.md (each: problem, facts, two helpers, blind judge). All three verdicts recorded (propose.py status: verdict ok). Side finding: notes/proposals/cost-other/milburn-usage.md (app's own usage, 13 of 15 Milburn chats: $74.59 real vs $73.84 estimated; re-read 45%, write 30%, output 25%), so the gap from 32.4% to Sam's 22% is the week-size figure (WEEK_USD 245, provisional), not the step estimate; the brief's "$32.40" was 32.4% of a week. Nothing built, no tool changed.
 - **Next (Sonnet, default effort; routine: recording, showing, sending):** `propose.py show cost-other`, `show cold-start`, `show check-catches`; one message to Sam: Need line, each idea's top two in plain English with Lost/Added and its Critiqued line, numbered questions (CLAUDE.md "Back-end proposals"); push notification; stop for his numbers.
-- **Needs Sam:** his pick by number for each of the three (after the next chat sends them). Change no tool until then.
+- **Needs Sam:** SENT 19 Nov (job 4 chat 2): his numbers 1-3 (cost-other, cold-start, check-catches: option 1 or 2 each) and 4 (cold-start vs chat-size-and-model). Change no tool until then.
 - **Read:** this section; then `propose.py show NAME` output only. No pack needed.
-- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker.
+- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker, claude/job1-front-on-focus (job 1's own work, not mine; left for job 1). Ledger flag: system job, no film estimate (expected).
 - **For Claude:** job 1's retire proposal was not in notes/proposals/ at 17:30; check-catches feeds it. cold-start overlaps chat-size-and-model (open): say so to Sam. Judging cost ~4.3% of a week (6 helpers + 3 judges). Handover check's one flag (no ledger estimate for proposal-route) is expected: system jobs carry no film estimate.
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
