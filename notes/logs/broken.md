@@ -1,5 +1,5 @@
 # Broken (watcher.py): each stays until fixed or named
 
   - named 2026-11-17 09:12 | guard | chat D (20721d48): the live test of finish.py ran because the app had not loaded the new PreToolUse hook mid-chat; the guard refuses the same input when run directly; the first chat after D proves it live
-- 2026-11-19 17:24 | unlisted | cost_faults has no promise in the watcher (source/watcher.py PROMISES): add one and a kittest
   - named 2026-11-19 20:26 | kittests | job 4 chat 3, 19 Nov: in this container setup.sh's pip install (150 s cap) did not finish (scipy, numba, mediapipe missing), so most kit tests failed on import; after a manual install the ledger and cost tests pass. round_page and facehouse_whole_head are job 1's (named in proposal-route notes). The 150 s cap needs a fix through the proposal route.
+  - named 2026-11-19 20:26 | unlisted | cost_faults has had its promise since 19 Nov (watcher.py PROMISES, kittest quiet_cost_line); 'watcher.py unlisted' prints: every system has a promise
