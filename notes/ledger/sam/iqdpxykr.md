@@ -38,3 +38,8 @@ Why did you break a 'rule'
 ### 2026-11-19T10:05:14
 A rule should function. If it doesn't function, you built it wrong.
 
+### 2026-11-19T10:20:51
+A rule should function. If it doesn't function, you built it wrong. 
+
+Can this important statement be built into our project in any meaningful way?
+
