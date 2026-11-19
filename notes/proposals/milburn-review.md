@@ -60,3 +60,6 @@ Why it was over the 15% aim, not over the estimate: the screenplay doubled (34 s
 Critiqued: none attached; each lesson goes through the proposal route on Sam's number, with its own "Critiqued: N found, N fixed, N named" line, before anything is built.
 
 Open rule requests found in the film's notes: none.
+
+## Sam's answers (19 Nov) and the queue for the proposal route
+Order: 1, 3, 4, 8 (Sam Y), 2 (not deleting checks: each old line fixed, or dropped only under the three-films rule with his Y on a Lost line), 6 (guard: fix and test on the five Milburn messages), 9 (brow limit enforced by the kit, Sam yes), 11 (a check that the plain-language rule is followed: steps, Lost/Added, every technical word explained), 12 (no rule without a working check: line in CLAUDE.md, audit of every rule, gate on new rules, test each check on a known-bad example; Sam Y). Dropped: 5 (already queued), 7 (stays manual), 10 (rule 38 covers it). Results come back as one numbered message in the plain format.
