@@ -32,6 +32,32 @@
     "renders": 6,
     "pictures": 10,
     "other": 10
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "film notes": 7,
+     "guides": 4,
+     "other": 2,
+     "shared:branches.py": 1,
+     "shared:ledger.py": 1,
+     "shared:satire_template.py": 2,
+     "shared:people.py": 10,
+     "shared:likeness.py": 2,
+     "shared:views.py": 2,
+     "shared:people_parts.py": 2,
+     "shared:people_famous.py": 1,
+     "shared:burnham.py": 1,
+     "shared:traitors_cast.py": 2,
+     "shared:critique.py": 1,
+     "shared:kittests.py": 1,
+     "shared:handover.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -64,6 +90,32 @@
     "renders": 5,
     "pictures": 12,
     "other": 22
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 6
+    },
+    "other": {
+     "other": 6,
+     "shared:handover.py": 3,
+     "film notes": 3,
+     "shared:kittests.py": 4,
+     "guides": 3,
+     "shared:satire_template.py": 1,
+     "shared:protest_tiers.py": 1,
+     "shared:places.py": 4,
+     "shared:people.py": 4,
+     "shared:views.py": 1,
+     "shared:rough.py": 3,
+     "shared:critique.py": 9,
+     "shared:places_parts.py": 3,
+     "shared:places_outside.py": 1,
+     "shared:places_tables.py": 1,
+     "shared:people_parts.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -96,6 +148,38 @@
     "renders": 5,
     "pictures": 18,
     "other": 21
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 24
+    },
+    "other": {
+     "other": 4,
+     "shared:handover.py": 3,
+     "film notes": 4,
+     "shared:acting.py": 9,
+     "shared:blessed.py": 4,
+     "shared:mouths.py": 2,
+     "shared:people_parts.py": 9,
+     "shared:people.py": 4,
+     "shared:sitting.py": 1,
+     "shared:ad_vanced_notice_sets.py": 1,
+     "shared:patriots4_cast.py": 1,
+     "shared:moves.py": 1,
+     "shared:views.py": 1,
+     "shared:film_engine.py": 1,
+     "shared:mixaudio.py": 1,
+     "shared:series.py": 1,
+     "shared:burnham_film.py": 1,
+     "shared:critique.py": 10,
+     "guides": 1,
+     "shared:posecheck.py": 4,
+     "shared:headlife.py": 1,
+     "shared:preflight.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -129,6 +213,25 @@
     "renders": 10,
     "pictures": 10,
     "other": 14
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 1,
+     "after show": 8
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "shared:people.py": 4,
+     "shared:people_parts.py": 5,
+     "shared:patriots4_cast.py": 1,
+     "other": 3,
+     "film notes": 3,
+     "shared:kittests.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -162,6 +265,31 @@
     "renders": 2,
     "pictures": 18,
     "other": 26
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 13
+    },
+    "other": {
+     "other": 21,
+     "shared:handover.py": 3,
+     "film notes": 11,
+     "guides": 6,
+     "shared:burnham.py": 1,
+     "shared:kittests.py": 3,
+     "shared:facehouse.py": 21,
+     "shared:facepick.py": 6,
+     "shared:ledger.py": 2,
+     "shared:ad_vanced_notice_cast.py": 1,
+     "shared:people.py": 2,
+     "shared:turnhead.py": 1,
+     "shared:places_rooms.py": 1,
+     "shared:places_parts.py": 1,
+     "shared:places_tables.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -196,6 +324,29 @@
     "renders": 11,
     "pictures": 16,
     "other": 13
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 1,
+     "miss": 1,
+     "after show": 12
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 2,
+     "film notes": 6,
+     "shared:facehouse.py": 7,
+     "shared:people.py": 2,
+     "shared:acting.py": 5,
+     "shared:grips.py": 2,
+     "shared:ledger.py": 2,
+     "shared:views.py": 2,
+     "shared:moves.py": 2,
+     "shared:posegallery.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -228,6 +379,24 @@
     "renders": 3,
     "pictures": 6,
     "other": 16
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 18
+    },
+    "other": {
+     "other": 10,
+     "shared:handover.py": 2,
+     "film notes": 8,
+     "shared:acting.py": 1,
+     "shared:moves.py": 2,
+     "shared:prepper_fx.py": 2,
+     "shared:critique.py": 1,
+     "guides": 1
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -262,6 +431,34 @@
     "renders": 2,
     "pictures": 11,
     "other": 13
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 4,
+     "miss": 8,
+     "after show": 12
+    },
+    "other": {
+     "other": 9,
+     "shared:handover.py": 2,
+     "film notes": 6,
+     "shared:propose.py": 6,
+     "shared:views.py": 3,
+     "guides": 1,
+     "shared:places.py": 1,
+     "shared:acting.py": 4,
+     "shared:facehouse.py": 2,
+     "shared:people_parts.py": 5,
+     "shared:people_turned.py": 3,
+     "shared:turnhead.py": 1,
+     "shared:people.py": 1,
+     "shared:people_famous.py": 1,
+     "shared:preflight.py": 4,
+     "shared:kittests.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -295,6 +492,29 @@
     "renders": 11,
     "pictures": 24,
     "other": 16
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 0,
+     "miss": 6,
+     "after show": 30
+    },
+    "other": {
+     "other": 7,
+     "shared:handover.py": 1,
+     "guides": 2,
+     "shared:places_tables.py": 5,
+     "shared:places.py": 2,
+     "shared:acting.py": 1,
+     "shared:critique.py": 8,
+     "shared:mouths.py": 3,
+     "shared:kittests.py": 1,
+     "film notes": 3,
+     "shared:preflight.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -328,6 +548,25 @@
     "renders": 3,
     "pictures": 21,
     "other": 19
+   },
+   "search": {
+    "show": 3,
+    "film": {
+     "before show": 7,
+     "miss": 9,
+     "after show": 24
+    },
+    "other": {
+     "film notes": 6,
+     "shared:places.py": 3,
+     "other": 10,
+     "shared:ledger.py": 3,
+     "shared:views.py": 2,
+     "shared:kittests.py": 4,
+     "shared:places_parts.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -361,6 +600,23 @@
     "renders": 4,
     "pictures": 1,
     "other": 3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 10
+    },
+    "other": {
+     "other": 1,
+     "shared:handover.py": 1,
+     "film notes": 3,
+     "shared:posecheck.py": 6,
+     "shared:preflight.py": 2,
+     "shared:rough.py": 3,
+     "shared:plan.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {
@@ -394,6 +650,27 @@
     "renders": 5,
     "pictures": 17,
     "other": 31
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 0,
+     "miss": 14,
+     "after show": 21
+    },
+    "other": {
+     "other": 12,
+     "shared:handover.py": 2,
+     "film notes": 8,
+     "shared:places_tables.py": 3,
+     "shared:places_parts.py": 1,
+     "guides": 1,
+     "shared:cryminister.py": 2,
+     "shared:mouths.py": 1,
+     "shared:prepper.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true
    }
   },
   {

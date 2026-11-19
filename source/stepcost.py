@@ -205,6 +205,7 @@ def measure(path, film=None, helpers=True):
 
 
 SHOW = re.compile(r'(?:^|[;&|\n(]\s*)(?:cd \S+ && )?python3?\s+\S*page\.py\s+[\w-]+\s+show\b')    # a finder call (page.py FILM show ...)
+WHY = 120                                           # characters Claude wrote just before a search: its reason
 MISS = 10                                            # film searches within 10 calls after a show: the show missed
 NOTES_RE = re.compile(r'notes/[\w./-]*\.md')
 
@@ -261,7 +262,7 @@ def search_record(path, film=None):
     the first show / a miss (within MISS calls after a show) / later after a show / in a chat with no show; other
     searches by target (shared tools named per file); notes ticked; whether the chat edited the film's code."""
     film_re = _film_paths(film)
-    seq = []
+    seq, whys = [], []
     for raw in open(path, encoding='utf-8', errors='replace'):
         if '"tool_use"' not in raw:
             continue
@@ -271,11 +272,16 @@ def search_record(path, film=None):
             continue
         if d.get('isSidechain') or d.get('type') != 'assistant':
             continue
+        said = ''
         for b in (d.get('message') or {}).get('content') or []:
+            if isinstance(b, dict) and b.get('type') == 'text':
+                said = (b.get('text') or '').strip()[-WHY:] or said
             if isinstance(b, dict) and b.get('type') == 'tool_use':
                 seq.append((b.get('name'), b.get('input') or {}))
+                whys.append(said)
+                said = ''
     out = {'show': 0, 'film': {'before show': 0, 'miss': 0, 'after show': 0}, 'other': {}, 'ticked': 0,
-           'edited film code': False, 'list': []}     # list: [call number, kind, target, file, pattern] per search
+           'edited film code': False, 'list': []}     # list: [call number, kind, target, file, pattern, reason] per search
     last_show = None
     for i, (name, inp) in enumerate(seq):
         cmd = inp.get('command', '') if name == 'Bash' else ''
@@ -287,11 +293,11 @@ def search_record(path, film=None):
         if k == 'film-file search':
             key = 'before show' if last_show is None else 'miss' if i - last_show <= MISS else 'after show'
             out['film'][key] += 1
-            out['list'].append([i, 'film', key] + list(_what(name, inp)))
+            out['list'].append([i, 'film', key] + list(_what(name, inp)) + [whys[i]])
         elif k == 'tool search':
             t = _target(name, inp)
             out['other'][t] = out['other'].get(t, 0) + 1
-            out['list'].append([i, 'other', t] + list(_what(name, inp)))
+            out['list'].append([i, 'other', t] + list(_what(name, inp)) + [whys[i]])
         out['ticked'] += _ticked(name, inp)
         out['edited film code'] |= _edits_film(name, inp, film_re)
     if not out['show']:
@@ -339,7 +345,15 @@ def test():
     sr = (m or {}).get('search') or {}
     check('every search is listed with its file and pattern',
           sr.get('list') and len(sr['list']) == sum(sr['film'].values()) + sum(sr['other'].values())
-          and all(len(x) == 5 for x in sr['list']))
+          and all(len(x) == 6 for x in sr['list']))
+    import tempfile
+    tj = os.path.join(tempfile.mkdtemp(), 't.jsonl')       # change 2 (19 Nov): the words before a search are its reason
+    with open(tj, 'w') as f:
+        f.write(json.dumps({'type': 'assistant', 'message': {'content': [
+            {'type': 'text', 'text': 'Looking for where the arm is drawn'},
+            {'type': 'tool_use', 'name': 'Bash', 'input': {'command': 'grep -n "def arm" source/blessed_cast.py'}}]}}) + '\n')
+    rr = search_record(tj, 'blessed')['list']
+    check('a search carries the reason Claude gave just before it', len(rr) == 1 and 'arm is drawn' in rr[0][5])
     check('the file and pattern of a shell grep are read',
           _what('Bash', {'command': 'grep -n "def arm" source/blessed_cast.py | head'}) == ('source/blessed_cast.py', 'def arm'))
     check('the kinds add to 100%', m and abs(sum(m['kinds'].values()) - 100) < 1)
