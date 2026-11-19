@@ -2186,26 +2186,26 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 3.35,
+   "cost": 4.14,
    "src": "estimate",
    "sid": "session_01J1JB7ZPv3wYxu8yAH6EYJT",
-   "steps": 96,
-   "hist_k": 253,
+   "steps": 103,
+   "hist_k": 261,
    "kinds": {
-    "tool search": 24.4,
-    "renders": 0.6,
-    "pictures": 5.7,
-    "other": 69.3
+    "tool search": 18.9,
+    "renders": 0.4,
+    "pictures": 4.6,
+    "other": 76.1
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 63,
+    "tool search": 64,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 1,
     "pictures": 10,
-    "other": 25
+    "other": 28
    },
    "search": {
     "show": 0,
@@ -2213,7 +2213,7 @@
      "no show": 0
     },
     "other": {
-     "other": 17,
+     "other": 18,
      "shared:branches.py": 1,
      "film notes": 14,
      "guides": 4,
@@ -2737,6 +2737,14 @@
       "shared:blessed.py",
       "notes/proposals/front-on-focus.md source/blessed.py story/status.md notes/logs/h",
       "<<<<<<<\\|>>>>>>>",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "",
+      "git status --short | head -3; git push origin claude/job1-front-on-focus 2>&1 | ",
       ""
      ]
     ]
