@@ -10,6 +10,12 @@
       recognisable cartoon versions of the game's look.
 - [ ] References: ONLY from the game (it is out, 1.4 billion copies, references everywhere) for everything: Jason,
       Lucia, the car, the police cars, Vice City streets, shops, hydrants. The autistic woman's references from anywhere.
+- [ ] Sam (19 Nov, Q5 Y): straight cut from the opening's skyline to the junction.
+- [ ] Sam (19 Nov, Q7 N): the crash is NOT softened: "GTA is a violent satire and there's no reason to pretend
+      otherwise." Show the police driver and the hit as the game would (cartoon house style, no hiding in smoke).
+- [ ] Still open (Sam chose not to answer yet, 19 Nov): Q1 screenplay final? Q2 rough version on subtitles before his
+      voice recordings? Q3 sound effects the script names (sirens, shots, glass, crash, fireball)? Q4 no music?
+      Q6 Hook Text: his words or three options? Ask again only when a stage actually needs the answer.
 - [ ] Sam: "Notify this work to continue at 00:30. Proceed." (19 Nov, ~21:10): planning restarts at 00:30 UK time.
 - [ ] Topic: the release of GTA 6. Joke: Lucia and Jason bring an autistic woman on a bank job (her hyperfixation is
       cracking safes with home-made explosives); she sees the car chase from an autistic point of view.
