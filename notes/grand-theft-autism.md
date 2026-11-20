@@ -21,6 +21,8 @@
       the rule across all clipping checks"; "1" = skip the proposal route. Rule 17 rewritten; viewchecks.layer_faults
       built (catches the old shot 2 on all four cars, clean on the fix); hide_faults widened to every scene thing;
       kittests: the same 5 old failures before and after (none from this change).
+      `gta_rehearse.py layers shot2 shot4`: clean (6.5 min); the old shot 2 put back is caught (4 faults). Three false
+      flags fixed on the way (the car's own inside in front, look-alike cruisers, see-through windscreen glass).
 - [x] Lettering matched to the reference (g's tail, R joined into the h of "theft"). Sam: "great".
 - [ ] Screenplay draft 1 received (19 Nov). NOT final: no estimate until Sam confirms it.
 - [ ] Sam's answers (19 Nov): 1 Y, the opening's pink sunset light for the whole chase; 2 Y, subtitle "brought";

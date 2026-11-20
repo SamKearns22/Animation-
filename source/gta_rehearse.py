@@ -315,10 +315,11 @@ def shot2(t, record=None):
     items.append(('hydrant', math.dist(cam.pos, (HYD2[0], 0.4, HYD2[1])), lambda im: hydrant(im, cam, S.pen(im), HYD2)))
     for _, _, draw in sorted(items, key=lambda it: -it[1]):   # far to near: the hydrant hides the cars behind it (rule 17)
         draw(img)
-    if record is not None:
+    if record is not None:                   # the depth check sees the picture before the lights' tint goes over it
         record += items
     block(img, cam, p, BLOCKS[0])             # the near block hides the cross street until the car rounds it
-    light_wash(img, cam, cars[1:], t)
+    if record is None:
+        light_wash(img, cam, cars[1:], t)
     return img
 
 
@@ -1028,12 +1029,12 @@ if __name__ == '__main__':
         fd = a[a.index('--frames') + 1] if '--frames' in a else None
         clip(shot4, SHOT4_LEN, a[1], fd)
     elif len(a) >= 2 and a[0] == 'layers':           # rule 17: anything against anything, every listed thing
-        import viewchecks as V
+        import viewchecks as VC
         shots = {'shot2': (shot2, SHOT2_LEN, OVERLAP_OK2), 'shot4': (shot4, SHOT4_LEN, OVERLAP_OK4)}
         faults = []
         for nm in a[1:]:
             fn, ln, ok = shots[nm]
-            faults += V.layer_faults(fn, ln, allowed=ok, label=nm)
+            faults += VC.layer_faults(fn, ln, allowed=ok, label=nm)
         print('\n'.join(faults) or 'layers: clean')
     elif len(a) >= 3 and a[0] == 'still4':
         shot4(float(a[1])).convert('RGB').resize((1080, 1920), Image.LANCZOS).save(a[2], quality=90)
