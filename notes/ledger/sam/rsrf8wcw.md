@@ -22,3 +22,6 @@ It will fade to car radio volume volume by the time the first dialogue line is s
 ### 2026-11-20T11:23:43
 Why did the fire hydrant/cars clipping pass?
 
+### 2026-11-20T11:25:39
+Can you not just use the existing check for clipping in practice clips rather than building and proposing a new one
+
