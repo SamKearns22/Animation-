@@ -19,6 +19,7 @@ MAP
     python3 source/checkreplay.py branches FILM
     python3 source/checkreplay.py run FILM [--only BRANCH,BRANCH] [--max N]     (~20 s to 2 min a branch)
     python3 source/checkreplay.py table FILM                                    (writes replay/FILM.md)
+    python3 source/checkreplay.py table FILM --record    (the live record: notes/ledger/FILM/check-table.md)
     python3 source/checkreplay.py test
 """
 import json, os, re, shutil, subprocess, sys, tempfile, time
@@ -70,18 +71,45 @@ def overlay(film, branch):
     return d, ref[:8], len(files)
 
 
+TIMED = re.compile(r'^\d+(?:\.\d+)?\s*s$')     # "7.17 s: runner6.footR jumps": the audit's time-stamped lines
+
+
+def head(body):
+    """The check a fault line belongs to: the words before the first ':' (a quoted bit and a bracket dropped, counts
+    as '#'). check-catches change 3 (Sam's Y, 20 Nov): a time-stamped line ("7.17 s: ...") is the audit's, so all of
+    them are ONE check, not one row per time; "the brief checklist has 8 blank" and "...has 4 blank" are one check."""
+    h = body.split(':', 1)[0].strip()
+    if TIMED.match(h):
+        return 'AUDIT'
+    cut = re.split(r'\s*["“(]', h)[0].strip()
+    if len(cut) <= 3:                              # 'no "Rehearsal clips sent' would be 'no': keep the quoted words
+        cut = re.split(r'\s*\(', re.sub(r'["“”]', '', h))[0].strip()
+    return NUM.sub('#', re.sub(r'\s+', ' ', cut or 'other'))[:40]
+
+
 def parse(text):
-    """Fault lines -> {check: [fault, ...]}. A check is the words before the first ':' (quotes dropped)."""
+    """Fault lines -> {check: [fault, ...]}."""
     out = {}
     for ln in text.splitlines():
         m = LINE.match(ln)
-        if not m:
-            continue
-        body = m.group(1)
-        head = re.split(r'\s*["“(]', body.split(':', 1)[0])[0].strip() or 'other'
-        head = re.sub(r'\s+', ' ', head)[:40]
-        out.setdefault(head, []).append(body[:200])
+        if m:
+            out.setdefault(head(m.group(1)), []).append(m.group(1)[:200])
     return out
+
+
+def regroup(faults):
+    """Old records were grouped before change 3; group their lines again by today's head()."""
+    out = {}
+    for f in (x for v in faults.values() for x in v):
+        out.setdefault(head(f), []).append(f)
+    return out
+
+
+def broken(r):
+    """change 3: a run is broken only when it listed no fault at all and crashed or timed out. Before, any run whose
+    output held the word "refuse" (pre-flight's gates say it in ordinary output) was dropped, so Protest Tiers and
+    Blessed scored nothing."""
+    return not any(r.get('faults', {}).values()) and (r.get('refused') or r.get('exit', 0) not in (0, 1, 2))
 
 
 def _key(f):
@@ -105,8 +133,8 @@ def run(film, only=None, mx=None):
         except subprocess.TimeoutExpired:
             txt, code = 'TIMED OUT', -1
         secs = round(time.time() - t0)
-        refused = 'REFUSE' in txt.upper()[:3000] or ('Traceback' in txt and not LINE.search(txt))
         faults = parse(txt)
+        refused = not faults and ('Traceback' in txt or code not in (0, 1, 2))
         rec['runs'].append({'branch': b, 'ref': ref, 'files': n, 'secs': secs, 'exit': code, 'refused': refused,
                             'faults': faults, 'tail': txt[-600:] if refused or code not in (0, 1) else ''})
         json.dump(rec, open(jf, 'w'), indent=1)
@@ -117,19 +145,28 @@ def run(film, only=None, mx=None):
     return rec
 
 
-def table(film, rec=None, exceptions=''):
+def table(film, rec=None, exceptions='', tags=None):
     rec = rec or json.load(open(os.path.join(OUT, film + '.json')))
-    runs = [r for r in rec['runs'] if not r.get('refused')]
+    runs = [dict(r, faults=regroup(r['faults'])) for r in rec['runs'] if not broken(r)]
+    for r in runs:                                  # stopped at a gate (exit 2): the checks after it never ran, so
+        if 'ran' not in r and r.get('exit') == 2:   # only the ones it listed are compared
+            r['ran'] = list(r['faults'])
     checks = sorted({c for r in runs for c in r['faults']})
     rows = []
     for c in checks:
-        seen = [{_key(f) for f in r['faults'].get(c, [])} for r in runs]
-        caught = sum(len(a - b) for a, b in zip(seen, seen[1:]))
+        owners = {c} | {r.get('of', {}).get(c, c) for r in runs}   # a check inside pre-flight ran when pre-flight did
+        seen = [{_key(f) for f in r['faults'].get(c, [])} for r in runs if 'ran' not in r or owners & set(r['ran'])]
         last = seen[-1] if seen else set()
+        caught = len(set().union(*[a - b for a, b in zip(seen, seen[1:])]) - last)   # each fault once
         named = sum(1 for k in last if k[:30] in exceptions)
         rows.append({'check': c, 'runs': sum(1 for s in seen if s), 'faults': len(set().union(*seen)),
                      'caught': caught, 'let_through': len(last) - named, 'named': named,
-                     'could_not_test': sum(1 for r in runs for f in r['faults'].get(c, []) if 'COULD NOT TEST' in f)})
+                     'could_not_test': sum(1 for r in runs for f in r['faults'].get(c, []) if 'COULD NOT TEST' in f),
+                     'missed': [n for n, t in (tags or {}).items() if t and t.strip().lower() == c.lower()]})
+    for t in sorted({t for t in (tags or {}).values() if t and t.strip().lower() != 'none'} - {r['check'].lower() for r in rows},
+                    key=str.lower):                 # a check Sam's notes name that listed nothing at all
+        rows.append({'check': t.strip(), 'runs': 0, 'faults': 0, 'caught': 0, 'let_through': 0, 'named': 0,
+                     'could_not_test': 0, 'missed': [n for n, x in tags.items() if x and x.strip().lower() == t.lower()]})
     secs = sum(r['secs'] for r in runs)
     out = [f'# Check replay: {film} (today\'s checks on each chat branch; check-catches Learn)', '',
            f'{len(rec["runs"])} branches, {len(runs)} ran ({len(rec["runs"]) - len(runs)} refused or broken); '
@@ -140,8 +177,12 @@ def table(film, rec=None, exceptions=''):
            '| check | runs | faults | caught | let through | named | could not test | false alarms | Sam\'s notes missed |',
            '|---|---|---|---|---|---|---|---|---|']
     out += [f"| {r['check']} | {r['runs']} | {r['faults']} | {r['caught']} | {r['let_through']} | {r['named']} | "
-            f"{r['could_not_test']} | ? | ? |" for r in rows]
-    bad = [r for r in rec['runs'] if r.get('refused')]
+            f"{r['could_not_test']} | ? | " + (', '.join(r['missed']) or '0' if tags else '?') + " |" for r in rows]
+    if tags:
+        out.insert(next(i for i, x in enumerate(out) if x.startswith('| check |')), f"Sam's notes: {len(tags)}, each tagged by the check that should have caught it "
+                   f"({sum(1 for t in tags.values() if t and t.strip().lower() == 'none')} 'none'; "
+                   f"{sum(1 for t in tags.values() if not t)} untagged).\n")
+    bad = [r for r in rec['runs'] if broken(r)]
     if bad:
         out += ['', '## Refused or broken (today\'s pre-flight would not run on this chat\'s files)']
         for r in bad:
@@ -178,6 +219,70 @@ def test():
           and 'crashed in plan.py' in md)
     check('the branch list skips posted and review branches', SKIP.search('claude/milburn-posted')
           and not SKIP.search('claude/milburn-chat12'))
+    # change 3 (Sam's Y, 20 Nov)
+    t = (' - 7.17 s: runner6.footR jumps 74 cm in one frame\n - 4.25 s: runner3 and swinger swap front and back\n'
+         ' - AUDIT: PASSES THROUGH: 4.28 s\n - the brief checklist has 8 blank "done?" row(s): 34\n'
+         ' - no "Rehearsal clips sent: DATE, FILE" line in the notes\n')
+    p2 = parse(t)
+    check('time-stamped audit lines are one check, not one row per time', len(p2['AUDIT']) == 3)
+    check('a count in the check\'s name does not split it', 'the brief checklist has # blank' in p2)
+    check('a two-letter head keeps its quoted words', any(k.startswith('no Rehearsal clips sent') for k in p2))
+    gated = {'film': 'y', 'runs': [{'branch': 'a', 'secs': 5, 'exit': 2, 'refused': True,
+                                    'tail': 'preflight refuses: the brief is not done', 'faults': {'7.17 s': ['7.17 s: a jumps']}},
+                                   {'branch': 'b', 'secs': 5, 'exit': 1, 'faults': {}}]}
+    md2, rows2 = table('y', gated)
+    check('a run that says "refuses" but lists faults is scored, and its old groups are regrouped',
+          '2 ran' in md2 and [r['check'] for r in rows2] == ['AUDIT'] and rows2[0]['caught'] == 1)
+    check('a crash with no fault lines is still broken', broken({'faults': {}, 'exit': 1, 'refused': True})
+          and not broken({'faults': {}, 'exit': 0}))
+    # change 1 (Sam's Y, 20 Nov): in a fresh copy with no marker file, a check saves under the film it names
+    d = tempfile.mkdtemp(prefix='record-test-')
+    os.makedirs(os.path.join(d, 'source'))
+    os.makedirs(os.path.join(d, 'notes'))
+    for f in ('ledger.py', 'report.py', 'checkreplay.py'):
+        shutil.copy(os.path.join(ROOT, 'source', f), os.path.join(d, 'source', f))
+    open(os.path.join(d, 'notes', 'filmx.md'), 'w').write('# notes\n')
+    code = ('import report; report.summarise("plan", ["plan: goth has no facing"]); '
+            'report.summarise("caption", [])')
+    env = dict(os.environ, CHECK_RUN='r1')
+    env.pop('CHECK_FILM', None)
+    a = subprocess.run([sys.executable, '-c', code, 'filmx'], cwd=os.path.join(d, 'source'), env=env,
+                       capture_output=True, text=True)
+    b = subprocess.run([sys.executable, '-c', code.replace('goth', 'camera'), 'filmx'], env=dict(env, CHECK_RUN='r2'),
+                       cwd=os.path.join(d, 'source'), capture_output=True, text=True)
+    n = subprocess.run([sys.executable, '-c', code], cwd=os.path.join(d, 'source'), env=env, capture_output=True, text=True)
+    jl = os.path.join(d, 'notes', 'ledger', 'filmx', 'checks.jsonl')
+    rows_ = [json.loads(x) for x in open(jl)] if os.path.exists(jl) else []
+    check('no marker file: every check run is saved under the film in its command, clean ones too',
+          not os.path.exists(os.path.join(d, 'notes', 'ledger', '.current')) and len(rows_) == 4
+          and {x['run'] for x in rows_} == {'r1', 'r2'} and not a.stderr.strip() and not b.stderr.strip())
+    check('no film named: it says so in one line, once', n.stdout.count('check record: not saved') == 1)
+    sys.path.insert(0, os.path.join(d, 'source'))
+    import importlib
+    lg = importlib.import_module('ledger')
+    importlib.reload(lg)
+    md3, rows3 = table('filmx', lg.checkruns('filmx'))
+    r3 = {x['check']: x for x in rows3}
+    check('each fault\'s fate from comparing runs (gone = caught, still there = let through)',
+          r3['plan']['caught'] == 1 and r3['plan']['let_through'] == 1 and 'caption' not in r3)
+    sys.path.remove(os.path.join(d, 'source'))
+    shutil.rmtree(d, ignore_errors=True)
+    # change 2 (Sam's Y, 20 Nov): notes tagged by the check that should have caught them
+    md4, rows4 = table('x', rec, tags={'1': 'plan', '2': 'none', '3': 'HEAD LIFE', '4': None})
+    r4 = {x['check']: x for x in rows4}
+    check('a tagged note is counted against its check, even one that listed nothing',
+          r4['plan']['missed'] == ['1'] and r4['HEAD LIFE']['missed'] == ['3'] and "Sam's notes: 4" in md4
+          and '1 untagged' in md4 and md4.index("Sam's notes: 4") < md4.index('| check |'))
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import handover
+    nf = os.path.join(tempfile.mkdtemp(), 'n.md')
+    open(nf, 'w').write('## Notes\n| # | shot | time | note | line | should have caught | status |\n|---|---|---|---|---|---|---|\n'
+                        '| 1 | 2 | 3 s | arm through body | x | AUDIT | fixed |\n| 2 | 3 | | too fast | | | open |\n'
+                        '| 3 | | | | | | open |\n## Other\n| 9 | a | b | c |\n')
+    check('the handover reads each note\'s tag; a blank one is untagged; an empty row is not a note',
+          handover.note_tags(nf) == {'1': 'AUDIT', '2': ''})
+    open(nf, 'w').write('## Notes\n| # | shot | time | note | line | status |\n|---|---|---|---|---|---|\n| 1 | 2 | 3 s | arm | x | open |\n')
+    check('a notes table with no tag column leaves every note untagged', handover.note_tags(nf) == {'1': None})
     print('ALL PASS' if ok else 'SOME FAILED')
     return ok
 
@@ -198,6 +303,13 @@ if __name__ == '__main__':
         nf = os.path.join(ROOT, 'notes', a[1] + '.md')
         exc = open(nf).read() if os.path.exists(nf) else ''
         exc = exc.split('## Exceptions', 1)[1][:20000] if '## Exceptions' in exc else ''
-        md, _ = table(a[1], exceptions=exc)
-        open(os.path.join(OUT, a[1] + '.md'), 'w').write(md)
+        if '--record' in a:                         # change 1: the live record (every run kept), not the replay
+            import ledger
+            md, _ = table(a[1], ledger.checkruns(a[1]), exc, ledger.load(a[1]).get('notes_tags'))
+            md = md.replace("today's checks on each chat branch", 'every check run this film, from its record')
+            dest = os.path.join(ledger._paths(a[1])[2], 'check-table.md')
+        else:
+            md, _ = table(a[1], exceptions=exc)
+            dest = os.path.join(OUT, a[1] + '.md')
+        open(dest, 'w').write(md)
         print(md[:3000])

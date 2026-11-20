@@ -53,7 +53,7 @@ A chat is tagged by its transcript; logging the same chat again replaces its row
 """
 import argparse, glob, json, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from datetime import date
+from datetime import date, datetime, timezone
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DIR = os.path.join(ROOT, 'notes', 'ledger')
@@ -103,21 +103,62 @@ def append(film, rnd, text):
         f.write(text.rstrip('\n') + '\n\n')
 
 
+RUN = os.environ.get('CHECK_RUN') or f'{datetime.now(timezone.utc):%Y-%m-%dT%H:%M:%S}-{os.getpid()}'
+_WARNED = []
+WHOLE = ('pre-flight', 'quick check')     # titles whose one list holds many checks' faults
+
+
+def check_film():
+    """check-catches change 1 (Sam's Y, 20 Nov): the film a check is saved under, with NO marker file needed: the film
+    named in the command (pre-flight puts it in CHECK_FILM for itself and every check it starts; a check run on its
+    own names the film among its arguments), else the old marker (notes/ledger/.current). Before, with no marker file
+    every check quietly saved nothing: 0 rows in all 27 ledgers against Milburn's 14 pre-flight runs."""
+    env = os.environ.get('CHECK_FILM', '')
+    if re.match(r'^[\w-]+$', env):
+        return env.replace('_', '-') if os.path.exists(os.path.join(ROOT, 'notes', env.replace('_', '-') + '.md')) else env
+    for a in [os.path.splitext(os.path.basename(a))[0] for a in sys.argv[1:]]:
+        for n in (a, a.replace('_', '-')):
+            if n and re.match(r'^[\w-]+$', n) and n not in SKIP and os.path.exists(os.path.join(ROOT, 'notes', n + '.md')):
+                return n
+    return current()[0]
+
+
 def record(title, faults, notes=()):
     """Called by report.summarise for every check. Saves the full list into the round file and counts each check's
-    faults by kind, so the audit can say which checks caught things and which never fired. Never breaks a check."""
+    faults by kind, so the audit can say which checks caught things and which never fired. change 1: also one line
+    per check run in notes/ledger/FILM/checks.jsonl (time, run, check, its faults, clean ones too), so each fault's
+    fate comes from comparing one run with the next (checkreplay.py table FILM --record). Never breaks a check; says
+    so in one line when it cannot save."""
     try:
-        film, rnd = current()
+        film = check_film()
         if not film:
+            if not _WARNED:
+                _WARNED.append(1)
+                print('(check record: not saved: no film named in the command; run it as `CHECK_FILM=NAME ...` '
+                      'or with the film as an argument)')
             return
+        cf, crnd = current()
+        rnd = crnd if cf and cf.replace('_', '-') == film.replace('_', '-') else 0
         import report
         faults = list(faults)
         body = f'== {title} ({date.today()}): ' + (f'{len(faults)} fault(s)' if faults else 'clean') + '\n'
         body += ''.join(f'- {x}\n' for x in faults) + ''.join(f'  {n}\n' for n in notes)
+        name = re.sub(r'\s*\(.*\)$', '', title)
+        os.makedirs(_paths(film)[2], exist_ok=True)   # the run lines first: they need nothing else to work
+        t, run = datetime.now(timezone.utc).isoformat(timespec='seconds'), os.environ.get('CHECK_RUN') or RUN
+        parts = {name: faults}
+        if name in WHOLE:                             # pre-flight's one list: each check under its own name
+            import checkreplay
+            parts = {name: []}
+            for x in faults:
+                parts.setdefault(checkreplay.head(str(x)), []).append(x)
+        with open(os.path.join(_paths(film)[2], 'checks.jsonl'), 'a', encoding='utf-8') as f:
+            for k, v in parts.items():
+                f.write(json.dumps({'t': t, 'run': run, 'check': k, 'of': name,
+                                    'faults': [str(x)[:200] for x in v]}) + '\n')
         append(film, rnd, body)
         d = load(film)
-        name = re.sub(r'\s*\(.*\)$', '', title)
-        c = d['checks'].setdefault(name, {'runs': 0, 'faults': 0, 'kinds': {}})
+        c = d.setdefault('checks', {}).setdefault(name, {'runs': 0, 'faults': 0, 'kinds': {}})
         c['runs'] += 1
         c['faults'] += len(faults)
         for x in faults:
@@ -125,7 +166,30 @@ def record(title, faults, notes=()):
             c['kinds'][k] = c['kinds'].get(k, 0) + 1
         store(d)
     except Exception as e:
-        print(f'(ledger: not saved: {e})')
+        print(f'(check record: not saved: {e})')
+
+
+def checkruns(film):
+    """The record as runs, oldest first, in checkreplay's shape: {'runs': [{'branch': RUN, 'ran': [checks],
+    'faults': {check: [...]}}]}."""
+    p = os.path.join(_paths(film)[2], 'checks.jsonl')
+    runs = {}
+    for ln in (open(p, encoding='utf-8') if os.path.exists(p) else []):
+        try:
+            x = json.loads(ln)
+        except ValueError:
+            continue
+        r = runs.setdefault(x['run'], {'branch': x['run'], 't': x['t'], 'secs': 0, 'ran': [], 'of': {}, 'faults': {}})
+        r['ran'] += [x['check'], x.get('of', x['check'])]
+        r['of'][x['check']] = x.get('of', x['check'])
+        if x['faults']:
+            r['faults'].setdefault(x['check'], []).extend(x['faults'])
+    return {'film': film, 'runs': sorted(runs.values(), key=lambda r: r['t'])}
+
+
+def record_since(film, since):
+    """Lines saved for FILM at or after SINCE (an ISO time, UTC)."""
+    return [r for r in checkruns(film)['runs'] if r['t'][:19] >= since[:19]]
 
 
 def chat_cost():

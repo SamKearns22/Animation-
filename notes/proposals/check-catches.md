@@ -92,3 +92,24 @@ Added: a per-check table for three films; an automatic record on every film; a "
 One chat reads the notes and records of the last three films and sorts each check's results by hand into real catches, false alarms and misses, the way the 13 Nov pre-flight review did. Cheaper to start, but the records hold little about the checks, so many answers would be "could not tell".
 Lost: a firmer answer now; some checks left unjudged until three new films have run.
 Added: a hand-made per-check table (about 2.5% of a week, an estimate); the same automatic record and note tags.
+
+## Built (job 4 chat 5, 20 Nov; Sam's Y to all three, 20 Nov)
+Sam said Y to changes 1 and 2 together (the judge had change 2 wait one film; Sam's Y overrides) and to fixing the
+replay tool's two flaws (change 3: a fix to the adopted replay, listed here for the end-of-film review).
+- **Change 1, the record always saves:** ledger.check_film() names the film from the command (CHECK_FILM, set by
+  pre-flight for itself and every check it starts, or the film among a check's arguments), else the old marker; no
+  marker needed. Each check run is one line in notes/ledger/FILM/checks.jsonl (time, run, check, faults; clean too),
+  written first so nothing else can stop it; pre-flight's one list is split into its checks; the quick check
+  (--text), which never reached the record, is recorded too. One printed line when it cannot save. `checkreplay.py
+  table FILM --record` makes the per-check table from it (each fault's fate from comparing runs). handover.py end
+  refuses (RECORD) when this chat ran pre-flight and the record holds nothing from it. Tested: a fresh copy with no
+  marker file (checkreplay.py test), and a real quick check on Milburn in a throwaway copy: 61 of 61 faults saved
+  under 10 checks (before: 0).
+- **Change 2, notes tagged:** the notes template's table has a "should have caught" column (a check's name, or none);
+  handover.py end refuses (TAG) a note without one and saves the tags into the film's ledger (notes_tags); the
+  --record table fills "Sam's notes missed" from them, and lists a check a note names even if it listed nothing.
+- **Change 3, the replay table's flaws:** a run is broken only when it listed no fault and crashed (the word
+  "refuses" in normal output no longer drops it); time-stamped audit lines are one check (AUDIT), counts in a check's
+  name are '#'; a run stopped at a gate is compared only on the checks it listed; each fault is counted once.
+  Re-made tables: Protest Tiers 21 of 31 chats scored (before 0; the 10 early chats had no film file yet), 13
+  checks; Blessed 20 of 20 (before 0), 7 checks; Milburn 5 of 6 (before 3). Appended to each replay/FILM.md.

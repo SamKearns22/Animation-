@@ -449,6 +449,79 @@ def branch_faults(film, notes=None):
 
 
 
+TAG = re.compile(r'(?i)should\s+have\s+caught')
+
+
+def note_tags(notes_path):
+    """check-catches change 2 (Sam's Y, 20 Nov): Sam's numbered notes (the "## Notes" table) as {number: tag}, the
+    tag being the "should have caught" cell (a check's name, or "none"); None when the table has no such column.
+    Only rows with words in their note cell count (the template's empty row 1 does not)."""
+    if not notes_path or not os.path.exists(notes_path):
+        return {}
+    tags, head, on = {}, None, False
+    for ln in open(notes_path, encoding='utf-8'):
+        if ln.startswith('#'):
+            on, head = bool(re.match(r'#+\s*Notes\b', ln)), None
+            continue
+        if not on or not ln.startswith('|'):
+            continue
+        cells = [c.strip() for c in ln.strip().strip('|').split('|')]
+        if head is None:
+            head = [c.lower() for c in cells]
+            continue
+        if set(''.join(cells)) <= set('-: ') or not re.match(r'^\d+[a-z]?$', cells[0]):
+            continue
+        ni = next((i for i, h in enumerate(head) if h.startswith('note')), 3)
+        if ni >= len(cells) or not cells[ni]:
+            continue
+        ti = next((i for i, h in enumerate(head) if TAG.search(h)), None)
+        tags[cells[0]] = cells[ti] if ti is not None and ti < len(cells) else None
+    return tags
+
+
+def tag_faults(film, notes=None):
+    """change 2: the handover refuses while any of Sam's notes lacks "should have caught: CHECK / none"; the tags and
+    the count go into the film's record (ledger notes_tags), so misses are counted without guessing."""
+    p = notes or (film and os.path.join(ROOT, 'notes', f'{film}.md'))
+    tags = note_tags(p)
+    if not tags:
+        return []
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        import ledger
+        d = ledger.load(film)
+        if d.get('notes_tags') != tags:
+            d['notes_tags'] = tags
+            ledger.store(d)
+    except Exception as e:
+        return [f'TAG: the notes\' tags could not be saved to the record ({e})']
+    return [f'TAG: note {n} has no "should have caught" (a check\'s name, or none): add it to the notes table'
+            for n, t in tags.items() if not t]
+
+
+def record_faults(rec):
+    """check-catches change 1 (Sam's Y, 20 Nov): this chat ran pre-flight but the check record holds nothing from it."""
+    if not rec or not os.path.exists(rec):
+        return []
+    films, start = set(), None
+    for ln in open(rec, encoding='utf-8'):
+        try:
+            x = json.loads(ln)
+        except ValueError:
+            continue
+        start = start or x.get('timestamp')
+        for c in (x.get('message') or {}).get('content') or []:
+            if isinstance(c, dict) and c.get('type') == 'tool_use':
+                films |= set(re.findall(r'preflight\.py\s+([\w-]+)\s', str((c.get('input') or {}).get('command', ''))))
+    if not films or not start:
+        return []
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ledger
+    return [f'RECORD: pre-flight ran on {f} in this chat but the check record (notes/ledger/{f.replace("_", "-")}/'
+            'checks.jsonl) holds nothing from it: find why it did not save before handing over'
+            for f in sorted(films) if not (ledger.record_since(f, start) or ledger.record_since(f.replace('_', '-'), start))]
+
+
 def cost_faults(film, notes=None):
     """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem (costline.py)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -584,6 +657,7 @@ def main(argv):
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
                       + sentence_faults() + cost_faults(film, opt('--notes'))
+                      + tag_faults(film, opt('--notes')) + record_faults(rec)
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
     if cmd == 'start':
