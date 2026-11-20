@@ -376,7 +376,7 @@ def _lead_track():
             if hyd is None and fx > 8.1:
                 hyd = (t, (fx, z + 2.55 * math.cos(math.radians(yaw))))
             cs = [(x + S.rot_y((sx * 0.97, 0, 2.58), yaw)[0]) for sx in (-1, 1)]
-            if max(cs) >= SHOP4 - 0.08:
+            if max(cs) >= SHOP4 + 0.9:                       # the nose goes through the shop glass
                 imp = (t, (x, z), yaw)
             crush = 0.0
         else:
@@ -429,9 +429,9 @@ def chaser_at(t, i):
 CAM4 = [  # (t, position, look-at, focal)
     (0.00, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
     (0.45, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
-    (1.05, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
-    (1.65, (2.10, 1.85, 1.55), (-0.30, 1.10, -14.0), 1000),
-    (3.05, (2.10, 1.87, 1.45), (0.40, 1.10, -14.0), 1040),
+    (1.10, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
+    (1.70, (2.10, 1.85, 1.55), (-0.30, 1.10, -14.0), 1000),
+    (3.05, (2.10, 1.80, 1.45), (0.30, 1.15, -14.0), 1180),
     (4.55, (2.10, 1.87, 1.40), (1.40, 1.05, -15.0), 1000),
     (5.15, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
     (5.75, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
@@ -665,7 +665,7 @@ OUT_J = (1.24, 1.60, -0.15)       # sitting on the sill, his body outside the ca
 def jason4(t):
     """Jason's state at t in the Tulip's frame: k (0 seated .. 1 out), neck, facing angle (degrees from forward,
     + toward the car's right), lean, aim weight (0 gun on chest .. 1 arm out at the lead cruiser), recoil, flash."""
-    k = smooth((t - 0.45) / 0.95) * (1 - smooth((t - 4.65) / 0.95))
+    k = smooth((t - 0.35) / 1.25) * (1 - smooth((t - 4.55) / 1.05))   # a real climb: a beat to brace, then out
     neck = tuple(a + (b - a) * k for a, b in zip(SEAT_J, OUT_J))
     neck = (neck[0] - 0.12 * math.sin(math.pi * k), neck[1] + 0.05 * math.sin(math.pi * k), neck[2])   # up, then out
     aim = smooth((t - 1.15) / 0.5) * (1 - smooth((t - 4.25) / 0.45))
@@ -947,7 +947,7 @@ def shot4(t):
     for pp in PEOPLE4:
         x, z = pp['at']
         d = cam.depth((x, 1.0, z))
-        if 0.6 < d < 70:
+        if 0.2 < d < 70:
             a = math.radians(pp['face'])
             items.append((d, lambda im, pp=pp, x=x, z=z, a=a: person_cached(
                 im, cam, _walker(pp['i']), pp['i'], (x, 0.15 + _walker(pp['i']).get('height', 1.75) * 928 / FIG_H, z),
@@ -955,7 +955,8 @@ def shot4(t):
     for k, (x, z) in enumerate(PALMS4):
         d = cam.depth((x, 3.0, z))
         if 0.5 < d < 140:
-            items.append((d, lambda im, x=x, z=z, k=k: palm(im, cam, S.pen(im), (x, z), seed=k)))
+            if d > 3.0 or abs(x - cam.pos[0]) > 2.5:              # never a trunk cut by the lens
+                items.append((d, lambda im, x=x, z=z, k=k: palm(im, cam, S.pen(im), (x, z), seed=k)))
     if HYDRANT:
         hx, hz = HYDRANT[1]
         d = cam.depth((hx, 0.5, hz))

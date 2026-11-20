@@ -139,3 +139,80 @@ I read panel 8 as a chase. It should be parked side by side, so the overlap and 
 4. The panel 8 cars are not at matching angles, so the size comparison is unfair. Suggested line: size-comparison panels show both cars from the same angle with no overlap.
 5. The shadows differ in panels 1, 7 and 9. Suggested line: the contact shadow matches the car's footprint and the light direction.
 
+== critique, round 1 pass 5 (2026-11-20): 13 fault(s), 2 can't tell
+-- look.md --
+1: Red convertible with bearded man, red-haired woman, brown-haired woman driving down palm street; police lights behind. No words.
+2: Man in green holds gun from red car at police car; pedestrians on sidewalk. No words.
+3: Orange explosion near white police car marked "POLICE"; man aims pistol; woman in purple watches.
+4: Tiny strip of filmstrip frames, red car and buildings; text too small to read.
+5: Tiny strip of filmstrip frames, car and palm trees; text too small to read.
+6: Tiny strip of filmstrip frames with small explosions; text too small to read.
+7: Tiny strip of filmstrip frames, car chase street; text too small to read.
+-- result.md --
+## Faults
+FAULT A1 [4-7]: the strips are slivers at phone size; nothing in them can be named.
+FAULT A2 O3 P1 [1]: the car is a flat red slab with two huge black blobs on the hood that read as holes or oil. No grille, no headlights, no 1970s Tulip shape like the reference. The white hexagon on the black bar at the bottom reads as litter.
+FAULT P2 O5 M5 [2, 5]: no windscreen craze on the lead police car, only sparks. No damage stays on it afterwards.
+FAULT O5 M5 [3, 6]: no hydrant, no water jet, no shop front hit. The fireball hangs in mid-air above the pavement. The police car is intact in the road, not over the kerb. A white cone (jet?) floats beside the pedestrian at 3.33.
+FAULT O5 [3, 6, 7]: smoke hangs over the pavement, not at a shop front. In 7 it stays in the same screen spot while the camera swings round, so it is pinned to the camera.
+FAULT S9 [6, 7]: smoke is a dark ball with outline and white puffs, with little volume or thinning.
+FAULT P11 [1-7]: Jason's head sits straight on his shoulders, with no neck.
+FAULT P7 [2-7]: Jason's torso comes out of the car side with no ledge or seat under him, so he looks sunk into the car.
+FAULT M2 [4]: lean-out is not acted. He is seated at 0.50 and outside the window by 1.00, and the camera jumps from front to side between 0.50 and 0.75.
+FAULT M1 [5, 6, 7]: the palm at 2.33-2.67 loses its trunk, leaving a thin pole and a floating crown. Pedestrians pop in and out (2.17, 2.33).
+FAULT M1 S6 [7, 1]: the end frame is meant to match panel 1, but it shows two police cars with blue lights at the right. Panel 1 has one car with a light bar in the centre.
+FAULT S5 [2-7]: the pavement and road are flat colour with no texture. The left walls are mostly blank.
+FAULT S1 [2, 5]: the police car, the target of the beat, is tiny behind Jason's head.
+CAN'T TELL P1 P6 [2, 3]: pistol against the ball hand. A full-size crop would show it. No gun is visible in 2.
+CAN'T TELL P14 P4 [1, 7]: faces too small for eyes and beard lines. A full-size crop beside the reference would show them.
+
+## Checked
+1-7
+
+## Cold look
+Panels 4-7 were unreadable, so I named none of their content. In panel 2 I wrote "holds gun" but no gun shows. In 3 I called the fireball "near" the police car and missed that the hydrant, water jet and crash are absent. In 1 I did not identify the woman in the back.
+
+## Not on the list
+1. Bystanders beside the blast do not react. Suggested line: people near a blast flinch or run.
+2. Trees and poles lose their base. Suggested line: every pole and trunk stays joined to its base in every frame.
+3. The weapon is not visible in firing shots. Suggested line: a fired prop shows in every firing panel.
+4. The car design differs between front view and side views. Suggested line: one vehicle model matches in all views.
+5. The police light colour and count change between shots. Suggested line: light colours and counts stay fixed.
+
+== critique, round 1 pass 6 (2026-11-20): 10 fault(s), 2 can't tell
+-- look.md --
+1: Red convertible, bearded man in green, redhead woman, tanned woman beside him; police lights behind; pedestrian in teal. No words.
+2: Police car with red lights chasing; teal-shirt pedestrian on pavement; palm tree; man's head and car at right. No words.
+3: Explosion at left; white police car reading "POLICE"; man with dark hair aims gun from red car; woman in purple.
+4: Strip of six tiny frames: red convertible chase, men in car; text too small to read.
+5: Strip of five tiny frames: chase down street, red car, police car, timestamps unreadable.
+6: Strip of five tiny frames: police cars chasing, small explosions, timestamps unreadable.
+7: Strip of five tiny frames: red car, passengers, dark objects flying overhead; timestamps unreadable.
+-- result.md --
+## Faults
+FAULT A1 O3 P1 [1, 7]: bonnet - two huge black patches with grey chips read as burnt holes, not the reference's thin stripes; white grille blob reads as litter. Bonnet fills over half the frame (S8).
+FAULT A1 S1 P1 [1]: police cars behind - only a light bar above our windscreen, reads as ours; no police car visible.
+FAULT P1 O5 [2, 3, 4-7]: Jason's gun - not visible in panel 2 or strip frames 1.5-3.08; no ledge seat shown. Panel 3 gun is a tiny dot.
+FAULT O5 O2 [2, 3, 5, 6, 7]: white wing mirror sits beside the car body, detached from it.
+FAULT M5 O6 [2, 5]: no sparks on the bonnet, no crazed windscreen at 2.33-3.08 or in panel 2; the police car is untouched.
+FAULT O5 O6 [3, 6]: no fire hydrant water jet in panel 3. In strip 6 the jet is a flat white cone; fireball is cropped at the frame edge, and the hydrant is gone.
+FAULT M1 M4 [5]: palm tree jumps in size and position (2.33 thin line, 2.67 large leaves), pops in and out between frames.
+FAULT M3 [4]: 0.83-1.17 car body squeezes into a flat slab, windscreen shape changes, Jason's head and torso jump size.
+FAULT S9 A1 [3, 6, 7]: smoke is separate dark balls floating above the roofline, detached from the fire, and flat cut-outs; read as dark flying objects, not smoke.
+FAULT S1 [2, 3, 5, 6]: the target police car is tiny, so the hit is lost at phone size.
+CAN'T TELL P1 [1, 7]: hands on the wheel; a full-size crop with the windscreen cleared.
+CAN'T TELL P7 [1, 7]: seated lap, thighs; bodies are cut off at the windscreen.
+
+## Checked
+1-7
+
+## Cold look
+I named "text too small to read" for the strips, which proves the timestamps fail at phone size. I read the smoke as "dark objects flying overhead" (a real A1 fault). I missed no gun in panel 2, no windscreen craze, the missing hydrant, the floating mirror and the police lights reading as ours.
+
+## Not on the list
+- Strip timestamps unreadable at phone size; suggested line: M6 timestamps legible on every strip.
+- Detached parts such as the mirror; suggested line: O7 every car part attached to the body.
+- Tiny focus subject; suggested line: S10 the hit target is at least a quarter of frame height.
+
+critique, pass 6: faults fixed as one list: hunt 1 fixed as one list: the crashed car goes through the shop glass over the kerb, punch-in on the shots, longer climb out, palms never cut by the lens, passers-by no longer pop; hunt 2 named for the next chat; left open: ["1,7 A1 O3 P1: bonnet - two huge black patches with grey chips read as burnt holes, not the reference's thin stripes; white grille blob reads as litter. Bonnet f", '1 A1 S1 P1: police cars behind - only a light bar above our windscreen, reads as ours; no police car visible.', "2-7 P1 O5: Jason's gun - not visible in panel 2 or strip frames 1.5-3.08; no ledge seat shown. Panel 3 gun is a tiny dot.", '2-3,5-7 O5 O2: white wing mirror sits beside the car body, detached from it.', '2,5 M5 O6: no sparks on the bonnet, no crazed windscreen at 2.33-3.08 or in panel 2; the police car is untouched.', '3,6 O5 O6: no fire hydrant water jet in panel 3. In strip 6 the jet is a flat white cone; fireball is cropped at the frame edge, and the hydrant is gone.', '5 M1 M4: palm tree jumps in size and position (2.33 thin line, 2.67 large leaves), pops in and out between frames.', "4 M3: 0.83-1.17 car body squeezes into a flat slab, windscreen shape changes, Jason's head and torso jump size.", '3,6-7 S9 A1: smoke is separate dark balls floating above the roofline, detached from the fire, and flat cut-outs; read as dark flying objects, not smoke.', '2-3,5-6 S1: the target police car is tiny, so the hit is lost at phone size.']
+

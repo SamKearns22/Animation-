@@ -50,3 +50,23 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   Cars: build in source/gta_cars.py on sets.Cam/Face/obox/cylinder (3D, metres); film file from source/satire_template.py.
   The 5:30 UK reminder (trig_01B51RSAAq6Sgymzr6MttTsf) fires into chat 4 as a backup; chat 5 carries the work.
 
+
+
+## Where things stand (20 Nov, chat 5, Opus high)
+- Rules that bite next: 8 (shot 4's lean-out and crash rehearsed before any other movement), 41 (Jason's arms and gun hand leaning out), 89 (the clip critiqued).
+- Done: both cars built in 3D and through both critique hunts (getaway car and police car, whole and crashed; sheet sent).
+  Rehearsal 1 sent: shot 2's swerve past the low camera on a stand-in street (the real junction is the sets stage).
+- Next: Opus, high effort (a new move): rehearsal 2, shot 4: track left with Jason leaning out of the passenger window,
+  4 shots back, the lead police car's windscreen crazes in front of its driver, it slews, hits a hydrant (water jet),
+  bursts into a shop front in a fireball; back in to shot 3's frame. Short clip to Sam.
+- Needs Sam: his look at the cast sheet, the car sheet and the swerve clip (notes, not gates).
+- Read: guides/job-packs.md, Build; the plan and acting list above; guides/figure-rig.md 2-4 (Jason leaning out).
+- Open rule requests: none found in this film's notes.
+- Left open (named): the police car is a boxier saloon than the game's rounded one (house look; a rounder roof is a later fix if Sam asks);
+  plates are real size so their letters only read close up; the swerve's street is a stand-in.
+- For Claude: cars source/gta_cars.py (Car, draw_car, SPECS, flash; crush/shatter for the crash); shot 2 rehearsal and the
+  stand-in street source/gta_rehearse.py (route, car_at, tyre_smoke, light_wash, clip; `shot2 OUT.mp4`). Build shot 4 there:
+  a shot4(t) with the Tulip on a straight street, cruisers behind (car_at-style paths), Jason from source/gta_cast.py,
+  muzzle flash/glass/hydrant jet/fireball from prepper_fx and flying_whales_fx (catalogue, Effects). Critique packs r1-p3, r1-p4 (cars stage).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 5.66% of 15%; forecast 56.2% (2026-11-20)
