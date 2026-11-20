@@ -396,7 +396,7 @@ def look_at(me_x, target_x, spread=600.0):
 # ------------------------------------------------------------------------------------------- the pose test sheet
 def sheet(out):
     """Every standard pose on the series' person, drawn and checked (and one bad, hand-typed arm, caught)."""
-    import burnham as B
+    import body as B
     from PIL import Image, ImageDraw, ImageFont
     B.SS = 1
     base = dict(skin=B.PALE, hw=68, hh=90, jaw='square', hair='crop', hair_c=(80, 60, 44), outfit='jumper',

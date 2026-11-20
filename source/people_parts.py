@@ -12,9 +12,11 @@ import math
 
 import numpy as np
 
-import ad_vanced_notice_cast as AV     # noqa: E402  (installs midterminal's hooks, turnhead, the Vance helpers)
-from midterminal_cast import B, P4, dk   # noqa: E402
-from ed import INK, curve, oval  # noqa: E402
+import body as B                       # noqa: E402  the people engine
+import views as V                      # noqa: E402  every view of a person
+import faces as FA                     # noqa: E402  the measured face layout and its parts
+from faces import dk                   # noqa: E402
+from ink import INK, curve, oval  # noqa: E402
 import turnhead as TH  # noqa: E402
 import focus as FO  # noqa: E402  (C2, 19 Nov: where a front-on face looks)
 
@@ -24,7 +26,7 @@ LONG_STYLES = ('bob', 'long', 'curly', 'bun', 'shag')   # hair that has a mass b
 def gaze(L, g):
     """This film's gaze_dy is a share of the eye's half-height (-1 up .. 1 down); traitors_cast.eye takes drawing units
     (found 11 Nov, cast chat 8: -0.7 moved the pupils under a pixel, so no planned eye move showed)."""
-    eh = (L['eh'] if L else 0.0508) * P4.H / 1.8
+    eh = (L['eh'] if L else 0.0508) * FA.H / 1.8
     return g * eh * 0.85
 
 
@@ -35,11 +37,11 @@ HEAD_K = 1.15        # Sam, 11 Nov (cast sheet): "a small-looking head": his fac
 class _Big:
     """While drawing his head, the face height (patriots4's and turnhead's H) is HEAD_K times the house size."""
     def __enter__(self):
-        self.old = (P4.H, TH.H)
-        P4.H = TH.H = 172.0 * HEAD_K
+        self.old = (FA.H, TH.H)
+        FA.H = TH.H = 172.0 * HEAD_K
 
     def __exit__(self, *a):
-        P4.H, TH.H = self.old
+        FA.H, TH.H = self.old
 
 
 def _lift(hy):
@@ -76,10 +78,10 @@ def _dome_outline(L, crown=SKULL_CROWN):
 
 
 def _outline(L, crown=-0.42):
-    """P4.outline_uv without its fold: that list runs out to the upper-left temple and back and repeats the left
+    """FA.outline_uv without its fold: that list runs out to the upper-left temple and back and repeats the left
     temple point, so the smoothing folds the left forehead into a notch (Sam, 11 Nov: "strange ridges on the left
     side"). Here: once round, crown first, both temples alike."""
-    pts = P4.outline_uv(L, 0.4, crown=crown)[2:]               # from the crown: right side, chin, left side
+    pts = FA.outline_uv(L, 0.4, crown=crown)[2:]               # from the crown: right side, chin, left side
     out = []
     for q in pts:
         if not out or abs(q[0] - out[-1][0]) + abs(q[1] - out[-1][1]) > 1e-6:
@@ -206,17 +208,17 @@ def wig_head(img, p, sp, t, hx, hy):
 
 
 def face_layout(fc):
-    m = dict(P4.AVG)
+    m = dict(FA.AVG)
     for k, v in fc["m"].items():
         m[k] = m[k] + v
-    return P4.layout(m)
+    return FA.layout(m)
 
 
 def front_head(img, p, sp, t, hx, hy):
     """An invented face, front on (blessed_cast's inmate head, lifted): the face card is sp['kit_face']."""
     k = sp['kit_face'].get('k', 1.0)          # note 14: a face may be drawn smaller than the house's bigger size
     with _Big():
-        P4.H, TH.H = P4.H * k, TH.H * k
+        FA.H, TH.H = FA.H * k, TH.H * k
         return _front_head(img, p, sp, t, hx, hy - (HEAD_K * k - 1) * 172.0 * 0.85)
 
 
@@ -226,7 +228,7 @@ def _front_head(img, p, sp, t, hx, hy):
     L = face_layout(fc)
     up = max(0.0, -sp.get('gaze_dy', 0.0))                 # looking up at the TV: the face tips up a little
     gw = (L['ew'] * (0.86 if fc.get('glasses_thick') else 0.78)) if fc.get('glasses') else L['ew'] * 0.5
-    FF = FO.Focus(P4.Face(hx, hy, down=-0.8 * up), sp, L, L['fw'] * 0.5 - L['ecx'] - gw - 0.012)   # C2 (19 Nov): where
+    FF = FO.Focus(FA.Face(hx, hy, down=-0.8 * up), sp, L, L['fw'] * 0.5 - L['ecx'] - gw - 0.012)   # C2 (19 Nov): where
     #                                                         they look (focus.py); off at focus 0
     f = FF.whole
     skin, hc = sp['skin'], sp.get('hair_c', (40, 32, 28))
@@ -235,7 +237,7 @@ def _front_head(img, p, sp, t, hx, hy):
     if fc['hair'] in LONG_STYLES:
         _hair_mass(p, f, L, fc, hc)
     if fc['hair'] not in ('bob', 'long', 'curly', 'shag'):
-        AV._ears(p, FF.ears, L, skin)
+        FA.ears(p, FF.ears, L, skin)
     outl = _dome_outline(L) if bare_skull(fc) else _outline(L)
     p.poly(curve(f.pts(outl), 4), skin, INK, 2.6)
     jaw = [(-e, 0.5), (-L['jw'] * 0.5, 0.82), (-0.08, 0.98), (0.0, 1.0), (0.08, 0.98), (L['jw'] * 0.5, 0.82), (e, 0.5),
@@ -271,7 +273,7 @@ def _front_head(img, p, sp, t, hx, hy):
             sgn = 1 if rng.random() < 0.5 else -1
             u, v = sgn * rng.uniform(L['nw'] * 0.4, L['ecx'] + 0.04), rng.uniform(L['eye_y'] + 0.08, L['nose_y'])
             p.poly(oval(*FF.lines(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
-    P4.eyes(p, FF.eyes, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up), look=FO.look(sp)), fc['iris'], dk(skin, 0.8),
+    FA.eyes(p, FF.eyes, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up), look=FO.look(sp)), fc['iris'], dk(skin, 0.8),
             liner=2.6)
     if fc.get('lashes'):                                      # GTA (Lucia): a heavier upper lid and two flicks out
         for sgn in (-1, 1):
@@ -286,11 +288,11 @@ def _front_head(img, p, sp, t, hx, hy):
         pencil(p, FF.mouth, L, fc)
     if fc.get('glasses'):
         _glasses(p, FF.lens, L, fc['glasses'], fc.get('glasses_thick'))
-    P4.brows(p, FF.brows, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
+    FA.brows(p, FF.brows, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
              sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
-    P4.nose(p, FF.nose, L, skin)
+    FA.nose(p, FF.nose, L, skin)
     fx, my = FF.mouth(0.0, L['lip13'])
-    P4.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', -0.4)), fc['lip'], (fx, my - 6))
+    FA.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', -0.4)), fc['lip'], (fx, my - 6))
     hl = -0.06
     if fc['hair'] in LONG_STYLES + ('receding', 'pony'):
         _hair_front(p, f, L, fc, hc, skin)
@@ -394,7 +396,7 @@ def piercings(p, f, L, fc, raise_=0.0, frown=0.0, seen=_all_seen):
     k = max(1.0, abs(f(1.0, 0.0)[0] - f(0.0, 0.0)[0]) / 100.0)   # sizes grow with the face (phone size, 2a's close)
     if 'brow' in which:
         up = raise_[1] if isinstance(raise_, (tuple, list)) else raise_
-        uv = P4.brow_uv(L, thick, up, frown)
+        uv = FA.brow_uv(L, thick, up, frown)
         (xm, ym), (xo, yo) = uv[1], uv[2]
         u = xm + (xo - xm) * 0.62
         v = ym + (yo - ym) * 0.62

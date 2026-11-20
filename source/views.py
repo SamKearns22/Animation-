@@ -27,9 +27,9 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-import burnham as B          # noqa: E402
+import body as B             # noqa: E402  the people engine
 import figure as F           # noqa: E402
-from ed import INK, curve, oval   # noqa: E402
+from ink import INK, curve, oval   # noqa: E402
 
 VIEWS = {0: 'front', 45: 'three', 90: 'side', 135: 'three_back', 180: 'back'}
 THIGH, SHIN, ANKLE_Y = 228, 218, 890          # person units: hips at 450, soles at 928 (knees just soft standing)
@@ -338,6 +338,26 @@ def hand(p, j2, side, sp, shape):
 
 
 def arm(p, j2, side, sp, shape=None):
+    """An arm and its hand; a short-sleeved top (sp['short_sleeve']): the bare arm, then the sleeve over the top of
+    the upper arm (from MidTerminal's polo, 20 Nov: higher and wider for Grand Theft Autism, so no skin shows over the
+    shoulder's round top; the sleeve narrows round the arm)."""
+    if sp.get('short_sleeve') and not PROBE:
+        sh, el = j2['sh' + side], j2['el' + side]
+        sleeved_arm(p, j2, side, dict(sp, sleeve=sp['skin'], jacket=sp['skin']), shape)
+        end = (sh[0] + (el[0] - sh[0]) * 0.55, sh[1] + (el[1] - sh[1]) * 0.55)
+        up, half = sp.get('sleeve_up', 0.2), sp.get('sleeve_w', 36)
+        sh = (sh[0] - (el[0] - sh[0]) * up, sh[1] - (el[1] - sh[1]) * up)
+        dx, dy = end[0] - sh[0], end[1] - sh[1]
+        n = math.hypot(dx, dy) or 1.0
+        nx, ny = -dy / n * half, dx / n * half
+        tp = sp.get('sleeve_taper', 0.95)
+        p.poly([(sh[0] + nx, sh[1] + ny), (end[0] + nx * tp, end[1] + ny * tp), (end[0] - nx * tp, end[1] - ny * tp),
+                (sh[0] - nx, sh[1] - ny)], sp['jacket'], INK, 2.4)
+        return
+    sleeved_arm(p, j2, side, sp, shape)
+
+
+def sleeved_arm(p, j2, side, sp, shape=None):
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
     with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
         B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sp.get('sleeve', sp.get('jacket', (40, 40, 46))))
@@ -609,7 +629,7 @@ def torso_outline(sp, view, bottom):
     """The turned torso's outline (torso_view's body), facing right, in the body's units."""
     sw = sp.get('shoulders', 150)
     if view == 'three':
-        from ed import open_curve
+        from ink import open_curve
         top = open_curve([(-sw * 0.97, 120), (-sw * 0.95, 48), (-sw * 0.84, 18), (-sw * 0.55, 4), (-30, -6),
                           (52, -6), (sw * 0.5, 4), (sw * 0.78, 20), (sw * 0.88, 52), (sw * 0.89, 120)], 6)
         return top + [(sw * 0.88, 200), (sw * 0.78 * B.HEM, bottom), (-sw * 0.86 * B.HEM, bottom), (-sw * 0.97, 200)]
@@ -641,8 +661,7 @@ class WrapPen:
     STEP = 10.0                                   # edges cut into steps this long, so they bend round the body
 
     def __init__(self, img, p, sp, view, seated=False, face='front'):
-        import burnham
-        self.pen, self.view, self.face = burnham.Pen(img, p.cam), view, face
+        self.pen, self.view, self.face = B.Pen(img, p.cam), view, face
         self.cam, self.img = p.cam, img
         sw = sp.get('shoulders', 150)
         bottom = min(sp.get('bottom', JACKET), 470) if seated else sp.get('bottom', JACKET)
@@ -753,7 +772,20 @@ def _sits(j):
                                                                        for f in feet)))
 
 
+TURNED_HEADS = {}    # name -> fn(img, p, sp, t, view, hx, hy): each kit's turned heads (turnhead, people_turned,
+NOT_MINE = object()  # people_famous, facehouse), newest tried first, turnhead's last; NOT_MINE passes the person on
+
+
 def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
+    """The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head."""
+    for k in [k for k in reversed(list(TURNED_HEADS)) if k != 'turnhead'] + ['turnhead'] * ('turnhead' in TURNED_HEADS):
+        r = TURNED_HEADS[k](img, p, sp, t, view, hx, hy)
+        if r is not NOT_MINE:
+            return r
+    return plain_head_view(img, p, sp, t, view, hx, hy)
+
+
+def plain_head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
     """The head for each view, facing right. 'front' is the library's own head; the others are drawn here from the
     same design (hair kind and colour, beard kind, eyes, brows, nose, glasses, mouth shapes)."""
     if view == 'front':

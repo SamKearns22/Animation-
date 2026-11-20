@@ -22,7 +22,7 @@ import random
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
-from ed import INK, curve
+from ink import INK, curve
 from places_parts import kind, wob, quad, mix, dk, bricks_in
 
 STEEL = (176, 182, 188)

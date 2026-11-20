@@ -14,7 +14,7 @@ import random
 
 import numpy as np
 
-from ed import INK
+from ink import INK
 from places_parts import kind, wob, quad, mix, dk, window_box, bricks_in
 from remakes_sets import blob, clump
 

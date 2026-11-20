@@ -238,7 +238,7 @@ def person(photos, others, age=None):
 def draw(p, f, L, skin, age, ink=None):
     """The age lines on a front head (patriots4_cast's Face f and layout L), after the nose and before the lips.
     age: person()'s dict (or just {'strength': {...}}). Nothing is drawn for a line of strength under 0.15."""
-    from ed import open_curve as curve      # (ed.curve is closed: a line on it doubles back)
+    from ink import open_curve as curve      # (ed.curve is closed: a line on it doubles back)
     st = age.get('strength', age)
     dk = lambda c, k: tuple(int(v * k) for v in c)
     ew, ecx, ey, eh = L['ew'], L['ecx'], L['eye_y'], L['eh']

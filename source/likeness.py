@@ -596,7 +596,7 @@ def _dk(c, k):
 
 def _smooth(pts, n=6, closed=True):
     sys.path.insert(0, HERE)
-    from ed import curve, open_curve
+    from ink import curve, open_curve
     return curve(pts, n) if closed else open_curve(pts, n)
 
 

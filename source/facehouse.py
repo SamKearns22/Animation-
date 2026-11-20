@@ -30,7 +30,7 @@ HAIR PIECES (named in the person's lines, `head: house NAME, hair PIECE`):
 
 LIKENESS (chat 8): the person's lines may also name push/tune (caricature(): each measure moved further from real
     faces' middle; Sam: "careful, you're straying too hard into caricature territory": keep push near 1.15), lashes,
-    eye_scale, iris_r/pupil_r/iris_c (the iris's colour), lid (a heavier upper lid: calm, not wide), brow_up/brow_arch/brow_taper, mouth (the house mouths, AV.vance_mouth: soft, grin,
+    eye_scale, iris_r/pupil_r/iris_c (the iris's colour), lid (a heavier upper lid: calm, not wide), brow_up/brow_arch/brow_taper, mouth (the house mouths, FA.house_mouth: soft, grin,
     smirk; wide, gap, creases, drop), forehead (hairline lifted), plait_k (each plait bigger).
     shape (chat 9): the face's outline traced off the front photos, row by row (`facehouse.py trace NAME OUT.jpg`
     measures it into the pick and lays it over each photo); the house outline otherwise.
@@ -87,9 +87,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 ROOT = os.path.dirname(HERE)
 import people_parts as PP                        # noqa: E402  (the house head size, outline; installs the hooks)
-from people_parts import AV, P4, dk, INK, curve, oval  # noqa: E402
-from midterminal_cast import blend               # noqa: E402
-from ed import open_curve                        # noqa: E402
+from people_parts import FA, dk, INK, curve, oval  # noqa: E402
+from faces import blend               # noqa: E402
+from ink import open_curve                        # noqa: E402
 import focus as FO                               # noqa: E402  (C2: where a front-on head looks)
 
 # ---------------------------------------------------------------------------------------------- reading the pick
@@ -161,7 +161,7 @@ def trace(name, out=None):
 def overlay(name, got, tr, out, T=420):
     """Each front photo with the traced outline (yellow) and the house outline it replaces (thin blue) laid over."""
     from PIL import Image, ImageDraw
-    L = P4.layout(load(name)['meas'])
+    L = FA.layout(load(name)['meas'])
     old = PP._outline(L, -0.3)
     new = face_outline(dict(L, trace=tr), -0.3)
     tiles = []
@@ -408,7 +408,7 @@ def browcheck(name, out=None):
     sp = person(name, 'detail', **CAST.get(name, {})) if name in CAST else None
     kh = sp['kit_house'] if sp else dict(load(name), brow=photo)
     L = face_layout(kh)
-    br = curve(P4.brow_uv(L, kh.get('brow_thick', 0.05), 0.0, 0.0, kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0),
+    br = curve(FA.brow_uv(L, kh.get('brow_thick', 0.05), 0.0, 0.0, kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0),
                           _peak(kh)), 3)
     lid = kh.get('lid', LID0)
     drawn = dict(high=round(_brow_gap(L, kh), 3),
@@ -475,7 +475,7 @@ LOOKS = {'house': dict(skin_k=0.65, age_min=0.5, age_k=0.6, sockets=False, fleck
 # ---------------------------------------------------------------------------------------------- the head
 EYE_OPEN_MIN = 0.2   # chat 13: Walliams' smiling photos tuned his eyes to 0.08 open: shut, at phone size a line.
                      # The house eye never opens less (real faces' middle 0.31; Andy's 0.26 untouched)
-LID0 = 0.12          # the house's resting upper lid (P4.eyes' lid4) that the measured brow height was laid out against
+LID0 = 0.12          # the house's resting upper lid (FA.eyes' lid4) that the measured brow height was laid out against
 
 
 def face_layout(kh):
@@ -488,7 +488,7 @@ def face_layout(kh):
     if kh.get('head') and kh.get('head_m'):                # chat 16: the whole head as measured (measure_head())
         hd = drawn_head(kh['head_m'], kh.get('shape_push', SHAPE_PUSH), kh.get('card'))
         meas['face_wide'] *= feature_scale(kh, hd, meas, kh.get('shape_push', SHAPE_PUSH))
-    L = P4.layout(meas)
+    L = FA.layout(meas)
     if hd:                                                 # chat 17: the widths every part reads (ears, age lines,
         L['head'] = hd                                     # stubble, the turned views) are the drawn face's own
         r = [(q[0], q[1]) for q in hd['rows'] if q[1] is not None]
@@ -595,7 +595,7 @@ def _sil(L, v):
 
 def _brow_gap(L, kh):
     """The drawn brow's middle line over the eye's middle, above the drawn upper lid, in eye widths."""
-    br = curve(P4.brow_uv(L, kh.get('brow_thick', 0.05), 0.0, 0.0, kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0),
+    br = curve(FA.brow_uv(L, kh.get('brow_thick', 0.05), 0.0, 0.0, kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0),
                           _peak(kh)), 3)
     cut = [v0 + (v1 - v0) * (L['ecx'] - u0) / (u1 - u0) for (u0, v0), (u1, v1) in zip(br, br[1:] + br[:1])
            if (u0 - L['ecx']) * (u1 - L['ecx']) < 0]
@@ -625,7 +625,7 @@ def _head(img, p, sp, t, hx, hy):
         L['dome_wide'] = kh.get('dome_wide')              # half width over the temples (face units), the photos'
     if kh.get('shape') and kh.get('outline'):               # the outline traced off the front photos (trace())
         L['trace'] = kh['outline']
-    FF = FO.Focus(P4.Face(hx, hy), sp, L, _focus_room(L, kh))   # C2 (19 Nov): where they look; off at focus 0
+    FF = FO.Focus(FA.Face(hx, hy), sp, L, _focus_room(L, kh))   # C2 (19 Nov): where they look; off at focus 0
     f = FF.whole
     skin = sp['skin']
     hc = sp['hair_c']
@@ -639,24 +639,24 @@ def _head(img, p, sp, t, hx, hy):
     if lk['sockets'] and kh['eyes'].get('shade', 0) >= 0.1:
         sockets(p, FF.eyes, L, skin, kh['eyes']['shade'])
     ey = kh['eyes']
-    P4.eyes(p, FF.eyes, L, dict(sp, lid4=sp.get('lid4', kh.get('lid', 0.12)), look=FO.look(sp)), tuple(kh.get('iris_c') or ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
+    FA.eyes(p, FF.eyes, L, dict(sp, lid4=sp.get('lid4', kh.get('lid', 0.12)), look=FO.look(sp)), tuple(kh.get('iris_c') or ey.get('iris') or (66, 46, 34)), dk(skin, 0.8),
             liner=_eye(kh, 'liner', 2.8) + 1.6 * kh.get('lashes', 0.0), iris_r=kh.get('iris_r', min(1.15, ey.get('iris_r', 0.95))),
             pupil_r=kh.get('pupil_r', min(0.5, ey.get('pupil_r', 0.42))), scale=_eye(kh, 'eye_scale', 1.0))
     if kh.get('lashes'):
         lashes(p, FF.eyes, L, sp, kh['lashes'], _eye(kh, 'eye_scale', 1.0))
-    P4.brows(p, FF.brows, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0),
+    FA.brows(p, FF.brows, L, sp['brow_c'], kh.get('brow_thick', 0.05), sp.get('brow_up', 0.0), sp.get('frown', 0.0),
              kh.get('brow_arch', 0.0), kh.get('brow_taper', 0.0), _peak(kh))
-    P4.nose(p, FF.nose, L, skin)
+    FA.nose(p, FF.nose, L, skin)
     age_lines(p, FF.lines, L, skin, kh['age'], lk)
     if kh.get('beard'):
         stubble(p, f, L, skin, kh['beard'])
     fx, my = FF.mouth(0.0, L['lip13'])
     m = kh.get('mouth')
     if m:                                                 # the person's own resting mouth (chat 8: the likeness push)
-        PP.AV.MC.TC.talk_or(p, dict(sp, lips=True, lip_c=kh['lip']), 0.0, fx, my - 6, lambda: PP.AV.vance_mouth(
+        FA.talk_or(p, dict(sp, lips=True, lip_c=kh['lip']), 0.0, fx, my - 6, lambda: FA.house_mouth(
             p, FF.mouth, L, m['kind'], kh['lip'], skin, m.get('wide', 1.12), m.get('gap', 0.0), m.get('creases', 1.0), m.get('drop')))
     else:
-        P4.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', 0.0)), kh['lip'], (fx, my - 6))
+        FA.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', 0.0)), kh['lip'], (fx, my - 6))
     if piece == 'swept':
         swept(p, f, L, hc, kh, lk)
     elif piece == 'bald':
@@ -664,7 +664,7 @@ def _head(img, p, sp, t, hx, hy):
     elif piece == 'braids':
         braids(p, f, L, hc, lk, kh)
         if kh.get('ears'):                                # over the plaits, as the pick drew them (K1: her width)
-            AV._ears(p, FF.ears, _ear_L(L), skin)
+            FA.ears(p, FF.ears, _ear_L(L), skin)
     if kh.get('glasses'):
         glasses(p, FF.lens, L, kh['glasses'])
     return fx
@@ -684,10 +684,10 @@ def _focus_room(L, kh):
 
 
 def ears(p, f, L, skin, k=1.0):
-    """The house ears (AV._ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
+    """The house ears (FA.ears); `ear_k` in the person's lines (Milburn chat 5, McFadden's): bigger, standing out
     from the head by as much again."""
     if k == 1.0:
-        return AV._ears(p, f, L, skin)
+        return FA.ears(p, f, L, skin)
     for sgn in (-1, 1):
         if sgn < 0 and f.tq > 0.5:
             continue
@@ -730,25 +730,25 @@ def stubble(p, f, L, skin, bd, seed=61, ink=True):
     uj = _face_u(L, top_v)
     cheek = [(-uj + 0.01, top_v), (-uj * 0.84, top_v + 0.07), (-mw * 0.8, l13), (-mw * 0.62, ny + 0.04),
              (0.0, ny + 0.035), (mw * 0.62, ny + 0.04), (mw * 0.8, l13), (uj * 0.84, top_v + 0.07), (uj - 0.01, top_v)]
-    p.poly(f.pts(low + AV.tufts(cheek, 0.01, 0.014, out=1.0, seed=seed)), mid, None)
-    chin = AV.tufts([(jw * 0.46, 0.8), (mw * 0.55, l17 + 0.06), (0.0, l17 + 0.075), (-mw * 0.55, l17 + 0.06),
+    p.poly(f.pts(low + FA.tufts(cheek, 0.01, 0.014, out=1.0, seed=seed)), mid, None)
+    chin = FA.tufts([(jw * 0.46, 0.8), (mw * 0.55, l17 + 0.06), (0.0, l17 + 0.075), (-mw * 0.55, l17 + 0.06),
                      (-jw * 0.46, 0.8)], 0.012, 0.016, out=-1.0, seed=seed + 1)
     p.poly(f.pts([q for q in low if abs(q[0]) < jw * 0.47 and q[1] > 0.78] + chin[::-1]), light, None)
     mt = l0 - 0.03
-    mo = AV.tufts([(-mw * 0.6, l13 + 0.004), (-mw * 0.52, mt + 0.008), (-nw * 0.3, mt), (0.0, mt + 0.004),
+    mo = FA.tufts([(-mw * 0.6, l13 + 0.004), (-mw * 0.52, mt + 0.008), (-nw * 0.3, mt), (0.0, mt + 0.004),
                    (nw * 0.3, mt), (mw * 0.52, mt + 0.008), (mw * 0.6, l13 + 0.004)], 0.006, 0.012, out=1.0, seed=seed + 2)
     goat = [(mw * 0.6, l13 + 0.01), (mw * 0.3, l17 + 0.012), (mw * 0.14, l17 + 0.045), (0.0, l17 + 0.05),
             (-mw * 0.14, l17 + 0.045), (-mw * 0.3, l17 + 0.012), (-mw * 0.6, l13 + 0.01)]
-    p.poly(f.pts(mo + AV.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), must, None)
+    p.poly(f.pts(mo + FA.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), must, None)
     if ink:                                               # turned (turnhead's TurnFace): its own outline inks
         p.poly(curve(f.pts(face_outline(L)), 4), None, INK, 2.6)   # the jaw's ink line back over the shade
 
 
 def lashes(p, f, L, sp, k, scale=1.0):
     """Long dark lashes along each upper lid, longest at the outer corner (chat 8: Burnham's, the cartoonists' cue);
-    k (0..1) their length and count. The lid's curve is P4.eyes' own."""
-    w = L['ew'] * P4.H / 2 * scale
-    h = L['eh'] * P4.H / 1.8 * scale
+    k (0..1) their length and count. The lid's curve is FA.eyes' own."""
+    w = L['ew'] * FA.H / 2 * scale
+    h = L['eh'] * FA.H / 1.8 * scale
     lid = sp.get('lid4', 0.12)
     for sgn in (-1, 1):
         ex, ey = f(sgn * L['ecx'], L['eye_y'])
@@ -796,7 +796,7 @@ def _swept_shapes(L, kh, hc):
            (c + 0.035, -0.04)]
     front = [(c - 0.005, -0.04), (c - 0.05, -0.14), (c * 0.66, -0.16 + 0.02), (c * 0.42, hl - 0.01), (c * 0.12, hl + 0.015),
              (-c * 0.2, hl + 0.02), (-c * 0.48, hl + 0.005), (-c * 0.7, -0.13), (-c + 0.05, -0.14), (-c + 0.01, -0.04)]
-    cap = AV.tufts(top, 0.005, 0.03, out=1.0, seed=31) + front
+    cap = FA.tufts(top, 0.005, 0.03, out=1.0, seed=31) + front
     return dict(c=c, hl=hl, lift=lift, grey=grey, sides=sides, cap=cap)
 
 
@@ -829,7 +829,7 @@ def _swept_measured(L, kh, hc):
              (0.0, h(0.0) + 0.016), (-0.1, h(0.1) + 0.012), (-0.2, h(0.2) + 0.002), (-0.3, h(0.3) - 0.004),
              (-fe + 0.02, cb - 0.02), (-c + 0.01, cb)]
     front = [q for q in front if abs(q[0]) <= c]
-    cap = AV.tufts(top, 0.005, 0.03 * max(0.5, min(1.0, k)), out=1.0, seed=31) + front
+    cap = FA.tufts(top, 0.005, 0.03 * max(0.5, min(1.0, k)), out=1.0, seed=31) + front
     sides = []
     for sgn in (1, -1):
         sv = np.linspace(cb - 0.08, low, 7)
@@ -1104,7 +1104,7 @@ def braids_behind(p, f, L, hc, kh, sp):
     hs = _hair(L, kh)
     inner, _ = _edges(L, hs)
     yc = -11.0                                              # the collar's top in the body's units (views.torso)
-    vc = (yc - f.top) / P4.H
+    vc = (yc - f.top) / FA.H
     rows = VS[VS <= vc]
     right = [(u + 0.01, v) for u, v in zip(inner[:len(rows)], rows)] + [(inner[len(rows) - 1] + 0.01, vc)]
     p.poly(f.pts(right + [(-u, v) for u, v in right[::-1]]), dk(hc, 0.8), None)
@@ -1157,7 +1157,7 @@ def glasses(p, f, L, g):
     rounded box round each eye, an ink edge either side of the frame's colour, the bridge, the arms to the ears."""
     colr = tuple(g.get('colr', (30, 28, 30)))
     half, ew = L['ecx'], L['ew']
-    lw = min(g['rim_w'], 0.17) * ew * P4.H
+    lw = min(g['rim_w'], 0.17) * ew * FA.H
     y0 = max(L['eye_y'] + g['top'] * ew, L['brow_y'] - 0.02)
     y1 = L['eye_y'] + min(g['bot'], 1.0) * ew
     xi = max(half + g['cx'] * ew - g['w'] * ew / 2, 0.035)
@@ -1268,10 +1268,10 @@ def _turn_mouth(p, f, L, sp, fx, my):
     kh = sp['kit_house']
     m = kh.get('mouth')
     if m:
-        PP.AV.vance_mouth(p, f, L, m['kind'], kh['lip'], sp['skin'], m.get('wide', 1.12), m.get('gap', 0.0),
+        FA.house_mouth(p, f, L, m['kind'], kh['lip'], sp['skin'], m.get('wide', 1.12), m.get('gap', 0.0),
                           m.get('creases', 1.0), m.get('drop'))
     else:
-        P4.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0), mouth='rest'), kh['lip'], (fx, my - 6))
+        FA.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0), mouth='rest'), kh['lip'], (fx, my - 6))
 
 
 def _turn_face(pen, f, L, sp):
@@ -1381,7 +1381,7 @@ def _turned_braids(img, p, f, L, sp, kh, hc, lk, yaw):
 def _outside(img, p, poly, draw):
     """draw(pen) kept OUTSIDE the head's outline (poly, head units): what hangs behind the far cheek."""
     from PIL import Image, ImageDraw
-    import burnham as B
+    import body as B
     base = p.pen if hasattr(p, 'pen') else p
     layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
     draw(B.Pen(layer, base.cam))
@@ -1396,7 +1396,7 @@ def _turn_widths(L):
     """The face's half widths the turned views go round on: the measured head's drawn outline (chat 17: the turned
     views carried the house outline's widths, so the head changed shape as it turned), else the house outline's."""
     import turnhead as TH
-    return TH.half_widths(face_outline(L) if L.get('head') else P4.outline_uv(L, 0.4, crown=-0.42))
+    return TH.half_widths(face_outline(L) if L.get('head') else FA.outline_uv(L, 0.4, crown=-0.42))
 
 
 def _turn_person(sp):
@@ -1422,10 +1422,9 @@ def install_turned():
     Person: its measured face carried round the head, its colours, age lines and glasses, its hair piece turned;
     drawn at the house's bigger head size, lifted as the front is. Ears hidden under braids."""
     import turnhead as TH
-    V = PP.AV.MC.V
-    if getattr(V.head_view, 'kit_house', False):
+    V = PP.V
+    if 'kit_house' in V.TURNED_HEADS:
         return
-    old = V.head_view
 
     def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         kh = sp.get('kit_house')
@@ -1434,19 +1433,17 @@ def install_turned():
             with PP._Big():
                 return TH.draw(img, p, dict(sp, who=key, ears_hidden=kh['hair'] == 'braids' and not kh.get('ears')),
                                t, view, hx, PP._lift(hy))
-        return old(img, p, sp, t, view, hx, hy)
-    head_view.__dict__.update(getattr(old, '__dict__', {}))   # carry the earlier kits' flags: a second install is a no-op
-    head_view.kit_house = head_view.turnhead = True
-    V.head_view = head_view
+        return V.NOT_MINE
+    V.TURNED_HEADS['kit_house'] = head_view     # one list of turned heads in views.py, newest tried first
 
 
 # ---------------------------------------------------------------------------------------------- the person
 def caricature(meas, push=1.0, tune=None):
     """The caricaturist's push (chat 8, Sam: "we are allowed to play with face shapes in the house style"): each
-    measure moved further from real faces' middle (P4.AVG), by push, times tune[measure] where a person's lines name
+    measure moved further from real faces' middle (FA.AVG), by push, times tune[measure] where a person's lines name
     one; push 1 and no tune is the pick as measured. What makes this face THIS face grows; nothing new is invented."""
     tune = tune or {}
-    return {k: (P4.AVG[k] + push * tune.get(k, 1.0) * (v - P4.AVG[k])) if k in P4.AVG else v for k, v in meas.items()}
+    return {k: (FA.AVG[k] + push * tune.get(k, 1.0) * (v - FA.AVG[k])) if k in FA.AVG else v for k, v in meas.items()}
 
 
 def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246), tie=None, height=1.75, src=None,
@@ -1501,9 +1498,9 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
 
 def install():
     import people
-    PP.AV.MC.TC.HEADS  # noqa: B018  (the hooks are installed on import)
+    PP.B.HEADS  # noqa: B018  (the hooks are installed on import)
     people.install({})
-    TC = PP.AV.MC.TC
+    TC = PP.B                                    # the engine holds each look's head and torso (HEADS, TORSOS)
     return TC
 
 
@@ -1512,7 +1509,7 @@ def draw(name, look, out, size=900, lines=None, src=None, variant=None):
     person's house lines (CAST's for that face otherwise); `src`/`variant`: one of facepick's heads (load())."""
     from PIL import Image
     from satire_style import install_circle_hands
-    B, V = PP.B, PP.AV.MC.V
+    B, V = PP.B, PP.V
     install_circle_hands(B)
     TC = install()
     sp = person(name, look, src=src, variant=variant, **(lines if lines is not None else CAST[name]))
@@ -1533,7 +1530,7 @@ def turns(out, names, look='detail', yaws=(0, 45, 90, 135, 180), T=420):
     from PIL import Image, ImageDraw, ImageFont
     import people
     from satire_style import install_circle_hands
-    B, V = PP.B, PP.AV.MC.V
+    B, V = PP.B, PP.V
     install_circle_hands(B)
     cast = {}
     for n in names:
@@ -1568,7 +1565,7 @@ def compare(out, name, beside=None, T=440, title=None, turned=False):
     import people
     import facepick as FP
     from satire_style import install_circle_hands
-    B, V = PP.B, PP.AV.MC.V
+    B, V = PP.B, PP.V
     install_circle_hands(B)
     TC = install()
     tmp = os.path.join(os.path.dirname(os.path.abspath(out)), '_facehouse')

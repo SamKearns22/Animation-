@@ -28,7 +28,7 @@ sys.path.insert(0, HERE)
 
 import figure as F           # noqa: E402
 import views as V            # noqa: E402
-from ed import INK           # noqa: E402
+from ink import INK           # noqa: E402
 
 HOVER = 10.0                  # units (1.5 cm): a resting hand's contact point at most this far above its surface
 SINK = 7.0                    # ... and at most this far into it

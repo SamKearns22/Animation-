@@ -23,15 +23,15 @@ INK = (24, 20, 22)
 # ------------------------------------------------------------------------------------------- shadows
 def contact_shadow(img, cam, x, y, w, h=None, alpha=0.28, colr=(0, 0, 0)):
     """A flat shadow where something meets the ground (world units): x, y the contact point, w its width.
-    Feet, chair castors, bins and boxes all get one, so nothing floats. Hard-edged (ed.HARD, Job K); soft when off."""
-    import ed
+    Feet, chair castors, bins and boxes all get one, so nothing floats. Hard-edged (ink.HARD, Job K); soft when off."""
+    import ink
     h = h if h is not None else w * 0.18
     X, Y = cam.P(x, y)
     W, H = cam.S(w), cam.S(h)
     pad = int(H * 2 + 4)
     lay = Image.new('RGBA', (int(W) + 2 * pad, int(H) + 2 * pad), (0, 0, 0, 0))
     ImageDraw.Draw(lay).ellipse([pad, pad, pad + W, pad + H], fill=colr + (int(255 * alpha),))
-    if not ed.HARD:
+    if not ink.HARD:
         lay = lay.filter(ImageFilter.GaussianBlur(max(1, H * 0.35)))
     img.alpha_composite(lay, (int(X - W / 2 - pad), int(Y - H / 2 - pad)))
 
@@ -57,7 +57,7 @@ def _frame(el, wr):
 def hand(p, el, wr, shape, skin, extra=None, t=0.0):
     """The extra hand shapes (person's own units). Returns True if drawn here (else burnham draws its own)."""
     from burnham import dk, finger
-    from ed import curve
+    from ink import curve
     d, nrm = _frame(el, wr)
     c = (wr[0] + d[0] * 16, wr[1] + d[1] * 16)
     shade = dk(skin, 0.8)

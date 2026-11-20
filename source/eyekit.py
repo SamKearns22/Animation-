@@ -14,7 +14,7 @@ MAP
 """
 import math
 
-from traitors_cast import clip_convex
+from faces import clip_convex
 
 INK = (28, 24, 26)
 SHINE = (255, 255, 255)

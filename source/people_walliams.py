@@ -20,21 +20,22 @@ from PIL import Image, ImageDraw
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import people_parts as PP         # noqa: E402  (the house head size, gaze)
-from people_parts import P4, AV, dk, INK, curve, oval  # noqa: E402
-from midterminal_cast import B, blend  # noqa: E402,F401
+from people_parts import FA, dk, INK, curve, oval  # noqa: E402
+import body as B  # noqa: E402,F401
+from faces import blend  # noqa: E402
 
 # ---------------------------------------------------------------------------------------------- measures (12 Nov)
 _card = json.load(open(os.path.join(HERE, '..', 'references', 'blessed', 'likeness', 'walliams-card.json')))
 _WM, _WA = _card['measures'], _card['average']
-P4.MEASURED[KEY] = {k: P4.AVG[k] + _WM[k] - _WA[k] for k in P4.AVG}
-P4.PUSH[KEY] = 1.6
+FA.MEASURED[KEY] = {k: FA.AVG[k] + _WM[k] - _WA[k] for k in FA.AVG}
+FA.PUSH[KEY] = 1.6
 # Note 29 (Sam, 12 Nov: not recognisable): a new card from Sam's straight-on photos w06, w07 with w01, w02. Its top
 # measures: a broad, square jaw (99th), a long chin (98th), a narrow forehead, a long gap nose to lip, small wide-set
 # eyes. Its 'short nose' (82nd, the photos disagree) is the long chin taking the face's height: by eye the nose is
 # long and straight, so it is pushed the other way (TUNE -1.5), as the first try's tiny button nose taught.
 
 # ---------------------------------------------------------------------------------------------- moods
-# brow: up (+); frown (-) lifts the inner ends (worry); lid: upper lid down; wide: the stare (P4.eyes)
+# brow: up (+); frown (-) lifts the inner ends (worry); lid: upper lid down; wide: the stare (FA.eyes)
 MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.25, wide=0.0, mouth='lips', smile=1.0, squint=0.55, cock=0.015),   # the smirk
          # scared and alarmed (note 25): brows high and pinched up in the middle, eyes wide, mouth pulled into a
          # wide grimace, the teeth showing
@@ -57,7 +58,7 @@ MOODS = {'neutral': dict(brow=0.0, frown=0.0, lid=0.25, wide=0.0, mouth='lips', 
 # on w02, w06, w09 his head is a BIG BOX: the hair makes the top as wide as the cheeks, the jaw square and wide.
 # likeness.py check on w06 (13 Nov, measured on the clean face: the stubble's edge fooled the jaw and lip measures):
 # 77%, none the wrong way, first in the line-up. The cocked brow above 0.015 made it read his eye corners as lifting.
-P4.TUNE[KEY] = dict(nose_long=0.0, chin_long=1.0, jaw_wide=8.0, face_wide=2.0, forehead_wide=5.0,
+FA.TUNE[KEY] = dict(nose_long=0.0, chin_long=1.0, jaw_wide=8.0, face_wide=2.0, forehead_wide=5.0,
                            eyes_apart=6.0, eye_size=3.0, eye_open=1.0, eye_tilt=-3.0, mouth_wide=-2.0, lip_top=1.5,
                            lip_low=1.5, brow_high=3.0, brow_slope=-0.6)
 
@@ -122,25 +123,25 @@ def beard(p, f, L, seed=61):
     low = o[i0:i1 + 1]
     cheek = [(-jw * 0.5 - 0.01, 0.6), (-jw * 0.42, 0.68), (-mw * 0.8, l13 + 0.0), (-mw * 0.62, ny + 0.04),
              (0.0, ny + 0.035), (mw * 0.62, ny + 0.04), (mw * 0.8, l13 + 0.0), (jw * 0.42, 0.68), (jw * 0.5 + 0.01, 0.6)]
-    top = AV.tufts(cheek, 0.01, 0.014, out=1.0, seed=seed)
+    top = FA.tufts(cheek, 0.01, 0.014, out=1.0, seed=seed)
     body = f.pts(low + top)
     p.poly(body, BD_MID, None)
-    chin = AV.tufts([(jw * 0.46, 0.8), (mw * 0.55, l17 + 0.06), (0.0, l17 + 0.075), (-mw * 0.55, l17 + 0.06),
+    chin = FA.tufts([(jw * 0.46, 0.8), (mw * 0.55, l17 + 0.06), (0.0, l17 + 0.075), (-mw * 0.55, l17 + 0.06),
                      (-jw * 0.46, 0.8)], 0.012, 0.016, out=-1.0, seed=seed + 1)
     p.poly(f.pts([q for q in low if abs(q[0]) < jw * 0.47 and q[1] > 0.78] + chin[::-1]), BD_LIGHT, None)
     mt = l0 - 0.03                                       # a thin band over the lip (w02, w07), not the philtrum
-    must = AV.tufts([(-mw * 0.6, l13 + 0.004), (-mw * 0.52, mt + 0.008), (-nw * 0.3, mt), (0.0, mt + 0.004),
+    must = FA.tufts([(-mw * 0.6, l13 + 0.004), (-mw * 0.52, mt + 0.008), (-nw * 0.3, mt), (0.0, mt + 0.004),
                      (nw * 0.3, mt), (mw * 0.52, mt + 0.008), (mw * 0.6, l13 + 0.004)], 0.006, 0.012,
                     out=1.0, seed=seed + 2)
     goat = [(mw * 0.6, l13 + 0.01), (mw * 0.3, l17 + 0.012), (mw * 0.14, l17 + 0.045), (0.0, l17 + 0.05),
             (-mw * 0.14, l17 + 0.045), (-mw * 0.3, l17 + 0.012), (-mw * 0.6, l13 + 0.01)]
-    p.poly(f.pts(must + AV.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), BD_MOUST, None)
+    p.poly(f.pts(must + FA.tufts(goat, 0.007, 0.012, out=-1.0, seed=seed + 3)), BD_MOUST, None)
     rng = np.random.default_rng(seed)
     for gv in np.arange(0.66, 1.0, 0.035):                # the grain: short light strokes on the grey
         for gu in np.arange(-fw * 0.5, fw * 0.5, 0.035):
             u, v = gu + rng.uniform(-0.012, 0.012), gv + rng.uniform(-0.012, 0.012)
             q = f(u, v)
-            if not AV._inside(body, q[0], q[1]) or (abs(u) < mw * 0.62 and v < l17 + 0.055):
+            if not FA.inside(body, q[0], q[1]) or (abs(u) < mw * 0.62 and v < l17 + 0.055):
                 continue
             q2 = f(u - u * 0.012, v + 0.02)
             p.line([q, q2], BD_GRAIN, 1.4)
@@ -168,7 +169,7 @@ def hair(p, f, L):
     front = [(c - 0.01, -0.05), (c - 0.06, -0.16), (c * 0.62, -0.17), (c * 0.4, hl - 0.02), (c * 0.15, hl + 0.01),
              (-c * 0.15, hl + 0.012), (-c * 0.4, hl - 0.015), (-c * 0.62, -0.17), (-c + 0.06, -0.16),
              (-c + 0.01, -0.05)]                            # chat 4: the temples receding to an M (w02, w06)
-    p.poly(curve(f.pts(AV.tufts(top, 0.008, 0.022, out=1.0, seed=52) + front), 2), HAIR, INK, 2.4)
+    p.poly(curve(f.pts(FA.tufts(top, 0.008, 0.022, out=1.0, seed=52) + front), 2), HAIR, INK, 2.4)
     for k, (u, ln) in enumerate(((-0.24, 0.24), (-0.13, 0.3), (-0.03, 0.27), (0.08, 0.31), (0.18, 0.25),
                                  (0.27, 0.2))):           # brushed up and over to our right, uneven
         u *= c / 0.4
@@ -185,7 +186,7 @@ def long_nose(p, f, L, skin):
     p.line(curve(f.pts([(-0.03, L['eye_y'] + 0.02), (-0.04, (L['eye_y'] + y) / 2), (-nw * 0.24, y - 0.065)]), 3), sd, 1.7)
     p.line(curve(f.pts([(-nw * 0.26, y - 0.03), (-nw * 0.2, y - 0.075), (0.0, y - 0.088), (nw * 0.2, y - 0.075),
                         (nw * 0.26, y - 0.03)]), 4), dk(skin, 0.84), 1.5)
-    P4.nose(p, f, L, skin)
+    FA.nose(p, f, L, skin)
 
 
 def smirk_lines(p, f, L, skin, smile):
@@ -249,7 +250,7 @@ def mouth(p, f, L, kind):
     hw, l0, l13, l17 = L['mw'] / 2, L['lip0'], L['lip13'], L['lip17']
     if kind == 'gasp':
         x, y = f(0.0, (l13 + l17) / 2 + 0.01)
-        rx, ry = hw * P4.H * 0.6, (l17 - l0) * P4.H * 0.9
+        rx, ry = hw * FA.H * 0.6, (l17 - l0) * FA.H * 0.9
         p.poly(oval(x, y, rx, ry, 24), (70, 26, 30), INK, 2.4)
         p.poly(oval(x, y + ry * 0.25, rx * 0.6, ry * 0.5, 20), (40, 14, 18), None)
         p.poly(oval(x, y - ry * 0.74, rx * 0.66, ry * 0.16, 14), (250, 248, 240), None)
@@ -272,34 +273,34 @@ def walliams_head(img, p, sp, t, hx, hy):
 
 
 def _head(img, p, sp, t, hx, hy):
-    L = _lay(P4.layout(P4.target(KEY, sp.get('average', False))))
-    f = P4.Face(hx, hy, 0.0, sp.get('turn', 0.0), sp.get('down', 0.0))
+    L = _lay(FA.layout(FA.target(KEY, sp.get('average', False))))
+    f = FA.Face(hx, hy, 0.0, sp.get('turn', 0.0), sp.get('down', 0.0))
     look = MOODS.get(sp.get('mood', 'neutral'), MOODS['neutral'])
     smile = look.get('smile', 0.0) if look['mouth'] == 'lips' else -0.5
-    AV._ears(p, f, L, SKIN)
+    FA.ears(p, f, L, SKIN)
     p.poly(curve(f.pts(outline(L)), 4), SKIN, INK, 2.6)
     if sp.get('shave', SHAVE) == 'stubble':
         beard(p, f, L)
     if sp.get('empty'):                                  # the likeness check's bare face
         long_nose(p, f, L, SKIN)
-        P4.lips(p, f, L, dict(sp, smile=0.1), LIP, f(0.0, L['lip13']))
+        FA.lips(p, f, L, dict(sp, smile=0.1), LIP, f(0.0, L['lip13']))
         hair(p, f, L)
         return f(0.0, L['lip13'])[0]
     smirk_lines(p, f, L, SKIN, smile)
     crinkles(p, f, L, SKIN, smile)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), look=sp.get('look', 0.0),
+    FA.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), look=sp.get('look', 0.0),
                           squint=sp.get('squint', look.get('squint', 0.0)),
                           gaze_dy=PP.gaze(L, sp.get('gaze_dy', 0.0))), IRIS, dk(SKIN, 0.8), liner=3.0,
             wide=look['wide'])
     r = look['brow'] + sp.get('brow_up', 0.0)
-    P4.brows(p, f, L, BROW, 0.052, (r + look.get('cock', 0.0), r), look['frown'] + sp.get('frown', 0.0))
+    FA.brows(p, f, L, BROW, 0.052, (r + look.get('cock', 0.0), r), look['frown'] + sp.get('frown', 0.0))
     long_nose(p, f, L, SKIN)
     fx, my = f(0.0, L['lip13'])
     talking = str(sp.get('mouth', 'rest')).startswith('v:')
     if not talking and look['mouth'] == 'lips' and smile > 0.3:
         smirk(p, f, L, smile)
     elif talking or look['mouth'] == 'lips':
-        P4.lips(p, f, L, dict(sp, smile=smile), LIP, (fx, my - 6))
+        FA.lips(p, f, L, dict(sp, smile=smile), LIP, (fx, my - 6))
     else:
         mouth(p, f, L, look['mouth'])
     hair(p, f, L)

@@ -16,7 +16,7 @@ import math
 import numpy as np
 
 import people_parts as PP
-from people_parts import P4, TH, dk, INK, curve, oval
+from people_parts import FA, TH, dk, INK, curve, oval
 
 # ---------------------------------------------------------------------------------------------- haircuts from behind
 # style: front hair design; hl: hairline; the profile keys say how far down the back the hair reaches. Lifted from
@@ -43,10 +43,10 @@ HIDES_EARS = ('bob', 'long', 'curly', 'wig', 'shag')       # hair over the ears:
 
 # ---------------------------------------------------------------------------------------------- the press pack's pieces
 def _layout(sp):
-    m = dict(P4.AVG)
+    m = dict(FA.AVG)
     for k, v in sp['kit_face']['m'].items():
         m[k] += v
-    return P4.layout(m)
+    return FA.layout(m)
 
 
 def _cap(L, hl):
@@ -181,7 +181,7 @@ def _mood(sp, f):
 
 
 def _rest(p, f, L, sp, fx, my, lip):
-    P4.lips(p, f, L, dict(sp, smile=0.0, mouth='rest'), lip, (fx, my - 6))
+    FA.lips(p, f, L, dict(sp, smile=0.0, mouth='rest'), lip, (fx, my - 6))
 
 
 # ---------------------------------------------------------------------------------------------- face marks held round
@@ -264,10 +264,9 @@ KEYED = {}       # who -> a function(sp) -> key, to key a look another way (repl
 def install():
     """Once: an invented kit face's turned views through its own turnhead Person, at the house's bigger head size (no
     lift: from behind, the neck shows long)."""
-    V = PP.AV.MC.V
-    if getattr(V.head_view, 'kit_turned', False):
+    V = PP.V
+    if 'kit_turned' in V.TURNED_HEADS:
         return
-    old = V.head_view
 
     def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         if (ON or sp.get('kit_crowd')) and sp.get('kit_face') and not sp.get('kit_head') and not sp.get('kit_famous') and view in TH.YAW:
@@ -277,10 +276,8 @@ def install():
             with PP._Big():
                 return TH.draw(img, p, dict(sp, who=lk['key'], ears_hidden=lk['ears_hidden'], _faithful=faithful), t,
                                view, hx, hy)
-        return old(img, p, sp, t, view, hx, hy)
-    head_view.__dict__.update(getattr(old, '__dict__', {}))   # carry the earlier kits' flags: a second install is a no-op
-    head_view.kit_turned = head_view.turnhead = True
-    V.head_view = head_view
+        return V.NOT_MINE
+    V.TURNED_HEADS['kit_turned'] = head_view     # one list of turned heads in views.py, newest tried first
 
 
 # ---------------------------------------------------------------------------------------------- the lost-parts check
@@ -289,7 +286,7 @@ PARTS = ('pencil', 'piercings', 'hair_streak', 'beard', 'stub', 'freckles', 'gla
 
 def _head_png(sp, yaw):
     from PIL import Image
-    V = PP.AV.MC.V
+    V = PP.V
     B = PP.B
     img = Image.new('RGBA', (360, 420), (255, 255, 255, 255))
     B.SS = 1

@@ -44,7 +44,7 @@ sys.path.insert(0, HERE)
 import burnham as B          # noqa: E402
 import figure as F           # noqa: E402
 import views as V            # noqa: E402
-from ed import INK           # noqa: E402
+from ink import INK           # noqa: E402
 
 KEYS = {'L': ((255, 0, 255), (0, 255, 255)), 'R': ((255, 128, 0), (0, 255, 0))}   # (sleeve, hand) per arm
 PROP_HAND = (255, 255, 0)     # a hand drawn by a prop (gesture_hand called from outside views.hand)

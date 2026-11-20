@@ -23,7 +23,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from ed import INK                                     # noqa: E402
+from ink import INK                                     # noqa: E402
 from remakes_sets import wob, quad, mix, dk            # noqa: E402
 
 KINDS = {}

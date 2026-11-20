@@ -30,7 +30,7 @@ from contextlib import contextmanager
 import numpy as np
 import cv2
 
-from ed import INK, curve, oval
+from ink import INK, curve, oval
 
 H = 172.0                                   # patriots4's face height in person units (top of forehead to chin)
 NECK = {'three': (-24, 40), 'side': (-26, 24), 'three_back': (-32, 32), 'back': (-32, 32)}   # views.torso_view's neck at its top
@@ -254,7 +254,7 @@ def inside(img, p, poly, draw):
     """Draw `draw(pen)` kept inside the head's outline (a face seen from behind: the beard's far edge, held round
     the head, never spills over the neck)."""
     from PIL import Image, ImageDraw
-    import burnham as B
+    import body as B
     base = p.pen if hasattr(p, 'pen') else p
     layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
     draw(B.Pen(layer, base.cam))
@@ -426,7 +426,7 @@ def clipped(img, p, mask, draw):
     m, x0, y0 = mask
     base = p.pen if hasattr(p, 'pen') else p
     layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    import burnham as B
+    import body as B
     draw(B.Pen(layer, base.cam))
     keep = cv2.erode(m, np.ones((5, 5), np.uint8))
     full = np.zeros((img.size[1], img.size[0]), np.uint8)
@@ -528,9 +528,9 @@ class Person:
         """(L, profile, widths): made the first time a shot needs this person turned, then kept."""
         key = bool(sp.get('average', False))
         if key not in self.built:
-            import patriots4_cast as P4
+            import faces as FA
             L = self.layout(sp)
-            w = self.widths(L) if self.widths else half_widths(P4.outline_uv(L, self.pad, crown=self.crown))
+            w = self.widths(L) if self.widths else half_widths(FA.outline_uv(L, self.pad, crown=self.crown))
             self.built[key] = (L, self.profile(L), w)
         return self.built[key]
 
@@ -580,32 +580,30 @@ def draw(img, p, sp, t, view, hx, hy):
 def install(V):
     """views.head_view's turned views go to the person's own turned head when they have one; a person with a measured
     front design but no Person yet is recorded (pre-flight: build it) and drawn the old way. Installed once."""
-    if getattr(V.head_view, 'turnhead', False):
+    if 'turnhead' in V.TURNED_HEADS:
         return
-    old = V.head_view
 
     def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         who = sp.get('who')
         if view in YAW and who in PEOPLE:
             return draw(img, p, sp, t, view, hx, hy)
         if view in YAW and who:
-            import patriots4_cast as P4
-            if who in P4.MEASURED:
+            import faces as FA
+            if who in FA.MEASURED:
                 MISSING.append((who, view))
         if view in YAW:
             GENERIC.append((sp.get('name', who or 'someone'), view))
-        return old(img, p, sp, t, view, hx, hy)
-    head_view.turnhead = True
-    V.head_view = head_view
+        return V.NOT_MINE
+    V.TURNED_HEADS['turnhead'] = head_view     # one list of turned heads in views.py, newest tried first
 
 
 def eyes(p, f, L, st, iris, skin, hood=False):
     """A turned face's eyes (traitors_cast.eye, as the front design draws them), each narrowed as it turns; the far one
     hidden behind the bridge of the nose once it turns away. hood: hooded outer corners (Vance)."""
-    import patriots4_cast as P4
-    import traitors_cast as TC
+    import faces as FA
+    import faces as FA
     dk = lambda c, k: tuple(int(x * k) for x in c)
-    w, h = L['ew'] * P4.H / 2, L['eh'] * P4.H / 1.8
+    w, h = L['ew'] * FA.H / 2, L['eh'] * FA.H / 1.8
     for sgn in (-1, 1):
         u = sgn * L['ecx']
         k = f.k(u, L['eye_y'])
@@ -614,7 +612,7 @@ def eyes(p, f, L, st, iris, skin, hood=False):
         k = max(k, 0.55) if sgn < 0 else max(k, KMIN if f.three else 0.0)  # an eye is a ball: from the side it still shows
         ex, ey = f(u, L['eye_y'])
         with squashed(p, ex, k):
-            TC.eye(p, ex, ey, sgn, w, h, iris, st, dk(skin, 0.82), liner=2.6)
+            FA.eye(p, ex, ey, sgn, w, h, iris, st, dk(skin, 0.82), liner=2.6)
             if hood:
                 hd = [(ex + sgn * w * 0.05, ey - h * 1.25), (ex + sgn * w * 1.2, ey - h * 1.0),
                       (ex + sgn * w * 1.12, ey + h * 0.15), (ex + sgn * w * 0.6, ey - h * 0.55),
@@ -662,7 +660,7 @@ def turnaround(pairs, moods=None, first=None):
     puts it on the check sheet; Sam's faces sheet). moods: {who: [sp overrides per row]}; a person with no Person
     (MISSING) shows the old drawing, labelled. -> PIL image, or None for no pairs."""
     from PIL import Image, ImageDraw, ImageFont
-    import burnham as B
+    import body as B
     import views as V
     who_views = {}
     for who, view in pairs:

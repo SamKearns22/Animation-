@@ -26,7 +26,7 @@ sys.path.insert(0, HERE)
 import burnham as B          # noqa: E402
 import figure as F           # noqa: E402
 import views as V            # noqa: E402
-from ed import INK           # noqa: E402
+from ink import INK           # noqa: E402
 
 MODEL = dict(name='Model', skin=(236, 196, 166), hair='crop', hair_c=(84, 62, 44), jacket=(64, 92, 132),
              sleeve=(64, 92, 132), trousers=(52, 54, 62), shoe=(30, 28, 30), hw=70, hh=90, jaw='round')

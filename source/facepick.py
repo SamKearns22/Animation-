@@ -58,8 +58,8 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import likeness as LK                                    # noqa: E402
-import patriots4_cast as P4                              # noqa: E402  (the measured face layout and its parts)
-from ed import INK, Pen, curve                           # noqa: E402
+import faces as FA                                       # noqa: E402  (the measured face layout and its parts)
+from ink import INK, Pen, curve                           # noqa: E402
 
 FONT = os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf')
 KEYS = [k for k, *_ in LK.MEASURES]
@@ -114,7 +114,7 @@ def _uv_to_photo(fr, L):
     """2x3 matrix: canvas pixel (X, Y) -> segmentation crop pixel, for this head's layout L."""
     # canvas -> (u, v): u = (X/SC - HX)/H, v = (Y/SC - top)/H
     top = HY - 72
-    H = P4.H
+    H = FA.H
     # (u, v) -> photo: along = u / fw * cheek ; down = (v - eye_y) / (1 - eye_y) * chin
     sa = fr['cheek'] / L['fw']
     sd = fr['chin'] / (1.0 - L['eye_y'])
@@ -274,7 +274,7 @@ def _strands(img, hair, face, colr, top_px):
     it, broken into pieces (house style: a hint of the comb's direction, not drawn hair)."""
     import cv2
     m = (hair & ~face).astype(np.uint8)
-    m[int(top_px + 0.1 * P4.H * SC):] = 0
+    m[int(top_px + 0.1 * FA.H * SC):] = 0
     if m.sum() < 400 * SC * SC:
         return
     dist = cv2.distanceTransform(m, cv2.DIST_L2, 5)
@@ -285,7 +285,7 @@ def _strands(img, hair, face, colr, top_px):
             c = c[:, 0, :].astype(float)
             if len(c) < 60 * SC:
                 continue
-            c = c[c[:, 1] < top_px + 0.02 * P4.H * SC]       # the upper arc only (the outline's inside along the top)
+            c = c[c[:, 1] < top_px + 0.02 * FA.H * SC]       # the upper arc only (the outline's inside along the top)
             n, run = len(c), int(26 * SC)
             for i in range(gap * run // 2, n - run // 2, int(run * 1.6)):
                 seg = c[i:i + run:max(1, SC)]
@@ -316,8 +316,8 @@ def _braids(img, hair, face, f, L, light):
     h, w = hair.shape
     inside = lambda x, y: 0 <= int(y * SC) < h and 0 <= int(x * SC) < w and hair[int(y * SC), int(x * SC)] \
         and not face[int(y * SC), int(x * SC)]
-    step, colw = 0.028 * P4.H, 0.042 * P4.H
-    y0 = f.top + (L['brow_y'] - 0.02) * P4.H
+    step, colw = 0.028 * FA.H, 0.042 * FA.H
+    y0 = f.top + (L['brow_y'] - 0.02) * FA.H
     ys = np.nonzero(hair.any(1))[0]
     if not len(ys):
         return
@@ -325,15 +325,15 @@ def _braids(img, hair, face, f, L, light):
     # where each plait starts: not one level line (a hard band at brow height, chat 3) but higher towards the
     # outside, as the crown lines curve down the sides, and a little uneven column to column; the crown lines stop
     # where the plaits take over, so each line runs on into a plait
-    start = lambda x: (y0 - 0.16 * P4.H * float(np.clip((abs(x - f.cx) - 0.25 * P4.H) / (0.35 * P4.H), 0, 1))
-                       + 0.03 * P4.H * math.sin(x * 1.7))
-    for x in np.arange(f.cx - 1.2 * P4.H, f.cx + 1.2 * P4.H, colw):
+    start = lambda x: (y0 - 0.16 * FA.H * float(np.clip((abs(x - f.cx) - 0.25 * FA.H) / (0.35 * FA.H), 0, 1))
+                       + 0.03 * FA.H * math.sin(x * 1.7))
+    for x in np.arange(f.cx - 1.2 * FA.H, f.cx + 1.2 * FA.H, colw):
         for y in np.arange(start(x), ybot, step):
             if inside(x, y) and inside(x, y + step):
                 p.line([(x - colw * 0.36, y), (x, y + step * 0.75), (x + colw * 0.36, y)], light, 1.7)
     for a in np.linspace(-1.0, 1.0, 13):                      # the crown: from the parting down to each side
-        top = (f.cx, ytop + 0.04 * P4.H)
-        pts = [(f.cx + a * 0.62 * P4.H * t, top[1] + (y0 - top[1]) * (t ** 0.8)) for t in np.linspace(0.05, 1, 12)]
+        top = (f.cx, ytop + 0.04 * FA.H)
+        pts = [(f.cx + a * 0.62 * FA.H * t, top[1] + (y0 - top[1]) * (t ** 0.8)) for t in np.linspace(0.05, 1, 12)]
         run = [q for q in pts if inside(*q) and q[1] < start(q[0]) + step]
         if len(run) > 3:
             p.line(run, light, 1.3)
@@ -368,8 +368,8 @@ def _grey_sides(img, hair, f, L, colr):
     photo's lighter sides, mirrored: a hard cut along the photo's temple line drew a square patch on one side)."""
     from scipy import ndimage
     h, w = hair.shape
-    u = (np.arange(w)[None, :] / SC - f.cx) / P4.H
-    v = (np.arange(h)[:, None] / SC - f.top) / P4.H
+    u = (np.arange(w)[None, :] / SC - f.cx) / FA.H
+    v = (np.arange(h)[:, None] / SC - f.top) / FA.H
     wt = np.clip((v - (L['brow_y'] - 0.12)) / 0.12, 0, 1) * np.clip((np.abs(u) - L['fw'] * 0.32) / 0.1, 0, 1)
     wt = np.clip(ndimage.gaussian_filter(wt * hair, 4 * SC) * 1.8, 0, 0.9) * hair
     a = np.asarray(img).astype(float)
@@ -379,27 +379,27 @@ def _grey_sides(img, hair, f, L, colr):
 
 def _face_mask(f, L):
     m = Image.new('L', (CW * SC, CH * SC), 0)
-    ImageDraw.Draw(m).polygon([(x * SC, y * SC) for x, y in curve(f.pts(P4.outline_uv(L)), 4)], fill=255)
+    ImageDraw.Draw(m).polygon([(x * SC, y * SC) for x, y in curve(f.pts(FA.outline_uv(L)), 4)], fill=255)
     return np.asarray(m) > 0
 
 
 def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None):
     """One head, front on, on a white canvas: traced shoulders, neck and hair; the measured face; then (extras)
     the glasses and beard. meas: the 16 measures to draw (likeness.MEASURES' keys)."""
-    import ad_vanced_notice_cast as AV
-    L = P4.layout(meas)
-    f = P4.Face(HX, HY)
+    import faces as FA
+    L = FA.layout(meas)
+    f = FA.Face(HX, HY)
     img = Image.new('RGB', (CW * SC, CH * SC), (255, 255, 255))
     p = Pen(img, Cam())
     face = _face_mask(f, L)
     rows = np.arange(CH * SC)[:, None] / SC
-    below_chin = rows > (f.top + 0.9 * P4.H)
+    below_chin = rows > (f.top + 0.9 * FA.H)
     from scipy import ndimage
     clothes = _warp(fr, L, shapes['clothes']) & below_chin
     xs = np.arange(CW * SC)[None, :] / SC
-    column = (np.abs(xs - f.cx) < 0.37 * L['jw'] * P4.H) & (rows > f.top + 0.7 * P4.H)   # the neck under the jaw
+    column = (np.abs(xs - f.cx) < 0.37 * L['jw'] * FA.H) & (rows > f.top + 0.7 * FA.H)   # the neck under the jaw
     neck = (_warp(fr, L, shapes['skin2']) & below_chin) | (column & ~below_chin)
-    near = (np.abs(xs - f.cx) < 0.6 * L['fw'] * P4.H) & (rows > f.top + 0.78 * P4.H)
+    near = (np.abs(xs - f.cx) < 0.6 * L['fw'] * FA.H) & (rows > f.top + 0.78 * FA.H)
     wedge = ndimage.binary_closing(face | clothes | neck, iterations=8 * SC) & near   # jaw-to-shoulder slivers
     neck = (neck | wedge) & ~face & ~clothes
     _paint(img, neck, col['skin'])
@@ -408,7 +408,7 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
     if hair.any():                                            # no white gap between the traced hair and the face
         from scipy import ndimage
         both = ndimage.binary_closing(hair | face, iterations=4 * SC)
-        top_half = rows < (f.top + L['eye_y'] * P4.H)
+        top_half = rows < (f.top + L['eye_y'] * FA.H)
         hair = hair | (ndimage.binary_fill_holes(both) & ~face & (top_half | hair))
     _paint(img, hair & ~face, col['hair'])
     if col.get('hair2') and shapes.get('hair_lt') is not None and shapes['hair_lt'].any():
@@ -418,30 +418,30 @@ def draw_head(meas, fr, shapes, col, out, extras=True, beard=None, glasses=None)
     else:
         _strands(img, hair, face, LK._dk(col['hair'], 0.55), f.top * SC)
     p = Pen(img, Cam())                                       # (the paste replaced the pixels: a fresh pen)
-    AV._ears(p, f, L, col['skin'])
-    p.poly(curve(f.pts(P4.outline_uv(L)), 4), col['skin'], INK, 2.6)
+    FA.ears(p, f, L, col['skin'])
+    p.poly(curve(f.pts(FA.outline_uv(L)), 4), col['skin'], INK, 2.6)
     if extras and beard:
         import beardkit
         beardkit.draw(p, f, L, col['skin'], beard)
     look = shapes.get('eyes') if extras else None   # the eyes' darkness, measured (eye_look), drawn after the check
     if look:
         _sockets(p, f, L, col['skin'], look)
-        P4.eyes(p, f, L, dict(lid4=0.1), tuple(int(c) for c in (look.get('iris') or (66, 46, 34))),
-                P4.dk(col['skin'], 0.8), liner=2.8 + 0.6 * look['shade'], iris_r=look['iris_r'], pupil_r=look['pupil_r'],
+        FA.eyes(p, f, L, dict(lid4=0.1), tuple(int(c) for c in (look.get('iris') or (66, 46, 34))),
+                FA.dk(col['skin'], 0.8), liner=2.8 + 0.6 * look['shade'], iris_r=look['iris_r'], pupil_r=look['pupil_r'],
                 scale=look.get('scale', 1.0))
     else:
-        P4.eyes(p, f, L, dict(lid4=0.1), (66, 46, 34), P4.dk(col['skin'], 0.8), liner=2.8)
-    P4.brows(p, f, L, col['brow'], fr.get('brow_th', 0.04))
-    P4.nose(p, f, L, col['skin'])
+        FA.eyes(p, f, L, dict(lid4=0.1), (66, 46, 34), FA.dk(col['skin'], 0.8), liner=2.8)
+    FA.brows(p, f, L, col['brow'], fr.get('brow_th', 0.04))
+    FA.nose(p, f, L, col['skin'])
     if extras and shapes.get('age'):     # the age lines measured from the photos (agelines), drawn AFTER the check like
         import agelines                  # a beard (rule 49.3): the face finder reads a cheek fold as the lips (A: chin
                                          # +0.4 -> -0.3, lip_low -0.35 -> -1.7) and crow's feet as the eyes' width
         agelines.draw(p, f, L, col['skin'], shapes['age'])
-    P4.lips(p, f, L, dict(smile=0.0), col['lip'], f(0.0, L['lip13']))
+    FA.lips(p, f, L, dict(smile=0.0), col['lip'], f(0.0, L['lip13']))
     # hair over the face: the hairline, a fringe, side curtains; never over the eyes and brows
     xs = np.arange(CW * SC)[None, :] / SC
-    u = (xs - HX) / P4.H
-    v = (rows - f.top) / P4.H
+    u = (xs - HX) / FA.H
+    v = (rows - f.top) / FA.H
     keep = (v < L['brow_y'] - 0.05) | (np.abs(u) > L['ecx'] + L['ew'] * 0.75)
     front = hair & face & keep
     if front.any():
@@ -487,7 +487,7 @@ def draw_glasses(p, f, L, g, colr=(30, 28, 30)):
     past the brow's top edge, and the lenses never meet in the middle."""
     colr = tuple(g.get('colr', colr))
     half, ew = L['ecx'], L['ew']
-    lw = g['rim_w'] * ew * P4.H
+    lw = g['rim_w'] * ew * FA.H
     y0 = max(L['eye_y'] + g['top'] * ew, L['brow_y'] - 0.03)
     y1 = L['eye_y'] + g['bot'] * ew
     for sgn in (-1, 1):
@@ -548,13 +548,13 @@ def response(fr, shapes, col, out_dir, name, step=1.5, log=print):
     mouth, lips and chin share the face's height), so the settings are solved together, not one by one."""
     spread = LK.baseline(False)['spread']
     tmp = os.path.join(out_dir, f'{name}-probe.png')
-    draw_head(dict(P4.AVG), fr, shapes, col, tmp, extras=False)
+    draw_head(dict(FA.AVG), fr, shapes, col, tmp, extras=False)
     d0 = _devs(tmp)
     if d0 is None:
         raise SystemExit(f'{name}: the face finder cannot read the average head: the traced shapes hide the face')
     J = np.zeros((len(KEYS), len(KEYS)))
     for j, k in enumerate(KEYS):
-        m = dict(P4.AVG)
+        m = dict(FA.AVG)
         m[k] += step * spread[k]
         draw_head(m, fr, shapes, col, tmp, extras=False)
         d = _devs(tmp)
@@ -602,12 +602,12 @@ def tune(target, fr, shapes, col, out, rounds=ROUNDS, log=print, ref=None, other
     bias, J = resp
     J = J.copy()
     twin = os.path.splitext(out)[0] + '-average.png'
-    draw_head(dict(P4.AVG), fr, shapes, col, twin, extras=False)
+    draw_head(dict(FA.AVG), fr, shapes, col, twin, extras=False)
     sg = np.sign([ref[k] for k in KEYS])
     best, sigma, n = None, 0.6, 0
 
     def drawn(x):
-        meas = {k: P4.AVG[k] + x[i] * spread[k] for i, k in enumerate(KEYS)}
+        meas = {k: FA.AVG[k] + x[i] * spread[k] for i, k in enumerate(KEYS)}
         draw_head(meas, fr, shapes, col, out, extras=False)
         got = _devs(out)
         if got is None:

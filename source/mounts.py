@@ -30,7 +30,7 @@ import burnham as B          # noqa: E402
 import figure as F           # noqa: E402
 import kit                   # noqa: E402
 import views as V            # noqa: E402
-from ed import INK, curve, open_curve   # noqa: E402
+from ink import INK, curve, open_curve   # noqa: E402
 
 M = 1.0 / V.M_PER_UNIT       # person units in a metre (658)
 FH = 120.0                   # fetlock height above the ground, standing

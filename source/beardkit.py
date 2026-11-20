@@ -87,8 +87,8 @@ def v_of_b(b, anc):
 
 def cartoon_edge(L, chin_w=0.4):
     """The cartoon face's half-width at height v (from patriots4's outline)."""
-    import patriots4_cast as P4
-    pts = P4.outline_uv(L, chin_w)
+    import faces as FA
+    pts = FA.outline_uv(L, chin_w)
     right = sorted({(round(v, 4), abs(u)) for u, v in pts if u >= 0 and v >= 0.0})
     vs = np.array([v for v, _ in right])
     us = np.array([u for _, u in right])
@@ -563,16 +563,16 @@ def draw(p, f, L, skin, spec, chin_w=0.4, seed=7):
     """Draw the facial hair on a face (patriots4 frame f, layout L) in house style. Call after the face's skin and
     outline, before the nose and mouth."""
     import random
-    import patriots4_cast as P4
-    from ed import INK
+    import faces as FA
+    from ink import INK
     rng = random.Random(seed)
     edge = cartoon_edge(L, chin_w)
     base = _col(spec['base'], skin)
     dark = _col(spec.get('dark', [c * 0.75 for c in spec['base']]), skin)
-    face_poly = f.pts(P4.outline_uv(L, chin_w))
+    face_poly = f.pts(FA.outline_uv(L, chin_w))
 
     sil = []
-    for u, v in P4.outline_uv(L, chin_w):
+    for u, v in FA.outline_uv(L, chin_w):
         if v > 0.4:
             spill = 0.012 + 0.04 * max(0.0, (v - 0.8) / 0.2)
             du, dv = u, v - 0.55
@@ -649,11 +649,11 @@ def draw(p, f, L, skin, spec, chin_w=0.4, seed=7):
 # ---------------------------------------------------------------------------------------------- the check sheet
 def empty_face(spec, out_size=520, L=None, skin=(232, 178, 152)):
     """The beard on an empty face (skin, ears, nose, lips) in the house style, for the check sheet."""
-    import burnham as B
-    import patriots4_cast as P4
-    from ed import INK, curve, oval
+    import body as B
+    import faces as FA
+    from ink import INK, curve, oval
     if L is None:
-        L = P4.layout(P4.AVG)
+        L = FA.layout(FA.AVG)
     im = Image.new('RGBA', (1080, 1300), (255, 255, 255, 255))
 
     class Pen:
@@ -673,11 +673,11 @@ def empty_face(spec, out_size=520, L=None, skin=(232, 178, 152)):
         def ell(self, x, y, rx, ry, fill, line, w=1.0):
             self.d.ellipse([x - rx, y - ry, x + rx, y + ry], fill=fill, outline=line)
     p = Pen(im)
-    pts = P4.outline_uv(L, 0.4)
+    pts = FA.outline_uv(L, 0.4)
     f = _BigFace(540, 300, 900)
     p.poly(f.pts(pts), skin, INK, 3)
     draw(p, f, L, skin, spec)
-    P4.nose(p, f, L, skin)
+    FA.nose(p, f, L, skin)
     hw = L['mw'] / 2
     p.poly(f.pts([(-hw, L['lip13']), (0, L['lip0'] + 0.01), (hw, L['lip13']), (0, L['lip17'])]), (200, 128, 116), INK, 2)
     p.line(f.pts([(-hw, L['lip13']), (hw, L['lip13'])]), INK, 2)
@@ -722,7 +722,7 @@ def check_sheet(spec, faces, G, As, Bs, out):
     W = sum(t.width for t in tiles) + 12 * (len(tiles) - 1)
     sheet = Image.new('RGB', (W, H + 46), (232, 228, 222))
     d = ImageDraw.Draw(sheet)
-    from midterminal_cast import FONT
+    FONT = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonts', 'DejaVuSans-Bold.ttf')
     font = ImageFont.truetype(FONT, 24)
     x = 0
     labels = []

@@ -703,14 +703,16 @@ HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (T
 def install(cast):
     """Hang each person's head and torso parts on the engine (traitors_cast's hooks, read by views.person)."""
     import people_parts as PP
-    TC = PP.AV.MC.TC
+    TC = PP.B                                    # the engine holds each look's head and torso (HEADS, TORSOS)
     import people_famous as PF
     import people_turned as PT
     import facehouse as FH
+    import turnhead as TH
+    TH.install(PP.V)                             # turned heads, first in line (people_turned, famous, house: before it)
     PF.install()
     PT.install()
     FH.install_turned()
-    V = PP.AV.MC.V
+    V = PP.V
     if kit_torso_view not in V.TORSO_EXTRAS:
         V.TORSO_EXTRAS.append(kit_torso_view)
     import people_hats as PH                     # craft change 1: a crowd member's beanie or cap, every view
@@ -719,6 +721,8 @@ def install(cast):
     for sp in cast.values():                     # one person may have several looks (Brand's four): the head and
         TC.HEADS[sp['who']] = kit_head           # torso are chosen from the look being drawn, not from the name
         TC.TORSOS[sp['who']] = kit_torso
+        if sp.get('kit_famous'):                 # a famous look's curls behind the head
+            TC.HAIR_BEHIND[sp['who']] = PF.hair_back
     return cast
 
 
@@ -745,7 +749,7 @@ def faults(cast):
     """Blessed's notes 5, 13, 15, 45 (a repeated note): a face on the house head draws no mouth at rest. Everyone the
     kit builds must be drawn by the kit's own face (or a part over it)."""
     import people_parts as PP
-    TC = PP.AV.MC.TC
+    TC = PP.B                                    # the engine holds each look's head and torso (HEADS, TORSOS)
     ok = {kit_head}
     return [f"{sp['name']}: not on the kit's face (no mouth at rest; Blessed notes 5, 13, 15, 45)"
             for w, sp in cast.items() if TC.HEADS.get(sp['who']) not in ok]
@@ -760,7 +764,7 @@ def sheet(film, out, cast=None, yaws=YAWS, crowd=8):
     true heights, a 1.75 m person's scale; each crowd's first `crowd` members after them."""
     import people_parts as PP
     from PIL import Image, ImageDraw, ImageFont
-    B, V = PP.B, PP.AV.MC.V
+    B, V = PP.B, PP.V
     from satire_style import install_circle_hands
     install_circle_hands(B)
     cast = dict(cast or load(film))

@@ -11,10 +11,10 @@ import numpy as np
 from PIL import Image
 
 import people_parts as PP
-from ed import INK, curve
+from ink import INK, curve
 
 B = PP.B
-V = PP.AV.MC.V
+V = PP.V
 _BOX = {}
 _VIEW_YAW = {'front': 0, 'three': 45, 'side': 90, 'three_back': 135, 'back': 180}
 _DK = lambda c, k=.72: tuple(int(v * k) for v in c)                                   # noqa: E731

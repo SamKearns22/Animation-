@@ -315,7 +315,7 @@ def move_tiles(film_name, keys, draft=False, tw=160, th=285):
     film = A.film_side(film_name) if real else draft_side(film_name, desc)
     import people_parts as PP
     from satire_style import install_circle_hands
-    B, V = PP.B, PP.AV.MC.V
+    B, V = PP.B, PP.V
     install_circle_hands(B)
     keep = A.install(desc, film) if real else None
     out = {}

@@ -54,7 +54,7 @@ import figure as F           # noqa: E402
 import moves                 # noqa: E402
 import sets as S             # noqa: E402
 import views as V            # noqa: E402
-from ed import INK           # noqa: E402
+from ink import INK           # noqa: E402
 
 M = V.M_PER_UNIT                                     # metres per person unit
 UPPER, FORE = F.UPPER * 0.98 * M, F.FORE * 0.98 * M  # the rig's bones, in metres

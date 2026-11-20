@@ -150,7 +150,7 @@ def at(trk, t):
 # ------------------------------------------------------------------------------------------- drawing
 def draw(p, sp, fx, my, shape, ink=(24, 20, 22)):
     """One mouth shape in the series' flat style, centred at (fx, my) in the person's units (burnham.mouth's place)."""
-    from ed import curve
+    from ink import curve
     lip = sp.get('lip_c', (198, 96, 104)) if sp.get('lips') else (150, 80, 84)
     dark, teeth, tongue = (70, 26, 30), (248, 248, 242), (196, 90, 96)
     if shape == 'rest':
@@ -221,7 +221,7 @@ _installed = {}
 
 def install(B):
     """Teach burnham's mouth to draw 'v:SHAPE' (e.g. sp['mouth'] = 'v:AI'); every other mouth is left as it was."""
-    if 'mouth' in _installed:
+    if 'mouth' in _installed or B.__name__ == 'body':     # the people engine (body.py) draws spoken shapes itself
         return
     inner = B.mouth
     _installed['mouth'] = inner
@@ -239,7 +239,7 @@ def install(B):
 
 def sheet(out):
     """Every shape on a face, labelled, and one line's track as a strip under it."""
-    import burnham as B
+    import body as B
     from PIL import Image, ImageDraw, ImageFont
     install(B)
     B.SS = 1

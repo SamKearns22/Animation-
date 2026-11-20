@@ -16,8 +16,8 @@ import os
 import numpy as np
 
 import people_parts as PP
-from people_parts import AV, P4, TH, dk, INK, curve, oval  # noqa: F401
-from midterminal_cast import blend
+from people_parts import FA, TH, dk, INK, curve, oval  # noqa: F401
+from faces import blend
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SHADES = (28, 30, 36)
@@ -68,31 +68,31 @@ def full_beard(p, f, L, skin, c, seed=91):
     # the left side"): smaller tufts the more he turns
     turned = abs(getattr(f, 's', 0.0)) if hasattr(f, 'th') else (getattr(f, 'tq', 0.0) or 0.0)   # TurnFace: sin(yaw)
     ta = 1.0 - 0.6 * min(1.0, turned)
-    inner = AV.tufts(right + left[1:], 0.012 * ta, 0.014, out=1.0, seed=seed)
-    edge = AV.tufts(bottom, 0.012 * ta, 0.018, out=1.0, seed=seed + 1)
+    inner = FA.tufts(right + left[1:], 0.012 * ta, 0.014, out=1.0, seed=seed)
+    edge = FA.tufts(bottom, 0.012 * ta, 0.018, out=1.0, seed=seed + 1)
     body = f.pts(edge + inner)
     p.poly(body, c['mid'], None)
     # grey-white over the chin and the jaw: everything below a tufted line from the jaw corner under the mouth
-    low_top = AV.tufts([(fw * 0.5 + 0.01, 0.66), (jw * 0.42, 0.8), (mw * 0.5, l17 + 0.08), (0.0, l17 + 0.1),
+    low_top = FA.tufts([(fw * 0.5 + 0.01, 0.66), (jw * 0.42, 0.8), (mw * 0.5, l17 + 0.08), (0.0, l17 + 0.1),
                         (-mw * 0.5, l17 + 0.08), (-jw * 0.42, 0.8), (-fw * 0.5 - 0.01, 0.66)], 0.016 * ta, 0.016,
                        out=1.0, seed=seed + 2)
     n = len(edge)
     p.poly(f.pts(edge[n // 5: n - n // 5] + low_top), c['low'], None)
     # the dark moustache: from under the nose, over the lip, down past the corners (a horseshoe) to the chin patch
     mt = max(ny + 0.03, l0 - 0.06)                       # a band over the lip (b10), not the whole philtrum
-    top = AV.tufts([(-mw * 0.7, l13 + 0.02), (-mw * 0.6, mt + 0.01), (-nw * 0.5, mt), (0.0, mt + 0.006),
+    top = FA.tufts([(-mw * 0.7, l13 + 0.02), (-mw * 0.6, mt + 0.01), (-nw * 0.5, mt), (0.0, mt + 0.006),
                     (nw * 0.5, mt), (mw * 0.6, mt + 0.01), (mw * 0.7, l13 + 0.02)], 0.008, 0.013, out=1.0,
                    seed=seed + 3)
     down = [(mw * 0.62, l13 + 0.012), (mw * 0.12, l17 - 0.004), (mw * 0.08, l17 + 0.03), (0.0, l17 + 0.045),
             (-mw * 0.08, l17 + 0.03), (-mw * 0.12, l17 - 0.004), (-mw * 0.62, l13 + 0.012)]   # the drooping ends, a soul patch
-    must = f.pts(top + AV.tufts(down, 0.008, 0.014, out=-1.0, seed=seed + 4))
+    must = f.pts(top + FA.tufts(down, 0.008, 0.014, out=-1.0, seed=seed + 4))
     p.poly(must, c['moust'], None)
     # the grain: short light strokes falling down and in over the grey parts (none in the dark horseshoe)
     for r, gv in enumerate(np.arange(0.5, 1.06, 0.04)):
         for gu in np.arange(-fw * 0.5 - (0.12 if wrap else 0.0) + (0.02 if r % 2 else 0.0), fw * 0.5, 0.04):
             u, v = gu + rng.uniform(-0.014, 0.014), gv + rng.uniform(-0.014, 0.014)
             q = f(u, v)
-            if not AV._inside(body, q[0], q[1]) or AV._inside(must, q[0], q[1]) or (wrap and f.k(u, v) < 0.15):
+            if not FA.inside(body, q[0], q[1]) or FA.inside(must, q[0], q[1]) or (wrap and f.k(u, v) < 0.15):
                 continue
             du, dv = -u * 0.5, 1.0
             nn = math.hypot(du, dv)
@@ -203,7 +203,7 @@ def _texture(p, f, c, poly_uv, n, seed, length=0.2):
         u, v = rng.uniform(min(us), max(us)), rng.uniform(min(vs), max(vs))
         ln = length * rng.uniform(0.6, 1.2)
         ends = (f(u, v), f(u, v + ln))
-        if not (AV._inside(q, *ends[0]) and AV._inside(q, *ends[1])):
+        if not (FA.inside(q, *ends[0]) and FA.inside(q, *ends[1])):
             continue
         k += 1
         sw = rng.choice((-1, 1)) * 0.025
@@ -302,7 +302,7 @@ def open_mouth(p, f, L, kind):
     if kind == 'gasp':
         # a round O inside the moustache: a long narrow one hanging below it read as a tongue (critique, 11 Nov)
         x, y = f(0.0, (l13 + l17) / 2 - 0.004)
-        rx, ry = hw * P4.H * 0.72, (l17 - l0) * P4.H * 0.72
+        rx, ry = hw * FA.H * 0.72, (l17 - l0) * FA.H * 0.72
         p.poly(oval(x, y, rx, ry, 24), (70, 26, 30), INK, 2.4)
         p.poly(oval(x, y + ry * 0.25, rx * 0.62, ry * 0.55, 20), (40, 14, 18), None)          # the dark throat
         p.poly(oval(x, y - ry * 0.72, rx * 0.66, ry * 0.16, 14), (250, 248, 240), None)       # top teeth
@@ -377,8 +377,8 @@ def _turned_hair(img, p, f, L, sp):
 def hair_back(p, sp, hx, hy, hw, hh):
     """Behind the head: the big curly mass down past the shoulders (loose), or nothing (the topknot)."""
     fm = sp.get('kit_famous')
-    if not fm:
-        return _old_hair_back(p, sp, hx, hy, hw, hh)
+    if not fm:                                   # another look of the same person: its own head draws its hair
+        return
     if fm['hair'] == 'knot':
         return
     pts = curls([(hx - hw - 30, hy - 40), (hx - hw - 70, hy + 120), (hx - hw - 66, hy + 300), (hx + hw + 66, hy + 300),
@@ -391,17 +391,17 @@ def hair_back(p, sp, hx, hy, hw, hh):
 def _card(fm):
     """The likeness card's measures, pushed and tuned, registered once under the face's own key."""
     k = fm['key']
-    if k not in P4.MEASURED:
+    if k not in FA.MEASURED:
         card = json.load(open(os.path.join(ROOT, fm['card'])))
         m, a = card['measures'], card['average']
-        P4.MEASURED[k] = {q: P4.AVG[q] + m[q] - a[q] for q in P4.AVG}
-        P4.PUSH[k] = fm['push']
-        P4.TUNE[k] = dict(fm['tune'])
+        FA.MEASURED[k] = {q: FA.AVG[q] + m[q] - a[q] for q in FA.AVG}
+        FA.PUSH[k] = fm['push']
+        FA.TUNE[k] = dict(fm['tune'])
     return k
 
 
 def layout(sp):
-    return P4.layout(P4.target(_card(sp['kit_famous']), sp.get('average', False)))
+    return FA.layout(FA.target(_card(sp['kit_famous']), sp.get('average', False)))
 
 
 def famous_head(img, p, sp, t, hx, hy):
@@ -413,32 +413,32 @@ def _famous_head(img, p, sp, t, hx, hy):
     fm = sp['kit_famous']
     c = fm['c']
     L = layout(sp)
-    f = P4.Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
+    f = FA.Face(hx, hy, sp.get('three', 0.0), sp.get('turn', 0.0), sp.get('down', 0.0))
     skin, look = sp['skin'], look_of(sp)
     knot = fm['hair'] == 'knot'
     cap, mass, locks = curls_hair(L, knot)
     if mass:                                             # the curls behind the face, past the shoulders
         p.poly(curve(f.pts(mass), 2), c['hair'], INK, 2.4)
         _texture(p, f, c, mass, 46, 7)
-    AV._ears(p, f, L, skin)
+    FA.ears(p, f, L, skin)
     p.poly(curve(f.pts(PP._outline(L)), 4), skin, INK, 2.6)
     if fm.get('beard'):
         full_beard(p, f, L, skin, fm['beard'])
     if sp.get('empty'):
-        P4.nose(p, f, L, skin)
-        P4.lips(p, f, L, dict(sp, smile=0.2), fm['lip'], f(0.0, L['lip13']))
+        FA.nose(p, f, L, skin)
+        FA.lips(p, f, L, dict(sp, smile=0.2), fm['lip'], f(0.0, L['lip13']))
         return f(0.0, L['lip13'])[0]
     if fm.get('deep_set'):
         deep_set(p, f, L, skin)
-    P4.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), squint=sp.get('squint', look['squint']),
+    FA.eyes(p, f, L, dict(sp, lid4=sp.get('lid4', look['lid']), squint=sp.get('squint', look['squint']),
                           gaze_dy=PP.gaze(L, sp.get('gaze_dy', look.get('gaze_dy', 0.0)))), fm['iris'], dk(skin, 0.8),
             liner=2.8)
-    P4.brows(p, f, L, sp['brow_c'], fm['brow_thick'], look['brow'] + sp.get('brow_up', 0.0),
+    FA.brows(p, f, L, sp['brow_c'], fm['brow_thick'], look['brow'] + sp.get('brow_up', 0.0),
              look['frown'] + sp.get('frown', 0.0))
-    P4.nose(p, f, L, skin)
+    FA.nose(p, f, L, skin)
     fx, my = f(0.0, L['lip13'])
     if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
-        P4.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0)), fm['lip'], (fx, my - 6))
+        FA.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0)), fm['lip'], (fx, my - 6))
     else:
         open_mouth(p, f, L, look['mouth'])
     if look.get('tears') or sp.get('tears'):
@@ -470,7 +470,7 @@ def _mood(sp, f):
 def _rest(p, f, L, sp, fx, my):
     look = look_of(sp)
     if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
-        P4.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0), mouth='rest'), sp['kit_famous']['lip'], (fx, my - 6))
+        FA.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0), mouth='rest'), sp['kit_famous']['lip'], (fx, my - 6))
     else:
         open_mouth(p, f, L, look['mouth'])
 
@@ -534,21 +534,13 @@ def zip_back(img, p, sp, t):
 
 
 # ---------------------------------------------------------------------------------------------- install
-_old_hair_back = None
-
-
 def install():
-    """Once: the hair behind famous heads, and their turned views through their own turnhead Person (drawn at the
+    """Once: the hair behind famous heads (hung per person by people.install: B.HAIR_BEHIND), and their turned views through their own turnhead Person (drawn at the
     house's bigger head size, lifted, under the key 'kit:WHO' so no film's own Person is used)."""
-    global _old_hair_back
-    B, V = PP.B, PP.AV.MC.V
-    if _old_hair_back is None:
-        _old_hair_back = B.hair_back
-        B.hair_back = hair_back
+    V = PP.V
     V.LONG_HAIR['kit_curls'] = 230
-    if getattr(V.head_view, 'kit_famous', False):
+    if 'kit_famous' in V.TURNED_HEADS:
         return
-    old = V.head_view
 
     def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         fm = sp.get('kit_famous')
@@ -556,7 +548,5 @@ def install():
             register(sp)
             with PP._Big():
                 return TH.draw(img, p, dict(sp, who=fm['key']), t, view, hx, PP._lift(hy))
-        return old(img, p, sp, t, view, hx, hy)
-    head_view.__dict__.update(getattr(old, '__dict__', {}))   # carry the earlier kits' flags: a second install is a no-op
-    head_view.kit_famous = head_view.turnhead = True
-    V.head_view = head_view
+        return V.NOT_MINE
+    V.TURNED_HEADS['kit_famous'] = head_view     # one list of turned heads in views.py, newest tried first

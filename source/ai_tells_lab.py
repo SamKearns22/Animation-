@@ -11,7 +11,7 @@ MAP
   head_life        proposal: a talking head that tilts, settles and nods on the voice's stresses (pose to pose)
   sheet OUT.jpg    the before/after check sheet (three rows: shading, head, background lines)
   clip OUT.mp4     Islamocommunism 36-42 s (one unbroken close-up): today | with head acting, side by side, with the film's sound
-  shading OUT.jpg  proposal 2's check (built, ed.HARD): the old airbrushed shading vs the hard-edged shapes, crops
+  shading OUT.jpg  proposal 2's check (built, ink.HARD): the old airbrushed shading vs the hard-edged shapes, crops
   rigclip OUT.mp4  proposal 1's check (built, headlife.py + views.Rolled): Islamocommunism 36-42 s, today | the rig's
                    own head acting from the voice, side by side, with the film's sound
   shirt OUT.jpg    proposal 4's check (built, ad_vanced_notice_cast.BENT): the check shirt flat vs bent, four views
@@ -55,9 +55,9 @@ def swapped(pairs):
 
 def cel():
     """Every module's soft() (and limbs' arm shading) drawn with a hard edge: the same shadow shape, no airbrush."""
-    import ed
+    import ink
     import limbs
-    orig, orig_shade = ed.soft, limbs._shade
+    orig, orig_shade = ink.soft, limbs._shade
 
     def hard(img, cam, pts, colr, alpha, blur=6):
         return orig(img, cam, pts, colr, alpha, 0)
@@ -366,15 +366,15 @@ def _film_frame(film, t):
 
 
 def shading(out, rows=None):
-    """Today's airbrushed shading (ed.HARD off) beside the hard-edged shapes, each a crop at the same place."""
-    import ed
+    """Today's airbrushed shading (ink.HARD off) beside the hard-edged shapes, each a crop at the same place."""
+    import ink
     rows = rows or SHADE_ROWS
     cw = 528
     pics = []
     for label, film, t, box in rows:
-        ed.HARD = False
+        ink.HARD = False
         a = _film_frame(film, t)
-        ed.HARD = True
+        ink.HARD = True
         b = _film_frame(film, t)
         a.save(os.path.join(OUT, f'shade-{film}-{t}-today.png'))
         b.save(os.path.join(OUT, f'shade-{film}-{t}-hard.png'))

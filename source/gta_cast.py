@@ -21,7 +21,7 @@ import people as PK                                  # noqa: E402  the people ki
 import people_parts as PP                            # noqa: E402
 from satire_style import install_circle_hands       # noqa: E402
 
-B, V = PP.B, PP.AV.MC.V
+B, V = PP.B, PP.V
 FILM = 'grand-theft-autism'
 REFS = os.path.join(ROOT, 'references', FILM)
 _CAST = None

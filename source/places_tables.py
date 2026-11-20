@@ -28,7 +28,7 @@ Map: table top 30 | curtain 70 | tumbler 115 | name card 140 | folder 160 | fire
 import math
 import random
 
-from ed import INK
+from ink import INK
 from places_parts import kind, wob, quad, mix, dk
 
 

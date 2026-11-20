@@ -35,7 +35,7 @@ from PIL import Image, ImageDraw
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import burnham as B              # noqa: E402
-from ed import INK               # noqa: E402
+from ink import INK               # noqa: E402
 
 FLAT = B.Cam(1.0, 540, 960)
 WALL_LOOK = dict(floor=(196, 186, 168), wall=(232, 226, 214), ceiling=(246, 244, 238), thing=(170, 140, 110))

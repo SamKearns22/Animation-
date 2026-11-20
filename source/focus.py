@@ -161,7 +161,7 @@ def _cast(people_file, who):
     import people_parts as PP
     install_circle_hands(PP.B)
     got = PK.load(people_file)
-    return PK.install({w: got[w] for w in who}), PP.B, PP.AV.MC.V
+    return PK.install({w: got[w] for w in who}), PP.B, PP.V
 
 
 def bust(sp, focus, B, V, w=390, extra=None):

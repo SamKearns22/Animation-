@@ -35,7 +35,7 @@ sys.path.insert(0, HERE)
 
 import figure as F           # noqa: E402
 import views as V            # noqa: E402
-from ed import INK           # noqa: E402
+from ink import INK           # noqa: E402
 
 FPS = 12
 SIT = 40.0                   # the hip joint sits this far above the seat: the thigh's half-thickness (no thigh in the seat)

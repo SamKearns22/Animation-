@@ -1333,7 +1333,7 @@ def turned_heads_for_anyone():
     import views as V
     import ad_vanced_notice_cast as C
     import turnhead as TH
-    from ed import curve
+    from ink import curve
     B.SS = 1
 
     def head(sp, yaw):
@@ -1518,7 +1518,7 @@ def eyes_cut_to_the_outline():
     import types
     import eyekit
     import housestyle
-    from ed import oval
+    from ink import oval
     import shocking_cast  # noqa: F401  (an old cast that draws uncut pupils)
     r, look, pr = 38, 2.4, 38 * 0.5 * 1.2
     outline = oval(0, 0, r, r, 40)
@@ -2412,7 +2412,7 @@ def kit_people_never_generic():
     import people_parts as PP
     import turnhead as TH
     from satire_style import install_circle_hands
-    B, V = PP.B, PP.AV.MC.V
+    B, V = PP.B, PP.V
     install_circle_hands(B)
     B.SS = 1
     films = sorted(f[:-len('-people.txt')] for f in os.listdir(os.path.join(HERE, '..', 'story')) if f.endswith('-people.txt'))
@@ -2461,7 +2461,7 @@ def outfit_every_view():
     import people
     import people_parts as PP
     from satire_style import install_circle_hands
-    B, V = PP.B, PP.AV.MC.V
+    B, V = PP.B, PP.V
     install_circle_hands(B)
     B.SS = 1
     base = people.parse("# t: Test\nbody: 1.78 m\nskin: pale | hair: crop, 40 32 28\n"
@@ -2499,26 +2499,21 @@ def cast_tile_scale_is_one():
 @test
 def head_view_installs_idempotent():
     """Chat 18, 15 Nov: installing the turned/famous/house head kits again (in any order) adds no layer (pre-flight's
-    child re-installed them and head_view wrapped itself to a RecursionError)."""
-    import inspect
+    child re-installed them and head_view wrapped itself to a RecursionError). Since one-route-kit Change 2 (20 Nov)
+    each kit is one entry in views.TURNED_HEADS, and head_view itself is never replaced."""
     import people_turned as A
     import people_famous as Fm
     import facehouse as Hs
-    V = A.PP.AV.MC.V
-
-    def depth():
-        n, f = 0, V.head_view
-        while f and n < 500:
-            f = inspect.getclosurevars(f).nonlocals.get('old')
-            n += 1
-        return n
+    V = A.PP.V
+    hv = V.head_view
     for m in (A, Fm, Hs):
         m.install()
-    d0 = depth()
+    d0 = len(V.TURNED_HEADS)
     for _ in range(5):
         for m in (Hs, A, Fm):
             m.install()
-    return depth() == d0, f'head_view layers {d0} -> {depth()} after 5 more rounds of installs'
+    return len(V.TURNED_HEADS) == d0 and V.head_view is hv, (f'turned-head kits {d0} -> {len(V.TURNED_HEADS)} after 5 '
+                                                              f'more rounds of installs; head_view kept: {V.head_view is hv}')
 
 
 # ------------------------------------------------------------------------------------------------ the proposal route

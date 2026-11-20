@@ -29,7 +29,7 @@ sys.path.insert(0, HERE)
 
 import burnham as B          # noqa: E402
 import views as V            # noqa: E402
-from ed import INK, curve    # noqa: E402
+from ink import INK, curve    # noqa: E402
 
 BACKS = ('three_back', 'back')                         # trunk views seen from behind
 HEAD_TILT = 35.0                                       # degrees the head may tip off the trunk's line

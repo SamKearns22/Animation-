@@ -6,6 +6,8 @@
 - [x] "should the outdated things be completely isolated or deleted?" Answer sent: isolated, never deleted (recuts need them)
 - [x] "should this be the case throughout the project?" Answer sent: yes, every kind of kit (people, places, sound, checks)
 - [x] Sam's pick (20 Nov): "1" (freeze old films, then one clean kit; each change still gets its own yes)
+- [ ] Sam (20 Nov 11:38, chat Vqz9UpsK): "Please inform me once the kit produces our best quality product (represented by the models in Milburn, aside from the 3/4 pose tools that have been produced since then) so I can continue with the film." Test: the kit redraws Milburn's people as the posted Milburn (people.py replicate milburn, from its bookmark), plus the 3/4 tools.
+- [ ] Sam (20 Nov 11:38): "I don't like those tiny chips in the shoulders that are throughout the jury picture." (Blessed jury; the live code differs from posted Blessed by up to 1.92%: drift-baseline.json.) Fix in the kit's shoulder join, checked on the reference cast.
 
 ## Estimate
 Whole job about 12-14% of a week once, as tool work (judge's figure, unmeasured). This proposal chat: about 3%.
@@ -35,13 +37,35 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 - Blessed test: now draws the film's picture from its saved copy and reports how far the live code is from the posted film. FINDING: live Blessed differs from the posted film by up to 1.92% of pixels (jacket shoulder shading, since the moves-kit saves of 14 Nov). Not loosened; the number may not rise (drift-baseline.json). The places test is untouched (it already failed before: milburn.py uses the kit).
 - Not done: places replicate still reads live film code. Next time Change 2 touches it.
 
-## Where things stand (20 Nov, one-route-kit chat 3, Sonnet)
+## Change 2 results, part 1: the people steps (chat 4, 20 Nov, Opus high)
+- Three new kit files hold every step a person is drawn with, each step in one place: `ink.py` (line and shading
+  helpers, from An Honest Chat's ed.py), `body.py` (camera, pen, body and outfits, arm poses, the plain test head, head
+  tilt, the head/torso/hair-behind hooks HEADS, TORSOS, HAIR_BEHIND; house limbs and circle hands installed once), and
+  `faces.py` (the measured face layout from The Patriots 4's cast, the eye and clip from The Traitors', ears, tufts and
+  the house mouths from Ad-Vanced Notice's, vance_mouth renamed house_mouth). views.py now owns the arm with short
+  sleeves (from MidTerminal) and one list of turned-head kits (TURNED_HEADS) instead of four files rewrapping head_view.
+- Dropped (old films' own, stay at their bookmarks): Hope Again's armour, swords, crowns, hall; Mossad's apron, coat,
+  tee and extra brows/mouths/hair; Patriots 3 boots, gaiters, cargo, patches; Prepper's rolled/torn sleeves; Vance's
+  own torso and arm; MidTerminal's Satan wings and Epstein head; Romesh/Bash/Claudia measures.
+- Proof: the people kit redraws every person in five people files (Grand Theft Autism 9, Milburn 7, Blessed 27,
+  facetool 2, Protest Tiers 11) at five turns: PIXEL-IDENTICAL to before (hash per film). GTA's cast sheet and opener
+  frames (2.0 s, 6.0 s): identical. Script: notes/proposals/one-route-kit/measure/refcast.py.
+- Count: GTA cast loads 0 old-film files (from 12), 0 steps swapped (from 15), also 0 after the cast is set up;
+  kit files loading a film file 36 (from 52); old films reached 40 (people.py's Blessed replicate, places, tools).
+- Not done yet (next chat): the other 36 kit files (most-used: burnham in tools, ed in places), old films reached,
+  the reference-cast kit test (man, woman, short sleeves, jacket; hand, seam, body checks; people file
+  story/kit-reference-people.txt), the load-map check, the before/after sheet of the steps (pictures are identical, so
+  a table of moved/dropped steps with one reference row), Sam's Milburn-look test and the jury shoulder chips.
+
+## Where things stand (20 Nov, one-route-kit chat 4, Opus high)
 - Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
-- Done: Change 1 (results above). GitHub refuses tag pushes here, so each bookmark is also a branch freeze/NAME (61); a fresh chat turns them back into tags (freeze.py fetch_tags).
-- Next: chat 4 (opened), Opus, high: Change 2 (one kit). Sam said Y to Change 2 (20 Nov).
-- Needs Sam: nothing for Change 2 (Y given). Open: Y/N bookmark Shocking Behaviour at the newest save of its code, best guess (answered 'later'). (His priority, 20 Nov: continue Grand Theft Autism with the best tools only; he dislikes the small chips in the jury shoulders, picture in chat); Blessed's 1.92% drift is probably the same thing.
+- Done: Change 2 part 1, the people steps (above): GTA's cast loads no old film and nothing overwrites a step.
+- Next: chat 5, Opus, high: Change 2 part 2 (the other 36 kit loads, reference-cast test, load-map check, sheet,
+  Milburn-look test, jury shoulder chips); then GTA restarts.
+- Needs Sam: nothing (Y given). Open: Y/N bookmark Shocking Behaviour (answered 'later').
 - Read: this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
-- Open rule requests: none found. UNROUTED "2026-11-20 11:40 chat e3a7708e" is a false alarm: Change 2 was routed inside notes/proposals/one-route-kit.md (Final version) and Sam said Y.
-- For Claude: freeze.py recut/check/count; branches claude/elegant-davinci-2anki0 (depth-check proposal files, not this job's) named, not merged; claude/blessed-c2-mics-wip as before.
+- Open rule requests: none found.
+- For Claude: body/ink/faces/views.TURNED_HEADS; refcast hashes in Change 2 results; kittests compared against an
+  untouched copy (scratch); freeze.py count --lower done at 0/0/36.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 1.23% of 15%; forecast not yet planned (2026-11-20)
