@@ -69,8 +69,18 @@ def cmd_tag(push):
                 sh('git', 'tag', '-f', tagname(n, v), s)
     tags = sh('git', 'tag', '-l', 'film/*').split()
     print(len(tags), 'bookmarks made')
-    if push:
-        print(sh('git', 'push', '-f', 'origin', *[f'refs/tags/{t}' for t in tags], check=False) or 'pushed')
+    if push:       # GitHub here refuses tag pushes, so each bookmark is also kept as a branch freeze/NAME (fetch_tags undoes it)
+        bad = 0
+        for i in range(0, len(tags), 8):       # a few at a time: one big push gets cut off
+            r = subprocess.run(['git', 'push', '-q', '-f', 'origin'] + [f'{sh("git", "rev-parse", t + "^{commit}")}:refs/heads/freeze/{t[5:]}'
+                                                                      for t in tags[i:i + 8]], cwd=ROOT, capture_output=True, text=True)
+            bad += r.returncode != 0
+        print('pushed' if not bad else f'{bad} pushes failed; run it again')
+
+
+def fetch_tags():
+    """A fresh clone has the branches freeze/NAME but no tags: turn them back into the bookmarks film/NAME."""
+    subprocess.run(['git', 'fetch', '-q', 'origin', '+refs/heads/freeze/*:refs/tags/film/*'], cwd=ROOT, capture_output=True)
 
 
 def worktree(name, tag=None):
@@ -355,6 +365,8 @@ def bookmark_faults():
     """Every film in the registry has its bookmark, on the save the registry names; a finished video in animations/
     that no film lists is a fault (a new finished film gets its bookmark the day it is posted: freeze.py tag)."""
     reg = load()
+    if not sh('git', 'tag', '-l', 'film/*'):
+        fetch_tags()
     have = set(sh('git', 'tag', '-l', 'film/*').split())
     out = []
     for n, d in reg.items():

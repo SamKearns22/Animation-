@@ -37,9 +37,11 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 
 ## Where things stand (20 Nov, one-route-kit chat 3, Sonnet)
 - Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
-- Done: Change 1 (results above). Pushed with bookmarks.
+- Done: Change 1 (results above). GitHub refuses tag pushes here, so each bookmark is also a branch freeze/NAME (61); a fresh chat turns them back into tags (freeze.py fetch_tags).
 - Next: Change 2 (one kit), Opus high, on Sam's own yes. Not started.
 - Needs Sam: Y/N Change 2 (his priority, 20 Nov: continue Grand Theft Autism with the best tools only; he dislikes the small chips in the jury shoulders, picture in chat); Blessed's 1.92% drift is probably the same thing.
 - Read: this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
 - Open rule requests: none found.
 - For Claude: freeze.py recut/check/count; branches claude/elegant-davinci-2anki0 (depth-check proposal files, not this job's) named, not merged; claude/blessed-c2-mics-wip as before.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 0.25% of 15%; forecast not yet planned (2026-11-20)
