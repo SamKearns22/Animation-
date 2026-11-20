@@ -3581,6 +3581,25 @@ def body_send_gate():
     return ok, f'no record {len(no_rec)}, faulty {len(faulty)}, clean {len(clean)}, old {len(old)}, hook {hook.returncode}'
 
 
+@test
+def body_check_headless():
+    """GTA chat 20 (rule 30): the lean-out sheet showed pose K2 from three-quarter front with no head; the figure
+    guard had stopped the drawing at the arm and the body check had no test for a person with no head. The old K2
+    must now be caught with no head (and crossed out on the sheet); K1 from the same view must stay clean."""
+    import leanout as LO
+    import gta_cast as GC
+    import body as B
+    B.SS = 1
+    sp = dict(GC.cast()['jason'], mood='stern')
+    old = LO._key((0.48, 0.80, 0.0), (0.78, 1.30, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),
+                  {'R': ('rel', ((-0.04, 0.02, 0.32), 'out')), 'L': ((0.84, 1.34, 0.18), LO._v(0.3, -1, 0.6))},
+                  {'L': (0.52, LO.SEAT + 0.05, 0.14), 'R': (0.50, LO.SEAT + 0.05, -0.12)}, sp)
+    _, f_old = LO.draw_view(sp, old, 45)
+    _, f_k1 = LO.draw_view(sp, LO.pose('K1', sp), 45)
+    caught = any('no head' in f for f in f_old)
+    return caught and not f_k1, f'old K2 at 3/4: headless caught {caught}; K1 at 3/4: {len(f_k1)} faults'
+
+
 
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''

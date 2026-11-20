@@ -1164,6 +1164,11 @@ def vest_torso(img, p, sp, t):
 
 def _leonida(p, cx, cy):
     """The vest's print (Sam's key art): a setting sun in bands, a palm, LEONIDA in a hand-drawn line above."""
+    cam = getattr(p, 'cam', None)                                     # the drawing mirrored (a turned or lying
+    if cam is not None:                                               # body): the print is flipped back, so the
+        a, b, c = (cam.P(*q) for q in ((cx, cy), (cx + 1, cy), (cx, cy + 1)))   # word never reads backwards
+        if (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]) < 0:   # (GTA chat 20, lean-out sheet)
+            p = _Flip(p, cx)
     bands = [(250, 196, 70), (244, 150, 60), (226, 102, 70)]
     for i, c in enumerate(bands):                                     # the sun: a half disc cut by bands
         y0 = cy + i * 16
@@ -1184,6 +1189,21 @@ def _leonida(p, cx, cy):
             p.line([(x + gx * 13 + (cy - 60 - (cy - 82 + gy * 22)) * -0.18, cy - 82 + gy * 22) for gx, gy in st],
                    ink, 2.6)
         x += 21
+
+
+class _Flip:
+    """A pen mirrored about x = cx (the print drawn so it reads the right way on a mirrored drawing)."""
+    def __init__(self, p, cx):
+        self.p, self.cx = p, cx
+
+    def _m(self, pts):
+        return [(2 * self.cx - x, y) for x, y in pts]
+
+    def poly(self, pts, *a, **k):
+        return self.p.poly(self._m(pts), *a, **k)
+
+    def line(self, pts, *a, **k):
+        return self.p.line(self._m(pts), *a, **k)
 
 
 _GLYPH = {'L': [[(0, 0), (0, 1), (0.8, 1)]], 'E': [[(0.8, 0), (0, 0), (0, 1), (0.8, 1)], [(0, 0.5), (0.6, 0.5)]],

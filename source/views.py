@@ -965,6 +965,8 @@ NOT_MINE = object()  # people_famous, facehouse), newest tried first, turnhead's
 
 def head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
     """The head for each view: the first kit in TURNED_HEADS that draws this person, else the plain turned head."""
+    if HC_HOOK[0]:                               # the body check: every person drawn has a head (GTA chat 20: a
+        HC_HOOK[0](dict(kind='head', sp=sp))     # drawing stopped halfway showed a headless body on the pose sheet)
     for k in [k for k in reversed(list(TURNED_HEADS)) if k != 'turnhead'] + ['turnhead'] * ('turnhead' in TURNED_HEADS):
         r = TURNED_HEADS[k](img, p, sp, t, view, hx, hy)
         if r is not NOT_MINE:

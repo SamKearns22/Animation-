@@ -14,6 +14,8 @@ gun drawn pointing away from its target. So this tests what is drawn, where it i
                     the back), or hidden behind the body while both are well in front of it (a stump)
   _joined ......... the person redrawn alone (no props): one joined shape; a piece apart = a limb off its joint
   _lying .......... skeleton-route people (lying_flat): lying.body_faults (arm on its own side, a neck shows)
+  headless ........ in frame_end: every person reported has a head drawn after it (views.head_view reports each
+                    head); GTA chat 20: a drawing the figure guard stopped halfway showed a body with no head
   aim ............. a film reports a fired gun as drawn (muzzle, barrel and target on screen): more than 10 degrees
                     off its target is a fault
   Writer .......... per clip: collects faults per person and kind, writes OUT.bodycheck.txt, refuses (holds the
@@ -81,8 +83,14 @@ def aim(who, muzzle, barrel, target, firing=True):
 
 def frame_end(t):
     out = []
+    open_ = []                                     # people drawn, waiting for their head (_headless)
     for e in list(_ENTRIES):
         who = ((e.get('sp') or {}).get('name') or e.get('who') or 'someone').split(' (')[0]
+        if e['kind'] == 'head':
+            if open_:
+                open_.pop()
+            continue
+        open_.append(who)
         try:
             if e['kind'] == 'flat':
                 out += [(who, k, x) for k, x in _order(e)]
@@ -91,6 +99,8 @@ def frame_end(t):
                 out += [(who, k, x) for k, x in _lying(e)]
         except Exception as ex:                    # a check that cannot run is said, never silent
             out.append((who, 'check', f'body check could not run ({type(ex).__name__}: {ex})'))
+    out += [(who, 'head', 'drawn with no head (the drawing stopped before it, or the head was skipped)')
+            for who in open_]
     for who, (mx, my), (dx, dy), (tx, ty), firing in _AIMS:
         if not firing:
             continue

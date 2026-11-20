@@ -12,7 +12,7 @@ The car's frame (gta_cars Tulip at the origin, yaw 0): x across (+ the car's rig
 y up from the road, z forward. Window sill (belt) 0.95, roof 1.47, the front side window z -0.45..0.45, the
 greenhouse's side at x 0.86 (belt) .. 0.70 (roof). The passenger's seat cushion top y 0.47, its middle x 0.42.
 
-  KEYS ............ the key poses by name: K1 seated (gun flat on his chest), K2 knee up and turned to the window,
+  KEYS ............ the key poses by name: K1 seated (gun flat on his chest), K2 up on his knees turned to the window (gun low),
                     K3 head and shoulders out, K4 out to the waist turned back, gun arm straight at the lead cruiser,
                     K5 the recoil of K4
   pose(name, sp) .. a key pose as a lying.Body (k.pose = 'leanout': its arms are held up on purpose)
@@ -105,10 +105,14 @@ def pose(name, sp):
                      floor=None)
         k.pose = 'leanout'
         return k
-    if name == 'K2':          # up on his knees on the seat, turned to the window, free hand on the window's top
-        return _key((0.48, 0.80, 0.0), (0.78, 1.30, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),
-                    {'R': ('rel', ((-0.04, 0.02, 0.32), 'out')), 'L': ((0.84, 1.34, 0.18), _v(0.3, -1, 0.6))},
-                    {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
+    if name == 'K2':          # up on his knees on the seat, turned to the window, free hand braced on the door
+        #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
+        #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
+        k = _key((0.48, 0.80, 0.0), (0.78, 1.30, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),
+                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.94, 0.98, 0.26), _v(0.5, -1, 0.3))},
+                 {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
+        k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
+        return k
     if name == 'K3':          # head and shoulders out over the sill, turning back, gun up beside his head
         return _key((0.62, 0.90, 0.0), (0.98, 1.36, -0.04), (0.7, 0, -1), (0.5, 0, -1),
                     {'R': ('rel', ((0.06, 0.34, 0.16), 'out')), 'L': ((0.98, 0.99, 0.18), _v(1, -0.2, 0.5))},
@@ -219,9 +223,13 @@ def draw_view(sp, k, deg, guide=True):
     import figure as F
     try:
         LF.draw(img, cam, k, sp, 0.0)
-    except F.FigureError as e:                           # the figure guard refused the drawing: a fault, said
-        HC.frame_end(0.0)
-        return img, [str(e).replace('figure check: ', '').split(' (never')[0]]
+    except F.FigureError as e:                           # the figure guard refused the drawing: a fault, said;
+        faults = [str(e).replace('figure check: ', '').split(' (never')[0]]   # the half-drawn body is crossed out
+        faults += [f'{w}: {x}' for _, w, kd, x in HC.frame_end(0.0)]          # (chat 20: K2 showed headless, read
+        dr = ImageDraw.Draw(img)                                              # as a head fault)
+        dr.line([(90, 380), (990, 1640)], fill=(200, 30, 20), width=14)
+        dr.line([(990, 380), (90, 1640)], fill=(200, 30, 20), width=14)
+        return img, faults
     if not under:
         draw_gun(img, cam, k, report=False)
     if guide and 30 < deg < 150:                         # from outside his window the door hides his knees
