@@ -7434,48 +7434,49 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.93,
+   "cost": 2.29,
    "src": "estimate",
    "sid": "session_01J1JB7WZEYx3Q15QRpXP43W",
-   "steps": 83,
-   "hist_k": 266,
+   "steps": 101,
+   "hist_k": 288,
    "kinds": {
     "film-file search": 0.1,
-    "tool search": 20.2,
-    "whole-file .py read": 0.2,
-    "renders": 0.2,
-    "pictures": 4.1,
-    "other": 75.2
+    "tool search": 19.6,
+    "whole-file .py read": 0.1,
+    "renders": 0.7,
+    "pictures": 4.4,
+    "other": 75.1
    },
    "calls": {
     "film-file search": 1,
-    "tool search": 52,
+    "tool search": 59,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
-    "renders": 1,
-    "pictures": 12,
-    "other": 16
+    "renders": 3,
+    "pictures": 13,
+    "other": 22
    },
    "split": {
-    "usd": 7.0518,
-    "total": 7.0518,
+    "usd": 8.3653,
+    "total": 8.3653,
     "floor_k": 82,
     "blocks": {
-     "carried history": 35.9,
-     "new writes": 31.2,
-     "Claude's words": 28.7,
-     "start-up floor": 4.2
+     "carried history": 41.0,
+     "new writes": 28.4,
+     "Claude's words": 27.0,
+     "start-up floor": 3.5
     },
     "origins": {
      "Claude's words": 46.9,
-     "messages and reminders": 21.8,
-     "result: tool search": 9.8,
-     "cache re-write": 5.8,
-     "result: pictures": 5.2,
-     "start-up floor": 4.4,
-     "result: other": 4.0,
-     "Claude's edits": 2.1
+     "messages and reminders": 21.6,
+     "result: tool search": 10.7,
+     "result: pictures": 5.8,
+     "cache re-write": 4.9,
+     "result: other": 4.1,
+     "start-up floor": 3.7,
+     "Claude's edits": 2.1,
+     "result: film-file search": 0.1
     },
     "leftover": 0.0
    },
@@ -7484,7 +7485,7 @@
     "work_step": 5,
     "work_pct": 0.08,
     "reads": [],
-    "base_pct": 17.3
+    "base_pct": 17.8
    },
    "search": {
     "show": 0,
@@ -7492,9 +7493,9 @@
      "no show": 1
     },
     "other": {
-     "other": 6,
-     "shared:handover.py": 3,
-     "film notes": 8,
+     "other": 8,
+     "shared:handover.py": 4,
+     "film notes": 10,
      "shared:gta_rehearse.py": 10,
      "shared:gta_cast.py": 2,
      "shared:views.py": 3,
@@ -7502,10 +7503,10 @@
      "shared:people_parts.py": 3,
      "shared:faces.py": 2,
      "shared:figure.py": 1,
-     "shared:gta_shots58.py": 7,
+     "shared:gta_shots58.py": 8,
      "shared:viewchecks.py": 1,
      "shared:gta_opener.py": 1,
-     "shared:sheet.py": 3,
+     "shared:sheet.py": 4,
      "shared:people.py": 1
     },
     "ticked": 0,
@@ -7933,6 +7934,62 @@
       "shared:gta_shots58.py",
       "source/gta_shots58.py",
       "S=/tmp/claude-0/-home-user-Animation-/723ab24d-6015-5704-92b5-afcd4eb2d325/scrat",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "other",
+      "notes/checks/gta-chat15-bodies.txt",
+      "cat notes/checks/gta-chat15-bodies.txt | cut -c1-200 | head -20",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:sheet.py",
+      "notes/checks/gta-chat16-bodies.txt source/sheet.py",
+      "cut -c1-200 /tmp/claude-0/-home-user-Animation-/723ab24d-6015-5704-92b5-afcd4eb2",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/723ab24d-6015-5704-92b5-afcd4eb2d325/scrat",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/archive/grand-theft-autism-handovers.md notes/",
+      "Where things stand",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:gta_shots58.py",
+      "source/gta_shots58.py",
+      "git add -A notes story source/gta_shots58.py && git commit -qm \"Grand Theft Auti",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md story/status.md notes/archive/grand-theft-autism-han",
+      "for f in notes/grand-theft-autism.md story/status.md notes/archive/grand-theft-a",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git add -A notes story && GIT_EDITOR=true git rebase --continue 2>&1 | tail -1 &",
       ""
      ]
     ]
