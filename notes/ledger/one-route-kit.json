@@ -3788,6 +3788,121 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "d71e0d91",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "haiku",
+   "cost": 0.02,
+   "src": "estimate",
+   "sid": "session_01J1JB7WNsTdcnMFesLVpUsb",
+   "steps": 6,
+   "hist_k": 91,
+   "kinds": {
+    "tool search": 20.3,
+    "other": 79.7
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 4,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 0
+   },
+   "split": {
+    "usd": 0.0734,
+    "total": 0.0734,
+    "floor_k": 81,
+    "blocks": {
+     "start-up floor": 56.8,
+     "Claude's words": 23.5,
+     "new writes": 18.7,
+     "carried history": 1.0
+    },
+    "origins": {
+     "start-up floor": 56.8,
+     "Claude's words": 29.0,
+     "result: tool search": 7.2,
+     "messages and reminders": 7.0
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 81,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "story/status.md",
+      1.0,
+      0.0013
+     ],
+     [
+      "guides/job-packs.md",
+      1.0,
+      0.0013
+     ],
+     [
+      "story/archive.md",
+      0.6,
+      0.0007
+     ]
+    ],
+    "base_pct": 16.6
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 3,
+     "other": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md guides/job-packs.md",
+      "cat story/status.md 2>/dev/null | head -40; echo ---; sed -n '1,60p' guides/job-",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "source/data",
+      "shock|behav",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "story/metrics.md story/archive.md guides/satire.md guides/best-practice.md notes",
+      "shocking",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "source/data/shocking story/archive.md",
+      "ls source/data/shocking 2>&1 | head -3; find / -iname \"*shocking*.mp4\" 2>/dev/nu",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
