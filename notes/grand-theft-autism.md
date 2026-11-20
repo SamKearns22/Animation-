@@ -166,7 +166,7 @@
       out (views._bare_neck, also fills an old background notch under the jaw from the side). Judged at full size
       beside the photos; sheet sent (Sam's three references, chat 9 15:39, were the game art already in references/).
 
-- [ ] Sam (20 Nov, chat 10, on the headphones sheet): "the three-quarter turns still have the weird slumped necks that
+- [x] Sam (20 Nov, chat 10, on the headphones sheet): "the three-quarter turns still have the weird slumped necks that
       I thought we had fixed over the last 2 days. Could you investigate that, please? The headphones don't go around
       the back of her neck. They look good otherwise." Headphones: done chat 10 (the head draws the neck after the
       torso's props, so the band was hidden from behind: people_parts.headphones_over_neck on views.HEAD_WEAR draws
@@ -176,7 +176,12 @@
       the three-quarter drawing itself was never rebuilt (status: "the 3/4 fix is a reserve job (his word starts it)").
       Chats 9 and 10 broke rule 38 by putting three-quarter views on the cast sheets. Measured: at three-quarter the
       chin sits ~20 px lower (the turned jaw longer) and the shoulders' top ~15 px higher than front-on, so the neck
-      all but vanishes. Waiting on Sam's pick (question 1 in the reply); chat 11 interrupted until then.
+      all but vanishes. Sam: "1" (fix the drawing for every film). Done chat 10: why: the people kit's turned heads
+      (people_turned) were drawn 15% bigger (PP._Big) without the front's lift (PP._lift), so they grew down over
+      the neck (eyes 21, chin 33 units low); and their chin ran to turnhead's 1.06 face heights where the front's
+      ends at 1.0 (CHIN_V). Now eyes and chin match front-on in every turn (measured: Jason chin 563 front, 562-563
+      turned). Every film on the people kit; the other head kits (facehouse, famous) already lifted. Kit tests: the
+      same 11 old failures. Sheet: notes/sheets/grand-theft-autism-necks-fixed.jpg.
 
 ## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
 Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
@@ -277,18 +282,17 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
-## Where things stand (20 Nov, chat 10 end, Opus medium)
-- Rules that bite next: 8 (nothing past the rehearsals until Sam's Y/N on both clips), 89 (judge clips at full
-  size), 30 (headphones were a repeat note: if Sam flags them again, read the chat 10 line in the checklist first).
-- Done: headphones rebuilt as a solid prop (photo-matched, never inside her), no neckline on bare tops in any view,
-  print-under-prop order fixed in the kit; sheet sent (notes/sheets/grand-theft-autism-headphones-neckline.jpg).
-  Kit tests: the same 11 old failures before and after (pose_gallery, outfit_every_view officer/scarf, etc.): none new.
-- Next: Sonnet: the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch
-  the opening.
-- Needs Sam: question 1 (three-quarter necks: fix the drawing for every film now, or keep them front-on); chat 11
-  (session_01J1JB7VedxxaeCdyPTmFuNx) interrupted until he answers; his answer comes back to chat 10.
+## Where things stand (20 Nov, chat 10 end, Opus medium, second handover)
+- Rules that bite next: 8 (nothing past the rehearsals until Sam's Y/N on both clips), 38 (cast sheets: front, side,
+  back only; three-quarter only where a shot needs it), 89 (judge clips at full size).
+- Done: headphones solid and round the back of her neck; no neckline on bare tops; three-quarter necks fixed in the
+  kit for every film (turned heads lifted as the front is, chin at the front's height); sheet sent
+  (notes/sheets/grand-theft-autism-necks-fixed.jpg). Kit tests: the same 11 old failures, none new.
+- Next: Sonnet chat 11 (already open, resumed): the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out),
+  both clips sent. Don't touch the opening.
+- Needs Sam: the clips' Y/N (rule 8); notes on the sheet can come with them.
 - Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP.
 - Open rule requests: none.
-- For Claude: people_parts.headphones3d (cups: n, upr, push-forward loop), views._bare_neck, people.WORN_OVER.
+- For Claude: people_turned head_view (PP._lift), CHIN_V; people_parts.headphones_over_neck (views.HEAD_WEAR).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 16.79% of 15%; forecast 67.3% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 18.52% of 15%; forecast 69.1% (2026-11-20)

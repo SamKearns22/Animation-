@@ -153,3 +153,18 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: people_parts.headphones3d (PHONES_YAW, headphones_view), views.torso_outline for the body's edge per
   view; body.plain_torso jumper line (oval at 0,-2); people_parts.vest_torso neck patch.
 
+
+## Where things stand (20 Nov, chat 10 end, Opus medium)
+- Rules that bite next: 8 (nothing past the rehearsals until Sam's Y/N on both clips), 89 (judge clips at full
+  size), 30 (headphones were a repeat note: if Sam flags them again, read the chat 10 line in the checklist first).
+- Done: headphones rebuilt as a solid prop (photo-matched, never inside her), no neckline on bare tops in any view,
+  print-under-prop order fixed in the kit; sheet sent (notes/sheets/grand-theft-autism-headphones-neckline.jpg).
+  Kit tests: the same 11 old failures before and after (pose_gallery, outfit_every_view officer/scarf, etc.): none new.
+- Next: Sonnet: the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch
+  the opening.
+- Needs Sam: question 1 (three-quarter necks: fix the drawing for every film now, or keep them front-on); chat 11
+  (session_01J1JB7VedxxaeCdyPTmFuNx) interrupted until he answers; his answer comes back to chat 10.
+- Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP.
+- Open rule requests: none.
+- For Claude: people_parts.headphones3d (cups: n, upr, push-forward loop), views._bare_neck, people.WORN_OVER.
+
