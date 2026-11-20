@@ -1,7 +1,352 @@
 {
  "film": "one-route-kit",
  "estimate": 14.0,
- "chats": [],
+ "chats": [
+  {
+   "date": "2026-11-20",
+   "chat": "474881c3",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.25,
+   "src": "estimate",
+   "sid": "session_01J1JB7Z2VT38xNC3Hh4fxk8",
+   "steps": 33,
+   "hist_k": 132,
+   "kinds": {
+    "tool search": 27.5,
+    "whole-file .py read": 1.8,
+    "renders": 3.2,
+    "pictures": 1.9,
+    "other": 65.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 26,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 2,
+    "other": 3
+   },
+   "split": {
+    "usd": 0.8977,
+    "total": 0.8977,
+    "floor_k": 82,
+    "blocks": {
+     "start-up floor": 39.5,
+     "Claude's words": 30.1,
+     "new writes": 22.1,
+     "carried history": 8.3
+    },
+    "origins": {
+     "Claude's words": 40.5,
+     "start-up floor": 39.5,
+     "result: tool search": 14.3,
+     "result: pictures": 3.0,
+     "messages and reminders": 2.1,
+     "result: other": 0.4,
+     "result: renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/one-route-kit.md",
+      1.8,
+      0.0126
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/474881c3-cb04-55bc-ae36-05cf93ead27a/scratchpad/m.png",
+      1.6,
+      0.0094
+     ],
+     [
+      "notes/proposals/one-route-kit/measure/patches.py",
+      1.2,
+      0.0082
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/474881c3-cb04-55bc-ae36-05cf93ead27a/scratchpad/sheet.png",
+      1.6,
+      0.0078
+     ],
+     [
+      "notes/proposals/one-route-kit.md",
+      0.4,
+      0.0018
+     ],
+     [
+      "notes/proposals/one-route-kit/measure/reach.py",
+      0.4,
+      0.0018
+     ],
+     [
+      "source/ad_vanced_notice_cast.py",
+      0.3,
+      0.0012
+     ],
+     [
+      "source/midterminal_cast.py",
+      0.3,
+      0.0012
+     ],
+     [
+      "source/patriots4_cast.py",
+      0.3,
+      0.0012
+     ],
+     [
+      "source/patriots3_cast.py",
+      0.3,
+      0.0012
+     ],
+     [
+      "source/turnhead.py",
+      0.3,
+      0.0012
+     ]
+    ],
+    "base_pct": 29.4
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "film notes": 3,
+     "other": 14,
+     "guides": 2,
+     "shared:filmkit.py": 1,
+     "shared:milburn.py": 2,
+     "shared:press_secretary.py": 1,
+     "shared:hutt.py": 1,
+     "shared:ad_vanced_notice_cast.py": 1
+    },
+    "ticked": 2,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/one-route-kit.md notes/proposals/one-route-kit.md notes",
+      "git status | head -3; git remote -v | head -1; python3 source/handover.py start ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/one-route-kit.md notes/proposals/one-route-kit.md notes/proposals/one-rout",
+      "Final version",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "",
+      "git checkout -q claude/create-claude-md-oe8z4g 2>&1|tail -1; git fetch --unshall",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "guides",
+      "guides/job-packs.md notes/proposals/one-route-kit/measure/README* notes/proposal",
+      "finished\\|posted",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/proposals/one-route-kit/measure/",
+      "git merge --ff-only origin/claude/create-claude-md-oe8z4g 2>&1 | tail -2; git lo",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "notes/proposals/one-route-kit/measure/patches.py notes/archive",
+      "sed -n 1,60p notes/proposals/one-route-kit/measure/patches.py; ls animations/*.m",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "for f in animations/*.mp4; do c=$(git log -1 --format='%h %ad' --date=short -- $",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:filmkit.py",
+      "source/filmkit.py source/film_engine.py",
+      "span\\|--small\\|def main\\|argv",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "span\\|final OUT",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      " animations/README.md; grep -n ",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "source/*.py",
+      "'stills'",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "S=/tmp/claude-0/-home-user-Animation-/474881c3-cb04-55bc-ae36-05cf93ead27a/scrat",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/474881c3-cb04-55bc-ae36-05cf93ead27a/scrat",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/474881c3-cb04-55bc-ae36-05cf93ead27a/scra",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "",
+      "'stills'",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "source/data/bayeux/rifle-before.png source/data/strictly-crabs/pass/pass.json so",
+      "S=/tmp/claude-0/-home-user-Animation-/474881c3-cb04-55bc-ae36-05cf93ead27a/scrat",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "source/",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:press_secretary.py",
+      "source/press_secretary.py source/roadster.py",
+      "def stills_sheet",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:hutt.py",
+      "S/wt-andrew-hutt/source/hutt.py S/wt-king-in-the-north/source/burnham.py",
+      "^def frame_image\\|^def frame\\b\\|^def render_frame",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/474881c3-cb04-55bc-ae36-05cf93ead27a/scrat",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "film notes",
+      "notes/proposals/one-route-kit/measure/patches.py notes/proposals/one-route-kit.m",
+      "swap\\|15 ",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "film notes",
+      "notes/proposals/one-route-kit.md notes/proposals/one-route-kit/measure/reach.py",
+      "sed -n 28,40p notes/proposals/one-route-kit.md | cut -c1-700; cat notes/proposal",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      " ",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:ad_vanced_notice_cast.py",
+      "source/ad_vanced_notice_cast.py source/midterminal_cast.py source/patriots4_cast",
+      "sed -n 715,745p source/ad_vanced_notice_cast.py; sed -n 686,700p source/ad_vance",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "notes/sheets notes/sheets/one-route-kit-recut-check.png notes/sheets/one-route-k",
+      ",",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "git pull -q --no-rebase --no-edit origin claude/create-claude-md-oe8z4g 2>&1 | t",
+      ""
+     ]
+    ]
+   }
+  }
+ ],
  "checks": {},
  "cost_flagged": [],
  "cost_log": [
