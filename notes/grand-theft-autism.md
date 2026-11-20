@@ -264,7 +264,7 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Next: Opus medium: the headphones rebuilt as a solid prop resting on her (plan in the brief checklist's last
   item), no neckline on bare tops; five angles at full size beside a real photo; send. Then Sonnet: the new cast
   into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch the opening.
-- Needs Sam: Y/N on her nose stud going; the clips' Y/N later (rule 8).
+- Needs Sam: the clips' Y/N later (rule 8). (Sam, 20 Nov: "Y": her nose stud stays off.)
 - Read: guides/job-packs.md, Notes round; this file's brief checklist, last three items.
 - Open rule requests: none.
 - For Claude: people_parts.headphones3d (PHONES_YAW, headphones_view), views.torso_outline for the body's edge per
