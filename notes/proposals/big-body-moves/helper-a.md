@@ -1,0 +1,68 @@
+# Helper A
+
+## Leak
+Facts give lesson 10's remedy (key poses per angle, layered by hand); weighed as one option.
+
+## Results
+- Shot 4: four versions; 8 of Sam's 16 notes on version 4 share one cause (2, 3, 4, 6, 7, 8, 11, 15: case study s7 A);
+  sent "checks clean", as version 3 was (s7 E): a repeat.
+- Cost: film 27.71% of a week spent against 15%, forecast 78.2% (ledger). Version 4's chats 12-15 roughly 5-7%
+  (ledger rows 13-16; row-to-chat mapping unchecked). The ledger shows "0 notes": Sam's 16 notes are not in it (gap).
+- No gate ran: gta_rehearse.py calls no pre-flight, posecheck, handcheck or critique (grep); posecheck "does not see" a
+  hand-built pose (its header); rules 41 (new pose tested from every view) and 89 (critique) went unrun. Same bypass
+  caused the bald crowd (s7 B).
+- The kit has a 3D body (lying.py): one outline, flat fills, own face, per-pixel depth, `body_faults` (arm on its own
+  side), collision capsules, `from_views` hand-over from the flat figure. Used only lying and from high (catalogue 70).
+- Not known: which of the 8 faults sit in Jason's skeleton, which only in its flat drawing.
+
+## The real decision
+For every film: which body draws a move beyond the flat figure (bend, turn past side-on, touching a solid), and gates
+no file can skip. Both outweigh one new check.
+
+## Root cause
+1. Wrong means: a flat sprite at one turn angle, arms solved in 2D, hidden by masks from three points (jason_layer);
+   each chat patched one frame (the 160-degree turn).
+2. Checks attach to named kit poses and to pre-flight; a hand-built shot in a rehearsal file escapes all of them.
+3. The body check tests ~15 points against solids, never the body as a whole.
+
+## Approaches weighed
+1. Key poses drawn per angle, layered by hand (lesson 10): redone every film; hand layering is today's masks again.
+2. Reframe: big moves on the 3D body, extended to upright moves among solids; depth per pixel against the car; flat
+   figure before and after via `from_views`. Bodies joined by construction; layering computed.
+3. Reframe: one send gate: every person drawn by `views.person` or `lying.draw` is recorded and checked, whatever file
+   draws it; no clip is written for Sam with an unnamed fault.
+4. Learn-first: replay version 4 through existing checks and through the 3D body; measure what each catches.
+Chosen: 4, then 3, then 2 (1 only if 2's look fails).
+
+## Proposal
+Learn first (changes nothing, ~1% of a week, Opus): replay version 4 (5edd1c1d) every frame; run `body_faults`,
+`check_arm3` and capsules-against-car on Jason's skeleton; count which of the 8 notes each catches. One sheet for Sam:
+6 frames of version 4 beside the 3D body of the same skeleton, and Jason's 3D body from five views at phone size.
+
+Change 1, the check (~1.5%, after the replay): recorded at the drawing functions, so no file bypasses it. Every person,
+every frame: bones at rig lengths in 3D, each arm on its own side as drawn, no limb through another (unlisted),
+no part inside a listed solid, a held gun pointing within 10 degrees of its target. The clip writer refuses an unnamed
+fault. Number to beat: catches all skeleton-held faults in version 4 (kittest on those frames); any picture-only fault
+found by the replay goes to the critique, made a refusal at the same writer (rule 89 already says so).
+
+Change 2, the means (~3-4%, unchecked, only if Sam passes the look sheet): the 3D body for big moves, key poses as 3D
+keys shown on a five-view pose sheet before building (rule 8), the car drawn into a depth image so every pixel of him
+is hidden or shown by true depth. Number: shot 4's next clip has 0 of Sam's 8 cause-A faults; its rebuild under 4%.
+Total ~6% once; later films reuse it.
+
+## Sam test
+Q1: measure first, then gate at the drawing, not per file.
+Q2: the real failed frames are the right evidence for this decision.
+Q3: enforced at the drawing and the clip writer, not by a chat choosing to run it.
+Q4: four different approaches weighed.
+Q5: step 1 changes nothing; each change undoes alone; the look is shown before building.
+Q6: sources named; gaps listed under Unchecked.
+Q7: sized to the result: a kit, not a patch.
+Q8: no trial; each change permanent, reviewed at film end.
+
+## Lost / Added
+Lost: the flat figure in big moves (kept at rest). Added: one look sheet for Sam; a check that stops a clip.
+
+## Unchecked
+Ledger row-to-chat mapping; build cost; 3D body render speed and Jason's face on it; whether the low close camera keeps
+the house look.
