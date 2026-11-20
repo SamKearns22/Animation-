@@ -9431,48 +9431,48 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.69,
+   "cost": 1.09,
    "src": "estimate",
    "sid": "session_01J1JB7WhVtfo94mxXruR19h",
-   "steps": 49,
-   "hist_k": 163,
+   "steps": 68,
+   "hist_k": 186,
    "kinds": {
-    "film-file search": 0.3,
-    "tool search": 15.6,
-    "renders": 8.2,
-    "pictures": 9.7,
-    "other": 66.2
+    "film-file search": 0.2,
+    "tool search": 15.9,
+    "renders": 8.6,
+    "pictures": 9.8,
+    "other": 65.5
    },
    "calls": {
     "film-file search": 1,
-    "tool search": 27,
+    "tool search": 36,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 6,
-    "pictures": 10,
-    "other": 11
+    "renders": 14,
+    "pictures": 13,
+    "other": 14
    },
    "split": {
-    "usd": 2.527,
-    "total": 2.527,
+    "usd": 3.5371,
+    "total": 3.5371,
     "floor_k": 82,
     "blocks": {
-     "new writes": 34.9,
-     "Claude's words": 28.3,
-     "start-up floor": 26.8,
-     "carried history": 10.0
+     "new writes": 30.1,
+     "start-up floor": 27.1,
+     "Claude's words": 26.7,
+     "carried history": 16.1
     },
     "origins": {
-     "Claude's words": 40.4,
-     "start-up floor": 26.8,
-     "cache re-write": 12.1,
-     "result: tool search": 12.1,
-     "result: pictures": 5.7,
-     "messages and reminders": 2.3,
+     "Claude's words": 40.5,
+     "start-up floor": 27.1,
+     "result: tool search": 13.3,
+     "cache re-write": 8.7,
+     "result: pictures": 6.5,
+     "messages and reminders": 2.9,
+     "result: renders": 0.4,
      "result: other": 0.3,
-     "result: renders": 0.2,
-     "result: film-file search": 0.2
+     "result: film-file search": 0.1
     },
     "leftover": 0.0
    },
@@ -9484,37 +9484,37 @@
      [
       "source/gta_shots58.py",
       4.3,
-      0.0527
+      0.0673
      ],
      [
       "notes/grand-theft-autism.md",
       2.6,
-      0.023
+      0.0289
      ],
      [
       "/tmp/a/before.jpg",
       1.6,
-      0.0174
+      0.0229
      ],
      [
       "/tmp/a/z.jpg",
       1.6,
-      0.0171
+      0.0226
      ],
      [
       "source/focus.py",
       1.5,
-      0.0153
+      0.0196
      ],
      [
       "/tmp/g/sheet.png",
       1.6,
-      0.0125
+      0.0155
      ],
      [
       "source/gta_rehearse.py",
       0.8,
-      0.0099
+      0.0128
      ]
     ],
     "base_pct": 15.7
@@ -9526,14 +9526,16 @@
     },
     "other": {
      "other": 8,
-     "shared:handover.py": 2,
+     "shared:handover.py": 4,
      "shared:gta_shots58.py": 9,
      "film notes": 1,
      "shared:focus.py": 2,
      "shared:gta_rehearse.py": 1,
      "shared:views.py": 2,
      "shared:figure.py": 1,
-     "guides": 1
+     "guides": 1,
+     "shared:humancheck.py": 2,
+     "shared:critique.py": 5
     },
     "ticked": 0,
     "edited film code": false,
@@ -9760,6 +9762,78 @@
       "shared:gta_shots58.py",
       "source/gta_shots58.py",
       "mkdir -p /tmp/g2 && cd /home/user/Animation- && date +%s > /tmp/g2/start && for ",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "concat\\|join\\|record\\|sendgate\\|copy_record",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sed -n 225,340p source/humancheck.py",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 -c \" import sys,json,os;sys.path.insert(0,'source');import humancheck as",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/grand-theft-autism source/sets.py",
+      "def pack",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data",
+      "^PARTS",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/grand-theft-autism/cars-spec.json source/data/critique-",
+      "'P'\\|\\",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/grand-theft-autism source/data/critique-src/grand-theft",
+      "Yeah, I didn\\'t like that.",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^Checks",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:handover.py",
+      "notes/grand-theft-autism.md source/handover.py",
+      "python3 - <<'E' p='notes/grand-theft-autism.md' s=open(p).read() a=\"- Branches n",
       ""
      ]
     ]
