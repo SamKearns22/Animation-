@@ -55,6 +55,16 @@
 - [x] Sam (22:36): "This is an ambitious build." Priced honestly in the estimate below (20 Nov).
 - [x] Sam (22:41): "You have 2% of this usage session left to spend on whatever you want for this job." Spent in chat 1.
 
+- [x] Sam's answers (20 Nov, to chat 2's 1-7): 1 Y screenplay is final; 2 Y rehearse the swerve and the lean-out/crash
+      first as short clips; 3 her "It's very loud": flat and polite with a definite undercurrent of distress, a
+      noticeable wince; 4 N: Jason's "wouldn't have worked without her" is NOT sincere/proud, he is still fed up;
+      5 Y she brightens on nitroglycerin, the other two glance at each other; 6 Y must-haves accepted;
+      7 estimate pricing proposal: "Estimate isn't trusted at all, disregard" (no change to how films are priced; the
+      53.2% figure is not used for any decision).
+- [ ] Sam: "Camera movement 7, keep it on all 3." My reading (to confirm on the first clip): camera-move strength 7 out
+      of 10 (clearly felt, not violent) on the three moving shots, 2 (swerve past the kerb camera), 4 (lean-out
+      track) and 5 (corner), kept at that level through every round. Shots 3, 6, 8 stay steady.
+
 ## The plan (chat 2, 20 Nov; Opus high)
 Length: 45 spoken words at Sam's pace (3.3 a second) = about 14 s of speech; with the opening, the chase and the
 pauses the film runs about 33 s, plus the sign-off (about 36 s in all).
@@ -80,10 +90,10 @@ Showstoppers (rule 8, for Sam to approve): the swerve past the low camera (shot 
 | line | who | shot and why | face | body | lands on |
 |---|---|---|---|---|---|
 | 1 "This is actually a really difficult..." | her (off) | 2, wide: the chase is the picture, her voice is the joke | (off screen) | (off) | "difficult" as the car passes the lens |
-| 2 "It's very loud." | her | 3, three-shot: calm in the chaos | flat, polite, small wince, eyes on the spinner | shoulders up, spinner spinning, elbows tucked | "loud" (a wince) |
+| 2 "It's very loud." | her | 3, three-shot: calm in the chaos | flat, polite, a definite undercurrent of distress, a noticeable wince on "loud", eyes on the spinner | shoulders up, spinner spinning, elbows tucked | "loud" (a wince) |
 | 3 "Yeah, I didn't like that." | her | 5, three-shot: right after the corner | brows pinched, eyes down then forward | thrown sideways by the corner, settles, straightens her jumper | "didn't" |
 | 4 "You want to tell me why we brought her again?" | Lucia | 6, two-shot: the argument is between the front seats | eyes flick to Jason and back to the road, jaw tight | both hands on the wheel, head turns on "you" | "brought" (a nod back at her) |
-| 5 "I told you. Her hyperfixation is homemade explosives. This job wouldn't have worked without her." | Jason | 6, two-shot | looking forward, eyes close on "told you" (exasperated), then sincere | free hand opens on "hyperfixation", counts the point on "explosives", open palm toward her on "without her" | "told you" (eyes shut), "without her" |
+| 5 "I told you. Her hyperfixation is homemade explosives. This job wouldn't have worked without her." | Jason | 6, two-shot | looking forward, eyes close on "told you" (exasperated), stays fed up to the end (Sam: not sincere or proud) | free hand opens on "hyperfixation", counts the point on "explosives", open palm toward her on "without her", tired and grudging | "told you" (eyes shut), "without her" |
 | 6 "My safe food is nitroglycerin." | her | 8, three-shot: the punchline lands on the whole car | brightens, a small proud smile, eyes up between the seats | leans forward a little, spinner stops | "nitroglycerin" (Jason and Lucia's eyes slide to each other) |
 
 ## Estimate (rule 24; Sam allowed it 19 Nov). Unmeasured: 5.0 of 53.2 (9%)
@@ -116,20 +126,17 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 | vice-city-montage, vice-city-ocean-beach | murals, palms, overhead wires, low pastel shops, Ocean Drive neon at dusk, pink sky | |
 | missing: a cruiser front-on (seen through the rear window and in the crash); the woman's unicorn jumper (anywhere) | fetched at the build | |
 
-## Where things stand (20 Nov, chat 2)
+## Where things stand (20 Nov, chat 3, Sonnet)
 - Rules that bite next: 8 (rehearse the swerve and the crash first), 38 (front, side, back on the cast sheet), 89 (each new thing critiqued alone).
-- Done: plan, staging (8 shots), acting list, game references filed, estimate 53.2% of a week (ledger stages set).
-- Next: on Sam's answers, the cast build: Opus, high effort (new people and the car): Jason, Lucia, her, the Tulip.
-- Needs Sam: questions 1-6 in chat 2's message (screenplay final, showstoppers, three tones, must-haves, mirror insert,
-  the estimates proposal).
+- Done: plan, acting list, game references; Sam's answers 1-7 recorded above (screenplay final).
+- Next: Opus, high effort: the cast build (Jason, Lucia, her, the Tulip), then the two rehearsal clips (swerve, lean-out and crash) before any other movement.
+- Needs Sam: nothing; camera-move 7 on shots 2, 4, 5 is my reading, shown on the first clip.
 - Read: guides/job-packs.md, Build; the plan, acting list and references above.
-- Open rule requests: none.
-- Sounds the script names go in (sirens, shots, glass, crash, fireball): CLAUDE.md's sound rule.
-- No page.py show this chat: the plan stage wrote no film code (the film file is not started yet).
-- Branch claude/blessed-c2-mics-wip stays off the main line (named in story/status.md, 19 Nov).
+- Open rule requests: none found in this film's notes.
+- No page.py show this chat: chat 3 only recorded answers in the notes; no film code was touched (the film file is not started).
+- Branch claude/blessed-c2-mics-wip stays off the main line (named in story/status.md).
 - For Claude: start source/grand_theft_autism.py from source/satire_template.py; places in story/grand-theft-autism-places.txt;
   Glock from prepper_cast, effects from prepper_fx and flying_whales_fx (fireball_sprite, Puff, splash_parts);
-  vehicle precedent protest_tiers_sets.truck (through a camera). Title font Pricedown is fetched by `_title_font()`,
-  in .gitignore; never commit it.
+  vehicle precedent protest_tiers_sets.truck. Title font Pricedown is fetched by `_title_font()`, in .gitignore; never commit it.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.67% of 15%; forecast 53.2% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 3.36% of 15%; forecast 53.9% (2026-11-20)
