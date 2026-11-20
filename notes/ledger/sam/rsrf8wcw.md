@@ -19,3 +19,23 @@ I've just noticed that the bottom of the A in grand is also connected with the r
 ### 2026-11-20T10:45:57
 It will fade to car radio volume volume by the time the first dialogue line is spoken and continue
 
+### 2026-11-20T11:23:43
+Why did the fire hydrant/cars clipping pass?
+
+### 2026-11-20T11:25:39
+Can you not just use the existing check for clipping in practice clips rather than building and proposing a new one
+
+### 2026-11-20T11:27:12
+Y.
+
+'Anything against anything' should be the rule across all clipping checks in this project, otherwise we will always encounter the same problem every time we build any new prop or setting.
+
+### 2026-11-20T11:27:26
+Is my assertion correct?
+
+### 2026-11-20T11:28:47
+Do we need to run this through proposal route or is your new rule sufficient
+
+### 2026-11-20T11:29:30
+1
+
