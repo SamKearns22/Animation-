@@ -52,3 +52,16 @@ Please do not analyse the following frames until all my notes are in.
 I'm done now.
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-20T22:07:13
+1. A 2D body can be animated to do 3D movements like this, though.
+
+2. Fix
+
+3. Fix
+
+4. We need to do acting notes for scenes without dialogue too.
+
+5. I think for a scene this ambitious, it should have been proposed.
+
+I think you've diagnosed them pretty well. So is it necessary to run proposal route? That's usually for problems you haven't entirely thought through. Suggest honestly.
+
