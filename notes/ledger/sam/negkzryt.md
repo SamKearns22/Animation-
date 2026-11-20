@@ -16,3 +16,11 @@ Please do not analyse the following frames until all my notes are in.
 ### 2026-11-20T21:40:11
 3. His lower body is still visible through the bonnet. Clipping. The right arm turns into a gross sausage shape and becomes dislocated from the shoulder.
 
+### 2026-11-20T21:47:30
+4. In these frames, J's knees clip through bonnet, side body through door, the back wheel through chassis. 
+
+5. A large amount of bald people on the streets? Remember you're to do crowds/civilians by city, and Vice City is a parody of Miami. Look up that rule and ensure it is working.
+
+6. In the final frame, J becomes a monstrosity. Limbs, neck, torso, all curled around each other and in the wrong place. Utterly inhuman. It really worries me that this wasn't caught by anything we have so far implemented.
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
