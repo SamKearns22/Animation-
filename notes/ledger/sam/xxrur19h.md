@@ -7,3 +7,6 @@ The main issue I see is a lack of imagination with the acting when they are spea
 
 J for example, always faces forward even though he's indicating other things. His arm poses could use work too. Handover.
 
+### 2026-11-20T23:33:46
+Actually don't handover just continue here
+
