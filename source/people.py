@@ -19,6 +19,8 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     extras: wig, robe, officer, open shirt, crucifix, scarf, zip, flowers, crest, skirt   (parts that sit on top: EXTRAS)
     (Milburn, 17 Nov: `hair: curly, C, big` | `beard: pencil C` | `glasses: C, thick` | extras flowers (a jumper's
     knitted flowers), crest (a football shirt's badge and white collar trim))
+    (GTA, 20 Nov: `outfit: ..., sleeves short` | extras palms (a leaf-print shirt), biker (a leather biker jacket over a
+    white vest, gold chain), unicorn (a jumper's unicorn being sick rainbows))
   One outfit in every view (face tool chat 15): each extra and the open collar is drawn turned too (TURNED below):
     its front drawing wrapped round the turned body (views.WrapPen), its own back where it shows from behind (the
     belt, the sash, the scarf round the neck, the top's collar), a bespoke view where Sam has seen one (the open
@@ -410,6 +412,9 @@ def _fact(d, key, val, people):
             if q.strip() == 'big':                     # Milburn (17 Nov): a big mass of curls, half as big again
                 d['hair_big'] = 1.5
                 continue
+            if q.strip() == 'loose':                   # GTA (20 Nov): a middle parting and loose strands by the face
+                d['hair_loose'] = True
+                continue
             if w == 'streaks':                         # Milburn note (Sam, 17 Nov): strands of a second colour
                 d['hair_streak'] = colour(c)
                 continue
@@ -476,6 +481,9 @@ def _fact(d, key, val, people):
             if p == 'open collar':                     # the shirt open at the neck (chat 15: an outfit choice)
                 d['collar'] = 'open'
                 continue
+            if p == 'sleeves short':                   # a short-sleeved shirt (GTA, 20 Nov: midterminal's sleeve)
+                d['short_sleeve'] = True
+                continue
             w, _, c = p.partition(' ')
             if c.startswith('darker '):                # 'trousers darker jacket 0.6': the jacket's colour, darker
                 src, k = c.split()[1:]
@@ -508,7 +516,7 @@ def person(d):
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
               'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
-              'hat_c'):
+              'hat_c', 'short_sleeve'):
         if k in d:
             sp[k] = d[k]
     if 'skin' not in sp:
@@ -528,7 +536,7 @@ def person(d):
               brow=sp['brow_c'], hair='crop' if style == 'short' else style, turned=style)
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
                   ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes'), ('pencil', 'pencil'),
-                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'),
+                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'), ('hair_loose', 'hair_loose'),
                   ('piercings', 'piercings')):
         if k in d:
             fc[fk] = d[k]
@@ -616,7 +624,8 @@ def _extras():
             'open shirt': ('torso', PF.open_shirt), 'crucifix': ('torso', PF.crucifix), 'scarf': ('torso', PF.scarf),
             'zip': ('torso', PF.zip_top), 'open collar': ('torso', PP.collar_torso),
             'flowers': ('torso', PP.flowers_torso), 'crest': ('torso', PP.crest_torso),
-            'skirt': ('torso', PP.skirt_torso)}
+            'skirt': ('torso', PP.skirt_torso), 'palms': ('torso', PP.palms_torso),
+            'biker': ('torso', PP.biker_torso), 'unicorn': ('torso', PP.unicorn_torso)}
 
 
 def turned():
@@ -627,7 +636,8 @@ def turned():
     return {'robe': dict(back=PP.robe_back), 'officer': dict(back=PP.officer_back), 'open shirt': dict(back=None),
             'crucifix': dict(back=None), 'scarf': dict(back=PF.scarf_back), 'zip': dict(back=PF.zip_back),
             'open collar': dict(back=None, own={'three': PP.collar_three}), 'flowers': dict(back=PP.flowers_torso),
-            'crest': dict(back=None), 'skirt': dict(back=PP.skirt_torso)}
+            'crest': dict(back=None), 'skirt': dict(back=PP.skirt_torso), 'palms': dict(back=PP.palms_torso),
+            'biker': dict(back=PP.biker_back), 'unicorn': dict(back=None)}
 
 
 def pieces(sp):
@@ -670,7 +680,8 @@ def _head_parts():
 
 
 
-EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt')
+EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt', 'palms',
+          'biker', 'unicorn')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 

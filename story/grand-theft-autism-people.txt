@@ -1,0 +1,32 @@
+# Grand Theft Autism's people (20 Nov, chat 4, cast build), described for the people kit (source/people.py).
+# Jason and Lucia: cartoon versions of the game's look (Sam, answer 4), from references/grand-theft-autism/
+# jason-portrait.jpg and lucia-portrait.jpg only. Her: invented (references from anywhere).
+# All three are seen from the waist up, seated, through the windscreen (shots 3, 5, 6, 7, 8); Jason also from the
+# side as he leans out of the window (shot 4). `python3 source/people.py sheet grand-theft-autism OUT.jpg`.
+
+# jason: Jason (short dark hair, stubble, strong jaw, olive skin; dark palm-leaf short-sleeved shirt open at the neck)
+body: 1.85 m, shoulders 178, head 70 x 94, hem 480
+skin: 214 160 120 | hair: crop, 34 28 24
+face: jaw_wide ++, chin_long +, brow_high -, face_wide +
+eyes: 74 58 44 | lips: 168 112 96 | brows: 34 28 24, width 5.0, thick 0.07
+beard: stubble 0.8
+outfit: jumper 52 50 40, shirt 52 50 40, no tie, sleeves short, trousers 54 58 66, shoes 30 26 24, open collar
+extras: palms
+
+# lucia: Lucia (dark brown hair pulled back, loose strands; brown skin; black leather biker jacket, white vest, gold chain)
+body: 1.68 m, shoulders 146, head 62 x 94, neck 0.85, hem 470
+skin: 170 112 80 | hair: pony, 52 34 26, loose
+face: jaw_wide --, face_wide -, chin_long +, eye_size ++, lip_low ++, lip_top +
+eyes: 70 46 32 | lips: 176 92 92 | brows: 40 28 22, width 3.4, thick 0.035
+lashes
+outfit: jumper 36 34 36, shirt 240 238 230, no tie, trousers 40 40 46, shoes 24 22 22
+extras: biker
+
+# her: The autistic woman (25, white, auburn hair; cream jumper with a unicorn being sick rainbows; jeans)
+body: 1.64 m, shoulders 140, head 64 x 94, hem 470
+skin: pale | hair: long, 150 66 36
+face: face_wide -, eye_size +, chin_long -
+eyes: 96 120 104 | lips: 196 128 118 | brows: 140 70 44, width 3.6, thick 0.04
+lashes
+outfit: jumper 238 228 204, shirt 238 228 204, no tie, trousers 70 96 140, shoes 230 230 226
+extras: unicorn

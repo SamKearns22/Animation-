@@ -273,6 +273,15 @@ def _front_head(img, p, sp, t, hx, hy):
             p.poly(oval(*FF.lines(u, v), 2.0, 2.0, 6), dk(skin, 0.74), None)
     P4.eyes(p, FF.eyes, L, dict(sp, lid4=sp.get('lid4', 0.22 - 0.2 * up), gaze_dy=gaze(L, -up), look=FO.look(sp)), fc['iris'], dk(skin, 0.8),
             liner=2.6)
+    if fc.get('lashes'):                                      # GTA (Lucia): a heavier upper lid and two flicks out
+        for sgn in (-1, 1):
+            cx, cy = sgn * L['ecx'], L['eye_y']
+            p.line(curve(FF.eyes.pts([(cx - sgn * L['ew'] * 0.9, cy - L['eh'] * 0.55), (cx, cy - L['eh'] * 1.05),
+                                      (cx + sgn * L['ew'] * 1.05, cy - L['eh'] * 0.45)]), 3), INK, 3.6)
+            for k in range(2):
+                a = (cx + sgn * L['ew'] * (0.75 + 0.25 * k), cy - L['eh'] * (0.75 - 0.25 * k))
+                b = (a[0] + sgn * L['ew'] * 0.32, a[1] - L['eh'] * 0.42)
+                p.line(FF.eyes.pts([a, b]), INK, 2.2)
     if fc.get('pencil'):                                      # a pencil moustache: one thin line above the lip
         pencil(p, FF.mouth, L, fc)
     if fc.get('glasses'):
@@ -602,6 +611,15 @@ def _hair_front(p, f, L, fc, hc, skin):
         for k in range(7):
             u = -c * 0.75 + k * c * 0.25
             p.line(curve(f.pts([(u, hl - 0.02), (u * 0.7, -0.24), (u * 0.3, -0.42)]), 3), dk(hc, 0.72), 1.3)
+    if fc.get('hair_loose'):                                  # GTA (Lucia): a middle parting, loose strands either
+        p.line(curve(f.pts([(0.0, hl - 0.01), (0.01, -0.3), (0.0, -0.44)]), 3), dk(hc, 0.55), 1.8)  # side of the face
+        for sgn in (-1, 1):
+            for k, (w, dv) in enumerate(((0.07, 0.0), (0.05, 0.08))):
+                x0 = sgn * (c * 0.55 - k * 0.04)
+                pts = [(x0, hl - 0.04), (sgn * (e - 0.03 - k * 0.02), 0.04 + dv), (sgn * (e - 0.08 - k * 0.03), 0.3 + dv),
+                       (sgn * (e - 0.01), 0.52 + dv), (sgn * (e - 0.05), 0.66 + dv)]
+                out = [(x + sgn * w * (1 - i / 5), y) for i, (x, y) in enumerate(pts)]
+                p.poly(curve(f.pts(pts + out[::-1]), 3), hc, INK, 1.4)
 
 
 def _glasses(p, f, L, col, thick=False):
@@ -667,3 +685,121 @@ def skirt_torso(img, p, sp, t):
     for u in (-0.9, -0.3, 0.3, 0.9):                       # folds falling from the waist
         p.line(curve([(u * sw * 0.6, top + 30), (u * sw * 0.9, top + 160), (u * sw * 1.2, hem - 20)], 3),
                B.lt(c, 1.9), 1.6)
+
+
+# ------------------------------------------------------------------- GTA (20 Nov): three tops, kit extras for any film
+def _inside(sp, y, pad=0.78):
+    """Half the torso's width at height y (the body tapers from the shoulders to a hem at 0.85), padded in."""
+    sw = sp.get('shoulders', 150)
+    bot = sp.get('bottom', 505)
+    return sw * (1.0 - 0.15 * min(1.0, max(0.0, y / bot))) * pad
+
+
+def palms_torso(img, p, sp, t):
+    """A dark shirt's palm-leaf print (Jason, GTA): long pointed leaves with a mid-rib, two tones, in a loose
+    scatter at varied angles, kept inside the shirt's outline (front, and the same seen from behind)."""
+    rng = np.random.default_rng(23)
+    base = sp.get('jacket', (52, 50, 40))
+    tones = [(150, 118, 78), (122, 96, 64)]
+    bot = int(sp.get('bottom', 480)) - 24
+    for row, y in enumerate(range(44, bot, 58)):
+        half = _inside(sp, y)
+        xs = np.arange(-half + 18 + (row % 2) * 26, half - 10, 52)
+        for k, x in enumerate(xs):
+            ang = rng.uniform(-1.2, 1.2) + (0.6 if (row + k) % 2 else -0.6)
+            ln, wd = rng.uniform(26, 34), rng.uniform(7, 9)
+            ca, sa = math.cos(ang), math.sin(ang)
+            pts = []
+            for u in np.linspace(-1, 1, 9):
+                pts.append((u * ln, wd * (1 - u * u) ** 0.8))
+            for u in np.linspace(1, -1, 9):
+                pts.append((u * ln, -wd * (1 - u * u) ** 0.8))
+            c = tones[(row + k) % 2]
+            q = [(x + a * ca - b * sa, y + a * sa + b * ca) for a, b in pts]
+            q = [(max(-half, min(half, a)), b) for a, b in q]
+            p.poly(q, c, None)
+            p.line([(x - ln * 0.9 * ca, y - ln * 0.9 * sa), (x + ln * 0.9 * ca, y + ln * 0.9 * sa)], dk(base, 1.1), 1.2)
+
+
+def biker_torso(img, p, sp, t):
+    """A black leather biker jacket worn open (Lucia, GTA): a white vest top between wide lapels with silver
+    studs, the off-centre zip running down one front, a gold chain with a small pendant on the vest."""
+    jk = sp.get('jacket', (36, 34, 36))
+    vest = sp.get('shirt', (240, 238, 230))
+    bot = int(sp.get('bottom', 470))
+    jw = sp.get('shoulders', 150)
+    p.poly([(-jw * 0.9, -4), (jw * 0.9, -4), (jw * 0.86, bot - 4), (-jw * 0.86, bot - 4)], jk, None)  # the plain front
+    p.poly(curve([(-44, -2), (0, 40), (44, -2), (46, 120), (34, bot - 6), (-34, bot - 6), (-46, 120)], 3),
+           vest, INK, 2.0)                                                        # the vest between the fronts
+    p.poly(curve([(-30, -6), (30, -6), (24, 10), (0, 30), (-24, 10)], 3), sp['skin'], None)   # bare skin above it
+    p.line(curve([(-30, 4), (0, 30), (30, 4)], 3), dk(vest, 0.8), 1.6)            # the vest's scoop neck
+    for k in range(4):                                                            # ribbing
+        x = -18 + k * 12
+        p.line([(x, 70), (x, bot - 20)], dk(vest, 0.9), 1.0)
+    hi = B.lt(jk, 2.4)
+    for sgn in (-1, 1):                                                           # the wide lapels
+        lap = [(sgn * 40, -10), (sgn * 70, -4), (sgn * 98, 30), (sgn * 92, 96), (sgn * 66, 92), (sgn * 48, 170),
+               (sgn * 46, 120)]
+        p.poly(curve(lap, 1), B.lt(jk, 1.35), INK, 2.6)                          # wide notched lapels, a sheen
+        p.line(curve([(sgn * 72, 4), (sgn * 90, 34), (sgn * 86, 86)], 2), B.lt(jk, 2.6), 2.0)
+        p.poly(oval(sgn * 90, 88, 4.2, 4.2, 8), (214, 214, 220), INK, 0.9)         # studs at the lapel points
+        p.poly(oval(sgn * 56, 158, 4.2, 4.2, 8), (214, 214, 220), INK, 0.9)
+        p.line([(sgn * 46, 168), (sgn * 36, bot - 6)], INK, 2.4)                   # the jacket fronts' edges
+    p.line([(-70, 190), (-60, bot - 10)], (196, 196, 202), 2.6)                   # the off-centre zip
+    for y in range(200, bot - 20, 14):
+        p.line([(-73, y), (-63, y + 2)], (150, 150, 156), 1.0)
+    p.line([(54, 250), (90, 244)], (196, 196, 202), 2.4)                          # a pocket zip
+    p.line([(-90, 300), (-120, 294)], (196, 196, 202), 2.4)
+    gold = (222, 180, 70)
+    p.line(curve([(-26, 2), (-14, 56), (0, 74), (14, 56), (26, 2)], 3), gold, 2.6)  # the gold chain
+    p.poly([(0, 72), (9, 84), (0, 98), (-9, 84)], gold, dk(gold, 0.6), 1.2)        # the pendant
+
+
+def biker_back(img, p, sp, t):
+    """The biker jacket from behind: its collar round the neck and a yoke seam across the shoulders."""
+    jk = sp.get('jacket', (36, 34, 36))
+    p.poly([(-44, -6), (44, -6), (48, 18), (-48, 18)], jk, INK, 2.2)
+    p.line(curve([(-60, 70), (0, 84), (60, 70)], 3), B.lt(jk, 2.4), 1.6)
+
+
+class _Scaled:
+    """A pen that scales and moves every point (a small picture drawn bigger: the unicorn)."""
+    def __init__(self, p, k, x, y):
+        self.p, self.k, self.x, self.y = p, k, x, y
+
+    def _q(self, pts):
+        return [(self.x + a * self.k, self.y + b * self.k) for a, b in pts]
+
+    def poly(self, pts, fill, line=None, w=1.0):
+        return self.p.poly(self._q(pts), fill, line, w * self.k ** 0.5)
+
+    def line(self, pts, col, w=1.0):
+        return self.p.line(self._q(pts), col, w * self.k ** 0.5)
+
+
+def unicorn_torso(img, p, sp, t):
+    """A jumper's knitted unicorn being sick rainbows (her, GTA): a white unicorn head in profile on the chest, gold
+    horn, pink and purple mane, mouth open, a rainbow pouring down the jumper in six bands."""
+    cx, cy = 0, 0
+    white, horn = (250, 250, 250), (236, 196, 90)
+    bands = [(220, 60, 60), (240, 150, 50), (244, 220, 70), (90, 180, 90), (70, 130, 210), (140, 90, 190)]
+    bot = 200
+    p = _Scaled(p, 1.7, 30, 150)
+    for k, c in enumerate(bands):                         # the rainbow, from the mouth down and out to the left
+        o = (k - 2.5) * 5.0
+        pts = [(cx - 32, cy + 14 + o * 0.4), (cx - 52 - o * 0.3, cy + 60 + o * 0.6), (cx - 46 - o, bot - 60),
+               (cx - 34 - o * 1.2, bot)]
+        p.line(curve(pts, 3), c, 5.4)
+    for k in range(5):                                    # the splash where it lands
+        p.poly(oval(cx - 54 + k * 9, bot + 4 - (k % 2) * 4, 4.4, 3.4, 8), bands[k], None)
+    mane = [(cx + 4, cy - 40), (cx + 30, cy - 34), (cx + 40, cy - 6), (cx + 34, cy + 30), (cx + 18, cy + 34)]
+    p.poly(curve(mane, 3), (234, 140, 190), INK, 1.4)
+    p.line(curve([(cx + 12, cy - 36), (cx + 30, cy - 10), (cx + 26, cy + 24)], 3), (160, 110, 200), 3.0)
+    head = [(cx + 6, cy - 38), (cx + 20, cy - 26), (cx + 22, cy + 26), (cx + 4, cy + 30), (cx - 10, cy + 12),
+            (cx - 30, cy + 10), (cx - 36, cy + 2), (cx - 30, cy - 10), (cx - 10, cy - 24)]
+    p.poly(curve(head, 2), white, INK, 1.8)
+    p.poly([(cx - 30, cy + 8), (cx - 36, cy + 18), (cx - 20, cy + 14)], (190, 70, 90), INK, 1.2)    # open mouth
+    p.poly([(cx - 4, cy - 30), (cx + 6, cy - 34), (cx - 14, cy - 66)], horn, INK, 1.4)              # the horn
+    p.line([(cx - 2, cy - 40), (cx - 8, cy - 46)], dk(horn, 0.7), 1.0)
+    p.line(curve([(cx - 12, cy - 12), (cx - 6, cy - 9), (cx - 1, cy - 12)], 2), INK, 1.8)            # a shut eye
+    p.poly([(cx + 4, cy - 40), (cx + 10, cy - 54), (cx + 14, cy - 36)], white, INK, 1.4)            # the ear
