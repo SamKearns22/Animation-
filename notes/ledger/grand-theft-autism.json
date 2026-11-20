@@ -4200,6 +4200,456 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "097bc3b7",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.12,
+   "src": "estimate",
+   "sid": "session_01J1JB7X3LFKmZ11ymra4t6z",
+   "steps": 88,
+   "hist_k": 177,
+   "kinds": {
+    "film-file search": 0.2,
+    "tool search": 14.0,
+    "whole-file .py read": 0.3,
+    "page.py": 0.2,
+    "renders": 3.7,
+    "pictures": 8.4,
+    "other": 73.1
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 39,
+    "whole-file .py read": 1,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 19,
+    "other": 26
+   },
+   "split": {
+    "usd": 4.0868,
+    "total": 4.0868,
+    "floor_k": 80,
+    "blocks": {
+     "start-up floor": 35.2,
+     "Claude's words": 26.3,
+     "carried history": 19.5,
+     "new writes": 19.1
+    },
+    "origins": {
+     "Claude's words": 42.2,
+     "start-up floor": 35.2,
+     "result: tool search": 11.5,
+     "result: pictures": 7.3,
+     "messages and reminders": 1.8,
+     "result: other": 1.6,
+     "result: page.py": 0.2,
+     "result: renders": 0.1,
+     "result: film-file search": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 80,
+    "work_step": 20,
+    "work_pct": 0.26,
+    "reads": [
+     [
+      "/tmp/claude-0/-home-user-Animation-/097bc3b7-15fb-52d8-9d97-76976e5ba53d/scratchpad/before.png",
+      1.6,
+      0.033
+     ],
+     [
+      "source/people_parts.py",
+      1.4,
+      0.0315
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      0.9,
+      0.0201
+     ],
+     [
+      "source/gta_cast.py",
+      0.8,
+      0.0172
+     ],
+     [
+      "guides/job-packs.md",
+      0.5,
+      0.0123
+     ],
+     [
+      "source/views.py",
+      0.6,
+      0.0116
+     ],
+     [
+      "story/status.md",
+      0.5,
+      0.0113
+     ],
+     [
+      "source/page.py",
+      0.3,
+      0.0059
+     ]
+    ],
+    "base_pct": 30.8
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 0,
+     "after show": 1
+    },
+    "other": {
+     "film notes": 4,
+     "shared:handover.py": 2,
+     "shared:people_parts.py": 3,
+     "shared:views.py": 9,
+     "other": 5,
+     "shared:gta_cast.py": 2,
+     "shared:faces.py": 1,
+     "shared:body.py": 5,
+     "shared:people.py": 2,
+     "guides": 1,
+     "shared:kittest.py": 1,
+     "shared:kittests.py": 4
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md",
+      "git status | head -5 && git log --oneline -3 && ls notes/ | head -50 && cat stor",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "Where things stand",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start --film grand-theft-autism 2>&1 | tail -30",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01J1JB7X4DqA8UyL6TXWdGbM --film grand-t",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md guides/job-packs.md",
+      "headphones\\|neckline\\|three references\\|third reference",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 125,160p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/*.py",
+      "def headphones3d\\|def headphones_view\\|PHONES_YAW\\|headphones",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "sed -n 900,1010p source/people_parts.py",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:views.py",
+      "notes/grand-theft-autism.md source/views.py",
+      "five-angle\\|five angles\\|turnaround\\|castsheet\\|cast sheet",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "notes/sheets",
+      "PHONES_YAW\\|five_angle\\|five-angle\\|turnsheet",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "gta\\|grand\\|cast",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py",
+      "^def \\|argv\\|five\\|angles",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py",
+      "sed -n 40,56p source/gta_cast.py; ls references/grand-theft-autism/",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import gta_cast as G, views",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:faces.py",
+      "source/faces.py source/ink.py source/body.py",
+      "^def lt\\|^def lighten\\|^def lt(",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:body.py",
+      "source/body.py source/people_parts.py",
+      "lt = B.lt\\|lt(c",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "def plain_torso",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "sed -n 574,600p source/body.py",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:body.py",
+      "source/body.py source/people_parts.py",
+      "jumper\\|oval(0, -2\\|crew\\|oval",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:body.py",
+      "source/body.py source/people_parts.py",
+      "sed -n 610,618p source/body.py; sed -n 1119,1140p source/people_parts.py",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "'vest'\\|vest_c\\|'tank'",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:views.py",
+      "source/views.py source/people_turned.py",
+      "jumper",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "neckline\\|collar\\|crew",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "def torso_view",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 670,760p source/views.py",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^from ink\\|open_curve",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -i '32s/from ink import INK, curve, oval /from ink import INK, curve, oval, ",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "xb + 4, y2 - 12",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "curl -s -A \"AnimationRefBot/1.0\" \"https://commons.wikimedia.org/w/api.php?action",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "reference photo\\|search order",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "kit_extras",
+      ""
+     ],
+     [
+      70,
+      "film",
+      "after show",
+      "source/people.py story/grand-theft-autism-people.txt",
+      "headphones\\|unicorn",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:kittest.py",
+      "source/kittest.py",
+      "ls source | grep -i kittest; python3 source/kittest.py 2>&1 | tail -15",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 900 python3 source/kittests.py 2>&1 | tail -15",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "",
+      "sleep 1; tail -15 /tmp/claude-0/-home-user-Animation-/097bc3b7-15fb-52d8-9d97-76",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "source/kittests.py",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "other",
+      "",
+      "FAIL\\|fail",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "usage\\|argv\\|python3",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "kittests.py",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/views.py source/body.py source/people.py story/sta",
+      "git add -A source/people_parts.py source/views.py source/body.py source/people.p",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
