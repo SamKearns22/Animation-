@@ -28,3 +28,17 @@ Please do not analyse the following frames until all my notes are in.
 7. The horror continues. It gets worse. Then his arms come out his back. Then the arms coming out his back pull out a pistol. It is truly and genuinely disturbing..
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-20T21:53:52
+8. He fires. The gun is not pointing at his target. It is firing towards the left.
+
+9. The cop is not hit by the wound. There is no blood. Or reaction. He is fine. He should be dead or seriously injured. Blood mist against the glass.
+
+10. All the cops are bald too -- what's your thing with bald? This happened with the ERG crowds and then we fixed it.
+
+11. J's legs are 2D and are sticking inside the doorframe.
+
+12. Not only is the cop sat there in the crashed car like a placid marionette, he isn't the same cop from a few frames before
+
+13. There is a fire hydrant water effect -- we do not see it get hit by the car
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
