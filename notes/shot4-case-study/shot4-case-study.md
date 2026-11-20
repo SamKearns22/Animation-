@@ -182,6 +182,13 @@ the ground for 1-4 frames; Jason's knee inside the car floor while seated (hidde
 (To be filled as Sam's notes arrive: each note verbatim, the frame it names, what we see there, the cause, the fix,
 and which check should have caught it.)
 
+Sam said (21:40): "Please do not analyse the following frames until all my notes are in." So each note is filed
+verbatim first; analysis (frame, cause, fix, the check that should have caught it) comes only once he says all are in.
+
+**Frame 1** (Sam's still, `sam-frame-01.jpg`: shot 3's three-shot, the version 4 clip)
+- Note 1: "Throughout the scene, L's hands are on the wheel in opposite grips. It is very funny but not how humans drive."
+- Note 2: "When J begins his movement, his lower body becomes visible. This isn't necessary and I wonder why you made that choice."
+
 ## 8. Lessons for future films (draft; nothing here is a rule until Sam says so)
 
 1. Judge a clip at full size, beat by beat, against the screenplay's words, before sending. A thin strip of small
