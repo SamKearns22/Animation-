@@ -61,9 +61,9 @@
       5 Y she brightens on nitroglycerin, the other two glance at each other; 6 Y must-haves accepted;
       7 estimate pricing proposal: "Estimate isn't trusted at all, disregard" (no change to how films are priced; the
       53.2% figure is not used for any decision).
-- [ ] Sam: "Camera movement 7, keep it on all 3." My reading (to confirm on the first clip): camera-move strength 7 out
-      of 10 (clearly felt, not violent) on the three moving shots, 2 (swerve past the kerb camera), 4 (lean-out
-      track) and 5 (corner), kept at that level through every round. Shots 3, 6, 8 stay steady.
+- [x] Sam (20 Nov): "Camera movement 7, keep it on all 3." = shot 7 (the rear-view mirror insert) is DROPPED: the camera
+      stays on all three characters, the same three-shot as shot 8. Cruiser lights still show through the rear window.
+      (My first reading, camera-move strength 7, was wrong; Sam corrected it.)
 
 ## The plan (chat 2, 20 Nov; Opus high)
 Length: 45 spoken words at Sam's pace (3.3 a second) = about 14 s of speech; with the opening, the chase and the
@@ -80,7 +80,7 @@ middle of the back seat. (The game's trailer has Jason driving; the brief wins.)
 | 4 | 10.6-16.8 | tracks left with Jason as he leans out of the passenger window, until we hang outside with him looking back down the street; then back in to shot 3's frame | shops and people whip by; 4 shots fired; the lead cruiser's windscreen shatters in front of its driver, it slews, smashes the hydrant (water jet), ploughs into a shop front in a fireball |
 | 5 | 16.8-20.0 | shot 3's camera | Lucia yanks the wheel, all three lean; through the windows the street swings to a new main road. Line 3 |
 | 6 | 20.0-28.0 | windscreen, closer two-shot of Lucia and Jason (she is still visible between, small) | Line 4 (Lucia to Jason), line 5 (Jason, forward) |
-| 7 | 28.0-29.4 | insert: the rear-view mirror from inside, close | the cruisers' lights growing in the mirror; the small pause |
+| 7 | 28.0-29.4 | shot 3's three-shot, held (Sam: keep it on all 3; no mirror insert) | the small pause, both looking forward, cruiser lights growing in the rear window |
 | 8 | 29.4-33.0 | shot 3's camera | Line 6, then a held beat |
 
 Showstoppers (rule 8, for Sam to approve): the swerve past the low camera (shot 2) and the lean-out with the crash
@@ -130,7 +130,7 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rules that bite next: 8 (rehearse the swerve and the crash first), 38 (front, side, back on the cast sheet), 89 (each new thing critiqued alone).
 - Done: plan, acting list, game references; Sam's answers 1-7 recorded above (screenplay final).
 - Next: Opus, high effort: the cast build (Jason, Lucia, her, the Tulip), then the two rehearsal clips (swerve, lean-out and crash) before any other movement.
-- Needs Sam: nothing; camera-move 7 on shots 2, 4, 5 is my reading, shown on the first clip.
+- Needs Sam: nothing. Shot 7 is the held three-shot (no mirror insert), per Sam.
 - Read: guides/job-packs.md, Build; the plan, acting list and references above.
 - Open rule requests: none found in this film's notes.
 - No page.py show this chat: chat 3 only recorded answers in the notes; no film code was touched (the film file is not started).
