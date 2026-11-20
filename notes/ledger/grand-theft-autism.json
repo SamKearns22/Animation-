@@ -1905,48 +1905,50 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.64,
+   "cost": 2.09,
    "src": "estimate",
    "sid": "session_01J1JB7W7uJtCncXknb3JEgQ",
-   "steps": 65,
-   "hist_k": 270,
+   "steps": 82,
+   "hist_k": 288,
    "kinds": {
-    "film-file search": 3.5,
-    "tool search": 35.1,
-    "whole-file .py read": 1.1,
-    "renders": 6.4,
+    "film-file search": 3.1,
+    "tool search": 31.7,
+    "whole-file .py read": 1.0,
+    "page.py": 0.1,
+    "renders": 5.9,
     "pictures": 4.8,
-    "other": 49.1
+    "other": 53.4
    },
    "calls": {
-    "film-file search": 7,
-    "tool search": 47,
+    "film-file search": 8,
+    "tool search": 54,
     "whole-file .py read": 2,
-    "page.py": 0,
+    "page.py": 1,
     "routine": 0,
-    "renders": 1,
-    "pictures": 11,
-    "other": 6
+    "renders": 3,
+    "pictures": 12,
+    "other": 11
    },
    "split": {
-    "usd": 5.9979,
-    "total": 5.9979,
+    "usd": 7.2326,
+    "total": 7.2326,
     "floor_k": 82,
     "blocks": {
-     "Claude's words": 38.5,
-     "new writes": 25.1,
-     "start-up floor": 18.3,
-     "carried history": 18.0
+     "Claude's words": 35.3,
+     "carried history": 23.2,
+     "new writes": 22.8,
+     "start-up floor": 18.7
     },
     "origins": {
-     "Claude's words": 57.8,
-     "start-up floor": 18.3,
+     "Claude's words": 56.3,
+     "start-up floor": 18.7,
      "result: tool search": 17.9,
-     "result: pictures": 3.0,
-     "messages and reminders": 1.5,
+     "result: pictures": 3.3,
+     "messages and reminders": 2.0,
      "result: whole-file .py read": 0.7,
      "result: film-file search": 0.6,
-     "result: other": 0.2
+     "result: other": 0.3,
+     "result: renders": 0.1
     },
     "leftover": 0.0
    },
@@ -1958,23 +1960,23 @@
      [
       "notes/grand-theft-autism.md",
       4.2,
-      0.0796
+      0.0926
      ]
     ],
-    "base_pct": 15.9
+    "base_pct": 16.7
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 7
+     "no show": 8
     },
     "other": {
-     "other": 6,
-     "shared:handover.py": 4,
+     "other": 7,
+     "shared:handover.py": 5,
      "film notes": 2,
      "guides": 3,
      "shared:branches.py": 1,
-     "shared:gta_rehearse.py": 9,
+     "shared:gta_rehearse.py": 10,
      "shared:gta_cars.py": 2,
      "shared:prepper_fx.py": 1,
      "shared:flying_whales_fx.py": 2,
@@ -1985,7 +1987,7 @@
      "shared:whale.py": 1,
      "shared:people.py": 3,
      "shared:figure.py": 1,
-     "shared:critique.py": 3
+     "shared:critique.py": 7
     },
     "ticked": 0,
     "edited film code": true,
@@ -2420,6 +2422,70 @@
       "guides",
       "guides/critique-checklist.md",
       "sed -n 67,75p guides/critique-checklist.md",
+      ""
+     ],
+     [
+      74,
+      "film",
+      "before show",
+      "source/gta_rehearse.py story/grand-theft-autism-people.txt notes/grand-theft-aut",
+      "git status --short && git checkout -B claude/gta-chat6 2>&1 | tail -1 && git add",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..FE",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/grand-theft-autism/r1-p5 source/critique.py",
+      "D=source/data/critique/grand-theft-autism/r1-p5 && python3 source/critique.py re",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "S4=/tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09b/scra",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py pack grand-theft-autism /tmp/claude-0/-home-user-Anim",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/grand-theft-autism/r1-p6",
+      "python3 source/critique.py record grand-theft-autism source/data/critique/grand-",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py fixed grand-theft-autism \"hunt 1 fixed as one list: t",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py source/gta_rehearse.py",
+      "python3 - <<'EOF' p='story/status.md' s=open(p).read() old=[l for l in s.splitli",
       ""
      ]
     ]
