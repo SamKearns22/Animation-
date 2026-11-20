@@ -308,6 +308,21 @@ Added after Sam's notes 1-16 (chat 16):
 8. Background people are part of the action: walking, reacting to every event, feet on the ground every frame.
 9. Ambitious camera moves need the open space to move the actor (Sam: "Give Jason an open window").
 
+## 10. Chat 17 (20 Nov, Opus high): the proposal route for cause A, and the build proposal
+
+- Sam's go-ahead (end of chat 16): the proposal route for cause A only (how to build Jason's big 2D body moves from key
+  poses drawn per angle and layered by hand, plus a check that every person in every frame is a human body); then the
+  shot 4 build proposal to Sam before any rebuilding (rule 8), with acting notes for every beat (rule 74) and his fix 3
+  (the cop hit with blood mist and a slump, one cop throughout, the hydrant hit on camera, the crowd reacting).
+- The proposal: notes/proposals/big-body-moves.md (problem and facts written with no answer; the chat's own idea in
+  big-body-moves/chat.md before two fresh helpers wrote theirs; a blind judge picks).
+- Acting rows for every person and beat, and the fix 3 events: notes/grand-theft-autism.md, "Shot 4 acting rows" and
+  "Shot 4 events" (the first silent shot planned this way: rule 74's new wording).
+- Noticed while re-reading version 1 (the camera Sam liked): the screenplay says Jason "leans out of the window";
+  versions 3-4 had him climb out to SIT on the sill with his legs inside, a bigger move than written. Version 1 kept him
+  seated and leaned his upper body out. Kept in mind for the build proposal (the move should be what is written, made
+  well, not a bigger one made badly).
+
 ## 9. For Claude (code names live here, not in messages)
 
 - Code: `source/gta_rehearse.py` (world4, shot3_cam, shot4_cam, CAM3, CAM4, J4_KEYS, jason4, jason_layer, crowd,

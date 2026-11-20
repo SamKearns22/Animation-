@@ -348,6 +348,72 @@ scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back 
 into the seated pose (last frame matches the first).
 Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
 
+## Shot 4: Sam's frame notes of version 4 (chat 16, verbatim in the case study section 7), to fix in the rebuild
+- [ ] Note 1: "Throughout the scene, L's hands are on the wheel in opposite grips." It is "not how humans drive":
+      Lucia steers hand over hand (acting rows below).
+- [ ] Notes 2-4, 11: "When J begins his movement, his lower body becomes visible." "This isn't necessary and I wonder
+      why you made that choice." "His lower body is still visible through the bonnet." "J's legs are 2D and are
+      sticking inside the doorframe." (cause A: the build method, proposal big-body-moves)
+- [ ] Notes 3, 6, 7, 15: "The right arm turns into a gross sausage shape and becomes dislocated from the shoulder."
+      "Limbs, neck, torso, all curled around each other and in the wrong place." "Utterly inhuman." "It really worries
+      me that this wasn't caught by anything we have so far implemented." "The horror continues." "It gets worse."
+      "Then his arms come out his back." "Then the arms coming out his back pull out a pistol." "It is truly and
+      genuinely disturbing.." "we then begin the horror show in reverse." (cause A, and the human-body check)
+- [ ] Note 8: "The gun is not pointing at his target." "It is firing towards the left."
+- [ ] Note 9: the cop "should be dead or seriously injured." Blood mist against the glass, a slump (fix 3).
+- [ ] Note 14: "The eternally bald crowd doesn't notice the explosion or react to it." (bald fixed chat 16; the
+      reaction is fix 3)
+- [ ] Note 16: "At no point do our cast display any acting notes." (acting rows below, rule 74)
+- [x] Sam's answers: "A 2D body can be animated to do 3D movements like this, though." (lesson 10); "We need to do
+      acting notes for scenes without dialogue too." (rule 74, written chat 16); "I think for a scene this ambitious,
+      it should have been proposed." (rule 8, written chat 16); "I think you've diagnosed them pretty well." "So is it
+      necessary to run proposal route?" "That's usually for problems you haven't entirely thought through." "Suggest
+      honestly." (answered chat 16; Sam then said Y to the route for cause A only)
+- [x] Sam (21:27): "First of all, please take all the work you have done on shot 4, and all our communication and
+      pictur..." into one document: notes/shot4-case-study/shot4-case-study.md. "Continue to update that document for
+      anything to do with shot 4." "The reason we are doing this is so it can be used as a learning case study." "This
+      is an ambitious shot with many challenges and if we learn them now and convert it into knowledg..." (standing
+      order: every chat touching shot 4 adds to it). (21:31) "Please do not analyse the following frames until all my
+      notes are in." (kept: analysis came after "I'm done now".)
+
+## Shot 4 acting rows (rule 74, every person, beat by beat; my picks, in the build proposal to Sam)
+Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging out with him; B4 shots at 1.95, 2.30,
+2.62, 2.92; B5 3.0-4.55 the slew, hydrant, fireball; B6 4.55-6.2 back in to shot 3's frame.
+| who | beat | face | body | reacts to / lands on |
+|---|---|---|---|---|
+| Jason | B1 | looking hard at us (shot 3's face); eyes flick to the mirror at 0.3 | still, gun flat on his chest | a small decisive nod at 0.4: the decision |
+| Jason | B2 | teeth set, squinting into the wind | free hand grabs the roof edge, pulls up; head and shoulders out first, gun hand up by his head, muzzle up | the wind hits his face as he clears the frame |
+| Jason | B3 | one eye shut along the arm, mouth tight | hips on the sill, turned back; free hand gripping the roof; gun arm straight at the lead cruiser | the cruiser |
+| Jason | B4 | a blink on each shot; narrower after shot 3 | each shot: arm kicks up, shoulder back, re-aims lower | shot 4: a slight head tilt as the cop slumps |
+| Jason | B5 | brows up, a flat impressed "huh" as the fireball blooms, then cool again | head turns a little from the flash; gun back up, muzzle up | the fireball |
+| Jason | B6 | back to looking hard at us | drops back in, settles; gun flat on his chest (last frame = first) | none: business as usual |
+| Lucia | all | face screwed up in concentration | hands at about ten to two; small swerves keep the grip, a bigger turn goes hand over hand (the top hand crosses and re-grips); never opposite grips | the road |
+| Lucia | B2, B6 | a quick tight glance at Jason, back to the road | shoulders square | Jason climbing past |
+| Lucia | B4 | a flinch blink each shot | shoulders up | the shots |
+| Lucia | B5 | eyes to the mirror, the fireball's glow on her face, no smile | a small steering correction | the crash behind |
+| her | B1 | eyes on the spinner, distressed (shot 3) | shoulders up, spinner spinning | the noise |
+| her | B2 | leans away from Jason's hips as he rises | spinner held to her chest | Jason |
+| her | B4 | eyes squeezed shut | hands over her ears on shot 1, held to shot 4 (pays off "it's very loud") | each shot |
+| her | B5 | peeks at the fireball, a small interested look (her hyperfixation: explosives) | one hand off an ear | the fireball (sets up shot 8's punchline) |
+| her | B6 | back to the spinner, the interest fading | hands back on the spinner | none |
+| lead cop | B3 | teeth gritted, hunched forward | both hands on the wheel | the getaway car |
+| lead cop | B4 | shot 1: ducks a little (sparks off the bonnet); shot 2: flinches, arm up; shot 3: recoils | | shot 4: hit: head snaps back, blood mist bursts against the inside of the crazed windscreen (spatter stays on the glass), he slumps onto the wheel, which pulls the car right: the cause of the slew |
+| lead cop | B5 | eyes shut, mouth slack | dead weight: thrown forward at the hydrant, again at the shop front, then still; never upright or swaying | the crash |
+| other cops | B4-B5 | | the second cruiser brakes hard (nose dips) and swerves round the slewing car | the crash |
+| crowd | B2-B3 | | walking both ways; some stop, look and point at the getaway car | the chase |
+| crowd | B4 | | the nearest duck at each shot (crouch, hands over heads); others turn their heads | each shot |
+| crowd | B5 | faces turn to the crash | people by the kerb dive aside as the cruiser mounts it; the hydrant jet soaks the nearest, who leap back; at the fireball everyone in view reacts: near ones shield their faces, turn and run; far ones stop, stare, point | the hydrant, the fireball |
+| crowd | B6 | | running away, gawping at the smoke | the smoke |
+
+## Shot 4 events (Sam's fix 3, 20 Nov; in the build proposal)
+- The hit on camera: shot 4 (2.92 s) goes through the crazed glass in front of the lead cop: blood mist and spatter on
+  the glass, the slump onto the wheel turns the car (cause and effect on screen).
+- One cop throughout: the lead cop is one person drawn the same way near and far (version 4 swapped drawings by
+  distance, note 12); after the crash he is dead weight, never a placid marionette.
+- The hydrant hit on camera: the pan keeps the hydrant in frame as the cruiser's front wheel hits it; the jet starts on
+  the contact frame, not on a timer (note 13).
+- The crowd reacts to every shot, the hydrant and the fireball (rows above); the crash is not softened.
+
 ## Where things stand (20 Nov, chat 16 end, Opus; for chat 17)
 - Rules that bite next: 8 (NEW, Sam 20 Nov: shot 4 is a hardest shot, so a build proposal to Sam BEFORE rebuilding),
   74 (NEW: acting notes for every shot, dialogue or not, beat by beat), 30 (bald crowd was a repeat: fixed at the kit).
