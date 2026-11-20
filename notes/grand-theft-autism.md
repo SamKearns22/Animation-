@@ -283,6 +283,8 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
 ## Shot 4 rebuild (Sam, 20 Nov, chat 11): checklist, tick against the film before the first clip
+- Shot 4 case study (Sam, 20 Nov, chat 16): everything on shot 4 (versions, pictures, Sam's words, causes, lessons,
+  his frame-by-frame notes) lives in notes/shot4-case-study/shot4-case-study.md; add to it in every chat that touches shot 4.
 - [x] Sam: "Shot 2 looks amazing." (keep the swerve as it is)
 - [ ] Sam: "Our scenery needs an appropriately vice city background, as currently the street ends in blank void." Both
       shots 2 and 4: a Vice City backdrop at the end of every street (sunset skyline, palms, towers, sea glow).
