@@ -108,15 +108,25 @@
       judge." ("chips" = the two chase clips.) His Y/N on the rehearsals is withdrawn for now; no wait on the cast
       sheet; put the new Jason and Lucia in both rehearsals and send both clips again. Rule 8 holds after that.
 
-- [ ] Sam (20 Nov, characters chat, on the new cast): "Jason should have a very light fade of stubble." (was a full
+- [x] Sam (20 Nov, characters chat, on the new cast): "Jason should have a very light fade of stubble." (was a full
       boxed beard: a light stubble shadow instead.) "Eyebrows too high on all characters." (lower them on all three)
       "Also, Jason's eyebrows are too thick and a bit to dark." (thinner and lighter)
-- [ ] Sam: "The current design of autistic woman is too close to someone I know and I'd like to to approach her face and
+- [x] Sam: "The current design of autistic woman is too close to someone I know and I'd like to to approach her face and
       hair differently." (a new face and hair, not a tweak; keep his brief's auburn and her age; plan: curly auburn hair
       pulled up in a messy high bun with curls loose at the face, no fringe, a rounder face, freckles; shown to him
       beside the old one.) "Unicorn jumper is vomiting off the jumper itself." (the rainbow runs past the hem onto her
       jeans: keep it on the jumper.) "Add brackets and bangles to both arms, reduce sleeve size by 25%" (bracelets and
       bangles on both her wrists; her jumper sleeves 25% slimmer).
+      Done chat 9: Jason stubble 0.95 fade, brows 62 48 38 / 4.6 / 0.048, brow_high ---, buzz (hair: crop .. buzz);
+      Lucia brow_high -, 'loose' strands, fuller tail; her: new face (round, freckles, hazel, bigger eyes), messy curly
+      bun, no fringe, no nose stud (Lost line to Sam), bangles, arms 22.5, rainbow kept 34 units above the hem.
+      Critique r2: hunt 2 repeated hunt 1's list (rainbow, bangles, fringe already fixed: P13, P6 marked false).
+      Left, named: Jason's build reads slim to the helper (measured from the game's art last chat); rest faces read
+      neutral (the sheet's rest pose; acting is in the shots). The gate's status still reads "pass 2 open": `fixed`
+      answered "that was hunt 1" after r2-p2 was recorded (a tool fault to look at; named, not fixed).
+      No `page.py show`: no note touched a shot; all the work was the shared people kit (people*.py, views.py).
+      Handover check: the 28 NOT CARRIED lines were other chats' messages (the cross-session wrapper and the body
+      notes), all carried already in this checklist and Diagnosis.
 
 ## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
 Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
@@ -217,23 +227,22 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
-## Where things stand (20 Nov, characters chat, Opus high)
-- Rules that bite next: 30 (none of these notes repeats an earlier one; check), 89 (the critique's two hunts on the
-  cast), 8 (nothing past the rehearsals until Sam answers on the two clips).
-- Done: Sam's new references and body notes in the brief; full-figure game art filed and measured (table above); the
-  body faults fixed in the kit (Diagnosis, Status); cast sheet redrawn beside Sam's pictures and the game's, sent.
-- Next: Opus medium, Sam's 6 notes on the cast (brief checklist, last two items): Jason a light stubble fade, thinner
-  lighter brows; brows lower on all three; her new face and hair; the rainbow kept on the jumper; bangles on both
-  wrists, sleeves 25% slimmer. Then the critique's two hunts (stage "cast"), fixed; likeness: Jason's hair a buzz,
-  Lucia's ponytail fuller with short loose strands. Then a Sonnet chat: the new cast into both rehearsals, both clips sent.
-- Needs Sam: nothing now; after the clips, his Y/N on both (rule 8).
-- Read: guides/job-packs.md, Notes round; this notes file's brief checklist (last items), Diagnosis, Body shapes measured.
+## Where things stand (20 Nov, chat 9, Opus medium)
+- Rules that bite next: 8 (nothing past the rehearsals until Sam answers on both clips), 30 (a repeated note: find
+  why the first fix failed), 85 (the cost watch: the film is at its budget; see the cost line).
+- Done: Sam's 6 cast notes (brief checklist, ticked); likeness (Jason's buzz, Lucia's fuller tail, loose strands);
+  critique hunts 1 and 2 on the cast, fixed or named; fixed cast sheet and her before/after sent.
+- Next: Sonnet, medium: put the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out; source/gta_rehearse.py
+  draws its people from the people file, so a re-render picks them up; check first), send both clips. Do not touch
+  the opening (Sam's own chat).
+- Needs Sam: his Y/N on both clips (rule 8); whether losing her nose stud is fine.
+- Read: guides/job-packs.md, Checks and animatic (the clip part); this file's brief checklist (last items).
 - Open rule requests: none.
-- For Claude: body.FIGS/fig_half/front_outline(fig, arm_w); views._built_outline/_covered/_trainer, WrapPen.fig;
-  people_parts.VEST, vest_outline (dip: below the arm's fade); people.py 'build', 'arms N muscle', 'shorts', 'trainers';
-  her look: story/grand-theft-autism-people.txt '# her'; unicorn: people_parts.unicorn_torso (bot).
+- For Claude: people.py hair 'buzz'/'messy', 'bangles'; people_parts.buzz_front, messy_bun/messy_front, unicorn bot;
+  views.bangles (BANGLES); people_turned knot+hair_messy, pony fk; vest_torso tank chest line.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 14.66% of 15%; forecast 65.2% (2026-11-20)
 - Handover check answers (characters chat): no `page.py show` because no note touched a shot: the work was the shared
   kit's body parts and gta_cast's sheet layout (read whole). The freeze/* branches (halo-no-no, milburn,
   milburn+milburn-story, protest-tiers, blessed) are finished films' bookmarks (one-route-kit Change 1), not work to merge.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 15.88% of 15%; forecast 66.4% (2026-11-20)

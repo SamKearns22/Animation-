@@ -520,7 +520,7 @@ def messy_front(p, f, L, fc, hc, hl):
         x, y = f(u, v)
         p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
     for sgn in (-1, 1):                                       # ringlets at the temples: a wavy ribbon each side
-        for k, (x0, y0, ln) in enumerate(((e - 0.07, hl + 0.06, 0.62), (e - 0.015, 0.0, 0.5))):
+        for k, (x0, y0, ln) in enumerate(((e - 0.035, 0.0, 0.58), (e + 0.01, 0.08, 0.46))):
             pts = []                                          # hanging in front of the face's edge, to the cheek
             for i in range(11):
                 t = i / 10
@@ -880,7 +880,7 @@ def unicorn_torso(img, p, sp, t):
     white, horn = (250, 250, 250), (236, 196, 90)
     bands = [(220, 60, 60), (240, 150, 50), (244, 220, 70), (90, 180, 90), (70, 130, 210), (140, 90, 190)]
     # the rainbow and its splash stay on the jumper, above the hem (Sam, 20 Nov: "vomiting off the jumper itself")
-    bot = min(200, (sp.get('bottom', 470) - 150) / 1.7 - 18)
+    bot = min(200, (sp.get('bottom', 470) - 150) / 1.7 - 34)
     p = _Scaled(p, 1.7, 30, 150)
     for k, c in enumerate(bands):                         # the rainbow, from the mouth down and out to the left
         o = (k - 2.5) * 5.0
@@ -1000,6 +1000,8 @@ def vest_torso(img, p, sp, t):
         gold = (222, 180, 70)
         p.line(open_curve([(-24, -2), (-14, 26), (0, 38), (14, 26), (24, -2)], 3), gold, 1.8)
         p.poly(oval(0, 42, 3.6, 4.6, 8), gold, dk(gold, 0.6), 0.8)
+        for sgn in (-1, 1):                     # a soft line under the chest each side: reads as a woman at phone size
+            p.line(open_curve([(sgn * 58, 122), (sgn * 40, 148), (sgn * 14, 146)], 3), dk(col, 0.7), 1.8)   # (critique, chat 9)
 
 
 def _leonida(p, cx, cy):

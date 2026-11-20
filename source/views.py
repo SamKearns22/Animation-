@@ -458,8 +458,8 @@ def sleeved_arm(p, j2, side, sp, shape=None):
         hand(p, j2, side, sp, shape)
 
 
-BANGLES = {'L': [((222, 180, 70), 0.9, 3.4), ((200, 202, 210), 0.84, 2.6), ('beads', 0.77, 0)],
-           'R': [((222, 180, 70), 0.92, 2.8), ((222, 180, 70), 0.86, 3.6), ((214, 110, 150), 0.79, 2.4)]}
+BANGLES = {'L': [((236, 186, 60), 0.92, 6.0), ((206, 210, 220), 0.83, 5.0), ('beads', 0.74, 0)],   # bold enough to
+           'R': [((236, 186, 60), 0.93, 5.0), ((236, 186, 60), 0.85, 6.0), ((228, 90, 150), 0.76, 4.6)]}   # read small
 
 
 def bangles(p, el, wr, w, side):
@@ -478,7 +478,7 @@ def bangles(p, el, wr, w, side):
                 o = (k - 3) / 3.0 * half * 0.92
                 bc = ((90, 190, 200), (250, 220, 120), (236, 120, 140))[k % 3]
                 p.poly(_ring(cx + nx * o + ux * 2 * (1 - (o / half) ** 2), cy + ny * o + uy * 2 * (1 - (o / half) ** 2),
-                             3.6), bc, INK, 1.0)
+                             5.2), bc, INK, 1.2)
             continue
         sag = half * 0.18                                     # the band curves round the wrist (seen a little above)
         top = [(cx + nx * half * (k / 6) + ux * sag * (1 - (k / 6) ** 2) - ux * th / 2,

@@ -9,7 +9,7 @@ body: 1.85 m, shoulders 178, head 70 x 94, hem 450, build man, arms 36 muscle, l
 skin: 206 150 112 | hair: crop, 40 32 26, buzz
 face: jaw_wide ++, chin_long +, brow_high ---, face_wide +
 eyes: 74 58 44 | lips: 168 112 96 | brows: 62 48 38, width 4.6, thick 0.048
-beard: stubble 0.93
+beard: stubble 0.95
 rest smile: -0.5
 outfit: jumper 236 230 212, no tie, trousers 116 112 76, shoes 66 64 62, shorts knee, camo, fray, trainers
 extras: vest
@@ -32,7 +32,7 @@ extras: tank
 # a rounder face, freckles, hazel eyes; no nose stud. Bangles on both wrists; jumper sleeves 25% slimmer.
 body: 1.64 m, shoulders 138, head 66 x 92, neck 0.85, hem 470, arms 22.5
 skin: 248 214 196 | hair: bun, 150 66 36, messy
-face: face_wide ++, jaw_wide +, chin_long --, eye_size 0.04, eye_open 0.05, nose_long --, lip_low +, lip_top -, brow_high -
+face: face_wide ++, jaw_wide +, chin_long --, eye_size 0.052, eye_open 0.075, nose_long --, lip_low +, lip_top -, brow_high -
 eyes: 120 96 52 | lips: 214 128 126 | brows: 132 66 40, width 3.6, thick 0.038
 freckles
 lashes

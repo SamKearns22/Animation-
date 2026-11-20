@@ -121,3 +121,20 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   at the moves stage); the four prepper lines are another film's, not this one's.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.59% of 15%; forecast 60.1% (2026-11-20)
+
+## Where things stand (20 Nov, characters chat, Opus high)
+- Rules that bite next: 30 (none of these notes repeats an earlier one; check), 89 (the critique's two hunts on the
+  cast), 8 (nothing past the rehearsals until Sam answers on the two clips).
+- Done: Sam's new references and body notes in the brief; full-figure game art filed and measured (table above); the
+  body faults fixed in the kit (Diagnosis, Status); cast sheet redrawn beside Sam's pictures and the game's, sent.
+- Next: Opus medium, Sam's 6 notes on the cast (brief checklist, last two items): Jason a light stubble fade, thinner
+  lighter brows; brows lower on all three; her new face and hair; the rainbow kept on the jumper; bangles on both
+  wrists, sleeves 25% slimmer. Then the critique's two hunts (stage "cast"), fixed; likeness: Jason's hair a buzz,
+  Lucia's ponytail fuller with short loose strands. Then a Sonnet chat: the new cast into both rehearsals, both clips sent.
+- Needs Sam: nothing now; after the clips, his Y/N on both (rule 8).
+- Read: guides/job-packs.md, Notes round; this notes file's brief checklist (last items), Diagnosis, Body shapes measured.
+- Open rule requests: none.
+- For Claude: body.FIGS/fig_half/front_outline(fig, arm_w); views._built_outline/_covered/_trainer, WrapPen.fig;
+  people_parts.VEST, vest_outline (dip: below the arm's fade); people.py 'build', 'arms N muscle', 'shorts', 'trainers';
+  her look: story/grand-theft-autism-people.txt '# her'; unicorn: people_parts.unicorn_torso (bot).
+
