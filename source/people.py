@@ -20,7 +20,8 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     (Milburn, 17 Nov: `hair: curly, C, big` | `beard: pencil C` | `glasses: C, thick` | extras flowers (a jumper's
     knitted flowers), crest (a football shirt's badge and white collar trim))
     (GTA, 20 Nov: `outfit: ..., sleeves short` | extras palms (a leaf-print shirt), biker (a leather biker jacket over a
-    white vest, gold chain), unicorn (a jumper's unicorn being sick rainbows))
+    white vest, gold chain), unicorn (a jumper's unicorn being sick rainbows), scoop (a fitted top's scoop neck and
+    gold chain), headphones (over-ear, round the neck) | `soft`: a young face, no eye bags | `hair: pony, C, loose`)
   One outfit in every view (face tool chat 15): each extra and the open collar is drawn turned too (TURNED below):
     its front drawing wrapped round the turned body (views.WrapPen), its own back where it shows from behind (the
     belt, the sash, the scarf round the neck, the top's collar), a bespoke view where Sam has seen one (the open
@@ -387,6 +388,10 @@ def _fact(d, key, val, people):
             w, _, v = q.partition(' ')
             m[w] = True if not v else (v if w == 'mouth' else float(v))
         d.setdefault('moods', {})[key[5:].strip()] = m
+    elif key == 'hoops':                           # GTA (20 Nov): small gold hoop earrings
+        d['hoops'] = True
+    elif key == 'soft':                            # GTA (20 Nov): a young, pretty face (no eye bags, faint folds)
+        d['soft'] = True
     elif key == 'deep set':
         d['deep_set'] = True
     elif key == 'body':
@@ -411,6 +416,9 @@ def _fact(d, key, val, people):
             w, _, c = q.partition(' ')
             if q.strip() == 'big':                     # Milburn (17 Nov): a big mass of curls, half as big again
                 d['hair_big'] = 1.5
+                continue
+            if q.strip() == 'high':                    # GTA (20 Nov): a high ponytail, its top seen over the crown
+                d['pony_high'] = True
                 continue
             if q.strip() == 'loose':                   # GTA (20 Nov): a middle parting and loose strands by the face
                 d['hair_loose'] = True
@@ -483,6 +491,7 @@ def _fact(d, key, val, people):
                 continue
             if p == 'sleeves short':                   # a short-sleeved shirt (GTA, 20 Nov: midterminal's sleeve)
                 d['short_sleeve'] = True
+                d['sleeve_up'], d['sleeve_w'] = 0.27, 39     # over the shoulder's top (no skin corner shows)
                 continue
             w, _, c = p.partition(' ')
             if c.startswith('darker '):                # 'trousers darker jacket 0.6': the jacket's colour, darker
@@ -516,7 +525,7 @@ def person(d):
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
               'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
-              'hat_c', 'short_sleeve'):
+              'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w'):
         if k in d:
             sp[k] = d[k]
     if 'skin' not in sp:
@@ -536,7 +545,7 @@ def person(d):
               brow=sp['brow_c'], hair='crop' if style == 'short' else style, turned=style)
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
                   ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes'), ('pencil', 'pencil'),
-                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'), ('hair_loose', 'hair_loose'),
+                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'), ('hair_loose', 'hair_loose'), ('soft', 'soft'), ('hoops', 'hoops'), ('pony_high', 'pony_high'),
                   ('piercings', 'piercings')):
         if k in d:
             fc[fk] = d[k]
@@ -625,7 +634,8 @@ def _extras():
             'zip': ('torso', PF.zip_top), 'open collar': ('torso', PP.collar_torso),
             'flowers': ('torso', PP.flowers_torso), 'crest': ('torso', PP.crest_torso),
             'skirt': ('torso', PP.skirt_torso), 'palms': ('torso', PP.palms_torso),
-            'biker': ('torso', PP.biker_torso), 'unicorn': ('torso', PP.unicorn_torso)}
+            'biker': ('torso', PP.biker_torso), 'unicorn': ('torso', PP.unicorn_torso),
+            'scoop': ('torso', PP.scoop_torso), 'headphones': ('torso', PP.headphones_torso)}
 
 
 def turned():
@@ -637,7 +647,8 @@ def turned():
             'crucifix': dict(back=None), 'scarf': dict(back=PF.scarf_back), 'zip': dict(back=PF.zip_back),
             'open collar': dict(back=None, own={'three': PP.collar_three}), 'flowers': dict(back=PP.flowers_torso),
             'crest': dict(back=None), 'skirt': dict(back=PP.skirt_torso), 'palms': dict(back=PP.palms_torso),
-            'biker': dict(back=PP.biker_back), 'unicorn': dict(back=None)}
+            'biker': dict(back=PP.biker_back), 'unicorn': dict(back=None),
+            'scoop': dict(back=None), 'headphones': dict(back=PP.headphones_back)}
 
 
 def pieces(sp):
@@ -681,7 +692,7 @@ def _head_parts():
 
 
 EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt', 'palms',
-          'biker', 'unicorn')
+          'biker', 'unicorn', 'scoop', 'headphones')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 

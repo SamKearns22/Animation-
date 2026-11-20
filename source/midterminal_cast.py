@@ -472,10 +472,11 @@ def arm(p, j2, side, sp, shape=None):
     sh, el = j2['sh' + side], j2['el' + side]
     _arm(p, j2, side, dict(sp, sleeve=sp['skin'], jacket=sp['skin']), shape)
     end = (sh[0] + (el[0] - sh[0]) * 0.55, sh[1] + (el[1] - sh[1]) * 0.55)
-    sh = (sh[0] - (el[0] - sh[0]) * 0.2, sh[1] - (el[1] - sh[1]) * 0.2)     # up over the shoulder's round top
+    up, half = sp.get('sleeve_up', 0.2), sp.get('sleeve_w', 36)        # GTA (20 Nov): higher and wider, so no skin
+    sh = (sh[0] - (el[0] - sh[0]) * up, sh[1] - (el[1] - sh[1]) * up)     # up over the shoulder's round top
     dx, dy = end[0] - sh[0], end[1] - sh[1]
     n = math.hypot(dx, dy) or 1.0
-    nx, ny = -dy / n * 36, dx / n * 36
+    nx, ny = -dy / n * half, dx / n * half
     p.poly([(sh[0] + nx, sh[1] + ny), (end[0] + nx * 0.95, end[1] + ny * 0.95), (end[0] - nx * 0.95, end[1] - ny * 0.95),
             (sh[0] - nx, sh[1] - ny)], sp['jacket'], INK, 2.4)
 

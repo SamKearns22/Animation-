@@ -50,7 +50,7 @@ def bust(who, yaw=0.0, size=(500, 560), s=1.0, **over):
     sp = cast()[who]
     k = s * sp['height'] / 1.85
     draw(img, 540, 600, k, who, yaw, **over)
-    top = int(600 - 300 * k)
+    top = int(600 - 380 * k)
     return img.crop((540 - size[0] // 2, top, 540 + size[0] // 2, top + size[1])).convert('RGB')
 
 
@@ -58,7 +58,7 @@ def _font(n):
     return ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), n)
 
 
-REF_OF = {'jason': 'jason-portrait.jpg', 'lucia': 'lucia-portrait.jpg', 'her': None}
+REF_OF = {'jason': 'gameplay-jason-lucia-bar-dance.jpg', 'lucia': 'gameplay-lucia-bar.jpg', 'her': None}
 
 
 def sheet(out):
@@ -74,7 +74,7 @@ def sheet(out):
             tile = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
             s = 0.9 * c[who]['height'] / 1.85
             draw(tile, 540, 1700 - 928 * s, s, who, yaw)
-            tile = tile.crop((290, 1700 - int(1180 * s), 790, 1720)).convert('RGB')
+            tile = tile.crop((290, 1700 - int(1260 * s), 790, 1720)).convert('RGB')
             tile.thumbnail((tw, th - 40))
             x0 = 20 + (i * 3 + k) * tw
             img.paste(tile, (x0, 80 + 30))
@@ -92,6 +92,28 @@ def sheet(out):
     return out
 
 
+def panels(out_dir):
+    """One picture per person for the critique (rule 89): front, side, back at true height beside the bust."""
+    os.makedirs(out_dir, exist_ok=True)
+    c, outs = cast(), []
+    for who in c:
+        row = Image.new('RGB', (1500, 900), (232, 228, 222))
+        for k, yaw in enumerate((0, 90, 180)):
+            tile = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
+            s = 0.75 * c[who]['height'] / 1.85
+            draw(tile, 540, 1800 - 928 * s, s, who, yaw)
+            tile = tile.crop((340, 1800 - int(1260 * s), 740, 1820)).convert('RGB')
+            tile.thumbnail((300, 880))
+            row.paste(tile, (k * 300, 10))
+        b = bust(who)
+        b.thumbnail((600, 880))
+        row.paste(b, (900, 10))
+        f = os.path.join(out_dir, f'{who}.jpg')
+        row.save(f, quality=90)
+        outs.append(f)
+    return outs
+
+
 def busts(out, yaw=0.0):
     ims = [bust(w, yaw) for w in cast()]
     img = Image.new('RGB', (sum(i.width for i in ims), ims[0].height), (232, 228, 222))
@@ -106,5 +128,7 @@ def busts(out, yaw=0.0):
 if __name__ == '__main__':
     if sys.argv[1] == 'sheet':
         print(sheet(sys.argv[2]))
+    elif sys.argv[1] == 'panels':
+        print(panels(sys.argv[2]))
     elif sys.argv[1] == 'busts':
         print(busts(sys.argv[2], float(sys.argv[3]) if len(sys.argv) > 3 else 0.0))

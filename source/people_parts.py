@@ -276,11 +276,11 @@ def _front_head(img, p, sp, t, hx, hy):
     if fc.get('lashes'):                                      # GTA (Lucia): a heavier upper lid and two flicks out
         for sgn in (-1, 1):
             cx, cy = sgn * L['ecx'], L['eye_y']
-            p.line(curve(FF.eyes.pts([(cx - sgn * L['ew'] * 0.9, cy - L['eh'] * 0.55), (cx, cy - L['eh'] * 1.05),
-                                      (cx + sgn * L['ew'] * 1.05, cy - L['eh'] * 0.45)]), 3), INK, 3.6)
+            p.line(curve(FF.eyes.pts([(cx - sgn * L['ew'] * 0.85, cy - L['eh'] * 0.35), (cx, cy - L['eh'] * 0.78),
+                                      (cx + sgn * L['ew'] * 1.08, cy - L['eh'] * 0.3)]), 3), INK, 3.0)
             for k in range(2):
                 a = (cx + sgn * L['ew'] * (0.75 + 0.25 * k), cy - L['eh'] * (0.75 - 0.25 * k))
-                b = (a[0] + sgn * L['ew'] * 0.32, a[1] - L['eh'] * 0.42)
+                b = (a[0] + sgn * L['ew'] * 0.2, a[1] - L['eh'] * 0.3)
                 p.line(FF.eyes.pts([a, b]), INK, 2.2)
     if fc.get('pencil'):                                      # a pencil moustache: one thin line above the lip
         pencil(p, FF.mouth, L, fc)
@@ -330,16 +330,23 @@ def _all_seen(u, v):
 
 
 def face_detail(p, f, L, fc, skin, seen=_all_seen):
-    """Eye bags, the smile folds, a chin dimple."""
+    """Eye bags, the smile folds, a chin dimple. 'soft' (GTA, 20 Nov: a young, pretty face): no eye bags, the smile
+    folds short and faint."""
     sh = dk(skin, 0.84)
+    soft = fc.get('soft')
     for sgn in (-1, 1):
         cx, ey, w = sgn * L['ecx'], L['eye_y'], L['ew'] * 0.6
+        if soft:
+            if seen(sgn * L['mw'] * 0.7, L['lip0']):
+                p.line(curve(f.pts([(sgn * L['nw'] * 0.75, L['nose_y'] + 0.0), (sgn * L['mw'] * 0.72, L['lip0'])]), 3),
+                       dk(skin, 0.88), 1.2)
+            continue
         if seen(cx, ey + 0.06):
             p.line(curve(f.pts([(cx - w * 0.6, ey + 0.05), (cx, ey + 0.064), (cx + w * 0.7, ey + 0.046)]), 3), sh, 1.5)
         if seen(sgn * L['mw'] * 0.7, L['lip0']):
             p.line(curve(f.pts([(sgn * L['nw'] * 0.62, L['nose_y'] - 0.03), (sgn * L['mw'] * 0.7, L['lip0'] + 0.01),
                                 (sgn * L['mw'] * 0.76, L['lip13'] + 0.03)]), 3), dk(skin, 0.78), 1.6)
-    if not fc.get('beard') and seen(0.0, 0.93):
+    if not fc.get('beard') and not soft and seen(0.0, 0.93):
         p.line(curve(f.pts([(-0.025, 0.93), (0.0, 0.94), (0.025, 0.93)]), 3), dk(skin, 0.8), 1.4)
 
 
@@ -611,6 +618,15 @@ def _hair_front(p, f, L, fc, hc, skin):
         for k in range(7):
             u = -c * 0.75 + k * c * 0.25
             p.line(curve(f.pts([(u, hl - 0.02), (u * 0.7, -0.24), (u * 0.3, -0.42)]), 3), dk(hc, 0.72), 1.3)
+    if st == 'pony' and fc.get('pony_high'):           # GTA (Lucia): the high ponytail's knot over the crown
+        p.poly(curve(f.pts([(-0.12, -0.43), (-0.15, -0.52), (-0.06, -0.58), (0.06, -0.58), (0.15, -0.52),
+                            (0.12, -0.43)]), 3), hc, INK, 2.2)               # the tail's top, seen over the crown
+        for u in (-0.06, 0.0, 0.06):
+            p.line(curve(f.pts([(u * 1.3, -0.46), (u, -0.55)]), 2), dk(hc, 0.7), 1.2)
+    if fc.get('hoops'):                                       # GTA (Lucia): small gold hoops at the ear lobes
+        for sgn in (-1, 1):
+            x, y = f(sgn * (e + 0.01), 0.5)
+            p.poly(oval(x, y + 9, 7, 9, 14), None, (222, 180, 70), 2.6)
     if fc.get('hair_loose'):                                  # GTA (Lucia): a middle parting, loose strands either
         p.line(curve(f.pts([(0.0, hl - 0.01), (0.01, -0.3), (0.0, -0.44)]), 3), dk(hc, 0.55), 1.8)  # side of the face
         for sgn in (-1, 1):
@@ -803,3 +819,34 @@ def unicorn_torso(img, p, sp, t):
     p.line([(cx - 2, cy - 40), (cx - 8, cy - 46)], dk(horn, 0.7), 1.0)
     p.line(curve([(cx - 12, cy - 12), (cx - 6, cy - 9), (cx - 1, cy - 12)], 2), INK, 1.8)            # a shut eye
     p.poly([(cx + 4, cy - 40), (cx + 10, cy - 54), (cx + 14, cy - 36)], white, INK, 1.4)            # the ear
+
+
+def scoop_torso(img, p, sp, t):
+    """A fitted top with a wide scoop neck (Lucia in the game's first hours): bare skin to the scoop, a soft line
+    under it, a fine gold chain with a small pendant."""
+    top = sp.get('jacket', (120, 150, 200))
+    p.poly(curve([(-46, -6), (46, -6), (40, 14), (0, 44), (-40, 14)], 3), sp['skin'], None)
+    p.line(curve([(-46, 2), (-30, 30), (0, 46), (30, 30), (46, 2)], 3), INK, 2.0)
+    p.line(curve([(-40, 8), (-26, 34), (0, 52), (26, 34), (40, 8)], 3), dk(top, 0.8), 1.4)
+    gold = (222, 180, 70)
+    p.line(curve([(-22, -2), (-12, 22), (0, 30), (12, 22), (22, -2)], 3), gold, 1.8)
+    p.poly(oval(0, 33, 3.4, 4.2, 8), gold, dk(gold, 0.6), 0.8)
+
+
+def headphones_torso(img, p, sp, t):
+    """Big over-ear headphones resting round the neck (her, GTA): a band behind the neck, a cup on each collarbone."""
+    c = sp.get('phones_c', (40, 40, 46))
+    cush = (70, 70, 78)
+    p.line(curve([(-50, 10), (-30, -6), (0, -10), (30, -6), (50, 10)], 3), INK, 9.0)
+    p.line(curve([(-50, 10), (-30, -6), (0, -10), (30, -6), (50, 10)], 3), c, 6.0)
+    for sgn in (-1, 1):
+        x, y = sgn * 44, 26
+        p.poly(oval(x, y, 21, 27, 18), cush, INK, 2.2)
+        p.poly(oval(x + sgn * 4, y, 16, 22, 16), c, INK, 1.8)
+        p.poly(oval(x + sgn * 4, y - 6, 6, 4, 10), sp.get('phones_hi', (150, 210, 200)), None)
+
+
+def headphones_back(img, p, sp, t):
+    c = sp.get('phones_c', (40, 40, 46))
+    p.line(curve([(-50, 6), (0, -2), (50, 6)], 3), INK, 9.0)
+    p.line(curve([(-50, 6), (0, -2), (50, 6)], 3), c, 6.0)

@@ -114,12 +114,14 @@ def _hair(img, p, f, L, sp, look):
             pen.line(curve([(bx - 0.12 * H, f.top - 0.42 * H), (bx - 0.14 * H, f.top - 0.2 * H)], 3), dk(hc, 0.55), 1.6)
     TH.clipped(img, p, mask, strands)
     if st.get('pony'):                                         # a ponytail from the back of the head, a band round it
-        x, y = bx, f.top + 0.36 * H
-        tail = [(x - 16, y), (x - 26, y + 60), (x - 20, y + 130), (x - 4, y + 168), (x + 12, y + 132), (x + 20, y + 62),
-                (x + 16, y)]
+        x, y = bx, f.top + (0.36 if not fc.get('pony_high') else -0.12) * H   # GTA: a high ponytail (Lucia)
+        k = 1.0 if not fc.get('pony_high') else 1.7                     # a high tail falls past the nape
+        tail = [(x - 16, y), (x - 26 * k ** 0.5, y + 60 * k), (x - 20, y + 130 * k), (x - 4, y + 168 * k),
+                (x + 12, y + 132 * k), (x + 20 * k ** 0.5, y + 62 * k), (x + 16, y)]
         p.poly(curve(tail, 3), hc, INK, 2.2)
-        for k in range(3):
-            p.line(curve([(x - 6 + 6 * k, y + 14), (x - 10 + 7 * k, y + 80), (x - 4 + 4 * k, y + 140)], 3), dk(hc, 0.72), 1.3)
+        for j in range(3):
+            p.line(curve([(x - 6 + 6 * j, y + 14), (x - 10 + 7 * j, y + 80 * k), (x - 4 + 4 * j, y + 140 * k)], 3),
+                   dk(hc, 0.72), 1.3)
         p.poly(oval(x, y + 6, 18, 8, 12), (40, 40, 44), INK, 1.6)
     if st.get('rolls'):                                        # the wig's rolls over each ear (chat 15)
         for deg in (-91, 91):
