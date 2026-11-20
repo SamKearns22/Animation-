@@ -33,3 +33,6 @@ Stop
 ### 2026-11-20T17:30:54
 @"/root/.claude/uploads/54e4f7a9-1acc-5f13-a3d7-9f0ea32eb01b/0ac0b8d3-gta-shot4-leanout-rehearsal.mp4" Make a frame by frame comparison of the original, except on the actors which we know we changed
 
+### 2026-11-20T17:33:49
+In yours, the people are tiny and being actively sucked into the pavement.
+
