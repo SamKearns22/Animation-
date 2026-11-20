@@ -487,4 +487,4 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - Quick check on gta_rehearse (no SHOT_MARKS): it is the rehearsal file, not the film's module; the front-on check
   runs on the film file once the moves stage builds it (answered chat 17).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 31.87% of 15%; forecast 82.4% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 32.69% of 15%; forecast 83.2% (2026-11-20)
