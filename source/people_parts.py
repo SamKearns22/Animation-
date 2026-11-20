@@ -16,7 +16,7 @@ import body as B                       # noqa: E402  the people engine
 import views as V                      # noqa: E402  every view of a person
 import faces as FA                     # noqa: E402  the measured face layout and its parts
 from faces import dk                   # noqa: E402
-from ink import INK, curve, oval  # noqa: E402
+from ink import INK, curve, oval, open_curve  # noqa: E402
 import turnhead as TH  # noqa: E402
 import focus as FO  # noqa: E402  (C2, 19 Nov: where a front-on face looks)
 
@@ -854,3 +854,126 @@ def headphones_back(img, p, sp, t):
     c = sp.get('phones_c', (40, 40, 46))
     p.line(curve([(-50, 6), (0, -2), (50, 6)], 3), INK, 9.0)
     p.line(curve([(-50, 6), (0, -2), (50, 6)], 3), c, 6.0)
+
+
+# ------------------------------------------------- GTA cast chat (20 Nov): sleeveless tops on a bare-armed body
+# 'vest' (Jason in Sam's key art: wide straps, a deep scoop, deep armholes) and 'tank' (Lucia: thin straps). The body
+# under them is skin (people.person sets the jacket to the skin), so the arm grows out of a bare shoulder with the
+# house arm's one outline (rule 41); the top is drawn on the body, its sides on the body's own outline (any build).
+VEST = {'vest': dict(xi=50, xo=88, neck=78, back=26, ya=196, dip=200),
+        'tank': dict(xi=60, xo=72, neck=62, back=34, ya=150, dip=200)}
+# ya: where the armhole is seen to bottom out (beside the arm); dip: where its curve meets the body's side, under
+# the arm, below the house arm's fade at the shoulder (limbs: the upper arm's top 0.6), or the top shows through the
+# faded arm as a smudge in the armpit (GTA cast chat).
+
+
+def _vest_kind(sp):
+    return 'tank' if 'tank' in sp.get('kit_extras', ()) else 'vest'
+
+
+def _top_y(out, x):
+    """The highest point of the outline straight above x (the shoulder's top there)."""
+    ys = []
+    for (x0, y0), (x1, y1) in zip(out, out[1:] + out[:1]):
+        if (x0 - x) * (x1 - x) <= 0 and x0 != x1:
+            ys.append(y0 + (y1 - y0) * (x - x0) / (x1 - x0))
+    return min(ys) if ys else 0.0
+
+
+def _bez(a, b, c, n=10):
+    return [((1 - u) ** 2 * a[0] + 2 * (1 - u) * u * b[0] + u * u * c[0],
+             (1 - u) ** 2 * a[1] + 2 * (1 - u) * u * b[1] + u * u * c[1]) for u in np.linspace(0, 1, n)]
+
+
+def vest_outline(sp, neck=None):
+    """The top's outline on the front (or back) body: the scoop, a strap over each shoulder, the armhole curving down
+    to the side at ya, the body's own sides to the hem."""
+    k = VEST[_vest_kind(sp)]
+    sw, bot = sp.get('shoulders', 150), sp.get('bottom', 505)
+    out = B.front_outline(sw, bot, 2.0, sp.get('figure'), sp.get('arm_w', 30.0))
+    edge = lambda y: V._span(out, y)[1] - 0.5                                     # noqa: E731
+    neck = k['neck'] if neck is None else neck
+    xi, xo, ya = k['xi'], k['xo'], k['ya']
+    yi, yo = _top_y(out, xi) + 1.5, _top_y(out, xo) + 1.5
+    yd = max(ya, k['dip'])
+    xa = edge(yd)
+    right = _bez((0, neck), (xi * 0.9, neck), (xi, yi), 9)[:-1] + [(xi, yi), (xo, yo)]
+    right += _bez((xo, yo), (xo + 6, ya + 30), (xa, yd), 12)[1:]
+    right += [(edge(y), y) for y in np.linspace(yd, bot - 0.6, 9)[1:]]
+    left = [(-x, y) for x, y in right]
+    return right + left[::-1]
+
+
+def vest_torso(img, p, sp, t):
+    """The sleeveless top on the front; Jason's vest carries its LEONIDA sunset print and his thin silver chain,
+    Lucia's tank a fine gold chain with a small pendant."""
+    col = sp.get('vest_c', (236, 232, 220))
+    kind = _vest_kind(sp)
+    p.poly(vest_outline(sp), col, INK, 2.4)
+    if kind == 'vest':
+        k = VEST['vest']
+        p.line(open_curve([(-k['xi'] + 6, 8), (-30, k['neck'] - 6), (0, k['neck'] + 8), (30, k['neck'] - 6),
+                      (k['xi'] - 6, 8)], 3), dk(col, 0.86), 1.4)              # the scoop's binding
+        if sp.get('vest_print', 'leonida') == 'leonida':
+            _leonida(p, 0, 236)
+        silver = (196, 198, 204)
+        p.line(open_curve([(-30, -2), (-20, 60), (0, 118), (20, 60), (30, -2)], 3), dk(silver, 0.7), 2.4)
+        p.line(open_curve([(-30, -2), (-20, 60), (0, 118), (20, 60), (30, -2)], 3), silver, 1.4)
+    else:
+        gold = (222, 180, 70)
+        p.line(open_curve([(-24, -2), (-14, 26), (0, 38), (14, 26), (24, -2)], 3), gold, 1.8)
+        p.poly(oval(0, 42, 3.6, 4.6, 8), gold, dk(gold, 0.6), 0.8)
+
+
+def _leonida(p, cx, cy):
+    """The vest's print (Sam's key art): a setting sun in bands, a palm, LEONIDA in a hand-drawn line above."""
+    bands = [(250, 196, 70), (244, 150, 60), (226, 102, 70)]
+    for i, c in enumerate(bands):                                     # the sun: a half disc cut by bands
+        y0 = cy + i * 16
+        r = 58
+        xs = math.sqrt(max(0.0, r * r - (y0 - cy) ** 2))
+        xs2 = math.sqrt(max(0.0, r * r - (y0 + 12 - cy) ** 2))
+        p.poly([(cx - xs, y0), (cx + xs, y0), (cx + xs2, y0 + 12), (cx - xs2, y0 + 12)], c, None)
+    p.line(oval(cx, cy, 58, 58, 24, math.pi, 2 * math.pi), (226, 102, 70), 1.6)
+    teal = (40, 88, 96)
+    p.line(open_curve([(cx + 34, cy + 48), (cx + 30, cy + 10), (cx + 22, cy - 34)], 3), teal, 4.0)   # the palm
+    for a in (-2.6, -2.0, -1.2, -0.5, 0.1):
+        tip = (cx + 22 + 34 * math.cos(a), cy - 34 + 22 * math.sin(a) + 14)
+        p.line(open_curve([(cx + 22, cy - 34), ((cx + 22 + tip[0]) / 2, cy - 44), tip], 2), teal, 3.0)
+    ink = (36, 40, 52)
+    x = cx - 74
+    for ch in 'LEONIDA':                                              # the word, slanted a little, as the print's
+        for st in _GLYPH[ch]:                                         # hand lettering
+            p.line([(x + gx * 13 + (cy - 60 - (cy - 82 + gy * 22)) * -0.18, cy - 82 + gy * 22) for gx, gy in st],
+                   ink, 2.6)
+        x += 21
+
+
+_GLYPH = {'L': [[(0, 0), (0, 1), (0.8, 1)]], 'E': [[(0.8, 0), (0, 0), (0, 1), (0.8, 1)], [(0, 0.5), (0.6, 0.5)]],
+          'O': [[(0.4, 0), (0.85, 0.25), (0.85, 0.75), (0.4, 1), (0, 0.75), (0, 0.25), (0.4, 0)]],
+          'N': [[(0, 1), (0, 0), (0.8, 1), (0.8, 0)]], 'I': [[(0.4, 0), (0.4, 1)]],
+          'D': [[(0, 0), (0, 1), (0.5, 1), (0.85, 0.7), (0.85, 0.3), (0.5, 0), (0, 0)]],
+          'A': [[(0, 1), (0.42, 0), (0.85, 1)], [(0.18, 0.62), (0.68, 0.62)]]}
+
+
+def vest_back(img, p, sp, t):
+    """The top seen from behind: the same straps and armholes, a shallow neck."""
+    p.poly(vest_outline(sp, VEST[_vest_kind(sp)]['back']), sp.get('vest_c', (236, 232, 220)), INK, 2.4)
+
+
+def vest_side(img, p, sp, t):
+    """The top in profile: the side of the body below the armhole, which rises in a U to the strap at the chest's
+    front and at the back (each outline point pushed down onto the armhole's curve)."""
+    k = VEST[_vest_kind(sp)]
+    sw, bot = sp.get('shoulders', 150), sp.get('bottom', 505)
+    body = V.torso_outline(sp, 'side', bot)
+    d = 0.6 * sw
+    ya = k['dip'] + 16
+    dense = []
+    for (x0, y0), (x1, y1) in zip(body, body[1:] + body[:1]):
+        n = max(1, int(math.hypot(x1 - x0, y1 - y0) / 6))
+        dense += [(x0 + (x1 - x0) * i / n, y0 + (y1 - y0) * i / n) for i in range(n)]
+    w = 0.82 * d
+    U = lambda x: ya - (ya - 24) * min(1.0, max(0.0, (abs(x) - 0.45 * w) / (0.55 * w))) ** 1.5   # noqa: E731
+    #   (flat under the arm, which hangs over the middle of the side: the arm's fade must find skin there)
+    p.poly([(x, max(y, U(x))) for x, y in dense], sp.get('vest_c', (236, 232, 220)), INK, 2.4)

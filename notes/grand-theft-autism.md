@@ -96,6 +96,28 @@
       missions, their everyday outfits), file them in references/grand-theft-autism/, and match the cast to those
       before the cast sheet goes to him (the trailer portraits may differ).
 
+- [x] Sam (20 Nov, 13:06, relayed by one-route-kit chat 5): "These are the new references for Jason and Lucia." (two
+      pictures: references/grand-theft-autism/sam-jason-lucia-bike-key-art.jpg, sam-lucia-portrait-art.jpg). Build the
+      cast from them in place of the older references. Jason: buzzed dark hair, stubble, cream "LEONIDA" vest, thin
+      silver chain, camo cargo shorts, black watch. Lucia: high ponytail with loose strands, gold hoops and chain,
+      dark grey thin-strap tank top, grey-blue cropped jeans.
+- [x] Sam (20 Nov, 13:06): "Please ensure you are building them the correct body shapes." "Find further references if
+      you need to see more of their full figures." Full-figure references, proportions measured from them, shown
+      next to the cast sheet.
+- [ ] Sam (20 Nov, 13:07): "Proceed onwards as I will need to see the chase chips again with the new characters to
+      judge." ("chips" = the two chase clips.) His Y/N on the rehearsals is withdrawn for now; no wait on the cast
+      sheet; put the new Jason and Lucia in both rehearsals and send both clips again. Rule 8 holds after that.
+
+- [ ] Sam (20 Nov, characters chat, on the new cast): "Jason should have a very light fade of stubble." (was a full
+      boxed beard: a light stubble shadow instead.) "Eyebrows too high on all characters." (lower them on all three)
+      "Also, Jason's eyebrows are too thick and a bit to dark." (thinner and lighter)
+- [ ] Sam: "The current design of autistic woman is too close to someone I know and I'd like to to approach her face and
+      hair differently." (a new face and hair, not a tweak; keep his brief's auburn and her age; plan: curly auburn hair
+      pulled up in a messy high bun with curls loose at the face, no fringe, a rounder face, freckles; shown to him
+      beside the old one.) "Unicorn jumper is vomiting off the jumper itself." (the rainbow runs past the hem onto her
+      jeans: keep it on the jumper.) "Add brackets and bangles to both arms, reduce sleeve size by 25%" (bracelets and
+      bangles on both her wrists; her jumper sleeves 25% slimmer).
+
 ## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
 Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
 (rule 41 one outline), square shoulder corners, tops not tapering to the hips (figure-rig 2, hem 0.85), hands on the
@@ -108,6 +130,25 @@ that catch these (handcheck's seam and no-hand checks, rule 81/41) run only on f
 though rule 41 says the sheet draws arms as the film does; (3) the people kit has no woman's body, only narrower
 widths; (4) widths were set by eye (Jason 178) with no check against the rig's proportions; (5) speed: chat on amber,
 working unattended overnight. Proposals to follow through the proposal route (no change made yet).
+
+Status (characters chat, 20 Nov): fixed in the kit, all opt-in so finished films draw as before. Sleeves: both now
+wear sleeveless tops (Sam's references), drawn on a skin body so the bare arm grows out of the shoulder with the house
+arm's one outline (people_parts.vest_torso/vest_back/vest_side; extras 'vest', 'tank'). Shoulders: round (chat 5's
+fix). Taper: body.FIGS builds ('build man', 'build woman'), front/back/turned/side (views._built_outline). Hands: clear
+of the top (the waist is now narrower than the hanging arm). Lucia: the woman's build (waist 0.67, hips 0.85). Shoes:
+'trainers' (views._trainer). Arms: 'arms 36 muscle' (limbs._arm_spine bulge). Shorts: 'shorts knee|crop', 'camo', 'fray'
+(views._covered). Checks: handcheck on the sheet, 5 views x 3 people: clean at 0/45/90/180; at 135 (three-quarter
+back) every person's far hand is hidden, her too (untouched body): a kit fault older than this chat, not in any shot
+of this film (all seated, facing the windscreen); named here for the kit. kittests: 10 fail before and after; the two
+on people (outfit_every_view passes alone with the new tops, 78 piece-views; people_from_a_description fails the same
+way on the old code: Blessed's 2.06%).
+
+## Body shapes measured (characters chat, 20 Nov; game art in references/grand-theft-autism/game-art-*.jpg)
+| who | reference | shoulders : waist : hips | ours (body.FIGS) |
+|---|---|---|---|
+| Jason | game-art-jason-lucia-rooftop (front), -launch (vest, camo shorts, standing) | 1 : 0.78 : ~0.8 (heavy arms, V taper) | 1 : 0.81 : 0.85 (hem rule); arms 36 (house 30) + muscle |
+| Lucia | game-art-jason-lucia-robbery (front, head to thigh) | 1 : 0.63 : 0.77 | 1 : 0.67 : 0.85 (hips held at the rule's 15%) |
+Heights kept (1.85 m, 1.68 m; the robbery art has her about a third of a head shorter). Shoulders kept (178, 140).
 
 ## The plan (chat 2, 20 Nov; Opus high)
 Length: 45 spoken words at Sam's pace (3.3 a second) = about 14 s of speech; with the opening, the chase and the
@@ -176,28 +217,23 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
-## Where things stand (20 Nov, chat 7, Opus medium)
-- Rules that bite next: 8 (nothing else moves until Sam has seen both rehearsals), 30 (a repeat note: find why the first fix failed), 89.
-- Done: hunt 2's 10 shot-4 faults fixed as one list and `critique.py fixed` recorded (Checks: none). Shot 4 re-rendered
-  (6.2 s, 2.9 MB, 4.4 min) and sent whole, as the changes span 0.8-5.2 s: bolder crack and a closer cruiser on a longer
-  lens, the gun shown at the shots (higher camera, gun 1.4x), smoke one column out of the fire, the jet a column,
-  the fireball low and in frame, palms slide in (no pop), no squeeze at the corner, bumpers inside the body, mirrors on
-  stalks, bonnet stripes worn charcoal (read as paint from above).
-- Next: Sam's answer. On "approved": Opus high chat for the sets stage (the real Vice City shop street and the junction
-  for shots 2 and 4, replacing the stand-in blocks). On notes: Opus medium, his notes first (rule 30 on any repeat).
-- First, whatever Sam answers (front-on chat 2b, 20 Nov 08:02): kittest focus_front_heads fails: 'milburn 5' no longer
-  draws pixel-for-pixel. Restoring source/people.py AND people_parts.py to d732ceea passes, so one of this film's kit
-  additions (358132dd on: soft/hoops/pony_high/hair_loose/short_sleeve/'smile') changes a default for people who never
-  set it. Fix so finished films draw as before (Opus medium); named in notes/proposals/front-on-focus/retirement-and-handover.md.
-- Kit change since (one-route-kit chat 5, 20 Nov): front and back shoulders now round smoothly over the arm (Sam's
-  jury chips; body.front_outline), so the cast sheet's "square shoulder corners" fault may be partly gone: redraw the
-  sheet before judging. Jason's short sleeves (MidTerminal's flap) are untouched and still read as stuck-on flaps.
-- Needs Sam: Y or N, the two rehearsals (swerve clip, this lean-out clip) approved so the rest can move (rule 8).
-- Read: guides/job-packs.md, Notes round (on notes) or Build (on approval); this notes file's plan and acting list.
-- Open rule requests: none found in this film's notes.
-- For Claude: source/gta_rehearse.py shot 4 (CAM4 keys, GAPS, SMOKE4, PALMS4, jet_lumps, fx_items); gta_cars.py
-  _cracks/_tulip_decals (STRIPE, STRIPE_EDGE)/_parts; prepper_cast.glock(size=). `shot4 OUT.mp4`, `still4 T OUT`.
-- Handover check answers (chat 7): gta_rehearse's two quick checks as chat 6 (a rehearsal file, notes here, SHOT_MARKS
-  at the moves stage); the four prepper lines are another film's, not this one's.
+## Where things stand (20 Nov, characters chat, Opus high)
+- Rules that bite next: 30 (none of these notes repeats an earlier one; check), 89 (the critique's two hunts on the
+  cast), 8 (nothing past the rehearsals until Sam answers on the two clips).
+- Done: Sam's new references and body notes in the brief; full-figure game art filed and measured (table above); the
+  body faults fixed in the kit (Diagnosis, Status); cast sheet redrawn beside Sam's pictures and the game's, sent.
+- Next: Opus medium, Sam's 6 notes on the cast (brief checklist, last two items): Jason a light stubble fade, thinner
+  lighter brows; brows lower on all three; her new face and hair; the rainbow kept on the jumper; bangles on both
+  wrists, sleeves 25% slimmer. Then the critique's two hunts (stage "cast"), fixed; likeness: Jason's hair a buzz,
+  Lucia's ponytail fuller with short loose strands. Then a Sonnet chat: the new cast into both rehearsals, both clips sent.
+- Needs Sam: nothing now; after the clips, his Y/N on both (rule 8).
+- Read: guides/job-packs.md, Notes round; this notes file's brief checklist (last items), Diagnosis, Body shapes measured.
+- Open rule requests: none.
+- For Claude: body.FIGS/fig_half/front_outline(fig, arm_w); views._built_outline/_covered/_trainer, WrapPen.fig;
+  people_parts.VEST, vest_outline (dip: below the arm's fade); people.py 'build', 'arms N muscle', 'shorts', 'trainers';
+  her look: story/grand-theft-autism-people.txt '# her'; unicorn: people_parts.unicorn_torso (bot).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.59% of 15%; forecast 60.1% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 14.66% of 15%; forecast 65.2% (2026-11-20)
+- Handover check answers (characters chat): no `page.py show` because no note touched a shot: the work was the shared
+  kit's body parts and gta_cast's sheet layout (read whole). The freeze/* branches (halo-no-no, milburn,
+  milburn+milburn-story, protest-tiers, blessed) are finished films' bookmarks (one-route-kit Change 1), not work to merge.

@@ -22,6 +22,9 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     (GTA, 20 Nov: `outfit: ..., sleeves short` | extras palms (a leaf-print shirt), biker (a leather biker jacket over a
     white vest, gold chain), unicorn (a jumper's unicorn being sick rainbows), scoop (a fitted top's scoop neck and
     gold chain), headphones (over-ear, round the neck) | `soft`: a young face, no eye bags | `hair: pony, C, loose`)
+    (GTA characters chat, 20 Nov: `body: ..., build man|woman, arms 36 muscle` (body.FIGS: a man's taper, a woman's
+    waist and hips; thicker, muscled arms) | `outfit: ..., shorts knee|crop, camo, fray, trainers` | extras vest (wide
+    straps, LEONIDA print, silver chain), tank (thin straps, gold chain): sleeveless, on a skin body, bare arms)
   One outfit in every view (face tool chat 15): each extra and the open collar is drawn turned too (TURNED below):
     its front drawing wrapped round the turned body (views.WrapPen), its own back where it shows from behind (the
     belt, the sash, the scarf round the neck, the top's collar), a bespoke view where Sam has seen one (the open
@@ -407,6 +410,15 @@ def _fact(d, key, val, people):
                 if w == 'head':
                     a, b = re.findall(r'\d+', v)
                     d['hw'], d['hh'] = int(a), int(b)
+                elif w == 'build':                 # GTA (20 Nov): 'build man' (a broad chest's taper) or 'build woman'
+                    if v not in ('man', 'woman'):  # (a waist and hips): body.FIGS
+                        raise DescriptionError(f'build {v!r}: man or woman')
+                    d['figure'] = v
+                elif w == 'arms':                  # 'arms 35' (the house arm is 30); 'arms 35 muscle' swells them
+                    a = v.split()
+                    d['arm_w'] = float(a[0])
+                    if a[1:] == ['muscle']:
+                        d['arm_bulge'] = 0.28
                 else:
                     d[{'shoulders': 'shoulders', 'neck': 'neck_w', 'hem': 'bottom', 'legs': 'leg_k'}[w]] = \
                         float(v) if '.' in v else int(v)
@@ -493,6 +505,21 @@ def _fact(d, key, val, people):
             if p == 'open collar':                     # the shirt open at the neck (chat 15: an outfit choice)
                 d['collar'] = 'open'
                 continue
+            if p.startswith('shorts'):                 # GTA (20 Nov): 'shorts knee', 'shorts crop' (to mid calf)
+                w_ = p.split()[1] if len(p.split()) > 1 else 'knee'
+                d['leg_cover'] = {'knee': 0.56, 'crop': 0.8}.get(w_) or float(w_)
+                continue
+            if p in ('camo', 'cargo', 'fray'):          # the shorts' print and pocket; a frayed hem
+                if p == 'fray':
+                    d['fray'] = True
+                else:
+                    d['shorts_print'] = p
+                continue
+            if p.startswith('trainers'):               # 'trainers' or 'trainers SOLE COLOUR': round-toed, a pale sole
+                d['shoe_style'] = 'trainer'
+                if p[8:].strip():
+                    d['sole_c'] = colour(p[8:].strip())
+                continue
             if p == 'sleeves short':                   # a short-sleeved shirt (GTA, 20 Nov: midterminal's sleeve)
                 d['short_sleeve'] = True
                 d['sleeve_up'], d['sleeve_w'], d['sleeve_taper'] = 0.27, 39, 0.88    # over the shoulder's top (no skin corner shows)
@@ -529,7 +556,8 @@ def person(d):
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
               'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
-              'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w', 'sleeve_taper', 'smile'):
+              'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w', 'sleeve_taper', 'smile', 'figure', 'arm_w',
+              'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c'):
         if k in d:
             sp[k] = d[k]
     if 'skin' not in sp:
@@ -555,6 +583,10 @@ def person(d):
             fc[fk] = d[k]
     sp['kit_face'] = fc
     sp['kit_extras'] = list(d.get('extras', ()))
+    if {'vest', 'tank'} & set(sp['kit_extras']):   # a sleeveless top (GTA, 20 Nov): bare shoulders and arms; the body
+        sp['vest_c'] = sp.get('jacket', (236, 232, 220))   # is skin, the top drawn on it (people_parts.vest_torso)
+        sp['jacket'] = sp['sleeve'] = sp['skin']
+        sp.pop('short_sleeve', None)
     if 'strand_seed' in d:
         sp['strand_seed'] = d['strand_seed']
     if d.get('crowd_member'):                       # a crowd member: the head draws all their hair (the film's press)
@@ -639,7 +671,8 @@ def _extras():
             'flowers': ('torso', PP.flowers_torso), 'crest': ('torso', PP.crest_torso),
             'skirt': ('torso', PP.skirt_torso), 'palms': ('torso', PP.palms_torso),
             'biker': ('torso', PP.biker_torso), 'unicorn': ('torso', PP.unicorn_torso),
-            'scoop': ('torso', PP.scoop_torso), 'headphones': ('torso', PP.headphones_torso)}
+            'scoop': ('torso', PP.scoop_torso), 'headphones': ('torso', PP.headphones_torso),
+            'vest': ('torso', PP.vest_torso), 'tank': ('torso', PP.vest_torso)}
 
 
 def turned():
@@ -652,7 +685,9 @@ def turned():
             'open collar': dict(back=None, own={'three': PP.collar_three}), 'flowers': dict(back=PP.flowers_torso),
             'crest': dict(back=None), 'skirt': dict(back=PP.skirt_torso), 'palms': dict(back=PP.palms_torso),
             'biker': dict(back=PP.biker_back), 'unicorn': dict(back=None),
-            'scoop': dict(back=None), 'headphones': dict(back=PP.headphones_back)}
+            'scoop': dict(back=None), 'headphones': dict(back=PP.headphones_back),
+            'vest': dict(back=PP.vest_back, own={'side': PP.vest_side}),
+            'tank': dict(back=PP.vest_back, own={'side': PP.vest_side})}
 
 
 def pieces(sp):
@@ -696,7 +731,7 @@ def _head_parts():
 
 
 EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt', 'palms',
-          'biker', 'unicorn', 'scoop', 'headphones')
+          'biker', 'unicorn', 'scoop', 'headphones', 'vest', 'tank')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 

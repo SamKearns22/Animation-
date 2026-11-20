@@ -517,14 +517,42 @@ def ink_units(p):
     return Pen(p.img, p.cam).w(2.6) / (p.cam.S(1) or 1.0)
 
 
-def front_outline(sw, bottom, o=2.0):
+# Builds (GTA cast chat, 20 Nov: Sam, "the correct body shapes"; measured from the game's own art in
+# references/grand-theft-autism/, notes "Body shapes measured"): the body's half width at each height as a share of
+# the shoulders. None is the house body (the sides out to sw + 6 at 200, then in to the hem): every film before keeps it.
+# 'man': a broad chest tapering to the waist (the game's Jason: waist 0.78 of the shoulders); 'woman': a chest
+# narrower than the shoulders, a real waist (Lucia: 0.63) and hips back out to the hem (0.85, rule: hips 15% under).
+FIGS = {'man': ((110, 0.98), (190, 0.92), (300, 0.81), (420, 0.85)),
+        'woman': ((100, 0.95), (170, 0.86), (275, 0.67), (360, 0.80), (430, 0.85))}
+
+
+def fig_half(fig, y, sw, bottom):
+    """The build's half width at height y (None: the house body's, as front_outline draws it)."""
+    if not fig:
+        return float(np.interp(y, [60, 200, bottom], [sw, sw + 6, sw * HEM]))
+    ys, ks = zip(*FIGS[fig])
+    return sw * float(np.interp(y, ys + (bottom,), ks + (HEM,)))
+
+
+def _chaikin(pts, n=2):
+    """Corners cut (n times), the ends kept: a smooth side from a few measured heights."""
+    for _ in range(n):
+        out = [pts[0]]
+        for a, b in zip(pts, pts[1:]):
+            out += [(0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]),
+                    (0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1])]
+        pts = out + [pts[-1]]
+    return pts
+
+
+def front_outline(sw, bottom, o=2.0, fig=None, arm_w=30.0):
     """The body's outline seen from the front (or the back): the collar, each shoulder sloping down and rounding over
     the top of the arm on the arm's own circle (its joint sits at sw - 14, 60: views.standing), the sides, the hem.
     Was a flat slope to a corner at (0.8 sw, 12): the arm's round top sat lower, so the outline stepped down, then
     up over the arm, a small chip at every shoulder (one-route-kit chat 5, Sam 20 Nov, the Blessed jury). `o`: the
     outline's thickness (ink_units): the body's line runs just outside the arm's fill, on the arm's own outline, so
     the arm (which hides its line over the body) and the body (whose line is painted out under the arm) leave no gap."""
-    cx, cy, R = sw - 14.0, 60.0, ARM_TOP + 0.5 * o + 0.8
+    cx, cy, R = sw - 14.0, 60.0, ARM_TOP * arm_w / 30.0 + 0.5 * o + 0.8
     ax, ay = 40.0, -4.0
     dx, dy = cx - ax, cy - ay
     L = math.hypot(dx, dy)
@@ -534,7 +562,11 @@ def front_outline(sw, bottom, o=2.0):
     a0 = math.atan2(ty - cy, tx - cx)
     a1 = math.atan2(-math.sqrt(max(1.0, R * R - (sw - cx) ** 2)), sw - cx)   # where the circle meets the side
     arc = [(cx + R * math.cos(a), cy + R * math.sin(a)) for a in np.linspace(a0, a1, 8)]
-    right = arc + [(sw + 6, 200), (sw * HEM, bottom)]
+    if fig:                                             # the build's side, smooth, from the arm down to the hem
+        side = [(fig_half(fig, y, sw, bottom), y) for y, _ in FIGS[fig] if arc[-1][1] + 20 < y < bottom - 10]
+        right = arc + _chaikin([arc[-1]] + side + [(sw * HEM, bottom)])[1:]
+    else:
+        right = arc + [(sw + 6, 200), (sw * HEM, bottom)]
     left = [(-x, y) for x, y in right]
     return [(-ax, ay)] + left + right[::-1] + [(ax, ay)]
 
@@ -550,7 +582,7 @@ def plain_torso(img, p, sp, t):
         p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # neck_lean: its top
         soft(img, p.cam, [(-32 + nx, -76 + ny), (32 + nx, -76 + ny), (30 + nx * 0.5, -40), (-30 + nx * 0.5, -40)],
              (150, 90, 80), 0.35, 4)                # follows a shifted head, one neck (Ad-Vanced Notice, 8 Nov)
-    body = front_outline(sw, bottom, ink_units(p))
+    body = front_outline(sw, bottom, ink_units(p), sp.get('figure'), sp.get('arm_w', 30.0))
     if out == 'suit':
         jc = sp.get('jacket', NAVY)
         sc = sp.get('shirt', (236, 238, 244))

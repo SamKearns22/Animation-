@@ -118,7 +118,7 @@ def _shade(lay, cam, pts, alpha, blur):
 
 # ------------------------------------------------------------------------------------------------ arms
 
-def _arm_spine(sh, el, wr, w):
+def _arm_spine(sh, el, wr, w, bulge=0.0):
     S, E, Wr = (np.asarray(v, float) for v in (sh, el, wr))
     l1, l2 = np.hypot(*(E - S)) or 1.0, np.hypot(*(Wr - E)) or 1.0
     d1, d2 = (E - S) / l1, (Wr - E) / l2
@@ -134,6 +134,9 @@ def _arm_spine(sh, el, wr, w):
     fold = max(0.0, min(1.0, (bend - 100) / 50))           # a tight fold: slimmer at the elbow, so it reads as a bend
     s_el = (len(a) + 4) / len(spine)
     hw = hw * (1 - 0.22 * fold * np.exp(-((s - s_el) / 0.1) ** 2))
+    if bulge:                                              # a muscular arm (GTA's Jason, 20 Nov): the biceps and the
+        hw = hw * (1 + bulge * (np.exp(-((s - 0.5 * s_el) / 0.16) ** 2)        # forearm's swell, in at the elbow
+                                + 0.6 * np.exp(-((s - (s_el + 0.18)) / 0.11) ** 2)))
     return spine, hw, fold, len(a) + 4, float(d1[0] * d2[1] - d1[1] * d2[0])
 
 
@@ -215,7 +218,7 @@ def install(B):
     def pline(self, pts, colr=INK, lw=4):
         return orig_line(self, follow(self, pts), colr, lw)
 
-    def arm(p, sh, el, wr, sleeve, w=30):
+    def arm(p, sh, el, wr, sleeve, w=30, bulge=0.0):
         import figure
         if 'arm' in figure._GUARDED and w <= 40:            # the film's arm checker still measures every arm
             figure.audit_arm(sh, el, wr)
@@ -227,7 +230,7 @@ def install(B):
                                              if big and who == me and _inside(shp, pts)), None)
         busy.append(1)
         try:
-            spine, hw, fold, k_el, turn = _arm_spine(sh, el, wr, w)
+            spine, hw, fold, k_el, turn = _arm_spine(sh, el, wr, w, bulge)
             if LENS.get('side') and (sh[0] < 0) == (LENS['side'] == 'L'):   # reaching to the camera: the near end
                 s_ = np.linspace(0, 1, len(spine))                          # swells, as anything close to the lens
                 hw = hw * (1 + LENS.get('swell', 1.0) * s_ ** 2)

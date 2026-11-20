@@ -250,14 +250,16 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
     hip3 = chain[0]
     k = sp.get('leg_k', 1.0)                                          # a heavier build (Ad-Vanced Notice, 7 Nov)
     toward = project(knee3, yaw)[1] - project(hip3, yaw)[1]         # how far the knee comes at us
+    tb = _covered(sp) if sp.get('leg_cover') is not None else (lambda p_, q_, w_, c_, u=None: tube(p_, q_, w_, c_))
+    t0 = 0.5 + 0.5 * (from_u - 1) if from_u > 1 else 0.5 * from_u   # where the drawn chain starts, as a share of the leg
     if len(pts) == 2:
-        tube(p, pts, [27 * k * 1.2, 27 * k], sp.get('trousers', (40, 40, 46)))
+        tb(p, pts, [27 * k * 1.2, 27 * k], sp.get('trousers', (40, 40, 46)), (t0, 1.0))
     elif j.get('lap') and toward > 90:              # seated, thighs at the camera (rule 80): the shin first, then the
         col = sp.get('trousers', (40, 40, 46))     # thigh over it ending in a round knee, a touch bigger (nearer)
-        tube(p, pts[1:], [36 * k, 27 * k], col)
+        tb(p, pts[1:], [36 * k, 27 * k], col, (0.5, 1.0))
         kn = 1.0 + 0.12 * min(1.0, toward / 230)
-        tube(p, pts[:2], [48 * k, 46 * k * kn], col)
-        p.ell(pts[1][0], pts[1][1], 47 * k * kn, 44 * k * kn, col, INK, 2.6)
+        tb(p, pts[:2], [48 * k, 46 * k * kn], col, (t0, 0.5))
+        p.ell(pts[1][0], pts[1][1], 47 * k * kn, 44 * k * kn, col if sp.get('leg_cover', 1.0) > 0.5 else sp['skin'], INK, 2.6)
     else:
         col = sp.get('trousers', (40, 40, 46))
         a_, b_ = _sub(pts[0] + (0,), pts[1] + (0,)), _sub(pts[2] + (0,), pts[1] + (0,))
@@ -266,12 +268,15 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
             #   crossed itself at the knee and left a triangular hole), folded tight on screen (or a seated right-angle knee seen
             #                                     turned, which spiked on its inside: Blessed note 16, j['knee_round'])
             # (folded tight on screen (a figure four's leg seen three-quarter): one
-            tube(p, pts[:2], [48 * k, 38 * k], col)   # smooth outline would turn inside out at the knee, so the
-            tube(p, pts[1:], [38 * k, 27 * k], col)   # thigh, then the shin over it, joined by a round knee
-            p.ell(pts[1][0], pts[1][1], 38 * k, 38 * k, col, None)
+            tb(p, pts[:2], [48 * k, 38 * k], col, (t0, 0.5))   # smooth outline would turn inside out at the knee, so the
+            tb(p, pts[1:], [38 * k, 27 * k], col, (0.5, 1.0))   # thigh, then the shin over it, joined by a round knee
+            p.ell(pts[1][0], pts[1][1], 38 * k, 38 * k, col if sp.get('leg_cover', 1.0) > 0.5 else sp['skin'], None)
         else:
-            tube(p, pts, [48 * k, 38 * k, 27 * k], col)
+            tb(p, pts, [48 * k, 38 * k, 27 * k], col, (t0, 1.0))
     foot_pt = shoe_frame(j, side)
+    if sp.get('shoe_style') == 'trainer':         # a trainer (GTA, 20 Nov: the cast sheet's slab shoes): low and
+        _trainer(p, foot_pt, yaw, sp)              # round at the toe, high at the ankle, a pale sole
+        return
     box = [foot_pt(sx, sy, sz) for sx in (-28, 28) for sy in (0, 36) for sz in (-28, 92)]   # the shoe starts at the ankle
     hull = _hull([project(q, yaw)[0] for q in box])
     p.poly(curve(hull, 3), sp.get('shoe', (22, 20, 22)), INK, 2.4)
@@ -283,6 +288,90 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
             p.poly(curve(_hull([project(q, yaw)[0] for q in sole]), 3), sc, INK, 2.0)
             heel = [foot_pt(sx, 36, sz) for sx, sz in ((-24, -24), (24, -24), (24, 14), (-24, 14))]
             p.poly(curve(_hull([project(q, yaw)[0] for q in heel]), 2), B.dk(sc, 0.7), INK, 1.6)
+
+
+def _covered(sp):
+    """A tube drawer for a leg in shorts: the leg drawn bare (skin), then the cloth over it from the hip down to
+    sp['leg_cover'] (a share of the leg, hip 0 to ankle 1), a touch looser, its hem cut square; 'camo' blotches and a
+    cargo pocket (Jason's shorts), a frayed hem ('fray'). Each tube's share of the leg is worked out from its points'
+    heights (hip 450, knee about 680, ankle 890), so the thigh, the shin and the whole leg all cut at the same place."""
+    col, skin = sp.get('trousers', (40, 40, 46)), sp['skin']
+    cover = sp['leg_cover']
+    print_ = sp.get('shorts_print')
+
+    def draw(p, pts, widths, c, u=(0.0, 1.0)):
+        P = np.asarray(pts, float)
+        seg = np.hypot(*np.diff(P, axis=0).T)
+        tot = float(seg.sum()) or 1.0
+        n = len(P)
+        u0, u1 = u
+        if c != col:                               # something else (not the leg's cloth): as before
+            return tube(p, pts, widths, c)
+        tube(p, pts, widths, skin)
+        if cover <= u0:
+            return
+        f = min(1.0, (cover - u0) / max(1e-6, u1 - u0))
+        d = np.concatenate([[0], np.cumsum(seg)]) / tot
+        keep = [tuple(P[i]) for i in range(n) if d[i] < f]
+        wk = [widths[i] * 1.07 for i in range(n) if d[i] < f]
+        i = int(np.searchsorted(d, f))
+        i = min(max(i, 1), n - 1)
+        t_ = (f - d[i - 1]) / max(1e-6, d[i] - d[i - 1])
+        end = tuple(P[i - 1] + (P[i] - P[i - 1]) * t_)
+        keep.append(end)
+        wk.append((widths[i - 1] + (widths[i] - widths[i - 1]) * t_) * 1.12)
+        tube(p, keep, wk, col)
+        K = np.asarray(keep)
+        if print_ == 'camo':                       # blotches inside the cloth, in the shorts' own frame
+            rng = np.random.default_rng(int(abs(K[0][0])) % 7 + 11)
+            tones = [B.dk(col, 0.62), B.lt(col, 1.3), B.dk(col, 0.8)]
+            L = np.concatenate([[0], np.cumsum(np.hypot(*np.diff(K, axis=0).T))])
+            for b in range(int(L[-1] / 22) + 3):
+                a = rng.uniform(0.04, 0.92) * L[-1]
+                j_ = min(len(K) - 2, int(np.searchsorted(L, a)) - 1) if len(K) > 1 else 0
+                j_ = max(0, j_)
+                tt = (a - L[j_]) / max(1e-6, L[j_ + 1] - L[j_])
+                c0 = K[j_] + (K[j_ + 1] - K[j_]) * tt
+                dv = (K[j_ + 1] - K[j_]) / max(1e-6, np.hypot(*(K[j_ + 1] - K[j_])))
+                nv = np.array([-dv[1], dv[0]])
+                ww = wk[j_] * 0.6
+                c0 = c0 + nv * rng.uniform(-ww, ww)
+                p.poly(oval(c0[0], c0[1], rng.uniform(7, 13), rng.uniform(5, 9), 14), tones[b % 3], None)
+        if print_ in ('camo', 'cargo'):            # a cargo pocket on the outside of the thigh
+            if len(K) >= 2:
+                a, b_ = K[0], K[-1]
+                dv = (b_ - a) / max(1e-6, np.hypot(*(b_ - a)))
+                nv = np.array([-dv[1], dv[0]]) * (1 if a[0] >= 0 else -1)
+                if nv[0] * (1 if a[0] >= 0 else -1) < 0:
+                    nv = -nv
+                c0 = a + (b_ - a) * 0.62 + nv * wk[0] * 0.55
+                q = [tuple(c0 + dv * dy + nv * dx) for dx, dy in ((-16, -26), (16, -26), (16, 26), (-16, 26))]
+                p.poly(q, B.dk(col, 0.86), INK, 1.6)
+                p.line([tuple(c0 + dv * -26 + nv * -18), tuple(c0 + dv * -26 + nv * 18)], INK, 1.6)
+        if sp.get('fray'):                         # a frayed hem: short threads below the cut
+            a = K[-2] if len(K) > 1 else K[-1]
+            dv = (K[-1] - a) / max(1e-6, np.hypot(*(K[-1] - a)))
+            nv = np.array([-dv[1], dv[0]])
+            for m in np.linspace(-0.85, 0.85, 7):
+                q0 = K[-1] + nv * wk[-1] * m
+                p.line([tuple(q0), tuple(q0 + dv * (5 + 3 * (abs(m * 7) % 2)))], B.lt(col, 1.2), 1.4)
+    return draw
+
+
+def _trainer(p, foot_pt, yaw, sp):
+    """A trainer from any angle: a hull through the shoe's points (low at the toe, high at the ankle, widest at the
+    ball), then a pale sole band along its bottom and a dark collar at the ankle."""
+    col = sp.get('shoe', (40, 40, 44))
+    sole = sp.get('sole_c', (236, 234, 228))
+    top = {-26: -6, 0: -2, 30: 8, 60: 16, 88: 24}            # the upper's height above the sole, toe lower
+    half = {-26: 19, 0: 20, 30: 29, 60: 30, 88: 24}           # its half width: a narrow collar, widest at the ball
+    up = [foot_pt(sx * half[z], top[z], z) for z in top for sx in (-1, 1)]
+    low = [foot_pt(sx * half[z], 36, z) for z in top for sx in (-1, 1)]
+    sl = [foot_pt(sx * (half[z] + 2), 28, z) for z in top for sx in (-1, 1)]
+    hull = _hull([project(q, yaw)[0] for q in up + low])
+    p.poly(curve(hull, 3), col, INK, 2.4)
+    band = _hull([project(q, yaw)[0] for q in sl + [foot_pt(sx * (half[z] + 2), 38, z) for z in top for sx in (-1, 1)]])
+    p.poly(curve(band, 3), sole, INK, 1.8)
 
 
 def shoe_frame(j, side):
@@ -360,7 +449,8 @@ def arm(p, j2, side, sp, shape=None):
 def sleeved_arm(p, j2, side, sp, shape=None):
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
     with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
-        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sp.get('sleeve', sp.get('jacket', (40, 40, 46))))
+        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sp.get('sleeve', sp.get('jacket', (40, 40, 46))),
+              **({'w': sp['arm_w'], 'bulge': sp.get('arm_bulge', 0.0)} if 'arm_w' in sp else {}))
     shape = shape or j2.get('hand', {}).get(side, 'fist')
     if shape != 'none':
         hand(p, j2, side, sp, shape)
@@ -629,6 +719,9 @@ def torso_outline(sp, view, bottom, o=2.0):
     """The turned torso's outline (torso_view's body), facing right, in the body's units (o: the outline's
     thickness in those units, body.ink_units: the front and back shoulders run on the arm's own outline)."""
     sw = sp.get('shoulders', 150)
+    fig = sp.get('figure')
+    if fig:                                       # a build (body.FIGS): the house outline, its sides to the build's
+        return _built_outline(sp, view, bottom, o, fig)
     if view == 'three':
         from ink import open_curve
         top = open_curve([(-sw * 0.97, 120), (-sw * 0.95, 48), (-sw * 0.84, 18), (-sw * 0.55, 4), (-30, -6),
@@ -643,6 +736,37 @@ def torso_outline(sp, view, bottom, o=2.0):
     k = 0.9 if view == 'three_back' else 1.0
     return [(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
             (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]
+
+
+def _built_outline(sp, view, bottom, o, fig):
+    """A build's turned outline (GTA cast chat, 20 Nov): each side of the house outline below the shoulder scaled by
+    the build's width over the house's at that height, so the turned views keep the front's shape. The side view: a
+    man's deeper chest; a woman's bust, waist and seat."""
+    sw = sp.get('shoulders', 150)
+    if view in ('front', 'back'):
+        return B.front_outline(sw, bottom, o, fig, sp.get('arm_w', 30.0))
+    if view == 'side':
+        d = 0.6 * sw
+        if fig == 'woman':
+            pts = [(-34, -8), (-d * 0.92, 22), (-d * 0.98, 130), (-d * 0.84, 270), (-d * 1.04, 380), (-d * 0.98, bottom),
+                   (d * 0.92, bottom), (d * 0.86, 290), (d * 0.84, 250), (d * 1.2, 150), (d * 1.0, 90), (d * 0.86, 30),
+                   (30, -6)]
+        else:
+            pts = [(-34, -8), (-d * 0.96, 22), (-d * 1.06, 130), (-d * 0.92, 320), (-d * 0.92, bottom), (d * 0.94, bottom),
+                   (d * 0.94, 300), (d * 1.18, 150), (d * 0.92, 30), (30, -6)]
+        return curve(pts, 3)
+    base = torso_outline(dict(sp, figure=None), view, bottom, o)
+    dense = []                                    # the edges cut into short steps, so the waist can show between
+    for (x0, y0), (x1, y1) in zip(base, base[1:] + base[:1]):
+        n = max(1, int(math.hypot(x1 - x0, y1 - y0) / 18))
+        dense += [(x0 + (x1 - x0) * k / n, y0 + (y1 - y0) * k / n) for k in range(n)]
+    return [(x * _fig_k(fig, y, sw, bottom), y) for x, y in dense]
+
+
+def _fig_k(fig, y, sw, bottom):
+    """The build's width over the house body's at height y (1 over the shoulders, so the arms still hang there)."""
+    k = B.fig_half(fig, y, sw, bottom) / max(1.0, B.fig_half(None, y, sw, bottom))
+    return 1.0 + (k - 1.0) * min(1.0, max(0.0, (y - 70.0) / 50.0))
 
 
 def _span(pts, y):
@@ -669,12 +793,16 @@ class WrapPen:
         sw = sp.get('shoulders', 150)
         bottom = min(sp.get('bottom', JACKET), 470) if seated else sp.get('bottom', JACKET)
         self.out, self.sw, self.bottom = torso_outline(sp, view, bottom), sw, bottom
+        self.fig = sp.get('figure')
         self.mid = sp.get('v_at', 0.24 * sw) if view == 'three' else (-0.22 * sw if view == 'three_back' else 0.0)
         self._rows = {}
 
     def width(self, y):
         """The front torso's half width at y (burnham.torso's shape: the neck's foot, the shoulders, the hem)."""
         sw = self.sw
+        if self.fig:                                  # a build: the front's own width at y
+            got = _span(B.front_outline(sw, self.bottom, 2.0, self.fig), min(max(y, 0.0), self.bottom - 0.5))
+            return max(40.0, got[1]) if got else 40.0
         return float(np.interp(y, [-6, 12, 50, 200, self.bottom], [40, sw * 0.8, sw, sw + 6, sw * B.HEM]))
 
     def row(self, y):

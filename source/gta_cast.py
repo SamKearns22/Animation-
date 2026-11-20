@@ -58,37 +58,63 @@ def _font(n):
     return ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), n)
 
 
-REF_OF = {'jason': 'gameplay-jason-lucia-bar-dance.jpg', 'lucia': 'gameplay-lucia-bar.jpg', 'her': None}
+REF_OF = {'jason': 'sam-jason-lucia-bike-key-art.jpg', 'lucia': 'sam-lucia-portrait-art.jpg', 'her': None}
+# the whole figure as the game draws it (GTA cast chat, Sam 20 Nov: "the correct body shapes"), beside the sheet
+FIGURE_OF = {'jason': 'game-art-jason-lucia-launch.jpg', 'lucia': 'game-art-jason-lucia-robbery.jpg'}
+
+
+CROPS = {'sam-jason-lucia-bike-key-art.jpg': (1126, 0, 2432, 1440),     # Jason, in Sam's key art
+         'sam-lucia-portrait-art.jpg': None,
+         'game-art-jason-lucia-launch.jpg': (300, 0, 800, 1440),          # Jason standing, head to knee
+         'game-art-jason-lucia-robbery.jpg': (960, 150, 1660, 1440)}      # Lucia, head to thigh
+
+
+def _ref(name, h):
+    r = Image.open(os.path.join(REFS, name)).convert('RGB')
+    if CROPS.get(name):
+        r = r.crop(CROPS[name])
+    r.thumbnail((10_000, h))
+    return r
 
 
 def sheet(out):
-    """Rule 38 and 89: front, side and back at true heights, then each bust large beside its reference."""
+    """Rule 38 and 89: one row each: front, side and back at true heights (one scale for all three people), the
+    bust large, then Sam's picture and the game's whole figure (GTA cast chat: shapes judged against the game)."""
     c = cast()
-    tw, th = 300, 620
-    img = Image.new('RGB', (40 + 3 * 3 * tw, 80 + th + 620), (232, 228, 222))
-    d = ImageDraw.Draw(img)
-    d.text((20, 18), 'Grand Theft Autism: the cast (front, side, back; busts beside the game)', font=_font(32),
-           fill=(30, 30, 30))
-    for i, who in enumerate(c):
+    tw, th = 270, 640
+    rows = []
+    for who in c:
+        row = Image.new('RGB', (3600, th + 50), (232, 228, 222))
+        d = ImageDraw.Draw(row)
+        d.text((14, 8), c[who]['name'].split(' (')[0], font=_font(30), fill=(30, 30, 30))
+        x = 10
         for k, yaw in enumerate((0, 90, 180)):
             tile = Image.new('RGBA', (1080, 1920), (232, 228, 222, 255))
             s = 0.9 * c[who]['height'] / 1.85
-            draw(tile, 540, 1700 - 928 * s, s, who, yaw)
-            tile = tile.crop((290, 1700 - int(1260 * s), 790, 1720)).convert('RGB')
-            tile.thumbnail((tw, th - 40))
-            x0 = 20 + (i * 3 + k) * tw
-            img.paste(tile, (x0, 80 + 30))
-            d.text((x0 + 6, 80), f"{c[who]['name'].split(' (')[0]} {('front', 'side', 'back')[k]}", font=_font(18),
-                   fill=(30, 30, 30))
-        y0 = 80 + th
-        b = bust(who)
-        b.thumbnail((450, 520))
-        img.paste(b, (20 + i * 3 * tw, y0))
-        if REF_OF[who]:
-            r = Image.open(os.path.join(REFS, REF_OF[who])).convert('RGB')
-            r.thumbnail((430, 520))
-            img.paste(r, (20 + i * 3 * tw + 460, y0))
-    img.save(out, quality=88)
+            draw(tile, 540, 1720 - 928 * s, s, who, yaw)
+            tile = tile.crop((300, 1720 - int(1240 * 0.9), 780, 1740)).convert('RGB')
+            tile = tile.resize((int(tile.width * th / tile.height), th))
+            row.paste(tile, (x, 46))
+            x += tile.width - 20
+        b = bust(who, size=(500, 600))
+        b = b.resize((int(b.width * th / b.height), th))
+        row.paste(b, (x + 10, 46))
+        x += b.width + 24
+        for name in (REF_OF.get(who), FIGURE_OF.get(who)):
+            if name:
+                r = _ref(name, th)
+                row.paste(r, (x, 46))
+                x += r.width + 12
+        rows.append(row.crop((0, 0, x, row.height)))
+    W = max(r.width for r in rows)
+    img = Image.new('RGB', (W, 60 + sum(r.height for r in rows)), (232, 228, 222))
+    ImageDraw.Draw(img).text((14, 12), 'Grand Theft Autism: the cast (front, side, back; face; Sam\'s picture; the game)',
+                             font=_font(30), fill=(30, 30, 30))
+    y = 60
+    for r in rows:
+        img.paste(r, (0, y))
+        y += r.height
+    img.save(out, quality=86)
     return out
 
 

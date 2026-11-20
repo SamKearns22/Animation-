@@ -94,3 +94,30 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   build, not a note, so the code was searched on purpose.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.59% of 15%; forecast 60.1% (2026-11-20)
+
+
+## Where things stand (20 Nov, chat 7, Opus medium)
+- Rules that bite next: 8 (nothing else moves until Sam has seen both rehearsals), 30 (a repeat note: find why the first fix failed), 89.
+- Done: hunt 2's 10 shot-4 faults fixed as one list and `critique.py fixed` recorded (Checks: none). Shot 4 re-rendered
+  (6.2 s, 2.9 MB, 4.4 min) and sent whole, as the changes span 0.8-5.2 s: bolder crack and a closer cruiser on a longer
+  lens, the gun shown at the shots (higher camera, gun 1.4x), smoke one column out of the fire, the jet a column,
+  the fireball low and in frame, palms slide in (no pop), no squeeze at the corner, bumpers inside the body, mirrors on
+  stalks, bonnet stripes worn charcoal (read as paint from above).
+- Next: Sam's answer. On "approved": Opus high chat for the sets stage (the real Vice City shop street and the junction
+  for shots 2 and 4, replacing the stand-in blocks). On notes: Opus medium, his notes first (rule 30 on any repeat).
+- First, whatever Sam answers (front-on chat 2b, 20 Nov 08:02): kittest focus_front_heads fails: 'milburn 5' no longer
+  draws pixel-for-pixel. Restoring source/people.py AND people_parts.py to d732ceea passes, so one of this film's kit
+  additions (358132dd on: soft/hoops/pony_high/hair_loose/short_sleeve/'smile') changes a default for people who never
+  set it. Fix so finished films draw as before (Opus medium); named in notes/proposals/front-on-focus/retirement-and-handover.md.
+- Kit change since (one-route-kit chat 5, 20 Nov): front and back shoulders now round smoothly over the arm (Sam's
+  jury chips; body.front_outline), so the cast sheet's "square shoulder corners" fault may be partly gone: redraw the
+  sheet before judging. Jason's short sleeves (MidTerminal's flap) are untouched and still read as stuck-on flaps.
+- Needs Sam: Y or N, the two rehearsals (swerve clip, this lean-out clip) approved so the rest can move (rule 8).
+- Read: guides/job-packs.md, Notes round (on notes) or Build (on approval); this notes file's plan and acting list.
+- Open rule requests: none found in this film's notes.
+- For Claude: source/gta_rehearse.py shot 4 (CAM4 keys, GAPS, SMOKE4, PALMS4, jet_lumps, fx_items); gta_cars.py
+  _cracks/_tulip_decals (STRIPE, STRIPE_EDGE)/_parts; prepper_cast.glock(size=). `shot4 OUT.mp4`, `still4 T OUT`.
+- Handover check answers (chat 7): gta_rehearse's two quick checks as chat 6 (a rehearsal file, notes here, SHOT_MARKS
+  at the moves stage); the four prepper lines are another film's, not this one's.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.59% of 15%; forecast 60.1% (2026-11-20)
