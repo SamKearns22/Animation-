@@ -18,3 +18,6 @@ What are the elements you would need to consider with the camera, actors, props 
 ### 2026-11-20T17:26:17
 That was a very good summary. Do you think it helps to read the screenplay before working on a scene?
 
+### 2026-11-20T17:27:43
+Y to both. But before you do that, tell me what the civilians are doing in your clip?
+
