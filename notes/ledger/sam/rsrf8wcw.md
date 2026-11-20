@@ -7,3 +7,12 @@
 Apologies, I made an error. Could you
 make it a total of 5.5 seconds
 
+### 2026-11-20T10:35:48
+6.5 seconds.
+
+### 2026-11-20T10:38:25
+Don't have the music fade out
+
+### 2026-11-20T10:42:29
+I've just noticed that the bottom of the A in grand is also connected with the r/h connection when it shouldn't be.
+
