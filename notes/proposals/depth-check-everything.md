@@ -1,6 +1,6 @@
 # Proposal: Clipping checks: anything nearer the camera hides anything behind it, practice clips included
 
-Status: open
+Status: adopted (2026-11-20) on Sam's word ("1": skip the route, his own idea); judged in the end-of-film review
 
 ## Problem
 In Grand Theft Autism's swerve practice clip (shot 2), the police cars and the getaway car are drawn over a fire hydrant

@@ -311,7 +311,7 @@ def hide_faults(film, step=3):
         if not pts:
             continue
         cam = film.cam_for(t)
-        figs = [th for th in film.scene(t) if th.kind != 'set' and any(s.part in ('body', 'head') for s in th.solids)]
+        figs = list(film.scene(t))                    # rule 17 (Sam, 20 Nov): anything against anything, sets included
         cands = []
         for en, p, r in pts:
             pe = A._project(film, cam, np.asarray(p, float)[None])
@@ -350,6 +350,49 @@ def hide_faults(film, step=3):
             if n > 40:
                 seen.add((th.name, en))
                 out.append(f'EFFECTS HIDDEN: {t:.2f} s: the {en} behind {th.name} is drawn over them ({n} px)')
+    return out
+
+
+def layer_faults(shot, length, fps=12, step=2, allowed=(), label=''):
+    """Rule 17 for any picture painted in layers (practice clips, flat-painted shots): every standing thing is listed by
+    the shot as (name, distance, draw) through shot(t, record=list). Each thing is drawn alone on a clear sheet; where
+    two things overlap, the finished picture must show the NEARER one. allowed = [(name_a, name_b, reason)], names
+    matched by their start (a hand on a held gun, people inside a car, see-through glass or smoke). A shot that lists
+    nothing is a fault itself: the check cannot see it."""
+    out, seen = [], set()
+    ok = [(a, b) for a, b, _ in allowed]
+
+    def okay(n1, n2):
+        return any((n1.startswith(a) and n2.startswith(b)) or (n1.startswith(b) and n2.startswith(a)) for a, b in ok)
+    for i in range(0, int(round(length * fps)), step):
+        t = i / fps
+        rec = []
+        full = np.asarray(shot(t, record=rec).convert('RGB')).astype(int)
+        if not rec:
+            return [f'LAYERS UNLISTED: {label} lists no things, so nothing in it can be checked (rule 17)']
+        alone = []
+        for name, d, fn in rec:
+            sheet = Image.new('RGBA', (full.shape[1], full.shape[0]), (0, 0, 0, 0))
+            fn(sheet)
+            a = np.asarray(sheet).astype(int)
+            m = a[..., 3] > 200
+            if m.any():
+                alone.append((name, d, m, a[..., :3]))
+        for ka in range(len(alone)):
+            for kb in range(len(alone)):
+                na, da, ma, ca = alone[ka]
+                nb, db, mb, cb = alone[kb]
+                if not da < db or (na, nb) in seen or okay(na, nb):
+                    continue
+                both = ma & mb & (np.abs(ca - cb).sum(2) > 60)      # where the two would look different
+                n = int(both.sum())
+                if n < 40:
+                    continue
+                f = full[both]
+                wrong = int((np.abs(f - cb[both]).sum(1) + 20 < np.abs(f - ca[both]).sum(1)).sum())
+                if wrong > max(40, 0.3 * n):
+                    seen.add((na, nb))
+                    out.append(f'LAYERS: {label} {t:.2f} s: {nb} (farther) is drawn over {na} (nearer), {wrong} px')
     return out
 
 
