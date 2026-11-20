@@ -78,7 +78,7 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 - Needs Sam: nothing. Open: Y/N bookmark Shocking Behaviour (answered 'later').
 - Read: this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
 - Open rule requests: none found.
-- For Claude: handover.py end was still running (it runs the kit tests) when Sam said hurry; run handover.py start first. body/ink/faces/views.TURNED_HEADS; refcast hashes in Change 2 results; kittests compared against an
+- For Claude: handover.py end finished after chat 5 opened: its 69 items are QUICK CHECKs of the three films whose files this chat touched by one line (milburn.py, protest_tiers_cast.py: finished, frozen; satire_template.py: imports only). They are those films' own old staging faults (plans, mouths, poses, collisions), not from the kit move; named here, nothing to fix for GTA. body/ink/faces/views.TURNED_HEADS; refcast hashes in Change 2 results; kittests compared against an
   untouched copy (scratch); freeze.py count --lower done at 0/0/20/40.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 1.23% of 15%; forecast not yet planned (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 3.8% of 15%; forecast not yet planned (2026-11-20)
