@@ -9422,6 +9422,123 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "d2773847",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.05,
+   "src": "estimate",
+   "sid": "session_01J1JB7WhVtfo94mxXruR19h",
+   "steps": 8,
+   "hist_k": 87,
+   "kinds": {
+    "tool search": 11.5,
+    "renders": 2.5,
+    "other": 86.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 1
+   },
+   "split": {
+    "usd": 0.1935,
+    "total": 0.1935,
+    "floor_k": 82,
+    "blocks": {
+     "start-up floor": 77.0,
+     "Claude's words": 11.0,
+     "new writes": 11.0,
+     "carried history": 1.0
+    },
+    "origins": {
+     "start-up floor": 77.0,
+     "Claude's words": 14.1,
+     "result: tool search": 7.8,
+     "messages and reminders": 0.8,
+     "result: other": 0.2,
+     "result: renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/grand-theft-autism.md",
+      1.4,
+      0.0061
+     ]
+    ],
+    "base_pct": 29.9
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 3,
+     "shared:handover.py": 1,
+     "shared:gta_shots58.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status -sb | head -5; git fetch origin claude/create-claude-md-oe8z4g 2>&1 |",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/grand-theft-autism.md",
+      "Where things stand",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:gta_shots58.py",
+      "notes/grand-theft-autism.md source/gta_shots58.py",
+      "sed -n 378,400p notes/grand-theft-autism.md; sed -n 458,490p notes/grand-theft-a",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "",
+      "^done",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "",
+      "sleep 600; ls -la /tmp/g; tail -qn 1 /tmp/g/log*.txt",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
