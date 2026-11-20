@@ -345,6 +345,894 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "e3a7708e",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.98,
+   "src": "estimate",
+   "sid": "session_01J1JB7WM7Ywds25Vqz9UpsK",
+   "steps": 122,
+   "hist_k": 229,
+   "kinds": {
+    "tool search": 26.0,
+    "renders": 2.9,
+    "pictures": 1.2,
+    "other": 69.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 95,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 9,
+    "pictures": 4,
+    "other": 16
+   },
+   "split": {
+    "usd": 3.6046,
+    "total": 3.6046,
+    "floor_k": 82,
+    "blocks": {
+     "start-up floor": 29.7,
+     "carried history": 27.2,
+     "Claude's words": 26.7,
+     "new writes": 16.4
+    },
+    "origins": {
+     "Claude's words": 43.1,
+     "start-up floor": 29.7,
+     "result: tool search": 14.7,
+     "result: other": 6.4,
+     "messages and reminders": 2.9,
+     "result: pictures": 1.6,
+     "Claude's edits": 1.2,
+     "result: renders": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 26,
+    "work_pct": 0.18,
+    "reads": [
+     [
+      "notes/one-route-kit.md",
+      1.1,
+      0.018
+     ],
+     [
+      "notes/proposals/one-route-kit/chat.md",
+      1.1,
+      0.0159
+     ],
+     [
+      "notes/proposals/one-route-kit/measure/reach.py",
+      0.8,
+      0.0113
+     ],
+     [
+      "source/film_engine.py",
+      0.6,
+      0.0089
+     ],
+     [
+      "story/status.md",
+      0.5,
+      0.0079
+     ],
+     [
+      "source/bayeux.py",
+      0.4,
+      0.0048
+     ],
+     [
+      "source/strictly_crabs/prep.py",
+      0.4,
+      0.0048
+     ]
+    ],
+    "base_pct": 27.7
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 4,
+     "film notes": 8,
+     "other": 38,
+     "shared:film_engine.py": 1,
+     "guides": 1,
+     "shared:bayeux.py": 3,
+     "shared:freeze.py": 14,
+     "shared:channel_trailer.py": 1,
+     "shared:bayeux_weapons.py": 2,
+     "shared:animation_test.py": 1,
+     "shared:animation_test_audio.py": 1,
+     "shared:deck_the_halls.py": 1,
+     "shared:shot.py": 2,
+     "shared:burnham_film.py": 1,
+     "shared:strictly_crabs_film.py": 1,
+     "shared:kittests.py": 6,
+     "shared:kit.py": 1,
+     "shared:people.py": 3,
+     "shared:places.py": 3,
+     "shared:strictly_crabs_titles.py": 2,
+     "shared:blessed.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status -sb | head -5 && git remote -v | head -2 && git branch -a | head && p",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/one-route-kit.md notes/proposals/one-route-kit.md",
+      "git checkout claude/create-claude-md-oe8z4g 2>&1|tail -1; git pull -q origin cla",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/proposals/one-route-kit.md",
+      "Final version",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "",
+      "git checkout -q claude/create-claude-md-oe8z4g && git status -sb|head -3; git lo",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/proposals/one-route-kit.md notes/proposals/one-route-kit/ notes/proposals/",
+      "Final version\\|Change 1\\|Change 2",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "source/films source/*.py",
+      "recut",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "source/data source/data/bayeux source/data/strictly-crabs",
+      "timeout 280 git fetch --unshallow origin 2>&1 | tail -3; git rev-list --count or",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "[g]it ",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "",
+      "[g]it ",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "rm -f .git/shallow.lock && (git fetch --unshallow origin > /tmp/fetch.log 2>&1; ",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "notes/sheets notes/proposals/one-route-kit/measure",
+      "git rev-list --count origin/claude/create-claude-md-oe8z4g; git rev-parse --is-s",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "film notes",
+      "story/status.md guides/job-packs.md",
+      "Film types\\|Final and posting",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "notes/proposals/one-route-kit/measure/reach.py notes/proposals/one-route-kit/mea",
+      "head -50 notes/proposals/one-route-kit/measure/reach.py; cat animations/README.m",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/proposals/one-route-kit.md notes/proposals/one-route-kit/chat.md",
+      "41",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "sed -n 5,200p animations/README.md | cut -c1-230",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py source/finish.py source/*.md source/MAP*",
+      "def \\|argv\\|argparse",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "guides",
+      "source/*.py guides/kit-catalogue.md",
+      "^def frame_image",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "for f in animations/*.mp4 animations/*.png; do echo \"== $(basename $f)\"; git log",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "ls source/ | sed -n 80,400p | tr '\\n' ' '; python3 -c \"import PIL,numpy;print('o",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:bayeux.py",
+      "source/data/bayeux source/data/strictly-crabs source/bayeux.py source/strictly_c",
+      "data/bayeux\\|data', 'bayeux\\|'bayeux'",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:bayeux.py",
+      "source/bayeux.py source/*.py source/strictly_crabs/prep.py",
+      "data/bayeux\\|data\\b.*bayeux",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "source/data/freeze source/data/freeze/films.json",
+      "no such",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "notes/proposals/one-route-kit/measure",
+      "cd notes/proposals/one-route-kit/measure && wc -l *.py && sed -n 1,60p graph.py ",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "notes/proposals/one-route-kit/measure",
+      "^count|^== |FILM FILES|KIT",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && timeout 200 python3 - <<'E' 2>&1 | tail -30 i",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "timeout 200 python3 - <<'E' 2>&1 | tail -30 import sys,types,ast import gta_cast",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^def \\|^    def ",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "sed -n 525,552p source/handover.py; sed -n 637,760p source/handover.py",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "python3 source/freeze.py tag && python3 source/freeze.py count 2>&1 | tail -8 &&",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/data/freeze/count-baseline.json",
+      "python3 - <<'E' p='source/freeze.py' s=open(p).read() s=s.replace(\"\"\" for s in r",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/data/freeze/count-baseline.json",
+      "python3 - <<'E' import re p='source/freeze.py' s=open(p).read() i=s.index(\"FILM ",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "other",
+      "",
+      "stills",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "other",
+      "",
+      "stills\\|^def frame\\|^def .*image",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/data/freeze/films.json",
+      "python3 - <<'E' p='source/freeze.py' s=open(p).read() s=s.replace(''' d = load()",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "freeze.py\\|source/",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:channel_trailer.py",
+      "source/channel_trailer.py source/burnham.py source/bayeux_story.py",
+      "sed -n 1,25p source/channel_trailer.py | cut -c1-180; git show film/king-in-the-",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:bayeux.py",
+      "source/bayeux.py source/data",
+      "[f]reeze.py",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:bayeux_weapons.py",
+      "source/bayeux_weapons.py source/bayeux_stitch.py",
+      "rifle-before\\|def build\\|__main__\\|argv",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "cd /tmp/freeze/film_bayeux-season-pass/source && sed -n 540,563p bayeux_weapons.",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "[p]ython3",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:animation_test.py",
+      "source/animation_test.py",
+      "anim\\|yule\\|test",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:animation_test_audio.py",
+      "source/animation_test_audio.py source/.*test",
+      "yule\\|anim.*test\\|source/.*test",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:deck_the_halls.py",
+      "source/deck_the_halls.py source/duel.py story/animation-test.md",
+      "stills\\|def frame\\|argv\\|Usage\\|python3",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "source/shots/",
+      "python3 \\|argv",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:shot.py",
+      "source/shot.py source/shots/s1_chop.py /tmp/freeze/film_strictly-crabs/source/st",
+      "cd /tmp/freeze/film_yuletide-test && mkdir -p /tmp/yt && (time timeout 500 pytho",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "shared:shot.py",
+      "source/shot.py source/shots/s1_chop.py source/burnham_film.py",
+      "^def \\|python3 \\|argv",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:burnham_film.py",
+      "source/burnham_film.py",
+      "^FPS\\|FPS =\\|def render_frame",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/data/freeze/films.json source/bayeux_weapons.py source/c",
+      "index_fps",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:bayeux_weapons.py",
+      "source/data/freeze/films.json source/bayeux_weapons.py source/bayeux_story.py so",
+      "python3 - <<'E' import json r=json.load(open('source/data/freeze/films.json')) r",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/shot.py source/data/freeze/films.json source/shots/s1_ch",
+      "index_fps",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py .claude/hooks/setup.sh",
+      "strictly\\|playwright\\|three\\|npm",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py .claude/hooks/setup.sh source/strictly_crabs/",
+      "strictly",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:strictly_crabs_film.py",
+      ".claude/hooks/*.sh notes/*.md guides/*.md source/strictly_crabs_film.py source/s",
+      "npm \\|playwright-core\\|three",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "/tmp/freeze/film_strictly-crabs/source/strictly_crabs/stage.js notes/archive",
+      "import\\|from ",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "film notes",
+      "/tmp/freeze/film_strictly-crabs/notes/strictly-crabs.md source/strictly_crabs/in",
+      "npm\\|three\\|install\\|node_modules\\|importmap\\|prep.py",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "/tmp/freeze/film_strictly-crabs/source/strictly_crabs",
+      "launch\\|executablePath",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "/tmp/freeze/film_strictly-crabs/source/strictly_crabs",
+      "cd /tmp/freeze/film_strictly-crabs/source/strictly_crabs && timeout 300 node ren",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "/tmp/freeze/film_strictly-crabs/source/strictly_crabs",
+      "tex/\\|OUT",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "/tmp/freeze/film_strictly-crabs/source/strictly_crabs",
+      "makedirs\\|OUT",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "/tmp/freeze/film_strictly-crabs/source/strictly_crabs",
+      "cd /tmp/freeze/film_strictly-crabs/source/strictly_crabs && timeout 300 node ren",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/kit*.py source/regress.py source/checks.py",
+      "blessed",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 1876,1935p source/kittests.py | cut -c1-210",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:kit.py",
+      "source/kit.py",
+      "def replicate",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "source/*.py",
+      "replicate",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 510,600p source/people.py | cut -c1-200",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def replicate",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/people.py source/places.py",
+      "film_frame\\|FROZEN",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "shared:places.py",
+      "source/places.py",
+      "^def replicate",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "shared:places.py",
+      "source/places.py source/kittests.py",
+      "def test\\b\\|^def main\\|argv",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "tail -30 source/kittests.py | cut -c1-160; sed -n 15,40p source/kittests.py | cu",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "sleep 240; tail -5 /tmp/check2.txt; wc -l /tmp/check2.txt",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "other",
+      "",
+      "freeze.py check",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'E' p='source/kittests.py' s=open(p).read() new='''@test def finishe",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "shared:strictly_crabs_titles.py",
+      "source/strictly_crabs/prep.py source/strictly_crabs_titles.py source/strictly_cr",
+      "logo",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:strictly_crabs_titles.py",
+      "source/strictly_crabs_titles.py",
+      "cd /tmp/freeze/film_strictly-crabs && sed -n 1,30p source/strictly_crabs_titles.",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/e3a7708e-5c2f-5441-9c02-b86c90936a26/tas",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/e3a7708e-5c2f-5441-9c02-b86c90936a26/tas",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "shared:freeze.py",
+      "guides/job-packs.md source/freeze.py",
+      "sed -n 50,63p guides/job-packs.md | cut -c1-220; sed -i '/savedata NAME/d' sourc",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "",
+      "freeze.py check",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "yuletide|bayeux|dam |halo-no-no ",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "shared:kittests.py",
+      "notes/sheets/one-route-kit-freeze-check-1.jpg notes/sheets/one-route-kit-freeze-",
+      "cp /tmp/sheetA.jpg notes/sheets/one-route-kit-freeze-check-1.jpg && cp /tmp/shee",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "kittests.py",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "PASS|FAIL|kittests",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "shared:blessed.py",
+      "source/blessed.py source/blessed_cast.py source/blessed_sets.py source/people.py",
+      "python3 - <<'E' import sys;sys.path.insert(0,'source') import freeze as F, numpy",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "shared:people.py",
+      "source/people.py source/kittests.py source/freeze.py source/data/freeze/drift-ba",
+      "PASS|FAIL|kittests",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "shared:places.py",
+      "source/places.py source/kittests.py source/handover.py",
+      "git checkout source/places.py && python3 source/kittests.py finished_films 2>&1 ",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "film notes",
+      "notes/one-route-kit.md",
+      "Change 1 results",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "shared:freeze.py",
+      "notes/one-route-kit.md source/freeze.py",
+      "python3 - <<'E' p='notes/one-route-kit.md' t=open(p).read() t=t.replace(\"- Needs",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "other",
+      "",
+      "film/",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "other",
+      "",
+      "git push origin refs/tags/film/milburn 2>&1 | tail -3",
+      ""
+     ],
+     [
+      119,
+      "other",
+      "other",
+      "",
+      "git push origin refs/tags/film/milburn 2>&1 | tail -2; git push origin 6dc5df69:",
+      ""
+     ],
+     [
+      120,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "\\",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "python3 - <<'E' p='source/freeze.py' s=open(p).read() old=s[s.index(\" r = subpro",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git tag -l 'film/*' | xargs git tag -d >/dev/null && python3 -c \" import sys;sys",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "film notes",
+      "notes/one-route-kit.md",
+      "sed -i 's/^- Done: Change 1 (results above). Pushed with bookmarks\\./- Done: Cha",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
