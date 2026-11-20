@@ -161,6 +161,10 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
   stalks, bonnet stripes worn charcoal (read as paint from above).
 - Next: Sam's answer. On "approved": Opus high chat for the sets stage (the real Vice City shop street and the junction
   for shots 2 and 4, replacing the stand-in blocks). On notes: Opus medium, his notes first (rule 30 on any repeat).
+- First, whatever Sam answers (front-on chat 2b, 20 Nov 08:02): kittest focus_front_heads fails: 'milburn 5' no longer
+  draws pixel-for-pixel. Restoring source/people.py AND people_parts.py to d732ceea passes, so one of this film's kit
+  additions (358132dd on: soft/hoops/pony_high/hair_loose/short_sleeve/'smile') changes a default for people who never
+  set it. Fix so finished films draw as before (Opus medium); named in notes/proposals/front-on-focus/retirement-and-handover.md.
 - Needs Sam: Y or N, the two rehearsals (swerve clip, this lean-out clip) approved so the rest can move (rule 8).
 - Read: guides/job-packs.md, Notes round (on notes) or Build (on approval); this notes file's plan and acting list.
 - Open rule requests: none found in this film's notes.
