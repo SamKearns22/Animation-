@@ -1,0 +1,63 @@
+== quick check (2026-11-20): 61 fault(s)
+- CAMERA FEEL: shot *: the film gives no camera the check can read (cam_for(t) returning a B.Cam or a sets.Cam): rule 72 not checked (give it one, or a row in the exceptions: | camera feel | * | why | looked |)
+- EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule S7
+- READABILITY: the film has no JOKE_PROPS ([(name, [times], where, size m)], [] for none): rule 18
+- SHOT CAST: shot 2a: goth is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 2a: rangy is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 2a: swindon is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 2a: waif is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 2b: goth is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 2b: rangy is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 2b: swindon is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 2b: waif is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 3: goth is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 3: rangy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 3: swindon is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 3: waif is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 1: milburn is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 4b: milburn is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 7d: milburn is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 4a: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 4a: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 4c: andy is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 4c: pat is never on screen (the brief puts them in it; SHOT_CAST)  [2 like it]
+- SHOT CAST: shot 7e: andy is never on screen (the brief puts them in it; SHOT_CAST)
+- SHOT CAST: shot 7e: pat is never on screen (the brief puts them in it; SHOT_CAST)
+- caption "to kill each": 0.38 s on screen at 1.1x for 3 words (too fast to read)
+- caption "have to arm": 0.45 s on screen at 1.1x for 3 words (too fast to read)
+- caption "You're pulling a": 0.53 s on screen at 1.1x for 3 words (too fast to read)
+- caption "Would you care": 0.53 s on screen at 1.1x for 3 words (too fast to read)
+- caption "to hear the": 0.53 s on screen at 1.1x for 3 words (too fast to read)
+- caption "where this one goes,": 0.53 s on screen at 1.1x for 4 words (too fast to read)
+- caption "a Maze Runner,": 0.61 s on screen at 1.1x for 3 words (too fast to read)
+- caption "Royale on us,": 0.68 s on screen at 1.1x for 3 words (too fast to read)
+- caption "I'd like to hear": 0.76 s on screen at 1.1x for 4 words (too fast to read)
+- caption "I am sorry that": 0.83 s on screen at 1.1x for 4 words (too fast to read)
+- caption "Are you or are": 0.83 s on screen at 1.1x for 4 words (too fast to read)
+- caption "This report has been": 0.91 s on screen at 1.1x for 4 words (too fast to read)
+- caption "you not sending NEETs": 1.06 s on screen at 1.1x for 4 words (too fast to read)
+- caption "away PIP after they": 1.06 s on screen at 1.1x for 4 words (too fast to read)
+- clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing checks that no one passes through anyone or teleports (clipcheck.py; rule 19)
+- house style: the film has no audits: the general audit (each body alone: in pieces, popping, stretching, frozen): start from the template
+- house style: the film has no LINE_SUBJECTS: the line-work check (every shape outlined, one weight)
+- house style: the film has no PROP_SIZES: the real-size check for props and set pieces
+- house style: the film has no OUTFIT: the clothes check (skirts from the waist, jackets to the hips)
+- the collision and pop-in tests did not run: the film has no scene(t) (audit.py; rules 5 and 6; a film with no people or props says so in HAS)
+- plan: rooms cabinet room and shaft overlap
+- plan: rooms cabinet room and field overlap
+- plan: rooms shaft and field overlap
+- plan: milburn stands inside the platform (sitting on it? give on="platform")
+- plan: goth has no facing (which way they face)
+- plan: goth stands inside the platform (sitting on it? give on="platform")
+- plan: rangy has no facing (which way they face)
+- plan: rangy stands inside the platform (sitting on it? give on="platform")
+- plan: swindon has no facing (which way they face)
+- plan: swindon stands inside the platform (sitting on it? give on="platform")
+- plan: waif has no facing (which way they face)
+- plan: waif stands inside the platform (sitting on it? give on="platform")
+- plan: camera 2b looks at nothing (give look=)
+- plan (rule 38): no SHOT_MARKS {shot: [people marks]}, so the front-on check cannot run
+- plan: no camera in the plan for shot(s) 3, 4a, 4b, 4c, 6, 7a, 7b, 7c, 7d, 7e
+- script/mouth: line 2 (milburn), 0.0-7.6 s into the recording: the voice says about 47 syllables, the script about 32 ("Those not in education, employment or training will be presented with a unique opportunity to serve their country."): words said that the script lacks?
+- script/mouth: line 8 (milburn), 0.1-2.8 s into the recording: the voice says about 12 syllables, the script about 7 ("The NEETs will form a unit."): words said that the script lacks?
+

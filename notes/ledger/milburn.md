@@ -55,3 +55,6 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-18 NHfhpT4Y (Milburn animatic update (chat 11)): 122 steps, history 244k at the end; other 72.4%, film-file search 11.4%, pictures 8.2%, tool search 6%, page.py 1%, renders 1%
 - 2026-11-18 1oCmSw6q (Milburn chat 12): 40 steps, history 125k at the end; other 69.1%, tool search 17%, film-file search 6.5%, renders 4.8%, routine 1.7%, pictures 0.8%
 - 2026-11-18 agnAgzD2 (Milburn chat 13): 117 steps, history 244k at the end; other 70.2%, film-file search 12.7%, tool search 7.6%, pictures 6.2%, renders 2.2%, page.py 1%
+
+## Checks (runs, faults, by kind)
+- quick check: 1 runs, 61 faults (SHOT CAST 21, plan 15, caption 14, house style 4, script/mouth 2, CAMERA FEEL 1, EFFECT SHAPES 1, READABILITY 1, clipcheck COULD NOT TEST 1, other 1)

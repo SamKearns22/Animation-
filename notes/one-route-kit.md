@@ -51,8 +51,18 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
   facetool 2, Protest Tiers 11) at five turns: PIXEL-IDENTICAL to before (hash per film). GTA's cast sheet and opener
   frames (2.0 s, 6.0 s): identical. Script: notes/proposals/one-route-kit/measure/refcast.py.
 - Count: GTA cast loads 0 old-film files (from 12), 0 steps swapped (from 15), also 0 after the cast is set up;
-  kit files loading a film file 36 (from 52); old films reached 40 (people.py's Blessed replicate, places, tools).
-- Not done yet (next chat): the other 36 kit files (most-used: burnham in tools, ed in places), old films reached,
+  kit files loading a film file 20 (from 52: every kit file now uses body.py, not burnham.py); old films reached 40
+  (people.py's Blessed replicate, places, tools).
+- Kit tests (full run vs an untouched copy): the same 7 fail as before (round_page, people_from_a_description,
+  places/moves (milburn's Y), outfit_every_view (passes alone), focus_front_heads, watcher). 2 NEW, named:
+  lopsided_invented_only and turned_heads_for_anyone test Ad-Vanced Notice's own man, Vance and driver through the live
+  kit; their heads were that film's hooks, which the kit no longer carries. Next chat moves both onto the reference
+  cast (an invented person drawn uneven; a turned head from a front design), or onto the film's frozen copy.
+- Also changed: milburn.py and protest_tiers_cast.py (finished, frozen) one line each (V = PPt.V), so kit tests that
+  draw them live still run; mouths.install and satire_style.install_circle_hands do nothing on body (built in).
+- Not done yet (next chat): the other 20 kit loads (kittests 19 films, places/blessed_sets, people.py replicate,
+  ai_tells_lab, checks, signoff/voices/satire_template (mossad_audio, burnham_film), subtitles, reel...), the 2 tests
+  above, the catalogue rows for body/ink/faces, old films reached,
   the reference-cast kit test (man, woman, short sleeves, jacket; hand, seam, body checks; people file
   story/kit-reference-people.txt), the load-map check, the before/after sheet of the steps (pictures are identical, so
   a table of moved/dropped steps with one reference row), Sam's Milburn-look test and the jury shoulder chips.
@@ -60,12 +70,12 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 ## Where things stand (20 Nov, one-route-kit chat 4, Opus high)
 - Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
 - Done: Change 2 part 1, the people steps (above): GTA's cast loads no old film and nothing overwrites a step.
-- Next: chat 5, Opus, high: Change 2 part 2 (the other 36 kit loads, reference-cast test, load-map check, sheet,
+- Next: chat 5, Opus, high: Change 2 part 2 (the other 20 kit loads, the 2 named tests, reference-cast test, load-map check, sheet,
   Milburn-look test, jury shoulder chips); then GTA restarts.
 - Needs Sam: nothing (Y given). Open: Y/N bookmark Shocking Behaviour (answered 'later').
 - Read: this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
 - Open rule requests: none found.
 - For Claude: body/ink/faces/views.TURNED_HEADS; refcast hashes in Change 2 results; kittests compared against an
-  untouched copy (scratch); freeze.py count --lower done at 0/0/36.
+  untouched copy (scratch); freeze.py count --lower done at 0/0/20/40.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 1.23% of 15%; forecast not yet planned (2026-11-20)

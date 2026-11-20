@@ -739,7 +739,24 @@
    "usd": 4.654
   }
  ],
- "checks": {},
+ "checks": {
+  "quick check": {
+   "runs": 1,
+   "faults": 61,
+   "kinds": {
+    "CAMERA FEEL": 1,
+    "EFFECT SHAPES": 1,
+    "READABILITY": 1,
+    "SHOT CAST": 21,
+    "caption": 14,
+    "clipcheck COULD NOT TEST": 1,
+    "house style": 4,
+    "other": 1,
+    "plan": 15,
+    "script/mouth": 2
+   }
+  }
+ },
  "critique": {
   "passes": [
    {
@@ -1066,6 +1083,10 @@
   {
    "at": "2026-11-18T08:18+00:00",
    "faults": 48
+  },
+  {
+   "at": "2026-11-20T12:25+00:00",
+   "faults": 61
   }
  ],
  "stages": [
