@@ -6,4 +6,4 @@
   - named 2026-11-19 20:36 | kittests | facehouse_whole_head fixed 19 Nov (re-held after Sam's 14 Nov shadow change, bisected); round_page is job 3's; places_from_a_description and moves_from_the_acting_list fail only because milburn.py uses the places and moves kits with no recorded Y from Sam (kit list), not a drawing fault: next tool chat records his Y or names it
 - 2026-11-20 03:29 | saver | the message saver missed 1 of Sam's messages in this chat (handover.py log); his words are not on GitHub
   - named 2026-11-20 | saver | one-route-kit chat 4: Sam's 11:38 words (Milburn-look target, jury shoulder chips) are saved in notes/ledger/sam/vqz9upsk.md and now carried in notes/one-route-kit.md's brief checklist
-- 2026-11-20 15:32 | finder | this chat hand-searched grand-theft-autism's code 3 times with no show call and the finder reminder never fired
+  - named 2026-11-20 15:33 | finder | chat 9's work was the shared people kit (hair, bangles, stubble, the tank's line), not the film's shots, so page.py show (made for notes on a shot) had nothing to find; the hand searches were in source/people*.py and views.py
