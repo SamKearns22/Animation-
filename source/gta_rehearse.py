@@ -151,7 +151,9 @@ TOWERS = _make_towers()
 CLOUDS = [(az, el, ln * 1.3, th * 2.6) for az, el, ln, th in
           [(-8, 12, 26, 0.9), (14, 19, 34, 1.1), (172, 13, 30, 1.0), (196, 22, 22, 0.8), (190, 8, 18, 0.6),
            (80, 15, 28, 1.0), (102, 25, 20, 0.8), (262, 11, 30, 1.0), (285, 20, 24, 0.9), (40, 9, 22, 0.7),
-           (140, 17, 26, 0.9), (225, 15, 28, 1.0), (320, 14, 26, 0.9), (-30, 28, 30, 1.0), (160, 30, 26, 0.9)]]
+           (140, 17, 26, 0.9), (225, 15, 28, 1.0), (320, 14, 26, 0.9), (-30, 28, 30, 1.0), (160, 30, 26, 0.9),
+           # shot 2's upper sky (its low camera looks up to ~60 degrees; chat 13 judged one streak too few): chat 14
+           (6, 38, 30, 1.1), (32, 45, 26, 1.0), (-16, 50, 24, 0.9), (20, 57, 22, 0.8)]]
 
 
 def backdrop(img, cam):
@@ -582,9 +584,12 @@ CAM4 = [  # (t, position, look-at, focal): the FIRST clip's keys (commit 2668817
     (0.00, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),      # shot 3's exact frame (CAM3): the cut is invisible
     (0.45, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
     (1.10, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
-    (1.70, (2.10, 1.85, 1.55), (-0.30, 1.10, -14.0), 1000),
-    (3.05, (2.10, 1.80, 1.45), (0.30, 1.15, -14.0), 1180),
-    (4.55, (2.10, 1.87, 1.40), (1.40, 1.05, -15.0), 1000),
+    # chat 14: the sill Jason sat outside the frame (head at x 1120-1290 of 1080) from 1.7 s; keys re-aimed by measuring
+    # his head and the lead cruiser through the camera: him on the right third, the cruiser and then the crash left
+    (1.70, (2.10, 1.85, 1.55), (-4.90, 1.10, -14.0), 1000),
+    (3.05, (2.10, 1.80, 1.45), (-6.20, 1.15, -14.0), 1180),
+    (3.60, (2.60, 1.85, 2.40), (-1.38, 1.10, -14.0), 850),      # pulled forward and wider: Jason and the crash together
+    (4.55, (2.60, 1.87, 2.40), (-1.06, 1.05, -14.0), 850),
     (5.15, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
     (5.75, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
     (6.20, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
@@ -711,7 +716,8 @@ def crowd(pp, t):
     near_fire = IMPACT is not None and abs(z0 - (IMPACT[1][1] + 2.6)) < 22 and side > 0 or (
         IMPACT is not None and abs(z0 - IMPACT[1][1]) < 14)
     ducks = abs(z0 - V4 * SHOTS[0]) < 45
-    t_stop = t_duck if ducks else 99.0
+    sees_fire = IMPACT is not None and abs(z0 - (IMPACT[1][1] + 2.6)) < 60     # chat 14: a man strolled past the fireball
+    t_stop = min(t_duck if ducks else 99.0, IMPACT[0] + 0.3 if sees_fire else 99.0)
     z = z0 + (dirz * WALK_V * (min(t, t_stop) + 3.2) if walker else 0.0)
     F = (0.0, 0.0, dirz) if walker else (-side * 1.0, 0.0, 0.0)
     head = None
@@ -720,8 +726,8 @@ def crowd(pp, t):
         _stride(j, ph, 120.0, 40.0, 70.0)
         j['bob'] = 6 * abs(math.sin(ph))
     duck = smooth((t - t_duck) / 0.22) if ducks else 0.0
-    t_run = (IMPACT[0] + 0.15 + 0.05 * (pp['i'] % 4)) if (IMPACT and near_fire and ducks) else 99.0
-    up = smooth((t - (IMPACT[0] + 0.5 if IMPACT else 99)) / 0.4) if (ducks and not near_fire) else 0.0
+    t_run = (IMPACT[0] + 0.15 + 0.05 * (pp['i'] % 4)) if (IMPACT and near_fire and (ducks or sees_fire)) else 99.0
+    up = smooth((t - (IMPACT[0] + 0.5 if IMPACT else 99)) / 0.4) if ((ducks or sees_fire) and not near_fire) else 0.0
     duck *= 1 - up
     if t > t_run:                                          # run from the fire, along the pavement, away from it
         away = 1.0 if z0 > IMPACT[1][1] + 2.6 else -1.0
@@ -745,7 +751,14 @@ def crowd(pp, t):
         if duck > 0.3:
             for sd, sg in (('L', -1), ('R', 1)):
                 V.arm_to(j, sd, (sg * 40.0, -150.0, 60.0), 'out', 'palm')
-    if IMPACT and t > IMPACT[0] + 0.2 and t < t_run and not walker or (IMPACT and up > 0.5):
+    if IMPACT and up > 0.0:                                # stood up again: the whole body turns to the fire (chat 14:
+        fz = IMPACT[1][1] + 2.6                            # a head alone cannot turn round to a fire behind them)
+        a0, a1 = math.atan2(F[0], F[2]), math.atan2(SHOP4 - x0, fz - z)
+        da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
+        a = a0 + da * up                                   # turning round over 0.4 s, never a flip
+        F = (math.sin(a), 0.0, math.cos(a))
+        head = None
+    elif IMPACT and t > IMPACT[0] + 0.2 and t < t_run and not walker:
         fz = IMPACT[1][1] + 2.6
         head = S._norm((SHOP4 - x0, 0.0, fz - z))           # staring at the fire
     elif ducks and t < t_duck and abs(z0 - tz) < 30:
@@ -940,20 +953,20 @@ def unlean(v, lean):
 # viewchecks.solid_faults; then drawn flat, his lower half rubbed out only by what of the car is in front of his hips,
 # his upper half only by what is in front of his chest (gta_cars.cover_masks).
 MPU_J = 1.85 / FIG_H              # metres per person unit (Jason is 1.85 m)
-SEAT_HIPS = (0.42, 0.24, 0.0)          # low in the seat: his head clears the roof (1.33) at 1.30
+SEAT_HIPS = (0.42, 0.18, 0.0)          # low in the seat: his head clears the roof rail (1.47), chat 14
 J4_KEYS = [  # (t, hips, facing (deg, + toward the car's right), lean (deg forward), ankle L, ankle R)
-    (0.00, (0.42, 0.24, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
-    (0.35, (0.42, 0.24, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
+    (0.00, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
+    (0.35, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
     (0.85, (0.62, 0.62, 0.00), 75, 30, (0.40, 0.33, 0.25), (0.55, 0.33, 0.30)),    # up and turned: head out first
     (1.40, (0.86, 1.03, -0.02), 125, 12, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),  # on the sill, turning back
     (1.70, (0.88, 1.03, -0.02), 140, 4, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),   # sat on the sill: legs inside
     (4.30, (0.88, 1.03, -0.02), 140, 4, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),
     (4.85, (0.86, 1.03, -0.02), 115, 14, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),
     (5.30, (0.62, 0.62, 0.00), 70, 28, (0.40, 0.33, 0.25), (0.55, 0.33, 0.30)),
-    (5.80, (0.42, 0.24, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
-    (6.20, (0.42, 0.24, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
+    (5.80, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
+    (6.20, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
 ]
-GRIP_J = (0.72, 1.36, 0.20)       # his free hand on the roof's front corner, over the open window
+GRIP_J = (0.72, 1.50, 0.20)       # his free hand on the roof's front corner, over the open window
 
 
 def jason4(t):
@@ -975,7 +988,7 @@ def jason4(t):
             rec = max(rec, 16.0 * math.exp(-w / 0.07))
         if 0 <= w < 1.0 / 12:
             flash = 1.0
-    out = smooth((hips[1] - 0.24) / 0.79)
+    out = smooth((hips[1] - 0.18) / 0.85)
     return dict(hips=hips, face=face, lean=lean - 0.25 * rec, al=al, ar=ar, aim=aim, rec=rec, flash=flash, out=out)
 
 
@@ -1019,12 +1032,15 @@ def jason_layer(img, cam, tul, t, lead, info=None):
     d = S._norm(S._add(d, (0.0, math.tan(math.radians(js['rec'])), 0.0)))   # the recoil kicks the arm up
     reach = (FG.UPPER + FG.FORE) * 0.93 * m
     aim_hand = fig(S._add(shR, S._mul(d, reach)))
-    chest = (14.0, 175.0, 62.0)                               # the gun hand flat on his chest
+    kk = smooth((js['out'] - 0.1) / 0.4)
+    chest = (120.0, 25.0, 80.0)        # seated: the gun hand on his chest, high enough to show over the dash (chat 14)
+    ready = (300.0, -70.0, 60.0)       # climbing out: elbow out, gun up beside his head, readable from behind too
+    chest = tuple(c + (r - c) * kk for c, r in zip(chest, ready))
     hand = tuple(c + (b - c) * w for c, b in zip(chest, _unleaned_pt(aim_hand, lean)))
     V.arm_to(j, 'R', hand, 'down', 'fist')         # 'in' folded the elbow across his chest mid-climb (chat 13)
     d_fig = unlean(to_fig(cam, n0, a, d), lean)
-    gun_dir = S._norm(tuple(c + (b - c) * w for c, b in zip((0.15, -1.0, 0.25), d_fig)))
-    kk = smooth((js['out'] - 0.1) / 0.4)
+    up = tuple(c + (r - c) * kk for c, r in zip((0.9, -1.0, 0.05), (0.15, -1.0, 0.0)))
+    gun_dir = S._norm(tuple(c + (b - c) * w for c, b in zip(up, d_fig)))
     if kk > 0:                                                # the free hand takes the roof's corner as he climbs
         g = _unleaned_pt(fig(tul.body_pt(GRIP_J)), lean)
         g = (min(g[0], -40.0), g[1], g[2])            # the roof corner stays on his left: never reached across his chest
@@ -1035,7 +1051,7 @@ def jason_layer(img, cam, tul, t, lead, info=None):
         if Lg > rmax:
             g = S._add(shl, S._mul(dg, rmax / Lg))
         V.arm_to(j, 'L', tuple(p + (q - p) * kk for p, q in zip(j['wrL'], g)), 'out', 'palm')
-    j['props'].append(PC.glock('R', flash=js['flash'], aim3=gun_dir, size=1.4))   # big enough to read on a phone
+    j['props'].append(PC.glock('R', flash=js['flash'], aim3=gun_dir, size=1.0 + 0.4 * js["out"]))   # big enough to read on a phone once out
     j['grip'] = {'R'}
     head = S._norm(S._sub(target, n0)) if w > 0.2 else F
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -1043,19 +1059,27 @@ def jason_layer(img, cam, tul, t, lead, info=None):
     V.person(lay, B.Cam(1.0), X, Y, kpx * m, sp, t, a, j, fig_yaw(cam, n0, head))
     # each half rubbed out only by the car between it and the lens; closed glass dims it like the others inside
     chest_w = fig_to_world(cam, n0, a, _leaned_pt((0.0, 220.0, 0.0), lean), m)
-    lo_s, lo_g, lo_used = G.cover_masks(tul, cam, hips, img.size)
+    shins = tul.body_pt(tuple((h + (a + b) / 2) / 2 for h, a, b in zip(js['hips'], js['al'], js['ar'])))
+    feet = tul.body_pt(tuple((a + b) / 2 for a, b in zip(js['al'], js['ar'])))
+    lo_s, lo_g, lo_used = G.cover_masks(tul, cam, shins, img.size)   # his legs (inside, behind the door), not his hips:
+    f_s, f_g, f_used = G.cover_masks(tul, cam, feet, img.size)       # knees and feet each tested (chat 14)
+    lo_s = Image.fromarray(np.maximum(np.asarray(lo_s), np.asarray(f_s)))
+    lo_g = Image.fromarray(np.maximum(np.asarray(lo_g), np.asarray(f_g)))
+    lo_used = lo_used + [u for u in f_used if u[0] not in {n for n, _ in lo_used}]
+
     up_s, up_g, up_used = G.cover_masks(tul, cam, chest_w, img.size)
     (_, hy), _ = cam.project(hips)
     split = int(hy * B.SS)
     rows = (np.arange(img.size[1]) > split)[:, None]
     sol = np.where(rows, np.asarray(lo_s), np.asarray(up_s)).astype(np.float32) / 255
     gl = np.where(rows, np.asarray(lo_g), np.asarray(up_g)).astype(np.float32) / 255
-    al = np.asarray(lay.split()[3], np.float32) * (1 - sol) * (1 - 0.15 * gl)
+    al = np.asarray(lay.split()[3], np.float32) * (1 - sol)
     sk = 1 - smooth(js['out'] / 0.12)              # sat in his seat: seen only through the glass, like the others (the
     if sk > 0:                                     # header rail hides his crown, never his head over the roof: chat 13)
         al *= (1 - sk) + sk * np.maximum(np.asarray(lo_g), np.asarray(up_g)).astype(np.float32) / 255
     lay.putalpha(Image.fromarray(al.astype(np.uint8)))
     img.alpha_composite(lay)
+    img.alpha_composite(G.glass_tint(img.size, al * gl * 0.15))   # glass dims him by a tint on top, never see-through
     if info is not None:
         pts = body_pts3(cam, n0, a, j, m, 'jason', lean=lean)
         pts.append(('gun hand', fig_to_world(cam, n0, a, _leaned_pt(j['wrR'], lean), m)))
@@ -1176,11 +1200,11 @@ def tulip_inside(t):
         if mo:
             her_over['mouth'] = mo
         fid = 0.012 * math.sin(t * 19.0)                 # the nervous fidget: hands working the spinner
-        her_neck = (0.0, 0.97, -0.80)
-        spin_at = (0.0 + fid, 0.86, -0.50)
-        her_hands = [('L', (-0.05 + fid, 0.84, -0.53), 'down', 'fist'), ('R', (0.05 + fid, 0.86, -0.50), 'down', 'fist')]
+        her_neck = (0.0, 0.91, -0.80)
+        spin_at = (0.0 + fid, 0.87, -0.50)       # held up nearer her face (she sits 6 cm lower, chat 14)
+        her_hands = [('L', (-0.05 + fid, 0.85, -0.53), 'down', 'fist'), ('R', (0.05 + fid, 0.87, -0.50), 'down', 'fist')]
         lu_over = dict(mood='stern', squint=0.45, frown=0.09, brow_up=-0.01)
-        lu_neck = (-0.42, 1.00, 0.05)
+        lu_neck = (-0.42, 0.94, 0.05)
         lu_hands = [('L', wheel_pt(rot, 160), 'out', 'fist'), ('R', wheel_pt(rot, 20), 'out', 'fist')]
         bench(lay, cam, car)
         order = sorted([('case', (0.4, 0.7, -0.85)), ('her', her_neck), ('lucia', lu_neck)],
@@ -1243,7 +1267,7 @@ def jet_lumps(t):
         p = np.array([hx, hz, 0.55]) + v * age + np.array([0.35 * age, 0, -0.5 * FX.G * age * age])   # the wind leans its top
         if p[2] < 0.15:
             continue
-        r = rng.uniform(0.16, 0.24) * (1.0 + 0.5 * min(1.0, age))
+        r = rng.uniform(0.26, 0.36) * (1.0 + 0.5 * min(1.0, age))   # fatter (chat 14: a thin jet read as a black stick)
         out.append((p, r, rng.rand() < 0.6, v + np.array([0, 0, -FX.G * age])))
     return out
 

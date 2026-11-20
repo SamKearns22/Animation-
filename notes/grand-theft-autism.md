@@ -322,6 +322,16 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - [ ] Sam (20 Nov, after chat 13): "Keep working on this until you can render the whole film shot sheet." (the chain
       carries on, chat after chat, until a sheet of every shot of the whole film, 1-8, can be rendered; his ask, so it
       is allowed before an animatic)
+- [ ] Sam (20 Nov 18:06, shot 3 as written): "On the left, Jason, looking hard towards us." "On the driver's side,
+      Lucia, her face screwed up in concentration as she jerks the wheel." "Framed between them, a 25 year old white
+      woman with auburn hair, a cream jumper with a unicorn barfi..." "She is playing nervously with a fidget spinner in
+      her hands." "A bulging suitcase full of cash is just visible beside her." "In the background, we see through the
+      back windshield glass the pursuing cop cars." "Autistic girl: it's very loud". On the camera: "Because you're
+      starting the camera in the wrong place." (18:21) "The camera is at the bonnet." "Looking at the seated occupants."
+      (18:23) "What would you call that shot?" (answered: a windscreen three-shot, camera on the bonnet looking in).
+- [ ] Sam (20 Nov ~18:30), note 1: "Y. Just follow your best suggestion for the next hour please, no stopping."
+      ("Just go" for an hour from ~18:30: no waiting for his Y/N; checks and hand-over still done; each message says
+      what was picked and why.)
 
 Beats for shot 4 (screenplay row 4, 6.2 s in the film's clip): 1) 0-0.5 s start on shot 3's windscreen three-shot,
 same position and lens; 2) 0.5-1.7 s camera swings left round the front corner to Jason's window while he rises and

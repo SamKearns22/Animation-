@@ -71,7 +71,7 @@ SPECS = {
     'tulip': dict(
         stations=[(-2.64, 0.93, 0.33, 0.90), (-2.48, 1.0, 0.26, 0.95), (2.40, 1.0, 0.26, 0.93), (2.64, 0.96, 0.30, 0.89)],
         half_w=0.985, bevel=0.10, top_in=0.92,
-        house=dict(base=(-1.98, 0.80), roof=(-1.12, 0.30), hw=(0.86, 0.70), y=(0.95, 1.33)),
+        house=dict(base=(-1.98, 0.80), roof=(-1.12, 0.30), hw=(0.86, 0.70), y=(0.95, 1.47)),  # roof +14 cm (Sam Y to ~10, chat 13; +4 more and the cast sat 6 cm lower, chat 14: heads clear the rail)
         wheels=dict(z=(1.44, -1.52), x=0.90, r=0.34, w=0.28),
         seats=[(-0.42, 0.10, 'driver'), (0.42, 0.10, 'front'), (0.0, -0.80, 'back')],
         body=TULIP_RED, house_col=VINYL),
@@ -915,7 +915,25 @@ def cover_masks(car, cam, ref, size):
         if abs(den) < 1e-9:
             return False
         u = float(n @ (a - c)) / den
-        return 0.0 < u < 0.999
+        if not 0.0 < u < 0.999:
+            return False
+        # and the sight line must pass THROUGH the face, not just its endless plane (chat 14: the roof rubbed out the
+        # arm and chest of Jason sat on the sill, outside the roof's edge): inside the polygon, 5 cm of slack
+        p = c + u * (r - c)
+        P = [np.asarray(q, float) for q in pts]
+        nn = n / (np.linalg.norm(n) + 1e-12)
+        sgn = 0.0
+        for i in range(len(P)):
+            e = P[(i + 1) % len(P)] - P[i]
+            le = np.linalg.norm(e)
+            if le < 1e-9:
+                continue
+            side = float(np.cross(e, p - P[i]) @ nn) / le          # signed distance from this edge, in metres
+            if sgn == 0.0 and abs(side) > 0.05:
+                sgn = 1.0 if side > 0 else -1.0
+            if sgn and side * sgn < -0.05:
+                return False
+        return True
 
     used = []
 
@@ -965,6 +983,13 @@ def _house_ids(decals):
     return [d for d in decals if getattr(d, 'house', False)]
 
 
+def glass_tint(size, alpha):
+    """A layer of the glass colour with the given alpha (a float array, 0-255): laid over what is behind a pane."""
+    t = Image.new('RGBA', size, GLASS + (0,))
+    t.putalpha(Image.fromarray(np.clip(alpha, 0, 255).astype(np.uint8)))
+    return t
+
+
 def _through_glass(img, cam, car, glass, inside):
     """What is seen through the windows: painted into its own layer, kept only inside the seen glass, a little
     dimmed by the glass, then a soft sky streak across each pane."""
@@ -1000,11 +1025,13 @@ def _through_glass(img, cam, car, glass, inside):
     if inside:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         inside(lay, cam, car)
-        a = lay.split()[3]
-        k = np.maximum(np.asarray(mask, np.float32) * 0.85, np.asarray(omask, np.float32)) / 255
-        a = Image.fromarray((np.asarray(a, np.float32) * k).astype(np.uint8))
-        lay.putalpha(a)
+        a = np.asarray(lay.split()[3], np.float32)
+        k = np.maximum(np.asarray(mask, np.float32), np.asarray(omask, np.float32)) / 255
+        lay.putalpha(Image.fromarray((a * k).astype(np.uint8)))
         img.alpha_composite(lay)
+        # the glass dims them with a tint laid OVER them: never by thinning them (chat 14: faces showed the seats through)
+        g = np.asarray(mask, np.float32) / 255 * (a / 255) * 0.15 * 255
+        img.alpha_composite(glass_tint(img.size, g))
     p = S.pen(img)
     for g in glass:                    # the sky streak and the pane's edge again on top
         _, pts, n = g[:3]
