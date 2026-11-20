@@ -136,7 +136,8 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - [x] Carried from chat 4 (03:30, a message from the sister chat): "Correction from Sam: ignore the "camera-move strength 7" reading in your prompt." "His note meant shot 7: no rear-view mirror close-up;" "the camera stays on all three characters, same three-shot as shot 8 (cruiser lights still visible in" the back window). "Notes updated on the main line (fetch it first)." "No question for Sam is open on this." (Done: shot 7 row in the plan.)
 - [x] Sam (03:37): "Just have a 5:30 reactivation check in case usage runs out whilst I sleep" (set in chat 4 as a backup).
 - [x] Cars built (chat 5): source/gta_cars.py, both critique hunts fixed; car sheet sent to Sam (20 Nov).
-- Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB). Shot 4 lean-out and crash: next chat.
+- Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
+  (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
 ## Where things stand (20 Nov, chat 5, Opus high)
 - Rules that bite next: 8 (shot 4's lean-out and crash rehearsed before any other movement), 41 (Jason's arms and gun hand leaning out), 89 (the clip critiqued).

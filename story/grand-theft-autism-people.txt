@@ -37,3 +37,23 @@ stud: 1.1
 rest smile: 0.15
 outfit: jumper 238 228 204, shirt 238 228 204, no tie, trousers 70 96 140, shoes 230 230 226
 extras: headphones, unicorn
+
+# walker: Vice City passers-by on the shop pavements (a crowd; shot 4 whips past them; Glimpses, rule 24)
+crowd: walker
+body: 1.74 m
+outfit: jumper 200 200 200, no tie, sleeves short
+mix: mixed
+seed: 900 + i
+jacket (3i+s): 236 120 140; 90 190 200; 250 220 120; 240 240 236; 120 200 150; 230 150 90; 60 90 150; 200 120 200
+trousers (i): 150 170 200; 236 230 214; 60 66 80; 196 170 130; 40 40 46
+
+# cop: the cruisers' drivers (a crowd; Glimpses through the police cars' windscreens): VCPD navy short sleeves
+crowd: cop
+body: 1.80 m, shoulders 156
+outfit: jumper 34 44 78, shirt 34 44 78, no tie, sleeves short, trousers 30 34 50
+mix: mixed
+seed: 960 + i
+hats: 0
+hair (i): crop; short; side; bald; crop
+hair colour (i): 40 32 28; 120 80 50; 30 26 24; 180 150 100
+skin (i): pale; brown; olive; deep; pink

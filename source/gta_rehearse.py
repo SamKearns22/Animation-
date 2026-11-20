@@ -27,6 +27,7 @@ sys.path.insert(0, HERE)
 import burnham as B              # noqa: E402
 import sets as S                 # noqa: E402
 import gta_cars as G             # noqa: E402
+import gta_cast as GC            # noqa: E402
 from ed import INK               # noqa: E402
 
 FPS = 12
@@ -316,6 +317,679 @@ def shot2(t):
     return img
 
 
+# ------------------------------------------------------------------------------------------------ shot 4
+# The lean-out and the crash (rule 8, rehearsal 2). The Tulip runs north up a straight shop street at chase speed; the
+# camera rides with it (its keys are in the car's own frame), starting on shot 3's windscreen three-shot, tracking
+# left (round the car's front-right corner) with Jason as he leans out of the passenger window until it hangs
+# outside beside him looking back down the street; four shots; the lead cruiser's windscreen crazes in front of its
+# driver, it slews right over the kerb, through a hydrant (a water jet) and into a shop front (a fireball); then the
+# camera and Jason go back in to shot 3's frame. Effects are flying_whales_fx's, drawn through FxCam.
+import figure as FG              # noqa: E402
+import flying_whales_fx as FX    # noqa: E402
+import people as PK              # noqa: E402
+import prepper_cast as PC        # noqa: E402
+import views as V                # noqa: E402
+
+SHOT4_LEN = 6.2
+V4 = 16.0                        # chase speed, m/s
+LANE4 = 5.0                      # the Tulip's lane: the outer northbound lane (kerb at x 7, shop fronts at x 10)
+KERB4, SHOP4 = 7.0, 10.0
+SHOTS = (1.95, 2.30, 2.62, 2.92)  # Jason's four shots: 1 sparks off the bonnet, 2-4 into the windscreen
+CRAZE = (0.0, 0.5, 0.8, 1.0)
+GAPS = (6.5, 15.0, 23.5)         # the cruisers behind the Tulip (m)
+FIG_H = 1128.0                   # a person's whole height in their own units (head top to soles)
+
+
+def smooth(u):
+    u = max(0.0, min(1.0, u))
+    return u * u * (3 - 2 * u)
+
+
+def tulip4(t):
+    z = V4 * t
+    x = LANE4 + 0.10 * math.sin(t * 1.7)
+    yaw = math.degrees(math.atan(0.10 * 1.7 * math.cos(t * 1.7) / V4))
+    return G.Car('tulip', pos=(x, z), yaw=yaw, roll=0.7 * math.sin(t * 2.3), pitch=0.5, spin=z / 0.34)
+
+
+# ---- the lead cruiser's path: chasing, hit, slewing over the kerb and the hydrant into the shop front
+def _lead_track():
+    dt = 1.0 / 240
+    th = SHOTS[-1]
+    rows, x, z, head, imp, hyd = [], None, None, 0.0, None, None
+    for i in range(int(SHOT4_LEN / dt) + 2):
+        t = i * dt
+        u = t - th
+        if u <= 0:
+            x = LANE4 - 0.15 + 0.3 * math.sin(t * 2.1 + 1.0)
+            z = V4 * t - GAPS[0]
+            head = math.degrees(math.atan(0.3 * 2.1 * math.cos(t * 2.1 + 1.0) / V4))
+            yaw, lift, crush = head, 0.0, 0.0
+        elif imp is None:
+            head = 34.0 * smooth(u / 0.45)
+            v = V4 * (1 - 0.25 * min(1.0, u / 0.8))
+            x += v * math.sin(math.radians(head)) * dt
+            z += v * math.cos(math.radians(head)) * dt
+            yaw = head + 30.0 * smooth(u / 0.5)                 # the back end swings out: it slews
+            lift = 0.0
+            fx = x + 2.55 * math.sin(math.radians(yaw))         # the front's middle
+            if hyd is None and fx > 8.1:
+                hyd = (t, (fx, z + 2.55 * math.cos(math.radians(yaw))))
+            cs = [(x + S.rot_y((sx * 0.97, 0, 2.58), yaw)[0]) for sx in (-1, 1)]
+            if max(cs) >= SHOP4 - 0.08:
+                imp = (t, (x, z), yaw)
+            crush = 0.0
+        else:
+            ti, (xi, zi), yi = imp
+            w = t - ti
+            k = smooth(w / 0.12)
+            x = xi + 0.28 * k * math.sin(math.radians(yi)) - 0.1 * smooth((w - 0.12) / 0.3) * math.sin(math.radians(yi))
+            z = zi + 0.28 * k * math.cos(math.radians(yi))
+            yaw, crush, lift = yi + 4.0 * k, k, 0.0
+        # the kerb: a jolt as the front wheels then the back wheels go up it
+        kerb = 0.0
+        if imp is None and u > 0:
+            for zc, amt in ((1.50, 1.0), (-1.40, 0.8)):
+                wx = x + S.rot_y((0.86, 0, zc), yaw)[0]
+                kerb += amt * max(0.0, 1 - abs(wx - KERB4) / 0.5)
+        rows.append(dict(t=t, pos=(x, z), yaw=yaw, crush=crush, kerb=kerb, u=u))
+    return rows, imp, hyd
+
+
+LEAD, IMPACT, HYDRANT = _lead_track()
+
+
+def lead_at(t):
+    r = LEAD[min(len(LEAD) - 1, max(0, int(round(t * 240))))]
+    shatter = 0.0
+    for ts, c in zip(SHOTS, CRAZE):
+        if t >= ts:
+            shatter = c
+    u = r['u']
+    roll = -7.0 * smooth(u / 0.4) * (1 - smooth((u - 0.6) / 0.3)) if u > 0 else 0.0
+    car = G.Car('cruiser', pos=r['pos'], yaw=r['yaw'], roll=roll + 3.0 * r['kerb'], pitch=2.5 * r['kerb'] - 3.0 * r['crush'],
+                steer=-22.0 * smooth(u / 0.3) if u > 0 else 0.0, spin=(V4 * min(t, IMPACT[0]) - GAPS[0]) / 0.37,
+                crush=r['crush'], shatter=shatter, lift=0.06 * r['kerb'])
+    car.u = u
+    return car
+
+
+def chaser_at(t, i):
+    """Cruisers 2 and 3: weaving behind; after the crash they swerve to the inner lane round it."""
+    gap = GAPS[i]
+    z = V4 * t - gap
+    sw = smooth((t - (SHOTS[-1] + 0.2 + 0.35 * i)) / 0.7)
+    x = LANE4 - 0.2 + 0.35 * math.sin(t * 1.9 + 2 * i) - 3.4 * sw
+    dsw = 3.4 * (smooth((t + 0.02 - (SHOTS[-1] + 0.2 + 0.35 * i)) / 0.7) - sw) / 0.02
+    yaw = math.degrees(math.atan((0.35 * 1.9 * math.cos(t * 1.9 + 2 * i) - dsw) / V4))
+    return G.Car('cruiser', pos=(x, z), yaw=yaw, roll=-0.08 * yaw, pitch=0.4, steer=yaw * 0.8, spin=z / 0.37)
+
+
+# ---- the camera: keys in the Tulip's own frame (x right, y up, z forward), eased from key to key
+CAM4 = [  # (t, position, look-at, focal)
+    (0.00, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
+    (0.45, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
+    (1.05, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
+    (1.65, (2.10, 1.85, 1.55), (-0.30, 1.10, -14.0), 1000),
+    (3.05, (2.10, 1.87, 1.45), (0.40, 1.10, -14.0), 1040),
+    (4.55, (2.10, 1.87, 1.40), (1.40, 1.05, -15.0), 1000),
+    (5.15, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
+    (5.75, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
+    (6.20, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
+]
+
+
+def _key(t):
+    for a, b in zip(CAM4, CAM4[1:]):
+        if a[0] <= t <= b[0]:
+            e = smooth((t - a[0]) / (b[0] - a[0]))
+            L = lambda p, q: tuple(x + (y - x) * e for x, y in zip(p, q))
+            return L(a[1], b[1]), L(a[2], b[2]), a[3] + (b[3] - a[3]) * e
+    return CAM4[-1][1], CAM4[-1][2], CAM4[-1][3]
+
+
+def shot4_cam(t, car):
+    pos, at, focal = _key(t)
+    rng = np.random.RandomState(int(t * 24))
+    shake = [rng.uniform(-2.5, 2.5), rng.uniform(-2.0, 2.0)]   # the road through the car
+    for ts in SHOTS:                                            # each shot kicks the frame
+        w = t - ts
+        if 0 <= w < 0.16:
+            shake[0] += 7 * (1 - w / 0.16) * (1 if int(ts * 100) % 2 else -1)
+            shake[1] += 9 * (1 - w / 0.16)
+    if IMPACT and 0 <= t - IMPACT[0] < 0.3:
+        shake[1] += 6 * (1 - (t - IMPACT[0]) / 0.3) * math.sin(t * 90)
+    return S.Cam(car.ground_pt(pos), car.ground_pt(at), focal, shake=tuple(shake))
+
+
+# ---- the shop street (a stand-in until the sets stage: plain pastel shop blocks, palms, passers-by)
+def _strip_blocks():
+    rng = np.random.RandomState(44)
+    out = []
+    cols = [(238, 196, 206), (190, 226, 214), (246, 226, 168), (200, 206, 236), (250, 204, 170), (214, 196, 236),
+            (236, 236, 222), (176, 220, 230)]
+    for side in (-1, 1):
+        z = -90.0
+        while z < 230:
+            w = rng.uniform(9, 17)
+            out.append(dict(side=side, z0=z, z1=z + w, h=rng.uniform(5.0, 10.5), col=cols[rng.randint(len(cols))],
+                            awn=cols[rng.randint(len(cols))], seed=int(rng.randint(1 << 20))))
+            z += w
+    return out
+
+
+BLOCKS4 = _strip_blocks()
+
+
+def _strip_people():
+    rng = np.random.RandomState(7)
+    out = []
+    for side in (-1, 1):
+        z = -60.0
+        while z < 200:
+            z += rng.uniform(3.0, 9.0)
+            out.append(dict(at=(side * rng.uniform(8.2, 9.5), z), face=rng.choice([0.0, 180.0, 90.0 * -side]),
+                            i=len(out), walk=rng.uniform(0, 1)))
+    return out
+
+
+PEOPLE4 = _strip_people()
+PALMS4 = [((s * 7.6), z) for k, (s, z) in enumerate((s, z) for z in np.arange(-70, 220, 21.0) for s in (-1, 1))
+          if (k + int(z / 21)) % 2 == 0]
+_SP = {}
+
+
+def _walker(i):
+    if i not in _SP:
+        cr = PK.crowds(GC.FILM)
+        _SP[i] = PK.crowd_person(cr['walker'], i)
+    return _SP[i]
+
+
+def _cop(i):
+    k = 'cop%d' % i
+    if k not in _SP:
+        _SP[k] = PK.crowd_person(PK.crowds(GC.FILM)['cop'], i)
+    return _SP[k]
+
+
+def strip_ground(img, cam, p):
+    sky(img)
+    zc = cam.pos[2]
+    z0, z1 = zc - 160, zc + 160
+    _quad(cam, p, [(-60, 0, z0), (60, 0, z0), (60, 0, z1), (-60, 0, z1)], ROAD, None, 0)
+    for s in (-1, 1):
+        _quad(cam, p, [(s * KERB4, 0.15, z0), (s * SHOP4, 0.15, z0), (s * SHOP4, 0.15, z1), (s * KERB4, 0.15, z1)], PAVE, None, 0)
+        _quad(cam, p, [(s * KERB4, 0, z0), (s * KERB4, 0.15, z0), (s * KERB4, 0.15, z1), (s * KERB4, 0, z1)], KERB, INK, 1.4)
+        _quad(cam, p, [(s * (KERB4 + 0.03), 0.152, z0), (s * (KERB4 + 0.25), 0.152, z0), (s * (KERB4 + 0.25), 0.152, z1),
+                       (s * (KERB4 + 0.03), 0.152, z1)], KERB, None, 0)
+        for z in np.arange(math.floor(z0 / 1.5) * 1.5, z1, 1.5):        # paving slabs
+            if abs(z - zc) < 70:
+                cam.line(p, [(s * (KERB4 + 0.25), 0.152, z), (s * SHOP4, 0.152, z)], (150, 130, 136), 1.0)
+    for dx in (-0.12, 0.12):
+        _quad(cam, p, [(dx - 0.05, 0.01, z0), (dx + 0.05, 0.01, z0), (dx + 0.05, 0.01, z1), (dx - 0.05, 0.01, z1)], (236, 196, 70), None, 0)
+    for z in np.arange(math.floor(z0 / 6) * 6, z1, 6.0):
+        for x in (-3.5, 3.5):
+            _quad(cam, p, [(x - 0.06, 0.01, z), (x + 0.06, 0.01, z), (x + 0.06, 0.01, z + 3), (x - 0.06, 0.01, z + 3)], (236, 232, 228), None, 0)
+
+
+def shop_block(img, cam, p, b, hole=None):
+    """One shop block on the street, its front on the road: shop glass and doors under a sign band and striped
+    awnings, two rows of windows above. hole: (z, t since impact) when the cruiser has burst into this front."""
+    s = b['side']
+    xf, xb = s * SHOP4, s * (SHOP4 + 14)
+    x0, x1 = min(xf, xb), max(xf, xb)
+    faces = S.obox(((x0 + x1) / 2, 0.15, (b['z0'] + b['z1']) / 2), (x1 - x0, b['h'], b['z1'] - b['z0']), 0, cols={'all': b['col']})
+    for f in faces:
+        if not f.seen(cam):
+            continue
+        cam.poly(p, f.pts, G.shade(b['col'], f.n, 0.25), INK, 2.2)
+        if abs(f.n[0]) < 0.5:
+            continue
+        xo = xf - s * 0.01
+        Q = lambda z0, z1, y0, y1: [(xo, y0, z0), (xo, y0, z1), (xo, y1, z1), (xo, y1, z0)]
+        n = max(1, int((b['z1'] - b['z0']) / 4.2))
+        wd = (b['z1'] - b['z0']) / n
+        cam.poly(p, Q(b['z0'] + 0.3, b['z1'] - 0.3, 3.0, 3.75), G.dk_(b['awn'], 0.55), INK, 1.4)      # the sign band
+        rng = np.random.RandomState(b['seed'])
+        for k in range(n):
+            za, zb = b['z0'] + k * wd + 0.35, b['z0'] + (k + 1) * wd - 0.35
+            door = rng.rand() < 0.35
+            cam.poly(p, Q(za, zb, 0.35, 2.75), (70, 84, 104), INK, 1.4)                                  # shop glass
+            if door:
+                zm = (za + zb) / 2
+                cam.poly(p, Q(zm - 0.55, zm + 0.55, 0.2, 2.5), (96, 70, 70), INK, 1.4)
+            cam.poly(p, Q(za + 0.2, za + 0.55, 0.5, 2.6), (120, 138, 156), None, 0)                    # a glint
+            for y in np.arange(4.6, b['h'] - 1.0, 2.6):
+                for zz in (za + 0.4, (za + zb) / 2 + 0.2):
+                    if zz + 1.1 < zb:
+                        cam.poly(p, Q(zz, zz + 1.1, y, y + 1.3), (96, 112, 132), INK, 1.2)
+            # the awning: a striped slope out over the pavement
+            ao = s * 1.1
+            stripes = 6
+            for q in range(stripes):
+                c = b['awn'] if q % 2 == 0 else (246, 240, 232)
+                zq0, zq1 = za + (zb - za) * q / stripes, za + (zb - za) * (q + 1) / stripes
+                cam.poly(p, [(xo, 3.0, zq0), (xo, 3.0, zq1), (xo - ao, 2.55, zq1), (xo - ao, 2.55, zq0)], c, None, 0)
+            cam.poly(p, [(xo, 3.0, za), (xo, 3.0, zb), (xo - ao, 2.55, zb), (xo - ao, 2.55, za)], None, INK, 1.4)
+        if hole is not None:                                    # the burst front: a black ragged hole, fire inside
+            zc, age = hole
+            rr = np.random.RandomState(3)
+            pts = [(xo - s * 0.02, 1.35 + 1.35 * math.sin(a) * rr.uniform(0.8, 1.05), zc + 1.9 * math.cos(a) * rr.uniform(0.8, 1.05))
+                   for a in np.linspace(0, 2 * math.pi, 15, endpoint=False)]
+            pts = [(x, max(0.18, y), z) for x, y, z in pts]
+            cam.poly(p, pts, (44, 30, 36), INK, 2.0)
+            cam.poly(p, [(x, 0.18 + (y - 0.18) * 0.45, zc + (z - zc) * 0.8) for x, y, z in pts], (150, 60, 40), None, 0)
+
+
+S_REF = 0.32                     # passers-by and cops are drawn once at this size per view, then scaled (rule 61: fast)
+_SPR = {}
+
+
+def person_cached(img, cam, sp, key, neck, facing, lean=0.0):
+    """A Glimpse (a passer-by, a cop through the glass): one drawing per (who, view, lean), scaled to the size the
+    camera wants. Drawn fresh when it is nearer (bigger) than the drawing."""
+    if cam.depth(neck) < 0.35:
+        return
+    (X, Y), k = cam.project(neck)
+    if X < -400 or X > 1480 or Y < -500 or Y > 2600:
+        return
+    s = k * sp.get('height', 1.75) / FIG_H
+    a = fig_yaw(cam, neck, facing)
+    if s > S_REF * 1.1:
+        j = V.standing(sp)
+        j['lean'] = lean
+        V.person(img, B.Cam(1.0), X, Y, s, sp, 0.0, a, j, None)
+        return
+    aq = int(round(a / 15.0)) * 15
+    ck = (key, aq, int(round(lean / 4.0)))
+    if ck not in _SPR:
+        lay = Image.new('RGBA', (1080 * B.SS, 1920 * B.SS), (0, 0, 0, 0))
+        j = V.standing(sp)
+        j['lean'] = ck[2] * 4.0
+        V.person(lay, B.Cam(1.0), 540, 700, S_REF, sp, 0.0, aq, j, None)
+        bb = lay.getbbox()
+        _SPR[ck] = (lay.crop(bb), (540 * B.SS - bb[0], 700 * B.SS - bb[1]))
+    spr, (ax, ay) = _SPR[ck]
+    f = s / S_REF
+    w, h = max(1, int(spr.width * f)), max(1, int(spr.height * f))
+    im = spr.resize((w, h), Image.LANCZOS)
+    img.paste(im, (int(X * B.SS - ax * f), int(Y * B.SS - ay * f)), im)
+
+
+def person_at(img, cam, sp, neck, facing, t=0.0, joints=None, head_dir=None):
+    """A people-kit person drawn into the 3D street: the neck base at `neck` (world), facing `facing` (world, level);
+    head_dir turns the head alone. Their size and facing come from the camera's ray to them (the perspective)."""
+    if cam.depth(neck) < 0.35:
+        return None
+    (X, Y), k = cam.project(neck)
+    if X < -400 or X > 1480 or Y < -500 or Y > 2600:
+        return None
+    s = k * sp.get('height', 1.75) / FIG_H
+    a = fig_yaw(cam, neck, facing)
+    hy = fig_yaw(cam, neck, head_dir) if head_dir is not None else None
+    return V.person(img, B.Cam(1.0), X, Y, s, sp, t, a, joints, hy)
+
+
+def _axes(cam, at):
+    L = S._norm((at[0] - cam.pos[0], 0.0, at[2] - cam.pos[2]))
+    right = S._norm(S._cross((0.0, 1.0, 0.0), L))
+    return right, (-L[0], 0.0, -L[2])
+
+
+def fig_yaw(cam, at, d):
+    right, toward = _axes(cam, at)
+    return math.degrees(math.atan2(S._dot(d, right), S._dot(d, toward)))
+
+
+def to_fig(cam, at, a, w):
+    """A world direction in a drawn person's own frame (x across, y down, z forward) for a person at `at` drawn at
+    yaw `a` (degrees): the inverse of views.project."""
+    right, toward = _axes(cam, at)
+    sx, tw = S._dot(w, right), S._dot(w, toward)
+    r = math.radians(a)
+    return (sx * math.cos(r) - tw * math.sin(r), -w[1], sx * math.sin(r) + tw * math.cos(r))
+
+
+def unlean(v, lean):
+    L = math.radians(lean)
+    x, y, z = v
+    return (x, y * math.cos(L) - z * math.sin(L), y * math.sin(L) + z * math.cos(L))
+
+
+# ---- Jason: seated (pistol flat on his chest), leaning out of the window, four shots, back in
+SEAT_J = (0.42, 1.02, 0.05)
+OUT_J = (1.24, 1.60, -0.15)       # sitting on the sill, his body outside the car beside the roof
+
+
+def jason4(t):
+    """Jason's state at t in the Tulip's frame: k (0 seated .. 1 out), neck, facing angle (degrees from forward,
+    + toward the car's right), lean, aim weight (0 gun on chest .. 1 arm out at the lead cruiser), recoil, flash."""
+    k = smooth((t - 0.45) / 0.95) * (1 - smooth((t - 4.65) / 0.95))
+    neck = tuple(a + (b - a) * k for a, b in zip(SEAT_J, OUT_J))
+    neck = (neck[0] - 0.12 * math.sin(math.pi * k), neck[1] + 0.05 * math.sin(math.pi * k), neck[2])   # up, then out
+    aim = smooth((t - 1.15) / 0.5) * (1 - smooth((t - 4.25) / 0.45))
+    rec, flash = 0.0, 0.0
+    for ts in SHOTS:
+        w = t - ts
+        if 0 <= w < 0.25:
+            rec = max(rec, 14.0 * math.exp(-w / 0.07))
+        if 0 <= w < 1.0 / 12:
+            flash = 1.0
+    return dict(k=k, neck=neck, face=140.0 * k, lean=6.0 * k, aim=aim, rec=rec, flash=flash)
+
+
+def jason_layer(img, cam, tul, t, lead):
+    js = jason4(t)
+    sp = GC.cast()['jason']
+    neck = tul.body_pt(js['neck'])
+    a_face = math.radians(tul.yaw + js['face'])
+    F = (math.sin(a_face), 0.0, math.cos(a_face))
+    target = lead.body_pt((-0.35, 1.25, 0.9))                 # the cruiser's windscreen in front of its driver
+    look = S._norm(S._sub(target, neck))
+    if cam.depth(neck) < 0.35:
+        return
+    yaw_fig = fig_yaw(cam, neck, F)
+    j = V.standing(sp)
+    j['lean'] = js['lean']
+    sh = j['shR']                   # the outboard arm once he has turned round (views' R)
+    # the aim: the shoulder-to-windscreen line in his own frame, kicked up by the recoil
+    d = to_fig(cam, neck, yaw_fig, look)
+    d = S._norm((d[0], d[1] - math.tan(math.radians(js['rec'])), d[2]))
+    d = S._norm(unlean(d, js['lean']))
+    reach = (FG.UPPER + FG.FORE) * 0.93
+    aim_hand = S._add(sh, S._mul(d, reach))
+    chest = (14.0, 175.0, 62.0)                             # the gun hand flat on his chest
+    w = js['aim']
+    hand = tuple(c + (a - c) * w for c, a in zip(chest, aim_hand))
+    if w > 0.35:
+        dd = S._sub(hand, sh)
+        L = math.sqrt(S._dot(dd, dd))
+        hand = S._add(sh, S._mul(dd, min(1.0, reach / max(L, 1e-6))))
+    V.arm_to(j, 'R', hand, 'down' if w > 0.5 else 'in', 'fist')
+    gun_dir = tuple(c + (a - c) * w for c, a in zip((0.15, -1.0, 0.25), d))
+    if js['k'] > 0.05:                                      # the free hand grips the roof's edge as he climbs out
+        grip = tul.body_pt((0.84, 1.36, 0.25))
+        rel = S._mul(S._sub(grip, neck), 1.0 / (sp['height'] / FIG_H))
+        g = unlean(to_fig(cam, neck, yaw_fig, rel), js['lean'])
+        shl = j['shL']
+        dg = S._sub(g, shl)
+        Lg = math.sqrt(S._dot(dg, dg))
+        rmax = (FG.UPPER + FG.FORE) * 0.95
+        if Lg > rmax:
+            g = S._add(shl, S._mul(dg, rmax / Lg))
+        rest = j['wrL']
+        kk = smooth((js['k'] - 0.05) / 0.3)
+        V.arm_to(j, 'L', tuple(a + (b - a) * kk for a, b in zip(rest, g)), 'out', 'palm')
+    j['props'].append(PC.glock('R', flash=js['flash'], aim3=S._norm(gun_dir)))
+    j['grip'] = {'R'}
+    head = look if w > 0.2 else F
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    (X, Y), kpx = cam.project(neck)
+    V.person(lay, B.Cam(1.0), X, Y, kpx * sp['height'] / FIG_H, sp, t, yaw_fig, j, fig_yaw(cam, neck, head))
+    # the car's lower body hides what of him is inside it (the door below the sill, the bonnet)
+    mask = Image.new('L', img.size, 0)
+    md = ImageDraw.Draw(mask)
+    hw, yt, zl = 1.0, 0.97, 2.66
+    boxes = [((1, 0, 0), [(hw, -3, -zl), (hw, yt, -zl), (hw, yt, zl), (hw, -3, zl)]),
+             ((-1, 0, 0), [(-hw, -3, -zl), (-hw, yt, -zl), (-hw, yt, zl), (-hw, -3, zl)]),
+             ((0, 0, 1), [(-hw, -3, zl), (hw, -3, zl), (hw, yt, zl), (-hw, yt, zl)]),
+             ((0, 0, -1), [(-hw, -3, -zl), (hw, -3, -zl), (hw, yt, -zl), (-hw, yt, -zl)]),
+             ((0, 1, 0), [(-hw, yt, 0.75), (hw, yt, 0.75), (hw, yt, zl), (-hw, yt, zl)]),      # the bonnet
+             ((0, 1, 0), [(-hw, yt, -zl), (hw, yt, -zl), (hw, yt, -1.95), (-hw, yt, -1.95)])]  # the boot
+    for n, pts in boxes:
+        w3 = [tul.body_pt(q) for q in pts]
+        nw = S._norm(tul.body_dir(n))
+        if S._dot(nw, S._sub(cam.pos, w3[0])) <= 0:
+            continue
+        q2 = cam.clip(w3)
+        if len(q2) > 2:
+            md.polygon([(x * B.SS, y * B.SS) for x, y in q2], fill=255)
+    a = np.asarray(lay.split()[3], np.uint8).copy()
+    a[np.asarray(mask) > 0] = 0
+    lay.putalpha(Image.fromarray(a))
+    img.alpha_composite(lay)
+
+
+def tulip_inside(t):
+    def paint(lay, cam, car):
+        c = GC.cast()
+        F = S._norm(car.body_dir((0, 0, 1)))
+        F = (F[0], 0.0, F[2])
+        seats = [('her', (0.0, 0.98, -0.80)), ('lucia', (-0.42, 1.02, 0.05))]
+        for who, at in sorted(seats, key=lambda s: -math.dist(car.body_pt(s[1]), cam.pos)):
+            person_at(lay, cam, c[who], car.body_pt(at), F, t)
+    return paint
+
+
+def cop_inside(i, t, lead=False):
+    def paint(lay, cam, car):
+        F = S._norm(car.body_dir((0, 0, 1)))
+        F = (F[0], 0.0, F[2])
+        j = V.standing(_cop(i))
+        if lead:                                          # flinches at each hit, thrown about in the slew
+            for ts in SHOTS[1:]:
+                if 0 <= t - ts < 0.3:
+                    j['lean'] = -14 * (1 - (t - ts) / 0.3)
+            u = getattr(car, 'u', 0)
+            if u > 0:
+                j['lean'] = 10 * math.sin(u * 9) * math.exp(-u)
+        person_cached(lay, cam, _cop(i), 'cop%d' % i, car.body_pt((-0.42, 1.12, 0.0)), F, j.get('lean', 0.0))
+    return paint
+
+
+# ---- effects through flying_whales_fx (metres, z up there): FxCam turns our y-up world into theirs
+class FxCam:
+    def __init__(self, cam):
+        self.cam, self.focal, self.size = cam, cam.focal * B.SS, (1080 * B.SS, 1920 * B.SS)
+
+    def screen(self, p):
+        q = (float(p[0]), float(p[2]), float(p[1]))
+        (x, y), _ = self.cam.project(q)
+        return np.array([x * B.SS, y * B.SS]), self.cam.depth(q)
+
+
+def wz(p):
+    return np.array([p[0], p[2], p[1]], float)
+
+
+def jet_lumps(t):
+    """The hydrant's water: a column thrown up from the broken stump, falling back round it."""
+    if HYDRANT is None or t < HYDRANT[0]:
+        return []
+    th, (hx, hz) = HYDRANT
+    out = []
+    for tb in np.arange(th, t, 1.0 / 60):
+        rng = np.random.RandomState(int(tb * 6000) % (1 << 30))
+        age = t - tb
+        v = np.array([rng.normal(0.4, 0.6), rng.normal(0.2, 0.6), rng.uniform(10.5, 13.0)])
+        ramp = min(1.0, (tb - th) / 0.15 + 0.4)
+        v[2] *= ramp
+        p = np.array([hx, hz, 0.55]) + v * age + np.array([1.2, 0, -0.5 * FX.G * age * age])   # the wind leans it
+        if p[2] < 0.15:
+            continue
+        r = rng.uniform(0.2, 0.34) * (1.0 + 0.6 * min(1.0, age))
+        out.append((p, r, rng.rand() < 0.6, v + np.array([0, 0, -FX.G * age])))
+    return out
+
+
+def glass_bits(t):
+    """Shop glass thrown out of the burst front (pale blue chunks that land on the pavement and stay)."""
+    if IMPACT is None or t < IMPACT[0]:
+        return []
+    ti, (xi, zi), yi = IMPACT
+    zc = zi + 2.6 * math.cos(math.radians(yi))
+    rng = np.random.RandomState(12)
+    out = []
+    for n in range(26):
+        p0 = np.array([SHOP4 - 0.05, zc + rng.uniform(-1.8, 1.8), rng.uniform(0.4, 2.6)])
+        v = np.array([-rng.uniform(2.0, 6.0), rng.uniform(-2.5, 2.5), rng.uniform(0.5, 4.5)])
+        age = t - ti
+        tl = (v[2] + math.sqrt(v[2] ** 2 + 2 * FX.G * (p0[2] - 0.16))) / FX.G     # when it lands
+        a = min(age, tl)
+        p = p0 + v * a + np.array([0, 0, -0.5 * FX.G * a * a])
+        spin = rng.uniform(-12, 12) * a
+        out.append((p, rng.uniform(0.06, 0.16), spin, int(rng.randint(1 << 20))))
+    return out
+
+
+def hit_bits(t, lead):
+    """Each shot: a spark and glass grit off the cruiser where it hits (the first off the bonnet)."""
+    out = []
+    for n, ts in enumerate(SHOTS):
+        age = t - ts
+        if not (0 <= age < 0.35):
+            continue
+        at = lead.body_pt((-0.5, 0.92, 1.6)) if n == 0 else lead.body_pt((-0.40, 1.28, 0.95))
+        rng = np.random.RandomState(50 + n)
+        for q in range(9):
+            v = np.array([rng.normal(0, 1.6), rng.normal(0, 1.6), rng.uniform(0.8, 3.0)])
+            p = wz(at) + v * age + np.array([0, 0, -0.5 * FX.G * age * age])
+            out.append((p, rng.uniform(0.025, 0.05), age * 9, int(rng.randint(1 << 20)), n == 0))
+        out.append(('flash', wz(at), age, n))
+    return out
+
+
+SMOKE4 = []
+if IMPACT:
+    _r = np.random.RandomState(31)
+    _ti, (_xi, _zi), _yi = IMPACT
+    _zc = _zi + 2.6 * math.cos(math.radians(_yi))
+    for _k in range(30):
+        SMOKE4.append(FX.Puff(_ti + 0.3 + _k * 0.1 + _r.uniform(0, 0.08),
+                              (SHOP4 - 0.6 + _r.uniform(-0.8, 0.4), _zc + _r.uniform(-1.8, 1.8), 1.6 + _r.uniform(0, 1.6)),
+                              (_r.uniform(-2.5, -0.5), _r.uniform(-1.5, 1.5), _r.uniform(0.0, 1.5)), _r.uniform(1.2, 2.6),
+                              _r.uniform(0.7, 1.1), _r.uniform(1.8, 2.8), 3.4, 'smoke', int(_r.randint(1 << 20)), tau=0.6))
+TYRE4 = []
+for _k, _tb in enumerate(np.arange(SHOTS[-1] + 0.1, (IMPACT[0] if IMPACT else SHOT4_LEN), 1.0 / 24)):
+    _c = lead_at(_tb)
+    for _sx in (-1, 1):
+        _p = _c.ground_pt((_sx * 0.86, 0.3, -1.4))
+        TYRE4.append(FX.Puff(_tb, wz(_p), (0, 0, 0.3), 0.5, 0.3, 1.0, 1.4, 'steam', 900 + 2 * _k + (_sx > 0)))
+
+
+def fx_items(cam, t, lead):
+    """The effects as (depth, draw) pairs, to sort in with the cars and people."""
+    fc = FxCam(cam)
+    items = []
+    lumps = jet_lumps(t)
+    if lumps:
+        d = cam.depth((HYDRANT[1][0], 2.0, HYDRANT[1][1]))
+        spr = FX.lumps_sprite(fc, lumps, d)
+        if spr:
+            items.append((d - 0.5, spr.paste))
+    if IMPACT and t >= IMPACT[0]:
+        ti, (xi, zi), yi = IMPACT
+        front = lead_at(ti).body_pt((0.0, 1.0, 2.4))
+        age = t - ti
+        d = cam.depth(front)
+        spr = FX.fireball_sprite(fc, wz(front) + np.array([0.0, 0.0, 0.4]), 2.4, age, 21, d)
+        if spr:
+            items.append((d - 3.0, spr.paste))                    # the fireball engulfs the car's front
+        if age > 0.35:
+            zc = zi + 2.6 * math.cos(math.radians(yi))
+            spr = FX.fire_sprite(fc, np.array([SHOP4 - 0.2, zc, 0.25]), np.array([0, 1.0, 0]), 1.6, 2.4, t, 5, d)
+            if spr:
+                items.append((d + 0.5, spr.paste))
+        spr = FX.puffs_sprite(fc, SMOKE4, t, d)
+        if spr:
+            items.append((d + 0.3, spr.paste))
+        gl = glass_bits(t)
+        its = [(FX.chunk_poly(fc, p, r, sp, sd), (196, 222, 236), None, None) for p, r, sp, sd in gl]
+        spr = FX.pieces_sprite([i for i in its if i[0]], d, ol=3.0)
+        if spr:
+            items.append((d - 1.0, spr.paste))
+    spr = FX.puffs_sprite(fc, TYRE4, t, 0)
+    if spr:
+        items.append((cam.depth((lead.pos[0], 0.5, lead.pos[1])) + 1.5, spr.paste))
+    hb = hit_bits(t, lead)
+    for h in hb:
+        if isinstance(h[0], str):
+            _, at, age, n = h
+            if age < 1.0 / 12:
+                s, dd = fc.screen(at)
+                r = fc.focal * 0.16 / max(dd, 1.0)
+                b = FX._blob(s[0], s[1], r, 70 + n, n=7)
+                spr = FX.shape_sprite([((255, 210, 90), [b]), ((255, 250, 220), [FX._scaled(b, 0.5)])], dd, ol=3.0)
+                if spr:
+                    items.append((dd - 0.6, spr.paste))
+    bits = [(FX.chunk_poly(fc, p, r, sp, sd), (255, 220, 120) if spark else (214, 232, 240), None, None)
+            for p, r, sp, sd, spark in (h for h in hb if not isinstance(h[0], str))]
+    spr = FX.pieces_sprite([b for b in bits if b[0]], 0, ol=2.5)
+    if spr:
+        items.append((cam.depth((lead.pos[0], 1.2, lead.pos[1])) - 2.0, spr.paste))
+    return items
+
+
+def shot4(t):
+    GC.cast()
+    B.SS = 2                     # the cast loads at 1; the street, the cars and the people all draw at 2 here
+    FX.SIZE = (1080 * B.SS, 1920 * B.SS)
+    img = B.canvas((240, 170, 170))
+    tul = tulip4(t)
+    lead = lead_at(t)
+    chasers = [chaser_at(t, 1), chaser_at(t, 2)]
+    cam = shot4_cam(t, tul)
+    p = S.pen(img)
+    strip_ground(img, cam, p)
+    hole = None
+    if IMPACT and t >= IMPACT[0]:
+        hole = (IMPACT[1][1] + 2.6 * math.cos(math.radians(IMPACT[2])), t - IMPACT[0])
+    blocks = [b for b in BLOCKS4 if -40 < (b['z0'] + b['z1']) / 2 - cam.pos[2] < 160 or True]
+    for b in sorted(blocks, key=lambda b: -math.dist(cam.pos, (b['side'] * (SHOP4 + 7), b['h'] / 2, (b['z0'] + b['z1']) / 2))):
+        if cam.depth((b['side'] * SHOP4, 1.0, b['z0'])) < -2 and cam.depth((b['side'] * SHOP4, 1.0, b['z1'])) < -2:
+            continue
+        if min(abs(b['z0'] - cam.pos[2]), abs(b['z1'] - cam.pos[2])) > 140 and not (b['z0'] < cam.pos[2] < b['z1']):
+            continue
+        h = hole if hole and b['side'] == 1 and b['z0'] < hole[0] < b['z1'] else None
+        shop_block(img, cam, p, b, h)
+    items = []
+    for pp in PEOPLE4:
+        x, z = pp['at']
+        d = cam.depth((x, 1.0, z))
+        if 0.6 < d < 70:
+            a = math.radians(pp['face'])
+            items.append((d, lambda im, pp=pp, x=x, z=z, a=a: person_cached(
+                im, cam, _walker(pp['i']), pp['i'], (x, 0.15 + _walker(pp['i']).get('height', 1.75) * 928 / FIG_H, z),
+                (math.sin(a), 0.0, math.cos(a)))))
+    for k, (x, z) in enumerate(PALMS4):
+        d = cam.depth((x, 3.0, z))
+        if 0.5 < d < 140:
+            items.append((d, lambda im, x=x, z=z, k=k: palm(im, cam, S.pen(im), (x, z), seed=k)))
+    if HYDRANT:
+        hx, hz = HYDRANT[1]
+        d = cam.depth((hx, 0.5, hz))
+        if t < HYDRANT[0]:
+            items.append((d, lambda im: hydrant(im, cam, S.pen(im), (hx, hz))))
+        else:
+            items.append((d, lambda im: hydrant_stump(im, cam, S.pen(im), (hx, hz))))
+    for c, ins in ((lead, cop_inside(0, t, True)), (chasers[0], cop_inside(1, t)), (chasers[1], cop_inside(2, t))):
+        d = cam.depth((c.pos[0], 0.8, c.pos[1]))
+        if d > 0.5:
+            items.append((d, lambda im, c=c, ins=ins: G.draw_car(im, cam, c, t=t, inside=ins)))
+    items += fx_items(cam, t, lead)
+    d_t = cam.depth((tul.pos[0], 0.8, tul.pos[1]))
+
+    def tulip_and_jason(im):
+        G.draw_car(im, cam, tul, t=t, inside=tulip_inside(t))
+        jason_layer(im, cam, tul, t, lead)
+    items.append((d_t, tulip_and_jason))
+    for d, fn in sorted(items, key=lambda e: -e[0]):
+        fn(img)
+    light_wash(img, cam, [lead] + chasers, t)
+    return img
+
+
+def hydrant_stump(img, cam, p, at, col=(232, 196, 60)):
+    x, z = at
+    for part in (S.cylinder((x, 0.15, z), 0.13, 0.22, dict(side=G.dk_(col, 0.9), top=(70, 60, 50))),
+                 S.cylinder((x, 0.15, z), 0.17, 0.08, dict(side=G.dk_(col, 0.8), top=col))):
+        for f in part:
+            if f.seen(cam):
+                f.draw(img, cam, p)
+
+
+
 def clip(frame_fn, length, out, frames_dir=None, fps=FPS):
     import tempfile
     d = frames_dir or tempfile.mkdtemp()
@@ -334,6 +1008,11 @@ if __name__ == '__main__':
     if len(a) >= 2 and a[0] == 'shot2':
         fd = a[a.index('--frames') + 1] if '--frames' in a else None
         clip(shot2, SHOT2_LEN, a[1], fd)
+    elif len(a) >= 2 and a[0] == 'shot4':
+        fd = a[a.index('--frames') + 1] if '--frames' in a else None
+        clip(shot4, SHOT4_LEN, a[1], fd)
+    elif len(a) >= 3 and a[0] == 'still4':
+        shot4(float(a[1])).convert('RGB').resize((1080, 1920), Image.LANCZOS).save(a[2], quality=90)
     elif len(a) >= 3 and a[0] == 'still2':
         shot2(float(a[1])).convert('RGB').resize((1080, 1920), Image.LANCZOS).save(a[2], quality=90)
     else:
