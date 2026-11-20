@@ -1,0 +1,63 @@
+== critique, round 2 pass 1 (2026-11-20): 8 fault(s), 2 can't tell
+-- look.md --
+1: Character sheet "Jason": man, dark hair, sleeveless cream top "LEONIDA" with cup logo, camo shorts; front, side, back, close-up. Neutral.
+2: Character sheet "Lucia": woman, long dark braid, grey tank top, blue jeans; front, side, back, close-up. Neutral.
+3: Character sheet "The autistic woman": red hair bun, cream sweater with unicorn and rainbow, headphones, blue jeans; four views. Calm.
+-- result.md --
+## Faults
+FAULT P1 A1 P4 [1]: Jason, all views - build is average and slim, not the heavy muscled build in the brief or the references; arms and torso are thin. Stubble in the bust is heavier than "very light fade", and cargo shorts have no cargo pockets and a ragged hem.
+FAULT P2 A1 P4 [2]: Lucia, all views - hair is a low, flat tail or braid down the back, not a full high ponytail (side and back views hang to mid-back). Brows are thin, not thick and low. Gold hoops are not visible in front or side views.
+FAULT P3 A2 [2]: Lucia, bust and front - reads as an androgynous narrow-chested figure, with square shoulders and a flat tank. It does not read clearly as a woman at phone size.
+FAULT P4 A1 P4 [3]: autistic woman, all views - the bun is small and neat, not a messy high bun. The hair has straight strands across the forehead that read as a fringe (brief: no fringe), and no loose curls by the face.
+FAULT P5 A1 [3]: autistic woman, front and bust - rainbow runs down to and over the jumper hem; the brief wants it to stay on the jumper above the hem.
+FAULT P6 A1 P13 [3]: autistic woman - no bangles or bracelets on either wrist in any view. The sleeves are not visibly slimmer.
+FAULT P7 P11 [3]: autistic woman, bust - head sits straight on the headphones with almost no neck. The head is large against the body in the full-length views.
+FAULT P8 A1 [3]: autistic woman, bust - the face is sallow and heavy-lidded, with small eyes and a flat mouth, so she is not "pretty and cool". Hazel eyes are not readable.
+CAN'T TELL P9 P14 [1-3]: eye pupil, iris and shine at the hardest glance - the bust eyes are too small on the sheet to see whether they stay inside the outline. A full-size face crop of each would show it.
+CAN'T TELL P10 P5 [1-3]: arms joining shoulders in the bust views - a full-size shoulder crop of each would show it.
+
+## Checked
+1-3
+
+## Cold look
+look.md called Jason's hair "dark hair" and did not note the missing muscle build. It called Lucia's hair "long dark braid", which is itself the fault (not a high ponytail). It did not name the bun as messy or the bangles as missing, and it named no gold hoops, so those were missed. It called all three "neutral" or "calm", which is the flat acting the brief might not want. At cold-look size the brief's details (stubble, hoops, freckles, bangles, rainbow above the hem) were not readable, which is a fault in itself.
+
+## Not on the list
+1. The characters look as if they are a different house style from the reference art: flat faces, no shading. suggested line: "Ours has the same likeness and mood as the reference, not only the same parts."
+2. Skin tones differ between the sheets and the references (Jason lighter, Lucia flatter). suggested line: "Skin and hair colour are matched to the reference swatch."
+3. Hand and foot sizes differ between the views. suggested line: "Feet and hands are the same size in every view of one person."
+4. The side views show a different outfit from the front, with Jason's vest looking unrelated. suggested line: "Front, side and back show the same garment, logo and trim."
+5. The bust crop is not framed as a windscreen would frame it. suggested line: "The bust is cropped to the windscreen frame, with its aspect ratio."
+
+== critique, round 2 pass 2 (2026-11-20): 9 fault(s), 2 can't tell
+-- look.md --
+1: Character sheet "Jason": man, dark hair, cream sleeveless top "LEONIDA", camo shorts; front, side, back, close-up. Neutral.
+2: Character sheet "Lucia": woman, dark hair in a low tail, grey tank top, blue jeans; four views. Neutral.
+3: Character sheet "The autistic woman": red hair bun, cream sweater with unicorn and rainbow, headphones, blue jeans; four views. Calm.
+-- result.md --
+## Faults
+FAULT A1 P4 A2 [1]: Jason, all views - the build is slim and average, not heavy and muscled like the references. The stubble in the bust is heavier than a very light fade. The shorts have no cargo pockets and have a ragged hem.
+FAULT A1 P4 A2 [2]: Lucia, all views - the hair is a low, flat tail down the back, not a full high ponytail (side and back views hang to mid-back). Brows are thin, not thick and low. No gold hoops are visible in front or side views.
+FAULT A1 A2 [2]: Lucia, front and bust - narrow chest, square shoulders and a flat tank make her read as androgynous at phone size, not clearly a woman.
+FAULT A1 P4 [3]: autistic woman, all views - the bun is small and neat, not messy and high. Straight strands across the forehead read as a fringe (brief: no fringe), and there are no loose curls by the face.
+FAULT A1 P13 [3]: autistic woman, front and bust - the rainbow runs down to and over the jumper hem; the brief wants it above the hem. The sleeves are not visibly slimmer.
+FAULT A1 P6 [3]: autistic woman - no bangles or bracelets on either wrist in any view.
+FAULT P11 [3]: autistic woman, bust - the head sits straight on the headphones with almost no neck. The head is large against the body in the full-length views.
+FAULT A1 P2 [3]: autistic woman, bust - the face is sallow, with small heavy-lidded eyes and a flat mouth, so she is not "pretty and cool". Hazel eyes are not readable.
+FAULT P2 [1-3]: all faces are neutral and blank; no feeling reads at phone size.
+CAN'T TELL P14 [1-3]: eyes at the hardest glance - the bust eyes are too small on the sheet to see whether they stay inside their outline. A full-size face crop of each would show it.
+CAN'T TELL P5 [1-3]: arms joining shoulders in the bust views - a full-size shoulder crop of each would show it.
+
+## Checked
+1-3
+
+## Cold look
+look.md named Jason only as "dark hair" and missed the missing muscle build, the stubble and the cargo pockets. It called Lucia's hair "a low tail", which is itself the fault (the brief wants a high ponytail). It did not name the messy bun, the loose curls, freckles or bangles for the autistic woman, nor any hoops or chain for Lucia, so these were missed. At cold-look size the brief's small details were not readable, which is a fault in itself.
+
+## Not on the list
+1. Ours looks flatter and less detailed than the references, with no shading. suggested line: "Ours has the same likeness and mood as the reference, not only the same parts."
+2. Skin tones differ from the references (Jason lighter). suggested line: "Skin and hair colour are matched to the reference."
+3. Hands and feet differ in size between views. suggested line: "Hands and feet are the same size in every view of one person."
+4. The side views show the garments differently from the front (Jason's vest looks unrelated). suggested line: "Front, side and back show the same garment, logo and trim."
+5. The bust is not visibly cropped to the windscreen frame. suggested line: "The bust is cropped to the windscreen frame's shape."
+
