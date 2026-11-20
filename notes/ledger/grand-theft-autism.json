@@ -6452,45 +6452,45 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.68,
+   "cost": 1.93,
    "src": "estimate",
    "sid": "session_01J1JB7WreJwtVPEEEsmQZRx",
-   "steps": 103,
-   "hist_k": 243,
+   "steps": 116,
+   "hist_k": 260,
    "kinds": {
-    "tool search": 22.2,
-    "whole-file .py read": 2.3,
-    "renders": 1.4,
-    "pictures": 8.7,
-    "other": 65.4
+    "tool search": 21.3,
+    "whole-file .py read": 2.0,
+    "renders": 1.2,
+    "pictures": 9.2,
+    "other": 66.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 52,
+    "tool search": 56,
     "whole-file .py read": 4,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
-    "pictures": 22,
-    "other": 23
+    "pictures": 25,
+    "other": 26
    },
    "split": {
-    "usd": 6.1443,
-    "total": 6.1443,
+    "usd": 7.061,
+    "total": 7.061,
     "floor_k": 82,
     "blocks": {
-     "start-up floor": 27.2,
-     "Claude's words": 26.8,
-     "carried history": 25.1,
-     "new writes": 20.9
+     "carried history": 27.5,
+     "start-up floor": 26.4,
+     "Claude's words": 25.9,
+     "new writes": 20.2
     },
     "origins": {
-     "Claude's words": 45.2,
-     "start-up floor": 27.2,
-     "result: tool search": 13.4,
-     "result: pictures": 10.5,
-     "messages and reminders": 2.1,
-     "result: other": 1.2,
+     "Claude's words": 45.1,
+     "start-up floor": 26.4,
+     "result: tool search": 13.0,
+     "result: pictures": 11.2,
+     "messages and reminders": 2.2,
+     "result: other": 1.5,
      "result: whole-file .py read": 0.3,
      "result: renders": 0.2
     },
@@ -6504,20 +6504,20 @@
      [
       "source/gta_rehearse.py",
       1.7,
-      0.0426
+      0.0466
      ],
      [
       "notes/grand-theft-autism.md",
       1.5,
-      0.038
+      0.0415
      ],
      [
       "source/gta_cars.py",
       0.6,
-      0.0148
+      0.0162
      ]
     ],
-    "base_pct": 24.7
+    "base_pct": 24.3
    },
    "search": {
     "show": 0,
@@ -6525,11 +6525,11 @@
      "no show": 0
     },
     "other": {
-     "other": 8,
+     "other": 10,
      "shared:handover.py": 2,
      "film notes": 5,
      "shared:gta_cars.py": 7,
-     "shared:gta_rehearse.py": 28,
+     "shared:gta_rehearse.py": 30,
      "shared:prepper_cast.py": 1,
      "guides": 1
     },
@@ -6950,6 +6950,38 @@
       "other",
       "",
       "S=/tmp/claude-0/-home-user-Animation-/315290f5-03d6-515c-bfaf-96b32bfbcc97/scrat",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git add -A notes/ && git commit -qm \"Grand Theft Au",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/315290f5-03d6-515c-bfaf-96b32bfbcc97/scrat",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "layers shot2",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "git add -A source/gta_rehearse.py notes/ && git commit -qm \"Grand Theft Autism c",
       ""
      ]
     ]
