@@ -72,6 +72,19 @@
       missions, their everyday outfits), file them in references/grand-theft-autism/, and match the cast to those
       before the cast sheet goes to him (the trailer portraits may differ).
 
+## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
+Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
+(rule 41 one outline), square shoulder corners, tops not tapering to the hips (figure-rig 2, hem 0.85), hands on the
+top's corners instead of clear of it, Lucia on a man's box body, her hands lost in the cuffs, slab shoes.
+Root cause: Claude saw the faults (the critic named sleeves, shoulders and Lucia's box body in BOTH hunts) and closed
+them as "house style" with `critique.py fixed --left`, then sent the sheet calling them deliberate. Nothing stops a
+named-not-fixed fault that is a rule break. Contributing: (1) the short sleeves reuse Midterminal's one-person patch
+(a rectangle laid over a bare arm), not a kit part built to rule 41, and were tuned by eye four times; (2) the checks
+that catch these (handcheck's seam and no-hand checks, rule 81/41) run only on film frames, never on a cast sheet,
+though rule 41 says the sheet draws arms as the film does; (3) the people kit has no woman's body, only narrower
+widths; (4) widths were set by eye (Jason 178) with no check against the rig's proportions; (5) speed: chat on amber,
+working unattended overnight. Proposals to follow through the proposal route (no change made yet).
+
 ## The plan (chat 2, 20 Nov; Opus high)
 Length: 45 spoken words at Sam's pace (3.3 a second) = about 14 s of speech; with the opening, the chase and the
 pauses the film runs about 33 s, plus the sign-off (about 36 s in all).
