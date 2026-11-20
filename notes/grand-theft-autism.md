@@ -475,6 +475,7 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   walkers' feet 4-7 px down for 1-3 frames (notes/checks/gta-chat16-bodies.txt: shared walker code in gta_rehearse.py,
   for the shot 4 rebuild); Lucia's hands feed the wheel there (never crossed). Whole-film shot sheet (shots 1-8, 36 s,
   source/gta_film.py) sent to Sam ~23:10: his standing order done. Chat 19 (Sonnet) renders a clip of shots 5-8.
+- Needs Sam: his notes on the shots 5-8 clip (sent 20 Nov ~23:30, 4.9 MB, 14 min to render, body check clean); chat 19 done, no chat opened, chain waits for his notes.
 - Needs Sam: nothing until the shot 4 pose sheet (with the build) or the clip.
 - Read: guides/job-packs.md Build; notes/proposals/big-body-moves.md Final version and learn.md; source/humancheck.py
   MAP; this file's shot 4 sections.
@@ -487,4 +488,4 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - Quick check on gta_rehearse (no SHOT_MARKS): it is the rehearsal file, not the film's module; the front-on check
   runs on the film file once the moves stage builds it (answered chat 17).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 32.69% of 15%; forecast 83.2% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 33.1% of 15%; forecast 83.6% (2026-11-20)
