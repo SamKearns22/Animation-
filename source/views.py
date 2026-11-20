@@ -1201,8 +1201,11 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     if view in ('three', 'side', 'three_back'):
         behind.add(arms_far[0])
     if view in ('back', 'three_back'):            # hands in front of him: hidden by his back (Sam); three-quarter back
-        behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10}   # too (Job G: palms together
-        #                                           showed a hand on his back)
+        behind |= {sd for sd in 'LR' if depth['wr' + sd] < depth['sh' + sd] - 10   # too (Job G: palms together
+                   and (view == 'three_back' or abs(j2['wr' + sd][0]) < abs(j2['sh' + sd][0]) * 0.75)}
+        #  showed a hand on his back). A hanging arm (the hand out beside the hips, not in front of the body) is not
+        #  hidden: drawn after the back, so it joins the shoulder with one outline as from the front (Sam, GTA chat 9:
+        #  "a line bisecting his arm and shoulder" from the back: the back's outline was drawn over the arm)
     if seated:
         (j.get('chair_draw') or chair)(p, view, j2, sp, under=True)
     for draw in j.get('pre', []):                 # set pieces beyond him in this view (sitting.py: the far side of a desk)

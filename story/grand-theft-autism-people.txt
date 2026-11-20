@@ -32,7 +32,7 @@ extras: tank
 # a rounder face, freckles, hazel eyes; no nose stud. Bangles on both wrists; jumper sleeves 25% slimmer.
 body: 1.64 m, shoulders 138, head 66 x 92, neck 0.85, hem 470, arms 22.5
 skin: 248 214 196 | hair: bun, 150 66 36, messy
-face: face_wide ++, jaw_wide +, chin_long --, eye_size 0.052, eye_open 0.075, nose_long --, lip_low +, lip_top -, brow_high -
+face: face_wide ++, jaw_wide +, chin_long --, eye_size 0.052, eye_open 0.075, nose_long --, nose_wide --, lip_low +, lip_top -, brow_high -
 eyes: 120 96 52 | lips: 214 128 126 | brows: 132 66 40, width 3.6, thick 0.038
 freckles
 lashes

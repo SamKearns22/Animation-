@@ -134,15 +134,17 @@ def _hair(img, p, f, L, sp, look):
             for k in range(3):
                 p.ell(ex, f.top + (0.3 + 0.08 * k) * H, 12, 9, hc, INK, 1.8)
     if st.get('knot') and fc.get('hair_messy'):                # chat 9 (her): the big messy curly bun on the crown,
-        x, y = bx - (0.0 if yaw >= 170 else 0.05 * H), f.top - 0.62 * H   # as the front shows it
-        rng = np.random.default_rng(31)
-        lumps = [(0, 0, 34), (-22, 8, 24), (22, 6, 24), (-10, -20, 22), (12, -22, 22)]
+        x, y = bx - (0.0 if yaw >= 170 else 0.04 * H), f.top - 0.4 * H   # sat on the crown, never above it
+        rng = np.random.default_rng(31)                                  # (Sam, chat 9: "floats off her head")
+        lumps = [(0, 0, 0.11), (-0.07, 0.03, 0.08), (0.07, 0.02, 0.08), (-0.03, -0.07, 0.07), (0.04, -0.07, 0.07),
+                 (0, 0.07, 0.09)]
         for dx, dy, r in lumps:
-            p.poly(oval(x + dx, y + dy, r + 2.4, r * 0.92 + 2.4, 18), INK, None)
+            p.poly(oval(x + dx * H, y + dy * H, r * H + 2.4, r * H * 0.92 + 2.4, 18), INK, None)
         for dx, dy, r in lumps:
-            p.poly(oval(x + dx, y + dy, r, r * 0.92, 18), hc, None)
+            p.poly(oval(x + dx * H, y + dy * H, r * H, r * H * 0.92, 18), hc, None)
         for _ in range(16):
-            p.line(oval(x + rng.uniform(-36, 36), y + rng.uniform(-36, 22), 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+            p.line(oval(x + rng.uniform(-0.12, 0.12) * H, y + rng.uniform(-0.12, 0.08) * H, 7, 6, 10, 0.3, math.pi * 1.6),
+                   dk(hc, 0.66), 1.3)
     elif st.get('knot'):                                       # new: a bun high on the back of the head
         x, y = bx - (0.0 if yaw >= 170 else 0.1 * H), f.top - 0.3 * H
         p.poly(curve(oval(x, y, 26, 22, 18), 2), hc, INK, 2.2)

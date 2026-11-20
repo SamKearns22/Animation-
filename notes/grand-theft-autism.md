@@ -128,6 +128,22 @@
       Handover check: the 28 NOT CARRIED lines were other chats' messages (the cross-session wrapper and the body
       notes), all carried already in this checklist and Diagnosis.
 
+- [x] Sam (20 Nov, chat 9, on the fixed cast sheet; "Overall, good"): (1) "When we look at him from the back, there is a
+      line bisecting his arm and shoulder that isn't there when we see our characters from the front. Our kits need
+      to be fixed so that this line isn't generated." (Jason, side/back: the arm's outline runs up across the shoulder;
+      a kit fix, every person.) (2) Lucia "has two necklines ... the neckline which is straight is also a kit problem
+      and should be removed so that the neck and the torso are one continuing part". "Her gold chain looks a bit small."
+      (3) Her headphones "drawn on in 2D ... need to be a 3D prop that is on the character around the neck" (right
+      from every angle). "The bob at the top floats off her head when we see her from the side." "A different nose,
+      one that's less wide." ("JSON" in his message = Jason, voice typing.)
+      Done chat 9: (1) why: from behind, views.person counted a hanging arm (wrist a little forward) as hidden
+      behind the back, so the arm was drawn first and the back's outline crossed it; now only a hand in front of
+      the body counts (three-quarter back unchanged); every film's back view joins arms as the front does
+      (kittest outfit_every_view passes). (2) the skin body's flat top across the neck's foot painted out
+      (vest_torso), the neck's sides run into the shoulders; Lucia's chain and pendant bolder. (3) headphones3d: one
+      3D prop projected in every view (people_parts; people.turned 'own' for each view); her turned bun sits on
+      the crown (people_turned, sizes in head units); nose_wide --.
+
 ## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
 Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
 (rule 41 one outline), square shoulder corners, tops not tapering to the hips (figure-rig 2, hem 0.85), hands on the
@@ -236,6 +252,7 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
   draws its people from the people file, so a re-render picks them up; check first), send both clips. Do not touch
   the opening (Sam's own chat).
 - Needs Sam: his Y/N on both clips (rule 8); whether losing her nose stud is fine.
+- Chat 9 also did Sam's second cast notes (back-view arm seam, Lucia's neck line and chain, her 3D headphones, bun, nose).
 - Read: guides/job-packs.md, Checks and animatic (the clip part); this file's brief checklist (last items).
 - Open rule requests: none.
 - For Claude: people.py hair 'buzz'/'messy', 'bangles'; people_parts.buzz_front, messy_bun/messy_front, unicorn bot;

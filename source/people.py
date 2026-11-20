@@ -694,7 +694,7 @@ def turned():
             'open collar': dict(back=None, own={'three': PP.collar_three}), 'flowers': dict(back=PP.flowers_torso),
             'crest': dict(back=None), 'skirt': dict(back=PP.skirt_torso), 'palms': dict(back=PP.palms_torso),
             'biker': dict(back=PP.biker_back), 'unicorn': dict(back=None),
-            'scoop': dict(back=None), 'headphones': dict(back=PP.headphones_back),
+            'scoop': dict(back=None), 'headphones': dict(back=PP.headphones_back, own={v: PP.headphones_view(v) for v in PP.PHONES_YAW}),
             'vest': dict(back=PP.vest_back, own={'side': PP.vest_side}),
             'tank': dict(back=PP.vest_back, own={'side': PP.vest_side})}
 

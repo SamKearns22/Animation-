@@ -915,22 +915,85 @@ def scoop_torso(img, p, sp, t):
 
 
 def headphones_torso(img, p, sp, t):
-    """Big over-ear headphones resting round the neck (her, GTA): a band behind the neck, a cup on each collarbone."""
-    c = sp.get('phones_c', (40, 40, 46))
-    cush = (70, 70, 78)
-    p.line(curve([(-50, 10), (-30, -6), (0, -10), (30, -6), (50, 10)], 3), INK, 9.0)
-    p.line(curve([(-50, 10), (-30, -6), (0, -10), (30, -6), (50, 10)], 3), c, 6.0)
-    for sgn in (-1, 1):
-        x, y = sgn * 44, 26
-        p.poly(oval(x, y, 21, 27, 18), cush, INK, 2.2)
-        p.poly(oval(x + sgn * 4, y, 16, 22, 16), c, INK, 1.8)
-        p.poly(oval(x + sgn * 4, y - 6, 6, 4, 10), sp.get('phones_hi', (150, 210, 200)), None)
+    """Big over-ear headphones resting round the neck (her, GTA), from the front: the 3D prop at yaw 0."""
+    headphones3d(p, sp, 0.0)
 
 
 def headphones_back(img, p, sp, t):
+    headphones3d(p, sp, 180.0)
+
+
+PHONES_YAW = {'three': 45.0, 'side': 90.0, 'three_back': 135.0, 'back': 180.0}
+
+
+def headphones_view(view):
+    return lambda img, p, sp, t: headphones3d(p, sp, PHONES_YAW[view])
+
+
+def headphones3d(p, sp, yaw):
+    """The headphones as one 3D prop round the neck (Sam, GTA chat 9: "drawn on in 2D ... it needs to be a 3D prop"):
+    a band round the back of the neck, a cup resting on each collarbone, its shell facing out. Every view projects the
+    same points (views.project, body units: neck base at 0, 0, y down, z towards the face); what the neck hides (the
+    band's back from the front, the far cup from the side) and what the body hides from behind (the cups) is left out."""
     c = sp.get('phones_c', (40, 40, 46))
-    p.line(curve([(-50, 6), (0, -2), (50, 6)], 3), INK, 9.0)
-    p.line(curve([(-50, 6), (0, -2), (50, 6)], 3), c, 6.0)
+    cush = (70, 70, 78)
+    a = math.radians(yaw)
+    view_v = (-math.sin(a), 0.0, math.cos(a))          # towards the camera, in the body's frame
+    behind_body = math.cos(a) < -0.2                    # seen from behind: the chest (and the cups on it) is hidden
+
+    def hidden(pt):
+        (sx, _), d = V.project(pt, yaw)
+        return (d < -6 and abs(sx) < 36) or (behind_body and pt[2] > 6 and abs(sx) < 70 and d < 0)
+
+    band = []
+    for k in range(41):                                  # cup to cup round the back of the neck
+        u = -0.45 + (math.pi + 0.9) * k / 40
+        band.append((50 * math.cos(u), 8 + 8 * math.sin(u), -34 * math.sin(u) + 6))   # low at the back: on the shoulders
+    cups = [(sgn, (sgn * 50.0, 22.0, 16.0)) for sgn in (-1, 1)]
+    cups.sort(key=lambda q: V.project(q[1], yaw)[1])    # the far cup first
+
+    def draw_band():
+        run = []
+        for pt in band + [None]:
+            if pt is not None and not hidden(pt):
+                run.append(V.project(pt, yaw)[0])
+                continue
+            if len(run) > 1:
+                p.line(curve(run, 2), INK, 9.0)
+                p.line(curve(run, 2), c, 6.0)
+            run = []
+
+    def draw_cup(sgn, ctr):
+        if hidden(ctr):
+            return
+        n = (sgn * 0.82, -0.25, 0.5)                     # the shell faces out and a little forward
+        nl = math.sqrt(sum(v * v for v in n))
+        n = tuple(v / nl for v in n)
+        facing = sum(x * y for x, y in zip(n, view_v))
+        (cx, cy), _ = V.project(ctr, yaw)
+        (tx, ty), _ = V.project(tuple(q + 10 * v for q, v in zip(ctr, n)), yaw)
+        ux, uy = tx - cx, ty - cy                        # the normal on screen: the cup is thin along it
+        ul = math.hypot(ux, uy) or 1.0
+        ux, uy = ux / ul, uy / ul
+        wx, wy = -uy, ux
+        f = max(0.38, abs(facing))
+
+        def ell(ox, oy, r1, r2):
+            return [(ox + ux * r1 * math.cos(q) + wx * r2 * math.sin(q), oy + uy * r1 * math.cos(q) + wy * r2 * math.sin(q))
+                    for q in (2 * math.pi * i / 20 for i in range(20))]
+        side = 1 if facing >= 0 else -1                  # the shell sits on the outer side of the cushion
+        off = 7 * math.sqrt(max(0.0, 1 - facing * facing))
+        p.poly(ell(cx - ux * off * side * 0.5, cy - uy * off * side * 0.5, 22 * f, 25), cush, INK, 2.2)
+        if facing >= 0:                                  # the shell, seen from outside
+            p.poly(ell(cx + ux * off * 0.5, cy + uy * off * 0.5, 17 * f, 20), c, INK, 1.8)
+            p.poly(ell(cx + ux * off * 0.5, cy + uy * off * 0.5 - 6, 5 * f, 4), sp.get('phones_hi', (150, 210, 200)), None)
+        else:                                            # the pad's hollow, seen from inside
+            p.poly(ell(cx, cy, 13 * f, 16), dk(cush, 0.6), None)
+
+    far, near = cups
+    draw_cup(*far)
+    draw_band()
+    draw_cup(*near)
 
 
 # ------------------------------------------------- GTA cast chat (20 Nov): sleeveless tops on a bare-armed body
@@ -986,6 +1049,11 @@ def vest_torso(img, p, sp, t):
     Lucia's tank a fine gold chain with a small pendant."""
     col = sp.get('vest_c', (236, 232, 220))
     kind = _vest_kind(sp)
+    # one neck and body (Sam, GTA chat 9: "the neckline which is straight is a kit problem"): the skin body's flat top
+    # edge across the neck's foot is painted out, the neck's sides run on down into the shoulders' line
+    p.poly([(-35, -40), (35, -40), (38.6, 5), (-38.6, 5)], sp['skin'], None)
+    for sgn in (-1, 1):
+        p.line(open_curve([(sgn * 33.8, -40), (sgn * 35.2, -16), (sgn * 38.5, -6), (sgn * 44, -3.6)], 3), INK, 2.6)
     p.poly(vest_outline(sp), col, INK, 2.4)
     if kind == 'vest':
         k = VEST['vest']
@@ -997,9 +1065,11 @@ def vest_torso(img, p, sp, t):
         p.line(open_curve([(-30, -2), (-20, 60), (0, 118), (20, 60), (30, -2)], 3), dk(silver, 0.7), 2.4)
         p.line(open_curve([(-30, -2), (-20, 60), (0, 118), (20, 60), (30, -2)], 3), silver, 1.4)
     else:
-        gold = (222, 180, 70)
-        p.line(open_curve([(-24, -2), (-14, 26), (0, 38), (14, 26), (24, -2)], 3), gold, 1.8)
-        p.poly(oval(0, 42, 3.6, 4.6, 8), gold, dk(gold, 0.6), 0.8)
+        gold = (222, 180, 70)                   # a bolder chain and pendant (Sam, chat 9: "a bit small")
+        p.line(open_curve([(-28, -2), (-17, 30), (0, 44), (17, 30), (28, -2)], 3), dk(gold, 0.6), 4.2)
+        p.line(open_curve([(-28, -2), (-17, 30), (0, 44), (17, 30), (28, -2)], 3), gold, 2.8)
+        p.poly(oval(0, 51, 6.4, 8.2, 12), gold, dk(gold, 0.55), 1.2)
+        p.poly(oval(-1.8, 48.5, 1.8, 2.2, 6), (252, 236, 170), None)
         for sgn in (-1, 1):                     # a soft line under the chest each side: reads as a woman at phone size
             p.line(open_curve([(sgn * 58, 122), (sgn * 40, 148), (sgn * 14, 146)], 3), dk(col, 0.7), 1.8)   # (critique, chat 9)
 
