@@ -1233,6 +1233,886 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "4487bc3c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.97,
+   "src": "estimate",
+   "sid": "session_01J1JB7YF3EaL3RQ8DGeE7tt",
+   "steps": 109,
+   "hist_k": 260,
+   "kinds": {
+    "tool search": 37.3,
+    "whole-file .py read": 0.5,
+    "other": 62.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 98,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 11
+   },
+   "split": {
+    "usd": 7.2068,
+    "total": 7.2068,
+    "floor_k": 82,
+    "blocks": {
+     "Claude's words": 28.1,
+     "carried history": 27.3,
+     "start-up floor": 24.9,
+     "new writes": 19.7
+    },
+    "origins": {
+     "Claude's words": 48.2,
+     "start-up floor": 24.9,
+     "result: tool search": 22.8,
+     "result: other": 2.1,
+     "messages and reminders": 1.9,
+     "result: whole-file .py read": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/freeze.py",
+      3.4,
+      0.0872
+     ],
+     [
+      "notes/one-route-kit.md",
+      1.7,
+      0.046
+     ],
+     [
+      "../story/grand-theft-autism-people.txt",
+      1.8,
+      0.0432
+     ],
+     [
+      "notes/logs/broken.md",
+      0.5,
+      0.0048
+     ]
+    ],
+    "base_pct": 22.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 87,
+     "shared:branches.py": 1,
+     "shared:handover.py": 1,
+     "film notes": 3,
+     "shared:freeze.py": 4,
+     "shared:body.py": 1,
+     "shared:watcher.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git log --oneline -1 && git fetch origin claude/create-c",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:branches.py",
+      "source/branches.py",
+      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1 | tail -1 && gi",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git push --dry-run origin HEAD:claude/create-claude-md-oe8z4g 2>&1 | tail -2; py",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/proposals/one-route-kit.md",
+      "Final version",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:freeze.py",
+      "guides/job-packs.md source/freeze.py",
+      "awk '/^## Build/{f=1;next} /^## /{f=0} f' guides/job-packs.md | head -60; python",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "def count\\|def _count\\|steps_swapped\\|kit_files_loading\\|old_films_reached\\|film",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "sed -n 255,400p source/freeze.py",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "sed -n 400,440p source/freeze.py; cd source && python3 -c \" import sys; sys.argv",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "burnham\\.\\w* *=\\|views\\.\\w* *=\\|setattr",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "",
+      "^\\s*\\(B\\|burnham\\|BU\\|V\\|views\\|_b\\|_B\\)\\.\\(head\\|torso\\|arm\\|legs\\|leg\\|face\\|b",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "sed -n 1,60p gta_cast.py; ls gta*.py",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "other",
+      "",
+      "^def ",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "B\\.[a-z_]+ *= |setattr\\(B|for .* in .*\\(.head.|B\\.__dict__",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "^def head\\|^def torso\\|^def hair_back\\|_prev\\|_orig\\|PREV\\|^_[a-z_]* = B\\.",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "",
+      "^def \\|^class \\|^[A-Z_]* = \\|^if __name__",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "../story/*people*.txt ../story/grand-theft-autism-people.txt",
+      "^def ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "sed -n 758,860p people.py",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "mkdir -p /tmp/claude-0/-home-user-Animation-/4487bc3c-a4c0-56a3-8445-a1a31a00d75",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "^def test_\\|^def kt_\\|TESTS *=",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "^def \\|^TESTS\\|^    '[a-z_]*':",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "scratchpad",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "^ *[0-9]*- ",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "^ *[0-9]*- ",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "V\\.arm\\b\\|_arm = \\|V\\.leg\\b\\|_leg = \\|V\\.person\\b\\|_person = \\|V\\.head_view\\b\\|V",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "^ *[0-9]*- ",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "^ *[0-9]*- ",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "from ed import [A-Za-z_, ]+|import ed( as [A-Z]+)?",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "^\\s*import ed\\b",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "^\\s*(from ed import|import ed)",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "ed\\.\\|ed's",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "\\bed\\.\\(HARD\\|soft\\)\\|import ed\\b",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "^class Cam",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' s = open('ink.py').read() pen = '\\n'.join(open('ed.py').read()",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "B\\.head\\b\\|B\\.mouth\\b\\|B\\.torso\\b\\|B\\.arm\\b\\|B\\.hair_back\\|B\\.gesture_hand\\|B\\.l",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "",
+      ",",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "import\\|^[A-Z]",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "other",
+      "",
+      "^\\s*$",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "other",
+      "",
+      "$k",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      "rolled",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "sed -n 38,51p burnham.py; pip list 2>/dev/null | grep -i flake; python3 /tmp/cla",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "sed -n 170,200p limbs.py; sed -n 300,340p limbs.py; sed -n 1,30p satire_style.py",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "other",
+      "",
+      "_limbs\\b\\|_limbs(",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "",
+      "import burnham\\|burnham",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "^\\s*(import|from) (burnham|midterminal_cast|ad_vanced_notice_cast|patriots[34]_c",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "other",
+      "",
+      "MEASURED\\|PUSH\\b\\|TUNE\\b",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "vance_mouth\\|Ground\\b\\|PP\\.AV\\.MC\\.\\w*\\|\\.Rot\\b\\|peepee",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "other",
+      "",
+      "\\bMC\\.[A-Za-z_]+|\\bAV\\.[A-Za-z_]+|\\bTC\\.[A-Za-z_]+",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' import re def seg(f, a, b): return '\\n'.join(open(f).read().sp",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      "sed -n 180,188p faces.py; sed -n 252,258p faces.py; sed -n 309,312p faces.py",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "sword\\|steel\\|armour\\|helmet\\|crown\\|pauldron\\|gorget\\|fur_mantle\\|bee(\\|FUR\\|ST",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "sed -n 784,836p burnham.py",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "",
+      "peepee.hand\\|PP.hand\\|\\.hand(",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "other",
+      "",
+      "The plain head's hair behind the head; a look with its own head draws its own (H",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "^# ---",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "^def arm\\|^def leg\\b\\|^def person\\|^def head_view\\|^def torso_view\\|^def _person",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "^\\s*ok\\b|^ok ",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "^FAIL",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:body.py",
+      "/tmp/claude-0/-home-user-Animation-/4487bc3c-a4c0-56a3-8445-a1a31a00d758/scratch",
+      "cd /home/user/Animation- && rm -rf /tmp/claude-0/-home-user-Animation-/4487bc3c-",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "",
+      "^!!",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "",
+      "^PASS",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && sed -n 328,346p views.py; sed -n 640,646p vie",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "",
+      "TH.install\\|turnhead.install\\|PT.install\\|install_turned\\|PF.install",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "",
+      "kit_turned\\|kit_famous\\|kit_house\\|\\.turnhead\\b",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "old(img\\|old = V.head_view\\|V.head_view = head_view\\|head_view.__dict__\\|head_vi",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' import re for f, key in [('turnhead.py', 'turnhead'), ('people",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "",
+      "^import math\\|^import",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "mouths.install\\|M.install()\\|install_circle_hands(B)\\|F.guard(B)\\|figure.guard",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "other",
+      "",
+      "^def mouth(p, sp",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "other",
+      "",
+      "import\\|^B\\|^V\\|AV\\|MC\\|P4",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "",
+      "^\\s*(import|from) (burnham|midterminal_cast|ad_vanced_notice_cast|patriots[34]_c",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "other",
+      "",
+      "midterminal_cast\\|FONT",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "other",
+      "",
+      "MC.TC\\|PP.AV\\|TC\\.HEADS\\|TC\\.TORSOS\\|TC = ",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "other",
+      "",
+      "imported but unused\\|shadowed by loop\\|is assigned to but never used\\|redefiniti",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "other",
+      "",
+      "undefined",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "other",
+      "",
+      "undefined",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "other",
+      "",
+      "sed -i 's/^B, V = PP.B, PP.V$/B, V = PP.B, PP.V/' /tmp/claude-0/-home-user-Anima",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "",
+      "python3 freeze.py count --list 2>&1 | tail -8",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -5 import sys, types, ast sys.path.insert(0, '.') ",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "other",
+      "",
+      "_old_hair_back",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "",
+      "Once: the hair behind famous heads, and their turned views''', '''def install():",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "other",
+      "",
+      "install_circle_hands",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' s = open('satire_style.py').read() old = \"\"\" 'point' hand gets",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4487bc3c-a4c0-56a3-8445-a1a31a00d758/scrat",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "usage\\|python3",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4487bc3c-a4c0-56a3-8445-a1a31a00d758/scrat",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "",
+      "^PASS",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "other",
+      "",
+      "^def ",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "other",
+      "",
+      "sed -n 531,572p handcheck.py; sed -n 649,700p kittests.py",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "",
+      "^def pose\\|^MODEL\\|^POSES\\|^def people_file",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "other",
+      "",
+      "PP\\.AV\\|AV\\.MC\\|\\.AV\\b",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "other",
+      "",
+      "PP\\.AV\\b\\|\\.AV\\.MC\\b",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "other",
+      "",
+      "PP\\.P4|PP\\.TH\\.|people_parts import [^#]*\\b(AV|P4)\\b|\\.MC\\.(TC|V|B|P4)\\b",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "other",
+      "../notes/logs/",
+      "message saver missed\\|def .*saver\\|NOT CARRIED",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:watcher.py",
+      "notes/ledger/sam/vqz9upsk.md notes/logs/broken.md source/watcher.py",
+      "best quality product",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "film notes",
+      "notes/logs/broken.md notes/ledger/sam/vqz9upsk.md notes/one-route-kit.md",
+      "python3 - <<'EOF' p = 'notes/logs/broken.md' s = open(p).read() line = \"- 2026-1",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation- && git checkout -b claude/one-route-kit-chat4 -q && git",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "other",
+      "",
+      "^FAIL\\|kittests:",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
