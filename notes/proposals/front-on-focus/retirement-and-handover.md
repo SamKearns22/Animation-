@@ -31,3 +31,11 @@ Not tools: park.py, duel.py are finished film files and stay (corrections.md).
 - Read: job pack "A tool job"; notes/proposals/front-on-focus.md "Final version"; this file's chat 2 record.
 - Open rule requests: none found.
 - For Claude: focus.py MAP; posecheck.turn check in preflight.turn_sample; kittests drawn_angle_every_film, focus_front_heads. Main-line branch claude/create-claude-md-oe8z4g; this chat's branch claude/front-on-chat2. Branches named, not merged: claude/aim-check-study-oe8z4g (another chat's), claude/blessed-c2-mics-wip (stays off). The shared proposal-route ledger has no estimate, so no cost line (named, not this job's to set); this chat about 2% of a week.
+
+
+## Chat 2b (20 Nov, Opus medium): option 1 shown
+- Built behind a switch that is OFF (focus.py: sp['focus_strong'], STRONG_K 1.7, STRONG_LOOK 1.4; `focus.py compare OUT.jpg`). Under it, when the far-side room limit holds the far eye/lens, the near side keeps today's spacing so glasses keep their shape (first try squashed Andy's glasses).
+- Sheet sent: stronger-sheet.jpg (0.2 MB). Kemi reads clearly; Andy less (his glasses hold the far side). kittest focus_front_heads passes.
+- Rule 30: first strength fell short because it was 85% of a real 15-degree turn, and at whole-body phone size the face is about 50 points wide, so the slides were a few points.
+- Named (handover start): the message saver missed 1 of Sam's messages in chat 2 ("Show 1", 20 Nov); its words are recorded here and in Where things stand.
+- Needs Sam: Y (keep stronger as the default) or N. On Y: make focus_strong the default (or set STRONG on), re-run kittest, push.
