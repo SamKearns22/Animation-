@@ -104,6 +104,23 @@ def frame_end(t):
 
 
 # ---------------------------------------------------------------------------------------------- the tests
+def _surface(j, sd, vd, lean, sp, key):
+    """The torso's surface depths (nearest, farthest) along the screen line through this joint, the torso an ellipse
+    (half-width the shoulders, half-depth 0.6 of them: torso_outline's side view); None where the joint's screen x
+    misses the torso (beside it: drawing order does not matter there)."""
+    import views as V
+    x, y, z = j[key + sd]
+    (px, _), _ = V.project(V.leaned((x, y, z), lean), vd)
+    a, b = sp.get('shoulders', 150) - 14, 0.6 * sp.get('shoulders', 150)
+    ds = []
+    for i in range(72):
+        th = math.radians(i * 5)
+        (qx, _), dq = V.project(V.leaned((a * math.cos(th), y, b * math.sin(th)), lean), vd)
+        if abs(qx - px) < 10:
+            ds.append(dq)
+    return (max(ds), min(ds)) if ds else None
+
+
 def _order(e):
     import views as V
     j, vd, depth, j2, behind = e['j'], e['view_deg'], e['depth'], e['j2'], e['behind']
@@ -112,6 +129,8 @@ def _order(e):
         return []
     lean = j.get('lean', 0.0)
     (cx, cy), dc = V.project(V.leaned((0.0, 225.0, 0.0), lean), vd)
+    (fx, _), _ = V.project(V.leaned((0.0, 225.0, 100.0), lean), vd)
+    face = 1 if fx > cx + 1 else -1 if fx < cx - 1 else 0     # the screen side his chest faces (0: back on)
     sp = e['sp']
     half = (sp.get('shoulders', 150) - 14) * (0.55 if view == 'side' else 0.8)
     hem = min(sp.get('bottom', V.JACKET), 470.0)
@@ -122,16 +141,25 @@ def _order(e):
         pts = [(el[0] + (wr[0] - el[0]) * u, el[1] + (wr[1] - el[1]) * u) for u in (0.0, 0.25, 0.5, 0.75, 1.0)]
         pts += [(sh[0] + (el[0] - sh[0]) * u, sh[1] + (el[1] - sh[1]) * u) for u in (0.5, 0.75)]
         over = sum(1 for x, y in pts if abs(x - cx) < half and 40 < y < hem)
-        if over < 2 and not (sd in behind and (wr[0] - cx) * (sh[0] - cx) < 0):
+        far_side = sd in behind and (wr[0] - cx) * (sh[0] - cx) < 0 and abs(wr[0] - cx) > half
+        # a hand just peeking past the side his chest faces is a far arm reaching forward (arms folded from
+        # three-quarter back); a long forearm out there with its shoulder hidden on the other side reads as an arm out
+        # of his back (GTA v4 1.67 s, Sam's notes 3, 6, 7: wrist 80 px past his outline)
+        far_side = far_side and not (face and (wr[0] - cx) * face > 0 and abs(wr[0] - cx) < half + 45)
+        if over < 2 and not far_side:
             continue
         if sd not in behind and de < dc - 40 and dw < dc - 40:
             out.append(('order', f'{sd} arm drawn over the body though its elbow and hand are behind it (an arm out '
                                  f'of the {"back" if "back" in view else "side"})'))
-        elif sd in behind and (wr[0] - cx) * (sh[0] - cx) < 0 and abs(wr[0] - cx) > half:
+        elif far_side:
             out.append(('order', f'{sd} arm hidden behind the body comes out on the far side, away from its own '
                                  f'shoulder (reads as an arm out of the {"back" if "back" in view else "body"})'))
-        elif sd in behind and de > dc + 70 and dw > dc + 70:
-            out.append(('order', f'{sd} arm hidden behind the body though its elbow and hand are in front of it'))
+        elif sd in behind and sd not in j.get('on_face', ()) and 'el' + sd in j:   # (on_face: redrawn over him)
+            # hidden, but the elbow and hand are nearer us than the torso's own near surface where they cross it
+            # (pose gallery, 20 Nov: a hanging near arm beside the body, nearer than its centre, is not in front)
+            sel, swr = _surface(j, sd, vd, lean, sp, 'el'), _surface(j, sd, vd, lean, sp, 'wr')
+            if sel and swr and de > sel[0] + 25 and dw > swr[0] + 25:
+                out.append(('order', f'{sd} arm hidden behind the body though its elbow and hand are in front of it'))
     return out
 
 
@@ -145,7 +173,8 @@ def _joined(e):
     if s * B.SS * 1150 < MIN_PX:
         return []
     j = dict(e['j'])
-    j['props'] = []
+    j['props'], j['pre'], j['mid'] = [], [], []   # held things and set pieces (a desk, a chair) are not his body
+    j['chair_draw'] = lambda *a, **k: None        # (Milburn: the PM's dispatch box read as a limb apart)
     W = int(1700 * s * B.SS) + 8
     H = int(1700 * s * B.SS) + 8
     lay = Image.new('RGBA', (W, H), (0, 0, 0, 0))

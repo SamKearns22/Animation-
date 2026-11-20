@@ -3503,6 +3503,85 @@ def finished_films_keep_their_bookmark():
     return not bad, '; '.join(bad[:6]) or f'{len(reg)} films bookmarked, count not risen'
 
 
+# ------------------------------------------------------------------------------------------------ the human-body check
+V4_COMMIT = '560d946d'                   # GTA shot 4 version 4 as Sam saw it (chat 16), with the check's hooks (chat 17)
+V4_TIMES = (1.67, 2.0)                 # the right arm out of his back (notes 3, 6, 7); the gun 27 degrees off (note 8)
+
+
+def _body_faults(fn, times):
+    import humancheck as HC
+    out = []
+    for t in times:
+        HC.frame_begin()
+        fn(t)
+        out += HC.frame_end(t)
+    return out
+
+
+@test
+def body_check_shot4_v4():
+    """GTA shot 4, version 4 (Sam, 20 Nov: "Utterly inhuman ... It really worries me that this wasn't caught"): the
+    body check (humancheck.py) must catch the right arm out of Jason's back and the gun drawn off its target in the
+    old version, pass shot 3 clean, and pass the pose gallery's three former false flags (arms folded and microphone
+    from three-quarter back, cup sipping three-quarter front)."""
+    import importlib.util
+    import subprocess
+    import tempfile
+    import posegallery as PG
+    import body as B
+    import views as V
+    import moves
+    src = subprocess.run(['git', 'show', f'{V4_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
+                         capture_output=True, text=True, check=True).stdout
+    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v4.py')
+    with open(tmp, 'w') as fh:
+        fh.write(src)
+    spec = importlib.util.spec_from_file_location('gta_rehearse_v4', tmp)
+    R = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(R)
+    old = _body_faults(R.shot4, V4_TIMES)
+    kinds = {k for _, who, k, _ in old if who == 'Jason'}
+    s3 = _body_faults(R.shot3, (0.5, 1.5, 2.5))
+    gal = {n: b for n, b, _ in PG.GALLERY}
+    import humancheck as HC
+    g = []
+    for name, deg in (('arms folded', 135), ('cup, sipping', 45), ('cup, sipping', -45), ('microphone', 135)):
+        build = gal.get(name) or (lambda sp, m=name: moves.pose(sp, 'mic'))
+        HC.frame_begin()
+        from PIL import Image
+        V.person(Image.new('RGBA', (1200, 1100)), B.Cam(1.0, 540, 960), 600, 330, 0.62, PG.MODEL, 0.0, float(deg),
+                 build(PG.MODEL))
+        g += HC.frame_end(0.0)
+    ok = {'order', 'aim'} <= kinds and not s3 and not g
+    return ok, f'version 4 Jason: {sorted(kinds)}; shot 3: {len(s3)} faults; gallery: {len(g)} false flags'
+
+
+@test
+def body_send_gate():
+    """Change 1 (Sam's Y, 20 Nov): a video made since the gate reaches Sam only with a body check record, clean or
+    named, and a fresh critique (rule 89); videos from before the gate pass as they are."""
+    import subprocess
+    import tempfile
+    import humancheck as HC
+    d = tempfile.mkdtemp()
+    v = os.path.join(d, 'clip.mp4')
+    open(v, 'wb').write(b'0')
+    no_rec = HC.send_faults(v)
+    w = HC.Writer('clip.mp4')
+    w.frame(0.0, [(0.0, 'Jason', 'order', 'R arm out of his back')])
+    HC._save(v, dict(video='clip.mp4', faults=w.lines(), named=False, critique=None, made=None))
+    faulty = HC.send_faults(v)
+    HC._save(v, dict(video='clip.mp4', faults=[], named=False, critique='notes/critiques/x', made=None))
+    clean = HC.send_faults(v)
+    os.utime(v, (HC.START - 3600, HC.START - 3600))
+    old = HC.send_faults(os.path.join(d, 'gone.mp4')) + HC.send_faults(v)
+    hook = subprocess.run([sys.executable, os.path.join(HERE, 'humancheck.py'), 'sendgate'], cwd=d, capture_output=True,
+                          text=True, input=json.dumps({'tool_input': {'files': ['clip.mp4']}, 'cwd': d}))
+    ok = len(no_rec) == 1 and len(faulty) == 2 and not clean and not old and hook.returncode == 0
+    return ok, f'no record {len(no_rec)}, faulty {len(faulty)}, clean {len(clean)}, old {len(old)}, hook {hook.returncode}'
+
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

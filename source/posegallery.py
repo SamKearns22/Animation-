@@ -235,7 +235,8 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
 ]
 
 
-AVOID = {   # views a pose fails the hand check in (rule 41): a film never uses it from there
+AVOID = {                  # views a pose fails the hand check in (rule 41): a film never uses it from there
+    'hands behind the back': {'behind': 'his hands sit inside the jacket: from behind no hands show (body check, 20 Nov)'},
     'hands on a table (drawn)': {'three-quarter back': 'the far hand is on the table beyond his body',
                                  'behind': 'both hands are on the table beyond his body'},
     'cup in hand': {'three-quarter back': 'the cup is in front of him, hidden by his back (Job J: prop hidden)',

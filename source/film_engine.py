@@ -132,6 +132,16 @@ def _frame(args):
     path = os.path.join(j['cache'], f'{i:04d}.png')
     rec = None
     recp = path[:-4] + '.rec.pkl'
+    bodyp = path[:-4] + '.body.json'              # the body check's faults for this drawing (humancheck, Change 1)
+    reuse = reuse and os.path.exists(bodyp)       # a frame cached before the body check is drawn again
+    import humancheck as HC
+    body = None
+    if reuse and os.path.exists(bodyp):
+        try:
+            with open(bodyp) as fh:
+                body = [tuple(f) for f in json.load(fh)]
+        except (OSError, ValueError):
+            reuse = False
     if j.get('check') and reuse and os.path.exists(path) and os.path.exists(recp):
         import pickle                             # chat 30 (Sam's Y): an unchanged frame and its check record, reused
         pic = Image.open(path)
@@ -139,7 +149,9 @@ def _frame(args):
         with open(recp, 'rb') as fh:
             rec = pickle.load(fh)
     elif j.get('check'):                          # rule 59 (13 Nov): the picture checks run on this one drawing
+        HC.frame_begin()
         pic, rec = _checked(t)
+        body = HC.frame_end(t)
         pic.save(path, compress_level=1)
         try:
             import pickle
@@ -152,15 +164,23 @@ def _frame(args):
         pic = Image.open(path)
         pic.load()
     else:
+        HC.frame_begin()
         pic = j['picture'](t)
+        body = HC.frame_end(t)
         pic.save(path, compress_level=1)
+    if body is None:                              # (drawn above, or its record lost): never a frame unchecked
+        HC.frame_begin()
+        j['picture'](t)
+        body = HC.frame_end(t)
+    with open(bodyp, 'w') as fh:
+        json.dump(body, fh)
     if j.get('look'):                             # rule S7: once, on the clean drawing (the cache stays clean)
         import house_look
         pic = house_look.apply(pic).convert(pic.mode)   # same kind of image back (captions want RGBA)
     im = j['overlay'](pic, t).convert('RGB').resize(j['size'], Image.LANCZOS)
     if j.get('stamp'):
         stamp(im, t, j['shot_of'](t))
-    return np.asarray(im).tobytes(), rec
+    return np.asarray(im).tobytes(), rec, body
 
 
 def stamp(im, t, shot):
@@ -249,6 +269,8 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     _JOB.update(fps=fps, ss=ss, size=size, cache=cache, picture=picture, overlay=overlay, set_ss=set_ss,
                 shot_of=shot_of, stamp=stamp, look=look, check=check)
     recs = []
+    import humancheck as HC
+    hc = HC.Writer(os.path.basename(out))         # the body check (Change 1): every person, every drawing
     hold = FILE_FPS // fps if look and fps == DRAW_FPS else 1          # rule S7: 12 drawings a second, each shown twice
     wav = out + '.wav'
     write_wav(wav, sound())
@@ -259,8 +281,9 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     try:
         with Pool(os.cpu_count()) as pool:
-            for k, (fr, rec) in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
+            for k, (fr, rec, body) in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
                 p.stdin.write(fr)
+                hc.frame((first + k) / fps, body)
                 if rec is not None:
                     recs.append(rec)
                 if k % 48 == 0:
@@ -297,6 +320,7 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                      f'The final still needs a render whose checks are clean or named.')
         stamp0 = read_pass(film) or {}
         write_pass(film, stamp0.get('faults', 0) + len(found), pictures=True)   # the final may now go ahead
+    hc.finish(out, named='--body-named' in sys.argv)   # an unnamed body fault: the video is held aside
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB)', flush=True)
 
 

@@ -225,6 +225,9 @@ def main():
             subprocess.run([sys.executable, os.path.join(HERE, 'hook_text.py'), step, hooked, hook] + extra, check=True)
             step = hooked
         subprocess.run([sys.executable, os.path.join(HERE, 'signoff.py'), 'add', step, dst, follow], check=True)
+    sys.path.insert(0, HERE)
+    import humancheck                              # the finished video carries its clean render's body check record
+    humancheck.copy_record(src, dst)               # (faults, names, critique): the send gate reads it (Change 1)
     if 'animatic' in os.path.basename(dst):        # rule P16 (Sam, 15 Nov): the latest animatic and its clean render are
         import shutil                              # kept on GitHub, so a fix to a few seconds is a splice, not a redraw
         keep = os.path.join(os.path.dirname(HERE), 'animations', 'drafts')

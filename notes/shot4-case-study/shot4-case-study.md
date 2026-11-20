@@ -350,3 +350,24 @@ Added after Sam's notes 1-16 (chat 16):
   chat 13, eesmqzrx = chat 14).
 - Rendering the pictures: scratchpad helpers `prender.py` (4 workers) and `sheet.py` are not in the repo; a still is
   about 21 s; the whole shots 3-4 clip about 10 minutes with 4 workers.
+
+## 11. Chat 18 (20 Nov, Opus high): the body check finished (Change 1)
+
+- The pose gallery under the check (900 drawings): 5 flags, sorted. 3 were the check's own mistakes, fixed: (a) a hand
+  just peeking past the side the chest faces (arms folded seen three-quarter from behind) is a far arm reaching
+  forward, not an arm out of the back; a long forearm out there with its shoulder hidden still is (version 4, 1.67 s:
+  the wrist 80 px past his outline); (b) "hidden though in front" now measures against the torso's own surface, not
+  its centre (a near arm hanging beside the body is beside it, not in front: microphone pose); (c) a hand redrawn over
+  the face (cup sipping) is not hidden. 2 were real: "hands behind the back" seen from behind shows no hands (they sit
+  inside the jacket); listed in the gallery's avoid list for that view (not used by any film from there).
+- Shot 4's 3 crowd flags (a ducking passer-by, hands over the head, seen three-quarter from behind): the hands just
+  peek past his front: correct drawing, cleared by fix (a).
+- Two posted films: Halo No-No 42 drawings, 0 flags. Milburn 71 drawings: 22 flags, all the Prime Minister at the
+  dispatch box: the check's lone redraw kept the furniture (set pieces) and counted the desk as a limb apart. Fixed:
+  0 flags.
+- Version 4 still fails (right arm out of his back at 1.67 and 2.0 s, gun 27 degrees off at 2.0 s); shot 3 passes.
+  Both are now a kit test, with the send gate's own test.
+- Installed: the renderer runs the check on every drawing (each cached frame keeps its record); finish.py carries the
+  record to the finished video; a video made since 22:00 on 20 Nov reaches Sam only with a clean or named body record
+  and a fresh critique (the send gate). Lesson (draft 18): a check's "lone" redraw must remove everything that is not
+  the body (props AND set pieces), or furniture reads as limbs.
