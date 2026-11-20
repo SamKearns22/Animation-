@@ -2,7 +2,7 @@ BODY: shot4 0.00 s: tulip and jason: wrL is inside the tulip's floor (a body thr
 BODY: shot4 0.33 s: person 115: feet 4 px below the ground (sunk into it) (1 frame)
 BODY: shot4 0.33 s: person 117: feet 6 px below the ground (sunk into it) (1 frame)
 BODY: shot4 0.50 s: person 118: feet 8 px below the ground (sunk into it) (2 frames)
-BODY: shot4 0.83 s: tulip and jason: shR is rubbed out by the tulip's hright but is in front of it (3 frames)
+BODY: shot4 1.00 s: tulip and jason: neck is rubbed out by the tulip's hright but is in front of it (2 frames)
 BODY: shot4 1.17 s: person 119: feet 4 px below the ground (sunk into it) (2 frames)
 BODY: shot4 1.17 s: tulip and jason: elL is inside the tulip's roof (a body through a solid) (3 frames)
 BODY: shot4 2.50 s: person 45: drawn 70 px tall where the camera makes them 88 (7 frames)
