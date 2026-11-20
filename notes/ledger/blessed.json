@@ -704,5 +704,15 @@
  "budget_answers": [
   "Sam, 13 Nov: Y, continue (at 48.63% of 19%); stops every 10% over from now"
  ],
- "finished": "2026-11-13 (Sam: \"mark Blessed as finished\")"
+ "finished": "2026-11-13 (Sam: \"mark Blessed as finished\")",
+ "quick_checks": [
+  {
+   "at": "2026-11-20T13:03+00:00",
+   "faults": 3
+  },
+  {
+   "at": "2026-11-20T13:04+00:00",
+   "faults": 3
+  }
+ ]
 }
