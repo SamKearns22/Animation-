@@ -1,0 +1,6 @@
+BODY: shot5 0.00 s: person 130: feet 4 px below the ground (sunk into it) (2 frames)
+BODY: shot5 0.00 s: person 131: feet 6 px below the ground (sunk into it) (1 frame)
+BODY: shot5 0.50 s: person 132: feet 4 px below the ground (sunk into it) (1 frame)
+BODY: shot6 2.00 s: person b 1076: feet 7 px below the ground (sunk into it) (1 frame)
+BODY: shot6 2.75 s: person b 1079: feet 7 px below the ground (sunk into it) (3 frames)
+(chat 16: layers clean on shots 5-8 every 2nd frame; bodies every 3rd frame: only these, the walkers' stride code in gta_rehearse.py, shot 4's file, named not fixed while chat 17 rebuilds shot 4)
