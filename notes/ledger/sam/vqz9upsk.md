@@ -3,3 +3,6 @@
 ### 2026-11-20T11:38:02
 Please inform me once the kit produces our best quality product (represented by the models in Milburn, aside from the 3/4 pose tools that have been produced since then) so I can continue with the film.
 
+### 2026-11-20T11:38:04
+I don't like those tiny chips in the shoulders that are throughout the jury picture.
+
