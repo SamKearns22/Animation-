@@ -1,0 +1,12 @@
+{
+ "film": "satire_template",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "quick_checks": [
+  {
+   "at": "2026-11-20T12:45+00:00",
+   "faults": 2
+  }
+ ]
+}

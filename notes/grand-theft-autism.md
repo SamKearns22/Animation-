@@ -11,11 +11,22 @@
       fixed, the R-h joint now stops short of the a (it had been widened to the h's stem and reached the a).
       Clip sent; waiting. Every later shot moves 3 s later (plan table times are the old ones until the board).
 - [ ] Sam (20 Nov): "It will fade to car radio volume by the time the first dialogue line is spoken and continue."
-      = the song runs under the WHOLE film (from 36.48 s of the song, unbroken): full volume to the cut (6.5 s), down
+      = the song runs under the WHOLE film (from 36.98 s of the song since the dark lead-in went, unbroken): full volume to the cut (6.5 s), down
       to car-radio level (x0.16, about -16 dB) over 0.6 s so it is there before line 1, then stays at that level to
       the sign-off. Volume only, no radio-speaker filter (my pick). Heard in a clip (opening + shot 2 rehearsal, sent
       20 Nov). If line 1 starts earlier than 0.6 s into shot 2 once recorded, the dip moves with it. Brief Q4 ("no
       music?") is answered by this.
+- [x] Sam (20 Nov): "Why did the fire hydrant/cars clipping pass?" Shot 2 drew the hydrant with the street, under every
+      car; no check ran on practice clips. Fixed (depth order) and re-sent. Sam: "'Anything against anything' should be
+      the rule across all clipping checks"; "1" = skip the proposal route. Rule 17 rewritten; viewchecks.layer_faults
+      built (catches the old shot 2 on all four cars, clean on the fix); hide_faults widened to every scene thing;
+      kittests: the same 5 old failures before and after (none from this change).
+      `gta_rehearse.py layers shot2 shot4`: clean (6.5 min); the old shot 2 put back is caught (4 faults). Three false
+      flags fixed on the way (the car's own inside in front, look-alike cruisers, see-through windscreen glass).
+- [x] Sam (20 Nov): "No darkness at the beginning of the clip: immediate logo wipe in so that people don't swipe away."
+      Done: the wipe starts on frame 1 with the top third already showing (fast start, gentle settle, 0-1.5 s); the song
+      now starts at 36.98 s (the chorus's first hit on frame 1); the rest of the timing unchanged (6.5 s in all). The
+      song under the whole film starts at 36.98 s too. Clip sent (opening into the swerve).
 - [x] Lettering matched to the reference (g's tail, R joined into the h of "theft"). Sam: "great".
 - [ ] Screenplay draft 1 received (19 Nov). NOT final: no estimate until Sam confirms it.
 - [ ] Sam's answers (19 Nov): 1 Y, the opening's pink sunset light for the whole chase; 2 Y, subtitle "brought";

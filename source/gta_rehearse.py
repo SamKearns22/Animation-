@@ -278,6 +278,7 @@ def light_wash(img, cam, cars, t):
 # ------------------------------------------------------------------------------------------------ shot 2
 SHOT2_LEN = 4.1
 LEAD2 = 0.3                # an empty beat of junction before the car screams out
+HYD2 = (-8.5, 16.8)          # shot 2's hydrant: on the pavement, clear of the car's way in
 COPS = (LEAD2 + 0.85, LEAD2 + 1.45, LEAD2 + 2.05)
 
 
@@ -296,7 +297,7 @@ def shot2_cam(t, cars):
     return S.Cam(pos, at, 640, shake=tuple(shake))
 
 
-def shot2(t):
+def shot2(t, record=None):
     img = B.canvas((240, 170, 170))
     states = [('tulip', car_at(t, LEAD2, 1.0))] + [('cruiser', car_at(t, d, 0.55)) for d in COPS]
     cars = []
@@ -307,16 +308,22 @@ def shot2(t):
     cam = shot2_cam(t, cars)
     p = S.pen(img)
     street(img, cam, p)
-    hydrant(img, cam, p, (-8.5, 16.8))         # on the pavement, clear of the car's way in
     tyre_smoke(img, cam, t, LEAD2)
     live = [c for c in cars if c.st['s'] > -12 and cam.depth((c.pos[0], 1, c.pos[1])) > 0.5]
-    for c in sorted(live, key=lambda c: -math.dist(cam.pos, (c.pos[0], 0.8, c.pos[1]))):
-        G.draw_car(img, cam, c, t=t)
+    items = [('getaway car' if c is cars[0] else f'cruiser {cars.index(c)}', math.dist(cam.pos, (c.pos[0], 0.8, c.pos[1])),
+              lambda im, c=c: G.draw_car(im, cam, c, t=t)) for c in live]
+    items.append(('hydrant', math.dist(cam.pos, (HYD2[0], 0.4, HYD2[1])), lambda im: hydrant(im, cam, S.pen(im), HYD2)))
+    for _, _, draw in sorted(items, key=lambda it: -it[1]):   # far to near: the hydrant hides the cars behind it (rule 17)
+        draw(img)
+    if record is not None:                   # the depth check sees the picture before the lights' tint goes over it
+        record += items
     block(img, cam, p, BLOCKS[0])             # the near block hides the cross street until the car rounds it
-    light_wash(img, cam, cars[1:], t)
+    if record is None:
+        light_wash(img, cam, cars[1:], t)
     return img
 
 
+OVERLAP_OK2 = []                 # rule 17: shot 2 has no meant overlaps
 # ------------------------------------------------------------------------------------------------ shot 4
 # The lean-out and the crash (rule 8, rehearsal 2). The Tulip runs north up a straight shop street at chase speed; the
 # camera rides with it (its keys are in the car's own frame), starting on shot 3's windscreen three-shot, tracking
@@ -923,7 +930,12 @@ def fx_items(cam, t, lead):
     return items
 
 
-def shot4(t):
+OVERLAP_OK4 = [('effect', 'lead cruiser', 'the fireball, flames and smoke engulf the crashed car on purpose (Sam: not hidden in smoke, but on fire)'),
+               ('effect', 'hydrant', 'the water jet rises out of the broken hydrant'),
+               ('effect', 'effect', 'smoke and fire overlap each other, both see-through')]
+
+
+def shot4(t, record=None):
     GC.cast()
     B.SS = 2                     # the cast loads at 1; the street, the cars and the people all draw at 2 here
     FX.SIZE = (1080 * B.SS, 1920 * B.SS)
@@ -951,34 +963,36 @@ def shot4(t):
         d = cam.depth((x, 1.0, z))
         if 0.2 < d < 70:
             a = math.radians(pp['face'])
-            items.append((d, lambda im, pp=pp, x=x, z=z, a=a: person_cached(
+            items.append((f"person {pp['i']}", d, lambda im, pp=pp, x=x, z=z, a=a: person_cached(
                 im, cam, _walker(pp['i']), pp['i'], (x, 0.15 + _walker(pp['i']).get('height', 1.75) * 928 / FIG_H, z),
                 (math.sin(a), 0.0, math.cos(a)))))
     for k, (x, z) in enumerate(PALMS4):
         d = cam.depth((x, 3.0, z))
         if 0.5 < d < 140:
             if True:                 # always drawn: a palm slides in from the frame's edge, never pops in mid-frame
-                items.append((d, lambda im, x=x, z=z, k=k: palm(im, cam, S.pen(im), (x, z), seed=k)))
+                items.append((f'palm {k}', d, lambda im, x=x, z=z, k=k: palm(im, cam, S.pen(im), (x, z), seed=k)))
     if HYDRANT:
         hx, hz = HYDRANT[1]
         d = cam.depth((hx, 0.5, hz))
         if t < HYDRANT[0]:
-            items.append((d, lambda im: hydrant(im, cam, S.pen(im), (hx, hz))))
+            items.append(('hydrant', d, lambda im: hydrant(im, cam, S.pen(im), (hx, hz))))
         else:
-            items.append((d, lambda im: hydrant_stump(im, cam, S.pen(im), (hx, hz))))
-    for c, ins in ((lead, cop_inside(0, t, True)), (chasers[0], cop_inside(1, t)), (chasers[1], cop_inside(2, t))):
+            items.append(('hydrant', d, lambda im: hydrant_stump(im, cam, S.pen(im), (hx, hz))))
+    for k, (c, ins) in enumerate(((lead, cop_inside(0, t, True)), (chasers[0], cop_inside(1, t)), (chasers[1], cop_inside(2, t)))):
         d = cam.depth((c.pos[0], 0.8, c.pos[1]))
         if d > 0.5:
-            items.append((d, lambda im, c=c, ins=ins: G.draw_car(im, cam, c, t=t, inside=ins)))
-    items += fx_items(cam, t, lead)
+            items.append(('lead cruiser' if k == 0 else f'cruiser {k + 1}', d, lambda im, c=c, ins=ins: G.draw_car(im, cam, c, t=t, inside=ins)))
+    items += [(f'effect {k}', d, fn) for k, (d, fn) in enumerate(fx_items(cam, t, lead))]
     d_t = cam.depth((tul.pos[0], 0.8, tul.pos[1]))
 
     def tulip_and_jason(im):
         G.draw_car(im, cam, tul, t=t, inside=tulip_inside(t))
         jason_layer(im, cam, tul, t, lead)
-    items.append((d_t, tulip_and_jason))
-    for d, fn in sorted(items, key=lambda e: -e[0]):
+    items.append(('tulip and jason', d_t, tulip_and_jason))
+    for _, d, fn in sorted(items, key=lambda e: -e[1]):
         fn(img)
+    if record is not None:
+        record += items
     light_wash(img, cam, [lead] + chasers, t)
     return img
 
@@ -1014,6 +1028,14 @@ if __name__ == '__main__':
     elif len(a) >= 2 and a[0] == 'shot4':
         fd = a[a.index('--frames') + 1] if '--frames' in a else None
         clip(shot4, SHOT4_LEN, a[1], fd)
+    elif len(a) >= 2 and a[0] == 'layers':           # rule 17: anything against anything, every listed thing
+        import viewchecks as VC
+        shots = {'shot2': (shot2, SHOT2_LEN, OVERLAP_OK2), 'shot4': (shot4, SHOT4_LEN, OVERLAP_OK4)}
+        faults = []
+        for nm in a[1:]:
+            fn, ln, ok = shots[nm]
+            faults += VC.layer_faults(fn, ln, allowed=ok, label=nm)
+        print('\n'.join(faults) or 'layers: clean')
     elif len(a) >= 3 and a[0] == 'still4':
         shot4(float(a[1])).convert('RGB').resize((1080, 1920), Image.LANCZOS).save(a[2], quality=90)
     elif len(a) >= 3 and a[0] == 'still2':

@@ -39,3 +39,6 @@ Do we need to run this through proposal route or is your new rule sufficient
 ### 2026-11-20T11:29:30
 1
 
+### 2026-11-20T12:59:00
+No darkness at the beginning of the clip: immediate logon wipe in so that people don't swipe away
+

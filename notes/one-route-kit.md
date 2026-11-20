@@ -100,5 +100,7 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 - Read (for part 2): this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
 - Open rule requests: none found.
 - For Claude: body.front_outline/ink_units/ARM_TOP; limbs._fillet(body_big, pb); measure/milburn_look.py, turns5.py.
+  Chat 4's late end-check items (69 QUICK CHECKs of milburn.py, protest_tiers_cast.py, satire_template.py: those
+  films' own old faults) stay named as chat 4 wrote them; branches.py scan should skip freeze/* (part 2).
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 3.8% of 15%; forecast not yet planned (2026-11-20)
