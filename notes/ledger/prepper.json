@@ -1,0 +1,20 @@
+{
+ "film": "prepper",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "quick_checks": [
+  {
+   "at": "2026-11-20T05:00+00:00",
+   "faults": 4
+  },
+  {
+   "at": "2026-11-20T05:01+00:00",
+   "faults": 4
+  },
+  {
+   "at": "2026-11-20T05:02+00:00",
+   "faults": 4
+  }
+ ]
+}

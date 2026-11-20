@@ -336,7 +336,7 @@ LANE4 = 5.0                      # the Tulip's lane: the outer northbound lane (
 KERB4, SHOP4 = 7.0, 10.0
 SHOTS = (1.95, 2.30, 2.62, 2.92)  # Jason's four shots: 1 sparks off the bonnet, 2-4 into the windscreen
 CRAZE = (0.0, 0.5, 0.8, 1.0)
-GAPS = (6.5, 15.0, 23.5)         # the cruisers behind the Tulip (m)
+GAPS = (4.8, 13.5, 22.0)         # the cruisers behind the Tulip (m): the lead close enough to read at the shots         # the cruisers behind the Tulip (m)
 FIG_H = 1128.0                   # a person's whole height in their own units (head top to soles)
 
 
@@ -429,11 +429,12 @@ def chaser_at(t, i):
 CAM4 = [  # (t, position, look-at, focal)
     (0.00, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
     (0.45, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
-    (1.10, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
-    (1.70, (2.10, 1.85, 1.55), (-0.30, 1.10, -14.0), 1000),
-    (3.05, (2.10, 1.80, 1.45), (0.30, 1.15, -14.0), 1180),
-    (4.55, (2.10, 1.87, 1.40), (1.40, 1.05, -15.0), 1000),
-    (5.15, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
+    (1.10, (2.35, 1.55, 3.45), (0.40, 1.10, -2.40), 1600),   # wide of the corner: no squeeze on a wide lens
+    (1.70, (2.40, 2.30, 2.25), (-0.80, 0.85, -14.0), 1250),  # further back and higher: Jason whole, the cruiser bigger, his arm seen from above
+    (3.00, (2.40, 2.25, 2.15), (-0.50, 0.90, -14.0), 1400),  # pushes in on the cruiser through the shots
+    (3.50, (2.30, 1.87, 1.85), (1.60, 1.05, -15.0), 950),    # pans with the slew on a wider lens: jet and fireball in frame
+    (4.55, (2.25, 1.87, 1.75), (1.50, 1.05, -15.0), 980),
+    (5.15, (2.35, 1.55, 3.45), (0.40, 1.10, -2.40), 1600),
     (5.75, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
     (6.20, (0.00, 1.52, 3.95), (0.00, 1.02, -0.30), 1750),
 ]
@@ -494,7 +495,7 @@ def _strip_people():
 
 
 PEOPLE4 = _strip_people()
-PALMS4 = [((s * 7.6), z) for k, (s, z) in enumerate((s, z) for z in np.arange(-70, 220, 21.0) for s in (-1, 1))
+PALMS4 = [((7.6 if s < 0 else 9.2) * s, z) for k, (s, z) in enumerate((s, z) for z in np.arange(-70, 220, 21.0) for s in (-1, 1))
           if (k + int(z / 21)) % 2 == 0]
 _SP = {}
 
@@ -721,7 +722,7 @@ def jason_layer(img, cam, tul, t, lead):
         rest = j['wrL']
         kk = smooth((js['k'] - 0.05) / 0.3)
         V.arm_to(j, 'L', tuple(a + (b - a) * kk for a, b in zip(rest, g)), 'out', 'palm')
-    j['props'].append(PC.glock('R', flash=js['flash'], aim3=S._norm(gun_dir)))
+    j['props'].append(PC.glock('R', flash=js['flash'], aim3=S._norm(gun_dir), size=1.4))   # big enough to read on a phone
     j['grip'] = {'R'}
     head = look if w > 0.2 else F
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
@@ -802,13 +803,13 @@ def jet_lumps(t):
     for tb in np.arange(th, t, 1.0 / 60):
         rng = np.random.RandomState(int(tb * 6000) % (1 << 30))
         age = t - tb
-        v = np.array([rng.normal(0.4, 0.6), rng.normal(0.2, 0.6), rng.uniform(10.5, 13.0)])
+        v = np.array([rng.normal(0.1, 0.18), rng.normal(0.0, 0.18), rng.uniform(10.5, 13.0)])   # a column, not a spray
         ramp = min(1.0, (tb - th) / 0.15 + 0.4)
         v[2] *= ramp
-        p = np.array([hx, hz, 0.55]) + v * age + np.array([1.2, 0, -0.5 * FX.G * age * age])   # the wind leans it
+        p = np.array([hx, hz, 0.55]) + v * age + np.array([0.35 * age, 0, -0.5 * FX.G * age * age])   # the wind leans its top
         if p[2] < 0.15:
             continue
-        r = rng.uniform(0.2, 0.34) * (1.0 + 0.6 * min(1.0, age))
+        r = rng.uniform(0.16, 0.24) * (1.0 + 0.5 * min(1.0, age))
         out.append((p, r, rng.rand() < 0.6, v + np.array([0, 0, -FX.G * age])))
     return out
 
@@ -851,15 +852,16 @@ def hit_bits(t, lead):
 
 
 SMOKE4 = []
-if IMPACT:
+if IMPACT:                       # one joined column: born inside the flame tips (so it grows out of the fire), rising
     _r = np.random.RandomState(31)
     _ti, (_xi, _zi), _yi = IMPACT
     _zc = _zi + 2.6 * math.cos(math.radians(_yi))
-    for _k in range(30):
-        SMOKE4.append(FX.Puff(_ti + 0.3 + _k * 0.1 + _r.uniform(0, 0.08),
-                              (SHOP4 - 0.6 + _r.uniform(-0.8, 0.4), _zc + _r.uniform(-1.8, 1.8), 1.6 + _r.uniform(0, 1.6)),
-                              (_r.uniform(-2.5, -0.5), _r.uniform(-1.5, 1.5), _r.uniform(0.0, 1.5)), _r.uniform(1.2, 2.6),
-                              _r.uniform(0.7, 1.1), _r.uniform(1.8, 2.8), 3.4, 'smoke', int(_r.randint(1 << 20)), tau=0.6))
+    for _k in range(44):         # the first ones where the fireball burns out, the rest out of the fire, close-packed
+        _tb = _ti + 0.25 + _k * 0.065 + _r.uniform(0, 0.03)
+        _y = 1.3 + _r.uniform(0, 0.7) + (1.6 if _k < 6 else 0.0)
+        SMOKE4.append(FX.Puff(_tb, (SHOP4 - 0.5 + _r.uniform(-0.4, 0.3), _zc + _r.uniform(-0.9, 0.9), _y),
+                              (_r.uniform(-0.8, -0.1), _r.uniform(-0.4, 0.4), _r.uniform(0.3, 1.0)), _r.uniform(1.6, 2.4),
+                              _r.uniform(0.6, 0.9), _r.uniform(1.6, 2.3), 3.4, 'smoke', int(_r.randint(1 << 20)), tau=0.5))
 TYRE4 = []
 for _k, _tb in enumerate(np.arange(SHOTS[-1] + 0.1, (IMPACT[0] if IMPACT else SHOT4_LEN), 1.0 / 24)):
     _c = lead_at(_tb)
@@ -883,7 +885,7 @@ def fx_items(cam, t, lead):
         front = lead_at(ti).body_pt((0.0, 1.0, 2.4))
         age = t - ti
         d = cam.depth(front)
-        spr = FX.fireball_sprite(fc, wz(front) + np.array([0.0, 0.0, 0.4]), 2.4, age, 21, d)
+        spr = FX.fireball_sprite(fc, wz(front) + np.array([-0.4, 0.0, -0.4 - 2.5 * min(age, 1.0)]), 1.8, age, 21, d)   # rises half as fast: stays on the car
         if spr:
             items.append((d - 3.0, spr.paste))                    # the fireball engulfs the car's front
         if age > 0.35:
@@ -955,7 +957,7 @@ def shot4(t):
     for k, (x, z) in enumerate(PALMS4):
         d = cam.depth((x, 3.0, z))
         if 0.5 < d < 140:
-            if d > 3.0 or abs(x - cam.pos[0]) > 2.5:              # never a trunk cut by the lens
+            if True:                 # always drawn: a palm slides in from the frame's edge, never pops in mid-frame
                 items.append((d, lambda im, x=x, z=z, k=k: palm(im, cam, S.pen(im), (x, z), seed=k)))
     if HYDRANT:
         hx, hz = HYDRANT[1]

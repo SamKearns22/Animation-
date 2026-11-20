@@ -70,3 +70,27 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   muzzle flash/glass/hydrant jet/fireball from prepper_fx and flying_whales_fx (catalogue, Effects). Critique packs r1-p3, r1-p4 (cars stage).
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 5.66% of 15%; forecast 56.2% (2026-11-20)
+
+## Where things stand (20 Nov, chat 6, Opus high)
+- Rules that bite next: 89 (the 10 faults left open below are fixed before the next clip), 8 (no other movement until Sam has seen both rehearsals), 41 (Jason's gun arm out of the window).
+- Done: rehearsal 2 built and sent: shot 4 (6.2 s, 2.8 MB), stand-in shop street, Jason climbs out onto the window ledge, 4 shots,
+  the lead cruiser's windscreen crazes, it slews over the kerb through a hydrant (water jet) into a shop front (fireball), back in.
+  Critique round 1 (packs r1-p5, r1-p6): hunt-1 faults fixed; hunt 2's 10 named, not fixed (Checks line sent to Sam).
+- Next: Opus, medium effort (fixes from a clear list): when Sam answers on the clips, his notes first; else hunt 2's list:
+  craze bigger/bolder and the target cruiser larger at the shots (S1, M5); gun readable at phone size; smoke joined to
+  the fire, not floating balls; jet a column, fireball not cut by the frame edge; the palm pop near the lens; the
+  squeeze at 0.83-1.17 (wide lens at the car's corner); the wing mirror off the body; the bonnet stripes from above
+  read as holes (car builder). Then a short clip of only the changed seconds.
+- Needs Sam: his look at the cast sheet, the car sheet, the swerve clip and this lean-out clip (notes, not gates).
+- Read: guides/job-packs.md, Build; this notes file's plan and acting list.
+- Open rule requests: none found in this film's notes.
+- For Claude: source/gta_rehearse.py shot 4 section (MAP in its header comment: tulip4, _lead_track/lead_at, chaser_at,
+  CAM4 keys in the car frame, strip_ground/shop_block, person_cached (Glimpses drawn once per view), jason4/jason_layer
+  (masked by the car's lower body), FxCam + fx_items (flying_whales_fx)); `shot4 OUT.mp4`, `still4 T OUT`. Render 4.5 min.
+  Crowds 'walker' and 'cop' in story/grand-theft-autism-people.txt.
+
+- Handover check answers (chat 6): the quick checks name gta_rehearse as a film of its own; it is this film's rehearsal
+  file (notes here; SHOT_MARKS belong to the film's shot file at the moves stage). No `page.py show`: shot 4 was a new
+  build, not a note, so the code was searched on purpose.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.59% of 15%; forecast 60.1% (2026-11-20)

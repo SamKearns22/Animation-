@@ -139,26 +139,21 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
-## Where things stand (20 Nov, chat 6, Opus high)
-- Rules that bite next: 89 (the 10 faults left open below are fixed before the next clip), 8 (no other movement until Sam has seen both rehearsals), 41 (Jason's gun arm out of the window).
-- Done: rehearsal 2 built and sent: shot 4 (6.2 s, 2.8 MB), stand-in shop street, Jason climbs out onto the window ledge, 4 shots,
-  the lead cruiser's windscreen crazes, it slews over the kerb through a hydrant (water jet) into a shop front (fireball), back in.
-  Critique round 1 (packs r1-p5, r1-p6): hunt-1 faults fixed; hunt 2's 10 named, not fixed (Checks line sent to Sam).
-- Next: Opus, medium effort (fixes from a clear list): when Sam answers on the clips, his notes first; else hunt 2's list:
-  craze bigger/bolder and the target cruiser larger at the shots (S1, M5); gun readable at phone size; smoke joined to
-  the fire, not floating balls; jet a column, fireball not cut by the frame edge; the palm pop near the lens; the
-  squeeze at 0.83-1.17 (wide lens at the car's corner); the wing mirror off the body; the bonnet stripes from above
-  read as holes (car builder). Then a short clip of only the changed seconds.
-- Needs Sam: his look at the cast sheet, the car sheet, the swerve clip and this lean-out clip (notes, not gates).
-- Read: guides/job-packs.md, Build; this notes file's plan and acting list.
+## Where things stand (20 Nov, chat 7, Opus medium)
+- Rules that bite next: 8 (nothing else moves until Sam has seen both rehearsals), 30 (a repeat note: find why the first fix failed), 89.
+- Done: hunt 2's 10 shot-4 faults fixed as one list and `critique.py fixed` recorded (Checks: none). Shot 4 re-rendered
+  (6.2 s, 2.9 MB, 4.4 min) and sent whole, as the changes span 0.8-5.2 s: bolder crack and a closer cruiser on a longer
+  lens, the gun shown at the shots (higher camera, gun 1.4x), smoke one column out of the fire, the jet a column,
+  the fireball low and in frame, palms slide in (no pop), no squeeze at the corner, bumpers inside the body, mirrors on
+  stalks, bonnet stripes worn charcoal (read as paint from above).
+- Next: Sam's answer. On "approved": Opus high chat for the sets stage (the real Vice City shop street and the junction
+  for shots 2 and 4, replacing the stand-in blocks). On notes: Opus medium, his notes first (rule 30 on any repeat).
+- Needs Sam: Y or N, the two rehearsals (swerve clip, this lean-out clip) approved so the rest can move (rule 8).
+- Read: guides/job-packs.md, Notes round (on notes) or Build (on approval); this notes file's plan and acting list.
 - Open rule requests: none found in this film's notes.
-- For Claude: source/gta_rehearse.py shot 4 section (MAP in its header comment: tulip4, _lead_track/lead_at, chaser_at,
-  CAM4 keys in the car frame, strip_ground/shop_block, person_cached (Glimpses drawn once per view), jason4/jason_layer
-  (masked by the car's lower body), FxCam + fx_items (flying_whales_fx)); `shot4 OUT.mp4`, `still4 T OUT`. Render 4.5 min.
-  Crowds 'walker' and 'cop' in story/grand-theft-autism-people.txt.
+- For Claude: source/gta_rehearse.py shot 4 (CAM4 keys, GAPS, SMOKE4, PALMS4, jet_lumps, fx_items); gta_cars.py
+  _cracks/_tulip_decals (STRIPE, STRIPE_EDGE)/_parts; prepper_cast.glock(size=). `shot4 OUT.mp4`, `still4 T OUT`.
+- Handover check answers (chat 7): gta_rehearse's two quick checks as chat 6 (a rehearsal file, notes here, SHOT_MARKS
+  at the moves stage); the four prepper lines are another film's, not this one's.
 
-- Handover check answers (chat 6): the quick checks name gta_rehearse as a film of its own; it is this film's rehearsal
-  file (notes here; SHOT_MARKS belong to the film's shot file at the moves stage). No `page.py show`: shot 4 was a new
-  build, not a note, so the code was searched on purpose.
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.14% of 15%; forecast 59.7% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 9.59% of 15%; forecast 60.1% (2026-11-20)

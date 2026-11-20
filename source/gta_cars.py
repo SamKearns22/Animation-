@@ -39,7 +39,8 @@ BOLD = '/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf'
 TULIP_RED = (190, 62, 48)
 TULIP_FADE = (210, 96, 78)        # sun-faded patches (the game's car is worn pink on the flanks and bonnet)
 TULIP_DEEP = (150, 42, 36)
-STRIPE = (36, 32, 32)
+STRIPE = (58, 50, 52)               # weathered black paint (pure black read as holes from above)
+STRIPE_EDGE = (120, 74, 70)         # the worn edge where the red shows through
 VINYL = (52, 48, 42)
 CHROME = (206, 212, 218)
 CHROME_DK = (150, 148, 142)
@@ -319,13 +320,13 @@ def _tulip_decals(car):
     for x0, x1 in ((-0.44, -0.07), (0.07, 0.44)):
         for z0, z1, seed in ((H['base'][1] + 0.04, zf - 0.03, 11), (zb + 0.03, H['base'][0] - 0.04, 23)):
             pts = [_top_pt(car, x, z) for x, z in _ragged(x0, x1, z0, z1, seed + int(x0 * 10))]
-            d.append(Decal(pts, (0, 1, 0), STRIPE, None, 0))
+            d.append(Decal(pts, (0, 1, 0), STRIPE, STRIPE_EDGE, 1.6))
             rng = np.random.RandomState(seed + 5 + int(x1 * 10))
             for _ in range(2):          # worn-through scuffs in the stripes (faded grey, small)
                 zc, xc = rng.uniform(z0 + 0.1, z1 - 0.1), rng.uniform(x0 + 0.06, x1 - 0.06)
                 pts = [_top_pt(car, xc + 0.04 * math.cos(a) * rng.uniform(0.7, 1.1), zc + 0.07 * math.sin(a))
                        for a in np.linspace(0, 2 * math.pi, 7, endpoint=False)]
-                d.append(Decal(pts, (0, 1, 0), (70, 62, 62), None, 0))
+                d.append(Decal(pts, (0, 1, 0), (104, 86, 86), None, 0))
     # the front: chrome-edged black grille across, a round lamp in each end, the badge
     zfe = _end_z(car, True)
     hwf = half_w(car, zf) * 0.97
@@ -476,6 +477,12 @@ def _cracks(car):
     d = []
     c = (-0.50, 0.50)
     k = car.shatter
+    # a frosted pale patch round the hole first: at phone size the web reads as one white star, not hairlines
+    rf = np.random.RandomState(8)
+    d.append(Decal([on(max(-0.9, min(0.9, c[0] + 0.30 * k * rf.uniform(0.7, 1.0) * math.cos(a))),
+                       max(0.06, min(0.92, c[1] + 0.30 * k * 0.9 * rf.uniform(0.7, 1.0) * math.sin(a))))
+                    for a in np.linspace(0, 2 * math.pi, 14, endpoint=False)], n_loc, (196, 214, 226), (236, 244, 248), 1.2))
+    spokes = []
     for i in range(11):
         a = i / 11 * 2 * math.pi + rng.uniform(-0.2, 0.2)
         L = rng.uniform(0.35, 0.75) * k
@@ -484,11 +491,15 @@ def _cracks(car):
             r = L * j / 3
             pts.append(on(max(-0.88, min(0.88, c[0] + r * math.cos(a) + rng.uniform(-0.04, 0.04))),
                           max(0.08, min(0.9, c[1] + r * 0.9 * math.sin(a)))))
-        d.append(Decal(pts, n_loc, None, (236, 244, 248), 1.6, 'line'))
+        spokes.append(pts)
+    for pts in spokes:                   # bold: an ink edge under each white crack (hairlines vanish on a phone)
+        d.append(Decal(pts, n_loc, None, INK, 7.0, 'line'))
+    for pts in spokes:
+        d.append(Decal(pts, n_loc, None, (246, 250, 252), 4.4, 'line'))
     for r in (0.12, 0.26):               # the rings of the web
         pts = [on(max(-0.88, min(0.88, c[0] + r * k * math.cos(a))), max(0.08, min(0.9, c[1] + r * k * 0.9 * math.sin(a))))
                for a in np.linspace(0, 2 * math.pi, 12)]
-        d.append(Decal(pts, n_loc, None, (226, 236, 242), 1.2, 'line'))
+        d.append(Decal(pts, n_loc, None, (236, 244, 248), 2.4, 'line'))
     d.append(Decal([on(c[0] + 0.10 * math.cos(a), c[1] + 0.12 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 10, endpoint=False)],
                    n_loc, (210, 222, 230), INK, 1.2))
     d.append(Decal([on(c[0] + 0.055 * math.cos(a), c[1] + 0.065 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 8, endpoint=False)],
@@ -527,9 +538,9 @@ def _parts(car):
     parts = []
     if car.kind == 'tulip':
         cr = car.crush
-        parts.append(Part(_box(car, (0, st[-1][2] + 0.02, zf + 0.04), (2 * hw + 0.04, 0.11, 0.09), CHROME),
+        parts.append(Part(_box(car, (0, st[-1][2] + 0.02, zf + 0.04), (2 * half_w(car, zf) - 0.04, 0.11, 0.09), CHROME),
                           (0, 0.5, zf), (0, 0, 1)))
-        rear = _box(car, (0, st[0][2] - 0.02, zb - 0.06), (2 * hw + 0.06, 0.24, 0.14), CHROME)
+        rear = _box(car, (0, st[0][2] - 0.02, zb - 0.06), (2 * half_w(car, zb) - 0.04, 0.24, 0.14), CHROME)   # inside the body's width: never a box poking out
         lamps = []
         zbb = zb - 0.13 - EPS
         for s in (-1, 1):
@@ -544,10 +555,12 @@ def _parts(car):
                                        None, (90, 10, 14), 1.4, 'line'))
         parts.append(Part(rear, (0, 0.5, zb), (0, 0, -1), decals=lamps))
         P = _house_pts(car)
-        for s in (-1, 1):
+        for s in (-1, 1):                # the wing mirror: a stalk out of the door top into a small round-ish head
             m = P(s, 0.98, 0.0)
-            parts.append(Part(_box(car, (s * (hw + 0.06), 0.98, m[2] - 0.05), (0.12, 0.09, 0.07), CHROME),
-                              (s * hw, 0.9, m[2]), (s, 0, 0)))
+            xd = abs(m[0])               # the door's skin at the screen's foot (the body tucks in above the waist)
+            stalk = _box(car, (s * (xd + 0.04), 0.90, m[2] - 0.02), (0.10, 0.03, 0.04), TULIP_RED)
+            head = _box(car, (s * (xd + 0.11), 0.91, m[2] - 0.04), (0.10, 0.08, 0.06), TULIP_RED)
+            parts.append(Part(stalk + head, (s * xd, 0.9, m[2]), (s, 0, 0)))
     else:
         parts.append(Part(_box(car, (0, st[-1][2] - 0.04, zf + 0.04), (2 * hw - 0.10, 0.20, 0.12), COP_BLACK),
                           (0, 0.5, zf), (0, 0, 1)))

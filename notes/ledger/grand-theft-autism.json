@@ -2601,6 +2601,21 @@
    "date": "2026-11-20",
    "spent": 9.14,
    "forecast": 59.7
+  },
+  {
+   "date": "2026-11-20",
+   "spent": 9.59,
+   "forecast": 60.1
+  },
+  {
+   "date": "2026-11-20",
+   "spent": 9.59,
+   "forecast": 60.1
+  },
+  {
+   "date": "2026-11-20",
+   "spent": 9.59,
+   "forecast": 60.1
   }
  ],
  "critique": {
@@ -2742,19 +2757,8 @@
      "1,7 P1: hands on the wheel; a full-size crop with the windscreen cleared.",
      "1,7 P7: seated lap, thighs; bodies are cut off at the windscreen."
     ],
-    "fixed": "hunt 1 fixed as one list: the crashed car goes through the shop glass over the kerb, punch-in on the shots, longer climb out, palms never cut by the lens, passers-by no longer pop; hunt 2 named for th",
-    "left": [
-     "1,7 A1 O3 P1: bonnet - two huge black patches with grey chips read as burnt holes, not the reference's thin stripes; white grille blob reads as litter. Bonnet f",
-     "1 A1 S1 P1: police cars behind - only a light bar above our windscreen, reads as ours; no police car visible.",
-     "2-7 P1 O5: Jason's gun - not visible in panel 2 or strip frames 1.5-3.08; no ledge seat shown. Panel 3 gun is a tiny dot.",
-     "2-3,5-7 O5 O2: white wing mirror sits beside the car body, detached from it.",
-     "2,5 M5 O6: no sparks on the bonnet, no crazed windscreen at 2.33-3.08 or in panel 2; the police car is untouched.",
-     "3,6 O5 O6: no fire hydrant water jet in panel 3. In strip 6 the jet is a flat white cone; fireball is cropped at the frame edge, and the hydrant is gone.",
-     "5 M1 M4: palm tree jumps in size and position (2.33 thin line, 2.67 large leaves), pops in and out between frames.",
-     "4 M3: 0.83-1.17 car body squeezes into a flat slab, windscreen shape changes, Jason's head and torso jump size.",
-     "3,6-7 S9 A1: smoke is separate dark balls floating above the roofline, detached from the fire, and flat cut-outs; read as dark flying objects, not smoke.",
-     "2-3,5-6 S1: the target police car is tiny, so the hit is lost at phone size."
-    ]
+    "fixed": "shot 4 hunt 2: cracks bolder with a frosted patch and the lead cruiser closer (4.8 m) on a longer lens at the shots; camera higher and further back so the gun shows at the shots, gun drawn 1.4x; smoke",
+    "left": []
    }
   ],
   "lines": {

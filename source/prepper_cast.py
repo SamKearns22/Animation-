@@ -407,9 +407,10 @@ def crossbow(loaded=True, skin=None, aim3=(0.0, 0.0, 1.0), min_k=0.55):
 GLOCK_L = 0.186 / M
 
 
-def glock(side='R', flash=0.0, aim3=None, rec=None):
+def glock(side='R', flash=0.0, aim3=None, rec=None, size=1.0):
     """The Glock 17 (ref pistols, bottom): a black slide and frame, the angled textured grip in the fist, the trigger
-    guard; seen end on (pointing at us) a square slide face with the muzzle. `flash` > 0: a hard muzzle flash."""
+    guard; seen end on (pointing at us) a square slide face with the muzzle. `flash` > 0: a hard muzzle flash.
+    size: a scale on the whole gun (a far, small figure's gun is drawn bigger so it reads on a phone)."""
     def draw(p, j2):
         c, d, n = _one_hand(j2, side)
         keep = n / F.FORE
@@ -419,13 +420,15 @@ def glock(side='R', flash=0.0, aim3=None, rec=None):
         if ny > 0:
             nx, ny = -nx, -ny                                 # "up" on the gun: away from the floor
         def P(u, v):
+            u, v = u * size, v * size
             return (c[0] + d[0] * u * max(keep, 0.35) + nx * v, c[1] + d[1] * u * max(keep, 0.35) + ny * v)
         end_on = keep < 0.4
         if end_on:
             p.poly([P(-6, 30), P(6, 30), P(6, 52), P(-6, 52)], GUN, INK, 2.0)
-            p.poly([(c[0] - 16, c[1] - 30), (c[0] + 16, c[1] - 30), (c[0] + 16, c[1] - 8), (c[0] - 16, c[1] - 8)], GUN, INK, 2.0)
-            p.ell(c[0], c[1] - 20, 5, 5, (10, 10, 12), None)
-            mz = (c[0], c[1] - 20)
+            z = size
+            p.poly([(c[0] - 16 * z, c[1] - 30 * z), (c[0] + 16 * z, c[1] - 30 * z), (c[0] + 16 * z, c[1] - 8 * z), (c[0] - 16 * z, c[1] - 8 * z)], GUN, INK, 2.0)
+            p.ell(c[0], c[1] - 20 * z, 5 * z, 5 * z, (10, 10, 12), None)
+            mz = (c[0], c[1] - 20 * z)
         else:
             L = GLOCK_L
             p.poly([P(-30, 14), P(L - 30, 14), P(L - 30, 44), P(-30, 44)], GUN, INK, 2.0)                       # slide
@@ -438,7 +441,7 @@ def glock(side='R', flash=0.0, aim3=None, rec=None):
         if rec is not None:                                   # where the muzzle is drawn (for the film's tracers)
             rec['muzzle'] = tuple(v / B.SS for v in p.cam.P(*mz))
         if flash > 0:
-            muzzle_flash(p, mz, d if not end_on else (0, -1), 50 * flash, end_on)
+            muzzle_flash(p, mz, d if not end_on else (0, -1), 50 * flash * size, end_on)
     draw.held = True
     return draw
 
