@@ -8,3 +8,8 @@ I will now post frame by frame analysis of the shot you've provided with notes. 
 ### 2026-11-20T21:31:28
 Please do not analyse the following frames until all my notes are in.
 
+### 2026-11-20T21:38:18
+1. Throughout the scene, L's hands are on the wheel in opposite grips. It is very funny but not how humans drive.
+
+2. When J begins his movement, his lower body becomes visible. This isn't necessary and I wonder why you made that choice.
+
