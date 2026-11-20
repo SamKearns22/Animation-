@@ -644,6 +644,134 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "23d4842a",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.13,
+   "src": "estimate",
+   "sid": "session_01J1JB7WH4iX6Ej2bDsLC8hv",
+   "steps": 18,
+   "hist_k": 108,
+   "kinds": {
+    "tool search": 6.1,
+    "page.py": 2.4,
+    "renders": 7.4,
+    "other": 84.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 2,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 9
+   },
+   "split": {
+    "usd": 0.4714,
+    "total": 0.4714,
+    "floor_k": 80,
+    "blocks": {
+     "start-up floor": 47.8,
+     "new writes": 24.1,
+     "Claude's words": 23.2,
+     "carried history": 4.8
+    },
+    "origins": {
+     "start-up floor": 47.8,
+     "Claude's words": 29.8,
+     "result: other": 17.7,
+     "result: tool search": 3.2,
+     "messages and reminders": 1.1,
+     "result: page.py": 0.3,
+     "result: renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 80,
+    "work_step": 14,
+    "work_pct": 0.1,
+    "reads": [
+     [
+      "notes/grand-theft-autism.md",
+      3.5,
+      0.0189
+     ],
+     [
+      "story/status.md",
+      0.2,
+      0.0014
+     ],
+     [
+      "notes/ledger/sam/bdslc8hv.md",
+      0.3,
+      0.0013
+     ]
+    ],
+    "base_pct": 29.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 4,
+     "other": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md",
+      "git status -sb | head -5; ls -t notes | head; ls -t story 2>/dev/null | head -5;",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "Where things stand",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "/root/.claude/projects/-home-user-Animation-/23d4842a-79e0-51c0-a298-6e3636775b9",
+      "screenplay[^\"]\\{0,300\\}",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/proposals notes/ledger notes/ledger/sam/bdslc8hv.md",
+      "camera movement 7\\|Camera movement",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "film notes",
+      "guides/film-quality-rules.md story/status.md notes/*.md",
+      "camera move\\|camera movement\\|movement [0-9]\\|strength",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
