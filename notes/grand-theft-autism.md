@@ -348,23 +348,22 @@ scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back 
 into the seated pose (last frame matches the first).
 Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
 
-## Where things stand (20 Nov, chat 15 end, Opus; for chat 16)
-- Rules that bite next: 8 (shots 3-4 clip sent: wait for Sam's Y/N before any final; build on meanwhile), 17 (layers
-  and bodies on every new shot), 30 (Jason's arm/gun from behind was a repeat: now turned 160 on the sill).
-- Done: draw order clean in shots 2 and 4 (every fault was a car seen through another car's glass: the check's lone
-  sheet painted the glass opaque); Jason's seated left hand on his thigh; on the sill turned 160 so gun arm, gun and
-  flash read past his shoulder; his legs hidden behind the car side (they drew under it); walkers' feet stay down
-  through the bob. Small ones named in notes/checks/gta-chat15-bodies.txt. Clip of shots 3-4 sent to Sam.
-- Next: Opus, high (a new build): shots 5-8 (plan rows 5-8: shot 3's camera, the wheel yank to a new road, lines
-  3-6, the closer two-shot, the held pause with lights in the back window), each checked (layers, bodies) and looked
-  at full size; then the whole-film shot sheet (shots 1-8), Sam's standing order.
-- Needs Sam: Y/N on the shots 3-4 clip (rule 8).
-- Read: guides/job-packs.md Build; plan rows 5-8; brief lines 3-6.
-- Open rule requests: none.
-- Branches named, not merged (frozen snapshots of other films, not this film's work): freeze/halo-no-no,
-  freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers, freeze/blessed.
-- For Claude: gta_cars._through_glass keeps bg alpha (min 72) so lone sheets show glass as a veil; J4_KEYS 1.70/4.30
-  face 160; jason_layer side quad (x 0.98, z -2.6..1.0) erases rows below the hips once out > 0.9; crowd() lifts feet
-  by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
+## Where things stand (20 Nov, chat 16 end, Opus; for chat 17)
+- Rules that bite next: 8 (NEW, Sam 20 Nov: shot 4 is a hardest shot, so a build proposal to Sam BEFORE rebuilding),
+  74 (NEW: acting notes for every shot, dialogue or not, beat by beat), 30 (bald crowd was a repeat: fixed at the kit).
+- Done: shot 4 case study (notes/shot4-case-study/shot4-case-study.md: versions, pictures, all Sam's words, his 16
+  frame notes, five causes, lessons). Fix 2: crowd heads hung, Miami mix, kittest crowd_heads_hung. Rules 8 and 74 written.
+- Next: Opus, high (new design): the proposal route for cause A only (Sam Y): how to build big 2D body moves from key
+  poses drawn per angle and layered by hand, plus a "is this a human body" check every frame; then the shot 4 build
+  proposal to Sam (rule 8): key poses, camera, fix 3 (cop hit with blood mist and slump, one cop throughout, hydrant hit
+  on camera, crowd reacts), acting rows for shot 4 (Lucia hand over hand at the wheel). Shots 5-8 wait.
+- Needs Sam: nothing until the proposal's top two and the build proposal.
+- Read: guides/job-packs.md Build; the case study sections 5, 7, 8; rules 8, 74, 89.
+- Open rule requests: none (Sam's two written this chat).
+- Handover check answers (chat 16): FINDER: no film notes fixed by code this chat except the kit crowd fix; the
+  rehearsal file was read by hand to diagnose Sam's 16 notes (no page.py for a rehearsal file). UNROUTED 22:09: the
+  question was Sam's own ("is it necessary to run proposal route?"), reworded to say so; Sam: "Y all".
+- For Claude: people.crowd_person hangs kit_head/kit_torso for crowd members once installed; MIXES['miami'];
+  jason_layer/J4_KEYS/cover_masks is cause A; cop_inside person_cached vs fresh path is note 12; HYDRANT timer note 13.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 25.57% of 15%; forecast 76.1% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 27.36% of 15%; forecast 77.9% (2026-11-20)

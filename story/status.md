@@ -1,3 +1,3 @@
-Grand Theft Autism: shots 3-4 clip sent to Sam (draw order clean; Jason's gun arm now reads from behind; legs hidden).
-Waiting on Sam's Y/N for that clip before any finals; building on meanwhile.
-Next: chat 16 (Opus, high): build shots 5-8, then the whole-film shot sheet (shots 1-8).
+Grand Theft Autism: shot 4 case study done (Sam's 16 frame notes, five causes); bald crowd fixed; two new rules (8, 74).
+Next: chat 17 (Opus, high): proposal route for Jason's body method and a human-body check, then shot 4 build proposal to Sam.
+Shots 5-8 wait until shot 4 is approved.
