@@ -13,3 +13,6 @@ Please do not analyse the following frames until all my notes are in.
 
 2. When J begins his movement, his lower body becomes visible. This isn't necessary and I wonder why you made that choice.
 
+### 2026-11-20T21:40:11
+3. His lower body is still visible through the bonnet. Clipping. The right arm turns into a gross sausage shape and becomes dislocated from the shoulder.
+
