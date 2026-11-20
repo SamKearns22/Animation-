@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Grand Theft Autism: the 3.5 s opening, a send-up of a game-trailer logo reveal (Sam, 19 Nov).
+"""Grand Theft Autism: the 9.5 s opening (Sam, 20 Nov: six seconds longer, a gentler wipe, a hold on the logo over
+the city, the chorus of his song under it), a send-up of a game-trailer logo reveal (Sam, 19 Nov).
 
 MAP
 - sky set-up (top): the Flying Whales dusk sea, re-coloured pink, the sun right of centre, its orange caps removed
@@ -9,7 +10,9 @@ MAP
 - skyline(): the waterfront city in three depths (pale far, mid, dark near): towers with window grids and a lit edge
   on the sun's side, the big wheel, a seafront shelter, boats, a shaded tree, palms with full fronds; sun path dashes
 - reflection(): the city mirrored in the water, darker, broken into rippling rows
-- frame(t): dark -> logo wipes in top to bottom and grows -> city fades in -> logo washes pale and dissolves -> city
+- frame(t): dark (0.6 s) -> logo wipes in slowly top to bottom and grows (0.6-2.6) -> city fades in under it (2.4-4.0)
+  -> held, logo over the city (to 7.4) -> logo washes pale and dissolves (7.4-8.45) -> city
+- music(): the song's chorus (from 36.38 s, so its first hit lands on the wipe's start at 0.6 s), faded out at the end
 - house look: the city drawing gets paper edges and shadows (house_look.edges); every frame is laid on paper; drawn on
   twos (12 drawings a second, each held 2 frames at 24 fps)
 - python3 source/gta_opener.py OUT.mp4 [--small]      python3 source/gta_opener.py still OUT.png T [T ...]
@@ -45,7 +48,12 @@ S._caps = lambda d, t, ss, hy: None               # no orange wave caps: the ref
 W, H = S.SIZE
 FPS = 24
 DRAW_FPS = 12                                     # on twos
-DUR = 3.5
+DUR = 9.5
+WIPE0, WIPE = 0.6, 2.0                           # the logo's wipe: starts on the chorus's first hit, 2 s long
+CITY0, CITY_IN = 2.4, 1.6                        # the city fades in under the logo
+OUT0 = 7.4                                       # the logo washes pale from here, then dissolves
+SONG = os.path.join(HERE, '..', 'music', 'gta-opener-chorus.mp3')   # Sam's song, the chorus cut (20 Nov)
+SONG_AT = 36.38                                  # where in the whole song the cut starts (0.6 s before the chorus hits)
 INK = (40, 12, 56)
 DARK = (27, 26, 36)
 OL = 3
@@ -451,18 +459,18 @@ def _place(img, layer, scale, cx, cy, alpha, reveal=1.0):
     a = np.asarray(L.getchannel('A')).astype(float) * alpha
     if reveal < 1:
         hh = L.size[1]
-        edge = reveal * (hh + 160) - 160
-        a = a * np.clip((edge + 160 - np.arange(hh)[:, None]) / 160, 0, 1)
+        edge = reveal * (hh + 360) - 360                   # a tall soft edge: the gentle wipe
+        a = a * np.clip((edge + 360 - np.arange(hh)[:, None]) / 360, 0, 1)
     L.putalpha(Image.fromarray(a.astype(np.uint8)))
     img.alpha_composite(L, (int(cx - L.size[0] / 2), int(cy - L.size[1] / 2)))
 
 
 def frame(t, LOGO, PALE, CITY, REF):
-    # the city: fades in 1.25-2.0 s, a slow push in all the way (the camera drifting forward over the water)
-    city_a = _ease((t - 1.25) / 0.75)
+    # the city: fades in under the logo, a slow push in all the way (the camera drifting forward over the water)
+    city_a = _ease((t - CITY0) / CITY_IN)
     img = Image.new('RGBA', (W, H), DARK + (255,))
     if city_a > 0:
-        push = 1.0 + 0.06 * (t - 1.25) / (DUR - 1.25)
+        push = 1.0 + 0.08 * (t - CITY0) / (DUR - CITY0)
         bg = S.paint(t).convert('RGBA')
         bg.alpha_composite(_ripple(REF, t), (0, int(HY) + 6))
         bg.alpha_composite(CITY)
@@ -472,12 +480,13 @@ def frame(t, LOGO, PALE, CITY, REF):
         ox, oy = (bw - W) // 2, int((bh - H) * 0.58)
         bg = bg.resize((bw, bh), Image.LANCZOS).crop((ox, oy, ox + W, oy + H))
         img = Image.blend(img, bg, city_a)
-    # the logo: wipes in top to bottom (0-0.3 s) while growing, keeps growing slowly, washes pale (2.0-2.4 s),
-    # dissolves (2.35-2.85 s)
-    reveal = _ease(t / 0.3) if t < 0.3 else 1.0
-    scale = 0.86 + 0.08 * _ease(t / 0.6) + 0.05 * min(1, t / 2.85)
-    a_out = 1 - _ease((t - 2.35) / 0.5)
-    pale = _ease((t - 2.0) / 0.4)
+    # the logo: wipes in gently top to bottom while growing, keeps growing slowly through the hold, washes pale,
+    # dissolves
+    u = t - WIPE0
+    reveal = _ease(u / WIPE)
+    scale = 0.86 + 0.08 * _ease(u / 2.6) + 0.05 * min(1, max(0, u) / (OUT0 + 1.05 - WIPE0))
+    a_out = 1 - _ease((t - OUT0 - 0.45) / 0.6)
+    pale = _ease((t - OUT0) / 0.5)
     cx, cy = W / 2, 860
     _place(img, LOGO, scale, cx, cy, a_out * (1 - pale), reveal)
     _place(img, PALE, scale, cx, cy, a_out * pale, reveal)
@@ -509,6 +518,11 @@ def main():
             p.stdin.write(fr)
     p.stdin.close()
     p.wait()
+    if os.path.exists(SONG) and '--silent' not in sys.argv:      # the chorus under the picture
+        tmp = out + '.music.mp4'
+        subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', out, '-i', SONG, '-map', '0:v', '-map', '1:a',
+                        '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-shortest', tmp], check=True)
+        os.replace(tmp, out)
 
 
 if __name__ == '__main__':
