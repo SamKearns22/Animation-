@@ -10,6 +10,12 @@
       Sam (20 Nov): "the bottom of the A in grand is also connected with the r/h connection when it shouldn't be":
       fixed, the R-h joint now stops short of the a (it had been widened to the h's stem and reached the a).
       Clip sent; waiting. Every later shot moves 3 s later (plan table times are the old ones until the board).
+- [ ] Sam (20 Nov): "It will fade to car radio volume by the time the first dialogue line is spoken and continue."
+      = the song runs under the WHOLE film (from 36.48 s of the song, unbroken): full volume to the cut (6.5 s), down
+      to car-radio level (x0.16, about -16 dB) over 0.6 s so it is there before line 1, then stays at that level to
+      the sign-off. Volume only, no radio-speaker filter (my pick). Heard in a clip (opening + shot 2 rehearsal, sent
+      20 Nov). If line 1 starts earlier than 0.6 s into shot 2 once recorded, the dip moves with it. Brief Q4 ("no
+      music?") is answered by this.
 - [x] Lettering matched to the reference (g's tail, R joined into the h of "theft"). Sam: "great".
 - [ ] Screenplay draft 1 received (19 Nov). NOT final: no estimate until Sam confirms it.
 - [ ] Sam's answers (19 Nov): 1 Y, the opening's pink sunset light for the whole chase; 2 Y, subtitle "brought";

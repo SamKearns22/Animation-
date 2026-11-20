@@ -277,8 +277,8 @@ def light_wash(img, cam, cars, t):
 
 # ------------------------------------------------------------------------------------------------ shot 2
 SHOT2_LEN = 4.1
-LEAD = 0.3                # an empty beat of junction before the car screams out
-COPS = (LEAD + 0.85, LEAD + 1.45, LEAD + 2.05)
+LEAD2 = 0.3                # an empty beat of junction before the car screams out
+COPS = (LEAD2 + 0.85, LEAD2 + 1.45, LEAD2 + 2.05)
 
 
 def shot2_cam(t, cars):
@@ -298,7 +298,7 @@ def shot2_cam(t, cars):
 
 def shot2(t):
     img = B.canvas((240, 170, 170))
-    states = [('tulip', car_at(t, LEAD, 1.0))] + [('cruiser', car_at(t, d, 0.55)) for d in COPS]
+    states = [('tulip', car_at(t, LEAD2, 1.0))] + [('cruiser', car_at(t, d, 0.55)) for d in COPS]
     cars = []
     for kind, st in states:
         c = G.Car(kind, pos=st['pos'], yaw=st['yaw'], roll=st['roll'], pitch=st['pitch'], steer=st['steer'], spin=st['spin'])
@@ -308,7 +308,7 @@ def shot2(t):
     p = S.pen(img)
     street(img, cam, p)
     hydrant(img, cam, p, (-8.5, 16.8))         # on the pavement, clear of the car's way in
-    tyre_smoke(img, cam, t, LEAD)
+    tyre_smoke(img, cam, t, LEAD2)
     live = [c for c in cars if c.st['s'] > -12 and cam.depth((c.pos[0], 1, c.pos[1])) > 0.5]
     for c in sorted(live, key=lambda c: -math.dist(cam.pos, (c.pos[0], 0.8, c.pos[1]))):
         G.draw_car(img, cam, c, t=t)
