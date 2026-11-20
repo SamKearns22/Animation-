@@ -227,6 +227,12 @@ def logo(ss=2):
     xa, xb = min(stem), max(stem)
     if leg:                                            # the joint spans from the R's leg to the h's stem
         xa, xb = min(xa, max(leg[0], xa - 4 * s)), max(xb, min(leg[-1], xb + 4 * s))
+        run_end = leg[0]                               # the R's leg ends where its first unbroken run ends
+        while block[yR, run_end + 1]:
+            run_end += 1
+        a_left = next((x for x in range(run_end + 1, int(r1) + 60 * s) if block[yR - 10 * s, x]), None)
+        if a_left is not None:                         # the joint stops short of the a (Sam, 20 Nov: it touched it)
+            xb = min(xb, a_left - 9 * s)
     block[yR - 2 * s:yH + 6 * s, xa:xb + 1] = True
     # the g's tail, as the reference's: a thick bar under the g, joined to its right stem, a thin dark slit above it open to the left
     g0, g1 = int(gx0), int(gx0 + gf.getlength('g'))
