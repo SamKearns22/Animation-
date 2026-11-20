@@ -781,49 +781,50 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.17,
+   "cost": 2.74,
    "src": "estimate",
    "sid": "session_01J1JB7WJP6bF722TEcuVREX",
-   "steps": 121,
-   "hist_k": 281,
+   "steps": 127,
+   "hist_k": 286,
    "kinds": {
-    "film-file search": 5.8,
-    "tool search": 20.1,
-    "page.py": 0.5,
-    "renders": 4.7,
-    "pictures": 7.6,
-    "other": 61.4
+    "film-file search": 4.5,
+    "tool search": 16.4,
+    "page.py": 0.4,
+    "renders": 3.7,
+    "pictures": 6.3,
+    "other": 68.7
    },
    "calls": {
     "film-file search": 12,
-    "tool search": 59,
+    "tool search": 62,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
     "renders": 11,
     "pictures": 24,
-    "other": 21
+    "other": 23
    },
    "split": {
-    "usd": 7.6027,
-    "total": 7.6027,
+    "usd": 9.6809,
+    "total": 9.6809,
     "floor_k": 82,
     "blocks": {
-     "carried history": 30.7,
-     "start-up floor": 25.4,
-     "Claude's words": 23.0,
-     "new writes": 20.9
+     "new writes": 34.8,
+     "carried history": 25.9,
+     "start-up floor": 20.8,
+     "Claude's words": 18.4
     },
     "origins": {
-     "Claude's words": 39.3,
-     "start-up floor": 25.4,
-     "result: tool search": 18.9,
-     "result: pictures": 8.6,
-     "messages and reminders": 4.0,
-     "result: other": 2.0,
-     "result: film-file search": 0.6,
-     "result: renders": 0.5,
-     "Claude's edits": 0.5
+     "Claude's words": 32.0,
+     "start-up floor": 20.8,
+     "cache re-write": 17.9,
+     "result: tool search": 15.5,
+     "result: pictures": 7.1,
+     "messages and reminders": 3.4,
+     "result: other": 1.9,
+     "result: film-file search": 0.5,
+     "result: renders": 0.4,
+     "Claude's edits": 0.4
     },
     "leftover": 0.0
    },
@@ -835,55 +836,55 @@
      [
       "source/people.py",
       4.9,
-      0.1272
+      0.1325
      ],
      [
       "notes/grand-theft-autism.md",
       3.8,
-      0.1076
+      0.1117
      ],
      [
       "guides/kit-catalogue.md",
       3.4,
-      0.0942
+      0.0978
      ],
      [
       "guides/figure-rig.md",
       2.4,
-      0.0659
+      0.0685
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/caff6f5e-2e4e-56a5-be31-0ef3425985f7/scratchpad/refs.jpg",
       1.6,
-      0.0419
+      0.0436
      ],
      [
       "source/people_parts.py",
       1.5,
-      0.0382
+      0.0398
      ],
      [
       "source/satire_template.py",
       1.1,
-      0.0302
+      0.0315
      ],
      [
       "story/protest-tiers-people.txt",
       1.0,
-      0.0268
+      0.0278
      ],
      [
       "source/halo_no_no.py",
       1.0,
-      0.0261
+      0.0272
      ],
      [
       "story/grand-theft-autism-places.txt",
       0.4,
-      0.0118
+      0.0123
      ]
     ],
-    "base_pct": 23.5
+    "base_pct": 19.3
    },
    "search": {
     "show": 0,
@@ -891,7 +892,7 @@
      "no show": 12
     },
     "other": {
-     "other": 6,
+     "other": 9,
      "shared:handover.py": 2,
      "film notes": 3,
      "guides": 7,
@@ -1478,6 +1479,30 @@
       "shared:gta_cast.py",
       "notes/grand-theft-autism.md source/gta_cast.py story/status.md",
       "python3 - <<'EOF' p='notes/grand-theft-autism.md'; s=open(p).read() s=s.replace(",
+      ""
+     ],
+     [
+      128,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "other",
+      "source/data/critique-src",
+      "git add source/data/critique-src && git commit -qm \"Grand Theft Autism: the cast",
+      ""
+     ],
+     [
+      132,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log origin/claude/crea",
       ""
      ]
     ]
