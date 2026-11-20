@@ -3091,45 +3091,45 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.62,
+   "cost": 1.29,
    "src": "estimate",
    "sid": "session_01J1JB7XJ6kN1aW2RSrF8Wcw",
-   "steps": 49,
-   "hist_k": 139,
+   "steps": 70,
+   "hist_k": 163,
    "kinds": {
-    "tool search": 14.6,
-    "renders": 11.7,
-    "pictures": 2.0,
-    "other": 71.7
+    "tool search": 14.4,
+    "renders": 10.6,
+    "pictures": 2.3,
+    "other": 72.7
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 19,
+    "tool search": 28,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 8,
-    "pictures": 3,
-    "other": 19
+    "renders": 11,
+    "pictures": 4,
+    "other": 23
    },
    "split": {
-    "usd": 2.27,
-    "total": 2.27,
+    "usd": 3.3108,
+    "total": 3.3108,
     "floor_k": 80,
     "blocks": {
-     "start-up floor": 38.6,
-     "Claude's words": 27.2,
-     "new writes": 20.6,
-     "carried history": 13.7
+     "start-up floor": 35.7,
+     "Claude's words": 26.9,
+     "new writes": 20.1,
+     "carried history": 17.3
     },
     "origins": {
-     "Claude's words": 40.2,
-     "start-up floor": 38.6,
-     "result: tool search": 12.3,
-     "result: renders": 3.6,
-     "result: other": 1.9,
-     "messages and reminders": 1.8,
-     "result: pictures": 1.5
+     "Claude's words": 41.6,
+     "start-up floor": 35.7,
+     "result: tool search": 12.8,
+     "result: renders": 3.2,
+     "result: pictures": 2.7,
+     "messages and reminders": 2.0,
+     "result: other": 2.0
     },
     "leftover": 0.0
    },
@@ -3141,20 +3141,20 @@
      [
       "notes/grand-theft-autism.md",
       4.1,
-      0.0665
+      0.0821
      ],
      [
       "source/gta_opener.py",
       2.5,
-      0.0394
+      0.0488
      ],
      [
       "story/status.md",
       0.9,
-      0.0146
+      0.018
      ]
     ],
-    "base_pct": 30.7
+    "base_pct": 30.3
    },
    "search": {
     "show": 0,
@@ -3162,10 +3162,13 @@
      "no show": 0
     },
     "other": {
-     "other": 2,
-     "film notes": 2,
+     "other": 4,
+     "film notes": 3,
      "shared:gta_opener.py": 7,
-     "shared:gta_rehearse.py": 8
+     "shared:gta_rehearse.py": 10,
+     "shared:gta_cars.py": 1,
+     "shared:viewchecks.py": 2,
+     "shared:propose.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -3320,6 +3323,78 @@
       "shared:gta_rehearse.py",
       "source/gta_rehearse.py",
       "LEAD2",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "hydrant",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "cd /home/user/Animation-; sed -n 299,325p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "LENGTH\\|WIDTH\\|B_LEN\\b\\|HALF",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "film notes",
+      "guides/film-quality-rules.md notes/archive/grand-theft-autism-handovers.md",
+      "occlu\\|draw order\\|depth order\\|in front of\\|passes through\\|through each other\\",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:viewchecks.py",
+      "notes/archive/grand-theft-autism-handovers.md source/viewchecks.py notes/critiqu",
+      "hide_faults",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "hydrant",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git status --short | head; git log --oneline origin/cl",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:viewchecks.py",
+      "source/viewchecks.py source/*.py",
+      "effect_points\\|def scene",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "cd /home/user/Animation-; git push -q origin claude/elegant-davinci-2anki0; sed ",
       ""
      ]
     ]
