@@ -50,6 +50,8 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
 ## Final and posting (Sonnet)
 - Read: `guides/tiktok-design.md` The video file, Sign-off, Posting; `guides/preflight.md` Stage 5.
 - Bite: 70, 75, 52, 47, 37. Tools: `finish.py CLEAN OUT --film NAME`, `ledger.py log/audit`.
+- The day a film is posted: add it to `source/data/freeze/films.json`, then `python3 source/freeze.py tag --push` (its bookmark
+  at the save its final video came from). The handover check refuses a video in `animations/` that no film lists.
 
 ### My accounts (Sam, 26 Oct)
 (Moved from CLAUDE.md word for word, startup fixes 4, 16 Nov.)

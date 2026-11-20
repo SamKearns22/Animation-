@@ -1906,6 +1906,11 @@ def people_from_a_description():
             bad.append(f'{label} {t}s: {diff:.2f}% of pixels differ')
     if len(drawn) < 18:
         bad.append(f'only {len(drawn)} people drawn by the kit')
+    import freeze as FZ
+    drift = max(K.FROZEN_DRIFT.values() or [0.0])           # live code vs the posted film (its bookmark): may not rise
+    base = FZ.drift_baseline('blessed', drift)
+    if drift > base + 0.05:
+        bad.append(f'the live film now differs from the posted Blessed by {drift:.2f}% (was {base:.2f}%)')
     import blessed as BL
     import blessed_cast as BC
     TC = BC.TC
@@ -1925,7 +1930,7 @@ def people_from_a_description():
         bad.append('a changed lip colour did not change the picture')
     return not bad, '; '.join(bad) or (f'{len(drawn)} people redrawn from their descriptions (the press pack a crowd'
                                         f' of 31; turned heads new: escort {K.replicate.turned["escort"]:.2f}%), '
-                                        + ', '.join(f'{lb} {d:.2f}%' for _, lb, d, _ in scores) + f' differ; a changed line shows ({seen:.2f}%)')
+                                        + ', '.join(f'{lb} {d:.2f}%' for _, lb, d, _ in scores) + f' differ; a changed line shows ({seen:.2f}%); live code vs the posted film: {drift:.2f}% at most')
 
 
 @test
@@ -3470,6 +3475,21 @@ def watcher_catches_last_weeks_four():
         shutil.rmtree(tmp, ignore_errors=True)
     return not bad, '; '.join(bad) or ('all four caught (saver, guard, finder, kit list); quiet on a clean record and '
                                        'today\'s kit list; a new hook, check and tool with no promise flagged')
+
+
+@test
+def finished_films_keep_their_bookmark():
+    """One route to the kit, Change 1 (Sam's Y, 20 Nov): every finished film has a bookmark on its true source save,
+    nothing in animations/ is unlisted, and the count of old-film files loaded and steps swapped has not risen."""
+    import freeze as FZ
+    bad = FZ.bookmark_faults() + FZ.count_faults()
+    reg = FZ.load()
+    for n, d in reg.items():
+        if not d.get('no_frame') and not any(v.endswith('.mp4') for v in d['videos']):
+            continue
+        if not d.get('save') or d['save'] == '9707503c':
+            bad.append(f'{n}: the bookmark is on a re-title save, not the true source')
+    return not bad, '; '.join(bad[:6]) or f'{len(reg)} films bookmarked, count not risen'
 
 
 def main():

@@ -844,6 +844,10 @@ def _differ(a, b):
     return float((np.abs(A - Bm).max(axis=2) > 24).mean() * 100)
 
 
+FROZEN_DRIFT = {}                 # frame label -> % of pixels where the live film code differs from its saved copy
+FROZEN_FILMS = ('blessed',)       # films whose reference pictures are drawn from their bookmark (source/freeze.py)
+
+
 def replicate(film, out_dir, frames=None, film_keys=False):
     """Render the finished frames, swap the kit's people in, render the same frames again; one labelled sheet of
     pairs and a score per frame (the share of pixels that differ by more than a hair's colour).
@@ -858,6 +862,11 @@ def replicate(film, out_dir, frames=None, film_keys=False):
     FILM_TURNED.update({'blessed': ('scarf', 'officer')}.get(film, ()))   # its own turned scarf and officer kit
     frames = frames or FRAMES[film]
     old = [BL.frame_image(t) for t, _ in frames]
+    FROZEN_DRIFT.clear()
+    if film in FROZEN_FILMS:                        # one route to the kit: how far the live code is from the POSTED film
+        import freeze
+        for (t, lab), live in zip(frames, old):
+            FROZEN_DRIFT[lab] = _differ(freeze.film_frame(film, t), live)
     kit = load(film)
     for w, d in crowds(film).items():
         crowd_hooks[w](d)

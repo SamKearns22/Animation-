@@ -1,0 +1,487 @@
+{
+ "dam": {
+  "module": "beaver_asteroid",
+  "videos": [
+   "dam.mp4",
+   "dam-discord.mp4",
+   "dam-vertical.mp4"
+  ],
+  "retitle": true,
+  "saves": {
+   "dam.mp4": "968dc8a0",
+   "dam-discord.mp4": "968dc8a0",
+   "dam-vertical.mp4": "eaea694a"
+  },
+  "save": "a5cfbb98",
+  "proxy_save": "968dc8a0",
+  "recipe": "stills"
+ },
+ "the-salt": {
+  "module": "salt",
+  "videos": [
+   "the-salt.mp4",
+   "the-salt-vertical.mp4"
+  ],
+  "retitle": true,
+  "saves": {
+   "the-salt.mp4": "968dc8a0",
+   "the-salt-vertical.mp4": "24084fa7"
+  },
+  "save": "e1c64ae8",
+  "proxy_save": "968dc8a0",
+  "recipe": "stills"
+ },
+ "andrew": {
+  "module": "rap",
+  "videos": [
+   "andrew.mp4",
+   "andrew-discord.mp4"
+  ],
+  "retitle": true,
+  "saves": {
+   "andrew.mp4": "e63302a8",
+   "andrew-discord.mp4": "e63302a8"
+  },
+  "save": "5b3ed51d",
+  "proxy_save": "e63302a8",
+  "recipe": "stills"
+ },
+ "sam": {
+  "module": "sam",
+  "videos": [
+   "sam.mp4"
+  ],
+  "retitle": true,
+  "saves": {
+   "sam.mp4": "e63302a8"
+  },
+  "save": "472bee57",
+  "proxy_save": "e63302a8",
+  "recipe": "stills"
+ },
+ "listening-and-learning": {
+  "module": "ed",
+  "videos": [
+   "listening-and-learning.mp4",
+   "listening-and-learning-vertical.mp4"
+  ],
+  "retitle": true,
+  "saves": {
+   "listening-and-learning.mp4": "e63302a8",
+   "listening-and-learning-vertical.mp4": "27d3883e"
+  },
+  "save": "7331e15f",
+  "proxy_save": "e63302a8",
+  "recipe": "stills"
+ },
+ "andrew-hutt": {
+  "module": "hutt",
+  "videos": [
+   "andrew-hutt-vertical.mp4"
+  ],
+  "saves": {
+   "andrew-hutt-vertical.mp4": "e72883ed"
+  },
+  "save": "e72883ed"
+ },
+ "king-in-the-north": {
+  "module": "burnham_film",
+  "videos": [
+   "king-in-the-north-vertical.mp4"
+  ],
+  "saves": {
+   "king-in-the-north-vertical.mp4": "36c2db4e"
+  },
+  "save": "36c2db4e",
+  "index_fps": 12
+ },
+ "pee-pee": {
+  "module": "peepee",
+  "videos": [
+   "pee-pee-vertical.mp4"
+  ],
+  "saves": {
+   "pee-pee-vertical.mp4": "f3b5eef9"
+  },
+  "save": "f3b5eef9"
+ },
+ "mossad": {
+  "module": "mossad",
+  "videos": [
+   "mossad-vertical.mp4"
+  ],
+  "saves": {
+   "mossad-vertical.mp4": "ca460e7d"
+  },
+  "save": "ca460e7d"
+ },
+ "the-patriots-2": {
+  "module": "patriots2",
+  "videos": [
+   "the-patriots-2-vertical.mp4"
+  ],
+  "saves": {
+   "the-patriots-2-vertical.mp4": "3da6a6b6"
+  },
+  "save": "3da6a6b6"
+ },
+ "russiadent-evil": {
+  "module": "russiadent",
+  "videos": [
+   "russiadent-evil-vertical.mp4"
+  ],
+  "saves": {
+   "russiadent-evil-vertical.mp4": "b65fffb5"
+  },
+  "save": "b65fffb5"
+ },
+ "the-park": {
+  "module": "thepark",
+  "videos": [
+   "the-park-vertical.mp4"
+  ],
+  "saves": {
+   "the-park-vertical.mp4": "df8b7556"
+  },
+  "save": "df8b7556"
+ },
+ "cry-minister": {
+  "module": "cryminister",
+  "videos": [
+   "cry-minister-vertical.mp4"
+  ],
+  "saves": {
+   "cry-minister-vertical.mp4": "c00969a2"
+  },
+  "save": "c00969a2"
+ },
+ "bingo-bingo": {
+  "module": "polanski",
+  "videos": [
+   "bingo-bingo-vertical.mp4"
+  ],
+  "saves": {
+   "bingo-bingo-vertical.mp4": "48433026"
+  },
+  "save": "48433026"
+ },
+ "press-secretary": {
+  "module": "press_secretary",
+  "videos": [
+   "press-secretary-vertical.mp4"
+  ],
+  "saves": {
+   "press-secretary-vertical.mp4": "fa264ca4"
+  },
+  "save": "fa264ca4"
+ },
+ "roadster": {
+  "module": "roadster",
+  "videos": [
+   "roadster-vertical.mp4"
+  ],
+  "saves": {
+   "roadster-vertical.mp4": "e2053861"
+  },
+  "save": "e2053861"
+ },
+ "traitors": {
+  "module": "traitors",
+  "videos": [
+   "traitors-vertical.mp4"
+  ],
+  "saves": {
+   "traitors-vertical.mp4": "b454f669"
+  },
+  "save": "b454f669"
+ },
+ "poker-mon": {
+  "module": "poker_mon",
+  "videos": [
+   "poker-mon-vertical.mp4"
+  ],
+  "saves": {
+   "poker-mon-vertical.mp4": "7d3f04a6"
+  },
+  "save": "7d3f04a6"
+ },
+ "bayeux-season-pass": {
+  "module": "bayeux",
+  "videos": [
+   "bayeux-season-pass-vertical.mp4",
+   "bayeux-season-pass-story.mp4"
+  ],
+  "saves": {
+   "bayeux-season-pass-vertical.mp4": "5770e731",
+   "bayeux-season-pass-story.mp4": "409f830e"
+  },
+  "save": "5770e731",
+  "recipe": "stills",
+  "regen": [
+   "python3 source/bayeux_weapons.py build",
+   "python3 source/bayeux_story.py build"
+  ]
+ },
+ "power-crime-action": {
+  "module": "power_crime",
+  "videos": [
+   "power-crime-action-vertical.mp4"
+  ],
+  "saves": {
+   "power-crime-action-vertical.mp4": "15da542f"
+  },
+  "save": "15da542f"
+ },
+ "strictly-crabs": {
+  "module": "strictly_crabs_film",
+  "videos": [
+   "strictly-crabs-vertical.mp4",
+   "strictly-crabs-story-darling.png"
+  ],
+  "saves": {
+   "strictly-crabs-vertical.mp4": "a3156c1f",
+   "strictly-crabs-story-darling.png": "ff6bfd81"
+  },
+  "save": "a3156c1f",
+  "recipe": "crab",
+  "size": [
+   540,
+   960
+  ],
+  "fixups": [
+   [
+    "source/strictly_crabs/prep.py",
+    "/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+    "/usr/bin/ffmpeg"
+   ],
+   [
+    "source/strictly_crabs/render.mjs",
+    "/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+    "/usr/bin/ffmpeg"
+   ],
+   [
+    "source/strictly_crabs/render.mjs",
+    "/opt/pw-browsers/chromium-1194/chrome-linux/chrome",
+    "/opt/pw-browsers/chromium"
+   ],
+   [
+    "source/strictly_crabs_titles.py",
+    "/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+    "/usr/bin/ffmpeg"
+   ]
+  ],
+  "regen": [
+   "cd source/strictly_crabs && npm install --no-save three@0.170.0 playwright-core && python3 prep.py",
+   "mkdir -p source/data/strictly-crabs/titles/out && python3 source/strictly_crabs_titles.py extract && python3 source/strictly_crabs_titles.py track && python3 source/strictly_crabs_titles.py render source/data/strictly-crabs/titles/out && python3 source/strictly_crabs_titles.py logo"
+  ],
+  "slow": "about 3 minutes to set up, then seconds a picture"
+ },
+ "prepper-minister": {
+  "module": "prepper",
+  "videos": [
+   "prepper-minister-vertical.mp4",
+   "prepper-minister-story.mp4"
+  ],
+  "saves": {
+   "prepper-minister-vertical.mp4": "fb16ade1",
+   "prepper-minister-story.mp4": "ec68d195"
+  },
+  "save": "fb16ade1"
+ },
+ "netan-yahoo": {
+  "module": "netan_yahoo",
+  "videos": [
+   "netan-yahoo-vertical.mp4",
+   "maul-icc-story.png"
+  ],
+  "saves": {
+   "netan-yahoo-vertical.mp4": "7021bc3f",
+   "maul-icc-story.png": "e52ec786"
+  },
+  "save": "7021bc3f"
+ },
+ "the-patriots-3": {
+  "module": "patriots3",
+  "videos": [
+   "the-patriots-3-vertical.mp4",
+   "the-patriots-3-story.png"
+  ],
+  "saves": {
+   "the-patriots-3-vertical.mp4": "f3909c48",
+   "the-patriots-3-story.png": "b79eef06"
+  },
+  "save": "f3909c48"
+ },
+ "halo-no-no": {
+  "module": "halo_no_no",
+  "videos": [
+   "halo-no-no-vertical.mp4",
+   "halo-no-no-story.png"
+  ],
+  "saves": {
+   "halo-no-no-vertical.mp4": "0ac2712b",
+   "halo-no-no-story.png": "341dd891"
+  },
+  "save": "0ac2712b"
+ },
+ "halo-no-no-retry": {
+  "module": "halo_no_no_retry",
+  "videos": [
+   "halo-no-no-retry-vertical.mp4"
+  ],
+  "saves": {
+   "halo-no-no-retry-vertical.mp4": "e1599b3a"
+  },
+  "save": "e1599b3a"
+ },
+ "patriots-4": {
+  "module": "patriots4",
+  "videos": [
+   "patriots-4-vertical.mp4"
+  ],
+  "saves": {
+   "patriots-4-vertical.mp4": "39d87567"
+  },
+  "save": "39d87567"
+ },
+ "flying-whales": {
+  "module": "flying_whales",
+  "videos": [
+   "flying-whales-vertical.mp4",
+   "flying-whales-recut-vertical.mp4",
+   "flying-whales-rig-first-vertical.mp4",
+   "blue-planet-iii-story.png"
+  ],
+  "saves": {
+   "flying-whales-vertical.mp4": "5b0a9e5b",
+   "flying-whales-recut-vertical.mp4": "bb03663c",
+   "flying-whales-rig-first-vertical.mp4": "bb03663c",
+   "blue-planet-iii-story.png": "ef4fef61"
+  },
+  "save": "5b0a9e5b"
+ },
+ "terfwarts": {
+  "module": "terfwarts",
+  "videos": [
+   "terfwarts-vertical.mp4"
+  ],
+  "saves": {
+   "terfwarts-vertical.mp4": "9b5e38d6"
+  },
+  "save": "9b5e38d6"
+ },
+ "channel-trailer": {
+  "module": "channel_trailer",
+  "videos": [
+   "channel-trailer-story.mp4"
+  ],
+  "saves": {
+   "channel-trailer-story.mp4": "718219ae"
+  },
+  "save": "718219ae",
+  "no_frame": "a cut of other films' posted finals and clips re-drawn from their own saved copies; it draws no picture of its own (recut = those films' recuts plus source/channel_trailer.py)"
+ },
+ "midterminal": {
+  "module": "midterminal",
+  "videos": [
+   "midterminal-vertical.mp4",
+   "midterminal-story.png"
+  ],
+  "saves": {
+   "midterminal-vertical.mp4": "40a5858b",
+   "midterminal-story.png": "28fbf743"
+  },
+  "save": "40a5858b"
+ },
+ "islamocommunism": {
+  "module": "islamocommunism",
+  "videos": [
+   "islamocommunism-vertical.mp4",
+   "islamocommunism-story.png"
+  ],
+  "saves": {
+   "islamocommunism-vertical.mp4": "8066e234",
+   "islamocommunism-story.png": "fab448e3"
+  },
+  "save": "8066e234"
+ },
+ "ad-vanced-notice": {
+  "module": "ad_vanced_notice",
+  "videos": [
+   "ad-vanced-notice-vertical.mp4"
+  ],
+  "saves": {
+   "ad-vanced-notice-vertical.mp4": "3a465222"
+  },
+  "save": "3a465222"
+ },
+ "elder-swindon": {
+  "module": "elder_swindon",
+  "videos": [
+   "elder-swindon-vertical.mp4"
+  ],
+  "saves": {
+   "elder-swindon-vertical.mp4": "5475bf4a"
+  },
+  "save": "5475bf4a"
+ },
+ "remakes": {
+  "module": "remakes",
+  "videos": [
+   "remakes-vertical.mp4"
+  ],
+  "saves": {
+   "remakes-vertical.mp4": "a92742ab"
+  },
+  "save": "a92742ab"
+ },
+ "blessed": {
+  "module": "blessed",
+  "videos": [
+   "blessed.mp4"
+  ],
+  "saves": {
+   "blessed.mp4": "66ddce12"
+  },
+  "save": "66ddce12"
+ },
+ "protest-tiers": {
+  "module": "protest_tiers",
+  "videos": [
+   "european-protests-ranked.mp4"
+  ],
+  "saves": {
+   "european-protests-ranked.mp4": "a88714fe"
+  },
+  "save": "a88714fe"
+ },
+ "milburn": {
+  "module": "milburn",
+  "videos": [
+   "milburn-vertical.mp4",
+   "milburn-story.png"
+  ],
+  "saves": {
+   "milburn-vertical.mp4": "6dc5df69",
+   "milburn-story.png": "6f43178d"
+  },
+  "save": "6dc5df69"
+ },
+ "yuletide-test": {
+  "module": "shot",
+  "videos": [
+   "yuletide-animation-test.mp4"
+  ],
+  "saves": {
+   "yuletide-animation-test.mp4": "97cf03dc"
+  },
+  "save": "97cf03dc",
+  "recipe": "shot",
+  "shotfile": "source/shots/s1_chop.py",
+  "size": [
+   960,
+   540
+  ],
+  "slow": "about 4 minutes a picture"
+ }
+}

@@ -532,6 +532,17 @@ def cost_faults(film, notes=None):
         return [f'COST: the cost line could not be recorded ({e})']
 
 
+def freeze_faults():
+    """One route to the kit (Sam's Y, 20 Nov): old-film files loaded, steps swapped and the like may never rise;
+    every finished film keeps its bookmark (source/freeze.py)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import freeze
+    try:
+        return freeze.count_faults() + freeze.bookmark_faults()
+    except Exception as e:
+        return [f'FREEZE: the count could not be made ({e}); run python3 source/freeze.py count']
+
+
 def sentence_faults():
     """startup fixes 4 (Sam's Y, 16 Nov): no CLAUDE.md sentence lost; text leaves only word for word (sentences.py)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -656,7 +667,7 @@ def main(argv):
             film = ledger.film_of(rec)
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
-                      + sentence_faults() + cost_faults(film, opt('--notes'))
+                      + sentence_faults() + freeze_faults() + cost_faults(film, opt('--notes'))
                       + tag_faults(film, opt('--notes')) + record_faults(rec)
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
@@ -686,8 +697,10 @@ def main(argv):
                   '`python3 source/handover.py end --film FILM` now and settle what it lists before new work')
         if not os.path.exists(p):
             print(f'handover: no saved log for {pos[0]}; list_events kinds ["user"], newest pages only, then `dump`')
+            for f in freeze_faults():
+                print(f)
             return 2
-        return report(_run(turns(p), opt('--film'), opt('--notes')), f'(start, {pos[0][-8:]})')
+        return report(_run(turns(p), opt('--film'), opt('--notes')) + freeze_faults(), f'(start, {pos[0][-8:]})')
     if cmd == 'dump':
         tr = sorted(x for f in pos for x in turns(f))
         return report(_run(tr, opt('--film'), opt('--notes')), '(from list_events)')

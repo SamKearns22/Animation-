@@ -25,13 +25,21 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 - 15 swapped steps (notes/sheets/one-route-kit-15-swapped-steps.png): 4 meet the rules (turned head, limbs arm, limbs legs, circle hands); 11 are one film's patch or drawing (Ad-Vanced Notice arm/torso, MidTerminal wings, Patriots 3 boots, Patriots 4 back hair, Mossad's six face/body steps).
 - Cost: about 1.5%, as estimated. Changed nothing in the kit or any film.
 
-## Where things stand (20 Nov, one-route-kit chat 2, Sonnet)
-- Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
-- Done: Learn step (results above).
-- Next: chat 3 (opened), Sonnet, medium: bookmark per film, one recut command, save bayeux/strictly-crabs data first; Blessed test reads frozen copy.
-- Needs Sam: nothing. Sam said Y to Change 1 and Y to deleting the stray page (20 Nov); page deleted.
-- Read: this file; notes/proposals/one-route-kit.md "Final version"; guides/job-packs.md Build.
-- Open rule requests: none found.
-- For Claude: stray page claude.ai/artifact/7vGcQMxzVKwDNLQS8EqV7Q. Watcher lines (saver, record_faults/tag_faults) still named, not this job's. Branches elegant-davinci-2anki0 appears merged; claude/blessed-c2-mics-wip: named, not merged (source/blessed.py; Blessed owns it), not this job's.
+## Change 1 results (chat 3, 20 Nov, Sonnet)
+- Built source/freeze.py + source/data/freeze/films.json: `tag` (bookmarks `film/NAME`, 39 films + extra bookmarks for variant videos, 61 in all), `recut NAME` (draws from the saved copy in a separate folder), `check` (redraw vs posted video), `count` (baseline in count-baseline.json: old-film files loaded 12, steps swapped 15, kit files loading a film file 52, old films reached 40; may never rise). Count and bookmark check run in handover.py start and end; kittest finished_films_keep_their_bookmark.
+- Registry: 39 films with a posted video in animations/ (the "41" was a loose count). Not in it: Shocking Behaviour (video never on GitHub, Sam 18 Oct); Grand Theft Autism (not finished).
+- Five early films (Dam, The Salt, Andrew, Sam, Listening & Learning): bookmark is on the true source save (the last save that changed the raw video, 24-26 Sep), not the re-title 9707503c.
+- Bayeux and Strictly Crabs: their data folders exist nowhere (gitignored, lost with old containers), so nothing to save. Both rebuild exactly from files in the repo; the rebuild steps ("regen", "fixups" for tool paths) are in films.json and run on each recut (Bayeux about 2.5 min, Strictly Crabs about 3 min). Both now redraw and match.
+- Result: 38 of 39 redraw from their saved copy and match the posted video (sheets notes/sheets/one-route-kit-freeze-check-1/2.jpg). Exception named: channel-trailer (a cut of other finals plus clips redrawn from other films' copies; draws no picture of its own).
+- The 5 that differed in the Learn check (Halo No No, Remakes, Protest Tiers, Poker-Mon, Press Secretary), at 4 times each (sheet one-route-kit-freeze-five-films.jpg): all match. The earlier "differences" were the posted video being sped up (Halo ~1.3x, Remakes 1.1x) plus captions; Poker-Mon pose differences were one frame, same pose in the other three.
+- Blessed test: now draws the film's picture from its saved copy and reports how far the live code is from the posted film. FINDING: live Blessed differs from the posted film by up to 1.92% of pixels (jacket shoulder shading, since the moves-kit saves of 14 Nov). Not loosened; the number may not rise (drift-baseline.json). The places test is untouched (it already failed before: milburn.py uses the kit).
+- Not done: places replicate still reads live film code. Next time Change 2 touches it.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-20)
+## Where things stand (20 Nov, one-route-kit chat 3, Sonnet)
+- Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
+- Done: Change 1 (results above). Pushed with bookmarks.
+- Next: Change 2 (one kit), Opus high, on Sam's own yes. Not started.
+- Needs Sam: Y/N Change 2 (his priority, 20 Nov: continue Grand Theft Autism with the best tools only; he dislikes the small chips in the jury shoulders, picture in chat); Blessed's 1.92% drift is probably the same thing.
+- Read: this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
+- Open rule requests: none found.
+- For Claude: freeze.py recut/check/count; branches claude/elegant-davinci-2anki0 (depth-check proposal files, not this job's) named, not merged; claude/blessed-c2-mics-wip as before.
