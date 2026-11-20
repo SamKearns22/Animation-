@@ -10,16 +10,16 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.13,
+   "cost": 2.67,
    "src": "estimate",
    "sid": "session_01J1JB7ZdmzPQqSmkpoDgFWX",
-   "steps": 96,
-   "hist_k": 269,
+   "steps": 101,
+   "hist_k": 274,
    "kinds": {
-    "tool search": 6.8,
-    "renders": 10.8,
-    "pictures": 12.0,
-    "other": 70.4
+    "tool search": 5.6,
+    "renders": 8.6,
+    "pictures": 9.9,
+    "other": 75.9
    },
    "calls": {
     "film-file search": 0,
@@ -29,28 +29,28 @@
     "routine": 0,
     "renders": 22,
     "pictures": 30,
-    "other": 36
+    "other": 40
    },
    "split": {
-    "usd": 7.8005,
-    "total": 7.8005,
+    "usd": 9.7616,
+    "total": 9.7616,
     "floor_k": 80,
     "blocks": {
-     "Claude's words": 38.2,
-     "carried history": 22.4,
-     "start-up floor": 19.9,
-     "new writes": 19.4
+     "new writes": 33.2,
+     "Claude's words": 30.9,
+     "carried history": 19.3,
+     "start-up floor": 16.6
     },
     "origins": {
-     "Claude's words": 58.2,
-     "start-up floor": 19.9,
-     "result: pictures": 8.3,
-     "result: tool search": 5.6,
-     "Claude's edits": 5.5,
+     "Claude's words": 47.7,
+     "cache re-write": 17.4,
+     "start-up floor": 16.6,
+     "result: pictures": 6.9,
+     "result: tool search": 4.6,
+     "Claude's edits": 4.5,
      "messages and reminders": 1.2,
      "result: other": 0.9,
-     "cache re-write": 0.2,
-     "result: renders": 0.2
+     "result: renders": 0.1
     },
     "leftover": 0.0
    },
@@ -62,35 +62,35 @@
      [
       "guides/kit-catalogue.md",
       2.1,
-      0.0497
+      0.0516
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/vid/s4.jpg",
       1.6,
-      0.0393
+      0.0407
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/sea.png",
       1.6,
-      0.037
+      0.0384
      ],
      [
       "guides/job-packs.md",
       1.2,
-      0.0288
+      0.0298
      ],
      [
       "source/flying_whales_sea.py",
       1.2,
-      0.0281
+      0.0292
      ],
      [
       "story/status.md",
       0.3,
-      0.0076
+      0.0079
      ]
     ],
-    "base_pct": 17.7
+    "base_pct": 14.9
    },
    "search": {
     "show": 0,
