@@ -612,7 +612,8 @@ def plain_torso(img, p, sp, t):
     elif out == 'jumper':
         jc = sp.get('jacket', (90, 110, 140))
         p.poly(body, jc, INK, 2.6)
-        p.line(oval(0, -2, 46, 22, 24, 0.2, math.pi - 0.2), INK, 2.4)
+        if 'vest_c' not in sp:                   # bare tops (vest, tank): no neckline at all (Sam, GTA chat 9)
+            p.line(oval(0, -2, 46, 22, 24, 0.2, math.pi - 0.2), INK, 2.4)
     if sp.get('lanyard'):  # the conference pass, still round the neck
         lc = sp.get('lanyard_c', (196, 26, 52))
         p.line([(-34, 0), (-16, 200)], lc, 6)

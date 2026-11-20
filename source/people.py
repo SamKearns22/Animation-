@@ -702,8 +702,12 @@ def turned():
 def pieces(sp):
     """The torso pieces this look wears, in the order drawn: the open collar (the outfit's), then the extras."""
     ex = _extras()
-    return (['open collar'] if sp.get('collar') == 'open' else []) + [e for e in sp.get('kit_extras', ())
-                                                                        if ex[e][0] == 'torso']
+    got = [e for e in sp.get('kit_extras', ()) if ex[e][0] == 'torso']
+    got.sort(key=lambda e: e in WORN_OVER)       # a prop worn on top always after the clothes' prints (GTA chat 10)
+    return (['open collar'] if sp.get('collar') == 'open' else []) + got
+
+
+WORN_OVER = ('headphones',)   # props that sit on the clothes (her unicorn print was drawn over her headphones)
 
 
 TURNED_ON = True     # replicate turns the new turned pieces off to score a frame against the film (as PT.ON)

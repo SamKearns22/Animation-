@@ -144,7 +144,7 @@
       3D prop projected in every view (people_parts; people.turned 'own' for each view); her turned bun sits on
       the crown (people_turned, sizes in head units); nose_wide --.
 
-- [ ] Sam (20 Nov, chat 9, on the five-angle sheet): "The headphones ... look absolutely terrible. They literally clip
+- [x] Sam (20 Nov, chat 9, on the five-angle sheet): "The headphones ... look absolutely terrible. They literally clip
       through her body, and if anything, they look more 2D than before. So I don't know how you made that judgment."
       "Although the rounded neckline on both Lucia and Jason looks better, I still think it would be better to just
       not have that neckline at all." (A repeat note, rule 30.) Why the first fix failed: the cups were flat ovals
@@ -156,6 +156,15 @@
       drawn over the shoulder line; find a photo of headphones worn round the neck first and compare at full size,
       five angles, before sending. Neckline: on bare tops (vest, tank) no neckline at all (the jumper's crew-neck curve
       in body.plain_torso is drawn on the skin body: leave it off when sp has vest_c).
+      Done chat 10: compared first with two real photos (references/grand-theft-autism/headphones-worn-neck-1/2.jpg):
+      cups turned out to the sides on the collarbones beside the throat. headphones3d rebuilt: each cup two solid
+      drums (pad, shell) with true 3D rims, its top leaning back with the chest; pushed forward until no rim point is
+      inside the chest's section (never in her); a cup two-thirds of a head wide; the band a thick strap with a
+      highlight, round the back of the neck on the shoulders, yokes into the cups' outer tops. Kit: WORN_OVER in
+      people.pieces (the unicorn print was drawn over the headphones). Neckline: none on vest/tank in front
+      (body.plain_torso), three-quarter (views oval) and the turned views' straight line at the neck's foot painted
+      out (views._bare_neck, also fills an old background notch under the jaw from the side). Judged at full size
+      beside the photos; sheet sent (Sam's three references, chat 9 15:39, were the game art already in references/).
 
 ## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
 Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
@@ -256,18 +265,17 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
-## Where things stand (20 Nov, chat 9 end, Opus medium)
-- Rules that bite next: 30 (the headphones are a repeat note: the why is in the brief checklist), 89 (judge at full
-  size against a reference, never a thumbnail), 8 (nothing past the rehearsals until Sam's Y/N on both clips).
-- Done: Sam's 6 cast notes; his second notes (back-view arm seam fixed in the kit, Lucia's neck line, chain, bun,
-  nose); critique hunts 1 and 2. Headphones and neckline NOT done (his last note).
-- Next: Opus medium: the headphones rebuilt as a solid prop resting on her (plan in the brief checklist's last
-  item), no neckline on bare tops; five angles at full size beside a real photo; send. Then Sonnet: the new cast
-  into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch the opening.
-- Needs Sam: the clips' Y/N later (rule 8). (Sam, 20 Nov: "Y": her nose stud stays off.)
-- Read: guides/job-packs.md, Notes round; this file's brief checklist, last three items.
+## Where things stand (20 Nov, chat 10 end, Opus medium)
+- Rules that bite next: 8 (nothing past the rehearsals until Sam's Y/N on both clips), 89 (judge clips at full
+  size), 30 (headphones were a repeat note: if Sam flags them again, read the chat 10 line in the checklist first).
+- Done: headphones rebuilt as a solid prop (photo-matched, never inside her), no neckline on bare tops in any view,
+  print-under-prop order fixed in the kit; sheet sent (notes/sheets/grand-theft-autism-headphones-neckline.jpg).
+  Kit tests: the same 11 old failures before and after (pose_gallery, outfit_every_view officer/scarf, etc.): none new.
+- Next: Sonnet: the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch
+  the opening.
+- Needs Sam: his look at the headphones sheet (an answer can come with the clips' Y/N; rule 8).
+- Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP.
 - Open rule requests: none.
-- For Claude: people_parts.headphones3d (PHONES_YAW, headphones_view), views.torso_outline for the body's edge per
-  view; body.plain_torso jumper line (oval at 0,-2); people_parts.vest_torso neck patch.
+- For Claude: people_parts.headphones3d (cups: n, upr, push-forward loop), views._bare_neck, people.WORN_OVER.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 15.88% of 15%; forecast 66.4% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 16.79% of 15%; forecast 67.3% (2026-11-20)

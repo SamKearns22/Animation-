@@ -931,69 +931,149 @@ def headphones_view(view):
 
 
 def headphones3d(p, sp, yaw):
-    """The headphones as one 3D prop round the neck (Sam, GTA chat 9: "drawn on in 2D ... it needs to be a 3D prop"):
-    a band round the back of the neck, a cup resting on each collarbone, its shell facing out. Every view projects the
-    same points (views.project, body units: neck base at 0, 0, y down, z towards the face); what the neck hides (the
-    band's back from the front, the far cup from the side) and what the body hides from behind (the cups) is left out."""
+    """The headphones as one solid 3D prop round the neck (Sam, GTA chat 9: "drawn on in 2D ... it needs to be a 3D
+    prop"; chat 10: the first prop "clip[s] through her body ... more 2D than before"). Real over-ear headphones worn
+    round the neck: the band lies on the shoulders round the back of the neck; each cup hangs on the collarbone, its
+    pad flat on the chest and its shell facing out. Each cup is two solid drums (the soft pad, then the hard shell),
+    every rim a true circle in 3D, so it is thick and round from every side; its back rests ON the chest's surface
+    (the torso's section at that height), never inside it. Sizes are real: a cup about two-thirds of the head's width.
+    Body units (views.project): neck base at 0, 0, y down, z towards the face."""
     c = sp.get('phones_c', (40, 40, 46))
-    cush = (70, 70, 78)
+    pad = sp.get('phones_pad', (64, 64, 72))
+    hi = sp.get('phones_hi', (150, 210, 200))
     a = math.radians(yaw)
     view_v = (-math.sin(a), 0.0, math.cos(a))          # towards the camera, in the body's frame
     behind_body = math.cos(a) < -0.2                    # seen from behind: the chest (and the cups on it) is hidden
+    sw = sp.get('shoulders', 150)
+    deep = 0.6 * sw * 0.86                               # the chest's depth at the collarbone (views.torso_outline side)
+
+    def chest_z(x, y):                                   # the front of the body at (x, y): an oval section
+        d = deep + 0.5 * max(0.0, y - 20)
+        return d * math.sqrt(max(0.05, 1 - (x / sw) ** 2))
+
+    def unit(v):
+        n = math.sqrt(sum(q * q for q in v)) or 1.0
+        return tuple(q / n for q in v)
+
+    def add(*vs):
+        return tuple(sum(q) for q in zip(*vs))
+
+    def mul(v, k):
+        return tuple(q * k for q in v)
+
+    def dot(u, v):
+        return sum(x * y for x, y in zip(u, v))
+
+    def cross(u, v):
+        return (u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0])
+
+    def proj(pt):
+        return V.project(pt, yaw)[0]
+
+    def hull(pts):
+        pts = sorted(set((round(x, 2), round(y, 2)) for x, y in pts))
+        if len(pts) < 3:
+            return pts
+
+        def turn(o, a_, b_):
+            return (a_[0] - o[0]) * (b_[1] - o[1]) - (a_[1] - o[1]) * (b_[0] - o[0])
+        lo, up = [], []
+        for q in pts:
+            while len(lo) > 1 and turn(lo[-2], lo[-1], q) <= 0:
+                lo.pop()
+            lo.append(q)
+        for q in reversed(pts):
+            while len(up) > 1 and turn(up[-2], up[-1], q) <= 0:
+                up.pop()
+            up.append(q)
+        return lo[:-1] + up[:-1]
+
+    def ring(ctr, cup, r, k=28):
+        return [add(ctr, mul(cup['up'], r * math.cos(2 * math.pi * i / k)), mul(cup['side'], r * math.sin(2 * math.pi * i / k)))
+                for i in range(k)]
+
+    R = 40.0                                             # the cup's radius (the pad); the shell a little smaller
+    cups = []
+    for sgn in (-1, 1):
+        # worn as in the photos (references/grand-theft-autism/headphones-*): each cup turned out to the side and a
+        # little forward, its pad beside the throat, its rim resting on the collarbone
+        n = unit((sgn * 0.85, -0.3, 0.45))
+        upr = (0.0, -1.0, -0.7)                          # its top leans back with the chest's slope
+        e_up = unit(add(upr, mul(n, -dot(upr, n))))
+        e_side = cross(n, e_up)
+        cup = dict(sgn=sgn, back=(sgn * 30.0, 26.0, 20.0), n=n, up=e_up, side=e_side)
+        dz = 0.0                                         # pushed forward until no part of it is inside her
+        for q in ring(cup['back'], cup, R, 36) + ring(add(cup['back'], mul(n, 34.0)), cup, R * 0.9, 36):
+            if q[1] > 2:
+                dz = max(dz, chest_z(q[0], q[1]) + 1.5 - q[2])
+        cup['back'] = add(cup['back'], (0.0, 0.0, dz))
+        cups.append(cup)
+
+
+    def drum(cup, z0, z1, r, wall, face):
+        """A solid round drum along the cup's axis, from z0 to z1 out of the chest: its wall, then the end we see."""
+        b0 = add(cup['back'], mul(cup['n'], z0))
+        b1 = add(cup['back'], mul(cup['n'], z1))
+        r0, r1 = ring(b0, cup, r), ring(b1, cup, r)
+        p.poly(hull([proj(q) for q in r0 + r1]), wall, INK, 2.4)
+        facing = dot(cup['n'], view_v)
+        end = r1 if facing >= 0 else r0
+        if abs(facing) > 0.08:
+            p.poly([proj(q) for q in end], face, INK, 1.8)
+        return b1, facing
+
+    def draw_cup(cup):
+        _, facing = drum(cup, 0.0, 15.0, R, dk(pad, 0.75), pad)          # the soft pad on the chest
+        top, facing = drum(cup, 15.0, 34.0, R * 0.9, dk(c, 0.6), c)      # the hard shell
+        if facing > 0.08:                                                 # the shell's face: a ring, a logo, a shine
+            p.line([proj(q) for q in ring(top, cup, R * 0.66)] + [proj(ring(top, cup, R * 0.66)[0])], dk(c, 0.55), 2.0)
+            p.poly([proj(q) for q in ring(top, cup, R * 0.2, 16)], hi, None)
+            sh = [add(top, mul(cup['up'], R * 0.78 * math.cos(u)), mul(cup['side'], -R * 0.78 * math.sin(u)))
+                  for u in (math.radians(d) for d in range(-10, 75, 8))]
+            p.line([proj(q) for q in sh], B.lt(c, 2.6), 3.0)
 
     def hidden(pt):
         (sx, _), d = V.project(pt, yaw)
-        return (d < -6 and abs(sx) < 36) or (behind_body and pt[2] > 6 and abs(sx) < 70 and d < 0)
+        return d < -4 and abs(sx) < 34                   # behind the neck
 
+    # the band: from each shell's top, up onto the shoulder beside the neck, round the back of the neck
+    def outward(cu):                                     # the cup's side away from the neck
+        return cu['side'] if cu['side'][0] * cu['sgn'] > 0 else mul(cu['side'], -1)
+    ends = [add(cu['back'], mul(cu['n'], 24.0), mul(cu['up'], R * 0.7), mul(outward(cu), R * 0.7)) for cu in cups]
     band = []
-    for k in range(41):                                  # cup to cup round the back of the neck
-        u = -0.45 + (math.pi + 0.9) * k / 40
-        band.append((50 * math.cos(u), 8 + 8 * math.sin(u), -34 * math.sin(u) + 6))   # low at the back: on the shoulders
-    cups = [(sgn, (sgn * 50.0, 22.0, 16.0)) for sgn in (-1, 1)]
-    cups.sort(key=lambda q: V.project(q[1], yaw)[1])    # the far cup first
+    for k in range(49):
+        u = math.pi * k / 48                             # 0 at one side of the neck, pi at the other, round the back
+        x = -68 * math.cos(u)
+        z = 14 - 60 * math.sin(u)
+        band.append((x, -5 + 0 * math.sin(u), z))
+    lead = []
+    for i, e in enumerate(ends):                         # each end climbs from the shell to the band's side
+        side_pt = band[0] if i == 0 else band[-1]
+        mid = add(mul(add(e, side_pt), 0.5), (0.0, 0.0, 14.0))        # the yoke bows forward a little
+        lead.append([add(mul(e, (1 - f) ** 2), mul(mid, 2 * f * (1 - f)), mul(side_pt, f * f))
+                     for f in (k / 10 for k in range(11))])
+    path = lead[0][::-1][:-1] + band + lead[1][1:]
 
     def draw_band():
         run = []
-        for pt in band + [None]:
-            if pt is not None and not hidden(pt):
-                run.append(V.project(pt, yaw)[0])
+        for pt in path + [None]:
+            if pt is not None and not hidden(pt) and not (behind_body and pt[2] > 30):
+                run.append(proj(pt))
                 continue
             if len(run) > 1:
-                p.line(curve(run, 2), INK, 9.0)
-                p.line(curve(run, 2), c, 6.0)
+                pts = curve(run, 2)
+                p.line(pts, INK, 15.0)
+                p.line(pts, c, 10.5)
+                p.line([(x, y - 2.5) for x, y in pts], B.lt(c, 2.0), 2.4)
             run = []
 
-    def draw_cup(sgn, ctr):
-        if hidden(ctr):
-            return
-        n = (sgn * 0.82, -0.25, 0.5)                     # the shell faces out and a little forward
-        nl = math.sqrt(sum(v * v for v in n))
-        n = tuple(v / nl for v in n)
-        facing = sum(x * y for x, y in zip(n, view_v))
-        (cx, cy), _ = V.project(ctr, yaw)
-        (tx, ty), _ = V.project(tuple(q + 10 * v for q, v in zip(ctr, n)), yaw)
-        ux, uy = tx - cx, ty - cy                        # the normal on screen: the cup is thin along it
-        ul = math.hypot(ux, uy) or 1.0
-        ux, uy = ux / ul, uy / ul
-        wx, wy = -uy, ux
-        f = max(0.38, abs(facing))
-
-        def ell(ox, oy, r1, r2):
-            return [(ox + ux * r1 * math.cos(q) + wx * r2 * math.sin(q), oy + uy * r1 * math.cos(q) + wy * r2 * math.sin(q))
-                    for q in (2 * math.pi * i / 20 for i in range(20))]
-        side = 1 if facing >= 0 else -1                  # the shell sits on the outer side of the cushion
-        off = 7 * math.sqrt(max(0.0, 1 - facing * facing))
-        p.poly(ell(cx - ux * off * side * 0.5, cy - uy * off * side * 0.5, 22 * f, 25), cush, INK, 2.2)
-        if facing >= 0:                                  # the shell, seen from outside
-            p.poly(ell(cx + ux * off * 0.5, cy + uy * off * 0.5, 17 * f, 20), c, INK, 1.8)
-            p.poly(ell(cx + ux * off * 0.5, cy + uy * off * 0.5 - 6, 5 * f, 4), sp.get('phones_hi', (150, 210, 200)), None)
-        else:                                            # the pad's hollow, seen from inside
-            p.poly(ell(cx, cy, 13 * f, 16), dk(cush, 0.6), None)
-
-    far, near = cups
-    draw_cup(*far)
+    if behind_body:                                      # from behind only the band shows, on the shoulders
+        draw_band()
+        return
+    order = sorted(cups, key=lambda cu: V.project(cu['back'], yaw)[1])    # the far cup first
+    draw_cup(order[0])
     draw_band()
-    draw_cup(*near)
+    draw_cup(order[1])
 
 
 # ------------------------------------------------- GTA cast chat (20 Nov): sleeveless tops on a bare-armed body

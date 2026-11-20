@@ -138,3 +138,18 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   people_parts.VEST, vest_outline (dip: below the arm's fade); people.py 'build', 'arms N muscle', 'shorts', 'trainers';
   her look: story/grand-theft-autism-people.txt '# her'; unicorn: people_parts.unicorn_torso (bot).
 
+
+## Where things stand (20 Nov, chat 9 end, Opus medium)
+- Rules that bite next: 30 (the headphones are a repeat note: the why is in the brief checklist), 89 (judge at full
+  size against a reference, never a thumbnail), 8 (nothing past the rehearsals until Sam's Y/N on both clips).
+- Done: Sam's 6 cast notes; his second notes (back-view arm seam fixed in the kit, Lucia's neck line, chain, bun,
+  nose); critique hunts 1 and 2. Headphones and neckline NOT done (his last note).
+- Next: Opus medium: the headphones rebuilt as a solid prop resting on her (plan in the brief checklist's last
+  item), no neckline on bare tops; five angles at full size beside a real photo; send. Then Sonnet: the new cast
+  into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch the opening.
+- Needs Sam: the clips' Y/N later (rule 8). (Sam, 20 Nov: "Y": her nose stud stays off.)
+- Read: guides/job-packs.md, Notes round; this file's brief checklist, last three items.
+- Open rule requests: none.
+- For Claude: people_parts.headphones3d (PHONES_YAW, headphones_view), views.torso_outline for the body's edge per
+  view; body.plain_torso jumper line (oval at 0,-2); people_parts.vest_torso neck patch.
+

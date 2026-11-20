@@ -29,7 +29,7 @@ sys.path.insert(0, HERE)
 
 import body as B             # noqa: E402  the people engine
 import figure as F           # noqa: E402
-from ink import INK, curve, oval   # noqa: E402
+from ink import INK, curve, oval, open_curve  # noqa: E402
 
 VIEWS = {0: 'front', 45: 'three', 90: 'side', 135: 'three_back', 180: 'back'}
 THIGH, SHIN, ANKLE_Y = 228, 218, 890          # person units: hips at 450, soles at 928 (knees just soft standing)
@@ -680,6 +680,7 @@ def torso_view(img, p, sp, view, seated=False):
         # near side's hard-edged shadow panel and seam line gone (they read as a box's side plane).
         body = torso_outline(sp, view, bottom)
         p.poly(body, jc, INK, 2.6)
+        _bare_neck(p, sp, [(-22.2, -40), (40.3, -40), (45.2, -4), (-20.5, -4)])
         if out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)
             if tie:
@@ -694,7 +695,7 @@ def torso_view(img, p, sp, view, seated=False):
             p.line([(o, 240), (o + 4, bottom)], jd, 2.2)
         elif out == 'dress':
             p.poly([(o - 34, -4), (o + 30, -4), (o + 18, 46), (o, 62), (o - 22, 46)], skin, INK, 2.0)
-        else:
+        elif 'vest_c' not in sp:                  # bare tops (vest, tank): no neckline at all (Sam, GTA chat 9)
             p.line(oval(o - 4, -2, 40, 18, 20, 0.2, math.pi - 0.2), INK, 2.4)
         if sp.get('rosette'):
             p.ell(o - 70, 120, 20, 20, (40, 156, 72), INK, 2.4)
@@ -710,6 +711,7 @@ def torso_view(img, p, sp, view, seated=False):
             p.poly([(-26, -80), (24, -80), (34, 8), (-30, 8)], skin, INK, 2.6)
         body = torso_outline(sp, view, bottom)
         p.poly(body, jc, INK, 2.6)
+        _bare_neck(p, sp, [(-28.5, -40), (28.5, -40), (32.6, -5), (-29.5, -5)], front_flare=False)
         if out in ('suit', 'blouse'):
             p.poly([(4, -14), (36, -6), (34, 24), (16, 12)], sc, INK, 2.0)
             if tie:
@@ -743,6 +745,24 @@ def torso_view(img, p, sp, view, seated=False):
             p.line([(off, bottom - 110), (off, bottom)], INK, 2.2)
     for extra in TORSO_EXTRAS:                    # what a person wears over the clothes (the people kit's extras), in
         extra(img, p, sp, view, seated)           # this view too (face tool chat 15: one outfit in every view)
+
+
+def _bare_neck(p, sp, q, front_flare=True):
+    """A bare top (vest, tank; people.py sets vest_c): one neck and body, no line across the neck's foot (Sam, GTA
+    chat 9: "the neck and the torso are one continuing part"). The body's top edge there is painted out; the neck's
+    sides run on down, flaring into the shoulders' line. q: the neck's quad from y -40 down to the body's top edge (TL, TR, BR, BL)."""
+    if 'vest_c' not in sp or sp.get('neck_off'):
+        return
+    (x0, y0), (x1, _), (x2, y2), (x3, _) = q
+    p.poly([(x0, y0), (x1, y0), (x2 + 1, y2 + 9), (x3 - 1, y2 + 9)], sp['skin'], None)   # q's foot: the body's top edge
+    for (xa, xb, sg) in ((x0, x3, -1), (x1, x2, 1)):
+        if sg > 0 and not front_flare:            # from the side the throat curves on into the chest's line (it
+            throat = open_curve([(xa, y0), (xb + 4, y2 - 12), (xb + 10, y2 - 1), (xb + 16, y2 + 6)], 3)
+            p.poly(throat + [(xb, y2 + 9), (xa, y2)], sp['skin'], None)   # left a notch of background under the jaw)
+            p.line(throat, INK, 2.6)
+            continue
+        p.line(open_curve([(xa, y0), (xa + (xb - xa) * 0.7, y0 + (y2 - y0) * 0.7),
+                           (xb + sg * 3, y2 - 1), (xb + sg * 9, y2 + 1)], 3), INK, 2.6)
 
 
 # ------------------------------------------------------------------------------------- one outfit in every view
