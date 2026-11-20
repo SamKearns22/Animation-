@@ -21,7 +21,8 @@ THE LANGUAGE (one fact per line, or several on a line split by ' | '; colours ar
     knitted flowers), crest (a football shirt's badge and white collar trim))
     (GTA, 20 Nov: `outfit: ..., sleeves short` | extras palms (a leaf-print shirt), biker (a leather biker jacket over a
     white vest, gold chain), unicorn (a jumper's unicorn being sick rainbows), scoop (a fitted top's scoop neck and
-    gold chain), headphones (over-ear, round the neck) | `soft`: a young face, no eye bags | `hair: pony, C, loose`)
+    gold chain), headphones (over-ear, round the neck) | chat 9: `hair: crop, C, buzz` (a buzz cut), `hair: bun, C,
+    messy` (curly hair piled in a messy high bun, curls loose by the face), `bangles` (both wrists) | `soft`: a young face, no eye bags | `hair: pony, C, loose`)
     (GTA characters chat, 20 Nov: `body: ..., build man|woman, arms 36 muscle` (body.FIGS: a man's taper, a woman's
     waist and hips; thicker, muscled arms) | `outfit: ..., shorts knee|crop, camo, fray, trainers` | extras vest (wide
     straps, LEONIDA print, silver chain), tank (thin straps, gold chain): sleeveless, on a skin body, bare arms)
@@ -397,6 +398,8 @@ def _fact(d, key, val, people):
         d['stud_k'] = float(val)
     elif key == 'hoops':                           # GTA (20 Nov): small gold hoop earrings
         d['hoops'] = True
+    elif key == 'bangles':                         # GTA (chat 9): bangles and bracelets on both wrists
+        d['bangles'] = True
     elif key == 'soft':                            # GTA (20 Nov): a young, pretty face (no eye bags, faint folds)
         d['soft'] = True
     elif key == 'deep set':
@@ -435,6 +438,9 @@ def _fact(d, key, val, people):
                 continue
             if q.strip() == 'high':                    # GTA (20 Nov): a high ponytail, its top seen over the crown
                 d['pony_high'] = True
+                continue
+            if q.strip() in ('buzz', 'messy'):         # GTA (chat 9): a buzz cut (crop); a messy curly bun (bun)
+                d['hair_' + q.strip()] = True
                 continue
             if q.strip() == 'loose':                   # GTA (20 Nov): a middle parting and loose strands by the face
                 d['hair_loose'] = True
@@ -557,12 +563,14 @@ def person(d):
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
               'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
               'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w', 'sleeve_taper', 'smile', 'figure', 'arm_w',
-              'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c'):
+              'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c', 'bangles'):
         if k in d:
             sp[k] = d[k]
     if 'skin' not in sp:
         raise DescriptionError(f"{d['who']}: no skin line")
     sp.setdefault('hair_c', (40, 32, 28))
+    if d.get('hair_buzz'):                         # a buzz cut: the skin shows through, so the hair reads lighter
+        sp['hair_c'] = tuple(int(h * 0.8 + k * 0.2) for h, k in zip(sp['hair_c'], sp['skin']))
     sp['hair'] = BEHIND[style]
     if 'brows_dk' in d:
         d = dict(d, brows=tuple(int(v * d['brows_dk']) for v in sp['hair_c']))
@@ -578,6 +586,7 @@ def person(d):
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
                   ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes'), ('pencil', 'pencil'),
                   ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'), ('hair_loose', 'hair_loose'), ('soft', 'soft'), ('hoops', 'hoops'), ('pony_high', 'pony_high'), ('stud_k', 'stud_k'),
+                  ('hair_buzz', 'hair_buzz'), ('hair_messy', 'hair_messy'),
                   ('piercings', 'piercings')):
         if k in d:
             fc[fk] = d[k]

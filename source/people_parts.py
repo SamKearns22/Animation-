@@ -248,10 +248,12 @@ def _front_head(img, p, sp, t, hx, hy):
         p.poly(curve(FF.mouth.pts([(-L['mw'] * 0.6, L['lip0'] - 0.005), (0.0, L['nose_y'] + 0.01),
                             (L['mw'] * 0.6, L['lip0'] - 0.005), (0.0, L['lip0'] + 0.01)]), 3), dk(skin, fc['stub']), None)
         rng = np.random.default_rng(len(who))
-        for _ in range(60):
-            u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.7, 0.96)
+        light = fc['stub'] >= 0.9                          # a very light fade (GTA chat 9, Jason): finer, fainter
+        for _ in range(110 if light else 60):
+            u, v = rng.uniform(-e * 0.8, e * 0.8), rng.uniform(0.62 if light else 0.7, 0.96)
             if abs(u) < L['jw'] * 0.5 * (1.0 - (v - 0.82) * 2.2):
-                p.poly(oval(*f(u, v), 1.6, 1.6, 6), dk(skin, fc['stub'] - 0.12), None)
+                p.poly(oval(*f(u, v), *((1.0, 1.0) if light else (1.6, 1.6)), 6),
+                       dk(skin, fc['stub'] - (0.06 if light else 0.12)), None)
         o = curve(f.pts(outl), 4)                             # the face's ink back over the stubble's edge (line-work
         p.line(o + o[:1], INK, 2.6)                           # check, chat 3: the jaw lost its outline)
     if fc.get('beard'):                                       # a short boxed beard and a moustache
@@ -296,6 +298,8 @@ def _front_head(img, p, sp, t, hx, hy):
     hl = -0.06
     if fc['hair'] in LONG_STYLES + ('receding', 'pony'):
         _hair_front(p, f, L, fc, hc, skin)
+    elif fc['hair'] == 'crop' and fc.get('hair_buzz'):         # GTA chat 9 (Jason): a buzz cut
+        buzz_front(p, f, L, hc)
     elif fc['hair'] == 'crop':                                  # a short crop: a low straight hairline, the skull's shape
         crop_front(p, f, L, hc, hl)
     elif fc['hair'] == 'none':                                # under a wig (the judge): the wig is drawn after
@@ -378,6 +382,21 @@ def crop_front(p, f, L, hc, hl=-0.06, fill=True):
             p.line([f(u, v), f(u + 0.008, v + 0.025)], B.lt(hc, 1.7), 1.4)
 
 
+def buzz_front(p, f, L, hc, hl=-0.08):
+    """A buzz cut (GTA chat 9, Jason; Sam: "his hair should be a buzz"): the crop's cap hugging the skull, the skin
+    showing through (the colour is set lighter in people.py), a fine stipple instead of strokes, a soft hairline."""
+    c = L['fhw'] * 0.5
+    cap = crop_cap(L, hl)
+    cap = [(u, v + 0.03 if v < -0.3 else v) for u, v in cap]         # no height over the skull: it hugs the dome
+    p.poly(curve(f.pts(cap), 2), hc, INK, 1.8)
+    rng = np.random.default_rng(7)
+    for _ in range(90):                                   # the stubble of a buzz: fine dots
+        u, v = rng.uniform(-c, c), rng.uniform(-0.36, hl - 0.02)
+        if abs(u) < c * (1.0 - max(0.0, -v - 0.25) * 2.0):
+            x, y = f(u, v)
+            p.poly(oval(x, y, 1.3, 1.3, 6), dk(hc, 0.72), None)
+
+
 SILVER = (214, 218, 226)
 
 
@@ -440,6 +459,8 @@ def _hair_mass(p, f, L, fc, hc):
             r = 1.0 + 0.04 * math.sin(k * 2.7)
             pts.append(((e + 0.17) * big * r * math.cos(a), 0.22 + 0.62 * big * r * math.sin(a)))
         pts += [(e + 0.1 * big, 0.62 + 0.2 * (big - 1)), (-e - 0.1 * big, 0.62 + 0.2 * (big - 1))]
+    elif fc.get('hair_messy'):                               # GTA chat 9 (her): a big messy curly bun, high
+        return messy_bun(p, f, L, fc, hc)
     else:                                                     # bun: a knot on the crown
         p.poly(curve(f.pts([(-0.13, -0.46), (-0.12, -0.62), (0.0, -0.68), (0.12, -0.62), (0.13, -0.46)]), 3), hc, INK,
                2.2)
@@ -461,6 +482,53 @@ def _hair_mass(p, f, L, fc, hc):
             big = fc.get('hair_big', 1.0)
             x, y = f((e + 0.17) * big * r * math.cos(a), 0.22 + 0.62 * big * r * math.sin(a))
             p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+
+
+def messy_bun(p, f, L, fc, hc):
+    """A big messy bun of curls piled high on the crown (her, GTA chat 9): overlapping lumps of curls, loops of
+    curl inside, a few curls springing loose off the top."""
+    rng = np.random.default_rng(31)
+    lumps = [(0.0, -0.64, 0.15), (-0.12, -0.58, 0.11), (0.12, -0.6, 0.11), (-0.06, -0.74, 0.1), (0.08, -0.75, 0.1),
+             (0.0, -0.52, 0.12)]
+    for u, v, r in lumps:                                     # ink first, then fill, so the lumps merge as one mass
+        p.poly(oval(*f(u, v), *_rr(f, r * 1.04), 18), INK, None)
+    for u, v, r in lumps:
+        p.poly(oval(*f(u, v), *_rr(f, r * 0.98), 18), hc, None)
+    for _ in range(22):                                       # curls inside the bun
+        u, v = rng.uniform(-0.17, 0.17), rng.uniform(-0.82, -0.5)
+        x, y = f(u, v)
+        p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+    for u, v, du in ((-0.1, -0.82, -0.06), (0.06, -0.86, 0.05), (0.17, -0.7, 0.07)):   # loose curls off the top
+        x0, y0 = f(u, v)
+        x1, y1 = f(u + du, v - 0.05)
+        p.line(curve([(x0, y0), ((x0 + x1) / 2 - 6, (y0 + y1) / 2), (x1, y1)], 3), INK, 4.4)
+        p.line(curve([(x0, y0), ((x0 + x1) / 2 - 6, (y0 + y1) / 2), (x1, y1)], 3), hc, 2.4)
+
+
+def _rr(f, r):
+    """A radius in face units as the picture's x and y radii."""
+    return (abs(f(r, 0.0)[0] - f(0.0, 0.0)[0]), abs(f(0.0, r)[1] - f(0.0, 0.0)[1]))
+
+
+def messy_front(p, f, L, fc, hc, hl):
+    """Her curls swept up to the bun (GTA chat 9): curly texture over the crown, and loose ringlets falling by
+    each temple to the cheek (no fringe)."""
+    e, c = L['fw'] * 0.5, L['fhw'] * 0.5
+    rng = np.random.default_rng(len(fc['m']) + 11)
+    for _ in range(14):
+        u, v = rng.uniform(-c, c), rng.uniform(-0.4, hl - 0.04)
+        x, y = f(u, v)
+        p.line(oval(x, y, 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+    for sgn in (-1, 1):                                       # ringlets at the temples: a wavy ribbon each side
+        for k, (x0, y0, ln) in enumerate(((e - 0.07, hl + 0.06, 0.62), (e - 0.015, 0.0, 0.5))):
+            pts = []                                          # hanging in front of the face's edge, to the cheek
+            for i in range(11):
+                t = i / 10
+                pts.append((sgn * (x0 + 0.03 * math.sin(t * math.pi * 3.5 + k)), y0 + t * ln))
+            q = curve(f.pts(pts), 3)
+            p.line(q, INK, 6.2 - k)
+            p.line(q, hc, 3.8 - k)
+            p.line(q, B.lt(hc, 1.25), 1.0)
 
 
 def _strand(p, pts, col, w):
@@ -598,6 +666,8 @@ def _hair_front(p, f, L, fc, hc, skin):
     if st == 'shag':
         return shag_front(p, f, L, fc, hc)
     hl = {'bob': -0.02, 'long': -0.08, 'curly': -0.1, 'bun': -0.1, 'pony': -0.1}[st]
+    if st == 'bun' and fc.get('hair_messy'):                  # swept up off the face: a higher hairline (her, chat 9)
+        hl = -0.2
     cap = _press_cap(L, hl)
     if st == 'bob':                                           # a straight fringe to the brows
         cap = [(-e - 0.02, 0.36), (-e - 0.03, 0.02), (-e + 0.04, -0.24), (-0.24, -0.4), (0.0, -0.45), (0.24, -0.4),
@@ -605,7 +675,9 @@ def _hair_front(p, f, L, fc, hc, skin):
                (c * 0.6, L['brow_y'] - 0.07), (-c * 0.6, L['brow_y'] - 0.07), (-c + 0.02, 0.1), (-e + 0.03, 0.34)]
     p.poly(curve(f.pts(cap), 2), hc, INK, 2.4)
     rng = np.random.default_rng(len(fc['m']) + 3)
-    if st == 'curly' and fc.get('hair_streak'):
+    if st == 'bun' and fc.get('hair_messy'):
+        messy_front(p, f, L, fc, hc, hl)
+    elif st == 'curly' and fc.get('hair_streak'):
         streaked_front(p, f, c, hl, fc, hc, rng)
     elif st == 'curly':
         for _ in range(16):
@@ -622,11 +694,15 @@ def _hair_front(p, f, L, fc, hc, skin):
             p.line(curve(f.pts([(u, hl - 0.02), (u * 0.7, -0.24), (u * 0.3, -0.42)]), 3), dk(hc, 0.72), 1.3)
     if st == 'pony' and fc.get('pony_high'):           # GTA (Lucia; critique r1): a high ponytail from the front:
         p.poly(curve(f.pts([(-0.1, -0.44), (0.0, -0.5), (0.1, -0.44)]), 2), hc, INK, 2.0)   # its root over the crown
-        tail = [(e - 0.04, -0.2), (e + 0.1, -0.05), (e + 0.16, 0.3), (e + 0.12, 0.72), (e + 0.04, 0.95),
-                (e + 0.02, 0.7), (e + 0.05, 0.3), (e - 0.01, 0.0)]           # and the tail swinging past her cheek
-        p.poly(curve(f.pts(tail), 3), hc, INK, 2.2)
-        for u in (0.03, 0.07):
-            p.line(curve(f.pts([(e + u, 0.0), (e + u + 0.04, 0.35), (e + u, 0.75)]), 3), dk(hc, 0.7), 1.2)
+        tail = [(e - 0.06, -0.24), (e + 0.14, -0.08), (e + 0.24, 0.3), (e + 0.2, 0.7), (e + 0.1, 0.92),
+                (e + 0.04, 0.96), (e + 0.0, 0.7), (e + 0.02, 0.3), (e - 0.03, 0.0)]   # the tail past her cheek: full
+        p.poly(curve(f.pts(tail), 3), hc, INK, 2.2)                        # (Sam's likeness note, chat 9)
+        for u in (0.04, 0.09, 0.14):
+            p.line(curve(f.pts([(e + u, -0.02), (e + u + 0.05, 0.35), (e + u - 0.01, 0.8)]), 3), dk(hc, 0.7), 1.2)
+        for (u0, v0), (u1, v1) in (((e + 0.1, 0.9), (e + 0.16, 1.0)), ((e + 0.05, 0.93), (e + 0.02, 1.03)),
+                                   ((e + 0.2, 0.62), (e + 0.27, 0.7))):    # split ends off the tail
+            p.line(curve(f.pts([(u0, v0), ((u0 + u1) / 2 + 0.01, (v0 + v1) / 2), (u1, v1)]), 3), INK, 3.0)
+            p.line(curve(f.pts([(u0, v0), ((u0 + u1) / 2 + 0.01, (v0 + v1) / 2), (u1, v1)]), 3), hc, 1.4)
     if fc.get('hoops'):                                       # GTA (Lucia): small gold hoops at the ear lobes
         for sgn in (-1, 1):
             x, y = f(sgn * (e + 0.01), 0.5)
@@ -803,7 +879,8 @@ def unicorn_torso(img, p, sp, t):
     cx, cy = 0, 0
     white, horn = (250, 250, 250), (236, 196, 90)
     bands = [(220, 60, 60), (240, 150, 50), (244, 220, 70), (90, 180, 90), (70, 130, 210), (140, 90, 190)]
-    bot = 200
+    # the rainbow and its splash stay on the jumper, above the hem (Sam, 20 Nov: "vomiting off the jumper itself")
+    bot = min(200, (sp.get('bottom', 470) - 150) / 1.7 - 18)
     p = _Scaled(p, 1.7, 30, 150)
     for k, c in enumerate(bands):                         # the rainbow, from the mouth down and out to the left
         o = (k - 2.5) * 5.0

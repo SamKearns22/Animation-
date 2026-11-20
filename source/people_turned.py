@@ -116,8 +116,9 @@ def _hair(img, p, f, L, sp, look):
     if st.get('pony'):                                         # a ponytail from the back of the head, a band round it
         x, y = bx, f.top + (0.36 if not fc.get('pony_high') else -0.12) * H   # GTA: a high ponytail (Lucia)
         k = 1.0 if not fc.get('pony_high') else 1.7                     # a high tail falls past the nape
-        tail = [(x - 16, y), (x - 26 * k ** 0.5, y + 60 * k), (x - 20, y + 130 * k), (x - 4, y + 168 * k),
-                (x + 12, y + 132 * k), (x + 20 * k ** 0.5, y + 62 * k), (x + 16, y)]
+        fk = 1.35 if fc.get('pony_high') else 1.0                      # chat 9: Lucia's tail fuller (Sam)
+        tail = [(x - 16, y), (x - 26 * k ** 0.5 * fk, y + 60 * k), (x - 20 * fk, y + 130 * k), (x - 4, y + 168 * k),
+                (x + 12 * fk, y + 132 * k), (x + 20 * k ** 0.5 * fk, y + 62 * k), (x + 16, y)]
         p.poly(curve(tail, 3), hc, INK, 2.2)
         for j in range(3):
             p.line(curve([(x - 6 + 6 * j, y + 14), (x - 10 + 7 * j, y + 80 * k), (x - 4 + 4 * j, y + 140 * k)], 3),
@@ -132,7 +133,17 @@ def _hair(img, p, f, L, sp, look):
             ex = f.cx + X * H + math.copysign(8, X)
             for k in range(3):
                 p.ell(ex, f.top + (0.3 + 0.08 * k) * H, 12, 9, hc, INK, 1.8)
-    if st.get('knot'):                                         # new: a bun high on the back of the head
+    if st.get('knot') and fc.get('hair_messy'):                # chat 9 (her): the big messy curly bun on the crown,
+        x, y = bx - (0.0 if yaw >= 170 else 0.05 * H), f.top - 0.62 * H   # as the front shows it
+        rng = np.random.default_rng(31)
+        lumps = [(0, 0, 34), (-22, 8, 24), (22, 6, 24), (-10, -20, 22), (12, -22, 22)]
+        for dx, dy, r in lumps:
+            p.poly(oval(x + dx, y + dy, r + 2.4, r * 0.92 + 2.4, 18), INK, None)
+        for dx, dy, r in lumps:
+            p.poly(oval(x + dx, y + dy, r, r * 0.92, 18), hc, None)
+        for _ in range(16):
+            p.line(oval(x + rng.uniform(-36, 36), y + rng.uniform(-36, 22), 7, 6, 10, 0.3, math.pi * 1.6), dk(hc, 0.66), 1.3)
+    elif st.get('knot'):                                       # new: a bun high on the back of the head
         x, y = bx - (0.0 if yaw >= 170 else 0.1 * H), f.top - 0.3 * H
         p.poly(curve(oval(x, y, 26, 22, 18), 2), hc, INK, 2.2)
         for k in range(3):

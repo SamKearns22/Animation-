@@ -4,20 +4,20 @@
 # All three are seen from the waist up, seated, through the windscreen (shots 3, 5, 6, 7, 8); Jason also from the
 # side as he leans out of the window (shot 4). `python3 source/people.py sheet grand-theft-autism OUT.jpg`.
 
-# jason: Jason (Sam's key art, 20 Nov: buzzed dark hair, short stubble beard, hard frown; a cream LEONIDA vest, a thin silver chain, camo cargo shorts, trainers). Build measured from the game's art (notes, "Body shapes measured").
+# jason: Jason (Sam's key art, 20 Nov: buzzed dark hair, a very light fade of stubble (Sam, chat 9), hard frown; a cream LEONIDA vest, a thin silver chain, camo cargo shorts, trainers). Build measured from the game's art (notes, "Body shapes measured").
 body: 1.85 m, shoulders 178, head 70 x 94, hem 450, build man, arms 36 muscle, legs 1.08
-skin: 206 150 112 | hair: crop, 40 32 26
-face: jaw_wide ++, chin_long +, brow_high -, face_wide +
-eyes: 74 58 44 | lips: 168 112 96 | brows: 34 28 24, width 5.0, thick 0.07
-beard: boxed 74 58 46
+skin: 206 150 112 | hair: crop, 40 32 26, buzz
+face: jaw_wide ++, chin_long +, brow_high ---, face_wide +
+eyes: 74 58 44 | lips: 168 112 96 | brows: 62 48 38, width 4.6, thick 0.048
+beard: stubble 0.93
 rest smile: -0.5
 outfit: jumper 236 230 212, no tie, trousers 116 112 76, shoes 66 64 62, shorts knee, camo, fray, trainers
 extras: vest
 
 # lucia: Lucia (Sam's key art and portrait, 20 Nov: dark brown hair in a high ponytail, loose strands; thick dark brows, gold hoops, a gold chain; a dark grey thin-strap tank top, grey-blue cropped jeans). Build measured from the game's art.
 body: 1.68 m, shoulders 140, head 62 x 94, neck 0.85, hem 440, build woman, arms 27, legs 0.96
-skin: 182 124 90 | hair: pony, 52 36 26, high
-face: jaw_wide -, chin_long -, eye_size 0.035, eye_open 0.05, lip_low ++, lip_top +, brow_high ++
+skin: 182 124 90 | hair: pony, 52 36 26, high, loose
+face: jaw_wide -, chin_long -, eye_size 0.035, eye_open 0.05, lip_low ++, lip_top +, brow_high -
 eyes: 70 46 32 | lips: 176 96 92 | brows: 36 26 20, width 3.6, thick 0.05
 lashes
 soft
@@ -27,16 +27,18 @@ outfit: jumper 76 76 82, no tie, trousers 120 140 162, shoes 44 44 48, shorts cr
 extras: tank
 
 # her: The autistic woman (25, white, auburn hair; cream jumper with a unicorn being sick rainbows; jeans). Sam (20 Nov):
-# prettier and cooler: a shaggy auburn cut with a fringe, a tiny nose stud, big headphones round her neck.
-body: 1.64 m, shoulders 138, head 64 x 94, neck 0.85, hem 470
-skin: 248 210 192 | hair: shag, 160 72 40
-face: face_wide -, eye_size 0.045, eye_open 0.06, chin_long -, nose_long -, lip_low +, brow_high ++
-eyes: 56 104 84 | lips: 206 120 124 | brows: 140 70 44, width 3.4, thick 0.035
+# prettier and cooler, big headphones round her neck. Sam (chat 9): the first face and hair were too close to someone
+# he knows: redesigned, not tweaked: curly auburn hair piled in a messy high bun, curls loose by the face, no fringe;
+# a rounder face, freckles, hazel eyes; no nose stud. Bangles on both wrists; jumper sleeves 25% slimmer.
+body: 1.64 m, shoulders 138, head 66 x 92, neck 0.85, hem 470, arms 22.5
+skin: 248 214 196 | hair: bun, 150 66 36, messy
+face: face_wide ++, jaw_wide +, chin_long --, eye_size 0.04, eye_open 0.05, nose_long --, lip_low +, lip_top -, brow_high -
+eyes: 120 96 52 | lips: 214 128 126 | brows: 132 66 40, width 3.6, thick 0.038
+freckles
 lashes
 soft
-piercings: nose
-stud: 1.1
-rest smile: 0.15
+bangles
+rest smile: 0.25
 outfit: jumper 238 228 204, shirt 238 228 204, no tie, trousers 70 96 140, shoes 230 230 226
 extras: headphones, unicorn
 

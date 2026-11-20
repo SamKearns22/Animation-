@@ -451,9 +451,44 @@ def sleeved_arm(p, j2, side, sp, shape=None):
     with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
         B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sp.get('sleeve', sp.get('jacket', (40, 40, 46))),
               **({'w': sp['arm_w'], 'bulge': sp.get('arm_bulge', 0.0)} if 'arm_w' in sp else {}))
+    if sp.get('bangles') and not PROBE:
+        bangles(p, el, wr, sp.get('arm_w', 30), side)
     shape = shape or j2.get('hand', {}).get(side, 'fist')
     if shape != 'none':
         hand(p, j2, side, sp, shape)
+
+
+BANGLES = {'L': [((222, 180, 70), 0.9, 3.4), ((200, 202, 210), 0.84, 2.6), ('beads', 0.77, 0)],
+           'R': [((222, 180, 70), 0.92, 2.8), ((222, 180, 70), 0.86, 3.6), ((214, 110, 150), 0.79, 2.4)]}
+
+
+def bangles(p, el, wr, w, side):
+    """Bangles and bracelets round the wrist (her, GTA chat 9; Sam: "both arms"): thin gold and silver bands, a
+    coloured cord and a bead bracelet, each a band across the forearm, a little wider than it, drawn over the sleeve's
+    end and under the hand."""
+    dx, dy = wr[0] - el[0], wr[1] - el[1]
+    n = math.hypot(dx, dy) or 1.0
+    ux, uy = dx / n, dy / n
+    nx, ny = -uy, ux
+    for col, s, th in BANGLES[side]:
+        cx, cy = el[0] + dx * s, el[1] + dy * s
+        half = w * (1.15 - 0.42 * s) * 1.08                  # the arm's own half width there (limbs._arm_spine)
+        if col == 'beads':
+            for k in range(7):
+                o = (k - 3) / 3.0 * half * 0.92
+                bc = ((90, 190, 200), (250, 220, 120), (236, 120, 140))[k % 3]
+                p.poly(_ring(cx + nx * o + ux * 2 * (1 - (o / half) ** 2), cy + ny * o + uy * 2 * (1 - (o / half) ** 2),
+                             3.6), bc, INK, 1.0)
+            continue
+        sag = half * 0.18                                     # the band curves round the wrist (seen a little above)
+        top = [(cx + nx * half * (k / 6) + ux * sag * (1 - (k / 6) ** 2) - ux * th / 2,
+                cy + ny * half * (k / 6) + uy * sag * (1 - (k / 6) ** 2) - uy * th / 2) for k in range(-6, 7)]
+        bot = [(x + ux * th, y + uy * th) for x, y in top]
+        p.poly(top + bot[::-1], col, INK, 1.2)
+
+
+def _ring(x, y, r):
+    return [(x + r * math.cos(a * math.pi / 5), y + r * math.sin(a * math.pi / 5)) for a in range(10)]
 
 
 # ------------------------------------------------------------------------------------------------ the chair
