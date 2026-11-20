@@ -375,6 +375,42 @@ Judge: Sam wants the first clip's close, low camera, with the new cast; at full 
       is an ambitious shot with many challenges and if we learn them now and convert it into knowledg..." (standing
       order: every chat touching shot 4 adds to it). (21:31) "Please do not analyse the following frames until all my
       notes are in." (kept: analysis came after "I'm done now".)
+## Shots 5-8 (chat 16, 20 Nov; Sam Y: built in their own file, chat 17's shot 4 work untouched)
+Built in source/gta_shots58.py on shot 4's world; the whole film's clock in source/gta_film.py (shot 1 0-6.5, 2 to
+10.6, 3 to 13.6, 4 to 19.8, 5 to 23.0, 6 to 31.0, 7 to 32.4, 8 to 36.0; sign-off after).
+- Shot 5: from shot 4's last frame (matches); she brakes, Lucia yanks the wheel right, the Tulip slides round a T
+  junction onto a new main road (new shops, palms, passers-by whose heads turn as it roars past); both cruisers follow
+  round the corner, lights on. Line 3 after the corner (pinched brows, eyes down then forward); she straightens her
+  jumper after.
+- Shot 6: closer two-shot through the windscreen. Line 4: Lucia's eyes and a small head turn to Jason on "you", eyes
+  back to her on "brought". Line 5: Jason's eyes shut on "told you"; free hand opens on "hyperfixation", counts on
+  "explosives", open palm toward her on "without her".
+- Shot 7: three-shot held, both forward; the cruisers close in, lights growing over the roof and in the back window.
+- Shot 8: line 6; the spinner stops, she leans in, smiles; Jason's and Lucia's eyes slide to each other on
+  "nitroglycerin", held.
+- Fixed at full size before any check: windscreen rail across the heads in shot 6 (camera lowered, rule 30: Sam's
+  shot 3 note); Lucia's ponytail across her face when her head turned (smaller turn, the nod done with her eyes);
+  the wheel's rim across her mouth as she speaks (wheel 8 cm lower in shots 5-8 only); Jason's gestures below the
+  dash; the first street's smoke, palms and people painted over the new road's shops (hidden round the corner now).
+
+## Where things stand (20 Nov, chat 15 end, Opus; for chat 16)
+- Rules that bite next: 8 (shots 3-4 clip sent: wait for Sam's Y/N before any final; build on meanwhile), 17 (layers
+  and bodies on every new shot), 30 (Jason's arm/gun from behind was a repeat: now turned 160 on the sill).
+- Done: draw order clean in shots 2 and 4 (every fault was a car seen through another car's glass: the check's lone
+  sheet painted the glass opaque); Jason's seated left hand on his thigh; on the sill turned 160 so gun arm, gun and
+  flash read past his shoulder; his legs hidden behind the car side (they drew under it); walkers' feet stay down
+  through the bob. Small ones named in notes/checks/gta-chat15-bodies.txt. Clip of shots 3-4 sent to Sam.
+- Next: Opus, high (a new build): shots 5-8 (plan rows 5-8: shot 3's camera, the wheel yank to a new road, lines
+  3-6, the closer two-shot, the held pause with lights in the back window), each checked (layers, bodies) and looked
+  at full size; then the whole-film shot sheet (shots 1-8), Sam's standing order.
+- Needs Sam: Y/N on the shots 3-4 clip (rule 8).
+- Read: guides/job-packs.md Build; plan rows 5-8; brief lines 3-6.
+- Open rule requests: none.
+- Branches named, not merged (frozen snapshots of other films, not this film's work): freeze/halo-no-no,
+  freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers, freeze/blessed.
+- For Claude: gta_cars._through_glass keeps bg alpha (min 72) so lone sheets show glass as a veil; J4_KEYS 1.70/4.30
+  face 160; jason_layer side quad (x 0.98, z -2.6..1.0) erases rows below the hips once out > 0.9; crowd() lifts feet
+  by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
 
 ## Shot 4 acting rows (rule 74, every person, beat by beat; my picks, in the build proposal to Sam)
 Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging out with him; B4 shots at 1.95, 2.30,
