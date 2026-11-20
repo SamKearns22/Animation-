@@ -198,6 +198,7 @@ MIXES = {'barcelona': {'light': .72, 'olive': .16, 'tan': .07, 'brown': .03, 'da
          'paris': {'light': .55, 'olive': .17, 'tan': .07, 'brown': .07, 'dark': .12, 'sasian': .02},
          'tirana': {'light': .55, 'olive': .40, 'tan': .05},
          'london': {'light': .54, 'olive': .1, 'tan': .06, 'brown': .06, 'dark': .13, 'sasian': .11},
+         'miami': {'light': .30, 'olive': .30, 'tan': .15, 'brown': .10, 'dark': .13, 'sasian': .02},   # GTA (Vice City), 20 Nov: Miami-Dade, mostly Hispanic
          'mixed': {'light': .55, 'olive': .15, 'tan': .08, 'brown': .07, 'dark': .1, 'sasian': .05}}
 TOPS = [((26, 26, 30), .2), ((54, 56, 60), .12), ((34, 38, 56), .08), ((88, 90, 94), .08), ((168, 168, 164), .07),
         ((66, 68, 54), .07), ((156, 34, 38), .09), ((226, 224, 216), .06), ((62, 86, 128), .07), ((150, 118, 76), .06),
@@ -667,7 +668,13 @@ def crowds(film):
 
 def crowd_person(d, i, s=0, job=None):
     """Crowd member i as the engine's person (their own look; the film adds what they are doing)."""
-    return person(dict(member(d, i, s, job), crowd_member=True))
+    sp = person(dict(member(d, i, s, job), crowd_member=True))
+    if d.get('crowd_defaults', True):               # GTA shot 4 (Sam's notes 5, 10, 14, 20 Nov): a member made on the fly
+        import people_parts as PP                   # was never hung on the engine, so its body's 'bald' stand-in drew
+        if PP.B.HEADS and sp['who'] not in PP.B.HEADS:   # (every walker and cop a bald man); hang its own head and torso
+            PP.B.HEADS[sp['who']] = kit_head        # once the kit is installed
+            PP.B.TORSOS[sp['who']] = kit_torso
+    return sp
 
 
 # ---------------------------------------------------------------------------------------------- install

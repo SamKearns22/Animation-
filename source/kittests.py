@@ -3073,6 +3073,22 @@ def focus_front_heads():
 
 
 @test
+def crowd_heads_hung():
+    """GTA shot 4 (Sam's notes 5, 10, 14, 20 Nov): a crowd member made on the fly (crowd_person) after the kit is
+    installed draws its OWN head and hair, never the body's bald stand-in (every walker and cop drew bald). Old way
+    put back (the hook removed): caught."""
+    import people as PK
+    import people_parts as PP
+    import gta_cast as GC
+    GC.cast()
+    cr = PK.crowds(GC.FILM)
+    sps = [PK.crowd_person(cr['walker'], i) for i in range(12)] + [PK.crowd_person(cr['cop'], i) for i in range(3)]
+    hung = sum(PP.B.HEADS.get(sp['who']) is PK.kit_head for sp in sps)
+    want_hair = sum(sp['kit_face'].get('hair') not in ('bald', 'none') for sp in sps)
+    return hung == len(sps) and want_hair >= 12, f'heads hung {hung}/{len(sps)}; members meant to have hair {want_hair}'
+
+
+@test
 def crowds_varied():
     """Craft change 1 (Sam, 16 Nov): the sameness check: EPR's gold hats (9 of 20 hats), one-model police and one-face
     rioters, the bald share, a place's skin mix, a crowd step that skips list items, and neighbours in step."""

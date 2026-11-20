@@ -265,11 +265,28 @@ drive (hand over hand, or shuffle).
 fresh-eye critique, no pose sheet of Jason through the climb, and no beat-by-beat tick against the screenplay with a
 picture for each beat. The same failure as version 3 (rule 30): "checks clean" again taken as "good".
 
+### Sam's answers to the analysis (20 Nov, chat 16)
+- "1. A 2D body can be animated to do 3D movements like this, though." (Correction taken: the fault is OUR method, one
+  stiff figure bent toward 3D points and hidden by masks, not 2D itself. Hand-drawn 2D does it with key poses drawn for
+  each angle and layered by hand: lesson 10 rewritten.)
+- "2. Fix" DONE chat 16: the kit now hangs every crowd member's own head as it is made (people.crowd_person); a Miami
+  skin mix added (Miami-Dade: light 30, olive 30, tan 15, brown 10, dark 13, south Asian 2) and used for the walkers and
+  cops. New kittest crowd_heads_hung: passes; with the old code put back it fails (0 of 15 heads hung). crowds_varied,
+  people_from_a_description, outfit_every_view still pass. Test drawing: hair, hats and faces back.
+- "3. Fix" (the hit, blood mist, slump, one cop throughout, the hydrant hit on camera, the crowd reacting): to do, in
+  the shot 4 rebuild, since the camera will change with cause A.
+- "4. We need to do acting notes for scenes without dialogue too." (Rule wording offered, chat 16.)
+- "5. I think for a scene this ambitious, it should have been proposed." (Meaning: the way to build it should have been
+  put to Sam before building. Rule wording offered, chat 16.)
+- "I think you've diagnosed them pretty well. So is it necessary to run proposal route? That's usually for problems you
+  haven't entirely thought through. Suggest honestly."
+
 ## 8. Lessons for future films (draft; nothing here is a rule until Sam says so)
 
 Added after Sam's notes 1-16 (chat 16):
-10. A body that has to climb, turn round or touch a 3D thing (a car, a door) cannot be a flat figure with masks: it needs
-    real depth for every part, or key poses drawn and approved on a pose sheet before the shot is built.
+10. A 2D body CAN do 3D moves (Sam): the way is key poses drawn for each angle of the move (front, three-quarter, side,
+    back, each with its arms and legs placed right for that angle), layered by hand (what is in front of the door, what
+    behind), checked on a pose sheet before the shot is built; not one figure bent toward 3D points and hidden by masks.
 11. A check that tests points is not a check that the body is human. Something must look at each person, every frame,
     as a body: limbs joined, human lengths, arms on the right side, nothing tangled.
 12. A fix for one frame is judged across the whole move (the 160-degree turn fixed one picture, broke the climb).
