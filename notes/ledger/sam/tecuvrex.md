@@ -31,3 +31,6 @@ Before any more work on the film is done, diagnose the root cause of this mistak
 ### 2026-11-20T10:13:25
 How do I explain this? I feel like there should be one route to the right kit, the best kit, the most updated kit, and you shouldn't be able to find all of the previous kits from previous films because they're done now, and we have a much more quality thing, and it worries me when you're finding, when you're using things that are outdated. So is it a case that the outdated things should be completely isolated or deleted now? And should this be the case throughout the project, not just in this case?
 
+### 2026-11-20T10:19:04
+1.
+
