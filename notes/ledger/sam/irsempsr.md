@@ -16,3 +16,7 @@ The camera is at the bonnet. It needs to be where the windshield is. Looking at 
 ### 2026-11-20T18:23:20
 Actually, never mind. Continue as you are. And for the record I meant the musk/Cortana shot, where you see the entirety of the inside of the roadster. What would you call that shot? The tip of the character's heads are being cropped by the car's windscreen.
 
+### 2026-11-20T18:30:21
+Y
+Keep working on this until you can render the whole film shot sheet.
+
