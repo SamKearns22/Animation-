@@ -9539,6 +9539,833 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "52f64bb2",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.98,
+   "src": "estimate",
+   "sid": "session_01J1JB7X7y3bwRrdQiKSE4vh",
+   "steps": 115,
+   "hist_k": 263,
+   "kinds": {
+    "tool search": 29.7,
+    "whole-file .py read": 0.5,
+    "renders": 5.8,
+    "pictures": 1.8,
+    "other": 62.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 88,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 11,
+    "pictures": 6,
+    "other": 11
+   },
+   "split": {
+    "usd": 7.2331,
+    "total": 7.2331,
+    "floor_k": 82,
+    "blocks": {
+     "Claude's words": 28.7,
+     "carried history": 25.7,
+     "start-up floor": 25.5,
+     "new writes": 20.0
+    },
+    "origins": {
+     "Claude's words": 47.8,
+     "start-up floor": 25.5,
+     "result: tool search": 20.2,
+     "messages and reminders": 2.9,
+     "result: pictures": 2.2,
+     "Claude's edits": 0.6,
+     "result: other": 0.3,
+     "result: renders": 0.3,
+     "result: whole-file .py read": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 22,
+    "work_pct": 0.35,
+    "reads": [
+     [
+      "source/humancheck.py",
+      3.2,
+      0.0862
+     ],
+     [
+      "source/posegallery.py",
+      2.4,
+      0.0642
+     ],
+     [
+      "source/views.py",
+      1.8,
+      0.0439
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scratchpad/gal2.jpg",
+      1.6,
+      0.0416
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      0.7,
+      0.0189
+     ],
+     [
+      "guides/job-packs.md",
+      0.3,
+      0.0074
+     ]
+    ],
+    "base_pct": 23.4
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 14,
+     "shared:handover.py": 1,
+     "film notes": 9,
+     "guides": 1,
+     "shared:costline.py": 1,
+     "shared:humancheck.py": 9,
+     "shared:posegallery.py": 4,
+     "shared:views.py": 8,
+     "shared:kittests.py": 6,
+     "shared:milburn.py": 4,
+     "shared:gta_rehearse.py": 6,
+     "shared:film_engine.py": 4,
+     "shared:finish.py": 1,
+     "shared:lying_flat.py": 6,
+     "shared:lying.py": 6,
+     "shared:gta_cars.py": 4,
+     "shared:leanout.py": 2,
+     "shared:figure.py": 1,
+     "shared:limbs.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch origin claud",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1|tail -1 && git ",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01J1JB7YEB8h4Uq9vxvvKo16 --film grand-t",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "Where things stand",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 477,520p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "^## ",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:costline.py",
+      "guides/job-packs.md source/costline.py",
+      "sed -n 27,35p guides/job-packs.md; sed -n 62,65p guides/job-packs.md; python3 so",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "wc -l source/humancheck.py && sed -n 1,80p source/humancheck.py",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/proposals/big-body-moves.md",
+      "awk '/^## Final version/{f=1} f{print}' notes/proposals/big-body-moves.md | head",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sed -n 80,303p source/humancheck.py",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py source/views.py",
+      "^def \\|HC_HOOK",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py source/views.py",
+      "HC_HOOK\\[0\\]",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "mkdir -p /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      ":None,",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:views.py",
+      "/home/user/Animation-/source/views.py",
+      ",",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py guides/pose-gallery.md",
+      "^AVOID",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "behind",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1215,1266p source/views.py",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "^arms",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "def torso_outline\\|TORSO_D\\|depth_half\\|half_depth\\|THICK",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 774,800p source/views.py",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sp",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "far_side = far_side",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1400,1440p source/views.py",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "python3 - <<'EOF' p='source/humancheck.py' s=open(p).read() s=s.replace(\"\"\" elif",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py source/gta_rehearse.py",
+      "sed -i \"239s/ # views a pose fails.*//\" source/posegallery.py && sed -i \"238s/AV",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scra",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/film_engine.py",
+      "^def \\|^TESTS\\|^    ('",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/film_engine.py",
+      "sed -n 30,70p source/kittests.py; sed -n 120,260p source/film_engine.py",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "source/*.py",
+      "^def frame_image",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py source/halo_no_no.py source/blessed.py",
+      "^DUR\\|^LENGTH\\|^TOTAL\\|^def frame_image",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scra",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md",
+      "^#",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md",
+      "sed -n 170,180p notes/shot4-case-study/shot4-case-study.md; sed -n 311,345p note",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "HC\\.\\(aim\\|frame\\)",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "sleep 1; cat /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9ab",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "git show\\|_from_git\\|def _old_module",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/gta_rehearse.py",
+      "s three former false flags (arms folded and microphone\n    from three-quarter ba",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/tas",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "^$",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "\nnew=",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "49\\b\\|hands_up\\|'cower\\|duck",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 1470,1500p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:milburn.py",
+      "/home/user/Animation-/source/milburn.py",
+      "DUR\\b",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/film_engine.py source/finish.py .claude/settings.json",
+      "^V4_",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:film_engine.py",
+      ".claude/settings.json source/film_engine.py",
+      "def _checked",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py",
+      "sed -n 262,340p source/film_engine.py",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py /home/user/Animation-/source/film_engine.py",
+      "^import\\|hc\\.\\|HC\\.",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py source/finish.py",
+      "def main\\|ffmpeg\\|out =\\|args.out\\|clean",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:finish.py",
+      "source/finish.py",
+      "sed -n 215,245p source/finish.py",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scr",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scra",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "j\\.get('[a-z_]*'",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "j.get('mid'\\|j.get('legs_over'\\|j.get('body_props'\\|j.get('chair_draw'",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "python3 - <<'EOF' p='source/humancheck.py' s=open(p).read() old=\"\"\" j = dict(e['",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py source/lying.py",
+      "^def ",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:lying.py",
+      "notes/proposals/big-body-moves/learn.md source/lying.py",
+      "from_views\\|lying_flat\\|scratch\\|five\\|sheet",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:lying.py",
+      "source/lying.py",
+      "sed -n 1,65p source/lying.py | head -70; sed -n 100,230p source/lying.py",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py notes/grand-theft-autism.md",
+      "^J4_KEYS\\|gun_side\\|GUN_SIDE\\|'grip'\\]\\|grip=",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 940,1000p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "SILL\\|sill\\|ROOF\\|BELT\\|def open_windows",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "^def \\|^TULIP\\|'stations'\\|'glass'\\|'greenhouse'\\|'roof'",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "tail -8 /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 600 python3 source/kittests.py body_ 2>&1 | tail -6",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "S=/tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scrat",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "S=/tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scrat",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:humancheck.py",
+      "notes/shot4-case-study/shot4-case-study.md source/humancheck.py source/kittests.",
+      " seen from behind shows no hands (they sit\n  inside the jacket); listed in the g",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..or",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "sed -n 40,80p source/lying_flat.py; sed -n 422,445p source/lying_flat.py; sed -n",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:lying.py",
+      "source/lying.py source/gta_rehearse.py source/gta_*.py",
+      "def _cam_for\\|def _fit\\|def _room",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:lying.py",
+      "source/lying.py source/gta_rehearse.py",
+      "def jason_layer",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "sed -n 134,176p source/gta_cars.py",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py source/gta_rehearse.py",
+      "kind='tulip'\\|Car(.*tulip\\|'house':",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:lying.py",
+      "source/lying.py source/sets.py",
+      "def body_faults",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:lying.py",
+      "source/lying.py source/sets.py",
+      "^HELD_ARMS\\|^class Body",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/leanout.py",
+      "as GC",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "S=/tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scrat",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "shared:figure.py",
+      "source/figure.py",
+      "def audit_arm",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "def _j2\\|j2\\[",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "shared:limbs.py",
+      "source/limbs.py",
+      "audit_arm",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "_head(\\|_head_draw(\\|face_up_away",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "sed -n 476,528p source/lying_flat.py",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "sed -n 329,345p source/lying_flat.py",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/archive/",
+      "^## ",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py source/limbs.py source/lying_flat.py story/status.md",
+      "git add -A source/leanout.py source/limbs.py source/lying_flat.py notes/ story/s",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/logs/handover-end.log",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/logs/handover-end.log",
+      "sed -n 473,500p notes/grand-theft-autism.md; sed -n 173,180p notes/logs/handover",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/logs/handover-end.log story/status.md",
+      "<<<<<<<\\|>>>>>>>",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
