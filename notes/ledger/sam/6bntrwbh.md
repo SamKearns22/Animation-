@@ -32,3 +32,6 @@ Jason should have a very light fade of stubble. Eyebrows too high on all charact
 
 The current design of autistic woman is too close to someone I know and I'd like to to approach her face and hair differently. Unicorn jumper is vomiting off the jumper itself. Add brackets and bangles to both arms, reduce sleeve size by 25%
 
+### 2026-11-20T13:49:16
+Also, Jason's eyebrows are too thick and a bit to dark
+
