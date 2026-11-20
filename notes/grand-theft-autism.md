@@ -318,7 +318,10 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
       "Scene 3 flows into scene 4" (shot 4's first frame is shot 3's camera, CAM3); "never mind ... continue as you
       are" (keep the outside-the-glass windscreen camera); the reference he meant is Halo No-No's Musk/Cortana cabin
       shot (a dashboard shot: camera inside on the dash looking back, whole cabin seen). "The tip of the characters'
-      heads are being cropped by the car's windscreen": asked (Q1) whether to raise the Tulip's roof ~10 cm. OPEN.
+      heads are being cropped by the car's windscreen": asked (Q1) whether to raise the Tulip's roof ~10 cm: Sam Y.
+- [ ] Sam (20 Nov, after chat 13): "Keep working on this until you can render the whole film shot sheet." (the chain
+      carries on, chat after chat, until a sheet of every shot of the whole film, 1-8, can be rendered; his ask, so it
+      is allowed before an animatic)
 
 Beats for shot 4 (screenplay row 4, 6.2 s in the film's clip): 1) 0-0.5 s start on shot 3's windscreen three-shot,
 same position and lens; 2) 0.5-1.7 s camera swings left round the front corner to Jason's window while he rises and
@@ -339,10 +342,11 @@ Judge: Sam wants the first clip's close, low camera, with the new cast; at full 
   cash case, bench, cruisers through the back window (see-through glass). Shot 4 starts on CAM3. Crowd: walk, duck at
   the shots, run from the fire, stare (crowd()). Backdrop and clouds judged at full size: fine; more cloud wanted in
   shot 2's upper sky (one streak only).
-- Next: Opus, high (new build). On Sam's Q1 answer: raise house y top 1.33 -> ~1.43 (gta_cars SPECS tulip) or not;
+- Next: Opus, high (new build). Sam answered Q1 Y: raise house y top 1.33 -> ~1.43 (gta_cars SPECS tulip), check
+  heads clear the rail in shot 3 at full size;
   then shot 4 Jason: arm stubs and a flat bar for a pistol at 1.4 s, arm fault at 1.0 s (left hand to the roof corner);
   judge crowd poses full size; run `bodies shot4`, `layers shot2 shot4`; ONE clip via `shot34`.
-- Needs Sam: Q1, raise the roof ~10 cm so heads are not cut (Y my pick / N).
+- Needs Sam: nothing until the clip of shots 3-4; then on through shots 5-8 to the whole film's shot sheet (Sam).
 - Read: guides/job-packs.md Build; Shot 4 rebuild checklist; plan rows 3-4.
 - Open rule requests: none. Handover check: gta_rehearse is the rehearsal tool, not a film (its notes are this file;
   no SHOT_MARKS until the film's shot files exist): answered.

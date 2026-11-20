@@ -1,3 +1,3 @@
-Grand Theft Autism: shot 3 (windscreen three-shot) built; shot 4 flows from it; the half-size drawing fault fixed.
-Waiting on Sam: Q1, raise the car roof ~10 cm so heads are not cut.
-Next: chat 14 (Opus, high): Jason's climb-out arms and pistol, checks, ONE clip of shots 3-4.
+Grand Theft Autism: shot 3 built, flows into shot 4; Sam said Y to a 10 cm taller roof.
+Sam: keep going until the whole film's shot sheet can be rendered.
+Next: chat 14 (Opus, high): roof, Jason's climb-out, checks, clip of shots 3-4, then shots 5-8.
