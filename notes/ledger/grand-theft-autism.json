@@ -10842,6 +10842,11 @@
    "date": "2026-11-20",
    "spent": 35.72,
    "forecast": 86.3
+  },
+  {
+   "date": "2026-11-20",
+   "spent": 35.72,
+   "forecast": 86.3
   }
  ],
  "critique": {
@@ -11007,6 +11012,27 @@
      "1-3 P14: eyes at the hardest glance - the bust eyes are too small on the sheet to see whether they stay inside their outline. A full-size face crop of each woul",
      "1-3 P5: arms joining shoulders in the bust views - a full-size shoulder crop of each would show it."
     ]
+   },
+   {
+    "round": 19,
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-20",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 2,
+    "open": [
+     "1-7 A1: car bonnet - two dark stripes with grey patches on red read as a pair of dark trousers or legs, not a bonnet; it fills half of panels 2-6.",
+     "2-6 P2: faces - the sliding-toward-the-listener look is hard to see: Jason (4, 6) does not look turned back at the woman, the woman (2) does not look at Lucia; ",
+     "4,6 P6: Jason's hand - a plain circle at the far left edge, no thumb jabbed back over the shoulder as the brief says.",
+     "5 P6: Jason's raised hand - cropped at the frame edge, half outside the windscreen, hardly reads as a hand beside his face.",
+     "2-6 P14: Lucia - a pale grey windscreen glare triangle covers her eye and cheek, dulling her colouring against her reference (also P4).",
+     "3 P3: Jason - brief says eyes shut and exasperated; the eyes look open, so the beat does not read.",
+     "2-6 P1: Lucia drives but no hands touch the wheel (an arc at her chest only); the woman's and Lucia's hands are never shown (P6).",
+     "1,7 P2: three people tiny in the wide shots; the headshake (1) and the brightening (7) cannot be read at phone size.",
+     "2-7 P12: whether mouths open only on the speaker's words (6: Jason speaking, mouth looks shut); need a frame labelled with who speaks.",
+     "1-7 M5: the slide round the corner (1) shows no jolt; a last-frame strip would show it."
+    ]
    }
   ],
   "lines": {
@@ -11019,11 +11045,11 @@
     "false": 0
    },
    "A1": {
-    "faults": 13,
+    "faults": 14,
     "false": 0
    },
    "P2": {
-    "faults": 8,
+    "faults": 10,
     "false": 0
    },
    "P5": {
@@ -11043,11 +11069,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 3,
+    "faults": 5,
     "false": 1
    },
    "P1": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "O5": {
@@ -11055,8 +11081,8 @@
     "false": 0
    },
    "P3": {
-    "faults": 1,
-    "false": 0
+    "faults": 2,
+    "false": 1
    },
    "O1": {
     "faults": 1,
@@ -11111,6 +11137,10 @@
     "false": 0
    },
    "M3": {
+    "faults": 1,
+    "false": 0
+   },
+   "P14": {
     "faults": 1,
     "false": 0
    }

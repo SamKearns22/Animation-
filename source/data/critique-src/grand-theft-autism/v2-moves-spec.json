@@ -1,0 +1,83 @@
+{
+ "round": 19,
+ "stage": "moves",
+ "panels": [
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v2-s5.jpg",
+   "is": "Shot 5, three-shot through the windscreen, just after the car slid round a corner. The woman in the middle back seat (red hair in a bun) says \"Yeah, I didn't like that.\" with a small headshake; Jason (left, passenger) glances back at her. Flat cartoon house style: big front-on heads that show where they look by sliding the face toward that side (BoJack style); circle hands are the house style. No voices yet.",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v2-s6a.jpg",
+   "is": "Shot 6, closer two-shot through the windscreen. Lucia (right, driving) asks Jason (left) \"You want to tell me why we brought her again?\": she looks at Jason. The woman in the middle back looks at Lucia. Flat cartoon house style: big front-on heads that show where they look by sliding the face toward that side (BoJack style); circle hands are the house style. No voices yet.",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v2-s6b.jpg",
+   "is": "Shot 6. Jason says \"I told you\" to Lucia, eyes shut, exasperated; his face turned toward Lucia. Flat cartoon house style: big front-on heads that show where they look by sliding the face toward that side (BoJack style); circle hands are the house style. No voices yet.",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v2-s6c.jpg",
+   "is": "Shot 6. Jason on \"Her hyperfixation...\": a thumb jabbed back over his shoulder at the woman behind, his face turned toward her. Lucia rolls her eyes. Flat cartoon house style: big front-on heads that show where they look by sliding the face toward that side (BoJack style); circle hands are the house style. No voices yet.",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v2-s6d.jpg",
+   "is": "Shot 6. Jason explaining \"...is homemade explosives\" to Lucia: his free hand raised beside his face, he looks at Lucia; the woman looks at Jason, a little proud. Flat cartoon house style: big front-on heads that show where they look by sliding the face toward that side (BoJack style); circle hands are the house style. No voices yet.",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v2-s6e.jpg",
+   "is": "Shot 6. Jason \"...wouldn't have worked without her\": thumb back at her again, grudging, face turned toward her; Lucia side-eyes him. Flat cartoon house style: big front-on heads that show where they look by sliding the face toward that side (BoJack style); circle hands are the house style. No voices yet.",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v2-s8.jpg",
+   "is": "Shot 8, three-shot. The woman says \"My safe food is nitroglycerin\", brightening; Jason and Lucia slide their eyes to each other. Flat cartoon house style: big front-on heads that show where they look by sliding the face toward that side (BoJack style); circle hands are the house style. No voices yet.",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false
+  }
+ ]
+}
