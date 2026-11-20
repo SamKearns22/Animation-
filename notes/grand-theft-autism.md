@@ -145,6 +145,7 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Left open after hunt 2 (named): house-style boxy torsos and sleeve flaps; Lucia has no waist (a new body build if Sam asks); her side/back hair is a blob (never seen in this film).
 - Handover check: midterminal_cast.py was touched only for sleeve options that default to its old look; its old exceptions and
   pose lines are that film's, not this one's. No page.py show: the film file is not started yet (only source/gta_cast.py).
+- Branch claude/blessed-c2-mics-wip stays off the main line (another film's work; named in story/status.md).
 - For Claude: cast is source/gta_cast.py (draw, bust, sheet, panels); kit additions in people.py/people_parts.py/people_turned.py
   (palms, biker, unicorn, scoop, headphones extras; soft, lashes, hoops, stud, rest smile, `hair: pony, C, high`, `sleeves short`).
   Cars: build in source/gta_cars.py on sets.Cam/Face/obox/cylinder (3D, metres); film file from source/satire_template.py.
