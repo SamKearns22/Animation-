@@ -63,10 +63,13 @@ Send all notes in ONE message, each with the shot and the time, e.g. "shot 2, 10
 Status: one line of what was done (no "Was:"; git keeps the history), "new kind" or "seen before" (a "seen
 before" note means a check is missing: add it), and the note's line in `guides/critique-checklist.md` (rule 30):
 a new line's id, or an old one and why it missed (line unclear, sheet didn't show it, no critique).
+"Should have caught": the check that should have caught the note before Sam saw it (its name as pre-flight prints
+it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover check refuses a blank one
+(check-catches change 2, Sam's Y 20 Nov), so misses are counted without guessing.
 
-| # | shot | time | note | line | status |
-|---|------|------|------|------|--------|
-| 1 |      |      |      |      | open   |
+| # | shot | time | note | line | should have caught | status |
+|---|------|------|------|------|--------------------|--------|
+| 1 |      |      |      |      |                    | open   |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - 

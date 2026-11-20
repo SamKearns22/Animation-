@@ -38,6 +38,7 @@ import importlib
 import os
 import re
 import sys
+import time
 import traceback
 
 from PIL import Image, ImageDraw, ImageFont
@@ -405,6 +406,8 @@ def _text_only(film, problems, end, fps):
         print(f'info: shots over {MAX_SHOT:.0f} s (fine when chosen): ' + ', '.join(long))
     import report
     problems[:] = report.group(problems, getattr(film, 'SHOTS', []))
+    import ledger                               # check-catches change 1: the quick check is recorded too (it never was)
+    ledger.record('quick check', problems)
     print('quick check (--text):', 'clean' if not problems else f'{len(problems)} fault(s)')
     for x in problems:
         print(' -', x)
@@ -414,6 +417,8 @@ def _text_only(film, problems, end, fps):
 def main():
     name, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
+    os.environ.setdefault('CHECK_FILM', name)    # check-catches change 1: every check (forked children too) saves
+    os.environ.setdefault('CHECK_RUN', time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime()) + f'-{os.getpid()}')
     named_file = os.path.join(out, f'{name}-named.txt')   # Job C 1: faults named not fixed (ARM_FOLD_NAMED), from
     open(named_file, 'w').close()                         # every forked child too
     os.environ['NAMED_FAULTS_FILE'] = named_file

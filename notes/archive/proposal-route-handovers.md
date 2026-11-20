@@ -396,3 +396,16 @@
 - **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker, claude/job1-front-on-focus (job 1's own work, not mine; left for job 1). Ledger flag: system job, no film estimate (expected).
 - **For Claude:** job 1's retire proposal was not in notes/proposals/ at 17:30; check-catches feeds it. cold-start overlaps chat-size-and-model (open): say so to Sam. Judging cost ~4.3% of a week (6 helpers + 3 judges). Handover check's one flag (no ledger estimate for proposal-route) is expected: system jobs carry no film estimate.
 
+
+
+## Where things stood (job 4 chat 4, 19 Nov)
+- **Rules that bite next:** the proposal route (`source/propose.py`; the two check fixes are each their own yes), 85 (cost watch), CLAUDE.md "Rules are permanent" (retire only after three films, Sam's Y).
+- **Done (job 4 chat 4, Sonnet, 19 Nov):** replay run on all three films; tables in notes/proposals/check-catches/replay/ (milburn.md, protest-tiers.md, blessed.md; each ends with a plain summary). Milburn: 3 of 6 chats ran, 13 of 18 answer cells sourced (72%, under the 80% bar). Protest Tiers and Blessed: the tool's own table came out empty (it wrongly marks every chat "refused"; it also splits time-stamped lines one-per-timestamp); I rebuilt them in a scratch copy, tool unchanged. False alarms / misses mostly "?" there (Sam's notes for those films are archived in pieces). Tools changed: none.
+- **Next:** Sam answers the Y/N list (in chat 4's last message): (1) record that always saves, (2) notes tagged by which check should catch them, (3) fix the table's two flaws. An Opus chat (medium) builds whichever he picks, through the proposal route.
+- **Branches named, not merged on purpose:** every claude/milburn-*, claude/protest-*, claude/blessed-* chat branch the handover check lists is the replay's read-only source (old chat work of films already handled); merging them would undo the replay. Handover check COST flag again expected (system job, no film estimate).
+- **Numbers to beat:** split leftover under 5% on every chat of the next film, three chats within 5% of the app; start + re-learning over 0.5% a chat triggers the warm-handover proposal; replay: sourced answer for 80% of check-film pairs.
+- **Needs Sam:** the Y/N list above (3 questions).
+- **Read:** this section; `checkreplay.py` doc string only. No pack needed.
+- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker, claude/job1-front-on-focus (job 1's).
+- **For Claude:** setup.sh's pip install (150 s cap) did not finish in chat 3's container (scipy, numba, mediapipe missing; kit tests failed on import; named in the watcher): run `pip install scipy numba imageio imageio-ffmpeg mediapipe opencv-python-headless` before replays; a fix to the cap goes through the route. round_page and facehouse_whole_head failing are job 1's. Handover check COST flag (no film estimate): expected for a system job.
+
