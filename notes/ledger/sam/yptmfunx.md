@@ -21,3 +21,6 @@ That was a very good summary. Do you think it helps to read the screenplay befor
 ### 2026-11-20T17:27:43
 Y to both. But before you do that, tell me what the civilians are doing in your clip?
 
+### 2026-11-20T17:28:29
+Compare what they do in your clip compared to the first clip of this scene you produced
+
