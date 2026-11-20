@@ -24,3 +24,6 @@ Y to both. But before you do that, tell me what the civilians are doing in your 
 ### 2026-11-20T17:28:29
 Compare what they do in your clip compared to the first clip of this scene you produced
 
+### 2026-11-20T17:29:23
+Post the original please
+
