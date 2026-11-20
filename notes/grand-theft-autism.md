@@ -398,7 +398,17 @@ Built in source/gta_shots58.py on shot 4's world; the whole film's clock in sour
   turn, eyes and face sliding toward where they look) so they express more. Applies to all three people, shots 5-8.
 - [ ] 2. Jason always faces forward while he indicates other things: his head and look should go to what he points at.
 - [ ] 3. Jason's arm poses need work (gestures in shot 6: free hand opening, counting, open palm toward her).
-- Sam: "Handover." Plan first (rule 74 acting rows for shots 5-8, then build), render nothing before he sees it.
+- Sam then: "Actually don't handover just continue here" (chat 19, switched to Opus). Done in chat 19:
+  every look is the focus kit now (J_FOCUS, L_FOCUS, H_FOCUS keys in gta_shots58, eyes lead 0.17 s); found and fixed:
+  the old looks went the WRONG way (Lucia's turn to Jason and both "eyes slide to each other" on nitroglycerin looked
+  away from each other: + is screen right). Jason: to Lucia on the yank, back at her on line 3, to Lucia on "I told
+  you" (eyes shut), thumb back at her on "Her", hand up explaining to Lucia with beats on home/made/explosives, palm
+  up on "this job", thumb back at her on "without her", then forward, fed up. His gestures moved to the window side,
+  forearm upright beside his face (from the inner side they crossed his chest: a thick diagonal arm). Lucia: to
+  Jason on "you", a jerk back at her on "brought her", glance on "told you", eye-roll on "hyperfixation", side-eye
+  on "without her", eyes to the mirror in shot 7. Her: headshake on "didn't", at the driver on "like that", at Lucia
+  during line 4, eyes drop on "brought her", at Jason on "hyperfixation", proud smile on "explosives"/"without her".
+  Lost: Jason "looking forward" through line 5 (Sam's script); his note overrides it.
 
 ## Shot 4 acting rows (rule 74, every person, beat by beat; my picks, in the build proposal to Sam)
 Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging out with him; B4 shots at 1.95, 2.30,

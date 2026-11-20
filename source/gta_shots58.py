@@ -352,6 +352,42 @@ def sit(lay, cam, car, who, neck_l, t, hands=(), over=None, head_dir=None, props
     return out
 
 
+EYES_LEAD = 0.17     # the pupils reach a new look two drawings before the face slides (acting.py)
+
+
+def focused(over, keys, t):
+    """Front-on focus (focus.py, the BoJack look: -1 screen left .. +1 screen right) from [(t, focus)] keys; the eyes
+    lead. Sam's note on the shots 5-8 clip (chat 19): "a lack of imagination with the acting when they are speaking";
+    "J always faces forward even though he's indicating other things"."""
+    over['focus'] = keys_at(keys, t)
+    over['focus_eyes'] = keys_at(keys, t + EYES_LEAD)
+    over['look'] = 0.0
+    return over
+
+
+# Where each person looks (world time; + = screen right in both cameras: Jason sits screen left, her in the middle,
+# Lucia screen right). Chat 19 found the old looks went the wrong way: Lucia's "turn to Jason" and both "eyes slide to
+# each other" on "nitroglycerin" looked AWAY from each other (+ is screen right).
+H1 = LINE5[0] + 0.95                # "Her" (hyperfixation...): Jason's thumb back at her
+JOB = word_at(LINE5, 38)            # "This job..."
+J_FOCUS = [(0, 0.0), (6.28, 0.0), (6.42, 0.8), (7.3, 0.8), (7.6, 0.0),            # the yank: "what are you doing"
+           (7.70, 0.0), (7.85, 0.45), (8.6, 0.45), (8.9, 0.0),                    # line 3: a glance back at her
+           (12.05, 0.0), (12.25, 0.7), (12.9, 0.7),                               # "I told you" to Lucia, eyes shut
+           (H1 - 0.12, 0.45), (H1 + 0.45, 0.45), (H1 + 0.7, 0.95), (15.25, 0.95),  # at her, then explains to Lucia
+           (15.45, 0.35), (JOB - 0.05, 0.35), (JOB + 0.12, 0.85), (WITHOUT - 0.1, 0.85),
+           (WITHOUT + 0.08, 0.45), (17.55, 0.45), (17.95, 0.0),                   # "without her": at her, then fed up
+           (NITRO + 0.12, 0.0), (NITRO + 0.4, 0.7)]                              # eyes slide to Lucia, held
+L_FOCUS = [(0, 0.0), (LINE4[0] - 0.12, 0.0), (LINE4[0] + 0.08, -0.9), (BROUGHT - 0.12, -0.9),
+           (BROUGHT + 0.05, -0.45), (BROUGHT + 0.5, -0.45), (BROUGHT + 0.8, 0.0),  # "brought her": a jerk back at her
+           (TOLD[0], 0.0), (TOLD[0] + 0.12, -0.4), (TOLD[1] + 0.2, -0.4), (TOLD[1] + 0.45, 0.0),
+           (WITHOUT, 0.0), (WITHOUT + 0.15, -0.55), (WITHOUT + 0.6, -0.55), (WITHOUT + 0.85, 0.0),   # side-eye
+           (NITRO + 0.05, 0.0), (NITRO + 0.3, -0.7)]
+H_FOCUS = [(0, 0.0), (7.75, 0.0), (7.85, -0.25), (7.97, 0.25), (8.09, -0.2), (8.2, 0.0),   # "didn't": a small headshake
+           (8.3, 0.5), (8.85, 0.5), (9.05, 0.0),                                   # "like that": at the driver
+           (LINE4[0] + 0.25, 0.0), (LINE4[0] + 0.4, 0.5), (BROUGHT, 0.5), (BROUGHT + 0.2, 0.0),
+           (HYPER - 0.1, 0.0), (HYPER + 0.05, -0.5), (15.4, -0.5), (15.6, 0.0)]  # "hyperfixation": at Jason
+
+
 def her_spin_t(t):
     """The spinner's own clock: it spins, and stops as she brightens before her line (shot 8)."""
     t_stop = LINE6[0] - 0.25
@@ -379,6 +415,11 @@ def inside58(t, rec=None):
                         brow_up=0.045 * bright)
         if her_over['mood'] is None:
             her_over.pop('mood')
+        proud = bump(t, EXPLO - 0.1, EXPLO + 0.2, EXPLO + 1.2) + bump(t, WITHOUT, WITHOUT + 0.25, WITHOUT + 1.1)
+        her_over['smile'] += 0.7 * proud                                   # a little proud on "explosives", "without her"
+        her_over['brow_up'] += 0.03 * proud
+        her_over['gaze_dy'] += 0.45 * bump(t, BROUGHT + 0.1, BROUGHT + 0.3, BROUGHT + 1.0)   # "brought her": eyes drop
+        focused(her_over, H_FOCUS, t)
         if mo:
             her_over['mouth'] = mo
         fid = 0.012 * math.sin(t * 19.0) * (1 - bright)
@@ -387,18 +428,19 @@ def inside58(t, rec=None):
         her_hands = [('L', (sx - 0.05 + fid - 0.08 * tug, 0.85 - 0.25 * tug, -0.53 + 0.05 * lean_in), 'down', 'fist'),
                      ('R', (sx + 0.05 + fid + 0.08 * tug, 0.87 - 0.25 * tug, -0.50 + 0.05 * lean_in), 'down', 'fist')]
         # ---- Lucia: the yank (face screwed up), line 4 (turns to Jason on "you", nods back at her on "brought")
-        to_j = bump(t, LINE4[0] - 0.1, LINE4[0] + 0.15, LINE4[0] + 1.1) + 0.4 * bump(t, BROUGHT + 0.25, BROUGHT + 0.45, BROUGHT + 0.9)
         nod = bump(t, BROUGHT - 0.1, BROUGHT + 0.12, BROUGHT + 0.45)
-        slide = bump(t, NITRO + 0.05, NITRO + 0.3, 30.0)          # eyes slide to Jason on "nitroglycerin", held
         yank = bump(t, 6.25, 6.55, 7.6)
-        lu_over = dict(mood='stern', squint=0.45 + 0.35 * yank, frown=0.09 + 0.05 * yank, brow_up=-0.01,
-                       look=0.0 + 0.9 * min(1.0, to_j + slide + nod), gaze_dy=0.25 * nod)   # the nod back at her: eyes, never
+        roll = bump(t, HYPER - 0.05, HYPER + 0.2, HYPER + 0.75)      # "hyperfixation": her eyes roll up
+        mirror = bump(t, 17.7, 18.0, 18.9)                          # shot 7: eyes up to the mirror, the lights
+        lu_over = dict(mood='stern', squint=0.45 + 0.35 * yank - 0.15 * roll, frown=0.09 + 0.05 * yank, brow_up=-0.01 + 0.03 * roll,
+                       gaze_dy=0.25 * nod - 0.7 * roll - 0.45 * mirror)
+        focused(lu_over, L_FOCUS, t)   # the nod back at her: eyes, never
         #                                       the head (turned away, her ponytail crossed her face: chat 16)
         lm = mouth(t, LINE4)
         if lm:
             lu_over['mouth'] = lm
         lu_neck = (-0.42 - 0.07 * th, 0.94, 0.05)
-        lu_dir = hd((0.42 * min(1.0, to_j), 0.0, 1.0))   # a small turn: further, her ponytail
+        lu_dir = None   # the look is the focus kit now (no 3D head turn: her ponytail crossed her face, chat 16)   # a small turn: further, her ponytail
         # swings over her face (chat 16, full size); her eyes do the rest
         # Sam's note 1 on shot 4 v4: opposite grips (the hands carried round with the wheel until the arms crossed) are
         # "not how humans drive". Here she feeds the wheel: hands near ten and two, carried only a little way by a turn
@@ -408,22 +450,36 @@ def inside58(t, rec=None):
         # ---- Jason: gun flat on his chest; braced through the corner; line 5 (eyes shut on "told you", the free hand
         # opens on "hyperfixation", counts on "explosives", open palm toward her on "without her")
         shut = TOLD[0] + 0.02 <= t <= TOLD[1] + 0.12
-        j_slide = bump(t, NITRO + 0.12, NITRO + 0.4, 30.0)
         j_over = dict(mood='stern', squint=0.35 - 0.2 * (t > 9.5), frown=0.07, blink=shut,
-                      look=-0.9 * j_slide, brow_up=0.015 * bump(t, TOLD[0], TOLD[1], TOLD[1] + 2.5))
+                      brow_up=0.015 * bump(t, TOLD[0], TOLD[1], TOLD[1] + 2.5) + 0.03 * bump(t, JOB, JOB + 0.2, WITHOUT))
+        focused(j_over, J_FOCUS, t)
         jm = mouth(t, LINE5)
         if jm:
             j_over['mouth'] = jm
         j_neck = (0.42 - 0.07 * th, 0.918, 0.0)
         thigh = (0.30 - 0.07 * th, 0.31, 0.30)
         dash = (0.34, 0.82, 0.52)
+        # Sam's note (chat 19): "his arm poses could use work". The free hand now works where the camera sees it, up
+        # beside his face on the window side, forearm upright (it reached across his chest from that shoulder: a
+        # thick diagonal with a lump at the frame's bottom, chat 19), and his head goes where his hand points: a
+        # thumb back at her, an open hand explaining to Lucia with beats on the words, palm up on "this job", the
+        # thumb back at her again on "without her" (grudging), then down, fed up.
+        lift = (0.52, 0.96, 0.22)
+        thumb = (0.60, 1.16, 0.06)
+        expl = (0.64, 1.12, 0.16)
+        beat = lambda u, d=0.045: (expl[0], expl[1] - d, expl[2])
+        shrug = (0.66, 1.08, 0.22)
+        her_hand = (0.60, 1.16, 0.06)
+        b1, b2, b3 = word_at(LINE5, 20), word_at(LINE5, 24), EXPLO
         lh = keys_at([(0, thigh), (6.30, thigh), (6.50, dash), (7.40, dash), (7.75, thigh),
-                      (HYPER - 0.25, thigh), (HYPER + 0.05, (0.17, 1.06, 0.32)), (EXPLO - 0.25, (0.17, 1.06, 0.32)),
-                      (EXPLO, (0.19, 1.02, 0.38)), (EXPLO + 0.12, (0.19, 1.09, 0.38)), (EXPLO + 0.24, (0.19, 1.02, 0.38)),
-                      (WITHOUT - 0.3, (0.17, 1.05, 0.32)), (WITHOUT + 0.05, (0.08, 1.10, 0.16)), (WITHOUT + 0.9, (0.08, 1.10, 0.16)),
-                      (WITHOUT + 1.4, thigh)], t)
-        lshape = step_at([(0, 'palm'), (HYPER - 0.1, 'palm'), (EXPLO - 0.1, 'point'), (WITHOUT - 0.15, 'palm')], t)
-        lpole = 'down' if lh[1] < 0.6 else 'out'
+                      (12.0, thigh), (12.3, lift), (H1 - 0.25, lift), (H1 - 0.05, thumb), (H1 + 0.45, thumb),
+                      (H1 + 0.75, expl), (b1 - 0.05, expl), (b1 + 0.08, beat(0)), (b1 + 0.2, expl),
+                      (b2 - 0.05, expl), (b2 + 0.08, beat(0)), (b2 + 0.2, expl),
+                      (b3 - 0.05, expl), (b3 + 0.1, beat(0, 0.06)), (b3 + 0.25, expl), (15.3, expl),
+                      (JOB - 0.05, lift), (JOB + 0.2, shrug), (WITHOUT - 0.12, shrug), (WITHOUT + 0.1, her_hand),
+                      (17.45, her_hand), (17.9, thigh)], t)
+        lshape = step_at([(0, 'palm'), (H1 - 0.12, 'thumb'), (H1 + 0.6, 'palm'), (WITHOUT - 0.05, 'thumb'), (17.6, 'palm')], t)
+        lpole = 'down'
         j_hands = [('R', ('fig', (120.0, 25.0, 80.0)), 'down', 'fist'), ('L', lh, lpole, lshape)]
         gun = PC.glock('R', flash=0.0, aim3=(0.9, -1.0, 0.05), size=1.0)
         R.bench(lay, cam, car)
