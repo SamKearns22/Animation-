@@ -414,22 +414,47 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   the contact frame, not on a timer (note 13).
 - The crowd reacts to every shot, the hydrant and the fireball (rows above); the crash is not softened.
 
-## Where things stand (20 Nov, chat 16 end, Opus; for chat 17)
-- Rules that bite next: 8 (NEW, Sam 20 Nov: shot 4 is a hardest shot, so a build proposal to Sam BEFORE rebuilding),
-  74 (NEW: acting notes for every shot, dialogue or not, beat by beat), 30 (bald crowd was a repeat: fixed at the kit).
-- Done: shot 4 case study (notes/shot4-case-study/shot4-case-study.md: versions, pictures, all Sam's words, his 16
-  frame notes, five causes, lessons). Fix 2: crowd heads hung, Miami mix, kittest crowd_heads_hung. Rules 8 and 74 written.
-- Next: Opus, high (new design): the proposal route for cause A only (Sam Y): how to build big 2D body moves from key
-  poses drawn per angle and layered by hand, plus a "is this a human body" check every frame; then the shot 4 build
-  proposal to Sam (rule 8): key poses, camera, fix 3 (cop hit with blood mist and slump, one cop throughout, hydrant hit
-  on camera, crowd reacts), acting rows for shot 4 (Lucia hand over hand at the wheel). Shots 5-8 wait.
-- Needs Sam: nothing until the proposal's top two and the build proposal.
-- Read: guides/job-packs.md Build; the case study sections 5, 7, 8; rules 8, 74, 89.
-- Open rule requests: none (Sam's two written this chat).
-- Handover check answers (chat 16): FINDER: no film notes fixed by code this chat except the kit crowd fix; the
-  rehearsal file was read by hand to diagnose Sam's 16 notes (no page.py for a rehearsal file). UNROUTED 22:09: the
-  question was Sam's own ("is it necessary to run proposal route?"), reworded to say so; Sam: "Y all".
-- For Claude: people.crowd_person hangs kit_head/kit_torso for crowd members once installed; MIXES['miami'];
-  jason_layer/J4_KEYS/cover_masks is cause A; cop_inside person_cached vs fresh path is note 12; HYDRANT timer note 13.
+## Shot 4 build proposal (rule 8; sent to Sam chat 17, waiting for his Y)
+- The move, as written ("leans out of the window"): Jason stays kneeling on his seat and leans out of the open window
+  to the waist, turned back toward the cruisers; his legs never leave the car and are never seen (versions 3-4 climbed
+  out to sit on the sill: bigger than written; note 2 asked why the legs showed at all).
+- Key poses, each posed on the 3D skeleton (proposal big-body-moves, Change 2) and shown on a five-view pose sheet
+  with a fresh critique before building: K1 seated (shot 3's pose, 0-0.5 s); K2 twist to the window, free hand on the
+  roof edge, one knee onto the seat (0.9 s); K3 head and shoulders out, gun up beside his head (1.3 s); K4 out to the
+  waist, turned back, gun arm straight at the lead cruiser, free hand gripping the roof (1.7 s); K5 recoil (each shot);
+  K3, K2, K1 again on the way back in (4.6-6.2 s). In-betweens on the skeleton; the car hides each piece by depth.
+- Camera: version 1's (the one Sam liked): from shot 3's frame, low round the front corner to beside his window,
+  hanging back along the car looking back at the cruisers, panning with the crash, back to shot 3's frame.
+- Reused: the cars (crash state, crazed glass), fireball, smoke, water splash, sparks, glass bursts, bullet holes, the
+  crowd kit (heads fixed chat 16, Miami mix), walking and running people, the 3D skeleton and flat pieces (lying,
+  lying_flat), version 1's camera keys.
+- New: the lean-out key poses (kept in the pose gallery); the gun held on the skeleton; the neck; the car hiding him
+  piece by piece; blood mist and spatter; the hydrant breaking on contact; crowd ducking, diving aside, shielding,
+  running; Lucia steering hand over hand; the human-body check (Change 1).
+- Risks: the flat-on-skeleton look upright is shown only on one test sheet; the new check may raise false alarms on
+  old films (it must pass the pose gallery, shot 3 and two past films clean before it can stop a clip); hand-over-hand
+  steering on a small wheel at phone size.
+- Checked by: the human-body check on every person in every frame; the anything-against-anything depth check; the pose
+  sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
+  the acting rows at full size, with a picture for each beat.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 27.36% of 15%; forecast 77.9% (2026-11-20)
+## Where things stand (20 Nov, chat 17, Opus high; waiting on Sam)
+- Rules that bite next: 8 (build proposal before building: sent, waiting), 74 (shot 4 acting rows, written), 89 (fresh
+  critique before every send: version 4 skipped it).
+- Done: proposal big-body-moves judged blind (helper A picked) and its learn step (learn.md: v4's skeleton measured
+  human; the drawing method was the fault; look sheet v5-test-skeleton-vs-v4.jpg); shot 4 acting rows, fix 3 events,
+  Sam's 16 frame notes carried; the shot 4 build proposal (section above); case study section 10.
+- Next: Opus, high (new building), on Sam's answers: Change 1 (the human-body check, must pass the pose gallery, shot 3
+  and two past films clean), then Change 2 (lean-out key poses on the skeleton, five-view pose sheet + critique), then
+  rebuild shot 4 from the build proposal. Shots 5-8 wait.
+- Needs Sam: Q1 option 1 or 2; Q2 the lean-out as written; Q3 Y to the build proposal.
+- Read: guides/job-packs.md Build; notes/proposals/big-body-moves.md Final version and learn.md; this file's shot 4
+  sections; the case study section 10.
+- Open rule requests: none (lesson 17 is a draft lesson, not a rule request).
+- For Claude: skeleton test script was scratch: build k from jason_layer joints via fig_to_world (lying.Body keys as in
+  from_views), draw with lying_flat.draw(img, cam, k, sp, t, M=MPU_J); patch only inside jason_layer (V.person is
+  shared with hats and crowd). Critique pack gta-shot4-learn r1-p1 is a learn run, not a film stage.
+- Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
+  freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 28.82% of 15%; forecast 79.4% (2026-11-20)

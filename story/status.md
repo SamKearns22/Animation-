@@ -1,3 +1,3 @@
-Grand Theft Autism: shot 4 case study done (Sam's 16 frame notes, five causes); bald crowd fixed; two new rules (8, 74).
-Next: chat 17 (Opus, high): proposal route for Jason's body method and a human-body check, then shot 4 build proposal to Sam.
-Shots 5-8 wait until shot 4 is approved.
+Grand Theft Autism: Jason's body method judged (3D skeleton + flat pieces, a human-body check); test sheet shows it fixes the arms.
+Shot 4 build plan sent to Sam with acting notes and his fix 3; waiting for his 3 answers.
+Then chat 17 or next (Opus, high) builds the check, the lean-out poses, and shot 4.

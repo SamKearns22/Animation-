@@ -281,3 +281,22 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 27.36% of 15%; forecast 77.9% (2026-11-20)
+
+## Where things stand (20 Nov, chat 16 end, Opus; for chat 17)
+- Rules that bite next: 8 (NEW, Sam 20 Nov: shot 4 is a hardest shot, so a build proposal to Sam BEFORE rebuilding),
+  74 (NEW: acting notes for every shot, dialogue or not, beat by beat), 30 (bald crowd was a repeat: fixed at the kit).
+- Done: shot 4 case study (notes/shot4-case-study/shot4-case-study.md: versions, pictures, all Sam's words, his 16
+  frame notes, five causes, lessons). Fix 2: crowd heads hung, Miami mix, kittest crowd_heads_hung. Rules 8 and 74 written.
+- Next: Opus, high (new design): the proposal route for cause A only (Sam Y): how to build big 2D body moves from key
+  poses drawn per angle and layered by hand, plus a "is this a human body" check every frame; then the shot 4 build
+  proposal to Sam (rule 8): key poses, camera, fix 3 (cop hit with blood mist and slump, one cop throughout, hydrant hit
+  on camera, crowd reacts), acting rows for shot 4 (Lucia hand over hand at the wheel). Shots 5-8 wait.
+- Needs Sam: nothing until the proposal's top two and the build proposal.
+- Read: guides/job-packs.md Build; the case study sections 5, 7, 8; rules 8, 74, 89.
+- Open rule requests: none (Sam's two written this chat).
+- Handover check answers (chat 16): FINDER: no film notes fixed by code this chat except the kit crowd fix; the
+  rehearsal file was read by hand to diagnose Sam's 16 notes (no page.py for a rehearsal file). UNROUTED 22:09: the
+  question was Sam's own ("is it necessary to run proposal route?"), reworded to say so; Sam: "Y all".
+- For Claude: people.crowd_person hangs kit_head/kit_torso for crowd members once installed; MIXES['miami'];
+  jason_layer/J4_KEYS/cover_masks is cause A; cop_inside person_cached vs fresh path is note 12; HYDRANT timer note 13.
+
