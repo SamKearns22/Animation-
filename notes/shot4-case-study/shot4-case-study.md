@@ -198,6 +198,9 @@ verbatim first; analysis (frame, cause, fix, the check that should have caught i
   (An action for after the hold: find the crowds-by-city rule and check it runs.)
 - Note 6: "In the final frame, J becomes a monstrosity. Limbs, neck, torso, all curled around each other and in the wrong place. Utterly inhuman. It really worries me that this wasn't caught by anything we have so far implemented."
 
+**Frames 4a, 4b, 4c** (Sam's stills, `sam-frame-04a/b/c.jpg`: Jason out of the window, the camera moving behind him)
+- Note 7: "The horror continues. It gets worse. Then his arms come out his back. Then the arms coming out his back pull out a pistol. It is truly and genuinely disturbing.."
+
 ## 8. Lessons for future films (draft; nothing here is a rule until Sam says so)
 
 1. Judge a clip at full size, beat by beat, against the screenplay's words, before sending. A thin strip of small
