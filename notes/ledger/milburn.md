@@ -57,4 +57,4 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-18 agnAgzD2 (Milburn chat 13): 117 steps, history 244k at the end; other 70.2%, film-file search 12.7%, tool search 7.6%, pictures 6.2%, renders 2.2%, page.py 1%
 
 ## Checks (runs, faults, by kind)
-- quick check: 1 runs, 61 faults (SHOT CAST 21, plan 15, caption 14, house style 4, script/mouth 2, CAMERA FEEL 1, EFFECT SHAPES 1, READABILITY 1, clipcheck COULD NOT TEST 1, other 1)
+- quick check: 2 runs, 122 faults (SHOT CAST 42, plan 30, caption 28, house style 8, script/mouth 4, CAMERA FEEL 2, EFFECT SHAPES 2, READABILITY 2, clipcheck COULD NOT TEST 2, other 2)

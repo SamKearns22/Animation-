@@ -741,19 +741,19 @@
  ],
  "checks": {
   "quick check": {
-   "runs": 1,
-   "faults": 61,
+   "runs": 2,
+   "faults": 122,
    "kinds": {
-    "CAMERA FEEL": 1,
-    "EFFECT SHAPES": 1,
-    "READABILITY": 1,
-    "SHOT CAST": 21,
-    "caption": 14,
-    "clipcheck COULD NOT TEST": 1,
-    "house style": 4,
-    "other": 1,
-    "plan": 15,
-    "script/mouth": 2
+    "CAMERA FEEL": 2,
+    "EFFECT SHAPES": 2,
+    "READABILITY": 2,
+    "SHOT CAST": 42,
+    "caption": 28,
+    "clipcheck COULD NOT TEST": 2,
+    "house style": 8,
+    "other": 2,
+    "plan": 30,
+    "script/mouth": 4
    }
   }
  },
@@ -1086,6 +1086,10 @@
   },
   {
    "at": "2026-11-20T12:25+00:00",
+   "faults": 61
+  },
+  {
+   "at": "2026-11-20T12:35+00:00",
    "faults": 61
   }
  ],
