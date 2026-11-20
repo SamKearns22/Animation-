@@ -13,3 +13,6 @@ Camera movement 7, keep it on all 3.
 6. Y
 7. Estimate isn't trusted at all, disregard
 
+### 2026-11-20T03:29:49
+Oh no, you listed camera movements and I wanted it to be focused on all 3 characters like camera shot 8
+
