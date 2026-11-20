@@ -192,6 +192,12 @@ verbatim first; analysis (frame, cause, fix, the check that should have caught i
 **Frame 2** (Sam's still, `sam-frame-02.jpg`: early in Jason's rise, camera still near shot 3's)
 - Note 3: "His lower body is still visible through the bonnet. Clipping. The right arm turns into a gross sausage shape and becomes dislocated from the shoulder."
 
+**Frames 3a, 3b, 3c** (Sam's stills, `sam-frame-03a/b/c.jpg`: the camera swinging round to Jason's side; 3c last)
+- Note 4: "In these frames, J's knees clip through bonnet, side body through door, the back wheel through chassis."
+- Note 5: "A large amount of bald people on the streets? Remember you're to do crowds/civilians by city, and Vice City is a parody of Miami. Look up that rule and ensure it is working."
+  (An action for after the hold: find the crowds-by-city rule and check it runs.)
+- Note 6: "In the final frame, J becomes a monstrosity. Limbs, neck, torso, all curled around each other and in the wrong place. Utterly inhuman. It really worries me that this wasn't caught by anything we have so far implemented."
+
 ## 8. Lessons for future films (draft; nothing here is a rule until Sam says so)
 
 1. Judge a clip at full size, beat by beat, against the screenplay's words, before sending. A thin strip of small
