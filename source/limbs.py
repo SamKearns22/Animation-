@@ -137,7 +137,7 @@ def _arm_spine(sh, el, wr, w):
     return spine, hw, fold, len(a) + 4, float(d1[0] * d2[1] - d1[1] * d2[0])
 
 
-def _fillet(img, x0, y0, arm, body, zone, fore, arm_fill, sleeve, ow, r):
+def _fillet(img, x0, y0, arm, body_big, zone, fore, arm_fill, sleeve, ow, r, pb):
     """One outline from the collar over the shoulder and down the arm (Ad-Vanced Notice note 14, rule 80): the
     sleeve's round top and the body's sloping shoulder met in a V-shaped notch, so the arm read as a separate piece
     stuck on. The body and the arm are joined into one shape, the notch is filled in the sleeve's colour with a
@@ -147,11 +147,16 @@ def _fillet(img, x0, y0, arm, body, zone, fore, arm_fill, sleeve, ow, r):
     ow = max(2, int(round(ow)))
     r = max(3, int(round(r)))
     disk = lambda k: cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * k + 1, 2 * k + 1))   # noqa: E731
-    body_out = cv2.dilate(body.astype(np.uint8), disk(max(1, ow // 2))) > 0       # the body with its ink line
+    # body_big: the body's mask reaching pb pixels past the arm's rectangle on every side. The closing sees the real
+    # body there (was the rectangle's edge rows copied outward: at a shoulder whose slope runs to the rectangle's top,
+    # that made a false notch along the edge and the fill painted the outline out; one-route-kit chat 5)
+    r = min(r, pb - 2)
+    bob = cv2.dilate(body_big.astype(np.uint8), disk(max(1, ow // 2))) > 0
+    Ub = (np.pad(arm, pb) | bob).astype(np.uint8)
+    C = cv2.morphologyEx(Ub, cv2.MORPH_CLOSE, disk(r))[pb:-pb, pb:-pb] > 0
+    body = body_big[pb:-pb, pb:-pb]
+    body_out = bob[pb:-pb, pb:-pb]                                                # the body with its ink line
     U = (arm | body_out).astype(np.uint8)
-    pad = r + 2
-    Up = cv2.copyMakeBorder(U, pad, pad, pad, pad, cv2.BORDER_REPLICATE)
-    C = cv2.morphologyEx(Up, cv2.MORPH_CLOSE, disk(r))[pad:-pad, pad:-pad] > 0
     # only beside the body: never the inside of a bent elbow (Sam, 8 Nov, note 18: with the forearm raised and the
     # elbow near the shoulder, the gap between upper arm and forearm was filled as if it were the shoulder: tufts)
     next_body = cv2.dilate(body_out.astype(np.uint8), disk(max(2, r // 2))) > 0
@@ -160,7 +165,9 @@ def _fillet(img, x0, y0, arm, body, zone, fore, arm_fill, sleeve, ow, r):
     if notch.sum() < 4:
         return
     S = (U > 0) | notch
-    inner = cv2.erode(S.astype(np.uint8), disk(ow)) > 0
+    # the box's edge is not the shape's edge: an outline running out of the box (the body's sloping shoulder, which
+    # now meets the arm's round top: body.front_outline) was read as inside and painted out (one-route-kit chat 5)
+    inner = cv2.erode(S.astype(np.uint8), disk(ow), borderType=cv2.BORDER_REPLICATE) > 0
     near = cv2.dilate(notch.astype(np.uint8), disk(2 * ow + 3)) > 0
     old_ink = (body_out & ~(cv2.erode(body.astype(np.uint8), disk(max(1, ow // 2 + 1))) > 0)) | (arm & ~arm_fill)
     H, W = U.shape
@@ -277,7 +284,9 @@ def install(B):
                     R = cam.S(hw[i] + o) + 2
                     fd.ellipse([X - R, Y - R, X + R, Y + R], fill=255)
                 zone[np.asarray(fore) > 0] = 0
-                pad = 8                                              # the body, a little beyond the rectangle so its
+                # the body, beyond the rectangle so its edge is found right up to the rectangle's sides, and far enough
+                # for the shoulder's fillet to see the real body past them (one-route-kit chat 5)
+                pad = max(8, int(cam.S(w * 0.9)) + 4)
                 bm = Image.new('L', (W + 2 * pad, H + 2 * pad), 0)   # edge is found right up to the rectangle's sides
                 ImageDraw.Draw(bm).polygon([(x - bx0 + pad, y - by0 + pad) for x, y in body], fill=255)
                 k = 2 * (q.w(2.6) // 2) + 3
@@ -299,8 +308,8 @@ def install(B):
                     p.img.alpha_composite(patch, (bx0, by0))
             p.img.alpha_composite(lay, (bx0, by0))
             if body is not None:                             # the notch where the sleeve's top meets the shoulder
-                _fillet(p.img, bx0, by0, a > 8, inside > 0.5, zone, np.asarray(fore) > 0,
-                        np.asarray(fill_m) > 0, sleeve, q.w(2.6), cam.S(w * 0.9))
+                _fillet(p.img, bx0, by0, a > 8, np.asarray(bm) > 127, zone, np.asarray(fore) > 0,
+                        np.asarray(fill_m) > 0, sleeve, q.w(2.6), cam.S(w * 0.9), pad)
         finally:
             busy.pop()
 

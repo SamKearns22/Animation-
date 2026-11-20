@@ -509,6 +509,36 @@ def hand(p, x, y, skin, r=19, rot=0.0):
     p.ell(x, y, r, r * 0.86, skin, INK, 2.4, rot=rot)
 
 
+ARM_TOP = 34.5     # the house arm's half width at the shoulder (limbs: 1.15 x 30): the shoulder rounds over it
+
+
+def ink_units(p):
+    """The body's outline thickness in the person's own units (Pen.w grows slower than the drawing)."""
+    return Pen(p.img, p.cam).w(2.6) / (p.cam.S(1) or 1.0)
+
+
+def front_outline(sw, bottom, o=2.0):
+    """The body's outline seen from the front (or the back): the collar, each shoulder sloping down and rounding over
+    the top of the arm on the arm's own circle (its joint sits at sw - 14, 60: views.standing), the sides, the hem.
+    Was a flat slope to a corner at (0.8 sw, 12): the arm's round top sat lower, so the outline stepped down, then
+    up over the arm, a small chip at every shoulder (one-route-kit chat 5, Sam 20 Nov, the Blessed jury). `o`: the
+    outline's thickness (ink_units): the body's line runs just outside the arm's fill, on the arm's own outline, so
+    the arm (which hides its line over the body) and the body (whose line is painted out under the arm) leave no gap."""
+    cx, cy, R = sw - 14.0, 60.0, ARM_TOP + 0.5 * o + 0.8
+    ax, ay = 40.0, -4.0
+    dx, dy = cx - ax, cy - ay
+    L = math.hypot(dx, dy)
+    off = math.asin(min(0.99, R / L))
+    th = math.atan2(dy, dx) - off                       # the slope that just touches the arm's top
+    tx, ty = ax + L * math.cos(off) * math.cos(th), ay + L * math.cos(off) * math.sin(th)
+    a0 = math.atan2(ty - cy, tx - cx)
+    a1 = math.atan2(-math.sqrt(max(1.0, R * R - (sw - cx) ** 2)), sw - cx)   # where the circle meets the side
+    arc = [(cx + R * math.cos(a), cy + R * math.sin(a)) for a in np.linspace(a0, a1, 8)]
+    right = arc + [(sw + 6, 200), (sw * HEM, bottom)]
+    left = [(-x, y) for x, y in right]
+    return [(-ax, ay)] + left + right[::-1] + [(ax, ay)]
+
+
 def plain_torso(img, p, sp, t):
     out = sp.get('outfit', 'suit')
     skin = sp['skin']
@@ -520,8 +550,7 @@ def plain_torso(img, p, sp, t):
         p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # neck_lean: its top
         soft(img, p.cam, [(-32 + nx, -76 + ny), (32 + nx, -76 + ny), (30 + nx * 0.5, -40), (-30 + nx * 0.5, -40)],
              (150, 90, 80), 0.35, 4)                # follows a shifted head, one neck (Ad-Vanced Notice, 8 Nov)
-    body = [(-40, -4), (-sw * 0.8, 12), (-sw, 50), (-sw - 6, 200), (-sw * HEM, bottom), (sw * HEM, bottom),
-            (sw + 6, 200), (sw, 50), (sw * 0.8, 12), (40, -4)]
+    body = front_outline(sw, bottom, ink_units(p))
     if out == 'suit':
         jc = sp.get('jacket', NAVY)
         sc = sp.get('shirt', (236, 238, 244))

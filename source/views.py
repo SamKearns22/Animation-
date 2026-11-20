@@ -607,7 +607,7 @@ def torso_view(img, p, sp, view, seated=False):
             if sp.get('neck_shade'):                  # the jaw's shadow on it: the neck sits under the head
                 p.poly([(-32 * nw + nx, -80 + ny), (32 * nw + nx, -80 + ny), (30 * nw, -40 + ny), (0, -28 + ny),
                         (-30 * nw, -40 + ny)], B.dk(skin, 0.82), None)
-        body = torso_outline(sp, view, bottom)
+        body = torso_outline(sp, view, bottom, B.ink_units(p))
         p.poly(body, jc, INK, 2.6)
         if out in ('suit', 'blouse'):
             if not sp.get('collar_off'):              # lying_flat draws it round the neck's foot instead (Job I, 18)
@@ -625,8 +625,9 @@ HEAD_WEAR = []       # draw(p, view, sp, hx, hy) on every head after its head_pr
 TORSO_EXTRAS = []    # draw(img, p, sp, view, seated) after each turned torso (people.install hangs the kit's on it)
 
 
-def torso_outline(sp, view, bottom):
-    """The turned torso's outline (torso_view's body), facing right, in the body's units."""
+def torso_outline(sp, view, bottom, o=2.0):
+    """The turned torso's outline (torso_view's body), facing right, in the body's units (o: the outline's
+    thickness in those units, body.ink_units: the front and back shoulders run on the arm's own outline)."""
     sw = sp.get('shoulders', 150)
     if view == 'three':
         from ink import open_curve
@@ -637,6 +638,8 @@ def torso_outline(sp, view, bottom):
         d = 0.6 * sw
         return curve([(-34, -8), (-d * 0.92, 22), (-d * 1.02, 130), (-d * 0.96, 320), (-d * 0.92, bottom), (d * 1.0, bottom),
                       (d * 1.02, 300), (d * 1.12, 140), (d * 0.86, 30), (30, -6)], 3)
+    if view in ('front', 'back'):
+        return B.front_outline(sw, bottom, o)
     k = 0.9 if view == 'three_back' else 1.0
     return [(-40, -4), (-sw * 0.8 * k, 12), (-sw * k, 50), (-(sw + 6) * k, 200), (-sw * k * B.HEM, bottom),
             (sw * k * B.HEM, bottom), ((sw + 6) * k, 200), (sw * k, 50), (sw * 0.8 * k, 12), (40, -4)]

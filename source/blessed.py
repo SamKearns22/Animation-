@@ -38,6 +38,12 @@ import blessed_checks as CK      # noqa: E402  the checks it was never set up fo
 import press_secretary as PS     # noqa: E402,F401  (its seated reporters are no longer drawn: Sam's note 4)
 import views as V                # noqa: E402
 import moves                     # noqa: E402
+import body                      # noqa: E402
+# one-route-kit chat 5: the people engine (body.py) reads its own HEADS and TORSOS; this film's people (Brand, the
+# judge, the jurors, Walliams...) hang theirs on MidTerminal's, so they are handed over here (all twelve jurors had
+# come out as the plain test head since chat 4)
+body.HEADS.update(BC.TC.HEADS)
+body.TORSOS.update(BC.TC.TORSOS)
 from satire_style import install_circle_hands   # noqa: E402
 from ed import INK, curve        # noqa: E402
 
