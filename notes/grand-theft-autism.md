@@ -144,6 +144,19 @@
       3D prop projected in every view (people_parts; people.turned 'own' for each view); her turned bun sits on
       the crown (people_turned, sizes in head units); nose_wide --.
 
+- [ ] Sam (20 Nov, chat 9, on the five-angle sheet): "The headphones ... look absolutely terrible. They literally clip
+      through her body, and if anything, they look more 2D than before. So I don't know how you made that judgment."
+      "Although the rounded neckline on both Lucia and Jason looks better, I still think it would be better to just
+      not have that neckline at all." (A repeat note, rule 30.) Why the first fix failed: the cups were flat ovals
+      placed by fixed numbers, not on the body's surface, so they sink into the chest from the front and cut the
+      shoulder's outline from the side; no thickness, no rim, no shading, the band a plain line. Claude judged them
+      from a small picture by "do they turn", never "do they sit on her and look solid", and told Sam they looked
+      right. Plan: each cup a short solid drum (face, rim wall, shade side), its back resting on the body's outline
+      at that height in each view (never inside it), the band a thick strap with its own outline and highlight,
+      drawn over the shoulder line; find a photo of headphones worn round the neck first and compare at full size,
+      five angles, before sending. Neckline: on bare tops (vest, tank) no neckline at all (the jumper's crew-neck curve
+      in body.plain_torso is drawn on the skin body: leave it off when sp has vest_c).
+
 ## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
 Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
 (rule 41 one outline), square shoulder corners, tops not tapering to the hips (figure-rig 2, hem 0.85), hands on the
@@ -243,23 +256,18 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
-## Where things stand (20 Nov, chat 9, Opus medium)
-- Rules that bite next: 8 (nothing past the rehearsals until Sam answers on both clips), 30 (a repeated note: find
-  why the first fix failed), 85 (the cost watch: the film is at its budget; see the cost line).
-- Done: Sam's 6 cast notes (brief checklist, ticked); likeness (Jason's buzz, Lucia's fuller tail, loose strands);
-  critique hunts 1 and 2 on the cast, fixed or named; fixed cast sheet and her before/after sent.
-- Next: Sonnet, medium: put the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out; source/gta_rehearse.py
-  draws its people from the people file, so a re-render picks them up; check first), send both clips. Do not touch
-  the opening (Sam's own chat).
-- Needs Sam: his Y/N on both clips (rule 8); whether losing her nose stud is fine.
-- Chat 9 also did Sam's second cast notes (back-view arm seam, Lucia's neck line and chain, her 3D headphones, bun, nose).
-- Read: guides/job-packs.md, Checks and animatic (the clip part); this file's brief checklist (last items).
+## Where things stand (20 Nov, chat 9 end, Opus medium)
+- Rules that bite next: 30 (the headphones are a repeat note: the why is in the brief checklist), 89 (judge at full
+  size against a reference, never a thumbnail), 8 (nothing past the rehearsals until Sam's Y/N on both clips).
+- Done: Sam's 6 cast notes; his second notes (back-view arm seam fixed in the kit, Lucia's neck line, chain, bun,
+  nose); critique hunts 1 and 2. Headphones and neckline NOT done (his last note).
+- Next: Opus medium: the headphones rebuilt as a solid prop resting on her (plan in the brief checklist's last
+  item), no neckline on bare tops; five angles at full size beside a real photo; send. Then Sonnet: the new cast
+  into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch the opening.
+- Needs Sam: Y/N on her nose stud going; the clips' Y/N later (rule 8).
+- Read: guides/job-packs.md, Notes round; this file's brief checklist, last three items.
 - Open rule requests: none.
-- For Claude: people.py hair 'buzz'/'messy', 'bangles'; people_parts.buzz_front, messy_bun/messy_front, unicorn bot;
-  views.bangles (BANGLES); people_turned knot+hair_messy, pony fk; vest_torso tank chest line.
-
-- Handover check answers (characters chat): no `page.py show` because no note touched a shot: the work was the shared
-  kit's body parts and gta_cast's sheet layout (read whole). The freeze/* branches (halo-no-no, milburn,
-  milburn+milburn-story, protest-tiers, blessed) are finished films' bookmarks (one-route-kit Change 1), not work to merge.
+- For Claude: people_parts.headphones3d (PHONES_YAW, headphones_view), views.torso_outline for the body's edge per
+  view; body.plain_torso jumper line (oval at 0,-2); people_parts.vest_torso neck patch.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 15.88% of 15%; forecast 66.4% (2026-11-20)
