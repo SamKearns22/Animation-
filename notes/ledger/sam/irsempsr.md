@@ -7,3 +7,6 @@ We cut to a windscreen view, similar to Halo No-No, looking in. On the left, Jas
 
 Autistic girl: it’s very loud
 
+### 2026-11-20T18:06:57
+No. Because you're starting the camera in the wrong place. Scene 3 flows into screen 4.
+
