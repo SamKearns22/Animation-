@@ -41,7 +41,7 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 - Next: chat 4 (opened), Opus, high: Change 2 (one kit). Sam said Y to Change 2 (20 Nov).
 - Needs Sam: nothing for Change 2 (Y given). Open: Y/N bookmark Shocking Behaviour at the newest save of its code, best guess (answered 'later'). (His priority, 20 Nov: continue Grand Theft Autism with the best tools only; he dislikes the small chips in the jury shoulders, picture in chat); Blessed's 1.92% drift is probably the same thing.
 - Read: this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
-- Open rule requests: none found. UNROUTED line of 20 Nov 11:40 is a false alarm: Change 2 was routed inside notes/proposals/one-route-kit.md (Final version) and Sam said Y.
+- Open rule requests: none found. UNROUTED "2026-11-20 11:40 chat e3a7708e" is a false alarm: Change 2 was routed inside notes/proposals/one-route-kit.md (Final version) and Sam said Y.
 - For Claude: freeze.py recut/check/count; branches claude/elegant-davinci-2anki0 (depth-check proposal files, not this job's) named, not merged; claude/blessed-c2-mics-wip as before.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 1.23% of 15%; forecast not yet planned (2026-11-20)
