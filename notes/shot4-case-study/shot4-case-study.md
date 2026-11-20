@@ -201,6 +201,14 @@ verbatim first; analysis (frame, cause, fix, the check that should have caught i
 **Frames 4a, 4b, 4c** (Sam's stills, `sam-frame-04a/b/c.jpg`: Jason out of the window, the camera moving behind him)
 - Note 7: "The horror continues. It gets worse. Then his arms come out his back. Then the arms coming out his back pull out a pistol. It is truly and genuinely disturbing.."
 
+**Frames 5a, 5b, 5c** (Sam's stills, `sam-frame-05a/b/c.jpg`: the shots and the cruiser's slew; 5c the crash with the hydrant jet)
+- Note 8: "He fires. The gun is not pointing at his target. It is firing towards the left."
+- Note 9: "The cop is not hit by the wound. There is no blood. Or reaction. He is fine. He should be dead or seriously injured. Blood mist against the glass."
+- Note 10: "All the cops are bald too -- what's your thing with bald? This happened with the ERG crowds and then we fixed it." (Repeat note: rule 30, find why the ERG fix did not carry over.)
+- Note 11: "J's legs are 2D and are sticking inside the doorframe."
+- Note 12: "Not only is the cop sat there in the crashed car like a placid marionette, he isn't the same cop from a few frames before"
+- Note 13: "There is a fire hydrant water effect -- we do not see it get hit by the car"
+
 ## 8. Lessons for future films (draft; nothing here is a rule until Sam says so)
 
 1. Judge a clip at full size, beat by beat, against the screenplay's words, before sending. A thin strip of small
