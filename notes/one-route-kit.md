@@ -5,7 +5,7 @@
 - [x] "you shouldn't be able to find all of the previous kits from previous films because they're done now" (Option 1, change 3)
 - [ ] "should the outdated things be completely isolated or deleted?" Answer sent: isolated, never deleted (recuts need them)
 - [ ] "should this be the case throughout the project?" Answer sent: yes, every kind of kit (people, places, sound, checks)
-- [ ] Sam's pick between Option 1 and Option 2 (notes/proposals/one-route-kit.md, verdict)
+- [x] Sam's pick (20 Nov): "1" (freeze old films, then one clean kit; each change still gets its own yes)
 
 ## Estimate
 Whole job about 12-14% of a week once, as tool work (judge's figure, unmeasured). This proposal chat: about 3%.
@@ -19,8 +19,8 @@ too: Grand Theft Autism's kit additions made Milburn's frame stop matching (kitt
 ## Where things stand (20 Nov, proposal chat 1, Opus high)
 - Rules that bite next: the proposal route (one change per yes), 24 (the cost watch), 30.
 - Done: measured; two helpers and the blind judge ran; verdict recorded (helper A's version, 8 faults: 4 fixed, 4 named); options sent to Sam.
-- Next: on Sam's pick, Sonnet, normal effort: the Learn step (fetch full history, find each film's final save, re-render one frame each, compare; sheet of the 15 swapped steps). Changes nothing. Then Change 1 on its own yes.
-- Needs Sam: 1 Option 1 or 2; 2 Y/N delete the private page a helper published by mistake.
+- Next (Sam picked 1): chat 2, Sonnet, normal effort: the Learn step (fetch full history, find each film's final save, re-render one frame each, compare; sheet of the 15 swapped steps). Changes nothing. Then Change 1 on its own yes.
+- Needs Sam: Y/N delete the private page a helper published by mistake (asked, not yet answered; ask again with the next question).
 - Read: notes/proposals/one-route-kit.md (Verdict, "Final version"); guides/job-packs.md, Build.
 - Open rule requests: none found.
 - For Claude: the watcher's BROKEN saver line (03:29) and UNLISTED record_faults/tag_faults are named, not this job's. Helper B's stray page: claude.ai/artifact/7vGcQMxzVKwDNLQS8EqV7Q.

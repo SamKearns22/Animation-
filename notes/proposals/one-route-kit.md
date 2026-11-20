@@ -1,6 +1,6 @@
 # Proposal: One route to the current kit
 
-Status: open
+Status: adopted (2026-11-20)
 
 ## Problem
 Sam (20 Nov, his words): "there should be one route to the right kit, the best kit, the most updated kit, and you
