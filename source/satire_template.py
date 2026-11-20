@@ -21,7 +21,7 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import burnham as B              # noqa: E402  people: flat shapes, black outlines
+import body as B              # noqa: E402  people: flat shapes, black outlines
 import mossad as M               # noqa: E402  (brows, mouths, hair; patched into burnham on import)
 import figure as F               # noqa: E402  arms solved and guarded
 import mouths                    # noqa: E402  lip sync

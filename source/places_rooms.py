@@ -165,7 +165,7 @@ def vent(p, img, cam, a, t):
 def street_window(p, img, cam, a, t):
     """A small tinted window in a side wall (its near top corner `slant` higher than the far one) with a street's
     lights sliding past it at night, every `period` seconds, and a bar down the middle."""
-    import burnham as B
+    import body as B
     w, h, s = a['w'], a['h'], a['slant']
     win = [(w, 0), (0, s), (0, h), (w, h)]
     p.poly(win, a['glass'], INK, 2.6)
@@ -368,7 +368,7 @@ def pin_phone(p, img, cam, a, t):
     """A prison PIN phone on the wall under its blue acoustic hood (x, z: the hood's box): the hood's back, cheeks
     and canopy, its perforations, the steel phone with keypad and screen, the cradle, a label over it. empty 1: the
     handset hung up, its cord coiled below (someone else's phone holds the handset in his hand)."""
-    import burnham as B
+    import body as B
     import blessed_sets as BS                     # the house lettering
     lc = B.Local(cam, -180, -300, 1.0)            # drawn in the booth's original units (the hood's corner 180, 300)
     q = lambda x0, y0, x1, y1: quad(x0, y0, x1, y1)
@@ -480,7 +480,7 @@ def pool_table(p, img, cam, a, t):
 def wall_tv(p, img, cam, a, t):
     """A TV on a wall bracket (x, z: the set): the wall plate and its bolts, the arm, the set, the picture (the
     feed the film passes in, else a dark screen), a sheen on the glass, the standby light."""
-    import burnham as B
+    import body as B
     w, h = a['w'], a['h']
     mx = w / 2
     if a['bracket']:

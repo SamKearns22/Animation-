@@ -26,7 +26,7 @@ import numpy as np
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-import burnham as B          # noqa: E402
+import body as B          # noqa: E402
 import figure as F           # noqa: E402
 import kit                   # noqa: E402
 import views as V            # noqa: E402
@@ -496,7 +496,7 @@ class Mount:
 # ------------------------------------------------------------------------------------------------ checks
 def check(mount=None, gaits=None):
     """Every gait sampled finely: planted hooves never slide on the ground, no leg stretches, the rider reaches."""
-    import burnham as B_
+    import body as B_
     B_.SS = 1
     probs = []
     for kind in ([mount] if mount else ['horse', 'donkey']):

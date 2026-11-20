@@ -14,7 +14,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-import burnham as B          # noqa: E402
+import body as B          # noqa: E402
 import figure as F           # noqa: E402
 import kit                   # noqa: E402
 import views as V            # noqa: E402

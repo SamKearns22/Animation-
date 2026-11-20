@@ -468,7 +468,7 @@ def run(film):
 
 
 if __name__ == '__main__':
-    import burnham as B
+    import body as B
     B.SS = 1
     film = importlib.import_module(sys.argv[1])
     f = run(film)

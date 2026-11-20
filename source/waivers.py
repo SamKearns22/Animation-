@@ -114,7 +114,7 @@ _HOUSE = []
 def install():
     """Log every front head drawn and whether burnham's own head (the house head: no lips at rest) drew it. Wraps the
     top of the head hooks (B.head) and every module's reference to the original."""
-    import burnham as B
+    import body as B
     import figure as F
     if getattr(B.head, '_waivers', False):
         return

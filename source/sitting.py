@@ -1386,7 +1386,7 @@ def audit_part2(sp):
 
 # ------------------------------------------------------------------------------------------------ sheet and clips
 def _setup():
-    import burnham as B
+    import body as B
     import handcheck as H
     import kitchecks
     import limbs

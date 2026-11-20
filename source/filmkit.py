@@ -377,7 +377,7 @@ def look_sheet(frame, records, out, size=(480, 853)):
     """The check sheet for rule 43: one frame from the middle of each stretch where eyes should meet, each face's
     drawn look against its target written under it (OK or the fault). frame(t) -> the picture."""
     from PIL import Image, ImageDraw, ImageFont
-    import burnham as B
+    import body as B
     font = ImageFont.truetype(B.SANS, 20)
     tiles = []
     for a, b, t0, t1 in meets(records):

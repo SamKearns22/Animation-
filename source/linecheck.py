@@ -92,7 +92,7 @@ def faults(film, sheet=None):
     if not hasattr(film, 'LINE_SUBJECTS'):
         return []
     ok = getattr(film, 'LINE_OK', ())
-    import burnham as B
+    import body as B
     keep, B.SS = B.SS, 1
     out, tiles = [], []
     for name, draw in film.LINE_SUBJECTS():
@@ -123,7 +123,7 @@ def faults(film, sheet=None):
 
 
 if __name__ == '__main__':
-    import burnham as B
+    import body as B
     B.SS = 1
     f = faults(importlib.import_module(sys.argv[1]), sys.argv[2] if len(sys.argv) > 2 else None)
     print('\n'.join(f) if f else 'line work: every shape outlined, one weight')

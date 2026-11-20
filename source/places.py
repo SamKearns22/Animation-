@@ -331,7 +331,7 @@ class Piece:
         return a
 
     def draw(self, img, cam, t):
-        import burnham as B
+        import body as B
         lc = B.Local(cam, self.ox, self.oy, self.k)
         self.kind['fn'](B.Pen(img, lc), img, lc, self.args, t)
 

@@ -105,7 +105,7 @@ def _checked(t):
     import preflight
     pic, rec = preflight.probe(t, _JOB['picture'])
     if pic is None:
-        from burnham import canvas
+        from body import canvas
         pic = canvas((0, 0, 0))
     return pic, rec
 

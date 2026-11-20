@@ -25,7 +25,7 @@ def test(fn):
 
 def _hand_faults(film, times, who=None):
     """handcheck's findings for these frames of a film (drawn here, one after another)."""
-    import burnham as B
+    import body as B
     import figure as F
     import handcheck as H
     import kitchecks
@@ -132,7 +132,7 @@ def pose_gallery():
 @test
 def looks_at_the_shot_camera():
     """Patriots 3 note 11: the Loader's profile at the Gunner (41-42.6 s) read as looking at the wall."""
-    import burnham as B
+    import body as B
     import filmkit
     import patriots3 as P
     import patriots3_act as ACT
@@ -169,7 +169,7 @@ def looks_at_the_shot_camera():
 def head_turns_its_own_way():
     """Kit lesson 1 (Patriots 3): a front-on body's head could only turn the way the body's drawing was mirrored."""
     from PIL import Image
-    import burnham as B
+    import body as B
     import patriots3_cast as C
     import views as V
     B.SS = 1
@@ -477,8 +477,8 @@ def every_face_has_a_mouth():
     """Rule 13 (Sam, 13 Nov, proposal 5; Blessed notes 5, 15, 45): a face turned to us with no mouth drawn is caught,
     front and three-quarter; one with its mouth, or seen from behind, is not."""
     from PIL import Image
-    import burnham as B
-    import patriots3_cast as C
+    import body as B
+    import posegallery as G
     import views as V
     B.SS = 1
 
@@ -486,7 +486,7 @@ def every_face_has_a_mouth():
         out = []
         for deg in (0, 40, 180):
             im = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
-            out.append(V.person(im, B.Cam(1.0, 540, 960), 540, 700, 0.8, dict(C.GUNNER), 0.0, deg)['_drawn']['mouth'])
+            out.append(V.person(im, B.Cam(1.0, 540, 960), 540, 700, 0.8, dict(G.MODEL), 0.0, deg)['_drawn']['mouth'])
         return out
     real = B.mouth
     a = seen()
@@ -621,7 +621,7 @@ def shoulder_seam_caught():
     last drawing (that cut a wedge of background into the shoulder: the gap Sam saw, failed four times by hand). Then
     a gap painted across the far arm's join, and a line painted across the near arm's, must both be caught."""
     import itertools
-    import burnham as B
+    import body as B
     import figure as F
     import handcheck as H
     import kitchecks
@@ -686,7 +686,7 @@ def held_prop_touches():
     the ear (redone: the phone sat on top of his head) and the cup are clean from every view; the same phone drawn a
     hand's width and more away from the hand is caught. Job J: a prop hidden on the picture (behind his back or head)
     is flagged, and the views it is flagged in are exactly the gallery's avoid views for it."""
-    import burnham as B
+    import body as B
     import figure as F
     import handcheck as H
     import kitchecks
@@ -738,7 +738,7 @@ def held_over_or_behind_the_head():
     """Protest Tiers note 1 (chat 7): a held thing up at the head is in front of or beside it (rule 41). Chat 5's phone
     (hand at the crown, the phone a prop drawn before the head) is caught from the front as covered by the head though
     in front of it; a phone held up behind the head is caught from every view; the whole pose gallery is clean of both."""
-    import burnham as B
+    import body as B
     import figure as F
     import handcheck as H
     import kitchecks
@@ -815,7 +815,7 @@ def lying_and_pose_checks():
     arm curled up off the ground) and every kit lying pose clean from every view; and pre-flight's pose check
     (posecheck.py) flags a gallery pose seen from an avoid view and a pose with no gallery row."""
     import numpy as np
-    import burnham as B
+    import body as B
     import handcheck as H
     import lying as L
     import moves
@@ -1164,7 +1164,7 @@ def famous_face_size():
     shot alone is caught, a name never drawn is caught, and a film with people but no FAMOUS list is asked for one."""
     import types
     from PIL import Image
-    import burnham as B
+    import body as B
     import kitchecks as K
     import patriots3_cast as C
     import views as V
@@ -1273,7 +1273,7 @@ def copies_in_a_group():
     before they were varied); a varied pair passes; COPIES_OK lets a meant pair through."""
     import types
     from PIL import Image
-    import burnham as B
+    import body as B
     import figure as F
     import kitchecks as K
     import views as V
@@ -1302,7 +1302,7 @@ def lopsided_invented_only():
     a likeness head never is (Vance stays as measured)."""
     import numpy as np
     from PIL import Image
-    import burnham as B
+    import body as B
     import views as V
     import patriots4_cast as P4
     import ad_vanced_notice_cast as AC
@@ -1329,7 +1329,7 @@ def turned_heads_for_anyone():
     import hashlib
     from PIL import Image
     import numpy as np
-    import burnham as B
+    import body as B
     import views as V
     import ad_vanced_notice_cast as C
     import turnhead as TH
@@ -1415,7 +1415,7 @@ def lying_shirt_and_nape():
     the head is inked all round with no neck over it (turnhead, nape_in_head). Standing views are untouched."""
     import numpy as np
     from PIL import Image
-    import burnham as B
+    import body as B
     import lying as L
     import lying_flat as LF
     import turnhead as TH
@@ -1482,7 +1482,7 @@ def lying_neck_from_behind():
     it) and the back collar stood up beside the head like a block. Now the neck rises out of the collar, which
     wraps its foot. Measured: the neck's own pixels left showing (drawn in a test colour), and the collar's turn."""
     import numpy as np
-    import burnham as B
+    import body as B
     import lying as L
     import lying_flat as LF
     import ad_vanced_notice_cast as AC
@@ -1763,7 +1763,7 @@ def camera_feel():
     """Rule 72 (tool chat, 12 Nov; Blessed note 51): a zoom eased over 3 s passes; the same zoom in 0.5 s, or one that
     starts at full speed, is caught unless the acting list marks its shot sharp; a jump in one frame is a cut."""
     import types
-    import burnham as B
+    import body as B
     import camfeel as C
 
     def film(cam, dur=4.0):
@@ -2959,7 +2959,7 @@ def drawn_angle_every_film():
     40 degrees is flagged, a reason in THREE_QUARTER_OK clears it, a head turned past 25 counts, a mark named by its
     CAST key matches the drawn name, and a front-on film (midterminal's shot 'two') passes."""
     import importlib
-    import burnham as B
+    import body as B
     import figure as F
     import posecheck as P
     import preflight
@@ -3017,7 +3017,7 @@ def focus_front_heads():
     import math as M
     import shutil
     import tempfile
-    import burnham as B
+    import body as B
     import facehouse as FH
     import figure as F
     import focus as FO

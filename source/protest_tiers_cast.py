@@ -42,7 +42,7 @@ from satire_style import install_circle_hands   # noqa: E402
 
 PPt.TRUE_SKULL = True               # O5 (Sam's Y, 16 Nov): bald heads drawn as a true round skull, this film only
 B = PPt.B
-V = PPt.AV.MC.V
+V = PPt.V
 import figure as F                   # noqa: E402
 install_circle_hands(B)
 F.guard(B)

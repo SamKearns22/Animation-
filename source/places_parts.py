@@ -416,7 +416,7 @@ def glass_screen(p, img, cam, a, t):
     """A glass screen (a dock's): faint glass, slanting pale shines (pairs of x across the top, in metres), steel
     uprights (x in metres) and a top rail."""
     from PIL import Image
-    import burnham as B
+    import body as B
     w, h = a['w'], a['h']
     pc = a['piece']
     X = lambda xm: pc.P(xm, pc.z1)[0]

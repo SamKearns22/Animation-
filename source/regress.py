@@ -22,7 +22,7 @@ FILMS = {'hutt': (2.0, 12.0), 'russiadent': (2.0, 14.0), 'cryminister': (3.0, 30
 
 
 def frames(name):
-    import burnham as B
+    import body as B
     m = importlib.import_module(name)
     B.SS = 1
     for t in FILMS[name]:

@@ -56,7 +56,7 @@ def _frame(el, wr):
 
 def hand(p, el, wr, shape, skin, extra=None, t=0.0):
     """The extra hand shapes (person's own units). Returns True if drawn here (else burnham draws its own)."""
-    from burnham import dk, finger
+    from body import dk, finger
     from ink import curve
     d, nrm = _frame(el, wr)
     c = (wr[0] + d[0] * 16, wr[1] + d[1] * 16)
@@ -172,7 +172,7 @@ def dangle(p, top, length, angle, colr, width=5, tag=None):
 
 # ------------------------------------------------------------------------------------------- the test sheet
 def sheet(out):
-    import burnham as B
+    import body as B
     import figure as F
     from PIL import ImageFont
     install(B)

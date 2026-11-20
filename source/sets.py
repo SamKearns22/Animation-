@@ -34,7 +34,7 @@ from PIL import Image, ImageDraw
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import burnham as B              # noqa: E402
+import body as B              # noqa: E402
 from ink import INK               # noqa: E402
 
 FLAT = B.Cam(1.0, 540, 960)

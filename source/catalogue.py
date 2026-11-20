@@ -96,7 +96,7 @@ def draw_one(k, out):
             m.B.SS = 1
         m.cast_sheet(out)
     else:
-        import burnham as B
+        import body as B
         import prepper_fx as X           # noqa: F401  (used by the recipe)
         import sets
         B.SS = 1

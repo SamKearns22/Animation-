@@ -59,7 +59,7 @@ def _blank_like(d):
 def turn_faults(poses, tested=None):
     """Redraw each logged person-with-a-prop alone at every 30 degrees. poses: kitchecks.POSES entries (where, name,
     sp, joints, t). Returns faults; `tested` (a set) skips a person and prop already turned."""
-    import burnham as B
+    import body as B
     import views as V
     tested = set() if tested is None else tested
     out = []
@@ -169,7 +169,7 @@ def shape_faults(film):
     """Rule S7: each listed effect drawn alone and its shape tested (the off-style list in guides/satire.md)."""
     if not hasattr(film, 'EFFECTS'):
         return ['EFFECT SHAPES: the film has no EFFECTS list ([(name, kind, draw(img))], [] for none): rule S7']
-    import burnham as B
+    import body as B
     out = []
     keep = B.SS
     B.SS = 1

@@ -43,7 +43,7 @@ import traceback
 
 from PIL import Image, ImageDraw, ImageFont
 
-import burnham as B
+import body as B
 import figure as F
 import handcheck
 

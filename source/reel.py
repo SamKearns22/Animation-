@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-import burnham as B          # noqa: E402
+import body as B          # noqa: E402
 import figure as F           # noqa: E402
 import kit                   # noqa: E402
 import moves as MV           # noqa: E402
@@ -240,7 +240,7 @@ def car(img, cam, t, zack, adv):
 
 
 def reel_frame(i):
-    import burnham as B_
+    import body as B_
     B_.SS = 1
     zack, adv = cast()
     t = i / 12.0

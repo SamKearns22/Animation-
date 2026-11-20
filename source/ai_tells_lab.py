@@ -174,7 +174,7 @@ def act_head(lay, pivot, head_w, roll, nod, body_roll):
 
 def ic_frame(t, life=None, i=0):
     """Islamocommunism's frame at t (captions on), El-Sayed's head acted when `life` is given."""
-    import burnham as B
+    import body as B
     import islamocommunism as IC
     import views as V
     B.SS = SS
@@ -212,7 +212,7 @@ def small(im, w):
 
 # ------------------------------------------------------------------------------------------------ the sheet
 def sheet(out):
-    import burnham as B
+    import body as B
     import ad_vanced_notice as AV
     import islamocommunism as IC
     B.SS = SS
@@ -307,7 +307,7 @@ def _clip_frame(i, t, life, tmp, font):
 # ------------------------------------------------------------------------------------------------ proposal 5 (built)
 def driver(out):
     """Proposal 5's sheet: the pump driver with the kit's options off and on, whole body, then his face full size."""
-    import burnham as B
+    import body as B
     import views as V
     import ad_vanced_notice_cast as AC
     B.SS = 1
@@ -357,7 +357,7 @@ SHADE_ROWS = [  # (label, film, time, crop box on the 1080 x 1920 frame)
 
 
 def _film_frame(film, t):
-    import burnham as B
+    import body as B
     B.SS = SS
     if film == 'av':
         import ad_vanced_notice as AV
@@ -440,7 +440,7 @@ def _rig_frame(i, t, life, tmp):
 def shirt(out):
     """Proposal 4's check (built, ad_vanced_notice_cast.BENT): the driver's shirt from four views, the flat grid as
     filmed (top) vs the check bent round his body (bottom)."""
-    import burnham as B
+    import body as B
     import views as V
     import ad_vanced_notice_cast as AC
     B.SS = 1

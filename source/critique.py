@@ -82,7 +82,7 @@ LINE_RE = re.compile(r'^- ([APCOSM]\d+) \((\d+)\) (.*)$')
 
 def _font(size):
     try:
-        import burnham as B
+        import body as B
         return ImageFont.truetype(B.SANS, size)
     except Exception:
         return ImageFont.load_default()

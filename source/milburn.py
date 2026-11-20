@@ -40,7 +40,7 @@ import milburn_sets as MS            # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
 
 B = PPt.B
-V = PPt.AV.MC.V
+V = PPt.V
 install_circle_hands(B)
 W, H = 1080, 1920
 

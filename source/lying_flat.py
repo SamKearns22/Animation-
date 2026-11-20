@@ -27,7 +27,7 @@ from PIL import Image, ImageDraw, ImageFont
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-import burnham as B          # noqa: E402
+import body as B          # noqa: E402
 import views as V            # noqa: E402
 from ink import INK, curve    # noqa: E402
 

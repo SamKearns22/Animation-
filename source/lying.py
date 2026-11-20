@@ -48,7 +48,7 @@ from scipy import ndimage
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-import burnham as B          # noqa: E402
+import body as B          # noqa: E402
 import clipcheck as CC       # noqa: E402
 import figure as F           # noqa: E402
 import moves                 # noqa: E402

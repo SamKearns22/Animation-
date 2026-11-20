@@ -200,7 +200,7 @@ def _font(ss=1):
 
 
 def rows(text, ss=1):
-    import burnham as B
+    import body as B
     return B.wrap(text, _font(ss), WIDE * ss)
 
 
