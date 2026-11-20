@@ -781,48 +781,49 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.82,
+   "cost": 2.17,
    "src": "estimate",
    "sid": "session_01J1JB7WJP6bF722TEcuVREX",
-   "steps": 54,
-   "hist_k": 181,
+   "steps": 121,
+   "hist_k": 281,
    "kinds": {
-    "film-file search": 4.0,
-    "tool search": 23.9,
-    "renders": 7.5,
-    "pictures": 4.2,
-    "other": 60.4
+    "film-file search": 5.8,
+    "tool search": 20.1,
+    "page.py": 0.5,
+    "renders": 4.7,
+    "pictures": 7.6,
+    "other": 61.4
    },
    "calls": {
-    "film-file search": 4,
-    "tool search": 33,
+    "film-file search": 12,
+    "tool search": 59,
     "whole-file .py read": 0,
-    "page.py": 0,
+    "page.py": 1,
     "routine": 0,
-    "renders": 4,
-    "pictures": 8,
-    "other": 7
+    "renders": 11,
+    "pictures": 24,
+    "other": 21
    },
    "split": {
-    "usd": 3.0017,
-    "total": 3.0017,
+    "usd": 7.6027,
+    "total": 7.6027,
     "floor_k": 82,
     "blocks": {
-     "start-up floor": 31.2,
-     "new writes": 26.3,
-     "Claude's words": 25.8,
-     "carried history": 16.7
+     "carried history": 30.7,
+     "start-up floor": 25.4,
+     "Claude's words": 23.0,
+     "new writes": 20.9
     },
     "origins": {
-     "Claude's words": 36.8,
-     "start-up floor": 31.2,
-     "result: tool search": 22.7,
-     "result: pictures": 4.5,
-     "messages and reminders": 2.5,
-     "result: other": 0.9,
-     "Claude's edits": 0.6,
+     "Claude's words": 39.3,
+     "start-up floor": 25.4,
+     "result: tool search": 18.9,
+     "result: pictures": 8.6,
+     "messages and reminders": 4.0,
+     "result: other": 2.0,
      "result: film-file search": 0.6,
-     "result: renders": 0.1
+     "result: renders": 0.5,
+     "Claude's edits": 0.5
     },
     "leftover": 0.0
    },
@@ -834,73 +835,79 @@
      [
       "source/people.py",
       4.9,
-      0.0686
+      0.1272
      ],
      [
       "notes/grand-theft-autism.md",
       3.8,
-      0.0624
+      0.1076
      ],
      [
       "guides/kit-catalogue.md",
       3.4,
-      0.0536
+      0.0942
      ],
      [
       "guides/figure-rig.md",
       2.4,
-      0.037
+      0.0659
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/caff6f5e-2e4e-56a5-be31-0ef3425985f7/scratchpad/refs.jpg",
       1.6,
-      0.0226
+      0.0419
      ],
      [
       "source/people_parts.py",
       1.5,
-      0.0204
+      0.0382
      ],
      [
       "source/satire_template.py",
       1.1,
-      0.0168
+      0.0302
      ],
      [
       "story/protest-tiers-people.txt",
       1.0,
-      0.0148
+      0.0268
      ],
      [
       "source/halo_no_no.py",
       1.0,
-      0.0143
+      0.0261
      ],
      [
       "story/grand-theft-autism-places.txt",
       0.4,
-      0.0068
+      0.0118
      ]
     ],
-    "base_pct": 26.2
+    "base_pct": 23.5
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 4
+     "no show": 12
     },
     "other": {
-     "other": 4,
-     "shared:handover.py": 1,
-     "film notes": 2,
-     "guides": 6,
+     "other": 6,
+     "shared:handover.py": 2,
+     "film notes": 3,
+     "guides": 7,
      "shared:satire_template.py": 1,
      "shared:people.py": 9,
      "shared:halo_no_no.py": 1,
-     "shared:people_parts.py": 5,
+     "shared:people_parts.py": 10,
      "shared:midterminal_cast.py": 1,
      "shared:people_famous.py": 1,
-     "shared:gta_cast.py": 2
+     "shared:gta_cast.py": 4,
+     "shared:halo_cast.py": 1,
+     "shared:critique.py": 7,
+     "shared:people_turned.py": 2,
+     "shared:protest_tiers_sets.py": 1,
+     "shared:sets.py": 2,
+     "shared:kittests.py": 1
     },
     "ticked": 0,
     "edited film code": true,
@@ -1199,6 +1206,278 @@
       "before show",
       "source/people_parts.py story/grand-theft-autism-people.txt",
       "hair_loose\\|fc.get('lashes')",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "python3 - <<'EOF' p='notes/grand-theft-autism.md'; s=open(p).read() s=s.replace(",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q origin/claude",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "reference",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/patriots4_cast.py",
+      "def face_detail",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/people.py",
+      "def shag_front\\|def shag_mass",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/people.py",
+      "phones_c",
+      ""
+     ],
+     [
+      73,
+      "film",
+      "before show",
+      "story/grand-theft-autism-people.txt source/gta_cast.py",
+      "python3 - <<'EOF' p='story/grand-theft-autism-people.txt'; s=open(p).read() a=s.",
+      ""
+     ],
+     [
+      75,
+      "film",
+      "before show",
+      "source/midterminal_cast.py source/people.py story/grand-theft-autism-people.txt ",
+      "'+++'\\|def _push\\|STEP \\* ",
+      ""
+     ],
+     [
+      77,
+      "film",
+      "before show",
+      "source/people.py story/grand-theft-autism-people.txt source/gta_cast.py",
+      "sleeve_up'\\], d",
+      ""
+     ],
+     [
+      79,
+      "film",
+      "before show",
+      "source/people_parts.py source/people.py story/grand-theft-autism-people.txt sour",
+      "python3 - <<'EOF' p='source/people_parts.py'; s=open(p).read() old=\"\"\" p.line(cu",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/gta_cast.py",
+      "python3 - <<'EOF' p='source/people_parts.py'; s=open(p).read() s=s.replace(\"x, y",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:halo_cast.py",
+      "source/data/critique/ source/data/critique source/halo_cast.py source/data",
+      "\"stage\": *\"cast\"",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "def pack",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "def _panel",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "def _film_module",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py source/people_parts.py /home/user/Animation-/source/data/crit",
+      "\n    os.makedirs(out_dir, exist_ok=True)\n    c, outs = cast(), []\n    for who in",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:people_turned.py",
+      "source/people_turned.py source/views.py source/burnham.py",
+      "pony",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:people_turned.py",
+      "source/people_turned.py",
+      "sed -n 105,140p source/people_turned.py",
+      ""
+     ],
+     [
+      93,
+      "film",
+      "before show",
+      "source/people_parts.py source/people_turned.py source/people.py story/grand-thef",
+      "fc = \\|fc\\b",
+      ""
+     ],
+     [
+      96,
+      "film",
+      "before show",
+      "source/people_turned.py story/grand-theft-autism-people.txt source/data/critique",
+      "python3 - <<'EOF' p='source/people_turned.py'; s=open(p).read() old=\"\"\" tail = [",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/grand-theft-autism source/critique.py",
+      ", ",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:protest_tiers_sets.py",
+      "source/protest_tiers_sets.py source/roadster.py",
+      "^def truck",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "shared:sets.py",
+      "source/sets.py",
+      "^class \\|^def ",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:sets.py",
+      "source/sets.py",
+      "sed -n 74,148p source/sets.py; sed -n 171,290p source/sets.py",
+      ""
+     ],
+     [
+      103,
+      "film",
+      "before show",
+      "source/people.py source/people_parts.py source/people_turned.py source/midtermin",
+      "git add source/people.py source/people_parts.py source/people_turned.py source/m",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 500 python3 source/kittests.py outfit_every_view 2>&1 | tail -4; timeout",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "/home/user/Animation-/source/data/critique/grand-theft-autism/r1-p1",
+      "cd /home/user/Animation-/source/data/critique/grand-theft-autism/r1-p1 && ls; ta",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/grand-theft-autism/r1-p1 source/people_p",
+      "def piercings",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "nose",
+      ""
+     ],
+     [
+      109,
+      "film",
+      "before show",
+      "source/people_parts.py source/midterminal_cast.py source/people.py story/grand-t",
+      "rest smile\\|stud",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique-src/grand-theft-autism/cast-spec.json",
+      "python3 source/critique.py pack grand-theft-autism source/data/critique-src/gran",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/grand-theft-autism/r1-p2",
+      "cannot tell",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "QUICK CHECK\\|FINDER\\|NOT CARRIED\\|settle",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "shared:gta_cast.py",
+      "notes/grand-theft-autism.md source/gta_cast.py story/status.md",
+      "python3 - <<'EOF' p='notes/grand-theft-autism.md'; s=open(p).read() s=s.replace(",
       ""
      ]
     ]
