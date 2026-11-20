@@ -30,3 +30,6 @@ Y.
 
 'Anything against anything' should be the rule across all clipping checks in this project, otherwise we will always encounter the same problem every time we build any new prop or setting.
 
+### 2026-11-20T11:27:26
+Is my assertion correct?
+
