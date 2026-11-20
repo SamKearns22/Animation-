@@ -30,7 +30,7 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import burnham as B              # noqa: E402
+import body as B                 # noqa: E402  the one kit (burnham kept its own SS: the street drew at half size, chat 13)
 import sets as S                 # noqa: E402
 from ed import INK               # noqa: E402
 
@@ -821,6 +821,7 @@ def seat_people(img_layer, cam, car, who=None):
 def draw_car(img, cam, car, t=0.0, inside=seat_people, lit=True):
     """The whole car through `cam` at time t. inside(layer, cam, car) paints what is seen through the glass."""
     car.t = t
+    car._bg = img.copy()                 # what lies behind the car: seen through its far windows (chat 13)
     p = S.pen(img)
     shadow(img, cam, car)
     body = _body(car)
@@ -978,6 +979,24 @@ def _through_glass(img, cam, car, glass, inside):
             continue
         poly = [(x * B.SS, y * B.SS) for x, y in (cam.project(q)[0] for q in pts)]
         (od if len(g) > 3 else md).polygon(poly, fill=255)
+    bg = getattr(car, '_bg', None)
+    if bg is not None:                 # through the near glass and out of the far glass: the street behind, glass-dimmed
+        far = Image.new('L', img.size, 0)
+        fd = ImageDraw.Draw(far)
+        for dc in _house_decals(car, car.kind):
+            if dc.kind != 'glass':
+                continue
+            w = [car.body_pt(q) for q in dc.pts]
+            c = tuple(sum(q[i] for q in w) / len(w) for i in range(3))
+            if S._dot(S._norm(car.body_dir(dc.n_local)), S._sub(cam.pos, c)) >= 0 or getattr(dc, 'open', False):
+                continue
+            if any(cam.depth(q) < cam.NEAR for q in w):
+                continue
+            fd.polygon([(x * B.SS, y * B.SS) for x, y in (cam.project(q)[0] for q in w)], fill=255)
+        k = np.minimum(np.asarray(far, np.float32), np.maximum(np.asarray(mask, np.float32), np.asarray(omask, np.float32)))
+        if k.any():
+            tint = Image.blend(bg.convert('RGB'), Image.new('RGB', img.size, GLASS), 0.28).convert('RGBA')
+            img.paste(tint, (0, 0), Image.fromarray(k.astype(np.uint8)))
     if inside:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         inside(lay, cam, car)

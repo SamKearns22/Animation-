@@ -1,5 +1,3 @@
-Job 1 (19 Nov, chat 2): front-on check on every film and the focus setting built and tested; sheet sent to Sam. Next: Sonnet chat 3 (turned seconds, route test, the goth sheet).
-Job 4 (20 Nov): Sam's three check changes built and tested (record always saves, notes tagged, replay table fixed); nothing next until the next film's pre-flight.
-Sam: strength of the look (stronger, or add a body cue); the 3/4 fix is a reserve job (his word starts it). Blessed WIP branch stays off the main line (named).
-One route to the current kit (20 Nov, chat 5): shoulder chips fixed in the kit; today's kit draws Milburn as posted (shoulders only differ). Next: Grand Theft Autism's characters (Opus high); Change 2 part 2 after the film.
-Grand Theft Autism (20 Nov, chat 12 end): clipping check now sees bodies through solids and feet off the pavement; Vice City skyline and cloud streaks in. Next: Opus chat 13, shot 3 built properly, then shot 4 from it (Sam's order).
+Grand Theft Autism: shot 3 (windscreen three-shot) built; shot 4 flows from it; the half-size drawing fault fixed.
+Waiting on Sam: Q1, raise the car roof ~10 cm so heads are not cut.
+Next: chat 14 (Opus, high): Jason's climb-out arms and pistol, checks, ONE clip of shots 3-4.

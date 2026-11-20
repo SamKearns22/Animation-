@@ -200,3 +200,23 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Open rule requests: none (Sam has not said "I want a rule"; reading the screenplay first is a candidate if he does).
 - For Claude: CAM4 and shot4 in gta_rehearse.py; PEOPLE4/_strip_people (standing only); person_cached (neck anchor);
   original clip references/grand-theft-autism/shot4-original-rehearsal.mp4; original keys at commit 2668817c.
+
+## Where things stand (20 Nov, chat 12 end, Opus; for chat 13)
+- Rules that bite next: 30 (people drawn on the grille at shot 4's first frame, chat 11 too: find why first), 89 (judge
+  every beat at full size before sending), 8 (one clip, then Sam's Y/N).
+- Done: clipping check improved (body through solid, rubbed out in front, feet on ground, every person every frame);
+  it fails chat 11's shot 4 on exactly Sam's faults. Backdrop (Vice City towers, far palms, haze) and cloud streaks in
+  both shots (first pass, not yet judged at full size). Jason's new climb-out through an OPEN window drafted (hips on
+  the sill, legs inside, per-half rub-out) but NOT judged: Sam stopped it ("putting the actors in the bonnet").
+- Next: Opus, high (building new). Sam's order: 1) judge the backdrop and clouds at full size in shots 2 and 4;
+  2) build shot 3 (windscreen three-shot) properly from the screenplay row 3, all three seated behind the glass; find
+  why people land on the grille first; 3) then shot 4 beat by beat from shot 3's exact frame (Shot 4 rebuild checklist);
+  4) people walking, watching, ducking, running; run `gta_rehearse.py bodies shot4` and `layers shot2 shot4`; ONE clip.
+- Needs Sam: nothing until the clip.
+- Read: guides/job-packs.md Build; this file's Shot 4 rebuild checklist; plan table rows 3-4.
+- Open rule requests: none. Handover check: gta_rehearse is the rehearsal tool, not a film (its notes are this file;
+  no SHOT_MARKS until the film's shot files exist): answered.
+- For Claude: gta_rehearse.py backdrop/TOWERS/CLOUDS, jason4/J4_KEYS/jason_layer, solids4, `bodies` command;
+  gta_cars.local_pt/solid_at/cover_masks/open_windows; viewchecks.solid_faults. MAP lines for shot 4 still to add.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 19.33% of 15%; forecast 69.9% (2026-11-20)

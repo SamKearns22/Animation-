@@ -314,6 +314,12 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
       windscreen three-shot built properly (all three seated behind the glass), then shot 4 from shot 3's frame.
       (Found: at shot 4's first frame all three people are drawn on the grille, in chat 11's version too: rule 30.)
 
+- [ ] Sam (20 Nov, chat 13): "This part of the screenplay comes first" (shot 3 text, as in the brief items above);
+      "Scene 3 flows into scene 4" (shot 4's first frame is shot 3's camera, CAM3); "never mind ... continue as you
+      are" (keep the outside-the-glass windscreen camera); the reference he meant is Halo No-No's Musk/Cortana cabin
+      shot (a dashboard shot: camera inside on the dash looking back, whole cabin seen). "The tip of the characters'
+      heads are being cropped by the car's windscreen": asked (Q1) whether to raise the Tulip's roof ~10 cm. OPEN.
+
 Beats for shot 4 (screenplay row 4, 6.2 s in the film's clip): 1) 0-0.5 s start on shot 3's windscreen three-shot,
 same position and lens; 2) 0.5-1.7 s camera swings left round the front corner to Jason's window while he rises and
 turns; window frame must cut him right; 3) 1.7-3.0 s we hang outside: Jason whole to the hips through an OPEN window,
@@ -324,22 +330,23 @@ scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back 
 into the seated pose (last frame matches the first).
 Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
 
-## Where things stand (20 Nov, chat 12 end, Opus; for chat 13)
-- Rules that bite next: 30 (people drawn on the grille at shot 4's first frame, chat 11 too: find why first), 89 (judge
-  every beat at full size before sending), 8 (one clip, then Sam's Y/N).
-- Done: clipping check improved (body through solid, rubbed out in front, feet on ground, every person every frame);
-  it fails chat 11's shot 4 on exactly Sam's faults. Backdrop (Vice City towers, far palms, haze) and cloud streaks in
-  both shots (first pass, not yet judged at full size). Jason's new climb-out through an OPEN window drafted (hips on
-  the sill, legs inside, per-half rub-out) but NOT judged: Sam stopped it ("putting the actors in the bonnet").
-- Next: Opus, high (building new). Sam's order: 1) judge the backdrop and clouds at full size in shots 2 and 4;
-  2) build shot 3 (windscreen three-shot) properly from the screenplay row 3, all three seated behind the glass; find
-  why people land on the grille first; 3) then shot 4 beat by beat from shot 3's exact frame (Shot 4 rebuild checklist);
-  4) people walking, watching, ducking, running; run `gta_rehearse.py bodies shot4` and `layers shot2 shot4`; ONE clip.
-- Needs Sam: nothing until the clip.
-- Read: guides/job-packs.md Build; this file's Shot 4 rebuild checklist; plan table rows 3-4.
+## Where things stand (20 Nov, chat 13 end, Opus; for chat 14)
+- Rules that bite next: 30 (heads cut by the windscreen rail: Sam's note; cause is cartoon heads ~2x life in a
+  real-height car), 89 (every beat at full size before the clip), 8 (one clip, then Sam's Y/N).
+- Done: ROOT CAUSE of "people on the grille", tiny sunken passers-by and the stretched car: the street and cars drew at
+  half size (gta_rehearse/gta_cars used burnham, whose sharpness setting is separate from the people kit's); both now
+  use the one kit. Shot 3 built (shot3, CAM3): three seated, Lucia jerking a wheel, spinner, her line with a wince,
+  cash case, bench, cruisers through the back window (see-through glass). Shot 4 starts on CAM3. Crowd: walk, duck at
+  the shots, run from the fire, stare (crowd()). Backdrop and clouds judged at full size: fine; more cloud wanted in
+  shot 2's upper sky (one streak only).
+- Next: Opus, high (new build). On Sam's Q1 answer: raise house y top 1.33 -> ~1.43 (gta_cars SPECS tulip) or not;
+  then shot 4 Jason: arm stubs and a flat bar for a pistol at 1.4 s, arm fault at 1.0 s (left hand to the roof corner);
+  judge crowd poses full size; run `bodies shot4`, `layers shot2 shot4`; ONE clip via `shot34`.
+- Needs Sam: Q1, raise the roof ~10 cm so heads are not cut (Y my pick / N).
+- Read: guides/job-packs.md Build; Shot 4 rebuild checklist; plan rows 3-4.
 - Open rule requests: none. Handover check: gta_rehearse is the rehearsal tool, not a film (its notes are this file;
   no SHOT_MARKS until the film's shot files exist): answered.
-- For Claude: gta_rehearse.py backdrop/TOWERS/CLOUDS, jason4/J4_KEYS/jason_layer, solids4, `bodies` command;
-  gta_cars.local_pt/solid_at/cover_masks/open_windows; viewchecks.solid_faults. MAP lines for shot 4 still to add.
+- For Claude: world4/shot3/shot3_cam/CAM3/seated/tulip_inside/crowd/wheel3 in gta_rehearse; gta_cars._through_glass
+  far-glass paste (car._bg); `still3`, `shot34` commands. Shot 2 untouched (it never loaded the cast: drew right).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 19.33% of 15%; forecast 69.9% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 21.01% of 15%; forecast 71.5% (2026-11-20)
