@@ -168,3 +168,18 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Open rule requests: none.
 - For Claude: people_parts.headphones3d (cups: n, upr, push-forward loop), views._bare_neck, people.WORN_OVER.
 
+
+## Where things stand (20 Nov, chat 10 end, Opus medium, second handover)
+- Rules that bite next: 8 (nothing past the rehearsals until Sam's Y/N on both clips), 38 (cast sheets: front, side,
+  back only; three-quarter only where a shot needs it), 89 (judge clips at full size).
+- Done: headphones solid and round the back of her neck; no neckline on bare tops; three-quarter necks fixed in the
+  kit for every film (turned heads lifted as the front is, chin at the front's height); sheet sent
+  (notes/sheets/grand-theft-autism-necks-fixed.jpg). Kit tests: the same 11 old failures, none new.
+- Next: Sonnet chat 11 (already open, resumed): the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out),
+  both clips sent. Don't touch the opening.
+- Needs Sam: the clips' Y/N (rule 8); notes on the sheet can come with them.
+- Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP.
+- Open rule requests: none.
+- For Claude: people_turned head_view (PP._lift), CHIN_V; people_parts.headphones_over_neck (views.HEAD_WEAR).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 18.52% of 15%; forecast 69.1% (2026-11-20)

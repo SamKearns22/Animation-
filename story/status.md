@@ -3,3 +3,4 @@ Job 4 (20 Nov): Sam's three check changes built and tested (record always saves,
 Sam: strength of the look (stronger, or add a body cue); the 3/4 fix is a reserve job (his word starts it). Blessed WIP branch stays off the main line (named).
 One route to the current kit (20 Nov, chat 5): shoulder chips fixed in the kit; today's kit draws Milburn as posted (shoulders only differ). Next: Grand Theft Autism's characters (Opus high); Change 2 part 2 after the film.
 Grand Theft Autism (20 Nov, chat 10 end): headphones, necklines and three-quarter necks fixed (kit, every film); sheet sent. Next: Sonnet chat 11, the new cast into both rehearsal clips.
+Grand Theft Autism (20 Nov, chat 11 end): shot 2 approved; shot 4 rejected, to be rebuilt from scratch with an open window, Vice City backdrop and clouds in both shots, living people. Next: Opus high chat 12 (check first, then build).

@@ -282,17 +282,57 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB); 20 Nov chat 6, shot 4 lean-out and crash
   (stand-in shop street, 6.2 s). Passers-by and the police drivers added as crowds (walker, cop) in the people file.
 
-## Where things stand (20 Nov, chat 10 end, Opus medium, second handover)
-- Rules that bite next: 8 (nothing past the rehearsals until Sam's Y/N on both clips), 38 (cast sheets: front, side,
-  back only; three-quarter only where a shot needs it), 89 (judge clips at full size).
-- Done: headphones solid and round the back of her neck; no neckline on bare tops; three-quarter necks fixed in the
-  kit for every film (turned heads lifted as the front is, chin at the front's height); sheet sent
-  (notes/sheets/grand-theft-autism-necks-fixed.jpg). Kit tests: the same 11 old failures, none new.
-- Next: Sonnet chat 11 (already open, resumed): the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out),
-  both clips sent. Don't touch the opening.
-- Needs Sam: the clips' Y/N (rule 8); notes on the sheet can come with them.
-- Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP.
-- Open rule requests: none.
-- For Claude: people_turned head_view (PP._lift), CHIN_V; people_parts.headphones_over_neck (views.HEAD_WEAR).
+## Shot 4 rebuild (Sam, 20 Nov, chat 11): checklist, tick against the film before the first clip
+- [x] Sam: "Shot 2 looks amazing." (keep the swerve as it is)
+- [ ] Sam: "Our scenery needs an appropriately vice city background, as currently the street ends in blank void." Both
+      shots 2 and 4: a Vice City backdrop at the end of every street (sunset skyline, palms, towers, sea glow).
+- [ ] Sam: "I think some white cloud streaks would be good too." (in the sky of both shots)
+- [ ] Sam on shot 4 (chat 11 version, sent too early): "I am surprised you delivered it to me." The lean-out was a
+      floating chest, Jason from behind a lump with no readable arm or gun, flashes too small, crash far and tiny.
+- [ ] Sam: "What are the elements you would need to consider with the camera, actors, props and perspective ... walk me
+      through it, moment by moment" (chat 11's walk-through is the beat list below; "That was a very good summary").
+- [ ] Sam: "Do you think it helps to read the screenplay before working on a scene?" Yes: read shot 4's lines in the
+      plan table (row 4) and the brief item above before building, tick every beat at full size before any clip is
+      sent. (Not yet a rule: Sam has not said "I want a rule".)
+- [ ] Sam on the civilians: they only stand still (same code in every version); "in yours, the people are tiny and
+      being actively sucked into the pavement." Wanted: walking, watching, ducking at each shot, running from the crash,
+      big enough to read, feet on the pavement in every frame (measure every person in every frame).
+- [ ] Sam (uploaded the first clip, references/grand-theft-autism/shot4-original-rehearsal.mp4): the ORIGINAL is
+      better than chat 11's: camera close beside Jason and low, big fireball and black smoke, cruiser close and broadside
+      with POLICE readable, people big. Chat 7 moved the camera back and higher; that lost the drama. Original camera
+      keys: CAM4 in source/gta_rehearse.py at commit 2668817c (git show 2668817c:source/gta_rehearse.py).
+- [ ] Sam: "Rebuild this scene from scratch following your beat-by-beat analysis. Give Jason an open window so you have
+      more space to move him. No clipping whatsoever, but we have a thorough clipping check now, don't we? Assumedly not
+      applied to your above practice shot (why?)". Answer: it WAS applied (gta_rehearse.py layers shot2 shot4, clean
+      twice). It only checks that nearer things hide what is behind them where they overlap; it cannot see a body drawn
+      through a door or window frame, an arm or gun with no readable shape, or feet below the pavement. First improve the
+      check that missed it (a body-through-solid test per frame; a feet-on-ground test per person per frame), then build.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 18.52% of 15%; forecast 69.1% (2026-11-20)
+Beats for shot 4 (screenplay row 4, 6.2 s in the film's clip): 1) 0-0.5 s start on shot 3's windscreen three-shot,
+same position and lens; 2) 0.5-1.7 s camera swings left round the front corner to Jason's window while he rises and
+turns; window frame must cut him right; 3) 1.7-3.0 s we hang outside: Jason whole to the hips through an OPEN window,
+arm back over the roof, pistol readable, face along the arm; 4) shots at 1.95, 2.30, 2.62, 2.92 s: flash, recoil in arm
+and shoulder, frame kick, lead cruiser's windscreen crazes (shot 1 sparks off the bonnet, 2-4 into the glass), driver
+flinches; 5) 3.0-4.55 s pan with the slewing cruiser over the kerb, hydrant jet, shop-front fireball, people react and
+scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back to shot 3's exact frame, Jason settles
+into the seated pose (last frame matches the first).
+Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
+
+## Where things stand (20 Nov, chat 11 end, Sonnet; for chat 12)
+- Rules that bite next: 8 (rehearsals before anything else), 89 (judge every clip at full size, every beat), 30 (a note
+  given before is a warning: the first shot 4 faults came back; find why before changing anything).
+- Done: chat 11 drew both rehearsals with the new cast and the neck fix; Sam: shot 2 "amazing" (keep); shot 4 rejected
+  (see the Shot 4 rebuild checklist). Sam has said Y to: rebuild shot 4 from scratch with an open window, add a Vice City
+  backdrop and white cloud streaks to BOTH shots, and give the people real behaviour. Nothing of that is built yet.
+- Next: Opus, high effort (building something new): chat 12. 1) Read the Shot 4 rebuild checklist and the plan table
+  row 4. 2) Improve the clipping check first (body through solid, feet on ground, every frame). 3) Rebuild shot 4 from
+  the original camera keys with the open window, then the backdrop and clouds in both shots, then the people. 4) Check
+  every beat at full size; send ONE clip, shot 4 first; then Sonnet chat for sending if needed.
+- Needs Sam: nothing open; the clip's Y/N (rule 8) after it is sent.
+- Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP; gta_cars.py; viewchecks.layer_faults.
+- Unrouted flags (chat 11, answered): 17:20 was a question about the film itself, not a system change (reworded to say so, Sam said Y); 17:26 was a rule idea (read the screenplay first), withdrawn in the next message, no proposal made.
+- Open rule requests: none (Sam has not said "I want a rule"; reading the screenplay first is a candidate if he does).
+- For Claude: CAM4 and shot4 in gta_rehearse.py; PEOPLE4/_strip_people (standing only); person_cached (neck anchor);
+  original clip references/grand-theft-autism/shot4-original-rehearsal.mp4; original keys at commit 2668817c.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 19.33% of 15%; forecast 69.9% (2026-11-20)
