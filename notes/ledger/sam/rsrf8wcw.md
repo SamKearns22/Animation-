@@ -10,3 +10,6 @@ make it a total of 5.5 seconds
 ### 2026-11-20T10:35:48
 6.5 seconds.
 
+### 2026-11-20T10:38:25
+Don't have the music fade out
+
