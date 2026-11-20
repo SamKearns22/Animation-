@@ -21,3 +21,8 @@ Why did the fire hydrant/cars clipping pass?
 ### 2026-11-20T11:25:39
 Can you not just use the existing check for clipping in practice clips rather than building and proposing a new one
 
+### 2026-11-20T11:27:12
+Y.
+
+'Anything against anything' should be the rule across all clipping checks in this project, otherwise we will always encounter the same problem every time we build any new prop or setting.
+
