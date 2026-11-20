@@ -740,6 +740,10 @@ def crowd(pp, t):
         j['lean'] = 16.0
         j['bob'] = 10 * abs(math.sin(ph))
         duck = 0.4 * (1 - smooth(u / 0.5))
+    if j.get('bob'):                                       # the bob lowers the whole drawing, feet too: lift the feet
+        for sd in ('L', 'R'):                              # back by it so they stay on the pavement (chat 15: sunk)
+            fx, fy, fz = j['foot' + sd]
+            j['foot' + sd] = (fx, fy - j['bob'], fz)
     if duck > 0:                                           # a crouch: body down, knees bent, head down, arms over it
         bob = 230.0 * duck
         j['bob'] = j.get('bob', 0.0) + bob
