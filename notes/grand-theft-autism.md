@@ -359,8 +359,10 @@ Judge: Sam wants the first clip's close, low camera, with the new cast; at full 
 - Needs Sam: Y/N on the shots 3-4 clip (rule 8).
 - Read: guides/job-packs.md Build; plan rows 5-8; brief lines 3-6.
 - Open rule requests: none.
+- Branches named, not merged (frozen snapshots of other films, not this film's work): freeze/halo-no-no,
+  freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers, freeze/blessed.
 - For Claude: gta_cars._through_glass keeps bg alpha (min 72) so lone sheets show glass as a veil; J4_KEYS 1.70/4.30
   face 160; jason_layer side quad (x 0.98, z -2.6..1.0) erases rows below the hips once out > 0.9; crowd() lifts feet
   by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 24.73% of 15%; forecast 75.3% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 25.57% of 15%; forecast 76.1% (2026-11-20)
