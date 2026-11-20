@@ -14,3 +14,6 @@ Make the autistic girl prettier, I want her to be sort of cooler too.
 
 Set reminder to continue this work at 5:30am
 
+### 2026-11-20T03:36:21
+You may want to look at references of Lucia and Jason from the first few hours of the gameplay before you decide, as that's what most people will be currently familiar with.
+
