@@ -322,6 +322,15 @@ Added after Sam's notes 1-16 (chat 16):
   versions 3-4 had him climb out to SIT on the sill with his legs inside, a bigger move than written. Version 1 kept him
   seated and leaned his upper body out. Kept in mind for the build proposal (the move should be what is written, made
   well, not a bigger one made badly).
+- The proposal route's verdict (blind judge, helper A's version picked): first a learn step that changes nothing,
+  then (each on Sam's own Y) a human-body check that every drawing passes through, and big moves posed on a 3D skeleton
+  drawn with the usual flat pieces. Option 2: the same, with the check at the usual pre-send checks. Critiqued: 8
+  found, 4 fixed, 4 named.
+- Learn step done (notes/proposals/big-body-moves/learn.md): a fresh cold critic on version 4 caught 2 of the 8 body
+  notes, half-caught 3, missed the 3 about the car (it also caught the missing hit, hydrant and acting). The skeleton
+  under version 4 measured HUMAN at all six moments tested: the horror came from the flat drawing method, not the
+  poses. Same poses drawn with flat pieces on the skeleton: arms join the shoulders (picture:
+  v5-test-skeleton-vs-v4.jpg). Lesson 17 (draft): test the drawn picture, not only the skeleton underneath it.
 
 ## 9. For Claude (code names live here, not in messages)
 
