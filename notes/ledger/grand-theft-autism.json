@@ -1896,6 +1896,534 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "48091c44",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.64,
+   "src": "estimate",
+   "sid": "session_01J1JB7W7uJtCncXknb3JEgQ",
+   "steps": 65,
+   "hist_k": 270,
+   "kinds": {
+    "film-file search": 3.5,
+    "tool search": 35.1,
+    "whole-file .py read": 1.1,
+    "renders": 6.4,
+    "pictures": 4.8,
+    "other": 49.1
+   },
+   "calls": {
+    "film-file search": 7,
+    "tool search": 47,
+    "whole-file .py read": 2,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 11,
+    "other": 6
+   },
+   "split": {
+    "usd": 5.9979,
+    "total": 5.9979,
+    "floor_k": 82,
+    "blocks": {
+     "Claude's words": 38.5,
+     "new writes": 25.1,
+     "start-up floor": 18.3,
+     "carried history": 18.0
+    },
+    "origins": {
+     "Claude's words": 57.8,
+     "start-up floor": 18.3,
+     "result: tool search": 17.9,
+     "result: pictures": 3.0,
+     "messages and reminders": 1.5,
+     "result: whole-file .py read": 0.7,
+     "result: film-file search": 0.6,
+     "result: other": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 6,
+    "work_pct": 0.1,
+    "reads": [
+     [
+      "notes/grand-theft-autism.md",
+      4.2,
+      0.0796
+     ]
+    ],
+    "base_pct": 15.9
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 7
+    },
+    "other": {
+     "other": 6,
+     "shared:handover.py": 4,
+     "film notes": 2,
+     "guides": 3,
+     "shared:branches.py": 1,
+     "shared:gta_rehearse.py": 9,
+     "shared:gta_cars.py": 2,
+     "shared:prepper_fx.py": 1,
+     "shared:flying_whales_fx.py": 2,
+     "shared:sets.py": 1,
+     "shared:burnham.py": 2,
+     "shared:prepper_cast.py": 3,
+     "shared:views.py": 3,
+     "shared:whale.py": 1,
+     "shared:people.py": 3,
+     "shared:figure.py": 1,
+     "shared:critique.py": 3
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git fetch origin claude/create-claude-md-oe8z4g 2>&1 ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git log --oneline -1 FETCH_HEAD; git checkout --detach FETCH_HEAD 2>&1|tail -1; ",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^#",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 3,160p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "awk '/^## /{p=0} /^## Build/{p=1} p' guides/job-packs.md | head -80",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:handover.py",
+      "source/handover.py /root/.claude/projects/-home-user-Animation-/48091c44-dde8-58",
+      "python3 source/handover.py 2>&1 | head -20; python3 -c \" import json t=open('/ro",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:handover.py",
+      "/root/.claude/projects/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09",
+      "F=/root/.claude/projects/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:handover.py",
+      "/root/.claude/projects/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09",
+      "F=/root/.claude/projects/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:branches.py",
+      "source/branches.py source/gta_rehearse.py source/gta_cars.py source/gta_cast.py",
+      "python3 source/branches.py scan 2>&1 | tail -8; wc -l source/gta_rehearse.py sou",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 60,340p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "^def \\|^class \\|^    def ",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "guides",
+      "guides/figure-rig.md guides/kit-catalogue.md",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:prepper_fx.py",
+      "guides/figure-rig.md source/prepper_fx.py guides/kit-catalogue.md source/flying_",
+      "^def ",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:flying_whales_fx.py",
+      "source/flying_whales_fx.py",
+      "^def \\|^class ",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:flying_whales_fx.py",
+      "source/flying_whales_fx.py",
+      "sed -n 156,300p source/flying_whales_fx.py; sed -n 370,673p source/flying_whales",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:sets.py",
+      "source/sets.py source/burnham.py source/flying_whales_sea.py source/flying_whale",
+      "^class Cam",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:burnham.py",
+      "source/burnham.py source/gta_cars.py",
+      "^W\\b\\|^H\\b\\|^SS\\b\\|^W, H\\|^SS =",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "sed -n 579,590p source/gta_cars.py; sed -n 704,870p source/gta_cars.py",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:prepper_cast.py",
+      "source/*.py source/prepper_cast.py guides/pose-gallery.md",
+      "def person",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:prepper_cast.py",
+      "source/prepper_cast.py source/people_views.py source/views.py",
+      "def aim\\b\\|def aim(",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "props\\|def person\\|def arm_to\\|lean\\b\\|'lean'",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:prepper_cast.py",
+      "source/*.py source/prepper_cast.py",
+      "glock(",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:whale.py",
+      "source/whale.py source/sets.py source/burnham.py",
+      "^class Sprite",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "mkdir -p /tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:views.py",
+      "source/views.py source/prepper*.py",
+      "\\['grip'\\]\\|j\\[.grip.\\] =",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "S4=/tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09b/scra",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:burnham.py",
+      "source/burnham.py source/views.py",
+      "^class Cam",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "S4=/tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09b/scra",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def project",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def ",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:people.py",
+      "source/people.py story/*-people.txt",
+      "crowd",
+      ""
+     ],
+     [
+      36,
+      "film",
+      "before show",
+      "story/protest-tiers-people.txt source/people.py story/grand-theft-autism-people.",
+      "MIXES = ",
+      ""
+     ],
+     [
+      37,
+      "film",
+      "before show",
+      "story/grand-theft-autism-people.txt",
+      "cat >> story/grand-theft-autism-people.txt <<'EOF' # walker: Vice City passers-b",
+      ""
+     ],
+     [
+      38,
+      "film",
+      "before show",
+      "story/grand-theft-autism-people.txt",
+      "S4=/tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09b/scra",
+      ""
+     ],
+     [
+      39,
+      "film",
+      "before show",
+      "story/grand-theft-autism-people.txt",
+      "S4=/tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09b/scra",
+      ""
+     ],
+     [
+      41,
+      "film",
+      "before show",
+      "story/grand-theft-autism-people.txt",
+      "S4=/tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09b/scra",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "'jacket'\\|'trousers'\\|'top'\\|key == '",
+      ""
+     ],
+     [
+      44,
+      "film",
+      "before show",
+      "story/grand-theft-autism-people.txt",
+      "S4=/tmp/claude-0/-home-user-Animation-/48091c44-dde8-5896-ac48-036c8223a09b/scra",
+      ""
+     ],
+     [
+      46,
+      "film",
+      "before show",
+      "source/views.py story/grand-theft-autism-people.txt source/sets.py",
+      "head_yaw",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:figure.py",
+      "source/figure.py",
+      "^UPPER\\|^FORE\\|^HAND",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() s=s.replace(\"\"\"def",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -i \"s/ if h\\[0\\] == 'flash':/ if isinstance(h[0], str):/; s/for h in hb if h",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -i \"s/(h for h in hb if h\\[0\\] != 'flash')\\]/(h for h in hb if not isinstanc",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      "^\\s+[0-9]",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() def rep(a,b): glob",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() def rep(a,b): glob",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() def rep(a,b): glob",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() def rep(a,b): glob",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "(0.40, 1.10, -14.0)",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "sed -n 1,40p source/critique.py | head -50",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "source/data/critique/grand-theft-autism/ source/data/critique/grand-theft-autism",
+      "ls source/data/critique/grand-theft-autism/ 2>&1; find source/data/critique/gran",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:critique.py",
+      "story/*.json notes/ledger/*critique* source/critique.py",
+      "grand-theft-autism",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:critique.py",
+      "source/critique.py guides/critique-checklist.md",
+      "^PACKS\\|^def pack_dir\\|PACKS =",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "guides",
+      "guides/critique-checklist.md",
+      "sed -n 67,75p guides/critique-checklist.md",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
