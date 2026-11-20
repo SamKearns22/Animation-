@@ -455,7 +455,7 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
   the acting rows at full size, with a picture for each beat.
 
-## Where things stand (20 Nov, chat 18 end, Opus high; for chat 19)
+## Where things stand (20 Nov, chat 18 end, Opus high; for chat 20, shot 4)
 - Rules that bite next: 8 (the pose sheet goes to Sam in the build before the rebuild), 89 (fresh critique of the
   pose sheet before it is sent), 30 (the K2 missing head: find why lying_flat drops it before changing anything).
 - Done: Change 1 finished: gallery 0 false flags (900 drawings), Halo No-No and Milburn 0, version 4 still caught,
@@ -466,7 +466,8 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   and add "every drawn person has a head" to the body check (it missed it); (2) redraw the sheet, all clean; (3) one
   fresh critique (critique.py pack, stage "pose sheet"), fix; (4) the in-betweens (lying.blend) and leanout.at(t);
   (5) send Sam the pose sheet with the build (Y/N before the rebuild); (6) on his Y, rebuild shot 4.
-- Needs Sam: nothing yet (the pose sheet comes with step 5).
+- Needs Sam: nothing for shot 4 yet (the pose sheet comes with step 5). Shots 5-8: a separate Sonnet chain (its
+  chat 19) sent Sam a clip ~23:30 (body check clean) and waits for his notes; this chain does not touch shots 5-8.
 - Read: guides/job-packs.md Build; source/leanout.py MAP; lying_flat.py _head and draw (lines ~224-330, 470-525);
   case study sections 10-11.
 - Open rule requests: none.
