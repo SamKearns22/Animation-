@@ -5535,15 +5535,15 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.87,
+   "cost": 1.24,
    "src": "estimate",
    "sid": "session_01J1JB7VYeZUakhr5Jo1pdzY",
-   "steps": 29,
+   "steps": 30,
    "hist_k": 153,
    "kinds": {
-    "tool search": 22.5,
-    "whole-file .py read": 5.1,
-    "other": 72.5
+    "tool search": 22.2,
+    "whole-file .py read": 5.0,
+    "other": 72.8
    },
    "calls": {
     "film-file search": 0,
@@ -5556,22 +5556,22 @@
     "other": 10
    },
    "split": {
-    "usd": 1.765,
-    "total": 1.765,
+    "usd": 1.7984,
+    "total": 1.7984,
     "floor_k": 82,
     "blocks": {
-     "new writes": 32.1,
-     "start-up floor": 31.8,
-     "Claude's words": 24.7,
-     "carried history": 11.4
+     "start-up floor": 32.0,
+     "new writes": 31.8,
+     "Claude's words": 24.2,
+     "carried history": 11.9
     },
     "origins": {
-     "Claude's words": 33.7,
-     "start-up floor": 31.8,
-     "result: tool search": 17.6,
+     "Claude's words": 33.4,
+     "start-up floor": 32.0,
+     "result: tool search": 17.5,
      "result: other": 10.6,
      "result: whole-file .py read": 3.3,
-     "messages and reminders": 2.0,
+     "messages and reminders": 2.2,
      "Claude's edits": 0.9
     },
     "leftover": 0.0
@@ -5584,30 +5584,30 @@
      [
       "guides/kit-catalogue.md",
       5.2,
-      0.0631
+      0.064
      ],
      [
       "notes/grand-theft-autism.md",
       1.5,
-      0.0184
+      0.0186
      ],
      [
       "source/propose.py",
       1.5,
-      0.0184
+      0.0186
      ],
      [
       "source/midterminal_cast.py",
       1.2,
-      0.0124
+      0.0126
      ],
      [
       "notes/proposals/one-route-kit.md",
       0.5,
-      0.0057
+      0.0058
      ]
     ],
-    "base_pct": 23.5
+    "base_pct": 23.9
    },
    "search": {
     "show": 0,
