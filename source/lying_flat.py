@@ -211,7 +211,14 @@ def _arm(p, sc, cam, k, side, sp):
     s = sc.s
     j2 = {'sh' + side: tuple(sc.shoulders[side]), 'el' + side: tuple(_proj(cam, k['el' + side]) / s),
           'wr' + side: tuple(_proj(cam, k['wr' + side]) / s), 'hand': {side: sp.get('lying_hand', 'fist')}}
-    V.arm(p, j2, side, sp)
+    import limbs
+    c = (np.asarray(sc.shoulders['L'], float) + np.asarray(sc.shoulders['R'], float)) / 2
+    fl = 1.0 if sc.shoulders['R'][0] >= sc.shoulders['L'][0] else -1.0
+    limbs.AUDIT_FRAME[0] = lambda q: ((q[0] - c[0]) * fl, q[1])   # the arm audit about this body's middle
+    try:
+        V.arm(p, j2, side, sp)
+    finally:
+        limbs.AUDIT_FRAME[0] = None
 
 
 def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)

@@ -338,3 +338,36 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   face 160; jason_layer side quad (x 0.98, z -2.6..1.0) erases rows below the hips once out > 0.9; crowd() lifts feet
   by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
 
+
+
+## Where things stand (20 Nov, chat 17 end, Opus high; for chat 18)
+- Rules that bite next: 8 (Sam said Y to the build proposal: build exactly it), 89 (critique before every send), 30.
+- Done: Sam's answers 1 (option 1), Y (lean-out as written, legs never seen), Y (build proposal). Change 1 started:
+  source/humancheck.py (arm drawn over/behind the body against its depth, arm coming out on the far side, the picture
+  one joined piece, the gun as drawn vs its target), hooked into views and lying_flat; viewchecks.solid_faults now
+  samples along every bone and tests "a part behind a solid must not show" (toggle); gta_rehearse.clip runs it and
+  holds a faulty clip aside. On version 4 it finds notes 2, 3, 4, 6, 7, 8 (hip through the bonnet, chest through the
+  pillar, elbow through the roof, arm out of the back, gun 27-30 degrees off). Shot 3: clean.
+- Next: Opus, high (finish Change 1, then Change 2): (1) the pose gallery gives 10 flags in 744 drawings (2 "far
+  side", 8 "hidden though in front"): name the poses (add the pose name to the hook's who), sort real from false, fix
+  the test; also the 3 crowd "far side" flags at 2.58-3.5 s in shot 4; (2) run two past films' animatic frames with
+  the check: 0 false flags; (3) a kittest (version 4 frames must fail, shot 3 must pass); (4) only then install the
+  send gate (PreToolUse on SendUserFile: python3 source/humancheck.py sendgate) and hook film_engine._frame
+  (frame_begin/end per drawing, faults in a .body.txt beside each cached frame) and finish.py (copy_record);
+  (5) Change 2: lean-out key poses on the skeleton (lying_flat + grips for the gun), five-view pose sheet, critique;
+  (6) rebuild shot 4 from the build proposal and acting rows.
+- Chat 16 (shots 5-8, its own file source/gta_shots58.py; section "Shots 5-8"): built, layers clean, bodies only 5 far
+  walkers' feet 4-7 px down for 1-3 frames (notes/checks/gta-chat16-bodies.txt: shared walker code in gta_rehearse.py,
+  for the shot 4 rebuild); Lucia's hands feed the wheel there (never crossed). Whole-film shot sheet (shots 1-8, 36 s,
+  source/gta_film.py) sent to Sam ~23:10: his standing order done. Chat 19 (Sonnet) renders a clip of shots 5-8.
+- Needs Sam: nothing until the shot 4 pose sheet (with the build) or the clip.
+- Read: guides/job-packs.md Build; notes/proposals/big-body-moves.md Final version and learn.md; source/humancheck.py
+  MAP; this file's shot 4 sections.
+- Open rule requests: none.
+- For Claude: test scripts were scratch (lost with the container): a frame list through H.frame_begin / R.shot4(t) /
+  H.frame_end(t) with H.Writer, and VC.solid_faults(R.shot4, R.SHOT4_LEN, frames=[...]). humancheck.START is
+  20 Nov 22:00 UTC.
+- Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
+  freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
+- Quick check on gta_rehearse (no SHOT_MARKS): it is the rehearsal file, not the film's module; the front-on check
+  runs on the film file once the moves stage builds it (answered chat 17).

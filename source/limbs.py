@@ -35,6 +35,8 @@ HEAD = [0]              # > 0 while views draws a head: its long hair is never t
 #                         Protest Tiers A25: a raised arm's sleeve top melted into a woman's long hair with a soft blur)
 
 
+AUDIT_FRAME = [None]      # lying_flat: frame pixels -> the rig's frame (body middle at 0, right +x) for audit_arm
+
 def _resample(P, step):
     seg = np.hypot(*np.diff(P, axis=0).T)
     s = np.concatenate([[0], np.cumsum(seg)])
@@ -221,7 +223,8 @@ def install(B):
     def arm(p, sh, el, wr, sleeve, w=30, bulge=0.0):
         import figure
         if 'arm' in figure._GUARDED and w <= 40:            # the film's arm checker still measures every arm
-            figure.audit_arm(sh, el, wr)
+            xf = AUDIT_FRAME[0] or (lambda q: q)            # (a skeleton-drawn arm comes in frame pixels: measured
+            figure.audit_arm(xf(sh), xf(el), xf(wr))         # about its own body's middle, its right side +x)
         shp = p.cam.P(*sh)                                  # the body as drawn on screen (it may lean; the arm not)
         # only the body drawn in this same drawing: a leftover one (the last view, the last frame) cut a gap into the
         # shoulder (Job G, 9 Nov: rule 81's seam, failed four times, was an arm joining a body no longer there)

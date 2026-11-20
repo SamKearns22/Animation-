@@ -371,3 +371,14 @@ Added after Sam's notes 1-16 (chat 16):
   record to the finished video; a video made since 22:00 on 20 Nov reaches Sam only with a clean or named body record
   and a fresh critique (the send gate). Lesson (draft 18): a check's "lone" redraw must remove everything that is not
   the body (props AND set pieces), or furniture reads as limbs.
+- Change 2 started (chat 18): the lean-out key poses K1-K5 built on the 3D skeleton in the car's own frame
+  (source/leanout.py), drawn with the flat house pieces, tested from five views by the body check and against the
+  car's solid shape. Sheet: leanout-sheet-v1.jpg. Three rounds: (1) the chest faced the ground and the free arm reached
+  over his head to the roof (an X across his body): the poses are now set by where the chest faces, and the free hand
+  braces on the door top (my change to the acting row "free hand gripping the roof": that hand crossed his own head);
+  (2) the gun followed the forearm and pointed up to 150 degrees off: the wrist now turns the pistol onto the line to
+  the cruiser; (3) the figure guard's arm test read skeleton-drawn arms in screen pixels, not about the body's middle,
+  and refused good arms: it now measures them about their own body. K1, K3, K4, K5: clean from all five views,
+  clear of the car; K4 and K5 read as a man leaning out and shooting back. Open: K2 (kneeling, hunched toward the
+  window) drawn from three-quarter front has NO HEAD (leanout-K2-no-head.jpg), and the body check did not notice:
+  the skeleton drawing drops the head; the check needs "every person has a head".
