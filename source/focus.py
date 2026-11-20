@@ -22,8 +22,9 @@ Used by facehouse._head (the house head) and people_parts._front_head (the peopl
     F = focus.Focus(face, sp, L)      then draw each part through F.whole / F.eyes / F.brows / F.lens / F.nose /
                                        F.mouth / F.lines / F.ears / F.marks (piercings), and give the eyes focus.look(sp)
     python3 source/focus.py sheet OUT.jpg     Andy and Kemi at focus -1, 0, +1, phone size, and one close-up
+    python3 source/focus.py compare OUT.jpg   option 1: today's strength beside the stronger one (focus_strong)
 
-Map: amounts 40 | Piece 55 | Focus 85 | sheet 150
+Map: amounts 45 | Piece 60 | Focus 90 | sheet 155 | compare (option 1) 195
 """
 import math
 import os
@@ -38,6 +39,10 @@ NOSE, TIP = 0.1, 0.05   # the bridge slides NOSE, the tip that much further
 MOUTH = 0.1
 LINES = 0.09
 EARS = (0.015, -0.04)     # the near ear out, the far ear tucked behind the head
+# Option 1 (Sam: "Show 1", 20 Nov): a stronger look, OFF until his Y; sp['focus_strong'] = 1 turns it on for one
+# person. Every slide above times STRONG_K, the pupils further; the far-side room limit and the 6-degree tilt stay.
+STRONG_K = 1.7
+STRONG_LOOK = 1.4
 
 
 def amounts(sp):
@@ -52,7 +57,8 @@ def look(sp):
     """The eyes' sideways look with the focus added (the pupils lead)."""
     f = max(-1.0, min(1.0, float(sp.get('focus_eyes', amounts(sp)[0]) or 0.0)))   # the eyes may lead (acting.py)
     base = float(sp.get('look', 0.0) or 0.0)
-    return max(-1.4, min(1.4, base + LOOK * f)) if f else base
+    lk = STRONG_LOOK if sp.get('focus_strong') else LOOK
+    return max(-1.4, min(1.4, base + lk * f)) if f else base
 
 
 class Piece:
@@ -102,14 +108,18 @@ class Focus:
             def rot(x, y):
                 dx, dy = x - px, y - py
                 return px + dx * c - dy * s, py + dx * s + dy * c
-        k = f * turn
+        strong = bool(sp.get('focus_strong'))
+        k = f * turn * (STRONG_K if strong else 1.0)
         far = 1 if k > 0 else 0                              # the side the look is on (our right for +)
         near = 1 - far
 
         def two(pair):                                        # (near, far) amounts -> (our left, our right) slides
             out = [0.0, 0.0]
             fa = pair[1] * k if room is None else math.copysign(min(abs(pair[1] * k), max(0.0, room)), k)
-            out[near], out[far] = pair[0] * k, fa             # the far rim stays inside the outline (Andy's glasses)
+            nr = pair[0] * k
+            if strong and abs(fa) < abs(pair[1] * k):         # held at the outline: the near side keeps today's
+                nr = fa + (pair[0] - pair[1]) * k             # spacing, so glasses keep their shape (option 1)
+            out[near], out[far] = nr, fa                      # the far rim stays inside the outline (Andy's glasses)
             return tuple(out)
 
         def lifts(pair):
@@ -206,9 +216,43 @@ def sheet(out, people_file='facetool', who=('andy', 'kemi')):
     return out
 
 
+def compare(out, people_file='facetool', who=('andy', 'kemi')):
+    """Option 1 for Sam: each person looking left and right at today's strength beside the stronger one, phone
+    size, labelled; then a close-up of the first looking right, today and stronger."""
+    from PIL import Image, ImageDraw, ImageFont
+    cast, B, V = _cast(people_file, who)
+    fp = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'fonts', 'DejaVuSans-Bold.ttf')
+    font, small = ImageFont.truetype(fp, 30), ImageFont.truetype(fp, 24)
+    cols = ((-1.0, 0, 'LEFT today'), (-1.0, 1, 'LEFT stronger'), (1.0, 0, 'RIGHT today'), (1.0, 1, 'RIGHT stronger'))
+    tw = 300
+    rows = [[bust(cast[w], c, B, V, tw, {'focus_strong': st}) for c, st, _ in cols] for w in who]
+    th = rows[0][0].height
+    big = [bust(cast[who[0]], 1.0, B, V, 600, {'focus_strong': st}) for st in (0, 1)]
+    H = 60 + len(who) * (th + 50) + 50 + big[0].height
+    img = Image.new('RGB', (4 * tw, H), (250, 248, 244))
+    d = ImageDraw.Draw(img)
+    for j, (_, st, lab) in enumerate(cols):
+        d.text((j * tw + 10, 18), lab, font=small, fill=(150, 30, 20) if st else (20, 20, 20))
+    y = 60
+    for w, row in zip(who, rows):
+        d.text((12, y), w.title(), font=font, fill=(120, 40, 30))
+        y += 40
+        for j, im in enumerate(row):
+            img.paste(im, (j * tw, y))
+        y += th + 10
+    d.text((12, y + 6), f'Close-up: {who[0].title()} looking right, today then stronger', font=font, fill=(20, 20, 20))
+    y += 50
+    for j, im in enumerate(big):
+        img.paste(im, (j * big[0].width, y))
+    img.save(out, quality=88)
+    return out
+
+
 if __name__ == '__main__':
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     if len(sys.argv) > 2 and sys.argv[1] == 'sheet':
         print(sheet(sys.argv[2]))
+    elif len(sys.argv) > 2 and sys.argv[1] == 'compare':
+        print(compare(sys.argv[2]))
     else:
         print(__doc__)
