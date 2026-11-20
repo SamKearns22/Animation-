@@ -1242,42 +1242,42 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.97,
+   "cost": 2.31,
    "src": "estimate",
    "sid": "session_01J1JB7YF3EaL3RQ8DGeE7tt",
-   "steps": 109,
-   "hist_k": 260,
+   "steps": 128,
+   "hist_k": 277,
    "kinds": {
-    "tool search": 37.3,
+    "tool search": 36.1,
     "whole-file .py read": 0.5,
-    "other": 62.2
+    "other": 63.4
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 98,
+    "tool search": 114,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 11
+    "other": 12
    },
    "split": {
-    "usd": 7.2068,
-    "total": 7.2068,
+    "usd": 8.4571,
+    "total": 8.4571,
     "floor_k": 82,
     "blocks": {
-     "Claude's words": 28.1,
-     "carried history": 27.3,
-     "start-up floor": 24.9,
-     "new writes": 19.7
+     "carried history": 30.8,
+     "Claude's words": 26.2,
+     "start-up floor": 24.5,
+     "new writes": 18.4
     },
     "origins": {
-     "Claude's words": 48.2,
-     "start-up floor": 24.9,
-     "result: tool search": 22.8,
+     "Claude's words": 47.5,
+     "start-up floor": 24.5,
+     "result: tool search": 23.6,
+     "messages and reminders": 2.2,
      "result: other": 2.1,
-     "messages and reminders": 1.9,
      "result: whole-file .py read": 0.1
     },
     "leftover": 0.0
@@ -1290,25 +1290,25 @@
      [
       "source/freeze.py",
       3.4,
-      0.0872
+      0.0987
      ],
      [
       "notes/one-route-kit.md",
       1.7,
-      0.046
+      0.0519
      ],
      [
       "../story/grand-theft-autism-people.txt",
       1.8,
-      0.0432
+      0.0493
      ],
      [
       "notes/logs/broken.md",
       0.5,
-      0.0048
+      0.0066
      ]
     ],
-    "base_pct": 22.3
+    "base_pct": 22.4
    },
    "search": {
     "show": 0,
@@ -1316,7 +1316,7 @@
      "no show": 0
     },
     "other": {
-     "other": 87,
+     "other": 103,
      "shared:branches.py": 1,
      "shared:handover.py": 1,
      "film notes": 3,
@@ -2105,6 +2105,134 @@
      ],
      [
       109,
+      "other",
+      "other",
+      "",
+      "^FAIL\\|kittests:",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "other",
+      "",
+      "^FAIL\\|kittests:",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "other",
+      "",
+      "^FAIL",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "other",
+      "",
+      "\\.AV\\b\\|\\bAV\\.\\(MC\\|_ears\\|tufts\\)",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "other",
+      "",
+      "import.*people_parts\\|PP\\.AV\\|people_parts\\.AV",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "other",
+      "",
+      "AV\\b",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "other",
+      "",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "other",
+      "",
+      "def every_face_has_a_mouth",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "other",
+      "",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "other",
+      "",
+      "def lopsided_invented_only",
+      ""
+     ],
+     [
+      119,
+      "other",
+      "other",
+      "",
+      "lopsided\\|FA\\.lop\\|\\.lop(",
+      ""
+     ],
+     [
+      120,
+      "other",
+      "other",
+      "",
+      "burnham",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "other",
+      "",
+      "^import body",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "other",
+      "",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "other",
+      "",
+      "B\\.DATA\\|B\\.case\\|B\\.score",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "other",
+      "",
+      "python3 /tmp/claude-0/-home-user-Animation-/4487bc3c-a4c0-56a3-8445-a1a31a00d758",
+      ""
+     ],
+     [
+      126,
       "other",
       "other",
       "",
