@@ -5834,6 +5834,615 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "9e6c5e18",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.79,
+   "src": "estimate",
+   "sid": "session_01J1JB7Yniif3GHeirSeMpSR",
+   "steps": 94,
+   "hist_k": 257,
+   "kinds": {
+    "tool search": 28.7,
+    "renders": 2.9,
+    "pictures": 7.3,
+    "other": 61.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 56,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 7,
+    "pictures": 19,
+    "other": 15
+   },
+   "split": {
+    "usd": 6.5548,
+    "total": 6.5548,
+    "floor_k": 82,
+    "blocks": {
+     "Claude's words": 30.2,
+     "carried history": 24.7,
+     "start-up floor": 23.4,
+     "new writes": 21.7
+    },
+    "origins": {
+     "Claude's words": 48.7,
+     "start-up floor": 23.4,
+     "result: tool search": 16.2,
+     "result: pictures": 9.0,
+     "messages and reminders": 2.0,
+     "cache re-write": 0.4,
+     "result: other": 0.3,
+     "result: renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 38,
+    "work_pct": 0.6,
+    "reads": [
+     [
+      "source/gta_rehearse.py",
+      7.7,
+      0.1717
+     ],
+     [
+      "source/gta_cars.py",
+      2.5,
+      0.0539
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      2.1,
+      0.0504
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/s2_a.png",
+      1.6,
+      0.037
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/s2_b.png",
+      1.6,
+      0.037
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/s4_a.png",
+      1.6,
+      0.0367
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/s4_b.png",
+      1.6,
+      0.0367
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/s4_c.png",
+      1.6,
+      0.0367
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/orig_sheet.png",
+      1.6,
+      0.0361
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/dbg0.png",
+      1.6,
+      0.0332
+     ],
+     [
+      "guides/job-packs.md",
+      1.4,
+      0.0332
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scratchpad/dbg1.png",
+      1.6,
+      0.0324
+     ],
+     [
+      "source/sets.py",
+      0.6,
+      0.0119
+     ],
+     [
+      "source/burnham.py",
+      0.4,
+      0.0087
+     ],
+     [
+      "source/gta_cast.py",
+      0.2,
+      0.0031
+     ]
+    ],
+    "base_pct": 21.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 1,
+     "film notes": 2,
+     "shared:gta_rehearse.py": 20,
+     "shared:gta_cars.py": 7,
+     "shared:sets.py": 4,
+     "shared:burnham.py": 3,
+     "shared:gta_cast.py": 3,
+     "shared:views.py": 5,
+     "shared:people_famous.py": 2,
+     "shared:faces.py": 1,
+     "shared:mouths.py": 1,
+     "shared:halo_no_no.py": 1,
+     "shared:figure.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git push --dry-run origin HEAD:claude/create-claude-md-oe8z4g 2>&1 | tail -2; py",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^#",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 218,248p notes/grand-theft-autism.md && sed -n 285,326p notes/grand-theft",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:gta_rehearse.py",
+      "guides/job-packs.md source/gta_rehearse.py source/gta_cars.py",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:gta_rehearse.py",
+      "guides/job-packs.md source/gta_rehearse.py",
+      "^def \\|^    python3\\|^[A-Z0-9_]* = ",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 1231,1278p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "S=/tmp/claude-0/-home-user-Animation-/9e6c5e18-ee6e-51aa-a5f0-194c75fbb7dd/scrat",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 456,600p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 829,990p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 713,830p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "def \\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "sed -n 66,135p source/gta_cars.py && sed -n 807,900p source/gta_cars.py",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 1125,1222p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:sets.py",
+      "source/sets.py",
+      "def project\\|SS",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py source/sets.py",
+      "sed -n 177,265p source/gta_cars.py && sed -n 781,787p source/gta_cars.py && sed ",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:sets.py",
+      "source/sets.py source/burnham.py",
+      "def pen",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:burnham.py",
+      "source/burnham.py source/sets.py source/gta_cars.py",
+      "class Pen",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:burnham.py",
+      "source/burnham.py source/sets.py",
+      "^FLAT",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:burnham.py",
+      "source/burnham.py source/sets.py",
+      "class Cam",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:sets.py",
+      "source/sets.py source/gta_cars.py source/gta_cast.py source/views.py source/gta_",
+      "B.SS\\b\\|B\\.SS =",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:sets.py",
+      "source/sets.py source/body.py",
+      "^import\\|^from\\|^    import",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py source/views.py",
+      "^import\\|as B\\b",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:views.py",
+      "source/gta_*.py source/views.py source/viewchecks.py source/sets.py source/gta_r",
+      "^import burnham\\|^import body\\|burnham as\\|body as",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/gta_cars.py",
+      "^import body",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:gta_rehearse.py",
+      "notes/*.md guides/kit-catalogue.md source/gta_rehearse.py",
+      "Halo No-No",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:gta_rehearse.py",
+      "/home/user/Animation-/source/gta_rehearse.py",
+      "lines 1149+12",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:views.py",
+      "source/views.py source/props_*.py source/propkit*.py source/gta_rehearse.py sour",
+      "def arm_to\\|def standing\\|def person\\b\\|def person(",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py",
+      "^def \\|spinner\\|props",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py source/views.py source/*.py",
+      "spinner",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py source/people*.py source/faces*.py",
+      "sp.get('\\(mouth\\|brow\\|eyes\\|expr\\|wince\\|look\\|blink\\|talk\\|squint\\)[a-z_]*'",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:people_famous.py",
+      "source/people_famous.py source/faces*.py",
+      "def mouth_shape\\|VISEME\\|'v:'",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:faces.py",
+      "source/faces.py source/people_famous.py",
+      "look = \\|LOOKS\\|def _look\\b\\|'expr'\\|sp.get('look_name\\|sp.get('face'",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:mouths.py",
+      "source/mouths.py source/people_famous.py",
+      "^SHAPES\\|^    '[A-Za-z]*':",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:people_famous.py",
+      "source/people_famous.py",
+      "^MOODS",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      ")\ns=s.replace(",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "etc",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "def _through_glass",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "def _decal_draw",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "sed -n 292,299p source/gta_cars.py",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:gta_cars.py",
+      "source/gta_cars.py",
+      "def cover_masks",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "1.62, 4.40",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -i \"s/ V.arm_to(j, 'R', hand, 'down' if w > 0.5 else 'in', 'fist')/ V.arm_to",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys,traceback; sys.path.insert(0,'sourc",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -8 import sys; sys.path.insert(0,'source') import ",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' f='source/gta_rehearse.py'; s=open(f).read() old=\"\"\" g = _unle",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/halo_no_no.py notes/halo-no-no.md",
+      "never reached across his chest",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:halo_no_no.py",
+      "source/halo_no_no.py",
+      "'s2'\\|CAMS\\|cam.*s2\\|def cabin_cam\\|focal",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "other",
+      "",
+      "timeout 900 python3 - <<'EOF' 2>&1 | tail -3 import sys; sys.path.insert(0,'sour",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py source/figure.py source/poses*.py source/people*.",
+      "^def walk\\|^def run\\|^def crouch\\|^def duck\\|^def cower\\|^def stride\\|^def gait",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:figure.py",
+      "source/figure.py source/*.py",
+      "F.walk\\|FG.walk\\|figure.walk",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def legs\\|^def leg\\b\\|^def _leg\\|knee",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "    for pp in PEOPLE4:",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' f='source/gta_rehearse.py'; s=open(f).read() a=s.index(\" for p",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:gta_rehearse.py",
+      "notes/grand-theft-autism.md source/gta_rehearse.py source/gta_cars.py story/stat",
+      "Handover check: gta_rehearse",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "git log origin/claude/create-claude-md-oe8z4g --oneline -1 && git status -sb | h",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
