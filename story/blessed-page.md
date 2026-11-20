@@ -3,200 +3,200 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## blessed.py (2095 lines)
+## blessed.py (2101 lines)
 - 23: HERE (data)
-- 51: NAME (data)
-- 52: HAS (data)
-- 53: TITLE (data)
-- 54: TITLE_AT (data)
-- 55: INMATE (data)
-- 58: CAST (data)
-- 65: LINES (data)
-- 81: `_take` Sam's recording, else an espeak-ng stand-in (polanski.py's way), cached in source/data.
-- 98: L (data)
-- 109: FADE_FROM (data)
-- 112: `_at` 
-- 118: T (data)
-- 147: WAL_SHIFT (data)
-- 148: DUR (data)
-- 149: G2_CAM (data)
-- 165: `_voice_env` The speaker's loudness per drawing over the whole film (for headlife).
-- 179: HEAD_LIFE (data)
-- 182: SHOTS (data)
-- 188: VIEW (data)
-- 191: SHOT_CAST (data)
-- 199: BENCHMARK (data)
-- 203: _PX (data)
-- 205: PLAN (data)
-- 209: HOOK (data)
-- 211: SUBS_IN_PICTURE (data)
-- 212: PIECE_FIX (data)
-- 215: KEEP_CLEAR (data)
-- 217: PROP_SIZES (data)
-- 218: OUTFIT (data)
-- 219: HEIGHTS (data)
-- 220: FAMOUS (data)
-- 221: CUT_RESTS_OK (data)
-- 223: HANDS_OK (data)
-- 235: LOOKS_AT (data)
-- 241: LINE_OK (data)
-- 255: STILL_OK (data)
-- 257: GUARDS (data)
-- 260: TRACK (data)
-- 263: BLINKS (data)
-- 266: `shot_of` 
-- 270: `_ramp` 
-- 274: `_ease` 
-- 279: `_s` 
-- 283: `put` Someone standing on a mark (screen x, ground y, pixels per metre).
-- 296: `_scarf_turned` His long white scarf when he is turned (hunt 1, 12 Nov: it vanished in the three-quarter walk): the front
-- 307: `_officer_turned` Note 28 (Sam, 12 Nov: the escort 'needs to look more like an HM Prison officer'): turned, his white shirt read
-- 326: `put_seated` Someone seated, feet on the floor at the mark (the seated pose's own drop lowers him onto the seat).
-- 337: `put_kit` Someone seated by the sitting kit (j from sitting.realize: the seat drawn with them, knees and lap front on),
-- 347: TV_TILT (data)
-- 350: PRESS_HAIR (data)
-- 351: PRESS_JKT (data)
-- 352: CREW_TOP (data)
-- 353: CREW_LEG (data)
-- 354: PRESS_STYLE (data)
-- 355: PRESS_KIT (data)
-- 357: PRESS_YAW (data)
-- 358: PRESS_FACE (data)
-- 362: `press_sp` Journalist i: their own build, clothes, haircut and turning head (blessed_cast.press_person).
-- 387: NEAR_ARM (data)
-- 392: `press_pose` Their arms: the camera operator's near hand up on the camera's grip, a boom held up in front (hands hidden by
-- 425: `press` The press pack from behind (Sam's note 4): standing people with shoulders, collars, arms and turning heads, fa
-- 466: `_kit` The hand-held kit at the hands (press(): from behind it is painted before the person, from the front after).
-- 476: `_stills` A stills camera held up over the heads, seen from behind (note 24): the body and its screen between the raised
-- 506: `_hand_mic` N10: a hand-held TV microphone held out towards him, seen from behind: the handle up out of the fist, the
-- 518: `_phone_up` A phone held up filming, seen from behind: its back over the hand, the screen's glow round its edge.
-- 527: `_tv_camera` A TV camera on the right shoulder, seen from behind: the body beside the head, the battery on its back,
-- 540: `_boom` A boom microphone held up over the scrum: the pole from his hands (in front of him, hidden) up and forward,
-- 561: `face` 
-- 568: `brand_mood` The acting list: sincere showman (arrival, shades lowered on 'mate'); stiff and earnest (the oath); hollow
-- 591: `brand_sp` 
-- 601: ANCHORS (data)
-- 605: `word_at` When line n reaches `words` (from ad_vanced_notice: the share of the text before them, spread over the take's
-- 622: `_bump` 
-- 626: `_keys` A number eased between timed keys [(t, value)], held before the first and after the last.
-- 636: `_contact` 
-- 641: `_rest_spec` The hand where the standing pose (or `j`) puts it, as an arm spec: (contact point, pole, hand shape).
-- 650: `_arm` views.arm_to with the hand's reach beyond the wrist given (`off`), so a hand changing shape never pops.
-- 660: `arm_keys` The hand on `side` through timed keys [(t, spec)]: spec = (target, pole, shape) in the torso frame, or None
-- 688: `unlean` A point where it should end up AFTER the body leans `lean` degrees, in the torso frame before the lean.
-- 698: HANDS (data)
-- 701: `_log_hands` 
-- 709: `_world_to_person` 
-- 714: `_beads` 
-- 728: `_sleeve_edge` An ink-edged, slightly darker forearm over the jacket, so the arm on the heart does not merge with it (Sam, hu
-- 740: `_box_prop` A flat box held in the hand (the Bible), drawn from its 8 corners in 3D, leaning with the body.
-- 756: `_sway` The swagger's roll of the head and shoulders, towards each planted foot.
-- 761: `_dip` Down at the knees by `amt` person units, feet kept on the floor, knees opening a little.
-- 778: `arrive` (mark, yaw, joints) for Brand arriving: swaggers in, leans in to the press on "mate", dips with his arms
-- 820: OATH_BIBLE (data)
-- 821: OATH_RAISE (data)
-- 822: OATH_BOOK (data)
-- 827: `oath` 
-- 849: `_bible` The Bible in his far (L) hand, moving with the hand (also the moves kit's 'bible' prop: acting.py).
-- 872: `oath_gaze` 
-- 877: `dock` 
-- 888: VAN_HANDS (data)
-- 891: `van` 
-- 900: `van_seat` Note 16: the legs and seat are drawn here, before the jumper (the moves kit's 'with van seat').
-- 907: VAN_YAW (data)
-- 912: `_seat` Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
-- 940: CELL (data)
-- 942: ESC_GO (data)
-- 943: ESC_STOP (data)
-- 944: OFF_BEHIND (data)
-- 947: `_cell_mark` 
-- 952: `escort` (mark, yaw, joints, head_yaw) for Brand or the officer in the escort.
-- 984: BRAND_BED (data)
-- 986: CELL_LOOK (data)
-- 994: CELL_SHOULDERS (data)
-- 997: GRIP_AT (data)
-- 1000: `officer_grip` His near hand ('L', facing left) on Brand's near upper arm until the stop, then back to his side.
-- 1023: `cot_pose` Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), staring up at the ceiling (t
-- 1041: COT_BIBLE_HAND (data)
-- 1044: `_cot_cross` 
-- 1055: `cot_face` Note 41: eyes squeezed shut on each sob, then a tear runs down from each eye (no static streaks).
-- 1062: `phone_extra` 
-- 1070: `asleep_pose` Note 22: asleep in his chair in front of the TV: slumped (the sitting kit's slump, on his red plastic chair),
-- 1085: POOL_TOP (data)
-- 1086: POOL_YAW (data)
-- 1089: `pool_pose` N8 (Sam, 13 Nov, a repeat of 43: 'a squashed person who clips through a pool table'): side-on at the table's
-- 1105: POOL_LEAN (data)
-- 1108: `pool_cue` The cue from his cue hand through the bridge hand on the cloth, its tip at the cue ball.
-- 1128: `pool_body_pts` N8 check: his body's points on the frame (hands and forearms left out: the bridge hand rests on the cloth).
-- 1146: POOL_SEEN (data)
-- 1149: `tv_pose` Chat 5: on the sitting kit (upright, hands on the seat's edges), front-on with knees and lap. Sam, 13 Nov
-- 1168: `tv_blink` Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones.
-- 1177: `_gates_cut` 
-- 1181: GATE_V (data)
-- 1182: GATE_OPEN (data)
-- 1185: `_arms_wide` Both arms flung up and open at t_up: out to the side on the way (figure-rig 3's waypoint), then up.
-- 1194: `gates_wide` 
-- 1212: GATE_D_OUT (data)
-- 1220: G2_WALK (data)
-- 1221: G2_X (data)
-- 1224: `_g2_press` The wide shot's whole pack (both sides, note 32). Anyone whose head would cover Brand (down to his hips) or th
-- 1258: G2_PRESS (data)
-- 1259: G2_NEAR_KIT (data)
-- 1262: `gates_at` Note 46: where Brand stands (x, d) at t in either release shot; the whole pack looks there.
-- 1271: `gates_close` 
-- 1310: `gates2_head` Note 49: his head turns to play to the cameras on one side, then the other (degrees, None = ahead).
-- 1322: WAL_X (data)
-- 1323: WAL_D (data)
-- 1324: DOOR_D (data)
-- 1327: OFF_DX (data)
-- 1328: LEAF_OPEN (data)
-- 1331: `wal_place` (x, d) in metres on the gates' Level camera: Walliams, or an officer at dx from him.
-- 1344: `wal_roll` His whole body tipped (degrees, + leaning to our right): dug in against the drag, wobbling as he fights.
-- 1351: `_blend_specs` A hand's (target, pole, shape) from timed phases [(t0, fn)]: each fn(t) gives a spec; 0.15 s cross-fades.
-- 1364: `wal_pose` His body and arms through the beats (front-on). jamb: the frame's edge in his own units, for the grab.
-- 1408: `wal_face` Scared, darting; the double-take (glance, away, SNAP back, alarmed); pleading; scared at the door.
-- 1432: `_person_pt` A point u of the way from a joint to the next (2D person units) -> screen, on a person drawn front-on.
-- 1440: `_to_person` A screen point -> a hand target in a front-on person's torso frame, z units nearer the lens.
-- 1447: `_reach` A hand target pushed out along its line from the shoulder to at least k of the arm's length (an elbow folded
-- 1457: `_rot` A screen point turned with a layer rotated `deg` (PIL: anticlockwise on screen) about c.
-- 1464: `leaf_angle` 
-- 1470: `_leaf` A point on the wicket's leaf (hinged on its right edge at x 1.15), x along it from the free edge (0) to the
-- 1478: `_gp` 
-- 1482: `door_inside` Note 32: the prison seen through the open wicket: a short lit passage (pale green walls, a lino floor, a strip
-- 1509: `draw_leaf` The wicket's leaf slammed shut (from SLAM): the set's painted open leaf is covered with the gate's timber, the
-- 1527: `_door_clip` A mask (the frame's size) of the wicket doorway, for people past its plane; hand: (x, y, r) also shows a hand
-- 1541: GUARD_SIDES (data)
-- 1544: `draw_walliams` Notes 25, 30, 32: the lit passage behind the wicket; Walliams between two officers on his own layer (tipped as
-- 1608: GUARD_EYES (data)
-- 1611: `guard_look` N9 (Sam, 13 Nov): no head turn. Turned side-on he swapped to the separate profile drawing (another size, hair
-- 1617: `guard_eyes` 0..1: the left officer's eyes on Walliams for the line (note 48), then back to the front.
-- 1624: ARRIVE_CAM (data)
-- 1625: TV_READER (data)
-- 1626: `_cam` The camera on a view; the push is a slow zoom into his face on the tvroom painting (brief 14).
-- 1659: `person` (face and look, mark, yaw, joints, head yaw) of one person in a shot: the seam the moves kit stands in for
-- 1716: `draw_people` 
-- 1795: DEFER (data)
-- 1798: `handset_pose` The landing phone's steel handset at his ear (moves.phone_at_ear's hold, his near hand: facing left he is
-- 1809: `_handset` The handset itself, drawn beside the head at the ear (the moves kit's 'handset' prop).
-- 1825: `phone_cord` The handset's armoured steel cord, from under his hand sagging back to the phone (blessed_sets.PHONE_CORD).
-- 1840: `picture` The frame WITHOUT captions (those go on last, so wording notes never re-render a picture).
-- 1858: `set_still` blessed_sets.alone's tile: the view with the cast at their marks, at the middle of its first shot.
-- 1872: `draw_order` 
-- 1876: `caption_at` 
-- 1880: `overlay` 
-- 1887: `frame_image` 
-- 1891: `_gavel_knock` A wooden gavel on a block: a sharp click, a hollow 'tock' and a short ring, about 0.5 s (made here: no sample)
-- 1903: `_gavel_sample` Sam's gavel (13 Nov, audio/sfx-gavel.mp3, two knocks): cut so the first knock lands on the dock's first frame.
-- 1912: MUSIC (data)
-- 1913: MUSIC_GAIN (data)
-- 1917: `music` Sam's note 27: The Mountain under the film from the cell (prison) on: its sad opening, then (joined in the hus
-- 1947: `soundtrack` 
-- 1974: `touch_faults` The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle):
-- 1999: `furniture_faults` N8 (Sam, 13 Nov: 'how did a squashed person who clips through a pool table get through a 40-minute check
-- 2035: `checks` Plan checks: subtitles printed to proofread, mouths on the words, the voice level. Raises on faults.
-- 2057: `_fx_tears` His tears alone, large (rule S7: an effect drawn alone for the shape check).
-- 2063: EFFECTS (data)
-- 2068: `main` 
+- 57: NAME (data)
+- 58: HAS (data)
+- 59: TITLE (data)
+- 60: TITLE_AT (data)
+- 61: INMATE (data)
+- 64: CAST (data)
+- 71: LINES (data)
+- 87: `_take` Sam's recording, else an espeak-ng stand-in (polanski.py's way), cached in source/data.
+- 104: L (data)
+- 115: FADE_FROM (data)
+- 118: `_at` 
+- 124: T (data)
+- 153: WAL_SHIFT (data)
+- 154: DUR (data)
+- 155: G2_CAM (data)
+- 171: `_voice_env` The speaker's loudness per drawing over the whole film (for headlife).
+- 185: HEAD_LIFE (data)
+- 188: SHOTS (data)
+- 194: VIEW (data)
+- 197: SHOT_CAST (data)
+- 205: BENCHMARK (data)
+- 209: _PX (data)
+- 211: PLAN (data)
+- 215: HOOK (data)
+- 217: SUBS_IN_PICTURE (data)
+- 218: PIECE_FIX (data)
+- 221: KEEP_CLEAR (data)
+- 223: PROP_SIZES (data)
+- 224: OUTFIT (data)
+- 225: HEIGHTS (data)
+- 226: FAMOUS (data)
+- 227: CUT_RESTS_OK (data)
+- 229: HANDS_OK (data)
+- 241: LOOKS_AT (data)
+- 247: LINE_OK (data)
+- 261: STILL_OK (data)
+- 263: GUARDS (data)
+- 266: TRACK (data)
+- 269: BLINKS (data)
+- 272: `shot_of` 
+- 276: `_ramp` 
+- 280: `_ease` 
+- 285: `_s` 
+- 289: `put` Someone standing on a mark (screen x, ground y, pixels per metre).
+- 302: `_scarf_turned` His long white scarf when he is turned (hunt 1, 12 Nov: it vanished in the three-quarter walk): the front
+- 313: `_officer_turned` Note 28 (Sam, 12 Nov: the escort 'needs to look more like an HM Prison officer'): turned, his white shirt read
+- 332: `put_seated` Someone seated, feet on the floor at the mark (the seated pose's own drop lowers him onto the seat).
+- 343: `put_kit` Someone seated by the sitting kit (j from sitting.realize: the seat drawn with them, knees and lap front on),
+- 353: TV_TILT (data)
+- 356: PRESS_HAIR (data)
+- 357: PRESS_JKT (data)
+- 358: CREW_TOP (data)
+- 359: CREW_LEG (data)
+- 360: PRESS_STYLE (data)
+- 361: PRESS_KIT (data)
+- 363: PRESS_YAW (data)
+- 364: PRESS_FACE (data)
+- 368: `press_sp` Journalist i: their own build, clothes, haircut and turning head (blessed_cast.press_person).
+- 393: NEAR_ARM (data)
+- 398: `press_pose` Their arms: the camera operator's near hand up on the camera's grip, a boom held up in front (hands hidden by
+- 431: `press` The press pack from behind (Sam's note 4): standing people with shoulders, collars, arms and turning heads, fa
+- 472: `_kit` The hand-held kit at the hands (press(): from behind it is painted before the person, from the front after).
+- 482: `_stills` A stills camera held up over the heads, seen from behind (note 24): the body and its screen between the raised
+- 512: `_hand_mic` N10: a hand-held TV microphone held out towards him, seen from behind: the handle up out of the fist, the
+- 524: `_phone_up` A phone held up filming, seen from behind: its back over the hand, the screen's glow round its edge.
+- 533: `_tv_camera` A TV camera on the right shoulder, seen from behind: the body beside the head, the battery on its back,
+- 546: `_boom` A boom microphone held up over the scrum: the pole from his hands (in front of him, hidden) up and forward,
+- 567: `face` 
+- 574: `brand_mood` The acting list: sincere showman (arrival, shades lowered on 'mate'); stiff and earnest (the oath); hollow
+- 597: `brand_sp` 
+- 607: ANCHORS (data)
+- 611: `word_at` When line n reaches `words` (from ad_vanced_notice: the share of the text before them, spread over the take's
+- 628: `_bump` 
+- 632: `_keys` A number eased between timed keys [(t, value)], held before the first and after the last.
+- 642: `_contact` 
+- 647: `_rest_spec` The hand where the standing pose (or `j`) puts it, as an arm spec: (contact point, pole, hand shape).
+- 656: `_arm` views.arm_to with the hand's reach beyond the wrist given (`off`), so a hand changing shape never pops.
+- 666: `arm_keys` The hand on `side` through timed keys [(t, spec)]: spec = (target, pole, shape) in the torso frame, or None
+- 694: `unlean` A point where it should end up AFTER the body leans `lean` degrees, in the torso frame before the lean.
+- 704: HANDS (data)
+- 707: `_log_hands` 
+- 715: `_world_to_person` 
+- 720: `_beads` 
+- 734: `_sleeve_edge` An ink-edged, slightly darker forearm over the jacket, so the arm on the heart does not merge with it (Sam, hu
+- 746: `_box_prop` A flat box held in the hand (the Bible), drawn from its 8 corners in 3D, leaning with the body.
+- 762: `_sway` The swagger's roll of the head and shoulders, towards each planted foot.
+- 767: `_dip` Down at the knees by `amt` person units, feet kept on the floor, knees opening a little.
+- 784: `arrive` (mark, yaw, joints) for Brand arriving: swaggers in, leans in to the press on "mate", dips with his arms
+- 826: OATH_BIBLE (data)
+- 827: OATH_RAISE (data)
+- 828: OATH_BOOK (data)
+- 833: `oath` 
+- 855: `_bible` The Bible in his far (L) hand, moving with the hand (also the moves kit's 'bible' prop: acting.py).
+- 878: `oath_gaze` 
+- 883: `dock` 
+- 894: VAN_HANDS (data)
+- 897: `van` 
+- 906: `van_seat` Note 16: the legs and seat are drawn here, before the jumper (the moves kit's 'with van seat').
+- 913: VAN_YAW (data)
+- 918: `_seat` Note 16: seen turned and seated, the body had no hips: the jumper stopped at the waist and the thighs began in
+- 946: CELL (data)
+- 948: ESC_GO (data)
+- 949: ESC_STOP (data)
+- 950: OFF_BEHIND (data)
+- 953: `_cell_mark` 
+- 958: `escort` (mark, yaw, joints, head_yaw) for Brand or the officer in the escort.
+- 990: BRAND_BED (data)
+- 992: CELL_LOOK (data)
+- 1000: CELL_SHOULDERS (data)
+- 1003: GRIP_AT (data)
+- 1006: `officer_grip` His near hand ('L', facing left) on Brand's near upper arm until the stop, then back to his side.
+- 1029: `cot_pose` Sam's note 18: lying flat on his back, seen from straight above (drawn front-on), staring up at the ceiling (t
+- 1047: COT_BIBLE_HAND (data)
+- 1050: `_cot_cross` 
+- 1061: `cot_face` Note 41: eyes squeezed shut on each sob, then a tear runs down from each eye (no static streaks).
+- 1068: `phone_extra` 
+- 1076: `asleep_pose` Note 22: asleep in his chair in front of the TV: slumped (the sitting kit's slump, on his red plastic chair),
+- 1091: POOL_TOP (data)
+- 1092: POOL_YAW (data)
+- 1095: `pool_pose` N8 (Sam, 13 Nov, a repeat of 43: 'a squashed person who clips through a pool table'): side-on at the table's
+- 1111: POOL_LEAN (data)
+- 1114: `pool_cue` The cue from his cue hand through the bridge hand on the cloth, its tip at the cue ball.
+- 1134: `pool_body_pts` N8 check: his body's points on the frame (hands and forearms left out: the bridge hand rests on the cloth).
+- 1152: POOL_SEEN (data)
+- 1155: `tv_pose` Chat 5: on the sitting kit (upright, hands on the seat's edges), front-on with knees and lap. Sam, 13 Nov
+- 1174: `tv_blink` Note 43: slow, heavy blinks in the TV room (shut for 0.3 s), not the quick talking ones.
+- 1183: `_gates_cut` 
+- 1187: GATE_V (data)
+- 1188: GATE_OPEN (data)
+- 1191: `_arms_wide` Both arms flung up and open at t_up: out to the side on the way (figure-rig 3's waypoint), then up.
+- 1200: `gates_wide` 
+- 1218: GATE_D_OUT (data)
+- 1226: G2_WALK (data)
+- 1227: G2_X (data)
+- 1230: `_g2_press` The wide shot's whole pack (both sides, note 32). Anyone whose head would cover Brand (down to his hips) or th
+- 1264: G2_PRESS (data)
+- 1265: G2_NEAR_KIT (data)
+- 1268: `gates_at` Note 46: where Brand stands (x, d) at t in either release shot; the whole pack looks there.
+- 1277: `gates_close` 
+- 1316: `gates2_head` Note 49: his head turns to play to the cameras on one side, then the other (degrees, None = ahead).
+- 1328: WAL_X (data)
+- 1329: WAL_D (data)
+- 1330: DOOR_D (data)
+- 1333: OFF_DX (data)
+- 1334: LEAF_OPEN (data)
+- 1337: `wal_place` (x, d) in metres on the gates' Level camera: Walliams, or an officer at dx from him.
+- 1350: `wal_roll` His whole body tipped (degrees, + leaning to our right): dug in against the drag, wobbling as he fights.
+- 1357: `_blend_specs` A hand's (target, pole, shape) from timed phases [(t0, fn)]: each fn(t) gives a spec; 0.15 s cross-fades.
+- 1370: `wal_pose` His body and arms through the beats (front-on). jamb: the frame's edge in his own units, for the grab.
+- 1414: `wal_face` Scared, darting; the double-take (glance, away, SNAP back, alarmed); pleading; scared at the door.
+- 1438: `_person_pt` A point u of the way from a joint to the next (2D person units) -> screen, on a person drawn front-on.
+- 1446: `_to_person` A screen point -> a hand target in a front-on person's torso frame, z units nearer the lens.
+- 1453: `_reach` A hand target pushed out along its line from the shoulder to at least k of the arm's length (an elbow folded
+- 1463: `_rot` A screen point turned with a layer rotated `deg` (PIL: anticlockwise on screen) about c.
+- 1470: `leaf_angle` 
+- 1476: `_leaf` A point on the wicket's leaf (hinged on its right edge at x 1.15), x along it from the free edge (0) to the
+- 1484: `_gp` 
+- 1488: `door_inside` Note 32: the prison seen through the open wicket: a short lit passage (pale green walls, a lino floor, a strip
+- 1515: `draw_leaf` The wicket's leaf slammed shut (from SLAM): the set's painted open leaf is covered with the gate's timber, the
+- 1533: `_door_clip` A mask (the frame's size) of the wicket doorway, for people past its plane; hand: (x, y, r) also shows a hand
+- 1547: GUARD_SIDES (data)
+- 1550: `draw_walliams` Notes 25, 30, 32: the lit passage behind the wicket; Walliams between two officers on his own layer (tipped as
+- 1614: GUARD_EYES (data)
+- 1617: `guard_look` N9 (Sam, 13 Nov): no head turn. Turned side-on he swapped to the separate profile drawing (another size, hair
+- 1623: `guard_eyes` 0..1: the left officer's eyes on Walliams for the line (note 48), then back to the front.
+- 1630: ARRIVE_CAM (data)
+- 1631: TV_READER (data)
+- 1632: `_cam` The camera on a view; the push is a slow zoom into his face on the tvroom painting (brief 14).
+- 1665: `person` (face and look, mark, yaw, joints, head yaw) of one person in a shot: the seam the moves kit stands in for
+- 1722: `draw_people` 
+- 1801: DEFER (data)
+- 1804: `handset_pose` The landing phone's steel handset at his ear (moves.phone_at_ear's hold, his near hand: facing left he is
+- 1815: `_handset` The handset itself, drawn beside the head at the ear (the moves kit's 'handset' prop).
+- 1831: `phone_cord` The handset's armoured steel cord, from under his hand sagging back to the phone (blessed_sets.PHONE_CORD).
+- 1846: `picture` The frame WITHOUT captions (those go on last, so wording notes never re-render a picture).
+- 1864: `set_still` blessed_sets.alone's tile: the view with the cast at their marks, at the middle of its first shot.
+- 1878: `draw_order` 
+- 1882: `caption_at` 
+- 1886: `overlay` 
+- 1893: `frame_image` 
+- 1897: `_gavel_knock` A wooden gavel on a block: a sharp click, a hollow 'tock' and a short ring, about 0.5 s (made here: no sample)
+- 1909: `_gavel_sample` Sam's gavel (13 Nov, audio/sfx-gavel.mp3, two knocks): cut so the first knock lands on the dock's first frame.
+- 1918: MUSIC (data)
+- 1919: MUSIC_GAIN (data)
+- 1923: `music` Sam's note 27: The Mountain under the film from the cell (prison) on: its sad opening, then (joined in the hus
+- 1953: `soundtrack` 
+- 1980: `touch_faults` The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle):
+- 2005: `furniture_faults` N8 (Sam, 13 Nov: 'how did a squashed person who clips through a pool table get through a 40-minute check
+- 2041: `checks` Plan checks: subtitles printed to proofread, mouths on the words, the voice level. Raises on faults.
+- 2063: `_fx_tears` His tears alone, large (rule S7: an effect drawn alone for the shape check).
+- 2069: EFFECTS (data)
+- 2074: `main` 
 
 ## blessed_cast.py (1144 lines)
 - 32: HERE (data)
