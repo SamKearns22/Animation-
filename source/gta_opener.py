@@ -10,9 +10,9 @@ MAP
 - skyline(): the waterfront city in three depths (pale far, mid, dark near): towers with window grids and a lit edge
   on the sun's side, the big wheel, a seafront shelter, boats, a shaded tree, palms with full fronds; sun path dashes
 - reflection(): the city mirrored in the water, darker, broken into rippling rows
-- frame(t): dark (0.5 s) -> logo wipes in slowly top to bottom and grows (0.5-2.0) -> city fades in under it (1.8-3.0)
+- frame(t): logo already wiping in on frame 1, no dark lead-in (Sam: so people don't swipe away), top to bottom, growing (0-1.5) -> city fades in under it (1.8-3.0)
   -> held, logo over the city (to 4.7) -> logo washes pale and dissolves (4.7-5.65) -> city
-- music(): the song's chorus (from 36.48 s, so its first hit lands on the wipe's start at 0.5 s), full volume to the end (no fade, Sam)
+- music(): the song's chorus (from 36.98 s, its first hit on frame 1 with the wipe), full volume to the end (no fade, Sam)
 - house look: the city drawing gets paper edges and shadows (house_look.edges); every frame is laid on paper; drawn on
   twos (12 drawings a second, each held 2 frames at 24 fps)
 - python3 source/gta_opener.py OUT.mp4 [--small]      python3 source/gta_opener.py still OUT.png T [T ...]
@@ -49,11 +49,11 @@ W, H = S.SIZE
 FPS = 24
 DRAW_FPS = 12                                     # on twos
 DUR = 6.5
-WIPE0, WIPE = 0.5, 1.5                           # the logo's wipe: starts on the chorus's first hit, 1.5 s long
+WIPE0, WIPE = 0.0, 1.5                           # the logo's wipe: starts on the chorus's first hit, 1.5 s long
 CITY0, CITY_IN = 1.8, 1.2                        # the city fades in under the logo
 OUT0 = 4.7                                       # the logo washes pale from here, then dissolves
 SONG = os.path.join(HERE, '..', 'music', 'gta-opener-chorus.mp3')   # Sam's song, the chorus cut (20 Nov)
-SONG_AT = 36.48                                  # where in the whole song the cut starts (0.5 s before the chorus hits)
+SONG_AT = 36.98                                  # where in the whole song the cut starts (the chorus's first hit, on frame 1)
 INK = (40, 12, 56)
 DARK = (27, 26, 36)
 OL = 3
@@ -489,7 +489,8 @@ def frame(t, LOGO, PALE, CITY, REF):
     # the logo: wipes in gently top to bottom while growing, keeps growing slowly through the hold, washes pale,
     # dissolves
     u = t - WIPE0
-    reveal = _ease(u / WIPE)
+    x = min(1.0, max(0.0, u / WIPE))
+    reveal = 0.3 + 0.7 * (1 - (1 - x) ** 2)          # the top already showing on frame 1, settling gently
     scale = 0.86 + 0.08 * _ease(u / 2.0) + 0.05 * min(1, max(0, u) / (OUT0 + 0.95 - WIPE0))
     a_out = 1 - _ease((t - OUT0 - 0.4) / 0.55)
     pale = _ease((t - OUT0) / 0.45)
