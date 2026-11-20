@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 53.2% of a week; spent 26.74% (-26.46); 17 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 53.2% of a week; spent 27.03% (-26.17); 17 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 26.74% of the 0% planned so far; at this rate the film lands at 77.3%.**
+**Forecast: Spent 27.03% of the 0% planned so far; at this rate the film lands at 77.6%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -40,7 +40,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-20 | 315290f5 | est | opus | auto |  | 1.93 |  | 0 | 0 |
 | 2026-11-20 | 5943f8f0 | est | opus | auto |  | 1.21 |  | 0 | 0 |
 | 2026-11-20 | 723ab24d | est | opus | auto |  | 0.27 |  | 0 | 0 |
-| 2026-11-20 | 87a6944f | est | opus | auto |  | 0.53 |  | 0 | 0 |
+| 2026-11-20 | 87a6944f | est | opus | auto |  | 0.82 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-19 c079f576 (auto): 101 steps, history 274k at the end; other 75.9%, pictures 9.9%, renders 8.6%, tool search 5.6%
@@ -59,7 +59,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 315290f5 (auto): 116 steps, history 260k at the end; other 66.2%, tool search 21.3%, pictures 9.2%, whole-file .py read 2%, renders 1.2%
 - 2026-11-20 5943f8f0 (auto): 81 steps, history 200k at the end; other 65.6%, tool search 21.9%, pictures 7.1%, whole-file .py read 4.2%, renders 1%, page.py 0.2%
 - 2026-11-20 723ab24d (auto): 14 steps, history 116k at the end; other 87.5%, tool search 12.5%
-- 2026-11-20 87a6944f (auto): 34 steps, history 153k at the end; other 72.7%, tool search 23.7%, renders 1.6%, whole-file .py read 1.2%, pictures 0.8%
+- 2026-11-20 87a6944f (auto): 52 steps, history 197k at the end; other 74.1%, tool search 22.2%, renders 1.6%, pictures 1.4%, whole-file .py read 0.8%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 c079f576 (auto): new writes 33.2%, Claude's words 30.9%, carried history 19.3%, start-up floor 16.6%. Biggest origins: Claude's words 47.7%, cache re-write 17.4%, start-up floor 16.6%. Leftover 0%
@@ -78,7 +78,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 315290f5 (auto): carried history 27.5%, start-up floor 26.4%, Claude's words 25.9%, new writes 20.2%. Biggest origins: Claude's words 45.1%, start-up floor 26.4%, result: tool search 13%. Leftover 0%
 - 2026-11-20 5943f8f0 (auto): start-up floor 30.4%, Claude's words 26.1%, carried history 22.2%, new writes 21.3%. Biggest origins: Claude's words 41.8%, start-up floor 30.4%, result: tool search 15.7%. Leftover 0%
 - 2026-11-20 723ab24d (auto): new writes 60.1%, start-up floor 30.4%, Claude's words 7.4%, carried history 2.2%. Biggest origins: messages and reminders 45.7%, start-up floor 31.5%, result: tool search 12.5%. Leftover 0%
-- 2026-11-20 87a6944f (auto): start-up floor 33.7%, new writes 30%, Claude's words 24.8%, carried history 11.5%. Biggest origins: start-up floor 33.7%, Claude's words 32.3%, result: tool search 24.1%. Leftover 0%
+- 2026-11-20 87a6944f (auto): new writes 31.3%, start-up floor 30.7%, Claude's words 21.2%, carried history 16.9%. Biggest origins: start-up floor 30.7%, Claude's words 29.6%, result: tool search 20.3%. Leftover 0%
 
 ## Starting each chat
 A new chat's start and re-learning cost 19% of the film (5.05% of a week over 17 chats: start 4.74, re-learning 0.31; 0.30% a chat; step-1 context re-read is 23% of a chat on average).
@@ -98,4 +98,4 @@ A new chat's start and re-learning cost 19% of the film (5.05% of a week over 17
 - 2026-11-20 315290f5: step-1 context 82k; first real work at step 9 (0.13% of a week); read before it: source/gta_rehearse.py 1.7k, notes/grand-theft-autism.md 1.5k, source/gta_cars.py 0.6k
 - 2026-11-20 5943f8f0: step-1 context 82k; first real work at step 14 (0.2% of a week); read before it: source/gta_rehearse.py 2.7k, /tmp/claude-0/-home-user-Animation-/5943f8f0-e808-5003-ac63-1bca03670dd7/scratchpad/s4_5.5.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/5943f8f0-e808-5003-ac63-1bca03670dd7/scratchpad/s4_0.67.jpg 1.6k, notes/checks/gta-chat14-layers.txt 0.8k, notes/checks/gta-chat14-bodies.txt 0.8k, source/gta_cars.py 0.8k
 - 2026-11-20 723ab24d: step-1 context 82k; first real work at step 5 (0.08% of a week); read before it: 
-- 2026-11-20 87a6944f: step-1 context 80k; first real work at step None (None% of a week); read before it: notes/grand-theft-autism.md 6.1k, notes/archive/grand-theft-autism-handovers.md 3.2k, source/gta_rehearse.py 2.7k, notes/shot4-case-study/v1-chat6-original.jpg 1.6k, notes/checks/gta-chat15-bodies.txt 1.3k, notes/ledger/sam/negkzryt.md 0.6k
+- 2026-11-20 87a6944f: step-1 context 80k; first real work at step None (None% of a week); read before it: notes/grand-theft-autism.md 6.1k, notes/archive/grand-theft-autism-handovers.md 3.2k, source/gta_rehearse.py 2.7k, notes/shot4-case-study/v1-chat6-original.jpg 1.6k, notes/checks/gta-chat15-bodies.txt 1.3k, notes/shot4-case-study/v4-chat15-shots3-4.jpg 1.6k

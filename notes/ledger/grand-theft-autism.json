@@ -7600,46 +7600,47 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.53,
+   "cost": 0.82,
    "src": "estimate",
    "sid": "session_01J1JB7Z8NfX6Qt6NegKzRyt",
-   "steps": 34,
-   "hist_k": 153,
+   "steps": 52,
+   "hist_k": 197,
    "kinds": {
-    "tool search": 23.7,
-    "whole-file .py read": 1.2,
+    "tool search": 22.2,
+    "whole-file .py read": 0.8,
     "renders": 1.6,
-    "pictures": 0.8,
-    "other": 72.7
+    "pictures": 1.4,
+    "other": 74.1
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 23,
+    "tool search": 31,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
-    "renders": 1,
-    "pictures": 1,
+    "renders": 2,
+    "pictures": 2,
     "other": 9
    },
    "split": {
-    "usd": 1.9508,
-    "total": 1.9508,
+    "usd": 2.9885,
+    "total": 2.9885,
     "floor_k": 80,
     "blocks": {
-     "start-up floor": 33.7,
-     "new writes": 30.0,
-     "Claude's words": 24.8,
-     "carried history": 11.5
+     "new writes": 31.3,
+     "start-up floor": 30.7,
+     "Claude's words": 21.2,
+     "carried history": 16.9
     },
     "origins": {
-     "start-up floor": 33.7,
-     "Claude's words": 32.3,
-     "result: tool search": 24.1,
-     "result: other": 5.3,
-     "Claude's edits": 2.0,
-     "messages and reminders": 1.4,
-     "result: pictures": 1.2,
+     "start-up floor": 30.7,
+     "Claude's words": 29.6,
+     "result: tool search": 20.3,
+     "messages and reminders": 10.7,
+     "result: other": 4.3,
+     "result: pictures": 2.4,
+     "Claude's edits": 1.8,
+     "result: renders": 0.1,
      "result: whole-file .py read": 0.1
     },
     "leftover": 0.0
@@ -7652,45 +7653,55 @@
      [
       "notes/grand-theft-autism.md",
       6.1,
-      0.0824
+      0.1023
      ],
      [
       "notes/archive/grand-theft-autism-handovers.md",
       3.2,
-      0.0294
+      0.0398
      ],
      [
       "source/gta_rehearse.py",
       2.7,
-      0.0269
+      0.0356
      ],
      [
       "notes/shot4-case-study/v1-chat6-original.jpg",
       1.6,
-      0.014
+      0.0191
      ],
      [
       "notes/checks/gta-chat15-bodies.txt",
       1.3,
-      0.012
+      0.0163
+     ],
+     [
+      "notes/shot4-case-study/v4-chat15-shots3-4.jpg",
+      1.6,
+      0.016
      ],
      [
       "notes/ledger/sam/negkzryt.md",
       0.6,
-      0.0085
+      0.0105
      ],
      [
       "story/status.md",
       0.4,
-      0.0061
+      0.0075
      ],
      [
       "notes/ledger/grand-theft-autism.md",
       0.2,
-      0.002
+      0.0025
+     ],
+     [
+      "notes/shot4-case-study/shot4-case-study.md.tmp",
+      0.0,
+      0.0001
      ]
     ],
-    "base_pct": 24.5
+    "base_pct": 24.8
    },
    "search": {
     "show": 0,
@@ -7698,8 +7709,8 @@
      "no show": 0
     },
     "other": {
-     "film notes": 8,
-     "other": 11,
+     "film notes": 13,
+     "other": 14,
      "shared:gta_rehearse.py": 4
     },
     "ticked": 0,
@@ -7887,6 +7898,70 @@
       "other",
       "",
       "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "git status -sb | head -3; git log --oneline -3; git push -u origin claude/nice-m",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "notes/shot4-case-study",
+      "git worktree remove --force /tmp/claude-0/-home-user-Animation-/87a6944f-84c5-5f",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "film notes",
+      "/root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424/c9047d89-image.jpg no",
+      "cp /root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424/c9047d89-image.jpg",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "film notes",
+      "/root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424/2e3c5328-image.jpg no",
+      "cp /root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424/2e3c5328-image.jpg",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "film notes",
+      "/root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424 notes/shot4-case-stud",
+      "\n- Note 5: ",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "film notes",
+      "/root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424 notes/shot4-case-stud",
+      "\n",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "film notes",
+      "/root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424 notes/shot4-case-stud",
+      "U=/root/.claude/uploads/87a6944f-84c5-5f37-aba4-5c9b4b02b424 && D=notes/shot4-ca",
       ""
      ]
     ]
