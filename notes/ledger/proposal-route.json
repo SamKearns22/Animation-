@@ -4789,45 +4789,46 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.19,
+   "cost": 0.45,
    "src": "estimate",
    "sid": "session_01J1JB7Vr9GV3Fbh1MgDWZdo",
-   "steps": 15,
-   "hist_k": 99,
+   "steps": 32,
+   "hist_k": 118,
    "kinds": {
-    "tool search": 10.7,
-    "renders": 14.3,
-    "pictures": 4.6,
-    "other": 70.4
+    "tool search": 14.1,
+    "renders": 6.9,
+    "pictures": 2.4,
+    "other": 76.6
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 6,
+    "tool search": 19,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 3,
+    "renders": 4,
     "pictures": 3,
-    "other": 2
+    "other": 5
    },
    "split": {
-    "usd": 0.6836,
-    "total": 0.6836,
+    "usd": 1.643,
+    "total": 1.643,
     "floor_k": 82,
     "blocks": {
-     "start-up floor": 52.6,
-     "Claude's words": 24.0,
-     "new writes": 19.8,
-     "carried history": 3.6
+     "start-up floor": 37.1,
+     "new writes": 36.2,
+     "Claude's words": 20.5,
+     "carried history": 6.2
     },
     "origins": {
-     "start-up floor": 52.6,
-     "Claude's words": 32.0,
-     "result: tool search": 9.4,
-     "result: pictures": 4.9,
-     "messages and reminders": 0.7,
-     "result: renders": 0.1,
-     "result: other": 0.1
+     "start-up floor": 37.1,
+     "Claude's words": 29.0,
+     "cache re-write": 18.8,
+     "result: tool search": 8.0,
+     "result: pictures": 2.7,
+     "messages and reminders": 2.7,
+     "result: other": 1.6,
+     "result: renders": 0.1
     },
     "leftover": 0.0
    },
@@ -4839,15 +4840,15 @@
      [
       "source/focus.py",
       3.2,
-      0.0319
+      0.0416
      ],
      [
       "source/facehouse.py",
       0.5,
-      0.0045
+      0.006
      ]
     ],
-    "base_pct": 30.6
+    "base_pct": 28.2
    },
    "search": {
     "show": 0,
@@ -4856,10 +4857,13 @@
     },
     "other": {
      "shared:branches.py": 1,
-     "shared:handover.py": 1,
-     "shared:focus.py": 1,
+     "shared:handover.py": 2,
+     "shared:focus.py": 4,
      "shared:facehouse.py": 2,
-     "shared:kittests.py": 1
+     "shared:kittests.py": 5,
+     "other": 2,
+     "shared:people_parts.py": 1,
+     "shared:people.py": 2
     },
     "ticked": 0,
     "edited film code": false,
@@ -4910,6 +4914,110 @@
       "shared:kittests.py",
       "source/kittests.py",
       "python3 source/kittests.py focus_front_heads 2>&1 | tail -4",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git rebase -q FETCH_HEAD 2",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:focus.py",
+      "source/focus.py notes/proposals/front-on-focus/retirement-and-handover.md source",
+      "strong\\|STRONG\\|compare",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:focus.py",
+      "source/focus.py",
+      "git diff d732ceea -- source/focus.py | head -40; git log --oneline d732ceea..HEA",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS|^FAIL",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "sleep 1; cd /home/user/Animation- && cat /tmp/claude-0/-home-user-Animation-/400",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:focus.py",
+      "source/focus.py source/kittests.py",
+      "^(PASS|FAIL)[^;]*",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/people.py source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "milburn 5\\|'milburn'",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:kittests.py",
+      "source/*.py source/kittests.py source/focus.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:people.py",
+      "source/people.py source/people_parts.py source/people_turned.py source/midtermin",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^[-+]",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/proposals/front-on-focus/retirement-and-handover.md",
+      "timeout 100 python3 source/handover.py end --notes notes/proposals/front-on-focu",
       ""
      ]
     ]
