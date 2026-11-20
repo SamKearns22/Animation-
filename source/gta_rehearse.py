@@ -959,8 +959,10 @@ J4_KEYS = [  # (t, hips, facing (deg, + toward the car's right), lean (deg forwa
     (0.35, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
     (0.85, (0.62, 0.62, 0.00), 75, 30, (0.40, 0.33, 0.25), (0.55, 0.33, 0.30)),    # up and turned: head out first
     (1.40, (0.86, 1.03, -0.02), 125, 12, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),  # on the sill, turning back
-    (1.70, (0.88, 1.03, -0.02), 140, 4, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),   # sat on the sill: legs inside
-    (4.30, (0.88, 1.03, -0.02), 140, 4, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),
+    (1.70, (0.88, 1.03, -0.02), 160, 4, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),   # sat on the sill: legs inside;
+    # turned 160 (was 140) square to the lead cruiser: at 140 the gun arm crossed his chest and hid behind his back,
+    # the stump Sam flagged in chat 11 (rule 30, chat 15); now arm, gun and flash read past his left shoulder
+    (4.30, (0.88, 1.03, -0.02), 160, 4, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),
     (4.85, (0.86, 1.03, -0.02), 115, 14, (0.48, 0.45, -0.05), (0.62, 0.45, 0.12)),
     (5.30, (0.62, 0.62, 0.00), 70, 28, (0.40, 0.33, 0.25), (0.55, 0.33, 0.30)),
     (5.80, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
@@ -1041,7 +1043,10 @@ def jason_layer(img, cam, tul, t, lead, info=None):
     d_fig = unlean(to_fig(cam, n0, a, d), lean)
     up = tuple(c + (r - c) * kk for c, r in zip((0.9, -1.0, 0.05), (0.15, -1.0, 0.0)))
     gun_dir = S._norm(tuple(c + (b - c) * w for c, b in zip(up, d_fig)))
-    if kk > 0:                                                # the free hand takes the roof's corner as he climbs
+    thigh = _unleaned_pt(fig(tul.body_pt((0.30, 0.31, 0.30))), lean)   # seated: his left hand rests on his thigh
+    if kk <= 0:                                               # (it hung through the floor before: chat 15)
+        V.arm_to(j, 'L', thigh, 'down', 'palm')
+    else:                                                     # the free hand takes the roof's corner as he climbs
         g = _unleaned_pt(fig(tul.body_pt(GRIP_J)), lean)
         g = (min(g[0], -40.0), g[1], g[2])            # the roof corner stays on his left: never reached across his chest
         shl = j['shL']
@@ -1050,7 +1055,7 @@ def jason_layer(img, cam, tul, t, lead, info=None):
         rmax = (FG.UPPER + FG.FORE) * 0.95
         if Lg > rmax:
             g = S._add(shl, S._mul(dg, rmax / Lg))
-        V.arm_to(j, 'L', tuple(p + (q - p) * kk for p, q in zip(j['wrL'], g)), 'out', 'palm')
+        V.arm_to(j, 'L', tuple(p + (q - p) * kk for p, q in zip(thigh, g)), 'out', 'palm')   # any lower bend folds the elbow (figure check); 2-frame roof graze named (chat 15)
     j['props'].append(PC.glock('R', flash=js['flash'], aim3=gun_dir, size=1.0 + 0.4 * js["out"]))   # big enough to read on a phone once out
     j['grip'] = {'R'}
     head = S._norm(S._sub(target, n0)) if w > 0.2 else F
@@ -1074,6 +1079,13 @@ def jason_layer(img, cam, tul, t, lead, info=None):
     rows = (np.arange(img.size[1]) > split)[:, None]
     sol = np.where(rows, np.asarray(lo_s), np.asarray(up_s)).astype(np.float32) / 255
     gl = np.where(rows, np.asarray(lo_g), np.asarray(up_g)).astype(np.float32) / 255
+    so = smooth((js['out'] - 0.9) / 0.1)          # on the sill his legs are inside, behind the car's whole right side:
+    if so > 0:                                     # the flat figure draws them a leg-length down, under the car (chat 15)
+        side = Image.new('L', img.size, 0)
+        quad = [tul.body_pt(q) for q in ((0.98, -1.5, -2.6), (0.98, -1.5, 1.0), (0.98, 0.98, 1.0), (0.98, 0.98, -2.6))]
+        if all(cam.depth(q) > cam.NEAR for q in quad):    # front edge at z 1.0: the lens sits beside the bonnet
+            ImageDraw.Draw(side).polygon([(x * B.SS, y * B.SS) for x, y in (cam.project(q)[0] for q in quad)], fill=255)
+            sol = np.where(rows, np.maximum(sol, np.asarray(side, np.float32) / 255 * so), sol)
     al = np.asarray(lay.split()[3], np.float32) * (1 - sol)
     sk = 1 - smooth(js['out'] / 0.12)              # sat in his seat: seen only through the glass, like the others (the
     if sk > 0:                                     # header rail hides his crown, never his head over the roof: chat 13)

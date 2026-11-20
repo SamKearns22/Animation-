@@ -1021,6 +1021,11 @@ def _through_glass(img, cam, car, glass, inside):
         k = np.minimum(np.asarray(far, np.float32), np.maximum(np.asarray(mask, np.float32), np.asarray(omask, np.float32)))
         if k.any():
             tint = Image.blend(bg.convert('RGB'), Image.new('RGB', img.size, GLASS), 0.28).convert('RGBA')
+            # keep what is behind see-through: drawn alone (the layer check's clear sheet) the pane is a faint veil, not
+            # an opaque dark panel that made every car behind it read as 'drawn over' this one (chat 15); unchanged in
+            # the film, where the street behind is always solid
+            ba = np.asarray(bg.convert('RGBA').split()[3], np.uint8)
+            tint.putalpha(Image.fromarray(np.maximum(ba, 72).astype(np.uint8)))
             img.paste(tint, (0, 0), Image.fromarray(k.astype(np.uint8)))
     if inside:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
