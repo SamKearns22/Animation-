@@ -12,7 +12,7 @@ MAP
 - reflection(): the city mirrored in the water, darker, broken into rippling rows
 - frame(t): dark (0.5 s) -> logo wipes in slowly top to bottom and grows (0.5-2.0) -> city fades in under it (1.8-3.0)
   -> held, logo over the city (to 4.7) -> logo washes pale and dissolves (4.7-5.65) -> city
-- music(): the song's chorus (from 36.48 s, so its first hit lands on the wipe's start at 0.5 s), faded out at the end
+- music(): the song's chorus (from 36.48 s, so its first hit lands on the wipe's start at 0.5 s), full volume to the end (no fade, Sam)
 - house look: the city drawing gets paper edges and shadows (house_look.edges); every frame is laid on paper; drawn on
   twos (12 drawings a second, each held 2 frames at 24 fps)
 - python3 source/gta_opener.py OUT.mp4 [--small]      python3 source/gta_opener.py still OUT.png T [T ...]
