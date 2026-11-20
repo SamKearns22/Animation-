@@ -29,3 +29,6 @@ Y.
 ### 2026-11-20T11:27:26
 Is my assertion correct?
 
+### 2026-11-20T11:28:47
+Do we need to run this through proposal route or is your new rule sufficient
+
