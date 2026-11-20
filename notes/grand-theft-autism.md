@@ -499,6 +499,7 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   F._ALLOW 'kittests'. K2 head: camera 45/60 deg, hup (0.51,0.86,0), hfwd down 0.51; head is drawn at 30 deg.
   The acting row "free hand gripping the roof" changed to "braced on the door top" (it crossed his head): tell Sam
   in the build message as an "Added/Lost" line.
-- Branches named, not merged on purpose: freeze/* bookmarks of posted films.
+- Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
+  freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 35.72% of 15%; forecast 86.3% (2026-11-20)
