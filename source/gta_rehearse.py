@@ -1067,7 +1067,8 @@ def jason_layer(img, cam, tul, t, lead, info=None):
     lo_g = Image.fromarray(np.maximum(np.asarray(lo_g), np.asarray(f_g)))
     lo_used = lo_used + [u for u in f_used if u[0] not in {n for n, _ in lo_used}]
 
-    up_s, up_g, up_used = G.cover_masks(tul, cam, chest_w, img.size)
+    up_s, up_g, up_used = G.cover_masks(tul, cam, n0, img.size)   # from his neck: sat low, his chest is below the dash
+                                                                 # and the windscreen missed it (chat 14: he vanished)
     (_, hy), _ = cam.project(hips)
     split = int(hy * B.SS)
     rows = (np.arange(img.size[1]) > split)[:, None]
