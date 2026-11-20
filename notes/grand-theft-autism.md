@@ -393,6 +393,25 @@ Built in source/gta_shots58.py on shot 4's world; the whole film's clock in sour
   the wheel's rim across her mouth as she speaks (wheel 8 cm lower in shots 5-8 only); Jason's gestures below the
   dash; the first street's smoke, palms and people painted over the new road's shops (hidden round the corner now).
 
+## Shots 5-8: Sam's notes on the clip (chat 19, 20 Nov ~23:35; "Very cool")
+- [ ] 1. Acting while they speak lacks imagination: use the front-on focus kit (source/focus.py, the BoJack look: head
+  turn, eyes and face sliding toward where they look) so they express more. Applies to all three people, shots 5-8.
+- [ ] 2. Jason always faces forward while he indicates other things: his head and look should go to what he points at.
+- [ ] 3. Jason's arm poses need work (gestures in shot 6: free hand opening, counting, open palm toward her).
+- Sam then: "Actually don't handover just continue here" (chat 19, switched to Opus). Done in chat 19:
+  every look is the focus kit now (J_FOCUS, L_FOCUS, H_FOCUS keys in gta_shots58, eyes lead 0.17 s); found and fixed:
+  the old looks went the WRONG way (Lucia's turn to Jason and both "eyes slide to each other" on nitroglycerin looked
+  away from each other: + is screen right). Jason: to Lucia on the yank, back at her on line 3, to Lucia on "I told
+  you" (eyes shut), thumb back at her on "Her", hand up explaining to Lucia with beats on home/made/explosives, palm
+  up on "this job", thumb back at her on "without her", then forward, fed up. His gestures moved to the window side,
+  forearm upright beside his face (from the inner side they crossed his chest: a thick diagonal arm). Lucia: to
+  Jason on "you", a jerk back at her on "brought her", glance on "told you", eye-roll on "hyperfixation", side-eye
+  on "without her", eyes to the mirror in shot 7. Her: headshake on "didn't", at the driver on "like that", at Lucia
+  during line 4, eyes drop on "brought her", at Jason on "hyperfixation", proud smile on "explosives"/"without her".
+  Lost: Jason "looking forward" through line 5 (Sam's script); his note overrides it.
+  Clip v2 sent ~23:57 (4.9 MB, ~14 min render; shot 7 first refused by the figure check: elbow folded across his
+  chest as the hand came down; fixed with the elbow 'out' then). Waiting for Sam's notes on v2.
+
 ## Shot 4 acting rows (rule 74, every person, beat by beat; my picks, in the build proposal to Sam)
 Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging out with him; B4 shots at 1.95, 2.30,
 2.62, 2.92; B5 3.0-4.55 the slew, hydrant, fireball; B6 4.55-6.2 back in to shot 3's frame.
@@ -466,6 +485,7 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   and add "every drawn person has a head" to the body check (it missed it); (2) redraw the sheet, all clean; (3) one
   fresh critique (critique.py pack, stage "pose sheet"), fix; (4) the in-betweens (lying.blend) and leanout.at(t);
   (5) send Sam the pose sheet with the build (Y/N before the rebuild); (6) on his Y, rebuild shot 4.
+- Shots 5-8 (chain B, Sam's notes on the clip: section above): Next Opus, high: acting rows for shots 5-8 (every person, beat by beat, using focus.py for looks and head turns; Jason looks where he points; new arm poses), file source/gta_shots58.py only (chat 20 owns shot 4 and gta_rehearse.py); then a short clip of just the changed shots to Sam.
 - Needs Sam: nothing for shot 4 yet (the pose sheet comes with step 5). Shots 5-8: a separate Sonnet chain (its
   chat 19) sent Sam a clip ~23:30 (body check clean) and waits for his notes; this chain does not touch shots 5-8.
 - Read: guides/job-packs.md Build; source/leanout.py MAP; lying_flat.py _head and draw (lines ~224-330, 470-525);
@@ -478,4 +498,4 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   in the build message as an "Added/Lost" line.
 - Branches named, not merged on purpose: freeze/* bookmarks of posted films.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 33.1% of 15%; forecast 83.6% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 35.72% of 15%; forecast 86.3% (2026-11-20)
