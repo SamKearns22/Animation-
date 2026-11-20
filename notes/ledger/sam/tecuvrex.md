@@ -20,3 +20,8 @@ You may want to look at references of Lucia and Jason from the first few hours o
 ### 2026-11-20T03:37:02
 Continue work in full for now. Just have a 5:30 reactivation check in case usage runs out whilst I sleep
 
+### 2026-11-20T08:00:38
+The cast sheet you have provided has broken many of our rules on body shape and proportions. Can you name how?
+
+I will find references for Lucia and Jason
+
