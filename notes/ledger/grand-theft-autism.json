@@ -772,6 +772,437 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "caff6f5e",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.82,
+   "src": "estimate",
+   "sid": "session_01J1JB7WJP6bF722TEcuVREX",
+   "steps": 54,
+   "hist_k": 181,
+   "kinds": {
+    "film-file search": 4.0,
+    "tool search": 23.9,
+    "renders": 7.5,
+    "pictures": 4.2,
+    "other": 60.4
+   },
+   "calls": {
+    "film-file search": 4,
+    "tool search": 33,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 8,
+    "other": 7
+   },
+   "split": {
+    "usd": 3.0017,
+    "total": 3.0017,
+    "floor_k": 82,
+    "blocks": {
+     "start-up floor": 31.2,
+     "new writes": 26.3,
+     "Claude's words": 25.8,
+     "carried history": 16.7
+    },
+    "origins": {
+     "Claude's words": 36.8,
+     "start-up floor": 31.2,
+     "result: tool search": 22.7,
+     "result: pictures": 4.5,
+     "messages and reminders": 2.5,
+     "result: other": 0.9,
+     "Claude's edits": 0.6,
+     "result: film-file search": 0.6,
+     "result: renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 24,
+    "work_pct": 0.32,
+    "reads": [
+     [
+      "source/people.py",
+      4.9,
+      0.0686
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      3.8,
+      0.0624
+     ],
+     [
+      "guides/kit-catalogue.md",
+      3.4,
+      0.0536
+     ],
+     [
+      "guides/figure-rig.md",
+      2.4,
+      0.037
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/caff6f5e-2e4e-56a5-be31-0ef3425985f7/scratchpad/refs.jpg",
+      1.6,
+      0.0226
+     ],
+     [
+      "source/people_parts.py",
+      1.5,
+      0.0204
+     ],
+     [
+      "source/satire_template.py",
+      1.1,
+      0.0168
+     ],
+     [
+      "story/protest-tiers-people.txt",
+      1.0,
+      0.0148
+     ],
+     [
+      "source/halo_no_no.py",
+      1.0,
+      0.0143
+     ],
+     [
+      "story/grand-theft-autism-places.txt",
+      0.4,
+      0.0068
+     ]
+    ],
+    "base_pct": 26.2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 4
+    },
+    "other": {
+     "other": 4,
+     "shared:handover.py": 1,
+     "film notes": 2,
+     "guides": 6,
+     "shared:satire_template.py": 1,
+     "shared:people.py": 9,
+     "shared:halo_no_no.py": 1,
+     "shared:people_parts.py": 5,
+     "shared:midterminal_cast.py": 1,
+     "shared:people_famous.py": 1,
+     "shared:gta_cast.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch origin claud",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1 | tail -1 && gi",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^#",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "",
+      "git fetch origin claude/create-claude-md-oe8z4g 2>&1|tail -1; git log --oneline ",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 1,200p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "awk '/^## /{p=0} /^## .*Build/{p=1} p' guides/job-packs.md | head -120",
+      ""
+     ],
+     [
+      6,
+      "film",
+      "before show",
+      "story/grand-theft-autism-places.txt",
+      "ls source | head -100; ls source | wc -l; ls references/grand-theft-autism/; cat",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "car\\b\\|cars\\|windscreen\\|vehicle\\|truck\\|halo",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "sed -n 1,19p guides/kit-catalogue.md; sed -n 22,61p guides/kit-catalogue.md | cu",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "People from a description",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "guides",
+      "guides/figure-rig.md guides/satire.md guides/critique-checklist.md",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "guides",
+      "guides/figure-rig.md",
+      "sed -n 26,110p guides/figure-rig.md; sed -n 135,152p guides/figure-rig.md",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:satire_template.py",
+      "story/*people* source/*.py source/satire_template.py",
+      "ls story/*people* ; ls -t source/*.py | head -15; wc -l source/satire_template.p",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:people.py",
+      "story/protest-tiers-people.txt source/people.py",
+      "^def \\|^    python3\\|^\\s*python3",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 1,92p source/people.py",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:halo_no_no.py",
+      "source/halo_no_no.py source/halo_cast.py source/halo_sets.py",
+      "sed -n 1,60p source/halo_no_no.py | cut -c1-220; wc -l source/halo_no_no.py sour",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:people.py",
+      "source/people.py source/people_parts.py",
+      "^EXTRAS\\|EXTRAS = \\|^def ",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/people.py",
+      "EXTRAS\\b",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:people.py",
+      "source/people.py source/people_turned.py source/views.py source/people_parts.py",
+      "flowers",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 606,640p source/people.py; sed -n 490,503p source/people.py",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sleeves\\|'short'",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "source/*.py",
+      "short_sleeve",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:midterminal_cast.py",
+      "source/midterminal_cast.py",
+      "sed -n 455,500p source/midterminal_cast.py",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:people_famous.py",
+      "source/people_famous.py",
+      "^def zip_top\\|^def open_shirt\\|^def zip_back\\|^def crucifix",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "sed -n 1,23p source/people_parts.py; tail -5 source/people_parts.py",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 466,489p source/people.py; sed -n 503,548p source/people.py",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/views.py",
+      "def torso\\b\\|def _torso\\|shoulders",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def sheet",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py",
+      "S=/tmp/claude-0/-home-user-Animation-/caff6f5e-2e4e-56a5-be31-0ef3425985f7/scrat",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:gta_cast.py",
+      "source/gta_cast.py",
+      "python3 - <<'EOF' p='source/gta_cast.py'; s=open(p).read() s=s.replace('\"\"\"One p",
+      ""
+     ],
+     [
+      45,
+      "film",
+      "before show",
+      "story/grand-theft-autism-people.txt",
+      "S=/tmp/claude-0/-home-user-Animation-/caff6f5e-2e4e-56a5-be31-0ef3425985f7/scrat",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def install",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/caff6f5e-2e4e-56a5-be31-0ef3425985f7/scrat",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/people_turned.py",
+      "lashes",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "sed -n 262,300p source/people_parts.py",
+      ""
+     ],
+     [
+      52,
+      "film",
+      "before show",
+      "source/people_parts.py story/grand-theft-autism-people.txt source/gta_cast.py",
+      "FF = \\|FF\\.eyes\\b",
+      ""
+     ],
+     [
+      53,
+      "film",
+      "before show",
+      "source/people_parts.py story/grand-theft-autism-people.txt",
+      "hair_loose\\|fc.get('lashes')",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
