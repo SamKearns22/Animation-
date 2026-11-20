@@ -183,3 +183,20 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: people_turned head_view (PP._lift), CHIN_V; people_parts.headphones_over_neck (views.HEAD_WEAR).
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 18.52% of 15%; forecast 69.1% (2026-11-20)
+
+## Where things stand (20 Nov, chat 11 end, Sonnet; for chat 12)
+- Rules that bite next: 8 (rehearsals before anything else), 89 (judge every clip at full size, every beat), 30 (a note
+  given before is a warning: the first shot 4 faults came back; find why before changing anything).
+- Done: chat 11 drew both rehearsals with the new cast and the neck fix; Sam: shot 2 "amazing" (keep); shot 4 rejected
+  (see the Shot 4 rebuild checklist). Sam has said Y to: rebuild shot 4 from scratch with an open window, add a Vice City
+  backdrop and white cloud streaks to BOTH shots, and give the people real behaviour. Nothing of that is built yet.
+- Next: Opus, high effort (building something new): chat 12. 1) Read the Shot 4 rebuild checklist and the plan table
+  row 4. 2) Improve the clipping check first (body through solid, feet on ground, every frame). 3) Rebuild shot 4 from
+  the original camera keys with the open window, then the backdrop and clouds in both shots, then the people. 4) Check
+  every beat at full size; send ONE clip, shot 4 first; then Sonnet chat for sending if needed.
+- Needs Sam: nothing open; the clip's Y/N (rule 8) after it is sent.
+- Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP; gta_cars.py; viewchecks.layer_faults.
+- Unrouted flags (chat 11, answered): 17:20 was a question about the film itself, not a system change (reworded to say so, Sam said Y); 17:26 was a rule idea (read the screenplay first), withdrawn in the next message, no proposal made.
+- Open rule requests: none (Sam has not said "I want a rule"; reading the screenplay first is a candidate if he does).
+- For Claude: CAM4 and shot4 in gta_rehearse.py; PEOPLE4/_strip_people (standing only); person_cached (neck anchor);
+  original clip references/grand-theft-autism/shot4-original-rehearsal.mp4; original keys at commit 2668817c.

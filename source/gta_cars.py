@@ -7,11 +7,14 @@ MAP
   colours ........... TULIP_*, COP_*, CHROME, GLASS, TYRE, LIGHT (the sun's way)
   SPECS ............. each car's numbers: body stations, greenhouse, wheels, seats (who sits where)
   class Car ......... one car's state at a moment: where, which way, lean, steer, wheel turn, crash (crush, shatter)
+  local_pt/solid_at . a world point back in the car's frame; which solid part of the car it is inside (for
+                      viewchecks.solid_faults: the cabin is air, an OPEN window is a hole, glass is solid)
   _body/_house ...... the two convex solids (lower body, glass house), built in the car's own frame
   _tulip_decals ..... stripes, weathering, grille, round lamps, door seams, handles, chrome, plates, tail lamps
   _cop_decals ....... blue side stripe, POLICE, badge, black grille, swept lamps, VICE CITY POLICE on the boot
   _parts ............ bumpers, mirrors, push bar, light bar: each tied to the body face it sits on (draw order)
   _wheel ............ tyre and rim seen from anywhere; lug nuts turn with the wheel
+  cover_masks ....... what of the car is between the lens and a point (to rub out someone leaning out of it)
   draw_car .......... shadow, then parts behind, body, parts in front, glass with the people inside seen through
   glow / paste_quad . soft light (lamps, light bar); a picture (lettering) laid on a 3D quad
   sheet ............. both cars from every side the film uses, the crashed cruiser, beside the game pictures
@@ -46,6 +49,7 @@ CHROME = (206, 212, 218)
 CHROME_DK = (150, 148, 142)
 GLASS = (58, 74, 84)
 GLASS_HI = (132, 150, 160)
+CABIN = (46, 40, 44)               # the dark cabin seen through a wound-down window
 TYRE = (34, 33, 35)
 STEEL = (78, 78, 80)
 GRILLE = (30, 30, 32)
@@ -112,6 +116,62 @@ class Car:
         o = self.body_pt((0, 0, 0))
         e = self.body_pt(v)
         return (e[0] - o[0], e[1] - o[1], e[2] - o[2])
+
+
+def local_pt(car, w):
+    """A world point in the car's own frame (the inverse of Car.body_pt)."""
+    v = S.rot_y((w[0] - car.pos[0], w[1], w[2] - car.pos[1]), -car.yaw)
+    yc = 0.55
+    r, q = math.radians(car.roll), math.radians(car.pitch)
+    Y, zz = v[1] - car.lift - yc, v[2]
+    a = Y * math.cos(q) - zz * math.sin(q)
+    z = Y * math.sin(q) + zz * math.cos(q)
+    x = v[0] * math.cos(r) + a * math.sin(r)
+    b = -v[0] * math.sin(r) + a * math.cos(r)
+    return (x, b + yc, z)
+
+
+def solid_at(car, w, open_windows=(), wall=0.07):
+    """Which solid part of the car the world point w is inside, or None (outside, or in the cabin's air). The cabin
+    runs between the glass house's base ends above the floor; door walls are `wall` thick; the house's shell is
+    solid except an open side window (open_windows: (side, pane) with side +1 the car's right, pane 1 the front)."""
+    x, y, z = local_pt(car, w)
+    st = _stations(car)
+    h = car.spec['house']
+    (zb0, zb1), (zr0, zr1), (wb, wr), (yb, yr) = h['base'], h['roof'], h['hw'], h['y']
+    who = 'the ' + car.kind
+    if st[0][0] <= z <= st[-1][0] and abs(x) < half_w(car, z) and _interp(st, z, 2) - 0.05 < y < top_y(car, z):
+        cabin = zb0 + 0.06 < z < zb1 - 0.06 and abs(x) < half_w(car, z) - wall and y > 0.27
+        if cabin:
+            return None
+        if y <= 0.27 and zb0 < z < zb1:
+            return who + "'s floor"
+        if abs(x) >= half_w(car, z) - wall and zb0 < z < zb1:
+            return who + "'s door"
+        return who + ("'s bonnet" if z > 0 else "'s boot")
+    v = (y - yb) / (yr - yb)
+    if 0 <= v <= 1:
+        zf, zk = zb1 + (zr1 - zb1) * v, zb0 + (zr0 - zb0) * v
+        hw = wb + (wr - wb) * v
+        if zk <= z <= zf and abs(x) <= hw:
+            sh = 0.05
+            if v > 1 - sh / (yr - yb):
+                return who + "'s roof"
+            if z > zf - sh:
+                return who + "'s windscreen"
+            if z < zk + sh:
+                return who + "'s back screen"
+            if abs(x) > hw - sh:
+                u = (z - zk) / (zf - zk)
+                wins = [(0.20, 0.50), (0.52, 0.94)] if car.kind == 'tulip' else [(0.10, 0.20), (0.23, 0.53), (0.57, 0.95)]
+                side = 1 if x > 0 else -1
+                for k, (u0, u1) in enumerate(wins):
+                    if u0 <= u <= u1 and 0.10 <= v <= 0.90:
+                        if (side, k) in open_windows:
+                            return None
+                        return who + "'s side window (glass)"
+                return who + "'s window pillar"
+    return None
 
 
 def _stations(car):
@@ -375,10 +435,11 @@ def _house_decals(car, kind):
     wins = [(0.20, 0.50), (0.52, 0.94)] if kind == 'tulip' else [(0.10, 0.20), (0.23, 0.53), (0.57, 0.95)]
     for s in (-1, 1):
         n_loc = _outward([P(s, 0, 0), P(s, 1, 0), P(s, 1, 1)], (0, (h['y'][0] + h['y'][1]) / 2, sum(h['base']) / 2))
-        for u0, u1 in wins:
+        for k, (u0, u1) in enumerate(wins):
             pts = [P(s, u0, 0.10), P(s, u1, 0.10), P(s, u1, 0.90), P(s, u0, 0.90)]
             pts = [S._add(p, S._mul(n_loc, EPS)) for p in pts]
             d.append(Decal(pts, n_loc, GLASS, INK, 1.3, 'glass', glow='side'))
+            d[-1].open = (s, k) in getattr(car, 'open_windows', ())     # wound down: a hole onto the dark cabin
         if kind == 'tulip':      # the chrome window surround
             pts = [P(s, 0.18, 0.06), P(s, 0.955, 0.06)]
             d.append(Decal([S._add(p, S._mul(n_loc, EPS * 2)) for p in pts], n_loc, None, CHROME, 2.0, 'line'))
@@ -702,6 +763,9 @@ def _decal_draw(img, cam, p, car, dc, t, lit):
         paste_quad(img, [cam.project(q)[0] for q in (pts[3], pts[2], pts[1], pts[0])], _text_pic(text, col))
         return None
     fill = dc.fill
+    if dc.kind == 'glass' and getattr(dc, 'open', False):
+        cam.poly(p, pts, CABIN, dc.line, dc.lw)
+        return ('glass', pts, n, True)
     if dc.kind == 'glass':
         fill = shade(GLASS, n, 0.5)
     elif dc.kind != 'lamp':
@@ -833,6 +897,69 @@ def draw_car(img, cam, car, t=0.0, inside=seat_people, lit=True):
                     glow(img, (sx, sy), max(14, 0.75 * k), col, 0.85)
 
 
+def cover_masks(car, cam, ref, size):
+    """What of the car stands between the lens and the point `ref` (someone leaning out of it, or sat in it), as two
+    canvas masks: solid (body sides, bonnet, boot, pillars, roof: rub them out there) and glass (closed panes: seen
+    through, a little dimmed). Only faces whose plane cuts the line from the lens to ref count, so a man in front of
+    the door is never rubbed out by it (chat 11's floating chest). The cabin's top is open air; an open window a hole."""
+    solid, pane = Image.new('L', size, 0), Image.new('L', size, 0)
+    sd, gd = ImageDraw.Draw(solid), ImageDraw.Draw(pane)
+    c = np.asarray(cam.pos, float)
+    r = np.asarray(ref, float)
+
+    def between(pts):
+        a, b, d = (np.asarray(q, float) for q in pts[:3])
+        n = np.cross(b - a, d - a)
+        den = float(n @ (r - c))
+        if abs(den) < 1e-9:
+            return False
+        u = float(n @ (a - c)) / den
+        return 0.0 < u < 0.999
+
+    used = []
+
+    def poly(dr, pts, name='the ' + car.kind):
+        used.append((name, pts))
+        q2 = cam.clip(pts)
+        if len(q2) > 2:
+            dr.polygon([(x * B.SS, y * B.SS) for x, y in q2], fill=255)
+    h = car.spec['house']
+    for f in _body(car):
+        if not f.seen(cam):
+            continue
+        if f.tag == 'top':                                   # only the bonnet and boot: the cabin is open
+            loc = [local_pt(car, q) for q in f.pts]
+            z0, z1 = min(q[2] for q in loc), max(q[2] for q in loc)
+            parts = [(max(z0, h['base'][1]), z1), (z0, min(z1, h['base'][0]))]
+            ys = sorted(q[1] for q in loc)[-1]
+            xs = max(abs(q[0]) for q in loc)
+            for a_, b_ in parts:
+                if b_ - a_ > 0.01:
+                    pts = [car.body_pt(q) for q in ((-xs, ys, a_), (xs, ys, a_), (xs, ys, b_), (-xs, ys, b_))]
+                    if between(pts):
+                        poly(sd, pts, "the %s's %s" % (car.kind, 'bonnet' if a_ > 0 else 'boot'))
+            continue
+        if between(f.pts):
+            poly(sd, f.pts, "the %s's %s" % (car.kind, f.tag))
+    wins = [d for d in _house_decals(car, car.kind) if d.kind == 'glass']
+    for f in _house(car):
+        if not f.seen(cam) or not between(f.pts):
+            continue
+        poly(sd, f.pts, "the %s's %s" % (car.kind, f.tag))
+        fn = S._norm(f.n)
+        for d in wins:                                       # this face's windows: cut out of the solid
+            dn = S._norm(car.body_dir(d.n_local))
+            if S._dot(dn, fn) < 0.98:
+                continue
+            w = [car.body_pt(q) for q in d.pts]
+            q2 = cam.clip(w)
+            if len(q2) > 2:
+                sd.polygon([(x * B.SS, y * B.SS) for x, y in q2], fill=0)
+                if not getattr(d, 'open', False):
+                    gd.polygon([(x * B.SS, y * B.SS) for x, y in q2], fill=255)
+    return solid, pane, used
+
+
 def _house_ids(decals):
     return [d for d in decals if getattr(d, 'house', False)]
 
@@ -843,20 +970,28 @@ def _through_glass(img, cam, car, glass, inside):
     if not glass:
         return
     mask = Image.new('L', img.size, 0)
-    md = ImageDraw.Draw(mask)
-    for _, pts, n in glass:
+    omask = Image.new('L', img.size, 0)              # wound-down windows: the people seen plainly, no glass
+    md, od = ImageDraw.Draw(mask), ImageDraw.Draw(omask)
+    for g in glass:
+        pts = g[1]
         if any(cam.depth(q) < cam.NEAR for q in pts):
             continue
-        md.polygon([(x * B.SS, y * B.SS) for x, y in (cam.project(q)[0] for q in pts)], fill=255)
+        poly = [(x * B.SS, y * B.SS) for x, y in (cam.project(q)[0] for q in pts)]
+        (od if len(g) > 3 else md).polygon(poly, fill=255)
     if inside:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         inside(lay, cam, car)
         a = lay.split()[3]
-        a = Image.fromarray((np.asarray(a, np.float32) * np.asarray(mask, np.float32) / 255 * 0.85).astype(np.uint8))
+        k = np.maximum(np.asarray(mask, np.float32) * 0.85, np.asarray(omask, np.float32)) / 255
+        a = Image.fromarray((np.asarray(a, np.float32) * k).astype(np.uint8))
         lay.putalpha(a)
         img.alpha_composite(lay)
     p = S.pen(img)
-    for _, pts, n in glass:            # the sky streak and the pane's edge again on top
+    for g in glass:                    # the sky streak and the pane's edge again on top
+        _, pts, n = g[:3]
+        if len(g) > 3:
+            cam.poly(p, pts, None, INK, 1.4)
+            continue
         if any(cam.depth(q) < cam.NEAR for q in pts):
             continue
         a, b, c, d = pts[0], pts[1], pts[2], pts[3]

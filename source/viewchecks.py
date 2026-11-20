@@ -372,7 +372,10 @@ def layer_faults(shot, length, fps=12, step=2, allowed=(), label=''):
             return [f'LAYERS UNLISTED: {label} lists no things, so nothing in it can be checked (rule 17)']
         alone = []
         front = np.full(full.shape[:2], np.inf)       # the nearest thing covering each pixel, solid or see-through
-        for name, d, fn in rec:
+        for e in rec:
+            name, d, fn = e[:3]
+            if fn is None:                           # a solid or a camera listed for solid_faults: nothing drawn
+                continue
             sheet = Image.new('RGBA', (full.shape[1], full.shape[0]), (0, 0, 0, 0))
             fn(sheet)
             bb = sheet.getchannel('A').point(lambda v: 255 if v > 200 else 0).getbbox()
@@ -410,6 +413,107 @@ def layer_faults(shot, length, fps=12, step=2, allowed=(), label=''):
                 if wrong > max(4e-5 * full.shape[0] * full.shape[1], 0.3 * n):   # a speck of matching paint is not a fault
                     seen.add((na, nb))
                     out.append(f'LAYERS: {label} {t:.2f} s: {nb} (farther) is drawn over {na} (nearer), {wrong} px')
+    return out
+
+
+def _in_poly(x, y, poly):
+    inside = False
+    for (x0, y0), (x1, y1) in zip(poly, poly[1:] + poly[:1]):
+        if (y0 > y) != (y1 > y) and x < x0 + (y - y0) * (x1 - x0) / (y1 - y0):
+            inside = not inside
+    return inside
+
+
+def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
+    """Rule 17's other half: what layer_faults cannot see (Grand Theft Autism shot 4, chat 11: a body drawn through a
+    car door, a chest floating over an erased waist, people sunk into the pavement, all passed twice by layer_faults).
+    Every person, every frame. The shot lists, as a 4th item of a record entry, an info dict:
+      solid ......... fn(world point) -> the solid's name or None (a car's panels, a shop wall, the ground): listed
+                      on an entry whose draw is None
+      cam ........... the frame's camera (one entry is enough)
+      pts3 .......... [(part, world point)] a person's body (hips, knees, feet, shoulders, elbows, hands, gun)
+      may_touch ..... names of solids this person may be inside (their own seat's car cabin is not a solid anyway)
+      erase ......... [(name, world polygon[, parts])] faces the shot rubs this person out behind: every body point inside a
+                      face's picture must be BEHIND that face (else a waist rubbed out in front of a door)
+      ground_px ..... (X, Y) canvas pixels of the ground point under the feet; height_px, the standing height in
+                      canvas pixels (None when crouched): drawn alone, the lowest painted row near the feet must be
+                      within 3% of their height of Y (sunk or floating) and a standing person at least 85% as tall
+    Faults are grouped per person and kind: first time, how many frames."""
+    found = {}
+
+    def note(who, kind, t, text):
+        k = (who, kind)
+        if k not in found:
+            found[k] = [t, 0, text]
+        found[k][1] += 1
+    idx = frames if frames is not None else range(0, int(round(length * fps)), step)
+    for i in idx:
+        t = i / fps
+        rec = []
+        full = shot(t, record=rec)
+        W, H = full.size
+        infos = [(e[0], e[2], e[3]) for e in rec if len(e) > 3 and e[3]]
+        solids = [(n, inf['solid']) for n, _, inf in infos if 'solid' in inf]
+        cam = next((inf['cam'] for _, _, inf in infos if 'cam' in inf), None)
+        for who, fn, inf in infos:
+            for part, q in inf.get('pts3', []):
+                for sn, test in solids:
+                    hit = test(q)
+                    if hit and hit not in inf.get('may_touch', ()) and sn not in inf.get('may_touch', ()):
+                        note(who, 'solid ' + hit, t, f'{who}: {part} is inside {hit} (a body through a solid)')
+                        break
+            if cam is not None and inf.get('erase'):
+                for er in inf['erase']:
+                    fname, poly = er[:2]
+                    only = er[2] if len(er) > 2 else None   # the body parts this face rubs out (a split drawing)
+                    pp = cam.clip(poly) if hasattr(cam, 'clip') else [cam.project(q)[0] for q in poly]
+                    if len(pp) < 3:
+                        continue
+                    a, b, c = (np.asarray(poly[k], float) for k in range(3))
+                    nrm = np.cross(b - a, c - a)
+                    cp = np.asarray(cam.pos, float)
+                    for part, q in inf.get('pts3', []):
+                        if cam.depth(q) < 0.05 or (only is not None and part not in only):
+                            continue
+                        (X, Y), _ = cam.project(q)
+                        if not _in_poly(X, Y, pp):
+                            continue
+                        den = float(nrm @ (np.asarray(q, float) - cp))
+                        if abs(den) < 1e-9:
+                            continue
+                        u = float(nrm @ (a - cp)) / den        # where the face cuts the ray: 1 = at the point
+                        if u > 1.02:
+                            note(who, 'erase ' + fname, t, f'{who}: {part} is rubbed out by {fname} but is in front of it')
+                            break
+            if inf.get('ground_px') and fn is not None:
+                gx, gy = inf['ground_px']
+                sc = W / 1080.0                          # ground_px is in 1080 x 1920 pixels
+                gx, gy = gx * sc, gy * sc
+                if not (0 <= gx < W and 0 <= gy < H):
+                    continue
+                sheet = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+                fn(sheet)
+                al = np.asarray(sheet.getchannel('A')) > 128
+                hp = (inf.get('height_px') or 0) * sc
+                band = max(6, int(0.18 * (hp or 200 * sc)))
+                x0, x1 = max(0, int(gx - band)), min(W, int(gx + band))
+                rows = np.nonzero(al[:, x0:x1].any(1))[0]
+                if not len(rows):
+                    continue
+                low, top = rows.max(), np.nonzero(al.any(1))[0].min()
+                tall = low - top
+                lim = max(2.5 * sc, 0.03 * (hp or tall))   # 2.5 px of 1920 is a speck
+                if low >= H - 2:
+                    continue                             # the feet are below the frame
+                if low > gy + lim:
+                    note(who, 'sunk', t, f'{who}: feet {(low - gy) / sc:.0f} px below the ground (sunk into it)')
+                elif low < gy - lim and not inf.get('airborne'):
+                    note(who, 'floating', t, f'{who}: feet {(gy - low) / sc:.0f} px above the ground (floating)')
+                if hp and top > 1 and tall < 0.85 * hp:
+                    note(who, 'small', t, f'{who}: drawn {tall / sc:.0f} px tall where the camera makes them {hp / sc:.0f}')
+    out = []
+    for (who, kind), (t0, n, text) in sorted(found.items(), key=lambda e: e[1][0]):
+        out.append(f'BODY: {label} {t0:.2f} s: {text} ({n} frame{"s" if n > 1 else ""})')
     return out
 
 
