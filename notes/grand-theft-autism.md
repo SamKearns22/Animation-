@@ -3,6 +3,11 @@
 ## Brief checklist (Sam's words)
 - [x] Title "Grand Theft Autism"; opening = a send-up of the game-trailer logo reveal (Sam's screen recording, 3.4 s).
 - [x] Opening approved (19 Nov, v4: "It's great"): logo wipes in, grows, city fades in, logo washes pale and dissolves.
+- [ ] Sam (20 Nov): "extend the opening shot ... by six seconds (a more gentle wipe in of the logo, hold on it as we see
+      the city scape) and put the chorus of the above song over it" (his upload, "Monde de Mer"). Done in the opener:
+      9.5 s (wipe 0.6-2.6 s with a soft edge, city in 2.4-4.0, logo held over the city to 7.4, gone by 8.45); chorus
+      cut from 36.38 s of the song (music/gta-opener-chorus.mp3), first hit on the wipe's start. Clip sent; waiting.
+      Every later shot moves 6 s later (plan table times are the old ones until the board is made).
 - [x] Lettering matched to the reference (g's tail, R joined into the h of "theft"). Sam: "great".
 - [ ] Screenplay draft 1 received (19 Nov). NOT final: no estimate until Sam confirms it.
 - [ ] Sam's answers (19 Nov): 1 Y, the opening's pink sunset light for the whole chase; 2 Y, subtitle "brought";
