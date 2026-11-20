@@ -209,7 +209,75 @@ verbatim first; analysis (frame, cause, fix, the check that should have caught i
 - Note 12: "Not only is the cop sat there in the crashed car like a placid marionette, he isn't the same cop from a few frames before"
 - Note 13: "There is a fire hydrant water effect -- we do not see it get hit by the car"
 
+**Frames 6a, 6b** (Sam's stills, `sam-frame-06a/b.jpg`: after the crash, then the climb back in)
+- Note 14: "The eternally bald crowd doesn't notice the explosion or react to it."
+- Note 15: "we then begin the horror show in reverse."
+- Note 16: "At no point do our cast display any acting notes."
+- Sam: "I'm done now." (the hold ends; analysis below)
+
+### Analysis of notes 1-16 (chat 16, 20 Nov; CONFIRMED = tested in code or a test drawing, LIKELY = read from the code, not yet tested)
+
+The 16 notes fall into five causes. Each line: note numbers, the cause, the check that should have caught it.
+
+**A. Jason is a flat paper figure asked to do a 3D climb (notes 2, 3, 4, 6, 7, 8, 11, 15). CONFIRMED from the code.**
+Jason is the kit's standing figure (a front or back drawing at one turn angle), placed by his neck, his arms bent by a
+2D arm solver toward hand targets worked out in 3D, his legs aimed at foot points in the car, and his lower half
+"hidden" afterwards by rubbing out whatever of the car lies in front of three sample points (neck, shins, feet). So:
+- Lower body / knees through the bonnet, side through the door, 2D legs in the door frame (2, 3, 4, 11): the hiding is
+  a cut-out mask from three points, not real depth for every part of him; where the masks miss, the flat legs show.
+- The sausage arm off the shoulder, limbs and neck curled round each other, arms out of his back holding the gun
+  (3, 6, 7, 15): when he turns past side-on (to 160 degrees, chat 15's fix for note "arm hidden"), the figure is drawn
+  from behind, but the arm targets and the order the arms are drawn in were set for a front view; the 2D solver bends
+  limbs to reach points it cannot reach. Chat 15's turn to 160 fixed one picture and broke the climb either side.
+- The gun firing to the left (8), LIKELY: the gun's direction is turned into the figure's own frame and leaned; seen
+  from behind the frame is mirrored, so the barrel points away from the cruiser.
+- Why nothing caught it: the body check tests about 15 single points (joints) against solids. It never asks "is this
+  a human body": arm joined to its shoulder, limbs a human length, arms on the right side of the torso from behind,
+  nothing tangled. The fresh-eye critique (rule 89), the one check that looks at the picture as a viewer would, was NOT
+  run on version 4 (chats 12-15 judged by eye and by the two point checks only).
+
+**B. Every passer-by and police driver drawn bald (notes 5, 10, 14). CONFIRMED by a test drawing.** The people file asks
+for a varied crowd and the kit gives each member a varied face and hair (140 walkers: crop 28, long 23, curly 23, bob 20,
+side 13, pony 11, bun 11, receding 8, bald 3). But the kit marks a crowd member's BODY bald so that its own head can draw
+the hair, and that head is switched on only for the three named cast. This film makes crowd members on the fly and never
+switches it on, so the engine's stand-in head draws: a bald man with a fringe, for everyone, women included (test: a
+"pony" woman drawn as a bald man). Rule 30, why the ERG fix did not hold: the fix (varied crowds, the 10% bald limit and
+the sameness check) lives in the kit and in a film's pre-flight; this practice file bypasses both. Note 5: the kit's city
+mixes are Paris, Barcelona, Frankfurt, Tirana, London; there is NO Miami mix, so the file used "mixed" (light skin 55%).
+Nothing checks that a crowd in a new city has a mix for it.
+
+**C. Events written in the screenplay but not built or not on camera (notes 9, 12, 13, 14). LIKELY from the code.**
+- The cop is never hit (9): the build has the windscreen crazing and a flinch, no wound, no blood mist, no slump. Sam's
+  Q7 ("not softened") was in the brief; no beat-list line carried it into shot 4.
+- A different cop after the crash (12): the lead cop is drawn from a cached drawing while far and redrawn fresh when near;
+  the two paths do not draw the same person (the fresh path also misses the kit head, cause B). After the crash he only
+  sways ("a placid marionette").
+- The hydrant (13): the jet starts on a timer; the camera is not on the hydrant when the car reaches it.
+- The crowd and the explosion (14): only people within 38 m get a pose; the reaction is a stop and a head turn, too small
+  to read, and far people are one cached standing drawing.
+
+**D. Acting never planned for this shot (notes 1, 16).** The acting list only has rows for spoken lines; shot 4 has none,
+so Jason's face is one fixed mood ("stern") throughout, Lucia's face and the woman's never change. Lucia's hands (1):
+both hands are pinned to points on the rim and turn with the wheel, so they cross over; no pose rule says how people
+drive (hand over hand, or shuffle).
+
+**E. The judging (all notes).** Version 4 went out with the point checks clean and an eye judgement at full size, but no
+fresh-eye critique, no pose sheet of Jason through the climb, and no beat-by-beat tick against the screenplay with a
+picture for each beat. The same failure as version 3 (rule 30): "checks clean" again taken as "good".
+
 ## 8. Lessons for future films (draft; nothing here is a rule until Sam says so)
+
+Added after Sam's notes 1-16 (chat 16):
+10. A body that has to climb, turn round or touch a 3D thing (a car, a door) cannot be a flat figure with masks: it needs
+    real depth for every part, or key poses drawn and approved on a pose sheet before the shot is built.
+11. A check that tests points is not a check that the body is human. Something must look at each person, every frame,
+    as a body: limbs joined, human lengths, arms on the right side, nothing tangled.
+12. A fix for one frame is judged across the whole move (the 160-degree turn fixed one picture, broke the climb).
+13. Every crowd member is drawn through the same path as the cast; every new city gets its own skin and look mix.
+14. Every event the screenplay names (a hit, a crash into a hydrant, an explosion) is on camera, and everyone who would
+    see it reacts visibly.
+15. Silent shots get acting rows too: faces and bodies for each beat, not only for spoken lines.
+16. The fresh-eye critique runs on every clip before it is sent, without exception.
 
 1. Judge a clip at full size, beat by beat, against the screenplay's words, before sending. A thin strip of small
    frames hides everything that matters.
