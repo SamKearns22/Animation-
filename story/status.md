@@ -1,3 +1,3 @@
-Grand Theft Autism: shot 3 built, flows into shot 4; Sam said Y to a 10 cm taller roof.
-Sam: keep going until the whole film's shot sheet can be rendered.
-Next: chat 14 (Opus, high): roof, Jason's climb-out, checks, clip of shots 3-4, then shots 5-8.
+Grand Theft Autism: heads clear the roof; shot 4 camera keeps Jason in frame; crash and crowd fixed.
+Shots 3-4 clip held back: farther things drawn over nearer ones in shot 4 (draw order).
+Next: chat 15 (Opus, medium): fix draw order, send the shots 3-4 clip; then shots 5-8 and the whole-film sheet.

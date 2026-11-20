@@ -347,20 +347,21 @@ into the seated pose (last frame matches the first).
 Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
 
 ## Where things stand (20 Nov, chat 14 end, Opus; for chat 15)
-- Rules that bite next: 89 (every new shot judged at full size before Sam sees it), 74 (moves checked against the
-  acting list before the sheet), 30 (heads under the roof rail: fixed by roof +14 cm and a 6 cm lower seat; keep it).
-- Done: heads clear the rail (shot 3); faces behind glass were see-through (glass now a tint on top); pistol reads in
-  his fist over the dash; shot 4 camera re-aimed (Jason sat OUTSIDE the frame 1.7-4.5 s), the hiding test fixed (roof
-  rubbed out his arm; door now hides his legs); crowd turns or runs at the crash; fatter hydrant jet; shot 2 clouds.
-  Clip of shots 3-4 sent (CLIPLINE).
-- Next: Opus, high (new builds): shots 5-8 from the plan table (5: Lucia yanks the wheel, all lean, street swings; 6:
-  closer two-shot, lines 4-5; 7: held three-shot, cruiser lights grow; 8: line 6), each as a `shot5..8` in
-  gta_rehearse on shot3_cam; then ONE whole-film shot sheet (shots 1-8, a frame per beat). Sam's "just go" ended 19:30.
-- Needs Sam: his Y/N on the shots 3-4 clip (rule 8) before any final; the sheet is his ask, no Y needed for it.
-- Read: guides/job-packs.md Build; plan table rows 5-8; acting list; Shot 4 rebuild checklist's open items.
+- Rules that bite next: 17 (layers: shot 4 has farther-over-nearer faults since the camera re-aim, list in
+  notes/checks/gta-chat14-layers.txt), 89 (full size before sending), 8 (ONE clip of shots 3-4, then Sam's Y/N).
+- Done: heads clear the rail (roof +14 cm, cast 6 cm lower); faces behind glass solid (tint on top); pistol reads over
+  the dash; shot 4 camera re-aimed (Jason was outside the frame 1.7-4.5 s); hiding test needs the sight line inside the
+  face (roof no longer cuts his arm; shins+feet keep his legs behind the door; seated glass judged from his neck, else
+  he vanished); crowd turns or runs at the crash; fatter hydrant jet; shot 2 upper clouds. Clip NOT sent: layers fail.
+- Next: Opus, medium (fixing from a clear list): fix shot 4's draw order (layers shot2 shot4: cruiser 2/3 over the
+  lead, people/palms over the Tulip at 0.83-1.17 and 5.0-5.7 s, cruiser 2 over the Tulip at 5.5 s, 28,647 px); body
+  check (notes/checks/gta-chat14-bodies.txt): Jason's left wrist in the floor while seated (hand on thigh), left elbow
+  in the roof 1.17 s and door 5.5 s; name the rest (crouchers read short; 3-8 px feet, 1-2 frames). Re-run both, look
+  at full size, render `shot34` (scratchpad pclip with 3 workers: 7 min), send it; then shots 5-8 (Opus, high).
+- Needs Sam: Y/N on the shots 3-4 clip once sent (rule 8). His "just go" ran to 19:30 (ended).
+- Read: guides/job-packs.md Build; Shot 4 rebuild checklist; plan rows 3-8.
 - Open rule requests: none.
-- For Claude: gta_cars.cover_masks between() now needs the sight line inside the face (5 cm slack);
-  glass_tint(); jason_layer tests shins+feet for the lower mask; CAM4 keys 1.70-4.55 solved by projecting his head
-  (scratchpad solver not kept: re-solve with cam.project if keys move); crowd sees_fire (60 m).
+- For Claude: gta_cars.cover_masks between() (inside-face test, 5 cm slack), glass_tint(); jason_layer lower mask
+  = shins+feet, upper = n0; CAM4 1.70-4.55 solved by projecting his head; crowd sees_fire; world4 sorts items by depth.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 21.01% of 15%; forecast 71.5% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 24.73% of 15%; forecast 75.3% (2026-11-20)

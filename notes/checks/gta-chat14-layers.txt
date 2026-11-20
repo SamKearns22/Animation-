@@ -1,0 +1,21 @@
+LAYERS: shot4 0.67 s: cruiser 2 (farther) is drawn over lead cruiser (nearer), 4612 px
+LAYERS: shot4 0.67 s: cruiser 3 (farther) is drawn over lead cruiser (nearer), 2547 px
+LAYERS: shot4 0.83 s: person 37 (farther) is drawn over tulip and jason (nearer), 836 px
+LAYERS: shot4 0.83 s: person 38 (farther) is drawn over tulip and jason (nearer), 835 px
+LAYERS: shot4 1.17 s: palm 13 (farther) is drawn over tulip and jason (nearer), 720 px
+LAYERS: shot4 3.50 s: palm 15 (farther) is drawn over lead cruiser (nearer), 389 px
+LAYERS: shot4 3.67 s: person 125 (farther) is drawn over lead cruiser (nearer), 462 px
+LAYERS: shot4 3.67 s: cruiser 3 (farther) is drawn over cruiser 2 (nearer), 1160 px
+LAYERS: shot4 3.83 s: person 128 (farther) is drawn over lead cruiser (nearer), 1294 px
+LAYERS: shot4 5.00 s: person 123 (farther) is drawn over lead cruiser (nearer), 411 px
+LAYERS: shot4 5.00 s: person 51 (farther) is drawn over tulip and jason (nearer), 1176 px
+LAYERS: shot4 5.00 s: person 53 (farther) is drawn over tulip and jason (nearer), 816 px
+LAYERS: shot4 5.00 s: palm 16 (farther) is drawn over tulip and jason (nearer), 434 px
+LAYERS: shot4 5.33 s: person 126 (farther) is drawn over lead cruiser (nearer), 394 px
+LAYERS: shot4 5.33 s: person 46 (farther) is drawn over cruiser 2 (nearer), 344 px
+LAYERS: shot4 5.33 s: person 49 (farther) is drawn over cruiser 2 (nearer), 726 px
+LAYERS: shot4 5.33 s: person 50 (farther) is drawn over cruiser 2 (nearer), 682 px
+LAYERS: shot4 5.50 s: person 45 (farther) is drawn over cruiser 2 (nearer), 613 px
+LAYERS: shot4 5.50 s: cruiser 2 (farther) is drawn over tulip and jason (nearer), 28647 px
+LAYERS: shot4 5.67 s: person 47 (farther) is drawn over cruiser 2 (nearer), 504 px
+LAYERS: shot4 5.83 s: person 134 (farther) is drawn over tulip and jason (nearer), 1663 px
