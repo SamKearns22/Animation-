@@ -346,22 +346,21 @@ scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back 
 into the seated pose (last frame matches the first).
 Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
 
-## Where things stand (20 Nov, chat 14 end, Opus; for chat 15)
-- Rules that bite next: 17 (layers: shot 4 has farther-over-nearer faults since the camera re-aim, list in
-  notes/checks/gta-chat14-layers.txt), 89 (full size before sending), 8 (ONE clip of shots 3-4, then Sam's Y/N).
-- Done: heads clear the rail (roof +14 cm, cast 6 cm lower); faces behind glass solid (tint on top); pistol reads over
-  the dash; shot 4 camera re-aimed (Jason was outside the frame 1.7-4.5 s); hiding test needs the sight line inside the
-  face (roof no longer cuts his arm; shins+feet keep his legs behind the door; seated glass judged from his neck, else
-  he vanished); crowd turns or runs at the crash; fatter hydrant jet; shot 2 upper clouds. Clip NOT sent: layers fail.
-- Next: Opus, medium (fixing from a clear list): fix shot 4's draw order (layers shot2 shot4: cruiser 2/3 over the
-  lead, people/palms over the Tulip at 0.83-1.17 and 5.0-5.7 s, cruiser 2 over the Tulip at 5.5 s, 28,647 px); body
-  check (notes/checks/gta-chat14-bodies.txt): Jason's left wrist in the floor while seated (hand on thigh), left elbow
-  in the roof 1.17 s and door 5.5 s; name the rest (crouchers read short; 3-8 px feet, 1-2 frames). Re-run both, look
-  at full size, render `shot34` (scratchpad pclip with 3 workers: 7 min), send it; then shots 5-8 (Opus, high).
-- Needs Sam: Y/N on the shots 3-4 clip once sent (rule 8). His "just go" ran to 19:30 (ended).
-- Read: guides/job-packs.md Build; Shot 4 rebuild checklist; plan rows 3-8.
+## Where things stand (20 Nov, chat 15 end, Opus; for chat 16)
+- Rules that bite next: 8 (shots 3-4 clip sent: wait for Sam's Y/N before any final; build on meanwhile), 17 (layers
+  and bodies on every new shot), 30 (Jason's arm/gun from behind was a repeat: now turned 160 on the sill).
+- Done: draw order clean in shots 2 and 4 (every fault was a car seen through another car's glass: the check's lone
+  sheet painted the glass opaque); Jason's seated left hand on his thigh; on the sill turned 160 so gun arm, gun and
+  flash read past his shoulder; his legs hidden behind the car side (they drew under it); walkers' feet stay down
+  through the bob. Small ones named in notes/checks/gta-chat15-bodies.txt. Clip of shots 3-4 sent to Sam.
+- Next: Opus, high (a new build): shots 5-8 (plan rows 5-8: shot 3's camera, the wheel yank to a new road, lines
+  3-6, the closer two-shot, the held pause with lights in the back window), each checked (layers, bodies) and looked
+  at full size; then the whole-film shot sheet (shots 1-8), Sam's standing order.
+- Needs Sam: Y/N on the shots 3-4 clip (rule 8).
+- Read: guides/job-packs.md Build; plan rows 5-8; brief lines 3-6.
 - Open rule requests: none.
-- For Claude: gta_cars.cover_masks between() (inside-face test, 5 cm slack), glass_tint(); jason_layer lower mask
-  = shins+feet, upper = n0; CAM4 1.70-4.55 solved by projecting his head; crowd sees_fire; world4 sorts items by depth.
+- For Claude: gta_cars._through_glass keeps bg alpha (min 72) so lone sheets show glass as a veil; J4_KEYS 1.70/4.30
+  face 160; jason_layer side quad (x 0.98, z -2.6..1.0) erases rows below the hips once out > 0.9; crowd() lifts feet
+  by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 24.73% of 15%; forecast 75.3% (2026-11-20)

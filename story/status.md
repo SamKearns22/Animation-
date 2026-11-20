@@ -1,3 +1,3 @@
-Grand Theft Autism: heads clear the roof; shot 4 camera keeps Jason in frame; crash and crowd fixed.
-Shots 3-4 clip held back: farther things drawn over nearer ones in shot 4 (draw order).
-Next: chat 15 (Opus, medium): fix draw order, send the shots 3-4 clip; then shots 5-8 and the whole-film sheet.
+Grand Theft Autism: shots 3-4 clip sent to Sam (draw order clean; Jason's gun arm now reads from behind; legs hidden).
+Waiting on Sam's Y/N for that clip before any finals; building on meanwhile.
+Next: chat 16 (Opus, high): build shots 5-8, then the whole-film shot sheet (shots 1-8).

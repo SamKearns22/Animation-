@@ -241,3 +241,22 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: world4/shot3/shot3_cam/CAM3/seated/tulip_inside/crowd/wheel3 in gta_rehearse; gta_cars._through_glass
   far-glass paste (car._bg); `still3`, `shot34` commands. Shot 2 untouched (it never loaded the cast: drew right).
 
+
+## Where things stand (20 Nov, chat 14 end, Opus; for chat 15)
+- Rules that bite next: 17 (layers: shot 4 has farther-over-nearer faults since the camera re-aim, list in
+  notes/checks/gta-chat14-layers.txt), 89 (full size before sending), 8 (ONE clip of shots 3-4, then Sam's Y/N).
+- Done: heads clear the rail (roof +14 cm, cast 6 cm lower); faces behind glass solid (tint on top); pistol reads over
+  the dash; shot 4 camera re-aimed (Jason was outside the frame 1.7-4.5 s); hiding test needs the sight line inside the
+  face (roof no longer cuts his arm; shins+feet keep his legs behind the door; seated glass judged from his neck, else
+  he vanished); crowd turns or runs at the crash; fatter hydrant jet; shot 2 upper clouds. Clip NOT sent: layers fail.
+- Next: Opus, medium (fixing from a clear list): fix shot 4's draw order (layers shot2 shot4: cruiser 2/3 over the
+  lead, people/palms over the Tulip at 0.83-1.17 and 5.0-5.7 s, cruiser 2 over the Tulip at 5.5 s, 28,647 px); body
+  check (notes/checks/gta-chat14-bodies.txt): Jason's left wrist in the floor while seated (hand on thigh), left elbow
+  in the roof 1.17 s and door 5.5 s; name the rest (crouchers read short; 3-8 px feet, 1-2 frames). Re-run both, look
+  at full size, render `shot34` (scratchpad pclip with 3 workers: 7 min), send it; then shots 5-8 (Opus, high).
+- Needs Sam: Y/N on the shots 3-4 clip once sent (rule 8). His "just go" ran to 19:30 (ended).
+- Read: guides/job-packs.md Build; Shot 4 rebuild checklist; plan rows 3-8.
+- Open rule requests: none.
+- For Claude: gta_cars.cover_masks between() (inside-face test, 5 cm slack), glass_tint(); jason_layer lower mask
+  = shins+feet, upper = n0; CAM4 1.70-4.55 solved by projecting his head; crowd sees_fire; world4 sorts items by depth.
+
