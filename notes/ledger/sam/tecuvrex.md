@@ -25,3 +25,6 @@ The cast sheet you have provided has broken many of our rules on body shape and 
 
 I will find references for Lucia and Jason
 
+### 2026-11-20T08:02:39
+Before any more work on the film is done, diagnose the root cause of this mistake as it's new and serious
+
