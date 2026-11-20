@@ -42,3 +42,13 @@ Please do not analyse the following frames until all my notes are in.
 13. There is a fire hydrant water effect -- we do not see it get hit by the car
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-20T21:56:28
+14. The eternally bald crowd doesn't notice the explosion or react to it. 
+
+15. we then begin the horror show in reverse. 
+
+16. At no point do our cast display any acting notes.
+
+I'm done now.
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
