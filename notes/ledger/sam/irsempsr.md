@@ -13,3 +13,6 @@ No. Because you're starting the camera in the wrong place. Scene 3 flows into sc
 ### 2026-11-20T18:21:40
 The camera is at the bonnet. It needs to be where the windshield is. Looking at the seated occupants. Basically the very front of the inside of the car, looking back. As I said in screenplay, look at Musk shot in Halo No-No
 
+### 2026-11-20T18:23:20
+Actually, never mind. Continue as you are. And for the record I meant the musk/Cortana shot, where you see the entirety of the inside of the roadster. What would you call that shot? The tip of the character's heads are being cropped by the car's windscreen.
+
