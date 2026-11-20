@@ -15,3 +15,6 @@ Shot 4...I mean, I am surprised you delivered it to me. Why did you deliver it t
 ### 2026-11-20T17:20:18
 What are the elements you would need to consider with the camera, actors, props and perspective in this shot. Read the screenplay and walk me through it, moment by moment.
 
+### 2026-11-20T17:26:17
+That was a very good summary. Do you think it helps to read the screenplay before working on a scene?
+
