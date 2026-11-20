@@ -6,7 +6,7 @@
 - [ ] Sam (20 Nov): "extend the opening shot ... (a more gentle wipe in of the logo, hold on it as we see the city
       scape) and put the chorus of the above song over it"; corrected twice, final: "6.5 seconds" in all. Done in the
       opener: wipe 0.5-2.0 s with a soft edge, city in 1.8-3.0, logo held over the city to 4.7, gone by 5.65; chorus
-      cut from 36.48 s of his song "Monde de Mer" (music/gta-opener-chorus.mp3), first hit on the wipe's start.
+      cut from 36.48 s of his song "Monde de Mer" (music/gta-opener-chorus.mp3), first hit on the wipe's start; no fade out (Sam).
       Clip sent; waiting. Every later shot moves 3 s later (plan table times are the old ones until the board).
 - [x] Lettering matched to the reference (g's tail, R joined into the h of "theft"). Sam: "great".
 - [ ] Screenplay draft 1 received (19 Nov). NOT final: no estimate until Sam confirms it.
