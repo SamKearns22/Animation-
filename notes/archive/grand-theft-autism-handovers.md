@@ -319,4 +319,22 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   shared with hats and crowd). Critique pack gta-shot4-learn r1-p1 is a learn run, not a film stage.
 - Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
   freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
+## Where things stand (20 Nov, chat 15 end, Opus; for chat 16)
+- Rules that bite next: 8 (shots 3-4 clip sent: wait for Sam's Y/N before any final; build on meanwhile), 17 (layers
+  and bodies on every new shot), 30 (Jason's arm/gun from behind was a repeat: now turned 160 on the sill).
+- Done: draw order clean in shots 2 and 4 (every fault was a car seen through another car's glass: the check's lone
+  sheet painted the glass opaque); Jason's seated left hand on his thigh; on the sill turned 160 so gun arm, gun and
+  flash read past his shoulder; his legs hidden behind the car side (they drew under it); walkers' feet stay down
+  through the bob. Small ones named in notes/checks/gta-chat15-bodies.txt. Clip of shots 3-4 sent to Sam.
+- Next: Opus, high (a new build): shots 5-8 (plan rows 5-8: shot 3's camera, the wheel yank to a new road, lines
+  3-6, the closer two-shot, the held pause with lights in the back window), each checked (layers, bodies) and looked
+  at full size; then the whole-film shot sheet (shots 1-8), Sam's standing order.
+- Needs Sam: Y/N on the shots 3-4 clip (rule 8).
+- Read: guides/job-packs.md Build; plan rows 5-8; brief lines 3-6.
+- Open rule requests: none.
+- Branches named, not merged (frozen snapshots of other films, not this film's work): freeze/halo-no-no,
+  freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers, freeze/blessed.
+- For Claude: gta_cars._through_glass keeps bg alpha (min 72) so lone sheets show glass as a veil; J4_KEYS 1.70/4.30
+  face 160; jason_layer side quad (x 0.98, z -2.6..1.0) erases rows below the hips once out > 0.9; crowd() lifts feet
+  by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
 

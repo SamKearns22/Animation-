@@ -393,25 +393,6 @@ Built in source/gta_shots58.py on shot 4's world; the whole film's clock in sour
   the wheel's rim across her mouth as she speaks (wheel 8 cm lower in shots 5-8 only); Jason's gestures below the
   dash; the first street's smoke, palms and people painted over the new road's shops (hidden round the corner now).
 
-## Where things stand (20 Nov, chat 15 end, Opus; for chat 16)
-- Rules that bite next: 8 (shots 3-4 clip sent: wait for Sam's Y/N before any final; build on meanwhile), 17 (layers
-  and bodies on every new shot), 30 (Jason's arm/gun from behind was a repeat: now turned 160 on the sill).
-- Done: draw order clean in shots 2 and 4 (every fault was a car seen through another car's glass: the check's lone
-  sheet painted the glass opaque); Jason's seated left hand on his thigh; on the sill turned 160 so gun arm, gun and
-  flash read past his shoulder; his legs hidden behind the car side (they drew under it); walkers' feet stay down
-  through the bob. Small ones named in notes/checks/gta-chat15-bodies.txt. Clip of shots 3-4 sent to Sam.
-- Next: Opus, high (a new build): shots 5-8 (plan rows 5-8: shot 3's camera, the wheel yank to a new road, lines
-  3-6, the closer two-shot, the held pause with lights in the back window), each checked (layers, bodies) and looked
-  at full size; then the whole-film shot sheet (shots 1-8), Sam's standing order.
-- Needs Sam: Y/N on the shots 3-4 clip (rule 8).
-- Read: guides/job-packs.md Build; plan rows 5-8; brief lines 3-6.
-- Open rule requests: none.
-- Branches named, not merged (frozen snapshots of other films, not this film's work): freeze/halo-no-no,
-  freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers, freeze/blessed.
-- For Claude: gta_cars._through_glass keeps bg alpha (min 72) so lone sheets show glass as a veil; J4_KEYS 1.70/4.30
-  face 160; jason_layer side quad (x 0.98, z -2.6..1.0) erases rows below the hips once out > 0.9; crowd() lifts feet
-  by bob; scratchpad pclip.py (4 workers, ~6 min for shot34) is not in the repo: world4(t - SHOT3_LEN, cam) per frame.
-
 ## Shot 4 acting rows (rule 74, every person, beat by beat; my picks, in the build proposal to Sam)
 Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging out with him; B4 shots at 1.95, 2.30,
 2.62, 2.92; B5 3.0-4.55 the slew, hydrant, fireball; B6 4.55-6.2 back in to shot 3's frame.
@@ -490,6 +471,10 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   (frame_begin/end per drawing, faults in a .body.txt beside each cached frame) and finish.py (copy_record);
   (5) Change 2: lean-out key poses on the skeleton (lying_flat + grips for the gun), five-view pose sheet, critique;
   (6) rebuild shot 4 from the build proposal and acting rows.
+- Chat 16 (shots 5-8, its own file source/gta_shots58.py; section "Shots 5-8"): built, layers clean, bodies only 5 far
+  walkers' feet 4-7 px down for 1-3 frames (notes/checks/gta-chat16-bodies.txt: shared walker code in gta_rehearse.py,
+  for the shot 4 rebuild); Lucia's hands feed the wheel there (never crossed). Whole-film shot sheet (shots 1-8, 36 s,
+  source/gta_film.py) sent to Sam ~23:10: his standing order done. Chat 19 (Sonnet) renders a clip of shots 5-8.
 - Needs Sam: nothing until the shot 4 pose sheet (with the build) or the clip.
 - Read: guides/job-packs.md Build; notes/proposals/big-body-moves.md Final version and learn.md; source/humancheck.py
   MAP; this file's shot 4 sections.
@@ -502,4 +487,4 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - Quick check on gta_rehearse (no SHOT_MARKS): it is the rehearsal file, not the film's module; the front-on check
   runs on the film file once the moves stage builds it (answered chat 17).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 30.21% of 15%; forecast 80.7% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 32.69% of 15%; forecast 83.2% (2026-11-20)
