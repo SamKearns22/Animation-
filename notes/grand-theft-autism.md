@@ -286,7 +286,8 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 - [x] Sam: "Shot 2 looks amazing." (keep the swerve as it is)
 - [ ] Sam: "Our scenery needs an appropriately vice city background, as currently the street ends in blank void." Both
       shots 2 and 4: a Vice City backdrop at the end of every street (sunset skyline, palms, towers, sea glow).
-- [ ] Sam: "I think some white cloud streaks would be good too." (in the sky of both shots)
+- [x] Sam: "I think some white cloud streaks would be good too." (in the sky of both shots) (chat 14: four more
+      streaks in shot 2's upper sky, judged full size)
 - [ ] Sam on shot 4 (chat 11 version, sent too early): "I am surprised you delivered it to me." The lean-out was a
       floating chest, Jason from behind a lump with no readable arm or gun, flashes too small, crash far and tiny.
 - [ ] Sam: "What are the elements you would need to consider with the camera, actors, props and perspective ... walk me
@@ -314,11 +315,13 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
       windscreen three-shot built properly (all three seated behind the glass), then shot 4 from shot 3's frame.
       (Found: at shot 4's first frame all three people are drawn on the grille, in chat 11's version too: rule 30.)
 
-- [ ] Sam (20 Nov, chat 13): "This part of the screenplay comes first" (shot 3 text, as in the brief items above);
+- [x] Sam (20 Nov, chat 13): "This part of the screenplay comes first" (shot 3 text, as in the brief items above);
       "Scene 3 flows into scene 4" (shot 4's first frame is shot 3's camera, CAM3); "never mind ... continue as you
       are" (keep the outside-the-glass windscreen camera); the reference he meant is Halo No-No's Musk/Cortana cabin
       shot (a dashboard shot: camera inside on the dash looking back, whole cabin seen). "The tip of the characters'
       heads are being cropped by the car's windscreen": asked (Q1) whether to raise the Tulip's roof ~10 cm: Sam Y.
+      Chat 14: +10 cm still hid the hairlines (measured full size), so roof +14 cm and all three sat 6 cm lower; gun
+      hand and spinner raised to stay above the dash. Heads clear the rail at 0.3, 1.5, 2.7 s.
 - [ ] Sam (20 Nov, after chat 13): "Keep working on this until you can render the whole film shot sheet." (the chain
       carries on, chat after chat, until a sheet of every shot of the whole film, 1-8, can be rendered; his ask, so it
       is allowed before an animatic)
@@ -343,24 +346,21 @@ scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back 
 into the seated pose (last frame matches the first).
 Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
 
-## Where things stand (20 Nov, chat 13 end, Opus; for chat 14)
-- Rules that bite next: 30 (heads cut by the windscreen rail: Sam's note; cause is cartoon heads ~2x life in a
-  real-height car), 89 (every beat at full size before the clip), 8 (one clip, then Sam's Y/N).
-- Done: ROOT CAUSE of "people on the grille", tiny sunken passers-by and the stretched car: the street and cars drew at
-  half size (gta_rehearse/gta_cars used burnham, whose sharpness setting is separate from the people kit's); both now
-  use the one kit. Shot 3 built (shot3, CAM3): three seated, Lucia jerking a wheel, spinner, her line with a wince,
-  cash case, bench, cruisers through the back window (see-through glass). Shot 4 starts on CAM3. Crowd: walk, duck at
-  the shots, run from the fire, stare (crowd()). Backdrop and clouds judged at full size: fine; more cloud wanted in
-  shot 2's upper sky (one streak only).
-- Next: Opus, high (new build). Sam answered Q1 Y: raise house y top 1.33 -> ~1.43 (gta_cars SPECS tulip), check
-  heads clear the rail in shot 3 at full size;
-  then shot 4 Jason: arm stubs and a flat bar for a pistol at 1.4 s, arm fault at 1.0 s (left hand to the roof corner);
-  judge crowd poses full size; run `bodies shot4`, `layers shot2 shot4`; ONE clip via `shot34`.
-- Needs Sam: nothing until the clip of shots 3-4; then on through shots 5-8 to the whole film's shot sheet (Sam).
-- Read: guides/job-packs.md Build; Shot 4 rebuild checklist; plan rows 3-4.
-- Open rule requests: none. Handover check: gta_rehearse is the rehearsal tool, not a film (its notes are this file;
-  no SHOT_MARKS until the film's shot files exist): answered.
-- For Claude: world4/shot3/shot3_cam/CAM3/seated/tulip_inside/crowd/wheel3 in gta_rehearse; gta_cars._through_glass
-  far-glass paste (car._bg); `still3`, `shot34` commands. Shot 2 untouched (it never loaded the cast: drew right).
+## Where things stand (20 Nov, chat 14 end, Opus; for chat 15)
+- Rules that bite next: 89 (every new shot judged at full size before Sam sees it), 74 (moves checked against the
+  acting list before the sheet), 30 (heads under the roof rail: fixed by roof +14 cm and a 6 cm lower seat; keep it).
+- Done: heads clear the rail (shot 3); faces behind glass were see-through (glass now a tint on top); pistol reads in
+  his fist over the dash; shot 4 camera re-aimed (Jason sat OUTSIDE the frame 1.7-4.5 s), the hiding test fixed (roof
+  rubbed out his arm; door now hides his legs); crowd turns or runs at the crash; fatter hydrant jet; shot 2 clouds.
+  Clip of shots 3-4 sent (CLIPLINE).
+- Next: Opus, high (new builds): shots 5-8 from the plan table (5: Lucia yanks the wheel, all lean, street swings; 6:
+  closer two-shot, lines 4-5; 7: held three-shot, cruiser lights grow; 8: line 6), each as a `shot5..8` in
+  gta_rehearse on shot3_cam; then ONE whole-film shot sheet (shots 1-8, a frame per beat). Sam's "just go" ended 19:30.
+- Needs Sam: his Y/N on the shots 3-4 clip (rule 8) before any final; the sheet is his ask, no Y needed for it.
+- Read: guides/job-packs.md Build; plan table rows 5-8; acting list; Shot 4 rebuild checklist's open items.
+- Open rule requests: none.
+- For Claude: gta_cars.cover_masks between() now needs the sight line inside the face (5 cm slack);
+  glass_tint(); jason_layer tests shins+feet for the lower mask; CAM4 keys 1.70-4.55 solved by projecting his head
+  (scratchpad solver not kept: re-solve with cam.project if keys move); crowd sees_fire (60 m).
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 21.01% of 15%; forecast 71.5% (2026-11-20)

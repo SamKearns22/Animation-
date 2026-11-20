@@ -220,3 +220,24 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   gta_cars.local_pt/solid_at/cover_masks/open_windows; viewchecks.solid_faults. MAP lines for shot 4 still to add.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 19.33% of 15%; forecast 69.9% (2026-11-20)
+
+## Where things stand (20 Nov, chat 13 end, Opus; for chat 14)
+- Rules that bite next: 30 (heads cut by the windscreen rail: Sam's note; cause is cartoon heads ~2x life in a
+  real-height car), 89 (every beat at full size before the clip), 8 (one clip, then Sam's Y/N).
+- Done: ROOT CAUSE of "people on the grille", tiny sunken passers-by and the stretched car: the street and cars drew at
+  half size (gta_rehearse/gta_cars used burnham, whose sharpness setting is separate from the people kit's); both now
+  use the one kit. Shot 3 built (shot3, CAM3): three seated, Lucia jerking a wheel, spinner, her line with a wince,
+  cash case, bench, cruisers through the back window (see-through glass). Shot 4 starts on CAM3. Crowd: walk, duck at
+  the shots, run from the fire, stare (crowd()). Backdrop and clouds judged at full size: fine; more cloud wanted in
+  shot 2's upper sky (one streak only).
+- Next: Opus, high (new build). Sam answered Q1 Y: raise house y top 1.33 -> ~1.43 (gta_cars SPECS tulip), check
+  heads clear the rail in shot 3 at full size;
+  then shot 4 Jason: arm stubs and a flat bar for a pistol at 1.4 s, arm fault at 1.0 s (left hand to the roof corner);
+  judge crowd poses full size; run `bodies shot4`, `layers shot2 shot4`; ONE clip via `shot34`.
+- Needs Sam: nothing until the clip of shots 3-4; then on through shots 5-8 to the whole film's shot sheet (Sam).
+- Read: guides/job-packs.md Build; Shot 4 rebuild checklist; plan rows 3-4.
+- Open rule requests: none. Handover check: gta_rehearse is the rehearsal tool, not a film (its notes are this file;
+  no SHOT_MARKS until the film's shot files exist): answered.
+- For Claude: world4/shot3/shot3_cam/CAM3/seated/tulip_inside/crowd/wheel3 in gta_rehearse; gta_cars._through_glass
+  far-glass paste (car._bg); `still3`, `shot34` commands. Shot 2 untouched (it never loaded the cast: drew right).
+
