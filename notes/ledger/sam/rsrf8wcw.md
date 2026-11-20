@@ -19,3 +19,6 @@ I've just noticed that the bottom of the A in grand is also connected with the r
 ### 2026-11-20T10:45:57
 It will fade to car radio volume volume by the time the first dialogue line is spoken and continue
 
+### 2026-11-20T11:23:43
+Why did the fire hydrant/cars clipping pass?
+
