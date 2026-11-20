@@ -415,7 +415,7 @@ def piercings(p, f, L, fc, raise_=0.0, frown=0.0, seen=_all_seen):
         p.line(ring, SILVER, 1.8 * k)
         p.poly(oval(cx - r * 0.5, cy + r * 0.6, 0.8 * k, 0.8 * k, 6), (255, 255, 255), None)
     if 'nose' in which and seen(L['nw'] * 0.46, L['nose_y'] - 0.04):
-        _bead(p, f(L['nw'] * 0.46, L['nose_y'] - 0.04), 2.6 * k)
+        _bead(p, f(L['nw'] * 0.46, L['nose_y'] - 0.04), 2.6 * k * fc.get('stud_k', 1.0))
 
 
 def _hair_mass(p, f, L, fc, hc):
@@ -618,11 +618,13 @@ def _hair_front(p, f, L, fc, hc, skin):
         for k in range(7):
             u = -c * 0.75 + k * c * 0.25
             p.line(curve(f.pts([(u, hl - 0.02), (u * 0.7, -0.24), (u * 0.3, -0.42)]), 3), dk(hc, 0.72), 1.3)
-    if st == 'pony' and fc.get('pony_high'):           # GTA (Lucia): the high ponytail's knot over the crown
-        p.poly(curve(f.pts([(-0.12, -0.43), (-0.15, -0.52), (-0.06, -0.58), (0.06, -0.58), (0.15, -0.52),
-                            (0.12, -0.43)]), 3), hc, INK, 2.2)               # the tail's top, seen over the crown
-        for u in (-0.06, 0.0, 0.06):
-            p.line(curve(f.pts([(u * 1.3, -0.46), (u, -0.55)]), 2), dk(hc, 0.7), 1.2)
+    if st == 'pony' and fc.get('pony_high'):           # GTA (Lucia; critique r1): a high ponytail from the front:
+        p.poly(curve(f.pts([(-0.1, -0.44), (0.0, -0.5), (0.1, -0.44)]), 2), hc, INK, 2.0)   # its root over the crown
+        tail = [(e - 0.04, -0.2), (e + 0.1, -0.05), (e + 0.16, 0.3), (e + 0.12, 0.72), (e + 0.04, 0.95),
+                (e + 0.02, 0.7), (e + 0.05, 0.3), (e - 0.01, 0.0)]           # and the tail swinging past her cheek
+        p.poly(curve(f.pts(tail), 3), hc, INK, 2.2)
+        for u in (0.03, 0.07):
+            p.line(curve(f.pts([(e + u, 0.0), (e + u + 0.04, 0.35), (e + u, 0.75)]), 3), dk(hc, 0.7), 1.2)
     if fc.get('hoops'):                                       # GTA (Lucia): small gold hoops at the ear lobes
         for sgn in (-1, 1):
             x, y = f(sgn * (e + 0.01), 0.5)

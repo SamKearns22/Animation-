@@ -65,9 +65,9 @@
       stays on all three characters, the same three-shot as shot 8. Cruiser lights still show through the rear window.
       (My first reading, camera-move strength 7, was wrong; Sam corrected it.)
 
-- [ ] Sam (20 Nov, 03:35, chat 4): "Make the autistic girl prettier, I want her to be sort of cooler too." Before
+- [x] Sam (20 Nov, 03:35, chat 4): "Make the autistic girl prettier, I want her to be sort of cooler too." Before
       the cast sheet goes to him. Then "Set reminder to continue this work at 5:30am": set (05:30 UK, this chat).
-- [ ] Sam (20 Nov, chat 4): "look at references of Lucia and Jason from the first few hours of the gameplay before you
+- [x] Sam (20 Nov, chat 4): "look at references of Lucia and Jason from the first few hours of the gameplay before you
       decide, as that's what most people will be currently familiar with." Fetch in-game pictures of both (early
       missions, their everyday outfits), file them in references/grand-theft-autism/, and match the cast to those
       before the cast sheet goes to him (the trailer portraits may differ).
@@ -133,17 +133,21 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 | vice-city-montage, vice-city-ocean-beach | murals, palms, overhead wires, low pastel shops, Ocean Drive neon at dusk, pink sky | |
 | missing: a cruiser front-on (seen through the rear window and in the crash); the woman's unicorn jumper (anywhere) | fetched at the build | |
 
-## Where things stand (20 Nov, chat 3, Sonnet)
-- Rules that bite next: 8 (rehearse the swerve and the crash first), 38 (front, side, back on the cast sheet), 89 (each new thing critiqued alone).
-- Done: plan, acting list, game references; Sam's answers 1-7 recorded above (screenplay final).
-- Next: Opus, high effort: the cast build (Jason, Lucia, her, the Tulip), then the two rehearsal clips (swerve, lean-out and crash) before any other movement.
-- Needs Sam: nothing. Shot 7 is the held three-shot (no mirror insert), per Sam.
-- Read: guides/job-packs.md, Build; the plan, acting list and references above.
+## Where things stand (20 Nov, chat 4, Opus high)
+- Rules that bite next: 8 (rehearse the swerve and the crash first), 3 (Vice City streets point by point beside the game), 89 (cars critiqued alone).
+- Done: cast built and through both critique hunts (people file story/grand-theft-autism-people.txt; matched to the game's first hours,
+  Sam's note; her prettier and cooler: shag cut, nose stud, headphones; Added: headphones round her neck). Cast sheet sent to Sam.
+- Next: Opus, high effort: the Tulip and the VCPD cruiser (3D, new), then the two rehearsal clips (swerve past the low camera;
+  lean-out and crash). Shot 7 is the held three-shot (Sam's correction).
+- Needs Sam: his look at the cast sheet (a note, not a gate: building carries on).
+- Read: guides/job-packs.md, Build; the plan and acting list above; references/grand-theft-autism/ (car and police pictures).
 - Open rule requests: none found in this film's notes.
-- No page.py show this chat: chat 3 only recorded answers in the notes; no film code was touched (the film file is not started).
-- Branch claude/blessed-c2-mics-wip stays off the main line (named in story/status.md).
-- For Claude: start source/grand_theft_autism.py from source/satire_template.py; places in story/grand-theft-autism-places.txt;
-  Glock from prepper_cast, effects from prepper_fx and flying_whales_fx (fireball_sprite, Puff, splash_parts);
-  vehicle precedent protest_tiers_sets.truck. Title font Pricedown is fetched by `_title_font()`, in .gitignore; never commit it.
+- Left open after hunt 2 (named): house-style boxy torsos and sleeve flaps; Lucia has no waist (a new body build if Sam asks); her side/back hair is a blob (never seen in this film).
+- Handover check: midterminal_cast.py was touched only for sleeve options that default to its old look; its old exceptions and
+  pose lines are that film's, not this one's. No page.py show: the film file is not started yet (only source/gta_cast.py).
+- For Claude: cast is source/gta_cast.py (draw, bust, sheet, panels); kit additions in people.py/people_parts.py/people_turned.py
+  (palms, biker, unicorn, scoop, headphones extras; soft, lashes, hoops, stud, rest smile, `hair: pony, C, high`, `sleeves short`).
+  Cars: build in source/gta_cars.py on sets.Cam/Face/obox/cylinder (3D, metres); film file from source/satire_template.py.
+  The 5:30 UK reminder (trig_01B51RSAAq6Sgymzr6MttTsf) fires into chat 4 as a backup; chat 5 carries the work.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 3.36% of 15%; forecast 53.9% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 4.31% of 15%; forecast 54.8% (2026-11-20)

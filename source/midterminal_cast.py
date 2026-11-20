@@ -477,7 +477,8 @@ def arm(p, j2, side, sp, shape=None):
     dx, dy = end[0] - sh[0], end[1] - sh[1]
     n = math.hypot(dx, dy) or 1.0
     nx, ny = -dy / n * half, dx / n * half
-    p.poly([(sh[0] + nx, sh[1] + ny), (end[0] + nx * 0.95, end[1] + ny * 0.95), (end[0] - nx * 0.95, end[1] - ny * 0.95),
+    tp = sp.get('sleeve_taper', 0.95)                                   # GTA: the sleeve narrows round the arm
+    p.poly([(sh[0] + nx, sh[1] + ny), (end[0] + nx * tp, end[1] + ny * tp), (end[0] - nx * tp, end[1] - ny * tp),
             (sh[0] - nx, sh[1] - ny)], sp['jacket'], INK, 2.4)
 
 

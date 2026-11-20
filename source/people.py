@@ -388,6 +388,10 @@ def _fact(d, key, val, people):
             w, _, v = q.partition(' ')
             m[w] = True if not v else (v if w == 'mouth' else float(v))
         d.setdefault('moods', {})[key[5:].strip()] = m
+    elif key == 'rest smile':                      # GTA (20 Nov): the mouth at rest (house -0.4, a little down)
+        d['smile'] = float(val)
+    elif key == 'stud':                            # GTA: the nose stud's size (1 = the kit's)
+        d['stud_k'] = float(val)
     elif key == 'hoops':                           # GTA (20 Nov): small gold hoop earrings
         d['hoops'] = True
     elif key == 'soft':                            # GTA (20 Nov): a young, pretty face (no eye bags, faint folds)
@@ -491,7 +495,7 @@ def _fact(d, key, val, people):
                 continue
             if p == 'sleeves short':                   # a short-sleeved shirt (GTA, 20 Nov: midterminal's sleeve)
                 d['short_sleeve'] = True
-                d['sleeve_up'], d['sleeve_w'] = 0.27, 39     # over the shoulder's top (no skin corner shows)
+                d['sleeve_up'], d['sleeve_w'], d['sleeve_taper'] = 0.27, 39, 0.88    # over the shoulder's top (no skin corner shows)
                 continue
             w, _, c = p.partition(' ')
             if c.startswith('darker '):                # 'trousers darker jacket 0.6': the jacket's colour, darker
@@ -525,7 +529,7 @@ def person(d):
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
               'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
-              'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w'):
+              'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w', 'sleeve_taper', 'smile'):
         if k in d:
             sp[k] = d[k]
     if 'skin' not in sp:
@@ -545,7 +549,7 @@ def person(d):
               brow=sp['brow_c'], hair='crop' if style == 'short' else style, turned=style)
     for k, fk in (('face_k', 'k'), ('stub', 'stub'), ('beard', 'beard'), ('freckles', 'freckles'),
                   ('glasses', 'glasses'), ('brow_thick', 'brow_thick'), ('lashes', 'lashes'), ('pencil', 'pencil'),
-                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'), ('hair_loose', 'hair_loose'), ('soft', 'soft'), ('hoops', 'hoops'), ('pony_high', 'pony_high'),
+                  ('glasses_thick', 'glasses_thick'), ('hair_big', 'hair_big'), ('hair_streak', 'hair_streak'), ('hair_loose', 'hair_loose'), ('soft', 'soft'), ('hoops', 'hoops'), ('pony_high', 'pony_high'), ('stud_k', 'stud_k'),
                   ('piercings', 'piercings')):
         if k in d:
             fc[fk] = d[k]
