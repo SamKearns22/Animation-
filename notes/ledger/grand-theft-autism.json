@@ -8188,6 +8188,356 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "4b78c55d",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.11,
+   "src": "estimate",
+   "sid": "session_01J1JB7YEB8h4Uq9vxvvKo16",
+   "steps": 30,
+   "hist_k": 145,
+   "kinds": {
+    "tool search": 34.2,
+    "renders": 6.3,
+    "pictures": 1.6,
+    "other": 57.9
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 25,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 1,
+    "other": 3
+   },
+   "split": {
+    "usd": 1.725,
+    "total": 1.725,
+    "floor_k": 82,
+    "blocks": {
+     "start-up floor": 33.5,
+     "new writes": 29.4,
+     "Claude's words": 27.2,
+     "carried history": 9.8
+    },
+    "origins": {
+     "Claude's words": 37.7,
+     "start-up floor": 33.5,
+     "result: tool search": 25.7,
+     "result: pictures": 1.4,
+     "messages and reminders": 1.0,
+     "result: other": 0.4,
+     "result: renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/shot4-case-study/shot4-case-study.md",
+      4.0,
+      0.0452
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      3.1,
+      0.0353
+     ],
+     [
+      "notes/proposal-route.md",
+      2.6,
+      0.0294
+     ],
+     [
+      "guides/figure-rig.md",
+      2.7,
+      0.0292
+     ],
+     [
+      "source/gta_rehearse.py",
+      2.6,
+      0.0269
+     ],
+     [
+      "notes/shot4-case-study/v1-chat6-original.jpg",
+      1.6,
+      0.0148
+     ],
+     [
+      "source/propose.py",
+      1.2,
+      0.0144
+     ],
+     [
+      "source/costline.py",
+      0.8,
+      0.0091
+     ],
+     [
+      "source/views.py",
+      0.8,
+      0.0082
+     ],
+     [
+      "notes/proposals/depth-check-everything.md",
+      0.5,
+      0.0062
+     ],
+     [
+      "guides/pose-gallery.md",
+      0.5,
+      0.0059
+     ],
+     [
+      "guides/proposal-route/sam-test.md",
+      0.6,
+      0.0052
+     ],
+     [
+      "notes/proposals/big-body-moves.md",
+      0.2,
+      0.0016
+     ],
+     [
+      "notes/proposals/big-body-moves/chat.md",
+      0.2,
+      0.0015
+     ]
+    ],
+    "base_pct": 25.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 2,
+     "shared:handover.py": 2,
+     "film notes": 7,
+     "guides": 6,
+     "shared:propose.py": 2,
+     "shared:costline.py": 1,
+     "shared:gta_rehearse.py": 3,
+     "shared:figure.py": 1,
+     "shared:posegallery.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch origin claud",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git branch --show-current; git merge-base --is-ancestor HEAD origin/claude/creat",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/branches.py",
+      "python3 source/handover.py start session_01J1JB7Z8NfX6Qt6NegKzRyt --film grand-t",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/shot4-case-study/shot4-case-study.md notes/sho",
+      "^#",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 285,420p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:handover.py",
+      "notes/shot4-case-study/shot4-case-study.md source/handover.py",
+      "^#",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "awk '/^## Build/,/^## [A-Z][a-z]+ *$/' guides/job-packs.md | head -60",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md",
+      "sed -n 151,180p notes/shot4-case-study/shot4-case-study.md; sed -n 218,320p note",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 1,80p source/propose.py",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:costline.py",
+      "source/costline.py guides/film-quality-rules.md",
+      "^| *24 \\|^| *85 ",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "guides/film-quality-rules.md notes/proposal-route.md notes/proposals",
+      "^| *8 \\|^| *74 \\|^| *89 ",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposals/depth-check-everything.md notes/proposals/depth-check-everything",
+      "sed -n 1,60p notes/proposals/depth-check-everything.md | cut -c1-400; ls notes/p",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "guides",
+      "guides/figure-rig.md guides/pose-gallery.md",
+      "^#",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "guides",
+      "guides/figure-rig.md",
+      "sed -n 26,110p guides/figure-rig.md | cut -c1-400; sed -n 192,230p guides/figure",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/viewchecks.py source/views.py source/posegallery.p",
+      "def jason4\\|def jason_layer\\|J4_KEYS\\s*=\\|def solid_faults\\|def body_faults\\|def",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 955,1110p source/gta_rehearse.py | cut -c1-220",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:figure.py",
+      "guides/kit-catalogue.md source/figure.py source/viewchecks.py source/handcheck.p",
+      "3d body\\|climb\\|key pose\\|keyframe\\|turnaround\\|model sheet\\|lying.py\\|posegalle",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/big-body-moves.md",
+      "python3 source/propose.py new big-body-moves \"How to build big 2D body moves (a ",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md notes/grand-theft-autism.md",
+      "sed -n 16,43p notes/shot4-case-study/shot4-case-study.md; sed -n 180,217p notes/",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/shot4-case-study/shot4-case-study.md.",
+      " ",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "blood\\|spatter\\|fireball\\|hydrant\\|craz\\|smoke\\|duck\\|flee\\|run away\\|scatter",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "react\\|crowd",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py source/people.py source/views.py source/moves.py source/gt",
+      "'[a-z_]*\\(duck\\|crouch\\|cower\\|run\\|flee\\|shield\\|point\\)[a-z_]*'",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "crouch\\|duck\\|walk\\|run\\|react\\|head turn\\|pose",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "guides",
+      "guides/proposal-route/sam-test.md",
+      "sed -n 1,60p guides/proposal-route/sam-test.md | cut -c1-300",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
