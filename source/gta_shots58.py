@@ -479,7 +479,8 @@ def inside58(t, rec=None):
                       (JOB - 0.05, lift), (JOB + 0.2, shrug), (WITHOUT - 0.12, shrug), (WITHOUT + 0.1, her_hand),
                       (17.45, her_hand), (17.9, thigh)], t)
         lshape = step_at([(0, 'palm'), (H1 - 0.12, 'thumb'), (H1 + 0.6, 'palm'), (WITHOUT - 0.05, 'thumb'), (17.6, 'palm')], t)
-        lpole = 'down'
+        lpole = 'out' if WITHOUT + 0.6 < t < 18.2 else 'down'   # the hand coming down from his ear: 'down' folded
+        #                                                       the elbow across his chest (figure check, shot 7)
         j_hands = [('R', ('fig', (120.0, 25.0, 80.0)), 'down', 'fist'), ('L', lh, lpole, lshape)]
         gun = PC.glock('R', flash=0.0, aim3=(0.9, -1.0, 0.05), size=1.0)
         R.bench(lay, cam, car)

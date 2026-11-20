@@ -409,6 +409,8 @@ Built in source/gta_shots58.py on shot 4's world; the whole film's clock in sour
   on "without her", eyes to the mirror in shot 7. Her: headshake on "didn't", at the driver on "like that", at Lucia
   during line 4, eyes drop on "brought her", at Jason on "hyperfixation", proud smile on "explosives"/"without her".
   Lost: Jason "looking forward" through line 5 (Sam's script); his note overrides it.
+  Clip v2 sent ~23:57 (4.9 MB, ~14 min render; shot 7 first refused by the figure check: elbow folded across his
+  chest as the hand came down; fixed with the elbow 'out' then). Waiting for Sam's notes on v2.
 
 ## Shot 4 acting rows (rule 74, every person, beat by beat; my picks, in the build proposal to Sam)
 Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging out with him; B4 shots at 1.95, 2.30,
@@ -496,4 +498,4 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   in the build message as an "Added/Lost" line.
 - Branches named, not merged on purpose: freeze/* bookmarks of posted films.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 35.08% of 15%; forecast 85.6% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 35.72% of 15%; forecast 86.3% (2026-11-20)
