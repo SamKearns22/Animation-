@@ -12,3 +12,6 @@ Shot 2 looks amazing. Our scenery needs an appropriately vice city background, a
 Shot 4...I mean, I am surprised you delivered it to me. Why did you deliver it to me?
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-20T17:20:18
+What are the elements you would need to consider with the camera, actors, props and perspective in this shot. Read the screenplay and walk me through it, moment by moment.
+
