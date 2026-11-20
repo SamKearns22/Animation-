@@ -65,6 +65,13 @@
       stays on all three characters, the same three-shot as shot 8. Cruiser lights still show through the rear window.
       (My first reading, camera-move strength 7, was wrong; Sam corrected it.)
 
+- [ ] Sam (20 Nov, 03:35, chat 4): "Make the autistic girl prettier, I want her to be sort of cooler too." Before
+      the cast sheet goes to him. Then "Set reminder to continue this work at 5:30am": set (05:30 UK, this chat).
+- [ ] Sam (20 Nov, chat 4): "look at references of Lucia and Jason from the first few hours of the gameplay before you
+      decide, as that's what most people will be currently familiar with." Fetch in-game pictures of both (early
+      missions, their everyday outfits), file them in references/grand-theft-autism/, and match the cast to those
+      before the cast sheet goes to him (the trailer portraits may differ).
+
 ## The plan (chat 2, 20 Nov; Opus high)
 Length: 45 spoken words at Sam's pace (3.3 a second) = about 14 s of speech; with the opening, the chase and the
 pauses the film runs about 33 s, plus the sign-off (about 36 s in all).
