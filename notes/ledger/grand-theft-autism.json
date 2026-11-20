@@ -1,6 +1,6 @@
 {
  "film": "grand-theft-autism",
- "estimate": null,
+ "estimate": 53.2,
  "chats": [
   {
    "date": "2026-11-19",
@@ -274,5 +274,75 @@
    }
   }
  ],
- "checks": {}
+ "checks": {},
+ "stages": [
+  {
+   "name": "opener",
+   "pct": 2.67,
+   "done": null
+  },
+  {
+   "name": "plan",
+   "pct": 2.0,
+   "done": null
+  },
+  {
+   "name": "cast",
+   "pct": 13.3,
+   "done": null
+  },
+  {
+   "name": "cars",
+   "pct": 4.5,
+   "done": null
+  },
+  {
+   "name": "sets",
+   "pct": 4.7,
+   "done": null
+  },
+  {
+   "name": "board",
+   "pct": 0.5,
+   "done": null
+  },
+  {
+   "name": "moves",
+   "pct": 11.3,
+   "done": null
+  },
+  {
+   "name": "animatic1",
+   "pct": 2.1,
+   "done": null
+  },
+  {
+   "name": "round1",
+   "pct": 9.4,
+   "done": null
+  },
+  {
+   "name": "round2",
+   "pct": 2.4,
+   "done": null
+  },
+  {
+   "name": "final",
+   "pct": 0.35,
+   "done": null
+  }
+ ],
+ "cost_flagged": [],
+ "cost_log": [
+  {
+   "date": "2026-11-20",
+   "spent": 2.67,
+   "forecast": 53.2
+  },
+  {
+   "date": "2026-11-20",
+   "spent": 2.67,
+   "forecast": 53.2
+  }
+ ]
 }
