@@ -930,7 +930,15 @@ def headphones_view(view):
     return lambda img, p, sp, t: headphones3d(p, sp, PHONES_YAW[view])
 
 
-def headphones3d(p, sp, yaw):
+def headphones_over_neck(p, view, sp, hx, hy):
+    """views.HEAD_WEAR: seen from behind (or three-quarter behind) the band round the back of the neck is nearer
+    than the neck, which the head draws after the torso's props: the band again, over it (Sam, GTA chat 10: "they
+    don't go around the back of her neck")."""
+    if 'headphones' in sp.get('kit_extras', ()) and view in ('back', 'three_back'):
+        headphones3d(p, sp, PHONES_YAW[view], band_only=True)
+
+
+def headphones3d(p, sp, yaw, band_only=False):
     """The headphones as one solid 3D prop round the neck (Sam, GTA chat 9: "drawn on in 2D ... it needs to be a 3D
     prop"; chat 10: the first prop "clip[s] through her body ... more 2D than before"). Real over-ear headphones worn
     round the neck: the band lies on the shoulders round the back of the neck; each cup hangs on the collarbone, its
@@ -1045,7 +1053,7 @@ def headphones3d(p, sp, yaw):
         u = math.pi * k / 48                             # 0 at one side of the neck, pi at the other, round the back
         x = -68 * math.cos(u)
         z = 14 - 60 * math.sin(u)
-        band.append((x, -5 + 0 * math.sin(u), z))
+        band.append((x, -5 - 9 * math.sin(u), z))          # rising onto the back of the neck
     lead = []
     for i, e in enumerate(ends):                         # each end climbs from the shell to the band's side
         side_pt = band[0] if i == 0 else band[-1]
@@ -1056,7 +1064,7 @@ def headphones3d(p, sp, yaw):
 
     def draw_band():
         run = []
-        for pt in path + [None]:
+        for pt in (band if (behind_body or band_only) else path) + [None]:   # from behind: no stubs of the yokes
             if pt is not None and not hidden(pt) and not (behind_body and pt[2] > 30):
                 run.append(proj(pt))
                 continue
@@ -1067,7 +1075,7 @@ def headphones3d(p, sp, yaw):
                 p.line([(x, y - 2.5) for x, y in pts], B.lt(c, 2.0), 2.4)
             run = []
 
-    if behind_body:                                      # from behind only the band shows, on the shoulders
+    if behind_body or band_only:                         # from behind only the band shows, on the shoulders
         draw_band()
         return
     order = sorted(cups, key=lambda cu: V.project(cu['back'], yaw)[1])    # the far cup first

@@ -166,6 +166,18 @@
       out (views._bare_neck, also fills an old background notch under the jaw from the side). Judged at full size
       beside the photos; sheet sent (Sam's three references, chat 9 15:39, were the game art already in references/).
 
+- [ ] Sam (20 Nov, chat 10, on the headphones sheet): "the three-quarter turns still have the weird slumped necks that
+      I thought we had fixed over the last 2 days. Could you investigate that, please? The headphones don't go around
+      the back of her neck. They look good otherwise." Headphones: done chat 10 (the head draws the neck after the
+      torso's props, so the band was hidden from behind: people_parts.headphones_over_neck on views.HEAD_WEAR draws
+      it again over the neck from behind; band lifted onto the neck). Necks (a repeat, rule 30), investigated, not
+      changed: Sam's 19 Nov job ("sunken necks ... I would rather we used the 'front on' method") was settled by
+      keeping people front-on with focus (rule 38, posecheck refuses three-quarter past 25 degrees without a reason);
+      the three-quarter drawing itself was never rebuilt (status: "the 3/4 fix is a reserve job (his word starts it)").
+      Chats 9 and 10 broke rule 38 by putting three-quarter views on the cast sheets. Measured: at three-quarter the
+      chin sits ~20 px lower (the turned jaw longer) and the shoulders' top ~15 px higher than front-on, so the neck
+      all but vanishes. Waiting on Sam's pick (question 1 in the reply); chat 11 interrupted until then.
+
 ## Diagnosis: the cast sheet's body faults (Sam, 20 Nov: "new and serious"; chat 4)
 Sam: the cast sheet "has broken many of our rules on body shape and proportions". Faults: sleeves as stuck-on flaps
 (rule 41 one outline), square shoulder corners, tops not tapering to the hips (figure-rig 2, hem 0.85), hands on the
@@ -273,7 +285,8 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
   Kit tests: the same 11 old failures before and after (pose_gallery, outfit_every_view officer/scarf, etc.): none new.
 - Next: Sonnet: the new cast into both rehearsals (shot 2 swerve, shot 4 lean-out), both clips sent. Don't touch
   the opening.
-- Needs Sam: his look at the headphones sheet (an answer can come with the clips' Y/N; rule 8).
+- Needs Sam: question 1 (three-quarter necks: fix the drawing for every film now, or keep them front-on); chat 11
+  (session_01J1JB7VedxxaeCdyPTmFuNx) interrupted until he answers; his answer comes back to chat 10.
 - Read: guides/job-packs.md, Notes round (clips); source/gta_rehearse.py's MAP.
 - Open rule requests: none.
 - For Claude: people_parts.headphones3d (cups: n, upr, push-forward loop), views._bare_neck, people.WORN_OVER.

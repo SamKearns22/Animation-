@@ -766,6 +766,8 @@ def install(cast):
     import people_hats as PH                     # craft change 1: a crowd member's beanie or cap, every view
     if PH.draw not in V.HEAD_WEAR:
         V.HEAD_WEAR.append(PH.draw)
+    if PP.headphones_over_neck not in V.HEAD_WEAR:   # GTA chat 10: from behind the neck is drawn after the torso's
+        V.HEAD_WEAR.append(PP.headphones_over_neck)  # props, so the band round its back is drawn again over it
     for sp in cast.values():                     # one person may have several looks (Brand's four): the head and
         TC.HEADS[sp['who']] = kit_head           # torso are chosen from the look being drawn, not from the name
         TC.TORSOS[sp['who']] = kit_torso
