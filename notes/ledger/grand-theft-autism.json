@@ -2540,45 +2540,45 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.99,
+   "cost": 1.31,
    "src": "estimate",
    "sid": "session_01J1JB7ZbCDC2svB5sx76FTn",
-   "steps": 73,
-   "hist_k": 188,
+   "steps": 77,
+   "hist_k": 191,
    "kinds": {
-    "tool search": 23.3,
-    "renders": 1.6,
-    "pictures": 4.7,
-    "other": 70.4
+    "tool search": 18.5,
+    "renders": 1.2,
+    "pictures": 3.8,
+    "other": 76.5
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 46,
+    "tool search": 47,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
     "pictures": 8,
-    "other": 17
+    "other": 19
    },
    "split": {
-    "usd": 3.6364,
-    "total": 3.6364,
+    "usd": 4.8027,
+    "total": 4.8027,
     "floor_k": 82,
     "blocks": {
-     "start-up floor": 33.5,
-     "new writes": 23.3,
-     "Claude's words": 23.0,
-     "carried history": 20.3
+     "new writes": 38.7,
+     "start-up floor": 26.5,
+     "Claude's words": 18.2,
+     "carried history": 16.6
     },
     "origins": {
-     "Claude's words": 35.4,
-     "start-up floor": 33.5,
-     "result: tool search": 20.6,
-     "result: pictures": 6.1,
-     "messages and reminders": 3.4,
-     "result: other": 0.9,
-     "result: renders": 0.1
+     "Claude's words": 28.3,
+     "start-up floor": 26.5,
+     "cache re-write": 20.5,
+     "result: tool search": 16.1,
+     "result: pictures": 4.8,
+     "messages and reminders": 2.8,
+     "result: other": 0.9
     },
     "leftover": 0.0
    },
@@ -2590,60 +2590,60 @@
      [
       "source/gta_rehearse.py",
       8.0,
-      0.1474
+      0.1532
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/78cd6210-928b-5aee-845d-05993a6f4285/scratchpad/s4/sheet.jpg",
       6.4,
-      0.0878
+      0.0924
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/78cd6210-928b-5aee-845d-05993a6f4285/scratchpad/s4/crop.jpg",
       3.2,
-      0.042
+      0.0443
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/78cd6210-928b-5aee-845d-05993a6f4285/scratchpad/v.jpg",
       1.6,
-      0.018
+      0.0191
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/78cd6210-928b-5aee-845d-05993a6f4285/scratchpad/cs/strip.jpg",
       1.6,
-      0.0171
+      0.0183
      ],
      [
       "story/status.md",
       0.9,
-      0.0087
+      0.0093
      ],
      [
       "notes/ledger/sam/tecuvrex.md",
       0.4,
-      0.0077
+      0.008
      ],
      [
       "notes/grand-theft-autism.md",
       0.6,
-      0.006
+      0.0064
      ],
      [
       "source/ledger.py",
       0.5,
-      0.0043
+      0.0047
      ],
      [
       "source/handover.py",
       0.2,
-      0.0037
+      0.0038
      ],
      [
       "notes/ledger/sam/yaekzh9z.md",
       0.2,
-      0.0034
+      0.0035
      ]
     ],
-    "base_pct": 29.4
+    "base_pct": 23.5
    },
    "search": {
     "show": 0,
@@ -2656,7 +2656,8 @@
      "film notes": 7,
      "shared:gta_rehearse.py": 3,
      "shared:critique.py": 2,
-     "shared:ledger.py": 3
+     "shared:ledger.py": 3,
+     "shared:people.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -3027,6 +3028,14 @@
       "shared:ledger.py",
       "source/ledger.py",
       "def forecast_line",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:people.py",
+      "notes/grand-theft-autism.md source/people.py notes/proposals/front-on-focus/reti",
+      "git status --short | head -3; git fetch -q origin claude/create-claude-md-oe8z4g",
       ""
      ]
     ]
