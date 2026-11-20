@@ -28,8 +28,8 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
 ## Where things stand (20 Nov, one-route-kit chat 2, Sonnet)
 - Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
 - Done: Learn step (results above).
-- Next: if Sam says Y to Change 1: chat 3, Sonnet, medium: bookmark per film, one recut command, save bayeux/strictly-crabs data first; Blessed test reads frozen copy.
-- Needs Sam: Y/N Change 1; Y/N delete helper's stray private page.
+- Next: chat 3 (opened), Sonnet, medium: bookmark per film, one recut command, save bayeux/strictly-crabs data first; Blessed test reads frozen copy.
+- Needs Sam: nothing. Sam said Y to Change 1 and Y to deleting the stray page (20 Nov); page deleted.
 - Read: this file; notes/proposals/one-route-kit.md "Final version"; guides/job-packs.md Build.
 - Open rule requests: none found.
 - For Claude: stray page claude.ai/artifact/7vGcQMxzVKwDNLQS8EqV7Q. Watcher lines (saver, record_faults/tag_faults) still named, not this job's. Branches elegant-davinci-2anki0 appears merged; claude/blessed-c2-mics-wip: named, not merged (source/blessed.py; Blessed owns it), not this job's.
