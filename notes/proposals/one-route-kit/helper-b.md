@@ -42,7 +42,7 @@ Q4: five approaches weighed.
 Q5: each change is undone alone; versions are proven before anything moves.
 Q6: sources named; rest under Unchecked.
 Q7: removes the cause (52 to 0), not just a label.
-Q8: permanent, and reviewed at film end.
+Q8: permanent; reviewed at film end.
 
 ## Lost / Added
 Lost: recuts use their old version, so later kit fixes need carrying across. Added: one kit, the same whatever loads first, proven against the rules.
