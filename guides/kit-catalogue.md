@@ -74,6 +74,8 @@ the critique (new things a clean critique pass filed: a plan counts them as KNOW
 ## Creatures and machines
 | what | file | notes |
 |---|---|---|
+| Cars in 3D, any camera (Grand Theft Autism, 20 Nov): a 1970s four-door hardtop muscle car (the game's Declasse Tulip: faded red, worn black bonnet and boot stripes, vinyl roof, chrome bumpers, steel wheels) and a modern police saloon (VCPD: white, blue stripe, POLICE, badge, push bar, flashing red and blue light bar); body leans (roll, pitch) on its wheels, front wheels steer, wheels turn; crash state (front crumpled, push bar twisted, lamp smashed, windscreen crazed round a bullet hole); people seen through the glass; lettering on any 3D quad (`paste_quad`); soft lamp glow | `source/gta_cars.py` (`Car`, `draw_car`, `SPECS` for a new car's numbers, `flash`, `glow`, `paste_quad`) | `python3 source/gta_cars.py sheet OUT.jpg`; a new car is a new `SPECS` entry plus its decals |
+| A car chase through a stand-in junction from a low kerb camera: a route with a sliding turn and fishtail (`car_at`), tyre smoke, police light wash, camera shake as cars pass | `source/gta_rehearse.py` (`route`, `car_at`, `tyre_smoke`, `light_wash`, `shot2`, `clip`) | the street is a stand-in, not a set |
 | Chrome Centurion robot (3D: blade arm or cannon palm, sweeping eye, walks, falls, loses head or arm, explodes, dents) | `source/prepper_robot.py` | |
 | Horse to ride, side-on (bay, chestnut, grey, black, palomino; also pony and donkey): stand, walk, trot, canter, gallop, either direction, with any satire person riding (sits, rising trot, up off the saddle at the gallop; reins, stirrups) | `source/mounts.py` | `python3 source/mounts.py reel OUT.mp4`; checks: `mounts.py check` (hooves never slide, no leg stretches, rider reaches). Side view only so far |
 | Dragonite | `source/poker_mon_cast.py` | |
@@ -154,3 +156,4 @@ The follow line on the sign-off (rule 52, 12 Nov): `follow_line.py` (the next li
 ## Passed the critique (filed by `critique.py record` on a clean pass: reuse as KNOWN)
 | thing | what it is | film, round, pass, date | where it is drawn |
 |---|---|---|---|
+| Declasse Tulip and VCPD cruiser | 3D cars, whole and crashed | Grand Theft Autism, cars, hunts 1-2 fixed, 20 Nov | `source/gta_cars.py` |

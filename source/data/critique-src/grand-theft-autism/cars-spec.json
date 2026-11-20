@@ -1,0 +1,89 @@
+{
+ "round": 1,
+ "stage": "cars",
+ "panels": [
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-tulip-side.jpg",
+   "is": "The getaway car, a cartoon copy of the game's Declasse Tulip (a 1970s four-door hardtop like a 1972 Chevelle): faded red with sun-worn patches, two weathered black stripes on the bonnet and boot, dark vinyl roof, chrome bumpers, steel wheels. Side view. Flat cartoon house style (flat fills, black outlines, no texture). Dark people shapes inside by design.",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/tulip-side-trailer1.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-tulip-front34.jpg",
+   "is": "The same getaway car from the front three-quarter: grille across the front with a round lamp at each end, chrome bumper, the bonnet stripes.",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/tulip-side-trailer1.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-tulip-rear34.jpg",
+   "is": "The same getaway car from the rear three-quarter: boot stripes, red tail lamps set in the chrome rear bumper, the number plate.",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/tulip-rear-three-quarter.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-tulip-shot2-low.jpg",
+   "is": "The getaway car as the film's shot 2 sees it: camera low at the kerb (0.4 m up), the car coming at it mid-swerve, leaning, front wheels turned.",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/tulip-side-trailer1.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-cruiser-front34.jpg",
+   "is": "A Vice City police car, a cartoon copy of the game's VCPD saloon: white, dark blue side stripe, POLICE on the doors, badge, black push bar, roof light bar (red and blue, flashing), black wheels. Front three-quarter, as the film's shot 4 sees the chasing cars. The light bar runs across the roof, so side on only its end shows.",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/vcpd-cruiser-rear.jpg",
+    "references/grand-theft-autism/vcpd-cruiser-above.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-cruiser-rear34.jpg",
+   "is": "The same police car from the rear three-quarter: wide red tail lamps, VICE CITY POLICE on the boot, plate.",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/vcpd-cruiser-rear.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-cruiser-side.jpg",
+   "is": "The same police car side on.",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/vcpd-cruiser-above.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-both.jpg",
+   "is": "Both cars parked side by side, to judge their sizes against each other (the getaway car about 5.3 m long, the police car about 5.1 m).",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/tulip-side-trailer1.jpg",
+    "references/grand-theft-autism/vcpd-cruiser-rear.jpg"
+   ],
+   "closeups": false
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/car-cruiser-crashed.jpg",
+   "is": "The lead police car after it is shot and crashes: front pushed in and crumpled, bonnet buckled, push bar twisted, one headlamp smashed, windscreen crazed round a bullet hole in front of the driver. (The fireball, smoke and the shop front come later.)",
+   "parts": "AO",
+   "refs": [
+    "references/grand-theft-autism/vcpd-cruiser-rear.jpg"
+   ],
+   "closeups": false
+  }
+ ]
+}

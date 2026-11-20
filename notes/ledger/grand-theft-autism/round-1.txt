@@ -65,3 +65,77 @@ My look.md named the broad brief items right: beard, olive shirt, ponytail, blue
 
 critique, pass 2: faults fixed as one list: Hunt 2: sleeves kept at the cleanest setting (no skin at the shoulder); her eyes darker and the nose stud smaller. Named, not fixed: the boxy torsos and short-sleeve flaps are the house body (a waist for Lucia would be a new body build); Jason's hair block and blank cast-sheet faces (acting comes with the moves); her side/back hair is a blob but she is only ever seen front on in this film.; left open: ['1-2 P5 P13: shoulders and sleeves, all views - sleeves are stiff square flaps sticking out past the arm, with a visible step where the arm starts; in the bust t', '1-3 P11: bust - head sits straight on the clothes with almost no neck; the bust is cut off in a flat horizontal edge (panel 1 and 2 bust).', "2 A1 P2: Lucia - boxy straight torso, same build as Jason; the brief's fitted top does not show and she does not read clearly as a woman at phone size. Neckline", "1 A2 P4: Jason's hair is a tall, heavy block, much bigger than the close-cropped reference; face is blank, no weight like the reference. Build is thin-limbed ag"]
 
+== critique, round 1 pass 3 (2026-11-20): 10 fault(s), 0 can't tell
+-- look.md --
+1: Red sedan in side view on grey ground, pink sky, small, no text.
+2: Red car, front three-quarter, chrome bumper, dark grille, two occupants, flat grey ground.
+3: Red car rear three-quarter view, red tail lights, chrome bumper, plate unreadable.
+4: Red car front, tilted and off-balance, pale bumper, dark grille, headlights on.
+5: White police car front three-quarter, red and blue roof lights, "POLICE" small on door.
+6: White police car rear three-quarter, red tail lights glowing, roof lights, small illegible text.
+7: White police car in side view, "POLICE" on door, small, blue stripe, far away.
+8: White police car front, tilted, roof lights, dark windscreen, cracked look, grey ground.
+-- result.md --
+## Faults
+FAULT A2 P1 [1-4]: red car - shape is a boxy four-door sedan/wagon (panel 2 reads as a station wagon), with a tall flat roof, short flat bonnet, small wheels. The reference is a low, long-bonnet muscle hardtop on fat tyres. Sun-worn patches barely show; bonnet and boot stripes are faint or missing in panel 1.
+FAULT A2 O5 P2 [2, 4]: front bumper - a pale slab sticking out in front like a shelf. In panel 4 the wheels are tiny and hidden, so the bumper seems to float over the road.
+FAULT A2 P2 [2, 4]: grille - a red dot sits in the middle of the grille. It is not in the reference or brief. It makes panel 4 read as a face.
+FAULT A2 P4 [4]: swerve - the car is not leaning, and the front wheels are not turned. It reads as a tilted box coming at us, not a mid-swerve.
+FAULT A2 P3 [3]: tail lamps - plain red squares. The reference has slatted lamps. The plate is tiny and its text can't be read.
+FAULT O1 O2 P6 [6]: boot text - "VICE CITY POLICE" shows as "ICE CITY POLIC", cut off by the tail lamp glow. A garbled second line sits under it ("luran.ed").
+FAULT A2 P7 [7]: light bar - only one small blue dome shows. Panels 5, 6 and 8 have a full red and blue bar. The car looks lower and longer, so it reads as a different car.
+FAULT A2 O3 P5 [5, 7]: the door badge is missing in panel 5. "POLICE" on the door is tiny and thin. Panel 7 is small in frame, so at phone size it reads as a white blob.
+FAULT A2 O5 P8 [8]: damage - the bullet hole is not found. The windscreen is crazed but has no clear hole in front of the driver. The front is hardly crumpled, the push bar is straight (not twisted), and one lamp glows (not smashed).
+FAULT O5 P8 [8]: the large purple shadow is offset to the left of the car, so the car looks pasted on.
+
+CAN'T TELL P1-8 [O4]: size of the red car against a police car. A frame with both side by side would show it.
+
+## Checked
+1-8
+
+## Cold look
+I read panel 1 as a "sedan" (matches the brief's four-door, but missed the Tulip and the stripes, which are not visible). I called panel 4 "tilted and off-balance" and did not see the missing wheel turn. In panel 6 I called the text "illegible"; it is cut off. I wrote "cracked look" for panel 8 and missed the weak damage. I did not name the badge, which is missing.
+
+## Not on the list
+- Cars are small in frame at phone size (panels 1, 7). Suggested line: the main prop fills at least a third of the frame width.
+- The shadow does not match the car or the light (panel 8). Suggested line: each shadow sits under the wheels and falls the same way in every panel.
+- The model looks like a different car from different angles (panels 5/7). Suggested line: key details (light bar, push bar, stripes) match across all views of one vehicle.
+
+== critique, round 1 pass 4 (2026-11-20): 4 fault(s), 0 can't tell
+-- look.md --
+1: Red long coupe, side view, on grey road under pink sky; no words.
+2: Red car front three-quarter view, headlights glowing, dark figure inside; no words.
+3: Red car rear view, red taillights glowing, small plate text unreadable; no words legible.
+4: Red car small, tilted front view, headlights glowing, pink sky, grey ground; no words.
+5: White police car, front three-quarter, flashing lights, "POLICE" on side, two figures inside.
+6: White police car rear view, red taillights, "VICE CITY POLICE" on trunk, lights flashing.
+7: Large white police car side view, "POLICE" and badge, blue stripe, small light bar.
+8: White police car chasing red car, side by side, small, "POLICE" text tiny.
+9: Tilted white-and-black police car, front view, flashing lights, figures inside, smeared white.
+-- result.md --
+## Faults
+FAULT A2 P1 [2, 3, 4, 8]: getaway car shape - ours is a long, low, flat-sided slab with small wheels and a short bonnet. The reference is a muscle car with a long bonnet, curved haunches, fat tyres and a small grille. It does not read as the Chevelle-type car.
+FAULT A2 P5 [6, 7, 8, 9]: police car shape - ours is a boxy 1980s saloon with a flat nose. The reference is a smooth modern saloon with a rounded body and a curved roofline. The push bar is a thin black lump on one side only.
+FAULT A2 P4: brief asks for the camera 0.4 m up, the car coming at it mid-swerve, leaning, front wheels turned. Ours shows a small, level car in the middle of the frame, with the roof visible so the camera is not low. There is no lean and no turned wheels.
+FAULT O3 P4: the car is tiny at phone size. The stripes, grille details and swerve cannot be read.
+FAULT A2 P1 [2, 3, 4]: sun-worn patches show only on panel 1. Panels 2 to 4 are flat red, so the car is inconsistent between panels.
+FAULT A2 P7 [5, 6]: the police car is grey-white in panel 7 but bright white in panels 5, 6 and 9. The paint colour does not match across panels.
+FAULT O2 P8: the red car covers the police car, and the police car's POLICE lettering is cut off by the red bonnet. The cars overlap and are not side by side, so the 5.3 m and 5.1 m lengths cannot be compared. This breaks O4 as well.
+FAULT A2 P9: the crash does not read. The crumpled front is a white smear on the bonnet, the push bar is not visibly twisted, and the car sits level on intact wheels. The headlamp glows on one side only, and the crazed windscreen and bullet hole are faint at phone size. The black lower front reads as a dark hole, not as damage.
+FAULT O1 P6: the rear plate text is tiny and not readable at full size. The red car's plate in panel 3 (M9C T48) is also too small to check at phone size.
+CAN'T TELL P1 [4]: the two black stripes on bonnet and boot. A side view and the tiny panel 4 do not show them. A top or three-quarter picture of the bonnet would show them.
+CAN'T TELL P9: whether the bullet hole is in front of the driver. A larger front view would show it.
+
+## Checked
+1-9
+
+## Cold look
+I read panel 8 as a chase. It should be parked side by side, so the overlap and angles hid the intent. I wrote "no words legible" for panel 3, but it has a plate, and I missed the plate in panel 6. For panel 9 I wrote "smeared white" and missed the crazed windscreen and the bullet hole. That confirms the crash does not read at phone size. Panel 4 read as a small tilted car, not a low-camera swerve.
+
+## Not on the list
+1. The car sits small in frame in panels 4, 5, 8 and 9, with a lot of empty background. Suggested line: the car fills at least half the panel width.
+2. Panels 2 to 4 show the grille and wheels as flat black blobs. Suggested line: wheels and grille show a rim, hubcap or bar detail at phone size.
+3. The wheels are too big for the body and the arches are missing. Suggested line: wheel-to-body proportion matches the reference.
+4. The panel 8 cars are not at matching angles, so the size comparison is unfair. Suggested line: size-comparison panels show both cars from the same angle with no overlap.
+5. The shadows differ in panels 1, 7 and 9. Suggested line: the contact shadow matches the car's footprint and the light direction.
+

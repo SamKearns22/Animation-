@@ -133,22 +133,26 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
 | vice-city-montage, vice-city-ocean-beach | murals, palms, overhead wires, low pastel shops, Ocean Drive neon at dusk, pink sky | |
 | missing: a cruiser front-on (seen through the rear window and in the crash); the woman's unicorn jumper (anywhere) | fetched at the build | |
 
-## Where things stand (20 Nov, chat 4, Opus high)
-- Rules that bite next: 8 (rehearse the swerve and the crash first), 3 (Vice City streets point by point beside the game), 89 (cars critiqued alone).
-- Done: cast built and through both critique hunts (people file story/grand-theft-autism-people.txt; matched to the game's first hours,
-  Sam's note; her prettier and cooler: shag cut, nose stud, headphones; Added: headphones round her neck). Cast sheet sent to Sam.
-- Next: Opus, high effort: the Tulip and the VCPD cruiser (3D, new), then the two rehearsal clips (swerve past the low camera;
-  lean-out and crash). Shot 7 is the held three-shot (Sam's correction).
-- Needs Sam: his look at the cast sheet (a note, not a gate: building carries on).
-- Read: guides/job-packs.md, Build; the plan and acting list above; references/grand-theft-autism/ (car and police pictures).
-- Open rule requests: none found in this film's notes.
-- Left open after hunt 2 (named): house-style boxy torsos and sleeve flaps; Lucia has no waist (a new body build if Sam asks); her side/back hair is a blob (never seen in this film).
-- Handover check: midterminal_cast.py was touched only for sleeve options that default to its old look; its old exceptions and
-  pose lines are that film's, not this one's. No page.py show: the film file is not started yet (only source/gta_cast.py).
-- Branch claude/blessed-c2-mics-wip stays off the main line (another film's work; named in story/status.md).
-- For Claude: cast is source/gta_cast.py (draw, bust, sheet, panels); kit additions in people.py/people_parts.py/people_turned.py
-  (palms, biker, unicorn, scoop, headphones extras; soft, lashes, hoops, stud, rest smile, `hair: pony, C, high`, `sleeves short`).
-  Cars: build in source/gta_cars.py on sets.Cam/Face/obox/cylinder (3D, metres); film file from source/satire_template.py.
-  The 5:30 UK reminder (trig_01B51RSAAq6Sgymzr6MttTsf) fires into chat 4 as a backup; chat 5 carries the work.
+- [x] Carried from chat 4 (03:30, a message from the sister chat): "Correction from Sam: ignore the "camera-move strength 7" reading in your prompt." "His note meant shot 7: no rear-view mirror close-up;" "the camera stays on all three characters, same three-shot as shot 8 (cruiser lights still visible in" the back window). "Notes updated on the main line (fetch it first)." "No question for Sam is open on this." (Done: shot 7 row in the plan.)
+- [x] Sam (03:37): "Just have a 5:30 reactivation check in case usage runs out whilst I sleep" (set in chat 4 as a backup).
+- [x] Cars built (chat 5): source/gta_cars.py, both critique hunts fixed; car sheet sent to Sam (20 Nov).
+- Rehearsal clips sent: 20 Nov, shot 2 swerve (stand-in street, 4.1 s, 1.0 MB). Shot 4 lean-out and crash: next chat.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 4.31% of 15%; forecast 54.8% (2026-11-20)
+## Where things stand (20 Nov, chat 5, Opus high)
+- Rules that bite next: 8 (shot 4's lean-out and crash rehearsed before any other movement), 41 (Jason's arms and gun hand leaning out), 89 (the clip critiqued).
+- Done: both cars built in 3D and through both critique hunts (getaway car and police car, whole and crashed; sheet sent).
+  Rehearsal 1 sent: shot 2's swerve past the low camera on a stand-in street (the real junction is the sets stage).
+- Next: Opus, high effort (a new move): rehearsal 2, shot 4: track left with Jason leaning out of the passenger window,
+  4 shots back, the lead police car's windscreen crazes in front of its driver, it slews, hits a hydrant (water jet),
+  bursts into a shop front in a fireball; back in to shot 3's frame. Short clip to Sam.
+- Needs Sam: his look at the cast sheet, the car sheet and the swerve clip (notes, not gates).
+- Read: guides/job-packs.md, Build; the plan and acting list above; guides/figure-rig.md 2-4 (Jason leaning out).
+- Open rule requests: none found in this film's notes.
+- Left open (named): the police car is a boxier saloon than the game's rounded one (house look; a rounder roof is a later fix if Sam asks);
+  plates are real size so their letters only read close up; the swerve's street is a stand-in.
+- For Claude: cars source/gta_cars.py (Car, draw_car, SPECS, flash; crush/shatter for the crash); shot 2 rehearsal and the
+  stand-in street source/gta_rehearse.py (route, car_at, tyre_smoke, light_wash, clip; `shot2 OUT.mp4`). Build shot 4 there:
+  a shot4(t) with the Tulip on a straight street, cruisers behind (car_at-style paths), Jason from source/gta_cast.py,
+  muzzle flash/glass/hydrant jet/fireball from prepper_fx and flying_whales_fx (catalogue, Effects). Critique packs r1-p3, r1-p4 (cars stage).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 5.66% of 15%; forecast 56.2% (2026-11-20)

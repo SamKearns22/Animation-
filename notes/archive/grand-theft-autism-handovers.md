@@ -31,3 +31,22 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   Glock from prepper_cast, effects from prepper_fx and flying_whales_fx (fireball_sprite, Puff, splash_parts);
   vehicle precedent protest_tiers_sets.truck. Title font Pricedown is fetched by `_title_font()`, in .gitignore; never commit it.
 
+
+## Where things stood (20 Nov, chat 4, Opus high)
+- Rules that bite next: 8 (rehearse the swerve and the crash first), 3 (Vice City streets point by point beside the game), 89 (cars critiqued alone).
+- Done: cast built and through both critique hunts (people file story/grand-theft-autism-people.txt; matched to the game's first hours,
+  Sam's note; her prettier and cooler: shag cut, nose stud, headphones; Added: headphones round her neck). Cast sheet sent to Sam.
+- Next: Opus, high effort: the Tulip and the VCPD cruiser (3D, new), then the two rehearsal clips (swerve past the low camera;
+  lean-out and crash). Shot 7 is the held three-shot (Sam's correction).
+- Needs Sam: his look at the cast sheet (a note, not a gate: building carries on).
+- Read: guides/job-packs.md, Build; the plan and acting list above; references/grand-theft-autism/ (car and police pictures).
+- Open rule requests: none found in this film's notes.
+- Left open after hunt 2 (named): house-style boxy torsos and sleeve flaps; Lucia has no waist (a new body build if Sam asks); her side/back hair is a blob (never seen in this film).
+- Handover check: midterminal_cast.py was touched only for sleeve options that default to its old look; its old exceptions and
+  pose lines are that film's, not this one's. No page.py show: the film file is not started yet (only source/gta_cast.py).
+- Branch claude/blessed-c2-mics-wip stays off the main line (another film's work; named in story/status.md).
+- For Claude: cast is source/gta_cast.py (draw, bust, sheet, panels); kit additions in people.py/people_parts.py/people_turned.py
+  (palms, biker, unicorn, scoop, headphones extras; soft, lashes, hoops, stud, rest smile, `hair: pony, C, high`, `sleeves short`).
+  Cars: build in source/gta_cars.py on sets.Cam/Face/obox/cylinder (3D, metres); film file from source/satire_template.py.
+  The 5:30 UK reminder (trig_01B51RSAAq6Sgymzr6MttTsf) fires into chat 4 as a backup; chat 5 carries the work.
+

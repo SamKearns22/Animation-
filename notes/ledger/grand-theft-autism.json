@@ -1578,6 +1578,11 @@
    "date": "2026-11-20",
    "spent": 4.31,
    "forecast": 54.8
+  },
+  {
+   "date": "2026-11-20",
+   "spent": 5.66,
+   "forecast": 56.2
   }
  ],
  "critique": {
@@ -1634,15 +1639,51 @@
      "2 A1 P2: Lucia - boxy straight torso, same build as Jason; the brief's fitted top does not show and she does not read clearly as a woman at phone size. Neckline",
      "1 A2 P4: Jason's hair is a tall, heavy block, much bigger than the close-cropped reference; face is blank, no weight like the reference. Build is thin-limbed ag"
     ]
+   },
+   {
+    "round": 1,
+    "pass": 3,
+    "stage": "cars",
+    "date": "2026-11-20",
+    "hunt": 1,
+    "faults": 10,
+    "cant_tell": 0,
+    "open": [
+     "1-4 A2 P1: red car - shape is a boxy four-door sedan/wagon (panel 2 reads as a station wagon), with a tall flat roof, short flat bonnet, small wheels. The refer",
+     "2,4 A2 O5 P2: front bumper - a pale slab sticking out in front like a shelf. In panel 4 the wheels are tiny and hidden, so the bumper seems to float over the ro",
+     "2,4 A2 P2: grille - a red dot sits in the middle of the grille. It is not in the reference or brief. It makes panel 4 read as a face.",
+     "4 A2 P4: swerve - the car is not leaning, and the front wheels are not turned. It reads as a tilted box coming at us, not a mid-swerve.",
+     "3 A2 P3: tail lamps - plain red squares. The reference has slatted lamps. The plate is tiny and its text can't be read.",
+     "6 O1 O2 P6: boot text - \"VICE CITY POLICE\" shows as \"ICE CITY POLIC\", cut off by the tail lamp glow. A garbled second line sits under it (\"luran.ed\").",
+     "7 A2 P7: light bar - only one small blue dome shows. Panels 5, 6 and 8 have a full red and blue bar. The car looks lower and longer, so it reads as a different ",
+     "5,7 A2 O3 P5: the door badge is missing in panel 5. \"POLICE\" on the door is tiny and thin. Panel 7 is small in frame, so at phone size it reads as a white blob.",
+     "8 A2 O5 P8: damage - the bullet hole is not found. The windscreen is crazed but has no clear hole in front of the driver. The front is hardly crumpled, the push",
+     "8 O5 P8: the large purple shadow is offset to the left of the car, so the car looks pasted on."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 4,
+    "stage": "cars",
+    "date": "2026-11-20",
+    "hunt": 2,
+    "faults": 4,
+    "cant_tell": 0,
+    "open": [
+     "2-4,8 A2 P1: getaway car shape - ours is a long, low, flat-sided slab with small wheels and a short bonnet. The reference is a muscle car with a long bonnet, cu",
+     "6-9 A2 P5: police car shape - ours is a boxy 1980s saloon with a flat nose. The reference is a smooth modern saloon with a rounded body and a curved roofline. T",
+     "2-4 A2 P1: sun-worn patches show only on panel 1. Panels 2 to 4 are flat red, so the car is inconsistent between panels.",
+     "5-6 A2 P7: the police car is grey-white in panel 7 but bright white in panels 5, 6 and 9. The paint colour does not match across panels."
+    ]
    }
   ],
   "lines": {
    "A2": {
-    "faults": 5,
+    "faults": 17,
     "false": 0
    },
    "P4": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "A1": {
@@ -1650,11 +1691,11 @@
     "false": 0
    },
    "P2": {
-    "faults": 3,
+    "faults": 5,
     "false": 0
    },
    "P5": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "P13": {
@@ -1666,10 +1707,38 @@
     "false": 0
    },
    "P8": {
-    "faults": 2,
+    "faults": 4,
     "false": 0
    },
    "P6": {
+    "faults": 2,
+    "false": 0
+   },
+   "P1": {
+    "faults": 3,
+    "false": 0
+   },
+   "O5": {
+    "faults": 3,
+    "false": 0
+   },
+   "P3": {
+    "faults": 1,
+    "false": 0
+   },
+   "O1": {
+    "faults": 1,
+    "false": 0
+   },
+   "O2": {
+    "faults": 1,
+    "false": 0
+   },
+   "P7": {
+    "faults": 2,
+    "false": 0
+   },
+   "O3": {
     "faults": 1,
     "false": 0
    }
