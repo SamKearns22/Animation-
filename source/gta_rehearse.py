@@ -972,7 +972,9 @@ J4_KEYS = [  # (t, hips, facing (deg, + toward the car's right), lean (deg forwa
     (5.80, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
     (6.20, (0.42, 0.18, 0.00), 0, 0, (0.32, 0.33, 0.70), (0.52, 0.33, 0.70)),
 ]
-GRIP_J = (0.72, 1.50, 0.20)       # his free hand on the roof's front corner, over the open window
+GRIP_J = (0.72, 1.50, 0.20)
+HIDE_JASON = [False]
+import humancheck as HC           # noqa: E402  the body check (proposal big-body-moves)       # his free hand on the roof's front corner, over the open window
 
 
 def jason4(t):
@@ -1047,6 +1049,7 @@ def jason_layer(img, cam, tul, t, lead, info=None):
     d_fig = unlean(to_fig(cam, n0, a, d), lean)
     up = tuple(c + (r - c) * kk for c, r in zip((0.9, -1.0, 0.05), (0.15, -1.0, 0.0)))
     gun_dir = S._norm(tuple(c + (b - c) * w for c, b in zip(up, d_fig)))
+    d_fig_drawn = gun_dir
     thigh = _unleaned_pt(fig(tul.body_pt((0.30, 0.31, 0.30))), lean)   # seated: his left hand rests on his thigh
     if kk <= 0:                                               # (it hung through the floor before: chat 15)
         V.arm_to(j, 'L', thigh, 'down', 'palm')
@@ -1095,13 +1098,20 @@ def jason_layer(img, cam, tul, t, lead, info=None):
     if sk > 0:                                     # header rail hides his crown, never his head over the roof: chat 13)
         al *= (1 - sk) + sk * np.maximum(np.asarray(lo_g), np.asarray(up_g)).astype(np.float32) / 255
     lay.putalpha(Image.fromarray(al.astype(np.uint8)))
-    img.alpha_composite(lay)
-    img.alpha_composite(G.glass_tint(img.size, al * gl * 0.15))   # glass dims him by a tint on top, never see-through
+    if not HIDE_JASON[0]:                          # the body check draws the frame once without him (shows-through test)
+        img.alpha_composite(lay)
+        img.alpha_composite(G.glass_tint(img.size, al * gl * 0.15))   # glass dims him by a tint on top, never see-through
+    if js['flash']:                                # the body check: the gun as DRAWN against its target (note 8)
+        vd, mir = V.snap(a)
+        (dx, dy), _ = V.project(d_fig_drawn, vd)
+        (mx, my), _ = cam.project(fig_to_world(cam, n0, a, _leaned_pt(j['wrR'], lean), m))
+        (tx, ty), _ = cam.project(target)
+        HC.aim('Jason', (mx, my), (-dx if mir else dx, dy), (tx, ty))
     if info is not None:
         pts = body_pts3(cam, n0, a, j, m, 'jason', lean=lean)
         pts.append(('gun hand', fig_to_world(cam, n0, a, _leaned_pt(j['wrR'], lean), m)))
         lower = {'hipL', 'hipR', 'kneeL', 'kneeR', 'footL', 'footR', 'waist'}
-        info.update(pts3=pts, erase=[(n, q, lower) for n, q in lo_used] + [(n, q, {p for p, _ in pts} - lower) for n, q in up_used])
+        info.update(toggle=lambda on: HIDE_JASON.__setitem__(0, not on), pts3=pts, erase=[(n, q, lower) for n, q in lo_used] + [(n, q, {p for p, _ in pts} - lower) for n, q in up_used])
 
 
 # ---- inside the Tulip (shot 3's three-shot and shot 4's ends): each person posed in the car's own frame (metres),
@@ -1522,12 +1532,16 @@ def clip(frame_fn, length, out, frames_dir=None, fps=FPS):
     d = frames_dir or tempfile.mkdtemp()
     os.makedirs(d, exist_ok=True)
     n = int(round(length * fps))
+    hc = HC.Writer(os.path.basename(out))           # the body check, every person, every drawing
     for i in range(n):
+        HC.frame_begin()
         im = frame_fn(i / fps)
+        hc.frame(i / fps, HC.frame_end(i / fps))
         im.convert('RGB').resize((1080, 1920), Image.LANCZOS).save(os.path.join(d, f'f{i:04d}.png'))
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(fps), '-i', os.path.join(d, 'f%04d.png'),
                     '-vf', 'fps=24,format=yuv420p', '-c:v', 'libx264', '-crf', '22', '-preset', 'medium', out], check=True)
     print('wrote', out, f'{os.path.getsize(out) / 1e6:.1f} MB', n, 'drawings')
+    hc.finish(out, named='--body-named' in sys.argv)
 
 
 if __name__ == '__main__':

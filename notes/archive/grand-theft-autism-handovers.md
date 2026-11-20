@@ -300,3 +300,23 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: people.crowd_person hangs kit_head/kit_torso for crowd members once installed; MIXES['miami'];
   jason_layer/J4_KEYS/cover_masks is cause A; cop_inside person_cached vs fresh path is note 12; HYDRANT timer note 13.
 
+
+## Where things stand (20 Nov, chat 17, Opus high; waiting on Sam)
+- Rules that bite next: 8 (build proposal before building: sent, waiting), 74 (shot 4 acting rows, written), 89 (fresh
+  critique before every send: version 4 skipped it).
+- Done: proposal big-body-moves judged blind (helper A picked) and its learn step (learn.md: v4's skeleton measured
+  human; the drawing method was the fault; look sheet v5-test-skeleton-vs-v4.jpg); shot 4 acting rows, fix 3 events,
+  Sam's 16 frame notes carried; the shot 4 build proposal (section above); case study section 10.
+- Next: Opus, high (new building), on Sam's answers: Change 1 (the human-body check, must pass the pose gallery, shot 3
+  and two past films clean), then Change 2 (lean-out key poses on the skeleton, five-view pose sheet + critique), then
+  rebuild shot 4 from the build proposal. Shots 5-8 wait.
+- Needs Sam: Q1 option 1 or 2; Q2 the lean-out as written; Q3 Y to the build proposal.
+- Read: guides/job-packs.md Build; notes/proposals/big-body-moves.md Final version and learn.md; this file's shot 4
+  sections; the case study section 10.
+- Open rule requests: none (lesson 17 is a draft lesson, not a rule request).
+- For Claude: skeleton test script was scratch: build k from jason_layer joints via fig_to_world (lying.Body keys as in
+  from_views), draw with lying_flat.draw(img, cam, k, sp, t, M=MPU_J); patch only inside jason_layer (V.person is
+  shared with hats and crowd). Critique pack gta-shot4-learn r1-p1 is a learn run, not a film stage.
+- Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
+  freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
+

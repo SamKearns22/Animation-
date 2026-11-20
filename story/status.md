@@ -1,3 +1,3 @@
-Grand Theft Autism: Jason's body method judged (3D skeleton + flat pieces, a human-body check); test sheet shows it fixes the arms.
-Shot 4 build plan sent to Sam with acting notes and his fix 3; waiting for his 3 answers.
-Then chat 17 or next (Opus, high) builds the check, the lean-out poses, and shot 4.
+Grand Theft Autism: Sam said Y to the body method and the shot 4 build plan.
+The body check is half built: it catches 6 of Sam's version 4 notes by itself; 10 pose-gallery flags to sort.
+Next: chat 18 (Opus, high) finishes the check, then Jason's lean-out poses, then rebuilds shot 4.

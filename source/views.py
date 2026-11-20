@@ -38,6 +38,7 @@ ELEV = 0.14                                   # the camera a little above: neare
 _E = [ELEV]                                   # the tilt in use: ELEV, or the camera's real one (person(tilt=...))
 HIGH = 40.0                                   # degrees: a camera steeper than this draws people in 3D (lying.stand)
 HIP_Y = 450.0
+HC_HOOK = [None]                             # humancheck.install sets it: every person drawn is reported
 JACKET = 505.0                                # jacket hem just below the hips: more leg shows (Sam, 14 Oct)
 SEAT_DROP = 222.0                             # seated: the body lower by this (knee-height chair, thighs level)
 LONG_HAIR = {'long': 150, 'bob': 110, 'blonde': 260, 'wavy': 230}
@@ -1265,6 +1266,10 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
             draw(p, j2)
     # a long thing held through the middle (Maul's saberstaff, Netan-Yahoo! 26 Oct) crosses in front of him: seen
     # from behind it is drawn before his back, only its ends showing past him (the prop sets rear_under)
+    if HC_HOOK[0]:                               # the body check (humancheck.py): what is drawn, as it is drawn
+        HC_HOOK[0](dict(kind='flat', j=j, view_deg=view_deg, mirror=mirror, depth=depth, j2=j2, behind=set(behind),
+                        sp=sp, s=s, t=t, yaw=yaw, head_yaw=head_yaw,
+                        tilt=None if squash is None else (_E[0], squash)))
     under = [] if held_behind or not rear else [d for d in j.get('props', []) if getattr(d, 'rear_under', False)]
     for draw in under:
         draw(p, j2)

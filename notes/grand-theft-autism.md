@@ -438,23 +438,32 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
   the acting rows at full size, with a picture for each beat.
 
-## Where things stand (20 Nov, chat 17, Opus high; waiting on Sam)
-- Rules that bite next: 8 (build proposal before building: sent, waiting), 74 (shot 4 acting rows, written), 89 (fresh
-  critique before every send: version 4 skipped it).
-- Done: proposal big-body-moves judged blind (helper A picked) and its learn step (learn.md: v4's skeleton measured
-  human; the drawing method was the fault; look sheet v5-test-skeleton-vs-v4.jpg); shot 4 acting rows, fix 3 events,
-  Sam's 16 frame notes carried; the shot 4 build proposal (section above); case study section 10.
-- Next: Opus, high (new building), on Sam's answers: Change 1 (the human-body check, must pass the pose gallery, shot 3
-  and two past films clean), then Change 2 (lean-out key poses on the skeleton, five-view pose sheet + critique), then
-  rebuild shot 4 from the build proposal. Shots 5-8 wait.
-- Needs Sam: Q1 option 1 or 2; Q2 the lean-out as written; Q3 Y to the build proposal.
-- Read: guides/job-packs.md Build; notes/proposals/big-body-moves.md Final version and learn.md; this file's shot 4
-  sections; the case study section 10.
-- Open rule requests: none (lesson 17 is a draft lesson, not a rule request).
-- For Claude: skeleton test script was scratch: build k from jason_layer joints via fig_to_world (lying.Body keys as in
-  from_views), draw with lying_flat.draw(img, cam, k, sp, t, M=MPU_J); patch only inside jason_layer (V.person is
-  shared with hats and crowd). Critique pack gta-shot4-learn r1-p1 is a learn run, not a film stage.
+## Where things stand (20 Nov, chat 17 end, Opus high; for chat 18)
+- Rules that bite next: 8 (Sam said Y to the build proposal: build exactly it), 89 (critique before every send), 30.
+- Done: Sam's answers 1 (option 1), Y (lean-out as written, legs never seen), Y (build proposal). Change 1 started:
+  source/humancheck.py (arm drawn over/behind the body against its depth, arm coming out on the far side, the picture
+  one joined piece, the gun as drawn vs its target), hooked into views and lying_flat; viewchecks.solid_faults now
+  samples along every bone and tests "a part behind a solid must not show" (toggle); gta_rehearse.clip runs it and
+  holds a faulty clip aside. On version 4 it finds notes 2, 3, 4, 6, 7, 8 (hip through the bonnet, chest through the
+  pillar, elbow through the roof, arm out of the back, gun 27-30 degrees off). Shot 3: clean.
+- Next: Opus, high (finish Change 1, then Change 2): (1) the pose gallery gives 10 flags in 744 drawings (2 "far
+  side", 8 "hidden though in front"): name the poses (add the pose name to the hook's who), sort real from false, fix
+  the test; also the 3 crowd "far side" flags at 2.58-3.5 s in shot 4; (2) run two past films' animatic frames with
+  the check: 0 false flags; (3) a kittest (version 4 frames must fail, shot 3 must pass); (4) only then install the
+  send gate (PreToolUse on SendUserFile: python3 source/humancheck.py sendgate) and hook film_engine._frame
+  (frame_begin/end per drawing, faults in a .body.txt beside each cached frame) and finish.py (copy_record);
+  (5) Change 2: lean-out key poses on the skeleton (lying_flat + grips for the gun), five-view pose sheet, critique;
+  (6) rebuild shot 4 from the build proposal and acting rows.
+- Needs Sam: nothing until the shot 4 pose sheet (with the build) or the clip.
+- Read: guides/job-packs.md Build; notes/proposals/big-body-moves.md Final version and learn.md; source/humancheck.py
+  MAP; this file's shot 4 sections.
+- Open rule requests: none.
+- For Claude: test scripts were scratch (lost with the container): a frame list through H.frame_begin / R.shot4(t) /
+  H.frame_end(t) with H.Writer, and VC.solid_faults(R.shot4, R.SHOT4_LEN, frames=[...]). humancheck.START is
+  20 Nov 22:00 UTC.
 - Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
   freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
+- Quick check on gta_rehearse (no SHOT_MARKS): it is the rehearsal file, not the film's module; the front-on check
+  runs on the film file once the moves stage builds it (answered chat 17).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 28.82% of 15%; forecast 79.4% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 30.21% of 15%; forecast 80.7% (2026-11-20)

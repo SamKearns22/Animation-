@@ -34,6 +34,7 @@ from ink import INK, curve    # noqa: E402
 BACKS = ('three_back', 'back')                         # trunk views seen from behind
 HEAD_TILT = 35.0                                       # degrees the head may tip off the trunk's line
 _N = [0]
+HC_HOOK = [None]                                       # humancheck.install: every body drawn is reported
 
 
 # ---------------------------------------------------------------------------------------------- cams
@@ -431,6 +432,8 @@ def draw(img, cam, k, sp, t=0.0, M=None):
     mid = (k['neck'] + k['pelvis']) / 2
     if cam.depth(tuple(mid)) <= cam.NEAR:
         return None
+    if HC_HOOK[0]:
+        HC_HOOK[0](dict(kind='skeleton', k=k, sp=sp, cam=cam, t=t))
     d = _unit(np.asarray(cam.pos, float) - mid)
     a = yaw_seen(d, X, fwd)
     vd, _ = V.snap(a)

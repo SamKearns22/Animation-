@@ -331,6 +331,12 @@ Added after Sam's notes 1-16 (chat 16):
   under version 4 measured HUMAN at all six moments tested: the horror came from the flat drawing method, not the
   poses. Same poses drawn with flat pieces on the skeleton: arms join the shoulders (picture:
   v5-test-skeleton-vs-v4.jpg). Lesson 17 (draft): test the drawn picture, not only the skeleton underneath it.
+- Sam's answers (chat 17): option 1; the lean-out as written (kneeling on the seat, out to the waist, legs never seen);
+  Y to the build proposal.
+- The body check (chat 17, first half of Change 1): run on version 4 it names Sam's notes 2, 3, 4, 6, 7 and 8 by
+  itself (hip through the bonnet at 0.58 s, chest through the window pillar, elbow through the roof, the right arm
+  coming out of his back at 1.67 s, the gun 27-30 degrees off its target as drawn). Shot 3 passes clean. Not yet
+  allowed to stop a clip: 10 flags on the pose gallery to sort first.
 
 ## 9. For Claude (code names live here, not in messages)
 

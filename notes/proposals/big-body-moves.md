@@ -1,6 +1,6 @@
 # Proposal: How to build big 2D body moves (a climb, a turn, a lean-out) and a check that every person in every frame is a human body
 
-Status: open
+Status: adopted (2026-11-20)
 
 ## Problem
 In Grand Theft Autism shot 4 (6.2 s), Jason climbs from the front passenger seat of a moving car, out through the

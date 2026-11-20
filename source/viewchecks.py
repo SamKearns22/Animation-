@@ -416,12 +416,50 @@ def layer_faults(shot, length, fps=12, step=2, allowed=(), label=''):
     return out
 
 
+def _bone_in(base, only):
+    """A bone sample belongs to the parts a face rubs out when both its joints do."""
+    return any(nm == base and a in only and b in only for a, b, nm in BONES)
+
+
 def _in_poly(x, y, poly):
     inside = False
     for (x0, y0), (x1, y1) in zip(poly, poly[1:] + poly[:1]):
         if (y0 > y) != (y1 > y) and x < x0 + (y - y0) * (x1 - x0) / (y1 - y0):
             inside = not inside
     return inside
+
+
+BONES = (('shL', 'elL', 'upper arm L'), ('elL', 'wrL', 'forearm L'), ('shR', 'elR', 'upper arm R'),
+         ('elR', 'wrR', 'forearm R'), ('hipL', 'kneeL', 'thigh L'), ('kneeL', 'footL', 'shin L'),
+         ('hipR', 'kneeR', 'thigh R'), ('kneeR', 'footR', 'shin R'), ('neck', 'chest', 'chest'),
+         ('chest', 'waist', 'belly'))
+
+
+def bone_samples(pts3):
+    """The body's joints plus points along every bone (thirds), so a limb half through a door is seen, not only its
+    ends (humancheck, proposal big-body-moves: a sausage arm cut from its shoulder passed the joints-only test)."""
+    d = dict(pts3)
+    out = list(pts3)
+    for a, b, nm in BONES:
+        if a in d and b in d:
+            pa, pb = np.asarray(d[a], float), np.asarray(d[b], float)
+            out += [(f'{nm} ({k}/3)', tuple(pa + (pb - pa) * k / 3)) for k in (1, 2)]
+    return out
+
+
+def _hidden_by(cam, q, solids, skip, step=0.03):
+    """The first listed solid the line from the lens to body point q passes through before it gets there (None)."""
+    cp = np.asarray(cam.pos, float)
+    qq = np.asarray(q, float)
+    L = float(np.linalg.norm(qq - cp))
+    n = int(L / step)
+    for k in range(1, n - 2):                      # stop 6-9 cm short of the point: its own surface is not a cover
+        p = tuple(cp + (qq - cp) * (k * step / L))
+        for sn, test in solids:
+            hit = test(p)
+            if hit and hit not in skip and sn not in skip and not any(g in hit for g in ('glass', 'screen')):
+                return hit                         # glass tints what is behind it, never hides it
+    return None
 
 
 def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
@@ -456,7 +494,8 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
         solids = [(n, inf['solid']) for n, _, inf in infos if 'solid' in inf]
         cam = next((inf['cam'] for _, _, inf in infos if 'cam' in inf), None)
         for who, fn, inf in infos:
-            for part, q in inf.get('pts3', []):
+            samples = bone_samples(inf.get('pts3', []))
+            for part, q in samples:
                 for sn, test in solids:
                     hit = test(q)
                     if hit and hit not in inf.get('may_touch', ()) and sn not in inf.get('may_touch', ()):
@@ -472,8 +511,10 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
                     a, b, c = (np.asarray(poly[k], float) for k in range(3))
                     nrm = np.cross(b - a, c - a)
                     cp = np.asarray(cam.pos, float)
-                    for part, q in inf.get('pts3', []):
-                        if cam.depth(q) < 0.05 or (only is not None and part not in only):
+                    for part, q in samples:
+                        base = part.split(' (')[0]
+                        if cam.depth(q) < 0.05 or (only is not None and part not in only and
+                                                   not _bone_in(base, only)):
                             continue
                         (X, Y), _ = cam.project(q)
                         if not _in_poly(X, Y, pp):
@@ -485,6 +526,24 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
                         if u > 1.02:
                             note(who, 'erase ' + fname, t, f'{who}: {part} is rubbed out by {fname} but is in front of it')
                             break
+            if cam is not None and inf.get('toggle'):       # a part behind a solid must not show (knees through a
+                inf['toggle'](False)                         # bonnet, legs in a door frame: GTA notes 2, 3, 4, 11)
+                try:
+                    bare = np.asarray(shot(t).convert('RGB'), np.int16)
+                finally:
+                    inf['toggle'](True)
+                diff = np.abs(np.asarray(full.convert('RGB'), np.int16) - bare).sum(2) > 40
+                sc = W / 1080.0
+                for part, q in samples:
+                    if cam.depth(q) < 0.05:
+                        continue
+                    hit = _hidden_by(cam, q, solids, set(inf.get('may_touch', ())) | set(inf.get('see_through', ())))
+                    if not hit:
+                        continue
+                    (X, Y), _ = cam.project(q)
+                    X, Y = int(X * sc), int(Y * sc)
+                    if 2 <= X < W - 2 and 2 <= Y < H - 2 and diff[Y - 2:Y + 3, X - 2:X + 3].mean() > 0.5:
+                        note(who, 'shows ' + hit, t, f'{who}: {part} shows through {hit} (it is behind it)')
             if inf.get('ground_px') and fn is not None:
                 gx, gy = inf['ground_px']
                 sc = W / 1080.0                          # ground_px is in 1080 x 1920 pixels
