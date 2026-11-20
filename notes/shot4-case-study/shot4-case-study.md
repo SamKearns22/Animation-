@@ -189,6 +189,9 @@ verbatim first; analysis (frame, cause, fix, the check that should have caught i
 - Note 1: "Throughout the scene, L's hands are on the wheel in opposite grips. It is very funny but not how humans drive."
 - Note 2: "When J begins his movement, his lower body becomes visible. This isn't necessary and I wonder why you made that choice."
 
+**Frame 2** (Sam's still, `sam-frame-02.jpg`: early in Jason's rise, camera still near shot 3's)
+- Note 3: "His lower body is still visible through the bonnet. Clipping. The right arm turns into a gross sausage shape and becomes dislocated from the shoulder."
+
 ## 8. Lessons for future films (draft; nothing here is a rule until Sam says so)
 
 1. Judge a clip at full size, beat by beat, against the screenplay's words, before sending. A thin strip of small
