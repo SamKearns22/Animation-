@@ -7,6 +7,8 @@
       scape) and put the chorus of the above song over it"; corrected twice, final: "6.5 seconds" in all. Done in the
       opener: wipe 0.5-2.0 s with a soft edge, city in 1.8-3.0, logo held over the city to 4.7, gone by 5.65; chorus
       cut from 36.48 s of his song "Monde de Mer" (music/gta-opener-chorus.mp3), first hit on the wipe's start; no fade out (Sam).
+      Sam (20 Nov): "the bottom of the A in grand is also connected with the r/h connection when it shouldn't be":
+      fixed, the R-h joint now stops short of the a (it had been widened to the h's stem and reached the a).
       Clip sent; waiting. Every later shot moves 3 s later (plan table times are the old ones until the board).
 - [x] Lettering matched to the reference (g's tail, R joined into the h of "theft"). Sam: "great".
 - [ ] Screenplay draft 1 received (19 Nov). NOT final: no estimate until Sam confirms it.
