@@ -178,6 +178,9 @@ a crash and a fireball. Past films came in above their estimates (Remakes, Bless
   draws pixel-for-pixel. Restoring source/people.py AND people_parts.py to d732ceea passes, so one of this film's kit
   additions (358132dd on: soft/hoops/pony_high/hair_loose/short_sleeve/'smile') changes a default for people who never
   set it. Fix so finished films draw as before (Opus medium); named in notes/proposals/front-on-focus/retirement-and-handover.md.
+- Kit change since (one-route-kit chat 5, 20 Nov): front and back shoulders now round smoothly over the arm (Sam's
+  jury chips; body.front_outline), so the cast sheet's "square shoulder corners" fault may be partly gone: redraw the
+  sheet before judging. Jason's short sleeves (MidTerminal's flap) are untouched and still read as stuck-on flaps.
 - Needs Sam: Y or N, the two rehearsals (swerve clip, this lean-out clip) approved so the rest can move (rule 8).
 - Read: guides/job-packs.md, Notes round (on notes) or Build (on approval); this notes file's plan and acting list.
 - Open rule requests: none found in this film's notes.

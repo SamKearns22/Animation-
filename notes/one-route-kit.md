@@ -6,8 +6,8 @@
 - [x] "should the outdated things be completely isolated or deleted?" Answer sent: isolated, never deleted (recuts need them)
 - [x] "should this be the case throughout the project?" Answer sent: yes, every kind of kit (people, places, sound, checks)
 - [x] Sam's pick (20 Nov): "1" (freeze old films, then one clean kit; each change still gets its own yes)
-- [ ] Sam (20 Nov 11:38, chat Vqz9UpsK): "Please inform me once the kit produces our best quality product (represented by the models in Milburn, aside from the 3/4 pose tools that have been produced since then) so I can continue with the film." Test: the kit redraws Milburn's people as the posted Milburn (people.py replicate milburn, from its bookmark), plus the 3/4 tools.
-- [ ] Sam (20 Nov 11:38): "I don't like those tiny chips in the shoulders that are throughout the jury picture." (Blessed jury; the live code differs from posted Blessed by up to 1.92%: drift-baseline.json.) Fix in the kit's shoulder join, checked on the reference cast.
+- [x] Sam (20 Nov 11:38, chat Vqz9UpsK): "Please inform me once the kit produces our best quality product (represented by the models in Milburn, aside from the 3/4 pose tools that have been produced since then) so I can continue with the film." Test: the kit redraws Milburn's people as the posted Milburn (people.py replicate milburn, from its bookmark), plus the 3/4 tools.
+- [x] Sam (20 Nov 11:38): "I don't like those tiny chips in the shoulders that are throughout the jury picture." (Blessed jury; the live code differs from posted Blessed by up to 1.92%: drift-baseline.json.) Fix in the kit's shoulder join, checked on the reference cast.
 
 ## Estimate
 Whole job about 12-14% of a week once, as tool work (judge's figure, unmeasured). This proposal chat: about 3%.
@@ -67,18 +67,38 @@ Full history fetched (3,448 saves; it was shallow). For each posted video, its s
   story/kit-reference-people.txt), the load-map check, the before/after sheet of the steps (pictures are identical, so
   a table of moved/dropped steps with one reference row), Sam's Milburn-look test and the jury shoulder chips.
 
-## Where things stand (20 Nov, one-route-kit chat 4, Opus high)
-- Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
-- Done: Change 2 part 1, the people steps (above): GTA's cast loads no old film and nothing overwrites a step.
-- Sam (20 Nov, "Y to all hurry", read as my pick 1): chat 5 FIRST fixes the shoulder chips (kit shoulder join,
-  checked on the reference cast and the jury) and runs the Milburn-look check (people.py replicate on Milburn's
-  bookmark), tells Sam, then goes straight to Grand Theft Autism's characters. The tool tidying waits till after the film.
-- Later (after GTA): Change 2 part 2 (the other 20 kit loads, the 2 named tests, reference-cast test, load-map check, sheet,
-  Milburn-look test, jury shoulder chips); then GTA restarts.
-- Needs Sam: nothing. Open: Y/N bookmark Shocking Behaviour (answered 'later').
-- Read: this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
-- Open rule requests: none found.
-- For Claude: handover.py end was still running (it runs the kit tests) when Sam said hurry; run handover.py start first. body/ink/faces/views.TURNED_HEADS; refcast hashes in Change 2 results; kittests compared against an
-  untouched copy (scratch); freeze.py count --lower done at 0/0/20/40.
+## Chat 5 results (20 Nov, Opus high): the shoulder chips and the Milburn-look check
+- Chips, cause: the body's front (and back) outline sloped to a corner at (0.8 sw, 12); the arm's round top (joint at
+  sw - 14, 60, half width 34.5) sat lower, so the outline stepped down, then bumped up over the arm. And limbs._fillet
+  copied its box's edge rows outward, which at a shoulder near the box top made a false notch and painted the line out.
+- Fix: body.front_outline (front and back: the slope just touches the arm's top, rounds on the arm's own outline,
+  ink_units keeps the two lines from fighting); _fillet gets the real body mask past its box (pad). Turned views
+  (45/90/135 degrees) unchanged, except a gap at the arm two 3/4 Milburn people had, now mended (turns5.py).
+- Sent Sam: the jury before/after (same code bar the fix). Milburn-look check (measure/milburn_look.py, 12 moments,
+  bookmark vs today's kit): 0.00-0.09% of pixels differ, all at the shoulders (the fix). Sent with a picture.
+- Found, fixed: since chat 4 the live blessed.py drew all its own people (jurors, Brand, judge...) as the plain test
+  head: the engine reads body.HEADS, the film hangs its heads on MidTerminal's TC.HEADS. One line in blessed.py hands
+  them over. Found, NAMED (not fixed): live Blessed faces now draw with heavier lines than posted (drift from chat 4;
+  the bookmark draws the posted look). Other finished films that hang heads on TC.HEADS likely lost theirs the same
+  way: Change 2 part 2's drift check covers them.
+- Found, NAMED: refcast.py (chat 4's "pixel-identical at five turns") passed radians to views.person, which takes
+  degrees: all five turns were the front. Its proof covers front views only; turns5.py uses degrees.
+- Handover check (end, chat 5), named: blessed.py was touched (one line, the HEADS hand-over), so its old quick checks
+  show (no brief-checklist section, 14 exceptions without reasons, no SHOT_MARKS): the finished film's own, unchanged.
+  Branches freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers, freeze/blessed are
+  the finished films' bookmarks (freeze.py, chat 3): kept off the main line on purpose, never merged.
+- Watcher UNLISTED (start check): freeze.py, freeze_faults, record_faults, tag_faults have no promise: Change 2 part 2.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 1.23% of 15%; forecast not yet planned (2026-11-20)
+## Where things stand (20 Nov, one-route-kit chat 5, Opus high)
+- Rules that bite next: the proposal route (one change per yes), 24 (cost watch), 30.
+- Done: shoulder chips fixed in the kit (body.py, limbs.py) and shown on the jury; Milburn-look check: today's kit
+  draws Milburn as posted (only the shoulders differ). Both pictures sent to Sam.
+- Next: Grand Theft Autism's characters (Sam's "hurry": the film first), Opus high, notes/grand-theft-autism.md.
+  After the film: Change 2 part 2 (20 kit loads, 2 named tests, reference-cast test, load-map check, live-film drift
+  incl. Blessed's heavier face lines and other TC.HEADS films, refcast in degrees, 4 watcher promises).
+- Needs Sam: nothing. Open: Y/N bookmark Shocking Behaviour (answered 'later').
+- Read (for part 2): this file; notes/proposals/one-route-kit.md "Final version" Change 2; guides/job-packs.md Build.
+- Open rule requests: none found.
+- For Claude: body.front_outline/ink_units/ARM_TOP; limbs._fillet(body_big, pb); measure/milburn_look.py, turns5.py.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 3.8% of 15%; forecast not yet planned (2026-11-20)
