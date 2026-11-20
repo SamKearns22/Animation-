@@ -4914,6 +4914,510 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-20",
+   "chat": "3725a04d",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.79,
+   "src": "estimate",
+   "sid": "session_01J1JB7W4kJAPEyeCHNerQby",
+   "steps": 54,
+   "hist_k": 160,
+   "kinds": {
+    "tool search": 37.1,
+    "renders": 1.7,
+    "other": 61.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 49,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 6
+   },
+   "split": {
+    "usd": 2.8883,
+    "total": 2.8883,
+    "floor_k": 82,
+    "blocks": {
+     "start-up floor": 32.5,
+     "Claude's words": 31.1,
+     "new writes": 21.4,
+     "carried history": 15.0
+    },
+    "origins": {
+     "Claude's words": 46.6,
+     "start-up floor": 32.5,
+     "result: tool search": 17.4,
+     "result: other": 2.0,
+     "messages and reminders": 1.5
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 12,
+    "work_pct": 0.21,
+    "reads": [
+     [
+      "source/checkreplay.py",
+      3.6,
+      0.0597
+     ],
+     [
+      "source/handover.py",
+      2.8,
+      0.0453
+     ],
+     [
+      "source/ledger.py",
+      1.2,
+      0.0199
+     ],
+     [
+      "source/report.py",
+      0.9,
+      0.0146
+     ],
+     [
+      "notes/_template.md",
+      0.6,
+      0.0089
+     ],
+     [
+      "source/preflight.py",
+      0.3,
+      0.0053
+     ],
+     [
+      "notes/ledger/.current",
+      0.3,
+      0.0053
+     ]
+    ],
+    "base_pct": 27.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 2,
+     "shared:handover.py": 5,
+     "shared:checkreplay.py": 9,
+     "film notes": 8,
+     "shared:ledger.py": 12,
+     "shared:preflight.py": 5,
+     "shared:report.py": 1,
+     "shared:kittests.py": 6,
+     "shared:propose.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/branches.py",
+      "git push --dry-run origin HEAD:claude/create-claude-md-oe8z4g 2>&1 | tail -2; py",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py source/propose.py notes/proposals/check-catches/replay/",
+      "wc -l source/checkreplay.py source/propose.py && ls notes/proposals/check-catche",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposals/ notes/proposals/check-catches/ notes/proposals/check-catches.md",
+      "verdict\\|adopted\\|record\\|mark",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      "sed -n 60,203p source/checkreplay.py",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/report.py source/preflight.py",
+      "ledger\\|record(",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/preflight.py",
+      "def current\\|def _paths\\|def load\\|def store\\|\\.current\\|def round\\b\\|def cmd_ro",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/preflight.py notes/ledger/ notes/ledger/.current",
+      "sed -n 55,95p source/ledger.py; sed -n 414,440p source/preflight.py; ls notes/le",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/*.md",
+      "^def \\|refus",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/_template.md",
+      "Notes\\b\\|^## \\|^| #\\|^| *[0-9]",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/_template.md notes/proposals/check-catches/replay/",
+      "sed -n 60,70p notes/_template.md; python3 - <<'E' import json for f in ['protest",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      " in txt and not LINE.search(txt))\n        faults = parse(txt)\"\"\",\"\"\"        faul",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "^import\\|^from\\|current()",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/*.py",
+      "sed -n 100,108p source/ledger.py && du -sh source && ls source/*.py | wc -l",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/ledger/.current notes/ledger/FILM/checks.jsonl",
+      "^SKIP\\|^PROCESS",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/preflight.py",
+      "^import datetime\\|datetime\\.date\\|datetime\\.datetime",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "^import time\\|import time",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:report.py",
+      "source/report.py source/ledger.py",
+      "^import\\|^from\\|^    import",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      "python3 - <<'E' p='source/checkreplay.py' s=open(p).read() anchor=\"\"\" print('ALL",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      "^  ",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "film notes",
+      "rt/notes/filmx.md /tmp/rt/notes/ledger/filmx/checks.jsonl",
+      "cd /tmp && rm -rf rt && mkdir -p rt/source rt/notes && cp /home/user/Animation-/",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/checkreplay.py",
+      "^  ",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "sed -n '/^def record(/,/^def checkruns/p' source/ledger.py | sed -n 8,45p",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/preflight.py source/checkreplay.py D/notes/ledger/.curre",
+      "^\\s*- ",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:preflight.py",
+      "notes/milburn.md notes/archive/ /tmp/tmp.5D11xvEHX7/notes/ledger/milburn/ source",
+      "summarise\\|_text_only",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:preflight.py",
+      "/home/user/Animation-/source/preflight.py",
+      "check record\\|ledger",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/*.py",
+      "def run_shared\\|shared checks",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/ledger.py source/checkreplay.py",
+      "_film_files\\|^def \\|^    film = \\|SKIP",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/preflight.py source/checkreplay.py D/notes/ledger/milbur",
+      "^ - ",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/ledger/",
+      "^import\\|^from",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      "python3 - <<'E' p='source/checkreplay.py' s=open(p).read() a=\"\"\" out.insert(-2 -",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:checkreplay.py",
+      "notes/proposals/check-catches/replay/protest-tiers.md notes/proposals/check-catc",
+      "cp notes/proposals/check-catches/replay/protest-tiers.md /tmp/pt-old.md; cp note",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      "python3 - <<'E' p='source/checkreplay.py' s=open(p).read() a=\"\"\" runs = [dict(r,",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "film notes",
+      "notes/proposals/check-catches/replay/milburn.md notes/proposals/check-catches/re",
+      "git checkout notes/proposals/check-catches/replay/milburn.md notes/proposals/che",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/handover.py source/preflight.py source/checkreplay.py no",
+      "^## \\|^Status",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "ledger",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def .*(\\|ledger.record",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3\\|usage\\|argv",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "awk 'NR>=2660 && NR<=2680 && /^def /' source/kittests.py; timeout 600 python3 so",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "git stash -q && timeout 300 python3 source/kittests.py cost_rows 2>&1 | tail -2;",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "film notes",
+      "notes/proposals/check-catches.md notes/ledger/FILM/checks.jsonl notes/proposal-r",
+      "Where things stand",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/archive/",
+      "^## ",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/archive/proposal-route-handovers.md",
+      "sed -n 1,2p notes/proposal-route.md; tail -3 notes/archive/proposal-route-handov",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "film notes",
+      "notes/halo-no-no.md",
+      "posted\\|Where things stand",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:propose.py",
+      "notes/proposal-route.md notes/archive/proposal-route-handovers.md source/propose",
+      "python3 - <<'E' p='notes/proposal-route.md' s=open(p).read() i=s.index('## Where",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:handover.py",
+      "notes/proposal-route.md source/handover.py",
+      "python3 - <<'E' p='notes/proposal-route.md' s=open(p).read() s=s.replace(\"Handov",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "other",
+      "",
+      "git worktree remove --force /tmp/tmp.5D11xvEHX7; git worktree prune; git commit ",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:checkreplay.py",
+      "source/checkreplay.py",
+      "git fetch -q origin && git log --oneline -1 origin/claude/create-claude-md-oe8z4",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {}
