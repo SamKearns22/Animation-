@@ -9,3 +9,6 @@ I don't like those tiny chips in the shoulders that are throughout the jury pict
 ### 2026-11-20T11:38:26
 Hello. How long will it be before I can continue with the film with our best tools only? That is priority.
 
+### 2026-11-20T11:42:26
+what's wrong with Shocking Behaviour?
+
