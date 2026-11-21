@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 53.2% of a week; spent 40.79% (-12.41); 22 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate 53.2% of a week; spent 41.3% (-11.90); 23 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 40.79% of the 0% planned so far; at this rate the film lands at 91.3%.**
+**Forecast: Spent 41.3% of the 0% planned so far; at this rate the film lands at 91.8%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -46,6 +46,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-20 | 52f64bb2 | est | opus | auto |  | 1.98 |  | 0 | 0 |
 | 2026-11-21 | 423495d7 | est | opus | auto |  | 2.36 |  | 0 | 0 |
 | 2026-11-21 | 7cd3743d | est | opus | auto |  | 2.31 |  | 0 | 0 |
+| 2026-11-21 | b6dc5d92 | est | opus | auto |  | 0.51 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-19 c079f576 (auto): 101 steps, history 274k at the end; other 75.9%, pictures 9.9%, renders 8.6%, tool search 5.6%
@@ -70,6 +71,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 52f64bb2 (auto): 115 steps, history 263k at the end; other 62.2%, tool search 29.7%, renders 5.8%, pictures 1.8%, whole-file .py read 0.5%
 - 2026-11-21 423495d7 (auto): 94 steps, history 222k at the end; other 75.1%, tool search 14.5%, pictures 5%, renders 4.6%, whole-file .py read 0.8%
 - 2026-11-21 7cd3743d (auto): 114 steps, history 301k at the end; other 69.5%, tool search 21.5%, pictures 4.9%, renders 3.8%, whole-file .py read 0.3%
+- 2026-11-21 b6dc5d92 (auto): 35 steps, history 146k at the end; other 64.5%, tool search 23.6%, whole-file .py read 11%, pictures 0.9%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 c079f576 (auto): new writes 33.2%, Claude's words 30.9%, carried history 19.3%, start-up floor 16.6%. Biggest origins: Claude's words 47.7%, cache re-write 17.4%, start-up floor 16.6%. Leftover 0%
@@ -94,9 +96,10 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 52f64bb2 (auto): Claude's words 28.7%, carried history 25.7%, start-up floor 25.5%, new writes 20%. Biggest origins: Claude's words 47.8%, start-up floor 25.5%, result: tool search 20.2%. Leftover 0%
 - 2026-11-21 423495d7 (auto): new writes 45.7%, carried history 19.3%, Claude's words 19.3%, start-up floor 15.7%. Biggest origins: Claude's words 28.9%, messages and reminders 25%, cache re-write 17%. Leftover 0%
 - 2026-11-21 7cd3743d (auto): carried history 31.3%, Claude's words 25.7%, start-up floor 22%, new writes 21%. Biggest origins: Claude's words 44.1%, result: tool search 24.3%, start-up floor 22%. Leftover 0%
+- 2026-11-21 b6dc5d92 (auto): start-up floor 34.9%, Claude's words 28.9%, new writes 27.1%, carried history 9.1%. Biggest origins: Claude's words 39.9%, start-up floor 34.9%, result: tool search 19%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 22% of the film (9.12% of a week over 22 chats: start 8.66, re-learning 0.46; 0.41% a chat; step-1 context re-read is 22% of a chat on average).
+A new chat's start and re-learning cost 23% of the film (9.43% of a week over 23 chats: start 8.95, re-learning 0.48; 0.41% a chat; step-1 context re-read is 22% of a chat on average).
 - 2026-11-19 c079f576: step-1 context 80k; first real work at step 12 (0.21% of a week); read before it: guides/kit-catalogue.md 2.1k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/vid/s4.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/sea.png 1.6k, guides/job-packs.md 1.2k, source/flying_whales_sea.py 1.2k, story/status.md 0.3k
 - 2026-11-20 ba8d2922: step-1 context 82k; first real work at step 40 (0.6% of a week); read before it: notes/_template.md 1.5k, notes/grand-theft-autism.md 1.3k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip1.png 1.6k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip2.jpg 1.6k, guides/kit-catalogue.md 1.4k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/jl.jpg 1.6k
 - 2026-11-20 23d4842a: step-1 context 80k; first real work at step 14 (0.1% of a week); read before it: notes/grand-theft-autism.md 3.5k, story/status.md 0.2k, notes/ledger/sam/bdslc8hv.md 0.3k
@@ -119,3 +122,4 @@ A new chat's start and re-learning cost 22% of the film (9.12% of a week over 22
 - 2026-11-20 52f64bb2: step-1 context 82k; first real work at step 22 (0.35% of a week); read before it: source/humancheck.py 3.2k, source/posegallery.py 2.4k, source/views.py 1.8k, /tmp/claude-0/-home-user-Animation-/52f64bb2-1116-5d15-95db-8a8a9abd2d7a/scratchpad/gal2.jpg 1.6k, notes/grand-theft-autism.md 0.7k, guides/job-packs.md 0.3k
 - 2026-11-21 423495d7: step-1 context 82k; first real work at step 21 (0.28% of a week); read before it: source/lying_flat.py 4.1k, source/leanout.py 3.8k, source/humancheck.py 1.8k, /tmp/claude-0/-home-user-Animation-/423495d7-d439-5c80-82e7-c49e0261f928/scratchpad/k2_pair.png 1.6k, /tmp/claude-0/-home-user-Animation-/423495d7-d439-5c80-82e7-c49e0261f928/scratchpad/k2_0z.png 1.6k, source/views.py 0.6k
 - 2026-11-21 7cd3743d: step-1 context 82k; first real work at step 35 (0.6% of a week); read before it: source/gta_rehearse.py 10.6k, source/leanout.py 5.4k, source/lying_flat.py 3k, notes/shot4-case-study/leanout-strip-v1-phone.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/7cd3743d-10f6-5e20-8037-dd67e8fa1e7e/scratchpad/before.jpg 1.6k, source/lying.py 0.9k
+- 2026-11-21 b6dc5d92: step-1 context 82k; first real work at step 22 (0.29% of a week); read before it: source/gta_rehearse.py 5.8k, source/critique.py 1.4k, source/viewchecks.py 0.5k, source/views.py 0.4k, source/data/critique/grand-theft-autism/r21-p1/result.md 0.1k, guides/job-packs.md 0.1k
