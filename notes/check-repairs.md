@@ -15,6 +15,16 @@
 - [x] No push notification at handovers: push_faults in handover end.
 - [x] kittest handover_status_checks; watcher_catches_last_weeks_four passes again (promises added).
 - [ ] The 11 other failing kit tests (below).
+- [ ] Sam, 21 Nov: "Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again."
+      Why: (1) the watcher finds systems by reading the wiring (settings.json hooks, handover end calls, job packs), so
+      a tool that never got wired is invisible to it; (2) each tool's kittest calls the tool directly (modelguard
+      test "OK, 11 cases"), proving it works when called, never that anything calls it; (3) a job is ticked done when
+      the file and its test exist, not when it has been seen running in a real chat. Fix to build (chat 2):
+      a) the watcher also finds tools from the files themselves (every .claude/hooks file, every source tool an
+         adopted proposal names) and lists any that nothing switches on, at every chat start, until wired or named;
+      b) every tool's kittest gets a switched-on half (it is in a hook, called by handover end, or in a job pack);
+      c) a built tool is ticked only after its own log shows it ran in a real chat (as modelguard.log now does);
+      d) test it against the 17 Nov guard (settings.json as it was before 21 Nov must be flagged).
 - Plain words, one wait per render, repeat notes (rule 30): looked at chat 26's last message and waits; followed.
   Rule 30: the arm note came a fourth time; the chat said why the earlier fix failed (camera fix covered only the
   shooting). The ledger never counted repeats: LEDGER fault now makes each chat log them.
@@ -29,7 +39,7 @@ Changes made without a proposal (for the end-of-film review): every item above, 
 - Rules that bite next: 30 (a test failing twice: find why the first fix failed), "Seeing like Sam" 2 (a check is done
   only when it catches the note that taught it), "Rules are permanent" (remove a check only with Sam's Y).
 - Done: the seven items ticked above, on the main line; kittests 94 pass / 11 fail before this chat's new test.
-- Next: Opus, medium effort (fixes from a clear list). One by one, find why each fails, fix the kit or the stale
+- Next: Opus, medium effort. First the 'built but not enabled' fix above (a-d), then one by one, find why each fails, fix the kit or the stale
   test, rerun it and `python3 source/kittests.py` in full at the end: body_check_shot4_v4 (old shot 3 now has 6
   faults, probably real crossed arms the newer check catches: confirm on the picture), focus_front_heads (broken by
   the 20 Nov people-kit default change), pose_gallery, lopsided_invented_only, turned_heads_for_anyone, round_page,
