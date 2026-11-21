@@ -115,7 +115,7 @@ def pose(name, sp):
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
         #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
         k = _key((0.48, 0.80, 0.0), (0.76, 1.25, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),   # head ducked under the roof
-                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(1, -0.5, 0.3))},
+                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(0.8, -1, 0.6))},
                  {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
         return k
