@@ -501,6 +501,13 @@ def frame(t, LOGO, PALE, CITY, REF):
     return Image.fromarray((np.clip(a, 0, 1) * 255 + 0.5).astype(np.uint8))
 
 
+def dark_frame():
+    """Plain dark, on paper like every frame (the 0.5 s before the logo swipes in, Sam 21 Nov)."""
+    img = Image.new('RGBA', (W, H), DARK + (255,))
+    a = HL.lay_on_paper(np.asarray(img.convert('RGB'), np.float32) / 255, HL.LOOK['paper'])
+    return Image.fromarray((np.clip(a, 0, 1) * 255 + 0.5).astype(np.uint8))
+
+
 def layers():
     L = logo()
     city = clouds()

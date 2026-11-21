@@ -3,7 +3,7 @@
 "keep working on this until you can render the whole film shot sheet").
 
 MAP
-  SHOTS ........... (name, start, end) on the film's clock: the opener (extended to 6.5 s, Sam 20 Nov), then the plan's
+  SHOTS ........... (name, start, end) on the film's clock: the opener (6.5 s + 0.5 s of darkness first, Sam 21 Nov), then the plan's
                     rows 2-8 at their planned lengths
   frame_image ..... the frame at film time t, from the shot's own file (gta_opener, gta_rehearse, gta_shots58)
 
@@ -19,7 +19,8 @@ import gta_rehearse as R         # noqa: E402
 import gta_shots58 as M          # noqa: E402
 
 FPS = 12
-_L = [O.DUR, R.SHOT2_LEN, R.SHOT3_LEN, R.SHOT4_LEN] + [M.SHOTS58[n][1] for n in (5, 6, 7, 8)]
+LEAD = 0.5                      # Sam, 21 Nov: 0.5 s of darkness before the logo swipes in
+_L = [O.DUR + LEAD, R.SHOT2_LEN, R.SHOT3_LEN, R.SHOT4_LEN] + [M.SHOTS58[n][1] for n in (5, 6, 7, 8)]
 SHOTS, _t = [], 0.0
 for _n, _ln in enumerate(_L, 1):
     SHOTS.append((f'shot {_n}', round(_t, 3), round(_t + _ln, 3)))
@@ -35,7 +36,9 @@ def frame_image(t):
     if n == 1:
         if _OL is None:
             _OL = O.layers()
-        return O.frame(u, *_OL)
+        if u < LEAD:
+            return O.dark_frame()
+        return O.frame(u - LEAD, *_OL)
     if n == 2:
         return R.shot2(u)
     if n == 3:
