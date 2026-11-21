@@ -21,3 +21,6 @@ Currently 97% of our weekly usage and I want animatic before we hit 100% so plea
 ### 2026-11-21T13:42:11
 Jason's character has whiter skin by the way, check reference
 
+### 2026-11-21T13:52:20
+One thing I should have mentioned: the dialogue and effects should be the clearest top sound, followed by the music, then the sirens. We don't want the sirens drowning everything out
+
