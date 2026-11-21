@@ -18,3 +18,6 @@ Shot 5 seems to be missing? The one which connects to 4 and takes them around th
 
 Currently 97% of our weekly usage and I want animatic before we hit 100% so please override checks again.
 
+### 2026-11-21T13:42:11
+Jason's character has whiter skin by the way, check reference
+
