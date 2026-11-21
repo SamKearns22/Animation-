@@ -10,3 +10,6 @@ Please disable budget stops, they are useless. We save budget by getting things 
 
 I did not want the camera angles changed. It is a great shot but a broken drawing. You seem to have proposed fixing the drawing by breaking the shot.
 
+### 2026-11-21T23:22:59
+Never do that again. That was expensive and not okay.
+
