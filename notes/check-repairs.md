@@ -86,8 +86,9 @@ discover how it can be made more compliant with statement one.")
       app's figures for the chats that can still be read, and how chats are filed to jobs (Opus medium).
 - [ ] On Sam's picks: `dearest.py grand-theft-autism --open N,N`, then the route on each; its cost per proposal is
       unmeasured, so measure the first before the rest (Opus medium).
-- [ ] Sam's note 3 in the status chat (21 Nov): "I had noticed that renders were not being handed off to sonnet models
+- [x] Sam's note 3 in the status chat (21 Nov): "I had noticed that renders were not being handed off to sonnet models
       like you used to." Not yet carried anywhere: find why (handover model line, modelguard) and fix.
+      Done in the status chat: modelguard.py was never wired; wired 21 Nov, watcher flags unwired hooks (see the top).
 
 ## Where things stand (21 Nov, status chat, Opus)
 - Cost audit (21 Nov): done, waits on Sam's picks (see Budget tracker audit). Branch claude/check-repairs-2 = chat 2's
