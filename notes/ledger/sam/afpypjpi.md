@@ -9,3 +9,6 @@ No, every frame of the shot
 ### 2026-11-21T12:28:08
 Stop render. Shots 0.92-2:42 have the exact same arm problem.
 
+### 2026-11-21T12:30:42
+You're wasting a huge amount of my time and money by repeating these mistakes.
+
