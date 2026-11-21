@@ -1,0 +1,35 @@
+== critique, round 22 pass 1 (2026-11-21): 5 fault(s), 3 can't tell
+-- look.md --
+1: Contact sheet of tiny frames, red convertible and police cars; timestamps 0.00 s to 6.00 s; unreadable.
+2: Red convertible chasing police car on palm street; man leans out shooting, muzzle flash; no text.
+3: Police car with blue light, pedestrians, yellow fire hydrant, small red burst on car; no text.
+4: Orange explosion beside police cars, pink smoke, man leaning from red convertible; no text.
+-- result.md --
+## Faults
+FAULT O5 P4 [3]: the fireball hangs in the air beside the pavement, not at a shop front; the police cars are still on the road, uncrashed. On P3 the red burst sits on the car's back, not on a driver behind glass.
+FAULT O6 P2 [4]: the muzzle flash is a cartoon star. The P4 explosion is flat orange blobs with a pale pink-white column. There is no black smoke, so it reads as a balloon, not a fireball.
+FAULT A1 P3: the driver cannot be seen, so "driver hit, blood on his head inside the windscreen, slumping" is not shown. The car is seen from behind, with no windscreen and no slump.
+FAULT O4 P4 [2]: Jason is large and cut off at the frame edge, seen from the side or behind. The brief says right, smaller, seen from ahead of his car. The red car is also cropped so much that it no longer reads as a car.
+FAULT P6 P4 [2]: "gun raised" is not visible. The arm is up with a ball hand and no gun shape. On P2 the gun is hard to see too, only the flash.
+FAULT A1 P2 [3, 4]: Lucia and the red-haired woman are not visible in any full frame, though the brief puts them in the car. Only the strip frames show them, too small to read.
+FAULT P1 P2: the free hand is not seen resting on the top of the door. The arm and hand are hidden behind his body, so the "grips, not sinking" note cannot be confirmed (CAN'T TELL below).
+FAULT A1 P1: the strip frames are tiny, and the timestamps are unreadable at phone size. The four shots, hydrant jet and crash cannot be read.
+FAULT P7 P3: the white-coated pedestrian at left is cut off by the frame edge and looks half-drawn. The arm is stretched out long and thin.
+
+CAN'T TELL P2 [4]: the hand on the door, and Jason's face and hair against his reference (turned away). A full-size crop of the hand and the head would show it.
+CAN'T TELL P3 [4]: pedestrian arms and mouths (P3, P12). A full-size crop would show them.
+CAN'T TELL P4 [3]: the hydrant water jet and the passers-by ducking. They are too small to read at phone size.
+CAN'T TELL P1: M1-M5 (pop-in, the hit damage staying, the last frame matching the first). The strip is too small. Enlarged frames with times would show them.
+
+## Checked
+1-4
+
+## Cold look
+My look.md named the panel 1 strip as unreadable, and that is a fault. I called the P3 red burst "on car", and it is not on the driver. I called the P4 fireball "beside police cars", but it floats in the air. I did not name Lucia, the woman or the gun anywhere, because they are not visible. I read the pale pink column in P4 as smoke, but it is not black smoke.
+
+## Not on the list
+- Panel 4's fireball size and position against the shop front. Suggested line: "O7 the hit lands on the thing the brief names, at the place it names."
+- A brief character visible in a full frame. Suggested line: "A5 every named person is identifiable in at least one full-size frame."
+- Gun visible and the right way round. Suggested line: "P15 a held weapon reads as that weapon at phone size."
+- Cropping at the edge. Suggested line: "O8 no key prop or person is cut off by the frame edge unless the brief says so."
+

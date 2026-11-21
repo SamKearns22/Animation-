@@ -12673,6 +12673,16 @@
    "date": "2026-11-21",
    "spent": 40.3,
    "forecast": 90.8
+  },
+  {
+   "date": "2026-11-21",
+   "spent": 42.43,
+   "forecast": 93.0
+  },
+  {
+   "date": "2026-11-21",
+   "spent": 42.43,
+   "forecast": 93.0
   }
  ],
  "critique": {
@@ -12935,6 +12945,36 @@
      "2-6 P14: eyes too small to judge; need a close crop.",
      "1 M2: strip timestamps are unreadable; need a larger strip.",
      "2-6 P13: LEONIDA print on the vest; need a close crop."
+    ],
+    "fixed": "hunt 2: blood now over the cop's head from any camera (was beside it, parallax), finer spatter; the push-in turns onto the cruiser first (it swung out of frame at 3.0 s)",
+    "left": [
+     "2,6 O6: gun muzzle flash is a cartoon yellow star, small, not a house-style flash; hard to read at phone size.",
+     "4 S9 O6: smoke is a flat pale lilac cut-out column with no clumps or shading; fireball is a flat orange cloud shape.",
+     "4 S2 O2: the fireball sits against the wall behind the police cars; no police car is visibly inside a shop front, and the fire is not in front of or behind anyt",
+     "4 O4: Jason and the red car are huge and cropped at the right edge, not \"right, smaller, from ahead of the car\"; the gun is not raised or visible.",
+     "2,5-6 P2: Jason is far too small or turned away to show any feeling; the face cannot be read at phone size.",
+     "4-5 S1: the car cuts off at the frame edge and takes much of the frame (S8 mass of red car in 5); the action is pushed to a corner.",
+     "2,5-6 P1: free hand gripping the top of the door cannot be seen as touching; the hand looks to hang in front of the door.",
+     "1 M1: panels 2 and 6 are near-identical compositions, so the strip shows no change between shots."
+    ]
+   },
+   {
+    "round": 22,
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-21",
+    "hunt": 1,
+    "faults": 5,
+    "cant_tell": 3,
+    "open": [
+     "3 O5 P4: the fireball hangs in the air beside the pavement, not at a shop front; the police cars are still on the road, uncrashed. On P3 the red burst sits on t",
+     "4 O6 P2: the muzzle flash is a cartoon star. The P4 explosion is flat orange blobs with a pale pink-white column. There is no black smoke, so it reads as a ball",
+     "2 O4 P4: Jason is large and cut off at the frame edge, seen from the side or behind. The brief says right, smaller, seen from ahead of his car. The red car is a",
+     "2 P6 P4: \"gun raised\" is not visible. The arm is up with a ball hand and no gun shape. On P2 the gun is hard to see too, only the flash.",
+     "3-4 A1 P2: Lucia and the red-haired woman are not visible in any full frame, though the brief puts them in the car. Only the strip frames show them, too small t",
+     "4 P2: the hand on the door, and Jason's face and hair against his reference (turned away). A full-size crop of the hand and the head would show it.",
+     "4 P3: pedestrian arms and mouths (P3, P12). A full-size crop would show them.",
+     "3 P4: the hydrant water jet and the passers-by ducking. They are too small to read at phone size."
     ]
    }
   ],
@@ -12944,15 +12984,15 @@
     "false": 0
    },
    "P4": {
-    "faults": 13,
+    "faults": 16,
     "false": 0
    },
    "A1": {
-    "faults": 15,
+    "faults": 16,
     "false": 0
    },
    "P2": {
-    "faults": 14,
+    "faults": 16,
     "false": 0
    },
    "P5": {
@@ -12972,7 +13012,7 @@
     "false": 0
    },
    "P6": {
-    "faults": 6,
+    "faults": 7,
     "false": 1
    },
    "P1": {
@@ -12980,7 +13020,7 @@
     "false": 0
    },
    "O5": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "P3": {
@@ -13032,7 +13072,7 @@
     "false": 0
    },
    "O6": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "M4": {
@@ -13044,7 +13084,7 @@
     "false": 0
    },
    "O4": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "S2": {

@@ -477,28 +477,23 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
   the acting rows at full size, with a picture for each beat.
 
-## Where things stand (21 Nov, chat 21, Opus high; shot 4 v6 built, critique hunt 1 recorded: chat 22 fixes)
-- Rules that bite next: 89 (hunt 2 on the fixed clip, then `critique.py fixed`, before it is sent), 74 (acting rows),
-  30 (the "stump" came back from the old camera: the camera is now chosen by measuring the gun on screen).
-- Done: Jason rebuilt on leanout.at in the moving car (shot 3's seated Jason is the same drawing); the car hides him in
-  8 cm pieces; the lead cruiser drops back to the approved aim; side-window camera keys B3/B5; pistol 1.5x; a flash on
-  every shot's drawing; cop hit (blood mist + spatter, slump, dead weight); acting faces; her ears/peek; Lucia glances.
-  Move check 149 frames clean; body check: Jason clean every frame; one cop glimpse named. Case study section 13.
-- Next: chat 22, Opus medium (a fix round from a clear plan): hunt 1's list (source/data/critique/grand-theft-autism/
-  r21-p1): (1) the hit at 2.85-3.3 s: push the lens in on the lead cruiser's windscreen so blood and slump read;
-  (2) B5 crash framed bigger, Jason smaller, his raised gun clear of his body (measure muzzle vs body on screen, as
-  chat 21's camera search); (3) a little life in the 3.5-4.55 hold (head turns from the flash, gun tracks). Name: flash
-  star and fireball (house look), car perspective, the cruiser-2 cop arm (4 drawings at 3.42 s). Render (20 min),
-  hunt 2, `critique.py fixed`, humancheck name + critiqued, send Sam the clip (no yes needed).
-- Needs Sam: nothing.
-- Read: guides/job-packs.md Build; source/leanout.py MAP (to_world, film_layer); source/gta_rehearse.py CAM4 and
-  jason_layer / lead_cop_lean / blood_items; the hunt's result.md.
-- Open rule requests: none (draft lesson 20 in the case study: put the film's camera through the pose sheet).
-- For Claude: v6 clip (held, 1 named fault) in chat 21's scratchpad is gone with it: re-render with
-  `gta_rehearse.py shot4 OUT --frames DIR`; `bodies shot4` (solid check) was still running at handover, unread.
-  Critique spec: source/data/critique-src/grand-theft-autism/v6-shot4-spec.json (round 21; hunt 2 = pack again).
-  `bodies shot4` (every frame): Jason clean; passers-by 128, 129 run through the crashed cruiser at 3.75-4.25 s (the
-  crash moved 4 m back with the cruiser's drop-back: their run must avoid it, crowd() in gta_rehearse); feet sunk 3-12 px:
-  persons 128-131, 51 (4.5 and 5.5 s). Fix in chat 22 with the list above.
+## Where things stand (21 Nov, chat 22, Opus medium; shot 4 v7 sent to Sam, waiting for his notes)
+- Rules that bite next: 30 (a note he gives again: find why the first fix failed first), 89 (round 22 has one hunt
+  left), 74 (acting rows before any animatic).
+- Done: hunt 1's list (push-in on the hit, crash framed bigger with Jason smaller, a flinch and nod in the hold,
+  passers-by clear of the crashed cruiser); Sam's door note (free hand ON the door top, the car check now tests it);
+  hunt 2's fixes (blood over the cop's head, the push-in keeps the cruiser in frame). Clip v7 sent (3.3 MB).
+- Next: Sam's notes on the v7 clip come back to this chat (Opus medium: a notes round). Open from round 22's hunt 1
+  (taste, named in the message): the hit still reads small at 3.0-3.1 s; the crash reads weakly against the shop; his
+  raised gun is hard to see at 3.75 s; faces small in the wide frames; flash, smoke, fireball are the house look.
+- Needs Sam: notes on the shot 4 v7 clip.
+- Read: guides/job-packs.md Notes round; notes/shot4-case-study/shot4-case-study.md section 14.
+- Open rule requests: none (draft lessons 20 and 21 in the case study).
+- For Claude: CAM4 keys 2.85-4.55 and blood_items, crowd()/_in_path (gta_rehearse); leanout K2-K4 'L' hands, the
+  car_faults hand test, _cover edge smoothing. Round 22 pack r22-p1 recorded (hunt 1); hunt 2 = pack again after
+  fixes. Body flags named: 3.17 s Jason off-frame; 3.50 s cruiser-2 driver glimpse. bodies shot4: passers-by clean of
+  the cruiser; feet "sunk" 7-20 px on runners' long strides (front foot nearer the lens), looked fine in frames.
+  Branches freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers: other films'
+  frozen copies, kept off the main line on purpose; not this film's work.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 40.3% of 15%; forecast 90.8% (2026-11-21)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 42.43% of 15%; forecast 93% (2026-11-21)
