@@ -44,12 +44,43 @@ discover how it can be made more compliant with statement one.")
   most expensive things were; (2) nothing takes the dearest things to the proposal route: only a hand-run end-of-film
   review does (Milburn's); (3) notes and repeats were never counted (fixed tonight: LEDGER fault); (4) no real (app)
   figures imported for GTA yet. Known parts: tool search 11.3, carried history 14.5, start-up floor 11.5, renders 2.0.
-- [ ] Cost audit chat (Opus high): split "other" into named things (writing code, thinking, edits, reading notes,
+- [x] Cost audit chat (Opus high): split "other" into named things (writing code, thinking, edits, reading notes,
       critique helpers...) on GTA's real records; then a standing step that, at each film's end (and weekly), ranks
       the five dearest things and opens each as a proposal through propose.py against Statement 1 (quality first,
       then fewer notes and faults, then cost). Test it on GTA and Milburn; report the top five to Sam in plain words.
+      Done 21 Nov (cost audit chat, session_01GznaAVLcaYKAag7e6Ap2Nx):
+      - Every dollar of a chat is now named (stepcost.split -> 'named': thinking (exact, from the usage), writing
+        code, writing notes, commands, messages to Sam, helper and chat prompts, reading notes / guides / film code /
+        kit code / chat records, pictures, renders, checks and tools, git, start-up and handover tools, critique /
+        name-test / proposal helpers, start-up reading, memory lapses, messages and reminders). Adds up to the bill;
+        on this chat and the 6b test chat 0% is left unnamed. Rows from now on carry it (the ledger stores the split).
+      - GTA's gta_*.py now counts as the film's own code (the record filed it as kit code).
+      - source/dearest.py ranks the five dearest named things per film and per week and opens each as a proposal
+        (problem + facts only; "not split" gaps are never opened). Switched on: propose.py review (film end) runs it;
+        handover.py end flags DEAREST when the weekly run is over 7 days old. kittest dearest_things_named; catalogue row.
+      - Weekly run done: notes/proposals/dearest-week-2026-11-14-1..5 (start-up reading 15.6%, messages and reminders
+        4.4%, reading kit code 3.9%, memory lapses 3.4%, pictures 3.3% of a week). The route (helpers, judge) is
+        NOT yet run on them: next chat.
+      - GTA top five on its own record (51.5% of a week): Claude's own writing 22.3 (older rows cannot split it; on the
+        two full records thinking was 39-48% of it, writing code 32-38%), start-up reading 11.0, searching and reading
+        code and notes 7.9 (kit code 2.8, film code 2.0, other 1.7, notes 0.8), messages and reminders 3.3, memory
+        lapses 2.9 (7 chats). Milburn: no split was ever recorded (17-18 Nov): cannot be ranked.
+      - The app's own records for GTA chats 1-25 and Milburn 1-7 can no longer be read (their old ids give "not
+        found" and they are not listed); only chat 26 can, and its copy lacks thinking and true output counts. The
+        ledger rows (made from each chat's full record at the time) are the only record left.
+- [ ] The week's record adds to 278% of a week over 149 chats (219 of it estimates, 3 chats filed twice; 42 chats
+      filed under proposal-route). That cannot all be real if the weekly limit holds: check the estimates against the
+      app's figures for the chats that can still be read, and how chats are filed to jobs (Opus medium).
+- [ ] Run the route (pack, two helpers, judge) on the five dearest-week proposals; its cost per proposal is unmeasured,
+      so measure the first one before running all five (Opus medium).
+- [ ] Sam's note 3 in the status chat (21 Nov): "I had noticed that renders were not being handed off to sonnet models
+      like you used to." Not yet carried anywhere: find why (handover model line, modelguard) and fix.
 
 ## Where things stand (21 Nov, status chat, Opus)
+- Cost audit chat (21 Nov, Opus high, ran beside check-repairs chat 2): the budget tracker audit item is done (see that
+  section). Next for it: cost audit chat 2 (Opus medium): the 278% week check, then the route on dearest-week-1 with its
+  cost measured, then Sam's Sonnet-render note. Branch claude/check-repairs-2 is chat 2's live work (not merged by
+  this chat on purpose). The job has no cost estimate in the ledger (none was set for check-repairs).
 - Rules that bite next: 30 (a test failing twice: find why the first fix failed), "Seeing like Sam" 2 (a check is done
   only when it catches the note that taught it), "Rules are permanent" (remove a check only with Sam's Y).
 - Done: the seven items ticked above, on the main line; kittests 94 pass / 11 fail before this chat's new test.

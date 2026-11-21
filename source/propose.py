@@ -515,6 +515,11 @@ def review(film, since=None):
            '`propose.py new`, the route). Nothing temporary: a change is kept or properly replaced.', '']
     for head, files in changes:
         out.append(f'- {head} ({", ".join(files[:6])}{" ..." if len(files) > 6 else ""}): ')
+    import dearest                                 # cost audit (Sam, 21 Nov): the five dearest things, each a proposal
+    text, _, _ = dearest.report(film)
+    opened = dearest.open_top(film)
+    out += ['', '## The five dearest things (source/dearest.py), each opened as a proposal', '', text, '']
+    out += [f'- {how}: notes/proposals/{name}.md (run the route: propose.py pack {name})' for name, how in opened]
     f = _p(f'review-{film}.md')
     os.makedirs(PROPS, exist_ok=True)
     open(f, 'w').write('\n'.join(out) + '\n')
