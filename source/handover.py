@@ -597,10 +597,34 @@ def size_faults(film, notes=None):
         while i < len(lines) and not lines[i].startswith('#'):
             n += bool(lines[i].strip())
             i += 1
+        block = '\n'.join(lines[heads[-1]:i]).lower()
+        if 'rule request' not in block:
+            out.append('HANDOVER: no "Open rule requests" line (CLAUDE.md: search the notes for rule requests not yet '
+                       'written and list them, "none" if none)')
         if n > 15:
             out.append(f'HANDOVER: "Where things stand" is {n} lines (CLAUDE.md: 15 at most); move detail to the notes '
                        'or the "For Claude" line')
     return out
+
+
+def push_faults(rec):
+    """Status check (Sam, 21 Nov): CLAUDE.md "Models and chats": push notifications when a render or long job
+    finishes, fails or needs Sam, and at every stage end. Chat 26 handed over (a stage end) with none; nothing checked.
+    A call the app skips because Sam is watching still counts: the chat tried."""
+    if not rec or not os.path.exists(rec):
+        return []
+    for ln in open(rec, encoding='utf-8', errors='replace'):
+        if 'PushNotification' not in ln:
+            continue
+        try:
+            m = json.loads(ln).get('message') or {}
+        except ValueError:
+            continue
+        if m.get('role') == 'assistant' and any(isinstance(b, dict) and b.get('type') == 'tool_use'
+                                                and b.get('name') == 'PushNotification' for b in m.get('content') or []):
+            return []
+    return ['PUSH: no push notification in this chat; send one at the handover (what is done, what Sam is needed for), '
+            'and when a render or long job finishes or fails (CLAUDE.md, Models and chats)']
 
 
 def ledger_faults(film, rec=None):
@@ -769,7 +793,7 @@ def main(argv):
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
                       + sentence_faults() + freeze_faults() + cost_faults(film, opt('--notes'))
-                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + routine_run_faults(rec)
+                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + routine_run_faults(rec) + push_faults(rec)
                       + tag_faults(film, opt('--notes')) + record_faults(rec)
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
