@@ -48,12 +48,50 @@ discover how it can be made more compliant with statement one.")
   route itself is expensive. Please fix the 'other' problem and the notes problem, test in a real chat, and once
   done report back with your five suggestions." So: fix "other" and automatic notes counting, test on real records,
   then five plain suggestions to Sam; the route runs only on the ones he picks.
-- [ ] (superseded by Sam's line above where they differ) Cost audit chat (Opus high): split "other" into named things (writing code, thinking, edits, reading notes,
+- [x] (superseded by Sam's line above where they differ) Cost audit chat (Opus high): split "other" into named things (writing code, thinking, edits, reading notes,
       critique helpers...) on GTA's real records; then a standing step that, at each film's end (and weekly), ranks
       the five dearest things and opens each as a proposal through propose.py against Statement 1 (quality first,
       then fewer notes and faults, then cost). Test it on GTA and Milburn; report the top five to Sam in plain words.
+      Done 21 Nov (cost audit chat, session_01GznaAVLcaYKAag7e6Ap2Nx):
+      - Every dollar of a chat is now named (stepcost.split -> 'named': thinking (exact, from the usage), writing
+        code, writing notes, commands, messages to Sam, helper and chat prompts, reading notes / guides / film code /
+        kit code / chat records, pictures, renders, checks and tools, git, start-up and handover tools, critique /
+        name-test / proposal helpers, start-up reading, memory lapses, messages and reminders). Adds up to the bill;
+        on this chat and the 6b test chat 0% is left unnamed. Rows from now on carry it (the ledger stores the split).
+      - GTA's gta_*.py now counts as the film's own code (the record filed it as kit code).
+      - source/dearest.py ranks the dearest named things per film and per week. Per Sam's later line, nothing opens on
+        its own: the five are SUGGESTED to Sam (numbered); `dearest.py FILM --open 1,3` opens only his picks
+        ("not split" gaps never). Switched on: propose.py review (film end) prints the five to suggest; handover.py
+        end flags DEAREST when the weekly ranking is over 7 days old. kittest dearest_things_named; catalogue row.
+      - Notes problem: the Stop hook now counts Sam's notes from his own typed messages (numbered items each count;
+        yes/no/go/number answers and one-line questions do not) onto the row, and flags possible repeats (60% of the
+        words of a line already in the film's notes); handover.py end shows them as REPEAT?. On the saved messages:
+        301 notes in 287 messages, 13 possible repeats (e.g. GTA's "the gun is not pointing at his target").
+      - Real-chat test: this chat's own row carries the named split (0% unnamed) and its note count (0: no message
+        from Sam in it). A chat with Sam's notes: tested on his saved messages, not yet live.
+      - GTA top five on its own record (51.5% of a week): Claude's own writing 22.3 (older rows cannot split it; on the
+        two full records thinking was 39-48% of it, writing code 32-38%), start-up reading 11.0, searching and reading
+        code and notes 7.9 (kit code 2.8, film code 2.0, other 1.7, notes 0.8), messages and reminders 3.3, memory
+        lapses 2.9 (7 chats). Milburn: no split was ever recorded (17-18 Nov): cannot be ranked.
+      - The app's own records for GTA chats 1-25 and Milburn 1-7 can no longer be read (their old ids give "not
+        found" and they are not listed); only chat 26 can, and its copy lacks thinking and true output counts. The
+        ledger rows (made from each chat's full record at the time) are the only record left.
+      - Put to Sam (21 Nov): which of five go through the route (my pick 1, 2, 3): 1 start-up reading, 2 Claude's
+        thinking and code writing, 3 memory lapses, 4 looking at pictures, 5 searching code. His answer comes back here.
+        Ideas given with them (unrouted, his pick first): 1 a smaller fixed start, only what that chat needs; 2 more
+        built from ready kit pieces, less new code per note; 3 hand over before a long wait instead of resuming;
+        4 small labelled crops of what changed; 5 a map of where each part of the film lives in the code.
+- [ ] The week's record adds to 278% of a week over 149 chats (219 of it estimates, 3 chats filed twice; 42 chats
+      filed under proposal-route). That cannot all be real if the weekly limit holds: check the estimates against the
+      app's figures for the chats that can still be read, and how chats are filed to jobs (Opus medium).
+- [ ] On Sam's picks: `dearest.py grand-theft-autism --open N,N`, then the route on each; its cost per proposal is
+      unmeasured, so measure the first before the rest (Opus medium).
+- [ ] Sam's note 3 in the status chat (21 Nov): "I had noticed that renders were not being handed off to sonnet models
+      like you used to." Not yet carried anywhere: find why (handover model line, modelguard) and fix.
 
 ## Where things stand (21 Nov, status chat, Opus)
+- Cost audit (21 Nov): done, waits on Sam's picks (see Budget tracker audit). Branch claude/check-repairs-2 = chat 2's
+  live work, left alone; check-repairs has no cost estimate (none was set).
 - Rules that bite next: 30 (a test failing twice: find why the first fix failed), "Seeing like Sam" 2 (a check is done
   only when it catches the note that taught it), "Rules are permanent" (remove a check only with Sam's Y).
 - Done: the seven items ticked above, on the main line; kittests 94 pass / 11 fail before this chat's new test.
