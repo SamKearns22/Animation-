@@ -469,3 +469,13 @@ Added after Sam's notes 1-16 (chat 16):
   outline: smoothed there only. Picture: v7-chat22-door-hand-fixed.jpg.
 - Lesson (draft 21): a resting hand is a contact, like feet on a floor: test the drawn hand against the surface, not
   only the bones.
+- The first render stopped itself (body check): the new door-hand elbow folded across his chest on the way up, so
+  the drawing stopped before his head at 0.75 s. Four elbow directions tried against the car check and the drawing
+  check; one passed both. (The check worked: it was caught before anyone saw it.)
+- Hunt 2 (r21-p2, on the fixed clip), what was done with each: FIXED the blood (it sat off to one side of his head:
+  laid on the glass, 0.9 m in front of him, the side-on camera saw it beside him; now it hangs just in front of his
+  head, finer spatter); FIXED the push-in swinging the cruiser out of frame at 3.0 s (the camera turns onto it first,
+  then pushes). NAMED: the flash star, smoke and fireball (house look); the hydrant "no jet" (the panel was 0.04 s
+  before it breaks); the crash reading against the wall (the cruiser rests against the shop, fire on it); faces too
+  small to read in the wide frames (the price of the bigger crash Sam's list asked for); the free hand "hanging"
+  (it rests on the door top, seen from below it); panels 2 and 6 alike (my choice of panels, not the film).
