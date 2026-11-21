@@ -637,17 +637,19 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     # wing it was hidden behind his own head, the "stump" again; over his shoulder it ran straight down the lens)
     (0.00, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),      # shot 3's exact frame (CAM3): the cut is invisible
     (0.45, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
-    (1.10, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),      # round the front corner to his window as he rises
-    (1.70, (3.00, 1.40, 0.80), (-8.50, 1.20, -12.0), 760),     # beside his window at arm height (keys found by
-    (2.85, (2.90, 1.45, 0.80), (-6.80, 1.20, -12.0), 760),     # measuring gun, head and cruiser on screen, chat 21)
-    # chat 22 (hunt 1): the lens pushes in on the lead cruiser's windscreen for the hit (blood, slump) and follows
-    # it into the hydrant; then the crash framed big with Jason small at the right, his raised gun clear of his head
-    # (measured on screen: crash 480-300 px wide over the hold, Jason 250-310 px tall, muzzle 1.5 head-widths clear)
-    (2.95, (2.90, 1.45, 0.80), (0.50, 1.28, -7.70), 900),      # turn onto the cruiser first (hunt 2: a pan and
-    (3.10, (2.90, 1.45, 0.80), (0.45, 1.27, -7.75), 1500),     # push together swung it out of frame at 3.0 s)
-    # chat 23 (v7 notes 8, 9): stay on the cop as he dies (snap back, slump onto the door), then pull out to watch his
-    # car weave across the road for two seconds, then follow it as it turns into the hydrant and the shop
-    (3.50, (2.90, 1.45, 0.80), (0.40, 1.25, -7.80), 1500),
+    # chat 24 (v7 note 4, the arm, THIRD time; Sam: "Shots 0.92-2:42 have the exact same arm problem"): every key
+    # from chat 21 to 23 sat AHEAD of him (z +0.8) while he faces back at the cruiser, so we saw his back and the gun
+    # arm ran away from the lens from behind his head: a tube with no shoulder, whatever its size. Now the lens goes
+    # round to his FRONT side, out on the pavement a little behind him: his face and chest at three-quarters, the
+    # gun arm 70 degrees across the line of sight (its full length, shoulder to hand), then a pan along his line of
+    # fire onto the lead cruiser for shots 3 and 4 (the cruiser and his face cannot share a tall frame from here)
+    (1.10, (2.20, 1.55, 2.30), (0.95, 1.20, -0.30), 1300),      # round the front corner as he rises to the window
+    (1.70, (3.70, 1.35, -1.25), (0.80, 1.28, -0.60), 1650),     # his front side: face, chest, the arm across
+    (2.40, (3.70, 1.35, -1.25), (0.75, 1.28, -0.80), 1650),     # held through shots 1 and 2
+    (2.70, (3.70, 1.35, -1.25), (0.40, 1.27, -7.70), 1000),     # along his line of fire onto the cruiser
+    (2.95, (3.70, 1.35, -1.25), (0.50, 1.28, -7.70), 1000),
+    (3.10, (3.70, 1.35, -1.25), (0.45, 1.27, -7.75), 1225),     # the push for the hit (focal scaled to the distance)
+    (3.50, (3.70, 1.35, -1.25), (0.40, 1.25, -7.80), 1225),
     (3.95, (1.90, 1.50, 0.80), (0.35, 1.05, -9.00), 1250),     # over the road beside his door (on the pavement
     (4.90, (1.90, 1.50, 0.80), (0.40, 1.05, -9.20), 1250),     # the passers-by walked through the lens)
     (5.10, (2.40, 1.45, 0.80), (1.37, 1.27, -8.20), 1100),
