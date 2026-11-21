@@ -21,3 +21,6 @@ So what has been achieved on shot 4 since the handover?
 ### 2026-11-21T23:26:08
 Can I have the usage you've spent refunded to me please?
 
+### 2026-11-21T23:27:07
+Explain fully what happened and explain that it was not what was requested by the user.
+
