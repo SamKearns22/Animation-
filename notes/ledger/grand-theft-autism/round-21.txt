@@ -37,3 +37,40 @@ I named the strip only as tiny frames and could not read its times; the brief sa
 4. Cropped faces and bodies at the frame edge (panels 2-5); suggested line: "No key person is cut by the frame edge."
 5. Camera tilt and lean in panel 5 makes the car look sliding; suggested line: "The horizon and car sit level unless the plan says tilt."
 
+== critique, round 21 pass 2 (2026-11-21): 10 fault(s), 5 can't tell
+-- look.md --
+1: Contact sheet of tiny film frames, red car and police cars; timestamps unreadable, no other words.
+2: Man leans from red convertible firing a gun with yellow flash; police car chases behind; pink sky.
+3: Police car with red burst on it, pedestrians scattering, yellow hydrant; word "POLICE" on car.
+4: Orange explosion beside building, smoke column, police cars behind, shooter in red car at right; "POLICE" on cars.
+5: Close red convertible, man leaning out, red-haired passenger in back seat; police car and pedestrians behind.
+6: Man leans from red car firing, yellow flash; police car follows down street.
+-- result.md --
+## Faults
+FAULT O6 [2, 6]: gun muzzle flash is a cartoon yellow star, small, not a house-style flash; hard to read at phone size.
+FAULT O5 P3 [3]: blood is a red blob on the outside of the car body at its front, not a mist on the inside of the windscreen; no slumped driver visible.
+FAULT M5 O3 [3, 4]: no water jet from the broken hydrant (yellow hydrant just stands there); the hit does not read as a hit.
+FAULT S9 O6 [4]: smoke is a flat pale lilac cut-out column with no clumps or shading; fireball is a flat orange cloud shape.
+FAULT S2 O2 [4]: the fireball sits against the wall behind the police cars; no police car is visibly inside a shop front, and the fire is not in front of or behind anything in a clear way. The crash does not read.
+FAULT O4 [4]: Jason and the red car are huge and cropped at the right edge, not "right, smaller, from ahead of the car"; the gun is not raised or visible.
+FAULT P2 [2, 5, 6]: Jason is far too small or turned away to show any feeling; the face cannot be read at phone size.
+FAULT S1 [4, 5]: the car cuts off at the frame edge and takes much of the frame (S8 mass of red car in 5); the action is pushed to a corner.
+FAULT P1 [2, 5, 6]: free hand gripping the top of the door cannot be seen as touching; the hand looks to hang in front of the door.
+FAULT M1 [1]: panels 2 and 6 are near-identical compositions, so the strip shows no change between shots.
+CAN'T TELL P5 [2, 4, 6]: shoulder and arm join; need a full-size crop of Jason's arm.
+CAN'T TELL P4 [2-6]: Jason's face too small to compare with reference; need a close crop.
+CAN'T TELL P14 [2-6]: eyes too small to judge; need a close crop.
+CAN'T TELL M2 [1]: strip timestamps are unreadable; need a larger strip.
+CAN'T TELL P13 [2-6]: LEONIDA print on the vest; need a close crop.
+
+## Checked
+1-6
+
+## Cold look
+Look.md named the cars, gun, flash, explosion and the red-haired passenger. I missed or could not name: the blood (read as a red burst), the slumped driver (not visible), the hydrant spray (absent), and the strip times.
+
+## Not on the list
+- Panel 5 shows the red-haired woman and Lucia cropped or half out of frame; suggested line: every person the brief places in a panel is fully in shot.
+- Reuse of the same composition across panels; suggested line: no two panels of a shot are the same frame.
+- Blood in a cartoon looks like a red blob; suggested line: blood reads as blood at phone size.
+
