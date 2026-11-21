@@ -272,4 +272,4 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
 - For Claude: humancheck._backview; gta_rehearse CAM4 keys 0.85-7.85, LENS_PAVE, _lens_clear, crowd zi; kittest
   body_check_back_view; frames: gta_film.frame_image + HC.frame_end loop. ARM_FOLD_NAMED still set; dafont blocked.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 53.67% of 15%; forecast 104.2% (2026-11-21)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 53.78% of 15%; forecast 69.7% (2026-11-21)
