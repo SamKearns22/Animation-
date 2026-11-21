@@ -477,16 +477,32 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
   the acting rows at full size, with a picture for each beat.
 
+## Shot 4 v7: Sam's notes on the clip (chat 22, 21 Nov; pictures notes/shot4-case-study/sam-v7/)
+- [ ] 1. "Lucia arms still crossed on steering wheel" (REPEAT of chat 16 note 1, rule 30). Likely why: her grips are
+  set right in the car's frame (left hand at 10 o'clock, right at 2), so the crossing is probably in how the figure's
+  left and right map once she is drawn facing the camera; test before changing.
+- [ ] 2. "We can see through the bonnet to Jason when he moves" (shot 3/4 start: his body shows through the bonnet).
+- [ ] 3. "Jason clips through two parts of the car as he moves" (pictures: arm through the door frame and pillar).
+- [ ] 4. "The backwards arm is a gross distended sausage still" (REPEAT of chat 16 notes 3, 6, 7, 15).
+- [ ] 5. "Blood splatter is a 2D effect that doesn't turn with the windscreen, is always horizontal on to the camera."
+- [ ] 6. "No hydrant strike, there's no physicality, it should be hit and smash forward, like any object hit by a car."
+- [ ] 7. "Hydrant water effect clips through car."
+- [ ] 8. "No death reaction by officer, stays still" (REPEAT of chat 16 note 9). Likely why: his slump leans him
+  forward, toward the lens when the car faces us, so from the front his outline barely changes.
+- [ ] 9. "Let's have the car wobble back and forth along the road for two secs before it turns and crashes."
+- [ ] 10. "Ultimately" (the message ended here: the rest asked for).
+
 ## Where things stand (21 Nov, chat 22, Opus medium; shot 4 v7 sent to Sam, waiting for his notes)
 - Rules that bite next: 30 (a note he gives again: find why the first fix failed first), 89 (round 22 has one hunt
   left), 74 (acting rows before any animatic).
 - Done: hunt 1's list (push-in on the hit, crash framed bigger with Jason smaller, a flinch and nod in the hold,
   passers-by clear of the crashed cruiser); Sam's door note (free hand ON the door top, the car check now tests it);
   hunt 2's fixes (blood over the cop's head, the push-in keeps the cruiser in frame). Clip v7 sent (3.3 MB).
-- Next: Sam's notes on the v7 clip come back to this chat (Opus medium: a notes round). Open from round 22's hunt 1
+- Next: Sam's v7 notes are in (list above, 3 repeats); once he finishes "Ultimately", this chat opens chat 23 on
+  Opus high (new building: a hydrant that is struck, a weaving cruiser, blood that turns with the glass): notes round. Open from round 22's hunt 1
   (taste, named in the message): the hit still reads small at 3.0-3.1 s; the crash reads weakly against the shop; his
   raised gun is hard to see at 3.75 s; faces small in the wide frames; flash, smoke, fireball are the house look.
-- Needs Sam: notes on the shot 4 v7 clip.
+- Needs Sam: the end of his v7 notes ("Ultimately ...").
 - Read: guides/job-packs.md Notes round; notes/shot4-case-study/shot4-case-study.md section 14.
 - Open rule requests: none (draft lessons 20 and 21 in the case study).
 - For Claude: CAM4 keys 2.85-4.55 and blood_items, crowd()/_in_path (gta_rehearse); leanout K2-K4 'L' hands, the
@@ -496,4 +512,4 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   Branches freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers: other films'
   frozen copies, kept off the main line on purpose; not this film's work.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 42.43% of 15%; forecast 93% (2026-11-21)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 42.84% of 15%; forecast 93.4% (2026-11-21)

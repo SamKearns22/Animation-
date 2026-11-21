@@ -479,3 +479,12 @@ Added after Sam's notes 1-16 (chat 16):
   before it breaks); the crash reading against the wall (the cruiser rests against the shop, fire on it); faces too
   small to read in the wide frames (the price of the bigger crash Sam's list asked for); the free hand "hanging"
   (it rests on the door top, seen from below it); panels 2 and 6 alike (my choice of panels, not the film).
+
+## 15. Sam's notes on version 7 (21 Nov, chat 22; pictures in sam-v7/)
+Verbatim: "Lucia arms still crossed on steering wheel / We can see through the bonnet to Jason when he moves / Jason
+clips through two parts of the car as he moves. / The backwards arm is a gross distended sausage still. / Blood
+splatter is a 2D effect that doesn't turn with the windscreen, is always horizontal on to the camera / No hydrant
+strike, there's no physicality, it should be hit and smash forward, like any object hit by a car / Hydrant water
+effect clips through car / No death reaction by officer, stays still / Let's have the car wobble back and forth along
+the road for two secs before it turns and crashes / Ultimately" (the message stopped there).
+Three are repeats (Lucia's grip, the sausage arm, the cop's death): rule 30, find why the first fix failed first.
