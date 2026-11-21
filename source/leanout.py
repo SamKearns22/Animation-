@@ -179,7 +179,22 @@ def at(t, sp):
     #                                                     half a drawing each side, so every shot has one)
     if a != b and 0 < u < 1:
         k = _clear_arms(k, ka, kb, u, sp)
+    if HOLD[0] < t < HOLD[1]:                 # the hold after the crash (chat 22, hunt 1: "frozen"): he flinches from
+        f = _hump(t, 3.46, 3.62, 4.00)        # the fireball (head away, toward the car's front), looks back at it,
+        g = _hump(t, 3.90, 4.20, 4.55)        # a small nod of "got him"; the raised gun drifts with his look
+        k['hfwd'] = _u(k['hfwd'] + _v(0.10 * f, 0.06 * f - 0.10 * g, 0.75 * f))
+        if getattr(k, 'aim', None) is not None:
+            k.aim = _u(k.aim + _v(0.12 * f - 0.06 * g, 0, 0.18 * f))
     return k
+
+
+HOLD = (3.46, 4.55)
+
+
+def _hump(t, a, peak, b):
+    if t <= a or t >= b:
+        return 0.0
+    return _ease((t - a) / (peak - a)) if t < peak else _ease((b - t) / (b - peak))
 
 
 def _clear_arms(k, ka, kb, u, sp):

@@ -593,9 +593,14 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     (0.45, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
     (1.10, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),      # round the front corner to his window as he rises
     (1.70, (3.00, 1.40, 0.80), (-8.50, 1.20, -12.0), 760),     # beside his window at arm height (keys found by
-    (3.05, (2.90, 1.45, 0.80), (-6.50, 1.20, -12.0), 760),     # measuring gun, head and cruiser on screen, chat 21)
-    (3.45, (1.40, 1.70, 0.90), (3.50, 1.00, -14.0), 760),      # in to his shoulder with the slew: him and the crash
-    (4.55, (1.20, 1.70, 0.80), (4.00, 1.00, -14.0), 750),
+    (2.85, (2.90, 1.45, 0.80), (-6.80, 1.20, -12.0), 760),     # measuring gun, head and cruiser on screen, chat 21)
+    # chat 22 (hunt 1): the lens pushes in on the lead cruiser's windscreen for the hit (blood, slump) and follows
+    # it into the hydrant; then the crash framed big with Jason small at the right, his raised gun clear of his head
+    # (measured on screen: crash 460 px wide at 3.6 s, Jason 420 px tall, muzzle 195 px clear of his head)
+    (3.10, (2.90, 1.45, 0.80), (1.37, 1.27, -7.84), 1500),     # the windscreen's place in the Tulip's frame
+    (3.32, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
+    (3.70, (1.30, 1.70, 2.40), (2.50, 1.00, -14.0), 1300),
+    (4.55, (1.30, 1.70, 2.40), (2.80, 1.00, -14.0), 1650),     # a slow push on the fire through the hold
     (5.15, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
     (5.75, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
     (6.20, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
@@ -709,9 +714,26 @@ def _stride(j, ph, amp, lift, swing):
 ANKLE = V.ANKLE_Y
 
 
+CRASH_Z = LEAD[-1]['pos'][1]      # where the crashed lead cruiser comes to rest on the pavement (chat 22: it moved 4 m
+CRASH_CLEAR = 3.4                 # back with the drop-back; two passers-by ran through it): nobody stands within this
+
+
 def crowd(pp, t):
-    """(x, z, facing, joints, head direction) of passer-by pp at world time t."""
+    """(x, z, facing, joints, head direction) of passer-by pp at world time t. One on the crash's pavement who would be
+    standing where the cruiser lands is moved along the pavement clear of it (chat 22), and runners run away from the
+    crashed car itself, so no run crosses it."""
+    if 'dz' not in pp:
+        pp['dz'] = 0.0
+        if IMPACT and pp['at'][0] > 0:
+            zi = _crowd(pp, IMPACT[0])[1]
+            if abs(zi - CRASH_Z) < CRASH_CLEAR:
+                pp['dz'] = (CRASH_CLEAR - abs(zi - CRASH_Z)) * (1.0 if zi >= CRASH_Z else -1.0)
+    return _crowd(pp, t, pp['dz'])
+
+
+def _crowd(pp, t, dz=0.0):
     x0, z0 = pp['at']
+    z0 += dz
     side = 1 if x0 > 0 else -1
     walker = pp['walk'] > 0.45
     dirz = 1.0 if pp['face'] == 0.0 else -1.0
@@ -736,7 +758,8 @@ def crowd(pp, t):
     up = smooth((t - (IMPACT[0] + 0.5 if IMPACT else 99)) / 0.4) if ((ducks or sees_fire) and not near_fire) else 0.0
     duck *= 1 - up
     if t > t_run:                                          # run from the fire, along the pavement, away from it
-        away = 1.0 if z0 > IMPACT[1][1] + 2.6 else -1.0
+        z_run = z0 + (dirz * WALK_V * (min(t_run, t_stop) + 3.2) if walker else 0.0)
+        away = 1.0 if (z_run > CRASH_Z if side > 0 else z_run > IMPACT[1][1] + 2.6) else -1.0
         u = t - t_run
         z += away * RUN_V * max(0.0, u - 0.15) * smooth(u / 0.3)
         F = (0.0, 0.0, away)
