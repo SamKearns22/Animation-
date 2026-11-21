@@ -21,3 +21,6 @@ Why are tools built then not enabled? Keeps happening. Please ensure that doesn'
 ### 2026-11-21T23:07:48
 I don't care much for the budget warnings right now, but I need to know that the budget tracking tool has worked as promised. The idea was to audit every last thing done in order to find the most expensive things and run it through the proposal route to discover how it can be made more compliant with statement one.
 
+### 2026-11-21T23:14:05
+I would you like them suggested to me before I approve them to send through proposal route as the route itself is expensive. Please fix the 'other' problem and the notes problem, test in a real chat, and once done report back with your five suggestions.
+
