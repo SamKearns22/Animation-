@@ -65,3 +65,6 @@ We don't have the usage. Could you stop the render, delete the pistol and just h
 ### 2026-11-21T15:22:08
 Thank you. I'm glad to have it. The video is still riddled with problems from shot 4 onwards but I understand we did not do all our checks. At 9pm I want to hand this over to my other account. Please provide me with a handover that will 1) continue the work on shot 4 and 2) do a thorough check on this animatic (honestly there's so many problems with hands, Jason still glitches at the transition to shot 5, there's just so many things and I don't have time to list all of them, frame by frame)
 
+### 2026-11-21T23:31:04
+I have just discovered that you told the handover to fix shot 4 by ‘finding other camera angles’
+
