@@ -44,7 +44,11 @@ discover how it can be made more compliant with statement one.")
   most expensive things were; (2) nothing takes the dearest things to the proposal route: only a hand-run end-of-film
   review does (Milburn's); (3) notes and repeats were never counted (fixed tonight: LEDGER fault); (4) no real (app)
   figures imported for GTA yet. Known parts: tool search 11.3, carried history 14.5, start-up floor 11.5, renders 2.0.
-- [x] Cost audit chat (Opus high): split "other" into named things (writing code, thinking, edits, reading notes,
+- Sam, 21 Nov: "I would like them suggested to me before I approve them to send through proposal route as the
+  route itself is expensive. Please fix the 'other' problem and the notes problem, test in a real chat, and once
+  done report back with your five suggestions." So: fix "other" and automatic notes counting, test on real records,
+  then five plain suggestions to Sam; the route runs only on the ones he picks.
+- [x] (superseded by Sam's line above where they differ) Cost audit chat (Opus high): split "other" into named things (writing code, thinking, edits, reading notes,
       critique helpers...) on GTA's real records; then a standing step that, at each film's end (and weekly), ranks
       the five dearest things and opens each as a proposal through propose.py against Statement 1 (quality first,
       then fewer notes and faults, then cost). Test it on GTA and Milburn; report the top five to Sam in plain words.
