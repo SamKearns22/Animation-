@@ -488,3 +488,8 @@ strike, there's no physicality, it should be hit and smash forward, like any obj
 effect clips through car / No death reaction by officer, stays still / Let's have the car wobble back and forth along
 the road for two secs before it turns and crashes / Ultimately" (the message stopped there).
 Three are repeats (Lucia's grip, the sausage arm, the cop's death): rule 30, find why the first fix failed first.
+Sam's last line (picture sam-v7/ultimately-door-arm.jpg): "Ultimately there's so much wrong in this image, I don't
+know how to teach you to recognise it." Seven faults read from it in chat 22 (film notes, v7 note 10). The checks
+passed this frame: the body check tests bones and joints, not how the drawn shapes read; the critique saw it only at
+phone size in a wide panel. Lesson (draft 22): a view where the flat drawing breaks (close, from behind, arm toward
+the lens) is a camera fault before it is a drawing fault.

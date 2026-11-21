@@ -490,7 +490,15 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - [ ] 8. "No death reaction by officer, stays still" (REPEAT of chat 16 note 9). Likely why: his slump leans him
   forward, toward the lens when the car faces us, so from the front his outline barely changes.
 - [ ] 9. "Let's have the car wobble back and forth along the road for two secs before it turns and crashes."
-- [ ] 10. "Ultimately" (the message ended here: the rest asked for).
+- [ ] 10. "Ultimately there's so much wrong in this image, I don't know how to teach you to recognise it." (picture
+  sam-v7/ultimately-door-arm.jpg, Jason from ahead at the door in the crash framing). What is wrong in it (chat 22's
+  reading, for chat 23 to check): (a) the arm grows out of his back, no shoulder; (b) the forearm folds back into an
+  L of flesh with a thumb-stub, no elbow, thicker than his head; (c) the hand neither grips nor rests: it floats over
+  the door; (d) the car's side breaks into loose red slabs, the tyre sits on the door with no wheel arch; (e) black
+  bars (pillar, rail) cut across his vest with nothing to say what they are; (f) white stair-step streaks (the hide
+  map) at the right; (g) the vest is a flat white shape with no back, neck or form. Chat 23: answer "how to teach
+  me" through the proposal route (Sam's pictures as labelled examples for the critique; full-size crops of every
+  joint and every contact with the car, every frame; views where the flat drawing breaks are not used).
 
 ## Where things stand (21 Nov, chat 22, Opus medium; shot 4 v7 sent to Sam, waiting for his notes)
 - Rules that bite next: 30 (a note he gives again: find why the first fix failed first), 89 (round 22 has one hunt
@@ -498,11 +506,11 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - Done: hunt 1's list (push-in on the hit, crash framed bigger with Jason smaller, a flinch and nod in the hold,
   passers-by clear of the crashed cruiser); Sam's door note (free hand ON the door top, the car check now tests it);
   hunt 2's fixes (blood over the cop's head, the push-in keeps the cruiser in frame). Clip v7 sent (3.3 MB).
-- Next: Sam's v7 notes are in (list above, 3 repeats); once he finishes "Ultimately", this chat opens chat 23 on
+- Next: Sam's v7 notes are in (list above, 3 repeats); chat 23 on
   Opus high (new building: a hydrant that is struck, a weaving cruiser, blood that turns with the glass): notes round. Open from round 22's hunt 1
   (taste, named in the message): the hit still reads small at 3.0-3.1 s; the crash reads weakly against the shop; his
   raised gun is hard to see at 3.75 s; faces small in the wide frames; flash, smoke, fireball are the house look.
-- Needs Sam: the end of his v7 notes ("Ultimately ...").
+- Needs Sam: nothing until chat 23 brings the proposal on note 10.
 - Read: guides/job-packs.md Notes round; notes/shot4-case-study/shot4-case-study.md section 14.
 - Open rule requests: none (draft lessons 20 and 21 in the case study).
 - For Claude: CAM4 keys 2.85-4.55 and blood_items, crowd()/_in_path (gta_rehearse); leanout K2-K4 'L' hands, the
