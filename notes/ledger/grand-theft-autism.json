@@ -11846,44 +11846,44 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.05,
+   "cost": 2.3,
    "src": "estimate",
    "sid": "session_01J1JB7VcJ5G5nT3goi87qZu",
-   "steps": 128,
-   "hist_k": 246,
+   "steps": 139,
+   "hist_k": 265,
    "kinds": {
-    "tool search": 17.9,
-    "whole-file .py read": 4.1,
-    "renders": 1.9,
-    "pictures": 5.1,
+    "tool search": 18.4,
+    "whole-file .py read": 3.6,
+    "renders": 2.2,
+    "pictures": 4.8,
     "other": 71.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 72,
+    "tool search": 77,
     "whole-file .py read": 6,
     "page.py": 0,
     "routine": 0,
-    "renders": 5,
+    "renders": 6,
     "pictures": 11,
-    "other": 35
+    "other": 36
    },
    "split": {
-    "usd": 7.2143,
-    "total": 7.2143,
+    "usd": 8.1631,
+    "total": 8.1631,
     "floor_k": 82,
     "blocks": {
-     "carried history": 29.6,
-     "start-up floor": 28.3,
-     "Claude's words": 24.1,
-     "new writes": 18.1
+     "carried history": 30.4,
+     "start-up floor": 27.0,
+     "Claude's words": 24.7,
+     "new writes": 17.9
     },
     "origins": {
-     "Claude's words": 43.1,
-     "start-up floor": 28.3,
-     "result: tool search": 16.2,
-     "messages and reminders": 4.6,
-     "result: pictures": 4.5,
+     "Claude's words": 44.4,
+     "start-up floor": 27.0,
+     "result: tool search": 15.7,
+     "messages and reminders": 5.2,
+     "result: pictures": 4.4,
      "result: other": 2.0,
      "result: whole-file .py read": 1.0,
      "result: renders": 0.2
@@ -11898,35 +11898,35 @@
      [
       "source/gta_rehearse.py",
       5.8,
-      0.1657
+      0.1772
      ],
      [
       "source/critique.py",
       1.4,
-      0.0406
+      0.0434
      ],
      [
       "source/viewchecks.py",
       0.5,
-      0.0149
+      0.0159
      ],
      [
       "source/views.py",
       0.4,
-      0.0115
+      0.0123
      ],
      [
       "source/data/critique/grand-theft-autism/r21-p1/result.md",
       0.1,
-      0.0039
+      0.0041
      ],
      [
       "guides/job-packs.md",
       0.1,
-      0.0039
+      0.0041
      ]
     ],
-    "base_pct": 26.2
+    "base_pct": 25.2
    },
    "search": {
     "show": 0,
@@ -11936,13 +11936,13 @@
     "other": {
      "other": 15,
      "shared:branches.py": 1,
-     "shared:handover.py": 6,
+     "shared:handover.py": 7,
      "guides": 1,
      "shared:critique.py": 7,
-     "shared:gta_rehearse.py": 17,
+     "shared:gta_rehearse.py": 19,
      "shared:views.py": 1,
      "shared:leanout.py": 12,
-     "film notes": 4,
+     "film notes": 6,
      "shared:watcher.py": 1,
      "shared:humancheck.py": 7
     },
@@ -12523,6 +12523,46 @@
       "other",
       "source/data/critique-src",
       "git add -A notes story source/data/critique-src && git status --short | head; gi",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "grip\\|wheel_pt(",
+      ""
+     ],
+     [
+      130,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 1226,1250p source/gta_rehearse.py; sed -n 1126,1134p source/gta_rehearse.",
+      ""
+     ],
+     [
+      131,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/sam-v7 /root/.claude/uploads/b6dc5d92-6fd3-5bd0-b166-74ab",
+      "\n- [ ] 10. ",
+      ""
+     ],
+     [
+      132,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^## ",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "shared:handover.py",
+      "/root/.claude/uploads/b6dc5d92-6fd3-5bd0-b166-74abd2eeec64/2c10d9d8-image.jpg no",
+      "how to teach\n  me",
       ""
      ]
     ]

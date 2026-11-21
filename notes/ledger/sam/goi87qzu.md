@@ -40,3 +40,14 @@ Ultimately there's so much wrong in this image, I don't know how to teach you to
 ### 2026-11-21T11:21:22
 Ultimately there's so much wrong in this image, I don't know how to teach you to recognise it.
 
+### 2026-11-21T11:44:54
+You shouldn't have to teach this frame by frame; the checks need to look the way you do.
+
+If you were to convert this statement into a profoundly useful section at the top of Claude MD, how would you word it?
+
+### 2026-11-21T11:46:12
+Please reword your rule so it could apply to any film in any situation. So, for example, people who are shot is not going to apply to the majority of our films. But the principle of physical things behaving physically is a good one.
+
+### 2026-11-21T11:46:46
+Y
+

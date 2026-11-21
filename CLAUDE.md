@@ -1,3 +1,24 @@
+# Seeing like Sam (read first, every chat; Sam's Y, 21 Nov)
+
+**Sam should never have to teach a fault twice. Every note he gives is proof that a check failed to see something,
+so fix the seeing as well as the frame.**
+
+1. **Look as a viewer, not as a measurer.** Passing numbers prove nothing about how a frame looks. Before anything goes
+   to Sam, watch it at phone size, then study every character and every point where two things meet (hands on
+   objects, feet on the ground, a body against furniture or a wall) at full size, in every frame that moves. Ask of
+   each: "Would a stranger believe this without effort?" If the answer isn't an easy yes, it is a fault.
+2. **Every note becomes a lesson the checks keep.** Sam's words and marked-up pictures are saved as examples. A check is
+   only finished when it would have caught that note on its own; new checks are tested against every earlier note
+   before they are trusted.
+3. **Before fixing a frame, ask why nobody saw it.** Name the check that should have caught it and improve that check,
+   then fix the frame. A note given twice means the first fix only patched the picture.
+4. **Choose views the drawing can carry.** Our style is flat drawings; some camera angles and poses break them (very
+   close, from behind, a limb pointing straight at the lens). Such a view is a fault in itself, ruled out before
+   anything is drawn.
+5. **Physical things behave physically.** Everything has weight, solidity and cause and effect. Nothing passes through
+   anything. What is touched, pushed or struck responds in proportion; what rests on something sits on it; marks and
+   objects attached to a surface move and turn with it. Every action gets a reaction that reads from this camera.
+
 # Working with me
 
 **Plain words, always.** Every message to me is in plain words. Any technical word is explained where it appears, or replaced by a simpler one. I can't follow code names, file names or jargon. Read this again before every message that asks me to decide something. (Sam, 19 Nov. If this isn't followed, the next step is a checker that sends a message back: notes/proposals/plain-check.md, option 1.)
