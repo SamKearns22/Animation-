@@ -395,7 +395,9 @@ def reply_faults(reply, touched=()):
     if not asks:
         return []
     names = sorted(n for n in set(touched) | set(PROP_RE.findall(reply))
-                   if n != UNROUTED[:-3] and not n.startswith('review-'))
+                   if n != UNROUTED[:-3] and not n.startswith('review-')
+                   and (n in PROP_RE.findall(reply) or os.path.exists(_p(n + '.md'))))   # cost audit, 21 Nov: a proposal
+    #                deleted this turn (or a glob like dearest-week-*.md in a command) is not one the reply asks about
     faults = []
     for name in names:
         ok, v = verdict_ok(name)
