@@ -99,9 +99,9 @@ def mix(silent, out):
     for f, a, b, at in VOICES:
         ev.append((f.split('.')[0] + '.m4a', a - 0.04, b - a + 0.08, at - 0.04, 1.0, 1.0))
     for ts in (1.95, 2.30, 2.62, 2.92):
-        ev.append(('pistol', 0.0, 0.7, 14.1 + ts, 0.55, 1.0))
-    ev.append(('glass-breaking', 0.0, 3.12, 14.1 + 2.30, 0.6, 2.0))        # double speed, Sam
-    ev.append(('car-crash', 0.0, 5.09, 14.1 + 5.504 - 0.5, 0.8, 1.0))
+        ev.append(('pistol', 0.0, 0.7, 14.1 + ts, 0.8, 1.0))
+    ev.append(('glass-breaking', 0.0, 3.12, 14.1 + 2.30, 0.8, 2.0))        # double speed, Sam
+    ev.append(('car-crash', 0.0, 5.09, 14.1 + 5.504 - 0.5, 0.9, 1.0))
     for n, (key, a, ln, at, vol, sp) in enumerate(ev):
         ins += ['-ss', f'{a:.3f}', '-t', f'{ln:.3f}', '-i', _find(key)]
         k += 1
@@ -111,7 +111,7 @@ def mix(silent, out):
     ins += ['-stream_loop', '-1', '-i', _find('police-siren')]
     k += 1
     sir = int(F.SHOTS[1][1] * 1000)
-    parts.append(f'[{k}:a]atrim=0:{LENGTH - F.SHOTS[1][1]:.2f},volume=0.2,afade=t=in:d=1.0,adelay={sir}|{sir}[sir]')
+    parts.append(f'[{k}:a]atrim=0:{LENGTH - F.SHOTS[1][1]:.2f},volume=0.07,afade=t=in:d=1.0,adelay={sir}|{sir}[sir]')
     labels.append('[sir]')
     parts.append(''.join(labels) + f'amix=inputs={len(labels)}:duration=longest:normalize=0,apad=whole_dur={LENGTH}[a]')
     subprocess.run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(parts), '-map', '0:v', '-map', '[a]',
