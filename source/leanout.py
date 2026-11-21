@@ -110,6 +110,7 @@ def pose(name, sp):
                      {sd: (_v(*a), _v(0, 0.6, 1), _v(0, -0.1, 1), _v(0, 1, 0)) for sd, a in ankles.items()}, sp,
                      floor=None)
         k.pose = 'leanout'
+        k.aim = _u((0.85, 0.5, 0.2))                      # the pistol lies flat on his chest, barrel up across it (Sam 21 Nov: it was not drawn)
         return k
     if name == 'K2':          # up on his knees on the seat, turned to the window, free hand braced on the door
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
@@ -146,8 +147,8 @@ WOB = 2.0                            # Sam, v7 note 9: the dead cop's car wobble
 #                                      before it turns and crashes: everything after the hit is this much later
 TIMES = [(0.0, 'K1'), (0.5, 'K1'), (1.0, 'K2'), (1.4, 'K3'), (1.85, 'K4')] + \
         [x for t in SHOTS for x in ((t, 'K4'), (t + 0.04, 'K4'), (t + 0.10, 'K5'), (t + 0.28, 'K4'))] + \
-        [(3.2 + WOB, 'K4'), (3.5 + WOB, 'K3'), (4.55 + WOB, 'K3'), (5.2 + WOB, 'K2'), (5.8 + WOB, 'K1'),
-         (6.2 + WOB, 'K1')]
+        [(3.2 + WOB, 'K4'), (4.45 + WOB, 'K4'), (4.95 + WOB, 'K3'), (5.4 + WOB, 'K2'), (5.8 + WOB, 'K1'),
+         (6.2 + WOB, 'K1')]      # Sam 21 Nov: stays upright out of the window after the crash (it sank to K3 at once)
 _CACHE = {}
 
 
@@ -171,6 +172,7 @@ def at(t, sp):
     ka, kb = P[a], P[b]
     k = L.blend(ka, kb, u) if a != b and u > 0 else L.blend(ka, ka, 0.0)
     k.pose = 'leanout'
+    k.front = (a == 'K1' and u < 0.5) or (b == 'K1' and u >= 0.5)       # the chest-held pistol is drawn over his body
     da = getattr(ka, 'aim', None)
     db = getattr(kb, 'aim', None)
     if da is None:
@@ -248,7 +250,7 @@ def draw_gun(img, cam, k, report=True):
     body = [hand - d * 0.03 * g, muzzle, muzzle + down * 0.035 * g, hand + down * 0.035 * g]
     grip = [hand - d * 0.03 * g, hand + d * 0.03 * g, hand + d * 0.02 * g + down * 0.11 * g, hand - d * 0.05 * g + down * 0.10 * g]
     for poly in (grip, body):
-        cam.poly(p, [tuple(q) for q in poly], (40, 40, 44), (14, 14, 16), 2.0)
+        cam.poly(p, [tuple(q) for q in poly], (62, 64, 74), (14, 14, 16), 2.4)
     if report:
         m, b0, tg = cam.P(tuple(muzzle)), cam.P(tuple(hand)), cam.P(TARGET)
         HC.aim('Jason', m, (m[0] - b0[0], m[1] - b0[1]), tg, firing=True)
@@ -455,7 +457,7 @@ def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide
         k['hup'] = _u(k['hup'] + _v(0, 0, nod * 0.6))
     kw = to_world(k, car)
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    under = cam.depth(tuple(kw['wrR'])) > cam.depth(tuple(kw['neck']))
+    under = cam.depth(tuple(kw['wrR'])) > cam.depth(tuple(kw['neck'])) and not getattr(k, 'front', False)
     if under:
         draw_gun(lay, cam, kw, report=False)
     try:

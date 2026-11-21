@@ -62,21 +62,32 @@ def _draw(i):
 
 def main():
     out = sys.argv[1]
+    t0 = float(sys.argv[sys.argv.index('--from') + 1]) if '--from' in sys.argv else 0.0
     if '--remux' in sys.argv:                      # new sound on an existing picture (no redraw)
         silent = sys.argv[sys.argv.index('--remux') + 1]
         return mix(silent, out)
     n = int(round(LENGTH * 12))
     silent = out + '.silent.mp4'
+    if t0 > 0:
+        os.replace(out, out + '.old.mp4')
+        silent_new = silent
+        silent = out + '.new.mp4'
     p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '540x960', '-r',
                           '12', '-i', '-', '-r', '24', '-c:v', 'libx264', '-crf', '20', '-preset', 'medium',
                           '-pix_fmt', 'yuv420p', silent], stdin=subprocess.PIPE)
     with Pool(os.cpu_count()) as pool:
-        for k, fr in enumerate(pool.imap(_draw, range(n), chunksize=1)):
+        for k, fr in enumerate(pool.imap(_draw, range(int(round(t0 * 12)), n), chunksize=1)):
             p.stdin.write(fr)
             if k % 24 == 0:
                 print(f'drawing {k}/{n}', flush=True)
     p.stdin.close()
     p.wait()
+    if t0 > 0:                                     # the first t0 seconds of the old picture, then the new drawings
+        subprocess.run(['ffmpeg', '-v', 'error', '-y', '-t', f'{t0:.3f}', '-i', out + '.old.mp4', '-i', silent,
+                        '-filter_complex', '[0:v][1:v]concat=n=2:v=1:a=0[v]', '-map', '[v]', '-r', '24', '-c:v', 'libx264',
+                        '-crf', '20', '-preset', 'medium', '-pix_fmt', 'yuv420p', silent_new], check=True)
+        os.remove(silent)
+        silent = silent_new
     mix(silent, out)
 
 
@@ -85,6 +96,10 @@ VOICES = [  # (file, speech starts in file, speech ends, film time it starts)
     ('Autistic_1.m4a', 0.93, 3.87, 7.30), ('Autistic_2.m4a', 0.80, 1.65, 12.10),
     ('Autistic_3.m4a', 0.80, 2.00, 23.55), ('Lucia.m4a', 0.87, 3.11, 25.75),
     ('Jason.m4a', 1.40, 6.99, 28.25), ('Autistic_4.m4a', 0.79, 2.59, 35.30)]
+
+
+GAIN_DB = {'Autistic_1.m4a': 7.5, 'Autistic_2.m4a': 13.8, 'Autistic_3.m4a': 10.9, 'Autistic_4.m4a': 7.9,
+           'Lucia.m4a': 2.0, 'Jason.m4a': 0.0}      # Sam 21 Nov: her voice was barely audible; all brought to one level
 
 
 def _find(key):
@@ -104,7 +119,7 @@ def mix(silent, out):
     labels = ['[m]']
     ev = []   # (file key, in-start, length, film time, volume, speed)
     for f, a, b, at in VOICES:
-        ev.append((f.split('.')[0] + '.m4a', a - 0.04, b - a + 0.08, at - 0.04, 1.0, 1.0))
+        ev.append((f.split('.')[0] + '.m4a', a - 0.04, b - a + 0.08, at - 0.04, 10 ** (GAIN_DB.get(f, 0) / 20), 1.0))
     for ts in (1.95, 2.30, 2.62, 2.92):
         ev.append(('pistol', 0.0, 0.7, 14.1 + ts, 0.8, 1.0))
     ev.append(('glass-breaking', 0.0, 3.12, 14.1 + 2.30, 0.8, 2.0))        # double speed, Sam
@@ -120,7 +135,7 @@ def mix(silent, out):
     sir = int(F.SHOTS[1][1] * 1000)
     parts.append(f'[{k}:a]atrim=0:{LENGTH - F.SHOTS[1][1]:.2f},volume=0.07,afade=t=in:d=1.0,adelay={sir}|{sir}[sir]')
     labels.append('[sir]')
-    parts.append(''.join(labels) + f'amix=inputs={len(labels)}:duration=longest:normalize=0,apad=whole_dur={LENGTH}[a]')
+    parts.append(''.join(labels) + f'amix=inputs={len(labels)}:duration=longest:normalize=0,alimiter=limit=0.95,apad=whole_dur={LENGTH}[a]')
     subprocess.run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(parts), '-map', '0:v', '-map', '[a]',
                     '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-t', str(LENGTH), out], check=True)
     if silent.endswith('.silent.mp4'):

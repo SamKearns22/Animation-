@@ -472,7 +472,7 @@ def inside58(t, rec=None):
         jm = mouth(t, LINE5)
         if jm:
             j_over['mouth'] = jm
-        j_neck = (0.42 - 0.07 * th, 0.918, 0.0)
+        j_neck = (0.42 - 0.07 * th, 1.02, 0.0)      # 0.918 + 0.10: he sat lower than in shots 1-4 (Sam 21 Nov: 'sunken')
         thigh = (0.30 - 0.07 * th, 0.31, 0.30)
         dash = (0.34, 0.82, 0.52)
         # Sam's note (chat 19): "his arm poses could use work". The free hand now works where the camera sees it, up
