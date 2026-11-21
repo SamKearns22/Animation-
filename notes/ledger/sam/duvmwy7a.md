@@ -13,3 +13,8 @@ I did not want the camera angles changed. It is a great shot but a broken drawin
 ### 2026-11-21T23:22:59
 Never do that again. That was expensive and not okay.
 
+### 2026-11-21T23:24:36
+Y. Please set a 2am reminder for all currently working jobs to continue.
+
+So what has been achieved on shot 4 since the handover?
+
