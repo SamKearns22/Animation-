@@ -449,3 +449,25 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 40.3% of 15%; forecast 90.8% (2026-11-21)
 
+
+## Where things stand (21 Nov, chat 23, Opus high; render stopped by Sam on the arm)
+- Rules that bite next: 30 (the arm is now a THIRD repeat: why chat 23's fix failed is in the case study, section
+  16, last point), Seeing like Sam 1 and 4 (look at full size; a view the drawing can't carry is a fault), 89.
+- Done: v7 notes 1-3 and 5-10 fixed in code (Lucia's grip, the bonnet, the arm-edge car check, blood on the glass,
+  the struck hydrant, water kept out of the car, the cop's sideways slump, the 2 s weave; shot 4 now 8.2 s); test
+  stills and the 0-2.4 s frame sheets sent. Note 10 proposal judged (teach-recognise: option 1 picked blind).
+- Next: chat 24 on Opus high (new build): the backwards arm, 0.9-2.4 s: start from the camera and pose (Seeing like
+  Sam 4), then the drawn shape; full-size look at every frame of it before any clip; then render the clip
+  (about 40 min, 134 drawings), round 23 critique (spec v9-shot4, mkspec in the case study), send the clip.
+- Needs Sam: his Y/N on note 10's two options (the clip message brings them; `propose.py show teach-recognise`).
+- Read: guides/job-packs.md Notes round; CLAUDE.md "Seeing like Sam"; case study section 16.
+- Open rule requests: none (draft lesson 23 in the case study).
+- For Claude: lying_flat._arm PERSP (near limbs drawn bigger: did not fix it, keep or drop); humancheck _crossed,
+  _limbs (its stretch test is graded after PERSP: re-base on the unscaled drawing); leanout _cover IN_CABIN seat
+  mask, car_faults ARM_R edge test, K3 moved; gta_rehearse WOB, _hydrant_spot, hydrant_flight/body, lead_cop_roll,
+  person_cached(roll=), CAM4 weave keys; R.SHOT4_LEN 8.2 moves shots 5-8's T5 (their chain should know).
+  Frames 0-65 of the stopped v8 render: scratchpad only (lost with this chat).
+  Handover check's 4 QUICK CHECK lines (gta_rehearse, leanout: no notes file, no SHOT_MARKS): they are this film's
+  shot code, not films; named, not fixed (the film's notes are grand-theft-autism.md).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 47.1% of 15%; forecast 97.6% (2026-11-21)

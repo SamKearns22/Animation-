@@ -502,24 +502,26 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - Chat 23: all ten done in version 8 (each cause, fix and check in the case study, section 16); note 10 through
   the proposal route (notes/proposals/teach-recognise.md).
 
-## Where things stand (21 Nov, chat 23, Opus high; render stopped by Sam on the arm)
-- Rules that bite next: 30 (the arm is now a THIRD repeat: why chat 23's fix failed is in the case study, section
-  16, last point), Seeing like Sam 1 and 4 (look at full size; a view the drawing can't carry is a fault), 89.
-- Done: v7 notes 1-3 and 5-10 fixed in code (Lucia's grip, the bonnet, the arm-edge car check, blood on the glass,
-  the struck hydrant, water kept out of the car, the cop's sideways slump, the 2 s weave; shot 4 now 8.2 s); test
-  stills and the 0-2.4 s frame sheets sent. Note 10 proposal judged (teach-recognise: option 1 picked blind).
-- Next: chat 24 on Opus high (new build): the backwards arm, 0.9-2.4 s: start from the camera and pose (Seeing like
-  Sam 4), then the drawn shape; full-size look at every frame of it before any clip; then render the clip
-  (about 40 min, 134 drawings), round 23 critique (spec v9-shot4, mkspec in the case study), send the clip.
-- Needs Sam: his Y/N on note 10's two options (the clip message brings them; `propose.py show teach-recognise`).
-- Read: guides/job-packs.md Notes round; CLAUDE.md "Seeing like Sam"; case study section 16.
-- Open rule requests: none (draft lesson 23 in the case study).
-- For Claude: lying_flat._arm PERSP (near limbs drawn bigger: did not fix it, keep or drop); humancheck _crossed,
-  _limbs (its stretch test is graded after PERSP: re-base on the unscaled drawing); leanout _cover IN_CABIN seat
-  mask, car_faults ARM_R edge test, K3 moved; gta_rehearse WOB, _hydrant_spot, hydrant_flight/body, lead_cop_roll,
-  person_cached(roll=), CAM4 weave keys; R.SHOT4_LEN 8.2 moves shots 5-8's T5 (their chain should know).
-  Frames 0-65 of the stopped v8 render: scratchpad only (lost with this chat).
-  Handover check's 4 QUICK CHECK lines (gta_rehearse, leanout: no notes file, no SHOT_MARKS): they are this film's
-  shot code, not films; named, not fixed (the film's notes are grand-theft-autism.md).
+## Where things stand (21 Nov, chat 25, Sonnet; Sam hands this to his other account at 9 pm)
+- Rules that bite next: Seeing like Sam 1 (look as a viewer: every frame from shot 4 on at FULL size, hands and joins first),
+  30 (a repeat note = the first fix only patched it), the new top rule (say plainly what I can't do). Sam's "overrule all checks" is over:
+  this round runs every check.
+- Done: whole-film animatic v3 sent (animations/drafts/grand-theft-autism-animatic.mp4, 36.7 s, checks skipped on Sam's order, record says so).
+  Built: source/grand_theft_autism.py renders the whole film (`OUT.mp4`, `--from T` redraws from T and splices, `--remux CLEAN` redoes sound only);
+  0.5 s dark lead-in; his whole song under it; his 6 voices, subtitles, siren/pistol/glass(2x)/crash effects; shot 5's corner re-timed for the 8.2 s shot 4
+  (gta_shots58 SH/S_OFF); Jason lighter skin; Jason upright after the crash; chest pistol removed (hand empty); her smile broader on line 6.
+- Next: Opus, high effort (a build + a full check). 1) A frame-by-frame look at the animatic FROM 14.1 s (shot 4) AT FULL SIZE, listing every fault with time:
+  Sam says it is "riddled" from shot 4 on: hands, Jason's glitch at the shot 4 -> 5 join (~21.8 s), more. Name why no check saw each (rule 3), improve the check, then fix.
+  2) Continue shot 4. Likely root of the 4->5 glitch: shots 1-4 draw Jason with the leanout 3D skeleton (K1), shots 5-8 with a different flat figure (sit()): two bodies,
+  so his head, shoulders and hand jump at the join. Probable fix: draw Jason in shots 5-8 with the leanout skeleton too.
+- Needs Sam: nothing now. When ready: his Y for a check sheet, then an animatic. Still open from him: whether the 5->6->7->8 cuts should be glides (his "no cuts" ask).
+- Read: guides/job-packs.md "Notes round"; CLAUDE.md "Seeing like Sam"; case study section 16; `python3 source/page.py` for code.
+- Open rule requests: Sam: a check that a held object is recognisable (the pistol was drawn but unreadable); draft only, not written.
+- For Claude: leanout.py (TIMES tail: K4 held to 4.45+WOB; draw_gun returns early when k.front; K1 has aim + `front`), gta_shots58 (SH, S_OFF, ZC shifted, fit() mouths, j_neck y 1.02, props=[]),
+  grand_theft_autism.py (CAPS, GAIN_DB, VOICES, ARM_FOLD_NAMED so figure checks only warn: REMOVE for the real checks), finish.py with a path outside drafts (it deletes its own output otherwise).
+  Known unfixed: 12 drawings of Jason's arm folded back (see /tmp/gta_named_faults.txt, lost); chest "fist" is a plain circle; song full-length now saved at music/monde-de-mer-full.mp3;
+  mouths = old timings stretched to his takes; line 1 start time (7.3 s) is a guess; the film's body-check record is hand-written ("skipped").
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 47.1% of 15%; forecast 97.6% (2026-11-21)
+- Finder: this chat searched the code by hand (no `page.py show`) because the shot code is one large file with no page index yet; the next chat should use `page.py grand-theft-autism show` first.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 48.76% of 15%; forecast 99.3% (2026-11-21)
