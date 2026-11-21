@@ -247,10 +247,18 @@ def draw_gun(img, cam, k, report=True):
     d = _u(muzzle - hand)
     down = _u(np.cross(d, _v(1e-3, 0, 1)) if abs(d[1]) > 0.9 else _v(0, -1, 0) - d * d[1])
     g = GUN[0]
-    body = [hand - d * 0.03 * g, muzzle, muzzle + down * 0.035 * g, hand + down * 0.035 * g]
-    grip = [hand - d * 0.03 * g, hand + d * 0.03 * g, hand + d * 0.02 * g + down * 0.11 * g, hand - d * 0.05 * g + down * 0.10 * g]
-    for poly in (grip, body):
-        cam.poly(p, [tuple(q) for q in poly], (62, 64, 74), (14, 14, 16), 2.4)
+    # a side-on pistol that reads at phone size (Sam 21 Nov: the plain dark wedge read as a second seatbelt):
+    # a pale gunmetal slide with a dark muzzle block, the frame under it, a raked grip, a trigger guard, a highlight
+    P = lambda a, b: hand + d * (a * g) + down * (b * g)
+    slide = [P(-0.05, -0.012), P(0.19, -0.012), P(0.19, 0.045), P(-0.05, 0.045)]
+    frame = [P(-0.03, 0.045), P(0.14, 0.045), P(0.14, 0.075), P(0.04, 0.085), P(-0.03, 0.075)]
+    grip = [P(-0.05, 0.045), P(0.035, 0.045), P(0.015, 0.20), P(-0.075, 0.20)]
+    guard = [P(0.04, 0.075), P(0.115, 0.075), P(0.10, 0.12), P(0.055, 0.12)]
+    muzzle_blk = [P(0.165, -0.012), P(0.19, -0.012), P(0.19, 0.045), P(0.165, 0.045)]
+    shine = [P(0.0, 0.0), P(0.15, 0.0), P(0.15, 0.014), P(0.0, 0.014)]
+    for poly, col in ((guard, (46, 48, 56)), (grip, (44, 46, 54)), (frame, (70, 74, 84)), (slide, (132, 138, 152)),
+                      (muzzle_blk, (30, 30, 36)), (shine, (200, 206, 218))):
+        cam.poly(p, [tuple(q) for q in poly], col, (14, 14, 16), 2.4)
     if report:
         m, b0, tg = cam.P(tuple(muzzle)), cam.P(tuple(hand)), cam.P(TARGET)
         HC.aim('Jason', m, (m[0] - b0[0], m[1] - b0[1]), tg, firing=True)
