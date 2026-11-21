@@ -5,8 +5,7 @@ preflights. 0.5 s darkness before the logo swipe in. No hook text.").
 MAP
   caption_at ... none yet (Sam records the voices, so there is nothing to caption)
   no HOOK ...... no Hook Text (Sam)
-  sound() ...... his song under the whole film: from the cut (music/gta-opener-chorus-long.mp3, 9.4 s is all that is
-                 saved), full to the end of the opening, down to car-radio level over 0.6 s, a short fade at its end
+  sound() ...... his song under the whole film: from the cut (music/monde-de-mer-full.mp3), full to the end of the opening, down to car-radio level over 0.6 s, a short fade at its end
   render ....... python3 source/grand_theft_autism.py OUT.mp4   (540 x 960, 12 drawings a second, each held 2 frames)
 """
 import os
@@ -23,9 +22,9 @@ from PIL import Image         # noqa: E402
 LENGTH = F.LENGTH
 DUR = LENGTH
 SHOTS = F.SHOTS
-SONG = os.path.join(HERE, '..', 'music', 'gta-opener-chorus-long.mp3')
-SONG_FROM = 0.1               # seconds into the saved cut: the film's frame 1 (the 0.5 s dark lead-in is its own start)
-SONG_LEN = 9.4
+SONG = os.path.join(HERE, '..', 'music', 'monde-de-mer-full.mp3')
+SONG_FROM = 36.48             # his whole song (21 Nov): 0.5 s before the chorus's first hit (36.98) = film frame 1
+SONG_LEN = LENGTH
 
 
 def caption_at(t):
@@ -45,6 +44,9 @@ def _draw(i):
 
 def main():
     out = sys.argv[1]
+    if '--remux' in sys.argv:                      # new sound on an existing picture (no redraw)
+        silent = sys.argv[sys.argv.index('--remux') + 1]
+        return mix(silent, out)
     n = int(round(LENGTH * 12))
     silent = out + '.silent.mp4'
     p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '540x960', '-r',
@@ -57,6 +59,10 @@ def main():
                 print(f'drawing {k}/{n}', flush=True)
     p.stdin.close()
     p.wait()
+    mix(silent, out)
+
+
+def mix(silent, out):
     open_end = F.SHOTS[0][2]                       # the opening's end (7.0 s on the film's clock)
     fade_at = SONG_LEN - 0.6
     vol = (f"volume='if(lt(t,{open_end}),1,if(lt(t,{open_end + 0.6}),1-(1-0.16)*(t-{open_end})/0.6,0.16))':eval=frame,"
@@ -64,7 +70,8 @@ def main():
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', silent, '-ss', str(SONG_FROM), '-t', str(SONG_LEN), '-i', SONG,
                     '-filter_complex', f'[1:a]{vol},apad=whole_dur={LENGTH}[a]', '-map', '0:v', '-map', '[a]', '-c:v',
                     'copy', '-c:a', 'aac', '-b:a', '160k', '-t', str(LENGTH), out], check=True)
-    os.remove(silent)
+    if silent.endswith('.silent.mp4'):
+        os.remove(silent)
     print('done', out, round(os.path.getsize(out) / 1e6, 2), 'MB')
 
 

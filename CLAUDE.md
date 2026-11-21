@@ -1,3 +1,9 @@
+# Be honest about what I can do (Sam, 21 Nov)
+
+**Be honest. If something isn't currently within my capabilities, say so and suggest what I would first need to learn
+or have, instead of trying to use the wrong tools to make something happen.** (A wrong-tool workaround that only looks
+like it worked is worse than saying "I can't yet".)
+
 # Seeing like Sam (read first, every chat; Sam's Y, 21 Nov)
 
 **Sam should never have to teach a fault twice. Every note he gives is proof that a check failed to see something,
