@@ -371,3 +371,29 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
 - Quick check on gta_rehearse (no SHOT_MARKS): it is the rehearsal file, not the film's module; the front-on check
   runs on the film file once the moves stage builds it (answered chat 17).
+
+## Where things stand (20 Nov, chat 18 end, Opus high; for chat 20, shot 4)
+- Rules that bite next: 8 (the pose sheet goes to Sam in the build before the rebuild), 89 (fresh critique of the
+  pose sheet before it is sent), 30 (the K2 missing head: find why lying_flat drops it before changing anything).
+- Done: Change 1 finished: gallery 0 false flags (900 drawings), Halo No-No and Milburn 0, version 4 still caught,
+  kittests body_check_shot4_v4 and body_send_gate pass; send gate on SendUserFile; renderer and finish.py carry the
+  record. Change 2 begun: leanout.py, key poses K1-K5 on the skeleton, five-view sheet (notes/shot4-case-study/
+  leanout-sheet-v1.jpg): K1, K3, K4, K5 clean and clear of the car.
+- Next: Opus, high (still building new): (1) K2 from three-quarter front has no head: fix in lying_flat (head drop),
+  and add "every drawn person has a head" to the body check (it missed it); (2) redraw the sheet, all clean; (3) one
+  fresh critique (critique.py pack, stage "pose sheet"), fix; (4) the in-betweens (lying.blend) and leanout.at(t);
+  (5) send Sam the pose sheet with the build (Y/N before the rebuild); (6) on his Y, rebuild shot 4.
+- Shots 5-8 (chain B, Sam's notes on the clip: section above): Next Opus, high: acting rows for shots 5-8 (every person, beat by beat, using focus.py for looks and head turns; Jason looks where he points; new arm poses), file source/gta_shots58.py only (chat 20 owns shot 4 and gta_rehearse.py); then a short clip of just the changed shots to Sam.
+- Needs Sam: nothing for shot 4 yet (the pose sheet comes with step 5). Shots 5-8: a separate Sonnet chain (its
+  chat 19) sent Sam a clip ~23:30 (body check clean) and waits for his notes; this chain does not touch shots 5-8.
+- Read: guides/job-packs.md Build; source/leanout.py MAP; lying_flat.py _head and draw (lines ~224-330, 470-525);
+  case study sections 10-11.
+- Open rule requests: none.
+- For Claude: scratch scripts lost with the container: run the gallery under the check by wrapping V.person with
+  HC.frame_begin/frame_end inside posegallery.main (--all); past films via film.frame_image(t) with F.guard and
+  F._ALLOW 'kittests'. K2 head: camera 45/60 deg, hup (0.51,0.86,0), hfwd down 0.51; head is drawn at 30 deg.
+  The acting row "free hand gripping the roof" changed to "braced on the door top" (it crossed his head): tell Sam
+  in the build message as an "Added/Lost" line.
+- Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
+  freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
+

@@ -32,3 +32,38 @@ look.md said "crouches, hides behind red board": wrong, he is kneeling or seated
 - Arms look like stick tubes bending mid-forearm in panel 3; suggested line: raised arm keeps one clean bend and its length.
 - Reference shows a phone and palm shirt, not the vest; suggested line: note which reference details are intentionally dropped.
 
+== critique, round 3 pass 2 (2026-11-21): 9 fault(s), 3 can't tell
+-- look.md --
+1: Man in white vest stands, ducks behind red barrier, rises, sits; no words seen.
+2: Man kneels, pops up behind red barrier, peeks, crouches low; no words seen.
+3: Man in vest kneels, raises small dark object behind red barrier, leans, crouches; no words.
+4: Man crouches, aims pistol over red barrier, leans back, kneels; no words visible.
+5: Man kneels, aims pistol over red barrier, raises arm up, crouches; no words visible.
+-- result.md --
+## Faults
+FAULT A1 P1 [1-5]: pistol is a thin black stick, no grip; panel 1 gun is diagonal, not flat on chest; panel 2 gun hidden in views 2-3; gun floats beside the hand (3, 5, 4 view 2).
+FAULT P6 [2-5]: arms end in blunt tubes, no ball hand (2 view 1; 3 views 1-2; 4 view 1; 5 view 1).
+FAULT P11 [1-5]: head sits on the shoulders, no neck (view 5 of every panel; 3 views 1, 5).
+FAULT P4 [1-5]: face smooth, no stubble or heavy brow as in the reference.
+FAULT P13 [2-5]: LEONIDA print unreadable in every front view.
+FAULT P7 [1]: seated front and back views: legs hang from a thin plank, no thighs or lap.
+FAULT P7 [3-5]: view 5 leans steeply on one straight leg; floats.
+FAULT P8 [3]: view 1 shows back of head, body twisting forward.
+FAULT P1 [1]: stray black spike left of the door, view 4.
+CAN'T TELL P5 [3-5]: shoulder joins, views 1 and 5; needs full-size crop.
+CAN'T TELL P14 [1-5]: eyes too small; needs face crop.
+CAN'T TELL P2 [1-5]: mouth a dash, no feeling; needs face crop.
+
+## Checked
+1-5
+
+## Cold look
+Missed the pistol on panel 1, the seat and the LEONIDA print. Called the door a "barrier". Read panels 2-3 as ducking, missing the braced hand. Cause: gun and print too small at phone size.
+
+## Not on the list
+Red block reads as a barrier; suggested line: guide block reads as a car door.
+K4 and K5 nearly identical; suggested line: recoil reads differently from the aim.
+Suggested line: every prop reads as itself in silhouette at phone size.
+
+critique, pass 2: faults fixed as one list: Shot 4 pose sheet hunt 2: nothing new to fix in the poses the film uses. Named: circle hands, neck, print size and smooth face are the house body (shot 3's Jason, approved); the pistol on his chest in K1 is drawn by shot 3's own frame in the film, not this sheet; the stray spike in K1 three-quarter back is the gun showing past the guide door (a guide, not the car); K3-K5 behind views lean on one leg because the sheet's guide shows only a seat patch (in the film his legs are inside the car, never seen); K3 from ahead shows the back of his head because he has turned back (no camera in shot 4 sees him from ahead).
+

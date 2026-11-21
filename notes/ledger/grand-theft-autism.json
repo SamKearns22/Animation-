@@ -10916,6 +10916,11 @@
    "date": "2026-11-20",
    "spent": 35.72,
    "forecast": 86.3
+  },
+  {
+   "date": "2026-11-21",
+   "spent": 36.12,
+   "forecast": 86.7
   }
  ],
  "critique": {
@@ -11103,6 +11108,31 @@
      "1-5 P4: reference is a short-haired, stubbled man in a palm shirt; a face crop beside it would show stubble and brow, ours looks clean and softer.",
      "1-5 P12: mouths shown closed; a labelled frame would confirm one mouth."
     ]
+   },
+   {
+    "round": 3,
+    "pass": 2,
+    "stage": "moves",
+    "date": "2026-11-21",
+    "hunt": 2,
+    "faults": 9,
+    "cant_tell": 3,
+    "open": [
+     "1-5 A1 P1: pistol is a thin black stick, no grip; panel 1 gun is diagonal, not flat on chest; panel 2 gun hidden in views 2-3; gun floats beside the hand (3, 5,",
+     "2-5 P6: arms end in blunt tubes, no ball hand (2 view 1; 3 views 1-2; 4 view 1; 5 view 1).",
+     "1-5 P11: head sits on the shoulders, no neck (view 5 of every panel; 3 views 1, 5).",
+     "1-5 P4: face smooth, no stubble or heavy brow as in the reference.",
+     "2-5 P13: LEONIDA print unreadable in every front view.",
+     "1 P7: seated front and back views: legs hang from a thin plank, no thighs or lap.",
+     "3-5 P7: view 5 leans steeply on one straight leg; floats.",
+     "3 P8: view 1 shows back of head, body twisting forward.",
+     "1 P1: stray black spike left of the door, view 4.",
+     "3-5 P5: shoulder joins, views 1 and 5; needs full-size crop.",
+     "1-5 P14: eyes too small; needs face crop.",
+     "1-5 P2: mouth a dash, no feeling; needs face crop."
+    ],
+    "fixed": "Shot 4 pose sheet hunt 2: nothing new to fix in the poses the film uses. Named: circle hands, neck, print size and smooth face are the house body (shot 3's Jason, approved); the pistol on his chest in",
+    "left": []
    }
   ],
   "lines": {
@@ -11111,11 +11141,11 @@
     "false": 0
    },
    "P4": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "A1": {
-    "faults": 13,
+    "faults": 14,
     "false": 0
    },
    "P2": {
@@ -11127,23 +11157,23 @@
     "false": 0
    },
    "P13": {
-    "faults": 4,
+    "faults": 5,
     "false": 1
    },
    "P11": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "P8": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "P6": {
-    "faults": 4,
+    "faults": 5,
     "false": 1
    },
    "P1": {
-    "faults": 8,
+    "faults": 10,
     "false": 0
    },
    "O5": {
@@ -11163,7 +11193,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 4,
+    "faults": 6,
     "false": 0
    },
    "O3": {

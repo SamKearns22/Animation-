@@ -477,29 +477,26 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
   the acting rows at full size, with a picture for each beat.
 
-## Where things stand (20 Nov, chat 18 end, Opus high; for chat 20, shot 4)
-- Rules that bite next: 8 (the pose sheet goes to Sam in the build before the rebuild), 89 (fresh critique of the
-  pose sheet before it is sent), 30 (the K2 missing head: find why lying_flat drops it before changing anything).
-- Done: Change 1 finished: gallery 0 false flags (900 drawings), Halo No-No and Milburn 0, version 4 still caught,
-  kittests body_check_shot4_v4 and body_send_gate pass; send gate on SendUserFile; renderer and finish.py carry the
-  record. Change 2 begun: leanout.py, key poses K1-K5 on the skeleton, five-view sheet (notes/shot4-case-study/
-  leanout-sheet-v1.jpg): K1, K3, K4, K5 clean and clear of the car.
-- Next: Opus, high (still building new): (1) K2 from three-quarter front has no head: fix in lying_flat (head drop),
-  and add "every drawn person has a head" to the body check (it missed it); (2) redraw the sheet, all clean; (3) one
-  fresh critique (critique.py pack, stage "pose sheet"), fix; (4) the in-betweens (lying.blend) and leanout.at(t);
-  (5) send Sam the pose sheet with the build (Y/N before the rebuild); (6) on his Y, rebuild shot 4.
-- Shots 5-8 (chain B, Sam's notes on the clip: section above): Next Opus, high: acting rows for shots 5-8 (every person, beat by beat, using focus.py for looks and head turns; Jason looks where he points; new arm poses), file source/gta_shots58.py only (chat 20 owns shot 4 and gta_rehearse.py); then a short clip of just the changed shots to Sam.
-- Needs Sam: nothing for shot 4 yet (the pose sheet comes with step 5). Shots 5-8: a separate Sonnet chain (its
-  chat 19) sent Sam a clip ~23:30 (body check clean) and waits for his notes; this chain does not touch shots 5-8.
-- Read: guides/job-packs.md Build; source/leanout.py MAP; lying_flat.py _head and draw (lines ~224-330, 470-525);
-  case study sections 10-11.
+## Where things stand (21 Nov, chat 20, Opus high; waiting for Sam's Y on the pose sheet)
+- Rules that bite next: 8 (no rebuild before Sam's Y), 74 (every beat acted as the acting rows say), 89 (the rebuilt
+  shot's clip gets a fresh critique before it is sent; the send gate refuses it otherwise).
+- Done: K2's missing head found (the figure guard stopped the drawing at the arm; the sheet showed the half body);
+  body check: every drawn person has a head (gallery 900 / Halo No-No / Milburn: 0 false flags; kittest
+  body_check_headless); refused views crossed out; LEONIDA print never backwards; K2, K3, K5 re-posed; two critique
+  hunts (round 3) fixed or named; leanout.at(t) on the acting beats: 149 frames clean, clear of the car. Pictures:
+  notes/shot4-case-study/leanout-sheet-v3.jpg, leanout-strip-v1-phone.jpg (sent to Sam). Case study section 12.
+- Next: on Sam's Y, Opus high (building new): rebuild shot 4's Jason on leanout.at(t) in the film (the skeleton
+  drawn through the shot's camera, legs hidden by the car), with the acting rows' faces and the fix 3 events; body
+  check and car test every frame; a clip of shot 4 (no yes needed) after a fresh critique.
+- Needs Sam: Y or N on the pose sheet and move strip (asked 21 Nov).
+- Read: guides/job-packs.md Build; source/leanout.py MAP; the shot 4 acting rows and events in this file.
 - Open rule requests: none.
-- For Claude: scratch scripts lost with the container: run the gallery under the check by wrapping V.person with
-  HC.frame_begin/frame_end inside posegallery.main (--all); past films via film.frame_image(t) with F.guard and
-  F._ALLOW 'kittests'. K2 head: camera 45/60 deg, hup (0.51,0.86,0), hfwd down 0.51; head is drawn at 30 deg.
-  The acting row "free hand gripping the roof" changed to "braced on the door top" (it crossed his head): tell Sam
-  in the build message as an "Added/Lost" line.
-- Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
-  freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
+- For Claude: critique round 3 hunt 2 was marked "fixed" though its faults were named (house style, guides): the
+  Checks line to Sam names them. Kittests failing before this chat and unchanged by it (11: pose_gallery,
+  lopsided_invented_only, turned_heads_for_anyone, round_page, people_from_a_description, places/moves_from_..,
+  facehouse_whole_head, outfit_every_view, focus_front_heads, watcher_catches_last_weeks_four). Watcher: saver BROKEN
+  03:29 20 Nov (old; chat 18's messages checked clean by dump) and 5 systems with no promise (freeze.py,
+  freeze_faults, humancheck sendgate, record_faults, tag_faults): named, not this job. Shots 5-8: a separate chain.
+- Branches named, not merged on purpose: freeze/* bookmarks of posted films.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 35.72% of 15%; forecast 86.3% (2026-11-20)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 36.12% of 15%; forecast 86.7% (2026-11-21)

@@ -382,3 +382,33 @@ Added after Sam's notes 1-16 (chat 16):
   clear of the car; K4 and K5 read as a man leaning out and shooting back. Open: K2 (kneeling, hunched toward the
   window) drawn from three-quarter front has NO HEAD (leanout-K2-no-head.jpg), and the body check did not notice:
   the skeleton drawing drops the head; the check needs "every person has a head".
+
+## 12. Chat 20 (20-21 Nov, Opus high): the K2 head, the pose sheet cleaned, the move in time
+
+- K2's missing head, found before changing anything (rule 30): the head code never dropped it. The figure guard
+  refused K2's gun arm from three-quarter front (the elbow folded back across his chest) and stopped the drawing
+  halfway; the sheet caught the refusal but pasted the half-drawn body anyway, and its label showed only the arm fault,
+  so it read as "no head". Two holes: (1) the body check had no test that a drawn person has a head; (2) a refused
+  drawing was shown as if it were the pose.
+- Fixed: the body check now counts a head for every person drawn (each head reports itself as it is drawn); a person
+  with none is a fault "drawn with no head". Tested: the pose gallery (900 drawings) 0 false flags, Halo No-No and
+  Milburn (40 frames each) 0; the old K2 is caught (kit test body_check_headless). A refused view on the pose sheet is
+  now crossed out in red with every fault listed.
+- Also found on the sheet: Jason's LEONIDA print read backwards in the turned views (the skeleton drawing lays the
+  flat torso mirrored to fit the real shoulders). The print now flips itself back whenever its drawing is mirrored;
+  standing Jason front and turned both ways still reads right.
+- K2 re-posed: free hand braced on the door top (the acting row's change), gun held low pointing down (it was folded
+  across his chest), head ducked under the roof line. Sheet v2: every view clean.
+- Fresh critique, hunt 1 (pose sheet, round 3): 8 faults, 3 can't-tell. Fixed: K3's gun hand lay on top of his head
+  (from behind it read as a gun to his forehead): now beside his head, muzzle up; K5's recoil (16 degrees) read as K4
+  again: now 26. Named, not fixed: circle hands shrink at sheet size (house hands); neck and print size (house body);
+  the seat patch and red door are guides (the film has the real car); front and behind views alike in K3-K5 (he has
+  turned back, as the shot asks). Sheet v3.
+- The move in time (leanout.at): the keys on the acting rows' beats (K1 to 0.5 s, K2 1.0, K3 1.4, K4 1.85, four shots
+  at 1.95, 2.30, 2.62, 2.92 each a flash frame on the aim then a kick to K5 and back, gun up 3.5, K2 5.2, K1 5.8-6.2:
+  the last frame is the first). In-betweens ease and keep bone lengths. First test: 13 of 63 moments faulty: the gun arm
+  swung through the roof edge on the way out and in, and the gun was judged mid-kick. Fixed: an arm that would cross
+  the car takes its pose from a nearby moment (it leads or lags the body); the flash comes before the kick. Every film
+  frame (149, at 24 a second) now clean from two camera sides and clear of the car. Strip: leanout-strip-v1.jpg.
+- Lesson (draft 19): a sheet that shows a refused drawing must show it as refused; "the check said something" is not
+  the same as "the check said what is wrong".
