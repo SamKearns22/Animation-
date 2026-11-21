@@ -120,8 +120,10 @@ def pose(name, sp):
         k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
         return k
     if name == 'K3':          # head and shoulders out over the sill, turning back, gun up beside his head
-        k = _key((0.62, 0.90, 0.0), (0.98, 1.36, -0.04), (0.7, 0, -1), (0.5, 0, -1),
-                 {'R': ('rel', ((0.20, 0.20, 0.14), 'out')), 'L': ((0.96, 1.07, 0.18), _v(1, 0, 0.6))},
+        k = _key((0.66, 0.90, 0.0), (1.04, 1.33, -0.04), (0.7, 0, -1), (0.5, 0, -1),   # chat 23: 6 cm further out,
+        #                       3 cm lower: the drawn gun arm's shoulder was jammed under the roof edge (the arm's edge
+        #                       test, v7 note 3; Sam's "black bars across his vest" in the hold, note 10 (e))
+                 {'R': ('rel', ((0.0, 0.30, 0.10), 'out')), 'L': ((0.96, 1.07, 0.18), _v(1, 0, 0.6))},
                  {'L': (0.60, SEAT + 0.05, 0.16), 'R': (0.58, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0, 1, 0.1))                             # muzzle up, beside his head (chat 20 critique: the hand
         return k                                            # laid on his head read as a gun to his forehead)
@@ -140,9 +142,12 @@ KEYS = ['K1', 'K2', 'K3', 'K4', 'K5']
 FIRE = [0.0, 0.042]                  # the flash: seconds before and after each shot (one drawing at 24 a second)
 SHOTS = (1.95, 2.30, 2.62, 2.92)       # the four shots (acting rows, B4)
 # the move in time (shot 4's acting rows, beats B1-B6): (seconds, key); between two keys an eased in-between
+WOB = 2.0                            # Sam, v7 note 9: the dead cop's car wobbles along the road for two seconds
+#                                      before it turns and crashes: everything after the hit is this much later
 TIMES = [(0.0, 'K1'), (0.5, 'K1'), (1.0, 'K2'), (1.4, 'K3'), (1.85, 'K4')] + \
         [x for t in SHOTS for x in ((t, 'K4'), (t + 0.04, 'K4'), (t + 0.10, 'K5'), (t + 0.28, 'K4'))] + \
-        [(3.2, 'K4'), (3.5, 'K3'), (4.55, 'K3'), (5.2, 'K2'), (5.8, 'K1'), (6.2, 'K1')]
+        [(3.2 + WOB, 'K4'), (3.5 + WOB, 'K3'), (4.55 + WOB, 'K3'), (5.2 + WOB, 'K2'), (5.8 + WOB, 'K1'),
+         (6.2 + WOB, 'K1')]
 _CACHE = {}
 
 
@@ -180,15 +185,16 @@ def at(t, sp):
     if a != b and 0 < u < 1:
         k = _clear_arms(k, ka, kb, u, sp)
     if HOLD[0] < t < HOLD[1]:                 # the hold after the crash (chat 22, hunt 1: "frozen"): he flinches from
-        f = _hump(t, 3.46, 3.62, 4.00)        # the fireball (head away, toward the car's front), looks back at it,
-        g = _hump(t, 3.90, 4.20, 4.55)        # a small nod of "got him"; the raised gun drifts with his look
+        h0, h1 = HOLD                         # (HOLD: set from the crash's own time by gta_rehearse)
+        f = _hump(t, h0, h0 + 0.16, h0 + 0.54)  # the fireball (head away, toward the car's front), looks back at it,
+        g = _hump(t, h0 + 0.44, h0 + 0.74, h1)  # a small nod of "got him"; the raised gun drifts with his look
         k['hfwd'] = _u(k['hfwd'] + _v(0.10 * f, 0.06 * f - 0.10 * g, 0.75 * f))
         if getattr(k, 'aim', None) is not None:
             k.aim = _u(k.aim + _v(0.12 * f - 0.06 * g, 0, 0.18 * f))
     return k
 
 
-HOLD = (3.46, 4.55)
+HOLD = (3.46 + WOB, 4.55 + WOB)
 
 
 def _hump(t, a, peak, b):
@@ -263,6 +269,26 @@ def car_faults(k, sp):
             if part:
                 out.append((f'{a}-{b}', part, round(float(u), 2)))
                 break
+    for sd in 'LR':                       # the drawn arm is thick (Jason's 'arms 36 muscle': about 6 cm round the
+        for a, b in (('sh', 'el'), ('el', 'wr')):   # bone): the bone clear of the window frame by less than that
+            pa, pb = k[a + sd], k[b + sd]               # still drew the arm through it (v7 note 3, "Jason clips
+            d = _u(pb - pa)                             # through two parts of the car": the pillar and the frame)
+            n1 = _u(np.cross(d, _v(0, 1, 0)) if abs(d[1]) < 0.9 else np.cross(d, _v(1, 0, 0)))
+            n2 = np.cross(d, n1)
+            hit = None
+            for u in np.linspace(0, 1, 7):
+                c = pa + (pb - pa) * u
+                for o in (n1, -n1, n2, -n2):
+                    q_ = c + o * ARM_R
+                    part = G.solid_at(car, tuple(q_), open_windows=OPEN, wall=0.07)
+                    if part and any(w_ in part for w_ in FRAME_PARTS) and q_[1] > SILL + 0.06:   # (over the
+                        #                                       sill rail is the arm resting on the door top: allowed)
+                        hit = (f'{a}{sd}-{b}{sd}', part + " (the drawn arm's edge)", round(float(u), 2))
+                        break
+                if hit:
+                    break
+            if hit and not any(x[0] == f'{a}{sd}-{b}{sd}' for x in out):
+                out.append(hit)
     for sd in 'LR':                       # a hand resting on the door top sits whole ON it: a wrist at the sill's
         w = k['wr' + sd]                  # edge has the bottom of its round hand cut off by the door line and reads
         if 0.86 < w[0] < 1.06 and abs(w[2]) < 0.9 and w[1] < SILL + HAND_R - 0.01:   # as sinking into it (Sam, chat 22)
@@ -271,6 +297,8 @@ def car_faults(k, sp):
 
 
 HAND_R = 0.07                             # the drawn round hand's reach past the wrist (m)
+ARM_R = 0.055                             # the drawn arm's reach round its bone (m)
+FRAME_PARTS = ('pillar', 'roof', 'windscreen', 'back screen', 'side window')
 
 
 def car_frame(img, cam):
@@ -314,10 +342,17 @@ _BONES = [('neck', 'head'), ('waist', 'neck'), ('pelvis', 'waist')] + \
          [(a + sd, b + sd) for sd in 'LR' for a, b in (('sh', 'el'), ('el', 'wr'), ('hip', 'kn'), ('kn', 'an'))]
 
 
-def _cover(car, cam, kw, size, gun=None):
+IN_CABIN = (WIN_X - 0.08, ROOF)   # a piece with its middle inside these (|x|, y; car frame) is in the cabin
+
+
+def _cover(car, cam, kw, size, gun=None, kc=None):
     """Per pixel, what of the car is in front of the part of him drawn there: (solid, glass) float masks 0..1. Each
     pixel takes the masks of the nearest bone half on screen (the legs behind the door, the head under the roof rail,
-    the arm out in the open air each get their own answer). Returns the masks and the car parts used."""
+    the arm out in the open air each get their own answer). Returns the masks and the car parts used.
+    v7 note 2 ("we can see through the bonnet to Jason"): a piece is tested at its middle, but its drawn shape (the
+    vest's hem, the hips, a hand on his thigh) reaches past it on screen; where the middle sat just above the dash
+    line, nothing hid the shape's lower edge over the bonnet. So a piece inside the cabin (kc: the car-frame
+    skeleton) also takes what hides his seat: the cabin's walls (bonnet, doors, boot) hide all of him inside them."""
     import gta_cars as G
     from scipy import ndimage
     q = 4                                                    # the label map at a quarter of the canvas
@@ -333,6 +368,18 @@ def _cover(car, cam, kw, size, gun=None):
     if gun is not None:
         segs.append(('gun', gun[0], gun[1]))
     masks, used = [], []
+    seat_m = None
+    if kc is not None:
+        seat_m = G.cover_masks(car, cam, tuple(car.body_pt((0.42, SEAT, 0.0))), size)
+        used += [(n, pts, 'seat') for n, pts in seat_m[2]]
+    inside = []                                              # per piece, in the same order as segs
+    if kc is not None:
+        for a, b in _BONES:
+            ca, cb = np.asarray(kc[a], float), np.asarray(kc[b], float)
+            n = max(2, int(math.ceil(float(np.linalg.norm(kw[b] - kw[a])) / 0.08)))
+            for i in range(n):
+                m = ca + (cb - ca) * (i + 0.5) / n
+                inside.append(abs(m[0]) < IN_CABIN[0] and m[1] < IN_CABIN[1])
     for i, (nm, p0, p1) in enumerate(segs, 1):
         if cam.depth(tuple(p0)) <= cam.NEAR or cam.depth(tuple(p1)) <= cam.NEAR:
             masks.append(None)
@@ -342,6 +389,8 @@ def _cover(car, cam, kw, size, gun=None):
         f = B.SS / q
         dr.line([(x0 * f, y0 * f), (x1 * f, y1 * f)], fill=i, width=max(1, int(0.05 * kk * f)))
         so, gl, us = G.cover_masks(car, cam, tuple((p0 + p1) / 2), size)
+        if seat_m is not None and i <= len(inside) and inside[i - 1]:
+            so = Image.fromarray(np.maximum(np.asarray(so), np.asarray(seat_m[0])))
         masks.append((so, gl))
         used += [(n, pts, nm) for n, pts in us]
     L_ = np.asarray(lab)
@@ -366,8 +415,9 @@ def _cover(car, cam, kw, size, gun=None):
     edge[:, 1:] |= near[:, 1:] != near[:, :-1]               # blocks cut a stair-step into his outline (Sam's
     edge[1:, :] |= near[1:, :] != near[:-1, :]               # door clip, chat 22): smooth the cut there only
     edge = ndimage.binary_dilation(edge, iterations=q)
-    for arr in (sol, gls):
-        arr[edge] = ndimage.gaussian_filter(arr, q * 0.8)[edge]
+    for arr in (sol, gls):                                   # smoothing only ever hides MORE: a blur alone let
+        arr[edge] = np.maximum(arr, ndimage.gaussian_filter(arr, q * 0.8))[edge]   # him show half through the
+    #                                                          bonnet where two pieces meet on its edge (v7 note 2)
     return sol, gls, used
 
 
@@ -417,7 +467,7 @@ def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide
     if kw.firing:
         age = min(abs(t - s_) for s_ in SHOTS)
         flash(lay, cam, kw, age)
-    sol, gls, used = _cover(car, cam, kw, img.size, gun=gun_pts(kw))
+    sol, gls, used = _cover(car, cam, kw, img.size, gun=gun_pts(kw), kc=k)
     al = np.asarray(lay.split()[3], np.float32) * (1 - sol)
     lay.putalpha(Image.fromarray(al.astype(np.uint8)))
     if not hide:

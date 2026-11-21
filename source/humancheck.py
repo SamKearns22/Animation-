@@ -12,8 +12,11 @@ gun drawn pointing away from its target. So this tests what is drawn, where it i
   frame_begin/end . a writer wraps each drawing; frame_end(t) returns that drawing's faults
   _order .......... an arm drawn over the body while both its elbow and hand are behind the body (an arm out of
                     the back), or hidden behind the body while both are well in front of it (a stump)
+  _crossed ........ both forearms crossing, each hand on the other arm's side (Lucia's wheel grip, GTA v4/v7 note 1)
   _joined ......... the person redrawn alone (no props): one joined shape; a piece apart = a limb off its joint
   _lying .......... skeleton-route people (lying_flat): lying.body_faults (arm on its own side, a neck shows)
+  _limbs .......... the drawn arm's proportions against the rig: stretched past 1.25x (the sausage), a forearm
+                    end-on to the lens (a stub); GTA v7 notes 4 and 10
   headless ........ in frame_end: every person reported has a head drawn after it (views.head_view reports each
                     head); GTA chat 20: a drawing the figure guard stopped halfway showed a body with no head
   aim ............. a film reports a fired gun as drawn (muzzle, barrel and target on screen): more than 10 degrees
@@ -95,6 +98,7 @@ def frame_end(t):
             if e['kind'] == 'flat':
                 out += [(who, k, x) for k, x in _order(e)]
                 out += [(who, k, x) for k, x in _joined(e)]
+                out += [(who, k, x) for k, x in _crossed(e)]
             elif e['kind'] == 'skeleton':
                 out += [(who, k, x) for k, x in _lying(e)]
         except Exception as ex:                    # a check that cannot run is said, never silent
@@ -173,6 +177,27 @@ def _order(e):
     return out
 
 
+def _crossed(e):
+    """Both forearms drawn crossing each other, each hand over on the other arm's side (GTA v4 note 1 and v7 note 1,
+    Lucia "arms crossed on the steering wheel": the hands were set by the car's left and right, but the kit's 'L' arm is
+    the one on the picture's left when a person faces us, so from the front each hand reached across). Folded arms on
+    purpose say j['folded'] = True."""
+    j, j2 = e['j'], e['j2']
+    if j.get('folded') or not all(k in j2 for k in ('shL', 'shR', 'elL', 'elR', 'wrL', 'wrR')):
+        return []
+    mid = (j2['shL'][0] + j2['shR'][0]) / 2
+    side = lambda sd: (j2['sh' + sd][0] - mid) * (j2['wr' + sd][0] - mid) < 0
+    def cut(a, b, c, d):
+        f = lambda p, q, r: (q[0] - p[0]) * (r[1] - p[1]) - (q[1] - p[1]) * (r[0] - p[0])
+        return f(a, b, c) * f(a, b, d) < 0 and f(c, d, a) * f(c, d, b) < 0
+    half = abs(j2['shR'][0] - j2['shL'][0]) / 2 or 1.0
+    far = lambda sd: abs(j2['wr' + sd][0] - mid) > 0.3 * half    # hands meeting in the middle (a held thing) pass
+    if side('L') and side('R') and (far('L') and far('R') or cut(j2['elL'], j2['wrL'], j2['elR'], j2['wrR'])):
+        return [('crossed', 'forearms drawn crossed, each hand on the other side of the body (hands given to the '
+                            'wrong arms? folded arms on purpose: folded=True)')]
+    return []
+
+
 def _joined(e):
     import numpy as np
     from PIL import Image
@@ -207,11 +232,53 @@ def _joined(e):
     return []
 
 
+STRETCH = (0.35, 1.25)        # a drawn arm piece shorter or longer than this x its rig length (after perspective)
+
+
+def _limbs(e):
+    """The drawn arm's proportions (GTA v7 notes 4 and 10, "a gross distended sausage", "the forearm folds back into an
+    L of flesh"): each arm piece as drawn on screen against the rig's length at the size the arm is drawn (lying_flat
+    draws a near arm bigger). Longer than 1.25x reads as a sausage; shorter than 0.35x points at the lens and the flat
+    drawing shows a stub. Both are camera faults first (lesson 22): move the camera or the pose. Off-screen: skipped."""
+    import numpy as np
+    import body as B
+    import figure as F
+    import lying as L
+    import lying_flat as LF
+    k, cam = e['k'], e.get('cam')
+    if cam is None:
+        return []
+    W, H = getattr(B, 'FRAME', (1080, 1920))
+    dm = cam.depth(tuple((np.asarray(k['neck'], float) + np.asarray(k['pelvis'], float)) / 2))
+    if dm <= cam.NEAR:
+        return []
+    s = cam.focal / dm * L.M
+    out = []
+    for sd in 'LR':
+        pts = [k[n + sd] for n in ('sh', 'el', 'wr')]
+        if any(cam.depth(tuple(q)) <= cam.NEAR for q in pts):
+            continue
+        P = [np.asarray(cam.project(tuple(q))[0], float) for q in pts]
+        if not any(0 <= x <= W and 0 <= y <= H for x, y in P[1:]):
+            continue
+        da = cam.depth(tuple((np.asarray(pts[1], float) + np.asarray(pts[2], float)) / 2))
+        f = min(max(dm / da, LF.PERSP[0]), LF.PERSP[1])
+        for nm, a, b, rig in (('upper arm', P[0], P[1], F.UPPER), ('forearm', P[1], P[2], F.FORE)):
+            r = float(np.linalg.norm(b - a)) / (s * f * rig)
+            if r > STRETCH[1]:
+                out.append(('limb', f'{sd} {nm} drawn {r:.1f}x its length (a stretched sausage: camera too close, '
+                                    f'or the drawing cannot show this angle)'))
+            elif r < STRETCH[0] and nm == 'forearm':
+                out.append(('limb', f'{sd} {nm} drawn {r:.1f}x its length (end-on to the lens: reads as a stub)'))
+    return out
+
+
 def _lying(e):
     import lying as L
     out = []
     for f in L.body_faults(e['k'], e['sp'], cam=e.get('cam'), who=''):
         out.append(('skeleton', f.lstrip(': ')))
+    out += _limbs(e)
     return out
 
 

@@ -349,18 +349,18 @@ into the seated pose (last frame matches the first).
 Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
 
 ## Shot 4: Sam's frame notes of version 4 (chat 16, verbatim in the case study section 7), to fix in the rebuild
-- [ ] Note 1: "Throughout the scene, L's hands are on the wheel in opposite grips." It is "not how humans drive":
+- [x] Note 1: "Throughout the scene, L's hands are on the wheel in opposite grips." It is "not how humans drive":
       Lucia steers hand over hand (acting rows below).
 - [ ] Notes 2-4, 11: "When J begins his movement, his lower body becomes visible." "This isn't necessary and I wonder
       why you made that choice." "His lower body is still visible through the bonnet." "J's legs are 2D and are
       sticking inside the doorframe." (cause A: the build method, proposal big-body-moves)
-- [ ] Notes 3, 6, 7, 15: "The right arm turns into a gross sausage shape and becomes dislocated from the shoulder."
+- [x] Notes 3, 6, 7, 15: "The right arm turns into a gross sausage shape and becomes dislocated from the shoulder."
       "Limbs, neck, torso, all curled around each other and in the wrong place." "Utterly inhuman." "It really worries
       me that this wasn't caught by anything we have so far implemented." "The horror continues." "It gets worse."
       "Then his arms come out his back." "Then the arms coming out his back pull out a pistol." "It is truly and
       genuinely disturbing.." "we then begin the horror show in reverse." (cause A, and the human-body check)
 - [ ] Note 8: "The gun is not pointing at his target." "It is firing towards the left."
-- [ ] Note 9: the cop "should be dead or seriously injured." Blood mist against the glass, a slump (fix 3).
+- [x] Note 9: the cop "should be dead or seriously injured." Blood mist against the glass, a slump (fix 3).
 - [ ] Note 14: "The eternally bald crowd doesn't notice the explosion or react to it." (bald fixed chat 16; the
       reaction is fix 3)
 - [ ] Note 16: "At no point do our cast display any acting notes." (acting rows below, rule 74)
@@ -478,19 +478,19 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   the acting rows at full size, with a picture for each beat.
 
 ## Shot 4 v7: Sam's notes on the clip (chat 22, 21 Nov; pictures notes/shot4-case-study/sam-v7/)
-- [ ] 1. "Lucia arms still crossed on steering wheel" (REPEAT of chat 16 note 1, rule 30). Likely why: her grips are
+- [x] 1. "Lucia arms still crossed on steering wheel" (REPEAT of chat 16 note 1, rule 30). Likely why: her grips are
   set right in the car's frame (left hand at 10 o'clock, right at 2), so the crossing is probably in how the figure's
   left and right map once she is drawn facing the camera; test before changing.
-- [ ] 2. "We can see through the bonnet to Jason when he moves" (shot 3/4 start: his body shows through the bonnet).
-- [ ] 3. "Jason clips through two parts of the car as he moves" (pictures: arm through the door frame and pillar).
-- [ ] 4. "The backwards arm is a gross distended sausage still" (REPEAT of chat 16 notes 3, 6, 7, 15).
-- [ ] 5. "Blood splatter is a 2D effect that doesn't turn with the windscreen, is always horizontal on to the camera."
-- [ ] 6. "No hydrant strike, there's no physicality, it should be hit and smash forward, like any object hit by a car."
-- [ ] 7. "Hydrant water effect clips through car."
-- [ ] 8. "No death reaction by officer, stays still" (REPEAT of chat 16 note 9). Likely why: his slump leans him
+- [x] 2. "We can see through the bonnet to Jason when he moves" (shot 3/4 start: his body shows through the bonnet).
+- [x] 3. "Jason clips through two parts of the car as he moves" (pictures: arm through the door frame and pillar).
+- [x] 4. "The backwards arm is a gross distended sausage still" (REPEAT of chat 16 notes 3, 6, 7, 15).
+- [x] 5. "Blood splatter is a 2D effect that doesn't turn with the windscreen, is always horizontal on to the camera."
+- [x] 6. "No hydrant strike, there's no physicality, it should be hit and smash forward, like any object hit by a car."
+- [x] 7. "Hydrant water effect clips through car."
+- [x] 8. "No death reaction by officer, stays still" (REPEAT of chat 16 note 9). Likely why: his slump leans him
   forward, toward the lens when the car faces us, so from the front his outline barely changes.
-- [ ] 9. "Let's have the car wobble back and forth along the road for two secs before it turns and crashes."
-- [ ] 10. "Ultimately there's so much wrong in this image, I don't know how to teach you to recognise it." (picture
+- [x] 9. "Let's have the car wobble back and forth along the road for two secs before it turns and crashes."
+- [x] 10. "Ultimately there's so much wrong in this image, I don't know how to teach you to recognise it." (picture
   sam-v7/ultimately-door-arm.jpg, Jason from ahead at the door in the crash framing). What is wrong in it (chat 22's
   reading, for chat 23 to check): (a) the arm grows out of his back, no shoulder; (b) the forearm folds back into an
   L of flesh with a thumb-stub, no elbow, thicker than his head; (c) the hand neither grips nor rests: it floats over
@@ -499,6 +499,8 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   map) at the right; (g) the vest is a flat white shape with no back, neck or form. Chat 23: answer "how to teach
   me" through the proposal route (Sam's pictures as labelled examples for the critique; full-size crops of every
   joint and every contact with the car, every frame; views where the flat drawing breaks are not used).
+- Chat 23: all ten done in version 8 (each cause, fix and check in the case study, section 16); note 10 through
+  the proposal route (notes/proposals/teach-recognise.md).
 
 ## Where things stand (21 Nov, chat 22, Opus medium; shot 4 v7 sent to Sam, waiting for his notes)
 - Rules that bite next: 30 (a note he gives again: find why the first fix failed first), 89 (round 22 has one hunt

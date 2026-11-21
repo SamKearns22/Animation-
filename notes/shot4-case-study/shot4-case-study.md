@@ -493,3 +493,52 @@ know how to teach you to recognise it." Seven faults read from it in chat 22 (fi
 passed this frame: the body check tests bones and joints, not how the drawn shapes read; the critique saw it only at
 phone size in a wide panel. Lesson (draft 22): a view where the flat drawing breaks (close, from behind, arm toward
 the lens) is a camera fault before it is a drawing fault.
+
+## 16. Chat 23 (21 Nov, Opus high): version 7's ten notes fixed as one list (version 8)
+Rule 30 first, the three repeats, why the first fix failed (each measured, not guessed):
+- Lucia's crossed grip (v4 note 1, v7 note 1). The first fix moved her grip points to 10 and 2 o'clock in the car's
+  frame; it never asked WHICH arm went to each point. The people kit names arms by the picture: its 'L' arm is the one
+  on the picture's left when a person faces us, i.e. their RIGHT arm (front view: left shoulder drawn at x < 0). So
+  from the windscreen camera each hand reached across to the other side. Fix: the seated pose gives each hand to the
+  person's own arm (one line, every seated person in the car; the woman's hands over her ears had the same cross).
+  Check: the body check now flags two forearms drawn crossing with each hand on the other side ("crossed"); it flags
+  version 7's frame and passes the fixed one. Picture of the fix: Lucia's hands each on their own side of the wheel.
+- The sausage arm (v4 notes 3/6/7/15, v7 note 4). The first fix rebuilt Jason on a 3D skeleton and fixed WHERE the
+  joints go; nothing changed HOW the flat arm is drawn. Measured on v7: in the firing frames the camera sits 2 m from
+  him with a wide lens; his near arm is 20-30% nearer the lens than his middle, so its joints land 1.26-1.37x the
+  arm's length apart, but its thickness and hand were drawn at the body-middle size: a long thin tube with round ends.
+  Fix: a limb nearer the lens is now drawn bigger all through (sleeve, forearm, hand), as a camera shows it (capped at
+  1.3x). Check: the body check measures each drawn arm piece against its length at the size it is drawn: past 1.25x
+  is "a stretched sausage", a forearm under 0.35x is "end-on to the lens: a stub". After the fix: two 1-frame stubs
+  (the free hand going to and from the door, seen end-on from the windscreen camera).
+- The cop's death (v4 note 9, v7 note 8). The first fix slumped him FORWARD onto the wheel; the camera is in front of
+  his car, so a forward slump barely changes his outline (it reads as "stays still"). Fix: the shot throws his head
+  back and to the side, then he tips over onto his door and slides down (seen from the front: a big change), and his
+  dead weight lolls with each swing of the weaving car and is thrown at the hydrant and the shop. The first try put
+  him out of sight under the dash (40 degrees forward plus the tip): forward lean cut to 16 so his head stays in view.
+The other notes:
+- 2, see-through bonnet: each piece of Jason was tested at its middle; the drawn shape (the vest's hem, a hand on his
+  thigh) reaches past that point, so where the middle sat just above the dash line nothing hid the shape's lower edge
+  over the bonnet. Fix: any piece of him inside the cabin is also hidden by whatever hides his seat (bonnet, doors).
+- 3, Jason through the car: the car check tested bone LINES against the car; his drawn arm is about 6 cm thick round
+  the bone, so a bone 3 cm from the window pillar or roof still drew the arm through it. The car check now tests the
+  arm's drawn edge against the window frame, pillars and roof (resting on the sill rail is allowed). It found the
+  raised gun arm jammed under the roof edge through the whole hold (Sam's "black bars across his vest", note 10 (e)):
+  the raised-gun pose moved 6 cm further out and 3 cm lower, the gun hand straight above the shoulder. Clean after.
+- 5, blood that never turns: the spatter was round blobs facing the lens. Now each drop is a flat shape laid on the
+  inside of the windscreen's own plane, streaks running out from where the shot came through in front of his face: it
+  tips and turns with the car. The mist at his head is a quick puff (0.3 s).
+- 6 and 7, the hydrant: it was hit at its middle by the cruiser's nose and its stump ended up UNDER the crashed car, so
+  the water rose through the bonnet; and the hydrant just swapped to a stump. Now the hydrant is placed by search where
+  the cruiser's front strikes it 0.3 s before the shop and its stump is never under the car again; its body is thrown
+  ahead of the car, end over end, bounces and skids; the water is never drawn inside the car and sits at the stump's
+  own depth (it was put half a metre nearer, in front of the car).
+- 9, the wobble: two seconds of the dead cop's car weaving across the lanes (2.5 swings, about half a metre each way,
+  the body leaning on each swing) before it turns into the hydrant and the shop. Shot 4 is now 8.2 s (was 6.2); every
+  moment after the hit moved two seconds later. The camera stays on the dying cop, then watches the weave from over
+  the road beside Jason's door (on the pavement the passers-by walked through the lens), then follows the turn.
+  Shots 5-8 start from shot 4's end on the same clock, so the crash is the same age when shot 5 starts.
+- 10, "so much wrong in this image": answered through the proposal route (notes/proposals/teach-recognise.md).
+- Lesson (draft 23): a fix is only a fix when the thing Sam saw is measured before and after; three repeats in
+  version 7 were each a fix to a nearby cause (grip points, joint places, a forward slump) that left his picture as
+  it was.

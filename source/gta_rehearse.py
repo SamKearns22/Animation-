@@ -457,7 +457,9 @@ import people as PK              # noqa: E402
 import prepper_cast as PC        # noqa: E402
 import views as V                # noqa: E402
 
-SHOT4_LEN = 6.2
+import leanout as LO              # noqa: E402  (WOB: Sam's v7 note 9, the two-second wobble)
+WOB = LO.WOB
+SHOT4_LEN = 6.2 + WOB            # chat 23: the dead cop's car wobbles two seconds before it crashes (Sam, v7 note 9)
 SHOT3_LEN = 3.0                  # shot 3: the windscreen three-shot, world t -3..0, flowing straight into shot 4
 V4 = 16.0                        # chase speed, m/s
 LANE4 = 5.0                      # the Tulip's lane: the outer northbound lane (kerb at x 7, shop fronts at x 10)
@@ -519,16 +521,20 @@ def _lead_track():
             z = V4 * t - GAPS[0] - LEAD_DZ * smooth(t / LEAD_RAMP)
             head = math.degrees(math.atan(0.3 * 2.1 * math.cos(t * 2.1 + 1.0) / V4))
             yaw, lift, crush = head, 0.0, 0.0
+        elif u <= WOB:                                           # v7 note 9: the dead weight on the wheel: the
+            env = smooth(u / 0.35) * (1 - 0.35 * smooth((u - 1.3) / 0.7))   # car weaves across the lanes (2.5 swings,
+            head = -14.0 * env * math.sin(2 * math.pi * u / 0.8)            # 0.5 m each way), still at speed
+            x += V4 * math.sin(math.radians(head)) * dt
+            z += V4 * math.cos(math.radians(head)) * dt
+            yaw, lift, crush = head * 1.2, 0.0, 0.0
         elif imp is None:
-            head = 34.0 * smooth(u / 0.45)
-            v = V4 * (1 - 0.25 * min(1.0, u / 0.8))
+            u2 = u - WOB
+            head = 34.0 * smooth(u2 / 0.45)
+            v = V4 * (1 - 0.25 * min(1.0, u2 / 0.8))
             x += v * math.sin(math.radians(head)) * dt
             z += v * math.cos(math.radians(head)) * dt
-            yaw = head + 30.0 * smooth(u / 0.5)                 # the back end swings out: it slews
+            yaw = head + 30.0 * smooth(u2 / 0.5)                # the back end swings out: it slews
             lift = 0.0
-            fx = x + 2.55 * math.sin(math.radians(yaw))         # the front's middle
-            if hyd is None and fx > 8.1:
-                hyd = (t, (fx, z + 2.55 * math.cos(math.radians(yaw))))
             cs = [(x + S.rot_y((sx * 0.97, 0, 2.58), yaw)[0]) for sx in (-1, 1)]
             if max(cs) >= SHOP4 + 0.9:                       # the nose goes through the shop glass
                 imp = (t, (x, z), yaw)
@@ -542,15 +548,52 @@ def _lead_track():
             yaw, crush, lift = yi + 4.0 * k, k, 0.0
         # the kerb: a jolt as the front wheels then the back wheels go up it
         kerb = 0.0
-        if imp is None and u > 0:
+        if imp is None and u > WOB:
             for zc, amt in ((1.50, 1.0), (-1.40, 0.8)):
                 wx = x + S.rot_y((0.86, 0, zc), yaw)[0]
                 kerb += amt * max(0.0, 1 - abs(wx - KERB4) / 0.5)
         rows.append(dict(t=t, pos=(x, z), yaw=yaw, crush=crush, kerb=kerb, u=u))
-    return rows, imp, hyd
+    return rows, imp, _hydrant_spot(rows, imp)
+
+
+def _inside(r, h, pad):
+    """The hydrant point h in the car's own frame at row r: (across, along) and whether it is under the body."""
+    a = math.radians(r['yaw'])
+    dx, dz = h[0] - r['pos'][0], h[1] - r['pos'][1]
+    lx, lz = dx * math.cos(a) - dz * math.sin(a), dx * math.sin(a) + dz * math.cos(a)
+    return lx, lz, abs(lx) < 0.97 + pad and abs(lz) < 2.58 + pad
+
+
+def _hydrant_spot(rows, imp):
+    """v7 notes 6 and 7: the hydrant stands where the cruiser's front strikes it, and its stump is clear of the car
+    once it has passed (at rest it sat UNDER the crashed car, so the water came up through the bonnet). Searched over
+    the pavement: struck by the front (not the side), 0.15-0.5 s before the shop, the stump never under the car again."""
+    if imp is None:
+        return None
+    best = None
+    for hx in np.arange(KERB4 + 0.45, SHOP4 - 0.6, 0.15):
+        for hz in np.arange(imp[1][1] - 6.0, imp[1][1] + 4.0, 0.15):
+            hit = None
+            for r in rows:
+                if r['t'] > imp[0] + 0.05:
+                    break
+                lx, lz, ins = _inside(r, (hx, hz), 0.12)
+                if ins:
+                    hit = (r['t'], lz, abs(lx))
+                    break
+            if hit is None or hit[1] < 1.9 or not 0.15 <= imp[0] - hit[0] <= 0.5:
+                continue
+            if any(_inside(r, (hx, hz), 0.25)[2] for r in rows if r['t'] > hit[0] + 0.3):
+                continue
+            sc = abs(imp[0] - hit[0] - 0.3) + 0.2 * hit[2]         # about 0.3 s before the shop, near the middle
+            if best is None or sc < best[0]:
+                best = (sc, hit[0], (float(hx), float(hz)))
+    return (best[1], best[2]) if best else None
 
 
 LEAD, IMPACT, HYDRANT = _lead_track()
+if IMPACT:
+    LO.HOLD = (IMPACT[0], IMPACT[0] + 1.09)          # Jason's flinch and nod from the crash's own moment
 
 
 def lead_at(t):
@@ -566,9 +609,12 @@ def lead_at(t):
         if t >= ts:
             shatter = c
     u = r['u']
-    roll = -7.0 * smooth(u / 0.4) * (1 - smooth((u - 0.6) / 0.3)) if u > 0 else 0.0
+    u2 = u - WOB
+    roll = -7.0 * smooth(u2 / 0.4) * (1 - smooth((u2 - 0.6) / 0.3)) if u2 > 0 else 0.0
+    if 0 < u <= WOB:
+        roll = 0.25 * r['yaw']                                 # the body leans out on each swing
     car = G.Car('cruiser', pos=r['pos'], yaw=r['yaw'], roll=roll + 3.0 * r['kerb'], pitch=2.5 * r['kerb'] - 3.0 * r['crush'],
-                steer=-22.0 * smooth(u / 0.3) if u > 0 else 0.0, spin=(V4 * min(t, IMPACT[0]) - GAPS[0]) / 0.37,
+                steer=(-22.0 * smooth(u2 / 0.3) if u2 > 0 else (0.9 * r['yaw'] if u > 0 else 0.0)), spin=(V4 * min(t, IMPACT[0]) - GAPS[0]) / 0.37,
                 crush=r['crush'], shatter=shatter, lift=0.06 * r['kerb'])
     car.u = u
     return car
@@ -578,9 +624,9 @@ def chaser_at(t, i):
     """Cruisers 2 and 3: weaving behind; after the crash they swerve to the inner lane round it."""
     gap = GAPS[i]
     z = V4 * t - gap
-    sw = smooth((t - (SHOTS[-1] + 0.2 + 0.35 * i)) / 0.7)
+    sw = smooth((t - (SHOTS[-1] + WOB + 0.2 + 0.35 * i)) / 0.7)
     x = LANE4 - 0.2 + 0.35 * math.sin(t * 1.9 + 2 * i) - 3.4 * sw
-    dsw = 3.4 * (smooth((t + 0.02 - (SHOTS[-1] + 0.2 + 0.35 * i)) / 0.7) - sw) / 0.02
+    dsw = 3.4 * (smooth((t + 0.02 - (SHOTS[-1] + WOB + 0.2 + 0.35 * i)) / 0.7) - sw) / 0.02
     yaw = math.degrees(math.atan((0.35 * 1.9 * math.cos(t * 1.9 + 2 * i) - dsw) / V4))
     return G.Car('cruiser', pos=(x, z), yaw=yaw, roll=-0.08 * yaw, pitch=0.4, steer=yaw * 0.8, spin=z / 0.37)
 
@@ -598,13 +644,19 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     # it into the hydrant; then the crash framed big with Jason small at the right, his raised gun clear of his head
     # (measured on screen: crash 480-300 px wide over the hold, Jason 250-310 px tall, muzzle 1.5 head-widths clear)
     (2.95, (2.90, 1.45, 0.80), (0.50, 1.28, -7.70), 900),      # turn onto the cruiser first (hunt 2: a pan and
-    (3.10, (2.90, 1.45, 0.80), (1.37, 1.27, -7.84), 1500),     # push together swung it out of frame at 3.0 s)
-    (3.32, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
-    (3.70, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
-    (4.55, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
-    (5.15, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
-    (5.75, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
-    (6.20, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
+    (3.10, (2.90, 1.45, 0.80), (0.45, 1.27, -7.75), 1500),     # push together swung it out of frame at 3.0 s)
+    # chat 23 (v7 notes 8, 9): stay on the cop as he dies (snap back, slump onto the door), then pull out to watch his
+    # car weave across the road for two seconds, then follow it as it turns into the hydrant and the shop
+    (3.50, (2.90, 1.45, 0.80), (0.40, 1.25, -7.80), 1500),
+    (3.95, (1.90, 1.50, 0.80), (0.35, 1.05, -9.00), 1250),     # over the road beside his door (on the pavement
+    (4.90, (1.90, 1.50, 0.80), (0.40, 1.05, -9.20), 1250),     # the passers-by walked through the lens)
+    (5.10, (2.40, 1.45, 0.80), (1.37, 1.27, -8.20), 1100),
+    (5.36, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
+    (3.70 + WOB, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
+    (4.55 + WOB, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
+    (5.15 + WOB, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
+    (5.75 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
+    (6.20 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
 ]
 
 
@@ -893,7 +945,18 @@ S_REF = 0.32                     # passers-by and cops are drawn once at this si
 _SPR = {}
 
 
-def person_cached(img, cam, sp, key, neck, facing, lean=0.0):
+def person_cached(img, cam, sp, key, neck, facing, lean=0.0, roll=0.0):
+    if abs(roll) > 0.5:                               # tipped over sideways about the hips (the dead cop, v7 note 8)
+        if cam.depth(neck) < 0.35:
+            return
+        (X, Y), k = cam.project(neck)
+        s = k * sp.get('height', 1.75) / FIG_H
+        lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+        person_cached(lay, cam, sp, key, neck, facing, lean)
+        piv = (X * B.SS, (Y + 420 * s) * B.SS)
+        lay = lay.rotate(-roll, resample=Image.BICUBIC, center=piv)
+        img.alpha_composite(lay) if img.mode == 'RGBA' else img.paste(lay, (0, 0), lay)
+        return
     """A Glimpse (a passer-by, a cop through the glass): one drawing per (who, view, lean), scaled to the size the
     camera wants. Drawn fresh when it is nearer (bigger) than the drawing."""
     if cam.depth(neck) < 0.35:
@@ -1084,7 +1147,7 @@ def jason_face(t):
     imp = IMPACT[0] if IMPACT else 99.0
     if imp + 0.05 <= t < imp + 0.95:                                      # B5: brows up, a flat impressed "huh"
         f.update(squint=0.1, frown=-0.03, brow_up=0.035, mouth='v:O' if t < imp + 0.5 else 'v:rest')
-    elif 3.0 <= t < 4.55:
+    elif 3.0 <= t < 4.55 + WOB:
         f.update(squint=0.5, frown=0.06)
     if any(0.0 <= t - ts < 0.085 for ts in SHOTS):                        # a blink on each shot
         f['blink'] = True
@@ -1157,7 +1220,11 @@ def seated(lay, cam, car, who, neck_l, t, hands=(), over=None, head_dir=None, pr
         f = fig(car.body_pt((neck_l[0] + dx, 0.28, neck_l[2] + feet_z)))
         j['foot' + sd] = f
     for sd, at, pole, shape in hands:
-        V.arm_to(j, sd, fig(car.body_pt(at)), pole, shape)
+        # hands are given by the person's own left and right (the car's left and right, they face forward); the kit's
+        # 'L' arm is the one on the picture's left when a person faces us, i.e. their RIGHT arm (views.standing; front
+        # view shL x < 0). Given straight across, each hand reached over to the other side: Lucia's crossed grip, Sam's
+        # v4 note 1 and v7 note 1 (rule 30: the first fix moved the grip points, never the arm they went to).
+        V.arm_to(j, {'L': 'R', 'R': 'L'}[sd], fig(car.body_pt(at)), pole, shape)
     j['props'] += list(props)
     return person_at(lay, cam, sp, neck, F, t, j, head_dir)
 
@@ -1252,7 +1319,7 @@ def tulip_inside(t):
                 her_over.update(squint=0.0, frown=-0.02, brow_up=0.03, gaze_dy=0.0)
                 her_dir = S._norm(car.body_dir((0.9, 0.0, -0.6)))
         lu_dir = None
-        if 0.0 <= t and (bump(t, 0.55, 0.75, 1.15) > 0.3 or bump(t, 4.65, 4.85, 5.3) > 0.3):
+        if 0.0 <= t and (bump(t, 0.55, 0.75, 1.15) > 0.3 or bump(t, 4.65 + WOB, 4.85 + WOB, 5.3 + WOB) > 0.3):
             lu_dir = S._norm(car.body_dir((1.0, 0.0, 0.35)))
         if any(0.0 <= t - ts < 0.1 for ts in SHOTS):
             lu_over['blink'] = True
@@ -1288,11 +1355,29 @@ def lead_cop_lean(t):
                 lean = -14 * (1 - (t - ts) / 0.3)
         return lean, False
     u = t - hit
-    lean = -18 * bump(u, 0.0, 0.05, 0.14) + 40 * smooth((u - 0.08) / 0.32)
+    lean = -18 * bump(u, 0.0, 0.05, 0.14) + 16 * smooth((u - 0.08) / 0.32)   # chat 23: 40 put him under the dash
+    #                                                     once he also tips onto the door (lead_cop_roll): head kept in view
     for te, amt in ((HYDRANT[0] if HYDRANT else 99, 10), (IMPACT[0] if IMPACT else 99, 16)):
         if t >= te:
             lean += amt * math.exp(-(t - te) / 0.18) * smooth((t - te) / 0.05)
     return lean, u > 0.04
+
+
+def lead_cop_roll(t):
+    """v7 note 8 (a repeat of v4 note 9: "no death reaction by officer, stays still"): the first fix slumped him
+    FORWARD onto the wheel, which from in front (where the camera is) barely changes his outline. Now the shot throws
+    his head back and to the side, then he slides down and over onto the door (degrees, + toward the door), and his
+    dead weight lolls with each swing of the weaving car and is thrown at the hydrant and the shop."""
+    u = t - SHOTS[3]
+    if u < 0:
+        return 0.0, 0.0
+    roll = 14 * bump(u, 0.0, 0.06, 0.2) + 28 * smooth((u - 0.12) / 0.45)
+    if 0 < u < WOB:
+        roll += 9 * math.sin(2 * math.pi * u / 0.8 - 1.2) * smooth(u / 0.4)
+    for te, amt in ((HYDRANT[0] if HYDRANT else 99, 8), (IMPACT[0] if IMPACT else 99, 14)):
+        if t >= te:
+            roll += amt * math.exp(-(t - te) / 0.25) * smooth((t - te) / 0.05)
+    return roll, 0.05 * smooth((u - 0.12) / 0.45)               # and he slides 5 cm down the seat
 
 
 def cop_inside(i, t, lead=False):
@@ -1300,10 +1385,16 @@ def cop_inside(i, t, lead=False):
         F = S._norm(car.body_dir((0, 0, 1)))
         F = (F[0], 0.0, F[2])
         lean, dead = lead_cop_lean(t) if lead else (0.0, False)
+        roll, drop = lead_cop_roll(t) if lead else (0.0, 0.0)
         sp = _cop(i)
         if dead:                                      # eyes shut, mouth slack
             sp = dict(sp, blink=True, mouth='v:O')
-        person_cached(lay, cam, sp, 'cop%d%s' % (i, 'dead' if dead else ''), car.body_pt((-0.42, 1.12, 0.0)), F, lean)
+        neck = car.body_pt((-0.42, 1.12 - drop, 0.0))
+        if roll:                                      # toward the door: which way is that on screen?
+            (dx, _), _ = cam.project(car.body_pt((-1.0, 1.12, 0.0)))
+            (nx, _), _ = cam.project(neck)
+            roll = roll if dx > nx else -roll
+        person_cached(lay, cam, sp, 'cop%d%s' % (i, 'dead' if dead else ''), neck, F, lean, roll=roll)
     return paint
 
 
@@ -1320,20 +1411,43 @@ def blood_items(cam, t, lead):
     # hunt 2 (chat 22): laid on the windscreen, the blood sat off to one side of his head from the side-on camera
     # (parallax: the glass is 0.9 m in front of him), and read as a red rose on the outside. Now it hangs just in
     # front of his head (drawn at the glass's depth, so always over his face from any camera), spatter finer
-    glass = lambda x, y: lead.body_pt((x, y, 0.22))
-    for n in range(24):                                # spatter: stays
-        x, y = -0.42 + rng.normal(0, 0.15), 1.24 + rng.normal(0, 0.08)
-        r = rng.uniform(0.010, 0.032) * min(1.0, u / 0.06)
-        s, d = fc.screen(wz(glass(x, y)))
-        if d > 0.5:
-            pieces.append((FX._blob(s[0], s[1], fc.focal * r / d, 300 + n, n=6), (150, 14, 22), None, None))
-    if u < 0.5:                                        # the mist: grows and thins out
+    # chat 23 (v7 note 5, "a 2D effect that doesn't turn with the windscreen"): the spatter is laid ON the inside of
+    # the windscreen, each drop a flat shape in the glass's own plane (it tips and turns with the car through the
+    # weave, the slew and the crash), streaks running out from where the shot came through in front of his face
+    gy0, gz0, gy1, gz1 = 1.05, 1.08, 1.55, -0.02                    # the cruiser's windscreen: bottom and top edge
+    e2 = np.array([0.0, gy1 - gy0, gz1 - gz0]) / math.hypot(gy1 - gy0, gz1 - gz0)   # up the glass
+    e1 = np.array([1.0, 0.0, 0.0])
+    def on_glass(x, y):
+        v = (y - gy0) / (gy1 - gy0)
+        return np.array([x, y, gz0 + (gz1 - gz0) * v - 0.012])
+    c0 = on_glass(-0.40, 1.30)
+    grow = min(1.0, u / 0.08)
+    for n in range(34):                                # spatter: stays
+        ang = rng.uniform(0, 2 * math.pi)
+        dist = abs(rng.normal(0, 0.10)) * grow
+        cen = c0 + (e1 * math.cos(ang) + e2 * math.sin(ang)) * dist
+        r = rng.uniform(0.008, 0.026) * (1.2 if dist < 0.04 else 1.0)
+        el = 1.0 + 3.0 * min(1.0, dist / 0.12)          # drops further out are streaks pointing away from the hole
+        ra = e1 * math.cos(ang) + e2 * math.sin(ang)
+        rb = e1 * -math.sin(ang) + e2 * math.cos(ang)
+        poly = []
+        for q in range(14):
+            a = 2 * math.pi * q / 14
+            w = cen + ra * (r * el * math.cos(a)) + rb * (r * math.sin(a) * (1 - 0.3 * max(0, math.cos(a))))
+            sc, d = fc.screen(wz(lead.body_pt(tuple(w))))
+            if d < 0.5:
+                poly = []
+                break
+            poly.append((float(sc[0]), float(sc[1])))
+        if poly:
+            pieces.append((poly, (150, 14, 22), None, None))
+    if u < 0.3:                                        # the mist at his head: a quick puff, gone in 0.3 s
         for n in range(9):
             x, y = -0.42 + rng.normal(0, 0.12), 1.22 + rng.normal(0, 0.06)
             k = n / 9.0
-            if k > 1.0 - u / 0.5:
+            if k > 1.0 - u / 0.3:
                 continue
-            r = (0.05 + 0.13 * min(1.0, u / 0.18)) * rng.uniform(0.6, 1.0)
+            r = (0.025 + 0.045 * min(1.0, u / 0.12)) * rng.uniform(0.6, 1.0)
             s, d = fc.screen(wz(lead.body_pt((x, y + 0.06 * u, 0.18))))
             if d > 0.5:
                 pieces.append((FX._blob(s[0], s[1], fc.focal * r / d, 400 + n, n=8), (196, 42, 48), None, None))
@@ -1359,6 +1473,58 @@ def wz(p):
     return np.array([p[0], p[2], p[1]], float)
 
 
+def hydrant_flight(t):
+    """v7 note 6 ("no hydrant strike, no physicality: it should be hit and smash forward, like any object hit by a
+    car"): struck by the cruiser's front, the hydrant's body breaks off its stump and is thrown ahead of the car, a
+    little faster than it, spinning end over end, bouncing on the pavement and skidding to rest. Returns its base and
+    top (world, y up) or None before the strike."""
+    if HYDRANT is None or t < HYDRANT[0]:
+        return None
+    th, (hx, hz) = HYDRANT
+    a, b = lead_at(th - 0.02), lead_at(th + 0.02)
+    v = np.array([(b.pos[0] - a.pos[0]) / 0.04, 0.0, (b.pos[1] - a.pos[1]) / 0.04]) * 1.15
+    v[1] = 3.2
+    p = np.array([hx, 0.42, hz])
+    w = 14.0                                           # end over end (radians a second), slowing on each bounce
+    ang, dt, T = 0.0, 1.0 / 240, th
+    while T < t:
+        p += v * dt
+        v[1] -= 9.81 * dt
+        ang += w * dt
+        if p[1] < 0.28 and v[1] < 0:                  # the pavement (0.15) plus its half-thickness
+            p[1] = 0.28
+            v[1] = -0.35 * v[1]
+            v[0] *= 0.7
+            v[2] *= 0.7
+            w *= 0.6
+        T += dt
+    d = np.array([v[0], 0.0, v[2]])
+    d = d / (np.linalg.norm(d) or 1.0)
+    axis = np.array([0.0, 1.0, 0.0]) * math.cos(ang) + d * math.sin(ang)
+    return p - axis * 0.27, p + axis * 0.27
+
+
+def hydrant_body(img, cam, p, ends, col=(232, 196, 60)):
+    """The struck hydrant's body in flight: a yellow barrel from base to top (flat, one ink outline), its cap."""
+    a, b = ends
+    if cam.depth(tuple(a)) < 0.4 or cam.depth(tuple(b)) < 0.4:
+        return
+    (ax, ay), ka = cam.project(tuple(a))
+    (bx, by), kb = cam.project(tuple(b))
+    t_ = np.array([bx - ax, by - ay])
+    n = np.array([-t_[1], t_[0]]) / (np.linalg.norm(t_) or 1.0)
+    ra, rb = 0.14 * ka, 0.12 * kb
+    body = [tuple(np.array([ax, ay]) + n * ra), tuple(np.array([bx, by]) + n * rb),
+            tuple(np.array([bx, by]) - n * rb), tuple(np.array([ax, ay]) - n * ra)]
+    pen = S.pen(img)
+    pen.poly(body, G.dk_(col, 0.9), INK, 2.0)
+    pen.ell(bx, by, rb, rb, col, INK, 2.0)
+    m = (np.array([ax, ay]) * 0.45 + np.array([bx, by]) * 0.55)
+    for sg in (-1, 1):                                 # the two side nozzles
+        q = m + n * sg * (ra + 0.05 * ka)
+        pen.ell(q[0], q[1], 0.045 * ka, 0.045 * ka, G.dk_(col, 0.85), INK, 1.6)
+
+
 def jet_lumps(t):
     """The hydrant's water: a column thrown up from the broken stump, falling back round it."""
     if HYDRANT is None or t < HYDRANT[0]:
@@ -1375,6 +1541,13 @@ def jet_lumps(t):
         if p[2] < 0.15:
             continue
         r = rng.uniform(0.26, 0.36) * (1.0 + 0.5 * min(1.0, age))   # fatter (chat 14: a thin jet read as a black stick)
+        if p[2] < 1.9:                                 # v7 note 7: water never drawn inside the cruiser's body
+            car = lead_at(t)
+            a_ = math.radians(car.yaw)
+            dx, dz = p[0] - car.pos[0], p[1] - car.pos[1]
+            lx, lz = dx * math.cos(a_) - dz * math.sin(a_), dx * math.sin(a_) + dz * math.cos(a_)
+            if abs(lx) < 0.97 + r and abs(lz) < 2.58 + r:
+                continue
         out.append((p, r, rng.rand() < 0.6, v + np.array([0, 0, -FX.G * age])))
     return out
 
@@ -1428,7 +1601,7 @@ if IMPACT:                       # one joined column: born inside the flame tips
                               (_r.uniform(-0.8, -0.1), _r.uniform(-0.4, 0.4), _r.uniform(0.3, 1.0)), _r.uniform(1.6, 2.4),
                               _r.uniform(0.6, 0.9), _r.uniform(1.6, 2.3), 3.4, 'smoke', int(_r.randint(1 << 20)), tau=0.5))
 TYRE4 = []
-for _k, _tb in enumerate(np.arange(SHOTS[-1] + 0.1, (IMPACT[0] if IMPACT else SHOT4_LEN), 1.0 / 24)):
+for _k, _tb in enumerate(np.arange(SHOTS[-1] + WOB + 0.1, (IMPACT[0] if IMPACT else SHOT4_LEN), 1.0 / 24)):
     _c = lead_at(_tb)
     for _sx in (-1, 1):
         _p = _c.ground_pt((_sx * 0.86, 0.3, -1.4))
@@ -1444,7 +1617,8 @@ def fx_items(cam, t, lead):
         d = cam.depth((HYDRANT[1][0], 2.0, HYDRANT[1][1]))
         spr = FX.lumps_sprite(fc, lumps, d)
         if spr:
-            items.append((d - 0.5, spr.paste))
+            items.append((d, spr.paste))                  # at the stump's own depth (v7 note 7: d - 0.5 put it
+            #                                               in front of the cruiser parked beside it)
     if IMPACT and t >= IMPACT[0]:
         ti, (xi, zi), yi = IMPACT
         front = lead_at(ti).body_pt((0.0, 1.0, 2.4))
@@ -1576,6 +1750,10 @@ def world4(t, cam_fn, record=None):
             items.append(('hydrant', d, lambda im: hydrant(im, cam, S.pen(im), (hx, hz))))
         else:
             items.append(('hydrant', d, lambda im: hydrant_stump(im, cam, S.pen(im), (hx, hz))))
+            fl = hydrant_flight(t)
+            if fl is not None:
+                items.append(('hydrant body', cam.depth(tuple((fl[0] + fl[1]) / 2)),
+                              lambda im, fl=fl: hydrant_body(im, cam, S.pen(im), fl)))
     for k, (c, ins) in enumerate(((lead, cop_inside(0, t, True)), (chasers[0], cop_inside(1, t)), (chasers[1], cop_inside(2, t)))):
         d = cam.depth((c.pos[0], 0.8, c.pos[1]))
         if d > 0.5:

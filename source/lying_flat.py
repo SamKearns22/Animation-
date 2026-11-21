@@ -207,7 +207,21 @@ def _shoe(p, sc, cam, k, side, sp, M):
         #                                    the shoe's own colour, darker (the critique: grey soles read as other shoes)
 
 
+PERSP = (0.8, 1.3)           # how much nearer or farther than the body's middle a limb may be drawn bigger or smaller
+
+
 def _arm(p, sc, cam, k, side, sp):
+    # Perspective in the limb (GTA shot 4, v4 notes 3/6/7/15 and v7 note 4, "a gross distended sausage"): the joints
+    # are placed by the camera (an arm 25% nearer the lens than his middle lands 25-35% longer on screen) but the
+    # widths and the hand were drawn at the body's middle, so a near arm came out long and thin with round ends. Now a
+    # limb nearer the lens is drawn bigger all through (sleeve, forearm, hand), as the camera would show it.
+    dm = cam.depth(tuple((np.asarray(k['neck'], float) + np.asarray(k['pelvis'], float)) / 2))
+    da = cam.depth(tuple((np.asarray(k['el' + side], float) + np.asarray(k['wr' + side], float)) / 2))
+    f = min(max(dm / max(da, cam.NEAR), PERSP[0]), PERSP[1]) if da > cam.NEAR else 1.0
+    if abs(f - 1.0) > 0.06:
+        sc2 = ScreenCam(sc.s * f, int(sc.ox))
+        sc2.shoulders = {sd: tuple(np.asarray(v, float) / f) for sd, v in sc.shoulders.items()}
+        p, sc = B.Pen(p.img, sc2), sc2
     s = sc.s
     j2 = {'sh' + side: tuple(sc.shoulders[side]), 'el' + side: tuple(_proj(cam, k['el' + side]) / s),
           'wr' + side: tuple(_proj(cam, k['wr' + side]) / s), 'hand': {side: sp.get('lying_hand', 'fist')}}
