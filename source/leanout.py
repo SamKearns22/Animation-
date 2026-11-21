@@ -137,6 +137,7 @@ def pose(name, sp):
 
 
 KEYS = ['K1', 'K2', 'K3', 'K4', 'K5']
+FIRE = [0.0, 0.042]                  # the flash: seconds before and after each shot (one drawing at 24 a second)
 SHOTS = (1.95, 2.30, 2.62, 2.92)       # the four shots (acting rows, B4)
 # the move in time (shot 4's acting rows, beats B1-B6): (seconds, key); between two keys an eased in-between
 TIMES = [(0.0, 'K1'), (0.5, 'K1'), (1.0, 'K2'), (1.4, 'K3'), (1.85, 'K4')] + \
@@ -173,7 +174,9 @@ def at(t, sp):
         db = _u(kb['wrR'] - kb['elR'])
     if getattr(ka, 'aim', None) is not None or getattr(kb, 'aim', None) is not None:
         k.aim = _u(da + (db - da) * u)
-    k.firing = any(s_ <= t < s_ + 0.042 for s_ in SHOTS)    # the flash frame, on the aim; the kick follows it
+    k.firing = any(s_ - FIRE[0] <= t < s_ + FIRE[1] for s_ in SHOTS)   # the flash frame, on the aim; the kick
+    #                                                     follows it (FIRE: the film at 12 drawings a second sets
+    #                                                     half a drawing each side, so every shot has one)
     if a != b and 0 < u < 1:
         k = _clear_arms(k, ka, kb, u, sp)
     return k
@@ -384,7 +387,7 @@ def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide
     if not under:
         draw_gun(lay, cam, kw, report=False)
     if kw.firing:
-        age = min(t - s_ for s_ in SHOTS if s_ <= t)
+        age = min(abs(t - s_) for s_ in SHOTS)
         flash(lay, cam, kw, age)
     sol, gls, used = _cover(car, cam, kw, img.size, gun=gun_pts(kw))
     al = np.asarray(lay.split()[3], np.float32) * (1 - sol)

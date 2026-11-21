@@ -982,6 +982,7 @@ GRIP_J = (0.72, 1.50, 0.20)
 HIDE_JASON = [False]
 import leanout as LO             # noqa: E402  the lean-out (chat 21)
 LO.GUN[0] = 1.5                   # the pistol 1.5x in the film: readable at phone size
+LO.FIRE[:] = [1 / 24, 1 / 24]     # 12 drawings a second: each shot's flash lands on one drawing (chat 21: 3 of 4 fell between)
 import humancheck as HC           # noqa: E402  the body check (proposal big-body-moves)       # his free hand on the roof's front corner, over the open window
 
 

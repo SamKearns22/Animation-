@@ -1,0 +1,61 @@
+{
+ "round": 21,
+ "stage": "moves",
+ "panels": [
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v6-strip.jpg",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). Shot 4 of a car chase, 6.2 s, a vertical phone video. Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman sits in the middle of the back seat. Police cars chase them. A strip of the whole shot, one frame every 0.33 s with its time. Written: starts on the windscreen three-shot (all three seated, Jason looking hard at us, gun flat on his chest); the camera swings round to his window as he rises on his knees and leans out of the OPEN window to the waist, turned back; we hang beside him; he fires four shots at the lead police car (each a flash and a kick of the arm); the fourth hits its driver (blood on the glass, he slumps); the police car slews onto the pavement, breaks a hydrant (water jet) and crashes into a shop front (fireball, black smoke); passers-by duck and run; Jason drops back into his seat and the shot ends on the same windscreen frame it began on. His legs are never seen (he kneels on the seat)."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v6-b3.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). Shot 4 of a car chase, 6.2 s, a vertical phone video. Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman sits in the middle of the back seat. Police cars chase them. 1.92 s, full frame: Jason leaning out of the open passenger window, turned back, gun arm straight at the lead police car, firing (muzzle flash)."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v6-b4.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). Shot 4 of a car chase, 6.2 s, a vertical phone video. Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman sits in the middle of the back seat. Police cars chase them. 3.0 s, full frame: just after his fourth shot; the lead police car's driver is hit: a mist of blood against the inside of its windscreen, the driver slumping onto the wheel."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v6-b5.jpg",
+   "parts": "APOS",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). Shot 4 of a car chase, 6.2 s, a vertical phone video. Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman sits in the middle of the back seat. Police cars chase them. 3.75 s, full frame: the police car has crashed into a shop front: fireball and smoke; Jason (near, right) still leaning out, gun up; passers-by react."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v6-b2.jpg",
+   "parts": "AP",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). Shot 4 of a car chase, 6.2 s, a vertical phone video. Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman sits in the middle of the back seat. Police cars chase them. 1.17 s, full frame: Jason rising and turning to his open window, head and shoulders going out; the camera is coming round the car's front corner."
+  }
+ ]
+}
