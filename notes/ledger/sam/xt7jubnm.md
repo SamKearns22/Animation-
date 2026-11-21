@@ -30,3 +30,6 @@ Please don't restart the render again
 ### 2026-11-21T14:42:45
 Jason skips position in second 20. Previously he is sat upright, then he's sunken into the car. We want him upright. The pistol he holds at his chest is not present. The autistic girl's dialogue is barely audible but everyone else's is fine.
 
+### 2026-11-21T14:50:35
+I also believe she was supposed to look delighted with her final line.
+
