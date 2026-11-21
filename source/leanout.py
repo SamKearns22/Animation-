@@ -20,6 +20,9 @@ greenhouse's side at x 0.86 (belt) .. 0.70 (roof). The passenger's seat cushion 
   strip(OUT) ...... the move every 0.1 s from the shot's two camera sides, each frame tested (body check, car)
   gun(...) ........ the pistol drawn on the skeleton, along the forearm's aim; reported to the body check (aim)
   car_faults(k) ... samples along every bone outside the car's solid parts (the window open)
+  to_world ........ a car-frame skeleton put in the world with the moving car
+  film_layer ...... Jason in a film frame: at(t) in the car, drawn through the film's camera, the car rubbing out
+                    what it hides per bone half (_cover: legs behind the door, the dash, the roof rail), the flash
   sheet(OUT) ...... the five-view pose sheet: each key pose from the front, three-quarter, side, three-quarter back
                     and behind, with the car's window frame, its faults written under each view
 
@@ -42,7 +45,8 @@ import sets as S             # noqa: E402
 
 SILL, ROOF, SEAT = 0.95, 1.47, 0.47
 WIN_X = 0.86                 # the greenhouse's side at the sill
-TARGET = (0.6, 1.0, -9.0)    # the lead cruiser's windscreen, behind on the right (car frame)
+TARGET = (0.05, 1.31, -7.68) # the lead cruiser's windscreen in front of its driver (car frame), where it sits
+                             # through the four shots (GTA shot 4, chat 21: measured, +-0.35 m across them)
 OPEN = ((1, 1),)             # the passenger's front window, wound down
 
 L.HELD_ARMS.add('leanout')
@@ -198,13 +202,16 @@ def _clear_arms(k, ka, kb, u, sp):
 
 
 # ------------------------------------------------------------------------------------------------ the gun
+GUN = [1.0]                  # the pistol's size: 1 on the pose sheet; the film draws it 1.5x to read on a phone
+
+
 def gun_pts(k):
     """The pistol in the car frame: (hand, muzzle), the barrel along the forearm."""
     wr, el = k['wrR'], k['elR']
     d = getattr(k, 'aim', None)
     d = _u(wr - el) if d is None else d
     hand = wr + d * 0.05
-    return hand, hand + d * 0.17
+    return hand, hand + d * 0.17 * GUN[0]
 
 
 def draw_gun(img, cam, k, report=True):
@@ -213,8 +220,9 @@ def draw_gun(img, cam, k, report=True):
     hand, muzzle = gun_pts(k)
     d = _u(muzzle - hand)
     down = _u(np.cross(d, _v(1e-3, 0, 1)) if abs(d[1]) > 0.9 else _v(0, -1, 0) - d * d[1])
-    body = [hand - d * 0.03, muzzle, muzzle + down * 0.035, hand + down * 0.035]
-    grip = [hand - d * 0.03, hand + d * 0.03, hand + d * 0.02 + down * 0.11, hand - d * 0.05 + down * 0.10]
+    g = GUN[0]
+    body = [hand - d * 0.03 * g, muzzle, muzzle + down * 0.035 * g, hand + down * 0.035 * g]
+    grip = [hand - d * 0.03 * g, hand + d * 0.03 * g, hand + d * 0.02 * g + down * 0.11 * g, hand - d * 0.05 * g + down * 0.10 * g]
     for poly in (grip, body):
         cam.poly(p, [tuple(q) for q in poly], (40, 40, 44), (14, 14, 16), 2.0)
     if report:
@@ -259,6 +267,135 @@ def seat(img, cam):
     p = B.Pen(img, S.FLAT)
     cam.poly(p, [(0.15, SEAT, -0.30), (0.75, SEAT, -0.30), (0.75, SEAT, 0.30), (0.15, SEAT, 0.30)],
              (120, 90, 70), (30, 20, 20), 1.6)
+
+
+# ------------------------------------------------------------------------------------------------ in the film
+def to_world(k, car):
+    """A car-frame skeleton put in the world with the car (gta_cars.Car.body_pt: its place, turn and lean)."""
+    o = np.asarray(car.body_pt((0.0, 0.0, 0.0)), float)
+    out = L.Body()
+    for n, v in k.items():
+        w = np.asarray(car.body_pt(tuple(float(c) for c in v)), float)
+        out[n] = w if n in L.POINTS else _u(w - o)
+    out.pose = 'leanout'
+    if getattr(k, 'aim', None) is not None:
+        out.aim = _u(np.asarray(car.body_pt(tuple(k.aim)), float) - o)
+    out.firing = getattr(k, 'firing', False)
+    return out
+
+
+# the pieces the car may hide, each tested on its own sight line (gta_cars.cover_masks): each bone in 8 cm pieces
+_BONES = [('neck', 'head'), ('waist', 'neck'), ('pelvis', 'waist')] + \
+         [(a + sd, b + sd) for sd in 'LR' for a, b in (('sh', 'el'), ('el', 'wr'), ('hip', 'kn'), ('kn', 'an'))]
+
+
+def _cover(car, cam, kw, size, gun=None):
+    """Per pixel, what of the car is in front of the part of him drawn there: (solid, glass) float masks 0..1. Each
+    pixel takes the masks of the nearest bone half on screen (the legs behind the door, the head under the roof rail,
+    the arm out in the open air each get their own answer). Returns the masks and the car parts used."""
+    import gta_cars as G
+    from scipy import ndimage
+    q = 4                                                    # the label map at a quarter of the canvas
+    W, H = size[0] // q, size[1] // q
+    lab = Image.new('L', (W, H), 0)
+    dr = ImageDraw.Draw(lab)
+    segs = []
+    for a, b in _BONES:
+        pa, pb = kw[a], kw[b]
+        n = max(2, int(math.ceil(float(np.linalg.norm(pb - pa)) / 0.08)))   # pieces of about 8 cm: the sill cuts
+        for i in range(n):                                                   # the leaning chest where it really is
+            segs.append((f'{a}-{b}', pa + (pb - pa) * i / n, pa + (pb - pa) * (i + 1) / n))
+    if gun is not None:
+        segs.append(('gun', gun[0], gun[1]))
+    masks, used = [], []
+    for i, (nm, p0, p1) in enumerate(segs, 1):
+        if cam.depth(tuple(p0)) <= cam.NEAR or cam.depth(tuple(p1)) <= cam.NEAR:
+            masks.append(None)
+            continue
+        (x0, y0), kk = cam.project(tuple(p0))
+        (x1, y1), _ = cam.project(tuple(p1))
+        f = B.SS / q
+        dr.line([(x0 * f, y0 * f), (x1 * f, y1 * f)], fill=i, width=max(1, int(0.05 * kk * f)))
+        so, gl, us = G.cover_masks(car, cam, tuple((p0 + p1) / 2), size)
+        masks.append((so, gl))
+        used += [(n, pts, nm) for n, pts in us]
+    L_ = np.asarray(lab)
+    if not L_.any():
+        z = np.zeros((size[1], size[0]), np.float32)
+        return z, z, used
+    _, (iy, ix) = ndimage.distance_transform_edt(L_ == 0, return_indices=True)
+    near = L_[iy, ix]
+    near = np.repeat(np.repeat(near, q, 0), q, 1)
+    near = np.pad(near, ((0, max(0, size[1] - near.shape[0])), (0, max(0, size[0] - near.shape[1]))), mode='edge')
+    near = near[:size[1], :size[0]]
+    sol = np.zeros((size[1], size[0]), np.float32)
+    gls = np.zeros((size[1], size[0]), np.float32)
+    for i, m in enumerate(masks, 1):
+        if m is None:
+            continue
+        sel = near == i
+        if sel.any():
+            sol[sel] = np.asarray(m[0], np.float32)[sel] / 255
+            gls[sel] = np.asarray(m[1], np.float32)[sel] / 255
+    return sol, gls, used
+
+
+def flash(img, cam, kw, age):
+    """The muzzle flash at the muzzle on the shot's frame: a flat star, white heart (house look: one outline)."""
+    hand, muzzle = gun_pts(kw)
+    d = _u(muzzle - hand)
+    tip = muzzle + d * 0.03
+    if cam.depth(tuple(tip)) <= cam.NEAR:
+        return
+    (X, Y), kk = cam.project(tuple(tip))
+    (X2, Y2), _ = cam.project(tuple(tip + d * 0.3))
+    ang = math.atan2(Y2 - Y, X2 - X)
+    r = max(10.0, 0.16 * kk) * (1.0 - 0.35 * age / 0.042)
+    p = B.Pen(img, S.FLAT)
+    for col, f in (((255, 196, 70), 1.0), ((255, 248, 214), 0.5)):
+        pts = []
+        for i in range(10):
+            a = ang + i * math.pi / 5
+            rr = r * f * (1.0 if i % 2 == 0 else 0.45) * (1.6 if i == 0 else 1.0)
+            pts.append((X + rr * math.cos(a), Y + rr * math.sin(a)))
+        p.poly(pts, col, (40, 24, 10) if f == 1.0 else None, 2.0 if f == 1.0 else 0)
+
+
+def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide=False):
+    """Jason in shot 4 at t: the move (at), put in the moving car, drawn with the house's flat pieces through the
+    film's camera on his own layer; the car rubs out what of him it hides (legs behind the door, the dash, the roof
+    rail), closed glass dims him a little. Returns (alpha drawn, body in the world, car parts used)."""
+    import figure as F
+    import gta_cars as G
+    import lying_flat as LF
+    k = at(t, sp_pose)
+    if nod:                                                  # a small nod: the face dips and comes back
+        k['hfwd'] = _u(k['hfwd'] + _v(0, -nod, 0))
+        k['hup'] = _u(k['hup'] + _v(0, 0, nod * 0.6))
+    kw = to_world(k, car)
+    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    under = cam.depth(tuple(kw['wrR'])) > cam.depth(tuple(kw['neck']))
+    if under:
+        draw_gun(lay, cam, kw, report=False)
+    try:
+        LF.draw(lay, cam, kw, sp_face, t)
+    except F.FigureError as e:
+        FILM_FAULTS.append(f'{t:.2f} s: Jason drawing stopped: {e}')
+    if not under:
+        draw_gun(lay, cam, kw, report=False)
+    if kw.firing:
+        age = min(t - s_ for s_ in SHOTS if s_ <= t)
+        flash(lay, cam, kw, age)
+    sol, gls, used = _cover(car, cam, kw, img.size, gun=gun_pts(kw))
+    al = np.asarray(lay.split()[3], np.float32) * (1 - sol)
+    lay.putalpha(Image.fromarray(al.astype(np.uint8)))
+    if not hide:
+        img.alpha_composite(lay)
+        img.alpha_composite(G.glass_tint(img.size, al * gls * glass_dim))
+    return al, kw, used
+
+
+FILM_FAULTS = []
 
 
 # ------------------------------------------------------------------------------------------------ the sheet

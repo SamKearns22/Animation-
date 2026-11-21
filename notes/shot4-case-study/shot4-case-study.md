@@ -412,3 +412,34 @@ Added after Sam's notes 1-16 (chat 16):
   frame (149, at 24 a second) now clean from two camera sides and clear of the car. Strip: leanout-strip-v1.jpg.
 - Lesson (draft 19): a sheet that shows a refused drawing must show it as refused; "the check said something" is not
   the same as "the check said what is wrong".
+
+## 13. Chat 21 (21 Nov, Opus high): the lean-out put into the film (version 6)
+
+- Built: shot 4's Jason is now the approved lean-out (Sam's Y to the pose sheet and strip, 21 Nov), drawn in the
+  moving car through the film's camera, the same skeleton from shot 3's seat to the window and back (shot 3's Jason is
+  the same drawing at its seated pose, so the cut stays invisible). The old flat climb-out (versions 3-5) is gone.
+- Found first (measured, not seen): the lead cruiser sat 3.9 m behind the Tulip, but the approved aim pointed 9 m
+  back; aimed at the real cruiser the arm would have gone through the Tulip's own back pillar. Fix: Lucia pulls away as
+  Jason climbs out (the cruiser drops back 3.8 m over 1.8 s and edges 0.55 m out); the aim is the cruiser's windscreen
+  where it really is through the four shots (within 3 degrees). Shot 3 untouched.
+- Found on the first sheet (picture: v6-chat21-arm-hidden-and-sill-sliver.jpg): (1) from the old camera keys (out by
+  the front wing, high) his own head hid the gun arm, the "stump" of chat 11 again: the rebuilt pose leans his head
+  out over the arm. (2) A thin black stick across his belly: the car hid him per bone half, so only a sliver at the
+  door top was rubbed out and his lower chest showed over the door. Fix (2): the car now hides him in 8 cm pieces,
+  each tested on its own sight line: the door top cuts him where it really is.
+- The camera, chosen by measuring rather than by eye: an over-the-shoulder try ran straight down the arm (gun hidden
+  behind his fist); a search of 2,000+ positions scored gun clear of the head, gun line on screen pointing at the
+  cruiser, Jason big enough, cruiser in frame. Kept: beside his window at arm height (B3), in to his shoulder with the
+  slew (B5). Picture of the tries: v6-chat21-camera-tries.jpg; the middle of the shot: v6-chat21-middle.jpg.
+- The pistol is drawn 1.5x in the film (it vanished behind his fist at phone size); flash: a flat star at the muzzle.
+- Fix 3 events: the fourth shot hits the lead cop: head snaps back, blood mist bursts on the inside of the glass and
+  fades, spatter stays on the glass through the crash; he slumps onto the wheel (the slew), eyes shut, thrown on at the
+  hydrant and the shop front, never upright. The hydrant already broke on contact (kept); the crowd already ducks,
+  runs and stares (kept).
+- Acting rows put in: Jason's face per beat (hard look and mirror flick and a nod; teeth set in the wind; squint along
+  the arm, a blink on every shot; brows up at the fireball; back to the hard look). Her: hands over her ears from the
+  first shot, eyes squeezed, a peek at the fireball with one hand off. Lucia: a glance at Jason as he climbs past and
+  back, a flinch blink on every shot, eyes up to the mirror at the crash.
+- Lesson (draft 20): a pose approved from a sheet's views is not approved from the film's camera: before building, put
+  the shot's real camera through the pose sheet (the strip's two views were near, not equal, and the head-over-arm
+  showed only in the film).

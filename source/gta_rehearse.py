@@ -501,6 +501,12 @@ def tulip4(t):
 
 
 # ---- the lead cruiser's path: chasing, hit, slewing over the kerb and the hydrant into the shop front
+# chat 21: Lucia pulls away as Jason climbs out: the lead cruiser drops back 3.8 m and edges 0.55 m out, so the
+# lean-out's straight gun arm (leanout.TARGET, the approved K4) points at its windscreen (at 3.9 m the line ran
+# through the Tulip's own back pillar). Shot 3 (t < 0) is untouched.
+LEAD_DZ, LEAD_DX, LEAD_RAMP = 3.8, 0.55, 1.8
+
+
 def _lead_track():
     dt = 1.0 / 240
     th = SHOTS[-1]
@@ -509,8 +515,8 @@ def _lead_track():
         t = i * dt
         u = t - th
         if u <= 0:
-            x = LANE4 - 0.15 + 0.3 * math.sin(t * 2.1 + 1.0)
-            z = V4 * t - GAPS[0]
+            x = LANE4 - 0.15 + LEAD_DX * smooth(t / LEAD_RAMP) + 0.3 * math.sin(t * 2.1 + 1.0)
+            z = V4 * t - GAPS[0] - LEAD_DZ * smooth(t / LEAD_RAMP)
             head = math.degrees(math.atan(0.3 * 2.1 * math.cos(t * 2.1 + 1.0) / V4))
             yaw, lift, crush = head, 0.0, 0.0
         elif imp is None:
@@ -580,17 +586,17 @@ def chaser_at(t, i):
 
 
 # ---- the camera: keys in the Tulip's own frame (x right, y up, z forward), eased from key to key
-CAM4 = [  # (t, position, look-at, focal): the FIRST clip's keys (commit 2668817c), close and low (Sam, chat 11)
+CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are shot 3's exact frame; chat 21: B3-B5 over
+    # beside his window (the rebuilt lean-out's gun arm runs back beside the roof: from the old keys out by the front
+    # wing it was hidden behind his own head, the "stump" again; over his shoulder it ran straight down the lens)
     (0.00, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),      # shot 3's exact frame (CAM3): the cut is invisible
     (0.45, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
-    (1.10, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
-    # chat 14: the sill Jason sat outside the frame (head at x 1120-1290 of 1080) from 1.7 s; keys re-aimed by measuring
-    # his head and the lead cruiser through the camera: him on the right third, the cruiser and then the crash left
-    (1.70, (2.10, 1.85, 1.55), (-4.90, 1.10, -14.0), 1000),
-    (3.05, (2.10, 1.80, 1.45), (-6.20, 1.15, -14.0), 1180),
-    (3.60, (2.60, 1.85, 2.40), (-1.38, 1.10, -14.0), 850),      # pulled forward and wider: Jason and the crash together
-    (4.55, (2.60, 1.87, 2.40), (-1.06, 1.05, -14.0), 850),
-    (5.15, (1.70, 1.45, 3.10), (0.40, 1.10, -2.40), 1350),
+    (1.10, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),      # round the front corner to his window as he rises
+    (1.70, (3.00, 1.40, 0.80), (-8.50, 1.20, -12.0), 760),     # beside his window at arm height (keys found by
+    (3.05, (2.90, 1.45, 0.80), (-6.50, 1.20, -12.0), 760),     # measuring gun, head and cruiser on screen, chat 21)
+    (3.45, (1.40, 1.70, 0.90), (3.50, 1.00, -14.0), 760),      # in to his shoulder with the slew: him and the crash
+    (4.55, (1.20, 1.70, 0.80), (4.00, 1.00, -14.0), 750),
+    (5.15, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
     (5.75, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
     (6.20, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
 ]
@@ -974,6 +980,8 @@ J4_KEYS = [  # (t, hips, facing (deg, + toward the car's right), lean (deg forwa
 ]
 GRIP_J = (0.72, 1.50, 0.20)
 HIDE_JASON = [False]
+import leanout as LO             # noqa: E402  the lean-out (chat 21)
+LO.GUN[0] = 1.5                   # the pistol 1.5x in the film: readable at phone size
 import humancheck as HC           # noqa: E402  the body check (proposal big-body-moves)       # his free hand on the roof's front corner, over the open window
 
 
@@ -1014,104 +1022,53 @@ def _unleaned_pt(v, lean):
     return x, V.HIP_Y + dy * math.cos(L) - z * math.sin(L), z * math.cos(L) + dy * math.sin(L)
 
 
-def jason_layer(img, cam, tul, t, lead, info=None):
-    js = jason4(t)
-    sp = dict(GC.cast()['jason'], mood='stern', squint=0.35, frown=0.07)   # looking hard at us
-    m = MPU_J
-    hips = tul.body_pt(js['hips'])
-    n0 = (hips[0], hips[1] + V.HIP_Y * m, hips[2])          # the upright neck: the drawing's anchor
-    if cam.depth(n0) < 0.35:
-        return
-    fa = math.radians(js['face'])
-    F = S._norm(tul.body_dir((math.sin(fa), 0.0, math.cos(fa))))
-    F = S._norm((F[0], 0.0, F[2]))
-    a = fig_yaw(cam, n0, F)
-    lean = js['lean']
-    fig = lambda w: tuple(c / m for c in to_fig(cam, n0, a, S._sub(w, n0)))    # world point -> his frame (units)
-    j = V.standing(sp)
-    j['lean'] = lean
-    for sd, an in (('L', js['al']), ('R', js['ar'])):
-        f = fig(tul.body_pt(an))
-        j['foot' + sd] = (f[0], f[1], f[2])
-    target = lead.body_pt((-0.35, 1.25, 0.9))                 # the cruiser's windscreen in front of its driver
-    w = js['aim']
-    shR = fig_to_world(cam, n0, a, _leaned_pt(j['shR'], lean), m)
-    d = S._norm(S._sub(target, shR))
-    d = S._norm(S._add(d, (0.0, math.tan(math.radians(js['rec'])), 0.0)))   # the recoil kicks the arm up
-    reach = (FG.UPPER + FG.FORE) * 0.93 * m
-    aim_hand = fig(S._add(shR, S._mul(d, reach)))
-    kk = smooth((js['out'] - 0.1) / 0.4)
-    chest = (120.0, 25.0, 80.0)        # seated: the gun hand on his chest, high enough to show over the dash (chat 14)
-    ready = (300.0, -70.0, 60.0)       # climbing out: elbow out, gun up beside his head, readable from behind too
-    chest = tuple(c + (r - c) * kk for c, r in zip(chest, ready))
-    hand = tuple(c + (b - c) * w for c, b in zip(chest, _unleaned_pt(aim_hand, lean)))
-    V.arm_to(j, 'R', hand, 'down', 'fist')         # 'in' folded the elbow across his chest mid-climb (chat 13)
-    d_fig = unlean(to_fig(cam, n0, a, d), lean)
-    up = tuple(c + (r - c) * kk for c, r in zip((0.9, -1.0, 0.05), (0.15, -1.0, 0.0)))
-    gun_dir = S._norm(tuple(c + (b - c) * w for c, b in zip(up, d_fig)))
-    d_fig_drawn = gun_dir
-    thigh = _unleaned_pt(fig(tul.body_pt((0.30, 0.31, 0.30))), lean)   # seated: his left hand rests on his thigh
-    if kk <= 0:                                               # (it hung through the floor before: chat 15)
-        V.arm_to(j, 'L', thigh, 'down', 'palm')
-    else:                                                     # the free hand takes the roof's corner as he climbs
-        g = _unleaned_pt(fig(tul.body_pt(GRIP_J)), lean)
-        g = (min(g[0], -40.0), g[1], g[2])            # the roof corner stays on his left: never reached across his chest
-        shl = j['shL']
-        dg = S._sub(g, shl)
-        Lg = math.sqrt(S._dot(dg, dg))
-        rmax = (FG.UPPER + FG.FORE) * 0.95
-        if Lg > rmax:
-            g = S._add(shl, S._mul(dg, rmax / Lg))
-        V.arm_to(j, 'L', tuple(p + (q - p) * kk for p, q in zip(thigh, g)), 'out', 'palm')   # any lower bend folds the elbow (figure check); 2-frame roof graze named (chat 15)
-    j['props'].append(PC.glock('R', flash=js['flash'], aim3=gun_dir, size=1.0 + 0.4 * js["out"]))   # big enough to read on a phone once out
-    j['grip'] = {'R'}
-    head = S._norm(S._sub(target, n0)) if w > 0.2 else F
-    lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    (X, Y), kpx = cam.project(n0)
-    V.person(lay, B.Cam(1.0), X, Y, kpx * m, sp, t, a, j, fig_yaw(cam, n0, head))
-    # each half rubbed out only by the car between it and the lens; closed glass dims it like the others inside
-    chest_w = fig_to_world(cam, n0, a, _leaned_pt((0.0, 220.0, 0.0), lean), m)
-    shins = tul.body_pt(tuple((h + (a + b) / 2) / 2 for h, a, b in zip(js['hips'], js['al'], js['ar'])))
-    feet = tul.body_pt(tuple((a + b) / 2 for a, b in zip(js['al'], js['ar'])))
-    lo_s, lo_g, lo_used = G.cover_masks(tul, cam, shins, img.size)   # his legs (inside, behind the door), not his hips:
-    f_s, f_g, f_used = G.cover_masks(tul, cam, feet, img.size)       # knees and feet each tested (chat 14)
-    lo_s = Image.fromarray(np.maximum(np.asarray(lo_s), np.asarray(f_s)))
-    lo_g = Image.fromarray(np.maximum(np.asarray(lo_g), np.asarray(f_g)))
-    lo_used = lo_used + [u for u in f_used if u[0] not in {n for n, _ in lo_used}]
+JSP = {}
+_JN = {'shL': 'shL', 'elL': 'elL', 'wrL': 'wrL', 'shR': 'shR', 'elR': 'elR', 'wrR': 'wrR', 'hipL': 'hipL',
+       'hipR': 'hipR', 'knL': 'kneeL', 'knR': 'kneeR', 'anL': 'footL', 'anR': 'footR', 'neck': 'neck',
+       'head': 'head top', 'waist': 'waist', 'pelvis': 'hips'}
 
-    up_s, up_g, up_used = G.cover_masks(tul, cam, n0, img.size)   # from his neck: sat low, his chest is below the dash
-                                                                 # and the windscreen missed it (chat 14: he vanished)
-    (_, hy), _ = cam.project(hips)
-    split = int(hy * B.SS)
-    rows = (np.arange(img.size[1]) > split)[:, None]
-    sol = np.where(rows, np.asarray(lo_s), np.asarray(up_s)).astype(np.float32) / 255
-    gl = np.where(rows, np.asarray(lo_g), np.asarray(up_g)).astype(np.float32) / 255
-    so = smooth((js['out'] - 0.9) / 0.1)          # on the sill his legs are inside, behind the car's whole right side:
-    if so > 0:                                     # the flat figure draws them a leg-length down, under the car (chat 15)
-        side = Image.new('L', img.size, 0)
-        quad = [tul.body_pt(q) for q in ((0.98, -1.5, -2.6), (0.98, -1.5, 1.0), (0.98, 0.98, 1.0), (0.98, 0.98, -2.6))]
-        if all(cam.depth(q) > cam.NEAR for q in quad):    # front edge at z 1.0: the lens sits beside the bonnet
-            ImageDraw.Draw(side).polygon([(x * B.SS, y * B.SS) for x, y in (cam.project(q)[0] for q in quad)], fill=255)
-            sol = np.where(rows, np.maximum(sol, np.asarray(side, np.float32) / 255 * so), sol)
-    al = np.asarray(lay.split()[3], np.float32) * (1 - sol)
-    sk = 1 - smooth(js['out'] / 0.12)              # sat in his seat: seen only through the glass, like the others (the
-    if sk > 0:                                     # header rail hides his crown, never his head over the roof: chat 13)
-        al *= (1 - sk) + sk * np.maximum(np.asarray(lo_g), np.asarray(up_g)).astype(np.float32) / 255
-    lay.putalpha(Image.fromarray(al.astype(np.uint8)))
-    if not HIDE_JASON[0]:                          # the body check draws the frame once without him (shows-through test)
-        img.alpha_composite(lay)
-        img.alpha_composite(G.glass_tint(img.size, al * gl * 0.15))   # glass dims him by a tint on top, never see-through
-    if js['flash']:                                # the body check: the gun as DRAWN against its target (note 8)
-        vd, mir = V.snap(a)
-        (dx, dy), _ = V.project(d_fig_drawn, vd)
-        (mx, my), _ = cam.project(fig_to_world(cam, n0, a, _leaned_pt(j['wrR'], lean), m))
-        (tx, ty), _ = cam.project(target)
-        HC.aim('Jason', (mx, my), (-dx if mir else dx, dy), (tx, ty))
+
+def jason_face(t):
+    """Jason's face through shot 4 (the acting rows, B1-B6; shot 3 is t < 0: looking hard at us)."""
+    f = dict(mood='stern', squint=0.35, frown=0.07)                       # B1, B6: shot 3's hard look
+    if 0.28 <= t < 0.40:                                                  # eyes flick to the mirror
+        f['look'] = -0.7
+    if 0.5 <= t < 1.75:                                                   # B2: teeth set, squinting into the wind
+        f.update(squint=0.75, frown=0.10, mouth='v:E')
+    elif 1.75 <= t < 3.0:                                                 # B3/B4: along the arm, mouth tight
+        f.update(squint=0.85 if t < SHOTS[2] else 0.95, frown=0.11, mouth='v:rest')
+    imp = IMPACT[0] if IMPACT else 99.0
+    if imp + 0.05 <= t < imp + 0.95:                                      # B5: brows up, a flat impressed "huh"
+        f.update(squint=0.1, frown=-0.03, brow_up=0.035, mouth='v:O' if t < imp + 0.5 else 'v:rest')
+    elif 3.0 <= t < 4.55:
+        f.update(squint=0.5, frown=0.06)
+    if any(0.0 <= t - ts < 0.085 for ts in SHOTS):                        # a blink on each shot
+        f['blink'] = True
+    return f
+
+
+def jason_layer(img, cam, tul, t, lead, info=None):
+    """Jason (chat 21 rebuild): the approved lean-out (leanout.at, Sam's Y 21 Nov) in the moving Tulip, drawn through
+    this camera with the house's flat pieces; the car hides his legs, the dash and the roof rail per bone half."""
+    base = JSP.setdefault('sp', dict(GC.cast()['jason'], mood='stern', squint=0.35, frown=0.07))
+    face = dict(base, **jason_face(t))
+    nod = 0.30 * bump(t, 0.36, 0.42, 0.52)                               # B1: the small decisive nod
+    al, kw, used = LO.film_layer(img, cam, tul, max(t, 0.0), base, face, nod=nod, hide=HIDE_JASON[0])
+    if kw.firing:                                                         # the body check: the gun as drawn
+        hand, muzzle = LO.gun_pts(kw)
+        target = lead.body_pt((-0.35, 1.25, 0.9))
+        m, b0, tg = cam.P(tuple(muzzle)), cam.P(tuple(hand)), cam.P(target)
+        HC.aim('Jason', m, (m[0] - b0[0], m[1] - b0[1]), tg, firing=True)
     if info is not None:
-        pts = body_pts3(cam, n0, a, j, m, 'jason', lean=lean)
-        pts.append(('gun hand', fig_to_world(cam, n0, a, _leaned_pt(j['wrR'], lean), m)))
-        lower = {'hipL', 'hipR', 'kneeL', 'kneeR', 'footL', 'footR', 'waist'}
-        info.update(toggle=lambda on: HIDE_JASON.__setitem__(0, not on), pts3=pts, erase=[(n, q, lower) for n, q in lo_used] + [(n, q, {p for p, _ in pts} - lower) for n, q in up_used])
+        pts = [(_JN[n], tuple(kw[n])) for n in _JN]
+        pts.append(('chest', tuple((kw['waist'] + kw['neck']) / 2)))
+        pts.append(('gun hand', tuple(LO.gun_pts(kw)[0])))
+        erase = []
+        for n, poly, bone in used:
+            a_, b_ = bone.split('-') if '-' in bone else (bone, bone)
+            erase.append((n, poly, {_JN.get(a_, a_), _JN.get(b_, b_)}))
+        info.update(toggle=lambda on: HIDE_JASON.__setitem__(0, not on), pts3=pts, erase=erase,
+                    may_touch=('the tulip\'s seat',))
 
 
 # ---- inside the Tulip (shot 3's three-shot and shot 4's ends): each person posed in the car's own frame (metres),
@@ -1233,6 +1190,30 @@ def tulip_inside(t):
         lu_over = dict(mood='stern', squint=0.45, frown=0.09, brow_up=-0.01)
         lu_neck = (-0.42, 0.94, 0.05)
         lu_hands = [('L', wheel_pt(rot, 160), 'out', 'fist'), ('R', wheel_pt(rot, 20), 'out', 'fist')]
+        # shot 4's acting rows (chat 21): her hands over her ears from the first shot ("it's very loud"), eyes squeezed
+        # shut; a peek at the fireball (one hand off an ear); back to the spinner. Lucia: a tight glance at Jason as he
+        # climbs past and back, a flinch blink on each shot, her eyes up to the mirror at the crash.
+        imp = IMPACT[0] if IMPACT else 99.0
+        ears = smooth((t - SHOTS[0] + 0.06) / 0.12) * (1 - smooth((t - (imp + 1.1)) / 0.3))
+        peek = bump(t, imp + 0.1, imp + 0.4, imp + 1.4)
+        her_dir = None
+        if ears > 0.01:
+            ear = lambda sd, g: (her_neck[0] + g * 0.10, her_neck[1] + 0.17, her_neck[2] + 0.02)
+            mix = lambda a, b, k: tuple(x + (y - x) * k for x, y in zip(a, b))
+            her_hands = [('L', mix(her_hands[0][1], ear('L', -1), ears), 'out', 'palm'),
+                         ('R', mix(her_hands[1][1], ear('R', 1), ears * (1 - peek)), 'out', 'palm' if peek < 0.5 else 'fist')]
+            if t < imp:
+                her_over.update(squint=1.0 * ears, frown=-0.06, gaze_dy=0.0)
+            if peek > 0.3:
+                her_over.update(squint=0.0, frown=-0.02, brow_up=0.03, gaze_dy=0.0)
+                her_dir = S._norm(car.body_dir((0.9, 0.0, -0.6)))
+        lu_dir = None
+        if 0.0 <= t and (bump(t, 0.55, 0.75, 1.15) > 0.3 or bump(t, 4.65, 4.85, 5.3) > 0.3):
+            lu_dir = S._norm(car.body_dir((1.0, 0.0, 0.35)))
+        if any(0.0 <= t - ts < 0.1 for ts in SHOTS):
+            lu_over['blink'] = True
+        if imp + 0.05 <= t < imp + 1.0:
+            lu_over['gaze_dy'] = -0.6
         bench(lay, cam, car)
         order = sorted([('case', (0.4, 0.7, -0.85)), ('her', her_neck), ('lucia', lu_neck)],
                        key=lambda s: -math.dist(car.body_pt(s[1]), cam.pos))
@@ -1240,28 +1221,80 @@ def tulip_inside(t):
             if who == 'case':
                 cash_case(lay, cam, car)
             elif who == 'her':
-                seated(lay, cam, car, 'her', her_neck, t, her_hands, her_over, feet_z=0.55)
-                spinner(lay, cam, car.body_pt(spin_at), t, r=0.065)
+                seated(lay, cam, car, 'her', her_neck, t, her_hands, her_over, head_dir=her_dir, feet_z=0.55)
+                if ears < 0.5:
+                    spinner(lay, cam, car.body_pt(spin_at), t, r=0.065)
             else:
-                seated(lay, cam, car, 'lucia', lu_neck, t, lu_hands, lu_over)
+                seated(lay, cam, car, 'lucia', lu_neck, t, lu_hands, lu_over, head_dir=lu_dir)
                 steering_wheel(lay, cam, car, rot)
     return paint
+
+
+def lead_cop_lean(t):
+    """The lead cop's lean through shot 4 (acting rows): shot 1 ducks a little, shots 2-3 flinch back; shot 4 hits him:
+    his head snaps back, then he slumps onto the wheel and stays there, dead weight, thrown on at the hydrant and the
+    shop front (fix 3, note 9: never upright, never swaying)."""
+    hit = SHOTS[3]
+    if t < hit:
+        lean = 0.0
+        if 0 <= t - SHOTS[0] < 0.3:
+            lean = 10 * (1 - (t - SHOTS[0]) / 0.3)
+        for ts in SHOTS[1:3]:
+            if 0 <= t - ts < 0.3:
+                lean = -14 * (1 - (t - ts) / 0.3)
+        return lean, False
+    u = t - hit
+    lean = -18 * bump(u, 0.0, 0.05, 0.14) + 40 * smooth((u - 0.08) / 0.32)
+    for te, amt in ((HYDRANT[0] if HYDRANT else 99, 10), (IMPACT[0] if IMPACT else 99, 16)):
+        if t >= te:
+            lean += amt * math.exp(-(t - te) / 0.18) * smooth((t - te) / 0.05)
+    return lean, u > 0.04
 
 
 def cop_inside(i, t, lead=False):
     def paint(lay, cam, car):
         F = S._norm(car.body_dir((0, 0, 1)))
         F = (F[0], 0.0, F[2])
-        j = V.standing(_cop(i))
-        if lead:                                          # flinches at each hit, thrown about in the slew
-            for ts in SHOTS[1:]:
-                if 0 <= t - ts < 0.3:
-                    j['lean'] = -14 * (1 - (t - ts) / 0.3)
-            u = getattr(car, 'u', 0)
-            if u > 0:
-                j['lean'] = 10 * math.sin(u * 9) * math.exp(-u)
-        person_cached(lay, cam, _cop(i), 'cop%d' % i, car.body_pt((-0.42, 1.12, 0.0)), F, j.get('lean', 0.0))
+        lean, dead = lead_cop_lean(t) if lead else (0.0, False)
+        sp = _cop(i)
+        if dead:                                      # eyes shut, mouth slack
+            sp = dict(sp, blink=True, mouth='v:O')
+        person_cached(lay, cam, sp, 'cop%d%s' % (i, 'dead' if dead else ''), car.body_pt((-0.42, 1.12, 0.0)), F, lean)
     return paint
+
+
+def blood_items(cam, t, lead):
+    """Shot 4 hits the lead cop (fix 3): a mist of blood bursts against the inside of the crazed windscreen and fades;
+    spatter stays on the glass, riding with the car through the slew and the crash."""
+    hit = SHOTS[3]
+    u = t - hit
+    if u < 0:
+        return []
+    fc = FxCam(cam)
+    rng = np.random.RandomState(77)
+    pieces = []
+    glass = lambda x, y: lead.body_pt((x, y, 0.93 - (y - 1.28) * 1.1))   # on the windscreen, over his face
+    for n in range(14):                                # spatter: stays
+        x, y = -0.38 + rng.normal(0, 0.13), 1.27 + rng.normal(0, 0.07)
+        r = rng.uniform(0.025, 0.06) * min(1.0, u / 0.06)
+        s, d = fc.screen(wz(glass(x, y)))
+        if d > 0.5:
+            pieces.append((FX._blob(s[0], s[1], fc.focal * r / d, 300 + n, n=6), (150, 14, 22), None, None))
+    if u < 0.5:                                        # the mist: grows and thins out
+        for n in range(9):
+            x, y = -0.38 + rng.normal(0, 0.16), 1.24 + rng.normal(0, 0.08)
+            k = n / 9.0
+            if k > 1.0 - u / 0.5:
+                continue
+            r = (0.07 + 0.20 * min(1.0, u / 0.18)) * rng.uniform(0.6, 1.0)
+            s, d = fc.screen(wz(lead.body_pt((x, y + 0.06 * u, 0.80))))
+            if d > 0.5:
+                pieces.append((FX._blob(s[0], s[1], fc.focal * r / d, 400 + n, n=8), (196, 42, 48), None, None))
+    if not pieces:
+        return []
+    dd = cam.depth(lead.body_pt((-0.38, 1.27, 0.93)))
+    spr = FX.pieces_sprite(pieces[::-1], dd, ol=2.5)
+    return [(dd - 0.05, spr.paste)] if spr else []
 
 
 # ---- effects through flying_whales_fx (metres, z up there): FxCam turns our y-up world into theirs
@@ -1389,6 +1422,7 @@ def fx_items(cam, t, lead):
     spr = FX.puffs_sprite(fc, TYRE4, t, 0)
     if spr:
         items.append((cam.depth((lead.pos[0], 0.5, lead.pos[1])) + 1.5, spr.paste))
+    items += blood_items(cam, t, lead)
     hb = hit_bits(t, lead)
     for h in hb:
         if isinstance(h[0], str):
