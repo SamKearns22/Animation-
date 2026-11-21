@@ -11846,46 +11846,46 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.64,
+   "cost": 2.05,
    "src": "estimate",
    "sid": "session_01J1JB7VcJ5G5nT3goi87qZu",
-   "steps": 105,
-   "hist_k": 229,
+   "steps": 128,
+   "hist_k": 246,
    "kinds": {
     "tool search": 17.9,
-    "whole-file .py read": 4.9,
-    "renders": 0.9,
-    "pictures": 5.0,
-    "other": 71.2
+    "whole-file .py read": 4.1,
+    "renders": 1.9,
+    "pictures": 5.1,
+    "other": 71.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 57,
+    "tool search": 72,
     "whole-file .py read": 6,
     "page.py": 0,
     "routine": 0,
-    "renders": 3,
-    "pictures": 10,
-    "other": 31
+    "renders": 5,
+    "pictures": 11,
+    "other": 35
    },
    "split": {
-    "usd": 5.8618,
-    "total": 5.8618,
+    "usd": 7.2143,
+    "total": 7.2143,
     "floor_k": 82,
     "blocks": {
-     "start-up floor": 28.9,
-     "Claude's words": 25.6,
-     "carried history": 25.5,
-     "new writes": 20.0
+     "carried history": 29.6,
+     "start-up floor": 28.3,
+     "Claude's words": 24.1,
+     "new writes": 18.1
     },
     "origins": {
-     "Claude's words": 43.3,
-     "start-up floor": 28.9,
+     "Claude's words": 43.1,
+     "start-up floor": 28.3,
      "result: tool search": 16.2,
-     "messages and reminders": 4.3,
-     "result: pictures": 4.2,
-     "result: other": 1.8,
-     "result: whole-file .py read": 1.1,
+     "messages and reminders": 4.6,
+     "result: pictures": 4.5,
+     "result: other": 2.0,
+     "result: whole-file .py read": 1.0,
      "result: renders": 0.2
     },
     "leftover": 0.0
@@ -11898,35 +11898,35 @@
      [
       "source/gta_rehearse.py",
       5.8,
-      0.1416
+      0.1657
      ],
      [
       "source/critique.py",
       1.4,
-      0.0349
+      0.0406
      ],
      [
       "source/viewchecks.py",
       0.5,
-      0.0127
+      0.0149
      ],
      [
       "source/views.py",
       0.4,
-      0.0098
+      0.0115
      ],
      [
       "source/data/critique/grand-theft-autism/r21-p1/result.md",
       0.1,
-      0.0033
+      0.0039
      ],
      [
       "guides/job-packs.md",
       0.1,
-      0.0033
+      0.0039
      ]
     ],
-    "base_pct": 26.4
+    "base_pct": 26.2
    },
    "search": {
     "show": 0,
@@ -11934,17 +11934,17 @@
      "no show": 0
     },
     "other": {
-     "other": 11,
+     "other": 15,
      "shared:branches.py": 1,
-     "shared:handover.py": 5,
+     "shared:handover.py": 6,
      "guides": 1,
-     "shared:critique.py": 4,
+     "shared:critique.py": 7,
      "shared:gta_rehearse.py": 17,
      "shared:views.py": 1,
      "shared:leanout.py": 12,
-     "film notes": 3,
+     "film notes": 4,
      "shared:watcher.py": 1,
-     "shared:humancheck.py": 1
+     "shared:humancheck.py": 7
     },
     "ticked": 0,
     "edited film code": false,
@@ -12403,6 +12403,126 @@
       "other",
       "notes/ledger",
       "git add notes/ledger && git commit -qm \"Ledger: shot 4 critique hunt 2 recorded ",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "other",
+      "notes/shot4-case-study",
+      "git add notes/shot4-case-study && git commit -qm \"Shot 4 case study: chat 22 hun",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/critique.py",
+      "D=/tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eeec64/scrat",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "critiqued\\|sendgate",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/data/critique/grand-theft-autism/r21-p2",
+      "D=/tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eeec64/scrat",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "def sendgate",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sed -n 280,308p source/humancheck.py",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/grand-theft-autism source/critique.py",
+      "S=source/data/critique-src/grand-theft-autism; python3 -c \" import json;p='$S/v8",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "other",
+      "notes/ledger/grand-theft-autism/ notes/ledger/grand-theft-autism/round-22.txt so",
+      "ls notes/ledger/grand-theft-autism/ | tail -5; head -5 notes/ledger/grand-theft-",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "other",
+      "source/data/critique/grand-theft-autism/r22-p1",
+      "ls -la source/data/critique/grand-theft-autism/r22-p1 | head; ",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/grand-theft-autism/r22-p1 source/data/critique/grand-theft-",
+      "rm -rf source/data/critique/grand-theft-autism/r22-p1 source/data/critique/grand",
+      ""
+     ],
+     [
+      120,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/grand-theft-autism/r22-p1 source/critique.py",
+      "P=source/data/critique/grand-theft-autism/r22-p1; sed -n '/## Faults/,/## Checke",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/data/critique/grand-theft-autism/r22-p1",
+      "D=/tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eeec64/scrat",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md story/status.md notes/archive",
+      "awk 'NR>=480 && /^## /{print NR\": \"$0}' notes/grand-theft-autism.md | head -3; c",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "shared:handover.py",
+      "notes/grand-theft-autism.md source/handover.py",
+      "python3 - <<'EOF' p='notes/grand-theft-autism.md'; s=open(p).read() a=' the crui",
+      ""
+     ],
+     [
+      128,
+      "other",
+      "other",
+      "source/data/critique-src",
+      "git add -A notes story source/data/critique-src && git status --short | head; gi",
       ""
      ]
     ]
