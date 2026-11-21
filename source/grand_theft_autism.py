@@ -19,6 +19,13 @@ import gta_film as F          # noqa: E402
 import film_engine as FE      # noqa: E402
 from PIL import Image         # noqa: E402
 
+# Sam, 21 Nov: all checks overruled. The drawing code's own figure checks warn (named in the faults file) instead of
+# stopping a frame.
+os.environ['ARM_FOLD_NAMED'] = '1'
+os.environ['NAMED_FAULTS_FILE'] = '/tmp/gta_named_faults.txt'
+import figure as _fig         # noqa: E402
+_fig._ALLOW.append("Sam's order, 21 Nov: checks overruled")
+
 LENGTH = F.LENGTH
 DUR = LENGTH
 SHOTS = F.SHOTS
