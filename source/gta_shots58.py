@@ -512,7 +512,7 @@ def inside58(t, rec=None):
                 sit(lay, cam, car, 'lucia', lu_neck, t, lu_hands, lu_over, head_dir=lu_dir, rec=rec)
                 R.steering_wheel(lay, cam, car, rot)
             else:
-                sit(lay, cam, car, 'jason', j_neck, t, j_hands, j_over, props=[gun], grip=('R',), rec=rec,
+                sit(lay, cam, car, 'jason', j_neck, t, j_hands, j_over, props=[], grip=(), rec=rec,
                     head_dir=fwd)
     return paint
 

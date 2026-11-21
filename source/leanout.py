@@ -242,6 +242,8 @@ def gun_pts(k):
 
 def draw_gun(img, cam, k, report=True):
     import humancheck as HC
+    if getattr(k, 'front', False):                        # Sam 21 Nov: no pistol in the chest hold, his hand empty
+        return
     p = B.Pen(img, S.FLAT)
     hand, muzzle = gun_pts(k)
     d = _u(muzzle - hand)
