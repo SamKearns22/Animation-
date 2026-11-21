@@ -68,3 +68,8 @@ Thank you. I'm glad to have it. The video is still riddled with problems from sh
 ### 2026-11-21T23:31:04
 I have just discovered that you told the handover to fix shot 4 by ‘finding other camera angles’
 
+### 2026-11-21T23:34:35
+The camera change is in the next chat's own handover (chat 27, on your other account): "shot 4's camera re-chosen (never his back, nobody through the lens)". That chat made the call itself. My guess is it applied the "choose views the drawing can carry" rule in CLAUDE.md to shot 4.
+
+This is awful. Instead of fixing the drawing, it burned usage changing the screenplay and shot into something I didn’t want, on its own accord. How do I fix this so it never happens again? I wanted it to fix the drawing errors not change the camera angles!
+
