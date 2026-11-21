@@ -1,0 +1,34 @@
+== critique, round 3 pass 1 (2026-11-20): 8 fault(s), 3 can't tell
+-- look.md --
+1: Man in light vest stands, then crouches behind red board, rises; no text visible.
+2: Man kneels, ducks behind red board, pops up holding something; no words visible.
+3: Man in vest crouches, hides behind red board, rises with arm raised, aiming.
+4: Man kneels, ducks behind red board, rises pointing a gun forward; no words.
+5: Man crouches, dips behind red board, aims a gun, then kneels away.
+-- result.md --
+## Faults
+FAULT P6 [2-5]: views 1 and 2 (ahead, three-quarter front) - arms end in bare stumps, no ball hand; the braced hand on the door top (K2) and the free hand are missing.
+FAULT P11 [3-5]: views 1 and 5 - head sits straight on the shoulders with no neck, and in panel 3 the head is bent into the raised arm so it reads as a lump.
+FAULT P1 [1, 3-5]: gun floats at the end of the arm with no hand round it (P3 view 3, P4 and P5 views 3-4); in panel 1 view 1 the pistol is a thin stick crossing the chest, not held flat; in panel 5 view 5 it is a vertical wand.
+FAULT P2 [4, 5]: panel 5 (recoil) is nearly identical to panel 4; arm barely lifts, so the shot does not read. Panel 4 "leaning out to the waist" is not shown: he kneels upright behind the block.
+FAULT P5 [2-5]: views 1 and 5 - the near arm starts from the chest or back edge, a step where it leaves the vest, not one line from the shoulder (panel 3 view 1 arm wraps over the head).
+FAULT P13 [1-5]: LEONIDA print is tiny, half hidden by the arm in panel 1 view 1, off-centre and cropped in panel 3 view 4; the lettering is unreadable at phone size.
+FAULT P7 [1-5]: seat patch is a thin strip under one foot or knee; in panels 3-5 views 1 and 5 the knee and foot sit at its edge and the body leans out over nothing, so he looks to float; panel 1 view 2 has legs sprawled with no thigh on the seat.
+FAULT P8 [3-5]: view 1 and view 5 read almost the same (both back of head); the "ahead" view does not show the front, and the gun side switches between views.
+CAN'T TELL P14 [1-5]: eyes are specks at this size; a full-size face crop would show pupil and shine inside the outline.
+CAN'T TELL P4 [1-5]: reference is a short-haired, stubbled man in a palm shirt; a face crop beside it would show stubble and brow, ours looks clean and softer.
+CAN'T TELL P12 [1-5]: mouths shown closed; a labelled frame would confirm one mouth.
+
+## Checked
+1-5
+
+## Cold look
+look.md said "crouches, hides behind red board": wrong, he is kneeling or seated and the block is the door. Missed the seat, the vest print (LEONIDA) and its unreadable size, and called panel 2's gun "something" because it is hidden at phone size. Named a gun in panels 4 and 5 and in 3 only as an aimed arm: the gun is barely visible in panels 1-3.
+
+## Not on the list
+- Gun is a black sliver that vanishes against the dark block edge; suggested line: the prop's silhouette reads as a pistol at phone size in every view.
+- The block's slope differs between views 2 and 4 and looks like a floating billboard, not a door; suggested line: guide shapes read as one object from every angle.
+- Beat-to-beat continuity: panel 2 to 3 jumps in torso turn; suggested line: adjacent key poses differ by one clear change.
+- Arms look like stick tubes bending mid-forearm in panel 3; suggested line: raised arm keeps one clean bend and its length.
+- Reference shows a phone and palm shirt, not the vest; suggested line: note which reference details are intentionally dropped.
+

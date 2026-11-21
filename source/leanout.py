@@ -16,13 +16,15 @@ greenhouse's side at x 0.86 (belt) .. 0.70 (roof). The passenger's seat cushion 
                     K3 head and shoulders out, K4 out to the waist turned back, gun arm straight at the lead cruiser,
                     K5 the recoil of K4
   pose(name, sp) .. a key pose as a lying.Body (k.pose = 'leanout': its arms are held up on purpose)
-  at(t, sp) ....... the move in time: the keys and in-betweens (lying.blend), for the shot
+  at(t, sp) ....... the move in time (TIMES: the beats of the acting rows): keys, eased in-betweens (lying.blend)
+  strip(OUT) ...... the move every 0.1 s from the shot's two camera sides, each frame tested (body check, car)
   gun(...) ........ the pistol drawn on the skeleton, along the forearm's aim; reported to the body check (aim)
   car_faults(k) ... samples along every bone outside the car's solid parts (the window open)
   sheet(OUT) ...... the five-view pose sheet: each key pose from the front, three-quarter, side, three-quarter back
                     and behind, with the car's window frame, its faults written under each view
 
     python3 source/leanout.py sheet OUT.jpg
+    python3 source/leanout.py strip OUT.jpg
 """
 import math
 import os
@@ -108,20 +110,22 @@ def pose(name, sp):
     if name == 'K2':          # up on his knees on the seat, turned to the window, free hand braced on the door
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
         #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
-        k = _key((0.48, 0.80, 0.0), (0.78, 1.30, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),
+        k = _key((0.48, 0.80, 0.0), (0.76, 1.25, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),   # head ducked under the roof
                  {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.94, 0.98, 0.26), _v(0.5, -1, 0.3))},
                  {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
         return k
     if name == 'K3':          # head and shoulders out over the sill, turning back, gun up beside his head
-        return _key((0.62, 0.90, 0.0), (0.98, 1.36, -0.04), (0.7, 0, -1), (0.5, 0, -1),
-                    {'R': ('rel', ((0.06, 0.34, 0.16), 'out')), 'L': ((0.98, 0.99, 0.18), _v(1, -0.2, 0.5))},
-                    {'L': (0.60, SEAT + 0.05, 0.16), 'R': (0.58, SEAT + 0.05, -0.12)}, sp)
+        k = _key((0.62, 0.90, 0.0), (0.98, 1.36, -0.04), (0.7, 0, -1), (0.5, 0, -1),
+                 {'R': ('rel', ((0.20, 0.20, 0.14), 'out')), 'L': ((0.98, 0.99, 0.18), _v(1, -0.2, 0.5))},
+                 {'L': (0.60, SEAT + 0.05, 0.16), 'R': (0.58, SEAT + 0.05, -0.12)}, sp)
+        k.aim = _u((0, 1, 0.1))                             # muzzle up, beside his head (chat 20 critique: the hand
+        return k                                            # laid on his head read as a gun to his forehead)
     if name in ('K4', 'K5'):  # out to the waist over the sill, turned back, gun arm at the lead cruiser
         neck = _v(1.08, 1.32, -0.10)
         aim = _u(_v(*TARGET) - neck)
-        if name == 'K5':      # the recoil: the arm kicks up 16 degrees
-            aim = _u(aim + _v(0, 0.29, 0))
+        if name == 'K5':      # the recoil: the arm kicks up 26 degrees (chat 20 critique: 16 read as K4 again)
+            aim = _u(aim + _v(0, 0.5, 0))
         return _key((0.68, 0.90, 0.02), tuple(neck), (0.35, 0, -1), (0.25, -0.05, -1),
                     {'R': ((0.9, 1.3, -0.7), _v(0.4, -1, 0)), 'L': ((1.00, 0.99, 0.14), _v(1, -0.3, 0.4))},
                     {'L': (0.64, SEAT + 0.05, 0.16), 'R': (0.60, SEAT + 0.05, -0.12)}, sp, aim=aim)
@@ -129,6 +133,68 @@ def pose(name, sp):
 
 
 KEYS = ['K1', 'K2', 'K3', 'K4', 'K5']
+SHOTS = (1.95, 2.30, 2.62, 2.92)       # the four shots (acting rows, B4)
+# the move in time (shot 4's acting rows, beats B1-B6): (seconds, key); between two keys an eased in-between
+TIMES = [(0.0, 'K1'), (0.5, 'K1'), (1.0, 'K2'), (1.4, 'K3'), (1.85, 'K4')] + \
+        [x for t in SHOTS for x in ((t, 'K4'), (t + 0.04, 'K4'), (t + 0.10, 'K5'), (t + 0.28, 'K4'))] + \
+        [(3.2, 'K4'), (3.5, 'K3'), (4.55, 'K3'), (5.2, 'K2'), (5.8, 'K1'), (6.2, 'K1')]
+_CACHE = {}
+
+
+def _ease(u):
+    return u * u * (3 - 2 * u)
+
+
+def at(t, sp):
+    """Jason's skeleton at t seconds into shot 4: the keys of TIMES, eased in-betweens (lying.blend: joints slide,
+    directions turn, elbows and knees solved again so the bones keep their lengths); the gun's way turns with them.
+    k.firing is True for the 0.06 s of each shot's kick."""
+    key = id(sp)
+    if key not in _CACHE:
+        _CACHE[key] = {n: pose(n, sp) for n in KEYS}
+    P = _CACHE[key]
+    t = min(max(t, TIMES[0][0]), TIMES[-1][0])
+    for (t0, a), (t1, b) in zip(TIMES, TIMES[1:]):
+        if t0 <= t <= t1:
+            break
+    u = 0.0 if t1 <= t0 else _ease((t - t0) / (t1 - t0))
+    ka, kb = P[a], P[b]
+    k = L.blend(ka, kb, u) if a != b and u > 0 else L.blend(ka, ka, 0.0)
+    k.pose = 'leanout'
+    da = getattr(ka, 'aim', None)
+    db = getattr(kb, 'aim', None)
+    if da is None:
+        da = _u(ka['wrR'] - ka['elR'])
+    if db is None:
+        db = _u(kb['wrR'] - kb['elR'])
+    if getattr(ka, 'aim', None) is not None or getattr(kb, 'aim', None) is not None:
+        k.aim = _u(da + (db - da) * u)
+    k.firing = any(s_ <= t < s_ + 0.042 for s_ in SHOTS)    # the flash frame, on the aim; the kick follows it
+    if a != b and 0 < u < 1:
+        k = _clear_arms(k, ka, kb, u, sp)
+    return k
+
+
+def _clear_arms(k, ka, kb, u, sp):
+    """An in-between whose arm passes through the car (the gun arm swinging up past the roof edge, chat 20): that arm
+    alone is taken from a nearby moment (it leads or lags the body), held at its own shoulder, until it is clear."""
+    bad = {sd for sd in 'LR' for a, _, _ in car_faults(k, sp) if a.endswith(sd) and a[:2] in ('sh', 'el')}
+    for sd in bad:
+        for v in [u + du for du in (0.08, -0.08, 0.16, -0.16, 0.25, -0.25, 0.35, -0.35, 0.5, -0.5)] + [0.0, 1.0]:
+            v = min(1.0, max(0.0, v))
+            m = L.blend(ka, kb, v)
+            k2 = k.copy()
+            k2.pose = 'leanout'
+            for att in ('aim', 'firing'):
+                if hasattr(k, att):
+                    setattr(k2, att, getattr(k, att))
+            sh = k['sh' + sd]
+            pole = m['el' + sd] - (m['sh' + sd] + m['wr' + sd]) / 2
+            k2['el' + sd], k2['wr' + sd] = L.limb(sh, sh + m['wr' + sd] - m['sh' + sd], L.UPPER, L.FORE, pole)
+            if not any(a.endswith(sd) and a[:2] in ('sh', 'el') for a, _, _ in car_faults(k2, sp)):
+                k = k2
+                break
+    return k
 
 
 # ------------------------------------------------------------------------------------------------ the gun
@@ -294,9 +360,43 @@ def sheet(out, sp=None):
     return report
 
 
+def strip(out, sp=None, step=0.25, views=(45, 100), fps=24):
+    """The move as a strip: a frame every `step` seconds from each view in `views` (the shot's camera sides), and every
+    film frame (fps) tested: body check from those views and the car's solid shape. Prints the faults."""
+    import gta_cast as GC
+    sp = sp or dict(GC.cast()['jason'], mood='stern', squint=0.35, frown=0.07)
+    B.SS = 1
+    report = []
+    for i in range(int(TIMES[-1][0] * fps) + 1):
+        t = i / fps
+        k = at(t, sp)
+        report += [f'{t:.2f} s: {a} goes through {p_}' for a, p_, _ in car_faults(k, sp)]
+        for deg in views:
+            report += [f'{t:.2f} s, {deg} deg: {f}' for f in draw_view(sp, k, deg, guide=False)[1]]
+    ts = [round(x * step, 2) for x in range(int(TIMES[-1][0] / step) + 1)]
+    cw, ch = 150, 210
+    font = ImageFont.truetype(B.SANS, 16)
+    sh = Image.new('RGB', (40 + cw * len(ts), 30 + ch * len(views)), (246, 244, 238))
+    d = ImageDraw.Draw(sh)
+    for r, deg in enumerate(views):
+        for c, t in enumerate(ts):
+            img, _ = draw_view(sp, at(t, sp), deg)
+            sh.paste(img.convert('RGB').crop((90, 380, 990, 1640)).resize((cw - 4, ch - 4), Image.LANCZOS),
+                     (40 + c * cw, 30 + r * ch))
+            if r == 0:
+                d.text((44 + c * cw, 6), f'{t:.2f}', font=font, fill=(20, 20, 20))
+        d.text((4, 30 + r * ch + 8), f'{deg}', font=font, fill=(20, 20, 20))
+    sh.save(out, quality=88)
+    print('\n'.join(report) or f'move: every frame clean ({int(TIMES[-1][0] * fps) + 1} frames), clear of the car')
+    print('strip:', out)
+    return report
+
+
 if __name__ == '__main__':
     a = sys.argv[1:]
-    if a and a[0] == 'sheet':
+    if a and a[0] == 'strip':
+        strip(a[1] if len(a) > 1 else os.path.join(HERE, 'data', 'leanout-strip.jpg'))
+    elif a and a[0] == 'sheet':
         sheet(a[1] if len(a) > 1 else os.path.join(HERE, 'data', 'leanout-sheet.jpg'))
     else:
         print(__doc__)
