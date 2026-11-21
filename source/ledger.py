@@ -305,6 +305,13 @@ def auto(transcript):
                        'repeats': []}, model=model, cost=cost, src='estimate', sid=sid)
     if meas:
         _put_measure(row, meas)
+    try:                                          # cost audit (Sam, 21 Nov: "fix ... the notes problem"): counted, not typed
+        n, maybe = count_notes(transcript, film)
+        row['notes_auto'], row['notes'] = n, max(n, row.get('notes') or 0)
+        if maybe:
+            row['repeats_maybe'] = maybe
+    except Exception:
+        pass
     if old:
         d['chats'][d['chats'].index(old)] = row
     else:
@@ -599,6 +606,49 @@ def mergefile(o, a, b, path):
         out = ta
     open(a, 'w', encoding='utf-8').write(out)
     return 0
+
+
+NOT_A_NOTE = re.compile(r'^\W*(y|n|yes|no|go|ok|okay|override|thanks?|thank you|hold|just go|\d{1,2}\s*[yn]?)\W*$', re.I)
+STOP = set('the a an to of and is it in on that this for be with as at not but are was i you he she they them his her '
+           'its my me do does so if or from have has can will would should there what when then than now just also '
+           'one all any more very too please make made keep still again'.split())
+
+
+def _words(t):
+    return {w for w in re.findall(r"[a-z']{3,}", t.lower()) if w not in STOP}
+
+
+def count_notes(transcript, film):
+    """Sam's notes in this chat, counted from his own typed messages (the chat record): each numbered item is one
+    note; a message with none is one note, unless it is only a yes/no/go/number answer or a question. Possible
+    repeats: a note sharing at least 60% of its words (and 4 or more) with a line of the film's notes written before
+    this chat. Returns (count, [possible repeats, short])."""
+    import handover
+    msgs = [t for _, t in handover.sam_messages(transcript)]
+    notes = []
+    for m in msgs:
+        m = m.strip()
+        if not m or NOT_A_NOTE.match(m) or (m.endswith('?') and '\n' not in m):
+            continue
+        items = re.split(r'(?m)^\s*\d{1,2}\s*[.):-]\s+', m)
+        items = [x.strip() for x in items if len(x.strip()) > 3]
+        notes += items if len(items) > 1 else [m]
+    past = []
+    for f in (os.path.join(ROOT, 'notes', film + '.md'), os.path.join(ROOT, 'notes', 'archive', film + '-handovers.md')):
+        try:
+            past += [ln for ln in open(f, encoding='utf-8') if len(ln) > 30]
+        except OSError:
+            pass
+    pw = [(ln, _words(ln)) for ln in past]
+    maybe = []
+    for n in notes:
+        w = _words(n)
+        if len(w) < 4:
+            continue
+        best = max((len(w & q) / len(w) for _, q in pw), default=0)
+        if best >= 0.6 and not any(n[:40] in ln for ln, _ in pw):     # the note copied in this chat is not a repeat
+            maybe.append(n[:90])
+    return len(notes), maybe
 
 
 def _put_measure(row, m):

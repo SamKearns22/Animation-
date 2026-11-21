@@ -643,31 +643,21 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     # round to his FRONT side, out on the pavement a little behind him: his face and chest at three-quarters, the
     # gun arm 70 degrees across the line of sight (its full length, shoulder to hand), then a pan along his line of
     # fire onto the lead cruiser for shots 3 and 4 (the cruiser and his face cannot share a tall frame from here)
-    # chat 27 (v3 F1, F4, F5, F7: his back at 15.4, 18.1-18.6, 20.1-21.5; a passer-by through the lens at 17.1;
-    # the back-view check measures each): the lens reaches his front side BEFORE he turns back (it arrived 0.3 s
-    # after him), rides 2.1 m up over the pavement (above every head; the passers-by on that side walk nearer the
-    # shop fronts, PEOPLE4), looks back at the crash from beside him (he is behind the lens, never his back), turns
-    # to his face for the "huh", and swings round the bonnet only as he turns to climb in (he faces out, then front)
-    (0.85, (2.30, 1.60, 2.40), (0.90, 1.25, 0.00), 1300),      # round the front corner as he rises to the window
-    (1.15, (3.00, 1.90, 0.60), (0.90, 1.28, -0.30), 1400),
-    (1.45, (3.00, 2.10, -1.25), (0.80, 1.28, -0.60), 1355),     # his front side: face, chest, the arm across
-    (2.40, (3.00, 2.10, -1.25), (0.75, 1.28, -0.80), 1355),     # held through shots 1 and 2
-    (2.62, (3.00, 2.10, -1.25), (0.40, 1.27, -7.70), 965),      # along his line of fire onto the cruiser
-    (2.95, (3.00, 2.10, -1.25), (0.50, 1.28, -7.70), 965),
-    (3.10, (3.00, 2.10, -1.25), (0.45, 1.27, -7.75), 1185),     # the push for the hit (focal scaled to the distance)
-    (3.50, (3.00, 2.10, -1.25), (0.40, 1.25, -7.80), 1185),
-    (3.95, (1.60, 2.10, -1.25), (0.35, 1.05, -9.00), 1150),     # the wobble: back over the road (the walkers 2.6 m
-    #   off), he is behind the lens from here
-    (4.90, (1.60, 2.10, -1.25), (0.40, 1.05, -9.20), 1150),
-    (5.10, (1.60, 2.10, -1.25), (1.37, 1.27, -8.20), 1050),
-    (5.36, (1.60, 2.10, -1.25), (2.71, 1.29, -8.49), 1150),     # the hydrant, then the shop front
-    (5.70, (1.60, 2.10, -1.25), (2.80, 1.00, -12.0), 1150),     # the fireball blooms
-    (6.15, (1.60, 2.10, -1.25), (2.70, 1.20, -13.5), 1350),     # a slow push on the fire
-    (6.45, (1.90, 2.00, -1.45), (1.15, 1.42, -0.20), 1150),     # round onto his face (from just behind his gun
-    #   hand, above it: his front at about 20 degrees): the flat "huh"
-    (6.85, (1.90, 2.00, -1.45), (1.10, 1.38, -0.15), 1150),
-    (7.35, (2.20, 1.90, 1.80), (0.60, 1.25, -0.10), 1150),      # round the bonnet as he turns to climb in
-    (7.85, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),      # shot 3's frame
+    (1.10, (2.20, 1.55, 2.30), (0.95, 1.20, -0.30), 1300),      # round the front corner as he rises to the window
+    (1.70, (3.70, 1.35, -1.25), (0.80, 1.28, -0.60), 1650),     # his front side: face, chest, the arm across
+    (2.40, (3.70, 1.35, -1.25), (0.75, 1.28, -0.80), 1650),     # held through shots 1 and 2
+    (2.70, (3.70, 1.35, -1.25), (0.40, 1.27, -7.70), 1000),     # along his line of fire onto the cruiser
+    (2.95, (3.70, 1.35, -1.25), (0.50, 1.28, -7.70), 1000),
+    (3.10, (3.70, 1.35, -1.25), (0.45, 1.27, -7.75), 1225),     # the push for the hit (focal scaled to the distance)
+    (3.50, (3.70, 1.35, -1.25), (0.40, 1.25, -7.80), 1225),
+    (3.95, (1.90, 1.50, 0.80), (0.35, 1.05, -9.00), 1250),     # over the road beside his door (on the pavement
+    (4.90, (1.90, 1.50, 0.80), (0.40, 1.05, -9.20), 1250),     # the passers-by walked through the lens)
+    (5.10, (2.40, 1.45, 0.80), (1.37, 1.27, -8.20), 1100),
+    (5.36, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
+    (3.70 + WOB, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
+    (4.55 + WOB, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
+    (5.15 + WOB, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
+    (5.75 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
     (6.20 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
 ]
 
@@ -735,15 +725,13 @@ def _strip_people():
         while z < 200:
             z += rng.uniform(3.0, 9.0)
             x = rng.uniform(8.2, 9.5)
-            if side > 0:                  # chat 27 (v3 F4): shot 4's lens rides at x 8.0 over this pavement; walkers
-                x = 9.2 + (x - 8.2) * 0.4 / 1.3   # keep 1.2 m clear of it, by the shop fronts (9.2 to 9.6)
             out.append(dict(at=(side * x, z), face=rng.choice([0.0, 180.0, 90.0 * -side]),
                             i=len(out), walk=rng.uniform(0, 1)))
     return out
 
 
 PEOPLE4 = _strip_people()
-LENS_PAVE = (0.9, 4.0)          # shot 4's lens rides over the shop pavement (x 8.0, 2.1 m up) in this span (CAM4)
+LENS_PAVE = (0.9, 5.5)          # shot 4's lens stands on the shop pavement (x 8.7, head height) in this span (CAM4)
 
 
 def _lens_clear():

@@ -19,6 +19,10 @@ MAP
                  edits, messages and reminders, cache re-write, the floor), exact: the parts add to the chat's bill;
                  'unexplained' (leftover) is only growth with nothing arriving. Number to beat: leftover under 5% on
                  every chat of the next film; three chats within 5% of the app's figure
+  thing_of() / wrote_of()  cost audit (Sam, 21 Nov): every call's result and every piece of Claude's output gets a plain
+                 name (reading notes, reading film code, writing code, thinking (exact, from the usage), messages to
+                 Sam, critique helpers ...); split() returns them as 'named', adding up to the bill. source/dearest.py
+                 ranks them per film and per week
   start() ...... cold-start change (Sam's Y, 19 Nov): four start figures per chat: step-1 context, steps and % of a
                  week to the first real work, the files read before it (with sizes and cost), base share. ledger.py
                  coldstart FILM turns them into the film-end line (start + re-learning as % of the film)
@@ -50,8 +54,86 @@ def _film_paths(film):
     code = (film or '').replace('-', '_')
     if not code:
         return re.compile(r'(?!x)x')
-    return re.compile(r'(?:source/%s[A-Za-z0-9_]*\.py|story/(?:%s|%s)[^\s\'"]*)' % (
-        re.escape(code), re.escape(code), re.escape(code.replace('_', '-'))))
+    codes = [code]
+    words = [w for w in code.split('_') if w]
+    if len(words) >= 3:                       # cost audit (21 Nov): GTA's code is gta_*.py, its initials
+        codes.append(''.join(w[0] for w in words))
+    alt = '|'.join(re.escape(c) for c in codes)
+    return re.compile(r'(?:source/(?:%s)[A-Za-z0-9_]*\.py|story/(?:%s|%s)[^\s\'"]*)' % (
+        alt, alt, re.escape(code.replace('_', '-'))))
+
+
+# cost audit (Sam, 21 Nov: "find the most expensive things"): every dollar named as a THING a person would
+# recognise, not "other". Results are named by what was read or run; Claude's own output by what it wrote.
+THINGS_START = 'start-up and handover tools'
+START_RE = re.compile(r'\b(handover|branches|ledger|page|propose|watcher|status|plaincheck)\.py\b')
+
+
+def _where(t):
+    if re.search(r'(?:^|[\s\'"/])(?:notes|story)/', t):
+        return 'notes'
+    if 'guides/' in t or 'CLAUDE.md' in t:
+        return 'guides'
+    if re.search(r'(?:source|\.claude/hooks|tests)/|\.py\b', t):
+        return 'code'
+    return ''
+
+
+def thing_of(name, inp, film_re):
+    """What one tool call's RESULT was, in plain words (the thing it put into the chat)."""
+    inp = inp or {}
+    if name == 'Bash':
+        cmd = inp.get('command', '')
+        heads = [w[0].split('/')[-1] for w in _segments(cmd)]
+        if START_RE.search(cmd):
+            return THINGS_START
+        if RENDER.search(cmd) and (re.search(r'source/\S+\.py', cmd) or 'ffmpeg' in cmd or 'blender' in cmd):
+            return 'renders'
+        if any(h in ('python3', 'python') for h in heads) and re.search(r'source/\S+\.py', cmd):
+            return 'running checks and tools'
+        if 'git' in heads and all(h in ('git', 'cd', 'for', 'do', 'done', 'sleep', 'echo', 'break', 'head', 'tail',
+                                        'grep', '||', '&&') for h in heads):
+            return 'git and saving'
+        if re.search(r'\.jsonl\b|\.claude/projects', cmd):
+            return 'reading chat records'
+        w = _where(cmd)
+        if any(h in SEARCH_CMDS or h in ('cat', 'sed', 'wc', 'ls', 'python3', 'python') for h in heads) and w:
+            return 'reading ' + w if w != 'code' else ('reading film code' if film_re.search(cmd) else 'reading kit code')
+        return 'other commands'
+    if name in ('Read', 'Grep', 'Glob'):
+        t = ' '.join(str(inp.get(k, '')) for k in ('file_path', 'path', 'glob', 'pattern'))
+        if name == 'Read' and IMG.search(inp.get('file_path', '')):
+            return 'looking at pictures'
+        w = _where(t)
+        if w == 'code':
+            return 'reading film code' if film_re.search(t) else 'reading kit code'
+        return 'reading ' + w if w else 'reading other files'
+    if name in EDIT_TOOLS:
+        return 'edit results'
+    if name in ('Agent', 'Task'):
+        return 'helper results'
+    if name == 'ToolSearch':
+        return 'tool lookups'
+    if re.search(r'list_events|list_sessions|get_session|get_event', name):
+        return 'reading chat records'
+    return 'app tools (chats, files sent)'
+
+
+def wrote_of(name, inp):
+    """What one tool call's INPUT was, i.e. what Claude wrote to make it."""
+    inp = inp or {}
+    if name in EDIT_TOOLS:
+        f = inp.get('file_path', '')
+        return 'writing notes' if _where(f) in ('notes', 'guides') else 'writing code'
+    if name == 'Bash':
+        cmd = inp.get('command', '')
+        if '<<' in cmd or 'python3 -c' in cmd:
+            return 'writing notes' if re.search(r"open\(\s*['\"](?:notes|story|guides)/|p\s*=\s*['\"](?:notes|story)/", cmd) \
+                else 'writing code'
+        return 'commands'
+    if name in ('Agent', 'Task') or name.endswith('create_session') or name.endswith('send_message'):
+        return 'helper and chat prompts'
+    return 'commands'
 
 
 def _segments(cmd):
@@ -237,6 +319,65 @@ def _msg_tokens(d):
     return 0
 
 
+NAMED_COARSE = {'start-up floor': 'start-up reading (rules, tools, first files)', 'cache re-write': 'memory lapses (re-paying for the whole chat)',
+                'messages and reminders': 'messages and reminders', 'unexplained': 'unexplained', 'helpers': 'helpers'}
+
+
+def _words_parts(st, edits=True):
+    """One step's output by what it was: thinking (exact, from the usage), then the visible output shared by the
+    size of what was written (messages to Sam, code, notes, commands, prompts)."""
+    u = st['u']
+    th = (u.get('output_tokens_details') or {}).get('thinking_tokens', 0) or 0
+    vis = max(0, u.get('output_tokens', 0) - th)
+    out = {k: v for k, v in st['out'].items()}
+    if not edits:
+        for k, v in st['edit_thing'].items():
+            out[k] = max(0, out.get(k, 0) - v)
+    tot = sum(out.values())
+    parts = {'thinking': th} if th else {}
+    for k, v in out.items():
+        if tot and v:
+            parts[k] = parts.get(k, 0) + vis * v / tot
+    if not tot and vis:
+        parts['messages to Sam'] = vis
+    return parts
+
+
+def _shares(coarse, amount, parts, default='thinking'):
+    """Spread an amount over named parts: {'coarse|part': amount x share}."""
+    tot = sum(parts.values())
+    if not amount:
+        return {}
+    if not tot:
+        return {coarse + '|' + default: amount}
+    return {coarse + '|' + k: amount * v / tot for k, v in parts.items() if v}
+
+
+def _helper_name(path):
+    """A helper's kind (critic, namer, general-purpose...) from the record beside it, else 'helpers'."""
+    meta = os.path.splitext(path)[0] + '.meta.json'
+    try:
+        t = json.load(open(meta)).get('agentType') or ''
+    except Exception:
+        t = ''
+    if not t:
+        try:
+            for raw in open(path, encoding='utf-8', errors='replace'):
+                d = json.loads(raw)
+                t = d.get('subagent_type') or d.get('agentType') or ''
+                if t:
+                    break
+                if d.get('type') == 'user':
+                    c = json.dumps(d.get('message', {}).get('content', ''))[:600]
+                    t = ('critique' if 'critique' in c else 'proposal' if 'propos' in c else
+                         'name test' if 'nametest' in c else '')
+                    break
+        except Exception:
+            pass
+    return {'critic': 'critique helpers', 'critique': 'critique helpers', 'namer': 'name-test helpers',
+            'proposal': 'proposal helpers'}.get(t, 'other helpers' if t in ('', 'general-purpose') else t + ' helpers')
+
+
 def split(path, film=None, helpers=True):
     """cost-other change 1 (Sam's Y, 19 Nov): every dollar of the main chat by block AND by origin, exactly.
 
@@ -264,22 +405,29 @@ def split(path, film=None, helpers=True):
             if mid not in byid:
                 byid[mid] = len(steps)
                 steps.append({'u': m['usage'], 'price': costwatch.PRICE[costwatch.fam(m.get('model'))],
-                              'arr': pend, 'edits': 0.0, 'kind': {}})
+                              'arr': pend, 'edits': 0.0, 'kind': {}, 'out': {}, 'edit_thing': {}})
                 pend = {}
             st = steps[byid[mid]]
             for b in m.get('content') or []:
                 if isinstance(b, dict) and b.get('type') == 'tool_use':
-                    st['kind'][b['id']] = kind_of(b.get('name'), b.get('input'), film_re)
+                    st['kind'][b['id']] = (kind_of(b.get('name'), b.get('input'), film_re) + '|'
+                                           + thing_of(b.get('name'), b.get('input'), film_re))
+                    n = len(json.dumps(b.get('input') or {})) / 4
+                    w = wrote_of(b.get('name'), b.get('input'))
+                    st['out'][w] = st['out'].get(w, 0) + n
                     if b.get('name') in EDIT_TOOLS:
-                        st['edits'] += len(json.dumps(b.get('input') or {})) / 4
+                        st['edits'] += n
+                        st['edit_thing'][w] = st['edit_thing'].get(w, 0) + n
+                elif isinstance(b, dict) and b.get('type') == 'text':
+                    st['out']['messages to Sam'] = st['out'].get('messages to Sam', 0) + len(b.get('text', '')) / 4
             continue
         if d.get('type') == 'user' and isinstance(m, dict) and isinstance(m.get('content'), list):
             for b in m['content']:
                 if isinstance(b, dict) and b.get('type') == 'tool_result':
                     k = next((s['kind'][b.get('tool_use_id')] for s in reversed(steps[-3:])
-                              if b.get('tool_use_id') in s['kind']), 'other')
-                    if _has_image(b) and k == 'other':
-                        k = 'pictures'
+                              if b.get('tool_use_id') in s['kind']), 'other|other tool results')
+                    if _has_image(b) and k.startswith('other|'):
+                        k = 'pictures|looking at pictures'
                     o = 'result: ' + k
                     pend[o] = pend.get(o, 0) + _result_tokens(b)
         t = _msg_tokens(d)
@@ -331,7 +479,11 @@ def split(path, film=None, helpers=True):
             po_prev = steps[k - 1]['u'].get('output_tokens', 0)
             mine = min(new, po_prev)
             ed = min(mine, steps[k - 1]['edits'])
-            got = {"Claude's edits": ed, "Claude's words": mine - ed}
+            got = {}
+            for o, n in _shares("Claude's edits", ed, steps[k - 1]['edit_thing'], 'writing code').items():
+                got[o] = got.get(o, 0) + n
+            for o, n in _shares("Claude's words", mine - ed, _words_parts(steps[k - 1], edits=False)).items():
+                got[o] = got.get(o, 0) + n
             rest = new - mine
             est = sum(st['arr'].values())
             if rest and est:
@@ -347,23 +499,37 @@ def split(path, film=None, helpers=True):
                     held[o] = held.get(o, 0) + n
         v = O * po / 1e6
         blocks["Claude's words"] += v
-        add("Claude's words", v)
+        for o, n in _shares("Claude's words", v, _words_parts(st)).items():
+            add(o, n)
         prev_ctx = ctx
     usd = sum(blocks.values())
     hu = 0.0
+    helper_names = {}
     for h in (costwatch.helper_files(path) if helpers else []):
         hm = split(h, film, helpers=False)
         if hm:
             hu += hm['usd']
+            nm = _helper_name(h)
+            helper_names[nm] = helper_names.get(nm, 0.0) + hm['usd']
     blocks['helpers'] = hu
-    if hu:
-        add('helpers', hu)
+    for name, v in helper_names.items():
+        add('helpers|' + name, v)
     total = usd + hu
+    named = {}
+    for o, v in origins.items():
+        coarse, _, fine = o.partition('|')
+        t = fine or NAMED_COARSE.get(coarse, coarse)
+        named[t] = named.get(t, 0.0) + v
+    coarse_o = {}
+    for o, v in origins.items():
+        c = o.partition('|')[0]
+        coarse_o[c] = coarse_o.get(c, 0.0) + v
+    origins = coarse_o
     pc = lambda dct: {k: round(100 * v / total, 1) for k, v in sorted(dct.items(), key=lambda kv: -kv[1])
                       if total and round(100 * v / total, 1)}
     return {'usd': round(usd, 4), 'total': round(total, 4), 'floor_k': round(steps[0]['u'].get('cache_read_input_tokens', 0)
             + steps[0]['u'].get('cache_creation_input_tokens', 0) + steps[0]['u'].get('input_tokens', 0)) // 1000,
-            'blocks': pc(blocks), 'origins': pc(origins),
+            'blocks': pc(blocks), 'origins': pc(origins), 'named': pc(named),
             'leftover': round(100 * origins.get('unexplained', 0) / total, 1) if total else 0.0}
 
 

@@ -3689,6 +3689,45 @@ def body_check_headless():
 
 
 
+@test
+def dearest_things_named():
+    """Cost audit (Sam, 21 Nov: "audit every last thing done in order to find the most expensive things and run it
+    through the proposal route"): GTA's record filed 69% of its cost as "other". Every dollar of a chat must now carry a
+    plain name (thinking, writing code, reading notes, critique helpers ...) that adds up to the bill, the film's GTA
+    code (gta_*.py) counts as film code, and the five dearest open as proposals that pass the route's own check."""
+    import glob as G
+    import io
+    import contextlib
+    import stepcost
+    import dearest
+    out = []
+    fr = stepcost._film_paths('grand-theft-autism')
+    if not fr.search('python3 source/gta_rehearse.py'):
+        out.append("GTA's gta_*.py files are not counted as the film's own code")
+    mine = sorted(G.glob(os.path.expanduser('~/.claude/projects/*/*.jsonl')), key=os.path.getmtime)
+    for p in ['tests/stepcost-transcript.jsonl'] + mine[-1:]:
+        sp = stepcost.split(os.path.join(os.path.dirname(HERE), p) if not p.startswith('/') else p, 'grand-theft-autism')
+        if not sp or not sp.get('named'):
+            out.append(f'{p}: no named split')
+            continue
+        if abs(sum(sp['named'].values()) - sum(sp['origins'].values())) > 1.0:
+            out.append(f'{p}: the named parts do not add up to the bill')
+        if sp['named'].get('other tool results', 0) + sp['named'].get('unexplained', 0) > 10:
+            out.append(f'{p}: over 10% still unnamed')
+    with contextlib.redirect_stdout(io.StringIO()) as buf:
+        ok = dearest.test()
+    if not ok:
+        out.append('dearest.py test: ' + ' | '.join(ln for ln in buf.getvalue().splitlines() if ln.startswith('FAIL')))
+    import ledger                                   # the notes problem: Sam's notes counted from his own words
+    n, maybe = ledger.count_notes(os.path.join(os.path.dirname(HERE), 'notes/ledger/sam/negkzryt.md'), 'grand-theft-autism')
+    if n < 10:
+        out.append(f'GTA chat with 10 of Sam\'s messages counted only {n} notes')
+    if not any('gun' in m or 'fires' in m for m in maybe):
+        out.append('the gun note Sam gave before (the gun not pointing at the target) is not flagged as a possible repeat')
+    return not out, '; '.join(out) or 'every dollar named; five dearest ranked; Sam\'s notes counted, repeats flagged'
+
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0

@@ -708,6 +708,99 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-21",
+   "chat": "335c535e",
+   "model": "opus",
+   "stage": "cost-audit",
+   "round": null,
+   "cost": 1.41,
+   "notes": 0,
+   "repeats": [],
+   "steps": 73,
+   "hist_k": 231,
+   "kinds": {
+    "tool search": 25.5,
+    "page.py": 0.8,
+    "renders": 1.8,
+    "other": 72.0
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 48,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 0,
+    "other": 23
+   },
+   "split": {
+    "usd": 4.97,
+    "total": 4.97,
+    "floor_k": 95,
+    "blocks": {
+     "Claude's words": 29.0,
+     "start-up floor": 28.7,
+     "new writes": 21.8,
+     "carried history": 20.5
+    },
+    "origins": {
+     "Claude's words": 44.0,
+     "start-up floor": 28.7,
+     "result: other": 13.4,
+     "result: tool search": 11.8,
+     "messages and reminders": 1.1,
+     "Claude's edits": 0.7,
+     "result: renders": 0.2,
+     "result: page.py": 0.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 28.7,
+     "writing code": 18.3,
+     "thinking": 17.3,
+     "reading chat records": 15.0,
+     "start-up and handover tools": 5.4,
+     "commands": 4.4,
+     "writing notes": 3.6,
+     "reading notes": 3.0,
+     "reading kit code": 1.2,
+     "messages to Sam": 1.1,
+     "messages and reminders": 1.1,
+     "running checks and tools": 0.7,
+     "reading guides": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 95,
+    "work_step": 29,
+    "work_pct": 0.51,
+    "reads": [
+     [
+      "source/stepcost.py",
+      1.9,
+      0.0319
+     ],
+     [
+      "notes/ledger/app-costs.tsv",
+      1.2,
+      0.0234
+     ],
+     [
+      "notes/overnight-run.md",
+      0.8,
+      0.0155
+     ],
+     [
+      "tests/stepcost-transcript.jsonl",
+      0.2,
+      0.004
+     ]
+    ],
+    "base_pct": 24.9
+   }
   }
  ],
  "checks": {}
