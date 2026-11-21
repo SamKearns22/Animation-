@@ -1,0 +1,34 @@
+== critique, round 19 pass 1 (2026-11-20): 8 fault(s), 2 can't tell
+-- look.md --
+1: Wide street, pink sky; red car from behind, three people inside, police car ahead. No words.
+2: Close on red car; tan man, red-haired woman, dark-haired woman in windshield, calm faces. No words.
+3: Same car view; man mouth slightly open, woman frowning, dark-haired woman neutral. No words.
+4: Man shouting, mouth open, hand at left; woman worried; third woman neutral. No words.
+5: Man frowning, hand raised left; red-haired woman worried; third woman looking sideways. No words.
+6: Same trio, man's hand up; blue police light behind car; woman worried. No words.
+7: Wide again, car driving away down street, police car ahead with lights. No words.
+-- result.md --
+## Faults
+FAULT A1 [1-7]: car bonnet - two dark stripes with grey patches on red read as a pair of dark trousers or legs, not a bonnet; it fills half of panels 2-6.
+FAULT P2 [2-6]: faces - the sliding-toward-the-listener look is hard to see: Jason (4, 6) does not look turned back at the woman, the woman (2) does not look at Lucia; everyone reads as facing forward.
+FAULT P6 [4, 6]: Jason's hand - a plain circle at the far left edge, no thumb jabbed back over the shoulder as the brief says.
+FAULT P6 [5]: Jason's raised hand - cropped at the frame edge, half outside the windscreen, hardly reads as a hand beside his face.
+FAULT P14 [2-6]: Lucia - a pale grey windscreen glare triangle covers her eye and cheek, dulling her colouring against her reference (also P4).
+FAULT P3 [3]: Jason - brief says eyes shut and exasperated; the eyes look open, so the beat does not read.
+FAULT P1 [2-6]: Lucia drives but no hands touch the wheel (an arc at her chest only); the woman's and Lucia's hands are never shown (P6).
+FAULT P2 [1, 7]: three people tiny in the wide shots; the headshake (1) and the brightening (7) cannot be read at phone size.
+CAN'T TELL P12 [2-7]: whether mouths open only on the speaker's words (6: Jason speaking, mouth looks shut); need a frame labelled with who speaks.
+CAN'T TELL M5 [1-7]: the slide round the corner (1) shows no jolt; a last-frame strip would show it.
+CAN'T TELL A4 [1-7]: the Hook Text frame was not sent; need it to see whether the box covers faces.
+
+## Checked
+1-7
+
+## Cold look
+I named no words (none visible, fine). I missed the trousers-like bonnet (A1). I called Jason's hand "hand at left", not a thumb, and did not see eyes shut in 3. I named a police car in 1, 6, 7 that is not in the brief. I wrote "hand raised" in 5 without noting it is cropped.
+
+## Not on the list
+1. Police car and blue light in 1, 6, 7 are not in the brief; suggested line: everything drawn is in the brief or the notes.
+2. Black wedge by Jason's shoulder in 2-6 reads as a stray shape; suggested line: no unexplained dark shapes beside people.
+3. Action is a thin strip of the frame; suggested line: the people fill at least a third of the frame.
+
