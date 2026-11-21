@@ -15294,52 +15294,74 @@
    "model": "opus",
    "stage": "round1",
    "round": null,
-   "cost": 2.55,
+   "cost": 2.83,
    "notes": 0,
    "repeats": [],
    "src": "estimate",
    "sid": "session_01GznaAUXaMVpNbxdUVmwY7a",
-   "steps": 125,
-   "hist_k": 295,
+   "steps": 136,
+   "hist_k": 321,
    "kinds": {
-    "film-file search": 0.3,
-    "tool search": 28.6,
+    "film-file search": 10.3,
+    "tool search": 17.2,
     "page.py": 0.2,
     "routine": 0.3,
-    "renders": 2.1,
+    "renders": 1.9,
     "pictures": 1.9,
-    "other": 66.7
+    "other": 68.2
    },
    "calls": {
-    "film-file search": 2,
-    "tool search": 91,
+    "film-file search": 24,
+    "tool search": 73,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 1,
     "renders": 6,
     "pictures": 5,
-    "other": 16
+    "other": 23
    },
    "split": {
-    "usd": 9.1567,
-    "total": 9.1567,
+    "usd": 10.1803,
+    "total": 10.1803,
     "floor_k": 95,
     "blocks": {
-     "start-up floor": 31.6,
-     "carried history": 25.9,
-     "Claude's words": 24.9,
-     "new writes": 17.5
+     "start-up floor": 30.3,
+     "carried history": 27.4,
+     "Claude's words": 24.6,
+     "new writes": 17.7
     },
     "origins": {
-     "Claude's words": 44.4,
-     "start-up floor": 31.6,
-     "result: tool search": 16.5,
-     "messages and reminders": 3.9,
+     "Claude's words": 44.7,
+     "start-up floor": 30.3,
+     "result: tool search": 11.4,
+     "result: film-file search": 5.0,
+     "messages and reminders": 4.2,
      "result: pictures": 2.4,
-     "result: other": 0.5,
+     "result: other": 1.7,
      "result: renders": 0.3,
-     "result: film-file search": 0.2,
      "result: page.py": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 30.3,
+     "thinking": 21.9,
+     "writing code": 11.0,
+     "reading kit code": 6.5,
+     "commands": 6.1,
+     "reading film code": 4.6,
+     "messages and reminders": 4.2,
+     "writing notes": 2.7,
+     "looking at pictures": 2.4,
+     "messages to Sam": 2.3,
+     "reading notes": 2.1,
+     "reading guides": 1.1,
+     "running checks and tools": 1.0,
+     "start-up and handover tools": 1.0,
+     "app tools (chats, files sent)": 0.8,
+     "reading chat records": 0.6,
+     "helper and chat prompts": 0.6,
+     "other commands": 0.4,
+     "renders": 0.2,
+     "helper results": 0.1
     },
     "leftover": 0.0
    },
@@ -15351,57 +15373,57 @@
      [
       "source/gta_rehearse.py",
       2.9,
-      0.0827
+      0.0885
      ],
      [
       "notes/grand-theft-autism.md",
       2.2,
-      0.0649
+      0.0692
      ],
      [
       "source/humancheck.py",
       1.4,
-      0.039
+      0.0419
      ],
      [
       "source/leanout.py",
       0.9,
-      0.0251
+      0.0269
      ],
      [
       "source/cutmatch.py",
       0.8,
-      0.022
+      0.0235
      ],
      [
       "source/lying_flat.py",
       0.7,
-      0.0176
+      0.0189
      ],
      [
       "source/gta_film.py",
       0.4,
-      0.0126
+      0.0134
      ],
      [
       "source/views.py",
       0.3,
-      0.0072
+      0.0078
      ],
      [
       "source/page.py",
       0.2,
-      0.0044
+      0.0048
      ]
     ],
-    "base_pct": 23.3
+    "base_pct": 22.8
    },
    "search": {
     "show": 1,
     "film": {
-     "before show": 1,
-     "miss": 0,
-     "after show": 1
+     "before show": 4,
+     "miss": 5,
+     "after show": 15
     },
     "other": {
      "other": 26,
@@ -15409,18 +15431,17 @@
      "film notes": 7,
      "guides": 1,
      "shared:cutmatch.py": 1,
-     "shared:gta_rehearse.py": 19,
-     "shared:gta_film.py": 2,
      "shared:humancheck.py": 7,
      "shared:lying_flat.py": 2,
      "shared:sets.py": 1,
      "shared:views.py": 6,
      "shared:leanout.py": 1,
-     "shared:kittests.py": 7,
-     "shared:critique.py": 8
+     "shared:kittests.py": 8,
+     "shared:critique.py": 8,
+     "shared:ledger.py": 2
     },
     "ticked": 6,
-    "edited film code": false,
+    "edited film code": true,
     "list": [
      [
       0,
@@ -15480,64 +15501,64 @@
      ],
      [
       7,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "before show",
       "source/gta_rehearse.py source/leanout.py source/gta_film.py",
       "WOB *=",
       ""
      ],
      [
       8,
-      "other",
-      "shared:gta_film.py",
+      "film",
+      "before show",
       "source/gta_film.py",
       "sed -n 1,80p source/gta_film.py",
       ""
      ],
      [
       9,
-      "other",
-      "shared:gta_film.py",
+      "film",
+      "before show",
       "source/gta_film.py",
       "timeout 120 python3 source/gta_film.py 2>&1 | tail -12",
       ""
      ],
      [
       11,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "miss",
       "source/gta_rehearse.py",
       "record\\[",
       ""
      ],
      [
       12,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "miss",
       "source/gta_rehearse.py",
       "sed -n 1700,1800p source/gta_rehearse.py",
       ""
      ],
      [
       13,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "miss",
       "source/gta_rehearse.py",
       "def jason_layer",
       ""
      ],
      [
       14,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "miss",
       "source/gta_rehearse.py",
       "sed -n 1159,1192p source/gta_rehearse.py",
       ""
      ],
      [
       15,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "miss",
       "source/gta_rehearse.py source/leanout.py",
       "^_JN",
       ""
@@ -15640,8 +15661,8 @@
      ],
      [
       29,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "def person_cached",
       ""
@@ -15656,8 +15677,8 @@
      ],
      [
       31,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "^S_REF",
       ""
@@ -15696,48 +15717,48 @@
      ],
      [
       38,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "^SHOP4\\|^KERB\\|^CURB\\|^LANE\\|^ROAD\\|def tulip4",
       ""
      ],
      [
       39,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "^PEOPLE4\\|^def crowd\\|^V4\\b\\|^V4 =",
       ""
      ],
      [
       40,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "^def _crowd",
       ""
      ],
      [
       41,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "^IMPACT\\|^FIREBALL\\|^CRASH_Z\\|^HYDRANT\\b\\|^HYDRANT =\\|IMPACT = \\|HYDRANT = ",
       ""
      ],
      [
       42,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "def fx_items",
       ""
      ],
      [
       43,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "huh",
       ""
@@ -15768,8 +15789,8 @@
      ],
      [
       50,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "6.45, (3.00\\|6.85, (3.00",
       ""
@@ -15808,8 +15829,8 @@
      ],
      [
       57,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "sed -n 826,905p source/gta_rehearse.py",
       ""
@@ -15832,8 +15853,8 @@
      ],
      [
       61,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "python3 - <<'EOF' p='source/gta_rehearse.py'; s=open(p).read() old=\"\"\" F = (math",
       ""
@@ -15864,16 +15885,16 @@
      ],
      [
       67,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py source/*.py",
       ",\n",
       ""
      ],
      [
       68,
-      "other",
-      "shared:gta_rehearse.py",
+      "film",
+      "after show",
       "source/gta_rehearse.py",
       "python3 - <<'EOF' p='source/gta_rehearse.py'; s=open(p).read() old='''PEOPLE4 = ",
       ""
@@ -16165,9 +16186,42 @@
       "",
       "git status --short | head -3; git log --oneline -1; for i in 1 2 3; do git push ",
       ""
+     ],
+     [
+      122,
+      "film",
+      "after show",
+      "source/gta_rehearse.py source/ledger.py",
+      "            x = rng.uniform(8.2, 9.5)\n            if side > 0:                  ",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py source/*.py .claude/hooks/*.py",
+      "_budget_stop\\|def budget\\|BUDGET STOP",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/*.py .claude/hooks/*.py",
+      "budget_stop\\|BUDGET STOP\\|stage_share_stop\\|def estimate_forecast_and_alarm",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "def stage_alarm",
+      ""
      ]
     ]
-   }
+   },
+   "notes_auto": 0
   },
   {
    "date": "2026-11-21",
