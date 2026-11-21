@@ -35,6 +35,20 @@ has no estimate; RECORD "pre-flight ran on gta": only test text naming preflight
 
 Changes made without a proposal (for the end-of-film review): every item above, all on Sam's 21 Nov instruction.
 
+## Budget tracker audit (Sam, 21 Nov: "I need to know that the budget tracking tool has worked as promised. The idea was to
+audit every last thing done in order to find the most expensive things and run it through the proposal route to
+discover how it can be made more compliant with statement one.")
+- Works: every GTA chat has a row (27, 53.3% of a week), each with its cost split by kind of step and part of the
+  bill; the estimate matches the app's real figure (chat 26: 2.45% estimated, $9.07 = 2.48% real).
+- Fails the promise: (1) 69% of the film's cost (36.6 of 53.3) is filed as "other": the record cannot say what the
+  most expensive things were; (2) nothing takes the dearest things to the proposal route: only a hand-run end-of-film
+  review does (Milburn's); (3) notes and repeats were never counted (fixed tonight: LEDGER fault); (4) no real (app)
+  figures imported for GTA yet. Known parts: tool search 11.3, carried history 14.5, start-up floor 11.5, renders 2.0.
+- [ ] Cost audit chat (Opus high): split "other" into named things (writing code, thinking, edits, reading notes,
+      critique helpers...) on GTA's real records; then a standing step that, at each film's end (and weekly), ranks
+      the five dearest things and opens each as a proposal through propose.py against Statement 1 (quality first,
+      then fewer notes and faults, then cost). Test it on GTA and Milburn; report the top five to Sam in plain words.
+
 ## Where things stand (21 Nov, status chat, Opus)
 - Rules that bite next: 30 (a test failing twice: find why the first fix failed), "Seeing like Sam" 2 (a check is done
   only when it catches the note that taught it), "Rules are permanent" (remove a check only with Sam's Y).
