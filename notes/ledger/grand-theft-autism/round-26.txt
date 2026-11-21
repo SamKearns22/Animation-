@@ -1,0 +1,33 @@
+== critique, round 26 pass 1 (2026-11-21): 8 fault(s), 2 can't tell
+-- look.md --
+1: Street, red convertible at right edge, man in cream shirt leaning out sideways, black smoke, police cars far.
+2: Red car front, dark patched pants-shaped hood, three worried people inside, police lights, pedestrians, smoke plume. Text: "22.17 s shot 4".
+3: Same car front-on, three tense passengers, blue police lights, bystanders, palm tree, smoke. Text: "22.42 s shot 5".
+4: Car tilted, three people, shirt text partly readable, white scrap on hood, shops, bystanders. Text: "23.50 s shot 5".
+5: Car smaller, three people worried, red police light behind, shops, buildings, bystanders. Text: "25.00 s shot 5".
+6: Close on car, bald-ish man, red-bun woman frowning, dark woman mouth open, hood dark pants-shaped. Text: "25.83 s shot 6".
+-- result.md --
+## Faults
+FAULT A1 P7 [2-6]: car hood - two dark patched pants-leg shapes lie on the red bonnet; reads as trousers/legs sprawled on the car, not a bonnet. Passengers also look like they sit on the dash with no seat or lap visible.
+FAULT A1 P8 [1]: Jason hangs sideways out of the car at its right edge, back to camera, and is seen from the side, not "from in front climbing into the passenger seat"; car is cropped by the frame edge, so the action does not read.
+FAULT P10 [1]: Jason's body overlaps the door/side with no visible contact, hand or grip; weapon not visible, so what he just did is unclear.
+FAULT M1 P3 [2-3]: the cut should not jump, but the palm tree, pedestrians and police car change position/size between 22.17 s and 22.42 s.
+FAULT P2 [4]: no slide round a corner, no police chase behind, Jason not clearly braced on the dash; car only tilted, faces calm.
+FAULT P12 P2 [5]: the middle woman should be saying a line; her mouth is closed and her face is the same as in panel 4, no beat shown.
+FAULT P2 P8 [6]: Lucia (right) should turn to Jason; she stares forward with mouth open in an "o", Jason also looks forward. A pale transparent patch covers her face and the glass.
+FAULT M3 [6]: Jason's face is larger and drawn differently from panels 2-5; head crowds the roof; faces stretch between 5 and 6.
+CAN'T TELL P14 [2-5]: eyes too small to judge at phone size; need a full-size face crop.
+CAN'T TELL P4 [1-6]: no references on the sheet; need the character reference beside each face.
+
+## Checked
+1-6
+
+## Cold look
+look.md read the hood as pants-shaped shapes and the panel 1 figure as only leaning out; it missed the transparent patch over the right woman in panels 4 and 6 and named no speech in 5, which is correct because none is drawn. I could not name the smoke clump in 1-3 as anything but black balls, and it reads as such.
+
+## Not on the list
+- Black smoke made of stacked balls beside the street looks like a pile of boulders; suggested line: smoke reads as smoke, with soft edges and a source.
+- White scrap on the hood repeated in 2-6 (and the grille mark) reads as litter; suggested line: marks on a prop must be identifiable.
+- Panel 4's frame leaves the car tilting with no motion cue; suggested line: speed or slide shows through blur, lean or scenery.
+- Heavy grey haze over the right woman in 4 and 6; suggested line: no semi-transparent overlay on a face.
+

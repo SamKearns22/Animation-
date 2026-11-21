@@ -360,7 +360,10 @@ def sit(lay, cam, car, who, neck_l, t, hands=(), over=None, head_dir=None, props
         j['foot' + sd] = fig(car.body_pt((neck_l[0] + dx, 0.28, neck_l[2] + feet_z)))
     for sd, at, pole, shape in hands:
         tgt = at[1] if at[0] == 'fig' else fig(car.body_pt(at))
-        V.arm_to(j, sd, tgt, pole, shape)
+        # car-frame hands are the person's own left/right; the kit's 'L' arm is their RIGHT (views.standing). Shot 4's
+        # seated() swapped them in chat 23 (Lucia's crossed grip, Sam's v4 note 1 and v7 note 1); this copy never got
+        # the swap, so shots 5-8 kept her (and the woman's) forearms crossed (chat 26: found by the body check, 41 drawings)
+        V.arm_to(j, sd if at[0] == 'fig' else {'L': 'R', 'R': 'L'}[sd], tgt, pole, shape)
     j['props'] += list(props)
     if grip:
         j['grip'] = set(grip)

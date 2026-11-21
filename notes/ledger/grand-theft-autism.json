@@ -14719,6 +14719,11 @@
    "date": "2026-11-21",
    "spent": 48.76,
    "forecast": 99.3
+  },
+  {
+   "date": "2026-11-21",
+   "spent": 49.03,
+   "forecast": 99.6
   }
  ],
  "critique": {
@@ -15012,6 +15017,27 @@
      "4 P3: pedestrian arms and mouths (P3, P12). A full-size crop would show them.",
      "3 P4: the hydrant water jet and the passers-by ducking. They are too small to read at phone size."
     ]
+   },
+   {
+    "round": 26,
+    "pass": 1,
+    "stage": "notes",
+    "date": "2026-11-21",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 2,
+    "open": [
+     "2-6 A1 P7: car hood - two dark patched pants-leg shapes lie on the red bonnet; reads as trousers/legs sprawled on the car, not a bonnet. Passengers also look li",
+     "1 A1 P8: Jason hangs sideways out of the car at its right edge, back to camera, and is seen from the side, not \"from in front climbing into the passenger seat\";",
+     "1 P10: Jason's body overlaps the door/side with no visible contact, hand or grip; weapon not visible, so what he just did is unclear.",
+     "2-3 M1 P3: the cut should not jump, but the palm tree, pedestrians and police car change position/size between 22.17 s and 22.42 s.",
+     "4 P2: no slide round a corner, no police chase behind, Jason not clearly braced on the dash; car only tilted, faces calm.",
+     "5 P12 P2: the middle woman should be saying a line; her mouth is closed and her face is the same as in panel 4, no beat shown.",
+     "6 P2 P8: Lucia (right) should turn to Jason; she stares forward with mouth open in an \"o\", Jason also looks forward. A pale transparent patch covers her face an",
+     "6 M3: Jason's face is larger and drawn differently from panels 2-5; head crowds the roof; faces stretch between 5 and 6.",
+     "2-5 P14: eyes too small to judge at phone size; need a full-size face crop.",
+     "1-6 P4: no references on the sheet; need the character reference beside each face."
+    ]
    }
   ],
   "lines": {
@@ -15024,11 +15050,11 @@
     "false": 0
    },
    "A1": {
-    "faults": 16,
+    "faults": 18,
     "false": 0
    },
    "P2": {
-    "faults": 16,
+    "faults": 19,
     "false": 0
    },
    "P5": {
@@ -15044,7 +15070,7 @@
     "false": 0
    },
    "P8": {
-    "faults": 6,
+    "faults": 8,
     "false": 0
    },
    "P6": {
@@ -15060,7 +15086,7 @@
     "false": 0
    },
    "P3": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "O1": {
@@ -15072,7 +15098,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "O3": {
@@ -15092,7 +15118,7 @@
     "false": 0
    },
    "M1": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "S6": {
@@ -15116,7 +15142,7 @@
     "false": 0
    },
    "M3": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "O4": {
@@ -15125,6 +15151,14 @@
    },
    "S2": {
     "faults": 2,
+    "false": 0
+   },
+   "P10": {
+    "faults": 1,
+    "false": 0
+   },
+   "P12": {
+    "faults": 1,
     "false": 0
    }
   }
