@@ -18,3 +18,6 @@ Y. Please set a 2am reminder for all currently working jobs to continue.
 
 So what has been achieved on shot 4 since the handover?
 
+### 2026-11-21T23:26:08
+Can I have the usage you've spent refunded to me please?
+
