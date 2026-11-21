@@ -1,17 +1,6 @@
 {
  "film": "check-repairs",
  "estimate": null,
- "chats": [
-  {
-   "date": "2026-11-21",
-   "chat": "906480b5",
-   "model": "opus",
-   "stage": "status",
-   "round": null,
-   "cost": 1.74,
-   "notes": 2,
-   "repeats": []
-  }
- ],
+ "chats": [],
  "checks": {}
 }
