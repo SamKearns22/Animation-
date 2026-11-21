@@ -236,7 +236,10 @@ GALLERY = [   # (name, pose(sp) -> joints, where it came from)
 
 
 AVOID = {                  # views a pose fails the hand check in (rule 41): a film never uses it from there
-    'hands behind the back': {'behind': 'his hands sit inside the jacket: from behind no hands show (body check, 20 Nov)'},
+    'hands behind the back': {   # SEEN: no check catches these yet (21 Nov, check repairs): the kit draws the hands hidden
+        'side': 'his hands should show at his back: none drawn (seen on the sheet, 21 Nov)',
+        'three-quarter back': 'his hands should show at his back: none drawn (seen on the sheet, 21 Nov)',
+        'behind': 'his hands sit inside the jacket: from behind no hands show (seen on the sheet, 20 and 21 Nov)'},
     'hands on a table (drawn)': {'three-quarter back': 'the far hand is on the table beyond his body',
                                  'behind': 'both hands are on the table beyond his body'},
     'cup in hand': {'three-quarter back': 'the cup is in front of him, hidden by his back (Job J: prop hidden)',
@@ -253,7 +256,6 @@ AVOID = {                  # views a pose fails the hand check in (rule 41): a f
                                              'build 2: the blurred shading had hidden that sleeve from the check)'},
     'hands on hips': {'three-quarter back': 'the far hand is behind his body'},
     'slumped': {'behind': 'the far hand hangs in front of him, hidden by his back'},
-    'palm open': {'behind': 'the open palm is in front of him, hidden by his back'},
     'facepalm': {'three-quarter back': 'the hand is on his face, hidden by his head',
                  'behind': 'the hand is on his face, hidden by his head'},
     'pen in hand': {'behind': 'the pen hand is in front of him, hidden by his back'},

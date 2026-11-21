@@ -656,7 +656,7 @@ def _head(img, p, sp, t, hx, hy):
         FA.talk_or(p, dict(sp, lips=True, lip_c=kh['lip']), 0.0, fx, my - 6, lambda: FA.house_mouth(
             p, FF.mouth, L, m['kind'], kh['lip'], skin, m.get('wide', 1.12), m.get('gap', 0.0), m.get('creases', 1.0), m.get('drop')))
     else:
-        FA.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', 0.0)), kh['lip'], (fx, my - 6))
+        FA.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', 0.0), lopsided=None), kh['lip'], (fx, my - 6))
     if piece == 'swept':
         swept(p, f, L, hc, kh, lk)
     elif piece == 'bald':
@@ -1271,7 +1271,7 @@ def _turn_mouth(p, f, L, sp, fx, my):
         FA.house_mouth(p, f, L, m['kind'], kh['lip'], sp['skin'], m.get('wide', 1.12), m.get('gap', 0.0),
                           m.get('creases', 1.0), m.get('drop'))
     else:
-        FA.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0), mouth='rest'), kh['lip'], (fx, my - 6))
+        FA.lips(p, f, L, dict(sp, smile=sp.get('smile', 0.0), mouth='rest', lopsided=None), kh['lip'], (fx, my - 6))
 
 
 def _turn_face(pen, f, L, sp):

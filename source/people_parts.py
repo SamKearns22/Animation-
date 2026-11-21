@@ -214,6 +214,13 @@ def face_layout(fc):
     return FA.layout(m)
 
 
+def _lop_brows(sp, r):
+    """Job K 5 (Sam: Y, 11 Nov): an invented face may be a touch uneven (sp['lopsided']): our left brow higher. The
+    mouth corner comes from faces.lips; a likeness head never reads it."""
+    b = FA.lop(sp).get('brow', 0.0)
+    return (r + b, r - 0.004) if b else r
+
+
 def front_head(img, p, sp, t, hx, hy):
     """An invented face, front on (blessed_cast's inmate head, lifted): the face card is sp['kit_face']."""
     k = sp['kit_face'].get('k', 1.0)          # note 14: a face may be drawn smaller than the house's bigger size
@@ -291,7 +298,7 @@ def _front_head(img, p, sp, t, hx, hy):
     if fc.get('glasses'):
         _glasses(p, FF.lens, L, fc['glasses'], fc.get('glasses_thick'))
     FA.brows(p, FF.brows, L, fc['brow'], fc.get('brow_thick', 0.05 if fc['hair'] != 'side' else 0.04),
-             sp.get('brow_up', 0.012 * up), sp.get('frown', 0.0))
+             _lop_brows(sp, sp.get('brow_up', 0.012 * up)), sp.get('frown', 0.0))
     FA.nose(p, FF.nose, L, skin)
     fx, my = FF.mouth(0.0, L['lip13'])
     FA.lips(p, FF.mouth, L, dict(sp, smile=sp.get('smile', -0.4)), fc['lip'], (fx, my - 6))

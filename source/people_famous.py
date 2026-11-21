@@ -426,7 +426,7 @@ def _famous_head(img, p, sp, t, hx, hy):
         full_beard(p, f, L, skin, fm['beard'])
     if sp.get('empty'):
         FA.nose(p, f, L, skin)
-        FA.lips(p, f, L, dict(sp, smile=0.2), fm['lip'], f(0.0, L['lip13']))
+        FA.lips(p, f, L, dict(sp, smile=0.2, lopsided=None), fm['lip'], f(0.0, L['lip13']))
         return f(0.0, L['lip13'])[0]
     if fm.get('deep_set'):
         deep_set(p, f, L, skin)
@@ -438,7 +438,7 @@ def _famous_head(img, p, sp, t, hx, hy):
     FA.nose(p, f, L, skin)
     fx, my = f(0.0, L['lip13'])
     if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
-        FA.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0)), fm['lip'], (fx, my - 6))
+        FA.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0), lopsided=None), fm['lip'], (fx, my - 6))
     else:
         open_mouth(p, f, L, look['mouth'])
     if look.get('tears') or sp.get('tears'):
@@ -470,7 +470,7 @@ def _mood(sp, f):
 def _rest(p, f, L, sp, fx, my):
     look = look_of(sp)
     if str(sp.get('mouth', 'rest')).startswith('v:') or look['mouth'] == 'lips':
-        FA.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0), mouth='rest'), sp['kit_famous']['lip'], (fx, my - 6))
+        FA.lips(p, f, L, dict(sp, smile=look.get('smile', 0.0), mouth='rest', lopsided=None), sp['kit_famous']['lip'], (fx, my - 6))
     else:
         open_mouth(p, f, L, look['mouth'])
 
