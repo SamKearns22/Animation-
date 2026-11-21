@@ -12026,6 +12026,11 @@
    "date": "2026-11-21",
    "spent": 38.08,
    "forecast": 88.6
+  },
+  {
+   "date": "2026-11-21",
+   "spent": 40.3,
+   "forecast": 90.8
   }
  ],
  "critique": {
@@ -12238,6 +12243,31 @@
     ],
     "fixed": "Shot 4 pose sheet hunt 2: nothing new to fix in the poses the film uses. Named: circle hands, neck, print size and smooth face are the house body (shot 3's Jason, approved); the pistol on his chest in",
     "left": []
+   },
+   {
+    "round": 21,
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-21",
+    "hunt": 1,
+    "faults": 11,
+    "cant_tell": 3,
+    "open": [
+     "3-4 O6 P2: muzzle flash is a yellow cartoon star (P2); P3 blood is a tiny red dot; P4 fireball is a flat orange blob with no black smoke - effects do not suit t",
+     "2,4 S1 P3: the action is tiny in the far distance (police car, driver hit, crash) while Jason or the car's body fills the frame; P4 shows Jason's shoulder and a",
+     "1 S9 P4: no smoke at all, and no hydrant water jet or shop-front crash; the fire sits on the road, not in a shop front, so M5 damage is not shown either.",
+     "2 A1 P3: cold look named the red mark as a burst, not blood on glass; the driver slumping cannot be seen.",
+     "3-4 P6 P2: no gun can be seen in Jason's raised hand (P2/P3); in P4 a black bar at the top is the only hint of the gun, and the hand is lost behind the body.",
+     "3 P2 P2: panels 2 and 3 look almost the same pose, so the beat \"just after the fourth shot\" is not told by Jason; no feeling is readable on his face at phone si",
+     "5 O4 P4: Jason is out of scale against the car and street (huge torso beside a small police car and tiny pedestrians).",
+     "2-3 P7 P5: Jason's body does not sit in the open window; in P5 he is on the car's side above the door with no seat, lap or knees, and the car is tilted so it re",
+     "2-4 O1 P5: car body and perspective changes between panels: the car's shape and lane position differ, so the set and car do not match from shot to shot (S6).",
+     "2-3 S2 P5: street with pedestrians on the pavement but the police car is mid-road beside the kerb; P4 has no passers-by ducking.",
+     "2-4 M2 P1: the strip has several near-identical frames between 4.33 and 5.33 s; the crash and the drop back look rushed or missing.",
+     "2-3,5 P1: P1 hands on the gun and each shoulder are too small; a close full-size crop of Jason's arm at the shoulder would show it (P5 shoulder join).",
+     "2-3 P3: arm length and elbow bend for the extended arm; a full-size crop would show it.",
+     "1 P12: the mouths of the woman and Lucia are not seen at this size; frames labelled with who speaks would show it."
+    ]
    }
   ],
   "lines": {
@@ -12246,19 +12276,19 @@
     "false": 0
    },
    "P4": {
-    "faults": 11,
+    "faults": 13,
     "false": 0
    },
    "A1": {
-    "faults": 14,
+    "faults": 15,
     "false": 0
    },
    "P2": {
-    "faults": 9,
+    "faults": 13,
     "false": 0
    },
    "P5": {
-    "faults": 5,
+    "faults": 8,
     "false": 0
    },
    "P13": {
@@ -12274,11 +12304,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 5,
+    "faults": 6,
     "false": 1
    },
    "P1": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "O5": {
@@ -12286,11 +12316,11 @@
     "false": 0
    },
    "P3": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "O1": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "O2": {
@@ -12298,7 +12328,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "O3": {
@@ -12310,11 +12340,11 @@
     "false": 0
    },
    "S9": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "M2": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "M1": {
@@ -12330,11 +12360,11 @@
     "false": 0
    },
    "S1": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "O6": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "M4": {
@@ -12342,6 +12372,14 @@
     "false": 0
    },
    "M3": {
+    "faults": 1,
+    "false": 0
+   },
+   "O4": {
+    "faults": 1,
+    "false": 0
+   },
+   "S2": {
     "faults": 1,
     "false": 0
    }

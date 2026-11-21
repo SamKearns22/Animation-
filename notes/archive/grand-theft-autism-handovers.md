@@ -397,3 +397,27 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Branches named, not merged on purpose: freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story,
   freeze/protest-tiers are posted films' bookmarks (freeze.py tag), kept as they are.
 
+
+## Where things stand (21 Nov, chat 20, Opus high; Sam's Y given: chat 21 rebuilds shot 4)
+- Rules that bite next: 8 (no rebuild before Sam's Y), 74 (every beat acted as the acting rows say), 89 (the rebuilt
+  shot's clip gets a fresh critique before it is sent; the send gate refuses it otherwise).
+- Done: K2's missing head found (the figure guard stopped the drawing at the arm; the sheet showed the half body);
+  body check: every drawn person has a head (gallery 900 / Halo No-No / Milburn: 0 false flags; kittest
+  body_check_headless); refused views crossed out; LEONIDA print never backwards; K2, K3, K5 re-posed; two critique
+  hunts (round 3) fixed or named; leanout.at(t) on the acting beats: 149 frames clean, clear of the car. Pictures:
+  notes/shot4-case-study/leanout-sheet-v3.jpg, leanout-strip-v1-phone.jpg (sent to Sam). Case study section 12.
+- Next: chat 21, Opus high (building new): rebuild shot 4's Jason on leanout.at(t) in the film (the skeleton
+  drawn through the shot's camera, legs hidden by the car), with the acting rows' faces and the fix 3 events; body
+  check and car test every frame; a clip of shot 4 (no yes needed) after a fresh critique.
+- Needs Sam: nothing. Sam (21 Nov): "Y" to the pose sheet and move strip: rebuild shot 4 on this move.
+- Read: guides/job-packs.md Build; source/leanout.py MAP; the shot 4 acting rows and events in this file.
+- Open rule requests: none.
+- For Claude: critique round 3 hunt 2 was marked "fixed" though its faults were named (house style, guides): the
+  Checks line to Sam names them. Kittests failing before this chat and unchanged by it (11: pose_gallery,
+  lopsided_invented_only, turned_heads_for_anyone, round_page, people_from_a_description, places/moves_from_..,
+  facehouse_whole_head, outfit_every_view, focus_front_heads, watcher_catches_last_weeks_four). Watcher: saver BROKEN
+  03:29 20 Nov (old; chat 18's messages checked clean by dump) and 5 systems with no promise (freeze.py,
+  freeze_faults, humancheck sendgate, record_faults, tag_faults): named, not this job. Shots 5-8: a separate chain.
+- Branches named, not merged on purpose: freeze/* bookmarks of posted films.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 38.08% of 15%; forecast 88.6% (2026-11-21)

@@ -477,26 +477,28 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
   the acting rows at full size, with a picture for each beat.
 
-## Where things stand (21 Nov, chat 20, Opus high; Sam's Y given: chat 21 rebuilds shot 4)
-- Rules that bite next: 8 (no rebuild before Sam's Y), 74 (every beat acted as the acting rows say), 89 (the rebuilt
-  shot's clip gets a fresh critique before it is sent; the send gate refuses it otherwise).
-- Done: K2's missing head found (the figure guard stopped the drawing at the arm; the sheet showed the half body);
-  body check: every drawn person has a head (gallery 900 / Halo No-No / Milburn: 0 false flags; kittest
-  body_check_headless); refused views crossed out; LEONIDA print never backwards; K2, K3, K5 re-posed; two critique
-  hunts (round 3) fixed or named; leanout.at(t) on the acting beats: 149 frames clean, clear of the car. Pictures:
-  notes/shot4-case-study/leanout-sheet-v3.jpg, leanout-strip-v1-phone.jpg (sent to Sam). Case study section 12.
-- Next: chat 21, Opus high (building new): rebuild shot 4's Jason on leanout.at(t) in the film (the skeleton
-  drawn through the shot's camera, legs hidden by the car), with the acting rows' faces and the fix 3 events; body
-  check and car test every frame; a clip of shot 4 (no yes needed) after a fresh critique.
-- Needs Sam: nothing. Sam (21 Nov): "Y" to the pose sheet and move strip: rebuild shot 4 on this move.
-- Read: guides/job-packs.md Build; source/leanout.py MAP; the shot 4 acting rows and events in this file.
-- Open rule requests: none.
-- For Claude: critique round 3 hunt 2 was marked "fixed" though its faults were named (house style, guides): the
-  Checks line to Sam names them. Kittests failing before this chat and unchanged by it (11: pose_gallery,
-  lopsided_invented_only, turned_heads_for_anyone, round_page, people_from_a_description, places/moves_from_..,
-  facehouse_whole_head, outfit_every_view, focus_front_heads, watcher_catches_last_weeks_four). Watcher: saver BROKEN
-  03:29 20 Nov (old; chat 18's messages checked clean by dump) and 5 systems with no promise (freeze.py,
-  freeze_faults, humancheck sendgate, record_faults, tag_faults): named, not this job. Shots 5-8: a separate chain.
-- Branches named, not merged on purpose: freeze/* bookmarks of posted films.
+## Where things stand (21 Nov, chat 21, Opus high; shot 4 v6 built, critique hunt 1 recorded: chat 22 fixes)
+- Rules that bite next: 89 (hunt 2 on the fixed clip, then `critique.py fixed`, before it is sent), 74 (acting rows),
+  30 (the "stump" came back from the old camera: the camera is now chosen by measuring the gun on screen).
+- Done: Jason rebuilt on leanout.at in the moving car (shot 3's seated Jason is the same drawing); the car hides him in
+  8 cm pieces; the lead cruiser drops back to the approved aim; side-window camera keys B3/B5; pistol 1.5x; a flash on
+  every shot's drawing; cop hit (blood mist + spatter, slump, dead weight); acting faces; her ears/peek; Lucia glances.
+  Move check 149 frames clean; body check: Jason clean every frame; one cop glimpse named. Case study section 13.
+- Next: chat 22, Opus medium (a fix round from a clear plan): hunt 1's list (source/data/critique/grand-theft-autism/
+  r21-p1): (1) the hit at 2.85-3.3 s: push the lens in on the lead cruiser's windscreen so blood and slump read;
+  (2) B5 crash framed bigger, Jason smaller, his raised gun clear of his body (measure muzzle vs body on screen, as
+  chat 21's camera search); (3) a little life in the 3.5-4.55 hold (head turns from the flash, gun tracks). Name: flash
+  star and fireball (house look), car perspective, the cruiser-2 cop arm (4 drawings at 3.42 s). Render (20 min),
+  hunt 2, `critique.py fixed`, humancheck name + critiqued, send Sam the clip (no yes needed).
+- Needs Sam: nothing.
+- Read: guides/job-packs.md Build; source/leanout.py MAP (to_world, film_layer); source/gta_rehearse.py CAM4 and
+  jason_layer / lead_cop_lean / blood_items; the hunt's result.md.
+- Open rule requests: none (draft lesson 20 in the case study: put the film's camera through the pose sheet).
+- For Claude: v6 clip (held, 1 named fault) in chat 21's scratchpad is gone with it: re-render with
+  `gta_rehearse.py shot4 OUT --frames DIR`; `bodies shot4` (solid check) was still running at handover, unread.
+  Critique spec: source/data/critique-src/grand-theft-autism/v6-shot4-spec.json (round 21; hunt 2 = pack again).
+  `bodies shot4` (every frame): Jason clean; passers-by 128, 129 run through the crashed cruiser at 3.75-4.25 s (the
+  crash moved 4 m back with the cruiser's drop-back: their run must avoid it, crowd() in gta_rehearse); feet sunk 3-12 px:
+  persons 128-131, 51 (4.5 and 5.5 s). Fix in chat 22 with the list above.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 38.08% of 15%; forecast 88.6% (2026-11-21)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 40.3% of 15%; forecast 90.8% (2026-11-21)

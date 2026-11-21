@@ -1,0 +1,39 @@
+== critique, round 21 pass 1 (2026-11-21): 11 fault(s), 3 can't tell
+-- look.md --
+1: Tiny contact strip of two rows of red-car frames; timestamps illegible, mostly empty black panel.
+2: Red convertible chased by police car with blue lights; man leans out arm raised, yellow star flash.
+3: Same chase; man leans out, red burst at car, police car behind, street of pastel shops.
+4: Man in white vest foreground, orange explosion near a police car down a street, building left.
+5: Red convertible tilted, man leaning out, red-haired passenger and another inside, police car behind, pedestrians on pavement.
+-- result.md --
+## Faults
+FAULT O6 P2 [3, 4]: muzzle flash is a yellow cartoon star (P2); P3 blood is a tiny red dot; P4 fireball is a flat orange blob with no black smoke - effects do not suit the house style or read at phone size.
+FAULT S1 P3 [2, 4]: the action is tiny in the far distance (police car, driver hit, crash) while Jason or the car's body fills the frame; P4 shows Jason's shoulder and arm large and the crash a small blob; P3 shows no slumping driver or blood on the windscreen.
+FAULT S9 P4 [1]: no smoke at all, and no hydrant water jet or shop-front crash; the fire sits on the road, not in a shop front, so M5 damage is not shown either.
+FAULT A1 P3 [2]: cold look named the red mark as a burst, not blood on glass; the driver slumping cannot be seen.
+FAULT P6 P2 [3, 4]: no gun can be seen in Jason's raised hand (P2/P3); in P4 a black bar at the top is the only hint of the gun, and the hand is lost behind the body.
+FAULT P2 P2 [3]: panels 2 and 3 look almost the same pose, so the beat "just after the fourth shot" is not told by Jason; no feeling is readable on his face at phone size.
+FAULT O4 P4 [5]: Jason is out of scale against the car and street (huge torso beside a small police car and tiny pedestrians).
+FAULT P7 P5 [2, 3]: Jason's body does not sit in the open window; in P5 he is on the car's side above the door with no seat, lap or knees, and the car is tilted so it reads as if sliding.
+FAULT O1 P5 [2, 3, 4]: car body and perspective changes between panels: the car's shape and lane position differ, so the set and car do not match from shot to shot (S6).
+FAULT S2 P5 [2, 3]: street with pedestrians on the pavement but the police car is mid-road beside the kerb; P4 has no passers-by ducking.
+FAULT M2 P1 [2, 3, 4]: the strip has several near-identical frames between 4.33 and 5.33 s; the crash and the drop back look rushed or missing.
+
+CAN'T TELL P1 [2, 3, 5]: P1 hands on the gun and each shoulder are too small; a close full-size crop of Jason's arm at the shoulder would show it (P5 shoulder join).
+CAN'T TELL P3 [2, 3]: arm length and elbow bend for the extended arm; a full-size crop would show it.
+CAN'T TELL P12 [1]: the mouths of the woman and Lucia are not seen at this size; frames labelled with who speaks would show it.
+CAN'T TELL A4 [1]: no Hook Text frame is on the sheet.
+
+## Checked
+1-5
+
+## Cold look
+I named the strip only as tiny frames and could not read its times; the brief says a strip with time labels. I called the red mark a burst and the orange shape an explosion, but the brief says blood on glass and a fireball with black smoke: it does not read as either. I missed the driver slumping, hydrant, passers-by running, and Lucia (not visible in panels 2-4). I named a "yellow star flash", which is the O6 fault itself.
+
+## Not on the list
+1. Panel 1 strip is mostly black and unreadable at phone size; suggested line: "The strip fills the frame and its times and frames are readable."
+2. Lucia (the driver) is not seen in panels 2-4; suggested line: "Everyone the brief puts in the shot is in the panel."
+3. Jason's face turned away from the camera shows no expression; suggested line: "The face of the person acting is in view on the beat."
+4. Cropped faces and bodies at the frame edge (panels 2-5); suggested line: "No key person is cut by the frame edge."
+5. Camera tilt and lean in panel 5 makes the car look sliding; suggested line: "The horizon and car sit level unless the plan says tilt."
+
