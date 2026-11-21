@@ -97,6 +97,16 @@ def turns(path):
                 elif kind == 'assistant' and txt.strip():
                     out.append((e['created_at'][:19], 'claude', txt, []))
         return sorted(out)
+    failed = set()                     # status chat (21 Nov): chat 26's clip was refused by the permission check, yet
+    for ln in raw.splitlines():        # counted as sent and Sam was told "I sent you a short clip"
+        if '"tool_result"' in ln:
+            try:
+                for c in (json.loads(ln).get('message') or {}).get('content') or []:
+                    if isinstance(c, dict) and c.get('type') == 'tool_result' and (
+                            c.get('is_error') or re.search(r'denied|not sent|rejected', _text(c.get('content') or ''), re.I)):
+                        failed.add(c.get('tool_use_id'))
+            except (ValueError, AttributeError):
+                pass
     for ln in raw.splitlines():                                    # a chat record
         try:
             d = json.loads(ln)
@@ -113,7 +123,7 @@ def turns(path):
             for c in msg.get('content') or []:
                 if c.get('type') == 'text' and c['text'].strip():
                     out.append((t, 'claude', c['text'], []))
-                elif c.get('type') == 'tool_use' and c.get('name') == 'SendUserFile':
+                elif c.get('type') == 'tool_use' and c.get('name') == 'SendUserFile' and c.get('id') not in failed:
                     out.append((t, 'sent', '', [os.path.basename(f) for f in c['input'].get('files', [])]))
     return out
 
@@ -274,7 +284,7 @@ def check(tr, lines, old=None):
     for t, who, text, _ in tr:
         if who != 'claude':
             continue
-        for m in re.finditer(r'(?i)(?:clips?|sheet|animatic|picture)s?\s+sent\b[^.\n]*', text):
+        for m in re.finditer(r'(?i)(?:(?:clips?|sheet|animatic|picture)s?\b[^.\n]{0,30}?\s(?<!be )(?<!been )(?:is\s+|are\s+|was\s+)?(?<!be )sent\b|\b(?:sent|sending)\s+(?:you\s+)?(?:a\s+|the\s+|an\s+)?(?:short\s+|new\s+|quick\s+)?(?:clip|sheet|animatic|picture|video))[^.\n]*', text):
             files = re.findall(r'[\w.-]+\.(?:mp4|jpg|png|gif)', m.group(0))
             if any(x[1] == 'sent' for x in tr) is False or any(f not in sent for f in files):
                 faults.append(f'NOT SENT {t[11:16]}: "{m.group(0)[:80]}" (no such file was sent in this chat)')
@@ -333,6 +343,38 @@ def model_faults(film, notes=None):
         out.append('MODEL: the Next line gives Sonnet a fix or a build ("' + BUILDING.search(nxt).group(0) + '"): '
                    'Opus (medium for a fix from a clear plan) does that, then opens the Sonnet chat')
     return out
+
+
+ROUTINE_RUN = re.compile(r'python3\s+(-\S+\s+)*\S*(finish|preflight)\.py\b|python3\s+\S+\.py\s+(final|animatic)\b(?![^\n]*--span)')
+
+
+def routine_run_faults(rec):
+    """Status check (Sam, 21 Nov: "renders were not being handed off to Sonnet like you used to"). model_faults reads
+    only the Next line's words; nothing looked at what an Opus chat actually ran. Routine work (CLAUDE.md, Models by
+    stage: check sheet, animatic, finish.py, final render, sending) run in an Opus chat is a fault; clips
+    (`final OUT --small --span`) stay with the fix that needs them."""
+    if not rec or not os.path.exists(rec):
+        return []
+    model, hits = '', []
+    for ln in open(rec, encoding='utf-8', errors='replace'):
+        try:
+            m = json.loads(ln).get('message') or {}
+        except ValueError:
+            continue
+        if m.get('role') != 'assistant':
+            continue
+        model = m.get('model') or model
+        for b in m.get('content') or []:
+            if isinstance(b, dict) and b.get('type') == 'tool_use' and b.get('name') == 'Bash':
+                c = (b.get('input') or {}).get('command', '')
+                c = re.sub(r"<<-?\s*'?(\w+)'?.*?^\1$", '', c, flags=re.S | re.M)   # a script's text is not a command run
+                g = ROUTINE_RUN.search(c)
+                if g and 'opus' in model:
+                    hits.append(g.group(0))
+    if not hits:
+        return []
+    return [f'MODEL: this Opus chat ran routine work itself ({", ".join(sorted(set(hits)))}): the check sheet, animatic, '
+            'finish.py and final render belong to a Sonnet chat this one opens (CLAUDE.md, Models by stage)']
 
 
 def draft_faults(film, notes=None):
@@ -727,7 +769,7 @@ def main(argv):
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
                       + sentence_faults() + freeze_faults() + cost_faults(film, opt('--notes'))
-                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec)
+                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + routine_run_faults(rec)
                       + tag_faults(film, opt('--notes')) + record_faults(rec)
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
