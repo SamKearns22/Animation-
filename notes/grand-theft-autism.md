@@ -582,6 +582,7 @@ Done in chat 26 (not yet seen by Sam):
   Opener font comes from dafont.com, blocked in chat 26's network: shot 1 could not be drawn there. ARM_FOLD_NAMED is
   still set in grand_theft_autism.py (remove for the real checks). Checked-clip script: a loop with humancheck.Writer.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 49.03% of 15%; forecast 99.6% (2026-11-21)
   Handover check (chat 26): its 4 quick-check lines take gta_rehearse.py and leanout.py for films; they are this film's shot
   files (brief and notes here, people named in grand-theft-autism-people.txt): answered, nothing to add.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 51.78% of 15%; forecast 102.3% (2026-11-21)
