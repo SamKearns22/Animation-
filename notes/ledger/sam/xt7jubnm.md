@@ -10,3 +10,6 @@ Add to Claude MD near top
 
 Be honest. If something isn't currently within your capabilities, suggest what you would first need to learn instead of trying to use the wrong tools to make something happen.
 
+### 2026-11-21T13:23:22
+Shot 5 seems to be missing? The one which connects to 4 and takes them around the next corner? It was included in the shots 5-8 render
+
