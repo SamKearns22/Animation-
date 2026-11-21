@@ -11846,45 +11846,47 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.51,
+   "cost": 1.12,
    "src": "estimate",
    "sid": "session_01J1JB7VcJ5G5nT3goi87qZu",
-   "steps": 35,
-   "hist_k": 146,
+   "steps": 76,
+   "hist_k": 194,
    "kinds": {
-    "tool search": 23.6,
-    "whole-file .py read": 11.0,
-    "pictures": 0.9,
-    "other": 64.5
+    "tool search": 19.4,
+    "whole-file .py read": 6.9,
+    "renders": 1.1,
+    "pictures": 3.6,
+    "other": 69.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 26,
-    "whole-file .py read": 5,
+    "tool search": 45,
+    "whole-file .py read": 6,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
-    "pictures": 1,
-    "other": 3
+    "renders": 2,
+    "pictures": 6,
+    "other": 19
    },
    "split": {
-    "usd": 1.8736,
-    "total": 1.8736,
+    "usd": 4.0934,
+    "total": 4.0934,
     "floor_k": 82,
     "blocks": {
-     "start-up floor": 34.9,
-     "Claude's words": 28.9,
-     "new writes": 27.1,
-     "carried history": 9.1
+     "start-up floor": 30.9,
+     "Claude's words": 27.1,
+     "new writes": 21.7,
+     "carried history": 20.3
     },
     "origins": {
-     "Claude's words": 39.9,
-     "start-up floor": 34.9,
-     "result: tool search": 19.0,
-     "messages and reminders": 3.1,
-     "result: pictures": 1.1,
-     "result: whole-file .py read": 1.0,
-     "result: other": 0.9
+     "Claude's words": 43.0,
+     "start-up floor": 30.9,
+     "result: tool search": 16.8,
+     "messages and reminders": 3.7,
+     "result: pictures": 2.9,
+     "result: other": 1.4,
+     "result: whole-file .py read": 1.1,
+     "result: renders": 0.2
     },
     "leftover": 0.0
    },
@@ -11896,35 +11898,35 @@
      [
       "source/gta_rehearse.py",
       5.8,
-      0.0684
+      0.1113
      ],
      [
       "source/critique.py",
       1.4,
-      0.0175
+      0.0277
      ],
      [
       "source/viewchecks.py",
       0.5,
-      0.006
+      0.0099
      ],
      [
       "source/views.py",
       0.4,
-      0.0045
+      0.0076
      ],
      [
       "source/data/critique/grand-theft-autism/r21-p1/result.md",
       0.1,
-      0.0017
+      0.0027
      ],
      [
       "guides/job-packs.md",
       0.1,
-      0.0017
+      0.0027
      ]
     ],
-    "base_pct": 27.0
+    "base_pct": 27.3
    },
    "search": {
     "show": 0,
@@ -11932,14 +11934,16 @@
      "no show": 0
     },
     "other": {
-     "other": 4,
+     "other": 8,
      "shared:branches.py": 1,
-     "shared:handover.py": 2,
+     "shared:handover.py": 5,
      "guides": 1,
      "shared:critique.py": 2,
-     "shared:gta_rehearse.py": 12,
+     "shared:gta_rehearse.py": 14,
      "shared:views.py": 1,
-     "shared:leanout.py": 3
+     "shared:leanout.py": 9,
+     "film notes": 3,
+     "shared:watcher.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -12150,6 +12154,158 @@
       "other",
       "",
       "python3 -c \" import sys;sys.path.insert(0,'source') import gta_rehearse as R, le",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/leanout.py",
+      "git status --short && git add source/gta_rehearse.py source/leanout.py && git co",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git rebase origin/claude/c",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "sed -n 64,100p source/leanout.py; sed -n 237,275p source/leanout.py; sed -n 295,",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "^SILL\\|^SEAT",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "HAND_R",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py source/gta_rehearse.py",
+      "0.96, 1.07",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "^def _cover",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py source/gta_rehearse.py notes/shot4-case-study",
+      "git add -A source/leanout.py source/gta_rehearse.py notes/shot4-case-study && gi",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "",
+      "gta_rehearse.py shot4 $D",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "saver missed\\|message saver",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "named\\|Named",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/watcher.py",
+      "def broken\\|ack\\|named",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "ID\\|list",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "film notes",
+      "notes/logs/broken.md",
+      "cat notes/logs/broken.md | tail -5",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "log\\b\\|log ",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "notes/ledger/sam/ notes/ledger/sam",
+      "ls notes/ledger/sam/ | grep -i b6dc 2>/dev/null; ls -t notes/ledger/sam | head -",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "SHOT4_LEN =",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "other",
+      "",
+      "until [ -s /tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eee",
       ""
      ]
     ]
