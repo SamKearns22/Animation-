@@ -15287,6 +15287,855 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-21",
+   "chat": "7a739e72",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.19,
+   "src": "estimate",
+   "sid": "session_01GznaAUXaMVpNbxdUVmwY7a",
+   "steps": 108,
+   "hist_k": 265,
+   "kinds": {
+    "film-file search": 0.3,
+    "tool search": 31.4,
+    "page.py": 0.2,
+    "routine": 0.3,
+    "renders": 1.8,
+    "pictures": 1.9,
+    "other": 64.1
+   },
+   "calls": {
+    "film-file search": 2,
+    "tool search": 87,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 1,
+    "renders": 4,
+    "pictures": 5,
+    "other": 9
+   },
+   "split": {
+    "usd": 7.8505,
+    "total": 7.8505,
+    "floor_k": 95,
+    "blocks": {
+     "start-up floor": 33.1,
+     "Claude's words": 26.2,
+     "carried history": 23.3,
+     "new writes": 17.3
+    },
+    "origins": {
+     "Claude's words": 44.6,
+     "start-up floor": 33.1,
+     "result: tool search": 16.7,
+     "messages and reminders": 2.5,
+     "result: pictures": 2.4,
+     "result: film-file search": 0.3,
+     "result: renders": 0.2,
+     "result: other": 0.2,
+     "result: page.py": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 95,
+    "work_step": 25,
+    "work_pct": 0.5,
+    "reads": [
+     [
+      "source/gta_rehearse.py",
+      2.9,
+      0.0738
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      2.2,
+      0.0582
+     ],
+     [
+      "source/humancheck.py",
+      1.4,
+      0.0346
+     ],
+     [
+      "source/leanout.py",
+      0.9,
+      0.0223
+     ],
+     [
+      "source/cutmatch.py",
+      0.8,
+      0.0197
+     ],
+     [
+      "source/lying_flat.py",
+      0.7,
+      0.0156
+     ],
+     [
+      "source/gta_film.py",
+      0.4,
+      0.0113
+     ],
+     [
+      "source/views.py",
+      0.3,
+      0.0064
+     ],
+     [
+      "source/page.py",
+      0.2,
+      0.004
+     ]
+    ],
+    "base_pct": 23.4
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 1,
+     "miss": 0,
+     "after show": 1
+    },
+    "other": {
+     "other": 23,
+     "shared:handover.py": 2,
+     "film notes": 7,
+     "guides": 1,
+     "shared:cutmatch.py": 1,
+     "shared:gta_rehearse.py": 19,
+     "shared:gta_film.py": 2,
+     "shared:humancheck.py": 7,
+     "shared:lying_flat.py": 2,
+     "shared:sets.py": 1,
+     "shared:views.py": 6,
+     "shared:leanout.py": 1,
+     "shared:kittests.py": 7,
+     "shared:critique.py": 8
+    },
+    "ticked": 6,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch origin claud",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git checkout -",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^## ",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 505,640p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md guides/job-packs.md",
+      "^| *24 \\|^24\\.\\|rule 24\\|Rule 24",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:cutmatch.py",
+      "source/cutmatch.py",
+      "gta|leanout|cutmatch|bodycheck|human|layer",
+      ""
+     ],
+     [
+      6,
+      "film",
+      "before show",
+      "source/gta_rehearse.py source/leanout.py source/gta_shots58.py source/grand_thef",
+      "CAM4\\|def cam\\|WOB\\b\\|^WOB",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/leanout.py source/gta_film.py",
+      "WOB *=",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:gta_film.py",
+      "source/gta_film.py",
+      "sed -n 1,80p source/gta_film.py",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:gta_film.py",
+      "source/gta_film.py",
+      "timeout 120 python3 source/gta_film.py 2>&1 | tail -12",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "record\\[",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 1700,1800p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "def jason_layer",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 1159,1192p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/leanout.py",
+      "^_JN",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sed -n 1,70p source/humancheck.py; wc -l source/humancheck.py",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py source/humancheck.py",
+      "HC_HOOK\\[0\\](",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "def yaw_seen",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:sets.py",
+      "source/sets.py source/lying_flat.py",
+      "class Cam",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "HC_HOOK\\[0\\](",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "class Writer",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "^$",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "def \\|j\\[\\|j =\\|ox\\|oy\\|anchor",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:views.py",
+      "source/*.py source/views.py",
+      "^FIG_H\\|FIG_H =",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:views.py",
+      "source/views.py source/humancheck.py",
+      "def _limbs",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "share = e",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "^$",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "def person_cached",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "timeout 900 python3 /tmp/claude-0/-home-user-Animation-/7a739e72-684f-53b2-ac2f-",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "^S_REF",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "^$",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 418,456p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "^TIMES\\|^def at\\|^def film_layer",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "",
+      ")\nEOF\ntimeout 300 python3 /tmp/claude-0/-home-user-Animation-/7a739e72-684f-53b2",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "^SHOP4\\|^KERB\\|^CURB\\|^LANE\\|^ROAD\\|def tulip4",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "^PEOPLE4\\|^def crowd\\|^V4\\b\\|^V4 =",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "^def _crowd",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "^IMPACT\\|^FIREBALL\\|^CRASH_Z\\|^HYDRANT\\b\\|^HYDRANT =\\|IMPACT = \\|HYDRANT = ",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "def fx_items",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "huh",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "^$",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "timeout 200 python3 -c \" import sys; sys.path.insert(0,'source') import gta_rehe",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "^u",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "6.45, (3.00\\|6.85, (3.00",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "humancheck\\|^def kt_\\|^TESTS\\|def test_",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 3505,3575p source/kittests.py; sed -n 18,40p source/kittests.py",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      "D=/tmp/claude-0/-home-user-Animation-/7a739e72-684f-53b2-ac2f-d423f9a291fa/scrat",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "^done",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n 826,905p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:views.py",
+      "source/views.py source/hands*.py",
+      "def arm_to",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 141,148p source/views.py",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py'; s=open(p).read() old=\"\"\" F = (math",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "other",
+      "",
+      "^done",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "^done",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      ")\ns.save(",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/*.py",
+      ",\n",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py'; s=open(p).read() old='''PEOPLE4 = ",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "",
+      "^u",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "^done",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "",
+      "crossed|limb|order",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "folded arms on",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 -c \" import sys; sys.path.insert(0,'source') import humanche",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "python3 - <<'EOF' p='source/humancheck.py'; s=open(p).read() old=\"\"\" if j.get('f",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "(timeout 900 python3 source/kittests.py body_check_back_view 2>&1 | tail -3 &) ;",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "timeout 600 python3 -c \" import sys; sys.path.insert(0,'source') import humanche",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "]   # chat 27: version 4",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "FAIL|PASS",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "]   # chat 27: version 4",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "other",
+      "source/*.py",
+      "\\-\\-span",
+      ""
+     ],
+     [
+      81,
+      "film",
+      "after show",
+      "source/grand_theft_autism.py",
+      "final\\|span\\|clip\\|python3",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3\\|pack",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "other",
+      "notes/critiques/ notes/critiques",
+      "gta\\|grand\\|r26",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "",
+      "r26-p1",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:critique.py",
+      "notes/ledger/grand-theft-autism.json source/critique.py",
+      "spec\\|json\\|frames\\|video",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "other",
+      "source/data/critique/grand-theft-autism/ source/data/critique/grand-theft-autism",
+      "ls source/data/critique/grand-theft-autism/ | tail -5; ls source/data/critique/g",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "sed -n 1,30p source/critique.py",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "def pack",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "^PARTS",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      ",",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "def closeups",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/grand-theft-autism/r27-p1 source/data/critique/grand-theft-",
+      "rm -rf source/data/critique/grand-theft-autism/r27-p1 source/data/critique/grand",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/archive/grand-theft-autism-handovers.md notes/",
+      "huh",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "source/data/critique/grand-theft-autism/r27-p1",
+      "FAULT|CAN'T",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py",
+      "sed -i '1,3s/.*//' story/status.md 2>/dev/null; python3 - <<'EOF' p='story/statu",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "echo \" Handover check (chat 27): its 2 quick-check lines take gta_rehearse.py fo",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "other",
+      "",
+      "^M \\|^A ",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 612,626p notes/grand-theft-autism.md | cut -c1-200; git diff HEAD...origi",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "shared:kittests.py",
+      "notes/grand-theft-autism.md notes/logs/handover-end.log source/kittests.py",
+      "PASS|FAIL",
+      ""
+     ]
+    ]
+   }
   }
  ],
  "checks": {},
