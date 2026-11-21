@@ -47,3 +47,6 @@ That is the exact mistake your first rule in CLAUDE.md warns about.
 
 Then why ignore it?
 
+### 2026-11-21T14:55:23
+Okay, thank you. Because we are so short on usage, draw the pistol and restart the render, override checks.
+
