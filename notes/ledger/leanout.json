@@ -1,0 +1,16 @@
+{
+ "film": "leanout",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "quick_checks": [
+  {
+   "at": "2026-11-21T12:28+00:00",
+   "faults": 2
+  },
+  {
+   "at": "2026-11-21T12:28+00:00",
+   "faults": 2
+  }
+ ]
+}

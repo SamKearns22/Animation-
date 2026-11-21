@@ -542,3 +542,15 @@ The other notes:
 - Lesson (draft 23): a fix is only a fix when the thing Sam saw is measured before and after; three repeats in
   version 7 were each a fix to a nearby cause (grip points, joint places, a forward slump) that left his picture as
   it was.
+- Sam (21 Nov, on the version 8 frame sheets, render stopped): "Stop render. Shots 0.92-2:42 have the exact same arm
+  problem." Third time for the arm (rule 30). Why chat 23's fix failed: it treated the sausage as a size fault (a
+  near arm drawn too long for its thickness) and drew near arms bigger; that changes nothing in these frames (the
+  camera is far enough that the scale moved 9-18%), and the shape is the same: a thick even tube with round ends,
+  coming round his back from behind his head with no shoulder, across the window. The new "stretched" measure was
+  graded on the drawing AFTER that same scaling, so it passed by construction: a check that marks its own fix.
+  And chat 23's own test still showed "little visible difference" and went on anyway (Seeing like Sam, rule 1).
+  What the next chat must start from: the arm's drawn SHAPE from these cameras (the house sleeve tube seen across
+  his back), not its size; the camera/pose choice for 0.9-2.4 s (Seeing like Sam, rule 4) before any drawing fix;
+  Sam's frame sheets (v8-frames/) as the before picture. Kept from chat 23 (not seen faulty): Lucia's grip, the
+  bonnet cover, the arm-edge car check and the raised-gun pose, the wobble, the struck hydrant, blood on the glass,
+  the cop's sideways slump (stills sent; Sam has not judged them yet).

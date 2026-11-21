@@ -1,3 +1,3 @@
-Grand Theft Autism: shot 4 version 7 sent to Sam (chat 22): free hand on the door top, push-in on the cop's hit, crash framed bigger.
-Two fresh critiques; the blood and the push-in fixed after the second; the hit and crash still read small (named).
-Next: Sam's notes on the clip, a notes round on Opus medium in this chat.
+Grand Theft Autism, 21 Nov (chat 23): shot 4 v8 fixes in; Sam stopped the render: the backwards arm (0.9-2.4 s) is still wrong, third time.
+Next: chat 24 (Opus high) rebuilds that arm from the camera and pose first, then renders the clip.
+Needs Sam: a Y/N on the note 10 proposal, with the clip.

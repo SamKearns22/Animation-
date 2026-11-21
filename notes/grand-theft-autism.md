@@ -483,7 +483,7 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   left and right map once she is drawn facing the camera; test before changing.
 - [x] 2. "We can see through the bonnet to Jason when he moves" (shot 3/4 start: his body shows through the bonnet).
 - [x] 3. "Jason clips through two parts of the car as he moves" (pictures: arm through the door frame and pillar).
-- [x] 4. "The backwards arm is a gross distended sausage still" (REPEAT of chat 16 notes 3, 6, 7, 15).
+- [ ] 4. "The backwards arm is a gross distended sausage still" (THIRD time: chat 23's fix failed, Sam on the v8 frame sheets: "Shots 0.92-2:42 have the exact same arm problem"; case study section 16, last point) (REPEAT of chat 16 notes 3, 6, 7, 15).
 - [x] 5. "Blood splatter is a 2D effect that doesn't turn with the windscreen, is always horizontal on to the camera."
 - [x] 6. "No hydrant strike, there's no physicality, it should be hit and smash forward, like any object hit by a car."
 - [x] 7. "Hydrant water effect clips through car."
@@ -502,24 +502,24 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - Chat 23: all ten done in version 8 (each cause, fix and check in the case study, section 16); note 10 through
   the proposal route (notes/proposals/teach-recognise.md).
 
-## Where things stand (21 Nov, chat 22, Opus medium; shot 4 v7 sent to Sam, waiting for his notes)
-- Rules that bite next: 30 (a note he gives again: find why the first fix failed first), 89 (round 22 has one hunt
-  left), 74 (acting rows before any animatic).
-- Done: hunt 1's list (push-in on the hit, crash framed bigger with Jason smaller, a flinch and nod in the hold,
-  passers-by clear of the crashed cruiser); Sam's door note (free hand ON the door top, the car check now tests it);
-  hunt 2's fixes (blood over the cop's head, the push-in keeps the cruiser in frame). Clip v7 sent (3.3 MB).
-- Next: Sam's v7 notes are in (list above, 3 repeats); chat 23 on
-  Opus high (new building: a hydrant that is struck, a weaving cruiser, blood that turns with the glass): notes round. Open from round 22's hunt 1
-  (taste, named in the message): the hit still reads small at 3.0-3.1 s; the crash reads weakly against the shop; his
-  raised gun is hard to see at 3.75 s; faces small in the wide frames; flash, smoke, fireball are the house look.
-- Needs Sam: nothing until chat 23 brings the proposal on note 10.
-- Read: guides/job-packs.md Notes round; notes/shot4-case-study/shot4-case-study.md section 14.
-- Open rule requests: none (draft lessons 20 and 21 in the case study).
-- For Claude: CAM4 keys 2.85-4.55 and blood_items, crowd()/_in_path (gta_rehearse); leanout K2-K4 'L' hands, the
-  car_faults hand test, _cover edge smoothing. Round 22 pack r22-p1 recorded (hunt 1); hunt 2 = pack again after
-  fixes. Body flags named: 3.17 s Jason off-frame; 3.50 s cruiser-2 driver glimpse. bodies shot4: passers-by clean of
-  the cruiser; feet "sunk" 7-20 px on runners' long strides (front foot nearer the lens), looked fine in frames.
-  Branches freeze/halo-no-no, freeze/milburn, freeze/milburn+milburn-story, freeze/protest-tiers: other films'
-  frozen copies, kept off the main line on purpose; not this film's work.
+## Where things stand (21 Nov, chat 23, Opus high; render stopped by Sam on the arm)
+- Rules that bite next: 30 (the arm is now a THIRD repeat: why chat 23's fix failed is in the case study, section
+  16, last point), Seeing like Sam 1 and 4 (look at full size; a view the drawing can't carry is a fault), 89.
+- Done: v7 notes 1-3 and 5-10 fixed in code (Lucia's grip, the bonnet, the arm-edge car check, blood on the glass,
+  the struck hydrant, water kept out of the car, the cop's sideways slump, the 2 s weave; shot 4 now 8.2 s); test
+  stills and the 0-2.4 s frame sheets sent. Note 10 proposal judged (teach-recognise: option 1 picked blind).
+- Next: chat 24 on Opus high (new build): the backwards arm, 0.9-2.4 s: start from the camera and pose (Seeing like
+  Sam 4), then the drawn shape; full-size look at every frame of it before any clip; then render the clip
+  (about 40 min, 134 drawings), round 23 critique (spec v9-shot4, mkspec in the case study), send the clip.
+- Needs Sam: his Y/N on note 10's two options (the clip message brings them; `propose.py show teach-recognise`).
+- Read: guides/job-packs.md Notes round; CLAUDE.md "Seeing like Sam"; case study section 16.
+- Open rule requests: none (draft lesson 23 in the case study).
+- For Claude: lying_flat._arm PERSP (near limbs drawn bigger: did not fix it, keep or drop); humancheck _crossed,
+  _limbs (its stretch test is graded after PERSP: re-base on the unscaled drawing); leanout _cover IN_CABIN seat
+  mask, car_faults ARM_R edge test, K3 moved; gta_rehearse WOB, _hydrant_spot, hydrant_flight/body, lead_cop_roll,
+  person_cached(roll=), CAM4 weave keys; R.SHOT4_LEN 8.2 moves shots 5-8's T5 (their chain should know).
+  Frames 0-65 of the stopped v8 render: scratchpad only (lost with this chat).
+  Handover check's 4 QUICK CHECK lines (gta_rehearse, leanout: no notes file, no SHOT_MARKS): they are this film's
+  shot code, not films; named, not fixed (the film's notes are grand-theft-autism.md).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 42.84% of 15%; forecast 93.4% (2026-11-21)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 47.1% of 15%; forecast 97.6% (2026-11-21)
