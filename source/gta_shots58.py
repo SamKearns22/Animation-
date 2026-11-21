@@ -35,8 +35,14 @@ import gta_cast as GC            # noqa: E402
 B, V, PC, FX = R.B, R.V, R.PC, R.FX
 smooth, bump = R.smooth, R.bump
 
-T5 = R.SHOT4_LEN                 # world time shot 5 starts (shot 4's clock)
-ZC, R_T = 116.0, 6.0             # the T junction's middle (z) and the corner's radius
+# Shots 5-8 keep their own clock u (shot 5 starts at u = 6.2, every timing below is on it). Shot 4 is now longer (8.2 s,
+# chat 23), so shot 5 starts SH seconds later on shot 4's clock and the car is S_OFF metres further up the street:
+# the corner moves up the street by S_OFF and everything of shot 4's world is read at u + SH (21 Nov, Sam: shot 5 had
+# vanished: the braking and the corner were timed for the old, shorter shot 4).
+T5 = 6.2
+SH = R.SHOT4_LEN - T5
+S_OFF = R.V4 * SH
+ZC, R_T = 116.0 + S_OFF, 6.0             # the T junction's middle (z) and the corner's radius
 S0 = ZC - 5.0 - R_T              # path distance (= z on A) where the arc starts
 ARC = math.pi / 2 * R_T
 
@@ -120,7 +126,7 @@ def _speed(t):
 
 def _s_table():
     dt = 1 / 480.0
-    ts, ss = [T5], [R.V4 * T5]
+    ts, ss = [T5], [R.V4 * T5 + S_OFF]
     while ts[-1] < 23.5:
         ts.append(ts[-1] + dt)
         ss.append(ss[-1] + _speed(ts[-1]) * dt)
@@ -132,7 +138,7 @@ _TS, _SS = _s_table()
 
 def s_at(t):
     if t <= T5:
-        return R.V4 * t
+        return R.V4 * t + S_OFF
     return float(np.interp(t, _TS, _SS))
 
 
@@ -163,7 +169,7 @@ def throw(t):
 def tulip58(t):
     s = s_at(t)
     x, z, head = path(s)
-    wob = 0.10 * math.sin(t * 1.7) * (1 - smooth((t - T5) / 0.4))    # shot 4's weave, settling as she brakes
+    wob = 0.10 * math.sin((t + SH) * 1.7) * (1 - smooth((t - T5) / 0.4))    # shot 4's weave, settling as she brakes
     x += wob
     w = wheel58(t)
     th = throw(t)
@@ -185,8 +191,8 @@ def gap(t, i):
 
 def chaser58(t, i):
     if t <= T5:
-        return R.chaser_at(t, i)
-    c0 = R.chaser_at(T5, i)
+        return R.chaser_at(t + SH, i)
+    c0 = R.chaser_at(T5 + SH, i)
     off0 = R.LANE4 - c0.pos[0]                       # in the inner lane after swerving round the crash: back out
     s = s_at(t) - gap(t, i)
     x, z, head = path(s)
@@ -318,6 +324,16 @@ LINE6 = line(19.20, [(.06, 'MBP'), (.14, 'AI'), (.08, 'etc'), (.10, 'E'), (.06, 
                      (.06, 'etc'), (.08, 'E'), (.06, 'etc'), (.06, 'etc'), (.12, 'AI'), (.06, 'etc'), (.10, 'O'),
                      (.04, 'etc'), (.04, 'L'), (.08, 'E'), (.06, 'etc'), (.06, 'E'), (.06, 'etc'), (.10, 'E'),
                      (.06, 'etc')])
+def fit(ln, real):
+    """The mouths stretched to the length of Sam's recording of the line (21 Nov), start unchanged."""
+    k = real / ln[1][-1][0]
+    return ln[0], [(u * k, v) for u, v in ln[1]]
+
+
+LINE3 = fit(LINE3, 1.20)     # his takes: "Yeah, I didn't like that." 1.20 s
+LINE4 = fit(LINE4, 2.24)     # Lucia 2.24 s
+LINE5 = fit(LINE5, 5.59)     # Jason 5.59 s (three phrases, two pauses)
+LINE6 = fit(LINE6, 1.80)     # "My safe food is nitroglycerin." 1.80 s
 TOLD = (word_at(LINE5, 1), word_at(LINE5, 6))         # "told you": his eyes shut
 HYPER = word_at(LINE5, 10)                            # "hyperfixation": the free hand opens
 EXPLO = word_at(LINE5, 28)                            # "explosives": he counts the point
@@ -533,7 +549,7 @@ def _world58(t, cam_fn, record=None):
     FX.SIZE = (1080 * B.SS, 1920 * B.SS)
     img = B.canvas((240, 170, 170))
     tul = tulip58(t)
-    lead = R.lead_at(t)
+    lead = R.lead_at(t + SH)
     chasers = [chaser58(t, 1), chaser58(t, 2)]
     cam = cam_fn(t, tul)
     cb = camB(cam)
@@ -541,8 +557,8 @@ def _world58(t, cam_fn, record=None):
     ground58(img, cam, cb, p)
     # shops of both roads, far to near (B's in its own frame: same depth either way)
     hole = None
-    if R.IMPACT and t >= R.IMPACT[0]:
-        hole = (R.IMPACT[1][1] + 2.6 * math.cos(math.radians(R.IMPACT[2])), t - R.IMPACT[0])
+    if R.IMPACT and t + SH >= R.IMPACT[0]:
+        hole = (R.IMPACT[1][1] + 2.6 * math.cos(math.radians(R.IMPACT[2])), t + SH - R.IMPACT[0])
     shops = []
     for b, c in [(b, cam) for b in BLOCKS_A] + [(b, cb) for b in BLOCKS_B]:
         if c.depth((b['side'] * R.SHOP4, 1.0, b['z0'])) < -2 and c.depth((b['side'] * R.SHOP4, 1.0, b['z1'])) < -2:
@@ -559,7 +575,7 @@ def _world58(t, cam_fn, record=None):
         for pp in people:
             if c is cb and abs(pp['at'][1] - c.pos[2]) > 90:
                 continue
-            x, z, F_, j_, hd = crowd_fn(pp, t)
+            x, z, F_, j_, hd = crowd_fn(pp, t + SH if crowd_fn is R.crowd else t)
             d = c.depth((x, 1.0, z))
             wq = to_world((x, 1.0, z)) if c is cb else (x, 1.0, z)
             if 0.2 < d < 70 and seen_round_corner(cam, wq):
@@ -590,13 +606,13 @@ def _world58(t, cam_fn, record=None):
         d = cam.depth((hx, 0.5, hz))
         if seen_round_corner(cam, (hx, 0.5, hz)):
             items.append(('hydrant', d, lambda im: R.hydrant_stump(im, cam, S.pen(im), (hx, hz))))
-    for k, (c, ins) in enumerate(((lead, R.cop_inside(0, t, True)), (chasers[0], R.cop_inside(1, t)), (chasers[1], R.cop_inside(2, t)))):
+    for k, (c, ins) in enumerate(((lead, R.cop_inside(0, t + SH, True)), (chasers[0], R.cop_inside(1, t + SH)), (chasers[1], R.cop_inside(2, t + SH)))):
         d = cam.depth((c.pos[0], 0.8, c.pos[1]))
         if d > 0.5 and seen_round_corner(cam, (c.pos[0], 0.8, c.pos[1])):
             items.append(('lead cruiser' if k == 0 else f'cruiser {k + 1}', d,
                           lambda im, c=c, ins=ins: G.draw_car(im, cam, c, t=t, inside=ins)))
     fx_seen = seen_round_corner(cam, (lead.pos[0], 1.0, lead.pos[1]))   # the crash's fire, smoke and jet: all at the crash
-    items += [(f'effect {k}', d, fn) for k, (d, fn) in enumerate(R.fx_items(cam, t, lead)) if fx_seen]
+    items += [(f'effect {k}', d, fn) for k, (d, fn) in enumerate(R.fx_items(cam, t + SH, lead)) if fx_seen]
     d_t = cam.depth((tul.pos[0], 0.8, tul.pos[1]))
     seat_pts = []
     tinf = {}
@@ -612,7 +628,7 @@ def _world58(t, cam_fn, record=None):
         tinf['may_touch'] = ('tulip (solid)',)            # seated people are in the cabin: their own car never counts
         record += items
         record += solids58(cam, [('lead cruiser', lead)] + [(f'cruiser {k + 2}', c) for k, c in enumerate(chasers)])
-    R.light_wash(img, cam, [lead] + chasers, t)
+    R.light_wash(img, cam, [lead] + chasers, t + SH)
     return img
 
 

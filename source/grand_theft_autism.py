@@ -27,8 +27,19 @@ SONG_FROM = 36.48             # his whole song (21 Nov): 0.5 s before the chorus
 SONG_LEN = LENGTH
 
 
+# what is said, on the film's clock (the recordings' speech starts; shot 5-8 times are the mouths' starts)
+CAPS = [(7.30, 10.24, "This is actually a really difficult sensory experience."),
+        (12.10, 12.95, "It's very loud."),
+        (23.55, 24.75, "Yeah, I didn't like that."),
+        (25.75, 27.99, "You want to tell me why we brought her again?"),
+        (28.25, 28.81, "I told you."),
+        (29.25, 31.74, "Her hyperfixation is homemade explosives."),
+        (32.17, 33.84, "This job wouldn't have worked without her."),
+        (35.30, 37.10, "My safe food is nitroglycerin.")]
+
+
 def caption_at(t):
-    return None
+    return next((c for a, b, c in CAPS if a <= t < b), None)
 
 
 def shot_of(t):
@@ -62,14 +73,49 @@ def main():
     mix(silent, out)
 
 
+UP = '/root/.claude/uploads/77034bac-879c-5e0d-ae1f-2f0f01232e9c/'
+VOICES = [  # (file, speech starts in file, speech ends, film time it starts)
+    ('Autistic_1.m4a', 0.93, 3.87, 7.30), ('Autistic_2.m4a', 0.80, 1.65, 12.10),
+    ('Autistic_3.m4a', 0.80, 2.00, 23.55), ('Lucia.m4a', 0.87, 3.11, 25.75),
+    ('Jason.m4a', 1.40, 6.99, 28.25), ('Autistic_4.m4a', 0.79, 2.59, 35.30)]
+
+
+def _find(key):
+    import glob
+    return glob.glob(UP + '*' + key + '*')[0]
+
+
 def mix(silent, out):
-    open_end = F.SHOTS[0][2]                       # the opening's end (7.0 s on the film's clock)
-    fade_at = SONG_LEN - 0.6
-    vol = (f"volume='if(lt(t,{open_end}),1,if(lt(t,{open_end + 0.6}),1-(1-0.16)*(t-{open_end})/0.6,0.16))':eval=frame,"
-           f"afade=t=out:st={fade_at}:d=0.6")
-    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', silent, '-ss', str(SONG_FROM), '-t', str(SONG_LEN), '-i', SONG,
-                    '-filter_complex', f'[1:a]{vol},apad=whole_dur={LENGTH}[a]', '-map', '0:v', '-map', '[a]', '-c:v',
-                    'copy', '-c:a', 'aac', '-b:a', '160k', '-t', str(LENGTH), out], check=True)
+    """The song (radio level after the opening), the voices, the sound effects Sam named: siren, pistol, glass at
+    double speed, swerve and crash."""
+    end = F.SHOTS[0][2]
+    ins, parts, k = ['-i', silent], [], 1
+    song = (f"volume='if(lt(t,{end}),1,if(lt(t,{end + 0.6}),1-(1-0.16)*(t-{end})/0.6,0.16))':eval=frame,"
+            f"afade=t=out:st={LENGTH - 0.6}:d=0.6")
+    ins += ['-ss', str(SONG_FROM), '-t', str(LENGTH), '-i', SONG]
+    parts.append(f'[1:a]{song}[m]')
+    labels = ['[m]']
+    ev = []   # (file key, in-start, length, film time, volume, speed)
+    for f, a, b, at in VOICES:
+        ev.append((f.split('.')[0] + '.m4a', a - 0.04, b - a + 0.08, at - 0.04, 1.0, 1.0))
+    for ts in (1.95, 2.30, 2.62, 2.92):
+        ev.append(('pistol', 0.0, 0.7, 14.1 + ts, 0.55, 1.0))
+    ev.append(('glass-breaking', 0.0, 3.12, 14.1 + 2.30, 0.6, 2.0))        # double speed, Sam
+    ev.append(('car-crash', 0.0, 5.09, 14.1 + 5.504 - 0.5, 0.8, 1.0))
+    for n, (key, a, ln, at, vol, sp) in enumerate(ev):
+        ins += ['-ss', f'{a:.3f}', '-t', f'{ln:.3f}', '-i', _find(key)]
+        k += 1
+        ms = int(at * 1000)
+        parts.append(f'[{k}:a]atempo={sp},volume={vol},adelay={ms}|{ms}[e{n}]')
+        labels.append(f'[e{n}]')
+    ins += ['-stream_loop', '-1', '-i', _find('police-siren')]
+    k += 1
+    sir = int(F.SHOTS[1][1] * 1000)
+    parts.append(f'[{k}:a]atrim=0:{LENGTH - F.SHOTS[1][1]:.2f},volume=0.2,afade=t=in:d=1.0,adelay={sir}|{sir}[sir]')
+    labels.append('[sir]')
+    parts.append(''.join(labels) + f'amix=inputs={len(labels)}:duration=longest:normalize=0,apad=whole_dur={LENGTH}[a]')
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', ';'.join(parts), '-map', '0:v', '-map', '[a]',
+                    '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-t', str(LENGTH), out], check=True)
     if silent.endswith('.silent.mp4'):
         os.remove(silent)
     print('done', out, round(os.path.getsize(out) / 1e6, 2), 'MB')

@@ -6,7 +6,7 @@
 
 # jason: Jason (Sam's key art, 20 Nov: buzzed dark hair, a very light fade of stubble (Sam, chat 9), hard frown; a cream LEONIDA vest, a thin silver chain, camo cargo shorts, trainers). Build measured from the game's art (notes, "Body shapes measured").
 body: 1.85 m, shoulders 178, head 70 x 94, hem 450, build man, arms 36 muscle, legs 1.08
-skin: 206 150 112 | hair: crop, 40 32 26, buzz
+skin: 236 196 168 | hair: crop, 40 32 26, buzz
 face: jaw_wide ++, chin_long +, brow_high ---, face_wide +
 eyes: 74 58 44 | lips: 168 112 96 | brows: 62 48 38, width 4.6, thick 0.048
 beard: stubble 0.95
