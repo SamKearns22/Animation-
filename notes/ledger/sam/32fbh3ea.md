@@ -13,3 +13,11 @@ I had noticed that renders were not being handed off to sonnet models like you u
 
 Everything else needs step by step checking, fixing, testing, and reporting back to me.
 
+### 2026-11-21T23:06:31
+The guard that keeps Opus chats from handling routine work was approved on 17 Nov but never actually enabled.
+
+Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again
+
+### 2026-11-21T23:07:48
+I don't care much for the budget warnings right now, but I need to know that the budget tracking tool has worked as promised. The idea was to audit every last thing done in order to find the most expensive things and run it through the proposal route to discover how it can be made more compliant with statement one.
+
