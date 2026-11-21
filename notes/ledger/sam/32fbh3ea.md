@@ -13,3 +13,8 @@ I had noticed that renders were not being handed off to sonnet models like you u
 
 Everything else needs step by step checking, fixing, testing, and reporting back to me.
 
+### 2026-11-21T23:06:31
+The guard that keeps Opus chats from handling routine work was approved on 17 Nov but never actually enabled.
+
+Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again
+
