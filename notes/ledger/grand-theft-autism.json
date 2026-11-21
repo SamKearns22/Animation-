@@ -13502,23 +13502,23 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 1.57,
+   "cost": 1.83,
    "src": "estimate",
    "sid": "session_01J1JB7ZCcAW4GSext7JUbnM",
-   "steps": 181,
-   "hist_k": 276,
+   "steps": 184,
+   "hist_k": 280,
    "kinds": {
-    "film-file search": 2.0,
-    "tool search": 15.4,
-    "page.py": 0.8,
-    "routine": 1.0,
-    "renders": 3.2,
-    "pictures": 5.8,
-    "other": 71.8
+    "film-file search": 1.7,
+    "tool search": 13.5,
+    "page.py": 0.7,
+    "routine": 0.9,
+    "renders": 2.8,
+    "pictures": 5.0,
+    "other": 75.5
    },
    "calls": {
     "film-file search": 11,
-    "tool search": 88,
+    "tool search": 90,
     "whole-file .py read": 0,
     "page.py": 2,
     "routine": 7,
@@ -13527,24 +13527,25 @@
     "other": 27
    },
    "split": {
-    "usd": 5.7448,
-    "total": 5.7448,
+    "usd": 6.7116,
+    "total": 6.7116,
     "floor_k": 81,
     "blocks": {
-     "carried history": 54.5,
-     "Claude's words": 23.9,
-     "new writes": 13.6,
-     "start-up floor": 7.9
+     "carried history": 47.6,
+     "new writes": 24.8,
+     "Claude's words": 20.8,
+     "start-up floor": 6.8
     },
     "origins": {
-     "Claude's words": 57.1,
-     "result: tool search": 19.5,
-     "start-up floor": 8.2,
-     "messages and reminders": 7.4,
-     "result: pictures": 6.0,
-     "result: film-file search": 1.0,
+     "Claude's words": 49.8,
+     "result: tool search": 17.0,
+     "cache re-write": 13.0,
+     "start-up floor": 7.0,
+     "messages and reminders": 6.4,
+     "result: pictures": 5.2,
+     "result: film-file search": 0.8,
      "result: renders": 0.3,
-     "result: routine": 0.3,
+     "result: routine": 0.2,
      "result: other": 0.2
     },
     "leftover": 0.0
@@ -13595,7 +13596,7 @@
       0.0034
      ]
     ],
-    "base_pct": 25.4
+    "base_pct": 22.1
    },
    "search": {
     "show": 0,
@@ -13604,7 +13605,7 @@
     },
     "other": {
      "other": 34,
-     "film notes": 6,
+     "film notes": 8,
      "shared:gta_film.py": 2,
      "shared:gta_rehearse.py": 11,
      "shared:gta_opener.py": 2,
@@ -14409,6 +14410,22 @@
       "other",
       "",
       "git add -A animations/drafts; git commit -qm \"Grand Theft Autism animatic v3 Co-",
+      ""
+     ],
+     [
+      169,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "angle",
+      ""
+     ],
+     [
+      170,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "Where things stand",
       ""
      ]
     ]
