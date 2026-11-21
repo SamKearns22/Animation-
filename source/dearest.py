@@ -10,14 +10,19 @@ MAP
                    so nothing is guessed. Rows with no split at all: "not split (record too old)"
   rank() ......... a film's rows (or every film's rows since a date) added up and sorted, dearest first
   report() ....... the plain-words table: thing, % of a week, share of the film, how many chats it touched
-  open_top() ..... --open: each of the top five NAMED things (never "not split", a gap in the record) becomes notes/proposals/dearest-FILM-N.md with Problem / Facts /
+  SAM PICKS ...... Sam, 21 Nov: "I would like them suggested to me before I approve them to send through proposal
+                   route as the route itself is expensive." So the ranking is only SUGGESTED to Sam (film end, weekly);
+                   nothing opens until he picks
+  open_top() ..... --open 1,3: each thing Sam picked (by its number among the named five; never "not split", a gap
+                   in the record) becomes notes/proposals/dearest-FILM-N.md with Problem / Facts /
                    Record filled from the figures (no solution: the route's helpers find that); one that is already
                    open is left alone. Statement 1 is written into each Problem so the helpers weigh it
   due() .......... the weekly reminder: handover.py end flags DEAREST when the last weekly ranking is over 7 days old
   test ........... `python3 source/dearest.py test`: GTA and Milburn rank, every row is counted once, the parts add up
 
-    python3 source/dearest.py FILM [--open]          (film end: also printed by `propose.py review FILM`)
-    python3 source/dearest.py week [--open]          (every film's rows in the last 7 days)
+    python3 source/dearest.py FILM                   (film end: also printed by `propose.py review FILM`)
+    python3 source/dearest.py week                   (every film's rows in the last 7 days; marks the week as done)
+    python3 source/dearest.py FILM|week --open 1,3   (only the numbers Sam picked)
     python3 source/dearest.py test
 """
 import datetime
@@ -133,15 +138,22 @@ def report(film=None, since=None, top=5):
     return '\n'.join(lines), ranked, total
 
 
-def open_top(film=None, since=None, top=5):
-    """Each of the top five opens as a proposal (step 1 of the route: problem and facts only)."""
+def suggestions(film=None, since=None, top=5):
+    """The five named things to put to Sam, numbered as --open takes them."""
+    ranked, total, _ = rank(film, since)
+    return [x for x in ranked if 'not split' not in x[0]][:top], total
+
+
+def open_top(film=None, since=None, top=5, picks=None):
+    """Each thing Sam picked opens as a proposal (step 1 of the route: problem and facts only)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import propose
-    _, ranked, total = report(film, since, top)
+    named, total = suggestions(film, since, top)    # a gap in the record is not a thing to cheapen
     tag = film or 'week-' + (since or '')
     made = []
-    named = [x for x in ranked if 'not split' not in x[0]][:top]     # a gap in the record is not a thing to cheapen
     for i, (k, v, n) in enumerate(named, 1):
+        if picks is None or i not in picks:
+            continue
         name = f'dearest-{tag}-{i}'
         f = os.path.join(PROPS, name + '.md')
         if os.path.exists(f) or _open_already(k):
@@ -184,9 +196,11 @@ def due(today=None):
     try:
         last = datetime.date.fromisoformat(open(WEEKLY).readline().split()[-1])
     except Exception:
-        return ['DEAREST: the weekly ranking of the dearest things has never run: python3 source/dearest.py week --open']
+        return ['DEAREST: the weekly ranking of the dearest things has never run: python3 source/dearest.py week, '
+                'then put its five to Sam as numbered suggestions (the route runs only on his picks)']
     if (today - last).days > 7:
-        return [f'DEAREST: the weekly ranking of the dearest things last ran {last}: python3 source/dearest.py week --open']
+        return [f'DEAREST: the weekly ranking of the dearest things last ran {last}: python3 source/dearest.py week, '
+                'then put its five to Sam as numbered suggestions (the route runs only on his picks)']
     return []
 
 
@@ -216,14 +230,16 @@ def test():
     with tempfile.TemporaryDirectory() as tmp:
         globals()['PROPS'] = propose.PROPS = tmp
         try:
-            made = open_top('grand-theft-autism')
-            again = open_top('grand-theft-autism')
+            none = open_top('grand-theft-autism')
+            made = open_top('grand-theft-autism', picks={1, 2, 3, 4, 5})
+            again = open_top('grand-theft-autism', picks={1, 2, 3, 4, 5})
             files = sorted(glob.glob(os.path.join(tmp, 'dearest-*.md')))
             body = open(files[0]).read() if files else ''
             faults = propose.pack_faults(os.path.basename(files[0])[:-3]) if files else ['none']
         finally:
             globals()['PROPS'], propose.PROPS = keep
-    check(len(files) == 5 and all(h == 'opened' for _, h in made), 'GTA: the top five open as proposals')
+    check(none == [], 'nothing opens until Sam picks')
+    check(len(files) == 5 and all(h == 'opened' for _, h in made), 'GTA: the five Sam picks open as proposals')
     check(all(h == 'already open' for _, h in again), 'GTA: a second run opens nothing twice')
     check('Statement 1' in body and '% of a week' in body, 'each proposal states the cost and Statement 1')
     check(not [x for x in faults if 'empty' in x or 'solution' in x],
@@ -245,12 +261,15 @@ def main(argv):
         film, since = None, (datetime.date.today() - datetime.timedelta(days=7)).isoformat()
     text, _, _ = report(film, since)
     print(text)
+    named, _ = suggestions(film, since)
+    print('  To suggest to Sam (numbered for --open): ' + '; '.join(f'{i}. {k}' for i, (k, _, _) in enumerate(named, 1)))
     if '--open' in argv:
-        for name, how in open_top(film, since):
+        picks = {int(x) for x in argv[argv.index('--open') + 1].split(',')} if len(argv) > argv.index('--open') + 1 else set()
+        for name, how in open_top(film, since, picks=picks):
             print(f'  {how}: notes/proposals/{name}.md')
-        if not film:
-            os.makedirs(PROPS, exist_ok=True)
-            open(WEEKLY, 'w').write(f'# Weekly dearest things, last run {datetime.date.today()}\n\n{text}\n')
+    if not film:
+        os.makedirs(PROPS, exist_ok=True)
+        open(WEEKLY, 'w').write(f'# Weekly dearest things, last run {datetime.date.today()}\n\n{text}\n')
 
 
 if __name__ == '__main__':

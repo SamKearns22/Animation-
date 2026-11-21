@@ -3718,7 +3718,13 @@ def dearest_things_named():
         ok = dearest.test()
     if not ok:
         out.append('dearest.py test: ' + ' | '.join(ln for ln in buf.getvalue().splitlines() if ln.startswith('FAIL')))
-    return not out, '; '.join(out) or 'every dollar named; five dearest open as proposals'
+    import ledger                                   # the notes problem: Sam's notes counted from his own words
+    n, maybe = ledger.count_notes(os.path.join(os.path.dirname(HERE), 'notes/ledger/sam/negkzryt.md'), 'grand-theft-autism')
+    if n < 10:
+        out.append(f'GTA chat with 10 of Sam\'s messages counted only {n} notes')
+    if not any('gun' in m or 'fires' in m for m in maybe):
+        out.append('the gun note Sam gave before (the gun not pointing at the target) is not flagged as a possible repeat')
+    return not out, '; '.join(out) or 'every dollar named; five dearest ranked; Sam\'s notes counted, repeats flagged'
 
 
 
