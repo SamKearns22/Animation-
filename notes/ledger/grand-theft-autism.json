@@ -10674,17 +10674,17 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.96,
+   "cost": 2.36,
    "src": "estimate",
    "sid": "session_01J1JB7YW8q2mBATUcV9aDmj",
-   "steps": 90,
-   "hist_k": 219,
+   "steps": 94,
+   "hist_k": 222,
    "kinds": {
-    "tool search": 18.1,
-    "whole-file .py read": 1.0,
-    "renders": 5.3,
-    "pictures": 6.2,
-    "other": 69.5
+    "tool search": 14.5,
+    "whole-file .py read": 0.8,
+    "renders": 4.6,
+    "pictures": 5.0,
+    "other": 75.1
    },
    "calls": {
     "film-file search": 0,
@@ -10692,26 +10692,27 @@
     "whole-file .py read": 2,
     "page.py": 0,
     "routine": 0,
-    "renders": 14,
+    "renders": 15,
     "pictures": 14,
-    "other": 16
+    "other": 17
    },
    "split": {
-    "usd": 5.9931,
-    "total": 5.9931,
+    "usd": 7.4738,
+    "total": 7.4738,
     "floor_k": 82,
     "blocks": {
-     "new writes": 35.3,
-     "Claude's words": 23.2,
-     "carried history": 21.9,
-     "start-up floor": 19.6
+     "new writes": 45.7,
+     "carried history": 19.3,
+     "Claude's words": 19.3,
+     "start-up floor": 15.7
     },
     "origins": {
-     "Claude's words": 34.6,
-     "messages and reminders": 29.2,
-     "start-up floor": 19.8,
-     "result: tool search": 12.1,
-     "result: pictures": 3.5,
+     "Claude's words": 28.9,
+     "messages and reminders": 25.0,
+     "cache re-write": 17.0,
+     "start-up floor": 15.9,
+     "result: tool search": 9.7,
+     "result: pictures": 2.9,
      "result: renders": 0.4,
      "result: other": 0.3,
      "result: whole-file .py read": 0.1
@@ -10759,7 +10760,7 @@
       0.0022
      ]
     ],
-    "base_pct": 22.1
+    "base_pct": 18.5
    },
    "search": {
     "show": 0,
