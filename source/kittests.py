@@ -3590,6 +3590,49 @@ def body_check_shot4_v4():
 
 
 @test
+def tools_switched_on():
+    """Sam, 21 Nov: "Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again."
+    The model guard was built and tested on 17 Nov but never put in .claude/settings.json, so it never ran for four
+    days. The watcher must flag it from the 17 Nov settings with no promise needed (it finds tools from the files),
+    pass today's settings, and flag a switched-on step that has never been seen running (no mark), but not once it
+    has its mark. This is every tool's switched-on half: it covers every hook file and every adopted proposal's tool."""
+    import json
+    import subprocess
+    import tempfile
+    import hookran
+    import watcher as W
+    old = subprocess.run(['git', 'show', 'edb1cd78~1:.claude/settings.json'], cwd=os.path.dirname(HERE),
+                         capture_output=True, text=True, check=True).stdout
+    keep = dict(W.PROMISES)
+    W.PROMISES.pop('modelguard.py', None)              # 17 Nov: no promise for it either
+    try:
+        then = [f for f in W.unwired(old) if 'modelguard.py' in f]
+    finally:
+        W.PROMISES.clear()
+        W.PROMISES.update(keep)
+    now = W.unwired()
+    d = tempfile.mkdtemp()
+    rec = os.path.join(d, 'chat.jsonl')
+    with open(rec, 'w') as fh:
+        fh.write(json.dumps({'type': 'user', 'timestamp': '2026-11-21T22:00:00Z', 'message': {'content': 'hi'}}) + '\n')
+        fh.write(json.dumps({'type': 'assistant', 'message': {'content': [{'type': 'tool_use', 'name': 'Bash'}]}}) + '\n')
+    real = hookran.DIR
+    hookran.DIR = os.path.join(d, 'ran')
+    try:
+        os.makedirs(hookran.DIR)
+        open(os.path.join(hookran.DIR, '_since'), 'w').write('1000\n')     # marks kept long before this chat
+        missing = [f for f in W.ran_faults(rec) if 'modelguard.py' in f]
+        hookran.ran('modelguard.py')
+        marked = [f for f in W.ran_faults(rec) if 'modelguard.py' in f]
+    finally:
+        hookran.DIR = real
+    ok = bool(then) and not now and bool(missing) and not marked
+    return ok, (f'17 Nov settings: model guard {"flagged" if then else "NOT flagged"}; today unwired: {now or "none"}; '
+                f'never seen running: {"flagged" if missing else "NOT flagged"}; with its mark: '
+                f'{"quiet" if not marked else "still flagged"}')
+
+
+@test
 def handover_status_checks():
     """Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must
     catch what slipped on Grand Theft Autism: notes over 4,000 words, a handover over 15 lines, a chat that never

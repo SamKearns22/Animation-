@@ -378,6 +378,7 @@ def sendgate():
 
 def main(a):
     if a and a[0] == 'sendgate':
+        __import__('hookran').ran('humancheck.py sendgate')
         sys.exit(sendgate())
     if len(a) >= 3 and a[0] == 'critiqued':
         video, pack = a[1], a[2]

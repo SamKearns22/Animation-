@@ -746,6 +746,7 @@ def main(argv):
     opt = lambda k: rest[rest.index(k) + 1] if k in rest else None
     pos = [a for i, a in enumerate(rest) if not a.startswith('--') and (i == 0 or not rest[i - 1].startswith('--'))]
     if cmd == 'log':
+        __import__('hookran').ran('handover.py log')
         log_hook()
         return 0
     if cmd == '_late':
