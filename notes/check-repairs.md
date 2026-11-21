@@ -78,6 +78,9 @@ discover how it can be made more compliant with statement one.")
         ledger rows (made from each chat's full record at the time) are the only record left.
       - Put to Sam (21 Nov): which of five go through the route (my pick 1, 2, 3): 1 start-up reading, 2 Claude's
         thinking and code writing, 3 memory lapses, 4 looking at pictures, 5 searching code. His answer comes back here.
+        Ideas given with them (unrouted, his pick first): 1 a smaller fixed start, only what that chat needs; 2 more
+        built from ready kit pieces, less new code per note; 3 hand over before a long wait instead of resuming;
+        4 small labelled crops of what changed; 5 a map of where each part of the film lives in the code.
 - [ ] The week's record adds to 278% of a week over 149 chats (219 of it estimates, 3 chats filed twice; 42 chats
       filed under proposal-route). That cannot all be real if the weekly limit holds: check the estimates against the
       app's figures for the chats that can still be read, and how chats are filed to jobs (Opus medium).
