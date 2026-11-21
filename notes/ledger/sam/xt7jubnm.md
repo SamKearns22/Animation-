@@ -73,3 +73,10 @@ The camera change is in the next chat's own handover (chat 27, on your other acc
 
 This is awful. Instead of fixing the drawing, it burned usage changing the screenplay and shot into something I didn’t want, on its own accord. How do I fix this so it never happens again? I wanted it to fix the drawing errors not change the camera angles!
 
+### 2026-11-21T23:36:44
+Y.
+
+But instead of offering alternatives, first it should try and suggest what the project would need to learn in order to execute the shot/movement effectively.
+
+Can you schedule a job for my other account to pick up at 2am?
+
