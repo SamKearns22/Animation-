@@ -3,3 +3,6 @@
 ### 2026-11-21T12:25:06
 Do you want to show me the frame stills?
 
+### 2026-11-21T12:25:54
+No, every frame of the shot
+
