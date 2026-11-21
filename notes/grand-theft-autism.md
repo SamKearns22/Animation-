@@ -477,7 +477,7 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   sheet critique; a fresh cold critique of the clip before it is sent; a beat-by-beat tick against the screenplay and
   the acting rows at full size, with a picture for each beat.
 
-## Where things stand (21 Nov, chat 20, Opus high; waiting for Sam's Y on the pose sheet)
+## Where things stand (21 Nov, chat 20, Opus high; Sam's Y given: chat 21 rebuilds shot 4)
 - Rules that bite next: 8 (no rebuild before Sam's Y), 74 (every beat acted as the acting rows say), 89 (the rebuilt
   shot's clip gets a fresh critique before it is sent; the send gate refuses it otherwise).
 - Done: K2's missing head found (the figure guard stopped the drawing at the arm; the sheet showed the half body);
@@ -485,10 +485,10 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   body_check_headless); refused views crossed out; LEONIDA print never backwards; K2, K3, K5 re-posed; two critique
   hunts (round 3) fixed or named; leanout.at(t) on the acting beats: 149 frames clean, clear of the car. Pictures:
   notes/shot4-case-study/leanout-sheet-v3.jpg, leanout-strip-v1-phone.jpg (sent to Sam). Case study section 12.
-- Next: on Sam's Y, Opus high (building new): rebuild shot 4's Jason on leanout.at(t) in the film (the skeleton
+- Next: chat 21, Opus high (building new): rebuild shot 4's Jason on leanout.at(t) in the film (the skeleton
   drawn through the shot's camera, legs hidden by the car), with the acting rows' faces and the fix 3 events; body
   check and car test every frame; a clip of shot 4 (no yes needed) after a fresh critique.
-- Needs Sam: Y or N on the pose sheet and move strip (asked 21 Nov).
+- Needs Sam: nothing. Sam (21 Nov): "Y" to the pose sheet and move strip: rebuild shot 4 on this move.
 - Read: guides/job-packs.md Build; source/leanout.py MAP; the shot 4 acting rows and events in this file.
 - Open rule requests: none.
 - For Claude: critique round 3 hunt 2 was marked "fixed" though its faults were named (house style, guides): the
@@ -499,4 +499,4 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
   freeze_faults, humancheck sendgate, record_faults, tag_faults): named, not this job. Shots 5-8: a separate chain.
 - Branches named, not merged on purpose: freeze/* bookmarks of posted films.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 36.12% of 15%; forecast 86.7% (2026-11-21)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 38.08% of 15%; forecast 88.6% (2026-11-21)
