@@ -215,7 +215,7 @@ def _clear_arms(k, ka, kb, u, sp):
             m = L.blend(ka, kb, v)
             k2 = k.copy()
             k2.pose = 'leanout'
-            for att in ('aim', 'firing'):
+            for att in ('aim', 'firing', 'front'):
                 if hasattr(k, att):
                     setattr(k2, att, getattr(k, att))
             sh = k['sh' + sd]
@@ -247,9 +247,13 @@ def draw_gun(img, cam, k, report=True):
     d = _u(muzzle - hand)
     down = _u(np.cross(d, _v(1e-3, 0, 1)) if abs(d[1]) > 0.9 else _v(0, -1, 0) - d * d[1])
     g = GUN[0]
+    d0 = d
+    if getattr(k, 'front', False):                      # held against his chest: the grip sits inside his fist (Sam 21 Nov)
+        down0 = down
+        hand = k['wrR'] - d0 * (-0.012 * g) - down0 * (0.074 * g)
     # a side-on pistol that reads at phone size (Sam 21 Nov: the plain dark wedge read as a second seatbelt):
     # a pale gunmetal slide with a dark muzzle block, the frame under it, a raked grip, a trigger guard, a highlight
-    P = lambda a, b: hand + d * (a * g) + down * (b * g)
+    P = lambda a, b: hand + d * (0.62 * a * g) + down * (0.62 * b * g)
     slide = [P(-0.05, -0.012), P(0.19, -0.012), P(0.19, 0.045), P(-0.05, 0.045)]
     frame = [P(-0.03, 0.045), P(0.14, 0.045), P(0.14, 0.075), P(0.04, 0.085), P(-0.03, 0.075)]
     grip = [P(-0.05, 0.045), P(0.035, 0.045), P(0.015, 0.20), P(-0.075, 0.20)]
@@ -259,6 +263,12 @@ def draw_gun(img, cam, k, report=True):
     for poly, col in ((guard, (46, 48, 56)), (grip, (44, 46, 54)), (frame, (70, 74, 84)), (slide, (132, 138, 152)),
                       (muzzle_blk, (30, 30, 36)), (shine, (200, 206, 218))):
         cam.poly(p, [tuple(q) for q in poly], col, (14, 14, 16), 2.4)
+    if getattr(k, 'front', False):                       # his fist closed round the grip
+        c = P(-0.02, 0.12)
+        for sx, sy, r_ in ((-0.35, -0.2, 1.0), (0.3, 0.15, 1.0), (0.0, 0.5, 0.9)):
+            ring = [tuple(c + d * (0.035 * g * (math.cos(a_) + sx)) + down * (0.035 * g * (math.sin(a_) + sy)))
+                    for a_ in [i * math.pi / 6 for i in range(12)]]
+            cam.poly(p, ring, (226, 184, 156), (14, 14, 16), 2.2)
     if report:
         m, b0, tg = cam.P(tuple(muzzle)), cam.P(tuple(hand)), cam.P(TARGET)
         HC.aim('Jason', m, (m[0] - b0[0], m[1] - b0[1]), tg, firing=True)
@@ -344,6 +354,7 @@ def to_world(k, car):
     if getattr(k, 'aim', None) is not None:
         out.aim = _u(np.asarray(car.body_pt(tuple(k.aim)), float) - o)
     out.firing = getattr(k, 'firing', False)
+    out.front = getattr(k, 'front', False)
     return out
 
 
