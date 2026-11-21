@@ -1270,7 +1270,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     # from behind it is drawn before his back, only its ends showing past him (the prop sets rear_under)
     if HC_HOOK[0]:                               # the body check (humancheck.py): what is drawn, as it is drawn
         HC_HOOK[0](dict(kind='flat', j=j, view_deg=view_deg, mirror=mirror, depth=depth, j2=j2, behind=set(behind),
-                        sp=sp, s=s, t=t, yaw=yaw, head_yaw=head_yaw,
+                        sp=sp, s=s, t=t, yaw=yaw, head_yaw=head_yaw, x=x, y=y, size=img.size,
                         tilt=None if squash is None else (_E[0], squash)))
     under = [] if held_behind or not rear else [d for d in j.get('props', []) if getattr(d, 'rear_under', False)]
     for draw in under:

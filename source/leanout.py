@@ -16,6 +16,7 @@ greenhouse's side at x 0.86 (belt) .. 0.70 (roof). The passenger's seat cushion 
                     K3 head and shoulders out, K4 out to the waist turned back, gun arm straight at the lead cruiser,
                     K5 the recoil of K4
   pose(name, sp) .. a key pose as a lying.Body (k.pose = 'leanout': its arms are held up on purpose)
+  seated(sp, ..) .. K1 with the window-side hand anywhere (shots 5-8 gesture on this same body, chat 26)
   at(t, sp) ....... the move in time (TIMES: the beats of the acting rows): keys, eased in-betweens (lying.blend)
   strip(OUT) ...... the move every 0.1 s from the shot's two camera sides, each frame tested (body check, car)
   gun(...) ........ the pistol drawn on the skeleton, along the forearm's aim; reported to the body check (aim)
@@ -103,15 +104,7 @@ def _key(pelvis, neck, fwd, hfwd, arms, knees, sp, aim=None):
 def pose(name, sp):
     """A key pose for this person (their shoulders set the arms' roots)."""
     if name == 'K1':          # seated, pistol flat on his chest (shot 3's frame)
-        ankles = {'L': (0.32, 0.30, 0.62), 'R': (0.52, 0.30, 0.62)}
-        k = L._build((0.42, 0.56, -0.02), (0.42, 0.83, 0.0), (0.42, 1.14, 0.05), _v(1, 0, 0), _v(0, 1, 0.05),
-                     _v(0, -0.05, 1), {'R': ((0.38, 0.98, 0.20), _v(0.6, -1, 0.2)),
-                                       'L': ((0.30, 0.60, 0.30), _v(-0.6, -0.3, 0.4))},
-                     {sd: (_v(*a), _v(0, 0.6, 1), _v(0, -0.1, 1), _v(0, 1, 0)) for sd, a in ankles.items()}, sp,
-                     floor=None)
-        k.pose = 'leanout'
-        k.aim = _u((0.85, 0.5, 0.2))                      # the pistol lies flat on his chest, barrel up across it (Sam 21 Nov: it was not drawn)
-        return k
+        return seated(sp)
     if name == 'K2':          # up on his knees on the seat, turned to the window, free hand braced on the door
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
         #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
@@ -138,6 +131,27 @@ def pose(name, sp):
                     {'L': (0.64, SEAT + 0.05, 0.16), 'R': (0.60, SEAT + 0.05, -0.12)}, sp, aim=aim)
     raise KeyError(name)
 
+
+
+K1_HAND_R = (0.38, 0.98, 0.20)       # K1: the right hand (window side) flat on his chest
+K1_POLE_R = (0.6, -1, 0.2)
+
+
+def seated(sp, hand_r=K1_HAND_R, pole_r=K1_POLE_R, dx=0.0, hfwd=(0, -0.05, 1)):
+    """K1, seated, with the right hand (window side) anywhere: shots 5-8 draw Jason on this same skeleton so the cut
+    from shot 4 does not change his body (chat 26, F10: shots 5-8 used the seated flat figure, another drawing).
+    dx: the whole body slid across the seat (the corner's throw)."""
+    ankles = {'L': (0.32, 0.30, 0.62), 'R': (0.52, 0.30, 0.62)}
+    o = _v(dx, 0, 0)
+    k = L._build(_v(0.42, 0.56, -0.02) + o, _v(0.42, 0.83, 0.0) + o, _v(0.42, 1.14, 0.05) + o, _v(1, 0, 0),
+                 _v(0, 1, 0.05), _v(*hfwd), {'R': (_v(*hand_r) + o, _v(*pole_r)),
+                                             'L': (_v(0.30, 0.60, 0.30) + o, _v(-0.6, -0.3, 0.4))},
+                 {sd: (_v(*a) + o, _v(0, 0.6, 1), _v(0, -0.1, 1), _v(0, 1, 0)) for sd, a in ankles.items()}, sp,
+                 floor=None)
+    k.pose = 'leanout'
+    k.aim = _u((0.85, 0.5, 0.2))                      # the pistol lies flat on his chest, barrel up across it (Sam 21 Nov: it was not drawn)
+    k.firing = False
+    return k
 
 KEYS = ['K1', 'K2', 'K3', 'K4', 'K5']
 FIRE = [0.0, 0.042]                  # the flash: seconds before and after each shot (one drawing at 24 a second)
@@ -465,14 +479,14 @@ def flash(img, cam, kw, age):
         p.poly(pts, col, (40, 24, 10) if f == 1.0 else None, 2.0 if f == 1.0 else 0)
 
 
-def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide=False):
+def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide=False, k=None):
     """Jason in shot 4 at t: the move (at), put in the moving car, drawn with the house's flat pieces through the
     film's camera on his own layer; the car rubs out what of him it hides (legs behind the door, the dash, the roof
     rail), closed glass dims him a little. Returns (alpha drawn, body in the world, car parts used)."""
     import figure as F
     import gta_cars as G
     import lying_flat as LF
-    k = at(t, sp_pose)
+    k = at(t, sp_pose) if k is None else k              # k: a ready pose (shots 5-8: seated(), chat 26)
     if nod:                                                  # a small nod: the face dips and comes back
         k['hfwd'] = _u(k['hfwd'] + _v(0, -nod, 0))
         k['hup'] = _u(k['hup'] + _v(0, 0, nod * 0.6))

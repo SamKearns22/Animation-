@@ -724,12 +724,27 @@ def _strip_people():
         z = -260.0
         while z < 200:
             z += rng.uniform(3.0, 9.0)
-            out.append(dict(at=(side * rng.uniform(8.2, 9.5), z), face=rng.choice([0.0, 180.0, 90.0 * -side]),
+            x = rng.uniform(8.2, 9.5)
+            out.append(dict(at=(side * x, z), face=rng.choice([0.0, 180.0, 90.0 * -side]),
                             i=len(out), walk=rng.uniform(0, 1)))
     return out
 
 
 PEOPLE4 = _strip_people()
+LENS_PAVE = (0.9, 5.5)          # shot 4's lens stands on the shop pavement (x 8.7, head height) in this span (CAM4)
+
+
+def _lens_clear():
+    """chat 27 (v3 F4, a repeat): whoever is on the shop pavement within 7 m of the lens while it rides over it passes
+    the frame's edge as half a giant: they are not on this stretch (the crash's pavement, passed later from over the
+    road, keeps its people)."""
+    keep = []
+    for pp in PEOPLE4:
+        if pp['at'][0] > 0 and any(abs(_crowd(pp, u)[1] - (V4 * u - 1.25)) < 7.0
+                                   for u in np.arange(LENS_PAVE[0], LENS_PAVE[1], 0.1)):
+            continue
+        keep.append(pp)
+    PEOPLE4[:] = keep
 PALMS4 = [((7.6 if s < 0 else 9.2) * s, z) for k, (s, z) in enumerate((s, z) for z in np.arange(-280, 220, 21.0) for s in (-1, 1))
           if (k + int(z / 21)) % 2 == 0]
 _SP = {}
@@ -815,10 +830,13 @@ def _crowd(pp, t, dz=0.0):
     j = V.standing(sp)
     tz = V4 * t                                            # the Tulip's z: where the noise is
     t_duck = SHOTS[0] + 0.12 + 0.010 * abs(z0 - tz) + 0.08 * (pp['i'] % 3)
-    near_fire = IMPACT is not None and abs(z0 - (IMPACT[1][1] + 2.6)) < 22 and side > 0 or (
-        IMPACT is not None and abs(z0 - IMPACT[1][1]) < 14)
     ducks = abs(z0 - V4 * SHOTS[0]) < 45
-    sees_fire = IMPACT is not None and abs(z0 - (IMPACT[1][1] + 2.6)) < 60     # chat 14: a man strolled past the fireball
+    # chat 27 (v3 F6, Sam's note given twice, rule 30): who is near the fire is judged where they ARE at the blast,
+    # not where they started the shot (a walker covers 12 m by then: a woman 5 m from the fireball strolled on)
+    zi = z0 + (dirz * WALK_V * (min(IMPACT[0], t_duck if ducks else 99.0) + 3.2) if walker and IMPACT else 0.0)
+    near_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 22 and side > 0 or (
+        IMPACT is not None and abs(zi - IMPACT[1][1]) < 14)
+    sees_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 60     # chat 14: a man strolled past the fireball
     t_stop = min(t_duck if ducks else 99.0, IMPACT[0] + 0.3 if sees_fire else 99.0)
     z = z0 + (dirz * WALK_V * (min(t, t_stop) + 3.2) if walker else 0.0)
     F = (0.0, 0.0, dirz) if walker else (-side * 1.0, 0.0, 0.0)
@@ -865,12 +883,19 @@ def _crowd(pp, t, dz=0.0):
         a = a0 + da * up                                   # turning round over 0.4 s, never a flip
         F = (math.sin(a), 0.0, math.cos(a))
         head = None
+        r = smooth((t - (IMPACT[0] + 0.9 + 0.1 * (pp['i'] % 2))) / 0.35) if pp['i'] % 3 == 0 else 0.0
+        if r > 0:                                          # every third points at it (acting rows, B5: "stop, stare,
+            V.aim(j, 'R', tuple(a_ + (b_ - a_) * r for a_, b_ in zip((110.0, 430.0, 40.0), (80.0, -120.0, 600.0))))
+            #                                                point"; chat 27, v3 F6: a still stare read as nothing)
     elif IMPACT and t > IMPACT[0] + 0.2 and t < t_run and not walker:
         fz = IMPACT[1][1] + 2.6
         head = S._norm((SHOP4 - x0, 0.0, fz - z))           # staring at the fire
     elif ducks and t < t_duck and abs(z0 - tz) < 30:
         head = S._norm((LANE4 - x0, 0.0, tz - z))           # turning to the roar of the chase
     return x0, z, F, j, head
+
+
+_lens_clear()
 
 
 def strip_ground(img, cam, p):
@@ -1182,7 +1207,9 @@ def jason_layer(img, cam, tul, t, lead, info=None):
 
 # ---- inside the Tulip (shot 3's three-shot and shot 4's ends): each person posed in the car's own frame (metres),
 # then drawn flat at the size and turn the camera gives them; the glass and the body rub out what they hide.
-WHEEL_C, WHEEL_R = (-0.42, 0.95, 0.48), 0.19          # Lucia's wheel: centre (car frame) and rim radius
+WHEEL_C, WHEEL_R = (-0.42, 0.87, 0.47), 0.19          # Lucia's wheel: centre (car frame) and rim radius. Chat 26
+#   (F9): 8 cm lower in every shot, as shots 5-8 had it since chat 16: at 0.95 its rim ran across her mouth in shots 3-4
+#   and dropped at the cut to shot 5
 WHEEL_TILT = math.radians(32)                        # its face tipped back toward her
 LINE2 = (1.00, [(0.00, 'etc'), (0.12, 'FV'), (0.24, 'E'), (0.38, 'L'), (0.48, 'AI'), (0.70, 'O'), (0.86, 'etc'),
                 (0.95, 'rest')])                     # "It's very loud." (shot 3 time, s): the wince lands on "loud"
@@ -1302,7 +1329,8 @@ def tulip_inside(t):
         her_hands = [('L', (-0.05 + fid, 0.85, -0.53), 'down', 'fist'), ('R', (0.05 + fid, 0.87, -0.50), 'down', 'fist')]
         lu_over = dict(mood='stern', squint=0.45, frown=0.09, brow_up=-0.01)
         lu_neck = (-0.42, 0.94, 0.05)
-        lu_hands = [('L', wheel_pt(rot, 160), 'out', 'fist'), ('R', wheel_pt(rot, 20), 'out', 'fist')]
+        carry = 0.28 * rot                               # chat 26: shots 5-8's grip (ten and two, fed), so the cut keeps her hands
+        lu_hands = [('L', wheel_pt(rot, 150 - carry), 'down', 'fist'), ('R', wheel_pt(rot, 30 - carry), 'down', 'fist')]
         # shot 4's acting rows (chat 21): her hands over her ears from the first shot ("it's very loud"), eyes squeezed
         # shut; a peek at the fireball (one hand off an ear); back to the spinner. Lucia: a tight glance at Jason as he
         # climbs past and back, a flinch blink on each shot, her eyes up to the mirror at the crash.

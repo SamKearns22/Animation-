@@ -224,7 +224,7 @@ def _arm(p, sc, cam, k, side, sp):
         p, sc = B.Pen(p.img, sc2), sc2
     s = sc.s
     j2 = {'sh' + side: tuple(sc.shoulders[side]), 'el' + side: tuple(_proj(cam, k['el' + side]) / s),
-          'wr' + side: tuple(_proj(cam, k['wr' + side]) / s), 'hand': {side: sp.get('lying_hand', 'fist')}}
+          'wr' + side: tuple(_proj(cam, k['wr' + side]) / s), 'hand': {side: sp.get('lying_hand_' + side, sp.get('lying_hand', 'fist'))}}
     import limbs
     c = (np.asarray(sc.shoulders['L'], float) + np.asarray(sc.shoulders['R'], float)) / 2
     fl = 1.0 if sc.shoulders['R'][0] >= sc.shoulders['L'][0] else -1.0

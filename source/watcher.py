@@ -51,6 +51,7 @@ PROMISES = {
     'ledger.py auto': ('every chat has a cost row with its steps, kinds and search record', 'kittest cost_rows_reach_the_main_line'),
     'propose.py hook': ('no change is put to Sam without the proposal route', 'named: its block is the proof; a let-through is logged to notes/proposals/unrouted.md and listed by handover end'),
     'modelguard.py': ('no routine work (finish.py, a whole-film render, a splice) runs on Opus or Fable', 'live guard'),
+    'humancheck.py sendgate': ('no clip reaches Sam without a body check record, clean or named', 'kittest body_send_gate'),
     'finderwarn.py': ('a chat that hand-searches a film\'s code before using the finder is told so at once', 'live finder'),
     'watcher.py stop': ('every promise here is checked at the end of every reply; a daily line shows it is alive', 'live hooks'),
     # handover checks (source/handover.py)
@@ -62,6 +63,13 @@ PROMISES = {
     'branch_faults': ('every branch with work off the main line is merged or named', 'named: branches.py scan at every start'),
     'cost_faults': ('the film\'s cost line is recorded at every handover and shown only on a problem', 'kittest quiet_cost_line'),
     'sentence_faults': ('no CLAUDE.md sentence is lost', 'kittest claude_md_sentences_never_lost'),
+    'freeze.py': ('the count of old-film loads and the bookmarks of finished films', 'kittest finished_films_keep_their_bookmark'),
+    'freeze_faults': ('old-film loads never rise and every finished film keeps its bookmark', 'kittest finished_films_keep_their_bookmark'),
+    'tag_faults': ('each of Sam\'s notes is tagged with the check that should have caught it', 'named: its own fault line in handover end is the proof'),
+    'record_faults': ('a pre-flight run leaves its check record', 'named: its own fault line in handover end is the proof'),
+    'size_faults': ('a film\'s notes stay under 4,000 words and its handover under 15 lines, with its rule-requests line', 'kittest handover_status_checks'),
+    'ledger_faults': ('every chat logs its stage and Sam\'s notes; finished stages are marked', 'kittest handover_status_checks'),
+    'push_faults': ('every chat sends Sam a push notification at its handover', 'kittest handover_status_checks'),
     # pack tools (guides/job-packs.md)
     'catalogue.py': ('the kit list is current', 'live kits'),
     'codemap.py': ('every film file opens with a MAP', 'named: used by hand'),
@@ -259,6 +267,12 @@ def hook_faults():
             out.append(f'hooks|a hook points at a missing file: {m.group(1)}')
     if not any('watcher.py' in c for c in cmds):
         out.append('hooks|the watcher is not wired into the Stop hook')
+    # status chat (Sam, 21 Nov): modelguard.py was built and promised on 17 Nov but never wired into settings.json, so
+    # it never ran for four days and nothing said so. Every promised hook file must be in a hook command.
+    for f in sorted(glob.glob(os.path.join(ROOT, '.claude', 'hooks', '*.py'))):
+        name = os.path.basename(f)
+        if name in PROMISES and not any(name in c for c in cmds):
+            out.append(f'hooks|{name} has a promise but is not wired into .claude/settings.json: it never runs')
     return out
 
 

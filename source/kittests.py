@@ -3552,8 +3552,96 @@ def body_check_shot4_v4():
         V.person(Image.new('RGBA', (1200, 1100)), B.Cam(1.0, 540, 960), 600, 330, 0.62, PG.MODEL, 0.0, float(deg),
                  build(PG.MODEL))
         g += HC.frame_end(0.0)
+    import gta_rehearse as Rn                     # chat 27: version 4's own shot 3 really had Lucia's arms crossed
+    s3 = _body_faults(Rn.shot3, (0.5, 1.5, 2.5))  # (v4 note 1, caught since chat 23): today's shot 3 must be clean
     ok = {'order', 'aim'} <= kinds and not s3 and not g
-    return ok, f'version 4 Jason: {sorted(kinds)}; shot 3: {len(s3)} faults; gallery: {len(g)} false flags'
+    return ok, f'version 4 Jason: {sorted(kinds)}; shot 3: {len(s3)} faults {sorted({x[2] for x in s3})}; gallery: {len(g)} false flags'
+
+
+V3_COMMIT = '9067f25d'                  # GTA animatic v3 as Sam saw it (chat 26): Jason's back at 15.4 and 18.3 s
+V3_BACK = (1.3, 4.2)                    # shot 4's own clock (film 15.4 F1, 18.3 F5)
+
+
+@test
+def body_check_back_view():
+    """Seeing like Sam 4 (GTA v3 F1, F5, F7, chat 27): a person seen from behind, big in frame, is a fault in itself.
+    The body check must flag Jason's back in animatic v3's shot 4 (15.4 and 18.3 s), pass the re-aimed camera at the
+    same moments, flag a big flat figure drawn from behind and pass the same figure from the front."""
+    import importlib.util
+    import subprocess
+    import tempfile
+    from PIL import Image
+    import posegallery as PG
+    import body as B
+    import views as V
+    import humancheck as HC
+    src = subprocess.run(['git', 'show', f'{V3_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
+                         capture_output=True, text=True, check=True).stdout
+    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v3.py')
+    with open(tmp, 'w') as fh:
+        fh.write(src)
+    spec = importlib.util.spec_from_file_location('gta_rehearse_v3', tmp)
+    R3 = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(R3)
+    old = [x for x in _body_faults(R3.shot4, V3_BACK) if x[1] == 'Jason' and x[2] == 'back view']
+    import gta_rehearse as R
+    new = [x for x in _body_faults(R.shot4, V3_BACK) if x[1] == 'Jason' and x[2] == 'back view']
+    flat = {}
+    for deg in (0.0, 180.0):
+        HC.frame_begin()
+        V.person(Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), 540, 500, 0.6, PG.MODEL, 0.0, deg,
+                 V.standing(PG.MODEL))
+        flat[deg] = [x for x in HC.frame_end(0.0) if x[2] == 'back view']
+    ok = len(old) == 2 and not new and flat[180.0] and not flat[0.0]
+    return ok, (f'v3 Jason back views: {len(old)} of 2; re-aimed: {len(new)}; big figure from behind flagged: '
+                f'{bool(flat[180.0])}, from the front: {bool(flat[0.0])}')
+
+
+@test
+def handover_status_checks():
+    """Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must
+    catch what slipped on Grand Theft Autism: notes over 4,000 words, a handover over 15 lines, a chat that never
+    logged its notes, stages never marked (Opus running finish.py: modelguard.py, now wired), a refused clip told to Sam as sent (chat 26), no
+    push notification; and stay quiet on the clean cases."""
+    import json
+    import tempfile
+    import handover as H
+    d = tempfile.mkdtemp()
+    def rec(lines):
+        f = os.path.join(d, f'r{len(os.listdir(d))}.jsonl')
+        open(f, 'w').write('\n'.join(json.dumps(x) for x in lines))
+        return f
+    def ast(*content, model='claude-opus-5-5'):
+        return {'type': 'assistant', 'timestamp': '2026-11-21T22:00:00',
+                'message': {'role': 'assistant', 'model': model, 'content': list(content)}}
+    bash = lambda c: {'type': 'tool_use', 'name': 'Bash', 'input': {'command': c}}
+    big = os.path.join(d, 'big.md')
+    open(big, 'w').write('word ' * 4100 + '\n## Where things stand\n' + 'line\n' * 16)
+    small = os.path.join(d, 'small.md')
+    open(small, 'w').write('notes\n## Where things stand\n- Open rule requests: none\n' + 'line\n' * 5)
+    sz_big, sz_small = H.size_faults(None, big), H.size_faults(None, small)
+    send = {'type': 'tool_use', 'id': 't1', 'name': 'SendUserFile', 'input': {'files': ['/x/clip.mp4']}}
+    refused = {'type': 'user', 'timestamp': '2026-11-21T22:00:01', 'message': {'content': [
+        {'type': 'tool_result', 'tool_use_id': 't1', 'is_error': True, 'content': 'Permission for this action was denied'}]}}
+    told = ast({'type': 'text', 'text': 'I sent you a short clip, 20-26 seconds.'})
+    not_sent = [f for f in H._run(H.turns(rec([ast(send), refused, told])), None, small) if 'NOT SENT' in f]
+    sent_ok = [f for f in H._run(H.turns(rec([ast(send), told])), None, small) if 'NOT SENT' in f]
+    no_push = H.push_faults(rec([ast(bash('ls'))]))
+    push = H.push_faults(rec([ast({'type': 'tool_use', 'name': 'PushNotification', 'input': {'message': 'x'}})]))
+    import ledger
+    led = ledger.load('grand-theft-autism')
+    stages_open = {'chats': led['chats'], 'estimate': 10, 'stages': [{'name': 'cast', 'pct': 2, 'done': None}],
+                   'film': 'x'}
+    real_load = ledger.load
+    ledger.load = lambda f: stages_open
+    try:
+        st = [f for f in H.ledger_faults('x') if f.startswith('STAGES')]
+    finally:
+        ledger.load = real_load
+    ok = (len(sz_big) == 3 and not sz_small and not_sent and not sent_ok
+          and no_push and not push and st)
+    return ok, (f'big notes {len(sz_big)} faults, clean {len(sz_small)}; refused send caught {bool(not_sent)}, real send '
+                f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
 
 
 @test
@@ -3598,6 +3686,45 @@ def body_check_headless():
     _, f_k1 = LO.draw_view(sp, LO.pose('K1', sp), 45)
     caught = any('no head' in f for f in f_old)
     return caught and not f_k1, f'old K2 at 3/4: headless caught {caught}; K1 at 3/4: {len(f_k1)} faults'
+
+
+
+@test
+def dearest_things_named():
+    """Cost audit (Sam, 21 Nov: "audit every last thing done in order to find the most expensive things and run it
+    through the proposal route"): GTA's record filed 69% of its cost as "other". Every dollar of a chat must now carry a
+    plain name (thinking, writing code, reading notes, critique helpers ...) that adds up to the bill, the film's GTA
+    code (gta_*.py) counts as film code, and the five dearest open as proposals that pass the route's own check."""
+    import glob as G
+    import io
+    import contextlib
+    import stepcost
+    import dearest
+    out = []
+    fr = stepcost._film_paths('grand-theft-autism')
+    if not fr.search('python3 source/gta_rehearse.py'):
+        out.append("GTA's gta_*.py files are not counted as the film's own code")
+    mine = sorted(G.glob(os.path.expanduser('~/.claude/projects/*/*.jsonl')), key=os.path.getmtime)
+    for p in ['tests/stepcost-transcript.jsonl'] + mine[-1:]:
+        sp = stepcost.split(os.path.join(os.path.dirname(HERE), p) if not p.startswith('/') else p, 'grand-theft-autism')
+        if not sp or not sp.get('named'):
+            out.append(f'{p}: no named split')
+            continue
+        if abs(sum(sp['named'].values()) - sum(sp['origins'].values())) > 1.0:
+            out.append(f'{p}: the named parts do not add up to the bill')
+        if sp['named'].get('other tool results', 0) + sp['named'].get('unexplained', 0) > 10:
+            out.append(f'{p}: over 10% still unnamed')
+    with contextlib.redirect_stdout(io.StringIO()) as buf:
+        ok = dearest.test()
+    if not ok:
+        out.append('dearest.py test: ' + ' | '.join(ln for ln in buf.getvalue().splitlines() if ln.startswith('FAIL')))
+    import ledger                                   # the notes problem: Sam's notes counted from his own words
+    n, maybe = ledger.count_notes(os.path.join(os.path.dirname(HERE), 'notes/ledger/sam/negkzryt.md'), 'grand-theft-autism')
+    if n < 10:
+        out.append(f'GTA chat with 10 of Sam\'s messages counted only {n} notes')
+    if not any('gun' in m or 'fires' in m for m in maybe):
+        out.append('the gun note Sam gave before (the gun not pointing at the target) is not flagged as a possible repeat')
+    return not out, '; '.join(out) or 'every dollar named; five dearest ranked; Sam\'s notes counted, repeats flagged'
 
 
 

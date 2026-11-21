@@ -1,0 +1,45 @@
+== critique, round 27 pass 1 (2026-11-21): 14 fault(s), 0 can't tell
+-- look.md --
+1: Man in LEONIDA tank top leans out of red car window, street, palm trees, women inside.
+2: Same man raises a gun upward out of the car window, shouting, passers-by on sidewalk.
+3: White police car with red lights, red car corner at right, empty street.
+4: Police car with blue lights chasing down street, more police cars behind.
+5: White car from behind, police cars with lights further back, red car corner.
+6: Police car with blue lights crashes sideways into building, yellow object falling, smoke.
+7: Orange explosion near police cars, a person in pink shirt stands on sidewalk.
+8: Man in LEONIDA top lies back on red car, looking sideways, calm.
+9: Man leans out car window, arm hanging down, woman drives inside.
+10: Rear view of red car: freckled redhead holding fidget toy, driver woman, police behind.
+11: Close up, grimacing man in LEONIDA top leaning on door, redhead, driver woman.
+12: Low close view, man grins holding gun upward, redhead with toy, pedestrians on sidewalk.
+13: Explosion with smoke beside police car, glass shards, man in pink shirt walking, unbothered.
+14: Close tilted face of smiling stubbled man lying on red car, LEONIDA shirt, wheel.
+15: Man slumped sideways in car, arm hanging out window, woman driving, pedestrians above.
+16: Redhead with headphones holding fidget toy, driver woman, man at left, police cars behind.
+-- result.md --
+## Faults
+FAULT P3 [1, 9, 11, 15]: Jason's arm hanging out of the window is a limp tube with no elbow bend; in 15 the forearm ends in a jagged cut edge with no hand.
+FAULT P6 [1, 11, 15]: hand outside the window is a blank pale stump (no ball hand, no fingers), lost against the door.
+FAULT P2 [2, 12]: gun arm points straight up, gun upright; the brief says arm straight back at the police car. No recoil, nothing aimed.
+FAULT P1 [2, 12]: the gun sits on top of the fist, not gripped; it floats above the hand.
+FAULT P5 [12, 14, 8]: arm starts behind or beside the head with no shoulder line; in 14 it comes out of the chest/neck.
+FAULT P11 [8, 14, 12]: head sits straight on the shoulders with no neck, tilted sideways on the car.
+FAULT P10 P7 [8, 14]: car wheel and body overlap his shoulder and chest; he seems to lie through the car body, not on the sill.
+FAULT P10 [16]: Jason at left is cut by the roof pillar and window frame, his head clipped. Panel 10 has the same overlap.
+FAULT P7 [10, 16]: the redhead's knees are balls with no thighs or lap, held up against her chest.
+FAULT P2 [7, 13]: passer-by in pink walks calmly. Brief needs running and pointing; nobody reacts.
+FAULT S1 [4, 5, 3]: the hit police car is tiny or cut off by the frame edge. No broken windscreen, and no dead driver is visible in 5.
+FAULT S1 [6]: no hydrant and no shop-front damage; the car sits beside the wall. The yellow falling thing is unreadable.
+FAULT S9 [6, 7, 13]: the smoke is a flat pale column; the fire is flat orange cut-outs, not on the car (it floats above it).
+FAULT S6 [8]: a pink spire building appears that no other panel has.
+
+## Checked
+1-16
+
+## Cold look
+I read 11 as grimace and 8 as calm; I did not see a hydrant, a broken windscreen or a dead driver, so the brief's story beats (4, 5, 6) do not read. I read the glow in 7 as an explosion.
+
+## Not on the list
+Gun arm pointing at the lens in 12 and close-up crops 11 and 12 look soft and enlarged; suggested line: a close-up must be redrawn, not an enlarged crop.
+Beat 6 and 7 cause and effect (bullet to crash): suggested line: each action has a visible cause on the previous panel.
+
