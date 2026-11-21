@@ -643,21 +643,31 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     # round to his FRONT side, out on the pavement a little behind him: his face and chest at three-quarters, the
     # gun arm 70 degrees across the line of sight (its full length, shoulder to hand), then a pan along his line of
     # fire onto the lead cruiser for shots 3 and 4 (the cruiser and his face cannot share a tall frame from here)
-    (1.10, (2.20, 1.55, 2.30), (0.95, 1.20, -0.30), 1300),      # round the front corner as he rises to the window
-    (1.70, (3.70, 1.35, -1.25), (0.80, 1.28, -0.60), 1650),     # his front side: face, chest, the arm across
-    (2.40, (3.70, 1.35, -1.25), (0.75, 1.28, -0.80), 1650),     # held through shots 1 and 2
-    (2.70, (3.70, 1.35, -1.25), (0.40, 1.27, -7.70), 1000),     # along his line of fire onto the cruiser
-    (2.95, (3.70, 1.35, -1.25), (0.50, 1.28, -7.70), 1000),
-    (3.10, (3.70, 1.35, -1.25), (0.45, 1.27, -7.75), 1225),     # the push for the hit (focal scaled to the distance)
-    (3.50, (3.70, 1.35, -1.25), (0.40, 1.25, -7.80), 1225),
-    (3.95, (1.90, 1.50, 0.80), (0.35, 1.05, -9.00), 1250),     # over the road beside his door (on the pavement
-    (4.90, (1.90, 1.50, 0.80), (0.40, 1.05, -9.20), 1250),     # the passers-by walked through the lens)
-    (5.10, (2.40, 1.45, 0.80), (1.37, 1.27, -8.20), 1100),
-    (5.36, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
-    (3.70 + WOB, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
-    (4.55 + WOB, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
-    (5.15 + WOB, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
-    (5.75 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
+    # chat 27 (v3 F1, F4, F5, F7: his back at 15.4, 18.1-18.6, 20.1-21.5; a passer-by through the lens at 17.1;
+    # the back-view check measures each): the lens reaches his front side BEFORE he turns back (it arrived 0.3 s
+    # after him), rides 2.1 m up over the pavement (above every head; the passers-by on that side walk nearer the
+    # shop fronts, PEOPLE4), looks back at the crash from beside him (he is behind the lens, never his back), turns
+    # to his face for the "huh", and swings round the bonnet only as he turns to climb in (he faces out, then front)
+    (0.85, (2.30, 1.60, 2.40), (0.90, 1.25, 0.00), 1300),      # round the front corner as he rises to the window
+    (1.15, (3.00, 1.90, 0.60), (0.90, 1.28, -0.30), 1400),
+    (1.45, (3.00, 2.10, -1.25), (0.80, 1.28, -0.60), 1355),     # his front side: face, chest, the arm across
+    (2.40, (3.00, 2.10, -1.25), (0.75, 1.28, -0.80), 1355),     # held through shots 1 and 2
+    (2.62, (3.00, 2.10, -1.25), (0.40, 1.27, -7.70), 965),      # along his line of fire onto the cruiser
+    (2.95, (3.00, 2.10, -1.25), (0.50, 1.28, -7.70), 965),
+    (3.10, (3.00, 2.10, -1.25), (0.45, 1.27, -7.75), 1185),     # the push for the hit (focal scaled to the distance)
+    (3.50, (3.00, 2.10, -1.25), (0.40, 1.25, -7.80), 1185),
+    (3.95, (1.60, 2.10, -1.25), (0.35, 1.05, -9.00), 1150),     # the wobble: back over the road (the walkers 2.6 m
+    #   off), he is behind the lens from here
+    (4.90, (1.60, 2.10, -1.25), (0.40, 1.05, -9.20), 1150),
+    (5.10, (1.60, 2.10, -1.25), (1.37, 1.27, -8.20), 1050),
+    (5.36, (1.60, 2.10, -1.25), (2.71, 1.29, -8.49), 1150),     # the hydrant, then the shop front
+    (5.70, (1.60, 2.10, -1.25), (2.80, 1.00, -12.0), 1150),     # the fireball blooms
+    (6.15, (1.60, 2.10, -1.25), (2.70, 1.20, -13.5), 1350),     # a slow push on the fire
+    (6.45, (1.90, 2.00, -1.45), (1.15, 1.42, -0.20), 1150),     # round onto his face (from just behind his gun
+    #   hand, above it: his front at about 20 degrees): the flat "huh"
+    (6.85, (1.90, 2.00, -1.45), (1.10, 1.38, -0.15), 1150),
+    (7.35, (2.20, 1.90, 1.80), (0.60, 1.25, -0.10), 1150),      # round the bonnet as he turns to climb in
+    (7.85, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),      # shot 3's frame
     (6.20 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
 ]
 
@@ -724,12 +734,29 @@ def _strip_people():
         z = -260.0
         while z < 200:
             z += rng.uniform(3.0, 9.0)
-            out.append(dict(at=(side * rng.uniform(8.2, 9.5), z), face=rng.choice([0.0, 180.0, 90.0 * -side]),
+            x = rng.uniform(8.2, 9.5)
+            if side > 0:                  # chat 27 (v3 F4): shot 4's lens rides at x 8.0 over this pavement; walkers
+                x = 9.2 + (x - 8.2) * 0.4 / 1.3   # keep 1.2 m clear of it, by the shop fronts (9.2 to 9.6)
+            out.append(dict(at=(side * x, z), face=rng.choice([0.0, 180.0, 90.0 * -side]),
                             i=len(out), walk=rng.uniform(0, 1)))
     return out
 
 
 PEOPLE4 = _strip_people()
+LENS_PAVE = (0.9, 4.0)          # shot 4's lens rides over the shop pavement (x 8.0, 2.1 m up) in this span (CAM4)
+
+
+def _lens_clear():
+    """chat 27 (v3 F4, a repeat): whoever is on the shop pavement within 7 m of the lens while it rides over it passes
+    the frame's edge as half a giant: they are not on this stretch (the crash's pavement, passed later from over the
+    road, keeps its people)."""
+    keep = []
+    for pp in PEOPLE4:
+        if pp['at'][0] > 0 and any(abs(_crowd(pp, u)[1] - (V4 * u - 1.25)) < 7.0
+                                   for u in np.arange(LENS_PAVE[0], LENS_PAVE[1], 0.1)):
+            continue
+        keep.append(pp)
+    PEOPLE4[:] = keep
 PALMS4 = [((7.6 if s < 0 else 9.2) * s, z) for k, (s, z) in enumerate((s, z) for z in np.arange(-280, 220, 21.0) for s in (-1, 1))
           if (k + int(z / 21)) % 2 == 0]
 _SP = {}
@@ -815,10 +842,13 @@ def _crowd(pp, t, dz=0.0):
     j = V.standing(sp)
     tz = V4 * t                                            # the Tulip's z: where the noise is
     t_duck = SHOTS[0] + 0.12 + 0.010 * abs(z0 - tz) + 0.08 * (pp['i'] % 3)
-    near_fire = IMPACT is not None and abs(z0 - (IMPACT[1][1] + 2.6)) < 22 and side > 0 or (
-        IMPACT is not None and abs(z0 - IMPACT[1][1]) < 14)
     ducks = abs(z0 - V4 * SHOTS[0]) < 45
-    sees_fire = IMPACT is not None and abs(z0 - (IMPACT[1][1] + 2.6)) < 60     # chat 14: a man strolled past the fireball
+    # chat 27 (v3 F6, Sam's note given twice, rule 30): who is near the fire is judged where they ARE at the blast,
+    # not where they started the shot (a walker covers 12 m by then: a woman 5 m from the fireball strolled on)
+    zi = z0 + (dirz * WALK_V * (min(IMPACT[0], t_duck if ducks else 99.0) + 3.2) if walker and IMPACT else 0.0)
+    near_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 22 and side > 0 or (
+        IMPACT is not None and abs(zi - IMPACT[1][1]) < 14)
+    sees_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 60     # chat 14: a man strolled past the fireball
     t_stop = min(t_duck if ducks else 99.0, IMPACT[0] + 0.3 if sees_fire else 99.0)
     z = z0 + (dirz * WALK_V * (min(t, t_stop) + 3.2) if walker else 0.0)
     F = (0.0, 0.0, dirz) if walker else (-side * 1.0, 0.0, 0.0)
@@ -865,12 +895,19 @@ def _crowd(pp, t, dz=0.0):
         a = a0 + da * up                                   # turning round over 0.4 s, never a flip
         F = (math.sin(a), 0.0, math.cos(a))
         head = None
+        r = smooth((t - (IMPACT[0] + 0.9 + 0.1 * (pp['i'] % 2))) / 0.35) if pp['i'] % 3 == 0 else 0.0
+        if r > 0:                                          # every third points at it (acting rows, B5: "stop, stare,
+            V.aim(j, 'R', tuple(a_ + (b_ - a_) * r for a_, b_ in zip((110.0, 430.0, 40.0), (80.0, -120.0, 600.0))))
+            #                                                point"; chat 27, v3 F6: a still stare read as nothing)
     elif IMPACT and t > IMPACT[0] + 0.2 and t < t_run and not walker:
         fz = IMPACT[1][1] + 2.6
         head = S._norm((SHOP4 - x0, 0.0, fz - z))           # staring at the fire
     elif ducks and t < t_duck and abs(z0 - tz) < 30:
         head = S._norm((LANE4 - x0, 0.0, tz - z))           # turning to the roar of the chase
     return x0, z, F, j, head
+
+
+_lens_clear()
 
 
 def strip_ground(img, cam, p):

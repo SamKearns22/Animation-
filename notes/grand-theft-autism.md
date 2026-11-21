@@ -563,25 +563,57 @@ Done in chat 26 (not yet seen by Sam):
 - [ ] Environment: the opener's title font downloads from dafont.com, which this session's network blocks; shot 1
       cannot be drawn here (cutmatch ran from cut 2->3). The next chat's machine needs it, or the font file.
 
-## Where things stand (21 Nov, chat 26, Opus high)
-- Rules that bite next: Seeing like Sam 4 (Jason from behind at 15.4, 18.1-18.6, 20.6-21.7 is a camera fault first),
-  30 (the sausage arm is a FOURTH repeat: chat 24 moved the camera for the firing only), 3 (improve the check, then fix).
-- Done: full-size fault list F1-F13 from 14.1 s (section "Animatic v3 from 14.1 s" above). Fixed: F10/F11 (Jason is one
-  body across the 4->5 cut and in shots 5-8), F9 (wheel and Lucia's grip the same in every shot). New cut-match check
-  (catches Sam's 4->5 glitch on its own, passes the true cuts). Body and layer checks on shots 5-8: one passer-by's feet
-  4 px under the pavement for one drawing (shot 5's start). Clip 20-26 s sent (body check on every drawing).
-- Next: Opus, high effort (camera and pose rebuild). 1) A back-view check (Seeing like Sam 4): a lead seen from more than
-  about 110 degrees behind, big in frame, is a fault; test it on F1, F5, F7. 2) Re-choose shot 4's cameras for the crash
-  hold and the climb back (CAM4 keys 3.95 to 5.75+WOB) so Jason is seen from his front side. 3) F4, F3, F6, the palm at
-  the cut. 4) Hands (F13) and shot 6's framing (F12) through the proposal route. Then Sam's Y for a check sheet/animatic.
-- Needs Sam: nothing now. Still open: whether the 5->6->7->8 cuts should be glides.
-- Read: guides/job-packs.md "Notes round"; CLAUDE.md "Seeing like Sam"; this file's "Animatic v3 from 14.1 s"; case study 16.
-- Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
-- For Claude: leanout.seated(sp, hand_r, pole_r, dx) and film_layer(k=); gta_shots58 JASON58 (drawn after the car in
-  tulip_draw); R.WHEEL_C lowered, WHEEL58 gone; lying_flat 'lying_hand_R'; `cutmatch.py gta_film --only "cut_4->5" --out D`.
-  Opener font comes from dafont.com, blocked in chat 26's network: shot 1 could not be drawn there. ARM_FOLD_NAMED is
-  still set in grand_theft_autism.py (remove for the real checks). Checked-clip script: a loop with humancheck.Writer.
+Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
+- [x] NEW back-view check (Seeing like Sam 4), inside the body check, so every clip and animatic runs it: a person
+      turned more than 100 degrees from the lens and big in frame (skeleton: neck to hips over 10% of the frame
+      height; flat people over 11% tall) is a fault. Tested alone on v3: catches F1 (15.4, 107), F5 (18.1-18.6, 140),
+      F7 (20.2-21.25, 125-162), F4's passer-by (17.0, 174) and F6's big man (20.1, 167); passes 14.5 and shots 5-8.
+      Standing test body_check_back_view (v3 from its commit must flag, today's must pass).
+- [x] F1, F5, F7: shot 4's camera re-chosen (CAM4): the lens reaches his front side before he turns back (it arrived
+      0.3 s after him), rides 2.1 m up over the pavement for the shooting, looks back at the crash from over the road
+      with him behind the lens, turns onto his face for the "huh" from just behind and above his gun hand, and goes
+      round the bonnet only as he turns to climb in. Jason now never more than 94 degrees from the lens (was 162).
+      Lost: the old over-the-bonnet view back past him at the fire (it showed his back).
+- [x] F4: walkers on the shop pavement within 7 m of the lens while it rides there are not on that stretch
+      (_lens_clear: 11 of 154); the others walk 9.2-9.6 m out (by the shop fronts), 1.2 m clear. No one through the lens.
+- [x] F3 reads now: the pan along his line of fire lands on the lead cruiser with the street round it.
+- [~] F6: nearness to the fire is judged where a walker IS at the blast (was: where they started, 12 m off); every
+      third onlooker who turns to the fire points at it. NOT fixed on screen: at 20.27 a woman in pink 5 m from the
+      fireball still stands still facing us (cause not found; look at her t_run and near_fire first).
+- [x] False flag fixed: the crossed-arms test skipped side-on walkers (shoulders one over the other): 8 flags gone.
+- [x] Old test body_check_shot4_v4 was already failing (v4's own shot 3 really had Lucia's crossed arms, v4 note 1):
+      it now asks today's shot 3 to be clean. Passes.
+- Named in the clip's body check: Lucia flagged from behind 15.4-16.5 and 20.5-21.1 (from the pavement she is on the
+  far side, almost wholly hidden behind Jason; the check counts her whole drawing); Jason's forearm end-on one drawing
+  each at 15.77 and 21.68; a cruiser driver's arm one drawing at 19.68; the woman from behind one drawing at 20.52.
+- Seen, not fixed: the yellow hydrant passes right under the lens at 19.0 (two drawings as a yellow dome at the
+  bottom edge). F15 (bonnet stripes read as trousers) clearly visible at 21.8-22.3.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 49.03% of 15%; forecast 99.6% (2026-11-21)
+- [ ] Critique r27-p1 (fresh helper, 10 panels 15.27-21.68 + close-ups), open: arms tubes and hands stumps (F2/F13,
+      known: hand kit); gun upright at 15.60 (rising beat B2: muzzle up is the acting row, my panel brief was wrong);
+      NEW 20.60: the car's side drawn over Jason's chest (he seems to lie through the door: layer check on the face
+      key's view); his head on the shoulders with no neck at 20.60; NEW the hit cruiser small at 17.1-18.3 (focal 965-
+      1150 from the new lens: push in); the hydrant hit unreadable at 19.6 (the yellow piece); fire and smoke flat cut-
+      outs floating above the car; the redhead's knees balls at 21.68; a pink spire on the skyline at 20.60 only; F6's
+      pink walker (confirmed).
+
+## Where things stand (21 Nov, chat 27, Opus high)
+- Rules that bite next: 30 (F6's crowd is a repeat: the woman in pink at 20.27 still stands 5 m from the fireball),
+  3 (improve the check that missed it, then fix), Seeing like Sam 1 (look at every frame that moves, full size).
+- Done: back-view check (in the body check, tested on v3's F1/F4/F5/F6/F7); shot 4's camera re-chosen (never his
+  back; nobody through the lens); fire nearness by position; side-on false flag. Shot 4 clip sent (14.1-22.3 s).
+- Next: Opus, high effort. 1) F6: why the woman in pink does not run (then a check: anyone within 12 m of a blast who
+  neither runs nor shields is a fault). 2) F15 bonnet stripes, the palm at the 4->5 cut, the hydrant under the lens.
+  3) Hands (F13) and shot 6's framing (F12) through the proposal route. Then Sam's Y for the animatic.
+- Needs Sam: his look at the shot 4 clip. Still open: whether the 5->6->7->8 cuts should be glides.
+- Read: guides/job-packs.md "Notes round"; this file's "Animatic v3 from 14.1 s" (chat 27's list at its end).
+- Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
+- For Claude: humancheck._backview (BACK_DEG 100, BIG_SKEL, BIG_FLAT); gta_rehearse CAM4 keys 0.85-7.85, LENS_PAVE,
+  _lens_clear, crowd zi; kittests body_check_back_view. Frames: render with a loop of gta_film.frame_image + HC.frame_end.
+  ARM_FOLD_NAMED is still set in grand_theft_autism.py. Opener font from dafont.com (blocked here too, untested).
+
   Handover check (chat 26): its 4 quick-check lines take gta_rehearse.py and leanout.py for films; they are this film's shot
   files (brief and notes here, people named in grand-theft-autism-people.txt): answered, nothing to add.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 51.48% of 15%; forecast 102% (2026-11-21)
+  Handover check (chat 27): its 2 quick-check lines take gta_rehearse.py for a film; it is this film's shot file (notes here, people in grand-theft-autism-people.txt): answered, nothing to add.

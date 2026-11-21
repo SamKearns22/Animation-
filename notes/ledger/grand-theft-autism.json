@@ -15598,6 +15598,11 @@
    "date": "2026-11-21",
    "spent": 49.03,
    "forecast": 99.6
+  },
+  {
+   "date": "2026-11-21",
+   "spent": 51.48,
+   "forecast": 102.0
   }
  ],
  "critique": {
@@ -15912,6 +15917,31 @@
      "2-5 P14: eyes too small to judge at phone size; need a full-size face crop.",
      "1-6 P4: no references on the sheet; need the character reference beside each face."
     ]
+   },
+   {
+    "round": 27,
+    "pass": 1,
+    "stage": "notes",
+    "date": "2026-11-21",
+    "hunt": 1,
+    "faults": 14,
+    "cant_tell": 0,
+    "open": [
+     "1,9,11,15 P3: Jason's arm hanging out of the window is a limp tube with no elbow bend; in 15 the forearm ends in a jagged cut edge with no hand.",
+     "1,11,15 P6: hand outside the window is a blank pale stump (no ball hand, no fingers), lost against the door.",
+     "2,12 P2: gun arm points straight up, gun upright; the brief says arm straight back at the police car. No recoil, nothing aimed.",
+     "2,12 P1: the gun sits on top of the fist, not gripped; it floats above the hand.",
+     "8,12,14 P5: arm starts behind or beside the head with no shoulder line; in 14 it comes out of the chest/neck.",
+     "8,12,14 P11: head sits straight on the shoulders with no neck, tilted sideways on the car.",
+     "8,14 P10 P7: car wheel and body overlap his shoulder and chest; he seems to lie through the car body, not on the sill.",
+     "16 P10: Jason at left is cut by the roof pillar and window frame, his head clipped. Panel 10 has the same overlap.",
+     "10,16 P7: the redhead's knees are balls with no thighs or lap, held up against her chest.",
+     "7,13 P2: passer-by in pink walks calmly. Brief needs running and pointing; nobody reacts.",
+     "3-5 S1: the hit police car is tiny or cut off by the frame edge. No broken windscreen, and no dead driver is visible in 5.",
+     "6 S1: no hydrant and no shop-front damage; the car sits beside the wall. The yellow falling thing is unreadable.",
+     "6-7,13 S9: the smoke is a flat pale column; the fire is flat orange cut-outs, not on the car (it floats above it).",
+     "8 S6: a pink spire building appears that no other panel has."
+    ]
    }
   ],
   "lines": {
@@ -15928,11 +15958,11 @@
     "false": 0
    },
    "P2": {
-    "faults": 19,
+    "faults": 21,
     "false": 0
    },
    "P5": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "P13": {
@@ -15940,7 +15970,7 @@
     "false": 1
    },
    "P11": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "P8": {
@@ -15948,11 +15978,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 7,
+    "faults": 8,
     "false": 1
    },
    "P1": {
-    "faults": 12,
+    "faults": 13,
     "false": 0
    },
    "O5": {
@@ -15960,7 +15990,7 @@
     "false": 0
    },
    "P3": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "O1": {
@@ -15972,7 +16002,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 8,
+    "faults": 10,
     "false": 0
    },
    "O3": {
@@ -15984,7 +16014,7 @@
     "false": 0
    },
    "S9": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "M2": {
@@ -15996,7 +16026,7 @@
     "false": 0
    },
    "S6": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "S5": {
@@ -16004,7 +16034,7 @@
     "false": 0
    },
    "S1": {
-    "faults": 5,
+    "faults": 7,
     "false": 0
    },
    "O6": {
@@ -16028,7 +16058,7 @@
     "false": 0
    },
    "P10": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "P12": {

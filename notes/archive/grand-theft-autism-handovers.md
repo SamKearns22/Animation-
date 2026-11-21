@@ -496,3 +496,24 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Finder: this chat searched the code by hand (no `page.py show`) because the shot code is one large file with no page index yet; the next chat should use `page.py grand-theft-autism show` first.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 48.76% of 15%; forecast 99.3% (2026-11-21)
+
+
+## Where things stand (21 Nov, chat 26, Opus high)
+- Rules that bite next: Seeing like Sam 4 (Jason from behind at 15.4, 18.1-18.6, 20.6-21.7 is a camera fault first),
+  30 (the sausage arm is a FOURTH repeat: chat 24 moved the camera for the firing only), 3 (improve the check, then fix).
+- Done: full-size fault list F1-F13 from 14.1 s (section "Animatic v3 from 14.1 s" above). Fixed: F10/F11 (Jason is one
+  body across the 4->5 cut and in shots 5-8), F9 (wheel and Lucia's grip the same in every shot). New cut-match check
+  (catches Sam's 4->5 glitch on its own, passes the true cuts). Body and layer checks on shots 5-8: one passer-by's feet
+  4 px under the pavement for one drawing (shot 5's start). Clip 20-26 s sent (body check on every drawing).
+- Next: Opus, high effort (camera and pose rebuild). 1) A back-view check (Seeing like Sam 4): a lead seen from more than
+  about 110 degrees behind, big in frame, is a fault; test it on F1, F5, F7. 2) Re-choose shot 4's cameras for the crash
+  hold and the climb back (CAM4 keys 3.95 to 5.75+WOB) so Jason is seen from his front side. 3) F4, F3, F6, the palm at
+  the cut. 4) Hands (F13) and shot 6's framing (F12) through the proposal route. Then Sam's Y for a check sheet/animatic.
+- Needs Sam: nothing now. Still open: whether the 5->6->7->8 cuts should be glides.
+- Read: guides/job-packs.md "Notes round"; CLAUDE.md "Seeing like Sam"; this file's "Animatic v3 from 14.1 s"; case study 16.
+- Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
+- For Claude: leanout.seated(sp, hand_r, pole_r, dx) and film_layer(k=); gta_shots58 JASON58 (drawn after the car in
+  tulip_draw); R.WHEEL_C lowered, WHEEL58 gone; lying_flat 'lying_hand_R'; `cutmatch.py gta_film --only "cut_4->5" --out D`.
+  Opener font comes from dafont.com, blocked in chat 26's network: shot 1 could not be drawn there. ARM_FOLD_NAMED is
+  still set in grand_theft_autism.py (remove for the real checks). Checked-clip script: a loop with humancheck.Writer.
+
