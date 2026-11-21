@@ -27,3 +27,6 @@ One thing I should have mentioned: the dialogue and effects should be the cleare
 ### 2026-11-21T13:57:58
 Please don't restart the render again
 
+### 2026-11-21T14:42:45
+Jason skips position in second 20. Previously he is sat upright, then he's sunken into the car. We want him upright. The pistol he holds at his chest is not present. The autistic girl's dialogue is barely audible but everyone else's is fine.
+
