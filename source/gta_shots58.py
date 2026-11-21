@@ -10,7 +10,8 @@ MAP
   chaser58 ......... cruisers 2 and 3 follow the same path, a gap behind, closing in from shot 6 to shot 8
   crowd_b .......... B's passers-by: walk or watch, heads turn to the chase as it roars past
   ground58 ......... A's ground, the junction mouth cut out of A's east pavement, B's road, kerbs and pavements
-  inside58 ......... all three in their seats (Jason too, gun flat on his chest): acting keys per line (lines 3-6)
+  inside58 ......... her and Lucia in their seats; Jason's pose and face for the drawing (JASON58: drawn after the car
+                     on shot 4's own seated skeleton, leanout.seated, chat 26): acting keys per line (lines 3-6)
   world58 .......... one frame at world time t (shot 4's clock: shot 5 starts at 6.2)
   cam6 ............. shot 6's closer two-shot through the windscreen
   SHOTS58 .......... shot 5-8 frame functions, their world start times and lengths
@@ -32,6 +33,7 @@ import gta_rehearse as R         # noqa: E402  shot 4's world: street pieces, ca
 import sets as S                 # noqa: E402
 import gta_cars as G             # noqa: E402
 import gta_cast as GC            # noqa: E402
+import leanout as LO              # noqa: E402  Jason's one body (chat 26)
 B, V, PC, FX = R.B, R.V, R.PC, R.FX
 smooth, bump = R.smooth, R.bump
 
@@ -480,27 +482,35 @@ def inside58(t, rec=None):
         # thick diagonal with a lump at the frame's bottom, chat 19), and his head goes where his hand points: a
         # thumb back at her, an open hand explaining to Lucia with beats on the words, palm up on "this job", the
         # thumb back at her again on "without her" (grudging), then down, fed up.
-        lift = (0.52, 0.96, 0.22)
-        thumb = (0.60, 1.16, 0.06)
-        expl = (0.64, 1.12, 0.16)
+        # chat 26 (F10/F11): Jason is drawn on shot 4's own seated skeleton (leanout.seated), so the cut from shot 4
+        # keeps his body; the hand points are in the car's frame for that skeleton (neck 1.14, right shoulder at
+        # 0.67, 1.08, 0.04). Rest = shot 4's last pose (hand on his chest).
+        rest = LO.K1_HAND_R
+        dash = (0.42, 0.90, 0.52)
+        lift = (0.60, 1.16, 0.26)          # beside his face, inboard of the window: shot 6's close camera
+        thumb = (0.60, 1.28, 0.16)         # sees it (at 0.64-0.68 it fell off the frame's left edge, chat 26)
+        expl = (0.60, 1.20, 0.32)
         beat = lambda u, d=0.045: (expl[0], expl[1] - d, expl[2])
-        shrug = (0.66, 1.08, 0.22)
-        her_hand = (0.60, 1.16, 0.06)
+        shrug = (0.62, 1.12, 0.36)
+        her_hand = thumb
         b1, b2, b3 = word_at(LINE5, 20), word_at(LINE5, 24), EXPLO
-        lh = keys_at([(0, thigh), (6.30, thigh), (6.50, dash), (7.40, dash), (7.75, thigh),
-                      (12.0, thigh), (12.3, lift), (H1 - 0.25, lift), (H1 - 0.05, thumb), (H1 + 0.45, thumb),
+        lh = keys_at([(0, rest), (6.30, rest), (6.50, dash), (7.40, dash), (7.75, rest),
+                      (12.0, rest), (12.3, lift), (H1 - 0.25, lift), (H1 - 0.05, thumb), (H1 + 0.45, thumb),
                       (H1 + 0.75, expl), (b1 - 0.05, expl), (b1 + 0.08, beat(0)), (b1 + 0.2, expl),
                       (b2 - 0.05, expl), (b2 + 0.08, beat(0)), (b2 + 0.2, expl),
                       (b3 - 0.05, expl), (b3 + 0.1, beat(0, 0.06)), (b3 + 0.25, expl), (15.3, expl),
                       (JOB - 0.05, lift), (JOB + 0.2, shrug), (WITHOUT - 0.12, shrug), (WITHOUT + 0.1, her_hand),
-                      (17.45, her_hand), (17.9, thigh)], t)
-        lshape = step_at([(0, 'palm'), (H1 - 0.12, 'thumb'), (H1 + 0.6, 'palm'), (WITHOUT - 0.05, 'thumb'), (17.6, 'palm')], t)
-        lpole = 'out' if WITHOUT + 0.6 < t < 18.2 else 'down'   # the hand coming down from his ear: 'down' folded
-        #                                                       the elbow across his chest (figure check, shot 7)
-        j_hands = [('R', ('fig', (120.0, 25.0, 80.0)), 'down', 'fist'), ('L', lh, lpole, lshape)]
-        gun = PC.glock('R', flash=0.0, aim3=(0.9, -1.0, 0.05), size=1.0)
+                      (17.45, her_hand), (17.9, rest)], t)
+        lshape = step_at([(0, 'fist'), (12.15, 'palm'), (H1 - 0.12, 'thumb'), (H1 + 0.6, 'palm'),
+                          (WITHOUT - 0.05, 'thumb'), (17.6, 'palm'), (17.85, 'fist')], t)
+        near_rest = math.dist(lh, rest) < 0.12
+        pole = LO.K1_POLE_R if near_rest else (1.0, -1.0, 0.1)     # off the chest: the elbow out and down
+        j_over['lying_hand_R'] = lshape
+        JASON58['k'] = LO.seated(JASON58.setdefault('sp', GC.cast()['jason']), hand_r=lh, pole_r=pole, dx=-0.07 * th)
+        JASON58['k'].front = True
+        JASON58['face'] = dict(GC.cast()['jason'], **j_over)
         R.bench(lay, cam, car)
-        order = sorted([('case', (0.4, 0.7, -0.85)), ('her', her_neck), ('lucia', lu_neck), ('jason', j_neck)],
+        order = sorted([('case', (0.4, 0.7, -0.85)), ('her', her_neck), ('lucia', lu_neck)],
                        key=lambda s: -math.dist(car.body_pt(s[1]), cam.pos))
         for who, at in order:
             if who == 'case':
@@ -511,24 +521,15 @@ def inside58(t, rec=None):
             elif who == 'lucia':
                 sit(lay, cam, car, 'lucia', lu_neck, t, lu_hands, lu_over, head_dir=lu_dir, rec=rec)
                 R.steering_wheel(lay, cam, car, rot)
-            else:
-                sit(lay, cam, car, 'jason', j_neck, t, j_hands, j_over, props=[], grip=(), rec=rec,
-                    head_dir=fwd)
     return paint
 
 
+JASON58 = {}       # Jason's seated skeleton and face for this drawing (inside58 sets it; tulip_draw draws it)
+
+
 # ------------------------------------------------------------------------------------------------ one frame
-WHEEL58 = (-0.42, 0.87, 0.47)    # Lucia's wheel 8 cm lower than shot 3's: the closer, lower two-shot put its rim across
-#                                  her mouth as she speaks (chat 16); too small to see between shots
-
-
 def world58(t, cam_fn, record=None):
-    keep = R.WHEEL_C
-    R.WHEEL_C = WHEEL58
-    try:
-        return _world58(t, cam_fn, record)
-    finally:
-        R.WHEEL_C = keep
+    return _world58(t, cam_fn, record)      # the wheel's lower height is shot 3-4's own now (chat 26, F9)
 
 
 def seen_round_corner(cam, q):
@@ -620,6 +621,9 @@ def _world58(t, cam_fn, record=None):
     def tulip_draw(im):
         seat_pts.clear()
         G.draw_car(im, cam, tul, t=t, inside=inside58(t, seat_pts))
+        _, kw, _ = LO.film_layer(im, cam, tul, t, JASON58['sp'], JASON58['face'], k=JASON58['k'])
+        seat_pts.append(('jason', [(n, tuple(map(float, kw[n]))) for n in
+                                   ('neck', 'head', 'shL', 'elL', 'wrL', 'shR', 'elR', 'wrR', 'pelvis')]))
         tinf['pts3'] = [(f'{who} {n}', q) for who, pts in seat_pts for n, q in pts]
     items.append(('tulip', d_t, tulip_draw, tinf))
     for e in sorted(items, key=lambda e: -e[1]):

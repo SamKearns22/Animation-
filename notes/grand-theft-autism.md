@@ -502,6 +502,58 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - Chat 23: all ten done in version 8 (each cause, fix and check in the case study, section 16); note 10 through
   the proposal route (notes/proposals/teach-recognise.md).
 
+## Animatic v3 from 14.1 s at full size (chat 26, 21 Nov, Opus high; Sam: "riddled from shot 4 on")
+Film-clock times (the clean render's own stamp). Each: what a stranger sees; the check that should have caught it.
+Why none was caught this round: v3 was made with every check off (Sam's order); the body check, the layer check and
+the critique never ran. Under that, the checks that would still have passed it are named per line.
+- [ ] F1 15.4: Jason climbs out with his back to us; his arm a plain tube, the hand on the door a blob. Check: none
+      measures "seen from behind" (Seeing like Sam 4 has no check). NEW: back-view check (below).
+- [ ] F2 15.6-16.4: the gun arm is a tube with a round end, no hand; the pistol reads as a stick (15.6), a blade
+      (15.75), a grey box (16.1). His near arm is a big blob with a bare circle on it (bottom right). Check: the
+      body check tests bones, not whether a hand reads as a hand; Sam's open request (held object recognisable).
+- [ ] F3 16.6: the lens right behind the Tulip's tail: a red box with a dark slab out of the boot, nobody in frame.
+      Check: none asks "what is this frame of?" (critique skipped).
+- [ ] F4 17.1: a passer-by walks through the lens (half a man in white at the left edge, stick legs). Repeat of chat
+      23's own note (rule 30). Check: none tests people against the camera's near distance.
+- [ ] F5 18.1-18.6: the back of Jason's head, huge, cut by the right edge. Back-view check (F1).
+- [ ] F6 20.1-20.6: passers-by 10 m from the fireball stand still, one big man in front with his back to us and stick
+      arms. Repeat of v4 note 14 (rule 30): the crowd code "stares at the fire" after it; a stare reads as nothing.
+- [ ] F7 20.6-21.5: Jason from behind leaning out and climbing back: the arm a thick tube with a round end (the
+      sausage, FOURTH time, rule 30), head a brown blob, body hanging outside the door at 21.25. Why chat 24's fix
+      failed: it moved the camera to his front for the firing only; the crash hold and the climb back (keys 3.70+WOB
+      to 5.15+WOB) still look at him from ahead of the car while he faces back. Back-view check (F1).
+- [ ] F8 21.67: sliding in, his head and arm are drawn over the windscreen's frame. Car check ran only on the firing.
+- [ ] F9 21.9-22.3 (shot 4's end, and shot 3): the steering wheel's rim runs across Lucia's mouth. Shots 5-8 lowered
+      their wheel 8 cm in chat 16 for this; shots 3-4 kept the old one. Check: layer check not run on shot 4's ends.
+- [ ] F10 22.3, the cut to shot 5 (Sam's "glitch"): same camera, but Jason becomes another drawing (hair, face
+      turned, arms gone, a bare circle on his shoulder); Lucia's hands and wheel drop; passers-by jump; a palm trunk
+      pops in at the left edge; fire appears on the wreck. Root: shots 3-4 draw Jason on the lean-out skeleton,
+      shots 5-8 with the seated flat figure, and each shot sets its own wheel, crowd and fire. Check: none compares a
+      shot's last drawing with the next one's first. NEW: cut-match check.
+- [ ] F11 shots 5, 7, 8: Jason's arms never show; a bare circle sits on his left shoulder; his raised hand (33.6) is
+      a mitten. Same root as F10 (the seated figure's fist at a fixed point inside his own outline).
+- [ ] F12 shot 6 (25.5-33.5): half the frame is bonnet (bottom 55%); a see-through grey panel over Lucia's face and
+      hair the whole shot; Jason's gesture hand a mitten with a lump (29-31 s); a bare circle on his chest throughout.
+- [ ] F13 every shot: hands are discs or mittens (no fingers read at phone size or full size). The house hand kit is
+      not used inside the car. Name: a kit job, too big for this chat.
+Order of work this chat: F10/F11 (one Jason, the cut matched), F9, the cut-match check; then F7/F5 camera (back view).
+Done in chat 26 (not yet seen by Sam):
+- [x] F10/F11: Jason in shots 5-8 is drawn on shot 4's own seated skeleton (leanout.seated, K1 with his gesture hand),
+      so the cut keeps his body, hair, face and hand; the bare shoulder circle is gone. Gesture points moved inboard
+      (at the window they fell off shot 6's left edge). Lost: the seated figure's mitten-with-a-thumb gesture hand; it
+      is a disc now (F13 either way: neither reads as a hand).
+- [x] F9: the wheel is 8 cm lower in shots 3-4 too, Lucia's grip is shots 5-8's (ten and two) in every shot: the rim
+      no longer crosses her mouth and nothing drops at the cut. Shot 3 changes with it (the same frame).
+- [x] NEW check (rule 3): source/cutmatch.py, the cut-match check. Same camera across a cut -> anything jumping more
+      than the four drawings before it moved is a fault, with a marked picture. Tested: flags v3's 4->5 (Sam's
+      glitch) on its own; passes 3->4 and 7->8 (siren light flips taught it: whole-frame wash removed, four-drawing
+      baseline); 4->5 clean after the fix. Not yet wired into the animatic's pre-send checks (next chat: add it to
+      the checks list for this film; propose it as a house check through the proposal route).
+- [ ] Still at the cut: a thin palm trunk appears at the left edge (the side road exists only from shot 5 on); the
+      woman in pink moves because she is running (real movement).
+- [ ] Environment: the opener's title font downloads from dafont.com, which this session's network blocks; shot 1
+      cannot be drawn here (cutmatch ran from cut 2->3). The next chat's machine needs it, or the font file.
+
 ## Where things stand (21 Nov, chat 25, Sonnet; Sam hands this to his other account at 9 pm)
 - Rules that bite next: Seeing like Sam 1 (look as a viewer: every frame from shot 4 on at FULL size, hands and joins first),
   30 (a repeat note = the first fix only patched it), the new top rule (say plainly what I can't do). Sam's "overrule all checks" is over:

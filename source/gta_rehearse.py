@@ -1182,7 +1182,9 @@ def jason_layer(img, cam, tul, t, lead, info=None):
 
 # ---- inside the Tulip (shot 3's three-shot and shot 4's ends): each person posed in the car's own frame (metres),
 # then drawn flat at the size and turn the camera gives them; the glass and the body rub out what they hide.
-WHEEL_C, WHEEL_R = (-0.42, 0.95, 0.48), 0.19          # Lucia's wheel: centre (car frame) and rim radius
+WHEEL_C, WHEEL_R = (-0.42, 0.87, 0.47), 0.19          # Lucia's wheel: centre (car frame) and rim radius. Chat 26
+#   (F9): 8 cm lower in every shot, as shots 5-8 had it since chat 16: at 0.95 its rim ran across her mouth in shots 3-4
+#   and dropped at the cut to shot 5
 WHEEL_TILT = math.radians(32)                        # its face tipped back toward her
 LINE2 = (1.00, [(0.00, 'etc'), (0.12, 'FV'), (0.24, 'E'), (0.38, 'L'), (0.48, 'AI'), (0.70, 'O'), (0.86, 'etc'),
                 (0.95, 'rest')])                     # "It's very loud." (shot 3 time, s): the wince lands on "loud"
@@ -1302,7 +1304,8 @@ def tulip_inside(t):
         her_hands = [('L', (-0.05 + fid, 0.85, -0.53), 'down', 'fist'), ('R', (0.05 + fid, 0.87, -0.50), 'down', 'fist')]
         lu_over = dict(mood='stern', squint=0.45, frown=0.09, brow_up=-0.01)
         lu_neck = (-0.42, 0.94, 0.05)
-        lu_hands = [('L', wheel_pt(rot, 160), 'out', 'fist'), ('R', wheel_pt(rot, 20), 'out', 'fist')]
+        carry = 0.28 * rot                               # chat 26: shots 5-8's grip (ten and two, fed), so the cut keeps her hands
+        lu_hands = [('L', wheel_pt(rot, 150 - carry), 'down', 'fist'), ('R', wheel_pt(rot, 30 - carry), 'down', 'fist')]
         # shot 4's acting rows (chat 21): her hands over her ears from the first shot ("it's very loud"), eyes squeezed
         # shut; a peek at the fireball (one hand off an ear); back to the spinner. Lucia: a tight glance at Jason as he
         # climbs past and back, a flinch blink on each shot, her eyes up to the mirror at the crash.
