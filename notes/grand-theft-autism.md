@@ -615,5 +615,5 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
   Handover check (chat 26): its 4 quick-check lines take gta_rehearse.py and leanout.py for films; they are this film's shot
   files (brief and notes here, people named in grand-theft-autism-people.txt): answered, nothing to add.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 51.48% of 15%; forecast 102% (2026-11-21)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 51.78% of 15%; forecast 63.5% (2026-11-21)
   Handover check (chat 27): its 2 quick-check lines take gta_rehearse.py for a film; it is this film's shot file (notes here, people in grand-theft-autism-people.txt): answered, nothing to add.

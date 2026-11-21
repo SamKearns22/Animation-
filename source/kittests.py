@@ -3598,6 +3598,53 @@ def body_check_back_view():
 
 
 @test
+def handover_status_checks():
+    """Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must
+    catch what slipped on Grand Theft Autism: notes over 4,000 words, a handover over 15 lines, a chat that never
+    logged its notes, stages never marked (Opus running finish.py: modelguard.py, now wired), a refused clip told to Sam as sent (chat 26), no
+    push notification; and stay quiet on the clean cases."""
+    import json
+    import tempfile
+    import handover as H
+    d = tempfile.mkdtemp()
+    def rec(lines):
+        f = os.path.join(d, f'r{len(os.listdir(d))}.jsonl')
+        open(f, 'w').write('\n'.join(json.dumps(x) for x in lines))
+        return f
+    def ast(*content, model='claude-opus-5-5'):
+        return {'type': 'assistant', 'timestamp': '2026-11-21T22:00:00',
+                'message': {'role': 'assistant', 'model': model, 'content': list(content)}}
+    bash = lambda c: {'type': 'tool_use', 'name': 'Bash', 'input': {'command': c}}
+    big = os.path.join(d, 'big.md')
+    open(big, 'w').write('word ' * 4100 + '\n## Where things stand\n' + 'line\n' * 16)
+    small = os.path.join(d, 'small.md')
+    open(small, 'w').write('notes\n## Where things stand\n- Open rule requests: none\n' + 'line\n' * 5)
+    sz_big, sz_small = H.size_faults(None, big), H.size_faults(None, small)
+    send = {'type': 'tool_use', 'id': 't1', 'name': 'SendUserFile', 'input': {'files': ['/x/clip.mp4']}}
+    refused = {'type': 'user', 'timestamp': '2026-11-21T22:00:01', 'message': {'content': [
+        {'type': 'tool_result', 'tool_use_id': 't1', 'is_error': True, 'content': 'Permission for this action was denied'}]}}
+    told = ast({'type': 'text', 'text': 'I sent you a short clip, 20-26 seconds.'})
+    not_sent = [f for f in H._run(H.turns(rec([ast(send), refused, told])), None, small) if 'NOT SENT' in f]
+    sent_ok = [f for f in H._run(H.turns(rec([ast(send), told])), None, small) if 'NOT SENT' in f]
+    no_push = H.push_faults(rec([ast(bash('ls'))]))
+    push = H.push_faults(rec([ast({'type': 'tool_use', 'name': 'PushNotification', 'input': {'message': 'x'}})]))
+    import ledger
+    led = ledger.load('grand-theft-autism')
+    stages_open = {'chats': led['chats'], 'estimate': 10, 'stages': [{'name': 'cast', 'pct': 2, 'done': None}],
+                   'film': 'x'}
+    real_load = ledger.load
+    ledger.load = lambda f: stages_open
+    try:
+        st = [f for f in H.ledger_faults('x') if f.startswith('STAGES')]
+    finally:
+        ledger.load = real_load
+    ok = (len(sz_big) == 3 and not sz_small and not_sent and not sent_ok
+          and no_push and not push and st)
+    return ok, (f'big notes {len(sz_big)} faults, clean {len(sz_small)}; refused send caught {bool(not_sent)}, real send '
+                f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
+
+
+@test
 def body_send_gate():
     """Change 1 (Sam's Y, 20 Nov): a video made since the gate reaches Sam only with a body check record, clean or
     named, and a fresh critique (rule 89); videos from before the gate pass as they are."""
