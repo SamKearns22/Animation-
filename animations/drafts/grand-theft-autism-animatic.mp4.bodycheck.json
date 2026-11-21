@@ -1,10 +1,11 @@
 {
  "video": "grand-theft-autism-animatic.mp4",
  "faults": [
-  "body check NOT run: Sam ordered all checks and preflights overruled (21 Nov)"
+  "body check NOT run: Sam ordered all checks overruled (21 Nov)",
+  "12 drawings of Jason's arm folded back across the body (named, not fixed)"
  ],
  "named": true,
  "why_named": "Sam's order, 21 Nov",
  "critique": "skipped on Sam's order, 21 Nov",
- "made": 1795266431.1130657
+ "made": 1795270022.9087634
 }
