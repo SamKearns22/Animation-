@@ -42,3 +42,8 @@ Yes. Why did you draw something unrecognisable that would 100% need a note?
 ### 2026-11-21T14:53:55
 Don't do the current render
 
+### 2026-11-21T14:54:33
+That is the exact mistake your first rule in CLAUDE.md warns about.
+
+Then why ignore it?
+
