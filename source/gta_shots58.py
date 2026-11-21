@@ -427,8 +427,8 @@ def inside58(t, rec=None):
         down = 1 - bump(t, LINE3[0] + 0.5, LINE3[0] + 0.9, LINE3[0] + 2.3)  # eyes down on the spinner, up then forward
         bright = smooth((t - (LINE6[0] - 0.35)) / 0.35)
         her_over = dict(mood='phone' if bright < 0.5 and down > 0.5 else None, gaze_dy=0.7 * down * (1 - bright) - 0.45 * bright,
-                        squint=0.35 * th, frown=-0.04 + 0.10 * pinch - 0.06 * bright, smile=-0.4 + 1.2 * bright,
-                        brow_up=0.045 * bright)
+                        squint=0.35 * th, frown=-0.04 + 0.10 * pinch - 0.06 * bright, smile=-0.4 + 2.0 * bright,
+                        brow_up=0.075 * bright)
         if her_over['mood'] is None:
             her_over.pop('mood')
         proud = bump(t, EXPLO - 0.1, EXPLO + 0.2, EXPLO + 1.2) + bump(t, WITHOUT, WITHOUT + 0.25, WITHOUT + 1.1)
