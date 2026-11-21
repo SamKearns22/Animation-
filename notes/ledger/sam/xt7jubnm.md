@@ -50,3 +50,6 @@ Then why ignore it?
 ### 2026-11-21T14:55:23
 Okay, thank you. Because we are so short on usage, draw the pistol and restart the render, override checks.
 
+### 2026-11-21T14:57:02
+He needs to hold it against his chest, in his gripZ
+
