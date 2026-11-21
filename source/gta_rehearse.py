@@ -596,11 +596,11 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     (2.85, (2.90, 1.45, 0.80), (-6.80, 1.20, -12.0), 760),     # measuring gun, head and cruiser on screen, chat 21)
     # chat 22 (hunt 1): the lens pushes in on the lead cruiser's windscreen for the hit (blood, slump) and follows
     # it into the hydrant; then the crash framed big with Jason small at the right, his raised gun clear of his head
-    # (measured on screen: crash 460 px wide at 3.6 s, Jason 420 px tall, muzzle 195 px clear of his head)
+    # (measured on screen: crash 480-300 px wide over the hold, Jason 250-310 px tall, muzzle 1.5 head-widths clear)
     (3.10, (2.90, 1.45, 0.80), (1.37, 1.27, -7.84), 1500),     # the windscreen's place in the Tulip's frame
     (3.32, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
-    (3.70, (1.30, 1.70, 2.40), (2.50, 1.00, -14.0), 1300),
-    (4.55, (1.30, 1.70, 2.40), (2.80, 1.00, -14.0), 1650),     # a slow push on the fire through the hold
+    (3.70, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
+    (4.55, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
     (5.15, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
     (5.75, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
     (6.20, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
@@ -728,7 +728,26 @@ def crowd(pp, t):
             zi = _crowd(pp, IMPACT[0])[1]
             if abs(zi - CRASH_Z) < CRASH_CLEAR:
                 pp['dz'] = (CRASH_CLEAR - abs(zi - CRASH_Z)) * (1.0 if zi >= CRASH_Z else -1.0)
+            for dz in sorted((d * 0.5 for d in range(-24, 25)), key=abs):   # and clear of the cruiser's whole path
+                if not _in_path(pp, pp['dz'] + dz):                        # up the pavement (chat 22: a woman
+                    pp['dz'] += dz                                         # crouched where it ploughed in)
+                    break
     return _crowd(pp, t, pp['dz'])
+
+
+def _in_path(pp, dz):
+    """Does passer-by pp (moved dz along the pavement) stand within 2 m of the lead cruiser from 3.0 s on?"""
+    for k in range(40):
+        t = 3.0 + k * 0.05
+        x, z = _crowd(pp, t, dz)[:2]
+        c = lead_at(t)
+        a = math.radians(c.yaw)
+        dx, dzz = x - c.pos[0], z - c.pos[1]
+        u = dx * math.cos(a) - dzz * math.sin(a)                 # across the car
+        v = dx * math.sin(a) + dzz * math.cos(a)                 # along it
+        if abs(u) < 1.0 + 2.0 and abs(v) < 2.5 + 2.0:         # 2 m: a crouch closer looks run over
+            return True
+    return False
 
 
 def _crowd(pp, t, dz=0.0):

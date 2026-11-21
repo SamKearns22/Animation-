@@ -443,3 +443,29 @@ Added after Sam's notes 1-16 (chat 16):
 - Lesson (draft 20): a pose approved from a sheet's views is not approved from the film's camera: before building, put
   the shot's real camera through the pose sheet (the strip's two views were near, not equal, and the head-over-arm
   showed only in the film).
+
+## 14. Chat 22 (21 Nov, Opus medium): hunt 1's list fixed, and Sam's door clip
+- Hunt 1's list, fixed as one list: (1) the hit: the lens pushes in (focal 760 to 1500) on the lead cruiser's
+  windscreen from 2.85 to 3.1 s and follows it into the hydrant (blood mist and slump now fill a third of the frame);
+  (2) the crash: a new camera out ahead of the bonnet looking back past Jason (found by measuring, as chat 21: 2,000+
+  positions scored on crash size, Jason's size and the muzzle's clearance from his head, everything in frame): crash
+  480 to 300 px wide over the hold (was 300 to 150), Jason 250 to 310 px tall (was 860 to 980), muzzle 1.5
+  head-widths clear; a slow push (focal 1600 to 1850) through the hold. Picture: v7-chat22-crash-framing.jpg.
+  (3) Life in the hold: he flinches from the fireball (head away toward the car's front), looks back, a small "got
+  him" nod; the raised gun drifts with his look. (4) The passers-by: the crash had moved 4 m back with the cruiser's
+  drop-back, so two ran through it and one crouched where it ploughed in: anyone within 2 m of the cruiser's path from
+  3.0 s is moved along the pavement clear of it, and runners run away from the crashed car itself.
+- First try at (2), a mistake caught on the test sheet, not by the numbers: a camera just over the bonnet measured
+  Jason "420 px" from his joints, but it sat 0.5 m from his back and his drawn head and shoulders filled a third of
+  the frame. The measure now adds the head's drawn size; the camera moved 2 m further out.
+- Sam's note (21 Nov, during the fix, picture v6-sam-door-clip-2.33s.jpg): "Do you see this car door clip?" His free
+  hand, braced on the door top, sat at the door's edge (wrist 4 cm above it): the car rubbed out the bottom of the
+  round hand along the door line, so it read as sinking into the door; the elbow hung below the door top outside the
+  car. Why the checks missed it: the car check tests his bones against the car's solid shape, and the bones were
+  clear; nothing tested the drawn hand. Fix: the hand sits on top of the door (wrist 12 cm up, 3 cm in from the outer
+  edge), elbow above the door top; the in-between on his way up was re-placed so no frame puts the arm in the door or
+  the pillar. The car check now also tests a hand resting on the door top: whole on top, never cut by the edge (it
+  flags the old pose). Where two of his pieces meet, the 4-pixel blocks of the hide map cut a stair-step into his
+  outline: smoothed there only. Picture: v7-chat22-door-hand-fixed.jpg.
+- Lesson (draft 21): a resting hand is a contact, like feet on a floor: test the drawn hand against the surface, not
+  only the bones.

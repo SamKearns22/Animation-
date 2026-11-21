@@ -115,13 +115,13 @@ def pose(name, sp):
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
         #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
         k = _key((0.48, 0.80, 0.0), (0.76, 1.25, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),   # head ducked under the roof
-                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.94, 0.98, 0.26), _v(0.5, -1, 0.3))},
+                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(1, -0.5, 0.3))},
                  {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
         return k
     if name == 'K3':          # head and shoulders out over the sill, turning back, gun up beside his head
         k = _key((0.62, 0.90, 0.0), (0.98, 1.36, -0.04), (0.7, 0, -1), (0.5, 0, -1),
-                 {'R': ('rel', ((0.20, 0.20, 0.14), 'out')), 'L': ((0.98, 0.99, 0.18), _v(1, -0.2, 0.5))},
+                 {'R': ('rel', ((0.20, 0.20, 0.14), 'out')), 'L': ((0.96, 1.07, 0.18), _v(1, 0, 0.6))},
                  {'L': (0.60, SEAT + 0.05, 0.16), 'R': (0.58, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0, 1, 0.1))                             # muzzle up, beside his head (chat 20 critique: the hand
         return k                                            # laid on his head read as a gun to his forehead)
@@ -131,7 +131,7 @@ def pose(name, sp):
         if name == 'K5':      # the recoil: the arm kicks up 26 degrees (chat 20 critique: 16 read as K4 again)
             aim = _u(aim + _v(0, 0.5, 0))
         return _key((0.68, 0.90, 0.02), tuple(neck), (0.35, 0, -1), (0.25, -0.05, -1),
-                    {'R': ((0.9, 1.3, -0.7), _v(0.4, -1, 0)), 'L': ((1.00, 0.99, 0.14), _v(1, -0.3, 0.4))},
+                    {'R': ((0.9, 1.3, -0.7), _v(0.4, -1, 0)), 'L': ((0.96, 1.07, 0.14), _v(1, 0, 0.6))},   # free hand ON the door top, elbow above it (Sam, chat 22)
                     {'L': (0.64, SEAT + 0.05, 0.16), 'R': (0.60, SEAT + 0.05, -0.12)}, sp, aim=aim)
     raise KeyError(name)
 
@@ -263,7 +263,14 @@ def car_faults(k, sp):
             if part:
                 out.append((f'{a}-{b}', part, round(float(u), 2)))
                 break
+    for sd in 'LR':                       # a hand resting on the door top sits whole ON it: a wrist at the sill's
+        w = k['wr' + sd]                  # edge has the bottom of its round hand cut off by the door line and reads
+        if 0.86 < w[0] < 1.06 and abs(w[2]) < 0.9 and w[1] < SILL + HAND_R - 0.01:   # as sinking into it (Sam, chat 22)
+            out.append((f'wr{sd}', 'hand cut by the door top', round(float(w[1] - SILL), 2)))
     return out
+
+
+HAND_R = 0.07                             # the drawn round hand's reach past the wrist (m)
 
 
 def car_frame(img, cam):
@@ -355,6 +362,12 @@ def _cover(car, cam, kw, size, gun=None):
         if sel.any():
             sol[sel] = np.asarray(m[0], np.float32)[sel] / 255
             gls[sel] = np.asarray(m[1], np.float32)[sel] / 255
+    edge = np.zeros(near.shape, bool)                        # where two bone pieces meet, the label map's 4-pixel
+    edge[:, 1:] |= near[:, 1:] != near[:, :-1]               # blocks cut a stair-step into his outline (Sam's
+    edge[1:, :] |= near[1:, :] != near[:-1, :]               # door clip, chat 22): smooth the cut there only
+    edge = ndimage.binary_dilation(edge, iterations=q)
+    for arr in (sol, gls):
+        arr[edge] = ndimage.gaussian_filter(arr, q * 0.8)[edge]
     return sol, gls, used
 
 
