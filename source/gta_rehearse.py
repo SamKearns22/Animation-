@@ -597,7 +597,8 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     # chat 22 (hunt 1): the lens pushes in on the lead cruiser's windscreen for the hit (blood, slump) and follows
     # it into the hydrant; then the crash framed big with Jason small at the right, his raised gun clear of his head
     # (measured on screen: crash 480-300 px wide over the hold, Jason 250-310 px tall, muzzle 1.5 head-widths clear)
-    (3.10, (2.90, 1.45, 0.80), (1.37, 1.27, -7.84), 1500),     # the windscreen's place in the Tulip's frame
+    (2.95, (2.90, 1.45, 0.80), (0.50, 1.28, -7.70), 900),      # turn onto the cruiser first (hunt 2: a pan and
+    (3.10, (2.90, 1.45, 0.80), (1.37, 1.27, -7.84), 1500),     # push together swung it out of frame at 3.0 s)
     (3.32, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
     (3.70, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
     (4.55, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
@@ -1316,27 +1317,30 @@ def blood_items(cam, t, lead):
     fc = FxCam(cam)
     rng = np.random.RandomState(77)
     pieces = []
-    glass = lambda x, y: lead.body_pt((x, y, 0.93 - (y - 1.28) * 1.1))   # on the windscreen, over his face
-    for n in range(14):                                # spatter: stays
-        x, y = -0.38 + rng.normal(0, 0.13), 1.27 + rng.normal(0, 0.07)
-        r = rng.uniform(0.025, 0.06) * min(1.0, u / 0.06)
+    # hunt 2 (chat 22): laid on the windscreen, the blood sat off to one side of his head from the side-on camera
+    # (parallax: the glass is 0.9 m in front of him), and read as a red rose on the outside. Now it hangs just in
+    # front of his head (drawn at the glass's depth, so always over his face from any camera), spatter finer
+    glass = lambda x, y: lead.body_pt((x, y, 0.22))
+    for n in range(24):                                # spatter: stays
+        x, y = -0.42 + rng.normal(0, 0.15), 1.24 + rng.normal(0, 0.08)
+        r = rng.uniform(0.010, 0.032) * min(1.0, u / 0.06)
         s, d = fc.screen(wz(glass(x, y)))
         if d > 0.5:
             pieces.append((FX._blob(s[0], s[1], fc.focal * r / d, 300 + n, n=6), (150, 14, 22), None, None))
     if u < 0.5:                                        # the mist: grows and thins out
         for n in range(9):
-            x, y = -0.38 + rng.normal(0, 0.16), 1.24 + rng.normal(0, 0.08)
+            x, y = -0.42 + rng.normal(0, 0.12), 1.22 + rng.normal(0, 0.06)
             k = n / 9.0
             if k > 1.0 - u / 0.5:
                 continue
-            r = (0.07 + 0.20 * min(1.0, u / 0.18)) * rng.uniform(0.6, 1.0)
-            s, d = fc.screen(wz(lead.body_pt((x, y + 0.06 * u, 0.80))))
+            r = (0.05 + 0.13 * min(1.0, u / 0.18)) * rng.uniform(0.6, 1.0)
+            s, d = fc.screen(wz(lead.body_pt((x, y + 0.06 * u, 0.18))))
             if d > 0.5:
                 pieces.append((FX._blob(s[0], s[1], fc.focal * r / d, 400 + n, n=8), (196, 42, 48), None, None))
     if not pieces:
         return []
     dd = cam.depth(lead.body_pt((-0.38, 1.27, 0.93)))
-    spr = FX.pieces_sprite(pieces[::-1], dd, ol=2.5)
+    spr = FX.pieces_sprite(pieces[::-1], dd, ol=1.2)
     return [(dd - 0.05, spr.paste)] if spr else []
 
 
