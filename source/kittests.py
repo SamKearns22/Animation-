@@ -3560,7 +3560,7 @@ def body_check_shot4_v4():
 def handover_status_checks():
     """Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must
     catch what slipped on Grand Theft Autism: notes over 4,000 words, a handover over 15 lines, a chat that never
-    logged its notes, stages never marked, Opus running finish.py, a refused clip told to Sam as sent (chat 26), no
+    logged its notes, stages never marked (Opus running finish.py: modelguard.py, now wired), a refused clip told to Sam as sent (chat 26), no
     push notification; and stay quiet on the clean cases."""
     import json
     import tempfile
@@ -3585,9 +3585,6 @@ def handover_status_checks():
     told = ast({'type': 'text', 'text': 'I sent you a short clip, 20-26 seconds.'})
     not_sent = [f for f in H._run(H.turns(rec([ast(send), refused, told])), None, small) if 'NOT SENT' in f]
     sent_ok = [f for f in H._run(H.turns(rec([ast(send), told])), None, small) if 'NOT SENT' in f]
-    opus_fin = H.routine_run_faults(rec([ast(bash('python3 source/finish.py a.mp4 b.mp4 --film x'))]))
-    opus_clip = H.routine_run_faults(rec([ast(bash('python3 source/x.py final o.mp4 --small --span 3 5'))]))
-    sonnet_fin = H.routine_run_faults(rec([ast(bash('python3 source/finish.py a b'), model='claude-sonnet-5-5')]))
     no_push = H.push_faults(rec([ast(bash('ls'))]))
     push = H.push_faults(rec([ast({'type': 'tool_use', 'name': 'PushNotification', 'input': {'message': 'x'}})]))
     import ledger
@@ -3600,11 +3597,10 @@ def handover_status_checks():
         st = [f for f in H.ledger_faults('x') if f.startswith('STAGES')]
     finally:
         ledger.load = real_load
-    ok = (len(sz_big) == 3 and not sz_small and not_sent and not sent_ok and opus_fin and not opus_clip
-          and not sonnet_fin and no_push and not push and st)
+    ok = (len(sz_big) == 3 and not sz_small and not_sent and not sent_ok
+          and no_push and not push and st)
     return ok, (f'big notes {len(sz_big)} faults, clean {len(sz_small)}; refused send caught {bool(not_sent)}, real send '
-                f'quiet {not sent_ok}; Opus finish.py {bool(opus_fin)}, Opus clip quiet {not opus_clip}, Sonnet quiet '
-                f'{not sonnet_fin}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
+                f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
 
 
 @test

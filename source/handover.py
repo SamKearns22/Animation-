@@ -345,38 +345,6 @@ def model_faults(film, notes=None):
     return out
 
 
-ROUTINE_RUN = re.compile(r'python3\s+(-\S+\s+)*\S*(finish|preflight)\.py\b|python3\s+\S+\.py\s+(final|animatic)\b(?![^\n]*--span)')
-
-
-def routine_run_faults(rec):
-    """Status check (Sam, 21 Nov: "renders were not being handed off to Sonnet like you used to"). model_faults reads
-    only the Next line's words; nothing looked at what an Opus chat actually ran. Routine work (CLAUDE.md, Models by
-    stage: check sheet, animatic, finish.py, final render, sending) run in an Opus chat is a fault; clips
-    (`final OUT --small --span`) stay with the fix that needs them."""
-    if not rec or not os.path.exists(rec):
-        return []
-    model, hits = '', []
-    for ln in open(rec, encoding='utf-8', errors='replace'):
-        try:
-            m = json.loads(ln).get('message') or {}
-        except ValueError:
-            continue
-        if m.get('role') != 'assistant':
-            continue
-        model = m.get('model') or model
-        for b in m.get('content') or []:
-            if isinstance(b, dict) and b.get('type') == 'tool_use' and b.get('name') == 'Bash':
-                c = (b.get('input') or {}).get('command', '')
-                c = re.sub(r"<<-?\s*'?(\w+)'?.*?^\1$", '', c, flags=re.S | re.M)   # a script's text is not a command run
-                g = ROUTINE_RUN.search(c)
-                if g and 'opus' in model:
-                    hits.append(g.group(0))
-    if not hits:
-        return []
-    return [f'MODEL: this Opus chat ran routine work itself ({", ".join(sorted(set(hits)))}): the check sheet, animatic, '
-            'finish.py and final render belong to a Sonnet chat this one opens (CLAUDE.md, Models by stage)']
-
-
 def draft_faults(film, notes=None):
     """Rule P16 (Sam, 15 Nov: animatic 2 was lost with its chat, so a 3-second fix meant a 30-minute redraw): once a film's
     notes say an animatic was sent, its latest animatic and clean render are in animations/drafts/ and pushed."""
@@ -793,7 +761,7 @@ def main(argv):
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
                       + sentence_faults() + freeze_faults() + cost_faults(film, opt('--notes'))
-                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + routine_run_faults(rec) + push_faults(rec)
+                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + push_faults(rec)
                       + tag_faults(film, opt('--notes')) + record_faults(rec)
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
