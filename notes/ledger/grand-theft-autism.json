@@ -11846,45 +11846,45 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.12,
+   "cost": 1.64,
    "src": "estimate",
    "sid": "session_01J1JB7VcJ5G5nT3goi87qZu",
-   "steps": 76,
-   "hist_k": 194,
+   "steps": 105,
+   "hist_k": 229,
    "kinds": {
-    "tool search": 19.4,
-    "whole-file .py read": 6.9,
-    "renders": 1.1,
-    "pictures": 3.6,
-    "other": 69.0
+    "tool search": 17.9,
+    "whole-file .py read": 4.9,
+    "renders": 0.9,
+    "pictures": 5.0,
+    "other": 71.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 45,
+    "tool search": 57,
     "whole-file .py read": 6,
     "page.py": 0,
     "routine": 0,
-    "renders": 2,
-    "pictures": 6,
-    "other": 19
+    "renders": 3,
+    "pictures": 10,
+    "other": 31
    },
    "split": {
-    "usd": 4.0934,
-    "total": 4.0934,
+    "usd": 5.8618,
+    "total": 5.8618,
     "floor_k": 82,
     "blocks": {
-     "start-up floor": 30.9,
-     "Claude's words": 27.1,
-     "new writes": 21.7,
-     "carried history": 20.3
+     "start-up floor": 28.9,
+     "Claude's words": 25.6,
+     "carried history": 25.5,
+     "new writes": 20.0
     },
     "origins": {
-     "Claude's words": 43.0,
-     "start-up floor": 30.9,
-     "result: tool search": 16.8,
-     "messages and reminders": 3.7,
-     "result: pictures": 2.9,
-     "result: other": 1.4,
+     "Claude's words": 43.3,
+     "start-up floor": 28.9,
+     "result: tool search": 16.2,
+     "messages and reminders": 4.3,
+     "result: pictures": 4.2,
+     "result: other": 1.8,
      "result: whole-file .py read": 1.1,
      "result: renders": 0.2
     },
@@ -11898,35 +11898,35 @@
      [
       "source/gta_rehearse.py",
       5.8,
-      0.1113
+      0.1416
      ],
      [
       "source/critique.py",
       1.4,
-      0.0277
+      0.0349
      ],
      [
       "source/viewchecks.py",
       0.5,
-      0.0099
+      0.0127
      ],
      [
       "source/views.py",
       0.4,
-      0.0076
+      0.0098
      ],
      [
       "source/data/critique/grand-theft-autism/r21-p1/result.md",
       0.1,
-      0.0027
+      0.0033
      ],
      [
       "guides/job-packs.md",
       0.1,
-      0.0027
+      0.0033
      ]
     ],
-    "base_pct": 27.3
+    "base_pct": 26.4
    },
    "search": {
     "show": 0,
@@ -11934,16 +11934,17 @@
      "no show": 0
     },
     "other": {
-     "other": 8,
+     "other": 11,
      "shared:branches.py": 1,
      "shared:handover.py": 5,
      "guides": 1,
-     "shared:critique.py": 2,
-     "shared:gta_rehearse.py": 14,
+     "shared:critique.py": 4,
+     "shared:gta_rehearse.py": 17,
      "shared:views.py": 1,
-     "shared:leanout.py": 9,
+     "shared:leanout.py": 12,
      "film notes": 3,
-     "shared:watcher.py": 1
+     "shared:watcher.py": 1,
+     "shared:humancheck.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -12306,6 +12307,102 @@
       "other",
       "",
       "until [ -s /tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eee",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "other",
+      "",
+      "D=/tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eeec64/scrat",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "cat > /tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eeec64/s",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "0.88, 1.03, 0.10), _v(0.8, -1, 0.6)",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "git add source/leanout.py && git commit -qm \"GTA shot 4 (chat 22): K2 free-hand ",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "name\\b\\|name ",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique-src/grand-theft-autism/v7-shot4-spec.jso",
+      "python3 source/critique.py pack grand-theft-autism source/data/critique-src/gran",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/grand-theft-autism/r21-p2 source/critique.py",
+      "P=source/data/critique/grand-theft-autism/r21-p2; cat $P/result.md; python3 sour",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "sed -n '/^def lead_cop_lean/,/^def wz/p' source/gta_rehearse.py",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/data/critique-src/grand-theft-autism/v7-*",
+      "git add source/gta_rehearse.py source/data/critique-src/grand-theft-autism/v7-* ",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "D=/tmp/claude-0/-home-user-Animation-/b6dc5d92-6fd3-5bd0-b166-74abd2eeec64/scrat",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "notes/ledger",
+      "git add notes/ledger && git commit -qm \"Ledger: shot 4 critique hunt 2 recorded ",
       ""
      ]
     ]
