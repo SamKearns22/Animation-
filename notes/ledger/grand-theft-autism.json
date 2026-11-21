@@ -15483,42 +15483,74 @@
   {
    "name": "opener",
    "pct": 2.67,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 2.67,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "plan",
    "pct": 2.0,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 3.36,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "cast",
    "pct": 13.3,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 18.98,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "cars",
    "pct": 4.5,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 18.98,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "sets",
    "pct": 4.7,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 25.94,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "board",
    "pct": 0.5,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 28.23,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "moves",
    "pct": 11.3,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 47.46,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "animatic1",
    "pct": 2.1,
-   "done": null
+   "done": {
+    "date": "2026-11-21",
+    "spent": 49.03,
+    "approx": "set afterwards by the status chat from the chat order (no chat marked it at the time)"
+   }
   },
   {
    "name": "round1",
@@ -15536,7 +15568,10 @@
    "done": null
   }
  ],
- "cost_flagged": [],
+ "cost_flagged": [
+  "board",
+  "moves"
+ ],
  "cost_log": [
   {
    "date": "2026-11-20",
@@ -15792,6 +15827,11 @@
    "date": "2026-11-21",
    "spent": 51.78,
    "forecast": 102.3
+  },
+  {
+   "date": "2026-11-21",
+   "spent": 51.78,
+   "forecast": 63.5
   }
  ],
  "critique": {

@@ -4,18 +4,18 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 
 **Estimate 53.2% of a week; spent 51.78% (-1.42); 27 chats, 0 rounds, 0 notes, 0 repeated.**
 
-**Forecast: Spent 51.78% of the 0% planned so far; at this rate the film lands at 102.3%.**
+**Forecast: Spent 51.78% of the 41.05% planned so far; at this rate the film lands at 63.5%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
-| opener | 2.67 |  |  |
-| plan | 2 |  |  |
-| cast | 13.3 |  |  |
-| cars | 4.5 |  |  |
-| sets | 4.7 |  |  |
-| board | 0.5 |  |  |
-| moves | 11.3 |  |  |
-| animatic1 | 2.1 |  |  |
+| opener | 2.67 | 2026-11-21 | 2.67 |
+| plan | 2 | 2026-11-21 | 3.36 |
+| cast | 13.3 | 2026-11-21 | 18.98 |
+| cars | 4.5 | 2026-11-21 | 18.98 |
+| sets | 4.7 | 2026-11-21 | 25.94 |
+| board | 0.5 | 2026-11-21 | 28.23 |
+| moves | 11.3 | 2026-11-21 | 47.46 |
+| animatic1 | 2.1 | 2026-11-21 | 49.03 |
 | round1 | 9.4 |  |  |
 | round2 | 2.4 |  |  |
 | final | 0.35 |  |  |

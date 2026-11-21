@@ -532,6 +532,65 @@ def cost_faults(film, notes=None):
         return [f'COST: the cost line could not be recorded ({e})']
 
 
+def size_faults(film, notes=None):
+    """Status check (Sam, 21 Nov: "everything needs checking"): CLAUDE.md "Reading little" keeps a film's notes under
+    4,000 words, and "The handover" keeps ONE "Where things stand" of 15 lines at most. Nothing checked either: by
+    chat 26 Grand Theft Autism's notes were 11,031 words and the handover 22 lines."""
+    p = notes or (film and os.path.join(ROOT, 'notes', f'{film}.md'))
+    if not p or not os.path.exists(p):
+        return []
+    text = open(p, encoding='utf-8').read()
+    out, words = [], len(text.split())
+    if words > 4000:
+        out.append(f'NOTES: {os.path.relpath(p, ROOT)} is {words:,} words (CLAUDE.md "Reading little": under 4,000). '
+                   f'Move ticked notes and finished sections to notes/archive/{os.path.basename(p)[:-3]}-notes.md, '
+                   'keeping the brief checklist, the estimate, open notes and Where things stand')
+    lines = text.splitlines()
+    heads = [i for i, ln in enumerate(lines) if ln.startswith('#') and 'where things stand' in ln.lower()]
+    if len(heads) > 1:
+        out.append(f'HANDOVER: {len(heads)} "Where things stand" sections; keep ONE, move the old ones to '
+                   f'notes/archive/{os.path.basename(p)[:-3]}-handovers.md')
+    if heads:
+        i, n = heads[-1] + 1, 0
+        while i < len(lines) and not lines[i].startswith('#'):
+            n += bool(lines[i].strip())
+            i += 1
+        if n > 15:
+            out.append(f'HANDOVER: "Where things stand" is {n} lines (CLAUDE.md: 15 at most); move detail to the notes '
+                       'or the "For Claude" line')
+    return out
+
+
+def ledger_faults(film, rec=None):
+    """Status check (Sam, 21 Nov): the budget tracker's record of notes, repeated notes and finished stages. On Grand
+    Theft Autism every chat's row read 'auto, 0 notes, 0 repeats' (nobody ran `ledger.py log`), and none of the 11
+    stages was marked done, so the forecast assumed the whole plan was still ahead and the stage stop could not mean
+    anything. This chat must log its row; a stage long past its planned end must be marked."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ledger
+    try:
+        d = ledger.load(film)
+    except Exception:
+        return []
+    if not d.get('chats'):
+        return []
+    out, sid = [], ledger.this_sid()
+    chat = os.path.basename(rec)[:8] if rec else None
+    row = next((c for c in d['chats'] if (sid and c.get('sid') == sid) or (chat and c['chat'] == chat)), None)
+    if row and row.get('stage') in ('auto', '', None):
+        out.append(f'LEDGER: this chat never logged its stage and Sam\'s notes: run python3 source/ledger.py log {film} '
+                   '--stage STAGE --notes N [--repeat "the note | what would have caught it"] (0 notes is fine if none came)')
+    o = ledger.open_stage(d)
+    if o:
+        i, s, share, spent = o
+        planned_end = sum(x['pct'] for x in d['stages'][:i + 1])
+        if spent > 1.5 * planned_end and spent - planned_end > 2:
+            out.append(f"STAGES: the first unfinished stage is '{s['name']}' (planned to end by {planned_end:g}% of a "
+                       f"week) but the film has spent {spent:g}%: mark each finished stage with python3 source/ledger.py "
+                       f"stage {film} NAME, or the forecast is guesswork")
+    return out
+
+
 def freeze_faults():
     """One route to the kit (Sam's Y, 20 Nov): old-film files loaded, steps swapped and the like may never rise;
     every finished film keeps its bookmark (source/freeze.py)."""
@@ -668,6 +727,7 @@ def main(argv):
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
                       + sentence_faults() + freeze_faults() + cost_faults(film, opt('--notes'))
+                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec)
                       + tag_faults(film, opt('--notes')) + record_faults(rec)
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')
