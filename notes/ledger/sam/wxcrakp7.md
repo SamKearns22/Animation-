@@ -30,3 +30,6 @@ Y
 
 Would this speed up the construction of the character overlay?
 
+### 2026-11-22T20:07:47
+If we published this shot right now into the film, what would it look like?
+
