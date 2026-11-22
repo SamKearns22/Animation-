@@ -864,8 +864,8 @@ def _crowd(pp, t, dz=0.0):
         j = V.standing(sp)
         ph = u * math.pi * 3.2
         _stride(j, ph, 210.0, 90.0, 140.0)
-        for sd, sg in (('L', -1), ('R', 1)):
-            V.arm_to(j, sd, (sg * 95.0, -150.0 + 12 * math.sin(ph) * sg, 70.0), 'out', 'palm')
+        for sd, sg in ((('L', -1), ('R', 1)) if side > 0 else ()):   # the far pavement's runners are seen from behind:
+            V.arm_to(j, sd, (sg * 95.0, -150.0 + 12 * math.sin(ph) * sg, 70.0), 'out', 'palm')   # arms up read as out of the back
         j['lean'] = 16.0
         j['bob'] = 10 * abs(math.sin(ph))
         duck = 0.4 * (1 - smooth(u / 0.5))
