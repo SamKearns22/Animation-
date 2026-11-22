@@ -1,0 +1,40 @@
+== critique, round 33 pass 3 (2026-11-22): 8 fault(s), 1 can't tell
+-- look.md --
+1: Fireball and black smoke by police cars; man in white shirt hands on head; man leaning from red car.
+2: Explosion bigger, police cars with blue lights; man holds head, panicked; another man leans out of red car.
+3: Fireball gone, black smoke clouds; police cars sit; man in white shirt, hand at head; car passenger leaning.
+4: Three people in red convertible, front view: two men-ish and a red-haired woman; palm tree, shops. Text "LEONIDA" faint.
+5: Same red convertible farther back, three occupants stare ahead; small pedestrians left; pink sky, skyscrapers.
+6: Close on three in car: muscular man, red-haired woman with bun looking worried, dark-haired woman mouth open; shirt "LEONIDA".
+7: Man eyes closed, grimacing, fist raised left; red-haired woman uneasy; dark-haired woman frowning; shirt "LEONIDA".
+8: Man looking forward, arm raised left; red-haired woman pursed lips; dark-haired woman stern; shirt "LEONIDA".
+-- result.md --
+## Faults
+FAULT S1 A1 [4-8]: bonnet - the two big dark stripes with a red wedge between still read as trouser legs lying on the car; the new light streak doesn't change it.
+FAULT P5 P6 [7-8]: Jason's raised arm - cut off by the left frame edge, no clear shoulder join, hand not shown; in 8 it sits at chest height, not "by his face".
+FAULT P12 [7]: Jason is explaining but his mouth is shut and his eyes closed.
+FAULT A1 [1-3]: the brief's crashed police car is not shown; the cars sit intact and the fireball floats above them. In 3 the smoke is detached black balls.
+FAULT A1 P2 [3]: the runner is small, standing still with a hand at his head, against a wall; no doorway, so "reaches the doorway" does not read.
+FAULT P2 P7 [1-2]: runner is cropped at the left edge in 1; in 2 he strolls stiffly with straddled legs, not fleeing.
+FAULT P2 [4]: no corner slide or bracing; the three sit upright and calm, the car looks straight on.
+FAULT A1 P10 [1-3]: man hanging out of the red car, not in the brief, a tangled bundle of limbs with the wheel and door cutting across his body; unreadable.
+FAULT F6 M1 [4-5]: pedestrians on the pavement stand frozen.
+CAN'T TELL P12 [5]: the red-haired woman's mouth looks open; a frame labelled with who speaks.
+CAN'T TELL A4 [all]: Hook Text frame not provided.
+
+## Checked
+1-8
+
+## Cold look
+I read the car stripes as a bonnet, not trousers (the fault note still stands). I missed that no police car crashed, that the runner stood still in 3, and I only called the car passenger "leaning" because I could not tell what he is doing.
+
+## Notes
+Note F15: not fixed; worse anywhere: added light streak across 6-8; same fault elsewhere: 4-5 bonnet.
+Note F12: fixed (the grey panel on Lucia is gone; the chest circle is now a fist); worse anywhere: Jason's arm shape in 7-8; same fault elsewhere: none seen.
+Note F6: partly fixed; the runner now moves in 1-3, but he is stiff in 2 and still in 3; same fault elsewhere: pedestrians in 4-5.
+
+## Not on the list
+Hand/arm cut by the frame edge; suggested line: a limb leaving the frame must still show its shoulder join and hand.
+Weapons or props in a character's hand unexplained; suggested line: every person shown in an action is named in the brief.
+Fire or smoke floating off its source; suggested line: effects touch the object that makes them.
+

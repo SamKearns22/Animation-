@@ -213,7 +213,13 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
       the doorways, hands over heads; [~] F15 stripes: edge chips + bonnet shine, still read as legs at phone size in
       shot 6 (Sam to judge). Clips sent; waiting on Sam's notes. Open lesson to propose: runner/walker heading within
       25 degrees of the lens line named by the body check; tool gap: a --span clip option for this film.
-- Where it stands (33b): Next = Sam's notes on the two clips, then a notes round (Opus medium). Never shot 4's Jason.
+- Critique r33-p3 (fresh helper): F12 fixed; F6 partly (runner moves but stiff in 2, small and still at the wall in
+      3); F15 NOT fixed (still trousers; a pinstripe try was too thin at phone size, removed); new: Jason's raised hand
+      cut by the left edge at 29.3 (shot 6, his gesture, not the camera); passers-by in shot 5 stand frozen; 3 tiny
+      walkers in shot 5 (22.3-23 s, 4-7 drawings) with an arm out of the back (body check, there before this chat).
+- [ ] Sam Q (33b): F15, 1 stripes narrower (about 25 cm each, wider red gap, still black) or 2 keep as now.
+- Where it stands (33b): Next = Sam's notes on the two clips + the F15 answer, then a notes round (Opus medium).
+      Never shot 4's Jason. grand_theft_autism.py now has frame_image (critique.py needed it).
 
 
 
