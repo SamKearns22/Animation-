@@ -22,6 +22,7 @@ import time
 
 import numpy as np
 from PIL import Image, ImageDraw
+from numba import njit
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -142,7 +143,77 @@ def _proj(cam, P):
     return np.stack([540 + x * cam.focal / zc + cam.shake[0], 960 + y * cam.focal / zc + cam.shake[1]], 1), z
 
 
+@njit(cache=True)
+def _fill(xy, z, T, tpi, zb, pb, ob, oi, near, ab, attrs, use_ab):
+    """One object's triangles into the buffers, in order (speed-up step 5, chat 40): the same sums, in the same
+    order, as the numpy loop it replaced (kept as _raster_py, the referee), so every dot comes out the same."""
+    h, w = zb.shape
+    for ti in range(len(T)):
+        a, b, c = T[ti, 0], T[ti, 1], T[ti, 2]
+        if min(z[a], z[b], z[c]) <= near:
+            continue
+        pa0, pa1, pb0, pb1, pc0, pc1 = xy[a, 0], xy[a, 1], xy[b, 0], xy[b, 1], xy[c, 0], xy[c, 1]
+        x0 = int(max(0.0, math.floor(min(pa0, pb0, pc0))))
+        x1 = int(min(w - 1.0, math.ceil(max(pa0, pb0, pc0))))
+        y0 = int(max(0.0, math.floor(min(pa1, pb1, pc1))))
+        y1 = int(min(h - 1.0, math.ceil(max(pa1, pb1, pc1))))
+        if x1 < x0 or y1 < y0:
+            continue
+        den = (pb1 - pc1) * (pa0 - pc0) + (pc0 - pb0) * (pa1 - pc1)
+        if abs(den) < 1e-9:
+            continue
+        for yy in range(y0, y1 + 1):
+            Y = yy + 0.5
+            for xx in range(x0, x1 + 1):
+                X = xx + 0.5
+                l1 = ((pb1 - pc1) * (X - pc0) + (pc0 - pb0) * (Y - pc1)) / den
+                l2 = ((pc1 - pa1) * (X - pc0) + (pa0 - pc0) * (Y - pc1)) / den
+                l3 = 1 - l1 - l2
+                if l1 < -1e-6 or l2 < -1e-6 or l3 < -1e-6:
+                    continue
+                iz = l1 / z[a] + l2 / z[b] + l3 / z[c]
+                zz = 1.0 / iz
+                if not zz < zb[yy, xx]:
+                    continue
+                zb[yy, xx] = zz
+                pb[yy, xx] = tpi[ti]
+                ob[yy, xx] = oi
+                if use_ab:
+                    wa = l1 / z[a] * zz
+                    wb_ = l2 / z[b] * zz
+                    wc = l3 / z[c] * zz
+                    for k in range(attrs.shape[1]):
+                        ab[yy, xx, k] = wa * attrs[a, k] + wb_ * attrs[b, k] + wc * attrs[c, k]
+
+
 def raster(cam, objs, scale=1, attrs=None):
+    """Depth (metres along the lens), part index and object index per dot (scale: supersampling). attrs: per-point
+    values of object 0 (Jason) interpolated per dot (his rest-body point and bone group), returned as ab."""
+    if os.environ.get('BENCH_OLD_FILL'):
+        return _raster_py(cam, objs, scale, attrs)
+    w, h = W * scale, H * scale
+    ab = np.zeros((h, w, attrs.shape[1])) if attrs is not None else None
+    zb = np.full((h, w), np.inf)
+    pb = np.full((h, w), -1, np.int64)
+    ob = np.full((h, w), -1, np.int64)
+    names = []
+    for oi, (P, T, tp, nm) in enumerate(objs):
+        xy, z = _proj(cam, P)
+        xy = np.ascontiguousarray(xy * scale, float)
+        tpi = np.array([PART_IX[x] for x in tp], np.int64)
+        use = oi == 0 and ab is not None
+        _fill(xy, np.ascontiguousarray(z, float), np.ascontiguousarray(T, np.int64), tpi, zb, pb, ob, oi,
+              float(cam.NEAR), ab if use else np.zeros((1, 1, 1)),
+              np.ascontiguousarray(attrs, float) if use else np.zeros((1, 1)), use)
+        names.append(nm)
+    if ab is not None:
+        m = ob == 0
+        if m.any():
+            pb[m] = BP.part_at(ab[m][:, :3], ab[m][:, 3:])
+    return zb, pb, ob, names
+
+
+def _raster_py(cam, objs, scale=1, attrs=None):
     """Depth (metres along the lens), part index and object index per dot (scale: supersampling). attrs: per-point
     values of object 0 (Jason) interpolated per dot (his rest-body point and bone group), returned as ab."""
     w, h = W * scale, H * scale
