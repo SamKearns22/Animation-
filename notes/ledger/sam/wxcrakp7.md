@@ -33,3 +33,8 @@ Would this speed up the construction of the character overlay?
 ### 2026-11-22T20:07:47
 If we published this shot right now into the film, what would it look like?
 
+### 2026-11-22T20:08:29
+Dressing it as Jason takes about 5 minutes a frame with today's drawing step. Shot 4 is 197 frames, so about 16 hours for one pass.
+
+This is insane. Surely there's a better way?
+
