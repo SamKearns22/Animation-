@@ -574,3 +574,13 @@ Jason's movement in shot 4 (FAILED, chat 33's job).
 
 
 (chat 38: Shot 4 version 4 frame notes and Chat 35 summary moved here above.)
+
+## Chat 33c (22 Nov, Sonnet): animatic v4 drawn, NOT yet sent
+Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
+- Drawn: 7.0-38.5 s fresh in 22 min (shot 1 = v3's first 7.0 s). Picture: source/data/v4/gta-v4-clean.mp4 (8 MB).
+- Sound is v3's mix (the voice and effect files are not in this container, so mix() cannot run); timings locked.
+- Blocked: no body-check record (my scratch writer was refused: it switched the checks off and self-named faults).
+  Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
+  (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
+- Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
+
