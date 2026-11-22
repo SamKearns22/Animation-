@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 94.71%; 44 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate ?% of a week; spent 96.59%; 45 chats, 0 rounds, 0 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -50,8 +50,9 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-20 | 400b5518 | est | opus | auto |  | 0.45 |  | 0 | 0 |
 | 2026-11-20 | 3725a04d | est | opus | auto |  | 0.79 |  | 0 | 0 |
 | 2026-11-20 | 4ace415c | est | opus | auto |  | 1.63 |  | 0 | 0 |
-| 2026-11-22 | f4f681d6 | est | opus | auto |  | 0.35 |  | 0 | 0 |
+| 2026-11-22 | f4f681d6 | est | opus | auto |  | 0.7 |  | 0 | 0 |
 | 2026-11-22 | bbd2eb18 | est | opus | milburn-lessons helpers |  | 5.91 |  | 0 | 0 |
+| 2026-11-22 | 82f7492f | est | opus | auto |  | 1.53 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 83ccf353 (auto): 18 steps, history 141k at the end; other 60.5%, page.py 26.5%, tool search 13%
@@ -85,7 +86,9 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 400b5518 (auto): 32 steps, history 118k at the end; other 76.6%, tool search 14.1%, renders 6.9%, pictures 2.4%
 - 2026-11-20 3725a04d (auto): 54 steps, history 160k at the end; other 61.2%, tool search 37.1%, renders 1.7%
 - 2026-11-20 4ace415c (auto): 47 steps, history 166k at the end; other 74.9%, tool search 21.2%, whole-file .py read 3.9%
-- 2026-11-22 f4f681d6 (auto): 19 steps, history 142k at the end; other 77.8%, tool search 22.2%
+- 2026-11-22 f4f681d6 (auto): 34 steps, history 153k at the end; other 86.8%, tool search 13.2%
+- 2026-11-22 bbd2eb18 (milburn-lessons helpers): 24 steps, history 156k at the end; other 79.4%, tool search 20.6%
+- 2026-11-22 82f7492f (auto): 11 steps, history 100k at the end; other 84.8%, tool search 15.2%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 3a437266 (auto): Claude's words 33%, start-up floor 30.8%, new writes 20.8%, carried history 15.3%. Biggest origins: Claude's words 49.3%, start-up floor 30.8%, result: tool search 16.2%. Leftover 0%
@@ -94,10 +97,12 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 400b5518 (auto): start-up floor 37.1%, new writes 36.2%, Claude's words 20.5%, carried history 6.2%. Biggest origins: start-up floor 37.1%, Claude's words 29%, cache re-write 18.8%. Leftover 0%
 - 2026-11-20 3725a04d (auto): start-up floor 32.5%, Claude's words 31.1%, new writes 21.4%, carried history 15%. Biggest origins: Claude's words 46.6%, start-up floor 32.5%, result: tool search 17.4%. Leftover 0%
 - 2026-11-20 4ace415c (auto): start-up floor 32.6%, new writes 26.6%, Claude's words 22.9%, carried history 17.8%. Biggest origins: Claude's words 32.8%, start-up floor 32.6%, result: tool search 16.3%. Leftover 0%
-- 2026-11-22 f4f681d6 (auto): start-up floor 39.9%, new writes 31.8%, Claude's words 19.7%, carried history 8.6%. Biggest origins: start-up floor 39.9%, Claude's words 26.7%, result: tool search 21.7%. Leftover 0%
+- 2026-11-22 f4f681d6 (auto): new writes 44.8%, start-up floor 27%, Claude's words 17.1%, carried history 11.1%. Biggest origins: messages and reminders 31.6%, start-up floor 27.5%, Claude's words 23.8%. Leftover 0%
+- 2026-11-22 bbd2eb18 (milburn-lessons helpers): start-up floor 39.2%, new writes 32.1%, Claude's words 19%, carried history 9.6%. Biggest origins: start-up floor 39.2%, Claude's words 26.5%, result: other 16.7%. Leftover 0%
+- 2026-11-22 82f7492f (auto): start-up floor 57.1%, new writes 23%, Claude's words 17.4%, carried history 2.6%. Biggest origins: start-up floor 57.1%, Claude's words 23.1%, result: tool search 8.6%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 2% of the film (1.60% of a week over 7 chats: start 1.59, re-learning 0.01; 0.23% a chat; step-1 context re-read is 26% of a chat on average).
+A new chat's start and re-learning cost 2% of the film (1.61% of a week over 9 chats: start 1.59, re-learning 0.02; 0.18% a chat; step-1 context re-read is 25% of a chat on average).
 - 2026-11-19 3a437266: step-1 context 82k; first real work at step 15 (0.26% of a week); read before it: source/stepcost.py 4.6k, notes/proposals/cost-other/milburn-usage.md 1.6k, source/propose.py 1.1k, notes/proposals/cost-other.md 0.9k, notes/proposals/cold-start.md 0.9k, source/ledger.py 0.7k
 - 2026-11-19 3498a80f: step-1 context 83k; first real work at step 31 (0.44% of a week); read before it: source/preflight.py 5.6k, source/posecheck.py 2.2k, source/milburn.py 1.9k, notes/proposals/front-on-focus/retirement-and-handover.md 1.1k, source/film_engine.py 1k, guides/job-packs.md 0.7k
 - 2026-11-19 6a247f23: step-1 context 82k; first real work at step None (None% of a week); read before it: notes/archive/milburn.md 2.8k, source/checkreplay.py 0.9k, notes/proposals/check-catches/replay/milburn.md 0.4k, notes/proposals/check-catches/replay/blessed.md 0.3k, notes/proposals/check-catches/replay/protest-tiers.md 0k
@@ -105,3 +110,5 @@ A new chat's start and re-learning cost 2% of the film (1.60% of a week over 7 c
 - 2026-11-20 3725a04d: step-1 context 82k; first real work at step 12 (0.21% of a week); read before it: source/checkreplay.py 3.6k, source/handover.py 2.8k, source/ledger.py 1.2k, source/report.py 0.9k, notes/_template.md 0.6k, source/preflight.py 0.3k
 - 2026-11-20 4ace415c: step-1 context 82k; first real work at step 19 (0.33% of a week); read before it: guides/kit-catalogue.md 5.2k, notes/grand-theft-autism.md 1.5k, source/propose.py 1.5k, source/midterminal_cast.py 1.2k, notes/proposals/one-route-kit.md 0.5k
 - 2026-11-22 f4f681d6: step-1 context 92k; first real work at step 12 (0.25% of a week); read before it: notes/proposals/milburn-review.md 2.7k, source/propose.py 1.9k, notes/archive/milburn.md 1.6k
+- 2026-11-22 bbd2eb18: step-1 context 95k; first real work at step None (None% of a week); read before it: source/propose.py 2k, notes/proposal-route.md 1.8k, guides/job-packs.md 0.7k, guides/proposal-route/helper.md 0.7k, notes/proposals/named-lines.md 0.5k, notes/ledger/sam/gr9hlufs.md 0.1k
+- 2026-11-22 82f7492f: step-1 context 83k; first real work at step None (None% of a week); read before it: notes/proposal-route.md 2.2k, source/propose.py 1.5k, notes/proposals/could-not-test.md 0.5k, notes/proposals/brow-limit/state.json 0.4k
