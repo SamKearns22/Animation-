@@ -943,7 +943,7 @@ def fit_knee():
 
 # ---------------------------------------------------------------------------------------------------- checks
 @njit(parallel=True, cache=True)
-def _winding(Q, V, T):
+def _winding_sum(Q, V, T):
     out = np.zeros(len(Q))
     for i in prange(len(Q)):
         q = Q[i]
@@ -962,6 +962,158 @@ def _winding(Q, V, T):
             s += 2.0 * math.atan2(det, den)
         out[i] = s / (4.0 * math.pi)
     return out
+
+
+# The inside test, fast and exact (proposal bench-speedup step 2, chat 40). The old sum over all 20,304 triangles
+# (_winding_sum) stays the referee. The body's skin is closed except two 24-edge holes at the wrists (the 3D hands
+# are left out); capped by 48 lid triangles it is closed, so its winding number at a point is a whole number: the
+# signed count of skin crossed by a ray from the point (+x), found through a grid of the triangles seen along x.
+# The open skin's number is that count minus the lids' own exact share (the same sum over the 48 lids only).
+# A ray that grazes an edge, a point on the skin, or a result within 1e-6 of the 0.5 line goes to the old sum.
+SLOW_INSIDE = bool(os.environ.get('BENCH_OLD_INSIDE'))
+GRID_CELL = 0.01
+
+
+@njit(cache=True)
+def _grid_build(V, T, lo, cell, ny, nz):
+    cnt = np.zeros(ny * nz + 1, np.int64)
+    for t in range(len(T)):
+        y0 = min(V[T[t, 0], 1], V[T[t, 1], 1], V[T[t, 2], 1])
+        y1 = max(V[T[t, 0], 1], V[T[t, 1], 1], V[T[t, 2], 1])
+        z0 = min(V[T[t, 0], 2], V[T[t, 1], 2], V[T[t, 2], 2])
+        z1 = max(V[T[t, 0], 2], V[T[t, 1], 2], V[T[t, 2], 2])
+        for a in range(max(0, int((y0 - lo[0]) / cell)), min(ny - 1, int((y1 - lo[0]) / cell)) + 1):
+            for b in range(max(0, int((z0 - lo[1]) / cell)), min(nz - 1, int((z1 - lo[1]) / cell)) + 1):
+                cnt[a * nz + b + 1] += 1
+    start = np.cumsum(cnt)
+    fill = start[:-1].copy()
+    idx = np.zeros(start[-1], np.int64)
+    for t in range(len(T)):
+        y0 = min(V[T[t, 0], 1], V[T[t, 1], 1], V[T[t, 2], 1])
+        y1 = max(V[T[t, 0], 1], V[T[t, 1], 1], V[T[t, 2], 1])
+        z0 = min(V[T[t, 0], 2], V[T[t, 1], 2], V[T[t, 2], 2])
+        z1 = max(V[T[t, 0], 2], V[T[t, 1], 2], V[T[t, 2], 2])
+        for a in range(max(0, int((y0 - lo[0]) / cell)), min(ny - 1, int((y1 - lo[0]) / cell)) + 1):
+            for b in range(max(0, int((z0 - lo[1]) / cell)), min(nz - 1, int((z1 - lo[1]) / cell)) + 1):
+                c = a * nz + b
+                idx[fill[c]] = t
+                fill[c] += 1
+    return start, idx
+
+
+@njit(cache=True)
+def _edge(V, u, v, qy, qz):
+    sg = 1.0
+    if u > v:                                          # each edge computed one way for both its triangles
+        u, v = v, u
+        sg = -1.0
+    return sg * ((V[v, 1] - V[u, 1]) * (qz - V[u, 2]) - (V[v, 2] - V[u, 2]) * (qy - V[u, 1]))
+
+
+@njit(parallel=True, cache=True)
+def _ray_count(Q, V, T, start, idx, lo, cell, ny, nz):
+    """Signed skin crossings along +x from each point; flag 1 where the ray is ambiguous (an edge, the skin)."""
+    out = np.zeros(len(Q))
+    amb = np.zeros(len(Q), np.int64)
+    eps = 1e-11
+    for i in prange(len(Q)):
+        qx, qy, qz = Q[i, 0], Q[i, 1], Q[i, 2]
+        a = int(math.floor((qy - lo[0]) / cell))
+        b = int(math.floor((qz - lo[1]) / cell))
+        if a < 0 or b < 0 or a >= ny or b >= nz:
+            continue
+        c = a * nz + b
+        s = 0.0
+        for k in range(start[c], start[c + 1]):
+            t = idx[k]
+            e0 = _edge(V, T[t, 0], T[t, 1], qy, qz)
+            e1 = _edge(V, T[t, 1], T[t, 2], qy, qz)
+            e2 = _edge(V, T[t, 2], T[t, 0], qy, qz)
+            small = abs(e0) < eps or abs(e1) < eps or abs(e2) < eps
+            if small:                                  # on or next to an edge seen along x: let the referee decide
+                if (e0 > -eps and e1 > -eps and e2 > -eps) or (e0 < eps and e1 < eps and e2 < eps):
+                    amb[i] = 1
+                continue
+            pos = e0 > 0 and e1 > 0 and e2 > 0
+            neg = e0 < 0 and e1 < 0 and e2 < 0
+            if not (pos or neg):
+                continue
+            tot = e0 + e1 + e2                         # each edge's weight belongs to the corner facing it
+            x = (e1 * V[T[t, 0], 0] + e2 * V[T[t, 1], 0] + e0 * V[T[t, 2], 0]) / tot
+            if abs(x - qx) < 1e-9:
+                amb[i] = 1
+                continue
+            if x > qx:
+                s += 1.0 if pos else -1.0
+        out[i] = s
+    return out, amb
+
+
+def _lids():
+    """The wrist holes' rims (each boundary edge's far end, in order) and the lid fans' triangles (rim, centre)."""
+    r = rig()
+    if 'lids' not in r:
+        tb = _body_tris()
+        E = set(map(tuple, np.concatenate([tb[:, [0, 1]], tb[:, [1, 2]], tb[:, [2, 0]]])))
+        nxt = {u: v for (u, v) in E if (v, u) not in E}
+        loops, seen = [], set()
+        for u in list(nxt):
+            if u in seen:
+                continue
+            L = [u]
+            seen.add(u)
+            c = nxt[u]
+            while c != u:
+                L.append(c)
+                seen.add(c)
+                c = nxt[c]
+            loops.append(np.array(L, np.int64))
+        r['lids'] = loops
+    return r['lids']
+
+
+def _capped(V):
+    """The skin's points plus one centre point per wrist hole, and the closed skin's triangles."""
+    tb = _body_tris()
+    loops = _lids()
+    n = len(V)
+    Vc = np.concatenate([V, np.array([V[L].mean(0) for L in loops])])
+    lid = []
+    for li, L in enumerate(loops):
+        for j in range(len(L)):
+            u, v = L[j], L[(j + 1) % len(L)]       # the skin has u->v; the lid runs v->u
+            lid.append((v, u, n + li))
+    lid = np.array(lid, np.int64)
+    return Vc, np.concatenate([tb, lid]), lid
+
+
+_SIGN = {}
+
+
+def _winding(Q, V, T):
+    """The body skin's winding number at points Q (same values as _winding_sum to rounding; see above). Any other
+    triangle set, or SLOW_INSIDE, uses the old sum."""
+    Q = np.ascontiguousarray(Q, float)
+    if SLOW_INSIDE or T is not _body_tris() or not len(Q):
+        return _winding_sum(Q, V, T)
+    Vc, Tc, lid = _capped(np.asarray(V, float))
+    lo = np.array([Vc[:, 1].min() - GRID_CELL, Vc[:, 2].min() - GRID_CELL])
+    ny = int((Vc[:, 1].max() - lo[0]) / GRID_CELL) + 2
+    nz = int((Vc[:, 2].max() - lo[1]) / GRID_CELL) + 2
+    start, idx = _grid_build(Vc, Tc, lo, GRID_CELL, ny, nz)
+    cnt, amb = _ray_count(Q, Vc, Tc, start, idx, lo, GRID_CELL, ny, nz)
+    if 's' not in _SIGN:                              # which way round the count runs on this skin: once, by the
+        k = np.where((cnt != 0) & (amb == 0))[0][:8]  # referee on the closed skin (whole numbers there)
+        if not len(k):
+            return _winding_sum(Q, V, T)
+        ref = _winding_sum(Q[k], Vc, Tc)
+        _SIGN['s'] = 1.0 if np.sum(cnt[k] * ref) > 0 else -1.0
+    w = _SIGN['s'] * cnt - _winding_sum(Q, Vc, lid)
+    near = np.abs(np.abs(w) - 0.5) < 1e-6
+    redo = (amb > 0) | near
+    if redo.any():
+        w[redo] = _winding_sum(Q[redo], V, T)
+    return w
 
 
 def _inside2(Q, N, P, tb):

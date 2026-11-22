@@ -1,6 +1,6 @@
 # Proposal: Speed up the bench test frames (grey and dressed) without changing a drawn pixel or a check
 
-Status: open
+Status: adopted (2026-11-22)
 
 ## Problem
 The test-space move (Jason leaning out of the car window and back, shot 4's 8.2 s, 197 frames) is too slow to make
