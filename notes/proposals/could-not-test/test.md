@@ -63,3 +63,12 @@ check?" (notes/ledger/sam/agnagzd2.md); chat 18 "his sleeve clipped its edge at 
    from the code. Number to beat: catches shots 1 and 4b of the posted final; Andy and Pat clean.
 
 Cost of this test: see the ledger line for this chat.
+
+## Sam's pick on the step-2 ask (22 Nov)
+"1": all three together: (1) the stop no chat can skip (pre-flight, the render tool and finish.py; the only way past
+is the check's own Exceptions line with Sam's Y); (2) cover by default: the places painter hands each piece to
+clipcheck at its own depth, people with their arms' real depth from the pose, flat things under resting hands
+allowed; number to beat: Milburn at chat 12 flags all three cards, final code clean, 0 false alarms; (3) stays
+readable: listed things (cards, signs, faces) measured against captions and Hook Text on the frames actually
+rendered (the render keeps their boxes per frame), not re-drawn from code; number to beat: Milburn's posted shots
+1 and 4b caught, Andy's and Pat's cards clear. Stop lands with the cover, never before it. About 5-6% of a week once.
