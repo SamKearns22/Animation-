@@ -17,13 +17,22 @@ the head leading). The beats and their times are shot 4's locked acting rows (le
   KEYS, goals_at(t) . the key poses as goals, eased in-betweens (goals, not joints, are blended)
   solve(g) .......... goals -> joints, bone turns, skin points, hand balls, the pistol
   CHECKS ............ car(), self_cross(), pistol(), contacts(), jumps(), ranges(), aim(): the stage-1 bar
-  run(OUT) .......... every frame of shot 4 (8.2 s at 24): solve, check, draw grey; writes OUT/frames, report.txt
+  run(OUT) .......... every frame of shot 4 (8.2 s at 24): solve and check ALL first, then draw grey (draw_all:
+                      from the frame store, only changed frames drawn, 4 at a time); writes OUT/frames, report.txt
+  checked_clip ...... the clip for Sam: checks first; NOTHING drawn while a fault is neither fixed nor named
+  frame store ....... frame_key (body points + camera + drawing code), spot check of 10, keep -> notes/bench/store
+  inside test ....... _winding: counted ray crossings on the capped skin (exact); _winding_sum: the old referee
   proof(OUT) ........ every check first run on old failed frames (pass list, notes/bench/learn-step.md)
 
     python3 source/bench_move.py run OUT_DIR        the clip's frames + the check table (prints it)
+    python3 source/bench_move.py clip OUT_DIR OUT.mp4 [T0 T1]   checks first, then the side-by-side grey clip
+    python3 source/bench_move.py name OUT_DIR "why"   name the last check pass's faults (lets the clip draw)
+    python3 source/bench_move.py keep OUT_DIR       file the frame store on GitHub (notes/bench/store/frames.tar)
     python3 source/bench_move.py proof OUT_DIR      the checks against the old failed frames
     python3 source/bench_move.py keys OUT.jpg       the key poses from three sides (a sheet)
 """
+import hashlib
+import json
 import math
 import os
 import sys
@@ -1536,7 +1545,7 @@ def run(out_dir, draw_frames=True, every=1, span=None, side=False):
     fit_seat()
     fit_knee()
     fit_ankles()
-    rows, track, fails = [], [], []
+    rows, track, fails, outs = [], [], [], []
     aims = []
     t0 = time.time()
     ts = frame_times()
@@ -1560,15 +1569,9 @@ def run(out_dir, draw_frames=True, every=1, span=None, side=False):
             fails.append((int(round(t * FPS)), round(t, 3), bad))
         with open(os.path.join(out_dir, 'frames.log'), 'a') as fh:      # each frame's result kept as it goes
             fh.write('%d %.3f %s %s\n' % (int(round(t * FPS)), t, bad or 'clean', c['contacts']))
-        if draw_frames and i % every == 0:
-            im = draw(out, cam_at(t))
-            if side:                     # left: shot 4's locked camera; right: outside the window, same pose
-                from PIL import Image
-                both = Image.new('RGB', (im.width * 2, im.height))
-                both.paste(im, (0, 0))
-                both.paste(draw_view(out, 'outside', t, im.size, mark=False), (im.width, 0))
-                im = both
-            im.save(os.path.join(out_dir, 'frames', 'f%04d.png' % i))
+        outs.append(out)
+    if draw_frames:                      # every frame solved and checked first; then drawn (from the store)
+        draw_all(out_dir, outs, ts, every, side)
     top, over, pops = jumps(track)
     held = contacts_held(rows)
     sl = slides(track, rows)
@@ -1578,11 +1581,142 @@ def run(out_dir, draw_frames=True, every=1, span=None, side=False):
             span[0], span[1], int(round(ts[0] * FPS)))
     open(os.path.join(out_dir, 'report.txt'), 'w').write(rep)
     print(rep)
-    RUN_LAST.update(ts=ts, aims=aims, top=top)
+    RUN_LAST.update(ts=ts, aims=aims, top=top, outs=outs, side=side)
     return fails, over, pops, held, sl
 
 
 RUN_LAST = {}
+
+# The frame store (speed-up step 4, chat 40): each drawn frame is filed under a fingerprint of everything that makes
+# it: its solved body (every point), the camera, and the drawing code (this file minus the move and checks
+# sections, bench_draw, bench_pose, sets). A fix redraws only frames whose fingerprint changed; the checks always
+# run on every frame. Before frames are used, up to 10 stored ones picked at random are drawn again and must match
+# pixel for pixel, else the store is wiped and everything is drawn. `keep` files the store as one lossless bundle.
+STORE_TAR = os.path.join(HERE, '..', 'notes', 'bench', 'store', 'frames.tar')
+STORE_MB = 20
+DRAW_WORKERS = 4
+_DRAW = {}
+
+
+def _draw_code():
+    h = hashlib.sha256()
+    txt = open(os.path.abspath(__file__)).read()
+    txt = txt[txt.index('"""', 4) + 3:]                 # the file's description (its MAP) is not drawing code
+    mv, ck = txt.index('# ' + '-' * 100 + ' the move'), txt.index('# ' + '-' * 100 + ' solve')
+    c0, c1 = txt.index('# ' + '-' * 100 + ' checks'), txt.index('# ' + '-' * 100 + ' drawing')
+    h.update((txt[:mv] + txt[ck:c0] + txt[c1:]).encode())
+    for f in ('bench_draw.py', 'bench_pose.py', 'sets.py'):
+        h.update(open(os.path.join(HERE, f), 'rb').read())
+    return h.hexdigest()
+
+
+def _feed(h, x):
+    if isinstance(x, np.ndarray):
+        h.update(str((x.dtype, x.shape)).encode())
+        h.update(np.ascontiguousarray(x).tobytes())
+    elif isinstance(x, dict):
+        for k in sorted(x, key=str):
+            h.update(repr(k).encode())
+            _feed(h, x[k])
+    elif isinstance(x, (list, tuple)):
+        h.update(b'[%d' % len(x))
+        for v in x:
+            _feed(h, v)
+    elif hasattr(x, '__dict__'):
+        _feed(h, vars(x))
+    else:
+        h.update(repr(x).encode())
+
+
+def frame_key(out, t, side, code):
+    h = hashlib.sha256(code.encode())
+    _feed(h, {k: v for k, v in out.items() if k != 'bad_pts'})
+    _feed(h, vars(cam_at(t)))
+    h.update(b'side' if side else b'shot')
+    return h.hexdigest()[:24]
+
+
+def _draw_frame(i):
+    out, t, side = _DRAW['outs'][i], _DRAW['ts'][i], _DRAW['side']
+    im = draw(out, cam_at(t))
+    if side:                             # left: shot 4's locked camera; right: outside the window, same pose
+        from PIL import Image
+        both = Image.new('RGB', (im.width * 2, im.height))
+        both.paste(im, (0, 0))
+        both.paste(draw_view(out, 'outside', t, im.size, mark=False), (im.width, 0))
+        im = both
+    im.save(os.path.join(_DRAW['store'], _DRAW['keys'][i] + '.png'))
+    return i
+
+
+def _pool_map(fn, items):
+    if DRAW_WORKERS <= 1 or len(items) < 2:
+        return [fn(i) for i in items]
+    import multiprocessing as mp
+    with mp.get_context('fork').Pool(DRAW_WORKERS) as pool:
+        return pool.map(fn, items, chunksize=1)
+
+
+def draw_all(out_dir, outs, ts, every=1, side=False):
+    """Draw (or take from the store) every `every`-th frame into OUT/frames; prints how many were drawn."""
+    import random
+    import shutil
+    from PIL import Image
+    store = os.path.join(out_dir, 'store')
+    os.makedirs(store, exist_ok=True)
+    fdir = os.path.join(out_dir, 'frames')
+    os.makedirs(fdir, exist_ok=True)
+    code = _draw_code()
+    idx = list(range(0, len(ts), every))
+    keys = {i: frame_key(outs[i], ts[i], side, code) for i in idx}
+    if os.path.exists(STORE_TAR) and any(not os.path.exists(os.path.join(store, keys[i] + '.png')) for i in idx):
+        import tarfile
+        with tarfile.open(STORE_TAR) as tf:              # the bundle kept between chats (only PNGs by name)
+            want = {keys[i] + '.png' for i in idx}
+            tf.extractall(store, members=[m for m in tf.getmembers() if m.name in want and m.isfile()])
+    _DRAW.update(outs=outs, ts=ts, side=side, keys=keys, store=store)
+    have = [i for i in idx if os.path.exists(os.path.join(store, keys[i] + '.png'))]
+    if have:                                             # the store's spot check: drawn again, pixel for pixel
+        spot = random.sample(have, min(10, len(have)))
+        old = {i: np.asarray(Image.open(os.path.join(store, keys[i] + '.png'))) for i in spot}
+        _pool_map(_draw_frame, spot)
+        if any(not np.array_equal(old[i], np.asarray(Image.open(os.path.join(store, keys[i] + '.png'))))
+               for i in spot):
+            print('frame store: a stored frame drew differently: store wiped, every frame drawn', flush=True)
+            shutil.rmtree(store)
+            os.makedirs(store)
+            have, spot = [], []
+        else:
+            have = [i for i in have if i not in spot]
+    else:
+        spot = []
+    todo = [i for i in idx if i not in have and i not in spot]
+    t0 = time.time()
+    _pool_map(_draw_frame, todo)
+    for i in idx:
+        shutil.copyfile(os.path.join(store, keys[i] + '.png'), os.path.join(fdir, 'f%04d.png' % i))
+    with open(os.path.join(store, 'index.json'), 'w') as fh:
+        json.dump({'%04d' % i: keys[i] for i in idx}, fh)
+    print('frames: %d new (%.0f s, %d at a time), %d from the store (%d of them drawn again to check it: same)' % (
+        len(todo), time.time() - t0, DRAW_WORKERS, len(have) + len(spot), len(spot)), flush=True)
+
+
+def keep(out_dir):
+    """File OUT's store (the frames of its last run) as the one bundle on GitHub (lossless PNGs, under 20 MB)."""
+    import tarfile
+    store = os.path.join(out_dir, 'store')
+    names = sorted(set(json.load(open(os.path.join(store, 'index.json'))).values()))
+    os.makedirs(os.path.dirname(STORE_TAR), exist_ok=True)
+    tmp = STORE_TAR + '.tmp'
+    with tarfile.open(tmp, 'w') as tf:
+        for n in names:
+            tf.add(os.path.join(store, n + '.png'), arcname=n + '.png')
+    mb = os.path.getsize(tmp) / 1e6
+    if mb > STORE_MB:
+        os.remove(tmp)
+        sys.exit('keep: %.1f MB is over %d MB; not kept' % (mb, STORE_MB))
+    os.replace(tmp, STORE_TAR)
+    print('kept %d frames, %.1f MB: %s' % (len(names), mb, os.path.relpath(STORE_TAR)))
 SLIDE_BAR = 1.0                  # cm: a planted knee or the door hand moving more than this while planted
 
 
@@ -1593,7 +1727,7 @@ def checked_clip(out_dir, mp4, span=None):
     on a grey solid body (it is not drawn by views), so THESE are its body check. Side by side: shot 4's locked
     camera and outside the window. Unnamed faults hold the video aside (Writer.finish), as for any clip."""
     import humancheck as HC
-    fails, over, pops, held, sl = run(out_dir, span=span, side=True)
+    fails, over, pops, held, sl = run(out_dir, span=span, side=True, draw_frames=False)   # checks first, no drawing
     ts = RUN_LAST['ts']
     f0 = int(round(ts[0] * FPS))
     W = HC.Writer('grey test body')
@@ -1615,9 +1749,37 @@ def checked_clip(out_dir, mp4, span=None):
     for f, k, gap in held:
         t = ts[min(f, len(ts) - 1)]
         W.frame(t, [(t, who, 'contact', 'contact: %s gap %.1f cm' % (k, gap))])
+    lines = W.lines()                    # the checks-first lock (speed-up step 3): nothing is drawn while a fault
+    fh = hashlib.sha256('\n'.join(lines).encode()).hexdigest()[:16]     # is neither fixed nor named
+    json.dump(dict(hash=fh, faults=lines), open(os.path.join(out_dir, 'faults.json'), 'w'), indent=1)
+    named = _named(out_dir).get(fh) if lines else None
+    if lines and not named:
+        print('\n'.join(lines), flush=True)
+        sys.exit('checks first: %d fault(s) above, NOTHING drawn. Fix them and run again, or name every one: '
+                 'python3 source/bench_move.py name %s "why"' % (len(lines), out_dir))
+    draw_all(out_dir, RUN_LAST['outs'], ts, 1, side=True)
     size = clip(out_dir, mp4)
     print('clip %s: %.0f KB, film frames %d-%d' % (mp4, size / 1024, f0, f0 + len(ts) - 1), flush=True)
-    W.finish(mp4)
+    if named:
+        print('faults named: %s' % named, flush=True)
+    W.finish(mp4, named=bool(named))
+
+
+def _named(out_dir):
+    try:
+        return json.load(open(os.path.join(out_dir, 'named.json')))
+    except (OSError, ValueError):
+        return {}
+
+
+def name_faults(out_dir, why):
+    """Name the faults of OUT's last check pass (faults.json) so the clip may be drawn; a new fault list needs a new
+    name (the name is filed under the list's fingerprint)."""
+    f = json.load(open(os.path.join(out_dir, 'faults.json')))
+    d = _named(out_dir)
+    d[f['hash']] = why
+    json.dump(d, open(os.path.join(out_dir, 'named.json'), 'w'), indent=1)
+    print('named %d fault(s): %s' % (len(f['faults']), why))
 
 
 def report(n, fails, top, over, pops, held, sl, aims, secs):
@@ -1877,6 +2039,10 @@ if __name__ == '__main__':
         dressed_still(sys.argv[2], *(sys.argv[3:4] or ['K4']), *[float(x) for x in sys.argv[4:5]])
     elif cmd == 'checks':
         run(sys.argv[2], draw_frames=False)
+    elif cmd == 'name':          # name OUT_DIR "why": the last check pass's faults named, so the clip may draw
+        name_faults(sys.argv[2], sys.argv[3])
+    elif cmd == 'keep':          # keep OUT_DIR: the frame store as the bundle on GitHub
+        keep(sys.argv[2])
     elif cmd == 'proof':
         proof(sys.argv[2])
     elif cmd == 'keys':

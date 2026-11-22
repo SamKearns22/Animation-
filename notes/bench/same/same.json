@@ -1,0 +1,136 @@
+{
+ "frames": {
+  "0": {
+   "P": "a61f60f37362401e",
+   "checks": "{'car': {}, 'contacts': {}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 0, 'neck': 0, 'bend': 8}, 'self': {}}"
+  },
+  "8": {
+   "P": "a61f60f37362401e",
+   "checks": "{'car': {}, 'contacts': {}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 0, 'neck': 0, 'bend': 8}, 'self': {}}"
+  },
+  "16": {
+   "P": "aa4789653191a637",
+   "checks": "{'car': {'dash': (688, 4.5)}, 'contacts': {}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 15, 'neck': 10, 'bend': 19}, 'self': {'arm R / trunk': (1, 10.2), 'leg R / trunk': (31, 4.4), 'leg L / leg R': (171, 7.7), 'arm L / leg R': (85, 5.3), 'foot R / leg L': (86, 7.0), 'foot L / foot R': (18, 12.0), 'foot R / leg R': (7, 2.2), 'arm L / leg L': (26, 8.1)}}"
+  },
+  "24": {
+   "P": "aefc6ea03cd29b7f",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.2), 'knee R on seat': np.float64(0.2), 'free hand on door top': np.float64(0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 8, 'neck': -6, 'bend': 20}, 'self': {'arm R / trunk': (1, 1.4)}}"
+  },
+  "32": {
+   "P": "d92638e63c1c5fef",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.2), 'knee R on seat': np.float64(0.2), 'free hand on door top': np.float64(0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 17, 'neck': 32, 'bend': 14}, 'self': {}}"
+  },
+  "40": {
+   "P": "fe4010e0d8999c8f",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 30, 'neck': 37, 'bend': 19}, 'self': {}}"
+  },
+  "48": {
+   "P": "9f78d1dd93077a44",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "56": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "64": {
+   "P": "5c3f0f341d285611",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "72": {
+   "P": "76b33951f3a6a909",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "80": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "88": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "96": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "104": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "112": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "120": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "128": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "136": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "144": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "152": {
+   "P": "b44688b44cba6d67",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2), 'belly on door top': np.float64(-0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 35, 'neck': 40, 'bend': 21}, 'self': {}}"
+  },
+  "160": {
+   "P": "0b579d409e01f68e",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.1), 'knee R on seat': np.float64(0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 29, 'neck': 37, 'bend': 19}, 'self': {}}"
+  },
+  "168": {
+   "P": "3497e43c997c7616",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.2), 'knee R on seat': np.float64(0.2), 'free hand on door top': np.float64(0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 17, 'neck': 33, 'bend': 14}, 'self': {}}"
+  },
+  "176": {
+   "P": "a29959259d5cc59a",
+   "checks": "{'car': {}, 'contacts': {'knee L on seat': np.float64(0.2), 'knee R on seat': np.float64(0.2), 'free hand on door top': np.float64(0.2)}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 9, 'neck': -3, 'bend': 19}, 'self': {}}"
+  },
+  "184": {
+   "P": "e142ac6cf15bc681",
+   "checks": "{'car': {'dash': (688, 4.5)}, 'contacts': {}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 15, 'neck': 10, 'bend': 19}, 'self': {'arm R / trunk': (1, 10.2), 'leg R / trunk': (31, 4.4), 'leg L / leg R': (171, 7.7), 'arm L / leg R': (85, 5.3), 'foot R / leg L': (86, 7.0), 'foot L / foot R': (18, 12.0), 'foot R / leg R': (7, 2.2), 'arm L / leg L': (26, 8.1)}}"
+  },
+  "192": {
+   "P": "a61f60f37362401e",
+   "checks": "{'car': {}, 'contacts': {}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 0, 'neck': 0, 'bend': 8}, 'self': {}}"
+  },
+  "196": {
+   "P": "a61f60f37362401e",
+   "checks": "{'car': {}, 'contacts': {}, 'pistol': {}, 'rom': {}, 'romv': {'twist': 0, 'neck': 0, 'bend': 8}, 'self': {}}"
+  }
+ },
+ "drawn": {
+  "0": "469b419ed4309242",
+  "16": "3b7941f6f781e740",
+  "32": "6afa2a8232b5e39c",
+  "48": "37fd87700d801141",
+  "64": "847379e91738a186",
+  "80": "847379e91738a186",
+  "96": "86106afa0c8b5eaa",
+  "112": "53e3a07def3063a5",
+  "128": "847379e91738a186",
+  "144": "5219134cf2634488",
+  "160": "ef1202812db39abb",
+  "176": "c721ea0e4be3323e"
+ },
+ "secs": {
+  "fits": 73.3,
+  "solve per frame": 13.2,
+  "processors busy in solve": "68%",
+  "checks per frame": 2.45,
+  "draw per frame": 0.99,
+  "all": 492.2,
+  "processors busy overall": "66%"
+ },
+ "fits": [
+  "0.5512146981846096",
+  "0.054533798382873484",
+  "0.667"
+ ]
+}
