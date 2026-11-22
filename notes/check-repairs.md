@@ -152,3 +152,4 @@ discover how it can be made more compliant with statement one.")
 - Cost idea 1 (start-up reading): **Option 2** (measure + the one-at-a-time searches check). Build chat opened (Opus medium).
 - Cost ideas 2 (rework) and 3 (silent-hour forgetting): **ignored and deleted** on Sam's word; their proposal files removed (history in git). Do not raise them again.
 - Budget stops (chat 28): N. Still open: usage meter reading, budget alarms Y/N, aim-check reviewer 1/2, un-parking the Milburn lessons.
+- Milburn's parked lessons (notes/proposals: could-not-test, named-lines, staging-stills, shared-check-fixes, guard-film-questions, notes-model, brow-limit, rule-needs-check; plain-check too): Sam 22 Nov "Milburn: begin all". Each goes through the proposal route (helpers, blind judge), then to Sam one at a time as judged options; build on his picks. Chat opened (Opus high).
