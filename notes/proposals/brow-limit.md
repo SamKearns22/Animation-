@@ -1,6 +1,6 @@
 # Proposal: The brow limit learnt on Milburn lives only in that film's notes
 
-Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
+Status: open (un-parked 22 Nov, Sam: "Milburn: begin all"; his 19 Nov words below still stand)
 
 ## Problem
 On Milburn, Sam noted that scene 7's angry faces looked wrong: the brows tipped into steep slashes through the
