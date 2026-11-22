@@ -307,17 +307,75 @@ def _lerp_goal(a, b, u):
 
 
 _KEYC = {}
+_BD_T = {t for t, _ in BREAKDOWNS}
+
+
+def _abs_spec(x):
+    return isinstance(x, tuple) and len(x) == 2 and not isinstance(x[0], str) and x[0] is not None
+
+
+def _herm(p, tt, s, i):
+    """Monotone cubic through four values p[0..3] at times tt[0..3], at s in [0,1] between p[1] and p[2]. A locked
+    beat (not a breakdown) has zero speed (he settles on it); a breakdown is passed THROUGH with speed (no stop:
+    a stop there is a pop), its speed per number made zero where the path turns back (no overshoot)."""
+    p = [np.asarray(v, float) for v in p]
+    h = tt[2] - tt[1]
+    d = [(p[k + 1] - p[k]) / max(tt[k + 1] - tt[k], 1e-6) for k in range(3)]
+
+    def tan(k):                                   # the speed at key k (1 or 2)
+        if tt[k] not in _BD_T:
+            return np.zeros_like(p[1])
+        a, b = d[k - 1], d[k]
+        m = (a + b) / 2
+        m = np.where(a * b <= 0, 0.0, m)
+        lim = 3 * np.minimum(np.abs(a), np.abs(b))
+        return np.clip(m, -lim, lim)
+    s2, s3 = s * s, s * s * s
+    return ((2 * s3 - 3 * s2 + 1) * p[1] + (s3 - 2 * s2 + s) * h * tan(1) + (-2 * s3 + 3 * s2) * p[2] +
+            (s3 - s2) * h * tan(2))
+
+
+def _herm_goal(G, tt, s, fallback):
+    """_herm over every number of four goal dicts; parts that are not plain numbers (aim, 'rel' hands) fall back to
+    the eased blend of the two keys."""
+    out = {}
+    for n in G[1]:
+        xs = [g[n] for g in G]
+        if isinstance(xs[1], dict):
+            out[n] = {}
+            for sd in xs[1]:
+                vs = [x[sd] for x in xs]
+                if all(_abs_spec(v) for v in vs):
+                    out[n][sd] = (_herm([v[0] for v in vs], tt, s, 0), _herm([v[1] for v in vs], tt, s, 0))
+                elif all(not isinstance(v, tuple) for v in vs):
+                    out[n][sd] = _herm(vs, tt, s, 0)
+                else:
+                    out[n][sd] = fallback[n][sd]
+        elif any(x is None for x in xs):
+            out[n] = fallback[n]
+        else:
+            out[n] = _herm(xs, tt, s, 0)
+            if n in ('knee_w', 'seat_w', 'aim_w', 'kick', 'belly'):
+                out[n] = float(np.clip(out[n], 0, 1))
+    return out
 
 
 def goals_at(t):
     T = _times()
     t = min(max(t, T[0][0]), T[-1][0])
-    for (t0, a), (t1, b) in zip(T, T[1:]):
+    for i, ((t0, a), (t1, b)) in enumerate(zip(T, T[1:])):
         if t0 <= t <= t1:
             u = 0.0 if t1 == t0 else _ease((t - t0) / (t1 - t0))
             ka = _KEYC.setdefault(a, key(a))
             kb = _KEYC.setdefault(b, key(b))
-            return _lerp_goal(ka, kb, u)
+            lin = _lerp_goal(ka, kb, u)
+            if t1 == t0 or not ({t0, t1} & _BD_T):
+                return lin
+            # a span touching a breakdown: a smooth path through it (Hermite), not a stop on it
+            tp, pa = T[max(i - 1, 0)]
+            tn, nb = T[min(i + 2, len(T) - 1)]
+            G = [_KEYC.setdefault(k, key(k)) for k in (pa, a, b, nb)]
+            return _herm_goal(G, [tp, t0, t1, tn], (t - t0) / (t1 - t0), lin)
     return key(T[-1][1])
 
 
