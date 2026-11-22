@@ -379,7 +379,7 @@ def _tulip_decals(car):
                        (z0 + z1) / 2 + (z1 - z0) / 2 * rng.uniform(0.6, 1.0) * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 14, endpoint=False)]
         d.append(Decal(pts, (0, 1, 0), TULIP_FADE, None, 0))
     # the two weathered black stripes on the bonnet and the boot, and a faded patch on the bonnet
-    for x0, x1 in ((-0.44, -0.07), (0.07, 0.44)):
+    for x0, x1 in ((-0.36, -0.11), (0.11, 0.36)):       # Sam 22 Nov (F15, his 1): 25 cm each, a wider red gap
         for z0, z1, seed in ((H['base'][1] + 0.04, zf - 0.03, 11), (zb + 0.03, H['base'][0] - 0.04, 23)):
             pts = [_top_pt(car, x, z) for x, z in _ragged(x0, x1, z0, z1, seed + int(x0 * 10))]
             d.append(Decal(pts, (0, 1, 0), STRIPE, STRIPE_EDGE, 1.6))
@@ -397,7 +397,7 @@ def _tulip_decals(car):
     zb0, zb1 = H['base'][1] + 0.04, zf - 0.03
     zm = zb0 + 0.42 * (zb1 - zb0)
     hw = half_w(car, zm) * 0.93
-    cuts = [-hw, -0.44, -0.07, 0.07, 0.44, hw]
+    cuts = [-hw, -0.36, -0.11, 0.11, 0.36, hw]
     for w0, w1 in ((0.0, 0.10), (0.15, 0.18)):          # a broad band and a thin one beside it
         for i in range(len(cuts) - 1):
             xa, xb = cuts[i], cuts[i + 1]

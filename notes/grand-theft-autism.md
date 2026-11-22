@@ -217,7 +217,10 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
       3); F15 NOT fixed (still trousers; a pinstripe try was too thin at phone size, removed); new: Jason's raised hand
       cut by the left edge at 29.3 (shot 6, his gesture, not the camera); passers-by in shot 5 stand frozen; 3 tiny
       walkers in shot 5 (22.3-23 s, 4-7 drawings) with an arm out of the back (body check, there before this chat).
-- [ ] Sam Q (33b): F15, 1 stripes narrower (about 25 cm each, wider red gap, still black) or 2 keep as now.
+- [x] Sam Q (33b): F15, Sam "1" (22 Nov): stripes 25 cm each, wider red gap, still black. Done; still sent.
+- PAUSED (Sam 22 Nov: "Then let's wait until the 3D work is done"): no more 33b film work until chat 33's 3D move is
+      done. Open for then: F6 runner stiff in his second step and still at the wall; Jason's raised hand cut by the
+      left edge at 29.3; shot 5 frozen passers-by; 3 tiny walkers' arms out of the back (22.3-23 s).
 - Where it stands (33b): Next = Sam's notes on the two clips + the F15 answer, then a notes round (Opus medium).
       Never shot 4's Jason. grand_theft_autism.py now has frame_image (critique.py needed it).
 
