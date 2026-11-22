@@ -94,3 +94,27 @@ Locked by Sam: every camera and beat of shots 1-8 (shot 4's camera and acting-ro
 - Not yet run: the 197 frames, proof on old frames (chat 33's still through bench_pose: seat 7.4 / pistol 4.8 must
   show; old leanout.at keys through solve), the grey clip. Open question for Sam once measured: the 3 cm a frame bar
   cannot hold at the locked timing (a hand reaching 0.8 m in 0.5 s, the pistol's kick); count sudden jumps instead?
+
+## Stage 1, chat 35 (Opus high): key poses cleared
+Fixed in the drawing (the body), never by loosening a check:
+- Skin folds (groin, armpits, neck): bone-weight skinning let thigh and belly skin pass into each other at a bent
+  joint. New: press_folds + _settle (flesh pressed together: a fold-zone skin point inside the other part goes to
+  that part's free surface, 2 mm out). Pose errors away from folds are NOT touched by it.
+- K1: right elbow back against the ribs -> hanging out and forward; left hand into the thigh -> resting on it;
+  the pistol pointed back along his own forearm (no wrist can do that) -> barrel up across his chest, carrying on
+  from the forearm (the hold "flat on his chest, barrel up across it" kept).
+- Kneeling: shins sank into the cushion (ankles too low) -> fit_ankles (ANKLE_Y 0.667); knees settled per key ON
+  the cushion (two-pass solve: each knee's skin gap measured, then taken out).
+- The aimed pistol was canted 45 degrees with its grip point at the hand ball's centre, so its back sank into the
+  wrist -> pistol_mesh: upright when aimed, the slide sitting on top of the fist (barrel above the wrist).
+Check precision fixes (each one stricter or equal for real crossings, said plainly):
+- Inside test now steps 1.5 mm AND 3 mm out: the ear's thin flap read "inside" at 3 mm only (a 9.9 cm "head into
+  trunk" with 1 point). A point deeper than the 5 mm bar is inside at both steps, so no real crossing can slip.
+- The circle hand meeting its OWN wrist is the house hand's join, not a crossing (within a hand's width of the wrist).
+- "Belly on door top" measured the belly's x past the door's inner face, so folding OVER the door top (reference
+  B, C) read as -3.5 cm "into the door". Now: over the door top -> its lowest skin on the top (gap); not over -> how
+  far short of the inner face.
+Keys now (keytest.py): K1-K5 0 crossings (car, self, pistol), contacts held (knees 0.1-0.8, door hand 0.2,
+belly -0.2 = resting), joints in range, K4 aim 0.0 m off. Sheet: three sides plus shot 4's camera, crossing
+points marked red (bench_move.py keys OUT.jpg). Viewer note: K4 from outside, his chin rests against the gun arm
+(sighting along it); touching, not crossing.

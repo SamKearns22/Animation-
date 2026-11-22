@@ -217,8 +217,8 @@ def key(name):
     if name == 'K1':          # seated (shot 3's frame): pistol flat on his chest, left hand on his thigh
         return dict(pelvis=_v(0.42, 0.0, -0.06), p_up=_v(0, 1, -0.12), p_fwd=_v(0, 0, 1), c_up=_v(0, 1, 0.02),
                     c_fwd=_v(0, 0, 1), h_fwd=_v(0, -0.05, 1),
-                    hand={'L': (_v(0.28, 0.66, 0.34), _v(-0.3, -0.2, -1)), 'R': (_v(0.40, 0.98, 0.18), _v(0.7, -1, -0.3))},
-                    aim_w=0.0, gun=_v(0.85, 0.5, 0.2), kick=0.0, belly=0.0,
+                    hand={'L': (_v(0.26, 0.72, 0.36), _v(-1, -0.6, -0.2)), 'R': (_v(0.40, 1.00, 0.26), _v(1, -0.5, 0.3))},
+                    aim_w=0.0, gun=_v(-0.7, 0.65, 0.3), kick=0.0, belly=0.0,   # barrel up across his chest, along the forearm
                     knee={'L': _v(0.31, 0.64, 0.42), 'R': _v(0.53, 0.64, 0.42)},
                     ankle={'L': _v(0.31, 0.18, 0.50), 'R': _v(0.53, 0.18, 0.50)}, knee_w=0.0, seat_w=1.0)
     if name == 'K2':          # up on his knees, turned to the window, ducking: chest at the window, forearm and
@@ -228,7 +228,7 @@ def key(name):
                     hand={'L': (DOOR_HAND, _v(0.3, -1, 0.6)), 'R': (_v(0.74, 0.86, -0.16), _v(0.2, -0.3, -1))},
                     aim_w=0.0, gun=_v(0.3, -1, -0.1), kick=0.0, belly=0.0,
                     knee={'L': _v(0.62, 0.0, 0.14), 'R': _v(0.60, 0.0, -0.12)},
-                    ankle={'L': _v(0.20, 0.53, 0.18), 'R': _v(0.18, 0.53, -0.16)}, knee_w=1.0, seat_w=0.0)
+                    ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
     if name == 'K3':          # head and shoulders out over the door top, the head leading the turn back (D),
         #                       gun up beside his head, muzzle up
         return dict(pelvis=_v(0.70, 0.0, 0.01), p_up=_v(0.5, 1, 0), p_fwd=_v(1, 0, -0.25), c_up=_v(0.8, 1, -0.05),
@@ -236,7 +236,7 @@ def key(name):
                     hand={'L': (DOOR_HAND, _v(0.5, -1, 0.6)), 'R': ('rel', _v(0.06, 0.34, -0.10), _v(0.3, -1, -0.5))},
                     aim_w=0.0, gun=_v(0, 1, -0.1), kick=0.0, belly=0.0,
                     knee={'L': _v(0.63, 0.0, 0.14), 'R': _v(0.61, 0.0, -0.12)},
-                    ankle={'L': _v(0.20, 0.53, 0.18), 'R': _v(0.18, 0.53, -0.16)}, knee_w=1.0, seat_w=0.0)
+                    ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
     if name in ('K4', 'K5'):  # out to the waist, folded over the door top (B, C), chest turned back along the car
         #                       (D), the gun arm along the line to the lead cruiser; K5 the kick
         k = dict(pelvis=_v(0.76, 0.0, 0.0), p_up=_v(0.55, 1, 0), p_fwd=_v(1, 0, -0.3), c_up=_v(1.15, 1, -0.05),
@@ -244,7 +244,7 @@ def key(name):
                  hand={'L': (DOOR_HAND, _v(0.6, -0.6, 0.8)), 'R': ('aim', None, _v(0.3, -1, 0.2))},
                  aim_w=1.0, gun=None,
                  knee={'L': _v(0.64, 0.0, 0.14), 'R': _v(0.62, 0.0, -0.12)},
-                 ankle={'L': _v(0.20, 0.53, 0.18), 'R': _v(0.18, 0.53, -0.16)}, knee_w=1.0, seat_w=0.0)
+                 ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
         k['kick'] = 1.0 if name == 'K5' else 0.0
         k['belly'] = 1.0
         return k
@@ -353,7 +353,49 @@ class Pose(dict):
 
 
 def solve(g, seat_dy=None):
-    """Goals -> the posed body: dict(P points, J joints, R bone turns, balls, gun (points, tris), aim)."""
+    """Goals -> the posed body: dict(P points, J joints, R bone turns, balls, gun (points, tris), aim). Kneeling,
+    each knee is settled ON the cushion: a first pass measures each knee's skin gap, the second takes it out."""
+    if float(g['knee_w']) <= 0:
+        return _solve(g, seat_dy)
+    first = _solve(g, seat_dy, fold=False)
+    gaps = knee_gaps(first['P'], first['J'])
+    return _solve(g, seat_dy, knee_dy={sd: gaps[sd] - 0.001 for sd in 'LR'})
+
+
+def pistol_mesh(pose, ball, aim_w):
+    """The pistol in the gun hand (gun3d_film's blocks). Aimed, it is held upright (its grip straight down from the
+    barrel, no cant) with the slide sitting ON the fist: the barrel runs above the hand ball, higher than the wrist,
+    as in a real grip. Seated (K1) it lies flat on his chest (its grip across the chest), held between fist and
+    chest. Between the two, blended by aim_w."""
+    import gun3d_film as GF
+    V, T, K = GF.mesh(1.0)
+    d = _u(pose.aim)
+    fwd = np.asarray(pose['fwd'], float)
+    flat = np.cross(fwd, d)
+    if flat[1] > 0:
+        flat = -flat
+    flat = _u(flat)
+    upright = _u(np.array([0, -1.0, 0]) - d * (-d[1]))
+    w = float(np.clip(aim_w, 0, 1))
+    down = _u((1 - w) * flat + w * upright + 1e-6)
+    down = _u(down - d * np.dot(down, d))
+    side = np.cross(d, down)
+    top = ball - fwd * 0.012 * (1 - w) - down * HAND_R * 0.75 * w       # the slide's bottom on top of the fist
+    return top + V[:, :1] * d + V[:, 1:2] * down + V[:, 2:3] * side, T
+
+
+def knee_gaps(P, J):
+    """Each knee's lowest skin above the cushion's top (metres), the skin within 12 cm of the knee joint."""
+    r = rig()
+    out = {}
+    for sd in 'LR':
+        Q = P[r['keep'] & (r['region'] == (6 if sd == 'L' else 8))]
+        near = np.linalg.norm(Q - J['kn' + sd], axis=1) < 0.12
+        out[sd] = float(Q[near, 1].min() - SEAT_TOP)
+    return out
+
+
+def _solve(g, seat_dy=None, knee_dy=None, fold=True):
     r = rig()
     J0 = r['J']
     Rp = _frame(g['p_up'], g['p_fwd'])
@@ -366,7 +408,7 @@ def solve(g, seat_dy=None):
     y_knee = []
     for sd in 'LR':
         kg = g['knee'][sd].copy()
-        kg[1] = SEAT_TOP + KNEE_R
+        kg[1] = SEAT_TOP + KNEE_R - (knee_dy[sd] if knee_dy else 0.0)
         hxz = pel + hipoff[sd]
         dxz = np.hypot(hxz[0] - kg[0], hxz[2] - kg[2])
         y_knee.append(kg[1] + math.sqrt(max(r['L_th'] ** 2 - dxz ** 2, 0.0)) - hipoff[sd][1])
@@ -403,7 +445,7 @@ def solve(g, seat_dy=None):
     for sd in 'LR':
         hip = jw['hip' + sd]
         kg = np.asarray(g['knee'][sd], float).copy()
-        ky = SEAT_TOP + KNEE_R
+        ky = SEAT_TOP + KNEE_R - (knee_dy[sd] if knee_dy else 0.0)
         kg[1] = kg[1] * (1 - w) + ky * w
         if w > 0:                                                   # kneeling: the knee ON the cushion, at the
             dxz = _v(kg[0] - hip[0], 0, kg[2] - hip[2])            # thigh's length from the hip (slid along the
@@ -433,6 +475,8 @@ def solve(g, seat_dy=None):
         ws[idx] += wt
     ws[ws < 1e-9] = 1
     P = acc / ws[:, None]
+    if FOLD and fold:
+        P = press_folds(P, jw)
     balls = {sd: jw['wr' + sd] + _u(jw['wr' + sd] - jw['el' + sd]) * HAND_OFF for sd in 'LR'}
     gun_way = g['gun']
     if isinstance(gun_way, tuple):
@@ -445,13 +489,136 @@ def solve(g, seat_dy=None):
     pose = Pose({n: v for n, v in jw.items()})
     pose['fwd'] = Rc[:, 2]
     pose.aim = _u(gun_way)
-    import bench_draw as BD
-    Pg, Tg = BD.gun_mesh(pose)
+    Pg, Tg = pistol_mesh(pose, balls['R'], g.get('aim_w', 0.0))
     return dict(P=P, J=jw, balls=balls, gun=(Pg, Tg), aim=pose.aim, pel=pel, Rc=Rc, Rp=Rp, Rh=Rh, pose=pose)
 
 
+FOLD = True
+ANKLE_Y = 0.667                  # kneeling: the ankles' height behind the knees (fit_ankles: shins ON the cushion)
+
+
+def fit_ankles():
+    """ANKLE_Y: the lowest ankle height that keeps the shins' skin on the cushion, not in it (kneeling keys)."""
+    global ANKLE_Y
+    r = rig()
+    seat = [s for s in solids() if s[0] == 'seat R'][0]
+    for _ in range(8):
+        worst = 0.0
+        for k in ('K2', 'K3', 'K4'):
+            P = solve(key(k))['P']
+            leg = np.isin(r['region'], (6, 8, 12, 14)) & r['keep']
+            worst = max(worst, float(inside_depth(P[leg], seat).max()))
+        if worst <= 0.001:
+            break
+        ANKLE_Y += worst + 0.002
+    return ANKLE_Y
+FOLD_ZONE = {(1, 6): ('hipL', 'pelvis'), (1, 8): ('hipR', 'pelvis'), (1, 7): ('pelvis',), (6, 7): ('pelvis',),
+             (7, 8): ('pelvis',), (6, 8): ('pelvis',), (1, 3): ('shL',), (1, 5): ('shR',), (1, 10): ('neck', 'head')}
+FOLD_R = 0.20                    # a fold: skin within this of the joint the two parts share (hip, armpit, neck)
+
+
+def press_folds(P, jw, iters=8, ease=True):
+    """Flesh pressed together at the joint folds (groin, armpit, neck): skinning by bone weights lets the skin of
+    two parts meeting at a bent joint pass into each other there. Real flesh does not; it presses flat. Each skin
+    point of one part found inside the other part's skin, within FOLD_R of their shared joint, is moved out to the
+    other part's surface (2 mm outside), a few rounds, then its ring of neighbours eased. Pose errors away from the
+    folds (a forearm sunk in the chest) are NOT touched: the checks still see them."""
+    from scipy.spatial import cKDTree
+    r = rig()
+    tb = _body_tris()
+    use = np.unique(tb)
+    reg = r['region'][use]
+    P = P.copy()
+    moved = np.zeros(len(P), bool)
+    for it in range(iters):
+        wide = 0.006 if it < iters - 3 else 0.03
+        Q = P[use]
+        N = _normals(P, tb)[use]
+        cand, dest = [], []
+        for (a, b), joints in FOLD_ZONE.items():
+            JP = np.array([jw[j] for j in joints])
+            for x, y in ((a, b), (b, a)):
+                mx, my = reg == x, reg == y
+                if not mx.any() or not my.any():
+                    continue
+                ix = np.where(mx)[0]
+                dj = np.min(np.linalg.norm(Q[ix][:, None] - JP[None], axis=2), 1)
+                ix = ix[dj < FOLD_R]
+                if not len(ix):
+                    continue
+                iy = np.where(my)[0]
+                d, j = cKDTree(Q[iy]).query(Q[ix], distance_upper_bound=0.12)
+                ok = np.isfinite(d) & (d > TOUCH * 0.5)
+                jj = np.where(ok, j, 0)                            # behind the other part's skin there (its
+                ok &= np.einsum('ij,ij->i', Q[ix] - Q[iy[jj]], N[iy[jj]]) < wide   # normal): the only ones to test
+                cand.append(ix[ok])
+                dest.append(iy[j[ok]])
+        if not cand:
+            break
+        ci, di = np.concatenate(cand), np.concatenate(dest)
+        if not len(ci):
+            break
+        m = _inside2(Q[ci], N[ci], P, tb)
+        if os.environ.get('FOLD_DEBUG'):
+            print('press round', it, 'cand', len(ci), 'inside', int(m.sum()))
+        if not m.any():
+            break
+        ci, di = ci[m], di[m]
+        P[use[ci]] = Q[di] + N[di] * 0.002
+        moved[use[ci]] = True
+    if moved.any() and ease:                                        # ease the ring around what moved
+        nb = {}
+        for t in tb:
+            for a_ in t:
+                nb.setdefault(a_, set()).update(t)
+        ring = set()
+        for v in np.where(moved)[0]:
+            ring |= nb.get(v, set())
+        ring = np.array(sorted(ring - set(np.where(moved)[0])), int)
+        for _ in range(2):
+            P[ring] = 0.5 * P[ring] + 0.5 * np.array([P[list(nb[v])].mean(0) for v in ring])
+        P = _settle(P, jw)                                          # the easing can nudge a point back in
+    return P
+
+
+def _settle(P, jw, rounds=3):
+    """Last step of the press: every fold-zone skin point still inside the body goes to the nearest FREE skin point
+    (one found outside) of another part, 2 mm out. Free points are outside, so this ends inside-free."""
+    from scipy.spatial import cKDTree
+    r = rig()
+    tb = _body_tris()
+    use = np.unique(tb)
+    reg = r['region'][use]
+    zone = np.zeros(len(use), bool)
+    for (a, b), joints in FOLD_ZONE.items():
+        JP = np.array([jw[j] for j in joints])
+        m = np.isin(reg, (a, b))
+        zone[m] |= np.min(np.linalg.norm(P[use][m][:, None] - JP[None], axis=2), 1) < FOLD_R
+    zi = np.where(zone)[0]
+    mate = {}
+    for (a, b) in FOLD_ZONE:
+        mate.setdefault(a, set()).add(b)
+        mate.setdefault(b, set()).add(a)
+    for _ in range(rounds):
+        Q = P[use]
+        N = _normals(P, tb)[use]
+        ins = _inside2(Q[zi], N[zi], P, tb)
+        if os.environ.get('FOLD_DEBUG'):
+            print('settle inside', int(ins.sum()))
+        if not ins.any():
+            break
+        free = np.ones(len(use), bool)
+        free[zi[ins]] = False
+        for i in zi[ins]:
+            fm = free & np.isin(reg, list(mate.get(reg[i], ())))
+            fi = np.where(fm)[0]
+            j = fi[np.argmin(np.linalg.norm(Q[fi] - Q[i], axis=1))]
+            P[use[i]] = Q[j] + N[j] * 0.002
+    return P
+
+
 KNEE_R = 0.055                   # the knee's skin below its joint when kneeling (measured: _fit_knee)
-SEAT_Y = 0.60                    # the seated pelvis height (solved by fit_seat: his seat on the cushion)
+SEAT_Y = 0.551                   # the seated pelvis height (solved by fit_seat: his seat on the cushion)
 
 
 def fit_seat():
@@ -515,6 +682,16 @@ def _winding(Q, V, T):
     return out
 
 
+def _inside2(Q, N, P, tb):
+    """Inside the closed skin when stepped 1.5 mm AND 3 mm out along its own skin. A point more than TOUCH (5 mm)
+    inside another part is inside at both; a thin flap (the ear) read inside at one step only is not a crossing."""
+    w = _wsign()
+    m = _winding(Q + N * 0.003, P, tb) * w > 0.5
+    if m.any():
+        m[m] = _winding(Q[m] + N[m] * 0.0015, P, tb) * w > 0.5
+    return m
+
+
 def _body_tris():
     """The body's closed skin for inside tests: the kept triangles, the 3D hands left out (circle hands stand in)."""
     r = rig()
@@ -547,6 +724,7 @@ def car(out):
         m = d > TOUCH
         if m.any():
             hits[sol[0]] = (int(m.sum()), round(float(d[m].max()) * 100, 1))
+            out.setdefault('bad_pts', []).append(Q[m])
     return hits
 
 
@@ -597,23 +775,31 @@ def self_cross(out):
     hits = {}
     if len(cand):
         N = _normals(P, tb)[use]
-        wn = _winding(Q[cand] + N[cand] * 0.003, P, tb) * _wsign()   # 3 mm out along its own skin: a free
-        for i in cand[wn > 0.5]:                                        # skin point is then outside (0)
+        wn = _inside2(Q[cand], N[cand], P, tb)                       # 1.5 and 3 mm out along its own skin: a free
+        for i in cand[wn]:                                              # skin point is then outside
             dep = float(near[i])
             if dep <= TOUCH:
                 continue
             nm = ' / '.join(sorted({REG_NAMES.get(reg[i], 'body'), REG_NAMES.get(near_reg[i], 'body')}))
+            out.setdefault('bad_pts', []).append(Q[i][None])
             n0, d0 = hits.get(nm, (0, 0.0))
             hits[nm] = (n0 + 1, max(d0, round(dep * 100, 1)))
     for sd, c in out['balls'].items():
         S = _sphere(c, HAND_R * 0.98)
         wn = _winding(S, P, tb) * _wsign()
         m = wn > 0.5
+        # the circle hand is joined to its own wrist by design (house hands): its ball inside its OWN forearm
+        # within a hand's width of the wrist is the join, not a crossing
+        own = (r['region'][use] == (3 if sd == 'L' else 5))
+        _, ni = tree.query(S)
+        join = own[ni] & (np.linalg.norm(S - out['J']['wr' + sd], axis=1) < HAND_R + HAND_OFF)
+        m &= ~join
         if m.any():
             dist, _ = tree.query(S[m])
             dep = dist.max()
             if dep > TOUCH:
                 hits['hand %s in body' % sd] = (int(m.sum()), round(float(dep) * 100, 1))
+                out.setdefault('bad_pts', []).append(S[m])
     return hits
 
 
@@ -631,6 +817,8 @@ def pistol(out):
     tree = cKDTree(out['P'][np.unique(tb)])
     dist, _ = tree.query(Pg[m])
     dep = dist.max()
+    if dep > TOUCH:
+        out.setdefault('bad_pts', []).append(Pg[m])
     return {'pistol in body': (int(m.sum()), round(float(dep) * 100, 1))} if dep > TOUCH else {}
 
 
@@ -667,8 +855,12 @@ def contact_state(out, g):
     if g.get('belly', 0) >= 0.999:
         trunk = r['keep'] & (r['region'] == 1)
         Q = out['P'][trunk]
-        near = (np.abs(Q[:, 1] - SILL) < 0.06) & (Q[:, 2] > -0.95) & (Q[:, 2] < 0.80)
-        gap = DOOR_X - Q[near, 0].max() if near.any() else 9.0
+        over = (Q[:, 0] > DOOR_X) & (Q[:, 0] < DOOR_X + 0.07) & (Q[:, 2] > -0.95) & (Q[:, 2] < 0.80)
+        if over.any():                                             # folded over the door top: resting ON it
+            gap = Q[over, 1].min() - SILL
+        else:                                                      # not over it: how far short of its inner face
+            near = (np.abs(Q[:, 1] - SILL) < 0.06) & (Q[:, 2] > -0.95) & (Q[:, 2] < 0.80)
+            gap = DOOR_X - Q[near, 0].max() if near.any() else 9.0
         res['belly on door top'] = round(gap * 100, 1)
     return res
 
@@ -829,6 +1021,73 @@ def draw(out, cam, size=(540, 960)):
     return Image.fromarray(img).resize(size, Image.LANCZOS)
 
 
+SIDE_CAMS = {   # extra views for the key sheet (car frame): beside the window outside, from the front, from above
+    'outside': ((3.2, 1.25, -0.2), (0.6, 1.0, 0.0), 1500.0),
+    'front': ((0.5, 1.6, 3.2), (0.55, 0.95, 0.0), 1500.0),
+    'above': ((0.6, 4.2, 0.05), (0.6, 0.9, 0.0), 1300.0),
+}
+
+
+def draw_view(out, view, t=0.0, size=(540, 960), mark=True):
+    """One view of a pose: 'shot' (shot 4's locked camera at t) or a SIDE_CAMS view (the car cut away to what
+    touches him: seat, door, door top; the windscreen frame and roof left out so he can be seen). Crossing points
+    (bad_pts from the checks) are marked red."""
+    import bench_draw as BD
+    import sets as S
+    from PIL import Image, ImageDraw
+    if view == 'shot':
+        cam = cam_at(t, shake=False)
+        objs = scene(out)
+    else:
+        p, a, f = SIDE_CAMS[view]
+        cam = S.Cam(p, a, f)
+        keep = ('seat', 'door', 'dash')
+        objs = [o for o in scene(out) if o[3] in ('jason', 'gun') or o[3].startswith('hand') or
+                any(o[3].startswith(k) for k in keep)]
+        if view == 'outside':
+            objs = [o for o in objs if not (o[3].startswith('door') and 'rear' not in o[3])]
+    zb, pb, ob, names = BD.raster(cam, objs, 1)
+    edge = BD.ink(zb, pb, ob, 3)
+    img = np.zeros(zb.shape + (3,), np.uint8)
+    img[:] = SKY
+    for i, n in enumerate(BD.PART_NAMES):
+        img[pb == i] = GREY[n]
+    img[edge] = BD.INK
+    im = Image.fromarray(img)
+    if mark and out.get('bad_pts'):
+        Q = np.concatenate(out['bad_pts'])
+        xy, z = BD._proj(cam, Q)
+        d = ImageDraw.Draw(im)
+        for (x, y), zz in zip(xy, z):
+            if zz > cam.NEAR:
+                d.ellipse([x - 5, y - 5, x + 5, y + 5], fill=(230, 30, 30))
+    return im.resize(size, Image.LANCZOS)
+
+
+def key_sheet(path, names=('K1', 'K2', 'K3', 'K4', 'K5'), views=('shot', 'outside', 'front', 'above'), w=300):
+    """Each key pose from shot 4's camera and three other sides, its check results written under each row."""
+    from PIL import Image, ImageDraw
+    fit_seat()
+    fit_knee()
+    fit_ankles()
+    T = dict((k, t) for t, k in reversed(_times()))
+    h = int(w * 16 / 9)
+    sheet = Image.new('RGB', (w * len(views), (h + 60) * len(names)), (255, 255, 255))
+    d = ImageDraw.Draw(sheet)
+    for ri, k in enumerate(names):
+        g = key(k)
+        o = solve(g)
+        c = check_frame(o, g)
+        for ci, v in enumerate(views):
+            sheet.paste(draw_view(o, v, T.get(k, 0.0), (w, h)), (ci * w, ri * (h + 60)))
+        txt = '%s  %s' % (k, '; '.join('%s %s' % (n, v) for kk in ('car', 'self', 'pistol', 'rom') for n, v in c[kk].items()) or 'clean')
+        cs = ' '.join('%s %s' % (n, v) for n, v in c['contacts'].items())
+        for li, line in enumerate([txt[i:i + 150] for i in range(0, len(txt), 150)][:2] + [cs[:150]]):
+            d.text((6, ri * (h + 60) + h + 4 + li * 16), line, fill=(0, 0, 0))
+    sheet.save(path, quality=88)
+    return path
+
+
 # ---------------------------------------------------------------------------------------------------- run
 def frame_times():
     T = _times()
@@ -840,6 +1099,7 @@ def run(out_dir, draw_frames=True, every=1):
     os.makedirs(os.path.join(out_dir, 'frames'), exist_ok=True)
     fit_seat()
     fit_knee()
+    fit_ankles()
     rows, track, fails = [], [], []
     aims = []
     t0 = time.time()
@@ -884,6 +1144,57 @@ def report(n, fails, top, over, pops, held, sl, aims, secs):
     return '\n'.join(L)
 
 
+def _old_out(k):
+    """An old skeleton pose (leanout's house skeleton) with the solid body posed on it the old way
+    (bench_pose.posed), the old pistol and the old hand balls, as an `out` the checks read."""
+    import bench_draw as BD
+    r = rig()
+    P, T, part, bone, keep = BP.posed(k)
+    J = {n: np.asarray(k[n], float) for n in ('pelvis', 'neck', 'head', 'shL', 'shR', 'elL', 'elR', 'wrL', 'wrR',
+                                               'hipL', 'hipR', 'knL', 'knR', 'anL', 'anR')}
+    balls = {sd: c for sd, (c, rad) in zip('LR', BD.hand_balls(k, None))}
+    Pg, Tg = BD.gun_mesh(k)
+    return dict(P=P, J=J, balls=balls, gun=(Pg, Tg), aim=_u(getattr(k, 'aim', [0, 0, -1])))
+
+
+def proof(out_dir):
+    """Every check first run on the OLD failed poses (learn-step.md's pass list): chat 33's still (the seated K1
+    through bench_pose: the seat 7.4 cm and the pistol 4.8 cm must show) and the old move (leanout.at) at each
+    key's time, the body posed on it the old way; then the old move's 197 frames for jumps and the door hand."""
+    import gta_cast as GC
+    import leanout as LO
+    os.makedirs(out_dir, exist_ok=True)
+    sp = dict(GC.cast()['jason'], mood='stern')
+    L = ['Proof: the stage-1 checks on the OLD failed poses (they must catch the old faults)']
+    cases = [('chat 33 still (seated K1)', LO.seated(sp))]
+    T = dict((k, t) for t, k in reversed(_times()))
+    for nm in ('K1', 'K2', 'K3', 'K4', 'K5'):
+        cases.append(('old move %s (%.2f s)' % (nm, T[nm]), LO.at(T[nm], sp)))
+    for nm, k in cases:
+        o = _old_out(k)
+        c = dict(car=car(o), gun_car=gun_car(o), self=self_cross(o), pistol=pistol(o))
+        bad = {}
+        for sd in 'LR':
+            J = o['J']
+            a = math.degrees(math.acos(np.clip(np.dot(_u(J['el' + sd] - J['sh' + sd]), _u(J['wr' + sd] - J['el' + sd])), -1, 1)))
+            if a > ROM['elbow'][1]:
+                bad['elbow ' + sd] = round(a)
+        firing = nm.startswith('old move K4') or nm.startswith('old move K5')
+        aim = ('aim %.2f m off' % aim_err(o)) if firing else ''
+        hand = 'door hand gap %.1f cm' % ((o['balls']['L'][1] - HAND_R - SILL) * 100)
+        L.append('%-30s car %s | pistol-car %s | self %s | pistol %s | range %s | %s %s' % (
+            nm, c['car'] or 0, c['gun_car'] or 0, c['self'] or 0, c['pistol'] or 0, bad or 0, aim, hand))
+        if nm.startswith('chat 33'):
+            draw_view(o, 'outside', 0.0, (540, 960)).save(os.path.join(out_dir, 'proof-still.png'))
+    track = [{n: np.asarray(LO.at(t, sp)[n], float) for n in TRACK} for t in frame_times()]
+    top, over, pops = jumps(track)
+    L.append('old move, 197 frames: sudden jumps (pops) %d, e.g. %s; steps over 3 cm %d' % (len(pops), pops[:4], len(over)))
+    rep = '\n'.join(L)
+    open(os.path.join(out_dir, 'proof.txt'), 'w').write(rep)
+    print(rep)
+    return rep
+
+
 def clip(out_dir, mp4):
     import subprocess
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-framerate', str(FPS), '-i', os.path.join(out_dir, 'frames', 'f%04d.png'),
@@ -897,3 +1208,7 @@ if __name__ == '__main__':
         run(sys.argv[2])
     elif cmd == 'checks':
         run(sys.argv[2], draw_frames=False)
+    elif cmd == 'proof':
+        proof(sys.argv[2])
+    elif cmd == 'keys':
+        key_sheet(sys.argv[2], *(sys.argv[3:4] and [sys.argv[3].split(',')]))
