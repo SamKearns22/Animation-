@@ -1,0 +1,72 @@
+{
+ "round": 44,
+ "stage": "notes",
+ "panels": [
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v5clip/f0.6.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A vertical phone video, one frame from a whole-film animatic: Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman is in the back; police cars chase them through a city. Frame at 22.9 s of the film (a short clip of shots 5-8). Jason holds a pistol."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v5clip/f4.5.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A vertical phone video, one frame from a whole-film animatic: Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman is in the back; police cars chase them through a city. Frame at 26.8 s of the film (a short clip of shots 5-8). Jason holds a pistol."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v5clip/f8.0.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A vertical phone video, one frame from a whole-film animatic: Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman is in the back; police cars chase them through a city. Frame at 30.3 s of the film (a short clip of shots 5-8). Jason holds a pistol."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v5clip/f11.5.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A vertical phone video, one frame from a whole-film animatic: Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman is in the back; police cars chase them through a city. Frame at 33.8 s of the film (a short clip of shots 5-8). Jason holds a pistol."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v5clip/f13.2.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A vertical phone video, one frame from a whole-film animatic: Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman is in the back; police cars chase them through a city. Frame at 35.5 s of the film (a short clip of shots 5-8). Jason holds a pistol."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v5clip/f15.5.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A vertical phone video, one frame from a whole-film animatic: Jason (white vest, dark hair) is the passenger of a red 1970s muscle car; Lucia drives; a red-haired woman is in the back; police cars chase them through a city. Frame at 37.8 s of the film (a short clip of shots 5-8). Jason holds a pistol."
+  }
+ ]
+}

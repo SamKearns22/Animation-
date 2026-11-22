@@ -508,6 +508,9 @@ def inside58(t, rec=None):
                       (b3 - 0.05, expl), (b3 + 0.1, beat(0, 0.06)), (b3 + 0.25, expl), (15.3, expl),
                       (JOB - 0.05, lift), (JOB + 0.2, shrug), (WITHOUT - 0.12, shrug), (WITHOUT + 0.1, her_hand),
                       (17.45, her_hand), (17.9, rest)], t)
+        if t >= 17.4:      # shot 7's camera (lower, wider): the hand came down across his face, pistol and all (chat
+            #                  33d, Sam's N2 look): from the cut it goes out beside his face, then down to his chest
+            lh = keys_at([(17.4, (0.74, 1.18, 0.12)), (17.6, (0.74, 1.00, 0.18)), (17.9, rest)], t)
         lshape = step_at([(0, 'fist'), (12.15, 'palm'), (H1 - 0.12, 'thumb'), (H1 + 0.6, 'palm'),
                           (WITHOUT - 0.05, 'thumb'), (17.6, 'palm'), (17.85, 'fist')], t)
         near_rest = min(math.dist(lh, rest), math.dist(lh, rest0)) < 0.12
@@ -518,7 +521,8 @@ def inside58(t, rec=None):
         j_over['lying_hand_R'] = 'fist'
         up = smooth((min(math.dist(lh, rest), math.dist(lh, rest0)) - 0.06) / 0.12)
         JASON58['k'] = LO.seated(JASON58.setdefault('sp', GC.cast()['jason']), hand_r=lh, pole_r=pole, dx=-0.07 * th)
-        a0, a1 = np.array((0.85, 0.5, 0.2)), np.array((-0.30, 0.93, 0.20))   # barrel up, tipped inboard: in frame
+        a0, a1 = np.array((0.85, 0.5, 0.0)), np.array((-0.30, 0.95, 0.0))   # barrel up, tipped inboard: in frame;
+        # no forward part (critique r44: the raised gun turned edge-on and read as a pen): it stays side-on to the lens
         JASON58['k'].aim = LO._u(a0 + (a1 - a0) * up)
         JASON58['k'].front = True
         JASON58['k'].chest_gun = True

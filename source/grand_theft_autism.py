@@ -67,6 +67,14 @@ def _draw(i):
     return im.tobytes()
 
 
+def _draw_checked(i):
+    """A drawing with the body check on (humancheck): (pixels, its faults)."""
+    import humancheck as HC
+    HC.frame_begin()
+    px = _draw(i)
+    return px, HC.frame_end(i / 12)
+
+
 def main():
     out = sys.argv[1]
     t0 = float(sys.argv[sys.argv.index('--from') + 1]) if '--from' in sys.argv else 0.0
@@ -111,15 +119,19 @@ def clip(out, a, b):
     p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '540x960', '-r',
                           '12', '-i', '-', '-r', '24', '-c:v', 'libx264', '-crf', '22', '-preset', 'medium',
                           '-pix_fmt', 'yuv420p', silent], stdin=subprocess.PIPE)
+    import humancheck as HC
+    w = HC.Writer(f'clip {a}-{b}')
     with Pool(os.cpu_count()) as pool:
-        for fr in pool.imap(_draw, range(int(round(a * 12)), int(round(b * 12))), chunksize=1):
+        for fr, faults in pool.imap(_draw_checked, range(int(round(a * 12)), int(round(b * 12))), chunksize=1):
             p.stdin.write(fr)
+            w.frame(0, faults)
     p.stdin.close()
     p.wait()
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', silent, '-ss', f'{a:.3f}', '-t', f'{b - a:.3f}', '-i', CLEAN,
                     '-map', '0:v', '-map', '1:a?', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-shortest', out],
                    check=True)
     os.remove(silent)
+    w.finish(out, named='--named' in sys.argv)     # the body check record (the send gate asks for it)
 
 
 UP = '/root/.claude/uploads/77034bac-879c-5e0d-ae1f-2f0f01232e9c/'
