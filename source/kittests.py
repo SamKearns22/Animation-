@@ -1910,8 +1910,14 @@ def people_from_a_description():
                                              'height', 'hw', 'seed')) or f['face_m'] != k['kit_face']['m']:
             bad.append(f'journalist {i + 1} not as the film drew them')
             break
-    out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van'),
-                                               (24.0, 'escort'), (60.5, 'gates2')], film_keys=True)
+    import people_turned as PTN                         # Blessed was drawn before the kit's neck fix (GTA chat 10,
+    neck = PTN.LIFT, PTN.CHIN_V                         # Sam: "weird slumped necks"): compare with the old necks
+    PTN.LIFT, PTN.CHIN_V = False, 1.06
+    try:
+        out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van'),
+                                                   (24.0, 'escort'), (60.5, 'gates2')], film_keys=True)
+    finally:
+        PTN.LIFT, PTN.CHIN_V = neck
     drawn = set().union(*[set(w) for *_, w in scores])
     if 'escort' not in K.replicate.turned:                 # chat 4d: invented people turn with their own face
         bad.append('the officer in escort was not turned by the kit')
@@ -1930,10 +1936,11 @@ def people_from_a_description():
         bad.append(f'the live film now differs from the posted Blessed by {drift:.2f}% (was {base:.2f}%)')
     import blessed as BL
     import blessed_cast as BC
-    TC = BC.TC
+    import people_parts as PPK
+    TC = PPK.B                                     # since 20 Nov the engine holds each look's head (was BC.TC's copy)
     caught = K.faults(dict(judge=BC.JUDGE)) == []
-    keep = TC.HEADS['judge']
-    TC.HEADS['judge'] = TC._head                   # the old fault (notes 13, 15): the judge on the house head
+    keep = TC.HEADS.get('judge')
+    TC.HEADS['judge'] = TC.plain_head              # the old fault (notes 13, 15): the judge on the plain (house) head
     caught = caught and bool(K.faults(dict(judge=BC.JUDGE)))
     TC.HEADS['judge'] = keep
     if not caught:
@@ -1972,11 +1979,7 @@ def places_from_a_description():
             bad.append(why + ' was not refused')
         except K.DescriptionError:
             pass
-    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if not os.path.basename(f).startswith(
-             ('places', 'page.py', 'kittests.py', 'rough.py')) and re.search(r'^\s*(import places\b|from places\b|import places_)',
-             open(f, encoding='utf-8').read(), re.M)]
-    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
-        bad.append(f'films using the kit before Sam approves it: {users}')
+    # Sam approved the kit for films (14 Nov, notes/morning-report.md): the old 'no film uses the kit yet' clause is gone
     out, scores = K.replicate('blessed', os.path.join(HERE, 'data', 'kittest-places'), frames=False)
     if len(scores) < 13:
         bad.append(f'only {len(scores)} of 13 paintings redrawn')
@@ -2026,11 +2029,7 @@ def moves_from_the_acting_list():
             bad.append(why + ' was not refused')
         except (ValueError, IndexError, AttributeError):
             pass
-    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in (
-             'acting.py', 'kittests.py', 'catalogue.py', 'page.py', 'rough.py') and re.search(r'^\s*(import acting\b|from acting\b)',
-             open(f, encoding='utf-8').read(), re.M)]
-    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
-        bad.append(f'films using the kit before Sam approves it: {users}')
+    # Sam approved the kit for films (14 Nov, notes/morning-report.md): the old 'no film uses the kit yet' clause is gone
     bad += A.check('blessed')
     desc, film = A.load('blessed'), A.film_side('blessed')
     BL = film['module']
@@ -2320,7 +2319,9 @@ def facehouse_whole_head():
     import facehouse as FH
     import people
     import turnhead as TH
-    held = {'burnham': '840197c25a2801e6cde010a48eb1797d', 'badenoch': 'de6b4e6f7ca6c106e5626a65be453c41'}
+    held = {'burnham': '4f13fdafb1c7d29d2c492a16fbe949c4', 'badenoch': 'a2cbd8ae06ef3b53bd9921c3111961d9'}
+    # re-held 21 Nov (check repairs 2): both changed at aa09376a only (Sam, 20 Nov: one smooth shoulder line), found by
+    # bisecting; the pictures differ only below the collar (rows 707-767 of 1038), the faces identical.
     # re-held 19 Nov (front-on focus chat 2): both changed at 594f94ba only (Sam, 14 Nov: the flat dark shadow side
     # taken off people), found by bisecting; unchanged from then to today, so today's heads are the finished ones
     tmp = tempfile.mkdtemp()

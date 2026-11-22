@@ -67,6 +67,8 @@ def _profile(style):
     return lambda L: TH.fitted(L, _crown(style), CHIN_V, **st['prof'])
 
 
+LIFT = True     # turned heads lifted as the front is (GTA chat 10); kittest people_from_a_description sets it
+#                 off (with CHIN_V 1.06) to compare with Blessed, drawn before the fix
 CHIN_V = 1.0    # the turned chin where the front's is (faces.outline_uv ends at 1.0); was turnhead's 1.06 (a bearded
 #                 template's), so every turned kit jaw hung 11 units lower over the neck (Sam, GTA chat 10)
 
@@ -294,7 +296,7 @@ def install():
                 # still have the weird slumped necks"): drawn 15% bigger without the front's lift, every turned head
                 # grew downwards, eyes 21 and chin 33 units lower than front on, over the neck
                 return TH.draw(img, p, dict(sp, who=lk['key'], ears_hidden=lk['ears_hidden'], _faithful=faithful), t,
-                               view, hx, PP._lift(hy))
+                               view, hx, PP._lift(hy) if LIFT else hy)
         return V.NOT_MINE
     V.TURNED_HEADS['kit_turned'] = head_view     # one list of turned heads in views.py, newest tried first
 
