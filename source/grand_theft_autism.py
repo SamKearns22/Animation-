@@ -27,6 +27,7 @@ import figure as _fig         # noqa: E402
 _fig._ALLOW.append("Sam's order, 21 Nov: checks overruled")
 
 LENGTH = F.LENGTH
+frame_image = F.frame_image      # for critique.py (chat 33b: its before/after sheet calls the film for frames)
 DUR = LENGTH
 SHOTS = F.SHOTS
 SONG = os.path.join(HERE, '..', 'music', 'monde-de-mer-full.mp3')

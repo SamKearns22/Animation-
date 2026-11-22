@@ -19993,6 +19993,26 @@
      "6-7,13 S9: the smoke is a flat pale column; the fire is flat orange cut-outs, not on the car (it floats above it).",
      "8 S6: a pink spire building appears that no other panel has."
     ]
+   },
+   {
+    "round": 33,
+    "pass": 3,
+    "stage": "notes",
+    "date": "2026-11-22",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 1,
+    "open": [
+     "4-8 S1 A1: bonnet - the two big dark stripes with a red wedge between still read as trouser legs lying on the car; the new light streak doesn't change it.",
+     "7-8 P5 P6: Jason's raised arm - cut off by the left frame edge, no clear shoulder join, hand not shown; in 8 it sits at chest height, not \"by his face\".",
+     "7 P12: Jason is explaining but his mouth is shut and his eyes closed.",
+     "1-3 A1: the brief's crashed police car is not shown; the cars sit intact and the fireball floats above them. In 3 the smoke is detached black balls.",
+     "3 A1 P2: the runner is small, standing still with a hand at his head, against a wall; no doorway, so \"reaches the doorway\" does not read.",
+     "1-2 P2 P7: runner is cropped at the left edge in 1; in 2 he strolls stiffly with straddled legs, not fleeing.",
+     "4 P2: no corner slide or bracing; the three sit upright and calm, the car looks straight on.",
+     "1-3 A1 P10: man hanging out of the red car, not in the brief, a tangled bundle of limbs with the wheel and door cutting across his body; unreadable.",
+     "5 P12: the red-haired woman's mouth looks open; a frame labelled with who speaks."
+    ]
    }
   ],
   "lines": {
@@ -20005,15 +20025,15 @@
     "false": 0
    },
    "A1": {
-    "faults": 18,
+    "faults": 22,
     "false": 0
    },
    "P2": {
-    "faults": 21,
+    "faults": 24,
     "false": 0
    },
    "P5": {
-    "faults": 9,
+    "faults": 10,
     "false": 0
    },
    "P13": {
@@ -20029,7 +20049,7 @@
     "false": 0
    },
    "P6": {
-    "faults": 8,
+    "faults": 9,
     "false": 1
    },
    "P1": {
@@ -20053,7 +20073,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "O3": {
@@ -20085,7 +20105,7 @@
     "false": 0
    },
    "S1": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "O6": {
@@ -20109,11 +20129,11 @@
     "false": 0
    },
    "P10": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P12": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    }
   }
