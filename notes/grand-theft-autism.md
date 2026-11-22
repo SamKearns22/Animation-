@@ -188,34 +188,44 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
       outs floating above the car; the redhead's knees balls at 21.68; a pink spire on the skyline at 20.60 only; F6's
       pink walker (confirmed).
 
-## Chat 29 (22 Nov, Opus high): Jason from behind drawn from the 3D body (camera kept exactly as animatic v3)
-- [x] Arm (F1, F7, v7 note 4 "sausage"): new arm3d_film.py, the measured MakeHuman arm posed on Jason's shoulder,
-      elbow and wrist, drawn through the film's camera (flat skin, outline, elbow fold); cut square inside the
-      shoulder and faded into the drawn shoulder; tested on a sheet of 6 poses x 8 turns. Seen: reads as an arm
-      raised (15.4) and along the gun (20.8). Lost: nothing. Added: the arm is ~1.3x a real man's girth.
-- [x] Pistol (F2): new gun3d_film.py, solid blocks (slide, frame, raked grip, guard, sights), shaded one side;
-      sheet of 24 views incl. straight down the barrel: reads as a pistol from all.
-- [~] Back of head (F5): new head3d_film.py, the measured skull, ears, jaw with a buzz cut (hairline found per
-      pixel); house head size, tilted on screen like the house head. Reads at 20.8; at 15.4 and 18.3 (seen from
-      above) too much skin shows: reads BALD (repeat risk: Sam's "eternally bald" note). Fix the hairline for
-      top-down views first.
-- [ ] Still to look at, full size: 15.4 a dark box by the door hand (was there before); 21.25 dotted outline bits on
-      the arm's left edge; faint fold lines at the door arm's shoulder; hand to forearm join; hand check (rule 41).
+## Chat 30 (22 Nov, Opus high): shot 4 drawing fixes (camera and beats untouched)
+- [x] Bald from above (15.4, 18.3): the buzz cut's edge ran on a slant from the nape to above the ear, a big patch of
+      skin behind the ear. Now it drops straight behind the ear to the nape, sits on the ear top, a short sideburn,
+      fuller temples. Reads as short dark hair (sheet, both frames). Why missed: the sheet was judged level-on only.
+- [x] 15.4 "dark box by the door hand": the car's window seal showing through his arm on the sill (the door-hiding
+      map gave those pixels to his chest piece behind, inside the cabin). Arm pieces now claim their own width,
+      nearest last, tested at their near skin; the map at half size (the stair-steps gone).
+- [x] Dots by the ear / dotted bits on the arm edge: ink bits shorter than 3 line widths are dropped (all 3D parts).
+- [x] 21.25 blurred smears (red door through the arm, grey through the raised one, vest through the arm's edge): the
+      arm's cut end faded to see-through everywhere; now it fades only over his drawn bare shoulder.
+- [ ] OPEN, the free elbow dangles outside the door below his hand (15.2-15.3 s, 21.15-21.3 s), and the arm hangs
+      down to a round elbow with a stub of forearm back up to the hand (21.25): between "on his knees" (K2) and "head
+      out" (K3) his shoulder slides out right over the hand on the door top, so the arm folds tight (hand 12 cm from
+      shoulder) and the only bends that keep the elbow above the sill point inward. Tried (all rejected, now OFF: the
+      LIFT setting in leanout): K2's elbow pointed up (breaks K2->K1: 17 drawings "elbow folded across the chest");
+      the elbow lifted step by step (jumps half a metre a drawing); the hand re-gripping (lifted 6-20 cm: still jumps
+      0.3-0.45 m a drawing). What it needs: the free hand placed on the door top where the shoulder never passes over
+      it (further along the sill, forward or back, in K2, K3 and K4 alike so it stays planted), tested on the strip
+      for drawing-to-drawing jumps and on the 45-degree view for a stub forearm. Also a wrist jump of 17 cm inward at
+      about 21.43 s (was there before; seen in the numbers, not yet on a frame).
+- [ ] Still seen at full size: a sliver of camo shorts at the sill (15.4); 21.25 a faint fade on the arm's edge over
+      the vest; the bare upper arm reads very big from behind (THICK 1.3). Checked: the body check's strip has exactly
+      the same faults as before this chat (311 lines, none new).
 
-## Where things stand (22 Nov, chat 29, Opus high)
-- Rules that bite next: Fix the drawing, never the shot (CLAUDE.md); Seeing like Sam 1 (full size, every moving frame); 30.
+## Where things stand (22 Nov, chat 30, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 and 5 (CLAUDE.md); 30.
 - Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera: "great shot, broken
   drawing"); the script; the 8 shots' order and lengths. Fix drawings only.
-- Done: Jason's arm, pistol, back of head drawn from 3D (chat 29 section); the 5 frames rendered and looked at.
-- Next: Opus, high. 1) the bald look from above (hairline, 15.4, 18.3); 2) the four open items in chat 29's list;
-  3) every moving frame 14.1-22.3 at full size; 4) the clip 14.1-22.3 s to Sam. Then F6, F15, F12.
+- Done: chat 30 section (bald look, seal box, stairs, dots, smears fixed; body check unchanged).
+- Next: Opus, high. 1) the free elbow (chat 30's OPEN item: move the free hand along the door top, test jumps);
+  2) every moving frame 14.1-22.3 at full size (`gta_rehearse.py shot4 OUT --frames DIR`, ~40 min, frames saved
+  at full size: look at them, then send that clip to Sam). Then F6, F15, F12.
 - Needs Sam: his own Y in a chat to switch off the budget stops (chat 28 item). His look at the next shot 4 clip.
-- Read: guides/job-packs.md "Notes round"; this file's chat 29 section.
-- Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
-- For Claude (branch claude/check-repairs-2 is the status chat's, left for it; handover check's leanout quick-check
-  and "sentence lost" lines: answered in chat 28, false alarms): arm3d_film (THICK, SHOULDER_IN, SHOULDER_FADE, CREASE), gun3d_film (PARTS), head3d_film (HAIR_Z/HAIR_Y,
-  hair_of, _roll_to); hand3d_film.paint (any world mesh; field= per-pixel colour edge, hands3d._FIELD); leanout
-  BODY3D, HEAD3D_H 300, _real_hands patches lying_flat._arm/_head_draw. Sheets: `python3 source/arm3d_film.py sheet
-  OUT`, gun3d_film, head3d_film. Frames: gta_film.frame_image(t) (about 25 s a frame now).
+- Read: job-packs "Notes round"; chat 30 section. Open rule requests: Sam's held-object check (draft only).
+- For Claude (claude/check-repairs-2: the status chat's, left; handover check's leanout quick-checks and "Choose views"
+  sentence: false alarms, the sentence is in CLAUDE.md Seeing like Sam 4): leanout._cover (q 2, _GIRTH, arm
+  pieces tested at near skin), leanout._elbow_over_sill + LIFT (off), arm3d_film fade only over drawn skin,
+  hands3d._no_specks, head3d_film HAIR_Z/HAIR_Y. Strip check: `python3 source/leanout.py strip OUT` (~10 min; 311
+  fault lines is the baseline). Frames: gta_film.frame_image(t) (~25 s a frame).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 56.18% of 15%; forecast 69.7% (2026-11-22)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 57.98% of 15%; forecast 69.7% (2026-11-22)

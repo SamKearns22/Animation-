@@ -1,3 +1,6 @@
+Grand Theft Autism, chat 30 (22 Nov): Jason's hair no longer looks bald from above; the dark box, stair-steps, dots and see-through smears on his arm are gone.
+Still wrong: his free elbow dangles outside the door below his hand for a moment as he climbs out and back (15.2, 21.2).
+Next: chat 31, Opus high: fix that elbow, check every frame 14.1-22.3 at full size, then the clip to Sam.
 Grand Theft Autism, chat 29 (22 Nov): Jason's arm, pistol and back of head now drawn from the 3D body; shot 4's camera untouched.
 Still wrong: his head seen from above reads bald (15.4, 18.3); a few small marks to check at full size.
 Next: chat 30, Opus high: fix the bald look and the small marks, check every frame 14.1-22.3 at full size, then the clip to Sam.

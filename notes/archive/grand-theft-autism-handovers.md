@@ -556,3 +556,20 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   carry" is still there, with "(for a NEW shot ...)" added inside it by Sam's Y (60e25406).
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 54.67% of 15%; forecast 69.7% (2026-11-22)
+
+## Where things stand (22 Nov, chat 29, Opus high)
+- Rules that bite next: Fix the drawing, never the shot (CLAUDE.md); Seeing like Sam 1 (full size, every moving frame); 30.
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera: "great shot, broken
+  drawing"); the script; the 8 shots' order and lengths. Fix drawings only.
+- Done: Jason's arm, pistol, back of head drawn from 3D (chat 29 section); the 5 frames rendered and looked at.
+- Next: Opus, high. 1) the bald look from above (hairline, 15.4, 18.3); 2) the four open items in chat 29's list;
+  3) every moving frame 14.1-22.3 at full size; 4) the clip 14.1-22.3 s to Sam. Then F6, F15, F12.
+- Needs Sam: his own Y in a chat to switch off the budget stops (chat 28 item). His look at the next shot 4 clip.
+- Read: guides/job-packs.md "Notes round"; this file's chat 29 section.
+- Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
+- For Claude (branch claude/check-repairs-2 is the status chat's, left for it; handover check's leanout quick-check
+  and "sentence lost" lines: answered in chat 28, false alarms): arm3d_film (THICK, SHOULDER_IN, SHOULDER_FADE, CREASE), gun3d_film (PARTS), head3d_film (HAIR_Z/HAIR_Y,
+  hair_of, _roll_to); hand3d_film.paint (any world mesh; field= per-pixel colour edge, hands3d._FIELD); leanout
+  BODY3D, HEAD3D_H 300, _real_hands patches lying_flat._arm/_head_draw. Sheets: `python3 source/arm3d_film.py sheet
+  OUT`, gun3d_film, head3d_film. Frames: gta_film.frame_image(t) (about 25 s a frame now).
+

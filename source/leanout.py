@@ -109,7 +109,7 @@ def pose(name, sp):
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
         #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
         k = _key((0.48, 0.80, 0.0), (0.76, 1.25, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),   # head ducked under the roof
-                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(1, 0.8, 0.2))},   # elbow out, above the door top (chat 30: it pointed down, so the elbow dangled outside below the hand)
+                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(0.8, -1, 0.6))},
                  {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
         return k
@@ -212,7 +212,8 @@ def at(t, sp):
 
 
 HOLD = (3.46 + WOB, 4.55 + WOB)
-LIFT = [0.20, 0.20]     # the re-grip between door-top keys: the hand's lift, the elbow's (m)
+LIFT = [0.0, 0.0]       # the re-grip between door-top keys: the hand's lift, the elbow's (m). OFF (chat 30): any lift
+#                         that keeps the elbow over the sill swings it 0.3-0.45 m a drawing; see the film notes
 
 
 def _elbow_over_sill(k, ka, kb, u):
@@ -223,7 +224,7 @@ def _elbow_over_sill(k, ka, kb, u):
     over the top instead (smooth in u, so no frame jumps)."""
     def on_door(b):
         return abs(b['wrL'][0] - WIN_X) < 0.15 and SILL - 0.05 < b['wrL'][1] < SILL + 0.25
-    if not (on_door(ka) and on_door(kb)):
+    if not any(LIFT) or not (on_door(ka) and on_door(kb)):
         return
     b = math.sin(math.pi * u)
     wr = k['wrL'] + _v(0.0, LIFT[0], 0.0) * b     # the hand lifts off the door top as his weight shifts (a re-grip)

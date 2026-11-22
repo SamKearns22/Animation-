@@ -457,3 +457,18 @@ Sam (via chat 27): "I did not want the camera angles changed. It is a great shot
       through another chat, not from Sam in this one. Waits for Sam's own word in this chat. Note: the ledger's
       automatic stop is already paused (since 18 Nov); the stop that fired comes from the ledger's other commands.
 
+
+## Chat 29 (22 Nov, Opus high): Jason from behind drawn from the 3D body (camera kept exactly as animatic v3)
+- [x] Arm (F1, F7, v7 note 4 "sausage"): new arm3d_film.py, the measured MakeHuman arm posed on Jason's shoulder,
+      elbow and wrist, drawn through the film's camera (flat skin, outline, elbow fold); cut square inside the
+      shoulder and faded into the drawn shoulder; tested on a sheet of 6 poses x 8 turns. Seen: reads as an arm
+      raised (15.4) and along the gun (20.8). Lost: nothing. Added: the arm is ~1.3x a real man's girth.
+- [x] Pistol (F2): new gun3d_film.py, solid blocks (slide, frame, raked grip, guard, sights), shaded one side;
+      sheet of 24 views incl. straight down the barrel: reads as a pistol from all.
+- [~] Back of head (F5): new head3d_film.py, the measured skull, ears, jaw with a buzz cut (hairline found per
+      pixel); house head size, tilted on screen like the house head. Reads at 20.8; at 15.4 and 18.3 (seen from
+      above) too much skin shows: reads BALD (repeat risk: Sam's "eternally bald" note). Fix the hairline for
+      top-down views first.
+- [ ] Still to look at, full size: 15.4 a dark box by the door hand (was there before); 21.25 dotted outline bits on
+      the arm's left edge; faint fold lines at the door arm's shoulder; hand to forearm join; hand check (rule 41).
+
