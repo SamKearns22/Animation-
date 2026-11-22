@@ -214,6 +214,12 @@ DOOR_HAND = _v(0.955, SILL + HAND_R + 0.002, 0.16)   # the free hand resting on 
 
 def key(name):
     """A key pose as goals (car frame, metres). Reference letters: notes/bench/l3-reference.jpg."""
+    k = _key(name)
+    k.setdefault('leg_ik', 0.0)
+    return k
+
+
+def _key(name):
     r = rig()
     if name == 'K1':          # seated (shot 3's frame): pistol flat on his chest, left hand on his thigh
         return dict(pelvis=_v(0.42, 0.0, -0.06), p_up=_v(0, 1, -0.12), p_fwd=_v(0, 0, 1), c_up=_v(0, 1, 0.02),
@@ -239,22 +245,44 @@ def key(name):
                     knee=KNEES,
                     ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
     if name == 'B1':          # breakdown, getting up (and its mirror sitting down): rocking back on his seat, knees
-        #                       drawn up, feet lifted off the floor in front of the cushion, left hand on his raised
-        #                       knee, the pistol still at his chest turning up
-        return dict(pelvis=_v(0.44, 0.0, -0.04), p_up=_v(0.05, 1, -0.35), p_fwd=_v(0.2, 0, 1), c_up=_v(0.1, 1, 0.12),
-                    c_fwd=_v(0.35, 0, 1), h_fwd=_v(0.6, -0.1, 1),
-                    hand={'L': (_v(0.32, 0.93, 0.40), _v(-1, -0.6, -0.2)), 'R': (_v(0.44, 1.02, 0.30), _v(1, -0.5, 0.3))},
+        #                       drawn up and turning toward the window, feet lifted off the floor in front of the
+        #                       cushion, left hand pushing on the cushion beside his hip, the pistol at his chest
+        return dict(pelvis=_v(0.43, 0.0, -0.05), p_up=_v(0.08, 1, -0.30), p_fwd=_v(0.25, 0, 1), c_up=_v(0.12, 1, 0.08),
+                    c_fwd=_v(0.4, 0, 1), h_fwd=_v(0.7, -0.15, 1),
+                    hand={'L': (_v(0.20, SEAT_TOP + HAND_R + 0.002, -0.02), _v(-1, 0, 0.5)),
+                          'R': (_v(0.46, 1.02, 0.28), _v(1, -0.5, 0.3))},
                     aim_w=0.0, gun=_v(-0.2, 0.8, 0.6), kick=0.0, belly=0.0,
-                    knee={'L': _v(0.30, 0.80, 0.36), 'R': _v(0.58, 0.80, 0.36)},
-                    ankle={'L': _v(0.30, 0.57, 0.42), 'R': _v(0.58, 0.57, 0.42)}, knee_w=0.0, seat_w=1.0)
-    if name == 'B2':          # breakdown: rising onto his knees, head ducked under the roof, turning to the window,
-        #                       knees landing on the cushion, shins following them over it, the gun low in front
-        return dict(pelvis=_v(0.50, 0.0, 0.05), p_up=_v(0.35, 1, 0), p_fwd=_v(0.8, 0, 0.5), c_up=_v(1.2, 1, 0.15),
-                    c_fwd=_v(1, 0, 0.2), h_fwd=_v(1, -0.7, 0.2),
-                    hand={'L': (_v(0.76, 1.06, 0.16), _v(0.3, -1, 0.6)), 'R': (_v(0.66, 0.92, 0.16), _v(0.2, -0.3, -1))},
-                    aim_w=0.0, gun=_v(0.5, -0.6, 0.4), kick=0.0, belly=0.0,
-                    knee={'L': _v(0.52, 0.525, 0.16), 'R': _v(0.54, 0.525, -0.14)},
-                    ankle={'L': _v(0.15, ANKLE_Y, 0.18), 'R': _v(0.15, ANKLE_Y, -0.16)}, knee_w=0.95, seat_w=0.0)
+                    knee={'L': _v(0.36, 0.74, 0.34), 'R': _v(0.58, 0.74, 0.30)},
+                    ankle={'L': _v(0.26, 0.40, 0.56), 'R': _v(0.46, 0.40, 0.54)}, knee_w=0.0, seat_w=1.0, leg_ik=1.0)
+    if name == 'B1b':         # breakdown: still on his seat, turned further, knees high over the cushion, both feet
+        #                       swung up and inboard IN FRONT of the cushion (above its front edge's height), so the
+        #                       shins can come back beside it (past its inboard edge), not through it
+        return dict(pelvis=_v(0.42, 0.0, -0.03), p_up=_v(0.15, 1, -0.25), p_fwd=_v(0.6, 0, 0.8), c_up=_v(0.3, 1, 0.05),
+                    c_fwd=_v(0.75, 0, 0.6), h_fwd=_v(1, -0.3, 0.6),
+                    hand={'L': (_v(0.24, SEAT_TOP + HAND_R + 0.002, 0.06), _v(-1, 0, 0.5)),
+                          'R': (_v(0.56, 1.04, 0.18), _v(1, -0.5, 0.0))},
+                    aim_w=0.0, gun=_v(0.1, 0.9, 0.3), kick=0.0, belly=0.0,
+                    knee={'L': _v(0.48, 0.78, 0.26), 'R': _v(0.64, 0.78, 0.06)},
+                    ankle={'L': _v(0.06, 0.60, 0.42), 'R': _v(0.14, 0.62, 0.32)}, knee_w=0.0, seat_w=1.0, leg_ik=1.0)
+    if name == 'B2':          # breakdown: knees landed on their spots on the cushion (planted from here), shins across
+        #                       it, feet past its inboard edge, sitting back toward his heels, leaning to the window,
+        #                       head ducked, left hand reaching for the door top, the gun up in front on his right
+        return dict(pelvis=_v(0.36, 0.0, 0.02), p_up=_v(0.45, 1, 0), p_fwd=_v(1, 0, 0.1), c_up=_v(0.9, 1, 0.05),
+                    c_fwd=_v(1, 0, 0.05), h_fwd=_v(1, -0.5, 0.05),
+                    hand={'L': (_v(0.84, 1.02, 0.18), _v(0.3, -1, 0.6)), 'R': (_v(0.66, 1.00, -0.12), _v(0.2, -0.6, -1))},
+                    aim_w=0.0, gun=_v(0.7, 0.3, -0.2), kick=0.0, belly=0.0,
+                    knee=KNEES,
+                    ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
+    if name == 'B3':          # breakdown between K2 and K3 (and back): the gun comes up IN FRONT of his chest, elbow
+        #                       down, on its way from low to beside his head (straight between the two, the hand
+        #                       would pass through his shoulder and the elbow fold past its range: a snap)
+        k = _lerp_goal(key('K2'), key('K3'), 0.5)
+        k['hand'] = dict(k['hand'])
+        k['hand']['L'] = (DOOR_HAND, _v(0.4, -1, 0.6))
+        Rc = _frame(k['c_up'], k['c_fwd'])
+        k['hand']['R'] = ('rel', Rc.T @ _v(0.28, -0.04, 0.0), _v(0.3, -0.7, -0.8))   # in front of his shoulder
+        k['gun'] = _v(0.3, 0.6, -0.1)
+        return k
     if name in ('K4', 'K5'):  # out to the waist, folded over the door top (B, C), chest turned back along the car
         #                       (D), the gun arm along the line to the lead cruiser; K5 the kick
         k = dict(pelvis=_v(0.755, 0.0, 0.0), p_up=_v(0.55, 1, 0), p_fwd=_v(1, 0, -0.3), c_up=_v(1.15, 1, -0.05),
@@ -272,7 +300,8 @@ def key(name):
 KICK_DEG = 7.0                   # the pistol's kick: the forearm flips up this much (a real one-hand kick)
 
 
-BREAKDOWNS = [(0.65, 'B1'), (0.82, 'B2'), (7.55, 'B2'), (7.68, 'B1')]   # in-between drawings that shape the
+BREAKDOWNS = [(0.60, 'B1'), (0.72, 'B1b'), (0.86, 'B2'), (1.2, 'B3'), (7.175, 'B3'), (7.512, 'B2'), (7.624, 'B1b'),
+              (7.72, 'B1')]   # in-between drawings that shape the
 #   path between two locked beats (the feet go up over the cushion's front edge, not through it); beats unchanged
 
 
@@ -335,7 +364,31 @@ def _herm(p, tt, s, i):
             (s3 - s2) * h * tan(2))
 
 
-def _herm_goal(G, tt, s, fallback):
+_ABSH = {}
+_PELY = {}
+
+
+def _pel_y(name):
+    """A key's own hip height (its pelvis joint's y, solved once)."""
+    if name not in _PELY:
+        _PELY[name] = float(_solve(_KEYC.setdefault(name, key(name)), fold=False)['pel'][1])
+    return _PELY[name]
+
+
+def _rel_hand(name, sd, spec):
+    """A key's hand goal as an offset from his own shoulder in his chest's frame (a 'rel' goal): solved once per
+    key. Blended this way, a hand on its way somewhere moves WITH his body (the shoulder carries it), so it cannot
+    cut through the shoulder while the body turns and rises."""
+    if isinstance(spec, tuple) and spec and isinstance(spec[0], str) and spec[0] == 'rel':
+        return (np.asarray(spec[1], float), np.asarray(spec[2], float))
+    if (name, sd) not in _ABSH:
+        o = _solve(_KEYC.setdefault(name, key(name)), fold=False)
+        _ABSH[(name, sd)] = o['Rc'].T @ (o['balls'][sd] - o['J']['sh' + sd])
+    pole = spec[2] if isinstance(spec[0], str) else spec[1]
+    return (_ABSH[(name, sd)], np.asarray(pole, float))
+
+
+def _herm_goal(G, tt, s, fallback, names=()):
     """_herm over every number of four goal dicts; parts that are not plain numbers (aim, 'rel' hands) fall back to
     the eased blend of the two keys."""
     out = {}
@@ -345,7 +398,10 @@ def _herm_goal(G, tt, s, fallback):
             out[n] = {}
             for sd in xs[1]:
                 vs = [x[sd] for x in xs]
-                if all(_abs_spec(v) for v in vs):
+                if n == 'hand' and any(isinstance(v[0], str) for v in vs):
+                    rv = [_rel_hand(nm, sd, v) for nm, v in zip(names, vs)]
+                    out[n][sd] = ('rel', _herm([v[0] for v in rv], tt, s, 0), _herm([v[1] for v in rv], tt, s, 0))
+                elif all(_abs_spec(v) for v in vs):
                     out[n][sd] = (_herm([v[0] for v in vs], tt, s, 0), _herm([v[1] for v in vs], tt, s, 0))
                 elif all(not isinstance(v, tuple) for v in vs):
                     out[n][sd] = _herm(vs, tt, s, 0)
@@ -368,14 +424,28 @@ def goals_at(t):
             u = 0.0 if t1 == t0 else _ease((t - t0) / (t1 - t0))
             ka = _KEYC.setdefault(a, key(a))
             kb = _KEYC.setdefault(b, key(b))
-            lin = _lerp_goal(ka, kb, u)
             if t1 == t0 or not ({t0, t1} & _BD_T):
-                return lin
+                return _lerp_goal(ka, kb, u)
+            # parts the smooth path cannot carry (the aim, 'rel' hands) still pass a breakdown with speed: a
+            # time-warp with speed 1 at the breakdown end(s) and 0 at a locked beat
+            s_ = (t - t0) / (t1 - t0)
+            if t0 in _BD_T and t1 in _BD_T:
+                uw = s_
+            elif t1 in _BD_T:
+                uw = -s_ ** 3 + 2 * s_ ** 2
+            else:
+                uw = s_ + s_ ** 2 - s_ ** 3
+            lin = _lerp_goal(ka, kb, uw)
             # a span touching a breakdown: a smooth path through it (Hermite), not a stop on it
             tp, pa = T[max(i - 1, 0)]
             tn, nb = T[min(i + 2, len(T) - 1)]
             G = [_KEYC.setdefault(k, key(k)) for k in (pa, a, b, nb)]
-            return _herm_goal(G, [tp, t0, t1, tn], (t - t0) / (t1 - t0), lin)
+            out = _herm_goal(G, [tp, t0, t1, tn], (t - t0) / (t1 - t0), lin, (pa, a, b, nb))
+            if (ka['knee_w'] >= 0.999) != (kb['knee_w'] >= 0.999):
+                # the weight moving from his seat to his knees (or back): the hips' height follows a smooth path
+                # between the two poses' own heights (blending the two supports' heights jumps)
+                out['pel_y'] = float(_herm([_pel_y(k) for k in (pa, a, b, nb)], [tp, t0, t1, tn], (t - t0) / (t1 - t0), 0))
+            return out
     return key(T[-1][1])
 
 
@@ -495,6 +565,8 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
     y_seat = SEAT_Y if seat_dy is None else seat_dy
     w = float(np.clip(g['knee_w'], 0, 1))
     pel[1] = (1 - w) * y_seat + w * float(np.mean(y_knee))
+    if 'pel_y' in g:
+        pel[1] = g['pel_y']
     if w > 0:                                   # kneeling unevenly, the hips tip to the side so BOTH knees rest
         dy = (y_knee[0] - y_knee[1]) * w        # the L hip wants to be this much higher than the R hip
         hw = np.linalg.norm(hipoff['L'] - hipoff['R'])
@@ -541,6 +613,26 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
         kg[1] = kg[1] * (1 - w) + ky * w
         dt = _u(kg - hip)
         kn = hip + dt * r['L_th']
+        lik = float(np.clip(g.get('leg_ik', 0.0), 0, 1))
+        if lik > 0:
+            # in-between drawings place the FOOT (the ankle goal is a point) and the knee follows, bending toward
+            # the knee goal (two-bone IK), so a foot path round the cushion is a path the foot really takes
+            kn_ik, an_ik = _two_bone(hip, np.asarray(g['ankle'][sd], float), r['L_th'], r['L_sh'], kg - hip)
+            an_ray = kn + _u(np.asarray(g['ankle'][sd], float) - kn) * r['L_sh']
+            kn = hip + _u(kn + (kn_ik - kn) * lik - hip) * r['L_th']
+            an_mix = an_ray + (an_ik - an_ray) * lik
+            dt = _u(kn - hip)
+            g = dict(g)
+            g['ankle'] = dict(g['ankle'])
+            g['ankle'][sd] = an_mix
+        floor = SEAT_TOP + KNEE_R - (knee_dy[sd] if knee_dy else 0.0)
+        if kn[1] < floor - 1e-4 and 0.18 <= kn[0] <= 0.70 and -0.35 <= kn[2] <= 0.25 and hip[1] - floor < r['L_th']:
+            # a knee coming down over the cushion RESTS on it (it cannot sink in): the thigh keeps its length and
+            # its way round, the knee goes onto the cushion's top
+            hz = _u(np.array([kg[0] - hip[0], 0.0, kg[2] - hip[2]]) + 1e-9)
+            rad = math.sqrt(r['L_th'] ** 2 - (hip[1] - floor) ** 2)
+            kn = np.array([hip[0], floor, hip[2]]) + hz * rad
+            dt = _u(kn - hip)
         ds = _u(np.asarray(g['ankle'][sd], float) - kn)
         hn = np.cross(dt, ds)
         if np.linalg.norm(hn) < 1e-3:
@@ -1181,7 +1273,9 @@ def frame_times():
     return [i / FPS for i in range(n)]
 
 
-def run(out_dir, draw_frames=True, every=1):
+def run(out_dir, draw_frames=True, every=1, span=None):
+    """span=(t0, t1) seconds: only those frames (a part clip; frames numbered from 0 so clip() can read them).
+    A progress line every 12 frames (frame, seconds so far, minutes left)."""
     os.makedirs(os.path.join(out_dir, 'frames'), exist_ok=True)
     fit_seat()
     fit_knee()
@@ -1190,7 +1284,13 @@ def run(out_dir, draw_frames=True, every=1):
     aims = []
     t0 = time.time()
     ts = frame_times()
+    if span:
+        ts = [t for t in ts if span[0] - 1e-6 <= t <= span[1] + 1e-6]
     for i, t in enumerate(ts):
+        if i and i % 12 == 0:
+            el = time.time() - t0
+            print('progress: frame %d of %d (%.2f s), %.0f min so far, about %.0f min left' % (
+                i, len(ts), t, el / 60, el / i * (len(ts) - i) / 60), flush=True)
         g = goals_at(t)
         out = solve(g)
         c = check_frame(out, g)
@@ -1201,13 +1301,16 @@ def run(out_dir, draw_frames=True, every=1):
             aims.append((i, aim_err(out)))
         bad = {k: v for k, v in c.items() if k in ('car', 'self', 'pistol', 'rom') and v}
         if bad:
-            fails.append((i, round(t, 3), bad))
+            fails.append((int(round(t * FPS)), round(t, 3), bad))
         if draw_frames and i % every == 0:
             draw(out, cam_at(t)).save(os.path.join(out_dir, 'frames', 'f%04d.png' % i))
     top, over, pops = jumps(track)
     held = contacts_held(rows)
     sl = slides(track, rows)
     rep = report(len(ts), fails, top, over, pops, held, sl, aims, time.time() - t0)
+    if span:
+        rep += '\n(part run %.2f-%.2f s: jumps, steps and contacts count frames from %d = film frame 0 of the part)' % (
+            span[0], span[1], int(round(ts[0] * FPS)))
     open(os.path.join(out_dir, 'report.txt'), 'w').write(rep)
     print(rep)
     return fails, over, pops, held, sl
@@ -1291,7 +1394,7 @@ def clip(out_dir, mp4):
 if __name__ == '__main__':
     cmd = sys.argv[1]
     if cmd == 'run':
-        run(sys.argv[2])
+        run(sys.argv[2], span=(float(sys.argv[3]), float(sys.argv[4])) if len(sys.argv) > 4 else None)
     elif cmd == 'checks':
         run(sys.argv[2], draw_frames=False)
     elif cmd == 'proof':
