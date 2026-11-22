@@ -208,7 +208,9 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 ## Where things stand, the ANIMATIC strand (22 Nov, chat 33d, Opus medium): v4 notes fixed, clip sent
 - Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (the pop check to propose); rule 30.
 - Locked by Sam: every camera and beat of shots 1-8 as in v3; shot 4's Jason untouched (3D rebuild, other chats).
-- Done: N1 street no longer pops out; N2 pistol in shots 5-8; light-bar glow on the bar. Clip 22.3-38.5 sent (2.8 MB).
+- Done: N1 street no longer pops out; N2 pistol in shots 5-8 (side-on to the lens; shot 7's hand path beside his
+  face, critiques r44 p1-p2); light-bar glow on the bar. Clip 22.3-38.5 sent (2.8 MB), body check named, critique r45.
+  Critique r45 open: the raised pistol beside his cheek (30-34 s) can read as a phone; her teal headphones; old N3 set.
   N3 rest named in "Chat 33d" above (skin/face, Lucia face, necks/bonnet, ONIDA, shot 4 items).
 - Needs Sam: Q1 shot 3 pistol (Y once shot 4's opening shows it too / N); Q2 Y = animatic v5 from this clip.
 - Next: on Sam's Y, chat 33e, Sonnet: animatic v5 `grand_theft_autism.py OUT --from 7.0` (shot 1 reused), audio from
@@ -219,4 +221,4 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 83.37% of 15%; forecast 87% (2026-11-22)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 83.75% of 15%; forecast 87.4% (2026-11-22)
