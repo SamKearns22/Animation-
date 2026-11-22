@@ -56,3 +56,22 @@ K2 7.4, K1 7.8); house art style; circle hands. Sam holds the grey-clip body-che
   0.71 head into roof / A pillar / roof rail 1.7-3.4 cm.
   CODE CHANGE in source/bench_move.py (needed for p4): a 'lift' goal (hips raised off the seat while still
   seated; default 0 on every key, so frames outside the get-up/sit-down are unchanged).
+- 23:15 (real clock, UK) p5-p9 on GitHub (notes/bench/getup41/). p9 = BEST: he rises on his LEFT leg (foot in the
+  footwell) pulling on the door top, chest ducked to the window; the right knee comes down on its rear spot;
+  then the left foot lifts out of the footwell (new breakdown B1c, 0.78 s; 7.576 s sitting down) and the left knee
+  comes down on its front spot. Checks 0.5-1.0 s: 0.667-0.71 seat back 0.6-0.9, 0.75-0.79 left knee into dash 3.7,
+  0.83-0.96 CLEAN; 0.583-0.625 right thigh / left arm into his trunk 11-12 cm (to fix); roof clear.
+  OPEN: JUMPS. Right ankle 54-70 cm, right knee 25-28, left elbow 34 cm "pops" (sudden changes of speed) at
+  0.58-0.67 s; left knee 46 at 0.79. The right leg has 0.1 s to go from the footwell to its rear spot (0.7 m).
+  Code in source/bench_move.py (all default to "no change" outside the get-up): 'lift' goal (hips raised while
+  seated; a bug where it was added twice during the seat->knees hand-over is fixed), 'lik_R' (the right leg can be
+  led by its knee while the left is led by its foot).
+- 23:30 p10 = p9 with the breakdowns re-spaced (B1 0.57, B1b 0.72, B1c 0.83, B2 0.92; sitting down 7.464/7.536/
+  7.624/7.744; Sam's beats unchanged): the climb reads well in pictures (sits, rises on left foot, right knee onto
+  seat, left foot lifts, left knee onto seat). Faults left: 0.58-0.63 thigh/arm into trunk, seat 8 cm; dash 3 cm
+  (0.79-0.83); pops (right ankle 52, left knee 47). p11 (hand tweaks) worse: dropped.
+  STARTED: notes/bench/getup41/opt.py, an automatic search (35 min, background) over B1/B1b/B1c numbers from p10;
+  best so far saved in notes/bench/getup41/opt-best.json, progress in opt-run.log. IF THIS CHAT DIES: run
+  `python3 notes/bench/getup41/opt.py notes/bench/getup41/p10.py notes/bench/getup41/opt-best.json 35` (it resumes
+  from the saved best), then check the SITTING-DOWN frames (7.4-7.8 s: it.py ... full 177 189) which reuse the same
+  poses backwards and are not scored by the search.

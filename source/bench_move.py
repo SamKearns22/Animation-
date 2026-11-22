@@ -226,6 +226,7 @@ def key(name):
     k = _key(name)
     k.setdefault('leg_ik', 0.0)
     k.setdefault('lift', 0.0)     # chat 41: hips lifted off the seat this much (metres) before the knees take him
+    k.setdefault('lik_R', k['leg_ik'])   # chat 41: the right leg's own foot-led share (its knee can lead instead)
     return k
 
 
@@ -639,8 +640,9 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
     w = float(np.clip(g['knee_w'], 0, 1))
     pel[1] = (1 - w) * y_seat + w * float(np.mean(y_knee))
     if 'pel_y' in g:
-        pel[1] = g['pel_y']
-    pel[1] += float(g.get('lift', 0.0)) * (1 - w)
+        pel[1] = g['pel_y']             # (a seat <-> knees path: each key's own height, its lift already in it)
+    else:
+        pel[1] += float(g.get('lift', 0.0)) * (1 - w)
     if w > 0:                                   # kneeling unevenly, the hips tip to the side so BOTH knees rest
         dy = (y_knee[0] - y_knee[1]) * w        # the L hip wants to be this much higher than the R hip
         hw = np.linalg.norm(hipoff['L'] - hipoff['R'])
@@ -706,7 +708,7 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
         kg[1] = kg[1] * (1 - w) + ky * w
         dt = _u(kg - hip)
         kn = hip + dt * r['L_th']
-        lik = float(np.clip(g.get('leg_ik', 0.0), 0, 1))
+        lik = float(np.clip(g.get('lik_R' if sd == 'R' else 'leg_ik', g.get('leg_ik', 0.0)), 0, 1))
         if 'thigh' in g and THIGH_BLEND:
             # the weight moving seat <-> knees: the thigh's way is given (goals_at), the foot follows its goal
             kn = hip + _u(g['thigh'][sd]) * r['L_th']
