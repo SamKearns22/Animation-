@@ -7,3 +7,6 @@ https://ai-muninn.com/en/blog/dev-workflow-token-burn-rate
 
 What from these articles can be learned to better adhere this project to Statement One
 
+### 2026-11-22T23:16:33
+Statement One should be at the top of Claude MD and it should be about the 15% per film budget goal and quality
+
