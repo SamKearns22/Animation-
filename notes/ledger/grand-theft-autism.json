@@ -23423,250 +23423,12 @@
   {
    "date": "2026-11-22",
    "chat": "9b9328a0",
-   "stage": "auto",
-   "round": null,
-   "notes": 0,
-   "repeats": [],
    "model": "opus",
-   "cost": 1.24,
-   "src": "estimate",
-   "sid": "session_01GznaARQ8nqSUNN5Q5otHo4",
-   "steps": 23,
-   "hist_k": 130,
-   "kinds": {
-    "tool search": 21.0,
-    "renders": 5.4,
-    "other": 73.6
-   },
-   "calls": {
-    "film-file search": 0,
-    "tool search": 16,
-    "whole-file .py read": 0,
-    "page.py": 0,
-    "routine": 0,
-    "renders": 1,
-    "pictures": 0,
-    "other": 6
-   },
-   "split": {
-    "usd": 1.1154,
-    "total": 1.1154,
-    "floor_k": 96,
-    "blocks": {
-     "start-up floor": 51.5,
-     "new writes": 24.8,
-     "Claude's words": 17.0,
-     "carried history": 6.8
-    },
-    "origins": {
-     "start-up floor": 51.5,
-     "Claude's words": 23.5,
-     "result: tool search": 21.1,
-     "messages and reminders": 2.6,
-     "result: other": 1.1,
-     "result: renders": 0.2
-    },
-    "named": {
-     "start-up reading (rules, tools, first files)": 51.5,
-     "reading kit code": 9.7,
-     "commands": 9.1,
-     "writing notes": 7.2,
-     "reading notes": 6.3,
-     "start-up and handover tools": 5.5,
-     "thinking": 3.3,
-     "messages and reminders": 2.6,
-     "helper and chat prompts": 2.2,
-     "messages to Sam": 1.0,
-     "helper results": 0.9,
-     "writing code": 0.6
-    },
-    "leftover": 0.0
-   },
-   "start": {
-    "floor_k": 96,
-    "work_step": 14,
-    "work_pct": 0.21,
-    "reads": [
-     [
-      "source/bench_move.py",
-      3.1,
-      0.0314
-     ],
-     [
-      "source/propose.py",
-      2.0,
-      0.0216
-     ],
-     [
-      "source/bench_draw.py",
-      1.5,
-      0.0148
-     ],
-     [
-      "notes/grand-theft-autism.md",
-      1.0,
-      0.0108
-     ],
-     [
-      "notes/bench/learn-step.md",
-      1.0,
-      0.0108
-     ],
-     [
-      "notes/proposals/bench-speedup.md",
-      0.4,
-      0.0043
-     ]
-    ],
-    "base_pct": 34.2
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 0
-    },
-    "other": {
-     "other": 5,
-     "shared:handover.py": 1,
-     "film notes": 2,
-     "shared:propose.py": 3,
-     "shared:bench_draw.py": 2,
-     "shared:bench_move.py": 3
-    },
-    "ticked": 0,
-    "edited film code": false,
-    "list": [
-     [
-      0,
-      "other",
-      "other",
-      "",
-      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
-      ""
-     ],
-     [
-      1,
-      "other",
-      "shared:handover.py",
-      "source/handover.py",
-      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1 | tail -1 && gi",
-      ""
-     ],
-     [
-      2,
-      "other",
-      "film notes",
-      "notes/grand-theft-autism.md notes/bench/learn-step.md",
-      "^## \\|^### ",
-      ""
-     ],
-     [
-      3,
-      "other",
-      "film notes",
-      "notes/grand-theft-autism.md notes/bench/learn-step.md",
-      "sed -n 125,158p notes/grand-theft-autism.md; echo ======; sed -n '225,$p' notes/",
-      ""
-     ],
-     [
-      4,
-      "other",
-      "shared:propose.py",
-      "source/propose.py",
-      "sed -n 1,80p source/propose.py; python3 source/propose.py --help 2>&1 | head -30",
-      ""
-     ],
-     [
-      5,
-      "other",
-      "shared:propose.py",
-      "source/propose.py notes/proposals notes/proposals/bench-speedup.md",
-      "python3 source/propose.py status 2>&1 | tail -8; ls notes/proposals | tail -5; p",
-      ""
-     ],
-     [
-      6,
-      "other",
-      "other",
-      "source/*.py source/**/*.py",
-      "def fit_ankles\\|def fit_knee\\|def fit_seat\\|fold press\\|fold_press\\|def raster\\|",
-      ""
-     ],
-     [
-      7,
-      "other",
-      "other",
-      "notes/bench",
-      "numba\\|scipy\\|trimesh\\|mesh\\|cython\\|numpy\\|skimage\\|pillow\\|opencv",
-      ""
-     ],
-     [
-      8,
-      "other",
-      "shared:bench_draw.py",
-      "source/bench_draw.py source/bench_move.py source/bench_pose.py notes/bench/span.",
-      "wc -l source/bench_draw.py source/bench_move.py source/bench_pose.py notes/bench",
-      ""
-     ],
-     [
-      9,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py source/bench_draw.py",
-      "^def \\|^    def \\|^[A-Z_]* = ",
-      ""
-     ],
-     [
-      10,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py",
-      "sed -n 765,1000p source/bench_move.py",
-      ""
-     ],
-     [
-      11,
-      "other",
-      "shared:bench_draw.py",
-      "source/bench_draw.py source/bench_move.py",
-      "^name\\|not found",
-      ""
-     ],
-     [
-      12,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py",
-      "def dressed\\|dressed",
-      ""
-     ],
-     [
-      13,
-      "other",
-      "other",
-      "",
-      "timeout 120 python3 -c \" import sys,time;sys.path.insert(0,'source');t=time.time",
-      ""
-     ],
-     [
-      17,
-      "other",
-      "other",
-      "notes/proposals/bench-speedup*",
-      "git add notes/proposals/bench-speedup* && git commit -qm \"Proposal bench-speedup",
-      ""
-     ],
-     [
-      20,
-      "other",
-      "shared:propose.py",
-      "source/propose.py",
-      "python3 source/propose.py judge bench-speedup 2>&1 | tail -5",
-      ""
-     ]
-    ]
-   },
-   "notes_auto": 0
+   "stage": "plan",
+   "round": null,
+   "cost": 1.54,
+   "notes": 0,
+   "repeats": []
   }
  ],
  "checks": {},
@@ -24122,6 +23884,16 @@
    "date": "2026-11-22",
    "spent": 79.6,
    "forecast": 83.2
+  },
+  {
+   "date": "2026-11-22",
+   "spent": 83.07,
+   "forecast": 86.7
+  },
+  {
+   "date": "2026-11-22",
+   "spent": 83.37,
+   "forecast": 87.0
   }
  ],
  "critique": {
