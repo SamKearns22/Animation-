@@ -409,3 +409,15 @@
 - **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker, claude/job1-front-on-focus (job 1's).
 - **For Claude:** setup.sh's pip install (150 s cap) did not finish in chat 3's container (scipy, numba, mediapipe missing; kit tests failed on import; named in the watcher): run `pip install scipy numba imageio imageio-ffmpeg mediapipe opencv-python-headless` before replays; a fix to the cap goes through the route. round_page and facehouse_whole_head failing are job 1's. Handover check COST flag (no film estimate): expected for a system job.
 
+
+
+# Archived 22 Nov (Milburn lessons chat 1)
+## Where things stand (the ONE handover)
+- **Rules that bite next:** the proposal route (`source/propose.py`), CLAUDE.md "Rules are permanent" (retire a check only after three films, Sam's Y), 85 (cost watch).
+- **Done (job 4 chat 5, Opus medium, 20 Nov):** Sam's Y to all three check changes, built and tested (detail: notes/proposals/check-catches.md, "Built"). (1) every check run is saved under the film in its command, no marker file; the quick check is saved too; the handover refuses if pre-flight ran and nothing saved; a real Milburn quick check saved 61 of 61 faults (before 0). (2) the notes table has a "should have caught" column; the handover refuses a blank one and saves the tags. (3) the replay table scores runs it wrongly dropped and groups the audit's time-stamped lines: Protest Tiers 21 of 31 chats (before 0), Blessed 20 of 20 (before 0); re-made tables appended to replay/*.md, chat 4's hand-made ones kept.
+- **Next:** nothing for job 4 until the next film runs pre-flight: no chat opened (one now would have no work). The bar (every check run has a row; every note tagged) is checked by that film's own handovers and at its end-of-film review (`propose.py review`). Sonnet if a chat is ever needed for it.
+- **Needs Sam:** nothing.
+- **Read:** this section only.
+- **Open rule requests:** none. Branches named (not merged, waiting on Sam): claude/blessed-c2-mics-wip, claude/audit-honest-checker, claude/job1-front-on-focus (job 1's); the replay's read-only source branches (claude/milburn-*, protest-*, blessed-*) stay unmerged on purpose.
+- **For Claude:** live table: `checkreplay.py table FILM --record` (notes/ledger/FILM/check-table.md). halo-no-no's notes table (posted film, 5 notes) has no tag column: a handover on it will say TAG; add the column then. Kit test cost_rows_reach_the_main_line fails here before and after (no costwatch module in this container): not this job's. Handover check COST flag: expected for a system job. Its RECORD flag on milburn (chat 5): the test pre-flight ran in a throwaway copy on purpose, so the real record has nothing; the flag firing is the check working. The saver missed 1 of Sam's messages in chat 4 (his Y to the three changes, 20 Nov): recorded here.
+
