@@ -220,20 +220,20 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
 - [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
 
-## Where things stand (22 Nov, chat 36, Opus high)
+## Where things stand (22 Nov, chat 37, Sonnet)
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
-  style; circle hands. (Breakdown poses add in-betweens only; no beat or time moved.)
-- Done: gun arm K2-K3 (B3: no snap, elbow in range); getting up rebuilt (B1, B1b, B2); middle grey clip rendered
-  and checked (1.0-6.45 s; frames saved in notes/bench/mid-frames).
-- Next: chat 37, Sonnet: make and send Sam the middle clip with its table and named faults (learn-step "Chat 36:
-  the middle grey clip"); then chat 38, Opus high: those faults, the dressed K4 still (Sam's Y), getting up /
-  sitting down with the real checks, the full run.
+  style; circle hands.
+- Done: middle grey clip (1.0-6.45 s, 131 frames, 215 KB) made as animations/drafts/grey-lean-out-middle.mp4, watched,
+  sent to Sam with table and named faults; frames .tgz removed.
+- Next: chat 38, Opus high: fix the named faults (pistol 3-4 cm into him 1.25-1.33 s and 0.6-1.1 cm at 1.0-1.1 s; gun arm
+  2.5 cm into his side 1.71 s; left knee slides 3 cm while planted; quick hand moves over 3 cm a frame), the rough
+  dressed still of K4 (Sam's Y), getting up 13-23 / sitting down 176-190 with the real checks, full run, whole grey clip,
+  the 3 cm question.
 - Needs Sam: budget stops Y (chat 28), still open; the 3 cm question after the full run.
 - Read: notes/bench/learn-step.md ("Stage 1, chat 36" and "Chat 36: the middle grey clip"); bench_move.py MAP.
 - Open rule requests: Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
-- Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4); not lost.
-- For Claude: notes/bench/span.py A B (real checks); look.py OUT.jpg F.. (4 views); fast proxy _solve(g,
-  fold=False)+car()+ranges(); `run OUT T0 T1` (part run, frames.log as it goes). Branch claude/gta-chat31: record only (Sam's Y), not merged.
+- For Claude: notes/bench/span.py A B (real checks); look.py OUT.jpg F.. (4 views); `run OUT T0 T1` (part run).
+  Branch claude/gta-chat31: record only, not merged.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 72.98% of 15%; forecast 76.6% (2026-11-22)
