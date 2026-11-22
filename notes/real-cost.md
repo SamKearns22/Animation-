@@ -3,7 +3,7 @@
 - Rules that bite next: 24 (budget stop), 85 (cost watch), rules are permanent (proposal route).
 - Done: look-back (17 Milburn chats from the app: 80.44 USD = 32.85% of a week vs estimate 24%); quiet cost line built (source/costline.py, handover.py end, test quiet_cost_line); Sam's yes recorded in notes/proposals/search-first.md.
 - Next (Opus, medium): when Sam answers the aim-check-reviewer question, do what his pick says (Option 1: one priced list of where Milburn's and Blessed's money went, changes nothing; Option 2: build the re-stage checker). Nothing written to CLAUDE.md or the rulebook.
-- Needs Sam: aim-check-reviewer option 1 or 2 (or N); study in notes/proposals/aim-check/study.md.
+- Needs Sam: nothing (aim-check-reviewer: Sam picked Option 1, 22 Nov); study in notes/proposals/aim-check/study.md.
 - Read: guides/job-packs.md, Plan section only.
 - Open rule requests: aim-check-reviewer (judged; waiting for his number).
 - For Claude: forecast (ledger.forecast) said 100.4% for Milburn, which is wrong because unplanned stages carry no share; its accuracy is the thing to measure next film.
@@ -14,3 +14,5 @@
 - 19 Nov (aim-check study chat): study done (notes/proposals/aim-check/study.md). Missed same-quality kit reuse: 2 clear + 1 partial, all Milburn, about 0.1-0.2% of a week over both films; 0 in Blessed; none challenged; 2 of 3 mid-stage. The money went on rework, re-stages, long chats and scope. Ledger ratio now about 1.00 at 366 USD a week (the 0.68 was the old week price). Follow-up sent through the proposal route: notes/proposals/aim-check-reviewer.md.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 32.85% of 15%; forecast 100.4% (2026-11-19)
+- 22 Nov (status chat): Sam picked **Option 1** of aim-check-reviewer: the checker is closed, unbuilt; one priced list of where Milburn's and Grand Theft Autism's (or Blessed's) money went (redoing noted work, re-stages, long chats), changing nothing. Chat opened (Opus medium).
+- 22 Nov: Sam's usage meter read **54%** of the week, BUT "we are now using a different account": the ledger's week price (WEEK_USD) and old ratios may not hold for the new account. Do not calibrate against old figures without saying so; ask Sam the new account's reset day only if a figure needs it.

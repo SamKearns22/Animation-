@@ -154,3 +154,4 @@ discover how it can be made more compliant with statement one.")
 - Budget stops (chat 28): N. Still open: usage meter reading, budget alarms Y/N, aim-check reviewer 1/2, un-parking the Milburn lessons.
 - Milburn's parked lessons (notes/proposals: could-not-test, named-lines, staging-stills, shared-check-fixes, guard-film-questions, notes-model, brow-limit, rule-needs-check; plain-check too): Sam 22 Nov "Milburn: begin all". Each goes through the proposal route (helpers, blind judge), then to Sam one at a time as judged options; build on his picks. Chat opened (Opus high).
 - Budget alarms: **N** (Sam 22 Nov: "No to the budget alarms, I've said that"). Same answer as the budget stops: never ask again. Status chat's fault: it treated stops and alarms as two questions.
+- Usage reading: 54% (22 Nov), on a NEW account (see notes/real-cost.md). Aim-check: Option 1. Nothing left for Sam from the status chat.
