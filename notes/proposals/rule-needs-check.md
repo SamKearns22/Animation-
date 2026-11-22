@@ -1,6 +1,6 @@
 # Proposal: Rules are written without a working check, so they fail without anyone seeing
 
-Status: open (un-parked 22 Nov, Sam: "Milburn: begin all"; his 19 Nov words below still stand)
+Status: adopted (2026-11-22)
 
 ## Problem
 Several of Sam's rules have nothing that makes them happen; they rely on a chat reading them and choosing to follow

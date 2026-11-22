@@ -6178,64 +6178,75 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.09,
+   "cost": 0.46,
    "src": "estimate",
    "sid": "session_01U3pKR13HKBmKShVS4PF9Aa",
-   "steps": 5,
-   "hist_k": 86,
+   "steps": 27,
+   "hist_k": 145,
    "kinds": {
-    "tool search": 12.1,
-    "other": 87.9
+    "tool search": 13.1,
+    "whole-file .py read": 15.8,
+    "other": 71.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 4,
-    "whole-file .py read": 0,
+    "tool search": 17,
+    "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 0
+    "other": 3
    },
    "split": {
-    "usd": 0.3193,
-    "total": 0.3193,
+    "usd": 1.6999,
+    "total": 1.6999,
     "floor_k": 83,
     "blocks": {
-     "start-up floor": 78.1,
-     "Claude's words": 13.6,
-     "new writes": 7.9,
-     "carried history": 0.4
+     "start-up floor": 34.1,
+     "Claude's words": 34.0,
+     "new writes": 27.2,
+     "carried history": 4.6
     },
     "origins": {
-     "start-up floor": 78.1,
-     "Claude's words": 16.4,
-     "messages and reminders": 4.0,
-     "result: tool search": 1.5
+     "Claude's words": 44.0,
+     "start-up floor": 34.1,
+     "result: other": 12.1,
+     "result: tool search": 6.4,
+     "messages and reminders": 3.3
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 78.1,
-     "writing notes": 5.5,
-     "messages to Sam": 5.1,
-     "messages and reminders": 4.0,
-     "commands": 3.8,
-     "thinking": 2.0,
-     "start-up and handover tools": 1.5
+     "start-up reading (rules, tools, first files)": 34.1,
+     "writing code": 13.5,
+     "thinking": 12.2,
+     "reading guides": 8.6,
+     "messages to Sam": 8.0,
+     "app tools (chats, files sent)": 6.9,
+     "writing notes": 6.4,
+     "commands": 3.9,
+     "messages and reminders": 3.3,
+     "start-up and handover tools": 2.0,
+     "reading notes": 0.8
     },
     "leftover": 0.0
    },
    "start": {
     "floor_k": 83,
-    "work_step": null,
-    "work_pct": null,
+    "work_step": 21,
+    "work_pct": 0.25,
     "reads": [
      [
       "source/propose.py",
-      0.5,
-      0.0038
+      2.2,
+      0.0237
+     ],
+     [
+      "notes/proposals/rule-needs-check.md",
+      0.9,
+      0.0084
      ]
     ],
-    "base_pct": 18.8
+    "base_pct": 23.0
    },
    "search": {
     "show": 0,
@@ -6244,8 +6255,10 @@
     },
     "other": {
      "shared:handover.py": 1,
-     "shared:propose.py": 2,
-     "film notes": 1
+     "shared:propose.py": 6,
+     "film notes": 6,
+     "other": 2,
+     "guides": 2
     },
     "ticked": 0,
     "edited film code": false,
@@ -6280,6 +6293,621 @@
       "film notes",
       "notes/proposal-route.md",
       "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=\"- **Needs Sa",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/proposals/",
+      "ls notes/proposals/ | grep -i staging",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py mark staging-stills adopted 2>&1 | tail -3; python3 so",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposals/staging-stills.md notes/proposal-route.md",
+      "fate|adopted",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "",
+      "git pull -q --rebase origin claude/create-claude-md-oe8z4g 2>&1|tail -2; git pus",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/named-lines.md",
+      "status:",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=\"- **Needs Sa",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/guard-film-questions.md notes/proposals/notes-",
+      "Status:",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=\"- **Needs Sa",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/rule-needs-check.md guides/film-quality-rules.",
+      "^\\| *[0-9]+ *\\|",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check.md",
+      "sed -n '/^## Facts/,/^## Verdict/p' notes/proposals/rule-needs-check.md | head -",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "^#|^\\| ",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "guides",
+      "guides/critique-checklist.md guides/tiktok-design.md guides/satire.md guides/pos",
+      " guides/critique-checklist.md guides/tiktok-design.md guides/satire.md guides/po",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/rule-needs-check/rule-list.html",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=[l for l in s",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "2c58a054",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.75,
+   "src": "estimate",
+   "sid": "session_01U3pKR1xydztyQLbhMiM5M9",
+   "steps": 54,
+   "hist_k": 157,
+   "kinds": {
+    "tool search": 32.1,
+    "renders": 0.5,
+    "pictures": 1.3,
+    "other": 66.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 45,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 2,
+    "other": 6
+   },
+   "split": {
+    "usd": 2.7568,
+    "total": 2.7568,
+    "floor_k": 83,
+    "blocks": {
+     "start-up floor": 34.7,
+     "Claude's words": 28.6,
+     "new writes": 21.5,
+     "carried history": 15.2
+    },
+    "origins": {
+     "Claude's words": 42.0,
+     "start-up floor": 34.7,
+     "result: tool search": 19.8,
+     "messages and reminders": 1.6,
+     "Claude's edits": 0.8,
+     "result: pictures": 0.8,
+     "result: other": 0.3
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 34.7,
+     "thinking": 20.6,
+     "commands": 11.9,
+     "reading notes": 11.2,
+     "writing code": 8.1,
+     "reading kit code": 5.8,
+     "messages to Sam": 2.1,
+     "messages and reminders": 1.6,
+     "start-up and handover tools": 1.3,
+     "renders": 1.0,
+     "looking at pictures": 0.8,
+     "other commands": 0.5,
+     "edit results": 0.2,
+     "running checks and tools": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/clipcheck.py",
+      3.0,
+      0.0479
+     ],
+     [
+      "notes/proposals/could-not-test.md",
+      2.5,
+      0.0424
+     ],
+     [
+      "notes/proposals/could-not-test/helper-b.md",
+      1.4,
+      0.0235
+     ],
+     [
+      "notes/proposals/could-not-test/state.json",
+      1.4,
+      0.0235
+     ],
+     [
+      "notes/archive/milburn.md",
+      1.4,
+      0.0235
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scratchpad/side155.png",
+      1.6,
+      0.0191
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scratchpad/fincrop.png",
+      1.6,
+      0.016
+     ],
+     [
+      "source/propose.py",
+      1.1,
+      0.0088
+     ],
+     [
+      "source/preflight.py",
+      0.5,
+      0.006
+     ],
+     [
+      "notes/proposals/could-not-test/chat.md",
+      0.3,
+      0.0026
+     ]
+    ],
+    "base_pct": 29.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 15,
+     "shared:handover.py": 1,
+     "film notes": 8,
+     "shared:milburn.py": 8,
+     "shared:clipcheck.py": 2,
+     "shared:places.py": 3,
+     "shared:protest_tiers.py": 1,
+     "shared:grand_theft_autism.py": 1,
+     "shared:preflight.py": 1,
+     "shared:finish.py": 2,
+     "shared:film_engine.py": 1,
+     "shared:places_tables.py": 1,
+     "shared:propose.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch -q origin claude/create-claude-md-oe8z4g ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01U3pKQyM6KwJ9VCHUrPtX7S --film proposa",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/proposals/could-not-test/ notes/proposals/could-not-test.md",
+      "ls notes/proposals/could-not-test/ && cat notes/proposals/could-not-test.md | he",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposals/could-not-test/helper-b.md notes/proposals/could-not-test/state.",
+      "cat notes/proposals/could-not-test/helper-b.md | head -80; cat notes/proposals/c",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:milburn.py",
+      "source/milburn* story/milburn* source/milburn.py source/clipcheck.py",
+      "ls source/milburn* story/milburn* 2>/dev/null; git log --format='%h %ad %s' --da",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:milburn.py",
+      "notes/archive/milburn*.md story/milburn* source/milburn.py",
+      "name card\\|namecard\\|name_card",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md notes/sam-words* notes/said*",
+      "card",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "",
+      "card",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/ledger/sam/ notes/ledger/sam/*.md notes/ledger/sam/agnagzd2.md notes/ledge",
+      "milburn\\|card",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "notes/ledger/sam/*.md",
+      "milburn",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/ledger/sam/*.md notes/ledger/sam/agnagzd2.md",
+      "placard\\|name card\\|his card\\|card ",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "def _reverse\\|def _shot4\\|_RPAINT\\|def _draw_reverse\\|card",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:clipcheck.py",
+      "source/clipcheck.py",
+      "^def \\|depth\\b\\|nearest\\|furthest",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:clipcheck.py",
+      "source/clipcheck.py",
+      "sed -n 320,378p source/clipcheck.py; sed -n 455,475p source/clipcheck.py",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:places.py",
+      "source/places.py story/milburn-places.txt",
+      "def painter",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:places.py",
+      "S/w4f5ece1f/source/places.py S/w4f5ece1f/source/milburn.py",
+      "^def pieces\\|^def layer_of\\|^class Piece\\|self.depth\\|self.it\\b\\|def screen_box",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:places.py",
+      "S/w4f5ece1f/source/places.py /source/milburn.py S/w4f5ece1f/source/milburn.py",
+      "^ACROSS\\|^REVERSE",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "notes/ledger/*/ notes/ledger/*/round-*.txt",
+      "clipcheck: COULD NOT TEST",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "source/*.py",
+      "^def solids\\|^def layers\\|^def draw_order",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:protest_tiers.py",
+      "source/protest_tiers.py source/blessed.py source/midterminal.py source/gta_*.py ",
+      "^def solids\\|^def layers\\|^def draw_order",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:grand_theft_autism.py",
+      "source/*.py source/gta_*.py source/grand_theft_autism.py",
+      "defines no solids",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py notes/grand-theft-autism.md",
+      "clip\\|through\\|COULD NOT",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:finish.py",
+      "S/w6dc5df69/source/finish.py",
+      "^def \\|keep.clear\\|KEEP_CLEAR\\|keep_clear",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:finish.py",
+      "S/w6dc5df69/source/finish.py",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:milburn.py",
+      "c/source/milburn.py S/w6dc5df69/source/finish.py",
+      "^def caption_at\\|^def draw_subtitle",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:milburn.py",
+      "w6dc5df69/source/milburn.py",
+      "^import\\|^from\\|B\\.SS\\|burnham",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py story/milburn-places.txt source/places.py",
+      "git log --format='%h %ad %s' --date=format:'%d %H:%M' -- animations/milburn-vert",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "film notes",
+      "story/milburn-places.txt",
+      "Alan Milburn",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "milburn-places\\|_DESC =",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py",
+      "[r]eplay.py",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:milburn.py",
+      "S/w6dc5df69/source/milburn.py",
+      "set_ss\\|ss=\\|SS = \\|def overlay\\|draw_subtitle\\|caption",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "film notes",
+      "story/milburn*",
+      "git diff --stat 456a03f3 6dc5df69 -- source/ story/milburn* | cat | tail -8",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:places_tables.py",
+      "source/places_tables.py",
+      "git diff 456a03f3 6dc5df69 -- source/places_tables.py | head -40",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/2c58a054-925c-51dc-8f0a-f6e6bf9f83b3/scrat",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "[r]eplay.py",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "other",
+      "",
+      "replay.py",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 1,60p source/propose.py",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "film notes",
+      "notes/proposals/could-not-test/chat.md notes/ledger/",
+      "cat notes/proposals/could-not-test/chat.md | head -30; ls notes/ledger/ | head -",
       ""
      ]
     ]
