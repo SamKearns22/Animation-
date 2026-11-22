@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 53.2% of a week; spent 64.49% (+11.29); 33 chats, 0 rounds, 3 notes, 1 repeated.**
+**Estimate 53.2% of a week; spent 64.57% (+11.37); 33 chats, 0 rounds, 3 notes, 1 repeated.**
 
-**Forecast: Spent 64.49% of the 41.05% planned so far; at this rate the film lands at 69.7%.**
+**Forecast: Spent 64.57% of the 41.05% planned so far; at this rate the film lands at 69.7%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -56,7 +56,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-22 | 9b27cd62 | est | opus | auto |  | 1.84 |  | 0 | 0 |
 | 2026-11-22 | 3e679d49 | est | opus | auto |  | 1.88 |  | 0 | 0 |
 | 2026-11-22 | d2f7038a | est | opus | auto |  | 1.92 |  | 0 | 0 |
-| 2026-11-22 | 6aff14a9 | est | opus | auto |  | 0.87 |  | 0 | 0 |
+| 2026-11-22 | 6aff14a9 | est | opus | notes |  | 0.95 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-19 c079f576 (auto): 101 steps, history 274k at the end; other 75.9%, pictures 9.9%, renders 8.6%, tool search 5.6%
@@ -90,7 +90,6 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-22 9b27cd62 (auto): 101 steps, history 264k at the end; other 60.6%, tool search 18.9%, pictures 16.5%, renders 2.4%, film-file search 1.3%, page.py 0.3%
 - 2026-11-22 3e679d49 (auto): 87 steps, history 241k at the end; other 72.8%, tool search 15.3%, pictures 7.7%, film-file search 3%, whole-file .py read 1.1%, page.py 0.2%
 - 2026-11-22 d2f7038a (auto): 55 steps, history 182k at the end; other 78.7%, tool search 17.3%, renders 4%
-- 2026-11-22 6aff14a9 (auto): 62 steps, history 182k at the end; other 66.3%, film-file search 15.4%, tool search 11.1%, pictures 6.3%, page.py 0.7%, renders 0.2%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 c079f576 (auto): new writes 33.2%, Claude's words 30.9%, carried history 19.3%, start-up floor 16.6%. Biggest origins: Claude's words 47.7%, cache re-write 17.4%, start-up floor 16.6%. Leftover 0%
@@ -124,10 +123,9 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-22 9b27cd62 (auto): start-up floor 28.5%, Claude's words 28.4%, carried history 23.1%, new writes 20%. Biggest origins: Claude's words 47.1%, start-up floor 28.5%, result: tool search 10.2%. Leftover 0%
 - 2026-11-22 3e679d49 (auto): new writes 41.9%, start-up floor 19.5%, Claude's words 19.3%, carried history 19.3%. Biggest origins: messages and reminders 34.1%, Claude's words 29.3%, start-up floor 19.5%. Leftover 0%
 - 2026-11-22 d2f7038a (auto): start-up floor 36.4%, new writes 23.9%, Claude's words 22.4%, carried history 17.2%. Biggest origins: start-up floor 36.4%, Claude's words 33.3%, result: tool search 14.4%. Leftover 0%
-- 2026-11-22 6aff14a9 (auto): start-up floor 39.1%, Claude's words 22.3%, new writes 21.8%, carried history 16.9%. Biggest origins: start-up floor 39.1%, Claude's words 34.1%, result: film-file search 9.3%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 21% of the film (13.40% of a week over 32 chats: start 12.64, re-learning 0.76; 0.42% a chat; step-1 context re-read is 23% of a chat on average).
+A new chat's start and re-learning cost 20% of the film (13.03% of a week over 31 chats: start 12.28, re-learning 0.75; 0.42% a chat; step-1 context re-read is 23% of a chat on average).
 - 2026-11-19 c079f576: step-1 context 80k; first real work at step 12 (0.21% of a week); read before it: guides/kit-catalogue.md 2.1k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/vid/s4.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/sea.png 1.6k, guides/job-packs.md 1.2k, source/flying_whales_sea.py 1.2k, story/status.md 0.3k
 - 2026-11-20 ba8d2922: step-1 context 82k; first real work at step 40 (0.6% of a week); read before it: notes/_template.md 1.5k, notes/grand-theft-autism.md 1.3k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip1.png 1.6k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip2.jpg 1.6k, guides/kit-catalogue.md 1.4k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/jl.jpg 1.6k
 - 2026-11-20 23d4842a: step-1 context 80k; first real work at step 14 (0.1% of a week); read before it: notes/grand-theft-autism.md 3.5k, story/status.md 0.2k, notes/ledger/sam/bdslc8hv.md 0.3k
@@ -159,7 +157,6 @@ A new chat's start and re-learning cost 21% of the film (13.40% of a week over 3
 - 2026-11-22 9b27cd62: step-1 context 95k; first real work at step 16 (0.22% of a week); read before it: /tmp/claude-0/-home-user-Animation-/9b27cd62-8614-547b-a7a6-66708742dbb3/scratchpad/c15.png 3.2k, source/head3d_film.py 2.4k, /tmp/claude-0/-home-user-Animation-/9b27cd62-8614-547b-a7a6-66708742dbb3/scratchpad/s15.4.png 1.6k, /tmp/claude-0/-home-user-Animation-/9b27cd62-8614-547b-a7a6-66708742dbb3/scratchpad/s18.3.png 1.6k, /tmp/claude-0/-home-user-Animation-/9b27cd62-8614-547b-a7a6-66708742dbb3/scratchpad/headsheet.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/9b27cd62-8614-547b-a7a6-66708742dbb3/scratchpad/c18.png 1.6k
 - 2026-11-22 3e679d49: step-1 context 96k; first real work at step 20 (0.33% of a week); read before it: source/leanout.py 5.7k, notes/grand-theft-autism.md 1k, source/page.py 0k
 - 2026-11-22 d2f7038a: step-1 context 92k; first real work at step 7 (0.15% of a week); read before it: notes/grand-theft-autism.md 1.5k, notes/ledger/grand-theft-autism.md 1.2k, story/status.md 0.9k
-- 2026-11-22 6aff14a9: step-1 context 96k; first real work at step 25 (0.36% of a week); read before it: notes/grand-theft-autism.md 2.4k, source/gta_cars.py 2.4k, guides/job-packs.md 2k, source/gta_shots58.py 1.8k, /tmp/claude-0/-home-user-Animation-/6aff14a9-9eea-54af-af82-0da1185b8dec/scratchpad/sheet.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/6aff14a9-9eea-54af-af82-0da1185b8dec/scratchpad/s6_4.0.jpg 1.6k
 
 ## Repeated notes (what would have caught them)
 - Jason from behind: tube arm, blob hand, brown-blob head (F1/F5/F7 again) | the back-view check told us to move the camera instead of naming what the drawing lacks

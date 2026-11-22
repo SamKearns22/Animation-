@@ -497,3 +497,27 @@ Sam (via chat 27): "I did not want the camera angles changed. It is a great shot
       the vest; the bare upper arm reads very big from behind (THICK 1.3). Checked: the body check's strip has exactly
       the same faults as before this chat (311 lines, none new).
 
+
+## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (alongside chat 33)
+Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths. Not touched:
+Jason's movement in shot 4 (FAILED, chat 33's job).
+- [x] F12 grey panel over Lucia: the windscreen's sky streak is now drawn only over the street seen through the glass,
+      never over a person (shots 3-8). Why unseen: the layer check tests what is in front of what, not whether a
+      see-through layer hides a face; the critique caught it (r26), nobody acted. Fixed in the car's glass drawing.
+- [x] F12 "bare circle on his chest" (shots 5-8): after his brace in shot 5 Jason settles with the forearm laid
+      across his chest, hand flat on it (no pistol, Sam 21 Nov); shot 5 opens on shot 4's own rest so the cut holds.
+      Why: the old rest had the forearm pointing at the lens (only the hand circle showed). Not changed: house circle
+      hands (the "mitten" thumb at 29-31 s is the house thumb shape; kept, Sam's order).
+- [~] F15 bonnet stripes as trousers: kept black (Sam's brief), but the grey middle scuffs (read as pockets) became
+      small red chips at the stripes' edges, and one paint shine now crosses the whole bonnet, stripes and red alike,
+      so they read as paint on a shiny panel. Sam to judge in the clip.
+- [x] F6 still crowd at the fireball: the man 5-18 m from the blast ran straight at the lens (legs and arms swinging
+      in depth, unreadable flat), so read as standing. Runners on the crash's pavement now run at a slant for the
+      shop doorways (stride side-on) with hands over their heads. Why unseen three times: the fix was measured
+      ("is he running?") not looked at from the camera (Seeing like Sam 1 and 4). Lesson to propose: a runner's or
+      walker's direction within 25 degrees of the lens line is a fault the body check names.
+- F12 "half the frame is bonnet": that is shot 6's camera, locked; drawing-only answer is the bonnet shine above.
+- Shots 5-8 notes 1-3 (chat 19): done in chat 19, waiting on Sam's word since clip v2; they stay open for his tick.
+- Clips: no short-clip command exists for this film (grand_theft_autism.py renders the whole film); used a one-off
+      script in the chat's scratch space. Tool gap to propose: a --span option.
+
