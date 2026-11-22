@@ -217,6 +217,22 @@ list of attempts is in the case study, section 17.
       the vest; the bare upper arm reads very big from behind (THICK 1.3). Checked: the body check's strip has exactly
       the same faults as before this chat (311 lines, none new).
 
+## Chat 32 (22 Nov): Sam's new job, learn the skill in a test space (plan first, nothing built)
+Sam: "You need to learn how to use 2.5d or 3d animation to make this movement work. Create a test space where it is just
+Jason in his sitting pose, and the window." Checklist (his words, each to be ticked against the test space):
+- [ ] test space: only Jason in his sitting pose and the window
+- [ ] a skeleton that can move in 3D
+- [ ] the move with no clipping
+- [ ] camera unchanged (shot 4's)
+- [ ] hand style unchanged (house circle hands)
+- [ ] art style unchanged, blends into the scene naturally
+- [ ] the skill serves all future complex human moves in showstopper shots
+- [ ] research and explain the plan before beginning (proposal solid-body-moves)
+- [x] investigate why the hand style changed: chat 26's fault list turned Sam's "so many problems with hands" (21 Nov
+      15:22) into its own words "hands are discs or mittens (no fingers read)" and "the hand on the door a blob"; chat 28
+      then built fingered hands and its code comment credits those words to Sam. Nobody asked Sam; no proposal. Why no
+      check caught it: nothing compares a frame's hands (or any house part) against the house look. Lesson to propose.
+
 ## Where things stand (22 Nov, chat 32, Opus)
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do (CLAUDE.md); 30.
 - Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3, shot 4's camera included; the script;
