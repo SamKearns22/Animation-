@@ -811,7 +811,7 @@ def press_folds(P, jw, iters=8, ease=True):
 SETTLE_MAX = 0.04                # the farthest a fold-zone skin point may move in one settle step
 
 
-def _settle(P, jw, rounds=6):
+def _settle(P, jw, rounds=10):
     """Last step of the press: every fold-zone skin point still inside the body goes to the nearest FREE skin point
     (one found outside) of another part, 2 mm out. Free points are outside, so this ends inside-free."""
     from scipy.spatial import cKDTree
@@ -829,17 +829,22 @@ def _settle(P, jw, rounds=6):
     for (a, b) in FOLD_ZONE:
         mate.setdefault(a, set()).add(b)
         mate.setdefault(b, set()).add(a)
-    for _ in range(rounds):
+    cur = zi                                 # round 1 tests every fold-zone point; later rounds only the points
+    for _ in range(rounds):                  # moved last round (a test costs ~2 s: chat 38's render ran 60 s a frame)
         Q = P[use]
         N = _normals(P, tb)[use]
-        ins = _inside2(Q[zi], N[zi], P, tb)
+        ins = _inside2(Q[cur], N[cur], P, tb)
         if os.environ.get('FOLD_DEBUG'):
             print('settle inside', int(ins.sum()))
         if not ins.any():
-            break
+            if len(cur) == len(zi):
+                break
+            cur = zi                            # a local round came out clean: one full round confirms it
+            continue
         free = np.ones(len(use), bool)
-        free[zi[ins]] = False
-        for i in zi[ins]:
+        free[cur[ins]] = False
+        moved = []
+        for i in cur[ins]:
             fm = free & np.isin(reg, list(mate.get(reg[i], ())))
             fi = np.where(fm)[0]
             dd = np.linalg.norm(Q[fi] - Q[i], axis=1)
@@ -847,6 +852,12 @@ def _settle(P, jw, rounds=6):
             if dd.min() > SETTLE_MAX:          # flesh presses flat; it never jumps across the body (chat 38: more
                 continue                       # rounds without this cap moved a chest point into the head)
             P[use[i]] = Q[j] + N[j] * 0.002
+            moved.append(i)
+        if not moved:
+            break
+        mv = np.array(moved, int)               # the moved points and every fold-zone point within 3 cm of one
+        near = cKDTree(P[use][mv]).query(P[use][zi], distance_upper_bound=0.03)[0]
+        cur = np.union1d(mv, zi[np.isfinite(near)])
     return P
 
 
@@ -1328,7 +1339,7 @@ def frame_times():
     return [i / FPS for i in range(n)]
 
 
-def run(out_dir, draw_frames=True, every=1, span=None):
+def run(out_dir, draw_frames=True, every=1, span=None, side=False):
     """span=(t0, t1) seconds: only those frames (a part clip; frames numbered from 0 so clip() can read them).
     A progress line every 12 frames (frame, seconds so far, minutes left)."""
     os.makedirs(os.path.join(out_dir, 'frames'), exist_ok=True)
@@ -1360,7 +1371,14 @@ def run(out_dir, draw_frames=True, every=1, span=None):
         with open(os.path.join(out_dir, 'frames.log'), 'a') as fh:      # each frame's result kept as it goes
             fh.write('%d %.3f %s %s\n' % (int(round(t * FPS)), t, bad or 'clean', c['contacts']))
         if draw_frames and i % every == 0:
-            draw(out, cam_at(t)).save(os.path.join(out_dir, 'frames', 'f%04d.png' % i))
+            im = draw(out, cam_at(t))
+            if side:                     # left: shot 4's locked camera; right: outside the window, same pose
+                from PIL import Image
+                both = Image.new('RGB', (im.width * 2, im.height))
+                both.paste(im, (0, 0))
+                both.paste(draw_view(out, 'outside', t, im.size, mark=False), (im.width, 0))
+                im = both
+            im.save(os.path.join(out_dir, 'frames', 'f%04d.png' % i))
     top, over, pops = jumps(track)
     held = contacts_held(rows)
     sl = slides(track, rows)
@@ -1370,7 +1388,46 @@ def run(out_dir, draw_frames=True, every=1, span=None):
             span[0], span[1], int(round(ts[0] * FPS)))
     open(os.path.join(out_dir, 'report.txt'), 'w').write(rep)
     print(rep)
+    RUN_LAST.update(ts=ts, aims=aims, top=top)
     return fails, over, pops, held, sl
+
+
+RUN_LAST = {}
+SLIDE_BAR = 1.0                  # cm: a planted knee or the door hand moving more than this while planted
+
+
+def checked_clip(out_dir, mp4, span=None):
+    """The grey clip through the body check's record (humancheck.Writer), so it can go to Sam (the send guard):
+    every frame's solid-body checks (car, body against itself, pistol, joint range) and the clip's own (pops, steps
+    over 3 cm, planted slides, contacts) go in as faults; the flat-drawing checks in humancheck have nothing to see
+    on a grey solid body (it is not drawn by views), so THESE are its body check. Side by side: shot 4's locked
+    camera and outside the window. Unnamed faults hold the video aside (Writer.finish), as for any clip."""
+    import humancheck as HC
+    fails, over, pops, held, sl = run(out_dir, span=span, side=True)
+    ts = RUN_LAST['ts']
+    f0 = int(round(ts[0] * FPS))
+    W = HC.Writer('grey test body')
+    who = 'Jason (grey test body)'
+    nm = {'car': 'car', 'self': 'self', 'pistol': 'pistol', 'rom': 'range'}
+    for fr, t, bad in fails:
+        W.frame(t, [(t, who, nm[k], '%s %s' % (nm[k], ', '.join('%s %s cm' % (a, b[1]) if isinstance(b, tuple) else
+                                                                      '%s %s' % (a, b) for a, b in v.items())))
+                    for k, v in bad.items()])
+    for i, j, cm in pops:
+        t = ts[min(i, len(ts) - 1)]
+        W.frame(t, [(t, who, 'pop', 'pop: %s jumps off its path (%.1f cm)' % (j, cm))])
+    for i, j, cm in over:
+        t = ts[min(i, len(ts) - 1)]
+        W.frame(t, [(t, who, 'step', 'step over 3 cm a frame: %s (%.1f cm)' % (j, cm))])
+    for k, v in sl.items():
+        if v > SLIDE_BAR:
+            W.frame(ts[0], [(ts[0], who, 'slide', 'planted slide: %s %.1f cm' % (k, v))])
+    for f, k, gap in held:
+        t = ts[min(f, len(ts) - 1)]
+        W.frame(t, [(t, who, 'contact', 'contact: %s gap %.1f cm' % (k, gap))])
+    size = clip(out_dir, mp4)
+    print('clip %s: %.0f KB, film frames %d-%d' % (mp4, size / 1024, f0, f0 + len(ts) - 1), flush=True)
+    W.finish(mp4)
 
 
 def report(n, fails, top, over, pops, held, sl, aims, secs):
@@ -1441,6 +1498,81 @@ def proof(out_dir):
     return rep
 
 
+def house_pose(out):
+    """A leanout-style pose (lying.Body) from a solved frame, for the house head drawing (lying_flat via
+    bench_draw.house_head): joints from out['J'], the head's centre and the neck point placed as chat 33's seated
+    still places them (their offsets measured once on K1, in the head's and chest's own frames)."""
+    import copy
+    r = rig()
+    if 'hp_off' not in RIG:
+        o1 = _solve(key('K1'), fold=False)
+        k1 = r['k1']
+        RIG['hp_off'] = (o1['Rh'].T @ (np.asarray(k1['head']) - o1['J']['head']),
+                         o1['Rc'].T @ (np.asarray(k1['neck']) - o1['J']['neck']))
+    dh, dn = RIG['hp_off']
+    J, Rc, Rh = out['J'], out['Rc'], out['Rh']
+    k = copy.deepcopy(r['k1'])
+    for n in ('shL', 'elL', 'wrL', 'shR', 'elR', 'wrR', 'hipL', 'knL', 'anL', 'hipR', 'knR', 'anR'):
+        k[n] = np.asarray(J[n], float)
+    k['pelvis'] = np.asarray(J['pelvis'], float)
+    k['neck'] = J['neck'] + Rc @ dn
+    k['head'] = J['head'] + Rh @ dh
+    k['waist'] = k['pelvis'] + 0.465 * (k['neck'] - k['pelvis'])
+    k['fwd'], k['hup'], k['hfwd'] = Rc[:, 2], Rh[:, 1], Rh[:, 2]
+    for sd in 'LR':
+        k['toe' + sd] = _u(J['an' + sd] - J['kn' + sd])
+        k['sup' + sd] = _u(np.cross(k['toe' + sd], np.cross([0, 1.0, 0], k['toe' + sd])) + 1e-9)
+    k.aim, k.firing = np.asarray(out['aim'], float), True
+    return k
+
+
+DRESS_HIDE_NECK = False         # the house neck (drawn with the house head) stands in for the solid neck
+
+
+def dressed_still(path, name='K4', t=1.95, scale=2):
+    """Rough early look (Sam's Y, chat 36): one solved key pose dressed as Jason in the house look through shot
+    4's locked camera at t: house colours by body part (bench_pose's part map), house ink, the house head drawing
+    laid at the head's depth, circle hands, the pistol. The 3D head and hands are not drawn (the house ones stand
+    in). Also saves the same pose from outside the window (path -outside.png). Prints the checks on the pose."""
+    import bench_draw as BD
+    from PIL import Image
+    fit_seat(); fit_knee(); fit_ankles()
+    g = key(name)
+    out = solve(g)
+    c = check_frame(out, g)
+    r = rig()
+    sp = dict(r['sp'], mood='stern', squint=0.35, frown=0.07)
+    tk = r['tk']
+    neckb = np.array([str(b).startswith('neck') for b in r['bone']])
+    hide = r['headb'] | (neckb & DRESS_HIDE_NECK)
+    tk = tk[~(r['hand'][tk].any(1) | hide[tk].all(1))]
+    tp = np.array([BP.PARTS[int(np.bincount(r['part'][tt]).argmax())] for tt in tk])
+    objs = [(out['P'], tk, tp, 'jason')] + scene(out)[1:]
+    rv, rg = BP.rest_attrs()
+    res = []
+    for view in ('shot', 'outside'):
+        if view == 'shot':
+            cam = cam_at(t, shake=False)
+        else:
+            import sets as S
+            cam = S.Cam(*SIDE_CAMS['outside'])
+        ob_ = objs if view == 'shot' else [o for o in objs if not (o[3].startswith('door') and 'rear' not in o[3])]
+        zb, pb, ob, names = BD.raster(cam, ob_, scale, np.concatenate([rv, rg], 1))
+        edge = BD.ink(zb, pb, ob, 3 * scale)
+        img = BD.compose(zb, pb, ob, names, edge, BD.colours(sp), scale)
+        bg = Image.new('RGBA', img.size, SKY + (255,))
+        bg.alpha_composite(img)
+        img = bg
+        k = house_pose(out)
+        head, _ = BD.house_head(cam, k, sp)
+        BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale)
+        img.convert('RGB').save(path if view == 'shot' else path.replace('.png', '-outside.png'))
+        res.append(img)
+    bad = {kk: v for kk, v in c.items() if kk in ('car', 'self', 'pistol', 'rom') and v}
+    print('dressed still %s at %.2f s: checks %s' % (name, t, bad or 'clean'), flush=True)
+    return res
+
+
 def clip(out_dir, mp4):
     import subprocess
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-framerate', str(FPS), '-i', os.path.join(out_dir, 'frames', 'f%04d.png'),
@@ -1452,6 +1584,10 @@ if __name__ == '__main__':
     cmd = sys.argv[1]
     if cmd == 'run':
         run(sys.argv[2], span=(float(sys.argv[3]), float(sys.argv[4])) if len(sys.argv) > 4 else None)
+    elif cmd == 'clip':          # clip OUT_DIR OUT.mp4 [T0 T1]
+        checked_clip(sys.argv[2], sys.argv[3], span=(float(sys.argv[4]), float(sys.argv[5])) if len(sys.argv) > 5 else None)
+    elif cmd == 'dressed':       # dressed OUT.png [KEY] [T]
+        dressed_still(sys.argv[2], *(sys.argv[3:4] or ['K4']), *[float(x) for x in sys.argv[4:5]])
     elif cmd == 'checks':
         run(sys.argv[2], draw_frames=False)
     elif cmd == 'proof':
