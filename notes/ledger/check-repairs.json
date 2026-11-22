@@ -1302,7 +1302,86 @@
    "round": null,
    "cost": 2.95,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "steps": 49,
+   "hist_k": 144,
+   "kinds": {
+    "tool search": 16.1,
+    "other": 83.9
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 30,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 17
+   },
+   "split": {
+    "usd": 2.6325,
+    "total": 2.6325,
+    "floor_k": 95,
+    "blocks": {
+     "start-up floor": 60.6,
+     "Claude's words": 15.5,
+     "new writes": 14.7,
+     "carried history": 9.2
+    },
+    "origins": {
+     "start-up floor": 60.6,
+     "Claude's words": 23.5,
+     "result: tool search": 10.1,
+     "messages and reminders": 3.7,
+     "result: other": 2.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 60.6,
+     "writing code": 7.1,
+     "thinking": 6.2,
+     "reading notes": 5.2,
+     "commands": 4.8,
+     "messages and reminders": 3.7,
+     "helper and chat prompts": 3.4,
+     "start-up and handover tools": 3.4,
+     "reading kit code": 1.8,
+     "helper results": 1.3,
+     "writing notes": 1.1,
+     "messages to Sam": 0.9,
+     "running checks and tools": 0.4,
+     "reading chat records": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 95,
+    "work_step": 13,
+    "work_pct": 0.35,
+    "reads": [
+     [
+      "notes/proposal-route.md",
+      1.3,
+      0.0193
+     ],
+     [
+      ".claude/hooks/costwatch.py",
+      1.0,
+      0.016
+     ],
+     [
+      "source/stepcost.py",
+      0.9,
+      0.0133
+     ],
+     [
+      "notes/proposals/dearest-grand-theft-autism-1/chat.md",
+      0.2,
+      0.0025
+     ]
+    ],
+    "base_pct": 31.5
+   }
   }
  ],
  "checks": {}
