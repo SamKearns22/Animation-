@@ -19009,6 +19009,642 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "1ca55da5",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.71,
+   "src": "estimate",
+   "sid": "session_01GznaAVBB3Pw7Y7Cqo6EbuB",
+   "steps": 89,
+   "hist_k": 266,
+   "kinds": {
+    "film-file search": 3.9,
+    "tool search": 22.3,
+    "renders": 11.0,
+    "pictures": 1.5,
+    "other": 61.3
+   },
+   "calls": {
+    "film-file search": 10,
+    "tool search": 46,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 12,
+    "pictures": 10,
+    "other": 18
+   },
+   "split": {
+    "usd": 6.2655,
+    "total": 6.2655,
+    "floor_k": 96,
+    "blocks": {
+     "Claude's words": 29.6,
+     "start-up floor": 27.4,
+     "new writes": 21.7,
+     "carried history": 21.3
+    },
+    "origins": {
+     "Claude's words": 46.9,
+     "start-up floor": 27.4,
+     "result: tool search": 15.5,
+     "result: film-file search": 3.3,
+     "messages and reminders": 2.7,
+     "result: other": 2.6,
+     "result: pictures": 1.2,
+     "result: renders": 0.3
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 27.4,
+     "writing code": 19.9,
+     "thinking": 18.0,
+     "reading notes": 10.9,
+     "commands": 6.1,
+     "reading kit code": 4.0,
+     "reading film code": 3.2,
+     "messages and reminders": 2.7,
+     "writing notes": 1.9,
+     "running checks and tools": 1.2,
+     "looking at pictures": 1.2,
+     "messages to Sam": 1.0,
+     "start-up and handover tools": 0.7,
+     "app tools (chats, files sent)": 0.7,
+     "other commands": 0.5,
+     "renders": 0.5
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 96,
+    "work_step": 41,
+    "work_pct": 0.64,
+    "reads": [
+     [
+      "notes/shot4-case-study/shot4-case-study.md",
+      5.0,
+      0.1112
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      3.7,
+      0.0856
+     ],
+     [
+      "notes/proposals/solid-body-moves.md",
+      3.1,
+      0.0715
+     ],
+     [
+      "source/lying_flat.py",
+      3.7,
+      0.066
+     ],
+     [
+      "source/mhuman.py",
+      2.0,
+      0.0407
+     ],
+     [
+      "source/gta_rehearse.py",
+      1.8,
+      0.0372
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/1ca55da5-d035-55ec-a630-7104895a7dc3/scratchpad/bl/eevee.png",
+      1.6,
+      0.0344
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/1ca55da5-d035-55ec-a630-7104895a7dc3/scratchpad/appr_13.9.png",
+      1.6,
+      0.0315
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/1ca55da5-d035-55ec-a630-7104895a7dc3/scratchpad/house_crop.png",
+      1.6,
+      0.0269
+     ],
+     [
+      "source/leanout.py",
+      1.2,
+      0.0247
+     ],
+     [
+      "source/gta_cars.py",
+      0.7,
+      0.0132
+     ],
+     [
+      "notes/ledger/app-costs.tsv",
+      0.5,
+      0.0105
+     ],
+     [
+      "source/gta_film.py",
+      0.4,
+      0.0091
+     ],
+     [
+      "source/sets.py",
+      0.4,
+      0.0089
+     ],
+     [
+      "source/character.py",
+      0.4,
+      0.007
+     ],
+     [
+      "source/body.py",
+      0.4,
+      0.007
+     ]
+    ],
+    "base_pct": 24.4
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 10
+    },
+    "other": {
+     "other": 13,
+     "shared:handover.py": 2,
+     "film notes": 11,
+     "shared:leanout.py": 1,
+     "shared:mhuman.py": 1,
+     "shared:sets.py": 1,
+     "shared:arm3d_film.py": 1,
+     "shared:hand3d_film.py": 1,
+     "shared:lying.py": 1,
+     "shared:lying_flat.py": 2,
+     "shared:body.py": 3,
+     "shared:satire_style.py": 2,
+     "shared:character.py": 1,
+     "shared:bench_pose.py": 3,
+     "shared:bench_draw.py": 2,
+     "shared:bench_blender.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -q -B claude/blissful-wozniak-zmlkey origin/claude/create-claude-md",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/proposals/solid-body-moves.md",
+      "^## \\|^# ",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 76,240p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md notes/shot4-case-study/ notes/ledger",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md",
+      "sed -n 1,20p notes/shot4-case-study/shot4-case-study.md; sed -n 67,112p notes/sh",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md notes/shot4-case-study/sam-v7 notes/s",
+      "sed -n 483,620p notes/shot4-case-study/shot4-case-study.md; ls notes/shot4-case-",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "notes/ledger/ notes/ledger/sam notes/ledger/app-costs.tsv",
+      "ls notes/ledger/ notes/ledger/sam | head -80; head -5 notes/ledger/app-costs.tsv",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "other",
+      "",
+      "tail -3 /tmp/claude-0/-home-user-Animation-/1ca55da5-d035-55ec-a630-7104895a7dc3",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "OK|FAIL|rror|EGL|GPU",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py source/mhuman.py source/mesh_sdf.py source/lying.py source/lyi",
+      "sed -n 1,80p source/leanout.py | head -100; wc -l source/leanout.py source/mhuma",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:mhuman.py",
+      "source/mhuman.py source/mesh_sdf.py",
+      "^def \\|^class ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "ls films/ 2>/dev/null | head; ls source | grep -i gta; ls animations/drafts/ 2>/",
+      ""
+     ],
+     [
+      20,
+      "film",
+      "before show",
+      "source/gta_film.py",
+      "def \\(shot4\\|shot3\\|cam\\)",
+      ""
+     ],
+     [
+      21,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "^def shot4\\|^def shot3\\|^def _shot4\\|SHOT4\\|def cam4\\|def _cam",
+      ""
+     ],
+     [
+      22,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "sed -n 660,760p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      23,
+      "film",
+      "before show",
+      "source/gta_rehearse.py source/sets.py",
+      "class Cam",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:sets.py",
+      "source/sets.py",
+      "sed -n 60,110p source/sets.py",
+      ""
+     ],
+     [
+      27,
+      "film",
+      "before show",
+      "source/gta_cars.py source/mhuman.py",
+      "def solid_at\\|def solid\\|SOLID\\|def _tulip\\|windscreen\\|A_PILLAR\\|def parts",
+      ""
+     ],
+     [
+      28,
+      "film",
+      "before show",
+      "source/gta_cars.py source/*.py source/mhuman",
+      "mhuman\\.\\|macro_values(",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:arm3d_film.py",
+      "source/arm3d_film.py source/head3d_film.py",
+      "3d",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:hand3d_film.py",
+      "source/hand3d_film.py source/leanout.py",
+      "^MAN\\|MAN =",
+      ""
+     ],
+     [
+      31,
+      "film",
+      "before show",
+      "source/leanout.py source/gta_cast.py",
+      "^def seated",
+      ""
+     ],
+     [
+      32,
+      "film",
+      "before show",
+      "source/leanout.py source/gta_rehearse.py",
+      "K1_HAND_R\\|K1_POLE_R",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys;sys.path.insert(0,'source');import leanout as LO, gta_ca",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:lying.py",
+      "source/lying.py",
+      "^class Body",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys;sys.path.insert(0,'source');import leanout as LO, gta_ca",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "^def ",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "sed -n 238,350p source/lying_flat.py; sed -n 443,545p source/lying_flat.py",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:body.py",
+      "source/body.py source/limbs.py source/views.py source/ink.py",
+      "def hand\\|def circle_hand\\|def _hand\\|circle hand",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:body.py",
+      "source/body.py source/lying.py",
+      "^M = \\|^M=",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/1ca55da5-d035-55ec-a630-7104895a7dc3/scrat",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:satire_style.py",
+      "source/satire_style.py",
+      "def hand\\|def circle",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:character.py",
+      "source/character.py",
+      "sed -n 40,60p source/character.py; python3 -c \" import sys;sys.path.insert(0,'so",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:bench_pose.py",
+      "source/bench_pose.py",
+      "head",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:body.py",
+      "source/body.py source/satire_style.py source/limbs.py",
+      "hand\\|import",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:satire_style.py",
+      "source/satire_style.py",
+      "sed -n 88,130p source/satire_style.py",
+      ""
+     ],
+     [
+      50,
+      "film",
+      "before show",
+      "source/gun3d_film.py source/gta_cars.py",
+      "^def ",
+      ""
+     ],
+     [
+      51,
+      "film",
+      "before show",
+      "source/gta_cars.py source/gun3d_film.py source/leanout.py",
+      "def gun\\b\\|def gun(",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:bench_draw.py",
+      "source/bench_draw.py",
+      "python3 - <<'EOF' p='source/bench_draw.py'; s=open(p).read() s=s.replace(\"\"\" old",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:bench_blender.py",
+      "/home/user/Animation-/source/bench_blender.py source/bench_blender.py",
+      "BLENDER|Error|error|real",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/1ca55da5-d035-55ec-a630-7104895a7dc3/scrat",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:bench_draw.py",
+      "source/bench_draw.py",
+      "python3 - <<'EOF' p='source/bench_draw.py'; s=open(p).read() s=s.replace(\"\"\" if ",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "film notes",
+      "notes/ledger/grand-theft-autism.md notes/ledger/grand-theft-autism.json",
+      "head -30 notes/ledger/grand-theft-autism.md; python3 -c \" import json;d=json.loa",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "film notes",
+      "notes/ledger/grand-theft-autism.md notes/archive/grand-theft-autism-handovers.md",
+      "^| chat\\|chat [0-9]* *|.*session\\|session_01",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-handovers.md notes/ledger/grand-theft-autism.js",
+      "^## Where things stand",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "notes/ledger/grand-theft-autism.json",
+      "python3 -c \" import json;d=json.load(open('notes/ledger/grand-theft-autism.json'",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "",
+      "lean|window|car |sit|climb|crawl|shoot|gun|pistol|reach",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "other",
+      "",
+      "car|vehicle|window|kneel|crawl|gun|pistol|shoot|aim|twist|turn around|look back",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:bench_pose.py",
+      "notes/bench notes/bench/l2-side-by-side.jpg notes/bench/learn-step.md source/ben",
+      "ultimately",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py",
+      "printf \"Grand Theft Autism, chat 33 (22 Nov): learn step done: Blender installed",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:bench_pose.py",
+      "source/bench_pose.py source/bench_draw.py source/bench_blender.py notes/bench no",
+      "git add -A source/bench_pose.py source/bench_draw.py source/bench_blender.py not",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "notes/ledger/grand-theft-autism.json notes/logs/handover-end.log",
+      "^(UU|AA)",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 195,250p notes/grand-theft-autism.md",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^<<<<<<<\\|^>>>>>>>",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
