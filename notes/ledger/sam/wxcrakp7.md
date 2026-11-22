@@ -47,3 +47,6 @@ Any other ways of speeding up chat 39's work?
 ### 2026-11-22T20:12:53
 Y and investigate the bigger computer
 
+### 2026-11-22T20:16:06
+I need to see it in motion, don't worry about the stills, we just need to speed it up/make it quality so there's no notes
+
