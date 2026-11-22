@@ -207,6 +207,10 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
       cut by the left edge at 29.3 (shot 6, his gesture, not the camera); passers-by in shot 5 stand frozen; 3 tiny
       walkers in shot 5 (22.3-23 s, 4-7 drawings) with an arm out of the back (body check, there before this chat).
 - [x] Sam Q (33b): F15, Sam "1" (22 Nov): stripes 25 cm each, wider red gap, still black. Done; still sent.
+- Sam 22 Nov (5.8 h later): "make me an animatic including your current fixes ... shot 4 ... use the models of the
+      previous animation". Done here: grand_theft_autism.py switches the 3D hands/arms off (shot 4 drawn as in v3;
+      checked side by side at 16 s). Shot 1 cannot draw here (title font host blocked): reuse v3 clean render's first
+      7.0 s (shot 1 unchanged since v3) via the render's --from 7.0. Next: chat 33c, Sonnet: animatic v4.
 - PAUSED (Sam 22 Nov: "Then let's wait until the 3D work is done"): no more 33b film work until chat 33's 3D move is
       done. Open for then: F6 runner stiff in his second step and still at the wall; Jason's raised hand cut by the
       left edge at 29.3; shot 5 frozen passers-by; 3 tiny walkers' arms out of the back (22.3-23 s).
@@ -237,3 +241,12 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   Branch claude/gta-chat31: record only, not merged.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 72.98% of 15%; forecast 76.6% (2026-11-22)
+
+## Chat 33c (22 Nov, Sonnet): animatic v4 drawn, NOT yet sent
+Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
+- Drawn: 7.0-38.5 s fresh in 22 min (shot 1 = v3's first 7.0 s). Picture: source/data/v4/gta-v4-clean.mp4 (8 MB).
+- Sound is v3's mix (the voice and effect files are not in this container, so mix() cannot run); timings locked.
+- Blocked: no body-check record (my scratch writer was refused: it switched the checks off and self-named faults).
+  Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
+  (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
+- Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
