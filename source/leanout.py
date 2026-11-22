@@ -101,6 +101,15 @@ def _key(pelvis, neck, fwd, hfwd, arms, knees, sp, aim=None):
     return k
 
 
+DOOR_L = {'K2': ((0.88, 1.03, 0.25), _v(0.8, -1, 0.6)),     # the free hand on the door top (hand, elbow pole), car
+          'K3': ((0.96, 1.07, 0.34), _v(1, 0, 0.6)),       # frame. Chat 31: 15-20 cm further forward along the sill
+          'K4': ((0.96, 1.07, 0.32), _v(1, 0, 0.6))}       # than before (z 0.10/0.18/0.14), so the shoulder, sliding
+#                                                            out and back from K2 to K3, never passes over the hand: the
+#                                                            elbow stays above the sill, out and forward, in every
+#                                                            drawing (before: it dropped below the sill outside the
+#                                                            door, 17 drawings at 15.2-15.3 s and 21.15-21.3 s)
+
+
 def pose(name, sp):
     """A key pose for this person (their shoulders set the arms' roots)."""
     if name == 'K1':          # seated, pistol flat on his chest (shot 3's frame)
@@ -109,7 +118,7 @@ def pose(name, sp):
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
         #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
         k = _key((0.48, 0.80, 0.0), (0.76, 1.25, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),   # head ducked under the roof
-                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(0.8, -1, 0.6))},
+                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': DOOR_L['K2']},
                  {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
         return k
@@ -117,7 +126,7 @@ def pose(name, sp):
         k = _key((0.66, 0.90, 0.0), (1.04, 1.33, -0.04), (0.7, 0, -1), (0.5, 0, -1),   # chat 23: 6 cm further out,
         #                       3 cm lower: the drawn gun arm's shoulder was jammed under the roof edge (the arm's edge
         #                       test, v7 note 3; Sam's "black bars across his vest" in the hold, note 10 (e))
-                 {'R': ('rel', ((0.0, 0.30, 0.10), 'out')), 'L': ((0.96, 1.07, 0.18), _v(1, 0, 0.6))},
+                 {'R': ('rel', ((0.0, 0.30, 0.10), 'out')), 'L': DOOR_L['K3']},
                  {'L': (0.60, SEAT + 0.05, 0.16), 'R': (0.58, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0, 1, 0.1))                             # muzzle up, beside his head (chat 20 critique: the hand
         return k                                            # laid on his head read as a gun to his forehead)
@@ -127,7 +136,7 @@ def pose(name, sp):
         if name == 'K5':      # the recoil: the arm kicks up 26 degrees (chat 20 critique: 16 read as K4 again)
             aim = _u(aim + _v(0, 0.5, 0))
         return _key((0.68, 0.90, 0.02), tuple(neck), (0.35, 0, -1), (0.25, -0.05, -1),
-                    {'R': ((0.9, 1.3, -0.7), _v(0.4, -1, 0)), 'L': ((0.96, 1.07, 0.14), _v(1, 0, 0.6))},   # free hand ON the door top, elbow above it (Sam, chat 22)
+                    {'R': ((0.9, 1.3, -0.7), _v(0.4, -1, 0)), 'L': DOOR_L['K4']},   # free hand ON the door top, elbow above it (Sam, chat 22)
                     {'L': (0.64, SEAT + 0.05, 0.16), 'R': (0.60, SEAT + 0.05, -0.12)}, sp, aim=aim)
     raise KeyError(name)
 
@@ -448,6 +457,7 @@ _BONES = [('neck', 'head'), ('waist', 'neck'), ('pelvis', 'waist')] + \
 
 
 _GIRTH = {'sh': 0.11, 'el': 0.09}     # the arms' drawn width (m): an arm claims its own pixels; other pieces 5 cm
+HEAD_R = 0.19                     # the drawn head's reach round its centre (m): the cartoon head sits on the collar
 IN_CABIN = (WIN_X - 0.08, ROOF)   # a piece with its middle inside these (|x|, y; car frame) is in the cabin
 
 
@@ -509,8 +519,20 @@ def _cover(car, cam, kw, size, gun=None, kc=None):
             so = Image.fromarray(np.maximum(np.asarray(so), np.asarray(seat_m[0])))
         masks.append((so, gl))
         used += [(n, pts, nm) for n, pts in us]
+    hi = next((i for i, (nm, _, _) in reversed(list(enumerate(segs, 1))) if nm == 'neck-head'), None)
+    if hi is not None and masks[hi - 1] is not None:     # the head claims its whole drawn disc (chat 31, 15.2-15.3 s:
+        hc = kw['head']                                  # the chin's pixels went to the chest piece inside the
+        (hx, hy), hk = cam.project(tuple(hc))            # cabin, so the door's window post, behind his head, was
+        f = B.SS / q                                     # drawn across his mouth like a stick)
+        r = HEAD_R * hk * f
+        lines.append((-1e9, [(hx * f - r, hy * f - r), (hx * f + r, hy * f + r)], hi, 0))   # last: the face is
+        #                                                  drawn over the arms behind it (15.2 s: the gun arm's piece
+        #                                                  inside the cabin took his chin)
     for _, xy, i, w in sorted(lines, key=lambda x: -x[0]):
-        dr.line(xy, fill=i, width=w)
+        if w == 0:
+            dr.ellipse(xy, fill=i)
+        else:
+            dr.line(xy, fill=i, width=w)
     L_ = np.asarray(lab)
     if not L_.any():
         z = np.zeros((size[1], size[0]), np.float32)
