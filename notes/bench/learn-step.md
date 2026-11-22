@@ -180,3 +180,31 @@ send Sam the middle grey clip (his Y). Commands: `mkdir -p /tmp/f && tar -xzf
   at 1.0-1.1 s; gun arm 2.5 cm into his side at 1.71 s; left knee slides 3 cm while planted; quick hand moves over
   3 cm a frame (the 3 cm question comes after the full run). Then chat 38, Opus high: those faults, the dressed K4
   still (Sam's Y; learn-step "chat 36"), getting up 13-23 / sitting down 176-190 with the real checks, full run.
+
+## Stage 1, chat 38 (Opus high)
+Fixed in the drawing (checks unchanged or stricter):
+- Pistol into his face 3.8 cm (1.25-1.33 s): B3's gun hand moved in front of his RIGHT shoulder, outboard (chest
+  frame +x away from the head: 0.05, 0.10, 0.26), so the gun rises outside his face. Frames 24-33 clean.
+- Pistol's back end in his own wrist 0.6-1.3 cm (1.0-1.3 s, and frame 5 in K1): `gun_rests` - the pistol RESTS on
+  the right forearm (nearest skin + normal near the wrist; the whole pistol out by the deepest point + 2 mm).
+  (A first try, lifting the slide onto the fist whenever the gun points along the forearm, broke K1: undone.)
+- Left knee slid 3 cm while planted: on his knees the hips' height and side tip are now solved EXACTLY (fsolve) so
+  each thigh reaches its planted spot (was a first-order tip). Knees 0.0 cm off their spots in xz; the joint
+  still rises/falls 0.5 cm as the knee rolls (frames 29-165).
+- Gun arm into his chest 2.5 cm (1.71 s, armpit fold): _settle (the fold press's last step) did not finish. Now:
+  each step moves a point at most SETTLE_MAX 4 cm (more rounds without a cap moved a chest point into the head,
+  11 cm), later rounds re-test only moved points and fold points within 3 cm of them, a clean local round is
+  confirmed by one full round, up to 10 rounds. Left: 1 point 1.1 cm at frame 41 (two points deep in the fold with
+  no free skin within 4 cm). An in-between B4 (elbow out) was tried and undone: the elbow then jumped 16 cm a frame.
+- Speed: _inside2 is ~2 s a call; the fold press was ~27 s a frame. Now ~30 s a frame with the side view.
+New tools: `bench_move.py clip OUT_DIR OUT.mp4 [T0 T1]` (side by side, the solid-body checks + pops, steps over
+3 cm, slides over 1 cm, contacts go into humancheck.Writer's record: the send guard's body check for a grey body;
+unnamed faults hold the video aside). `bench_move.py dressed OUT.png [KEY] [T]` (key pose dressed: house colours
+by part, house ink, house head via house_pose(out), circle hands, pistol; shot camera + outside view).
+Dressed K4 still (sent to Sam 22 Nov): pose and colours read; faults: neck join jagged (solid neck under the house
+head; hiding it, DRESS_HIDE_NECK, left a hole from outside), vest neckline and armholes ragged (BP.part_at per dot
+from the rest body tears where the shoulder bends). Both: stage 2 (the look).
+Named, not yet fixed: the gun hand at the locked K2 stop (1.0 s): he rises onto his knees in ~3 frames (B2 0.86 ->
+K2 1.0), stops, then the gun whips up 13-17 cm a frame: pops 7-8 cm at 1.04 s. This is the 3 cm question.
+Not done (next chat): getting up 13-23 and sitting down 176-190 with the real checks (span.py), full run (~100 min),
+whole grey clip, the 3 cm question.
