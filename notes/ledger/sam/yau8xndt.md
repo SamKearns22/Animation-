@@ -15,3 +15,9 @@ Can I just check that you have the same FULL understanding of the project as the
 Just these
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-22T23:22:27
+This is where we left off
+
+Leave handover in file to other account and stop
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
