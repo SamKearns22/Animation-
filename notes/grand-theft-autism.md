@@ -122,6 +122,21 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 
 
 
+## Sam's decisions, 22 Nov evening (relayed by chat 38; checked in Sam's own words in its record)
+- Y: the speed-up FIRST, before the full grey run: (a) time each part of a grey frame and of the dressed still;
+  (b) the proposal route for the speed-up: the inside test as a distance grid (mesh_sdf; the exact test kept for
+  points within a few mm of the skin), triangle filling in compiled code, the house head drawn once, frames drawn 4 at
+  a time; (c) build after Sam's numbers; then the move's faults, the full run.
+- Y: add to the same proposal: (1) quick checks with no drawing over all frames first, fix, then ONE render; (2) redraw
+  only the frames a fix touches, spliced into the last clip; (3) keep rendered frames between chats (a compact bundle
+  on GitHub). Bigger computer: looked into by chat 38, none offered (4 processors, no graphics card).
+- Sam: "I need to see it in motion, don't worry about the stills, we just need to speed it up/make it quality so
+  there's no notes." NO dressed stills (the 5-stills question closed: N); the strap is checked in motion. Goal: a
+  dressed clip in motion, fast to make, good enough for no notes, watched at phone and full size before it goes.
+- Answered in chat 38 (start check's "not carried"): time estimate (16:10, 19:45; corrected to "20-40 s a frame, to
+  be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
+  render-time factors (16:46).
+
 ## Where things stand (22 Nov, chat 38, Opus high)
 - Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 2-3 (Sam's neck/strap notes); proposal route.
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art

@@ -221,3 +221,35 @@ neck_front) stretched by the raised arm; the strap (|x| 0.85-1.5) does not reach
 depth / the strap's front run in part_at, resend the still. Why not caught: no check looks at a dressed still's
 part map; the dressed still is looked at only by eye (next: a "pieces" test - each clothing part one connected
 area per side, no island under N px - proposed via the proposal route).
+
+## Stage 1, chat 39 (Opus high)
+- Gun elbow pop (1.1 s, 22.3 cm; and back, 7.0-7.2 s, 20.7): the hand path was smooth; the elbow's bend was blended
+  as a fixed way in the CAR while the hand folded in past his shoulder, so the elbow swung out and back. Now a 'rel'
+  hand also carries the elbow's own place in the CHEST's frame (each key's solved elbow, `_rel_hand`), so keys are
+  unchanged and only in-betweens move. Elbow pops 22.3 -> 13.1 (1.125 s), 19.2 -> 6.8; back 20.7 -> 11.1. Real checks
+  frames 24-33 and 166-175 clean (24: arm R/trunk 1.4, as before). Passing K2 with speed: no help (the gun hand
+  turns back at K2, low then up, so it must stop); `GUN_THROUGH` kept, harmless. What is left is speed: the gun goes
+  low -> beside his head in 0.4 s (hand 13-16 cm a frame): the 3 cm question.
+- Vest strap island (K4 still): a debug colouring (vest front / back panel / strap halves, scratch partdbg2) showed
+  the "island" was the vest's BACK panel showing over his far shoulder (he is folded forward), cut off from the strap
+  by the shoulder's outline. part_at: back neckline 7.35 -> 6.2 (a 6.9 try changed nothing). The strap now runs up
+  over the shoulder as one band. Still visible (named): a zig-zag outline notching the strap near the shoulder top
+  (a depth edge: the strap's back half beyond the shoulder), and the ragged white sliver + hooked line under the
+  chin (vest neckline against the house head). Sheet: notes/bench/k4-dressed-neck-strap.jpg (sent).
+- Getting up 0.5-1.0 s / sitting down 7.4-7.8 s, REAL checks (span.py 12-26, 174-190): BROKEN, before and after
+  this chat's changes (chat 36's fast check had the same kinds). Frames 13-23 and 179-186: legs through each other
+  ~12 cm, left arm through the left thigh 12 cm, right arm into his trunk 12 cm, pistol into his body 3.7-4.4 cm,
+  seat back 7.5 cm (20-22, 179-181), dash 4.5 (16), roof rail 2.9, knees bent 164 (limit 160). Joint pops up to 28-36
+  cm (knees). Cause: the move itself. With hips on the seat and knees drawn up (B1b), the thigh must turn from
+  pointing up to pointing down; passing level, the knee is a thigh's length (46 cm) from the hip, which throws it
+  toward the door; and the whole thing has 0.5 s (0.4 s back). Tried this chat: thighs turning smoothly (kept,
+  `THIGH_BLEND`), hips back over his heels at B2 (x 0.28, kept; seat back got worse 5 -> 7.5), in-betweens re-spaced
+  0.58/0.68/0.88 and 7.496/7.656/7.736 (kept), the free hand grabbing the door top to pull up instead of pushing on
+  the cushion (kept: 1.3 m of hand travel gone, its pops 20 -> 8), foot-led legs (worse, dropped), hips lifted for the
+  landing knees (worse, dropped). NEXT: re-plan the move from reference, not tune it: how a person really gets from
+  sitting to kneeling on a car seat fast (likely one knee at a time: the window-side knee up onto the cushion first,
+  pulling on the door top, then the other; hips rising onto the first knee), as new key in-betweens, then span.py
+  until clean. Only then the full run (~80 min) and the whole grey clip (not run this chat: its first second would be
+  these known-broken frames).
+- Why no check caught it before: the get-up was only fast-checked (joints, no skin) in chat 36 and never with span.py
+  (chat 37 skipped it). The fast check prints pops but not crossings: span.py is the gate for any in-between change.

@@ -249,8 +249,8 @@ def _key(name):
         #                       cushion, left hand pushing on the cushion beside his hip, the pistol at his chest
         return dict(pelvis=_v(0.43, 0.0, -0.05), p_up=_v(0.08, 1, -0.30), p_fwd=_v(0.25, 0, 1), c_up=_v(0.12, 1, 0.08),
                     c_fwd=_v(0.4, 0, 1), h_fwd=_v(0.7, -0.15, 1),
-                    hand={'L': (_v(0.20, SEAT_TOP + HAND_R + 0.002, -0.02), _v(-1, 0, 0.5)),
-                          'R': (_v(0.46, 1.02, 0.28), _v(1, -0.5, 0.3))},
+                    hand={'L': (_v(0.40, 0.86, 0.32), _v(-1, -0.6, 0.0)),     # chat 39: lifting off his thigh,
+                          'R': (_v(0.46, 1.02, 0.28), _v(1, -0.5, 0.3))},     # on its way up to the door top
                     aim_w=0.0, gun=_v(-0.2, 0.8, 0.6), kick=0.0, belly=0.0,
                     knee={'L': _v(0.36, 0.74, 0.34), 'R': _v(0.58, 0.74, 0.30)},
                     ankle={'L': _v(0.26, 0.40, 0.56), 'R': _v(0.46, 0.40, 0.54)}, knee_w=0.0, seat_w=1.0, leg_ik=1.0)
@@ -259,17 +259,22 @@ def _key(name):
         #                       shins can come back beside it (past its inboard edge), not through it
         return dict(pelvis=_v(0.42, 0.0, -0.03), p_up=_v(0.15, 1, -0.25), p_fwd=_v(0.6, 0, 0.8), c_up=_v(0.3, 1, 0.05),
                     c_fwd=_v(0.75, 0, 0.6), h_fwd=_v(1, -0.3, 0.6),
-                    hand={'L': (_v(0.24, SEAT_TOP + HAND_R + 0.002, 0.06), _v(-1, 0, 0.5)),
-                          'R': (_v(0.56, 1.04, 0.18), _v(1, -0.5, 0.0))},
+                    hand={'L': (_v(0.70, 1.04, 0.24), _v(0.0, -1, 0.6)),      # chat 39: reaching for the door
+                          'R': (_v(0.56, 1.04, 0.18), _v(1, -0.5, 0.0))},     # top (it pulls him up; was a push
+#                                                                               on the cushion: 1.3 m of hand travel)
                     aim_w=0.0, gun=_v(0.1, 0.9, 0.3), kick=0.0, belly=0.0,
                     knee={'L': _v(0.48, 0.78, 0.26), 'R': _v(0.64, 0.78, 0.06)},
                     ankle={'L': _v(0.06, 0.60, 0.42), 'R': _v(0.14, 0.62, 0.32)}, knee_w=0.0, seat_w=1.0, leg_ik=1.0)
     if name == 'B2':          # breakdown: knees landed on their spots on the cushion (planted from here), shins across
         #                       it, feet past its inboard edge, sitting back toward his heels, leaning to the window,
         #                       head ducked, left hand reaching for the door top, the gun up in front on his right
-        return dict(pelvis=_v(0.36, 0.0, 0.02), p_up=_v(0.45, 1, 0), p_fwd=_v(1, 0, 0.1), c_up=_v(0.9, 1, 0.05),
+        #                       (chat 39: hips back at x 0.28, over his heels, so the knees land on their spots
+        #                       instead of being thrown out toward the door; the left hand already on the door top,
+        #                       pulling him up)
+        return dict(pelvis=_v(0.28, 0.0, 0.02), p_up=_v(0.45, 1, 0), p_fwd=_v(1, 0, 0.1), c_up=_v(0.9, 1, 0.05),
                     c_fwd=_v(1, 0, 0.05), h_fwd=_v(1, -0.5, 0.05),
-                    hand={'L': (_v(0.84, 1.02, 0.18), _v(0.3, -1, 0.6)), 'R': (_v(0.66, 1.00, -0.12), _v(0.2, -0.6, -1))},
+                    hand={'L': (_v(0.93, SILL + HAND_R + 0.01, 0.17), _v(0.3, -1, 0.6)),
+                          'R': (_v(0.66, 1.00, -0.12), _v(0.2, -0.6, -1))},
                     aim_w=0.0, gun=_v(0.7, 0.3, -0.2), kick=0.0, belly=0.0,
                     knee=KNEES,
                     ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
@@ -302,9 +307,9 @@ def _key(name):
 KICK_DEG = 7.0                   # the pistol's kick: the forearm flips up this much (a real one-hand kick)
 
 
-BREAKDOWNS = [(0.60, 'B1'), (0.72, 'B1b'), (0.86, 'B2'), (1.2, 'B3'), (7.175, 'B3'), (7.512, 'B2'), (7.624, 'B1b'),
-              (7.72, 'B1')]   # in-between drawings that shape the
-#   path between two locked beats (the feet go up over the cushion's front edge, not through it); beats unchanged
+BREAKDOWNS = [(0.58, 'B1'), (0.68, 'B1b'), (0.88, 'B2'), (1.2, 'B3'), (7.175, 'B3'), (7.496, 'B2'), (7.656, 'B1b'),
+              (7.736, 'B1')]   # chat 39: the knees' landing given 0.2 s (was 0.14 s; the beats K1 0.5, K2 1.0 unchanged)
+#   in-between drawings that shape the path between two locked beats (the feet go up over the cushion's front edge, not through it); beats unchanged
 
 
 def _times():
@@ -345,7 +350,11 @@ def _abs_spec(x):
     return isinstance(x, tuple) and len(x) == 2 and not isinstance(x[0], str) and x[0] is not None
 
 
-def _herm(p, tt, s, i):
+GUN_THROUGH = {1.0, 7.4}          # K2's times: the gun hand (only) passes K2 with speed (chat 39: stopping dead
+#                                  there and whipping up made the elbow pop); the pose at K2 is still met exactly
+
+
+def _herm(p, tt, s, i, through=()):
     """Monotone cubic through four values p[0..3] at times tt[0..3], at s in [0,1] between p[1] and p[2]. A locked
     beat (not a breakdown) has zero speed (he settles on it); a breakdown is passed THROUGH with speed (no stop:
     a stop there is a pop), its speed per number made zero where the path turns back (no overshoot)."""
@@ -354,7 +363,7 @@ def _herm(p, tt, s, i):
     d = [(p[k + 1] - p[k]) / max(tt[k + 1] - tt[k], 1e-6) for k in range(3)]
 
     def tan(k):                                   # the speed at key k (1 or 2)
-        if tt[k] not in _BD_T:
+        if tt[k] not in _BD_T and tt[k] not in through:
             return np.zeros_like(p[1])
         a, b = d[k - 1], d[k]
         m = (a + b) / 2
@@ -377,17 +386,33 @@ def _pel_y(name):
     return _PELY[name]
 
 
+_THIGH = {}
+THIGH_BLEND = True
+
+
+def _thigh(name, sd):
+    """A key's own thigh way (hip -> knee, car frame, solved once)."""
+    if (name, sd) not in _THIGH:
+        o = _solve(_KEYC.setdefault(name, key(name)), fold=False)
+        _THIGH[(name, sd)] = _u(o['J']['kn' + sd] - o['J']['hip' + sd])
+    return _THIGH[(name, sd)]
+
+
 def _rel_hand(name, sd, spec):
     """A key's hand goal as an offset from his own shoulder in his chest's frame (a 'rel' goal): solved once per
     key. Blended this way, a hand on its way somewhere moves WITH his body (the shoulder carries it), so it cannot
     cut through the shoulder while the body turns and rises."""
-    if isinstance(spec, tuple) and spec and isinstance(spec[0], str) and spec[0] == 'rel':
-        return (np.asarray(spec[1], float), np.asarray(spec[2], float))
     if (name, sd) not in _ABSH:
         o = _solve(_KEYC.setdefault(name, key(name)), fold=False)
-        _ABSH[(name, sd)] = o['Rc'].T @ (o['balls'][sd] - o['J']['sh' + sd])
-    pole = spec[2] if isinstance(spec[0], str) else spec[1]
-    return (_ABSH[(name, sd)], np.asarray(pole, float))
+        _ABSH[(name, sd)] = (o['Rc'].T @ (o['balls'][sd] - o['J']['sh' + sd]),
+                             o['Rc'].T @ (o['J']['el' + sd] - o['J']['sh' + sd]))
+    hand, elb = _ABSH[(name, sd)]
+    if isinstance(spec, tuple) and spec and isinstance(spec[0], str) and spec[0] == 'rel':
+        hand = np.asarray(spec[1], float)
+    # the elbow's bend: where the key's own elbow sits from his shoulder, in his chest's frame (chat 39: a pole
+    # blended as a fixed way in the car swung the elbow out and back 22 cm a frame at 1.1 s, while the gun hand
+    # folded in past his shoulder; blended with the chest, the elbow stays down in front and the forearm swings up)
+    return (hand, elb)
 
 
 def _herm_goal(G, tt, s, fallback, names=()):
@@ -402,7 +427,9 @@ def _herm_goal(G, tt, s, fallback, names=()):
                 vs = [x[sd] for x in xs]
                 if n == 'hand' and any(isinstance(v[0], str) for v in vs):
                     rv = [_rel_hand(nm, sd, v) for nm, v in zip(names, vs)]
-                    out[n][sd] = ('rel', _herm([v[0] for v in rv], tt, s, 0), _herm([v[1] for v in rv], tt, s, 0))
+                    th = GUN_THROUGH if sd == 'R' else ()
+                    out[n][sd] = ('rel', _herm([v[0] for v in rv], tt, s, 0, th),
+                                  _herm([v[1] for v in rv], tt, s, 0, th), 'chest')
                 elif all(_abs_spec(v) for v in vs):
                     out[n][sd] = (_herm([v[0] for v in vs], tt, s, 0), _herm([v[1] for v in vs], tt, s, 0))
                 elif all(not isinstance(v, tuple) for v in vs):
@@ -447,6 +474,11 @@ def goals_at(t):
                 # the weight moving from his seat to his knees (or back): the hips' height follows a smooth path
                 # between the two poses' own heights (blending the two supports' heights jumps)
                 out['pel_y'] = float(_herm([_pel_y(k) for k in (pa, a, b, nb)], [tp, t0, t1, tn], (t - t0) / (t1 - t0), 0))
+                # ... and each thigh TURNS smoothly from one pose's way to the other's (chat 39: aiming the knee at
+                # a blended point nearer than a thigh's length overshot it into the cushion, which pushed the knee
+                # flat out 25 cm in one frame, a 54 cm pop at 0.79 s and 7.56 s)
+                out['thigh'] = {sd: _u(_herm([_thigh(k, sd) for k in (pa, a, b, nb)], [tp, t0, t1, tn],
+                                             (t - t0) / (t1 - t0), 0)) for sd in 'LR'}
             return out
     return key(T[-1][1])
 
@@ -494,6 +526,8 @@ def _hand_goal(spec, sh, chest_R, aim_dir, l_reach):
             tb, pb = _hand_goal(b, sh, chest_R, aim_dir, l_reach)
             return ta + (tb - ta) * u, pa + (pb - pa) * u
         if spec[0] == 'rel':
+            if len(spec) > 3 and spec[3] == 'chest':       # the pole is the elbow's place in the chest's frame
+                return sh + chest_R @ spec[1], chest_R @ np.asarray(spec[2], float)
             return sh + chest_R @ spec[1] * np.array([1, 1, 1]), spec[2]
         if spec[0] == 'aim':
             return sh + aim_dir * l_reach, spec[2]
@@ -662,7 +696,11 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
         dt = _u(kg - hip)
         kn = hip + dt * r['L_th']
         lik = float(np.clip(g.get('leg_ik', 0.0), 0, 1))
-        if lik > 0:
+        if 'thigh' in g and THIGH_BLEND:
+            # the weight moving seat <-> knees: the thigh's way is given (goals_at), the foot follows its goal
+            kn = hip + _u(g['thigh'][sd]) * r['L_th']
+            dt = _u(kn - hip)
+        elif lik > 0:
             # in-between drawings place the FOOT (the ankle goal is a point) and the knee follows, bending toward
             # the knee goal (two-bone IK), so a foot path round the cushion is a path the foot really takes
             kn_ik, an_ik = _two_bone(hip, np.asarray(g['ankle'][sd], float), r['L_th'], r['L_sh'], kg - hip)
