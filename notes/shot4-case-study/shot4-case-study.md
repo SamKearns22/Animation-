@@ -583,7 +583,7 @@ Every attempt, all marked FAILED:
 | real hands | 28 | hands with fingers on the door and pistol grip | FAILED (arm a thick tube, pistol a flat card, head from behind) |
 | 3D arm, pistol, head | 29 | arm, pistol and back of head drawn from the 3D body | FAILED (head reads bald from above, marks) |
 | hair and marks | 30 | buzz cut edge, the seal box, stair-steps, dots, smears | FAILED (free elbow dangles outside the door, 15.2 and 21.2 s) |
-| free elbow | 31 | moving the free hand along the door top; full-size check | FAILED, stopped unfinished by Sam's order |
+| free elbow | 31 | free hand moved 15-20 cm forward along the door top; full render (26.7 min) | FAILED, stopped by Sam's order: the elbow stayed above the sill, but at full size the window post met his mouth like a stick (15.10-15.27 s), the pistol passed his mouth (15.27), a huge flat arm over the window frame (14.93), a dark slab cut his arm (15.02); the body check stopped the clip with 11 faults. Not saved on GitHub (left uncommitted in chat 31; Sam to say keep or throw away) |
 
 What it would take (plain words, for when Sam decides): the project has never been able to draw a flat-style person
 climbing out of a moving car window and back from this camera. Doing it needs a new way of drawing (for example a
