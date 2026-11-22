@@ -36,3 +36,9 @@ K2 7.4, K1 7.8); house art style; circle hands. Sam holds the grey-clip body-che
   toward its spot by the door, left shin across the cushion front); right leg stays down, knee swung out toward the
   door; then the pull on the door top lifts his hips onto the left knee and the right knee comes round the door side
   of the left knee onto its rear spot. Same breakdowns reused backwards for sitting down (7.4-7.8 s).
+- 23:20 Two more screenshots of the other account's chat 41 (notes/bench/sam-notes/chat41-other-account-2.jpg, -3.jpg).
+  Its ORDER (worked better): HIPS LIFT FIRST, then the WINDOW-SIDE (right) knee onto the seat, then the other knee.
+  Its result: "legs no longer pass through each other"; left over: HIS HEAD HITS THE ROOF as he rises, plus a few
+  small touches; it was tuning those and drawing the in-betweens to look at when the limit hit. Its order came
+  BEFORE the two snaps in the first screenshot (left knee flips at 0.83 s, right foot crosses the seat at 0.70 s).
+  This chat: testing my order (left knee first, p1) AND rebuilding its order (p2); keeping whichever checks cleaner.
