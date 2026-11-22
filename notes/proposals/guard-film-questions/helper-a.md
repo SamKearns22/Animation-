@@ -1,7 +1,7 @@
 # Helper A: the guard stops plain film questions
 
 ## Leak
-None in the problem file. (The pack's chat.md holds the chat's own version; not used.)
+None.
 
 ## Results
 - notes/proposals/unrouted.md: 39 replies sent after a block, 15-22 Nov. My reading (full replies not kept): ~8 film
@@ -10,14 +10,12 @@ None in the problem file. (The pack's chat.md holds the chat's own version; not 
   the blocks were wrong.
 - The log only records a block the re-send did NOT fix (`log_unrouted` runs only on the second stop). The true number
   of blocks is unknown: a gap in the record.
-- Every block makes Sam read a reply twice: the Stop hook (source/propose.py `hook`) runs after the text is already
-  shown. Sam, 22 Nov (notes/ledger/sam/gr9hlufs.md): "Why did you write your response 3 times?" That case was a
-  judged proposal missing its Critiqued line, a true format catch that still cost him the repeat.
+- Every block makes Sam read a reply twice: the Stop hook (source/propose.py `hook`) runs after he sees it. Sam, 22 Nov (notes/ledger/sam/gr9hlufs.md): "Why did you write your response 3 times?" A true format
+  catch that still cost him repeats.
 - Run today: the three Milburn film questions are not changes on their own words; "Hook Text" matches "hook". Props
   stage trips via the six-lines-above rule ("run"); the other two unchecked (log cuts at 120 characters).
 - notes/proposals/guard-holes.md is marked adopted (15 Nov), yet its probe run today still misses 9 of 12 change asks
   and stops "Which hook text: 1 or 2?". The last fix was never built or was lost.
-- Cost of a re-send in % of a week: unchecked (no ledger field for it).
 
 ## The real decision
 Not "let film questions through" but: how the whole film's chats stop unjudged system asks without Sam ever reading a
@@ -26,8 +24,8 @@ questions at all (route-start asks, exact-wording faults), and a guard whose ado
 
 ## Root cause
 1. The check runs after the reply is shown, so every stop, right or wrong, is a repeat for Sam.
-2. It guesses from word lists on one line plus six lines above; it cannot tell "the 1am run" from "run a tool", or
-   Hook Text from a hook, and it treats "may I start the route?" as an unjudged change.
+2. It guesses from word lists; it cannot tell "the 1am run" from running a tool, and treats "may I start the
+   route?" as an unjudged change.
 3. The fault text says "reword the question", so chats word around it, and nothing tests it against real replies:
    the 15 Nov probe was invented questions, and the adopted widening was never checked as built.
 
@@ -54,7 +52,7 @@ Each its own yes. ~1.2% once, against 15% per film. Sam notices: no repeated rep
 ## Sam test
 Q1: an expert fixes the timing and measures on real replies before tuning words.
 Q2: scope is every logged block across films, not Milburn's five.
-Q3: the root cause is the check's timing and guessing; kittests enforce it, the probe re-run catches a fix that never lands.
+Q3: root cause named; kittests enforce it in every chat; the probe catches a fix that never lands.
 Q4: four different approaches weighed.
 Q5: each change undone alone; nothing asked of Sam before the test list passes.
 Q6: sources named; reading of each line marked unchecked.
