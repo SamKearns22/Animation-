@@ -141,3 +141,29 @@ points marked red (bench_move.py keys OUT.jpg). Viewer note: K4 from outside, hi
   No 3D twin (flat-drawing faults, nothing for a 3D check to find): pass list 1, 2, 6, 7, 9 (hiding maps,
   stair-steps, seal boxes, smears: the one-pass drawing has no pieces), 13, 15, 16 (the look: stage 2-3),
   11-12 and 14 partly (the sausage arm, the stick pistol: stranger test at full size, stage 2).
+
+## Stage 1, chat 36 (Opus high)
+- Sam (22 Nov, via chat 35, checked in its transcript): Y to a short grey clip of the working middle (1.0-6.45 s)
+  first, and Y to one rough still of K4 dressed as Jason (house look) as an early look.
+- Gun arm K2->K3 (and back): straight between the two hand goals, the hand passed through his shoulder and the
+  elbow folded to 163-165 degrees (a 33 cm snap). Fixed in the drawing: breakdown B3 (1.2 s, 7.175 s), the gun up in
+  front of his chest; hands in spans touching a breakdown are blended as offsets from his own shoulder in his
+  chest's frame (they move WITH the body); the muzzle turns up through the car's front, not out over the door top
+  (it dipped 1.8 cm into the door top at 26). Elbow range now clear at every frame (fast check).
+- Breakdowns are passed THROUGH with speed (a smooth curve, its speed zeroed where a path turns back; locked
+  beats still settle): a stop on an in-between was itself a pop.
+- Getting up (cause of the leg faults): hips and knees went from seat to kneeling in about 3 frames, so shins swept
+  through the cushion and each other. Rebuilt as a real move: B1 0.60 s rock back, feet off the floor, left hand
+  pushing on the cushion; B1b 0.72 s knees high, both feet swung up and inboard IN FRONT of the cushion; B2 0.86 s
+  knees landed on their planted spots, sitting back toward the heels, feet past the cushion's inboard edge; then
+  K2 rising. Mirror for sitting down (B2 7.512, B1b 7.624, B1 7.72). New in the solver: in-betweens place the FOOT
+  (two-bone leg, the knee bending toward its goal: `leg_ik`); a knee coming down over the cushion rests on it;
+  while the weight moves seat <-> knees, the hips' height follows a smooth path between the two poses' heights.
+- Not yet checked with the real checks (chat 37): frames 13-23 and 176-190 after the rebuild. Last fast check
+  (before the foot-placed legs): dash 6.9 cm at 16-17 (toes up into the dash: feet must stay under it, y < 0.60
+  past z 0.55), thigh L / shin R up to 10 cm at 16-18, seat back 3-5 cm and roof rail 2-3 cm at 20-22 (rising
+  too far back and up: B2's hips at x 0.36 are behind the seat back's line?). Then the full run.
+- Next for the dressed still (Sam's Y): bench_draw.still dresses the old skeleton (house head via lying_flat.draw on
+  a leanout-style pose k); for bench_move's body build k from out['J'] (pelvis, neck, head, sh/el/wr, hip/kn/an,
+  aim, fwd) and pass the solved skin P instead of BP.posed. Rough first try; the head from three-quarter behind is
+  the known open question (pass list 15).

@@ -648,3 +648,22 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: key poses test: python3 notes/bench/keytest.py (fit_seat, fit_knee, check_frame per key). Blender at
   /usr/bin/blender (not needed so far). Chat 33b's film notes round is separate (Opus medium).
 
+
+## Where things stand (22 Nov, chat 35, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
+  style; circle hands. (Breakdown poses add in-betweens only; no beat or time moved.)
+- Done: K1-K5 clean; proof on old frames; checks made exact (ear flap, own-wrist join, belly-over-door measure).
+- Next: chat 36, Opus high: finish stage 1: clear frames 15-22 (getting up) and 176-190 (sitting down), elbow
+  range 29-30/171, pops; full run (`bench_move.py run OUT`, about 55 min: add a progress line); grey clip MP4 to
+  Sam with the check table and the 3 cm question (step 4 of chat 35's job). Not shot 4.
+- Sam (22 Nov, after chat 35's handover): Y to a short grey clip of the working part (about 1.0-6.45 s) first,
+  and Y to one rough still of K4 dressed as Jason (house look) as an early look. Both relayed to chat 36.
+- Needs Sam: budget stops Y (chat 28), still open.
+- Read: notes/bench/learn-step.md ("Stage 1", "Stage 1, chat 35" and its "later"); bench_move.py MAP.
+  Open rule requests: Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
+- Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4); not lost.
+- For Claude: keytest.py (5 keys, ~1.5 min); span check: for i in range(a,b): g=goals_at(i/24); check_frame(solve(g),g)
+  (~10 s a frame); `bench_move.py keys OUT.jpg` (sheet, red = crossing points); fits stored (SEAT_Y 0.551, KNEE_R
+  0.055, ANKLE_Y 0.667). Branch claude/gta-chat31: record only (Sam's Y), not merged.
+
