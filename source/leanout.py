@@ -320,8 +320,8 @@ def door_hand(k, car=None):
 
 def draw_gun(img, cam, k, report=True):
     import humancheck as HC
-    if getattr(k, 'front', False):                        # Sam 21 Nov: no pistol in the chest hold, his hand empty
-        return
+    if getattr(k, 'front', False) and not getattr(k, 'chest_gun', False):   # Sam 21 Nov: no pistol in the chest
+        return                                         # hold (shot 4); shots 5-8 set chest_gun (Sam's v4 note N2, chat 33d)
     p = B.Pen(img, S.FLAT)
     hand, muzzle = gun_pts(k)
     d = _u(muzzle - hand)
@@ -439,6 +439,7 @@ def to_world(k, car):
         out.aim = _u(np.asarray(car.body_pt(tuple(k.aim)), float) - o)
     out.firing = getattr(k, 'firing', False)
     out.front = getattr(k, 'front', False)
+    out.chest_gun = getattr(k, 'chest_gun', False)
     return out
 
 

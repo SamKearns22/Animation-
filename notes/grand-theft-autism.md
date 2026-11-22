@@ -157,6 +157,24 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Budget stops (open since chat 28): **N**. Do not ask again.
 - Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.
 
+## Chat 33d (22 Nov, Opus medium): Sam's v4 notes
+- [x] N1 street pops out (shot 8): blocks over 160 m from the camera were dropped in one frame as the car drove off
+  (also palms 160 m, people 70 m). Now FAR58 = 600 m (buildings, palms), FAR_PEOPLE58 = 130 m (gta_shots58).
+  Why nobody saw it: every check looks at single frames; nothing compares frame to frame for things that vanish.
+  To propose (proposal route): a pop check, background pixels that change by a whole block between two drawings.
+- [x] N2 pistol (shots 5-8): leanout.draw_gun skipped the chest hold (Sam 21 Nov, shot 4); shots 5-8 now set
+  chest_gun: pistol in his fist flat on his chest at rest, barrel up and tipped inboard while the hand explains (the
+  gesture moves and times unchanged; hand shape fist all through: Lost the open palm and thumb shapes). Shot 4 untouched.
+  Shot 3 also has no pistol (the brief says "pistol flat against his chest"): NOT changed, it would pop at the 3-4 cut
+  while shot 4's K1 shows none: question for Sam.
+- [~] N3: police light-bar glow 0.75 m -> 0.42 m (gta_cars; sits on the bar now, red/blue alternate as real bars do).
+  Lucia's hands ARE on the wheel in shots 5-8 (checked full size at 35.5). Not fixed, named: Jason's skin/face (his cast
+  is shared with shot 4's Jason, untouchable); Lucia's face/braid (taste call); no necks / bonnet size (the locked
+  camera's framing hides them under the windscreen rail); vest "ONIDA" at rest (his forearm and now the pistol cover
+  "LE"); shot 4's face at the right edge 19 s and left arm 17.9 (Jason, shot 4); cruiser driver arm 19.7 and passers-by
+  arms 22.3-22.9: looked full size at 19.7 and 22.5 only, nothing a stranger would stop on there; not swept.
+- Clip tool: `grand_theft_autism.py OUT --span T0 T1` (sound cut from animations/drafts clean render).
+
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 77.66% of 15%; forecast 81.3% (2026-11-22)
 - 33c finish (22 Nov, Sam "Just go"): body check run (11 faults, named), critique r43-p1 recorded (fresh helper), finish.py
   (note: finish.py deletes its own output if written into animations/drafts: write elsewhere). Animatic 4.5 MB, sent.

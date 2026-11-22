@@ -512,9 +512,16 @@ def inside58(t, rec=None):
                           (WITHOUT - 0.05, 'thumb'), (17.6, 'palm'), (17.85, 'fist')], t)
         near_rest = min(math.dist(lh, rest), math.dist(lh, rest0)) < 0.12
         pole = LO.K1_POLE_R if near_rest else (1.0, -1.0, 0.1)     # off the chest: the elbow out and down
-        j_over['lying_hand_R'] = lshape
+        # Sam's v4 note N2 (chat 33d): "Jason needs his pistol". He keeps it in his fist all through shots 5-8: flat
+        # on his chest at rest, barrel up while that hand explains (the gestures' moves and times are unchanged; an
+        # open palm or a thumb can't hold a pistol, so the hand stays a fist round the grip).
+        j_over['lying_hand_R'] = 'fist'
+        up = smooth((min(math.dist(lh, rest), math.dist(lh, rest0)) - 0.06) / 0.12)
         JASON58['k'] = LO.seated(JASON58.setdefault('sp', GC.cast()['jason']), hand_r=lh, pole_r=pole, dx=-0.07 * th)
+        a0, a1 = np.array((0.85, 0.5, 0.2)), np.array((-0.30, 0.93, 0.20))   # barrel up, tipped inboard: in frame
+        JASON58['k'].aim = LO._u(a0 + (a1 - a0) * up)
         JASON58['k'].front = True
+        JASON58['k'].chest_gun = True
         JASON58['face'] = dict(GC.cast()['jason'], **j_over)
         R.bench(lay, cam, car)
         order = sorted([('case', (0.4, 0.7, -0.85)), ('her', her_neck), ('lucia', lu_neck)],
@@ -551,6 +558,10 @@ def seen_round_corner(cam, q):
     return abs(cz + u * (z - cz) - ZC) < 10.5
 
 
+FAR58 = 600.0          # N1: buildings and palms are drawn to the street's end (was 160 m: they popped out)
+FAR_PEOPLE58 = 130.0   # N1: passers-by to 130 m (was 70: whole groups vanished at once)
+
+
 def _world58(t, cam_fn, record=None):
     GC.cast()
     B.SS = 2
@@ -571,7 +582,9 @@ def _world58(t, cam_fn, record=None):
     for b, c in [(b, cam) for b in BLOCKS_A] + [(b, cb) for b in BLOCKS_B]:
         if c.depth((b['side'] * R.SHOP4, 1.0, b['z0'])) < -2 and c.depth((b['side'] * R.SHOP4, 1.0, b['z1'])) < -2:
             continue
-        if min(abs(b['z0'] - c.pos[2]), abs(b['z1'] - c.pos[2])) > 160 and not (b['z0'] < c.pos[2] < b['z1']):
+        # Sam's v4 note N1 (chat 33d): a 160 m limit dropped each block of the street behind in one frame as the car
+        # drove off (shot 8): the whole street is drawn now, far to near, so nothing pops out.
+        if min(abs(b['z0'] - c.pos[2]), abs(b['z1'] - c.pos[2])) > FAR58 and not (b['z0'] < c.pos[2] < b['z1']):
             continue
         d = math.dist(c.pos, (b['side'] * (R.SHOP4 + 7), b['h'] / 2, (b['z0'] + b['z1']) / 2))
         shops.append((d, b, c))
@@ -581,12 +594,12 @@ def _world58(t, cam_fn, record=None):
     items = []
     for crowd_fn, people, c, tag in ((R.crowd, PEOPLE_A, cam, 'person'), (crowd_b, PEOPLE_B, cb, 'person b')):
         for pp in people:
-            if c is cb and abs(pp['at'][1] - c.pos[2]) > 90:
+            if c is cb and abs(pp['at'][1] - c.pos[2]) > FAR_PEOPLE58 + 20:
                 continue
             x, z, F_, j_, hd = crowd_fn(pp, t + SH if crowd_fn is R.crowd else t)
             d = c.depth((x, 1.0, z))
             wq = to_world((x, 1.0, z)) if c is cb else (x, 1.0, z)
-            if 0.2 < d < 70 and seen_round_corner(cam, wq):
+            if 0.2 < d < FAR_PEOPLE58 and seen_round_corner(cam, wq):
                 sp_ = R._walker(pp['i'])
                 hgt = sp_.get('height', 1.75)
                 m_ = hgt / R.FIG_H
@@ -607,7 +620,7 @@ def _world58(t, cam_fn, record=None):
         for k, (x, z) in enumerate(palms):
             d = c.depth((x, 3.0, z))
             wq = to_world((x, 3.0, z)) if c is cb else (x, 3.0, z)
-            if 0.5 < d < 160 and seen_round_corner(cam, wq):
+            if 0.5 < d < FAR58 and seen_round_corner(cam, wq):
                 items.append((f'{tag} {k}', d, lambda im, c=c, x=x, z=z, k=k: R.palm(im, c, S.pen(im), (x, z), seed=k)))
     if R.HYDRANT:
         hx, hz = R.HYDRANT[1]

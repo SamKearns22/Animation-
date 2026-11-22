@@ -7,6 +7,7 @@ MAP
   no HOOK ...... no Hook Text (Sam)
   sound() ...... his song under the whole film: from the cut (music/monde-de-mer-full.mp3), full to the end of the opening, down to car-radio level over 0.6 s, a short fade at its end
   render ....... python3 source/grand_theft_autism.py OUT.mp4   (540 x 960, 12 drawings a second, each held 2 frames)
+  clip ......... python3 source/grand_theft_autism.py OUT.mp4 --span T0 T1   (changed seconds; sound from the clean render)
 """
 import os
 import subprocess
@@ -73,6 +74,9 @@ def main():
         silent = sys.argv[sys.argv.index('--remux') + 1]
         return mix(silent, out)
     n = int(round(LENGTH * 12))
+    if '--span' in sys.argv:                       # a short clip of the changed seconds (CLAUDE.md), the sound cut
+        a = sys.argv.index('--span')               # from the latest clean render (voice files are not in a cloud chat)
+        return clip(out, float(sys.argv[a + 1]), float(sys.argv[a + 2]))
     silent = out + '.silent.mp4'
     if t0 > 0:
         os.replace(out, out + '.old.mp4')
@@ -95,6 +99,27 @@ def main():
         os.remove(silent)
         silent = silent_new
     mix(silent, out)
+
+
+CLEAN = os.path.join(HERE, '..', 'animations', 'drafts', 'grand-theft-autism-clean.mp4')
+
+
+def clip(out, a, b):
+    """python3 source/grand_theft_autism.py OUT.mp4 --span T0 T1: the seconds T0-T1 drawn fresh, small (540 x 960),
+    with the clean render's sound for those seconds."""
+    silent = out + '.silent.mp4'
+    p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '540x960', '-r',
+                          '12', '-i', '-', '-r', '24', '-c:v', 'libx264', '-crf', '22', '-preset', 'medium',
+                          '-pix_fmt', 'yuv420p', silent], stdin=subprocess.PIPE)
+    with Pool(os.cpu_count()) as pool:
+        for fr in pool.imap(_draw, range(int(round(a * 12)), int(round(b * 12))), chunksize=1):
+            p.stdin.write(fr)
+    p.stdin.close()
+    p.wait()
+    subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', silent, '-ss', f'{a:.3f}', '-t', f'{b - a:.3f}', '-i', CLEAN,
+                    '-map', '0:v', '-map', '1:a?', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-shortest', out],
+                   check=True)
+    os.remove(silent)
 
 
 UP = '/root/.claude/uploads/77034bac-879c-5e0d-ae1f-2f0f01232e9c/'

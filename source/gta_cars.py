@@ -914,7 +914,8 @@ def draw_car(img, cam, car, t=0.0, inside=seat_people, lit=True):
                 c = car.body_pt((x, yr, zm))
                 if on and cam.depth(c) > cam.NEAR:
                     (sx, sy), k = cam.project(c)
-                    glow(img, (sx, sy), max(14, 0.75 * k), col, 0.85)
+                    glow(img, (sx, sy), max(10, 0.42 * k), col, 0.85)   # v4 N3 (chat 33d): 0.75 m pools floated
+                    #                                   above the car as a smear; 0.42 m sits on the bar
 
 
 def cover_masks(car, cam, ref, size):
