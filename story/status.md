@@ -1,7 +1,9 @@
-Grand Theft Autism, 21 Nov (chat 23): shot 4 v8 fixes in; Sam stopped the render: the backwards arm (0.9-2.4 s) is still wrong, third time.
-Next: chat 24 (Opus high) rebuilds that arm from the camera and pose first, then renders the clip.
-Needs Sam: a Y/N on the note 10 proposal, with the clip.
-
+Grand Theft Autism, chat 28 (22 Nov): shot 4 kept exactly as Sam approved; Jason's hands now real hands with fingers (door and pistol grip); back-view check now points at the drawing.
+Still broken from behind: the arm (one thick tube), the pistol (flat card: a stick or blade edge-on), the back of the head.
+Next: chat 29, Opus high: build the arm, the pistol and the back of the head from 3D, then a clip of 14.1-22.3 s. Needs Sam: his own Y here to switch off budget stops.
+Grand Theft Autism, chat 27 (21 Nov): shot 4's camera re-aimed (never Jason's back, nobody through the lens); new back-view check in the body check.
+Clip of shot 4 sent to Sam. Open: the crowd at the fireball (F6), hands (F13), shot 6 framing (F12), critique r27 list.
+Next: chat 28, Opus high: F6 first, then F15, the palm at the cut, hands and shot 6 through the proposal route.
 Grand Theft Autism (21 Nov, chat 25): animatic v3 sent with checks skipped on Sam's order; Sam says shot 4 onward is riddled (hands, Jason jumps at 4->5).
 Next: Opus high, full-size frame check from shot 4 on, with every check on, then fix shot 4 and the Jason body swap.
 Handover is in notes/grand-theft-autism.md "Where things stand".

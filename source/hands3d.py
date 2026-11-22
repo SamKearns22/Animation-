@@ -211,7 +211,7 @@ def nail_meshes(side, x, palm_x, palm_back, origin):
 
 
 # ------------------------------------------------------------------------------------------- the flat renderer
-def render(meshes, size, to_px, light=(-0.3, 0.5, 0.85), eye_d=0.45, outline=3.0, hide=(9,)):
+def render(meshes, size, to_px, light=(-0.3, 0.5, 0.85), eye_d=0.45, outline=3.0, hide=(9,), flat=False, crease=0.3):
     """Draw meshes [(V, tris, colours per kind, id)] in our flat style onto an RGBA layer of `size`.
     to_px(X, Y) maps the prop frame (metres, at Z = 0) to layer pixels; points nearer the viewer (Z > 0) are
     drawn a little larger (a mild perspective, eye_d metres away). Meshes whose id is 0 only hide what is
@@ -262,7 +262,7 @@ def render(meshes, size, to_px, light=(-0.3, 0.5, 0.85), eye_d=0.45, outline=3.0
     # flat shading: one light tone, one shadow tone
     nn = nbuf / np.maximum(1e-9, np.linalg.norm(nbuf, axis=2))[..., None]
     lit = nn @ L
-    shade = np.where(lit > -0.05, 1.0, 0.88)
+    shade = np.where(lit > -0.05, 1.0, 1.0 if flat else 0.88)   # flat: no shadow tone (the house's flat limbs)
     rgb = cbuf * shade[..., None]
     # outlines: where the thing drawn changes, where the depth jumps (one finger over another), where the surface
     # turns sharply away (the creases at the knuckles)
@@ -272,7 +272,7 @@ def render(meshes, size, to_px, light=(-0.3, 0.5, 0.85), eye_d=0.45, outline=3.0
         a_z, b_z = zbuf, np.roll(np.roll(zbuf, dy, 0), dx, 1)
         a_n, b_n = nn, np.roll(np.roll(nn, dy, 0), dx, 1)
         e = (a_i != b_i) | ((np.abs(a_z - b_z) > 0.004) & (a_i > 0) & (b_i > 0))
-        e |= ((a_n * b_n).sum(2) < 0.3) & (a_i > 0) & (b_i > 0) & (a_i == b_i)
+        e |= ((a_n * b_n).sum(2) < crease) & (a_i > 0) & (b_i > 0) & (a_i == b_i)
         edge |= e
     drawn = (ibuf > 0) & ~np.isin(ibuf, hide)
     mask = Image.fromarray((drawn * 255).astype(np.uint8))

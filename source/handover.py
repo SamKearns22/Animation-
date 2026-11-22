@@ -595,6 +595,16 @@ def push_faults(rec):
             'and when a render or long job finishes or fails (CLAUDE.md, Models and chats)']
 
 
+def dearest_faults():
+    """Cost audit (Sam, 21 Nov): the weekly ranking of the dearest things (source/dearest.py week --open) is due."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    try:
+        import dearest
+        return dearest.due()
+    except Exception as e:
+        return [f'DEAREST: the ranking could not run ({e})']
+
+
 def ledger_faults(film, rec=None):
     """Status check (Sam, 21 Nov): the budget tracker's record of notes, repeated notes and finished stages. On Grand
     Theft Autism every chat's row read 'auto, 0 notes, 0 repeats' (nobody ran `ledger.py log`), and none of the 11
@@ -614,6 +624,11 @@ def ledger_faults(film, rec=None):
     if row and row.get('stage') in ('auto', '', None):
         out.append(f'LEDGER: this chat never logged its stage and Sam\'s notes: run python3 source/ledger.py log {film} '
                    '--stage STAGE --notes N [--repeat "the note | what would have caught it"] (0 notes is fine if none came)')
+    if row and row.get('repeats_maybe') and not row.get('repeats'):   # cost audit (Sam, 21 Nov): notes counted for him
+        for n in row['repeats_maybe'][:3]:
+            out.append(f'REPEAT?: Sam\'s note "{n}" matches one in the film\'s notes from before (rule 30): if it is a '
+                       f'repeat, find why the first fix failed and log it (ledger.py log {film} --repeat "note | what would '
+                       'have caught it"); if not, say so in the notes')
     o = ledger.open_stage(d)
     if o:
         i, s, share, spent = o
@@ -762,7 +777,7 @@ def main(argv):
         return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
                       + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
                       + sentence_faults() + freeze_faults() + cost_faults(film, opt('--notes'))
-                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + push_faults(rec)
+                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + push_faults(rec) + dearest_faults()
                       + tag_faults(film, opt('--notes')) + record_faults(rec)
                       + (end_stamp(rec) or []),
                       f'(end of chat, {film})')

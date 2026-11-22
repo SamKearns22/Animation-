@@ -3593,9 +3593,50 @@ def body_check_shot4_v4():
         V.person(Image.new('RGBA', (1200, 1100)), B.Cam(1.0, 540, 960), 600, 330, 0.62, PG.MODEL, 0.0, float(deg),
                  build(PG.MODEL))
         g += HC.frame_end(0.0)
-    s3_real = {(who, k) for _, who, k, _ in s3}
-    ok = {'order', 'aim'} <= kinds and s3_real == {('Lucia', 'crossed'), ('The autistic woman', 'crossed')} and not g
-    return ok, f'version 4 Jason: {sorted(kinds)}; shot 3: {len(s3)} faults; gallery: {len(g)} false flags'
+    import gta_rehearse as Rn                     # chat 27: version 4's own shot 3 really had Lucia's arms crossed
+    s3 = _body_faults(Rn.shot3, (0.5, 1.5, 2.5))  # (v4 note 1, caught since chat 23): today's shot 3 must be clean
+    ok = {'order', 'aim'} <= kinds and not s3 and not g
+    return ok, f'version 4 Jason: {sorted(kinds)}; shot 3: {len(s3)} faults {sorted({x[2] for x in s3})}; gallery: {len(g)} false flags'
+
+
+V3_COMMIT = '9067f25d'                  # GTA animatic v3 as Sam saw it (chat 26): Jason's back at 15.4 and 18.3 s
+V3_BACK = (1.3, 4.2)                    # shot 4's own clock (film 15.4 F1, 18.3 F5)
+
+
+@test
+def body_check_back_view():
+    """GTA v3 F1, F5, F7 (chat 27; changed chat 28 after Sam, 21 Nov: "a great shot but a broken drawing"): a person
+    seen big from behind must be DRAWN to read from behind; the camera of an approved shot never moves. The body check
+    must flag Jason's back in animatic v3's shot 4 (15.4 and 18.3 s) with advice that points at the drawing (never
+    "choose another camera"), flag a big flat figure drawn from behind and pass the same figure from the front."""
+    import importlib.util
+    import subprocess
+    import tempfile
+    from PIL import Image
+    import posegallery as PG
+    import body as B
+    import views as V
+    import humancheck as HC
+    src = subprocess.run(['git', 'show', f'{V3_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
+                         capture_output=True, text=True, check=True).stdout
+    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v3.py')
+    with open(tmp, 'w') as fh:
+        fh.write(src)
+    spec = importlib.util.spec_from_file_location('gta_rehearse_v3', tmp)
+    R3 = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(R3)
+    old = [x for x in _body_faults(R3.shot4, V3_BACK) if x[1] == 'Jason' and x[2] == 'back view']
+    said = ' '.join(str(v) for x in old for v in x[3:])
+    to_drawing = 'DRAWING' in said and 'another camera' not in said
+    flat = {}
+    for deg in (0.0, 180.0):
+        HC.frame_begin()
+        V.person(Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), 540, 500, 0.6, PG.MODEL, 0.0, deg,
+                 V.standing(PG.MODEL))
+        flat[deg] = [x for x in HC.frame_end(0.0) if x[2] == 'back view']
+    ok = len(old) == 2 and to_drawing and flat[180.0] and not flat[0.0]
+    return ok, (f'v3 Jason back views: {len(old)} of 2; advice points at the drawing: {to_drawing}; big figure from '
+                f'behind flagged: {bool(flat[180.0])}, from the front: {bool(flat[0.0])}')
 
 
 @test
@@ -3730,6 +3771,45 @@ def body_check_headless():
     _, f_k1 = LO.draw_view(sp, LO.pose('K1', sp), 45)
     caught = any('no head' in f for f in f_old)
     return caught and not f_k1, f'old K2 at 3/4: headless caught {caught}; K1 at 3/4: {len(f_k1)} faults'
+
+
+
+@test
+def dearest_things_named():
+    """Cost audit (Sam, 21 Nov: "audit every last thing done in order to find the most expensive things and run it
+    through the proposal route"): GTA's record filed 69% of its cost as "other". Every dollar of a chat must now carry a
+    plain name (thinking, writing code, reading notes, critique helpers ...) that adds up to the bill, the film's GTA
+    code (gta_*.py) counts as film code, and the five dearest open as proposals that pass the route's own check."""
+    import glob as G
+    import io
+    import contextlib
+    import stepcost
+    import dearest
+    out = []
+    fr = stepcost._film_paths('grand-theft-autism')
+    if not fr.search('python3 source/gta_rehearse.py'):
+        out.append("GTA's gta_*.py files are not counted as the film's own code")
+    mine = sorted(G.glob(os.path.expanduser('~/.claude/projects/*/*.jsonl')), key=os.path.getmtime)
+    for p in ['tests/stepcost-transcript.jsonl'] + mine[-1:]:
+        sp = stepcost.split(os.path.join(os.path.dirname(HERE), p) if not p.startswith('/') else p, 'grand-theft-autism')
+        if not sp or not sp.get('named'):
+            out.append(f'{p}: no named split')
+            continue
+        if abs(sum(sp['named'].values()) - sum(sp['origins'].values())) > 1.0:
+            out.append(f'{p}: the named parts do not add up to the bill')
+        if sp['named'].get('other tool results', 0) + sp['named'].get('unexplained', 0) > 10:
+            out.append(f'{p}: over 10% still unnamed')
+    with contextlib.redirect_stdout(io.StringIO()) as buf:
+        ok = dearest.test()
+    if not ok:
+        out.append('dearest.py test: ' + ' | '.join(ln for ln in buf.getvalue().splitlines() if ln.startswith('FAIL')))
+    import ledger                                   # the notes problem: Sam's notes counted from his own words
+    n, maybe = ledger.count_notes(os.path.join(os.path.dirname(HERE), 'notes/ledger/sam/negkzryt.md'), 'grand-theft-autism')
+    if n < 10:
+        out.append(f'GTA chat with 10 of Sam\'s messages counted only {n} notes')
+    if not any('gun' in m or 'fires' in m for m in maybe):
+        out.append('the gun note Sam gave before (the gun not pointing at the target) is not flagged as a possible repeat')
+    return not out, '; '.join(out) or 'every dollar named; five dearest ranked; Sam\'s notes counted, repeats flagged'
 
 
 

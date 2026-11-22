@@ -19,6 +19,9 @@ gun drawn pointing away from its target. So this tests what is drawn, where it i
                     end-on to the lens (a stub); GTA v7 notes 4 and 10
   headless ........ in frame_end: every person reported has a head drawn after it (views.head_view reports each
                     head); GTA chat 20: a drawing the figure guard stopped halfway showed a body with no head
+  _backview ....... a person seen from behind (turned more than BACK_DEG from the lens), big in frame: Seeing like
+                    Sam 4, a view our flat drawings cannot carry (GTA v3 F1, F5, F7: Jason's back, "a tube with a
+                    round end", "the back of his head, huge"; F6: the big passer-by with his back to us)
   aim ............. a film reports a fired gun as drawn (muzzle, barrel and target on screen): more than 10 degrees
                     off its target is a fault
   Writer .......... per clip: collects faults per person and kind, writes OUT.bodycheck.txt, refuses (holds the
@@ -99,8 +102,10 @@ def frame_end(t):
                 out += [(who, k, x) for k, x in _order(e)]
                 out += [(who, k, x) for k, x in _joined(e)]
                 out += [(who, k, x) for k, x in _crossed(e)]
+                out += [(who, k, x) for k, x in _backview(e)]
             elif e['kind'] == 'skeleton':
                 out += [(who, k, x) for k, x in _lying(e)]
+                out += [(who, k, x) for k, x in _backview(e)]
         except Exception as ex:                    # a check that cannot run is said, never silent
             out.append((who, 'check', f'body check could not run ({type(ex).__name__}: {ex})'))
     out += [(who, 'head', 'drawn with no head (the drawing stopped before it, or the head was skipped)')
@@ -185,6 +190,8 @@ def _crossed(e):
     j, j2 = e['j'], e['j2']
     if j.get('folded') or not all(k in j2 for k in ('shL', 'shR', 'elL', 'elR', 'wrL', 'wrR')):
         return []
+    if abs(abs(e.get('view_deg', 0)) % 180 - 90) < 1:     # side on, the shoulders one over the other: a walker's arms
+        return []                                         # swinging fore and aft are not crossed (GTA chat 27: 8 flags)
     mid = (j2['shL'][0] + j2['shR'][0]) / 2
     side = lambda sd: (j2['sh' + sd][0] - mid) * (j2['wr' + sd][0] - mid) < 0
     def cut(a, b, c, d):
@@ -235,11 +242,65 @@ def _joined(e):
 STRETCH = (0.35, 1.25)        # a drawn arm piece shorter or longer than this x its rig length (after perspective)
 
 
+BACK_DEG = 100.0      # turned further than this from the lens: we see his back (v3 F1 at 15.4 s measured 107)
+HEAD_BACK_DEG = 120.0 # a face turned further than this from the lens: we see the back of the head
+BIG_SKEL = 0.10       # skeleton people: neck to pelvis longer than this share of the frame's height is big (a
+                      # whole body about a third of the frame: rule 24's Glimpse limit)
+BIG_FLAT = 0.11       # flat people: head to soles taller than this share of the frame's height (v3 F6: the man
+                      # with his back to us at 20.1 s is 12%; far people are drawn once at 9.4% and only shrunk)
+FIG_UNITS = 1128.0    # a flat figure's whole height in its own units (views: head top to soles)
+
+
+def _backview(e):
+    """A person turned away from the lens, big in frame and on screen, must be DRAWN to read from behind (Sam, 21 Nov:
+    "a great shot but a broken drawing"; CLAUDE.md "Fix the drawing, never the shot": the camera of an approved shot
+    never moves). The fault names what a back view needs: real hands (fingers, not a circle), the arm narrowing to an
+    elbow and a wrist, and the back of the head with a hairline and the neck running into the shoulders. Skeleton people: the trunk's turn from the lens (and the face's); flat people: their
+    drawn turn. Returns [(kind, text)]."""
+    import numpy as np
+    out = []
+    if e['kind'] == 'skeleton':
+        import lying_flat as LF
+        k, cam = e['k'], e['cam']
+        X, up, fwd = LF.frame(k)
+        mid = (k['neck'] + k['pelvis']) / 2
+        yaw = abs(LF.yaw_seen(LF._unit(np.asarray(cam.pos, float) - mid), X, fwd))
+        dh = LF._unit(np.asarray(cam.pos, float) - k['head'])
+        hoff = math.degrees(math.acos(float(np.clip(np.dot(LF._unit(k['hfwd']), dh), -1, 1))))
+        n, pv = np.array(cam.P(tuple(k['neck']))), np.array(cam.P(tuple(k['pelvis'])))
+        hd = np.array(cam.P(tuple(k['head'])))
+        share = float(np.linalg.norm(n - pv)) / 1920.0
+        r = max(float(np.linalg.norm(n - pv)), float(np.linalg.norm(hd - n)))   # the drawing reaches this far past
+        seen = any(-r < q[0] < 1080 + r and -r < q[1] < 1920 + r for q in (n, hd, pv))   # its joints (F5: a head cut by the edge)
+    elif e['kind'] == 'flat':
+        if e.get('size') is None or e.get('x') is None:
+            return out
+        w, h = e['size']
+        if w * 16 != h * 9:                    # drawn into a cache picture (far people), not the frame: too small
+            return out
+        yaw = abs((float(e.get('yaw', e['view_deg'])) + 180) % 360 - 180)
+        hy = e.get('head_yaw')
+        hoff = abs((float(yaw if hy is None else hy) + 180) % 360 - 180)
+        share = e['s'] * FIG_UNITS / h
+        seen = -0.05 * w < e['x'] < 1.05 * w and -0.05 * h < e['y'] < 1.05 * h
+    else:
+        return out
+    big = share > (BIG_SKEL if e['kind'] == 'skeleton' else BIG_FLAT)
+    if seen and big and yaw > BACK_DEG:
+        out.append(('back view', f'seen from behind ({yaw:.0f} degrees turned from the lens, {share:.0%} of the '
+                                 f'frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), '
+                                 f'arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders'))
+    elif seen and big and hoff > HEAD_BACK_DEG:
+        out.append(('back view', f'the back of the head to the lens ({hoff:.0f} degrees), big in frame: draw the '
+                                 f'back of the head (hairline at the nape, ears, the neck into the shoulders); never move the camera'))
+    return out
+
+
 def _limbs(e):
     """The drawn arm's proportions (GTA v7 notes 4 and 10, "a gross distended sausage", "the forearm folds back into an
     L of flesh"): each arm piece as drawn on screen against the rig's length at the size the arm is drawn (lying_flat
     draws a near arm bigger). Longer than 1.25x reads as a sausage; shorter than 0.35x points at the lens and the flat
-    drawing shows a stub. Both are camera faults first (lesson 22): move the camera or the pose. Off-screen: skipped."""
+    drawing shows a stub. In an approved shot the camera never moves (Sam, 21 Nov): fix the pose or the drawing. Off-screen: skipped."""
     import numpy as np
     import body as B
     import figure as F

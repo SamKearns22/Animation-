@@ -395,7 +395,9 @@ def reply_faults(reply, touched=()):
     if not asks:
         return []
     names = sorted(n for n in set(touched) | set(PROP_RE.findall(reply))
-                   if n != UNROUTED[:-3] and not n.startswith('review-'))
+                   if n != UNROUTED[:-3] and not n.startswith('review-')
+                   and (n in PROP_RE.findall(reply) or os.path.exists(_p(n + '.md'))))   # cost audit, 21 Nov: a proposal
+    #                deleted this turn (or a glob like dearest-week-*.md in a command) is not one the reply asks about
     faults = []
     for name in names:
         ok, v = verdict_ok(name)
@@ -515,6 +517,12 @@ def review(film, since=None):
            '`propose.py new`, the route). Nothing temporary: a change is kept or properly replaced.', '']
     for head, files in changes:
         out.append(f'- {head} ({", ".join(files[:6])}{" ..." if len(files) > 6 else ""}): ')
+    import dearest                                 # cost audit (Sam, 21 Nov): the five dearest things, each a proposal
+    text, _, _ = dearest.report(film)               # Sam, 21 Nov: suggested to him first; the route only on his picks
+    named, _ = dearest.suggestions(film)
+    out += ['', '## The five dearest things (source/dearest.py): suggest them to Sam, numbered', '', text, '']
+    out += [f'{i}. {k} ({v:g}% of a week)' for i, (k, v, _) in enumerate(named, 1)]
+    out += ['', f'Open only the ones Sam picks: python3 source/dearest.py {film} --open N,N (then the route on each)']
     f = _p(f'review-{film}.md')
     os.makedirs(PROPS, exist_ok=True)
     open(f, 'w').write('\n'.join(out) + '\n')
