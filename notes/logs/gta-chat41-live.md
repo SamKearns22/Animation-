@@ -49,3 +49,10 @@ K2 7.4, K1 7.8); house art style; circle hands. Sam holds the grey-clip body-che
   lands further back (legs at 0.83-0.92 gone); NEW: left knee folded up into his belly 0.63-0.75 (thigh into trunk
   12 cm), right foot/leg folded too tight at 0.83 (knee 161 deg). Next: sit him more upright while the left knee
   comes up, ease the right leg's fold.
+- 23:25 p3 (left-knee-first, tuned): worse (seat back, right leg into trunk). DROPPED the left-knee-first idea.
+  p4 = the other account's order (hips up first, right knee to its rear spot, then left knee over the cushion
+  front): BEST SO FAR. 0.71-0.96 s nearly clean (pistol in body ~1 cm). Left: 0.58 thighs into belly (leaning
+  forward as hips rise), 0.625 right knee into the seat 8.5 cm, 0.667 right foot/leg into door/floor, knee R 160,
+  0.71 head into roof / A pillar / roof rail 1.7-3.4 cm.
+  CODE CHANGE in source/bench_move.py (needed for p4): a 'lift' goal (hips raised off the seat while still
+  seated; default 0 on every key, so frames outside the get-up/sit-down are unchanged).

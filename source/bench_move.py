@@ -225,6 +225,7 @@ def key(name):
     """A key pose as goals (car frame, metres). Reference letters: notes/bench/l3-reference.jpg."""
     k = _key(name)
     k.setdefault('leg_ik', 0.0)
+    k.setdefault('lift', 0.0)     # chat 41: hips lifted off the seat this much (metres) before the knees take him
     return k
 
 
@@ -639,6 +640,7 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
     pel[1] = (1 - w) * y_seat + w * float(np.mean(y_knee))
     if 'pel_y' in g:
         pel[1] = g['pel_y']
+    pel[1] += float(g.get('lift', 0.0)) * (1 - w)
     if w > 0:                                   # kneeling unevenly, the hips tip to the side so BOTH knees rest
         dy = (y_knee[0] - y_knee[1]) * w        # the L hip wants to be this much higher than the R hip
         hw = np.linalg.norm(hipoff['L'] - hipoff['R'])
