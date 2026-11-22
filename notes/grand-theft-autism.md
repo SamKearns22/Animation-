@@ -90,22 +90,7 @@ moves 11.3, animatic1 2.1, round1 9.4, round2 2.4, final 0.35. Full table: notes
   turn, eyes and face sliding toward where they look) so they express more. Applies to all three people, shots 5-8.
 - [ ] 2. Jason always faces forward while he indicates other things: his head and look should go to what he points at.
 - [ ] 3. Jason's arm poses need work (gestures in shot 6: free hand opening, counting, open palm toward her).
-- Sam then: "Actually don't handover just continue here" (chat 19, switched to Opus). Done in chat 19:
-  every look is the focus kit now (J_FOCUS, L_FOCUS, H_FOCUS keys in gta_shots58, eyes lead 0.17 s); found and fixed:
-  the old looks went the WRONG way (Lucia's turn to Jason and both "eyes slide to each other" on nitroglycerin looked
-  away from each other: + is screen right). Jason: to Lucia on the yank, back at her on line 3, to Lucia on "I told
-  you" (eyes shut), thumb back at her on "Her", hand up explaining to Lucia with beats on home/made/explosives, palm
-  up on "this job", thumb back at her on "without her", then forward, fed up. His gestures moved to the window side,
-  forearm upright beside his face (from the inner side they crossed his chest: a thick diagonal arm). Lucia: to
-  Jason on "you", a jerk back at her on "brought her", glance on "told you", eye-roll on "hyperfixation", side-eye
-  on "without her", eyes to the mirror in shot 7. Her: headshake on "didn't", at the driver on "like that", at Lucia
-  during line 4, eyes drop on "brought her", at Jason on "hyperfixation", proud smile on "explosives"/"without her".
-  Lost: Jason "looking forward" through line 5 (Sam's script); his note overrides it.
-  Clip v2 sent ~23:57 (4.9 MB, ~14 min render; shot 7 first refused by the figure check: elbow folded across his
-  chest as the hand came down; fixed with the elbow 'out' then). Waiting for Sam's notes on v2.
-  Critique r19-p1 named to Sam: the thumb reads as a plain circle (house circle hands); the face slides are subtle at
-  phone size (kept strength, Sam refused 1.7x); P3 'eyes open' was a false alarm. Older, not this note: bonnet
-  stripes read as legs, the windscreen glare over Lucia's eye.
+- Chat 19's done list (the focus-kit looks, clip v2): moved to notes/archive/grand-theft-autism-notes.md (chat 33).
 
 ## Shot 4 v7: Sam's notes on the clip (chat 22, 21 Nov; pictures notes/shot4-case-study/sam-v7/)
   set right in the car's frame (left hand at 10 o'clock, right at 2), so the crossing is probably in how the figure's
@@ -196,11 +181,11 @@ list of attempts is in the case study, section 17.
 ## Chat 32 (22 Nov): Sam's new job, learn the skill in a test space (plan first, nothing built)
 Sam: "You need to learn how to use 2.5d or 3d animation to make this movement work. Create a test space where it is just
 Jason in his sitting pose, and the window." Checklist (his words, each to be ticked against the test space):
-- [ ] test space: only Jason in his sitting pose and the window
+- [x] test space: only Jason in his sitting pose and the window (chat 33: still only, notes/bench/)
 - [ ] a skeleton that can move in 3D
 - [ ] the move with no clipping
-- [ ] camera unchanged (shot 4's)
-- [ ] hand style unchanged (house circle hands)
+- [x] camera unchanged (shot 4's) (chat 33 still)
+- [x] hand style unchanged (house circle hands) (chat 33 still)
 - [ ] art style unchanged, blends into the scene naturally
 - [ ] the skill serves all future complex human moves in showstopper shots
 - [x] research and explain the plan before beginning (proposal solid-body-moves)
@@ -211,18 +196,52 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
       then built fingered hands and its code comment credits those words to Sam. Nobody asked Sam; no proposal. Why no
       check caught it: nothing compares a frame's hands (or any house part) against the house look. Lesson to propose.
 
-## Where things stand (22 Nov, chat 32, Opus)
-- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
-- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3, shot 4's camera included; the script;
-  the 8 shots' order and lengths.
-- Done: shot 4's 14 attempts marked FAILED (case study 17); Sam's test-space job recorded (chat 32 section); why the
-  hands changed found; proposal solid-body-moves judged (two options sent to Sam, judge picked option 1).
-- Next: chat 33, Opus high: the learn step L1-L3 of option 1 (Sam's Y) (notes/proposals/solid-body-moves.md),
-  ending with the side-by-side still to Sam. Sam said Y to installing Blender. Alongside: chat 33b, Opus medium: F6, F12,
-  F15 and shots 5-8 notes (never shot 4's Jason).
-- Needs Sam: budget stops Y (chat 28), still open.
-- Read: notes/proposals/solid-body-moves.md (verdict); chat 32 section. Open rule requests: Sam's held-object check
-  (draft); house-look lock (option 1 step 4, its own proposal).
-- For Claude: handover check's SENTENCE line is the known false alarm (in CLAUDE.md, Seeing like Sam 4). Chat 30's FAILED section moved to the archive notes. Chat 31's uncommitted DOOR_L change sits in session_01GznaAVRjtm1nmzn6nuRJJ6 (branch claude/gta-chat31).
+## Chat 33 (22 Nov, Opus high): learn step L1-L3 done (notes/bench/learn-step.md)
+- L1: pass list of 24 shot-4 Jason notes/faults by cause (10 hiding, 7 look, 7 motion), each with the bench check that
+  must catch it; shot 4 cost about 39% of a week (62% of the film's spend).
+- L2: Blender installed and draws here (no graphics card needed for its fast engine). One frame both ways, same 3D Jason:
+  ours 5.6 s, Blender 4.2 s; both found the same 2 crossings (seat 7.4 cm, pistol 4.8 cm into his chest). Pick: ours, by
+  the picture (Blender: stray chin line, doubled lines, broken outlines). Sheet sent to Sam: notes/bench/l2-side-by-side.jpg.
+- L3: CMU has no car move; 3 stock clips found but not watched (previews would not play here); no key poses marked.
+  Asked Sam to film the move in a parked car (question 2).
+- [ ] Sam's Y for stage 1 (the grey-figure move) and his answers to questions 1-2 (below).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 61.7% of 15%; forecast 69.7% (2026-11-22)
+## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (alongside chat 33)
+Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths. Not touched:
+Jason's movement in shot 4 (FAILED, chat 33's job).
+- [x] F12 grey panel over Lucia: the windscreen's sky streak is now drawn only over the street seen through the glass,
+      never over a person (shots 3-8). Why unseen: the layer check tests what is in front of what, not whether a
+      see-through layer hides a face; the critique caught it (r26), nobody acted. Fixed in the car's glass drawing.
+- [x] F12 "bare circle on his chest" (shots 5-8): after his brace in shot 5 Jason settles with the forearm laid
+      across his chest, hand flat on it (no pistol, Sam 21 Nov); shot 5 opens on shot 4's own rest so the cut holds.
+      Why: the old rest had the forearm pointing at the lens (only the hand circle showed). Not changed: house circle
+      hands (the "mitten" thumb at 29-31 s is the house thumb shape; kept, Sam's order).
+- [~] F15 bonnet stripes as trousers: kept black (Sam's brief), but the grey middle scuffs (read as pockets) became
+      small red chips at the stripes' edges, and one paint shine now crosses the whole bonnet, stripes and red alike,
+      so they read as paint on a shiny panel. Sam to judge in the clip.
+- [x] F6 still crowd at the fireball: the man 5-18 m from the blast ran straight at the lens (legs and arms swinging
+      in depth, unreadable flat), so read as standing. Runners on the crash's pavement now run at a slant for the
+      shop doorways (stride side-on) with hands over their heads. Why unseen three times: the fix was measured
+      ("is he running?") not looked at from the camera (Seeing like Sam 1 and 4). Lesson to propose: a runner's or
+      walker's direction within 25 degrees of the lens line is a fault the body check names.
+- F12 "half the frame is bonnet": that is shot 6's camera, locked; drawing-only answer is the bonnet shine above.
+- Shots 5-8 notes 1-3 (chat 19): done in chat 19, waiting on Sam's word since clip v2; they stay open for his tick.
+- Clips: no short-clip command exists for this film (grand_theft_autism.py renders the whole film); used a one-off
+      script in the chat's scratch space. Tool gap to propose: a --span option.
+
+
+## Where things stand (22 Nov, chat 33, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera included; the house art style; circle hands.
+- Done: L1-L3 (notes/bench/learn-step.md); side-by-side still sent to Sam with the pick (our one-pass drawing).
+- Needs Sam: 1 Y/N stage 1 (grey-figure move on the bench) with our drawing; 2 Y/N he films the lean-out in a parked
+  car (10 s, from in front); budget stops Y (chat 28), still open.
+- Next: on Sam's Y, chat 34, Opus high: stage 1 (notes/proposals/solid-body-moves.md "Then one change"): the move as a
+  grey figure, IK contacts, crossings 0 incl. body against itself, every check proven on the pass list's old frames.
+  Chat 33b (Opus medium, F6/F12/F15, shots 5-8) is separate; its work is merged (its section above).
+- Read: notes/bench/learn-step.md; proposal solid-body-moves (Final version). Open rule requests: Sam's held-object
+  check (draft); house-look lock (option 1 step 4, its own proposal).
+- For Claude: bench code source/bench_pose.py, bench_draw.py (still / blender), bench_blender.py; Blender at
+  /usr/bin/blender (apt, not in setup.sh yet). Chat 31's uncommitted DOOR_L change: session_01GznaAVRjtm1nmzn6nuRJJ6.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 63.62% of 15%; forecast 69.7% (2026-11-22)
