@@ -6168,54 +6168,54 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.69,
+   "cost": 2.97,
    "src": "estimate",
    "sid": "session_01U3pKQyM6KwJ9VCHUrPtX7S",
-   "steps": 22,
-   "hist_k": 111,
+   "steps": 27,
+   "hist_k": 114,
    "kinds": {
-    "tool search": 15.1,
-    "other": 84.9
+    "tool search": 14.9,
+    "other": 85.1
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 14,
+    "tool search": 17,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 12
+    "other": 13
    },
    "split": {
-    "usd": 0.9474,
-    "total": 0.9474,
+    "usd": 1.089,
+    "total": 1.089,
     "floor_k": 83,
     "blocks": {
      "start-up floor": 53.4,
-     "new writes": 23.8,
-     "Claude's words": 16.5,
-     "carried history": 6.3
+     "new writes": 22.5,
+     "Claude's words": 16.2,
+     "carried history": 7.9
     },
     "origins": {
      "start-up floor": 53.4,
      "Claude's words": 23.0,
-     "messages and reminders": 11.2,
-     "result: tool search": 7.6,
-     "result: other": 4.7
+     "messages and reminders": 11.4,
+     "result: tool search": 7.3,
+     "result: other": 4.9
     },
     "named": {
      "start-up reading (rules, tools, first files)": 53.4,
-     "messages and reminders": 11.2,
-     "helper and chat prompts": 9.7,
-     "commands": 8.8,
-     "start-up and handover tools": 6.6,
-     "helper results": 4.6,
-     "thinking": 2.5,
-     "messages to Sam": 1.1,
+     "messages and reminders": 11.4,
+     "helper and chat prompts": 9.5,
+     "commands": 9.3,
+     "start-up and handover tools": 6.3,
+     "helper results": 4.7,
+     "thinking": 2.2,
+     "messages to Sam": 1.2,
      "reading notes": 1.0,
-     "writing code": 0.9,
-     "other commands": 0.2
+     "writing code": 0.8,
+     "other commands": 0.1
     },
     "leftover": 0.0
    },
@@ -6227,25 +6227,25 @@
      [
       "notes/proposal-route.md",
       2.2,
-      0.0253
+      0.0272
      ],
      [
       "source/propose.py",
       1.8,
-      0.02
+      0.0217
      ],
      [
       "notes/proposals/could-not-test.md",
       0.5,
-      0.0054
+      0.0059
      ],
      [
       "notes/proposals/brow-limit/state.json",
       0.4,
-      0.0039
+      0.0043
      ]
     ],
-    "base_pct": 33.4
+    "base_pct": 35.9
    },
    "search": {
     "show": 0,
@@ -6254,8 +6254,8 @@
     },
     "other": {
      "film notes": 2,
-     "shared:propose.py": 10,
-     "other": 2
+     "shared:propose.py": 11,
+     "other": 4
     },
     "ticked": 0,
     "edited film code": false,
@@ -6370,6 +6370,30 @@
       "shared:propose.py",
       "source/propose.py",
       "python3 source/propose.py judge could-not-test 2>&1 | tail -1",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge named-lines 2>&1 | tail -1",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add -A notes/proposals && git commit -qm \"could-not-test and named-lines hel",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit FETCH_",
       ""
      ]
     ]
