@@ -318,6 +318,1231 @@
     "ticked": 0,
     "edited film code": false
    }
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "3bda3f0b",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.71,
+   "src": "estimate",
+   "sid": "session_01GznaARH1RMUd4KR9wnb2E4",
+   "steps": 163,
+   "hist_k": 266,
+   "kinds": {
+    "tool search": 22.1,
+    "renders": 1.2,
+    "pictures": 1.3,
+    "other": 75.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 136,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 5,
+    "other": 19
+   },
+   "split": {
+    "usd": 9.9083,
+    "total": 9.9083,
+    "floor_k": 95,
+    "blocks": {
+     "carried history": 34.8,
+     "new writes": 26.0,
+     "start-up floor": 21.5,
+     "Claude's words": 17.8
+    },
+    "origins": {
+     "messages and reminders": 32.5,
+     "Claude's words": 29.2,
+     "start-up floor": 21.6,
+     "result: tool search": 13.9,
+     "result: pictures": 1.5,
+     "result: other": 1.2,
+     "result: renders": 0.2
+    },
+    "named": {
+     "messages and reminders": 32.5,
+     "start-up reading (rules, tools, first files)": 21.6,
+     "writing code": 12.2,
+     "thinking": 8.7,
+     "reading kit code": 7.4,
+     "commands": 6.7,
+     "start-up and handover tools": 2.8,
+     "messages to Sam": 1.6,
+     "looking at pictures": 1.5,
+     "reading notes": 1.2,
+     "running checks and tools": 1.0,
+     "git and saving": 1.0,
+     "other commands": 0.9,
+     "app tools (chats, files sent)": 0.4,
+     "reading chat records": 0.2,
+     "renders": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 95,
+    "work_step": 14,
+    "work_pct": 0.18,
+    "reads": [
+     [
+      "notes/check-repairs.md",
+      1.7,
+      0.0474
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scratchpad/s3.png",
+      1.6,
+      0.0425
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scratchpad/s3c.png",
+      1.6,
+      0.0419
+     ],
+     [
+      "source/kittests.py",
+      0.5,
+      0.0137
+     ]
+    ],
+    "base_pct": 28.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 33,
+     "shared:handover.py": 4,
+     "shared:kittests.py": 44,
+     "shared:gta_rehearse.py": 1,
+     "shared:people.py": 7,
+     "shared:freeze.py": 2,
+     "shared:focus.py": 1,
+     "shared:posegallery.py": 4,
+     "shared:patriots4_cast.py": 1,
+     "shared:faces.py": 2,
+     "shared:midterminal_cast.py": 1,
+     "shared:ad_vanced_notice_cast.py": 1,
+     "shared:views.py": 2,
+     "shared:people_parts.py": 4,
+     "shared:facehouse.py": 2,
+     "shared:people_famous.py": 2,
+     "shared:turnhead.py": 2,
+     "shared:blessed.py": 2,
+     "film notes": 8,
+     "shared:watcher.py": 3,
+     "shared:modelguard.py": 1,
+     "shared:propose.py": 1,
+     "shared:hookran.py": 2,
+     "guides": 1,
+     "shared:people_turned.py": 2,
+     "shared:body.py": 2,
+     "shared:burnham.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g -q ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/check-repairs.md",
+      "python3 source/handover.py start session_01GznaAT9PqqJ8Zt32fBh3ea --notes notes/",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def test_\\|^def ",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "for t in body_check_shot4_v4 focus_front_heads pose_gallery lopsided_invented_on",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def body_check_shot4_v4",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def _body_faults",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "cat > /tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/s",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scrat",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 -c \" import sys; sys.path.insert(0,'source') import kittests",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "\\",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/people.py source/focus.py",
+      "def focus_front_heads",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:people.py",
+      "source/people.py source/focus.py",
+      "FOCUS\\|focus",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/facehouse.py source/people_parts.py source/body.py sou",
+      "git log --format='%h %ad %s' --date=iso -S\"focus_front_heads\" -- source/kittests",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "source/*.py source/data",
+      "bookmark",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/milburn.py source/protest_tiers.py",
+      "sed -n 1,40p source/freeze.py; ls source/milburn.py source/protest_tiers.py 2>&1",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:focus.py",
+      "source/focus.py source/facehouse.py source/people_parts.py",
+      "Focus(\\|import focus\\|FO\\.\\|focus\\.",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "held at focus 0",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 3060,3086p source/kittests.py",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 900 python3 source/kittests.py focus_front_heads 2>&1 | tail -3",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 -c \" import sys,os,hashlib,tempfile; sys.path.insert(0,'sour",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "}, ",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py",
+      "^AVOID\\|'hands behind the back'\\|'palm open'",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py",
+      "^[0-9a-f]{8} |^\\+.*(behind the back|palm open)",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:posegallery.py",
+      "source/data/pose-gallery.jpg source/posegallery.py",
+      "python3 -c \" from PIL import Image; im=Image.open('source/data/pose-gallery.jpg'",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:posegallery.py",
+      "source/posegallery.py",
+      "S=/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scrat",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      ",",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:kittests.py",
+      "source/gta*.py source/kittests.py",
+      "behind_back\\|hands behind the back",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:patriots4_cast.py",
+      "source/*.py source/patriots4_cast.py",
+      "lopsided",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:faces.py",
+      "source/faces.py source/ad_vanced_notice_cast.py",
+      "lop",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:midterminal_cast.py",
+      "source/*.py source/midterminal_cast.py",
+      "lop_raise\\|lop(",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:ad_vanced_notice_cast.py",
+      "source/ad_vanced_notice_cast.py",
+      "def install\\|V\\.\\w* = \\|B\\.\\w* = ",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "source/*.py",
+      "man_head",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py source/traitors_cast.py source/midterminal_cast.p",
+      "HEADS",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/people.py",
+      "lips\\|lop\\|brows(",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:faces.py",
+      "source/data source/faces.py",
+      "lopsided",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "^import faces\\|as FA",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "^def ",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/people.py",
+      "def load\\b",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:people.py",
+      "story/facetool-people.txt source/people.py",
+      "def _house\\|def _famous",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 -c \" import sys; sys.path.insert(0,'source') import people a",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() a=s.index('def lopsid",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "FA.lips\\|FA.brows\\|lop",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/kittests.py",
+      "sed -i \"659s/dict(sp, smile=sp.get('smile', 0.0))/dict(sp, smile=sp.get('smile',",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:people_famous.py",
+      "source/people_famous.py",
+      "lips(\\|lop",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:people_famous.py",
+      "source/people_famous.py source/kittests.py",
+      "lopsided=None",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:views.py",
+      "source/views.py source/turnhead.py",
+      "MISSING",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py",
+      "sed -n 570,600p source/turnhead.py; timeout 200 python3 -c \" import sys; sys.pat",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/turnhead.py",
+      "TC.eye\\|TCE.eye\\|traitors_cast\\|def eyes",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py",
+      "sed -n 600,625p source/turnhead.py; git log --oneline -3 -- source/turnhead.py",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() old=\"\"\" keep = TH.PEO",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def round_page",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:blessed.py",
+      "source/blessed.py source/protest_tiers.py source/protest_tiers_cast.py",
+      "timeout 200 python3 -c \" import sys; sys.path.insert(0,'source'); import page as",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "`",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL|Traceback|  File|\\w+Error)",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def places_from_the_acting_list\\|def moves_from_the_acting_list",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "film notes",
+      "notes/check-repairs.md",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..or",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "film notes",
+      "notes/check-repairs.md",
+      "git merge -q origin/claude/create-claude-md-oe8z4g -m \"Merge main line into chec",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "^def \\|^PROMISES\\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py .claude/hooks/",
+      "sed -n 45,131p source/watcher.py; sed -n 245,292p source/watcher.py; sed -n 383,",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:modelguard.py",
+      "notes/proposals/ notes/logs/ notes/proposals/*.md .claude/hooks/modelguard.py",
+      "^Status\\|Adopted\\|adopted",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "film notes",
+      "notes/proposals/*.md notes/proposals/early-warning.md notes/proposals/early-warn",
+      "^\\*\\*status\\|^status:\\|^- status\\|^## status\\|Sam's [Y1-9]\\b.*adopt",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/*.json notes/proposals/early-warning/",
+      "decided\\|Decided\\|state\\|status\\|chosen",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "/.claude/projects/*/ /.claude/projects/*/*.jsonl",
+      "\"hookName\":\"[^\"]*\"\\|\"command\":\"[^\"]*hooks[^\"]*\"",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "/.claude/projects/*/*.jsonl",
+      "\"hookName\"",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "other",
+      ".claude/hooks/*.py .claude/settings.json",
+      "^if __name__\\|^def main\\|sys.argv",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py .claude/hooks/setup.sh source/handover.py source/ledger.py sou",
+      "def main\\|'log'\\|== 'log'\\|'auto'\\|'hook'\\|'sendgate'\\|'stop'",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:hookran.py",
+      "source/hookran.py /.claude/watcher/ran/NAME /.claude/watcher/ran .claude/hooks/c",
+      "^import\\|^from",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/ledger.py source/propose.py source/humancheck.py",
+      "sed -n 741,752p source/handover.py; sed -n 969,973p source/ledger.py; sed -n 542",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:hookran.py",
+      "/home/user/Animation-/.claude/hooks/setup.sh source/hookran.py /.claude/watcher/",
+      "sys.path",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py .claude/settings.json source/kittests.p",
+      "python3 - <<'EOF' p='/home/user/Animation-/source/kittests.py'; s=open(p).read()",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "other",
+      "",
+      "git add -A source/ .claude/ && git commit -qm \"Check repairs chat 2: tools built",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def places_from_the_acting_list",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "acting_list",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 1990,2075p source/kittests.py",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "guides",
+      "notes/ledger/sam/ guides/kit-catalogue.md notes/*.md",
+      "moves kit\\|places kit\\|acting list",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "before Sam approves it\\|until he approves",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 1972,1979p source/kittests.py; sed -n 2028,2033p source/kittests.py",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 1907,1945p source/kittests.py",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def facehouse_whole_head",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scrat",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "",
+      "is the first bad commit|^commit|^    ",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scra",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "other",
+      "",
+      "first bad commit",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:kittests.py",
+      "source/data/kittest-people/ source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "source/data/kittest-people/kit-walliams.png",
+      "S=/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scrat",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "other",
+      "",
+      "SCORE|DRIFT|Error",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "other",
+      "",
+      "SCORE walliams",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "shared:people.py",
+      "source/people.py source/blessed_cast.py source/body.py source/traitors_cast.py",
+      "^TC\\b\\|^TC =\\|import.* as TC",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py",
+      "python3 - <<'EOF' p='/home/user/Animation-/source/kittests.py'; s=open(p).read()",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "other",
+      "",
+      "^Bisecting|first bad",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "film notes",
+      "notes/check-repairs.md",
+      "The 11 other failing\\|Sam, 21 Nov: \\",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "other",
+      "",
+      "first bad commit\\|bisect found\\|error",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scrat",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "shared:people_turned.py",
+      "source/people_turned.py",
+      "git show df6d2d08 -- source/people_turned.py | head -60",
+      ""
+     ],
+     [
+      119,
+      "other",
+      "shared:people_turned.py",
+      "/home/user/Animation-/source/people_turned.py /home/user/Animation-/source/kitte",
+      "PTN",
+      ""
+     ],
+     [
+      120,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "shared:people.py",
+      "source/people.py source/freeze.py",
+      "FROZEN_DRIFT",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "other",
+      "source/data/freeze/drift-baseline.json",
+      "git log --format='%h %ad %s' --date=iso -- source/data/freeze/drift-baseline.jso",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-d3307fd55bac/scrat",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "other",
+      "",
+      "git add -A source/ && git commit -qm \"Check repairs chat 2: facehouse heads re-h",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "other",
+      "",
+      "until grep -c DRIFT /tmp/claude-0/-home-user-Animation-/3bda3f0b-5a98-5924-8e3d-",
+      ""
+     ],
+     [
+      126,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/data/freeze/drift-baseline.json /home/user/Animatio",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^FAIL|^kittests",
+      ""
+     ],
+     [
+      128,
+      "other",
+      "film notes",
+      "notes/check-repairs.md",
+      "sed -n 17,30p notes/check-repairs.md",
+      ""
+     ],
+     [
+      131,
+      "other",
+      "other",
+      "",
+      "^kittests",
+      ""
+     ],
+     [
+      132,
+      "other",
+      "shared:people.py",
+      "source/people.py source/freeze.py",
+      "^def film_frame",
+      ""
+     ],
+     [
+      133,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/blessed.py",
+      "SS = [^1]\\|\\.SCALE\\s*=\\|PREVIEW\\s*=\\|\\.HALF\\s*=\\|\\.SMALL\\s*=\\|\\.W, .*\\.H\\s*=\\|RE",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "shared:body.py",
+      "source/body.py source/freeze.py",
+      "^SS\\b\\|^SS =",
+      ""
+     ],
+     [
+      135,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "^def draw",
+      ""
+     ],
+     [
+      136,
+      "other",
+      "shared:body.py",
+      "source/body.py source/blessed.py",
+      "SS",
+      ""
+     ],
+     [
+      137,
+      "other",
+      "shared:people.py",
+      "source/*.py source/people.py",
+      "FILM_TURNED",
+      ""
+     ],
+     [
+      138,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 940,1001p source/people.py",
+      ""
+     ],
+     [
+      139,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      140,
+      "other",
+      "film notes",
+      "notes/check-repairs.md",
+      "git add -A source/ notes/check-repairs.md && git commit -qm \"Check repairs chat ",
+      ""
+     ],
+     [
+      141,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^FAIL|^kittests",
+      ""
+     ],
+     [
+      142,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/check-repairs.md story/status.md",
+      "end",
+      ""
+     ],
+     [
+      144,
+      "other",
+      "other",
+      "",
+      "^kittests",
+      ""
+     ],
+     [
+      145,
+      "other",
+      "shared:blessed.py",
+      "source/blessed.py source/kittests.py",
+      "^import\\|^from\\|^B = \\|as B\\b",
+      ""
+     ],
+     [
+      146,
+      "other",
+      "shared:burnham.py",
+      "source/burnham.py source/kittests.py",
+      "^SS\\|SS = \\|from body import\\|import body",
+      ""
+     ],
+     [
+      147,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py",
+      "^(PASS|FAIL|burnham)",
+      ""
+     ],
+     [
+      148,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^FAIL|^kittests",
+      ""
+     ],
+     [
+      149,
+      "other",
+      "shared:handover.py",
+      "notes/check-repairs.md story/status.md source/handover.py",
+      "full run 107",
+      ""
+     ],
+     [
+      150,
+      "other",
+      "film notes",
+      "story/status.md notes/check-repairs.md",
+      "^??",
+      ""
+     ],
+     [
+      151,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/check-repairs.md",
+      "^## \\|^- \\[",
+      ""
+     ],
+     [
+      152,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py source/kittests.py notes/check-repairs.",
+      "python3 - <<'EOF' import re p='/home/user/Animation-/source/kittests.py'; s=open",
+      ""
+     ],
+     [
+      153,
+      "other",
+      "film notes",
+      "notes/check-repairs.md",
+      "alarm",
+      ""
+     ],
+     [
+      155,
+      "other",
+      "shared:kittests.py",
+      "notes/archive/check-repairs-handovers.md story/status.md source/kittests.py",
+      "<<<<<<<\\|>>>>>>>",
+      ""
+     ],
+     [
+      156,
+      "other",
+      "other",
+      "",
+      "kittests:",
+      ""
+     ],
+     [
+      157,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/handover.py notes/check-repairs.md",
+      "^QUICK CHECK",
+      ""
+     ],
+     [
+      158,
+      "other",
+      "other",
+      "",
+      "for i in 1 2 3; do git fetch -q origin claude/create-claude-md-oe8z4g && git mer",
+      ""
+     ],
+     [
+      159,
+      "other",
+      "other",
+      "",
+      "^??",
+      ""
+     ],
+     [
+      160,
+      "other",
+      "other",
+      "notes/logs/handover-end.log",
+      "git add notes/logs/handover-end.log && git commit -qm \"Handover check log Co-Aut",
+      ""
+     ],
+     [
+      161,
+      "other",
+      "other",
+      "/home/user/Animation-/notes/logs/handover-end.log notes/logs/handover-end.log",
+      "python3 - <<'EOF' import re p='/home/user/Animation-/notes/logs/handover-end.log",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
