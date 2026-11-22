@@ -6168,53 +6168,53 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.14,
+   "cost": 2.69,
    "src": "estimate",
    "sid": "session_01U3pKQyM6KwJ9VCHUrPtX7S",
-   "steps": 13,
-   "hist_k": 102,
+   "steps": 22,
+   "hist_k": 111,
    "kinds": {
     "tool search": 15.1,
     "other": 84.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 8,
+    "tool search": 14,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 10
+    "other": 12
    },
    "split": {
-    "usd": 0.6504,
-    "total": 0.6504,
+    "usd": 0.9474,
+    "total": 0.9474,
     "floor_k": 83,
     "blocks": {
-     "start-up floor": 57.0,
-     "new writes": 23.0,
-     "Claude's words": 16.7,
-     "carried history": 3.3
+     "start-up floor": 53.4,
+     "new writes": 23.8,
+     "Claude's words": 16.5,
+     "carried history": 6.3
     },
     "origins": {
-     "start-up floor": 57.0,
-     "Claude's words": 22.5,
-     "result: tool search": 8.8,
-     "messages and reminders": 6.5,
-     "result: other": 5.1
+     "start-up floor": 53.4,
+     "Claude's words": 23.0,
+     "messages and reminders": 11.2,
+     "result: tool search": 7.6,
+     "result: other": 4.7
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 57.0,
-     "helper and chat prompts": 10.8,
-     "start-up and handover tools": 7.7,
-     "messages and reminders": 6.5,
-     "commands": 6.1,
-     "helper results": 4.9,
-     "thinking": 3.3,
-     "writing code": 1.2,
-     "reading notes": 1.2,
-     "messages to Sam": 1.2,
+     "start-up reading (rules, tools, first files)": 53.4,
+     "messages and reminders": 11.2,
+     "helper and chat prompts": 9.7,
+     "commands": 8.8,
+     "start-up and handover tools": 6.6,
+     "helper results": 4.6,
+     "thinking": 2.5,
+     "messages to Sam": 1.1,
+     "reading notes": 1.0,
+     "writing code": 0.9,
      "other commands": 0.2
     },
     "leftover": 0.0
@@ -6227,25 +6227,25 @@
      [
       "notes/proposal-route.md",
       2.2,
-      0.0217
+      0.0253
      ],
      [
       "source/propose.py",
       1.8,
-      0.0171
+      0.02
      ],
      [
       "notes/proposals/could-not-test.md",
       0.5,
-      0.0045
+      0.0054
      ],
      [
       "notes/proposals/brow-limit/state.json",
       0.4,
-      0.0034
+      0.0039
      ]
     ],
-    "base_pct": 27.8
+    "base_pct": 33.4
    },
    "search": {
     "show": 0,
@@ -6254,7 +6254,8 @@
     },
     "other": {
      "film notes": 2,
-     "shared:propose.py": 6
+     "shared:propose.py": 10,
+     "other": 2
     },
     "ticked": 0,
     "edited film code": false,
@@ -6321,6 +6322,54 @@
       "shared:propose.py",
       "source/propose.py",
       "python3 source/propose.py record staging-stills 2>&1 | tail -3 && python3 source",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add -A notes/proposals && git commit -qm \"staging-stills: judged and recorde",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals",
+      "python3 source/propose.py record rule-needs-check 2>&1 | tail -1; git add -A not",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals notes/proposals/",
+      "python3 source/propose.py record notes-model 2>&1 | tail -1; git add -A notes/pr",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge brow-limit 2>&1 | tail -1",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add -A notes/proposals && git commit -qm \"brow-limit helpers done, judge sta",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge could-not-test 2>&1 | tail -1",
       ""
      ]
     ]
