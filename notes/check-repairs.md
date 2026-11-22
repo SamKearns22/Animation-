@@ -82,7 +82,7 @@ discover how it can be made more compliant with statement one.")
         built from ready kit pieces, less new code per note; 3 hand over before a long wait instead of resuming;
         4 small labelled crops of what changed; 5 a map of where each part of the film lives in the code.
         22 Nov 02:00, Sam's 2am reminder ("go on with your own stated pick"): picks 1, 2, 3 go ahead, listed to Sam.
-- [ ] Cost audit chat 2 (Opus medium): `python3 source/dearest.py grand-theft-autism --open 1,2,3`, then the route
+- [x] Cost audit chat 2 (Opus medium): `python3 source/dearest.py grand-theft-autism --open 1,2,3`, then the route
       (pack, helpers, judge, record) on #1 first with its cost measured (ledger row), then #2 and #3; show Sam the
       verdicts (propose.py show) with Lost/Added. Then the 278% week check and Sam's Sonnet-render note.
 - Cost audit chat 2 (22 Nov, session_01GznaASKWmDUJAWLniVGoiV) found:
@@ -90,8 +90,12 @@ discover how it can be made more compliant with statement one.")
     hand-written; dearest.py's own numbers put "messages and reminders" at 2, so `--open 1,2,3` opened the wrong
     thing. Fixed by hand (proposal 2 rewritten to Sam's pick). Still open: the list Sam sees must be the tool's
     own printout, numbers and all (dearest.py should save what it showed and --open read that).
+  - Verdicts (propose.py show dearest-grand-theft-autism-1/2/3), each option 1 = measure first: (1) start-up block
+    measured per chat, then unused add-ons switched off by Sam; (2) tag rework of rejected shots, then stills must
+    pass checks before movement if rework is half or more; (3) time each memory lapse's cause, then one fix. Sam
+    picks option 1 or 2 for each.
   - The route's cost, measured on proposal 1: about 1.2% of a week (two helpers + judge 1.1%, the chat's own steps
-    about 0.1). Three proposals about 3.6%.
+    about 0.1). All three: about 2.6% (9 helpers and judges 2.2%, so about 0.7-1.1% each).
   - Week 15-21 Nov: 126 rows add to 234% as filed. The rows use two different week sizes (before 19 Nov $290, after
     $366: the 36 app-figure rows hold $160 but say 54.7%); at one size ($366) the week is 205%, still twice a week.
     2 chats filed under two jobs. The app's own figures for these chats can no longer be read ("not found"), so
@@ -101,26 +105,21 @@ discover how it can be made more compliant with statement one.")
 - [ ] The week's record adds to 278% of a week over 149 chats (219 of it estimates, 3 chats filed twice; 42 chats
       filed under proposal-route). That cannot all be real if the weekly limit holds: check the estimates against the
       app's figures for the chats that can still be read, and how chats are filed to jobs (Opus medium).
-- [ ] On Sam's picks: `dearest.py grand-theft-autism --open N,N`, then the route on each; its cost per proposal is
+- [x] (done in cost audit chat 2) On Sam's picks: `dearest.py grand-theft-autism --open N,N`, then the route on each; its cost per proposal is
       unmeasured, so measure the first before the rest (Opus medium).
 - [x] Sam's note 3 in the status chat (21 Nov): "I had noticed that renders were not being handed off to sonnet models
       like you used to." Not yet carried anywhere: find why (handover model line, modelguard) and fix.
       Done in the status chat: modelguard.py was never wired; wired 21 Nov, watcher flags unwired hooks (see the top).
 
-## Where things stand (21 Nov, status chat, Opus)
-- Cost audit (21 Nov): done, waits on Sam's picks (see Budget tracker audit). Branch claude/check-repairs-2 = chat 2's
-  live work, left alone; check-repairs has no cost estimate (none was set).
-- Rules that bite next: 30 (a test failing twice: find why the first fix failed), "Seeing like Sam" 2 (a check is done
-  only when it catches the note that taught it), "Rules are permanent" (remove a check only with Sam's Y).
-- Done: the seven items ticked above, on the main line; kittests 94 pass / 11 fail before this chat's new test.
-- Next: Opus, medium effort. First the 'built but not enabled' fix above (a-d), then one by one, find why each fails, fix the kit or the stale
-  test, rerun it and `python3 source/kittests.py` in full at the end: body_check_shot4_v4 (old shot 3 now has 6
-  faults, probably real crossed arms the newer check catches: confirm on the picture), focus_front_heads (broken by
-  the 20 Nov people-kit default change), pose_gallery, lopsided_invented_only, turned_heads_for_anyone, round_page,
-  people_from_a_description (4K vs 1080 image crash), places_ and moves_from_the_acting_list (milburn.py uses the
-  kit before Sam's Y: name or fix), facehouse_whole_head, outfit_every_view (officer and scarf missing at 45-180).
-- Needs Sam: Y/N to switch the budget alarms back on (paused by him 18 Nov).
-- Read: this file only; `python3 source/kittests.py NAME` per test; each test's docstring says what taught it.
-- Open rule requests: none from this job (GTA's held-object check stays in its own notes).
-- For Claude: new code in source/handover.py (size_faults, ledger_faults, push_faults, turns() failed ids, NOT SENT
-  regex), source/watcher.py (hook_faults unwired, PROMISES), .claude/settings.json PreToolUse Bash modelguard.
+## Where things stand (22 Nov, cost audit chat 2, Opus medium)
+- Rules that bite next: the proposal route (Sam picks only from judged options), 85 (cost watch), 30.
+- Done: Sam's picks 1-3 routed and judged (see "Cost audit chat 2 found"); the route costs about 1% of a week per
+  proposal; week check: 205% at one week size, cause most likely the week size; dearest_faults promise listed.
+- Next: on Sam's answers, Opus medium builds the options he picks (each option 1 is a measuring step first).
+- Needs Sam: an option (1 or 2) for each of the three; one reading of his usage meter (% and reset day).
+- Read: this file's "Budget tracker audit" only; `propose.py show dearest-grand-theft-autism-N`.
+- Open rule requests: none.
+- For Claude: still open, dearest.py numbering (save the shown list; --open reads it). Watcher BROKEN saver line
+  (20 Nov 03:29) is named in notes/proposal-route.md. claude/check-repairs-2 left alone (another chat's live work). Handover
+  flags named: SENTENCE (CLAUDE.md's "Choose views" line still there, now with Sam's 21 Nov aside), COST (no estimate set for this job).
+
