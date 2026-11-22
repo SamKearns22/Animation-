@@ -1931,6 +1931,8 @@ def people_from_a_description():
         bad.append(f'only {len(drawn)} people drawn by the kit')
     import freeze as FZ
     drift = max(K.FROZEN_DRIFT.values() or [0.0])           # live code vs the posted film (its bookmark): may not rise
+    # line moved 1.92 -> 2.06 on 22 Nov (check repairs 2): all of the rise is aa09376a, Sam's one smooth shoulder line
+    # (20 Nov), per frame against 413beb3e; nothing since. The posted film redraws from its bookmark (freeze.py).
     base = FZ.drift_baseline('blessed', drift)
     if drift > base + 0.05:
         bad.append(f'the live film now differs from the posted Blessed by {drift:.2f}% (was {base:.2f}%)')
