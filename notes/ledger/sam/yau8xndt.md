@@ -11,3 +11,7 @@ Chat 41  accomplished some things on this job on the other account before usage 
 ### 2026-11-22T22:47:05
 Can I just check that you have the same FULL understanding of the project as the other account?
 
+### 2026-11-22T22:58:32
+Just these
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+

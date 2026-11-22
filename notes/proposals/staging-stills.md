@@ -1,6 +1,6 @@
 # Proposal: Framing and staging notes take several rounds to land
 
-Status: open (un-parked 22 Nov, Sam: "Milburn: begin all"; his 19 Nov words below still stand)
+Status: adopted (2026-11-22)
 
 ## Problem
 On Milburn the reverse shot (the Cabinet Room table, Andy and Pat) was staged three times: chat 6 staged it, Sam
