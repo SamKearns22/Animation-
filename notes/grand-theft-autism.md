@@ -196,17 +196,6 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
       then built fingered hands and its code comment credits those words to Sam. Nobody asked Sam; no proposal. Why no
       check caught it: nothing compares a frame's hands (or any house part) against the house look. Lesson to propose.
 
-## Chat 33 (22 Nov, Opus high): learn step L1-L3 done (notes/bench/learn-step.md)
-- L1: pass list of 24 shot-4 Jason notes/faults by cause (10 hiding, 7 look, 7 motion), each with the bench check that
-  must catch it; shot 4 cost about 39% of a week (62% of the film's spend).
-- L2: Blender installed and draws here (no graphics card needed for its fast engine). One frame both ways, same 3D Jason:
-  ours 5.6 s, Blender 4.2 s; both found the same 2 crossings (seat 7.4 cm, pistol 4.8 cm into his chest). Pick: ours, by
-  the picture (Blender: stray chin line, doubled lines, broken outlines). Sheet sent to Sam: notes/bench/l2-side-by-side.jpg.
-- L3: CMU has no car move; 3 stock clips found but not watched (previews would not play here); no key poses marked.
-  Asked Sam to film the move in a parked car (question 2).
-- [x] Sam (22 Nov): "Y 1" (stage 1 on our one-pass drawing). "2 I'm sorry that just isn't possible. You may be able
-  to find references." So: no footage from Sam; stage 1 finds reference itself first (L3 still open).
-
 ## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (details: archive notes, "Chat 33b")
 Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
 - [x] F12 glare off faces; [x] F12 Jason's rest forearm across his chest (shots 5-8); [x] F6 fire runners slant to
@@ -226,24 +215,25 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 
 
 
-## Chat 34 (22 Nov, Opus high): L3 done, stage 1 started (notes/bench/learn-step.md, "Stage 1")
-- [x] L3: reference found and watched (free Pexels photo + 4 clips; videos.pexels.com allowed by Sam's approval);
-      sheet notes/bench/l3-reference.jpg. Gap: knees on the seat and a gun out of a window not seen anywhere.
-- [~] Stage 1: source/bench_move.py built (goal-driven solid body, own-skeleton IK, all checks); key poses not yet clean.
-- Branch claude/gta-chat31 (leanout.py DOOR_L change, show log): kept as a record only (Sam's Y, chat 32 pick 4); not merged.
+## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
+- [x] K1-K5: 0 crossings (car, self, pistol), contacts held, joints in range (fixed in the body, not the checks). Sheet notes/bench/stage1-keys.jpg.
+- [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
+- [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
 
-## Where things stand (22 Nov, chat 34, Opus high)
+## Where things stand (22 Nov, chat 35, Opus high)
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
-- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera included; the house art style; circle hands.
-- Done: L3 reference sheet; bench_move.py (goals on the car -> solid body; checks for car, self, pistol, contacts,
-  range, aim, jumps; self check proven 0 on the rest body). Handed over on the cost watch's amber.
-- Next: chat 35, Opus high: finish stage 1 (learn-step.md "Stage 1" list: clear K1-K5 to 0 crossings, run all 197
-  frames, proof on old frames, grey clip MP4 sent to Sam with the check table; ask the 3 cm question). Not shot 4.
-- Needs Sam: budget stops Y (chat 28), still open. Nothing new yet.
-- Read: notes/bench/learn-step.md (L3, Stage 1); bench_move.py MAP. Open rule requests: Sam's held-object check
-  (draft); house-look lock (option 1 step 4, its own proposal).
-- Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4), reworded by Sam's 21 Nov rule "Fix the drawing, never the shot"; not lost.
-- For Claude: key poses test: python3 notes/bench/keytest.py (fit_seat, fit_knee, check_frame per key). Blender at
-  /usr/bin/blender (not needed so far). Chat 33b's film notes round is separate (Opus medium).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
+  style; circle hands. (Breakdown poses add in-betweens only; no beat or time moved.)
+- Done: K1-K5 clean; proof on old frames; checks made exact (ear flap, own-wrist join, belly-over-door measure).
+- Next: chat 36, Opus high: finish stage 1: clear frames 15-22 (getting up) and 176-190 (sitting down), elbow
+  range 29-30/171, pops; full run (`bench_move.py run OUT`, about 55 min: add a progress line); grey clip MP4 to
+  Sam with the check table and the 3 cm question (step 4 of chat 35's job). Not shot 4.
+- Needs Sam: budget stops Y (chat 28), still open. Nothing new.
+- Read: notes/bench/learn-step.md ("Stage 1", "Stage 1, chat 35" and its "later"); bench_move.py MAP.
+  Open rule requests: Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
+- Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4); not lost.
+- For Claude: keytest.py (5 keys, ~1.5 min); span check: for i in range(a,b): g=goals_at(i/24); check_frame(solve(g),g)
+  (~10 s a frame); `bench_move.py keys OUT.jpg` (sheet, red = crossing points); fits stored (SEAT_Y 0.551, KNEE_R
+  0.055, ANKLE_Y 0.667). Branch claude/gta-chat31: record only (Sam's Y), not merged.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 66.28% of 15%; forecast 69.9% (2026-11-22)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 70.1% of 15%; forecast 73.7% (2026-11-22)

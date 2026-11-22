@@ -118,3 +118,26 @@ Keys now (keytest.py): K1-K5 0 crossings (car, self, pistol), contacts held (kne
 belly -0.2 = resting), joints in range, K4 aim 0.0 m off. Sheet: three sides plus shot 4's camera, crossing
 points marked red (bench_move.py keys OUT.jpg). Viewer note: K4 from outside, his chin rests against the gun arm
 (sighting along it); touching, not crossing.
+
+### Chat 35, later: the 197 frames and the proof
+- First full run (before the fixes below; 51 min, about 15 s a frame): faults only BETWEEN keys, in getting up
+  (0.5-1.0 s) and sitting down (7.4-7.8 s): feet through the seat and floor, legs and feet through each other,
+  the pistol swinging through his body, the head into the roof; knees "slid" 14-18 cm while planted; elbow over
+  range at 29-30 and 171; 162 pops (pelvis at 180-186, the sitting down).
+- Fixed since: knees PLANTED (the kneeling solver kept each thigh under its hip and dragged the knee with the
+  hips; now the knees stay on their spots KNEES, the thighs tilt, the hips tip sideways so both knees rest);
+  K4 hips 0.755 (belly resting on the door top, not 7 mm in). Breakdown poses B1, B2 added (BREAKDOWNS: in-between
+  drawings at 0.65/0.82 s and 7.55/7.68 s; the locked beats and times unchanged): B1 rocking back, knees drawn up,
+  feet lifted in front of the cushion, left hand on his knee; B2 rising onto his knees, head ducked, turning.
+- Still open (getting up, span.py 14 23): frames 15-18 legs/feet through each other and the seat (mid-swing),
+  arm L into the leg (15-16); frames 19-22 the pistol 1.8-3.5 cm into him (gun hand low in front, B2 to K2);
+  a roof rail touch at 18. Sitting down (176-190) not rechecked. Then: the elbow range frames (29-30, 171),
+  the pops. Tool: scratchpad span.py = `for i in range(a,b): goals_at(i/24) -> solve -> check_frame` (copy into
+  notes/bench/ if needed). run() prints nothing until the end: add a progress line.
+- Proof (bench_move.py proof OUT; notes/bench/proof.txt): chat 33's still: seat 7.4 cm and pistol 4.8 cm caught,
+  exactly as L2 measured. Old move (leanout.at, body posed the old way): dash 9-12 cm, seat 5-8.5 cm, seat back
+  7.3, pistol in the seat back 7.1, body against itself everywhere (the old posing could not twist), door hand
+  floating 4.7-8.3 cm (pass list 22), aim 3.5 m off at the kick (21), 142 pops and 411 steps over 3 cm (23).
+  No 3D twin (flat-drawing faults, nothing for a 3D check to find): pass list 1, 2, 6, 7, 9 (hiding maps,
+  stair-steps, seal boxes, smears: the one-pass drawing has no pieces), 13, 15, 16 (the look: stage 2-3),
+  11-12 and 14 partly (the sausage arm, the stick pistol: stranger test at full size, stage 2).

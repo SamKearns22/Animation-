@@ -633,3 +633,18 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: bench code source/bench_pose.py, bench_draw.py (still / blender), bench_blender.py; Blender at
   /usr/bin/blender (apt, not in setup.sh yet). Chat 31's uncommitted DOOR_L change: session_01GznaAVRjtm1nmzn6nuRJJ6.
 
+
+## Where things stand (22 Nov, chat 34, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera included; the house art style; circle hands.
+- Done: L3 reference sheet; bench_move.py (goals on the car -> solid body; checks for car, self, pistol, contacts,
+  range, aim, jumps; self check proven 0 on the rest body). Handed over on the cost watch's amber.
+- Next: chat 35, Opus high: finish stage 1 (learn-step.md "Stage 1" list: clear K1-K5 to 0 crossings, run all 197
+  frames, proof on old frames, grey clip MP4 sent to Sam with the check table; ask the 3 cm question). Not shot 4.
+- Needs Sam: budget stops Y (chat 28), still open. Nothing new yet.
+- Read: notes/bench/learn-step.md (L3, Stage 1); bench_move.py MAP. Open rule requests: Sam's held-object check
+  (draft); house-look lock (option 1 step 4, its own proposal).
+- Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4), reworded by Sam's 21 Nov rule "Fix the drawing, never the shot"; not lost.
+- For Claude: key poses test: python3 notes/bench/keytest.py (fit_seat, fit_knee, check_frame per key). Blender at
+  /usr/bin/blender (not needed so far). Chat 33b's film notes round is separate (Opus medium).
+

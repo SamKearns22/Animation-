@@ -538,3 +538,21 @@ Jason's movement in shot 4 (FAILED, chat 33's job).
 - Clips: no short-clip command exists for this film (grand_theft_autism.py renders the whole film); used a one-off
       script in the chat's scratch space. Tool gap to propose: a --span option.
 
+
+## Chat 33 (22 Nov, Opus high): learn step L1-L3 done (notes/bench/learn-step.md)
+- L1: pass list of 24 shot-4 Jason notes/faults by cause (10 hiding, 7 look, 7 motion), each with the bench check that
+  must catch it; shot 4 cost about 39% of a week (62% of the film's spend).
+- L2: Blender installed and draws here (no graphics card needed for its fast engine). One frame both ways, same 3D Jason:
+  ours 5.6 s, Blender 4.2 s; both found the same 2 crossings (seat 7.4 cm, pistol 4.8 cm into his chest). Pick: ours, by
+  the picture (Blender: stray chin line, doubled lines, broken outlines). Sheet sent to Sam: notes/bench/l2-side-by-side.jpg.
+- L3: CMU has no car move; 3 stock clips found but not watched (previews would not play here); no key poses marked.
+  Asked Sam to film the move in a parked car (question 2).
+- [x] Sam (22 Nov): "Y 1" (stage 1 on our one-pass drawing). "2 I'm sorry that just isn't possible. You may be able
+  to find references." So: no footage from Sam; stage 1 finds reference itself first (L3 still open).
+
+## Chat 34 (22 Nov, Opus high): L3 done, stage 1 started (notes/bench/learn-step.md, "Stage 1")
+- [x] L3: reference found and watched (free Pexels photo + 4 clips; videos.pexels.com allowed by Sam's approval);
+      sheet notes/bench/l3-reference.jpg. Gap: knees on the seat and a gun out of a window not seen anywhere.
+- [~] Stage 1: source/bench_move.py built (goal-driven solid body, own-skeleton IK, all checks); key poses not yet clean.
+- Branch claude/gta-chat31 (leanout.py DOOR_L change, show log): kept as a record only (Sam's Y, chat 32 pick 4); not merged.
+

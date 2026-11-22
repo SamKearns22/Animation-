@@ -207,6 +207,7 @@ def _v(*a):
     return np.array(a, float)
 
 
+KNEES = {'L': _v(0.60, 0.525, 0.14), 'R': _v(0.60, 0.525, -0.12)}   # kneeling K2-K4: planted, the same spots
 TARGET = _v(0.05, 1.31, -7.68)   # the lead cruiser's windscreen (leanout.TARGET, car frame)
 DOOR_HAND = _v(0.955, SILL + HAND_R + 0.002, 0.16)   # the free hand resting on the door top (reference C)
 
@@ -227,7 +228,7 @@ def key(name):
                     c_fwd=_v(1, 0, -0.2), h_fwd=_v(1, -0.1, -0.15),
                     hand={'L': (DOOR_HAND, _v(0.3, -1, 0.6)), 'R': (_v(0.74, 0.86, -0.16), _v(0.2, -0.3, -1))},
                     aim_w=0.0, gun=_v(0.3, -1, -0.1), kick=0.0, belly=0.0,
-                    knee={'L': _v(0.62, 0.0, 0.14), 'R': _v(0.60, 0.0, -0.12)},
+                    knee=KNEES,
                     ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
     if name == 'K3':          # head and shoulders out over the door top, the head leading the turn back (D),
         #                       gun up beside his head, muzzle up
@@ -235,15 +236,32 @@ def key(name):
                     c_fwd=_v(1, 0, -0.5), h_fwd=_v(0.5, 0, -1),
                     hand={'L': (DOOR_HAND, _v(0.5, -1, 0.6)), 'R': ('rel', _v(0.06, 0.34, -0.10), _v(0.3, -1, -0.5))},
                     aim_w=0.0, gun=_v(0, 1, -0.1), kick=0.0, belly=0.0,
-                    knee={'L': _v(0.63, 0.0, 0.14), 'R': _v(0.61, 0.0, -0.12)},
+                    knee=KNEES,
                     ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
+    if name == 'B1':          # breakdown, getting up (and its mirror sitting down): rocking back on his seat, knees
+        #                       drawn up, feet lifted off the floor in front of the cushion, left hand on his raised
+        #                       knee, the pistol still at his chest turning up
+        return dict(pelvis=_v(0.44, 0.0, -0.04), p_up=_v(0.05, 1, -0.35), p_fwd=_v(0.2, 0, 1), c_up=_v(0.1, 1, 0.12),
+                    c_fwd=_v(0.35, 0, 1), h_fwd=_v(0.6, -0.1, 1),
+                    hand={'L': (_v(0.32, 0.93, 0.40), _v(-1, -0.6, -0.2)), 'R': (_v(0.44, 1.02, 0.30), _v(1, -0.5, 0.3))},
+                    aim_w=0.0, gun=_v(-0.2, 0.8, 0.6), kick=0.0, belly=0.0,
+                    knee={'L': _v(0.30, 0.80, 0.36), 'R': _v(0.58, 0.80, 0.36)},
+                    ankle={'L': _v(0.30, 0.57, 0.42), 'R': _v(0.58, 0.57, 0.42)}, knee_w=0.0, seat_w=1.0)
+    if name == 'B2':          # breakdown: rising onto his knees, head ducked under the roof, turning to the window,
+        #                       knees landing on the cushion, shins following them over it, the gun low in front
+        return dict(pelvis=_v(0.50, 0.0, 0.05), p_up=_v(0.35, 1, 0), p_fwd=_v(0.8, 0, 0.5), c_up=_v(1.2, 1, 0.15),
+                    c_fwd=_v(1, 0, 0.2), h_fwd=_v(1, -0.7, 0.2),
+                    hand={'L': (_v(0.76, 1.06, 0.16), _v(0.3, -1, 0.6)), 'R': (_v(0.66, 0.92, 0.16), _v(0.2, -0.3, -1))},
+                    aim_w=0.0, gun=_v(0.5, -0.6, 0.4), kick=0.0, belly=0.0,
+                    knee={'L': _v(0.52, 0.525, 0.16), 'R': _v(0.54, 0.525, -0.14)},
+                    ankle={'L': _v(0.15, ANKLE_Y, 0.18), 'R': _v(0.15, ANKLE_Y, -0.16)}, knee_w=0.95, seat_w=0.0)
     if name in ('K4', 'K5'):  # out to the waist, folded over the door top (B, C), chest turned back along the car
         #                       (D), the gun arm along the line to the lead cruiser; K5 the kick
-        k = dict(pelvis=_v(0.76, 0.0, 0.0), p_up=_v(0.55, 1, 0), p_fwd=_v(1, 0, -0.3), c_up=_v(1.15, 1, -0.05),
+        k = dict(pelvis=_v(0.755, 0.0, 0.0), p_up=_v(0.55, 1, 0), p_fwd=_v(1, 0, -0.3), c_up=_v(1.15, 1, -0.05),
                  c_fwd=_v(1, 0, -0.85), h_fwd=_v(-0.05, 0, -1),
                  hand={'L': (DOOR_HAND, _v(0.6, -0.6, 0.8)), 'R': ('aim', None, _v(0.3, -1, 0.2))},
                  aim_w=1.0, gun=None,
-                 knee={'L': _v(0.64, 0.0, 0.14), 'R': _v(0.62, 0.0, -0.12)},
+                 knee=KNEES,
                  ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
         k['kick'] = 1.0 if name == 'K5' else 0.0
         k['belly'] = 1.0
@@ -254,9 +272,13 @@ def key(name):
 KICK_DEG = 7.0                   # the pistol's kick: the forearm flips up this much (a real one-hand kick)
 
 
+BREAKDOWNS = [(0.65, 'B1'), (0.82, 'B2'), (7.55, 'B2'), (7.68, 'B1')]   # in-between drawings that shape the
+#   path between two locked beats (the feet go up over the cushion's front edge, not through it); beats unchanged
+
+
 def _times():
     import leanout as LO
-    return LO.TIMES
+    return sorted(LO.TIMES + BREAKDOWNS, key=lambda x: x[0])
 
 
 def _ease(u):
@@ -415,6 +437,18 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
     y_seat = SEAT_Y if seat_dy is None else seat_dy
     w = float(np.clip(g['knee_w'], 0, 1))
     pel[1] = (1 - w) * y_seat + w * float(np.mean(y_knee))
+    if w > 0:                                   # kneeling unevenly, the hips tip to the side so BOTH knees rest
+        dy = (y_knee[0] - y_knee[1]) * w        # the L hip wants to be this much higher than the R hip
+        hw = np.linalg.norm(hipoff['L'] - hipoff['R'])
+        from scipy.spatial.transform import Rotation as Ro
+        ax = _u(Rp[:, 2])
+        best = None
+        for sg in (1, -1):
+            Rr = Ro.from_rotvec(ax * sg * math.asin(np.clip(dy / hw, -0.5, 0.5))).as_matrix() @ Rp
+            err = abs(((Rr @ J0['hipL'])[1] - (Rr @ J0['hipR'])[1]) - dy)
+            if best is None or err < best[0]:
+                best = (err, Rr)
+        Rp = best[1]
     Rd = {'P': Rp, 'C': Rc, 'H': Rh}
     Rw = _world_rots(Rd)
     Mx = _fk(Rw, pel)
@@ -447,12 +481,6 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
         kg = np.asarray(g['knee'][sd], float).copy()
         ky = SEAT_TOP + KNEE_R - (knee_dy[sd] if knee_dy else 0.0)
         kg[1] = kg[1] * (1 - w) + ky * w
-        if w > 0:                                                   # kneeling: the knee ON the cushion, at the
-            dxz = _v(kg[0] - hip[0], 0, kg[2] - hip[2])            # thigh's length from the hip (slid along the
-            want = math.sqrt(max(r['L_th'] ** 2 - (hip[1] - kg[1]) ** 2, 1e-6))   # line from the hip)
-            kk = hip + _u(dxz) * want
-            kk[1] = kg[1]
-            kg = kg * (1 - w) + kk * w
         dt = _u(kg - hip)
         kn = hip + dt * r['L_th']
         ds = _u(np.asarray(g['ankle'][sd], float) - kn)
