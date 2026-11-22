@@ -44,6 +44,8 @@ TULIP_FADE = (210, 96, 78)        # sun-faded patches (the game's car is worn pi
 TULIP_DEEP = (150, 42, 36)
 STRIPE = (58, 50, 52)               # weathered black paint (pure black read as holes from above)
 STRIPE_EDGE = (120, 74, 70)         # the worn edge where the red shows through
+STRIPE_SHINE = (98, 90, 98)        # the sky's shine on the black stripes (chat 33b, F15)
+TULIP_SHINE = (222, 112, 96)       # the same shine on the red
 VINYL = (52, 48, 42)
 CHROME = (206, 212, 218)
 CHROME_DK = (150, 148, 142)
@@ -381,12 +383,29 @@ def _tulip_decals(car):
         for z0, z1, seed in ((H['base'][1] + 0.04, zf - 0.03, 11), (zb + 0.03, H['base'][0] - 0.04, 23)):
             pts = [_top_pt(car, x, z) for x, z in _ragged(x0, x1, z0, z1, seed + int(x0 * 10))]
             d.append(Decal(pts, (0, 1, 0), STRIPE, STRIPE_EDGE, 1.6))
+            # chips where the red shows through, along the stripe's edges (chat 33b, F15: the grey patches in the
+            # middle read as pockets and the stripes as a pair of trousers lying on the bonnet)
             rng = np.random.RandomState(seed + 5 + int(x1 * 10))
-            for _ in range(2):          # worn-through scuffs in the stripes (faded grey, small)
-                zc, xc = rng.uniform(z0 + 0.1, z1 - 0.1), rng.uniform(x0 + 0.06, x1 - 0.06)
-                pts = [_top_pt(car, xc + 0.04 * math.cos(a) * rng.uniform(0.7, 1.1), zc + 0.07 * math.sin(a))
+            for k in range(3):
+                zc = rng.uniform(z0 + 0.15, z1 - 0.15)
+                xe, inw = (x0, 1) if k % 2 == 0 else (x1, -1)
+                pts = [_top_pt(car, xe + inw * 0.022 * (1 + math.cos(a)) * rng.uniform(0.6, 1.0), zc + 0.05 * math.sin(a))
                        for a in np.linspace(0, 2 * math.pi, 7, endpoint=False)]
-                d.append(Decal(pts, (0, 1, 0), (104, 86, 86), None, 0))
+                d.append(Decal(pts, (0, 1, 0), STRIPE_EDGE, None, 0))
+    # one shine across the whole bonnet, over the stripes and the red alike: the stripes read as paint on a glossy
+    # panel, not as cloth lying on it (chat 33b, F15). Split at the stripes' edges so each piece keeps its own colour.
+    zb0, zb1 = H['base'][1] + 0.04, zf - 0.03
+    zm = zb0 + 0.42 * (zb1 - zb0)
+    hw = half_w(car, zm) * 0.93
+    cuts = [-hw, -0.44, -0.07, 0.07, 0.44, hw]
+    for w0, w1 in ((0.0, 0.10), (0.15, 0.18)):          # a broad band and a thin one beside it
+        for i in range(len(cuts) - 1):
+            xa, xb = cuts[i], cuts[i + 1]
+            on_stripe = i in (1, 3)
+            zz = lambda x, w: zm + 0.18 * x + w
+            pts = [_top_pt(car, xa, zz(xa, w0)), _top_pt(car, xb, zz(xb, w0)), _top_pt(car, xb, zz(xb, w1)),
+                   _top_pt(car, xa, zz(xa, w1))]
+            d.append(Decal(pts, (0, 1, 0), STRIPE_SHINE if on_stripe else TULIP_SHINE, None, 0))
     # the front: chrome-edged black grille across, a round lamp in each end, the badge
     zfe = _end_z(car, True)
     hwf = half_w(car, zf) * 0.97
@@ -1027,10 +1046,12 @@ def _through_glass(img, cam, car, glass, inside):
             ba = np.asarray(bg.convert('RGBA').split()[3], np.uint8)
             tint.putalpha(Image.fromarray(np.maximum(ba, 72).astype(np.uint8)))
             img.paste(tint, (0, 0), Image.fromarray(k.astype(np.uint8)))
+    people = None
     if inside:
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         inside(lay, cam, car)
         a = np.asarray(lay.split()[3], np.float32)
+        people = a
         k = np.maximum(np.asarray(mask, np.float32), np.asarray(omask, np.float32)) / 255
         lay.putalpha(Image.fromarray((a * k).astype(np.uint8)))
         img.alpha_composite(lay)
@@ -1053,7 +1074,10 @@ def _through_glass(img, cam, car, glass, inside):
         streak = [at(0.18, 0.95), at(0.34, 0.95), at(0.16, 0.05), at(0.02, 0.05)]
         lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
         S.pen(lay).poly([cam.project(q)[0] for q in streak], GLASS_HI + (90,), None, 0)
-        lay.putalpha(Image.fromarray(np.minimum(np.asarray(lay.split()[3]), np.asarray(mask)).astype(np.uint8)))
+        sa = np.minimum(np.asarray(lay.split()[3]), np.asarray(mask)).astype(np.float32)
+        if people is not None:         # the streak lies on the glass over the street, never over a face (chat 33b, F12:
+            sa *= 1 - people / 255     # a see-through grey panel over Lucia's face and hair the whole of shot 6)
+        lay.putalpha(Image.fromarray(sa.astype(np.uint8)))
         img.alpha_composite(lay)
         cam.poly(p, pts, None, INK, 1.4)
 

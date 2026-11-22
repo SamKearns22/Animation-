@@ -206,6 +206,30 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
   Asked Sam to film the move in a parked car (question 2).
 - [ ] Sam's Y for stage 1 (the grey-figure move) and his answers to questions 1-2 (below).
 
+## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (alongside chat 33)
+Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths. Not touched:
+Jason's movement in shot 4 (FAILED, chat 33's job).
+- [x] F12 grey panel over Lucia: the windscreen's sky streak is now drawn only over the street seen through the glass,
+      never over a person (shots 3-8). Why unseen: the layer check tests what is in front of what, not whether a
+      see-through layer hides a face; the critique caught it (r26), nobody acted. Fixed in the car's glass drawing.
+- [x] F12 "bare circle on his chest" (shots 5-8): after his brace in shot 5 Jason settles with the forearm laid
+      across his chest, hand flat on it (no pistol, Sam 21 Nov); shot 5 opens on shot 4's own rest so the cut holds.
+      Why: the old rest had the forearm pointing at the lens (only the hand circle showed). Not changed: house circle
+      hands (the "mitten" thumb at 29-31 s is the house thumb shape; kept, Sam's order).
+- [~] F15 bonnet stripes as trousers: kept black (Sam's brief), but the grey middle scuffs (read as pockets) became
+      small red chips at the stripes' edges, and one paint shine now crosses the whole bonnet, stripes and red alike,
+      so they read as paint on a shiny panel. Sam to judge in the clip.
+- [x] F6 still crowd at the fireball: the man 5-18 m from the blast ran straight at the lens (legs and arms swinging
+      in depth, unreadable flat), so read as standing. Runners on the crash's pavement now run at a slant for the
+      shop doorways (stride side-on) with hands over their heads. Why unseen three times: the fix was measured
+      ("is he running?") not looked at from the camera (Seeing like Sam 1 and 4). Lesson to propose: a runner's or
+      walker's direction within 25 degrees of the lens line is a fault the body check names.
+- F12 "half the frame is bonnet": that is shot 6's camera, locked; drawing-only answer is the bonnet shine above.
+- Shots 5-8 notes 1-3 (chat 19): done in chat 19, waiting on Sam's word since clip v2; they stay open for his tick.
+- Clips: no short-clip command exists for this film (grand_theft_autism.py renders the whole film); used a one-off
+      script in the chat's scratch space. Tool gap to propose: a --span option.
+
+
 ## Where things stand (22 Nov, chat 33, Opus high)
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera included; the house art style; circle hands.
@@ -214,7 +238,7 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
   car (10 s, from in front); budget stops Y (chat 28), still open.
 - Next: on Sam's Y, chat 34, Opus high: stage 1 (notes/proposals/solid-body-moves.md "Then one change"): the move as a
   grey figure, IK contacts, crossings 0 incl. body against itself, every check proven on the pass list's old frames.
-  Chat 33b (Opus medium, F6/F12/F15, shots 5-8) is separate.
+  Chat 33b (Opus medium, F6/F12/F15, shots 5-8) is separate; its work is merged (its section above).
 - Read: notes/bench/learn-step.md; proposal solid-body-moves (Final version). Open rule requests: Sam's held-object
   check (draft); house-look lock (option 1 step 4, its own proposal).
 - For Claude: bench code source/bench_pose.py, bench_draw.py (still / blender), bench_blender.py; Blender at

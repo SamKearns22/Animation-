@@ -488,7 +488,11 @@ def inside58(t, rec=None):
         # chat 26 (F10/F11): Jason is drawn on shot 4's own seated skeleton (leanout.seated), so the cut from shot 4
         # keeps his body; the hand points are in the car's frame for that skeleton (neck 1.14, right shoulder at
         # 0.67, 1.08, 0.04). Rest = shot 4's last pose (hand on his chest).
-        rest = LO.K1_HAND_R
+        # chat 33b (F12, 'a bare circle on his chest'): shot 4's rest hand sat just above the dash with its forearm
+        # pointing at the lens, so only the circle showed. After the brace he settles with the forearm laid across
+        # his chest (hand still flat on it, Sam 21 Nov: no pistol): the arm reads from shot 5's front camera.
+        # Shot 5 opens on shot 4's own rest (rest0) so the cut keeps his body.
+        rest0, rest = LO.K1_HAND_R, (0.30, 1.04, 0.24)
         dash = (0.42, 0.90, 0.52)
         lift = (0.60, 1.16, 0.26)          # beside his face, inboard of the window: shot 6's close camera
         thumb = (0.60, 1.28, 0.16)         # sees it (at 0.64-0.68 it fell off the frame's left edge, chat 26)
@@ -497,7 +501,7 @@ def inside58(t, rec=None):
         shrug = (0.62, 1.12, 0.36)
         her_hand = thumb
         b1, b2, b3 = word_at(LINE5, 20), word_at(LINE5, 24), EXPLO
-        lh = keys_at([(0, rest), (6.30, rest), (6.50, dash), (7.40, dash), (7.75, rest),
+        lh = keys_at([(0, rest0), (6.30, rest0), (6.50, dash), (7.40, dash), (7.75, rest),
                       (12.0, rest), (12.3, lift), (H1 - 0.25, lift), (H1 - 0.05, thumb), (H1 + 0.45, thumb),
                       (H1 + 0.75, expl), (b1 - 0.05, expl), (b1 + 0.08, beat(0)), (b1 + 0.2, expl),
                       (b2 - 0.05, expl), (b2 + 0.08, beat(0)), (b2 + 0.2, expl),
@@ -506,7 +510,7 @@ def inside58(t, rec=None):
                       (17.45, her_hand), (17.9, rest)], t)
         lshape = step_at([(0, 'fist'), (12.15, 'palm'), (H1 - 0.12, 'thumb'), (H1 + 0.6, 'palm'),
                           (WITHOUT - 0.05, 'thumb'), (17.6, 'palm'), (17.85, 'fist')], t)
-        near_rest = math.dist(lh, rest) < 0.12
+        near_rest = min(math.dist(lh, rest), math.dist(lh, rest0)) < 0.12
         pole = LO.K1_POLE_R if near_rest else (1.0, -1.0, 0.1)     # off the chest: the elbow out and down
         j_over['lying_hand_R'] = lshape
         JASON58['k'] = LO.seated(JASON58.setdefault('sp', GC.cast()['jason']), hand_r=lh, pole_r=pole, dx=-0.07 * th)
