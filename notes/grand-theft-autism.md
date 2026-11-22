@@ -224,17 +224,16 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
   style; circle hands. (Breakdown poses add in-betweens only; no beat or time moved.)
-- Done: gun arm K2-K3 fixed (B3: elbow in range at 29-30/171, no snap); hands blend from his shoulder; gun turns
-  up through the car's front (door top clear at 26); getting up rebuilt (B1, B1b, B2; see learn-step "chat 36");
-  part runs (`run OUT 1.0 6.45`) with progress and a per-frame log. Middle grey clip 1.0-6.45 s: see chat 36 below.
-- Next: chat 37, Opus high: (1) Sam's Y: one rough still of K4 dressed as Jason (learn-step "chat 36", next);
-  (2) getting up 13-23 and sitting down 176-190 with the real checks (look.py from three sides); (3) full run,
-  whole grey clip to Sam with the check table and the 3 cm question. Not shot 4.
-- Needs Sam: budget stops Y (chat 28), still open; the 3 cm question (after the full run).
-- Read: notes/bench/learn-step.md ("Stage 1, chat 35" later part, "Stage 1, chat 36"); bench_move.py MAP.
-  Open rule requests: Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
-- For Claude: notes/bench/span.py A B (real checks, ~10-25 s a frame); notes/bench/look.py OUT.jpg F.. (4 views);
-  fast proxy = _solve(g, fold=False) + car() + ranges() (0.03 s a frame); jumps on that track. Branch
-  claude/gta-chat31: record only (Sam's Y), not merged.
+- Done: gun arm K2-K3 (B3: no snap, elbow in range); getting up rebuilt (B1, B1b, B2); middle grey clip rendered
+  and checked (1.0-6.45 s; frames saved in notes/bench/mid-frames).
+- Next: chat 37, Sonnet: make and send Sam the middle clip with its table and named faults (learn-step "Chat 36:
+  the middle grey clip"); then chat 38, Opus high: those faults, the dressed K4 still (Sam's Y), getting up /
+  sitting down with the real checks, the full run.
+- Needs Sam: budget stops Y (chat 28), still open; the 3 cm question after the full run.
+- Read: notes/bench/learn-step.md ("Stage 1, chat 36" and "Chat 36: the middle grey clip"); bench_move.py MAP.
+- Open rule requests: Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
+- Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4); not lost.
+- For Claude: notes/bench/span.py A B (real checks); look.py OUT.jpg F.. (4 views); fast proxy _solve(g,
+  fold=False)+car()+ranges(); `run OUT T0 T1` (part run, frames.log as it goes). Branch claude/gta-chat31: record only (Sam's Y), not merged.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 70.1% of 15%; forecast 73.7% (2026-11-22)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 72.98% of 15%; forecast 76.6% (2026-11-22)

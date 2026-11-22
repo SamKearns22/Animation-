@@ -1,0 +1,11 @@
+Stage 1 bench results (bench_move.py run): 131 frames at 1/24 s, 2115 s
+body-car crossings:    frames 0
+body against itself:   1 frames, e.g. [(41, {'arm R / trunk': (3, 2.5)})]
+body-pistol:           7 frames, e.g. [(24, {'pistol in body': (3, 0.6)}), (25, {'pistol in body': (3, 0.6)}), (26, {'pistol in body': (3, 1.1)})]
+joint range:           frames 0
+sudden jumps (pops):   28, e.g. [(np.int64(1), 'elR', 5.1), (np.int64(2), 'elR', 4.6), (np.int64(3), 'elR', 10.2), (np.int64(4), 'elR', 6.6)]
+steps over 3 cm:       40 steps (fastest a frame: wrR 17.0, elR 10.6, elL 5.0, knL 3.0)
+contacts held:         yes
+planted slide (cm):    {'free hand on door top': 1.9, 'knee L on seat': 3.0, 'knee R on seat': 0.9}
+aim:                   worst 0.90 m off the cruiser windscreen while aimed (110 frames)
+(part run 1.00-6.45 s: jumps, steps and contacts count frames from 24 = film frame 0 of the part)

@@ -167,3 +167,16 @@ points marked red (bench_move.py keys OUT.jpg). Viewer note: K4 from outside, hi
   a leanout-style pose k); for bench_move's body build k from out['J'] (pelvis, neck, head, sh/el/wr, hip/kn/an,
   aim, fwd) and pass the solved skin P instead of BP.posed. Rough first try; the head from three-quarter behind is
   the known open question (pass list 15).
+
+### Chat 36: the middle grey clip, for the Sonnet chat
+send Sam the middle grey clip (his Y). Commands: `mkdir -p /tmp/f && tar -xzf
+  notes/bench/mid-frames/side-frames.tgz -C /tmp/f && ffmpeg -v error -y -framerate 24 -i /tmp/f/side/f%04d.png
+  -c:v libx264 -pix_fmt yuv420p -crf 23 -movflags +faststart animations/drafts/grey-lean-out-middle.mp4`; watch it
+  at phone size; send it (MP4, size) with the table below; then `git rm -r notes/bench/mid-frames/side-frames.tgz`.
+  Left: shot 4's locked camera; right: outside the window (drawn from the same poses, skin folds simpler). 2.5-3.8 s
+  the locked camera pans to the police car, which the test space doesn't have: sky only, expected.
+  Table (notes/bench/mid-frames/report.txt): 0 car crossings, joints in range, contacts held, aim within 0.9 m
+  (the kick). Slipped, to name: pistol 3-4 cm into him at 1.25-1.33 s (gun coming up past his face) and 0.6-1.1 cm
+  at 1.0-1.1 s; gun arm 2.5 cm into his side at 1.71 s; left knee slides 3 cm while planted; quick hand moves over
+  3 cm a frame (the 3 cm question comes after the full run). Then chat 38, Opus high: those faults, the dressed K4
+  still (Sam's Y; learn-step "chat 36"), getting up 13-23 / sitting down 176-190 with the real checks, full run.
