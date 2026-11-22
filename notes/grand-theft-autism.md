@@ -188,7 +188,12 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
       outs floating above the car; the redhead's knees balls at 21.68; a pink spire on the skyline at 20.60 only; F6's
       pink walker (confirmed).
 
-## Chat 30 (22 Nov, Opus high): shot 4 drawing fixes (camera and beats untouched)
+## FAILED (Sam, 22 Nov, chat 32): every attempt at Jason's movements in shot 4
+Sam: "All attempts at building Jason's movements in shot 4 have failed. Please stop all attempts and mark them in
+the tracking document as failed." All shot 4 Jason items below are FAILED and closed; chat 31 was stopped. The full
+list of attempts is in the case study, section 17.
+
+## Chat 30 (22 Nov, Opus high): shot 4 drawing fixes (camera and beats untouched) - FAILED
 - [x] Bald from above (15.4, 18.3): the buzz cut's edge ran on a slant from the nape to above the ear, a big patch of
       skin behind the ear. Now it drops straight behind the ear to the nape, sits on the ear top, a short sideburn,
       fuller temples. Reads as short dark hair (sheet, both frames). Why missed: the sheet was judged level-on only.
@@ -198,7 +203,7 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
 - [x] Dots by the ear / dotted bits on the arm edge: ink bits shorter than 3 line widths are dropped (all 3D parts).
 - [x] 21.25 blurred smears (red door through the arm, grey through the raised one, vest through the arm's edge): the
       arm's cut end faded to see-through everywhere; now it fades only over his drawn bare shoulder.
-- [ ] OPEN, the free elbow dangles outside the door below his hand (15.2-15.3 s, 21.15-21.3 s), and the arm hangs
+- [x] FAILED (stopped by Sam, 22 Nov), the free elbow dangles outside the door below his hand (15.2-15.3 s, 21.15-21.3 s), and the arm hangs
       down to a round elbow with a stub of forearm back up to the hand (21.25): between "on his knees" (K2) and "head
       out" (K3) his shoulder slides out right over the hand on the door top, so the arm folds tight (hand 12 cm from
       shoulder) and the only bends that keep the elbow above the sill point inward. Tried (all rejected, now OFF: the
@@ -208,24 +213,20 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
       it (further along the sill, forward or back, in K2, K3 and K4 alike so it stays planted), tested on the strip
       for drawing-to-drawing jumps and on the 45-degree view for a stub forearm. Also a wrist jump of 17 cm inward at
       about 21.43 s (was there before; seen in the numbers, not yet on a frame).
-- [ ] Still seen at full size: a sliver of camo shorts at the sill (15.4); 21.25 a faint fade on the arm's edge over
+- [x] FAILED (stopped by Sam, 22 Nov), still seen at full size: a sliver of camo shorts at the sill (15.4); 21.25 a faint fade on the arm's edge over
       the vest; the bare upper arm reads very big from behind (THICK 1.3). Checked: the body check's strip has exactly
       the same faults as before this chat (311 lines, none new).
 
-## Where things stand (22 Nov, chat 30, Opus high)
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 and 5 (CLAUDE.md); 30.
-- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera: "great shot, broken
-  drawing"); the script; the 8 shots' order and lengths. Fix drawings only.
-- Done: chat 30 section (bald look, seal box, stairs, dots, smears fixed; body check unchanged).
-- Next: Opus, high. 1) the free elbow (chat 30's OPEN item: move the free hand along the door top, test jumps);
-  2) every moving frame 14.1-22.3 at full size (`gta_rehearse.py shot4 OUT --frames DIR`, ~40 min, frames saved
-  at full size: look at them, then send that clip to Sam). Then F6, F15, F12.
-- Needs Sam: his own Y in a chat to switch off the budget stops (chat 28 item). His look at the next shot 4 clip.
-- Read: job-packs "Notes round"; chat 30 section. Open rule requests: Sam's held-object check (draft only).
-- For Claude (claude/check-repairs-2: the status chat's, left; handover check's leanout quick-checks and "Choose views"
-  sentence: false alarms, the sentence is in CLAUDE.md Seeing like Sam 4): leanout._cover (q 2, _GIRTH, arm
-  pieces tested at near skin), leanout._elbow_over_sill + LIFT (off), arm3d_film fade only over drawn skin,
-  hands3d._no_specks, head3d_film HAIR_Z/HAIR_Y. Strip check: `python3 source/leanout.py strip OUT` (~10 min; 311
-  fault lines is the baseline). Frames: gta_film.frame_image(t) (~25 s a frame).
+## Where things stand (22 Nov, chat 32, Opus)
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do (CLAUDE.md); 30.
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3, shot 4's camera included; the script;
+  the 8 shots' order and lengths. The failure unlocks none of these.
+- Done: on Sam's order, every attempt at Jason's movements in shot 4 marked FAILED (case study section 17); chat 31
+  stopped mid-work; no next chat opened.
+- Next: nothing on shot 4 until Sam says how to go on. The chain is stopped here.
+- Needs Sam: how to go on with shot 4 (a new way of drawing it, see case study section 17), and whether other work
+  (F6, F15, F12, shots 5-8) goes on meanwhile. His Y on the budget stops (chat 28 item) still open.
+- Read: case study section 17. Open rule requests: Sam's held-object check (draft only).
+- For Claude: chat 31 (session_01GznaAVRjtm1nmzn6nuRJJ6) was interrupted; its unpushed work, if any, is not merged.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 57.98% of 15%; forecast 69.7% (2026-11-22)

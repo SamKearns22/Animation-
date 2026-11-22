@@ -573,3 +573,20 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   BODY3D, HEAD3D_H 300, _real_hands patches lying_flat._arm/_head_draw. Sheets: `python3 source/arm3d_film.py sheet
   OUT`, gun3d_film, head3d_film. Frames: gta_film.frame_image(t) (about 25 s a frame now).
 
+
+## Where things stand (22 Nov, chat 30, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 and 5 (CLAUDE.md); 30.
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera: "great shot, broken
+  drawing"); the script; the 8 shots' order and lengths. Fix drawings only.
+- Done: chat 30 section (bald look, seal box, stairs, dots, smears fixed; body check unchanged).
+- Next: Opus, high. 1) the free elbow (chat 30's OPEN item: move the free hand along the door top, test jumps);
+  2) every moving frame 14.1-22.3 at full size (`gta_rehearse.py shot4 OUT --frames DIR`, ~40 min, frames saved
+  at full size: look at them, then send that clip to Sam). Then F6, F15, F12.
+- Needs Sam: his own Y in a chat to switch off the budget stops (chat 28 item). His look at the next shot 4 clip.
+- Read: job-packs "Notes round"; chat 30 section. Open rule requests: Sam's held-object check (draft only).
+- For Claude (claude/check-repairs-2: the status chat's, left; handover check's leanout quick-checks and "Choose views"
+  sentence: false alarms, the sentence is in CLAUDE.md Seeing like Sam 4): leanout._cover (q 2, _GIRTH, arm
+  pieces tested at near skin), leanout._elbow_over_sill + LIFT (off), arm3d_film fade only over drawn skin,
+  hands3d._no_specks, head3d_film HAIR_Z/HAIR_Y. Strip check: `python3 source/leanout.py strip OUT` (~10 min; 311
+  fault lines is the baseline). Frames: gta_film.frame_image(t) (~25 s a frame).
+

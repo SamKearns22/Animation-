@@ -1,3 +1,6 @@
+Grand Theft Autism, chat 32 (22 Nov): on Sam's order, every attempt at Jason's movements in shot 4 is marked FAILED and stopped (chat 31 stopped).
+Shot 4's camera and beats stay locked; nothing on shot 4 goes on until Sam says how.
+Next: Sam's decision on shot 4 and on whether other work goes on meanwhile.
 Grand Theft Autism, chat 30 (22 Nov): Jason's hair no longer looks bald from above; the dark box, stair-steps, dots and see-through smears on his arm are gone.
 Still wrong: his free elbow dangles outside the door below his hand for a moment as he climbs out and back (15.2, 21.2).
 Next: chat 31, Opus high: fix that elbow, check every frame 14.1-22.3 at full size, then the clip to Sam.

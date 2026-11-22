@@ -554,3 +554,38 @@ The other notes:
   Sam's frame sheets (v8-frames/) as the before picture. Kept from chat 23 (not seen faulty): Lucia's grip, the
   bonnet cover, the arm-edge car check and the raised-gun pose, the wobble, the struck hydrant, blood on the glass,
   the cop's sideways slump (stills sent; Sam has not judged them yet).
+
+## 17. FAILED: every attempt at Jason's movements in shot 4 (Sam, 22 Nov, chat 32)
+
+Sam (22 Nov, verbatim): "All attempts at building Jason's movements in shot 4 have failed. Please stop all attempts
+and mark them in the tracking document as failed."
+
+**Status: FAILED. All work on Jason's movements in shot 4 is stopped.** Chat 31 (working on the free elbow) was
+stopped mid-work in chat 32. No chat picks shot 4's Jason up again until Sam says how to go on.
+
+Locked by Sam (unchanged): every camera and beat of shots 1-8 as in animatic v3, shot 4's camera included ("great
+shot, broken drawing"); the script; the shots' order and lengths. Failing to draw it does not unlock any of these.
+
+Every attempt, all marked FAILED:
+
+| attempt | chat(s) | what was tried | result |
+|---|---|---|---|
+| version 1 | 6 | first rehearsal, Jason climbs onto the ledge | FAILED (Jason from behind a lump) |
+| version 2 | 7 | critique fixes, camera higher and farther back | FAILED (never passed) |
+| version 3 | 11 | version 2 with the new cast | FAILED (rejected by Sam) |
+| version 4 | 12-16 | rebuilt from shot 3's frame, Jason turned on the sill | FAILED (Sam's 16 frame notes) |
+| body check + lean-out poses | 17-20 | the proposal route for the build method, the K2 head, the move in time | FAILED |
+| version 6 | 21 | the lean-out put into the film | FAILED |
+| version 7 | 22 | hunt 1's list, Sam's door clip | FAILED (Sam's ten notes) |
+| version 8 | 23 | version 7's ten notes as one list, near arms drawn bigger | FAILED ("the exact same arm problem", third time) |
+| animatic v3, shot 4 on | 25-26 | fault list from shot 4 on (13 faults), one Jason body for the 4-to-5 cut | FAILED ("riddled from shot 4 on") |
+| back-view check | 27 | cameras re-aimed so Jason is never seen from behind (undone in 28: the camera is locked) | FAILED |
+| real hands | 28 | hands with fingers on the door and pistol grip | FAILED (arm a thick tube, pistol a flat card, head from behind) |
+| 3D arm, pistol, head | 29 | arm, pistol and back of head drawn from the 3D body | FAILED (head reads bald from above, marks) |
+| hair and marks | 30 | buzz cut edge, the seal box, stair-steps, dots, smears | FAILED (free elbow dangles outside the door, 15.2 and 21.2 s) |
+| free elbow | 31 | moving the free hand along the door top; full-size check | FAILED, stopped unfinished by Sam's order |
+
+What it would take (plain words, for when Sam decides): the project has never been able to draw a flat-style person
+climbing out of a moving car window and back from this camera. Doing it needs a new way of drawing (for example a
+real 3D body posed and lit, then drawn over in the house style, or reference footage acted out and traced), tested
+on a short clip on its own before it goes back into the film. Nothing here is started without Sam's word.
