@@ -3,6 +3,9 @@
 if [ "$CLAUDE_CODE_REMOTE" != "true" ]; then
   exit 0
 fi
+# Sam, 21 Nov ("tools built then not enabled"): the 'seen running' mark the watcher reads (source/hookran.py)
+mkdir -p ~/.claude/watcher/ran 2>/dev/null && date +%s > ~/.claude/watcher/ran/setup.sh 2>/dev/null
+[ -f ~/.claude/watcher/ran/_since ] || date +%s > ~/.claude/watcher/ran/_since 2>/dev/null
 # Only what is missing is installed, each step with a time limit (10 Nov: reinstalling everything every chat took
 # about 1 min 45 s before Claude saw Sam's first message, and a slow download could hold a new chat up for good)
 py_has() { python3 -c "import $1" >/dev/null 2>&1; }

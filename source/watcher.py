@@ -277,10 +277,129 @@ def hook_faults():
     return out
 
 
+# Sam, 21 Nov: "Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again."
+# Why it kept happening: systems() found tools only from the wiring, so a tool never wired was invisible; each tool's
+# kittest called it directly (it works when called, never that anything calls it); and a job was ticked when its file
+# and test existed. So the watcher now also finds tools from the FILES (every hook file, every source tool an adopted
+# proposal names), flags any that nothing switches on (unwired), and flags a switched-on step never seen running
+# (ran_faults, from the marks source/hookran.py leaves).
+OFF = {                    # a tool deliberately not switched on, and why (a chat names it here, Sam sees it in notes)
+}
+SWITCHES = ('.claude/settings.json', '.claude/hooks/setup.sh', 'source/handover.py', 'guides/job-packs.md', 'CLAUDE.md')
+
+
+def _read(rel, text=None):
+    if text is not None:
+        return text
+    try:
+        return open(os.path.join(ROOT, rel), encoding='utf-8', errors='replace').read()
+    except OSError:
+        return ''
+
+
+def built_tools():
+    """Every tool that exists, found from the files: each file in .claude/hooks, and each source or hook tool an
+    adopted proposal names. -> {file name: where it was found}"""
+    out = {}
+    for f in glob.glob(os.path.join(ROOT, '.claude', 'hooks', '*.py')) + glob.glob(os.path.join(ROOT, '.claude', 'hooks', '*.sh')):
+        out[os.path.basename(f)] = 'a hook file'
+    for f in glob.glob(os.path.join(ROOT, 'notes', 'proposals', '*.md')):
+        txt = _read(os.path.relpath(f, ROOT))
+        if not re.search(r'^Status: adopted', txt, re.M):
+            continue
+        import freeze                              # a film's own files are not tools
+        for m in set(re.findall(r'(?:source/|\.claude/hooks/)([a-z_]+\.(?:py|sh))', txt)):
+            if freeze.FILM.match(m[:-3]):
+                continue
+            if os.path.exists(os.path.join(ROOT, 'source', m)) or os.path.exists(os.path.join(ROOT, '.claude', 'hooks', m)):
+                out.setdefault(m, 'named by adopted proposal ' + os.path.basename(f)[:-3])
+    return out
+
+
+def unwired(settings_text=None):
+    """Tools that exist but nothing switches on: not in a hook command, the start-up script, the handover check, the
+    job packs or CLAUDE.md, and (for a source tool) not imported or run by any other source file. settings_text: test
+    a different settings.json (the kittest replays 17 Nov's)."""
+    hooks_txt = _read('.claude/settings.json', settings_text)
+    others = ''.join(_read(r) for r in SWITCHES[1:])
+    out = []
+    for name, why in sorted(built_tools().items()):
+        if name in OFF:
+            continue
+        stem = name.rsplit('.', 1)[0]
+        on = name in hooks_txt or (why != 'a hook file' and name in others)
+        if not on and why != 'a hook file':
+            for f in glob.glob(os.path.join(ROOT, 'source', '*.py')):
+                b = os.path.basename(f)
+                if b in (name, 'kittests.py', 'watcher.py'):
+                    continue
+                t = _read(os.path.relpath(f, ROOT))
+                if re.search(rf'^\s*(?:import|from)\s+{stem}\b|\bimport .*\b{stem}\b|{re.escape(name)}', t, re.M):
+                    on = True
+                    break
+        if not on:
+            out.append(f'unwired|{name} is built ({why}) but nothing switches it on: wire it (a hook in '
+                       f'.claude/settings.json, handover end, or a job pack) or name why in watcher.py OFF')
+    return out
+
+
+def ran_faults(path=None):
+    """A step switched on in .claude/settings.json that has never been seen running on this machine, though its event
+    has happened in this chat (Sam's prompt for UserPromptSubmit, the chat's start for SessionStart, a tool it
+    watches for PreToolUse/PostToolUse; Stop steps from the second reply on)."""
+    import hookran
+    try:
+        hooks = json.load(open(os.path.join(ROOT, '.claude', 'settings.json')))['hooks']
+    except (OSError, ValueError, KeyError):
+        return []
+    tools, prompts, started = set(), 0, None
+    if path and os.path.exists(path):
+        for line in open(path, encoding='utf-8', errors='replace'):
+            try:
+                d = json.loads(line)
+            except ValueError:
+                continue
+            if started is None and d.get('timestamp'):
+                try:
+                    started = datetime.fromisoformat(d['timestamp'].replace('Z', '+00:00')).timestamp()
+                except ValueError:
+                    pass
+            if d.get('type') == 'user' and isinstance(d.get('message', {}).get('content'), str):
+                prompts += 1
+            for c in (d.get('message', {}).get('content') or []) if isinstance(d.get('message', {}).get('content'), list) else []:
+                if isinstance(c, dict) and c.get('type') == 'tool_use':
+                    tools.add(c.get('name'))
+    out = []
+    begun = hookran.since()
+    late = begun is None or started is None or begun > started + 300   # marks began mid-chat: judge only steps that keep firing
+    for event, groups in hooks.items():
+        if late and event in ('SessionStart', 'UserPromptSubmit', 'Stop'):
+            continue
+        for g in groups:
+            matcher = g.get('matcher', '') or ''
+            for h in g.get('hooks', []):
+                m = re.search(r'([\w.-]+\.(?:py|sh))"?\s*(\w+)?', h.get('command', ''))
+                if not m:
+                    continue
+                name = m.group(1) + (' ' + m.group(2) if m.group(2) and not m.group(2).startswith('test') else '')
+                if event == 'SessionStart':
+                    due = os.environ.get('CLAUDE_CODE_REMOTE') == 'true'
+                elif event == 'UserPromptSubmit':
+                    due = prompts >= 1
+                elif event == 'Stop':
+                    due = prompts >= 2
+                else:
+                    due = bool(tools) if matcher in ('', '*') else any(re.fullmatch(matcher, t or '') for t in tools)
+                if due and hookran.last(name) is None:
+                    out.append(f'notrun|{name} is switched on ({event}) but has never been seen running here: '
+                               f'check its hook line and that it leaves its mark (source/hookran.py)')
+    return out
+
+
 def check(path, film=None):
     faults = []
     for fn in (lambda: saver_faults(path), lambda: guard_faults(path), lambda: finder_faults(path, film),
-               kit_faults, kittest_faults, hook_faults):
+               kit_faults, kittest_faults, hook_faults, unwired, lambda: ran_faults(path)):
         try:
             faults += fn()
         except Exception as e:                      # a check that breaks is itself a fault, never hidden
@@ -386,12 +505,14 @@ def start_lines():
     out = [f'BROKEN (watcher, fix or name first): {b}' for b in standing()]
     out += [f'UNLISTED (watcher): {s} has no promise; add one to source/watcher.py PROMISES and a kittest'
             for s in unlisted()]
+    out += [f'UNWIRED (watcher): {f.split("|", 1)[1]}' for f in unwired()]
     return out
 
 
 def main(argv):
     cmd = argv[0] if argv else ''
     if cmd == 'stop':
+        __import__('hookran').ran('watcher.py stop')
         try:
             stop()
         except Exception:

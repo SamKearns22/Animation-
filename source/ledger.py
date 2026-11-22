@@ -1019,6 +1019,7 @@ def main():
         print('\n'.join(kept_lines()))
         return
     if o.cmd == 'auto':                           # the Stop hook: its JSON (with the transcript's path) on stdin
+        __import__('hookran').ran('ledger.py auto')
         try:
             auto(json.load(sys.stdin)['transcript_path'])
         except Exception as e:                    # never hold up a chat over the ledger

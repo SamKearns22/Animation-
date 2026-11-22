@@ -83,6 +83,12 @@ def decide(inp, state_dir=STATE):
 
 
 def main():
+    try:                                   # Sam, 21 Nov: every switched-on step leaves a 'seen running' mark
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'source'))
+        import hookran
+        hookran.ran('finderwarn.py')
+    except Exception:
+        pass
     try:
         out = decide(json.load(sys.stdin))
     except Exception:

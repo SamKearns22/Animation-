@@ -115,7 +115,9 @@ def hands_in_sleeves():
 # ------------------------------------------------------------------------------------------------ rule 42: poses
 @test
 def pose_gallery():
-    """Rule 42: every gallery pose passes the hand check from every view except those its AVOID lists."""
+    """Rule 42: every gallery pose passes the hand check from every view except those its AVOID lists. A view avoided
+    because it was SEEN wrong on the sheet (no check catches it yet, the reason says "seen on the sheet") need not
+    fail the hand check; every other avoided view must still fail it (else the kit got better: free the view)."""
     import posegallery as PG
     argv = sys.argv
     sys.argv = ['posegallery', os.path.join(HERE, 'data', 'pose-gallery.jpg')]
@@ -123,7 +125,8 @@ def pose_gallery():
         bad = PG.main()
     finally:
         sys.argv = argv
-    want = {n: set(v) for n, v in PG.AVOID.items()}
+    want = {n: {k for k, why in v.items() if 'seen on the sheet' not in why} for n, v in PG.AVOID.items()}
+    want = {n: v for n, v in want.items() if v}
     got = {n: v for n, v in PG.results.items() if v}
     return not bad and got == want, f'{len(PG.results)} poses; failing views {got or "none"} (AVOID lists {want})'
 
@@ -1299,22 +1302,29 @@ def copies_in_a_group():
 @test
 def lopsided_invented_only():
     """Job K 5 (Sam: Y, 11 Nov): an invented person can be drawn a touch uneven (brow, mouth corner, side hair);
-    a likeness head never is (Vance stays as measured)."""
+    a likeness head never is. Since the one-route kit (20 Nov) the film that taught it (Vance's advert) draws from its
+    bookmark, so this draws with today's people kit: an invented Milburn face (the goth) changes a little when
+    lopsided, Andy and Kemi on the house head (likenesses) not at all."""
     import numpy as np
     from PIL import Image
     import body as B
     import views as V
-    import patriots4_cast as P4
-    import ad_vanced_notice_cast as AC
+    import people as PK
     B.SS = 1
 
     def face(sp):
         im = Image.new('RGBA', (1080, 1920), (238, 234, 228, 255))
         V.person(im, B.Cam(1.0, 540, 960), 540, 1150, 2.2, dict(sp), 0.0, 0)
         return np.asarray(im.convert('L'), np.int16)
-    plain = dict(AC.MAN, lopsided=None)
-    changed = float((np.abs(face(AC.MAN) - face(plain)) > 40).mean())
-    likeness = [n for n, sp in AC.CAST.items() if n != 'man' and P4.lop(sp)]
+
+    def diff(sp):
+        return float((np.abs(face(dict(sp, lopsided=True)) - face(dict(sp, lopsided=None))) > 40).mean())
+    cast = PK.load('milburn')
+    PK.install(cast)
+    changed = diff(cast['goth'])
+    house = PK.load('facetool')
+    PK.install(house)
+    likeness = [w for w in ('andy', 'kemi') if diff(house[w]) > 0]
     return 0.0005 < changed < 0.02 and not likeness, \
         f'face pixels changed {changed * 100:.2f}%; likeness heads uneven: {likeness or "none"}'
 
@@ -1342,12 +1352,17 @@ def turned_heads_for_anyone():
         return np.asarray(im.crop((375, 620, 705, 1020)).convert('RGB')).astype(int)
     out = []
     # 1. a person with a measured front design but no turned head: recorded (pre-flight names it), then built
-    keep = TH.PEOPLE.pop('man')
+    import faces as FA                                      # since 20 Nov (one-route kit) a film measures its people
+    keep = TH.PEOPLE.pop('man')                             # in faces.MEASURED; this old film used its own copy
+    had = 'man' in FA.MEASURED
+    FA.MEASURED.setdefault('man', C.P4.MEASURED['man'])
     del TH.MISSING[:], TH.SEEN[:]
     try:
         head(C.MAN, 90)
     finally:
         TH.PEOPLE['man'] = keep
+        if not had:
+            FA.MEASURED.pop('man', None)
     caught = ('man', 'side') in TH.MISSING
     del TH.MISSING[:]
     side = head(C.MAN, 90)
@@ -1391,13 +1406,12 @@ def turned_heads_for_anyone():
     # three-quarter redrawn (face tool chat 12, Sam: "3/4 front poses ... look gaunt and weird"): both eyes now show
     vh = hashlib.md5(b''.join(head(C.VANCE, y).astype(np.uint8).tobytes() for y in (90, 135, 180))).hexdigest()
     out.append(f'Vance side and behind unchanged: {vh == VANCE_TURNED_MD5}')
-    import traitors_cast as TCE
-    real, seen = TCE.eye, []
-    TCE.eye = lambda *a, **k: (seen.append(1), real(*a, **k))[1]
+    real, seen = FA.eye, []                                 # the eyes are faces.eye since 20 Nov (was traitors_cast.eye)
+    FA.eye = lambda *a, **k: (seen.append(1), real(*a, **k))[1]
     try:
         head(C.VANCE, 45)
     finally:
-        TCE.eye = real
+        FA.eye = real
     out.append(f'three-quarter eyes drawn: {len(seen)} (was 1: the far eye hidden)')
     ok = (caught and fixed and new_g >= old_g + 15 and new_h < old_h - 0.06 and vh == VANCE_TURNED_MD5
           and len(seen) == 2)
@@ -1855,14 +1869,17 @@ def round_page():
     sys.path.insert(0, HERE)
     import page as P
     out, pg, code = P.build('blessed')
-    hit = [w for _, w, _ in P.find('blessed', "note 28: the escort should look like an HM Prison officer", 3)]
+    found = P.find('blessed', "note 28: the escort should look like an HM Prison officer", 3)
+    hit = [w for _, w, _ in found]
+    # line numbers drift as the files are edited (20 Nov kit changes): the test checks the functions found
+    officer = any(w.startswith('blessed.py:') and '`_officer_turned`' in d for _, w, d in found)
     # show (Sam's Y, 15 Nov): one command, a note -> ~40 numbered lines of the code it touches, either film spelling
     sh = P.show('protest-tiers', "frames missing: a stopped drawing mid-throw, the picture goes black")
-    got = [h.split()[0] for h, rows in sh if rows][:2]
+    got = [h.split('`')[1] for h, rows in sh if rows and '`' in h][:2]
     n = sum(len(rows) for _, rows in sh)
-    ok_show = (set(got) == {'protest_tiers.py:306', 'protest_tiers_cast.py:627'} and n <= 44 and
+    ok_show = (set(got) == {'_resolve_mixed_arms', '_clear_of_shoulder'} and n <= 44 and
                any('def _resolve_mixed_arms' in t for _, rows in sh for _, t in rows))
-    return (pg * 100 < code * 15 and 'blessed.py:307' in hit and ok_show,
+    return (pg * 100 < code * 15 and officer and ok_show,
             f'page {pg} tokens, code {code}; note 28 -> {hit}; show "frames missing" -> {got} ({n} lines)')
 
 
@@ -1893,8 +1910,20 @@ def people_from_a_description():
                                              'height', 'hw', 'seed')) or f['face_m'] != k['kit_face']['m']:
             bad.append(f'journalist {i + 1} not as the film drew them')
             break
-    out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van'),
-                                               (24.0, 'escort'), (60.5, 'gates2')], film_keys=True)
+    import people_turned as PTN                         # Blessed was drawn before the kit's neck fix (GTA chat 10,
+    neck = PTN.LIFT, PTN.CHIN_V                         # Sam: "weird slumped necks"): compare with the old necks
+    PTN.LIFT, PTN.CHIN_V = False, 1.06
+    import body as BD                                   # the film's own quality (2): earlier tests leave the quick 1,
+    ss, BD.SS = BD.SS, 2                                # which drew half size beside the posted film (full run crash)
+    bss, BL0.B.SS = BL0.B.SS, 2                         # Blessed's own engine (burnham) keeps its own setting
+    try:
+        out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van'),
+                                                   (24.0, 'escort'), (60.5, 'gates2')], film_keys=True)
+    finally:
+        PTN.LIFT, PTN.CHIN_V = neck
+        BD.SS, BL0.B.SS = ss, bss
+        K.FILM_TURNED.clear()                           # a crash mid-replicate left Blessed's scarf and officer as the
+        PTN.KEYED.clear()                               # film's own: outfit_every_view then lost them (full run)
     drawn = set().union(*[set(w) for *_, w in scores])
     if 'escort' not in K.replicate.turned:                 # chat 4d: invented people turn with their own face
         bad.append('the officer in escort was not turned by the kit')
@@ -1908,15 +1937,18 @@ def people_from_a_description():
         bad.append(f'only {len(drawn)} people drawn by the kit')
     import freeze as FZ
     drift = max(K.FROZEN_DRIFT.values() or [0.0])           # live code vs the posted film (its bookmark): may not rise
+    # line moved 1.92 -> 2.06 on 22 Nov (check repairs 2): all of the rise is aa09376a, Sam's one smooth shoulder line
+    # (20 Nov), per frame against 413beb3e; nothing since. The posted film redraws from its bookmark (freeze.py).
     base = FZ.drift_baseline('blessed', drift)
     if drift > base + 0.05:
         bad.append(f'the live film now differs from the posted Blessed by {drift:.2f}% (was {base:.2f}%)')
     import blessed as BL
     import blessed_cast as BC
-    TC = BC.TC
+    import people_parts as PPK
+    TC = PPK.B                                     # since 20 Nov the engine holds each look's head (was BC.TC's copy)
     caught = K.faults(dict(judge=BC.JUDGE)) == []
-    keep = TC.HEADS['judge']
-    TC.HEADS['judge'] = TC._head                   # the old fault (notes 13, 15): the judge on the house head
+    keep = TC.HEADS.get('judge')
+    TC.HEADS['judge'] = TC.plain_head              # the old fault (notes 13, 15): the judge on the plain (house) head
     caught = caught and bool(K.faults(dict(judge=BC.JUDGE)))
     TC.HEADS['judge'] = keep
     if not caught:
@@ -1955,11 +1987,7 @@ def places_from_a_description():
             bad.append(why + ' was not refused')
         except K.DescriptionError:
             pass
-    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if not os.path.basename(f).startswith(
-             ('places', 'page.py', 'kittests.py', 'rough.py')) and re.search(r'^\s*(import places\b|from places\b|import places_)',
-             open(f, encoding='utf-8').read(), re.M)]
-    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
-        bad.append(f'films using the kit before Sam approves it: {users}')
+    # Sam approved the kit for films (14 Nov, notes/morning-report.md): the old 'no film uses the kit yet' clause is gone
     out, scores = K.replicate('blessed', os.path.join(HERE, 'data', 'kittest-places'), frames=False)
     if len(scores) < 13:
         bad.append(f'only {len(scores)} of 13 paintings redrawn')
@@ -2009,11 +2037,7 @@ def moves_from_the_acting_list():
             bad.append(why + ' was not refused')
         except (ValueError, IndexError, AttributeError):
             pass
-    users = [os.path.basename(f) for f in glob.glob(os.path.join(HERE, '*.py')) if os.path.basename(f) not in (
-             'acting.py', 'kittests.py', 'catalogue.py', 'page.py', 'rough.py') and re.search(r'^\s*(import acting\b|from acting\b)',
-             open(f, encoding='utf-8').read(), re.M)]
-    if users:                                      # Sam (13 Nov): no film uses the kit until he approves it
-        bad.append(f'films using the kit before Sam approves it: {users}')
+    # Sam approved the kit for films (14 Nov, notes/morning-report.md): the old 'no film uses the kit yet' clause is gone
     bad += A.check('blessed')
     desc, film = A.load('blessed'), A.film_side('blessed')
     BL = film['module']
@@ -2303,7 +2327,9 @@ def facehouse_whole_head():
     import facehouse as FH
     import people
     import turnhead as TH
-    held = {'burnham': '840197c25a2801e6cde010a48eb1797d', 'badenoch': 'de6b4e6f7ca6c106e5626a65be453c41'}
+    held = {'burnham': '4f13fdafb1c7d29d2c492a16fbe949c4', 'badenoch': 'a2cbd8ae06ef3b53bd9921c3111961d9'}
+    # re-held 21 Nov (check repairs 2): both changed at aa09376a only (Sam, 20 Nov: one smooth shoulder line), found by
+    # bisecting; the pictures differ only below the collar (rows 707-767 of 1038), the faces identical.
     # re-held 19 Nov (front-on focus chat 2): both changed at 594f94ba only (Sam, 14 Nov: the flat dark shadow side
     # taken off people), found by bisecting; unchanged from then to today, so today's heads are the finished ones
     tmp = tempfile.mkdtemp()
@@ -3008,9 +3034,10 @@ def drawn_angle_every_film():
 @test
 def focus_front_heads():
     """C2 (front-on focus, Sam: Y to all, 19 Nov): the focus setting on both front heads (focus.py). At focus 0 every
-    finished film draws exactly as before: Andy and Kemi on the house head, a Milburn frame of invented kit faces
-    (5 s), one of Andy and Pat (32 s), a Protest Tiers frame (3 s), pixel for pixel (held the moment before focus was
-    put in). At full focus every piece is MOVED, never warped: each piece keeps every distance between its points on
+    drawing is pixel for pixel what it is with the focus code taken out: Andy and Kemi on the house head, a Milburn
+    frame of invented kit faces (5 s), one of Andy and Pat (32 s), a Protest Tiers frame (3 s). (Until 21 Nov these were
+    fingerprints held from 19 Nov; the kit has changed on purpose since and finished films draw from their bookmarks,
+    freeze.py, so the test now compares with focus switched off, drawn the same day.) At full focus every piece is MOVED, never warped: each piece keeps every distance between its points on
     one side of the face (the tilt only turns it), and the face outline stays where it was (tilt off)."""
     import hashlib
     import importlib
@@ -3023,21 +3050,33 @@ def focus_front_heads():
     import focus as FO
     if 'kittests' not in F._ALLOW:
         F._ALLOW.append('kittests')
-    held = {('milburn', 5.0): '43bc2edeac0c1b05fb6c82c9db1d6506', ('milburn', 32.0): 'a09b39a210cd9a0d57b1ac98321ef4c5',
-            ('protest_tiers', 3.0): '179c6924fa812ef9c7ab7e9fcf570a97'}
-    heads = {'burnham': '840197c25a2801e6cde010a48eb1797d', 'badenoch': 'de6b4e6f7ca6c106e5626a65be453c41'}
+    samples = [('milburn', 5.0), ('milburn', 32.0), ('protest_tiers', 3.0)]
     B.SS = 1
-    same = []
-    for (name, t), h in held.items():
-        if hashlib.md5(importlib.import_module(name).frame_image(t).tobytes()).hexdigest() == h:
-            same.append(f'{name} {t:g}')
     tmp = tempfile.mkdtemp()
+
+    def prints():
+        out = {}
+        for name, t in samples:
+            out[f'{name} {t:g}'] = hashlib.md5(importlib.import_module(name).frame_image(t).tobytes()).hexdigest()
+        for n in ('burnham', 'badenoch'):
+            out[n] = hashlib.md5(open(FH.draw(n, 'detail', os.path.join(tmp, n + '.png')), 'rb').read()).hexdigest()
+        return out
+
+    class Off:                       # no focus code at all: every piece is the head's own face, the eyes their own look
+        def __init__(self, base, sp, L, room=None):
+            self.whole = self.eyes = self.brows = self.lens = self.nose = self.mouth = self.lines = self.ears = base
+            self.marks = base
     try:
-        for n, h in heads.items():
-            if hashlib.md5(open(FH.draw(n, 'detail', os.path.join(tmp, n + '.png')), 'rb').read()).hexdigest() == h:
-                same.append(n)
+        live = prints()
+        real_focus, real_look = FO.Focus, FO.look
+        FO.Focus, FO.look = Off, (lambda sp: float(sp.get('look', 0.0) or 0.0))
+        try:
+            bare = prints()
+        finally:
+            FO.Focus, FO.look = real_focus, real_look
     finally:
         shutil.rmtree(tmp)
+    same = [k for k in live if live[k] == bare[k]]
 
     class Face:
         tq = 0.0
@@ -3522,8 +3561,10 @@ def _body_faults(fn, times):
 def body_check_shot4_v4():
     """GTA shot 4, version 4 (Sam, 20 Nov: "Utterly inhuman ... It really worries me that this wasn't caught"): the
     body check (humancheck.py) must catch the right arm out of Jason's back and the gun drawn off its target in the
-    old version, pass shot 3 clean, and pass the pose gallery's three former false flags (arms folded and microphone
-    from three-quarter back, cup sipping three-quarter front)."""
+    old version, pass the pose gallery's three former false flags (arms folded and microphone from three-quarter back,
+    cup sipping three-quarter front). Shot 3 of that same version had real crossed forearms (Lucia off the wheel, the
+    middle passenger's hands on the wrong sides; seen on the picture 21 Nov): the check must flag exactly those, and
+    nothing else there."""
     import importlib.util
     import subprocess
     import tempfile
@@ -3596,6 +3637,49 @@ def body_check_back_view():
     ok = len(old) == 2 and to_drawing and flat[180.0] and not flat[0.0]
     return ok, (f'v3 Jason back views: {len(old)} of 2; advice points at the drawing: {to_drawing}; big figure from '
                 f'behind flagged: {bool(flat[180.0])}, from the front: {bool(flat[0.0])}')
+
+
+@test
+def tools_switched_on():
+    """Sam, 21 Nov: "Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again."
+    The model guard was built and tested on 17 Nov but never put in .claude/settings.json, so it never ran for four
+    days. The watcher must flag it from the 17 Nov settings with no promise needed (it finds tools from the files),
+    pass today's settings, and flag a switched-on step that has never been seen running (no mark), but not once it
+    has its mark. This is every tool's switched-on half: it covers every hook file and every adopted proposal's tool."""
+    import json
+    import subprocess
+    import tempfile
+    import hookran
+    import watcher as W
+    old = subprocess.run(['git', 'show', 'edb1cd78~1:.claude/settings.json'], cwd=os.path.dirname(HERE),
+                         capture_output=True, text=True, check=True).stdout
+    keep = dict(W.PROMISES)
+    W.PROMISES.pop('modelguard.py', None)              # 17 Nov: no promise for it either
+    try:
+        then = [f for f in W.unwired(old) if 'modelguard.py' in f]
+    finally:
+        W.PROMISES.clear()
+        W.PROMISES.update(keep)
+    now = W.unwired()
+    d = tempfile.mkdtemp()
+    rec = os.path.join(d, 'chat.jsonl')
+    with open(rec, 'w') as fh:
+        fh.write(json.dumps({'type': 'user', 'timestamp': '2026-11-21T22:00:00Z', 'message': {'content': 'hi'}}) + '\n')
+        fh.write(json.dumps({'type': 'assistant', 'message': {'content': [{'type': 'tool_use', 'name': 'Bash'}]}}) + '\n')
+    real = hookran.DIR
+    hookran.DIR = os.path.join(d, 'ran')
+    try:
+        os.makedirs(hookran.DIR)
+        open(os.path.join(hookran.DIR, '_since'), 'w').write('1000\n')     # marks kept long before this chat
+        missing = [f for f in W.ran_faults(rec) if 'modelguard.py' in f]
+        hookran.ran('modelguard.py')
+        marked = [f for f in W.ran_faults(rec) if 'modelguard.py' in f]
+    finally:
+        hookran.DIR = real
+    ok = bool(then) and not now and bool(missing) and not marked
+    return ok, (f'17 Nov settings: model guard {"flagged" if then else "NOT flagged"}; today unwired: {now or "none"}; '
+                f'never seen running: {"flagged" if missing else "NOT flagged"}; with its mark: '
+                f'{"quiet" if not marked else "still flagged"}')
 
 
 @test

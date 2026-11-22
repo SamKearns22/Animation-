@@ -1,3 +1,6 @@
+# Check repairs: old handovers
+
+## Where things stand (21 Nov, status chat, Opus)
 
 ## Where things stand (21 Nov, status chat, Opus)
 - Cost audit (21 Nov): done, waits on Sam's picks (see Budget tracker audit). Branch claude/check-repairs-2 = chat 2's
@@ -16,4 +19,17 @@
 - Open rule requests: none from this job (GTA's held-object check stays in its own notes).
 - For Claude: new code in source/handover.py (size_faults, ledger_faults, push_faults, turns() failed ids, NOT SENT
   regex), source/watcher.py (hook_faults unwired, PROMISES), .claude/settings.json PreToolUse Bash modelguard.
+
+
+## Where things stand (22 Nov, cost audit chat 2, Opus medium)
+- Rules that bite next: the proposal route (Sam picks only from judged options), 85 (cost watch), 30.
+- Done: Sam's picks 1-3 routed and judged (see "Cost audit chat 2 found"); the route costs about 1% of a week per
+  proposal; week check: 205% at one week size, cause most likely the week size; dearest_faults promise listed.
+- Next: on Sam's answers, Opus medium builds the options he picks (each option 1 is a measuring step first).
+- Needs Sam: an option (1 or 2) for each of the three; one reading of his usage meter (% and reset day).
+- Read: this file's "Budget tracker audit" only; `propose.py show dearest-grand-theft-autism-N`.
+- Open rule requests: none.
+- For Claude: still open, dearest.py numbering (save the shown list; --open reads it). Watcher BROKEN saver line
+  (20 Nov 03:29) is named in notes/proposal-route.md. claude/check-repairs-2 left alone (another chat's live work). Handover
+  flags named: SENTENCE (CLAUDE.md's "Choose views" line still there, now with Sam's 21 Nov aside), COST (no estimate set for this job).
 

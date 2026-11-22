@@ -123,6 +123,12 @@ def decide(inp):
 
 
 def main():
+    try:                                   # Sam, 21 Nov: every switched-on step leaves a 'seen running' mark
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'source'))
+        import hookran
+        hookran.ran('modelguard.py')
+    except Exception:
+        pass
     try:
         inp = json.load(sys.stdin)
         out = decide(inp)

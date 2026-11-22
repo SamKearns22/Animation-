@@ -120,6 +120,12 @@ def describe(st, pct):
 
 
 def main():
+    try:                                   # Sam, 21 Nov: every switched-on step leaves a 'seen running' mark
+        sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'source'))
+        import hookran
+        hookran.ran('costwatch.py')
+    except Exception:
+        pass
     if "--report" in sys.argv:
         path = sys.argv[sys.argv.index("--report") + 1] if len(sys.argv) > 2 else None
         if not path:

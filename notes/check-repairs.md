@@ -14,8 +14,23 @@
       named). Refused sends no longer count as sent; wider "sent" wording. Chat 27 told to re-send.
 - [x] No push notification at handovers: push_faults in handover end.
 - [x] kittest handover_status_checks; watcher_catches_last_weeks_four passes again (promises added).
-- [ ] The 11 other failing kit tests (below).
-- [ ] Sam, 21 Nov: "Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again."
+- [x] The 11 other failing kit tests (chat 2, 22 Nov). Each now passes on its own:
+      1 body_check_shot4_v4: old shot 3's 6 faults are REAL (Lucia's forearms crossed off the wheel, the middle
+        passenger's hands on the wrong sides; seen on the picture); today's shot 3 is clean. Test now expects exactly those.
+      2 focus_front_heads: the 19 Nov fingerprints were stale (kit changed on purpose since); now compares focus 0
+        with the focus code taken out, same day; proven to catch a stray tilt.
+      3 pose_gallery: "palm open" from behind now reads (freed); "hands behind the back" shows NO hands from side,
+        3/4 back and behind and no check catches it: avoided as "seen on the sheet". Proposal owed: a check for it.
+      4 lopsided_invented_only: moved onto today's kit; brow unevenness wired into the people kit; FOUND a real leak:
+        likeness heads (house, famous) went uneven if asked; their mouths now ignore it.
+      5 turned_heads_for_anyone: fixture stale (eyes and measurements moved to faces.py, 20 Nov).
+      6 round_page: line numbers drifted; checks the functions found (still the right ones).
+      7 people_from_a_description: the engine's head list moved (20 Nov); Blessed compared with the old necks (the GTA
+        neck fix, df6d2d08, bisected, is the only change); drift line 1.92 -> 2.06, all from Sam's shoulder change.
+      8/9 places_ and moves_from_the_acting_list: Sam approved both kits 14 Nov (morning-report): stale clause removed.
+      10 facehouse_whole_head: Andy and Kemi changed only below the collar (Sam's shoulder line, aa09376a, bisected):
+        re-held. 11 outfit_every_view: passes with no change here (fixed by work merged from the main line).
+- [x] Sam, 21 Nov: "Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again."
       Why: (1) the watcher finds systems by reading the wiring (settings.json hooks, handover end calls, job packs), so
       a tool that never got wired is invisible to it; (2) each tool's kittest calls the tool directly (modelguard
       test "OK, 11 cases"), proving it works when called, never that anything calls it; (3) a job is ticked done when
@@ -25,6 +40,11 @@
       b) every tool's kittest gets a switched-on half (it is in a hook, called by handover end, or in a job pack);
       c) a built tool is ticked only after its own log shows it ran in a real chat (as modelguard.log now does);
       d) test it against the 17 Nov guard (settings.json as it was before 21 Nov must be flagged).
+      DONE chat 2: a) watcher finds tools from hook files and adopted proposals (films' own files skipped), flags any
+      nothing switches on (UNWIRED at every start and Stop); b) one switched-on test covers every such tool (kittest
+      tools_switched_on); c) every hook step leaves a "seen running" mark (source/hookran.py); a switched-on step with
+      no mark once its event has happened is flagged (the three hook files marked themselves live in chat 2);
+      d) the 17 Nov settings flag the model guard with no promise needed; today's: none unwired.
 - Plain words, one wait per render, repeat notes (rule 30): looked at chat 26's last message and waits; followed.
   Rule 30: the arm note came a fourth time; the chat said why the earlier fix failed (camera fix covered only the
   shooting). The ledger never counted repeats: LEDGER fault now makes each chat log them.
@@ -34,6 +54,9 @@ chat's words; the wider wording catches talk about sending: watch for false flag
 has no estimate; RECORD "pre-flight ran on gta": only test text naming preflight.py, nothing ran; PUSH: sent at the end.
 
 Changes made without a proposal (for the end-of-film review): every item above, all on Sam's 21 Nov instruction.
+Chat 2 adds (same instruction): fingerprints re-held (Andy, Kemi), Blessed drift line 1.92 -> 2.06, the focus test
+compares with focus off instead of held prints, pose gallery avoids changed (one freed, two added), likeness mouths
+ignore "lopsided", the hookran marks in every hook step, the watcher's UNWIRED and never-seen-running checks.
 
 ## Budget tracker audit (Sam, 21 Nov: "I need to know that the budget tracking tool has worked as promised. The idea was to
 audit every last thing done in order to find the most expensive things and run it through the proposal route to
@@ -111,15 +134,16 @@ discover how it can be made more compliant with statement one.")
       like you used to." Not yet carried anywhere: find why (handover model line, modelguard) and fix.
       Done in the status chat: modelguard.py was never wired; wired 21 Nov, watcher flags unwired hooks (see the top).
 
-## Where things stand (22 Nov, cost audit chat 2, Opus medium)
-- Rules that bite next: the proposal route (Sam picks only from judged options), 85 (cost watch), 30.
-- Done: Sam's picks 1-3 routed and judged (see "Cost audit chat 2 found"); the route costs about 1% of a week per
-  proposal; week check: 205% at one week size, cause most likely the week size; dearest_faults promise listed.
-- Next: on Sam's answers, Opus medium builds the options he picks (each option 1 is a measuring step first).
-- Needs Sam: an option (1 or 2) for each of the three; one reading of his usage meter (% and reset day).
+## Where things stand (22 Nov, check repairs chat 2 after cost audit chat 2, Opus medium)
+- Rules that bite next: the proposal route (Sam picks only from judged options; the hands-behind-the-back check goes
+  through it), "Seeing like Sam" 2 (a check is done only when it catches its note), 85 (cost watch).
+- Done: cost audit chat 2: Sam's picks 1-3 routed and judged ("Cost audit chat 2 found"). Check repairs chat 2: Sam's
+  "built then not enabled" fix (a-d) and all 11 failing kit tests; full kit test run 107 of 107 pass.
+- Next: on Sam's answers, Opus medium builds the options he picks (each option 1 is a measuring step first), then the
+  hands-behind-the-back check through propose.py.
+- Needs Sam: an option (1 or 2) for each of the three cost proposals; one reading of his usage meter (% and reset day);
+  Y/N to switch the budget alarms back on (paused 18 Nov; my pick Y).
 - Read: this file's "Budget tracker audit" only; `propose.py show dearest-grand-theft-autism-N`.
 - Open rule requests: none.
-- For Claude: still open, dearest.py numbering (save the shown list; --open reads it). Watcher BROKEN saver line
-  (20 Nov 03:29) is named in notes/proposal-route.md. claude/check-repairs-2 left alone (another chat's live work). Handover
-  flags named: SENTENCE (CLAUDE.md's "Choose views" line still there, now with Sam's 21 Nov aside), COST (no estimate set for this job).
-
+- For Claude: dearest.py numbering still open; saver BROKEN line named in notes/proposal-route.md; SENTENCE and COST
+  flags named; new: source/hookran.py, watcher.py unwired/ran_faults/OFF, people_turned.LIFT, posegallery "seen on the sheet".

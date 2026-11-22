@@ -554,6 +554,7 @@ def main(argv):
     cmd, rest = argv[0], argv[1:]
     opt = lambda k: rest[rest.index(k) + 1] if k in rest else None
     if cmd == 'hook':
+        __import__('hookran').ran('propose.py hook')
         return hook()
     if cmd == 'new':
         new(rest[0], ' '.join(rest[1:]) or rest[0])
