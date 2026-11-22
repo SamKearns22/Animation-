@@ -4,6 +4,15 @@
 or have, instead of trying to use the wrong tools to make something happen.** (A wrong-tool workaround that only looks
 like it worked is worse than saying "I can't yet".)
 
+# Fix the drawing, never the shot (Sam, 21 Nov)
+
+**Sam's approved shots are locked: the script, the shot order and lengths, each camera and framing, and what happens in
+each shot.** When a drawing is wrong, fix the drawing. Never change a camera, framing, shot or screenplay beat to hide
+or avoid a fault, even if the view is hard to draw. If a view seems not to work, first say in plain words **what the
+project would need to learn** to draw that shot or movement well (a new way of drawing, a tool, a reference, a test),
+and start learning it; only then, if it still can't be done, ask Sam, with any alternative as a numbered question.
+**Every handover has a "Locked by Sam" line** naming the cameras and beats that must not move.
+
 # Seeing like Sam (read first, every chat; Sam's Y, 21 Nov)
 
 **Sam should never have to teach a fault twice. Every note he gives is proof that a check failed to see something,
@@ -18,7 +27,7 @@ so fix the seeing as well as the frame.**
    before they are trusted.
 3. **Before fixing a frame, ask why nobody saw it.** Name the check that should have caught it and improve that check,
    then fix the frame. A note given twice means the first fix only patched the picture.
-4. **Choose views the drawing can carry.** Our style is flat drawings; some camera angles and poses break them (very
+4. **Choose views the drawing can carry** (for a NEW shot; never for a shot Sam has already approved: see "Fix the drawing, never the shot"). Our style is flat drawings; some camera angles and poses break them (very
    close, from behind, a limb pointing straight at the lens). Such a view is a fault in itself, ruled out before
    anything is drawn.
 5. **Physical things behave physically.** Everything has weight, solidity and cause and effect. Nothing passes through

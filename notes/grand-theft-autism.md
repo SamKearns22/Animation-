@@ -273,3 +273,4 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
   body_check_back_view; frames: gta_film.frame_image + HC.frame_end loop. ARM_FOLD_NAMED still set; dafont blocked.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 53.78% of 15%; forecast 69.7% (2026-11-21)
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera is the one he called 'great shot, broken drawing'); the script and the 8 shots' order and lengths. Fix drawings only.
