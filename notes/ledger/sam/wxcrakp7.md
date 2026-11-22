@@ -44,3 +44,6 @@ Y
 ### 2026-11-22T20:12:03
 Any other ways of speeding up chat 39's work?
 
+### 2026-11-22T20:12:53
+Y and investigate the bigger computer
+
