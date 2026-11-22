@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 53.2% of a week; spent 77.66% (+24.46); 41 chats, 0 rounds, 5 notes, 1 repeated.**
+**Estimate 53.2% of a week; spent 78.41% (+25.21); 41 chats, 0 rounds, 5 notes, 1 repeated.**
 
-**Forecast: Spent 77.66% of the 41.05% planned so far; at this rate the film lands at 81.3%.**
+**Forecast: Spent 78.41% of the 41.05% planned so far; at this rate the film lands at 82%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -62,8 +62,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-22 | f8c1b3e3 | est | opus | bench stage 1 (key poses, proof) |  | 2.03 |  | 0 | 0 |
 | 2026-11-22 | 47f66348 | est | opus | bench stage 1 |  | 2.61 |  | 0 | 0 |
 | 2026-11-22 | 677102bf | est | sonnet | auto |  | 0.17 |  | 0 | 0 |
-| 2026-11-22 | d52ed8c4 | est | sonnet | auto |  | 0.14 |  | 0 | 0 |
-| 2026-11-22 | b00bdfd9 | est | opus | moves |  | 3.09 |  | 2 | 0 |
+| 2026-11-22 | d52ed8c4 | est | sonnet | auto |  | 0.6 |  | 0 | 0 |
+| 2026-11-22 | b00bdfd9 | est | opus | moves |  | 3.38 |  | 2 | 0 |
 | 2026-11-22 | c6a910de | est | opus | auto |  | 0.56 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
@@ -104,8 +104,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-22 f8c1b3e3 (bench stage 1 (key poses, proof)): 96 steps, history 287k at the end; other 70.7%, tool search 22.7%, renders 3.7%, pictures 1.7%, film-file search 0.6%, whole-file .py read 0.5%
 - 2026-11-22 47f66348 (bench stage 1): 117 steps, history 269k at the end; other 81.5%, tool search 14.8%, renders 2.5%, whole-file .py read 0.7%, film-file search 0.3%, pictures 0.2%
 - 2026-11-22 677102bf (auto): 11 steps, history 108k at the end; other 92.1%, tool search 3.6%, renders 1.7%, pictures 1.4%, routine 1.2%
-- 2026-11-22 d52ed8c4 (auto): 9 steps, history 103k at the end; other 93.2%, tool search 6%, renders 0.8%
-- 2026-11-22 b00bdfd9 (moves): 83 steps, history 244k at the end; other 63.3%, tool search 30.2%, renders 4.9%, pictures 1.5%
+- 2026-11-22 d52ed8c4 (auto): 53 steps, history 158k at the end; other 86.8%, tool search 8.9%, film-file search 1.4%, renders 1.2%, routine 1%, whole-file .py read 0.6%
+- 2026-11-22 b00bdfd9 (moves): 137 steps, history 313k at the end; other 72.3%, tool search 22.2%, renders 3.9%, pictures 1.6%
 - 2026-11-22 c6a910de (auto): 42 steps, history 156k at the end; other 66.7%, tool search 22.9%, pictures 5.7%, renders 4.6%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
@@ -146,12 +146,12 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-22 f8c1b3e3 (bench stage 1 (key poses, proof)): Claude's words 31.3%, start-up floor 24.8%, carried history 23.2%, new writes 20.6%. Biggest origins: Claude's words 51.4%, start-up floor 24.8%, result: tool search 14.8%. Leftover 0%
 - 2026-11-22 47f66348 (bench stage 1): new writes 36%, carried history 25.2%, Claude's words 21.5%, start-up floor 17.3%. Biggest origins: messages and reminders 39.5%, Claude's words 31.7%, start-up floor 17.3%. Leftover 0%
 - 2026-11-22 677102bf (auto): start-up floor 79.4%, Claude's words 11.7%, new writes 8%, carried history 1%. Biggest origins: start-up floor 79.4%, Claude's words 14.5%, result: tool search 2.2%. Leftover 0%
-- 2026-11-22 d52ed8c4 (auto): start-up floor 89.8%, new writes 5.2%, Claude's words 4.5%, carried history 0.5%. Biggest origins: start-up floor 89.8%, Claude's words 5.7%, result: tool search 4%. Leftover 0%
-- 2026-11-22 b00bdfd9 (moves): start-up floor 29.7%, Claude's words 26.5%, new writes 22%, carried history 21.9%. Biggest origins: Claude's words 42.2%, start-up floor 29.7%, result: tool search 19.1%. Leftover 0%
+- 2026-11-22 d52ed8c4 (auto): new writes 39%, start-up floor 32.9%, carried history 16.7%, Claude's words 11.4%. Biggest origins: messages and reminders 44.8%, start-up floor 32.9%, Claude's words 15%. Leftover 0%
+- 2026-11-22 b00bdfd9 (moves): new writes 33.7%, carried history 27.7%, Claude's words 21.3%, start-up floor 17.3%. Biggest origins: Claude's words 34.3%, messages and reminders 33.8%, start-up floor 17.3%. Leftover 0%
 - 2026-11-22 c6a910de (auto): start-up floor 43.9%, new writes 23.6%, Claude's words 19.9%, carried history 12.6%. Biggest origins: start-up floor 43.9%, Claude's words 28.5%, result: tool search 17.2%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 22% of the film (16.71% of a week over 40 chats: start 15.77, re-learning 0.94; 0.42% a chat; step-1 context re-read is 23% of a chat on average).
+A new chat's start and re-learning cost 21% of the film (16.71% of a week over 40 chats: start 15.77, re-learning 0.94; 0.42% a chat; step-1 context re-read is 23% of a chat on average).
 - 2026-11-19 c079f576: step-1 context 80k; first real work at step 12 (0.21% of a week); read before it: guides/kit-catalogue.md 2.1k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/vid/s4.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/sea.png 1.6k, guides/job-packs.md 1.2k, source/flying_whales_sea.py 1.2k, story/status.md 0.3k
 - 2026-11-20 ba8d2922: step-1 context 82k; first real work at step 40 (0.6% of a week); read before it: notes/_template.md 1.5k, notes/grand-theft-autism.md 1.3k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip1.png 1.6k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip2.jpg 1.6k, guides/kit-catalogue.md 1.4k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/jl.jpg 1.6k
 - 2026-11-20 23d4842a: step-1 context 80k; first real work at step 14 (0.1% of a week); read before it: notes/grand-theft-autism.md 3.5k, story/status.md 0.2k, notes/ledger/sam/bdslc8hv.md 0.3k
