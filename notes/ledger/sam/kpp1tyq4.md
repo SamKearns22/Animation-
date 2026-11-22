@@ -13,3 +13,6 @@ Statement One should be at the top of Claude MD and it should be about the 15% p
 ### 2026-11-22T23:18:46
 You keep sending me messages twice
 
+### 2026-11-22T23:20:04
+1 and 2 and please put statement one as you've written it at the top
+
