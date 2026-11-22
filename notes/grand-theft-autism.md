@@ -204,7 +204,8 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
   the picture (Blender: stray chin line, doubled lines, broken outlines). Sheet sent to Sam: notes/bench/l2-side-by-side.jpg.
 - L3: CMU has no car move; 3 stock clips found but not watched (previews would not play here); no key poses marked.
   Asked Sam to film the move in a parked car (question 2).
-- [ ] Sam's Y for stage 1 (the grey-figure move) and his answers to questions 1-2 (below).
+- [x] Sam (22 Nov): "Y 1" (stage 1 on our one-pass drawing). "2 I'm sorry that just isn't possible. You may be able
+  to find references." So: no footage from Sam; stage 1 finds reference itself first (L3 still open).
 
 ## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (details: archive notes, "Chat 33b")
 Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
@@ -220,9 +221,9 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera included; the house art style; circle hands.
 - Done: L1-L3 (notes/bench/learn-step.md); side-by-side still sent to Sam with the pick (our one-pass drawing).
-- Needs Sam: 1 Y/N stage 1 (grey-figure move on the bench) with our drawing; 2 Y/N he films the lean-out in a parked
-  car (10 s, from in front); budget stops Y (chat 28), still open.
-- Next: on Sam's Y, chat 34, Opus high: stage 1 (notes/proposals/solid-body-moves.md "Then one change"): the move as a
+- Needs Sam: budget stops Y (chat 28), still open. (Sam said Y to stage 1; N to filming: find reference ourselves.)
+- Next: chat 34, Opus high: first finish L3 (watchable reference of leaning out of a car window and back: film
+  stills, behind-the-scenes, video frames; key poses and planted contacts marked on a sheet), then stage 1 (notes/proposals/solid-body-moves.md "Then one change"): the move as a
   grey figure, IK contacts, crossings 0 incl. body against itself, every check proven on the pass list's old frames.
   Chat 33b (Opus medium, F6/F12/F15, shots 5-8) is separate; its work is merged (its section above).
 - Read: notes/bench/learn-step.md; proposal solid-body-moves (Final version). Open rule requests: Sam's held-object

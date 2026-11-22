@@ -1,4 +1,4 @@
-Grand Theft Autism, chat 33 (22 Nov): learn step done: Blender installed and works; one frame of seated Jason drawn both ways; our own one-pass drawing picked by the picture.
+Grand Theft Autism, chat 33 (22 Nov): learn step done; Sam said Y to stage 1 with our own one-pass drawing (no footage from him: we find reference).
 Pass list of 24 past shot 4 notes made; shot 4 has cost about 39% of a week.
 Next: Sam's Y for stage 1 (the grey-figure move on the test bench) and whether he films the lean-out in a parked car.
 Grand Theft Autism, chat 32 (22 Nov): plan to learn 3D moves on a test bench (Jason and the window only) judged; two options sent to Sam.
