@@ -6063,55 +6063,55 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.64,
+   "cost": 4.01,
    "src": "estimate",
    "sid": "session_01GznaARyyXKTWg4hMGAH7sT",
-   "steps": 16,
-   "hist_k": 149,
+   "steps": 22,
+   "hist_k": 155,
    "kinds": {
-    "tool search": 22.5,
-    "other": 77.5
+    "tool search": 20.8,
+    "other": 79.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 13,
+    "tool search": 14,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 15
+    "other": 21
    },
    "split": {
-    "usd": 1.1604,
-    "total": 1.1604,
+    "usd": 1.4244,
+    "total": 1.4244,
     "floor_k": 95,
     "blocks": {
-     "start-up floor": 38.7,
-     "new writes": 36.6,
+     "start-up floor": 38.8,
+     "new writes": 33.3,
      "Claude's words": 19.4,
-     "carried history": 5.4
+     "carried history": 8.6
     },
     "origins": {
-     "start-up floor": 38.7,
-     "Claude's words": 25.9,
-     "result: tool search": 17.5,
-     "result: other": 17.2,
-     "messages and reminders": 0.7
+     "start-up floor": 38.8,
+     "Claude's words": 26.5,
+     "result: other": 16.9,
+     "result: tool search": 15.9,
+     "messages and reminders": 1.9
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 38.7,
-     "reading chat records": 13.3,
-     "reading notes": 10.8,
-     "helper and chat prompts": 9.1,
-     "commands": 7.4,
-     "start-up and handover tools": 6.7,
-     "thinking": 5.9,
-     "helper results": 3.9,
-     "writing notes": 2.6,
-     "messages to Sam": 0.8,
-     "messages and reminders": 0.7,
-     "other commands": 0.1
+     "start-up reading (rules, tools, first files)": 38.8,
+     "reading chat records": 12.1,
+     "reading notes": 9.7,
+     "helper and chat prompts": 8.8,
+     "commands": 6.8,
+     "thinking": 6.8,
+     "start-up and handover tools": 6.1,
+     "helper results": 4.0,
+     "writing notes": 3.3,
+     "messages and reminders": 1.9,
+     "messages to Sam": 0.9,
+     "app tools (chats, files sent)": 0.8
     },
     "leftover": 0.0
    },
@@ -6123,35 +6123,35 @@
      [
       "source/propose.py",
       2.0,
-      0.0191
+      0.0212
      ],
      [
       "notes/proposal-route.md",
       1.8,
-      0.0186
+      0.0206
      ],
      [
       "guides/job-packs.md",
       0.7,
-      0.0067
+      0.0075
      ],
      [
       "guides/proposal-route/helper.md",
       0.7,
-      0.0063
+      0.0071
      ],
      [
       "notes/proposals/named-lines.md",
       0.5,
-      0.0045
+      0.005
      ],
      [
       "notes/ledger/sam/gr9hlufs.md",
       0.1,
-      0.0007
+      0.0008
      ]
     ],
-    "base_pct": 22.3
+    "base_pct": 25.5
    },
    "search": {
     "show": 0,
@@ -6161,7 +6161,7 @@
     "other": {
      "other": 4,
      "film notes": 3,
-     "shared:propose.py": 4,
+     "shared:propose.py": 5,
      "shared:handover.py": 2
     },
     "ticked": 0,
@@ -6269,6 +6269,14 @@
       "other",
       "",
       "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..FE",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/guard-film-questions/helper-*.md notes/proposals/guard-film-ques",
+      "Why did you write\n  your response 3 times?",
       ""
      ]
     ]
