@@ -14,3 +14,8 @@
 
 I want to see the entire list of rules you need to test on 7 and from what parts of the project before you begin
 
+### 2026-11-22T23:11:02
+Continue with 7. Please report back on all changes rules and what the difference you have made is, and how it should behave in the future.
+
+With all these jobs, please continue at 3:30 if usages runs out
+
