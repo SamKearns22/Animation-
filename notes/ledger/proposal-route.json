@@ -6369,6 +6369,554 @@
     ],
     "base_pct": 29.0
    }
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "68adcdda",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.52,
+   "src": "estimate",
+   "sid": "session_01U3pKQzrerCvqGW2SqSWJc8",
+   "steps": 36,
+   "hist_k": 225,
+   "kinds": {
+    "tool search": 31.5,
+    "whole-file .py read": 9.4,
+    "renders": 5.7,
+    "other": 53.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 27,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 11
+   },
+   "split": {
+    "usd": 1.9206,
+    "total": 1.9206,
+    "floor_k": 84,
+    "blocks": {
+     "Claude's words": 36.4,
+     "new writes": 29.4,
+     "start-up floor": 20.4,
+     "carried history": 13.8
+    },
+    "origins": {
+     "Claude's words": 48.9,
+     "result: tool search": 23.4,
+     "start-up floor": 20.4,
+     "result: other": 5.8,
+     "messages and reminders": 1.5
+    },
+    "named": {
+     "thinking": 25.7,
+     "start-up reading (rules, tools, first files)": 20.4,
+     "reading notes": 16.2,
+     "writing notes": 15.1,
+     "reading guides": 8.3,
+     "commands": 4.1,
+     "running checks and tools": 2.1,
+     "writing code": 1.7,
+     "start-up and handover tools": 1.6,
+     "messages and reminders": 1.5,
+     "helper and chat prompts": 1.2,
+     "messages to Sam": 1.0,
+     "reading chat records": 0.7,
+     "reading kit code": 0.2,
+     "git and saving": 0.1,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 13,
+    "work_pct": 0.13,
+    "reads": [
+     [
+      "notes/archive/grand-theft-autism-notes.md",
+      3.7,
+      0.0241
+     ],
+     [
+      "notes/proposals/milburn-review.md",
+      3.0,
+      0.0206
+     ],
+     [
+      "notes/proposals/rule-needs-check.md",
+      2.5,
+      0.0186
+     ],
+     [
+      "notes/archive/milburn.md",
+      2.3,
+      0.015
+     ],
+     [
+      "notes/logs/kittests-last.log",
+      0.7,
+      0.0046
+     ],
+     [
+      "notes/proposals/unrouted.md",
+      0.6,
+      0.0036
+     ],
+     [
+      "source/watcher.py",
+      0.6,
+      0.0036
+     ],
+     [
+      "notes/logs/broken.md",
+      0.6,
+      0.0036
+     ]
+    ],
+    "base_pct": 15.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 2,
+     "film notes": 17,
+     "guides": 4,
+     "shared:kittests.py": 2,
+     "other": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git branch --show-current && git status -sb | head -5 && git remote -v | head -2",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/rule-needs-check* notes/proposals/rule-n",
+      "Where things stand",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check.md",
+      "git fetch origin claude/create-claude-md-oe8z4g 2>&1 | tail -1; git checkout -B ",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check/rule-list.html notes/proposals/milburn-review.m",
+      "milburn|grand|gta|repair",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "^| ",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md notes/archive/ notes/archive/milburn.md notes/",
+      "milburn|grand|check-repairs",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md",
+      "^\\| *[0-9]+ *\\||^## |^### ",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md notes/archive/grand-theft-autism-notes.md",
+      "^## |^### ",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-notes.md",
+      "sed -n 122,146p notes/archive/grand-theft-autism-notes.md | cut -c1-420; echo --",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/check-repairs.md notes/proposals/check-catches.md",
+      "cut -c1-330 notes/check-repairs.md | head -80; echo ====CATCHES; cut -c1-400 not",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:kittests.py",
+      "notes/proposals/unrouted.md source/kittests.py source/watcher.py notes/logs/brok",
+      " notes/proposals/unrouted.md; head -12 notes/proposals/unrouted.md | cut -c1-300",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      " source/kittests.py; grep -n -E ",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "guides",
+      "",
+      "\\b(always|never|must|every|only|no [a-z]+ (unless|without))\\b",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "guides",
+      "",
+      "\\b(always|never|must|every|only|no [a-z]+ (unless|without))\\b",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "film notes",
+      "notes/archive/milburn-handovers.md",
+      "note|sam:",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "notes/proposals/milburn-review.md notes/archive/milburn-handovers.md",
+      "chat (11|13|18)",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "film notes",
+      "notes/ledger/sam notes/ledger/sam/* notes/archive/milburn*.md notes/milburn.md",
+      "obtain|name card|Vimto|brow",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "film notes",
+      "notes/milburn.md notes/archive/milburn.md",
+      "^\\| *(1[2-9]|2[0-9]|3[0-9]) *\\|",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "notes/shot4-case-study notes/shot4-case-study/shot4-case-study.md",
+      "^## ",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md",
+      "^[0-9]+\\.|^- *\\*?\\*?(Note|Frame)|^\\*\\*|^### ",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "guides",
+      "guides/*.md source/people*.py notes/proposals/rule-needs-check/rule-list.html",
+      "by city\\|per city\\|civilians by",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:handover.py",
+      "notes/proposals/rule-needs-check/rule-table.md notes/proposal-route.md story/sta",
+      "python3 - <<'E' p='notes/proposals/rule-needs-check/rule-table.md' s=open(p).rea",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/rule-needs-check/rule-table.md story/sta",
+      "python3 - <<'E' p='notes/proposal-route.md' L=open(p).read().split('\\n') for i,l",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "git pull --rebase -q origin claude/create-claude-md-oe8z4g 2>&1 | tail -5; git s",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "^(<<<<<<<|=======|>>>>>>>)",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "python3 - <<'E' p='notes/proposal-route.md' L=open(p).read().split('\\n') # 1-ind",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "notes/proposals/rule-needs-check/",
+      "git pull --rebase -q origin claude/create-claude-md-oe8z4g 2>&1 | tail -3; git s",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "56d8e5c4",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.68,
+   "src": "estimate",
+   "sid": "session_01U3pKR36uALh2iRkpP1tyQ4",
+   "steps": 21,
+   "hist_k": 110,
+   "kinds": {
+    "tool search": 16.8,
+    "other": 83.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 11,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 1.0805,
+    "total": 1.0805,
+    "floor_k": 81,
+    "blocks": {
+     "start-up floor": 44.7,
+     "Claude's words": 30.3,
+     "new writes": 19.5,
+     "carried history": 5.5
+    },
+    "origins": {
+     "start-up floor": 44.7,
+     "Claude's words": 39.5,
+     "result: tool search": 9.5,
+     "messages and reminders": 5.3,
+     "result: other": 1.0
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 44.7,
+     "thinking": 17.5,
+     "messages to Sam": 8.7,
+     "start-up and handover tools": 5.9,
+     "commands": 5.9,
+     "messages and reminders": 5.3,
+     "writing code": 5.0,
+     "reading guides": 3.3,
+     "helper and chat prompts": 2.5,
+     "reading notes": 0.7,
+     "helper results": 0.6,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 81,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/propose.py",
+      2.1,
+      0.0195
+     ],
+     [
+      "CLAUDE.md",
+      1.0,
+      0.0096
+     ],
+     [
+      "notes/proposals/precheck-reply.md",
+      0.7,
+      0.0057
+     ],
+     [
+      ".claude/settings.json",
+      0.4,
+      0.0041
+     ],
+     [
+      "notes/proposals/precheck-reply/chat.md",
+      0.1,
+      0.0006
+     ]
+    ],
+    "base_pct": 27.3
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "guides": 4,
+     "shared:propose.py": 5,
+     "film notes": 1,
+     "other": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      1,
+      "other",
+      "guides",
+      ".claude/rules guides/film-quality-rules.md guides/job-packs.md",
+      "can't yet\\|honest",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md guides/job-packs.md",
+      "15%\\|week",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:propose.py",
+      ".claude/settings.json source/propose.py",
+      "def main\\|argv\\|draft",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "def cmd_hook\\|def hook",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md",
+      "cd /home/user/Animation-; git diff notes/proposals/unrouted.md | head -20; git a",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g && ",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "guides",
+      "",
+      "Statement One\\|never twice",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "guides",
+      "",
+      "cd /home/user/Animation-; git add CLAUDE.md && git commit -qm \"CLAUDE.md: Statem",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/precheck-reply.md notes/proposals/precheck-rep",
+      "cd /home/user/Animation-; python3 source/propose.py new precheck-reply \"Sam sees",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/unrouted.md source/propose.py",
+      "sent after one block",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "notes/proposals",
+      "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
