@@ -1,0 +1,170 @@
+<title>Rules to Test</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* One long readable column: summary first, then every rule grouped by where it lives. */
+:root{--bg:#f6f7f9;--card:#ffffff;--fg:#1b1f27;--mute:#5d6573;--line:#e1e4ea;--accent:#2f5bd3;
+--t:#1f7a4a;--tbg:#e3f3ea;--th:#8a5a00;--thbg:#fbefd6;--tj:#1f6a7a;--tjbg:#dff1f4;--j:#5b3fb0;--jbg:#ece6fb;--h:#a3392b;--hbg:#fbe4e0;--n:#4a4f58;--nbg:#e7e9ed;
+--display:"Space Grotesk",system-ui,sans-serif;--body:"Inter",system-ui,sans-serif}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#12151b;--card:#1a1e26;--fg:#e8eaef;--mute:#9aa2b1;--line:#2a303b;--accent:#7f9cf0;
+--t:#7fd6a4;--tbg:#17352a;--th:#f0c26a;--thbg:#3a2d12;--tj:#7fcfdc;--tjbg:#143238;--j:#b9a6f5;--jbg:#2a2245;--h:#f29a8d;--hbg:#40201b;--n:#c0c5ce;--nbg:#2a2e36;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#12151b;--card:#1a1e26;--fg:#e8eaef;--mute:#9aa2b1;--line:#2a303b;--accent:#7f9cf0;
+--t:#7fd6a4;--tbg:#17352a;--th:#f0c26a;--thbg:#3a2d12;--tj:#7fcfdc;--tjbg:#143238;--j:#b9a6f5;--jbg:#2a2245;--h:#f29a8d;--hbg:#40201b;--n:#c0c5ce;--nbg:#2a2e36;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.5}
+main{max-width:760px;margin:0 auto;padding-block:28px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:28px}
+h1{font-family:var(--display);font-size:1.9rem;line-height:1.15;margin:0;text-wrap:balance}
+h2{font-family:var(--display);font-size:1.2rem;margin:0;display:flex;gap:10px;align-items:baseline}
+h2 .n{font-family:var(--body);font-size:.85rem;color:var(--mute);font-weight:400}
+.lead{color:var(--mute);margin:8px 0 0;max-width:62ch}
+.sub{color:var(--mute);margin:4px 0 10px;font-size:.9rem}
+.summary{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.summary ul{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:8px}
+.summary li{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.summary b{font-variant-numeric:tabular-nums;font-size:1.05rem}
+.note{font-size:.9rem;color:var(--mute);margin:12px 0 0}
+ol.rules{list-style:none;margin:0;padding:0;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:10px;overflow:hidden}
+ol.rules li{background:var(--card);padding:12px 14px;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;align-items:start}
+.num{font-family:var(--display);font-weight:700;color:var(--accent);min-width:2.6em;font-variant-numeric:tabular-nums;font-size:.9rem;padding-top:1px}
+.txt{min-width:0}
+ol.rules li .chip{grid-column:2;justify-self:start}
+ol.rules li:not(:has(.num)) {grid-template-columns:1fr}
+ol.rules li:not(:has(.num)) .chip{grid-column:1}
+.chip{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.02em;padding:2px 8px;border-radius:999px;white-space:nowrap}
+.chip.t{color:var(--t);background:var(--tbg)}.chip.th{color:var(--th);background:var(--thbg)}.chip.tj{color:var(--tj);background:var(--tjbg)}
+.chip.j{color:var(--j);background:var(--jbg)}.chip.h{color:var(--h);background:var(--hbg)}.chip.n{color:var(--n);background:var(--nbg)}
+.others{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px}
+.others ul{margin:8px 0 0;padding-left:1.2em;display:grid;gap:6px}
+</style>
+<main>
+<header>
+<h1>Rules to test for lesson 7</h1>
+<p class="lead">Every rule step 1 would go through: 103 in all. Next to each rule is how it's checked today, going by what the rulebook says. Whether each check actually catches its fault is what step 1 finds out, so none of this has been tested yet.</p>
+</header>
+<div class="summary"><h2>How they're checked today</h2><ul><li><span class="chip t">A tool checks it</span><b>43</b></li><li><span class="chip th">Partly a tool, partly by hand</span><b>15</b></li><li><span class="chip tj">A tool and the fresh-eyes judge</span><b>7</b></li><li><span class="chip j">The fresh-eyes judge</span><b>2</b></li><li><span class="chip h">By hand only</span><b>12</b></li><li><span class="chip n">Nothing written down yet</span><b>24</b></li></ul>
+<p class="note">"The fresh-eyes judge" is a separate helper that looks at the pictures cold. "By hand" means a chat is meant to remember to do it.</p></div>
+<section><h2>Planning <span class="n">12</span></h2><p class="sub">The rulebook (the film rules), first part</p><ol class="rules">
+<li><span class="num">1</span><span class="txt">One measured plan of every place, camera and who stands where; the layout is fixed at planning.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">3</span><span class="txt">Before building a place: 8–10 things that make it recognisable, our drawing beside your photos. Real places shown beside their photos before every animatic.</span><span class="chip tj">A tool and the fresh-eyes judge</span></li>
+<li><span class="num">8</span><span class="txt">Rehearse the 3–4 riskiest moves as short clips first; your Showstopper Shots get everything the script implies.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">10</span><span class="txt">Framing, who looks where, and how long each beat holds are planned up front.</span><span class="chip tj">A tool and the fresh-eyes judge</span></li>
+<li><span class="num">11</span><span class="txt">Every shot drawn on one board (start, key moment, end) before any movement is built.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">14</span><span class="txt">The pre-start check refuses to run with a blank brief row, no composition sheet, or anyone missing from a shot.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">24</span><span class="txt">The cost estimate and forecast (paused by you on 18 Nov).</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">26</span><span class="txt">Every sound effect asked for in one message at planning; every swear bleeped.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">28</span><span class="txt">Reuse before building; anything new is added to the catalogue of reusable parts.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">38</span><span class="txt">Everyone faces the camera by default; a three-quarter view only as a last resort, with a reason.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">74</span><span class="txt">Every line and every shot gets an acting plan before the first animatic.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">86</span><span class="txt">Learn first: anything new or difficult gets research or a tool first, proposed to you.</span><span class="chip h">By hand only</span></li>
+</ol></section>
+<section><h2>Building <span class="n">20</span></h2><p class="sub">The rulebook, second part</p><ol class="rules">
+<li><span class="num">2</span><span class="txt">Doorways and windows show the real next room, never a flat colour.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">13</span><span class="txt">Every check is shared and runs on every film and every person; anyone left out has a written reason.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">20</span><span class="txt">Held things point in 3D with the body, never at a fixed angle on screen.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">22</span><span class="txt">My set dressing is shown on the cast sheet and kept clear of where the action happens.</span><span class="chip tj">A tool and the fresh-eyes judge</span></li>
+<li><span class="num">32</span><span class="txt">Falling pieces land flat, broadest side down, never overlapping.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">41</span><span class="txt">Bodies and hands: poses come from the tested gallery and are never shown from a bad view; hands checked every frame.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">49</span><span class="txt">Every famous face passes the likeness test before the cast sheet.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">50</span><span class="txt">Every famous person gets one shot with the face big enough to read.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">63</span><span class="txt">Running at the camera uses the proper front-on run.</span><span class="chip tj">A tool and the fresh-eyes judge</span></li>
+<li><span class="num">65</span><span class="txt">A speaker with no face of its own (like the Sorting Hat) opens its mouth with the voice, one syllable at a time.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">77</span><span class="txt">Anyone with facial hair: the beard tool first, and you confirm its five lines.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">78</span><span class="txt">Leaning on a desk, table, wall or rail shows weight; nothing sinks into it; a reaching arm ends in a clear shape.</span><span class="chip j">The fresh-eyes judge</span></li>
+<li><span class="num">80</span><span class="txt">Seated people facing us show knees and lap; standing up never makes the head dip.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">83</span><span class="txt">Painted objects in a set never overlap unless meant; the same for people and what they hold.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">S2</span><span class="txt">A hand moving an object is drawn over it; a resting hand stays just clear.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">S5</span><span class="txt">Pupils stay inside the eye on every character.</span><span class="chip tj">A tool and the fresh-eyes judge</span></li>
+<li><span class="num">S7</span><span class="txt">The house look: paper grain, light top edges and soft shadows on every drawing.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">S8</span><span class="txt">Bullet holes and marks only on real surfaces.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">S10</span><span class="txt">Riding: real speeds, and the rider&#x27;s seat matches the pace.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">L1</span><span class="txt">People lying down or seen from above have real depth.</span><span class="chip tj">A tool and the fresh-eyes judge</span></li>
+</ol></section>
+<section><h2>Checks <span class="n">17</span></h2><p class="sub">The rulebook, third part: what the automatic checks must do</p><ol class="rules">
+<li><span class="num">5</span><span class="txt">A bump test on every frame: nothing passes through anything.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">6</span><span class="txt">A pop-in test: nothing appears or vanishes mid-frame; crowds arrive and leave on screen.</span><span class="chip tj">A tool and the fresh-eyes judge</span></li>
+<li><span class="num">7</span><span class="txt">Recordings match the script and captions; mouths open once per syllable and shut in silence.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">16</span><span class="txt">Direction of travel holds across a cut unless planned.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">17</span><span class="txt">Whatever is nearer the camera hides what&#x27;s behind it, everywhere.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">18</span><span class="txt">Every joke prop is big enough to read on a phone.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">19</span><span class="txt">Every check ends with pass, fault or “couldn&#x27;t look”; “couldn&#x27;t look” stops the animatic.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">57</span><span class="txt">Nothing flips from in front to behind between two frames unless planned.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">58</span><span class="txt">The pre-start check runs only what the film contains and names what it skipped.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">59</span><span class="txt">No animatic or final unless the pre-start check passed on the current version.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">62</span><span class="txt">Captions on in every animatic and final, in the series style.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">66</span><span class="txt">A failed render leaves no file, so an old one is never mistaken for the new one.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">67</span><span class="txt">One pre-start check per round of fixes.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">70</span><span class="txt">Captions, Hook Text and sign-off added at the finishing step; everything delivered at 1.1× speed.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">72</span><span class="txt">No pose drifts back to rest just before a cut; no arm passes behind its own body or cape; turns snap.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">75</span><span class="txt">The Hook Text sits where it hides nothing important, in the tilted card style.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">85</span><span class="txt">The cost watch.</span><span class="chip t">A tool checks it</span></li>
+</ol></section>
+<section><h2>Notes, review and sound <span class="n">15</span></h2><p class="sub">The rulebook, fourth part</p><ol class="rules">
+<li><span class="num">29</span><span class="txt">Every review copy shows the time and shot in a corner.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">30</span><span class="txt">The notes table stays short; a note you&#x27;ve given before means a check is missing.</span><span class="chip h">By hand only</span></li>
+<li><span class="num">37</span><span class="txt">Sounds and reference photos are saved on GitHub.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">43</span><span class="txt">Who-looks-at-whom is tested at the shot&#x27;s own camera.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">47</span><span class="txt">A small fix to a finished film is patched in, not fully redrawn, unless you say Y.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">48</span><span class="txt">Frames are looked at on one labelled sheet; never an unchanged picture again.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="num">52</span><span class="txt">The sign-off lasts 1.6 seconds and carries the next follow line.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">61</span><span class="txt">Every film&#x27;s code opens with a short map, so a note is answered in one step.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">87</span><span class="txt">Each of your notes is restated in one line with its fix (and a marked still) before fixing.</span><span class="chip h">By hand only</span></li>
+<li><span class="num">88</span><span class="txt">One check sheet per round of notes; after that, only the frames that changed.</span><span class="chip h">By hand only</span></li>
+<li><span class="num">89</span><span class="txt">Critique before every send: everything new is drawn alone beside its references and judged cold.</span><span class="chip j">The fresh-eyes judge</span></li>
+<li><span class="num">S3</span><span class="txt">No added background hiss; the hiss check listens only between lines.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">S4</span><span class="txt">Video joins always at 24 frames a second.</span><span class="chip h">By hand only</span></li>
+<li><span class="num">S9</span><span class="txt">One sound per hit, and only when the hit is on screen.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="num">S11</span><span class="txt">The softer voice polish on every film.</span><span class="chip t">A tool checks it</span></li>
+</ol></section>
+<section><h2>Working with you <span class="n">15</span></h2><p class="sub">Your rules in my standing instructions, listed in the rulebook&#x27;s last table</p><ol class="rules">
+<li><span class="txt">Messages: first line says what&#x27;s needed; Done / Needs you / Next only when they have something in them; about 10 lines.</span><span class="chip h">By hand only</span></li>
+<li><span class="txt">No code names or file names in messages.</span><span class="chip h">By hand only</span></li>
+<li><span class="txt">One line per note, with Lost and Added lines for anything a fix takes away or adds.</span><span class="chip h">By hand only</span></li>
+<li><span class="txt">Questions numbered, my pick first; every open decision in one message.</span><span class="chip h">By hand only</span></li>
+<li><span class="txt">“Just go” skips waiting for your yes, never the checks.</span><span class="chip h">By hand only</span></li>
+<li><span class="txt">No animatic while a shot is missing anyone.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="txt">Unattended runs stop after one animatic.</span><span class="chip h">By hand only</span></li>
+<li><span class="txt">Every animatic carries the Hook Text and the sign-off.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="txt">“I want a rule” means a permanent rule, written in the same chat.</span><span class="chip h">By hand only</span></li>
+<li><span class="txt">The proposal route: every change put to you goes through helpers and a blind judge first.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="txt">The right model for each stage; chats open the next chat themselves.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="txt">The handover: one section, 15 lines at most, the 3 lines at the bottom of the message.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="txt">A drawing that failed to draw (black in the render) is named in the message, with the seconds and the plan to fix it.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+<li><span class="txt">The latest animatic and its clean render are kept on GitHub until the film is posted.</span><span class="chip t">A tool checks it</span></li>
+<li><span class="txt">Start with the project attached; branches merged at the start; save to the main line at the end; the order for searching reference photos.</span><span class="chip th">Partly a tool, partly by hand</span></li>
+</ol></section>
+<section><h2>Not on the rulebook&#x27;s list yet <span class="n">24</span></h2><p class="sub">In my standing instructions, but the rulebook doesn&#x27;t list a check for them. Step 1 finds out whether anything checks them.</p><ol class="rules">
+<li><span class="num">21 Nov</span><span class="txt">Be honest about what I can&#x27;t do yet, and say what I&#x27;d need to learn.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">21 Nov</span><span class="txt">Fix the drawing, never the shot; every handover names what&#x27;s locked by you.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">21 Nov</span><span class="txt">Seeing 1: look as a viewer, at phone size and then full size wherever two things meet.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">21 Nov</span><span class="txt">Seeing 2: every note becomes a saved example that a check must catch.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">21 Nov</span><span class="txt">Seeing 3: before fixing a frame, name the check that missed it and improve it.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">21 Nov</span><span class="txt">Seeing 4: for new shots, choose views the flat drawings can carry.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">21 Nov</span><span class="txt">Seeing 5: physical things behave physically (weight, solidity, cause and effect).</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">19 Nov</span><span class="txt">Plain words, always.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Files</span><span class="txt">Files under 50 MB, MP4 by default; only the finished film and the latest animatic on GitHub.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Asking</span><span class="txt">Offer an animatic before any full render; ask before the final and wait for a clear yes.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Asking</span><span class="txt">No check sheet before an animatic unless you ask.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Asking</span><span class="txt">Notes on movement get a short clip of just those seconds.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Asking</span><span class="txt">A question about the film is answered, not acted on.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Asking</span><span class="txt">“Hold” means collect notes and change nothing until you say go.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Asking</span><span class="txt">Up to three fix rounds on my own after each batch of notes, each with a two-line summary.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Asking</span><span class="txt">The brief is a checklist, ticked before the first animatic.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Rules</span><span class="txt">Every stage aims at high quality, fewer notes and about a week per film.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Rules</span><span class="txt">Every film is new: never repeat old characters, places or jokes.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Rules</span><span class="txt">Before every handover, search the notes for rule requests not yet written.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Chats</span><span class="txt">One wait per render, a push notification when it&#x27;s done, and how long it took.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Chats</span><span class="txt">A fresh chat for every round of notes and every cost warning.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Reading</span><span class="txt">Read little: this file, one pack, and only what a note names; notes kept short.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">Sound</span><span class="txt">Voices only, no sound effects unless the script names them; you record every voice.</span><span class="chip n">Nothing written down yet</span></li>
+<li><span class="num">TikTok</span><span class="txt">Hook Text in TikTok&#x27;s white-box style; every video ends with the CranbriJoos sign-off.</span><span class="chip n">Nothing written down yet</span></li>
+</ol></section>
+<section class="others"><h2>Other places with rule-like lines (not in the plan yet)</h2>
+<p class="sub">These guides also say "always" or "never" in places. Some lines are rules and some are advice. The plan as you approved it doesn't cover them; question 2 in the chat asks about them.</p>
+<ul>
+<li>The satire guide (how jokes, scripts and acting lists are written)</li>
+<li>The best-practice guide (craft notes)</li>
+<li>The figure guide (how bodies are built and moved)</li>
+<li>The TikTok guide (screen layout, Hook Text)</li>
+<li>The critique checklist (what the fresh-eyes judge looks for)</li>
+<li>The pose gallery (which views each pose must avoid)</li>
+</ul></section>
+</main>
