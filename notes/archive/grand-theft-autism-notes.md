@@ -572,3 +572,5 @@ Jason's movement in shot 4 (FAILED, chat 33's job).
 - [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
 - [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
 
+
+(chat 38: Shot 4 version 4 frame notes and Chat 35 summary moved here above.)
