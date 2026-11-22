@@ -65,3 +65,18 @@ We don't have the usage. Could you stop the render, delete the pistol and just h
 ### 2026-11-21T15:22:08
 Thank you. I'm glad to have it. The video is still riddled with problems from shot 4 onwards but I understand we did not do all our checks. At 9pm I want to hand this over to my other account. Please provide me with a handover that will 1) continue the work on shot 4 and 2) do a thorough check on this animatic (honestly there's so many problems with hands, Jason still glitches at the transition to shot 5, there's just so many things and I don't have time to list all of them, frame by frame)
 
+### 2026-11-21T23:31:04
+I have just discovered that you told the handover to fix shot 4 by ‘finding other camera angles’
+
+### 2026-11-21T23:34:35
+The camera change is in the next chat's own handover (chat 27, on your other account): "shot 4's camera re-chosen (never his back, nobody through the lens)". That chat made the call itself. My guess is it applied the "choose views the drawing can carry" rule in CLAUDE.md to shot 4.
+
+This is awful. Instead of fixing the drawing, it burned usage changing the screenplay and shot into something I didn’t want, on its own accord. How do I fix this so it never happens again? I wanted it to fix the drawing errors not change the camera angles!
+
+### 2026-11-21T23:36:44
+Y.
+
+But instead of offering alternatives, first it should try and suggest what the project would need to learn in order to execute the shot/movement effectively.
+
+Can you schedule a job for my other account to pick up at 2am?
+
