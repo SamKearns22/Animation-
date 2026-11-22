@@ -17,10 +17,17 @@ the head leading). The beats and their times are shot 4's locked acting rows (le
   KEYS, goals_at(t) . the key poses as goals, eased in-betweens (goals, not joints, are blended)
   solve(g) .......... goals -> joints, bone turns, skin points, hand balls, the pistol
   CHECKS ............ car(), self_cross(), pistol(), contacts(), jumps(), ranges(), aim(): the stage-1 bar
-  run(OUT) .......... every frame of shot 4 (8.2 s at 24): solve, check, draw grey; writes OUT/frames, report.txt
+  run(OUT) .......... every frame of shot 4 (8.2 s at 24): solve and check ALL first, then draw grey (draw_all:
+                      from the frame store, only changed frames drawn, 4 at a time); writes OUT/frames, report.txt
+  checked_clip ...... the clip for Sam: checks first; NOTHING drawn while a fault is neither fixed nor named
+  frame store ....... frame_key (body points + camera + drawing code), spot check of 10, keep -> notes/bench/store
+  inside test ....... _winding: counted ray crossings on the capped skin (exact); _winding_sum: the old referee
   proof(OUT) ........ every check first run on old failed frames (pass list, notes/bench/learn-step.md)
 
     python3 source/bench_move.py run OUT_DIR        the clip's frames + the check table (prints it)
+    python3 source/bench_move.py clip OUT_DIR OUT.mp4 [T0 T1]   checks first, then the side-by-side grey clip
+    python3 source/bench_move.py name OUT_DIR "why"   name the last check pass's faults (lets the clip draw)
+    python3 source/bench_move.py keep OUT_DIR       file the frame store on GitHub (notes/bench/store/frames.tar)
     python3 source/bench_move.py proof OUT_DIR      the checks against the old failed frames
     python3 source/bench_move.py keys OUT.jpg       the key poses from three sides (a sheet)
 """
