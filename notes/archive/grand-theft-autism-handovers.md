@@ -668,6 +668,8 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   0.055, ANKLE_Y 0.667). Branch claude/gta-chat31: record only (Sam's Y), not merged.
 
 
+
+(moved by chat 33c, 22 Nov: chat 37, the 3D chats read this)
 ## Where things stand (22 Nov, chat 37, Sonnet)
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
@@ -679,8 +681,10 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   dressed still of K4 (Sam's Y), getting up 13-23 / sitting down 176-190 with the real checks, full run, whole grey clip,
   the 3 cm question.
 - Needs Sam: budget stops Y (chat 28), still open; the 3 cm question after the full run.
+- Needs Sam: (budget stops: Sam N, 22 Nov) the 3 cm question after the full run.
 - Read: notes/bench/learn-step.md ("Stage 1, chat 36" and "Chat 36: the middle grey clip"); bench_move.py MAP.
 - Open rule requests: Sam HOLDS the proposal that grey test clips skip the body check (do not raise it);  Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
 - For Claude: notes/bench/span.py A B (real checks); look.py OUT.jpg F.. (4 views); `run OUT T0 T1` (part run).
   Branch claude/gta-chat31: record only, not merged.
+
 

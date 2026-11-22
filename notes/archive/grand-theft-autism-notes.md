@@ -557,6 +557,8 @@ Jason's movement in shot 4 (FAILED, chat 33's job).
 - Branch claude/gta-chat31 (leanout.py DOOR_L change, show log): kept as a record only (Sam's Y, chat 32 pick 4); not merged.
 
 
+
+(moved by chat 33c, 22 Nov)
 ## Shot 4: Sam's frame notes of version 4 (chat 16, verbatim in the case study section 7), to fix in the rebuild
 - [ ] Notes 2-4, 11: "When J begins his movement, his lower body becomes visible." "This isn't necessary and I wonder
       why you made that choice." "His lower body is still visible through the bonnet." "J's legs are 2D and are
@@ -583,4 +585,91 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
   (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
 - Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
+## Shots 5-8: Sam's notes on the clip (chat 19, 20 Nov ~23:35; "Very cool")
+- [ ] 1. Acting while they speak lacks imagination: use the front-on focus kit (source/focus.py, the BoJack look: head
+  turn, eyes and face sliding toward where they look) so they express more. Applies to all three people, shots 5-8.
+- [ ] 2. Jason always faces forward while he indicates other things: his head and look should go to what he points at.
+- [ ] 3. Jason's arm poses need work (gestures in shot 6: free hand opening, counting, open palm toward her).
+- Chat 19's done list (the focus-kit looks, clip v2): moved to notes/archive/grand-theft-autism-notes.md (chat 33).
+
+## Shot 4 v7: Sam's notes on the clip (chat 22, 21 Nov; pictures notes/shot4-case-study/sam-v7/)
+  set right in the car's frame (left hand at 10 o'clock, right at 2), so the crossing is probably in how the figure's
+  left and right map once she is drawn facing the camera; test before changing.
+- [ ] 4. "The backwards arm is a gross distended sausage still" (THIRD time: chat 23's fix failed, Sam on the v8 frame sheets: "Shots 0.92-2:42 have the exact same arm problem"; case study section 16, last point) (REPEAT of chat 16 notes 3, 6, 7, 15).
+  forward, toward the lens when the car faces us, so from the front his outline barely changes.
+  sam-v7/ultimately-door-arm.jpg, Jason from ahead at the door in the crash framing). What is wrong in it (chat 22's
+  reading, for chat 23 to check): (a) the arm grows out of his back, no shoulder; (b) the forearm folds back into an
+  L of flesh with a thumb-stub, no elbow, thicker than his head; (c) the hand neither grips nor rests: it floats over
+  the door; (d) the car's side breaks into loose red slabs, the tyre sits on the door with no wheel arch; (e) black
+  bars (pillar, rail) cut across his vest with nothing to say what they are; (f) white stair-step streaks (the hide
+  map) at the right; (g) the vest is a flat white shape with no back, neck or form. Chat 23: answer "how to teach
+  me" through the proposal route (Sam's pictures as labelled examples for the critique; full-size crops of every
+  joint and every contact with the car, every frame; views where the flat drawing breaks are not used).
+- Chat 23: all ten done in version 8 (each cause, fix and check in the case study, section 16); note 10 through
+  the proposal route (notes/proposals/teach-recognise.md).
+
+## Animatic v3 from 14.1 s at full size (chat 26, 21 Nov, Opus high; Sam: "riddled from shot 4 on")
+Film-clock times (the clean render's own stamp). Each: what a stranger sees; the check that should have caught it.
+Why none was caught this round: v3 was made with every check off (Sam's order); the body check, the layer check and
+the critique never ran. Under that, the checks that would still have passed it are named per line.
+- [ ] F1 15.4: Jason climbs out with his back to us; his arm a plain tube, the hand on the door a blob. Check: none
+      measures "seen from behind" (Seeing like Sam 4 has no check). NEW: back-view check (below).
+- [ ] F2 15.6-16.4: the gun arm is a tube with a round end, no hand; the pistol reads as a stick (15.6), a blade
+      (15.75), a grey box (16.1). His near arm is a big blob with a bare circle on it (bottom right). Check: the
+      body check tests bones, not whether a hand reads as a hand; Sam's open request (held object recognisable).
+- [ ] F3 16.6: the lens right behind the Tulip's tail: a red box with a dark slab out of the boot, nobody in frame.
+      Check: none asks "what is this frame of?" (critique skipped).
+- [ ] F4 17.1: a passer-by walks through the lens (half a man in white at the left edge, stick legs). Repeat of chat
+      23's own note (rule 30). Check: none tests people against the camera's near distance.
+- [ ] F5 18.1-18.6: the back of Jason's head, huge, cut by the right edge. Back-view check (F1).
+- [ ] F6 20.1-20.6: passers-by 10 m from the fireball stand still, one big man in front with his back to us and stick
+      arms. Repeat of v4 note 14 (rule 30): the crowd code "stares at the fire" after it; a stare reads as nothing.
+- [ ] F7 20.6-21.5: Jason from behind leaning out and climbing back: the arm a thick tube with a round end (the
+      sausage, FOURTH time, rule 30), head a brown blob, body hanging outside the door at 21.25. Why chat 24's fix
+      failed: it moved the camera to his front for the firing only; the crash hold and the climb back (keys 3.70+WOB
+      to 5.15+WOB) still look at him from ahead of the car while he faces back. Back-view check (F1).
+- [ ] F8 21.67: sliding in, his head and arm are drawn over the windscreen's frame. Car check ran only on the firing.
+- [ ] F9 21.9-22.3 (shot 4's end, and shot 3): the steering wheel's rim runs across Lucia's mouth. Shots 5-8 lowered
+      their wheel 8 cm in chat 16 for this; shots 3-4 kept the old one. Check: layer check not run on shot 4's ends.
+- [ ] F10 22.3, the cut to shot 5 (Sam's "glitch"): same camera, but Jason becomes another drawing (hair, face
+      turned, arms gone, a bare circle on his shoulder); Lucia's hands and wheel drop; passers-by jump; a palm trunk
+      pops in at the left edge; fire appears on the wreck. Root: shots 3-4 draw Jason on the lean-out skeleton,
+      shots 5-8 with the seated flat figure, and each shot sets its own wheel, crowd and fire. Check: none compares a
+      shot's last drawing with the next one's first. NEW: cut-match check.
+- [ ] F11 shots 5, 7, 8: Jason's arms never show; a bare circle sits on his left shoulder; his raised hand (33.6) is
+      a mitten. Same root as F10 (the seated figure's fist at a fixed point inside his own outline).
+- [ ] F12 shot 6 (25.5-33.5): half the frame is bonnet (bottom 55%); a see-through grey panel over Lucia's face and
+      hair the whole shot; Jason's gesture hand a mitten with a lump (29-31 s); a bare circle on his chest throughout.
+- [ ] F13 every shot: hands are discs or mittens (no fingers read at phone size or full size). The house hand kit is
+      not used inside the car. Name: a kit job, too big for this chat.
+Order of work this chat: F10/F11 (one Jason, the cut matched), F9, the cut-match check; then F7/F5 camera (back view).
+Done in chat 26 (not yet seen by Sam):
+- [ ] Body check, still open in the clip: Jason's forearm end-on (a stub) at 20.0 for 8 drawings and 21.67 (F7's
+      climb back); two passers-by with crossed forearms (24.3, 24.75; the crowd's arms, 1-5 drawings).
+- [ ] Critique of the clip (r26-p1, fresh helper): NEW F15, the bonnet's two dark weathered stripes read as a pair of
+      trousers lying on the car (shots 3-8's front camera); the palm, people and police car shift at the cut (the
+      palm: known; the people: running); Jason's head in shot 6 drawn bigger than in 5 ("faces stretch"); the grey
+      patch over Lucia (F12). Close-ups were not in the pack (no people boxes for this film yet).
+- [ ] Still at the cut: a thin palm trunk appears at the left edge (the side road exists only from shot 5 on); the
+      woman in pink moves because she is running (real movement).
+- [ ] Environment: the opener's title font downloads from dafont.com, which this session's network blocks; shot 1
+      cannot be drawn here (cutmatch ran from cut 2->3). The next chat's machine needs it, or the font file.
+
+Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
+- [~] F6: nearness to the fire is judged where a walker IS at the blast (was: where they started, 12 m off); every
+      third onlooker who turns to the fire points at it. NOT fixed on screen: at 20.27 a woman in pink 5 m from the
+      fireball still stands still facing us (cause not found; look at her t_run and near_fire first).
+- Named in the clip's body check: Lucia flagged from behind 15.4-16.5 and 20.5-21.1 (from the pavement she is on the
+  far side, almost wholly hidden behind Jason; the check counts her whole drawing); Jason's forearm end-on one drawing
+  each at 15.77 and 21.68; a cruiser driver's arm one drawing at 19.68; the woman from behind one drawing at 20.52.
+- Seen, not fixed: the yellow hydrant passes right under the lens at 19.0 (two drawings as a yellow dome at the
+  bottom edge). F15 (bonnet stripes read as trousers) clearly visible at 21.8-22.3.
+
+- [ ] Critique r27-p1 (fresh helper, 10 panels 15.27-21.68 + close-ups), open: arms tubes and hands stumps (F2/F13,
+      known: hand kit); gun upright at 15.60 (rising beat B2: muzzle up is the acting row, my panel brief was wrong);
+      NEW 20.60: the car's side drawn over Jason's chest (he seems to lie through the door: layer check on the face
+      key's view); his head on the shoulders with no neck at 20.60; NEW the hit cruiser small at 17.1-18.3 (focal 965-
+      1150 from the new lens: push in); the hydrant hit unreadable at 19.6 (the yellow piece); fire and smoke flat cut-
+      outs floating above the car; the redhead's knees balls at 21.68; a pink spire on the skyline at 20.60 only; F6's
+      pink walker (confirmed).
 
