@@ -20739,61 +20739,67 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.19,
+   "cost": 2.49,
    "src": "estimate",
    "sid": "session_01GznaASd4DAHjLEXh4Zh6QW",
-   "steps": 99,
-   "hist_k": 255,
+   "steps": 117,
+   "hist_k": 269,
    "kinds": {
-    "tool search": 15.5,
-    "whole-file .py read": 0.8,
-    "renders": 2.9,
-    "other": 80.8
+    "film-file search": 0.3,
+    "tool search": 14.8,
+    "whole-file .py read": 0.7,
+    "renders": 2.5,
+    "pictures": 0.2,
+    "other": 81.5
    },
    "calls": {
-    "film-file search": 0,
-    "tool search": 49,
+    "film-file search": 2,
+    "tool search": 57,
     "whole-file .py read": 2,
     "page.py": 0,
     "routine": 0,
     "renders": 2,
-    "pictures": 0,
-    "other": 42
+    "pictures": 2,
+    "other": 46
    },
    "split": {
-    "usd": 8.0072,
-    "total": 8.0072,
+    "usd": 9.112,
+    "total": 9.112,
     "floor_k": 96,
     "blocks": {
-     "new writes": 39.6,
-     "Claude's words": 22.6,
-     "start-up floor": 19.7,
-     "carried history": 18.1
+     "new writes": 36.0,
+     "carried history": 25.2,
+     "Claude's words": 21.5,
+     "start-up floor": 17.3
     },
     "origins": {
-     "messages and reminders": 35.0,
-     "Claude's words": 33.2,
-     "start-up floor": 19.7,
-     "result: tool search": 9.5,
-     "result: other": 2.2,
+     "messages and reminders": 39.5,
+     "Claude's words": 31.7,
+     "start-up floor": 17.3,
+     "result: tool search": 8.8,
+     "result: other": 2.0,
+     "result: film-file search": 0.2,
      "Claude's edits": 0.2,
+     "result: pictures": 0.1,
      "result: whole-file .py read": 0.1
     },
     "named": {
-     "messages and reminders": 35.0,
-     "start-up reading (rules, tools, first files)": 19.7,
-     "thinking": 18.9,
-     "writing code": 8.5,
-     "reading kit code": 4.9,
-     "commands": 4.2,
-     "reading notes": 2.5,
+     "messages and reminders": 39.5,
+     "thinking": 17.6,
+     "start-up reading (rules, tools, first files)": 17.3,
+     "writing code": 8.1,
+     "reading kit code": 4.6,
+     "commands": 4.4,
+     "reading notes": 2.2,
      "running checks and tools": 1.4,
+     "other commands": 1.0,
      "writing notes": 1.0,
-     "start-up and handover tools": 0.9,
-     "other commands": 0.9,
+     "start-up and handover tools": 0.8,
      "messages to Sam": 0.8,
      "app tools (chats, files sent)": 0.7,
-     "reading chat records": 0.2
+     "reading chat records": 0.2,
+     "looking at pictures": 0.1,
+     "reading film code": 0.1
     },
     "leftover": 0.0
    },
@@ -20833,19 +20839,20 @@
       0.0
      ]
     ],
-    "base_pct": 21.2
+    "base_pct": 22.1
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 0
+     "no show": 2
     },
     "other": {
-     "other": 13,
+     "other": 20,
      "shared:handover.py": 2,
      "shared:bench_move.py": 28,
      "film notes": 4,
-     "shared:bench_draw.py": 2
+     "shared:bench_draw.py": 2,
+     "shared:sets.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -21240,6 +21247,86 @@
       "other",
       "",
       "bench_move.py run",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "other",
+      "",
+      "bench_move.py run",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "",
+      " clean ",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "other",
+      "",
+      "Stage 1 bench results|Traceback",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "other",
+      "",
+      "git status -sb | head -2; git fetch -q origin claude/gta-chat36 claude/create-cl",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "",
+      " clean ",
+      ""
+     ],
+     [
+      105,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "def _key",
+      ""
+     ],
+     [
+      106,
+      "film",
+      "before show",
+      "source/gta_rehearse.py source/*.py",
+      "^CAM4",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "shared:sets.py",
+      "source/sets.py",
+      "Cam(\\|def __init__",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/47f66348-2b40-572f-9bd7-6f00024be32a/scrat",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "other",
+      "",
+      "done|Error|Traceback",
       ""
      ]
     ]
