@@ -22427,76 +22427,77 @@
    "model": "opus",
    "stage": "notes",
    "round": null,
-   "cost": 1.35,
+   "cost": 1.74,
    "notes": 3,
    "repeats": [
     "street buildings pop out as the car drives off | a frame-to-frame pop check on the background"
    ],
    "src": "estimate",
    "sid": "session_01GznaAV1mWd7L7gkwRVCMXc",
-   "steps": 92,
-   "hist_k": 220,
+   "steps": 111,
+   "hist_k": 235,
    "kinds": {
-    "film-file search": 10.3,
-    "tool search": 9.5,
-    "whole-file .py read": 2.3,
+    "film-file search": 9.4,
+    "tool search": 9.2,
+    "whole-file .py read": 1.9,
     "page.py": 0.2,
-    "renders": 3.5,
-    "pictures": 6.8,
-    "other": 67.4
+    "renders": 3.7,
+    "pictures": 7.4,
+    "other": 68.1
    },
    "calls": {
-    "film-file search": 25,
-    "tool search": 23,
+    "film-file search": 27,
+    "tool search": 28,
     "whole-file .py read": 4,
     "page.py": 3,
     "routine": 0,
-    "renders": 6,
-    "pictures": 15,
-    "other": 23
+    "renders": 9,
+    "pictures": 18,
+    "other": 30
    },
    "split": {
-    "usd": 4.7917,
-    "total": 4.7917,
+    "usd": 5.8952,
+    "total": 5.8952,
     "floor_k": 96,
     "blocks": {
-     "start-up floor": 36.8,
-     "carried history": 22.1,
-     "new writes": 20.7,
-     "Claude's words": 20.3
+     "start-up floor": 35.5,
+     "carried history": 25.6,
+     "Claude's words": 20.0,
+     "new writes": 18.9
     },
     "origins": {
-     "start-up floor": 36.8,
-     "Claude's words": 32.8,
-     "result: film-file search": 9.3,
-     "result: tool search": 7.6,
-     "result: pictures": 6.2,
-     "messages and reminders": 3.6,
-     "result: other": 1.8,
+     "start-up floor": 35.5,
+     "Claude's words": 33.5,
+     "result: film-file search": 8.9,
+     "result: tool search": 7.7,
+     "result: pictures": 6.4,
+     "messages and reminders": 4.0,
+     "result: other": 1.9,
      "result: whole-file .py read": 1.4,
-     "result: renders": 0.2,
+     "result: renders": 0.4,
      "result: page.py": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 36.8,
-     "thinking": 13.6,
-     "commands": 8.3,
-     "reading film code": 8.2,
+     "start-up reading (rules, tools, first files)": 35.5,
+     "thinking": 12.9,
+     "commands": 9.0,
+     "reading film code": 7.8,
      "writing code": 7.3,
-     "looking at pictures": 6.2,
-     "reading kit code": 6.0,
-     "messages and reminders": 3.6,
-     "reading notes": 2.8,
-     "writing notes": 2.3,
-     "messages to Sam": 1.2,
-     "reading guides": 1.0,
-     "start-up and handover tools": 1.0,
+     "looking at pictures": 6.4,
+     "reading kit code": 5.9,
+     "messages and reminders": 4.0,
+     "reading notes": 2.6,
+     "writing notes": 2.4,
+     "messages to Sam": 1.6,
+     "start-up and handover tools": 0.9,
+     "reading guides": 0.9,
+     "running checks and tools": 0.8,
      "other commands": 0.6,
-     "running checks and tools": 0.4,
-     "renders": 0.2,
+     "helper and chat prompts": 0.4,
+     "renders": 0.3,
      "git and saving": 0.2,
-     "helper and chat prompts": 0.1,
-     "app tools (chats, files sent)": 0.1
+     "app tools (chats, files sent)": 0.2,
+     "helper results": 0.1
     },
     "leftover": 0.0
    },
@@ -22508,66 +22509,66 @@
      [
       "source/gta_shots58.py",
       5.6,
-      0.1192
+      0.1383
      ],
      [
       "/tmp/claude-0/s/s8sheet.jpg",
       1.6,
-      0.035
+      0.0404
      ],
      [
       "/tmp/claude-0/s/n1.jpg",
       1.6,
-      0.0335
+      0.039
      ],
      [
       "notes/grand-theft-autism.md",
       1.4,
-      0.0329
+      0.0377
      ],
      [
       "source/grand_theft_autism.py",
       1.0,
-      0.0222
+      0.0255
      ],
      [
       "story/grand-theft-autism-page.md",
       0.7,
-      0.0168
+      0.0194
      ],
      [
       "source/gta_film.py",
       0.4,
-      0.0099
+      0.0114
      ],
      [
       "guides/job-packs.md",
       0.2,
-      0.0049
+      0.0057
      ],
      [
       "source/page.py",
       0.0,
-      0.001
+      0.0012
      ]
     ],
-    "base_pct": 32.9
+    "base_pct": 32.3
    },
    "search": {
     "show": 1,
     "film": {
      "before show": 1,
      "miss": 5,
-     "after show": 19
+     "after show": 21
     },
     "other": {
-     "other": 5,
+     "other": 6,
      "shared:handover.py": 1,
      "film notes": 6,
-     "shared:leanout.py": 5,
+     "shared:leanout.py": 6,
      "guides": 2,
-     "shared:humancheck.py": 2,
-     "shared:critique.py": 2
+     "shared:humancheck.py": 3,
+     "shared:critique.py": 4
     },
     "ticked": 2,
     "edited film code": true,
@@ -22954,6 +22955,62 @@
       "after show",
       "source/grand_theft_autism.py",
       "SP=/tmp/claude-0/-home-user-Animation-/8686f0ca-80cb-522b-a497-426b34f2d615/scra",
+      ""
+     ],
+     [
+      99,
+      "film",
+      "after show",
+      "source/gta_shots58.py source/grand_theft_autism.py source/data/critique-src/gran",
+      "git add -A source/gta_shots58.py source/grand_theft_autism.py source/data/critiq",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/grand-theft-autism/r44-p2 source/critique.py",
+      "P=source/data/critique/grand-theft-autism/r44-p2 && sed -n '/## Faults/,/## Chec",
+      ""
+     ],
+     [
+      109,
+      "film",
+      "after show",
+      "source/grand_theft_autism.py",
+      "SP=/tmp/claude-0/-home-user-Animation-/8686f0ca-80cb-522b-a497-426b34f2d615/scra",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py source/data/critique-src",
+      "git add -A source/leanout.py source/data/critique-src notes && git commit -qm \"G",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/data/critique/grand-theft-autism/r44-p2 source/criti",
+      "cat /tmp/claude-0/-home-user-Animation-/8686f0ca-80cb-522b-a497-426b34f2d615/tas",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/grand-theft-autism/r45-p1 source/critique.py source/humanch",
+      "P=source/data/critique/grand-theft-autism/r45-p1 && sed -n '/## Faults/,/## Chec",
       ""
      ]
     ]
