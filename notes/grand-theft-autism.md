@@ -228,7 +228,9 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Next: chat 36, Opus high: finish stage 1: clear frames 15-22 (getting up) and 176-190 (sitting down), elbow
   range 29-30/171, pops; full run (`bench_move.py run OUT`, about 55 min: add a progress line); grey clip MP4 to
   Sam with the check table and the 3 cm question (step 4 of chat 35's job). Not shot 4.
-- Needs Sam: budget stops Y (chat 28), still open. Nothing new.
+- Sam (22 Nov, after chat 35's handover): Y to a short grey clip of the working part (about 1.0-6.45 s) first,
+  and Y to one rough still of K4 dressed as Jason (house look) as an early look. Both relayed to chat 36.
+- Needs Sam: budget stops Y (chat 28), still open.
 - Read: notes/bench/learn-step.md ("Stage 1", "Stage 1, chat 35" and its "later"); bench_move.py MAP.
   Open rule requests: Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
 - Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4); not lost.
