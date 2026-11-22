@@ -591,6 +591,6 @@ real 3D body posed and lit, then drawn over in the house style, or reference foo
 on a short clip on its own before it goes back into the film. Nothing here is started without Sam's word.
 
 Record of chat 31's unsaved change (kept as a FAILED try on Sam's Y, 22 Nov; the code itself was never committed
-because chat 31 could not save on a relayed message): the free hand's door-top grip moved 15-20 cm forward, in the car's
+because chat 31 could not save on a relayed message; later saved after Sam typed Y there: commit 01ae11ab on branch claude/gta-chat31, never on the main line): the free hand's door-top grip moved 15-20 cm forward, in the car's
 frame (x across, y up, z forward, metres): K2 hand (0.88, 1.03, 0.25), K3 (0.96, 1.07, 0.34), K4 (0.96, 1.07, 0.32),
 elbow poles unchanged; plus a head-disc change in the door-hiding map. Result: in section 17's table.

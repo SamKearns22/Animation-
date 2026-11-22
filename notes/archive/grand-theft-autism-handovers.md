@@ -603,3 +603,18 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Read: case study section 17. Open rule requests: Sam's held-object check (draft only).
 - For Claude: chat 31 (session_01GznaAVRjtm1nmzn6nuRJJ6) was interrupted; its unpushed work, if any, is not merged.
 
+
+## Where things stand (22 Nov, chat 32, Opus)
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3, shot 4's camera included; the script;
+  the 8 shots' order and lengths.
+- Done: shot 4's 14 attempts marked FAILED (case study 17); Sam's test-space job recorded (chat 32 section); why the
+  hands changed found; proposal solid-body-moves judged (two options sent to Sam, judge picked option 1).
+- Next: chat 33, Opus high: the learn step L1-L3 of option 1 (Sam's Y) (notes/proposals/solid-body-moves.md),
+  ending with the side-by-side still to Sam. Sam said Y to installing Blender. Alongside: chat 33b, Opus medium: F6, F12,
+  F15 and shots 5-8 notes (never shot 4's Jason).
+- Needs Sam: budget stops Y (chat 28), still open.
+- Read: notes/proposals/solid-body-moves.md (verdict); chat 32 section. Open rule requests: Sam's held-object check
+  (draft); house-look lock (option 1 step 4, its own proposal).
+- For Claude: handover check's SENTENCE line is the known false alarm (in CLAUDE.md, Seeing like Sam 4). Chat 30's FAILED section moved to the archive notes. Chat 31's uncommitted DOOR_L change sits in session_01GznaAVRjtm1nmzn6nuRJJ6 (branch claude/gta-chat31).
+

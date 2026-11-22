@@ -498,6 +498,23 @@ Sam (via chat 27): "I did not want the camera angles changed. It is a great shot
       the same faults as before this chat (311 lines, none new).
 
 
+## Shots 5-8, done in chat 19 (moved from the film notes in chat 33)
+- Sam then: "Actually don't handover just continue here" (chat 19, switched to Opus). Done in chat 19:
+  every look is the focus kit now (J_FOCUS, L_FOCUS, H_FOCUS keys in gta_shots58, eyes lead 0.17 s); found and fixed:
+  the old looks went the WRONG way (Lucia's turn to Jason and both "eyes slide to each other" on nitroglycerin looked
+  away from each other: + is screen right). Jason: to Lucia on the yank, back at her on line 3, to Lucia on "I told
+  you" (eyes shut), thumb back at her on "Her", hand up explaining to Lucia with beats on home/made/explosives, palm
+  up on "this job", thumb back at her on "without her", then forward, fed up. His gestures moved to the window side,
+  forearm upright beside his face (from the inner side they crossed his chest: a thick diagonal arm). Lucia: to
+  Jason on "you", a jerk back at her on "brought her", glance on "told you", eye-roll on "hyperfixation", side-eye
+  on "without her", eyes to the mirror in shot 7. Her: headshake on "didn't", at the driver on "like that", at Lucia
+  during line 4, eyes drop on "brought her", at Jason on "hyperfixation", proud smile on "explosives"/"without her".
+  Lost: Jason "looking forward" through line 5 (Sam's script); his note overrides it.
+  Clip v2 sent ~23:57 (4.9 MB, ~14 min render; shot 7 first refused by the figure check: elbow folded across his
+  chest as the hand came down; fixed with the elbow 'out' then). Waiting for Sam's notes on v2.
+  Critique r19-p1 named to Sam: the thumb reads as a plain circle (house circle hands); the face slides are subtle at
+  phone size (kept strength, Sam refused 1.7x); P3 'eyes open' was a false alarm. Older, not this note: bonnet
+  stripes read as legs, the windscreen glare over Lucia's eye.
 ## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (alongside chat 33)
 Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths. Not touched:
 Jason's movement in shot 4 (FAILED, chat 33's job).
