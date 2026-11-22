@@ -70,6 +70,7 @@ PROMISES = {
     'size_faults': ('a film\'s notes stay under 4,000 words and its handover under 15 lines, with its rule-requests line', 'kittest handover_status_checks'),
     'ledger_faults': ('every chat logs its stage and Sam\'s notes; finished stages are marked', 'kittest handover_status_checks'),
     'push_faults': ('every chat sends Sam a push notification at its handover', 'kittest handover_status_checks'),
+    'dearest_faults': ('the week\'s five dearest things are re-ranked at least every 7 days and suggested to Sam', 'kittest dearest_things_named'),
     # pack tools (guides/job-packs.md)
     'catalogue.py': ('the kit list is current', 'live kits'),
     'codemap.py': ('every film file opens with a MAP', 'named: used by hand'),
