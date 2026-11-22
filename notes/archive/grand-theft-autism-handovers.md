@@ -590,3 +590,16 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   hands3d._no_specks, head3d_film HAIR_Z/HAIR_Y. Strip check: `python3 source/leanout.py strip OUT` (~10 min; 311
   fault lines is the baseline). Frames: gta_film.frame_image(t) (~25 s a frame).
 
+
+## Where things stand (22 Nov, chat 32, Opus)
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do (CLAUDE.md); 30.
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3, shot 4's camera included; the script;
+  the 8 shots' order and lengths. The failure unlocks none of these.
+- Done: on Sam's order, every attempt at Jason's movements in shot 4 marked FAILED (case study section 17); chat 31
+  stopped mid-work; no next chat opened.
+- Next: nothing on shot 4 until Sam says how to go on. The chain is stopped here.
+- Needs Sam: how to go on with shot 4 (a new way of drawing it, see case study section 17), and whether other work
+  (F6, F15, F12, shots 5-8) goes on meanwhile. His Y on the budget stops (chat 28 item) still open.
+- Read: case study section 17. Open rule requests: Sam's held-object check (draft only).
+- For Claude: chat 31 (session_01GznaAVRjtm1nmzn6nuRJJ6) was interrupted; its unpushed work, if any, is not merged.
+

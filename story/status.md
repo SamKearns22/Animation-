@@ -1,3 +1,6 @@
+Grand Theft Autism, chat 32 (22 Nov): plan to learn 3D moves on a test bench (Jason and the window only) judged; two options sent to Sam.
+Why the hands changed: a chat turned Sam's 'problems with hands' into 'needs fingers' and changed them unasked.
+Next: Sam picks; then Opus high does the learn step and sends a side-by-side still.
 Grand Theft Autism, chat 32 (22 Nov): on Sam's order, every attempt at Jason's movements in shot 4 is marked FAILED and stopped (chat 31 stopped).
 Shot 4's camera and beats stay locked; nothing on shot 4 goes on until Sam says how.
 Next: Sam's decision on shot 4 and on whether other work goes on meanwhile.

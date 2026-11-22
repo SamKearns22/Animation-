@@ -193,30 +193,6 @@ Sam: "All attempts at building Jason's movements in shot 4 have failed. Please s
 the tracking document as failed." All shot 4 Jason items below are FAILED and closed; chat 31 was stopped. The full
 list of attempts is in the case study, section 17.
 
-## Chat 30 (22 Nov, Opus high): shot 4 drawing fixes (camera and beats untouched) - FAILED
-- [x] Bald from above (15.4, 18.3): the buzz cut's edge ran on a slant from the nape to above the ear, a big patch of
-      skin behind the ear. Now it drops straight behind the ear to the nape, sits on the ear top, a short sideburn,
-      fuller temples. Reads as short dark hair (sheet, both frames). Why missed: the sheet was judged level-on only.
-- [x] 15.4 "dark box by the door hand": the car's window seal showing through his arm on the sill (the door-hiding
-      map gave those pixels to his chest piece behind, inside the cabin). Arm pieces now claim their own width,
-      nearest last, tested at their near skin; the map at half size (the stair-steps gone).
-- [x] Dots by the ear / dotted bits on the arm edge: ink bits shorter than 3 line widths are dropped (all 3D parts).
-- [x] 21.25 blurred smears (red door through the arm, grey through the raised one, vest through the arm's edge): the
-      arm's cut end faded to see-through everywhere; now it fades only over his drawn bare shoulder.
-- [x] FAILED (stopped by Sam, 22 Nov), the free elbow dangles outside the door below his hand (15.2-15.3 s, 21.15-21.3 s), and the arm hangs
-      down to a round elbow with a stub of forearm back up to the hand (21.25): between "on his knees" (K2) and "head
-      out" (K3) his shoulder slides out right over the hand on the door top, so the arm folds tight (hand 12 cm from
-      shoulder) and the only bends that keep the elbow above the sill point inward. Tried (all rejected, now OFF: the
-      LIFT setting in leanout): K2's elbow pointed up (breaks K2->K1: 17 drawings "elbow folded across the chest");
-      the elbow lifted step by step (jumps half a metre a drawing); the hand re-gripping (lifted 6-20 cm: still jumps
-      0.3-0.45 m a drawing). What it needs: the free hand placed on the door top where the shoulder never passes over
-      it (further along the sill, forward or back, in K2, K3 and K4 alike so it stays planted), tested on the strip
-      for drawing-to-drawing jumps and on the 45-degree view for a stub forearm. Also a wrist jump of 17 cm inward at
-      about 21.43 s (was there before; seen in the numbers, not yet on a frame).
-- [x] FAILED (stopped by Sam, 22 Nov), still seen at full size: a sliver of camo shorts at the sill (15.4); 21.25 a faint fade on the arm's edge over
-      the vest; the bare upper arm reads very big from behind (THICK 1.3). Checked: the body check's strip has exactly
-      the same faults as before this chat (311 lines, none new).
-
 ## Chat 32 (22 Nov): Sam's new job, learn the skill in a test space (plan first, nothing built)
 Sam: "You need to learn how to use 2.5d or 3d animation to make this movement work. Create a test space where it is just
 Jason in his sitting pose, and the window." Checklist (his words, each to be ticked against the test space):
@@ -234,15 +210,17 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
       check caught it: nothing compares a frame's hands (or any house part) against the house look. Lesson to propose.
 
 ## Where things stand (22 Nov, chat 32, Opus)
-- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do (CLAUDE.md); 30.
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
 - Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3, shot 4's camera included; the script;
-  the 8 shots' order and lengths. The failure unlocks none of these.
-- Done: on Sam's order, every attempt at Jason's movements in shot 4 marked FAILED (case study section 17); chat 31
-  stopped mid-work; no next chat opened.
-- Next: nothing on shot 4 until Sam says how to go on. The chain is stopped here.
-- Needs Sam: how to go on with shot 4 (a new way of drawing it, see case study section 17), and whether other work
-  (F6, F15, F12, shots 5-8) goes on meanwhile. His Y on the budget stops (chat 28 item) still open.
-- Read: case study section 17. Open rule requests: Sam's held-object check (draft only).
-- For Claude: chat 31 (session_01GznaAVRjtm1nmzn6nuRJJ6) was interrupted; its unpushed work, if any, is not merged.
+  the 8 shots' order and lengths.
+- Done: shot 4's 14 attempts marked FAILED (case study 17); Sam's test-space job recorded (chat 32 section); why the
+  hands changed found; proposal solid-body-moves judged (two options sent to Sam, judge picked option 1).
+- Next (on Sam's pick): Opus, high. The learn step L1-L3 of the picked option (notes/proposals/solid-body-moves.md),
+  ending with the side-by-side still to Sam. Installing Blender needs Sam's OK (this chat's install was refused).
+- Needs Sam: 1 option 1 or 2; 2 circle hands Y/N; 3 Blender install OK Y/N; still open: chat 31's unsaved change keep
+  or throw away; whether other film work (F6, F12, shots 5-8) goes on meanwhile; budget stops Y (chat 28).
+- Read: notes/proposals/solid-body-moves.md (verdict); chat 32 section. Open rule requests: Sam's held-object check
+  (draft); house-look lock (option 1 step 4, its own proposal).
+- For Claude: handover check's SENTENCE line is the known false alarm (in CLAUDE.md, Seeing like Sam 4). Chat 30's FAILED section moved to the archive notes. Chat 31's uncommitted DOOR_L change sits in session_01GznaAVRjtm1nmzn6nuRJJ6 (branch claude/gta-chat31).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 57.98% of 15%; forecast 69.7% (2026-11-22)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 61.7% of 15%; forecast 69.7% (2026-11-22)

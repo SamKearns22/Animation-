@@ -472,3 +472,28 @@ Sam (via chat 27): "I did not want the camera angles changed. It is a great shot
 - [ ] Still to look at, full size: 15.4 a dark box by the door hand (was there before); 21.25 dotted outline bits on
       the arm's left edge; faint fold lines at the door arm's shoulder; hand to forearm join; hand check (rule 41).
 
+
+## Chat 30 (22 Nov, Opus high): shot 4 drawing fixes (camera and beats untouched) - FAILED
+- [x] Bald from above (15.4, 18.3): the buzz cut's edge ran on a slant from the nape to above the ear, a big patch of
+      skin behind the ear. Now it drops straight behind the ear to the nape, sits on the ear top, a short sideburn,
+      fuller temples. Reads as short dark hair (sheet, both frames). Why missed: the sheet was judged level-on only.
+- [x] 15.4 "dark box by the door hand": the car's window seal showing through his arm on the sill (the door-hiding
+      map gave those pixels to his chest piece behind, inside the cabin). Arm pieces now claim their own width,
+      nearest last, tested at their near skin; the map at half size (the stair-steps gone).
+- [x] Dots by the ear / dotted bits on the arm edge: ink bits shorter than 3 line widths are dropped (all 3D parts).
+- [x] 21.25 blurred smears (red door through the arm, grey through the raised one, vest through the arm's edge): the
+      arm's cut end faded to see-through everywhere; now it fades only over his drawn bare shoulder.
+- [x] FAILED (stopped by Sam, 22 Nov), the free elbow dangles outside the door below his hand (15.2-15.3 s, 21.15-21.3 s), and the arm hangs
+      down to a round elbow with a stub of forearm back up to the hand (21.25): between "on his knees" (K2) and "head
+      out" (K3) his shoulder slides out right over the hand on the door top, so the arm folds tight (hand 12 cm from
+      shoulder) and the only bends that keep the elbow above the sill point inward. Tried (all rejected, now OFF: the
+      LIFT setting in leanout): K2's elbow pointed up (breaks K2->K1: 17 drawings "elbow folded across the chest");
+      the elbow lifted step by step (jumps half a metre a drawing); the hand re-gripping (lifted 6-20 cm: still jumps
+      0.3-0.45 m a drawing). What it needs: the free hand placed on the door top where the shoulder never passes over
+      it (further along the sill, forward or back, in K2, K3 and K4 alike so it stays planted), tested on the strip
+      for drawing-to-drawing jumps and on the 45-degree view for a stub forearm. Also a wrist jump of 17 cm inward at
+      about 21.43 s (was there before; seen in the numbers, not yet on a frame).
+- [x] FAILED (stopped by Sam, 22 Nov), still seen at full size: a sliver of camo shorts at the sill (15.4); 21.25 a faint fade on the arm's edge over
+      the vest; the bare upper arm reads very big from behind (THICK 1.3). Checked: the body check's strip has exactly
+      the same faults as before this chat (311 lines, none new).
+
