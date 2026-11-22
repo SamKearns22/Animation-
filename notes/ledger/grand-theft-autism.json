@@ -21844,6 +21844,196 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "f4f681d6",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.28,
+   "src": "estimate",
+   "sid": "session_01GznaATLDiLViEJgr9HLUfs",
+   "steps": 14,
+   "hist_k": 137,
+   "kinds": {
+    "tool search": 23.2,
+    "other": 76.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 11,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 3
+   },
+   "split": {
+    "usd": 1.0379,
+    "total": 1.0379,
+    "floor_k": 92,
+    "blocks": {
+     "start-up floor": 40.9,
+     "new writes": 34.9,
+     "Claude's words": 17.8,
+     "carried history": 6.4
+    },
+    "origins": {
+     "start-up floor": 40.9,
+     "result: tool search": 23.2,
+     "Claude's words": 23.0,
+     "result: other": 7.1,
+     "messages and reminders": 5.7
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 40.9,
+     "git and saving": 11.9,
+     "reading notes": 7.1,
+     "reading chat records": 6.8,
+     "commands": 6.6,
+     "messages to Sam": 6.0,
+     "messages and reminders": 5.7,
+     "thinking": 5.6,
+     "helper and chat prompts": 2.4,
+     "writing code": 2.4,
+     "start-up and handover tools": 2.4,
+     "other commands": 1.8,
+     "app tools (chats, files sent)": 0.3
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 92,
+    "work_step": 12,
+    "work_pct": 0.25,
+    "reads": [
+     [
+      "notes/proposals/milburn-review.md",
+      2.7,
+      0.0238
+     ],
+     [
+      "source/propose.py",
+      1.9,
+      0.017
+     ],
+     [
+      "notes/archive/milburn.md",
+      1.6,
+      0.0142
+     ]
+    ],
+    "base_pct": 20.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 7,
+     "shared:propose.py": 2,
+     "shared:leanout.py": 1,
+     "shared:elder_swindon.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g 2>/",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/budget-job.md notes/check-repairs.md",
+      "where things stand",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/check-repairs.md notes/grand-theft-autism.md notes/halo-no-no.md notes/eld",
+      "^## Where things stand",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "33b\\|33c\\|animatic v4",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:propose.py",
+      "notes/proposals source/propose.py",
+      "cd /home/user/Animation-; git checkout -q claude/create-claude-md-oe8z4g 2>/dev/",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "cd /home/user/Animation-; for n in 1 2 3; do echo \"=== $n\"; python3 source/propo",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/archive notes/proposals/milburn-review.md",
+      "after milburn\\|end of milburn\\|milburn.*suggest\\|suggested job",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/proposals/ notes/next-jobs.md notes/check-repairs.md notes/cost-diagnosis.",
+      "status\\|sam\\b\\|sam:\\|built\\|done\\|waiting",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/proposals/*.md story/*people*.txt",
+      "parked (Sam 19 Nov",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:leanout.py",
+      "notes/remakes.md notes/elder-swindon.md notes/archive source/leanout.py notes/lo",
+      "notes/remakes.md\\|notes/elder-swindon.md",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:elder_swindon.py",
+      "notes/elder-swindon.md notes/archive/elder-swindon.md notes/remakes.md notes/arc",
+      "Needs Sam",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
