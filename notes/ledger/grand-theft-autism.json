@@ -21048,6 +21048,164 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "d52ed8c4",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.14,
+   "src": "estimate",
+   "sid": "session_01GznaAVERGVwiSCieXGbEJ5",
+   "steps": 9,
+   "hist_k": 103,
+   "kinds": {
+    "tool search": 6.0,
+    "renders": 0.8,
+    "other": 93.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 8,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 0
+   },
+   "split": {
+    "usd": 0.5165,
+    "total": 0.5165,
+    "floor_k": 96,
+    "blocks": {
+     "start-up floor": 89.8,
+     "new writes": 5.2,
+     "Claude's words": 4.5,
+     "carried history": 0.5
+    },
+    "origins": {
+     "start-up floor": 89.8,
+     "Claude's words": 5.7,
+     "result: tool search": 4.0,
+     "messages and reminders": 0.4
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 89.8,
+     "commands": 4.7,
+     "reading notes": 1.7,
+     "start-up and handover tools": 1.2,
+     "reading guides": 0.9,
+     "messages to Sam": 0.5,
+     "thinking": 0.5,
+     "messages and reminders": 0.4,
+     "reading kit code": 0.2,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 96,
+    "work_step": 6,
+    "work_pct": 0.13,
+    "reads": [
+     [
+      "notes/grand-theft-autism.md",
+      1.1,
+      0.005
+     ],
+     [
+      "guides/job-packs.md",
+      0.6,
+      0.0027
+     ]
+    ],
+    "base_pct": 15.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 1,
+     "film notes": 1,
+     "guides": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git fetch origin claude/create-claude-md-oe8z4g 2>&1 ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git merge-base --is-ancestor HEAD origin/claude/create-claude-md-oe8z4g && echo ",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/grand-theft-autism.md",
+      "Chat 33b",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md guides/job-packs.md source/data/v4",
+      "Checks and animatic",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "",
+      "git ls-remote origin claude/create-claude-md-oe8z4g | head -1; git push --dry-ru",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "sed -n 42,90p guides/job-packs.md",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "source/data/v4/render.log",
+      "sleep 120; tail -2 source/data/v4/render.log",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "source/data/v4/end.txt source/data/v4/render.log source/data/v4/start.txt",
+      "until [ -f source/data/v4/end.txt ]; do sleep 20; done; tail -15 source/data/v4/",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
