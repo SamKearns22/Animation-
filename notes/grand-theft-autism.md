@@ -234,7 +234,7 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   2.5 cm into his side 1.71 s; left knee slides 3 cm while planted; quick hand moves over 3 cm a frame), the rough
   dressed still of K4 (Sam's Y), getting up 13-23 / sitting down 176-190 with the real checks, full run, whole grey clip,
   the 3 cm question.
-- Needs Sam: budget stops Y (chat 28), still open; the 3 cm question after the full run.
+- Needs Sam: (budget stops: Sam N, 22 Nov) the 3 cm question after the full run.
 - Read: notes/bench/learn-step.md ("Stage 1, chat 36" and "Chat 36: the middle grey clip"); bench_move.py MAP.
 - Open rule requests: Sam HOLDS the proposal that grey test clips skip the body check (do not raise it);  Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
 - For Claude: notes/bench/span.py A B (real checks); look.py OUT.jpg F.. (4 views); `run OUT T0 T1` (part run).
@@ -250,3 +250,7 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
   (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
 - Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
+
+## Sam's answers, 22 Nov (status chat)
+- Budget stops (open since chat 28): **N**. Do not ask again.
+- Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.

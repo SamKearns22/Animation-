@@ -1,5 +1,7 @@
 # Notes for REMAKES (one file, numbered; mark each done as it is fixed)
 
+**Posted (Sam, 22 Nov): notes filed here.**
+
 ## Where things stand (the ONE handover)
 - **Rules that bite next:** 70 (1.1x on delivery), 59 (checks before a final), 30 (seen-before notes).
 - **Done (11 Nov, eve):** notes 76-77 in; checks clean, pre-flight run (faults named), final re-rendered (7 min 35 s), finished at 1.1x (finish.py only, then fps=24): animations/remakes-vertical.mp4 (11.3 MB, 41.5 s, 1080x1920) sent to Sam.

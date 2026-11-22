@@ -2,7 +2,7 @@
 """Remakes (the Ocarina of Time remake satire): the film file. Modelled on flying_whales.py (custom-drawn cast, no
 burnham people): the sets are remakes_sets, the children and gunman remakes_cast, KG, Navi and the Goron
 remakes_creatures. The simplest staging that tells each beat (Sam, 10 Nov: the week at 75%): holds and cuts, one
-move per beat. Notes: notes/remakes.md ("Shots and the acting list").
+move per beat. Notes: notes/archive/remakes.md ("Shots and the acting list").
 
 MAP (rule 61)
   lines and timing ..... LINES (recording, who, shot, gap before); _time() lays them end to end; BEATS (the action
