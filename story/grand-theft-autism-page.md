@@ -3,24 +3,24 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## grand_theft_autism.py (147 lines)
+## grand_theft_autism.py (153 lines)
 - 16: HERE (data)
 - 29: LENGTH (data)
-- 30: DUR (data)
-- 31: SHOTS (data)
-- 32: SONG (data)
-- 33: SONG_FROM (data)
-- 34: SONG_LEN (data)
-- 38: CAPS (data)
-- 48: `caption_at` 
-- 52: `shot_of` 
-- 56: `_draw` 
-- 63: `main` 
-- 94: UP (data)
-- 95: VOICES (data)
-- 101: GAIN_DB (data)
-- 105: `_find` 
-- 110: `mix` The song (radio level after the opening), the voices, the sound effects Sam named: siren, pistol, glass at
+- 36: DUR (data)
+- 37: SHOTS (data)
+- 38: SONG (data)
+- 39: SONG_FROM (data)
+- 40: SONG_LEN (data)
+- 44: CAPS (data)
+- 54: `caption_at` 
+- 58: `shot_of` 
+- 62: `_draw` 
+- 69: `main` 
+- 100: UP (data)
+- 101: VOICES (data)
+- 107: GAIN_DB (data)
+- 111: `_find` 
+- 116: `mix` The song (radio level after the opening), the voices, the sound effects Sam named: siren, pistol, glass at
 
 ## grand-theft-autism-people.txt (5 people; a note on a person changes their lines)
 - 7: jason (Jason (Sam's key art, Nov: buzzed dark hair, a very light fade of stubble (Sam, chat ), hard frown; a cream LEONIDA vest, a thin silver chain, camo cargo shorts, trainers). Build measured from the game's art (notes, "Body shapes measured").): body: , shoulders , head x , hem , build man, arms muscle, legs ; skin: hair: crop, , buzz; face: jaw_wide ++, chin_long +, brow_high ---, face_wide +; eyes: lips: brows: , width , thick ; beard: stubble ; rest smile: ; outfit: jumper , no tie, trousers , shoes , shorts knee, camo, fray, trainers; extras: vest

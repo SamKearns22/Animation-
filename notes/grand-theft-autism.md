@@ -175,26 +175,21 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   arms 22.3-22.9: looked full size at 19.7 and 22.5 only, nothing a stranger would stop on there; not swept.
 - Clip tool: `grand_theft_autism.py OUT --span T0 T1` (sound cut from animations/drafts clean render).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 77.66% of 15%; forecast 81.3% (2026-11-22)
 - 33c finish (22 Nov, Sam "Just go"): body check run (11 faults, named), critique r43-p1 recorded (fresh helper), finish.py
   (note: finish.py deletes its own output if written into animations/drafts: write elsewhere). Animatic 4.5 MB, sent.
   Critic's lines NOT on the list (propose later): lights sit on a named object; no repeat frames at different beats;
   driver's hands visible on the wheel. Next: Sam's notes on v4 (Opus medium); shot 4 waits for the 3D work.
 
-## Where things stand, the ANIMATIC strand (22 Nov, chat 33c, Sonnet): v4 sent, Sam's notes in
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam; a note given before is a warning (rule 30).
+## Where things stand, the ANIMATIC strand (22 Nov, chat 33d, Opus medium): v4 notes fixed, clip sent
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (the pop check to propose); rule 30.
 - Locked by Sam: every camera and beat of shots 1-8 as in v3; shot 4's Jason untouched (3D rebuild, other chats).
-- Done: v4 made, body check (11 faults named), critique r43-p1, sent (animations/drafts/, 4.5 MB).
-- Sam's notes: [ ] N1 buildings at the right end of the last street vanish as they drive off (shot 8: set pops out).
-  [ ] N2 "Jason needs his pistol" (shots 5-8, as in shot 4). [ ] N3 fix all v4 named faults not in shot 4's Jason: cruiser
-  driver arm 19.7; passers-by arms 22.3-22.9; Jason skin/face (2,5-8); Lucia face/braid; no hands on wheel; no necks;
-  floating police lights, blue at 35.5; vest "ONIDA" 22.9/31; face cut at right edge 19; left arm crossing 17.9.
-  Say plainly which cannot be fixed without moving a camera or beat, then ask Sam (numbered).
-- Next: chat 33d, Opus medium: the notes round (page.py show, one step per note); clips of changed seconds, then ask.
-- Needs Sam: nothing yet. Read: job pack for a notes round; grand_theft_autism.py MAP.
-- Open rule requests: none; critic's three lines (lights on an object; no repeat beats; driver's hands) to propose.
-- For Claude: no film code edited here (scratch check only, so no page.py call); voice files absent, reuse the old
-  clean render's audio; Sam's edit of CLAUDE.md (60e25406) reworded "Choose views the drawing can carry"; chat 37's
-  old handover is in notes/archive/grand-theft-autism-handovers.md.
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 76.57% of 15%; forecast 80.2% (2026-11-22)
+- Done: N1 street no longer pops out; N2 pistol in shots 5-8; light-bar glow on the bar. Clip 22.3-38.5 sent (2.8 MB).
+  N3 rest named in "Chat 33d" above (skin/face, Lucia face, necks/bonnet, ONIDA, shot 4 items).
+- Needs Sam: Q1 shot 3 pistol (Y once shot 4's opening shows it too / N); Q2 Y = animatic v5 from this clip.
+- Next: on Sam's Y, chat 33e, Sonnet: animatic v5 `grand_theft_autism.py OUT --from 7.0` (shot 1 reused), audio from
+  the clean render, body check, critique pack, finish.py (write outside animations/drafts first), copy, send.
+- Read: job pack "Checks and animatic"; "Chat 33d" above.
+- Open rule requests: none new; to propose: the pop check (N1), critic's three lines (lights, repeat beats, hands).
+- For Claude: FAR58/FAR_PEOPLE58, chest_gun (gta_shots58, leanout.draw_gun); `--span` clip. Two "Where things stand"
+  on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
+  post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
