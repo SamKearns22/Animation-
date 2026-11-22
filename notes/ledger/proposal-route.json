@@ -6727,52 +6727,54 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.21,
+   "cost": 0.68,
    "src": "estimate",
    "sid": "session_01U3pKR36uALh2iRkpP1tyQ4",
-   "steps": 12,
-   "hist_k": 100,
+   "steps": 21,
+   "hist_k": 110,
    "kinds": {
-    "tool search": 10.6,
-    "other": 89.4
+    "tool search": 16.8,
+    "other": 83.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 5,
+    "tool search": 11,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 2
+    "other": 5
    },
    "split": {
-    "usd": 0.6985,
-    "total": 0.6985,
+    "usd": 1.0805,
+    "total": 1.0805,
     "floor_k": 81,
     "blocks": {
-     "start-up floor": 50.1,
-     "Claude's words": 29.0,
-     "new writes": 17.9,
-     "carried history": 3.1
+     "start-up floor": 44.7,
+     "Claude's words": 30.3,
+     "new writes": 19.5,
+     "carried history": 5.5
     },
     "origins": {
-     "start-up floor": 50.1,
-     "Claude's words": 35.9,
-     "result: tool search": 6.9,
-     "messages and reminders": 6.8,
-     "result: other": 0.1
+     "start-up floor": 44.7,
+     "Claude's words": 39.5,
+     "result: tool search": 9.5,
+     "messages and reminders": 5.3,
+     "result: other": 1.0
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 50.1,
-     "thinking": 19.2,
-     "messages to Sam": 11.2,
-     "messages and reminders": 6.8,
-     "commands": 3.9,
-     "reading guides": 3.7,
-     "start-up and handover tools": 2.4,
-     "helper and chat prompts": 1.6,
-     "reading notes": 0.8,
+     "start-up reading (rules, tools, first files)": 44.7,
+     "thinking": 17.5,
+     "messages to Sam": 8.7,
+     "start-up and handover tools": 5.9,
+     "commands": 5.9,
+     "messages and reminders": 5.3,
+     "writing code": 5.0,
+     "reading guides": 3.3,
+     "helper and chat prompts": 2.5,
+     "reading notes": 0.7,
+     "helper results": 0.6,
      "git and saving": 0.1
     },
     "leftover": 0.0
@@ -6784,16 +6786,31 @@
     "reads": [
      [
       "source/propose.py",
+      2.1,
+      0.0195
+     ],
+     [
+      "CLAUDE.md",
+      1.0,
+      0.0096
+     ],
+     [
+      "notes/proposals/precheck-reply.md",
       0.7,
-      0.0063
+      0.0057
      ],
      [
       ".claude/settings.json",
       0.4,
-      0.0034
+      0.0041
+     ],
+     [
+      "notes/proposals/precheck-reply/chat.md",
+      0.1,
+      0.0006
      ]
     ],
-    "base_pct": 23.2
+    "base_pct": 27.3
    },
    "search": {
     "show": 0,
@@ -6801,9 +6818,10 @@
      "no show": 0
     },
     "other": {
-     "guides": 2,
-     "shared:propose.py": 2,
-     "film notes": 1
+     "guides": 4,
+     "shared:propose.py": 5,
+     "film notes": 1,
+     "other": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -6846,6 +6864,54 @@
       "film notes",
       "notes/proposals/unrouted.md",
       "cd /home/user/Animation-; git diff notes/proposals/unrouted.md | head -20; git a",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g && ",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "guides",
+      "",
+      "Statement One\\|never twice",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "guides",
+      "",
+      "cd /home/user/Animation-; git add CLAUDE.md && git commit -qm \"CLAUDE.md: Statem",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/precheck-reply.md notes/proposals/precheck-rep",
+      "cd /home/user/Animation-; python3 source/propose.py new precheck-reply \"Sam sees",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/unrouted.md source/propose.py",
+      "sent after one block",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "notes/proposals",
+      "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
       ""
      ]
     ]
