@@ -707,3 +707,20 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 79.6% of 15%; forecast 83.2% (2026-11-22)
 
+
+## Where things stand (22 Nov, chat 38, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 2-3 (Sam's neck/strap notes); proposal route.
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
+  style; circle hands.
+- Done: pistol, knees, arm/chest (1.1 cm left); middle grey clip critiqued, named, SENT; dressed K4 still sent;
+  Sam's neck note fixed; strap note half-fixed (still an island: learn-step "chat 38").
+- Next: chat 39, Opus high: elbow pop 22 cm at 1.1 s (chat 38's B3); vest strap island (resend still); getting up
+  13-23 / sitting down 176-190; full run + whole grey clip (~80 min); the 3 cm question. Details: learn-step "chat 38".
+- Needs Sam: the 3 cm question after the full run (budget stops: Sam N, 22 Nov: never ask again).
+- Read: notes/bench/learn-step.md "Stage 1, chat 38"; bench_move.py MAP; notes/bench/sam-notes/.
+- Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
+  house-look lock (option 1 step 4).
+- For Claude: `bench_move.py clip|dressed`; span.py, look.py. CLAUDE.md sentence flag (60e25406, not this chat): kept,
+  bracket added.
+
+
