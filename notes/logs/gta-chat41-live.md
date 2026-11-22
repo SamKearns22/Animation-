@@ -17,3 +17,10 @@ K2 7.4, K1 7.8); house art style; circle hands. Sam holds the grey-clip body-che
 ## Entries
 - 22:40 chat 41 started (this account). Main line checked out, branch claude/blissful-sagan-ndv0fd.
   Branches dreamy-fermi-vkhutz (another chat's story post) and gta-chat31 (Sam: filed, never merge): left alone.
+- 22:50 Sam: the other account's chat 41 did some work before its usage ran out. NONE of it is on GitHub (searched
+  every branch: newest bench work is chat 40's, 50 min ago). That chat's transcript is not visible from this account.
+  Asked Sam to paste its last message if he can; carrying on from chat 40's handover meanwhile.
+- 22:50 Baseline, frames 12-26 (getting up), span.py, 64 s: frame 12 clean, 13-24 broken (legs through each other
+  12 cm, left arm through left thigh 12 cm, right arm into trunk 12 cm, dash 4.5, seat back 7.5, roof rail 2.9,
+  pistol 3.7, knees 164 deg). 25 clean. Same as chat 39 found.
+  LESSON FOR EVERY CHAT ON THIS JOB: push to GitHub after every step, or the work is lost when usage runs out.
