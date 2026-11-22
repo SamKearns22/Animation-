@@ -252,8 +252,10 @@ FIG_UNITS = 1128.0    # a flat figure's whole height in its own units (views: he
 
 
 def _backview(e):
-    """Seeing like Sam 4: a person turned away from the lens, big in frame and on screen, is a fault in itself
-    (choose another camera). Skeleton people: the trunk's turn from the lens (and the face's); flat people: their
+    """A person turned away from the lens, big in frame and on screen, must be DRAWN to read from behind (Sam, 21 Nov:
+    "a great shot but a broken drawing"; CLAUDE.md "Fix the drawing, never the shot": the camera of an approved shot
+    never moves). The fault names what a back view needs: real hands (fingers, not a circle), the arm narrowing to an
+    elbow and a wrist, and the back of the head with a hairline and the neck running into the shoulders. Skeleton people: the trunk's turn from the lens (and the face's); flat people: their
     drawn turn. Returns [(kind, text)]."""
     import numpy as np
     out = []
@@ -286,10 +288,11 @@ def _backview(e):
     big = share > (BIG_SKEL if e['kind'] == 'skeleton' else BIG_FLAT)
     if seen and big and yaw > BACK_DEG:
         out.append(('back view', f'seen from behind ({yaw:.0f} degrees turned from the lens, {share:.0%} of the '
-                                 f'frame tall): a view the flat drawing cannot carry; choose another camera'))
+                                 f'frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), '
+                                 f'arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders'))
     elif seen and big and hoff > HEAD_BACK_DEG:
-        out.append(('back view', f'the back of the head to the lens ({hoff:.0f} degrees), big in frame: choose '
-                                 f'another camera or turn the head'))
+        out.append(('back view', f'the back of the head to the lens ({hoff:.0f} degrees), big in frame: draw the '
+                                 f'back of the head (hairline at the nape, ears, the neck into the shoulders); never move the camera'))
     return out
 
 
@@ -297,7 +300,7 @@ def _limbs(e):
     """The drawn arm's proportions (GTA v7 notes 4 and 10, "a gross distended sausage", "the forearm folds back into an
     L of flesh"): each arm piece as drawn on screen against the rig's length at the size the arm is drawn (lying_flat
     draws a near arm bigger). Longer than 1.25x reads as a sausage; shorter than 0.35x points at the lens and the flat
-    drawing shows a stub. Both are camera faults first (lesson 22): move the camera or the pose. Off-screen: skipped."""
+    drawing shows a stub. In an approved shot the camera never moves (Sam, 21 Nov): fix the pose or the drawing. Off-screen: skipped."""
     import numpy as np
     import body as B
     import figure as F

@@ -16241,103 +16241,16 @@
    "notes_auto": 0
   },
   {
-   "date": "2026-11-21",
+   "date": "2026-11-22",
    "chat": "a21d7f3d",
-   "stage": "auto",
-   "round": null,
-   "notes": 0,
-   "repeats": [],
    "model": "opus",
-   "cost": 0.1,
-   "src": "estimate",
-   "sid": "session_01GznaAVFiu8mdAMoik8yk8U",
-   "steps": 6,
-   "hist_k": 101,
-   "kinds": {
-    "tool search": 11.1,
-    "other": 88.9
-   },
-   "calls": {
-    "film-file search": 0,
-    "tool search": 4,
-    "whole-file .py read": 0,
-    "page.py": 0,
-    "routine": 0,
-    "renders": 0,
-    "pictures": 0,
-    "other": 1
-   },
-   "split": {
-    "usd": 0.3551,
-    "total": 0.3551,
-    "floor_k": 95,
-    "blocks": {
-     "start-up floor": 76.7,
-     "new writes": 13.1,
-     "Claude's words": 9.7,
-     "carried history": 0.5
-    },
-    "origins": {
-     "start-up floor": 76.7,
-     "Claude's words": 12.2,
-     "result: tool search": 9.5,
-     "messages and reminders": 1.6
-    },
-    "leftover": 0.0
-   },
-   "start": {
-    "floor_k": 95,
-    "work_step": null,
-    "work_pct": null,
-    "reads": [],
-    "base_pct": 24.2
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 0
-    },
-    "other": {
-     "other": 2,
-     "shared:handover.py": 2
-    },
-    "ticked": 0,
-    "edited film code": false,
-    "list": [
-     [
-      0,
-      "other",
-      "other",
-      "",
-      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g cla",
-      ""
-     ],
-     [
-      1,
-      "other",
-      "other",
-      "",
-      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1|tail -1 && git ",
-      ""
-     ],
-     [
-      2,
-      "other",
-      "shared:handover.py",
-      "source/handover.py",
-      "git checkout -b claude/gta-chat28 2>&1|tail -1 && git push -u origin claude/gta-",
-      ""
-     ],
-     [
-      3,
-      "other",
-      "shared:handover.py",
-      "source/handover.py notes/grand-theft-autism.md",
-      "Where things stand",
-      ""
-     ]
-    ]
-   }
+   "stage": "round",
+   "round": null,
+   "cost": 1.61,
+   "notes": 3,
+   "repeats": [
+    "Jason from behind: tube arm, blob hand, brown-blob head (F1/F5/F7 again) | the back-view check told us to move the camera instead of naming what the drawing lacks"
+   ]
   }
  ],
  "checks": {},
@@ -16683,6 +16596,11 @@
    "date": "2026-11-21",
    "spent": 53.67,
    "forecast": 104.2
+  },
+  {
+   "date": "2026-11-22",
+   "spent": 54.67,
+   "forecast": 69.7
   }
  ],
  "critique": {

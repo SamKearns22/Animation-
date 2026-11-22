@@ -354,3 +354,85 @@ Beats: B1 0-0.5 s shot 3's frame; B2 0.5-1.7 rise and swing; B3 1.7-3.0 hanging 
 - [x] Old test body_check_shot4_v4 was already failing (v4's own shot 3 really had Lucia's crossed arms, v4 note 1):
       it now asks today's shot 3 to be clean. Passes.
 
+
+
+<!-- moved from the film notes, chat 28 (22 Nov) -->
+## Shot 4 rebuild (Sam, 20 Nov, chat 11): checklist, tick against the film before the first clip
+- Shot 4 case study (Sam, 20 Nov, chat 16): everything on shot 4 (versions, pictures, Sam's words, causes, lessons,
+  his frame-by-frame notes) lives in notes/shot4-case-study/shot4-case-study.md; add to it in every chat that touches shot 4.
+- [ ] Sam: "Our scenery needs an appropriately vice city background, as currently the street ends in blank void." Both
+      shots 2 and 4: a Vice City backdrop at the end of every street (sunset skyline, palms, towers, sea glow).
+- [ ] Sam on shot 4 (chat 11 version, sent too early): "I am surprised you delivered it to me." The lean-out was a
+      floating chest, Jason from behind a lump with no readable arm or gun, flashes too small, crash far and tiny.
+- [ ] Sam: "What are the elements you would need to consider with the camera, actors, props and perspective ... walk me
+      through it, moment by moment" (chat 11's walk-through is the beat list below; "That was a very good summary").
+- [ ] Sam: "Do you think it helps to read the screenplay before working on a scene?" Yes: read shot 4's lines in the
+      plan table (row 4) and the brief item above before building, tick every beat at full size before any clip is
+      sent. (Not yet a rule: Sam has not said "I want a rule".)
+- [ ] Sam on the civilians: they only stand still (same code in every version); "in yours, the people are tiny and
+      being actively sucked into the pavement." Wanted: walking, watching, ducking at each shot, running from the crash,
+      big enough to read, feet on the pavement in every frame (measure every person in every frame).
+- [ ] Sam (uploaded the first clip, references/grand-theft-autism/shot4-original-rehearsal.mp4): the ORIGINAL is
+      better than chat 11's: camera close beside Jason and low, big fireball and black smoke, cruiser close and broadside
+      with POLICE readable, people big. Chat 7 moved the camera back and higher; that lost the drama. Original camera
+      keys: CAM4 in source/gta_rehearse.py at commit 2668817c (git show 2668817c:source/gta_rehearse.py).
+- [ ] Sam: "Rebuild this scene from scratch following your beat-by-beat analysis. Give Jason an open window so you have
+      more space to move him. No clipping whatsoever, but we have a thorough clipping check now, don't we? Assumedly not
+      applied to your above practice shot (why?)". Answer: it WAS applied (gta_rehearse.py layers shot2 shot4, clean
+      twice). It only checks that nearer things hide what is behind them where they overlap; it cannot see a body drawn
+      through a door or window frame, an arm or gun with no readable shape, or feet below the pavement. First improve the
+      check that missed it (a body-through-solid test per frame; a feet-on-ground test per person per frame), then build.
+
+- [ ] Sam (20 Nov, chat 12): "You are currently putting the actors in the bonnet. You're not starting from the right
+      place. Let's instead build the film, as per the screenplay, on a beat by beat basis as you would normally ... do
+      the background and cloud work and then go from there." Order: backdrop and clouds (shots 2 and 4), then shot 3's
+      windscreen three-shot built properly (all three seated behind the glass), then shot 4 from shot 3's frame.
+      (Found: at shot 4's first frame all three people are drawn on the grille, in chat 11's version too: rule 30.)
+
+- [ ] Sam (20 Nov, after chat 13): "Keep working on this until you can render the whole film shot sheet." (the chain
+      carries on, chat after chat, until a sheet of every shot of the whole film, 1-8, can be rendered; his ask, so it
+      is allowed before an animatic)
+- [ ] Sam (20 Nov 18:06, shot 3 as written): "On the left, Jason, looking hard towards us." "On the driver's side,
+      Lucia, her face screwed up in concentration as she jerks the wheel." "Framed between them, a 25 year old white
+      woman with auburn hair, a cream jumper with a unicorn barfi..." "She is playing nervously with a fidget spinner in
+      her hands." "A bulging suitcase full of cash is just visible beside her." "In the background, we see through the
+      back windshield glass the pursuing cop cars." "Autistic girl: it's very loud". On the camera: "Because you're
+      starting the camera in the wrong place." (18:21) "The camera is at the bonnet." "Looking at the seated occupants."
+      (18:23) "What would you call that shot?" (answered: a windscreen three-shot, camera on the bonnet looking in).
+- [ ] Sam (20 Nov ~18:30), note 1: "Y. Just follow your best suggestion for the next hour please, no stopping."
+      ("Just go" for an hour from ~18:30: no waiting for his Y/N; checks and hand-over still done; each message says
+      what was picked and why.)
+
+Beats for shot 4 (screenplay row 4, 6.2 s in the film's clip): 1) 0-0.5 s start on shot 3's windscreen three-shot,
+same position and lens; 2) 0.5-1.7 s camera swings left round the front corner to Jason's window while he rises and
+turns; window frame must cut him right; 3) 1.7-3.0 s we hang outside: Jason whole to the hips through an OPEN window,
+arm back over the roof, pistol readable, face along the arm; 4) shots at 1.95, 2.30, 2.62, 2.92 s: flash, recoil in arm
+and shoulder, frame kick, lead cruiser's windscreen crazes (shot 1 sparks off the bonnet, 2-4 into the glass), driver
+flinches; 5) 3.0-4.55 s pan with the slewing cruiser over the kerb, hydrant jet, shop-front fireball, people react and
+scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back to shot 3's exact frame, Jason settles
+into the seated pose (last frame matches the first).
+Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
+
+
+
+<!-- estimate table moved from the film notes, chat 28 (22 Nov) -->
+## Estimate (rule 24; Sam allowed it 19 Nov). Unmeasured: 5.0 of 53.2 (9%)
+| thing, build or risky move | KNOWN (where) or NEW | why | stage | estimate | measured from | spent |
+|---|---|---|---|---|---|---|
+| The opening | KNOWN, source/gta_opener.py | built, approved | opener | 2.67 | this film's ledger | 2.67 |
+| Plan (this chat) | - | references, staging, acting list | plan | 2.0 | Protest Tiers plan chat 2 (2.0) | |
+| Jason, Lucia, her (Leads: each speaks; seated 3/4-front views; Jason leaning out and firing) | NEW, on the people kit | game likeness for two | cast | 9.6 | rule 24 Lead unit 3.2 each | |
+| Glimpses: cruiser drivers, pedestrians | KNOWN people kit | one frame of Glimpses | cast | 3.7 | rule 24 Glimpse frame | |
+| Declasse Tulip outside (3D: shot 2's camera moves round it); inside as one flat painting per camera | NEW | copied from the game | cars | 3.0 | unmeasured (nearest: Protest Tiers truck and helicopter chat, 0.9) | |
+| VCPD cruiser, same car builder; crash look (shattered screen, crumpled front) | NEW | 3 at once, one crashes | cars | 1.5 | unmeasured | |
+| Junction, street strip with shops and people, second main road, mirror close-up | NEW, places kit | one painting per camera | sets | 4.7 | Protest Tiers sets (4.74) | |
+| Muzzle flash, glass burst, hydrant jet, fireball, smoke, light wash; Glock | KNOWN prepper_fx, flying_whales_fx, prepper_cast | | moves | in moves | | |
+| Shot board (rule 11) | - | | board | 0.5 | unmeasured | |
+| Moves, with the two showstopper clips | NEW | swerve, lean-out, crash, corner | moves | 11.3 | Protest Tiers moves (11.30) | |
+| Animatic 1 | - | | animatic1 | 2.1 | Protest Tiers animatic 1 (2.13) | |
+| Notes round 1 | - | | round1 | 9.4 | Protest Tiers round 2 (9.4) | |
+| Notes round 2 | - | | round2 | 2.4 | Remakes round (about 2.4) | |
+| Final (Sonnet) | - | | final | 0.35 | rule 24 Sonnet finishing chat | |
+Honest note: rule 24 sizes 3 new characters and one place at about 15%; this film has 3 characters, 2 cars, 4 places,
+a crash and a fireball. Past films came in above their estimates (Remakes, Blessed, Protest Tiers: 2.5-3.3 times).
+

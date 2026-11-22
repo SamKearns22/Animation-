@@ -69,81 +69,12 @@ Finished sections and ticked notes: notes/archive/grand-theft-autism-notes.md (m
 
 
 
-## Estimate (rule 24; Sam allowed it 19 Nov). Unmeasured: 5.0 of 53.2 (9%)
-| thing, build or risky move | KNOWN (where) or NEW | why | stage | estimate | measured from | spent |
-|---|---|---|---|---|---|---|
-| The opening | KNOWN, source/gta_opener.py | built, approved | opener | 2.67 | this film's ledger | 2.67 |
-| Plan (this chat) | - | references, staging, acting list | plan | 2.0 | Protest Tiers plan chat 2 (2.0) | |
-| Jason, Lucia, her (Leads: each speaks; seated 3/4-front views; Jason leaning out and firing) | NEW, on the people kit | game likeness for two | cast | 9.6 | rule 24 Lead unit 3.2 each | |
-| Glimpses: cruiser drivers, pedestrians | KNOWN people kit | one frame of Glimpses | cast | 3.7 | rule 24 Glimpse frame | |
-| Declasse Tulip outside (3D: shot 2's camera moves round it); inside as one flat painting per camera | NEW | copied from the game | cars | 3.0 | unmeasured (nearest: Protest Tiers truck and helicopter chat, 0.9) | |
-| VCPD cruiser, same car builder; crash look (shattered screen, crumpled front) | NEW | 3 at once, one crashes | cars | 1.5 | unmeasured | |
-| Junction, street strip with shops and people, second main road, mirror close-up | NEW, places kit | one painting per camera | sets | 4.7 | Protest Tiers sets (4.74) | |
-| Muzzle flash, glass burst, hydrant jet, fireball, smoke, light wash; Glock | KNOWN prepper_fx, flying_whales_fx, prepper_cast | | moves | in moves | | |
-| Shot board (rule 11) | - | | board | 0.5 | unmeasured | |
-| Moves, with the two showstopper clips | NEW | swerve, lean-out, crash, corner | moves | 11.3 | Protest Tiers moves (11.30) | |
-| Animatic 1 | - | | animatic1 | 2.1 | Protest Tiers animatic 1 (2.13) | |
-| Notes round 1 | - | | round1 | 9.4 | Protest Tiers round 2 (9.4) | |
-| Notes round 2 | - | | round2 | 2.4 | Remakes round (about 2.4) | |
-| Final (Sonnet) | - | | final | 0.35 | rule 24 Sonnet finishing chat | |
-Honest note: rule 24 sizes 3 new characters and one place at about 15%; this film has 3 characters, 2 cars, 4 places,
-a crash and a fireball. Past films came in above their estimates (Remakes, Blessed, Protest Tiers: 2.5-3.3 times).
+## Estimate (rule 24; Sam allowed it 19 Nov; Sam 20 Nov: "Estimate isn't trusted at all, disregard")
+53.2% of a week in 13 lines (unmeasured 5.0); stages: opener 2.67, plan 2.0, cast 13.3, cars 4.5, sets 4.7, board 0.5,
+moves 11.3, animatic1 2.1, round1 9.4, round2 2.4, final 0.35. Full table: notes/archive/grand-theft-autism-notes.md.
 
-## Shot 4 rebuild (Sam, 20 Nov, chat 11): checklist, tick against the film before the first clip
-- Shot 4 case study (Sam, 20 Nov, chat 16): everything on shot 4 (versions, pictures, Sam's words, causes, lessons,
-  his frame-by-frame notes) lives in notes/shot4-case-study/shot4-case-study.md; add to it in every chat that touches shot 4.
-- [ ] Sam: "Our scenery needs an appropriately vice city background, as currently the street ends in blank void." Both
-      shots 2 and 4: a Vice City backdrop at the end of every street (sunset skyline, palms, towers, sea glow).
-- [ ] Sam on shot 4 (chat 11 version, sent too early): "I am surprised you delivered it to me." The lean-out was a
-      floating chest, Jason from behind a lump with no readable arm or gun, flashes too small, crash far and tiny.
-- [ ] Sam: "What are the elements you would need to consider with the camera, actors, props and perspective ... walk me
-      through it, moment by moment" (chat 11's walk-through is the beat list below; "That was a very good summary").
-- [ ] Sam: "Do you think it helps to read the screenplay before working on a scene?" Yes: read shot 4's lines in the
-      plan table (row 4) and the brief item above before building, tick every beat at full size before any clip is
-      sent. (Not yet a rule: Sam has not said "I want a rule".)
-- [ ] Sam on the civilians: they only stand still (same code in every version); "in yours, the people are tiny and
-      being actively sucked into the pavement." Wanted: walking, watching, ducking at each shot, running from the crash,
-      big enough to read, feet on the pavement in every frame (measure every person in every frame).
-- [ ] Sam (uploaded the first clip, references/grand-theft-autism/shot4-original-rehearsal.mp4): the ORIGINAL is
-      better than chat 11's: camera close beside Jason and low, big fireball and black smoke, cruiser close and broadside
-      with POLICE readable, people big. Chat 7 moved the camera back and higher; that lost the drama. Original camera
-      keys: CAM4 in source/gta_rehearse.py at commit 2668817c (git show 2668817c:source/gta_rehearse.py).
-- [ ] Sam: "Rebuild this scene from scratch following your beat-by-beat analysis. Give Jason an open window so you have
-      more space to move him. No clipping whatsoever, but we have a thorough clipping check now, don't we? Assumedly not
-      applied to your above practice shot (why?)". Answer: it WAS applied (gta_rehearse.py layers shot2 shot4, clean
-      twice). It only checks that nearer things hide what is behind them where they overlap; it cannot see a body drawn
-      through a door or window frame, an arm or gun with no readable shape, or feet below the pavement. First improve the
-      check that missed it (a body-through-solid test per frame; a feet-on-ground test per person per frame), then build.
-
-- [ ] Sam (20 Nov, chat 12): "You are currently putting the actors in the bonnet. You're not starting from the right
-      place. Let's instead build the film, as per the screenplay, on a beat by beat basis as you would normally ... do
-      the background and cloud work and then go from there." Order: backdrop and clouds (shots 2 and 4), then shot 3's
-      windscreen three-shot built properly (all three seated behind the glass), then shot 4 from shot 3's frame.
-      (Found: at shot 4's first frame all three people are drawn on the grille, in chat 11's version too: rule 30.)
-
-- [ ] Sam (20 Nov, after chat 13): "Keep working on this until you can render the whole film shot sheet." (the chain
-      carries on, chat after chat, until a sheet of every shot of the whole film, 1-8, can be rendered; his ask, so it
-      is allowed before an animatic)
-- [ ] Sam (20 Nov 18:06, shot 3 as written): "On the left, Jason, looking hard towards us." "On the driver's side,
-      Lucia, her face screwed up in concentration as she jerks the wheel." "Framed between them, a 25 year old white
-      woman with auburn hair, a cream jumper with a unicorn barfi..." "She is playing nervously with a fidget spinner in
-      her hands." "A bulging suitcase full of cash is just visible beside her." "In the background, we see through the
-      back windshield glass the pursuing cop cars." "Autistic girl: it's very loud". On the camera: "Because you're
-      starting the camera in the wrong place." (18:21) "The camera is at the bonnet." "Looking at the seated occupants."
-      (18:23) "What would you call that shot?" (answered: a windscreen three-shot, camera on the bonnet looking in).
-- [ ] Sam (20 Nov ~18:30), note 1: "Y. Just follow your best suggestion for the next hour please, no stopping."
-      ("Just go" for an hour from ~18:30: no waiting for his Y/N; checks and hand-over still done; each message says
-      what was picked and why.)
-
-Beats for shot 4 (screenplay row 4, 6.2 s in the film's clip): 1) 0-0.5 s start on shot 3's windscreen three-shot,
-same position and lens; 2) 0.5-1.7 s camera swings left round the front corner to Jason's window while he rises and
-turns; window frame must cut him right; 3) 1.7-3.0 s we hang outside: Jason whole to the hips through an OPEN window,
-arm back over the roof, pistol readable, face along the arm; 4) shots at 1.95, 2.30, 2.62, 2.92 s: flash, recoil in arm
-and shoulder, frame kick, lead cruiser's windscreen crazes (shot 1 sparks off the bonnet, 2-4 into the glass), driver
-flinches; 5) 3.0-4.55 s pan with the slewing cruiser over the kerb, hydrant jet, shop-front fireball, people react and
-scatter, crash big enough to enjoy and Jason still in frame; 6) 4.55-6.2 s back to shot 3's exact frame, Jason settles
-into the seated pose (last frame matches the first).
-Judge: Sam wants the first clip's close, low camera, with the new cast; at full size, every beat, before sending.
+## Shot 4 rebuild (chat 11 checklist): moved to notes/archive/grand-theft-autism-notes.md (chat 28); the case study
+   notes/shot4-case-study/shot4-case-study.md holds everything on shot 4.
 
 ## Shot 4: Sam's frame notes of version 4 (chat 16, verbatim in the case study section 7), to fix in the rebuild
 - [ ] Notes 2-4, 11: "When J begins his movement, his lower body becomes visible." "This isn't necessary and I wonder
@@ -257,20 +188,43 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
       outs floating above the car; the redhead's knees balls at 21.68; a pink spire on the skyline at 20.60 only; F6's
       pink walker (confirmed).
 
-## Where things stand (21 Nov, chat 27, Opus high)
-- Rules that bite next: 30 (F6 crowd is a repeat: the woman in pink at 20.27 still stands by the fireball), 3, Seeing like Sam 1.
-- Done: back-view check (in the body check, tested on v3's F1/F4/F5/F6/F7); shot 4's camera re-chosen (never his back,
-  nobody through the lens); fire nearness by position; side-on false flag. Shot 4 clip sent (14.1-22.3 s).
-- Next: Opus, high. 1) F6: why the woman in pink does not run (then a check: anyone within 12 m of a blast who neither
-  runs nor shields). 2) The 20-26 s clip chat 26 said it sent never arrived: send one covering 20-26 s. 3) F15 bonnet
-  stripes, the palm at the 4->5 cut, the hydrant under the lens, critique r27's list. 4) Hands (F13), shot 6 (F12) via
-  the proposal route. 5) Notes still 4,949 words: tighten the brief checklist to get under 4,000.
-- Needs Sam: Y/N past the budget stop (53.78% of 53.2%; chat 28 opened, then paused). His look at the shot 4 clip. Still open: whether the 5->6->7->8 cuts should be glides.
-- Read: guides/job-packs.md "Notes round"; this file's "Animatic v3 from 14.1 s" (open items and critique r27-p1).
+## Chat 28 (22 Nov, Opus high): Jason's drawing from behind in shot 4 (camera kept exactly as animatic v3)
+Sam (via chat 27): "I did not want the camera angles changed. It is a great shot but a broken drawing."
+- [~] Hands (F1 door hand, F2/F13): real hands with fingers (new hand3d_film.py: the project's measured MakeHuman hand,
+      turned into the film's world and drawn through its camera, flat skin, smooth outlines): the free hand hooked over
+      the door top, the gun hand closed round the grip; the pistol now sits in the fist; the forearm slims into the
+      wrist. Better at 16.0 and 21.25; still weak: the end-on fist at 20.8 (small, busy lines), a soft fade where
+      the forearm meets the hand.
+- [ ] NOT fixed, and what the project must learn first (CLAUDE.md "Fix the drawing"): (1) arms from behind and
+      foreshortened: the arm is one tube of the same width, at 15.4 a huge tube across his back. Learn: draw the arm's
+      outline from the same 3D body as the hands (shoulder muscle, elbow point, forearm narrowing). (2) The pistol is a
+      flat card, so edge-on it is a stick or a black blade (15.4 boxes, 21.25 blade). Learn: a solid 3D pistol drawn
+      through the camera, like the hands. (3) The back of the head is a tall brown flowerpot. Learn: a buzz cut from
+      behind (round skull, hairline at the nape, ears, neck cords into the shoulders), checked on a sheet of turns.
+- [x] Back-view check now says "fix the DRAWING, never the camera" and names what a back view must show; its test
+      (kittest body_check_back_view) checks that wording: PASS.
+- [ ] Budget stops (Sam: "Please disable budget stops"): blocked here by the safety system, because the request came
+      through another chat, not from Sam in this one. Waits for Sam's own word in this chat. Note: the ledger's
+      automatic stop is already paused (since 18 Nov); the stop that fired comes from the ledger's other commands.
+
+## Where things stand (22 Nov, chat 28, Opus high)
+- Rules that bite next: Fix the drawing, never the shot (CLAUDE.md); Seeing like Sam 1 (full size, every moving frame); 30.
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera: "great shot, broken
+  drawing"); the script; the 8 shots' order and lengths. Fix drawings only.
+- Done: real hands in shot 4 (partial); back-view check points at the drawing; notes under 4,000 words.
+- Next: Opus, high. Learn and build, in order: 1) the arm from the 3D body (outline traced from the posed MakeHuman
+  arm, like the hands), 2) a solid 3D pistol, 3) the back of Jason's head; each on a sheet of 8 turns, then frames
+  15.4, 16.0, 18.3, 20.8, 21.25 at full size; then a clip of 14.1-22.3 s. After that: F6 (woman in pink), F15, F12.
+- Needs Sam: his own Y in a chat to switch off the budget stops. His look at the next shot 4 clip.
+- Read: guides/job-packs.md "Notes round"; this file's chat 28 section and "Animatic v3 from 14.1 s".
 - Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
 - Branch claude/check-repairs-2 is the status chat's (house checks), not this film's: left for it.
-- For Claude: humancheck._backview; gta_rehearse CAM4 keys 0.85-7.85, LENS_PAVE, _lens_clear, crowd zi; kittest
-  body_check_back_view; frames: gta_film.frame_image + HC.frame_end loop. ARM_FOLD_NAMED still set; dafont blocked.
+- For Claude: hand3d_film.draw/_mesh (AA, WRIST_KEEP); leanout HAND3D, HAND3D_SCALE 1.5, HAND3D_WRIST 0.45, gun_fist,
+  door_hand, _real_hands (gesture_hand 'h3dL'/'h3dR'); limbs.WRIST; hands3d.render flat/crease. Frames: scratch script
+  = gta_film.frame_image(t).save (about 18 s a frame). Hand check (rule 41) not yet run on the new hands.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 53.78% of 15%; forecast 69.7% (2026-11-21)
-- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera is the one he called 'great shot, broken drawing'); the script and the 8 shots' order and lengths. Fix drawings only.
+  Handover check (chat 28): its 2 quick-check lines take leanout.py for a film; it is this film's shot file (notes here, people in
+  grand-theft-autism-people.txt): answered. "Sentence lost from CLAUDE.md" is a false alarm: "Choose views the drawing can
+  carry" is still there, with "(for a NEW shot ...)" added inside it by Sam's Y (60e25406).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 54.67% of 15%; forecast 69.7% (2026-11-22)

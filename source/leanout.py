@@ -245,13 +245,54 @@ def _clear_arms(k, ka, kb, u, sp):
 GUN = [1.0]                  # the pistol's size: 1 on the pose sheet; the film draws it 1.5x to read on a phone
 
 
+HAND3D = [True]              # real hands with fingers (hand3d_film) whenever the pistol is out (Sam 21 Nov, shot 4:
+#                              "the hand on the door a blob"; F2/F13): the door hand hooked over the door top, the gun
+#                              hand closed round the grip; the chest hold (k.front) keeps the circle hands
+HAND3D_SCALE = 1.5           # the measured hand at the house arm's slimmed wrist (a cartoon man's hand, a little big)
+HAND3D_WRIST = 0.45          # the forearm slims by this into the wrist (limbs.WRIST)
+
+
+def _gun_down(d):
+    return _u(np.cross(d, _v(1e-3, 0, 1)) if abs(d[1]) > 0.9 else _v(0, -1, 0) - d * d[1])
+
+
+def gun_fist(k):
+    """The gun hand as a real fist: (anchor = the grip's middle, A up the grip, B out of the back of the hand), with
+    the fist's own wrist on the skeleton's wrist (the hand follows the arm; the pistol follows the hand)."""
+    import hand3d_film as HF
+    wr, el = k['wrR'], k['elR']
+    d = getattr(k, 'aim', None)
+    d = _u(wr - el) if d is None else _u(d)
+    down = _gun_down(d)
+    A = _u(-down + d * 0.16)                               # the grip rakes back, as drawn
+    B = _u(np.cross(down, d))                              # the back of a right hand: the pistol's right side
+    V, tris, mwr, fd = HF._mesh('grip', 'R')
+    R = HF.frame_of(A, B)
+    return wr - R @ (mwr * HAND3D_SCALE), A, B
+
+
 def gun_pts(k):
-    """The pistol in the car frame: (hand, muzzle), the barrel along the forearm."""
+    """The pistol in the car frame: (hand, muzzle), the barrel along the forearm. With real hands, the pistol sits
+    in the fist: its grip's middle on the fist's handle line."""
     wr, el = k['wrR'], k['elR']
     d = getattr(k, 'aim', None)
     d = _u(wr - el) if d is None else d
     hand = wr + d * 0.05
+    if HAND3D[0] and not getattr(k, 'front', False):
+        anchor = gun_fist(k)[0]
+        g = GUN[0]
+        hand = anchor - d * (0.62 * -0.02 * g) - _gun_down(_u(d)) * (0.62 * 0.12 * g)
     return hand, hand + d * 0.17 * GUN[0]
+
+
+def door_hand(k, car=None):
+    """The free hand on the door top: (anchor = its wrist, A the fingers' way: out over the door's outer edge, B up
+    out of the back of the hand), in k's frame (the car's, or the world's when car is given)."""
+    if car is None:
+        return k['wrL'], _v(1, -0.15, 0), _v(0, 1, 0)
+    o = np.asarray(car.body_pt((0.0, 0.0, 0.0)), float)
+    cd = lambda v: _u(np.asarray(car.body_pt(tuple(float(c) for c in v)), float) - o)   # noqa: E731
+    return k['wrL'], cd((1, -0.15, 0)), cd((0, 1, 0))
 
 
 def draw_gun(img, cam, k, report=True):
@@ -261,7 +302,7 @@ def draw_gun(img, cam, k, report=True):
     p = B.Pen(img, S.FLAT)
     hand, muzzle = gun_pts(k)
     d = _u(muzzle - hand)
-    down = _u(np.cross(d, _v(1e-3, 0, 1)) if abs(d[1]) > 0.9 else _v(0, -1, 0) - d * d[1])
+    down = _gun_down(d)
     g = GUN[0]
     d0 = d
     if getattr(k, 'front', False):                      # held against his chest: the grip sits inside his fist (Sam 21 Nov)
@@ -493,14 +534,23 @@ def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide
     kw = to_world(k, car)
     lay = Image.new('RGBA', img.size, (0, 0, 0, 0))
     under = cam.depth(tuple(kw['wrR'])) > cam.depth(tuple(kw['neck'])) and not getattr(k, 'front', False)
+    real = HAND3D[0] and not getattr(k, 'front', False)
+    sp_draw = sp_face
+    if real:                                           # the arms end at the wrist; the real hands go on below
+        sp_draw = dict(sp_face, lying_hand_L='h3dL', lying_hand_R='h3dR' if under else 'none')
     if under:
         draw_gun(lay, cam, kw, report=False)
     try:
-        LF.draw(lay, cam, kw, sp_face, t)
+        with _real_hands(cam, kw, car, sp_face) if real else _nothing():
+            LF.draw(lay, cam, kw, sp_draw, t)
     except F.FigureError as e:
         FILM_FAULTS.append(f'{t:.2f} s: Jason drawing stopped: {e}')
     if not under:
         draw_gun(lay, cam, kw, report=False)
+        if real:                                       # the fist round the grip, over the pistol's grip
+            import hand3d_film as HF
+            a, A, B = gun_fist(kw)
+            HF.draw(lay, cam, 'grip', 'R', a, A, B, sp_face['skin'], HAND3D_SCALE)
     if kw.firing:
         age = min(abs(t - s_) for s_ in SHOTS)
         flash(lay, cam, kw, age)
@@ -514,6 +564,45 @@ def film_layer(img, cam, car, t, sp_pose, sp_face, nod=0.0, glass_dim=0.15, hide
 
 
 FILM_FAULTS = []
+
+
+class _nothing:
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *a):
+        return False
+
+
+class _real_hands:
+    """While Jason is drawn: an arm whose hand is 'h3dL' / 'h3dR' ends in the real hand (hand3d_film) at its place
+    in the drawing order (an arm behind his body keeps its hand behind it too)."""
+    def __init__(self, cam, kw, car, sp):
+        self.cam, self.kw, self.car, self.sp = cam, kw, car, sp
+
+    def __enter__(self):
+        import hand3d_film as HF
+        import limbs
+        self.old, self.wr0 = B.gesture_hand, limbs.WRIST[0]
+        limbs.WRIST[0] = HAND3D_WRIST
+        old, me = self.old, self
+
+        def gh(p, el, wr, shape, skin, *a, **kw_):
+            if shape == 'h3dL':
+                anc, A, B_ = door_hand(me.kw, me.car)
+                return HF.draw(p.img, me.cam, 'edge', 'L', anc, A, B_, skin, HAND3D_SCALE)
+            if shape == 'h3dR':
+                anc, A, B_ = gun_fist(me.kw)
+                return HF.draw(p.img, me.cam, 'grip', 'R', anc, A, B_, skin, HAND3D_SCALE)
+            return old(p, el, wr, shape, skin, *a, **kw_)
+        gh.point_finger = True
+        B.gesture_hand = gh
+        return self
+
+    def __exit__(self, *a):
+        import limbs
+        B.gesture_hand, limbs.WRIST[0] = self.old, self.wr0
+        return False
 
 
 # ------------------------------------------------------------------------------------------------ the sheet

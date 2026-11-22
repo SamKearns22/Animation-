@@ -3564,9 +3564,10 @@ V3_BACK = (1.3, 4.2)                    # shot 4's own clock (film 15.4 F1, 18.3
 
 @test
 def body_check_back_view():
-    """Seeing like Sam 4 (GTA v3 F1, F5, F7, chat 27): a person seen from behind, big in frame, is a fault in itself.
-    The body check must flag Jason's back in animatic v3's shot 4 (15.4 and 18.3 s), pass the re-aimed camera at the
-    same moments, flag a big flat figure drawn from behind and pass the same figure from the front."""
+    """GTA v3 F1, F5, F7 (chat 27; changed chat 28 after Sam, 21 Nov: "a great shot but a broken drawing"): a person
+    seen big from behind must be DRAWN to read from behind; the camera of an approved shot never moves. The body check
+    must flag Jason's back in animatic v3's shot 4 (15.4 and 18.3 s) with advice that points at the drawing (never
+    "choose another camera"), flag a big flat figure drawn from behind and pass the same figure from the front."""
     import importlib.util
     import subprocess
     import tempfile
@@ -3584,17 +3585,17 @@ def body_check_back_view():
     R3 = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(R3)
     old = [x for x in _body_faults(R3.shot4, V3_BACK) if x[1] == 'Jason' and x[2] == 'back view']
-    import gta_rehearse as R
-    new = [x for x in _body_faults(R.shot4, V3_BACK) if x[1] == 'Jason' and x[2] == 'back view']
+    said = ' '.join(str(v) for x in old for v in x[3:])
+    to_drawing = 'DRAWING' in said and 'another camera' not in said
     flat = {}
     for deg in (0.0, 180.0):
         HC.frame_begin()
         V.person(Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), 540, 500, 0.6, PG.MODEL, 0.0, deg,
                  V.standing(PG.MODEL))
         flat[deg] = [x for x in HC.frame_end(0.0) if x[2] == 'back view']
-    ok = len(old) == 2 and not new and flat[180.0] and not flat[0.0]
-    return ok, (f'v3 Jason back views: {len(old)} of 2; re-aimed: {len(new)}; big figure from behind flagged: '
-                f'{bool(flat[180.0])}, from the front: {bool(flat[0.0])}')
+    ok = len(old) == 2 and to_drawing and flat[180.0] and not flat[0.0]
+    return ok, (f'v3 Jason back views: {len(old)} of 2; advice points at the drawing: {to_drawing}; big figure from '
+                f'behind flagged: {bool(flat[180.0])}, from the front: {bool(flat[0.0])}')
 
 
 @test

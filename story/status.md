@@ -1,3 +1,6 @@
+Grand Theft Autism, chat 28 (22 Nov): shot 4 kept exactly as Sam approved; Jason's hands now real hands with fingers (door and pistol grip); back-view check now points at the drawing.
+Still broken from behind: the arm (one thick tube), the pistol (flat card: a stick or blade edge-on), the back of the head.
+Next: chat 29, Opus high: build the arm, the pistol and the back of the head from 3D, then a clip of 14.1-22.3 s. Needs Sam: his own Y here to switch off budget stops.
 Grand Theft Autism, chat 27 (21 Nov): shot 4's camera re-aimed (never Jason's back, nobody through the lens); new back-view check in the body check.
 Clip of shot 4 sent to Sam. Open: the crowd at the fireball (F6), hands (F13), shot 6 framing (F12), critique r27 list.
 Next: chat 28, Opus high: F6 first, then F15, the palm at the cut, hands and shot 6 through the proposal route.

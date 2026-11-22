@@ -517,3 +517,19 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   Opener font comes from dafont.com, blocked in chat 26's network: shot 1 could not be drawn there. ARM_FOLD_NAMED is
   still set in grand_theft_autism.py (remove for the real checks). Checked-clip script: a loop with humancheck.Writer.
 
+
+
+## Where things stand (21 Nov, chat 27, Opus high)
+- Rules that bite next: 30 (F6 crowd is a repeat: the woman in pink at 20.27 still stands by the fireball), 3, Seeing like Sam 1.
+- Done: back-view check (in the body check, tested on v3's F1/F4/F5/F6/F7); shot 4's camera re-chosen (never his back,
+  nobody through the lens); fire nearness by position; side-on false flag. Shot 4 clip sent (14.1-22.3 s).
+- Next: Opus, high. 1) F6: why the woman in pink does not run (then a check: anyone within 12 m of a blast who neither
+  runs nor shields). 2) The 20-26 s clip chat 26 said it sent never arrived: send one covering 20-26 s. 3) F15 bonnet
+  stripes, the palm at the 4->5 cut, the hydrant under the lens, critique r27's list. 4) Hands (F13), shot 6 (F12) via
+  the proposal route. 5) Notes still 4,949 words: tighten the brief checklist to get under 4,000.
+- Needs Sam: Y/N past the budget stop (53.78% of 53.2%; chat 28 opened, then paused). His look at the shot 4 clip. Still open: whether the 5->6->7->8 cuts should be glides.
+- Read: guides/job-packs.md "Notes round"; this file's "Animatic v3 from 14.1 s" (open items and critique r27-p1).
+- Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
+- Branch claude/check-repairs-2 is the status chat's (house checks), not this film's: left for it.
+- For Claude: humancheck._backview; gta_rehearse CAM4 keys 0.85-7.85, LENS_PAVE, _lens_clear, crowd zi; kittest
+  body_check_back_view; frames: gta_film.frame_image + HC.frame_end loop. ARM_FOLD_NAMED still set; dafont blocked.

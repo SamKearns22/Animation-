@@ -35,6 +35,8 @@ HEAD = [0]              # > 0 while views draws a head: its long hair is never t
 #                         Protest Tiers A25: a raised arm's sleeve top melted into a woman's long hair with a soft blur)
 
 
+WRIST = [0.0]           # > 0: the forearm narrows by this share into the wrist (a real hand joins it there:
+#                         leanout's real hands, GTA shot 4, Sam 21 Nov "tube with a round end")
 AUDIT_FRAME = [None]      # lying_flat: frame pixels -> the rig's frame (body middle at 0, right +x) for audit_arm
 
 def _resample(P, step):
@@ -136,6 +138,8 @@ def _arm_spine(sh, el, wr, w, bulge=0.0):
     fold = max(0.0, min(1.0, (bend - 100) / 50))           # a tight fold: slimmer at the elbow, so it reads as a bend
     s_el = (len(a) + 4) / len(spine)
     hw = hw * (1 - 0.22 * fold * np.exp(-((s - s_el) / 0.1) ** 2))
+    if WRIST[0]:                                           # into a real hand's wrist: the forearm slims in its
+        hw = hw * (1 - WRIST[0] * np.clip((s - 0.72) / 0.28, 0, 1) ** 1.5)    # last stretch, no round club end
     if bulge:                                              # a muscular arm (GTA's Jason, 20 Nov): the biceps and the
         hw = hw * (1 + bulge * (np.exp(-((s - 0.5 * s_el) / 0.16) ** 2)        # forearm's swell, in at the elbow
                                 + 0.6 * np.exp(-((s - (s_el + 0.18)) / 0.11) ** 2)))
