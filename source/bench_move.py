@@ -279,8 +279,10 @@ def _key(name):
         k = _lerp_goal(key('K2'), key('K3'), 0.5)
         k['hand'] = dict(k['hand'])
         k['hand']['L'] = (DOOR_HAND, _v(0.4, -1, 0.6))
-        Rc = _frame(k['c_up'], k['c_fwd'])
-        k['hand']['R'] = ('rel', Rc.T @ _v(0.28, -0.04, 0.0), _v(0.3, -0.7, -0.8))   # in front of his shoulder
+        # in front of his RIGHT shoulder, outboard of the shoulder line (chest frame: +x away from his head), so the
+        # gun rises outside his face to beside his head (chat 38: from in front of his chest the pistol cut through
+        # his face, 3.8 cm, 1.25-1.33 s)
+        k['hand']['R'] = ('rel', _v(0.05, 0.10, 0.26), _v(0.3, -0.7, -0.8))
         k['gun'] = _v(0.05, 0.6, 0.8)       # muzzle turning up THROUGH the car's front (not out over the door top)
         return k
     if name in ('K4', 'K5'):  # out to the waist, folded over the door top (B, C), chest turned back along the car
@@ -530,8 +532,35 @@ def pistol_mesh(pose, ball, aim_w):
     down = _u((1 - w) * flat + w * upright + 1e-6)
     down = _u(down - d * np.dot(down, d))
     side = np.cross(d, down)
-    top = ball - fwd * 0.012 * (1 - w) - down * HAND_R * 0.75 * w       # the slide's bottom on top of the fist
+    top = ball - fwd * 0.012 * (1 - w) - down * HAND_R * 0.75 * w    # the slide's bottom on top of the fist
     return top + V[:, :1] * d + V[:, 1:2] * down + V[:, 2:3] * side, T
+
+
+def gun_rests(Pg, P, jw, ball):
+    """The pistol RESTS against his own gun arm, never in it: its back end (behind the fist) ran 0.6-1.3 cm into
+    the wrist when it pointed out along the forearm (chat 38, 1.0-1.3 s). Each pistol point outside the fist is
+    tested against the right forearm's skin near the wrist (nearest skin point and its outward normal); the whole
+    pistol moves out along the forearm's normal by the deepest point plus 2 mm (it stays in the fist: a small shift).
+    """
+    from scipy.spatial import cKDTree
+    r = rig()
+    tb = _body_tris()
+    use = np.unique(tb)
+    arm = use[(r['region'][use] == 5) & (np.linalg.norm(P[use] - jw['wrR'], axis=1) < 0.16)]
+    if not len(arm):
+        return Pg
+    N = _normals(P, tb)[arm]
+    tree = cKDTree(P[arm])
+    for _ in range(3):
+        m = np.linalg.norm(Pg - ball, axis=1) > HAND_R
+        d, k = tree.query(Pg[m])
+        s = np.einsum('ij,ij->i', Pg[m] - P[arm][k], N[k])
+        bad = (s < 0) & (d < 0.03)
+        if not bad.any():
+            break
+        push = _u(N[k][bad].mean(0))
+        Pg = Pg + push * (float(-s[bad].min()) + 0.002)
+    return Pg
 
 
 def knee_gaps(P, J):
@@ -579,6 +608,25 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
             if best is None or err < best[0]:
                 best = (err, Rr)
         Rp = best[1]
+        if w >= 0.999 and 'pel_y' not in g:
+            # fully on his knees: the hips' height and side tip solved EXACTLY so each thigh reaches its knee's
+            # planted spot (the first-order tip above left the left knee sliding 3 cm while planted, chat 38)
+            from scipy.optimize import fsolve
+            Rp0 = Rp
+            kgs = []
+            for sd in 'LR':
+                kg = np.asarray(g['knee'][sd], float).copy()
+                kg[1] = SEAT_TOP + KNEE_R - (knee_dy[sd] if knee_dy else 0.0)
+                kgs.append(kg)
+
+            def _err(x):
+                Rr = Ro.from_rotvec(ax * x[1]).as_matrix() @ Rp0
+                pp = np.array([pel[0], x[0], pel[2]])
+                return [np.linalg.norm(kgs[k] - (pp + Rr @ J0['hip' + sd])) - r['L_th'] for k, sd in enumerate('LR')]
+            x, _, ok, _ = fsolve(_err, [pel[1], 0.0], full_output=True)
+            if ok == 1 and abs(x[1]) < 0.5 and max(abs(e) for e in _err(x)) < 1e-4:
+                pel[1] = x[0]
+                Rp = Ro.from_rotvec(ax * x[1]).as_matrix() @ Rp0
     Rd = {'P': Rp, 'C': Rc, 'H': Rh}
     Rw = _world_rots(Rd)
     Mx = _fk(Rw, pel)
@@ -668,6 +716,7 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
     pose['fwd'] = Rc[:, 2]
     pose.aim = _u(gun_way)
     Pg, Tg = pistol_mesh(pose, balls['R'], g.get('aim_w', 0.0))
+    Pg = gun_rests(Pg, P, jw, balls['R'])
     return dict(P=P, J=jw, balls=balls, gun=(Pg, Tg), aim=pose.aim, pel=pel, Rc=Rc, Rp=Rp, Rh=Rh, pose=pose)
 
 
@@ -759,7 +808,10 @@ def press_folds(P, jw, iters=8, ease=True):
     return P
 
 
-def _settle(P, jw, rounds=3):
+SETTLE_MAX = 0.04                # the farthest a fold-zone skin point may move in one settle step
+
+
+def _settle(P, jw, rounds=6):
     """Last step of the press: every fold-zone skin point still inside the body goes to the nearest FREE skin point
     (one found outside) of another part, 2 mm out. Free points are outside, so this ends inside-free."""
     from scipy.spatial import cKDTree
@@ -790,7 +842,10 @@ def _settle(P, jw, rounds=3):
         for i in zi[ins]:
             fm = free & np.isin(reg, list(mate.get(reg[i], ())))
             fi = np.where(fm)[0]
-            j = fi[np.argmin(np.linalg.norm(Q[fi] - Q[i], axis=1))]
+            dd = np.linalg.norm(Q[fi] - Q[i], axis=1)
+            j = fi[np.argmin(dd)]
+            if dd.min() > SETTLE_MAX:          # flesh presses flat; it never jumps across the body (chat 38: more
+                continue                       # rounds without this cap moved a chest point into the head)
             P[use[i]] = Q[j] + N[j] * 0.002
     return P
 
