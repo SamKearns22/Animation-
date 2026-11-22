@@ -1,6 +1,6 @@
 # Proposal: cost: start-up reading (rules, tools, first files) (11.93% of a week on grand-theft-autism)
 
-Status: open
+Status: Sam picked Option 2 (22 Nov): measure the start-up block AND build the check for searches done one at a time that could go together. Next: Opus medium builds it.
 
 ## Problem
 "start-up reading (rules, tools, first files)" cost 11.93% of a week on grand-theft-autism (22% of all it spent), in 28 chats: number 1 of the dearest things. Statement 1 (Sam, 13 Nov): every choice takes the way that gives higher quality first, then fewer notes and faults, then a film nearer 15% of a week; never one that trims the joke or reuses old content. The question: how can this thing cost less with no loss of quality, or buy more quality or fewer notes for what it costs?
