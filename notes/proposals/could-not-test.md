@@ -1,6 +1,6 @@
 # Proposal: A check that "could not test" passes as a line, so the fault it exists for reaches Sam
 
-Status: open (un-parked 22 Nov, Sam: "Milburn: begin all"; his 19 Nov words below still stand)
+Status: adopted (2026-11-22; Sam "1": option 1, a test on Milburn first (changes nothing), then one ask with the numbers: an unskippable stop plus automatic cover, and a readability check if the test shows a need)
 
 ## Problem
 On Milburn the name cards were hidden by hands and cut by captions twice, and Sam had to note it twice (chat 13 and
