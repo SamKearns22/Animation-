@@ -219,7 +219,14 @@ def draw(img, cam, k, side, skin, shoulder_px=None, outline=None):
         a = np.asarray(lay.getchannel('A'), np.float32)
         yy, xx = np.mgrid[0:lay.height, 0:lay.width]
         along = ((xx + x0 - p0[0] * ss) * dd[0] + (yy + y0 - p0[1] * ss) * dd[1]) / (n * n)
-        a *= np.clip((along - SHOULDER_FADE[0]) / (SHOULDER_FADE[1] - SHOULDER_FADE[0]), 0, 1)
+        fade = np.clip((along - SHOULDER_FADE[0]) / (SHOULDER_FADE[1] - SHOULDER_FADE[0]), 0, 1)
+        # only over the drawn shoulder: where nothing of him is drawn beneath, a faded arm let the car and street
+        # show through it as a smear (chat 30, 21.25 s: red door through the arm, grey through the raised one)
+        # and only over his drawn SKIN (the bare shoulder; over the vest's side the arm hangs in front of it)
+        bk = np.asarray(img.crop((x0, y0, x0 + lay.width, y0 + lay.height)), np.float32)
+        near_skin = np.abs(bk[..., :3] - np.asarray(skin[:3], np.float32)).max(2) < 16
+        under = (bk[..., 3] / 255) * near_skin
+        a *= np.maximum(fade, 1 - under)
         lay.putalpha(Image.fromarray(a.astype(np.uint8)))
     img.alpha_composite(lay, (x0, y0))
     return (x0, y0, x0 + lay.width, y0 + lay.height)

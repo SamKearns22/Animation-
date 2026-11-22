@@ -36,8 +36,11 @@ import mhuman as H          # noqa: E402
 
 NECK_CUT = 8.45             # decimetres up (MakeHuman): the head's neck is cut here (the house neck runs on below)
 # the buzz cut's lower edge (MakeHuman decimetres): height of the edge against how far forward (z), round the head
-HAIR_Z = [-0.8, -0.2, 0.25, 0.75, 1.15, 2.0]
-HAIR_Y = [9.12, 9.22, 9.80, 10.00, 10.32, 10.40]
+# (chat 30: the edge ran on a slant from the nape up to above the ear, leaving a big patch of skin behind the ear: from
+# above Jason read BALD. A buzz cut covers the whole back of the skull: the edge drops straight behind the ear to the
+# nape, sits just above the ear top (ear: y 9.1-9.8, z 0.1-0.8), a short sideburn in front of it, then the temple.)
+HAIR_Z = [-0.8, -0.3, 0.05, 0.15, 0.25, 0.68, 0.80, 0.98, 1.12, 1.40, 2.0]
+HAIR_Y = [9.00, 9.05, 9.12, 9.45, 9.80, 9.82, 9.52, 9.58, 9.95, 10.22, 10.30]
 CHIN, CROWN = 8.30, 10.85
 
 

@@ -289,9 +289,23 @@ def render(meshes, size, to_px, light=(-0.3, 0.5, 0.85), eye_d=0.45, outline=3.0
     out[..., 3] = np.asarray(mask)
     E = np.asarray(ed) > 0
     E &= (np.asarray(mask.filter(ImageFilter.MaxFilter(int(outline) | 1))) > 0)
+    E = _no_specks(E, outline)
     out[E, :3] = INK
     out[E, 3] = 255
     return Image.fromarray(out, 'RGBA')
+
+
+def _no_specks(E, outline):
+    """Drop ink bits too short to be a line: a lone dot or dash no longer than 3 line widths (GTA chat 30: dots by
+    the ear and along an arm's edge, where a fold of the measured body grazes the crease test for a pixel or two)."""
+    import scipy.ndimage as nd
+    lab, n = nd.label(E, np.ones((3, 3)))
+    if n < 2:
+        return E
+    keep = np.zeros(n + 1, bool)
+    for i, sl in enumerate(nd.find_objects(lab), 1):
+        keep[i] = max(sl[0].stop - sl[0].start, sl[1].stop - sl[1].start) > 3 * outline
+    return keep[lab]
 
 
 _KIND = {}

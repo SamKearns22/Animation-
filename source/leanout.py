@@ -109,7 +109,7 @@ def pose(name, sp):
         #                       top, the gun held low and pointing down (chat 20: the gun hand folded across his
         #                       chest was refused from three-quarter front, and the hand on the roof crossed his face)
         k = _key((0.48, 0.80, 0.0), (0.76, 1.25, 0.0), (1, 0, -0.15), (1, -0.15, -0.1),   # head ducked under the roof
-                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(0.8, -1, 0.6))},
+                 {'R': ('rel', ((0.10, -0.28, 0.10), 'out')), 'L': ((0.88, 1.03, 0.10), _v(1, 0.8, 0.2))},   # elbow out, above the door top (chat 30: it pointed down, so the elbow dangled outside below the hand)
                  {'L': (0.52, SEAT + 0.05, 0.14), 'R': (0.50, SEAT + 0.05, -0.12)}, sp)
         k.aim = _u((0.3, -1, -0.1))                         # the barrel's way (not aimed: the arm is not straightened)
         return k
@@ -200,6 +200,7 @@ def at(t, sp):
     #                                                     half a drawing each side, so every shot has one)
     if a != b and 0 < u < 1:
         k = _clear_arms(k, ka, kb, u, sp)
+        _elbow_over_sill(k, ka, kb, u)
     if HOLD[0] < t < HOLD[1]:                 # the hold after the crash (chat 22, hunt 1: "frozen"): he flinches from
         h0, h1 = HOLD                         # (HOLD: set from the crash's own time by gta_rehearse)
         f = _hump(t, h0, h0 + 0.16, h0 + 0.54)  # the fireball (head away, toward the car's front), looks back at it,
@@ -211,6 +212,23 @@ def at(t, sp):
 
 
 HOLD = (3.46 + WOB, 4.55 + WOB)
+LIFT = [0.20, 0.20]     # the re-grip between door-top keys: the hand's lift, the elbow's (m)
+
+
+def _elbow_over_sill(k, ka, kb, u):
+    """The free hand braced on the door top keeps its elbow above the sill (Sam, chat 22: "elbow above it"). Chat 30,
+    15.2 s and 21.25 s: between K2 and K3 the shoulder slides out over the hand, the arm folds tight and the blended
+    bend (straight from K2's elbow-out to K3's elbow-forward) dropped the elbow below the sill, outside the door: an
+    arm dangling over the door with a stub of forearm coming back up. Between two door-top keys the bend swings UP
+    over the top instead (smooth in u, so no frame jumps)."""
+    def on_door(b):
+        return abs(b['wrL'][0] - WIN_X) < 0.15 and SILL - 0.05 < b['wrL'][1] < SILL + 0.25
+    if not (on_door(ka) and on_door(kb)):
+        return
+    b = math.sin(math.pi * u)
+    wr = k['wrL'] + _v(0.0, LIFT[0], 0.0) * b     # the hand lifts off the door top as his weight shifts (a re-grip)
+    guess = ka['elL'] + (kb['elL'] - ka['elL']) * u + _v(0.0, LIFT[1], 0) * b
+    k['elL'], k['wrL'] = L.limb(k['shL'], wr, L.UPPER, L.FORE, guess - (k['shL'] + wr) / 2)
 
 
 def _hump(t, a, peak, b):
@@ -428,6 +446,7 @@ _BONES = [('neck', 'head'), ('waist', 'neck'), ('pelvis', 'waist')] + \
          [(a + sd, b + sd) for sd in 'LR' for a, b in (('sh', 'el'), ('el', 'wr'), ('hip', 'kn'), ('kn', 'an'))]
 
 
+_GIRTH = {'sh': 0.11, 'el': 0.09}     # the arms' drawn width (m): an arm claims its own pixels; other pieces 5 cm
 IN_CABIN = (WIN_X - 0.08, ROOF)   # a piece with its middle inside these (|x|, y; car frame) is in the cabin
 
 
@@ -441,7 +460,8 @@ def _cover(car, cam, kw, size, gun=None, kc=None):
     skeleton) also takes what hides his seat: the cabin's walls (bonnet, doors, boot) hide all of him inside them."""
     import gta_cars as G
     from scipy import ndimage
-    q = 4                                                    # the label map at a quarter of the canvas
+    q = 2                                                    # the label map at half the canvas (chat 30: at a
+    #                                                          quarter its blocks showed as stairs on the door's cut)
     W, H = size[0] // q, size[1] // q
     lab = Image.new('L', (W, H), 0)
     dr = ImageDraw.Draw(lab)
@@ -466,6 +486,7 @@ def _cover(car, cam, kw, size, gun=None, kc=None):
             for i in range(n):
                 m = ca + (cb - ca) * (i + 0.5) / n
                 inside.append(abs(m[0]) < IN_CABIN[0] and m[1] < IN_CABIN[1])
+    lines = []
     for i, (nm, p0, p1) in enumerate(segs, 1):
         if cam.depth(tuple(p0)) <= cam.NEAR or cam.depth(tuple(p1)) <= cam.NEAR:
             masks.append(None)
@@ -473,12 +494,22 @@ def _cover(car, cam, kw, size, gun=None, kc=None):
         (x0, y0), kk = cam.project(tuple(p0))
         (x1, y1), _ = cam.project(tuple(p1))
         f = B.SS / q
-        dr.line([(x0 * f, y0 * f), (x1 * f, y1 * f)], fill=i, width=max(1, int(0.05 * kk * f)))
-        so, gl, us = G.cover_masks(car, cam, tuple((p0 + p1) / 2), size)
+        # each piece claims its own drawn width, nearest piece last (chat 30, 15.4 s: the window seal showed as a
+        # dark box through his arm lying on the sill: those pixels went to his chest piece behind it, inside the
+        # cabin, so the car hid the arm in front of it)
+        lines.append((cam.depth(tuple((p0 + p1) / 2)), [(x0 * f, y0 * f), (x1 * f, y1 * f)], i,
+                      max(1, int(_GIRTH.get(nm.split('-')[0].rstrip('LR'), 0.05) * kk * f))))
+        mid = (p0 + p1) / 2
+        g = _GIRTH.get(nm.split('-')[0].rstrip('LR'))
+        if g:                    # an arm's drawn skin is its near side, half its girth nearer the lens than the bone:
+            mid = mid + _u(np.asarray(cam.pos, float) - mid) * g / 2  # a forearm lying ON the sill is above it
+        so, gl, us = G.cover_masks(car, cam, tuple(mid), size)
         if seat_m is not None and i <= len(inside) and inside[i - 1]:
             so = Image.fromarray(np.maximum(np.asarray(so), np.asarray(seat_m[0])))
         masks.append((so, gl))
         used += [(n, pts, nm) for n, pts in us]
+    for _, xy, i, w in sorted(lines, key=lambda x: -x[0]):
+        dr.line(xy, fill=i, width=w)
     L_ = np.asarray(lab)
     if not L_.any():
         z = np.zeros((size[1], size[0]), np.float32)
