@@ -23483,62 +23483,63 @@
    "model": "opus",
    "stage": "plan",
    "round": null,
-   "cost": 1.92,
+   "cost": 2.36,
    "notes": 0,
    "repeats": [],
    "src": "estimate",
    "sid": "session_01GznaARQ8nqSUNN5Q5otHo4",
-   "steps": 49,
-   "hist_k": 183,
+   "steps": 77,
+   "hist_k": 211,
    "kinds": {
-    "tool search": 26.5,
-    "renders": 2.6,
-    "other": 70.9
+    "tool search": 27.7,
+    "renders": 1.7,
+    "other": 70.7
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 30,
+    "tool search": 52,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 2,
     "pictures": 0,
-    "other": 15
+    "other": 19
    },
    "split": {
-    "usd": 2.8313,
-    "total": 2.8313,
+    "usd": 4.4475,
+    "total": 4.4475,
     "floor_k": 96,
     "blocks": {
-     "start-up floor": 36.2,
-     "Claude's words": 27.4,
-     "new writes": 24.6,
-     "carried history": 11.8
+     "start-up floor": 34.0,
+     "Claude's words": 26.8,
+     "new writes": 20.7,
+     "carried history": 18.5
     },
     "origins": {
-     "Claude's words": 38.9,
-     "start-up floor": 36.2,
-     "result: tool search": 15.3,
-     "messages and reminders": 8.4,
+     "Claude's words": 41.0,
+     "start-up floor": 34.0,
+     "result: tool search": 15.1,
+     "messages and reminders": 8.6,
      "result: other": 0.8,
      "Claude's edits": 0.3,
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 36.2,
-     "thinking": 12.4,
-     "messages and reminders": 8.4,
-     "writing notes": 8.0,
-     "commands": 7.7,
-     "writing code": 6.9,
-     "reading kit code": 6.6,
-     "reading notes": 4.1,
-     "start-up and handover tools": 3.7,
-     "helper and chat prompts": 2.2,
-     "messages to Sam": 2.0,
+     "start-up reading (rules, tools, first files)": 34.0,
+     "thinking": 15.5,
+     "commands": 8.7,
+     "messages and reminders": 8.6,
+     "writing code": 7.9,
+     "reading kit code": 6.9,
+     "writing notes": 5.7,
+     "start-up and handover tools": 3.6,
+     "reading notes": 3.6,
+     "messages to Sam": 1.9,
+     "helper and chat prompts": 1.6,
      "renders": 1.0,
-     "helper results": 0.6,
-     "other commands": 0.1
+     "helper results": 0.5,
+     "other commands": 0.2,
+     "running checks and tools": 0.1
     },
     "leftover": 0.0
    },
@@ -23550,35 +23551,35 @@
      [
       "source/bench_move.py",
       3.1,
-      0.046
+      0.0617
      ],
      [
       "source/propose.py",
       2.0,
-      0.0308
+      0.0406
      ],
      [
       "source/bench_draw.py",
       1.5,
-      0.0217
+      0.0292
      ],
      [
       "notes/grand-theft-autism.md",
       1.0,
-      0.0153
+      0.0201
      ],
      [
       "notes/bench/learn-step.md",
       1.0,
-      0.0153
+      0.0201
      ],
      [
       "notes/proposals/bench-speedup.md",
       0.4,
-      0.0062
+      0.0082
      ]
     ],
-    "base_pct": 29.4
+    "base_pct": 29.6
    },
    "search": {
     "show": 0,
@@ -23586,12 +23587,14 @@
      "no show": 0
     },
     "other": {
-     "other": 8,
+     "other": 14,
      "shared:handover.py": 3,
-     "film notes": 4,
+     "film notes": 5,
      "shared:propose.py": 5,
-     "shared:bench_draw.py": 2,
-     "shared:bench_move.py": 8
+     "shared:bench_draw.py": 5,
+     "shared:bench_move.py": 14,
+     "shared:watcher.py": 4,
+     "shared:humancheck.py": 2
     },
     "ticked": 0,
     "edited film code": false,
@@ -23834,6 +23837,182 @@
       "shared:bench_move.py",
       "source/bench_move.py",
       "_winding(",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "film notes",
+      "notes/logs/broken.md",
+      "bench",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:watcher.py",
+      "notes/logs/broken.md source/watcher.py",
+      "tail -5 notes/logs/broken.md; python3 source/watcher.py 2>&1 | head -20",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "OFF\\b\\|^OFF\\|built\\|adopted",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py guides/job-packs.md",
+      "bench_move\\|bench",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py notes/bench/learn-step.md",
+      ",\\n}\",1)\nopen(p,",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "",
+      "timeout 900 python3 - <<'EOF' 2>&1 | tail -15 import sys,time; sys.path.insert(0",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "notes/bench/same",
+      "git status --short | head; du -sh notes/bench/same",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "other",
+      "notes/bench/same",
+      "cat /tmp/claude-0/-home-user-Animation-/9b9328a0-4176-540d-80be-78ec9ebafbb5/tas",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "notes/bench/same.py notes/bench/same",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit FET",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "def checked_clip",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "class Writer",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sed -n 345,395p source/humancheck.py",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "^# ----",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "^def scene\\|^def house_pose\\|^def cam_at",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:bench_move.py",
+      "notes/bench/proof.txt source/bench_move.py",
+      "proof.txt\\|open(",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/9b9328a0-4176-540d-80be-78ec9ebafbb5/scrat",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "other",
+      "",
+      "git add -A source notes && git commit -qm \"Speed-up step 2 kept: exact inside te",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:bench_draw.py",
+      "source/bench_draw.py",
+      "import\\|^W\\|^H",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:bench_draw.py",
+      "source/bench_draw.py",
+      "^def \\|^@njit",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:bench_draw.py",
+      "source/bench_draw.py source/bench_move.py",
+      "raster(",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "sed -n '/^def dressed_still/,/raster(/p' source/bench_move.py | tail -25",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py notes/bench/same.py notes/bench/same",
+      "real\\|dressed",
       ""
      ]
     ]
