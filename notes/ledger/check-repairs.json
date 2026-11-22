@@ -715,60 +715,64 @@
    "model": "opus",
    "stage": "cost-audit",
    "round": null,
-   "cost": 1.41,
+   "cost": 2.24,
    "notes": 0,
    "repeats": [],
-   "steps": 73,
-   "hist_k": 231,
+   "steps": 93,
+   "hist_k": 250,
    "kinds": {
-    "tool search": 25.5,
-    "page.py": 0.8,
-    "renders": 1.8,
-    "other": 72.0
+    "tool search": 17.3,
+    "page.py": 0.5,
+    "renders": 2.2,
+    "other": 80.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 48,
+    "tool search": 54,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
-    "renders": 2,
+    "renders": 4,
     "pictures": 0,
-    "other": 23
+    "other": 31
    },
    "split": {
-    "usd": 4.97,
-    "total": 4.97,
+    "usd": 8.2097,
+    "total": 8.2097,
     "floor_k": 95,
     "blocks": {
-     "Claude's words": 29.0,
-     "start-up floor": 28.7,
-     "new writes": 21.8,
-     "carried history": 20.5
+     "new writes": 39.0,
+     "start-up floor": 21.3,
+     "Claude's words": 21.2,
+     "carried history": 18.4
     },
     "origins": {
-     "Claude's words": 44.0,
-     "start-up floor": 28.7,
-     "result: other": 13.4,
-     "result: tool search": 11.8,
+     "Claude's words": 34.0,
+     "cache re-write": 23.9,
+     "start-up floor": 21.3,
+     "result: other": 10.0,
+     "result: tool search": 8.8,
      "messages and reminders": 1.1,
-     "Claude's edits": 0.7,
+     "Claude's edits": 0.6,
      "result: renders": 0.2,
-     "result: page.py": 0.2
+     "result: page.py": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 28.7,
-     "writing code": 18.3,
-     "thinking": 17.3,
-     "reading chat records": 15.0,
-     "start-up and handover tools": 5.4,
-     "commands": 4.4,
-     "writing notes": 3.6,
-     "reading notes": 3.0,
-     "reading kit code": 1.2,
-     "messages to Sam": 1.1,
+     "memory lapses (re-paying for the whole chat)": 23.9,
+     "start-up reading (rules, tools, first files)": 21.3,
+     "thinking": 12.7,
+     "writing code": 12.2,
+     "reading chat records": 10.8,
+     "start-up and handover tools": 4.2,
+     "writing notes": 3.7,
+     "commands": 3.5,
+     "reading notes": 2.2,
+     "messages to Sam": 2.0,
      "messages and reminders": 1.1,
-     "running checks and tools": 0.7,
+     "reading kit code": 0.9,
+     "running checks and tools": 0.5,
+     "helper and chat prompts": 0.4,
+     "app tools (chats, files sent)": 0.3,
      "reading guides": 0.1
     },
     "leftover": 0.0
@@ -781,26 +785,483 @@
      [
       "source/stepcost.py",
       1.9,
-      0.0319
+      0.0388
      ],
      [
       "notes/ledger/app-costs.tsv",
       1.2,
-      0.0234
+      0.0277
      ],
      [
       "notes/overnight-run.md",
       0.8,
-      0.0155
+      0.0182
      ],
      [
       "tests/stepcost-transcript.jsonl",
       0.2,
-      0.004
+      0.0049
      ]
     ],
-    "base_pct": 24.9
-   }
+    "base_pct": 19.3
+   },
+   "src": "estimate",
+   "sid": "session_01GznaAVLcaYKAag7e6Ap2Nx",
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 11,
+     "shared:handover.py": 6,
+     "film notes": 4,
+     "shared:stepcost.py": 9,
+     "shared:ledger.py": 7,
+     "shared:costwatch.py": 1,
+     "shared:propose.py": 7,
+     "shared:dearest.py": 4,
+     "shared:kittests.py": 4,
+     "guides": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch -q origin cl",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/check-repairs.md",
+      "git checkout -q -b claude/cost-audit-chat && git push -u origin claude/cost-audi",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/check-repairs.md notes/overnight-run.md",
+      "Budget tracker audit",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/ledger.py source/costbreak.py source/propose.py",
+      "wc -l source/stepcost.py source/ledger.py source/costbreak.py source/propose.py;",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/ledger/ notes/ledger/grand-theft-autism.json",
+      "ls notes/ledger/ | head -40; python3 -c \" import json;d=json.load(open('notes/le",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "notes/ledger/grand-theft-autism.json notes/ledger/app-costs.tsv",
+      "python3 -c \" import json;d=json.load(open('notes/ledger/grand-theft-autism.json'",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:stepcost.py",
+      "notes/ledger/grand-theft-autism notes/ledger/milburn /.claude/projects/*/ source",
+      "def split",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "notes/ledger/milburn/ notes/ledger/milburn/335c*/ notes/ledger/milburn/*.jsonl n",
+      "ls -la notes/ledger/milburn/ notes/ledger/milburn/335c*/ | head; wc -c notes/led",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "/.claude/projects/*/ /.claude/projects/*/*.jsonl",
+      "ls ~/.claude/projects/*/ 2>/dev/null | head; f=$(ls -t ~/.claude/projects/*/*.js",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/app-costs.tsv source/ledger.py",
+      "grand-theft\\|milburn",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:stepcost.py",
+      "/.claude/projects/*/*.jsonl source/stepcost.py",
+      "^def \\|^EDIT_TOOLS\\|^BLOCKS",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "sed -n 72,107p source/stepcost.py; sed -n 296,369p source/stepcost.py",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "ls -la tests/stepcost* ; head -c 700 tests/stepcost-transcript.jsonl; echo; pyth",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "/.claude/projects/*/*.jsonl",
+      "f=$(ls -t ~/.claude/projects/*/*.jsonl | head -1); python3 - \"$f\" <<'EOF' import",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "sed -n 49,56p source/stepcost.py; sed -n 494,530p source/stepcost.py; sed -n 108",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "source/*.py .claude/hooks/*.py source/gta_ source/gta_* source/milburn*",
+      "'gta'\\|\\",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py source/propose.py /.claude/projects/*/*/subagents",
+      "def helper_files",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py",
+      "python3 - <<'EOF' p='source/stepcost.py'; s=open(p).read() reps=[ (\"\"\" steps.app",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "split",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/ledger.py",
+      "^SOLUTION_RE\\|^TEMPLATE",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "def ledger_faults",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:dearest.py",
+      "source/dearest.py",
+      "python3 - <<'EOF' p='source/dearest.py'; s=open(p).read() a=\"\"\" if os.path.exist",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/dearest.py notes/proposals/ source/handover.py",
+      " for name, how in opened]\n    f = _p(f",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:dearest.py",
+      "source/dearest.py notes/proposals/dearest-week-*-1.md",
+      "^propose: wrote",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:dearest.py",
+      "source/dearest.py",
+      "^propose: wrote",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/dearest-week-2026-11-14-*.md notes/proposals/dearest-week-2026-1",
+      "head -1 notes/proposals/dearest-week-2026-11-14-*.md; sed -n 5,9p notes/proposal",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py guides/kit-catalogue.md",
+      "stepcost\\|def test_.*cost",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py guides/kit-catalogue.md",
+      "def test_\\|^TESTS\\|subprocess",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^@kit\\|^@test\\|TESTS.append",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/gta_rehearse.py /.claude/projects/*/*.jsonl",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() i=s.rfind('\\n\\n\\ndef ",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "costbreak\\|ledger\\b\\|cost watch",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:stepcost.py",
+      "guides/kit-catalogue.md source/stepcost.py source/dearest.py",
+      "dearest",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/dearest.py",
+      "python3 - <<'EOF' p='source/stepcost.py'; s=open(p).read() a=\"\"\" start() ......\"",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:handover.py",
+      "notes/check-repairs.md source/handover.py",
+      "sed -i 's/writing code 31-38%/writing code 32-38%/' notes/check-repairs.md && py",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "notes/logs/handover-end.log",
+      "^UU\\|^AA",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "film notes",
+      "notes/check-repairs.md notes/logs/handover-end.log",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "film notes",
+      "notes/check-repairs.md",
+      "sed -n 40,60p notes/check-repairs.md",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "film notes",
+      "notes/check-repairs.md notes/logs/handover-end.log",
+      "<<<<<<<",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:handover.py",
+      "notes/check-repairs.md notes/logs/handover-end.log notes/proposals/dearest-week.",
+      "def turns\\|def sam_messages\\|def log_hook",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/ledger.py",
+      "'notes'\\|notes=",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "sed -n 296,325p source/ledger.py; sed -n 600,612p source/ledger.py",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "sed -n 262,295p source/ledger.py",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py /.claude/projects/*/*.jsonl",
+      "^import\\|^from",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittests.py notes/ledger/sam/negkzryt.md notes/grand-t",
+      "gun",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:dearest.py",
+      "notes/proposals/dearest-week-2026-11-14-*.md source/dearest.py notes/proposals/ ",
+      " for name, how in opened]\"\"\"\nb=\"\"\"    text, _, _ = dearest.report(film)         ",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "notes/ledger/check-repairs.json notes/ledger/",
+      "python3 -c \" import json;d=json.load(open('notes/ledger/check-repairs.json')) fo",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "notes/ledger/*.json /.claude/projects/*/*.jsonl",
+      "335c535e",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:ledger.py",
+      "/.claude/projects/*/*.jsonl source/ledger.py notes/ledger/check-repairs.json",
+      "t=$(ls -t ~/.claude/projects/*/*.jsonl | head -1); echo \"{\\\"transcript_path\\\": \\",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:ledger.py",
+      "notes/check-repairs.md source/ledger.py",
+      "python3 - <<'EOF' p='notes/check-repairs.md'; s=open(p).read() i=s.index(\"- Cost",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/dearest.py source/propose.py source/handover.py source",
+      "git add -A source/stepcost.py source/dearest.py source/propose.py source/handove",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "def hook",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "does not exist",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 366,420p source/propose.py",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/kittests.py",
+      "python3 - <<'EOF' p='source/propose.py'; s=open(p).read() a=\"\"\" names = sorted(n",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
