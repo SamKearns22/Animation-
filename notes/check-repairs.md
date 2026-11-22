@@ -81,6 +81,10 @@ discover how it can be made more compliant with statement one.")
         Ideas given with them (unrouted, his pick first): 1 a smaller fixed start, only what that chat needs; 2 more
         built from ready kit pieces, less new code per note; 3 hand over before a long wait instead of resuming;
         4 small labelled crops of what changed; 5 a map of where each part of the film lives in the code.
+        22 Nov 02:00, Sam's 2am reminder ("go on with your own stated pick"): picks 1, 2, 3 go ahead, listed to Sam.
+- [ ] Cost audit chat 2 (Opus medium): `python3 source/dearest.py grand-theft-autism --open 1,2,3`, then the route
+      (pack, helpers, judge, record) on #1 first with its cost measured (ledger row), then #2 and #3; show Sam the
+      verdicts (propose.py show) with Lost/Added. Then the 278% week check and Sam's Sonnet-render note.
 - [ ] The week's record adds to 278% of a week over 149 chats (219 of it estimates, 3 chats filed twice; 42 chats
       filed under proposal-route). That cannot all be real if the weekly limit holds: check the estimates against the
       app's figures for the chats that can still be read, and how chats are filed to jobs (Opus medium).
