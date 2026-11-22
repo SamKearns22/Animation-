@@ -1302,55 +1302,55 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.37,
+   "cost": 2.88,
    "src": "estimate",
    "sid": "session_01GznaASKWmDUJAWLniVGoiV",
-   "steps": 39,
-   "hist_k": 137,
+   "steps": 49,
+   "hist_k": 144,
    "kinds": {
-    "tool search": 16.6,
-    "other": 83.4
+    "tool search": 16.1,
+    "other": 83.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 25,
+    "tool search": 30,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 15
+    "other": 17
    },
    "split": {
-    "usd": 2.2924,
-    "total": 2.2924,
+    "usd": 2.6325,
+    "total": 2.6325,
     "floor_k": 95,
     "blocks": {
-     "start-up floor": 62.1,
-     "Claude's words": 16.2,
-     "new writes": 14.6,
-     "carried history": 7.1
+     "start-up floor": 60.6,
+     "Claude's words": 15.5,
+     "new writes": 14.7,
+     "carried history": 9.2
     },
     "origins": {
-     "start-up floor": 62.1,
-     "Claude's words": 23.6,
-     "result: tool search": 9.9,
-     "messages and reminders": 2.5,
-     "result: other": 1.9
+     "start-up floor": 60.6,
+     "Claude's words": 23.5,
+     "result: tool search": 10.1,
+     "messages and reminders": 3.7,
+     "result: other": 2.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 62.1,
-     "writing code": 7.8,
-     "thinking": 6.7,
-     "reading notes": 5.3,
-     "commands": 4.3,
-     "start-up and handover tools": 3.1,
-     "helper and chat prompts": 2.8,
-     "messages and reminders": 2.5,
+     "start-up reading (rules, tools, first files)": 60.6,
+     "writing code": 7.1,
+     "thinking": 6.2,
+     "reading notes": 5.2,
+     "commands": 4.8,
+     "messages and reminders": 3.7,
+     "helper and chat prompts": 3.4,
+     "start-up and handover tools": 3.4,
      "reading kit code": 1.8,
-     "writing notes": 1.3,
-     "helper results": 1.1,
-     "messages to Sam": 0.8,
+     "helper results": 1.3,
+     "writing notes": 1.1,
+     "messages to Sam": 0.9,
      "running checks and tools": 0.4,
      "reading chat records": 0.2
     },
@@ -1364,25 +1364,25 @@
      [
       "notes/proposal-route.md",
       1.3,
-      0.017
+      0.0193
      ],
      [
       ".claude/hooks/costwatch.py",
       1.0,
-      0.0141
+      0.016
      ],
      [
       "source/stepcost.py",
       0.9,
-      0.0117
+      0.0133
      ],
      [
       "notes/proposals/dearest-grand-theft-autism-1/chat.md",
       0.2,
-      0.0022
+      0.0025
      ]
     ],
-    "base_pct": 28.6
+    "base_pct": 31.5
    },
    "search": {
     "show": 0,
@@ -1390,13 +1390,13 @@
      "no show": 0
     },
     "other": {
-     "other": 5,
+     "other": 7,
      "shared:handover.py": 1,
      "film notes": 3,
      "shared:dearest.py": 3,
      "shared:stepcost.py": 1,
      "shared:costwatch.py": 5,
-     "shared:propose.py": 4,
+     "shared:propose.py": 7,
      "shared:watcher.py": 3
     },
     "ticked": 0,
@@ -1600,6 +1600,46 @@
       "other",
       "",
       "git add -A && git commit -qm \"Cost audit chat 2: proposal 1 judged; route cost a",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Cost audit chat 2: proposal 3 helper B written Co-",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Cost audit chat 2: proposal 2 helper A written Co-",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge dearest-grand-theft-autism-3 2>&1 | tail -1",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge dearest-grand-theft-autism-2 2>&1 | tail -1",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record dearest-grand-theft-autism-3 >/dev/null 2>&1; p",
       ""
      ]
     ]
