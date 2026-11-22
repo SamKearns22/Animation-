@@ -5847,6 +5847,449 @@
      ]
     ]
    }
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "f4f681d6",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.35,
+   "src": "estimate",
+   "sid": "session_01GznaATLDiLViEJgr9HLUfs",
+   "steps": 19,
+   "hist_k": 142,
+   "kinds": {
+    "tool search": 22.2,
+    "other": 77.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 13,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 1.2738,
+    "total": 1.2738,
+    "floor_k": 92,
+    "blocks": {
+     "start-up floor": 39.9,
+     "new writes": 31.8,
+     "Claude's words": 19.7,
+     "carried history": 8.6
+    },
+    "origins": {
+     "start-up floor": 39.9,
+     "Claude's words": 26.7,
+     "result: tool search": 21.7,
+     "result: other": 6.6,
+     "messages and reminders": 5.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 39.9,
+     "git and saving": 10.6,
+     "messages to Sam": 6.8,
+     "commands": 6.4,
+     "reading notes": 6.4,
+     "reading chat records": 6.1,
+     "thinking": 5.9,
+     "messages and reminders": 5.2,
+     "helper and chat prompts": 3.8,
+     "writing code": 3.7,
+     "start-up and handover tools": 3.0,
+     "other commands": 1.7,
+     "app tools (chats, files sent)": 0.5
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 92,
+    "work_step": 12,
+    "work_pct": 0.25,
+    "reads": [
+     [
+      "notes/proposals/milburn-review.md",
+      2.7,
+      0.0262
+     ],
+     [
+      "source/propose.py",
+      1.9,
+      0.0187
+     ],
+     [
+      "notes/archive/milburn.md",
+      1.6,
+      0.0157
+     ]
+    ],
+    "base_pct": 23.4
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 7,
+     "shared:propose.py": 3,
+     "shared:leanout.py": 1,
+     "shared:elder_swindon.py": 1,
+     "other": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g 2>/",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/budget-job.md notes/check-repairs.md",
+      "where things stand",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/check-repairs.md notes/grand-theft-autism.md notes/halo-no-no.md notes/eld",
+      "^## Where things stand",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "33b\\|33c\\|animatic v4",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:propose.py",
+      "notes/proposals source/propose.py",
+      "cd /home/user/Animation-; git checkout -q claude/create-claude-md-oe8z4g 2>/dev/",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "cd /home/user/Animation-; for n in 1 2 3; do echo \"=== $n\"; python3 source/propo",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/archive notes/proposals/milburn-review.md",
+      "after milburn\\|end of milburn\\|milburn.*suggest\\|suggested job",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/proposals/ notes/next-jobs.md notes/check-repairs.md notes/cost-diagnosis.",
+      "status\\|sam\\b\\|sam:\\|built\\|done\\|waiting",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/proposals/*.md story/*people*.txt",
+      "parked (Sam 19 Nov",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:leanout.py",
+      "notes/remakes.md notes/elder-swindon.md notes/archive source/leanout.py notes/lo",
+      "notes/remakes.md\\|notes/elder-swindon.md",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:elder_swindon.py",
+      "notes/elder-swindon.md notes/archive/elder-swindon.md notes/remakes.md notes/arc",
+      "Needs Sam",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/dearest-grand-theft-autism-* notes/proposals/d",
+      "dearest-grand-theft-autism-[23]",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "notes/proposals/dearest",
+      "dearest-grand-theft-autism-[23]\\|grand-theft-autism-2\\b",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "bbd2eb18",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 4.39,
+   "src": "estimate",
+   "sid": "session_01GznaARyyXKTWg4hMGAH7sT",
+   "steps": 24,
+   "hist_k": 156,
+   "kinds": {
+    "tool search": 20.6,
+    "other": 79.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 15,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 21
+   },
+   "split": {
+    "usd": 1.4966,
+    "total": 1.4966,
+    "floor_k": 95,
+    "blocks": {
+     "start-up floor": 39.2,
+     "new writes": 32.1,
+     "Claude's words": 19.0,
+     "carried history": 9.6
+    },
+    "origins": {
+     "start-up floor": 39.2,
+     "Claude's words": 26.5,
+     "result: other": 16.7,
+     "result: tool search": 15.6,
+     "messages and reminders": 2.0
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 39.2,
+     "reading chat records": 11.9,
+     "reading notes": 9.6,
+     "helper and chat prompts": 8.5,
+     "commands": 7.2,
+     "thinking": 6.7,
+     "start-up and handover tools": 6.0,
+     "helper results": 4.0,
+     "writing notes": 3.1,
+     "messages and reminders": 2.0,
+     "messages to Sam": 1.0,
+     "app tools (chats, files sent)": 0.8
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 95,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/propose.py",
+      2.0,
+      0.0219
+     ],
+     [
+      "notes/proposal-route.md",
+      1.8,
+      0.0212
+     ],
+     [
+      "guides/job-packs.md",
+      0.7,
+      0.0077
+     ],
+     [
+      "guides/proposal-route/helper.md",
+      0.7,
+      0.0074
+     ],
+     [
+      "notes/proposals/named-lines.md",
+      0.5,
+      0.0052
+     ],
+     [
+      "notes/ledger/sam/gr9hlufs.md",
+      0.1,
+      0.0009
+     ]
+    ],
+    "base_pct": 26.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 5,
+     "film notes": 3,
+     "shared:propose.py": 5,
+     "shared:handover.py": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git branch --show-current && git log --oneline -3 && git",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/proposals/ notes/proposal-route.md",
+      "git checkout -B claude/milburn-lessons-chat1 && git push -u origin claude/milbur",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/milburn-review.md notes/proposals/ source/propose.py",
+      "wc -w notes/proposals/milburn-review.md notes/proposals/{could-not-test,named-li",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "notes/proposals/",
+      "for n in could-not-test named-lines staging-stills shared-check-fixes guard-film",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:propose.py",
+      "guides/job-packs.md source/propose.py source/handover.py",
+      "def cmd_pack\\|def cmd_judge\\|def cmd_record\\|def cmd_show\\|def problem_hash\\|def",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/ledger/sam/",
+      "Milburn: begin all\\|begin all",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/ledger/sam/gr9hlufs.md",
+      "head -5 notes/ledger/sam/gr9hlufs.md; sed -n '15,40p' notes/ledger/sam/gr9hlufs.",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^\\s*$",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:propose.py",
+      "source/propose.py guides/proposal-route/helper.md",
+      "def pack\\|def cmd\\|SOLUTION\\|solution",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/proposals/ notes/proposals/named-lines/chat.md notes/proposals/shared-chec",
+      "python3 - <<'EOF' import re p='notes/proposals/' nl=open(p+'named-lines.md').rea",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "for n in could-not-test named-lines staging-stills guard-film-questions notes-mo",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add -A notes/proposals && git commit -qm \"Milburn lessons: un-park 7, merge ",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..FE",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/guard-film-questions/helper-*.md notes/proposals/guard-film-ques",
+      "Why did you write\n  your response 3 times?",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add -A notes/proposals && git commit -qm \"guard-film-questions: add the stat",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}

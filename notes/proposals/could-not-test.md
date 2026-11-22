@@ -1,6 +1,6 @@
 # Proposal: A check that "could not test" passes as a line, so the fault it exists for reaches Sam
 
-Status: parked (Sam 19 Nov: "just the communication problem for now"; packed, helpers not run)
+Status: open (un-parked 22 Nov, Sam: "Milburn: begin all"; his 19 Nov words below still stand)
 
 ## Problem
 On Milburn the name cards were hidden by hands and cut by captions twice, and Sam had to note it twice (chat 13 and

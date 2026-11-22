@@ -1,5 +1,7 @@
 # Elder Scrolls: Swindon (parody of the Elder Scrolls VI: Sentinel name-reveal teaser)
 
+**Posted (Sam, 22 Nov): notes filed here.**
+
 ## Where things stand
 - **Rules that bite next:** 84 (a real place beside its reference on the sheet), 56 (a fault of a kind: every shot), 67 (one full pre-flight per round).
 - **Done (9 Nov): FINAL rendered and sent (Sam: "skip animatic, render final"), animations/elder-swindon-vertical.mp4, 17.9 MB, 36.6 s.** Before that: notes on animatic 5 (brief row 64: no pigeons until shot 3). Checked on a sheet: shots 1-2 clear, shot 3 as before.

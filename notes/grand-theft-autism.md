@@ -223,7 +223,7 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Next: chat 39, Opus high: (1) the elbow pop 22 cm at 1.1 s (made worse by chat 38's B3 gun path: soften B3 or pass
   K2 with speed); (2) vest strap island on the K4 still (diagnosis in learn-step; resend the still); (3) getting up
   13-23 / sitting down 176-190 (span.py); (4) full run + whole grey clip (`bench_move.py clip`, ~80 min); 3 cm question.
-- Needs Sam: Q1 budget (asked chat 38: carry on past the film's allowance?); budget stops Y (chat 28) still open.
+- Needs Sam: the 3 cm question after the full run (budget stops: Sam N, 22 Nov: never ask again).
 - Read: notes/bench/learn-step.md "Stage 1, chat 38"; bench_move.py MAP; notes/bench/sam-notes/.
 - Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
   house-look lock (option 1 step 4).
@@ -240,4 +240,8 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
 - Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 75.49% of 15%; forecast 79.1% (2026-11-22)
+## Sam's answers, 22 Nov (status chat)
+- Budget stops (open since chat 28): **N**. Do not ask again.
+- Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 77.66% of 15%; forecast 81.3% (2026-11-22)

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Elder Scrolls: Swindon. A parody of the Elder Scrolls VI: Sentinel name-reveal teaser, beat for beat to its sound.
-From the satire template (guides/satire.md). Notes: notes/elder-swindon.md.
+From the satire template (guides/satire.md). Notes: notes/archive/elder-swindon.md.
 
 MAP (rule 61: a note is answered by reading only these lines)
 - STORY (top): shots, timing, HOOK, HAS, the brief's lists

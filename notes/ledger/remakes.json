@@ -250,7 +250,18 @@
    "usd": 0.69
   }
  ],
- "checks": {},
+ "checks": {
+  "quick check": {
+   "runs": 1,
+   "faults": 10,
+   "kinds": {
+    "CAMERA FEEL": 1,
+    "caption": 3,
+    "other": 1,
+    "script/mouth": 5
+   }
+  }
+ },
  "alarm": 10,
  "critique": {
   "passes": [
@@ -520,5 +531,11 @@
    }
   }
  },
- "budget_stop": 15
+ "budget_stop": 15,
+ "quick_checks": [
+  {
+   "at": "2026-11-22T19:48+00:00",
+   "faults": 10
+  }
+ ]
 }

@@ -2478,6 +2478,55 @@ def facehouse_beard_turns():
 
 
 @test
+def facehouse_walliams_kit_person():
+    """Walliams kit job (Sam, 22 Nov: "Walliams: put into kit"): David Walliams is a proper kit person in the face
+    tool's people file, his head the one Sam approved on 15 Nov (chat 17's pushed proportions, the rounded-dome
+    swept hair, the smirk and cocked brow, look 'detail') held pixel for pixel, at his own height (1.96 m) in the
+    navy suit, white shirt, no tie; every turn (0, 45, 90, 135, 180) draws his own house head, never the engine's
+    plain one; Blessed's test-only hand-made head stays its own. Fails before the job (no 'walliams' in the file)."""
+    import hashlib
+    import shutil
+    import tempfile
+    import facehouse as FH
+    import people
+    import people_parts as PP
+    import turnhead as TH
+    from PIL import Image
+    from satire_style import install_circle_hands
+    held = '31d28a85f8b5cb406696cad7c9819aa9'    # FH.draw('walliams', 'detail') on 22 Nov: the head Sam approved
+    cast = people.load('facetool')
+    if 'walliams' not in cast:
+        return False, 'no walliams in the face tool people file'
+    sp = cast['walliams']
+    out = []
+    if sp.get('kit_head') != 'house' or sp['kit_house']['meas'] != FH.person('walliams', 'detail', **FH.CAST['walliams'])['kit_house']['meas']:
+        out.append('the people file does not build facehouse\'s Walliams')
+    if abs(sp.get('height', 0) - 1.96) > 1e-6:
+        out.append(f"height {sp.get('height')}, not 1.96 m")
+    tmp = tempfile.mkdtemp()
+    try:
+        png = FH.draw('walliams', 'detail', os.path.join(tmp, 'w.png'))
+        if hashlib.md5(open(png, 'rb').read()).hexdigest() != held:
+            out.append('the approved head changed')
+    finally:
+        shutil.rmtree(tmp)
+    B, V = PP.B, PP.V
+    install_circle_hands(B)
+    people.install(cast)
+    B.SS = 1
+    del TH.GENERIC[:]
+    for yaw in (0, 45, 90, 135, 180):
+        tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+        V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, yaw)
+    if TH.GENERIC:
+        out.append(f'turned on the plain head: {list(TH.GENERIC)}')
+    blessed = people.load('blessed')['walliams']
+    if blessed.get('kit_head') != 'walliams':
+        out.append("Blessed's own hand-made head was moved")
+    return not out, '; '.join(out) or 'kit person: approved head held, 1.96 m, five turns on his own head'
+
+
+@test
 def outfit_every_view():
     """Face tool chat 15 (one outfit in every view): every piece a person wears over the clothes (each extra, the open
     collar) shows in the three-quarter and the side as it does from the front, and from behind where it goes round
