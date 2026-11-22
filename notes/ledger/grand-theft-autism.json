@@ -20210,7 +20210,99 @@
    "round": null,
    "cost": 1.76,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "steps": 64,
+   "hist_k": 222,
+   "kinds": {
+    "film-file search": 0.8,
+    "tool search": 26.2,
+    "whole-file .py read": 0.3,
+    "renders": 4.4,
+    "pictures": 1.5,
+    "other": 66.7
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 40,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 3,
+    "other": 17
+   },
+   "split": {
+    "usd": 4.5838,
+    "total": 4.5838,
+    "floor_k": 96,
+    "blocks": {
+     "Claude's words": 31.6,
+     "start-up floor": 28.1,
+     "new writes": 22.0,
+     "carried history": 18.3
+    },
+    "origins": {
+     "Claude's words": 48.6,
+     "start-up floor": 28.1,
+     "result: tool search": 17.1,
+     "messages and reminders": 2.5,
+     "result: pictures": 1.6,
+     "result: other": 1.2,
+     "result: film-file search": 0.8,
+     "result: renders": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 28.1,
+     "thinking": 20.9,
+     "writing code": 20.6,
+     "reading kit code": 10.6,
+     "commands": 5.5,
+     "reading notes": 4.3,
+     "messages and reminders": 2.5,
+     "looking at pictures": 1.6,
+     "running checks and tools": 1.4,
+     "other commands": 1.2,
+     "messages to Sam": 0.9,
+     "reading film code": 0.8,
+     "start-up and handover tools": 0.8,
+     "writing notes": 0.8,
+     "renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 96,
+    "work_step": 12,
+    "work_pct": 0.24,
+    "reads": [
+     [
+      "source/bench_move.py",
+      9.6,
+      0.1724
+     ],
+     [
+      "source/bench_draw.py",
+      2.3,
+      0.0404
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      1.7,
+      0.0315
+     ],
+     [
+      "notes/bench/learn-step.md",
+      1.4,
+      0.0256
+     ],
+     [
+      "notes/bench/keytest.py",
+      1.4,
+      0.0256
+     ]
+    ],
+    "base_pct": 23.9
+   }
   }
  ],
  "checks": {},
