@@ -326,6 +326,10 @@ def draw_gun(img, cam, k, report=True):
     hand, muzzle = gun_pts(k)
     d = _u(muzzle - hand)
     down = _gun_down(d)
+    if getattr(k, 'chest_gun', False) and hasattr(cam, 'pos'):    # shots 5-8 (chat 33d, critique r44): the flat
+        view = _u(np.asarray(cam.pos, float) - hand)                # pistol turned side-on to the lens, whatever
+        d2 = _u(np.cross(d, view))                                   # way the car faces (edge-on it read as a pen)
+        down = d2 if np.dot(d2, down) >= 0 else -d2
     g = GUN[0]
     d0 = d
     if getattr(k, 'front', False):                      # held against his chest: the grip sits inside his fist (Sam 21 Nov)

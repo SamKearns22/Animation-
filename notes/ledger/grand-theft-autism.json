@@ -23884,16 +23884,6 @@
    "date": "2026-11-22",
    "spent": 79.6,
    "forecast": 83.2
-  },
-  {
-   "date": "2026-11-22",
-   "spent": 83.07,
-   "forecast": 86.7
-  },
-  {
-   "date": "2026-11-22",
-   "spent": 83.37,
-   "forecast": 87.0
   }
  ],
  "critique": {
@@ -24254,15 +24244,35 @@
      "4-8 P10: hand overlaps roof bar; a hand-in-front-or-behind close-up would show it.",
      "1-8 P8: inside and outside figures may not share pose or facing; an overlay would show it."
     ]
+   },
+   {
+    "round": 44,
+    "pass": 2,
+    "stage": "notes",
+    "date": "2026-11-22",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 1,
+    "open": [
+     "1-6 P2: all three look straight at the camera with flat, calm faces; nobody looks at the police or shows chase tension. Only Lucia in 2 has an open mouth, and n",
+     "2 P12 P2: Lucia's mouth is open while the other two are closed. No speaker is shown, so it reads as a stray talking mouth.",
+     "2-6 A2: the red-haired woman's headphones are teal/cyan; the reference's are black. The unicorn print is not visible in any panel.",
+     "2-3 P4: Jason's skin and face look paler and wider than the reference's tan face with stubble. His hair also looks lighter in 3.",
+     "3 P1 P6: Jason's raised hand at the left edge is cropped and has no gun. The brief says he holds a pistol. In 2 the pistol is a thin diagonal against his chest,",
+     "1-6 O3: the dark stripes on the red bonnet look like a pair of trouser legs, not racing stripes. The grey bottom band with a white hexagon reads as nothing: no ",
+     "1-6 O4: the car's scale jumps between shots. In 2 and 3 the occupants fill the windscreen and the bonnet is huge. In 1 and 4-6 they are tiny.",
+     "1,4-6 O2: the police car is a tiny blurred blob, and its lights are a smudge in 5. It can't be named as a police car at phone size.",
+     "1,4-6 P1: is a pistol held at all? The people are too small at phone size. A full-size crop of Jason's hands would show it."
+    ]
    }
   ],
   "lines": {
    "A2": {
-    "faults": 21,
+    "faults": 22,
     "false": 0
    },
    "P4": {
-    "faults": 16,
+    "faults": 17,
     "false": 0
    },
    "A1": {
@@ -24270,7 +24280,7 @@
     "false": 0
    },
    "P2": {
-    "faults": 22,
+    "faults": 24,
     "false": 0
    },
    "P5": {
@@ -24290,11 +24300,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 9,
+    "faults": 10,
     "false": 1
    },
    "P1": {
-    "faults": 14,
+    "faults": 15,
     "false": 0
    },
    "O5": {
@@ -24310,7 +24320,7 @@
     "false": 0
    },
    "O2": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P7": {
@@ -24318,7 +24328,7 @@
     "false": 0
    },
    "O3": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "M5": {
@@ -24362,7 +24372,7 @@
     "false": 0
    },
    "O4": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "S2": {
@@ -24374,7 +24384,7 @@
     "false": 0
    },
    "P12": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    }
   }
