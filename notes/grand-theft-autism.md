@@ -203,7 +203,9 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
 - [ ] hand style unchanged (house circle hands)
 - [ ] art style unchanged, blends into the scene naturally
 - [ ] the skill serves all future complex human moves in showstopper shots
-- [ ] research and explain the plan before beginning (proposal solid-body-moves)
+- [x] research and explain the plan before beginning (proposal solid-body-moves)
+- Sam's answer (22 Nov): "Y" to all five picks: 1 option 1 (move first, then the look); 2 circle hands; 3 install
+  Blender; 4 keep chat 31's change as a record; 5 other film work carries on meanwhile (not shot 4's Jason).
 - [x] investigate why the hand style changed: chat 26's fault list turned Sam's "so many problems with hands" (21 Nov
       15:22) into its own words "hands are discs or mittens (no fingers read)" and "the hand on the door a blob"; chat 28
       then built fingered hands and its code comment credits those words to Sam. Nobody asked Sam; no proposal. Why no
@@ -215,10 +217,10 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
   the 8 shots' order and lengths.
 - Done: shot 4's 14 attempts marked FAILED (case study 17); Sam's test-space job recorded (chat 32 section); why the
   hands changed found; proposal solid-body-moves judged (two options sent to Sam, judge picked option 1).
-- Next (on Sam's pick): Opus, high. The learn step L1-L3 of the picked option (notes/proposals/solid-body-moves.md),
-  ending with the side-by-side still to Sam. Installing Blender needs Sam's OK (this chat's install was refused).
-- Needs Sam: 1 option 1 or 2; 2 circle hands Y/N; 3 Blender install OK Y/N; still open: chat 31's unsaved change keep
-  or throw away; whether other film work (F6, F12, shots 5-8) goes on meanwhile; budget stops Y (chat 28).
+- Next: chat 33, Opus high: the learn step L1-L3 of option 1 (Sam's Y) (notes/proposals/solid-body-moves.md),
+  ending with the side-by-side still to Sam. Sam said Y to installing Blender. Alongside: chat 33b, Opus medium: F6, F12,
+  F15 and shots 5-8 notes (never shot 4's Jason).
+- Needs Sam: budget stops Y (chat 28), still open.
 - Read: notes/proposals/solid-body-moves.md (verdict); chat 32 section. Open rule requests: Sam's held-object check
   (draft); house-look lock (option 1 step 4, its own proposal).
 - For Claude: handover check's SENTENCE line is the known false alarm (in CLAUDE.md, Seeing like Sam 4). Chat 30's FAILED section moved to the archive notes. Chat 31's uncommitted DOOR_L change sits in session_01GznaAVRjtm1nmzn6nuRJJ6 (branch claude/gta-chat31).

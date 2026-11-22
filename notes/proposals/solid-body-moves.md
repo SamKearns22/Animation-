@@ -1,6 +1,6 @@
 # Proposal: Learn to move a character in 3D for complex showstopper moves (Jason, shot 4 test space) without changing the art style
 
-Status: open
+Status: adopted (2026-11-22)
 
 ## Problem
 The project cannot make a cartoon person do a complex whole-body move (Jason climbing out of a moving car's window,
