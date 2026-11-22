@@ -1,0 +1,17 @@
+{
+ "video": "grey-lean-out-middle.held.mp4",
+ "faults": [
+  "BODY: grey test body 1.00 s: Jason (grey test body): planted slide: free hand on door top 1.9 cm (1 drawing)",
+  "BODY: grey test body 1.00 s: Jason (grey test body): self arm R / trunk 1.4 cm (1 drawing)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): pop: elR jumps off its path (6.8 cm) (11 drawings)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): step over 3 cm a frame: elR (6.6 cm) (14 drawings)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): pop: wrR jumps off its path (7.9 cm) (16 drawings)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): step over 3 cm a frame: wrR (5.5 cm) (21 drawings)",
+  "BODY: grey test body 1.08 s: Jason (grey test body): step over 3 cm a frame: elL (3.7 cm) (6 drawings)",
+  "BODY: grey test body 1.71 s: Jason (grey test body): self arm R / trunk 1.1 cm (1 drawing)"
+ ],
+ "named": true,
+ "critique": "source/data/critique/grand-theft-autism/r38-grey-p1",
+ "made": 1795368649.9554675,
+ "why_named": "grey stage-1 test clip: each fault said to Sam in the Checks line (gun arm pops and fast steps at 1.0-1.3 s = the 3 cm question, elbow pop grew 10->22 cm with chat 38's gun path; arm/chest fold 1.1-1.4 cm at 1.0 and 1.71 s; door hand slides 1.9 cm)"
+}

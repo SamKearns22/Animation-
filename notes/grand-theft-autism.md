@@ -240,3 +240,7 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 77.66% of 15%; forecast 81.3% (2026-11-22)
+- 33c finish (22 Nov, Sam "Just go"): body check run (11 faults, named), critique r43-p1 recorded (fresh helper), finish.py
+  (note: finish.py deletes its own output if written into animations/drafts: write elsewhere). Animatic 4.5 MB, sent.
+  Critic's lines NOT on the list (propose later): lights sit on a named object; no repeat frames at different beats;
+  driver's hands visible on the wheel. Next: Sam's notes on v4 (Opus medium); shot 4 waits for the 3D work.
