@@ -270,7 +270,7 @@ def compose(zb, pb, ob, names, edge, cols, scale=1):
     return im
 
 
-def house_head(cam, k, sp):
+def house_head(cam, k, sp, neck=True):
     """The house head (views.head_view as lying_flat draws seated Jason), alone on a clear layer: the full drawing
     minus the same drawing with the head left out."""
     import lying_flat as LF
@@ -280,7 +280,8 @@ def house_head(cam, k, sp):
         old, oldn = V.head_view, LF._neck
         if nohead:                                    # the head and the house neck under it (its chin sits on it)
             V.head_view = lambda *a, **kw: None
-            LF._neck = lambda *a, **kw: None
+        if nohead or not neck:                        # neck=False: the head alone (a solid neck stands under it;
+            LF._neck = lambda *a, **kw: None          # the flat neck's outline drew a stray line down it, chat 38)
         try:
             LF.draw(img, cam, k, sp)
         finally:

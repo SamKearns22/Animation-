@@ -1526,7 +1526,69 @@ def house_pose(out):
     return k
 
 
-DRESS_HIDE_NECK = False         # the house neck (drawn with the house head) stands in for the solid neck
+DRESS_HIDE_NECK = True          # a smooth solid neck column (neck_column) stands in for the skinned neck
+
+
+def clean_parts(pb, ob, rad):
+    """Sam (22 Nov, K4 still, marked crop of the vest strap): the vest's edges were torn, with skin slivers between
+    pieces, where the fold press flattened the shoulder skin (the rest-body map deciding vest or skin crumples there).
+    A flat drawing's colour areas have clean edges: each of Jason's dots takes the part most of its neighbours within
+    rad have (skin, vest, trousers, shoes; his dots only), so slivers thinner than rad go and edges run smooth. The
+    ink is drawn after, from these parts."""
+    from scipy import ndimage
+    body = ob == 0
+    kinds = [PI for PI in range(5)]                       # bench_draw.PART_NAMES 0-4: skin vest trousers shoes hair
+    votes = np.stack([ndimage.uniform_filter(((pb == k) & body).astype(np.float32), 2 * rad + 1) for k in kinds])
+    best = np.array(kinds)[votes.argmax(0)]
+    out = pb.copy()
+    m = body & np.isin(pb, kinds)
+    out[m] = best[m]
+    return out
+
+
+NECK_R = (0.060, 0.052)          # the neck column's radius at its base and under the head (Jason's neck: 6.6 cm
+#                                  median skin radius at rest, trapezius included)
+
+
+def neck_column(out, n_ring=24, n_len=10):
+    """Sam (22 Nov, K4 still, two marked crops: "Fix to human standard neck"): the skinned neck under the house head
+    was an open tube once the 3D head was hidden (inner edges inked, the vest seen through it) and the flat neck's
+    outline drew a line down it. A human neck is one smooth closed column from the shoulders up into the head:
+    here a tube along neck base -> neck joint -> head joint -> into the head, bending as the neck does (chest frame
+    at the base, head frame at the top), its base sunk into the trunk. Returns (points, tris) to join Jason's body."""
+    J, Rc, Rh = out['J'], out['Rc'], out['Rh']
+    ctrl = [J['neck'] - Rc[:, 1] * 0.05, J['neck'], J['head'], J['head'] + Rh[:, 1] * 0.06]
+    pts, frames = [], []
+    for i in range(n_len + 1):                          # a smooth path through the four points (Catmull-Rom)
+        u = i / n_len * 3
+        k = min(int(u), 2)
+        f = u - k
+        p0, p1, p2, p3 = (ctrl[max(k - 1, 0)], ctrl[k], ctrl[k + 1], ctrl[min(k + 2, 3)])
+        p = 0.5 * ((2 * p1) + (-p0 + p2) * f + (2 * p0 - 5 * p1 + 4 * p2 - p3) * f * f + (-p0 + 3 * p1 - 3 * p2 + p3) * f ** 3)
+        pts.append(p)
+    pts = np.array(pts)
+    V, T = [], []
+    for i, p in enumerate(pts):
+        a = _u(pts[min(i + 1, n_len)] - pts[max(i - 1, 0)])
+        w = i / n_len
+        fwd = _u((1 - w) * Rc[:, 2] + w * Rh[:, 2])
+        x = _u(np.cross(a, fwd))
+        y = np.cross(x, a)
+        rad = NECK_R[0] + (NECK_R[1] - NECK_R[0]) * min(1.0, w * 1.5)
+        for j in range(n_ring):
+            th = 2 * math.pi * j / n_ring
+            V.append(p + rad * (math.cos(th) * x + 0.92 * math.sin(th) * y))   # a little deeper side to side
+    for i in range(n_len):
+        for j in range(n_ring):
+            a0, a1 = i * n_ring + j, i * n_ring + (j + 1) % n_ring
+            b0, b1 = a0 + n_ring, a1 + n_ring
+            T += [(a0, b0, a1), (a1, b0, b1)]
+    c0, c1 = len(V), len(V) + 1
+    V += [pts[0], pts[-1]]
+    for j in range(n_ring):
+        T.append((c0, (j + 1) % n_ring, j))
+        T.append((c1, n_len * n_ring + j, n_len * n_ring + (j + 1) % n_ring))
+    return np.array(V), np.array(T, int)
 
 
 def dressed_still(path, name='K4', t=1.95, scale=2):
@@ -1545,10 +1607,39 @@ def dressed_still(path, name='K4', t=1.95, scale=2):
     tk = r['tk']
     neckb = np.array([str(b).startswith('neck') for b in r['bone']])
     hide = r['headb'] | (neckb & DRESS_HIDE_NECK)
-    tk = tk[~(r['hand'][tk].any(1) | hide[tk].all(1))]
+    # a triangle touching the hidden neck at all goes (its scraps poked through the neck column as a hooked line
+    # at the throat, chat 38); the column's base, sunk into the trunk, covers the opening
+    tk = tk[~(r['hand'][tk].any(1) | (hide[tk].any(1) if DRESS_HIDE_NECK else hide[tk].all(1)))]
     tp = np.array([BP.PARTS[int(np.bincount(r['part'][tt]).argmax())] for tt in tk])
-    objs = [(out['P'], tk, tp, 'jason')] + scene(out)[1:]
     rv, rg = BP.rest_attrs()
+    attrs = np.concatenate([rv, rg], 1)
+    Pj = out['P']
+    if DRESS_HIDE_NECK:                  # the smooth neck column joins his body (one object: no line where it meets)
+        Vn, Tn = neck_column(out)
+        # body skin INSIDE the column (the upper chest round the neck's base, the throat) is under the neck's skin:
+        # left drawn, its edges poked through the column as a hooked line at the throat (chat 38)
+        a0, a1 = out['J']['neck'] - out['Rc'][:, 1] * 0.05, out['J']['head']
+        ax_ = _u(a1 - a0)
+        d_ = Pj - a0
+        al = d_ @ ax_
+        rr = np.linalg.norm(d_ - np.outer(al, ax_), axis=1)
+        inside_col = (al > 0.0) & (al < np.linalg.norm(a1 - a0) + 0.06) & (rr < NECK_R[1] * 0.98)
+        tk = tk[~inside_col[tk].all(1)]
+        # the chest and trapezius skin ABOVE the neck's base flows onto the neck (a lip of it stood in front of the
+        # column at the throat, its edge inked as a hooked line, chat 38): those points go to just under its skin
+        lip = (r['region'] == 1) & (al > 0.02) & (al < np.linalg.norm(a1 - a0)) & (rr < 0.10) & (rr > NECK_R[1] * 0.97)
+        if lip.any():
+            radial = (d_ - np.outer(al, ax_))[lip]
+            Pj = Pj.copy()
+            Pj[lip] = a0 + np.outer(al[lip], ax_) + radial / rr[lip][:, None] * NECK_R[1] * 0.97
+        tp = np.array([BP.PARTS[int(np.bincount(r['part'][tt]).argmax())] for tt in tk])
+        ni = np.where(neckb & r['keep'])[0]
+        src = ni[np.argmin(np.linalg.norm(Pj[ni] - out['J']['neck'], axis=1))]   # its colour: a neck skin point's
+        tk = np.concatenate([tk, Tn + len(Pj)])
+        tp = np.concatenate([tp, ['skin'] * len(Tn)])
+        attrs = np.concatenate([attrs, np.repeat(attrs[src][None], len(Vn), 0)])
+        Pj = np.concatenate([Pj, Vn])
+    objs = [(Pj, tk, tp, 'jason')] + scene(out)[1:]
     res = []
     for view in ('shot', 'outside'):
         if view == 'shot':
@@ -1557,14 +1648,20 @@ def dressed_still(path, name='K4', t=1.95, scale=2):
             import sets as S
             cam = S.Cam(*SIDE_CAMS['outside'])
         ob_ = objs if view == 'shot' else [o for o in objs if not (o[3].startswith('door') and 'rear' not in o[3])]
-        zb, pb, ob, names = BD.raster(cam, ob_, scale, np.concatenate([rv, rg], 1))
+        zb, pb, ob, names = BD.raster(cam, ob_, scale, attrs)
+        pb = clean_parts(pb, ob, 9 * scale // 2)
         edge = BD.ink(zb, pb, ob, 3 * scale)
+        from scipy import ndimage                    # ink specks too small to be a line (left at the throat, chat 38)
+        lab, nl = ndimage.label(edge)
+        if nl:
+            sz = ndimage.sum(edge, lab, range(1, nl + 1))
+            edge &= ~np.isin(lab, np.where(sz < 60 * scale * scale)[0] + 1)
         img = BD.compose(zb, pb, ob, names, edge, BD.colours(sp), scale)
         bg = Image.new('RGBA', img.size, SKY + (255,))
         bg.alpha_composite(img)
         img = bg
         k = house_pose(out)
-        head, _ = BD.house_head(cam, k, sp)
+        head, _ = BD.house_head(cam, k, sp, neck=not DRESS_HIDE_NECK)
         BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale)
         img.convert('RGB').save(path if view == 'shot' else path.replace('.png', '-outside.png'))
         res.append(img)
