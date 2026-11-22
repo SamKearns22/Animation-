@@ -24264,23 +24264,46 @@
      "1,4-6 O2: the police car is a tiny blurred blob, and its lights are a smudge in 5. It can't be named as a police car at phone size.",
      "1,4-6 P1: is a pistol held at all? The people are too small at phone size. A full-size crop of Jason's hands would show it."
     ]
+   },
+   {
+    "round": 45,
+    "pass": 1,
+    "stage": "notes",
+    "date": "2026-11-22",
+    "hunt": 1,
+    "faults": 9,
+    "cant_tell": 3,
+    "open": [
+     "2-3 P4 A2: Jason's face and arms in the close shots are much paler than the tan reference, and his face is narrower, so he reads as a different man.",
+     "1-6 A2: The red-haired woman's headphones are teal/blue in the car; the reference is black.",
+     "1-6 A1 O3: The red hood with two dark stripes reads as a road, not a 1970s muscle car. In 2 and 3 there is no bonnet shape at all. The bottom black band with a ",
+     "1,4-6 A1: The red-haired woman sits in the front row between Jason and Lucia. The brief puts her in the back.",
+     "2 P2: Lucia's wide-open shouting mouth with teeth is a different, rounder face from her stern reference. It is overdone, and the following panel has her blank.",
+     "3-4 O3: Jason's gun is held flat against his ear/cheek and reads as a phone or a grey block, not a pistol.",
+     "3-4 O1: The \"LEONIDA\" shirt text is cropped by the dashboard and reads as a smudge. Not legible at phone size.",
+     "5 O6: The blue police flash is a soft blurry glow blob above the windshield. It has no light shape, and it reads as a smudge.",
+     "2-3 P2: Everyone stares at the camera and nobody looks at the police or road; there is no fear or urgency. The lack of reaction to the chase reads as flat.",
+     "1,4-6 P1: The people are too small to see whether the fingers touch the gun. A full-size crop of Jason's hand would show it.",
+     "2-3 P12: Only Lucia's mouth changes between panels, and no speaker label is given. A frame list of who speaks would show it.",
+     "1-6 P7: The lower bodies are hidden behind the cowl and dash, so the thighs and lap cannot be checked. A view of the seat area would show it."
+    ]
    }
   ],
   "lines": {
    "A2": {
-    "faults": 22,
+    "faults": 24,
     "false": 0
    },
    "P4": {
-    "faults": 17,
-    "false": 0
-   },
-   "A1": {
     "faults": 18,
     "false": 0
    },
+   "A1": {
+    "faults": 20,
+    "false": 0
+   },
    "P2": {
-    "faults": 24,
+    "faults": 26,
     "false": 0
    },
    "P5": {
@@ -24316,7 +24339,7 @@
     "false": 0
    },
    "O1": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "O2": {
@@ -24328,7 +24351,7 @@
     "false": 0
    },
    "O3": {
-    "faults": 5,
+    "faults": 7,
     "false": 0
    },
    "M5": {
@@ -24360,7 +24383,7 @@
     "false": 0
    },
    "O6": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "M4": {
