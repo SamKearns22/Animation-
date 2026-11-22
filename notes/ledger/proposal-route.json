@@ -6718,6 +6718,139 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-22",
+   "chat": "56d8e5c4",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.21,
+   "src": "estimate",
+   "sid": "session_01U3pKR36uALh2iRkpP1tyQ4",
+   "steps": 12,
+   "hist_k": 100,
+   "kinds": {
+    "tool search": 10.6,
+    "other": 89.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.6985,
+    "total": 0.6985,
+    "floor_k": 81,
+    "blocks": {
+     "start-up floor": 50.1,
+     "Claude's words": 29.0,
+     "new writes": 17.9,
+     "carried history": 3.1
+    },
+    "origins": {
+     "start-up floor": 50.1,
+     "Claude's words": 35.9,
+     "result: tool search": 6.9,
+     "messages and reminders": 6.8,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 50.1,
+     "thinking": 19.2,
+     "messages to Sam": 11.2,
+     "messages and reminders": 6.8,
+     "commands": 3.9,
+     "reading guides": 3.7,
+     "start-up and handover tools": 2.4,
+     "helper and chat prompts": 1.6,
+     "reading notes": 0.8,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 81,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/propose.py",
+      0.7,
+      0.0063
+     ],
+     [
+      ".claude/settings.json",
+      0.4,
+      0.0034
+     ]
+    ],
+    "base_pct": 23.2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "guides": 2,
+     "shared:propose.py": 2,
+     "film notes": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      1,
+      "other",
+      "guides",
+      ".claude/rules guides/film-quality-rules.md guides/job-packs.md",
+      "can't yet\\|honest",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md guides/job-packs.md",
+      "15%\\|week",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:propose.py",
+      ".claude/settings.json source/propose.py",
+      "def main\\|argv\\|draft",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "def cmd_hook\\|def hook",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md",
+      "cd /home/user/Animation-; git diff notes/proposals/unrouted.md | head -20; git a",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
