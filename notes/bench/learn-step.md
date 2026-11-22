@@ -253,3 +253,12 @@ area per side, no island under N px - proposed via the proposal route).
   these known-broken frames).
 - Why no check caught it before: the get-up was only fast-checked (joints, no skin) in chat 36 and never with span.py
   (chat 37 skipped it). The fast check prints pops but not crossings: span.py is the gate for any in-between change.
+- Sam's order (relayed by chat 38, read late this chat; verified in his own words): speed-up FIRST. Step (a) done,
+  timings (this machine, 4 processors): grey frame ~15 s = fold press 10.1 (inside the second body solve), body
+  through body check 1.8, pistol 0.1, other checks ~0, shot view 1.3, outside view 1.6; plus a start-up of ~73 s per
+  run. Dressed still 105 s = start-up fits re-run inside it 65 s (fit_ankles 41, fit_knee 14.5, fit_seat 9: fixed
+  numbers, never cached), the pose solve 16 (fold press), drawing both views at double size ~16 (raster 6, house head
+  twice 5, ink 1.8, clean_parts 1.6, compose 1.5). So chat 38's "mostly the drawing step" was wrong: the speed-up's
+  biggest items are the fold press (its inside tests: the distance grid idea) and caching the fits; then drawing.
+  Next: step (b), the proposal route (source/propose.py) for the speed-up with Sam's three extra items, then Sam's
+  numbers, then build; then the get-up re-plan (above), the 3 cm question (via the route too: it changes a check).

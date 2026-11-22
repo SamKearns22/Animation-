@@ -137,21 +137,29 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
   render-time factors (16:46).
 
-## Where things stand (22 Nov, chat 38, Opus high)
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 2-3 (Sam's neck/strap notes); proposal route.
-- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
-  style; circle hands.
-- Done: pistol, knees, arm/chest (1.1 cm left); middle grey clip critiqued, named, SENT; dressed K4 still sent;
-  Sam's neck note fixed; strap note half-fixed (still an island: learn-step "chat 38").
-- Next: chat 39, Opus high: elbow pop 22 cm at 1.1 s (chat 38's B3); vest strap island (resend still); getting up
-  13-23 / sitting down 176-190; full run + whole grey clip (~80 min); the 3 cm question. Details: learn-step "chat 38".
-- Needs Sam: the 3 cm question after the full run (budget stops: Sam N, 22 Nov: never ask again).
-- Read: notes/bench/learn-step.md "Stage 1, chat 38"; bench_move.py MAP; notes/bench/sam-notes/.
+## Where things stand (22 Nov, chat 40, Opus high)
+- Rules that bite next: proposal route (the 3 cm question still needs it); Fix the drawing, never the shot; Seeing
+  like Sam 1 (in motion, phone and full size).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included (K1 0.5, K2 1.0,
+  K3 1.4 ... K2 7.4, K1 7.8); the house art style; circle hands.
+- Done: speed-up proposal through the route (notes/proposals/bench-speedup.md: verdict recorded, judge picked
+  helper A, blind; 9 faults found, 5 fixed, 4 named). Option 1 = exact speed-up step by step (saved fits; faster
+  EXACT inside test by counted ray crossings, old sum as referee; checks-first lock; frame store + redraw only
+  changed frames, lossless bundle on GitHub; compiled fill + head once; 4-at-a-time only if processors sit idle).
+  The distance grid is dropped: every tested point is 1.5-3 mm from the skin, inside its "exact" band anyway.
+- Next: on Sam's numbers, THIS chat opens chat 41, Opus medium (building from a clear plan): the "learn first"
+  record (old answers, fits, proof.txt, 12 grey frames, timings), then each step he said Y to, in the verdict's
+  order, each kept only if its bar is met (identical answers / pixels). Then the get-up re-plan (learn-step chat
+  39), then the 3 cm question via the route.
+- Needs Sam: speed-up Q1 (option 1 or 2) and Q2 (which steps of option 1). No stills (in motion only).
+- Read: notes/proposals/bench-speedup.md "Verdict" (Final version); notes/bench/learn-step.md "Stage 1, chat 39".
 - Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
-  house-look lock (option 1 step 4).
-- For Claude: `bench_move.py clip|dressed`; span.py, look.py. CLAUDE.md sentence flag (60e25406, not this chat): kept,
-  bracket added.
-
+  house-look lock (option 1 step 4); dressed-still "pieces" test (chat 38's idea, via the route).
+- For Claude: inside test = bench_move `_winding`/`_inside2` (20,304 tris, 19,158 pts; wrist holes open: lids
+  needed for ray counting); fits fit_seat/knee/ankles; raster/house_head in bench_draw; span.py is the gate.
+  propose.py mark bench-speedup adopted after Sam's numbers. Branches dreamy-fermi-vkhutz (story post) and
+  gta-chat31 (old lean-out): not merged, as before. Two "Where things stand" on purpose (this strand, the
+  animatic strand); CLAUDE.md "Choose views..." flag: reworded by Sam, kept.
 
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
@@ -208,3 +216,5 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - For Claude: FAR58/FAR_PEOPLE58, chest_gun (gta_shots58, leanout.draw_gun); `--span` clip. Two "Where things stand"
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 83.37% of 15%; forecast 87% (2026-11-22)

@@ -707,3 +707,40 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 79.6% of 15%; forecast 83.2% (2026-11-22)
 
+
+## Where things stand (22 Nov, chat 38, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 2-3 (Sam's neck/strap notes); proposal route.
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
+  style; circle hands.
+- Done: pistol, knees, arm/chest (1.1 cm left); middle grey clip critiqued, named, SENT; dressed K4 still sent;
+  Sam's neck note fixed; strap note half-fixed (still an island: learn-step "chat 38").
+- Next: chat 39, Opus high: elbow pop 22 cm at 1.1 s (chat 38's B3); vest strap island (resend still); getting up
+  13-23 / sitting down 176-190; full run + whole grey clip (~80 min); the 3 cm question. Details: learn-step "chat 38".
+- Needs Sam: the 3 cm question after the full run (budget stops: Sam N, 22 Nov: never ask again).
+- Read: notes/bench/learn-step.md "Stage 1, chat 38"; bench_move.py MAP; notes/bench/sam-notes/.
+- Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
+  house-look lock (option 1 step 4).
+- For Claude: `bench_move.py clip|dressed`; span.py, look.py. CLAUDE.md sentence flag (60e25406, not this chat): kept,
+  bracket added.
+
+
+
+## Where things stand (22 Nov, chat 39, Opus high)
+- Rules that bite next: proposal route (the speed-up and the 3 cm question are both changes); Fix the drawing,
+  never the shot; Seeing like Sam 1 (in motion, phone and full size).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included (K1 0.5, K2 1.0,
+  K3 1.4 ... K2 7.4, K1 7.8); the house art style; circle hands.
+- Done: gun elbow pop 22 -> 13 cm (rest is speed); vest strap one band (back neckline); speed-up step (a), timings
+  (learn-step "chat 39"); getting up / sitting down measured with the real checks: broken (needs a re-plan).
+- Next: chat 40, Opus high: speed-up step (b), the proposal route (Sam's Y: distance-grid inside test, compiled
+  triangle fill, head once, 4 frames at a time, cached start-up fits, quick checks first, redraw only changed
+  frames, frames kept between chats); ask Sam; build after his numbers. Then the get-up re-plan, the 3 cm question.
+- Needs Sam: the speed-up proposal (chat 40). No stills (Sam: in motion only).
+- Read: notes/bench/learn-step.md "Stage 1, chat 39"; "Sam's decisions, 22 Nov evening" above; source/propose.py MAP.
+- Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
+  house-look lock (option 1 step 4); dressed-still "pieces" test (chat 38's idea, via the route).
+- For Claude: span.py is the gate for any in-between change; `_rel_hand` elbow, THIGH_BLEND, GUN_THROUGH; scratch
+  timing/profiles were in the chat's scratchpad (lost); fits: fit_ankles/knee/seat. Two "Where things stand" on
+  purpose (this strand, the animatic strand); CLAUDE.md "Choose views..." flag: reworded by Sam, kept. Branch
+  claude/gta-chat31 (leanout.py, show log): chat 31's old lean-out, superseded by bench_move; not merged.
+
