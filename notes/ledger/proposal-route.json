@@ -5856,56 +5856,56 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.35,
+   "cost": 0.7,
    "src": "estimate",
    "sid": "session_01GznaATLDiLViEJgr9HLUfs",
-   "steps": 19,
-   "hist_k": 142,
+   "steps": 34,
+   "hist_k": 153,
    "kinds": {
-    "tool search": 22.2,
-    "other": 77.8
+    "tool search": 13.2,
+    "other": 86.8
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 13,
+    "tool search": 14,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 5
+    "other": 11
    },
    "split": {
-    "usd": 1.2738,
-    "total": 1.2738,
+    "usd": 2.5559,
+    "total": 2.5559,
     "floor_k": 92,
     "blocks": {
-     "start-up floor": 39.9,
-     "new writes": 31.8,
-     "Claude's words": 19.7,
-     "carried history": 8.6
+     "new writes": 44.8,
+     "start-up floor": 27.0,
+     "Claude's words": 17.1,
+     "carried history": 11.1
     },
     "origins": {
-     "start-up floor": 39.9,
-     "Claude's words": 26.7,
-     "result: tool search": 21.7,
-     "result: other": 6.6,
-     "messages and reminders": 5.2
+     "messages and reminders": 31.6,
+     "start-up floor": 27.5,
+     "Claude's words": 23.8,
+     "result: tool search": 12.9,
+     "result: other": 4.3
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 39.9,
-     "git and saving": 10.6,
-     "messages to Sam": 6.8,
-     "commands": 6.4,
-     "reading notes": 6.4,
-     "reading chat records": 6.1,
-     "thinking": 5.9,
-     "messages and reminders": 5.2,
-     "helper and chat prompts": 3.8,
-     "writing code": 3.7,
-     "start-up and handover tools": 3.0,
-     "other commands": 1.7,
-     "app tools (chats, files sent)": 0.5
+     "messages and reminders": 31.6,
+     "start-up reading (rules, tools, first files)": 27.5,
+     "messages to Sam": 7.1,
+     "git and saving": 6.3,
+     "thinking": 4.6,
+     "helper and chat prompts": 4.4,
+     "writing code": 4.1,
+     "reading notes": 3.9,
+     "commands": 3.6,
+     "reading chat records": 3.6,
+     "start-up and handover tools": 1.8,
+     "other commands": 1.0,
+     "app tools (chats, files sent)": 0.6
     },
     "leftover": 0.0
    },
@@ -5917,20 +5917,20 @@
      [
       "notes/proposals/milburn-review.md",
       2.7,
-      0.0262
+      0.0315
      ],
      [
       "source/propose.py",
       1.9,
-      0.0187
+      0.0224
      ],
      [
       "notes/archive/milburn.md",
       1.6,
-      0.0157
+      0.0189
      ]
     ],
-    "base_pct": 23.4
+    "base_pct": 21.4
    },
    "search": {
     "show": 0,
@@ -5938,7 +5938,7 @@
      "no show": 0
     },
     "other": {
-     "film notes": 7,
+     "film notes": 8,
      "shared:propose.py": 3,
      "shared:leanout.py": 1,
      "shared:elder_swindon.py": 1,
@@ -6050,6 +6050,14 @@
       "notes/proposals/dearest",
       "dearest-grand-theft-autism-[23]\\|grand-theft-autism-2\\b",
       ""
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "notes/real-cost.md notes/check-repairs.md",
+      "cd /home/user/Animation-; git status --short | head; git fetch -q origin claude/",
+      ""
      ]
     ]
    },
@@ -6063,7 +6071,94 @@
    "round": null,
    "cost": 5.91,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "steps": 24,
+   "hist_k": 156,
+   "kinds": {
+    "tool search": 20.6,
+    "other": 79.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 15,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 21
+   },
+   "split": {
+    "usd": 1.4966,
+    "total": 1.4966,
+    "floor_k": 95,
+    "blocks": {
+     "start-up floor": 39.2,
+     "new writes": 32.1,
+     "Claude's words": 19.0,
+     "carried history": 9.6
+    },
+    "origins": {
+     "start-up floor": 39.2,
+     "Claude's words": 26.5,
+     "result: other": 16.7,
+     "result: tool search": 15.6,
+     "messages and reminders": 2.0
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 39.2,
+     "reading chat records": 11.9,
+     "reading notes": 9.6,
+     "helper and chat prompts": 8.5,
+     "commands": 7.2,
+     "thinking": 6.7,
+     "start-up and handover tools": 6.0,
+     "helper results": 4.0,
+     "writing notes": 3.1,
+     "messages and reminders": 2.0,
+     "messages to Sam": 1.0,
+     "app tools (chats, files sent)": 0.8
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 95,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/propose.py",
+      2.0,
+      0.0219
+     ],
+     [
+      "notes/proposal-route.md",
+      1.8,
+      0.0212
+     ],
+     [
+      "guides/job-packs.md",
+      0.7,
+      0.0077
+     ],
+     [
+      "guides/proposal-route/helper.md",
+      0.7,
+      0.0074
+     ],
+     [
+      "notes/proposals/named-lines.md",
+      0.5,
+      0.0052
+     ],
+     [
+      "notes/ledger/sam/gr9hlufs.md",
+      0.1,
+      0.0009
+     ]
+    ],
+    "base_pct": 26.5
+   }
   }
  ],
  "checks": {}

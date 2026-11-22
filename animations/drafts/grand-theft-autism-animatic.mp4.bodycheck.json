@@ -1,10 +1,20 @@
 {
  "video": "grand-theft-autism-animatic.mp4",
  "faults": [
-  "body check NOT run: Sam ordered all checks overruled (21 Nov)"
+  "BODY: gta-v4-clean.mp4 14.92 s: Jason: L forearm drawn 0.2x its length (end-on to the lens: reads as a stub) (1 drawing)",
+  "BODY: gta-v4-clean.mp4 15.33 s: Jason: seen from behind (105 degrees turned from the lens, 14% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (43 drawings)",
+  "BODY: gta-v4-clean.mp4 15.42 s: Jason: R forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (13 drawings)",
+  "BODY: gta-v4-clean.mp4 15.50 s: Jason: R forearm drawn 0.1x its length (end-on to the lens: reads as a stub) (3 drawings)",
+  "BODY: gta-v4-clean.mp4 15.67 s: Lucia: seen from behind (102 degrees turned from the lens, 18% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (11 drawings)",
+  "BODY: gta-v4-clean.mp4 17.92 s: Jason: the left arm crosses to the other shoulder's side of the body: both arms read as one side (Ad-Vanced 57-58: a hand each side) (2 drawings)",
+  "BODY: gta-v4-clean.mp4 19.67 s: the cruisers' drivers 1: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (1 drawing)",
+  "BODY: gta-v4-clean.mp4 21.67 s: Jason: L forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (1 drawing)",
+  "BODY: gta-v4-clean.mp4 22.33 s: Vice City passers-by on the shop pavements 58: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (7 drawings)",
+  "BODY: gta-v4-clean.mp4 22.83 s: Vice City passers-by on the shop pavements 64: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (5 drawings)",
+  "BODY: gta-v4-clean.mp4 22.92 s: Vice City passers-by on the shop pavements 61: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (4 drawings)"
  ],
  "named": true,
- "why_named": "Sam's order, 21 Nov",
- "critique": "skipped on Sam's order, 21 Nov",
- "made": 1795274246.0930638
+ "critique": "source/data/critique/grand-theft-autism/r43-p1",
+ "made": 1795376936.6285589,
+ "why_named": "Sam said just go (22 Nov): shot 4 Jason faults known (3D rebuild pending); shot 1 (0-7 s) reused from v3, not rechecked; sound is v3's mix"
 }

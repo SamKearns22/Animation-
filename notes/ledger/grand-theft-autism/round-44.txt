@@ -1,0 +1,66 @@
+== critique, round 44 pass 1 (2026-11-22): 8 fault(s), 2 can't tell
+-- look.md --
+1: Red convertible from behind, three people inside, police car with lights behind, pink sky city street. Text "22.92 s shot 5".
+2: Close view: man holding a gun, red-haired woman worried, dark-skinned woman shouting. Shirt "LEONIDA" partly. Text "26.83 s shot 6".
+3: Same close view: man raising a pen or knife, woman frowning, driver calm. Shirt "LEONIDA". Text "30.33 s shot 6".
+4: Wider rear view: man holding finger to lips, three people, police car with lights behind. Text "33.83 s shot 7".
+5: Wide rear view: man pointing gun, police car with blue light behind, street with pedestrians. Text "35.50 s shot 8".
+6: Wide rear view: man aiming gun, redhead uneasy, driver, police car behind. Text "37.83 s shot 8".
+-- result.md --
+## Faults
+FAULT P4 [2-3]: Jason's face and arms - skin reads much paler and greyer than the tan reference, and the stubble is missing; he looks like a different man.
+FAULT P1 [3]: Jason's raised hand - holds a thin stick, pen or blade, not the pistol the brief says he holds; no clear grip, and it cannot be named at phone size (also O3).
+FAULT P1 [4]: Jason's hand - raised to his lips with no pistol anywhere; the brief puts a pistol in his hand in every panel.
+FAULT P6 [1, 4-6]: Jason's and Lucia's hands - too small at phone size to read; Lucia's hands on the wheel are hidden behind the dashboard; Jason's gun hand is a smudge, so the pistol cannot be named.
+FAULT P2 [1, 4-6]: the three faces - at phone size none shows a clear feeling; heads are tiny and the acting is unreadable. Panel 2 has a shouting mouth, but panel 3 returns the driver to blank with no beat between them.
+FAULT P12 [2]: Lucia's mouth - open and shouting in panel 2 and closed in panel 3 on the same shot; nobody is labelled as speaking, so I cannot confirm it is on her words.
+FAULT P13 [2-3]: Jason's vest - the LEONIDA print is cut off by the arm and the frame edge ("/A" only), so the pattern does not run to every edge.
+FAULT O2 [2-3]: Jason's arm and the windscreen frame - the arm crosses the glass edge and the pillar with no clear overlap order.
+CAN'T TELL P8 [1, 4-6]: whether Jason's gun faces the right way round in his hand; a close crop would show it.
+CAN'T TELL O4 [1, 4-6]: the police car sits ahead of the car, seen through the windshield, not behind in a chase; a wider frame or the shot plan would show where the camera sits.
+CAN'T TELL A4 [all]: there is no Hook Text frame in the sheet, so overlap with faces and hands is unchecked.
+
+## Checked
+1-6
+
+## Cold look
+look.md named the red car, the three people, the police car and the gun in 1, 2, 5 and 6. It missed that no pistol shows in panels 3 and 4: I guessed "pen or knife" and "finger to lips". I also named the driver "calm" and "shouting" without knowing it was Lucia. I did not see skin tone drift, because I had no reference yet. The look gave no sign that police were ahead of the car, not behind.
+
+## Not on the list
+- Panels 2-3 are a different, much closer framing from 1 and 4-6, with a much bigger red bonnet; the car looks like a different size. suggested line: "Same prop is the same size across every shot of the sequence."
+- Scenery repeats: the same pink skyline and palms in every frame, so there is no sense of speed. suggested line: "Backgrounds change position between frames when the car is moving."
+- The black strips on the bonnet read as odd flat shapes, not the stripes of a muscle car. suggested line: "Named vehicle marks read as that vehicle's marks."
+- The black bar at the bottom of the frame with a white blob (a plate or badge?) is unexplained. suggested line: "Every shape in the frame can be named."
+
+== critique, round 44 pass 2 (2026-11-22): 8 fault(s), 1 can't tell
+-- look.md --
+1: Red convertible rear view, three people inside, police car behind with lights; pink sky, city street. "22.92 s shot 5"
+2: Close on three: man holding gun, red-haired woman, dark-haired woman with open mouth; stripes on hood. "26.83 s shot 6"
+3: Same close view; man raises gun left, women calm, mouths closed; shirt text "LEONIDA". "30.33 s shot 6"
+4: Wide rear view of car, three occupants, police car with blue/red lights behind; shirt "LEONIDA". "33.83 s shot 7"
+5: Wider street, car with three occupants, man holding gun, blue police light glowing behind. "35.50 s shot 8"
+6: Same street, three occupants, man with gun, police car behind with blue lights. "37.83 s shot 8"
+-- result.md --
+## Faults
+FAULT P2 [1-6]: all three look straight at the camera with flat, calm faces; nobody looks at the police or shows chase tension. Only Lucia in 2 has an open mouth, and nobody else reacts to it.
+FAULT P12 P2 [2]: Lucia's mouth is open while the other two are closed. No speaker is shown, so it reads as a stray talking mouth.
+FAULT A2 [2-6]: the red-haired woman's headphones are teal/cyan; the reference's are black. The unicorn print is not visible in any panel.
+FAULT P4 [2, 3]: Jason's skin and face look paler and wider than the reference's tan face with stubble. His hair also looks lighter in 3.
+FAULT P1 P6 [3]: Jason's raised hand at the left edge is cropped and has no gun. The brief says he holds a pistol. In 2 the pistol is a thin diagonal against his chest, and I can't tell whether the hand touches it.
+CAN'T TELL P1 [1, 4, 5, 6]: is a pistol held at all? The people are too small at phone size. A full-size crop of Jason's hands would show it.
+FAULT O3 [1-6]: the dark stripes on the red bonnet look like a pair of trouser legs, not racing stripes. The grey bottom band with a white hexagon reads as nothing: no bumper, no plate, no badge.
+FAULT O4 [2, 3 vs 1, 4-6]: the car's scale jumps between shots. In 2 and 3 the occupants fill the windscreen and the bonnet is huge. In 1 and 4-6 they are tiny.
+FAULT O2 [1, 4-6]: the police car is a tiny blurred blob, and its lights are a smudge in 5. It can't be named as a police car at phone size.
+
+## Checked
+1-6
+
+## Cold look
+I read all panels as three people in a red convertible with a police car behind them. That matches the brief. I missed that nobody looks at the police, and I didn't name the missing gun in 3. I took the stripes as hood stripes without noticing they read as trousers.
+
+## Not on the list
+1. Camera views the car front-on while the police are behind it, so the occupants face the lens and not the chase. Suggested line: gaze direction matches the story's threat.
+2. Steering wheel and dashboard cut the torsos, so no seats or laps are visible. Suggested line: seated people show a seat or lap.
+3. Panel 3 has Jason waving or raising a hand with no clear purpose. Suggested line: each gesture has a stated reason from the beat.
+4. The HUD time and shot label sits over the sky and edges. Suggested line: overlays cover no sign or action.
+

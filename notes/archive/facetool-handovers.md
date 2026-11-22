@@ -408,3 +408,25 @@
 - **Open rule requests:** none.
 - **For Claude:** FH.measure_head/_head_rows/drawn_head/_swept_measured/_Squeeze/compare/STRONG, SHAPE_PUSH, SKIN_BIAS,
   HEAD_EYES, EYE_OPEN_HEAD; pick key 'head', lines `head`, `shape_push`; `facehouse.py compare OUT walliams blessed:walliams`.
+
+
+## Face tool, where things stand (chat 17 of the face chain, 14 Nov)
+- **Rules that bite next:** 30 (Walliams is a repeated note: say why if Sam still can't see him), 85 (amber here), 86.
+- **Done (chat 17):** the push now works on the head's PROPORTIONS from the card (face width x1.08, jaw 0.98 of the
+  cheeks against the photos' 0.87, chin squarer), every feature scaled so the eyes sit apart as his photos say (the
+  pick's tiny eyes had pulled them in a sixth), ears on the drawn face's edge, the turned views on the measured widths.
+  Beard: the segmenter already counts it as face skin (jaw), nothing to add. New kittest facehouse_head_proportions
+  (fails on chat 16's head); the 4 face kittests and outfit_every_view pass; Andy and Kemi held pixel for pixel.
+  Sent Sam `notes/morning/walliams-head-c17.jpg` with chat 15's outfit sheet.
+- **Name test:** not named (Jenrick 12%), line-up 7th of 8; uncalibrated for him (the helper can't name his photo).
+- **Sam approved (15 Nov, relayed by chat 15 of Protests):** the new Walliams head (`walliams-head-c17.jpg`), the hair's
+  top (the pick offered: his photos' rounded dome), and chat 15's outfit sheet. Nothing left for Sam here.
+- **Next (Opus medium):** Walliams into a people file (head, rounded-dome hair, outfit as approved).
+- **Seen, not fixed:** the side view's stubble edge steps behind the jaw; the mouth is the pick's (narrower than
+  Blessed's smirk). Kittest people_from_a_description fails on protest-tiers' early import (not this job's).
+- **Sam's words kept:** the far temple of a three-quarter stays bare skin. "Please don't limit yourself on budget." Age
+  lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
+- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (WHOLE HEAD, PROPORTIONS).
+- **Open rule requests:** none.
+- **For Claude:** FH.proportions/feature_scale/_cheek/_turn_widths, SHAPE_PUSH 3 (card z), PROP_ROWS, SQUARE;
+  turnhead.Person(widths=); `facehouse.py compare OUT walliams blessed:walliams --turns`.

@@ -19,3 +19,34 @@ Could you explain the factors that make the render so long?
 Fix
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-22T19:45:05
+Continue. Provide time estimate for job finished, 100% legible and anatomically correct human body, and full film animatic.
+
+### 2026-11-22T20:04:40
+A faster inside test?
+
+### 2026-11-22T20:05:52
+Y
+
+Would this speed up the construction of the character overlay?
+
+### 2026-11-22T20:07:47
+If we published this shot right now into the film, what would it look like?
+
+### 2026-11-22T20:08:29
+Dressing it as Jason takes about 5 minutes a frame with today's drawing step. Shot 4 is 197 frames, so about 16 hours for one pass.
+
+This is insane. Surely there's a better way?
+
+### 2026-11-22T20:09:25
+Y
+
+### 2026-11-22T20:12:03
+Any other ways of speeding up chat 39's work?
+
+### 2026-11-22T20:12:53
+Y and investigate the bigger computer
+
+### 2026-11-22T20:16:06
+I need to see it in motion, don't worry about the stills, we just need to speed it up/make it quality so there's no notes
+

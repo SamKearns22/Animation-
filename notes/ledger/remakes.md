@@ -27,3 +27,6 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-11 | ABA1v3RU | app | sonnet | Remakes: final render (1.1x, new captions) |  | 0.27 | 0.97 | 0 | 0 |
 | 2026-11-11 | egMj1SuN | app | opus | Remakes: blue banner in last shot |  | 0.34 | 1.23 | 0 | 0 |
 | 2026-11-11 | dMz4dMHA | app | opus | Remakes: S13 banner fix, clip, then final |  | 0.19 | 0.69 | 0 | 0 |
+
+## Checks (runs, faults, by kind)
+- quick check: 1 runs, 10 faults (script/mouth 5, caption 3, CAMERA FEEL 1, other 1)

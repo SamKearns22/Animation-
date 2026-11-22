@@ -1,0 +1,35 @@
+== critique, round 45 pass 1 (2026-11-22): 9 fault(s), 3 can't tell
+-- look.md --
+1: Red convertible seen from behind, three people inside, police car with lights behind; "22.92 s shot 5".
+2: Close view: man holds gun up, red-haired woman worried, dark-haired woman mouth open shouting; "26.83 s shot 6".
+3: Man holds gun beside his face, redhead worried, dark-haired woman calm; shirt reads "LEONIDA"; "30.33 s shot 6".
+4: Convertible from behind, man with gun at ear, police lights behind, street with pedestrians; "33.83 s shot 7".
+5: Convertible from behind, man aims gun, blue flashing police light ahead, palms; "35.50 s shot 8".
+6: Same car view, man holds gun, police car with blue and red lights; "37.83 s shot 8".
+-- result.md --
+## Faults
+FAULT P4 A2 [2, 3]: Jason's face and arms in the close shots are much paler than the tan reference, and his face is narrower, so he reads as a different man.
+FAULT A2 [1-6]: The red-haired woman's headphones are teal/blue in the car; the reference is black.
+FAULT A1 O3 [1-6]: The red hood with two dark stripes reads as a road, not a 1970s muscle car. In 2 and 3 there is no bonnet shape at all. The bottom black band with a white blob reads as nothing (plate? grille?).
+FAULT A1 [1, 4-6]: The red-haired woman sits in the front row between Jason and Lucia. The brief puts her in the back.
+FAULT P2 [2]: Lucia's wide-open shouting mouth with teeth is a different, rounder face from her stern reference. It is overdone, and the following panel has her blank.
+FAULT O3 [3, 4]: Jason's gun is held flat against his ear/cheek and reads as a phone or a grey block, not a pistol.
+FAULT O1 [3, 4]: The "LEONIDA" shirt text is cropped by the dashboard and reads as a smudge. Not legible at phone size.
+FAULT O6 [5]: The blue police flash is a soft blurry glow blob above the windshield. It has no light shape, and it reads as a smudge.
+FAULT P2 [2, 3]: Everyone stares at the camera and nobody looks at the police or road; there is no fear or urgency. The lack of reaction to the chase reads as flat.
+CAN'T TELL P1 [1, 4-6]: The people are too small to see whether the fingers touch the gun. A full-size crop of Jason's hand would show it.
+CAN'T TELL P12 [2, 3]: Only Lucia's mouth changes between panels, and no speaker label is given. A frame list of who speaks would show it.
+CAN'T TELL P7 [1-6]: The lower bodies are hidden behind the cowl and dash, so the thighs and lap cannot be checked. A view of the seat area would show it.
+CAN'T TELL A4 [1-6]: No Hook Text frame was supplied.
+
+## Checked
+1-6
+
+## Cold look
+Look.md named the people only as "man", "red-haired woman" and "dark-haired woman" and did not confirm Jason, Lucia or the muscle car. I called the red thing "convertible" without noting the hood reads as a road. I missed the front-row seating of the red-haired woman and the teal headphones. I described the gun as "held" but it reads as a phone-at-ear in 3 and 4.
+
+## Not on the list
+- Driver side: Lucia is at the right-hand wheel, and a US-style car would put her at left. Suggested line: "Steering wheel side matches the place and the car."
+- Police cars are tiny, with lights only, so they cannot be read as police. Suggested line: "Chasing vehicles are nameable at phone size."
+- The pale screen text in 3 may be an overlay stamp. Suggested line: "Time labels are not in the final frame."
+

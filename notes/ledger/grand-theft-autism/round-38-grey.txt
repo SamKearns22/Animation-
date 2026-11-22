@@ -1,0 +1,52 @@
+== critique, round 38-grey pass 1 (2026-11-22): 8 fault(s), 2 can't tell
+-- look.md --
+1: Grey figure kneeling on brown box behind a red car, pistol low; left half shows car
+2: Kneeling grey figure, hand on hip, pistol held low by cover; red car beside
+3: Grey figure pistol low at wooden panel, other hand on hip; red car view
+4: Figure raises pistol near head by wooden panel; red car with dark frame
+5: Pistol raised straight up, grey figure kneeling; red car with dark roof frame
+6: Gun held up high, figure kneeling behind panel; red car beside
+7: Arm extends, pistol aimed left, grey figure behind panel; red car
+8: Pistol aimed left, arm outstretched, kneeling figure; red car close
+9: Pistol aimed left, kneeling figure by wooden panel; no car visible
+10: Aiming left; red car fragment at bottom left edge, mostly cropped
+11: Aiming left; tiny red car sliver at left edge, otherwise empty
+12: Aiming left; red car with small figure appears at bottom left
+13: Small kneeling aiming figure top left, red car piece, large black empty area below
+14: Large grey figure kneeling, hand on hip, pistol held low at panel
+15: Figure hand on hip, pistol low against wooden panel, concerned face
+16: Arm across to panel, pistol low, other hand on hip
+17: Pistol resting on shoulder near panel, hand on hip
+18: Arm bent, pistol raised above head, figure turned
+19: Pistol raised high above head, arm bent, body turned right
+20: Arm reaches left, pistol pointing left, grey figure kneeling
+21: Arm stretched left off edge, gun cropped, hand resting on dark slab
+22: Arm stretched far left, gun cut off, figure kneeling at panel
+23: Arm outstretched left, gun cut off at edge, kneeling figure
+24: Arm outstretched left, gun cut off at edge, same pose
+25: Larger figure kneeling, arm stretched left, gun cropped, hand on dark slab
+26: Same pose as 25, arm outstretched left, gun cropped at edge
+-- result.md --
+## Faults
+FAULT P5 [20-26]: arm starts at the jaw/neck with stray throat ticks, not from a shoulder; no neck (P11).
+FAULT P6 [21-26]: gun hand cut off by the left frame edge; hand lost (P1: touch not visible).
+FAULT P1 [1-3, 14-16]: pistol hangs low against the panel, half hidden; ball hand does not clearly grip it.
+FAULT P3 [17-19]: arm folds to the shoulder and over the head; forearm shorter than upper arm, rubbery bend.
+FAULT P10 [9-11, 13]: car mostly out of shot; red slivers float in empty air (10, 11), car does not read (A1).
+FAULT P7 [25, 26]: stray tick on the left thigh; legs unequal; kneeling weight unclear.
+FAULT P2 [14-26]: no feeling reads; face blank, gaze unclear.
+FAULT P12 [14, 25, 26]: mouth dot on 14, lip notch on 25-26 while nobody speaks.
+CAN'T TELL P10 [4-8]: hand overlaps roof bar; a hand-in-front-or-behind close-up would show it.
+CAN'T TELL P8 [1-8]: inside and outside figures may not share pose or facing; an overlay would show it.
+
+## Checked
+1-26
+
+## Cold look
+Named car, kneeling grey figure, pistol correctly. Wrong: on 15 I wrote "concerned face" but there is no face. Missed: the arm grows from the jaw on 20-26 (I read only "arm stretched"); I took 13's black block as picture, though it is sheet padding.
+
+## Not on the list
+- Pistol cropped off the frame edge in close-ups; suggested line: the prop the beat is about is fully in frame.
+- Left half nearly empty in 9-11; suggested line: both halves of a pair keep the subject in shot.
+- Kneeling box and slab unexplained; suggested line: every set piece reads as something at phone size.
+

@@ -284,6 +284,8 @@ def hook_faults():
 # proposal names), flags any that nothing switches on (unwired), and flags a switched-on step never seen running
 # (ran_faults, from the marks source/hookran.py leaves).
 OFF = {                    # a tool deliberately not switched on, and why (a chat names it here, Sam sees it in notes)
+    'bench_move.py': 'the test-space tool for learning solid-body moves (Sam, chat 32): run by hand by each bench chat '
+                     '(named in the film handover and notes/bench/learn-step.md); joins a job pack when the skill passes',
 }
 SWITCHES = ('.claude/settings.json', '.claude/hooks/setup.sh', 'source/handover.py', 'guides/job-packs.md', 'CLAUDE.md')
 

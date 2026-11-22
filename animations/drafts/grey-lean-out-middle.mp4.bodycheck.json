@@ -1,0 +1,16 @@
+{
+ "video": "grey-lean-out-middle.mp4",
+ "faults": [
+  "BODY: grey test body 1.00 s: Jason (grey test body): planted slide: free hand on door top 1.9 cm (1 drawing)",
+  "BODY: grey test body 1.00 s: Jason (grey test body): self arm R / trunk 1.4 cm (1 drawing)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): pop: elR jumps off its path (6.8 cm) (11 drawings)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): step over 3 cm a frame: elR (6.6 cm) (14 drawings)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): pop: wrR jumps off its path (7.9 cm) (16 drawings)",
+  "BODY: grey test body 1.04 s: Jason (grey test body): step over 3 cm a frame: wrR (5.5 cm) (21 drawings)",
+  "BODY: grey test body 1.08 s: Jason (grey test body): step over 3 cm a frame: elL (3.7 cm) (6 drawings)",
+  "BODY: grey test body 1.71 s: Jason (grey test body): self arm R / trunk 1.1 cm (1 drawing)"
+ ],
+ "named": false,
+ "critique": null,
+ "made": 1795368649.9554675
+}

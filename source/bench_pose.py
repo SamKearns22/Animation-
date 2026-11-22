@@ -103,10 +103,15 @@ def part_at(rest, grp):
     ax = np.abs(x)
     g = grp.argmax(1)
     part = np.zeros(len(rest), int)
-    trunk = g == 0
+    # trunk by the rest body's SHAPE as well as its bones: inside the shoulder line (|x| < 1.45) skin that moves with
+    # the arm is still chest and shoulder top, so the vest strap stays one band when the arm is raised (Sam, 22 Nov,
+    # K4 still: the strap was a torn island cut off from the vest front)
+    trunk = (g == 0) | ((g == 1) & (ax < 1.45) & (y > 5.0) & (y < 7.95))
     vest = trunk & (y >= 2.6) & ~((ax > 1.5) & (y > 5.7))
     neck_front = (z > 0) & (y > 6.75 - 0.25 * np.clip((ax - 0.0) / 0.9, 0, 1) * 0) & (ax < 0.85)
-    neck_back = (z <= 0) & (y > 7.35) & (ax < 0.85)
+    # the back neckline lower (chat 39): a scrap of the back panel above 6.2 showed over the top of his far shoulder
+    # with the shoulder's outline cutting it off from the strap, so the strap read as a torn island (Sam, K4 still)
+    neck_back = (z <= 0) & (y > 6.2) & (ax < 0.85)
     vest &= ~(neck_front | neck_back) & (y < 7.95)
     part[vest] = 1
     part[((g == 0) & (y < 2.6)) | (g == 2)] = 2

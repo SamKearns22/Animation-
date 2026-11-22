@@ -8,3 +8,9 @@ body: 1.75 m
 head: house badenoch, hair braids, look detail
 outfit: suit 30 32 58, shirt white, no tie, open collar
 body: 1.7 m
+
+# walliams: David Walliams
+# (kit person, 22 Nov: the head Sam approved 15 Nov, rounded-dome hair, navy suit; reusable means only, never old content)
+head: house walliams, hair swept, look detail
+outfit: suit 31 34 58, shirt white, no tie
+body: 1.96 m
