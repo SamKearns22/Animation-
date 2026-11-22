@@ -853,11 +853,19 @@ def _crowd(pp, t, dz=0.0):
         z_run = z0 + (dirz * WALK_V * (min(t_run, t_stop) + 3.2) if walker else 0.0)
         away = 1.0 if (z_run > CRASH_Z if side > 0 else z_run > IMPACT[1][1] + 2.6) else -1.0
         u = t - t_run
-        z += away * RUN_V * max(0.0, u - 0.15) * smooth(u / 0.3)
-        F = (0.0, 0.0, away)
+        # chat 33b (F6, Sam's note given three times, rule 30): a runner straight at the lens swings legs and arms in
+        # depth, which a flat drawing cannot show, so from the front he read as standing still. He runs at a slant
+        # for the shop doorways (the stride turns side-on and reads), arms up over his head against the blast.
+        slant = 0.45 if side > 0 else 0.0
+        run = RUN_V * max(0.0, u - 0.15) * smooth(u / 0.3)
+        z += away * run * math.cos(slant)
+        x0 = x0 + side * min(1.3, run * math.sin(slant))
+        F = (side * math.sin(slant), 0.0, away * math.cos(slant))
         j = V.standing(sp)
         ph = u * math.pi * 3.2
         _stride(j, ph, 210.0, 90.0, 140.0)
+        for sd, sg in (('L', -1), ('R', 1)):
+            V.arm_to(j, sd, (sg * 95.0, -150.0 + 12 * math.sin(ph) * sg, 70.0), 'out', 'palm')
         j['lean'] = 16.0
         j['bob'] = 10 * abs(math.sin(ph))
         duck = 0.4 * (1 - smooth(u / 0.5))
