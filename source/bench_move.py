@@ -281,7 +281,7 @@ def _key(name):
         k['hand']['L'] = (DOOR_HAND, _v(0.4, -1, 0.6))
         Rc = _frame(k['c_up'], k['c_fwd'])
         k['hand']['R'] = ('rel', Rc.T @ _v(0.28, -0.04, 0.0), _v(0.3, -0.7, -0.8))   # in front of his shoulder
-        k['gun'] = _v(0.3, 0.6, -0.1)
+        k['gun'] = _v(0.05, 0.6, 0.8)       # muzzle turning up THROUGH the car's front (not out over the door top)
         return k
     if name in ('K4', 'K5'):  # out to the waist, folded over the door top (B, C), chest turned back along the car
         #                       (D), the gun arm along the line to the lead cruiser; K5 the kick
@@ -1302,6 +1302,8 @@ def run(out_dir, draw_frames=True, every=1, span=None):
         bad = {k: v for k, v in c.items() if k in ('car', 'self', 'pistol', 'rom') and v}
         if bad:
             fails.append((int(round(t * FPS)), round(t, 3), bad))
+        with open(os.path.join(out_dir, 'frames.log'), 'a') as fh:      # each frame's result kept as it goes
+            fh.write('%d %.3f %s %s\n' % (int(round(t * FPS)), t, bad or 'clean', c['contacts']))
         if draw_frames and i % every == 0:
             draw(out, cam_at(t)).save(os.path.join(out_dir, 'frames', 'f%04d.png' % i))
     top, over, pops = jumps(track)
