@@ -556,3 +556,19 @@ Jason's movement in shot 4 (FAILED, chat 33's job).
 - [~] Stage 1: source/bench_move.py built (goal-driven solid body, own-skeleton IK, all checks); key poses not yet clean.
 - Branch claude/gta-chat31 (leanout.py DOOR_L change, show log): kept as a record only (Sam's Y, chat 32 pick 4); not merged.
 
+
+## Shot 4: Sam's frame notes of version 4 (chat 16, verbatim in the case study section 7), to fix in the rebuild
+- [ ] Notes 2-4, 11: "When J begins his movement, his lower body becomes visible." "This isn't necessary and I wonder
+      why you made that choice." "His lower body is still visible through the bonnet." "J's legs are 2D and are
+      sticking inside the doorframe." (cause A: the build method, proposal big-body-moves)
+- [ ] Note 8: "The gun is not pointing at his target." "It is firing towards the left."
+- [ ] Note 14: "The eternally bald crowd doesn't notice the explosion or react to it." (bald fixed chat 16; the
+      reaction is fix 3)
+- [ ] Note 16: "At no point do our cast display any acting notes." (acting rows below, rule 74)
+
+
+## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
+- [x] K1-K5: 0 crossings (car, self, pistol), contacts held, joints in range (fixed in the body, not the checks). Sheet notes/bench/stage1-keys.jpg.
+- [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
+- [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
+

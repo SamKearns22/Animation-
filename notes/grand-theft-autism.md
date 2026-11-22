@@ -76,14 +76,7 @@ moves 11.3, animatic1 2.1, round1 9.4, round2 2.4, final 0.35. Full table: notes
 ## Shot 4 rebuild (chat 11 checklist): moved to notes/archive/grand-theft-autism-notes.md (chat 28); the case study
    notes/shot4-case-study/shot4-case-study.md holds everything on shot 4.
 
-## Shot 4: Sam's frame notes of version 4 (chat 16, verbatim in the case study section 7), to fix in the rebuild
-- [ ] Notes 2-4, 11: "When J begins his movement, his lower body becomes visible." "This isn't necessary and I wonder
-      why you made that choice." "His lower body is still visible through the bonnet." "J's legs are 2D and are
-      sticking inside the doorframe." (cause A: the build method, proposal big-body-moves)
-- [ ] Note 8: "The gun is not pointing at his target." "It is firing towards the left."
-- [ ] Note 14: "The eternally bald crowd doesn't notice the explosion or react to it." (bald fixed chat 16; the
-      reaction is fix 3)
-- [ ] Note 16: "At no point do our cast display any acting notes." (acting rows below, rule 74)
+## Shot 4: Sam's frame notes of version 4 (moved to notes/archive/grand-theft-autism-notes.md, chat 38: superseded by the test-space rebuild)
 
 ## Shots 5-8: Sam's notes on the clip (chat 19, 20 Nov ~23:35; "Very cool")
 - [ ] 1. Acting while they speak lacks imagination: use the front-on focus kit (source/focus.py, the BoJack look: head
@@ -219,18 +212,14 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 
 
 
-## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
-- [x] K1-K5: 0 crossings (car, self, pistol), contacts held, joints in range (fixed in the body, not the checks). Sheet notes/bench/stage1-keys.jpg.
-- [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
-- [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
+## Chat 35 (moved to notes/archive/grand-theft-autism-notes.md, chat 38: superseded by the test-space rebuild)
 
 ## Where things stand (22 Nov, chat 38, Opus high)
 - Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 2-3 (Sam's neck/strap notes); proposal route.
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
   style; circle hands.
-- Done: pistol out of his face/wrist, knees planted, arm/chest 2.5 -> 1.1 cm; checked clip tool (body-check record);
-  middle grey clip re-rendered, critiqued (r38-grey-p1), named, SENT; dressed K4 still sent; Sam's neck note fixed
-  (neck column), strap note half-fixed (smoother; still an island: see learn-step "chat 38").
+- Done: pistol, knees, arm/chest (1.1 cm left); middle grey clip critiqued, named, SENT; dressed K4 still sent;
+  Sam's neck note fixed; strap note half-fixed (still an island: learn-step "chat 38").
 - Next: chat 39, Opus high: (1) the elbow pop 22 cm at 1.1 s (made worse by chat 38's B3 gun path: soften B3 or pass
   K2 with speed); (2) vest strap island on the K4 still (diagnosis in learn-step; resend the still); (3) getting up
   13-23 / sitting down 176-190 (span.py); (4) full run + whole grey clip (`bench_move.py clip`, ~80 min); 3 cm question.
@@ -238,10 +227,9 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Read: notes/bench/learn-step.md "Stage 1, chat 38"; bench_move.py MAP; notes/bench/sam-notes/.
 - Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
   house-look lock (option 1 step 4).
-- For Claude: `bench_move.py clip OUT MP4 T0 T1`, `dressed OUT.png K4 1.95`; span.py, look.py; another chain made
-  animatic v4 (GTA 33b/33c, old shot 4). Branch claude/gta-chat31: record only, not merged.
+- For Claude: `bench_move.py clip OUT MP4 T0 T1`, `dressed OUT.png K4 1.95`; span.py, look.py. Branch claude/gta-chat31:
+  record only. CLAUDE.md sentence check (60e25406, not this chat): "Choose views..." kept with an added bracket.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 72.98% of 15%; forecast 76.6% (2026-11-22)
 
 ## Chat 33c (22 Nov, Sonnet): animatic v4 drawn, NOT yet sent
 Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
@@ -251,3 +239,5 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
   (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
 - Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 75.49% of 15%; forecast 79.1% (2026-11-22)
