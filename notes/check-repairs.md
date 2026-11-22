@@ -72,18 +72,13 @@ discover how it can be made more compliant with statement one.")
       the five dearest things and opens each as a proposal through propose.py against Statement 1 (quality first,
       then fewer notes and faults, then cost). Test it on GTA and Milburn; report the top five to Sam in plain words.
 
-## Where things stand (21 Nov, status chat, Opus)
-- Rules that bite next: 30 (a test failing twice: find why the first fix failed), "Seeing like Sam" 2 (a check is done
-  only when it catches the note that taught it), "Rules are permanent" (remove a check only with Sam's Y).
-- Done: the seven items ticked above, on the main line; kittests 94 pass / 11 fail before this chat's new test.
-- Next: Opus, medium effort. First the 'built but not enabled' fix above (a-d), then one by one, find why each fails, fix the kit or the stale
-  test, rerun it and `python3 source/kittests.py` in full at the end: body_check_shot4_v4 (old shot 3 now has 6
-  faults, probably real crossed arms the newer check catches: confirm on the picture), focus_front_heads (broken by
-  the 20 Nov people-kit default change), pose_gallery, lopsided_invented_only, turned_heads_for_anyone, round_page,
-  people_from_a_description (4K vs 1080 image crash), places_ and moves_from_the_acting_list (milburn.py uses the
-  kit before Sam's Y: name or fix), facehouse_whole_head, outfit_every_view (officer and scarf missing at 45-180).
-- Needs Sam: Y/N to switch the budget alarms back on (paused by him 18 Nov).
-- Read: this file only; `python3 source/kittests.py NAME` per test; each test's docstring says what taught it.
-- Open rule requests: none from this job (GTA's held-object check stays in its own notes).
-- For Claude: new code in source/handover.py (size_faults, ledger_faults, push_faults, turns() failed ids, NOT SENT
-  regex), source/watcher.py (hook_faults unwired, PROMISES), .claude/settings.json PreToolUse Bash modelguard.
+## Where things stand (22 Nov, check repairs chat 2, Opus medium)
+- Rules that bite next: "Seeing like Sam" 2 (the hands-behind-the-back gap needs a check that catches it), the proposal
+  route (that check goes through propose.py before Sam sees it), "Rules are permanent" (remove nothing without Sam's Y).
+- Done: Sam's "built then not enabled" fix (a-d) and all 11 failing kit tests (list above); full run 107 of 107 pass.
+- Next: Opus, high effort: the cost audit chat (item above), then the hands-behind-the-back check through propose.py.
+- Needs Sam: Y/N to switch the budget alarms back on (paused by him 18 Nov); my pick Y.
+- Read: this file only (the cost audit item and the budget tracker audit above).
+- Open rule requests: none.
+- For Claude: source/hookran.py; watcher.py built_tools/unwired/ran_faults/OFF; kittest tools_switched_on;
+  people_turned.LIFT; posegallery AVOID "seen on the sheet"; NOT CARRIED lines at start were the status chat's (answered there).

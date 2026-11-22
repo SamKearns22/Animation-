@@ -1915,12 +1915,13 @@ def people_from_a_description():
     PTN.LIFT, PTN.CHIN_V = False, 1.06
     import body as BD                                   # the film's own quality (2): earlier tests leave the quick 1,
     ss, BD.SS = BD.SS, 2                                # which drew half size beside the posted film (full run crash)
+    bss, BL0.B.SS = BL0.B.SS, 2                         # Blessed's own engine (burnham) keeps its own setting
     try:
         out, scores = K.replicate('blessed', tmp, [(8.6, 'jury'), (5.6, 'oath'), (59.5, 'walliams'), (20.5, 'van'),
                                                    (24.0, 'escort'), (60.5, 'gates2')], film_keys=True)
     finally:
         PTN.LIFT, PTN.CHIN_V = neck
-        BD.SS = ss
+        BD.SS, BL0.B.SS = ss, bss
         K.FILM_TURNED.clear()                           # a crash mid-replicate left Blessed's scarf and officer as the
         PTN.KEYED.clear()                               # film's own: outfit_every_view then lost them (full run)
     drawn = set().union(*[set(w) for *_, w in scores])
