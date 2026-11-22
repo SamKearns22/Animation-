@@ -24,6 +24,12 @@ Milburn review section 1 item 10, lesson 6; Sam (19 Nov): "fix and test".
   change questions, 10 routine). Kittest proposal_route_hook in source/kittests.py.
 - A separate proposal (plain-check, 19 Nov) may also change what the guard reads in a change ask.
 
+- From the status chat (22 Nov, session 01GznaATLDiLViEJgr9HLUfs, sent to this chat): when the guard sends a reply
+  back, Sam STILL sees the blocked reply, so he got the same message three times in a row and asked "Why did you write
+  your response 3 times?". Two blocks: (1) a judged proposal asked without naming notes/proposals/aim-check-reviewer.md,
+  (2) the Critiqued line not in the exact words "Critiqued: 6 found, 3 fixed, 3 named". (Both were real asks that had
+  been judged: the cost was the repeats Sam saw, not a missed catch.)
+
 ## Record
 source/propose.py
 source/kittests.py
