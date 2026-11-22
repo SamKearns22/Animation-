@@ -85,6 +85,19 @@ discover how it can be made more compliant with statement one.")
 - [ ] Cost audit chat 2 (Opus medium): `python3 source/dearest.py grand-theft-autism --open 1,2,3`, then the route
       (pack, helpers, judge, record) on #1 first with its cost measured (ledger row), then #2 and #3; show Sam the
       verdicts (propose.py show) with Lost/Added. Then the 278% week check and Sam's Sonnet-render note.
+- Cost audit chat 2 (22 Nov, session_01GznaASKWmDUJAWLniVGoiV) found:
+  - Numbering slipped: the list put to Sam (1 start-up reading, 2 Claude's thinking and code, 3 memory lapses) was
+    hand-written; dearest.py's own numbers put "messages and reminders" at 2, so `--open 1,2,3` opened the wrong
+    thing. Fixed by hand (proposal 2 rewritten to Sam's pick). Still open: the list Sam sees must be the tool's
+    own printout, numbers and all (dearest.py should save what it showed and --open read that).
+  - The route's cost, measured on proposal 1: about 1.2% of a week (two helpers + judge 1.1%, the chat's own steps
+    about 0.1). Three proposals about 3.6%.
+  - Week 15-21 Nov: 126 rows add to 234% as filed. The rows use two different week sizes (before 19 Nov $290, after
+    $366: the 36 app-figure rows hold $160 but say 54.7%); at one size ($366) the week is 205%, still twice a week.
+    2 chats filed under two jobs. The app's own figures for these chats can no longer be read ("not found"), so
+    the estimates cannot be checked against them. Likeliest cause left: the week size itself is too small (set from
+    Milburn's 22 meter points = $80, but other chats ran at the same time, so the points cost more). Needs one meter
+    reading from Sam (the % his usage page shows and when it resets) to set it from all chats in the same window.
 - [ ] The week's record adds to 278% of a week over 149 chats (219 of it estimates, 3 chats filed twice; 42 chats
       filed under proposal-route). That cannot all be real if the weekly limit holds: check the estimates against the
       app's figures for the chats that can still be read, and how chats are filed to jobs (Opus medium).
