@@ -25,3 +25,8 @@ Continue. Provide time estimate for job finished, 100% legible and anatomically 
 ### 2026-11-22T20:04:40
 A faster inside test?
 
+### 2026-11-22T20:05:52
+Y
+
+Would this speed up the construction of the character overlay?
+
