@@ -1,0 +1,39 @@
+== critique, round 43 pass 1 (2026-11-22): 11 fault(s), 2 can't tell
+-- look.md --
+1: Empty pink-sky street, tiny red car far off, yellow hydrant, tall buildings left. Text "8.00 s shot 2".
+2: Red car front view, three people stare ahead, police lights behind, hood dark stripes. "12.50 s shot 3".
+3: Side view red car, man in white tank leans out holding gun up; two passengers. "15.50 s shot 4".
+4: Police car with red lights chases down street; red car and man's face at right. "19.00 s shot 4".
+5: Red car front, three calm-faced people, police lights left, tank top reads "LEONIDA". "22.92 s shot 5".
+6: Close front view, man in tank top, red-haired woman, dark-haired woman with pursed mouth; wary. "27.00 s shot 6".
+7: Same close view; man frowns, hand raised, woman's eyes sideways, third woman stern. "31.00 s shot 6".
+8: Red car front, blue police lights behind, three faces blank, same pose as panel 5. "35.50 s shot 8".
+-- result.md --
+## Faults
+FAULT P4 P3 [2, 5-8]: Jason's skin is pale beige and his face wider, near Asian-looking, against the tan reference. In panel 3 his face is also pinker and sharper-nosed than the cast sheet, and his hair is slicked.
+FAULT P4 [6-7]: Lucia's face is wider and rounder than her reference, and the braided side-ponytail does not read. Her mouth is a pursed "o" in panel 6.
+FAULT P3 P6 [3]: Jason's raised gun arm is far too long and thin, with a stray round tick at the elbow of the other arm. The gun is a tiny dark shape, hard to name at phone size. He leans out with no seat, lap or door contact (P7).
+FAULT P7 P11 [6-7, 2, 5, 8]: the bodies are cut off by the dashboard and windscreen frame, so the heads sit straight on the frame with no neck or shoulders. In 6-7 the heads are large against the car. Nobody seems to sit on a seat.
+FAULT P6 P1 [2, 5-8]: Lucia is the driver, but no hands are on the wheel anywhere. Jason's arms are folded or lost behind the dashboard.
+FAULT O1 [5, 7]: Jason's vest text is cut to "ONIDA" in panel 5, and half hidden in panel 7. It should read LEONIDA.
+FAULT O6 O2 [2, 5, 8]: police lights are a blurry smear floating above the windscreen. There is no readable police car, so the red glow looks like it sits on the roof. In panel 8 the lights turn blue with no motivation, against red in the other panels.
+FAULT O4 [2, 5, 8]: the bonnet is huge against the three tiny people, and its flat dark stripes carry stray tick marks. This reads as a different car from the side view in panel 3.
+FAULT O4 [1]: the car is tiny and the hydrant is almost as big as it. There are no police and no people to carry the chase beat. A stray diagonal wire crosses the sky.
+FAULT P2 [5, 8]: the faces are blank and identical across the chase. Nobody looks at the police or reacts. Panel 8 is a repeat of panel 5, with no change in feeling.
+FAULT A4 P11 [4]: a giant face is cropped at the right edge. It is far too big against the car and is cut by the frame.
+CAN'T TELL P12 [2-8]: which person speaks, since no labels are given. A close-up of each mouth at its line would show it.
+CAN'T TELL P14 [2, 5, 8]: the eyes are too small to judge at this size. Full-size crops would show it.
+
+## Checked
+1-8
+
+## Cold look
+I named the red car, police lights, the vest text and the three faces. I missed that Jason's skin colour is wrong against the reference. I missed that the heads have no necks. I did not notice that nobody has hands on the wheel. I read panel 4's cropped face only as "man's face", not as a size fault. I read panel 3's figure as a man with a gun but did not see the over-long arm. In panels 2, 5 and 8 I could not tell that the police car was missing; I saw only lights.
+
+## Not on the list
+- Lights or glare that float with no object behind them. Suggested line: every light source sits on a named object.
+- Identical frames at different times with no change in acting. Suggested line: beats at different times must show different feelings or poses.
+- A character cropped by the frame edge at a different scale. Suggested line: no person is cut by the frame edge unless the brief says so.
+- Colour changes between shots (blue lights in panel 8 against red elsewhere). Suggested line: effect colours match across shots.
+- A hand that is lost behind a prop for a whole shot. Suggested line: the driver's hands are visible on the wheel in every shot.
+
