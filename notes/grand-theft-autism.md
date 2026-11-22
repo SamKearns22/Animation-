@@ -224,21 +224,22 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
 - [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
 
-## Where things stand (22 Nov, chat 37, Sonnet)
-- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
+## Where things stand (22 Nov, chat 38, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 2-3 (Sam's neck/strap notes); proposal route.
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included; the house art
   style; circle hands.
-- Done: middle grey clip (1.0-6.45 s, 131 frames, 215 KB) made as animations/drafts/grey-lean-out-middle.mp4, watched,
-  sent to Sam with table and named faults; frames .tgz removed.
-- Next: chat 38, Opus high: FIRST re-render the middle grey clip through a writer that runs the body check, get the fresh critique (rule 89, new helper), send it to Sam (send tool refused the plain-ffmpeg MP4; Sam said 1 Y). Then fix the named faults (pistol 3-4 cm into him 1.25-1.33 s and 0.6-1.1 cm at 1.0-1.1 s; gun arm
-  2.5 cm into his side 1.71 s; left knee slides 3 cm while planted; quick hand moves over 3 cm a frame), the rough
-  dressed still of K4 (Sam's Y), getting up 13-23 / sitting down 176-190 with the real checks, full run, whole grey clip,
-  the 3 cm question.
-- Needs Sam: budget stops Y (chat 28), still open; the 3 cm question after the full run.
-- Read: notes/bench/learn-step.md ("Stage 1, chat 36" and "Chat 36: the middle grey clip"); bench_move.py MAP.
-- Open rule requests: Sam HOLDS the proposal that grey test clips skip the body check (do not raise it);  Sam's held-object check (draft); house-look lock (option 1 step 4, its own proposal).
-- For Claude: notes/bench/span.py A B (real checks); look.py OUT.jpg F.. (4 views); `run OUT T0 T1` (part run).
-  Branch claude/gta-chat31: record only, not merged.
+- Done: pistol out of his face/wrist, knees planted, arm/chest 2.5 -> 1.1 cm; checked clip tool (body-check record);
+  middle grey clip re-rendered, critiqued (r38-grey-p1), named, SENT; dressed K4 still sent; Sam's neck note fixed
+  (neck column), strap note half-fixed (smoother; still an island: see learn-step "chat 38").
+- Next: chat 39, Opus high: (1) the elbow pop 22 cm at 1.1 s (made worse by chat 38's B3 gun path: soften B3 or pass
+  K2 with speed); (2) vest strap island on the K4 still (diagnosis in learn-step; resend the still); (3) getting up
+  13-23 / sitting down 176-190 (span.py); (4) full run + whole grey clip (`bench_move.py clip`, ~80 min); 3 cm question.
+- Needs Sam: Q1 budget (asked chat 38: carry on past the film's allowance?); budget stops Y (chat 28) still open.
+- Read: notes/bench/learn-step.md "Stage 1, chat 38"; bench_move.py MAP; notes/bench/sam-notes/.
+- Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
+  house-look lock (option 1 step 4).
+- For Claude: `bench_move.py clip OUT MP4 T0 T1`, `dressed OUT.png K4 1.95`; span.py, look.py; another chain made
+  animatic v4 (GTA 33b/33c, old shot 4). Branch claude/gta-chat31: record only, not merged.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 72.98% of 15%; forecast 76.6% (2026-11-22)
 

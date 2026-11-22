@@ -22618,6 +22618,27 @@
      "6-7,13 S9: the smoke is a flat pale column; the fire is flat orange cut-outs, not on the car (it floats above it).",
      "8 S6: a pink spire building appears that no other panel has."
     ]
+   },
+   {
+    "round": "38-grey",
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-22",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 2,
+    "open": [
+     "20-26 P5: arm starts at the jaw/neck with stray throat ticks, not from a shoulder; no neck (P11).",
+     "21-26 P6: gun hand cut off by the left frame edge; hand lost (P1: touch not visible).",
+     "1-3,14-16 P1: pistol hangs low against the panel, half hidden; ball hand does not clearly grip it.",
+     "17-19 P3: arm folds to the shoulder and over the head; forearm shorter than upper arm, rubbery bend.",
+     "9-11,13 P10: car mostly out of shot; red slivers float in empty air (10, 11), car does not read (A1).",
+     "25-26 P7: stray tick on the left thigh; legs unequal; kneeling weight unclear.",
+     "14-26 P2: no feeling reads; face blank, gaze unclear.",
+     "14,25-26 P12: mouth dot on 14, lip notch on 25-26 while nobody speaks.",
+     "4-8 P10: hand overlaps roof bar; a hand-in-front-or-behind close-up would show it.",
+     "1-8 P8: inside and outside figures may not share pose or facing; an overlay would show it."
+    ]
    }
   ],
   "lines": {
@@ -22634,11 +22655,11 @@
     "false": 0
    },
    "P2": {
-    "faults": 21,
+    "faults": 22,
     "false": 0
    },
    "P5": {
-    "faults": 9,
+    "faults": 10,
     "false": 0
    },
    "P13": {
@@ -22654,11 +22675,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 8,
+    "faults": 9,
     "false": 1
    },
    "P1": {
-    "faults": 13,
+    "faults": 14,
     "false": 0
    },
    "O5": {
@@ -22666,7 +22687,7 @@
     "false": 0
    },
    "P3": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "O1": {
@@ -22678,7 +22699,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "O3": {
@@ -22734,11 +22755,11 @@
     "false": 0
    },
    "P10": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "P12": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    }
   }

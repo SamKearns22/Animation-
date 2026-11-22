@@ -208,3 +208,16 @@ Named, not yet fixed: the gun hand at the locked K2 stop (1.0 s): he rises onto 
 K2 1.0), stops, then the gun whips up 13-17 cm a frame: pops 7-8 cm at 1.04 s. This is the 3 cm question.
 Not done (next chat): getting up 13-23 and sitting down 176-190 with the real checks (span.py), full run (~100 min),
 whole grey clip, the 3 cm question.
+Chat 38, later: middle clip re-rendered with `clip` (2908 s, 131 frames): 0 car, 0 pistol, range ok; arm R/trunk
+1.4 cm at 1.0 s and 1.1 cm at 1.71 s; door hand slide 1.9; elbow pop 22.3 cm at film frame 27 (was 10.2: B3's
+outboard gun hand makes the elbow swing harder) - next chat. Critique r38-grey-p1 (fresh helper): real - pistol low
+/ grip unclear 1.0-1.1 s, arm rubbery over the head 1.33-1.5 s, arm seems to start at the jaw (shot camera, K4:
+shoulder hidden by the head), stray ink tick on the left thigh; false for a grey body - face, feeling, mouth.
+Sam's notes on the K4 still (notes/bench/sam-notes/): neck "Fix to human standard neck" -> neck_column (smooth
+closed column, house flat neck's outline off, skin inside it dropped, chest lip wrapped onto it, ink specks
+cleared); vest strap "Fix" -> clean_parts (majority of neighbours) smoothed the edges, BUT the strap is still an
+island: the bare V under the neck is the vest's front scoop (rest |x| < 0.64, y 6.97-7.96, front: BP.part_at's
+neck_front) stretched by the raised arm; the strap (|x| 0.85-1.5) does not reach the vest front. Fix the scoop's
+depth / the strap's front run in part_at, resend the still. Why not caught: no check looks at a dressed still's
+part map; the dressed still is looked at only by eye (next: a "pieces" test - each clothing part one connected
+area per side, no island under N px - proposed via the proposal route).
