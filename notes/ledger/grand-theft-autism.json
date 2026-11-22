@@ -20739,7 +20739,106 @@
    "round": null,
    "cost": 2.61,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "steps": 117,
+   "hist_k": 269,
+   "kinds": {
+    "film-file search": 0.3,
+    "tool search": 14.8,
+    "whole-file .py read": 0.7,
+    "renders": 2.5,
+    "pictures": 0.2,
+    "other": 81.5
+   },
+   "calls": {
+    "film-file search": 2,
+    "tool search": 57,
+    "whole-file .py read": 2,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 2,
+    "other": 46
+   },
+   "split": {
+    "usd": 9.112,
+    "total": 9.112,
+    "floor_k": 96,
+    "blocks": {
+     "new writes": 36.0,
+     "carried history": 25.2,
+     "Claude's words": 21.5,
+     "start-up floor": 17.3
+    },
+    "origins": {
+     "messages and reminders": 39.5,
+     "Claude's words": 31.7,
+     "start-up floor": 17.3,
+     "result: tool search": 8.8,
+     "result: other": 2.0,
+     "result: film-file search": 0.2,
+     "Claude's edits": 0.2,
+     "result: pictures": 0.1,
+     "result: whole-file .py read": 0.1
+    },
+    "named": {
+     "messages and reminders": 39.5,
+     "thinking": 17.6,
+     "start-up reading (rules, tools, first files)": 17.3,
+     "writing code": 8.1,
+     "reading kit code": 4.6,
+     "commands": 4.4,
+     "reading notes": 2.2,
+     "running checks and tools": 1.4,
+     "other commands": 1.0,
+     "writing notes": 1.0,
+     "start-up and handover tools": 0.8,
+     "messages to Sam": 0.8,
+     "app tools (chats, files sent)": 0.7,
+     "reading chat records": 0.2,
+     "looking at pictures": 0.1,
+     "reading film code": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 96,
+    "work_step": 29,
+    "work_pct": 0.39,
+    "reads": [
+     [
+      "source/bench_move.py",
+      9.8,
+      0.1956
+     ],
+     [
+      "notes/bench/learn-step.md",
+      1.7,
+      0.0362
+     ],
+     [
+      "notes/bench/keytest.py",
+      0.9,
+      0.0181
+     ],
+     [
+      "notes/bench/span.py",
+      0.2,
+      0.0042
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/47f66348-2b40-572f-9bd7-6f00024be32a/tasks/bw3q7sxma.output",
+      0.0,
+      0.0004
+     ],
+     [
+      "notes/bench/look.py",
+      0.0,
+      0.0
+     ]
+    ],
+    "base_pct": 22.1
+   }
   }
  ],
  "checks": {},
