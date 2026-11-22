@@ -60,15 +60,37 @@ Unchecked: ledger rows are matched to chat numbers by order (32 rows, 32 chats).
 - Code: source/bench_pose.py (the posed solid body, test car), source/bench_draw.py (the one pass; `blender` exports
   the same scene), source/bench_blender.py (Blender's drawing).
 
-## L3. Reference for leaning out of a car window and back
-- CMU motion capture (2,605 moves, index searched): no move in or out of a car, no kneeling on a seat. Nearest: 15_06
-  "lean forward, reach for" and 01_06-01_08 "climb, sit, dangle legs" (playground). Not usable as the move itself.
-- Stock clips found (watch-only previews, paid to download): Filmsupply 585633 "a woman leans out the passenger window
-  of a moving vehicle and fires a rifle repeatedly"; Storyblocks "young man is shooting from a gun leaning out the window
-  of the car"; Getty "men leaning out car windows and shooting at each other" (car-raid). Not yet watched frame by
-  frame: previews could not be played here, so no key poses are marked from them yet.
-- Planted contacts the move needs (from the brief, to be checked on footage): knees on the seat cushion; hips on the
-  door top while out; free hand on the door top or the roof edge; the gun hand free. Key poses K1-K5 as leanout.py has
-  them are the starting list, unchecked against real footage.
-- Honest gap: acted reference is still missing. Best source: Sam films someone (or himself) in a PARKED car leaning out
-  of the passenger window and back, 10 seconds on his phone, from in front of the car (the shot's camera).
+## L3. Reference for leaning out of a car window and back (done chat 34: notes/bench/l3-reference.jpg)
+- Sources (free, Pexels licence; watched frame by frame here after Sam allowed videos.pexels.com, 22 Nov): photo
+  9196399 (man, forearms over the door top: the lean starts); clips 5966358 and 5966362 (woman leaning out of a
+  passenger window, filmed from in front and beside: folded at the waist over the door top, back arched, free hand
+  resting on the door top or up by her head, chest turning back along the car with the head leading); clip 5966363
+  (the same from inside: hips at the door top, torso up in the opening, a hand gripping the roof edge); clip 9425911
+  (sat ON the door top: further than our move). Files: videos.pexels.com/video-files/ID/ID-sd_506_960_25fps.mp4
+  (9425911: -sd_540_960_30fps; 5966363: -sd_960_506_25fps).
+- Marked on the sheet: planted contacts (waist/belly ON the door top; free hand resting on the door top or gripping
+  the roof edge) and what leads (the head leads the turn back; the hand goes up by the head).
+- Honest gap: no watchable footage shows the knees on the seat (always behind the door) or a gun held out of the
+  window. Those are set from the car's measures (knees on the cushion, gun arm on the line to the cruiser).
+- CMU motion capture (2,605 moves): no move in or out of a car (chat 33).
+
+## Stage 1 (chat 34, in progress): the move as a grey solid body (source/bench_move.py)
+Locked by Sam: every camera and beat of shots 1-8 (shot 4's camera and acting-row times included); house look; circle hands.
+- Built: bench_move.py. The body is driven straight from goals on the car on its OWN skeleton (bench_pose.posed ignored
+  the chest's twist and the head's turn: shortest-turn aiming only; here each bone turns by a full frame: pelvis,
+  chest, a spine bending between them, neck, head; arms and legs by two-bone IK with the hinge kept on the bend).
+  Pelvis height solved from contacts (seated: his seat on the cushion, fit_seat; kneeling: knees ON the cushion at
+  thigh length, slid along the hip line). Goals, not joints, are blended between keys (leanout.TIMES = the locked beats).
+- Keys K1-K5 from the reference sheet (photo A, clips B-D); test space adds the roof, roof side rail, rear door, rear
+  glass to bench_pose's car. Camera: gta_rehearse._key (CAM4, the locked shot 4 camera) in the car's frame.
+- Checks built (each prints cm deep): car() body and hand balls in the car's solids; gun_car(); self_cross() (skin
+  point 3 mm out along its own normal, winding number of the closed skin > 0.5 = inside another part; mouth inside
+  excluded; proven 0 on the rest body); pistol(); contact_state() (knees, free hand on the door top, belly on the
+  door top); ranges() (elbow, knee, spine twist/bend, neck turn); aim_err(); jumps() (steps over 3 cm and pops).
+- Key poses now (cm): K1 arm R/trunk 8.9 (hand on chest), arm L/leg L 7.4 (hand into thigh), hand balls in body to 4.0,
+  pistol in body 1.3; K2-K3 seat 2.0-2.2 (shins), arm R/trunk 2.6; K4-K5 seat 5.4 (shins along the cushion too low:
+  ankles y 0.53), belly 3.5 INTO the door, head/trunk 8.9 and leg L/trunk 8.6 (to look at: neck fold? kneeling crease?),
+  arm R/trunk 2.7 (gun armpit), pistol in body 0.9. Knees and door hand held (gaps 0.1-0.6 cm). Aim K4 0.0 m off.
+- Not yet run: the 197 frames, proof on old frames (chat 33's still through bench_pose: seat 7.4 / pistol 4.8 must
+  show; old leanout.at keys through solve), the grey clip. Open question for Sam once measured: the 3 cm a frame bar
+  cannot hold at the locked timing (a hand reaching 0.8 m in 0.5 s, the pistol's kick); count sudden jumps instead?

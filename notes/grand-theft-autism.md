@@ -226,18 +226,24 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 
 
 
-## Where things stand (22 Nov, chat 33, Opus high)
+## Chat 34 (22 Nov, Opus high): L3 done, stage 1 started (notes/bench/learn-step.md, "Stage 1")
+- [x] L3: reference found and watched (free Pexels photo + 4 clips; videos.pexels.com allowed by Sam's approval);
+      sheet notes/bench/l3-reference.jpg. Gap: knees on the seat and a gun out of a window not seen anywhere.
+- [~] Stage 1: source/bench_move.py built (goal-driven solid body, own-skeleton IK, all checks); key poses not yet clean.
+- Branch claude/gta-chat31 (leanout.py DOOR_L change, show log): kept as a record only (Sam's Y, chat 32 pick 4); not merged.
+
+## Where things stand (22 Nov, chat 34, Opus high)
 - Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
 - Locked by Sam: every camera and beat of shots 1-8, shot 4's camera included; the house art style; circle hands.
-- Done: L1-L3 (notes/bench/learn-step.md); side-by-side still sent to Sam with the pick (our one-pass drawing).
-- Needs Sam: budget stops Y (chat 28), still open. (Sam said Y to stage 1; N to filming: find reference ourselves.)
-- Next: chat 34, Opus high: first finish L3 (watchable reference of leaning out of a car window and back: film
-  stills, behind-the-scenes, video frames; key poses and planted contacts marked on a sheet), then stage 1 (notes/proposals/solid-body-moves.md "Then one change"): the move as a
-  grey figure, IK contacts, crossings 0 incl. body against itself, every check proven on the pass list's old frames.
-  Chat 33b (Opus medium, F6/F12/F15, shots 5-8) is separate; its work is merged (its section above).
-- Read: notes/bench/learn-step.md; proposal solid-body-moves (Final version). Open rule requests: Sam's held-object
-  check (draft); house-look lock (option 1 step 4, its own proposal).
-- For Claude: bench code source/bench_pose.py, bench_draw.py (still / blender), bench_blender.py; Blender at
-  /usr/bin/blender (apt, not in setup.sh yet). Chat 31's uncommitted DOOR_L change: session_01GznaAVRjtm1nmzn6nuRJJ6.
+- Done: L3 reference sheet; bench_move.py (goals on the car -> solid body; checks for car, self, pistol, contacts,
+  range, aim, jumps; self check proven 0 on the rest body). Handed over on the cost watch's amber.
+- Next: chat 35, Opus high: finish stage 1 (learn-step.md "Stage 1" list: clear K1-K5 to 0 crossings, run all 197
+  frames, proof on old frames, grey clip MP4 sent to Sam with the check table; ask the 3 cm question). Not shot 4.
+- Needs Sam: budget stops Y (chat 28), still open. Nothing new yet.
+- Read: notes/bench/learn-step.md (L3, Stage 1); bench_move.py MAP. Open rule requests: Sam's held-object check
+  (draft); house-look lock (option 1 step 4, its own proposal).
+- Handover check: "Choose views the drawing can carry" is still in CLAUDE.md (Seeing like Sam, item 4), reworded by Sam's 21 Nov rule "Fix the drawing, never the shot"; not lost.
+- For Claude: key poses test: python3 notes/bench/keytest.py (fit_seat, fit_knee, check_frame per key). Blender at
+  /usr/bin/blender (not needed so far). Chat 33b's film notes round is separate (Opus medium).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 64.49% of 15%; forecast 69.7% (2026-11-22)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 66.28% of 15%; forecast 69.9% (2026-11-22)

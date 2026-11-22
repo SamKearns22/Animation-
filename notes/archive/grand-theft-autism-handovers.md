@@ -618,3 +618,18 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   (draft); house-look lock (option 1 step 4, its own proposal).
 - For Claude: handover check's SENTENCE line is the known false alarm (in CLAUDE.md, Seeing like Sam 4). Chat 30's FAILED section moved to the archive notes. Chat 31's uncommitted DOOR_L change sits in session_01GznaAVRjtm1nmzn6nuRJJ6 (branch claude/gta-chat31).
 
+
+## Where things stand (22 Nov, chat 33, Opus high)
+- Rules that bite next: Fix the drawing, never the shot; Be honest about what I can do; the proposal route (CLAUDE.md).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera included; the house art style; circle hands.
+- Done: L1-L3 (notes/bench/learn-step.md); side-by-side still sent to Sam with the pick (our one-pass drawing).
+- Needs Sam: budget stops Y (chat 28), still open. (Sam said Y to stage 1; N to filming: find reference ourselves.)
+- Next: chat 34, Opus high: first finish L3 (watchable reference of leaning out of a car window and back: film
+  stills, behind-the-scenes, video frames; key poses and planted contacts marked on a sheet), then stage 1 (notes/proposals/solid-body-moves.md "Then one change"): the move as a
+  grey figure, IK contacts, crossings 0 incl. body against itself, every check proven on the pass list's old frames.
+  Chat 33b (Opus medium, F6/F12/F15, shots 5-8) is separate; its work is merged (its section above).
+- Read: notes/bench/learn-step.md; proposal solid-body-moves (Final version). Open rule requests: Sam's held-object
+  check (draft); house-look lock (option 1 step 4, its own proposal).
+- For Claude: bench code source/bench_pose.py, bench_draw.py (still / blender), bench_blender.py; Blender at
+  /usr/bin/blender (apt, not in setup.sh yet). Chat 31's uncommitted DOOR_L change: session_01GznaAVRjtm1nmzn6nuRJJ6.
+

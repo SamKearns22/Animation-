@@ -1,3 +1,6 @@
+Grand Theft Autism, chat 34 (22 Nov): real reference found and marked (free clips of someone leaning out of a car window); the grey-move tool built with its checks.
+Key poses still have crossings (knees into the seat, hands into the body); handed over on the cost warning.
+Next: chat 35 clears them, runs the whole move and sends Sam the grey clip.
 Grand Theft Autism, chat 33 (22 Nov): learn step done; Sam said Y to stage 1 with our own one-pass drawing (no footage from him: we find reference).
 Pass list of 24 past shot 4 notes made; shot 4 has cost about 39% of a week.
 Next: Sam's Y for stage 1 (the grey-figure move on the test bench) and whether he films the lean-out in a parked car.
