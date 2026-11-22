@@ -250,6 +250,10 @@ HAND3D = [True]              # real hands with fingers (hand3d_film) whenever th
 #                              hand closed round the grip; the chest hold (k.front) keeps the circle hands
 HAND3D_SCALE = 1.5           # the measured hand at the house arm's slimmed wrist (a cartoon man's hand, a little big)
 HAND3D_WRIST = 0.45          # the forearm slims by this into the wrist (limbs.WRIST)
+BODY3D = [True]              # with the real hands (chat 29, Sam: "a great shot but a broken drawing"): the arms from the
+#                              3D body (arm3d_film), the back of the head from the 3D head (head3d_film), the pistol
+#                              solid (gun3d_film); the face side keeps the house's drawn face
+HEAD3D_H = 300.0             # the 3D head's chin-to-crown height in the house head's units (its size never jumps)
 
 
 def _gun_down(d):
@@ -317,9 +321,13 @@ def draw_gun(img, cam, k, report=True):
     guard = [P(0.04, 0.075), P(0.115, 0.075), P(0.10, 0.12), P(0.055, 0.12)]
     muzzle_blk = [P(0.165, -0.012), P(0.19, -0.012), P(0.19, 0.045), P(0.165, 0.045)]
     shine = [P(0.0, 0.0), P(0.15, 0.0), P(0.15, 0.014), P(0.0, 0.014)]
-    for poly, col in ((guard, (46, 48, 56)), (grip, (44, 46, 54)), (frame, (70, 74, 84)), (slide, (132, 138, 152)),
-                      (muzzle_blk, (30, 30, 36)), (shine, (200, 206, 218))):
-        cam.poly(p, [tuple(q) for q in poly], col, (14, 14, 16), 2.4)
+    if BODY3D[0] and HAND3D[0] and img.mode == 'RGBA' and hasattr(cam, 'r'):
+        import gun3d_film as G3                       # solid: reads as a pistol from any side (chat 29)
+        G3.draw(img, cam, hand, d, down, g)
+    else:
+        for poly, col in ((guard, (46, 48, 56)), (grip, (44, 46, 54)), (frame, (70, 74, 84)),
+                          (slide, (132, 138, 152)), (muzzle_blk, (30, 30, 36)), (shine, (200, 206, 218))):
+            cam.poly(p, [tuple(q) for q in poly], col, (14, 14, 16), 2.4)
     if getattr(k, 'front', False):                       # his fist closed round the grip
         c = P(-0.02, 0.12)
         for sx, sy, r_ in ((-0.35, -0.2, 1.0), (0.3, 0.15, 1.0), (0.0, 0.5, 0.9)):
@@ -597,11 +605,36 @@ class _real_hands:
             return old(p, el, wr, shape, skin, *a, **kw_)
         gh.point_finger = True
         B.gesture_hand = gh
+        import lying_flat as LF
+        self.old_arm, self.old_head = LF._arm, LF._head_draw
+        if BODY3D[0]:
+            import arm3d_film as A3
+            import head3d_film as H3D
+            old_arm, old_head = self.old_arm, self.old_head
+
+            def arm(p, sc, cam, k, side, sp):      # the arm from the 3D body (chat 29), then its real hand
+                shape = sp.get('lying_hand_' + side, sp.get('lying_hand', 'fist'))
+                if shape not in ('h3dL', 'h3dR', 'none'):
+                    return old_arm(p, sc, cam, k, side, sp)
+                sh_px = np.asarray(sc.shoulders[side], float) * sc.s
+                A3.draw(p.img, cam, k, side, sp['skin'], shoulder_px=sh_px)
+                if shape != 'none':
+                    gh(p, None, None, shape, sp['skin'])
+
+            def head(img, hc, sp, t):              # seen from behind: the 3D head with its buzz cut (chat 29)
+                hcam, hv = hc
+                if hv not in LF.BACKS:
+                    return old_head(img, hc, sp, t)
+                H3D.draw(img, me.cam, me.kw, sp.get('hair_c', (79, 64, 54)), sp['skin'],
+                         neck_px=hcam.n, height_px=HEAD3D_H * hcam.s, up_px=-np.asarray(hcam.d, float))
+            LF._arm, LF._head_draw = arm, head
         return self
 
     def __exit__(self, *a):
         import limbs
+        import lying_flat as LF
         B.gesture_hand, limbs.WRIST[0] = self.old, self.wr0
+        LF._arm, LF._head_draw = self.old_arm, self.old_head
         return False
 
 

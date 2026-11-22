@@ -258,7 +258,13 @@ def render(meshes, size, to_px, light=(-0.3, 0.5, 0.85), eye_d=0.45, outline=3.0
             ibuf[y0:y1, x0:x1][m] = mid
             n = l1[..., None] * vn[a] + l2[..., None] * vn[b] + l3[..., None] * vn[c]
             nbuf[y0:y1, x0:x1][m] = n[m]
-            cbuf[y0:y1, x0:x1][m] = colours[kind_of(tris, ti)]
+            F = _FIELD.get(id(tris))
+            if F is None:
+                cbuf[y0:y1, x0:x1][m] = colours[kind_of(tris, ti)]
+            else:                                  # a colour edge drawn per pixel (a hairline), never stepped
+                f = l1 * F[a] + l2 * F[b] + l3 * F[c]
+                cbuf[y0:y1, x0:x1][m] = np.where((f > 0)[..., None], np.asarray(colours[1], float),
+                                                 np.asarray(colours[0], float))[m]
     # flat shading: one light tone, one shadow tone
     nn = nbuf / np.maximum(1e-9, np.linalg.norm(nbuf, axis=2))[..., None]
     lit = nn @ L
@@ -289,6 +295,7 @@ def render(meshes, size, to_px, light=(-0.3, 0.5, 0.85), eye_d=0.45, outline=3.0
 
 
 _KIND = {}
+_FIELD = {}          # id(tris) -> a value per point: colour 1 where it is > 0, colour 0 elsewhere
 
 
 def kind_of(tris, ti):

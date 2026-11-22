@@ -88,19 +88,16 @@ def frame_of(A, B):
     return np.stack([A, B, np.cross(A, B)], 1)
 
 
-def draw(img, cam, pose, side, anchor, A, B, skin, scale=1.0, outline=None, ss=None):
-    """The hand onto img at world point `anchor`, its A axis along world A, B along world B (see _mesh)."""
-    V, tris, wr, fd = _mesh(pose, side)
+def paint(img, cam, W, tris, skin, ref, outline=None, crease=0.2, ss=None, colours=None, kind=None, shade=False, field=None):
+    """Any mesh already in the world (W: points, metres) drawn through the film's camera in the flat look onto a
+    fresh layer the size of its own box. ref: a world point near the mesh's middle (its depth sets the perspective).
+    Returns (layer RGBA, (x0, y0), kw = camera pixels per metre at ref) or None (behind the lens, off frame)."""
     ss = ss or img.width / 1080.0
-    R = frame_of(A, B)
-    W = np.asarray(anchor, float) + (V * scale) @ R.T             # world points
-    wr_w = np.asarray(anchor, float) + (wr * scale) @ R.T
-    fd_w = R @ fd
     cp, cr, cu, cf = (np.asarray(x, float) for x in (cam.pos, cam.r, cam.u, cam.f))
-    dw = float((wr_w - cp) @ cf)
+    dw = float((np.asarray(ref, float) - cp) @ cf)
     if dw <= cam.NEAR:
         return None
-    D = W - cp
+    D = np.asarray(W, float) - cp
     C = np.stack([D @ cr, D @ cu, dw - D @ cf], 1)                 # camera frame: x right, y up, z towards us
     if (dw - C[:, 2]).min() <= cam.NEAR:
         return None
@@ -124,14 +121,37 @@ def draw(img, cam, pose, side, anchor, A, B, skin, scale=1.0, outline=None, ss=N
     if x1 - x0 < 4 or y1 - y0 < 4:
         return None
     size = (x1 - x0, y1 - y0)
-    kind = np.zeros(len(V), int)
+    kind = np.zeros(len(W), int) if kind is None else kind
     ol = outline if outline is not None else max(3.0, 1.6 * ss)
-    mesh = H3.mesh_entry(C, tris, kind, (tuple(skin), tuple(skin)), 1)
-    small = (y1 - y0) < 260                                        # a small hand: only the main knuckle creases
+    mesh = H3.mesh_entry(C, tris, kind, colours or (tuple(skin), tuple(skin)), 1)
+    if field is not None:
+        H3._FIELD[id(tris)] = np.asarray(field, float)
     big = (size[0] * AA, size[1] * AA)                             # drawn at AA x and shrunk: smooth edges, as the
     lay = H3.render([mesh], big, lambda x, y: ((scr(x, y)[0] - x0) * AA, (scr(x, y)[1] - y0) * AA), eye_d=dw,
-                    outline=int(ol * AA) | 1, flat=True, crease=0.0 if small else 0.2)   # house's other lines
-    lay = lay.resize(size, Image.LANCZOS)
+                    outline=int(ol * AA) | 1, flat=not shade, crease=crease)   # house's other lines
+    H3._FIELD.pop(id(tris), None)
+    return lay.resize(size, Image.LANCZOS), (int(x0), int(y0)), kw
+
+
+def draw(img, cam, pose, side, anchor, A, B, skin, scale=1.0, outline=None, ss=None):
+    """The hand onto img at world point `anchor`, its A axis along world A, B along world B (see _mesh)."""
+    V, tris, wr, fd = _mesh(pose, side)
+    ss = ss or img.width / 1080.0
+    R = frame_of(A, B)
+    W = np.asarray(anchor, float) + (V * scale) @ R.T             # world points
+    wr_w = np.asarray(anchor, float) + (wr * scale) @ R.T
+    fd_w = R @ fd
+    dw = float((wr_w - np.asarray(cam.pos, float)) @ np.asarray(cam.f, float))
+    if dw <= cam.NEAR:
+        return None
+    kw0 = cam.focal / dw
+    # a small hand: only the main knuckle creases
+    small = (np.ptp(np.array([cam.project(tuple(q))[0] for q in W[::max(1, len(W) // 60)]])[:, 1]) * ss) < 244
+    got = paint(img, cam, W, tris, skin, wr_w, outline, 0.0 if small else 0.2, ss)
+    if got is None:
+        return None
+    lay, (x0, y0), kw = got
+    size = lay.size
     # the wrist end fades into the drawn forearm: past the wrist (towards the elbow) the hand is cleared, so the
     # arm's own outline runs on and no cut ring shows
     a = np.asarray(lay.getchannel('A'), np.float32)
@@ -139,7 +159,7 @@ def draw(img, cam, pose, side, anchor, A, B, skin, scale=1.0, outline=None, ss=N
     w1 = np.array(cam.project(tuple(wr_w + fd_w * 0.1))[0]) * ss - (x0, y0)
     dd = w1 - w0
     n = np.linalg.norm(dd)
-    if n > 1:
+    if n > 1 and FADE[0]:
         dd /= n
         yy, xx = np.mgrid[0:size[1], 0:size[0]]
         along = (xx - w0[0]) * dd[0] + (yy - w0[1]) * dd[1]
@@ -147,7 +167,10 @@ def draw(img, cam, pose, side, anchor, A, B, skin, scale=1.0, outline=None, ss=N
         a *= np.clip(1 - (along - off) / max(1.0, lim), 0, 1)           # then fades into the drawn forearm
     lay.putalpha(Image.fromarray(a.astype(np.uint8)))
     img.alpha_composite(lay, (int(x0), int(y0)))
-    return (x0, y0, x1, y1)
+    return (x0, y0, x0 + size[0], y0 + size[1])
+
+
+FADE = [True]        # the wrist fade (off when the 3D arm, arm3d_film, carries on under the hand)
 
 
 def test(out):

@@ -188,43 +188,34 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
       outs floating above the car; the redhead's knees balls at 21.68; a pink spire on the skyline at 20.60 only; F6's
       pink walker (confirmed).
 
-## Chat 28 (22 Nov, Opus high): Jason's drawing from behind in shot 4 (camera kept exactly as animatic v3)
-Sam (via chat 27): "I did not want the camera angles changed. It is a great shot but a broken drawing."
-- [~] Hands (F1 door hand, F2/F13): real hands with fingers (new hand3d_film.py: the project's measured MakeHuman hand,
-      turned into the film's world and drawn through its camera, flat skin, smooth outlines): the free hand hooked over
-      the door top, the gun hand closed round the grip; the pistol now sits in the fist; the forearm slims into the
-      wrist. Better at 16.0 and 21.25; still weak: the end-on fist at 20.8 (small, busy lines), a soft fade where
-      the forearm meets the hand.
-- [ ] NOT fixed, and what the project must learn first (CLAUDE.md "Fix the drawing"): (1) arms from behind and
-      foreshortened: the arm is one tube of the same width, at 15.4 a huge tube across his back. Learn: draw the arm's
-      outline from the same 3D body as the hands (shoulder muscle, elbow point, forearm narrowing). (2) The pistol is a
-      flat card, so edge-on it is a stick or a black blade (15.4 boxes, 21.25 blade). Learn: a solid 3D pistol drawn
-      through the camera, like the hands. (3) The back of the head is a tall brown flowerpot. Learn: a buzz cut from
-      behind (round skull, hairline at the nape, ears, neck cords into the shoulders), checked on a sheet of turns.
-- [x] Back-view check now says "fix the DRAWING, never the camera" and names what a back view must show; its test
-      (kittest body_check_back_view) checks that wording: PASS.
-- [ ] Budget stops (Sam: "Please disable budget stops"): blocked here by the safety system, because the request came
-      through another chat, not from Sam in this one. Waits for Sam's own word in this chat. Note: the ledger's
-      automatic stop is already paused (since 18 Nov); the stop that fired comes from the ledger's other commands.
+## Chat 29 (22 Nov, Opus high): Jason from behind drawn from the 3D body (camera kept exactly as animatic v3)
+- [x] Arm (F1, F7, v7 note 4 "sausage"): new arm3d_film.py, the measured MakeHuman arm posed on Jason's shoulder,
+      elbow and wrist, drawn through the film's camera (flat skin, outline, elbow fold); cut square inside the
+      shoulder and faded into the drawn shoulder; tested on a sheet of 6 poses x 8 turns. Seen: reads as an arm
+      raised (15.4) and along the gun (20.8). Lost: nothing. Added: the arm is ~1.3x a real man's girth.
+- [x] Pistol (F2): new gun3d_film.py, solid blocks (slide, frame, raked grip, guard, sights), shaded one side;
+      sheet of 24 views incl. straight down the barrel: reads as a pistol from all.
+- [~] Back of head (F5): new head3d_film.py, the measured skull, ears, jaw with a buzz cut (hairline found per
+      pixel); house head size, tilted on screen like the house head. Reads at 20.8; at 15.4 and 18.3 (seen from
+      above) too much skin shows: reads BALD (repeat risk: Sam's "eternally bald" note). Fix the hairline for
+      top-down views first.
+- [ ] Still to look at, full size: 15.4 a dark box by the door hand (was there before); 21.25 dotted outline bits on
+      the arm's left edge; faint fold lines at the door arm's shoulder; hand to forearm join; hand check (rule 41).
 
-## Where things stand (22 Nov, chat 28, Opus high)
+## Where things stand (22 Nov, chat 29, Opus high)
 - Rules that bite next: Fix the drawing, never the shot (CLAUDE.md); Seeing like Sam 1 (full size, every moving frame); 30.
 - Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera: "great shot, broken
   drawing"); the script; the 8 shots' order and lengths. Fix drawings only.
-- Done: real hands in shot 4 (partial); back-view check points at the drawing; notes under 4,000 words.
-- Next: Opus, high. Learn and build, in order: 1) the arm from the 3D body (outline traced from the posed MakeHuman
-  arm, like the hands), 2) a solid 3D pistol, 3) the back of Jason's head; each on a sheet of 8 turns, then frames
-  15.4, 16.0, 18.3, 20.8, 21.25 at full size; then a clip of 14.1-22.3 s. After that: F6 (woman in pink), F15, F12.
-- Needs Sam: his own Y in a chat to switch off the budget stops. His look at the next shot 4 clip.
-- Read: guides/job-packs.md "Notes round"; this file's chat 28 section and "Animatic v3 from 14.1 s".
+- Done: Jason's arm, pistol, back of head drawn from 3D (chat 29 section); the 5 frames rendered and looked at.
+- Next: Opus, high. 1) the bald look from above (hairline, 15.4, 18.3); 2) the four open items in chat 29's list;
+  3) every moving frame 14.1-22.3 at full size; 4) the clip 14.1-22.3 s to Sam. Then F6, F15, F12.
+- Needs Sam: his own Y in a chat to switch off the budget stops (chat 28 item). His look at the next shot 4 clip.
+- Read: guides/job-packs.md "Notes round"; this file's chat 29 section.
 - Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
-- Branch claude/check-repairs-2 is the status chat's (house checks), not this film's: left for it.
-- For Claude: hand3d_film.draw/_mesh (AA, WRIST_KEEP); leanout HAND3D, HAND3D_SCALE 1.5, HAND3D_WRIST 0.45, gun_fist,
-  door_hand, _real_hands (gesture_hand 'h3dL'/'h3dR'); limbs.WRIST; hands3d.render flat/crease. Frames: scratch script
-  = gta_film.frame_image(t).save (about 18 s a frame). Hand check (rule 41) not yet run on the new hands.
+- For Claude (branch claude/check-repairs-2 is the status chat's, left for it; handover check's leanout quick-check
+  and "sentence lost" lines: answered in chat 28, false alarms): arm3d_film (THICK, SHOULDER_IN, SHOULDER_FADE, CREASE), gun3d_film (PARTS), head3d_film (HAIR_Z/HAIR_Y,
+  hair_of, _roll_to); hand3d_film.paint (any world mesh; field= per-pixel colour edge, hands3d._FIELD); leanout
+  BODY3D, HEAD3D_H 300, _real_hands patches lying_flat._arm/_head_draw. Sheets: `python3 source/arm3d_film.py sheet
+  OUT`, gun3d_film, head3d_film. Frames: gta_film.frame_image(t) (about 25 s a frame now).
 
-  Handover check (chat 28): its 2 quick-check lines take leanout.py for a film; it is this film's shot file (notes here, people in
-  grand-theft-autism-people.txt): answered. "Sentence lost from CLAUDE.md" is a false alarm: "Choose views the drawing can
-  carry" is still there, with "(for a NEW shot ...)" added inside it by Sam's Y (60e25406).
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 54.67% of 15%; forecast 69.7% (2026-11-22)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 56.18% of 15%; forecast 69.7% (2026-11-22)
