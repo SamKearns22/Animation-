@@ -262,3 +262,24 @@ area per side, no island under N px - proposed via the proposal route).
   biggest items are the fold press (its inside tests: the distance grid idea) and caching the fits; then drawing.
   Next: step (b), the proposal route (source/propose.py) for the speed-up with Sam's three extra items, then Sam's
   numbers, then build; then the get-up re-plan (above), the 3 cm question (via the route too: it changes a check).
+
+## Speed-up, chat 40 (Opus high; proposal bench-speedup, Sam "1")
+- Bar: notes/bench/same.py (before record notes/bench/same/same.json: fits, 25 frames' body points + checks word for
+  word, 12 grey frames' pixels). Every kept step printed SAME; proof.txt byte-identical.
+- Step 2 KEPT, exact inside test: the skin capped at its two 24-edge wrist holes (48 lid triangles), winding number =
+  signed ray crossings along +x through a 1 cm grid (numba) minus the lids' exact share; grazing rays, points on the
+  skin and results within 1e-6 of 0.5 go to the old sum (`_winding_sum`, the referee; BENCH_OLD_INSIDE=1 forces it).
+  195,384 points over 6 poses: 0 answers differ, values within 3e-14. Solve 13.2 -> 0.78 s a frame, checks 2.45 ->
+  0.08, fits 73 -> 4 s, proof 11 s.
+- Step 5a KEPT, compiled triangle fill (`_fill`; old `_raster_py` the referee, BENCH_OLD_FILL=1): 0 pixels differ
+  (dressed K4 both views, 12 grey). Grey draw 1.0 -> 0.41 s; dressed still 105 -> 17 s.
+- Steps 3, 4, 6 KEPT: checked_clip runs checks on all frames with no drawing first; with any fault neither fixed nor
+  named it stops (nothing drawn; `bench_move.py name OUT "why"` names that fault list). Frame store (OUT/store, key
+  = body points + camera + drawing code minus the move/checks sections and the MAP); 10 random stored frames drawn
+  again each run (a mismatch wipes the store); drawing 4 at a time (processors were 49% busy). Bundle
+  notes/bench/store/frames.tar, 13.5 MB, 198 frames of the current move (`keep`). Whole grey clip ~80 min ->
+  3 min 15 s (checks 2 min 48 s, drawing 30 s); a fresh folder took all 198 from the bundle.
+- NOT built, named: step 1 saved fits (the fits fell 73 -> 4 s with step 2; a saved copy would risk a stale number
+  for 4 s). Step 5b head drawn once (only the dressed look uses it; drawing the head alone is not pixel-identical to
+  "full minus no-head" at its soft edges; ~2.5 s a dressed frame: revisit when the dressed clip is built).
+- Now the slowest part is the check pass's solve (0.87 s a frame, one frame at a time).

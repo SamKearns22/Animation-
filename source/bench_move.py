@@ -1601,6 +1601,7 @@ _DRAW = {}
 def _draw_code():
     h = hashlib.sha256()
     txt = open(os.path.abspath(__file__)).read()
+    txt = txt[txt.index('"""', 4) + 3:]                 # the file's description (its MAP) is not drawing code
     mv, ck = txt.index('# ' + '-' * 100 + ' the move'), txt.index('# ' + '-' * 100 + ' solve')
     c0, c1 = txt.index('# ' + '-' * 100 + ' checks'), txt.index('# ' + '-' * 100 + ' drawing')
     h.update((txt[:mv] + txt[ck:c0] + txt[c1:]).encode())
