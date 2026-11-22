@@ -147,11 +147,13 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   EXACT inside test by counted ray crossings, old sum as referee; checks-first lock; frame store + redraw only
   changed frames, lossless bundle on GitHub; compiled fill + head once; 4-at-a-time only if processors sit idle).
   The distance grid is dropped: every tested point is 1.5-3 mm from the skin, inside its "exact" band anyway.
-- Next: on Sam's numbers, THIS chat opens chat 41, Opus medium (building from a clear plan): the "learn first"
+- Next: (opened) chat 41, Opus medium (building from a clear plan): the "learn first"
   record (old answers, fits, proof.txt, 12 grey frames, timings), then each step he said Y to, in the verdict's
   order, each kept only if its bar is met (identical answers / pixels). Then the get-up re-plan (learn-step chat
   39), then the 3 cm question via the route.
-- Needs Sam: speed-up Q1 (option 1 or 2) and Q2 (which steps of option 1). No stills (in motion only).
+- Sam's answer (22 Nov, chat 40): "1" = option 1 (the exact speed-up, step by step); Q2 not answered separately, so
+  my pick stands: all six steps, in the verdict's order (step 6 only if the processors sit idle). Chat 41 builds.
+- Needs Sam: nothing now. No stills (in motion only).
 - Read: notes/proposals/bench-speedup.md "Verdict" (Final version); notes/bench/learn-step.md "Stage 1, chat 39".
 - Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
   house-look lock (option 1 step 4); dressed-still "pieces" test (chat 38's idea, via the route).
