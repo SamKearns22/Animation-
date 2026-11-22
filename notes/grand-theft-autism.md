@@ -207,6 +207,10 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
       cut by the left edge at 29.3 (shot 6, his gesture, not the camera); passers-by in shot 5 stand frozen; 3 tiny
       walkers in shot 5 (22.3-23 s, 4-7 drawings) with an arm out of the back (body check, there before this chat).
 - [x] Sam Q (33b): F15, Sam "1" (22 Nov): stripes 25 cm each, wider red gap, still black. Done; still sent.
+- Sam 22 Nov (5.8 h later): "make me an animatic including your current fixes ... shot 4 ... use the models of the
+      previous animation". Done here: grand_theft_autism.py switches the 3D hands/arms off (shot 4 drawn as in v3;
+      checked side by side at 16 s). Shot 1 cannot draw here (title font host blocked): reuse v3 clean render's first
+      7.0 s (shot 1 unchanged since v3) via the render's --from 7.0. Next: chat 33c, Sonnet: animatic v4.
 - PAUSED (Sam 22 Nov: "Then let's wait until the 3D work is done"): no more 33b film work until chat 33's 3D move is
       done. Open for then: F6 runner stiff in his second step and still at the wall; Jason's raised hand cut by the
       left edge at 29.3; shot 5 frozen passers-by; 3 tiny walkers' arms out of the back (22.3-23 s).

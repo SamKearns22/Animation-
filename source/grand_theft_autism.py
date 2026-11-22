@@ -27,6 +27,11 @@ import figure as _fig         # noqa: E402
 _fig._ALLOW.append("Sam's order, 21 Nov: checks overruled")
 
 LENGTH = F.LENGTH
+import leanout as _LO           # noqa: E402
+# Sam 22 Nov (chat 33b): an animatic with chat 33b's fixes, shot 4 "using the models of the previous animation"
+# (animatic v3): the 3D hands and arms (chats 28-30, marked FAILED) switched off; chat 33's 3D work is separate.
+_LO.HAND3D[0] = False
+_LO.BODY3D[0] = False
 frame_image = F.frame_image      # for critique.py (chat 33b: its before/after sheet calls the film for frames)
 DUR = LENGTH
 SHOTS = F.SHOTS
