@@ -1,3 +1,6 @@
+Grand Theft Autism, chat 29 (22 Nov): Jason's arm, pistol and back of head now drawn from the 3D body; shot 4's camera untouched.
+Still wrong: his head seen from above reads bald (15.4, 18.3); a few small marks to check at full size.
+Next: chat 30, Opus high: fix the bald look and the small marks, check every frame 14.1-22.3 at full size, then the clip to Sam.
 Grand Theft Autism, chat 28 (22 Nov): shot 4 kept exactly as Sam approved; Jason's hands now real hands with fingers (door and pistol grip); back-view check now points at the drawing.
 Still broken from behind: the arm (one thick tube), the pistol (flat card: a stick or blade edge-on), the back of the head.
 Next: chat 29, Opus high: build the arm, the pistol and the back of the head from 3D, then a clip of 14.1-22.3 s. Needs Sam: his own Y here to switch off budget stops.

@@ -436,3 +436,24 @@ Judge: Sam wants the first clip's close, low camera, with the new cast; at full 
 Honest note: rule 24 sizes 3 new characters and one place at about 15%; this film has 3 characters, 2 cars, 4 places,
 a crash and a fireball. Past films came in above their estimates (Remakes, Blessed, Protest Tiers: 2.5-3.3 times).
 
+
+
+## Chat 28 (22 Nov, Opus high): Jason's drawing from behind in shot 4 (camera kept exactly as animatic v3)
+Sam (via chat 27): "I did not want the camera angles changed. It is a great shot but a broken drawing."
+- [~] Hands (F1 door hand, F2/F13): real hands with fingers (new hand3d_film.py: the project's measured MakeHuman hand,
+      turned into the film's world and drawn through its camera, flat skin, smooth outlines): the free hand hooked over
+      the door top, the gun hand closed round the grip; the pistol now sits in the fist; the forearm slims into the
+      wrist. Better at 16.0 and 21.25; still weak: the end-on fist at 20.8 (small, busy lines), a soft fade where
+      the forearm meets the hand.
+- [ ] NOT fixed, and what the project must learn first (CLAUDE.md "Fix the drawing"): (1) arms from behind and
+      foreshortened: the arm is one tube of the same width, at 15.4 a huge tube across his back. Learn: draw the arm's
+      outline from the same 3D body as the hands (shoulder muscle, elbow point, forearm narrowing). (2) The pistol is a
+      flat card, so edge-on it is a stick or a black blade (15.4 boxes, 21.25 blade). Learn: a solid 3D pistol drawn
+      through the camera, like the hands. (3) The back of the head is a tall brown flowerpot. Learn: a buzz cut from
+      behind (round skull, hairline at the nape, ears, neck cords into the shoulders), checked on a sheet of turns.
+- [x] Back-view check now says "fix the DRAWING, never the camera" and names what a back view must show; its test
+      (kittest body_check_back_view) checks that wording: PASS.
+- [ ] Budget stops (Sam: "Please disable budget stops"): blocked here by the safety system, because the request came
+      through another chat, not from Sam in this one. Waits for Sam's own word in this chat. Note: the ledger's
+      automatic stop is already paused (since 18 Nov); the stop that fired comes from the ledger's other commands.
+

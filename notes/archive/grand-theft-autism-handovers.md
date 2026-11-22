@@ -533,3 +533,26 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Branch claude/check-repairs-2 is the status chat's (house checks), not this film's: left for it.
 - For Claude: humancheck._backview; gta_rehearse CAM4 keys 0.85-7.85, LENS_PAVE, _lens_clear, crowd zi; kittest
   body_check_back_view; frames: gta_film.frame_image + HC.frame_end loop. ARM_FOLD_NAMED still set; dafont blocked.
+
+
+## Where things stand (22 Nov, chat 28, Opus high)
+- Rules that bite next: Fix the drawing, never the shot (CLAUDE.md); Seeing like Sam 1 (full size, every moving frame); 30.
+- Locked by Sam (21 Nov): every camera and beat of shots 1-8 as in animatic v3 (shot 4's camera: "great shot, broken
+  drawing"); the script; the 8 shots' order and lengths. Fix drawings only.
+- Done: real hands in shot 4 (partial); back-view check points at the drawing; notes under 4,000 words.
+- Next: Opus, high. Learn and build, in order: 1) the arm from the 3D body (outline traced from the posed MakeHuman
+  arm, like the hands), 2) a solid 3D pistol, 3) the back of Jason's head; each on a sheet of 8 turns, then frames
+  15.4, 16.0, 18.3, 20.8, 21.25 at full size; then a clip of 14.1-22.3 s. After that: F6 (woman in pink), F15, F12.
+- Needs Sam: his own Y in a chat to switch off the budget stops. His look at the next shot 4 clip.
+- Read: guides/job-packs.md "Notes round"; this file's chat 28 section and "Animatic v3 from 14.1 s".
+- Open rule requests: Sam: a check that a held object is recognisable (draft only, not written).
+- Branch claude/check-repairs-2 is the status chat's (house checks), not this film's: left for it.
+- For Claude: hand3d_film.draw/_mesh (AA, WRIST_KEEP); leanout HAND3D, HAND3D_SCALE 1.5, HAND3D_WRIST 0.45, gun_fist,
+  door_hand, _real_hands (gesture_hand 'h3dL'/'h3dR'); limbs.WRIST; hands3d.render flat/crease. Frames: scratch script
+  = gta_film.frame_image(t).save (about 18 s a frame). Hand check (rule 41) not yet run on the new hands.
+
+  Handover check (chat 28): its 2 quick-check lines take leanout.py for a film; it is this film's shot file (notes here, people in
+  grand-theft-autism-people.txt): answered. "Sentence lost from CLAUDE.md" is a false alarm: "Choose views the drawing can
+  carry" is still there, with "(for a NEW shot ...)" added inside it by Sam's Y (60e25406).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 54.67% of 15%; forecast 69.7% (2026-11-22)
