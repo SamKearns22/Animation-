@@ -13,26 +13,23 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
-## Face tool, where things stand (chat 17 of the face chain, 14 Nov)
-- **Rules that bite next:** 30 (Walliams is a repeated note: say why if Sam still can't see him), 85 (amber here), 86.
-- **Done (chat 17):** the push now works on the head's PROPORTIONS from the card (face width x1.08, jaw 0.98 of the
-  cheeks against the photos' 0.87, chin squarer), every feature scaled so the eyes sit apart as his photos say (the
-  pick's tiny eyes had pulled them in a sixth), ears on the drawn face's edge, the turned views on the measured widths.
-  Beard: the segmenter already counts it as face skin (jaw), nothing to add. New kittest facehouse_head_proportions
-  (fails on chat 16's head); the 4 face kittests and outfit_every_view pass; Andy and Kemi held pixel for pixel.
-  Sent Sam `notes/morning/walliams-head-c17.jpg` with chat 15's outfit sheet.
-- **Name test:** not named (Jenrick 12%), line-up 7th of 8; uncalibrated for him (the helper can't name his photo).
-- **Sam approved (15 Nov, relayed by chat 15 of Protests):** the new Walliams head (`walliams-head-c17.jpg`), the hair's
-  top (the pick offered: his photos' rounded dome), and chat 15's outfit sheet. Nothing left for Sam here.
-- **Next (Opus medium):** Walliams into a people file (head, rounded-dome hair, outfit as approved).
-- **Seen, not fixed:** the side view's stubble edge steps behind the jaw; the mouth is the pick's (narrower than
-  Blessed's smirk). Kittest people_from_a_description fails on protest-tiers' early import (not this job's).
-- **Sam's words kept:** the far temple of a three-quarter stays bare skin. "Please don't limit yourself on budget." Age
-  lines stay. Look 2 ('detail'). Not too far into caricature. Andy and Kemi finished: do not change them.
-- **Read:** this section; `guides/job-packs.md` "A tool job"; `source/facehouse.py` MAP (WHOLE HEAD, PROPORTIONS).
+## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
+- **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
+- **Done:** Sam: "Walliams: put into kit" (22 Nov). David Walliams is a kit person in `story/facetool-people.txt`
+  (`walliams`: the head Sam approved 15 Nov, rounded-dome swept hair, look 'detail', navy suit, white shirt, no tie,
+  1.96 m). Five turns draw his own head. New kittest facehouse_walliams_kit_person; catalogue row added. Andy and Kemi
+  held pixel for pixel (facehouse_whole_head). Blessed's test-only hand-made head left as Blessed's own (its replay).
+  Sheet sent to Sam: `notes/morning/walliams-kit-person.jpg`.
+- **Seen, not fixed (named to Sam):** behind and three-quarter behind, the neck's two lines run up into the back of the
+  head (every house head does this; Andy too); the side view's stubble edge steps behind the jaw (old).
+- **Kittest people_from_a_description** crashes in a fresh copy: it needs a `film/blessed` marker in git that is not
+  on GitHub (not this job's; it crashed before the change too).
+- **Needs Sam:** nothing. **Next:** none for this job; Walliams is ready for any film's people file (copy the 4 lines).
+- **Branches:** claude/gta-chat31 is a record only, never merged (Sam, 22 Nov; notes/grand-theft-autism.md).
+- **Handover check named, not this job's:** a second "Where things stand" in this shared jobs file (another job's);
+  CLAUDE.md's "Choose views the drawing can carry" is still there (in bold; the check misreads it); the cost line errored.
 - **Open rule requests:** none.
-- **For Claude:** FH.proportions/feature_scale/_cheek/_turn_widths, SHAPE_PUSH 3 (card z), PROP_ROWS, SQUARE;
-  turnhead.Person(widths=); `facehouse.py compare OUT walliams blessed:walliams --turns`.
+- **For Claude:** FH.CAST['walliams'] holds his house lines; held hash in the kittest is FH.draw('walliams','detail').
 
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
