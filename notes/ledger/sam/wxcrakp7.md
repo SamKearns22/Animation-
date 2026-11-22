@@ -38,3 +38,6 @@ Dressing it as Jason takes about 5 minutes a frame with today's drawing step. Sh
 
 This is insane. Surely there's a better way?
 
+### 2026-11-22T20:09:25
+Y
+
