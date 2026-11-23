@@ -4513,21 +4513,38 @@ def named_lines_shared_inputs_milburn():
 
 @test
 def move_to_shared_catches_film_fixes():
-    """named-lines change 3's stop (Sam, 23 Nov: rules are not film specific): handover.py end stops on a check fix
-    written in one film's code. Replayed on the 10 the look-back found in three films (Blessed 7, Milburn 1, Grand Theft
-    Autism 2, its own renderer); a shared file is never flagged; Sam's 'stays in film' row lets one through."""
+    """named-lines change 3's stop, the check of CLAUDE.md "Every rule and fix is for all films" (Sam, 23 Nov, N26):
+    handover.py end stops on a check fix written in one film's code. Replayed on the SAVED code of the 10 the look-back
+    found in three films (Blessed 7, Milburn 1, Grand Theft Autism 2, its own renderer); a shared file is never flagged;
+    a film whose notes say Sam keeps it (| stays in film | FILE | why | Sam's Y |) passes."""
+    import tempfile
     import handover as H
-    real = [('source/blessed_checks.py', ['def scene(t):', 'def solids(t):', 'def cam_for(t):', 'def audits():',
-                                         'SET_FEET = {   # each walking shot']),
-            ('source/blessed.py', ['def touch_faults():', 'def furniture_faults():']),
-            ('source/milburn.py', ["    _ln.update(_voice=V_.VOICES[_i + 1], _stretches=V_.LINES_TIMED[_i + 1]['stretches'])"]),
-            ('source/gta_rehearse.py', ['def solids4(cam, cars):', "    faults = HC.solid_faults(frames, solids4(cam, cars))"])]
-    diff = ''.join(f'+++ b/{f}\n' + ''.join(f'+{ln}\n' for ln in lines) for f, lines in real)
+    want = {'blessed_checks.py': ['def scene(t)', 'def solids(t)', 'def cam_for(t)', 'def audits()', 'SET_FEET = {'],
+            'blessed.py': ['def touch_faults()', 'def furniture_faults()'], 'milburn.py': ['_ln.update(_voice='],
+            'gta_rehearse.py': ['def solids4('], 'gta_shots58.py': ['def solids58(']}   # written twice (learn.md 3)
+    diff = ''
+    for f, starts in want.items():
+        src = open(os.path.join(HERE, f), encoding='utf-8').read().splitlines()
+        got = [next((ln for ln in src if ln.strip().startswith(w)), None) for w in starts]
+        diff += f'+++ b/source/{f}\n' + ''.join(f'+{ln}\n' for ln in got if ln)
     found = H.film_check_fixes(diff)
     shared = H.film_check_fixes('+++ b/source/kitinputs.py\n+def scene(t):\n+def cam_for(film, sv):\n')
     films = sorted({f for _, f, _ in found})
-    ok = len(found) == 10 and not shared and films == ['blessed', 'grand-theft-autism', 'milburn']
-    return ok, f'found {len(found)} of 10 in {films}; shared file flagged {len(shared)}'
+    stops = H.shared_faults(diff=diff)
+    d = tempfile.mkdtemp()
+    keep = os.path.join(d, 'm.md')
+    open(keep, 'w').write('## Exceptions\n| check | who | why | looked |\n|---|---|---|---|\n'
+                          '| stays in film | milburn.py | its subtitles need the take | Sam\'s Y 23 Nov |\n')
+    real = H._keep_notes
+    H._keep_notes = lambda film: keep if film == 'milburn' else real(film)
+    try:
+        kept = H.shared_faults(diff=diff)
+    finally:
+        H._keep_notes = real
+    ok = len(found) == 10 and not shared and films == ['blessed', 'grand-theft-autism', 'milburn'] and \
+        len(stops) == 10 and all(x.startswith('STOP: MOVE TO SHARED') for x in stops) and len(kept) == 9
+    return ok, f'found {len(found)} of 10 on the saved code in {films}; stops {len(stops)}; with Sam\'s keep row ' \
+               f'{len(kept)}; shared file flagged {len(shared)}'
 
 
 @test

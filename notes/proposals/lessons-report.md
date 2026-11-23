@@ -120,7 +120,12 @@ rules need to be constructed that they work in this way, they are not film speci
 Nov), CLAUDE.md "Rules are permanent": "**Every rule and fix is for all films (Sam, 23 Nov):** a fix made because of one
 film's fault goes into the shared tools, template, rulebook or checks so every later film gets it; a fix that can only
 live in one film's code gets a 'move to shared' line in that film's notes, and the handover check stops until it is
-moved or Sam says it stays." Its check: the "move to shared" handover stop (named-lines change 3). **Sam: "Y but
+moved or Sam says it stays." Its check: the "move to shared" handover stop (named-lines change 3).
+Sam said Y with "needs testing" (23 Nov); chain B chat 2 wrote it in CLAUDE.md "Rules are permanent". Chat 3 built the
+stop and tested it as asked: on the saved code it stops on all 10 film-code fixes of the last three films, never on a
+shared file, and lets through one Sam has said may stay. The rule now counts as proven (kittest
+move_to_shared_catches_film_fixes). Building it found and fixed one fault in the stop itself: it crashed on a film
+whose notes are archived (Blessed). **Sam: "Y but
 needs testing" (23 Nov). Written** in CLAUDE.md "Rules are permanent" (before: no such line; fixes often stayed in one
 film's code). Not proven yet: it counts as a working rule only when the stop catches Blessed's 7 film-code check fixes,
 Milburn's voice takes and GTA's solids on the saved code (chain B chat 3 builds and tests it). From now on: a fix made
