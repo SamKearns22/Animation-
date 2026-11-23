@@ -39,7 +39,7 @@ def colours(sp):
             'trousers': tuple(sp['trousers']), 'shoes': tuple(sp['shoe']), 'hair': tuple(sp['hair_c']),
             'door': G.TULIP_RED, 'body': G.TULIP_RED, 'dash': G.VINYL, 'seat': (120, 84, 62),
             'pillar': G.STRIPE, 'gun': (44, 46, 54), 'hand': tuple(sp['skin']),
-            'gun_slide': (132, 138, 152), 'gun_frame': (70, 74, 84), 'gun_muzzle': (30, 30, 36)}
+            'gun_slide': (132, 138, 152), 'gun_frame': (70, 74, 84), 'gun_muzzle': (30, 30, 36), **PRINT_COLS}
 
 
 def _box(lo, hi):
@@ -211,6 +211,13 @@ def raster(cam, objs, scale=1, attrs=None):
         m = ob == 0
         if m.any():
             pb[m] = BP.part_at(ab[m][:, :3], ab[m][:, 3:])
+            if PRINT_ON[0]:
+                vm = m & (pb == PART_IX['vest'])
+                if vm.any():
+                    pp = print_parts(ab[vm][:, :3])
+                    sub = pb[vm]
+                    sub[pp >= 0] = pp[pp >= 0]
+                    pb[vm] = sub
     return zb, pb, ob, names
 
 
@@ -259,16 +266,72 @@ def _raster_py(cam, objs, scale=1, attrs=None):
         m = ob == 0
         if m.any():
             pb[m] = BP.part_at(ab[m][:, :3], ab[m][:, 3:])
+            if PRINT_ON[0]:
+                vm = m & (pb == PART_IX['vest'])
+                if vm.any():
+                    pp = print_parts(ab[vm][:, :3])
+                    sub = pb[vm]
+                    sub[pp >= 0] = pp[pp >= 0]
+                    pb[vm] = sub
     return zb, pb, ob, names
 
 
 PART_NAMES = ['skin', 'vest', 'trousers', 'shoes', 'hair', 'door', 'body', 'dash', 'seat', 'pillar', 'gun', 'hand',
-              'gun_slide', 'gun_frame', 'gun_muzzle']
+              'gun_slide', 'gun_frame', 'gun_muzzle', 'print_sun0', 'print_sun1', 'print_sun2', 'print_teal',
+              'print_ink']
+# the vest's LEONIDA print (the brief: "a cream LEONIDA vest"; the flat Jason's people_parts._leonida, chat 46: the
+# 3D vest had lost it): drawn once into a picture laid on the rest body's chest front, colours by part, no outlines
+PRINT_COLS = {'print_sun0': (250, 196, 70), 'print_sun1': (244, 150, 60), 'print_sun2': (226, 102, 70),
+              'print_teal': (40, 88, 96), 'print_ink': (36, 40, 52)}
+PRINT_ON = [True]
+PRINT_PX = 52.0                  # texture pixels per rest decimetre (the word spans the chest, as on the flat Jason)
+PRINT_AT = (0.0, 5.2)            # the print's centre (the sun's top) on the rest chest (x, y dm): word under the scoop
 # the pistol's blocks in the film's own tones (gun3d_film.COLS: slide, frame, grip = 'gun', muzzle), chat 44: drawn
 # all one near-black it read as a black mark or blob when it pointed at the camera; they share one outline (INK_PART)
 GUN_PARTS = ('gun_slide', 'gun_frame', 'gun', 'gun_muzzle')     # by gun3d_film kind 0-3
 PART_IX = {n: i for i, n in enumerate(PART_NAMES)}
-INK_PART = np.array([-1] + [PART_IX['gun'] if n in GUN_PARTS else i for i, n in enumerate(PART_NAMES)])
+INK_PART = np.array([-1] + [PART_IX['gun'] if n in GUN_PARTS else PART_IX['vest'] if n.startswith('print')
+                            else i for i, n in enumerate(PART_NAMES)])
+_PRINT = {}
+
+
+def _print_tex():
+    """The print as a part-index picture (people_parts._leonida drawn through a pen that writes part numbers)."""
+    if 'tex' in _PRINT:
+        return _PRINT['tex']
+    from PIL import Image, ImageDraw
+    import people_parts as PP
+    tw, th = 400, 300
+    im = Image.new('L', (tw, th), 0)
+    d = ImageDraw.Draw(im)
+    ix = {v: PART_IX[k] + 1 for k, v in PRINT_COLS.items()}
+    inkp = PART_IX['print_ink'] + 1
+
+    class Pen:
+        def poly(self, pts, fill, outline=None, width=0, **k):
+            if fill is not None:
+                d.polygon([tuple(q) for q in pts], fill=ix.get(tuple(fill), inkp))
+            if outline is not None and width:
+                d.line([tuple(q) for q in pts] + [tuple(pts[0])], fill=ix.get(tuple(outline), inkp),
+                       width=max(1, int(round(width))))
+
+        def line(self, pts, col, width=1.0, **k):
+            d.line([tuple(q) for q in pts], fill=ix.get(tuple(col), inkp), width=max(1, int(round(width))),
+                   joint='curve')
+    PP._leonida(Pen(), tw / 2, th / 2)
+    _PRINT['tex'] = (np.asarray(im).astype(np.int64) - 1, tw, th)
+    return _PRINT['tex']
+
+
+def print_parts(rest):
+    """Part index of the print at each rest point (front of the chest only), or -1."""
+    tex, tw, th = _print_tex()
+    u = np.round(tw / 2 + (rest[:, 0] - PRINT_AT[0]) * PRINT_PX).astype(int)
+    v = np.round(th / 2 - (rest[:, 1] - PRINT_AT[1]) * PRINT_PX).astype(int)
+    ok = (u >= 0) & (u < tw) & (v >= 0) & (v < th) & (rest[:, 2] > 0.2)
+    out = np.full(len(rest), -1)
+    out[ok] = tex[v[ok], u[ok]]
+    return out
 
 
 def ink(zb, pb, ob, width):

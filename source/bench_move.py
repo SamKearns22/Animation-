@@ -69,6 +69,57 @@ def _u(a):
     return a / (np.linalg.norm(a) + 1e-12)
 
 
+# Sam, 23 Nov (chat 46): "Jason has lost a lot of his bulk in the new version ... he's a muscled guy" (the game art:
+# broad shoulders, thick arms, deep chest). MakeHuman's own muscle and weight sliders move the shoulders only 3-4%,
+# so the skin is filled out round the house skeleton (the joints, the poses and the clothes' regions are unchanged):
+# the arms grow round their bones, the chest gains depth and the shoulders width. Blended by each point's arm weight,
+# so the armpit and shoulder joins stay smooth.
+FACE_IN = float(os.environ.get('BULK_FI', 1.0))
+BULK = dict(upper=float(os.environ.get('BULK_UP', 1.5)), fore=float(os.environ.get('BULK_FO', 1.2)),
+            chest_w=float(os.environ.get('BULK_CW', 1.06)), chest_d=float(os.environ.get('BULK_CD', 1.06)))
+
+
+def _seg_closest(P, a, b):
+    ab = b - a
+    u = np.clip(((P - a) @ ab) / (ab @ ab), 0, 1)
+    return a + u[:, None] * ab
+
+
+def bulk(V, J, R):
+    """The rest skin filled out to Jason's build (BULK): arms round their bones, chest depth and shoulder width."""
+    V = V.copy()
+    bone = R['bone']
+    w_arm = R['grp'][:, 1]
+    for sd, S_ in (('L', '.L'), ('R', '.R')):
+        for pre, (a, b), f in (('upperarm', ('sh', 'el'), BULK['upper']), ('lowerarm', ('el', 'wr'), BULK['fore'])):
+            m = np.array([str(x).startswith(pre) and str(x).endswith(S_) for x in bone])
+            if not m.any():
+                continue
+            A_, B_ = J[a + sd], J[b + sd]
+            ab = B_ - A_
+            u = np.clip(((V[m] - A_) @ ab) / (ab @ ab), 0, 1)
+            c = A_ + u[:, None] * ab
+            # the muscle swells mid-bone (biceps, forearm), not at the joint: from the armpit in, the bigger arm
+            # pressed 12 cm into the chest (self check, chat 46)
+            tap = np.clip(u / 0.35, 0, 1) * np.clip((1 - u) / 0.2, 0, 1) if pre == 'upperarm' else np.clip((1 - u) / 0.35, 0, 1)
+            tap = tap * tap * (3 - 2 * tap)
+            # the side facing the trunk stays (the arm grows outward, away from the chest)
+            out_ = V[m] - c
+            side_ = np.sign(A_[0]) if abs(A_[0]) > 1e-6 else 1.0
+            face_in = np.clip(-(out_[:, 0] * side_) / (np.linalg.norm(out_, axis=1) + 1e-9), 0, 1)
+            k = 1 + (f - 1) * np.clip(w_arm[m], 0, 1) * tap * (1 - FACE_IN * face_in)
+            V[m] = c + (V[m] - c) * k[:, None]
+    # the trunk from the waist up: wider at the shoulders, deeper at the chest (pelvis at y 0, neck at J['neck'])
+    yn = float(J['neck'][1])
+    tr = R['grp'][:, 0] > 0.5
+    up = np.clip((V[:, 1] - 0.25 * yn) / (0.6 * yn), 0, 1)
+    up = up * up * (3 - 2 * up) * tr * (V[:, 1] < yn + 0.02)
+    V[:, 0] *= 1 + (BULK['chest_w'] - 1) * up
+    zc = 0.0
+    V[:, 2] = zc + (V[:, 2] - zc) * (1 + (BULK['chest_d'] - 1) * up)
+    return V
+
+
 def rig():
     if RIG:
         return RIG
@@ -85,6 +136,7 @@ def rig():
     V = (v - o) * s * MIR                                          # rest body, metres, car-handed, pelvis at 0
     heads = {b: (sk.rest[b][:3, 3] - o) * s * MIR for b in sk.order}
     J = {n: heads[b] for n, b in JOINTS.items()}
+    V = bulk(V, J, R)
     keep = np.zeros(len(v), bool)
     keep[R['used']] = True
     bone = R['bone']
@@ -2092,16 +2144,20 @@ def dressed_still(path, name='K4', t=1.95, scale=2):
     return res
 
 
-def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
+def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None, cam=None, xf=None, face=None, car=None,
+                 layer=False):
     """One solved pose dressed as Jason in the house look (stage 2, chat 44: the still's drawing made a frame
     drawer, so the dressed clip and the still are drawn by the same code): house colours by body part (bench_pose
     part_at), house ink, the house head drawing laid at the head's depth, circle hands, the pistol, the smooth neck
     column. view 'shot' = shot 4's locked camera at t; 'outside' = beside the window (front door cut away).
-    Returns a PIL image at the camera's size x scale."""
+    Returns a PIL image at the camera's size x scale.
+    In the film (jason3d_film, chat 46): cam = the film's camera, xf = car frame -> world (the moving Tulip, car its
+    gta_cars car), face = the head's acting keys, layer=True: only his own dots (body, hands, pistol, the ink round
+    them) on a clear layer; the car solids still hide him by depth."""
     import bench_draw as BD
     from PIL import Image
     r = rig()
-    sp = dict(r['sp'], mood='stern', squint=0.35, frown=0.07)
+    sp = dict(dict(r['sp'], mood='stern', squint=0.35, frown=0.07), **(face or {}))
     tk = r['tk']
     neckb = np.array([str(b).startswith('neck') for b in r['bone']])
     # only the neck itself is hidden (rest |x| under 0.62 dm; 0.68 left an ink blot at the join): the shoulder tops
@@ -2149,7 +2205,13 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
         Pj = np.concatenate([Pj, Vn])
     tp = np.array(['skin'] * len(tk))    # Jason's colours come per dot from part_at (attrs), not per triangle
     objs = [(Pj, tk, tp, 'jason')] + scene(out)[1:]
-    if view == 'shot':
+    if xf is not None:
+        objs = [(xf(P_), T_, tp_, nm_) for P_, T_, tp_, nm_ in objs]
+        if DRESS_HIDE_NECK:
+            Vn = xf(Vn)
+    if cam is not None:
+        ob_ = objs
+    elif view == 'shot':
         cam = cam_at(t, shake=shake)
         ob_ = objs
     else:
@@ -2161,18 +2223,34 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
     if DRESS_HIDE_NECK:                  # where the neck column is the nearest thing, it never hides the head
         zn = BD.raster(cam, [(Vn, Tn, np.array(['skin'] * len(Tn)), 'neck')], scale)[0]   # drawing (Sam, 23 Nov)
         free = np.isfinite(zn) & (zn <= zb + 1e-6)
-    pb = clean_parts(pb, ob, 9 * scale // 2)
+    # chat 46: the clean-up reaches 1.8 cm on the body, however near the camera (shot 6's close two-shot: the
+    # strap's edge at the raised arm's shoulder zig-zagged 2 cm; 9 dots is ~1 cm there, ~4 cm far off in shot 4)
+    chest = (out['J']['neck'] + out['J']['pelvis']) / 2
+    if xf is not None:
+        chest = xf(chest[None])[0]
+    kk = cam.project(tuple(float(c) for c in chest))[1]
+    pb = clean_parts(pb, ob, max(9 * scale // 2, int(0.018 * kk * scale)))
     edge = BD.ink(zb, pb, ob, 3 * scale)
     from scipy import ndimage                    # ink specks too small to be a line (left at the throat, chat 38)
     lab, nl = ndimage.label(edge)
     if nl:
         sz = ndimage.sum(edge, lab, range(1, nl + 1))
         edge &= ~np.isin(lab, np.where(sz < 60 * scale * scale)[0] + 1)
+    if layer:                            # his own dots and the ink within a line's width of them
+        mine = np.isin(ob, [i for i, n in enumerate(names) if n == 'jason' or n.startswith('hand') or n == 'gun'])
+        near = ndimage.binary_dilation(mine, iterations=3 * scale)
+        pb = np.where(mine, pb, -1)
+        edge = edge & near
     img = BD.compose(zb, pb, ob, names, edge, BD.colours(sp), scale)
-    bg = Image.new('RGBA', img.size, SKY + (255,))
-    bg.alpha_composite(img)
-    img = bg
+    if not layer:
+        bg = Image.new('RGBA', img.size, SKY + (255,))
+        bg.alpha_composite(img)
+        img = bg
     k = house_pose(out)
+    if xf is not None:
+        import leanout as _L
+        k = _L.to_world(k, car)
+        k.aim, k.firing = _u(xf(np.asarray(out['aim'], float)[None] + out['J']['wrR'][None])[0] - xf(out['J']['wrR'][None])[0]), True
     import lying_flat as LF
     LF.HEAD_VD[0] = head_vd
     try:
@@ -2180,7 +2258,7 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
     finally:
         LF.HEAD_VD[0] = None
     BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale, free)
-    return img.convert('RGB')
+    return img if layer else img.convert('RGB')
 
 
 def head_yaw(out, t):

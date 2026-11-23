@@ -527,6 +527,9 @@ def inside58(t, rec=None):
         JASON58['k'].front = True
         JASON58['k'].chest_gun = True
         JASON58['face'] = dict(GC.cast()['jason'], **j_over)
+        JASON58['over'] = j_over
+        if J3.ON[0]:                     # chat 46: the dressed 3D body (the bench's, shot 4's own) acts the same keys
+            JASON58['g'] = goals58(lh, up, th)
         R.bench(lay, cam, car)
         order = sorted([('case', (0.4, 0.7, -0.85)), ('her', her_neck), ('lucia', lu_neck)],
                        key=lambda s: -math.dist(car.body_pt(s[1]), cam.pos))
@@ -540,6 +543,35 @@ def inside58(t, rec=None):
                 sit(lay, cam, car, 'lucia', lu_neck, t, lu_hands, lu_over, head_dir=lu_dir, rec=rec)
                 R.steering_wheel(lay, cam, car, rot)
     return paint
+
+
+import jason3d_film as J3        # noqa: E402  chat 46: the bench's dressed 3D Jason (Sam 23 Nov)
+
+
+def goals58(lh, up, th):
+    """Shots 5-8 on the 3D body (chat 46): shot 4's last goals (seated, K1: pistol flat on his chest), the gun hand
+    taken to the acting key lh (the old seated skeleton's hand points; at rest they sit on shot 4's own rest hand,
+    so the cut keeps his body), the elbow out and down off the chest, the barrel turning from flat on his chest to
+    up and tipped inboard (side-on to the lens) as the hand rises (up 0..1); braced inboard through the corner (th)."""
+    import copy
+    import bench_move as BM
+    if 'g_end' not in JASON58:
+        JASON58['g_end'] = BM.goals_at(R.SHOT4_LEN)
+    g = copy.deepcopy(JASON58['g_end'])
+    spec = g['hand']['R']
+    if isinstance(spec[0], str) and spec[0] == 'mix':          # shot 4's end: K1 fully blended in
+        spec = spec[2] if spec[3] >= 0.5 else spec[1]
+    hpos, hdir = spec
+    hpos = np.asarray(hpos, float)
+    off = hpos - np.asarray(LO.K1_HAND_R, float)
+    pos = np.asarray(lh, float) + off * (1 - up)
+    pole = LO._u(np.asarray(hdir, float) * (1 - up) + np.array((1.0, -1.0, 0.1)) * up)
+    g['hand'] = dict(g['hand'])
+    g['hand']['R'] = (pos, pole)
+    g0 = LO._u(np.asarray(g['gun'], float))
+    g['gun'] = LO._u(g0 * (1 - up) + np.array((-0.30, 0.95, 0.0)) * up)
+    g['pelvis'] = np.asarray(g['pelvis'], float) + np.array((-0.07 * th, 0.0, 0.0))
+    return g
 
 
 JASON58 = {}       # Jason's seated skeleton and face for this drawing (inside58 sets it; tulip_draw draws it)
@@ -645,7 +677,14 @@ def _world58(t, cam_fn, record=None):
     def tulip_draw(im):
         seat_pts.clear()
         G.draw_car(im, cam, tul, t=t, inside=inside58(t, seat_pts))
-        _, kw, _ = LO.film_layer(im, cam, tul, t, JASON58['sp'], JASON58['face'], k=JASON58['k'])
+        if J3.ON[0]:
+            out = J3.pose_goals(JASON58['g'])
+            chest = (np.asarray(out['J']['neck']) + np.asarray(out['J']['pelvis'])) / 2
+            _, pane, _ = G.cover_masks(tul, cam, tul.body_pt(tuple(float(c) for c in chest)), im.size)
+            _, kw = J3.layer(im, cam, tul, t, face=JASON58['over'], goals=JASON58['g'],
+                             glass=(np.asarray(pane, np.float32) / 255.0, 0.15))
+        else:
+            _, kw, _ = LO.film_layer(im, cam, tul, t, JASON58['sp'], JASON58['face'], k=JASON58['k'])
         seat_pts.append(('jason', [(n, tuple(map(float, kw[n]))) for n in
                                    ('neck', 'head', 'shL', 'elL', 'wrL', 'shR', 'elR', 'wrR', 'pelvis')]))
         tinf['pts3'] = [(f'{who} {n}', q) for who, pts in seat_pts for n, q in pts]

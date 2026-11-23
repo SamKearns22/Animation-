@@ -229,6 +229,7 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   he have three fists? Why is he holding the gun backwards?" Cause: draw_gun's chest mode adds 3 skin rings over the
   grip on top of his drawn fist; the grip hangs away from the hand. Missed: critique r44 said CAN'T TELL (gun way round,
   'a close crop would show it') and no crop was made; the held-object check is still a draft. Plan put to Sam, awaiting Y.
+- Sam (23 Nov, chat 46): "Y on pistol" = Q1 Y: shot 3 gets the pistol flat on his chest (the brief), matching shot 4's opening. Q0 is met by the 3D Jason (one fist round the handle, chat 43 grip) going into shots 5-8.
 - Needs Sam: Q0 Y for the three-fists/backwards-gun plan; Q1 shot 3 pistol (Y once shot 4's opening shows it too / N); Q2 Y = animatic v5 from this clip.
 - Next: on Sam's Y, chat 33e, Sonnet: animatic v5 `grand_theft_autism.py OUT --from 7.0` (shot 1 reused), audio from
   the clean render, body check, critique pack, finish.py (write outside animations/drafts first), copy, send.
