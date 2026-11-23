@@ -13,6 +13,23 @@
   `round_page` (page 16.4% of code, bar 15%).
 
 
+## Reserve jobs (Sam, 23 Nov ~22:05: "add that to our reserve job list ... we aren't doing those right this second")
+Each waits until Sam names it. No chat starts one, opens a chat for one, or asks Sam about one until then.
+- **R1. Body shapes (Sam, 23 Nov):** "I do think we need multiple body shapes in our kit, maybe 6 for male and
+  female." Several builds in the people kit (about six for men, six for women), each in every view, seated and
+  standing, with its own clothes cut. Starts from the woman's body if Open Wounds adopts it
+  (notes/proposals/womans-build.md). Through the proposal route first; Opus high.
+- **R2. Chain A, rule proofs (Milburn lessons; last chat session_01U3pKQzjJ6Hbt9H5jkEg1t1):** next as in
+  notes/proposal-route.md "Next (chain A, chat 6)": the back-view body check, rule 41's legs (a bent knee), a copy of
+  v4 with the car's solids, audit.py's saved example; audit_door_through_officer is written, not run. Opus high.
+- **R3. Chain B, lessons job (last chat session_01U3pKR2CR28qdUtk2Z9Y6DN):** ask Sam Q1 (the guard's Change 2: retune
+  it on the labelled list) and Q2 (the daily watcher line gets the one-line correction), then notes-model and
+  brow-limit, then the whole lessons report as a plain page (notes/proposal-route.md "Next (chain B)"). Opus medium.
+- **R4. Chain A chat 4's open question:** plain-check Change 1 Q1 (notes/proposal-route.md "Needs Sam").
+- **R5. Statement One chat (session_01U3pKR36uALh2iRkpP1tyQ4), two open questions:** option 1 or 2 for the
+  double-message fix; Statement One "every" or "normal" film (15% vs about 26% for a big film).
+- **R6. Fix the half-turn heads (Sam, 19 Nov, already reserve):** notes/proposals/front-on-focus/retirement-and-handover.md.
+
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
 - **Done:** Sam: "Walliams: put into kit" (22 Nov). David Walliams is a kit person in `story/facetool-people.txt`

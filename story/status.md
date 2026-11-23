@@ -1,3 +1,3 @@
-Brexit Is Done (Open Wounds): script in; cast sheet v2 sent; notes 5-6 (women's build, Kemi's collar) answered.
-Next: on Sam's Y, chat 3 (Opus high) builds a woman's build, fixes the collar, then plans the film.
-Then: sets (site, Westminster-style room), wolves, animatic.
+Open Wounds (brexit-is-done): cast notes 5-6; note 6 fixed, note 5 (woman's body) judged and asked.
+Waiting for Sam's pick on the woman's body (option 1 or 2).
+Then the build, cast sheet v3, and the plan (sets, wolves, estimate).
