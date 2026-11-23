@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 130.43%; 61 chats, 0 rounds, 1 notes, 0 repeated.**
+**Estimate ?% of a week; spent 130.69%; 61 chats, 0 rounds, 1 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -65,7 +65,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-23 | 4d585828 | est | opus | learn |  | 3.89 |  | 0 | 0 |
 | 2026-11-23 | 83eb68cc | est | opus | auto |  | 0.51 |  | 0 | 0 |
 | 2026-11-23 | 07b6e5a0 | est | opus | rule proofs (chain A chat 5) |  | 2.69 |  | 0 | 0 |
-| 2026-11-23 | bd54de71 | est | opus | build |  | 2.56 |  | 0 | 0 |
+| 2026-11-23 | bd54de71 | est | opus | build |  | 2.82 |  | 0 | 0 |
 | 2026-11-23 | 0551c818 | est | opus | auto |  | 3.68 |  | 0 | 0 |
 | 2026-11-23 | 7afd1f6f | est | opus | auto |  | 1.03 |  | 0 | 0 |
 | 2026-11-23 | fcc7aa67 | est | opus | auto |  | 0.15 |  | 0 | 0 |
@@ -115,7 +115,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-23 9158c1df (auto): 143 steps, history 293k at the end; other 73.9%, tool search 23.3%, renders 1.6%, pictures 0.9%, whole-file .py read 0.3%
 - 2026-11-23 83eb68cc (auto): 31 steps, history 150k at the end; other 59.7%, tool search 29.3%, renders 11%
 - 2026-11-23 07b6e5a0 (rule proofs (chain A chat 5)): 129 steps, history 285k at the end; other 71.9%, tool search 23.6%, pictures 3%, renders 1.3%, whole-file .py read 0.2%
-- 2026-11-23 bd54de71 (build): 123 steps, history 259k at the end; other 69%, tool search 29.3%, renders 1.2%, whole-file .py read 0.4%
+- 2026-11-23 bd54de71 (build): 139 steps, history 269k at the end; other 69.8%, tool search 28.7%, renders 1.1%, whole-file .py read 0.4%
 - 2026-11-23 0551c818 (auto): 156 steps, history 336k at the end; other 74.3%, tool search 25.7%
 - 2026-11-23 7afd1f6f (auto): 78 steps, history 188k at the end; other 64.5%, tool search 31.4%, renders 2.9%, pictures 1.3%
 - 2026-11-23 fcc7aa67 (auto): 10 steps, history 102k at the end; other 88.6%, tool search 11.4%
@@ -140,7 +140,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-23 9158c1df (auto): new writes 32.9%, carried history 26.5%, start-up floor 23%, Claude's words 17.7%. Biggest origins: Claude's words 30.3%, start-up floor 23%, result: tool search 19.4%. Leftover 0%
 - 2026-11-23 83eb68cc (auto): start-up floor 33.4%, new writes 28.2%, Claude's words 26.7%, carried history 11.7%. Biggest origins: Claude's words 37.7%, start-up floor 33.4%, result: tool search 25.2%. Leftover 0%
 - 2026-11-23 07b6e5a0 (rule proofs (chain A chat 5)): carried history 35.2%, new writes 29.8%, Claude's words 22.2%, start-up floor 12.9%. Biggest origins: messages and reminders 38.1%, Claude's words 33.7%, start-up floor 13%. Leftover 0%
-- 2026-11-23 bd54de71 (build): carried history 28.8%, start-up floor 26.9%, Claude's words 25.9%, new writes 18.4%. Biggest origins: Claude's words 44.7%, start-up floor 26.9%, result: tool search 17.6%. Leftover 0%
+- 2026-11-23 bd54de71 (build): carried history 31.5%, start-up floor 26.6%, Claude's words 24.5%, new writes 17.3%. Biggest origins: Claude's words 44.2%, start-up floor 26.6%, result: tool search 17.8%. Leftover 0%
 - 2026-11-23 0551c818 (auto): carried history 39.1%, new writes 27.3%, Claude's words 23%, start-up floor 10.5%. Biggest origins: messages and reminders 40.4%, Claude's words 35.3%, result: tool search 11%. Leftover 0%
 - 2026-11-23 7afd1f6f (auto): start-up floor 35.6%, Claude's words 24.7%, new writes 22%, carried history 17.7%. Biggest origins: Claude's words 38.6%, start-up floor 35.6%, result: tool search 20.4%. Leftover 0%
 - 2026-11-23 fcc7aa67 (auto): start-up floor 64.4%, Claude's words 19.6%, new writes 14.5%, carried history 1.5%. Biggest origins: start-up floor 64.4%, Claude's words 26.5%, result: tool search 7.3%. Leftover 0%

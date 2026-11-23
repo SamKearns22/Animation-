@@ -12449,67 +12449,67 @@
    "model": "opus",
    "stage": "build",
    "round": null,
-   "cost": 2.56,
+   "cost": 2.82,
    "notes": 0,
    "repeats": [],
    "src": "estimate",
    "sid": "session_01U3pKR2CR28qdUtk2Z9Y6DN",
-   "steps": 123,
-   "hist_k": 259,
+   "steps": 139,
+   "hist_k": 269,
    "kinds": {
-    "tool search": 29.3,
+    "tool search": 28.7,
     "whole-file .py read": 0.4,
-    "renders": 1.2,
-    "other": 69.0
+    "renders": 1.1,
+    "other": 69.8
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 90,
+    "tool search": 100,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
     "renders": 3,
     "pictures": 0,
-    "other": 32
+    "other": 35
    },
    "split": {
-    "usd": 7.5442,
-    "total": 7.5442,
+    "usd": 8.5276,
+    "total": 8.5276,
     "floor_k": 84,
     "blocks": {
-     "carried history": 28.8,
-     "start-up floor": 26.9,
-     "Claude's words": 25.9,
-     "new writes": 18.4
+     "carried history": 31.5,
+     "start-up floor": 26.6,
+     "Claude's words": 24.5,
+     "new writes": 17.3
     },
     "origins": {
-     "Claude's words": 44.7,
-     "start-up floor": 26.9,
-     "result: tool search": 17.6,
-     "result: other": 5.4,
-     "messages and reminders": 3.8,
+     "Claude's words": 44.2,
+     "start-up floor": 26.6,
+     "result: tool search": 17.8,
+     "result: other": 5.7,
+     "messages and reminders": 4.0,
      "Claude's edits": 1.3,
      "result: whole-file .py read": 0.2,
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 26.9,
-     "thinking": 18.7,
-     "writing code": 12.2,
-     "reading notes": 8.0,
+     "start-up reading (rules, tools, first files)": 26.6,
+     "thinking": 18.1,
+     "writing code": 11.9,
+     "reading notes": 7.9,
      "commands": 6.9,
-     "start-up and handover tools": 6.0,
-     "writing notes": 4.8,
-     "messages and reminders": 3.8,
+     "start-up and handover tools": 6.1,
+     "writing notes": 5.2,
+     "messages and reminders": 4.0,
      "reading chat records": 3.5,
-     "reading kit code": 2.8,
-     "messages to Sam": 2.0,
-     "running checks and tools": 1.6,
-     "helper and chat prompts": 1.4,
+     "reading kit code": 2.9,
+     "messages to Sam": 2.2,
+     "running checks and tools": 1.7,
+     "helper and chat prompts": 1.3,
+     "app tools (chats, files sent)": 0.5,
      "other commands": 0.4,
-     "reading guides": 0.3,
+     "reading guides": 0.4,
      "git and saving": 0.2,
-     "app tools (chats, files sent)": 0.2,
      "helper results": 0.1,
      "renders": 0.1
     },
@@ -12523,47 +12523,47 @@
      [
       "source/propose.py",
       3.9,
-      0.1095
+      0.1206
      ],
      [
       "notes/proposals/guard-film-questions.md",
       2.6,
-      0.0744
+      0.0818
      ],
      [
       "notes/proposals/unrouted.md",
       1.0,
-      0.0271
+      0.0299
      ],
      [
       "notes/proposals/precheck-reply.md",
       0.9,
-      0.0228
+      0.0254
      ],
      [
       "notes/ledger/sam/kpp1tyq4.md",
       0.4,
-      0.01
+      0.011
      ],
      [
       "notes/proposals/guard-holes/probe.py",
       0.4,
-      0.0098
+      0.0109
      ],
      [
       ".claude/settings.json",
       0.3,
-      0.008
+      0.0089
      ],
      [
       "notes/ledger/sam/gr9hlufs.md",
       0.2,
-      0.0056
+      0.0062
      ],
      [
       "guides/job-packs.md",
       0.2,
-      0.0049
+      0.0054
      ]
     ],
     "base_pct": 24.7
@@ -12574,13 +12574,13 @@
      "no show": 0
     },
     "other": {
-     "shared:handover.py": 3,
-     "other": 12,
-     "film notes": 20,
-     "shared:propose.py": 11,
+     "shared:handover.py": 4,
+     "other": 14,
+     "film notes": 23,
+     "shared:propose.py": 12,
      "shared:ledger.py": 2,
      "guides": 6,
-     "shared:watcher.py": 3,
+     "shared:watcher.py": 6,
      "shared:kittests.py": 15,
      "shared:ruleproofs.py": 5,
      "shared:override.py": 1,
@@ -13311,6 +13311,86 @@
       "shared:kittests.py",
       "source/kittests.py notes/logs/kittests-last.log",
       "^PASS",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "^    'shared_faults'\\|^    'kittest_gate_faults'\\|^    'override.py prompt'\\|^  ",
+      ""
+     ],
+     [
+      128,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "^    'shared_faults'\\|^    'kittest_gate_faults'",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git diff --name-only HEAD ",
+      ""
+     ],
+     [
+      130,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "^    'shared_faults'\\|^    'kittest_gate_faults'",
+      ""
+     ],
+     [
+      131,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/guard-blocks.jsonl",
+      "python3 -c \"import sys;sys.path.insert(0,'source');import watcher;print(len(watc",
+      ""
+     ],
+     [
+      133,
+      "other",
+      "other",
+      "notes/ledger/sam",
+      "hold the work",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/ledger/sam/5jkeg1t1.md",
+      "HELD by Sam",
+      ""
+     ],
+     [
+      135,
+      "other",
+      "film notes",
+      "notes/proposals/guard-film-questions.md notes/proposals/precheck-reply.md notes/",
+      "^Status",
+      ""
+     ],
+     [
+      136,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^SENTENCE",
+      ""
+     ],
+     [
+      137,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/logs/",
+      "python3 - <<'EOF' p='notes/proposal-route.md'; s=open(p).read() s=s.replace(\"Fir",
       ""
      ]
     ]
