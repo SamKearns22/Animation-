@@ -7802,7 +7802,1578 @@
    "round": null,
    "cost": 1.92,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "steps": 86,
+   "hist_k": 241,
+   "kinds": {
+    "tool search": 19.3,
+    "whole-file .py read": 2.5,
+    "renders": 2.9,
+    "other": 75.3
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 68,
+    "whole-file .py read": 2,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 6,
+    "pictures": 0,
+    "other": 14
+   },
+   "split": {
+    "usd": 6.59,
+    "total": 6.59,
+    "floor_k": 84,
+    "blocks": {
+     "carried history": 36.4,
+     "new writes": 32.3,
+     "Claude's words": 22.8,
+     "start-up floor": 8.5
+    },
+    "origins": {
+     "messages and reminders": 41.5,
+     "Claude's words": 33.7,
+     "result: tool search": 12.2,
+     "start-up floor": 8.6,
+     "result: other": 3.0,
+     "Claude's edits": 0.7,
+     "result: renders": 0.3
+    },
+    "named": {
+     "messages and reminders": 41.5,
+     "writing code": 14.1,
+     "thinking": 12.2,
+     "start-up reading (rules, tools, first files)": 8.6,
+     "commands": 6.5,
+     "reading notes": 4.9,
+     "start-up and handover tools": 3.6,
+     "reading chat records": 2.5,
+     "reading kit code": 1.6,
+     "reading guides": 1.2,
+     "writing notes": 0.7,
+     "other commands": 0.7,
+     "helper and chat prompts": 0.6,
+     "renders": 0.6,
+     "running checks and tools": 0.4,
+     "messages to Sam": 0.3
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 23,
+    "work_pct": 0.46,
+    "reads": [
+     [
+      "notes/proposals/rule-needs-check/rule-table.md",
+      9.2,
+      0.1051
+     ],
+     [
+      "source/watcher.py",
+      4.2,
+      0.0466
+     ],
+     [
+      "source/handover.py",
+      2.6,
+      0.0258
+     ],
+     [
+      "source/kittests.py",
+      2.2,
+      0.024
+     ],
+     [
+      "guides/film-quality-rules.md",
+      1.0,
+      0.0103
+     ],
+     [
+      "notes/proposals/rule-needs-check.md",
+      0.9,
+      0.0094
+     ],
+     [
+      "source/viewchecks.py",
+      0.9,
+      0.0083
+     ],
+     [
+      "source/bench_move.py",
+      0.9,
+      0.0083
+     ],
+     [
+      "notes/proposals/could-not-test/test.md",
+      0.5,
+      0.0058
+     ],
+     [
+      "source/propose.py",
+      0.6,
+      0.0051
+     ],
+     [
+      "notes/proposals/unrouted.md",
+      0.6,
+      0.0051
+     ]
+    ],
+    "base_pct": 19.6
+   }
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "37f021ea",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.93,
+   "src": "estimate",
+   "sid": "session_01U3pKQy7WWrKYXdcVwSbKkN",
+   "steps": 60,
+   "hist_k": 189,
+   "kinds": {
+    "tool search": 37.7,
+    "other": 62.3
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 55,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 3.4024,
+    "total": 3.4024,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 31.1,
+     "new writes": 24.8,
+     "Claude's words": 24.5,
+     "carried history": 19.6
+    },
+    "origins": {
+     "Claude's words": 36.0,
+     "start-up floor": 31.1,
+     "result: tool search": 27.2,
+     "messages and reminders": 3.7,
+     "result: other": 1.3,
+     "Claude's edits": 0.6
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 31.1,
+     "thinking": 15.7,
+     "reading notes": 13.9,
+     "commands": 9.1,
+     "writing notes": 8.7,
+     "reading chat records": 6.5,
+     "reading kit code": 5.4,
+     "messages and reminders": 3.7,
+     "messages to Sam": 1.7,
+     "writing code": 1.4,
+     "reading guides": 1.3,
+     "other commands": 1.0,
+     "start-up and handover tools": 0.4,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 49,
+    "work_pct": 0.77,
+    "reads": [
+     [
+      "notes/proposals/named-lines.md",
+      4.9,
+      0.0868
+     ],
+     [
+      "source/preflight.py",
+      4.2,
+      0.0684
+     ],
+     [
+      "notes/ledger/blessed-preflight-chat3.txt",
+      2.8,
+      0.0474
+     ],
+     [
+      "notes/proposals/lessons-report.md",
+      1.3,
+      0.0226
+     ],
+     [
+      "notes/proposals/rule-needs-check/rule-table.md",
+      1.1,
+      0.0174
+     ],
+     [
+      "notes/proposals/could-not-test.md",
+      0.9,
+      0.0149
+     ],
+     [
+      "notes/proposals/could-not-test/test.md",
+      0.9,
+      0.0149
+     ],
+     [
+      "source/waivers.py",
+      0.9,
+      0.0148
+     ],
+     [
+      "notes/archive/blessed-handovers.md",
+      1.0,
+      0.0125
+     ],
+     [
+      "notes/proposals/named-lines/chat.md",
+      0.6,
+      0.0105
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      0.8,
+      0.0099
+     ],
+     [
+      "notes/ledger/milburn/checks.jsonl",
+      0.5,
+      0.0088
+     ],
+     [
+      "source/kittests.py",
+      0.5,
+      0.0075
+     ],
+     [
+      "notes/logs/broken.md",
+      0.5,
+      0.0075
+     ],
+     [
+      "notes/logs/kittests-last.log",
+      0.5,
+      0.0075
+     ],
+     [
+      "source/grand_theft_autism.py",
+      0.5,
+      0.0075
+     ],
+     [
+      "notes/proposal-route.md",
+      0.3,
+      0.0027
+     ],
+     [
+      "notes/archive/proposal-route-handovers.md",
+      0.2,
+      0.0018
+     ],
+     [
+      "notes/archive/milburn.md",
+      0.1,
+      0.0015
+     ],
+     [
+      "story/status.md",
+      0.1,
+      0.0009
+     ]
+    ],
+    "base_pct": 26.4
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 4,
+     "film notes": 24,
+     "shared:preflight.py": 4,
+     "other": 12,
+     "shared:waivers.py": 1,
+     "shared:kittests.py": 6,
+     "shared:blessed_checks.py": 1,
+     "shared:blessed.py": 2,
+     "shared:grand_theft_autism.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "guides/job-packs.md notes/proposals/named-lines.md",
+      "git checkout -B chainb-named-lines 2>&1|tail -1; git push -n origin HEAD:claude/",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/proposals/named-lines.md notes/proposals/ notes/proposals/lessons-report.m",
+      "git fetch origin claude/create-claude-md-oe8z4g 2>&1|tail -1; git log --oneline ",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposals/named-lines.md",
+      "git checkout -B chainb-named-lines origin/claude/create-claude-md-oe8z4g 2>&1|ta",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/proposals/named-lines.md notes/proposals/could-not-test.md notes/proposals",
+      "Status\\|Final version",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:preflight.py",
+      "notes/proposals/could-not-test.md notes/proposals/could-not-test/test.md notes/p",
+      "sed -n 67,100p notes/proposals/could-not-test.md; echo ---; head -c 3000 notes/p",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/ledger notes/proposals/named-lines/chat.md",
+      "find notes/ledger -maxdepth 2 | head -30; find . -name \"checks.jsonl\" -not -path",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "notes/ledger/milburn/checks.jsonl notes/ledger/remakes/checks.jsonl notes/ledger",
+      "wc -l notes/ledger/milburn/checks.jsonl notes/ledger/remakes/checks.jsonl; head ",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "notes/ledger/milburn/checks.jsonl notes/ledger/blessed notes/ledger/blessed-pref",
+      "python3 -c \" import json rows=[json.loads(l) for l in open('notes/ledger/milburn",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "notes/ledger/blessed/round-1.txt notes/ledger/grand-theft-autism/round-1.txt not",
+      "for f in notes/ledger/blessed/round-1.txt notes/ledger/grand-theft-autism/round-",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:preflight.py",
+      "source/*.py source/preflight.py source/waivers.py notes/logs",
+      "checks.jsonl",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "sed -n 1,60p source/preflight.py; sed -n 430,620p source/preflight.py",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:waivers.py",
+      "source/waivers.py",
+      "^def \\|^    def ",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/film_engine.py source/*.py guides/*.md",
+      "named_file",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/broken.md notes/logs/kittests-last.log",
+      "sed -n 1,40p source/kittests.py | head -40; cat notes/logs/broken.md | head -40;",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/ledger/sam notes/ledger/sam/*.md",
+      "milburn",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check/rule-table.md",
+      "^#",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check/rule-table.md",
+      "milburn|bless|gta|grand|^\\|? *(M|B|G)",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "film notes",
+      "notes/ledger/milburn/checks.jsonl notes/archive/milburn.md",
+      "plan gap\\|overlap\\|syllab\\|SHOT CAST\\|bleep\\|named",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "notes/archive notes/archive/blessed.md",
+      "REPEAT\\|^| *4[0-9] \\|newsreader",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "film notes",
+      "notes/archive/blessed-notes-animatics-1-2.md notes/archive/blessed-handovers.md ",
+      "| *45 \\|note 45\\|newsreader",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "film notes",
+      "notes/archive/blessed-handovers.md",
+      "pre-flight\\|preflight",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:blessed_checks.py",
+      "source/blessed_checks.py source/blessed.py source/milburn.py source/satire_templ",
+      " $f; grep -o -E ",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:blessed.py",
+      "source/blessed.py source/blessed_checks.py source/milburn.py source/milburn_voic",
+      "check|pre-flight|preflight|false (line|fault)|named|clipcheck|audit|scene\\(t\\)|s",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:blessed.py",
+      "source/blessed.py source/blessed_checks.py source/milburn.py source/milburn_voic",
+      "^def [a-z_]*(check|fault|audit|solid|scene|voice)[a-z_]*\\(|^[A-Z_]*_OK *=|^def _",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:grand_theft_autism.py",
+      "source/grand_theft_autism.py source/gta_*.py",
+      "solid_at\\|street_solid",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "sleep 60; tail -5 /tmp/claude-0/-home-user-Animation-/37f021ea-18f2-55d9-af45-ba",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      " /tmp/claude-0/-home-user-Animation-/37f021ea-18f2-55d9-af45-ba2d8f3090ba/scratc",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "film notes",
+      "notes/archive/blessed-notes-animatics-1-2.md notes/archive/blessed.md",
+      "journalist\\|press\\b\\|cot\\b\\|frozen\\|still for\\|captions\\? .*fast\\|too fast",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "checks:\\|humancheck\\|body check\\|faults named\\|named",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "sed -n 100,115p notes/grand-theft-autism.md | cut -c1-260; sed -n 180,192p notes",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md",
+      "sed -n 13p notes/archive/milburn.md | cut -c380-900; grep -c \"\" /tmp/claude-0/-h",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "film notes",
+      "notes/archive/blessed-handovers.md",
+      "sed -n 166,180p notes/archive/blessed-handovers.md | cut -c1-700",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py",
+      "^(ok|FAIL|PASS|pass|fail)|passed|failed",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "source/*.py",
+      "furniture",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "^EXIT",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:kittests.py",
+      "guides/film-quality-rules.md source/kittests.py notes/proposal-route.md story/st",
+      "^| 59 ",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "^EXIT",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      "^EXIT",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL) (round_page|facehouse|places_from|moves_from)",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "film notes",
+      "notes/proposals/named-lines/learn.md notes/proposals/lessons-report.md",
+      "KITTEST",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "other",
+      "",
+      "^+",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/named-lines.md",
+      "^## ",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/archive/proposal-route-handovers.md notes/proposal",
+      "sed -n 3,13p notes/proposal-route.md > /tmp/claude-0/-home-user-Animation-/37f02",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:handover.py",
+      "story/status.md notes/proposals/named-lines.md source/handover.py",
+      "python3 - <<'EOF' p='story/status.md' L=open(p).read().split('\\n') L[0]='Proposa",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:handover.py",
+      "notes/proposal-route.md source/handover.py",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=\"body_check_*",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "git add -A notes story && git status --short | head && git commit -q -m \"named-l",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "film notes",
+      "story/status.md",
+      "git diff story/status.md | head -20",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "film notes",
+      "story/status.md notes/proposal-route.md",
+      "python3 - <<'EOF' p='story/status.md' s=open(p).read().split('\\n') out=[]; skip=",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/archive/proposal-route-handovers.md",
+      "^[+-]",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "git show origin/claude/create-claude-md-oe8z4g:notes/proposal-route.md | sed -n ",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/named-lines/learn.md. notes/proposals/le",
+      "<<<<<<<\\|>>>>>>>",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/propose.py",
+      "def settle\\|settle ",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "git add -A notes && git commit -q -m \"named-lines: handover check log Co-Authore",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "a1154f9c",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.72,
+   "src": "estimate",
+   "sid": "session_01U3pKQzaw3rkdJXunde285d",
+   "steps": 116,
+   "hist_k": 299,
+   "kinds": {
+    "tool search": 23.8,
+    "whole-file .py read": 0.3,
+    "renders": 4.0,
+    "pictures": 0.7,
+    "other": 71.3
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 80,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 9,
+    "pictures": 5,
+    "other": 28
+   },
+   "split": {
+    "usd": 9.9458,
+    "total": 9.9458,
+    "floor_k": 84,
+    "blocks": {
+     "carried history": 37.5,
+     "new writes": 27.9,
+     "Claude's words": 27.0,
+     "start-up floor": 7.5
+    },
+    "origins": {
+     "Claude's words": 42.4,
+     "messages and reminders": 37.7,
+     "result: tool search": 9.6,
+     "start-up floor": 7.7,
+     "result: other": 1.5,
+     "result: pictures": 0.6,
+     "Claude's edits": 0.4,
+     "result: renders": 0.2
+    },
+    "named": {
+     "messages and reminders": 37.7,
+     "thinking": 20.2,
+     "writing code": 16.2,
+     "start-up reading (rules, tools, first files)": 7.7,
+     "reading kit code": 6.6,
+     "commands": 5.2,
+     "renders": 1.5,
+     "running checks and tools": 0.9,
+     "reading notes": 0.9,
+     "messages to Sam": 0.7,
+     "looking at pictures": 0.6,
+     "other commands": 0.6,
+     "writing notes": 0.5,
+     "start-up and handover tools": 0.4,
+     "reading chat records": 0.3,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 36,
+    "work_pct": 0.73,
+    "reads": [
+     [
+      "source/film_engine.py",
+      4.7,
+      0.0482
+     ],
+     [
+      "source/clipcheck.py",
+      3.5,
+      0.048
+     ],
+     [
+      "source/places.py",
+      3.8,
+      0.0444
+     ],
+     [
+      "source/preflight.py",
+      3.1,
+      0.0404
+     ],
+     [
+      "source/satire_template.py",
+      3.5,
+      0.0356
+     ],
+     [
+      "source/views.py",
+      3.2,
+      0.0341
+     ],
+     [
+      "source/finish.py",
+      2.5,
+      0.0316
+     ],
+     [
+      "source/milburn.py",
+      2.4,
+      0.0281
+     ],
+     [
+      "notes/proposals/could-not-test/test.md",
+      1.5,
+      0.0224
+     ],
+     [
+      "source/waivers.py",
+      1.6,
+      0.0211
+     ],
+     [
+      "story/milburn-places.txt",
+      1.4,
+      0.0158
+     ],
+     [
+      "source/hookcheck.py",
+      1.0,
+      0.0125
+     ],
+     [
+      "source/body.py",
+      0.7,
+      0.0063
+     ]
+    ],
+    "base_pct": 17.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 10,
+     "shared:handover.py": 3,
+     "shared:clipcheck.py": 5,
+     "shared:preflight.py": 4,
+     "shared:waivers.py": 2,
+     "shared:hookcheck.py": 2,
+     "shared:finish.py": 1,
+     "shared:milburn.py": 4,
+     "shared:places.py": 4,
+     "film notes": 4,
+     "shared:views.py": 5,
+     "shared:satire_template.py": 4,
+     "shared:people.py": 1,
+     "shared:film_engine.py": 2,
+     "shared:cover.py": 13,
+     "shared:body.py": 3,
+     "shared:kittests.py": 10,
+     "shared:places_parts.py": 1,
+     "shared:grand_theft_autism.py": 1,
+     "shared:propose.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git push --dry-run origin HEAD:claude/create-claude-md-oe8z4g 2>&1 | tail -2; py",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:clipcheck.py",
+      "guides/job-packs.md source/clipcheck.py source/finish.py source/film_engine.py s",
+      "places painter\\|def paint_places\\|class Places",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "source/*.py",
+      "painter",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:clipcheck.py",
+      "source/clipcheck.py",
+      "sed -n 1,80p source/clipcheck.py",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:clipcheck.py",
+      "source/clipcheck.py",
+      "^def \\|COULD NOT\\|named\\|EXCEPT",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:clipcheck.py",
+      "source/clipcheck.py",
+      "sed -n 186,256p source/clipcheck.py; sed -n 320,380p source/clipcheck.py; sed -n",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:preflight.py",
+      "source/*.py source/preflight.py source/finish.py source/film_engine.py",
+      "COULD NOT TEST\\|could not test",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "sed -n 440,620p source/preflight.py",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:waivers.py",
+      "source/waivers.py source/film_engine.py",
+      "^def ",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:waivers.py",
+      "source/waivers.py source/finish.py",
+      "sed -n 42,113p source/waivers.py; sed -n 160,245p source/finish.py",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:hookcheck.py",
+      "source/hookcheck.py",
+      "^def \\|^[A-Z_]* =",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:hookcheck.py",
+      "source/hookcheck.py source/milburn*.py source/subtitles.py source/finish.py sour",
+      "KEEP_CLEAR\\|def caption_at\\|caption_box\\|def burn_subtitles",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:finish.py",
+      "source/finish.py",
+      "sed -n 1,30p source/finish.py; sed -n 60,160p source/finish.py",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "card\\|placard",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:places.py",
+      "source/places.py",
+      "^def \\|'over'\\|'front'\\|depth",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:places.py",
+      "source/places.py",
+      "sed -n 198,260p source/places.py; sed -n 340,383p source/places.py",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "^def \\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "sed -n 137,156p source/milburn.py; sed -n 253,347p source/milburn.py",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "story/milburn-places.txt",
+      "cat story/milburn-places.txt | head -80",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:places.py",
+      "source/places_*.py source/places.py",
+      "'papers'\\|'folder'\\|'name card'\\|'coaster'\\|'table top'\\|'flat'\\|lies\\b",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:views.py",
+      "source/views.py source/people_parts.py source/body.py",
+      "def person\\|\\['mid'\\]\\|'mid'\\|\\['pre'\\]\\|get('pre'\\|get('mid'",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1173,1240p source/views.py; sed -n 1300,1345p source/views.py",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "arm(\\|for draw\\|behind",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:satire_template.py",
+      "source/satire_template.py",
+      "def \\|PL\\.\\|painter\\|layers\\|solids",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:satire_template.py",
+      "source/satire_template.py",
+      "sed -n 100,215p source/satire_template.py",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:people.py",
+      "source/places_*.py source/people.py",
+      "@kind(",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py",
+      "sed -n 1,58p source/film_engine.py; sed -n 110,222p source/film_engine.py",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py source/humancheck.py",
+      "def copy_record\\|def finish\\|\\.body\\.\\|json",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:satire_template.py",
+      "source/satire_template.py source/body.py",
+      "def arm\\b\\|arm(p\\|draw_arm\\|_arm(",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "timeout 120 python3 -c \" import sys; sys.path.insert(0,'source') import milburn ",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "for draw in j.get('mid', \\[\\])\\|    for sd in arms_far:\\|        if sd not in be",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:cover.py",
+      "source/cover.py",
+      "time timeout 300 python3 source/cover.py milburn 1.5 20.0 27.0 60.0 2>&1 | tail ",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py source/places.py",
+      "def painter",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:cover.py",
+      "source/cover.py",
+      "python3 - <<'EOF' p='source/cover.py' s=open(p).read() s=s.replace(\"\"\" film = im",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:cover.py",
+      "source/cover.py",
+      " source/cover.py; grep -n ",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:cover.py",
+      "source/cover.py",
+      "sed -n 380,396p source/cover.py; git stash -q && git merge -q --ff-only origin/c",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:cover.py",
+      "source/cover.py source/places.py source/views.py",
+      "git checkout -q -b claude/could-not-test-build 2>/dev/null; git add -A source/co",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py",
+      "^class Pen",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:cover.py",
+      "source/cover.py source/views.py",
+      "^[0-9.]* s:",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 - <<'EOF' 2>&1 | tail import sys; sys.path.insert(0,'source'",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:cover.py",
+      "source/cover.py",
+      "^REST\\|^TORSO",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:cover.py",
+      "source/cover.py",
+      "python3 - <<'EOF' p='source/cover.py' s=open(p).read() old_sig=\"def _over(a, b, ",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:places.py",
+      "source/places.py source/views.py /home/user/Animation-/source/cover.py",
+      "TAP\\[0\\]",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "<<<<<<<\\|>>>>>>>\\|=======",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "SP=/tmp/claude-0/-home-user-Animation-/a1154f9c-010f-5333-b94f-f339b96e3fcd/scra",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:cover.py",
+      "source/cover.py source/subtitles.py",
+      "^def boxes",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "^import",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:body.py",
+      "SP/wt-4f5ece1f/source/body.py",
+      "SP=/tmp/claude-0/-home-user-Animation-/a1154f9c-010f-5333-b94f-f339b96e3fcd/scra",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:body.py",
+      "source/body.py source/milburn.py",
+      "^import\\|^from",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:cover.py",
+      "source/cover.py",
+      "python3 - <<'EOF' p='source/cover.py'; s=open(p).read() old=\"\"\" import body as B",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "",
+      "SP=/tmp/claude-0/-home-user-Animation-/a1154f9c-010f-5333-b94f-f339b96e3fcd/scra",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:satire_template.py",
+      "source/satire_template.py source/cover.py",
+      ", d(PLAN[",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def \\|^TESTS\\|^    ('",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() s=s.replace(\"\"\" 'arm'",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "",
+      "SP=/tmp/claude-0/-home-user-Animation-/a1154f9c-010f-5333-b94f-f339b96e3fcd/scra",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:places_parts.py",
+      "source/places_parts.py",
+      "@kind('papers'",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "shared:cover.py",
+      "source/cover.py /home/user/Animation-/source/cover.py",
+      "python3 - <<'EOF' p='source/cover.py'; s=open(p).read() old=\"\"\" return int(b_top",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "other",
+      "",
+      "SP=/tmp/claude-0/-home-user-Animation-/a1154f9c-010f-5333-b94f-f339b96e3fcd/scra",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:clipcheck.py",
+      "source/clipcheck.py",
+      "python3 - <<'EOF' p='source/clipcheck.py'; s=open(p).read() old=\"\"\"The checks: 1",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:grand_theft_autism.py",
+      "source/gta*.py source/grand_theft_autism.py story/status.md",
+      "PL.painter\\|places.painter\\|import places",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:cover.py",
+      "source/cover.py /home/user/Animation-/source/cover.py",
+      "/home/user/Animation-/source",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "until [ -f /tmp/claude-0/-home-user-Animation-/a1154f9c-010f-5333-b94f-f339b96e3",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "shared:cover.py",
+      "/home/user/Animation-/source/cover.py",
+      "cover_new",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/kittests.py",
+      "clipcheck\\|cover\\|COULD NOT\\|Traceback\\|Error\\|shared checks",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/preflight.py",
+      "timeout 300 python3 source/kittests.py could_not_test_cover 2>&1 | tail -3; SP=/",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -i \"s/card = lambda: d.rectangle((400, 1000, 700, 1100), fill=(250, 250, 250",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^FAIL|kittests:",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "mark",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "film notes",
+      "notes/proposals/could-not-test/*.md notes/proposals/could-not-test/ notes/propos",
+      "could-not-test",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)|kittests:",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def finish_captions_by_default",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def _finish_fake",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^(PASS|FAIL)|kittests:",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "git worktree remove --force /tmp/claude-0/-home-user-Animation-/a1154f9c-010f-53",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "shared:kittests.py",
+      "notes/proposal-route.md source/kittests.py",
+      "awk '/^## Where things stand/{f=1} f&&/^## /&&!/Where things/{exit} f' notes/pro",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "other",
+      "notes/proposals/named-lines/*.md notes/proposals/*lessons-report*.md notes/*less",
+      "Change 1",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/archive/proposal-route-handovers.md notes/archive ",
+      "python3 - <<'EOF' import re p='notes/proposal-route.md'; s=open(p).read() m=re.s",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py",
+      "sed -i '1s/$/ could-not-test built and tested (stop + cover + readable), report ",
+      ""
+     ],
+     [
+      119,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "timeout 300 python3 source/handover.py end --film proposal-route 2>&1 | head -12",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}

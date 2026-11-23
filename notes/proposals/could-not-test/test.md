@@ -72,3 +72,59 @@ allowed; number to beat: Milburn at chat 12 flags all three cards, final code cl
 readable: listed things (cards, signs, faces) measured against captions and Hook Text on the frames actually
 rendered (the render keeps their boxes per frame), not re-drawn from code; number to beat: Milburn's posted shots
 1 and 4b caught, Andy's and Pat's cards clear. Stop lands with the cover, never before it. About 5-6% of a week once.
+
+## The build (chat session_01U3pKQzaw3rkdJXunde285d, Opus high, 23 Nov): all three parts, tested
+Branch claude/could-not-test-build, merged to the main line. Replays run on each saved version (worktrees, the new
+cover copied in, the taps patched into that version's painters), every table shot one frame each 0.5 s.
+
+### (2) Cover by default (cover.py): numbers before and after
+| version | Andy's card | Pat's card | Milburn's card | false alarms |
+|---|---|---|---|---|
+| chat 12 (4f5ece1f) | flagged 17 frames (shot 4c) | flagged 49 (4a) | flagged 46 (shot 1) | 0 (replay: 1) |
+| chat 13 (e03bf0b6) | clean | clean | flagged 46 | 0 |
+| animatic 3 (f4c1d0d5) | clean | clean | flagged 49 | 0 |
+| chat 18 fix (d0f06955) | clean | clean | clean | 0 |
+| final code (6dc5df69) | clean | clean | clean | 0 |
+- Arms at their REAL depth from the pose: views.person draws each arm also on a clear layer (cover._arm), its depth
+  from shoulder, elbow and wrist (Andy's and Pat's forearms 1.82-1.87 m against their cards at 1.6 m: flagged without
+  any reach guess). Pieces: every places piece is its own layer at its own depth (near to far for things lying flat).
+- Who is in front is read from the real frame; a pixel another layer also explains, and 1-2 px outlines, prove
+  nothing (removed: the fireplace-over-chair and white-shirt alarms seen while building).
+- Flat things (papers, folders, coasters, table tops) under anything resting on or above them are allowed: the
+  replay's one false alarm (Milburn's hands on his papers) is gone.
+- About 26 s for 95-97 frames on 4 processors.
+
+### (3) Stays readable (render record + finish.py): numbers
+- The render (film_engine) keeps, beside the video, every drawing's box for each text piece the painter drew (name
+  cards, signs, notices, cans) and each KEEP_CLEAR box (VIDEO.readable.json); finish.py measures the captions and the
+  Hook Text against them. A thing with words is measured on its words band (the middle of its box), 5% the bar.
+- The posted film is a splice: shots 1 and 4b drawn with the card at 1.32 m, 7d at 1.44 m (checked on the posted
+  pixels: the card's box white 0.60 / 0.59 at 1.32 against 0.33 at 1.44 for 1.5 s and 25.0 s; 0.77 at 1.44 for 56.5 s).
+  On that mix the check flags shot 1 (17-20% of the name under "report is quite simple.") and shot 4b (11-30%), and
+  nothing else. Andy's and Pat's cards clear (0 false alarms; the replay had 2). The final code alone: clear.
+- First version measured the whole card box: Andy's and Pat's flagged 13-19% where the caption only touches their
+  card's lower edge (posted frames 18.0 and 44.0 s show the names readable): fixed by the words band.
+
+### (1) The stop no chat can skip
+- Pre-flight puts every clipcheck COULD NOT TEST in its pass stamp ("untested"); the render tool (lock_fault) and
+  finish.py refuse while any is there, before --faults-named is looked at. The only way past: a row in the notes'
+  "## Exceptions" | clipcheck | could not test, or the shot | why, with Sam's Y | looked at |.
+- COULD NOT TEST now means: nothing the film draws was recorded, or a shot's people were drawn with no depth (no places
+  view lists them, no cover.person). It lands only with the cover: Grand Theft Autism (started before, no places views)
+  keeps the old nameable fault (preflight.COVER_BEFORE) until its chat wraps its people in cover.person.
+- satire_template draws its wall, floor and table inside cover.thing and its people inside cover.person (clean).
+
+### Every change (for the end-of-film review; each part undoes on its own)
+1. NEW source/cover.py (the recorder, the analysis, the readable measure).
+2. source/places.py painter: each piece inside cover.piece (no cost when not recording).
+3. source/views.py: TAP hooks (start, mid, head) for cover; nothing when not recording.
+4. source/clipcheck.py: MAP says the cover feeds it by default.
+5. source/preflight.py: cover_faults on every 3rd frame of a film with people; untested in the stamp; untested_waived
+   (the Exceptions row with Sam's Y); COVER_BEFORE (GTA). Undo (1): drop the untested list from write_pass.
+6. source/film_engine.py: write_pass keeps untested; untested_fault refuses before --faults-named; the render records
+   each drawing's boxes (.read.json in the cache, VIDEO.readable.json beside the video). Undo (3): remove that record.
+7. source/finish.py: the readable check (refuses unless --faults-named; a clean video with no record: COULD NOT TEST,
+   nameable), the untested stop, the record copied with the kept animatic.
+8. source/satire_template.py: set and people inside cover.thing / cover.person.
+9. source/kittests.py: could_not_test_cover, could_not_test_readable.
+- Cost note: the first render of each film after this re-draws its cached frames once (each needs its record).

@@ -25,6 +25,11 @@ One shared check for every film, run by preflight.py before every animatic. A fi
                  must come after it (Remakes note 73: the near flower box hazed like the far square). A film that
                  says 'haze' in its code but never names it in draw_order is named
 
+Cover by default (could-not-test, Sam's pick 1, 22 Nov): a film with people needs none of the above. Pre-flight
+records the drawing itself (cover.py): each places piece and each person's body, arms and head as its own layer at
+its own depth, who is in front read from the real frame. People drawn with no depth, or nothing recorded, is COULD NOT
+TEST: a stop no flag passes (only this check's row in the notes' Exceptions, with Sam's Y).
+
 The checks:
 1. Solids: no two solids of different owners overlap by more than TOUCH, unless the pair is ALLOWED then.
 2. Drawing order: wherever two layers overlap on screen, the one drawn later must not be further away. And when two

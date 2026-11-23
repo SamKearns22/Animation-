@@ -60,13 +60,31 @@ def code_hash():
     return h.hexdigest()
 
 
-def write_pass(film, faults, pictures=False):
+def write_pass(film, faults, pictures=False, untested=None):
     """Pre-flight's stamp (rule 59): the code it ran on, how many faults it found, and whether the picture checks
     (every frame drawn with the probes) have passed on this code: pre-flight --pictures, or an animatic render that ran
-    them while it drew."""
+    them while it drew. untested: the checks that could not run (could-not-test, 23 Nov), kept from the last full
+    pre-flight when not given."""
     os.makedirs(PASSES, exist_ok=True)
+    if untested is None:
+        untested = (read_pass(film) or {}).get('untested', [])
     with open(os.path.join(PASSES, f'{film}.json'), 'w') as fh:
-        json.dump({'code': code_hash(), 'faults': faults, 'pictures': bool(pictures)}, fh)
+        json.dump({'code': code_hash(), 'faults': faults, 'pictures': bool(pictures), 'untested': list(untested)}, fh)
+
+
+def untested_fault(film):
+    """could-not-test (Sam's pick 1, 22 Nov): a check that could not test the film (clipcheck's COULD NOT TEST) is a
+    stop that --faults-named never passes: pre-flight lists it in its stamp unless the notes' "## Exceptions" has that
+    check's row with Sam's Y in its reason. None: nothing untested."""
+    stamp = read_pass(film)
+    if stamp is None:
+        return None
+    left = stamp.get('untested') or []
+    if not left:
+        return None
+    return (f'{len(left)} check(s) could not test {film} (no flag passes this; only the check\'s own row in the notes\' '
+            f'"## Exceptions", | clipcheck | could not test | why, with Sam\'s Y | looked at |, then pre-flight again): '
+            + ' | '.join(left[:3]) + (f' (+{len(left) - 3} more)' if len(left) > 3 else ''))
 
 
 def read_pass(film):
@@ -87,6 +105,9 @@ def lock_fault(film, faults_named=False, final=False):
         return f'pre-flight has not been run on {film} in this session: python3 source/preflight.py {film} OUT_DIR'
     if stamp['code'] != code_hash():
         return f'the code has changed since pre-flight last ran on {film}: run it again'
+    why = untested_fault(film)                    # could-not-test: before --faults-named is even looked at
+    if why:
+        return why
     if stamp['faults'] and not faults_named:
         return (f'pre-flight found {stamp["faults"]} fault(s) on {film}: fix them, or, if every one has been named to '
                 f'Sam, add --faults-named')
@@ -130,7 +151,8 @@ def _frame(args):
     t = i / j['fps']
     j['set_ss'](j['ss'])
     path = os.path.join(j['cache'], f'{i:04d}.png')
-    rec = None
+    rec = read = None
+    import cover
     recp = path[:-4] + '.rec.pkl'
     bodyp = path[:-4] + '.body.json'              # the body check's faults for this drawing (humancheck, Change 1)
     reuse = reuse and os.path.exists(bodyp)       # a frame cached before the body check is drawn again
@@ -150,7 +172,11 @@ def _frame(args):
             rec = pickle.load(fh)
     elif j.get('check'):                          # rule 59 (13 Nov): the picture checks run on this one drawing
         HC.frame_begin()
-        pic, rec = _checked(t)
+        cover.begin('read')
+        try:
+            pic, rec = _checked(t)
+        finally:
+            read = cover.read_boxes(None, cover.end()) + cover.keep_clear(j['film'], t)
         body = HC.frame_end(t)
         pic.save(path, compress_level=1)
         try:
@@ -165,22 +191,39 @@ def _frame(args):
         pic.load()
     else:
         HC.frame_begin()
-        pic = j['picture'](t)
+        cover.begin('read')
+        try:
+            pic = j['picture'](t)
+        finally:
+            read = cover.read_boxes(None, cover.end()) + cover.keep_clear(j['film'], t)
         body = HC.frame_end(t)
         pic.save(path, compress_level=1)
-    if body is None:                              # (drawn above, or its record lost): never a frame unchecked
+    readp = path[:-4] + '.read.json'              # could-not-test (3): each listed thing's box as drawn on this frame
+    if read is None and os.path.exists(readp):
+        try:
+            with open(readp) as fh:
+                read = json.load(fh)
+        except (OSError, ValueError):
+            read = None
+    if body is None or read is None:              # (drawn above, or its record lost): never a frame unchecked
         HC.frame_begin()
-        j['picture'](t)
+        cover.begin('read')
+        try:
+            j['picture'](t)
+        finally:
+            read = cover.read_boxes(None, cover.end()) + cover.keep_clear(j['film'], t)
         body = HC.frame_end(t)
     with open(bodyp, 'w') as fh:
         json.dump(body, fh)
+    with open(readp, 'w') as fh:
+        json.dump(read, fh)
     if j.get('look'):                             # rule S7: once, on the clean drawing (the cache stays clean)
         import house_look
         pic = house_look.apply(pic).convert(pic.mode)   # same kind of image back (captions want RGBA)
     im = j['overlay'](pic, t).convert('RGB').resize(j['size'], Image.LANCZOS)
     if j.get('stamp'):
         stamp(im, t, j['shot_of'](t))
-    return np.asarray(im).tobytes(), rec, body
+    return np.asarray(im).tobytes(), rec, body, read
 
 
 def stamp(im, t, shot):
@@ -277,8 +320,8 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
     if stamp is None:
         stamp = bool(span) or size[0] < 1080 and size[1] < 1920
     _JOB.update(fps=fps, ss=ss, size=size, cache=cache, picture=picture, overlay=overlay, set_ss=set_ss,
-                shot_of=shot_of, stamp=stamp, look=look, check=check)
-    recs = []
+                shot_of=shot_of, stamp=stamp, look=look, check=check, film=main)
+    recs, reads = [], {}
     import humancheck as HC
     hc = HC.Writer(os.path.basename(out))         # the body check (Change 1): every person, every drawing
     hold = FILE_FPS // fps if look and fps == DRAW_FPS else 1          # rule S7: 12 drawings a second, each shown twice
@@ -291,8 +334,9 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                           '-b:a', '160k', '-shortest', '-movflags', '+faststart', out], stdin=subprocess.PIPE)
     try:
         with Pool(os.cpu_count()) as pool:
-            for k, (fr, rec, body) in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
+            for k, (fr, rec, body, read) in enumerate(pool.imap(_frame, [(i, reuse and i not in redo_set) for i in range(first, n)], chunksize=2)):
                 p.stdin.write(fr)
+                reads[str(first + k)] = read
                 hc.frame((first + k) / fps, body)
                 if rec is not None:
                     recs.append(rec)
@@ -312,6 +356,9 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
                 os.remove(f)
         raise
     os.remove(wav)
+    import cover                                  # could-not-test (3): the boxes of what the film lists, as drawn,
+    with open(out + cover.SIDE, 'w') as fh:       # beside the video: finish.py measures captions against these
+        json.dump({'fps': fps, 'film': film, 'frames': reads}, fh)
     if not span:
         with open(keyf, 'w') as fh:               # every frame in the cache now matches this code
             fh.write(code)
