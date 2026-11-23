@@ -29,3 +29,6 @@ If I'm honest, it looks really bad. They sort of clump up against the wall, and 
 ### 2026-11-23T14:34:35
 Okay, well, I really want to get this film finished and posted today. So what if we compromised and used the older kit for now, but changed their everything else that you suggested? So where they run, their expressions, the way they move, would that be easier?
 
+### 2026-11-23T14:35:15
+Y
+
