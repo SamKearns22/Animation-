@@ -22,6 +22,8 @@ MAP
                     ("Broken: ...; fixing it first") and a push; once a day it asks for the "Watcher: N checks ran,
                     all held" line, so a silent watcher is itself a sign
   start ........... in handover.py start: the BROKEN list, UNLISTED systems, the last kittest run's FAILs
+  rules ........... ruleproofs.py (lesson 7): every rule's proof; a broken one or a new rule with no example is a
+                    fault here and a STOP at handover end; one RULES line at start
   replay .......... the number to beat: last week's four failures, each caught from its own record (kittest
                     watcher_catches_last_weeks_four)
 
@@ -59,6 +61,7 @@ PROMISES = {
     'draft_faults': ('the latest animatic and its clean render are on GitHub', 'named: its own fault line in handover end is the proof'),
     'quick_faults': ('handover end runs the quick film checks', 'named: its own fault line in handover end is the proof'),
     'finder_faults': ('a chat that edited a film\'s code without the finder is named at handover', 'kittest finder_reminder_per_chat'),
+    'rule_faults': ('no rule without a working check: every rule has its saved bad example and a kittest that catches it; a new rule with none stops the handover (lesson 7)', 'kittest rule_proofs_gate'),
     'unrouted_faults': ('a change that slipped the proposal route is named at handover', 'named: reads propose.py\'s log'),
     'branch_faults': ('every branch with work off the main line is merged or named', 'named: branches.py scan at every start'),
     'cost_faults': ('the film\'s cost line is recorded at every handover and shown only on a problem', 'kittest quiet_cost_line'),
@@ -398,10 +401,16 @@ def ran_faults(path=None):
     return out
 
 
+def _rule_faults():
+    """Lesson 7 step 2: a rule whose proof broke (its kittest fails on its saved example) or a new rule with none."""
+    import ruleproofs
+    return ruleproofs.faults()
+
+
 def check(path, film=None):
     faults = []
     for fn in (lambda: saver_faults(path), lambda: guard_faults(path), lambda: finder_faults(path, film),
-               kit_faults, kittest_faults, hook_faults, unwired, lambda: ran_faults(path)):
+               kit_faults, kittest_faults, hook_faults, unwired, lambda: ran_faults(path), _rule_faults):
         try:
             faults += fn()
         except Exception as e:                      # a check that breaks is itself a fault, never hidden
@@ -508,6 +517,11 @@ def start_lines():
     out += [f'UNLISTED (watcher): {s} has no promise; add one to source/watcher.py PROMISES and a kittest'
             for s in unlisted()]
     out += [f'UNWIRED (watcher): {f.split("|", 1)[1]}' for f in unwired()]
+    try:                                            # lesson 7 step 2: where the rules stand, worst first
+        import ruleproofs
+        out.append(ruleproofs.start_line())
+    except Exception as e:
+        out.append(f'BROKEN (watcher): the rule list could not be read ({e})')
     return out
 
 

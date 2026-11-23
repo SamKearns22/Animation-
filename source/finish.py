@@ -182,6 +182,11 @@ def main():
     name = take(rest, '--film')
     if not name:
         sys.exit('finish REFUSED (rule 62): give --film NAME: the captions come from the film\'s caption_at')
+    import propose                                # lesson 7 step 3 (fail closed): no animatic while a change slipped
+    slipped = propose.open_letthroughs()          # the proposal route unsettled; no --faults-named way past
+    if slipped:
+        sys.exit('finish REFUSED (the proposal route, fail closed): ' + ' | '.join(x[:140] for x in slipped) +
+                 ' ; settle each: python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"')
     film = load_film(name[0])
     if not hasattr(film, 'caption_at'):
         sys.exit(f'finish REFUSED (rule 62): {name[0]}.py has no caption_at(t), so the film would go out with no '

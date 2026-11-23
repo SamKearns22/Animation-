@@ -3861,6 +3861,56 @@ def dearest_things_named():
     return not out, '; '.join(out) or 'every dollar named; five dearest ranked; Sam\'s notes counted, repeats flagged'
 
 
+@test
+def rule_proofs_gate():
+    """Lesson 7 (rule-needs-check, Sam's option 1, 22 Nov): "no rule without a working check". Step 1 found 61 of 103
+    rules never proved on a bad example, 19 rows "by hand", and 39 let-throughs of the proposal guard carried on. The
+    gate must refuse a new rulebook row and a new CLAUDE.md rule with no saved example, a "by hand" status, a proof
+    whose kittest failed; a handover check that crashes is a STOP; an unsettled let-through refuses the animatic until
+    settled; and today's files pass."""
+    import copy
+    import tempfile
+    import ruleproofs as R
+    import handover as H
+    import propose as PR
+    out = []
+    d = R.load()
+    if R.faults(d, failed=set()):
+        out.append('today\'s rules fail the gate: ' + '; '.join(R.faults(d, failed=set()))[:200])
+    book = open(R.RULEBOOK, encoding='utf-8').read() + '\n| 99 | A new rule nobody proved. | `nothing.py` |\n'
+    if not any('rule 99 is new' in f for f in R.faults(d, book=book, failed=set())):
+        out.append('a new rulebook row with no entry was let through')
+    cl = open(R.CLAUDE, encoding='utf-8').read() + '\n- **Always do a brand new thing.** (Sam, 23 Nov)\n'
+    if not any('Always do a brand new thing' in f for f in R.faults(d, claude=cl, failed=set())):
+        out.append('a new CLAUDE.md rule with no entry was let through')
+    d2 = copy.deepcopy(d)
+    d2['rules']['99'] = dict(rule='x', status='next', plan='later', example='')
+    if not any('rule 99 is new and has no saved bad example' in f for f in R.faults(d2, book=book, failed=set())):
+        out.append('a new entry with no example was let through')
+    d2['rules']['99'].update(status='by hand', example='a still')
+    if not any('"by hand" never counts' in f for f in R.faults(d2, book=book, failed=set())):
+        out.append('"by hand" was accepted as a check')
+    t0 = next(t for r in d['rules'].values() if r['status'] == 'proven' for t in r['tests'])
+    if not any('BROKEN' in f for f in R.faults(d, failed={t0})):
+        out.append(f'a proven rule whose kittest {t0} failed was not shown as broken')
+    crash = H._safe('demo', lambda: 1 / 0)
+    if not (crash and crash[0].startswith('STOP: CHECK COULD NOT RUN')):
+        out.append('a crashing handover check did not stop the handover')
+    keep = PR.PROPS
+    PR.PROPS = tempfile.mkdtemp()
+    try:
+        open(PR._p(PR.UNROUTED), 'w').write('- 2026-11-23 01:00 chat abcd1234: sent after one block: x | "y"\n'
+                                           '- 2026-11-20 01:00 chat old00000: sent after one block: x | "y"\n')
+        if len(PR.open_letthroughs()) != 1 or not PR.unrouted_for('abcd1234'):
+            out.append('the open let-through was not seen (or an old one counted)')
+        PR.settle('abcd1234', 'false block: the guard asked for a line the reply did not need')
+        if PR.open_letthroughs() or PR.unrouted_for('abcd1234'):
+            out.append('settling did not clear the let-through')
+    finally:
+        PR.PROPS = keep
+    return not out, '; '.join(out) or 'new rule with no example refused (rulebook and CLAUDE.md); by hand refused; broken proof shown; crash = STOP; let-through closed until settled'
+
+
 
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
