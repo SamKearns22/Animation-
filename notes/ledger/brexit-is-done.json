@@ -22,67 +22,68 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.16,
+   "cost": 2.47,
    "src": "estimate",
    "sid": "session_01U3pKR1aCRX8VmEXSXkQfCF",
-   "steps": 126,
-   "hist_k": 262,
+   "steps": 144,
+   "hist_k": 273,
    "kinds": {
-    "film-file search": 0.7,
-    "tool search": 21.4,
+    "film-file search": 0.6,
+    "tool search": 20.6,
     "page.py": 0.2,
-    "renders": 6.2,
-    "pictures": 7.2,
-    "other": 64.3
+    "renders": 5.5,
+    "pictures": 7.1,
+    "other": 66.1
    },
    "calls": {
     "film-file search": 1,
-    "tool search": 76,
+    "tool search": 84,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
     "renders": 18,
     "pictures": 18,
-    "other": 13
+    "other": 19
    },
    "split": {
-    "usd": 7.5849,
-    "total": 7.5849,
+    "usd": 8.7232,
+    "total": 8.7232,
     "floor_k": 84,
     "blocks": {
-     "carried history": 30.3,
-     "start-up floor": 27.5,
-     "Claude's words": 23.3,
-     "new writes": 18.9
+     "carried history": 33.2,
+     "start-up floor": 27.0,
+     "Claude's words": 22.4,
+     "new writes": 17.4
     },
     "origins": {
      "Claude's words": 41.2,
-     "start-up floor": 27.5,
-     "result: tool search": 15.1,
+     "start-up floor": 27.0,
+     "result: tool search": 15.0,
      "result: pictures": 10.3,
-     "messages and reminders": 3.5,
+     "messages and reminders": 4.0,
      "Claude's edits": 1.0,
      "result: other": 0.7,
      "result: renders": 0.6,
      "result: film-file search": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 27.5,
-     "writing code": 17.4,
-     "thinking": 14.6,
+     "start-up reading (rules, tools, first files)": 27.0,
+     "writing code": 17.0,
+     "thinking": 14.2,
      "looking at pictures": 10.3,
-     "reading kit code": 10.3,
-     "commands": 7.9,
-     "messages and reminders": 3.5,
-     "start-up and handover tools": 2.8,
-     "messages to Sam": 1.6,
+     "reading kit code": 10.2,
+     "commands": 8.3,
+     "messages and reminders": 4.0,
+     "start-up and handover tools": 2.7,
+     "messages to Sam": 1.9,
      "running checks and tools": 1.1,
      "renders": 1.0,
      "reading notes": 0.6,
-     "writing notes": 0.6,
      "other commands": 0.5,
-     "helper and chat prompts": 0.1,
-     "app tools (chats, files sent)": 0.1
+     "writing notes": 0.5,
+     "helper and chat prompts": 0.4,
+     "app tools (chats, files sent)": 0.1,
+     "git and saving": 0.1
     },
     "leftover": 0.0
    },
@@ -94,40 +95,40 @@
      [
       "source/facehouse.py",
       4.4,
-      0.1269
+      0.1412
      ],
      [
       "source/turnhead.py",
       1.8,
-      0.0501
+      0.0558
      ],
      [
       "notes/sam-notes/brexit-cast-v1/n2-blair-threequarter-not-same.jpg",
       1.6,
-      0.0468
+      0.052
      ],
      [
       "notes/sam-notes/brexit-cast-v1/n3-kemi-orange-gone-threequarter.jpg",
       1.6,
-      0.0468
+      0.052
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scratchpad/t0.jpg",
       1.6,
-      0.0445
+      0.0497
      ],
      [
       "notes/sam-notes/brexit-cast-v1/notes.md",
       1.4,
-      0.0402
+      0.0446
      ],
      [
       "notes/brexit-is-done.md",
       1.2,
-      0.0351
+      0.039
      ]
     ],
-    "base_pct": 25.0
+    "base_pct": 24.8
    },
    "search": {
     "show": 0,
@@ -135,8 +136,8 @@
      "no show": 1
     },
     "other": {
-     "other": 8,
-     "shared:handover.py": 7,
+     "other": 13,
+     "shared:handover.py": 8,
      "shared:facehouse.py": 15,
      "shared:turnhead.py": 6,
      "shared:patriots_people.py": 1,
@@ -148,10 +149,10 @@
      "shared:limbs.py": 1,
      "shared:critique.py": 6,
      "shared:kittest.py": 1,
-     "shared:kittests.py": 8,
+     "shared:kittests.py": 9,
      "shared:gta_shots58.py": 1,
      "shared:gta_rehearse.py": 1,
-     "film notes": 2,
+     "film notes": 3,
      "shared:watcher.py": 1
     },
     "ticked": 0,
@@ -771,6 +772,70 @@
       "shared:kittests.py",
       "source/kittests.py notes/logs/kittests-last.log",
       "^FAIL\\|^kittests:",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      130,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "source/kittests.py",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      135,
+      "other",
+      "film notes",
+      "/home/user/Animation-/notes/brexit-is-done.md notes/brexit-is-done.md",
+      "python3 - <<'EOF' p='/home/user/Animation-/notes/brexit-is-done.md'; s=open(p).r",
+      ""
+     ],
+     [
+      136,
+      "other",
+      "other",
+      "notes/proposals/guard-blocks.jsonl",
+      "git add notes/proposals/guard-blocks.jsonl && git commit -qm \"Proposal guard log",
+      ""
+     ],
+     [
+      137,
+      "other",
+      "shared:handover.py",
+      "notes/logs/kittests-last.log source/handover.py",
+      "^FAIL\\|^kittests:",
+      ""
+     ],
+     [
+      138,
+      "other",
+      "other",
+      "notes/logs notes/ledger",
+      "git add -A notes/logs notes/ledger 2>/dev/null; git commit -qm \"Brexit chat 2: k",
       ""
      ]
     ]
