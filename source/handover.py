@@ -25,6 +25,10 @@ MAP
   model ............ in end and start: the Next line may not join Opus work with Sonnet work (render, finish.py,
                      sending, filing) nor give Sonnet a fix or build (Sam, 15 Nov: chat 30 rendered on Opus)
   watcher .......... in start: the watcher's standing BROKEN list and any system with no promise (source/watcher.py)
+  shared ........... in end (named-lines change 3): a check fix written in one film's code stops the handover until
+                     moved to the shared tools or Sam says it stays (shared_faults, film_check_fixes)
+  kittest .......... in end (named-lines change 4, on chain A's gate): a kit test red at two handovers in a row, or
+                     unable to run, stops the handover (kittest_gate_faults; notes/logs/kittest-reds.log)
   dump ............. list_events results saved to files (kinds ["user"], only when there is no log; never page a
                      whole chat: the newest pages, back to the last handover commit's time)
   sam_messages() ... Sam's own typed messages from any of the three sources (no tool results, task or system
@@ -457,6 +461,107 @@ def rule_faults():
             for f in ruleproofs.faults()]                                                  # list (fix or name); a new rule with no example: closed
 
 
+# ------------------------------------------------------------------ named-lines changes 3 and 4 (Sam's Y, 23 Nov)
+CHECK_FIX = re.compile(   # a check's input or a check itself, written in one film's code (learn.md: 10 in 3 films)
+    r'^\s*def (scene|solids\w*|layers|draw_order|cam_for|audits|checks|mouths_seen|movers|effect_points|LINE_SUBJECTS|'
+    r'\w+_faults|\w+_check)\(|^\s*(SET_FEET|PROP_SIZES|OUTFIT|JOKE_PROPS|EFFECTS)\s*=|_voice\s*=|_stretches\s*=|'
+    r'\b(humancheck|HC|clipcheck|audit|voices|viewchecks|kitchecks)\.\w*(check|faults|solid\w*)\(')
+KITREDS = os.path.join(ROOT, 'notes', 'logs', 'kittest-reds.log')
+KITLOG = os.path.join(ROOT, 'notes', 'logs', 'kittests-last.log')
+
+
+def _film_prefixes():
+    """Each film's code-file prefixes: its name (grand_theft_autism) and its initials (gta), from its notes file."""
+    out = {}
+    for p in glob.glob(os.path.join(ROOT, 'notes', '*.md')) + glob.glob(os.path.join(ROOT, 'notes', 'archive', '*.md')):
+        n = os.path.basename(p)[:-3]
+        if re.search(r'handovers|review|template|^_|next-jobs|proposal|plain|-chats$', n):
+            continue
+        out[n.replace('-', '_')] = n
+        parts = n.split('-')
+        if len(parts) >= 2:
+            out[''.join(w[0] for w in parts)] = n
+    return out
+
+
+def film_check_fixes(diff):
+    """[(file, film, line)]: added lines of a unified diff that write a check's input or a check in one film's code."""
+    pre, out, cur = _film_prefixes(), [], None
+    for ln in diff.splitlines():
+        if ln.startswith('+++ '):
+            f = ln[4:].strip()
+            f = f[2:] if f.startswith('b/') else f
+            stem = os.path.basename(f)[:-3] if f.startswith('source/') and f.endswith('.py') else None
+            cur = None
+            if stem:
+                for k in sorted(pre, key=len, reverse=True):
+                    if stem == k or stem.startswith(k + '_'):
+                        cur = (f, pre[k])
+                        break
+        elif cur and ln.startswith('+') and not ln.startswith('+++') and CHECK_FIX.search(ln[1:]):
+            out.append((cur[0], cur[1], ln[1:].strip()[:100]))
+    return out
+
+
+def shared_faults(since=None, diff=None):
+    """The "move to shared" stop (named-lines change 3; Sam, 23 Nov: "rules need to be constructed that they work in
+    this way, they are not film specific"): each check fix written in one film's code since the last handover (a film
+    with its own renderer counts) stops the handover until it is moved to the shared tools, or the film's notes have
+    an Exceptions row `| stays in film | FILE | why | Sam's Y DATE |`."""
+    if diff is None:
+        ends = os.path.join(ROOT, 'notes', 'logs', 'handover-end.log')
+        me = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1]
+        prev = [ln.split('\t')[0] for ln in (open(ends, encoding='utf-8') if os.path.exists(ends) else [])
+                if ln.strip() and ln.split('\t')[-1].strip() != me]
+        since = since or (prev[-1] if prev else '1 day ago')
+        r = subprocess.run(['git', '-C', ROOT, 'log', f'--since={since}', '-p', '--no-merges', '--format=', '--',
+                            'source/'], capture_output=True, text=True)
+        w = subprocess.run(['git', '-C', ROOT, 'diff', 'HEAD', '--', 'source/'], capture_output=True, text=True)
+        diff = r.stdout + w.stdout
+    out, seen = [], set()
+    for f, film, line in film_check_fixes(diff):
+        notes = _film_notes(film)
+        txt = open(notes, encoding='utf-8').read() if notes and os.path.exists(notes) else ''
+        if re.search(rf'^\|\s*stays in film\s*\|[^\n]*{re.escape(os.path.basename(f))}[^\n]*Sam', txt, re.M | re.I):
+            continue
+        if (f, line) in seen:
+            continue
+        seen.add((f, line))
+        out.append(f'STOP: MOVE TO SHARED: {f} ({film}): "{line}" is a check fix in one film\'s code: move it into the '
+                   f'shared tools (kitinputs, takes, the template) so every film gets it, or ask Sam; his Y goes in '
+                   f'its notes\' Exceptions as | stays in film | {os.path.basename(f)} | why | Sam\'s Y DATE |')
+    return out
+
+
+def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None):
+    """named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at this handover and at the one
+    before it (another chat), or one that could not run (it crashed, or no finished run is on record), stops the
+    handover (STOP: closed, never named away). This handover's reds are written to notes/logs/kittest-reds.log."""
+    txt = open(kitlog, encoding='utf-8', errors='replace').read() if os.path.exists(kitlog) else ''
+    if 'kittests:' not in txt:
+        return ['STOP: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 source/kittests.py '
+                '> notes/logs/kittests-last.log 2>&1`, then end again']
+    fails = re.findall(r'^FAIL (\w+): (.*)$', txt, re.M)
+    crashed = sorted({n for n, d in fails if d.startswith('crashed:')})
+    red = sorted({n for n, _ in fails} - set(crashed))
+    sid = sid or os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1] or 'local'
+    rows = [ln.rstrip('\n').split('\t') for ln in (open(reds_log, encoding='utf-8') if os.path.exists(reds_log) else [])
+            if ln.count('\t') >= 2]
+    prev = [r for r in rows if r[1] != sid]
+    before = set(filter(None, prev[-1][2].split(','))) if prev else set()
+    rows = [r for r in rows if r[1] != sid] + [[datetime.now(timezone.utc).isoformat(timespec='minutes'), sid,
+                                                  ','.join(red + crashed)]]
+    os.makedirs(os.path.dirname(reds_log), exist_ok=True)
+    with open(reds_log, 'w', encoding='utf-8') as f:
+        f.write(''.join('\t'.join(r) + '\n' for r in rows[-60:]))
+    out = [f'STOP: KIT TEST COULD NOT RUN: {n} (it crashed): a test that cannot run tests nothing; make it run here'
+           for n in crashed]
+    out += [f'STOP: KIT TEST RED AT TWO HANDOVERS IN A ROW: {n} (red at {prev[-1][0]} too): fix it (or the tool it '
+            'tests) before handing over' for n in red if n in before]
+    out += [f'KIT TEST RED: {n} (once: red again at the next handover stops it)' for n in red if n not in before]
+    return out
+
+
 def _safe(name, fn):
     """Lesson 7 step 3, fail closed: a handover check that cannot run stops the handover; it is never skipped."""
     try:
@@ -810,7 +915,7 @@ def main(argv):
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
                   ('dearest', dearest_faults), ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
-                  ('rule', rule_faults)]
+                  ('rule', rule_faults), ('shared', shared_faults), ('kittest', kittest_gate_faults)]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
         return report(faults, f'(end of chat, {film})')

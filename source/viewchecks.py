@@ -631,6 +631,8 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
 
 # ------------------------------------------------------------------------------------------------ rule 18
 def _measure(film, name, t, at, size):
+    if getattr(at, 'boxes', None) is not None:     # kitinputs.Screen: measured where the drawing put it (x, y, px)
+        return at(t)
     import audit as A
     p = np.asarray(at(t) if callable(at) else at, float)
     cam = film.cam_for(t)

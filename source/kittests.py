@@ -4473,6 +4473,110 @@ def acting_rows_every_shot():
 
 
 @test
+def named_lines_shared_inputs_milburn():
+    """named-lines change 3 (Sam's Y, 23 Nov): the kits hand the checks what they need from the drawing, no film code.
+    Must beat on Milburn: its blind lines cured (37 at its animatics; the 6 left are named: shot 2b's tiny figures drawn
+    by its own set code x4, no camera for shots 3 and 6, audits) and 0 false voice lines (85 read raw today, 60 then)."""
+    import importlib
+    import kitinputs, plan, housestyle, viewchecks, camfeel, voices, takes
+    import preflight as PF
+    import body as Bd
+    M = importlib.import_module('milburn')
+    has = set(M.HAS)
+    kf, said, kfaults = kitinputs.fill(M, has)
+    cast = PF.cast_faults(M, kf.KIT_ROSTER)
+    pl = plan.faults(kf)
+    hs = housestyle.faults(kf, Bd, has)
+    vc = [x for x in viewchecks.faults(kf) if x.startswith(('EFFECT SHAPES', 'READABILITY'))]
+    cf = camfeel.faults(kf)
+    blind = [x for x in cast + pl + hs + vc + cf if 'never on screen' in x or 'has no ' in x or 'no camera' in x
+             or 'looks at nothing' in x or 'no SHOT_MARKS' in x or 'gives no camera' in x or 'overlap' in x
+             or 'stands inside' in x or 'has no facing' in x]
+    left_ok = sorted(x for x in blind if ('shot 2b' in x and 'never on screen' in x) or 'shot(s) 3, 6' in x
+                     or 'no audits' in x)
+
+    class Check:
+        def __init__(self, f):
+            self._f, self.LINES = f, [{k: v for k, v in ln.items() if k not in ('_voice', '_stretches')} for ln in f.LINES]
+
+        def __getattr__(self, n):
+            return getattr(self._f, n)
+    vo = voices.check(Check(M))
+    raw = [x for x in vo if 'raw recording' in x]
+    ok = len(blind) == len(left_ok) == 6 and not raw and len(vo) <= 2 and not kfaults
+    return ok, f'blind lines left {len(blind)} (named and expected: {len(left_ok)}); voice lines with no film hand-over ' \
+               f'{len(vo)} ({len(raw)} raw reads); kit faults {kfaults[:2]}; inputs handed {len(said)}'
+
+
+@test
+def move_to_shared_catches_film_fixes():
+    """named-lines change 3's stop (Sam, 23 Nov: rules are not film specific): handover.py end stops on a check fix
+    written in one film's code. Replayed on the 10 the look-back found in three films (Blessed 7, Milburn 1, Grand Theft
+    Autism 2, its own renderer); a shared file is never flagged; Sam's 'stays in film' row lets one through."""
+    import handover as H
+    real = [('source/blessed_checks.py', ['def scene(t):', 'def solids(t):', 'def cam_for(t):', 'def audits():',
+                                         'SET_FEET = {   # each walking shot']),
+            ('source/blessed.py', ['def touch_faults():', 'def furniture_faults():']),
+            ('source/milburn.py', ["    _ln.update(_voice=V_.VOICES[_i + 1], _stretches=V_.LINES_TIMED[_i + 1]['stretches'])"]),
+            ('source/gta_rehearse.py', ['def solids4(cam, cars):', "    faults = HC.solid_faults(frames, solids4(cam, cars))"])]
+    diff = ''.join(f'+++ b/{f}\n' + ''.join(f'+{ln}\n' for ln in lines) for f, lines in real)
+    found = H.film_check_fixes(diff)
+    shared = H.film_check_fixes('+++ b/source/kitinputs.py\n+def scene(t):\n+def cam_for(film, sv):\n')
+    films = sorted({f for _, f, _ in found})
+    ok = len(found) == 10 and not shared and films == ['blessed', 'grand-theft-autism', 'milburn']
+    return ok, f'found {len(found)} of 10 in {films}; shared file flagged {len(shared)}'
+
+
+@test
+def kittest_red_twice_stops_handover():
+    """named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at two handovers in a row (different
+    chats), or one that crashed, is a STOP line; red once is a plain line; no finished run is a STOP."""
+    import tempfile
+    import handover as H
+    d = tempfile.mkdtemp()
+    log, reds = os.path.join(d, 'k.log'), os.path.join(d, 'r.log')
+    open(log, 'w').write('FAIL a_test: 1 of 2\nFAIL b_test: crashed: no model\nPASS c_test: ok\nkittests: 2 failed\n')
+    one = H.kittest_gate_faults(log, reds, sid='chat1')
+    again = H.kittest_gate_faults(log, reds, sid='chat1')          # the same chat running end twice: still once
+    two = H.kittest_gate_faults(log, reds, sid='chat2')
+    open(log, 'w').write('FAIL a_test: 1 of 2\n')                   # a run that never finished
+    none = H.kittest_gate_faults(log, reds, sid='chat3')
+    st = lambda fs, w: any(f.startswith('STOP:') and w in f for f in fs)
+    ok = (st(one, 'b_test') and not st(one, 'a_test') and not st(again, 'a_test') and st(two, 'a_test')
+          and st(none, 'COULD NOT RUN'))
+    return ok, f'once {len(one)} lines, twice {sum(f.startswith("STOP") for f in two)} stops, unfinished: {none[:1]}'
+
+
+@test
+def plan_places_apart_and_flat_floors():
+    """named-lines change 3: plan.py treats rooms no opening joins as separate places (Milburn's 3 false overlaps),
+    reads a floor-flat thing as stood on (its 5 false 'stands inside'), a tilt (pitch=) as where a camera looks, and the
+    film's own SHOT_MARKS; joined rooms that overlap, and a person inside a real table, are still faults."""
+    import plan
+    P = dict(ROOMS={'a': (0, 0, 4, 4), 'b': (0, 0, 3, 3), 'c': (2, 0, 6, 4), 'd': (5, 0, 9, 4)},
+             OPENINGS={'door': dict(wall=('x', 6.0), span=(1.0, 2.0), sill=0.0, head=2.0)},
+             THINGS={'deck': dict(at=(1, 1), size=(2, 2, 0.0)), 'desk': dict(at=(3.5, 3), size=(1, 1, 0.75))},
+             PEOPLE={'p': dict(at=(1, 1), facing=180), 'q': dict(at=(3.5, 3), facing=180)},
+             CAMS={'1': dict(up=70, pitch=28, lens=1000)})
+    film = type('F', (), {'PLAN': P, 'SHOTS': [('1', 0, 1)], 'SHOT_MARKS': {'1': ['p']}})
+    f = plan.faults(film)
+    over = [x for x in f if 'overlap' in x]
+    ok = over == ['plan: rooms c and d overlap'] or (len(over) == 1 and 'c' in over[0] and 'd' in over[0])
+    ok = ok and not any('p stands inside' in x for x in f) and any('q stands inside the desk' in x for x in f)
+    ok = ok and not any('looks at nothing' in x or 'no SHOT_MARKS' in x for x in f)
+    return ok, f'overlaps {over}; inside {[x for x in f if "inside" in x]}'
+
+
+@test
+def takes_cleaned_and_registered():
+    """named-lines change 3: takes.clean (Milburn's take cleaning, now shared) cleans each line's files and registers
+    the take under its audio name, so voices.py reads what the film plays; a film's code that never calls
+    mossad_audio.line is told when its check reads a raw file."""
+    import takes
+    ok = takes._test()
+    ok = ok and takes.plays_shared_loader([os.path.join(HERE, 'satire_template.py')]) and \
+        not takes.plays_shared_loader([os.path.join(HERE, 'milburn.py')])
+    return ok, 'cleaned, registered; the template plays the shared loader, Milburn does not'
 def door_slit():
     """Sam (23 Nov, chat 50, a marked still at 16.5 s): "Little bit of trouser showing there", a line of Jason's
     shorts along the Tulip's door top. The car's solid depth (gta_cars.solid_depth, the per-dot depth test that hides

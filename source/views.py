@@ -1233,7 +1233,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         #  hidden: drawn after the back, so it joins the shoulder with one outline as from the front (Sam, GTA chat 9:
         #  "a line bisecting his arm and shoulder" from the back: the back's outline was drawn over the arm)
     if TAP[0]:                                    # cover.py (could-not-test, 22 Nov): each part of him recorded as drawn
-        TAP[0]('start', img, sp=sp, s=s, cam=cam, depth=depth, j2=j2, L=L0)
+        TAP[0]('start', img, sp=sp, s=s, cam=cam, depth=depth, j2=j2, L=L0, x=x, y=y, yaw=yaw)
     if seated:
         (j.get('chair_draw') or chair)(p, view, j2, sp, under=True)
     for draw in j.get('pre', []):                 # set pieces beyond him in this view (sitting.py: the far side of a desk)
