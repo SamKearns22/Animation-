@@ -11,7 +11,7 @@ views film by film in `story/metrics.md`.
 - [x] Click Follow to claim PIP — milburn (17 Nov; Sam's own line)
 - [x] Follow. It's free 👉 — halo_no_no (19 Nov)
 - [x] Grand Theft Follow! — grand_theft_autism (23 Nov; Sam's own line)
-- [ ] Feed the beaver. Follow 👉
+- [x] Feed the beaver. Follow 👉 — grand-theft-autism (23 Nov)
 - [ ] A crow says follow 👉
 - [ ] Follow. We ruin the news 👉
 - [ ] Don't miss the next one 👉
