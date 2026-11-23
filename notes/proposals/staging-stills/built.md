@@ -13,4 +13,4 @@
   board of that shot, not by comparing fingerprints. Not covered: a chat changing a framing on its own with no note;
   movement code written for a held shot (it cannot be rendered or sent). Films begun before the shot board are not
   gated; Grand Theft Autism renders with its own code (Sam overruled its checks, 21 Nov) and is not gated.
-- Rule 11 and 87 wording: shown to Sam 22 Nov (numbered question), not yet written.
+- Rule 11 and 87 wording: written 23 Nov on Sam's "Y to all" (05:51 UK, chat 3, notes/ledger/sam/vs4pf9aa.md).
