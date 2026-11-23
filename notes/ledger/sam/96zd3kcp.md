@@ -18,3 +18,6 @@ Post it here
 ### 2026-11-23T09:57:50
 Override
 
+### 2026-11-23T10:53:31
+Please continue. Please make sure 'Override' works as a universal code work for skipping steps on all parts of the project. Please note that I use the mobile app only and have no idea how to locate or access the file you mention above.
+
