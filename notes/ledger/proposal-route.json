@@ -11467,60 +11467,61 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.9,
+   "cost": 2.17,
    "src": "estimate",
    "sid": "session_01U3pKR1Z6SWGi4RSahgw7hK",
-   "steps": 87,
-   "hist_k": 246,
+   "steps": 100,
+   "hist_k": 261,
    "kinds": {
-    "tool search": 28.5,
+    "tool search": 25.8,
     "whole-file .py read": 0.3,
+    "renders": 1.6,
     "pictures": 3.7,
-    "other": 67.5
+    "other": 68.6
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 73,
+    "tool search": 78,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
-    "pictures": 10,
-    "other": 11
+    "renders": 2,
+    "pictures": 11,
+    "other": 14
    },
    "split": {
-    "usd": 6.9715,
-    "total": 6.9715,
+    "usd": 7.9519,
+    "total": 7.9519,
     "floor_k": 84,
     "blocks": {
-     "new writes": 37.6,
-     "Claude's words": 23.5,
-     "carried history": 20.8,
-     "start-up floor": 18.2
+     "new writes": 34.4,
+     "carried history": 25.7,
+     "Claude's words": 23.9,
+     "start-up floor": 15.9
     },
     "origins": {
-     "Claude's words": 34.6,
-     "messages and reminders": 27.5,
-     "start-up floor": 18.3,
-     "result: tool search": 15.0,
-     "result: pictures": 3.9,
+     "Claude's words": 35.2,
+     "messages and reminders": 31.2,
+     "start-up floor": 16.1,
+     "result: tool search": 13.3,
+     "result: pictures": 3.5,
      "result: other": 0.5,
-     "Claude's edits": 0.2
+     "Claude's edits": 0.1
     },
     "named": {
-     "messages and reminders": 27.5,
-     "start-up reading (rules, tools, first files)": 18.3,
-     "thinking": 16.7,
-     "writing code": 11.1,
-     "reading kit code": 6.9,
+     "messages and reminders": 31.2,
+     "thinking": 16.4,
+     "start-up reading (rules, tools, first files)": 16.1,
+     "writing code": 12.0,
+     "reading kit code": 6.0,
      "commands": 5.9,
-     "looking at pictures": 3.9,
-     "start-up and handover tools": 3.1,
-     "reading notes": 1.8,
+     "looking at pictures": 3.5,
+     "start-up and handover tools": 2.7,
+     "reading notes": 1.6,
      "other commands": 1.5,
-     "running checks and tools": 1.2,
-     "reading guides": 1.1,
-     "messages to Sam": 0.5,
+     "running checks and tools": 1.1,
+     "reading guides": 1.0,
+     "messages to Sam": 0.7,
      "writing notes": 0.4
     },
     "leftover": 0.0
@@ -11616,7 +11617,7 @@
       0.0059
      ]
     ],
-    "base_pct": 18.7
+    "base_pct": 18.9
    },
    "search": {
     "show": 0,
@@ -11629,8 +11630,8 @@
      "guides": 2,
      "shared:bench_move.py": 1,
      "shared:watcher.py": 4,
-     "other": 28,
-     "shared:kittests.py": 9,
+     "other": 31,
+     "shared:kittests.py": 11,
      "shared:gta_rehearse.py": 6,
      "film notes": 4,
      "shared:humancheck.py": 5,
@@ -12224,6 +12225,46 @@
       "other",
       "",
       "head -2 /tmp/claude-0/-home-user-Animation-/07b6e5a0-25bc-51f6-a3aa-23f5d1af6576",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "git add source/kittests.py && git commit -qm \"Rule 17 test: today's outline chec",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/07b6e5a0-25bc-51f6-a3aa-23f5d1af6576/tas",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "other",
+      "",
+      "git add -A source/ && git commit -qm \"Rule proofs 41, 17, 5: records updated; so",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q origin/claude",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^     (",
       ""
      ]
     ]
