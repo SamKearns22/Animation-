@@ -13,4 +13,13 @@
   board of that shot, not by comparing fingerprints. Not covered: a chat changing a framing on its own with no note;
   movement code written for a held shot (it cannot be rendered or sent). Films begun before the shot board are not
   gated; Grand Theft Autism renders with its own code (Sam overruled its checks, 21 Nov) and is not gated.
-- Rule 11 and 87 wording: shown to Sam 22 Nov (numbered question), not yet written.
+- Rule 11 and 87 wording: written 23 Nov on Sam's "Y to all" (05:51 UK, chat 3, notes/ledger/sam/vs4pf9aa.md).
+
+## Verified working (23 Nov, Sam: "Y then test and verify working")
+- End to end on the main line, a made-up film through the real clip command: refused with no board; renders once a
+  board reached Sam; refused for an unrouted framing note; refused while held, with the sheet sent but no number, and
+  after his number until the shot's new board; renders after the new board; `staging.py check` then clean.
+- The made-up film's clip file came out empty (its own test sound, not the check: the check runs before any drawing).
+  A real Milburn clip (0-0.5 s) with the check in place: 0.98 s, 540x960, 24 fps, body check clean.
+- Kittests on the merged main line: staging_stills_milburn_replay, staging_stills_note_finder, board_gate_refusals,
+  board_gate_milburn_reverse, shot_board_every_shot, watcher_catches_last_weeks_four all PASS.

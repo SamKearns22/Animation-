@@ -153,6 +153,18 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - For Claude: leanout.SLOW; clips to Sam phone-safe (540x960 padded, baseline, faststart); two "Where things stand"
   on purpose; CLAUDE.md sentence changes are Sam's own; branches dreamy-fermi-vkhutz, gta-chat31 left unmerged.
 
+## Where things stand, the LOOK strand (23 Nov, chat 42 opens chat 44, Opus high): stage 2, the house look on the move
+- Sam (23 Nov): "open another chat to start building the character on him": stage 2 of solid-body-moves (line 106:
+  the same move in the house look; bar: 0 strip faults, pass list clear, side by side with the approved seated
+  Jason, stranger test at phone and full size). Runs beside chat 43 (timing x1.25): do NOT touch leanout.TIMES,
+  BREAKDOWNS, CAM4 or _climb; work in the drawing (bench_draw, bench_pose part_at, house_pose, clean_parts);
+  fetch and merge the main line before every push.
+- Open from Sam's K4 still notes (learn-step.md chat 38): vest strap an island (the vest's front scoop stretched by
+  the raised arm, part_at); pistol grip reads as a black mark at his side (critique r42-grey); head drawn once
+  (step 5b) when the dressed clip is built. First: the K4 still fixed and resent, then dressed key poses, then the
+  dressed clip on the new timing once chat 43 has pushed it.
+- Clips to Sam phone-safe: 540x960 padded, baseline, faststart (the wide clip would not open on his phone).
+
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
 - [x] K1-K5: 0 crossings (car, self, pistol), contacts held, joints in range (fixed in the body, not the checks). Sheet notes/bench/stage1-keys.jpg.

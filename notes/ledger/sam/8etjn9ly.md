@@ -9,3 +9,10 @@ Still doesn't function
 ### 2026-11-23T05:42:20
 All the human movements seem 25% too fast
 
+### 2026-11-23T05:44:04
+1 
+How long does that take?
+
+### 2026-11-23T05:44:37
+Can you open another chat to start building the character on him?
+
