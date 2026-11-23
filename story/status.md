@@ -1,3 +1,3 @@
-Grand Theft Autism: all of Sam's v5 notes fixed (door leak by a dot-by-dot depth test); clip of shot 4 sent.
-Next: Sam's Y on the clip, then Sonnet renders animatic v6.
-Then final render on Sam's yes.
+Grand Theft Autism: door fix approved by Sam; clip looks right.
+Next: Opus medium chat fixes the runners, the shot 4-5 cut and the critic's four finds; clip to Sam.
+Then Sonnet: animatic v6.
