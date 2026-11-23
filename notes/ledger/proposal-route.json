@@ -6992,55 +6992,57 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.68,
+   "cost": 1.58,
    "src": "estimate",
    "sid": "session_01U3pKR36uALh2iRkpP1tyQ4",
-   "steps": 21,
-   "hist_k": 110,
+   "steps": 38,
+   "hist_k": 133,
    "kinds": {
-    "tool search": 16.8,
-    "other": 83.2
+    "tool search": 14.1,
+    "other": 85.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 11,
+    "tool search": 21,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 5
+    "other": 9
    },
    "split": {
-    "usd": 1.0805,
-    "total": 1.0805,
+    "usd": 2.1646,
+    "total": 2.1646,
     "floor_k": 81,
     "blocks": {
-     "start-up floor": 44.7,
-     "Claude's words": 30.3,
-     "new writes": 19.5,
-     "carried history": 5.5
+     "new writes": 37.6,
+     "start-up floor": 23.7,
+     "Claude's words": 21.4,
+     "carried history": 17.4
     },
     "origins": {
-     "start-up floor": 44.7,
-     "Claude's words": 39.5,
-     "result: tool search": 9.5,
-     "messages and reminders": 5.3,
-     "result: other": 1.0
+     "messages and reminders": 37.9,
+     "Claude's words": 28.1,
+     "start-up floor": 24.2,
+     "result: tool search": 8.4,
+     "result: other": 1.5
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 44.7,
-     "thinking": 17.5,
-     "messages to Sam": 8.7,
-     "start-up and handover tools": 5.9,
-     "commands": 5.9,
-     "messages and reminders": 5.3,
-     "writing code": 5.0,
-     "reading guides": 3.3,
-     "helper and chat prompts": 2.5,
-     "reading notes": 0.7,
-     "helper results": 0.6,
-     "git and saving": 0.1
+     "messages and reminders": 37.9,
+     "start-up reading (rules, tools, first files)": 24.2,
+     "thinking": 12.2,
+     "commands": 5.7,
+     "messages to Sam": 5.4,
+     "start-up and handover tools": 4.7,
+     "writing code": 2.5,
+     "reading notes": 2.1,
+     "helper and chat prompts": 1.8,
+     "reading guides": 1.7,
+     "app tools (chats, files sent)": 0.6,
+     "writing notes": 0.5,
+     "git and saving": 0.4,
+     "helper results": 0.4
     },
     "leftover": 0.0
    },
@@ -7051,31 +7053,51 @@
     "reads": [
      [
       "source/propose.py",
-      2.1,
-      0.0195
+      2.6,
+      0.0242
+     ],
+     [
+      "notes/proposal-route.md",
+      1.5,
+      0.0121
+     ],
+     [
+      "notes/proposals/guard-film-questions.md",
+      1.4,
+      0.0111
      ],
      [
       "CLAUDE.md",
       1.0,
-      0.0096
+      0.01
+     ],
+     [
+      "notes/proposals/precheck-reply/helper-a.md",
+      1.1,
+      0.0085
      ],
      [
       "notes/proposals/precheck-reply.md",
       0.7,
-      0.0057
+      0.0059
      ],
      [
       ".claude/settings.json",
       0.4,
-      0.0041
+      0.0042
+     ],
+     [
+      "notes/proposals/precheck-reply/helper-b.md",
+      0.2,
+      0.0016
      ],
      [
       "notes/proposals/precheck-reply/chat.md",
       0.1,
-      0.0006
+      0.0007
      ]
     ],
-    "base_pct": 27.3
+    "base_pct": 25.2
    },
    "search": {
     "show": 0,
@@ -7084,9 +7106,9 @@
     },
     "other": {
      "guides": 4,
-     "shared:propose.py": 5,
-     "film notes": 1,
-     "other": 1
+     "shared:propose.py": 7,
+     "film notes": 5,
+     "other": 5
     },
     "ticked": 0,
     "edited film code": false,
@@ -7177,6 +7199,86 @@
       "other",
       "notes/proposals",
       "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/proposals/precheck-reply/helper-a.md notes/proposals/precheck-reply/helper",
+      "cd /home/user/Animation-; git status --short; git fetch -q origin claude/create-",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:propose.py",
+      "notes/proposals source/propose.py",
+      "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md notes/proposals/precheck-reply",
+      "^- ",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "notes/proposals/precheck-reply/helper-a.md",
+      "cd /home/user/Animation-; sed -n 1,45p notes/proposals/precheck-reply/helper-a.m",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/guard-film-questions.md notes/proposals/guard-film-questions sou",
+      "Status\\|adopted\\|Sam",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "cd /home/user/Animation-; sed -n 1,20p notes/proposal-route.md",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "notes/proposals",
+      "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g && ",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git push origin HEAD:claude/create-claude-md-oe8z4g 2>",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; for i in 1 2 3 4; do git fetch -q origin claude/create",
       ""
      ]
     ]
