@@ -121,7 +121,7 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
 - Rules that bite next: 59 (name every check line), 89 (look at full size before sending), Seeing like Sam 3 (fix the check too).
 - Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves; the door fix; no Hook Text; end line "Grand Theft Follow!".
 - Done: notes 13 (runners scatter, own moves, no clipping, the 4-to-5 cut) and 14 (vest, bonnet, yellow-coat woman); clip 20-27.5 s sent to Sam (no yes needed). Pistol from behind left open (named to Sam).
-- Next: Sonnet (routine): pre-flight checks, then animatic v6 with finish.py, send it; Sam's notes come on it.
+- Next: Sonnet (routine): pre-flight checks, then animatic v6 drawn with `--full` (Sam's Y, 23 Nov 14:3x: full size too, so on his Y the final is finish.py on OUT.full.mp4, no second draw; he wants the final by 16:30); finish.py on the animatic, send it; on Sam's clear yes, finish.py on the .full.mp4 -> animations/, send.
 - Needs Sam: his notes on the clip / animatic v6.
 - Read: pack "Checks and animatic" (guides/job-packs.md).
 - Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three owed checks (layer order, cut continuity incl. a crowd that stops or leaves, wheel/effect) through the proposal route; NEW: crowdpath's clash report as a pre-flight check for every crowd film (proposal route); a silhouette check for props seen end-on (pistol).
