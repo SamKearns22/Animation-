@@ -35,6 +35,8 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   sentences ("Locked by Sam", "Just go") were red before chat 1 (Sam's own CLAUDE.md edits): for Sam/a tool chat, not
   this film. No film code yet, so no `page.py show` (FINDER): chat 2 changed only shared tools (facehouse, turnhead,
   people_parts, people, castsheet, handover). No estimate yet (COST): the plan stage sets it once the script comes.
+  Kit tests: the start-up run (kittests-last.log) ran while chat 2 changed the code: its 2 reds (kit_people_never_generic,
+  move_to_shared_catches_film_fixes) both PASS rerun on the saved code (N26 fixed: archived notes are NAME-notes.md).
 
  branches gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz,
   gta-chat31 hold only GTA logs/proposals (film posted): not merged, for a tool chat; CLAUDE.md "Locked by Sam" and
