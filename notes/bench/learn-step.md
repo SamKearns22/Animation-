@@ -319,3 +319,20 @@ area per side, no island under N px - proposed via the proposal route).
   4 false (left view empty 2.7-5.3 s = the locked camera on the cruiser, not drawn in the test; door "flicker" =
   the pan, checked per frame; kneeling reads at full size; the outside test view has no door on purpose);
   real but stage 2 (the look): pistol grip at his side reads as a black tick on grey. Sent to Sam 23 Nov.
+
+## Stage 2, chat 44 (Opus high): the house look on the move
+- K4 vest strap (Sam's "Fix", 22 Nov), why the first two fixes failed: dressed_still HID every triangle touching a
+  neck-bone point (to make room for the neck column), and the shoulder tops out to rest |x| 1.4 dm are weighted to
+  the neck bones: a hole was cut across each strap, so its front piece stood alone. Now only the neck itself (rest
+  |x| < 0.62) is hidden (0.68 left an ink blot at the join). part_at also: the trapezius (neck-bone group) counts as
+  trunk below the jaw; the vest cut is a tank top as curves (U scoop neck, front deeper; straps |x| 0.85-1.3 unbroken
+  over the shoulder; armholes curving to |x| 1.8 at the armpit, y 5.8), was a box neckline + straight armhole.
+- dressed_draw(out, t, view): the still's drawing as a frame drawer (still unchanged: 0 pixels differ);
+  `clip OUT OUT.mp4 [T0 T1] --dressed` draws the clip in the house look (frame store keyed "dressed"; ~3.3 s a frame
+  of work, 4 at a time). Per-triangle part names dropped (colours come per dot from part_at; same pixels).
+- house_head: the flat drawing it is cut from no longer draws flat arms/legs (the flat arm's check refused an elbow
+  across the chest and stopped the clip; a flat arm crossing the head left a hole in it; K4 changed 24 px).
+- Head views: three -> side at 1.83 s, side -> three_back 3.83, -> back 5.54, back again to front 7.25-7.79: the house
+  head's standard snap between drawn views (views.py: "a turn swaps drawings"); no flicker (yaw never crosses back).
+- "Pieces" test tried in scratch (vest colour areas, connected pieces): the half-fixed still had a 655 px island,
+  the fixed one only specks < 100 px; the very first still's island was not found by colour (43 px): not ready.

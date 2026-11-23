@@ -348,15 +348,19 @@ def house_head(cam, k, sp, neck=True):
     import views as V
     def layer(nohead):
         img = Image.new('RGBA', (W, H), (0, 0, 0, 0))
-        old, oldn = V.head_view, LF._neck
+        old, oldn, olda, oldl = V.head_view, LF._neck, LF._arm, LF._leg
         if nohead:                                    # the head and the house neck under it (its chin sits on it)
             V.head_view = lambda *a, **kw: None
         if nohead or not neck:                        # neck=False: the head alone (a solid neck stands under it;
             LF._neck = lambda *a, **kw: None          # the flat neck's outline drew a stray line down it, chat 38)
+        # the flat arms and legs are not drawn: only the head is kept from this drawing (the solid body has its
+        # own limbs), a flat arm crossing the head left a hole in it, and the flat arm's own check refused poses
+        # the solid arm reaches (an elbow across the chest: the dressed clip stopped there, chat 44)
+        LF._arm = LF._leg = lambda *a, **kw: None
         try:
             LF.draw(img, cam, k, sp)
         finally:
-            V.head_view, LF._neck = old, oldn
+            V.head_view, LF._neck, LF._arm, LF._leg = old, oldn, olda, oldl
         return img
     full, nh = layer(False), layer(True)
     a, b = np.asarray(full).astype(int), np.asarray(nh).astype(int)
