@@ -105,14 +105,19 @@ def part_at(rest, grp):
     part = np.zeros(len(rest), int)
     # trunk by the rest body's SHAPE as well as its bones: inside the shoulder line (|x| < 1.45) skin that moves with
     # the arm is still chest and shoulder top, so the vest strap stays one band when the arm is raised (Sam, 22 Nov,
-    # K4 still: the strap was a torn island cut off from the vest front)
-    trunk = (g == 0) | ((g == 1) & (ax < 1.45) & (y > 5.0) & (y < 7.95))
-    vest = trunk & (y >= 2.6) & ~((ax > 1.5) & (y > 5.7))
-    neck_front = (z > 0) & (y > 6.75 - 0.25 * np.clip((ax - 0.0) / 0.9, 0, 1) * 0) & (ax < 0.85)
-    # the back neckline lower (chat 39): a scrap of the back panel above 6.2 showed over the top of his far shoulder
-    # with the shoulder's outline cutting it off from the strap, so the strap read as a torn island (Sam, K4 still)
-    neck_back = (z <= 0) & (y > 6.2) & (ax < 0.85)
-    vest &= ~(neck_front | neck_back) & (y < 7.95)
+    # K4 still: the strap was a torn island cut off from the vest front). The trapezius (the shoulder top between neck
+    # and shoulder) is weighted to the NECK bones: it is trunk too, below the jaw (chat 44: it was skin, so every
+    # strap was cut in two over the shoulder top, front piece and back piece, and the front piece read as an island)
+    trunk = (g == 0) | ((g == 3) & (y < 8.6)) | ((g == 1) & (ax < 1.45) & (y > 5.0) & (y < 7.95))
+    # a tank top's cut, as smooth curves on the rest body (chat 44; was a box neckline and a straight armhole):
+    # a U scoop neck, front deeper than back, meeting straps 4.5 cm wide (|x| 0.85-1.3) that run unbroken over the
+    # shoulder top, and armholes curving from the strap's outer edge down to the armpit (|x| 1.8 at y 5.8)
+    sc = np.clip(ax / 0.85, 0, 1) ** 2
+    neck = (ax < 0.85) & (y > np.where(z > 0, 6.8 + 1.25 * sc, 6.5 + 1.55 * sc))
+    neck |= y > 8.1
+    arm_x = 1.3 + 0.5 * np.clip((7.4 - y) / 1.6, 0, 1) ** 1.5
+    armhole = (ax > arm_x) & (y > 5.8)
+    vest = trunk & (y >= 2.6) & ~neck & ~armhole
     part[vest] = 1
     part[((g == 0) & (y < 2.6)) | (g == 2)] = 2
     part[(g == 4) | ((g == 2) & (y < -6.85))] = 3

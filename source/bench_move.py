@@ -20,12 +20,16 @@ the head leading). The beats and their times are shot 4's locked acting rows (le
   run(OUT) .......... every frame of shot 4 (8.2 s at 24): solve and check ALL first, then draw grey (draw_all:
                       from the frame store, only changed frames drawn, 4 at a time); writes OUT/frames, report.txt
   checked_clip ...... the clip for Sam: checks first; NOTHING drawn while a fault is neither fixed nor named
+  dressed_draw ...... stage 2 (chat 44): a solved pose in the house look (part_at colours, ink, house head, neck
+                      column); dressed_still and the --dressed clip both use it
   frame store ....... frame_key (body points + camera + drawing code), spot check of 10, keep -> notes/bench/store
   inside test ....... _winding: counted ray crossings on the capped skin (exact); _winding_sum: the old referee
   proof(OUT) ........ every check first run on old failed frames (pass list, notes/bench/learn-step.md)
 
     python3 source/bench_move.py run OUT_DIR        the clip's frames + the check table (prints it)
     python3 source/bench_move.py clip OUT_DIR OUT.mp4 [T0 T1]   checks first, then the side-by-side grey clip
+    python3 source/bench_move.py clip OUT_DIR OUT.mp4 [T0 T1] --dressed   the same in the house look
+    python3 source/bench_move.py dressed OUT.png [KEY] [T]   one key pose dressed (shot camera + outside)
     python3 source/bench_move.py name OUT_DIR "why"   name the last check pass's faults (lets the clip draw)
     python3 source/bench_move.py keep OUT_DIR       file the frame store on GitHub (notes/bench/store/frames.tar)
     python3 source/bench_move.py proof OUT_DIR      the checks against the old failed frames
@@ -1729,22 +1733,28 @@ def _feed(h, x):
         h.update(repr(x).encode())
 
 
-def frame_key(out, t, side, code):
+def frame_key(out, t, side, code, dressed=False):
     h = hashlib.sha256(code.encode())
     _feed(h, {k: v for k, v in out.items() if k != 'bad_pts'})
     _feed(h, vars(cam_at(t)))
     h.update(b'side' if side else b'shot')
+    if dressed:
+        h.update(b'dressed')
     return h.hexdigest()[:24]
 
 
 def _draw_frame(i):
     out, t, side = _DRAW['outs'][i], _DRAW['ts'][i], _DRAW['side']
-    im = draw(out, cam_at(t))
+    from PIL import Image
+    if _DRAW.get('dressed'):             # stage 2: the house look, drawn at 2x and brought down (smooth edges)
+        im = dressed_draw(out, t, 'shot', 2, shake=True).resize((540, 960), Image.LANCZOS)
+    else:
+        im = draw(out, cam_at(t))
     if side:                             # left: shot 4's locked camera; right: outside the window, same pose
-        from PIL import Image
         both = Image.new('RGB', (im.width * 2, im.height))
         both.paste(im, (0, 0))
-        both.paste(draw_view(out, 'outside', t, im.size, mark=False), (im.width, 0))
+        both.paste(dressed_draw(out, t, 'outside', 2).resize(im.size, Image.LANCZOS) if _DRAW.get('dressed') else
+                   draw_view(out, 'outside', t, im.size, mark=False), (im.width, 0))
         im = both
     im.save(os.path.join(_DRAW['store'], _DRAW['keys'][i] + '.png'))
     return i
@@ -1758,7 +1768,7 @@ def _pool_map(fn, items):
         return pool.map(fn, items, chunksize=1)
 
 
-def draw_all(out_dir, outs, ts, every=1, side=False):
+def draw_all(out_dir, outs, ts, every=1, side=False, dressed=False):
     """Draw (or take from the store) every `every`-th frame into OUT/frames; prints how many were drawn."""
     import random
     import shutil
@@ -1769,13 +1779,13 @@ def draw_all(out_dir, outs, ts, every=1, side=False):
     os.makedirs(fdir, exist_ok=True)
     code = _draw_code()
     idx = list(range(0, len(ts), every))
-    keys = {i: frame_key(outs[i], ts[i], side, code) for i in idx}
+    keys = {i: frame_key(outs[i], ts[i], side, code, dressed) for i in idx}
     if os.path.exists(STORE_TAR) and any(not os.path.exists(os.path.join(store, keys[i] + '.png')) for i in idx):
         import tarfile
         with tarfile.open(STORE_TAR) as tf:              # the bundle kept between chats (only PNGs by name)
             want = {keys[i] + '.png' for i in idx}
             tf.extractall(store, members=[m for m in tf.getmembers() if m.name in want and m.isfile()])
-    _DRAW.update(outs=outs, ts=ts, side=side, keys=keys, store=store)
+    _DRAW.update(outs=outs, ts=ts, side=side, keys=keys, store=store, dressed=dressed)
     have = [i for i in idx if os.path.exists(os.path.join(store, keys[i] + '.png'))]
     if have:                                             # the store's spot check: drawn again, pixel for pixel
         spot = random.sample(have, min(10, len(have)))
@@ -1821,7 +1831,7 @@ def keep(out_dir):
 SLIDE_BAR = 1.0                  # cm: a planted knee or the door hand moving more than this while planted
 
 
-def checked_clip(out_dir, mp4, span=None):
+def checked_clip(out_dir, mp4, span=None, dressed=False):
     """The grey clip through the body check's record (humancheck.Writer), so it can go to Sam (the send guard):
     every frame's solid-body checks (car, body against itself, pistol, joint range) and the clip's own (pops, steps
     over 3 cm, planted slides, contacts) go in as faults; the flat-drawing checks in humancheck have nothing to see
@@ -1858,7 +1868,7 @@ def checked_clip(out_dir, mp4, span=None):
         print('\n'.join(lines), flush=True)
         sys.exit('checks first: %d fault(s) above, NOTHING drawn. Fix them and run again, or name every one: '
                  'python3 source/bench_move.py name %s "why"' % (len(lines), out_dir))
-    draw_all(out_dir, RUN_LAST['outs'], ts, 1, side=True)
+    draw_all(out_dir, RUN_LAST['outs'], ts, 1, side=True, dressed=dressed)
     size = clip(out_dir, mp4)
     print('clip %s: %.0f KB, film frames %d-%d' % (mp4, size / 1024, f0, f0 + len(ts) - 1), flush=True)
     if named:
@@ -2046,24 +2056,42 @@ def neck_column(out, n_ring=24, n_len=10):
 
 def dressed_still(path, name='K4', t=1.95, scale=2):
     """Rough early look (Sam's Y, chat 36): one solved key pose dressed as Jason in the house look through shot
-    4's locked camera at t: house colours by body part (bench_pose's part map), house ink, the house head drawing
-    laid at the head's depth, circle hands, the pistol. The 3D head and hands are not drawn (the house ones stand
-    in). Also saves the same pose from outside the window (path -outside.png). Prints the checks on the pose."""
-    import bench_draw as BD
-    from PIL import Image
+    4's locked camera at t (dressed_draw), and the same pose from outside the window (path -outside.png). Prints
+    the checks on the pose."""
     fit_seat(); fit_knee(); fit_ankles()
     g = key(name)
     out = solve(g)
     c = check_frame(out, g)
+    res = []
+    for view in ('shot', 'outside'):
+        img = dressed_draw(out, t, view, scale)
+        img.save(path if view == 'shot' else path.replace('.png', '-outside.png'))
+        res.append(img)
+    bad = {kk: v for kk, v in c.items() if kk in ('car', 'self', 'pistol', 'rom') and v}
+    print('dressed still %s at %.2f s: checks %s' % (name, t, bad or 'clean'), flush=True)
+    return res
+
+
+def dressed_draw(out, t, view='shot', scale=2, shake=False):
+    """One solved pose dressed as Jason in the house look (stage 2, chat 44: the still's drawing made a frame
+    drawer, so the dressed clip and the still are drawn by the same code): house colours by body part (bench_pose
+    part_at), house ink, the house head drawing laid at the head's depth, circle hands, the pistol, the smooth neck
+    column. view 'shot' = shot 4's locked camera at t; 'outside' = beside the window (front door cut away).
+    Returns a PIL image at the camera's size x scale."""
+    import bench_draw as BD
+    from PIL import Image
     r = rig()
     sp = dict(r['sp'], mood='stern', squint=0.35, frown=0.07)
     tk = r['tk']
     neckb = np.array([str(b).startswith('neck') for b in r['bone']])
+    # only the neck itself is hidden (rest |x| under 0.62 dm; 0.68 left an ink blot at the join): the shoulder tops
+    # out to |x| 1.4 are tied to the neck bones too, and hiding them cut a hole across each vest strap, so the
+    # strap's front piece read as an island (Sam, K4 still, 22 Nov; found chat 44)
+    neckb &= np.abs(BP._REST['v'][:, 0]) < 0.62
     hide = r['headb'] | (neckb & DRESS_HIDE_NECK)
     # a triangle touching the hidden neck at all goes (its scraps poked through the neck column as a hooked line
     # at the throat, chat 38); the column's base, sunk into the trunk, covers the opening
     tk = tk[~(r['hand'][tk].any(1) | (hide[tk].any(1) if DRESS_HIDE_NECK else hide[tk].all(1)))]
-    tp = np.array([BP.PARTS[int(np.bincount(r['part'][tt]).argmax())] for tt in tk])
     rv, rg = BP.rest_attrs()
     attrs = np.concatenate([rv, rg], 1)
     Pj = out['P']
@@ -2085,42 +2113,36 @@ def dressed_still(path, name='K4', t=1.95, scale=2):
             radial = (d_ - np.outer(al, ax_))[lip]
             Pj = Pj.copy()
             Pj[lip] = a0 + np.outer(al[lip], ax_) + radial / rr[lip][:, None] * NECK_R[1] * 0.97
-        tp = np.array([BP.PARTS[int(np.bincount(r['part'][tt]).argmax())] for tt in tk])
         ni = np.where(neckb & r['keep'])[0]
         src = ni[np.argmin(np.linalg.norm(Pj[ni] - out['J']['neck'], axis=1))]   # its colour: a neck skin point's
         tk = np.concatenate([tk, Tn + len(Pj)])
-        tp = np.concatenate([tp, ['skin'] * len(Tn)])
         attrs = np.concatenate([attrs, np.repeat(attrs[src][None], len(Vn), 0)])
         Pj = np.concatenate([Pj, Vn])
+    tp = np.array(['skin'] * len(tk))    # Jason's colours come per dot from part_at (attrs), not per triangle
     objs = [(Pj, tk, tp, 'jason')] + scene(out)[1:]
-    res = []
-    for view in ('shot', 'outside'):
-        if view == 'shot':
-            cam = cam_at(t, shake=False)
-        else:
-            import sets as S
-            cam = S.Cam(*SIDE_CAMS['outside'])
-        ob_ = objs if view == 'shot' else [o for o in objs if not (o[3].startswith('door') and 'rear' not in o[3])]
-        zb, pb, ob, names = BD.raster(cam, ob_, scale, attrs)
-        pb = clean_parts(pb, ob, 9 * scale // 2)
-        edge = BD.ink(zb, pb, ob, 3 * scale)
-        from scipy import ndimage                    # ink specks too small to be a line (left at the throat, chat 38)
-        lab, nl = ndimage.label(edge)
-        if nl:
-            sz = ndimage.sum(edge, lab, range(1, nl + 1))
-            edge &= ~np.isin(lab, np.where(sz < 60 * scale * scale)[0] + 1)
-        img = BD.compose(zb, pb, ob, names, edge, BD.colours(sp), scale)
-        bg = Image.new('RGBA', img.size, SKY + (255,))
-        bg.alpha_composite(img)
-        img = bg
-        k = house_pose(out)
-        head, _ = BD.house_head(cam, k, sp, neck=not DRESS_HIDE_NECK)
-        BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale)
-        img.convert('RGB').save(path if view == 'shot' else path.replace('.png', '-outside.png'))
-        res.append(img)
-    bad = {kk: v for kk, v in c.items() if kk in ('car', 'self', 'pistol', 'rom') and v}
-    print('dressed still %s at %.2f s: checks %s' % (name, t, bad or 'clean'), flush=True)
-    return res
+    if view == 'shot':
+        cam = cam_at(t, shake=shake)
+        ob_ = objs
+    else:
+        import sets as S
+        cam = S.Cam(*SIDE_CAMS[view])
+        ob_ = [o for o in objs if not (o[3].startswith('door') and 'rear' not in o[3])]
+    zb, pb, ob, names = BD.raster(cam, ob_, scale, attrs)
+    pb = clean_parts(pb, ob, 9 * scale // 2)
+    edge = BD.ink(zb, pb, ob, 3 * scale)
+    from scipy import ndimage                    # ink specks too small to be a line (left at the throat, chat 38)
+    lab, nl = ndimage.label(edge)
+    if nl:
+        sz = ndimage.sum(edge, lab, range(1, nl + 1))
+        edge &= ~np.isin(lab, np.where(sz < 60 * scale * scale)[0] + 1)
+    img = BD.compose(zb, pb, ob, names, edge, BD.colours(sp), scale)
+    bg = Image.new('RGBA', img.size, SKY + (255,))
+    bg.alpha_composite(img)
+    img = bg
+    k = house_pose(out)
+    head, _ = BD.house_head(cam, k, sp, neck=not DRESS_HIDE_NECK)
+    BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale)
+    return img.convert('RGB')
 
 
 def clip(out_dir, mp4):
@@ -2134,8 +2156,10 @@ if __name__ == '__main__':
     cmd = sys.argv[1]
     if cmd == 'run':
         run(sys.argv[2], span=(float(sys.argv[3]), float(sys.argv[4])) if len(sys.argv) > 4 else None)
-    elif cmd == 'clip':          # clip OUT_DIR OUT.mp4 [T0 T1]
-        checked_clip(sys.argv[2], sys.argv[3], span=(float(sys.argv[4]), float(sys.argv[5])) if len(sys.argv) > 5 else None)
+    elif cmd == 'clip':          # clip OUT_DIR OUT.mp4 [T0 T1] [--dressed]
+        dr = '--dressed' in sys.argv
+        av = [a for a in sys.argv if a != '--dressed']
+        checked_clip(av[2], av[3], span=(float(av[4]), float(av[5])) if len(av) > 5 else None, dressed=dr)
     elif cmd == 'dressed':       # dressed OUT.png [KEY] [T]
         dressed_still(sys.argv[2], *(sys.argv[3:4] or ['K4']), *[float(x) for x in sys.argv[4:5]])
     elif cmd == 'checks':
