@@ -52,7 +52,10 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Rules that bite next:** 30 (note 5 repeats GTA's Lucia), 49 (likeness: Kemi's build from her photos), 89.
 - **Done (chat 4):** learn step (notes/learn/womans-build/learn.md: as drawn, May and Kemi read as men in all 10 views; the cast's body lines never reached face-tool people). Change 1 half built: `woman`/`man` in the body line (people.SEXED, BEFORE_SEX; load refuses a new film's person without it), face-tool people keep their body line, crowd women flagged, body.FIGS 'female' (GTA's 'woman' kept), arms a little out (views.standing). Sam's note 7: right for May, wrong for Kemi.
 - **Next (chat 6, Opus high: new build):** Kemi's own build from Sam's full-length photos (he is asked for 2-3; measured, never guessed; not slimmer than May; shown beside the photos); kit tests on finished films (each must draw as before); the cast-sheet check (fails both n5 pictures, passes Lucia as a woman and Blair as a man; wired into handover end, which now lists castsheet as UNWIRED); Change 2 (neckline first: May's striped blouse in a narrow V reads as a tie); cast sheet v3 to Sam; merge chat 5's branch and push the main line.
-- **Needs Sam:** 2-3 full-length photos of Kemi standing; Q2 blood (sets chat).
+- **Kemi's photos from Sam (23 Nov ~00:00):** references/brexit-is-done/kemi-full-1-portrait-sam.jpg (standing, front,
+  dark blazer, cream dress), -2-seated-sam.jpg (perched on a sofa arm, legs crossed, heels), -3-walking-sam.jpg (white
+  wrap top with a peplum, dark trousers). Measure her shoulders, waist, hips and legs from these; never guess.
+- **Needs Sam:** Q2 blood (sets chat).
 - **Read:** `guides/job-packs.md` Build; notes/learn/womans-build/learn.md; notes/proposals/womans-build.md "Final version"; note 7.
 - **Open rule requests:** none.
 - **For Claude:** learn drawings: notes/learn/womans-build/draw.py (draw2 style: sp['figure']='female', castsheet._setup); FIGS 'female', FIG_HEM in body.py; views.standing 'female' arms; Kemi's own build likely a second FIGS entry chosen by a `build` word on her body line.
