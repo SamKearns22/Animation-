@@ -366,3 +366,6 @@ area per side, no island under N px - proposed via the proposal route).
   head here, 48% on the approved seated still). A pose matter (shoulder/elbow), not the drawing. 1.67-1.83 s the
   raised gun arm wraps over/behind his head (critique r38: "rubbery over the head"). Head views snap (house style).
 - Not run: a fresh-helper critique of the dressed clip (cost; film at ~93% of its 15%).
+- Sam's notes (23 Nov): "Overall, it's very good"; the two named items fine; N1 neck from the back / side, N2 head
+  turn at 2 s jarring (film notes, LOOK strand). Missed by me: frames 205-214 were zoomed and the neck over the hair
+  not seen (I looked at the pistol and throat only). Lesson: every head view gets its own full-size look.
