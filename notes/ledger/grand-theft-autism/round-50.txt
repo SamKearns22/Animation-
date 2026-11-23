@@ -1,0 +1,31 @@
+== critique, round 50 pass 1 (2026-11-23): 6 fault(s), 3 can't tell
+-- look.md --
+1: Man in tank top aims pistol sideways from red convertible; passengers inside; shirt text "FLONDA"; street behind.
+2: Police car with red lights ahead on street; red convertible edge at right; calm sunset.
+3: Explosion with black smoke and fire by police cars; man leans out of red car.
+4: Woman in yellow coat, back turned, watches smoke; man leans out of car; police cars.
+5: Man leans over car side toward road; two passengers inside look worried; police cars distant, smoke.
+6: Three people in red striped convertible face camera, driver's shirt reads "FLONDA"; palm tree, buildings.
+-- result.md --
+## Faults
+FAULT O1 A2 P1 [6]: Jason's vest - the word reads "FLONDA" (panel 6 only "IONDA"), reference spells LEONIDA with a sunset logo below; letters wrong or cut off.
+FAULT A1 O3 P1 [3, 4, 5]: Jason is tiny and the pistol is not visible at all; the shoot-back beat does not read at phone size. Panel 5 shows only a man bent over the door, no gun, no shot.
+FAULT O4 [4]: the woman in the yellow coat is far bigger than the crowd standing right behind her; scale and distance disagree.
+FAULT O5 [6]: a white speck floats on the dark grille/bonnet edge, and tick marks hang below the black stripes like stray feet; both attach to nothing.
+FAULT P7 P10 [3, 5]: where Jason's body meets the door he looks stuck on the outside, with no window frame or arm over the sill; he seems pasted onto the car side rather than leaning out of a window.
+FAULT A1 [5, 6]: Lucia is cut by the right edge in panel 5, and in panel 6 the three faces are tiny behind the windscreen glare; the acting cannot be judged.
+CAN'T TELL P2 [1]: which way Jason's gun points (back at the police or forward); a wider frame showing the police cars would show it.
+CAN'T TELL P2 [2]: Jason is not visible at all at 19.0 s; a frame with the car's window in view would show it.
+CAN'T TELL P6 [1]: his hand and pistol are small; a full-size crop would show whether the gun sits in the hand.
+
+## Checked
+1-6
+
+## Cold look
+look.md read the shirt as "FLONDA" (the drawing's own spelling), so it matched the picture but not the brief or reference; I missed that until the check. I named a worried look on panel 5 that is hard to see. I did not name the gun in 2-5 because none is visible.
+
+## Not on the list
+- The explosion in panel 3 is a flat orange ball that reads as a cartoon blob, and the smoke in panel 4 seems to hang off the building; suggested line: "an effect touches the ground or thing it comes from".
+- Police cars all look alike and tiny; suggested line: "chasers are counted and readable at phone size".
+- The camera in panel 6 faces the car with no police in view; suggested line: "a view's content matches the beat's story".
+

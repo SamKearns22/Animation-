@@ -28771,11 +28771,31 @@
      "14 O2: roll bar is drawn in front of his face, but he sits behind it where the bar should be behind his head.",
      "1,4-7 O4: man is tiny against the car in 1, 4, 5, 7; car in 3 looks longer than in 2 (inconsistent scale between shots)."
     ]
+   },
+   {
+    "round": 50,
+    "pass": 1,
+    "stage": "notes",
+    "date": "2026-11-23",
+    "hunt": 1,
+    "faults": 6,
+    "cant_tell": 3,
+    "open": [
+     "6 O1 A2 P1: Jason's vest - the word reads \"FLONDA\" (panel 6 only \"IONDA\"), reference spells LEONIDA with a sunset logo below; letters wrong or cut off.",
+     "3-5 A1 O3 P1: Jason is tiny and the pistol is not visible at all; the shoot-back beat does not read at phone size. Panel 5 shows only a man bent over the door, ",
+     "4 O4: the woman in the yellow coat is far bigger than the crowd standing right behind her; scale and distance disagree.",
+     "6 O5: a white speck floats on the dark grille/bonnet edge, and tick marks hang below the black stripes like stray feet; both attach to nothing.",
+     "3,5 P7 P10: where Jason's body meets the door he looks stuck on the outside, with no window frame or arm over the sill; he seems pasted onto the car side rather",
+     "5-6 A1: Lucia is cut by the right edge in panel 5, and in panel 6 the three faces are tiny behind the windscreen glare; the acting cannot be judged.",
+     "1 P2: which way Jason's gun points (back at the police or forward); a wider frame showing the police cars would show it.",
+     "2 P2: Jason is not visible at all at 19.0 s; a frame with the car's window in view would show it.",
+     "1 P6: his hand and pistol are small; a full-size crop would show whether the gun sits in the hand."
+    ]
    }
   ],
   "lines": {
    "A2": {
-    "faults": 24,
+    "faults": 25,
     "false": 0
    },
    "P4": {
@@ -28783,7 +28803,7 @@
     "false": 0
    },
    "A1": {
-    "faults": 22,
+    "faults": 24,
     "false": 1
    },
    "P2": {
@@ -28811,11 +28831,11 @@
     "false": 1
    },
    "P1": {
-    "faults": 17,
+    "faults": 19,
     "false": 0
    },
    "O5": {
-    "faults": 12,
+    "faults": 13,
     "false": 0
    },
    "P3": {
@@ -28823,7 +28843,7 @@
     "false": 0
    },
    "O1": {
-    "faults": 3,
+    "faults": 4,
     "false": 0
    },
    "O2": {
@@ -28831,11 +28851,11 @@
     "false": 0
    },
    "P7": {
-    "faults": 13,
+    "faults": 14,
     "false": 1
    },
    "O3": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "M5": {
@@ -28879,7 +28899,7 @@
     "false": 1
    },
    "O4": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "S2": {
@@ -28887,7 +28907,7 @@
     "false": 0
    },
    "P10": {
-    "faults": 6,
+    "faults": 7,
     "false": 0
    },
    "P12": {
