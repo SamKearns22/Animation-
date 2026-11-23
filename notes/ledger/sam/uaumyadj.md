@@ -9,3 +9,6 @@ The voice and sound-effect recordings are not in the project, so don't look for 
 ### 2026-11-23T14:56:47
 Why are there 3 tasks?
 
+### 2026-11-23T14:57:20
+What is the role of pre-flight checks?
+
