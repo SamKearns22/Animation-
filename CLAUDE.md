@@ -17,7 +17,8 @@ each shot.** When a drawing is wrong, fix the drawing. Never change a camera, fr
 or avoid a fault, even if the view is hard to draw. If a view seems not to work, first say in plain words **what the
 project would need to learn** to draw that shot or movement well (a new way of drawing, a tool, a reference, a test),
 and start learning it; only then, if it still can't be done, ask Sam, with any alternative as a numbered question.
-**Every handover has a "Locked by Sam" line** naming the cameras and beats that must not move.
+**Every handover has a "Locked by Sam" line** naming the cameras and beats that must not move. It stays in the
+notes, never in messages to me ("it doesn't help me", Sam 23 Nov).
 
 # Seeing like Sam (read first, every chat; Sam's Y, 21 Nov)
 
@@ -84,6 +85,11 @@ at session start (`.claude/hooks/setup.sh`).
 - **No check sheet before an animatic unless I ask**: once the checks pass (every fault fixed or named),
   render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.
+- **"Override" skips everything between me and that one ask (Sam's pick, 23 Nov):** when my own latest message has
+  the word, every check, guard and step in the way is skipped for that ask only (e.g. an unchecked animatic at 99%
+  usage; the checks run again later), each skip logged and named to me ("Checks: skipped by Override: …"). Never
+  skipped: my locked shots, deleting work, saving. Only my typed word counts (`source/override.py`; kittest
+  `override_word`).
 - **"Just go" (or any override) skips waiting for my yes, never the checks or the hand-over:** every fault is fixed
   or named first; at red the chat opens the next one, which carries on without asking.
 - **Unattended runs stop after one animatic:** render, send, wait; never stack rounds I haven't seen.
@@ -103,6 +109,9 @@ at session start (`.claude/hooks/setup.sh`).
 - **No rule without a working check** (Sam's Y, 23 Nov): a rule counts only when its check has caught a saved example
   of its own fault (a still, my words or a message); "by hand" is not a check. A new rule comes with its example or the
   handover is refused; a rule whose check can't be built yet is listed for me with what must be learned first.
+- **Every rule and fix is for all films (Sam, 23 Nov):** a fix made because of one film's fault goes into the shared
+  tools, template, rulebook or checks so every later film gets it; a fix that can only live in one film's code gets a
+  'move to shared' line in that film's notes, and the handover check stops until it is moved or Sam says it stays.
 - **"I want a rule" (or "every film", "from now on", "always") means a permanent rule for all films:** reply with the
   exact wording and place; on my yes, write it in that same chat. Each rule is written once: in the rulebook with its
   check, or here if it's about working with me (listed in the rulebook's last table).

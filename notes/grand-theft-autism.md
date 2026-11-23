@@ -2,6 +2,8 @@
 Finished sections and ticked notes: notes/archive/grand-theft-autism-notes.md (moved chat 27: the diagnosis, body shapes, the plan, the acting list and shot 4 acting rows and events, references, the build proposals).
 
 ## Brief checklist (Sam's words)
+- [x] Sam (23 Nov, chat 48): "this film won't have an initial hook text as it would get in the way of the opening joke (the logo)". No Hook Text on the animatic or the final; the film has no HOOK, so finish.py adds none (checked: film_hook returns empty). Sign-off still goes on.
+- [x] Sam (23 Nov, chat 48): "The end hook text: Grand Theft Follow!" The sign-off's follow line (story/follow-lines.md, ticked for grand_theft_autism, Sam's own line; "Feed the beaver" freed for a later film).
 - [ ] Sam (20 Nov): "extend the opening shot ... (a more gentle wipe in of the logo, hold on it as we see the city
       scape) and put the chorus of the above song over it"; corrected twice, final: "6.5 seconds" in all. Done in the
       opener: wipe 0.5-2.0 s with a soft edge, city in 1.8-3.0, logo held over the city to 4.7, gone by 5.65; chorus
@@ -73,14 +75,6 @@ Finished sections and ticked notes: notes/archive/grand-theft-autism-notes.md (m
 53.2% of a week in 13 lines (unmeasured 5.0); stages: opener 2.67, plan 2.0, cast 13.3, cars 4.5, sets 4.7, board 0.5,
 moves 11.3, animatic1 2.1, round1 9.4, round2 2.4, final 0.35. Full table: notes/archive/grand-theft-autism-notes.md.
 
-## Shot 4 rebuild (chat 11 checklist): moved to notes/archive/grand-theft-autism-notes.md (chat 28); the case study
-   notes/shot4-case-study/shot4-case-study.md holds everything on shot 4.
-
-## FAILED (Sam, 22 Nov, chat 32): every attempt at Jason's movements in shot 4
-Sam: "All attempts at building Jason's movements in shot 4 have failed. Please stop all attempts and mark them in
-the tracking document as failed." All shot 4 Jason items below are FAILED and closed; chat 31 was stopped. The full
-list of attempts is in the case study, section 17.
-
 ## Chat 32 (22 Nov): Sam's new job, learn the skill in a test space (plan first, nothing built)
 Sam: "You need to learn how to use 2.5d or 3d animation to make this movement work. Create a test space where it is just
 Jason in his sitting pose, and the window." Checklist (his words, each to be ticked against the test space):
@@ -99,143 +93,34 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
       then built fingered hands and its code comment credits those words to Sam. Nobody asked Sam; no proposal. Why no
       check caught it: nothing compares a frame's hands (or any house part) against the house look. Lesson to propose.
 
-## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (details: archive notes, "Chat 33b")
-Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
-- [x] F12 glare off faces; [x] F12 Jason's rest forearm across his chest (shots 5-8); [x] F6 fire runners slant to
-      the doorways, hands over heads; [~] F15 stripes: edge chips + bonnet shine, still read as legs at phone size in
-      shot 6 (Sam to judge). Clips sent; waiting on Sam's notes. Open lesson to propose: runner/walker heading within
-      25 degrees of the lens line named by the body check; tool gap: a --span clip option for this film.
-- Critique r33-p3 (fresh helper): F12 fixed; F6 partly (runner moves but stiff in 2, small and still at the wall in
-      3); F15 NOT fixed (still trousers; a pinstripe try was too thin at phone size, removed); new: Jason's raised hand
-      cut by the left edge at 29.3 (shot 6, his gesture, not the camera); passers-by in shot 5 stand frozen; 3 tiny
-      walkers in shot 5 (22.3-23 s, 4-7 drawings) with an arm out of the back (body check, there before this chat).
-- [x] Sam Q (33b): F15, Sam "1" (22 Nov): stripes 25 cm each, wider red gap, still black. Done; still sent.
-- Sam 22 Nov (5.8 h later): "make me an animatic including your current fixes ... shot 4 ... use the models of the
-      previous animation". Done here: grand_theft_autism.py switches the 3D hands/arms off (shot 4 drawn as in v3;
-      checked side by side at 16 s). Shot 1 cannot draw here (title font host blocked): reuse v3 clean render's first
-      7.0 s (shot 1 unchanged since v3) via the render's --from 7.0. Next: chat 33c, Sonnet: animatic v4.
-- PAUSED (Sam 22 Nov: "Then let's wait until the 3D work is done"): no more 33b film work until chat 33's 3D move is
-      done. Open for then: F6 runner stiff in his second step and still at the wall; Jason's raised hand cut by the
-      left edge at 29.3; shot 5 frozen passers-by; 3 tiny walkers' arms out of the back (22.3-23 s).
-- Where it stands (33b): Next = Sam's notes on the two clips + the F15 answer, then a notes round (Opus medium).
-      Never shot 4's Jason. grand_theft_autism.py now has frame_image (critique.py needed it).
-
-
-
-## Sam's decisions, 22 Nov evening (relayed by chat 38; checked in Sam's own words in its record)
-- Y: the speed-up FIRST, before the full grey run: (a) time each part of a grey frame and of the dressed still;
-  (b) the proposal route for the speed-up: the inside test as a distance grid (mesh_sdf; the exact test kept for
-  points within a few mm of the skin), triangle filling in compiled code, the house head drawn once, frames drawn 4 at
-  a time; (c) build after Sam's numbers; then the move's faults, the full run.
-- Y: add to the same proposal: (1) quick checks with no drawing over all frames first, fix, then ONE render; (2) redraw
-  only the frames a fix touches, spliced into the last clip; (3) keep rendered frames between chats (a compact bundle
-  on GitHub). Bigger computer: looked into by chat 38, none offered (4 processors, no graphics card).
-- Sam: "I need to see it in motion, don't worry about the stills, we just need to speed it up/make it quality so
-  there's no notes." NO dressed stills (the 5-stills question closed: N); the strap is checked in motion. Goal: a
-  dressed clip in motion, fast to make, good enough for no notes, watched at phone and full size before it goes.
-- Answered in chat 38 (start check's "not carried"): time estimate (16:10, 19:45; corrected to "20-40 s a frame, to
-  be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
-  render-time factors (16:46).
-
-## Where things stand (23 Nov, chat 43, Opus high; shot 4 now 25% slower, clip sent)
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); rule 74 (acting list).
-- Locked by Sam: all cameras and beats of shots 1-8, in the same order; the house style; circle hands. CHANGED BY SAM
-  (23 Nov): every move in shot 4 25% slower: shot 4 is 10.25 s (was 8.2), everything after it 2.05 s later.
-- Done: one slow-down number for shot 4 (Jason, shots, camera, sounds, later voices and captions); two touches the
-  slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean, sent. Changed: the
-  cruiser's wobble 2.0 -> 2.5 s (slows with the shot). Sam's 05:33/05:35 "can't open": fixed by 42b's phone-safe copy.
-- Sam (05:44, chat 42): "1": only shot 4 slower now; the other shots' people are checked at the next animatic.
-- Sam on it: "PERFECT" except the grip: fixed, the fist round the handle everywhere (learn-step "Chat 43"); clip resent.
-- Next: Sam's word on the grip clip; the look strand (chat 44) dresses this move. The look strand (chat 44) dresses this new timing; chat 43
-  touched _climb (C1b hips, gun lift): chat 44 merges the main line first.
-- Read: notes/bench/learn-step.md "Chat 43". Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
-- For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
-  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look, claude/gta-chat45-look = the live look chats.
-
 ## Sam (23 Nov, on the redrawn dressed clip): "It looks very good. Well done."
 - [ ] "We have added a new skill to our toolkit. When we are done with the film, we can explore how we can improve
       the process from what we have learned." (end-of-film review item: the 3D-body skill and how it was learned)
-- [ ] "Would you care to build this into the rest of the film? A separate chat has worked on the rest of the film.
+- [x] (chat 46: built into shots 3-8; full animatic by chat 47) "Would you care to build this into the rest of the film? A separate chat has worked on the rest of the film.
       Once done, run checks across full animatic and produce." Plan (chat 45's pick): chat 46, Opus high, builds the
       dressed 3D Jason into the film: shot 4 first (the bench move on the film's camera and timing, replacing the
       flat lean-out Jason), then Jason in shots 3 and 5-8 so his look does not jump at the cuts (same body, house
       head, circle hands, chat 43's grip). Locked cameras, beats, timing unchanged. Then Sonnet: checks over the
       full animatic, finish.py (Hook Text, sign-off), send. Final render only on Sam's clear yes.
 
-## Where things stand, the LOOK strand (23 Nov, chat 45 done; waiting on Sam's look at the redrawn dressed clip)
-- Rules that bite next: rule 30 (neck twice: a third time means the check); Seeing like Sam 1; Fix the drawing.
-- Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower; house style; circle hands; chat 43's grip.
-- Done (chat 45): N1 neck never hides the head drawing; N2 head drawings planned over the clip, no flip at 2 s.
-  Merged chat 43's lower grip. Clip redrawn, every head view looked at full size, helper r45-p2 recorded,
-  sent: animations/drafts/jason-dressed-test.mp4 (406 KB). Told Sam: neck thin/long looking down ~9.1 s (helper).
-- Next: Sam's notes on the clip come back to this strand (Opus medium). No chat opened: one clip sent, waiting.
-- Needs Sam: notes or Y on the clip.
-- Read: notes/bench/learn-step.md "Stage 2, chat 45". Open rule requests: grey-clip body-check (Sam HOLDS);
-  held-object check; house-look lock; "pieces" test; head-flip check (head_plan prevents it; no check yet).
-- Handover check: kittest body_check_back_view (rules 41, N6) BROKEN since chat 44's tip or earlier (1 of 2 v3
-  back views; tested at 9235e83c and 26c51d84, not this chat's change): for the shot 4 movement strand to fix.
-- For Claude: bench_draw.lay_head(free=), bench_move.head_plan/HEAD_BOUNDS, LF.HEAD_VD; 40 faults named.
+## Sam's notes on animatic v5 (23 Nov, chat 49; words and marked pictures in notes/sam-notes/gta-v5/)
+- Checks owed (Seeing like Sam 3): none of today's checks tests what is in front of what between two drawings (person/car, wheel/body, effect/ground) or whether a person vanishes at a cut. Owed, through the proposal route: (a) a "layer order" check: each person in a car, the strip between their lowest drawn edge and the car's hiding edge must be them or the car, never what is behind; (b) a "cut continuity" check: everyone in the last frame of a shot who is still in view of the next shot's first frame is drawn there; (c) wheel/arch and effect/ground as cases of (a). Saved examples: notes/sam-notes/gta-v5/1a-6.
 
-## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
-## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
-- [x] K1-K5: 0 crossings (car, self, pistol), contacts held, joints in range (fixed in the body, not the checks). Sheet notes/bench/stage1-keys.jpg.
-- [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
-- [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
+- [ ] Body check on the chat 50 clip (14.1-26.5 s) held it with 25 older findings, none at the door (notes/logs/gta-chat50-clip-bodycheck.log): Jason's locked poses (forearm end-on 15-15.8 s, gun 11-31 degrees off its target 16.6-17.8 s, seen from behind 18.9 s), Lucia from behind 16.1 s, passers-by from behind or an arm out of the back 20-24.8 s. Clip sent with a Checks line; each needs a fix or Sam's answer before the final.
+- [ ] Fresh-eye critique of the chat 50 clip (r50-p1, recorded): vest print reads "FLONDA" at phone size; pistol hard to read in the back views (21.5-23.3 s); yellow-coat woman too big for the crowd behind her (22.5 s); a white speck and stray tick marks on the bonnet in shot 5 (25.6 s); "Jason pasted on the door" at 21.5/23.3 s (looked at full size: arm over the sill, window frame behind him; a phone-size read; Jason's pose is locked). Told to Sam on the clip; for the next notes round.
+- [ ] 13 (Sam, 23 Nov, on the chat 50 clip): "This clip looks right. What happened to the running away people? There is now a big static crowd further down the road, which is less dynamic." Why: chat 49's note 5 fix (gta_shots58._clear_mouth) moved every right-pavement runner whose path came within 13 m of the side road's mouth up or down the road (up to 40 m) for the WHOLE film, so shot 4's runners left the action and bunched further down, standing. Plan (answered, waiting for Sam's Y): remove the blanket move; put the runners back where they ran in shot 4; fix note 5 at its real cause, shot 5 dropping people near the mouth at the cut (draw them on through the cut instead). Then a short clip of 20-27 s. Check owed: the cut-continuity check (already owed) must also flag a crowd that stops moving or leaves the action after a fix.
+- [ ] 13 Sam's Y (23 Nov): "The runners need to run in different directions, mostly away down the street, away from the explosion, and not clip into the walls or any other object, and yes the transition between 4 and 5 needs to be fixed". Checklist: (a) runners scatter in several directions, most away down the street from the explosion; (b) none into a wall, shop front, lamp, hydrant, car or each other; (c) the 4-to-5 cut: everyone seen at shot 4's end is in the same place at shot 5's start (none vanish, none pop in); (d) remove _clear_mouth's whole-film move.
+- [ ] 14 Sam (23 Nov): "Fix the checker's finds": vest print must read LEONIDA at phone size; pistol readable in the shot 4 back views (21.5-23.3 s); yellow-coat woman in scale with the crowd behind her (22.5 s); the white speck and stray tick marks on the bonnet in shot 5 (25.6 s). Jason's poses stay locked.
+- After the film (Sam, 23 Nov, chat 50, on the fixed 16.5 s still): "This is SO good to see ... This has been a massive problem on this build ... We should return to this after the film and find out how to turn this into something you can do a lot easier" (picture: sam-notes/gta-v5/12-). Owed after posting: a proposal (through the proposal route) to make the dot-by-dot depth test the normal way any 3D body sits in any drawn car or set.
+- Branches named (chat 50): claude/gta-chat46-build (only a chats log), claude/dreamy-fermi-vkhutz (gta_story_post.py, an unused post draft), claude/gta-v5-sound-draft (unrouted list), claude/gta-chat31 (old leanout and show log): none holds film work the main line needs.
+## Where things stand (23 Nov, chat 50 done)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (fix the check too); 89 (look at full size before sending).
+- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves; the door fix (Sam: "SO good"); no Hook Text; end line "Grand Theft Follow!".
+- Done: v5 notes 2/8/9 + live notes 10-11 (door) fixed; Sam: "This clip looks right". Notes 13 (runners, 4-to-5 cut) and 14 (the critic's four finds) taken, Sam's Y to both.
+- Next: Opus MEDIUM (a notes round, chat 51): notes 13 and 14 as listed; look at full size; a clip of 20-27.5 s to Sam (no yes needed); then Sonnet: animatic v6.
+- Needs Sam: nothing until the clip.
+- Read: pack "Notes round" (guides/job-packs.md); "Sam's notes on animatic v5" (notes 13, 14); critique r50-p1 result.md.
+- Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three owed checks (layer order, cut continuity, wheel/effect as layer order) through the proposal route; note 13 shows the cut-continuity check must also flag a crowd that stops or leaves the action.
+- For Claude: runners: gta_rehearse runner slant + SHOP4 wall stop (chat 49), gta_shots58._clear_mouth (remove), R.PEOPLE4/_crowd; depth test: gta_cars.solid_depth, bench_move.depth_cut/in_door, kittest door_slit. RULE 41/N6 kittests broken (not touched); SENTENCE x7: CLAUDE.md reworded by Sam, the new wording holds each (named, as chat 48).
 
-## Chat 33c (22 Nov, Sonnet): animatic v4 drawn, NOT yet sent
-Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
-- Drawn: 7.0-38.5 s fresh in 22 min (shot 1 = v3's first 7.0 s). Picture: source/data/v4/gta-v4-clean.mp4 (8 MB).
-- Sound is v3's mix (the voice and effect files are not in this container, so mix() cannot run); timings locked.
-- Blocked: no body-check record (my scratch writer was refused: it switched the checks off and self-named faults).
-  Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
-  (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
-- Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
-
-## Sam's answers, 22 Nov (status chat)
-- Budget stops (open since chat 28): **N**. Do not ask again.
-- Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.
-
-## Chat 33d (22 Nov, Opus medium): Sam's v4 notes
-- [x] N1 street pops out (shot 8): blocks over 160 m from the camera were dropped in one frame as the car drove off
-  (also palms 160 m, people 70 m). Now FAR58 = 600 m (buildings, palms), FAR_PEOPLE58 = 130 m (gta_shots58).
-  Why nobody saw it: every check looks at single frames; nothing compares frame to frame for things that vanish.
-  To propose (proposal route): a pop check, background pixels that change by a whole block between two drawings.
-- [x] N2 pistol (shots 5-8): leanout.draw_gun skipped the chest hold (Sam 21 Nov, shot 4); shots 5-8 now set
-  chest_gun: pistol in his fist flat on his chest at rest, barrel up and tipped inboard while the hand explains (the
-  gesture moves and times unchanged; hand shape fist all through: Lost the open palm and thumb shapes). Shot 4 untouched.
-  Shot 3 also has no pistol (the brief says "pistol flat against his chest"): NOT changed, it would pop at the 3-4 cut
-  while shot 4's K1 shows none: question for Sam.
-- [~] N3: police light-bar glow 0.75 m -> 0.42 m (gta_cars; sits on the bar now, red/blue alternate as real bars do).
-  Lucia's hands ARE on the wheel in shots 5-8 (checked full size at 35.5). Not fixed, named: Jason's skin/face (his cast
-  is shared with shot 4's Jason, untouchable); Lucia's face/braid (taste call); no necks / bonnet size (the locked
-  camera's framing hides them under the windscreen rail); vest "ONIDA" at rest (his forearm and now the pistol cover
-  "LE"); shot 4's face at the right edge 19 s and left arm 17.9 (Jason, shot 4); cruiser driver arm 19.7 and passers-by
-  arms 22.3-22.9: looked full size at 19.7 and 22.5 only, nothing a stranger would stop on there; not swept.
-- Clip tool: `grand_theft_autism.py OUT --span T0 T1` (sound cut from animations/drafts clean render).
-
-- 33c finish (22 Nov, Sam "Just go"): body check run (11 faults, named), critique r43-p1 recorded (fresh helper), finish.py
-  (note: finish.py deletes its own output if written into animations/drafts: write elsewhere). Animatic 4.5 MB, sent.
-  Critic's lines NOT on the list (propose later): lights sit on a named object; no repeat frames at different beats;
-  driver's hands visible on the wheel. Next: Sam's notes on v4 (Opus medium); shot 4 waits for the 3D work.
-
-## Where things stand, the ANIMATIC strand (22 Nov, chat 33d, Opus medium): v4 notes fixed, clip sent
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (the pop check to propose); rule 30.
-- Locked by Sam: every camera and beat of shots 1-8 as in v3; shot 4's Jason untouched (3D rebuild, other chats).
-- Done: N1 street no longer pops out; N2 pistol in shots 5-8 (side-on to the lens; shot 7's hand path beside his
-  face, critiques r44 p1-p2); light-bar glow on the bar. Clip 22.3-38.5 sent (2.8 MB), body check named, critique r45.
-  Critique r45 open: the raised pistol beside his cheek (30-34 s) can read as a phone; her teal headphones; old N3 set.
-  N3 rest named in "Chat 33d" above (skin/face, Lucia face, necks/bonnet, ONIDA, shot 4 items).
-- Sam's note on the clip (22 Nov, picture notes/bench/sam-notes/gta-v5clip-three-fists-gun-backwards.jpg): "Why does
-  he have three fists? Why is he holding the gun backwards?" Cause: draw_gun's chest mode adds 3 skin rings over the
-  grip on top of his drawn fist; the grip hangs away from the hand. Missed: critique r44 said CAN'T TELL (gun way round,
-  'a close crop would show it') and no crop was made; the held-object check is still a draft. Plan put to Sam, awaiting Y.
-- Needs Sam: Q0 Y for the three-fists/backwards-gun plan; Q1 shot 3 pistol (Y once shot 4's opening shows it too / N); Q2 Y = animatic v5 from this clip.
-- Next: on Sam's Y, chat 33e, Sonnet: animatic v5 `grand_theft_autism.py OUT --from 7.0` (shot 1 reused), audio from
-  the clean render, body check, critique pack, finish.py (write outside animations/drafts first), copy, send.
-- Read: job pack "Checks and animatic"; "Chat 33d" above.
-- Open rule requests: none new; to propose: the pop check (N1), critic's three lines (lights, repeat beats, hands).
-- For Claude: FAR58/FAR_PEOPLE58, chest_gun (gta_shots58, leanout.draw_gun); `--span` clip. Two "Where things stand"
-  on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
-  post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.63% of 15%; forecast 97.2% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 103.74% of 15%; forecast 107.3% (2026-11-23)

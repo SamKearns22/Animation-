@@ -90,4 +90,9 @@ rules need to be constructed that they work in this way, they are not film speci
 Nov), CLAUDE.md "Rules are permanent": "**Every rule and fix is for all films (Sam, 23 Nov):** a fix made because of one
 film's fault goes into the shared tools, template, rulebook or checks so every later film gets it; a fix that can only
 live in one film's code gets a 'move to shared' line in that film's notes, and the handover check stops until it is
-moved or Sam says it stays." Its check: the "move to shared" handover stop (named-lines change 3).
+moved or Sam says it stays." Its check: the "move to shared" handover stop (named-lines change 3). **Sam: "Y but
+needs testing" (23 Nov). Written** in CLAUDE.md "Rules are permanent" (before: no such line; fixes often stayed in one
+film's code). Not proven yet: it counts as a working rule only when the stop catches Blessed's 7 film-code check fixes,
+Milburn's voice takes and GTA's solids on the saved code (chain B chat 3 builds and tests it). From now on: a fix made
+for one film's fault is made in the shared tools; anything that can only live in a film's code is listed and stops the
+handover until moved or kept on Sam's say.

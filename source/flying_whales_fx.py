@@ -263,7 +263,7 @@ def pieces_sprite(items, depth, ss=2, ol=4.0):
     return _sprite(img, x0, y0, depth)
 
 
-def lumps_sprite(cam, lumps, depth, ss=2, ol=5.0, cols=None):
+def lumps_sprite(cam, lumps, depth, ss=2, ol=5.0, cols=None, floor=None):
     """Lumps [(world centre, radius m, lit?, velocity)] as one flat shape (a Sprite, cropped), or None. Each lump is
     a teardrop: round at the front, drawn out into a tail behind it by its speed (thrown water streams; a falling
     drop points down), so the water reads as water, never as cotton wool or a row of coins."""
@@ -278,7 +278,10 @@ def lumps_sprite(cam, lumps, depth, ss=2, ol=5.0, cols=None):
         x, y = s[0], s[1]
         if x < -rp * 4 - 60 or y < -rp * 4 - 60 or x > SIZE[0] + rp * 4 + 60 or y > SIZE[1] + rp * 4 + 60:
             continue
-        tx, ty = cam.screen(p - np.asarray(v) * (0.13 if v[2] > 0 else 0.07))[0]   # where it was a moment ago
+        q = p - np.asarray(v) * (0.13 if v[2] > 0 else 0.07)       # where it was a moment ago
+        if floor is not None and q[2] < floor:                       # never below its source (GTA v5 note 3: a
+            q = p + (q - p) * max(0.0, (p[2] - floor)) / max(1e-6, p[2] - q[2])   # jet's tail went through the
+        tx, ty = cam.screen(q)[0]                                    # pavement): cut back along its own line
         sil.append(_teardrop(x, y, tx, ty, rp, r))
         if is_lit:                       # the lit side faces the sunset (left) and the sky: smaller, up and left
             o = rp * 0.28

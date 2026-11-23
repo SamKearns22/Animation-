@@ -1,0 +1,23 @@
+{
+ "film": "flying_whales",
+ "estimate": null,
+ "chats": [],
+ "checks": {
+  "quick check": {
+   "runs": 1,
+   "faults": 4,
+   "kinds": {
+    "CAMERA FEEL": 1,
+    "caption": 1,
+    "other": 1,
+    "rule 57": 1
+   }
+  }
+ },
+ "quick_checks": [
+  {
+   "at": "2026-11-23T12:07+00:00",
+   "faults": 4
+  }
+ ]
+}
