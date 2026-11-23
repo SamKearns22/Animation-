@@ -151,17 +151,18 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
   purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look = live chat 44.
 
-## Where things stand, the LOOK strand (23 Nov, chat 42 opens chat 44, Opus high): stage 2, the house look on the move
-- Sam (23 Nov): "open another chat to start building the character on him": stage 2 of solid-body-moves (line 106:
-  the same move in the house look; bar: 0 strip faults, pass list clear, side by side with the approved seated
-  Jason, stranger test at phone and full size). Runs beside chat 43 (timing x1.25): do NOT touch leanout.TIMES,
-  BREAKDOWNS, CAM4 or _climb; work in the drawing (bench_draw, bench_pose part_at, house_pose, clean_parts);
-  fetch and merge the main line before every push.
-- Open from Sam's K4 still notes (learn-step.md chat 38): vest strap an island (the vest's front scoop stretched by
-  the raised arm, part_at); pistol grip reads as a black mark at his side (critique r42-grey); head drawn once
-  (step 5b) when the dressed clip is built. First: the K4 still fixed and resent, then dressed key poses, then the
-  dressed clip on the new timing once chat 43 has pushed it.
-- Clips to Sam phone-safe: 540x960 padded, baseline, faststart (the wide clip would not open on his phone).
+## Where things stand, the LOOK strand (23 Nov, chat 44, Opus high): dressed clip on the new timing SENT
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion, phone and full size); 3.
+- Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower (chat 43); house style; circle hands.
+- Done: vest strap one band (the neck hiding cut a hole across both straps; tank-top cut as curves); throat scribble
+  gone; pistol in the film's own tones; dressed clip (247 frames, 8.75 min to draw) sent: jason-dressed-test.mp4.
+- Needs Sam: notes on the dressed clip. Named for him: 2.3-2.75 s the gun arm seems to come from his mouth (his
+  shoulder is behind his head from this camera: a pose matter); 1.7-1.8 s the raised arm wraps over his head.
+- Next: Sam's notes on the dressed clip, Opus medium (a notes round); pose notes go to the movement strand.
+- Read: notes/bench/learn-step.md "Stage 2, chat 44". Open rule requests: grey-clip body-check (Sam HOLDS);
+  held-object check; house-look lock; "pieces" test (tried, not ready: learn-step chat 44).
+- For Claude: bench_move dressed_draw, `clip OUT OUT.mp4 --dressed`; bench_draw GUN_PARTS/INK_PART; part_at's
+  tank-top curves; neck hide |x| < 0.62 (NECK_HIDE_X). Handover check: 3 sections, 19-line one (animatic) and CLAUDE.md sentences as chat 43 says.
 
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")

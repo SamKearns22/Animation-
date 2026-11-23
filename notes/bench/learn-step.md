@@ -357,3 +357,12 @@ area per side, no island under N px - proposed via the proposal route).
   black blob end-on (7.12 s) / black tick at his side: drawn in the film's own tones (gun3d_film.COLS: light slide,
   mid frame, dark grip, muzzle), one outline round the whole pistol (bench_draw INK_PART). Grey frames unchanged
   (same.py --draw-only: only frames 16 and 176 differ, as they did before this chat: chat 41's re-planned climb).
+- Dressed clip on chat 43's timing (247 frames, 10.25 s): checks 2.4 min (the same 42 faults chat 43 named, word for
+  word), drawing 8.75 min. Sent phone-safe: animations/drafts/jason-dressed-test.mp4 (shot camera only, 540x960,
+  baseline, 528 KB). Looked at every 11th frame and 12 key frames at full size: pistol reads as a pistol end-on
+  (0.92, 8.92 s: still mostly its dark grip from below); no throat scribble; strap one band throughout.
+- Named, not fixed (for Sam): 2.29-2.75 s the gun arm seems to come out of his mouth: from the locked camera his
+  right shoulder is behind his head (the house head is the approved cartoon size, measured: 17% wider than the solid
+  head here, 48% on the approved seated still). A pose matter (shoulder/elbow), not the drawing. 1.67-1.83 s the
+  raised gun arm wraps over/behind his head (critique r38: "rubbery over the head"). Head views snap (house style).
+- Not run: a fresh-helper critique of the dressed clip (cost; film at ~93% of its 15%).
