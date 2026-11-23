@@ -11,3 +11,7 @@ Jason has a gap throughout the film. His body ends just above where the car shou
 Jason should be in the car here but his lower body is clipping through the door. He shouldn't be able to come through the car door. I have also circled some broken cube effects in yellow.
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-23T11:36:52
+Geyser effect clipping through pavement
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
