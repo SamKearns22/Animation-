@@ -32,3 +32,6 @@ You're right!! The larger second account can collaborate but my original one can
 
 What are the implications of that?
 
+### 2026-11-23T19:51:01
+What would I need to do to get collaborate on the primary account?
+
