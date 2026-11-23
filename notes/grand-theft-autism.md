@@ -124,15 +124,12 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
 ## Sound files (23 Nov, chat 52): saved in the project
 Sam's six voices, the song and the four effects are in `sounds/grand-theft-autism/` (the film's `UP` points there). A mix no longer needs Sam to re-send them; his note: voices +50%, black start 75% shorter, end text "Grand Theft Follow" are held for his answers (see chat 52).
 
-## Where things stand (23 Nov, chat 52 done)
-- Rules that bite next: 59 (name every check line), 89 (look at full size before sending), Seeing like Sam 3 (fix the check too).
-- Locked by Sam: every camera, beat, shot length and timing except what his notes below change; house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves; the door fix; end line "Grand Theft Follow" (Sam's Y, 23 Nov: no "!").
-- Done: animatic v6 sent (pictures redrawn full size too, sound = v5's, since the voices were missing); finish.py needed Override (the proposal-route guard); final NOT made (killed mid-run, nothing written). Sam's 11 sound files saved in sounds/grand-theft-autism/ (UP points there). Whole-film body check was started, never finished: run it.
-- Sam's notes on v6 (23 Nov, all held, now go): (1) last shot: she looks at Lucia, big happy suddenly-interested smile, delighted. (2) dialogue volume +50% (voices only; GAIN_DB x1.5 = +3.5 dB; effects and song as they are). (3) the black at the start 75% shorter: LEAD 0.5 s -> 0.125 s in gta_film; sound follows (SONG_FROM stays so the song still starts at frame 1). (4) end text exactly "Grand Theft Follow" (no "!").
-- Next: Opus, medium effort (a round of Sam's notes): the four notes; a short clip of the last shot for note 1 (no yes needed); then Sonnet: animatic v7 with `--full`, finish.py (sound mixed from the real files now), send; on Sam's clear yes, finish.py on the .full.mp4 -> animations/, send.
-- Needs Sam: his notes on the clip / animatic v7; his clear yes for the final.
-- Read: pack "Notes round" (guides/job-packs.md); `page.py grand-theft-autism show "words" --shot 8 --at 38 --who her`.
-- Open rule requests: Sam's pre-flight rule in reserve (always run, list "Not checked:", only Override skips; Sam has not said Y); staging-stills proposal kept in reserve by Sam (its let-through still blocks finish.py: needs Override or re-record); build check; held-object check; head-flip check; pop check; the three owed checks; crowdpath clash report; pistol silhouette check.
-- For Claude: the full pre-flight refuses on this film (no shot board, Hook Text plan, SHOT_MARKS, acting list): v6 had no pre-flight, named to Sam. Render path: source/grand_theft_autism.py (checks overruled since 21 Nov; `--full` draws both sizes); a --span clip runs the body check. Move-to-shared as before (_round_palm, _lens_kerb to crowdpath).
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 107.76% of 15%; forecast 111.4% (2026-11-23)
+## Where things stand (23 Nov, chat 53 done)
+- Rules that bite next: 59 (name every check line), 89 (look at full size), Seeing like Sam 3.
+- Locked by Sam: every camera, beat, shot length and timing; house style; Jason's poses; the door fix; end line "Grand Theft Follow"; her last-shot face as chat 53 left it (Sam 23 Nov: "We will use it. We are too low on usage to correct further").
+- Done: v6 notes all four: (1) after her line she snaps to Lucia with the house's open grin (the old smile setting lifted the corners ~1 px: why the 21 Nov note failed); brows still tilt a little worried, Sam accepted; (2) voices +3.52 dB; (3) black start 0.125 s, all sound/caption times shifted -0.375 s, song in-point moved so the chorus hit still lands on the logo; (4) follow line "Grand Theft Follow". Merged claude/compassionate-wright-iq0cja: Sam's note 15 crowd fix (parallel chat 52), never in v6. Override fix: a chat's opening prompt no longer counts as Sam's word (this chat ran under a false Override until fixed; kittest override_word now covers it).
+- Next: Sonnet: let the kit-test run finish (notes/logs/kittests-last.log; rerun if absent), handover start check, animatic v7 with --full, finish.py, send to Sam (Checks line for anything held); final only on Sam's clear yes.
+- Needs Sam: notes on v7; clear yes for the final.
+- Read: pack "Checks and animatic" (guides/job-packs.md).
+- Open rule requests: as chat 52 (archive); body_check_back_view passed alone in chat 53, full run pending.
+- For Claude: gta_film.LEAD/LEAD_WAS; grand_theft_autism SHIFT0, VOICE_UP_DB, SONG_FROM; gta_shots58 DELIGHT/joy; override._text (textNotTyped).
