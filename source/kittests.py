@@ -3071,6 +3071,94 @@ def proposal_route_hook():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+@test
+def guard_one_correction():
+    """guard-film-questions Change 1, the check for Sam's rule "One message, never twice" (22 Nov): every block is logged
+    in full; the block tells the chat Sam has read the reply and asks for one "Correction:" line; on the retry only the
+    text after the block is judged: a right correction is cleared (no let-through), a full resend is logged as one."""
+    import io
+    import contextlib
+    import json as J
+    import shutil
+    import tempfile
+    import propose as P
+    tmp = tempfile.mkdtemp()
+    old = P.PROPS
+    P.PROPS = tmp
+    try:
+        f = os.path.join(tmp, 'abcd1234-chat.jsonl')
+
+        def turn(*texts):
+            ents = [{'type': 'user', 'message': {'content': 'go on'}}]
+            for i, t in enumerate(texts):
+                if i:   # the block's reason reaches the chat as a hook message, not as Sam's
+                    ents.append({'type': 'system', 'subtype': 'stop_hook', 'content': 'blocked'})
+                ents.append({'type': 'assistant', 'message': {'content': [{'type': 'text', 'text': t}]}})
+            open(f, 'w').write('\n'.join(J.dumps(e) for e in ents))
+
+        def run(active=False, last=None):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                P.hook(J.dumps({'transcript_path': f, 'stop_hook_active': active, 'last_assistant_message': last}))
+            return buf.getvalue()
+
+        bad = []
+        unrouted = lambda: P._read(os.path.join(tmp, P.UNROUTED)).count('\n')
+        # 1. Sam's 22 Nov chat (56d8e5c4): an unjudged system ask; the block asks for ONE correction line
+        ask = ('Way 2 is written in as a rule.\nStill open:\n1. Should lessons 2 and 3 from the articles change how the '
+               'rules file is read? Y or N. My pick is Y.\n2. Should I lower the big-film figure in the rulebook? Y or N.')
+        turn(ask)
+        out = run()
+        reason = J.loads(out)['reason'] if out else ''
+        if 'ALREADY READ' not in reason or 'Correction: ignore question 1, it is withdrawn' not in reason \
+                or 'Do NOT send the reply again' not in reason:
+            bad.append(f'block message does not ask for one correction line: {reason[:120]}')
+        log = P._blocks()
+        if not log or log[-1].get('reply') != ask or log[-1].get('event') != 'block':
+            bad.append('first block not logged with the whole reply')
+        # 2. a right one-line correction clears it: logged, no let-through
+        n0 = unrouted()
+        turn(ask, 'Correction: ignore question 1, it is withdrawn.')
+        if run(active=True):
+            bad.append('blocked twice')
+        r = P._blocks()[-1]
+        if r.get('event') != 'retry' or r.get('result') != 'cleared' or r.get('shape') != 'short':
+            bad.append(f'correct one-liner not cleared: {r}')
+        if unrouted() != n0:
+            bad.append('a cleared correction was logged as a let-through')
+        # 3. the fault Sam saw three times (22 Nov, "Why did you write your response 3 times?"): a full resend after
+        # the block is logged as a full repeated reply and a let-through
+        turn(ask)
+        run()
+        turn(ask, 'Sorry, here it is again.\n' + ask)
+        run(active=True)
+        r = P._blocks()[-1]
+        if r.get('shape') != 'full' or r.get('result') != 'let-through' or unrouted() != n0 + 1:
+            bad.append(f'a full resend was not caught: {r.get("shape")}, {r.get("result")}')
+        # 4. a judged proposal missing its Critiqued line: the block names the exact line; only that line clears it
+        fault = ['proposal x: the reply must carry "Critiqued: 6 found, 2 fixed, 4 named" (counted from its file)']
+        rs = P.block_reason(fault, 'Need: 1 or 2 below.')
+        if '"Correction: Critiqued: 6 found, 2 fixed, 4 named"' not in rs:
+            bad.append('Critiqued block does not print the exact line')
+        if not P.correction_ok('Correction: Critiqued: 6 found, 2 fixed, 4 named.', fault)[0]:
+            bad.append('right Critiqued correction refused')
+        if P.correction_ok('Correction: Critiqued: 6 found, 3 fixed, 3 named.', fault)[0]:
+            bad.append('wrong numbers accepted')
+        if P.correction_ok('Critiqued: 6 found, 2 fixed, 4 named\n' + 'more\n' * 4, fault)[0]:
+            bad.append('a long resend accepted as a correction')
+        # 5. a stop by another hook first (no block of ours pending): never blocks twice, logged as before
+        open(os.path.join(tmp, P.BLOCKS), 'w').close()
+        turn(ask)
+        if run(active=True) or unrouted() != n0 + 2:
+            bad.append('stop_hook_active without our block: blocked, or not logged as a let-through')
+        rep = P.blocks_report()
+        return not bad, '; '.join(bad) or ('block asks for one Correction line; a right one clears (no let-through); a '
+                                           f'full resend is logged; Critiqued line exact; report: {rep.splitlines()[0]}')
+    finally:
+        P.PROPS = old
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
 PLAIN_OPT = ("### Option {n}: two quick stills first\n"
              "Problem: staging was built three times before Sam saw the framing he wanted.\n"
              "1. When a note is about framing, draw two small stills of it.\n"
