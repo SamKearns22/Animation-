@@ -131,3 +131,45 @@ film's code). Not proven yet: it counts as a working rule only when the stop cat
 Milburn's voice takes and GTA's solids on the saved code (chain B chat 3 builds and tests it). From now on: a fix made
 for one film's fault is made in the shared tools; anything that can only live in a film's code is listed and stops the
 handover until moved or kept on Sam's say.
+
+## 3. guard-film-questions: a stopped message is corrected in one line, never sent again (built 23 Nov, chain B chat 4)
+
+**The look back first (the learning step; changed nothing).** The guard (the checker that reads each reply after you
+have already seen it, and stops one that asks you to approve a change to how films are made before helpers and a judge
+have looked at it) stopped 51 replies between 15 and 23 Nov. Each was read and sorted. Only 12 could be read in full:
+the chats behind the other 39 (15 to 21 Nov) have been deleted, so those were sorted from the logged question alone.
+- Right to stop: 18 (11 named a judged proposal but left out its "Critiqued" count line; 7 asked you to approve a
+  change nobody had judged). 8 of the 11 are not certain, because the deleted chats can't show whether the count was
+  there in other words.
+- Wrong to stop: 33. 7 were about the film itself (a recording, a shot, the effects, Hook Text options); 7 asked
+  whether to start, queue or restart a chat; 10 asked whether to START the judging process; 3 had the right count in
+  other words; 4 took a file that is not a proposal for one; 2 only asked what you meant.
+- Whole replies sent to you again after a stop: at least 3 of the 12 that could be read (22 Nov 17:03, which you saw
+  three times; 22 Nov 23:17, after which you said "You keep sending me messages twice"; 23 Nov 03:34).
+- The guard's old practice test still misses 9 of 12 real change asks and stops 1 of 10 film questions.
+
+**Rules changed.** No wording changed. Your rule "One message, never twice" (CLAUDE.md, 22 Nov, your pick "2" in the
+Statement One chat) had no working check; it now has one. Before: when the guard stopped a reply it said "reword the
+question", so chats sent the whole reply again; and only a second stop was written down, cut to 120 characters. Now:
+- Every stop is written down in full, the first one too, with what was sent after it and how long it was.
+- The stop tells the chat you have already read the reply, and asks for ONE line starting "Correction:": the missing
+  count line, or "ignore question 2, it is withdrawn", or "question 2 is not a change, it only asks about ...".
+- Only what is sent after the stop is judged. A right one-line correction clears it. A whole reply sent again is
+  counted as a repeat and listed at the handover, and stops the next animatic until it is settled.
+- The rulebook's "Messages to me" row names the check. The rule now counts as proven on your own 22 Nov double message
+  (partly: the daily watcher line can still ask for a resend; that part waits on your pick, see below).
+
+**Difference made.** Measured on your 22 Nov example: the old guard asked for a reworded resend and got 2,300
+characters again; the new one names question 2 and accepts a one-line answer. On real chats: not measured yet. The
+number to beat, counted from the full log at the end of the next film: whole replies sent to you again after a stop,
+from at least 3 in two days to 0; every stop cleared by one line.
+
+**Not built yet: Change 2 (its own yes).** Retune what the guard stops, tested on the 51 sorted stops and the practice
+test: questions about the film, about chats, and about starting the judging process pass; "every film", "from now on",
+"always" mark a real change ask; the count line passes in any wording with the right numbers; file names that are not
+proposals stop being read as proposals. To beat: 0 wrong stops on the list (21 when replayed today), 0 real asks missed
+(2 replayed today), practice test 9 of 12 missed to 0.
+
+**How it should behave from now on.** You read each reply once. If a checker objects after you've seen it, you get at
+most one extra line beginning "Correction:". The full log shows every stop and every repeat, so a chat that sends a
+reply twice is caught the same day.
