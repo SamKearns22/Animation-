@@ -18,3 +18,12 @@ That film is posted, mark it complete
 ### 2026-11-23T20:24:37
 I'll describe both to you soon. For now, please work on the characters.
 
+### 2026-11-23T21:01:05
+Reference 1: these side images appear cut off?
+
+Reference 2, Tony: do you see how something is going wrong still with 3/4 views? That is not the same person and haircut as presented in the straight on view.
+
+Reference 3: same with Kemi, notice that the orange is gone from her clothes and that there's something not quite right with the 3/4. 
+
+Are we using our most recent 3/4 kit?
+
