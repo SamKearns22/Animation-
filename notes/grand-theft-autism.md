@@ -121,6 +121,6 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
 - Needs Sam: nothing until the clip.
 - Read: pack "Notes round" (guides/job-packs.md); "Sam's notes on animatic v5" (notes 13, 14); critique r50-p1 result.md.
 - Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three owed checks (layer order, cut continuity, wheel/effect as layer order) through the proposal route; note 13 shows the cut-continuity check must also flag a crowd that stops or leaves the action.
-- For Claude: runners: gta_rehearse runner slant + SHOP4 wall stop (chat 49), gta_shots58._clear_mouth (remove), R.PEOPLE4/_crowd; depth test: gta_cars.solid_depth, bench_move.depth_cut/in_door, kittest door_slit. RULE 41/N6 kittests broken (not touched).
+- For Claude: runners: gta_rehearse runner slant + SHOP4 wall stop (chat 49), gta_shots58._clear_mouth (remove), R.PEOPLE4/_crowd; depth test: gta_cars.solid_depth, bench_move.depth_cut/in_door, kittest door_slit. RULE 41/N6 kittests broken (not touched); SENTENCE x7: CLAUDE.md reworded by Sam, the new wording holds each (named, as chat 48).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 103.13% of 15%; forecast 106.7% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 103.74% of 15%; forecast 107.3% (2026-11-23)
