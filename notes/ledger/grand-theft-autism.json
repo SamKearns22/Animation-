@@ -24902,271 +24902,14 @@
   {
    "date": "2026-11-23",
    "chat": "c097e603",
-   "stage": "auto",
-   "round": null,
-   "notes": 0,
-   "repeats": [],
    "model": "opus",
-   "cost": 0.62,
-   "src": "estimate",
-   "sid": "session_01GznaAUhtEECBrCyRVv94jh",
-   "steps": 32,
-   "hist_k": 144,
-   "kinds": {
-    "tool search": 16.4,
-    "whole-file .py read": 0.6,
-    "renders": 4.5,
-    "pictures": 3.6,
-    "other": 74.9
-   },
-   "calls": {
-    "film-file search": 0,
-    "tool search": 18,
-    "whole-file .py read": 1,
-    "page.py": 0,
-    "routine": 0,
-    "renders": 3,
-    "pictures": 7,
-    "other": 5
-   },
-   "split": {
-    "usd": 2.2638,
-    "total": 2.2638,
-    "floor_k": 96,
-    "blocks": {
-     "start-up floor": 57.6,
-     "Claude's words": 18.4,
-     "new writes": 17.0,
-     "carried history": 7.0
-    },
-    "origins": {
-     "start-up floor": 57.6,
-     "Claude's words": 26.0,
-     "result: tool search": 12.6,
-     "result: pictures": 2.7,
-     "messages and reminders": 0.8,
-     "result: other": 0.1
-    },
-    "named": {
-     "start-up reading (rules, tools, first files)": 57.6,
-     "writing code": 9.8,
-     "thinking": 9.7,
-     "reading kit code": 7.8,
-     "commands": 5.2,
-     "looking at pictures": 2.7,
-     "reading notes": 1.6,
-     "other commands": 1.2,
-     "renders": 1.1,
-     "start-up and handover tools": 1.0,
-     "writing notes": 0.9,
-     "messages and reminders": 0.8,
-     "messages to Sam": 0.3,
-     "running checks and tools": 0.1
-    },
-    "leftover": 0.0
-   },
-   "start": {
-    "floor_k": 96,
-    "work_step": 17,
-    "work_pct": 0.43,
-    "reads": [
-     [
-      "source/bench_move.py",
-      4.0,
-      0.0483
-     ],
-     [
-      "notes/bench/sam-notes/dressed-neck-back-hairline.jpg",
-      1.6,
-      0.0203
-     ],
-     [
-      "notes/bench/sam-notes/dressed-neck-side-jagged.jpg",
-      1.6,
-      0.0203
-     ],
-     [
-      "notes/bench/sam-notes/dressed-head-turn-2s.png",
-      1.6,
-      0.0203
-     ],
-     [
-      "source/bench_draw.py",
-      1.2,
-      0.0148
-     ],
-     [
-      "source/lying_flat.py",
-      0.7,
-      0.0082
-     ]
-    ],
-    "base_pct": 23.7
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 0
-    },
-    "other": {
-     "other": 4,
-     "shared:handover.py": 1,
-     "film notes": 2,
-     "shared:bench_draw.py": 3,
-     "shared:bench_move.py": 5,
-     "shared:views.py": 2,
-     "shared:lying_flat.py": 1
-    },
-    "ticked": 0,
-    "edited film code": false,
-    "list": [
-     [
-      0,
-      "other",
-      "other",
-      "",
-      "git status | head -5 && git branch --show-current && git fetch origin claude/cre",
-      ""
-     ],
-     [
-      1,
-      "other",
-      "shared:handover.py",
-      "source/handover.py",
-      "git checkout -B claude/gta-chat45-look origin/claude/create-claude-md-oe8z4g 2>&",
-      ""
-     ],
-     [
-      2,
-      "other",
-      "film notes",
-      "notes/grand-theft-autism.md",
-      "Where things stand",
-      ""
-     ],
-     [
-      3,
-      "other",
-      "film notes",
-      "notes/bench/learn-step.md notes/bench/sam-notes/ source/bench_*.py",
-      "def lay_head\\|def dressed_draw\\|def _choose\\|67.5\\|def clip",
-      ""
-     ],
-     [
-      7,
-      "other",
-      "shared:bench_draw.py",
-      "source/bench_draw.py",
-      "sed -n 380,470p source/bench_draw.py",
-      ""
-     ],
-     [
-      8,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py source/bench_draw.py",
-      "def house_head",
-      ""
-     ],
-     [
-      9,
-      "other",
-      "shared:bench_draw.py",
-      "source/*.py source/bench_draw.py source/bench_pose.py",
-      "^PART_NAMES\\|PART_NAMES =",
-      ""
-     ],
-     [
-      10,
-      "other",
-      "shared:bench_draw.py",
-      "source/bench_draw.py",
-      "sed -n 188,216p source/bench_draw.py",
-      ""
-     ],
-     [
-      11,
-      "other",
-      "shared:views.py",
-      "source/views.py source/lying_flat.py",
-      "67.5\\|22.5\\|112.5\\|157.5\\|def snap\\|def head_view\\|def view_of\\|def pick",
-      ""
-     ],
-     [
-      12,
-      "other",
-      "shared:views.py",
-      "source/views.py",
-      "def snap",
-      ""
-     ],
-     [
-      13,
-      "other",
-      "shared:lying_flat.py",
-      "source/lying_flat.py source/views.py source/bench_move.py",
-      "^VIEWS",
-      ""
-     ],
-     [
-      14,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py",
-      "def checked_clip",
-      ""
-     ],
-     [
-      15,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py",
-      "def draw_all",
-      ""
-     ],
-     [
-      16,
-      "other",
-      "other",
-      "",
-      "mkdir -p /tmp/claude-0/-home-user-Animation-/c097e603-4bbf-5830-a9b0-fe8480e393d",
-      ""
-     ],
-     [
-      17,
-      "other",
-      "other",
-      "",
-      "^[0-9]+ ",
-      ""
-     ],
-     [
-      18,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py",
-      "def frame_key",
-      ""
-     ],
-     [
-      22,
-      "other",
-      "other",
-      "",
-      "S=/tmp/claude-0/-home-user-Animation-/c097e603-4bbf-5830-a9b0-fe8480e393da/scrat",
-      ""
-     ],
-     [
-      31,
-      "other",
-      "shared:bench_move.py",
-      "source/bench_move.py",
-      "S=/tmp/claude-0/-home-user-Animation-/c097e603-4bbf-5830-a9b0-fe8480e393da/scrat",
-      ""
-     ]
-    ]
-   },
-   "notes_auto": 0
+   "stage": "notes",
+   "round": null,
+   "cost": 1.08,
+   "notes": 2,
+   "repeats": [
+    "neck from behind into the hairline | a full-size look at every head view, and a check that the head drawing is never cut by his own neck"
+   ]
   }
  ],
  "checks": {},
@@ -25677,6 +25420,11 @@
    "date": "2026-11-23",
    "spent": 92.55,
    "forecast": 96.2
+  },
+  {
+   "date": "2026-11-23",
+   "spent": 93.17,
+   "forecast": 96.8
   }
  ],
  "critique": {
@@ -26100,6 +25848,30 @@
      "1-3 P5 P11 P8: shoulders, neck and head at full size; the frames are too small to read them. Crops at full size would show it.",
      "1-3 P2: acting is not readable; the body is faceless (planned)."
     ]
+   },
+   {
+    "round": 45,
+    "pass": 2,
+    "stage": "moves",
+    "date": "2026-11-23",
+    "hunt": 1,
+    "faults": 13,
+    "cant_tell": 0,
+    "open": [
+     "2-3,9-10,13 P11: head - tiny pinched jaw, no real neck, head sits like a ball on the shoulders; neck thin and bent in 13.",
+     "2-3,9-10,13 P5: shoulder - far arm and glove start as a black blob/loose tick inside the chest; near arm in 3/10 starts from the shoulder as a thin straight tub",
+     "3,10,13 P3: raised arm in 3/10 is a straight rubber tube with no elbow; arm in 13 is a thin dangling stick with a bracelet-like cuff, wrong length.",
+     "1-2,8-9,14 P1: hand and gun - gun floats above the head in 2/9 with no hand gripping it, only a wrist; in 1/8 gun sits at the chest with a blob hand; in 14 gun ",
+     "1-3,8-10,12-14 P6: hands - no hand shown on the gun arm; in 3/10 the hand on the roll bar is lost; in 12 the gun hand is missing.",
+     "1-2,8,13-14 P4: face - does not match reference (short dark hair, stubble, heavy brow, tanned): ours is smooth, no stubble, lighter skin, hair a flat cap; face ",
+     "8,14 P14: eyes - in 14 the eye is half hidden by the roll bar and looks lopsided; in 8 the eyes are tiny dots.",
+     "4-5,11-12 P8: from behind - face is turned away but the gun and back are drawn in front; head from behind has a face profile shape, not a back of the head.",
+     "1,7-8,14 P7: weight - seated man floats inside the window, no seat, thighs or lap visible; seat back is a brown block that changes size between shots.",
+     "2-3,9-10,12 P10: body passes through roll bar and door; head cuts behind the bar in 14; in 12 arm hangs inside the car side.",
+     "2-7,9-14 O5: car - roll bar ends in mid-air, floating; panel seams split the red body (2, 3); sill black shapes hang under the car; in 7 the car ends above a wh",
+     "14 O2: roll bar is drawn in front of his face, but he sits behind it where the bar should be behind his head.",
+     "1,4-7 O4: man is tiny against the car in 1, 4, 5, 7; car in 3 looks longer than in 2 (inconsistent scale between shots)."
+    ]
    }
   ],
   "lines": {
@@ -26108,7 +25880,7 @@
     "false": 0
    },
    "P4": {
-    "faults": 18,
+    "faults": 19,
     "false": 0
    },
    "A1": {
@@ -26120,7 +25892,7 @@
     "false": 0
    },
    "P5": {
-    "faults": 10,
+    "faults": 11,
     "false": 0
    },
    "P13": {
@@ -26128,27 +25900,27 @@
     "false": 1
    },
    "P11": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "P8": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "P6": {
-    "faults": 11,
+    "faults": 12,
     "false": 1
    },
    "P1": {
-    "faults": 16,
+    "faults": 17,
     "false": 0
    },
    "O5": {
-    "faults": 11,
+    "faults": 12,
     "false": 0
    },
    "P3": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "O1": {
@@ -26156,11 +25928,11 @@
     "false": 0
    },
    "O2": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "P7": {
-    "faults": 12,
+    "faults": 13,
     "false": 1
    },
    "O3": {
@@ -26208,7 +25980,7 @@
     "false": 1
    },
    "O4": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "S2": {
@@ -26216,11 +25988,15 @@
     "false": 0
    },
    "P10": {
-    "faults": 5,
+    "faults": 6,
     "false": 0
    },
    "P12": {
     "faults": 3,
+    "false": 0
+   },
+   "P14": {
+    "faults": 1,
     "false": 0
    }
   }

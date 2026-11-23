@@ -152,34 +152,19 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
   purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look, claude/gta-chat45-look = the live look chats.
 
-## Where things stand, the LOOK strand (23 Nov, chat 44 -> chat 45, Opus medium): Sam's notes on the dressed clip
-- Rules that bite next: rule 30 (neck is a note given twice); Seeing like Sam 1 and 3; Fix the drawing, never the shot.
-- Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower; house style; circle hands.
-- Sam (23 Nov, on jason-dressed-test.mp4): "Overall, it's very good." The two named items (arm from mouth 2.3 s, arm
-  over head 1.7 s) "are actually alright". Notes (pictures: notes/bench/sam-notes/dressed-*):
-  [x] N1 (chat 45) the neck column never hides the head drawing (bench_draw.lay_head `free`: dots where the column is
-      nearest; the head's hide mask now taken by majority of fine dots, no ragged edge). Looked full size: front 0.2 s,
-      side 2.0/2.3 s (nape under the hair, jaw runs into the neck), three_back 5.4, back 7.5, three_back 8.75.
-  [ ] (old text) N1 neck from the back "not connected (goes into the hairline)" (~8.5-9 s, three_back view) and from the side
-      "jagged and like a separate part" (~2.3 s). WHY AGAIN (rule 30): lay_head hides the drawn head wherever anything
-      is nearer than the head's CENTRE minus 5 cm; from behind the neck column is 7-13 cm nearer (frame 210: 185 of
-      266 column points), so the neck paints over the hair. Chat 38 checked the neck from the front only (K4 still);
-      chat 44 zoomed frames 205-214 and did not see it. Fix: the head drawing hides only behind things nearer than
-      the head's own surface there (the solid head's depth per dot), the column's top ends under the drawing's nape;
-      side join: blend the column into the jaw line. Check: every head view (front, three, side, three_back, back).
-  [x] N2 (chat 45) yaw table showed the head at 57-69 deg from 1.8 to 4.4 s, on the 67.5 line: drawing went side,
-      three, side in 0.4 s. bench_move.head_plan: three/side line at 60, runs under 8 frames between two runs of the
-      same view folded in, each switch put on the fastest-turning frame. Switches now: 0.67 three, 0.75 side, 4.75
-      three_back, 6.92 back, 8.46 three_back, 9.08 side, 9.58 three, 9.71 front (no there-and-back).
-  [ ] (old text) N2 head turn at ~2 s "a bit jarring": at 1.5-1.83 s the head is 63-69 deg round (the drawing switch is at
-      67.5), so the 'three' drawing shows him facing us, then snaps to profile. Fix: choose the drawing by where he
-      looks with a lean to profile, and put each switch where the head is turning fastest; check by yaw table.
-- Next: chat 45, Opus medium: N1, N2; redraw the dressed clip (~9 min), look at every head view at full size,
-  send phone-safe (shot view 540x960 baseline).
-- Read: notes/bench/learn-step.md "Stage 2, chat 44". Open rule requests: grey-clip body-check (Sam HOLDS);
-  held-object check; house-look lock; "pieces" test (not ready).
-- For Claude: bench_move dressed_draw / lay_head (bench_draw), `clip OUT OUT.mp4 --dressed` (name the 42 chat-43
-  faults first); house head views via lying_flat._head (V.snap). Handover check items as chat 43 says.
+## Where things stand, the LOOK strand (23 Nov, chat 45 done; waiting on Sam's look at the redrawn dressed clip)
+- Rules that bite next: rule 30 (neck twice: a third time means the check); Seeing like Sam 1; Fix the drawing.
+- Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower; house style; circle hands; chat 43's grip.
+- Done (chat 45): N1 neck never hides the head drawing; N2 head drawings planned over the clip, no flip at 2 s.
+  Merged chat 43's lower grip. Clip redrawn, every head view looked at full size, helper r45-p2 recorded,
+  sent: animations/drafts/jason-dressed-test.mp4 (406 KB). Told Sam: neck thin/long looking down ~9.1 s (helper).
+- Next: Sam's notes on the clip come back to this strand (Opus medium). No chat opened: one clip sent, waiting.
+- Needs Sam: notes or Y on the clip.
+- Read: notes/bench/learn-step.md "Stage 2, chat 45". Open rule requests: grey-clip body-check (Sam HOLDS);
+  held-object check; house-look lock; "pieces" test; head-flip check (head_plan prevents it; no check yet).
+- Handover check: kittest body_check_back_view (rules 41, N6) BROKEN since chat 44's tip or earlier (1 of 2 v3
+  back views; tested at 9235e83c and 26c51d84, not this chat's change): for the shot 4 movement strand to fix.
+- For Claude: bench_draw.lay_head(free=), bench_move.head_plan/HEAD_BOUNDS, LF.HEAD_VD; 40 faults named.
 
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
@@ -243,4 +228,4 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 92.55% of 15%; forecast 96.2% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.17% of 15%; forecast 96.8% (2026-11-23)

@@ -33,3 +33,52 @@ Look.md named the people only as "man", "red-haired woman" and "dark-haired woma
 - Police cars are tiny, with lights only, so they cannot be read as police. Suggested line: "Chasing vehicles are nameable at phone size."
 - The pale screen text in 3 may be an overlay stamp. Suggested line: "Time labels are not in the final frame."
 
+== critique, round 45 pass 2 (2026-11-23): 13 fault(s), 0 can't tell
+-- look.md --
+1: Small man in red open car holding gun, seen through windshield frame; no words.
+2: Man in white vest leans out of red car, raising gun overhead; no words.
+3: Man in vest, arm stretched along roll bar, gun hand lowered; car body split at seam.
+4: Tiny red car at far right edge, man leaning out, mostly empty frame.
+5: Car cropped at right edge, man leaning over side, small gun raised.
+6: Man leaning over car side, car tilted, body cut off by panel edge.
+7: Man in vest low behind windshield, smirking, car body ends abruptly above white gap.
+8: Close view: man in vest, serious face, holding gun at chest inside car.
+9: Close view: man shouting, gun raised high overhead, black glove on seat edge.
+10: Close view: man grimacing, arm stretched left, black glove gripping right, head cut off.
+11: Man leaning over tilted car side from behind, gun raised, face turned away.
+12: Man leaning far over car side, gun held high above head, arm dangling.
+13: Man bending over car edge, looking down, gun tucked at waist, wrist bracelet visible.
+14: Man inside car, roll bar crossing his face, tired expression, hand on hip, gun tucked.
+-- result.md --
+## Faults
+FAULT P11 [2, 3, 9, 10, 13]: head - tiny pinched jaw, no real neck, head sits like a ball on the shoulders; neck thin and bent in 13.
+FAULT P5 [2, 3, 9, 10, 13]: shoulder - far arm and glove start as a black blob/loose tick inside the chest; near arm in 3/10 starts from the shoulder as a thin straight tube, no deltoid.
+FAULT P3 [3, 10, 13]: raised arm in 3/10 is a straight rubber tube with no elbow; arm in 13 is a thin dangling stick with a bracelet-like cuff, wrong length.
+FAULT P1 [1, 2, 8, 9, 14]: hand and gun - gun floats above the head in 2/9 with no hand gripping it, only a wrist; in 1/8 gun sits at the chest with a blob hand; in 14 gun is stuck at the waist, hand not holding it.
+FAULT P6 [1-3, 8-10, 12-14]: hands - no hand shown on the gun arm; in 3/10 the hand on the roll bar is lost; in 12 the gun hand is missing.
+FAULT P4 [1, 2, 8, 13, 14]: face - does not match reference (short dark hair, stubble, heavy brow, tanned): ours is smooth, no stubble, lighter skin, hair a flat cap; face in 8 is chubby and different from 9-13.
+FAULT P14 [8, 14]: eyes - in 14 the eye is half hidden by the roll bar and looks lopsided; in 8 the eyes are tiny dots.
+FAULT P8 [4, 5, 11, 12]: from behind - face is turned away but the gun and back are drawn in front; head from behind has a face profile shape, not a back of the head.
+FAULT P13 [all]: vest has no sleeves; arm and vest edge join without a seam; green trousers show only in 4-6, 11-13, otherwise cut off.
+FAULT P7 [1, 7, 8, 14]: weight - seated man floats inside the window, no seat, thighs or lap visible; seat back is a brown block that changes size between shots.
+FAULT P10 [2-3, 9-10, 12]: body passes through roll bar and door; head cuts behind the bar in 14; in 12 arm hangs inside the car side.
+FAULT O5 [2-7, 9-14]: car - roll bar ends in mid-air, floating; panel seams split the red body (2, 3); sill black shapes hang under the car; in 7 the car ends above a white gap.
+FAULT O2 [14]: roll bar is drawn in front of his face, but he sits behind it where the bar should be behind his head.
+FAULT O4 [1, 4-7]: man is tiny against the car in 1, 4, 5, 7; car in 3 looks longer than in 2 (inconsistent scale between shots).
+FAULT O3 [all]: car reads as a flat red box, not a car: no wheels, mirror, door handle or windscreen glass; the brown seat is a block.
+CAN'T TELL P12 [all]: mouth - closed or open on speech; no speech labelled; need a frame list with speakers.
+CAN'T TELL O1 [all]: no words in the panels; nothing to check for mirroring.
+
+## Checked
+1-14
+
+## Cold look
+look.md matched the brief's person and pose in all 14 panels, but I read the man as holding the gun in 1, 8, 14 and missed that he is not gripping it. I also called 7 "smirking" where the brief wants him turning back in. The look named "car body split at seam" (3) and the tilt (6), which the brief does not mention but the check confirms as faults. I missed the lost hands in 3 and 10, and the white gap under the car in 7 was the biggest miss in the cold look.
+
+## Not on the list
+- The car body is drawn in different perspectives from panel to panel (flat side, tilted wedge, front-on), so it looks like several cars. suggested line: "Set stays one object: perspective and parts match across all panels of a set."
+- Crops cut the subject off at the panel edge (4, 5, 6, 11 at the right edge). suggested line: "Subject sits fully in frame, with room on the side he faces."
+- Empty background with no ground, sky or horizon, so the car floats. suggested line: "Every set shows ground or road under the vehicle."
+- Panels 8-14 are enlargements of 1-7, so the lines are thicker and the faults bigger. suggested line: "Close-ups checked at their own line weight."
+- No sense of motion for a moving car (no blur, wind, road). suggested line: "A moving vehicle shows a cue of movement."
+

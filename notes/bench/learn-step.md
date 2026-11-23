@@ -382,3 +382,14 @@ area per side, no island under N px - proposed via the proposal route).
 - Sam's notes (23 Nov): "Overall, it's very good"; the two named items fine; N1 neck from the back / side, N2 head
   turn at 2 s jarring (film notes, LOOK strand). Missed by me: frames 205-214 were zoomed and the neck over the hair
   not seen (I looked at the pistol and throat only). Lesson: every head view gets its own full-size look.
+
+## Stage 2, chat 45 (Opus medium): Sam's N1 neck, N2 head turn
+- N1 why: lay_head hid the head drawing wherever anything was nearer than head centre - 5 cm; the neck column is
+  7-13 cm nearer from behind, ~5 cm from the side, so it cut into the hair and the jaw. Now dots where the neck column
+  is the nearest thing never hide the head (a second small raster of the column alone); the hide mask is taken by
+  majority over the fine dots (no ragged edge).
+- N2 why: yaw table (chat 45): head at 57-69 deg from 1.8 to 4.4 s, on the 67.5 line. head_plan: three/side at 60,
+  short runs between equal views folded, switches moved to the fastest-turning frame. Plan: 0.67 three, 0.75 side,
+  4.75 three_back, 6.92 back, 8.46 three_back, 9.08 side, 9.58 three, 9.71 front.
+- Looked full size: frames 15-19, 44-54, 202-219, 229-234 (head crops); 113-166 head off frame (leaning out).
+- Helper r45-p2: mostly house look/car; noted the neck long and thin looking down (~9.1 s): passed to Sam.
