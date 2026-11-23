@@ -1169,7 +1169,7 @@ def vest_torso(img, p, sp, t):
             p.line(open_curve([(sgn * 58, 122), (sgn * 40, 148), (sgn * 14, 146)], 3), dk(col, 0.7), 1.8)   # (critique, chat 9)
 
 
-def _leonida(p, cx, cy):
+def _leonida(p, cx, cy, word_dx=0.0, pitch=21.0, gw=13.0, stroke=2.6):
     """The vest's print (Sam's key art): a setting sun in bands, a palm, LEONIDA in a hand-drawn line above."""
     cam = getattr(p, 'cam', None)                                     # the drawing mirrored (a turned or lying
     if cam is not None:                                               # body): the print is flipped back, so the
@@ -1190,12 +1190,12 @@ def _leonida(p, cx, cy):
         tip = (cx + 22 + 34 * math.cos(a), cy - 34 + 22 * math.sin(a) + 14)
         p.line(open_curve([(cx + 22, cy - 34), ((cx + 22 + tip[0]) / 2, cy - 44), tip], 2), teal, 3.0)
     ink = (36, 40, 52)
-    x = cx - 74
+    x = cx - 3.5 * pitch + word_dx
     for ch in 'LEONIDA':                                              # the word, slanted a little, as the print's
         for st in _GLYPH[ch]:                                         # hand lettering
-            p.line([(x + gx * 13 + (cy - 60 - (cy - 82 + gy * 22)) * -0.18, cy - 82 + gy * 22) for gx, gy in st],
-                   ink, 2.6)
-        x += 21
+            p.line([(x + gx * gw + (cy - 60 - (cy - 82 + gy * 22)) * -0.18, cy - 82 + gy * 22) for gx, gy in st],
+                   ink, stroke)
+        x += pitch
 
 
 class _Flip:
