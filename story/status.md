@@ -1,3 +1,3 @@
-Grand Theft Autism: Sam's four v6 notes done (chat 53), crowd fix merged.
-Next: Sonnet, animatic v7 --full, send.
-Then: final on Sam's yes.
+Grand Theft Autism: posted (Sam, 23 Nov); final saved, bookmarked, notes archived.
+Next: new film, waiting for Sam's idea.
+Then: plan on Opus, high effort.

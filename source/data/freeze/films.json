@@ -483,5 +483,15 @@
    540
   ],
   "slow": "about 4 minutes a picture"
+ },
+ "grand-theft-autism": {
+  "module": "grand_theft_autism",
+  "videos": [
+   "grand-theft-autism-vertical.mp4"
+  ],
+  "saves": {
+   "grand-theft-autism-vertical.mp4": "801f074a"
+  },
+  "save": "801f074a"
  }
 }
