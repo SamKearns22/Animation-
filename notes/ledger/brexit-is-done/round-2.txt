@@ -1,0 +1,71 @@
+== critique, round 2 pass 2 (2026-11-23): 8 fault(s), 2 can't tell
+-- look.md --
+1: cast sheet, woman plum jacket, woman hard hat orange vest, man dark suit; "brexit-is-done: the cast, front and three-quarter at one scale"
+2: cast sheet, woman white hard hat, braids, orange-and-navy hi-vis; photo, front, three-quarter, full-body figures
+3: cast sheet, grey-haired man dark suit red tie; photo, front, three-quarter, full-body figures
+4: older grey-haired woman, plum jacket, striped collar, earrings, front; cropped caption "ew, 22 Nov 2026: plum jacket, |ket, patterned bl"; "front"
+5: same woman three-quarter, cut off at right edge; sliver left; labels "thr", "three-quarter"
+6: woman, white hard hat, glasses, long braids, orange vest, calm face; caption "s photo: white hard hat, glasse"; "front"
+7: three-quarter braids woman cut off right; tiny stray mark left; "lasses, braids, or", "thr", "three-quarter"
+8: grey-haired man, wide grin, dark suit, red tie; caption ": grey hair swept back, the g"; "front"
+9: three-quarter grinning man cut off right, tie cropped; "the grin, dark suit,", "thr", "three-quarter"
+-- result.md --
+## Faults
+FAULT A1 P4 [5, 7, 9]: close-ups of the three-quarter heads are sliced at the right edge. Half the face is gone, and a sliver of the neighbouring view shows at left ("thr", a stray tick in 7).
+FAULT A1 [4-9]: the printed captions are clipped mid-word ("ew, 22 Nov 2026", "glasse|lasses", "the g|the grin"), and the caption still says "Sam's photo".
+FAULT P4 A2 [2, 6, 7]: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo. The hi-vis is a navy vest over orange sleeves with a white V collar, but the photo has one jacket, orange on top and navy below, with a navy collar.
+FAULT P4 A2 [1, 4, 5]: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower. The photo's patterned blouse is only a thin striped collar, and the figure's blouse is almost not there (P13). The "pearls" are just two white dots.
+FAULT P4 [3, 8, 9]: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter than the photo's.
+FAULT P11 [3, 8, 9]: the neck is thin and long under a wide head.
+FAULT P8 [9]: the tie and shirt collar are a rigid red-in-white box, front-facing under a turned head. The nose line is a swirl.
+FAULT P2 [2, 6, 7]: the mouth is a tight pursed dark line, which reads as stern. The photo has a calm, slight smile.
+CAN'T TELL P1 P2 P3 [1-3]: the full-figure shoulders, sleeve ends and eyes are too small on the sheet. I need a full-size figure crop.
+CAN'T TELL P14 [5, 7, 9]: the far eye is cut off, so the pupil and shine can't be checked.
+
+## Checked
+1-9
+
+## Cold look
+look.md left out names on purpose, so A1 cannot confirm who anyone is. Cold, the drawings carry no likeness without the caption. I called Kemi's face "calm", but the mouth reads stern. I did not flag the clipped crops as clips at the time.
+
+## Not on the list
+- A stranger can't name the person without the caption. Suggested line: likeness holds with the caption covered.
+- Crops cut off heads and captions. Suggested line: every close-up shows the whole head and the whole caption.
+- Internal wording ("Sam's photo") and the reference credits are printed on the sheet. Suggested line: no working words on the picture.
+- The poses don't match the photos (hands clasped, shoulders turned). Suggested line: the stance is checked against the photo.
+
+== critique, round 2 pass 3 (2026-11-23): 6 fault(s), 1 can't tell
+-- look.md --
+1: tiny cast sheet, woman plum jacket; "The cast: front and three-quarter at one scale", "Theresa May"
+2: older grey-haired woman, plum jacket, striped collar, pearl earring, front and three-quarter heads, calm.
+3: same woman full figure, plum jacket, dark trousers, front and three-quarter, ball hands, neutral.
+4: tiny cast sheet, woman hard hat, orange vest; "The cast: front and three-quarter at one scale", "Kemi Badenoch"
+5: woman, white hard hat, glasses, long braids, orange collar, front and three-quarter heads, stern.
+6: same woman full figure, navy vest, orange sleeves, grey bands, braids, front and three-quarter.
+7: tiny cast sheet, grey-haired man dark suit; "The cast: front and three-quarter at one scale", "Tony Blair today"
+8: grey-haired grinning man, dark suit, red tie, front and three-quarter heads; tie box odd.
+9: same man full figure, dark suit, red tie, ball hands, front and three-quarter.
+-- result.md --
+## Faults
+FAULT P4 A2 [1-3]: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower than the photo's. The photo's patterned blouse is only a thin striped collar, and the figures show almost none of it (P13). The "pearls" are two white dots.
+FAULT P4 A2 [4-6]: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo's. The hi-vis is a navy vest over orange sleeves, but the photo has one jacket, orange on top and navy below, with a navy collar.
+FAULT P4 [7-9]: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter, with less volume than the photo.
+FAULT P11 [7-9]: the neck is thin and long under a wide head. The neck is also long on the full figures.
+FAULT P8 [7-9]: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is a swirl.
+FAULT P2 [4-6]: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile.
+CAN'T TELL P5 P13 [3, 6, 9]: the shoulder joins and cuffs are too small. I need a full-size crop of each figure's arms.
+
+## Checked
+1-9
+
+## Cold look
+look.md has the "Theresa May", "Kemi Badenoch" and "Tony Blair today" caption words exactly as written on the sheet. That conflicts with "never name a real person", so panels 1, 4 and 7 should have been left unnamed. Cold, the drawings have no likeness without the caption. I said Kemi is "stern", which matches the brief fault. I called the tie box "odd" but did not say the torso fails to turn. Nothing in the brief is missing.
+
+## Not on the list
+- A stranger can't name the person without the caption. Suggested line: likeness holds with the caption covered.
+- The poses don't match the photos (hands clasped, shoulders turned). Suggested line: the stance is checked against the photo.
+- The sheet text names real people. Suggested line: a naming rule for the printed captions.
+- The reference credits ("GETTY IMAGES", the BBC mark) are on the picture. Suggested line: no credit marks on the check picture.
+
+critique, pass 3: faults fixed as one list: hunt 1: sheet captions shortened, Kemi zipped to a navy collar, May's hair lighter and warmer, turned hat side lines; hunt 2 left as named; left open: ["1-3 P4 A2: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower than the photo's. The photo's pattern", "4-6 P4 A2: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo's. T", '7-9 P4: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter, with less volume ', '7-9 P11: the neck is thin and long under a wide head. The neck is also long on the full figures.', '7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ', '4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile.']
+

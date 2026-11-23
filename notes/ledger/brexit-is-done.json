@@ -13,6 +13,769 @@
    "repeats": [
     "Blair 3/4 not the same person as front | a front-vs-3/4 match check"
    ]
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "9db844b1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.16,
+   "src": "estimate",
+   "sid": "session_01U3pKR1aCRX8VmEXSXkQfCF",
+   "steps": 126,
+   "hist_k": 262,
+   "kinds": {
+    "film-file search": 0.7,
+    "tool search": 21.4,
+    "page.py": 0.2,
+    "renders": 6.2,
+    "pictures": 7.2,
+    "other": 64.3
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 76,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 18,
+    "pictures": 18,
+    "other": 13
+   },
+   "split": {
+    "usd": 7.5849,
+    "total": 7.5849,
+    "floor_k": 84,
+    "blocks": {
+     "carried history": 30.3,
+     "start-up floor": 27.5,
+     "Claude's words": 23.3,
+     "new writes": 18.9
+    },
+    "origins": {
+     "Claude's words": 41.2,
+     "start-up floor": 27.5,
+     "result: tool search": 15.1,
+     "result: pictures": 10.3,
+     "messages and reminders": 3.5,
+     "Claude's edits": 1.0,
+     "result: other": 0.7,
+     "result: renders": 0.6,
+     "result: film-file search": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 27.5,
+     "writing code": 17.4,
+     "thinking": 14.6,
+     "looking at pictures": 10.3,
+     "reading kit code": 10.3,
+     "commands": 7.9,
+     "messages and reminders": 3.5,
+     "start-up and handover tools": 2.8,
+     "messages to Sam": 1.6,
+     "running checks and tools": 1.1,
+     "renders": 1.0,
+     "reading notes": 0.6,
+     "writing notes": 0.6,
+     "other commands": 0.5,
+     "helper and chat prompts": 0.1,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 17,
+    "work_pct": 0.26,
+    "reads": [
+     [
+      "source/facehouse.py",
+      4.4,
+      0.1269
+     ],
+     [
+      "source/turnhead.py",
+      1.8,
+      0.0501
+     ],
+     [
+      "notes/sam-notes/brexit-cast-v1/n2-blair-threequarter-not-same.jpg",
+      1.6,
+      0.0468
+     ],
+     [
+      "notes/sam-notes/brexit-cast-v1/n3-kemi-orange-gone-threequarter.jpg",
+      1.6,
+      0.0468
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scratchpad/t0.jpg",
+      1.6,
+      0.0445
+     ],
+     [
+      "notes/sam-notes/brexit-cast-v1/notes.md",
+      1.4,
+      0.0402
+     ],
+     [
+      "notes/brexit-is-done.md",
+      1.2,
+      0.0351
+     ]
+    ],
+    "base_pct": 25.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "other": 8,
+     "shared:handover.py": 7,
+     "shared:facehouse.py": 15,
+     "shared:turnhead.py": 6,
+     "shared:patriots_people.py": 1,
+     "shared:people_parts.py": 1,
+     "shared:people.py": 4,
+     "shared:views.py": 5,
+     "shared:body.py": 2,
+     "shared:castsheet.py": 6,
+     "shared:limbs.py": 1,
+     "shared:critique.py": 6,
+     "shared:kittest.py": 1,
+     "shared:kittests.py": 8,
+     "shared:gta_shots58.py": 1,
+     "shared:gta_rehearse.py": 1,
+     "film notes": 2,
+     "shared:watcher.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git log --oneline -3 && git branch --show-current",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "notes/logs notes/logs/brexit-is-done-chats.log",
+      "git checkout -b claude/brexit-chat2 && mkdir -p notes/logs && echo \"chat 2 save ",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01U3pKR29HVfyxyRifpJy5ns --film brexit-",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/sam-notes/brexit-cast-v1/notes.md notes/sam-notes/brexi",
+      "python3 source/handover.py start session_01U3pKR29HVfyxyRifpJy5ns --film brexit-",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:handover.py",
+      "notes/brexit-is-done.md source/handover.py",
+      "^## ",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/brexit-is-done.md",
+      "def carried",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "def _turn_hair0\\|def bob_shapes\\|def back_shapes\\|def turned_hat\\|-0.44\\|def tur",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "sed -n 1470,1560p source/facehouse.py; sed -n 1059,1150p source/facehouse.py",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/turnhead.py",
+      "TURN_PROF",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py",
+      "def pts\\|def at\\|def wrap\\|def ring\\|def view\\|v0\\b\\|self.v0",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py",
+      "sed -n 60,200p source/turnhead.py",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "S=/tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scrat",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py source/*.py",
+      "def hair_top",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py source/facehouse.py",
+      "^def _interp",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py",
+      "s own width 0.15 under vref.\"\"\"\n    shell = prof.get(",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:turnhead.py",
+      "source/turnhead.py source/facehouse.py",
+      "^def clipped",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "hair",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      ":                       # combed back: from over the temple, back and a little d",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:facehouse.py",
+      "source/people*.py source/facehouse.py source/people.py",
+      "brexit",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:patriots_people.py",
+      "source/patriots_people.py",
+      "def workwear_torso",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "workwear",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "S=/tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scrat",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:views.py",
+      "source/views.py source/people.py",
+      "^JACKET\\|^SHOULDER\\|^NECK",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "def turns",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "def hard_hat\\|def hat(\\|kh.get('hat')",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def \\|^    def ",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py",
+      "class Cam",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "python3 source/castsheet.py selftest 2>&1 | tail -20",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "python3 - <<'EOF' p='source/castsheet.py' s=open(p).read() old=''' out.append(di",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "a real band",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "python3 - <<'EOF' p='source/castsheet.py' s=open(p).read() old=s[s.index(\" rows ",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "time python3 source/castsheet.py match brexit-is-done 2>&1 | tail -20",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "^def hard_hat",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/people.py",
+      "    'may': dict",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:people.py",
+      "source/people.py source/facehouse.py",
+      "sed -n 683,700p source/people.py; sed -n 755,760p source/people.py; sed -n 1415,",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "cat references/faces/may/pick/may-pick.json 2>/dev/null | python3 -c \"import jso",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/people_parts.py source/views.py",
+      "age_boost=1.5",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py",
+      "^class Pen",
+      ""
+     ],
+     [
+      60,
+      "film",
+      "before show",
+      "source/people_parts.py /home/user/Animation-/source/people.py /home/user/Animati",
+      "^import\\|^from",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "fade\\|gradient\\|soft\\b\\|blur\\|GaussianBlur",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "fade",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:views.py",
+      "source/views.py source/*.py",
+      "def _fade\\|def fade\\|shoulder fade",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py",
+      "shadow\\|shade",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1395,1440p source/views.py",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:views.py",
+      "source/views.py source/limbs.py",
+      "fade",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:limbs.py",
+      "source/limbs.py",
+      "sed -n 30,40p source/limbs.py; sed -n 265,310p source/limbs.py",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py 2>&1 | head -30",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/ source/data/critique/brexit-is-done",
+      "SPEC\\|spec\\[",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "sed -n 44,60p source/critique.py",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "'people'\\|\\",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "other",
+      "source/data/critique/brexit-is-done/r2-p2",
+      "D=source/data/critique/brexit-is-done/r2-p2; cat $D/result.md | head -60",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:people.py",
+      "source/people.py source/people_parts.py source/*.py",
+      "def _house\\|hair_c\\|'shirt'",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "shared:facehouse.py",
+      "source/facehouse.py source/castsheet.py",
+      "^CAUGHT|: CAUGHT",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "sed -n 150,175p source/critique.py",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "shared:kittest.py",
+      "source/kittest* source/kittest.py",
+      "ls source/kittest* 2>/dev/null; python3 source/kittest.py 2>&1 | tail -3 | head ",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3\\|usage",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 600 python3 source/kittests.py move_to_shared 2>&1 | tail -12",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def move_to_shared_catches_film_fixes\\|def t_move_to_shared\\|move_to_shared_catc",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 4704,4760p source/kittests.py",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "shared:gta_shots58.py",
+      "source/gta_shots58.py source/gta_rehearse.py",
+      "def solids",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/gta_shots58.py source/handover.py",
+      "def solids",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "def _film_prefixes",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "film notes",
+      "notes/archive notes/grand-theft-autism.md notes/archive/grand-theft-autism.md",
+      "grand\\|gta",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "shared:handover.py",
+      "/home/user/Animation-/source/handover.py source/kittests.py",
+      "python3 - <<'EOF' p='/home/user/Animation-/source/handover.py' s=open(p).read() ",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "source/data/critique/brexit-is-done/r2-p3",
+      "D=source/data/critique/brexit-is-done/r2-p3; sed -n 1,40p $D/result.md",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/brexit-is-done/r2-p3",
+      "fixed FILM\\|critique.py fixed",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "film notes",
+      "guides/kit-catalogue.md notes/brexit-is-done.md",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "tail -3 notes/logs/kittests-last.log; ls -la notes/logs/kittests-last.log; pgrep",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "source/kittests.py",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py source/facehouse.py source/turnhead.py source/people_parts.p",
+      "git add -A source/castsheet.py source/facehouse.py source/turnhead.py source/peo",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "other",
+      "notes/ledger notes/logs/handover-end.log",
+      "git add notes/ledger notes/logs/handover-end.log && git commit -qm \"Brexit chat ",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "source/kittests.py",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 900 python3 source/kittests.py kit_people_never_generic 2>&1 | tail -3",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "shared:handover.py",
+      "/home/user/Animation-/notes/brexit-is-done.md source/handover.py",
+      "^STOP|REFUSED|^Checks|^PUSH|^FINDER|^COST",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "kittests-last",
+      ""
+     ],
+     [
+      126,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "^FAIL\\|^kittests:",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
@@ -63,27 +826,75 @@
      "3 P4: full-body row - the toothy grin is lost at phone size (face is a few dots), and the hair at the back and side reads as a flat grey cap, not swept-back hai",
      "1-3 A2: full-body row - bodies are thin straight tubes with tiny heads; they don't match the reference proportions, and May reads weakly as a woman (trousers, n"
     ]
+   },
+   {
+    "round": 2,
+    "pass": 2,
+    "stage": "cast",
+    "date": "2026-11-23",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 2,
+    "open": [
+     "5,7,9 A1 P4: close-ups of the three-quarter heads are sliced at the right edge. Half the face is gone, and a sliver of the neighbouring view shows at left (\"thr",
+     "4-9 A1: the printed captions are clipped mid-word (\"ew, 22 Nov 2026\", \"glasse|lasses\", \"the g|the grin\"), and the caption still says \"Sam's photo\".",
+     "2,6-7 P4 A2: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo. T",
+     "1,4-5 P4 A2: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower. The photo's patterned blouse is on",
+     "3,8-9 P4: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter than the photo's",
+     "3,8-9 P11: the neck is thin and long under a wide head.",
+     "9 P8: the tie and shirt collar are a rigid red-in-white box, front-facing under a turned head. The nose line is a swirl.",
+     "2,6-7 P2: the mouth is a tight pursed dark line, which reads as stern. The photo has a calm, slight smile.",
+     "1-3 P1 P2 P3: the full-figure shoulders, sleeve ends and eyes are too small on the sheet. I need a full-size figure crop.",
+     "5,7,9 P14: the far eye is cut off, so the pupil and shine can't be checked."
+    ]
+   },
+   {
+    "round": 2,
+    "pass": 3,
+    "stage": "cast",
+    "date": "2026-11-23",
+    "hunt": 2,
+    "faults": 6,
+    "cant_tell": 1,
+    "open": [
+     "1-3 P4 A2: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower than the photo's. The photo's pattern",
+     "4-6 P4 A2: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo's. T",
+     "7-9 P4: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter, with less volume ",
+     "7-9 P11: the neck is thin and long under a wide head. The neck is also long on the full figures.",
+     "7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ",
+     "4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile.",
+     "3,6,9 P5 P13: the shoulder joins and cuffs are too small. I need a full-size crop of each figure's arms."
+    ],
+    "fixed": "hunt 1: sheet captions shortened, Kemi zipped to a navy collar, May's hair lighter and warmer, turned hat side lines; hunt 2 left as named",
+    "left": [
+     "1-3 P4 A2: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower than the photo's. The photo's pattern",
+     "4-6 P4 A2: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo's. T",
+     "7-9 P4: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter, with less volume ",
+     "7-9 P11: the neck is thin and long under a wide head. The neck is also long on the full figures.",
+     "7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ",
+     "4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 2,
-    "false": 0
+    "faults": 4,
+    "false": 1
    },
    "P2": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "P4": {
-    "faults": 5,
+    "faults": 12,
     "false": 0
    },
    "A2": {
-    "faults": 4,
+    "faults": 8,
     "false": 0
    },
    "P11": {
-    "faults": 2,
+    "faults": 4,
     "false": 2
    },
    "P1": {
@@ -95,7 +906,7 @@
     "false": 0
    },
    "P8": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "A4": {
@@ -103,5 +914,11 @@
     "false": 0
    }
   }
+ },
+ "notes_tags": {
+  "1": "none (sheet maker had no edge test)",
+  "2": "none (front and 3/4 never judged side by side)",
+  "3": "none",
+  "4": "-"
  }
 }

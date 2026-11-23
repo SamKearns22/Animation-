@@ -1246,20 +1246,64 @@ def vest_side(img, p, sp, t):
 # ---------------------------------------------------------------------------------------------- workwear (hi-vis)
 def workwear_torso(img, p, sp, t):
     """Brexit Is Done (23 Nov, Kemi on site; Sam's photo): a two-tone work jacket over the outfit's own (navy)
-    jacket: the body hi-vis orange below the chest, a silver reflective band where the colours meet and another
-    round the hips, a navy stand-up collar and a zip. Colours: `work_c` (orange), the outfit's jacket the navy.
-    Front coordinates; the turned views wrap it (views.WrapPen), so it turns with her."""
+    jacket. Her photo, as Sam's note on cast v1 asked ("the orange is gone from her clothes"): ORANGE over the
+    shoulders (a yoke from the collar out to the sleeves, which are the outfit's orange `sleeves`), the chest NAVY,
+    an orange band round the waist with a silver reflective stripe, navy below it to the hem; a zip. Colours: `work_c` (orange), the outfit's jacket the navy. Front coordinates; the turned views wrap it
+    (views.WrapPen), so it turns with her."""
     orange = tuple(sp.get('work_c', (236, 112, 30)))
     silver = (178, 186, 196)                         # (critique r1: a paler silver vanished against the orange)
+    navy = tuple(sp.get('jacket', (30, 32, 58)))
     sw = sp.get('shoulders', 150)
     bottom = sp.get('bottom', V.JACKET)
+
     def edge(y):                                    # the body's half width at y (burnham's body outline)
         return float(np.interp(y, [50, 200, bottom], [sw, sw + 6, sw * 0.85]))   # the kit body's hem (0.85)
-    y0 = 150
-    p.poly([(-edge(y0), y0), (edge(y0), y0), (edge(200), 200), (edge(bottom), bottom), (-edge(bottom), bottom),
-            (-edge(200), 200)], orange, INK, 2.0)
-    for ya, yb in ((y0 - 8, y0 + 22), (bottom - 78, bottom - 48)):
-        p.poly([(-edge(ya), ya), (edge(ya), ya), (edge(yb), yb), (-edge(yb), yb)], silver, INK, 1.6)
-    navy = tuple(sp.get('jacket', (30, 32, 58)))
-    p.poly(curve([(-44, -14), (44, -14), (48, 16), (0, 26), (-48, 16)], 3), navy, INK, 2.0)   # the stand-up collar
-    p.line([(0, 22), (1, bottom)], dk(orange, 0.55), 2.4)                                   # the zip
+    for sgn in (-1, 1):                             # the yoke: orange over each shoulder, from the collar out
+        yoke = [(sgn * 40, 4), (sgn * edge(30) * 0.75, 18), (sgn * edge(40), 40), (sgn * edge(250), 250),
+                (sgn * edge(250) * 0.8, 240), (sgn * edge(130) * 0.74, 118), (sgn * 52, 62), (sgn * 34, 34)]
+        #   (down the side under the arm, as her photo: the sleeve's shoulder joins orange, never fades to navy)
+        p.poly(curve(yoke, 3), orange, INK, 2.0)
+    ya, yb = bottom - 150, bottom - 62              # the waist band, its silver stripe through the middle
+    p.poly([(-edge(ya), ya), (edge(ya), ya), (edge(yb), yb), (-edge(yb), yb)], orange, INK, 2.0)
+    sa, sb = ya + 30, ya + 56
+    p.poly([(-edge(sa), sa), (edge(sa), sa), (edge(sb), sb), (-edge(sb), sb)], silver, INK, 1.6)
+    p.line([(0, 60), (1, bottom)], dk(navy, 0.5), 2.4)       # the zip (no stand-up collar: hidden by the braids
+    # from the front, it read as a navy scarf turned; chat 2 critique of Sam's n3 picture)
+
+
+# ---------------------------------------------------------------------------------------------- patterned blouse
+BLOUSE_STRIPES = ((222, 130, 50), (70, 140, 140), (112, 62, 118), (212, 172, 64), (232, 226, 210), (62, 92, 150))
+
+
+def pattern_torso(img, p, sp, t):
+    """Brexit Is Done chat 2 (May's interview photo; Sam on cast v1: she must read clearly as a woman at full
+    height): the shirt seen in the jacket's opening becomes a patterned silk blouse, wavy vertical stripes in
+    `pattern` colours (her photo's orange, teal, plum, mustard, cream, blue). Drawn on its own layer and kept only
+    where the shirt's colour already shows, so it follows the lapels and collar in every view (the turned views'
+    WrapPen carries the stripes round with the body)."""
+    from PIL import Image
+    shirt = np.array(sp.get('shirt', (246, 246, 246)), float)
+    cols = sp.get('pattern') or BLOUSE_STRIPES
+    layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    lp = B.Pen(layer, p.cam)
+    if hasattr(p, 'pen'):                       # a WrapPen: the same wrap, drawing onto the layer
+        old = p.pen
+        p.pen = lp
+        draw = p
+    else:
+        draw = lp
+    try:
+        for k, x in enumerate(np.arange(-90, 91, 7)):       # side by side, no shirt left between them
+            pts = [(x + 3 * math.sin(y / 22.0 + k), y) for y in np.arange(-30, 330, 10)]
+            draw.line(pts, cols[k % len(cols)], 9.0)
+    finally:
+        if hasattr(p, 'pen'):
+            p.pen = old
+    a = np.asarray(img.convert('RGB')).astype(float)
+    keep = (np.abs(a - shirt).sum(2) < 24).astype(np.uint8) * 255
+    al = np.asarray(layer)[:, :, 3].astype(np.uint16) * keep // 255
+    layer.putalpha(Image.fromarray(al.astype(np.uint8)))
+    if img.mode == 'RGBA':
+        img.alpha_composite(layer)
+    else:
+        img.paste(layer, (0, 0), layer)

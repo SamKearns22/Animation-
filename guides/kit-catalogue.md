@@ -72,6 +72,14 @@ the critique (new things a clean critique pass filed: a plan counts them as KNOW
 | The Patriot (balaclava, PP badges) rebuilt on views.person: every view, faces | `source/patriots3_cast.py` (`PATRIOT`) | |
 | German WW2 soldiers, June 1944: Gunner and Loader (M40 helmet, tunic, Y-straps, belt kit, boots or gaiters) | `source/patriots3_cast.py` (`GUNNER`, `LOADER`; `stahlhelm`, `tunic`, `kit`) | |
 
+- **Cast sheet + front/three-quarter match** (`source/castsheet.py`, Brexit chat 2): `sheet FILM OUT.jpg` builds Sam's
+  cast sheet (photo, heads and full figures front and three-quarter at one scale; refuses a figure touching a tile edge);
+  `match FILM` measures each colour in both views (top, length, share; fault past 15%); `selftest` replays Sam's notes.
+- **One hair shape in every view** (`turnhead.hair_point`, prof `shell` from `facehouse.hair_shell`): a turned house hair
+  piece keeps the front's height and width; `_round_strokes` draws combed/layered strokes on its side and back.
+- **Hi-vis work jacket** (`people_parts.workwear_torso`, extras `workwear`) and **patterned blouse** (`pattern_torso`,
+  extras `pattern`: stripes kept where the shirt shows, so they follow the lapels in every view).
+
 ## Creatures and machines
 | what | file | notes |
 |---|---|---|

@@ -477,6 +477,8 @@ def _film_prefixes():
         n = os.path.basename(p)[:-3]
         if re.search(r'handovers|review|template|^_|next-jobs|proposal|plain|-chats$', n):
             continue
+        n = re.sub(r'-notes$', '', n)        # a posted film's notes are archived as NAME-notes.md (GTA: the kittest
+        #                                      move_to_shared_catches_film_fixes was red from that, Brexit chat 2)
         out[n.replace('-', '_')] = n
         parts = n.split('-')
         if len(parts) >= 2:
@@ -505,7 +507,8 @@ def film_check_fixes(diff):
 
 def _keep_notes(film):
     """The film's notes file, live or archived (a finished film's code can still be changed), or None."""
-    for p in (os.path.join(ROOT, 'notes', f'{film}.md'), os.path.join(ROOT, 'notes', 'archive', f'{film}.md')):
+    for p in (os.path.join(ROOT, 'notes', f'{film}.md'), os.path.join(ROOT, 'notes', 'archive', f'{film}.md'),
+              os.path.join(ROOT, 'notes', 'archive', f'{film}-notes.md')):
         if os.path.exists(p):
             return p
     return None
