@@ -15445,58 +15445,58 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.77,
+   "cost": 1.09,
    "src": "estimate",
    "sid": "session_01U3pKQxvq55dv7RjXPsVWMa",
-   "steps": 19,
-   "hist_k": 111,
+   "steps": 27,
+   "hist_k": 120,
    "kinds": {
-    "tool search": 9.1,
-    "other": 90.9
+    "tool search": 9.3,
+    "other": 90.7
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 7,
+    "tool search": 10,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 13
+    "other": 17
    },
    "split": {
-    "usd": 0.9748,
-    "total": 0.9748,
+    "usd": 1.284,
+    "total": 1.284,
     "floor_k": 81,
     "blocks": {
-     "new writes": 43.4,
-     "start-up floor": 34.5,
-     "Claude's words": 16.9,
-     "carried history": 5.1
+     "new writes": 38.6,
+     "start-up floor": 35.4,
+     "Claude's words": 18.3,
+     "carried history": 7.6
     },
     "origins": {
-     "start-up floor": 34.5,
-     "Claude's words": 21.6,
-     "cache re-write": 21.6,
-     "result: other": 10.8,
+     "start-up floor": 35.4,
+     "Claude's words": 23.5,
+     "cache re-write": 16.4,
+     "result: other": 10.1,
+     "messages and reminders": 7.6,
      "result: tool search": 6.1,
-     "messages and reminders": 4.4,
-     "Claude's edits": 0.9
+     "Claude's edits": 0.8
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 34.5,
-     "memory lapses (re-paying for the whole chat)": 21.6,
-     "app tools (chats, files sent)": 9.3,
-     "commands": 7.0,
-     "start-up and handover tools": 6.0,
-     "writing notes": 5.2,
-     "thinking": 4.6,
-     "messages and reminders": 4.4,
-     "messages to Sam": 4.2,
-     "helper and chat prompts": 1.6,
-     "helper results": 0.7,
-     "reading notes": 0.5,
-     "reading other files": 0.3,
+     "start-up reading (rules, tools, first files)": 35.4,
+     "memory lapses (re-paying for the whole chat)": 16.4,
+     "app tools (chats, files sent)": 8.1,
+     "commands": 7.8,
+     "messages and reminders": 7.6,
+     "start-up and handover tools": 6.2,
+     "messages to Sam": 5.8,
+     "writing notes": 4.1,
+     "thinking": 4.0,
+     "helper and chat prompts": 2.6,
+     "helper results": 1.0,
+     "reading notes": 0.4,
+     "reading other files": 0.2,
      "edit results": 0.1
     },
     "leftover": 0.0
@@ -15508,31 +15508,31 @@
     "reads": [
      [
       "source/propose.py",
-      2.6,
-      0.0256
+      3.3,
+      0.0355
      ],
      [
       "notes/proposals/gifted-account.md",
       0.7,
-      0.0061
+      0.007
      ],
      [
       "guides/proposal-route/helper.md",
       0.7,
-      0.0061
+      0.007
      ],
      [
       "notes/ledger/sam/phxjozvs.md",
       0.2,
-      0.0014
+      0.0016
      ],
      [
       "notes/ledger/sam/jxpsvwma.md",
       0.1,
-      0.0003
+      0.0004
      ]
     ],
-    "base_pct": 15.1
+    "base_pct": 16.6
    },
    "search": {
     "show": 0,
@@ -15540,9 +15540,9 @@
      "no show": 0
     },
     "other": {
-     "other": 3,
+     "other": 4,
      "guides": 1,
-     "shared:propose.py": 2,
+     "shared:propose.py": 4,
      "film notes": 1
     },
     "ticked": 0,
@@ -15602,6 +15602,30 @@
       "other",
       "notes/proposals/gifted-account/",
       "git add notes/proposals/gifted-account/ && git commit -qm \"Proposal route: helpe",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "notes/proposals/gifted-account/",
+      "git add notes/proposals/gifted-account/ && git commit -qm \"Proposal route: helpe",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record gifted-account 2>&1 | tail -5 && python3 source",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/",
+      "python3 source/propose.py reader gifted-account; git add notes/proposals/ && git",
       ""
      ]
     ]
