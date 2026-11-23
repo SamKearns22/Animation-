@@ -11,7 +11,26 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
       orange-and-navy hi-vis jacket); faces the same way as May; a construction site behind her (Sam will describe it).
 - [ ] 3. Tony Blair as he is today (`blair-today-sam.jpg`: grey swept-back hair, big smile, dark suit, red tie, white
       shirt); ends up facing the same way as May; place not decided ("maybe some swanky embassy sort of place?").
-- [ ] Open: the script and the joke (not given yet); the site description; Blair's place.
+- [ ] Title: "Open Wounds". News: Andy Burnham's new EU deal, criticised as "opening up the wounds" of Brexit.
+- [ ] The joke: the critics talk about packs of wolves instead of Brexit, ignoring wolf attacks all round them while
+      they criticise ("people not noticing the damage they have done").
+- [ ] 4. Theresa (her interview): "The Prime Minister would do well to remember that we had a referendum, and in that
+      referendum, the British Public chose wolves."
+- [ ] 5. Cut to Kemi interviewed on a building site: an expanse of dusty ground; behind, a large complex under
+      construction, "all holes and pipes and scaffolding".
+- [ ] 6. From the first second: two wolves leap on a construction worker in the background and tear him to shreds
+      (as Cry Minister, the old wolves "spruced up" with the new body kits and rules).
+- [ ] 7. Background: a worker runs from two wolves across the scaffolding and leaps off it, off frame, to escape.
+- [ ] 8. Background: a group of men with steel bars staving off another group of wolves on the next level down.
+- [ ] 9. Background: wolves milling round the dirt in hard hats and construction vests, blood-drenched: sitting,
+      pawing the dirt, wandering.
+- [ ] 10. Kemi, staring at the interviewer as if none of it was happening: "Andy Burnham needs to spend less time trying
+      to take us backwards and more time doing his job: reducing the number of British people with their faces chewed off."
+- [ ] 11. Embassy scene, "a bit more, uh, classic British": oak and bookshelves, a political room like Westminster "or
+      some other august locale". Behind Tony Blair, doors thrown open as wolves run rampant, chasing staff and guests.
+- [ ] 12. Blair: "Well, in my opinion, you shouldn't listen to anything I say, I'm Tony Blair, I invaded Iraq, I belong in
+      The Hague." Big cheesy grin.
+- Locked by Sam: the script above (lines, order, who is where, every background action).
 - Sam's words kept: Kemi and Blair face "the same way she is facing, being interviewed"; the script and site: "I'll describe
   both to you soon." "For now, please work on the characters."
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
@@ -22,8 +41,10 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   strokes, Kemi's hi-vis as her photo, turned hard hat, far braids, May's age lines and patterned blouse, narrower
   shoulders; `castsheet.py` (sheet + front/3/4 match, tested on Sam's 3 notes); kittest N26 fixed (archived notes name).
   Two critique hunts; 6 left open as named (likeness taste on faces Sam picked; Blair's 3/4 shirt and tie do not turn).
-- **Next (chat 3, Opus medium, notes round):** Sam's notes on cast sheet v2 (sent in chat 2); then the script and site.
-- **Needs Sam:** notes on v2; the script; the site; Blair's place.
+- **Next (chat 3, Opus high: a new build and the plan):** on Sam's Y, a woman's build in the shared body kit (narrower
+  shoulders, waist, hips, jacket cut, shoes) for May and Kemi; Kemi's yoke stops at her collar (notes 5-6); then the
+  plan from the script ("Open Wounds", brief items 4-12): sets, the wolves from Cry Minister on the new kits, estimate.
+- **Needs Sam:** Y to the woman's-build plan; notes on the next sheet.
 - **Read:** `guides/job-packs.md` Notes round; `source/castsheet.py` MAP; `source/facehouse.py` `_turn_hair0`, `turned_hat`.
 - **Open rule requests:** none (the front/3/4 match may become a rule: proposal route first).
 - **For Claude:** `python3 source/castsheet.py sheet brexit-is-done OUT.jpg`; `castsheet.py match brexit-is-done`;
@@ -99,6 +120,8 @@ it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover
 | 1 | cast sheet v1 | - | Sam: "Reference 1: these side images appear cut off?" The three-quarter full figures were cut in half by my sheet crop | new: sheet-edge | none (sheet maker had no edge test) | fixed: the sheet is built by `castsheet.py sheet`, which refuses a figure touching its tile's edge (selftest caught) |
 | 2 | cast sheet v1 | - | Sam, Tony: "Reference 2, Tony: do you see how something is going wrong still with 3/4 views?" "That is not the same person and haircut as presented in the straight on view." Turned hair flattened by the crown clamp | new: front-3/4 match | none (front and 3/4 never judged side by side) | fixed: the turned hair is built to the front piece's own outline (hair shell), side/back strokes added; `castsheet.py match` caught Sam's picture |
 | 3 | cast sheet v1 | - | Kemi: orange gone from her clothes; 3/4 not right (hat flat and wide, glasses off the face) | new: front-3/4 match | none | fixed: orange shoulders and sleeves, navy chest, waist band; turned brim dips like the front, side lines; far braid curtain; zipped navy collar; `match` caught Sam's picture |
+| 5 | cast sheet v2 | - | Sam: "Can I just say...I'm not sure we have female bodies? Kemi's body seems much more like a man's." | new: female build | none (no check knows a woman's build) | open: answered (no woman's build in the kit yet), plan sent, waiting for his Y |
+| 6 | cast sheet v2 | - | Sam: "Do you see Kemi's orange detailing travels over her white collar?" | new: piece over collar | none (match checks colours, not layering) | open: the yoke must stop at the collar's edge; plan sent |
 | 4 | cast sheet v1 | - | Sam asked: "Are we using our most recent 3/4 kit?" | - | - | answered in chat 1 (yes, the turned head kit; the fault was the hair built apart from the front); Sam said Y to the plan |
 
 Decisions made (kept so a long session or a new session never has to rediscover them):

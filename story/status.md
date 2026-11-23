@@ -1,3 +1,3 @@
-Brexit Is Done: cast sheet v2 sent to Sam (3/4 hair, Kemi's hi-vis, May fixed; front/3/4 check built).
-Next: Sam's notes on v2 (chat 3, Opus medium).
-Then: script, site, Blair's place from Sam; the plan.
+Brexit Is Done (Open Wounds): script in; cast sheet v2 sent; notes 5-6 (women's build, Kemi's collar) answered.
+Next: on Sam's Y, chat 3 (Opus high) builds a woman's build, fixes the collar, then plans the film.
+Then: sets (site, Westminster-style room), wolves, animatic.
