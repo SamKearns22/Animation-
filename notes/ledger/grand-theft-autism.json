@@ -25107,6 +25107,11 @@
    "date": "2026-11-23",
    "spent": 90.93,
    "forecast": 94.5
+  },
+  {
+   "date": "2026-11-23",
+   "spent": 91.11,
+   "forecast": 94.7
   }
  ],
  "critique": {
@@ -25655,5 +25660,11 @@
    }
   }
  },
- "budget_stop": 1
+ "budget_stop": 1,
+ "quick_checks": [
+  {
+   "at": "2026-11-23T06:17+00:00",
+   "faults": 5
+  }
+ ]
 }

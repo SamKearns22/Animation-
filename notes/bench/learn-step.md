@@ -319,3 +319,18 @@ area per side, no island under N px - proposed via the proposal route).
   4 false (left view empty 2.7-5.3 s = the locked camera on the cruiser, not drawn in the test; door "flicker" =
   the pan, checked per frame; kneeling reads at full size; the outside test view has no door on purpose);
   real but stage 2 (the look): pistol grip at his side reads as a black tick on grey. Sent to Sam 23 Nov.
+
+## Chat 43 (Opus high): Sam's "every move 25% slower" (23 Nov)
+- One number, leanout.SLOW = 1.25: TIMES, SHOTS (the four shots), WOB (the cruiser's wobble, 2.0 -> 2.5 s so the
+  crash keeps its place in the camera moves), bench BREAKDOWNS, GUN_THROUGH (now read from TIMES), gta_rehearse CAM4
+  and SHOT4_LEN (8.2 -> 10.25 s), the film's Jason-face beats and Lucia's glance (gta_rehearse), the pistol / glass /
+  crash sounds (grand_theft_autism mix, crash now on IMPACT), and every caption and voice after shot 4 (+2.05 s,
+  SHIFT4). Shots 5-8 follow by themselves (gta_shots58 SH). The cars keep their speed (the crash lands further up
+  the street: z 96 instead of 77; the shop line runs the whole street).
+- Slower = new in-between drawings the old speed jumped over; two real crossings found there: the window-side thigh
+  3 cm into the door as that knee lifts (C1b; it was there between frames before) and the gun hand touching the
+  rising thigh (C2c/C3). Fixed: C1b hips 4 cm inboard (0.38 -> 0.34); gun hand up 3-4 cm at C2, C2c, C3. Tried and
+  dropped: aiming the knee up (it ran into his chest and gun arm, 11 cm). Checked at 48 a second over both climbs.
+- Result over 247 frames: body-car 0, pistol 0, range 0; one-point creases named (as chat 42). Watched the get-up and
+  sit-down as sheets: reads as one move. Clip: animations/drafts/jason-grey-test.mp4 (phone-safe, 258 KB) and
+  grey-lean-out-whole.mp4 (wide). Checks 2.8 min, drawing 3.6 min.

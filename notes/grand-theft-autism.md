@@ -137,22 +137,21 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
   render-time factors (16:46).
 
-## Where things stand (23 Nov, chat 42, Opus high; Sam: every move 25% slower)
+## Where things stand (23 Nov, chat 43, Opus high; shot 4 now 25% slower, clip sent)
 - Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); rule 74 (acting list).
 - Locked by Sam: all cameras and beats of shots 1-8, in the same order; the house style; circle hands. CHANGED BY SAM
-  (23 Nov): "All the human movements seem 25% too fast": shot 4's acting-row times x1.25 (8.2 -> ~10.25 s).
-- Done: grey clip clean (0 body-car, pistol, range) and seen by Sam (phone-safe copy jason-grey-test.mp4 by 42b).
-  fast-climb proposal declined (Sam chose to slow the moves instead).
-- Next: chat 43, Opus high: stretch shot 4's acting rows (leanout.TIMES, bench BREAKDOWNS) and its camera keys
-  (gta_rehearse CAM4) by 1.25 from the shot's start; gunshot sounds with them; re-run the grey checks and send a
-  phone-safe clip from his camera. Then note the other shots' moves for the next animatic (Sam's Q below).
+  (23 Nov): every move in shot 4 25% slower: shot 4 is 10.25 s (was 8.2), everything after it 2.05 s later.
+- Done: one slow-down number for shot 4 (Jason, shots, camera, sounds, later voices and captions); two touches the
+  slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean and sent
+  (jason-grey-test.mp4). Sam's 05:33 / 05:35 "can't open the file" = the wide clip; fixed by 42b's phone-safe copy.
+  Changed: the cruiser's wobble 2.0 -> 2.5 s (it slows with the shot so the crash stays where the camera looks).
+- Next: Sam's notes on the slower clip, then stage 2 (the house look on the moving body), Opus high.
 - Needs Sam: 1 = only shot 4 slower now, other shots' people checked at the next animatic (my pick); 2 = every
   shot's people 25% slower now.
-- Read: notes/bench/learn-step.md "Chat 42"; notes/proposals/fast-climb.md (only if the 3 cm bar comes up again).
+- Read: notes/bench/learn-step.md "Chat 43".
 - Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
-- For Claude: clips to Sam phone-safe (baseline, 540x960 padded, faststart: 42b's command in git log); the wide
-  1080x960 High-profile clip would not open on his phone. Two "Where things stand" on purpose; CLAUDE.md sentence
-  changes are Sam's own; branches dreamy-fermi-vkhutz, gta-chat31 left unmerged.
+- For Claude: leanout.SLOW; clips to Sam phone-safe (540x960 padded, baseline, faststart); two "Where things stand"
+  on purpose; CLAUDE.md sentence changes are Sam's own; branches dreamy-fermi-vkhutz, gta-chat31 left unmerged.
 
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
@@ -216,4 +215,4 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 90.93% of 15%; forecast 94.5% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 91.11% of 15%; forecast 94.7% (2026-11-23)

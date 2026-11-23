@@ -347,10 +347,11 @@ def _climb(name):
                  knee={'L': _v(0.10, 0.66, 0.42), 'R': _v(0.57, 0.70, 0.36)},
                  ankle={'L': _v(0.16, 0.19, 0.44), 'R': _v(0.56, 0.18, 0.44)})
     elif name == 'C1b':
-        k = dict(up, pelvis=_v(0.38, 0.0, 0.02), p_up=_v(0.2, 1, 0.12), p_fwd=_v(0.6, 0, 0.8),
+        k = dict(up, pelvis=_v(0.34, 0.0, 0.02), p_up=_v(0.2, 1, 0.12), p_fwd=_v(0.6, 0, 0.8),   # chat 43: hips 0.38 -> 0.34
                  c_up=_v(0.9, 1, 0.1), c_fwd=_v(0.8, -0.4, 0.7), h_fwd=_v(0.8, -0.6, 0.5), lift=0.20,
                  hand={'L': (_v(0.62, 1.02, 0.28), _v(0.4, -1, 0.6)), 'R': None},
-                 knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.82, 0.58, 0.16)},
+                 knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.82, 0.58, 0.16)},   # chat 43: the slower move's new in-betweens put this thigh 3 cm
+#                                  into the door (aiming the knee up ran it into his chest and gun arm): hips 4 cm inboard
                  ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.60, 0.58, 0.36)})
     elif name == 'C2':
         k = dict(up, pelvis=_v(0.26, 0.0, -0.02), p_up=_v(0.3, 1, 0.12), p_fwd=_v(0.85, 0, 0.5),
@@ -392,7 +393,7 @@ def _climb(name):
                  knee=KNEES, ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)},
                  knee_w=1.0, seat_w=0.0, leg_ik=0.0)
     k['hand'] = dict(k['hand'])
-    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.04, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.02, 0.03), 'C3': (0.03, 0, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee
+    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.08, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.05, 0.03), 'C3': (0.03, 0.03, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee (chat 43: C2c, C3 3 cm higher: the gun hand touched the right thigh)
     return _gun_with_chest(k, lift_gun, 'K2' if name == 'C3' else 'K1')
 
 
