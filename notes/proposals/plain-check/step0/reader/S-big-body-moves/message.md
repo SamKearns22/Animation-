@@ -1,0 +1,8 @@
+### Option 1: Measure, then a check nothing can skip, then a proper 3D skeleton
+First, at no risk, we replay the bad version and measure which of your 8 body notes our existing tools and a fresh critic would have caught, and show you one sheet: the bad frames beside Jason drawn on a 3D skeleton (a hidden stick-figure that knows where each limb is in space) dressed in our usual flat pieces. Then, each on its own yes: a check that looks at every person in every frame as a body (joined arms, right lengths, right sides, nothing through the car, gun aimed right), placed where people are drawn so no shortcut skips it, and nothing reaches you with a fault unnamed; and big moves built on that skeleton. You would notice: no more twisted bodies reaching you, and a look sheet before any rebuild.
+Lost: the old flat figure for big moves (kept for normal poses); a quick clip can no longer be sent before the critique runs.
+Added: one look sheet for you; a check that can stop a clip; climb, lean and aim poses kept for future films.
+### Option 2: The same, with the check at the usual pre-send checks
+The same measuring and the same skeleton, but the body check and a "critic must have looked" rule run at the usual pre-send checks and when finishing, not where people are drawn. Simpler to add, but shot 4 was built in a practice file that runs none of those checks, and quick clips skip them, so the same slip could happen again.
+Lost: the old flat figure for big moves; sending without a critique when finishing.
+Added: one look sheet; the skeleton route; the body check; a critique rule at finishing.
