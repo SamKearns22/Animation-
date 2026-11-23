@@ -10,3 +10,4 @@
 - 2026-11-23 11:09 | notrun | override.py prompt is switched on (UserPromptSubmit) but has never been seen running here: check its hook line and that it leaves its mark (source/hookran.py)
   - named 2026-11-23 13:51 | unwired | chain A chat 5: bench_move.py is named in watcher.py OFF (since chat 40: the solid-body learning bench, run by each bench chat; joins a job pack when the skill passes); watcher.unwired() is empty. Its checks are now proven on their old failed poses by kittest bump_test_bench_old_poses (rule 5)
   - named 2026-11-23 13:51 | saver | chain A chat 5: the 20 Nov 03:29 miss is the one one-route-kit chat 4 named: Sam's words are saved in notes/ledger/sam/vqz9upsk.md
+  - named 2026-11-23 21:50 | override.py prompt | brexit chat 3: seen running in this chat (its mark is fresh: the hook line and hookran mark work); the 11:09 flag came from a chat started by a system message, which fires no UserPromptSubmit
