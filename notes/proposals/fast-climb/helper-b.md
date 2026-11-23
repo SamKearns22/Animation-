@@ -21,7 +21,7 @@ One number was set for two things. Speed is fixed by Sam's times, so the step ba
 ## Approaches weighed
 1. Reframe: judge each joint against the least its locked window allows, and fix the spacing to reach it.
 2. Viewer-first: a screen-space test on the film camera; a step wider than the limb's own on-screen width reads as two drawings (strobing).
-3. Learn-first from reference: measure a real fast sit-to-kneel (pose tracking not in the kit, unchecked). No footage shows knees on a seat (learn-step L71).
+3. Learn-first from reference: measure a real fast sit-to-kneel (no footage shows knees on a seat, learn-step L71).
 4. Sam's eye alone: a check must catch it first (Seeing like Sam 2).
 
 Chosen: 1; 2 only if the learning shows strobing; 3 lacks footage.
@@ -34,7 +34,7 @@ Then one change at a time:
 - C2, the drawing, judged by C1: re-space get-up and sit-down over the whole windows, eased, overlapping (gun hand starts with the hips at 0.5). Camera, beats, times untouched. About 2.5%.
 - C3, only if on-screen steps exceed limb width: the step bar becomes that strobing test; otherwise it goes. About 0.5%.
 
-Total about 3.8%. The film is already at 89.23% against a 53.2% estimate (ledger): stated, not hidden. Sam would notice a grey climb starting smoothly at 0.5 s, no snaps, his timing kept.
+Total about 3.8%; the film is already at 89.23% against a 53.2% estimate (ledger). Sam would notice a grey climb starting smoothly at 0.5 s, no snaps, his timing kept.
 
 ## Sam test
 Q1: splits speed from jerk, spacing first.
