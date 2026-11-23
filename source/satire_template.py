@@ -29,6 +29,7 @@ import subtitles as SUB          # noqa: E402  short, quick, readable subtitles 
 import mossad_audio as MA        # noqa: E402  recordings cleaned and levelled
 import filmkit                   # noqa: E402  the general checks
 import film_engine as E          # noqa: E402  render with the picture cache, subtitle list, mouth check
+import cover                     # noqa: E402  every piece and person at its depth, for the clipping check
 from satire_style import rough, install_circle_hands   # noqa: E402
 
 mouths.install(B)
@@ -177,15 +178,22 @@ def background(img, cam):
     """The set, in Satire style: flat colour, one outline, hand-cut corners (never ruler-straight clip-art)."""
     p = B.Pen(img, cam)
     box = lambda x0, y0, x1, y1, f, sd: p.poly(rough([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], 6, sd), f, (24, 20, 22), 3)
-    box(-600, -600, 1700, FY - 40, (214, 200, 168), 1)
-    box(110, 470, 430, 840, (150, 190, 214), 2)                          # the window (PLAN: to 'the street'):
-    box(110, 600, 430, 840, (168, 108, 84), 5)                           # the street seen through it, never a flat
-    for wx in (150, 290):                                                # fill (rule 2): the building opposite,
-        box(wx, 640, wx + 90, 720, (96, 112, 128), 6 + wx)               # its windows, the pavement
-    box(110, 800, 430, 840, (176, 174, 168), 7)
-    box(262, 470, 278, 840, (236, 232, 222), 8)                          # the window's middle bar
-    box(-600, FY - 40, 1700, 2600, (140, 104, 76), 3)
-    box(380, NECK_Y + 390 * S, 700, FY - 30, (120, 84, 60), 4)          # the table A thumps
+    d = lambda z: z - PLAN['CAMS'][shot_of(_T[0])]['pos'][2]     # metres from the lens, from the plan (rule 1)
+    # could-not-test (23 Nov): each piece drawn inside cover.thing at its depth, so the clipping check sees it as its
+    # own layer (cover.py); people inside cover.person in picture(t). Without them pre-flight stops: COULD NOT TEST.
+    with cover.thing(img, 'the back wall', d(PLAN['ROOMS']['room'][3])):
+        box(-600, -600, 1700, FY - 40, (214, 200, 168), 1)
+        box(110, 470, 430, 840, (150, 190, 214), 2)                          # the window (PLAN: to 'the street'):
+        box(110, 600, 430, 840, (168, 108, 84), 5)                           # the street seen through it, never a flat
+        for wx in (150, 290):                                                # fill (rule 2): the building opposite,
+            box(wx, 640, wx + 90, 720, (96, 112, 128), 6 + wx)               # its windows, the pavement
+        box(110, 800, 430, 840, (176, 174, 168), 7)
+        box(262, 470, 278, 840, (236, 232, 222), 8)                          # the window's middle bar
+    with cover.thing(img, 'the floor', 0.3, d(PLAN['ROOMS']['room'][3]), flat=True, surface=0.0, bottom=0.0):
+        box(-600, FY - 40, 1700, 2600, (140, 104, 76), 3)
+    tz, tsz = PLAN['THINGS']['table']['at'][1], PLAN['THINGS']['table']['size'][1]
+    with cover.thing(img, 'the table', d(tz - tsz / 2), d(tz + tsz / 2), bottom=0.0):
+        box(380, NECK_Y + 390 * S, 700, FY - 30, (120, 84, 60), 4)      # the table A thumps
 
 
 def picture(t):
@@ -194,11 +202,16 @@ def picture(t):
         return B.canvas((0, 0, 0))
     cam = cam_for(t)
     img = B.canvas()
+    _T[0] = t
     background(img, cam)
     for who in 'AB':
         if visible(who, cam):
-            B.person(img, cam, XS[who], NECK_Y, S, state(who, t), t)
+            with cover.person(img, who, PLAN['PEOPLE'][who]['at'][1] - PLAN['CAMS'][shot_of(t)]['pos'][2]):
+                B.person(img, cam, XS[who], NECK_Y, S, state(who, t), t)
     return img
+
+
+_T = [0.0]
 
 
 def draw_order(t):

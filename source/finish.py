@@ -18,6 +18,11 @@ burn in the captions (rule 62), deliver at 1.1x with voices at their normal pitc
   * its HOOK = (text, {'y':, 'x':, 'w':, 'until':, 'centre':}): the Hook Text and where it sits ('until' in seconds of
     the delivered file); the Hook Text check (hookcheck.py, rule 10) runs first and stops on a fault unless
     --faults-named (Sam has been told). Hook Text words or flags typed on the command line override HOOK (and say so).
+  * the readable check (could-not-test 3, 23 Nov): every text piece the places painter drew (name cards, signs,
+    notices) and every KEEP_CLEAR box, as the render drew them (CLEAN.mp4.readable.json, written by the render),
+    against the captions and the Hook Text: 5% or more of one covered is a fault (--faults-named once Sam is told).
+  * a check pre-flight could not run (clipcheck's COULD NOT TEST) refuses even with --faults-named: only that check's
+    row in the notes' "## Exceptions" with Sam's Y lets it by (film_engine.untested_fault).
 
 Keep CLEAN.mp4 (in source/data/FILM/, not on GitHub) so the Hook Text and captions can change without a re-render.
 A --small clean render (540 x 960) works too: the captions are drawn at full size and scaled to fit.
@@ -204,6 +209,27 @@ def main():
                      'Sam has been told')
         if not faults:
             print('Hook Text check: clear of everything listed')
+    import cover                                  # could-not-test (3, Sam's pick 1, 22 Nov): what the film lists (name
+    side = src + cover.SIDE                       # cards, signs, KEEP_CLEAR) measured against the captions and the Hook
+    if os.path.exists(side):                      # Text on the frames the render actually drew (its boxes, kept beside
+        import json                               # the clean video), never re-drawn from the code
+        with open(side) as fh:
+            rfaults = cover.readable_faults(film, json.load(fh), film.HOOK if hook and (hook, extra) == (ftext, fflags)
+                                            and hasattr(film, 'HOOK') else None)
+    else:
+        rfaults = [f'readable check: COULD NOT TEST: {os.path.basename(src)} has no record of what it drew '
+                   f'({os.path.basename(side)}): render the clean video again with the render tool']
+    for f in rfaults:
+        print('READABLE FAULT: ' + f)
+    if rfaults and not named:
+        sys.exit('finish REFUSED (could-not-test 3): a listed thing is under a caption or the Hook Text: fix it, or add '
+                 '--faults-named once Sam has been told')
+    if not rfaults:
+        print('readable check: every listed thing clear of the captions and Hook Text, on the frames drawn')
+    import film_engine                            # could-not-test (1): a check that could not test stops here even with
+    why = film_engine.untested_fault(name[0])     # --faults-named; only its Exceptions row with Sam's Y lets it by
+    if why:
+        sys.exit('finish REFUSED (could-not-test): ' + why)
     import follow_line                            # rule 52: the film's follow line on the sign-off (story/follow-lines.md)
     follow = follow_line.line_for(name[0])
     with tempfile.TemporaryDirectory() as tmp:
@@ -238,6 +264,8 @@ def main():
                 os.remove(os.path.join(keep, f))   # only the latest is kept
         shutil.copy(dst, os.path.join(keep, f'{slug}-animatic.mp4'))
         shutil.copy(src, os.path.join(keep, f'{slug}-clean.mp4'))
+        if os.path.exists(src + cover.SIDE):       # what it drew, so a later finish from the kept copy can check it
+            shutil.copy(src + cover.SIDE, os.path.join(keep, f'{slug}-clean.mp4' + cover.SIDE))
         print(f'kept on GitHub: animations/drafts/{slug}-animatic.mp4 and -clean.mp4 (commit and push them)')
 
 

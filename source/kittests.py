@@ -333,6 +333,91 @@ def hiss_heard_only_between_lines():
 
 
 @test
+def could_not_test_cover():
+    """could-not-test (Sam's pick 1, 22 Nov): the clipping check is fed by the drawing itself (cover.py). A further
+    thing drawn over a nearer one is a fault; a hand resting on flat papers is not; a person drawn with no depth is
+    COULD NOT TEST; and that stop passes no flag: only the check's Exceptions row with Sam's Y."""
+    import types
+    import tempfile
+    import cover
+    import film_engine as E
+    from PIL import Image, ImageDraw
+
+    def film(order, flat=False, depth=True):
+        def picture(t):
+            img = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            d = ImageDraw.Draw(img)
+            card = lambda: d.rectangle((400, 1000, 700, 1100), fill=(250, 250, 250), outline=(0, 0, 0))
+            arm = lambda: d.rectangle((500, 900, 560, 1150), fill=(40, 40, 70))
+            steps = {'card': lambda: (cover.thing(img, 'name card', 1.44, flat=flat, surface=0.76 if flat else None),
+                                      card),
+                     'arm': lambda: (cover.person(img, 'andy', 2.2) if depth else cover.thing(img, 'x', 9), arm),
+                     'hand': lambda: (cover.thing(img, 'hand', 1.7, bottom=0.72), arm)}   # resting on the table
+            for k in order:
+                ctx, fn = steps[k]()
+                with ctx:
+                    fn()
+            return img.convert('RGB')
+        m = types.ModuleType('fake_cover_film')
+        m.picture, m.SHOTS, m.FPS = picture, [('1', 0, 1)], 12
+        return m
+
+    def run(f):
+        items, fr, blind = cover.record(f, 0.0)
+        return cover.faults(items, fr), blind
+    wrong, _ = run(film(['card', 'arm']))                     # the arm (2.2 m) drawn over the card (1.44 m)
+    right, _ = run(film(['arm', 'card']))
+    papers, _ = run(film(['card', 'hand'], flat=True))        # flat on the table: a hand resting on it is fine
+    real = E.PASSES
+    E.PASSES = tempfile.mkdtemp()
+    try:
+        E.write_pass('x', 1, untested=['clipcheck: COULD NOT TEST: nothing recorded'])
+        stopped = E.lock_fault('x', faults_named=True)        # no flag passes it
+        E.write_pass('x', 0, untested=[])
+        clear = E.lock_fault('x', faults_named=True)
+    finally:
+        E.PASSES = real
+    import preflight
+    with tempfile.TemporaryDirectory() as tmp:
+        notes = os.path.join(tmp, 'n.md')
+        line = 'clipcheck: COULD NOT TEST (shot 2a): goth drawn with no depth'
+        old = preflight.notes_path
+        try:
+            preflight.notes_path = lambda f, n: notes
+            open(notes, 'w').write('## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+                                   '| clipcheck | shot 2a | a shaft of light only | full size, 23 Nov |\n')
+            no_y = preflight.untested_waived(None, 'x', [line])
+            open(notes, 'w').write('## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+                                   "| clipcheck | shot 2a | a shaft of light only (Sam's Y, 23 Nov) | full size |\n")
+            with_y = preflight.untested_waived(None, 'x', [line])
+        finally:
+            preflight.notes_path = old
+    ok = (len(wrong) == 1 and not right and not papers and bool(stopped) and clear is None and not no_y
+          and with_y == [line])
+    return ok, (f'arm over a nearer card: {len(wrong)} fault; drawn right: {len(right)}; over flat papers: '
+                f'{len(papers)}; COULD NOT TEST with --faults-named refused: {bool(stopped)}; cleared: {clear is None};'
+                f' row without Sam\'s Y excuses: {bool(no_y)}; with it: {with_y == [line]}')
+
+
+@test
+def could_not_test_readable():
+    """could-not-test (3): a name card the render drew under the caption is a fault; one clear above it is not."""
+    import types
+    import cover
+    m = types.ModuleType('fake_read_film')
+    m.caption_at = lambda t: 'The essence of my report'
+    import subtitles as SUB
+    from PIL import Image
+    lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+    SUB.draw(lay, 'The essence of my report', ss=1)
+    y0, y1 = lay.getbbox()[1], lay.getbbox()[3]
+    under = {'fps': 12, 'frames': {'0': [('his name card', 400, y0 - 20, 600, y0 + 60)]}}
+    clear = {'fps': 12, 'frames': {'0': [('his name card', 400, y0 - 200, 600, y0 - 110)]}}
+    a, b = cover.readable_faults(m, under), cover.readable_faults(m, clear)
+    return len(a) == 1 and not b, f'card under the caption: {len(a)} fault; card clear above it: {len(b)}'
+
+
+@test
 def render_lock():
     """Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now."""
     import film_engine as E

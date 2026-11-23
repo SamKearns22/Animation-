@@ -13,7 +13,8 @@ MAP
                    flat things (papers, folders, coasters, a table top) under anything resting on or above them allowed
   clipcheck 290    cover_faults(film, times): picture(t) recorded at each time; the faults, and what it could not see
                    (people drawn with no depth: COULD NOT TEST for that shot)
-  readable 360     boxes(film, t) for the render: each listed thing's box as drawn (text pieces, KEEP_CLEAR)
+  readable 400     read_boxes(film, rec) for the render: each listed thing's box as drawn (text pieces, KEEP_CLEAR);
+                   readable_faults(film, record, hook): finish.py's check, captions and Hook Text against those boxes
 
 A film with no places views gives its people's depth with `with cover.person(img, who, depth): draw...` and its own
 set pieces with `with cover.thing(img, name, near, far, flat=False, bottom=None): draw...` (satire_template does).
@@ -214,9 +215,8 @@ def _arm(p, j2, side, sp, *a, **k):
     P = r.person if r is not None else None
     if P is not None and P['d'] is not None:
         lay = Image.new('RGBA', p.img.size, (0, 0, 0, 0))
-        import body as B
         try:
-            _ORIG_ARM[0](B.Pen(lay, p.cam), j2, side, sp, *a, **k)
+            _ORIG_ARM[0](type(p)(lay, p.cam), j2, side, sp, *a, **k)
             bb = lay.getbbox()
         except Exception:
             bb = None
@@ -406,33 +406,86 @@ def cover_faults(film, times, pool=True):
 
 
 # ---------------------------------------------------------------------------------------------- readable
-def boxes(film, t, draw):
-    """For the render: draw the frame (draw(t)) while recording things with words; returns (picture, boxes), boxes
-    [(name, x0, y0, x1, y1, px)] at 1080 x 1920: each text piece's drawn pixels, then the film's KEEP_CLEAR."""
-    begin('read')
-    try:
-        pic = draw(t)
-    finally:
-        r = end()
+def read_boxes(film, r):
+    """For the render (film_engine records each drawing in 'read' mode): [(name, x0, y0, x1, y1)] at 1080 x 1920,
+    each text piece as it was actually drawn on this frame, then the film's KEEP_CLEAR boxes at this time."""
     out = []
     for it in _merge(r.items):
         k = it['k']
         x0, y0, x1, y1 = it['box']
-        out.append((it['name'], round(x0 * k), round(y0 * k), round(x1 * k), round(y1 * k), int(it['mask'].sum() * k * k)))
+        out.append((it['name'], round(x0 * k), round(y0 * k), round(x1 * k), round(y1 * k)))
+    return out
+
+
+def keep_clear(film, t):
+    out = []
     for name, box_at in getattr(film, 'KEEP_CLEAR', ()):
         try:
             b = box_at(t)
         except Exception:
             b = None
         if b:
-            out.append((name, *(int(v) for v in b), int((b[2] - b[0]) * (b[3] - b[1]))))
-    return pic, out
+            out.append((name, *(int(v) for v in b)))
+    return out
+
+
+SIDE = '.readable.json'     # the render's record beside the clean video: each drawing's boxes (finish.py reads it)
+COVERED = 0.05              # a listed thing with 5% or more of its box under a caption or the Hook Text is a fault
+
+
+def readable_faults(film, data, hook=None):
+    """Captions (as finish.py draws them) and the Hook Text against each listed thing's box on the frames the render
+    drew (data: the render's record). One line per thing per caption: when, how much, the posted time."""
+    import subtitles as SUB
+    draw = getattr(film, 'draw_subtitle', None) or SUB.draw
+    B = sys.modules.get('burnham')
+    fps = data['fps']
+    alpha = {}
+
+    def cap(c):
+        if c not in alpha:
+            old = B.SS if B else None
+            if B:
+                B.SS = 1
+            lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+            draw(lay, c)
+            if B:
+                B.SS = old
+            alpha[c] = np.asarray(lay.split()[3]) > 100
+        return alpha[c]
+    hb, hook_until = None, -1.0
+    if hook:
+        import hookcheck
+        text, opts = hook
+        hb = hookcheck.hook_box(text, **opts)
+        hook_until = opts.get('until', 3.6) * SUB.SPEED             # its 'until' is on the delivered (1.1x) clock
+    worst = {}
+    for key in sorted(data['frames'], key=int):
+        t = int(key) / fps
+        c = film.caption_at(t) if hasattr(film, 'caption_at') else None
+        for name, x0, y0, x1, y1 in data['frames'][key]:
+            x0, y0, x1, y1 = max(0, x0), max(0, y0), min(1080, x1), min(1920, y1)
+            area = max(1, (x1 - x0) * (y1 - y0))
+            if c:
+                share = cap(c)[y0:y1, x0:x1].sum() / area
+                if share >= COVERED:
+                    w = worst.setdefault((name, 'the caption "' + c + '"'), [t, t, 0.0, 0])
+                    w[1], w[2], w[3] = t, max(w[2], share), w[3] + 1
+            if hb and t < hook_until:
+                ix = max(0, min(x1, hb[2]) - max(x0, hb[0])) * max(0, min(y1, hb[3]) - max(y0, hb[1]))
+                if ix / area >= COVERED:
+                    w = worst.setdefault((name, 'the Hook Text'), [t, t, 0.0, 0])
+                    w[1], w[2], w[3] = t, max(w[2], ix / area), w[3] + 1
+    return [f'{t0:.2f}-{t1:.2f} s (posted {t0 / SUB.SPEED:.2f} s): {name} is {share:.0%} under {what} at worst '
+            f'({n} drawings): move the thing, or the caption (a draw_subtitle with its own base for that shot)'
+            for (name, what), (t0, t1, share, n) in sorted(worst.items(), key=lambda kv: kv[1][0])]
 
 
 if __name__ == '__main__':
-    import body as B
-    B.SS = 1
     film = importlib.import_module(sys.argv[1])
+    for _b in ('body', 'burnham'):
+        if _b in sys.modules:
+            sys.modules[_b].SS = 1
     import cover as _me                           # the painters import `cover`: record through that same copy
     for t in map(float, sys.argv[2:]):
         items, fr, blind = _me.record(film, t)

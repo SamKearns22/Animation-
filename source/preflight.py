@@ -414,6 +414,27 @@ def _text_only(film, problems, end, fps):
     print('(no pass stamp: the render still needs the full pre-flight)')
 
 
+def untested_waived(film, name, untested):
+    """could-not-test: the COULD NOT TEST lines the notes' "## Exceptions" excuses: a row for the check (clipcheck)
+    whose who is * / could not test / words in the line (a shot: 'shot 2a'), whose reason carries Sam's Y, and whose
+    looked-at column is filled. Nothing else (no flag, no code comment) lets a COULD NOT TEST by."""
+    import waivers
+    path = notes_path(film, name)
+    table = waivers.rows(open(path).read()) if os.path.exists(path) else []
+    out = []
+    for x in untested:
+        for c, w, why, looked in table:
+            if c.strip('` ').lower() not in ('clipcheck', 'could not test') or not looked.strip():
+                continue
+            if not re.search(r"\bSam\b[^|]*\bY\b", why):
+                continue
+            ww = w.strip('`* ').lower()
+            if ww in ('', 'could not test', 'all') or ww in x.lower():
+                out.append(x)
+                break
+    return out
+
+
 def main():
     name, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
@@ -484,9 +505,23 @@ def main():
     if hasattr(film, 'scene'):
         shared += collisions.check(film)        # rules 5, 6, 12, 13: nothing passes through anything; nothing pops in;
         roster = collisions.LAST_ROSTER         # hands on what they touch, props held, resting hands clear
-    if people and not any(hasattr(film, a) for a in ('solids', 'layers')):   # Job C 5 (Sam, 13 Nov): Blessed's
-        shared.append('clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing '
-                      'checks that no one passes through anyone or teleports (clipcheck.py; rule 19)')   # in silence
+    untested = []                               # could-not-test (Sam's pick 1, 22 Nov): no flag passes these
+    if people:                                  # cover by default: the drawing itself recorded, every places piece
+        import cover                            # and each person's body, arms and head at their own depth (cover.py)
+        own = any(hasattr(film, a) for a in ('solids', 'layers'))
+        if cover.picture_fn(film) is not None:
+            cf, cu = cover.cover_faults(film, clipcheck._times(film, 3)[0])
+            shared += cf
+            if not own:                         # (the film's own solids or layers cover what the recording could not)
+                untested += cu
+        elif not own:                           # Job C 5 (Sam, 13 Nov): Blessed's, in silence
+            untested.append('clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t) and no '
+                            'picture(t) to record, so nothing checks that no one passes through anyone (rule 19)')
+    waived = untested_waived(film, name, untested)
+    for x in waived:
+        print('exception (Sam\'s Y in the notes): ' + x)
+    untested = [x for x in untested if x not in waived]
+    shared += untested
     if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT', 'draw_order')):
         shared += clipcheck.run(film)           # passes through, teleports, drawing order, flips (rule 57)
     if runs['collisions and pop-ins (rules 5, 6)'] and not any(hasattr(film, a) for a in ('scene', 'solids')):
@@ -612,7 +647,7 @@ def main():
         print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
     if not audit:
         import film_engine                      # rule 59: the render checks this stamp before an animatic or final
-        film_engine.write_pass(name, len(problems), pictures=pictures)
+        film_engine.write_pass(name, len(problems), pictures=pictures, untested=untested)
     sys.exit(1 if problems else 0)
 
 
