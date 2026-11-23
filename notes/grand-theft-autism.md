@@ -142,16 +142,14 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Locked by Sam: all cameras and beats of shots 1-8, in the same order; the house style; circle hands. CHANGED BY SAM
   (23 Nov): every move in shot 4 25% slower: shot 4 is 10.25 s (was 8.2), everything after it 2.05 s later.
 - Done: one slow-down number for shot 4 (Jason, shots, camera, sounds, later voices and captions); two touches the
-  slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean and sent
-  (jason-grey-test.mp4). Sam's 05:33 / 05:35 "can't open the file" = the wide clip; fixed by 42b's phone-safe copy.
-  Changed: the cruiser's wobble 2.0 -> 2.5 s (it slows with the shot so the crash stays where the camera looks).
-- Next: Sam's notes on the slower clip, then stage 2 (the house look on the moving body), Opus high.
-- Needs Sam: 1 = only shot 4 slower now, other shots' people checked at the next animatic (my pick); 2 = every
-  shot's people 25% slower now.
-- Read: notes/bench/learn-step.md "Chat 43".
-- Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
-- For Claude: leanout.SLOW; clips to Sam phone-safe (540x960 padded, baseline, faststart); two "Where things stand"
-  on purpose; CLAUDE.md sentence changes are Sam's own; branches dreamy-fermi-vkhutz, gta-chat31 left unmerged.
+  slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean, sent. Changed: the
+  cruiser's wobble 2.0 -> 2.5 s (slows with the shot). Sam's 05:33/05:35 "can't open": fixed by 42b's phone-safe copy.
+- Sam (05:44, chat 42): "1": only shot 4 slower now; the other shots' people are checked at the next animatic.
+- Next: Sam's notes on the slower clip (Opus medium). The look strand (chat 44) dresses this new timing; chat 43
+  touched _climb (C1b hips, gun lift): chat 44 merges the main line first.
+- Read: notes/bench/learn-step.md "Chat 43". Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
+- For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
+  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look = live chat 44.
 
 ## Where things stand, the LOOK strand (23 Nov, chat 42 opens chat 44, Opus high): stage 2, the house look on the move
 - Sam (23 Nov): "open another chat to start building the character on him": stage 2 of solid-body-moves (line 106:
@@ -227,4 +225,4 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 91.11% of 15%; forecast 94.7% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 92.55% of 15%; forecast 96.2% (2026-11-23)
