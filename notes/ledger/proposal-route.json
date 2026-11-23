@@ -7191,66 +7191,70 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.67,
+   "cost": 2.47,
    "src": "estimate",
    "sid": "session_01U3pKR27nDhvqq7xXsinsRV",
-   "steps": 78,
-   "hist_k": 223,
+   "steps": 102,
+   "hist_k": 260,
    "kinds": {
-    "tool search": 24.6,
-    "whole-file .py read": 0.3,
-    "renders": 1.1,
-    "pictures": 0.4,
-    "other": 73.7
+    "tool search": 17.8,
+    "whole-file .py read": 0.2,
+    "renders": 1.7,
+    "pictures": 0.2,
+    "other": 80.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 54,
+    "tool search": 63,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
-    "renders": 3,
+    "renders": 6,
     "pictures": 1,
-    "other": 18
+    "other": 26
    },
    "split": {
-    "usd": 6.1269,
-    "total": 6.1269,
+    "usd": 9.0545,
+    "total": 9.0545,
     "floor_k": 84,
     "blocks": {
-     "new writes": 36.7,
-     "Claude's words": 25.4,
-     "carried history": 20.0,
-     "start-up floor": 17.9
+     "new writes": 42.8,
+     "carried history": 24.6,
+     "Claude's words": 20.5,
+     "start-up floor": 12.1
     },
     "origins": {
-     "Claude's words": 36.3,
-     "messages and reminders": 27.9,
-     "start-up floor": 18.1,
-     "result: tool search": 14.3,
-     "Claude's edits": 1.6,
-     "result: other": 1.4,
-     "result: pictures": 0.3,
+     "messages and reminders": 29.7,
+     "Claude's words": 29.6,
+     "cache re-write": 14.7,
+     "start-up floor": 12.3,
+     "result: tool search": 10.4,
+     "result: other": 2.0,
+     "Claude's edits": 1.1,
+     "result: pictures": 0.2,
      "result: renders": 0.1
     },
     "named": {
-     "messages and reminders": 27.9,
-     "start-up reading (rules, tools, first files)": 18.1,
-     "thinking": 16.4,
-     "writing code": 11.6,
-     "reading notes": 10.5,
-     "commands": 3.8,
-     "writing notes": 3.6,
-     "reading kit code": 3.2,
-     "messages to Sam": 1.9,
-     "renders": 0.6,
-     "start-up and handover tools": 0.6,
-     "helper and chat prompts": 0.6,
-     "reading guides": 0.5,
-     "looking at pictures": 0.3,
-     "running checks and tools": 0.3,
+     "messages and reminders": 29.7,
+     "memory lapses (re-paying for the whole chat)": 14.7,
+     "start-up reading (rules, tools, first files)": 12.3,
+     "thinking": 12.1,
+     "writing code": 8.9,
+     "reading notes": 7.4,
+     "writing notes": 3.7,
+     "commands": 3.1,
+     "messages to Sam": 2.3,
+     "reading kit code": 2.2,
+     "reading chat records": 0.7,
+     "start-up and handover tools": 0.7,
+     "helper and chat prompts": 0.5,
+     "renders": 0.5,
+     "reading guides": 0.3,
+     "app tools (chats, files sent)": 0.3,
+     "looking at pictures": 0.2,
+     "running checks and tools": 0.2,
      "other commands": 0.1,
-     "app tools (chats, files sent)": 0.1
+     "git and saving": 0.1
     },
     "leftover": 0.0
    },
@@ -7365,7 +7369,7 @@
       0.002
      ]
     ],
-    "base_pct": 19.0
+    "base_pct": 16.9
    },
    "search": {
     "show": 0,
@@ -7374,8 +7378,8 @@
     },
     "other": {
      "shared:handover.py": 1,
-     "other": 11,
-     "film notes": 19,
+     "other": 15,
+     "film notes": 21,
      "guides": 2,
      "shared:rough.py": 7,
      "shared:preflight.py": 1,
@@ -7384,8 +7388,9 @@
      "shared:film_engine.py": 1,
      "shared:grand_theft_autism.py": 2,
      "shared:kittests.py": 4,
-     "shared:propose.py": 1,
-     "shared:watcher.py": 3
+     "shared:propose.py": 3,
+     "shared:watcher.py": 3,
+     "shared:milburn.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -7819,6 +7824,78 @@
       "other",
       "other",
       "notes/logs/handover-end.log",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git diff --stat | tail -3",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md",
+      "git diff notes/proposals/unrouted.md | tail -3 | cut -c1-300; git add -A && git ",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "stale\\|verdict-hash",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 285,325p source/propose.py",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "notes/ledger/sam/",
+      "y to all",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "notes/proposals/lessons-report.md",
+      "Now",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "other",
+      "",
+      "Duration|Stream",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "Duration|Video",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "other",
+      "",
       "^(PASS|FAIL)",
       ""
      ]
