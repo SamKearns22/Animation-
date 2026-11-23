@@ -1697,6 +1697,8 @@ def _finish_fake(tmp, caption=True):
     subprocess.run([finish.FF, '-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'color=c=0x203040:s=540x960:r=12:d=3',
                     '-f', 'lavfi', '-i', 'sine=frequency=440:sample_rate=48000:duration=3', '-c:v', 'libx264',
                     '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-shortest', clean], check=True)
+    with open(clean + '.readable.json', 'w') as fh:                 # what the render keeps beside it (could-not-test 3)
+        fh.write('{"fps": 12, "frames": {}}')
     m = types.ModuleType('kt_film')
     m.FPS, m.DUR, m.HOOK, m.KEEP_CLEAR = 12, 3.0, ('Hook here', {'y': 880}), []
     if caption:
