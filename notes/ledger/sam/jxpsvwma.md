@@ -17,3 +17,10 @@ Please do a deep dive into this issue, run it through the proposal route, and ge
 ### 2026-11-23T19:37:42
 Let's put it this way. I do not really care if 99,000 people ignore it or leave. If 1000 engage, it's a win. The security stuff is sorted. The account is entirely mine. I also do not have the time or budget to create an entirely new set of videos for this audience. Nor can I access metrics for a repost. So the goal is to get the original content in front of those 100,000 people on the other account in any way possible, in a manner that helps the original account. And no, TikTok are not going to come after me for it.
 
+### 2026-11-23T19:46:17
+Of course, if we just uploaded the same video, wouldn't TikTok take it down or punish it?
+
+Damn. I thought stick could have 5 seconds from the new account and play the rest from the old account. 
+
+Oh this is hard! If I had the collaboration feature, it wouldn't be a problem.
+
