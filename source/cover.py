@@ -32,6 +32,7 @@ from PIL import Image, ImageChops
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
+LENS = 1500.0           # px: the places kit's usual lens, for depth read from drawn size when no view is painted
 ORDER_TOL = 0.05        # m: depths closer than this are side by side (clipcheck's ORDER_TOL)
 MIN_PX = 60             # px at 1080 x 1920: a further thing showing over a nearer one by fewer is noise (edges)
 FLAT = {'papers', 'coaster', 'folder', 'table top', 'rug', 'mat', 'floor'}   # lie on a surface (plus any kind with `near`)
@@ -49,6 +50,8 @@ class _Rec:
         self.items = []
         self.depths = {}              # who -> depth from the lens, given by the film (person())
         self.blind = set()            # people drawn with no depth known
+        self.sized = set()            # people whose depth was read from their drawn size (no places view lists them)
+        self.drawn = []               # every person drawn: who, screen box, scale, yaw, depth, view (kitinputs' survey)
         self.person = None            # the person being drawn (the views tap's state)
 
 
@@ -62,7 +65,7 @@ def recording():
 def begin(mode='cover'):
     REC[0] = _Rec(mode)
     import views
-    views.TAP[0] = _tap if mode == 'cover' else None
+    views.TAP[0] = _tap if mode in ('cover', 'survey') else None
     if mode == 'cover' and _ORIG_ARM[0] is None:
         _ORIG_ARM[0] = views.arm
         views.arm = _arm
@@ -116,7 +119,7 @@ def piece(img, p):
     r = REC[0]
     raw = p.it['raw']
     text = str(p.args.get('text') or '').strip()
-    if r is None or p.d0 is None or (r.mode == 'read' and not (text and p.it['kind'] in TEXT_KINDS)):
+    if r is None or p.d0 is None or (r.mode in ('read', 'survey') and not (text and p.it['kind'] in TEXT_KINDS)):
         yield
         return
     before = img.copy()
@@ -132,7 +135,7 @@ def piece(img, p):
 def thing(img, name, near, far=None, flat=False, bottom=None, surface=None, text=''):
     """A film's own set piece drawn by hand, at its depth (metres from the lens)."""
     r = REC[0]
-    if r is None or (r.mode == 'read' and not text):
+    if r is None or (r.mode in ('read', 'survey') and not text):
         yield
         return
     before = img.copy()
@@ -148,6 +151,8 @@ def person(img, who, depth, flat_person=True):
     at their real depth; drawn any other way (body.person), the whole person is one layer at that depth."""
     r = REC[0]
     if r is None or r.mode != 'cover':
+        if r is not None:
+            r.depths[who] = depth
         yield
         return
     r.depths[who] = depth
@@ -177,11 +182,27 @@ def _tap(stage, img, **kw):
         if mu is None:
             import views as V
             mu = V.M_PER_UNIT
-        r.person = dict(who=who, d=d, mu=mu, depth=kw['depth'], snap=img.copy(), arms=[], body=None)
+        est = False
+        if d is None and kw.get('s'):          # named-lines change 3: no places view lists them, so their depth is
+            lens = float(r.view['camera']['lens']) if r.view is not None else LENS   # read from their drawn size (a
+            d, est = lens * mu / float(kw['s']), True          # level camera: pixels per metre = lens / depth)
+            r.sized.add(who)
+        r.person = dict(who=who, d=d, mu=mu, depth=kw['depth'], snap=img.copy(), snap0=img.copy(), arms=[], body=None)
+        r.drawn.append(dict(who=who, d=d, est=est, s=kw.get('s'), yaw=kw.get('yaw'), x=kw.get('x'), y=kw.get('y'),
+                            view=r.view['name'] if r.view is not None else None, box=None, k=1080.0 / img.size[0],
+                            seated=bool(sp.get('seated'))))
         if d is None:
             r.blind.add(who)
         return
     P = r.person
+    if stage == 'head_end' and P is not None and r.drawn and r.drawn[-1]['who'] == P['who']:
+        bb = ImageChops.difference(img.convert('RGB'), P['snap0'].convert('RGB')).getbbox()   # (RGBA: alpha only)
+        k = r.drawn[-1]['k']
+        r.drawn[-1]['box'] = tuple(int(v * k) for v in bb) if bb else None
+    if r.mode == 'survey':
+        if stage == 'head_end':
+            r.person = None
+        return
     if P is None or P['d'] is None:
         return
     who, d = P['who'], P['d']
@@ -370,6 +391,21 @@ def record(film, t):
         r = end()
     fr = np.asarray(im.convert('RGB'))
     return r.items, fr, r.blind
+
+
+def survey_record(film, t):
+    """kitinputs' survey: who is drawn at t (screen box, scale, yaw, depth), the places view painted, and every
+    piece with words on it (its box): no layers kept, so it is cheap."""
+    pic = picture_fn(film)
+    begin('survey')
+    try:
+        im = pic(t)
+    finally:
+        r = end()
+    v = r.view
+    return dict(t=t, view=(v['name'], dict(v['camera'] or {}), dict(v.get('people') or {}), v.get('place'))
+                if v is not None else None, people=[{k: x for k, x in d.items()} for d in r.drawn],
+                texts=[(i['name'], i['box'], i['k']) for i in r.items if i.get('text')], size=im.size, image=im)
 
 
 def _one(args):

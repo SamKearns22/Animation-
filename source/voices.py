@@ -535,18 +535,25 @@ def _runs(idx):
 def prepared(film):
     """The film's lines with their recordings measured (their own voices, as the film places them). A line with no
     recording yet keeps the film's placeholder timing (its 'end', or its _stretches) and gets no script check."""
-    out = []
+    import takes
+    out, raw_ok = [], None
     for ln in film.LINES:
         ln = dict(ln)
         v = ln.get('_voice')
+        if v is None:                       # named-lines change 3 (23 Nov): the take the film plays, cleaned the shared
+            v = takes.played(ln.get('audio'))   # way (takes.clean), never the raw file beside it
         path = os.path.join(MA.HERE, 'audio', f"{ln.get('audio')}.m4a")
         if v is None and ln.get('audio') and os.path.exists(path):
             v = MA.line(ln['audio'])
+            if raw_ok is None:              # the shared loader is what the film plays only if its code calls it
+                raw_ok = takes.plays_shared_loader(_film_paths(film))
+            if not raw_ok:
+                ln['_raw'] = path
         if v is None:
             ln['_stretches'] = ln.get('_stretches') or ([(0.0, ln['end'] - ln['start'])] if ln.get('end') else [])
             ln['_rows'], ln['_faults'], ln['_placeholder'] = [], [], True
         else:
-            ln['_stretches'] = ln.get('_stretches') or MA.pauses(v, 0.12)
+            ln['_stretches'] = ln.get('_stretches') or takes.stretches(ln.get('audio')) or MA.pauses(v, 0.12)
             ln['_rows'], ln['_faults'] = script_check(ln, v)
             ln['_words'] = word_times(ln)
         if not ln['_stretches']:
@@ -578,12 +585,29 @@ def audit(film, t0=None, t1=None, mouths=True):
     return faults, notes, lines, seen
 
 
+def _film_paths(film):
+    try:
+        import posecheck
+        paths = posecheck._film_files(film.__name__)
+    except Exception:
+        paths = []
+    return list(paths or []) + [getattr(film, '__file__', '') or '']
+
+
+def raw_faults(lines):
+    """named-lines change 3: a line checked against a raw recording the film does not play is said out loud (its
+    checks hear a different sound from Sam: Milburn's 60 false lines)."""
+    return [f"line {ln.get('n', ln['text'][:20])} ({ln['who']}): read the raw recording {os.path.basename(ln['_raw'])}, "
+            'which the film does not play (its code never calls mossad_audio.line): make its takes with takes.clean so '
+            'this check hears what Sam hears' for ln in lines if ln.get('_raw')]
+
+
 def check(film):
     """For pre-flight: the faults as lines (no LINES: nothing to check)."""
     if not hasattr(film, 'LINES'):
         return []
-    faults, notes, _, _ = audit(film)
-    return ['script/mouth: ' + f for f in faults]
+    faults, notes, lines, _ = audit(film)
+    return ['script/mouth: ' + f for f in raw_faults(lines) + faults]
 
 
 def report(film, t0=None, t1=None, mouths=True):

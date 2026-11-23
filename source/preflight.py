@@ -519,13 +519,18 @@ def main():
     if hasattr(film, 'checks'):                 # the film's own plan checks (overlaps, outfits...)
         film.checks()
     shared = ['gate: ' + x for x in stop]       # the shared checks every film gets (Sam, 18 Oct: catch it before I do)
+    import kitinputs                            # named-lines change 3 (Sam's Y, 23 Nov): the kits hand every check what
+    kf, ksaid, kfaults = kitinputs.fill(film, has)   # it needs, read from the drawing; the film's own inputs win
+    if ksaid:
+        print(f'the kits hand the checks {len(ksaid)} input(s) (python3 source/kitinputs.py {name} lists them)')
+    shared += kfaults
     B.SS = 1
     import audit as collisions, clipcheck, hookcheck, linecheck, musiccheck, sizes, landmarks, housestyle
     import plan, benchmark, sets
     people, rooms = 'people' in has, 'rooms' in has
-    shared += housestyle.faults(film, B, has)   # the template's house style is on, and each check has its inputs
+    shared += housestyle.faults(kf, B, has)   # the template's house style is on, and each check has its inputs
     if rooms:
-        shared += plan.faults(film)         # rule 1: one plan of the world in metres, joined up, a camera per shot
+        shared += plan.faults(kf)           # rule 1: one plan of the world in metres, joined up, a camera per shot
     shared += benchmark.faults(film)        # rule 3: each place benchmarked against its references, all decided
     if rooms:
         shared += sets.solids_faults(film)      # rule 5: what the set's solids need (door angles, reasons)
@@ -558,19 +563,20 @@ def main():
     shared += untested
     if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT', 'draw_order')):
         shared += clipcheck.run(film)           # passes through, teleports, drawing order, flips (rule 57)
-    if runs['collisions and pop-ins (rules 5, 6)'] and not any(hasattr(film, a) for a in ('scene', 'solids')):
+    if runs['collisions and pop-ins (rules 5, 6)'] and not any(hasattr(film, a) for a in ('scene', 'solids')) and \
+            not hasattr(kf, 'KIT_ROSTER'):      # (the drawing gave the roster and pop-ins; cover the passing through)
         shared.append('the collision and pop-in tests did not run: the film has no scene(t) (audit.py; '   # never
                       'rules 5 and 6; a film with no people or props says so in HAS)')               # in silence
     if 'effects' in has and getattr(film, 'EFFECTS', None) and not any(hasattr(film, a) for a in ('draw_order', 'layers')):
         shared.append('rule 57: the film has effects but no draw_order(t) (names back to front), so nothing checks '
                       'that a thing never flips from in front to behind mid-shot')
     if people:
-        shared += cast_faults(film, roster or {})   # rule 14: no shot missing anyone the brief puts in it
+        shared += cast_faults(film, roster or getattr(kf, 'KIT_ROSTER', None) or {})   # rule 14: no shot missing anyone the brief puts in it
     if hasattr(film, 'LINES') and 'voices' in has:   # rule 7: script v recordings v subtitles, and the mouths drawn
         import voices
         shared += voices.check(film)
     import viewchecks                       # rules S7, 16-18: effect shapes, readability, direction across a cut,
-    shared += viewchecks.faults(film)       # effects hidden behind figures (rule 20 runs on the drawing pass)
+    shared += viewchecks.faults(kf)       # effects hidden behind figures (rule 20 runs on the drawing pass)
     import film_engine
     shared += film_engine.look_faults(film)   # house look (S7): the engine's alone, so once; drawings 12 a second
     if 'mounts' in sys.modules:                 # riding (Sam, 25 Oct): a film with a mount gets the mount checks
@@ -583,12 +589,12 @@ def main():
     shared += setcheck.film_faults(film)        # rule 13: figures moving through the set, against its solid things
     shared += musiccheck.faults(film)           # no beat skipped or doubled where pieces of a song are joined
     import camfeel                              # rule 72: a fast or sudden camera move the acting list doesn't mark
-    shared += camfeel.faults(film)              # sharp (a row in the exceptions excuses a shot: 'camera feel')
+    shared += camfeel.faults(kf)              # sharp (a row in the exceptions excuses a shot: 'camera feel')
     if people:                                  # (in a throwaway child: linecheck loads GNU OpenMP, and forking the
-        shared += _in_child(linecheck.faults, film)   # drawing workers from a process that has used it freezes them
-        shared += _in_child(landmarks.faults, film)   # after about 330 frames: the Elder Swindon hang, 8 Nov)
+        shared += _in_child(linecheck.faults, kf)   # drawing workers from a process that has used it freezes them
+        shared += _in_child(landmarks.faults, kf)   # after about 330 frames: the Elder Swindon hang, 8 Nov)
     if 'props' in has:
-        shared += _in_child(sizes.faults, film)  # props and set pieces at their real size
+        shared += _in_child(sizes.faults, kf)  # props and set pieces at their real size
     print('shared checks:', 'clean' if not shared else f'{len(shared)} fault(s)')
     end = getattr(film, 'BLACK_AT', getattr(film, 'DUR', 0))
     if not end:                                 # a film without an end time would pass having checked nothing

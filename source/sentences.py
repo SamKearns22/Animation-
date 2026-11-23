@@ -77,13 +77,23 @@ def tag_rows(rulebook):
     return rows
 
 
+SAM_REWORDED = {   # sentences Sam himself rewrote (his words now stand in their place): never "lost"
+    'Every stage aims at three things (Sam, 13 Nov)': 'Statement One (Sam, 22 Nov), top of CLAUDE.md, and "Every stage '
+                                                     'aims at Statement One" in "Rules are permanent"',
+    'Every stage aims at three things: high quality': 'the same, reworded again by Sam\'s 22 Nov Statement One',
+    'Be honest about what I can do (Sam, 21 Nov)': 'Statement Two (Sam, 21 Nov), top of CLAUDE.md',
+    'Choose views the drawing can carry.': 'Seeing like Sam 4, now bold-split by Sam\'s 21 Nov wording',
+}
+
+
 def lost(old, files):
-    """old: the old CLAUDE.md text; files: {path: new text}. Returns the old sentences not found word for word."""
+    """old: the old CLAUDE.md text; files: {path: new text}. Returns the old sentences not found word for word
+    (a sentence Sam himself rewrote, SAM_REWORDED, is not lost: his new words stand in its place)."""
     body = ''.join(corpus(t) for t in files.values())
     rows = tag_rows(files.get('guides/film-quality-rules.md', ''))
     miss = []
     for s in split(old):
-        if s in body:
+        if s in body or any(s.startswith(k) for k in SAM_REWORDED):
             continue
         t = s
         for words, tag in rows:
