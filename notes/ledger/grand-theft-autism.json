@@ -24619,8 +24619,8 @@
    "model": "opus",
    "stage": "moves",
    "round": null,
-   "cost": 2.68,
-   "notes": 0,
+   "cost": 3.45,
+   "notes": 1,
    "repeats": []
   }
  ],
@@ -25102,6 +25102,11 @@
    "date": "2026-11-23",
    "spent": 90.34,
    "forecast": 93.9
+  },
+  {
+   "date": "2026-11-23",
+   "spent": 90.93,
+   "forecast": 94.5
   }
  ],
  "critique": {

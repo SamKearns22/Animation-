@@ -333,6 +333,91 @@ def hiss_heard_only_between_lines():
 
 
 @test
+def could_not_test_cover():
+    """could-not-test (Sam's pick 1, 22 Nov): the clipping check is fed by the drawing itself (cover.py). A further
+    thing drawn over a nearer one is a fault; a hand resting on flat papers is not; a person drawn with no depth is
+    COULD NOT TEST; and that stop passes no flag: only the check's Exceptions row with Sam's Y."""
+    import types
+    import tempfile
+    import cover
+    import film_engine as E
+    from PIL import Image, ImageDraw
+
+    def film(order, flat=False, depth=True):
+        def picture(t):
+            img = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            d = ImageDraw.Draw(img)
+            card = lambda: d.rectangle((400, 1000, 700, 1100), fill=(240, 236, 220), outline=(0, 0, 0))
+            arm = lambda: d.rectangle((500, 900, 560, 1150), fill=(40, 40, 70))
+            steps = {'card': lambda: (cover.thing(img, 'name card', 1.44, flat=flat, surface=0.76 if flat else None),
+                                      card),
+                     'arm': lambda: (cover.person(img, 'andy', 2.2) if depth else cover.thing(img, 'x', 9), arm),
+                     'hand': lambda: (cover.thing(img, 'hand', 1.7, bottom=0.72), arm)}   # resting on the table
+            for k in order:
+                ctx, fn = steps[k]()
+                with ctx:
+                    fn()
+            return img.convert('RGB')
+        m = types.ModuleType('fake_cover_film')
+        m.picture, m.SHOTS, m.FPS = picture, [('1', 0, 1)], 12
+        return m
+
+    def run(f):
+        items, fr, blind = cover.record(f, 0.0)
+        return cover.faults(items, fr), blind
+    wrong, _ = run(film(['card', 'arm']))                     # the arm (2.2 m) drawn over the card (1.44 m)
+    right, _ = run(film(['arm', 'card']))
+    papers, _ = run(film(['card', 'hand'], flat=True))        # flat on the table: a hand resting on it is fine
+    real = E.PASSES
+    E.PASSES = tempfile.mkdtemp()
+    try:
+        E.write_pass('x', 1, untested=['clipcheck: COULD NOT TEST: nothing recorded'])
+        stopped = E.lock_fault('x', faults_named=True)        # no flag passes it
+        E.write_pass('x', 0, untested=[])
+        clear = E.lock_fault('x', faults_named=True)
+    finally:
+        E.PASSES = real
+    import preflight
+    with tempfile.TemporaryDirectory() as tmp:
+        notes = os.path.join(tmp, 'n.md')
+        line = 'clipcheck: COULD NOT TEST (shot 2a): goth drawn with no depth'
+        old = preflight.notes_path
+        try:
+            preflight.notes_path = lambda f, n: notes
+            open(notes, 'w').write('## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+                                   '| clipcheck | shot 2a | a shaft of light only | full size, 23 Nov |\n')
+            no_y = preflight.untested_waived(None, 'x', [line])
+            open(notes, 'w').write('## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+                                   "| clipcheck | shot 2a | a shaft of light only (Sam's Y, 23 Nov) | full size |\n")
+            with_y = preflight.untested_waived(None, 'x', [line])
+        finally:
+            preflight.notes_path = old
+    ok = (len(wrong) == 1 and not right and not papers and bool(stopped) and clear is None and not no_y
+          and with_y == [line])
+    return ok, (f'arm over a nearer card: {len(wrong)} fault; drawn right: {len(right)}; over flat papers: '
+                f'{len(papers)}; COULD NOT TEST with --faults-named refused: {bool(stopped)}; cleared: {clear is None};'
+                f' row without Sam\'s Y excuses: {bool(no_y)}; with it: {with_y == [line]}')
+
+
+@test
+def could_not_test_readable():
+    """could-not-test (3): a name card the render drew under the caption is a fault; one clear above it is not."""
+    import types
+    import cover
+    m = types.ModuleType('fake_read_film')
+    m.caption_at = lambda t: 'The essence of my report'
+    import subtitles as SUB
+    from PIL import Image
+    lay = Image.new('RGBA', (1080, 1920), (0, 0, 0, 0))
+    SUB.draw(lay, 'The essence of my report', ss=1)
+    y0, y1 = lay.getbbox()[1], lay.getbbox()[3]
+    under = {'fps': 12, 'frames': {'0': [('his name card', 400, y0 - 20, 600, y0 + 60)]}}
+    clear = {'fps': 12, 'frames': {'0': [('his name card', 400, y0 - 200, 600, y0 - 110)]}}
+    a, b = cover.readable_faults(m, under), cover.readable_faults(m, clear)
+    return len(a) == 1 and not b, f'card under the caption: {len(a)} fault; card clear above it: {len(b)}'
+
+
+@test
 def render_lock():
     """Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now."""
     import film_engine as E
@@ -499,6 +584,88 @@ def every_face_has_a_mouth():
     finally:
         B.mouth = real
     return a == [True, True, None] and b == [False, False, None], f'with mouth: {a}; mouth removed: {b}'
+
+
+@test
+def mouth_name_that_does_not_exist_stops():
+    """Rule 13 (lesson 7, Milburn note 6, Sam 17 Nov: "character 3 has no mouth"): Swindon's "pow" switched between
+    'v:O' and 'v:M', a shape name that does not exist, so half his frames drew no mouth and every face check passed
+    (a face with a mouth slot is not a face with a mouth). mouths.draw now refuses an unknown name for every film;
+    the old 'M' must stop, the fix's 'grin' must draw."""
+    import mouths
+
+    class Pen:
+        def __init__(self):
+            self.n = 0
+
+        def line(self, *a, **k):
+            self.n += 1
+        poly = ell = arc = line
+    stopped = False
+    try:
+        mouths.draw(Pen(), {}, 0, 0, 'M')
+    except ValueError:
+        stopped = True
+    pen = Pen()
+    mouths.draw(pen, {}, 0, 0, 'grin')
+    return stopped and pen.n > 0, f"'M' (Milburn chat 7) stopped: {stopped}; 'grin' drew {pen.n} strokes"
+
+
+@test
+def board_gate_milburn_reverse():
+    """Rule 11 (lesson 7, Milburn note 5, Sam 17 Nov: "the scene composition in scene 4 as proposed is poor"): when the
+    reverse two-shot was built, Milburn's only delivered board held shots 1, 2a and 2b; the other 10 (the reverse 4a,
+    4c, 7a, 7c, 7e among them) were first seen by Sam in the animatic. Fed Milburn's own board record as it stood
+    then, rough.board_gate must refuse those 10 shots by name; with today's record (the second board) it lets them by."""
+    import milburn as M
+    import rough as R
+    real_rec, real_before = R.board_record, R._before_rule
+    full = real_rec('milburn')
+    try:
+        R._before_rule = lambda *a: False
+        R.board_record = lambda *a: full[:1]
+        then = R.board_gate(M, 'milburn')
+        R.board_record = lambda *a: full
+        now = R.board_gate(M, 'milburn')
+    finally:
+        R.board_record, R._before_rule = real_rec, real_before
+    hit = next((f for f in then if 'on no delivered board' in f), '')
+    ok = hit.startswith('10 shot') and '4a' in hit and not any('on no delivered board' in f for f in now)
+    return ok, f'as at chat 6: {hit[:70] or "not refused"}; with the second board: {len(now)} refusals'
+
+
+V7_COMMIT = '3844e0a9'                   # GTA shot 4 version 7 as Sam saw it (21 Nov, chat 22; stills in sam-v7/)
+
+
+@test
+def solid_check_shot4_v7():
+    """Rule 17 (lesson 7; GTA v7 note 3, Sam 21 Nov: "Jason clips through two parts of the car as he moves"): the
+    times of Sam's v7 stills were matched on the v7 strip (77a3eb10 ~1.0 s, 2194502b ~1.5 s); viewchecks.solid_faults
+    on version 7's own code at just those frames must flag Jason through the car (his arm in front of the window
+    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, two frames about 2.
+    Known misses, not in this proof: v7 note 2 (the see-through bonnet, 0.67 s) and note 7 (hydrant water through the
+    cruiser, 3.33-3.67 s) are still passed on those frames (rule_proofs.json, rule 17's miss)."""
+    import subprocess
+    import tempfile
+    root = os.path.dirname(HERE)
+    tmp = tempfile.mkdtemp()
+    try:
+        tar = subprocess.run(['git', 'archive', V7_COMMIT, 'source', 'story'], cwd=root, capture_output=True).stdout
+        if not tar:
+            return False, 'COULD NOT TEST: version 7 is not in this copy\'s history'
+        subprocess.run(['tar', '-x', '-C', tmp], input=tar, check=True)
+        src = os.path.join(tmp, 'source')
+        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks as VC; '
+                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[12, 18], label="v7")))' % src)
+        r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
+    finally:
+        import shutil
+        shutil.rmtree(tmp, ignore_errors=True)
+    lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
+    arm = any('rubbed out' in ln for ln in lines)
+    hips = any('window pillar' in ln for ln in lines)
+    return arm and hips, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the pillar {hips}' + \
+        ('' if r.returncode == 0 else f'; crashed: {r.stderr.strip().splitlines()[-1:]}')
 
 
 # ------------------------------------------------------------------------------------------------ running them
@@ -1612,6 +1779,8 @@ def _finish_fake(tmp, caption=True):
     subprocess.run([finish.FF, '-y', '-loglevel', 'error', '-f', 'lavfi', '-i', 'color=c=0x203040:s=540x960:r=12:d=3',
                     '-f', 'lavfi', '-i', 'sine=frequency=440:sample_rate=48000:duration=3', '-c:v', 'libx264',
                     '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-shortest', clean], check=True)
+    with open(clean + '.readable.json', 'w') as fh:                 # what the render keeps beside it (could-not-test 3)
+        fh.write('{"fps": 12, "frames": {}}')
     m = types.ModuleType('kt_film')
     m.FPS, m.DUR, m.HOOK, m.KEEP_CLEAR = 12, 3.0, ('Hook here', {'y': 880}), []
     if caption:
@@ -2393,6 +2562,20 @@ def facehouse_head_from_photos():
     errs = (max(face), max(hair), abs(crown - hd['crown']))
     ok = errs[0] <= 0.025 and errs[1] <= 0.03 and errs[2] <= 0.04
     return ok, f'face edge off by {errs[0]:.3f}, hair edge {errs[1]:.3f}, crown {errs[2]:.3f} (face heights)'
+
+
+@test
+def dome_not_a_carrot():
+    """Rule 49 (lesson 7, Milburn note 4: Pat McFadden's bald dome passed the likeness test at 62% and Sam saw "an
+    alien carrot man"): facehouse.dome_faults flags Pat's head as chat 5 drew it (dome -0.44, no measured width: the
+    skull 1.9x as tall as its half width, widest at the cheeks) and passes chat 6's fixed head and a head with hair."""
+    import facehouse as FH
+    old = dict(FH.CAST['mcfadden'])
+    old.pop('dome', None)
+    old.pop('dome_wide', None)
+    caught, fixed, hair = FH.dome_faults('mcfadden', old), FH.dome_faults('mcfadden'), FH.dome_faults('walliams')
+    ok = len(caught) == 2 and not fixed and not hair
+    return ok, f'old dome: {len(caught)} faults; fixed dome: {len(fixed)}; Walliams (hair): {len(hair)}'
 
 
 @test

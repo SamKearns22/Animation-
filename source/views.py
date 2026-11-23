@@ -1170,6 +1170,9 @@ def plain_head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
 
 
 # ------------------------------------------------------------------------------------------------ one person
+TAP = [None]      # cover.py sets it while recording (each part of a person as its own layer); None: no cost
+
+
 def person(img, cam, x, y, s, sp, t, yaw, joints=None, head_yaw=None, tilt=None):
     """Draw someone facing `yaw` degrees (snapped to the nearest drawn view), neck base at world (x, y), scale s,
     in the pose `joints` (standing() if none). Returns the pose's 2D points (person units) for props and checks.
@@ -1229,6 +1232,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         #  showed a hand on his back). A hanging arm (the hand out beside the hips, not in front of the body) is not
         #  hidden: drawn after the back, so it joins the shoulder with one outline as from the front (Sam, GTA chat 9:
         #  "a line bisecting his arm and shoulder" from the back: the back's outline was drawn over the arm)
+    if TAP[0]:                                    # cover.py (could-not-test, 22 Nov): each part of him recorded as drawn
+        TAP[0]('start', img, sp=sp, s=s, cam=cam, depth=depth, j2=j2, L=L0)
     if seated:
         (j.get('chair_draw') or chair)(p, view, j2, sp, under=True)
     for draw in j.get('pre', []):                 # set pieces beyond him in this view (sitting.py: the far side of a desk)
@@ -1307,6 +1312,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     for sd in arms_far:
         if sd in lap_arms:
             arm(p, j2, sd, sp)
+    if TAP[0]:
+        TAP[0]('mid', img)
     for draw in j.get('mid', []):                 # set pieces nearer than his body but under his arms (sitting.py: a desk
         draw(p, j2, view)                          # top his forearms rest on, the near armrest)
     if view in j.get('legs_over_views', ('front', 'three', 'side')):   # legs lying on a desk top (feet up; a thigh along a desk he perches
@@ -1365,7 +1372,11 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         hair_was = None
     limbs.HEAD[0] += 1
     try:
+        if TAP[0]:
+            TAP[0]('head', img)
         head_view(img, head_pen, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])
+        if TAP[0]:
+            TAP[0]('head_end', img)
     finally:
         limbs.HEAD[0] -= 1
     head_paint = None
