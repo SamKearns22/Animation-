@@ -408,12 +408,14 @@ def quick_faults(films=None):
     return out
 
 
-def end_stamp(rec):
-    """`end` ran in this chat: one line in notes/logs/handover-end.log, so the next chat's `start` can tell."""
+def end_stamp(rec, stops=()):
+    """`end` ran in this chat: one line in notes/logs/handover-end.log, so the next chat's `start` can tell. With
+    closed faults still open (lesson 7 step 3) the line says REFUSED and the next chat's start stops on it."""
     os.makedirs(os.path.join(ROOT, 'notes', 'logs'), exist_ok=True)
     with open(os.path.join(ROOT, 'notes', 'logs', 'handover-end.log'), 'a', encoding='utf-8') as f:
         sid = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '').split('_')[-1] or os.path.basename(rec or '-')[:8]
-        f.write(f'{datetime.now(timezone.utc).isoformat(timespec="minutes")}\t{sid}\n')
+        mark = f'REFUSED {len(stops)}: ' + ' | '.join(x[6:90] for x in stops) + '\t' if stops else ''
+        f.write(f'{datetime.now(timezone.utc).isoformat(timespec="minutes")}\t{mark}{sid}\n')
 
 
 def finder_faults(film, rec=None):
@@ -439,8 +441,28 @@ def unrouted_faults(rec):
     (stop_hook_active) is logged by propose.py; the handover names each one so it is routed, not forgotten."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import propose
-    return ['UNROUTED: ' + ln + ' (put it through propose.py new/pack/judge/record, or tell Sam it went unjudged)'
-            for ln in propose.unrouted_for(os.path.basename(rec or '')[:8])] if rec else []
+    chat = os.path.basename(rec or '')[:8]
+    return ['STOP: UNROUTED: ' + ln + f' (route it, then `python3 source/propose.py settle {chat} "routed: NAME"`, or '
+            f'`... settle {chat} "false block: why"`; naming it in the notes does not clear it: lesson 7 step 3)'
+            for ln in propose.unrouted_for(chat)] if rec else []
+
+
+def rule_faults():
+    """Lesson 7 step 2 (Sam's option 1): no rule without a working check. A new rule (rulebook row or CLAUDE.md
+    rule) with no saved bad example in source/rule_proofs.json, a "by hand" status: closed (STOP), never
+    named away. A proof whose kittest failed is a plain RULE line (the watcher's broken list: fix or name)."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import ruleproofs
+    return [('RULE: ' if ' is BROKEN: ' in f else 'STOP: RULE: ') + f.split('|', 1)[1]   # a broken proof: the watcher's
+            for f in ruleproofs.faults()]                                                  # list (fix or name); a new rule with no example: closed
+
+
+def _safe(name, fn):
+    """Lesson 7 step 3, fail closed: a handover check that cannot run stops the handover; it is never skipped."""
+    try:
+        return fn()
+    except Exception as e:
+        return [f'STOP: CHECK COULD NOT RUN: {name} ({type(e).__name__}: {e}); fix the check, then run end again']
 
 
 def branch_faults(film, notes=None):
@@ -663,6 +685,10 @@ def sentence_faults():
 def report(faults, where):
     for f in faults:
         print(f)
+    stops = [f for f in faults if f.startswith('STOP:')]
+    if stops:
+        print(f'handover REFUSED: {len(stops)} closed fault(s) (lines starting STOP:). These are never cleared by naming '
+              'them in the notes: fix each, then run end again (lesson 7 step 3, fail closed).')
     print(f'Checks: handover check {where}: ' + (f'{len(faults)} to settle before handing over (each: fix, '
                                                f'write it in the notes, or answer it)' if faults else 'clean'))
     return 1 if faults else 0
@@ -774,13 +800,18 @@ def main(argv):
             sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
             import ledger
             film = ledger.film_of(rec)
-        return report(quick_faults() + _run(turns(rec), film, opt('--notes')) + model_faults(film, opt('--notes')) + draft_faults(film, opt('--notes'))
-                      + finder_faults(film, rec) + unrouted_faults(rec) + branch_faults(film, opt('--notes'))
-                      + sentence_faults() + freeze_faults() + cost_faults(film, opt('--notes'))
-                      + size_faults(film, opt('--notes')) + ledger_faults(film, rec) + push_faults(rec) + dearest_faults()
-                      + tag_faults(film, opt('--notes')) + record_faults(rec)
-                      + (end_stamp(rec) or []),
-                      f'(end of chat, {film})')
+        nf = opt('--notes')
+        checks = [('quick', quick_faults), ('notes', lambda: _run(turns(rec), film, nf)),
+                  ('model', lambda: model_faults(film, nf)), ('draft', lambda: draft_faults(film, nf)),
+                  ('finder', lambda: finder_faults(film, rec)), ('unrouted', lambda: unrouted_faults(rec)),
+                  ('branch', lambda: branch_faults(film, nf)), ('sentence', sentence_faults), ('freeze', freeze_faults),
+                  ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
+                  ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
+                  ('dearest', dearest_faults), ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
+                  ('rule', rule_faults)]
+        faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
+        end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
+        return report(faults, f'(end of chat, {film})')
     if cmd == 'start':
         tail = pos[0].split('_')[-1][-8:].lower()
         p = os.path.join(LOGDIR, f'{tail}.md')
@@ -802,7 +833,11 @@ def main(argv):
                   'the functions it touches); never grep or sed a film file first')
         ends = os.path.join(ROOT, 'notes', 'logs', 'handover-end.log')
         parent = pos[0].split('_')[-1]
-        if not (os.path.exists(ends) and any(ln.split('\t')[-1].strip() == parent for ln in open(ends, encoding='utf-8'))):
+        mine = [ln for ln in (open(ends, encoding='utf-8') if os.path.exists(ends) else []) if ln.split('\t')[-1].strip() == parent]
+        if mine and '\tREFUSED ' in mine[-1]:                   # lesson 7 step 3: the last chat handed over closed
+            print('STOP: the last chat handed over with closed faults still open (' + mine[-1].split('\t')[1] + '): '
+                  'settle them first (handover.py end shows how); no other work until then')
+        if not mine:
             print(f'handover: the last chat ({pos[0][-8:]}) has no `handover.py end` on record: run '
                   '`python3 source/handover.py end --film FILM` now and settle what it lists before new work')
         if not os.path.exists(p):

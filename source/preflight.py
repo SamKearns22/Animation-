@@ -282,6 +282,25 @@ def gates(film, name):
     return out
 
 
+def acting_shot_faults(text, shots):
+    """Rule 74 (Sam, 20 Nov, GTA shot 4: "no acting notes anywhere"): every shot gets acting rows, with or without
+    lines. A shot counts as covered when an acting section's heading names it ("Shot 4 acting rows") or an acting
+    row's "shot and why" cell starts with its number (or a range: "5-8"). shots: the shot labels with someone in them."""
+    covered, cells_all = set(), []
+    for head, body in re.findall(r'^##+ *([^\n]*acting[^\n]*)$(.*?)(?=^## |\Z)', text, re.M | re.S | re.I):
+        cells = [head] + [ln.strip().strip('|').split('|')[2] for ln in body.splitlines()
+                          if ln.strip().startswith('|') and ln.count('|') >= 4]
+        cells_all += cells
+        for c in cells:
+            for a, b in re.findall(r'(?:^\s*|[Ss]hots? )(\d+)(?![\d.])(?:\s*[-\u2013]\s*(\d+)(?![\d.]))?', c):
+                covered |= {str(n) for n in range(int(a), int(b or a) + 1)}
+    alltext = '\n'.join(cells_all)
+    covered |= {str(s) for s in shots if not str(s).isdigit() and
+                re.search(r'(?<![\w.])' + re.escape(str(s)) + r'(?![\w.])', alltext, re.I)}
+    return [f'rule 74: shot {s} has no acting rows (every shot, with or without lines: each person, beat by beat; '
+            'guides/satire.md "The acting list")' for s in shots if str(s) not in covered]
+
+
 def gate_warnings(film, name, has):
     """Job J: by-hand rules turned into checks, printed (not yet refusing: Sam's numbers decide): rule 74 (an acting
     list row per line), rule 8 (risky moves rehearsed: a "Rehearsal clips sent:" line, or "none: why"), rule 61 (the
@@ -294,6 +313,8 @@ def gate_warnings(film, name, has):
         rows = [ln for ln in (m.group(2).splitlines() if m else []) if ln.strip().startswith('|')][2:]
         if not rows:
             out.append('no acting list in the notes (rule 74: one row per line; guides/satire.md "The acting list")')
+    if getattr(film, 'SHOT_CAST', None):                  # rule 74 since 20 Nov: every shot, lines or not
+        out += acting_shot_faults(text, [k for k, v in film.SHOT_CAST.items() if v])
     out += head_life_faults(film)
     import rough                                            # rule 11: every new thing on a rough before it is built
     out += rough.gate_faults(name)
@@ -414,6 +435,36 @@ def _text_only(film, problems, end, fps):
     print('(no pass stamp: the render still needs the full pre-flight)')
 
 
+# could-not-test (23 Nov): the stop lands with the cover, never before it. Films started before it whose drawing the
+# cover cannot yet see keep COULD NOT TEST as an ordinary fault until their own chat gives their people a depth
+# (cover.person / cover.thing, as satire_template does); then the name comes off this list.
+COVER_BEFORE = {'grand-theft-autism': 'Grand Theft Autism was started before the could-not-test stop and draws no '
+                                      'places views: its next chat wraps its people in cover.person(img, who, depth) '
+                                      '(cover.py) and takes it off preflight.COVER_BEFORE; until then COULD NOT TEST '
+                                      'is a fault to fix or name, as before'}
+
+
+def untested_waived(film, name, untested):
+    """could-not-test: the COULD NOT TEST lines the notes' "## Exceptions" excuses: a row for the check (clipcheck)
+    whose who is * / could not test / words in the line (a shot: 'shot 2a'), whose reason carries Sam's Y, and whose
+    looked-at column is filled. Nothing else (no flag, no code comment) lets a COULD NOT TEST by."""
+    import waivers
+    path = notes_path(film, name)
+    table = waivers.rows(open(path).read()) if os.path.exists(path) else []
+    out = []
+    for x in untested:
+        for c, w, why, looked in table:
+            if c.strip('` ').lower() not in ('clipcheck', 'could not test') or not looked.strip():
+                continue
+            if not re.search(r"\bSam\b[^|]*\bY\b", why):
+                continue
+            ww = w.strip('`* ').lower()
+            if ww in ('', 'could not test', 'all') or ww in x.lower():
+                out.append(x)
+                break
+    return out
+
+
 def main():
     name, out = sys.argv[1], sys.argv[2]
     os.makedirs(out, exist_ok=True)
@@ -484,9 +535,27 @@ def main():
     if hasattr(film, 'scene'):
         shared += collisions.check(film)        # rules 5, 6, 12, 13: nothing passes through anything; nothing pops in;
         roster = collisions.LAST_ROSTER         # hands on what they touch, props held, resting hands clear
-    if people and not any(hasattr(film, a) for a in ('solids', 'layers')):   # Job C 5 (Sam, 13 Nov): Blessed's
-        shared.append('clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t), so nothing '
-                      'checks that no one passes through anyone or teleports (clipcheck.py; rule 19)')   # in silence
+    untested = []                               # could-not-test (Sam's pick 1, 22 Nov): no flag passes these
+    if people:                                  # cover by default: the drawing itself recorded, every places piece
+        import cover                            # and each person's body, arms and head at their own depth (cover.py)
+        own = any(hasattr(film, a) for a in ('solids', 'layers'))
+        if cover.picture_fn(film) is not None:
+            cf, cu = cover.cover_faults(film, clipcheck._times(film, 3)[0])
+            shared += cf
+            if not own:                         # (the film's own solids or layers cover what the recording could not)
+                untested += cu
+        elif not own:                           # Job C 5 (Sam, 13 Nov): Blessed's, in silence
+            untested.append('clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t) and no '
+                            'picture(t) to record, so nothing checks that no one passes through anyone (rule 19)')
+    if untested and name.replace('_', '-') in COVER_BEFORE:   # the stop never lands before the cover can see the film
+        print('WARNING: ' + COVER_BEFORE[name.replace('_', '-')])
+        shared += untested                      # (a fault as before: fixed or named; not yet the stop)
+        untested = []
+    waived = untested_waived(film, name, untested)
+    for x in waived:
+        print('exception (Sam\'s Y in the notes): ' + x)
+    untested = [x for x in untested if x not in waived]
+    shared += untested
     if any(hasattr(film, a) for a in ('solids', 'layers', 'IN_SHOT', 'draw_order')):
         shared += clipcheck.run(film)           # passes through, teleports, drawing order, flips (rule 57)
     if runs['collisions and pop-ins (rules 5, 6)'] and not any(hasattr(film, a) for a in ('scene', 'solids')):
@@ -612,7 +681,7 @@ def main():
         print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
     if not audit:
         import film_engine                      # rule 59: the render checks this stamp before an animatic or final
-        film_engine.write_pass(name, len(problems), pictures=pictures)
+        film_engine.write_pass(name, len(problems), pictures=pictures, untested=untested)
     sys.exit(1 if problems else 0)
 
 

@@ -1,0 +1,217 @@
+<title>Rules That Prove Themselves</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Space+Grotesk:wght@500;700&display=swap">
+<style>
+/* Layout: one narrow reading column; each rule a block with four labelled lines (before / now / difference / from now on) */
+:root {
+  --bg: #f3f5f7; --panel: #ffffff; --fg: #1b2430; --muted: #5a6675; --line: #d9dfe6;
+  --accent: #1f6f8b; --good: #1d7a46; --warn: #a86400; --bad: #b3261e;
+  --good-bg: #e5f3ea; --warn-bg: #fbf0dc; --bad-bg: #fbe6e4;
+  --display: "Space Grotesk", "Segoe UI", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #12171d; --panel: #1a2129; --fg: #e4e9ef; --muted: #9aa6b4; --line: #2c3743;
+  --accent: #5fb4d3; --good: #6fcf97; --warn: #f0b45c; --bad: #f28b82;
+  --good-bg: #183026; --warn-bg: #33270f; --bad-bg: #3a1c1a; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #12171d; --panel: #1a2129; --fg: #e4e9ef; --muted: #9aa6b4; --line: #2c3743;
+  --accent: #5fb4d3; --good: #6fcf97; --warn: #f0b45c; --bad: #f28b82;
+  --good-bg: #183026; --warn-bg: #33270f; --bad-bg: #3a1c1a; color-scheme: dark }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 17px; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 24px 48px; }
+main { max-width: 680px; margin: 0 auto; display: grid; gap: 28px; }
+h1, h2 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.2; }
+h1 { font-size: 1.9rem; }
+h2 { font-size: 1.3rem; padding-top: 8px; border-top: 2px solid var(--line); }
+p { margin: 0; }
+.sub { color: var(--muted); }
+section { display: grid; gap: 14px; }
+.nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; }
+.num { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 12px; }
+.num b { display: block; font-family: var(--display); font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+.num span { color: var(--muted); font-size: .9rem; }
+.rule { background: var(--panel); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; display: grid; gap: 8px; }
+.rule h3 { font-family: var(--display); font-size: 1.05rem; margin: 0; display: flex; gap: 8px; flex-wrap: wrap; align-items: baseline; }
+.tag { font-family: var(--body); font-size: .75rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; padding: 2px 8px; border-radius: 99px; }
+.ok { color: var(--good); background: var(--good-bg); }
+.part { color: var(--warn); background: var(--warn-bg); }
+.no { color: var(--bad); background: var(--bad-bg); }
+dl { margin: 0; display: grid; gap: 6px; }
+dt { font-size: .78rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--accent); }
+dd { margin: 0 0 4px; }
+ol.q { margin: 0; padding-left: 1.3em; display: grid; gap: 12px; }
+.quote { border-left: 3px solid var(--accent); padding-left: 12px; color: var(--fg); }
+ul { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+</style>
+
+<main>
+<header style="display:grid;gap:10px">
+  <h1>Rules that prove themselves</h1>
+  <p class="sub">Report on lesson 7, "no rule without a working check" (your option 1). Chain A, chats 1 to 3, 22–23 Nov. Your ask: "report back on all changes to rules, what difference you have made, and how it should behave in the future."</p>
+</header>
+
+<section>
+  <h2>The short version</h2>
+  <p>Before: a rule counted as soon as it was written. Nobody knew whether its check had ever caught anything. Now a rule only counts when a test has shown its check catching a real past mistake (one of your notes, a still you marked, a message). A rule whose check stops working shows up as broken at the start of the next chat. A new rule written without a past mistake to prove it is refused at the handover.</p>
+  <div class="nums">
+    <div class="num"><b>42 → 37</b><span>rules proven on a past mistake. The new count is lower because every proof was re-checked strictly; 9 more are partly proven</span></div>
+    <div class="num"><b>4 → 10</b><span>of the 38 notes you gave that a rule should have stopped, now caught by a test on that exact mistake</span></div>
+    <div class="num"><b>26</b><span>rules that can't have a working check yet (questions below)</span></div>
+  </div>
+  <p class="sub">The real measure is fewer notes from you. That can't be measured until the next film ends. Step 1's baseline: 38 of your 65 notes on Milburn and Grand Theft Autism were faults a rule should have stopped.</p>
+</section>
+
+<section>
+  <h2>How the rules work now</h2>
+
+  <div class="rule">
+    <h3>One list of every rule, each with its proof <span class="tag ok">new</span></h3>
+    <dl>
+      <dt>Before</dt><dd>The rulebook marked 12 rules "by hand" and 24 with no check at all. Nothing showed which checks had ever caught a mistake. Step 1 counted: 61 of 103 never had.</dd>
+      <dt>Now</dt><dd>All 103 rules are in one list. Each is marked proven, partly proven, judged by the fresh-eye judge, next to build, waiting on another build, or can't yet. "By hand" is no longer allowed as a status.</dd>
+      <dt>Difference</dt><dd>Every chat now opens with one line: how many rules are proven, and the next three worst. This morning that line caught four proofs marked broken (captions, the 1.1× speed-up, the cost audit). I re-ran all four and they pass.</dd>
+      <dt>From now on</dt><dd>When a proof stops catching its mistake, the next chat sees it as broken and fixes it first.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>No new rule without its proof <span class="tag ok">new</span></h3>
+    <dl>
+      <dt>Before</dt><dd>A rule could be written and never tested.</dd>
+      <dt>Now</dt><dd>A new rule must come with a saved past mistake and a test that catches it, or the handover is refused. This applies to new rulebook rows and new rules in my instructions file alike.</dd>
+      <dt>Difference</dt><dd>Not measured yet. No new rule has been added since this went in. Your answer to question 1 below will be the first real test.</dd>
+      <dt>From now on</dt><dd>Each rule you approve arrives with its proof in the same save.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>Changes put to you can't slip through <span class="tag ok">changed</span></h3>
+    <dl>
+      <dt>Before</dt><dd>If the guard on the proposal route stopped a message twice, the second time it let it through and only wrote it on a list. That happened 39 times in one week.</dd>
+      <dt>Now</dt><dd>A let-through blocks the handover and every animatic and final until it has been routed properly or shown to be a false alarm. Writing "noted" no longer clears it.</dd>
+      <dt>Difference</dt><dd>It caught one straight away: an out-of-date judgement on a staging picture in the other lesson chain, which that chain has to settle before its next animatic. The weekly count will be measured at the next film's end.</dd>
+      <dt>From now on</dt><dd>Zero unsettled let-throughs at any handover.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>Handover check: faults can't be "written in the notes" away <span class="tag ok">changed</span></h3>
+    <dl>
+      <dt>Before</dt><dd>Any fault the end-of-chat check listed could be cleared by writing it in the notes.</dd>
+      <dt>Now</dt><dd>Serious faults are marked STOP and can only be cleared by fixing them. A check that crashes counts as a stop, not as a skipped line. If a chat hands over with a stop still open, the next chat refuses to start other work.</dd>
+      <dt>Difference</dt><dd>It worked this morning: this chat stopped on four stale "broken" lines and cleared them before doing anything else.</dd>
+      <dt>From now on</dt><dd>As now.</dd>
+    </dl>
+  </div>
+</section>
+
+<section>
+  <h2>Rules now proven on your own notes</h2>
+
+  <div class="rule">
+    <h3>74 · An acting plan for every shot <span class="tag ok">proven</span></h3>
+    <dl>
+      <dt>Before</dt><dd>The check asked for one acting row per spoken line. Shot 4 of Grand Theft Autism has no lines, so it needed none. Your note: "At no point do our cast display any acting notes."</dd>
+      <dt>Now</dt><dd>It asks for acting rows for every shot with anyone in it, which is what the rule has said since 20 Nov.</dd>
+      <dt>Difference</dt><dd>Your shot 4 note would have been caught before you saw it. Tested on the film's notes from before and after the fix.</dd>
+      <dt>From now on</dt><dd>Refused on new films, a warning on old ones. Whether the acting itself reads well (Andy reading as surprised instead of cross) is still the judge's job.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>49 · Famous faces pass the likeness test <span class="tag ok">proven</span></h3>
+    <dl>
+      <dt>Before</dt><dd>Pat McFadden's head scored 62% on likeness and passed, but you saw "an alien carrot man". The likeness score looks at the face, not the top of the head.</dd>
+      <dt>Now</dt><dd>The face tool also measures a bald head's skull. A real skull is about a half-circle, widest at the temples. Pat's old dome was nearly twice as tall as it was wide, and widest down at the cheeks. It now fails twice, and the picking sheet shows it in red whatever the likeness score.</dd>
+      <dt>Difference</dt><dd>Your note 4 on Milburn would have been caught before you saw it. His fixed head passes, and so do heads with hair.</dd>
+      <dt>From now on</dt><dd>Every bald famous head is measured this way before the cast sheet.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>13 · Every check works on every film and every person <span class="tag ok">proven</span></h3>
+    <dl>
+      <dt>Before</dt><dd>Swindon's "pow" switched to a mouth shape that doesn't exist, so half his frames had no mouth. The face check only asked whether there was a mouth, and passed it. Your note: "character 3 has no mouth."</dd>
+      <dt>Now</dt><dd>Any made-up mouth shape stops the drawing, on every film.</dd>
+      <dt>Difference</dt><dd>Your note 6 on Milburn would have been caught before you saw it. Still open: the fix for everyone being bald lived in one film's code and didn't carry over to the next.</dd>
+      <dt>From now on</dt><dd>As now. The baldness case is the next proof for this rule.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>11 · Every shot on the board before anything moves <span class="tag ok">proven</span></h3>
+    <dl>
+      <dt>Before</dt><dd>When the reverse two-shot was built, the only board you had seen held shots 1, 2a and 2b. You first saw the other 10 in the animatic. Your note: "the scene composition in scene 4 as proposed is poor."</dd>
+      <dt>Now</dt><dd>Tested on Milburn's real board record: the gate refuses those 10 shots by name, the reverse shots among them.</dd>
+      <dt>Difference</dt><dd>Your note 5 on Milburn would have been stopped at the board, before anything was built.</dd>
+      <dt>From now on</dt><dd>As now.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>19 · "Couldn't look" stops the animatic <span class="tag ok">proven</span></h3>
+    <dl>
+      <dt>Before</dt><dd>The clipping check said it couldn't look at Milburn, and that line was carried over as an old warning. The name card then clipped twice.</dd>
+      <dt>Now</dt><dd>Built by the could-not-test chat. "Couldn't look" refuses the animatic, the final and the finishing step. "I've told Sam" no longer gets past it; only a line in the notes with your Y does.</dd>
+      <dt>Difference</dt><dd>Replayed on Milburn: it catches every name-card fault, two rounds before you spotted it, with no false alarms.</dd>
+      <dt>From now on</dt><dd>As now.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>17 · Nearer things hide what's behind them <span class="tag part">partly</span></h3>
+    <dl>
+      <dt>Before</dt><dd>On version 7 of shot 4 you saw three faults: you could see through the bonnet to Jason, Jason clipped through two parts of the car, and the hydrant water went through the police car.</dd>
+      <dt>Now</dt><dd>I found the moment each of your stills comes from (the whole shot takes over 8 minutes to check; your frames take 2). Run on version 7's own frames, the check catches Jason through the car: his arm in front of the window frame that was rubbing it out, and his hips through the window post.</dd>
+      <dt>Difference</dt><dd>Your note 3 on version 7 would be caught. It still passes the see-through bonnet and the water through the car. I won't count those as caught.</dd>
+      <dt>From now on</dt><dd>To catch those two, the check has to learn to test the drawn outline of a body, not just points along its bones (as it already does for arms), and water and smoke each need a distance from the camera so they can be hidden properly.</dd>
+    </dl>
+  </div>
+
+  <div class="rule" id="r41">
+    <h3>41 · Bodies and hands from tested poses, checked every frame <span class="tag part">partly</span></h3>
+    <dl>
+      <dt>Before</dt><dd>On version 4: "Jason becomes a monstrosity", his arms come out of his back, his legs are flat inside the door frame, and "the horror show in reverse".</dd>
+      <dt>Now</dt><dd>Run on version 4 at the moments of your stills (frames 3c, 5a–5c and 6b, found by matching them to the saved clip): arms out of the back, crossed arms and the gun off its target are caught. The flat legs in the door frame are only stopped for the arms in the same frames, not for the legs.</dd>
+      <dt>Difference</dt><dd>Not caught: the curled-up "monstrosity" (frame 3c) and the reverse climb (frame 6b) still pass with no fault on Jason. I'm leaving this rule marked partly.</dd>
+      <dt>From now on</dt><dd>The body check has to learn what "limbs curled round the body" and "a leg drawn flat in a door frame" look like in the drawing. Those three moments become its test. It's first on the list of rules to prove.</dd>
+    </dl>
+  </div>
+
+  <div class="rule">
+    <h3>89 · A fresh-eye critique before anything is sent <span class="tag part">partly</span></h3>
+    <dl>
+      <dt>Before</dt><dd>The goth's hair reached you twice before any fresh-eye look ("crest of an alien monster").</dd>
+      <dt>Now</dt><dd>Since 20 Nov a clip or animatic can't be sent to you without a critique on record. That's now proven by a test.</dd>
+      <dt>Difference</dt><dd>The goth's clip would be refused. Her still would not: pictures are not checked at the send, only videos.</dd>
+      <dt>From now on</dt><dd>Checking new stills of a film at the send would change every picture you get, so it goes through the proposal route to you first. Not built.</dd>
+    </dl>
+  </div>
+</section>
+
+<section>
+  <h2>Still waiting on other work</h2>
+  <ul>
+    <li><b>5 · A bump test on every frame.</b> The new solid-body tool is built and catches the body through the car on old poses, but nothing switches it on yet. Its proof lands when it's wired in.</li>
+    <li><b>30 · A repeat note means a check is missing.</b> The check that counts your notes works again and flags the gun note as a repeat. Next step: every repeat must name the check that missed it the first time.</li>
+  </ul>
+</section>
+
+<section>
+  <h2>Questions</h2>
+  <ol class="q">
+    <li><b>Write this rule in my instructions file? (Y/N, my pick Y)</b>
+      <p class="quote">"No rule without a working check (Sam's Y, 22 Nov): a rule counts only when its check has caught a saved example of its own fault (a still, my words or a message); "by hand" is not a check. A new rule comes with its example or the handover is refused; a rule whose check can't be built yet is listed for me with what must be learned first."</p>
+      <p class="sub">It goes under "Rules are permanent", with its proof saved at the same time.</p></li>
+    <li><b>26 rules can't have a working check yet. Which should the project learn first?</b> (my pick 2a)
+      <ul>
+        <li><b>2a</b> · A message checker that reads each message to you before it goes (14 rules: plain words, Done / Needs you / Next, Lost and Added lines…). This is the plain-check proposal, option 1, which already needs your Y.</li>
+        <li><b>2b</b> · A list of events for every film (each hit, shot or crash, who must react and by when), plus a check that the frames show the reaction (2 rules: physical cause and effect, rehearsing risky moves; your notes on the cop not being hit, a different cop, the hydrant not struck).</li>
+        <li><b>2c</b> · A way to check how I work, not the film: reuse before building, research before trying something difficult, one check per round (9 rules).</li>
+        <li><b>2d</b> · Marks fixed to a surface in 3D, so blood on a windscreen turns with it (1 rule).</li>
+      </ul></li>
+  </ol>
+</section>
+</main>

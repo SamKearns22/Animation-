@@ -146,6 +146,9 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Next: on his answer, this chat or the one it opens, Opus high: build the picked option, measuring first.
 - Read: notes/proposals/fast-climb.md (verdict); notes/bench/learn-step.md "Chat 42".
 - Open rule requests: grey-clip body-check (Sam HOLDS: do not raise); held-object check; house-look lock; "pieces".
+- Found by chain A chat 3 (23 Nov, rule 17 proof; not fixed, film-side is yours): viewchecks.solid_faults on today's
+  shot4 at frames 8/12/16/18/40/44 flags footL through the tulip's bonnet (1.00 s, 2 frames) and hipR through the
+  window pillar (1.33 s); people at 3.33 s drawn ~20% short. Check at your next body pass (fix or name).
 - For Claude: `_climb` C1b lift_gun -0.03, C2 pelvis z -0.02; store bundle not refreshed; self_cross "depth" is the
   gap to the nearest OTHER part (a fold in one limb reads ~12 cm). No page.py: bench code, no Sam note. Two "Where
   things stand" on purpose; CLAUDE.md sentence changes are Sam's own (2ebb48bf, 60e25406); branches
