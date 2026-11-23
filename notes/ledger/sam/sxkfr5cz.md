@@ -7,3 +7,7 @@ Notes on recent animatic. Hold
 Jason has a gap throughout the film. His body ends just above where the car should cut him off. This is in almost all shots.
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-23T11:36:29
+Jason should be in the car here but his lower body is clipping through the door. He shouldn't be able to come through the car door. I have also circled some broken cube effects in yellow.
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
