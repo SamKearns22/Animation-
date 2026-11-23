@@ -12449,9 +12449,689 @@
    "model": "opus",
    "stage": "build",
    "round": null,
-   "cost": 1.78,
+   "cost": 2.1,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "src": "estimate",
+   "sid": "session_01U3pKR2CR28qdUtk2Z9Y6DN",
+   "steps": 97,
+   "hist_k": 230,
+   "kinds": {
+    "tool search": 30.4,
+    "whole-file .py read": 0.5,
+    "other": 69.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 68,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 30
+   },
+   "split": {
+    "usd": 5.8617,
+    "total": 5.8617,
+    "floor_k": 84,
+    "blocks": {
+     "Claude's words": 28.1,
+     "start-up floor": 27.8,
+     "carried history": 24.2,
+     "new writes": 19.9
+    },
+    "origins": {
+     "Claude's words": 45.3,
+     "start-up floor": 27.8,
+     "result: tool search": 16.5,
+     "result: other": 5.3,
+     "messages and reminders": 3.5,
+     "Claude's edits": 1.3,
+     "result: whole-file .py read": 0.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 27.8,
+     "thinking": 20.0,
+     "writing code": 11.6,
+     "reading notes": 8.3,
+     "commands": 6.3,
+     "start-up and handover tools": 6.0,
+     "writing notes": 5.5,
+     "reading chat records": 3.7,
+     "messages and reminders": 3.5,
+     "reading kit code": 2.3,
+     "messages to Sam": 1.8,
+     "helper and chat prompts": 1.5,
+     "running checks and tools": 0.9,
+     "other commands": 0.3,
+     "git and saving": 0.2,
+     "reading guides": 0.1,
+     "helper results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 32,
+    "work_pct": 0.48,
+    "reads": [
+     [
+      "source/propose.py",
+      3.9,
+      0.0913
+     ],
+     [
+      "notes/proposals/guard-film-questions.md",
+      2.6,
+      0.0624
+     ],
+     [
+      "notes/proposals/unrouted.md",
+      1.0,
+      0.0226
+     ],
+     [
+      "notes/proposals/precheck-reply.md",
+      0.9,
+      0.0185
+     ],
+     [
+      "notes/ledger/sam/kpp1tyq4.md",
+      0.4,
+      0.0082
+     ],
+     [
+      "notes/proposals/guard-holes/probe.py",
+      0.4,
+      0.0079
+     ],
+     [
+      ".claude/settings.json",
+      0.3,
+      0.0067
+     ],
+     [
+      "notes/ledger/sam/gr9hlufs.md",
+      0.2,
+      0.0046
+     ],
+     [
+      "guides/job-packs.md",
+      0.2,
+      0.0041
+     ]
+    ],
+    "base_pct": 25.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 3,
+     "other": 9,
+     "film notes": 20,
+     "shared:propose.py": 11,
+     "shared:ledger.py": 2,
+     "guides": 3,
+     "shared:watcher.py": 2,
+     "shared:kittests.py": 11,
+     "shared:ruleproofs.py": 5,
+     "shared:override.py": 1,
+     "shared:hookran.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status | head -3 && git log --oneline -3 && python3 source/handover.py start",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git branch -a | head; git fetch origin claude/create-claude-md-oe8z4g 2>&1 | tai",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "",
+      "git checkout -q claude/create-claude-md-oe8z4g && git merge -q --ff-only origin/",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --ff-only ori",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/proposals/guard-film-questions.md",
+      "cat notes/proposals/guard-film-questions.md | wc -w && sed -n '/Final version/,$",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposals/guard-film-questions.md notes/proposal-route.md notes/proposals/",
+      "guard-film-questions",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "guides/job-packs.md notes/proposals/lessons-report.md",
+      "^#",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "film notes",
+      "notes/proposals/lessons-report.md",
+      "sed -n '1,6p;47,200p' notes/proposals/lessons-report.md",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "unrouted\\|def reply_faults\\|def hook\\|ASK_RE\\|CHANGE_RE\\|ROUTINE_RE\\|def questio",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 545,700p source/propose.py; sed -n 745,790p source/propose.py",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md notes/logs notes/ledger /.claude/projects/",
+      "^- ",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:ledger.py",
+      "source/*.py source/ledger.py source/handover.py notes/ledger/sam",
+      "chat8\\|CHAT8\\|transcript",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/ledger/sam/gr9hlufs.md notes/ledger/*.json",
+      "e992c7dc\\|13a4cda5",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "guides",
+      "source/*.py .claude/settings.json guides/film-quality-rules.md",
+      "never twice\\|changed line\\|already seen\\|already read\\|Sam has seen",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "guides",
+      "notes/ledger/sam/*.md",
+      "twice\\|3 times\\|double",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "film notes",
+      "notes/ledger/sam/kpp1tyq4.md",
+      "twice",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "/root/.claude/projects/-home-user-Animation-/bd54de71-624e-556a-9c6a-ee55823cd2c",
+      "cd /tmp && F=/root/.claude/projects/-home-user-Animation-/bd54de71-624e-556a-9c6",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "notes/proposals/*.md",
+      "before sending\\|before the text shows\\|pre-send\\|presend",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "film notes",
+      "notes/proposals/precheck-reply.md",
+      "head -5 notes/proposals/precheck-reply.md; sed -n '/## Final version/,/## For Sa",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "film notes",
+      "notes/proposals/precheck-reply.md notes/*.md story/*.md",
+      "precheck-reply",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "film notes",
+      "notes/logs notes/ledger/*.json notes/proposals/unrouted.md",
+      "git ls-files notes/logs | head -3; python3 - <<'EOF' import json,glob,re m={} fo",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "notes/proposals/guard-film-questions/ notes/proposals/guard-holes/probe.py",
+      "ls notes/proposals/guard-film-questions/ && sed -n 1,40p notes/proposals/guard-h",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "film notes",
+      "notes/proposals/precheck-reply.md",
+      "sed -n '/## Facts/,/## Record/p' notes/proposals/precheck-reply.md",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "PROMISES",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def kt_proposal_route_hook\\|^def kt_override_word\\|^def kt_kittest_red_twice\\|^",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "proposal_route_hook\\|override_word\\|kittest_red_twice\\|move_to_shared_catches",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 2935,3040p source/kittests.py",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "^def _p\\|^PROPS\\|^def _read\\|^def critiqued",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 785,800p source/propose.py",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/unrouted.md notes/proposals/guard-blocks.jsonl",
+      "python3 - <<'EOF' p='source/propose.py'; s=open(p).read() old=\"\"\" stop_hook_acti",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PLAIN_OPT",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:ruleproofs.py",
+      "source/ruleproofs.py notes/rule-proofs* guides/film-quality-rules.md",
+      "never twice\\|One message",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "guides",
+      "source/*.py guides/film-quality-rules.md",
+      "ruleproofs\\|rule_proofs",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:ruleproofs.py",
+      "source/ruleproofs.py source/rule_proofs.json",
+      "sed -n 1,40p source/ruleproofs.py; python3 -c \" import json;d=json.load(open('so",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:ruleproofs.py",
+      "source/rule_proofs.json source/ruleproofs.py",
+      "python3 -c \" import json;d=json.load(open('source/rule_proofs.json')) r=d['rules",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:ruleproofs.py",
+      "source/rule_proofs.json source/ruleproofs.py",
+      "def claude_anchors",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 300 python3 source/kittests.py guard_one_correction 2>&1 | tail -5; time",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py notes/proposals/unrouted.md notes/proposals/guard-blocks.jsonl",
+      "UNLISTED|BROKEN",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:override.py",
+      "source/override.py .claude/settings.json notes/logs/broken.md notes/logs/ source",
+      "hookran\\|def main\\|'prompt'",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:hookran.py",
+      "source/hookran.py",
+      "^DIR",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/kittests.py",
+      "python3 - <<'EOF' p='source/propose.py'; s=open(p).read() old='''def reply_fault",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "^## \\|^- \\*\\*",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 300 python3 source/kittests.py guard_ 2>&1 | tail -6",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/NAME.md source/*.py",
+      "reword the question",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "PASS|FAIL|kittests:",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/propose.py",
+      "PASS|FAIL",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:ruleproofs.py",
+      "source/rule_proofs.json notes/proposals/guard-film-questions/example-22nov.json ",
+      "python3 - <<'EOF' import json p='source/rule_proofs.json'; d=json.load(open(p)) ",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "source/rule_proofs.json notes/proposals/guard-film-questions",
+      "git diff --stat source/rule_proofs.json && git add -A source notes/proposals/gua",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "film notes",
+      "notes/proposals/guard-film-questions.md",
+      "python3 -c \" import sys;sys.path.insert(0,'source');import propose as P ok,v=P.v",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:propose.py",
+      "guides/film-quality-rules.md notes/proposals/guard-film-questions.md notes/propo",
+      "guard-film|precheck",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "film notes",
+      "notes/proposals/lessons-report.md",
+      "python3 - <<'EOF' p='notes/proposals/lessons-report.md' entry=''' ## 3. guard-fi",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "film notes",
+      "notes/archive/ notes/proposal-route.md notes/proposals/guard-blocks.jsonl notes/",
+      "ls notes/archive/ | grep -i proposal-route; python3 - <<'EOF' p='notes/proposal-",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/guard-blocks.jsonl notes/proposals/lesso",
+      "python3 - <<'EOF' p='notes/proposal-route.md'; s=open(p).read() a=s.index('## Wh",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git add -A notes guides source && git commit -qm \"guard-film-questions: lessons ",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "^PASS",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "python3 source/ledger.py log proposal-route --stage build --notes 0 2>&1 | tail ",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/ledger",
+      "git status --short | head; git add -A notes/proposal-route.md notes/ledger 2>/de",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "other",
+      "notes/logs/handover-end.log",
+      "git add notes/logs/handover-end.log && git commit -qm \"handover-end log Co-Autho",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/kittests.py",
+      "share >= ",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/kittests.py",
+      "git log --oneline -4 -- source/propose.py source/kittests.py; git diff 1e0ebd48 ",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | head -30 import sys;sys.path.insert(0,'source') import ",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "1.5\\|ALREADY",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:kittests.py",
+      "source/__pycache__/propose.*.pyc source/kittests.py source/__pycache__",
+      "^PASS|^FAIL",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "^PASS",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "git add notes/proposal-route.md && git commit -qm \"proposal-route notes: stale c",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "git stash -q -- notes/logs/kittests-last.log 2>/dev/null; git fetch -q origin cl",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "git diff --name-only --diff-filter=U; git diff notes/proposal-route.md | cut -c1",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "<<<<<<<\\|>>>>>>>",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   },
   {
    "date": "2026-11-23",

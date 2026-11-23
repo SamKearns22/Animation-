@@ -2348,6 +2348,10 @@ def in_door(car, cam, zb, pb, scale):
     legs = np.isin(pb[yy, xx], [i for i, n in enumerate(BD.PART_NAMES) if n in ('trousers', 'shoes')])
     inside = (np.abs(L[:, 0]) > plane - 0.015) & ((np.abs(L[:, 0]) < hw + 0.02) | legs) & (L[:, 1] < ywin) & \
         (L[:, 2] > zb0) & (L[:, 2] < zb1)
+    # critic r50-p1 / Sam's note 14 (shot 5, 25.6 s, "a white speck and stray tick marks on the bonnet"): his shorts'
+    # hems and shoes, the legs stretched out past the dash, came up through the bonnet's top. Legs are in the
+    # footwell: nothing of them forward of the windscreen's foot is ever seen (it is inside the bonnet).
+    inside |= legs & (L[:, 2] > zb1 - 0.02)
     out[yy[inside], xx[inside]] = True
     return out
 
