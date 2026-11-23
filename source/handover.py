@@ -547,6 +547,10 @@ def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None):
     handover (STOP: closed, never named away). This handover's reds are written to notes/logs/kittest-reds.log."""
     txt = open(kitlog, encoding='utf-8', errors='replace').read() if os.path.exists(kitlog) else ''
     if 'kittests:' not in txt:
+        busy = subprocess.run(['pgrep', '-f', 'source/kittests.py'], capture_output=True).returncode == 0
+        if busy:                            # the start-up run (about 15 min on a fresh machine) is not finished yet
+            return ['STOP: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for it to '
+                    'finish, then run end again']
         return ['STOP: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 source/kittests.py '
                 '> notes/logs/kittests-last.log 2>&1`, then end again']
     fails = re.findall(r'^FAIL (\w+): (.*)$', txt, re.M)
