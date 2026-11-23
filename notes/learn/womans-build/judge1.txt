@@ -1,0 +1,25 @@
+f01 | man | 2 | broad, square boxy shoulders, straight sides
+f02 | woman | 1 | slightly slimmer rounded upper body; otherwise neutral
+f03 | man | 5 | suit with tie and lapels, broad shoulders
+f04 | woman | 2 | slight forward bulge at chest, narrow profile
+f05 | man | 2 | broad, square boxy shoulders, straight sides
+f06 | man | 1 | nothing: a neutral box
+f07 | woman | 3 | chest bulge, tapered waist, thin strap line
+f08 | man | 5 | suit jacket with white tie, seated
+f09 | man | 4 | tie and lapel marks at chest
+f10 | man | 4 | tie and lapel marks at chest
+f11 | woman | 2 | narrower rounded shoulders, slight waist taper
+f12 | man | 5 | suit with tie, broad square shoulders
+f13 | woman | 2 | narrower rounded shoulders, slight waist taper
+f14 | woman | 2 | narrower rounded shoulders, slight waist taper
+f15 | man | 1 | nothing: a neutral box
+f16 | man | 4 | white tie line down the chest
+f17 | man | 1 | nothing: a neutral box
+f18 | man | 2 | broad, square boxy shoulders, straight sides
+f19 | woman | 3 | chest bulge, tapered waist, thin strap line
+f20 | man | 1 | nothing: a neutral box
+f21 | man | 4 | tie and lapel marks at chest
+f22 | man | 5 | white shirt V and tie, suit jacket
+f23 | man | 1 | nothing: a neutral box (small collar notch)
+f24 | man | 4 | tie and lapel marks at chest
+f25 | man | 2 | broad, square boxy shoulders, straight sides

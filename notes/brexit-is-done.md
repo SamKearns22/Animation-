@@ -63,6 +63,12 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
   chat 3's try: scratch kemi_torso.py style draw via castsheet.draw(sp, yaw, PP).
 
+## Sam's words held elsewhere (chat 4, so the handover check finds each)
+- Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
+- Note 1 (Q5) Sam: "Yes, before a wolf lunges at him": Blair's grin then the wolf lunge, brief item 13.
+- Sam 22:00: "I do think we need multiple body shapes in our kit, maybe 6 for male and female": reserve job R1 (notes/next-jobs.md), waits for Sam to name it.
+- Sam 22:06: "I'd be keen to answer your script questions soon": answered as Q1-Q7 (brief items 13-18); only Q2, the blood, is still open.
+
 ## Handover check, named not fixed (chats 1-3)
  Chat 3: the four CLAUDE.md SENTENCE alerts are the same ones chats 1-2 named (Sam's own CLAUDE.md edits; the
   sentences still stand there in his newer wording). No estimate yet (COST): set at the plan stage, after Sam's pick
