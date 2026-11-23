@@ -34,3 +34,36 @@
 - **For Claude:** `python3 source/castsheet.py sheet brexit-is-done OUT.jpg`; `castsheet.py match brexit-is-done`;
   `castsheet.py selftest`; Blair's 3/4 tie box is the kit's three-quarter suit torso (views.WrapPen 'three').
 
+
+
+# Chat 3 handover, with chat 4 lines (archived chat 4, 23 Nov)
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Rules that bite next:** 30 (note 5 is a repeat of GTA's "Lucia on a man's box body"), 49 (likeness), 89.
+- **Done (chat 3):** note 6 fixed (Kemi's orange stops outside her collar, any build); note 5 through the proposal
+  route (judged: helper B's, 8 found, 4 fixed, 4 named; sent to Sam as two options); Sam's v2 notes saved with
+  pictures; reserve list made (Sam: 6+6 body shapes and today's tool chats, notes/next-jobs.md R1-R6).
+- **Chats are named "Open Wounds"** (Sam, 23 Nov); the film's files keep the name brexit-is-done.
+- **Chat 4 so far (paused by Sam at 22:24, restart 23:51 UK):** learn step done (notes/learn/womans-build/learn.md:
+  as drawn, May and Kemi read as men in all 10 views). Change 1 half built, not yet checked: `woman`/`man` in the body
+  line (people.SEXED, BEFORE_SEX; load refuses a new film's person without it), face-tool people now keep their body
+  line, crowd women flagged, new build body.FIGS 'female' (old 'woman' kept for GTA) with arms out a little
+  (views.standing). Sam's note 7: right for May, wrong for Kemi ("just does not have that body").
+- **Next (chat 4 on restart, Opus high):** Kemi's own build, measured from several photos of her (Sam 22:28: "maybe check a few photos"; full-length, standing, the search order in guides/job-packs.md Plan; her likeness, so her photos are right here, unlike the general body's size charts), never guessed (Sam: not 'slimmer' than May),
+  then run the kit tests on finished films, the cast-sheet check (fails both n5, passes Lucia and Blair), Change 2
+  (neckline first: May's striped blouse reads as a tie), cast sheet v3 to Sam.
+- **Two chats from 23:50 (Sam: "continue the character work here and pass off sets and other essential film work to
+  another chat"):** chat 4 (this one) keeps the people: May, Kemi, Blair, the woman's body, its check, cast sheet v3.
+  The sets chat (Opus high, planning) does the plan for brief items 4-18: the three places (May's dark wood-panelled
+  interview room, Kemi's building site under a grey sky, Blair's oak-panelled room), the wolves (a new animal: the
+  kit catalogue first), the background action, the blood plan (Q2, still waiting for Sam's Y), the estimate and the
+  shot board. It never edits people.py, body.py, views.py, castsheet.py or story/brexit-is-done-people.txt (chat 4's),
+  writes its notes in notes/brexit-is-done-sets.md, and pushes only to its own branch; chat 4 merges both onto the
+  main line once its checks pass.
+- **Kemi's photos (chat 4, 23:52):** one try per source, none full length: Wikimedia (refused: too many requests),
+  BTA's AP gallery (pictures load by script), news pictures (Irish News/PA at the lectern, waist up; GB News a face),
+  Alamy (pictures load by script). Asked Sam for 2-3 full-length standing photos.
+- **Needs Sam:** 2-3 full-length photos of Kemi standing (chat 4); Q2 blood plan (item 18): his Y goes to the sets chat.
+- **Read:** `guides/job-packs.md` Build; notes/proposals/womans-build.md "Final version"; notes/sam-notes/brexit-cast-v2/.
+- **Open rule requests:** none (the proposal's check becomes a rule only with Sam's Y).
+- **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
+  chat 3's try: scratch kemi_torso.py style draw via castsheet.draw(sp, yaw, PP).
