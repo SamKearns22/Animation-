@@ -18,3 +18,6 @@ Geyser effect clipping through pavement
 ### 2026-11-23T11:37:36
 Civilians run through the building instead of down the street. They clip into the scenery.
 
+### 2026-11-23T11:38:01
+In the frame after this one the civilians circled vanish
+
