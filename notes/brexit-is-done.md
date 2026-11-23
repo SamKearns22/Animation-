@@ -69,7 +69,10 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   shot board. It never edits people.py, body.py, views.py, castsheet.py or story/brexit-is-done-people.txt (chat 4's),
   writes its notes in notes/brexit-is-done-sets.md, and pushes only to its own branch; chat 4 merges both onto the
   main line once its checks pass.
-- **Needs Sam:** Q2 blood plan (item 18): his Y goes to the sets chat.
+- **Kemi's photos (chat 4, 23:52):** one try per source, none full length: Wikimedia (refused: too many requests),
+  BTA's AP gallery (pictures load by script), news pictures (Irish News/PA at the lectern, waist up; GB News a face),
+  Alamy (pictures load by script). Asked Sam for 2-3 full-length standing photos.
+- **Needs Sam:** 2-3 full-length photos of Kemi standing (chat 4); Q2 blood plan (item 18): his Y goes to the sets chat.
 - **Read:** `guides/job-packs.md` Build; notes/proposals/womans-build.md "Final version"; notes/sam-notes/brexit-cast-v2/.
 - **Open rule requests:** none (the proposal's check becomes a rule only with Sam's Y).
 - **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
