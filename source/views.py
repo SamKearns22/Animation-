@@ -1104,7 +1104,7 @@ def plain_head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
         else:
             p.poly([(ex - 10, ey), (ex + 2, ey - 7), (ex + 12, ey - 2), (ex + 4, ey + 5)], (250, 250, 248), INK, 1.8)
             p.ell(ex + 5, ey - 1, 3.4, 3.4, INK, None)
-        tilt = {'fierce': 6, 'joy': -4, 'wow': -6}.get(brows, 0)
+        tilt = {'fierce': 6, 'joy': -4, 'wow': -6, 'alarm': -6}.get(brows, 0)
         p.line([(ex - 12, ey - 18 - tilt), (ex + 2, ey - 22), (ex + 16, ey - 18 + tilt)], bc, bw)
         if sp.get('glasses'):
             gc = sp.get('glasses_c', (30, 28, 34))
@@ -1115,6 +1115,10 @@ def plain_head_view(img, p, sp, t, view, hx=0.0, hy=-150.0):
             p.poly([(hx + 50, hy + 50), (hx + 66, hy + 48), (hx + 64, hy + 64), (hx + 50, hy + 62)], (120, 30, 40), INK, 1.8)
         elif m in ('smile', 'grin'):
             p.line([(hx + 44, hy + 58), (hx + 56, hy + 62), (hx + 66, hy + 54)], INK, 2.2)
+        elif m in ('mid', 'open', 'shout', 'cheer'):       # an open mouth turned (GTA note 15: alarm read as blank)
+            d = {'mid': 10, 'open': 14, 'shout': 18, 'cheer': 16}[m]
+            p.poly([(hx + 46, hy + 52), (hx + 64, hy + 50), (hx + 62, hy + 52 + d), (hx + 48, hy + 54 + d)], (80, 24, 30),
+                   INK, 1.8)
         else:
             p.line([(hx + 46, hy + 58), (hx + 64, hy + 56)], INK, 2.2)
         if kind != 'long':                          # the head's outline first, the hair over it (Sam: never a skull line
