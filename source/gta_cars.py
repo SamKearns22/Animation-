@@ -1149,11 +1149,40 @@ def solid_depth(car, cam, scale=1, grow=0.0):
         sub = zc[y0:y1, x0:x1]
         cur = sub[yy, xx]
         sub[yy, xx] = np.minimum(cur, z)
+    zc = _seal(zc, 50 * scale)
     if grow > 0:
         from scipy import ndimage
         k = int(round(grow))
         zc = ndimage.grey_erosion(zc, size=(2 * k + 1, 2 * k + 1))
     return zc
+
+
+def _seal(zc, k):
+    """Fill thin gaps between the car's faces (critic r50-p1 / Sam's note 14: Jason's shoes and shorts' hems showed
+    on the bonnet in shot 5 through a strip where the bonnet's top met its nose bevel, left out of the solid). A gap
+    up to k dots tall with the car's skin above and below it at nearly one depth is skin too; an open window (sky or
+    nothing above) is never filled."""
+    H, W = zc.shape
+    fin = np.isfinite(zc)
+    up = np.full((H, W), np.inf)
+    dn = np.full((H, W), np.inf)
+    gu = np.full((H, W), 10 ** 9)
+    gd = np.full((H, W), 10 ** 9)
+    last_z, last_y = np.full(W, np.inf), np.full(W, -10 ** 9)
+    for y in range(H):
+        last_z = np.where(fin[y], zc[y], last_z)
+        last_y = np.where(fin[y], y, last_y)
+        up[y], gu[y] = last_z, y - last_y
+    last_z, last_y = np.full(W, np.inf), np.full(W, 10 ** 9)
+    for y in range(H - 1, -1, -1):
+        last_z = np.where(fin[y], zc[y], last_z)
+        last_y = np.where(fin[y], y, last_y)
+        dn[y], gd[y] = last_z, last_y - y
+    with np.errstate(invalid='ignore'):
+        fill = ~fin & (gu + gd <= k) & np.isfinite(up) & np.isfinite(dn) & (np.abs(up - dn) < 0.35)
+    out = zc.copy()
+    out[fill] = np.minimum(up, dn)[fill]
+    return out
 
 
 def _house_ids(decals):

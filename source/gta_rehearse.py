@@ -20,6 +20,7 @@ import subprocess
 import sys
 
 import numpy as np
+import crowdpath as CP
 from PIL import Image, ImageDraw, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -747,6 +748,34 @@ def _lens_clear():
             continue
         keep.append(pp)
     PEOPLE4[:] = keep
+
+
+LENS_KERB = (7.0, 9.3)          # the lens rides over the kerb looking back up the street (Jason leaning out)
+
+
+def _lens_kerb():
+    """Critic r50-p1 and Sam's note 14 ("the yellow-coat woman is too big for the crowd behind her", 22.5 s): one
+    standing on the shop pavement came out of the frame's edge 2 m from the lens and filled a fifth of the frame among
+    people 11 m off, the same lens-pass fault as chat 27's. Whoever stands or walks within 7 m of the lens, in its view,
+    while it rides the kerb is not on this stretch; the fire's runners stay (they run from the lens's side)."""
+    keep = []
+    for pp in PEOPLE4:
+        _crowd(pp, 12.0)
+        if pp['at'][0] > 0 and not pp.get('_runs'):
+            near = False
+            for u in np.arange(LENS_KERB[0], LENS_KERB[1], 1 / 12):
+                cam = shot4_cam(u, tulip4(u))
+                x, z = _crowd(pp, u)[:2]
+                d = cam.depth((x, 1.0, z))
+                if 0.3 < d < 7.0 and -100 < cam.project((x, 1.0, z))[0][0] < 1180:
+                    near = True
+                    break
+            if near:
+                continue
+        keep.append(pp)
+    PEOPLE4[:] = keep
+
+
 PALMS4 = [((7.6 if s < 0 else 9.2) * s, z) for k, (s, z) in enumerate((s, z) for z in np.arange(-280, 220, 21.0) for s in (-1, 1))
           if (k + int(z / 21)) % 2 == 0]
 _SP = {}
@@ -804,7 +833,22 @@ def crowd(pp, t):
                 if not _in_path(pp, pp['dz'] + dz):                        # up the pavement (chat 22: a woman
                     pp['dz'] += dz                                         # crouched where it ploughed in)
                     break
-    return _crowd(pp, t, pp['dz'])
+    x, z, F, j, head = _crowd(pp, t, pp['dz'])
+    return _round_palm(x, z), z, F, j, head
+
+
+PALM_CLEAR = 0.62          # a palm trunk (0.18 sway + 0.14) and a body's half-width (0.25), with a little air
+
+
+def _round_palm(x, z):
+    """Sam, v5 note 13 ("not clip into ... any other object"): whoever's line passes a palm trunk steps round it, on
+    the side away from the shop fronts' wall (x below the trunk), over 2 m either side, then back onto their line."""
+    for px, pz in PALMS4:
+        if (px > 0) != (x > 0) or abs(z - pz) > 2.0 or x <= px - PALM_CLEAR or x > px + 1.0:
+            continue
+        w = math.cos(min(1.0, abs(z - pz) / 2.0) * math.pi / 2) ** 2
+        x += w * (px - PALM_CLEAR - x)
+    return x
 
 
 def _in_path(pp, dz):
@@ -822,6 +866,19 @@ def _in_path(pp, dz):
     return False
 
 
+_STAND = {}
+
+
+def _stand(i, sp):
+    """V.standing for passer-by i, worked out once (the crowd's paths are tested thousands of times)."""
+    if i not in _STAND:
+        _STAND[i] = V.standing(sp)
+    c = _STAND[i]
+    j = dict(c)
+    j['hand'], j['behind'], j['props'] = dict(c['hand']), set(c['behind']), list(c['props'])
+    return j
+
+
 def _crowd(pp, t, dz=0.0):
     x0, z0 = pp['at']
     z0 += dz
@@ -829,7 +886,7 @@ def _crowd(pp, t, dz=0.0):
     walker = pp['walk'] > 0.45
     dirz = 1.0 if pp['face'] == 0.0 else -1.0
     sp = _walker(pp['i'])
-    j = V.standing(sp)
+    j = _stand(pp['i'], sp)
     tz = V4 * t                                            # the Tulip's z: where the noise is
     t_duck = SHOTS[0] + 0.12 + 0.010 * abs(z0 - tz) + 0.08 * (pp['i'] % 3)
     ducks = abs(z0 - V4 * SHOTS[0]) < 45
@@ -840,6 +897,12 @@ def _crowd(pp, t, dz=0.0):
         IMPACT is not None and abs(zi - IMPACT[1][1]) < 14)
     sees_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 60     # chat 14: a man strolled past the fireball
     t_stop = min(t_duck if ducks else 99.0, IMPACT[0] + 0.3 if sees_fire else 99.0)
+    t_stop = min(t_stop, pp.get('tstop', 99.0))          # crowdpath: stops short of someone in the way
+    lim = pp.get('zlim')                                   # gta_shots58: a walker stops at the side road's kerb
+    if lim and side > 0 and walker:
+        edge = lim[0] - 0.6 if dirz > 0 and z0 < lim[0] else (lim[1] + 0.6 if dirz < 0 and z0 > lim[1] else None)
+        if edge is not None:
+            t_stop = min(t_stop, abs(edge - z0) / WALK_V - 3.2)
     z = z0 + (dirz * WALK_V * (min(t, t_stop) + 3.2) if walker else 0.0)
     F = (0.0, 0.0, dirz) if walker else (-side * 1.0, 0.0, 0.0)
     head = None
@@ -855,33 +918,71 @@ def _crowd(pp, t, dz=0.0):
         z_run = z0 + (dirz * WALK_V * (min(t_run, t_stop) + 3.2) if walker else 0.0)
         away = 1.0 if (z_run > CRASH_Z if side > 0 else z_run > IMPACT[1][1] + 2.6) else -1.0
         u = t - t_run
-        # chat 33b (F6, Sam's note given three times, rule 30): a runner straight at the lens swings legs and arms in
-        # depth, which a flat drawing cannot show, so from the front he read as standing still. He runs at a slant
-        # for the shop doorways (the stride turns side-on and reads), arms up over his head against the blast.
-        slant = 0.45 if side > 0 else 0.0
-        run = RUN_V * max(0.0, u - 0.15) * smooth(u / 0.3)
-        # Sam, v5 note 4 ("civilians run through the building instead of down the street"): the slant stops 0.45 m
-        # short of the shop fronts; there they turn and run on along the pavement, never into the wall
-        room = max(0.0, SHOP4 - 0.45 - abs(x0)) if side > 0 else 1.3
-        lat = run * math.sin(slant)
-        along = slant > 0 and lat >= room
-        if along:                                          # the run after reaching the wall: straight on
-            r0 = room / math.sin(slant)
+        # Sam, v5 note 13 (23 Nov): "The runners need to run in different directions, mostly away down the street,
+        # away from the explosion, and not clip into the walls or any other object". Each runner has a lane, a speed
+        # and how far they run before slowing, stopping and turning to look back at the fire, so they scatter instead
+        # of filing off in one line. Lanes keep clear of the shop fronts and the palm trunks (right x 9.2, left
+        # -7.6); the run slants onto the lane (a side-on stride reads; chat 33b), then runs on along the pavement.
+        # Nobody runs into the side road's mouth (pp['zlim'], set by gta_shots58).
+        rr = np.random.RandomState(500 + pp['i'])
+        spd = RUN_V * rr.uniform(0.78, 1.12)
+        lane = pp.get('lane') or (rr.uniform(8.65, 9.7) if side > 0 else -rr.uniform(8.3, 9.45))
+        pp['_runs'] = True
+        D = rr.uniform(18.0, 34.0)
+        lim = pp.get('zlim')
+        if lim and side > 0:
+            D = min(D, (lim[0] - 0.6 - z_run) if away > 0 and z_run < lim[0] else
+                    (z_run - lim[1] - 0.6) if away < 0 and z_run > lim[1] else D)
+        D = max(D, 4.0)
+        free = spd * max(0.0, u - 0.15) * smooth(u / 0.3)
+        e = D - 3.0
+        if free <= e:
+            run, vel = free, 1.0
+        else:                                              # eases to a stop over the last 3 m, never a halt
+            run = e + 3.0 * (1 - math.exp(-(free - e) / 3.0))
+            vel = math.exp(-(free - e) / 3.0)
+        slant = rr.uniform(0.3, 0.6)                       # each their own angle onto their lane
+        dx = lane - x0
+        r0 = abs(dx) / math.sin(slant)
+        sg_x = 1.0 if dx >= 0 else -1.0
+        if run >= r0:                                      # on the lane: straight on along the street
             z += away * (r0 * math.cos(slant) + (run - r0))
-            x0 = x0 + side * room
+            x0 = lane
             k = smooth((run - r0) / 0.8)                   # turning along the street over 0.8 m, never a flip
-            F = S._norm((side * math.sin(slant) * (1 - k), 0.0, away * (math.cos(slant) * (1 - k) + k)))
+            F = S._norm((sg_x * math.sin(slant) * (1 - k), 0.0, away * (math.cos(slant) * (1 - k) + k)))
         else:
             z += away * run * math.cos(slant)
-            x0 = x0 + side * min(1.3, lat)
-            F = (side * math.sin(slant), 0.0, away * math.cos(slant))
-        j = V.standing(sp)
-        ph = u * math.pi * 3.2
-        _stride(j, ph, 210.0, 90.0, 140.0)
-        for sd, sg in ((('L', -1), ('R', 1)) if side > 0 else ()):   # the far pavement's runners are seen from behind:
-            V.arm_to(j, sd, (sg * 95.0, -150.0 + 12 * math.sin(ph) * sg, 70.0), 'out', 'palm')   # arms up read as out of the back
-        j['lean'] = 16.0
-        j['bob'] = 10 * abs(math.sin(ph))
+            x0 = x0 + sg_x * run * math.sin(slant)
+            F = (sg_x * math.sin(slant), 0.0, away * math.cos(slant))
+        look = smooth((free - D) / (spd * 0.6)) if free > D else 0.0   # stopped: turns round to the fire
+        if look > 0:
+            fz = IMPACT[1][1] + 2.6
+            a0, a1 = math.atan2(F[0], F[2]), math.atan2(SHOP4 - x0, fz - z)
+            da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
+            a = a0 + da * look
+            F = (math.sin(a), 0.0, math.cos(a))
+        j = _stand(pp['i'], sp)
+        # Sam (23 Nov, chat 51): "they don't all have identical movements": each runner has their own stride (phase,
+        # length, lift), lean and arms: both hands clamped on the head, one arm up over the head and the other
+        # pumping, or both arms pumping, close to the body (a wide swing from behind reads as an arm out of the back)
+        style = rr.randint(3)
+        ph = run * math.pi * 3.2 / RUN_V * rr.uniform(0.85, 1.15) + rr.uniform(0, 2 * math.pi)
+        amp = min(1.0, vel * 1.4)
+        _stride(j, ph, rr.uniform(170.0, 235.0) * amp, rr.uniform(70.0, 110.0) * amp, (60.0 if style == 2 else 140.0) * amp)
+        if style < 2:                                      # arms up read as out of the back; lowered as they stop
+            j0 = dict(j)
+            for sd, sg in (('L', -1), ('R', 1)):
+                if style == 1 and sd == 'L':
+                    continue
+                V.arm_to(j, sd, (sg * 95.0, -150.0 + 12 * math.sin(ph) * sg, 70.0), 'out', 'palm')
+            w = smooth((amp - 0.15) / 0.6)
+            for k_, v_ in list(j.items()):
+                v0 = j0.get(k_)
+                if w < 1 and isinstance(v_, tuple) and isinstance(v0, tuple) and len(v_) == len(v0) and all(
+                        isinstance(c, (int, float)) for c in v_ + v0):
+                    j[k_] = tuple(c0 + (c1 - c0) * w for c0, c1 in zip(v0, v_))
+        j['lean'] = rr.uniform(9.0, 22.0) * amp
+        j['bob'] = 10 * abs(math.sin(ph)) * amp
         duck = 0.4 * (1 - smooth(u / 0.5))
     if j.get('bob'):                                       # the bob lowers the whole drawing, feet too: lift the feet
         for sd in ('L', 'R'):                              # back by it so they stay on the pavement (chat 15: sunk)
@@ -918,6 +1019,61 @@ def _crowd(pp, t, dz=0.0):
 
 
 _lens_clear()
+
+
+def clear_crowd():
+    """Sam, v5 note 13 ("not clip into the walls or any other object"): walkers met head-on and walked through each
+    other and through palm trunks. crowdpath moves each one at fault sideways on their pavement to the nearest clear
+    line (first where they stand or walk, then a runner's lane); when and how far anyone moves is never changed."""
+    _lens_kerb()
+    ts = np.arange(-3.2, 26.7, 0.1)
+    posts = []                  # palms: _round_palm steps round them
+    if HYDRANT:
+        posts.append((HYDRANT[1][0], HYDRANT[1][1], 0.25))
+
+    def band(pp):
+        s = 1 if pp['at'][0] > 0 else -1
+        return [s * x for x in np.arange(7.6, SHOP4 - 0.29, 0.15)]
+
+    def set_at(pp, x):
+        old = pp['at'][0]
+        pp['at'] = (x, pp['at'][1])
+        pp.pop('dz', None)
+        return old
+
+    def set_lane(pp, x):
+        old = pp.get('lane')
+        pp['lane'] = x
+        pp.pop('dz', None)
+        return old
+
+    def lanes(pp):
+        if not pp.get('_runs'):
+            return []
+        lo = 8.65 if pp['at'][0] > 0 else 0.0       # the fire's pavement: runners keep to the shop side, clear of the
+        return sorted((x for x in band(pp) if abs(x - pp['at'][0]) >= 0.5 and abs(x) >= lo),   # lens over the kerb
+                      key=lambda x: abs(x - (pp.get('lane') or pp['at'][0])))
+
+    for _ in range(5):                    # where they stand and where they run each free the other's lines
+        if not (CP.clear(PEOPLE4, crowd, set_at, lambda pp: sorted(band(pp), key=lambda x: abs(x - pp['at'][0])),
+                         posts, ts, passes=1) + CP.clear(PEOPLE4, crowd, set_lane, lanes, posts, ts, passes=1)):
+            break
+    # a walker whose every line meets someone stops short of them instead (as people do), never walks through
+    for _ in range(4):
+        left = CP.report(PEOPLE4, crowd, posts, ts)
+        if not left:
+            break
+        by = {pp['i']: pp for pp in PEOPLE4}
+        for i, kind, j, t in left:
+            if kind != 'person':
+                continue
+            for q in (by[i], by[j]):
+                a, b = crowd(q, t - 0.3)[:2], crowd(q, t)[:2]
+                if q['walk'] > 0.45 and math.dist(a, b) > 0.1 and math.dist(a, b) < 0.6:   # walking, not running
+                    q['tstop'] = t - 0.45
+                    q.pop('dz', None)
+                    break
+    return ts, posts
 
 
 def strip_ground(img, cam, p):

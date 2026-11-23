@@ -318,7 +318,10 @@ def _print_tex():
         def line(self, pts, col, width=1.0, **k):
             d.line([tuple(q) for q in pts], fill=ix.get(tuple(col), inkp), width=max(1, int(round(width))),
                    joint='curve')
-    PP._leonida(Pen(), tw / 2, th / 2)
+    # Sam's note 14 / critic r50-p1 ("FLONDA" at phone size, 25.6 s): his gun arm across the chest hid the word's
+    # first letters and the thin strokes ran together. On the 3D vest the word is set closer (16 for 21), in strokes
+    # half as thick again, and moved to his left of the sun, clear of the arm (the sun and palm stay centred).
+    PP._leonida(Pen(), tw / 2, th / 2, word_dx=19.0, pitch=16.0, gw=10.5, stroke=4.2)
     _PRINT['tex'] = (np.asarray(im).astype(np.int64) - 1, tw, th)
     return _PRINT['tex']
 
