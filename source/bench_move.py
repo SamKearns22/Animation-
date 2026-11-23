@@ -227,6 +227,7 @@ def key(name):
     k.setdefault('leg_ik', 0.0)
     k.setdefault('lift', 0.0)                   # chat 41: the hips lifted off the cushion (metres), seated keys
     k.setdefault('plant', {sd: float(k['knee_w']) for sd in 'LR'})   # chat 41: ONE knee planted on its spot
+    k.setdefault('lik_R', k['leg_ik'])   # chat 41 (this account's trials, notes/bench/getup41): the right leg's own foot-led share
     return k
 
 
@@ -799,7 +800,7 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
         kg[1] = kg[1] * (1 - w) + ky * w
         dt = _u(kg - hip)
         kn = hip + dt * r['L_th']
-        lik = float(np.clip(g.get('leg_ik', 0.0), 0, 1))
+        lik = float(np.clip(g.get('lik_R' if sd == 'R' else 'leg_ik', g.get('leg_ik', 0.0)), 0, 1))
         if w < 0.999 and _planted(g)[sd] >= 0.999:
             # chat 41: this knee is down on its spot: the thigh reaches it (the hips were set from it)
             kg[1] = ky

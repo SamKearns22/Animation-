@@ -1,0 +1,9 @@
+frames [(13, 2.5), (14, 25.4), (15, 63.2), (16, 0.9), (17, 13.9), (18, 5.0), (19, 4.5), (20, 4.1), (21, 0.0), (22, 0.0), (23, 2.7)] pops 185.5
+start score 307.5
+1  0.3 min  score 303.4  kept ['B1b|p_fwd|']
+9  1.3 min  score 301.1  kept ['B1|pelvis|', 'B1|ankle|L']
+18  2.4 min  score 297.6  kept ['B1|handL|']
+19  2.5 min  score 288.4  kept ['B1|pelvis|', 'B1c|handL|']
+22  2.9 min  score 285.7  kept ['B1c|handL|', 'B1c|knee|L']
+23  3.0 min  score 285.6  kept ['B1c|p_fwd|']
+27  3.5 min  score 285.1  kept ['B1|lift|', 'B1b|ankle|L']

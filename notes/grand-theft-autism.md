@@ -206,7 +206,11 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   face, critiques r44 p1-p2); light-bar glow on the bar. Clip 22.3-38.5 sent (2.8 MB), body check named, critique r45.
   Critique r45 open: the raised pistol beside his cheek (30-34 s) can read as a phone; her teal headphones; old N3 set.
   N3 rest named in "Chat 33d" above (skin/face, Lucia face, necks/bonnet, ONIDA, shot 4 items).
-- Needs Sam: Q1 shot 3 pistol (Y once shot 4's opening shows it too / N); Q2 Y = animatic v5 from this clip.
+- Sam's note on the clip (22 Nov, picture notes/bench/sam-notes/gta-v5clip-three-fists-gun-backwards.jpg): "Why does
+  he have three fists? Why is he holding the gun backwards?" Cause: draw_gun's chest mode adds 3 skin rings over the
+  grip on top of his drawn fist; the grip hangs away from the hand. Missed: critique r44 said CAN'T TELL (gun way round,
+  'a close crop would show it') and no crop was made; the held-object check is still a draft. Plan put to Sam, awaiting Y.
+- Needs Sam: Q0 Y for the three-fists/backwards-gun plan; Q1 shot 3 pistol (Y once shot 4's opening shows it too / N); Q2 Y = animatic v5 from this clip.
 - Next: on Sam's Y, chat 33e, Sonnet: animatic v5 `grand_theft_autism.py OUT --from 7.0` (shot 1 reused), audio from
   the clean render, body check, critique pack, finish.py (write outside animations/drafts first), copy, send.
 - Read: job pack "Checks and animatic"; "Chat 33d" above.
