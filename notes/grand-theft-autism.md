@@ -145,11 +145,12 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean, sent. Changed: the
   cruiser's wobble 2.0 -> 2.5 s (slows with the shot). Sam's 05:33/05:35 "can't open": fixed by 42b's phone-safe copy.
 - Sam (05:44, chat 42): "1": only shot 4 slower now; the other shots' people are checked at the next animatic.
-- Next: Sam's notes on the slower clip (Opus medium). The look strand (chat 44) dresses this new timing; chat 43
+- Sam on it: "PERFECT" except the grip: fixed, the fist round the handle everywhere (learn-step "Chat 43"); clip resent.
+- Next: Sam's word on the grip clip; the look strand (chat 44) dresses this move. The look strand (chat 44) dresses this new timing; chat 43
   touched _climb (C1b hips, gun lift): chat 44 merges the main line first.
 - Read: notes/bench/learn-step.md "Chat 43". Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
 - For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
-  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look = live chat 44.
+  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look, claude/gta-chat45-look = the live look chats.
 
 ## Where things stand, the LOOK strand (23 Nov, chat 44 -> chat 45, Opus medium): Sam's notes on the dressed clip
 - Rules that bite next: rule 30 (neck is a note given twice); Seeing like Sam 1 and 3; Fix the drawing, never the shot.

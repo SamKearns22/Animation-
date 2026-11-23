@@ -334,6 +334,19 @@ area per side, no island under N px - proposed via the proposal route).
 - Result over 247 frames: body-car 0, pistol 0, range 0; one-point creases named (as chat 42). Watched the get-up and
   sit-down as sheets: reads as one move. Clip: animations/drafts/jason-grey-test.mp4 (phone-safe, 258 KB) and
   grey-lean-out-whole.mp4 (wide). Checks 2.8 min, drawing 3.6 min.
+- Sam on the slower clip (23 Nov, picture notes/bench/sam-notes/gta-grey43-grip-too-high.jpg): "PERFECT. Except one
+  thing. His grip on the pistol. It should be a little bit lower so that it is on the handle/trigger area. Check
+  reference of a hand holding a pistol ... apply this logic throughout the film. Otherwise, this is a perfect grey test."
+  Cause: pistol_mesh put the fist's middle level with the slide's bottom edge (the slide "sitting ON the fist"), so the
+  ball covered the slide; the film's old shot 4 drawing had the fist at the slide's back end. Reference
+  (references/grand-theft-autism/pistol-grip-real-hand.jpg, Wikimedia Commons "Pistol held sideways"): the fist wraps
+  only the handle, its top just under the slide, slide and barrel clear above. Fix: ONE spot, gun3d_film.GRIP
+  (-0.02, 0.12): grey test, film shot 4 (leanout.gun_pts, FIST_AT 3 cm), shots 5-8's chest hold (already there).
+  Knock-on, fixed in the pose: the slide now reached the door top in the climbs (C2-C2c gun hand back 2-3 cm and up;
+  K2 low hold 2 cm in, 4 cm up, muzzle less out). Checks: car 0, pistol 0, range 0; creases named. Before/after:
+  notes/bench/grip-before-after.jpg. Why no check saw it: nothing measures WHERE a held object sits in the hand
+  (the open "held-object check" request): it would have caught this (fist centre vs the object's handle spot).
+
 ## Stage 2, chat 44 (Opus high): the house look on the move
 - K4 vest strap (Sam's "Fix", 22 Nov), why the first two fixes failed: dressed_still HID every triangle touching a
   neck-bone point (to make room for the neck column), and the shoulder tops out to rest |x| 1.4 dm are weighted to

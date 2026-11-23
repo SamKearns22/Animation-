@@ -299,17 +299,25 @@ def gun_fist(k):
     return wr - R @ (mwr * HAND3D_SCALE), A, B
 
 
+FIST_AT = 0.03                       # the house circle hand's middle, past the wrist along the forearm (m)
+
+
 def gun_pts(k):
     """The pistol in the car frame: (hand, muzzle), the barrel along the forearm. With real hands, the pistol sits
     in the fist: its grip's middle on the fist's handle line."""
     wr, el = k['wrR'], k['elR']
     d = getattr(k, 'aim', None)
     d = _u(wr - el) if d is None else d
-    hand = wr + d * 0.05
+    import gun3d_film as _GF
+    g = GUN[0]
+    # Sam 23 Nov (chat 43): the fist round the HANDLE (gun3d_film.GRIP), the slide clear above it; the house circle
+    # hand's middle is taken FIST_AT along the forearm past the wrist (it had sat at the slide's back end: hand = wr + 5 cm)
+    hand = wr + d * FIST_AT - d * (_GF.UNIT * _GF.GRIP[0] * g) - _gun_down(_u(d)) * (_GF.UNIT * _GF.GRIP[1] * g)
     if HAND3D[0] and not getattr(k, 'front', False):
         anchor = gun_fist(k)[0]
         g = GUN[0]
-        hand = anchor - d * (0.62 * -0.02 * g) - _gun_down(_u(d)) * (0.62 * 0.12 * g)
+        import gun3d_film as _GF
+        hand = anchor - d * (_GF.UNIT * _GF.GRIP[0] * g) - _gun_down(_u(d)) * (_GF.UNIT * _GF.GRIP[1] * g)
     return hand, hand + d * 0.17 * GUN[0]
 
 
@@ -357,7 +365,8 @@ def draw_gun(img, cam, k, report=True):
                           (slide, (132, 138, 152)), (muzzle_blk, (30, 30, 36)), (shine, (200, 206, 218))):
             cam.poly(p, [tuple(q) for q in poly], col, (14, 14, 16), 2.4)
     if getattr(k, 'front', False):                       # his fist closed round the grip
-        c = P(-0.02, 0.12)
+        import gun3d_film as _GF
+        c = P(*_GF.GRIP)                                 # the fist round the handle (gun3d_film.GRIP)
         for sx, sy, r_ in ((-0.35, -0.2, 1.0), (0.3, 0.15, 1.0), (0.0, 0.5, 0.9)):
             ring = [tuple(c + d * (0.035 * g * (math.cos(a_) + sx)) + down * (0.035 * g * (math.sin(a_) + sy)))
                     for a_ in [i * math.pi / 6 for i in range(12)]]

@@ -30,6 +30,10 @@ sys.path.insert(0, HERE)
 import hand3d_film as HF    # noqa: E402
 
 UNIT = 0.62
+GRIP = (-0.02, 0.12)   # where the middle of the fist sits on the pistol (a, b, in UNITs): round the handle, its top
+#                        just under the slide, the trigger guard in front (Sam 23 Nov, chat 43: "on the handle/trigger
+#                        area"; reference references/grand-theft-autism/pistol-grip-real-hand.jpg). Every pistol in a
+#                        fist uses this: the grey test (bench_move.pistol_mesh), shot 4 and shots 5-8 (leanout).
 COLS = ((132, 138, 152), (70, 74, 84), (44, 46, 54), (30, 30, 36), (200, 206, 218))   # slide, frame, grip, muzzle, shine
 PARTS = [
     ('slide', [(-0.05, -0.012), (0.19, -0.012), (0.19, 0.045), (-0.05, 0.045)], 0.022, 0),
