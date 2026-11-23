@@ -68,8 +68,25 @@ three films, so each new film starts without them. Shared-tool tests failing now
   render's picture checks (a held video is released by answering each line, no second render), the body check (one
   reason for the whole list is refused; GTA's 11-at-once naming can't happen again) and finish.py's Hook Text and
   readable checks. Not changed: the critique gate (rule 89), whose faults already go to Sam one by one in the Checks line.
-- Changes 3 and 4: being built by the next chat (named-lines part 2), with the "move to shared" stop that Sam's 23 Nov
-  words ask for (wording waits for his yes).
+- Change 3 BUILT (chain B chat 3, 23 Nov): **the shared kits hand every check what it needs, read from the drawing
+  itself.** Before: a check saw a film only if that film's own code built its inputs (Blessed did, in 7 places;
+  Milburn did not, so 37 of its 61 warnings were checks that could not see it). Now one shared step draws the film
+  about 4 times a second and records who the people kit draws where, which way they face, which places view is
+  painted, and every piece with words on it. From that the checks get, only where the film gave nothing: who is in
+  each shot, pop-ins, a camera per shot, facings, the camera's movement measured from the frames, the props with
+  words (measured on screen), the real sizes of places pieces, each person drawn alone for the line check, and their
+  hems for the clothes check. People with no places view get their distance from how big they are drawn. Three plan
+  checks were wrong for every film and are fixed in the shared check: places with no doorway between them are
+  separate places; a floor-flat platform is stood on, not stood inside; a tilted camera says where it looks.
+  Voices: Milburn's take cleaning is now a shared tool; the voice check hears the cleaned take the film plays, and
+  says so out loud when it would read a raw file the film does not play.
+- **The "move to shared" stop (built, chain B chat 3):** a check fix written inside one film's code (a film with its
+  own renderer, like Grand Theft Autism, counts) stops the handover until it is moved to the shared tools, or Sam
+  says it stays (an Exceptions row with his Y). It is the check for Sam's 23 Nov words below.
+- Change 4 BUILT (chain B chat 3), on chain A's handover gate: a kit test red at two handovers in a row, or one that
+  could not run, stops the handover (closed: never named away). Red once is a plain line. Each handover's red tests
+  are kept (notes/logs/kittest-reds.log), so "two in a row" is counted, not remembered. The long-red sentence test is
+  fixed: it now knows the sentences Sam himself rewrote (Statements One and Two) are not "lost".
 
 **Difference made.** Measured on Milburn's saved lines (kittest named_lines_each_answered): all 61 now stop the render
 until answered (before: all 61 passed with one switch); the 37 blind ones cannot be answered at all, including the
@@ -78,6 +95,19 @@ film: not measured yet (at the next film's first animatic). The numbers to beat,
 Milburn's replay with changes 2 and 3 should leave at most the 16 chosen or unsettled lines, each answered (today 61
 named in a bunch plus 60 removed by hand); the next film: under 10 unanswered lines before every animatic, 0 blind
 lines at its first pre-flight, and 0 Sam notes that were already a printed line (3 in the last two films).
+
+**Difference made by changes 3 and 4 (measured 23 Nov, chain B chat 3).** Replaying Milburn with today's checks and
+no film code: its quick check went from 68 lines to 36. Of its 37 blind lines, 31 are cured; 6 stay, each named for
+what is missing: shot 2b's four tiny figures (drawn by Milburn's own set code, not the people kit, so no shared tool
+can see them: the cure is a far-figure piece in the people kit), no camera for shots 3 and 6 (hand-drawn places, no
+places view), and the "each body alone" audit (needs the render's drawing pass to keep each person's own drawing).
+Its 8 false plan lines: 0. Voice: with Milburn's own hand-over taken away, 2 lines (the two never-settled syllable
+counts), 0 false; reading the raw files gives 85. Now that the checks can see Milburn, they found new lines the old
+list never showed: line weights on the kit's people, and a fireplace 2 m wide against a real 1.3 m (to judge on the
+next film, as the kit's people are every film's people). The move-to-shared stop catches all 10 film-code fixes the
+look-back found (Blessed 7, Milburn 1, Grand Theft Autism 2) and no shared file. On the next film: not measured yet;
+the bar is 0 blind lines at its first pre-flight, judged at its first animatic. Cost: the shared survey adds about 50
+seconds to each pre-flight (drawing the film 4 times a second); it replaces the film code each film used to need.
 
 **How it should behave from now on (on Sam's yeses).** A warning is never waved through in a bunch. If a check could
 not look at the film, the animatic stops until the film or the shared tools give it what it needs. Every other warning

@@ -89,6 +89,8 @@ PROMISES = {
     'preflight.py': ('no animatic or final with an open fault (rule 59)', 'named: film_engine refuses a render without its pass'),
     'rough.py': ('the rough sheet', 'named: used by hand'),
     'waivers.py': ('no warning waves through in a bunch: each one left on a film has its own written answer, and a check that could not see the film is cured, never answered (rule 59, lesson named-lines)', 'kittest named_lines_each_answered'),
+    'kitinputs.py': ('every check gets its inputs from the kits and the drawing, so no new film starts blind; the film\'s own inputs always win (lesson named-lines, change 3)', 'kittest named_lines_shared_inputs_milburn'),
+    'takes.py': ('the voice check hears the cleaned take the film plays, and says so when it reads a raw file the film does not play (lesson named-lines, change 3)', 'kittest takes_cleaned_and_registered'),
     'staging.py': ('no shot reaches Sam as a clip or animatic before he has seen its framing (rule 11, lesson staging-stills)', 'kittest staging_stills_milburn_replay'),
     'satire_template.py': ('a new satire film starts from the house template', 'named: used by hand'),
 }
