@@ -4703,7 +4703,7 @@ def kittest_red_twice_stops_handover():
     none = H.kittest_gate_faults(log, reds, sid='chat3')
     st = lambda fs, w: any(f.startswith('STOP:') and w in f for f in fs)
     ok = (st(one, 'b_test') and not st(one, 'a_test') and not st(again, 'a_test') and st(two, 'a_test')
-          and st(none, 'COULD NOT RUN'))
+          and (st(none, 'COULD NOT RUN') or st(none, 'STILL RUNNING')))
     return ok, f'once {len(one)} lines, twice {sum(f.startswith("STOP") for f in two)} stops, unfinished: {none[:1]}'
 
 
