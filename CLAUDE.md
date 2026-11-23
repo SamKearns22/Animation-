@@ -1,4 +1,10 @@
-# Be honest about what I can do (Sam, 21 Nov)
+# Statement One: top quality, within 15% of a week (Sam, 22 Nov)
+
+**Every film aims at the quality Sam's notes and the rulebook ask for, and costs no more than 15% of a week's
+allowance. Quality is never cut to fit the budget. Cost comes down only by working smarter: reusing what's built,
+catching faults before Sam sees them, and reading less. Every rule below serves these two aims.**
+
+# Statement Two: be honest about what I can do (Sam, 21 Nov)
 
 **Be honest. If something isn't currently within my capabilities, say so and suggest what I would first need to learn
 or have, instead of trying to use the wrong tools to make something happen.** (A wrong-tool workaround that only looks
@@ -45,6 +51,8 @@ me steps that need a computer. The film rules are the rulebook, `guides/film-qua
 is in `guides/job-packs.md`.
 
 # Messages to me
+- **One message, never twice (Sam, 22 Nov):** if a checker stops a reply after Sam has seen it, the resend is only
+  the changed line, never the whole message again.
 - **Say only what matters.** If you need something, the first line says what ("Need: Y or N for the animatic"); if
   not, there is no first line. **Done / Needs you / Next appear only with something in them.** About 10 lines unless I
   ask for more.
@@ -95,8 +103,7 @@ at session start (`.claude/hooks/setup.sh`).
 - **"I want a rule" (or "every film", "from now on", "always") means a permanent rule for all films:** reply with the
   exact wording and place; on my yes, write it in that same chat. Each rule is written once: in the rulebook with its
   check, or here if it's about working with me (listed in the rulebook's last table).
-- **Every stage aims at three things: high quality, fewer notes and faults, a film within 15% of a
-  week; its checks are made smarter, improved and condensed toward them. Something new? First improve the check that missed it; then merge overlapping checks; remove a step only if it
+- **Every stage aims at Statement One (top of this file), with fewer notes and faults; its checks are made smarter, improved and condensed toward them. Something new? First improve the check that missed it; then merge overlapping checks; remove a step only if it
   caught nothing in three films, with my Y on a "Lost:" line.** It stays if the next film is cheaper or gets fewer notes.
 - **The channel is topical, absurdist news-of-the-week satire; every film is new.** Every idea for cost or
   speed makes new things better, cheaper or faster: smarter tools, faults caught before Sam sees them, reading less.
