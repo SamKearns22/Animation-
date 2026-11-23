@@ -879,6 +879,103 @@ def _stand(i, sp):
     return j
 
 
+def _lerp3(a, b, k):
+    return tuple(x + (y - x) * k for x, y in zip(a, b))
+
+
+def _mix_joints(ja, jb, w):
+    """Joints ja blended toward jb by w (every joint that is a point)."""
+    out = dict(jb)
+    for k_, v_ in jb.items():
+        v0 = ja.get(k_)
+        if isinstance(v_, tuple) and isinstance(v0, tuple) and len(v_) == len(v0) and all(
+                isinstance(c, (int, float)) for c in v_ + v0):
+            out[k_] = tuple(c0 + (c1 - c0) * w for c0, c1 in zip(v0, v_))
+    return out
+
+
+def _pump(j, sd, c, amp):
+    """A running arm (Sam, note 15: "pumping their arms as they run"): the elbow bent near a right angle, the fist
+    swinging from beside the hip (c = -1) up to the chest (c = 1), close to the body; amp 0 is a hanging arm."""
+    sx = -1 if sd == 'L' else 1
+    k = 0.5 + 0.5 * c
+    tgt = _lerp3((sx * 118.0, 330.0, -55.0), (sx * 62.0, 175.0, 150.0), k)
+    tgt = _lerp3((sx * 120.0, 400.0, 40.0), tgt, amp)
+    V.arm_to(j, sd, tgt, (0.35, 0.55, -0.9), 'fist')
+
+
+ACTS = ('pump', 'shield', 'head', 'flail')     # how each runner carries their arms (Sam, note 15)
+STARTLES = ('shield', 'fling', 'recoil')       # and how they first react to the blast
+
+
+def _alarmed(i, sp, rr, u, t_go, run, vel, x0, z, F):
+    """Sam, note 15 (23 Nov): runners "reacting as alarmed people would, you know, shielding their faces, flinging
+    their arms, pumping their arms as they run, and with expressions that match". Each runner (their own rr) has a
+    startle (shield the face from the blast, fling the arms up, or recoil with a forearm across the face) for t_go
+    seconds, then runs with their own arms (both pumping; one forearm up shielding the head; hands clamped on the
+    head; or arms flailing high), their own stride, lean and bounce, glancing back at the fire once or twice, mouths
+    open and brows up throughout. Returns (joints, head direction)."""
+    act = ACTS[rr.randint(len(ACTS))]
+    st = STARTLES[rr.randint(len(STARTLES))]
+    shs = 'L' if rr.rand() < 0.5 else 'R'                # the arm that shields (shield runners)
+    ph0, plen = rr.uniform(0, 2 * math.pi), rr.uniform(0.85, 1.15)
+    leg, lift, lean = rr.uniform(175.0, 235.0), rr.uniform(75.0, 115.0), rr.uniform(10.0, 20.0)
+    glances = [rr.uniform(0.7, 1.4), rr.uniform(2.2, 3.4)][:1 + (rr.rand() < 0.45)] if rr.rand() < 0.75 else []
+    face = {'brows': 'alarm', 'brow_raise': 6, 'mouth': ('open', 'shout', 'open', 'mid')[rr.randint(4)]}
+    fire = (IMPACT[1][0] - x0, 0.0, IMPACT[1][1] + 2.6 - z)
+    # the startle: on the spot, recoiling from the blast
+    js = _stand(i, sp)
+    k = smooth(u / 0.18)
+    wob = 10 * math.sin(u * 23 + ph0)
+    for sd, sx in (('L', -1), ('R', 1)):
+        if st == 'shield':                                # both forearms up in front of the face, palms out
+            tgt, pole, hs = (sx * 34.0, -120.0 + wob, 120.0), 'out', 'palm'
+        elif st == 'fling':                               # arms flung up and out, hands open
+            tgt, pole, hs = (sx * 230.0, -230.0 + wob, 30.0), 'down', 'palm'
+        else:                                             # one forearm across the face, the other hand flung back
+            tgt, pole, hs = ((sx * 20.0, -110.0 + wob, 125.0), 'out', 'palm') if sd == shs else \
+                ((sx * 190.0, 260.0, -60.0), 'down', 'palm')
+        V.arm_to(js, sd, _lerp3(js['wr' + sd], tgt, k) if k < 1 else tgt, pole, hs)
+    js['lean'] = -9.0 * k                                 # rocked back by it
+    js['face'] = face
+    w = smooth((u - t_go) / 0.25)
+    if w <= 0:
+        return js, S._norm(fire)
+    # the run
+    j = _stand(i, sp)
+    ph = run * math.pi * 3.2 / RUN_V * plen + ph0
+    amp = min(1.0, vel * 1.4)
+    _stride(j, ph, leg * amp, lift * amp, 0.0)
+    for sd, sg in (('L', 1), ('R', -1)):
+        sx = -1 if sd == 'L' else 1
+        c = -math.sin(ph) * sg                             # the arm swings against its own side's leg
+        jig = 14 * math.sin(ph) * sg
+        if act == 'pump' or (act == 'shield' and sd != shs):
+            _pump(j, sd, c, amp)
+        elif act == 'shield':                              # forearm up beside the head, between them and the fire
+            V.arm_to(j, sd, _lerp3((sx * 120.0, 400.0, 40.0), (sx * 40.0, -140.0 + jig, 95.0), amp), 'out', 'palm')
+        elif act == 'head':                                # hands clamped on the head
+            V.arm_to(j, sd, _lerp3((sx * 120.0, 400.0, 40.0), (sx * 95.0, -150.0 + jig, 70.0), amp), 'out', 'palm')
+        else:                                              # flailing: arms high, waving against the stride
+            V.arm_to(j, sd, _lerp3((sx * 120.0, 400.0, 40.0), (sx * 175.0, -150.0 + 70 * c, 50.0 + 60 * c), amp),
+                     'down', 'palm')
+    j['lean'] = (lean if act != 'flail' else lean * 0.5) * amp
+    j['bob'] = 10 * abs(math.sin(ph)) * amp
+    j['face'] = face
+    head = None
+    g = max((smooth((u - t_go - g0) / 0.15) * (1 - smooth((u - t_go - g0 - 0.45) / 0.15)) for g0 in glances),
+            default=0.0) * amp
+    if g > 0:                                             # a glance back over the shoulder at the fire
+        a0 = math.atan2(F[0], F[2])
+        da = (math.atan2(fire[0], fire[2]) - a0 + math.pi) % (2 * math.pi) - math.pi
+        da = max(-1.75, min(1.75, da)) * g                 # a head turns about 100 degrees on the shoulders, no more
+        head = (math.sin(a0 + da), 0.0, math.cos(a0 + da))
+    if w < 1:
+        j = _mix_joints(js, j, w)
+        j['face'] = face
+    return j, head
+
+
 def _crowd(pp, t, dz=0.0):
     x0, z0 = pp['at']
     z0 += dz
@@ -893,8 +990,8 @@ def _crowd(pp, t, dz=0.0):
     # chat 27 (v3 F6, Sam's note given twice, rule 30): who is near the fire is judged where they ARE at the blast,
     # not where they started the shot (a walker covers 12 m by then: a woman 5 m from the fireball strolled on)
     zi = z0 + (dirz * WALK_V * (min(IMPACT[0], t_duck if ducks else 99.0) + 3.2) if walker and IMPACT else 0.0)
-    near_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 22 and side > 0 or (
-        IMPACT is not None and abs(zi - IMPACT[1][1]) < 14)
+    near_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 28 and side > 0 or (
+        IMPACT is not None and abs(zi - IMPACT[1][1]) < 20)
     sees_fire = IMPACT is not None and abs(zi - (IMPACT[1][1] + 2.6)) < 60     # chat 14: a man strolled past the fireball
     t_stop = min(t_duck if ducks else 99.0, IMPACT[0] + 0.3 if sees_fire else 99.0)
     t_stop = min(t_stop, pp.get('tstop', 99.0))          # crowdpath: stops short of someone in the way
@@ -926,7 +1023,11 @@ def _crowd(pp, t, dz=0.0):
         # Nobody runs into the side road's mouth (pp['zlim'], set by gta_shots58).
         rr = np.random.RandomState(500 + pp['i'])
         spd = RUN_V * rr.uniform(0.78, 1.12)
-        lane = pp.get('lane') or (rr.uniform(8.65, 9.7) if side > 0 else -rr.uniform(8.3, 9.45))
+        # Sam, note 15 (23 Nov): "they sort of clump up against the wall ... run sort of right next to each other":
+        # lanes over the whole pavement width (kerb to shop fronts); clear_crowd keeps them off the lens by where they
+        # run when (_lens_ok) and apart from each other (crowdpath's spacing), never by herding them to the wall
+        l0 = rr.uniform(KERB4 + 0.35, SHOP4 - 0.35)
+        lane = pp.get('lane') or side * l0
         pp['_runs'] = True
         D = rr.uniform(18.0, 34.0)
         lim = pp.get('zlim')
@@ -934,7 +1035,8 @@ def _crowd(pp, t, dz=0.0):
             D = min(D, (lim[0] - 0.6 - z_run) if away > 0 and z_run < lim[0] else
                     (z_run - lim[1] - 0.6) if away < 0 and z_run > lim[1] else D)
         D = max(D, 4.0)
-        free = spd * max(0.0, u - 0.15) * smooth(u / 0.3)
+        t_go = rr.uniform(0.15, 0.45) + pp.get('hold', 0.0)  # the startle before the run (shield, fling, recoil)
+        free = spd * max(0.0, u - t_go) * smooth((u - t_go) / 0.3)
         e = D - 3.0
         if free <= e:
             run, vel = free, 1.0
@@ -945,6 +1047,7 @@ def _crowd(pp, t, dz=0.0):
         dx = lane - x0
         r0 = abs(dx) / math.sin(slant)
         sg_x = 1.0 if dx >= 0 else -1.0
+        F0 = F
         if run >= r0:                                      # on the lane: straight on along the street
             z += away * (r0 * math.cos(slant) + (run - r0))
             x0 = lane
@@ -954,6 +1057,11 @@ def _crowd(pp, t, dz=0.0):
             z += away * run * math.cos(slant)
             x0 = x0 + sg_x * run * math.sin(slant)
             F = (sg_x * math.sin(slant), 0.0, away * math.cos(slant))
+        turn = smooth((u - t_go + 0.1) / 0.35)             # the body turns from where it faced onto the run
+        if turn < 1:
+            a0, a1 = math.atan2(F0[0], F0[2]), math.atan2(F[0], F[2])
+            da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
+            F = (math.sin(a0 + da * turn), 0.0, math.cos(a0 + da * turn))
         look = smooth((free - D) / (spd * 0.6)) if free > D else 0.0   # stopped: turns round to the fire
         if look > 0:
             fz = IMPACT[1][1] + 2.6
@@ -961,28 +1069,7 @@ def _crowd(pp, t, dz=0.0):
             da = (a1 - a0 + math.pi) % (2 * math.pi) - math.pi
             a = a0 + da * look
             F = (math.sin(a), 0.0, math.cos(a))
-        j = _stand(pp['i'], sp)
-        # Sam (23 Nov, chat 51): "they don't all have identical movements": each runner has their own stride (phase,
-        # length, lift), lean and arms: both hands clamped on the head, one arm up over the head and the other
-        # pumping, or both arms pumping, close to the body (a wide swing from behind reads as an arm out of the back)
-        style = rr.randint(3)
-        ph = run * math.pi * 3.2 / RUN_V * rr.uniform(0.85, 1.15) + rr.uniform(0, 2 * math.pi)
-        amp = min(1.0, vel * 1.4)
-        _stride(j, ph, rr.uniform(170.0, 235.0) * amp, rr.uniform(70.0, 110.0) * amp, (60.0 if style == 2 else 140.0) * amp)
-        if style < 2:                                      # arms up read as out of the back; lowered as they stop
-            j0 = dict(j)
-            for sd, sg in (('L', -1), ('R', 1)):
-                if style == 1 and sd == 'L':
-                    continue
-                V.arm_to(j, sd, (sg * 95.0, -150.0 + 12 * math.sin(ph) * sg, 70.0), 'out', 'palm')
-            w = smooth((amp - 0.15) / 0.6)
-            for k_, v_ in list(j.items()):
-                v0 = j0.get(k_)
-                if w < 1 and isinstance(v_, tuple) and isinstance(v0, tuple) and len(v_) == len(v0) and all(
-                        isinstance(c, (int, float)) for c in v_ + v0):
-                    j[k_] = tuple(c0 + (c1 - c0) * w for c0, c1 in zip(v0, v_))
-        j['lean'] = rr.uniform(9.0, 22.0) * amp
-        j['bob'] = 10 * abs(math.sin(ph)) * amp
+        j, head = _alarmed(pp['i'], sp, rr, u, t_go, run, vel, x0, z, F)
         duck = 0.4 * (1 - smooth(u / 0.5))
     if j.get('bob'):                                       # the bob lowers the whole drawing, feet too: lift the feet
         for sd in ('L', 'R'):                              # back by it so they stay on the pavement (chat 15: sunk)
@@ -999,6 +1086,7 @@ def _crowd(pp, t, dz=0.0):
         if duck > 0.3:
             for sd, sg in (('L', -1), ('R', 1)):
                 V.arm_to(j, sd, (sg * 40.0, -150.0, 60.0), 'out', 'palm')
+            j.setdefault('face', {'brows': 'alarm', 'brow_raise': 4, 'mouth': 'mid'})   # note 15: faces that match
     if IMPACT and up > 0.0:                                # stood up again: the whole body turns to the fire (chat 14:
         fz = IMPACT[1][1] + 2.6                            # a head alone cannot turn round to a fire behind them)
         a0, a1 = math.atan2(F[0], F[2]), math.atan2(SHOP4 - x0, fz - z)
@@ -1006,6 +1094,7 @@ def _crowd(pp, t, dz=0.0):
         a = a0 + da * up                                   # turning round over 0.4 s, never a flip
         F = (math.sin(a), 0.0, math.cos(a))
         head = None
+        j['face'] = {'brows': 'alarm', 'brow_raise': 6, 'mouth': ('open', 'mid', 'shout')[pp['i'] % 3]}
         r = smooth((t - (IMPACT[0] + 0.9 + 0.1 * (pp['i'] % 2))) / 0.35) if pp['i'] % 3 == 0 else 0.0
         if r > 0:                                          # every third points at it (acting rows, B5: "stop, stare,
             V.aim(j, 'R', tuple(a_ + (b_ - a_) * r for a_, b_ in zip((110.0, 430.0, 40.0), (80.0, -120.0, 600.0))))
@@ -1013,12 +1102,25 @@ def _crowd(pp, t, dz=0.0):
     elif IMPACT and t > IMPACT[0] + 0.2 and t < t_run and not walker:
         fz = IMPACT[1][1] + 2.6
         head = S._norm((SHOP4 - x0, 0.0, fz - z))           # staring at the fire
+        j['face'] = {'brows': 'alarm', 'brow_raise': 6, 'mouth': ('open', 'mid')[pp['i'] % 2]}
     elif ducks and t < t_duck and abs(z0 - tz) < 30:
         head = S._norm((LANE4 - x0, 0.0, tz - z))           # turning to the roar of the chase
     return x0, z, F, j, head
 
 
 _lens_clear()
+
+
+def _lens_ok(pp):
+    """chat 27 / note 14 (a person passing the lens's edge reads as a giant): runner pp, on their lane, never comes
+    within 6 m of the lens, in its view, while it rides the kerb (shot 4) - kept off by where they run when."""
+    for u in np.arange(LENS_KERB[0] - 0.3, LENS_KERB[1] + 0.3, 1 / 12):
+        cam = shot4_cam(u, tulip4(u))
+        x, z = crowd(pp, u)[:2]
+        d = cam.depth((x, 1.0, z))
+        if 0.3 < d < 6.0 and -150 < cam.project((x, 1.0, z))[0][0] < 1230:
+            return False
+    return True
 
 
 def clear_crowd():
@@ -1048,15 +1150,78 @@ def clear_crowd():
         return old
 
     def lanes(pp):
+        # Sam, note 15: the whole pavement (chat 51 kept the fire's runners to x 8.65+, by the shop wall, to keep
+        # them off the lens: they clumped there). A lane is offered only if the run on it stays off the lens.
         if not pp.get('_runs'):
             return []
-        lo = 8.65 if pp['at'][0] > 0 else 0.0       # the fire's pavement: runners keep to the shop side, clear of the
-        return sorted((x for x in band(pp) if abs(x - pp['at'][0]) >= 0.5 and abs(x) >= lo),   # lens over the kerb
-                      key=lambda x: abs(x - (pp.get('lane') or pp['at'][0])))
+        old = pp.get('lane')
+        ok = []
+        for x in band(pp):
+            if abs(x - pp['at'][0]) < 0.5:
+                continue
+            pp['lane'] = x
+            if _lens_ok(pp):
+                ok.append(x)
+        pp['lane'] = old
+        return sorted(ok, key=lambda x: abs(x - (pp.get('lane') or pp['at'][0])))
 
+    def places(pp):
+        xs = sorted(band(pp), key=lambda x: abs(x - pp['at'][0]))
+        if not pp.get('_runs'):
+            return xs
+        ok, old = [], pp['at']
+        for x in xs:                             # a runner's start place keeps their run off the lens too
+            pp['at'] = (x, old[1])
+            if _lens_ok(pp):
+                ok.append(x)
+        pp['at'] = old
+        return ok
+
+    def spaced(i, tracks):
+        return [f for f in CP.bunched(i, tracks, ts) if f[1] in RUNNERS] if i in RUNNERS else []
+
+    RUNNERS = set()
+    for pp in PEOPLE4:
+        crowd(pp, 12.0)
+        if pp.get('_runs'):
+            RUNNERS.add(pp['i'])
+            if not _lens_ok(pp):                      # its own run passes the lens (Sam's Y: "keep off the lens by
+                x0, z0 = pp['at']                     # start place/timing"): they stood a little further along, the
+                for dz in sorted((d * 0.5 for d in range(-30, 31) if d), key=abs):   # nearest place where their own
+                    pp['at'] = (x0, z0 + dz)                                           # lane is clear of it (the
+                    pp.pop('dz', None)                                                 # lens has passed them by
+                    if _lens_ok(pp):                                                   # the time they run)
+                        break
+                else:
+                    pp['at'] = (x0, z0)
+                    pp.pop('dz', None)
+                    ls = lanes(pp)
+                    if ls:
+                        set_lane(pp, ls[0])
     for _ in range(5):                    # where they stand and where they run each free the other's lines
-        if not (CP.clear(PEOPLE4, crowd, set_at, lambda pp: sorted(band(pp), key=lambda x: abs(x - pp['at'][0])),
-                         posts, ts, passes=1) + CP.clear(PEOPLE4, crowd, set_lane, lanes, posts, ts, passes=1)):
+        if not (CP.clear(PEOPLE4, crowd, set_at, places,
+                         posts, ts, passes=1) +
+                CP.clear(PEOPLE4, crowd, set_lane, lanes, posts, ts, passes=1, extra=spaced)):
+            break
+    # Sam, note 15 ("they run sort of right next to each other"): a runner still beside or on another's heels, or
+    # still meeting someone, waits a moment longer in their startle (their own reaction time), never off the lens
+    def set_hold(pp, h):
+        old = pp.get('hold', 0.0)
+        pp['hold'] = h
+        return old
+
+    def holds(pp):
+        if not pp.get('_runs'):
+            return []
+        ok, old = [], pp.get('hold', 0.0)
+        for h in (0.25, 0.5, 0.75, 1.0, 1.25):
+            pp['hold'] = h
+            if _lens_ok(pp):
+                ok.append(h)
+        pp['hold'] = old
+        return ok
+    for _ in range(2):
+        if not CP.clear(PEOPLE4, crowd, set_hold, holds, posts, ts, passes=1, extra=spaced):
             break
     # a walker whose every line meets someone stops short of them instead (as people do), never walks through
     for _ in range(4):
@@ -1201,6 +1366,8 @@ def person_at(img, cam, sp, neck, facing, t=0.0, joints=None, head_dir=None):
     if X < -400 or X > 1480 or Y < -500 or Y > 2600:
         return None
     s = k * sp.get('height', 1.75) / FIG_H
+    if joints and joints.get('face'):                      # an expression for this moment (note 15: alarm, fear)
+        sp = dict(sp, **joints['face'])
     a = fig_yaw(cam, neck, facing)
     hy = fig_yaw(cam, neck, head_dir) if head_dir is not None else None
     return V.person(img, B.Cam(1.0), X, Y, s, sp, t, a, joints, hy)

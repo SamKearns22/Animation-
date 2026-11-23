@@ -12,6 +12,8 @@ MAP
   faults ....... one person's clashes against the others and the fixed posts (trunks, hydrants), within the pavement
   clear ........ the fixing pass: everyone at fault tries the nearby lines, nearest first, and keeps the first clear one
   report ....... every clash left (for a check): who, with whom or what, when
+  bunched ...... two runners side by side or on each other's heels for a while (GTA note 15: "they run sort of right
+                 next to each other"): pass it to clear() as `extra` so runners spread out too
 
 Use (a film's crowd):
     import crowdpath as CP
@@ -61,21 +63,43 @@ def faults(i, tracks, posts, first=False):
     return out
 
 
-def clear(people, pos_fn, set_line, lines_fn, posts, ts, key=lambda pp: pp['i'], passes=2):
+def bunched(i, tracks, ts, gap=1.1, along=1.8, hold=0.4, speed=1.8):
+    """Sam, GTA note 15 (23 Nov): "they run sort of right next to each other". Person i and another both moving
+    faster than `speed` (m/s, a run), closer than `gap` across the pavement and `along` along it, for `hold` seconds
+    or more: [('bunched', j, first sample)]."""
+    a = tracks[i]
+    dt = float(ts[1] - ts[0])
+    n = max(1, int(round(hold / dt)))
+    va = np.hypot(*np.diff(a, axis=0).T) / dt
+    out = []
+    for j, b in tracks.items():
+        if j == i:
+            continue
+        vb = np.hypot(*np.diff(b, axis=0).T) / dt
+        close = (np.abs(a[1:, 0] - b[1:, 0]) < gap) & (np.abs(a[1:, 1] - b[1:, 1]) < along) & (va > speed) & (vb > speed)
+        if close.sum() >= n:
+            run = np.convolve(close.astype(int), np.ones(n, int), 'valid')
+            if (run >= n).any():
+                out.append(('bunched', j, int(np.argmax(run >= n))))
+    return out
+
+
+def clear(people, pos_fn, set_line, lines_fn, posts, ts, key=lambda pp: pp['i'], passes=2, extra=None):
     """Fix every person at fault, in order: the nearest clear line wins; none clear: the one with fewest clashes.
-    Two passes: a later move can clear an earlier person's only line."""
+    Two passes: a later move can clear an earlier person's only line. extra(i, tracks) -> more faults (bunched)."""
+    more = (lambda i, tr: extra(i, tr)) if extra else (lambda i, tr: [])
     tracks = {key(pp): track(pp, pos_fn, ts) for pp in people}
     moved = 0
     for _ in range(passes):
         for pp in people:
             i = key(pp)
-            if not faults(i, tracks, posts, first=True):
+            if not faults(i, tracks, posts, first=True) and not more(i, tracks):
                 continue
             best = None
             for x in lines_fn(pp) or []:
                 old = set_line(pp, x)
                 tracks[i] = track(pp, pos_fn, ts)
-                n = len(faults(i, tracks, posts))
+                n = len(faults(i, tracks, posts)) + len(more(i, tracks))
                 if best is None or n < best[0]:
                     best = (n, x)
                 set_line(pp, old)
