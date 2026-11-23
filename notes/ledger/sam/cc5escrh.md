@@ -7,3 +7,12 @@ I do think we need multiple body shapes in our kit, maybe 6 for male and female,
 ### 2026-11-23T22:06:07
 I'd be keen to answer your script questions soon
 
+### 2026-11-23T22:09:36
+1. Y
+2. Can we do better?
+3. Yes
+4. Andy is opening old wounds... 🇬🇧 
+5. Yes, before a wolf lunges at him 
+6. Yes
+7. He would do his interview in the UK but sure why not
+
