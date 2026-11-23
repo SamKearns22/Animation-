@@ -9,7 +9,7 @@
 - **Needs Sam:** nothing for this job.
 - **Read:** this section; guides/job-packs.md "A tool job".
 - **Open rule requests:** none new.
-- **For Claude:** staging-stills Q1 waits on Sam; let-through 9c3f62f3 still to settle. Kit tests red before: claude_md_sentences_never_lost; body_check_* (makehuman clone). No reader agent type yet (general-purpose Sonnet). Branches claude/gta-chat31, claude/dreamy-fermi-vkhutz, claude/gta-chat46-build: GTA's (another account's chats), left alone. plain-check's existing proposals are shape 1 (no fields), by design.
+- **For Claude:** staging-stills Q1 waits on Sam; let-through 9c3f62f3 still to settle. Kit tests red before: claude_md_sentences_never_lost; body_check_* (makehuman clone). No reader agent type yet (general-purpose Sonnet). Branches claude/gta-chat31, claude/dreamy-fermi-vkhutz, claude/gta-chat46-build: GTA's (another account's chats), left alone. plain-check's existing proposals are shape 1 (no fields), by design. End check named: SENTENCE x3 (CLAUDE.md headings reworded by Sam 21-22 Nov: false flag, as chats 1-5); COST (system job, no estimate); PUSH (sent at the end).
 
 ## Learn step brief (Sam, 15 Nov: "We are aiming to cut the cost of every stage of production as greatly as possible
 without harming quality"; read-only, changes nothing outside notes/proposals/learn/)
