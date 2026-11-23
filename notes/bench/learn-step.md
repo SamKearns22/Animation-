@@ -346,3 +346,39 @@ area per side, no island under N px - proposed via the proposal route).
   K2 low hold 2 cm in, 4 cm up, muzzle less out). Checks: car 0, pistol 0, range 0; creases named. Before/after:
   notes/bench/grip-before-after.jpg. Why no check saw it: nothing measures WHERE a held object sits in the hand
   (the open "held-object check" request): it would have caught this (fist centre vs the object's handle spot).
+
+## Stage 2, chat 44 (Opus high): the house look on the move
+- K4 vest strap (Sam's "Fix", 22 Nov), why the first two fixes failed: dressed_still HID every triangle touching a
+  neck-bone point (to make room for the neck column), and the shoulder tops out to rest |x| 1.4 dm are weighted to
+  the neck bones: a hole was cut across each strap, so its front piece stood alone. Now only the neck itself (rest
+  |x| < 0.62) is hidden (0.68 left an ink blot at the join). part_at also: the trapezius (neck-bone group) counts as
+  trunk below the jaw; the vest cut is a tank top as curves (U scoop neck, front deeper; straps |x| 0.85-1.3 unbroken
+  over the shoulder; armholes curving to |x| 1.8 at the armpit, y 5.8), was a box neckline + straight armhole.
+- dressed_draw(out, t, view): the still's drawing as a frame drawer (still unchanged: 0 pixels differ);
+  `clip OUT OUT.mp4 [T0 T1] --dressed` draws the clip in the house look (frame store keyed "dressed"; ~3.3 s a frame
+  of work, 4 at a time). Per-triangle part names dropped (colours come per dot from part_at; same pixels).
+- house_head: the flat drawing it is cut from no longer draws flat arms/legs (the flat arm's check refused an elbow
+  across the chest and stopped the clip; a flat arm crossing the head left a hole in it; K4 changed 24 px).
+- Head views: three -> side at 1.83 s, side -> three_back 3.83, -> back 5.54, back again to front 7.25-7.79: the house
+  head's standard snap between drawn views (views.py: "a turn swaps drawings"); no flicker (yaw never crosses back).
+- "Pieces" test tried in scratch (vest colour areas, connected pieces): the half-fixed still had a 655 px island,
+  the fixed one only specks < 100 px; the very first still's island was not found by colour (43 px): not ready.
+- Whole dressed clip (old timing, 198 frames): 6.3 min drawing (4 at a time). Looked at every 9th frame and the
+  get-up / sit-down at full size. Found and fixed: (1) a scribble at the front of the throat in side views: the chest
+  skin pulled onto the neck column all-or-nothing left a ledge; the pull now fades in (4 cm up, 8-12 cm out) and
+  takes in the shoulder-top skin (region 10); the old full neck-hiding showed it worse (checked). (2) the pistol a
+  black blob end-on (7.12 s) / black tick at his side: drawn in the film's own tones (gun3d_film.COLS: light slide,
+  mid frame, dark grip, muzzle), one outline round the whole pistol (bench_draw INK_PART). Grey frames unchanged
+  (same.py --draw-only: only frames 16 and 176 differ, as they did before this chat: chat 41's re-planned climb).
+- Dressed clip on chat 43's timing (247 frames, 10.25 s): checks 2.4 min (the same 42 faults chat 43 named, word for
+  word), drawing 8.75 min. Sent phone-safe: animations/drafts/jason-dressed-test.mp4 (shot camera only, 540x960,
+  baseline, 528 KB). Looked at every 11th frame and 12 key frames at full size: pistol reads as a pistol end-on
+  (0.92, 8.92 s: still mostly its dark grip from below); no throat scribble; strap one band throughout.
+- Named, not fixed (for Sam): 2.29-2.75 s the gun arm seems to come out of his mouth: from the locked camera his
+  right shoulder is behind his head (the house head is the approved cartoon size, measured: 17% wider than the solid
+  head here, 48% on the approved seated still). A pose matter (shoulder/elbow), not the drawing. 1.67-1.83 s the
+  raised gun arm wraps over/behind his head (critique r38: "rubbery over the head"). Head views snap (house style).
+- Not run: a fresh-helper critique of the dressed clip (cost; film at ~93% of its 15%).
+- Sam's notes (23 Nov): "Overall, it's very good"; the two named items fine; N1 neck from the back / side, N2 head
+  turn at 2 s jarring (film notes, LOOK strand). Missed by me: frames 205-214 were zoomed and the neck over the hair
+  not seen (I looked at the pistol and throat only). Lesson: every head view gets its own full-size look.
