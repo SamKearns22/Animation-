@@ -1512,7 +1512,8 @@ def check_frame(out, g):
 # ---------------------------------------------------------------------------------------------------- drawing
 GREY = dict(skin=(176, 176, 176), vest=(176, 176, 176), trousers=(176, 176, 176), shoes=(176, 176, 176),
             hair=(176, 176, 176), door=(214, 120, 112), body=(214, 120, 112), dash=(120, 112, 110),
-            seat=(150, 128, 112), pillar=(70, 70, 76), gun=(40, 40, 44), hand=(176, 176, 176))
+            seat=(150, 128, 112), pillar=(70, 70, 76), gun=(40, 40, 44), hand=(176, 176, 176),
+            gun_slide=(40, 40, 44), gun_frame=(40, 40, 44), gun_muzzle=(40, 40, 44))
 SKY = (232, 236, 240)
 
 
@@ -1550,8 +1551,19 @@ def scene(out):
         Pb, Tb = BD._ball(c, HAND_R)
         objs.append((Pb, Tb, np.array(['hand'] * len(Tb)), 'hand' + sd))
     Pg, Tg = out['gun']
-    objs.append((Pg, Tg, np.array(['gun'] * len(Tg)), 'gun'))
+    objs.append((Pg, Tg, gun_kinds(Tg), 'gun'))
     return objs
+
+
+def gun_kinds(Tg):
+    """Each pistol triangle's part (slide, frame, grip, muzzle: gun3d_film's kinds; bench_draw.GUN_PARTS)."""
+    import bench_draw as BD
+    import gun3d_film as GF
+    if 'gun_k' not in RIG:
+        _, T, K = GF.mesh(1.0)
+        RIG['gun_k'] = (T, np.array([BD.GUN_PARTS[k] for k in K[T[:, 0]]]))
+    T, names = RIG['gun_k']
+    return names if len(T) == len(Tg) else np.array(['gun'] * len(Tg))
 
 
 def draw(out, cam, size=(540, 960)):
@@ -2087,7 +2099,7 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False):
     # only the neck itself is hidden (rest |x| under 0.62 dm; 0.68 left an ink blot at the join): the shoulder tops
     # out to |x| 1.4 are tied to the neck bones too, and hiding them cut a hole across each vest strap, so the
     # strap's front piece read as an island (Sam, K4 still, 22 Nov; found chat 44)
-    neckb &= np.abs(BP._REST['v'][:, 0]) < 0.62
+    neckb &= np.abs(BP._REST['v'][:, 0]) < float(os.environ.get('NECK_HIDE_X', 0.62))
     hide = r['headb'] | (neckb & DRESS_HIDE_NECK)
     # a triangle touching the hidden neck at all goes (its scraps poked through the neck column as a hooked line
     # at the throat, chat 38); the column's base, sunk into the trunk, covers the opening
@@ -2108,11 +2120,20 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False):
         tk = tk[~inside_col[tk].all(1)]
         # the chest and trapezius skin ABOVE the neck's base flows onto the neck (a lip of it stood in front of the
         # column at the throat, its edge inked as a hooked line, chat 38): those points go to just under its skin
-        lip = (r['region'] == 1) & (al > 0.02) & (al < np.linalg.norm(a1 - a0)) & (rr < 0.10) & (rr > NECK_R[1] * 0.97)
+        # chat 44: the pull fades in (over 4 cm up from the column's base and 8-12 cm out from its axis) and takes in
+        # the shoulder-top skin tied to the neck bones (now drawn): pulled all-or-nothing, the skin left a ledge at
+        # the front of the throat, inked as a scribble in every side view
+        tgt = NECK_R[1] * 0.97
+        def _ss(x):
+            x = np.clip(x, 0, 1)
+            return x * x * (3 - 2 * x)
+        f = _ss(al / 0.04) * (1 - _ss((rr - 0.08) / 0.04)) * (al < np.linalg.norm(a1 - a0))
+        lip = np.isin(r['region'], (1, 10)) & (rr > tgt) & (f > 0)
         if lip.any():
             radial = (d_ - np.outer(al, ax_))[lip]
+            nr = rr[lip] + (tgt - rr[lip]) * f[lip]
             Pj = Pj.copy()
-            Pj[lip] = a0 + np.outer(al[lip], ax_) + radial / rr[lip][:, None] * NECK_R[1] * 0.97
+            Pj[lip] = a0 + np.outer(al[lip], ax_) + radial / rr[lip][:, None] * nr[:, None]
         ni = np.where(neckb & r['keep'])[0]
         src = ni[np.argmin(np.linalg.norm(Pj[ni] - out['J']['neck'], axis=1))]   # its colour: a neck skin point's
         tk = np.concatenate([tk, Tn + len(Pj)])

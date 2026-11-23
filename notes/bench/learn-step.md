@@ -336,3 +336,10 @@ area per side, no island under N px - proposed via the proposal route).
   head's standard snap between drawn views (views.py: "a turn swaps drawings"); no flicker (yaw never crosses back).
 - "Pieces" test tried in scratch (vest colour areas, connected pieces): the half-fixed still had a 655 px island,
   the fixed one only specks < 100 px; the very first still's island was not found by colour (43 px): not ready.
+- Whole dressed clip (old timing, 198 frames): 6.3 min drawing (4 at a time). Looked at every 9th frame and the
+  get-up / sit-down at full size. Found and fixed: (1) a scribble at the front of the throat in side views: the chest
+  skin pulled onto the neck column all-or-nothing left a ledge; the pull now fades in (4 cm up, 8-12 cm out) and
+  takes in the shoulder-top skin (region 10); the old full neck-hiding showed it worse (checked). (2) the pistol a
+  black blob end-on (7.12 s) / black tick at his side: drawn in the film's own tones (gun3d_film.COLS: light slide,
+  mid frame, dark grip, muzzle), one outline round the whole pistol (bench_draw INK_PART). Grey frames unchanged
+  (same.py --draw-only: only frames 16 and 176 differ, as they did before this chat: chat 41's re-planned climb).

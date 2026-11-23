@@ -38,7 +38,8 @@ def colours(sp):
     return {'skin': tuple(sp['skin']), 'vest': tuple(sp.get('vest_c', (236, 230, 212))),
             'trousers': tuple(sp['trousers']), 'shoes': tuple(sp['shoe']), 'hair': tuple(sp['hair_c']),
             'door': G.TULIP_RED, 'body': G.TULIP_RED, 'dash': G.VINYL, 'seat': (120, 84, 62),
-            'pillar': G.STRIPE, 'gun': (44, 44, 48), 'hand': tuple(sp['skin'])}
+            'pillar': G.STRIPE, 'gun': (44, 46, 54), 'hand': tuple(sp['skin']),
+            'gun_slide': (132, 138, 152), 'gun_frame': (70, 74, 84), 'gun_muzzle': (30, 30, 36)}
 
 
 def _box(lo, hi):
@@ -261,8 +262,13 @@ def _raster_py(cam, objs, scale=1, attrs=None):
     return zb, pb, ob, names
 
 
-PART_NAMES = ['skin', 'vest', 'trousers', 'shoes', 'hair', 'door', 'body', 'dash', 'seat', 'pillar', 'gun', 'hand']
+PART_NAMES = ['skin', 'vest', 'trousers', 'shoes', 'hair', 'door', 'body', 'dash', 'seat', 'pillar', 'gun', 'hand',
+              'gun_slide', 'gun_frame', 'gun_muzzle']
+# the pistol's blocks in the film's own tones (gun3d_film.COLS: slide, frame, grip = 'gun', muzzle), chat 44: drawn
+# all one near-black it read as a black mark or blob when it pointed at the camera; they share one outline (INK_PART)
+GUN_PARTS = ('gun_slide', 'gun_frame', 'gun', 'gun_muzzle')     # by gun3d_film kind 0-3
 PART_IX = {n: i for i, n in enumerate(PART_NAMES)}
+INK_PART = np.array([-1] + [PART_IX['gun'] if n in GUN_PARTS else i for i, n in enumerate(PART_NAMES)])
 
 
 def ink(zb, pb, ob, width):
@@ -271,6 +277,7 @@ def ink(zb, pb, ob, width):
     h, w = zb.shape
     edge = np.zeros((h, w), bool)
     zf = np.where(np.isfinite(zb), zb, 1e3)
+    pb = INK_PART[np.clip(pb, -1, len(PART_NAMES) - 1) + 1]   # the pistol's tones are one part to the ink
     for dy, dx in ((0, 1), (1, 0), (1, 1), (1, -1)):
         a = (slice(max(0, -dy), h - max(0, dy)), slice(max(0, -dx), w - max(0, dx)))
         b = (slice(max(0, dy), h - max(0, -dy) if dy < 0 else h), slice(max(0, dx), w if dx >= 0 else w + dx))
