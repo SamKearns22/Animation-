@@ -240,5 +240,5 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Done: animatic v5 pictures + sound (branch claude/gta-v5-sound-draft); unchecked.
 - Next: Opus high, chat 48: run the proposal route (propose.py new override-word) for the Override rule; put the two options to Sam; on his pick write it, then send the animatic into the chat (Override or body check), with Hook Text and sign-off if finish.py allows.
 - Needs Sam: pick between the two Override options. Read: notes/proposal-route.md; "Chat 47" above.
-- Open rule requests: Override word (above); build check (bulk note); held-object check; head-flip check; pop check.
+- Open rule requests: Sam 23 Nov: drop the 'Locked by Sam' line from messages to him ("doesn't help me"): chat 47 stopped showing it to him now; the notes' line stays (it guards shots for later chats, handover check wants it); route changing CLAUDE.md/check with the Override proposal; Override word (above); build check (bulk note); held-object check; head-flip check; pop check.
 - For Claude: grand_theft_autism.mix(silent,out) rebuilds sound from a silent video without redrawing.
