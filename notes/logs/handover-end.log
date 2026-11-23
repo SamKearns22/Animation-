@@ -286,3 +286,4 @@
 2026-11-23T13:58+00:00	REFUSED 1: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 sour	01U3pKR1Z6SWGi4RSahgw7hK
 2026-11-23T14:07+00:00	REFUSED 1: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 sour	01U3pKR2CR28qdUtk2Z9Y6DN
 2026-11-23T14:14+00:00	REFUSED 1: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 sour	01U3pKR2taFPq31QroZMAKSe
+2026-11-23T14:15+00:00	REFUSED 1: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for i	01U3pKQzjJ6Hbt9H5jkEg1t1

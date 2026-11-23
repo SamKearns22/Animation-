@@ -768,6 +768,47 @@ def board_gate_milburn_reverse():
 V7_COMMIT = '3844e0a9'                   # GTA shot 4 version 7 as Sam saw it (21 Nov, chat 22; stills in sam-v7/)
 
 
+def _as_seen(commit, code, now, timeout=900):
+    """Run `code` on a film exactly as Sam saw it: every source file from `commit` (the film's own timing, poses and
+    kit as they were), with only the check under test taken from today (`now`: {name in the old copy: today's file}).
+    A replay that mixes today's kit into an old film tests a drawing Sam never saw (chain A chat 6: GTA chat 43's
+    "25% slower" moved v3's Jason to another pose, so the back-view check lost 1.3 s and found a head that wasn't
+    missing). Returns the finished process (stdout, stderr, returncode), or None if the commit is not in this copy."""
+    import shutil
+    import subprocess
+    import tempfile
+    tmp = tempfile.mkdtemp()
+    try:
+        tar = subprocess.run(['git', 'archive', commit, 'source', 'story'], cwd=os.path.dirname(HERE),
+                             capture_output=True).stdout
+        if not tar:
+            return None
+        subprocess.run(['tar', '-x', '-C', tmp], input=tar, check=True)
+        src = os.path.join(tmp, 'source')
+        for dest, mine in now.items():
+            shutil.copy(os.path.join(HERE, mine), os.path.join(src, dest))
+        return subprocess.run([sys.executable, '-c', f'import sys; sys.path.insert(0, {src!r}); ' + code], cwd=src,
+                              capture_output=True, text=True, timeout=timeout)
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _seen_faults(commit, shot, times):
+    """Today's body check (humancheck.py) on a film's shot exactly as Sam saw it (_as_seen): [(t, who, kind, text)].
+    Old copies record no 'head' drawings (that hook came in GTA chat 20), so their 'head' faults are left out.
+    Raises RuntimeError when the version is missing or its replay crashed (a test that cannot run says so)."""
+    import json
+    code = ('import json, gta_rehearse as G, humancheck as HC\nout = []\nfor t in %r:\n    HC.frame_begin(); G.%s(t)\n'
+            '    out += [list(x) for x in HC.frame_end(t)]\nprint("FAULTS " + json.dumps(out))' % (tuple(times), shot))
+    r = _as_seen(commit, code, {'humancheck.py': 'humancheck.py'})
+    if r is None:
+        raise RuntimeError(f'COULD NOT TEST: {commit} is not in this copy\'s history')
+    line = next((ln for ln in r.stdout.splitlines() if ln.startswith('FAULTS ')), None)
+    if line is None:
+        raise RuntimeError(f'{commit} replay crashed: {r.stderr.strip().splitlines()[-1:]}')
+    return [tuple(x) for x in json.loads(line[7:]) if x[2] != 'head']
+
+
 @test
 def solid_check_shot4_v7():
     """Rule 17 (lesson 7; GTA v7 note 3, Sam 21 Nov: "Jason clips through two parts of the car as he moves"): the
@@ -778,24 +819,11 @@ def solid_check_shot4_v7():
     point (the vest's edge showed between them); viewchecks.outline_shows now tests the drawn outline, so frame 8 must
     flag Jason's body through the tulip's bonnet; and v7 note 7, the hydrant water through the cruiser (still c0d78111,
     3.33 s = frame 40), effect_shows must flag the water (effect 0) through the cruiser's bonnet."""
-    import subprocess
-    import tempfile
-    root = os.path.dirname(HERE)
-    tmp = tempfile.mkdtemp()
-    try:
-        tar = subprocess.run(['git', 'archive', V7_COMMIT, 'source', 'story'], cwd=root, capture_output=True).stdout
-        if not tar:
-            return False, 'COULD NOT TEST: version 7 is not in this copy\'s history'
-        subprocess.run(['tar', '-x', '-C', tmp], input=tar, check=True)
-        src = os.path.join(tmp, 'source')
-        import shutil                             # today's check on version 7's own drawing code
-        shutil.copy(os.path.join(HERE, 'viewchecks.py'), os.path.join(src, 'viewchecks_now.py'))
-        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks_now as VC; '
-                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18, 40], label="v7")))' % src)
-        r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
-    finally:
-        import shutil
-        shutil.rmtree(tmp, ignore_errors=True)
+    code = ('import gta_rehearse as G, viewchecks_now as VC; '
+            'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18, 40], label="v7")))')
+    r = _as_seen(V7_COMMIT, code, {'viewchecks_now.py': 'viewchecks.py'})    # today's check on version 7's own code
+    if r is None:
+        return False, 'COULD NOT TEST: version 7 is not in this copy\'s history'
     water = any(ln.startswith('BODY:') and ' 3.33 s: effect 0 shows through the cruiser' in ln for ln in r.stdout.splitlines())
     lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
     arm = any('rubbed out' in ln for ln in lines)
@@ -825,6 +853,38 @@ def bump_test_bench_old_poses():
     new = [k for k in ('K1', 'K3') for o in [BM.solve(BM.goals_at(T[k]))] if BM.car(o) or BM.pistol(o) or BM.gun_car(o)]
     ok = seat >= 5 and gun >= 3 and dash and not new
     return ok, f'old still: seat {seat} cm, pistol {gun} cm; old K3 into the dash {dash}; new move faults at {new or "none"}'
+
+
+@test
+def audit_door_through_officer():
+    """Rule 5 (a bump test on every frame; Power Crime Action note 47, Sam 20 Oct, animatic 3: "The door clips through
+    the character."): the van's rear door swung through the officer who slams it. The fix moved him 0.8 m further back,
+    clear of the swing (notes/archive/power-crime-action.md row 47). The film's code from before 14 Nov was not kept,
+    so the old spot is rebuilt by undoing just that recorded move. audit.py, the bump test every other film uses, must
+    flag the van's door in the officer there, and pass the film as it is now. About 10 s."""
+    import power_crime as PC
+    import audit as A
+    real = PC.door_officer
+
+    def old_spot(img, cam, t):                       # the officer where he stood in animatic 3
+        put = PC.put
+        PC.put = lambda img_, cam_, sp, x, z, *a, **k: put(img_, cam_, sp, x - 0.8, z, *a, **k)
+        try:
+            real(img, cam, t)
+        finally:
+            PC.put = put
+
+    def door_hits():
+        return [f['text'] for f in A.run(PC, 15.9, 16.6, log=lambda *a: None)
+                if f['what'] == 'collision' and set(f['names']) == {'VAN', 'VANPC'}]
+    now = door_hits()
+    PC.door_officer = old_spot
+    try:
+        then = door_hits()
+    finally:
+        PC.door_officer = real
+    ok = any('door' in x for x in then) and not now
+    return ok, f'animatic 3 spot: {then or "NOT flagged"}; today: {now or "clean"}'
 
 
 # ------------------------------------------------------------------------------------------------ running them
@@ -4167,24 +4227,12 @@ def body_check_shot4_v4():
     cup sipping three-quarter front). Shot 3 of that same version had real crossed forearms (Lucia off the wheel, the
     middle passenger's hands on the wrong sides; seen on the picture 21 Nov): the check must flag exactly those, and
     nothing else there."""
-    import importlib.util
-    import subprocess
-    import tempfile
     import posegallery as PG
     import body as B
     import views as V
     import moves
-    src = subprocess.run(['git', 'show', f'{V4_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
-                         capture_output=True, text=True, check=True).stdout
-    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v4.py')
-    with open(tmp, 'w') as fh:
-        fh.write(src)
-    spec = importlib.util.spec_from_file_location('gta_rehearse_v4', tmp)
-    R = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(R)
-    old = _body_faults(R.shot4, V4_TIMES)
+    old = _seen_faults(V4_COMMIT, 'shot4', V4_TIMES)               # v4 exactly as Sam saw it
     kinds = {k for _, who, k, _ in old if who == 'Jason'}
-    s3 = _body_faults(R.shot3, (0.5, 1.5, 2.5))
     gal = {n: b for n, b, _ in PG.GALLERY}
     import humancheck as HC
     g = []
@@ -4212,23 +4260,13 @@ def body_check_curled_v4():
     4.92 s: his hand behind his back, the forearm end-on as a stump, 'stub'), and pass the gallery poses that a first
     draft of the stump test wrongly flagged (patting the air from behind, the phone at the ear from three-quarter)
     plus every gallery pose from the front and side. About 1 minute."""
-    import importlib.util
-    import subprocess
-    import tempfile
     from PIL import Image
     import posegallery as PG
     import body as B
     import views as V
     import humancheck as HC
-    src = subprocess.run(['git', 'show', f'{V4_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
-                         capture_output=True, text=True, check=True).stdout
-    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v4c.py')
-    with open(tmp, 'w') as fh:
-        fh.write(src)
-    spec = importlib.util.spec_from_file_location('gta_rehearse_v4c', tmp)
-    R = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(R)
-    got = {t: {k for _, who, k, _ in _body_faults(R.shot4, (t,)) if who == 'Jason'} for t in V4_CURLED}
+    seen = _seen_faults(V4_COMMIT, 'shot4', V4_CURLED)              # v4 exactly as Sam saw it
+    got = {t: {x[2] for x in seen if x[0] == t and x[1] == 'Jason'} for t in V4_CURLED}
     caught = 'reach' in got[1.00] and 'stub' in got[4.92]
     gal = {n: b for n, b, _ in PG.GALLERY}
     cases = [('flapping (pat)', 180), ('phone at the ear', 45), ('phone at the ear', -45)]
@@ -4253,23 +4291,12 @@ def body_check_back_view():
     seen big from behind must be DRAWN to read from behind; the camera of an approved shot never moves. The body check
     must flag Jason's back in animatic v3's shot 4 (15.4 and 18.3 s) with advice that points at the drawing (never
     "choose another camera"), flag a big flat figure drawn from behind and pass the same figure from the front."""
-    import importlib.util
-    import subprocess
-    import tempfile
     from PIL import Image
     import posegallery as PG
     import body as B
     import views as V
     import humancheck as HC
-    src = subprocess.run(['git', 'show', f'{V3_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
-                         capture_output=True, text=True, check=True).stdout
-    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v3.py')
-    with open(tmp, 'w') as fh:
-        fh.write(src)
-    spec = importlib.util.spec_from_file_location('gta_rehearse_v3', tmp)
-    R3 = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(R3)
-    old = [x for x in _body_faults(R3.shot4, V3_BACK) if x[1] == 'Jason' and x[2] == 'back view']
+    old = [x for x in _seen_faults(V3_COMMIT, 'shot4', V3_BACK) if x[1] == 'Jason' and x[2] == 'back view']
     said = ' '.join(str(v) for x in old for v in x[3:])
     to_drawing = 'DRAWING' in said and 'another camera' not in said
     flat = {}
