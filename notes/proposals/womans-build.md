@@ -1,6 +1,6 @@
 # Proposal: Women in the cast are drawn on a man's body
 
-Status: open
+Status: adopted (2026-11-23)
 
 ## Problem
 On the Brexit Is Done cast sheet v2, Sam said: "Can I just say...I'm not sure we have female bodies? Kemi's body

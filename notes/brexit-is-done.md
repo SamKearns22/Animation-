@@ -30,6 +30,18 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
       some other august locale". Behind Tony Blair, doors thrown open as wolves run rampant, chasing staff and guests.
 - [ ] 12. Blair: "Well, in my opinion, you shouldn't listen to anything I say, I'm Tony Blair, I invaded Iraq, I belong in
       The Hague." Big cheesy grin.
+- [ ] 13. (Sam, 23 Nov, Q5) Blair holds the big grin about 1.5 s, then a wolf lunges at him; cut to the sign-off on
+      the lunge (chat 3's pick, before it reaches him).
+- [ ] 14. (Q3) The interviewers are never seen or heard; all three look off-frame left at them.
+- [ ] 15. (Q4) Hook Text: "Andy is opening old wounds... 🇬🇧" (the flag drawn as one picture: hook_text fixed chat 3,
+      kittest hook_text_flag_emoji).
+- [ ] 16. (Q6) Kemi's site in daylight under a grey British sky, as her photo.
+- [ ] 17. (Q7) Blair's room: Sam: "He would do his interview in the UK but sure why not" -> a grand oak-panelled,
+      book-lined room in London (chat 3's pick from his words), not Brussels.
+- [ ] 18. (Q2) Blood: Sam: "Can we do better?" than Cry Minister's flat red: plan sent (two reds and a shine, arcs that
+      land and soak into the dust, stained muzzles, paws and vests, torn hi-vis and a tumbling hard hat, dust at every
+      leap; chunks as Cry Minister, no bones or insides); waiting for his Y.
+- [x] (Q1) Woman's body: option 1 (Sam: Y, 23 Nov): notes/proposals/womans-build.md "Final version".
 - Locked by Sam: the script above (lines, order, who is where, every background action).
 - Sam's words kept: Kemi and Blair face "the same way she is facing, being interviewed"; the script and site: "I'll describe
   both to you soon." "For now, please work on the characters."
@@ -41,11 +53,12 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   route (judged: helper B's, 8 found, 4 fixed, 4 named; sent to Sam as two options); Sam's v2 notes saved with
   pictures; reserve list made (Sam: 6+6 body shapes and today's tool chats, notes/next-jobs.md R1-R6).
 - **Chats are named "Open Wounds"** (Sam, 23 Nov); the film's files keep the name brexit-is-done.
-- **Next (Opus high: a new build):** Sam's pick on the woman's body; Option 1 = learn, then a woman's body by
-  default with a check, then women's clothes, then cast sheet v3. Then the plan from the script (brief items 4-12):
-  sets, the wolves from Cry Minister on the new kits, the estimate.
-- **Needs Sam:** Q1 woman's body: option 1 or 2 (asked in chat 3).
-- **Read:** `guides/job-packs.md` Build; notes/proposals/womans-build.md "Final version".
+- **Next (chat 4, Opus high: a new build):** Sam said Y to option 1 of the woman's body
+  (notes/proposals/womans-build.md "Final version"): the learn step (outlines, standing, turned, seated, saved
+  sheet), then the default and the check (must fail both n5 pictures, pass Lucia and Blair), then women's clothes,
+  then cast sheet v3 to Sam. Then the plan (brief items 4-18): sets, the wolves, the estimate.
+- **Needs Sam:** Q2 blood plan (item 18): his Y comes back to chat 3, which writes it here.
+- **Read:** `guides/job-packs.md` Build; notes/proposals/womans-build.md "Final version"; notes/sam-notes/brexit-cast-v2/.
 - **Open rule requests:** none (the proposal's check becomes a rule only with Sam's Y).
 - **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
   chat 3's try: scratch kemi_torso.py style draw via castsheet.draw(sp, yaw, PP).

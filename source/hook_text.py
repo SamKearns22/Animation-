@@ -7,6 +7,7 @@ by default the first cut. Picture and sound are otherwise untouched.
     python3 hook_text.py IN.mp4 OUT.mp4 "Zack Polanski this week" [--until 3.6] [--y 880] [--x 540] [--w 400] [--centre]
 """
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -23,7 +24,7 @@ SAFE_X0, SAFE_X1 = 60, 900                    # TikTok's safe area at 1080 wide 
 
 def emoji_img(ch, px):
     """An emoji as a picture (Google's Noto emoji, in source/fonts/emoji/<hex>.png): TikTok Sans has no emoji."""
-    path = os.path.join(HERE, 'fonts', 'emoji', f'{ord(ch):x}.png')
+    path = os.path.join(HERE, 'fonts', 'emoji', '-'.join(f'{ord(c):x}' for c in ch) + '.png')   # a flag: two letters
     if os.path.exists(path):
         return Image.open(path).convert('RGBA').resize((px, px), Image.LANCZOS)
     f = ImageFont.truetype(NOTO, 109)                   # any other emoji: the colour font (its pictures are 136 px)
@@ -60,6 +61,9 @@ def card(w, h, text, y_mid, path, size=74, centre=False, x_mid=None, width=None,
     while text and ord(text[-1]) > 0x2000:          # trailing emoji are drawn as pictures after the last word
         tail, text = text[-1] + tail, text[:-1]
     text = text.rstrip()
+    # A flag is TWO regional letters (Open Wounds, Sam's Hook Text "... 🇬🇧", 23 Nov): kept as one picture, never
+    # drawn as two letter boxes.
+    tail = re.findall('[\U0001F1E6-\U0001F1FF]{2}|.', tail)
     im = Image.new('RGBA', (w, h), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
     while True:                                # one to three balanced rows, inside the safe width

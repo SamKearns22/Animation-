@@ -1955,6 +1955,30 @@ def hook_text_planned():
 
 
 @test
+def hook_text_flag_emoji():
+    """Open Wounds chat 3 (Sam's Hook Text "Andy is opening old wounds... 🇬🇧", 23 Nov): a flag is two regional
+    letters; the card drew them as two letter boxes. Now one flag picture: its red, white and blue all present, and
+    one picture's width (not two)."""
+    import tempfile
+    import numpy as np
+    import hook_text as H
+    from PIL import Image
+    out = []
+    for txt in ('Andy is opening old wounds... \U0001F1EC\U0001F1E7', 'Andy is opening old wounds...'):
+        with tempfile.NamedTemporaryFile(suffix='.png') as tf:
+            H.card(1080, 1920, txt, 880, tf.name)
+            out.append(np.asarray(Image.open(tf.name).convert('RGBA')))
+    diff = np.any(out[0] != out[1], axis=2)
+    ys, xs = np.nonzero(diff)
+    px = out[0][diff][:, :3].astype(int)
+    red = np.sum((px[:, 0] > 170) & (px[:, 1] < 90) & (px[:, 2] < 90))
+    blue = np.sum((px[:, 2] > 90) & (px[:, 0] < 80))
+    w = (xs.max() - xs.min()) if len(xs) else 0
+    ok = red > 50 and blue > 50
+    return ok, f'flag pixels: red {red}, blue {blue}; changed width {w} px'
+
+
+@test
 def moving_figures_against_the_set():
     """Rule 13 (tool job, 11 Nov): Remakes' camp check moved into the kit (setcheck.moving_faults); Remakes calls it.
     Clean on Remakes' camp as built; Link put back into a barrel is caught, and so is a figure drawn over what hides him."""
