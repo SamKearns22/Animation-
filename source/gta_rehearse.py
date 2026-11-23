@@ -860,9 +860,21 @@ def _crowd(pp, t, dz=0.0):
         # for the shop doorways (the stride turns side-on and reads), arms up over his head against the blast.
         slant = 0.45 if side > 0 else 0.0
         run = RUN_V * max(0.0, u - 0.15) * smooth(u / 0.3)
-        z += away * run * math.cos(slant)
-        x0 = x0 + side * min(1.3, run * math.sin(slant))
-        F = (side * math.sin(slant), 0.0, away * math.cos(slant))
+        # Sam, v5 note 4 ("civilians run through the building instead of down the street"): the slant stops 0.45 m
+        # short of the shop fronts; there they turn and run on along the pavement, never into the wall
+        room = max(0.0, SHOP4 - 0.45 - abs(x0)) if side > 0 else 1.3
+        lat = run * math.sin(slant)
+        along = slant > 0 and lat >= room
+        if along:                                          # the run after reaching the wall: straight on
+            r0 = room / math.sin(slant)
+            z += away * (r0 * math.cos(slant) + (run - r0))
+            x0 = x0 + side * room
+            k = smooth((run - r0) / 0.8)                   # turning along the street over 0.8 m, never a flip
+            F = S._norm((side * math.sin(slant) * (1 - k), 0.0, away * (math.cos(slant) * (1 - k) + k)))
+        else:
+            z += away * run * math.cos(slant)
+            x0 = x0 + side * min(1.3, lat)
+            F = (side * math.sin(slant), 0.0, away * math.cos(slant))
         j = V.standing(sp)
         ph = u * math.pi * 3.2
         _stride(j, ph, 210.0, 90.0, 140.0)
@@ -1686,7 +1698,7 @@ def fx_items(cam, t, lead):
     lumps = jet_lumps(t)
     if lumps:
         d = cam.depth((HYDRANT[1][0], 2.0, HYDRANT[1][1]))
-        spr = FX.lumps_sprite(fc, lumps, d)
+        spr = FX.lumps_sprite(fc, lumps, d, floor=0.37)        # v5 note 3: tails stop at the stump's top
         if spr:
             items.append((d, spr.paste))                  # at the stump's own depth (v7 note 7: d - 0.5 put it
             #                                               in front of the cruiser parked beside it)

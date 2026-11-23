@@ -2062,6 +2062,8 @@ def house_pose(out):
     return k
 
 
+FILM_CAR_HIDES = [False]   # the film (jason3d_film): the bench's stand-in car hides nothing; the film's own drawn
+#   car hides him afterwards (Sam, v5 notes 1-2: the stand-in's dash and door did not line up with the film's car)
 DRESS_HIDE_NECK = True          # a smooth solid neck column (neck_column) stands in for the skinned neck
 
 
@@ -2206,6 +2208,8 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None, cam=No
         Pj = np.concatenate([Pj, Vn])
     tp = np.array(['skin'] * len(tk))    # Jason's colours come per dot from part_at (attrs), not per triangle
     objs = [(Pj, tk, tp, 'jason')] + scene(out)[1:]
+    if FILM_CAR_HIDES[0] and layer:
+        objs = [o for o in objs if o[3] == 'jason' or o[3].startswith('hand') or o[3] == 'gun']
     if xf is not None:
         objs = [(xf(P_), T_, tp_, nm_) for P_, T_, tp_, nm_ in objs]
         if DRESS_HIDE_NECK:

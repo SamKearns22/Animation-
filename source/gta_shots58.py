@@ -91,6 +91,30 @@ def _strip_b():
 BLOCKS_B, PEOPLE_B, PALMS_B = _strip_b()
 
 
+def _clear_mouth():
+    """Sam, v5 note 5 ("in the frame after this one the civilians vanish"): shot 5 dropped everyone on the shop
+    pavement near the side road's mouth, so they vanished at the cut. Each is moved up or down the pavement instead,
+    for the whole film (shot 4 too), so that from shot 4's end on they never stand in the mouth."""
+    span = np.arange(R.SHOT4_LEN - 1.0, R.SHOT4_LEN + 16.5, 0.25)
+    for pp in R.PEOPLE4:
+        if pp['at'][0] <= 0:
+            continue
+        x, z = pp['at']
+
+        def bad(dz):
+            q = dict(pp, at=(x, z + dz))
+            return any(abs(R._crowd(q, u)[1] - ZC) < 13 for u in span)
+        if not bad(0.0):
+            continue
+        for dz in sorted((d * 0.5 for d in range(-80, 81)), key=abs):
+            if not bad(dz):
+                pp['at'] = (x, z + dz)
+                break
+
+
+_clear_mouth()
+
+
 def _trim_a():
     """A's east side loses what stands where B's mouth and corner blocks are (z within ZC +- 24 behind x = 10)."""
     out = []
@@ -663,6 +687,10 @@ def _world58(t, cam_fn, record=None):
         d = cam.depth((hx, 0.5, hz))
         if seen_round_corner(cam, (hx, 0.5, hz)):
             items.append(('hydrant', d, lambda im: R.hydrant_stump(im, cam, S.pen(im), (hx, hz))))
+        fl = R.hydrant_flight(t + SH)            # v5 (with note 5): the thrown hydrant lying on the pavement popped
+        if fl is not None and seen_round_corner(cam, tuple((fl[0] + fl[1]) / 2)):   # out at the cut to shot 5
+            items.append(('hydrant body', cam.depth(tuple((fl[0] + fl[1]) / 2)),
+                          lambda im, fl=fl: R.hydrant_body(im, cam, S.pen(im), fl)))
     for k, (c, ins) in enumerate(((lead, R.cop_inside(0, t + SH, True)), (chasers[0], R.cop_inside(1, t + SH)), (chasers[1], R.cop_inside(2, t + SH)))):
         d = cam.depth((c.pos[0], 0.8, c.pos[1]))
         if d > 0.5 and seen_round_corner(cam, (c.pos[0], 0.8, c.pos[1])):

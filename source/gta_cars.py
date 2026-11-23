@@ -327,6 +327,45 @@ def _arch(car, side, zc):
     return Decal(pts, (side, 0, 0), (26, 22, 22), INK, 1.8)
 
 
+def arch_mask(car, cam, side, zc, size, pad=0.01):
+    """Where a near-side wheel may show (canvas mask, 255): its arch in the body's side, open down to the road (GTA
+    v5 note 6: the wheel was drawn whole over the wing). The arch is the one _arch draws, a little wider (pad)."""
+    from PIL import ImageDraw
+    w = car.spec['wheels']
+    r = w['r'] + 0.085 + pad
+    sill = car.spec['stations'][1][2]
+    a0 = math.asin(max(-1, min(1, (sill - w['r']) / r)))
+    yz = [(w['r'] + r * math.sin(a), zc + r * math.cos(a)) for a in np.linspace(a0, math.pi - a0, 24)]
+    yz += [(sill, zc - 3 * r), (-0.6, zc - 3 * r), (-0.6, zc + 3 * r), (sill, zc + 3 * r)]   # nothing of the body
+    m = Image.new('L', size, 0)                                       # is below the sill: the tyre shows whole there
+    dr = ImageDraw.Draw(m)
+    # the arch cut in the body's side: what of the wheel is outside it (a steered wheel swung out, a near wheel seen
+    # from close behind) is behind the wing and the door
+    xs = half_w(car, zc) + EPS
+    q = cam.clip([car.body_pt((side * xs, y, z)) for y, z in yz])
+    if len(q) > 2:
+        dr.polygon([(x * B.SS, y * B.SS) for x, y in q], fill=255)
+    # under the sill the tyre is in the open: its tread seen from in front or behind, through the wheel's width
+    # (only then: seen from the side the tread's box would show under the sill as a black block)
+    c0 = np.asarray(car.body_pt((side * xs, w['r'], zc)), float)
+    nrm = np.asarray(car.body_pt((side * (xs + 1.0), w['r'], zc)), float) - c0
+    to_cam = np.asarray(cam.pos, float) - c0
+    if float(nrm @ to_cam) / (np.linalg.norm(nrm) * np.linalg.norm(to_cam) + 1e-9) > 0.45:
+        return m
+    pts = []
+    for xa in (w['x'] - w['w'] / 2, max(xs, w['x'] + w['w'] / 2)):
+        q = cam.clip([car.body_pt((side * xa, y, z)) for y, z in ((sill, zc - r), (sill, zc + r), (-0.6, zc + r), (-0.6, zc - r))])
+        pts += [(x * B.SS, y * B.SS) for x, y in q]
+    if len(pts) > 2:
+        from scipy.spatial import ConvexHull
+        try:
+            h = ConvexHull(np.asarray(pts))
+            dr.polygon([tuple(pts[i]) for i in h.vertices], fill=255)
+        except Exception:
+            pass
+    return m
+
+
 def _ragged(x0, x1, z0, z1, seed, step=0.22, amt=0.007):
     """A worn stripe edge: never ruler-straight."""
     rng = np.random.RandomState(seed)
@@ -638,7 +677,9 @@ def _parts(car):
         for s in (-1, 1):                # the wing mirror: a stalk out of the door top into a small round-ish head
             m = P(s, 0.98, 0.0)
             xd = abs(m[0])               # the door's skin at the screen's foot (the body tucks in above the waist)
-            stalk = _box(car, (s * (xd + 0.04), 0.90, m[2] - 0.02), (0.10, 0.03, 0.04), TULIP_RED)
+            # Sam, v5 note 2 ("broken cube effects"): the stalk ran 3 cm into the head, so the two boxes cut each
+            # other into loose blocks; now a thin dark stalk meets the head's inner face, one clean head on it
+            stalk = _box(car, (s * (xd + 0.03), 0.905, m[2] - 0.03), (0.06, 0.025, 0.03), (44, 38, 38))
             head = _box(car, (s * (xd + 0.11), 0.91, m[2] - 0.04), (0.10, 0.08, 0.06), TULIP_RED)
             parts.append(Part(stalk + head, (s * xd, 0.9, m[2]), (s, 0, 0)))
     else:
@@ -871,10 +912,23 @@ def draw_car(img, cam, car, t=0.0, inside=seat_people, lit=True):
         (front if seen else behind).append((pt, dist))
     glows = []
 
-    def draw_part(pt):
+    def draw_part(pt, near=False):
         if hasattr(pt, 'wheel'):
             s, zc, fr = pt.wheel
-            _wheel(img, cam, p, car, s, zc, fr)
+            if not near:
+                _wheel(img, cam, p, car, s, zc, fr)
+                return
+            # Sam, GTA v5 note 6 ("wheel clipping through chassis"): a near-side wheel is drawn after the body, so it
+            # showed whole over the wing; it is seen only through its arch (and below the sill), the body hides the rest
+            lay = Image.new(img.mode, img.size, (0, 0, 0, 0) if img.mode == 'RGBA' else 0)
+            _wheel(lay, cam, S.pen(lay), car, s, zc, fr)
+            m = arch_mask(car, cam, s, zc, img.size)
+            if lay.mode == 'RGBA':
+                a = np.asarray(lay.split()[3], np.float32) * (np.asarray(m, np.float32) / 255)
+                lay.putalpha(Image.fromarray(a.astype(np.uint8)))
+                img.alpha_composite(lay)
+            else:
+                img.paste(lay, (0, 0), m)
             return
         _draw_faces(img, cam, p, pt.faces)
         if getattr(pt, 'house', False):
@@ -900,7 +954,7 @@ def draw_car(img, cam, car, t=0.0, inside=seat_people, lit=True):
             if r and r[0] == 'lamp':
                 glows.append(r)
     for pt, _ in sorted(front, key=lambda e: (e[0].level, -e[1])):
-        draw_part(pt)
+        draw_part(pt, near=True)
     if lit:
         for _, c, col in glows:
             if cam.depth(c) > cam.NEAR:

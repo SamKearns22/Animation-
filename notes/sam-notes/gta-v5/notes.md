@@ -5,3 +5,6 @@
 4. "Civilians run through the building instead of down the street. They clip into the scenery." (4, shot 4 ~0:20, purple: crowd overlapping shopfront)
 5. "In the frame after this one the civilians circled vanish" (5, shot 4 ~24.25s / 0:22, purple: crowd by smoke pops out)
 6. "Wheel clipping through chassis" (6, shot 4 ~15.4s / 0:14, purple: front wheel drawn over the car side, no arch)
+7. "Jason's poses and movements are otherwise good, his model just cuts off too early and his lower body and legs are on the wrong side of the door when he leans out" (keep poses; fix only the cut-off and the door order)
+8. "Make sure you don't see green trousers below that black line, just red or black car parts." (8, door top seen from above, shot 4 rear view)
+9. "Small bit of shirt and trouser leaking through the door, circled in purple" (9, on chat 49 test frame 22.5 s)

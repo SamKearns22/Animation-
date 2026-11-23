@@ -32,6 +32,7 @@ sys.path.insert(0, HERE)
 CHECK = [True]                    # check each shots 5-8 pose as drawn (FAULTS: (t, faults))
 FAULTS = []
 FAULTS_FILE = os.environ.get('J3_FAULTS', '/tmp/gta-jason3d-faults.txt')   # shots 5-8 (shots 5-8's own clock u)
+FILM_COVER = [True]               # v5 notes 1-2: hidden by the film's car, not the bench's (bench_move.FILM_CAR_HIDES)
 ON = [True]                       # the film draws this Jason in shots 3-4 (False: the old flat lean-out)
 HEAD_PLAN_FILE = os.path.join(HERE, 'data', 'gta-jason3d-headplan.json')
 FPS = 24
@@ -157,6 +158,7 @@ def layer(img, cam, car, t, face=None, glass=None, scale=2, goals=None):
     front of him. Returns (alpha at img size, world joints)."""
     import body as B
     BM = _bm()
+    BM.FILM_CAR_HIDES[0] = FILM_COVER[0]
     if goals is None:
         out, tt = pose_at(t)
         hv = head_view(t)
@@ -180,6 +182,13 @@ def layer(img, cam, car, t, face=None, glass=None, scale=2, goals=None):
         B.SS = ss
     if lay.size != img.size:
         lay = lay.resize(img.size, Image.LANCZOS)
+    if FILM_COVER[0]:                    # Sam, v5 notes 1-2: the film's own car hides him (leanout._cover, the cover
+        import leanout as LO             # the flat Jason was tuned on), not the bench's stand-in car
+        k = BM.house_pose(out)
+        kw = LO.to_world(k, car)
+        sol = LO._cover(car, cam, kw, img.size, kc=k)[0]
+        a = np.asarray(lay.split()[3], np.float32) * (1 - sol)
+        lay.putalpha(Image.fromarray(a.astype(np.uint8)))
     al = np.asarray(lay.split()[3], np.float32)
     img.alpha_composite(lay)
     if glass is not None:
