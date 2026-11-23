@@ -15,3 +15,6 @@ Jason should be in the car here but his lower body is clipping through the door.
 Geyser effect clipping through pavement
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-23T11:37:36
+Civilians run through the building instead of down the street. They clip into the scenery.
+
