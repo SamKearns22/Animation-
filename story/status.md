@@ -1,3 +1,3 @@
-Grand Theft Autism: posted (Sam, 23 Nov); final saved, bookmarked, notes archived.
-Next: new film, waiting for Sam's idea.
+Brexit Is Done (working name): brief started, refs saved (May, Badenoch, Blair).
+Next: Sam sends the script, the site and Blair's place.
 Then: plan on Opus, high effort.
