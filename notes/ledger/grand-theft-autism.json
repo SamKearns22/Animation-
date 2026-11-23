@@ -25965,6 +25965,184 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "2fec35f5",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.16,
+   "src": "estimate",
+   "sid": "session_01GznaARapyijnZG96Zd3Kcp",
+   "steps": 13,
+   "hist_k": 111,
+   "kinds": {
+    "film-file search": 2.1,
+    "tool search": 6.5,
+    "other": 91.3
+   },
+   "calls": {
+    "film-file search": 3,
+    "tool search": 7,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.6037,
+    "total": 0.6037,
+    "floor_k": 96,
+    "blocks": {
+     "start-up floor": 83.3,
+     "new writes": 9.6,
+     "Claude's words": 5.5,
+     "carried history": 1.6
+    },
+    "origins": {
+     "start-up floor": 83.3,
+     "Claude's words": 6.9,
+     "result: tool search": 5.8,
+     "messages and reminders": 1.8,
+     "result: film-file search": 1.2,
+     "result: other": 1.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 83.3,
+     "commands": 4.0,
+     "reading guides": 3.0,
+     "reading notes": 2.2,
+     "messages and reminders": 1.8,
+     "messages to Sam": 1.6,
+     "app tools (chats, files sent)": 1.1,
+     "renders": 0.7,
+     "writing code": 0.7,
+     "thinking": 0.6,
+     "other commands": 0.5,
+     "reading film code": 0.4
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 96,
+    "work_step": 4,
+    "work_pct": 0.12,
+    "reads": [
+     [
+      "notes/grand-theft-autism.md",
+      0.8,
+      0.0037
+     ],
+     [
+      "guides/job-packs.md",
+      0.8,
+      0.0037
+     ]
+    ],
+    "base_pct": 19.2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 3
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "film notes": 2,
+     "guides": 1,
+     "other": 3
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status --short | head; git fetch origin claude/create-claude-md-oe8z4g 2>&1 ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md guides/job-packs.md",
+      "Chat 46\\|Where things stand",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md guides/job-packs.md",
+      "sed -n 192,225p notes/grand-theft-autism.md; sed -n 46,110p guides/job-packs.md",
+      ""
+     ],
+     [
+      3,
+      "film",
+      "before show",
+      "guides/satire.md guides/preflight.md source/grand_theft_autism.py",
+      "Before every render\\|^## Render\\|If a check fails",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "guides",
+      "guides/satire.md guides/preflight.md",
+      "sed -n 308,370p guides/satire.md; sed -n 40,80p guides/preflight.md",
+      ""
+     ],
+     [
+      5,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py",
+      "mkdir -p /tmp/gta47 && rm -f /tmp/gta-jason3d-faults.txt && (nohup python3 sourc",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "urlopen\\|Traceback\\|File \\",
+      ""
+     ],
+     [
+      7,
+      "film",
+      "before show",
+      "source/gta_opener.py",
+      "sed -n 55,90p source/gta_opener.py",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "sleep 30; python3 -c \" import sys;sys.path.insert(0,'source') import gta_opener ",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys;sys.path.insert(0,'source') import gta_opener as G;print",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
