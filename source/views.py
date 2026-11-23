@@ -162,6 +162,10 @@ def standing(sp):
         sh = j['sh' + side]
         up = _unit((sg * 0.12, 0.99, -0.04))     # Sam's four rest references (8 Nov, references/figure-rig/):
         fo = _unit((sg * -0.04, 0.99, 0.13))     # elbow at the waist, forearm back in, hands beside the upper thigh
+        if sp.get('figure') == 'female':         # Open Wounds (chat 4; notes/learn/womans-build, arms test): the
+            up = _unit((sg * 0.16, 0.99, -0.04))  # upper arm a little further out and the forearm straight under it,
+            fo = _unit((sg * 0.02, 0.99, 0.13))   # so the waist and the hip's curve show between arm and body (the
+            #                                       judge: arms hugging the sides hid them; tucked in, a column)
         el = _add(sh, _mul(up, F.UPPER * 0.98))
         j['el' + side], j['wr' + side] = el, _add(el, _mul(fo, F.FORE * 0.98))
         j['hand'][side] = 'fist'
@@ -806,6 +810,10 @@ def _built_outline(sp, view, bottom, o, fig):
         if fig == 'woman':
             pts = [(-34, -8), (-d * 0.92, 22), (-d * 0.98, 130), (-d * 0.84, 270), (-d * 1.04, 380), (-d * 0.98, bottom),
                    (d * 0.92, bottom), (d * 0.86, 290), (d * 0.84, 250), (d * 1.2, 150), (d * 1.0, 90), (d * 0.86, 30),
+                   (30, -6)]
+        elif fig == 'female':                     # Open Wounds: the bust, the waist at 225, the seat out at 350
+            pts = [(-34, -8), (-d * 0.92, 22), (-d * 0.98, 120), (-d * 0.82, 225), (-d * 1.1, 350), (-d * 1.08, bottom),
+                   (d * 0.96, bottom), (d * 0.9, 330), (d * 0.8, 225), (d * 1.24, 140), (d * 1.04, 80), (d * 0.86, 30),
                    (30, -6)]
         else:
             pts = [(-34, -8), (-d * 0.96, 22), (-d * 1.06, 130), (-d * 0.92, 320), (-d * 0.92, bottom), (d * 0.94, bottom),

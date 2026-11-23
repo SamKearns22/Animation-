@@ -523,7 +523,13 @@ def ink_units(p):
 # 'man': a broad chest tapering to the waist (the game's Jason: waist 0.78 of the shoulders); 'woman': a chest
 # narrower than the shoulders, a real waist (Lucia: 0.63) and hips back out to the hem (0.85, rule: hips 15% under).
 FIGS = {'man': ((110, 0.98), (190, 0.92), (300, 0.81), (420, 0.85)),
-        'woman': ((100, 0.95), (170, 0.86), (275, 0.67), (360, 0.80), (430, 0.85))}
+        'woman': ((100, 0.95), (170, 0.86), (275, 0.67), (360, 0.80), (430, 0.85)),
+        # 'female' (Open Wounds chat 4, 23 Nov; Sam's note 5 "I'm not sure we have female bodies?"): the body every
+        # person marked `woman` gets. Measured from sewing-pattern size charts (notes/learn/womans-build/learn.md):
+        # hips as wide as the shoulders (charts about 1.0; 'woman' above had a man's 0.80), the waist higher (about
+        # 225 below the neck) at 0.70, the bust 0.92; the jacket shaped over the hip and in a little to the hem.
+        'female': ((100, 0.92), (150, 0.86), (225, 0.70), (300, 0.86), (370, 0.96), (430, 0.95))}
+FIG_HEM = {'female': 0.92}          # the hem's width over the shoulders (else HEM): a shaped jacket over the hip
 
 
 def fig_half(fig, y, sw, bottom):
@@ -531,7 +537,7 @@ def fig_half(fig, y, sw, bottom):
     if not fig:
         return float(np.interp(y, [60, 200, bottom], [sw, sw + 6, sw * HEM]))
     ys, ks = zip(*FIGS[fig])
-    return sw * float(np.interp(y, ys + (bottom,), ks + (HEM,)))
+    return sw * float(np.interp(y, ys + (bottom,), ks + (FIG_HEM.get(fig, HEM),)))
 
 
 def _chaikin(pts, n=2):
@@ -564,7 +570,7 @@ def front_outline(sw, bottom, o=2.0, fig=None, arm_w=30.0):
     arc = [(cx + R * math.cos(a), cy + R * math.sin(a)) for a in np.linspace(a0, a1, 8)]
     if fig:                                             # the build's side, smooth, from the arm down to the hem
         side = [(fig_half(fig, y, sw, bottom), y) for y, _ in FIGS[fig] if arc[-1][1] + 20 < y < bottom - 10]
-        right = arc + _chaikin([arc[-1]] + side + [(sw * HEM, bottom)])[1:]
+        right = arc + _chaikin([arc[-1]] + side + [(sw * FIG_HEM.get(fig, HEM), bottom)])[1:]
     else:
         right = arc + [(sw + 6, 200), (sw * HEM, bottom)]
     left = [(-x, y) for x, y in right]

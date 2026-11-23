@@ -217,6 +217,26 @@ SAID = {'skin': 'skin', 'hair': 'hair', 'hair colour': 'hair_c', 'face': 'face',
         'brows': 'brows', 'glasses': 'glasses', 'beard': 'beard', 'lashes': 'lashes', 'lips': 'lips'}
 BEFORE_DEFAULTS = {'blessed': 'posted before the defaults (its press pack is redrawn pixel for pixel)',
                    'protest-tiers': 'in its final rounds when they came in (16 Nov): the film dresses its own crowds'}
+# Woman or man (Open Wounds chat 4, 23 Nov; Sam's note 5 "I'm not sure we have female bodies?", a repeat of GTA's
+# "Lucia on a man's box body"): every person line in a new film says `woman` or `man` in its body line, load refuses
+# one without it, and `woman` draws the woman's body (SEXED) unless the line sets its own build. Crowd women get it
+# too. The films below were finished first: they draw exactly as before (no word, no change; their face-tool
+# people keep ignoring the body line, as they always did).
+BEFORE_SEX = {'blessed': 'posted', 'facetool': 'the face tool test cast', 'grand-theft-autism': 'posted (Lucia has '
+              'her own build woman)', 'milburn': 'posted', 'protest-tiers': 'posted'}
+SEXED = {'woman': dict(figure='female', shoulders=138, arm_w=27.0),
+         'man': {}}
+BODY_KEYS = ('shoulders', 'figure', 'arm_w', 'arm_bulge', 'bottom', 'leg_k')
+
+
+def _sexed(sp, d):
+    """The woman's body for a person marked `woman`: what the body line leaves unsaid comes from SEXED."""
+    for k, v in SEXED.get(d.get('sex'), {}).items():
+        if k not in d:
+            sp[k] = v
+    if d.get('sex'):
+        sp['sex'] = d['sex']
+    return sp
 
 
 def _said(d):
@@ -247,6 +267,8 @@ def varied(d, m, i):
     if 'skin' not in said:
         m['skin'] = SKIN_TONES[g][int(r.integers(len(SKIN_TONES[g])))]
     woman = r.random() < .45
+    if d.get('crowd_sex') and 'body' not in said:     # Open Wounds: a crowd woman gets the woman's body
+        m['sex'] = 'woman' if woman else 'man'
     if 'hair' not in said:
         m['hair_style'] = _pick(r, WOMEN_HAIR if woman else MEN_HAIR)
     woman = m.get('hair_style') in WOMEN or (woman and m.get('hair_style') in ('long', 'curly'))
@@ -409,6 +431,8 @@ def _fact(d, key, val, people):
         for p in parts:
             if p.endswith(' m'):
                 d['height'] = float(p[:-2])
+            elif p in ('woman', 'man'):            # Open Wounds (23 Nov, Sam's note 5): every person is a woman or a
+                d['sex'] = p                       # man; `woman` draws the woman's body (body.FIGS 'female', SEXED)
             else:
                 w, _, v = p.partition(' ')
                 if w == 'head':
@@ -567,6 +591,7 @@ def person(d):
               'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c', 'bangles'):
         if k in d:
             sp[k] = d[k]
+    _sexed(sp, d)
     if 'skin' not in sp:
         raise DescriptionError(f"{d['who']}: no skin line")
     sp.setdefault('hair_c', (40, 32, 28))
@@ -629,6 +654,11 @@ def _house(d):
         kw['neck_w'] = d['neck_w']
     sp = FH.person(h['name'], h.get('look', 'detail'), hair, outfit=out, **kw)
     sp.update(who=d.get('person', d['who']), name=d['name'], kit_extras=list(d.get('extras', ())))
+    if d.get('sex') or d.get('_new'):             # Open Wounds (chat 4): a new film's face-tool person keeps the body
+        for k in BODY_KEYS:                       # line (shoulders, build, arms, hem were silently dropped, so
+            if k in d:                            # `shoulders 138` and `build woman` never reached May or Kemi)
+                sp[k] = d[k]
+        _sexed(sp, d)
     if d.get('sleeve') and d.get('jacket') and tuple(d['sleeve']) != tuple(d['jacket']):   # Brexit Is Done: sleeves
         sp['sleeve'] = tuple(d['sleeve'])                                                    # of their own colour
     return sp
@@ -656,7 +686,15 @@ def people_file(film):
 
 def load(film):
     """The film's people file -> {who: engine person} (crowds apart: crowds())."""
-    return {w: person(d) for w, d in parse(open(people_file(film)).read()).items() if 'crowd' not in d}
+    ds = {w: d for w, d in parse(open(people_file(film)).read()).items() if 'crowd' not in d}
+    if film not in BEFORE_SEX:                    # Open Wounds (chat 4): a new film's every person says woman or man
+        no = [w for w, d in ds.items() if not d.get('sex')]
+        if no:
+            raise DescriptionError(f"{film}: {', '.join(no)}: the body line must say woman or man "
+                                   f"(e.g. 'body: 1.70 m, woman'; Sam's note 5, people.BEFORE_SEX)")
+        for d in ds.values():
+            d['_new'] = True
+    return {w: person(d) for w, d in ds.items()}
 
 
 def crowds(film):
@@ -665,6 +703,7 @@ def crowds(film):
     out = {w: d for w, d in parse(open(people_file(film)).read()).items() if 'crowd' in d}
     for d in out.values():
         d['crowd_defaults'] = film not in BEFORE_DEFAULTS
+        d['crowd_sex'] = film not in BEFORE_SEX     # Open Wounds: crowd women get the woman's body
     return out
 
 

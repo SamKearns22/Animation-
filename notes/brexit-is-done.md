@@ -53,10 +53,14 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   route (judged: helper B's, 8 found, 4 fixed, 4 named; sent to Sam as two options); Sam's v2 notes saved with
   pictures; reserve list made (Sam: 6+6 body shapes and today's tool chats, notes/next-jobs.md R1-R6).
 - **Chats are named "Open Wounds"** (Sam, 23 Nov); the film's files keep the name brexit-is-done.
-- **Next (chat 4, Opus high: a new build):** Sam said Y to option 1 of the woman's body
-  (notes/proposals/womans-build.md "Final version"): the learn step (outlines, standing, turned, seated, saved
-  sheet), then the default and the check (must fail both n5 pictures, pass Lucia as a woman and Blair as a man; Blair is the man's control, never a woman's body: Sam, 23 Nov, "obviously, Tony Blair is a man"), then women's clothes,
-  then cast sheet v3 to Sam. Then the plan (brief items 4-18): sets, the wolves, the estimate.
+- **Chat 4 so far (paused by Sam at 22:24, restart 23:51 UK):** learn step done (notes/learn/womans-build/learn.md:
+  as drawn, May and Kemi read as men in all 10 views). Change 1 half built, not yet checked: `woman`/`man` in the body
+  line (people.SEXED, BEFORE_SEX; load refuses a new film's person without it), face-tool people now keep their body
+  line, crowd women flagged, new build body.FIGS 'female' (old 'woman' kept for GTA) with arms out a little
+  (views.standing). Sam's note 7: right for May, wrong for Kemi ("just does not have that body").
+- **Next (chat 4 on restart, Opus high):** Kemi's own build (slim, straight, narrow hips, measured from her photo),
+  then run the kit tests on finished films, the cast-sheet check (fails both n5, passes Lucia and Blair), Change 2
+  (neckline first: May's striped blouse reads as a tie), cast sheet v3 to Sam.
 - **Needs Sam:** Q2 blood plan (item 18): his Y comes back to chat 3, which writes it here.
 - **Read:** `guides/job-packs.md` Build; notes/proposals/womans-build.md "Final version"; notes/sam-notes/brexit-cast-v2/.
 - **Open rule requests:** none (the proposal's check becomes a rule only with Sam's Y).
@@ -143,6 +147,7 @@ it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover
 | 1 | cast sheet v1 | - | Sam: "Reference 1: these side images appear cut off?" The three-quarter full figures were cut in half by my sheet crop | new: sheet-edge | none (sheet maker had no edge test) | fixed: the sheet is built by `castsheet.py sheet`, which refuses a figure touching its tile's edge (selftest caught) |
 | 2 | cast sheet v1 | - | Sam, Tony: "Reference 2, Tony: do you see how something is going wrong still with 3/4 views?" "That is not the same person and haircut as presented in the straight on view." Turned hair flattened by the crown clamp | new: front-3/4 match | none (front and 3/4 never judged side by side) | fixed: the turned hair is built to the front piece's own outline (hair shell), side/back strokes added; `castsheet.py match` caught Sam's picture |
 | 3 | cast sheet v1 | - | Kemi: orange gone from her clothes; 3/4 not right (hat flat and wide, glasses off the face) | new: front-3/4 match | none | fixed: orange shoulders and sleeves, navy chest, waist band; turned brim dips like the front, side lines; far braid curtain; zipped navy collar; `match` caught Sam's picture |
+| 7 | woman's body v1 (outlines, chat 4) | - | Sam (23 Nov 22:23): "How do I say this. Kemi Badenoch just does not have that body. Looks good for May though!" (picture: notes/learn/womans-build/outline-female-v1.jpg) | new: one woman's body for every woman is the same fault as one man's box for everyone | none (the learn step judged woman or man only, never "is this HER body"; Kemi's photo was not measured) | open: May keeps the 'female' build; Kemi needs her own, slimmer and straighter (narrower hips, little waist), measured against her photo; a check that each woman's build matches her own reference |
 | 5 | cast sheet v2 | - | Sam: "Can I just say...I'm not sure we have female bodies? Kemi's body seems much more like a man's." | seen before (GTA 20 Nov, "Lucia on a man's box body"): rule 30 | none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed) | open: through the proposal route (notes/proposals/womans-build.md); waiting for Sam's pick |
 | 6 | cast sheet v2 | - | Sam: "Do you see Kemi's orange detailing travels over her white collar?" | new: piece over collar | none (match checks colours, not layering: gap written in castsheet.py MAP) | fixed (chat 3): people_parts.workwear_torso's yoke starts outside the collar and lapel and follows the body's own outline (any build); saved: notes/sam-notes/brexit-cast-v2/n6 |
 | 4 | cast sheet v1 | - | Sam asked: "Are we using our most recent 3/4 kit?" | - | - | answered in chat 1 (yes, the turned head kit; the fault was the hair built apart from the front); Sam said Y to the plan |
