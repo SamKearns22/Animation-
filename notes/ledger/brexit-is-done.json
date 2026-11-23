@@ -63,27 +63,75 @@
      "3 P4: full-body row - the toothy grin is lost at phone size (face is a few dots), and the hair at the back and side reads as a flat grey cap, not swept-back hai",
      "1-3 A2: full-body row - bodies are thin straight tubes with tiny heads; they don't match the reference proportions, and May reads weakly as a woman (trousers, n"
     ]
+   },
+   {
+    "round": 2,
+    "pass": 2,
+    "stage": "cast",
+    "date": "2026-11-23",
+    "hunt": 1,
+    "faults": 8,
+    "cant_tell": 2,
+    "open": [
+     "5,7,9 A1 P4: close-ups of the three-quarter heads are sliced at the right edge. Half the face is gone, and a sliver of the neighbouring view shows at left (\"thr",
+     "4-9 A1: the printed captions are clipped mid-word (\"ew, 22 Nov 2026\", \"glasse|lasses\", \"the g|the grin\"), and the caption still says \"Sam's photo\".",
+     "2,6-7 P4 A2: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo. T",
+     "1,4-5 P4 A2: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower. The photo's patterned blouse is on",
+     "3,8-9 P4: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter than the photo's",
+     "3,8-9 P11: the neck is thin and long under a wide head.",
+     "9 P8: the tie and shirt collar are a rigid red-in-white box, front-facing under a turned head. The nose line is a swirl.",
+     "2,6-7 P2: the mouth is a tight pursed dark line, which reads as stern. The photo has a calm, slight smile.",
+     "1-3 P1 P2 P3: the full-figure shoulders, sleeve ends and eyes are too small on the sheet. I need a full-size figure crop.",
+     "5,7,9 P14: the far eye is cut off, so the pupil and shine can't be checked."
+    ]
+   },
+   {
+    "round": 2,
+    "pass": 3,
+    "stage": "cast",
+    "date": "2026-11-23",
+    "hunt": 2,
+    "faults": 6,
+    "cant_tell": 1,
+    "open": [
+     "1-3 P4 A2: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower than the photo's. The photo's pattern",
+     "4-6 P4 A2: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo's. T",
+     "7-9 P4: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter, with less volume ",
+     "7-9 P11: the neck is thin and long under a wide head. The neck is also long on the full figures.",
+     "7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ",
+     "4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile.",
+     "3,6,9 P5 P13: the shoulder joins and cuffs are too small. I need a full-size crop of each figure's arms."
+    ],
+    "fixed": "hunt 1: sheet captions shortened, Kemi zipped to a navy collar, May's hair lighter and warmer, turned hat side lines; hunt 2 left as named",
+    "left": [
+     "1-3 P4 A2: the hair is a tall cool-grey helmet, but the reference is short, warm ash hair. The face is longer and narrower than the photo's. The photo's pattern",
+     "4-6 P4 A2: the glasses are thick, dark and round, but the reference has thin light rims. The hard hat has no orange logo. The skin is darker than the photo's. T",
+     "7-9 P4: the eyebrows are thick brown bars, and the eyes are big black dots. The photo has lighter brows and smaller eyes. The hair is flatter, with less volume ",
+     "7-9 P11: the neck is thin and long under a wide head. The neck is also long on the full figures.",
+     "7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ",
+     "4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 2,
-    "false": 0
+    "faults": 4,
+    "false": 1
    },
    "P2": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "P4": {
-    "faults": 5,
+    "faults": 12,
     "false": 0
    },
    "A2": {
-    "faults": 4,
+    "faults": 8,
     "false": 0
    },
    "P11": {
-    "faults": 2,
+    "faults": 4,
     "false": 2
    },
    "P1": {
@@ -95,7 +143,7 @@
     "false": 0
    },
    "P8": {
-    "faults": 1,
+    "faults": 3,
     "false": 0
    },
    "A4": {
@@ -103,5 +151,11 @@
     "false": 0
    }
   }
+ },
+ "notes_tags": {
+  "1": "none (sheet maker had no edge test)",
+  "2": "none (front and 3/4 never judged side by side)",
+  "3": "none",
+  "4": "-"
  }
 }

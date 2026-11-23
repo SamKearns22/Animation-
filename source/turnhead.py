@@ -356,6 +356,31 @@ def hair_top(prof, ap, psi):
     return top + rag * (math.sin(math.radians(psi) * 11) + 0.5 * math.sin(math.radians(psi) * 23 + 1.0))
 
 
+def hair_point(f, prof, psi, v):
+    """Screen point of the hair's outer surface at angle psi, row v: the skull's ring puffed by 'volume'; with a
+    'shell' (the front piece's half widths by row) the ring is scaled to the shell's width, above the skull a ring
+    lower down shrunk to it (a dome as tall as the front's), easing back to the skull's own width 0.15 under vref."""
+    shell = prof.get('shell')
+    vref = prof.get('shell_ref', -0.25)
+    vr = max(v, vref) if shell else v
+    x, z = f.ring(psi, vr)
+    puff = 1.0 + prof.get('volume', 0.03) * (1 - max(0.0, v) / 0.7)
+    x, z = float(x) * puff, float(z) * puff
+    if shell and v <= shell[-1][0]:
+        sa = _interp(shell, v)
+        a = f.a(vr) * puff
+        if v < vref:
+            k = sa / a
+        else:
+            k = 1.0 + (max(1.0, sa / a) - 1.0) * max(0.0, 1 - (v - vref) / 0.15)
+        _, zf = f.ring(0.0, vr)
+        _, zb = f.ring(180.0, vr)
+        zc = (float(zf) + float(zb)) / 2 * puff
+        x, z = x * k, zc + (z - zc) * k
+    X, _ = f.view(x, z)
+    return (f.cx + X * H, f.top + (v - 0.012 * min(1.0, max(0.0, -v / 0.3))) * H)
+
+
 def hair(img, p, f, fronts, colour, prof, lw=2.4):
     """The hair as one mass: the person's own front hair shapes (carried round by f) and the back of the head
     (sampled over the rings behind the front hair, down to the nape), filled and inked round as one shape (no line
@@ -364,9 +389,13 @@ def hair(img, p, f, fronts, colour, prof, lw=2.4):
     cam = base.cam
     W, Hh = img.size
     pts = []
-    vs = np.arange(f.v0, prof.get('nape', 0.64) + 1e-9, 0.008)
+    shell = prof.get('shell')                      # the front's own hair outline [(v, half width)]: the turned mass
+    vref = prof.get('shell_ref', -0.25)            # takes its height and width from it (Brexit chat 2, Sam's n2:
+    v_start = min(f.v0, shell[0][0]) if shell else f.v0   # "not the same person and haircut" as the front)
+    vs = np.arange(v_start, prof.get('nape', 0.64) + 1e-9, 0.008)
     for v in vs:
-        lo, hi = f.visible(v)
+        vr = max(v, vref) if shell else v          # above the skull: the ring at vref scaled to the shell's width
+        lo, hi = f.visible(vr)
         bottom_side = prof.get('hair_low', 0.36)
         for psi in np.arange(lo, hi + 1e-9, 1.5):
             ap = abs((psi + 180) % 360 - 180)
@@ -375,10 +404,7 @@ def hair(img, p, f, fronts, colour, prof, lw=2.4):
                 continue
             if v < hair_top(prof, ap, psi):        # a bald pate: hair only in a band round the sides and back
                 continue
-            x, z = f.ring(psi, v)
-            puff = 1.0 + prof.get('volume', 0.03) * (1 - max(0.0, v) / 0.7)
-            X, _ = f.view(float(x) * puff, float(z) * puff)
-            pts.append(cam.P(f.cx + X * H, f.top + (v - 0.012 * min(1.0, max(0.0, -v / 0.3))) * H))
+            pts.append(cam.P(*hair_point(f, prof, psi, v)))
     xs = [q[0] for q in pts] + [q[0] for poly in fronts for q in (cam.P(*r) for r in poly)]
     ys = [q[1] for q in pts] + [q[1] for poly in fronts for q in (cam.P(*r) for r in poly)]
     if not xs:

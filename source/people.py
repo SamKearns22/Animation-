@@ -691,7 +691,7 @@ def _extras():
             'biker': ('torso', PP.biker_torso), 'unicorn': ('torso', PP.unicorn_torso),
             'scoop': ('torso', PP.scoop_torso), 'headphones': ('torso', PP.headphones_torso),
             'vest': ('torso', PP.vest_torso), 'tank': ('torso', PP.vest_torso),
-            'workwear': ('torso', PP.workwear_torso)}
+            'workwear': ('torso', PP.workwear_torso), 'pattern': ('torso', PP.pattern_torso)}
 
 
 def turned():
@@ -707,7 +707,7 @@ def turned():
             'scoop': dict(back=None), 'headphones': dict(back=PP.headphones_back, own={v: PP.headphones_view(v) for v in PP.PHONES_YAW}),
             'vest': dict(back=PP.vest_back, own={'side': PP.vest_side}),
             'tank': dict(back=PP.vest_back, own={'side': PP.vest_side}),
-            'workwear': dict(back=PP.workwear_torso)}
+            'workwear': dict(back=PP.workwear_torso), 'pattern': dict(back=None)}
 
 
 def pieces(sp):
@@ -755,7 +755,7 @@ def _head_parts():
 
 
 EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt', 'palms',
-          'biker', 'unicorn', 'scoop', 'headphones', 'vest', 'tank', 'workwear')
+          'biker', 'unicorn', 'scoop', 'headphones', 'vest', 'tank', 'workwear', 'pattern')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 

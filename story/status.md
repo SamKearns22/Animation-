@@ -1,3 +1,3 @@
-Brexit Is Done: Sam's cast v1 notes in (3 + fresh-eye points); plan Y.
-Next: chat 2 (Opus medium) fixes the 3/4 views, Kemi's jacket, May; builds the front-vs-3/4 check; sheet v2.
+Brexit Is Done: cast sheet v2 sent to Sam (3/4 hair, Kemi's hi-vis, May fixed; front/3/4 check built).
+Next: Sam's notes on v2 (chat 3, Opus medium).
 Then: script, site, Blair's place from Sam; the plan.
