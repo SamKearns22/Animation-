@@ -6176,55 +6176,59 @@
    "model": "opus",
    "stage": "lessons-put-to-sam",
    "round": null,
-   "cost": 0.6,
+   "cost": 0.98,
    "notes": 0,
    "repeats": [],
-   "steps": 27,
-   "hist_k": 145,
+   "steps": 48,
+   "hist_k": 184,
    "kinds": {
-    "tool search": 13.1,
-    "whole-file .py read": 15.8,
-    "other": 71.0
+    "tool search": 10.0,
+    "whole-file .py read": 7.5,
+    "other": 82.5
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 17,
+    "tool search": 26,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 3
+    "other": 17
    },
    "split": {
-    "usd": 1.6999,
-    "total": 1.6999,
+    "usd": 3.582,
+    "total": 3.582,
     "floor_k": 83,
     "blocks": {
-     "start-up floor": 34.1,
-     "Claude's words": 34.0,
-     "new writes": 27.2,
-     "carried history": 4.6
+     "new writes": 42.7,
+     "start-up floor": 24.9,
+     "Claude's words": 23.1,
+     "carried history": 9.3
     },
     "origins": {
-     "Claude's words": 44.0,
-     "start-up floor": 34.1,
-     "result: other": 12.1,
-     "result: tool search": 6.4,
-     "messages and reminders": 3.3
+     "Claude's words": 32.4,
+     "start-up floor": 24.9,
+     "cache re-write": 21.4,
+     "result: other": 14.2,
+     "result: tool search": 4.5,
+     "messages and reminders": 2.6
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 34.1,
-     "writing code": 13.5,
-     "thinking": 12.2,
-     "reading guides": 8.6,
-     "messages to Sam": 8.0,
-     "app tools (chats, files sent)": 6.9,
-     "writing notes": 6.4,
-     "commands": 3.9,
-     "messages and reminders": 3.3,
-     "start-up and handover tools": 2.0,
-     "reading notes": 0.8
+     "start-up reading (rules, tools, first files)": 24.9,
+     "memory lapses (re-paying for the whole chat)": 21.4,
+     "thinking": 8.9,
+     "writing code": 7.2,
+     "reading guides": 5.9,
+     "app tools (chats, files sent)": 5.4,
+     "reading chat records": 5.3,
+     "messages to Sam": 4.9,
+     "writing notes": 4.7,
+     "commands": 4.3,
+     "messages and reminders": 2.6,
+     "helper and chat prompts": 2.3,
+     "start-up and handover tools": 1.5,
+     "reading notes": 0.6
     },
     "leftover": 0.0
    },
@@ -6236,16 +6240,245 @@
      [
       "source/propose.py",
       2.2,
-      0.0237
+      0.032
      ],
      [
       "notes/proposals/rule-needs-check.md",
       0.9,
-      0.0084
+      0.0118
      ]
     ],
-    "base_pct": 23.0
-   }
+    "base_pct": 19.7
+   },
+   "src": "estimate",
+   "sid": "session_01U3pKR13HKBmKShVS4PF9Aa",
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 3,
+     "shared:propose.py": 7,
+     "film notes": 7,
+     "other": 4,
+     "guides": 4,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status -sb | head -3 && git fetch origin claude/create-claude-md-oe8z4g 2>&1",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "git push --dry-run origin HEAD 2>&1 | tail -2; python3 source/propose.py show st",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "mark|ask|put|usage|show",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=\"- **Needs Sa",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/proposals/",
+      "ls notes/proposals/ | grep -i staging",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py mark staging-stills adopted 2>&1 | tail -3; python3 so",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/proposals/staging-stills.md notes/proposal-route.md",
+      "fate|adopted",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "",
+      "git pull -q --rebase origin claude/create-claude-md-oe8z4g 2>&1|tail -2; git pus",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/named-lines.md",
+      "status:",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=\"- **Needs Sa",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/guard-film-questions.md notes/proposals/notes-",
+      "Status:",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=\"- **Needs Sa",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/rule-needs-check.md guides/film-quality-rules.",
+      "^\\| *[0-9]+ *\\|",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check.md",
+      "sed -n '/^## Facts/,/^## Verdict/p' notes/proposals/rule-needs-check.md | head -",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "^#|^\\| ",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "guides",
+      "guides/critique-checklist.md guides/tiktok-design.md guides/satire.md guides/pos",
+      " guides/critique-checklist.md guides/tiktok-design.md guides/satire.md guides/po",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/rule-needs-check/rule-list.html",
+      "python3 - <<'EOF' p='notes/proposal-route.md' s=open(p).read() old=[l for l in s",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "guides",
+      "",
+      "(Europe|America|Australia)/[A-Za-z_]+|\\b(GMT|BST|AEST|AEDT|UK time)\\b",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "UK time",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "git remote get-url origin; sed -n '/^## A tool job/,/^## /p' guides/job-packs.md",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/rule-needs-check/rule-list.html",
+      " Q2 (read the six guides too) unanswered: taken as my pick Y, told Sam with an A",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "for i in 1 2 3; do git pull -q --rebase origin claude/create-claude-md-oe8z4g 2>",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "FAULT|BROKEN|Checks|NOT|UNROUTED",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^\\s*$",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/proposal-route.md",
+      "python3 source/ledger.py log proposal-route --stage lessons-put-to-sam --notes 0",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "git log --oneline -1 && for i in 1 2 3 4; do git pull -q --rebase origin claude/",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   },
   {
    "date": "2026-11-22",
