@@ -35,7 +35,7 @@ MIN_GAP = 0.18         # these, so the voice check does too (a pause shorter tha
 
 
 def _trim(x):
-    import mossad_audio as MA
+    import voiceclean as MA
     y = MA.denoise(MA.dehum(x))
     st = MA.pauses(y, 0.12)
     if not st:
@@ -72,9 +72,9 @@ def audio_name(prefix, files):
 def clean(prefix, takes, gap=None, lufs=-20.0, load=None, min_gap=MIN_GAP):
     """takes: {line n: [file names without the prefix]} (source/audio/PREFIX+NAME.m4a). Returns ({n: take},
     {(n, file name): seconds cut from the file's start})."""
-    import mossad_audio as MA
+    import voiceclean as MA
     if load is None:
-        from burnham_film import load
+        load = MA.load
     gap = gap or {}
     order = sorted(takes)
     raw, cut = {}, {}
