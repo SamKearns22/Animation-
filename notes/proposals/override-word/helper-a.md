@@ -48,11 +48,11 @@ Sam would notice: "Override" gets the film in that reply, naming what wasn't che
 ## Sam test
 - Q1: Yes; one trusted input across all guards.
 - Q2: Every guard; the wrong-scope lock named as the bigger lever.
-- Q3: Enforced by hooks and counted at handover. Faking is checked.
+- Q3: Enforced by hooks, counted at handover; faking checked.
 - Q4: Four approaches weighed.
 - Q5: More unchecked faults may reach Sam, each named; undone by one rewording.
 - Q6: Sources named; gaps marked unchecked.
-- Q7: Built fully, with its proof check.
+- Q7: Built fully, with proof check.
 - Q8: Permanent; reviewed at film end.
 
 ## Lost / Added
