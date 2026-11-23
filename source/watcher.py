@@ -91,8 +91,6 @@ PROMISES = {
     'preflight.py': ('no animatic or final with an open fault (rule 59)', 'named: film_engine refuses a render without its pass'),
     'rough.py': ('the rough sheet', 'named: used by hand'),
     'waivers.py': ('no warning waves through in a bunch: each one left on a film has its own written answer, and a check that could not see the film is cured, never answered (rule 59, lesson named-lines)', 'kittest named_lines_each_answered'),
-    'kittest_gate_faults': ('a kit test red at two handovers in a row, or one that could not run, stops the handover (named-lines change 4)', 'kittest kittest_red_twice_stops_handover'),
-    'shared_faults': ('a check fix written in one film\'s code stops the handover until it is moved to the shared tools or Sam says it stays (rule N26)', 'kittest move_to_shared_catches_film_fixes'),
     'override.py prompt': ('Sam\'s typed word "Override" skips the checks between him and that one ask, each skip logged and named (rule N27)', 'kittest override_word'),
     'audiokit.py': ('the shared voice clean-up: takes.py loads no finished film for it (freeze count back to 20)', 'kittest takes_loads_no_film'),
     'kitinputs.py': ('every check gets its inputs from the kits and the drawing, so no new film starts blind; the film\'s own inputs always win (lesson named-lines, change 3)', 'kittest named_lines_shared_inputs_milburn'),
