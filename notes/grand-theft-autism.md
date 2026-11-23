@@ -226,3 +226,19 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   body_check_back_view broken since chat 44 (named, archive).
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.83% of 15%; forecast 97.4% (2026-11-23)
+
+## Chat 47 (23 Nov, Sonnet): animatic v5 pictures and sound built; stuck at the send guard
+- Rendered all 487 drawings (dressed 3D Jason, shots 3-8) and mixed the sound (voices re-sent by Sam; code now reads them from the uploads folder named in grand_theft_autism.UP). Film: 40.6 s, 8.8 MB, branch claude/gta-v5-sound-draft, file drafts-held/gta-v5-clean-sound.mp4 (NOT in animations/drafts; no Hook Text, no sign-off, no body check, no critique).
+- Jason faults file (shots 5-8): only the named 2-point armpit crease at rest, plus two 1-point leg/trunk touches 7.0-7.3 s. Shot 4's full-size look and the cuts (14.1, 24.35, 27.55, 35.55, 36.95 s) NOT done.
+- Blocked: SendUserFile needs a body check record + critique (rule 89); finish.py refuses (proposal-route backlog: staging-stills, 4 unrouted entries). Writing a stand-in record was refused.
+- Sam's rule request (23 Nov): "make sure 'Override' works as a universal code word for skipping steps on all parts of the project." Said Y to running the proposal route for it. Draft wording: on 'Override', every check/guard/step between Sam and his ask is skipped for that one ask; logged (what, when, film); message carries a "Checks: skipped by Sam's Override" line; never skips Locked-by-Sam, never deletes. Needs: guards (sendgate, finish proposal guard, render lock, handover) accept a logged Override from today.
+- Sam is on the iPhone app only: he cannot open files; the film must be sent into the chat.
+
+## Where things stand (23 Nov, chat 47 done)
+- Rules that bite next: Fix the drawing, never the shot; proposal route; Seeing like Sam 1.
+- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move.
+- Done: animatic v5 pictures + sound (branch claude/gta-v5-sound-draft); unchecked.
+- Next: Opus high, chat 48: run the proposal route (propose.py new override-word) for the Override rule; put the two options to Sam; on his pick write it, then send the animatic into the chat (Override or body check), with Hook Text and sign-off if finish.py allows.
+- Needs Sam: pick between the two Override options. Read: notes/proposal-route.md; "Chat 47" above.
+- Open rule requests: Override word (above); build check (bulk note); held-object check; head-flip check; pop check.
+- For Claude: grand_theft_autism.mix(silent,out) rebuilds sound from a silent video without redrawing.
