@@ -15,3 +15,6 @@ That film is posted, mark it complete
 
 3. Tony Blair as he is today. He will also end up facing the same way. I haven't decided where to put him yet, maybe some swanky embassy sort of place?
 
+### 2026-11-23T20:24:37
+I'll describe both to you soon. For now, please work on the characters.
+
