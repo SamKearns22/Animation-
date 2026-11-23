@@ -25485,6 +25485,26 @@
      "2-3 P12: Only Lucia's mouth changes between panels, and no speaker label is given. A frame list of who speaks would show it.",
      "1-6 P7: The lower bodies are hidden behind the cowl and dash, so the thighs and lap cannot be checked. A view of the seat area would show it."
     ]
+   },
+   {
+    "round": "42-grey",
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-23",
+    "hunt": 1,
+    "faults": 5,
+    "cant_tell": 4,
+    "open": [
+     "1-3 A1 M1 P1: RIGHT test view - the door, window frame and car body are not drawn at all, only seat and dashboard. \"Free hand onto the door top\" and \"leans out ",
+     "3 M1 A1: LEFT view - from about 2.67 s to 8 s the car and person vanish; the left cells are blank. Only red slivers pop in and out (about 4.00, 4.33, 4.67, 5.67",
+     "1-2 P7 P10: LEFT view, through the window the figure is a tiny blob cropped by the window frame and the cell edge; knees and seat contact can't be seen from the",
+     "1-3 P3 P6: RIGHT view - the pistol hand sits at the hip or thigh and is a black tick against the grey body. Its grip on the pistol is unreadable.",
+     "3 M3: LEFT view red door sliver flickers on and off between frames (no steady shape).",
+     "3 P12 M2: frames are 1/3 s apart and too small to judge the rhythm of four shots; a close strip of each kick is needed.",
+     "3 M5: no police car, muzzle flash or recoil is seen; a frame at each shot would show it.",
+     "1-3 P5 P11 P8: shoulders, neck and head at full size; the frames are too small to read them. Crops at full size would show it.",
+     "1-3 P2: acting is not readable; the body is faceless (planned)."
+    ]
    }
   ],
   "lines": {
@@ -25497,8 +25517,8 @@
     "false": 0
    },
    "A1": {
-    "faults": 20,
-    "false": 0
+    "faults": 22,
+    "false": 1
    },
    "P2": {
     "faults": 26,
@@ -25521,11 +25541,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 10,
+    "faults": 11,
     "false": 1
    },
    "P1": {
-    "faults": 15,
+    "faults": 16,
     "false": 0
    },
    "O5": {
@@ -25533,7 +25553,7 @@
     "false": 0
    },
    "P3": {
-    "faults": 7,
+    "faults": 8,
     "false": 0
    },
    "O1": {
@@ -25545,8 +25565,8 @@
     "false": 0
    },
    "P7": {
-    "faults": 11,
-    "false": 0
+    "faults": 12,
+    "false": 1
    },
    "O3": {
     "faults": 7,
@@ -25565,8 +25585,8 @@
     "false": 0
    },
    "M1": {
-    "faults": 5,
-    "false": 0
+    "faults": 7,
+    "false": 1
    },
    "S6": {
     "faults": 2,
@@ -25589,8 +25609,8 @@
     "false": 0
    },
    "M3": {
-    "faults": 2,
-    "false": 0
+    "faults": 3,
+    "false": 1
    },
    "O4": {
     "faults": 4,
@@ -25601,7 +25621,7 @@
     "false": 0
    },
    "P10": {
-    "faults": 4,
+    "faults": 5,
     "false": 0
    },
    "P12": {

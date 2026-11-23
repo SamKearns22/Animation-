@@ -305,3 +305,17 @@ area per side, no island under N px - proposed via the proposal route).
   speed 9-17 cm a frame at 24 fps). It goes to Sam through the proposal route; until then name the steps.
 - Tools in my scratch (not kept): a frame sheet from 3 sides, per-frame joint steps. The other account's trials:
   notes/bench/getup41/ (p4-p10, opt.py) reached the same order; this file's version is the one in bench_move.py.
+
+## Chat 42 (Opus high): touches cleared, whole grey clip sent
+- Fixes (bench_move `_climb`): C1b gun hand 3 cm inboard (elbow off the door, 0.625 s); C2 hips 5 cm back
+  (pelvis z 0.03 -> -0.02) and left foot 1 cm back: the left knee off the dash (0.71 s) and the right knee's kneel
+  opened 155 -> 153 deg (its crease points 11 -> 0). Body-car 0, pistol 0, range 0 over all 198 frames.
+- Left, named (one skin point each, inside his outline): groin / armpit / hip creases at 0.54, 1.0, 1.71, 6.46,
+  7.5, 7.75 s; the left elbow folded on ITSELF at 0.58 and 7.67 s (3 points; the check labels it "arm L / trunk
+  11.7 cm" because the depth it prints is the distance to the nearest OTHER part: a fold inside one limb reads ~12).
+  Slides 1.1-2.5 cm. Pops / steps = the 3 cm question (locked speed).
+- Whole grey clip: animations/drafts/grey-lean-out-whole.mp4 (427 KB; checks 4 min, drawing 30 s). Watched every
+  frame of the get-up and sit-down at phone size: reads as one move. Critique r42-grey-p1 (fresh helper): 5 faults,
+  4 false (left view empty 2.7-5.3 s = the locked camera on the cruiser, not drawn in the test; door "flicker" =
+  the pan, checked per frame; kneeling reads at full size; the outside test view has no door on purpose);
+  real but stage 2 (the look): pistol grip at his side reads as a black tick on grey. Sent to Sam 23 Nov.

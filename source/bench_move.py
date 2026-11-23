@@ -353,11 +353,11 @@ def _climb(name):
                  knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.82, 0.58, 0.16)},
                  ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.60, 0.58, 0.36)})
     elif name == 'C2':
-        k = dict(up, pelvis=_v(0.26, 0.0, 0.03), p_up=_v(0.3, 1, 0.12), p_fwd=_v(0.85, 0, 0.5),
+        k = dict(up, pelvis=_v(0.26, 0.0, -0.02), p_up=_v(0.3, 1, 0.12), p_fwd=_v(0.85, 0, 0.5),
                  c_up=_v(1.9, 1, 0.15), c_fwd=_v(1, -0.8, 0.3), h_fwd=_v(1, -1.1, 0.3),
                  hand={'L': (_v(0.90, SILL + HAND_R + 0.02, 0.20), _v(0.3, -1, 0.6)), 'R': None},
                  knee={'L': _v(0.16, 0.64, 0.44), 'R': KNEES['R']},
-                 ankle={'L': _v(0.02, 0.21, 0.44), 'R': _v(0.18, ANKLE_Y, -0.16)},
+                 ankle={'L': _v(0.02, 0.21, 0.43), 'R': _v(0.18, ANKLE_Y, -0.16)},
                  plant={'L': 0.0, 'R': 1.0})
     elif name == 'C2b':
         k = dict(up, pelvis=_v(0.30, 0.0, 0.03), p_up=_v(0.35, 1, 0.08), p_fwd=_v(0.95, 0, 0.3),
@@ -392,7 +392,7 @@ def _climb(name):
                  knee=KNEES, ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)},
                  knee_w=1.0, seat_w=0.0, leg_ik=0.0)
     k['hand'] = dict(k['hand'])
-    lift_gun = {'C1b': (0, 0.16, 0), 'C2': (0.06, 0.04, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.02, 0.03), 'C3': (0.03, 0, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee
+    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.04, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.02, 0.03), 'C3': (0.03, 0, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee
     return _gun_with_chest(k, lift_gun, 'K2' if name == 'C3' else 'K1')
 
 
