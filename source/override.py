@@ -116,6 +116,7 @@ def prompt(stdin=None):
 if __name__ == '__main__':
     a = sys.argv[1:]
     if a[:1] == ['prompt']:
+        __import__('hookran').ran('override.py prompt')
         sys.exit(prompt())
     if a[:1] == ['status']:
         s = active()
