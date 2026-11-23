@@ -35,3 +35,7 @@ Please note that Jason's poses and movements are otherwise good, his model just 
 Make sure you don't see green trousers below that black line, just red or black car parts.
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-23T12:05:29
+Small bit of shirt and trouser leaking through the door, circled in purple
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
