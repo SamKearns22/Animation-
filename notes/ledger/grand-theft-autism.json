@@ -28681,6 +28681,191 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "c0e9f993",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.09,
+   "src": "estimate",
+   "sid": "session_01U3pKQyA1pHCBo1mjGEHKzt",
+   "steps": 14,
+   "hist_k": 96,
+   "kinds": {
+    "film-file search": 10.8,
+    "tool search": 11.3,
+    "renders": 1.9,
+    "other": 76.1
+   },
+   "calls": {
+    "film-file search": 5,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.324,
+    "total": 0.324,
+    "floor_k": 82,
+    "blocks": {
+     "start-up floor": 62.4,
+     "new writes": 18.1,
+     "Claude's words": 15.6,
+     "carried history": 3.9
+    },
+    "origins": {
+     "start-up floor": 62.4,
+     "Claude's words": 20.5,
+     "result: tool search": 6.8,
+     "result: film-file search": 5.3,
+     "messages and reminders": 4.4,
+     "result: renders": 0.7,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 62.4,
+     "commands": 10.6,
+     "thinking": 6.0,
+     "reading notes": 5.4,
+     "messages and reminders": 4.4,
+     "renders": 4.0,
+     "writing code": 2.7,
+     "running checks and tools": 1.7,
+     "messages to Sam": 1.2,
+     "other commands": 0.8,
+     "reading kit code": 0.5,
+     "reading film code": 0.2,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 82,
+    "work_step": 5,
+    "work_pct": 0.05,
+    "reads": [
+     [
+      "notes/grand-theft-autism.md",
+      2.9,
+      0.0148
+     ],
+     [
+      "story/status.md",
+      0.5,
+      0.0027
+     ],
+     [
+      "source/override.py",
+      0.5,
+      0.0027
+     ]
+    ],
+    "base_pct": 33.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 5
+    },
+    "other": {
+     "shared:override.py": 1,
+     "film notes": 2,
+     "other": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:override.py",
+      "story/status.md source/override.py",
+      "git status -sb | head -5; cat story/status.md; ls animations animations/drafts 2",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "grand|gta|theft",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "story/status.md notes/grand-theft-autism.md",
+      "where things stand",
+      ""
+     ],
+     [
+      3,
+      "film",
+      "before show",
+      "notes/grand-theft-autism.md source/grand_theft_autism.py",
+      "git merge origin/claude/gta-chat53 --no-edit 2>&1 | tail -3; sed -n '/## Where t",
+      ""
+     ],
+     [
+      4,
+      "film",
+      "before show",
+      "guides/job-packs.md source/grand_theft_autism.py",
+      "span|final OUT|--small|--full|splice|finish.py",
+      ""
+     ],
+     [
+      5,
+      "film",
+      "before show",
+      "source/gta_opener.py source/grand_theft_autism.py",
+      "sed -n '/def _title_font/,/^def /p' source/gta_opener.py | head -20; ls -la font",
+      ""
+     ],
+     [
+      6,
+      "film",
+      "before show",
+      "source/gta_opener.py",
+      "^TITLE_(FONT|URL)",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "source/fonts/ source/fonts/Pricedown-Bl.otf",
+      "ls -la source/fonts/ | head; file source/fonts/Pricedown-Bl.otf; head -c 200 sou",
+      ""
+     ],
+     [
+      9,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py",
+      "mkdir -p /tmp/claude-0/gta && (time python3 source/grand_theft_autism.py animati",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "sleep 240; tail -c 400 /tmp/claude-0/gta/render.log; ls -la /home/user/Animation",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
