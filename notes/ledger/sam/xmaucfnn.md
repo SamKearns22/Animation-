@@ -15,3 +15,8 @@ This is SO good to see, Claude. This has been a massive problem on this build an
 ### 2026-11-23T13:01:01
 This clip looks right. What happened to the running away people? There is now a big static crowd further down the road, which is less dynamic.
 
+### 2026-11-23T13:32:46
+The runners need to run in different directions, mostly away down the street, away from the explosion, and not clip into the walls or any other object, and yes the transition between 4 and 5 needs to be fixed
+
+Fix the checker's finds
+
