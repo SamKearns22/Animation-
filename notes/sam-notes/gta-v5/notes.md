@@ -1,0 +1,3 @@
+# Sam's notes on animatic v5 (23 Nov) — HOLD (collect, don't act)
+1. "Jason has a gap throughout the film. His body ends just above where the car should cut him off. This is in almost all shots." (1a, 1b, purple)
+2. "Jason should be in the car here but his lower body is clipping through the door. He shouldn't be able to come through the car door. I have also circled some broken cube effects in yellow." (2a purple+yellow, 2b purple)
