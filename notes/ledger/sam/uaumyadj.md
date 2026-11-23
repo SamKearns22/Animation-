@@ -15,3 +15,8 @@ What is the role of pre-flight checks?
 ### 2026-11-23T14:58:11
 I think I'd like it so that pre-flight is run (unless I overrule it) regardless of what was missing.
 
+### 2026-11-23T14:58:59
+Keep this in reserve.
+
+Could you run the pre-flight after the fact on this film? I just want to check it's good
+
