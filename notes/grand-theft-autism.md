@@ -150,7 +150,7 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   touched _climb (C1b hips, gun lift): chat 44 merges the main line first.
 - Read: notes/bench/learn-step.md "Chat 43". Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
 - For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
-  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look = live chat 44.
+  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look, claude/gta-chat45-look = the live look chats.
 
 ## Where things stand, the LOOK strand (23 Nov, chat 44 -> chat 45, Opus medium): Sam's notes on the dressed clip
 - Rules that bite next: rule 30 (neck is a note given twice); Seeing like Sam 1 and 3; Fix the drawing, never the shot.
