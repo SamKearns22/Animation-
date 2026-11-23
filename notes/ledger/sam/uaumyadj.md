@@ -23,3 +23,6 @@ Could you run the pre-flight after the fact on this film? I just want to check i
 ### 2026-11-23T15:00:04
 What are the notes?
 
+### 2026-11-23T15:01:10
+I hardly see how they are relevant to the current job. Keep the staging stills proposal in reserve and delete the other 3. Then push the final
+
