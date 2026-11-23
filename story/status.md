@@ -1,2 +1,3 @@
-Proposal route: plain-words check (Change 1) built and tested: proposals put to Sam now come in fixed plain fields; chain A carries on in chat 5 (rules 41, 17, 5). named-lines (chain B) carries on in its chat 3.
-Grand Theft Autism: chat 46 built the dressed 3D Jason (bulkier, LEONIDA print, pistol in shot 3) into shots 3-8; chat 47 (Sonnet) renders and sends animatic v5.
+Grand Theft Autism: animatic v5 sent 23 Nov (unchecked, Sam's Override).
+Override word built and written (Sam's option 2).
+Waiting on Sam's notes on v5; next an Opus medium notes chat.

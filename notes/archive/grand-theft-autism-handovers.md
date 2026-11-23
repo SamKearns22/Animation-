@@ -889,3 +889,30 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: FAR58/FAR_PEOPLE58, chest_gun (gta_shots58, leanout.draw_gun); `--span` clip. Two "Where things stand"
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
+
+## Where things stand (23 Nov, chat 46 done; one strand again: the 3D Jason is in the film)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion, full size); rule 74.
+- Locked by Sam: every camera, beat, shot length and timing of shots 1-8 (shot 4 25% slower); house style; circle
+  hands; chat 43's grip; the bench move (Sam: "It looks very good").
+- Done: dressed 3D Jason in shots 3-8 (bulk, print, pistol in shot 3); cuts 3-4, 4-5 match; shots 5-8 checked as drawn.
+- Next: Sonnet, chat 47: full animatic v5 (`grand_theft_autism.py OUT`), Jason faults file, body check, critique,
+  finish.py (Hook Text, sign-off; write outside animations/drafts first), send. Final render only on Sam's clear yes.
+- Needs Sam: notes on animatic v5. Read: job pack "Checks and animatic"; "Chat 46" above.
+- Open rule requests: build check (bulk note); grey-clip body-check (Sam HOLDS); held-object check; house-look lock;
+  "pieces" test; head-flip check; pop check (v4 N1); critic's three lines.
+- For Claude: jason3d_film (ON, CHECK, FAULTS_FILE /tmp/gta-jason3d-faults.txt, data/gta-jason3d-headplan.json),
+  bench_move.BULK/bulk(), bench_draw PRINT_*; gta_shots58.goals58; branches claude/dreamy-fermi-vkhutz (story post, awaiting Sam), claude/gta-chat31 (record),
+  claude/gta-chat46-build (a chats log only) not merged on purpose; CLAUDE.md's three "lost" sentences are Sam's own
+  rewording (kept); kittest
+  body_check_back_view broken since chat 44 (named, archive).
+
+
+## Where things stand (23 Nov, chat 47 done)
+- Rules that bite next: Fix the drawing, never the shot; proposal route; Seeing like Sam 1.
+- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move.
+- Done: animatic v5 pictures + sound (branch claude/gta-v5-sound-draft); unchecked.
+- Next: Opus high, chat 48: run the proposal route (propose.py new override-word) for the Override rule; put the two options to Sam; on his pick write it, then send the animatic into the chat (Override or body check), with Hook Text and sign-off if finish.py allows.
+- Needs Sam: pick between the two Override options. Read: notes/proposal-route.md; "Chat 47" above.
+- Open rule requests: Sam 23 Nov: drop the 'Locked by Sam' line from messages to him ("doesn't help me"): chat 47 stopped showing it to him now; the notes' line stays (it guards shots for later chats, handover check wants it); route changing CLAUDE.md/check with the Override proposal; Override word (above); build check (bulk note); held-object check; head-flip check; pop check.
+- For Claude: grand_theft_autism.mix(silent,out) rebuilds sound from a silent video without redrawing.
+

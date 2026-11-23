@@ -149,21 +149,6 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
       head, circle hands, chat 43's grip). Locked cameras, beats, timing unchanged. Then Sonnet: checks over the
       full animatic, finish.py (Hook Text, sign-off), send. Final render only on Sam's clear yes.
 
-## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
-## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
-- [x] K1-K5: 0 crossings (car, self, pistol), contacts held, joints in range (fixed in the body, not the checks). Sheet notes/bench/stage1-keys.jpg.
-- [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
-- [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
-
-## Chat 33c (22 Nov, Sonnet): animatic v4 drawn, NOT yet sent
-Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
-- Drawn: 7.0-38.5 s fresh in 22 min (shot 1 = v3's first 7.0 s). Picture: source/data/v4/gta-v4-clean.mp4 (8 MB).
-- Sound is v3's mix (the voice and effect files are not in this container, so mix() cannot run); timings locked.
-- Blocked: no body-check record (my scratch writer was refused: it switched the checks off and self-named faults).
-  Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
-  (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
-- Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
-
 ## Sam's answers, 22 Nov (status chat)
 - Budget stops (open since chat 28): **N**. Do not ask again.
 - Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.
@@ -211,24 +196,6 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   Named, not fixed: these creases, and shots 5-8's rest crease (2 points at 6.2, 9.4, 18.8 s on their clock).
   Chat 47 looks at 0.79, 1.75, 8.67, 9.33 s of shot 4 at full size; anything a stranger would stop on comes back to Opus.
 
-## Where things stand (23 Nov, chat 46 done; one strand again: the 3D Jason is in the film)
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion, full size); rule 74.
-- Locked by Sam: every camera, beat, shot length and timing of shots 1-8 (shot 4 25% slower); house style; circle
-  hands; chat 43's grip; the bench move (Sam: "It looks very good").
-- Done: dressed 3D Jason in shots 3-8 (bulk, print, pistol in shot 3); cuts 3-4, 4-5 match; shots 5-8 checked as drawn.
-- Next: Sonnet, chat 47: full animatic v5 (`grand_theft_autism.py OUT`), Jason faults file, body check, critique,
-  finish.py (Hook Text, sign-off; write outside animations/drafts first), send. Final render only on Sam's clear yes.
-- Needs Sam: notes on animatic v5. Read: job pack "Checks and animatic"; "Chat 46" above.
-- Open rule requests: build check (bulk note); grey-clip body-check (Sam HOLDS); held-object check; house-look lock;
-  "pieces" test; head-flip check; pop check (v4 N1); critic's three lines.
-- For Claude: jason3d_film (ON, CHECK, FAULTS_FILE /tmp/gta-jason3d-faults.txt, data/gta-jason3d-headplan.json),
-  bench_move.BULK/bulk(), bench_draw PRINT_*; gta_shots58.goals58; branches claude/dreamy-fermi-vkhutz (story post, awaiting Sam), claude/gta-chat31 (record),
-  claude/gta-chat46-build (a chats log only) not merged on purpose; CLAUDE.md's three "lost" sentences are Sam's own
-  rewording (kept); kittest
-  body_check_back_view broken since chat 44 (named, archive).
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.83% of 15%; forecast 97.4% (2026-11-23)
-
 ## Chat 47 (23 Nov, Sonnet): animatic v5 pictures and sound built; stuck at the send guard
 - Rendered all 487 drawings (dressed 3D Jason, shots 3-8) and mixed the sound (voices re-sent by Sam; code now reads them from the uploads folder named in grand_theft_autism.UP). Film: 40.6 s, 8.8 MB, branch claude/gta-v5-sound-draft, file drafts-held/gta-v5-clean-sound.mp4 (NOT in animations/drafts; no Hook Text, no sign-off, no body check, no critique).
 - Jason faults file (shots 5-8): only the named 2-point armpit crease at rest, plus two 1-point leg/trunk touches 7.0-7.3 s. Shot 4's full-size look and the cuts (14.1, 24.35, 27.55, 35.55, 36.95 s) NOT done.
@@ -236,18 +203,20 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Sam's rule request (23 Nov): "make sure 'Override' works as a universal code word for skipping steps on all parts of the project." Said Y to running the proposal route for it. Draft wording: on 'Override', every check/guard/step between Sam and his ask is skipped for that one ask; logged (what, when, film); message carries a "Checks: skipped by Sam's Override" line; never skips Locked-by-Sam, never deletes. Needs: guards (sendgate, finish proposal guard, render lock, handover) accept a logged Override from today.
 - Sam is on the iPhone app only: he cannot open files; the film must be sent into the chat.
 
-## Where things stand (23 Nov, chat 47 done)
-- Rules that bite next: Fix the drawing, never the shot; proposal route; Seeing like Sam 1.
-- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move.
-- Done: animatic v5 pictures + sound (branch claude/gta-v5-sound-draft); unchecked.
-- Next: Opus high, chat 48: run the proposal route (propose.py new override-word) for the Override rule; put the two options to Sam; on his pick write it, then send the animatic into the chat (Override or body check), with Hook Text and sign-off if finish.py allows.
-- Needs Sam: pick between the two Override options. Read: notes/proposal-route.md; "Chat 47" above.
-- Open rule requests: Sam 23 Nov: drop the 'Locked by Sam' line from messages to him ("doesn't help me"): chat 47 stopped showing it to him now; the notes' line stays (it guards shots for later chats, handover check wants it); route changing CLAUDE.md/check with the Override proposal; Override word (above); build check (bulk note); held-object check; head-flip check; pop check.
-- For Claude: grand_theft_autism.mix(silent,out) rebuilds sound from a silent video without redrawing.
-
 ## Chat 48 (23 Nov, Opus high): the Override word built (Sam's pick: option 2)
 - Proposal override-word routed (2 helpers, blind judge picked helper B = option 1; Sam picked option 2: "If I'm at 99% usage and I need an animatic ... I can run them again once the usage is back"). Marked adopted.
 - Built: source/override.py (Sam's latest typed message holds "Override" -> every stop skips for that ask, logged to notes/logs/overrides.log, "Checks: skipped by Override" line). Wired: send guard, finish.py (route, Hook Text, readable, could-not-test), film_engine render stops (47, 11, 59), proposal Stop hook, watcher, ledger alarm, handover end, model guard, cost watch (word anywhere). Hook: UserPromptSubmit logs it. Kittests override_word, locked_line_not_to_sam pass; proposal_route_hook, cost_watch_lines, render_lock, named_lines_body_each_answered still pass.
 - CLAUDE.md: the Override line replaces "(or any override)"; Locked line: notes only, never in messages (Stop hook flags it). Rulebook last table: two rows.
 - Named, not done (Override skips them for an ask, the option-2 trade): the finish.py stop on other chats' let-throughs stays (option 1's fix, a later question).
+- Sam typed Override (11:09): finish.py ran here on Opus (model guard skipped by Override), skipping the route stop (other chats' let-throughs) and the readable check (COULD NOT TEST: the copied clean video had no record of what it drew). Animatic v5 sent: 38.5 s delivered at 1.1x, 4.8 MB, no Hook Text, sign-off "Grand Theft Follow!". Body check, critique, shot 4's full-size look and the cuts still NOT run (Override).
 
+## Where things stand (23 Nov, chat 48 done)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1; Override (CLAUDE.md, Asking me before you go on).
+- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; no Hook Text; end line "Grand Theft Follow!".
+- Done: Override built and written (option 2); animatic v5 sent (unchecked) and saved in animations/drafts.
+- Next: Sam's notes on v5 -> Opus medium chat (note round). Before the final: body check + critique on v5's fixes (they were skipped by Override).
+- Needs Sam: notes on animatic v5. Read: pack "Notes round" in guides/job-packs.md; "Chat 48" above.
+- Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix (finish.py held by other chats' let-throughs) as its own proposal.
+- For Claude: source/override.py; the clean render with sound is animations/drafts/grand-theft-autism-clean.mp4 (no readable record beside it: re-render if the readable check must run).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 99.5% of 15%; forecast 103.1% (2026-11-23)

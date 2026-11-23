@@ -673,3 +673,19 @@ Done in chat 27 (Opus high; seen by Sam only as the shot 4 clip):
       outs floating above the car; the redhead's knees balls at 21.68; a pink spire on the skyline at 20.60 only; F6's
       pink walker (confirmed).
 
+
+## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
+## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
+- [x] K1-K5: 0 crossings (car, self, pistol), contacts held, joints in range (fixed in the body, not the checks). Sheet notes/bench/stage1-keys.jpg.
+- [x] Proof on old frames: notes/bench/proof.txt (all old faults caught).
+- [~] 197 frames: getting up / sitting down still cross (breakdowns B1, B2 added, frames 15-22 open).
+
+## Chat 33c (22 Nov, Sonnet): animatic v4 drawn, NOT yet sent
+Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
+- Drawn: 7.0-38.5 s fresh in 22 min (shot 1 = v3's first 7.0 s). Picture: source/data/v4/gta-v4-clean.mp4 (8 MB).
+- Sound is v3's mix (the voice and effect files are not in this container, so mix() cannot run); timings locked.
+- Blocked: no body-check record (my scratch writer was refused: it switched the checks off and self-named faults).
+  Needs Sam: 1 = re-run the body check with the checks ON and name every fault (about 20 min), then critique pack
+  (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
+- Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
+

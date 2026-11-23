@@ -1093,6 +1093,28 @@
    "owed": "named-lines change 3, chain B chat 3 (session_01U3pKR2taFPq31QroZMAKSe): the move-to-shared handover stop; Sam's 'needs testing' = its kittest must catch Blessed's 7, Milburn's voice takes and GTA's solids on the saved code, and pass a film whose rows say moved or Sam keeps it",
    "plan": "kittest move_to_shared_blessed_replay",
    "kind_before": "new"
+  },
+  "N27": {
+   "rule": "Override: when Sam's own latest message has the word, every check, guard and step between him and that one ask is skipped, logged and named to him; never his locked shots, deleting work or saving.",
+   "anchor": "\"Override\" skips everything between me and that one ask (Sam's pick, 23 Nov):",
+   "status": "proven",
+   "tests": [
+    "override_word"
+   ],
+   "example": "Chat 47 (23 Nov): animatic v5 built but the send guard refused it (no body check) and finish.py refused it (other chats' let-throughs); Sam waited a whole chat. Sam: \"If I'm at 99% usage and I need an animatic so I can see something in motion, it is very frustrating if I can't prevent the checks from running\".",
+   "notes": "proposal override-word, Sam picked option 2 (23 Nov); chat 48 sent v5 under it.",
+   "kind_before": "none"
+  },
+  "N28": {
+   "rule": "No \"Locked by Sam\" line in messages to Sam; it stays in the notes.",
+   "anchor": "It stays in the\nnotes, never in messages to me",
+   "status": "proven",
+   "tests": [
+    "locked_line_not_to_sam"
+   ],
+   "example": "Sam, 23 Nov 10:54: \"Please remove the 'locked by Sam' section of communication as it doesn't help me\" (chat 46/47 replies carried the line).",
+   "notes": "check: propose.py hook locked_line.",
+   "kind_before": "none"
   }
  },
  "_baseline": {
