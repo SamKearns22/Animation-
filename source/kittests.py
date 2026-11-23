@@ -773,9 +773,10 @@ def solid_check_shot4_v7():
     """Rule 17 (lesson 7; GTA v7 note 3, Sam 21 Nov: "Jason clips through two parts of the car as he moves"): the
     times of Sam's v7 stills were matched on the v7 strip (77a3eb10 ~1.0 s, 2194502b ~1.5 s); viewchecks.solid_faults
     on version 7's own code at just those frames must flag Jason through the car (his arm in front of the window
-    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, two frames about 2.
-    Known misses, not in this proof: v7 note 2 (the see-through bonnet, 0.67 s) and note 7 (hydrant water through the
-    cruiser, 3.33-3.67 s) are still passed on those frames (rule_proofs.json, rule 17's miss)."""
+    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, three frames about 2.
+    Chain A chat 5 (23 Nov): v7 note 2, the see-through bonnet (still b03d81c2, 0.67 s = frame 8), passed every bone
+    point (the vest's edge showed between them); viewchecks.outline_shows now tests the drawn outline, so frame 8 must
+    flag Jason's body through the tulip's bonnet."""
     import subprocess
     import tempfile
     root = os.path.dirname(HERE)
@@ -786,8 +787,10 @@ def solid_check_shot4_v7():
             return False, 'COULD NOT TEST: version 7 is not in this copy\'s history'
         subprocess.run(['tar', '-x', '-C', tmp], input=tar, check=True)
         src = os.path.join(tmp, 'source')
-        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks as VC; '
-                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[12, 18], label="v7")))' % src)
+        import shutil                             # today's check on version 7's own drawing code
+        shutil.copy(os.path.join(HERE, 'viewchecks.py'), os.path.join(src, 'viewchecks_now.py'))
+        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks_now as VC; '
+                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18], label="v7")))' % src)
         r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
     finally:
         import shutil
@@ -795,7 +798,9 @@ def solid_check_shot4_v7():
     lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
     arm = any('rubbed out' in ln for ln in lines)
     hips = any('window pillar' in ln for ln in lines)
-    return arm and hips, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the pillar {hips}' + \
+    bonnet = any('drawn body shows through the tulip\'s bonnet' in ln and ' 0.67 s' in ln for ln in lines)
+    return arm and hips and bonnet, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the ' \
+        f'pillar {hips}; at 0.67 s the body through the bonnet {bonnet}' + \
         ('' if r.returncode == 0 else f'; crashed: {r.stderr.strip().splitlines()[-1:]}')
 
 
