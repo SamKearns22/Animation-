@@ -2,3 +2,4 @@
 1. "Jason has a gap throughout the film. His body ends just above where the car should cut him off. This is in almost all shots." (1a, 1b, purple)
 2. "Jason should be in the car here but his lower body is clipping through the door. He shouldn't be able to come through the car door. I have also circled some broken cube effects in yellow." (2a purple+yellow, 2b purple)
 3. "Geyser effect clipping through pavement" (3, purple: water pipe drawn over the kerb/pavement)
+4. "Civilians run through the building instead of down the street. They clip into the scenery." (4, shot 4 ~0:20, purple: crowd overlapping shopfront)
