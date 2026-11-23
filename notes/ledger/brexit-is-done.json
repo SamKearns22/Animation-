@@ -848,70 +848,70 @@
    "model": "opus",
    "stage": "cast",
    "round": null,
-   "cost": 2.06,
+   "cost": 2.32,
    "notes": 2,
    "repeats": [
     "Women drawn on a man's body (GTA Lucia 20 Nov, Open Wounds n5) | none: no check knows who is a woman; the GTA fix was opt-in for one person"
    ],
-   "steps": 78,
-   "hist_k": 167,
+   "steps": 115,
+   "hist_k": 211,
    "kinds": {
-    "film-file search": 0.9,
-    "tool search": 24.3,
-    "renders": 1.5,
-    "pictures": 2.4,
-    "other": 70.9
+    "film-file search": 0.7,
+    "tool search": 24.1,
+    "renders": 0.9,
+    "pictures": 2.1,
+    "other": 72.1
    },
    "calls": {
     "film-file search": 2,
-    "tool search": 53,
+    "tool search": 77,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 2,
-    "pictures": 7,
-    "other": 17
+    "pictures": 8,
+    "other": 27
    },
    "split": {
-    "usd": 3.2031,
-    "total": 3.2031,
+    "usd": 5.2131,
+    "total": 5.2131,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 41.5,
-     "new writes": 20.8,
-     "Claude's words": 19.4,
-     "carried history": 18.3
+     "start-up floor": 36.3,
+     "carried history": 25.1,
+     "Claude's words": 19.3,
+     "new writes": 19.3
     },
     "origins": {
-     "start-up floor": 41.5,
-     "Claude's words": 29.6,
-     "result: tool search": 19.6,
-     "messages and reminders": 4.6,
-     "result: pictures": 1.8,
-     "result: other": 1.1,
-     "result: film-file search": 0.9,
-     "Claude's edits": 0.8,
-     "result: renders": 0.1
+     "start-up floor": 36.3,
+     "Claude's words": 31.6,
+     "result: tool search": 19.3,
+     "messages and reminders": 6.1,
+     "result: other": 3.4,
+     "result: pictures": 1.7,
+     "result: film-file search": 0.8,
+     "Claude's edits": 0.7
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 41.5,
-     "thinking": 10.0,
-     "commands": 8.7,
-     "start-up and handover tools": 6.7,
-     "writing code": 6.4,
-     "reading kit code": 6.0,
-     "reading notes": 5.4,
-     "messages and reminders": 4.6,
-     "writing notes": 3.1,
-     "looking at pictures": 1.8,
-     "running checks and tools": 1.5,
-     "messages to Sam": 1.5,
+     "start-up reading (rules, tools, first files)": 36.3,
+     "thinking": 11.5,
+     "commands": 9.4,
+     "start-up and handover tools": 6.4,
+     "reading notes": 6.3,
+     "messages and reminders": 6.1,
+     "reading kit code": 5.2,
+     "writing code": 4.8,
+     "writing notes": 4.3,
+     "reading chat records": 1.9,
+     "messages to Sam": 1.9,
+     "looking at pictures": 1.7,
      "reading guides": 1.3,
-     "helper and chat prompts": 0.7,
+     "running checks and tools": 1.2,
+     "helper and chat prompts": 0.5,
      "helper results": 0.4,
+     "app tools (chats, files sent)": 0.3,
      "other commands": 0.2,
-     "git and saving": 0.1,
-     "renders": 0.1,
+     "git and saving": 0.2,
      "edit results": 0.1
     },
     "leftover": 0.0
@@ -924,31 +924,696 @@
      [
       "notes/logs/broken.md",
       1.0,
-      0.0196
+      0.0259
      ],
      [
       "source/watcher.py",
       0.4,
-      0.0081
+      0.0108
      ],
      [
       ".claude/settings.json",
       0.3,
-      0.0057
+      0.0076
      ],
      [
       "source/hookran.py",
       0.3,
-      0.0057
+      0.0076
      ],
      [
       "source/data/freeze/films.json",
       0.2,
-      0.0031
+      0.0042
      ]
     ],
-    "base_pct": 36.5
-   }
+    "base_pct": 33.2
+   },
+   "src": "estimate",
+   "sid": "session_01U3pKR2NkczhDyGCc5Escrh",
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 2
+    },
+    "other": {
+     "other": 14,
+     "shared:handover.py": 5,
+     "shared:hookran.py": 1,
+     "shared:override.py": 1,
+     "shared:watcher.py": 3,
+     "shared:freeze.py": 2,
+     "shared:gta_story_post.py": 1,
+     "shared:branches.py": 1,
+     "shared:propose.py": 9,
+     "film notes": 15,
+     "shared:people.py": 4,
+     "shared:body.py": 2,
+     "shared:castsheet.py": 5,
+     "shared:views.py": 3,
+     "shared:people_parts.py": 2,
+     "shared:kittests.py": 5,
+     "guides": 3,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch origin claud",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git log --oneline -1 && git checkout --detach origin/claude/create-claude-md-oe8",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01U3pKR1aCRX8VmEXSXkQfCF --film brexit-",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01U3pKR1aCRX8VmEXSXkQfCF --film brexit-",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:hookran.py",
+      ".claude/settings.json source/hookran.py notes/logs",
+      "cat .claude/settings.json | python3 -c \"import json,sys; d=json.load(sys.stdin);",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:override.py",
+      "source/override.py /.claude/watcher/ran/ notes/logs/broken.md",
+      "hookran\\|def main\\|def prompt\\|__main__",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:watcher.py",
+      "/.claude/watcher/ran/ notes/logs/broken.md source/watcher.py",
+      "def \\|fixed\\|resolve",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "sed -n 538,580p source/watcher.py",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py source/data/freeze/films.json",
+      "python3 source/watcher.py name \"override.py prompt\" \"brexit chat 3: seen running",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:freeze.py",
+      "source/data/freeze/films.json source/freeze.py",
+      "tag\\|story\\|videos",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:gta_story_post.py",
+      "source/gta_story_post.py source/freeze.py",
+      "ls source/gta_story_post.py 2>&1; git show --stat a56d40f7 | head -15; sed -n 1,",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:freeze.py",
+      "source/data/freeze/films.json source/freeze.py",
+      "python3 - <<'EOF' import json p='source/data/freeze/films.json' d=json.load(open",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:branches.py",
+      "source/branches.py",
+      "^import",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:propose.py",
+      "notes/brexit-is-done.md source/propose.py",
+      "^## \\|^| 5 \\|^| 6 ",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/proposals",
+      "sed -n 38,66p notes/brexit-is-done.md && sed -n 109,126p notes/brexit-is-done.md",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/brow-limit.md notes/proposals/brow-limit",
+      "sed -n 30,60p source/propose.py; cat notes/proposals/brow-limit.md | head -40; l",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:people.py",
+      "source/people.py source/people_parts.py",
+      "build\\|BUILD\\|shoulder_w\\|hip\\|waist\\|female\\|woman",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:body.py",
+      "source/body.py source/*.py source/data source/people.py source/castsheet.py",
+      "FIGS\\|'woman'\\|def fig\\|hips\\|waist",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "badenoch\\|Badenoch",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py source/data/critique-src/brexit-is-done/cast-spec.json",
+      "sed -n 37,62p source/castsheet.py; python3 -c \"import json;d=json.load(open('sou",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "",
+      "\\.git/",
+      ""
+     ],
+     [
+      21,
+      "film",
+      "before show",
+      "story/brexit-is-done-people.txt source/people.py source/*.py",
+      "'build'\\|\\.get('build\\|fig=",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:people.py",
+      "source/*.py source/people.py",
+      "'figure'\\|\\.figure\\|fig=",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py source/people_parts.py",
+      "sed -n 770,800p source/views.py; sed -n 845,870p source/views.py; sed -n 575,600",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py source/people.py source/people_parts.py",
+      "heel\\|pump\\|'shoes'\\|shoe_k\\|leg_k\\|def leg",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "notes/ledger/sam/",
+      "ls -t notes/ledger/sam/ | head -5; for f in $(ls -t notes/ledger/sam/ | head -3)",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "film notes",
+      "notes/ledger/sam/xsxkqfcf.md",
+      "sed -n '/Kemi: \\*staring/,$p' notes/ledger/sam/xsxkqfcf.md",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "notes/sam-notes/ notes/sam-notes/brexit-cast-v1",
+      "ls notes/sam-notes/ | grep -i brex; ls notes/sam-notes/brexit-cast-v1; python3 -",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "def workwear",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "lapel\\|def torso_view\\|TORSO_EXTRAS",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 663,750p source/views.py",
+      ""
+     ],
+     [
+      42,
+      "film",
+      "before show",
+      "story/brexit-is-done-people.txt",
+      "^[-+]outfit\\|^[0-9a-f]\\{8\\}",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py source/views.py",
+      "^import\\|^from\\|^B = \\|^V = \\|^B, V",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation/ 2>/dev/null; cd /home/user/Animation- && cat > /tmp/cla",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "python3 source/castsheet.py match brexit-is-done 2>&1 | tail -6; python3 source/",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "sed -n 1,31p source/castsheet.py",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/womans-build.md",
+      "python3 source/propose.py new womans-build \"Women in the cast are drawn on a man",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:people.py",
+      "source/people.py source/views.py source/body.py guides/film-quality-rules.md",
+      "trainers\\|'boots'\\|shoe_kind\\|heels",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:kittests.py",
+      "guides/kit-catalogue.md source/kittests.py source/views.py",
+      "woman\\|women\\|build",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "figure\\|shoulders\\|build\\|leg_k\\|arm_w\\|woman",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/f27fff03-91ff-5857-85fd-c4432e7250b8/scrat",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py pack womans-build 2>&1 | tail -20",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3\\|usage\\|argv",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 600 python3 source/kittests.py outfit 2>&1 | tail -6; timeout 300 python",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:kittests.py",
+      "source/blessed* notes/logs/kittests-last.log source/kittests.py",
+      "people_from_a_description",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "sleep 60; cat /tmp/claude-0/-home-user-Animation-/f27fff03-91ff-5857-85fd-c4432e",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "other",
+      "",
+      "git stash list | head -3; git status --short | head; tail -2 /tmp/claude-0/-home",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "film notes",
+      "notes/proposals/womans-build/helper-b.md notes/archive/grand-theft-autism-notes.",
+      "cat notes/proposals/womans-build/helper-b.md; sed -n 118,140p notes/archive/gran",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "",
+      "tail -3 /tmp/claude-0/-home-user-Animation-/f27fff03-91ff-5857-85fd-c4432e7250b8",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge womans-build 2>&1 | tail -5",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "sed -n 9,26p guides/job-packs.md",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "",
+      "tail -4 /tmp/claude-0/-home-user-Animation-/f27fff03-91ff-5857-85fd-c4432e7250b8",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "until [ -z \"$(git stash list)\" ]; do sleep 3; done; tail -2 /tmp/claude-0/-home-",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/proposals/womans-build.md notes/sam-notes/brexit-c",
+      "^| [56] ",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/proposals/womans-build.md notes/proposals/womans-b",
+      "git add notes/brexit-is-done.md notes/proposals/womans-build.md notes/proposals/",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "film notes",
+      "notes/*.md guides/*.md story/*.md",
+      "reserve",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "reserve job",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "film notes",
+      "notes/ledger/sam/cc5escrh.md notes/proposals/front-on-focus/retirement-and-hando",
+      "reserve",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "^## \\|Next\\b\\|\\*\\*Next",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "tail -4 /tmp/claude-0/-home-user-Animation-/f27fff03-91ff-5857-85fd-c4432e7250b8",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py source/data/freeze/films.json source/people_parts.py",
+      "git add -A source/castsheet.py source/data/freeze/films.json source/people_parts",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "sed -n 3,10p notes/proposal-route.md | cut -c1-400",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record womans-build 2>&1 | tail -4; python3 source/pro",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "def hook",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "def _names_in\\|def _asks\\|def _change_q\\|def judge_reply\\|Critiqued",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 640,700p source/propose.py",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/proposals/womans-build.md notes/proposal-route.md notes",
+      "s legs (a bent knee), a copy of\n  v4 with the car",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md notes/next-job",
+      "python3 - <<'EOF' p='notes/brexit-is-done.md'; s=open(p).read() a=s.index('## Wh",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py",
+      "cp /tmp/claude-0/-home-user-Animation-/f27fff03-91ff-5857-85fd-c4432e7250b8/scra",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py end --film brexit-is-done 2>&1 | head -12 | cut -c1-3",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/logs/kittests-last.log",
+      "python3 source/ledger.py log brexit-is-done --stage cast --notes 2 --repeat \"Wom",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "source/kittests.py",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 4,37p notes/brexit-is-done.md",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "guides",
+      "guides/tiktok-design.md notes/archive/cry-minister*.md notes/archive",
+      "hook text",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "film notes",
+      "guides/tiktok-design.md notes/archive/cryminister.md",
+      "blood\\|gore\\|shred",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "other",
+      "",
+      "git add -A notes story && git commit -q -m \"Open Wounds chat 3: named handover f",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^SENTENCE",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "other",
+      "source/data",
+      "git status --short | head; git add -A notes story source/data 2>/dev/null; git c",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
