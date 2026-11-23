@@ -16,3 +16,13 @@ Y
 ### 2026-11-23T14:22:49
 But actually, I think I need to hand that over to another account as you are on 96% of your weekly usage
 
+### 2026-11-23T14:28:45
+How close are we to having the running clip?
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
+### 2026-11-23T14:29:36
+Override
+
+### 2026-11-23T14:32:14
+If I'm honest, it looks really bad. They sort of clump up against the wall, and I can't help but notice that all of the citizens are using an old test kit where nobody has, like, everyone's got separate arms, like their shoulders and arms aren't connected. I thought we've binned that kit now and we've moved long past it. They run with blank expressions, they run sort of right next to each other, their arm movements aren't believable. It just doesn't look very good in any particular way, when sort of what I wanted was, well, for one, for us to use our modern body kits rather than these stick figures, and to have kind of a crowd of them just kind of run in different directions, different parts of the pavement, kind of reacting as alarmed people would, you know, shielding their faces, flinging their arms, pumping their arms as they run, and with expressions that match.
+

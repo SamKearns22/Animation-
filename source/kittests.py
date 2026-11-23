@@ -3181,34 +3181,16 @@ def guard_one_correction():
 
 
 @test
-def voiceclean_same_sound():
-    """The shared voice clean-up (voiceclean.py, 23 Nov) took takes.py off a finished film's file (freeze count 21 ->
-    20): takes imports no film module; mossad_audio re-uses the same functions, and its denoise still obeys the
-    film-set MAX_CUT_DB (Russiadent sets 20). Checked at the move: Milburn's 14 takes and two Mossad lines identical."""
+def takes_loads_no_film():
+    """takes.py (the shared voice clean-up for every film) loads no finished film's file: its cleaning comes from the
+    shared audiokit.py (23 Nov, chain B chat 3; freeze count 21 -> 20)."""
     import ast
-    import numpy as np
     import freeze as FZ
-    import mossad_audio as MA
-    import voiceclean as VC
-    bad = []
     tree = ast.parse(open(os.path.join(HERE, 'takes.py')).read())
     mods = {a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names} | \
            {n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module}
     films = sorted(m for m in mods if FZ.FILM.match(m))
-    if films:
-        bad.append(f'takes.py imports film files {films}')
-    for f in ('lufs', 'dehum', 'smooth_tail', 'pauses'):
-        if getattr(MA, f) is not getattr(VC, f):
-            bad.append(f'mossad_audio.{f} is not the shared one')
-    x = np.random.default_rng(1).normal(0, 0.05, 48000) + np.sin(np.arange(48000) * 2 * np.pi * 220 / 48000)
-    old = MA.MAX_CUT_DB
-    try:
-        MA.MAX_CUT_DB = 20.0
-        if not np.array_equal(MA.denoise(x), VC.denoise(x, 20.0)) or np.array_equal(VC.denoise(x, 20.0), VC.denoise(x)):
-            bad.append('mossad_audio.denoise does not obey its MAX_CUT_DB')
-    finally:
-        MA.MAX_CUT_DB = old
-    return not bad, '; '.join(bad) or 'takes loads no film; mossad_audio re-uses voiceclean; MAX_CUT_DB still obeyed'
+    return not films and 'audiokit' in mods, f'film files imported: {films or "none"}; audiokit used: {"audiokit" in mods}'
 
 
 # the guard's score on its labelled list as measured 23 Nov (chain B chat 4, before Change 2): never worse. Change 2

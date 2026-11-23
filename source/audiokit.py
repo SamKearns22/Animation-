@@ -1,31 +1,13 @@
 #!/usr/bin/env python3
-"""MAP  voiceclean: the shared voice clean-up (named-lines change 3 follow-up, chain B chat 4, 23 Nov). Moved word for word
-out of mossad_audio.py (a finished film's file) and burnham_film.load, so shared tools (takes.py) never load a finished
-film (freeze count kit_files_loading_a_film_file back to 20). mossad_audio re-uses these, so every film sounds the same
-as before (kittest voiceclean_same_sound compares the arrays).
-
-  load(path) ...... any sound file -> mono floats at 48 kHz
-  lufs(x) ......... integrated loudness (ITU-R BS.1770-4, mono)
-  dehum(x) ........ high-pass at 75 Hz, notches only a hum that is really there
-  denoise(x, max_cut_db) gentle spectral noise reduction (mossad_audio passes its own MAX_CUT_DB, which a film may set)
-  smooth_tail(y) .. the final consonant's chopped hiss pressed to a falling envelope
-  pauses(x, gap) .. (start, end) of each stretch of talk, in seconds
-"""
-import subprocess
-
+"""audiokit: the voice-cleaning steps every film shares (hum, hiss, loudness, speech stretches, soft tails), copied
+word for word from Mossad's audio file (mossad_audio.py, a finished film: freeze.py forbids new work loading it) so
+the shared tools (takes.py) use a kit file. mossad_audio keeps its own copy for the finished films; the two give
+identical sound (kittest takes_cleaned_and_registered compares Milburn's takes)."""
 import numpy as np
-from scipy.signal import butter, iirnotch, istft, sosfilt, sosfiltfilt, stft, tf2sos
+from scipy.signal import butter, iirnotch, istft, resample_poly, sosfilt, sosfiltfilt, stft, tf2sos
 
 SR = 48000
-MAX_CUT_DB = 10.0   # the most the noise reduction may turn anything down
-
-
-def load(path):
-    """Any sound file -> mono floats at 48 kHz."""
-    import imageio_ffmpeg
-    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-loglevel', 'error', '-i', path, '-ac', '1', '-ar', str(SR),
-                          '-f', 'f32le', '-'], capture_output=True, check=True).stdout
-    return np.frombuffer(raw, np.float32).astype(np.float64)
+MAX_CUT_DB = 10.0
 
 
 def lufs(x):
@@ -57,7 +39,7 @@ def dehum(x):
     return x
 
 
-def denoise(x, max_cut_db=None):
+def denoise(x):
     """Gentle spectral noise reduction, learnt from the quietest tenth of the recording."""
     nper = 2048
     f, t, X = stft(x, SR, nperseg=nper, noverlap=nper * 3 // 4)
@@ -65,7 +47,7 @@ def denoise(x, max_cut_db=None):
     energy = mag.sum(axis=0)
     quiet = energy <= np.percentile(energy, 10)
     noise = np.median(mag[:, quiet], axis=1, keepdims=True)
-    floor = 10 ** (-(MAX_CUT_DB if max_cut_db is None else max_cut_db) / 20)
+    floor = 10 ** (-MAX_CUT_DB / 20)
     g = np.clip(1 - (1.5 * noise / (mag + 1e-12)) ** 2, 0, 1) ** 0.5
     g = np.maximum(g, floor)
     # smooth the gains across time and pitch so nothing warbles ("musical noise")
@@ -135,3 +117,4 @@ def pauses(x, min_gap=0.12):
         else:
             merged.append([a, b])
     return [(a / 100, b / 100) for a, b in merged if b - a >= 4]
+
