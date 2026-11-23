@@ -35,3 +35,6 @@ What are the implications of that?
 ### 2026-11-23T19:51:01
 What would I need to do to get collaborate on the primary account?
 
+### 2026-11-23T20:03:47
+It is a personal. I have sent them a support ticket.
+
