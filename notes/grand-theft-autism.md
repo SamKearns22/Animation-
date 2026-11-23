@@ -152,6 +152,16 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
   purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look, claude/gta-chat45-look = the live look chats.
 
+## Sam (23 Nov, on the redrawn dressed clip): "It looks very good. Well done."
+- [ ] "We have added a new skill to our toolkit. When we are done with the film, we can explore how we can improve
+      the process from what we have learned." (end-of-film review item: the 3D-body skill and how it was learned)
+- [ ] "Would you care to build this into the rest of the film? A separate chat has worked on the rest of the film.
+      Once done, run checks across full animatic and produce." Plan (chat 45's pick): chat 46, Opus high, builds the
+      dressed 3D Jason into the film: shot 4 first (the bench move on the film's camera and timing, replacing the
+      flat lean-out Jason), then Jason in shots 3 and 5-8 so his look does not jump at the cuts (same body, house
+      head, circle hands, chat 43's grip). Locked cameras, beats, timing unchanged. Then Sonnet: checks over the
+      full animatic, finish.py (Hook Text, sign-off), send. Final render only on Sam's clear yes.
+
 ## Where things stand, the LOOK strand (23 Nov, chat 45 done; waiting on Sam's look at the redrawn dressed clip)
 - Rules that bite next: rule 30 (neck twice: a third time means the check); Seeing like Sam 1; Fix the drawing.
 - Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower; house style; circle hands; chat 43's grip.
