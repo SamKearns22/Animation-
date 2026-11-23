@@ -102,3 +102,5 @@ Added: about 7 to 9% of a week of tool work, once; more early stops while a film
 One sitting now sorts Milburn's warnings by cause. Each cause is fixed in the tools or dropped under the three-films rule. From the next film, an animatic is refused while more than 10 warnings are named, and only new warnings are shown in full. Cheaper and quicker, but a warning can be "named" just to get under the cap. Showing only new warnings is how the name card hid.
 Lost: old warnings shown in full.
 Added: a cap of 10 named warnings per animatic.
+
+Learned 23 Nov (chain B chat 2): named-lines/learn.md. Change 1 built by could-not-test's build chat; changes 2-4 asked of Sam 23 Nov (lessons-report.md entry 2), waiting.
