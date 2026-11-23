@@ -25974,57 +25974,64 @@
    "notes": 0,
    "repeats": [],
    "model": "sonnet",
-   "cost": 0.16,
+   "cost": 0.42,
    "src": "estimate",
    "sid": "session_01GznaARapyijnZG96Zd3Kcp",
-   "steps": 13,
-   "hist_k": 111,
+   "steps": 56,
+   "hist_k": 156,
    "kinds": {
-    "film-file search": 2.1,
-    "tool search": 6.5,
-    "other": 91.3
+    "film-file search": 3.2,
+    "tool search": 6.8,
+    "routine": 0.3,
+    "renders": 0.8,
+    "other": 88.9
    },
    "calls": {
-    "film-file search": 3,
-    "tool search": 7,
+    "film-file search": 10,
+    "tool search": 20,
     "whole-file .py read": 0,
     "page.py": 0,
-    "routine": 0,
-    "renders": 0,
+    "routine": 1,
+    "renders": 2,
     "pictures": 0,
-    "other": 2
+    "other": 16
    },
    "split": {
-    "usd": 0.6037,
-    "total": 0.6037,
+    "usd": 1.5532,
+    "total": 1.5532,
     "floor_k": 96,
     "blocks": {
-     "start-up floor": 83.3,
-     "new writes": 9.6,
-     "Claude's words": 5.5,
-     "carried history": 1.6
+     "start-up floor": 57.9,
+     "new writes": 15.4,
+     "Claude's words": 14.4,
+     "carried history": 12.4
     },
     "origins": {
-     "start-up floor": 83.3,
-     "Claude's words": 6.9,
-     "result: tool search": 5.8,
-     "messages and reminders": 1.8,
-     "result: film-file search": 1.2,
-     "result: other": 1.1
+     "start-up floor": 58.9,
+     "Claude's words": 19.3,
+     "messages and reminders": 10.8,
+     "result: tool search": 5.6,
+     "result: other": 3.0,
+     "result: film-file search": 2.1,
+     "result: renders": 0.1,
+     "result: routine": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 83.3,
-     "commands": 4.0,
-     "reading guides": 3.0,
-     "reading notes": 2.2,
-     "messages and reminders": 1.8,
-     "messages to Sam": 1.6,
-     "app tools (chats, files sent)": 1.1,
-     "renders": 0.7,
-     "writing code": 0.7,
-     "thinking": 0.6,
-     "other commands": 0.5,
-     "reading film code": 0.4
+     "start-up reading (rules, tools, first files)": 58.9,
+     "messages and reminders": 10.8,
+     "commands": 7.4,
+     "messages to Sam": 5.8,
+     "thinking": 3.8,
+     "writing code": 2.3,
+     "reading guides": 2.2,
+     "reading other files": 1.8,
+     "reading notes": 1.6,
+     "reading film code": 1.4,
+     "renders": 1.2,
+     "app tools (chats, files sent)": 1.0,
+     "reading kit code": 0.9,
+     "other commands": 0.8,
+     "git and saving": 0.1
     },
     "leftover": 0.0
    },
@@ -26036,29 +26043,31 @@
      [
       "notes/grand-theft-autism.md",
       0.8,
-      0.0037
+      0.0068
      ],
      [
       "guides/job-packs.md",
       0.8,
-      0.0037
+      0.0068
      ]
     ],
-    "base_pct": 19.2
+    "base_pct": 34.2
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 3
+     "no show": 10
     },
     "other": {
      "shared:handover.py": 1,
      "film notes": 2,
      "guides": 1,
-     "other": 3
+     "other": 14,
+     "shared:mhuman.py": 1,
+     "shared:humancheck.py": 1
     },
     "ticked": 0,
-    "edited film code": false,
+    "edited film code": true,
     "list": [
      [
       0,
@@ -26138,6 +26147,166 @@
       "other",
       "",
       "python3 -c \" import sys;sys.path.insert(0,'source') import gta_opener as G;print",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys;sys.path.insert(0,'source') import gta_opener as G;print",
+      ""
+     ],
+     [
+      13,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py",
+      "rm -f /tmp/gta-jason3d-faults.txt && nohup python3 source/grand_theft_autism.py ",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "tail -c 500 /tmp/gta47/render.log; ls -la /tmp/gta47; pgrep -f grand_theft_autis",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "source/*.py .claude/hooks/setup.sh",
+      "makehuman",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "source/*.py",
+      "makehumancommunity/makehuman.git",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:mhuman.py",
+      "source/mhuman.py",
+      "sed -n 15,70p source/mhuman.py",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "cd /tmp/makehuman && ls makehuman/data/3dobjs/base.obj; git sparse-checkout set ",
+      ""
+     ],
+     [
+      20,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py",
+      "rm -f /tmp/gta-jason3d-faults.txt /tmp/gta47/* && (setsid nohup python3 source/g",
+      ""
+     ],
+     [
+      22,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py",
+      "^UP\\|UP =",
+      ""
+     ],
+     [
+      23,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/grand_theft_autism.py",
+      "^UP|_find\\(",
+      ""
+     ],
+     [
+      25,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py /root/.claude/uploads",
+      "sed -n 143,186p source/grand_theft_autism.py; ls /root/.claude/uploads 2>&1 | he",
+      ""
+     ],
+     [
+      26,
+      "film",
+      "before show",
+      "/home/user/Animation-/source/grand_theft_autism.py",
+      "lines 120+70",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "/home/user/Animation-",
+      "**/*siren*",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "/home/user/Animation-",
+      "**/*{Autistic_1,Lucia.m4a,Jason.m4a,pistol,glass-breaking,car-crash}*",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "/root/.claude/uploads/**/*",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "cat /tmp/gta-jason3d-faults.txt 2>&1 | head -40; ls /tmp/gta47; ffprobe -v error",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      ""
+     ],
+     [
+      41,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py",
+      "git add source/grand_theft_autism.py && git commit -qm \"GTA: voices and effects ",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "source/*.py",
+      "no body check record",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:humancheck.py",
+      "/home/user/Animation-/source/humancheck.py",
+      "lines 385+85",
       ""
      ]
     ]
