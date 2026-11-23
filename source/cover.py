@@ -426,7 +426,7 @@ def read_boxes(film, r):
     for it in _merge(r.items):
         k = it['k']
         x0, y0, x1, y1 = it['box']
-        out.append((it['name'], round(x0 * k), round(y0 * k), round(x1 * k), round(y1 * k)))
+        out.append((it['name'], round(x0 * k), round(y0 * k), round(x1 * k), round(y1 * k), 'text'))
     return out
 
 
@@ -476,7 +476,11 @@ def readable_faults(film, data, hook=None):
     for key in sorted(data['frames'], key=int):
         t = int(key) / fps
         c = film.caption_at(t) if hasattr(film, 'caption_at') else None
-        for name, x0, y0, x1, y1 in data['frames'][key]:
+        for name, x0, y0, x1, y1, *kind in data['frames'][key]:
+            if kind and kind[0] == 'text':           # a thing with words: its words sit in the middle; a caption
+                dx, dy = (x1 - x0) * 0.1, (y1 - y0) * 0.3   # touching its edge leaves them readable (Milburn's posted
+                x0, y0, x1, y1 = int(x0 + dx), int(y0 + dy), int(x1 - dx), int(y1 - dy)   # frames, 23 Nov)
+            name = name.split(';')[0].split(' (')[0]
             x0, y0, x1, y1 = max(0, x0), max(0, y0), min(1080, x1), min(1920, y1)
             area = max(1, (x1 - x0) * (y1 - y0))
             if c:
