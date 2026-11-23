@@ -4,3 +4,4 @@
 3. "Geyser effect clipping through pavement" (3, purple: water pipe drawn over the kerb/pavement)
 4. "Civilians run through the building instead of down the street. They clip into the scenery." (4, shot 4 ~0:20, purple: crowd overlapping shopfront)
 5. "In the frame after this one the civilians circled vanish" (5, shot 4 ~24.25s / 0:22, purple: crowd by smoke pops out)
+6. "Wheel clipping through chassis" (6, shot 4 ~15.4s / 0:14, purple: front wheel drawn over the car side, no arch)
