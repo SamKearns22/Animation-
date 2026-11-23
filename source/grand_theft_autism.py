@@ -65,10 +65,17 @@ def shot_of(t):
     return next((k for k, (_, a, b) in enumerate(SHOTS, 1) if a <= t < b), len(SHOTS))
 
 
+FULL = '--full' in sys.argv     # Sam 23 Nov (chat 51, Y): the animatic is also drawn at full size, unstamped, so on his
+#                                Y it becomes the final with finish.py alone (no second whole-film draw)
+
+
 def _draw(i):
     t = i / 12
-    im = F.frame_image(t).convert('RGB').resize((540, 960), Image.LANCZOS)
+    big = F.frame_image(t).convert('RGB')
+    im = big.resize((540, 960), Image.LANCZOS)
     FE.stamp(im, t, shot_of(t))
+    if FULL:
+        return im.tobytes() + big.resize((1080, 1920), Image.LANCZOS).tobytes()
     return im.tobytes()
 
 
@@ -98,13 +105,26 @@ def main():
     p = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '540x960', '-r',
                           '12', '-i', '-', '-r', '24', '-c:v', 'libx264', '-crf', '20', '-preset', 'medium',
                           '-pix_fmt', 'yuv420p', silent], stdin=subprocess.PIPE)
+    pf = None
+    if FULL:                                       # the full-size clean picture beside the animatic (finish.py takes it)
+        pf = subprocess.Popen(['ffmpeg', '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '1080x1920',
+                               '-r', '12', '-i', '-', '-r', '24', '-c:v', 'libx264', '-crf', '18', '-preset', 'medium',
+                               '-pix_fmt', 'yuv420p', out + '.full.silent.mp4'], stdin=subprocess.PIPE)
+    small = 540 * 960 * 3
     with Pool(os.cpu_count()) as pool:
         for k, fr in enumerate(pool.imap(_draw, range(int(round(t0 * 12)), n), chunksize=1)):
-            p.stdin.write(fr)
+            p.stdin.write(fr[:small])
+            if pf is not None:
+                pf.stdin.write(fr[small:])
             if k % 24 == 0:
                 print(f'drawing {k}/{n}', flush=True)
     p.stdin.close()
     p.wait()
+    if pf is not None:
+        pf.stdin.close()
+        pf.wait()
+        mix(out + '.full.silent.mp4', out + '.full.mp4')
+        print('full-size clean render:', out + '.full.mp4', flush=True)
     if t0 > 0:                                     # the first t0 seconds of the old picture, then the new drawings
         subprocess.run(['ffmpeg', '-v', 'error', '-y', '-t', f'{t0:.3f}', '-i', out + '.old.mp4', '-i', silent,
                         '-filter_complex', '[0:v][1:v]concat=n=2:v=1:a=0[v]', '-map', '[v]', '-r', '24', '-c:v', 'libx264',

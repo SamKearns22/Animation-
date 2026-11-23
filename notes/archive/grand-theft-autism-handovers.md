@@ -937,3 +937,16 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Read: pack "Notes round" (guides/job-packs.md); "Sam's notes on animatic v5" above; Sam's pictures in notes/sam-notes/gta-v5/.
 - Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three checks owed in the v5 notes list (layer order, cut continuity, wheel/effect as layer order), through the proposal route.
 - For Claude: jason3d_film.FILM_COVER + bench_move.FILM_CAR_HIDES (the stand-in car off in the film); leanout._cover door_top/low (over-hides hips in the window at 22.5: revert when the depth test lands); gta_cars.arch_mask; flying_whales_fx.lumps_sprite floor=; gta_shots58._clear_mouth and the hydrant body in shot 5; gta_rehearse runner wall stop. Test stills: scratchpad many.py (gta_film.frame_image). End check named: branches and SENTENCE x7 as chat 48; RULE 41/49/77/N6 kittests broken (not touched here; the next chat runs kittest on them first); notes at 4,561 words (next chat archives ticked sections); QUICK CHECKs on other films' files left.
+
+
+## Where things stand (23 Nov, chat 50 done)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (fix the check too); 89 (look at full size before sending).
+- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves; the door fix (Sam: "SO good"); no Hook Text; end line "Grand Theft Follow!".
+- Done: v5 notes 2/8/9 + live notes 10-11 (door) fixed; Sam: "This clip looks right". Notes 13 (runners, 4-to-5 cut) and 14 (the critic's four finds) taken, Sam's Y to both.
+- Next: Opus MEDIUM (a notes round, chat 51): notes 13 and 14 as listed; look at full size; a clip of 20-27.5 s to Sam (no yes needed); then Sonnet: animatic v6.
+- Needs Sam: nothing until the clip.
+- Read: pack "Notes round" (guides/job-packs.md); "Sam's notes on animatic v5" (notes 13, 14); critique r50-p1 result.md.
+- Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three owed checks (layer order, cut continuity, wheel/effect as layer order) through the proposal route; note 13 shows the cut-continuity check must also flag a crowd that stops or leaves the action.
+- For Claude: runners: gta_rehearse runner slant + SHOP4 wall stop (chat 49), gta_shots58._clear_mouth (remove), R.PEOPLE4/_crowd; depth test: gta_cars.solid_depth, bench_move.depth_cut/in_door, kittest door_slit. RULE 41/N6 kittests broken (not touched); SENTENCE x7: CLAUDE.md reworded by Sam, the new wording holds each (named, as chat 48).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 103.74% of 15%; forecast 107.3% (2026-11-23)

@@ -91,28 +91,27 @@ def _strip_b():
 BLOCKS_B, PEOPLE_B, PALMS_B = _strip_b()
 
 
-def _clear_mouth():
-    """Sam, v5 note 5 ("in the frame after this one the civilians vanish"): shot 5 dropped everyone on the shop
-    pavement near the side road's mouth, so they vanished at the cut. Each is moved up or down the pavement instead,
-    for the whole film (shot 4 too), so that from shot 4's end on they never stand in the mouth."""
-    span = np.arange(R.SHOT4_LEN - 1.0, R.SHOT4_LEN + 16.5, 0.25)
+MOUTH = 8.0                      # B's road meets A's east pavement at z within ZC +- 7 (kerb 0.15 m); a body's width more
+
+
+def _mouth():
+    """Sam, v5 notes 5 and 13: nobody may stand or walk on B's road where it cuts A's east pavement, and nobody may
+    vanish at the cut from shot 4 to 5. Chat 49 moved whole runs of people (the fire's runners too) up to 40 m for the
+    whole film, which left a still crowd down the road (note 13). Now nobody is moved or dropped except one standing
+    where the road will be (moved to its nearer kerb, far ahead of shot 4's lens): walkers stop at the kerb
+    (R._crowd reads pp['zlim']), runners stop short of it."""
+    lo, hi = ZC - MOUTH, ZC + MOUTH
     for pp in R.PEOPLE4:
         if pp['at'][0] <= 0:
             continue
+        pp['zlim'] = (lo, hi)
         x, z = pp['at']
-
-        def bad(dz):
-            q = dict(pp, at=(x, z + dz))
-            return any(abs(R._crowd(q, u)[1] - ZC) < 13 for u in span)
-        if not bad(0.0):
-            continue
-        for dz in sorted((d * 0.5 for d in range(-80, 81)), key=abs):
-            if not bad(dz):
-                pp['at'] = (x, z + dz)
-                break
+        if lo - 0.6 < z < hi + 0.6:
+            pp['at'] = (x, lo - 0.6 if z < ZC else hi + 0.6)
 
 
-_clear_mouth()
+_mouth()
+R.clear_crowd()                  # note 13: paths re-cleared with the kerb in place
 
 
 def _trim_a():
@@ -127,7 +126,7 @@ def _trim_a():
             out.append(dict(b, z1=lo))
         if b['z1'] > hi:
             out.append(dict(b, z0=hi))
-    people = [pp for pp in R.PEOPLE4 if not (pp['at'][0] > 0 and abs(pp['at'][1] - ZC) < 13)]
+    people = list(R.PEOPLE4)                  # note 13: everyone seen at shot 4's end is still there in shot 5
     palms = [(x, z) for x, z in R.PALMS4 if not (x > 0 and abs(z - ZC) < 11)]
     return out, people, palms
 

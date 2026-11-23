@@ -27155,6 +27155,816 @@
    "repeats": [
     "trousers showing through the door (v5 2/8/9, again live) | a per-dot depth test of the 3D body against the drawn car (kittest door_slit)"
    ]
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "94260699",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.39,
+   "src": "estimate",
+   "sid": "session_01GznaATCGyNDEpFQFXcTw3t",
+   "steps": 137,
+   "hist_k": 280,
+   "kinds": {
+    "film-file search": 3.1,
+    "tool search": 20.2,
+    "whole-file .py read": 0.4,
+    "page.py": 0.2,
+    "renders": 1.7,
+    "pictures": 3.8,
+    "other": 70.6
+   },
+   "calls": {
+    "film-file search": 8,
+    "tool search": 78,
+    "whole-file .py read": 1,
+    "page.py": 3,
+    "routine": 0,
+    "renders": 6,
+    "pictures": 15,
+    "other": 22
+   },
+   "split": {
+    "usd": 8.7331,
+    "total": 8.7331,
+    "floor_k": 96,
+    "blocks": {
+     "start-up floor": 29.3,
+     "carried history": 29.3,
+     "Claude's words": 24.6,
+     "new writes": 16.8
+    },
+    "origins": {
+     "Claude's words": 45.8,
+     "start-up floor": 29.3,
+     "result: tool search": 9.4,
+     "messages and reminders": 5.4,
+     "result: film-file search": 4.6,
+     "result: pictures": 3.8,
+     "result: other": 0.9,
+     "Claude's edits": 0.3,
+     "result: renders": 0.3,
+     "result: page.py": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 29.3,
+     "thinking": 22.1,
+     "writing code": 15.8,
+     "reading kit code": 6.9,
+     "commands": 5.9,
+     "messages and reminders": 5.4,
+     "reading film code": 4.4,
+     "looking at pictures": 3.8,
+     "other commands": 1.5,
+     "writing notes": 1.4,
+     "start-up and handover tools": 1.1,
+     "messages to Sam": 0.9,
+     "reading guides": 0.5,
+     "reading notes": 0.5,
+     "renders": 0.3
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 96,
+    "work_step": 12,
+    "work_pct": 0.17,
+    "reads": [
+     [
+      "source/gta_rehearse.py",
+      2.9,
+      0.0886
+     ],
+     [
+      "source/gta_shots58.py",
+      1.6,
+      0.0494
+     ],
+     [
+      "source/gta_film.py",
+      0.4,
+      0.0135
+     ],
+     [
+      "source/page.py",
+      0.1,
+      0.0029
+     ]
+    ],
+    "base_pct": 27.1
+   },
+   "search": {
+    "show": 3,
+    "film": {
+     "before show": 0,
+     "miss": 5,
+     "after show": 3
+    },
+    "other": {
+     "other": 69,
+     "shared:handover.py": 1,
+     "film notes": 5,
+     "guides": 2,
+     "shared:people.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git log --oneline -3 && git push -u origin HEAD 2>&1 | t",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -b claude/gta-chat51 && git push -u origin claude/gta-chat51 2>&1 |",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "Where things stand",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "awk '/Notes round/,0' guides/job-packs.md | head -50",
+      ""
+     ],
+     [
+      6,
+      "film",
+      "miss",
+      "source/gta_shots58.py",
+      "sed -n 1,140p source/gta_shots58.py",
+      ""
+     ],
+     [
+      7,
+      "film",
+      "miss",
+      "source/gta_rehearse.py",
+      "def _crowd\\|PEOPLE4 =\\|def _strip\\b\\|SHOP4\\|def _runner\\|slant\\|EXPL\\|explosion",
+      ""
+     ],
+     [
+      8,
+      "film",
+      "miss",
+      "source/gta_rehearse.py",
+      "sed -n 700,925p source/gta_rehearse.py",
+      ""
+     ],
+     [
+      9,
+      "film",
+      "miss",
+      "source/grand_theft_autism.py",
+      "gta\\|grand",
+      ""
+     ],
+     [
+      10,
+      "film",
+      "miss",
+      "source/gta_film.py",
+      "def \\|argv",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      ".claude/hooks/setup.sh source/*.py",
+      "makehuman",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && ls /tmp/makehuman/makehuman/data | head -3; t",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import gta_rehearse as R, gta_shots58 as M print('IMPACT',R.IMPACT[",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "hydrant\\|lamp\\|bin\\b\\|bench\\|PALMS4\\b",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "",
+      "PEOPLE_A\\|R.crowd\\|R._crowd\\|_lens_clear\\|def crowd_b\\|def world58",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "",
+      "def shot_fn\\|SHOTS58 =",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "ZC",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "def palm\\b\\|def palm(",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "out",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "out",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "people = list",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "mkdir -p /tmp/claude-0/s && cat > /tmp/claude-0/s/runcheck.py <<'EOF' import sys",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "'people'",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "git stash -q && sed -i 's/M.MOUTH/13/' /tmp/claude-0/s/runcheck.py && python3 /t",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "^_lens_clear()",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "__main__",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "cumtime|py:",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "sed -n 150,160p views.py; python3 - <<'EOF' import sys; sys.path.insert(0,'.') i",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'.') import gta_shots58 as M, gta_reh",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'.') import gta_shots58 as M, gta_reh",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      "python3 /tmp/claude-0/s/runcheck.py 2>&1 | tail -5",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "'people'",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "time python3 sheet.py gta_film 20.9 21.5 22.2 22.9 23.5 24.3 24.4 25.3 --out /tm",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/s/frames.py <<'EOF' import sys; sys.path.insert(0,'/home/use",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && python3 -c \" import sys; sys.path.insert(0,'.",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "",
+      "def shot4_cam\\|def world4",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'.') import gta_shots58 as M, gta_reh",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "other",
+      "",
+      "def shot4_cam",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "LENS_PAVE",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "",
+      "^def _lens_clear",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md source/*.py",
+      "miami",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:people.py",
+      "source/people.py notes/grand-theft-autism.md notes/*.md guides/*.md",
+      "miami",
+      ""
+     ],
+     [
+      66,
+      "film",
+      "after show",
+      "source/people.py source/gta_cast.py source/data",
+      "miami\\|FILM\\b\\s*=",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "",
+      "walker",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "",
+      "if side > 0 or style < 2",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "",
+      "sed -i '972s/if side > 0 or style < 2: /if style < 2: /' gta_rehearse.py && sed ",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "'people'",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "",
+      "LEONIDA",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "sed -n 275,330p bench_draw.py; sed -n 1172,1215p people_parts.py",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "pin\\b\\|pins\\|latch\\|chip\\|weather\\|rust\\|scuff\\|tick",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "other",
+      "",
+      "sed -n 415,470p gta_cars.py",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "other",
+      "",
+      "def _house_decals",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "",
+      "J3\\.\\|jason3d\\|solid_depth\\|depth_cut\\|in_door",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "other",
+      "",
+      "sed -n 2276,2360p bench_move.py",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/s/noj.py <<'EOF' import sys; sys.path.insert(0,'/home/user/A",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "other",
+      "",
+      "wiper\\|vent\\|scoop\\|cowl\\|hood\\b",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "other",
+      "",
+      "record",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "other",
+      "",
+      "'parts'\\|parts=",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "",
+      "sed -n 650,700p gta_cars.py",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "sed -n 690,730p gta_shots58.py",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/s/noj2.py <<'EOF' import sys; sys.path.insert(0,'/home/user/",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "",
+      "^ON\\b\\|^ON =",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "other",
+      "",
+      "pb=",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "other",
+      "",
+      "depth_cut",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "python3 /tmp/claude-0/s/noj.py 1 /tmp/claude-0/s/j2.jpg 2>&1|tail -2",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "",
+      "depth_car",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -15 import sys; sys.path.insert(0,'.') import nump",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -15 import sys; sys.path.insert(0,'.') import nump",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -3 import sys; sys.path.insert(0,'.') import numpy",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "other",
+      "",
+      "sed -n 1107,1175p gta_cars.py",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' p='gta_cars.py' s=open(p).read() old=\"\"\" if grow > 0: from sci",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys; sys.path.insert(0,'.') import nump",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "",
+      "_seal(zc",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "other",
+      "",
+      "^COLS\\|COLS =",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "other",
+      "",
+      "sed -n 38,50p gun3d_film.py",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/archive",
+      "^- \\[ \\] 13 Sam's Y\\|^- \\[ \\] 14 Sam\\|^- \\[ \\] 13 (Sam\\|^- \\[ \\] Fresh-eye criti",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "python3 - <<'EOF' p='notes/grand-theft-autism.md' s=open(p).read() k=\"cache it i",
+      ""
+     ],
+     [
+      119,
+      "film",
+      "after show",
+      "source/crowdpath.py source/gta_rehearse.py source/gta_shots58.py source/gta_cars",
+      "git add -A source/crowdpath.py source/gta_rehearse.py source/gta_shots58.py sour",
+      ""
+     ],
+     [
+      120,
+      "other",
+      "other",
+      "",
+      "git add -A notes && git commit -qm \"GTA chat 51: logs Co-Authored-By: Claude Opu",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/archive/grand-theft-autism-*.md",
+      "final render[^.]*took[^.]*\\.\\|render took[^.]*\\.\\|animatic[^.]*took[^.]*\\.",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md notes/archive/grand-theft-autism-*.md notes/logs/gra",
+      "min(ute)?s?\\b.*(render|animatic)|(render|animatic).*[0-9]+ ?min",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git push -q origin claude/gta-chat51 2>&1|tail -1; gi",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      126,
+      "other",
+      "other",
+      "",
+      "git push -q origin HEAD:claude/create-claude-md-oe8z4g && git push -q origin cla",
+      ""
+     ],
+     [
+      127,
+      "film",
+      "after show",
+      "source/grand_theft_autism.py",
+      "sed -n 20,82p source/grand_theft_autism.py; sed -n 100,119p source/grand_theft_a",
+      ""
+     ],
+     [
+      131,
+      "other",
+      "other",
+      "",
+      "tail -3 /tmp/claude-0/s/clip/log.txt; ls -la /tmp/claude-0/s/clip/",
+      ""
+     ],
+     [
+      132,
+      "other",
+      "other",
+      "",
+      "git push -q origin claude/gta-chat51 2>&1|tail -1; git fetch -q origin claude/cr",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
@@ -27715,6 +28525,11 @@
    "date": "2026-11-23",
    "spent": 103.13,
    "forecast": 106.7
+  },
+  {
+   "date": "2026-11-23",
+   "spent": 103.74,
+   "forecast": 107.3
   },
   {
    "date": "2026-11-23",
