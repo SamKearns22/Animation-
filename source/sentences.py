@@ -13,7 +13,7 @@ Text may leave CLAUDE.md only word for word: to the rulebook (guides/film-qualit
   python3 source/sentences.py check            the faults; exit 1 if any (handover.py end runs it too)
   python3 source/sentences.py lost OLD.md      one old CLAUDE.md against today's files
 
-A later rewording (only with Sam's Y on its own proposal) must add its own allowance here; none exists yet.
+A later rewording (only with Sam's Y on its own proposal) must add its own allowance here: MERGED_23NOV is the first.
 """
 import os
 import re
@@ -86,6 +86,30 @@ SAM_REWORDED = {   # sentences Sam himself rewrote (his words now stand in their
 }
 
 
+MERGED_23NOV = {   # CLAUDE.md trim to under 2,800 words (Sam: "Override", 23 Nov): repeats merged, each rule kept once
+    'Choose views the drawing can carry (for a NEW shot': 'same item, "(new shots only; see Fix the drawing...)"',
+    "I don't know how to code.": 'Plain words, always ("I can\'t follow code names, file names or jargon")',
+    'Explain in plain English': 'Plain words, always (any technical word is explained where it appears)',
+    'No code names; any technical word is explained': 'Plain words, always',
+    'No code names or file internals': 'Plain words, always, and the handover\'s "For Claude" line for code names',
+    "The handover's 3 lines go at the bottom": 'Fresh chats and the handover: "The 3 lines at the bottom of every message"',
+    'New rules and lessons are proposed first': 'The proposal route, and "I want a rule"',
+    'Every stage aims at Statement One': 'Statement One, top of CLAUDE.md; the rest kept as "Something new? ..."',
+    'Every idea for cost or speed makes new things better': 'Statement One ("Cost comes down only by working smarter")',
+    "Before every handover, search the film's notes for rule requests": 'the handover\'s "Open rule requests (searched '
+                                                                        'for in the film\'s notes)"',
+    'The Animation- project is always attached': 'same sentence, now also "a chat without it adds it ... says so"',
+    'No chat ends under about 40 steps': 'same sentence; "routine stages always go on Sonnet" is Models by stage',
+    'A message never says "start a new chat"': 'The 3 lines at the bottom (never a request to start a chat or type)',
+    'A fresh chat for every round and every cost warning': 'same sentence; "change model only by a new chat" is the '
+                                                            'wrong-model rule in Models and chats',
+    'The handover is the film\'s ONE': 'same sentence; Next now carries "model and effort ... one line why"',
+    'The 3 lines at the bottom say': 'The 3 lines at the bottom of every message to me',
+    "Every handover names the next chat's model AND effort": 'the handover\'s Next (model and effort ...)',
+    'Every chat starts with the Animation- project selected': 'The Animation- project is always attached (... adds it)',
+}
+
+
 def lost(old, files):
     """old: the old CLAUDE.md text; files: {path: new text}. Returns the old sentences not found word for word
     (a sentence Sam himself rewrote, SAM_REWORDED, is not lost: his new words stand in its place)."""
@@ -93,7 +117,7 @@ def lost(old, files):
     rows = tag_rows(files.get('guides/film-quality-rules.md', ''))
     miss = []
     for s in split(old):
-        if s in body or any(s.startswith(k) for k in SAM_REWORDED):
+        if s in body or any(s.startswith(k) for k in {**SAM_REWORDED, **MERGED_23NOV}):
             continue
         t = s
         for words, tag in rows:

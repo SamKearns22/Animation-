@@ -5,3 +5,4 @@
 2026-11-23T11:11+00:00	0fed8303	skipped	handover stops: STOP: RULE: CLAUDE.md has a new rule (""Just go"") with no entry in source/rule_proofs.json (anchor, example, check): a new rule needs its saved bad example | STOP: RULE: CLAUDE.md has a new rule (""Override" skips everything between me and that one ask (Sam") with no entry in source
 2026-11-23T14:29+00:00	94260699	sam	Override
 2026-11-23T14:29+00:00	94260699	skipped	send guard (body check / rule 89): /tmp/claude-0/s/clip/gta-runners-20-27.held.mp4: 6 body fault(s) not named to Sam: fix, or humancheck.py name VIDEO "why" and say each in the message ("Checks:" line). | /tmp/claude-0/s/clip/gta-runners-20-27.held.mp4: no fresh critique of this video (rule 89). Run
+2026-11-23T14:50+00:00	fcc7aa67	sam	Override
