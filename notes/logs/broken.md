@@ -8,3 +8,4 @@
   - named 2026-11-20 | saver | one-route-kit chat 4: Sam's 11:38 words (Milburn-look target, jury shoulder chips) are saved in notes/ledger/sam/vqz9upsk.md and now carried in notes/one-route-kit.md's brief checklist
   - named 2026-11-20 15:33 | finder | chat 9's work was the shared people kit (hair, bangles, stubble, the tank's line), not the film's shots, so page.py show (made for notes on a shot) had nothing to find; the hand searches were in source/people*.py and views.py
 - 2026-11-22 21:22 | unwired | bench_move.py is built (named by adopted proposal bench-speedup) but nothing switches it on: wire it (a hook in .claude/settings.json, handover end, or a job pack) or name why in watcher.py OFF
+- 2026-11-23 03:51 | rules | rule 30 is BROKEN: its kittest dearest_things_named no longer catches the saved example
