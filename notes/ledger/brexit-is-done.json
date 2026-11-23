@@ -919,6 +919,8 @@
   "1": "none (sheet maker had no edge test)",
   "2": "none (front and 3/4 never judged side by side)",
   "3": "none",
+  "5": "none (no check knows a woman's build)",
+  "6": "none (match checks colours, not layering)",
   "4": "-"
  }
 }

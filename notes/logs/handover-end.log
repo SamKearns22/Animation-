@@ -299,3 +299,4 @@
 2026-11-23T21:14+00:00	01U3pKR29HVfyxyRifpJy5ns
 2026-11-23T21:31+00:00	REFUSED 1: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for i	01U3pKR1aCRX8VmEXSXkQfCF
 2026-11-23T21:34+00:00	REFUSED 2: KIT TEST COULD NOT RUN: kit_people_never_generic (it crashed): a test that cannot ru | KIT TEST RED AT TWO HANDOVERS IN A ROW: move_to_shared_catches_film_fixes (red at 20	01U3pKR1aCRX8VmEXSXkQfCF
+2026-11-23T21:48+00:00	01U3pKR1aCRX8VmEXSXkQfCF
