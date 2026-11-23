@@ -227,6 +227,16 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         # rule 47 (Sam, 13 Nov: Blessed's one-arm fix ran a 35-minute full redraw when a splice would do)
         sys.exit(f'render REFUSED (rule 47): {film} already has a final ({done}). Redraw only the seconds that changed '
                  f'(final OUT --span T0 T1 --nostamp) and splice them in; a full redraw needs Sam\'s Y (--full-ok)')
+    if span and film and getattr(main, 'SHOTS', None):
+        # lesson staging-stills (Sam's option 1, 22 Nov): a clip of a shot whose framing Sam has not seen is refused
+        # (never on a delivered board, or held by a framing note until his number and its new board); staging.py
+        import staging
+        k0, k1 = int(round(span[0] * fps)), int(round(min(span[1], dur) * fps))
+        inside = list(dict.fromkeys(shot_of(k / fps) for k in range(k0, max(k1, k0 + 1))))
+        why = staging.render_gate(main, film, inside)
+        if why:
+            sys.exit('render REFUSED (rule 11, lesson staging-stills: Sam sees a framing before it moves):\n  '
+                     + '\n  '.join(why))
     if lock:
         small = ss == 1 and size[0] < 1080
         why = lock_fault(film, named, final=not small)

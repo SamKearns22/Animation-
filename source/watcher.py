@@ -85,6 +85,7 @@ PROMISES = {
     'posegallery.py': ('pose sheets', 'named: used by hand'),
     'preflight.py': ('no animatic or final with an open fault (rule 59)', 'named: film_engine refuses a render without its pass'),
     'rough.py': ('the rough sheet', 'named: used by hand'),
+    'staging.py': ('no shot reaches Sam as a clip or animatic before he has seen its framing (rule 11, lesson staging-stills)', 'kittest staging_stills_milburn_replay'),
     'satire_template.py': ('a new satire film starts from the house template', 'named: used by hand'),
 }
 

@@ -3861,6 +3861,95 @@ def dearest_things_named():
     return not out, '; '.join(out) or 'every dollar named; five dearest ranked; Sam\'s notes counted, repeats flagged'
 
 
+@test
+def staging_stills_milburn_replay():
+    """Lesson staging-stills (Sam's option 1, 22 Nov): no shot moves before Sam has seen its framing. Milburn's own record
+    replayed: chat 6's first build of the Cabinet Room reverse (17 Nov 22:50) and chat 10's re-stage (18 Nov 04:00) must
+    both be refused; shot 1 (on the first board) must pass; and once note 5 is held, 2-3 framings sent, Sam's number
+    recorded and the shot's new board delivered, the reverse must pass."""
+    import calendar
+    import shutil
+    import tempfile
+    import time
+    import staging as S
+    root = os.path.dirname(HERE)
+    tmp = tempfile.mkdtemp()
+    out = []
+    at = lambda s: calendar.timegm(time.strptime(s, '%Y-%m-%d %H:%M'))          # noqa: E731 (UK = UTC in Nov)
+    try:
+        os.makedirs(os.path.join(tmp, 'story'))
+        shutil.copy(os.path.join(root, 'story', 'milburn-board-sent.txt'), os.path.join(tmp, 'story'))
+        shots = ['1', '2a', '2b', '3', '4a', '4b', '4c', '6', '7a', '7b', '7c', '7d', '7e']
+        rev = ['4a', '4c', '7a', '7c', '7e']
+        row5 = next(ln for ln in open(os.path.join(root, 'notes', 'archive', 'milburn.md'))
+                    if ln.startswith('| 5 |') and 'scene composition' in ln)
+        notes = '## Notes\n| # | shot | time | note | line | status |\n|---|---|---|---|---|---|\n' + row5
+        g6 = S.gate('milburn', ['3', '4a'], shots, tmp, now=at('2026-11-17 22:50'), notes_text='')
+        if len(g6) < 2 or not all('never been on a shot board' in f for f in g6):
+            out.append(f'chat 6 build of shots 3 and 4a not refused: {g6}')
+        if S.gate('milburn', ['1'], shots, tmp, now=at('2026-11-17 22:50'), notes_text=''):
+            out.append('shot 1 (on the 20:49 board) refused')
+        g10 = S.gate('milburn', ['4a'], shots, tmp, now=at('2026-11-18 04:00'), notes_text=notes)
+        if not any('never been on' in f for f in g10) or not any('note 5' in f and 'reads as framing' in f for f in g10):
+            out.append(f'chat 10 re-stage not refused for both reasons: {g10}')
+        rec = os.path.join(tmp, 'story', 'milburn-staging.txt')
+        with open(rec, 'w') as f:
+            for n in rev:
+                f.write(f'hold {n} {at("2026-11-17 23:08")} note=5 the scene composition in scene 4 as proposed is poor\n')
+        g10b = S.gate('milburn', rev, shots, tmp, now=at('2026-11-18 04:00'), notes_text=notes)
+        if any('reads as framing' in f for f in g10b) or not any('held by note 5' in f for f in g10b):
+            out.append(f'a held shot was not refused as held (or note 5 still unrouted): {g10b}')
+        with open(rec, 'a') as f:
+            f.write(f'options 4a {at("2026-11-17 23:20")} milburn-4a-framings.jpg n=3\n')
+            for n in rev:
+                f.write(f'pick {n} {at("2026-11-17 23:30")} 2 Sam: 2, equal and centred\n')
+        if not any('Sam picked 2' in f for f in S.gate('milburn', ['4a'], shots, tmp, now=at('2026-11-17 23:40'),
+                                                         notes_text=notes)):
+            out.append('a picked shot moved before its new board reached Sam')
+        with open(os.path.join(tmp, 'story', 'milburn-board-sent.txt'), 'a') as f:
+            f.write(f'board milburn-4a-built.jpg delivered={at("2026-11-17 23:50")} drawn={at("2026-11-17 23:49")} '
+                    f'commit=x moves=0 (17 Nov 23:50)\n' + ''.join(f'shot {n} 0000000000 andy,pat\n' for n in rev))
+        ok = S.gate('milburn', rev, shots, tmp, now=at('2026-11-18 00:30'), notes_text=notes)
+        if ok:
+            out.append(f'the reverse still refused after Sam\'s pick and its new board: {ok}')
+        with open(rec, 'a') as f:
+            f.write(f'hold 6 {at("2026-11-18 00:40")} note=9 dodge\npick 6 {at("2026-11-18 00:41")} go Sam: just build it\n')
+        if S.gate('milburn', ['6'], shots, tmp, now=at('2026-11-18 07:00'), notes_text=''):
+            out.append('Sam\'s "go" did not release the shot')
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return not out, '; '.join(out) or ('chat 6 and chat 10 builds refused; shot 1 passes; held until 2-3 framings, '
+                                       'his number and the new board; "go" releases')
+
+
+@test
+def staging_stills_note_finder():
+    """Lesson staging-stills: the note finder (staging.FRAMING, on Sam's words) finds every framing or staging note the
+    four-film look back listed (Milburn, Patriots 4, Blessed, European Protests Ranked) and leaves face, hair, mouth and
+    sound notes alone."""
+    import staging as S
+    arch = os.path.join(os.path.dirname(HERE), 'notes', 'archive')
+    need = {'milburn': ['5', '10'], 'patriots-4': ['7', '8', '12', '20', '26', '28', '31'],
+            'blessed-notes-animatics-1-2': ['7', '11', '12', '15', '22', '30', '32', '33', '37', '42'],
+            'protest-tiers': ['F1', 'F3', 'F4', 'F7', 'F13', 'G12', 'A1', 'A4', 'A10', 'G4']}
+    avoid = {'milburn': ['1', '2', '3', '4', '6', '7', '8', '9', '11'], 'patriots-4': ['13', '16'],
+             'blessed-notes-animatics-1-2': ['1', '2', '45'], 'protest-tiers': ['F21', 'A24', 'O8', 'S8', 'G20', 'A21']}
+    out, n_all, n_flag = [], 0, 0
+    for film in need:
+        text = open(os.path.join(arch, f'{film}.md')).read()
+        got = {i for i, _, _ in S.framing_notes(text)}
+        n_all += len(S.notes_in(text))
+        n_flag += len(got)
+        miss = [i for i in need[film] if i not in got]
+        wrong = [i for i in avoid[film] if i in got]
+        if miss:
+            out.append(f'{film}: missed {miss}')
+        if wrong:
+            out.append(f'{film}: flagged non-framing {wrong}')
+    return not out, '; '.join(out) or (f'all {sum(map(len, need.values()))} framing notes found; '
+                                       f'{n_flag} of {n_all} notes flagged')
+
+
 
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
