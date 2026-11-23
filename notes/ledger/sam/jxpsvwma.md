@@ -14,3 +14,6 @@ Since the collaborate function isn't available to me and reposts don't seem to d
 ### 2026-11-23T18:54:54
 Please do a deep dive into this issue, run it through the proposal route, and get back to me
 
+### 2026-11-23T19:37:42
+Let's put it this way. I do not really care if 99,000 people ignore it or leave. If 1000 engage, it's a win. The security stuff is sorted. The account is entirely mine. I also do not have the time or budget to create an entirely new set of videos for this audience. Nor can I access metrics for a repost. So the goal is to get the original content in front of those 100,000 people on the other account in any way possible, in a manner that helps the original account. And no, TikTok are not going to come after me for it.
+
