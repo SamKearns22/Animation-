@@ -503,6 +503,14 @@ def film_check_fixes(diff):
     return out
 
 
+def _keep_notes(film):
+    """The film's notes file, live or archived (a finished film's code can still be changed), or None."""
+    for p in (os.path.join(ROOT, 'notes', f'{film}.md'), os.path.join(ROOT, 'notes', 'archive', f'{film}.md')):
+        if os.path.exists(p):
+            return p
+    return None
+
+
 def shared_faults(since=None, diff=None):
     """The "move to shared" stop (named-lines change 3; Sam, 23 Nov: "rules need to be constructed that they work in
     this way, they are not film specific"): each check fix written in one film's code since the last handover (a film
@@ -520,7 +528,7 @@ def shared_faults(since=None, diff=None):
         diff = r.stdout + w.stdout
     out, seen = [], set()
     for f, film, line in film_check_fixes(diff):
-        notes = _film_notes(film)
+        notes = _keep_notes(film)
         txt = open(notes, encoding='utf-8').read() if notes and os.path.exists(notes) else ''
         if re.search(rf'^\|\s*stays in film\s*\|[^\n]*{re.escape(os.path.basename(f))}[^\n]*Sam', txt, re.M | re.I):
             continue

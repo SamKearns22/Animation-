@@ -1086,12 +1086,12 @@
   "N26": {
    "rule": "Every rule and fix is for all films: a fix made because of one film's fault goes into the shared tools, template, rulebook or checks; a fix that can only live in one film's code gets a 'move to shared' line, and the handover check stops until it is moved or Sam says it stays.",
    "anchor": "Every rule and fix is for all films (Sam, 23 Nov):",
-   "status": "owed",
-   "tests": [],
+   "status": "proven",
+   "tests": [
+    "move_to_shared_catches_film_fixes"
+   ],
    "example": "Sam, 23 Nov: \"I would have expected the change on Blessed to apply to all films in the future — rules need to be constructed that they work in this way, they are not film specific.\" Blessed built 7 check inputs in its own code (blessed_checks.py scene, solids, SET_FEET, cam_for, audits; blessed.py touch_faults, furniture_faults); Milburn the cleaned voice takes; GTA car and street solids twice (named-lines/learn.md section 3)",
-   "notes": "Sam's Y 23 Nov with \"needs testing\"; written by chain B chat 2",
-   "owed": "named-lines change 3, chain B chat 3 (session_01U3pKR2taFPq31QroZMAKSe): the move-to-shared handover stop; Sam's 'needs testing' = its kittest must catch Blessed's 7, Milburn's voice takes and GTA's solids on the saved code, and pass a film whose rows say moved or Sam keeps it",
-   "plan": "kittest move_to_shared_blessed_replay",
+   "notes": "Sam's Y 23 Nov with \"needs testing\"; written by chain B chat 2; proven by chain B chat 3 (23 Nov): the stop catches all 10 on the saved code and lets a Sam-keeps-it row through",
    "kind_before": "new"
   },
   "N27": {
