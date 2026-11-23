@@ -15445,18 +15445,18 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.52,
+   "cost": 0.77,
    "src": "estimate",
    "sid": "session_01U3pKQxvq55dv7RjXPsVWMa",
-   "steps": 14,
-   "hist_k": 109,
+   "steps": 19,
+   "hist_k": 111,
    "kinds": {
-    "tool search": 8.4,
-    "other": 91.6
+    "tool search": 9.1,
+    "other": 90.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 5,
+    "tool search": 7,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
@@ -15465,39 +15465,39 @@
     "other": 13
    },
    "split": {
-    "usd": 0.8444,
-    "total": 0.8444,
+    "usd": 0.9748,
+    "total": 0.9748,
     "floor_k": 81,
     "blocks": {
-     "new writes": 48.4,
-     "start-up floor": 31.1,
-     "Claude's words": 17.6,
-     "carried history": 2.9
+     "new writes": 43.4,
+     "start-up floor": 34.5,
+     "Claude's words": 16.9,
+     "carried history": 5.1
     },
     "origins": {
-     "start-up floor": 31.1,
-     "cache re-write": 24.9,
-     "Claude's words": 21.9,
-     "result: other": 11.3,
-     "result: tool search": 6.2,
-     "messages and reminders": 3.7,
-     "Claude's edits": 1.0
+     "start-up floor": 34.5,
+     "Claude's words": 21.6,
+     "cache re-write": 21.6,
+     "result: other": 10.8,
+     "result: tool search": 6.1,
+     "messages and reminders": 4.4,
+     "Claude's edits": 0.9
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 31.1,
-     "memory lapses (re-paying for the whole chat)": 24.9,
-     "app tools (chats, files sent)": 9.7,
-     "start-up and handover tools": 6.3,
-     "writing notes": 5.9,
-     "commands": 5.8,
-     "thinking": 5.0,
-     "messages to Sam": 4.3,
-     "messages and reminders": 3.7,
-     "helper and chat prompts": 1.8,
-     "helper results": 0.8,
-     "reading notes": 0.4,
+     "start-up reading (rules, tools, first files)": 34.5,
+     "memory lapses (re-paying for the whole chat)": 21.6,
+     "app tools (chats, files sent)": 9.3,
+     "commands": 7.0,
+     "start-up and handover tools": 6.0,
+     "writing notes": 5.2,
+     "thinking": 4.6,
+     "messages and reminders": 4.4,
+     "messages to Sam": 4.2,
+     "helper and chat prompts": 1.6,
+     "helper results": 0.7,
+     "reading notes": 0.5,
      "reading other files": 0.3,
-     "edit results": 0.2
+     "edit results": 0.1
     },
     "leftover": 0.0
    },
@@ -15509,22 +15509,22 @@
      [
       "source/propose.py",
       2.6,
-      0.0233
+      0.0256
      ],
      [
       "notes/proposals/gifted-account.md",
       0.7,
-      0.0055
+      0.0061
      ],
      [
       "guides/proposal-route/helper.md",
       0.7,
-      0.0055
+      0.0061
      ],
      [
       "notes/ledger/sam/phxjozvs.md",
       0.2,
-      0.0013
+      0.0014
      ],
      [
       "notes/ledger/sam/jxpsvwma.md",
@@ -15532,7 +15532,7 @@
       0.0003
      ]
     ],
-    "base_pct": 12.6
+    "base_pct": 15.1
    },
    "search": {
     "show": 0,
@@ -15540,9 +15540,10 @@
      "no show": 0
     },
     "other": {
-     "other": 2,
+     "other": 3,
      "guides": 1,
-     "shared:propose.py": 2
+     "shared:propose.py": 2,
+     "film notes": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -15585,6 +15586,22 @@
       "shared:propose.py",
       "source/propose.py notes/proposals/gifted-account.md guides/proposal-route/ guide",
       "git status -sb | head -3 && python3 source/propose.py new gifted-account \"Using ",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/proposals/gifted-account.md notes/proposals/gifted-account/ notes/ledger/s",
+      "git add notes/proposals/gifted-account.md notes/proposals/gifted-account/ notes/",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "notes/proposals/gifted-account/",
+      "git add notes/proposals/gifted-account/ && git commit -qm \"Proposal route: helpe",
       ""
      ]
     ]
