@@ -17,7 +17,7 @@ the head leading). The beats and their times are shot 4's locked acting rows (le
   KEYS, goals_at(t) . the key poses as goals, eased in-betweens (goals, not joints, are blended)
   solve(g) .......... goals -> joints, bone turns, skin points, hand balls, the pistol
   CHECKS ............ car(), self_cross(), pistol(), contacts(), jumps(), ranges(), aim(): the stage-1 bar
-  run(OUT) .......... every frame of shot 4 (8.2 s at 24): solve and check ALL first, then draw grey (draw_all:
+  run(OUT) .......... every frame of shot 4 (10.25 s at 24, Sam's 25% slower): solve and check ALL first, then draw grey (draw_all:
                       from the frame store, only changed frames drawn, 4 at a time); writes OUT/frames, report.txt
   checked_clip ...... the clip for Sam: checks first; NOTHING drawn while a fault is neither fixed nor named
   dressed_draw ...... stage 2 (chat 44): a solved pose in the house look (part_at colours, ink, house head, neck
@@ -351,10 +351,11 @@ def _climb(name):
                  knee={'L': _v(0.10, 0.66, 0.42), 'R': _v(0.57, 0.70, 0.36)},
                  ankle={'L': _v(0.16, 0.19, 0.44), 'R': _v(0.56, 0.18, 0.44)})
     elif name == 'C1b':
-        k = dict(up, pelvis=_v(0.38, 0.0, 0.02), p_up=_v(0.2, 1, 0.12), p_fwd=_v(0.6, 0, 0.8),
+        k = dict(up, pelvis=_v(0.34, 0.0, 0.02), p_up=_v(0.2, 1, 0.12), p_fwd=_v(0.6, 0, 0.8),   # chat 43: hips 0.38 -> 0.34
                  c_up=_v(0.9, 1, 0.1), c_fwd=_v(0.8, -0.4, 0.7), h_fwd=_v(0.8, -0.6, 0.5), lift=0.20,
                  hand={'L': (_v(0.62, 1.02, 0.28), _v(0.4, -1, 0.6)), 'R': None},
-                 knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.82, 0.58, 0.16)},
+                 knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.82, 0.58, 0.16)},   # chat 43: the slower move's new in-betweens put this thigh 3 cm
+#                                  into the door (aiming the knee up ran it into his chest and gun arm): hips 4 cm inboard
                  ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.60, 0.58, 0.36)})
     elif name == 'C2':
         k = dict(up, pelvis=_v(0.26, 0.0, -0.02), p_up=_v(0.3, 1, 0.12), p_fwd=_v(0.85, 0, 0.5),
@@ -396,15 +397,17 @@ def _climb(name):
                  knee=KNEES, ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)},
                  knee_w=1.0, seat_w=0.0, leg_ik=0.0)
     k['hand'] = dict(k['hand'])
-    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.04, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.02, 0.03), 'C3': (0.03, 0, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee
+    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.08, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.05, 0.03), 'C3': (0.03, 0.03, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee (chat 43: C2c, C3 3 cm higher: the gun hand touched the right thigh)
     return _gun_with_chest(k, lift_gun, 'K2' if name == 'C3' else 'K1')
 
 
 KICK_DEG = 7.0                   # the pistol's kick: the forearm flips up this much (a real one-hand kick)
 
 
-BREAKDOWNS = [(0.56, 'C1'), (0.62, 'C1b'), (0.71, 'C2'), (0.77, 'C2b'), (0.83, 'C2c'), (0.89, 'C3'), (1.2, 'B3'),
-              (7.175, 'B3'), (7.45, 'C3'), (7.49, 'C2c'), (7.53, 'C2b'), (7.57, 'C2'), (7.635, 'C1b'), (7.70, 'C1')]
+_BD0 = [(0.56, 'C1'), (0.62, 'C1b'), (0.71, 'C2'), (0.77, 'C2b'), (0.83, 'C2c'), (0.89, 'C3'), (1.2, 'B3'),
+        (7.175, 'B3'), (7.45, 'C3'), (7.49, 'C2c'), (7.53, 'C2b'), (7.57, 'C2'), (7.635, 'C1b'), (7.70, 'C1')]
+import leanout as _LO   # noqa: E402
+BREAKDOWNS = [(round(t * _LO.SLOW, 4), k) for t, k in _BD0]   # Sam 23 Nov: 25% slower (leanout.SLOW)
 #   chat 41: the get-up / sit-down re-planned (_climb: hips first, then one knee at a time, the window-side knee
 #   first; sitting down the same path backwards); chat 39's B1, B1b, B2 kept below, unused   # chat 39: the knees' landing given 0.2 s (was 0.14 s; the beats K1 0.5, K2 1.0 unchanged)
 #   in-between drawings that shape the path between two locked beats (the feet go up over the cushion's front edge, not through it); beats unchanged
@@ -448,7 +451,7 @@ def _abs_spec(x):
     return isinstance(x, tuple) and len(x) == 2 and not isinstance(x[0], str) and x[0] is not None
 
 
-GUN_THROUGH = {1.0, 7.4}          # K2's times: the gun hand (only) passes K2 with speed (chat 39: stopping dead
+GUN_THROUGH = {t for t, k in _LO.TIMES if k == 'K2'}   # K2's times: the gun hand (only) passes K2 with speed (chat 39: stopping dead
 #                                  there and whipping up made the elbow pop); the pose at K2 is still met exactly
 
 
