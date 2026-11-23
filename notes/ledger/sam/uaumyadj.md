@@ -26,3 +26,6 @@ What are the notes?
 ### 2026-11-23T15:01:10
 I hardly see how they are relevant to the current job. Keep the staging stills proposal in reserve and delete the other 3. Then push the final
 
+### 2026-11-23T15:01:52
+Override
+
