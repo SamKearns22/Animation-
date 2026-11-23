@@ -509,6 +509,8 @@ def stop(stdin=None):
         subprocess.Popen([sys.executable, os.path.abspath(__file__), '_day', f'{day}\t{st["runs"]} runs here\n'],
                          stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
     json.dump(st, open(sp, 'w'))
+    if say and __import__('override').skip('watcher stop: ' + ' '.join(say), inp.get('transcript_path') if isinstance(inp, dict) else None, sys.stderr):
+        say = []
     if say:
         print(json.dumps({'decision': 'block', 'reason': ' '.join(say)}))
 

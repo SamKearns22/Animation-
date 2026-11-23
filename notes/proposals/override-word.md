@@ -1,6 +1,6 @@
 # Proposal: The word Override: one code word that skips any check, guard or step between Sam and one ask; and drop the 'Locked by Sam' line from messages to Sam
 
-Status: open
+Status: adopted (2026-11-23)
 
 ## Problem
 Sam asked (23 Nov, his words): "make sure 'Override' works as a universal code word for skipping steps on all parts

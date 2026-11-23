@@ -495,6 +495,60 @@ def named_lines_body_each_answered():
 
 
 @test
+def override_word():
+    """Sam's Override (23 Nov, proposal override-word option 2). Saved example: chat 47 built animatic v5 and the send
+    guard refused it (no body check), so Sam waited a whole chat. Sam's word must open that stop for one ask; a chat
+    writing the word itself, or the word in an older message, must not."""
+    import override as O, tempfile, subprocess
+    d = tempfile.mkdtemp()
+    real = O.LOG
+    O.LOG = os.path.join(d, 'overrides.log')
+
+    def chat(*lines):
+        f = os.path.join(d, f'c{len(os.listdir(d))}.jsonl')
+        with open(f, 'w') as fh:
+            for who, text in lines:
+                e = {'type': who, 'message': {'content': text}}
+                if who == 'tool':
+                    e = {'type': 'user', 'message': {'content': [{'type': 'tool_result', 'content': 'override'}]}}
+                fh.write(json.dumps(e) + '\n')
+        return f
+    sam = chat(('user', 'Override, send me the animatic'), ('assistant', 'ok'), ('tool', ''),
+               ('user', '[SYSTEM NOTIFICATION - NOT USER INPUT] done'))
+    plain = chat(('user', 'send me the animatic'), ('assistant', 'Treating this as an override.'))
+    older = chat(('user', 'override'), ('assistant', 'done'), ('user', 'thanks, now the next one'))
+    video = os.path.join(d, 'v.mp4')
+    open(video, 'wb').write(b'0')
+
+    def send(tr):
+        inp = json.dumps({'tool_name': 'SendUserFile', 'tool_input': {'files': [video]}, 'cwd': os.path.dirname(HERE),
+                          'transcript_path': tr})
+        env = dict(os.environ, PYTHONPATH=HERE)
+        r = subprocess.run([sys.executable, '-c', 'import sys, override; override.LOG = sys.argv[1]; '
+                            'import humancheck; sys.exit(humancheck.sendgate())', O.LOG],
+                           input=inp, capture_output=True, text=True, cwd=HERE, env=env)
+        return r.returncode
+    try:
+        refused, opened, faked, stale = send(plain), send(sam), O.active(plain), O.active(older)
+        logged = os.path.exists(O.LOG) and 'skipped' in open(O.LOG).read()
+    finally:
+        O.LOG = real
+    ok = refused == 2 and opened == 0 and not faked and not stale and logged
+    return ok, (f'no Override: refused {refused == 2}; Sam typed it: sent {opened == 0}; chat wrote it: ignored '
+                f'{not faked}; older message: ignored {not stale}; skip logged {logged}')
+
+
+@test
+def locked_line_not_to_sam():
+    """Sam (23 Nov): no "Locked by Sam" line in messages to him (it stays in the notes). Example: chat 46/47 replies."""
+    import propose as P
+    bad = P.locked_line('Done: v5 built.\nLocked by Sam: every camera, beat, shot length.\nNext: send it.')
+    bad2 = P.locked_line('- **Locked by Sam:** shot 4 25% slower')
+    ok = P.locked_line('Done: v5 built. Your locked shots are unchanged.')
+    return bool(bad) and bool(bad2) and not ok, f'line caught: {bool(bad)}, bold caught: {bool(bad2)}, plain words pass: {not ok}'
+
+
+@test
 def render_lock():
     """Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now."""
     import film_engine as E

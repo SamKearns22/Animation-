@@ -17,7 +17,8 @@ each shot.** When a drawing is wrong, fix the drawing. Never change a camera, fr
 or avoid a fault, even if the view is hard to draw. If a view seems not to work, first say in plain words **what the
 project would need to learn** to draw that shot or movement well (a new way of drawing, a tool, a reference, a test),
 and start learning it; only then, if it still can't be done, ask Sam, with any alternative as a numbered question.
-**Every handover has a "Locked by Sam" line** naming the cameras and beats that must not move.
+**Every handover has a "Locked by Sam" line** naming the cameras and beats that must not move: in the notes
+only, never in messages to me ("it doesn't help me", Sam 23 Nov).
 
 # Seeing like Sam (read first, every chat; Sam's Y, 21 Nov)
 
@@ -84,7 +85,11 @@ at session start (`.claude/hooks/setup.sh`).
 - **No check sheet before an animatic unless I ask**: once the checks pass (every fault fixed or named),
   render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.
-- **"Just go" (or any override) skips waiting for my yes, never the checks or the hand-over:** every fault is fixed
+- **"Override" skips everything between me and that one ask (Sam's pick, 23 Nov):** when my own latest message has
+  the word, every check, guard and step in the way is skipped for that ask only (e.g. an unchecked animatic at 99%
+  usage; the checks run again later), each skip logged and named to me ("Checks: skipped by Override: …"). Never
+  skipped: my locked shots, deleting work, saving. Only my typed word counts (`source/override.py`; kittest
+  `override_word`). **"Just go"** skips waiting for my yes, never the checks or the hand-over: every fault is fixed
   or named first; at red the chat opens the next one, which carries on without asking.
 - **Unattended runs stop after one animatic:** render, send, wait; never stack rounds I haven't seen.
 - **Notes on movement get a short clip** of just those seconds (`final OUT --small --span T0 T1`); clips need no yes;

@@ -209,7 +209,7 @@ def main():
     import propose                                # lesson 7 step 3 (fail closed): no animatic while a change slipped
     slipped = propose.open_letthroughs()          # the proposal route unsettled; no --faults-named way past
     if slipped:
-        sys.exit('finish REFUSED (the proposal route, fail closed): ' + ' | '.join(x[:140] for x in slipped) +
+        __import__('override').refuse('finish REFUSED (the proposal route, fail closed): ' + ' | '.join(x[:140] for x in slipped) +
                  ' ; settle each: python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"')
     film = load_film(name[0])
     if not hasattr(film, 'caption_at'):
@@ -230,7 +230,7 @@ def main():
             print('HOOK TEXT FAULT: ' + f)
         faults = _left(film, name[0], faults, named)          # named-lines: each line its own written answer
         if faults:
-            sys.exit('finish REFUSED (rule 10): fix the Hook Text position in HOOK, or answer each line in the notes\' '
+            __import__('override').refuse('finish REFUSED (rule 10): fix the Hook Text position in HOOK, or answer each line in the notes\' '
                      '"## Exceptions" (rows to fill above; --faults-named no longer passes a list)')
         if not faults:
             print('Hook Text check: clear of everything listed')
@@ -248,14 +248,14 @@ def main():
         print('READABLE FAULT: ' + f)
     rfaults = _left(film, name[0], rfaults, named)            # named-lines: each line its own written answer
     if rfaults:
-        sys.exit('finish REFUSED (could-not-test 3): a listed thing is under a caption or the Hook Text: fix it, or '
+        __import__('override').refuse('finish REFUSED (could-not-test 3): a listed thing is under a caption or the Hook Text: fix it, or '
                  'answer each line in the notes\' "## Exceptions" (--faults-named no longer passes a list)')
     if not rfaults:
         print('readable check: every listed thing clear of the captions and Hook Text, on the frames drawn')
     import film_engine                            # could-not-test (1): a check that could not test stops here even with
     why = film_engine.untested_fault(name[0])     # --faults-named; only its Exceptions row with Sam's Y lets it by
     if why:
-        sys.exit('finish REFUSED (could-not-test): ' + why)
+        __import__('override').refuse('finish REFUSED (could-not-test): ' + why)
     import follow_line                            # rule 52: the film's follow line on the sign-off (story/follow-lines.md)
     follow = follow_line.line_for(name[0])
     with tempfile.TemporaryDirectory() as tmp:

@@ -609,6 +609,15 @@ def reply_faults(reply, touched=()):
     return faults
 
 
+def locked_line(reply):
+    """Sam, 23 Nov: "Please remove the 'locked by Sam' section of communication as it doesn't help me." The line stays
+    in the notes (it guards shots for later chats); a reply to Sam never carries it."""
+    if re.search(r'(?im)^[\W_]*locked by sam\b', reply or ''):
+        return ['the reply carries a "Locked by Sam" line: Sam asked (23 Nov) for it to stay in the notes only; take it '
+                'out of the message']
+    return []
+
+
 def _real_user(entry):
     if entry.get('type') != 'user' or entry.get('isMeta'):
         return False
@@ -668,8 +677,10 @@ def hook(stdin=None):
     reply, touched = last_turn(data.get('transcript_path'))
     if data.get('last_assistant_message') and data['last_assistant_message'] not in reply:
         reply += '\n' + data['last_assistant_message']
-    faults = reply_faults(reply, touched)
+    faults = reply_faults(reply, touched) + locked_line(reply)
     if not faults:
+        return 0
+    if __import__('override').skip('proposal route stop: ' + ' | '.join(faults), data.get('transcript_path'), sys.stderr):
         return 0
     if data.get('stop_hook_active'):          # blocked once already: never loop; leave a trace for the handover
         log_unrouted(os.path.basename(data.get('transcript_path') or 'unknown')[:8], faults, reply)

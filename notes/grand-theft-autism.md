@@ -244,3 +244,10 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Needs Sam: pick between the two Override options. Read: notes/proposal-route.md; "Chat 47" above.
 - Open rule requests: Sam 23 Nov: drop the 'Locked by Sam' line from messages to him ("doesn't help me"): chat 47 stopped showing it to him now; the notes' line stays (it guards shots for later chats, handover check wants it); route changing CLAUDE.md/check with the Override proposal; Override word (above); build check (bulk note); held-object check; head-flip check; pop check.
 - For Claude: grand_theft_autism.mix(silent,out) rebuilds sound from a silent video without redrawing.
+
+## Chat 48 (23 Nov, Opus high): the Override word built (Sam's pick: option 2)
+- Proposal override-word routed (2 helpers, blind judge picked helper B = option 1; Sam picked option 2: "If I'm at 99% usage and I need an animatic ... I can run them again once the usage is back"). Marked adopted.
+- Built: source/override.py (Sam's latest typed message holds "Override" -> every stop skips for that ask, logged to notes/logs/overrides.log, "Checks: skipped by Override" line). Wired: send guard, finish.py (route, Hook Text, readable, could-not-test), film_engine render stops (47, 11, 59), proposal Stop hook, watcher, ledger alarm, handover end, model guard, cost watch (word anywhere). Hook: UserPromptSubmit logs it. Kittests override_word, locked_line_not_to_sam pass; proposal_route_hook, cost_watch_lines, render_lock, named_lines_body_each_answered still pass.
+- CLAUDE.md: the Override line replaces "(or any override)"; Locked line: notes only, never in messages (Stop hook flags it). Rulebook last table: two rows.
+- Named, not done (Override skips them for an ask, the option-2 trade): the finish.py stop on other chats' let-throughs stays (option 1's fix, a later question).
+
