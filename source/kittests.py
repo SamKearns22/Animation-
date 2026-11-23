@@ -776,7 +776,8 @@ def solid_check_shot4_v7():
     frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, three frames about 2.
     Chain A chat 5 (23 Nov): v7 note 2, the see-through bonnet (still b03d81c2, 0.67 s = frame 8), passed every bone
     point (the vest's edge showed between them); viewchecks.outline_shows now tests the drawn outline, so frame 8 must
-    flag Jason's body through the tulip's bonnet."""
+    flag Jason's body through the tulip's bonnet; and v7 note 7, the hydrant water through the cruiser (still c0d78111,
+    3.33 s = frame 40), effect_shows must flag the water (effect 0) through the cruiser's bonnet."""
     import subprocess
     import tempfile
     root = os.path.dirname(HERE)
@@ -790,17 +791,19 @@ def solid_check_shot4_v7():
         import shutil                             # today's check on version 7's own drawing code
         shutil.copy(os.path.join(HERE, 'viewchecks.py'), os.path.join(src, 'viewchecks_now.py'))
         code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks_now as VC; '
-                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18], label="v7")))' % src)
+                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18, 40], label="v7")))' % src)
         r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
     finally:
         import shutil
         shutil.rmtree(tmp, ignore_errors=True)
+    water = any(ln.startswith('BODY:') and ' 3.33 s: effect 0 shows through the cruiser' in ln for ln in r.stdout.splitlines())
     lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
     arm = any('rubbed out' in ln for ln in lines)
     hips = any('window pillar' in ln for ln in lines)
     bonnet = any('drawn body shows through the tulip\'s bonnet' in ln and ' 0.67 s' in ln for ln in lines)
-    return arm and hips and bonnet, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the ' \
-        f'pillar {hips}; at 0.67 s the body through the bonnet {bonnet}' + \
+    return arm and hips and bonnet and water, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips ' \
+        f'through the pillar {hips}; at 0.67 s the body through the bonnet {bonnet}; at 3.33 s the hydrant water ' \
+        f'through the cruiser {water}' + \
         ('' if r.returncode == 0 else f'; crashed: {r.stderr.strip().splitlines()[-1:]}')
 
 
