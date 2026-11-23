@@ -217,6 +217,6 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Next: Sam's notes on v5 -> Opus medium chat (note round). Before the final: body check + critique on v5's fixes (they were skipped by Override).
 - Needs Sam: notes on animatic v5. Read: pack "Notes round" in guides/job-packs.md; "Chat 48" above.
 - Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix (finish.py held by other chats' let-throughs) as its own proposal.
-- For Claude: source/override.py; the clean render with sound is animations/drafts/grand-theft-autism-clean.mp4 (no readable record beside it: re-render if the readable check must run).
+- For Claude: end check named: SENTENCE x7 (3 old: Sam's rewordings 21-22 Nov; 4 this chat's in-between wordings, both original sentences back word for word); branches claude/gta-chat46-build (a log only), claude/dreamy-fermi-vkhutz (another account's gta_story_post.py), claude/gta-chat31, claude/gta-v5-sound-draft (its film is now in animations/drafts): left alone. source/override.py; the clean render with sound is animations/drafts/grand-theft-autism-clean.mp4 (no readable record beside it: re-render if the readable check must run).
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 99.5% of 15%; forecast 103.1% (2026-11-23)
