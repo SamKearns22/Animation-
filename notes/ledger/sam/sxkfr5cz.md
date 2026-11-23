@@ -21,3 +21,6 @@ Civilians run through the building instead of down the street. They clip into th
 ### 2026-11-23T11:38:01
 In the frame after this one the civilians circled vanish
 
+### 2026-11-23T11:38:25
+Wheel clipping through chassis
+
