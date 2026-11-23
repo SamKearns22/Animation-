@@ -836,3 +836,56 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - For Claude: bench_move dressed_draw / lay_head (bench_draw), `clip OUT OUT.mp4 --dressed` (name the 42 chat-43
   faults first); house head views via lying_flat._head (V.snap). Handover check items as chat 43 says.
 
+
+
+# Moved by chat 46 (23 Nov)
+
+## Where things stand (23 Nov, chat 43, Opus high; shot 4 now 25% slower, clip sent)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); rule 74 (acting list).
+- Locked by Sam: all cameras and beats of shots 1-8, in the same order; the house style; circle hands. CHANGED BY SAM
+  (23 Nov): every move in shot 4 25% slower: shot 4 is 10.25 s (was 8.2), everything after it 2.05 s later.
+- Done: one slow-down number for shot 4 (Jason, shots, camera, sounds, later voices and captions); two touches the
+  slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean, sent. Changed: the
+  cruiser's wobble 2.0 -> 2.5 s (slows with the shot). Sam's 05:33/05:35 "can't open": fixed by 42b's phone-safe copy.
+- Sam (05:44, chat 42): "1": only shot 4 slower now; the other shots' people are checked at the next animatic.
+- Sam on it: "PERFECT" except the grip: fixed, the fist round the handle everywhere (learn-step "Chat 43"); clip resent.
+- Next: Sam's word on the grip clip; the look strand (chat 44) dresses this move. The look strand (chat 44) dresses this new timing; chat 43
+  touched _climb (C1b hips, gun lift): chat 44 merges the main line first.
+- Read: notes/bench/learn-step.md "Chat 43". Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
+- For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
+  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look, claude/gta-chat45-look = the live look chats.
+
+## Where things stand, the LOOK strand (23 Nov, chat 45 done; waiting on Sam's look at the redrawn dressed clip)
+- Rules that bite next: rule 30 (neck twice: a third time means the check); Seeing like Sam 1; Fix the drawing.
+- Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower; house style; circle hands; chat 43's grip.
+- Done (chat 45): N1 neck never hides the head drawing; N2 head drawings planned over the clip, no flip at 2 s.
+  Merged chat 43's lower grip. Clip redrawn, every head view looked at full size, helper r45-p2 recorded,
+  sent: animations/drafts/jason-dressed-test.mp4 (406 KB). Told Sam: neck thin/long looking down ~9.1 s (helper).
+- Next: Sam's notes on the clip come back to this strand (Opus medium). No chat opened: one clip sent, waiting.
+- Needs Sam: notes or Y on the clip.
+- Read: notes/bench/learn-step.md "Stage 2, chat 45". Open rule requests: grey-clip body-check (Sam HOLDS);
+  held-object check; house-look lock; "pieces" test; head-flip check (head_plan prevents it; no check yet).
+- Handover check: kittest body_check_back_view (rules 41, N6) BROKEN since chat 44's tip or earlier (1 of 2 v3
+  back views; tested at 9235e83c and 26c51d84, not this chat's change): for the shot 4 movement strand to fix.
+- For Claude: bench_draw.lay_head(free=), bench_move.head_plan/HEAD_BOUNDS, LF.HEAD_VD; 40 faults named.
+
+## Where things stand, the ANIMATIC strand (22 Nov, chat 33d, Opus medium): v4 notes fixed, clip sent
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (the pop check to propose); rule 30.
+- Locked by Sam: every camera and beat of shots 1-8 as in v3; shot 4's Jason untouched (3D rebuild, other chats).
+- Done: N1 street no longer pops out; N2 pistol in shots 5-8 (side-on to the lens; shot 7's hand path beside his
+  face, critiques r44 p1-p2); light-bar glow on the bar. Clip 22.3-38.5 sent (2.8 MB), body check named, critique r45.
+  Critique r45 open: the raised pistol beside his cheek (30-34 s) can read as a phone; her teal headphones; old N3 set.
+  N3 rest named in "Chat 33d" above (skin/face, Lucia face, necks/bonnet, ONIDA, shot 4 items).
+- Sam's note on the clip (22 Nov, picture notes/bench/sam-notes/gta-v5clip-three-fists-gun-backwards.jpg): "Why does
+  he have three fists? Why is he holding the gun backwards?" Cause: draw_gun's chest mode adds 3 skin rings over the
+  grip on top of his drawn fist; the grip hangs away from the hand. Missed: critique r44 said CAN'T TELL (gun way round,
+  'a close crop would show it') and no crop was made; the held-object check is still a draft. Plan put to Sam, awaiting Y.
+- Sam (23 Nov, chat 46): "Y on pistol" = Q1 Y: shot 3 gets the pistol flat on his chest (the brief), matching shot 4's opening. Q0 is met by the 3D Jason (one fist round the handle, chat 43 grip) going into shots 5-8.
+- Needs Sam: Q0 Y for the three-fists/backwards-gun plan; Q1 shot 3 pistol (Y once shot 4's opening shows it too / N); Q2 Y = animatic v5 from this clip.
+- Next: on Sam's Y, chat 33e, Sonnet: animatic v5 `grand_theft_autism.py OUT --from 7.0` (shot 1 reused), audio from
+  the clean render, body check, critique pack, finish.py (write outside animations/drafts first), copy, send.
+- Read: job pack "Checks and animatic"; "Chat 33d" above.
+- Open rule requests: none new; to propose: the pop check (N1), critic's three lines (lights, repeat beats, hands).
+- For Claude: FAR58/FAR_PEOPLE58, chest_gun (gta_shots58, leanout.draw_gun); `--span` clip. Two "Where things stand"
+  on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
+  post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).

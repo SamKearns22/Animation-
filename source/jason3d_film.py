@@ -31,6 +31,7 @@ sys.path.insert(0, HERE)
 
 CHECK = [True]                    # check each shots 5-8 pose as drawn (FAULTS: (t, faults))
 FAULTS = []
+FAULTS_FILE = os.environ.get('J3_FAULTS', '/tmp/gta-jason3d-faults.txt')   # shots 5-8 (shots 5-8's own clock u)
 ON = [True]                       # the film draws this Jason in shots 3-4 (False: the old flat lean-out)
 HEAD_PLAN_FILE = os.path.join(HERE, 'data', 'gta-jason3d-headplan.json')
 FPS = 24
@@ -167,6 +168,8 @@ def layer(img, cam, car, t, face=None, glass=None, scale=2, goals=None):
             bad = {k: v for k, v in c.items() if k in ('car', 'self', 'pistol', 'rom') and v}
             if bad:
                 FAULTS.append((round(float(t), 3), bad))
+                with open(FAULTS_FILE, 'a') as fh:      # frames may be drawn in several processes: kept in a file
+                    fh.write('%.3f %s\n' % (float(t), bad))
     f, M, o = _xf(car)
     ss = B.SS
     B.SS = 1                                     # the bench draws at the frame's 1080 x 1920 (x scale inside)
