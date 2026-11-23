@@ -35,7 +35,7 @@ sys.path.insert(0, HERE)
 ORDER_TOL = 0.05        # m: depths closer than this are side by side (clipcheck's ORDER_TOL)
 MIN_PX = 60             # px at 1080 x 1920: a further thing showing over a nearer one by fewer is noise (edges)
 FLAT = {'papers', 'coaster', 'folder', 'table top', 'rug', 'mat', 'floor'}   # lie on a surface (plus any kind with `near`)
-REST = 0.1              # m: how far below a surface a hand resting on it may reach on screen (its own thickness)
+REST = 0.15             # m: how far below a surface a hand resting on it reaches on screen (a cartoon hand is big)
 TORSO = 0.12            # m: a body's half depth
 HAND = 0.045            # m: a hand's radius (clipcheck's hand sphere)
 TEXT_KINDS = ('name card', 'sign board', 'notice', 'can')    # pieces with words on them (the readable check)
@@ -292,7 +292,20 @@ def _over(a, b, frame, others=()):
             op = o['px'][sy:sy + oy1 - oy0, sx:sx + ox1 - ox0, :3].astype(np.int16)
             same = om & (np.abs(frame[oy0:oy1, ox0:ox1, :3].astype(np.int16) - op).max(-1) <= 6)
             b_top[oy0 - y0:oy1 - y0, ox0 - x0:ox1 - x0] &= ~same
-    return int(b_top.sum()), int(a_top.sum())
+    b_top = _solid(b_top)                              # outlines and soft edges (1-2 px, the same ink on everything)
+    return int(b_top.sum()), int(a_top.sum())        # prove nothing: only a patch of b's own colour counts
+
+
+def _solid(m, n=2):
+    """m eroded by n pixels: what is left of a mask once thin lines and edges are taken off."""
+    for _ in range(n):
+        e = m.copy()
+        e[1:] &= m[:-1]
+        e[:-1] &= m[1:]
+        e[:, 1:] &= m[:, :-1]
+        e[:, :-1] &= m[:, 1:]
+        m = e
+    return m
 
 
 def _excused(near, far):

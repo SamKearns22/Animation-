@@ -414,6 +414,15 @@ def _text_only(film, problems, end, fps):
     print('(no pass stamp: the render still needs the full pre-flight)')
 
 
+# could-not-test (23 Nov): the stop lands with the cover, never before it. Films started before it whose drawing the
+# cover cannot yet see keep COULD NOT TEST as an ordinary fault until their own chat gives their people a depth
+# (cover.person / cover.thing, as satire_template does); then the name comes off this list.
+COVER_BEFORE = {'grand-theft-autism': 'Grand Theft Autism was started before the could-not-test stop and draws no '
+                                      'places views: its next chat wraps its people in cover.person(img, who, depth) '
+                                      '(cover.py) and takes it off preflight.COVER_BEFORE; until then COULD NOT TEST '
+                                      'is a fault to fix or name, as before'}
+
+
 def untested_waived(film, name, untested):
     """could-not-test: the COULD NOT TEST lines the notes' "## Exceptions" excuses: a row for the check (clipcheck)
     whose who is * / could not test / words in the line (a shot: 'shot 2a'), whose reason carries Sam's Y, and whose
@@ -517,6 +526,10 @@ def main():
         elif not own:                           # Job C 5 (Sam, 13 Nov): Blessed's, in silence
             untested.append('clipcheck: COULD NOT TEST: a film with people defines no solids(t) or layers(t) and no '
                             'picture(t) to record, so nothing checks that no one passes through anyone (rule 19)')
+    if untested and name.replace('_', '-') in COVER_BEFORE:   # the stop never lands before the cover can see the film
+        print('WARNING: ' + COVER_BEFORE[name.replace('_', '-')])
+        shared += untested                      # (a fault as before: fixed or named; not yet the stop)
+        untested = []
     waived = untested_waived(film, name, untested)
     for x in waived:
         print('exception (Sam\'s Y in the notes): ' + x)
