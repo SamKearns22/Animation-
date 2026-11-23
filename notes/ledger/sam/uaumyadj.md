@@ -35,3 +35,8 @@ Is it coming?
 ### 2026-11-23T15:06:29
 Override
 
+### 2026-11-23T15:10:36
+Thanks. Please make her look delighted at the end, and look at Lucia. Big happy suddenly-interested smile. Increase dialogue volume by 50%. Reduce the black screen at the beginning by 75%. Make sure the end hook text is the one I provided: Grand Theft Follow.
+
+Hold on render.
+
