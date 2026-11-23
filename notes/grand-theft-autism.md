@@ -134,4 +134,4 @@ Sam's six voices, the song and the four effects are in `sounds/grand-theft-autis
 - Open rule requests: Sam's pre-flight rule in reserve (always run, list "Not checked:", only Override skips; Sam has not said Y); staging-stills proposal kept in reserve by Sam (its let-through still blocks finish.py: needs Override or re-record); build check; held-object check; head-flip check; pop check; the three owed checks; crowdpath clash report; pistol silhouette check.
 - For Claude: the full pre-flight refuses on this film (no shot board, Hook Text plan, SHOT_MARKS, acting list): v6 had no pre-flight, named to Sam. Render path: source/grand_theft_autism.py (checks overruled since 21 Nov; `--full` draws both sizes); a --span clip runs the body check. Move-to-shared as before (_round_palm, _lens_kerb to crowdpath).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 107.74% of 15%; forecast 111.3% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 107.76% of 15%; forecast 111.4% (2026-11-23)

@@ -15,3 +15,5 @@
 2026-11-23T15:06+00:00	46cfe473	skipped	finish REFUSED (the proposal route, fail closed): - 2026-11-23 03:34 chat 9c3f62f3: sent after one block: notes/proposals/staging-stills.md: its verdict was edited after `record` (stale): re ; settle each: python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"
 2026-11-23T15:07+00:00	46cfe473	skipped	finish REFUSED (could-not-test 3): a listed thing is under a caption or the Hook Text: fix it, or answer each line in the notes' "## Exceptions" (--faults-named no longer passes a list)
 2026-11-23T14:50+00:00	fcc7aa67	sam	Override
+2026-11-23T15:16+00:00	46cfe473	sam	1. Override
+2026-11-23T15:17+00:00	46cfe473	skipped	handover stops: STOP: KIT TEST RED AT TWO HANDOVERS IN A ROW: body_check_back_view (red at 2026-11-23T14:52+00:00 too): fix it (or the tool it tests) before handing over
