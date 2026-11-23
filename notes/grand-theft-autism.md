@@ -137,21 +137,19 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
   render-time factors (16:46).
 
-## Where things stand (23 Nov, chat 41, Opus high; get-up re-planned)
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); the proposal route (3 cm).
-- Locked by Sam: every camera and beat of shots 1-8; shot 4's camera and acting-row times (K1 0.5, K2 1.0, K3 1.4
-  ... K2 7.4, K1 7.8); the house art style; circle hands.
-- Done: get-up 0.5-1.0 s / sit-down 7.4-7.8 s re-planned (hips up, right knee to its rear spot, then the left):
-  legs clear of each other, the left knee's 81 cm flip fixed; small touches and fast steps left (learn-step).
-- Next: chat 42, Opus high: the touches (span.py 12 25 174 192), whole grey clip (`bench_move.py clip`, fast steps
-  named "the 3 cm question"), watched in motion, sent to Sam; then the 3 cm question via the proposal route.
-- Needs Sam: nothing.
-- Read: notes/bench/learn-step.md "Get-up re-plan, chat 41" and "Speed-up, chat 40".
-- Open rule requests: grey-clip body-check proposal (Sam HOLDS: do not raise); held-object check; house-look lock;
-  dressed-still "pieces" test.
-- For Claude: `_climb` C1..C3, 'lift'/'plant' goals, `_gun_with_chest`; old B1/B1b/B2 unused. Two "Where things
-  stand" on purpose (this, the animatic strand). CLAUDE.md sentence changes are Sam's own (2ebb48bf, 60e25406).
-  Branches dreamy-fermi-vkhutz, gta-chat31: left, not merged.
+## Where things stand (23 Nov, chat 42, Opus high; grey clip sent, the 3 cm question to Sam)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); the proposal route.
+- Locked by Sam: all cameras and beats of shots 1-8; shot 4's acting-row times (K1 0.5, K2 1.0 ... K2 7.4, K1 7.8).
+- Done: get-up touches cleared (0 body-car, pistol, range in 198 drawings; creases and slides named); whole grey
+  clip critiqued (r42-grey) and SENT; proposal fast-climb judged (helper B picked).
+- Needs Sam: fast-climb 1 (measure, then jerk check and eased re-draw, each on his Y) or 2 (breaks vs real speeds).
+- Next: on his answer, this chat or the one it opens, Opus high: build the picked option, measuring first.
+- Read: notes/proposals/fast-climb.md (verdict); notes/bench/learn-step.md "Chat 42".
+- Open rule requests: grey-clip body-check (Sam HOLDS: do not raise); held-object check; house-look lock; "pieces".
+- For Claude: `_climb` C1b lift_gun -0.03, C2 pelvis z -0.02; store bundle not refreshed; self_cross "depth" is the
+  gap to the nearest OTHER part (a fold in one limb reads ~12 cm). No page.py: bench code, no Sam note. Two "Where
+  things stand" on purpose; CLAUDE.md sentence changes are Sam's own (2ebb48bf, 60e25406); branches
+  dreamy-fermi-vkhutz, gta-chat31 left unmerged.
 
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
@@ -215,4 +213,4 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 85.41% of 15%; forecast 89% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 90.34% of 15%; forecast 93.9% (2026-11-23)

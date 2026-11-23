@@ -765,3 +765,20 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   dreamy-fermi-vkhutz (story post) and gta-chat31 (old lean-out): not merged. Two "Where things stand" on purpose
   (this strand, the animatic strand); CLAUDE.md "Choose views..." flag: reworded by Sam, kept.
 
+
+## Where things stand (23 Nov, chat 41, Opus high; get-up re-planned)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); the proposal route (3 cm).
+- Locked by Sam: every camera and beat of shots 1-8; shot 4's camera and acting-row times (K1 0.5, K2 1.0, K3 1.4
+  ... K2 7.4, K1 7.8); the house art style; circle hands.
+- Done: get-up 0.5-1.0 s / sit-down 7.4-7.8 s re-planned (hips up, right knee to its rear spot, then the left):
+  legs clear of each other, the left knee's 81 cm flip fixed; small touches and fast steps left (learn-step).
+- Next: chat 42, Opus high: the touches (span.py 12 25 174 192), whole grey clip (`bench_move.py clip`, fast steps
+  named "the 3 cm question"), watched in motion, sent to Sam; then the 3 cm question via the proposal route.
+- Needs Sam: nothing.
+- Read: notes/bench/learn-step.md "Get-up re-plan, chat 41" and "Speed-up, chat 40".
+- Open rule requests: grey-clip body-check proposal (Sam HOLDS: do not raise); held-object check; house-look lock;
+  dressed-still "pieces" test.
+- For Claude: `_climb` C1..C3, 'lift'/'plant' goals, `_gun_with_chest`; old B1/B1b/B2 unused. Two "Where things
+  stand" on purpose (this, the animatic strand). CLAUDE.md sentence changes are Sam's own (2ebb48bf, 60e25406).
+  Branches dreamy-fermi-vkhutz, gta-chat31: left, not merged.
+
