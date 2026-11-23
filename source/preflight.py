@@ -676,13 +676,19 @@ def main():
     notes = (['The figure guard (allowed drawings, how often):'] + log) if log else []
     notes += (['The film\'s exceptions (rule 13; reasons in the notes\' "## Exceptions"):'] + wlist) if wlist else []
     problems = report.group(problems, getattr(film, 'SHOTS', []))   # rule 19 (13 Nov): one line per fault
-    report.summarise(f'pre-flight ({name})', problems, os.path.join(out, f'{name}-preflight.txt'), notes=notes)
+    done, left = [], problems
+    if not audit:                               # named-lines change 2 (Sam's Y, 23 Nov; rule 59): each warning left
+        done, left = waivers.split(problems, pnotes, film)   # needs its own written answer; blind ones never pass
+        print(f'answered warnings: {len(done)} (each its own row in the notes\' "## Exceptions"); unanswered: '
+              f'{len(left)}' + (' (python3 source/waivers.py todo ' + name + ' prints the rows to fill)' if left else ''))
+        notes += waivers.answered_note(done)
+    report.summarise(f'pre-flight ({name})', left, os.path.join(out, f'{name}-preflight.txt'), notes=notes)
     if pictures:
         print('contact sheet:', os.path.join(out, f'{name}-preflight.jpg'))
     if not audit:
         import film_engine                      # rule 59: the render checks this stamp before an animatic or final
-        film_engine.write_pass(name, len(problems), pictures=pictures, untested=untested)
-    sys.exit(1 if problems else 0)
+        film_engine.write_pass(name, len(left), pictures=pictures, untested=untested, left=left)
+    sys.exit(1 if left else 0)
 
 
 if __name__ == '__main__':

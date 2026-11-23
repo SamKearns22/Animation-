@@ -146,7 +146,7 @@ The follow line on the sign-off (rule 52, 12 Nov): `follow_line.py` (the next li
 | Each shared check tested against the fault that taught it (the old version put back, caught; the fix passes) | `source/kittests.py` |
 | Pre-flight runs only the checks for what a film contains, and names the ones it skips (rule 58) | `source/preflight.py` (the film's `HAS`) |
 | Nothing flips from in front to behind in one frame within a shot (rule 57) | `source/clipcheck.py` (`flip_faults`; the film's `draw_order(t)`, `ORDER_SWAPS`) |
-| The render lock: no animatic or final without pre-flight's pass on the code as it is now (rule 59) | `source/film_engine.py` (`lock_fault`, `write_pass`; `--faults-named`) |
+| The render lock: no animatic or final without pre-flight's pass on the code as it is now (rule 59) | `source/film_engine.py` (`lock_fault`, `write_pass`); each warning's own answer: `source/waivers.py` (`split`, `todo`, `release`) |
 | The hiss check heard only between lines (rule S3) | `source/filmkit.py` (`hiss_check(voice=)`) |
 | Subtitles from Sam's recordings: a few words at a time, each on the syllable it starts with, made readable when cut (0.8 s minimum, 220 words a minute, two rows); the template's `caption_at` uses it (rule 62) | `subtitles.py` (`line_caption`, `chunk_times`) |
 | Running straight at the lens: the front-on gait (low knees, small float) with tucked, forward-pumping arms (rule 63); which poses read from behind (rule 64) | `moves.py` (`GAITS['front_run']`, `front_run_arms`, `READS_FROM_BEHIND`) |

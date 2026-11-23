@@ -1840,7 +1840,8 @@ def clip(frame_fn, length, out, frames_dir=None, fps=FPS):
     subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-framerate', str(fps), '-i', os.path.join(d, 'f%04d.png'),
                     '-vf', 'fps=24,format=yuv420p', '-c:v', 'libx264', '-crf', '22', '-preset', 'medium', out], check=True)
     print('wrote', out, f'{os.path.getsize(out) / 1e6:.1f} MB', n, 'drawings')
-    hc.finish(out, named='--body-named' in sys.argv)
+    _np = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'notes', 'grand-theft-autism.md')   # named-lines
+    hc.finish(out, named='--body-named' in sys.argv, notes=open(_np).read() if os.path.exists(_np) else '')
 
 
 if __name__ == '__main__':

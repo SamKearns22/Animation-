@@ -31,7 +31,7 @@ gun drawn pointing away from its target. So this tests what is drawn, where it i
                     record that is clean or named, and a critique record
 
     python3 source/humancheck.py critiqued VIDEO PACKDIR     after the critic's result.md for this video
-    python3 source/humancheck.py name VIDEO "why each fault is named to Sam"
+    python3 source/humancheck.py name VIDEO --film FILM   (each line answered in the film's notes, named-lines)
     python3 source/humancheck.py show VIDEO
 """
 import json
@@ -362,21 +362,27 @@ class Writer:
         return [f'BODY: {self.label} {t0:.2f} s: {text} ({n} drawing{"s" if n > 1 else ""})'
                 for t0, n, text in sorted(self.found.values())]
 
-    def finish(self, out, named=False):
-        """Write OUT.bodycheck.txt; on an unnamed fault hold the video aside and stop."""
+    def finish(self, out, named=False, notes=None):
+        """Write OUT.bodycheck.txt; a fault without its own written answer holds the video aside and stops.
+        named-lines change 2 (Sam's Y, 23 Nov; rule 59): `named` alone no longer passes the list (GTA's 11 named in one
+        go); each line needs its row in the film's notes ("## Exceptions"), read from `notes` (the notes' text)."""
+        import waivers
         lines = self.lines()
-        rec = dict(video=os.path.basename(out), faults=lines, named=bool(named and lines), critique=None,
-                   made=os.path.getmtime(out) if os.path.exists(out) else None)
+        done, left = waivers.split(lines, notes or '') if lines else ([], [])
+        rec = dict(video=os.path.basename(out), faults=lines, named=bool(lines and not left), critique=None,
+                   answered=len(done), made=os.path.getmtime(out) if os.path.exists(out) else None)
         _save(out, rec)
         print('\n'.join(lines) or f'body check ({self.label}): clean, every person, every drawing', flush=True)
-        if lines and not named:
+        if lines and left:
             held = os.path.splitext(out)[0] + '.held.mp4'
             if os.path.exists(out):
                 os.replace(out, held)
-                _save(held, dict(rec, video=os.path.basename(held)))
-            sys.exit(f'clip STOPPED (body check): {len(lines)} fault(s) above. The video is held as {held}. Fix them '
-                     f'and render again, or name every one to Sam (python3 source/humancheck.py name VIDEO "why").')
-
+                _save(held, dict(rec, video=os.path.basename(held), out=out))
+            sys.exit(f'clip STOPPED (body check): {len(left)} of {len(lines)} line(s) above without their own written '
+                     f'answer. The video is held as {held}. Fix them and render again, or answer each in the film\'s '
+                     f'notes ("## Exceptions": | `the exact words` | - | why | looked at | chosen or real | owner |), '
+                     f'then: python3 source/humancheck.py name {held} --film FILM' +
+                     (' (--named / --body-named no longer pass the list)' if named else ''))
 
 def _side(video):
     return video + '.bodycheck.json'
@@ -453,13 +459,30 @@ def main(a):
         _save(video, rec)
         print(f'humancheck: critique recorded for {video}')
         return
-    if len(a) >= 3 and a[0] == 'name':
+    if len(a) >= 3 and a[0] == 'name':          # named-lines change 2: each line answered in the film's notes
         rec = load(a[1])
         if rec is None:
             sys.exit(f'humancheck: {a[1]} has no body check record')
-        rec['named'], rec['why_named'] = True, a[2]
-        _save(a[1], rec)
-        print(f'humancheck: {len(rec.get("faults") or [])} fault(s) named; each goes in the message to Sam')
+        if '--film' not in a:
+            sys.exit('humancheck: one reason for the whole list no longer names it (rule 59, Sam 23 Nov): answer each '
+                     'line in the film\'s notes, then: humancheck.py name VIDEO --film FILM')
+        import waivers
+        film = a[a.index('--film') + 1]
+        notes_p = os.path.join(os.path.dirname(HERE), 'notes', f'{film}.md')
+        done, left = waivers.split(rec.get('faults') or [], open(notes_p).read() if os.path.exists(notes_p) else '')
+        if left:
+            print('\n'.join(waivers.todo_rows(left)))
+            sys.exit(f'humancheck: {len(left)} line(s) without their own answer in {notes_p} (rows to fill above)')
+        rec['named'], rec['answered'] = True, len(done)
+        video = a[1]
+        if rec.get('out') and video.endswith('.held.mp4'):   # every line answered: the held video goes back
+            os.replace(video, rec['out'])
+            if os.path.exists(_side(video)):
+                os.remove(_side(video))
+            video = rec['out']
+            rec['video'] = os.path.basename(video)
+        _save(video, rec)
+        print(f'humancheck: {len(done)} line(s), each answered in the notes; say each in the message to Sam')
         return
     if len(a) >= 2 and a[0] == 'show':
         print(json.dumps(load(a[1]), indent=1))

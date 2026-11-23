@@ -418,6 +418,83 @@ def could_not_test_readable():
 
 
 @test
+def named_lines_each_answered():
+    """named-lines change 2 (Sam's Y, 23 Nov; rule 59): Milburn's 61 lines went past every round under one switch; each
+    warning now needs its own written answer, blind ones never pass, and an answered line comes back if its numbers
+    change."""
+    import film_engine as E
+    import tempfile
+    import types
+    import waivers
+    rows = [json.loads(x) for x in open(os.path.join(HERE, '..', 'notes', 'ledger', 'milburn', 'checks.jsonl'))]
+    run = rows[0]['run']
+    lines = [f for r in rows if r['run'] == run for f in r['faults']]
+    film = types.ModuleType('milburn_replay')                 # Milburn had no scene(t)
+    blind = [x for x in lines if waivers.is_blind(x, film)]
+    cap = next(x for x in lines if x.startswith('caption "to kill each"'))
+    card = next(x for x in lines if 'COULD NOT TEST' in x)
+    notes = ('## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+             f'| `{cap}` | - | Sam speaks fast; his own take | 1.1 s full size | chosen | Sam |\n'
+             f'| `{card}` | - | named to Sam | animatic 1 | chosen | chat 15 |\n'
+             '| `plan: goth has no facing (which way they face)` | - | fine | | chosen | chat 15 |\n')
+    none_done, none_left = waivers.split(lines, '', film)
+    done, left = waivers.split(lines, notes, film)
+    moved = cap.replace('0.38', '0.41')
+    back = waivers.split([moved], notes, film)[1]
+    real = E.PASSES
+    E.PASSES = tempfile.mkdtemp()
+    try:
+        E.write_pass('x', len(left), left=left)
+        refused = E.lock_fault('x', faults_named=True)
+        E.write_pass('x', 0, left=[])
+        clear = E.lock_fault('x')
+    finally:
+        E.PASSES = real
+    card_left = any(x.startswith(card) and 'BLIND' in x for x in left)
+    incomplete = any(x.startswith('ANSWER incomplete') for x in left)
+    ok = (len(lines) == 61 and len(blind) == 37 and len(none_left) == 61 and len(done) == 1 and card_left
+          and incomplete and moved in back and bool(refused) and clear is None)
+    return ok, (f'Milburn lines {len(lines)}, blind {len(blind)} (learn.md: 37); unanswered with no notes '
+                f'{len(none_left)}; answered 1 caption: {len(done)}; blind card line answered but still stops: '
+                f'{card_left}; a row with no look flagged: {incomplete}; caption back when its time changes: '
+                f'{moved in back}; --faults-named refused: {bool(refused)}; all answered passes: {clear is None}')
+
+
+@test
+def named_lines_body_each_answered():
+    """named-lines change 2 (Sam's Y, 23 Nov): the body check's whole list was named with one reason (GTA, 11 at once);
+    now --named alone holds the clip, and it goes back only when each line has its own answer in the film's notes."""
+    import humancheck as HC
+    import tempfile
+    d = tempfile.mkdtemp()
+    out = os.path.join(d, 'clip.mp4')
+
+    def clip():
+        open(out, 'w').write('x')
+        w = HC.Writer('clip.mp4')
+        w.found = {('jason', 'arm', 'x'): [17.9, 3, 'jason: an arm out of the back']}
+        return w
+    w = clip()
+    line = w.lines()[0]
+    try:
+        w.finish(out, named=True, notes='')
+        held_named = False
+    except SystemExit:
+        held_named = os.path.exists(out[:-4] + '.held.mp4') and not os.path.exists(out)
+    notes = f'## Exceptions\n| `{line}` | - | a passer-by behind the car, 2 drawings | 17.9 s full size | real | chat 44 |\n'
+    clip().finish(out, named=False, notes=notes)
+    rec = HC.load(out)
+    passed = bool(rec and rec['named'] and rec['answered'] == 1)
+    try:
+        HC.main(['name', out, 'all named to Sam'])
+        one_reason = False
+    except SystemExit:
+        one_reason = True
+    return held_named and passed and one_reason, (f'--named alone held: {held_named}; each line answered passes: '
+                                                  f'{passed}; one reason for the list refused: {one_reason}')
+
+
+@test
 def render_lock():
     """Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now."""
     import film_engine as E
@@ -430,15 +507,15 @@ def render_lock():
         ok = E.lock_fault('x')
         E.write_pass('x', 3)
         faults = E.lock_fault('x')
-        named = E.lock_fault('x', faults_named=True)
+        named = E.lock_fault('x', faults_named=True)          # named-lines (23 Nov): the switch no longer passes
         E.write_pass('x', 0)
         final_quick = E.lock_fault('x', final=True)           # pictures not yet checked: no final
         E.write_pass('x', 0, pictures=True)
         final_ok = E.lock_fault('x', final=True)
     finally:
         E.PASSES = real
-    return bool(none) and ok is None and bool(faults) and named is None and bool(final_quick) and final_ok is None, \
-        (f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; named: {named is None}; '
+    return bool(none) and ok is None and bool(faults) and bool(named) and bool(final_quick) and final_ok is None, \
+        (f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; --faults-named refused: {bool(named)}; '
          f'final before the pictures are checked refused: {bool(final_quick)}; after: {final_ok is None}')
 
 

@@ -56,20 +56,25 @@ real ones, all fixed or answered within two chats. Sam notes that were already a
 cards, Blessed's newsreader mouth, likely Blessed's cot pose). 10 check fixes were made inside one film's own code in
 three films, so each new film starts without them. Shared-tool tests failing now: 4 of 112 (2 can't run here because a download is blocked, 2 real; the one the proposal named, round_page, is already repaired).
 
-**Rules changed: none yet.** Each change needs its own yes (Sam's option 1), asked 23 Nov:
-- Change 1 (a check that "could not test" stops the animatic): not asked again. It is the same fix as the
-  could-not-test lesson, which Sam has approved and which is being built in its own chat; built once, there.
-- Change 2, rule 59, before: "faults Sam has been told about need `--faults-named`, and each is listed once: the film
-  keeps a named-faults list and pre-flight shows only faults not on it." Proposed: "every fault left needs its own
-  written answer in the film's exceptions list (chosen or real; why; where it was looked at full size; who fixes it),
-  or the render refuses; a fault whose check could not see the film cannot be answered, only cured by handing the check
-  what it needs; an answered fault comes back if its numbers change; pre-flight prints how many are answered and every
-  unanswered one in full." Check column adds: the render lock reads the exceptions list per line (its kittest).
-- Change 3 (shared inputs, starting with the places and moves tools Milburn was built on): no rule wording; a
-  "move to shared" line for every check fix made in film code, flagged at the handover.
-- Change 4 (kit tests): round_page is already repaired. The rest: a shared-tool test red at two handovers in a row stops the handover (one is red at two today), and a test that could not run counts as red. No rule wording beyond rule 13's check column naming the handover check.
+**Rules changed (Sam's Y Y Y, 23 Nov).**
+- Rule 59, before: "faults Sam has been told about need `--faults-named`, and each is listed once: the film keeps a
+  named-faults list and pre-flight shows only faults not on it." Now (written): "every fault left needs its own written
+  answer in the film's exceptions list (chosen or real; why; where it was looked at full size; who fixes it), or the
+  render refuses; a fault whose check could not see the film cannot be answered, only cured by handing the check what
+  it needs; an answered fault comes back if its numbers change; pre-flight prints how many are answered and every
+  unanswered one in full." Its check column names the new tool and two kittests.
+- Change 1 ("could not test" stops the animatic): built once, by the could-not-test chat (already in the render lock).
+- Change 2 BUILT (chain B chat 2): the one switch is gone everywhere it waved a list through: pre-flight's pass, the
+  render's picture checks (a held video is released by answering each line, no second render), the body check (one
+  reason for the whole list is refused; GTA's 11-at-once naming can't happen again) and finish.py's Hook Text and
+  readable checks. Not changed: the critique gate (rule 89), whose faults already go to Sam one by one in the Checks line.
+- Changes 3 and 4: being built by the next chat (named-lines part 2), with the "move to shared" stop that Sam's 23 Nov
+  words ask for (wording waits for his yes).
 
-**Difference made.** Nothing changed yet, so nothing to measure in a film. The numbers to beat, from the look back:
+**Difference made.** Measured on Milburn's saved lines (kittest named_lines_each_answered): all 61 now stop the render
+until answered (before: all 61 passed with one switch); the 37 blind ones cannot be answered at all, including the
+"could not test" line that hid the name cards; an answered caption comes back the moment its timing changes. On a real
+film: not measured yet (at the next film's first animatic). The numbers to beat, from the look back:
 Milburn's replay with changes 2 and 3 should leave at most the 16 chosen or unsettled lines, each answered (today 61
 named in a bunch plus 60 removed by hand); the next film: under 10 unanswered lines before every animatic, 0 blind
 lines at its first pre-flight, and 0 Sam notes that were already a printed line (3 in the last two films).
@@ -79,3 +84,10 @@ not look at the film, the animatic stops until the film or the shared tools give
 left gets one written line: why it stays, where it was looked at full size, and who fixes it; if its numbers change it
 comes back. Sam's "Checks:" line gets short: a count of answered warnings and only the unanswered ones in full. A check
 fixed inside one film is flagged until it is moved into the shared tools, so the next film starts with it.
+
+**Sam's words on this (23 Nov): "I would have expected the change on Blessed to apply to all films in the future —
+rules need to be constructed that they work in this way, they are not film specific."** Proposed wording (asked 23
+Nov), CLAUDE.md "Rules are permanent": "**Every rule and fix is for all films (Sam, 23 Nov):** a fix made because of one
+film's fault goes into the shared tools, template, rulebook or checks so every later film gets it; a fix that can only
+live in one film's code gets a 'move to shared' line in that film's notes, and the handover check stops until it is
+moved or Sam says it stays." Its check: the "move to shared" handover stop (named-lines change 3).
