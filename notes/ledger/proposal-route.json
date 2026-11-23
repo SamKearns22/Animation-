@@ -12449,65 +12449,69 @@
    "model": "opus",
    "stage": "build",
    "round": null,
-   "cost": 2.1,
+   "cost": 2.56,
    "notes": 0,
    "repeats": [],
    "src": "estimate",
    "sid": "session_01U3pKR2CR28qdUtk2Z9Y6DN",
-   "steps": 97,
-   "hist_k": 230,
+   "steps": 123,
+   "hist_k": 259,
    "kinds": {
-    "tool search": 30.4,
-    "whole-file .py read": 0.5,
-    "other": 69.1
+    "tool search": 29.3,
+    "whole-file .py read": 0.4,
+    "renders": 1.2,
+    "other": 69.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 68,
+    "tool search": 90,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
+    "renders": 3,
     "pictures": 0,
-    "other": 30
+    "other": 32
    },
    "split": {
-    "usd": 5.8617,
-    "total": 5.8617,
+    "usd": 7.5442,
+    "total": 7.5442,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 28.1,
-     "start-up floor": 27.8,
-     "carried history": 24.2,
-     "new writes": 19.9
+     "carried history": 28.8,
+     "start-up floor": 26.9,
+     "Claude's words": 25.9,
+     "new writes": 18.4
     },
     "origins": {
-     "Claude's words": 45.3,
-     "start-up floor": 27.8,
-     "result: tool search": 16.5,
-     "result: other": 5.3,
-     "messages and reminders": 3.5,
+     "Claude's words": 44.7,
+     "start-up floor": 26.9,
+     "result: tool search": 17.6,
+     "result: other": 5.4,
+     "messages and reminders": 3.8,
      "Claude's edits": 1.3,
-     "result: whole-file .py read": 0.2
+     "result: whole-file .py read": 0.2,
+     "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 27.8,
-     "thinking": 20.0,
-     "writing code": 11.6,
-     "reading notes": 8.3,
-     "commands": 6.3,
+     "start-up reading (rules, tools, first files)": 26.9,
+     "thinking": 18.7,
+     "writing code": 12.2,
+     "reading notes": 8.0,
+     "commands": 6.9,
      "start-up and handover tools": 6.0,
-     "writing notes": 5.5,
-     "reading chat records": 3.7,
-     "messages and reminders": 3.5,
-     "reading kit code": 2.3,
-     "messages to Sam": 1.8,
-     "helper and chat prompts": 1.5,
-     "running checks and tools": 0.9,
-     "other commands": 0.3,
+     "writing notes": 4.8,
+     "messages and reminders": 3.8,
+     "reading chat records": 3.5,
+     "reading kit code": 2.8,
+     "messages to Sam": 2.0,
+     "running checks and tools": 1.6,
+     "helper and chat prompts": 1.4,
+     "other commands": 0.4,
+     "reading guides": 0.3,
      "git and saving": 0.2,
-     "reading guides": 0.1,
-     "helper results": 0.1
+     "app tools (chats, files sent)": 0.2,
+     "helper results": 0.1,
+     "renders": 0.1
     },
     "leftover": 0.0
    },
@@ -12519,50 +12523,50 @@
      [
       "source/propose.py",
       3.9,
-      0.0913
+      0.1095
      ],
      [
       "notes/proposals/guard-film-questions.md",
       2.6,
-      0.0624
+      0.0744
      ],
      [
       "notes/proposals/unrouted.md",
       1.0,
-      0.0226
+      0.0271
      ],
      [
       "notes/proposals/precheck-reply.md",
       0.9,
-      0.0185
+      0.0228
      ],
      [
       "notes/ledger/sam/kpp1tyq4.md",
       0.4,
-      0.0082
+      0.01
      ],
      [
       "notes/proposals/guard-holes/probe.py",
       0.4,
-      0.0079
+      0.0098
      ],
      [
       ".claude/settings.json",
       0.3,
-      0.0067
+      0.008
      ],
      [
       "notes/ledger/sam/gr9hlufs.md",
       0.2,
-      0.0046
+      0.0056
      ],
      [
       "guides/job-packs.md",
       0.2,
-      0.0041
+      0.0049
      ]
     ],
-    "base_pct": 25.0
+    "base_pct": 24.7
    },
    "search": {
     "show": 0,
@@ -12571,16 +12575,20 @@
     },
     "other": {
      "shared:handover.py": 3,
-     "other": 9,
+     "other": 12,
      "film notes": 20,
      "shared:propose.py": 11,
      "shared:ledger.py": 2,
-     "guides": 3,
-     "shared:watcher.py": 2,
-     "shared:kittests.py": 11,
+     "guides": 6,
+     "shared:watcher.py": 3,
+     "shared:kittests.py": 15,
      "shared:ruleproofs.py": 5,
      "shared:override.py": 1,
-     "shared:hookran.py": 1
+     "shared:hookran.py": 1,
+     "shared:takes.py": 5,
+     "shared:freeze.py": 3,
+     "shared:mossad_audio.py": 2,
+     "shared:voiceclean.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -13127,6 +13135,182 @@
       "film notes",
       "notes/proposal-route.md",
       "<<<<<<<\\|>>>>>>>",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:takes.py",
+      "source/takes.py source/mossad_audio.py source/freeze.py",
+      "mossad_audio\\|^import\\|^from",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "shared:takes.py",
+      "source/takes.py source/freeze.py",
+      "def count\\|def kit_files_loading",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "def measure",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "^FILM\\|^KIT_FILES\\|loads = \\|def film_loads\\|def static_loads",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:mossad_audio.py",
+      "source/mossad_audio.py source/burnham_film.py",
+      "^def load\\|^SR",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "shared:mossad_audio.py",
+      "source/*.py source/mossad_audio.py",
+      "MAX_CUT_DB\\|\\.dehum *=\\|\\.denoise *=\\|\\.lufs *=\\|\\.pauses *=\\|\\.smooth_tail *=",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/milburn_voice.py",
+      "kit_files|FREEZE",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "other",
+      "/home/user/Animation-/source/audio SP/old/source/audio",
+      "SP=/tmp/claude-0/-home-user-Animation-/bd54de71-624e-556a-9c6a-ee55823cd2c5/scra",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "other",
+      "",
+      "SP=/tmp/claude-0/-home-user-Animation-/bd54de71-624e-556a-9c6a-ee55823cd2c5/scra",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS|^FAIL",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "takes.py",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "mossad_audio\\|voices.py\\|kitinputs",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "sound\\|audio",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/bd54de71-624e-556a-9c6a-ee55823cd2c5/tas",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py guides/kit-catalogue.md source/mossad_audio.py source/takes.p",
+      "pkill -f \"source/kittests.py\" ; git add -A guides/kit-catalogue.md source/kittes",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "shared:takes.py",
+      "source/takes.py",
+      "git diff source/takes.py | head -40",
+      ""
+     ],
+     [
+      118,
+      "other",
+      "shared:voiceclean.py",
+      "source/voiceclean.py source/kittests.py source/watcher.py guides/kit-catalogue.m",
+      "audiokit",
+      ""
+     ],
+     [
+      119,
+      "other",
+      "shared:takes.py",
+      "source/takes.py source/mossad_audio.py source/voiceclean.py",
+      "^M  notes",
+      ""
+     ],
+     [
+      120,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py source/kittests.py guides/kit-catalogue.md",
+      "audiokit\\|voiceclean",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py guides/kit-catalogue.md",
+      "def voiceclean_same_sound",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "shared:takes.py",
+      "source/takes.py source/mossad_audio.py source/kittests.py source/watcher.py guid",
+      "^M  notes\\|^A  notes",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "^PASS",
       ""
      ]
     ]
