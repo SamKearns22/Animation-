@@ -228,4 +228,4 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.17% of 15%; forecast 96.8% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.63% of 15%; forecast 97.2% (2026-11-23)
