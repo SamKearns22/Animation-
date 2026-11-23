@@ -50,6 +50,11 @@ CAPS = [(7.30, 10.24, "This is actually a really difficult sensory experience.")
         (29.25, 31.74, "Her hyperfixation is homemade explosives."),
         (32.17, 33.84, "This job wouldn't have worked without her."),
         (35.30, 37.10, "My safe food is nitroglycerin.")]
+# Sam 23 Nov (shot 4 25% slower, 8.2 -> 10.25 s): everything after shot 4 moves later by SHIFT4 (the times above are
+# the chat-42 film clock, shot 5 then at 22.3)
+SHIFT4 = round(F.SHOTS[4][1] - 22.3, 4)
+_late = lambda t: t + SHIFT4 if t >= 22.3 else t
+CAPS = [(_late(a), _late(b), c) for a, b, c in CAPS]
 
 
 def caption_at(t):
@@ -139,6 +144,7 @@ VOICES = [  # (file, speech starts in file, speech ends, film time it starts)
     ('Autistic_1.m4a', 0.93, 3.87, 7.30), ('Autistic_2.m4a', 0.80, 1.65, 12.10),
     ('Autistic_3.m4a', 0.80, 2.00, 23.55), ('Lucia.m4a', 0.87, 3.11, 25.75),
     ('Jason.m4a', 1.40, 6.99, 28.25), ('Autistic_4.m4a', 0.79, 2.59, 35.30)]
+VOICES = [(f, a, b, _late(at)) for f, a, b, at in VOICES]   # Sam 23 Nov: after shot 4, SHIFT4 later
 
 
 GAIN_DB = {'Autistic_1.m4a': 7.5, 'Autistic_2.m4a': 13.8, 'Autistic_3.m4a': 10.9, 'Autistic_4.m4a': 7.9,
@@ -163,10 +169,12 @@ def mix(silent, out):
     ev = []   # (file key, in-start, length, film time, volume, speed)
     for f, a, b, at in VOICES:
         ev.append((f.split('.')[0] + '.m4a', a - 0.04, b - a + 0.08, at - 0.04, 10 ** (GAIN_DB.get(f, 0) / 20), 1.0))
-    for ts in (1.95, 2.30, 2.62, 2.92):
-        ev.append(('pistol', 0.0, 0.7, 14.1 + ts, 0.8, 1.0))
-    ev.append(('glass-breaking', 0.0, 3.12, 14.1 + 2.30, 0.8, 2.0))        # double speed, Sam
-    ev.append(('car-crash', 0.0, 5.09, 14.1 + 5.504 - 0.5, 0.9, 1.0))
+    s4 = F.SHOTS[3][1]                                                     # shot 4's start (14.1)
+    for ts in _LO.SHOTS:                                                   # Sam 23 Nov: with the slower shots
+        ev.append(('pistol', 0.0, 0.7, s4 + ts, 0.8, 1.0))
+    ev.append(('glass-breaking', 0.0, 3.12, s4 + _LO.SHOTS[1], 0.8, 2.0))  # double speed, Sam
+    import gta_rehearse as _GR
+    ev.append(('car-crash', 0.0, 5.09, s4 + (_GR.IMPACT[0] if _GR.IMPACT else 5.504) - 0.5, 0.9, 1.0))   # on the impact
     for n, (key, a, ln, at, vol, sp) in enumerate(ev):
         ins += ['-ss', f'{a:.3f}', '-t', f'{ln:.3f}', '-i', _find(key)]
         k += 1

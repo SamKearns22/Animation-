@@ -137,34 +137,44 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
   render-time factors (16:46).
 
-## Where things stand (23 Nov, chat 42, Opus high; Sam: every move 25% slower)
+## Where things stand (23 Nov, chat 43, Opus high; shot 4 now 25% slower, clip sent)
 - Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); rule 74 (acting list).
 - Locked by Sam: all cameras and beats of shots 1-8, in the same order; the house style; circle hands. CHANGED BY SAM
-  (23 Nov): "All the human movements seem 25% too fast": shot 4's acting-row times x1.25 (8.2 -> ~10.25 s).
-- Done: grey clip clean (0 body-car, pistol, range) and seen by Sam (phone-safe copy jason-grey-test.mp4 by 42b).
-  fast-climb proposal declined (Sam chose to slow the moves instead).
-- Next: chat 43, Opus high: stretch shot 4's acting rows (leanout.TIMES, bench BREAKDOWNS) and its camera keys
-  (gta_rehearse CAM4) by 1.25 from the shot's start; gunshot sounds with them; re-run the grey checks and send a
-  phone-safe clip from his camera. Then note the other shots' moves for the next animatic (Sam's Q below).
-- Needs Sam: 1 = only shot 4 slower now, other shots' people checked at the next animatic (my pick); 2 = every
-  shot's people 25% slower now.
-- Read: notes/bench/learn-step.md "Chat 42"; notes/proposals/fast-climb.md (only if the 3 cm bar comes up again).
-- Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
-- For Claude: clips to Sam phone-safe (baseline, 540x960 padded, faststart: 42b's command in git log); the wide
-  1080x960 High-profile clip would not open on his phone. Two "Where things stand" on purpose; CLAUDE.md sentence
-  changes are Sam's own; branches dreamy-fermi-vkhutz, gta-chat31 left unmerged.
+  (23 Nov): every move in shot 4 25% slower: shot 4 is 10.25 s (was 8.2), everything after it 2.05 s later.
+- Done: one slow-down number for shot 4 (Jason, shots, camera, sounds, later voices and captions); two touches the
+  slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean, sent. Changed: the
+  cruiser's wobble 2.0 -> 2.5 s (slows with the shot). Sam's 05:33/05:35 "can't open": fixed by 42b's phone-safe copy.
+- Sam (05:44, chat 42): "1": only shot 4 slower now; the other shots' people are checked at the next animatic.
+- Sam on it: "PERFECT" except the grip: fixed, the fist round the handle everywhere (learn-step "Chat 43"); clip resent.
+- Next: Sam's word on the grip clip; the look strand (chat 44) dresses this move. The look strand (chat 44) dresses this new timing; chat 43
+  touched _climb (C1b hips, gun lift): chat 44 merges the main line first.
+- Read: notes/bench/learn-step.md "Chat 43". Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
+- For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
+  purpose; CLAUDE.md sentences Sam's own; dreamy-fermi-vkhutz, gta-chat31 unmerged; claude/gta-chat44-look, claude/gta-chat45-look = the live look chats.
 
-## Where things stand, the LOOK strand (23 Nov, chat 42 opens chat 44, Opus high): stage 2, the house look on the move
-- Sam (23 Nov): "open another chat to start building the character on him": stage 2 of solid-body-moves (line 106:
-  the same move in the house look; bar: 0 strip faults, pass list clear, side by side with the approved seated
-  Jason, stranger test at phone and full size). Runs beside chat 43 (timing x1.25): do NOT touch leanout.TIMES,
-  BREAKDOWNS, CAM4 or _climb; work in the drawing (bench_draw, bench_pose part_at, house_pose, clean_parts);
-  fetch and merge the main line before every push.
-- Open from Sam's K4 still notes (learn-step.md chat 38): vest strap an island (the vest's front scoop stretched by
-  the raised arm, part_at); pistol grip reads as a black mark at his side (critique r42-grey); head drawn once
-  (step 5b) when the dressed clip is built. First: the K4 still fixed and resent, then dressed key poses, then the
-  dressed clip on the new timing once chat 43 has pushed it.
-- Clips to Sam phone-safe: 540x960 padded, baseline, faststart (the wide clip would not open on his phone).
+## Sam (23 Nov, on the redrawn dressed clip): "It looks very good. Well done."
+- [ ] "We have added a new skill to our toolkit. When we are done with the film, we can explore how we can improve
+      the process from what we have learned." (end-of-film review item: the 3D-body skill and how it was learned)
+- [ ] "Would you care to build this into the rest of the film? A separate chat has worked on the rest of the film.
+      Once done, run checks across full animatic and produce." Plan (chat 45's pick): chat 46, Opus high, builds the
+      dressed 3D Jason into the film: shot 4 first (the bench move on the film's camera and timing, replacing the
+      flat lean-out Jason), then Jason in shots 3 and 5-8 so his look does not jump at the cuts (same body, house
+      head, circle hands, chat 43's grip). Locked cameras, beats, timing unchanged. Then Sonnet: checks over the
+      full animatic, finish.py (Hook Text, sign-off), send. Final render only on Sam's clear yes.
+
+## Where things stand, the LOOK strand (23 Nov, chat 45 done; waiting on Sam's look at the redrawn dressed clip)
+- Rules that bite next: rule 30 (neck twice: a third time means the check); Seeing like Sam 1; Fix the drawing.
+- Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower; house style; circle hands; chat 43's grip.
+- Done (chat 45): N1 neck never hides the head drawing; N2 head drawings planned over the clip, no flip at 2 s.
+  Merged chat 43's lower grip. Clip redrawn, every head view looked at full size, helper r45-p2 recorded,
+  sent: animations/drafts/jason-dressed-test.mp4 (406 KB). Told Sam: neck thin/long looking down ~9.1 s (helper).
+- Next: Sam's notes on the clip come back to this strand (Opus medium). No chat opened: one clip sent, waiting.
+- Needs Sam: notes or Y on the clip.
+- Read: notes/bench/learn-step.md "Stage 2, chat 45". Open rule requests: grey-clip body-check (Sam HOLDS);
+  held-object check; house-look lock; "pieces" test; head-flip check (head_plan prevents it; no check yet).
+- Handover check: kittest body_check_back_view (rules 41, N6) BROKEN since chat 44's tip or earlier (1 of 2 v3
+  back views; tested at 9235e83c and 26c51d84, not this chat's change): for the shot 4 movement strand to fix.
+- For Claude: bench_draw.lay_head(free=), bench_move.head_plan/HEAD_BOUNDS, LF.HEAD_VD; 40 faults named.
 
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
@@ -228,4 +238,4 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   on purpose: the bench strand (chat 38) and this one. Branch claude/dreamy-fermi-vkhutz = another chat's live story
   post (awaiting Sam), not merged here. CLAUDE.md "Choose views..." sentence: still there, reworded by Sam (kept).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 90.93% of 15%; forecast 94.5% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.63% of 15%; forecast 97.2% (2026-11-23)

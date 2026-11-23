@@ -1061,6 +1061,17 @@
    "example": "kittest hook_text_planned: Rule 75 (tool job, 11 Nov): a film with HOOK but no KEEP_CLEAR was skipped quietly; now it is refused, and",
    "notes": "",
    "kind_before": "code (found)"
+  },
+  "N25": {
+   "rule": "No rule without a working check: a rule counts only when its check has caught a saved example of its own fault.",
+   "anchor": "No rule without a working check",
+   "status": "proven",
+   "tests": [
+    "rule_proofs_gate"
+   ],
+   "example": "kittest rule_proofs_gate: step 1's 61 of 103 rules never proved on a bad example (rule-needs-check/rule-table.md); a new rule with no entry or no saved example is refused at the handover",
+   "notes": "Sam's Y 23 Nov (lesson 7, option 1); written with this entry in one commit",
+   "kind_before": "new"
   }
  },
  "_baseline": {

@@ -319,3 +319,77 @@ area per side, no island under N px - proposed via the proposal route).
   4 false (left view empty 2.7-5.3 s = the locked camera on the cruiser, not drawn in the test; door "flicker" =
   the pan, checked per frame; kneeling reads at full size; the outside test view has no door on purpose);
   real but stage 2 (the look): pistol grip at his side reads as a black tick on grey. Sent to Sam 23 Nov.
+
+## Chat 43 (Opus high): Sam's "every move 25% slower" (23 Nov)
+- One number, leanout.SLOW = 1.25: TIMES, SHOTS (the four shots), WOB (the cruiser's wobble, 2.0 -> 2.5 s so the
+  crash keeps its place in the camera moves), bench BREAKDOWNS, GUN_THROUGH (now read from TIMES), gta_rehearse CAM4
+  and SHOT4_LEN (8.2 -> 10.25 s), the film's Jason-face beats and Lucia's glance (gta_rehearse), the pistol / glass /
+  crash sounds (grand_theft_autism mix, crash now on IMPACT), and every caption and voice after shot 4 (+2.05 s,
+  SHIFT4). Shots 5-8 follow by themselves (gta_shots58 SH). The cars keep their speed (the crash lands further up
+  the street: z 96 instead of 77; the shop line runs the whole street).
+- Slower = new in-between drawings the old speed jumped over; two real crossings found there: the window-side thigh
+  3 cm into the door as that knee lifts (C1b; it was there between frames before) and the gun hand touching the
+  rising thigh (C2c/C3). Fixed: C1b hips 4 cm inboard (0.38 -> 0.34); gun hand up 3-4 cm at C2, C2c, C3. Tried and
+  dropped: aiming the knee up (it ran into his chest and gun arm, 11 cm). Checked at 48 a second over both climbs.
+- Result over 247 frames: body-car 0, pistol 0, range 0; one-point creases named (as chat 42). Watched the get-up and
+  sit-down as sheets: reads as one move. Clip: animations/drafts/jason-grey-test.mp4 (phone-safe, 258 KB) and
+  grey-lean-out-whole.mp4 (wide). Checks 2.8 min, drawing 3.6 min.
+- Sam on the slower clip (23 Nov, picture notes/bench/sam-notes/gta-grey43-grip-too-high.jpg): "PERFECT. Except one
+  thing. His grip on the pistol. It should be a little bit lower so that it is on the handle/trigger area. Check
+  reference of a hand holding a pistol ... apply this logic throughout the film. Otherwise, this is a perfect grey test."
+  Cause: pistol_mesh put the fist's middle level with the slide's bottom edge (the slide "sitting ON the fist"), so the
+  ball covered the slide; the film's old shot 4 drawing had the fist at the slide's back end. Reference
+  (references/grand-theft-autism/pistol-grip-real-hand.jpg, Wikimedia Commons "Pistol held sideways"): the fist wraps
+  only the handle, its top just under the slide, slide and barrel clear above. Fix: ONE spot, gun3d_film.GRIP
+  (-0.02, 0.12): grey test, film shot 4 (leanout.gun_pts, FIST_AT 3 cm), shots 5-8's chest hold (already there).
+  Knock-on, fixed in the pose: the slide now reached the door top in the climbs (C2-C2c gun hand back 2-3 cm and up;
+  K2 low hold 2 cm in, 4 cm up, muzzle less out). Checks: car 0, pistol 0, range 0; creases named. Before/after:
+  notes/bench/grip-before-after.jpg. Why no check saw it: nothing measures WHERE a held object sits in the hand
+  (the open "held-object check" request): it would have caught this (fist centre vs the object's handle spot).
+
+## Stage 2, chat 44 (Opus high): the house look on the move
+- K4 vest strap (Sam's "Fix", 22 Nov), why the first two fixes failed: dressed_still HID every triangle touching a
+  neck-bone point (to make room for the neck column), and the shoulder tops out to rest |x| 1.4 dm are weighted to
+  the neck bones: a hole was cut across each strap, so its front piece stood alone. Now only the neck itself (rest
+  |x| < 0.62) is hidden (0.68 left an ink blot at the join). part_at also: the trapezius (neck-bone group) counts as
+  trunk below the jaw; the vest cut is a tank top as curves (U scoop neck, front deeper; straps |x| 0.85-1.3 unbroken
+  over the shoulder; armholes curving to |x| 1.8 at the armpit, y 5.8), was a box neckline + straight armhole.
+- dressed_draw(out, t, view): the still's drawing as a frame drawer (still unchanged: 0 pixels differ);
+  `clip OUT OUT.mp4 [T0 T1] --dressed` draws the clip in the house look (frame store keyed "dressed"; ~3.3 s a frame
+  of work, 4 at a time). Per-triangle part names dropped (colours come per dot from part_at; same pixels).
+- house_head: the flat drawing it is cut from no longer draws flat arms/legs (the flat arm's check refused an elbow
+  across the chest and stopped the clip; a flat arm crossing the head left a hole in it; K4 changed 24 px).
+- Head views: three -> side at 1.83 s, side -> three_back 3.83, -> back 5.54, back again to front 7.25-7.79: the house
+  head's standard snap between drawn views (views.py: "a turn swaps drawings"); no flicker (yaw never crosses back).
+- "Pieces" test tried in scratch (vest colour areas, connected pieces): the half-fixed still had a 655 px island,
+  the fixed one only specks < 100 px; the very first still's island was not found by colour (43 px): not ready.
+- Whole dressed clip (old timing, 198 frames): 6.3 min drawing (4 at a time). Looked at every 9th frame and the
+  get-up / sit-down at full size. Found and fixed: (1) a scribble at the front of the throat in side views: the chest
+  skin pulled onto the neck column all-or-nothing left a ledge; the pull now fades in (4 cm up, 8-12 cm out) and
+  takes in the shoulder-top skin (region 10); the old full neck-hiding showed it worse (checked). (2) the pistol a
+  black blob end-on (7.12 s) / black tick at his side: drawn in the film's own tones (gun3d_film.COLS: light slide,
+  mid frame, dark grip, muzzle), one outline round the whole pistol (bench_draw INK_PART). Grey frames unchanged
+  (same.py --draw-only: only frames 16 and 176 differ, as they did before this chat: chat 41's re-planned climb).
+- Dressed clip on chat 43's timing (247 frames, 10.25 s): checks 2.4 min (the same 42 faults chat 43 named, word for
+  word), drawing 8.75 min. Sent phone-safe: animations/drafts/jason-dressed-test.mp4 (shot camera only, 540x960,
+  baseline, 528 KB). Looked at every 11th frame and 12 key frames at full size: pistol reads as a pistol end-on
+  (0.92, 8.92 s: still mostly its dark grip from below); no throat scribble; strap one band throughout.
+- Named, not fixed (for Sam): 2.29-2.75 s the gun arm seems to come out of his mouth: from the locked camera his
+  right shoulder is behind his head (the house head is the approved cartoon size, measured: 17% wider than the solid
+  head here, 48% on the approved seated still). A pose matter (shoulder/elbow), not the drawing. 1.67-1.83 s the
+  raised gun arm wraps over/behind his head (critique r38: "rubbery over the head"). Head views snap (house style).
+- Not run: a fresh-helper critique of the dressed clip (cost; film at ~93% of its 15%).
+- Sam's notes (23 Nov): "Overall, it's very good"; the two named items fine; N1 neck from the back / side, N2 head
+  turn at 2 s jarring (film notes, LOOK strand). Missed by me: frames 205-214 were zoomed and the neck over the hair
+  not seen (I looked at the pistol and throat only). Lesson: every head view gets its own full-size look.
+
+## Stage 2, chat 45 (Opus medium): Sam's N1 neck, N2 head turn
+- N1 why: lay_head hid the head drawing wherever anything was nearer than head centre - 5 cm; the neck column is
+  7-13 cm nearer from behind, ~5 cm from the side, so it cut into the hair and the jaw. Now dots where the neck column
+  is the nearest thing never hide the head (a second small raster of the column alone); the hide mask is taken by
+  majority over the fine dots (no ragged edge).
+- N2 why: yaw table (chat 45): head at 57-69 deg from 1.8 to 4.4 s, on the 67.5 line. head_plan: three/side at 60,
+  short runs between equal views folded, switches moved to the fastest-turning frame. Plan: 0.67 three, 0.75 side,
+  4.75 three_back, 6.92 back, 8.46 three_back, 9.08 side, 9.58 three, 9.71 front.
+- Looked full size: frames 15-19, 44-54, 202-219, 229-234 (head crops); 113-166 head off frame (leaning out).
+- Helper r45-p2: mostly house look/car; noted the neck long and thin looking down (~9.1 s): passed to Sam.

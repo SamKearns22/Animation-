@@ -155,14 +155,19 @@ def seated(sp, hand_r=K1_HAND_R, pole_r=K1_POLE_R, dx=0.0, hfwd=(0, -0.05, 1)):
 
 KEYS = ['K1', 'K2', 'K3', 'K4', 'K5']
 FIRE = [0.0, 0.042]                  # the flash: seconds before and after each shot (one drawing at 24 a second)
-SHOTS = (1.95, 2.30, 2.62, 2.92)       # the four shots (acting rows, B4)
+SLOW = 1.25                          # Sam 23 Nov: "All the human movements seem 25% too fast": every time in shot 4
+#                                      (acting rows, shots, camera keys, the shot's length) is the chat-42 time x SLOW
+_SHOTS0 = (1.95, 2.30, 2.62, 2.92)   # the four shots at the old speed (acting rows, B4)
+SHOTS = tuple(round(s_ * SLOW, 4) for s_ in _SHOTS0)
 # the move in time (shot 4's acting rows, beats B1-B6): (seconds, key); between two keys an eased in-between
-WOB = 2.0                            # Sam, v7 note 9: the dead cop's car wobbles along the road for two seconds
+_WOB0 = 2.0                          # Sam, v7 note 9: the dead cop's car wobbles along the road for two seconds
 #                                      before it turns and crashes: everything after the hit is this much later
-TIMES = [(0.0, 'K1'), (0.5, 'K1'), (1.0, 'K2'), (1.4, 'K3'), (1.85, 'K4')] + \
-        [x for t in SHOTS for x in ((t, 'K4'), (t + 0.04, 'K4'), (t + 0.10, 'K5'), (t + 0.28, 'K4'))] + \
-        [(3.2 + WOB, 'K4'), (4.45 + WOB, 'K4'), (4.95 + WOB, 'K3'), (5.4 + WOB, 'K2'), (5.8 + WOB, 'K1'),
-         (6.2 + WOB, 'K1')]      # Sam 21 Nov: stays upright out of the window after the crash (it sank to K3 at once)
+WOB = _WOB0 * SLOW                   # the wobble slows with the shot (2.5 s), so the crash keeps its place in the camera moves
+_TIMES0 = [(0.0, 'K1'), (0.5, 'K1'), (1.0, 'K2'), (1.4, 'K3'), (1.85, 'K4')] + \
+          [x for t in _SHOTS0 for x in ((t, 'K4'), (t + 0.04, 'K4'), (t + 0.10, 'K5'), (t + 0.28, 'K4'))] + \
+          [(3.2 + _WOB0, 'K4'), (4.45 + _WOB0, 'K4'), (4.95 + _WOB0, 'K3'), (5.4 + _WOB0, 'K2'), (5.8 + _WOB0, 'K1'),
+           (6.2 + _WOB0, 'K1')]  # Sam 21 Nov: stays upright out of the window after the crash (it sank to K3 at once)
+TIMES = [(round(t * SLOW, 4), k) for t, k in _TIMES0]
 _CACHE = {}
 
 
@@ -294,17 +299,25 @@ def gun_fist(k):
     return wr - R @ (mwr * HAND3D_SCALE), A, B
 
 
+FIST_AT = 0.03                       # the house circle hand's middle, past the wrist along the forearm (m)
+
+
 def gun_pts(k):
     """The pistol in the car frame: (hand, muzzle), the barrel along the forearm. With real hands, the pistol sits
     in the fist: its grip's middle on the fist's handle line."""
     wr, el = k['wrR'], k['elR']
     d = getattr(k, 'aim', None)
     d = _u(wr - el) if d is None else d
-    hand = wr + d * 0.05
+    import gun3d_film as _GF
+    g = GUN[0]
+    # Sam 23 Nov (chat 43): the fist round the HANDLE (gun3d_film.GRIP), the slide clear above it; the house circle
+    # hand's middle is taken FIST_AT along the forearm past the wrist (it had sat at the slide's back end: hand = wr + 5 cm)
+    hand = wr + d * FIST_AT - d * (_GF.UNIT * _GF.GRIP[0] * g) - _gun_down(_u(d)) * (_GF.UNIT * _GF.GRIP[1] * g)
     if HAND3D[0] and not getattr(k, 'front', False):
         anchor = gun_fist(k)[0]
         g = GUN[0]
-        hand = anchor - d * (0.62 * -0.02 * g) - _gun_down(_u(d)) * (0.62 * 0.12 * g)
+        import gun3d_film as _GF
+        hand = anchor - d * (_GF.UNIT * _GF.GRIP[0] * g) - _gun_down(_u(d)) * (_GF.UNIT * _GF.GRIP[1] * g)
     return hand, hand + d * 0.17 * GUN[0]
 
 
@@ -352,7 +365,8 @@ def draw_gun(img, cam, k, report=True):
                           (slide, (132, 138, 152)), (muzzle_blk, (30, 30, 36)), (shine, (200, 206, 218))):
             cam.poly(p, [tuple(q) for q in poly], col, (14, 14, 16), 2.4)
     if getattr(k, 'front', False):                       # his fist closed round the grip
-        c = P(-0.02, 0.12)
+        import gun3d_film as _GF
+        c = P(*_GF.GRIP)                                 # the fist round the handle (gun3d_film.GRIP)
         for sx, sy, r_ in ((-0.35, -0.2, 1.0), (0.3, 0.15, 1.0), (0.0, 0.5, 0.9)):
             ring = [tuple(c + d * (0.035 * g * (math.cos(a_) + sx)) + down * (0.035 * g * (math.sin(a_) + sy)))
                     for a_ in [i * math.pi / 6 for i in range(12)]]
