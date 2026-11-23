@@ -351,20 +351,20 @@ def _climb(name):
                  c_up=_v(0.9, 1, 0.1), c_fwd=_v(0.8, -0.4, 0.7), h_fwd=_v(0.8, -0.6, 0.5), lift=0.20,
                  hand={'L': (_v(0.62, 1.02, 0.28), _v(0.4, -1, 0.6)), 'R': None},
                  knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.82, 0.58, 0.16)},
-                 ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.62, 0.48, 0.40)})
+                 ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.60, 0.58, 0.36)})
     elif name == 'C2':
         k = dict(up, pelvis=_v(0.26, 0.0, 0.03), p_up=_v(0.3, 1, 0.12), p_fwd=_v(0.85, 0, 0.5),
                  c_up=_v(1.9, 1, 0.15), c_fwd=_v(1, -0.8, 0.3), h_fwd=_v(1, -1.1, 0.3),
                  hand={'L': (_v(0.90, SILL + HAND_R + 0.02, 0.20), _v(0.3, -1, 0.6)), 'R': None},
-                 knee={'L': _v(-0.02, 0.64, 0.43), 'R': KNEES['R']},
-                 ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.18, ANKLE_Y, -0.16)},
+                 knee={'L': _v(0.16, 0.64, 0.44), 'R': KNEES['R']},
+                 ankle={'L': _v(0.02, 0.21, 0.44), 'R': _v(0.18, ANKLE_Y, -0.16)},
                  plant={'L': 0.0, 'R': 1.0})
     elif name == 'C2b':
         k = dict(up, pelvis=_v(0.30, 0.0, 0.03), p_up=_v(0.35, 1, 0.08), p_fwd=_v(0.95, 0, 0.3),
                  c_up=_v(1.5, 1, 0.1), c_fwd=_v(1, -0.6, 0.1), h_fwd=_v(1, -0.7, 0.1),
                  hand={'L': (_v(0.93, SILL + HAND_R + 0.01, 0.18), _v(0.3, -1, 0.6)), 'R': None},
-                 knee={'L': _v(0.25, 1.20, 0.30), 'R': KNEES['R']},
-                 ankle={'L': _v(0.10, 0.44, 0.36), 'R': _v(0.18, ANKLE_Y, -0.16)},
+                 knee={'L': _v(0.52, 0.84, 0.36), 'R': KNEES['R']},
+                 ankle={'L': _v(0.30, 0.50, 0.40), 'R': _v(0.18, ANKLE_Y, -0.16)},
                  plant={'L': 0.0, 'R': 1.0})
     elif name == 'C1c':     # sitting down only: the right foot lifted clear of the cushion as the knee comes up off
         #                     its spot (backwards, the path is shorter: 0.05 s; without it the foot drags through)

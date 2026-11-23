@@ -283,3 +283,25 @@ area per side, no island under N px - proposed via the proposal route).
   for 4 s). Step 5b head drawn once (only the dressed look uses it; drawing the head alone is not pixel-identical to
   "full minus no-head" at its soft edges; ~2.5 s a dressed frame: revisit when the dressed clip is built).
 - Now the slowest part is the check pass's solve (0.87 s a frame, one frame at a time).
+
+## Get-up re-plan, chat 41 (other account, Opus high; resumed 00:41 after its limit)
+- Code (source/bench_move.py `_climb`, keys C1 C1b C2 C2b C2c C3; chat 39's B1/B1b/B2 kept, unused): hips lift
+  first pushing on the left thigh, chest ducked to the window ('lift' goal); the RIGHT (window-side) knee goes down
+  first on its REAR spot ('plant': one knee down, the hips' height solved so that thigh reaches it, no sliding);
+  the left foot rests in the footwell, knee splayed inboard (else the knee hits the dash: geometry, not tuning);
+  then the left knee rises out toward the door (not forward: the dash) and lands on its front spot. Right knee
+  first because its spot is the rear one: the left shin (front) is then never crossed. Sitting down = the same path
+  backwards (left knee off first). Gun hand: K1's chest hold carried by the chest (`_gun_with_chest`), raised /
+  moved to his right while the knee comes up and the left arm reaches across; K2's hold from C3.
+- Times: get-up C1 0.56, C1b 0.62, C2 0.71, C2b 0.77, C2c 0.83, C3 0.89; sit-down C3 7.45 ... C1 7.70.
+- span.py 12-25 and 174-191 (00:55, 23 Nov): legs never through each other now (was 12 cm, 10 frames). Left: small
+  touches, 1-11 skin points each: 0.54-0.58 leg R/trunk 1.3 cm, left arm/trunk 3 pts; 0.625 door 0.8; 0.667 gun arm
+  / right knee 11 pts; 0.71 dash 0.9; 0.79 leg L/trunk 1 pt; 7.67 arm/leg 2-3 pts; 7.75 1 pt each. K2's 1-pt arm.
+- JUMPS (per-frame steps, the whole-shot check): the left knee's 81 cm flip at 0.83 s FIXED (it went forward into
+  the dash, then flipped out: now it rises out toward the door; steps 13-35 cm). Left: the right foot 29-37 cm a
+  frame at 0.62-0.71 (0.09 s to cross the seat: the locked beats give 12 frames to climb 41 cm and place two legs);
+  the gun hand 22-28 cm at 0.83-0.88 (K1 hold -> K2 hold). At this locked speed steps of 15-35 cm a frame are the
+  move itself: this IS the 3 cm question (rule: a pop = speed change over 3 cm a frame; real quick limbs change
+  speed 9-17 cm a frame at 24 fps). It goes to Sam through the proposal route; until then name the steps.
+- Tools in my scratch (not kept): a frame sheet from 3 sides, per-frame joint steps. The other account's trials:
+  notes/bench/getup41/ (p4-p10, opt.py) reached the same order; this file's version is the one in bench_move.py.

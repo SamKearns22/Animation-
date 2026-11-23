@@ -109,3 +109,7 @@ K2 7.4, K1 7.8); house art style; circle hands. Sam holds the grey-clip body-che
 - 23:22 STOPPED on Sam's word ("leave handover in file to other account and stop"). Search stopped (score 285.1,
   opt-best.json). Sam's five screenshots of the other account's chat 41 saved: notes/bench/sam-notes/
   chat41-other-account-s2.jpg ... s6.jpg (s6 = its newest messages; the 81 cm jump). Handover box at the TOP.
+- 00:55 (23 Nov) OTHER ACCOUNT's chat 41 resumed at 00:41: its work was still in its container; committed, merged
+  with this file's trials, pushed (branch claude/grand-theft-autism-chat-41-u13dlh and the main line). Left knee
+  flip fixed; get-up/sit-down down to small touches. Details: notes/bench/learn-step.md "Get-up re-plan, chat 41".
+  Handover in notes/grand-theft-autism.md "Where things stand (23 Nov, chat 41". Next: chat 42, Opus high.
