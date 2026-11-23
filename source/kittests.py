@@ -1624,12 +1624,15 @@ def _finish_fake(tmp, caption=True):
     out = os.path.join(tmp, 'out.mp4')
     argv = sys.argv
     sys.argv = ['finish.py', clean, out, '--film', 'kt_film']
+    import propose                                  # the test film's own proposal log: empty (lesson 7 step 3's stop
+    props, propose.PROPS = propose.PROPS, tmp       # on a real let-through is tested in rule_proofs_gate)
     try:
         finish.main()
     except SystemExit as e:
         return None, str(e)
     finally:
         sys.argv = argv
+        propose.PROPS = props
     return out, ''
 
 
@@ -3999,6 +4002,24 @@ def staging_stills_note_finder():
             out.append(f'{film}: flagged non-framing {wrong}')
     return not out, '; '.join(out) or (f'all {sum(map(len, need.values()))} framing notes found; '
                                        f'{n_flag} of {n_all} notes flagged')
+
+
+@test
+def acting_rows_every_shot():
+    """Rule 74 (Sam, 20 Nov, GTA shot 4 note 16: "no acting notes anywhere"): the gate asked for a row per spoken line
+    only, so shot 4 (no lines) went to Sam with none. The check must flag shot 4 in GTA's notes before chat 17 added
+    its rows (git f5cbaf64^) and pass shot 4 once they are there (f5cbaf64)."""
+    import subprocess
+    import preflight as P
+    root = os.path.dirname(HERE)
+    txt = lambda rev: subprocess.run(['git', '-C', root, 'show', f'{rev}:notes/grand-theft-autism.md'],
+                                     capture_output=True, text=True).stdout
+    before, after = txt('f5cbaf64^'), txt('f5cbaf64')
+    if not before or not after:
+        return False, 'COULD NOT TEST: the GTA notes are not in this copy\'s history'
+    b = [f for f in P.acting_shot_faults(before, range(1, 9)) if 'shot 4 ' in f]
+    a = [f for f in P.acting_shot_faults(after, range(1, 9)) if 'shot 4 ' in f]
+    return bool(b) and not a, f'before chat 17: shot 4 flagged {bool(b)}; after: flagged {bool(a)}'
 
 
 
