@@ -12,3 +12,6 @@ Why are there 3 tasks?
 ### 2026-11-23T14:57:20
 What is the role of pre-flight checks?
 
+### 2026-11-23T14:58:11
+I think I'd like it so that pre-flight is run (unless I overrule it) regardless of what was missing.
+
