@@ -27,3 +27,7 @@ Wheel clipping through chassis
 ### 2026-11-23T11:38:40
 Go
 
+### 2026-11-23T11:41:32
+Please note that Jason's poses and movements are otherwise good, his model just cuts off too early and his lower body and legs are on the wrong side of the door when he leans out
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
