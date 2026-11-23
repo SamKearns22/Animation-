@@ -1075,7 +1075,7 @@
   },
   "N26": {
    "rule": "Every rule and fix is for all films: a fix made because of one film's fault goes into the shared tools, template, rulebook or checks; a fix that can only live in one film's code gets a 'move to shared' line, and the handover check stops until it is moved or Sam says it stays.",
-   "anchor": "Every rule and fix is for all films",
+   "anchor": "Every rule and fix is for all films (Sam, 23 Nov):",
    "status": "owed",
    "tests": [],
    "example": "Sam, 23 Nov: \"I would have expected the change on Blessed to apply to all films in the future — rules need to be constructed that they work in this way, they are not film specific.\" Blessed built 7 check inputs in its own code (blessed_checks.py scene, solids, SET_FEET, cam_for, audits; blessed.py touch_faults, furniture_faults); Milburn the cleaned voice takes; GTA car and street solids twice (named-lines/learn.md section 3)",
