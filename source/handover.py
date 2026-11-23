@@ -449,11 +449,12 @@ def unrouted_faults(rec):
 
 def rule_faults():
     """Lesson 7 step 2 (Sam's option 1): no rule without a working check. A new rule (rulebook row or CLAUDE.md
-    rule) with no saved bad example in source/rule_proofs.json, a "by hand" status, or a proof whose kittest failed:
-    closed (STOP), never named away."""
+    rule) with no saved bad example in source/rule_proofs.json, a "by hand" status: closed (STOP), never
+    named away. A proof whose kittest failed is a plain RULE line (the watcher's broken list: fix or name)."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import ruleproofs
-    return ['STOP: RULE: ' + f.split('|', 1)[1] for f in ruleproofs.faults()]
+    return [('RULE: ' if ' is BROKEN: ' in f else 'STOP: RULE: ') + f.split('|', 1)[1]   # a broken proof: the watcher's
+            for f in ruleproofs.faults()]                                                  # list (fix or name); a new rule with no example: closed
 
 
 def _safe(name, fn):

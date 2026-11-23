@@ -106,14 +106,16 @@
    "rule": "Every line and every shot gets an acting plan before the first animatic.",
    "status": "partly",
    "tests": [
+    "acting_rows_every_shot",
     "phone_size_poses"
    ],
-   "example": "kittest phone_size_poses: Craft change 2 (Sam, 16 Nov): pre-flight refuses a film with people and no SHOT_MARKS, and every acting-list body",
+   "example": "kittest acting_rows_every_shot: GTA notes before chat 17 (git f5cbaf64^), Sam's note G4-16 \"no acting notes anywhere\" (shot 4 had no lines, so no rows)",
    "notes": "G4-1, G4-16, M8 (face read soft not cross), G58-2",
    "rank": 8,
-   "miss": "G4-16 (no acting notes anywhere: shot 4 has no lines, and the gate only asks for a row per spoken line), G4-1, M8, G58-2",
-   "plan": "the gate asks for acting notes for every shot (as rule 74 has said since 20 Nov), kittest on GTA's notes from 20 Nov; the acting itself (M8 face read soft, G58-2) is a judge case",
-   "kind_before": "code + by hand"
+   "miss": "M8 (Andy's face read as surprise, not cross), G4-1, G58-2: the acting itself, a judge case",
+   "plan": "a critic-bench case from M8 and G58-2: the fresh-eye judge must name them",
+   "kind_before": "code + by hand",
+   "done": "23 Nov: the gate now asks for acting rows for every shot with someone in it (rule 74 as written since 20 Nov)"
   },
   "86": {
    "rule": "Learn first: anything new or difficult gets research or a tool first, proposed to you.",
@@ -397,7 +399,7 @@
    "example": "",
    "notes": "G4-2, G4-3, G4-11, G7-2, G7-7 (see-through bonnet, body through car, hydrant water through car: ran and missed); M19 (name card clipping: Milburn had no layers(t))",
    "rank": 2,
-   "plan": "kittest: viewchecks' \"shows through\" check (the toggle) run on GTA shot 4 at Sam's v7 note times from git history: the see-through bonnet (G4-2, G7-2), legs in the door frame (G4-11), hydrant water (G7-7) must be flagged; Milburn's name card (M19) comes with the could-not-test build",
+   "plan": "find the time of each of Sam's v7 stills (notes/shot4-case-study/sam-v7/: bonnet G7-2, car parts G7-3, hydrant water G7-7) by matching them to the v7 render (git 3844e0a9), then a kittest running viewchecks.solid_faults with frames= only those frames on the v7 code: each must be flagged, and on today's code cleared. Measured 23 Nov: the whole of shot 4 at every 6th frame takes over 8 minutes, so the proof must use the noted frames only.",
    "kind_before": "code"
   },
   "18": {
