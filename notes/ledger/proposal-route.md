@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 110.72%; 54 chats, 0 rounds, 0 notes, 0 repeated.**
+**Estimate ?% of a week; spent 111.62%; 54 chats, 0 rounds, 0 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -53,13 +53,13 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-22 | f4f681d6 | est | opus | auto |  | 0.7 |  | 0 | 0 |
 | 2026-11-22 | bbd2eb18 | est | opus | milburn-lessons helpers |  | 5.91 |  | 0 | 0 |
 | 2026-11-22 | 82f7492f | est | opus | lessons-judging |  | 3.49 |  | 0 | 0 |
-| 2026-11-22 | e0605414 | est | opus | lessons-put-to-sam |  | 0.98 |  | 0 | 0 |
+| 2026-11-22 | e0605414 | est | opus | lessons-put-to-sam |  | 1.46 |  | 0 | 0 |
 | 2026-11-22 | 2c58a054 | est | opus | could-not-test replay test |  | 0.91 |  | 0 | 0 |
 | 2026-11-22 | 68adcdda | est | sonnet | auto |  | 0.52 |  | 0 | 0 |
 | 2026-11-22 | 56d8e5c4 | est | opus | auto |  | 0.68 |  | 0 | 0 |
 | 2026-11-23 | 9c3f62f3 | est | opus | auto |  | 1.67 |  | 0 | 0 |
 | 2026-11-23 | 9e0129dd | est | opus | lesson 7 steps 2-3 |  | 1.92 |  | 0 | 0 |
-| 2026-11-23 | 37f021ea | est | opus | auto |  | 0.93 |  | 0 | 0 |
+| 2026-11-23 | 37f021ea | est | opus | auto |  | 1.35 |  | 0 | 0 |
 | 2026-11-23 | a1154f9c | est | opus | auto |  | 2.72 |  | 0 | 0 |
 | 2026-11-23 | 9158c1df | est | opus | auto |  | 1.84 |  | 0 | 0 |
 
@@ -97,13 +97,13 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 4ace415c (auto): 47 steps, history 166k at the end; other 74.9%, tool search 21.2%, whole-file .py read 3.9%
 - 2026-11-22 f4f681d6 (auto): 34 steps, history 153k at the end; other 86.8%, tool search 13.2%
 - 2026-11-22 bbd2eb18 (milburn-lessons helpers): 24 steps, history 156k at the end; other 79.4%, tool search 20.6%
-- 2026-11-22 e0605414 (lessons-put-to-sam): 48 steps, history 184k at the end; other 82.5%, tool search 10%, whole-file .py read 7.5%
+- 2026-11-22 e0605414 (lessons-put-to-sam): 63 steps, history 199k at the end; other 87.3%, tool search 7.6%, whole-file .py read 5.1%
 - 2026-11-22 2c58a054 (could-not-test replay test): 54 steps, history 157k at the end; other 66.1%, tool search 32.1%, pictures 1.3%, renders 0.5%
 - 2026-11-22 68adcdda (auto): 36 steps, history 225k at the end; other 53.5%, tool search 31.5%, whole-file .py read 9.4%, renders 5.7%
 - 2026-11-22 56d8e5c4 (auto): 21 steps, history 110k at the end; other 83.2%, tool search 16.8%
 - 2026-11-23 9c3f62f3 (auto): 78 steps, history 223k at the end; other 73.7%, tool search 24.6%, renders 1.1%, pictures 0.4%, whole-file .py read 0.3%
 - 2026-11-23 9e0129dd (lesson 7 steps 2-3): 86 steps, history 241k at the end; other 75.3%, tool search 19.3%, renders 2.9%, whole-file .py read 2.5%
-- 2026-11-23 37f021ea (auto): 60 steps, history 189k at the end; other 62.3%, tool search 37.7%
+- 2026-11-23 37f021ea (auto): 69 steps, history 198k at the end; other 71.4%, tool search 28.6%
 - 2026-11-23 a1154f9c (auto): 116 steps, history 299k at the end; other 71.3%, tool search 23.8%, renders 4%, pictures 0.7%, whole-file .py read 0.3%
 - 2026-11-23 9158c1df (auto): 118 steps, history 265k at the end; other 67.7%, tool search 28.3%, renders 2.3%, pictures 1.2%, whole-file .py read 0.5%
 
@@ -116,18 +116,18 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-20 4ace415c (auto): start-up floor 32.6%, new writes 26.6%, Claude's words 22.9%, carried history 17.8%. Biggest origins: Claude's words 32.8%, start-up floor 32.6%, result: tool search 16.3%. Leftover 0%
 - 2026-11-22 f4f681d6 (auto): new writes 44.8%, start-up floor 27%, Claude's words 17.1%, carried history 11.1%. Biggest origins: messages and reminders 31.6%, start-up floor 27.5%, Claude's words 23.8%. Leftover 0%
 - 2026-11-22 bbd2eb18 (milburn-lessons helpers): start-up floor 39.2%, new writes 32.1%, Claude's words 19%, carried history 9.6%. Biggest origins: start-up floor 39.2%, Claude's words 26.5%, result: other 16.7%. Leftover 0%
-- 2026-11-22 e0605414 (lessons-put-to-sam): new writes 42.7%, start-up floor 24.9%, Claude's words 23.1%, carried history 9.3%. Biggest origins: Claude's words 32.4%, start-up floor 24.9%, cache re-write 21.4%. Leftover 0%
+- 2026-11-22 e0605414 (lessons-put-to-sam): new writes 51%, start-up floor 20.9%, Claude's words 16.7%, carried history 11.3%. Biggest origins: cache re-write 34.5%, Claude's words 24.7%, start-up floor 20.9%. Leftover 0%
 - 2026-11-22 2c58a054 (could-not-test replay test): start-up floor 34.7%, Claude's words 28.6%, new writes 21.5%, carried history 15.2%. Biggest origins: Claude's words 42%, start-up floor 34.7%, result: tool search 19.8%. Leftover 0%
 - 2026-11-22 68adcdda (auto): Claude's words 36.4%, new writes 29.4%, start-up floor 20.4%, carried history 13.8%. Biggest origins: Claude's words 48.9%, result: tool search 23.4%, start-up floor 20.4%. Leftover 0%
 - 2026-11-22 56d8e5c4 (auto): start-up floor 44.7%, Claude's words 30.3%, new writes 19.5%, carried history 5.5%. Biggest origins: start-up floor 44.7%, Claude's words 39.5%, result: tool search 9.5%. Leftover 0%
 - 2026-11-23 9c3f62f3 (auto): new writes 36.7%, Claude's words 25.4%, carried history 20%, start-up floor 17.9%. Biggest origins: Claude's words 36.3%, messages and reminders 27.9%, start-up floor 18.1%. Leftover 0%
 - 2026-11-23 9e0129dd (lesson 7 steps 2-3): carried history 36.4%, new writes 32.3%, Claude's words 22.8%, start-up floor 8.5%. Biggest origins: messages and reminders 41.5%, Claude's words 33.7%, result: tool search 12.2%. Leftover 0%
-- 2026-11-23 37f021ea (auto): start-up floor 31.1%, new writes 24.8%, Claude's words 24.5%, carried history 19.6%. Biggest origins: Claude's words 36%, start-up floor 31.1%, result: tool search 27.2%. Leftover 0%
+- 2026-11-23 37f021ea (auto): new writes 40.3%, start-up floor 24.1%, Claude's words 18.9%, carried history 16.7%. Biggest origins: Claude's words 28.3%, start-up floor 24.1%, cache re-write 21.8%. Leftover 0%
 - 2026-11-23 a1154f9c (auto): carried history 37.5%, new writes 27.9%, Claude's words 27%, start-up floor 7.5%. Biggest origins: Claude's words 42.4%, messages and reminders 37.7%, result: tool search 9.6%. Leftover 0%
 - 2026-11-23 9158c1df (auto): start-up floor 29%, carried history 27.4%, Claude's words 22.1%, new writes 21.5%. Biggest origins: Claude's words 35.8%, start-up floor 29%, result: tool search 23.4%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 4% of the film (4.77% of a week over 17 chats: start 4.70, re-learning 0.07; 0.28% a chat; step-1 context re-read is 24% of a chat on average).
+A new chat's start and re-learning cost 4% of the film (4.77% of a week over 17 chats: start 4.70, re-learning 0.07; 0.28% a chat; step-1 context re-read is 23% of a chat on average).
 - 2026-11-19 3a437266: step-1 context 82k; first real work at step 15 (0.26% of a week); read before it: source/stepcost.py 4.6k, notes/proposals/cost-other/milburn-usage.md 1.6k, source/propose.py 1.1k, notes/proposals/cost-other.md 0.9k, notes/proposals/cold-start.md 0.9k, source/ledger.py 0.7k
 - 2026-11-19 3498a80f: step-1 context 83k; first real work at step 31 (0.44% of a week); read before it: source/preflight.py 5.6k, source/posecheck.py 2.2k, source/milburn.py 1.9k, notes/proposals/front-on-focus/retirement-and-handover.md 1.1k, source/film_engine.py 1k, guides/job-packs.md 0.7k
 - 2026-11-19 6a247f23: step-1 context 82k; first real work at step None (None% of a week); read before it: notes/archive/milburn.md 2.8k, source/checkreplay.py 0.9k, notes/proposals/check-catches/replay/milburn.md 0.4k, notes/proposals/check-catches/replay/blessed.md 0.3k, notes/proposals/check-catches/replay/protest-tiers.md 0k

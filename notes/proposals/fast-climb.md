@@ -1,6 +1,6 @@
 # Proposal: Jason's get-up and sit-down in shot 4 move faster than the approved 3 cm bar allows
 
-Status: open
+Status: declined (2026-11-23)
 
 ## Problem
 Shot 4's locked acting rows give Jason 0.5 s (12 drawings, K1 0.5 s -> K2 1.0 s) to get from sitting to kneeling on

@@ -23495,109 +23495,129 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.49,
+   "cost": 1.93,
    "src": "estimate",
    "sid": "session_01U3pKR236BHHbkryAU8XnDt",
-   "steps": 30,
-   "hist_k": 149,
+   "steps": 77,
+   "hist_k": 260,
    "kinds": {
-    "tool search": 35.8,
-    "pictures": 0.9,
-    "other": 63.3
+    "tool search": 26.4,
+    "renders": 1.8,
+    "pictures": 1.6,
+    "other": 70.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 26,
+    "tool search": 58,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
-    "pictures": 1,
-    "other": 3
+    "renders": 2,
+    "pictures": 5,
+    "other": 10
    },
    "split": {
-    "usd": 1.7949,
-    "total": 1.7949,
+    "usd": 7.0806,
+    "total": 7.0806,
     "floor_k": 83,
     "blocks": {
-     "start-up floor": 34.9,
-     "Claude's words": 28.9,
-     "new writes": 27.4,
-     "carried history": 8.7
+     "new writes": 40.4,
+     "Claude's words": 25.6,
+     "start-up floor": 17.6,
+     "carried history": 16.4
     },
     "origins": {
-     "Claude's words": 39.4,
-     "start-up floor": 34.9,
-     "result: tool search": 21.9,
-     "result: pictures": 1.8,
-     "messages and reminders": 1.6,
-     "result: other": 0.4
+     "Claude's words": 38.5,
+     "messages and reminders": 27.4,
+     "start-up floor": 17.7,
+     "result: tool search": 12.9,
+     "result: pictures": 2.9,
+     "result: other": 0.3,
+     "result: renders": 0.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 34.9,
-     "thinking": 23.7,
-     "reading kit code": 9.9,
-     "writing code": 9.1,
-     "reading notes": 7.7,
-     "commands": 5.2,
-     "looking at pictures": 1.8,
-     "other commands": 1.6,
-     "messages and reminders": 1.6,
-     "start-up and handover tools": 1.5,
-     "messages to Sam": 1.3,
-     "running checks and tools": 0.7,
-     "renders": 0.5,
-     "reading chat records": 0.4
+     "messages and reminders": 27.4,
+     "thinking": 20.7,
+     "start-up reading (rules, tools, first files)": 17.7,
+     "writing code": 13.4,
+     "reading kit code": 6.5,
+     "reading notes": 4.2,
+     "commands": 3.6,
+     "looking at pictures": 2.9,
+     "messages to Sam": 0.7,
+     "other commands": 0.7,
+     "start-up and handover tools": 0.6,
+     "running checks and tools": 0.5,
+     "renders": 0.4,
+     "reading chat records": 0.2,
+     "git and saving": 0.2,
+     "helper and chat prompts": 0.1,
+     "app tools (chats, files sent)": 0.1
     },
     "leftover": 0.0
    },
    "start": {
     "floor_k": 83,
-    "work_step": null,
-    "work_pct": null,
+    "work_step": 48,
+    "work_pct": 0.86,
     "reads": [
      [
       "source/bench_move.py",
-      9.0,
-      0.0924
+      9.7,
+      0.1682
      ],
      [
       "notes/bench/learn-step.md",
       2.0,
-      0.0233
+      0.0379
      ],
      [
       "notes/ledger/sam/yau8xndt.md",
       1.8,
-      0.0225
+      0.0355
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scratchpad/getup_now.jpg",
       1.6,
-      0.0142
+      0.026
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scratchpad/p1.jpg",
+      1.6,
+      0.0217
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scratchpad/p2.jpg",
+      1.6,
+      0.0197
      ],
      [
       "source/handover.py",
       0.3,
-      0.0043
+      0.0069
      ],
      [
       "notes/bench/span.py",
       0.4,
-      0.004
+      0.0067
      ],
      [
       "story/status.md",
       0.3,
-      0.0039
+      0.0062
      ],
      [
       "notes/logs/gta-chat41-live.md",
+      0.1,
+      0.0009
+     ],
+     [
+      "notes/bench/getup41/README.md",
       0.0,
-      0.0005
+      0.0
      ]
     ],
-    "base_pct": 24.3
+    "base_pct": 16.2
    },
    "search": {
     "show": 0,
@@ -23605,10 +23625,10 @@
      "no show": 0
     },
     "other": {
-     "film notes": 5,
-     "other": 6,
+     "film notes": 8,
+     "other": 30,
      "shared:handover.py": 2,
-     "shared:bench_move.py": 12,
+     "shared:bench_move.py": 17,
      "shared:bench_pose.py": 1
     },
     "ticked": 0,
@@ -23820,6 +23840,262 @@
       "other",
       "",
       "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git log --oneline -3; /tmp/claude-0/-home-user-Animat",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "film notes",
+      "notes/bench/sam-notes/chat41-other-account-2.jpg notes/logs/gta-chat41-live.md",
+      "23:20",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "it.py",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "film notes",
+      "notes/logs/gta-chat41-live.md",
+      "pkill -f it.py; S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "sed -n 1194,1250p source/bench_move.py",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "other",
+      "",
+      "bad_pts",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "'lift'",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:bench_move.py",
+      "notes/bench/getup41/ notes/logs/gta-chat41-live.md source/bench_move.py",
+      "s order (hips up first, right knee to its rear spot, then left knee over the cus",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "B1",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "other",
+      "",
+      "^>",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "",
+      "region",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:bench_move.py",
+      "source/bench_move.py",
+      "sed -n 136,142p source/bench_move.py && python3 -c \" import sys; sys.path.insert",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "",
+      "0.525, -0.12",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "^>",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "/home/user/Animation-/notes/bench/getup41/p10.py /home/user/Animation-/notes/ben",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/4886b434-f7cf-5a97-8291-6d77aeef8332/scrat",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "notes/bench/getup41/opt-run.log",
+      "^done",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "notes/bench/getup41/opt-run.log notes/bench/sam-notes/chat41-other-account-s not",
+      "tail -5 notes/bench/getup41/opt-run.log; pkill -f opt.py; sleep 1; for i in 2 3 ",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "other",
+      "notes/ledger/sam/ notes/ledger/sam",
+      "ledger\\|message saved",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "film notes",
+      "story/status.md notes/grand-theft-autism.md",
+      "Where things stand",
       ""
      ]
     ]
@@ -24619,8 +24895,8 @@
    "model": "opus",
    "stage": "moves",
    "round": null,
-   "cost": 2.68,
-   "notes": 0,
+   "cost": 3.45,
+   "notes": 1,
    "repeats": []
   }
  ],
@@ -25102,6 +25378,11 @@
    "date": "2026-11-23",
    "spent": 90.34,
    "forecast": 93.9
+  },
+  {
+   "date": "2026-11-23",
+   "spent": 90.93,
+   "forecast": 94.5
   }
  ],
  "critique": {
