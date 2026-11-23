@@ -6,7 +6,7 @@ back." When Sam's own latest message holds the word Override (whole word, any ca
 between him and that one ask is skipped; each skip is logged and named to him in a "Checks: skipped by Override: ..."
 line. It lasts until his next message. Never skipped: Sam's locked shots, deleting work, saving to GitHub.
 A chat cannot fake it: the word is read from Sam's real message in the chat's own record (never from a file a chat
-could write); handover.py still flags a chat that claims an Override Sam never typed.
+could write, nor from the opening prompt a chat sends the next one: marked "not typed" in the record); handover.py still flags a chat that claims an Override Sam never typed.
 
 MAP
   WORD ............. the word, whole, any case
@@ -37,6 +37,9 @@ def _text(entry):
     """Sam's typed words in one record line, or None when the line is not a message he typed."""
     if entry.get('type') != 'user' or entry.get('isMeta') or entry.get('isSidechain'):
         return None
+    if entry.get('textNotTyped') or entry.get('promptSource') == 'system':
+        return None             # chat 53 (23 Nov): the opening prompt one chat writes for the next (create_session) is
+                                # recorded as a user line but marked not typed; its "Sam's Override" was read as his word
     c = entry.get('message', {}).get('content')
     if isinstance(c, list):
         if any(isinstance(x, dict) and x.get('type') == 'tool_result' for x in c):

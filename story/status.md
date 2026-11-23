@@ -1,3 +1,3 @@
-Grand Theft Autism: chat 51 fixed notes 13-14 (runners, vest, bonnet, near-lens woman); clip 20-27.5 s sent.
-Pistol from behind open (needs a silhouette check first).
-Next: Sonnet, animatic v6.
+Grand Theft Autism: Sam's four v6 notes done (chat 53), crowd fix merged.
+Next: Sonnet, animatic v7 --full, send.
+Then: final on Sam's yes.
