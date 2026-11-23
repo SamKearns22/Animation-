@@ -459,12 +459,13 @@ import views as V                # noqa: E402
 
 import leanout as LO              # noqa: E402  (WOB: Sam's v7 note 9, the two-second wobble)
 WOB = LO.WOB
-SHOT4_LEN = 6.2 + WOB            # chat 23: the dead cop's car wobbles two seconds before it crashes (Sam, v7 note 9)
+SHOT4_LEN = LO.TIMES[-1][0]      # (6.2 + 2.0) x LO.SLOW = 10.25 s (Sam 23 Nov: 25% slower; chat 23: the dead cop's car
+#                                  wobbles before it crashes, Sam v7 note 9: 2 s, now 2.5 s with the slower shot)
 SHOT3_LEN = 3.0                  # shot 3: the windscreen three-shot, world t -3..0, flowing straight into shot 4
 V4 = 16.0                        # chase speed, m/s
 LANE4 = 5.0                      # the Tulip's lane: the outer northbound lane (kerb at x 7, shop fronts at x 10)
 KERB4, SHOP4 = 7.0, 10.0
-SHOTS = (1.95, 2.30, 2.62, 2.92)  # Jason's four shots: 1 sparks off the bonnet, 2-4 into the windscreen
+SHOTS = LO.SHOTS  # Jason's four shots (x LO.SLOW): 1 sparks off the bonnet, 2-4 into the windscreen
 CRAZE = (0.0, 0.5, 0.8, 1.0)
 GAPS = (4.8, 13.5, 22.0)         # the cruisers behind the Tulip (m): the lead close enough to read at the shots         # the cruisers behind the Tulip (m)
 FIG_H = 1128.0                   # a person's whole height in their own units (head top to soles)
@@ -632,7 +633,7 @@ def chaser_at(t, i):
 
 
 # ---- the camera: keys in the Tulip's own frame (x right, y up, z forward), eased from key to key
-CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are shot 3's exact frame; chat 21: B3-B5 over
+_CAM4_0 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are shot 3's exact frame; chat 21: B3-B5 over
     # beside his window (the rebuilt lean-out's gun arm runs back beside the roof: from the old keys out by the front
     # wing it was hidden behind his own head, the "stump" again; over his shoulder it ran straight down the lens)
     (0.00, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),      # shot 3's exact frame (CAM3): the cut is invisible
@@ -654,12 +655,13 @@ CAM4 = [  # (t, position, look-at, focal) in the Tulip's frame. B1 and B6 are sh
     (4.90, (1.90, 1.50, 0.80), (0.40, 1.05, -9.20), 1250),     # the passers-by walked through the lens)
     (5.10, (2.40, 1.45, 0.80), (1.37, 1.27, -8.20), 1100),
     (5.36, (2.90, 1.45, 0.80), (2.71, 1.29, -8.49), 1450),
-    (3.70 + WOB, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
-    (4.55 + WOB, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
-    (5.15 + WOB, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
-    (5.75 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
-    (6.20 + WOB, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
+    (3.70 + LO._WOB0, (2.00, 2.00, 4.50), (2.00, 0.50, -14.0), 1600),     # out ahead of the bonnet, looking back past him
+    (4.55 + LO._WOB0, (2.00, 2.00, 4.50), (2.20, 0.50, -14.0), 1850),     # a slow push on the fire through the hold
+    (5.15 + LO._WOB0, (1.55, 1.70, 2.80), (0.60, 1.20, -2.40), 1250),
+    (5.75 + LO._WOB0, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
+    (6.20 + LO._WOB0, (0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000),
 ]
+CAM4 = [(round(k[0] * LO.SLOW, 4),) + tuple(k[1:]) for k in _CAM4_0]   # Sam 23 Nov: 25% slower
 
 
 CAM3 = ((0.00, 1.62, 4.40), (0.00, 1.02, -0.60), 2000)   # shot 3: just over the bonnet, level, the glass filling the frame
@@ -1173,16 +1175,16 @@ _JN = {'shL': 'shL', 'elL': 'elL', 'wrL': 'wrL', 'shR': 'shR', 'elR': 'elR', 'wr
 def jason_face(t):
     """Jason's face through shot 4 (the acting rows, B1-B6; shot 3 is t < 0: looking hard at us)."""
     f = dict(mood='stern', squint=0.35, frown=0.07)                       # B1, B6: shot 3's hard look
-    if 0.28 <= t < 0.40:                                                  # eyes flick to the mirror
+    if 0.28 * LO.SLOW <= t < 0.40 * LO.SLOW:                                                  # eyes flick to the mirror
         f['look'] = -0.7
-    if 0.5 <= t < 1.75:                                                   # B2: teeth set, squinting into the wind
+    if 0.5 * LO.SLOW <= t < 1.75 * LO.SLOW:                                                   # B2: teeth set, squinting into the wind
         f.update(squint=0.75, frown=0.10, mouth='v:E')
-    elif 1.75 <= t < 3.0:                                                 # B3/B4: along the arm, mouth tight
+    elif 1.75 * LO.SLOW <= t < 3.0 * LO.SLOW:                                                 # B3/B4: along the arm, mouth tight
         f.update(squint=0.85 if t < SHOTS[2] else 0.95, frown=0.11, mouth='v:rest')
     imp = IMPACT[0] if IMPACT else 99.0
     if imp + 0.05 <= t < imp + 0.95:                                      # B5: brows up, a flat impressed "huh"
         f.update(squint=0.1, frown=-0.03, brow_up=0.035, mouth='v:O' if t < imp + 0.5 else 'v:rest')
-    elif 3.0 <= t < 4.55 + WOB:
+    elif 3.0 * LO.SLOW <= t < (4.55 + LO._WOB0) * LO.SLOW:
         f.update(squint=0.5, frown=0.06)
     if any(0.0 <= t - ts < 0.085 for ts in SHOTS):                        # a blink on each shot
         f['blink'] = True
@@ -1357,7 +1359,7 @@ def tulip_inside(t):
                 her_over.update(squint=0.0, frown=-0.02, brow_up=0.03, gaze_dy=0.0)
                 her_dir = S._norm(car.body_dir((0.9, 0.0, -0.6)))
         lu_dir = None
-        if 0.0 <= t and (bump(t, 0.55, 0.75, 1.15) > 0.3 or bump(t, 4.65 + WOB, 4.85 + WOB, 5.3 + WOB) > 0.3):
+        if 0.0 <= t and (bump(t / LO.SLOW, 0.55, 0.75, 1.15) > 0.3 or bump(t / LO.SLOW, 4.65 + LO._WOB0, 4.85 + LO._WOB0, 5.3 + LO._WOB0) > 0.3):
             lu_dir = S._norm(car.body_dir((1.0, 0.0, 0.35)))
         if any(0.0 <= t - ts < 0.1 for ts in SHOTS):
             lu_over['blink'] = True

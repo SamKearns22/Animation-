@@ -17,7 +17,7 @@ the head leading). The beats and their times are shot 4's locked acting rows (le
   KEYS, goals_at(t) . the key poses as goals, eased in-betweens (goals, not joints, are blended)
   solve(g) .......... goals -> joints, bone turns, skin points, hand balls, the pistol
   CHECKS ............ car(), self_cross(), pistol(), contacts(), jumps(), ranges(), aim(): the stage-1 bar
-  run(OUT) .......... every frame of shot 4 (8.2 s at 24): solve and check ALL first, then draw grey (draw_all:
+  run(OUT) .......... every frame of shot 4 (10.25 s at 24, Sam's 25% slower): solve and check ALL first, then draw grey (draw_all:
                       from the frame store, only changed frames drawn, 4 at a time); writes OUT/frames, report.txt
   checked_clip ...... the clip for Sam: checks first; NOTHING drawn while a fault is neither fixed nor named
   frame store ....... frame_key (body points + camera + drawing code), spot check of 10, keep -> notes/bench/store
@@ -399,8 +399,10 @@ def _climb(name):
 KICK_DEG = 7.0                   # the pistol's kick: the forearm flips up this much (a real one-hand kick)
 
 
-BREAKDOWNS = [(0.56, 'C1'), (0.62, 'C1b'), (0.71, 'C2'), (0.77, 'C2b'), (0.83, 'C2c'), (0.89, 'C3'), (1.2, 'B3'),
-              (7.175, 'B3'), (7.45, 'C3'), (7.49, 'C2c'), (7.53, 'C2b'), (7.57, 'C2'), (7.635, 'C1b'), (7.70, 'C1')]
+_BD0 = [(0.56, 'C1'), (0.62, 'C1b'), (0.71, 'C2'), (0.77, 'C2b'), (0.83, 'C2c'), (0.89, 'C3'), (1.2, 'B3'),
+        (7.175, 'B3'), (7.45, 'C3'), (7.49, 'C2c'), (7.53, 'C2b'), (7.57, 'C2'), (7.635, 'C1b'), (7.70, 'C1')]
+import leanout as _LO   # noqa: E402
+BREAKDOWNS = [(round(t * _LO.SLOW, 4), k) for t, k in _BD0]   # Sam 23 Nov: 25% slower (leanout.SLOW)
 #   chat 41: the get-up / sit-down re-planned (_climb: hips first, then one knee at a time, the window-side knee
 #   first; sitting down the same path backwards); chat 39's B1, B1b, B2 kept below, unused   # chat 39: the knees' landing given 0.2 s (was 0.14 s; the beats K1 0.5, K2 1.0 unchanged)
 #   in-between drawings that shape the path between two locked beats (the feet go up over the cushion's front edge, not through it); beats unchanged
@@ -444,7 +446,7 @@ def _abs_spec(x):
     return isinstance(x, tuple) and len(x) == 2 and not isinstance(x[0], str) and x[0] is not None
 
 
-GUN_THROUGH = {1.0, 7.4}          # K2's times: the gun hand (only) passes K2 with speed (chat 39: stopping dead
+GUN_THROUGH = {t for t, k in _LO.TIMES if k == 'K2'}   # K2's times: the gun hand (only) passes K2 with speed (chat 39: stopping dead
 #                                  there and whipping up made the elbow pop); the pose at K2 is still met exactly
 
 
