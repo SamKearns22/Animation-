@@ -8,3 +8,7 @@ Other side of the door please
 Little bit of trouser showing there
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-23T12:28:07
+This is SO good to see, Claude. This has been a massive problem on this build and in this still at least it looks done. We should return to this after the film and find out how to turn this into something you can do a lot easier
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
