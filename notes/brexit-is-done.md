@@ -50,7 +50,11 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
   chat 3's try: scratch kemi_torso.py style draw via castsheet.draw(sp, yaw, PP).
 
-## Handover check, named not fixed (chats 1-2)
+## Handover check, named not fixed (chats 1-3)
+ Chat 3: the four CLAUDE.md SENTENCE alerts are the same ones chats 1-2 named (Sam's own CLAUDE.md edits; the
+  sentences still stand there in his newer wording). No estimate yet (COST): set at the plan stage, after Sam's pick
+  on the woman's body (the film is at 6.38% of a week). Kit test people_from_a_description crashes in a fresh copy
+  (no film/blessed marker; named in notes/next-jobs.md, not this film's). Branches as chat 2 named them below.
  Chat 2: branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31
   still hold only GTA logs/proposals/one-off tools (GTA posted): not merged, left for a tool chat. The two lost CLAUDE.md
   sentences ("Locked by Sam", "Just go") were red before chat 1 (Sam's own CLAUDE.md edits): for Sam/a tool chat, not
