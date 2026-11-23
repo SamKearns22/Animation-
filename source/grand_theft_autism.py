@@ -160,7 +160,7 @@ def clip(out, a, b):
     w.finish(out, named='--body-named' in sys.argv, notes=open(_np).read() if os.path.exists(_np) else '')
 
 
-UP = '/root/.claude/uploads/2fec35f5-939d-5f05-815c-2b3dbfcabf9b/'   # Sam's voices and effects, re-sent 23 Nov (chat 47)
+UP = os.path.join(HERE, '..', 'sounds', 'grand-theft-autism') + os.sep   # Sam's voices and effects, saved in the project (23 Nov, chat 52)
 VOICES = [  # (file, speech starts in file, speech ends, film time it starts)
     ('Autistic_1.m4a', 0.93, 3.87, 7.30), ('Autistic_2.m4a', 0.80, 1.65, 12.10),
     ('Autistic_3.m4a', 0.80, 2.00, 23.55), ('Lucia.m4a', 0.87, 3.11, 25.75),
