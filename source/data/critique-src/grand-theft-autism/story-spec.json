@@ -1,0 +1,29 @@
+{
+ "round": 23,
+ "stage": "animatic",
+ "panels": [
+  {
+   "img": "source/data/critique-src/grand-theft-autism/story-strip.jpg",
+   "parts": "APM",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A 3.6 s vertical phone story post: the last shot of a car-chase film. Front view through the windscreen of a red 1970s muscle car: Jason (white vest, gun) left, a red-haired autistic woman in the middle, Lucia driving on the right; a police car behind, a street of shops. Written: the red-haired woman says 'My safe food is nitroglycerin' (no subtitles on purpose), then snaps her head round to look at Lucia with a big, happy, suddenly-interested open-mouthed grin, held to the end; Lucia side-eyes her. A Hook Text in TikTok's white-box caption style sits tilted on a diagonal in the sky, the whole time: 'When Rockstar remembers to represent your people in their masterpiece:'. A strip of the whole clip, one frame every 0.33 s with its time."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/story-end.jpg",
+   "parts": "APO",
+   "refs": [
+    "source/data/critique-src/grand-theft-autism/jason.jpg",
+    "source/data/critique-src/grand-theft-autism/her.jpg",
+    "source/data/critique-src/grand-theft-autism/lucia.jpg"
+   ],
+   "closeups": false,
+   "set": "car",
+   "is": "GTA-style satire cartoon, flat house style (circle hands are the house style). A 3.6 s vertical phone story post: the last shot of a car-chase film. Front view through the windscreen of a red 1970s muscle car: Jason (white vest, gun) left, a red-haired autistic woman in the middle, Lucia driving on the right; a police car behind, a street of shops. Written: the red-haired woman says 'My safe food is nitroglycerin' (no subtitles on purpose), then snaps her head round to look at Lucia with a big, happy, suddenly-interested open-mouthed grin, held to the end; Lucia side-eyes her. A Hook Text in TikTok's white-box caption style sits tilted on a diagonal in the sky, the whole time: 'When Rockstar remembers to represent your people in their masterpiece:'. 3.2 s, full frame: the held delighted grin at Lucia."
+  }
+ ]
+}

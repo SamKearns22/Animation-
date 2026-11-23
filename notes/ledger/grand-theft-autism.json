@@ -29918,6 +29918,26 @@
      "2 P2: Jason is not visible at all at 19.0 s; a frame with the car's window in view would show it.",
      "1 P6: his hand and pistol are small; a full-size crop would show whether the gun sits in the hand."
     ]
+   },
+   {
+    "round": 23,
+    "pass": 1,
+    "stage": "animatic",
+    "date": "2026-11-23",
+    "hunt": 1,
+    "faults": 6,
+    "cant_tell": 3,
+    "open": [
+     "1-2 P2: middle woman - the brief wants a big, happy, open-mouthed grin with her head snapped round at Lucia. In the held frame she faces the camera with a small",
+     "1-2 P2 A1: all three faces are tiny against the huge red bonnet (about a third of the frame is bonnet and grille). The feeling, gaze and side-eye cannot be read",
+     "1-2 A4: the Hook Text box is not in the sky as the brief says. It sits over the left buildings and the tops of the street, covering part of the skyline. It is n",
+     "2 P1 P6: Jason's gun hand is a small grey shape at his chest, pointing up and sideways. It does not read clearly as a gun held in a ball hand. The hand and prop",
+     "1-2 O3: the front of the car, the dark band with one small oval badge, reads as a flat dark strip. It does not look like a 1970s muscle-car grille or bumper.",
+     "1-2 P4: the middle woman's hair and neck area do not clearly match her reference (bun on top, headphones round the neck, unicorn jumper). In ours the hair looks",
+     "1 P12: the strip frames are too small to show whether the woman's mouth moves on her line. A larger crop of frames 1-6 would show it.",
+     "1 M2 M3: the strip timestamps are unreadable and every frame looks almost identical. A bigger strip with legible times would show when the head snaps and how lo",
+     "2 P14 P11 P5 P13: eyes, necks, shoulders and sleeves are under about 40 px. A full-size crop of each face and each shoulder would show them."
+    ]
    }
   ],
   "lines": {
@@ -29926,16 +29946,16 @@
     "false": 0
    },
    "P4": {
-    "faults": 19,
+    "faults": 20,
     "false": 0
    },
    "A1": {
-    "faults": 24,
+    "faults": 25,
     "false": 1
    },
    "P2": {
-    "faults": 26,
-    "false": 0
+    "faults": 28,
+    "false": 1
    },
    "P5": {
     "faults": 11,
@@ -29954,11 +29974,11 @@
     "false": 0
    },
    "P6": {
-    "faults": 12,
+    "faults": 13,
     "false": 1
    },
    "P1": {
-    "faults": 19,
+    "faults": 20,
     "false": 0
    },
    "O5": {
@@ -29982,7 +30002,7 @@
     "false": 1
    },
    "O3": {
-    "faults": 8,
+    "faults": 9,
     "false": 0
    },
    "M5": {
@@ -30042,6 +30062,10 @@
     "false": 0
    },
    "P14": {
+    "faults": 1,
+    "false": 0
+   },
+   "A4": {
     "faults": 1,
     "false": 0
    }
