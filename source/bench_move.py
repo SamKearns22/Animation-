@@ -244,8 +244,9 @@ def _key(name):
         #                       free hand onto the door top (photo A), the gun held low, muzzle down
         return dict(pelvis=_v(0.56, 0.0, 0.02), p_up=_v(0.45, 1, 0), p_fwd=_v(1, 0, -0.15), c_up=_v(0.9, 1, 0),
                     c_fwd=_v(1, 0, -0.2), h_fwd=_v(1, -0.1, -0.15),
-                    hand={'L': (DOOR_HAND, _v(0.3, -1, 0.6)), 'R': (_v(0.74, 0.86, -0.16), _v(0.2, -0.3, -1))},
-                    aim_w=0.0, gun=_v(0.3, -1, -0.1), kick=0.0, belly=0.0,
+                    hand={'L': (DOOR_HAND, _v(0.3, -1, 0.6)), 'R': (_v(0.72, 0.90, -0.16), _v(0.2, -0.3, -1))},   # chat 43: 2 cm inboard, 4 cm up (the pistol's slide brushed the door top)
+                    aim_w=0.0, gun=_v(0.1, -1, -0.1), kick=0.0, belly=0.0,   # chat 43: muzzle less out (0.3): with the
+                    #   fist round the handle (Sam 23 Nov) the slide dipped into the door top coming back in, 9.1 s
                     knee=KNEES,
                     ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
     if name == 'K3':          # head and shoulders out over the door top, the head leading the turn back (D),
@@ -393,7 +394,8 @@ def _climb(name):
                  knee=KNEES, ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)},
                  knee_w=1.0, seat_w=0.0, leg_ik=0.0)
     k['hand'] = dict(k['hand'])
-    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.08, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.05, 0.03), 'C3': (0.03, 0.03, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee (chat 43: C2c, C3 3 cm higher: the gun hand touched the right thigh)
+    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.11, -0.03), 'C2b': (0.04, 0.02, -0.02), 'C2c': (0.04, 0.05, -0.01), 'C3': (0.03, 0.03, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee (chat 43: C2c, C3 3 cm higher: the gun hand touched the right thigh; C2-C2c 3-4 cm back from the door: with the fist
+    #   round the handle, Sam 23 Nov, the slide reached the door)
     return _gun_with_chest(k, lift_gun, 'K2' if name == 'C3' else 'K1')
 
 
@@ -655,7 +657,7 @@ def solve(g, seat_dy=None):
 
 def pistol_mesh(pose, ball, aim_w):
     """The pistol in the gun hand (gun3d_film's blocks). Aimed, it is held upright (its grip straight down from the
-    barrel, no cant) with the slide sitting ON the fist: the barrel runs above the hand ball, higher than the wrist,
+    barrel, no cant), the fist round the handle (gun3d_film.GRIP): the slide and barrel clear above the hand ball,
     as in a real grip. Seated (K1) it lies flat on his chest (its grip across the chest), held between fist and
     chest. Between the two, blended by aim_w."""
     import gun3d_film as GF
@@ -671,7 +673,9 @@ def pistol_mesh(pose, ball, aim_w):
     down = _u((1 - w) * flat + w * upright + 1e-6)
     down = _u(down - d * np.dot(down, d))
     side = np.cross(d, down)
-    top = ball - fwd * 0.012 * (1 - w) - down * HAND_R * 0.75 * w    # the slide's bottom on top of the fist
+    ga, gb = GF.GRIP                     # Sam 23 Nov: the fist round the HANDLE, the slide clear above it (it had
+    #                                      sat on the slide: the fist's middle level with the slide's bottom edge)
+    top = ball - fwd * 0.012 * (1 - w) - d * (ga * GF.UNIT) - down * (gb * GF.UNIT)
     return top + V[:, :1] * d + V[:, 1:2] * down + V[:, 2:3] * side, T
 
 

@@ -1,5 +1,5 @@
 {
- "video": "grey43.mp4",
+ "video": "grey43g.mp4",
  "faults": [
   "BODY: grey test body 0.00 s: Jason (grey test body): planted slide: free hand on door top 2.6 cm (1 drawing)",
   "BODY: grey test body 0.00 s: Jason (grey test body): planted slide: knee L on seat 1.5 cm (1 drawing)",
@@ -17,7 +17,7 @@
   "BODY: grey test body 0.62 s: Jason (grey test body): pop: shL jumps off its path (19.5 cm) (17 drawings)",
   "BODY: grey test body 0.62 s: Jason (grey test body): pop: elL jumps off its path (8.1 cm) (21 drawings)",
   "BODY: grey test body 0.62 s: Jason (grey test body): pop: knL jumps off its path (11.4 cm) (23 drawings)",
-  "BODY: grey test body 0.62 s: Jason (grey test body): pop: wrR jumps off its path (17.8 cm) (37 drawings)",
+  "BODY: grey test body 0.62 s: Jason (grey test body): pop: wrR jumps off its path (17.8 cm) (38 drawings)",
   "BODY: grey test body 0.62 s: Jason (grey test body): pop: elR jumps off its path (11.8 cm) (43 drawings)",
   "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: anR (3.2 cm) (11 drawings)",
   "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: knR (3.1 cm) (12 drawings)",
@@ -32,19 +32,17 @@
   "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: pelvis (5.8 cm) (25 drawings)",
   "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: shR (7.9 cm) (25 drawings)",
   "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: elL (8.1 cm) (35 drawings)",
-  "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: elR (11.8 cm) (60 drawings)",
-  "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: wrR (17.8 cm) (73 drawings)",
+  "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: elR (11.8 cm) (59 drawings)",
+  "BODY: grey test body 0.67 s: Jason (grey test body): step over 3 cm a frame: wrR (17.8 cm) (71 drawings)",
   "BODY: grey test body 0.67 s: Jason (grey test body): self leg R / trunk 10.4 cm (2 drawings)",
   "BODY: grey test body 0.71 s: Jason (grey test body): self leg R / trunk 3.5 cm (1 drawing)",
-  "BODY: grey test body 1.25 s: Jason (grey test body): self arm R / trunk 1.4 cm (2 drawings)",
   "BODY: grey test body 3.21 s: Jason (grey test body): self arm R / trunk 1.6 cm (1 drawing)",
   "BODY: grey test body 8.08 s: Jason (grey test body): self arm R / trunk 1.7 cm (1 drawing)",
   "BODY: grey test body 8.42 s: Jason (grey test body): self arm R / trunk 1.5 cm (1 drawing)",
   "BODY: grey test body 9.38 s: Jason (grey test body): self leg L / trunk 1.2 cm (1 drawing)",
-  "BODY: grey test body 9.50 s: Jason (grey test body): self arm R / leg R 11.8 cm (1 drawing)",
   "BODY: grey test body 9.58 s: Jason (grey test body): self arm L / trunk 11.9 cm (1 drawing)"
  ],
  "named": true,
  "critique": null,
- "made": 1795414617.8109705
+ "made": 1795420771.3354373
 }

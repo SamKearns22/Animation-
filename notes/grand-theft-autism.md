@@ -145,7 +145,8 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   slower in-betweens showed (thigh into the door, gun hand on the thigh) fixed; grey clip clean, sent. Changed: the
   cruiser's wobble 2.0 -> 2.5 s (slows with the shot). Sam's 05:33/05:35 "can't open": fixed by 42b's phone-safe copy.
 - Sam (05:44, chat 42): "1": only shot 4 slower now; the other shots' people are checked at the next animatic.
-- Next: Sam's notes on the slower clip (Opus medium). The look strand (chat 44) dresses this new timing; chat 43
+- Sam on it: "PERFECT" except the grip: fixed, the fist round the handle everywhere (learn-step "Chat 43"); clip resent.
+- Next: Sam's word on the grip clip; the look strand (chat 44) dresses this move. The look strand (chat 44) dresses this new timing; chat 43
   touched _climb (C1b hips, gun lift): chat 44 merges the main line first.
 - Read: notes/bench/learn-step.md "Chat 43". Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
 - For Claude: leanout.SLOW; clips phone-safe (540x960 padded, baseline, faststart); three "Where things stand" on
