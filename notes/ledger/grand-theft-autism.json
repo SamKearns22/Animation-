@@ -28073,66 +28073,66 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.93,
+   "cost": 1.42,
    "src": "estimate",
    "sid": "session_01U3pKR2qu2AuHroC996Qf7Q",
-   "steps": 53,
-   "hist_k": 194,
+   "steps": 82,
+   "hist_k": 228,
    "kinds": {
-    "film-file search": 21.5,
-    "tool search": 10.8,
-    "whole-file .py read": 1.8,
-    "renders": 0.6,
-    "pictures": 1.6,
-    "other": 63.8
+    "film-file search": 21.0,
+    "tool search": 9.7,
+    "whole-file .py read": 1.3,
+    "renders": 0.8,
+    "pictures": 2.3,
+    "other": 65.0
    },
    "calls": {
-    "film-file search": 22,
-    "tool search": 17,
+    "film-file search": 33,
+    "tool search": 28,
     "whole-file .py read": 2,
     "page.py": 0,
     "routine": 0,
-    "renders": 1,
-    "pictures": 3,
-    "other": 10
+    "renders": 3,
+    "pictures": 5,
+    "other": 13
    },
    "split": {
-    "usd": 3.418,
-    "total": 3.418,
+    "usd": 5.2044,
+    "total": 5.2044,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 28.8,
-     "Claude's words": 28.6,
-     "new writes": 25.9,
-     "carried history": 16.7
+     "start-up floor": 27.4,
+     "Claude's words": 26.8,
+     "carried history": 23.6,
+     "new writes": 22.2
     },
     "origins": {
-     "Claude's words": 41.9,
-     "start-up floor": 28.8,
-     "result: film-file search": 8.7,
-     "result: other": 8.3,
-     "result: tool search": 6.8,
-     "messages and reminders": 2.9,
-     "result: pictures": 1.7,
-     "result: whole-file .py read": 0.7
+     "Claude's words": 42.8,
+     "start-up floor": 27.4,
+     "result: film-file search": 8.5,
+     "result: other": 7.5,
+     "result: tool search": 7.0,
+     "messages and reminders": 3.3,
+     "result: pictures": 2.6,
+     "result: whole-file .py read": 0.8
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 28.8,
-     "thinking": 19.7,
-     "writing code": 14.8,
-     "reading film code": 8.1,
-     "reading chat records": 7.9,
-     "commands": 5.9,
-     "reading kit code": 4.8,
-     "messages and reminders": 2.9,
-     "reading notes": 2.5,
-     "looking at pictures": 1.7,
-     "messages to Sam": 1.0,
-     "writing notes": 0.6,
-     "other commands": 0.6,
-     "running checks and tools": 0.6,
-     "renders": 0.1,
-     "start-up and handover tools": 0.1
+     "start-up reading (rules, tools, first files)": 27.4,
+     "thinking": 18.7,
+     "writing code": 15.6,
+     "reading film code": 7.4,
+     "commands": 7.0,
+     "reading chat records": 6.8,
+     "reading kit code": 5.0,
+     "messages and reminders": 3.3,
+     "looking at pictures": 2.6,
+     "reading notes": 2.2,
+     "running checks and tools": 1.1,
+     "messages to Sam": 1.1,
+     "other commands": 1.0,
+     "writing notes": 0.5,
+     "git and saving": 0.1,
+     "renders": 0.1
     },
     "leftover": 0.0
    },
@@ -28144,43 +28144,43 @@
      [
       "source/gta_rehearse.py",
       6.5,
-      0.101
+      0.1348
      ],
      [
       "notes/grand-theft-autism.md",
       3.3,
-      0.0552
+      0.0723
      ],
      [
       "source/body.py",
       1.3,
-      0.0196
+      0.0264
      ],
      [
       "source/crowdpath.py",
       1.2,
-      0.0177
+      0.0241
      ],
      [
       "source/gta_shots58.py",
       0.7,
-      0.0102
+      0.0138
      ],
      [
       "source/views.py",
       0.4,
-      0.0057
+      0.0076
      ]
     ],
-    "base_pct": 23.1
+    "base_pct": 23.6
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 22
+     "no show": 33
     },
     "other": {
-     "other": 6,
+     "other": 17,
      "film notes": 2,
      "shared:handover.py": 1,
      "shared:views.py": 3,
@@ -28500,6 +28500,182 @@
       "other",
       "",
       "^[0-9][0-9]:",
+      ""
+     ],
+     [
+      55,
+      "film",
+      "before show",
+      "source/gta_rehearse.py source/crowdpath.py source/views.py notes/grand-theft-aut",
+      "git add source/gta_rehearse.py source/crowdpath.py source/views.py notes/grand-t",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "git commit -qam \"Sam's message saved (ledger) Co-Authored-By: Claude Opus 5.5 <n",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "git push -q origin claude/compassionate-wright-iq0cja 2>&1 | tail -1; git status",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/8030ee4c-1997-52a7-886b-e9bdf51cba3e/scrat",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "",
+      "grand_theft_autism.py",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "other",
+      "",
+      "gta-clip-20-27.mp4 --span",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/intelligent-tesla-pt713a claude/create-claude-md-oe8z",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "other",
+      "",
+      "git diff --stat HEAD origin/claude/intelligent-tesla-pt713a | tail -15; git merg",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "^BODY",
+      ""
+     ],
+     [
+      69,
+      "film",
+      "before show",
+      "source/gta_rehearse.py source/crowdpath.py",
+      "def bunched",
+      ""
+     ],
+     [
+      70,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "bunched",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/8030ee4c-1997-52a7-886b-e9bdf51cba3e/scrat",
+      ""
+     ],
+     [
+      72,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() old=\"\"\" return CP.",
+      ""
+     ],
+     [
+      73,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() old=\"\"\" if abs(pa[",
+      ""
+     ],
+     [
+      74,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "d < 4.5",
+      ""
+     ],
+     [
+      75,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "if not _lens_ok(pp):                      # its own run passes the lens",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/8030ee4c-1997-52a7-886b-e9bdf51cba3e/scrat",
+      ""
+     ],
+     [
+      77,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "if q\\['walk'\\] > 0.45 and math.dist(a, b) > 0.1",
+      ""
+     ],
+     [
+      78,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "t < IMPACT\\[0\\] or not q.get",
+      ""
+     ],
+     [
+      79,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "python3 - <<'EOF' p='source/gta_rehearse.py' s=open(p).read() a=s.index(\" # Sam,",
+      ""
+     ],
+     [
+      80,
+      "film",
+      "before show",
+      "source/gta_rehearse.py",
+      "the runners are laid out\\|^    return ts, posts",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/8030ee4c-1997-52a7-886b-e9bdf51cba3e/scrat",
       ""
      ]
     ]
