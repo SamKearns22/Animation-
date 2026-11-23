@@ -77,6 +77,9 @@ class HeadCam(_Cam):
         return q[0] * B.SS, q[1] * B.SS
 
 
+
+HEAD_VD = [None]    # set by a clip that plans its head drawings over time (bench_move.head_plan, chat 45)
+
 def _unit(a):
     a = np.asarray(a, float)
     return a / (np.linalg.norm(a) or 1.0)
@@ -247,7 +250,7 @@ def _head(img, cam, k, sp, t, sc, aff, tag, M):  # -> (HeadCam, view)
     Xh = _unit(np.cross(hup, hfwd))
     d = _unit(np.asarray(cam.pos, float) - k['head'])
     a = yaw_seen(d, Xh, hfwd)
-    vd, _ = V.snap(a)
+    vd = HEAD_VD[0] if HEAD_VD[0] is not None else V.snap(a)[0]   # a clip's head plan may choose (chat 45)
     hv = V.VIEWS[vd]
     neck = np.asarray(aff.P(0, 0)) / B.SS
     hs = _proj(cam, k['head'])

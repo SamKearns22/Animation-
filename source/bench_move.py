@@ -1762,7 +1762,7 @@ def _draw_frame(i):
     out, t, side = _DRAW['outs'][i], _DRAW['ts'][i], _DRAW['side']
     from PIL import Image
     if _DRAW.get('dressed'):             # stage 2: the house look, drawn at 2x and brought down (smooth edges)
-        im = dressed_draw(out, t, 'shot', 2, shake=True).resize((540, 960), Image.LANCZOS)
+        im = dressed_draw(out, t, 'shot', 2, shake=True, head_vd=_DRAW['hv'][i]).resize((540, 960), Image.LANCZOS)
     else:
         im = draw(out, cam_at(t))
     if side:                             # left: shot 4's locked camera; right: outside the window, same pose
@@ -1794,13 +1794,14 @@ def draw_all(out_dir, outs, ts, every=1, side=False, dressed=False):
     os.makedirs(fdir, exist_ok=True)
     code = _draw_code()
     idx = list(range(0, len(ts), every))
-    keys = {i: frame_key(outs[i], ts[i], side, code, dressed) for i in idx}
+    hv = head_plan([head_yaw(o, t) for o, t in zip(outs, ts)]) if dressed else [None] * len(ts)
+    keys = {i: frame_key(outs[i], ts[i], side, code + str(hv[i]), dressed) for i in idx}
     if os.path.exists(STORE_TAR) and any(not os.path.exists(os.path.join(store, keys[i] + '.png')) for i in idx):
         import tarfile
         with tarfile.open(STORE_TAR) as tf:              # the bundle kept between chats (only PNGs by name)
             want = {keys[i] + '.png' for i in idx}
             tf.extractall(store, members=[m for m in tf.getmembers() if m.name in want and m.isfile()])
-    _DRAW.update(outs=outs, ts=ts, side=side, keys=keys, store=store, dressed=dressed)
+    _DRAW.update(outs=outs, ts=ts, side=side, keys=keys, store=store, dressed=dressed, hv=hv)
     have = [i for i in idx if os.path.exists(os.path.join(store, keys[i] + '.png'))]
     if have:                                             # the store's spot check: drawn again, pixel for pixel
         spot = random.sample(have, min(10, len(have)))
@@ -2087,7 +2088,7 @@ def dressed_still(path, name='K4', t=1.95, scale=2):
     return res
 
 
-def dressed_draw(out, t, view='shot', scale=2, shake=False):
+def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
     """One solved pose dressed as Jason in the house look (stage 2, chat 44: the still's drawing made a frame
     drawer, so the dressed clip and the still are drawn by the same code): house colours by body part (bench_pose
     part_at), house ink, the house head drawing laid at the head's depth, circle hands, the pistol, the smooth neck
@@ -2152,6 +2153,10 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False):
         cam = S.Cam(*SIDE_CAMS[view])
         ob_ = [o for o in objs if not (o[3].startswith('door') and 'rear' not in o[3])]
     zb, pb, ob, names = BD.raster(cam, ob_, scale, attrs)
+    free = None
+    if DRESS_HIDE_NECK:                  # where the neck column is the nearest thing, it never hides the head
+        zn = BD.raster(cam, [(Vn, Tn, np.array(['skin'] * len(Tn)), 'neck')], scale)[0]   # drawing (Sam, 23 Nov)
+        free = np.isfinite(zn) & (zn <= zb + 1e-6)
     pb = clean_parts(pb, ob, 9 * scale // 2)
     edge = BD.ink(zb, pb, ob, 3 * scale)
     from scipy import ndimage                    # ink specks too small to be a line (left at the throat, chat 38)
@@ -2164,9 +2169,71 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False):
     bg.alpha_composite(img)
     img = bg
     k = house_pose(out)
-    head, _ = BD.house_head(cam, k, sp, neck=not DRESS_HIDE_NECK)
-    BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale)
+    import lying_flat as LF
+    LF.HEAD_VD[0] = head_vd
+    try:
+        head, _ = BD.house_head(cam, k, sp, neck=not DRESS_HIDE_NECK)
+    finally:
+        LF.HEAD_VD[0] = None
+    BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale, free)
     return img.convert('RGB')
+
+
+def head_yaw(out, t):
+    """How far round the head is from shot 4's camera at t (0 = facing us, 90 = profile, 180 = away)."""
+    import lying_flat as LF
+    k = house_pose(out)
+    hup, hfwd = LF._unit(k['hup']), LF._unit(k['hfwd'])
+    d = LF._unit(np.asarray(cam_at(t).pos, float) - k['head'])
+    return LF.yaw_seen(d, LF._unit(np.cross(hup, hfwd)), hfwd)
+
+
+VIEWS_DEG = (0, 45, 90, 135, 180)
+HEAD_BOUNDS = (22.5, 60.0, 112.5, 157.5)    # front | three | side | three_back | back; three->side at 60, not 67.5:
+HEAD_MIN_RUN = 8                            # a head looking past 60 reads as profile (Sam, 23 Nov: 'a bit jarring')
+
+
+def head_plan(yaws):
+    """The drawn head view per frame for a whole clip (Sam, 23 Nov, 'head turn at 2 s a bit jarring': the head
+    sat at 57-69 degrees, on the three/side line, so the drawing went side, three, side in half a second). Each
+    frame takes its view by HEAD_BOUNDS; a view held fewer than HEAD_MIN_RUN frames between two runs of the same
+    view is folded into them (no there-and-back); each remaining switch moves to the frame, between the last frame
+    of the old view's own range and the first of the new one's, where the head turns fastest (the drawing changes
+    inside the motion, never on a still head)."""
+    vs = sorted(VIEWS_DEG)
+    y = np.abs(np.asarray(yaws, float))
+    raw = [vs[int(np.searchsorted(HEAD_BOUNDS, v))] for v in y]
+    runs = []
+    for v in raw:
+        if runs and runs[-1][0] == v:
+            runs[-1][1] += 1
+        else:
+            runs.append([v, 1])
+    changed = True
+    while changed:
+        changed = False
+        for i in range(1, len(runs) - 1):
+            if runs[i][1] < HEAD_MIN_RUN and runs[i - 1][0] == runs[i + 1][0]:
+                runs[i - 1][1] += runs[i][1] + runs[i + 1][1]
+                del runs[i:i + 2]
+                changed = True
+                break
+    plan = sum([[v] * n for v, n in runs], [])
+    sp = np.abs(np.gradient(y))
+    i0 = 0
+    for j in range(len(runs) - 1):
+        a, b = runs[j][0], runs[j + 1][0]
+        sw = i0 + runs[j][1]
+        lo, hi = sw, sw
+        while lo > i0 and raw[lo - 1] != a:        # the stretch where the head is between the two views
+            lo -= 1
+        while hi < sw + runs[j + 1][1] - 1 and raw[hi] != b:
+            hi += 1
+        best = lo + int(np.argmax(sp[lo:hi + 1]))
+        for f in range(lo, hi + 1):
+            plan[f] = a if f < best else b
+        i0 = sw
+    return plan
 
 
 def clip(out_dir, mp4):

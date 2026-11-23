@@ -377,12 +377,18 @@ def house_head(cam, k, sp, neck=True):
     return Image.fromarray(out, 'RGBA'), full
 
 
-def lay_head(img, head, zb_full, depth, scale=1):
+def lay_head(img, head, zb_full, depth, scale=1, free=None):
     """The house head layer over img where nothing nearer than the head's depth is drawn (the roof rail in front
-    of his crown hides it, as in the film)."""
-    zb = zb_full[::scale, ::scale] if scale > 1 else zb_full
+    of his crown hides it, as in the film). free: dots that never hide the head (his own neck column: from behind
+    and from the side it is nearer than the head's centre, so it cut into the hair and the jaw; Sam, 23 Nov)."""
+    hide = zb_full < depth - 0.05
+    if free is not None:
+        hide &= ~free
+    if scale > 1:                        # a head dot is hidden only if most of its fine dots are (no ragged edge)
+        h, w = hide.shape[0] // scale, hide.shape[1] // scale
+        hide = hide[:h * scale, :w * scale].reshape(h, scale, w, scale).mean((1, 3)) > 0.5
     a = np.asarray(head).copy()
-    a[zb < depth - 0.05, 3] = 0
+    a[hide, 3] = 0
     img.alpha_composite(Image.fromarray(a, 'RGBA'))
     return img
 

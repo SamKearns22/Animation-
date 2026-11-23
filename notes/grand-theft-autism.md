@@ -156,14 +156,21 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Locked by Sam: all cameras and beats of shots 1-8; shot 4 25% slower; house style; circle hands.
 - Sam (23 Nov, on jason-dressed-test.mp4): "Overall, it's very good." The two named items (arm from mouth 2.3 s, arm
   over head 1.7 s) "are actually alright". Notes (pictures: notes/bench/sam-notes/dressed-*):
-  [ ] N1 neck from the back "not connected (goes into the hairline)" (~8.5-9 s, three_back view) and from the side
+  [x] N1 (chat 45) the neck column never hides the head drawing (bench_draw.lay_head `free`: dots where the column is
+      nearest; the head's hide mask now taken by majority of fine dots, no ragged edge). Looked full size: front 0.2 s,
+      side 2.0/2.3 s (nape under the hair, jaw runs into the neck), three_back 5.4, back 7.5, three_back 8.75.
+  [ ] (old text) N1 neck from the back "not connected (goes into the hairline)" (~8.5-9 s, three_back view) and from the side
       "jagged and like a separate part" (~2.3 s). WHY AGAIN (rule 30): lay_head hides the drawn head wherever anything
       is nearer than the head's CENTRE minus 5 cm; from behind the neck column is 7-13 cm nearer (frame 210: 185 of
       266 column points), so the neck paints over the hair. Chat 38 checked the neck from the front only (K4 still);
       chat 44 zoomed frames 205-214 and did not see it. Fix: the head drawing hides only behind things nearer than
       the head's own surface there (the solid head's depth per dot), the column's top ends under the drawing's nape;
       side join: blend the column into the jaw line. Check: every head view (front, three, side, three_back, back).
-  [ ] N2 head turn at ~2 s "a bit jarring": at 1.5-1.83 s the head is 63-69 deg round (the drawing switch is at
+  [x] N2 (chat 45) yaw table showed the head at 57-69 deg from 1.8 to 4.4 s, on the 67.5 line: drawing went side,
+      three, side in 0.4 s. bench_move.head_plan: three/side line at 60, runs under 8 frames between two runs of the
+      same view folded in, each switch put on the fastest-turning frame. Switches now: 0.67 three, 0.75 side, 4.75
+      three_back, 6.92 back, 8.46 three_back, 9.08 side, 9.58 three, 9.71 front (no there-and-back).
+  [ ] (old text) N2 head turn at ~2 s "a bit jarring": at 1.5-1.83 s the head is 63-69 deg round (the drawing switch is at
       67.5), so the 'three' drawing shows him facing us, then snaps to profile. Fix: choose the drawing by where he
       looks with a lean to profile, and put each switch where the head is turning fastest; check by yaw table.
 - Next: chat 45, Opus medium: N1, N2; redraw the dressed clip (~9 min), look at every head view at full size,
