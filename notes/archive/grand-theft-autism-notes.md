@@ -734,3 +734,75 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - CLAUDE.md: the Override line replaces "(or any override)"; Locked line: notes only, never in messages (Stop hook flags it). Rulebook last table: two rows.
 - Named, not done (Override skips them for an ask, the option-2 trade): the finish.py stop on other chats' let-throughs stays (option 1's fix, a later question).
 - Sam typed Override (11:09): finish.py ran here on Opus (model guard skipped by Override), skipping the route stop (other chats' let-throughs) and the readable check (COULD NOT TEST: the copied clean video had no record of what it drew). Animatic v5 sent: 38.5 s delivered at 1.1x, 4.8 MB, no Hook Text, sign-off "Grand Theft Follow!". Body check, critique, shot 4's full-size look and the cuts still NOT run (Override).
+
+
+## Shot 4 rebuild (chat 11 checklist): moved to notes/archive/grand-theft-autism-notes.md (chat 28); the case study
+   notes/shot4-case-study/shot4-case-study.md holds everything on shot 4.
+
+## FAILED (Sam, 22 Nov, chat 32): every attempt at Jason's movements in shot 4
+Sam: "All attempts at building Jason's movements in shot 4 have failed. Please stop all attempts and mark them in
+the tracking document as failed." All shot 4 Jason items below are FAILED and closed; chat 31 was stopped. The full
+list of attempts is in the case study, section 17.
+
+## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (details: archive notes, "Chat 33b")
+Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
+- [x] F12 glare off faces; [x] F12 Jason's rest forearm across his chest (shots 5-8); [x] F6 fire runners slant to
+      the doorways, hands over heads; [~] F15 stripes: edge chips + bonnet shine, still read as legs at phone size in
+      shot 6 (Sam to judge). Clips sent; waiting on Sam's notes. Open lesson to propose: runner/walker heading within
+      25 degrees of the lens line named by the body check; tool gap: a --span clip option for this film.
+- Critique r33-p3 (fresh helper): F12 fixed; F6 partly (runner moves but stiff in 2, small and still at the wall in
+      3); F15 NOT fixed (still trousers; a pinstripe try was too thin at phone size, removed); new: Jason's raised hand
+      cut by the left edge at 29.3 (shot 6, his gesture, not the camera); passers-by in shot 5 stand frozen; 3 tiny
+      walkers in shot 5 (22.3-23 s, 4-7 drawings) with an arm out of the back (body check, there before this chat).
+- [x] Sam Q (33b): F15, Sam "1" (22 Nov): stripes 25 cm each, wider red gap, still black. Done; still sent.
+- Sam 22 Nov (5.8 h later): "make me an animatic including your current fixes ... shot 4 ... use the models of the
+      previous animation". Done here: grand_theft_autism.py switches the 3D hands/arms off (shot 4 drawn as in v3;
+      checked side by side at 16 s). Shot 1 cannot draw here (title font host blocked): reuse v3 clean render's first
+      7.0 s (shot 1 unchanged since v3) via the render's --from 7.0. Next: chat 33c, Sonnet: animatic v4.
+- PAUSED (Sam 22 Nov: "Then let's wait until the 3D work is done"): no more 33b film work until chat 33's 3D move is
+      done. Open for then: F6 runner stiff in his second step and still at the wall; Jason's raised hand cut by the
+      left edge at 29.3; shot 5 frozen passers-by; 3 tiny walkers' arms out of the back (22.3-23 s).
+- Where it stands (33b): Next = Sam's notes on the two clips + the F15 answer, then a notes round (Opus medium).
+      Never shot 4's Jason. grand_theft_autism.py now has frame_image (critique.py needed it).
+
+## Sam's decisions, 22 Nov evening (relayed by chat 38; checked in Sam's own words in its record)
+- Y: the speed-up FIRST, before the full grey run: (a) time each part of a grey frame and of the dressed still;
+  (b) the proposal route for the speed-up: the inside test as a distance grid (mesh_sdf; the exact test kept for
+  points within a few mm of the skin), triangle filling in compiled code, the house head drawn once, frames drawn 4 at
+  a time; (c) build after Sam's numbers; then the move's faults, the full run.
+- Y: add to the same proposal: (1) quick checks with no drawing over all frames first, fix, then ONE render; (2) redraw
+  only the frames a fix touches, spliced into the last clip; (3) keep rendered frames between chats (a compact bundle
+  on GitHub). Bigger computer: looked into by chat 38, none offered (4 processors, no graphics card).
+- Sam: "I need to see it in motion, don't worry about the stills, we just need to speed it up/make it quality so
+  there's no notes." NO dressed stills (the 5-stills question closed: N); the strap is checked in motion. Goal: a
+  dressed clip in motion, fast to make, good enough for no notes, watched at phone and full size before it goes.
+- Answered in chat 38 (start check's "not carried"): time estimate (16:10, 19:45; corrected to "20-40 s a frame, to
+  be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
+  render-time factors (16:46).
+
+## Sam's answers, 22 Nov (status chat)
+- Budget stops (open since chat 28): **N**. Do not ask again.
+- Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.
+
+## Chat 33d (22 Nov, Opus medium): Sam's v4 notes
+- [x] N1 street pops out (shot 8): blocks over 160 m from the camera were dropped in one frame as the car drove off
+  (also palms 160 m, people 70 m). Now FAR58 = 600 m (buildings, palms), FAR_PEOPLE58 = 130 m (gta_shots58).
+  Why nobody saw it: every check looks at single frames; nothing compares frame to frame for things that vanish.
+  To propose (proposal route): a pop check, background pixels that change by a whole block between two drawings.
+- [x] N2 pistol (shots 5-8): leanout.draw_gun skipped the chest hold (Sam 21 Nov, shot 4); shots 5-8 now set
+  chest_gun: pistol in his fist flat on his chest at rest, barrel up and tipped inboard while the hand explains (the
+  gesture moves and times unchanged; hand shape fist all through: Lost the open palm and thumb shapes). Shot 4 untouched.
+  Shot 3 also has no pistol (the brief says "pistol flat against his chest"): NOT changed, it would pop at the 3-4 cut
+  while shot 4's K1 shows none: question for Sam.
+- [~] N3: police light-bar glow 0.75 m -> 0.42 m (gta_cars; sits on the bar now, red/blue alternate as real bars do).
+  Lucia's hands ARE on the wheel in shots 5-8 (checked full size at 35.5). Not fixed, named: Jason's skin/face (his cast
+  is shared with shot 4's Jason, untouchable); Lucia's face/braid (taste call); no necks / bonnet size (the locked
+  camera's framing hides them under the windscreen rail); vest "ONIDA" at rest (his forearm and now the pistol cover
+  "LE"); shot 4's face at the right edge 19 s and left arm 17.9 (Jason, shot 4); cruiser driver arm 19.7 and passers-by
+  arms 22.3-22.9: looked full size at 19.7 and 22.5 only, nothing a stranger would stop on there; not swept.
+- Clip tool: `grand_theft_autism.py OUT --span T0 T1` (sound cut from animations/drafts clean render).
+
+- 33c finish (22 Nov, Sam "Just go"): body check run (11 faults, named), critique r43-p1 recorded (fresh helper), finish.py
+  (note: finish.py deletes its own output if written into animations/drafts: write elsewhere). Animatic 4.5 MB, sent.
+  Critic's lines NOT on the list (propose later): lights sit on a named object; no repeat frames at different beats;
+  driver's hands visible on the wheel. Next: Sam's notes on v4 (Opus medium); shot 4 waits for the 3D work.

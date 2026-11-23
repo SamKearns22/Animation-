@@ -75,14 +75,6 @@ Finished sections and ticked notes: notes/archive/grand-theft-autism-notes.md (m
 53.2% of a week in 13 lines (unmeasured 5.0); stages: opener 2.67, plan 2.0, cast 13.3, cars 4.5, sets 4.7, board 0.5,
 moves 11.3, animatic1 2.1, round1 9.4, round2 2.4, final 0.35. Full table: notes/archive/grand-theft-autism-notes.md.
 
-## Shot 4 rebuild (chat 11 checklist): moved to notes/archive/grand-theft-autism-notes.md (chat 28); the case study
-   notes/shot4-case-study/shot4-case-study.md holds everything on shot 4.
-
-## FAILED (Sam, 22 Nov, chat 32): every attempt at Jason's movements in shot 4
-Sam: "All attempts at building Jason's movements in shot 4 have failed. Please stop all attempts and mark them in
-the tracking document as failed." All shot 4 Jason items below are FAILED and closed; chat 31 was stopped. The full
-list of attempts is in the case study, section 17.
-
 ## Chat 32 (22 Nov): Sam's new job, learn the skill in a test space (plan first, nothing built)
 Sam: "You need to learn how to use 2.5d or 3d animation to make this movement work. Create a test space where it is just
 Jason in his sitting pose, and the window." Checklist (his words, each to be ticked against the test space):
@@ -101,44 +93,6 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
       then built fingered hands and its code comment credits those words to Sam. Nobody asked Sam; no proposal. Why no
       check caught it: nothing compares a frame's hands (or any house part) against the house look. Lesson to propose.
 
-## Chat 33b (22 Nov, Opus medium): faults outside Jason's shot 4 move (details: archive notes, "Chat 33b")
-Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; shot order and lengths.
-- [x] F12 glare off faces; [x] F12 Jason's rest forearm across his chest (shots 5-8); [x] F6 fire runners slant to
-      the doorways, hands over heads; [~] F15 stripes: edge chips + bonnet shine, still read as legs at phone size in
-      shot 6 (Sam to judge). Clips sent; waiting on Sam's notes. Open lesson to propose: runner/walker heading within
-      25 degrees of the lens line named by the body check; tool gap: a --span clip option for this film.
-- Critique r33-p3 (fresh helper): F12 fixed; F6 partly (runner moves but stiff in 2, small and still at the wall in
-      3); F15 NOT fixed (still trousers; a pinstripe try was too thin at phone size, removed); new: Jason's raised hand
-      cut by the left edge at 29.3 (shot 6, his gesture, not the camera); passers-by in shot 5 stand frozen; 3 tiny
-      walkers in shot 5 (22.3-23 s, 4-7 drawings) with an arm out of the back (body check, there before this chat).
-- [x] Sam Q (33b): F15, Sam "1" (22 Nov): stripes 25 cm each, wider red gap, still black. Done; still sent.
-- Sam 22 Nov (5.8 h later): "make me an animatic including your current fixes ... shot 4 ... use the models of the
-      previous animation". Done here: grand_theft_autism.py switches the 3D hands/arms off (shot 4 drawn as in v3;
-      checked side by side at 16 s). Shot 1 cannot draw here (title font host blocked): reuse v3 clean render's first
-      7.0 s (shot 1 unchanged since v3) via the render's --from 7.0. Next: chat 33c, Sonnet: animatic v4.
-- PAUSED (Sam 22 Nov: "Then let's wait until the 3D work is done"): no more 33b film work until chat 33's 3D move is
-      done. Open for then: F6 runner stiff in his second step and still at the wall; Jason's raised hand cut by the
-      left edge at 29.3; shot 5 frozen passers-by; 3 tiny walkers' arms out of the back (22.3-23 s).
-- Where it stands (33b): Next = Sam's notes on the two clips + the F15 answer, then a notes round (Opus medium).
-      Never shot 4's Jason. grand_theft_autism.py now has frame_image (critique.py needed it).
-
-
-
-## Sam's decisions, 22 Nov evening (relayed by chat 38; checked in Sam's own words in its record)
-- Y: the speed-up FIRST, before the full grey run: (a) time each part of a grey frame and of the dressed still;
-  (b) the proposal route for the speed-up: the inside test as a distance grid (mesh_sdf; the exact test kept for
-  points within a few mm of the skin), triangle filling in compiled code, the house head drawn once, frames drawn 4 at
-  a time; (c) build after Sam's numbers; then the move's faults, the full run.
-- Y: add to the same proposal: (1) quick checks with no drawing over all frames first, fix, then ONE render; (2) redraw
-  only the frames a fix touches, spliced into the last clip; (3) keep rendered frames between chats (a compact bundle
-  on GitHub). Bigger computer: looked into by chat 38, none offered (4 processors, no graphics card).
-- Sam: "I need to see it in motion, don't worry about the stills, we just need to speed it up/make it quality so
-  there's no notes." NO dressed stills (the 5-stills question closed: N); the strap is checked in motion. Goal: a
-  dressed clip in motion, fast to make, good enough for no notes, watched at phone and full size before it goes.
-- Answered in chat 38 (start check's "not carried"): time estimate (16:10, 19:45; corrected to "20-40 s a frame, to
-  be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
-  render-time factors (16:46).
-
 ## Sam (23 Nov, on the redrawn dressed clip): "It looks very good. Well done."
 - [ ] "We have added a new skill to our toolkit. When we are done with the film, we can explore how we can improve
       the process from what we have learned." (end-of-film review item: the 3D-body skill and how it was learned)
@@ -148,33 +102,6 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
       flat lean-out Jason), then Jason in shots 3 and 5-8 so his look does not jump at the cuts (same body, house
       head, circle hands, chat 43's grip). Locked cameras, beats, timing unchanged. Then Sonnet: checks over the
       full animatic, finish.py (Hook Text, sign-off), send. Final render only on Sam's clear yes.
-
-## Sam's answers, 22 Nov (status chat)
-- Budget stops (open since chat 28): **N**. Do not ask again.
-- Branch claude/gta-chat31 (chat 31's failed shot 4 try, older leanout.py and show log): **filed away as a record, not merged** (Sam, 22 Nov). The main line's leanout.py is newer; never merge it.
-
-## Chat 33d (22 Nov, Opus medium): Sam's v4 notes
-- [x] N1 street pops out (shot 8): blocks over 160 m from the camera were dropped in one frame as the car drove off
-  (also palms 160 m, people 70 m). Now FAR58 = 600 m (buildings, palms), FAR_PEOPLE58 = 130 m (gta_shots58).
-  Why nobody saw it: every check looks at single frames; nothing compares frame to frame for things that vanish.
-  To propose (proposal route): a pop check, background pixels that change by a whole block between two drawings.
-- [x] N2 pistol (shots 5-8): leanout.draw_gun skipped the chest hold (Sam 21 Nov, shot 4); shots 5-8 now set
-  chest_gun: pistol in his fist flat on his chest at rest, barrel up and tipped inboard while the hand explains (the
-  gesture moves and times unchanged; hand shape fist all through: Lost the open palm and thumb shapes). Shot 4 untouched.
-  Shot 3 also has no pistol (the brief says "pistol flat against his chest"): NOT changed, it would pop at the 3-4 cut
-  while shot 4's K1 shows none: question for Sam.
-- [~] N3: police light-bar glow 0.75 m -> 0.42 m (gta_cars; sits on the bar now, red/blue alternate as real bars do).
-  Lucia's hands ARE on the wheel in shots 5-8 (checked full size at 35.5). Not fixed, named: Jason's skin/face (his cast
-  is shared with shot 4's Jason, untouchable); Lucia's face/braid (taste call); no necks / bonnet size (the locked
-  camera's framing hides them under the windscreen rail); vest "ONIDA" at rest (his forearm and now the pistol cover
-  "LE"); shot 4's face at the right edge 19 s and left arm 17.9 (Jason, shot 4); cruiser driver arm 19.7 and passers-by
-  arms 22.3-22.9: looked full size at 19.7 and 22.5 only, nothing a stranger would stop on there; not swept.
-- Clip tool: `grand_theft_autism.py OUT --span T0 T1` (sound cut from animations/drafts clean render).
-
-- 33c finish (22 Nov, Sam "Just go"): body check run (11 faults, named), critique r43-p1 recorded (fresh helper), finish.py
-  (note: finish.py deletes its own output if written into animations/drafts: write elsewhere). Animatic 4.5 MB, sent.
-  Critic's lines NOT on the list (propose later): lights sit on a named object; no repeat frames at different beats;
-  driver's hands visible on the wheel. Next: Sam's notes on v4 (Opus medium); shot 4 waits for the 3D work.
 
 ## Sam's notes on animatic v5 (23 Nov, chat 49; words and marked pictures in notes/sam-notes/gta-v5/)
 - Checks owed (Seeing like Sam 3): none of today's checks tests what is in front of what between two drawings (person/car, wheel/body, effect/ground) or whether a person vanishes at a cut. Owed, through the proposal route: (a) a "layer order" check: each person in a car, the strip between their lowest drawn edge and the car's hiding edge must be them or the car, never what is behind; (b) a "cut continuity" check: everyone in the last frame of a shot who is still in view of the next shot's first frame is drawn there; (c) wheel/arch and effect/ground as cases of (a). Saved examples: notes/sam-notes/gta-v5/1a-6.
@@ -186,40 +113,41 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 ## Where things stand (23 Nov, chat 50 done)
 - Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (fix the check too); 89 (look at full size before sending).
 - Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves (Sam: "otherwise good"); no Hook Text; end line "Grand Theft Follow!".
-- Done: v5 notes 2/8/9 fixed by the per-dot depth test, with Sam's live notes 10 ("Other side of the door please") and 11 ("Little bit of trouser showing there"); all v5 notes now ticked. Clip of shot 4 + shot 5's start sent (14.1-26.5 s).
+- Done: v5 notes 2/8/9 fixed by the per-dot depth test, with Sam's live notes 10 ("Other side of the door please") and 11 ("Little bit of trouser showing there"); all v5 notes now ticked. Clip sent (14.1-26.5 s) with its 25 body-check answers and critique r50 named to Sam. Film cost 103.7% of its 15% (over: told Sam).
 - Next: Sonnet (routine: animatic v6, finish.py, send) once Sam says the clip looks right; any new note on the clip: Opus medium (a notes round).
 - Needs Sam: Y on the clip (then animatic v6), or notes.
 - Read: pack "Checks and animatic" (guides/job-packs.md); on notes, pack "Notes round" and notes/sam-notes/gta-v5/.
 - Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three checks owed in the v5 notes list (layer order, cut continuity, wheel/effect as layer order), through the proposal route.
-- For Claude: gta_cars.solid_depth/solid_faces/SKIRT; bench_move.depth_cut + in_door (dressed_draw depth_car=); jason3d_film.DEPTH (FILM_COVER now off for him). kittest door_slit. Test stills: scratchpad many.py (gta_film.frame_image). RULE 41/49/77/N6 kittests broken (not touched); notes over 4,000 words (archive ticked sections next chat); QUICK CHECKs on other films' files left.
+- For Claude: gta_cars.solid_depth/solid_faces/SKIRT; bench_move.depth_cut + in_door (dressed_draw depth_car=); jason3d_film.DEPTH (FILM_COVER now off for him). kittest door_slit. RULE 41/N6 kittests broken (not touched).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 101.74% of 15%; forecast 105.3% (2026-11-23)
 
 ## Exceptions
 | line | - | why | looked at | chosen or real | owner |
 |---|---|---|---|---|---|
-| `BODY: clip 14.1-26.5 15.00 s: Jason: the left arm crosses to the other shoulder's side of the body: both arms read as one side (Ad-Vanced 57-58: a hand each side) (1 drawing)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 15.00 s: Jason: R forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (2 drawings)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 15.75 s: Jason: L forearm drawn 0.2x its length (end-on to the lens: reads as a stub) (1 drawing)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 15.83 s: Jason: L forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (1 drawing)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 16.08 s: Lucia: seen from behind (104 degrees turned from the lens, 17% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (14 drawings)` | - | the locked shot 4 camera passes behind her for a moment; seen through the glass her head, ponytail and shoulders read, hands hidden by the seat | chat 50 still 16.5 s at full size | chosen | Sam (locked camera) |
-| `BODY: clip 14.1-26.5 16.58 s: Jason: the gun points 31 degrees off its target as drawn (1 drawing)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 17.00 s: Jason: the gun points 21 degrees off its target as drawn (1 drawing)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 17.42 s: Jason: the gun points 11 degrees off its target as drawn (1 drawing)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 17.83 s: Jason: the gun points 12 degrees off its target as drawn (1 drawing)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 18.92 s: Jason: seen from behind (113 degrees turned from the lens, 49% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (50 drawings)` | - | Jason's poses and moves are locked by Sam (23 Nov, v5 note 7: 'otherwise good'); the bench move he approved | chat 50 stills 16.5, 19, 21.5, 22.5, 23, 23.33 s at full size | chosen | Sam (locked) |
-| `BODY: clip 14.1-26.5 20.25 s: Vice City passers-by on the shop pavements 138: seen from behind (165 degrees turned from the lens, 11% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 20.83 s: the cruisers' drivers 1: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 21.75 s: Vice City passers-by on the shop pavements 137: seen from behind (163 degrees turned from the lens, 14% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (2 drawings)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 21.75 s: Vice City passers-by on the shop pavements 140: seen from behind (167 degrees turned from the lens, 13% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (2 drawings)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 21.83 s: Vice City passers-by on the shop pavements 139: seen from behind (164 degrees turned from the lens, 11% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 21.83 s: Vice City passers-by on the shop pavements 144: seen from behind (161 degrees turned from the lens, 12% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 22.00 s: Vice City passers-by on the shop pavements 145: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 22.08 s: Vice City passers-by on the shop pavements 142: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 22.08 s: Vice City passers-by on the shop pavements 145: seen from behind (163 degrees turned from the lens, 17% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (3 drawings)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 22.17 s: Vice City passers-by on the shop pavements 142: seen from behind (162 degrees turned from the lens, 13% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 22.25 s: Vice City passers-by on the shop pavements 143: seen from behind (163 degrees turned from the lens, 27% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (4 drawings)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 23.33 s: Vice City passers-by on the shop pavements 61: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (7 drawings)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 23.50 s: Vice City passers-by on the shop pavements 64: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 24.25 s: Vice City passers-by on the shop pavements 148: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
-| `BODY: clip 14.1-26.5 24.83 s: Vice City passers-by on the shop pavements 67: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (5 drawings)` | - | a small far figure in the shot 4 crowd (4-27% of the frame tall); real, not caused by the door fix; it was in v5 | chat 50 stills 21.5, 22.5, 23.33 s at full size | real | next notes round (Opus medium), before the final |
+| `BODY: clip 14.1-26.5 15.00 s: Jason: the left arm crosses to the other shoulder's side of the body: both arms read as one side (Ad-Vanced 57-58: a hand each side) (1 drawing)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 15.00 s: Jason: R forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (2 drawings)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 15.75 s: Jason: L forearm drawn 0.2x its length (end-on to the lens: reads as a stub) (1 drawing)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 15.83 s: Jason: L forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (1 drawing)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 16.08 s: Lucia: seen from behind (104 degrees turned from the lens, 17% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (14 drawings)` | - | locked camera; head and shoulders read through the glass | 16.5 s still | chosen | Sam (locked camera) |
+| `BODY: clip 14.1-26.5 16.58 s: Jason: the gun points 31 degrees off its target as drawn (1 drawing)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 17.00 s: Jason: the gun points 21 degrees off its target as drawn (1 drawing)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 17.42 s: Jason: the gun points 11 degrees off its target as drawn (1 drawing)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 17.83 s: Jason: the gun points 12 degrees off its target as drawn (1 drawing)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 18.92 s: Jason: seen from behind (113 degrees turned from the lens, 49% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (50 drawings)` | - | pose locked by Sam (v5 note 7) | chat 50 stills | chosen | Sam (locked) |
+| `BODY: clip 14.1-26.5 20.25 s: Vice City passers-by on the shop pavements 138: seen from behind (165 degrees turned from the lens, 11% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 20.83 s: the cruisers' drivers 1: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the body) (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 21.75 s: Vice City passers-by on the shop pavements 137: seen from behind (163 degrees turned from the lens, 14% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (2 drawings)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 21.75 s: Vice City passers-by on the shop pavements 140: seen from behind (167 degrees turned from the lens, 13% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (2 drawings)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 21.83 s: Vice City passers-by on the shop pavements 139: seen from behind (164 degrees turned from the lens, 11% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 21.83 s: Vice City passers-by on the shop pavements 144: seen from behind (161 degrees turned from the lens, 12% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 22.00 s: Vice City passers-by on the shop pavements 145: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 22.08 s: Vice City passers-by on the shop pavements 142: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 22.08 s: Vice City passers-by on the shop pavements 145: seen from behind (163 degrees turned from the lens, 17% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (3 drawings)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 22.17 s: Vice City passers-by on the shop pavements 142: seen from behind (162 degrees turned from the lens, 13% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 22.25 s: Vice City passers-by on the shop pavements 143: seen from behind (163 degrees turned from the lens, 27% of the frame tall): fix the DRAWING, never the camera: from behind it must show real hands (hand3d_film), arms narrowing to elbow and wrist, a hairline at the nape and the neck into the shoulders (4 drawings)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 23.33 s: Vice City passers-by on the shop pavements 61: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (7 drawings)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 23.50 s: Vice City passers-by on the shop pavements 64: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 24.25 s: Vice City passers-by on the shop pavements 148: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (1 drawing)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+| `BODY: clip 14.1-26.5 24.83 s: Vice City passers-by on the shop pavements 67: R arm hidden behind the body comes out on the far side, away from its own shoulder (reads as an arm out of the back) (5 drawings)` | - | small far crowd figure; in v5 too | chat 50 stills | real | next notes round |
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 103.13% of 15%; forecast 106.7% (2026-11-23)
