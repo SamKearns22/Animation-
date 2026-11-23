@@ -7150,6 +7150,649 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "9c3f62f3",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.67,
+   "src": "estimate",
+   "sid": "session_01U3pKR27nDhvqq7xXsinsRV",
+   "steps": 78,
+   "hist_k": 223,
+   "kinds": {
+    "tool search": 24.6,
+    "whole-file .py read": 0.3,
+    "renders": 1.1,
+    "pictures": 0.4,
+    "other": 73.7
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 54,
+    "whole-file .py read": 1,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 1,
+    "other": 18
+   },
+   "split": {
+    "usd": 6.1269,
+    "total": 6.1269,
+    "floor_k": 84,
+    "blocks": {
+     "new writes": 36.7,
+     "Claude's words": 25.4,
+     "carried history": 20.0,
+     "start-up floor": 17.9
+    },
+    "origins": {
+     "Claude's words": 36.3,
+     "messages and reminders": 27.9,
+     "start-up floor": 18.1,
+     "result: tool search": 14.3,
+     "Claude's edits": 1.6,
+     "result: other": 1.4,
+     "result: pictures": 0.3,
+     "result: renders": 0.1
+    },
+    "named": {
+     "messages and reminders": 27.9,
+     "start-up reading (rules, tools, first files)": 18.1,
+     "thinking": 16.4,
+     "writing code": 11.6,
+     "reading notes": 10.5,
+     "commands": 3.8,
+     "writing notes": 3.6,
+     "reading kit code": 3.2,
+     "messages to Sam": 1.9,
+     "renders": 0.6,
+     "start-up and handover tools": 0.6,
+     "helper and chat prompts": 0.6,
+     "reading guides": 0.5,
+     "looking at pictures": 0.3,
+     "running checks and tools": 0.3,
+     "other commands": 0.1,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 35,
+    "work_pct": 0.63,
+    "reads": [
+     [
+      "source/rough.py",
+      5.4,
+      0.0822
+     ],
+     [
+      "notes/archive/milburn.md",
+      2.9,
+      0.0515
+     ],
+     [
+      "notes/proposals/staging-stills.md",
+      2.4,
+      0.0447
+     ],
+     [
+      "notes/proposals/craft-census.md",
+      1.9,
+      0.0342
+     ],
+     [
+      "source/film_engine.py",
+      1.5,
+      0.0221
+     ],
+     [
+      "notes/archive/patriots-4.md",
+      1.4,
+      0.0221
+     ],
+     [
+      "source/moves.py",
+      0.8,
+      0.012
+     ],
+     [
+      "source/kittests.py",
+      0.8,
+      0.0108
+     ],
+     [
+      "story/milburn-board-sent.txt",
+      0.6,
+      0.0101
+     ],
+     [
+      "notes/ledger/milburn.md",
+      0.6,
+      0.0093
+     ],
+     [
+      "source/ad_vanced_notice.py",
+      0.5,
+      0.0078
+     ],
+     [
+      "notes/ledger/sam/vqmqm3zn.md",
+      0.4,
+      0.0059
+     ],
+     [
+      "notes/ledger/sam/nhfhpt4y.md",
+      0.4,
+      0.0059
+     ],
+     [
+      "notes/ledger/sam/at3cudfk.md",
+      0.3,
+      0.0055
+     ],
+     [
+      "notes/archive/blessed.md",
+      0.3,
+      0.0039
+     ],
+     [
+      "notes/archive/blessed-notes-animatics-1-2.md",
+      0.3,
+      0.0039
+     ],
+     [
+      "source/grand_theft_autism.py",
+      0.3,
+      0.0037
+     ],
+     [
+      "notes/proposals/craft-census/notes.tsv",
+      0.1,
+      0.0025
+     ],
+     [
+      "../story/status.md",
+      0.2,
+      0.0022
+     ],
+     [
+      "notes/proposals/staging-stills/chat.md",
+      0.1,
+      0.002
+     ],
+     [
+      "notes/proposals/staging-stills/state.json",
+      0.1,
+      0.002
+     ]
+    ],
+    "base_pct": 19.0
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "other": 11,
+     "film notes": 19,
+     "guides": 2,
+     "shared:rough.py": 7,
+     "shared:preflight.py": 1,
+     "shared:moves.py": 1,
+     "shared:ad_vanced_notice.py": 1,
+     "shared:film_engine.py": 1,
+     "shared:grand_theft_autism.py": 2,
+     "shared:kittests.py": 4,
+     "shared:propose.py": 1,
+     "shared:watcher.py": 3
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status | head -5 && git branch --show-current && python3 source/handover.py ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "notes/proposals/",
+      "git fetch origin claude/create-claude-md-oe8z4g 2>&1 | tail -2; git log --onelin",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/proposals/staging-stills.md notes/proposals/staging-stills guides/job-pack",
+      "^#",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/proposals/staging-stills.md",
+      "sed -n 1,120p notes/proposals/staging-stills.md",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/proposals/staging-stills/chat.md notes/proposals/staging-stills/state.json",
+      "cat notes/proposals/staging-stills/chat.md | head -80; cat notes/proposals/stagi",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "^| *11 \\|^| *87 \\|^| 11 \\|^| 87 ",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:rough.py",
+      "notes/archive/ story/*board-sent* source/rough.py",
+      "def board_gate",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "film notes",
+      "notes/proposals/craft-census* notes/proposals/craft-census.md notes/archive/",
+      "ls notes/proposals/craft-census*; sed -n 40,80p notes/proposals/craft-census.md;",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "notes/archive/",
+      "^#",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md",
+      "sed -n 224,268p notes/archive/milburn.md | cut -c1-600",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/archive/milburn.md notes/archive/milburn-handovers.md story/milburn-board-",
+      "centred\\|centered\\|equal",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "notes/proposals/craft-census/notes.tsv",
+      "\\t(F1|F2|C1|framing|camera)",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "notes/proposals/craft-census/notes.tsv",
+      "awk -F'\\t' '$3==\"framing\"||$3==\"cameras\"' notes/proposals/craft-census/notes.tsv",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/archive/patriots-4.md",
+      "camera|fram|stag|closer|wider|position|stand|sit|lens|shot is|centre|angle|zoom",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/archive/milburn-handovers.md notes/archive/milburn*.md notes/ledger/milbur",
+      "session_",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "film notes",
+      "notes/ledger/milburn.md",
+      "session_01",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "film notes",
+      "notes/logs",
+      "vQMQm3zn\\|NHfhpT4Y",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/ledger/sam/ notes/ledger/sam/* notes/ledger/sam/at3cudfk.md",
+      "milburn chat 6\\|at3cudfk",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "film notes",
+      "notes/archive/blessed-notes-animatics-1-2.md notes/archive/blessed.md notes/arch",
+      "^\\| (7|12|22|30|32|33) \\|",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:rough.py",
+      "source/rough.py",
+      "^def \\|digest\\|sha\\|md5",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:rough.py",
+      "source/rough.py",
+      "sed -n 461,666p source/rough.py",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:preflight.py",
+      "source/*.py source/preflight.py",
+      "move|clip|final|render|preflight|acting|finish",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:moves.py",
+      "source/moves.py source/render.py source/*.py",
+      "small\\|span\\|def main\\|preflight",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:ad_vanced_notice.py",
+      "source/ad_vanced_notice.py source/*.py source/milburn.py",
+      "def render\\b\\|def render(",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py",
+      "sed -n 195,260p source/film_engine.py; sed -n 1,30p source/film_engine.py | head",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "film notes",
+      "story/status ../story/status.md",
+      "grand|gta",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:grand_theft_autism.py",
+      "source/grand_theft_autism.py source/*.py",
+      "render(\\|film_engine\\|preflight",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:grand_theft_autism.py",
+      "source/grand_theft_autism.py",
+      "FE\\.\\|def final\\|def main",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:rough.py",
+      "source/rough.py",
+      "_GRAB = ",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "board_gate_refusals",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && python3 - <<'EOF' 2>&1 | tail -15 import acti",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "notes/*.md",
+      "cd /home/user/Animation- && ls notes/*.md | head -30",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:rough.py",
+      "notes/archive/patriots-4.md notes/archive/blessed.md notes/archive/blessed-notes",
+      "SAFE =",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "film notes",
+      "../notes/archive/protest-tiers.md ../notes/archive/blessed-notes-animatics-1-2.m",
+      "F23\\|A4 \\|A7 ",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:rough.py",
+      "source/rough.py source/staging.py",
+      "BOARD_ONLY\\|only=\\|staging",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:rough.py",
+      "source/rough.py source/film_engine.py",
+      "lock = not span",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^@test",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "\n    import staging as S\n    arch = os.path.join(os.path.dirname(HERE), 'notes',",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() s=s.replace(\"\"\" impor",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "PASS|FAIL",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "PASS|FAIL",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "film notes",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/9c3f62f3-959d-5226-bd6b-781af781b779/scrat",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "timeout 1500 python3 kittests.py > /tmp/claude-0/-home-user-Animation-/9c3f62f3-",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/watcher.py",
+      "mark\\|built\\|usage\\|python3",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "sed -n 280,350p source/watcher.py",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "^## ",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "film notes",
+      "story/status.md notes/proposals/lessons-report.md notes/proposal-route.md",
+      "^## ",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "^FAIL",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:watcher.py",
+      "notes/logs/kittests-last.log source/watcher.py",
+      "dearest_things_named\\|watcher_catches",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "rough\\|board\\|'[a-z_]*\\.py",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "python3 - <<'EOF' p='notes/proposal-route.md'; s=open(p).read() s=s.replace(\"Cha",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/logs/handover-end.log",
+      "<<<<<<<\\|>>>>>>>",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "notes/logs/handover-end.log",
+      "^(PASS|FAIL)",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
