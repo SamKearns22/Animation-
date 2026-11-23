@@ -689,3 +689,48 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   (NEW helper), finish.py, copy clean to animations/drafts, send. 2 = "just go".
 - Next: Sonnet, routine: body check (checks on), critique.py pack ~8 frames, humancheck.py critiqued, finish.py, send.
 
+
+
+## Sam's notes on animatic v5 (ticked, archived chat 50)
+- [x] 1 Jason's gap above the car's edge, almost every shot. Why: the 3D Jason was hidden by the bench's stand-in car (its dash and door boxes), which does not line up with the film's drawn Tulip. Fix: in the film the stand-in hides nothing; the film's own car hides him (leanout._cover, the cover tuned on the flat Jason). Shared: bench_move.FILM_CAR_HIDES, jason3d_film.FILM_COVER.
+- [x] 2/8/9 Lower body through the door. Fixed chat 50 by a per-dot depth test (shared): gta_cars.solid_depth (the drawn Tulip's solids, windows as holes, door-top strips, skirts under the house's foot) against the 3D Jason's own depth (bench_move.depth_cut, replacing leanout._cover for him; jason3d_film.DEPTH). Sam watched live and gave two more: note 10 "Other side of the door please" (16.5 s, his belly drawn over the black strip under the window: bench_move.in_door hides his clothed dots inside the door up to the window's bottom edge; shorts and shoes never pass the door at all), note 11 "Little bit of trouser showing there" (a 1 cm slit between the body top and the house foot: skirts added; kittest door_slit catches the old shape). Looked at full size: 16.5, 19, 21.5, 22.5, 23 (hips still seen through the open window), plus 12.5, 25.5, 31, 36.2, 39. Pictures: sam-notes/gta-v5/10-, 11-. leanout._cover door_top/low left in place: only the flat lean-out (off) uses it.
+- [x] 3 Water jet through the pavement: each lump's tail ran back 0.13 s along its rise, below the stump. Fix: tails stop at the source (flying_whales_fx.lumps_sprite floor=, shared).
+- [x] 4 Runners through the shop fronts: chat 33b's slant to the doorways had no wall stop. Fix: stop 0.45 m short, turn along the pavement.
+- [x] 5 The group by the smoke vanished at the cut to shot 5: shot 5 dropped everyone near the side road's mouth. Fix: they are moved along the pavement out of the mouth for the whole film (gta_shots58._clear_mouth).
+- [x] 6 Front wheel over the body: near-side wheels were drawn whole after the body. Fix: cut to the arch slot (gta_cars.arch_mask, shared by every car).
+- [x] 7 (Sam) Jason's poses and moves are good: only the cut-off and the door order change. Poses untouched.
+
+
+## Chat 46 (23 Nov, Opus high): the dressed 3D Jason built into shots 3-8
+- Sam "Y on pistol" (Q1): shot 3 holds K1, pistol flat on his chest (the brief); Q0 (three fists, gun backwards) is
+  gone with the flat Jason: one fist round the handle (chat 43's grip) in every shot.
+- Built: shots 3-4 draw the bench move itself through the film's camera in the moving car (jason3d_film); shots 5-8
+  act the same keys on the same 3D body (goals58); old flat Jason kept behind one switch (jason3d_film.ON).
+- Sam (23 Nov, mid-build): "Jason has lost a lot of his bulk in the new version? If you check references he's a
+  muscled guy." (picture: notes/bench/sam-notes/gta46-bulk-old-slim-bulk.jpg: flat, slim, filled out) Fixed: the body filled out round its bones (bench_move.BULK: upper arms 1.5x, forearms 1.2x, chest
+  1.06x wide and deep; tapered at the joints so the arm grows outward, not into the chest). Why nobody saw it: the
+  dressed clip was only ever judged alone, never beside the approved flat Jason or the game art. To propose (with
+  its example, this note): a build check, the new body's shoulder width and arm thickness against the approved
+  drawing's, per head height.
+- Also found by looking (not Sam): the LEONIDA print had gone from the 3D vest (now laid on the chest, turns with
+  it); in close shots the strap edge zig-zagged at the raised arm's shoulder (clean-up now 1.8 cm at any distance).
+- Shot 4 move checks, bulky vs slim body (247 frames each): car 1 frame (seat back 0.5 cm, 9.33 s) vs 0; pistol 0,
+  joint range 0, pops 270 / steps 407 / slides / aim the same both (old, named before). Self: 52 frames vs 8, all
+  1-3 skin points (the gun arm's armpit at rest 0-0.79 s and 10.1-10.25 s; the gun arm against his head 1.75 s,
+  8.67 s; arm/trunk 1-2 cm 2.6-4.0 s) except 0.79 s, the free arm 13 points against his side (getting up).
+  Named, not fixed: these creases, and shots 5-8's rest crease (2 points at 6.2, 9.4, 18.8 s on their clock).
+  Chat 47 looks at 0.79, 1.75, 8.67, 9.33 s of shot 4 at full size; anything a stranger would stop on comes back to Opus.
+
+## Chat 47 (23 Nov, Sonnet): animatic v5 pictures and sound built; stuck at the send guard
+- Rendered all 487 drawings (dressed 3D Jason, shots 3-8) and mixed the sound (voices re-sent by Sam; code now reads them from the uploads folder named in grand_theft_autism.UP). Film: 40.6 s, 8.8 MB, branch claude/gta-v5-sound-draft, file drafts-held/gta-v5-clean-sound.mp4 (NOT in animations/drafts; no Hook Text, no sign-off, no body check, no critique).
+- Jason faults file (shots 5-8): only the named 2-point armpit crease at rest, plus two 1-point leg/trunk touches 7.0-7.3 s. Shot 4's full-size look and the cuts (14.1, 24.35, 27.55, 35.55, 36.95 s) NOT done.
+- Blocked: SendUserFile needs a body check record + critique (rule 89); finish.py refuses (proposal-route backlog: staging-stills, 4 unrouted entries). Writing a stand-in record was refused.
+- Sam's rule request (23 Nov): "make sure 'Override' works as a universal code word for skipping steps on all parts of the project." Said Y to running the proposal route for it. Draft wording: on 'Override', every check/guard/step between Sam and his ask is skipped for that one ask; logged (what, when, film); message carries a "Checks: skipped by Sam's Override" line; never skips Locked-by-Sam, never deletes. Needs: guards (sendgate, finish proposal guard, render lock, handover) accept a logged Override from today.
+- Sam is on the iPhone app only: he cannot open files; the film must be sent into the chat.
+
+## Chat 48 (23 Nov, Opus high): the Override word built (Sam's pick: option 2)
+- Proposal override-word routed (2 helpers, blind judge picked helper B = option 1; Sam picked option 2: "If I'm at 99% usage and I need an animatic ... I can run them again once the usage is back"). Marked adopted.
+- Built: source/override.py (Sam's latest typed message holds "Override" -> every stop skips for that ask, logged to notes/logs/overrides.log, "Checks: skipped by Override" line). Wired: send guard, finish.py (route, Hook Text, readable, could-not-test), film_engine render stops (47, 11, 59), proposal Stop hook, watcher, ledger alarm, handover end, model guard, cost watch (word anywhere). Hook: UserPromptSubmit logs it. Kittests override_word, locked_line_not_to_sam pass; proposal_route_hook, cost_watch_lines, render_lock, named_lines_body_each_answered still pass.
+- CLAUDE.md: the Override line replaces "(or any override)"; Locked line: notes only, never in messages (Stop hook flags it). Rulebook last table: two rows.
+- Named, not done (Override skips them for an ask, the option-2 trade): the finish.py stop on other chats' let-throughs stays (option 1's fix, a later question).
+- Sam typed Override (11:09): finish.py ran here on Opus (model guard skipped by Override), skipping the route stop (other chats' let-throughs) and the readable check (COULD NOT TEST: the copied clean video had no record of what it drew). Animatic v5 sent: 38.5 s delivered at 1.1x, 4.8 MB, no Hook Text, sign-off "Grand Theft Follow!". Body check, critique, shot 4's full-size look and the cuts still NOT run (Override).

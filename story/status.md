@@ -1,3 +1,3 @@
-Grand Theft Autism: Sam's v5 notes being fixed (1, 3-6 done; door leak 2/8/9 part-done).
-Next: Opus high chat builds the per-dot door test, then movement clips to Sam.
-Then Sonnet: animatic v6.
+Grand Theft Autism: all of Sam's v5 notes fixed (door leak by a dot-by-dot depth test); clip of shot 4 sent.
+Next: Sam's Y on the clip, then Sonnet renders animatic v6.
+Then final render on Sam's yes.
