@@ -94,6 +94,7 @@ PROMISES = {
     'kittest_gate_faults': ('a kit test red at two handovers in a row, or one that could not run, stops the handover (named-lines change 4)', 'kittest kittest_red_twice_stops_handover'),
     'shared_faults': ('a check fix written in one film\'s code stops the handover until it is moved to the shared tools or Sam says it stays (rule N26)', 'kittest move_to_shared_catches_film_fixes'),
     'override.py prompt': ('Sam\'s typed word "Override" skips the checks between him and that one ask, each skip logged and named (rule N27)', 'kittest override_word'),
+    'audiokit.py': ('the shared voice clean-up: takes.py loads no finished film for it (freeze count back to 20)', 'kittest takes_loads_no_film'),
     'kitinputs.py': ('every check gets its inputs from the kits and the drawing, so no new film starts blind; the film\'s own inputs always win (lesson named-lines, change 3)', 'kittest named_lines_shared_inputs_milburn'),
     'takes.py': ('the voice check hears the cleaned take the film plays, and says so when it reads a raw file the film does not play (lesson named-lines, change 3)', 'kittest takes_cleaned_and_registered'),
     'staging.py': ('no shot reaches Sam as a clip or animatic before he has seen its framing (rule 11, lesson staging-stills)', 'kittest staging_stills_milburn_replay'),

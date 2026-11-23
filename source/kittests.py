@@ -3180,6 +3180,19 @@ def guard_one_correction():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+@test
+def takes_loads_no_film():
+    """takes.py (the shared voice clean-up for every film) loads no finished film's file: its cleaning comes from the
+    shared audiokit.py (23 Nov, chain B chat 3; freeze count 21 -> 20)."""
+    import ast
+    import freeze as FZ
+    tree = ast.parse(open(os.path.join(HERE, 'takes.py')).read())
+    mods = {a.name for n in ast.walk(tree) if isinstance(n, ast.Import) for a in n.names} | \
+           {n.module for n in ast.walk(tree) if isinstance(n, ast.ImportFrom) and n.module}
+    films = sorted(m for m in mods if FZ.FILM.match(m))
+    return not films and 'audiokit' in mods, f'film files imported: {films or "none"}; audiokit used: {"audiokit" in mods}'
+
+
 # the guard's score on its labelled list as measured 23 Nov (chain B chat 4, before Change 2): never worse. Change 2
 # (its own yes from Sam) sets all four to 0.
 GUARD_BASELINE = {'wrong': 21, 'missed': 2, 'probe_missed': 9, 'probe_blocked': 1}
