@@ -119,19 +119,19 @@ Jason in his sitting pose, and the window." Checklist (his words, each to be tic
 - 12:15 "Other side of the door please": carried as live note 11 (the door fix, chat 50, locked).
 - 12:28 "This is SO good to see, Claude.": praise for the door fix; nothing to do.
 
-## Where things stand (23 Nov, chat 51 done)
-- Rules that bite next: 59 (name every check line), 89 (look at full size before sending), Seeing like Sam 3 (fix the check too).
-- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves; the door fix; no Hook Text; end line "Grand Theft Follow!".
-- Done: notes 13 (runners scatter, own moves, no clipping, the 4-to-5 cut) and 14 (vest, bonnet, yellow-coat woman); clip 20-27.5 s sent to Sam (no yes needed). Pistol from behind left open (named to Sam).
-- Next: Opus MEDIUM (a notes round from a clear plan, chat 52): note 15 as Sam's Y (old kit; spread, acting, faces); clip 20-27.5 s to Sam; then Sonnet: animatic v6 with --full; on Sam's yes finish.py on the .full.mp4 (he wants it posted today).
-- Needs Sam: his notes on the clip / animatic v6.
-- SOUND (chat 51): Sam's voice and effect recordings were chat 47 uploads, never saved to GitHub, so a new chat cannot mix them. The finished sound (song, voices, effects; 40.55 s, same timings) is the audio of animations/drafts/grand-theft-autism-clean.mp4: lay it on any new picture: ffmpeg -i NEW.mp4 -i animations/drafts/grand-theft-autism-clean.mp4 -map 0:v -map 1:a -c copy -shortest OUT.mp4. Open rule request: every recording Sam sends is saved to the repo the day it arrives.
-- Body check (chat 51 clip 20-27.5 s, held, sent to Sam with a Checks line): Jason seen from behind 20.0 s (locked pose, as chat 50); passer-by 138 from behind 20.25 s; cruiser driver 1 arm 20.83 s; passers-by 61, 64, 67 'arm out of the back' 23.25-24.83 s (left pavement walkers/standers, the same kind as chat 50's 20-24.8 s finds). Animatic v6 will be held by these too: each needs a fix or a written answer in '## Exceptions' (humancheck.py name ...) before it can go.
-- Read: pack "Checks and animatic" (guides/job-packs.md).
-- Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three owed checks (layer order, cut continuity incl. a crowd that stops or leaves, wheel/effect) through the proposal route; NEW: crowdpath's clash report as a pre-flight check for every crowd film (proposal route); a silhouette check for props seen end-on (pistol).
-- For Claude: crowdpath.py (shared) + R.clear_crowd/_round_palm/_lens_kerb/_stand cache; M._mouth (pp['zlim']); gta_cars._seal; bench_move.in_door legs rule (harmless, kept); bench_draw print args. Importing gta_shots58 now takes ~40 s (the crowd clearing): cache it if renders feel slow. End check named (as chat 50): RULE 41/N6 kittests broken (not touched); SENTENCE x7 (Sam reworded CLAUDE.md; the new wording holds each); QUICK CHECK gta_rehearse (its notes are this file; no SHOT_MARKS, an old module). Branches named, not merged (old drafts, nothing for this round): gta-v5-sound-draft (unrouted.md), gta-chat46-build (chats log), dreamy-fermi-vkhutz (gta_story_post.py), gta-chat31 (show log, leanout.py). Move-to-shared: _round_palm and _lens_kerb live in gta_rehearse (one film's street) - move to crowdpath when the next crowd film needs them.
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 103.74% of 15%; forecast 107.3% (2026-11-23)
 
 ## Sound files (23 Nov, chat 52): saved in the project
 Sam's six voices, the song and the four effects are in `sounds/grand-theft-autism/` (the film's `UP` points there). A mix no longer needs Sam to re-send them; his note: voices +50%, black start 75% shorter, end text "Grand Theft Follow" are held for his answers (see chat 52).
+
+## Where things stand (23 Nov, chat 52 done)
+- Rules that bite next: 59 (name every check line), 89 (look at full size before sending), Seeing like Sam 3 (fix the check too).
+- Locked by Sam: every camera, beat, shot length and timing except what his notes below change; house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves; the door fix; end line "Grand Theft Follow" (Sam's Y, 23 Nov: no "!").
+- Done: animatic v6 sent (pictures redrawn full size too, sound = v5's, since the voices were missing); finish.py needed Override (the proposal-route guard); final NOT made (killed mid-run, nothing written). Sam's 11 sound files saved in sounds/grand-theft-autism/ (UP points there). Whole-film body check was started, never finished: run it.
+- Sam's notes on v6 (23 Nov, all held, now go): (1) last shot: she looks at Lucia, big happy suddenly-interested smile, delighted. (2) dialogue volume +50% (voices only; GAIN_DB x1.5 = +3.5 dB; effects and song as they are). (3) the black at the start 75% shorter: LEAD 0.5 s -> 0.125 s in gta_film; sound follows (SONG_FROM stays so the song still starts at frame 1). (4) end text exactly "Grand Theft Follow" (no "!").
+- Next: Opus, medium effort (a round of Sam's notes): the four notes; a short clip of the last shot for note 1 (no yes needed); then Sonnet: animatic v7 with `--full`, finish.py (sound mixed from the real files now), send; on Sam's clear yes, finish.py on the .full.mp4 -> animations/, send.
+- Needs Sam: his notes on the clip / animatic v7; his clear yes for the final.
+- Read: pack "Notes round" (guides/job-packs.md); `page.py grand-theft-autism show "words" --shot 8 --at 38 --who her`.
+- Open rule requests: Sam's pre-flight rule in reserve (always run, list "Not checked:", only Override skips; Sam has not said Y); staging-stills proposal kept in reserve by Sam (its let-through still blocks finish.py: needs Override or re-record); build check; held-object check; head-flip check; pop check; the three owed checks; crowdpath clash report; pistol silhouette check.
+- For Claude: the full pre-flight refuses on this film (no shot board, Hook Text plan, SHOT_MARKS, acting list): v6 had no pre-flight, named to Sam. Render path: source/grand_theft_autism.py (checks overruled since 21 Nov; `--full` draws both sizes); a --span clip runs the body check. Move-to-shared as before (_round_palm, _lens_kerb to crowdpath).
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 107.74% of 15%; forecast 111.3% (2026-11-23)
