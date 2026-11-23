@@ -1,0 +1,11 @@
+The plan the options describe (the judge's final version):
+
+Step 0, learn (changes nothing; same chat). Build two checkers on paper: (A) a fixed shape-and-name check: problem in 1-2 sentences, numbered step lines, Why, You'd notice, Other option, one Lost: and one Added: line, and no file or code names; (C) a blind reader, a fresh Sonnet helper given only the message and "Sam doesn't code, uses an iPhone", that lists every word it can't explain and retells each step; a wrong retelling or any listed word fails. Must-fail: the 10 Milburn lessons, `show front-on-focus`, Claude's message before each of Sam's confused replies (19 Nov ledger). Must-pass: system asks Sam answered with a bare number or Y; routine animatic and clip messages. Score A, C, A+C. To beat: every must-fail caught, 9 in 10 good asks passed, every routine message passed. The winner is what Change 1 uses.
+
+Change 1 (own yes): make the text at the source. judge.md's "For Sam" becomes fixed fields (problem, numbered steps, why, what you'd notice, other option, Lost, Added), through the lock. The parser refuses a missing field; `show` prints them in that order. `record` refuses a verdict until the reader's pass file (with the verdict's hash) exists and A passes. The end-of-film review writes its lessons through the same fields and `show`. The kit test gets the Milburn lessons as must-fail and a good ask as must-pass. The rulebook row names this check. To beat: no "explain" / "don't understand" reply from Sam on the next 3 system asks (ledger search).
+
+Change 2 (own yes, after Change 1 meets its number): the hook requires the shown option text in the reply, as it already requires the Critiqued line; its refusal carries the paste-ready text, so the second try passes; it never refuses a third time. To beat: let-throughs from 10 a day to 0 over the next film.
+
+Change 3 (own yes, only if Step 0 shows the reader accurate on free text): status explanations of back-end work ("explain the jobs") go through the reader before sending.
+
+Not included: the hook taking film questions for system asks (its own proposal).

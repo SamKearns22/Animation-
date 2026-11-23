@@ -6,7 +6,7 @@ one chat, 15 Nov). Closest before it: rule 89's critic (critique.py) attacks pic
 "Back-end proposals get a plain explanation" says how Sam is told, not how the idea is found.
 
 MAP
-  paths ............ PROPS (notes/proposals), PROMPTS (guides/proposal-route: helper.md, judge.md, sam-test.md), LOCK
+  paths ............ PROPS (notes/proposals), PROMPTS (guides/proposal-route: helper.md, judge.md, sam-test.md, reader.md), LOCK
   new .............. step 1: notes/proposals/NAME.md with Problem / Facts / Record, NO solution; the chat's own idea
                      goes in NAME/chat.md, written before the helpers run (pack refuses without it)
   pack ............. step 2: refuses a solution-shaped line in the problem, changed prompts (LOCK) or a missing
@@ -18,7 +18,12 @@ MAP
                      [fixed] or [named]; two options with Lost/Added)
   record ........... parse, then the verdict word for word into NAME.md with its hash (problem + versions + verdict)
   verdict_ok ....... the verdict exists and its hash still matches (an edit after the verdict makes it stale)
-  show ............. step 5: what Sam sees: the two options, Lost/Added, "Critiqued: N found, N fixed, N named"
+  show ............. step 5: what Sam sees: the two options, Lost/Added, "Critiqued: N found, N fixed, N named";
+                     shape 2 (packed from 23 Nov): each option's fixed fields in order (Problem, steps, Why,
+                     You'd notice, Other option, Lost, Added); parse refuses a missing field or a code name
+  reader ........... plain-check Change 1 (Sam's 2): packs the blind reader (reader.md, a Sonnet helper) on `show`;
+                     run again once it has written: prints its unexplained phrases for the writer. Never blocks
+  plain ............ checker A on every lesson or option in a file (the end-of-film review's lessons)
   hook ............. step 4, the Stop hook: blocks a reply that asks Sam to approve a change while the proposal it
                      names (or wrote this turn) has no valid verdict, or lacks the Critiqued line; a change question
                      naming no proposal is blocked too. Routine Y/N (animatic, render, clip, budget) passes.
@@ -34,6 +39,8 @@ MAP
     python3 source/propose.py judge NAME         (then one NEW judge with the printed line)
     python3 source/propose.py record NAME
     python3 source/propose.py show NAME
+    python3 source/propose.py reader NAME        (pack; then one NEW Sonnet reader; then again: its phrases)
+    python3 source/propose.py plain FILE         (checker A on each "### " item or numbered lesson)
     python3 source/propose.py status
     python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"   (a let-through; until then no handover)
     python3 source/propose.py mark NAME adopted|declined|replaced:OTHER
@@ -53,7 +60,9 @@ from datetime import datetime, timezone
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROPS = os.path.join(ROOT, 'notes', 'proposals')
 PROMPTS = os.path.join(ROOT, 'guides', 'proposal-route')
-PROMPT_FILES = ('helper.md', 'judge.md', 'sam-test.md')
+PROMPT_FILES = ('helper.md', 'judge.md', 'sam-test.md', 'reader.md')
+SHAPE = 2                        # state shape 2 (plain-check Change 1, 23 Nov): For Sam in fixed fields
+READER_MODEL = 'sonnet'          # the blind reader (reader.md): advice to the writer, never a gate (Sam's 2, 23 Nov)
 LOCK = os.path.join(PROMPTS, 'LOCK')
 UNROUTED = 'unrouted.md'
 HELPER = 'general-purpose'      # critique.py's timing (11 Nov): no built-in kind is lighter AND can write its file
@@ -184,7 +193,7 @@ def pack(name):
     if faults:
         sys.exit('propose: pack refused:\n' + '\n'.join('  ' + f for f in faults))
     _state(name, {'packed': datetime.now(timezone.utc).timestamp(), 'problem': _sha(hashable(name)),
-                  'chat': _sha(_read(_p(name, 'chat.md'))), 'prompts': prompts_hash()})
+                  'chat': _sha(_read(_p(name, 'chat.md'))), 'prompts': prompts_hash(), 'shape': SHAPE})
     ls, why = lock_state()
     if ls == 'none':
         print(f'propose: note: {why}')
@@ -226,8 +235,10 @@ def judge(name, seed=None):
           f'Write only {out}."')
 
 
-def parse(text, versions):
-    """The judge's file -> dict, or SystemExit naming what is missing (a half verdict is never recorded)."""
+def parse(text, versions, shape=1):
+    """The judge's file -> dict, or ValueError naming what is missing (a half verdict is never recorded). shape 2
+    (proposals packed from 23 Nov): every For Sam option must pass checker A (the fixed fields, no code names);
+    shape 1 (older proposals) parses as before, so no old verdict goes stale."""
     bad = [s for s in SECTIONS if not re.search(rf'^## {re.escape(s)}\s*$', text, re.M)]
     if bad:
         raise ValueError('missing sections: ' + ', '.join(bad))
@@ -263,9 +274,99 @@ def parse(text, versions):
     for o in opts[:2]:
         if not re.search(r'^Lost:', o, re.M) or not re.search(r'^Added:', o, re.M):
             raise ValueError(f'option "{o.splitlines()[0]}" lacks a Lost: or an Added: line')
+        if shape >= 2 and shape_faults(o):
+            raise ValueError(f'option "{o.splitlines()[0]}" is not in the fixed fields: ' + '; '.join(shape_faults(o)))
     if not sec['Final version'].strip():
         raise ValueError('the final version is empty')
     return {'scores': scores, 'pick': pick[0], 'faults': faults, 'leak': sec['Leak'], 'options': opts[:2]}
+
+
+# ------------------------------------------------------------------------------------------------ plain words (Sam's Y, 23 Nov)
+# CLAUDE.md "Back-end proposals are explained plainly": the problem in 1-2 sentences, numbered steps, why, what he'd
+# notice, the other option, one Lost and one Added line, no code names. Checker A (fixed) tests the shape and the names;
+# checker C (the blind reader, reader.md) tests whether a stranger understands it. Step 0: notes/proposals/plain-check/step0.
+FIELDS = ('Problem', 'Steps', 'Why', "You'd notice", 'Other option', 'Lost', 'Added')
+FIELD_RE = {'Problem': r'Problem', 'Why': r'Why', "You'd notice": r"You(?:'|’)d notice", 'Other option': r'Other option',
+            'Lost': r'Lost', 'Added': r'Added'}
+PLAIN_OK = {'CranbriJoos', 'TikTok', 'YouTube', 'iPhone', 'GitHub', 'BoJack', 'McFadden', 'MacBook'}  # names, not code
+CODE_RE = re.compile(r'`[^`\n]+`'                                             # anything in code marks
+                     r'|\b[\w-]+\.(?:py|md|json|jsonl|tsv|txt|sh|html|jpg|png|mp4|mov|yaml|toml|lock)\b'  # file names
+                     r'|\b(?:source|notes|guides|animations|\.claude)/[\w./-]*'          # paths
+                     r'|\b[A-Za-z0-9]+(?:_[A-Za-z0-9]+)+\b'                    # joined_with_underscores
+                     r'|\b[a-z]+[A-Z][A-Za-z0-9]*\b|\b[A-Z][a-z]+[A-Z][A-Za-z0-9]*\b'  # joinedCapitals
+                     r'|--[a-z][\w-]+')                                        # command switches
+
+
+def code_names(text):
+    return sorted({m.group(0) for m in CODE_RE.finditer(text) if m.group(0) not in PLAIN_OK})
+
+
+def shape_faults(option):
+    """Checker A on one option (or one message): [] when it has every field of the rule, in plain shape."""
+    body = '\n'.join(option.splitlines()[1:]) if option.lstrip().startswith(('### ', 'Option')) else option
+    faults = []
+    for f, pat in FIELD_RE.items():
+        hits = re.findall(rf'^\s*(?:\*\*)?{pat}(?:\*\*)?\s*:\s*(\S.*)$', body, re.M | re.I)
+        if not hits:
+            faults.append(f'no "{f}:" line')
+        elif len(hits) > 1:
+            faults.append(f'"{f}:" twice')
+    prob = re.search(r'^\s*(?:\*\*)?Problem(?:\*\*)?\s*:\s*(.*)$', body, re.M | re.I)
+    if prob and len(re.findall(r'[.!?](?:\s|$)', prob.group(1).strip() + ' ')) > 2:
+        faults.append('the problem is more than two sentences')
+    if len(re.findall(r'^\s*\d+[.)]\s+\S', body, re.M)) < 1:
+        faults.append('no numbered step lines ("1. ...")')
+    names = code_names(body)
+    if names:
+        faults.append('code or file names: ' + ', '.join(names[:6]))
+    return faults
+
+
+SAM_DIR = os.path.join(ROOT, 'notes', 'ledger', 'sam')      # Sam's own typed messages (handover.py log)
+SAM_KNOWS = os.path.join(PROPS, 'plain-check', 'step0', 'sam-before-19nov.md')   # the C3 reader's 'what Sam knows'
+STOP = set('the a an of to in on at for and or but is are was be it its this that with by as from not no his her '
+           'their our your my we you i he she they them what which who how why when where one two all any each per '
+           'than then so if do does did has have had can could would should will just only also very more most '
+           'used sense unclear never explained said meaning means mean exactly'.split())
+
+
+def _words(text):
+    return {w.rstrip('s') for w in re.findall(r"[a-z][a-z0-9'’-]*", text.lower()) if len(w) > 2}
+
+
+def sam_words():
+    """Every word Sam has typed himself (his saved messages): a word he uses is a word he knows."""
+    txt = ''
+    for f in glob.glob(os.path.join(SAM_DIR, '*.md')):
+        t = re.sub(r'<cross-session-message.*?</cross-session-message>', '', _read(f), flags=re.S)
+        txt += '\n'.join(ln for ln in t.splitlines() if not ln.startswith(('(handover log', '# Sam', '### ')))
+    return _words(txt)
+
+
+def reader_verdict(look, result, known=None):
+    """The blind reader's two files -> {'words', 'unknown', 'wrong', 'pass', 'pass_sam'}. pass = the reader's own
+    strict result (no word it can't explain, every mark RIGHT); pass_sam (C2, Step 0's winner) = no word Sam has never
+    used himself, and no step retold WRONG. Raises ValueError on a half answer."""
+    if not re.search(r'^## Words I can.t explain', look, re.M) or not re.search(r'^## Retelling', look, re.M):
+        raise ValueError('look.md lacks its "Words I can\'t explain" or "Retelling" section')
+    if not re.search(r'^## Result', result, re.M) or not re.search(r'^## Marks', result, re.M):
+        raise ValueError('result.md lacks its "Marks" or "Result" section')
+    sec = look.split('## Retelling')[0]
+    words = []
+    for ln in sec.splitlines():
+        m = re.match(r'\s*-\s*(.+?)(?::\s|$)', ln)
+        if m and m.group(1).strip().lower().strip('."') != 'none':
+            words.append(m.group(1).strip().strip('"“”*'))
+    known = sam_words() if known is None else known
+    unknown = [w for w in words if {x for x in _words(w) if x not in STOP} - known]
+    marks = P_MARK_RE.findall(result.split('## Result')[0])
+    wrong = sum(1 for m in marks if m.upper() == 'WRONG')
+    strict = re.search(r'^## Result\s*\n\s*PASS\b', result, re.M) is not None
+    return {'words': words, 'unknown': unknown, 'wrong': wrong, 'pass': strict and not words,
+            'pass_sam': not unknown and not wrong}
+
+
+P_MARK_RE = re.compile(r':\s*\**(RIGHT|WRONG|PARTLY)\b', re.I)
 
 
 def who_wrote(key, pick):
@@ -291,7 +392,7 @@ def record(name):
     if os.path.getmtime(_p(name, 'judge', 'verdict-raw.md')) < st.get('judged', 0) - 1:
         sys.exit('propose: verdict-raw.md is older than `judge`: start a NEW judge')
     try:
-        v = parse(raw, list(st['key']))
+        v = parse(raw, list(st['key']), st.get('shape', 1))
     except ValueError as e:
         sys.exit(f'propose: the verdict is refused ({e}); send the judge back to judge.md\'s shape')
     key = ', '.join(f'{k} = {w}' for k, w in sorted(st['key'].items()))
@@ -319,7 +420,8 @@ def verdict_ok(name):
     if not text.split(VERDICT)[1].rstrip().endswith(raw.strip()):    # the copy in NAME.md must stay word for word
         return False, f'notes/proposals/{name}.md: its verdict was edited after `record` (stale): record it again'
     try:
-        return True, parse(raw, list(_state(name).get('key', {})))
+        st = _state(name)
+        return True, parse(raw, list(st.get('key', {})), st.get('shape', 1))
     except ValueError as e:
         return False, f'its verdict does not parse ({e})'
 
@@ -331,9 +433,98 @@ def show(name):
         sys.exit('propose: ' + v)
     who = who_wrote(_state(name)['key'], v['pick'])
     print(f'Proposal {name}: the judge picked {who}\'s version (judged blind).')
+    shape = _state(name).get('shape', 1)
     for o in v['options']:
-        print('### ' + o.strip())
+        print('### ' + (field_text(o) if shape >= 2 else o.strip()))
     print(critiqued(v['faults']) + '.')
+
+
+def fields(option):
+    """One option in the fixed fields -> {'head', 'Problem', 'Steps': [...], 'Why', ..., 'Added'} (missing ones '')."""
+    lines = option.strip().splitlines()
+    out = {'head': lines[0].lstrip('# ').strip() if lines else '', 'Steps': []}
+    for ln in lines[1:]:
+        st = re.match(r'^\s*(\d+)[.)]\s+(\S.*)$', ln)
+        if st:
+            out['Steps'].append(st.group(2).strip())
+            continue
+        for f, pat in FIELD_RE.items():
+            m = re.match(rf'^\s*(?:\*\*)?{pat}(?:\*\*)?\s*:\s*(\S.*)$', ln, re.I)
+            if m:
+                out[f] = m.group(1).strip()
+    return out
+
+
+def field_text(option):
+    """An option printed with its fields in the rule's order, whatever order the judge wrote them in."""
+    f = fields(option)
+    out = [f['head'], 'Problem: ' + f.get('Problem', '')]
+    out += [f'{i}. {s}' for i, s in enumerate(f['Steps'], 1)]
+    out += [f'{k}: {f.get(k, "")}' for k in FIELDS if k not in ('Problem', 'Steps')]
+    return '\n'.join(out)
+
+
+# ------------------------------------------------------------------------------------------------ the blind reader (advice)
+def reader(name):
+    """plain-check Change 1 (Sam's answer 2, 23 Nov): the blind reader is ADVICE to the writer, never a gate. First
+    run: packs NAME/reader/ (message.md = what `show` prints, truth.md = the final version, sam-knows.md = Sam's own
+    earlier messages) and prints the one Sonnet helper line. Once look.md and result.md are written: prints every
+    phrase it could not explain, for the writer to explain where it appears (or leave, saying why). Returns 0 always."""
+    import contextlib
+    import io
+    d = _p(name, 'reader')
+    look, res = _read(os.path.join(d, 'look.md')), _read(os.path.join(d, 'result.md'))
+    msg = io.StringIO()
+    with contextlib.redirect_stdout(msg):
+        show(name)
+    if look and res and _read(os.path.join(d, 'message.md')) == msg.getvalue():
+        try:
+            v = reader_verdict(look, res)
+        except ValueError as e:
+            print(f'propose: the reader\'s answer is half written ({e}); advice only, nothing refused')
+            return 0
+        print(f'propose: the blind reader (advice, never a gate): {len(v["words"])} phrase(s) it could not explain, '
+              f'{v["wrong"]} step(s) retold WRONG.')
+        for w in v['words']:
+            print(f'  - {w}')               # every one: Step 0 showed known words still make unknown phrases
+        print('  Explain each where it first appears (a few plain words), or say in the notes why it stays.')
+        return 0
+    os.makedirs(d, exist_ok=True)
+    for f in ('look.md', 'result.md'):
+        if os.path.exists(os.path.join(d, f)):
+            os.remove(os.path.join(d, f))
+    open(os.path.join(d, 'message.md'), 'w').write(msg.getvalue())
+    open(os.path.join(d, 'truth.md'), 'w').write(_section(_read(_p(name + '.md')).split(VERDICT)[-1], 'Final version') + '\n')
+    open(os.path.join(d, 'sam-knows.md'), 'w').write(_read(SAM_KNOWS))
+    rel = os.path.relpath(d, ROOT)
+    print('propose: start ONE NEW reader, nothing added to the line (advice only: it never holds the ask):')
+    print(f'  Agent ({HELPER}, model {READER_MODEL}, a NEW one): "Read guides/proposal-route/reader.md and follow it '
+          f'exactly. The repository root is {ROOT}. Your folder is {rel}."')
+    print(f'  then: python3 source/propose.py reader {name}')
+    return 0
+
+
+def plain_items(text):
+    """A file's items for checker A: each '### ' block, or else each top-level bold numbered lesson ('1. **...')."""
+    if re.search(r'^### ', text, re.M):
+        return ['### ' + b for b in re.split(r'^### ', text, flags=re.M)[1:]]
+    return [b for b in re.split(r'^(?=\d+\.\s+\*\*)', text, flags=re.M) if re.match(r'\d+\.\s+\*\*', b)]
+
+
+def plain(path):
+    """Checker A on every item of a file (the end-of-film review's lessons, or any ask): 0 when all pass."""
+    items = plain_items(_read(path))
+    if not items:
+        print(f'propose: plain: no "### " items or numbered lessons in {path}')
+        return 1
+    bad = 0
+    for it in items:
+        head = it.strip().splitlines()[0].lstrip('# ')[:70]
+        f = shape_faults(it)
+        bad += bool(f)
+        print(f'  {"FAIL" if f else "ok  "} {head}' + (': ' + '; '.join(f) if f else ''))
+    print(f'propose: plain: {len(items) - bad} of {len(items)} in the fixed fields')
+    return 1 if bad else 0
 
 
 def status():
@@ -524,6 +715,10 @@ def review(film, since=None):
     out += ['', '## The five dearest things (source/dearest.py): suggest them to Sam, numbered', '', text, '']
     out += [f'{i}. {k} ({v:g}% of a week)' for i, (k, v, _) in enumerate(named, 1)]
     out += ['', f'Open only the ones Sam picks: python3 source/dearest.py {film} --open N,N (then the route on each)']
+    out += ['', '## Lessons, each in the fixed fields (CLAUDE.md "Back-end proposals are explained plainly"; '
+            f'checked by `propose.py plain notes/proposals/review-{film}.md`)', '',
+            '### Lesson 1: short plain name', 'Problem: one or two plain sentences.', '1. first step',
+            '2. second step', 'Why: ...', "You'd notice: ...", 'Other option: ...', 'Lost: ...', 'Added: ...']
     f = _p(f'review-{film}.md')
     os.makedirs(PROPS, exist_ok=True)
     open(f, 'w').write('\n'.join(out) + '\n')
@@ -595,6 +790,10 @@ def main(argv):
         print(f'propose: {settle(rest[0][-8:], " ".join(rest[1:]))} let-through(s) settled')
     elif cmd == 'show':
         show(rest[0])
+    elif cmd == 'reader':
+        return reader(rest[0])
+    elif cmd == 'plain':
+        return plain(rest[0])
     elif cmd == 'status':
         status()
     elif cmd == 'mark':

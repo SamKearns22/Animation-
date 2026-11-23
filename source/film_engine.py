@@ -60,7 +60,7 @@ def code_hash():
     return h.hexdigest()
 
 
-def write_pass(film, faults, pictures=False, untested=None):
+def write_pass(film, faults, pictures=False, untested=None, left=None):
     """Pre-flight's stamp (rule 59): the code it ran on, how many faults it found, and whether the picture checks
     (every frame drawn with the probes) have passed on this code: pre-flight --pictures, or an animatic render that ran
     them while it drew. untested: the checks that could not run (could-not-test, 23 Nov), kept from the last full
@@ -68,8 +68,11 @@ def write_pass(film, faults, pictures=False, untested=None):
     os.makedirs(PASSES, exist_ok=True)
     if untested is None:
         untested = (read_pass(film) or {}).get('untested', [])
+    if left is None:                              # named-lines: the unanswered lines, kept from the last pre-flight
+        left = (read_pass(film) or {}).get('left', [])
     with open(os.path.join(PASSES, f'{film}.json'), 'w') as fh:
-        json.dump({'code': code_hash(), 'faults': faults, 'pictures': bool(pictures), 'untested': list(untested)}, fh)
+        json.dump({'code': code_hash(), 'faults': faults, 'pictures': bool(pictures), 'untested': list(untested),
+                   'left': list(left)}, fh)
 
 
 def untested_fault(film):
@@ -108,9 +111,12 @@ def lock_fault(film, faults_named=False, final=False):
     why = untested_fault(film)                    # could-not-test: before --faults-named is even looked at
     if why:
         return why
-    if stamp['faults'] and not faults_named:
-        return (f'pre-flight found {stamp["faults"]} fault(s) on {film}: fix them, or, if every one has been named to '
-                f'Sam, add --faults-named')
+    if stamp['faults']:                           # named-lines change 2 (Sam's Y, 23 Nov): no switch waves the list
+        return (f'pre-flight left {stamp["faults"]} warning(s) on {film} without their own written answer (rule 59): '
+                f'fix each, or answer it in the notes\' "## Exceptions" (python3 source/waivers.py todo {film} prints '
+                f'the rows), then pre-flight again. A blind one (its check could not see the film) is cured, never '
+                f'answered. --faults-named no longer passes this list'
+                + (' (given, and ignored)' if faults_named else ''))
     if final and not stamp.get('pictures'):
         return (f'the picture checks have not passed on this code: render the animatic (--small) first, which runs '
                 f'them, or run pre-flight with --pictures')
@@ -369,15 +375,25 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         found = report.group(found, getattr(main, 'SHOTS', []))
         report.summarise(f'picture checks ({film})', found, os.path.join(os.path.dirname(os.path.abspath(out)),
                                                                           f'{film}-picture-checks.txt'))
-        if found and not named:                   # chat 30 (Sam's Y, 15 Nov: a stopped 31-minute render was thrown
+        import waivers                            # named-lines change 2 (Sam's Y, 23 Nov): each line its own answer
+        notes_p = preflight.notes_path(main, film)
+        done, left = waivers.split(found, open(notes_p).read() if os.path.exists(notes_p) else '', main)
+        if done:
+            print(f'picture checks: {len(done)} line(s) answered in the notes, {len(left)} not', flush=True)
+        if left:                                  # chat 30 (Sam's Y, 15 Nov: a stopped 31-minute render was thrown
             os.replace(out, held)                 # away): kept aside, never under OUT's name, so nothing sends it unnamed
-            sys.exit(f'render STOPPED (rule 59): the picture checks found {len(found)} fault(s), listed above. The video '
-                     f'is held as {held} (not a pass). Fix them and render again, or name every one to Sam, then rename '
-                     f'the held file to {os.path.basename(out)} and run finish.py with --faults-named (no second render). '
-                     f'The final still needs a render whose checks are clean or named.')
+            with open(held + '.faults.json', 'w') as fh:
+                json.dump({'out': out, 'faults': found}, fh)
+            sys.exit(f'render STOPPED (rule 59): the picture checks left {len(left)} line(s) without a written answer, '
+                     f'listed above. The video is held as {held} (not a pass). Fix them and render again, or answer '
+                     f'each in the notes\' "## Exceptions" (| `the exact words` | - | why | looked at | chosen or real '
+                     f'| owner |), then: python3 source/waivers.py release {film} {held} (no second render). '
+                     f'--faults-named no longer passes this list.')
         stamp0 = read_pass(film) or {}
-        write_pass(film, stamp0.get('faults', 0) + len(found), pictures=True)   # the final may now go ahead
-    hc.finish(out, named='--body-named' in sys.argv)   # an unnamed body fault: the video is held aside
+        write_pass(film, stamp0.get('faults', 0), pictures=True)   # every line fixed or answered: the final may go
+    import preflight as _pf                       # named-lines: each body line answered in the film's notes
+    _np = _pf.notes_path(main, film)
+    hc.finish(out, named='--body-named' in sys.argv, notes=open(_np).read() if os.path.exists(_np) else '')
     print(f'done: {out} ({os.path.getsize(out) / 1e6:.2f} MB)', flush=True)
 
 

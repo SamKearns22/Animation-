@@ -53,7 +53,7 @@ PROMISES = {
     'ledger.py auto': ('every chat has a cost row with its steps, kinds and search record', 'kittest cost_rows_reach_the_main_line'),
     'propose.py hook': ('no change is put to Sam without the proposal route', 'named: its block is the proof; a let-through is logged to notes/proposals/unrouted.md and listed by handover end'),
     'modelguard.py': ('no routine work (finish.py, a whole-film render, a splice) runs on Opus or Fable', 'live guard'),
-    'humancheck.py sendgate': ('no clip reaches Sam without a body check record, clean or named', 'kittest body_send_gate'),
+    'humancheck.py sendgate': ('no clip reaches Sam without a body check record, clean or each line answered in the notes (named-lines)', 'kittest body_send_gate'),
     'finderwarn.py': ('a chat that hand-searches a film\'s code before using the finder is told so at once', 'live finder'),
     'watcher.py stop': ('every promise here is checked at the end of every reply; a daily line shows it is alive', 'live hooks'),
     # handover checks (source/handover.py)
@@ -88,6 +88,7 @@ PROMISES = {
     'posegallery.py': ('pose sheets', 'named: used by hand'),
     'preflight.py': ('no animatic or final with an open fault (rule 59)', 'named: film_engine refuses a render without its pass'),
     'rough.py': ('the rough sheet', 'named: used by hand'),
+    'waivers.py': ('no warning waves through in a bunch: each one left on a film has its own written answer, and a check that could not see the film is cured, never answered (rule 59, lesson named-lines)', 'kittest named_lines_each_answered'),
     'staging.py': ('no shot reaches Sam as a clip or animatic before he has seen its framing (rule 11, lesson staging-stills)', 'kittest staging_stills_milburn_replay'),
     'satire_template.py': ('a new satire film starts from the house template', 'named: used by hand'),
 }

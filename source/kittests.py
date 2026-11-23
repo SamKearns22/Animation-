@@ -418,6 +418,83 @@ def could_not_test_readable():
 
 
 @test
+def named_lines_each_answered():
+    """named-lines change 2 (Sam's Y, 23 Nov; rule 59): Milburn's 61 lines went past every round under one switch; each
+    warning now needs its own written answer, blind ones never pass, and an answered line comes back if its numbers
+    change."""
+    import film_engine as E
+    import tempfile
+    import types
+    import waivers
+    rows = [json.loads(x) for x in open(os.path.join(HERE, '..', 'notes', 'ledger', 'milburn', 'checks.jsonl'))]
+    run = rows[0]['run']
+    lines = [f for r in rows if r['run'] == run for f in r['faults']]
+    film = types.ModuleType('milburn_replay')                 # Milburn had no scene(t)
+    blind = [x for x in lines if waivers.is_blind(x, film)]
+    cap = next(x for x in lines if x.startswith('caption "to kill each"'))
+    card = next(x for x in lines if 'COULD NOT TEST' in x)
+    notes = ('## Exceptions\n| check | who | why | looked at |\n|---|---|---|---|\n'
+             f'| `{cap}` | - | Sam speaks fast; his own take | 1.1 s full size | chosen | Sam |\n'
+             f'| `{card}` | - | named to Sam | animatic 1 | chosen | chat 15 |\n'
+             '| `plan: goth has no facing (which way they face)` | - | fine | | chosen | chat 15 |\n')
+    none_done, none_left = waivers.split(lines, '', film)
+    done, left = waivers.split(lines, notes, film)
+    moved = cap.replace('0.38', '0.41')
+    back = waivers.split([moved], notes, film)[1]
+    real = E.PASSES
+    E.PASSES = tempfile.mkdtemp()
+    try:
+        E.write_pass('x', len(left), left=left)
+        refused = E.lock_fault('x', faults_named=True)
+        E.write_pass('x', 0, left=[])
+        clear = E.lock_fault('x')
+    finally:
+        E.PASSES = real
+    card_left = any(x.startswith(card) and 'BLIND' in x for x in left)
+    incomplete = any(x.startswith('ANSWER incomplete') for x in left)
+    ok = (len(lines) == 61 and len(blind) == 37 and len(none_left) == 61 and len(done) == 1 and card_left
+          and incomplete and moved in back and bool(refused) and clear is None)
+    return ok, (f'Milburn lines {len(lines)}, blind {len(blind)} (learn.md: 37); unanswered with no notes '
+                f'{len(none_left)}; answered 1 caption: {len(done)}; blind card line answered but still stops: '
+                f'{card_left}; a row with no look flagged: {incomplete}; caption back when its time changes: '
+                f'{moved in back}; --faults-named refused: {bool(refused)}; all answered passes: {clear is None}')
+
+
+@test
+def named_lines_body_each_answered():
+    """named-lines change 2 (Sam's Y, 23 Nov): the body check's whole list was named with one reason (GTA, 11 at once);
+    now --named alone holds the clip, and it goes back only when each line has its own answer in the film's notes."""
+    import humancheck as HC
+    import tempfile
+    d = tempfile.mkdtemp()
+    out = os.path.join(d, 'clip.mp4')
+
+    def clip():
+        open(out, 'w').write('x')
+        w = HC.Writer('clip.mp4')
+        w.found = {('jason', 'arm', 'x'): [17.9, 3, 'jason: an arm out of the back']}
+        return w
+    w = clip()
+    line = w.lines()[0]
+    try:
+        w.finish(out, named=True, notes='')
+        held_named = False
+    except SystemExit:
+        held_named = os.path.exists(out[:-4] + '.held.mp4') and not os.path.exists(out)
+    notes = f'## Exceptions\n| `{line}` | - | a passer-by behind the car, 2 drawings | 17.9 s full size | real | chat 44 |\n'
+    clip().finish(out, named=False, notes=notes)
+    rec = HC.load(out)
+    passed = bool(rec and rec['named'] and rec['answered'] == 1)
+    try:
+        HC.main(['name', out, 'all named to Sam'])
+        one_reason = False
+    except SystemExit:
+        one_reason = True
+    return held_named and passed and one_reason, (f'--named alone held: {held_named}; each line answered passes: '
+                                                  f'{passed}; one reason for the list refused: {one_reason}')
+
+
+@test
 def render_lock():
     """Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now."""
     import film_engine as E
@@ -430,15 +507,15 @@ def render_lock():
         ok = E.lock_fault('x')
         E.write_pass('x', 3)
         faults = E.lock_fault('x')
-        named = E.lock_fault('x', faults_named=True)
+        named = E.lock_fault('x', faults_named=True)          # named-lines (23 Nov): the switch no longer passes
         E.write_pass('x', 0)
         final_quick = E.lock_fault('x', final=True)           # pictures not yet checked: no final
         E.write_pass('x', 0, pictures=True)
         final_ok = E.lock_fault('x', final=True)
     finally:
         E.PASSES = real
-    return bool(none) and ok is None and bool(faults) and named is None and bool(final_quick) and final_ok is None, \
-        (f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; named: {named is None}; '
+    return bool(none) and ok is None and bool(faults) and bool(named) and bool(final_quick) and final_ok is None, \
+        (f'no pass: {bool(none)}; pass: {ok is None}; 3 faults: {bool(faults)}; --faults-named refused: {bool(named)}; '
          f'final before the pictures are checked refused: {bool(final_quick)}; after: {final_ok is None}')
 
 
@@ -2853,14 +2930,29 @@ def proposal_route_hook():
         raw = ('## Leak\nnone\n## Scores\n| version | quality | notes | cost | risk | undo | total |\n|---|---|---|---|---|---|---|\n'
                + rows + '\n## Sam test\n' + '\n'.join(f'Q{i}: ok' for i in range(1, 9)) +
                '\n## Pick\nV2\n## Why\nbest\n## Faults in the pick\n- F1 [fixed] a\n- F2 [named] b\n'
-               '## Final version\ndo it\n## For Sam\n### Option 1: a\ntext\nLost: x\nAdded: y\n'
-               '### Option 2: b\ntext\nLost: x\nAdded: y\n')
+               '## Final version\ndo it\n## For Sam\n' + PLAIN_OPT.format(n=1) + PLAIN_OPT.format(n=2))
         open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md'), 'w').write(raw.replace('## Sam test\n', '## Sam test\nQ1: only\n').replace('Q8: ok', ''))
         try:
             P.parse(open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md')).read(), ['V1', 'V2', 'V3'])
             bad.append('a verdict missing Q8 parsed')
         except ValueError:
             pass
+        # 5a. shape 2 (packed from 23 Nov, plain-check Change 1): an option missing a field, or with a code name, is
+        # refused; the same verdict in the old shape (an older proposal) still parses, so no old verdict goes stale
+        for cut, why in (("You'd notice: the answer comes in one look.\n", 'missing field'),
+                         ('Why: ', 'Why: notes/x.md says so; ')):
+            try:
+                P.parse(raw.replace(cut, '' if why == 'missing field' else why, 1), ['V1', 'V2', 'V3'], 2)
+                bad.append(f'a shape-2 verdict with a {why if why == "missing field" else "file name"} parsed')
+            except ValueError:
+                pass
+        old_shape = raw.split('## For Sam')[0] + '## For Sam\n### Option 1: a\ntext\nLost: x\nAdded: y\n### Option 2: b\ntext\nLost: x\nAdded: y\n'
+        try:
+            P.parse(old_shape, ['V1', 'V2', 'V3'], 1)
+        except ValueError:
+            bad.append('an old-shape verdict no longer parses as shape 1')
+        if P._state('t1').get('shape') != 2:
+            bad.append('pack did not mark the proposal shape 2')
         # 5b. V0 (judge.md: no version passes, the judge writes its own) parses; V9 (no such file) does not
         v0 = raw.replace('## Pick\nV2', '## Pick\nV0').replace('| V3 | 3 | 3 | 3 | 3 | 3 | 15 |', '| V3 | 3 | 3 | 3 | 3 | 3 | 15 |\n| V0 | 4 | 4 | 4 | 4 | 4 | 20 |')
         if P.parse(v0, ['V1', 'V2', 'V3'])['pick'] != 'V0':
@@ -2877,6 +2969,12 @@ def proposal_route_hook():
             bad.append('verdict but no Critiqued line: not blocked')
         if run(ask + '\nCritiqued: 2 found, 1 fixed, 1 named.'):
             bad.append('valid verdict + Critiqued line blocked')
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            P.show('t1')
+        order = [buf.getvalue().find(k) for k in ('Problem:', '1. ', 'Why:', "You'd notice:", 'Other option:', 'Lost:', 'Added:')]
+        if -1 in order or order != sorted(order):
+            bad.append('show does not print the fields in order')
         # 6. an edit after the verdict makes it stale; `mark` does not
         P.mark('t1', 'adopted')
         if run(ask + '\nCritiqued: 2 found, 1 fixed, 1 named.'):
@@ -2884,10 +2982,57 @@ def proposal_route_hook():
         open(f, 'a').write('\nmore')
         if not P.verdict_ok('t1')[0] is False:
             bad.append('edit after verdict not stale')
-        return not bad, '; '.join(bad) or 'blocks the 15 Nov asks, passes 5 routine ones, stale and missing verdicts, V0 pick, Critiqued line, stop_hook_active'
+        return not bad, '; '.join(bad) or ('blocks the 15 Nov asks, passes 5 routine ones, stale and missing verdicts, V0 '
+                                           'pick, Critiqued line, stop_hook_active, shape-2 fields (old shape parses)')
     finally:
         P.PROPS = old
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+PLAIN_OPT = ("### Option {n}: two quick stills first\n"
+             "Problem: staging was built three times before Sam saw the framing he wanted.\n"
+             "1. When a note is about framing, draw two small stills of it.\n"
+             "2. Send them in one message, a number on each.\n"
+             "3. Build the one Sam picks.\n"
+             "Why: one cheap look costs less than a whole round.\n"
+             "You'd notice: the answer comes in one look.\n"
+             "Other option: build and send a short clip, as now.\n"
+             "Lost: nothing.\n"
+             "Added: one small picture message before a staging round.\n")
+
+
+@test
+def plain_check_fields():
+    """CLAUDE.md "Back-end proposals are explained plainly" (Sam's Y, 23 Nov; plain-check Change 1, his answer 2):
+    checker A (the fixed fields, no code names) fails all 10 Milburn lessons as they were sent (Sam: "Explain" on 2
+    and 6, "don't know what you mean by brow cap" on 9), passes the same lesson rewritten in the fields, and the
+    review's lesson check (`propose.py plain`) agrees; the blind reader's saved answers (Step 0, reader3) read as
+    advice: L09's list names the brow cap, and every saved answer parses."""
+    import contextlib
+    import io
+    import propose as P
+    base = os.path.join(P.PROPS, 'plain-check', 'step0')
+    bad = []
+    for i in range(1, 11):
+        f = os.path.join(base, 'cases', f'L{i:02d}.md')
+        if not P.shape_faults(open(f).read()):
+            bad.append(f'Milburn lesson {i} passed A')
+        with contextlib.redirect_stdout(io.StringIO()):
+            if P.plain(f) == 0:
+                bad.append(f'plain passed Milburn lesson {i}')
+    if P.shape_faults(PLAIN_OPT.format(n=1)):
+        bad.append('the field-shaped ask failed A: ' + '; '.join(P.shape_faults(PLAIN_OPT.format(n=1))))
+    if not P.shape_faults(PLAIN_OPT.format(n=1).replace('Two quick', 'x').replace('Send them', 'Send them via source/stills.py')):
+        bad.append('a file name in a step passed A')
+    r3 = os.path.join(base, 'reader3')
+    n = 0
+    for k in sorted(os.listdir(r3)):
+        look, res = (open(os.path.join(r3, k, x)).read() for x in ('look.md', 'result.md'))
+        v = P.reader_verdict(look, res)
+        n += 1
+        if k == 'L09' and not any('brow cap' in w.lower() for w in v['words']):
+            bad.append('the reader on L09 does not name the brow cap')
+    return not bad, '; '.join(bad) or f'10/10 Milburn lessons fail A (and plain), the field-shaped ask passes, {n} saved reader answers parse'
 
 
 # ------------------------------------------------------------------------------------------------ code finder (Sam's 1, 16 Nov)

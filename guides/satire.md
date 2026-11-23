@@ -315,7 +315,7 @@ It says "incremental" or "full (why)" in its first lines; `--full` forces the fu
 `python3 source/preflight.py NAME OUT_DIR` (all cores; or `python3 source/NAME.py check` for the plan checks and audit
 alone, seconds to minutes). It runs only the checks for what the film's `HAS` lists, and names the rest. **The render
 lock (rule 59):** an animatic or final will not start unless pre-flight passed on the code as it is now (any code
-change means running it again); faults already named to Sam need `--faults-named` on the render. It also checks,
+change means running it again); every fault left needs its own written answer in the notes (rule 59; no switch passes a list). It also checks,
 from the film's `draw_order(t)`, that nothing flips from in front to behind in one frame (rule 57; planned swaps in
 `ORDER_SWAPS`; Flying Whales note 16). It runs: the plan checks (mouths move for every phrase, the voice sits at least 6 dB above
 everything else, subtitles printed as text: proofread them now), the general audit (each body alone: in pieces, popping,

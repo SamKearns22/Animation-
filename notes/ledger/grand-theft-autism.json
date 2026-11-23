@@ -24910,6 +24910,160 @@
    "repeats": [
     "neck from behind into the hairline | a full-size look at every head view, and a check that the head drawing is never cut by his own neck"
    ]
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "b154c429",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.2,
+   "src": "estimate",
+   "sid": "session_01U3pKR34dF31M2PmtpinWgm",
+   "steps": 11,
+   "hist_k": 106,
+   "kinds": {
+    "tool search": 20.2,
+    "other": 79.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 8,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 3
+   },
+   "split": {
+    "usd": 0.7157,
+    "total": 0.7157,
+    "floor_k": 83,
+    "blocks": {
+     "start-up floor": 47.8,
+     "new writes": 25.8,
+     "Claude's words": 23.1,
+     "carried history": 3.3
+    },
+    "origins": {
+     "start-up floor": 47.8,
+     "Claude's words": 30.2,
+     "result: tool search": 14.5,
+     "messages and reminders": 6.0,
+     "result: other": 1.4
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 47.8,
+     "thinking": 13.6,
+     "commands": 7.8,
+     "git and saving": 6.5,
+     "helper and chat prompts": 6.0,
+     "messages and reminders": 6.0,
+     "reading guides": 4.0,
+     "reading notes": 3.0,
+     "messages to Sam": 2.8,
+     "other commands": 1.0,
+     "reading chat records": 0.9,
+     "app tools (chats, files sent)": 0.6
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "story/status.md",
+      0.3,
+      0.0032
+     ]
+    ],
+    "base_pct": 21.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "film notes": 2,
+     "other": 5,
+     "guides": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "film notes",
+      "story/status.md",
+      "git branch --show-current && cat story/status.md 2>/dev/null | head -40 && ls no",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "story/status.md notes/grand-theft-autism.md",
+      "Where things stand",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "",
+      "gta|chat4|lesson|milburn|chain|plain|named",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/ledger/sam/",
+      "for b in gta-chat46 gta-chat45-look gta-chat44-look gta-chat43 chainb-named-line",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "notes/ledger/sam",
+      "^notes",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin 2>&1 | tail -2; git for-each-ref --sort=-committerdate --for",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "^\\| *24 |^24\\.|rule 24|\\b24\\b.*budget",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
@@ -26022,6 +26176,14 @@
   },
   {
    "at": "2026-11-23T06:19+00:00",
+   "faults": 5
+  },
+  {
+   "at": "2026-11-23T08:36+00:00",
+   "faults": 5
+  },
+  {
+   "at": "2026-11-23T08:37+00:00",
    "faults": 5
   }
  ]

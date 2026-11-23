@@ -699,12 +699,17 @@
   },
   "W2": {
    "rule": "No code names or file names in messages.",
-   "status": "cannot yet",
-   "tests": [],
-   "example": "",
+   "status": "partly",
+   "tests": [
+    "plain_check_fields",
+    "proposal_route_hook"
+   ],
+   "example": "kittest plain_check_fields: the 10 Milburn lessons as sent (Sam 19 Nov: \"Explain\" on 2 and 6, \"don't know what you mean by brow cap\" on 9) fail the fixed fields; the same lesson in the fields passes; proposal_route_hook: a judge's For Sam missing a field or holding a file name is refused (proposals packed from 23 Nov)",
    "notes": "",
-   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
-   "kind_before": "by hand"
+   "kind_before": "by hand",
+   "miss": "every other message to Sam (status, notes rounds, handovers): no check reads them; and the fields do not prove the words are plain (Step 0: coined phrases pass A; the blind reader is advice only, Sam's answer 2)",
+   "plan": "plain-check Change 2 (the hook asks for the shown option text) and Change 3 (status explanations through the reader), each its own yes",
+   "done": "23 Nov (chain A chat 6): system asks and end-of-film lessons proven (plain-check Change 1)"
   },
   "W3": {
    "rule": "One line per note, with Lost and Added lines for anything a fix takes away or adds.",
@@ -904,12 +909,17 @@
   },
   "N8": {
    "rule": "Plain words, always.",
-   "status": "cannot yet",
-   "tests": [],
-   "example": "",
+   "status": "partly",
+   "tests": [
+    "plain_check_fields",
+    "proposal_route_hook"
+   ],
+   "example": "kittest plain_check_fields: the 10 Milburn lessons as sent (Sam 19 Nov: \"Explain\" on 2 and 6, \"don't know what you mean by brow cap\" on 9) fail the fixed fields; the same lesson in the fields passes; proposal_route_hook: a judge's For Sam missing a field or holding a file name is refused (proposals packed from 23 Nov)",
    "notes": "CR (plain words failed in the 19 Nov review chat)",
-   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
-   "kind_before": "none"
+   "kind_before": "none",
+   "miss": "every other message to Sam (status, notes rounds, handovers): no check reads them; and the fields do not prove the words are plain (Step 0: coined phrases pass A; the blind reader is advice only, Sam's answer 2)",
+   "plan": "plain-check Change 2 (the hook asks for the shown option text) and Change 3 (status explanations through the reader), each its own yes",
+   "done": "23 Nov (chain A chat 6): system asks and end-of-film lessons proven (plain-check Change 1)"
   },
   "N9": {
    "rule": "Files under 50 MB, MP4 by default; only the finished film and the latest animatic on GitHub.",
@@ -1071,6 +1081,17 @@
    ],
    "example": "kittest rule_proofs_gate: step 1's 61 of 103 rules never proved on a bad example (rule-needs-check/rule-table.md); a new rule with no entry or no saved example is refused at the handover",
    "notes": "Sam's Y 23 Nov (lesson 7, option 1); written with this entry in one commit",
+   "kind_before": "new"
+  },
+  "N26": {
+   "rule": "Every rule and fix is for all films: a fix made because of one film's fault goes into the shared tools, template, rulebook or checks; a fix that can only live in one film's code gets a 'move to shared' line, and the handover check stops until it is moved or Sam says it stays.",
+   "anchor": "Every rule and fix is for all films (Sam, 23 Nov):",
+   "status": "owed",
+   "tests": [],
+   "example": "Sam, 23 Nov: \"I would have expected the change on Blessed to apply to all films in the future — rules need to be constructed that they work in this way, they are not film specific.\" Blessed built 7 check inputs in its own code (blessed_checks.py scene, solids, SET_FEET, cam_for, audits; blessed.py touch_faults, furniture_faults); Milburn the cleaned voice takes; GTA car and street solids twice (named-lines/learn.md section 3)",
+   "notes": "Sam's Y 23 Nov with \"needs testing\"; written by chain B chat 2",
+   "owed": "named-lines change 3, chain B chat 3 (session_01U3pKR2taFPq31QroZMAKSe): the move-to-shared handover stop; Sam's 'needs testing' = its kittest must catch Blessed's 7, Milburn's voice takes and GTA's solids on the saved code, and pass a film whose rows say moved or Sam keeps it",
+   "plan": "kittest move_to_shared_blessed_replay",
    "kind_before": "new"
   }
  },

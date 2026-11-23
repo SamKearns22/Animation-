@@ -1945,7 +1945,8 @@ def checked_clip(out_dir, mp4, span=None, dressed=False):
     print('clip %s: %.0f KB, film frames %d-%d' % (mp4, size / 1024, f0, f0 + len(ts) - 1), flush=True)
     if named:
         print('faults named: %s' % named, flush=True)
-    W.finish(mp4, named=bool(named))
+    _np = os.path.join(os.path.dirname(HERE), 'notes', 'grand-theft-autism.md')   # named-lines: lines answered there
+    W.finish(mp4, named=bool(named), notes=open(_np).read() if os.path.exists(_np) else '')
 
 
 def _named(out_dir):

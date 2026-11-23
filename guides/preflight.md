@@ -44,10 +44,13 @@ props; rule 58) and says which it skipped. It draws every 3rd frame (the checks 
 hands on every frame, checks captions (2 rows of 42 characters, 700 px, readable speed) and shot lengths (over 8 s is
 flagged), and makes a contact sheet with the safe area. A film needs `BLACK_AT` or `DUR`.
 - **The render lock (rule 59):** pre-flight leaves a pass stamp for the code as it is now. The animatic and the final
-  refuse to start without it, or after any code change since; faults already named to Sam need `--faults-named`.
+  refuse to start without it, or after any code change since. Every fault left needs its own answer in the notes'
+  "## Exceptions" (| `the exact words` | - | why | looked at full size | chosen or real | owner |; `waivers.py todo
+  FILM` prints the rows); a blind one is cured, never answered; `--faults-named` no longer passes a list (Sam, 23 Nov).
   So a failed pre-flight can never be followed by a render in the same command. If the animatic's own picture checks
-  stop it, its video is held as `OUT.held.mp4` (Sam's Y, 15 Nov): name every fault to Sam, rename it to OUT and finish
-  it with `--faults-named`; no second render.
+  stop it, its video is held as `OUT.held.mp4` (Sam's Y, 15 Nov): answer each line in the notes, then
+  `python3 source/waivers.py release FILM OUT.held.mp4` puts it back; no second render. The body check's held clips
+  the same way: `humancheck.py name VIDEO --film FILM`.
   A re-render reuses the cached frames and their check records when no code changed since; after a fix, name the
   changed shots (`final OUT --small --redo t2,t4`) and only those are drawn again (Sam's Y, 15 Nov).
 - **Hands (rule 41):** `source/handcheck.py` probes everyone `views.person` draws, every frame. Meant exceptions in the

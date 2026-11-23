@@ -103,6 +103,9 @@ at session start (`.claude/hooks/setup.sh`).
 - **No rule without a working check** (Sam's Y, 23 Nov): a rule counts only when its check has caught a saved example
   of its own fault (a still, my words or a message); "by hand" is not a check. A new rule comes with its example or the
   handover is refused; a rule whose check can't be built yet is listed for me with what must be learned first.
+- **Every rule and fix is for all films (Sam, 23 Nov):** a fix made because of one film's fault goes into the shared
+  tools, template, rulebook or checks so every later film gets it; a fix that can only live in one film's code gets a
+  'move to shared' line in that film's notes, and the handover check stops until it is moved or Sam says it stays.
 - **"I want a rule" (or "every film", "from now on", "always") means a permanent rule for all films:** reply with the
   exact wording and place; on my yes, write it in that same chat. Each rule is written once: in the rulebook with its
   check, or here if it's about working with me (listed in the rulebook's last table).

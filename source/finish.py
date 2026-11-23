@@ -3,7 +3,7 @@
 burn in the captions (rule 62), deliver at 1.1x with voices at their normal pitch (rule 70), add the Hook Text (rule
 75) and the CranbriJoos sign-off (rule 52) with the film's follow line (story/follow-lines.md), in that order.
 
-    python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME [--faults-named]
+    python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME
     python3 finish.py CLEAN.mp4 OUT.mp4 --film NAME ["Hook Text"] [--y 1180] [--x 540] [--w 400] [--until 3.6] [--centre]
     either way: [--signoff-speed 1.0]
 
@@ -16,11 +16,12 @@ burn in the captions (rule 62), deliver at 1.1x with voices at their normal pitc
   * then the whole film is sped to SPEED (1.1x, subtitles.SPEED) with the voices kept at their pitch, so the Hook
     Text's 0.5 s pop and the sign-off's 1.6 s, added after, stay as they are on the delivered file;
   * its HOOK = (text, {'y':, 'x':, 'w':, 'until':, 'centre':}): the Hook Text and where it sits ('until' in seconds of
-    the delivered file); the Hook Text check (hookcheck.py, rule 10) runs first and stops on a fault unless
-    --faults-named (Sam has been told). Hook Text words or flags typed on the command line override HOOK (and say so).
+    the delivered file); the Hook Text check (hookcheck.py, rule 10) runs first and stops on a fault unless that line
+    has its own written answer in the notes' "## Exceptions" (named-lines, Sam's Y 23 Nov: --faults-named no longer
+    passes a list). Hook Text words or flags typed on the command line override HOOK (and say so).
   * the readable check (could-not-test 3, 23 Nov): every text piece the places painter drew (name cards, signs,
     notices) and every KEEP_CLEAR box, as the render drew them (CLEAN.mp4.readable.json, written by the render),
-    against the captions and the Hook Text: 5% or more of one covered is a fault (--faults-named once Sam is told).
+    against the captions and the Hook Text: 5% or more of one covered is a fault (each line answered in the notes, as above).
   * a check pre-flight could not run (clipcheck's COULD NOT TEST) refuses even with --faults-named: only that check's
     row in the notes' "## Exceptions" with Sam's Y lets it by (film_engine.untested_fault).
 
@@ -170,6 +171,24 @@ def take(rest, flag, n=1):
     del rest[i:i + 1 + n]
     return vals
 
+def _left(film, name, lines, named=False):
+    """named-lines change 2 (Sam's Y, 23 Nov; rule 59): the lines with no written answer of their own in the film's
+    notes (blind ones always). --faults-named no longer passes a list; it is only reported."""
+    if not lines:
+        return []
+    import preflight
+    import waivers
+    p = preflight.notes_path(film, name)
+    done, left = waivers.split(lines, open(p).read() if os.path.exists(p) else '', film)
+    if done:
+        print(f'{len(done)} line(s) answered in the notes')
+    for x in waivers.todo_rows(left):
+        print('row to fill: ' + x)
+    if left and named:
+        print('--faults-named given: it no longer passes a list (rule 59, Sam 23 Nov)')
+    return left
+
+
 
 def main():
     src, dst = sys.argv[1], sys.argv[2]
@@ -209,9 +228,10 @@ def main():
         faults = hookcheck.faults(film) if (hook, extra) == (ftext, fflags) else []
         for f in faults:
             print('HOOK TEXT FAULT: ' + f)
-        if faults and not named:
-            sys.exit('finish REFUSED (rule 10): fix the Hook Text position in HOOK, or add --faults-named once '
-                     'Sam has been told')
+        faults = _left(film, name[0], faults, named)          # named-lines: each line its own written answer
+        if faults:
+            sys.exit('finish REFUSED (rule 10): fix the Hook Text position in HOOK, or answer each line in the notes\' '
+                     '"## Exceptions" (rows to fill above; --faults-named no longer passes a list)')
         if not faults:
             print('Hook Text check: clear of everything listed')
     import cover                                  # could-not-test (3, Sam's pick 1, 22 Nov): what the film lists (name
@@ -226,9 +246,10 @@ def main():
                    f'({os.path.basename(side)}): render the clean video again with the render tool']
     for f in rfaults:
         print('READABLE FAULT: ' + f)
-    if rfaults and not named:
-        sys.exit('finish REFUSED (could-not-test 3): a listed thing is under a caption or the Hook Text: fix it, or add '
-                 '--faults-named once Sam has been told')
+    rfaults = _left(film, name[0], rfaults, named)            # named-lines: each line its own written answer
+    if rfaults:
+        sys.exit('finish REFUSED (could-not-test 3): a listed thing is under a caption or the Hook Text: fix it, or '
+                 'answer each line in the notes\' "## Exceptions" (--faults-named no longer passes a list)')
     if not rfaults:
         print('readable check: every listed thing clear of the captions and Hook Text, on the frames drawn')
     import film_engine                            # could-not-test (1): a check that could not test stops here even with

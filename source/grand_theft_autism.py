@@ -136,7 +136,8 @@ def clip(out, a, b):
                     '-map', '0:v', '-map', '1:a?', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '128k', '-shortest', out],
                    check=True)
     os.remove(silent)
-    w.finish(out, named='--named' in sys.argv)     # the body check record (the send gate asks for it)
+    _np = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'notes', 'grand-theft-autism.md')   # named-lines
+    w.finish(out, named='--body-named' in sys.argv, notes=open(_np).read() if os.path.exists(_np) else '')
 
 
 UP = '/root/.claude/uploads/77034bac-879c-5e0d-ae1f-2f0f01232e9c/'

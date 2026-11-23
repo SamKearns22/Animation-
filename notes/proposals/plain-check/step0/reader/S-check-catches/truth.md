@@ -1,0 +1,9 @@
+The plan the options describe (the judge's final version):
+
+**Learn first (read-only, its own Y).** One Sonnet chat per film, for Milburn, Protest Tiers and Blessed, re-runs today's checks on each chat branch, as the 16 Nov late-faults replay did, and writes one table, one row per check: runs; faults listed; false alarms; faults gone before the animatic Sam saw; faults let through (named or allowed); Sam's notes it should have caught (misses, from each film's notes table); run time; could not test. "Would Sam have seen it" = visible at phone size in the animatic frame (a proxy). Bar to beat: a sourced answer for at least 80% of check-film pairs. The table goes to job 1; a check with nothing caught on three films goes to Sam with a Lost: line. About 3-5% of a week once (unchecked), filed as tool work.
+
+**Change 1: a record that always saves (its own Y).** Each check run saves under the film named in its command, with no marker file, each check under its own name, and each fault's fate from comparing one run with the next (gone after a fix = caught; named or allowed = let through). It prints a line if it cannot save. The handover check refuses when pre-flight ran but the record is empty; a test runs it in a fresh copy with no marker file. Bar to beat: on the next film, every check run has a row (today 0 rows against Milburn's 14 runs). About 1.5-2% once (unchecked).
+
+**Change 2: Sam's notes counted and tagged (its own Y, after one film of change 1).** The handover check counts Sam's numbered notes into the record and refuses while any note lacks "should have caught: CHECK / none". Bar to beat: the count equals the notes table (Milburn today: 0 against 11), and no repeat of a tagged miss on the next film, checked at the end-of-film review. About 1% once.
+
+After these, near nothing per chat. Nothing is retired by this proposal.
