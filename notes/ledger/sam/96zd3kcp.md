@@ -24,3 +24,7 @@ Please continue. Please make sure 'Override' works as a universal code work for 
 ### 2026-11-23T10:54:09
 Y
 
+### 2026-11-23T10:54:32
+Please remove the 'locked by Sam' section of communication as it doesn't help me
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
