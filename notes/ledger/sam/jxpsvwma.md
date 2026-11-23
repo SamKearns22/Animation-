@@ -11,3 +11,6 @@ Okay. Damn.
 
 Since the collaborate function isn't available to me and reposts don't seem to do anything for me at all, can I use stitch or duet to make this work?
 
+### 2026-11-23T18:54:54
+Please do a deep dive into this issue, run it through the proposal route, and get back to me
+
