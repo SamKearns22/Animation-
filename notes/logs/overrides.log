@@ -17,3 +17,5 @@
 2026-11-23T14:50+00:00	fcc7aa67	sam	Override
 2026-11-23T15:16+00:00	46cfe473	sam	1. Override
 2026-11-23T15:17+00:00	46cfe473	skipped	handover stops: STOP: KIT TEST RED AT TWO HANDOVERS IN A ROW: body_check_back_view (red at 2026-11-23T14:52+00:00 too): fix it (or the tool it tests) before handing over
+2026-11-23T15:17+00:00	17362969	not-sam (chat 52's opening prompt for chat 53, read as Sam's word until chat 53 fixed override.py)	Grand Theft Autism, chat 53 (Opus, medium effort, a round of Sam's notes). Start with the Animation- project attached; list it first, and check you can save to GitHub, else stop and say so. Run `python3 source/handover.py start PARENT_SESSION --film grand-theft-autism` with parent session session_01
+2026-11-23T15:19+00:00	17362969	skipped	render REFUSED (rule 59): pre-flight has not been run on kittests in this session: python3 source/preflight.py kittests OUT_DIR

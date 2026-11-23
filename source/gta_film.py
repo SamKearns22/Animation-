@@ -19,7 +19,8 @@ import gta_rehearse as R         # noqa: E402
 import gta_shots58 as M          # noqa: E402
 
 FPS = 12
-LEAD = 0.5                      # Sam, 21 Nov: 0.5 s of darkness before the logo swipes in
+LEAD = 0.125                    # Sam, 23 Nov: the darkness 75% shorter (was 0.5 s, Sam 21 Nov) before the logo swipes in
+LEAD_WAS = 0.5                  # the clock every time in grand_theft_autism.py was written on (shifted by LEAD - LEAD_WAS)
 _L = [O.DUR + LEAD, R.SHOT2_LEN, R.SHOT3_LEN, R.SHOT4_LEN] + [M.SHOTS58[n][1] for n in (5, 6, 7, 8)]
 SHOTS, _t = [], 0.0
 for _n, _ln in enumerate(_L, 1):

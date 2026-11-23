@@ -430,6 +430,11 @@ H_FOCUS = [(0, 0.0), (7.75, 0.0), (7.85, -0.25), (7.97, 0.25), (8.09, -0.2), (8.
            (8.3, 0.5), (8.85, 0.5), (9.05, 0.0),                                   # "like that": at the driver
            (LINE4[0] + 0.25, 0.0), (LINE4[0] + 0.4, 0.5), (BROUGHT, 0.5), (BROUGHT + 0.2, 0.0),
            (HYPER - 0.1, 0.0), (HYPER + 0.05, -0.5), (15.4, -0.5), (15.6, 0.0)]  # "hyperfixation": at Jason
+# Sam 23 Nov (on v6; first asked 21 Nov): "make her look delighted at the end, and look at Lucia. Big happy
+# suddenly-interested smile." Her line ends, then she snaps round to Lucia (screen right) with the open grin, held.
+LINE6_END = LINE6[0] + LINE6[1][-1][0]
+DELIGHT = LINE6_END + 0.05                             # the snap starts just after "nitroglycerin" ends
+H_FOCUS += [(DELIGHT, 0.0), (DELIGHT + 0.14, 0.6)]
 
 
 def her_spin_t(t):
@@ -463,9 +468,14 @@ def inside58(t, rec=None):
         her_over['smile'] += 0.7 * proud                                   # a little proud on "explosives", "without her"
         her_over['brow_up'] += 0.03 * proud
         her_over['gaze_dy'] += 0.45 * bump(t, BROUGHT + 0.1, BROUGHT + 0.3, BROUGHT + 1.0)   # "brought her": eyes drop
+        joy = smooth((t - DELIGHT) / 0.12)                               # Sam 23 Nov: delighted, at Lucia
+        her_over['brow_up'] += 0.06 * joy
+        her_over['smile'] += 1.0 * joy
         focused(her_over, H_FOCUS, t)
         if mo:
             her_over['mouth'] = mo
+        elif joy > 0.4:
+            her_over['mouth'] = 'v:grin'       # the house's big open smile (the closed smile's corners lift ~1 px: unseen)
         fid = 0.012 * math.sin(t * 19.0) * (1 - bright)
         sx = -0.11 * th
         spin_at = (sx + fid, 0.87 - 0.10 * tug, -0.50 + 0.05 * lean_in)

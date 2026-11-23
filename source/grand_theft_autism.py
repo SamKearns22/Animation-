@@ -9,6 +9,7 @@ MAP
   render ....... python3 source/grand_theft_autism.py OUT.mp4   (540 x 960, 12 drawings a second, each held 2 frames)
   clip ......... python3 source/grand_theft_autism.py OUT.mp4 --span T0 T1   (changed seconds; sound from the clean render)
 """
+import math
 import os
 import subprocess
 import sys
@@ -37,7 +38,8 @@ frame_image = F.frame_image      # for critique.py (chat 33b: its before/after s
 DUR = LENGTH
 SHOTS = F.SHOTS
 SONG = os.path.join(HERE, '..', 'music', 'monde-de-mer-full.mp3')
-SONG_FROM = 36.48             # his whole song (21 Nov): 0.5 s before the chorus's first hit (36.98) = film frame 1
+SONG_FROM = round(36.98 - F.LEAD, 3)   # his whole song (21 Nov): the chorus's first hit (36.98) lands as the logo swipes in
+                                      # (after LEAD s of darkness); frame 1 = LEAD s before the hit (Sam 23 Nov: LEAD 0.125)
 SONG_LEN = LENGTH
 
 
@@ -52,8 +54,10 @@ CAPS = [(7.30, 10.24, "This is actually a really difficult sensory experience.")
         (35.30, 37.10, "My safe food is nitroglycerin.")]
 # Sam 23 Nov (shot 4 25% slower, 8.2 -> 10.25 s): everything after shot 4 moves later by SHIFT4 (the times above are
 # the chat-42 film clock, shot 5 then at 22.3)
-SHIFT4 = round(F.SHOTS[4][1] - 22.3, 4)
-_late = lambda t: t + SHIFT4 if t >= 22.3 else t
+# Sam 23 Nov (chat 53): the black start 75% shorter moves every time F.LEAD - F.LEAD_WAS (-0.375 s) earlier
+SHIFT0 = round(F.LEAD - F.LEAD_WAS, 4)
+SHIFT4 = round(F.SHOTS[4][1] - SHIFT0 - 22.3, 4)
+_late = lambda t: (t + SHIFT4 if t >= 22.3 else t) + SHIFT0
 CAPS = [(_late(a), _late(b), c) for a, b, c in CAPS]
 
 
@@ -170,6 +174,8 @@ VOICES = [(f, a, b, _late(at)) for f, a, b, at in VOICES]   # Sam 23 Nov: after 
 
 GAIN_DB = {'Autistic_1.m4a': 7.5, 'Autistic_2.m4a': 13.8, 'Autistic_3.m4a': 10.9, 'Autistic_4.m4a': 7.9,
            'Lucia.m4a': 2.0, 'Jason.m4a': 0.0}      # Sam 21 Nov: her voice was barely audible; all brought to one level
+VOICE_UP_DB = round(20 * math.log10(1.5), 2)        # Sam 23 Nov (on v6): dialogue +50% (x1.5 = +3.52 dB), all voices
+GAIN_DB = {f: g + VOICE_UP_DB for f, g in GAIN_DB.items()}
 
 
 def _find(key):

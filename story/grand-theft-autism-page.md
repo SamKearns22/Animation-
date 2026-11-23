@@ -3,24 +3,31 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## grand_theft_autism.py (153 lines)
-- 16: HERE (data)
-- 29: LENGTH (data)
-- 36: DUR (data)
-- 37: SHOTS (data)
-- 38: SONG (data)
-- 39: SONG_FROM (data)
-- 40: SONG_LEN (data)
-- 44: CAPS (data)
-- 54: `caption_at` 
-- 58: `shot_of` 
-- 62: `_draw` 
-- 69: `main` 
-- 100: UP (data)
-- 101: VOICES (data)
-- 107: GAIN_DB (data)
-- 111: `_find` 
-- 116: `mix` The song (radio level after the opening), the voices, the sound effects Sam named: siren, pistol, glass at
+## grand_theft_autism.py (219 lines)
+- 17: HERE (data)
+- 30: LENGTH (data)
+- 37: DUR (data)
+- 38: SHOTS (data)
+- 39: SONG (data)
+- 40: SONG_FROM (data)
+- 41: SONG_LEN (data)
+- 45: CAPS (data)
+- 55: SHIFT4 (data)
+- 57: CAPS (data)
+- 60: `caption_at` 
+- 64: `shot_of` 
+- 68: FULL (data)
+- 72: `_draw` 
+- 82: `_draw_checked` A drawing with the body check on (humancheck): (pixels, its faults).
+- 90: `main` 
+- 137: CLEAN (data)
+- 140: `clip` python3 source/grand_theft_autism.py OUT.mp4 --span T0 T1: the seconds T0-T1 drawn fresh, small (540 x 960),
+- 163: UP (data)
+- 164: VOICES (data)
+- 168: VOICES (data)
+- 171: GAIN_DB (data)
+- 175: `_find` 
+- 180: `mix` The song (radio level after the opening), the voices, the sound effects Sam named: siren, pistol, glass at
 
 ## grand-theft-autism-people.txt (5 people; a note on a person changes their lines)
 - 7: jason (Jason (Sam's key art, Nov: buzzed dark hair, a very light fade of stubble (Sam, chat ), hard frown; a cream LEONIDA vest, a thin silver chain, camo cargo shorts, trainers). Build measured from the game's art (notes, "Body shapes measured").): body: , shoulders , head x , hem , build man, arms muscle, legs ; skin: hair: crop, , buzz; face: jaw_wide ++, chin_long +, brow_high ---, face_wide +; eyes: lips: brows: , width , thick ; beard: stubble ; rest smile: ; outfit: jumper , no tie, trousers , shoes , shorts knee, camo, fray, trainers; extras: vest
