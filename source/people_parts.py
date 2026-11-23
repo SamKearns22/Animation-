@@ -1256,11 +1256,18 @@ def workwear_torso(img, p, sp, t):
     sw = sp.get('shoulders', 150)
     bottom = sp.get('bottom', V.JACKET)
 
-    def edge(y):                                    # the body's half width at y (burnham's body outline)
-        return float(np.interp(y, [50, 200, bottom], [sw, sw + 6, sw * 0.85]))   # the kit body's hem (0.85)
-    for sgn in (-1, 1):                             # the yoke: orange over each shoulder, from the collar out
-        yoke = [(sgn * 40, 4), (sgn * edge(30) * 0.75, 18), (sgn * edge(40), 40), (sgn * edge(250), 250),
-                (sgn * edge(250) * 0.8, 240), (sgn * edge(130) * 0.74, 118), (sgn * 52, 62), (sgn * 34, 34)]
+    out = B.front_outline(sw, bottom, 2.0, sp.get('figure'), sp.get('arm_w', 30.0))
+
+    def edge(y):                                    # the body's own half width at y (any build: body.FIGS)
+        got = V._span(out, min(max(y, 0.0), bottom - 0.5))
+        return float(got[1]) - 1.0 if got else sw
+    for sgn in (-1, 1):                             # the yoke: orange over each shoulder, from the collar's edge out
+        # Its inner edge runs just outside the collar and lapel (the suit's lapel reaches x 70 at y 30, 62 at 150;
+        # Sam on cast v2, note 6: "Kemi's orange detailing travels over her white collar"; her photo: the navy
+        # collar lies on top, the orange starts at the shoulder outside it). It is drawn after the jacket, so it
+        # must never reach inside x 74 above the lapel's foot.
+        yoke = [(sgn * 76, 6), (sgn * edge(30) * 0.78, 18), (sgn * edge(40), 40), (sgn * edge(250), 250),
+                (sgn * edge(250) * 0.8, 240), (sgn * max(edge(130) * 0.74, 96), 118), (sgn * 86, 70), (sgn * 78, 32)]
         #   (down the side under the arm, as her photo: the sleeve's shoulder joins orange, never fades to navy)
         p.poly(curve(yoke, 3), orange, INK, 2.0)
     ya, yb = bottom - 150, bottom - 62              # the waist band, its silver stripe through the middle

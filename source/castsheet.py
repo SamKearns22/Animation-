@@ -12,6 +12,11 @@ in the straight on view"; n3 Kemi "the orange is gone from her clothes").
             the figure. A colour whose height changes past 15%, or which loses past half its share (or is gone),
             is a fault: one person must read as the same person, haircut and clothes in every view.
             Tested on Sam's saved notes (`selftest`: the cast v1 pictures he marked must fail, and why).
+            NOT SEEN (a gap, chat 3): LAYERING. match counts colours, never which piece lies on top, so a piece worn
+            over the clothes drawn across the collar passes (Sam on cast v2, n6: "Kemi's orange detailing travels
+            over her white collar"; notes/sam-notes/brexit-cast-v2/n6-*.jpg). To see it, the check would need each
+            piece's own pixels (drawn once alone) to test that an over-piece never covers the collar or lapels.
+            Nor does it know a build (n5: both women on the man's body): it compares a person with herself.
 
     python3 source/castsheet.py sheet FILM OUT.jpg [WHO ...]    the sheet (refuses on a figure touching an edge)
     python3 source/castsheet.py match FILM [WHO ...]            front | 3/4 faults, one line each

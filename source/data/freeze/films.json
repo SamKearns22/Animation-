@@ -487,10 +487,12 @@
  "grand-theft-autism": {
   "module": "grand_theft_autism",
   "videos": [
-   "grand-theft-autism-vertical.mp4"
+   "grand-theft-autism-vertical.mp4",
+   "grand-theft-autism-story.mp4"
   ],
   "saves": {
-   "grand-theft-autism-vertical.mp4": "801f074a"
+   "grand-theft-autism-vertical.mp4": "801f074a",
+   "grand-theft-autism-story.mp4": "a56d40f7"
   },
   "save": "801f074a"
  }
