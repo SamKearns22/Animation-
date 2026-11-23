@@ -2,6 +2,7 @@
 Finished sections and ticked notes: notes/archive/grand-theft-autism-notes.md (moved chat 27: the diagnosis, body shapes, the plan, the acting list and shot 4 acting rows and events, references, the build proposals).
 
 ## Brief checklist (Sam's words)
+- [x] Sam (23 Nov, chat 48): "this film won't have an initial hook text as it would get in the way of the opening joke (the logo)". No Hook Text on the animatic or the final; the film has no HOOK, so finish.py adds none (checked: film_hook returns empty). Sign-off still goes on.
 - [ ] Sam (20 Nov): "extend the opening shot ... (a more gentle wipe in of the logo, hold on it as we see the city
       scape) and put the chorus of the above song over it"; corrected twice, final: "6.5 seconds" in all. Done in the
       opener: wipe 0.5-2.0 s with a soft edge, city in 1.8-3.0, logo held over the city to 4.7, gone by 5.65; chorus
