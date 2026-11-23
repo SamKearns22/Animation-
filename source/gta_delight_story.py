@@ -26,7 +26,11 @@ TILT, Y = 6.0, 420
 
 
 def _draw(i):
-    return G.F.frame_image(T0 + i / 12).convert('RGB').resize((1080, 1920)).tobytes()
+    """One drawing with the body check on (humancheck, rule 89): (pixels, its faults)."""
+    import humancheck as HC
+    HC.frame_begin()
+    px = G.F.frame_image(T0 + i / 12).convert('RGB').resize((1080, 1920)).tobytes()
+    return px, HC.frame_end(T0 + i / 12)
 
 
 def main(out):
@@ -41,9 +45,12 @@ def main(out):
     p = subprocess.Popen([FF, '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', '1080x1920', '-r', '12',
                           '-i', '-', '-r', '24', '-c:v', 'libx264', '-crf', '18', '-pix_fmt', 'yuv420p', silent],
                          stdin=subprocess.PIPE)
+    import humancheck as HC
+    w = HC.Writer(f'story {T0}-{T1}')
     with Pool(os.cpu_count()) as pool:
-        for fr in pool.imap(_draw, range(n)):
+        for k, (fr, faults) in enumerate(pool.imap(_draw, range(n))):
             p.stdin.write(fr)
+            w.frame(T0 + k / 12, faults)
     p.stdin.close()
     p.wait()
     png = os.path.join(tmp, 'hook.png')
@@ -54,6 +61,8 @@ def main(out):
                     f'[0:v][2:v]overlay=0:0,format=yuv420p[v];[1:a]afade=t=out:st={dur - 0.3:.2f}:d=0.3[a]',
                     '-map', '[v]', '-map', '[a]', '-c:v', 'libx264', '-crf', '20', '-preset', 'slow',
                     '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', out], check=True)
+    notes = os.path.join(HERE, '..', 'notes', 'archive', 'grand-theft-autism-notes.md')
+    w.finish(out, notes=open(notes).read() if os.path.exists(notes) else '')
     print('wrote', out, f'{os.path.getsize(out) / 1e6:.1f} MB', f'{dur:.2f} s')
 
 

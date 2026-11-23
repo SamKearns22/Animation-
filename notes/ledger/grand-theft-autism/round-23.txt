@@ -1,0 +1,27 @@
+== critique, round 23 pass 1 (2026-11-23): 6 fault(s), 3 can't tell
+-- look.md --
+1: Contact strip of eleven tiny near-identical car-and-street frames; no readable words, nothing distinct.
+2: Red car, three people, man aims gun, police lights behind; "When Rockstar remembers to represent your people in their masterpiece:"
+-- result.md --
+## Faults
+FAULT P2 [1-2]: middle woman - the brief wants a big, happy, open-mouthed grin with her head snapped round at Lucia. In the held frame she faces the camera with a small, closed-looking smile. Her head does not turn toward Lucia, and Lucia's side-eye does not show. The strip's last frames look the same as its first ones.
+FAULT P2 A1 [1-2]: all three faces are tiny against the huge red bonnet (about a third of the frame is bonnet and grille). The feeling, gaze and side-eye cannot be read at phone size. The crop should put the faces larger, in the same camera and framing, by drawing them bigger and clearer.
+FAULT A4 [1-2]: the Hook Text box is not in the sky as the brief says. It sits over the left buildings and the tops of the street, covering part of the skyline. It is not clear it stays clear of the pedestrians and the police car.
+FAULT P1 P6 [2]: Jason's gun hand is a small grey shape at his chest, pointing up and sideways. It does not read clearly as a gun held in a ball hand. The hand and prop contact is unclear at phone size.
+FAULT O3 [1-2]: the front of the car, the dark band with one small oval badge, reads as a flat dark strip. It does not look like a 1970s muscle-car grille or bumper.
+FAULT P4 [1-2]: the middle woman's hair and neck area do not clearly match her reference (bun on top, headphones round the neck, unicorn jumper). In ours the hair looks loose and the neck shows a colourful clutter instead of black headphones. Lucia's plait over the shoulder is not visible.
+CAN'T TELL P12 [1]: the strip frames are too small to show whether the woman's mouth moves on her line. A larger crop of frames 1-6 would show it.
+CAN'T TELL M2 M3 [1]: the strip timestamps are unreadable and every frame looks almost identical. A bigger strip with legible times would show when the head snaps and how long the grin is held.
+CAN'T TELL P14 P11 P5 P13 [2]: eyes, necks, shoulders and sleeves are under about 40 px. A full-size crop of each face and each shoulder would show them.
+
+## Checked
+1-2 (every line looked at; those marked CAN'T TELL could not be judged from these pictures)
+
+## Cold look
+My look.md named the car, three people, gun, police lights and the Hook Text correctly. It did not name the woman's grin because I could not see one. That agrees with the P2 fault, and I should have said so in the look. I did not name Lucia's side-eye either, because it is not visible. I called panel 1 only a strip of near-identical frames, which is itself a fault: it shows no head turn.
+
+## Not on the list
+- Strip frames too small to read their timestamps. Suggested line: M6 each strip frame's time is legible at phone size.
+- Subject too small in a frame dominated by the bonnet. Suggested line: P15 each face fills enough of the frame to read its feeling at phone size.
+- Hook Text sitting over scenery rather than in the sky the brief names. Suggested line: A5 the Hook Text sits where the brief says it does.
+
