@@ -1,6 +1,6 @@
 # Proposal: Sam sees a message twice when the proposal checker blocks after sending
 
-Status: open (23 Nov: its Learn and the guard's Change 1 built by guard-film-questions; its Change 3 = that proposal's Change 2; the watcher part asked 23 Nov)
+Status: open (23 Nov: its Learn and the guard's Change 1 built by guard-film-questions; its Change 3 = that proposal's Change 2; the watcher part not yet asked: Sam's hold, 23 Nov)
 
 ## Problem
 When the proposal checker (the Stop hook in source/propose.py) decides a reply asks Sam to approve an unjudged change,
