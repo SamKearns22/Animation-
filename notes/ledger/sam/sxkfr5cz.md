@@ -31,3 +31,7 @@ Go
 Please note that Jason's poses and movements are otherwise good, his model just cuts off too early and his lower body and legs are on the wrong side of the door when he leans out
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-23T11:59:10
+Make sure you don't see green trousers below that black line, just red or black car parts.
+(handover log: not found in the chat record after 20 s; saved as Sam's)
+
