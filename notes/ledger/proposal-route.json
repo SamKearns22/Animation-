@@ -14566,6 +14566,670 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "7afd1f6f",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.03,
+   "src": "estimate",
+   "sid": "session_01U3pKQzjJ6Hbt9H5jkEg1t1",
+   "steps": 78,
+   "hist_k": 188,
+   "kinds": {
+    "tool search": 31.4,
+    "renders": 2.9,
+    "pictures": 1.3,
+    "other": 64.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 68,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 2,
+    "other": 7
+   },
+   "split": {
+    "usd": 3.7662,
+    "total": 3.7662,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 35.6,
+     "Claude's words": 24.7,
+     "new writes": 22.0,
+     "carried history": 17.7
+    },
+    "origins": {
+     "Claude's words": 38.6,
+     "start-up floor": 35.6,
+     "result: tool search": 20.4,
+     "messages and reminders": 1.8,
+     "result: other": 1.6,
+     "result: pictures": 1.6,
+     "result: renders": 0.5
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 35.6,
+     "thinking": 15.9,
+     "reading kit code": 13.7,
+     "writing code": 11.8,
+     "commands": 8.5,
+     "reading notes": 2.3,
+     "messages to Sam": 1.9,
+     "start-up and handover tools": 1.9,
+     "messages and reminders": 1.8,
+     "looking at pictures": 1.6,
+     "git and saving": 1.2,
+     "running checks and tools": 1.2,
+     "other commands": 0.7,
+     "writing notes": 0.6,
+     "reading guides": 0.5,
+     "reading chat records": 0.5,
+     "renders": 0.5
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 32,
+    "work_pct": 0.36,
+    "reads": [
+     [
+      "source/kittests.py",
+      2.5,
+      0.0456
+     ],
+     [
+      "source/humancheck.py",
+      1.5,
+      0.0292
+     ],
+     [
+      "source/takes.py",
+      0.9,
+      0.0157
+     ]
+    ],
+    "base_pct": 31.2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 19,
+     "shared:handover.py": 2,
+     "shared:kittests.py": 14,
+     "shared:gta_rehearse.py": 4,
+     "shared:humancheck.py": 6,
+     "shared:leanout.py": 1,
+     "shared:takes.py": 1,
+     "shared:views.py": 3,
+     "guides": 1,
+     "film notes": 6,
+     "shared:jason3d_film.py": 1,
+     "shared:viewchecks.py": 2,
+     "shared:audit.py": 2,
+     "shared:power_crime.py": 6
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g 2>&",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git log --onel",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "/root/.claude/projects/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2c3c",
+      "cd /root/.claude/projects/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "/root/.claude/projects/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2c3c",
+      "cd /root/.claude/projects/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/kittest*",
+      "kit tests\\|kittests",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "body_check_back_view",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 4235,4330p source/kittests.py",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def _body_faults",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n '/^if __name__/,$p' source/kittests.py | head -30",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def main",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "time python3 source/kittests.py body_check_back_view 2>&1 | tail -5",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "grip angles",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "back view",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "git rev-list --count 3d442e99..HEAD && git rev-list --first-parent --count 3d442",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "^def frame_begin\\|^def frame_end\\|^_FRAME\\|^def note\\|^def record\\|_ENTRIES\\|^de",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sed -n 49,125p source/humancheck.py",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "grip angles",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "^import\\|^from\\|^    import\\|^    from",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "grip angles",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:leanout.py",
+      "source/leanout.py",
+      "git show 12c3640d --stat | head; git show 12c3640d -- source/leanout.py | head -",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "^1.3",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/leanout.py",
+      "def _load_at\\|def _old_module\\|def _film_at\\|def _module_at\\|sys.modules\\[",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:takes.py",
+      "source/takes.py source/freeze.py",
+      "^def ",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py source/leanout.py source/gta_cars.py",
+      "import leanout\\|import gta_\\|import hand3d\\|import arm3d",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "_COMMIT\\b\\|_COMMIT =\\|git', 'show', f'{",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/leanout.py source/gta_rehearse.py",
+      "leanout",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py S/v3/source/humancheck.py",
+      "grip angles",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n '/^def solid_check_shot4_v7/,/^@test/p' source/kittests.py | sed -n '10,3",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/kittests.py",
+      "^BACK_DEG\\|^HEAD_BACK_DEG",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n '/^def body_check_shot4_v4/,/^def body_check_back_view/p' source/kittests",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/humancheck.py",
+      "^V4_TIMES",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/gta_rehearse.py",
+      "    code = ('import json, gta_rehearse as G, humancheck as HC\\\\nout = []\\\\nfor t",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL\\|kittests:",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "leg\\|knee\\|3d\\|skel\\|lying\\|bench",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "leg\\|knee",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1,30p source/views.py; sed -n 215,300p source/views.py",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "film notes",
+      "notes/archive notes/examples",
+      "doorframe",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "notes/grand-theft-autism-stills/v4/notes.txt",
+      "cat notes/grand-theft-autism-stills/v4/notes.txt 2>/dev/null | head -60",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "notes/grand-theft-autism-stills/v4/",
+      "ls notes/grand-theft-autism-stills/v4/ | head -30",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "film notes",
+      "notes/bench/learn-step.md",
+      "find . -name \"sam-frame-05*\" -not -path \"./.git/*\" | head; sed -n 1,40p notes/be",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:views.py",
+      "source/views.py source/humancheck.py",
+      "HC_HOOK\\[0\\](",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "grip angles",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "other",
+      "",
+      "grip angles",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "^PASS\\|^FAIL\\|kittests:",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "other",
+      "",
+      "PASS\\|FAIL\\|kittests:",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:jason3d_film.py",
+      "source/*.py source/jason3d_film.py",
+      "silhouette\\|iou\\|IoU",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "shared:viewchecks.py",
+      "source/viewchecks.py",
+      "^def \\|^    [a-z_]* \\.\\.\\.",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:viewchecks.py",
+      "source/viewchecks.py",
+      "sed -n 593,677p source/viewchecks.py; sed -n 483,516p source/viewchecks.py",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "def shot4\\b\\|def shot4(\\|record\\|'solid'\\|pts3\\|toggle\\|may_touch\\|SHOT4_LEN",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check/rule-table.md notes/shot4-case-study/shot4-case",
+      "G4-2 \\|G4-3 \\|G4-4 \\|G4-11 ",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "film notes",
+      "notes/shot4-case-study/shot4-case-study.md notes/proposals/rule-needs-check/*.md",
+      "3c.*1.00\\|frame-0[1-5].*[0-9]\\.[0-9]* s",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "film notes",
+      "notes/proposal-route.md notes/proposals/rule-needs-check/",
+      "2.67\\b\\|3\\.42",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "matched\\|V4_STILL\\|stills.*times",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "grip angles",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2c3cb/scrat",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:audit.py",
+      "source/audit*.py source/audit.py",
+      "^def ",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:audit.py",
+      "source/audit.py source/power_crime.py notes/archive/*.md",
+      "door.*through.*officer\\|swinging through",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "film notes",
+      "notes/archive/power-crime-action.md",
+      "^| 4[0-9] \\|^| [0-9] \\|^| [1-3][0-9] ",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:power_crime.py",
+      "source/power_crime*.py source/power_crime.py",
+      "note 47\\|clear of the swing\\|0\\.8.*door\\|door.*swing",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:power_crime.py",
+      "source/power_crime.py",
+      "THROW_OFF\\|officer.*stand\\|OFFICER_X\\|OFF_X\\|swing",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:power_crime.py",
+      "source/power_crime.py source/power_crime*.py",
+      "VAN_BACK",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:power_crime.py",
+      "source/power_crime.py",
+      "door_officer\\|'van'",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:power_crime.py",
+      "source/power_crime.py",
+      "sed -n 1577,1680p source/power_crime.py",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:power_crime.py",
+      "source/power_crime.py",
+      "^SLAM\\|^SHOTS\\|^FPS\\|^DRIVE\\|^FLIGHT",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2c3cb/scrat",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2c3cb/scrat",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "ls /tmp/claude-0/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2c3cb/scra",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/7afd1f6f-f6cc-550c-bacf-3a21d1a2c3cb/scrat",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
