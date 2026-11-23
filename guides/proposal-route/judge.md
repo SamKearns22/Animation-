@@ -31,8 +31,11 @@ named in the line that started you; every path is relative to it. Read `CLAUDE.m
 6. List the faults still in the pick (from the Sam test, the facts check, or your own reading), each tagged
    `[fixed]` (you fixed it in the final version) or `[named]` (left in, said plainly to Sam). Do not invent faults
    to fill a quota; do not hide one.
-7. Write the final version, then what Sam sees: the top two options in plain English (no code names; what it is,
-   why, what he would notice), each with a `Lost:` and an `Added:` line.
+7. Write the final version, then what Sam sees: the top two options in plain English, each in the fixed fields of
+   CLAUDE.md "Back-end proposals are explained plainly", one per line, in this order: `Problem:` (one or two plain
+   sentences), the steps as numbered lines (`1.`, `2.` ...), `Why:`, `You'd notice:`, `Other option:`, `Lost:`,
+   `Added:`. No code names, file names, paths or command words anywhere in it (the recorder refuses them); any
+   technical word is explained where it appears, or replaced by a simpler one.
 
 ## What you write
 Write ONE file, the path you were given, with the Write tool, exactly these sections in this order (the route's
@@ -61,13 +64,16 @@ V2   (or V0: your own, only when no version passes)
 (the pick as it should be built, under 500 words)
 ## For Sam
 ### Option 1: short name
-plain English, 3-6 lines
+Problem: one or two plain sentences.
+1. first step, plain words
+2. next step
+Why: ...
+You'd notice: ...
+Other option: ...
 Lost: ...
 Added: ...
 ### Option 2: short name
-plain English, 3-6 lines
-Lost: ...
-Added: ...
+(the same fields, in the same order)
 ```
 
 Option 1 is your pick. Edit nothing else. Your last message is one word: done.
