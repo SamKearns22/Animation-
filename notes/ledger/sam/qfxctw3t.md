@@ -32,3 +32,6 @@ Okay, well, I really want to get this film finished and posted today. So what if
 ### 2026-11-23T14:35:15
 Y
 
+### 2026-11-23T14:36:36
+On my other account, where it's currently rendering the final, it's saying it doesn't have access to the sound, and this has happened 3 different times as I'm making this. I don't know why you aren't saving the dialogue or the sound effects, but could you give me a message that I can send to the other account that tells them where they are?
+
