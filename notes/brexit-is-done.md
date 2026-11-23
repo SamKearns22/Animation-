@@ -55,7 +55,7 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Chats are named "Open Wounds"** (Sam, 23 Nov); the film's files keep the name brexit-is-done.
 - **Next (chat 4, Opus high: a new build):** Sam said Y to option 1 of the woman's body
   (notes/proposals/womans-build.md "Final version"): the learn step (outlines, standing, turned, seated, saved
-  sheet), then the default and the check (must fail both n5 pictures, pass Lucia and Blair), then women's clothes,
+  sheet), then the default and the check (must fail both n5 pictures, pass Lucia as a woman and Blair as a man; Blair is the man's control, never a woman's body: Sam, 23 Nov, "obviously, Tony Blair is a man"), then women's clothes,
   then cast sheet v3 to Sam. Then the plan (brief items 4-18): sets, the wolves, the estimate.
 - **Needs Sam:** Q2 blood plan (item 18): his Y comes back to chat 3, which writes it here.
 - **Read:** `guides/job-packs.md` Build; notes/proposals/womans-build.md "Final version"; notes/sam-notes/brexit-cast-v2/.
