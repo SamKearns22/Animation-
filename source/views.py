@@ -1316,8 +1316,6 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         TAP[0]('mid', img)
     for draw in j.get('mid', []):                 # set pieces nearer than his body but under his arms (sitting.py: a desk
         draw(p, j2, view)                          # top his forearms rest on, the near armrest)
-    if TAP[0]:
-        TAP[0]('mid_end', img)
     if view in j.get('legs_over_views', ('front', 'three', 'side')):   # legs lying on a desk top (feet up; a thigh along a desk he perches
         for sd in legs_order:                      # on) are over it: drawn again after it, the root under the jacket
             if sd in j.get('legs_over', {}) and sd not in hidden:
@@ -1327,11 +1325,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
             leg(p, j, sd, view_deg, sp)
     for sd in arms_far:
         if sd not in behind and sd not in lap_arms:
-            if TAP[0]:
-                TAP[0]('arm', img, side=sd)
             arm(p, j2, sd, sp)
-            if TAP[0]:
-                TAP[0]('arm_end', img, side=sd)
     if any(getattr(d, 'held', False) for d in j.get('props', [])) and not j.get('grip'):
         raise ValueError(f"{sp.get('name', 'someone')} holds a prop with no hand in front of it: set j['grip']")
     for draw in ([] if held_behind else [d for d in j.get('props', []) if d not in under]):

@@ -34,6 +34,7 @@ sys.path.insert(0, HERE)
 ORDER_TOL = 0.05        # m: depths closer than this are side by side (clipcheck's ORDER_TOL)
 MIN_PX = 60             # px at 1080 x 1920: a further thing showing over a nearer one by fewer is noise (edges)
 FLAT = {'papers', 'coaster', 'folder', 'table top', 'rug', 'mat', 'floor'}   # lie on a surface (plus any kind with `near`)
+REST = 0.1              # m: how far below a surface a hand resting on it may reach on screen (its own thickness)
 TORSO = 0.12            # m: a body's half depth
 HAND = 0.045            # m: a hand's radius (clipcheck's hand sphere)
 TEXT_KINDS = ('name card', 'sign board', 'notice', 'can')    # pieces with words on them (the readable check)
@@ -61,6 +62,9 @@ def begin(mode='cover'):
     REC[0] = _Rec(mode)
     import views
     views.TAP[0] = _tap if mode == 'cover' else None
+    if mode == 'cover' and _ORIG_ARM[0] is None:
+        _ORIG_ARM[0] = views.arm
+        views.arm = _arm
     return REC[0]
 
 
@@ -70,6 +74,9 @@ def end():
     try:
         import views
         views.TAP[0] = None
+        if _ORIG_ARM[0] is not None:
+            views.arm = _ORIG_ARM[0]
+            _ORIG_ARM[0] = None
     except ImportError:
         pass
     return r
@@ -152,7 +159,8 @@ def person(img, who, depth, flat_person=True):
 
 
 def _tap(stage, img, **kw):
-    """views.person's tap: start, mid (body drawn), mid_end, arm/arm_end (each arm), head/head_end."""
+    """views.person's tap: start, mid (the body drawn so far), head/head_end. Each arm is recorded by _arm (drawn
+    alone on a clear layer as well), wherever views.person draws it (behind the body, in the lap, over the desk)."""
     r = REC[0]
     if r is None:
         return
@@ -168,35 +176,64 @@ def _tap(stage, img, **kw):
         if mu is None:
             import views as V
             mu = V.M_PER_UNIT
-        r.person = dict(who=who, d=d, mu=mu, depth=kw['depth'], snap=img.copy(), L=kw['L'], j2=kw['j2'])
+        r.person = dict(who=who, d=d, mu=mu, depth=kw['depth'], snap=img.copy(), arms=[], body=None)
         if d is None:
             r.blind.add(who)
         return
     P = r.person
     if P is None or P['d'] is None:
         return
-    who, d, mu = P['who'], P['d'], P['mu']
-    if stage in ('mid', 'arm_end', 'head_end'):
-        what = {'mid': 'body', 'arm_end': 'arm' + kw.get('side', ''), 'head_end': 'head'}[stage]
-        if what.startswith('arm'):
-            sd = kw['side']
-            ds = [d - P['depth'][k + sd] * mu for k in ('sh', 'el', 'wr')]
-            rng = (min(ds) - HAND, max(ds))
-        elif what == 'body':
-            rng = (d - TORSO, d + TORSO)
-        else:
-            rng = (d - 0.1, d + 0.1)
-        rec = _diff(P['snap'], img)
-        bottom = None
-        if rec is not None and what.startswith('arm') and r.view is not None:
-            c = r.view['camera']                 # the arm's lowest point as a height above the floor (level camera)
-            ymax = rec[0][1] + int(np.nonzero(rec[1].any(1))[0].max())
-            wd = d - P['depth']['wr' + kw['side']] * mu
-            bottom = c['up'] - (ymax - c['horizon']) * wd / c['lens']
-        _add(img, rec, name=f'{who} {what}', owner=who, rng=rng, flat=False, surface=None, bottom=bottom, on=None,
-             text='', kind='person')
-    if stage in ('mid', 'mid_end', 'arm', 'arm_end', 'head', 'head_end'):
+    who, d = P['who'], P['d']
+    if stage == 'mid' and P['body'] is None:
+        P['body'] = _diff(P['snap'], img)
+    elif stage == 'head':
         P['snap'] = img.copy()
+    elif stage == 'head_end':
+        if P['body'] is not None:              # the body, less whatever an arm painted (an arm drawn behind it)
+            bb, m, px = P['body']
+            m = m.copy()
+            for abb, am in P['arms']:
+                x0, y0 = max(bb[0], abb[0]), max(bb[1], abb[1])
+                x1, y1 = min(bb[2], abb[2]), min(bb[3], abb[3])
+                if x1 > x0 and y1 > y0:
+                    m[y0 - bb[1]:y1 - bb[1], x0 - bb[0]:x1 - bb[0]] &= ~am[y0 - abb[1]:y1 - abb[1], x0 - abb[0]:x1 - abb[0]]
+            _add(img, (bb, m, px), name=f'{who} body', owner=who, rng=(d - TORSO, d + TORSO), flat=False,
+                 surface=None, bottom=None, on=None, text='', kind='person')
+        _add(img, _diff(P['snap'], img), name=f'{who} head', owner=who, rng=(d - 0.1, d + 0.1), flat=False,
+             surface=None, bottom=None, on=None, text='', kind='person')
+        r.person = None
+
+
+_ORIG_ARM = [None]
+
+
+def _arm(p, j2, side, sp, *a, **k):
+    """views.arm while recording: the arm drawn alone on a clear layer too, so its own pixels are known even where
+    it repaints what was there; recorded at its real depth (shoulder, elbow and wrist from the pose)."""
+    r = REC[0]
+    P = r.person if r is not None else None
+    if P is not None and P['d'] is not None:
+        lay = Image.new('RGBA', p.img.size, (0, 0, 0, 0))
+        import body as B
+        try:
+            _ORIG_ARM[0](B.Pen(lay, p.cam), j2, side, sp, *a, **k)
+            bb = lay.getbbox()
+        except Exception:
+            bb = None
+        if bb:
+            px = np.asarray(lay.crop(bb)).copy()
+            m = px[..., 3] > 0
+            d, mu = P['d'], P['mu']
+            ds = [d - P['depth'][q + side] * mu for q in ('sh', 'el', 'wr')]
+            bottom = None
+            if r.view is not None:
+                c = r.view['camera']           # the arm's lowest point as a height above the floor (level camera)
+                ymax = bb[1] + int(np.nonzero(m.any(1))[0].max())
+                bottom = c['up'] - (ymax - c['horizon']) * ds[2] / c['lens']
+            P['arms'].append((bb, m))
+            _add(p.img, (bb, m, px), name=f'{P["who"]} arm{side}', owner=P['who'], rng=(min(ds) - HAND, max(ds)),
+                 flat=False, surface=None, bottom=bottom, on=None, text='', kind='person')
+    return _ORIG_ARM[0](p, j2, side, sp, *a, **k)
 
 
 # ---------------------------------------------------------------------------------------------- analyse
@@ -222,7 +259,7 @@ def _merge(items):
     return list(out.values())
 
 
-def _over(a, b, frame):
+def _over(a, b, frame, others=()):
     """Pixels where b shows over a in the frame (and a over b): only pixels where their colours differ count."""
     x0, y0 = max(a['box'][0], b['box'][0]), max(a['box'][1], b['box'][1])
     x1, y1 = min(a['box'][2], b['box'][2]), min(a['box'][3], b['box'][3])
@@ -242,8 +279,19 @@ def _over(a, b, frame):
     da = np.abs(f - pa[..., :3]).max(-1)
     db = np.abs(f - pb[..., :3]).max(-1)
     differ = np.abs(pa[..., :3] - pb[..., :3]).max(-1) > 40
-    b_top = both & differ & (db < 24) & (da > 40)
-    a_top = both & differ & (da < 24) & (db > 40)
+    b_top = both & differ & (db <= 6) & (da > 40)      # the frame shows b's own colour exactly (nothing else on top)
+    a_top = both & differ & (da <= 6) & (db > 40)
+    if b_top.sum() >= MIN_PX:                          # a pixel a third thing also explains (Andy's white shirt over
+        for o in others:                               # the white marble) is nobody's proof
+            ox0, oy0 = max(x0, o['box'][0]), max(y0, o['box'][1])
+            ox1, oy1 = min(x1, o['box'][2]), min(y1, o['box'][3])
+            if ox1 <= ox0 or oy1 <= oy0:
+                continue
+            sx, sy = ox0 - o['box'][0], oy0 - o['box'][1]
+            om = o['mask'][sy:sy + oy1 - oy0, sx:sx + ox1 - ox0]
+            op = o['px'][sy:sy + oy1 - oy0, sx:sx + ox1 - ox0, :3].astype(np.int16)
+            same = om & (np.abs(frame[oy0:oy1, ox0:ox1, :3].astype(np.int16) - op).max(-1) <= 6)
+            b_top[oy0 - y0:oy1 - y0, ox0 - x0:ox1 - x0] &= ~same
     return int(b_top.sum()), int(a_top.sum())
 
 
@@ -251,7 +299,7 @@ def _excused(near, far):
     """A flat thing lying on a surface (papers, a folder) under something resting on or above that surface: the
     camera looks down on the surface, so what sits on it covers it (Milburn's hands on his papers: no fault)."""
     if near['flat'] and far.get('bottom') is not None and near.get('surface') is not None:
-        return far['bottom'] >= near['surface'] - 0.03
+        return far['bottom'] >= near['surface'] - REST   # a resting hand's lowest drawn edge dips below the top
     if near.get('on') and near['on'] == far['name'] or far.get('on') and far['on'] == near['name']:
         return True
     return False
@@ -275,7 +323,7 @@ def faults(items, frame, allowed=lambda a, b: False):
                 continue                            # side by side in depth
             if _excused(near, far) or allowed(near, far):
                 continue
-            n, _ = _over(near, far, frame)
+            n, _ = _over(near, far, frame, [o for o in items if o is not near and o is not far])
             if n >= MIN_PX:
                 out.append((far, near, n))
     return out
