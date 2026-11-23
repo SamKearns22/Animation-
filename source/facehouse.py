@@ -93,6 +93,7 @@ import people_parts as PP                        # noqa: E402  (the house head s
 from people_parts import FA, dk, INK, curve, oval  # noqa: E402
 from faces import blend               # noqa: E402
 from ink import open_curve                        # noqa: E402
+import turnhead as TH  # noqa: E402
 import focus as FO                               # noqa: E402  (C2: where a front-on head looks)
 
 # ---------------------------------------------------------------------------------------------- reading the pick
@@ -664,10 +665,19 @@ def _head(img, p, sp, t, hx, hy):
         swept(p, f, L, hc, kh, lk)
     elif piece == 'bald':
         bald(p, f, L, hc, kh, skin)
+    elif piece == 'bob':
+        bob(p, f, L, hc, kh, lk)
+    elif piece == 'back':
+        back(p, f, L, hc, kh, lk)
     elif piece == 'braids':
         braids(p, f, L, hc, lk, kh)
         if kh.get('ears'):                                # over the plaits, as the pick drew them (K1: her width)
             FA.ears(p, FF.ears, _ear_L(L), skin)
+    if kh.get('pearls'):
+        earrings(p, f, L, dict(kh, _skin=skin))
+    if kh.get('hat'):
+        cr = _hair(L, kh)['crown'] if piece == 'braids' else -0.46
+        hard_hat(p, f, L, kh, cr, max(_face_u(L, 0.0) + 0.1, L['fw'] * 0.5 + 0.08))
     if kh.get('glasses'):
         glasses(p, FF.lens, L, kh['glasses'])
     return fx
@@ -920,6 +930,171 @@ def bald(p, f, L, hc, kh, skin):
     cx, cy = -w * 0.42, top + 0.1
     shine = [(cx + w * 0.26 * math.cos(a), cy + 0.045 * math.sin(a)) for a in np.linspace(0, 2 * math.pi, 24)]
     p.poly(f.pts(shine), blend(skin, (255, 250, 244), 0.32), None)
+
+
+# ---------------------------------------------------------------------------------------------- hair: bob, back
+def bob_shapes(L, kh, hc):
+    """Brexit Is Done (23 Nov, May): a short layered bob. The mass from a full crown down both sides over the tops of
+    the ears to just under the lobe (`bob_low`, face units), the tips flicked out; a side-swept fringe from a parting
+    on our left (`part`) across the forehead, its edge falling to the brow on our right. Lighter streaks (`light`)."""
+    e = L['fw'] * 0.5
+    c = e + kh.get('bob_wide', 0.09)                     # the hair stands proud of the face at the sides
+    low = kh.get('bob_low', 0.5)
+    pu = kh.get('part', -0.12)
+    crown = kh.get('bob_crown', -0.5)
+    fe = lambda v: _face_u(L, v)                          # noqa: E731
+    outer_r = [(c * 0.55, crown + 0.02), (c * 0.85, crown + 0.1), (c, -0.22), (c + 0.01, 0.0), (c - 0.005, 0.2),
+               (c - 0.02, 0.36), (c + 0.02, low - 0.03), (c + 0.05, low + 0.01)]        # the flick out at the tip
+    inner_r = [(fe(low - 0.02) + 0.02, low - 0.02), (fe(0.36) - 0.005, 0.36), (fe(0.2) - 0.015, 0.2),
+               (fe(0.08) - 0.025, 0.08)]
+    # the fringe: from the parting it sweeps down and across to our right, ending on the brow at the temple
+    fringe = [(fe(0.08) - 0.03, 0.06), (e * 0.72, 0.1), (e * 0.45, 0.04), (e * 0.15, -0.04), (pu + 0.06, -0.1),
+              (pu, -0.13)]
+    left_hl = [(pu - 0.08, -0.1), (-e * 0.6, -0.08), (-(fe(0.0) - 0.03), -0.02), (-(fe(0.12) - 0.02), 0.12),
+               (-(fe(0.36) - 0.005), 0.36), (-(fe(low - 0.02) + 0.02), low - 0.02)]
+    outer_l = [(-u, v) for u, v in outer_r[::-1]]
+    top = [(-c * 0.55, crown + 0.02), (-c * 0.2, crown - 0.005), (c * 0.15, crown - 0.01)]
+    cap = (top + outer_r + inner_r + fringe + left_hl + outer_l)
+    cap = FA.tufts(cap[:len(top) + len(outer_r)], 0.004, 0.035, out=1.0, seed=41) + cap[len(top) + len(outer_r):]
+    light = tuple(kh.get('light') or blend(hc, (250, 248, 242), 0.6))
+    return dict(c=c, low=low, pu=pu, crown=crown, cap=cap, light=light, e=e)
+
+
+def _bob_strokes(p, f, hc, sh):
+    """The layers: strokes from the parting sweeping across the fringe and down each side, alternating light and dark."""
+    c, pu, crown, low, light = sh['c'], sh['pu'], sh['crown'], sh['low'], sh['light']
+    dark = dk(hc, 0.6)
+    for k, x in enumerate((0.05, 0.2, 0.35, 0.5, 0.65)):            # across the fringe to our right
+        u0 = pu + 0.02
+        p.line(open_curve(f.pts([(u0, crown + 0.2 + 0.03 * k), (pu + x * 0.5, -0.14 + 0.02 * k),
+                                 (min(pu + x * 0.95, sh['e'] * 0.8), -0.06 + 0.03 * k + 0.08 * x)]), 3),
+               light if k % 2 else dark, 2.6)
+    for sgn in (-1, 1):                                             # down each side to the flick
+        for k, x in enumerate((0.25, 0.55, 0.8)):
+            u = sgn * (sh['e'] + (c - sh['e']) * x)
+            p.line(open_curve(f.pts([(u * 0.9, -0.2 + 0.04 * k), (u, 0.15), (u + sgn * 0.02, low - 0.06)]), 3),
+                   dark if k % 2 else light, 2.4)
+        for k in range(3):                                          # the layered ends: notches up from the tips
+            u = sgn * (sh['e'] + (c - sh['e']) * (0.3 + 0.3 * k))
+            p.line(open_curve(f.pts([(u, low - 0.01 - 0.02 * k), (u - sgn * 0.01, low - 0.09 - 0.02 * k)]), 2),
+                   INK, 1.6)
+    p.poly(curve(f.pts([(pu - 0.02, crown + 0.14), (pu + 0.12, crown + 0.12), (pu + 0.28, -0.3), (pu + 0.18, -0.24),
+                        (pu + 0.04, -0.3)]), 3), blend(hc, light, 0.6), None)   # the light on the crown
+
+
+def bob(p, f, L, hc, kh, lk):
+    sh = bob_shapes(L, kh, hc)
+    p.poly(curve(f.pts(sh['cap']), 2), hc, INK, 2.4)
+    _bob_strokes(p, f, hc, sh)
+
+
+def earrings(p, f, L, kh, near=None):
+    """Pearl studs at the lobes (`pearls` in the person's lines), drawn over the hair; turned, only the `near` side's
+    (-1: our left)."""
+    for sgn in (-1, 1):
+        if near is not None and sgn != near:
+            continue
+        lx, ly = f(sgn * (_face_u(L, 0.5) + 0.006), 0.515)            # the lobe under the hair's edge
+        p.poly(oval(lx, ly, 6, 8, 14), kh.get('_skin', (222, 182, 158)), INK, 1.6)
+        x, y = f(sgn * (_face_u(L, 0.5) + 0.008), 0.535)
+        p.poly(oval(x, y, 7, 7, 14), (250, 248, 240), INK, 1.8)
+
+
+def hard_hat(p, f, L, kh, crown, hw):
+    """Brexit Is Done (23 Nov, Kemi on site): a white safety helmet sat on the hair, its brim at the forehead
+    (`hat_v`, face units) and a peak over the eyes, a ridge front to back. Front view in face units (`hw`: the hair's
+    half width); turned views as a solid on the head's own rings (turned_hat)."""
+    col = tuple(kh.get('hat_c', (244, 244, 240)))
+    vb = kh.get('hat_v', 0.04)
+    top = crown - 0.16
+    W = hw + 0.07
+    dome = [(W * math.cos(a), vb + (top - vb) * math.sin(a)) for a in np.linspace(0, math.pi, 30)]
+    p.poly(curve(f.pts(dome), 2), col, INK, 2.6)
+    p.line(open_curve(f.pts([(0.0, vb - 0.005), (0.0, top + 0.01)]), 3), dk(col, 0.78), 3.0)   # the ridge
+    for sgn in (-1, 1):
+        p.line(open_curve(f.pts([(sgn * W * 0.55, vb - 0.01), (sgn * W * 0.5, (vb + top) / 2), (sgn * W * 0.3, top + 0.03)]), 3),
+               dk(col, 0.86), 1.6)
+    brim = [(-W - 0.04, vb - 0.012), (W + 0.04, vb - 0.012), (W + 0.05, vb + 0.02), (W * 0.5, vb + 0.03),
+            (0.0, vb + 0.07), (-W * 0.5, vb + 0.03), (-W - 0.05, vb + 0.02)]
+    p.poly(curve(f.pts(brim), 2), dk(col, 0.92), INK, 2.2)
+
+
+def turned_hat(p, f, kh, crown):
+    """The helmet from any turned view: a shell over the head's rings (each ring 1.18 times out, an ellipsoid from
+    the brim's ring up to above the crown), its outline the shell's silhouette; the brim a band round the ring, the
+    peak at the face (psi 0) reaching further; the ridge the face's centre meridian."""
+    H = TH.H
+    col = tuple(kh.get('hat_c', (244, 244, 240)))
+    vb = kh.get('hat_v', 0.04)
+    top = crown - 0.16
+    ps = np.linspace(-180, 180, 145)
+    bx, bz = f.ring(ps, vb)
+    k = kh.get('hat_k', 1.3)
+    def at(h):                                       # the shell's ring at height h (0 brim .. 1 top)
+        s = math.sqrt(max(0.0, 1 - h * h)) * k
+        X, Z = f.view(bx * s, bz * s)
+        return X, Z, vb + (top - vb) * h
+    left, right = [], []
+    for h in np.linspace(0, 1, 16):
+        X, Z, v = at(h)
+        left.append((f.cx + float(X.min()) * H, f.top + v * H))
+        right.append((f.cx + float(X.max()) * H, f.top + v * H))
+    p.poly(curve(left + right[::-1], 2), col, INK, 2.6)
+    pk = 1.0 + 0.32 * np.clip(np.cos(np.radians(ps)), 0, 1) ** 2          # the peak over the face
+    X, Z = f.view(bx * k * 1.08 * pk, bz * k * 1.08 * pk)
+    x0, x1 = f.cx + float(X.min()) * H, f.cx + float(X.max()) * H
+    y0, y1 = f.top + (vb - 0.012) * H, f.top + (vb + 0.02) * H
+    p.poly([(x0, y0), (x1, y0), (x1, y1), (x0, y1)], dk(col, 0.92), INK, 2.2)
+    rid = []
+    for h in np.linspace(0, 0.98, 10):                 # the ridge: the meridian at the face's centre, if we see it
+        s = math.sqrt(max(0.0, 1 - h * h)) * k
+        x, z = f.ring(0.0, vb)
+        Xr, Zr = f.view(x * s, z * s)
+        if float(Zr) > -0.05:
+            rid.append((f.cx + float(Xr) * H, f.top + (vb + (top - vb) * h) * H))
+    if len(rid) > 1:
+        p.line(open_curve(rid, 3), dk(col, 0.78), 3.0)
+
+
+def back_shapes(L, kh, hc):
+    """Brexit Is Done (23 Nov, Blair): grey hair brushed straight back off a high forehead, the temples receded
+    (`recede`), a little lift over the front (`lift`); the sides short and lying back over the ears' tops."""
+    e = L['fw'] * 0.5
+    c = max(L['fhw'] * 0.5 + 0.03, e + 0.02)
+    hl = kh.get('hairline', -0.17)
+    rc = kh.get('recede', 0.07)
+    lift = kh.get('lift', 0.05)
+    crown = kh.get('back_crown', -0.5)
+    fe = lambda v: _face_u(L, v)                          # noqa: E731
+    front = [(c - 0.02, 0.2), (fe(0.2) - 0.02, 0.24), (fe(0.1) - 0.02, 0.08), (fe(-0.05) - 0.04, -0.06),
+             (e * 0.6, hl - rc * 0.4), (e * 0.48, hl - rc), (e * 0.3, hl - rc * 0.5), (e * 0.12, hl + 0.005),
+             (0.0, hl + 0.01)]
+    front = front + [(-u, v) for u, v in front[::-1][1:]]
+    top = [(-c + 0.01, 0.2), (-c - 0.01, 0.0), (-c + 0.01, -0.22), (-c * 0.8, crown + 0.1), (-c * 0.45, crown - lift * 0.5),
+           (0.0, crown - lift), (c * 0.45, crown - lift * 0.5), (c * 0.8, crown + 0.1), (c - 0.01, -0.22),
+           (c + 0.01, 0.0), (c - 0.02, 0.2)]
+    cap = FA.tufts(top, 0.004, 0.03, out=1.0, seed=53) + front
+    light = tuple(kh.get('light') or blend(hc, (244, 242, 238), 0.5))
+    return dict(c=c, hl=hl, rc=rc, crown=crown, lift=lift, cap=cap, light=light, e=e)
+
+
+def _back_strokes(p, f, hc, sh):
+    """Combed straight back: strokes from the hairline up over the crown, fanning to the sides."""
+    c, hl, crown = sh['c'], sh['hl'], sh['crown']
+    dark = dk(hc, 0.7)
+    for k, u in enumerate((-0.28, -0.18, -0.08, 0.02, 0.12, 0.22, 0.3)):
+        u *= c / 0.42
+        p.line(open_curve(f.pts([(u * 0.8, hl - 0.03), (u * 0.95, (hl + crown) / 2), (u * 1.1, crown + 0.15)]), 3),
+               sh['light'] if k % 2 else dark, 2.2)
+    for sgn in (-1, 1):
+        p.line(open_curve(f.pts([(sgn * (sh['e'] - 0.005), 0.15), (sgn * (c - 0.01), -0.05), (sgn * c * 0.85, -0.3)]), 3),
+               dark, 1.3)
+
+
+def back(p, f, L, hc, kh, lk):
+    sh = back_shapes(L, kh, hc)
+    p.poly(curve(f.pts(sh['cap']), 2), hc, INK, 2.4)
+    _back_strokes(p, f, hc, sh)
 
 
 # ---------------------------------------------------------------------------------------------- hair: braids
@@ -1241,10 +1416,12 @@ def age_lines(p, f, L, skin, age, lk):
 
 
 # ---------------------------------------------------------------------------------------------- turned views
-HAIR = ('swept', 'braids', 'bald')
+HAIR = ('swept', 'braids', 'bald', 'bob', 'back')
 TURN_PROF = {'swept': dict(hair_low=0.36, nape=0.62, volume=0.015),         # clipped short at the back
              'braids': dict(hair_low=0.5, nape=0.78, volume=0.05),
-             'bald': dict(hair_low=0.3, nape=0.6, volume=0.0)}               # bald: the skull is the head's own          # the plaits' bulk over the skull
+             'bald': dict(hair_low=0.3, nape=0.6, volume=0.0),
+             'bob': dict(hair_low=0.5, nape=0.66, volume=0.06),       # May: full, to the lobe, the nape covered
+             'back': dict(hair_low=0.3, nape=0.6, volume=0.03)}       # Blair: short at the back and sides               # bald: the skull is the head's own          # the plaits' bulk over the skull
 
 
 class _Screen:
@@ -1291,6 +1468,13 @@ def _turn_over(img, p, f, L, sp, view):
 
 
 def _turn_hair(img, p, f, L, sp):
+    _turn_hair0(img, p, f, L, sp)
+    kh = sp['kit_house']
+    if kh.get('hat'):
+        turned_hat(p, f, kh, _hair(L, kh)['crown'] if kh['hair'] == 'braids' else -0.46)
+
+
+def _turn_hair0(img, p, f, L, sp):
     import turnhead as TH
     kh, hc = sp['kit_house'], sp['hair_c']
     lk = LOOKS[kh['look']]
@@ -1298,6 +1482,17 @@ def _turn_hair(img, p, f, L, sp):
     if kh['hair'] == 'bald':                                     # Milburn chat 5: the bare skull; a clipped band
         TH.hair(img, p, f, [], tuple(kh.get('grey') or hc), dict(f.prof, hair_low=0.3, nape=0.6, volume=0.0,
                                                                   hair_top=0.0, hair_top_back=0.12, hair_ragged=0.006))
+        return
+    if kh['hair'] in ('bob', 'back'):                            # Brexit Is Done: one mass, front carried round
+        sh = (bob_shapes if kh['hair'] == 'bob' else back_shapes)(L, kh, hc)
+        prof = dict(f.prof, **TURN_PROF[kh['hair']])
+        cap = [(u, max(v, -0.44)) for u, v in curve(sh['cap'], 2)]          # the crown's points held to the skull
+        fronts = [f.pts(TH.dense(cap))] if yaw <= 60 else []   # past 60 the front's crown point
+        mask = TH.hair(img, p, f, fronts, hc, prof)                         # stood up off the skull (a spike)
+        if yaw <= 60:
+            TH.clipped(img, p, mask, lambda pen: (_bob_strokes if kh['hair'] == 'bob' else _back_strokes)(pen, f, hc, sh))
+        if kh.get('pearls') and yaw <= 135:
+            earrings(p, f, L, dict(kh, _skin=sp['skin']), near=-1 if f.th > 0 else 1)
         return
     if kh['hair'] == 'swept':
         sh = _swept_shapes(L, kh, hc)
@@ -1463,6 +1658,10 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
              jacket=tuple(outfit[1]), sleeve=tuple(outfit[1]), shirt=shirt, tie=tie)
     if collar:                                              # the outfit's neckline (chat 15: 'open collar')
         d['collar'] = collar
+    if 'brow_c' in kw:                                      # (and her brows, lighter and finer than the photo's)
+        d['brows'] = tuple(kw.pop('brow_c'))
+    if 'hair_c' in kw:                                      # Brexit Is Done: the hair's colour set by eye where the
+        d['hair_c'] = tuple(kw.pop('hair_c'))               # photos' lighting tints it (May's silver read brown)
     if 'neck_w' in kw:                                      # the person's lines: a wider neck (Kemi's, K1)
         d['neck_w'] = kw.pop('neck_w')
     if d['tie'] is not None:
@@ -1471,6 +1670,8 @@ def person(name, look, hair, outfit=('suit', (31, 34, 58)), shirt=(246, 246, 246
     if 'brow_up' in kw:                                     # the person's resting brows (a pair: one raised)
         sp['brow_up'] = tuple(kw.pop('brow_up')) if isinstance(kw['brow_up'], list) else kw.pop('brow_up')
     sp['hair'] = 'bald'                                    # the engine's own hair: none (the head part draws it all)
+    if kw.pop('specs', None):                               # Brexit Is Done: glasses the pick's photos lacked (Kemi
+        kw['glasses'] = dict(cx=0.3, w=2.5, top=-0.42, bot=1.05, rim_w=0.1, colr=(44, 32, 30), round=0.3)  # on site)
     kw.setdefault('head', True)                             # chat 16: every face's whole head measured (but the
     kh = dict(pk, look=look, hair=hair, lip=d['lips'], **kw)  # finished pair's: CAST says head=False)
     kh['meas'] = caricature(pk['meas'], kh.pop('push', 1.0), kh.pop('tune', {}))
@@ -1496,6 +1697,11 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
                                                                          # (Blessed's hand-made, Sam: "That's him")
     'mcfadden': dict(hair='bald', outfit=('suit', (40, 42, 56)), shirt=(246, 246, 246), tie=(70, 96, 140),   # Milburn
                      grey=(184, 170, 156), ear_k=1.3, side_proud=0.034, dome=-0.33, dome_wide=0.405),   # chat 5: bald, grey-ginger sides, his ears
+    'may': dict(hair='bob', outfit=('suit', (118, 38, 92)), shirt=(246, 246, 246), height=1.73, collar='open',   # Brexit
+                pearls=True, hair_c=(186, 180, 172), brow_c=(150, 124, 108), brow_thick=0.034,
+                brow_arch=0.03, brow_taper=0.5, head=False),                                                                     # Is Done, 23 Nov: first try
+    'blair': dict(hair='back', ear_k=1.35, lift=0.08, hair_c=(208, 204, 198), back_crown=-0.54, outfit=('suit', (28, 30, 40)), shirt=(246, 246, 246), tie=(150, 30, 40), height=1.83,
+                  mouth=dict(kind='grin'), head=False),                                          # (Brexit Is Done)
 }
 
 

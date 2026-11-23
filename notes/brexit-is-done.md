@@ -15,15 +15,25 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Rules that bite next:** (3, by number from guides/film-quality-rules.md)
-- **Done:**
-- **Spent against the estimate (rules 24 and 44):** (each build: estimated / spent; name any running over)
-- **Next:** (stage, model, and what Sam types in the new chat)
-- **Needs Sam:** (numbered, my pick first; or "nothing")
-- **Read:** (which sections of which guide; nothing else)
-- **Lost / Added:** (what fixes took away, what I added)
-- **Open rule requests:** (CLAUDE.md, "Rules are permanent"; or "none")
-- **For Claude:** (code names, files, commands; the film's `MAP` is in its first lines: rule 61)
+- **Rules that bite next:** 89 (critique before cast sheet), 49 (likeness), 24 (estimate before the build).
+- **Done (chat 1, 23 Nov):** May and Blair faces measured (face tool, pick B provisional); new shared hair pieces `bob` (May)
+  and `back` (Blair), pearl earrings, a hard hat (front and turned), `specs`, `workwear` hi-vis jacket, own-colour sleeves;
+  cast critique hunts 1-2 done; cast sheet v1 sent to Sam (`review/brexit-is-done-cast-v1.jpg`).
+- **Open critique faults (named to Sam):** May's age lines faint and full-body reads weakly as a woman; Blair's back/side hair
+  a plain cap; a small dark dash on the crown in three-quarter heads (turnhead's seam, also on old swept heads).
+- **Next:** Sam's notes on the cast sheet (Opus, medium), then the plan once he sends the script, the site and Blair's place (Opus, high).
+- **Needs Sam:** notes on the three faces; the script; the site; Blair's place.
+- **Read:** `guides/job-packs.md` Plan; `source/facehouse.py` MAP (hair pieces bob/back, hard_hat).
+- **Open rule requests:** none.
+- **For Claude:** cast `story/brexit-is-done-people.txt`; `python3 source/people.py sheet brexit-is-done OUT.jpg`;
+  `python3 source/facehouse.py turns OUT.jpg may blair`; picks in `references/faces/{may,blair}/pick` ('picked': B, provisional).
+  Plan stage not done: no estimate yet (template note: raise the estimates proposal at the plan).
+
+## Handover check, named not fixed (chat 1)
+ branches gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz,
+  gta-chat31 hold only GTA logs/proposals (film posted): not merged, for a tool chat; CLAUDE.md "Locked by Sam" and
+  "Just go" sentence alerts and kittest move_to_shared_catches_film_fixes (N26) were red before this chat (checked on
+  the saved code); no estimate yet: the plan stage sets it once the script comes. No film code yet (no `page.py show`): only the shared face tool and people kit changed.
 
 ## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
 its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees

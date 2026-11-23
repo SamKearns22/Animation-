@@ -1,0 +1,59 @@
+== critique, round 1 pass 1 (2026-11-23): 6 fault(s), 3 can't tell
+-- look.md --
+1: Five turnaround views of grey-haired woman in plum jacket; face close-ups below; small label "May", rest unreadable.
+2: Five views of dark-haired woman, white hat, orange apron, navy clothes; close-ups below; no legible words.
+3: Five views of grey-haired man, dark suit, red tie; close-ups below; label "Blair"; tiny top line unreadable.
+-- result.md --
+## Faults
+FAULT A1 P2 [2]: full-body views - the orange hi-vis torso block reads as a bib or apron over navy, not a work jacket; silver reflective bands are missing from the torso and sleeves in every view.
+FAULT P4 [1]: head row - hair is a smooth flat dome with no layers and no side-swept fringe; pearl earrings are not visible in any turn; the reference hair is fluffy and layered.
+FAULT P4 [2]: head row - braids read as plain long black hair, not box braids (no braid lines in the full-body views, faint in the heads); glasses disappear in the profile and back turns where the arms of the frame should show.
+FAULT P4 [3]: head row - ears are small, not big; the hair is a flat cap with no lifted swept-back volume or visibly receded temples as in the reference; the grin is toothy only in the front turns.
+FAULT A2 P11 [1-3]: full-body views - the head is tiny against the shoulders and sits straight on them with no visible neck, unlike the head row, so full body and head do not match in size.
+FAULT A2 [3]: sheet - a line of caption text is cut off along the top edge of panel 3's full-body area, unreadable; panel 1 and 3 have tiny labels ("May", "Blair") and panel 2 has none.
+CAN'T TELL P14 [1-3]: eyes are too small on this sheet to see whether pupils and shine stay inside the outline; a full-size crop of each front and three-quarter face would show it.
+CAN'T TELL P6 [1-3]: the circle hands are not readable at this size; a full-size crop of each hand at the hem would show them.
+CAN'T TELL P13 [1]: whether the white blouse shows at the collar in the full-body views; a full-size crop of the chest would show it.
+
+## Checked
+1-3
+
+## Cold look
+Missed: the lack of pearl earrings, the flat hair, and the white shirt on panel 3. Wrong: I read panel 2's orange as an "apron", which is the fault above and means it fails the brief. The tiny caption on panel 3 and the labels were unreadable to me at phone size, so I could not copy any words exactly.
+
+## Not on the list
+1. The check sheet's reference photos are different outfits from the brief (May in light blue, Blair with an open collar); suggested line: "each reference shown is the outfit the brief names, or is labelled as a face-only reference".
+2. Panel headers and captions clipped or overlapped by the picture; suggested line: "no label or caption is cut off, overlapped or too small to read at phone size".
+3. Age: the faces of May (70) and Blair (73) show no age lines and look younger than the references; suggested line: "age marks match the stated age".
+4. Scale: the three people have the same build and height in full-body view; suggested line: "relative heights and builds of the people match their references".
+
+== critique, round 1 pass 2 (2026-11-23): 7 fault(s), 2 can't tell
+-- look.md --
+1: Grey-haired woman in purple jacket, five turnaround views, face close-ups below; label "May"; neutral.
+2: Dark-haired woman, white hard hat, orange hi-vis vest, five turnaround views, face close-ups below; no legible text.
+3: Grey-haired man, dark suit, red tie, five turnaround views, face close-ups below; label "Blair"; tiny unreadable line of text above.
+-- result.md --
+## Faults
+FAULT P4 P1 [1]: head crops - face is smooth and youthful, no age lines for 70; pearl earrings missing; fringe is not a clear side-swept layered bob; jacket is dark maroon, not plum.
+FAULT A2 P13 [2]: full body and head - navy is a small patch, mostly orange; the reference has navy upper body with orange sleeves/lower and silver bands on sleeves too; ours has only one waist band, and the navy changes side from view to view.
+FAULT P4 [3]: full-body row - the toothy grin is lost at phone size (face is a few dots), and the hair at the back and side reads as a flat grey cap, not swept-back hair with receded temples; ears are not big.
+FAULT P8 A1 [1, 2, 3]: back and side head views - hair is one flat blob (grey cap on 1 and 3, black slab on 2); head-only back views have no neck, so they read as helmets or eggs.
+FAULT P11 [1, 2, 3]: head crops - no neck, heads sit straight on collars; in full-body the head is small for the body.
+FAULT A2 [1, 2, 3]: full-body row - bodies are thin straight tubes with tiny heads; they don't match the reference proportions, and May reads weakly as a woman (trousers, no waist or bust shape) at full-body size.
+FAULT A4 [3]: top of panel 3 - a clipped line of caption text runs along the top edge of the sheet, cut off and unreadable.
+CAN'T TELL P6 [1, 2, 3]: no circle hands visible in the full-body views; a picture with arms held out would show them.
+CAN'T TELL P14 [1, 2, 3]: eyes at full-body size are specks; a full-size face crop would show whether the pupil stays inside.
+
+## Checked
+1-3
+
+## Cold look
+My look.md named the grey-haired woman in purple, the dark-haired woman in hard hat and hi-vis, and the grey-haired man in suit and tie, so identities read only as generic types. I missed the glasses, long braids and silver bands on 2, the pearl earrings absent on 1 and the grin on 3. I called the tiny text "unreadable" rather than naming it as a clipped caption fault. I did not notice the missing necks or flat hair blobs.
+
+## Not on the list
+- Caption text clipped or overlapping the sheet edge. Suggested line: A5 every label and caption is whole, inside its panel, and readable.
+- Age cues (lines, jowls) for named ages. Suggested line: P4 the face shows the stated age.
+- Costume colour blocks match the reference's layout, not just the colours. Suggested line: P13 colour zones sit where the reference has them.
+
+critique, pass 2: faults fixed as one list: May's hair layers and pearls stronger, jacket plum; Kemi's jacket orange sleeves and bolder silver bands; Blair's ears bigger, hair lifted; left open: ['1 P4 P1: head crops - face is smooth and youthful, no age lines for 70; pearl earrings missing; fringe is not a clear side-swept layered bob; jacket is dark mar', '3 P4: full-body row - the toothy grin is lost at phone size (face is a few dots), and the hair at the back and side reads as a flat grey cap, not swept-back hai', "1-3 A2: full-body row - bodies are thin straight tubes with tiny heads; they don't match the reference proportions, and May reads weakly as a woman (trousers, n"]
+

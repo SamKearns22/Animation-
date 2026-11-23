@@ -1241,3 +1241,25 @@ def vest_side(img, p, sp, t):
     U = lambda x: ya - (ya - 24) * min(1.0, max(0.0, (abs(x) - 0.45 * w) / (0.55 * w))) ** 1.5   # noqa: E731
     #   (flat under the arm, which hangs over the middle of the side: the arm's fade must find skin there)
     p.poly([(x, max(y, U(x))) for x, y in dense], sp.get('vest_c', (236, 232, 220)), INK, 2.4)
+
+
+# ---------------------------------------------------------------------------------------------- workwear (hi-vis)
+def workwear_torso(img, p, sp, t):
+    """Brexit Is Done (23 Nov, Kemi on site; Sam's photo): a two-tone work jacket over the outfit's own (navy)
+    jacket: the body hi-vis orange below the chest, a silver reflective band where the colours meet and another
+    round the hips, a navy stand-up collar and a zip. Colours: `work_c` (orange), the outfit's jacket the navy.
+    Front coordinates; the turned views wrap it (views.WrapPen), so it turns with her."""
+    orange = tuple(sp.get('work_c', (236, 112, 30)))
+    silver = (178, 186, 196)                         # (critique r1: a paler silver vanished against the orange)
+    sw = sp.get('shoulders', 150)
+    bottom = sp.get('bottom', V.JACKET)
+    def edge(y):                                    # the body's half width at y (burnham's body outline)
+        return float(np.interp(y, [50, 200, bottom], [sw, sw + 6, sw * 0.85]))   # the kit body's hem (0.85)
+    y0 = 150
+    p.poly([(-edge(y0), y0), (edge(y0), y0), (edge(200), 200), (edge(bottom), bottom), (-edge(bottom), bottom),
+            (-edge(200), 200)], orange, INK, 2.0)
+    for ya, yb in ((y0 - 8, y0 + 22), (bottom - 78, bottom - 48)):
+        p.poly([(-edge(ya), ya), (edge(ya), ya), (edge(yb), yb), (-edge(yb), yb)], silver, INK, 1.6)
+    navy = tuple(sp.get('jacket', (30, 32, 58)))
+    p.poly(curve([(-44, -14), (44, -14), (48, 16), (0, 26), (-48, 16)], 3), navy, INK, 2.0)   # the stand-up collar
+    p.line([(0, 22), (1, bottom)], dk(orange, 0.55), 2.4)                                   # the zip

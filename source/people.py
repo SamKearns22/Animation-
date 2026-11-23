@@ -629,6 +629,8 @@ def _house(d):
         kw['neck_w'] = d['neck_w']
     sp = FH.person(h['name'], h.get('look', 'detail'), hair, outfit=out, **kw)
     sp.update(who=d.get('person', d['who']), name=d['name'], kit_extras=list(d.get('extras', ())))
+    if d.get('sleeve') and d.get('jacket') and tuple(d['sleeve']) != tuple(d['jacket']):   # Brexit Is Done: sleeves
+        sp['sleeve'] = tuple(d['sleeve'])                                                    # of their own colour
     return sp
 
 
@@ -688,7 +690,8 @@ def _extras():
             'skirt': ('torso', PP.skirt_torso), 'palms': ('torso', PP.palms_torso),
             'biker': ('torso', PP.biker_torso), 'unicorn': ('torso', PP.unicorn_torso),
             'scoop': ('torso', PP.scoop_torso), 'headphones': ('torso', PP.headphones_torso),
-            'vest': ('torso', PP.vest_torso), 'tank': ('torso', PP.vest_torso)}
+            'vest': ('torso', PP.vest_torso), 'tank': ('torso', PP.vest_torso),
+            'workwear': ('torso', PP.workwear_torso)}
 
 
 def turned():
@@ -703,7 +706,8 @@ def turned():
             'biker': dict(back=PP.biker_back), 'unicorn': dict(back=None),
             'scoop': dict(back=None), 'headphones': dict(back=PP.headphones_back, own={v: PP.headphones_view(v) for v in PP.PHONES_YAW}),
             'vest': dict(back=PP.vest_back, own={'side': PP.vest_side}),
-            'tank': dict(back=PP.vest_back, own={'side': PP.vest_side})}
+            'tank': dict(back=PP.vest_back, own={'side': PP.vest_side}),
+            'workwear': dict(back=PP.workwear_torso)}
 
 
 def pieces(sp):
@@ -751,7 +755,7 @@ def _head_parts():
 
 
 EXTRAS = ('wig', 'robe', 'officer', 'open shirt', 'crucifix', 'scarf', 'zip', 'flowers', 'crest', 'skirt', 'palms',
-          'biker', 'unicorn', 'scoop', 'headphones', 'vest', 'tank')
+          'biker', 'unicorn', 'scoop', 'headphones', 'vest', 'tank', 'workwear')
 HEAD_PARTS = ('walliams',)        # a bespoke head too much its own for lines (TEST ONLY: never in a film)
 
 
