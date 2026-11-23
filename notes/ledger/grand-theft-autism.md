@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 53.2% of a week; spent 97.83% (+44.63); 52 chats, 0 rounds, 14 notes, 3 repeated.**
+**Estimate 53.2% of a week; spent 98.2% (+45.00); 52 chats, 0 rounds, 14 notes, 3 repeated.**
 
-**Forecast: Spent 97.83% of the 41.05% planned so far; at this rate the film lands at 101.4%.**
+**Forecast: Spent 98.2% of the 41.05% planned so far; at this rate the film lands at 101.8%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -75,7 +75,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-23 | b154c429 | est | opus | auto |  | 0.2 |  | 0 | 0 |
 | 2026-11-23 | 414235e1 | est | opus | auto |  | 2.74 |  | 0 | 0 |
 | 2026-11-23 | 2fec35f5 | est | sonnet | auto |  | 0.42 |  | 0 | 0 |
-| 2026-11-23 | 0fed8303 | est | opus | auto |  | 0.84 |  | 0 | 0 |
+| 2026-11-23 | 0fed8303 | est | opus | auto |  | 1.21 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-19 c079f576 (auto): 101 steps, history 274k at the end; other 75.9%, pictures 9.9%, renders 8.6%, tool search 5.6%
@@ -125,7 +125,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-23 b154c429 (auto): 11 steps, history 106k at the end; other 79.8%, tool search 20.2%
 - 2026-11-23 414235e1 (auto): 136 steps, history 329k at the end; other 69.5%, tool search 17.7%, film-file search 7.8%, pictures 3.7%, renders 1.1%, page.py 0.2%
 - 2026-11-23 2fec35f5 (auto): 56 steps, history 156k at the end; other 88.9%, tool search 6.8%, film-file search 3.2%, renders 0.8%, routine 0.3%
-- 2026-11-23 0fed8303 (auto): 19 steps, history 120k at the end; other 83.6%, tool search 12.3%, renders 3.5%, routine 0.6%
+- 2026-11-23 0fed8303 (auto): 29 steps, history 138k at the end; other 83.2%, tool search 13%, renders 2.7%, film-file search 0.7%, routine 0.5%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 c079f576 (auto): new writes 33.2%, Claude's words 30.9%, carried history 19.3%, start-up floor 16.6%. Biggest origins: Claude's words 47.7%, cache re-write 17.4%, start-up floor 16.6%. Leftover 0%
@@ -175,10 +175,10 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-23 b154c429 (auto): start-up floor 47.8%, new writes 25.8%, Claude's words 23.1%, carried history 3.3%. Biggest origins: start-up floor 47.8%, Claude's words 30.2%, result: tool search 14.5%. Leftover 0%
 - 2026-11-23 414235e1 (auto): carried history 34.2%, start-up floor 25.3%, Claude's words 22%, new writes 18.6%. Biggest origins: Claude's words 38.4%, start-up floor 25.3%, result: tool search 13.4%. Leftover 0%
 - 2026-11-23 2fec35f5 (auto): start-up floor 57.9%, new writes 15.4%, Claude's words 14.4%, carried history 12.4%. Biggest origins: start-up floor 58.9%, Claude's words 19.3%, messages and reminders 10.8%. Leftover 0%
-- 2026-11-23 0fed8303 (auto): start-up floor 73.4%, new writes 12.7%, Claude's words 11.1%, carried history 2.8%. Biggest origins: start-up floor 73.4%, Claude's words 14.9%, result: tool search 10.3%. Leftover 0%
+- 2026-11-23 0fed8303 (auto): start-up floor 65.4%, new writes 17.5%, Claude's words 12%, carried history 5%. Biggest origins: start-up floor 65.4%, Claude's words 16.9%, result: tool search 9.6%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 20% of the film (19.40% of a week over 48 chats: start 18.33, re-learning 1.07; 0.40% a chat; step-1 context re-read is 23% of a chat on average).
+A new chat's start and re-learning cost 20% of the film (19.85% of a week over 48 chats: start 18.78, re-learning 1.07; 0.41% a chat; step-1 context re-read is 23% of a chat on average).
 - 2026-11-19 c079f576: step-1 context 80k; first real work at step 12 (0.21% of a week); read before it: guides/kit-catalogue.md 2.1k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/vid/s4.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/c079f576-588d-58fe-aa6f-b16fc9938f9a/scratchpad/sea.png 1.6k, guides/job-packs.md 1.2k, source/flying_whales_sea.py 1.2k, story/status.md 0.3k
 - 2026-11-20 ba8d2922: step-1 context 82k; first real work at step 40 (0.6% of a week); read before it: notes/_template.md 1.5k, notes/grand-theft-autism.md 1.3k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip1.png 1.6k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/tulip2.jpg 1.6k, guides/kit-catalogue.md 1.4k, /tmp/claude-0/-home-user-Animation-/ba8d2922-8810-560c-9071-db977029f213/scratchpad/refs/jl.jpg 1.6k
 - 2026-11-20 23d4842a: step-1 context 80k; first real work at step 14 (0.1% of a week); read before it: notes/grand-theft-autism.md 3.5k, story/status.md 0.2k, notes/ledger/sam/bdslc8hv.md 0.3k
@@ -226,7 +226,7 @@ A new chat's start and re-learning cost 20% of the film (19.40% of a week over 4
 - 2026-11-23 b154c429: step-1 context 83k; first real work at step None (None% of a week); read before it: story/status.md 0.3k
 - 2026-11-23 414235e1: step-1 context 96k; first real work at step 32 (0.6% of a week); read before it: source/bench_move.py 3.8k, source/leanout.py 3.5k, source/gta_rehearse.py 3k, notes/grand-theft-autism.md 2.6k, notes/bench/learn-step.md 1.9k, source/bench_draw.py 1.4k
 - 2026-11-23 2fec35f5: step-1 context 96k; first real work at step 4 (0.12% of a week); read before it: notes/grand-theft-autism.md 0.8k, guides/job-packs.md 0.8k
-- 2026-11-23 0fed8303: step-1 context 96k; first real work at step None (None% of a week); read before it: notes/grand-theft-autism.md 1.9k, notes/proposal-route.md 1.9k, source/propose.py 1.3k, source/finish.py 0.9k, .claude/settings.json 0.5k, notes/proposals/override-word.md 0.2k
+- 2026-11-23 0fed8303: step-1 context 96k; first real work at step 24 (0.45% of a week); read before it: notes/grand-theft-autism.md 1.9k, notes/proposal-route.md 1.9k, source/propose.py 1.3k, source/finish.py 0.9k, .claude/settings.json 0.5k, notes/proposals/override-word.md 0.2k
 
 ## Repeated notes (what would have caught them)
 - Jason from behind: tube arm, blob hand, brown-blob head (F1/F5/F7 again) | the back-view check told us to move the camera instead of naming what the drawing lacks

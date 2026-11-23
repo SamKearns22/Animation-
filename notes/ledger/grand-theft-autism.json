@@ -26321,119 +26321,121 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.84,
+   "cost": 1.21,
    "src": "estimate",
    "sid": "session_01GznaATicbZeSUqh1ymo3YF",
-   "steps": 19,
-   "hist_k": 120,
+   "steps": 29,
+   "hist_k": 138,
    "kinds": {
-    "tool search": 12.3,
-    "routine": 0.6,
-    "renders": 3.5,
-    "other": 83.6
+    "film-file search": 0.7,
+    "tool search": 13.0,
+    "routine": 0.5,
+    "renders": 2.7,
+    "other": 83.2
    },
    "calls": {
-    "film-file search": 0,
-    "tool search": 15,
+    "film-file search": 1,
+    "tool search": 21,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 1,
     "renders": 1,
     "pictures": 0,
-    "other": 2
+    "other": 3
    },
    "split": {
-    "usd": 1.4803,
-    "total": 1.4803,
+    "usd": 1.9275,
+    "total": 1.9275,
     "floor_k": 96,
     "blocks": {
-     "start-up floor": 73.4,
-     "new writes": 12.7,
-     "Claude's words": 11.1,
-     "carried history": 2.8
+     "start-up floor": 65.4,
+     "new writes": 17.5,
+     "Claude's words": 12.0,
+     "carried history": 5.0
     },
     "origins": {
-     "start-up floor": 73.4,
-     "Claude's words": 14.9,
-     "result: tool search": 10.3,
-     "messages and reminders": 0.7,
+     "start-up floor": 65.4,
+     "Claude's words": 16.9,
+     "result: tool search": 9.6,
+     "messages and reminders": 7.2,
      "result: other": 0.5,
+     "result: film-file search": 0.2,
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 73.4,
-     "commands": 5.8,
-     "reading notes": 4.7,
+     "start-up reading (rules, tools, first files)": 65.4,
+     "commands": 7.3,
+     "messages and reminders": 7.2,
      "writing notes": 4.4,
-     "start-up and handover tools": 4.0,
-     "thinking": 1.9,
-     "writing code": 1.1,
-     "helper and chat prompts": 1.0,
-     "renders": 0.9,
-     "running checks and tools": 0.8,
-     "messages and reminders": 0.7,
-     "messages to Sam": 0.6,
+     "reading notes": 4.3,
+     "start-up and handover tools": 3.6,
+     "thinking": 2.6,
+     "renders": 1.3,
+     "writing code": 0.9,
+     "messages to Sam": 0.8,
+     "helper and chat prompts": 0.8,
+     "running checks and tools": 0.7,
      "helper results": 0.5
     },
     "leftover": 0.0
    },
    "start": {
     "floor_k": 96,
-    "work_step": null,
-    "work_pct": null,
+    "work_step": 24,
+    "work_pct": 0.45,
     "reads": [
      [
       "notes/grand-theft-autism.md",
       1.9,
-      0.0205
+      0.024
      ],
      [
       "notes/proposal-route.md",
       1.9,
-      0.0205
+      0.024
      ],
      [
       "source/propose.py",
       1.3,
-      0.0138
+      0.0162
      ],
      [
       "source/finish.py",
       0.9,
-      0.007
+      0.0085
      ],
      [
       ".claude/settings.json",
       0.5,
-      0.0055
+      0.0065
      ],
      [
       "notes/proposals/override-word.md",
       0.2,
-      0.0016
+      0.0019
      ],
      [
       "notes/proposals/override-word/chat.md",
       0.2,
-      0.0013
+      0.0016
      ]
     ],
-    "base_pct": 21.2
+    "base_pct": 25.3
    },
    "search": {
     "show": 0,
     "film": {
-     "no show": 0
+     "no show": 1
     },
     "other": {
-     "other": 4,
+     "other": 7,
      "shared:handover.py": 3,
-     "film notes": 2,
+     "film notes": 4,
      "shared:propose.py": 2,
      "guides": 1,
-     "shared:finish.py": 3
+     "shared:finish.py": 4
     },
-    "ticked": 0,
+    "ticked": 1,
     "edited film code": false,
     "list": [
      [
@@ -26554,6 +26556,62 @@
       "shared:finish.py",
       "source/finish.py guides/job-packs.md",
       "^import",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "git checkout -B claude/gta-chat48 2>&1|tail -1 && git add -A notes/ && git commi",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Model guard log (chat 48) Co-Authored-By: Claude O",
+      ""
+     ],
+     [
+      22,
+      "film",
+      "before show",
+      "source/grand_theft_autism.py source/finish.py",
+      "^HOOK",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:finish.py",
+      "source/finish.py",
+      "sed -n 64,76p source/finish.py; sed -n 214,228p source/finish.py",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "^## Exceptions",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "python3 - <<'EOF' p='notes/grand-theft-autism.md' t=open(p).read() i=t.index('##",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
       ""
      ]
     ]
