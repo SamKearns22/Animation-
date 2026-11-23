@@ -41,17 +41,17 @@
   },
   "11": {
    "rule": "Every shot drawn on one board (start, key moment, end) before any movement is built.",
-   "status": "partly",
+   "status": "proven",
    "tests": [
     "shot_board_every_shot",
-    "board_gate_refusals"
+    "board_gate_refusals",
+    "board_gate_milburn_reverse"
    ],
-   "example": "kittest shot_board_every_shot: Craft-step2 learn step (craft chat 7, 17 Nov): rough.py's board draws EVERY shot of a film's SHOTS through the",
+   "example": "kittest board_gate_milburn_reverse: Milburn note 5 (Sam 17 Nov, \"the scene composition in scene 4 as proposed is poor\"): fed Milburn's own board record as it stood (shots 1, 2a, 2b only), the board gate refuses the other 10 shots by name, the reverse among them",
    "notes": "M5 (reverse framing: 10 shots had no delivered board, the animatic stood in)",
    "rank": 12,
-   "miss": "M5 (10 shots had no delivered board; the animatic stood in)",
-   "plan": "add Milburn's board record to board_gate_refusals",
-   "kind_before": "code"
+   "kind_before": "code",
+   "done": "23 Nov (chain A chat 3): M5 proven on Milburn's real board record"
   },
   "14": {
    "rule": "The pre-start check refuses to run with a blank brief row, no composition sheet, or anyone missing from a shot.",
@@ -142,14 +142,16 @@
     "exceptions_need_a_written_reason",
     "every_face_has_a_mouth",
     "townsfolk_not_in_the_house_walls",
-    "copies_in_a_group"
+    "copies_in_a_group",
+    "mouth_name_that_does_not_exist_stops"
    ],
-   "example": "kittest exceptions_need_a_written_reason: Rule 13 (tool chat, 12 Nov): every exception in a film's settings (HANDS_OK, LINE_OK, any *_OK, ALLOWED_POPS)",
+   "example": "kittest mouth_name_that_does_not_exist_stops: Milburn note 6 (Sam 17 Nov, \"character 3 has no mouth\"): Swindon's pow used mouth shape 'M', which does not exist, so half his frames drew no mouth; mouths.draw now stops on it for every film",
    "notes": "M6 (face with no mouth: bad shape name slipped through), G4-10 (ERG bald fix lived in one film, not shared)",
    "rank": 5,
-   "miss": "M6 (a bad shape name let a face through with no mouth), G4-10 (the bald fix lived in one film)",
-   "plan": "add Milburn's character 3 to every_face_has_a_mouth",
-   "kind_before": "code"
+   "miss": "G4-10 (the bald fix lived in one film, not shared)",
+   "plan": "a kittest that GTA's bald head is drawn by the shared people kit, not a fix in gta_cast",
+   "kind_before": "code",
+   "done": "23 Nov (chain A chat 3): M6 proven"
   },
   "20": {
    "rule": "Held things point in 3D with the body, never at a fixed angle on screen.",
@@ -202,25 +204,25 @@
    "example": "kittest hands_round_the_head: Patriots 3 note 21: the Loader's binocular pose from behind (shot 2) hid both hands: arms round his head.",
    "notes": "G4-6, G4-7, G4-15, G7-1, G7-4, G8 (arms and bodies: check ran and missed); GCS (cast sheet: check never run on it)",
    "rank": 1,
-   "miss": "G4-6, G4-11, G4-15 (limbs curled, legs 2D in the door frame, the move in reverse)",
-   "plan": "kittest on GTA shot 4 v7 frames at Sam's note times (git history): humancheck must flag each; arms-out-of-back (G4-7, G7-4, G8) and crossed forearms (G7-1) are already caught by body_check_shot4_v4",
+   "miss": "measured 23 Nov on v4 (560d946d) at Sam's stills, matched to the saved clip (shot 4 time = clip time - 3.0): G4-6 (still 3c, 1.00 s) and G4-15 (still 6b, 4.92 s) pass the body check with no Jason fault; G4-11 (stills 5a-5c, 2.67-3.42 s) is stopped, but for the arms and the back view, never the flat legs in the door frame",
+   "plan": "the body check must learn what \"curled\" and \"legs flat in a door frame\" look like on the drawing (limb overlap with the torso, a leg drawn with no depth turn); kittest on v4 at 1.00, 3.12 and 4.92 s",
    "kind_before": "code"
   },
   "49": {
    "rule": "Every famous face passes the likeness test before the cast sheet.",
-   "status": "partly",
+   "status": "proven",
    "tests": [
     "facepick_extras_after_the_check",
     "facepick_beard_from_any_front",
     "agelines_by_measure_and_age",
-    "facehouse_head_from_photos"
+    "facehouse_head_from_photos",
+    "dome_not_a_carrot"
    ],
-   "example": "kittest facepick_extras_after_the_check: Rule 49.3 (face tool, 13-14 Nov): glasses, beard, age lines and the eyes' look are drawn AFTER the likeness",
+   "example": "kittest dome_not_a_carrot: Milburn note 4 (Sam 17 Nov, \"alien carrot man\"): Pat McFadden's bald dome as chat 5 drew it (62% likeness, passed) is now refused by facehouse.dome_faults (1.9x as tall as its half width, widest at the cheeks); the fixed head and a head with hair pass",
    "notes": "M4 (Pat's dome \"alien carrot man\": likeness 62% passed)",
    "rank": 4,
-   "miss": "M4 (Pat's bald dome \"alien carrot man\": 62% passed)",
-   "plan": "add Pat's old dome (Milburn, git history) to the likeness test: it must fail the silhouette step",
-   "kind_before": "code"
+   "kind_before": "code",
+   "done": "23 Nov (chain A chat 3): the face tool measures a bald head's drawn skull before anyone sees it; the pick sheet shows a carrot dome in red whatever the likeness score"
   },
   "50": {
    "rule": "Every famous person gets one shot with the face big enough to read.",
@@ -394,13 +396,17 @@
   },
   "17": {
    "rule": "Whatever is nearer the camera hides what's behind it, everywhere.",
-   "status": "next",
-   "tests": [],
-   "example": "",
+   "status": "partly",
+   "tests": [
+    "solid_check_shot4_v7"
+   ],
+   "example": "kittest solid_check_shot4_v7: GTA v7 note 3 (Sam 21 Nov, \"Jason clips through two parts of the car\"): stills 77a3eb10 and 2194502b matched to 1.0 and 1.5 s on the v7 strip; viewchecks.solid_faults on version 7's own code at frames 12 and 18 flags his arm in front of the window frame that rubs it out and his hips through the window pillar",
    "notes": "G4-2, G4-3, G4-11, G7-2, G7-7 (see-through bonnet, body through car, hydrant water through car: ran and missed); M19 (name card clipping: Milburn had no layers(t))",
    "rank": 2,
-   "plan": "find the time of each of Sam's v7 stills (notes/shot4-case-study/sam-v7/: bonnet G7-2, car parts G7-3, hydrant water G7-7) by matching them to the v7 render (git 3844e0a9), then a kittest running viewchecks.solid_faults with frames= only those frames on the v7 code: each must be flagged, and on today's code cleared. Measured 23 Nov: the whole of shot 4 at every 6th frame takes over 8 minutes, so the proof must use the noted frames only.",
-   "kind_before": "code"
+   "plan": "bonnet: test the drawn outline of each body piece against the solid in front (the v8 arm-edge test, for every piece), not bone points; water: effects listed with a distance (layers) so layer_faults can compare them; then add frames 8, 40, 44 to solid_check_shot4_v7",
+   "kind_before": "code",
+   "miss": "G7-2 (see-through bonnet, still b03d81c2 ~0.67 s, frame 8) and G7-7 (hydrant water through the cruiser, stills c0d78111/d89a1ff1 ~3.33-3.67 s, frames 40/44): solid_faults and layer_faults both pass them on v7 (measured 23 Nov); M19 (Milburn name cards: rule 19's cover now)",
+   "done": "23 Nov (chain A chat 3): stills timed; G7-3 proven on v7 frames; today's shot 4 at the same times (a later camera and timing, mid-rebuild) still shows footL through the bonnet at 1.00 s and hipR through the window pillar at 1.33 s: told to the GTA notes"
   },
   "18": {
    "rule": "Every joke prop is big enough to read on a phone.",
@@ -413,13 +419,16 @@
   },
   "19": {
    "rule": "Every check ends with pass, fault or “couldn't look”; “couldn't look” stops the animatic.",
-   "status": "owed",
-   "tests": [],
-   "example": "",
+   "status": "proven",
+   "tests": [
+    "could_not_test_cover",
+    "could_not_test_readable"
+   ],
+   "example": "kittest could_not_test_cover: Milburn M19 (the clipping check said COULD NOT TEST, the line was carried as an old one and the name card clipped twice): a person drawn with no depth now gives COULD NOT TEST, and that stop refuses the animatic, the final and finish.py even with --faults-named; only the check's Exceptions row with Sam's Y lets it by",
    "notes": "M19 (clipcheck COULD NOT TEST carried as an old line, name card clipped twice); GR (v3 sent with every check off, Sam's order)",
    "rank": 11,
-   "owed": "could-not-test build (session 01U3pKQzaw3rkdJXunde285d): the stop no chat can skip, in pre-flight, the render tool and finish.py; its kittest on Milburn chat 12 is this rule's proof",
-   "kind_before": "code"
+   "kind_before": "code",
+   "done": "23 Nov: the could-not-test build (session 01U3pKQzaw3rkdJXunde285d, main line cc3adef2) landed; proof moved from owed to proven"
   },
   "57": {
    "rule": "Nothing flips from in front to behind between two frames unless planned.",
@@ -632,13 +641,14 @@
     "critique_library",
     "critique_closeups",
     "critique_each_fault_once",
-    "critic_bench_scores"
+    "critic_bench_scores",
+    "body_send_gate"
    ],
-   "example": "kittest critique_record: Job H (rule 89): critique.py record refuses a half answer and a look written after the result; passes a whole one.",
+   "example": "kittest body_send_gate: a clip or animatic made since 20 Nov with no fresh critique record is refused at the send (the hook on every file sent to Sam); Milburn's goth-hair clip (M1, M3, 17 Nov) went before this gate",
    "notes": "M1, M3 (goth hair: first look \"not yet critiqued\"); GTA shot 4 v4 went out on a point check plus a judgement at full size that missed 16 notes",
    "rank": 10,
-   "miss": "M1, M3 (the goth's hair reached Sam before any fresh-eye look)",
-   "plan": "the send gate refuses a clip or animatic with anything new and no critique record (as the body-check send gate does), kittest on Milburn chat 6's send",
+   "miss": "M1, M3 went as a STILL as well as a clip: pictures sent to Sam are not gated (videos only)",
+   "plan": "extend the send gate to new stills of the film (not check sheets or report pages); needs Sam's Y on the proposal route, since it changes every picture send",
    "kind_before": "judge"
   },
   "S3": {

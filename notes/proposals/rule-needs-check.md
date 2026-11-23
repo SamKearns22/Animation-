@@ -110,6 +110,7 @@ Added: every gap visible in every chat; a reader for the rules a tool can't chec
 - A handover check that crashes is a STOP ("CHECK COULD NOT RUN"), not a skipped line. `handover.py end` writes
   REFUSED in the end log when STOP lines remain, and the next chat's `start` prints STOP on it.
 
+**Chat 3 (23 Nov, Opus high):** proofs added for 49, 13, 11, 19, 17 (partly), 89 (partly); 41 measured, misses kept. Report sent as a page (report.html beside this file). Numbers: 42 rules with a proof at step 1, 37 proven + 9 partly after the strict re-check; of the 38 rule-covered notes, caught on their own saved example: 4 before chain A (G4-7, G7-1, G7-4, G8), 10 now (+G4-16, M4, M5, M6, M19, G7-3).
 **For the report (Sam's ask, 22 Nov ~23:10), so far:** rule 74 (before: a row per spoken line; now: every shot; GTA's
 shot 4 would have been caught before Sam saw it: note G4-16, 1 of the 9 by-hand notes); the proposal route (before: a
 let-through was logged and listed; now: it stops the handover and every animatic until settled: 39 let-throughs in a

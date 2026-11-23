@@ -61,6 +61,9 @@ WHOLE HEAD (chat 16, Sam: "draw the face shape from the reference a lot more int
     silhouette), the crown, the hairline and the side hair's foot into the pick ('head'); with `head` in the lines
     (the default; CAST's finished pair say head=False) the face outline, the swept hair's cap and sides and the eyes'
     size (HEAD_EYES) follow it. Kittest facehouse_head_from_photos.
+    DOME (rule 49, Milburn note 4, Pat "alien carrot man" at 62% likeness): dome_faults() measures a bald head's drawn
+    skull: widest at or above the eyes, no taller over its widest row than its half width (a near half-circle, as the
+    photos' skulls measure); draw() prints HEAD SHAPE lines, facepick's sheet shows them red. Kittest dome_not_a_carrot.
     PROPORTIONS (chat 17, rule 30: pushing each row from the average face left Walliams a light bulb; his rows differ
     from it by hundredths): shape_push (SHAPE_PUSH 3) pushes the head's proportions from real faces' middle by the
     pick's card (z-scores): the face's width (face_wide), the jaw against the cheeks (jaw_wide) and with it the chin's
@@ -1504,6 +1507,37 @@ def install():
     return TC
 
 
+def dome_faults(name, lines=None, src=None, variant=None):
+    """Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% and
+    Sam saw "an alien carrot man": the skull drawn 1.9x as tall over its widest row as its half width, widest down at
+    the cheeks). A bald head's drawn skull must be widest at or above the eyes (v <= 0.05 face heights) and no taller
+    over that row than 1.1x its half width (real skulls, measured off Pat's photos: a near half-circle, 0.76)."""
+    c = dict(lines if lines is not None else CAST.get(name, {}))
+    if c.get('hair') != 'bald':
+        return []
+    kh = person(name, 'detail', src=src, variant=variant, **c)['kit_house']
+    L = face_layout(kh)
+    L['round_top'], L['dome'], L['dome_wide'] = True, kh.get('dome', -0.44), kh.get('dome_wide')
+    fo = face_outline(L)
+    def half(v):
+        r = [abs(u0 + (v - v0) / (v1 - v0) * (u1 - u0)) for (u0, v0), (u1, v1) in zip(fo, fo[1:] + fo[:1])
+             if (v0 - v) * (v1 - v) < 0]
+        return max(r) if r else 0.0
+    top = min(v for _, v in fo)
+    vs = np.linspace(top + 0.005, 0.3, 60)
+    ws = [half(v) for v in vs]
+    k = int(np.argmax(ws))
+    tall = (vs[k] - top) / max(ws[k], 1e-6)
+    out = []
+    if vs[k] > 0.05:
+        out.append(f'HEAD SHAPE: {name}: the bald skull is widest at the cheeks ({vs[k]:.2f} face heights down), not '
+                   'the temples: a narrow dome (Milburn note 4, "alien carrot man")')
+    if tall > 1.1:
+        out.append(f'HEAD SHAPE: {name}: the bald dome is {tall:.1f}x as tall as its half width (a real skull is a near '
+                   'half-circle, under 1.1x): "alien carrot man" (Milburn note 4)')
+    return out
+
+
 def draw(name, look, out, size=900, lines=None, src=None, variant=None):
     """One head and shoulders, front on, on white: the people kit's person with the house head. `lines`: the
     person's house lines (CAST's for that face otherwise); `src`/`variant`: one of facepick's heads (load())."""
@@ -1513,6 +1547,8 @@ def draw(name, look, out, size=900, lines=None, src=None, variant=None):
     install_circle_hands(B)
     TC = install()
     sp = person(name, look, src=src, variant=variant, **(lines if lines is not None else CAST[name]))
+    for f in dome_faults(name, lines, src, variant):       # rule 49: the head's shape, before anyone sees it
+        print(f)
     TC.HEADS[sp['who']] = house_head
     TC.TORSOS[sp['who']] = lambda *a: None
     B.SS = 1

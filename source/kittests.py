@@ -586,6 +586,88 @@ def every_face_has_a_mouth():
     return a == [True, True, None] and b == [False, False, None], f'with mouth: {a}; mouth removed: {b}'
 
 
+@test
+def mouth_name_that_does_not_exist_stops():
+    """Rule 13 (lesson 7, Milburn note 6, Sam 17 Nov: "character 3 has no mouth"): Swindon's "pow" switched between
+    'v:O' and 'v:M', a shape name that does not exist, so half his frames drew no mouth and every face check passed
+    (a face with a mouth slot is not a face with a mouth). mouths.draw now refuses an unknown name for every film;
+    the old 'M' must stop, the fix's 'grin' must draw."""
+    import mouths
+
+    class Pen:
+        def __init__(self):
+            self.n = 0
+
+        def line(self, *a, **k):
+            self.n += 1
+        poly = ell = arc = line
+    stopped = False
+    try:
+        mouths.draw(Pen(), {}, 0, 0, 'M')
+    except ValueError:
+        stopped = True
+    pen = Pen()
+    mouths.draw(pen, {}, 0, 0, 'grin')
+    return stopped and pen.n > 0, f"'M' (Milburn chat 7) stopped: {stopped}; 'grin' drew {pen.n} strokes"
+
+
+@test
+def board_gate_milburn_reverse():
+    """Rule 11 (lesson 7, Milburn note 5, Sam 17 Nov: "the scene composition in scene 4 as proposed is poor"): when the
+    reverse two-shot was built, Milburn's only delivered board held shots 1, 2a and 2b; the other 10 (the reverse 4a,
+    4c, 7a, 7c, 7e among them) were first seen by Sam in the animatic. Fed Milburn's own board record as it stood
+    then, rough.board_gate must refuse those 10 shots by name; with today's record (the second board) it lets them by."""
+    import milburn as M
+    import rough as R
+    real_rec, real_before = R.board_record, R._before_rule
+    full = real_rec('milburn')
+    try:
+        R._before_rule = lambda *a: False
+        R.board_record = lambda *a: full[:1]
+        then = R.board_gate(M, 'milburn')
+        R.board_record = lambda *a: full
+        now = R.board_gate(M, 'milburn')
+    finally:
+        R.board_record, R._before_rule = real_rec, real_before
+    hit = next((f for f in then if 'on no delivered board' in f), '')
+    ok = hit.startswith('10 shot') and '4a' in hit and not any('on no delivered board' in f for f in now)
+    return ok, f'as at chat 6: {hit[:70] or "not refused"}; with the second board: {len(now)} refusals'
+
+
+V7_COMMIT = '3844e0a9'                   # GTA shot 4 version 7 as Sam saw it (21 Nov, chat 22; stills in sam-v7/)
+
+
+@test
+def solid_check_shot4_v7():
+    """Rule 17 (lesson 7; GTA v7 note 3, Sam 21 Nov: "Jason clips through two parts of the car as he moves"): the
+    times of Sam's v7 stills were matched on the v7 strip (77a3eb10 ~1.0 s, 2194502b ~1.5 s); viewchecks.solid_faults
+    on version 7's own code at just those frames must flag Jason through the car (his arm in front of the window
+    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, two frames about 2.
+    Known misses, not in this proof: v7 note 2 (the see-through bonnet, 0.67 s) and note 7 (hydrant water through the
+    cruiser, 3.33-3.67 s) are still passed on those frames (rule_proofs.json, rule 17's miss)."""
+    import subprocess
+    import tempfile
+    root = os.path.dirname(HERE)
+    tmp = tempfile.mkdtemp()
+    try:
+        tar = subprocess.run(['git', 'archive', V7_COMMIT, 'source', 'story'], cwd=root, capture_output=True).stdout
+        if not tar:
+            return False, 'COULD NOT TEST: version 7 is not in this copy\'s history'
+        subprocess.run(['tar', '-x', '-C', tmp], input=tar, check=True)
+        src = os.path.join(tmp, 'source')
+        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks as VC; '
+                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[12, 18], label="v7")))' % src)
+        r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
+    finally:
+        import shutil
+        shutil.rmtree(tmp, ignore_errors=True)
+    lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
+    arm = any('rubbed out' in ln for ln in lines)
+    hips = any('window pillar' in ln for ln in lines)
+    return arm and hips, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the pillar {hips}' + \
+        ('' if r.returncode == 0 else f'; crashed: {r.stderr.strip().splitlines()[-1:]}')
+
+
 # ------------------------------------------------------------------------------------------------ running them
 @test
 def standing_legs_straight_elbows_out():
@@ -2480,6 +2562,20 @@ def facehouse_head_from_photos():
     errs = (max(face), max(hair), abs(crown - hd['crown']))
     ok = errs[0] <= 0.025 and errs[1] <= 0.03 and errs[2] <= 0.04
     return ok, f'face edge off by {errs[0]:.3f}, hair edge {errs[1]:.3f}, crown {errs[2]:.3f} (face heights)'
+
+
+@test
+def dome_not_a_carrot():
+    """Rule 49 (lesson 7, Milburn note 4: Pat McFadden's bald dome passed the likeness test at 62% and Sam saw "an
+    alien carrot man"): facehouse.dome_faults flags Pat's head as chat 5 drew it (dome -0.44, no measured width: the
+    skull 1.9x as tall as its half width, widest at the cheeks) and passes chat 6's fixed head and a head with hair."""
+    import facehouse as FH
+    old = dict(FH.CAST['mcfadden'])
+    old.pop('dome', None)
+    old.pop('dome_wide', None)
+    caught, fixed, hair = FH.dome_faults('mcfadden', old), FH.dome_faults('mcfadden'), FH.dome_faults('walliams')
+    ok = len(caught) == 2 and not fixed and not hair
+    return ok, f'old dome: {len(caught)} faults; fixed dome: {len(fixed)}; Walliams (hair): {len(hair)}'
 
 
 @test
