@@ -1121,6 +1121,17 @@
    "example": "Sam, 23 Nov 10:54: \"Please remove the 'locked by Sam' section of communication as it doesn't help me\" (chat 46/47 replies carried the line).",
    "notes": "check: propose.py hook locked_line.",
    "kind_before": "none"
+  },
+  "N29": {
+   "rule": "One message, never twice: if a checker stops a reply after Sam has seen it, the resend is only the changed line, never the whole message again.",
+   "anchor": "One message, never twice (Sam, 22 Nov):",
+   "status": "partly",
+   "tests": [
+    "guard_one_correction"
+   ],
+   "example": "Sam, 22 Nov 23:18: \"You keep sending me messages twice\" (chat 56d8e5c4: the guard stopped a reply at 23:16:58 and the whole reply was sent again at 23:17:10; saved as notes/proposals/guard-film-questions/example-22nov.json). kittest guard_one_correction replays it: the block now names question 2 and asks for one Correction line; the whole resend is caught (logged as a full repeated reply and a let-through), a right one-liner is cleared.",
+   "notes": "check: propose.py hook (guard-film-questions Change 1, chain B chat 4, 23 Nov). Partly: the proposal guard only; the watcher's daily-line stop (watcher.py stop) still asks for a resend, which is precheck-reply's Change 2 (waits on Sam's pick).",
+   "kind_before": "none"
   }
  },
  "_baseline": {

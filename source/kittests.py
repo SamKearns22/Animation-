@@ -776,7 +776,8 @@ def solid_check_shot4_v7():
     frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, three frames about 2.
     Chain A chat 5 (23 Nov): v7 note 2, the see-through bonnet (still b03d81c2, 0.67 s = frame 8), passed every bone
     point (the vest's edge showed between them); viewchecks.outline_shows now tests the drawn outline, so frame 8 must
-    flag Jason's body through the tulip's bonnet."""
+    flag Jason's body through the tulip's bonnet; and v7 note 7, the hydrant water through the cruiser (still c0d78111,
+    3.33 s = frame 40), effect_shows must flag the water (effect 0) through the cruiser's bonnet."""
     import subprocess
     import tempfile
     root = os.path.dirname(HERE)
@@ -790,17 +791,19 @@ def solid_check_shot4_v7():
         import shutil                             # today's check on version 7's own drawing code
         shutil.copy(os.path.join(HERE, 'viewchecks.py'), os.path.join(src, 'viewchecks_now.py'))
         code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks_now as VC; '
-                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18], label="v7")))' % src)
+                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18, 40], label="v7")))' % src)
         r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
     finally:
         import shutil
         shutil.rmtree(tmp, ignore_errors=True)
+    water = any(ln.startswith('BODY:') and ' 3.33 s: effect 0 shows through the cruiser' in ln for ln in r.stdout.splitlines())
     lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
     arm = any('rubbed out' in ln for ln in lines)
     hips = any('window pillar' in ln for ln in lines)
     bonnet = any('drawn body shows through the tulip\'s bonnet' in ln and ' 0.67 s' in ln for ln in lines)
-    return arm and hips and bonnet, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the ' \
-        f'pillar {hips}; at 0.67 s the body through the bonnet {bonnet}' + \
+    return arm and hips and bonnet and water, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips ' \
+        f'through the pillar {hips}; at 0.67 s the body through the bonnet {bonnet}; at 3.33 s the hydrant water ' \
+        f'through the cruiser {water}' + \
         ('' if r.returncode == 0 else f'; crashed: {r.stderr.strip().splitlines()[-1:]}')
 
 
@@ -3066,6 +3069,146 @@ def proposal_route_hook():
     finally:
         P.PROPS = old
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+@test
+def guard_one_correction():
+    """guard-film-questions Change 1, the check for Sam's rule "One message, never twice" (22 Nov): every block is logged
+    in full; the block tells the chat Sam has read the reply and asks for one "Correction:" line; on the retry only the
+    text after the block is judged: a right correction is cleared (no let-through), a full resend is logged as one."""
+    import io
+    import contextlib
+    import json as J
+    import shutil
+    import tempfile
+    import propose as P
+    tmp = tempfile.mkdtemp()
+    old = P.PROPS
+    P.PROPS = tmp
+    try:
+        f = os.path.join(tmp, 'abcd1234-chat.jsonl')
+
+        def turn(*texts):
+            ents = [{'type': 'user', 'message': {'content': 'go on'}}]
+            for i, t in enumerate(texts):
+                if i:   # the block's reason reaches the chat as a hook message, not as Sam's
+                    ents.append({'type': 'system', 'subtype': 'stop_hook', 'content': 'blocked'})
+                ents.append({'type': 'assistant', 'message': {'content': [{'type': 'text', 'text': t}]}})
+            open(f, 'w').write('\n'.join(J.dumps(e) for e in ents))
+
+        def run(active=False, last=None):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                P.hook(J.dumps({'transcript_path': f, 'stop_hook_active': active, 'last_assistant_message': last}))
+            return buf.getvalue()
+
+        bad = []
+        unrouted = lambda: P._read(os.path.join(tmp, P.UNROUTED)).count('\n')
+        # 1. Sam's 22 Nov chat (56d8e5c4): an unjudged system ask; the block asks for ONE correction line
+        ask = ('Way 2 is written in as a rule.\nStill open:\n1. Should lessons 2 and 3 from the articles change how the '
+               'rules file is read? Y or N. My pick is Y.\n2. Should I lower the big-film figure in the rulebook? Y or N.')
+        turn(ask)
+        out = run()
+        reason = J.loads(out)['reason'] if out else ''
+        if 'ALREADY READ' not in reason or 'Correction: ignore question 1, it is withdrawn' not in reason \
+                or 'Do NOT send the reply again' not in reason:
+            bad.append(f'block message does not ask for one correction line: {reason[:120]}')
+        log = P._blocks()
+        if not log or log[-1].get('reply') != ask or log[-1].get('event') != 'block':
+            bad.append('first block not logged with the whole reply')
+        # 2. a right one-line correction clears it: logged, no let-through
+        n0 = unrouted()
+        turn(ask, 'Correction: ignore question 1, it is withdrawn.')
+        if run(active=True):
+            bad.append('blocked twice')
+        r = P._blocks()[-1]
+        if r.get('event') != 'retry' or r.get('result') != 'cleared' or r.get('shape') != 'short':
+            bad.append(f'correct one-liner not cleared: {r}')
+        if unrouted() != n0:
+            bad.append('a cleared correction was logged as a let-through')
+        # 3. the fault Sam saw three times (22 Nov, "Why did you write your response 3 times?"): a full resend after
+        # the block is logged as a full repeated reply and a let-through
+        turn(ask)
+        run()
+        turn(ask, 'Sorry, here it is again.\n' + ask)
+        run(active=True)
+        r = P._blocks()[-1]
+        if r.get('shape') != 'full' or r.get('result') != 'let-through' or unrouted() != n0 + 1:
+            bad.append(f'a full resend was not caught: {r.get("shape")}, {r.get("result")}')
+        # 4. a judged proposal missing its Critiqued line: the block names the exact line; only that line clears it
+        fault = ['proposal x: the reply must carry "Critiqued: 6 found, 2 fixed, 4 named" (counted from its file)']
+        rs = P.block_reason(fault, 'Need: 1 or 2 below.')
+        if '"Correction: Critiqued: 6 found, 2 fixed, 4 named"' not in rs:
+            bad.append('Critiqued block does not print the exact line')
+        if not P.correction_ok('Correction: Critiqued: 6 found, 2 fixed, 4 named.', fault)[0]:
+            bad.append('right Critiqued correction refused')
+        if P.correction_ok('Correction: Critiqued: 6 found, 3 fixed, 3 named.', fault)[0]:
+            bad.append('wrong numbers accepted')
+        if P.correction_ok('Critiqued: 6 found, 2 fixed, 4 named\n' + 'more\n' * 4, fault)[0]:
+            bad.append('a long resend accepted as a correction')
+        # 3b. Sam's own example (22 Nov, chat 56d8e5c4, saved from its record): the stopped reply sent again whole 12 s
+        # later; Sam: "You keep sending me messages twice". The check names question 2 and catches the resend.
+        ex = J.load(open(os.path.join(os.path.dirname(HERE), 'notes', 'proposals', 'guard-film-questions',
+                                      'example-22nov.json'), encoding='utf-8'))
+        turn(ex['blocked'])
+        out = run()
+        if 'question 2' not in (J.loads(out)['reason'] if out else ''):
+            bad.append("Sam's 22 Nov reply: the block does not name question 2")
+        turn(ex['blocked'], ex['retry'])
+        run(active=True)
+        r = P._blocks()[-1]
+        if r.get('shape') != 'full' or r.get('result') != 'let-through':
+            bad.append(f"Sam's 22 Nov resend not caught: {r.get('shape')}, {r.get('result')}")
+        n1 = unrouted()
+        turn(ex['blocked'])
+        run()
+        turn(ex['blocked'], 'Correction: question 2 is not a change, it only asks what you meant by 15% per film.')
+        run(active=True)
+        if P._blocks()[-1].get('result') != 'cleared' or unrouted() != n1:
+            bad.append("Sam's 22 Nov reply: the right one-line correction was not cleared")
+        n0 = unrouted() - 1                     # step 5 expects exactly one more let-through
+        # 5. a stop by another hook first (no block of ours pending): never blocks twice, logged as before
+        open(os.path.join(tmp, P.BLOCKS), 'w').close()
+        turn(ask)
+        if run(active=True) or unrouted() != n0 + 2:
+            bad.append('stop_hook_active without our block: blocked, or not logged as a let-through')
+        rep = P.blocks_report()
+        return not bad, '; '.join(bad) or ('block asks for one Correction line; a right one clears (no let-through); a '
+                                           f'full resend is logged; Critiqued line exact; report: {rep.splitlines()[0]}')
+    finally:
+        P.PROPS = old
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# the guard's score on its labelled list as measured 23 Nov (chain B chat 4, before Change 2): never worse. Change 2
+# (its own yes from Sam) sets all four to 0.
+GUARD_BASELINE = {'wrong': 21, 'missed': 2, 'probe_missed': 9, 'probe_blocked': 1}
+
+
+@test
+def guard_labelled_list():
+    """guard-film-questions Learn step 2: the guard's 51 real stops (15-23 Nov), each labelled from its chat (film
+    question, job, start the route, Critiqued wording, path misread, meaning: wrong stops; Critiqued missing, unjudged
+    system ask: true catches), plus the 15 Nov probe. The guard is replayed on all of them: never worse than measured."""
+    import json as J
+    import propose as P
+    d = J.load(open(P.GUARD_LIST, encoding='utf-8'))
+    bad = []
+    ok_labels = {'film': False, 'job': False, 'start-route': False, 'critiqued-wording': False, 'path-misread': False,
+                 'meaning': False, 'critiqued-missing': True, 'unjudged-system': True}
+    for r in d['rows']:
+        if ok_labels.get(r['label']) is None or ok_labels[r['label']] != r['true_catch']:
+            bad.append(f"row {r['n']}: label {r['label']} / true_catch {r['true_catch']} do not agree")
+    logged = [ln for ln in P._read(P._p(P.UNROUTED)).splitlines() if ln.startswith('- ') and ln[2:18] <= '2026-11-23 08:38']
+    if len(d['rows']) != len(logged) or len(d['probe_change']) != 12 or len(d['probe_routine']) != 10:
+        bad.append(f"list incomplete: {len(d['rows'])} rows for {len(logged)} logged stops; probe "
+                   f"{len(d['probe_change'])}+{len(d['probe_routine'])}")
+    g = P.guard_score()
+    for k, base in GUARD_BASELINE.items():
+        if len(g[k]) > base:
+            bad.append(f'{k}: {len(g[k])} > {base} ({g[k]})')
+    return not bad, '; '.join(bad) or ('51 labelled stops + 22 probe questions; replay: ' + ', '.join(
+        f'{k} {len(g[k])} (at most {GUARD_BASELINE[k]})' for k in GUARD_BASELINE))
 
 
 PLAIN_OPT = ("### Option {n}: two quick stills first\n"

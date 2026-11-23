@@ -1,6 +1,6 @@
 # Proposal: The guard stops plain film questions as if they were system changes
 
-Status: adopted (2026-11-22)
+Status: adopted (2026-11-22); Learn and Change 1 built 23 Nov (chain B chat 4); Change 2 asked 23 Nov
 
 ## Problem
 The guard (the Stop hook in source/propose.py: a script that reads each reply before Sam sees it and sends it back
