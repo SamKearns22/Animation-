@@ -32,6 +32,10 @@ Room shot and chat 10's re-stage (the two builds Sam then re-noted), and lets sh
 **not measured yet**: measured at the end of the next new film from the hold record: framings built before Sam saw
 them (Milburn 2, target 0) and staging notes given twice (Milburn 2 by the look back, target 0).
 
+**Verified working (23 Nov).** A made-up film was taken through every step with the real clip command: refused
+at each stage it should be, rendering once Sam's number and the new board were recorded; a real Milburn clip still
+renders normally; all six related tests pass.
+
 **How it should behave from now on.** When Sam gives a note about where people are or how a shot is framed, his reply
 is one picture of 2-3 numbered framings (one exactly as the script describes, and "0: none of these, say what
 instead"); he answers with a number; that shot then waits while every other shot carries on. The shot is built to his
