@@ -286,4 +286,5 @@
 2026-11-23T13:58+00:00	REFUSED 1: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 sour	01U3pKR1Z6SWGi4RSahgw7hK
 2026-11-23T14:07+00:00	REFUSED 1: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 sour	01U3pKR2CR28qdUtk2Z9Y6DN
 2026-11-23T14:14+00:00	REFUSED 1: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 sour	01U3pKR2taFPq31QroZMAKSe
+2026-11-23T14:29+00:00	REFUSED 2: KIT TEST RED AT TWO HANDOVERS IN A ROW: body_check_back_view (red at 2026-11-23T14:1 | KIT TEST RED AT TWO HANDOVERS IN A ROW: finished_films_keep_their_bookmark (red at 2	01U3pKR2taFPq31QroZMAKSe
 2026-11-23T14:19+00:00	01GznaATCGyNDEpFQFXcTw3t
