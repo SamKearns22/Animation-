@@ -744,3 +744,24 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
   purpose (this strand, the animatic strand); CLAUDE.md "Choose views..." flag: reworded by Sam, kept. Branch
   claude/gta-chat31 (leanout.py, show log): chat 31's old lean-out, superseded by bench_move; not merged.
 
+
+## Where things stand (22 Nov, chat 40, Opus high; speed-up BUILT)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion, phone and full size); the
+  proposal route (the 3 cm question changes a check).
+- Locked by Sam: every camera and beat of shots 1-8, shot 4's camera and acting-row times included (K1 0.5, K2 1.0,
+  K3 1.4 ... K2 7.4, K1 7.8); the house art style; circle hands.
+- Done: speed-up (Sam "1"; learn-step.md "Speed-up, chat 40"): whole grey clip ~80 min -> 3 min 15 s, dressed still
+  105 -> 17 s, every step proved identical (same.py SAME, proof.txt identical). Checks-first lock, frame store +
+  bundle (notes/bench/store/frames.tar). Not built, named: saved fits (not needed now), head once (not identical).
+- Next: chat 41, Opus high: the get-up 0.5-1.0 s / sit-down 7.4-7.8 s re-plan from reference (learn-step "Stage 1,
+  chat 39": likely one knee at a time, window-side knee first, pulling on the door top), span.py the gate; then the
+  whole grey clip via `bench_move.py clip` (checks first), watched in motion; then the 3 cm question via the route.
+- Needs Sam: nothing. The chat chain hit its limit (8 chats in a row): Sam starts chat 41 himself (prompt below).
+- Read: notes/bench/learn-step.md "Stage 1, chat 39" and "Speed-up, chat 40".
+- Open rule requests: Sam HOLDS the grey-clip body-check proposal (do not raise); held-object check (draft);
+  house-look lock (option 1 step 4); dressed-still "pieces" test (chat 38's idea, via the route).
+- For Claude: `bench_move.py clip OUT OUT.mp4` stops on unnamed faults (`name OUT "why"`); run `keep OUT` after a
+  clip so the next chat reuses frames; BENCH_OLD_INSIDE / BENCH_OLD_FILL force the referees. Branches
+  dreamy-fermi-vkhutz (story post) and gta-chat31 (old lean-out): not merged. Two "Where things stand" on purpose
+  (this strand, the animatic strand); CLAUDE.md "Choose views..." flag: reworded by Sam, kept.
+
