@@ -6,3 +6,6 @@ Are you able to cut our Claude MD down to 2,800 lines without losing any of its 
 ### 2026-11-23T14:50:10
 Does it need proposal route? You already seem to have a good plan
 
+### 2026-11-23T14:50:34
+Override
+
