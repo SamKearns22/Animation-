@@ -6176,58 +6176,58 @@
    "model": "opus",
    "stage": "lessons-put-to-sam",
    "round": null,
-   "cost": 0.98,
+   "cost": 1.46,
    "notes": 0,
    "repeats": [],
-   "steps": 48,
-   "hist_k": 184,
+   "steps": 63,
+   "hist_k": 199,
    "kinds": {
-    "tool search": 10.0,
-    "whole-file .py read": 7.5,
-    "other": 82.5
+    "tool search": 7.6,
+    "whole-file .py read": 5.1,
+    "other": 87.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 26,
+    "tool search": 30,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 17
+    "other": 21
    },
    "split": {
-    "usd": 3.582,
-    "total": 3.582,
+    "usd": 5.3261,
+    "total": 5.3261,
     "floor_k": 83,
     "blocks": {
-     "new writes": 42.7,
-     "start-up floor": 24.9,
-     "Claude's words": 23.1,
-     "carried history": 9.3
+     "new writes": 51.0,
+     "start-up floor": 20.9,
+     "Claude's words": 16.7,
+     "carried history": 11.3
     },
     "origins": {
-     "Claude's words": 32.4,
-     "start-up floor": 24.9,
-     "cache re-write": 21.4,
-     "result: other": 14.2,
-     "result: tool search": 4.5,
-     "messages and reminders": 2.6
+     "cache re-write": 34.5,
+     "Claude's words": 24.7,
+     "start-up floor": 20.9,
+     "result: other": 12.8,
+     "result: tool search": 3.7,
+     "messages and reminders": 3.3
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 24.9,
-     "memory lapses (re-paying for the whole chat)": 21.4,
-     "thinking": 8.9,
-     "writing code": 7.2,
-     "reading guides": 5.9,
-     "app tools (chats, files sent)": 5.4,
-     "reading chat records": 5.3,
-     "messages to Sam": 4.9,
-     "writing notes": 4.7,
-     "commands": 4.3,
-     "messages and reminders": 2.6,
-     "helper and chat prompts": 2.3,
-     "start-up and handover tools": 1.5,
+     "memory lapses (re-paying for the whole chat)": 34.5,
+     "start-up reading (rules, tools, first files)": 20.9,
+     "thinking": 6.8,
+     "writing code": 5.2,
+     "app tools (chats, files sent)": 5.0,
+     "reading chat records": 4.9,
+     "reading guides": 4.8,
+     "messages to Sam": 3.9,
+     "commands": 3.7,
+     "writing notes": 3.4,
+     "messages and reminders": 3.3,
+     "helper and chat prompts": 1.7,
+     "start-up and handover tools": 1.2,
      "reading notes": 0.6
     },
     "leftover": 0.0
@@ -6240,15 +6240,15 @@
      [
       "source/propose.py",
       2.2,
-      0.032
+      0.0379
      ],
      [
       "notes/proposals/rule-needs-check.md",
       0.9,
-      0.0118
+      0.0142
      ]
     ],
-    "base_pct": 19.7
+    "base_pct": 17.5
    },
    "src": "estimate",
    "sid": "session_01U3pKR13HKBmKShVS4PF9Aa",
@@ -6260,8 +6260,8 @@
     "other": {
      "shared:handover.py": 3,
      "shared:propose.py": 7,
-     "film notes": 7,
-     "other": 4,
+     "film notes": 8,
+     "other": 7,
      "guides": 4,
      "shared:ledger.py": 1
     },
@@ -6474,6 +6474,38 @@
       "other",
       "",
       "git log --oneline -1 && for i in 1 2 3 4; do git pull -q --rebase origin claude/",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "git log --oneline -1 && for i in 1 2 3 4; do git pull -q --rebase origin claude/",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "git status --short | head",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md",
+      "git diff notes/proposals/unrouted.md | head -20; git add notes/proposals/unroute",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git add -A notes && git commit -qm \"Guard log (automa",
       ""
      ]
     ]
@@ -6960,55 +6992,57 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.68,
+   "cost": 1.58,
    "src": "estimate",
    "sid": "session_01U3pKR36uALh2iRkpP1tyQ4",
-   "steps": 21,
-   "hist_k": 110,
+   "steps": 38,
+   "hist_k": 133,
    "kinds": {
-    "tool search": 16.8,
-    "other": 83.2
+    "tool search": 14.1,
+    "other": 85.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 11,
+    "tool search": 21,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 5
+    "other": 9
    },
    "split": {
-    "usd": 1.0805,
-    "total": 1.0805,
+    "usd": 2.1646,
+    "total": 2.1646,
     "floor_k": 81,
     "blocks": {
-     "start-up floor": 44.7,
-     "Claude's words": 30.3,
-     "new writes": 19.5,
-     "carried history": 5.5
+     "new writes": 37.6,
+     "start-up floor": 23.7,
+     "Claude's words": 21.4,
+     "carried history": 17.4
     },
     "origins": {
-     "start-up floor": 44.7,
-     "Claude's words": 39.5,
-     "result: tool search": 9.5,
-     "messages and reminders": 5.3,
-     "result: other": 1.0
+     "messages and reminders": 37.9,
+     "Claude's words": 28.1,
+     "start-up floor": 24.2,
+     "result: tool search": 8.4,
+     "result: other": 1.5
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 44.7,
-     "thinking": 17.5,
-     "messages to Sam": 8.7,
-     "start-up and handover tools": 5.9,
-     "commands": 5.9,
-     "messages and reminders": 5.3,
-     "writing code": 5.0,
-     "reading guides": 3.3,
-     "helper and chat prompts": 2.5,
-     "reading notes": 0.7,
-     "helper results": 0.6,
-     "git and saving": 0.1
+     "messages and reminders": 37.9,
+     "start-up reading (rules, tools, first files)": 24.2,
+     "thinking": 12.2,
+     "commands": 5.7,
+     "messages to Sam": 5.4,
+     "start-up and handover tools": 4.7,
+     "writing code": 2.5,
+     "reading notes": 2.1,
+     "helper and chat prompts": 1.8,
+     "reading guides": 1.7,
+     "app tools (chats, files sent)": 0.6,
+     "writing notes": 0.5,
+     "git and saving": 0.4,
+     "helper results": 0.4
     },
     "leftover": 0.0
    },
@@ -7019,31 +7053,51 @@
     "reads": [
      [
       "source/propose.py",
-      2.1,
-      0.0195
+      2.6,
+      0.0242
+     ],
+     [
+      "notes/proposal-route.md",
+      1.5,
+      0.0121
+     ],
+     [
+      "notes/proposals/guard-film-questions.md",
+      1.4,
+      0.0111
      ],
      [
       "CLAUDE.md",
       1.0,
-      0.0096
+      0.01
+     ],
+     [
+      "notes/proposals/precheck-reply/helper-a.md",
+      1.1,
+      0.0085
      ],
      [
       "notes/proposals/precheck-reply.md",
       0.7,
-      0.0057
+      0.0059
      ],
      [
       ".claude/settings.json",
       0.4,
-      0.0041
+      0.0042
+     ],
+     [
+      "notes/proposals/precheck-reply/helper-b.md",
+      0.2,
+      0.0016
      ],
      [
       "notes/proposals/precheck-reply/chat.md",
       0.1,
-      0.0006
+      0.0007
      ]
     ],
-    "base_pct": 27.3
+    "base_pct": 25.2
    },
    "search": {
     "show": 0,
@@ -7052,9 +7106,9 @@
     },
     "other": {
      "guides": 4,
-     "shared:propose.py": 5,
-     "film notes": 1,
-     "other": 1
+     "shared:propose.py": 7,
+     "film notes": 5,
+     "other": 5
     },
     "ticked": 0,
     "edited film code": false,
@@ -7146,6 +7200,86 @@
       "notes/proposals",
       "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
       ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/proposals/precheck-reply/helper-a.md notes/proposals/precheck-reply/helper",
+      "cd /home/user/Animation-; git status --short; git fetch -q origin claude/create-",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:propose.py",
+      "notes/proposals source/propose.py",
+      "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md notes/proposals/precheck-reply",
+      "^- ",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "film notes",
+      "notes/proposals/precheck-reply/helper-a.md",
+      "cd /home/user/Animation-; sed -n 1,45p notes/proposals/precheck-reply/helper-a.m",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/guard-film-questions.md notes/proposals/guard-film-questions sou",
+      "Status\\|adopted\\|Sam",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "film notes",
+      "notes/proposal-route.md",
+      "cd /home/user/Animation-; sed -n 1,20p notes/proposal-route.md",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "notes/proposals",
+      "cd /home/user/Animation-; git add -A notes/proposals && git commit -qm \"Proposal",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git fetch -q origin claude/create-claude-md-oe8z4g && ",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git push origin HEAD:claude/create-claude-md-oe8z4g 2>",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; for i in 1 2 3 4; do git fetch -q origin claude/create",
+      ""
      ]
     ]
    },
@@ -7159,66 +7293,70 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.67,
+   "cost": 2.47,
    "src": "estimate",
    "sid": "session_01U3pKR27nDhvqq7xXsinsRV",
-   "steps": 78,
-   "hist_k": 223,
+   "steps": 102,
+   "hist_k": 260,
    "kinds": {
-    "tool search": 24.6,
-    "whole-file .py read": 0.3,
-    "renders": 1.1,
-    "pictures": 0.4,
-    "other": 73.7
+    "tool search": 17.8,
+    "whole-file .py read": 0.2,
+    "renders": 1.7,
+    "pictures": 0.2,
+    "other": 80.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 54,
+    "tool search": 63,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
-    "renders": 3,
+    "renders": 6,
     "pictures": 1,
-    "other": 18
+    "other": 26
    },
    "split": {
-    "usd": 6.1269,
-    "total": 6.1269,
+    "usd": 9.0545,
+    "total": 9.0545,
     "floor_k": 84,
     "blocks": {
-     "new writes": 36.7,
-     "Claude's words": 25.4,
-     "carried history": 20.0,
-     "start-up floor": 17.9
+     "new writes": 42.8,
+     "carried history": 24.6,
+     "Claude's words": 20.5,
+     "start-up floor": 12.1
     },
     "origins": {
-     "Claude's words": 36.3,
-     "messages and reminders": 27.9,
-     "start-up floor": 18.1,
-     "result: tool search": 14.3,
-     "Claude's edits": 1.6,
-     "result: other": 1.4,
-     "result: pictures": 0.3,
+     "messages and reminders": 29.7,
+     "Claude's words": 29.6,
+     "cache re-write": 14.7,
+     "start-up floor": 12.3,
+     "result: tool search": 10.4,
+     "result: other": 2.0,
+     "Claude's edits": 1.1,
+     "result: pictures": 0.2,
      "result: renders": 0.1
     },
     "named": {
-     "messages and reminders": 27.9,
-     "start-up reading (rules, tools, first files)": 18.1,
-     "thinking": 16.4,
-     "writing code": 11.6,
-     "reading notes": 10.5,
-     "commands": 3.8,
-     "writing notes": 3.6,
-     "reading kit code": 3.2,
-     "messages to Sam": 1.9,
-     "renders": 0.6,
-     "start-up and handover tools": 0.6,
-     "helper and chat prompts": 0.6,
-     "reading guides": 0.5,
-     "looking at pictures": 0.3,
-     "running checks and tools": 0.3,
+     "messages and reminders": 29.7,
+     "memory lapses (re-paying for the whole chat)": 14.7,
+     "start-up reading (rules, tools, first files)": 12.3,
+     "thinking": 12.1,
+     "writing code": 8.9,
+     "reading notes": 7.4,
+     "writing notes": 3.7,
+     "commands": 3.1,
+     "messages to Sam": 2.3,
+     "reading kit code": 2.2,
+     "reading chat records": 0.7,
+     "start-up and handover tools": 0.7,
+     "helper and chat prompts": 0.5,
+     "renders": 0.5,
+     "reading guides": 0.3,
+     "app tools (chats, files sent)": 0.3,
+     "looking at pictures": 0.2,
+     "running checks and tools": 0.2,
      "other commands": 0.1,
-     "app tools (chats, files sent)": 0.1
+     "git and saving": 0.1
     },
     "leftover": 0.0
    },
@@ -7333,7 +7471,7 @@
       0.002
      ]
     ],
-    "base_pct": 19.0
+    "base_pct": 16.9
    },
    "search": {
     "show": 0,
@@ -7342,8 +7480,8 @@
     },
     "other": {
      "shared:handover.py": 1,
-     "other": 11,
-     "film notes": 19,
+     "other": 15,
+     "film notes": 21,
      "guides": 2,
      "shared:rough.py": 7,
      "shared:preflight.py": 1,
@@ -7352,8 +7490,9 @@
      "shared:film_engine.py": 1,
      "shared:grand_theft_autism.py": 2,
      "shared:kittests.py": 4,
-     "shared:propose.py": 1,
-     "shared:watcher.py": 3
+     "shared:propose.py": 3,
+     "shared:watcher.py": 3,
+     "shared:milburn.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -7789,6 +7928,78 @@
       "notes/logs/handover-end.log",
       "^(PASS|FAIL)",
       ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git diff --stat | tail -3",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md",
+      "git diff notes/proposals/unrouted.md | tail -3 | cut -c1-300; git add -A && git ",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "stale\\|verdict-hash",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "sed -n 285,325p source/propose.py",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "notes/ledger/sam/",
+      "y to all",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "notes/proposals/lessons-report.md",
+      "Now",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "other",
+      "",
+      "Duration|Stream",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "Duration|Video",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "other",
+      "",
+      "^(PASS|FAIL)",
+      ""
      ]
     ]
    },
@@ -7932,57 +8143,59 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.93,
+   "cost": 1.35,
    "src": "estimate",
    "sid": "session_01U3pKQy7WWrKYXdcVwSbKkN",
-   "steps": 60,
-   "hist_k": 189,
+   "steps": 69,
+   "hist_k": 198,
    "kinds": {
-    "tool search": 37.7,
-    "other": 62.3
+    "tool search": 28.6,
+    "other": 71.4
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 55,
+    "tool search": 61,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 5
+    "other": 6
    },
    "split": {
-    "usd": 3.4024,
-    "total": 3.4024,
+    "usd": 4.9388,
+    "total": 4.9388,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 31.1,
-     "new writes": 24.8,
-     "Claude's words": 24.5,
-     "carried history": 19.6
+     "new writes": 40.3,
+     "start-up floor": 24.1,
+     "Claude's words": 18.9,
+     "carried history": 16.7
     },
     "origins": {
-     "Claude's words": 36.0,
-     "start-up floor": 31.1,
-     "result: tool search": 27.2,
-     "messages and reminders": 3.7,
-     "result: other": 1.3,
-     "Claude's edits": 0.6
+     "Claude's words": 28.3,
+     "start-up floor": 24.1,
+     "cache re-write": 21.8,
+     "result: tool search": 20.9,
+     "messages and reminders": 3.4,
+     "result: other": 1.0,
+     "Claude's edits": 0.5
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 31.1,
-     "thinking": 15.7,
-     "reading notes": 13.9,
-     "commands": 9.1,
-     "writing notes": 8.7,
-     "reading chat records": 6.5,
-     "reading kit code": 5.4,
-     "messages and reminders": 3.7,
-     "messages to Sam": 1.7,
-     "writing code": 1.4,
-     "reading guides": 1.3,
-     "other commands": 1.0,
-     "start-up and handover tools": 0.4,
+     "start-up reading (rules, tools, first files)": 24.1,
+     "memory lapses (re-paying for the whole chat)": 21.8,
+     "thinking": 12.3,
+     "reading notes": 10.4,
+     "commands": 7.2,
+     "writing notes": 6.4,
+     "reading chat records": 4.9,
+     "reading kit code": 4.1,
+     "messages and reminders": 3.4,
+     "messages to Sam": 1.9,
+     "reading guides": 1.0,
+     "writing code": 1.0,
+     "other commands": 0.7,
+     "start-up and handover tools": 0.6,
      "git and saving": 0.1
     },
     "leftover": 0.0
@@ -7995,105 +8208,105 @@
      [
       "notes/proposals/named-lines.md",
       4.9,
-      0.0868
+      0.0948
      ],
      [
       "source/preflight.py",
       4.2,
-      0.0684
+      0.0752
      ],
      [
       "notes/ledger/blessed-preflight-chat3.txt",
       2.8,
-      0.0474
+      0.052
      ],
      [
       "notes/proposals/lessons-report.md",
       1.3,
-      0.0226
+      0.0246
      ],
      [
       "notes/proposals/rule-needs-check/rule-table.md",
       1.1,
-      0.0174
+      0.0192
      ],
      [
       "notes/proposals/could-not-test.md",
       0.9,
-      0.0149
+      0.0163
      ],
      [
       "notes/proposals/could-not-test/test.md",
       0.9,
-      0.0149
+      0.0163
      ],
      [
       "source/waivers.py",
       0.9,
-      0.0148
+      0.0163
      ],
      [
       "notes/archive/blessed-handovers.md",
       1.0,
-      0.0125
+      0.0141
      ],
      [
       "notes/proposals/named-lines/chat.md",
       0.6,
-      0.0105
+      0.0115
      ],
      [
       "notes/grand-theft-autism.md",
       0.8,
-      0.0099
+      0.0112
      ],
      [
       "notes/ledger/milburn/checks.jsonl",
       0.5,
-      0.0088
-     ],
-     [
-      "source/kittests.py",
-      0.5,
-      0.0075
-     ],
-     [
-      "notes/logs/broken.md",
-      0.5,
-      0.0075
-     ],
-     [
-      "notes/logs/kittests-last.log",
-      0.5,
-      0.0075
+      0.0096
      ],
      [
       "source/grand_theft_autism.py",
       0.5,
-      0.0075
+      0.0083
+     ],
+     [
+      "source/kittests.py",
+      0.5,
+      0.0083
+     ],
+     [
+      "notes/logs/broken.md",
+      0.5,
+      0.0083
+     ],
+     [
+      "notes/logs/kittests-last.log",
+      0.5,
+      0.0083
      ],
      [
       "notes/proposal-route.md",
       0.3,
-      0.0027
+      0.0031
      ],
      [
       "notes/archive/proposal-route-handovers.md",
       0.2,
-      0.0018
+      0.0021
      ],
      [
       "notes/archive/milburn.md",
       0.1,
-      0.0015
+      0.0017
      ],
      [
       "story/status.md",
       0.1,
-      0.0009
+      0.001
      ]
     ],
-    "base_pct": 26.4
+    "base_pct": 20.9
    },
    "search": {
     "show": 0,
@@ -8109,7 +8322,9 @@
      "shared:kittests.py": 6,
      "shared:blessed_checks.py": 1,
      "shared:blessed.py": 2,
-     "shared:grand_theft_autism.py": 1
+     "shared:grand_theft_autism.py": 1,
+     "shared:propose.py": 2,
+     "shared:watcher.py": 4
     },
     "ticked": 0,
     "edited film code": false,
@@ -8552,6 +8767,54 @@
       "other",
       "",
       "git add -A notes && git commit -q -m \"named-lines: handover check log Co-Authore",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/logs/broken.md",
+      "rule 30\\|dearest",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/named-lines.md source/propose.py notes/proposals/unrouted.md not",
+      "python3 - <<'EOF' p='notes/proposals/named-lines.md' s=open(p).read() i=s.index(",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:watcher.py",
+      "notes/logs/broken.md source/watcher.py",
+      "30",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "def name\\|'name'",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py",
+      "sed -n 540,560p source/watcher.py",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py notes/proposal-route.md",
+      "python3 source/watcher.py name rules \"rule 30's test dearest_things_named (Grand",
       ""
      ]
     ]
@@ -9383,66 +9646,69 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.84,
+   "cost": 2.76,
    "src": "estimate",
    "sid": "session_01U3pKR2YR3iNWMqaRbDiMxK",
-   "steps": 118,
-   "hist_k": 265,
+   "steps": 143,
+   "hist_k": 293,
    "kinds": {
-    "tool search": 28.3,
-    "whole-file .py read": 0.5,
-    "renders": 2.3,
-    "pictures": 1.2,
-    "other": 67.7
+    "tool search": 23.3,
+    "whole-file .py read": 0.3,
+    "renders": 1.6,
+    "pictures": 0.9,
+    "other": 73.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 103,
+    "tool search": 121,
     "whole-file .py read": 2,
     "page.py": 0,
     "routine": 0,
     "renders": 5,
     "pictures": 2,
-    "other": 15
+    "other": 21
    },
    "split": {
-    "usd": 6.7178,
-    "total": 6.7178,
+    "usd": 10.1064,
+    "total": 10.1064,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 29.0,
-     "carried history": 27.4,
-     "Claude's words": 22.1,
-     "new writes": 21.5
+     "new writes": 32.9,
+     "carried history": 26.5,
+     "start-up floor": 23.0,
+     "Claude's words": 17.7
     },
     "origins": {
-     "Claude's words": 35.8,
-     "start-up floor": 29.0,
-     "result: tool search": 23.4,
-     "result: other": 6.2,
-     "messages and reminders": 3.6,
-     "result: pictures": 1.3,
-     "Claude's edits": 0.7,
+     "Claude's words": 30.3,
+     "start-up floor": 23.0,
+     "result: tool search": 19.4,
+     "cache re-write": 16.3,
+     "result: other": 5.8,
+     "messages and reminders": 3.5,
+     "result: pictures": 1.0,
+     "Claude's edits": 0.6,
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 29.0,
-     "reading kit code": 14.0,
-     "thinking": 11.2,
-     "commands": 10.2,
-     "writing code": 8.0,
-     "reading notes": 6.8,
-     "writing notes": 5.3,
-     "messages and reminders": 3.6,
+     "start-up reading (rules, tools, first files)": 23.0,
+     "memory lapses (re-paying for the whole chat)": 16.3,
+     "reading kit code": 11.2,
+     "thinking": 9.3,
+     "commands": 8.9,
+     "writing code": 6.4,
+     "reading notes": 5.7,
+     "writing notes": 4.5,
+     "messages and reminders": 3.5,
      "app tools (chats, files sent)": 2.4,
      "reading chat records": 2.1,
      "messages to Sam": 1.7,
-     "git and saving": 1.5,
-     "looking at pictures": 1.3,
+     "git and saving": 1.3,
      "start-up and handover tools": 1.3,
-     "other commands": 0.8,
-     "renders": 0.4,
-     "running checks and tools": 0.2
+     "looking at pictures": 1.0,
+     "other commands": 0.7,
+     "renders": 0.3,
+     "running checks and tools": 0.2,
+     "helper and chat prompts": 0.1
     },
     "leftover": 0.0
    },
@@ -9454,25 +9720,25 @@
      [
       "source/kittests.py",
       1.9,
-      0.0546
+      0.0632
      ],
      [
       "source/ruleproofs.py",
       1.4,
-      0.038
+      0.0442
      ],
      [
       "source/handover.py",
       0.8,
-      0.0229
+      0.0266
      ],
      [
       "notes/logs/kittests-last.log",
       0.3,
-      0.0092
+      0.0107
      ]
     ],
-    "base_pct": 26.5
+    "base_pct": 21.4
    },
    "search": {
     "show": 0,
@@ -9480,11 +9746,11 @@
      "no show": 0
     },
     "other": {
-     "shared:handover.py": 5,
-     "other": 33,
+     "shared:handover.py": 6,
+     "other": 35,
      "shared:kittests.py": 15,
-     "shared:ruleproofs.py": 4,
-     "film notes": 17,
+     "shared:ruleproofs.py": 6,
+     "film notes": 24,
      "shared:viewchecks.py": 4,
      "shared:gta_rehearse.py": 4,
      "shared:humancheck.py": 2,
@@ -9495,7 +9761,9 @@
      "shared:kitchecks.py": 1,
      "shared:mouths.py": 1,
      "shared:finish.py": 2,
-     "shared:sendgate.py": 1
+     "shared:sendgate.py": 1,
+     "shared:propose.py": 5,
+     "guides": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -10322,6 +10590,150 @@
       "shared:ruleproofs.py",
       "source/ruleproofs.py",
       "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "stale\\|def record",
+      ""
+     ],
+     [
+      128,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/rule-needs-check.md",
+      "sed -n 95,115p source/propose.py; sed -n 286,325p source/propose.py; git diff c3",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check.md notes/proposals/rule-needs-check/",
+      "^## ",
+      ""
+     ],
+     [
+      130,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check/judge/verdict-raw.md",
+      "tail -5 notes/proposals/rule-needs-check/judge/verdict-raw.md | cut -c1-120; git",
+      ""
+     ],
+     [
+      131,
+      "other",
+      "film notes",
+      "notes/proposals/rule-needs-check.md notes/proposals/rule-needs-check/built.md",
+      "rule-needs-check.md \"Built\"\\|rule-needs-check.md \"Wording\\|rule-needs-check.md \"",
+      ""
+     ],
+     [
+      132,
+      "other",
+      "shared:ruleproofs.py",
+      "notes/proposal-route.md source/ruleproofs.py notes/proposals/rule-needs-check.md",
+      "built.md",
+      ""
+     ],
+     [
+      133,
+      "other",
+      "shared:ruleproofs.py",
+      "source/rule_proofs.json source/ruleproofs.py notes/proposals/",
+      "anchor",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "other",
+      "",
+      "date -u; git diff --stat; git log --oneline -1 origin/claude/create-claude-md-oe",
+      ""
+     ],
+     [
+      135,
+      "other",
+      "film notes",
+      "notes/proposals/unrouted.md",
+      "git diff notes/proposals/unrouted.md | tail -3; git stash -q && git merge -q --n",
+      ""
+     ],
+     [
+      136,
+      "other",
+      "shared:propose.py",
+      "notes/proposals/unrouted.md source/propose.py",
+      "<<<<<<<",
+      ""
+     ],
+     [
+      137,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "New rules and lessons are proposed first",
+      ""
+     ],
+     [
+      138,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/rule_proofs.json source/ruleproofs.py",
+      "^(PASS|FAIL)",
+      ""
+     ],
+     [
+      139,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "cd /home/user/Animation- && tail -12 guides/film-quality-rules.md | cut -c1-200",
+      ""
+     ],
+     [
+      141,
+      "other",
+      "other",
+      "",
+      "for i in 1 2 3; do git fetch -q origin claude/create-claude-md-oe8z4g && git mer",
+      ""
+     ],
+     [
+      144,
+      "other",
+      "film notes",
+      "notes/proposals/plain-check.md",
+      "^#\\|^Status\\|Option 1",
+      ""
+     ],
+     [
+      145,
+      "other",
+      "film notes",
+      "notes/proposals/plain-check.md",
+      "sed -n 88,106p notes/proposals/plain-check.md | cut -c1-400",
+      ""
+     ],
+     [
+      146,
+      "other",
+      "shared:handover.py",
+      "notes/proposal-route.md notes/proposals/plain-check.md story/status.md source/ha",
+      "^STOP|REFUSED|UNROUTED|^RULE|^PUSH|^handover REFUSED",
+      ""
+     ],
+     [
+      147,
+      "other",
+      "film notes",
+      "notes/proposal-route.md story/status.md notes/logs/ notes/proposals/unrouted.md",
+      "git add -A notes/proposal-route.md story/status.md notes/logs/ notes/proposals/u",
       ""
      ]
     ]

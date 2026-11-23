@@ -11,13 +11,13 @@ Sam had to give a note on twice were all built and sent as clips before he saw a
 Room shot was built three times; its weapon-picking shot needed "still poorly composed". The one time a still came
 first (Patriots 4's wide view), his "no" cost a picture, not a round. So the change was made.
 
-**Rules changed: none yet.** Two wording changes are waiting for Sam's yes (asked 22 Nov):
-- Rule 11, before: "Each is sent once: notes on it are acted on, never sent again." Proposed: "Each is sent once; a
+**Rules changed: rule 11 and rule 87**, written 23 Nov on Sam's "Y to all" (05:51 UK), word for word as shown to him:
+- Rule 11, before: "Each is sent once: notes on it are acted on, never sent again." Now: "Each is sent once; a
   shot whose framing changes (a note about framing or staging) goes on a new board before it moves: first a sheet of
   2-3 numbered framings, one of them the screenplay's camera line taken literally, then Sam's number, then the shot as
   built on the board." Check column adds: the clip and animatic refusals (staging tool) and their two tests.
 - Rule 87, before: "A fix that fails twice stops rendering: the next send is one still sheet of 2-3 options for Sam to
-  pick from." Proposed adds: "A note about framing or staging gets that sheet at once, not after two failures (rule
+  pick from." Now adds: "A note about framing or staging gets that sheet at once, not after two failures (rule
   11)." Check column: "framing notes: the staging tool (rule 11)".
 
 **Tools added (on Sam's option 1).** A new check runs every time a clip or animatic is drawn. It refuses any shot
@@ -31,6 +31,10 @@ Room shot and chat 10's re-stage (the two builds Sam then re-noted), and lets sh
 29 framing notes in the four films and flags 52 of 205 notes (a wrong flag costs one line to clear). On a real film:
 **not measured yet**: measured at the end of the next new film from the hold record: framings built before Sam saw
 them (Milburn 2, target 0) and staging notes given twice (Milburn 2 by the look back, target 0).
+
+**Verified working (23 Nov).** A made-up film was taken through every step with the real clip command: refused
+at each stage it should be, rendering once Sam's number and the new board were recorded; a real Milburn clip still
+renders normally; all six related tests pass.
 
 **How it should behave from now on.** When Sam gives a note about where people are or how a shot is framed, his reply
 is one picture of 2-3 numbered framings (one exactly as the script describes, and "0: none of these, say what
