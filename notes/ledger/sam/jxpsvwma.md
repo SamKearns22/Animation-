@@ -27,3 +27,8 @@ Oh this is hard! If I had the collaboration feature, it wouldn't be a problem.
 ### 2026-11-23T19:47:36
 Which feature adds views and comments to the original post?
 
+### 2026-11-23T19:49:54
+You're right!! The larger second account can collaborate but my original one can't.
+
+What are the implications of that?
+
