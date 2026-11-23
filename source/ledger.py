@@ -634,7 +634,8 @@ def count_notes(transcript, film):
         items = [x.strip() for x in items if len(x.strip()) > 3]
         notes += items if len(items) > 1 else [m]
     past = []
-    for f in (os.path.join(ROOT, 'notes', film + '.md'), os.path.join(ROOT, 'notes', 'archive', film + '-handovers.md')):
+    for f in (os.path.join(ROOT, 'notes', film + '.md'), os.path.join(ROOT, 'notes', 'archive', film + '-handovers.md'),
+              os.path.join(ROOT, 'notes', 'archive', film + '-notes.md')):    # ticked notes move here (GTA chat 27)
         try:
             past += [ln for ln in open(f, encoding='utf-8') if len(ln) > 30]
         except OSError:

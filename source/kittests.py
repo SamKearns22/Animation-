@@ -1624,12 +1624,15 @@ def _finish_fake(tmp, caption=True):
     out = os.path.join(tmp, 'out.mp4')
     argv = sys.argv
     sys.argv = ['finish.py', clean, out, '--film', 'kt_film']
+    import propose                                  # the test film's own proposal log: empty (lesson 7 step 3's stop
+    props, propose.PROPS = propose.PROPS, tmp       # on a real let-through is tested in rule_proofs_gate)
     try:
         finish.main()
     except SystemExit as e:
         return None, str(e)
     finally:
         sys.argv = argv
+        propose.PROPS = props
     return out, ''
 
 
@@ -3862,6 +3865,57 @@ def dearest_things_named():
 
 
 @test
+def rule_proofs_gate():
+    """Lesson 7 (rule-needs-check, Sam's option 1, 22 Nov): "no rule without a working check". Step 1 found 61 of 103
+    rules never proved on a bad example, 19 rows "by hand", and 39 let-throughs of the proposal guard carried on. The
+    gate must refuse a new rulebook row and a new CLAUDE.md rule with no saved example, a "by hand" status, a proof
+    whose kittest failed; a handover check that crashes is a STOP; an unsettled let-through refuses the animatic until
+    settled; and today's files pass."""
+    import copy
+    import tempfile
+    import ruleproofs as R
+    import handover as H
+    import propose as PR
+    out = []
+    d = R.load()
+    if R.faults(d, failed=set()):
+        out.append('today\'s rules fail the gate: ' + '; '.join(R.faults(d, failed=set()))[:200])
+    book = open(R.RULEBOOK, encoding='utf-8').read() + '\n| 99 | A new rule nobody proved. | `nothing.py` |\n'
+    if not any('rule 99 is new' in f for f in R.faults(d, book=book, failed=set())):
+        out.append('a new rulebook row with no entry was let through')
+    cl = open(R.CLAUDE, encoding='utf-8').read() + '\n- **Always do a brand new thing.** (Sam, 23 Nov)\n'
+    if not any('Always do a brand new thing' in f for f in R.faults(d, claude=cl, failed=set())):
+        out.append('a new CLAUDE.md rule with no entry was let through')
+    d2 = copy.deepcopy(d)
+    d2['rules']['99'] = dict(rule='x', status='next', plan='later', example='')
+    if not any('rule 99 is new and has no saved bad example' in f for f in R.faults(d2, book=book, failed=set())):
+        out.append('a new entry with no example was let through')
+    d2['rules']['99'].update(status='by hand', example='a still')
+    if not any('"by hand" never counts' in f for f in R.faults(d2, book=book, failed=set())):
+        out.append('"by hand" was accepted as a check')
+    t0 = next(t for r in d['rules'].values() if r['status'] == 'proven' for t in r['tests'])
+    if not any('BROKEN' in f for f in R.faults(d, failed={t0})):
+        out.append(f'a proven rule whose kittest {t0} failed was not shown as broken')
+    crash = H._safe('demo', lambda: 1 / 0)
+    if not (crash and crash[0].startswith('STOP: CHECK COULD NOT RUN')):
+        out.append('a crashing handover check did not stop the handover')
+    keep = PR.PROPS
+    PR.PROPS = tempfile.mkdtemp()
+    try:
+        open(PR._p(PR.UNROUTED), 'w').write('- 2026-11-23 01:00 chat abcd1234: sent after one block: x | "y"\n'
+                                           '- 2026-11-20 01:00 chat old00000: sent after one block: x | "y"\n')
+        if len(PR.open_letthroughs()) != 1 or not PR.unrouted_for('abcd1234'):
+            out.append('the open let-through was not seen (or an old one counted)')
+        PR.settle('abcd1234', 'false block: the guard asked for a line the reply did not need')
+        if PR.open_letthroughs() or PR.unrouted_for('abcd1234'):
+            out.append('settling did not clear the let-through')
+    finally:
+        PR.PROPS = keep
+    return not out, '; '.join(out) or 'new rule with no example refused (rulebook and CLAUDE.md); by hand refused; broken proof shown; crash = STOP; let-through closed until settled'
+
+
+
+@test
 def staging_stills_milburn_replay():
     """Lesson staging-stills (Sam's option 1, 22 Nov): no shot moves before Sam has seen its framing. Milburn's own record
     replayed: chat 6's first build of the Cabinet Room reverse (17 Nov 22:50) and chat 10's re-stage (18 Nov 04:00) must
@@ -3948,6 +4002,24 @@ def staging_stills_note_finder():
             out.append(f'{film}: flagged non-framing {wrong}')
     return not out, '; '.join(out) or (f'all {sum(map(len, need.values()))} framing notes found; '
                                        f'{n_flag} of {n_all} notes flagged')
+
+
+@test
+def acting_rows_every_shot():
+    """Rule 74 (Sam, 20 Nov, GTA shot 4 note 16: "no acting notes anywhere"): the gate asked for a row per spoken line
+    only, so shot 4 (no lines) went to Sam with none. The check must flag shot 4 in GTA's notes before chat 17 added
+    its rows (git f5cbaf64^) and pass shot 4 once they are there (f5cbaf64)."""
+    import subprocess
+    import preflight as P
+    root = os.path.dirname(HERE)
+    txt = lambda rev: subprocess.run(['git', '-C', root, 'show', f'{rev}:notes/grand-theft-autism.md'],
+                                     capture_output=True, text=True).stdout
+    before, after = txt('f5cbaf64^'), txt('f5cbaf64')
+    if not before or not after:
+        return False, 'COULD NOT TEST: the GTA notes are not in this copy\'s history'
+    b = [f for f in P.acting_shot_faults(before, range(1, 9)) if 'shot 4 ' in f]
+    a = [f for f in P.acting_shot_faults(after, range(1, 9)) if 'shot 4 ' in f]
+    return bool(b) and not a, f'before chat 17: shot 4 flagged {bool(b)}; after: flagged {bool(a)}'
 
 
 

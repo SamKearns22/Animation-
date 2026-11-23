@@ -282,6 +282,25 @@ def gates(film, name):
     return out
 
 
+def acting_shot_faults(text, shots):
+    """Rule 74 (Sam, 20 Nov, GTA shot 4: "no acting notes anywhere"): every shot gets acting rows, with or without
+    lines. A shot counts as covered when an acting section's heading names it ("Shot 4 acting rows") or an acting
+    row's "shot and why" cell starts with its number (or a range: "5-8"). shots: the shot labels with someone in them."""
+    covered, cells_all = set(), []
+    for head, body in re.findall(r'^##+ *([^\n]*acting[^\n]*)$(.*?)(?=^## |\Z)', text, re.M | re.S | re.I):
+        cells = [head] + [ln.strip().strip('|').split('|')[2] for ln in body.splitlines()
+                          if ln.strip().startswith('|') and ln.count('|') >= 4]
+        cells_all += cells
+        for c in cells:
+            for a, b in re.findall(r'(?:^\s*|[Ss]hots? )(\d+)(?![\d.])(?:\s*[-\u2013]\s*(\d+)(?![\d.]))?', c):
+                covered |= {str(n) for n in range(int(a), int(b or a) + 1)}
+    alltext = '\n'.join(cells_all)
+    covered |= {str(s) for s in shots if not str(s).isdigit() and
+                re.search(r'(?<![\w.])' + re.escape(str(s)) + r'(?![\w.])', alltext, re.I)}
+    return [f'rule 74: shot {s} has no acting rows (every shot, with or without lines: each person, beat by beat; '
+            'guides/satire.md "The acting list")' for s in shots if str(s) not in covered]
+
+
 def gate_warnings(film, name, has):
     """Job J: by-hand rules turned into checks, printed (not yet refusing: Sam's numbers decide): rule 74 (an acting
     list row per line), rule 8 (risky moves rehearsed: a "Rehearsal clips sent:" line, or "none: why"), rule 61 (the
@@ -294,6 +313,8 @@ def gate_warnings(film, name, has):
         rows = [ln for ln in (m.group(2).splitlines() if m else []) if ln.strip().startswith('|')][2:]
         if not rows:
             out.append('no acting list in the notes (rule 74: one row per line; guides/satire.md "The acting list")')
+    if getattr(film, 'SHOT_CAST', None):                  # rule 74 since 20 Nov: every shot, lines or not
+        out += acting_shot_faults(text, [k for k, v in film.SHOT_CAST.items() if v])
     out += head_life_faults(film)
     import rough                                            # rule 11: every new thing on a rough before it is built
     out += rough.gate_faults(name)

@@ -1,0 +1,1328 @@
+{
+ "_about": "Lesson 7 step 2 (rule-needs-check, Sam option 1): every rule as a proven promise. status: proven (a kittest runs its check on a saved earlier mistake, named in example) | partly (proven, but a known miss is not yet in the test) | judge (a taste rule; proven by a critic-bench case) | next (buildable; plan says how) | owed (another named build delivers the proof) | cannot yet (learn says what the project must learn first; listed for Sam). \"by hand\" is never a status. rank: worst first by step 1 numbers. Read by source/ruleproofs.py.",
+ "rules": {
+  "1": {
+   "rule": "One measured plan of every place, camera and who stands where; the layout is fixed at planning.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code + by hand"
+  },
+  "3": {
+   "rule": "Before building a place: 8–10 things that make it recognisable, our drawing beside your photos. Real places shown beside their photos before every animatic.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code + judge"
+  },
+  "8": {
+   "rule": "Rehearse the 3–4 riskiest moves as short clips first; your Showstopper Shots get everything the script implies.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "G4-9, G4-12, G4-13 (events the screenplay implies, not built) [by hand]",
+   "rank": 9,
+   "learn": "the same events list as Seeing 5: every event the screenplay implies listed at planning and found in the frames (G4-9 cop hit, G4-12 same cop, G4-13 hydrant struck)",
+   "kind_before": "code"
+  },
+  "10": {
+   "rule": "Framing, who looks where, and how long each beat holds are planned up front.",
+   "status": "judge",
+   "tests": [],
+   "example": "",
+   "notes": "G58-2 (Jason faces forward while pointing)",
+   "rank": 16,
+   "plan": "a bench case from G58-2 (Jason faces forward while pointing): the judge must name it",
+   "kind_before": "code + judge"
+  },
+  "11": {
+   "rule": "Every shot drawn on one board (start, key moment, end) before any movement is built.",
+   "status": "partly",
+   "tests": [
+    "shot_board_every_shot",
+    "board_gate_refusals"
+   ],
+   "example": "kittest shot_board_every_shot: Craft-step2 learn step (craft chat 7, 17 Nov): rough.py's board draws EVERY shot of a film's SHOTS through the",
+   "notes": "M5 (reverse framing: 10 shots had no delivered board, the animatic stood in)",
+   "rank": 12,
+   "miss": "M5 (10 shots had no delivered board; the animatic stood in)",
+   "plan": "add Milburn's board record to board_gate_refusals",
+   "kind_before": "code"
+  },
+  "14": {
+   "rule": "The pre-start check refuses to run with a blank brief row, no composition sheet, or anyone missing from a shot.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "kittest: preflight.gates on a notes file with a blank \"done?\" row must refuse",
+   "kind_before": "code"
+  },
+  "24": {
+   "rule": "The cost estimate and forecast (paused by you on 18 Nov).",
+   "status": "proven",
+   "tests": [
+    "estimate_forecast_and_alarm",
+    "stage_share_stop"
+   ],
+   "example": "kittest estimate_forecast_and_alarm: Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned",
+   "notes": "CR1 (stages never marked, notes never logged)",
+   "kind_before": "code"
+  },
+  "26": {
+   "rule": "Every sound effect asked for in one message at planning; every swear bleeped.",
+   "status": "proven",
+   "tests": [
+    "bleeps_every_swear"
+   ],
+   "example": "kittest bleeps_every_swear: Rule 26 (Sam, 4 Nov; Job L): every swear in the script is bleeped, asterisks or not: a line with a swear and no",
+   "notes": "",
+   "kind_before": "code + by hand"
+  },
+  "28": {
+   "rule": "Reuse before building; anything new is added to the catalogue of reusable parts.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "code + by hand"
+  },
+  "38": {
+   "rule": "Everyone faces the camera by default; a three-quarter view only as a last resort, with a reason.",
+   "status": "proven",
+   "tests": [
+    "drawn_angle_every_film"
+   ],
+   "example": "kittest drawn_angle_every_film: C1 (front-on focus, Sam: Y to all, 19 Nov): pre-flight reads the DRAWN angle on every film, rooms plan or not",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "74": {
+   "rule": "Every line and every shot gets an acting plan before the first animatic.",
+   "status": "partly",
+   "tests": [
+    "acting_rows_every_shot",
+    "phone_size_poses"
+   ],
+   "example": "kittest acting_rows_every_shot: GTA notes before chat 17 (git f5cbaf64^), Sam's note G4-16 \"no acting notes anywhere\" (shot 4 had no lines, so no rows)",
+   "notes": "G4-1, G4-16, M8 (face read soft not cross), G58-2",
+   "rank": 8,
+   "miss": "M8 (Andy's face read as surprise, not cross), G4-1, G58-2: the acting itself, a judge case",
+   "plan": "a critic-bench case from M8 and G58-2: the fresh-eye judge must name them",
+   "kind_before": "code + by hand",
+   "done": "23 Nov: the gate now asks for acting rows for every shot with someone in it (rule 74 as written since 20 Nov)"
+  },
+  "86": {
+   "rule": "Learn first: anything new or difficult gets research or a tool first, proposed to you.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "by hand"
+  },
+  "2": {
+   "rule": "Doorways and windows show the real next room, never a flat colour.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "13": {
+   "rule": "Every check is shared and runs on every film and every person; anyone left out has a written reason.",
+   "status": "partly",
+   "tests": [
+    "exceptions_need_a_written_reason",
+    "every_face_has_a_mouth",
+    "townsfolk_not_in_the_house_walls",
+    "copies_in_a_group"
+   ],
+   "example": "kittest exceptions_need_a_written_reason: Rule 13 (tool chat, 12 Nov): every exception in a film's settings (HANDS_OK, LINE_OK, any *_OK, ALLOWED_POPS)",
+   "notes": "M6 (face with no mouth: bad shape name slipped through), G4-10 (ERG bald fix lived in one film, not shared)",
+   "rank": 5,
+   "miss": "M6 (a bad shape name let a face through with no mouth), G4-10 (the bald fix lived in one film)",
+   "plan": "add Milburn's character 3 to every_face_has_a_mouth",
+   "kind_before": "code"
+  },
+  "20": {
+   "rule": "Held things point in 3D with the body, never at a fixed angle on screen.",
+   "status": "partly",
+   "tests": [
+    "held_prop_through_the_camera"
+   ],
+   "example": "kittest held_prop_through_the_camera: Kit lesson 4 (Patriots 3): held 3D props drawn through the real camera with the hands on the grip points the",
+   "notes": "G4-8 (gun fired away from target; not recorded whether the check ran)",
+   "rank": 15,
+   "miss": "G4-8 (the gun fired away from its target)",
+   "plan": "turn_faults on GTA shot 4's gun (body_check_shot4_v4 already catches the gun off target)",
+   "kind_before": "code"
+  },
+  "22": {
+   "rule": "My set dressing is shown on the cast sheet and kept clear of where the action happens.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code + judge"
+  },
+  "32": {
+   "rule": "Falling pieces land flat, broadest side down, never overlapping.",
+   "status": "proven",
+   "tests": [
+    "tilt_at_chest_height",
+    "lying_and_pose_checks"
+   ],
+   "example": "kittest tilt_at_chest_height: Kit lesson 3 (Patriots 3): lying.stand measured the camera's tilt at the floor, so close up a hand held out at",
+   "notes": "",
+   "kind_before": "code + by hand"
+  },
+  "41": {
+   "rule": "Bodies and hands: poses come from the tested gallery and are never shown from a bad view; hands checked every frame.",
+   "status": "partly",
+   "tests": [
+    "hands_round_the_head",
+    "hands_in_sleeves",
+    "pose_gallery",
+    "point_hand_shows_a_finger",
+    "elbow_folded_back_is_a_stop",
+    "shoulder_seam_caught",
+    "held_over_or_behind_the_head",
+    "body_check_shot4_v4",
+    "body_check_back_view",
+    "outfit_every_view"
+   ],
+   "example": "kittest hands_round_the_head: Patriots 3 note 21: the Loader's binocular pose from behind (shot 2) hid both hands: arms round his head.",
+   "notes": "G4-6, G4-7, G4-15, G7-1, G7-4, G8 (arms and bodies: check ran and missed); GCS (cast sheet: check never run on it)",
+   "rank": 1,
+   "miss": "G4-6, G4-11, G4-15 (limbs curled, legs 2D in the door frame, the move in reverse)",
+   "plan": "kittest on GTA shot 4 v7 frames at Sam's note times (git history): humancheck must flag each; arms-out-of-back (G4-7, G7-4, G8) and crossed forearms (G7-1) are already caught by body_check_shot4_v4",
+   "kind_before": "code"
+  },
+  "49": {
+   "rule": "Every famous face passes the likeness test before the cast sheet.",
+   "status": "partly",
+   "tests": [
+    "facepick_extras_after_the_check",
+    "facepick_beard_from_any_front",
+    "agelines_by_measure_and_age",
+    "facehouse_head_from_photos"
+   ],
+   "example": "kittest facepick_extras_after_the_check: Rule 49.3 (face tool, 13-14 Nov): glasses, beard, age lines and the eyes' look are drawn AFTER the likeness",
+   "notes": "M4 (Pat's dome \"alien carrot man\": likeness 62% passed)",
+   "rank": 4,
+   "miss": "M4 (Pat's bald dome \"alien carrot man\": 62% passed)",
+   "plan": "add Pat's old dome (Milburn, git history) to the likeness test: it must fail the silhouette step",
+   "kind_before": "code"
+  },
+  "50": {
+   "rule": "Every famous person gets one shot with the face big enough to read.",
+   "status": "proven",
+   "tests": [
+    "famous_face_size"
+   ],
+   "example": "kittest famous_face_size: Rule 50 (Job L): a famous person's face is measured as drawn (1920-tall frame): a close-up passes 240 px, a wide",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "63": {
+   "rule": "Running at the camera uses the proper front-on run.",
+   "status": "judge",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "a bench case from a saved still of this fault; the fresh-eye judge must name it",
+   "kind_before": "code + judge"
+  },
+  "65": {
+   "rule": "A speaker with no face of its own (like the Sorting Hat) opens its mouth with the voice, one syllable at a time.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "77": {
+   "rule": "Anyone with facial hair: the beard tool first, and you confirm its five lines.",
+   "status": "proven",
+   "tests": [
+    "facepick_beard_from_any_front"
+   ],
+   "example": "kittest facepick_beard_from_any_front: Face tool chat 5 (Walliams replay, 14 Nov): his first front photo is nearly shaven, and beardkit keeps only",
+   "notes": "",
+   "kind_before": "code + by hand"
+  },
+  "78": {
+   "rule": "Leaning on a desk, table, wall or rail shows weight; nothing sinks into it; a reaching arm ends in a clear shape.",
+   "status": "judge",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "a bench case from a saved still of this fault; the fresh-eye judge must name it",
+   "kind_before": "judge"
+  },
+  "80": {
+   "rule": "Seated people facing us show knees and lap; standing up never makes the head dip.",
+   "status": "proven",
+   "tests": [
+    "standing_legs_straight_elbows_out",
+    "house_look_and_lap"
+   ],
+   "example": "kittest standing_legs_straight_elbows_out: Rule 81 (Sam, 8 Nov, Ad-Vanced Notice notes 15-17): standing at rest, each knee sits within 5 units of the line",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "83": {
+   "rule": "Painted objects in a set never overlap unless meant; the same for people and what they hold.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code + by hand"
+  },
+  "S2": {
+   "rule": "A hand moving an object is drawn over it; a resting hand stays just clear.",
+   "status": "proven",
+   "tests": [
+    "grips_contacts_and_carry",
+    "held_prop_touches"
+   ],
+   "example": "kittest grips_contacts_and_carry: Job G (9 Nov): a hand that can't reach the table hovers and is caught (views.arm_to stops at full reach without",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "S5": {
+   "rule": "Pupils stay inside the eye on every character.",
+   "status": "judge",
+   "tests": [
+    "eyes_cut_to_the_outline"
+   ],
+   "example": "kittest eyes_cut_to_the_outline: Rule S5 (tool job, 11 Nov): KG's owl pupil at a hard glance spilled past his eye; eyekit cuts it, and the",
+   "notes": "",
+   "plan": "a bench case from a saved still of this fault; the fresh-eye judge must name it",
+   "kind_before": "code + judge"
+  },
+  "S7": {
+   "rule": "The house look: paper grain, light top edges and soft shadows on every drawing.",
+   "status": "proven",
+   "tests": [
+    "house_look_once_in_pairs",
+    "house_look_and_lap"
+   ],
+   "example": "kittest house_look_once_in_pairs: Rule S7 (house look, Sam 12 Nov): the engine lays the paper, light edges and shadows on every drawing ONCE,",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "S8": {
+   "rule": "Bullet holes and marks only on real surfaces.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "G7-5 (blood splatter did not turn with the windscreen: rule covers holes, not this)",
+   "rank": 7,
+   "learn": "marks fixed to a surface in 3D (its corners and the way it faces), drawn through the same camera as the surface, so a splash on a windscreen turns with it (G7-5); then a test on GTA v7's windscreen",
+   "kind_before": "code"
+  },
+  "S10": {
+   "rule": "Riding: real speeds, and the rider's seat matches the pace.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "L1": {
+   "rule": "People lying down or seen from above have real depth.",
+   "status": "proven",
+   "tests": [
+    "lying_shirt_and_nape",
+    "lying_neck_from_behind",
+    "lying_and_pose_checks"
+   ],
+   "example": "kittest lying_shirt_and_nape: Job I lying fixes (Sam, 11 Nov, for every character): slumped against a wall the shirt was a stiff box (lying",
+   "notes": "",
+   "kind_before": "code + judge"
+  },
+  "5": {
+   "rule": "A bump test on every frame: nothing passes through anything.",
+   "status": "owed",
+   "tests": [],
+   "example": "",
+   "notes": "G4-4, G7-3 (body through the car; ran and missed)",
+   "rank": 3,
+   "owed": "solid-body-moves (bench_move.py proof: the body through the car on the old failed poses, seat 7.4 cm, pistol 4.8 cm); becomes a kittest when that build wires it",
+   "plan": "kittest wrapping bench_move.proof once wired",
+   "kind_before": "code"
+  },
+  "6": {
+   "rule": "A pop-in test: nothing appears or vanishes mid-frame; crowds arrive and leave on screen.",
+   "status": "proven",
+   "tests": [
+    "critique_where_pops"
+   ],
+   "example": "kittest critique_where_pops: Job H (rule 56, line M1): critique.py where flags a thing that pops in mid-shot (Elder Swindon 59, 62, 64).",
+   "notes": "",
+   "kind_before": "code + judge"
+  },
+  "7": {
+   "rule": "Recordings match the script and captions; mouths open once per syllable and shut in silence.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "16": {
+   "rule": "Direction of travel holds across a cut unless planned.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "17": {
+   "rule": "Whatever is nearer the camera hides what's behind it, everywhere.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "G4-2, G4-3, G4-11, G7-2, G7-7 (see-through bonnet, body through car, hydrant water through car: ran and missed); M19 (name card clipping: Milburn had no layers(t))",
+   "rank": 2,
+   "plan": "find the time of each of Sam's v7 stills (notes/shot4-case-study/sam-v7/: bonnet G7-2, car parts G7-3, hydrant water G7-7) by matching them to the v7 render (git 3844e0a9), then a kittest running viewchecks.solid_faults with frames= only those frames on the v7 code: each must be flagged, and on today's code cleared. Measured 23 Nov: the whole of shot 4 at every 6th frame takes over 8 minutes, so the proof must use the noted frames only.",
+   "kind_before": "code"
+  },
+  "18": {
+   "rule": "Every joke prop is big enough to read on a phone.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "19": {
+   "rule": "Every check ends with pass, fault or “couldn't look”; “couldn't look” stops the animatic.",
+   "status": "owed",
+   "tests": [],
+   "example": "",
+   "notes": "M19 (clipcheck COULD NOT TEST carried as an old line, name card clipped twice); GR (v3 sent with every check off, Sam's order)",
+   "rank": 11,
+   "owed": "could-not-test build (session 01U3pKQzaw3rkdJXunde285d): the stop no chat can skip, in pre-flight, the render tool and finish.py; its kittest on Milburn chat 12 is this rule's proof",
+   "kind_before": "code"
+  },
+  "57": {
+   "rule": "Nothing flips from in front to behind between two frames unless planned.",
+   "status": "proven",
+   "tests": [
+    "order_flip_mid_shot",
+    "near_thing_after_the_haze"
+   ],
+   "example": "kittest order_flip_mid_shot: Rule 57 (Flying Whales note 16): a smoke column sent behind the rig at one instant is caught; a planned swap is not.",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "58": {
+   "rule": "The pre-start check runs only what the film contains and names what it skipped.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "59": {
+   "rule": "No animatic or final unless the pre-start check passed on the current version.",
+   "status": "proven",
+   "tests": [
+    "render_lock"
+   ],
+   "example": "kittest render_lock: Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now.",
+   "notes": "CR (48 to 61 named lines carried through Milburn: rule 59 allows them with --faults-named)",
+   "kind_before": "code + by hand"
+  },
+  "62": {
+   "rule": "Captions on in every animatic and final, in the series style.",
+   "status": "proven",
+   "tests": [
+    "subtitles_readable",
+    "subtitle_starts_on_its_word",
+    "finish_captions_by_default"
+   ],
+   "example": "kittest subtitles_readable: Rule 62 (Terfwarts, 3 Nov): a fast speaker's subtitles are made readable when cut: on screen at least 0.8 s and",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "66": {
+   "rule": "A failed render leaves no file, so an old one is never mistaken for the new one.",
+   "status": "proven",
+   "tests": [
+    "render_leaves_no_old_file"
+   ],
+   "example": "kittest render_leaves_no_old_file: Rule 66 (Terfwarts, 3 Nov): a refused, stopped or failed render leaves no file at its output path. (Run in",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "67": {
+   "rule": "One pre-start check per round of fixes.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "code + by hand"
+  },
+  "70": {
+   "rule": "Captions, Hook Text and sign-off added at the finishing step; everything delivered at 1.1× speed.",
+   "status": "proven",
+   "tests": [
+    "finish_delivers_at_one_point_one",
+    "caption_check_at_delivered_speed"
+   ],
+   "example": "kittest finish_delivers_at_one_point_one: Rule 70 (tool job, 11 Nov): 1.1x was done by hand; finish.py now speeds the film after the captions with the",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "72": {
+   "rule": "No pose drifts back to rest just before a cut; no arm passes behind its own body or cape; turns snap.",
+   "status": "proven",
+   "tests": [
+    "cut_before_the_return",
+    "camera_feel"
+   ],
+   "example": "kittest cut_before_the_return: Rule 72 (Job L): an arm posed out, then hanging at rest in the last 0.4 s before a cut, is caught; the same arm",
+   "notes": "",
+   "kind_before": "code + by hand"
+  },
+  "75": {
+   "rule": "The Hook Text sits where it hides nothing important, in the tilted card style.",
+   "status": "proven",
+   "tests": [
+    "hook_text_planned"
+   ],
+   "example": "kittest hook_text_planned: Rule 75 (tool job, 11 Nov): a film with HOOK but no KEEP_CLEAR was skipped quietly; now it is refused, and",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "85": {
+   "rule": "The cost watch.",
+   "status": "proven",
+   "tests": [
+    "cost_watch_lines"
+   ],
+   "example": "kittest cost_watch_lines: Rule 85 (Sam's Y, 17 Nov): amber at 250k of history, red at 370k; the warning lines count steps and say aim",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "29": {
+   "rule": "Every review copy shows the time and shot in a corner.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "30": {
+   "rule": "The notes table stays short; a note you've given before means a check is missing.",
+   "status": "partly",
+   "tests": [
+    "dearest_things_named",
+    "handover_drops"
+   ],
+   "example": "kittest dearest_things_named: Cost audit (Sam, 21 Nov: \"audit every last thing done in order to find the most expensive things and run it",
+   "notes": "9 repeats: M3, M5, M6, M19 (name card again), G4-10, G7-1, G7-4, G7-8, G8; CR (repeat notes never counted)",
+   "rank": 13,
+   "plan": "a repeat must name the check that missed the first time (tag_faults); kittest on GTA's nine repeats",
+   "kind_before": "by hand"
+  },
+  "37": {
+   "rule": "Sounds and reference photos are saved on GitHub.",
+   "status": "proven",
+   "tests": [
+    "sounds_and_references_kept"
+   ],
+   "example": "kittest sounds_and_references_kept: Rule 37 (Job L): a reference or sound file git does not hold is listed at the handover (ledger log / kept).",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "43": {
+   "rule": "Who-looks-at-whom is tested at the shot's own camera.",
+   "status": "proven",
+   "tests": [
+    "looks_at_the_shot_camera"
+   ],
+   "example": "kittest looks_at_the_shot_camera: Patriots 3 note 11: the Loader's profile at the Gunner (41-42.6 s) read as looking at the wall.",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "47": {
+   "rule": "A small fix to a finished film is patched in, not fully redrawn, unless you say Y.",
+   "status": "proven",
+   "tests": [
+    "nostamp_in_the_template"
+   ],
+   "example": "kittest nostamp_in_the_template: Rule 47 / Build list item 5: `--nostamp` is a standard option of satire_template.py's main.",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "48": {
+   "rule": "Frames are looked at on one labelled sheet; never an unchanged picture again.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "code + by hand"
+  },
+  "52": {
+   "rule": "The sign-off lasts 1.6 seconds and carries the next follow line.",
+   "status": "proven",
+   "tests": [
+    "follow_line_on_signoff"
+   ],
+   "example": "kittest follow_line_on_signoff: Rule 52 (Sam, 12 Nov): each film takes the next follow line once and keeps it; finishing stops when the list",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "61": {
+   "rule": "Every film's code opens with a short map, so a note is answered in one step.",
+   "status": "next",
+   "tests": [
+    "round_page"
+   ],
+   "example": "kittest round_page: Ranking item 6 (overnight chat 3): a round reads Blessed's page (under 15% of its code) and a note finds its lines.",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "87": {
+   "rule": "Each of your notes is restated in one line with its fix (and a marked still) before fixing.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "by hand"
+  },
+  "88": {
+   "rule": "One check sheet per round of notes; after that, only the frames that changed.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "by hand"
+  },
+  "89": {
+   "rule": "Critique before every send: everything new is drawn alone beside its references and judged cold.",
+   "status": "partly",
+   "tests": [
+    "critique_record",
+    "critique_library",
+    "critique_closeups",
+    "critique_each_fault_once",
+    "critic_bench_scores"
+   ],
+   "example": "kittest critique_record: Job H (rule 89): critique.py record refuses a half answer and a look written after the result; passes a whole one.",
+   "notes": "M1, M3 (goth hair: first look \"not yet critiqued\"); GTA shot 4 v4 went out on a point check plus a judgement at full size that missed 16 notes",
+   "rank": 10,
+   "miss": "M1, M3 (the goth's hair reached Sam before any fresh-eye look)",
+   "plan": "the send gate refuses a clip or animatic with anything new and no critique record (as the body-check send gate does), kittest on Milburn chat 6's send",
+   "kind_before": "judge"
+  },
+  "S3": {
+   "rule": "No added background hiss; the hiss check listens only between lines.",
+   "status": "proven",
+   "tests": [
+    "hiss_heard_only_between_lines"
+   ],
+   "example": "kittest hiss_heard_only_between_lines: Rule S3 (Flying Whales): speech full of \"s\" sounds is not hiss; noise in the gaps between lines still is.",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "S4": {
+   "rule": "Video joins always at 24 frames a second.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "a check on every join: each clip's frame rate read from the file is 24 (ffprobe), kittest on a 25 fps clip",
+   "kind_before": "by hand"
+  },
+  "S9": {
+   "rule": "One sound per hit, and only when the hit is on screen.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "M26 (uzi sound in scene 3; not recorded whether it ran)",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "S11": {
+   "rule": "The softer voice polish on every film.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "no fault of this kind recorded yet: the example is drawn from the rule's own words (a still showing the fault), and a kittest runs the check on it",
+   "kind_before": "code"
+  },
+  "W1": {
+   "rule": "Messages: first line says what's needed; Done / Needs you / Next only when they have something in them; about 10 lines.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "by hand"
+  },
+  "W2": {
+   "rule": "No code names or file names in messages.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "by hand"
+  },
+  "W3": {
+   "rule": "One line per note, with Lost and Added lines for anything a fix takes away or adds.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "by hand"
+  },
+  "W4": {
+   "rule": "Questions numbered, my pick first; every open decision in one message.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "by hand"
+  },
+  "W5": {
+   "rule": "“Just go” skips waiting for your yes, never the checks.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "by hand"
+  },
+  "W6": {
+   "rule": "No animatic while a shot is missing anyone.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "kittest: preflight.cast_faults with a shot missing someone in SHOT_CAST",
+   "kind_before": "code"
+  },
+  "W7": {
+   "rule": "Unattended runs stop after one animatic.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "by hand"
+  },
+  "W8": {
+   "rule": "Every animatic carries the Hook Text and the sign-off.",
+   "status": "proven",
+   "tests": [
+    "finish_captions_by_default",
+    "follow_line_on_signoff"
+   ],
+   "example": "kittest finish_captions_by_default: Rule 62 (tool job, 11 Nov): captions were opt-in (SUBTITLES_AT_FINISH) and a film could go out without them;",
+   "notes": "",
+   "kind_before": "code"
+  },
+  "W9": {
+   "rule": "“I want a rule” means a permanent rule, written in the same chat.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "by hand"
+  },
+  "W10": {
+   "rule": "The proposal route: every change put to you goes through helpers and a blind judge first.",
+   "status": "proven",
+   "tests": [
+    "proposal_route_hook"
+   ],
+   "example": "kittest proposal_route_hook: The proposal route (Sam, 15 Nov): the Stop hook blocks a change put to Sam without a judge's verdict, passes one with it, passes routine Y/N, never blocks twice.",
+   "notes": "39 second-try let-throughs 15-20 Nov; 5 Milburn blocks (4 false); the two-check design let through plain questions",
+   "kind_before": "code"
+  },
+  "W11": {
+   "rule": "The right model for each stage; chats open the next chat themselves.",
+   "status": "proven",
+   "tests": [
+    "model_guard_stops_routine_on_opus"
+   ],
+   "example": "kittest model_guard_stops_routine_on_opus: Model guard (Sam's 1, 17 Nov): on 16 Nov the Opus fix chats spliced the animatic with the word check silent;",
+   "notes": "CR2 (guard never wired until 21 Nov); Milburn chat 10 (chain limit: Sam started chat 11), chat 18 on Sonnet",
+   "kind_before": "code + by hand"
+  },
+  "W12": {
+   "rule": "The handover: one section, 15 lines at most, the 3 lines at the bottom of the message.",
+   "status": "proven",
+   "tests": [
+    "handover_drops",
+    "handover_status_checks"
+   ],
+   "example": "kittest handover_drops: Job Q (Sam, 13 Nov): the handover check catches Blessed's real drops: N8-N10 unread when chat 5 broke, note 47's face half.",
+   "notes": "CR3 (notes over 4,000 words, handovers over 15 lines: no check), CR5 (no push notification)",
+   "kind_before": "code + by hand"
+  },
+  "W13": {
+   "rule": "A drawing that failed to draw (black in the render) is named in the message, with the seconds and the plan to fix it.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "finish.py refuses an animatic whose render log names a stopped drawing unless the message line is written",
+   "kind_before": "code + by hand"
+  },
+  "W14": {
+   "rule": "The latest animatic and its clean render are kept on GitHub until the film is posted.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "kittest: handover draft_faults with no animatic in animations/drafts",
+   "kind_before": "code"
+  },
+  "W15": {
+   "rule": "Start with the project attached; branches merged at the start; save to the main line at the end; the order for searching reference photos.",
+   "status": "proven",
+   "tests": [
+    "branch_printout_lists_only_real_work",
+    "message_saver_keeps_typed_messages"
+   ],
+   "example": "kittest branch_printout_lists_only_real_work: startup-fixes 2 (Sam, 16 Nov): chats read all ~254 branches at start; the start now lists only branches whose",
+   "notes": "CR6 (a tool built but never switched on: Sam, 21 Nov)",
+   "kind_before": "code + by hand"
+  },
+  "N1": {
+   "rule": "Be honest about what I can't do yet, and say what I'd need to learn.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "none"
+  },
+  "N2": {
+   "rule": "Fix the drawing, never the shot; every handover names what's locked by you.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "no breach recorded in GTA chats 28-30 (camera kept); nothing would have caught one",
+   "rank": 14,
+   "plan": "each shot Sam approves has its camera and length recorded; the handover refuses a change to a locked camera, framing or shot length (kittest: a moved camera on GTA shot 4)",
+   "kind_before": "none"
+  },
+  "N3": {
+   "rule": "Seeing 1: look as a viewer, at phone size and then full size wherever two things meet.",
+   "status": "judge",
+   "tests": [],
+   "example": "",
+   "notes": "the 13 GTA and 2 Milburn \"check ran and missed\" notes are this failing: looked as a measurer",
+   "rank": 17,
+   "plan": "the judge on GTA v7 at phone size must name at least 10 of Sam's 16 shot-4 notes",
+   "kind_before": "none"
+  },
+  "N4": {
+   "rule": "Seeing 2: every note becomes a saved example that a check must catch.",
+   "status": "partly",
+   "tests": [
+    "critic_bench_scores"
+   ],
+   "example": "kittest critic_bench_scores: Ranking item 3: the critic bench scores an answer against Sam's real Blessed notes: a hit by line or words, a miss names its line.",
+   "notes": "GTA v7 note 10 (\"I do not know how to teach you to recognise it\")",
+   "rank": 18,
+   "plan": "this list itself: every new note gets an example here (the handover gate)",
+   "kind_before": "none"
+  },
+  "N5": {
+   "rule": "Seeing 3: before fixing a frame, name the check that missed it and improve it.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "every repeat (rule 30 row)",
+   "rank": 19,
+   "plan": "tag_faults already asks each note for \"should have caught\"; kittest that a repeat with no improved check is refused",
+   "kind_before": "none"
+  },
+  "N6": {
+   "rule": "Seeing 4: for new shots, choose views the flat drawings can carry.",
+   "status": "proven",
+   "tests": [
+    "body_check_back_view"
+   ],
+   "example": "kittest body_check_back_view: GTA v3 F1, F5, F7 (chat 27; changed chat 28 after Sam, 21 Nov: \"a great shot but a broken drawing\"): a person",
+   "notes": "GTA v3 F1, F5, F7 (found by Claude, not a Sam note)",
+   "kind_before": "code (found)"
+  },
+  "N7": {
+   "rule": "Seeing 5: physical things behave physically (weight, solidity, cause and effect).",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "G4-9, G4-12, G4-13, G4-14, G7-5, G7-6, G7-8 (no hit, no reaction, no turning marks)",
+   "rank": 6,
+   "learn": "an events list in every film's plan (each cause: a hit, a shot, a crash; who or what must respond; by when) and a check that reads the drawn frames and measures that response (a pose change, a mark, a fall) within half a second; the project must first learn how to measure \"a reaction\" from the drawing (pose change size, which part moves)",
+   "kind_before": "none"
+  },
+  "N8": {
+   "rule": "Plain words, always.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "CR (plain words failed in the 19 Nov review chat)",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "none"
+  },
+  "N9": {
+   "rule": "Files under 50 MB, MP4 by default; only the finished film and the latest animatic on GitHub.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "handover refuses a file over 50 MB or a draft outside animations/drafts (kittest on a fake 51 MB file)",
+   "kind_before": "none"
+  },
+  "N10": {
+   "rule": "Offer an animatic before any full render; ask before the final and wait for a clear yes.",
+   "status": "partly",
+   "tests": [
+    "nostamp_in_the_template"
+   ],
+   "example": "kittest nostamp_in_the_template: Rule 47 / Build list item 5: `--nostamp` is a standard option of satire_template.py's main.",
+   "notes": "",
+   "plan": "the ask before a final: finish.py --final refuses without Sam's recorded yes",
+   "kind_before": "code + by hand (found)"
+  },
+  "N11": {
+   "rule": "No check sheet before an animatic unless you ask.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "none"
+  },
+  "N12": {
+   "rule": "Notes on movement get a short clip of just those seconds.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "none"
+  },
+  "N13": {
+   "rule": "A question about the film is answered, not acted on.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "none"
+  },
+  "N14": {
+   "rule": "“Hold” means collect notes and change nothing until you say go.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "none"
+  },
+  "N15": {
+   "rule": "Up to three fix rounds on my own after each batch of notes, each with a two-line summary.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "the message checker: something that reads each message to Sam before it goes and flags it (the plain-check proposal, option 1, needs Sam's Y)",
+   "kind_before": "none"
+  },
+  "N16": {
+   "rule": "The brief is a checklist, ticked before the first animatic.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "kittest: preflight.gates on a notes file with a blank \"done?\" row must refuse (shared with rule 14)",
+   "kind_before": "code (found)"
+  },
+  "N17": {
+   "rule": "Every stage aims at high quality, fewer notes and about a week per film.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "none"
+  },
+  "N18": {
+   "rule": "Every film is new: never repeat old characters, places or jokes.",
+   "status": "next",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "plan": "a new film's cast and place names compared with every earlier film's; kittest with an old name",
+   "kind_before": "none"
+  },
+  "N19": {
+   "rule": "Before every handover, search the notes for rule requests not yet written.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "by hand (found)"
+  },
+  "N20": {
+   "rule": "One wait per render, a push notification when it's done, and how long it took.",
+   "status": "proven",
+   "tests": [
+    "handover_status_checks"
+   ],
+   "example": "kittest handover_status_checks: Status chat (Sam, 21 Nov: \"everything needs step by step checking, fixing, testing\"): the handover check must",
+   "notes": "CR5 (no push at handovers)",
+   "kind_before": "code (found)"
+  },
+  "N21": {
+   "rule": "A fresh chat for every round of notes and every cost warning.",
+   "status": "proven",
+   "tests": [
+    "cost_watch_lines"
+   ],
+   "example": "kittest cost_watch_lines: Rule 85 (Sam's Y, 17 Nov): amber at 250k of history, red at 370k; the warning lines count steps and say aim",
+   "notes": "",
+   "kind_before": "code (found)"
+  },
+  "N22": {
+   "rule": "Read little: this file, one pack, and only what a note names; notes kept short.",
+   "status": "proven",
+   "tests": [
+    "handover_status_checks"
+   ],
+   "example": "kittest handover_status_checks: Status chat (Sam, 21 Nov: \"everything needs step by step checking, fixing, testing\"): the handover check must",
+   "notes": "CR3",
+   "kind_before": "code (found)"
+  },
+  "N23": {
+   "rule": "Voices only, no sound effects unless the script names them; you record every voice.",
+   "status": "cannot yet",
+   "tests": [],
+   "example": "",
+   "notes": "",
+   "learn": "a way to see the work itself, not the film (the chat record and the commits); first a list of what a breach looks like in a chat record",
+   "kind_before": "none"
+  },
+  "N24": {
+   "rule": "Hook Text in TikTok's white-box style; every video ends with the CranbriJoos sign-off.",
+   "status": "proven",
+   "tests": [
+    "hook_text_planned",
+    "follow_line_on_signoff"
+   ],
+   "example": "kittest hook_text_planned: Rule 75 (tool job, 11 Nov): a film with HOOK but no KEEP_CLEAR was skipped quietly; now it is refused, and",
+   "notes": "",
+   "kind_before": "code (found)"
+  }
+ },
+ "_baseline": {
+  "rulebook": [
+   "1",
+   "10",
+   "11",
+   "13",
+   "14",
+   "16",
+   "17",
+   "18",
+   "19",
+   "2",
+   "20",
+   "22",
+   "24",
+   "26",
+   "28",
+   "29",
+   "3",
+   "30",
+   "32",
+   "37",
+   "38",
+   "41",
+   "43",
+   "47",
+   "48",
+   "49",
+   "5",
+   "50",
+   "52",
+   "57",
+   "58",
+   "59",
+   "6",
+   "61",
+   "62",
+   "63",
+   "65",
+   "66",
+   "67",
+   "7",
+   "70",
+   "72",
+   "74",
+   "75",
+   "77",
+   "78",
+   "8",
+   "80",
+   "83",
+   "85",
+   "86",
+   "87",
+   "88",
+   "89",
+   "L1",
+   "S10",
+   "S11",
+   "S2",
+   "S3",
+   "S4",
+   "S5",
+   "S7",
+   "S8",
+   "S9"
+  ],
+  "claude": [
+   "\"Hold responses until all my notes are through\": no replies at all",
+   "\"Hold\" means collect, don't act:",
+   "\"I want a rule\" (or \"every film\", \"from now on\", \"always\") means a permanent rule for all films:",
+   "\"Just go\" (or any override) skips waiting for my yes, never the checks or the hand-over:",
+   "15 lines at most",
+   "A \"Checks:\" line only when a check slipped or was at risk",
+   "A fresh chat for every round and every cost warning;",
+   "A note I've given before is a warning:",
+   "A question about the film is answered, not acted on",
+   "Always say where the finished file is",
+   "Ask before a final render and wait for a clear yes",
+   "Asking me before you go on",
+   "At the start, merge or name (in the notes) every branch the start lists (only branches with work not on the main line; `source/branches.py scan`) before building. At the end, push to the main line as well as the chat's own branch",
+   "Back-end proposals are explained plainly.",
+   "Be honest. If something isn't currently within my capabilities, say so and suggest what I would first need to learn or have, instead of trying to use the wrong tools to make something happen.",
+   "Before any full render, offer an animatic",
+   "Before every handover, search the film's notes for rule requests not yet written",
+   "Before fixing a frame, ask why nobody saw it.",
+   "Chat size:",
+   "Chats open the next chat themselves (create_session), with no count:",
+   "Choose views the drawing can carry",
+   "Code:",
+   "Critique-fix rounds:",
+   "Done / Needs you / Next appear only with something in them.",
+   "Earlier chats can be read",
+   "Every animatic carries the Hook Text and the CranbriJoos sign-off",
+   "Every chat starts with the Animation- project selected",
+   "Every film aims at the quality Sam's notes and the rulebook ask for, and costs no more than 15% of a week's allowance. Quality is never cut to fit the budget. Cost comes down only by working smarter: reusing what's built, catching faults before Sam sees them, and reading less. Every rule below serves these two aims.",
+   "Every handover has a \"Locked by Sam\" line",
+   "Every handover names the next chat's model AND effort",
+   "Every note becomes a lesson the checks keep.",
+   "Every open decision, across all jobs, goes in one message.",
+   "Every stage aims at Statement One (top of this file), with fewer notes and faults; its checks are made smarter, improved and condensed toward them. Something new? First improve the check that missed it; then merge overlapping checks; remove a step only if it caught nothing in three films, with my Y on a \"Lost:\" line.",
+   "Every video ends with the CranbriJoos sign-off",
+   "Explain in plain English",
+   "Fewer rounds, not cheaper rounds:",
+   "Files",
+   "Fix the drawing, never the shot (Sam, 21 Nov)",
+   "Fresh chats and the handover",
+   "I record every voice; never ask who voices them.",
+   "Look as a viewer, not as a measurer.",
+   "MP4",
+   "Make choices for me",
+   "Making the films",
+   "Messages to me",
+   "Models and chats",
+   "Models by stage:",
+   "My accounts",
+   "New rules and lessons are proposed first:",
+   "No animatic while a shot is missing anyone the brief puts in it",
+   "No check sheet before an animatic unless I ask",
+   "No code names or file internals",
+   "Notes on movement get a short clip",
+   "Notes:",
+   "One line per note:",
+   "One main line:",
+   "One message, never twice (Sam, 22 Nov):",
+   "One wait per render;",
+   "Opus, high effort",
+   "Opus, medium effort",
+   "Physical things behave physically.",
+   "Pictures:",
+   "Plain words, always.",
+   "Push notifications",
+   "Questions are numbered,",
+   "Reading little",
+   "Reference photos:",
+   "Reuse before building",
+   "Rules are permanent",
+   "Sam should never have to teach a fault twice. Every note he gives is proof that a check failed to see something, so fix the seeing as well as the frame.",
+   "Sam's approved shots are locked: the script, the shot order and lengths, each camera and framing, and what happens in each shot.",
+   "Say only what matters.",
+   "Seeing like Sam (read first, every chat; Sam's Y, 21 Nov)",
+   "Sonnet",
+   "Sound:",
+   "Statement One: top quality, within 15% of a week (Sam, 22 Nov)",
+   "Statement Two: be honest about what I can do (Sam, 21 Nov)",
+   "The 3 lines at the bottom",
+   "The Animation- project is always attached",
+   "The brief is a checklist:",
+   "The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work on its job. I never start a chat or type a prompt unless it failed to save.",
+   "The channel is topical, absurdist news-of-the-week satire; every film is new.",
+   "The cost watch (rule 85):",
+   "The handover",
+   "The handover check:",
+   "The handover's 3 lines go at the bottom of the message",
+   "The proposal route:",
+   "Three layers:",
+   "TikTok",
+   "Unattended runs stop after one animatic:",
+   "Which film, which guide",
+   "Working with me",
+   "except the latest animatic and its clean render",
+   "finished version",
+   "send finished animations in the chat",
+   "under 50 MB",
+   "what the project would need to learn"
+  ],
+  "ids": [
+   "1",
+   "10",
+   "11",
+   "13",
+   "14",
+   "16",
+   "17",
+   "18",
+   "19",
+   "2",
+   "20",
+   "22",
+   "24",
+   "26",
+   "28",
+   "29",
+   "3",
+   "30",
+   "32",
+   "37",
+   "38",
+   "41",
+   "43",
+   "47",
+   "48",
+   "49",
+   "5",
+   "50",
+   "52",
+   "57",
+   "58",
+   "59",
+   "6",
+   "61",
+   "62",
+   "63",
+   "65",
+   "66",
+   "67",
+   "7",
+   "70",
+   "72",
+   "74",
+   "75",
+   "77",
+   "78",
+   "8",
+   "80",
+   "83",
+   "85",
+   "86",
+   "87",
+   "88",
+   "89",
+   "L1",
+   "N1",
+   "N10",
+   "N11",
+   "N12",
+   "N13",
+   "N14",
+   "N15",
+   "N16",
+   "N17",
+   "N18",
+   "N19",
+   "N2",
+   "N20",
+   "N21",
+   "N22",
+   "N23",
+   "N24",
+   "N3",
+   "N4",
+   "N5",
+   "N6",
+   "N7",
+   "N8",
+   "N9",
+   "S10",
+   "S11",
+   "S2",
+   "S3",
+   "S4",
+   "S5",
+   "S7",
+   "S8",
+   "S9",
+   "W1",
+   "W10",
+   "W11",
+   "W12",
+   "W13",
+   "W14",
+   "W15",
+   "W2",
+   "W3",
+   "W4",
+   "W5",
+   "W6",
+   "W7",
+   "W8",
+   "W9"
+  ]
+ }
+}

@@ -446,6 +446,9 @@
 
 
 ## Archived 23 Nov (chain B chat 2 start)
+
+<!-- archived 23 Nov, chain A chat 2 -->
+## Where things stand (the ONE handover)
 - **Rules that bite next:** CLAUDE.md "Rules are permanent" (rule wording shown first, then Sam's yes), the proposal route, 85 (cost watch).
 - **Done (chain B chat 1, staging-stills, Opus high, 23 Nov, session_01U3pKR27nDhvqq7xXsinsRV):** step 1 look back (notes/proposals/staging-stills/learn.md: 5 staging repeats over 4 films, all built before a board; gate met); step 2 built: source/staging.py, wired into film_engine.render (clips) and rough.board_gate (animatic), `rough.py board --shots`, job pack "Notes round" line, watcher promise; kittests staging_stills_milburn_replay and staging_stills_note_finder pass. Report entry 1 in notes/proposals/lessons-report.md.
 - **Done (chain A chat 1, Sonnet, 22 Nov):** lesson 7 step 1: `notes/proposals/rule-needs-check/rule-table.md` (103 rules + six guides + 65 notes sorted). The four numbers: by-hand/judge-not-run 9, did not fire 4, no rule 10, ran and missed 15 (13 of them GTA shot 4's body/car/arm checks); 22 notes were direction changes, 5 unplaced. 42 of 103 rules ever proved on a bad example; 29 guide rule lines have no check. Cost: about 40 steps; app figure not readable here, ledger has no estimate for a system job (unmeasured).
@@ -455,3 +458,4 @@
 - **Read:** this section; guides/job-packs.md "A tool job"; the lesson's proposal "Final version".
 - **Open rule requests:** rule 11 and 87 wording (Q1 above).
 - **For Claude:** kittest dearest_things_named FAILS on the main line before this chat's work too (GTA ledger repeat flag; not this job's). Branches claude/gta-chat31 and claude/dreamy-fermi-vkhutz are GTA's, left alone; claude/could-not-test-replay is merged on the main line by its own chain (start listed it). Handover check: SENTENCE (CLAUDE.md wording, an earlier commit, not this job's) and COST (no estimate for a system job) named as chat 3; PUSH sent at handover. Chain A (rule-needs-check) and could-not-test run in their own sessions (list_sessions, 23 Nov): nothing built twice.
+
