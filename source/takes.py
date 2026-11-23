@@ -45,6 +45,15 @@ def _trim(x):
     return y[int(s0 * SR):int(s1 * SR)].copy(), s0
 
 
+def read(path):
+    """Any sound file -> mono floats at 48 kHz (the shared reader: no finished film's file is loaded, freeze.py)."""
+    import subprocess
+    import imageio_ffmpeg
+    raw = subprocess.run([imageio_ffmpeg.get_ffmpeg_exe(), '-loglevel', 'error', '-i', path, '-ac', '1', '-ar', str(SR),
+                          '-f', 'f32le', '-'], capture_output=True, check=True).stdout
+    return np.frombuffer(raw, np.float32).astype(np.float64)
+
+
 def match_tone(lines):
     """The takes made to sound like one session: each nudged towards the average tone, at most 4 dB, no echo."""
     from scipy.signal import firwin2, welch, fftconvolve
@@ -73,8 +82,7 @@ def clean(prefix, takes, gap=None, lufs=-20.0, load=None, min_gap=MIN_GAP):
     """takes: {line n: [file names without the prefix]} (source/audio/PREFIX+NAME.m4a). Returns ({n: take},
     {(n, file name): seconds cut from the file's start})."""
     import mossad_audio as MA
-    if load is None:
-        from burnham_film import load
+    load = load or read
     gap = gap or {}
     order = sorted(takes)
     raw, cut = {}, {}
