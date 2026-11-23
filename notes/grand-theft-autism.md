@@ -137,28 +137,22 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   be timed"), neck/shoulder progress (16:38), "Fix to human standard neck" (16:42: neck_column, learn-step chat 38),
   render-time factors (16:46).
 
-## Where things stand (23 Nov, chat 42, Opus high; grey clip sent, the 3 cm question to Sam)
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); the proposal route.
-- Locked by Sam: all cameras and beats of shots 1-8; shot 4's acting-row times (K1 0.5, K2 1.0 ... K2 7.4, K1 7.8).
-- Done: get-up touches cleared (0 body-car, pistol, range in 198 drawings; creases and slides named); whole grey
-  clip critiqued (r42-grey) and SENT; proposal fast-climb judged (helper B picked).
-- Needs Sam: fast-climb 1 (measure, then jerk check and eased re-draw, each on his Y) or 2 (breaks vs real speeds).
-- Next: on his answer, this chat or the one it opens, Opus high: build the picked option, measuring first.
-- Sonnet chat 42b (DONE 23 Nov: phone-safe animations/drafts/jason-grey-test.mp4 made, ffprobe ok, sent; waiting on whether it opens): Sam can't open the grey clip in the app (sent twice, also the GitHub link). Re-encode as a
-  phone-safe copy and send: ffmpeg -i animations/drafts/grey-lean-out-whole.mp4 -c:v libx264 -profile:v baseline -level 3.1
-  -pix_fmt yuv420p -vf "scale=540:480,pad=540:960:0:240:color=white" -crf 20 -movflags +faststart -an
-  animations/drafts/jason-grey-test.mp4; copy its .bodycheck.json; humancheck.py critiqued it with r42-grey-p1; send.
-- Sam (via chat 42b, 23 Nov): clip opened (phone-safe copy); on fast-climb: "Slow him down by 25%". Asked: 1 = only
-  the climb and sit-down take 25% longer, shot length and camera kept; 2 = all of shot 4 slower (8.2 -> 10.25 s).
-- Read: notes/proposals/fast-climb.md (verdict); notes/bench/learn-step.md "Chat 42".
-- Open rule requests: grey-clip body-check (Sam HOLDS: do not raise); held-object check; house-look lock; "pieces".
-- Found by chain A chat 3 (23 Nov, rule 17 proof; not fixed, film-side is yours): viewchecks.solid_faults on today's
-  shot4 at frames 8/12/16/18/40/44 flags footL through the tulip's bonnet (1.00 s, 2 frames) and hipR through the
-  window pillar (1.33 s); people at 3.33 s drawn ~20% short. Check at your next body pass (fix or name).
-- For Claude: `_climb` C1b lift_gun -0.03, C2 pelvis z -0.02; store bundle not refreshed; self_cross "depth" is the
-  gap to the nearest OTHER part (a fold in one limb reads ~12 cm). No page.py: bench code, no Sam note. Two "Where
-  things stand" on purpose; CLAUDE.md sentence changes are Sam's own (2ebb48bf, 60e25406); branches
-  dreamy-fermi-vkhutz, gta-chat31 left unmerged.
+## Where things stand (23 Nov, chat 42, Opus high; Sam: every move 25% slower)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1 (in motion); rule 74 (acting list).
+- Locked by Sam: all cameras and beats of shots 1-8, in the same order; the house style; circle hands. CHANGED BY SAM
+  (23 Nov): "All the human movements seem 25% too fast": shot 4's acting-row times x1.25 (8.2 -> ~10.25 s).
+- Done: grey clip clean (0 body-car, pistol, range) and seen by Sam (phone-safe copy jason-grey-test.mp4 by 42b).
+  fast-climb proposal declined (Sam chose to slow the moves instead).
+- Next: chat 43, Opus high: stretch shot 4's acting rows (leanout.TIMES, bench BREAKDOWNS) and its camera keys
+  (gta_rehearse CAM4) by 1.25 from the shot's start; gunshot sounds with them; re-run the grey checks and send a
+  phone-safe clip from his camera. Then note the other shots' moves for the next animatic (Sam's Q below).
+- Needs Sam: 1 = only shot 4 slower now, other shots' people checked at the next animatic (my pick); 2 = every
+  shot's people 25% slower now.
+- Read: notes/bench/learn-step.md "Chat 42"; notes/proposals/fast-climb.md (only if the 3 cm bar comes up again).
+- Open rule requests: grey-clip body-check (Sam HOLDS); held-object check; house-look lock; "pieces" test.
+- For Claude: clips to Sam phone-safe (baseline, 540x960 padded, faststart: 42b's command in git log); the wide
+  1080x960 High-profile clip would not open on his phone. Two "Where things stand" on purpose; CLAUDE.md sentence
+  changes are Sam's own; branches dreamy-fermi-vkhutz, gta-chat31 left unmerged.
 
 ## Chat 33c: animatic v4 SENT (22 Nov; section moved to the archive notes, chat 38)
 ## Chat 35 (22 Nov, Opus high): stage 1 key poses clean; in-betweens in progress (learn-step.md "Stage 1, chat 35")
