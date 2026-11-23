@@ -327,6 +327,45 @@ def _arch(car, side, zc):
     return Decal(pts, (side, 0, 0), (26, 22, 22), INK, 1.8)
 
 
+def arch_mask(car, cam, side, zc, size, pad=0.01):
+    """Where a near-side wheel may show (canvas mask, 255): its arch in the body's side, open down to the road (GTA
+    v5 note 6: the wheel was drawn whole over the wing). The arch is the one _arch draws, a little wider (pad)."""
+    from PIL import ImageDraw
+    w = car.spec['wheels']
+    r = w['r'] + 0.085 + pad
+    sill = car.spec['stations'][1][2]
+    a0 = math.asin(max(-1, min(1, (sill - w['r']) / r)))
+    yz = [(w['r'] + r * math.sin(a), zc + r * math.cos(a)) for a in np.linspace(a0, math.pi - a0, 24)]
+    yz += [(sill, zc - 3 * r), (-0.6, zc - 3 * r), (-0.6, zc + 3 * r), (sill, zc + 3 * r)]   # nothing of the body
+    m = Image.new('L', size, 0)                                       # is below the sill: the tyre shows whole there
+    dr = ImageDraw.Draw(m)
+    # the arch cut in the body's side: what of the wheel is outside it (a steered wheel swung out, a near wheel seen
+    # from close behind) is behind the wing and the door
+    xs = half_w(car, zc) + EPS
+    q = cam.clip([car.body_pt((side * xs, y, z)) for y, z in yz])
+    if len(q) > 2:
+        dr.polygon([(x * B.SS, y * B.SS) for x, y in q], fill=255)
+    # under the sill the tyre is in the open: its tread seen from in front or behind, through the wheel's width
+    # (only then: seen from the side the tread's box would show under the sill as a black block)
+    c0 = np.asarray(car.body_pt((side * xs, w['r'], zc)), float)
+    nrm = np.asarray(car.body_pt((side * (xs + 1.0), w['r'], zc)), float) - c0
+    to_cam = np.asarray(cam.pos, float) - c0
+    if float(nrm @ to_cam) / (np.linalg.norm(nrm) * np.linalg.norm(to_cam) + 1e-9) > 0.45:
+        return m
+    pts = []
+    for xa in (w['x'] - w['w'] / 2, max(xs, w['x'] + w['w'] / 2)):
+        q = cam.clip([car.body_pt((side * xa, y, z)) for y, z in ((sill, zc - r), (sill, zc + r), (-0.6, zc + r), (-0.6, zc - r))])
+        pts += [(x * B.SS, y * B.SS) for x, y in q]
+    if len(pts) > 2:
+        from scipy.spatial import ConvexHull
+        try:
+            h = ConvexHull(np.asarray(pts))
+            dr.polygon([tuple(pts[i]) for i in h.vertices], fill=255)
+        except Exception:
+            pass
+    return m
+
+
 def _ragged(x0, x1, z0, z1, seed, step=0.22, amt=0.007):
     """A worn stripe edge: never ruler-straight."""
     rng = np.random.RandomState(seed)
@@ -638,7 +677,9 @@ def _parts(car):
         for s in (-1, 1):                # the wing mirror: a stalk out of the door top into a small round-ish head
             m = P(s, 0.98, 0.0)
             xd = abs(m[0])               # the door's skin at the screen's foot (the body tucks in above the waist)
-            stalk = _box(car, (s * (xd + 0.04), 0.90, m[2] - 0.02), (0.10, 0.03, 0.04), TULIP_RED)
+            # Sam, v5 note 2 ("broken cube effects"): the stalk ran 3 cm into the head, so the two boxes cut each
+            # other into loose blocks; now a thin dark stalk meets the head's inner face, one clean head on it
+            stalk = _box(car, (s * (xd + 0.03), 0.905, m[2] - 0.03), (0.06, 0.025, 0.03), (44, 38, 38))
             head = _box(car, (s * (xd + 0.11), 0.91, m[2] - 0.04), (0.10, 0.08, 0.06), TULIP_RED)
             parts.append(Part(stalk + head, (s * xd, 0.9, m[2]), (s, 0, 0)))
     else:
@@ -871,10 +912,23 @@ def draw_car(img, cam, car, t=0.0, inside=seat_people, lit=True):
         (front if seen else behind).append((pt, dist))
     glows = []
 
-    def draw_part(pt):
+    def draw_part(pt, near=False):
         if hasattr(pt, 'wheel'):
             s, zc, fr = pt.wheel
-            _wheel(img, cam, p, car, s, zc, fr)
+            if not near:
+                _wheel(img, cam, p, car, s, zc, fr)
+                return
+            # Sam, GTA v5 note 6 ("wheel clipping through chassis"): a near-side wheel is drawn after the body, so it
+            # showed whole over the wing; it is seen only through its arch (and below the sill), the body hides the rest
+            lay = Image.new(img.mode, img.size, (0, 0, 0, 0) if img.mode == 'RGBA' else 0)
+            _wheel(lay, cam, S.pen(lay), car, s, zc, fr)
+            m = arch_mask(car, cam, s, zc, img.size)
+            if lay.mode == 'RGBA':
+                a = np.asarray(lay.split()[3], np.float32) * (np.asarray(m, np.float32) / 255)
+                lay.putalpha(Image.fromarray(a.astype(np.uint8)))
+                img.alpha_composite(lay)
+            else:
+                img.paste(lay, (0, 0), m)
             return
         _draw_faces(img, cam, p, pt.faces)
         if getattr(pt, 'house', False):
@@ -900,7 +954,7 @@ def draw_car(img, cam, car, t=0.0, inside=seat_people, lit=True):
             if r and r[0] == 'lamp':
                 glows.append(r)
     for pt, _ in sorted(front, key=lambda e: (e[0].level, -e[1])):
-        draw_part(pt)
+        draw_part(pt, near=True)
     if lit:
         for _, c, col in glows:
             if cam.depth(c) > cam.NEAR:
@@ -997,6 +1051,109 @@ def cover_masks(car, cam, ref, size):
                 if not getattr(d, 'open', False):
                     gd.polygon([(x * B.SS, y * B.SS) for x, y in q2], fill=255)
     return solid, pane, used
+
+
+SKIRT = [True]                   # solid_faces: the skirts under the house's foot (kittest door_slit puts them off)
+
+
+def solid_faces(car, cam):
+    """The car's solid faces as this camera sees them, as the drawing shows them: [(world pts, holes)] where holes
+    are the face's window openings (open AND closed glass: a pane is seen through, not solid). The body's top is
+    solid only at the bonnet, the boot and the door-top strips beside the cabin (outside the house's foot: inside
+    it the cabin is open); the house's sides, screens and roof less their glass; the parts (mirrors, bumpers)."""
+    out = []
+    h = car.spec['house']
+    (zb0, zb1), wb = h['base'], h['hw'][0]
+    for f in _body(car):
+        if not f.seen(cam):
+            continue
+        if f.tag != 'top':
+            out.append((f.pts, []))
+            continue
+        loc = [local_pt(car, q) for q in f.pts]
+        z0, z1 = min(q[2] for q in loc), max(q[2] for q in loc)
+        ys = sorted(q[1] for q in loc)[-1]
+        xs = max(abs(q[0]) for q in loc)
+        for a_, b_, xa, xb in ((max(z0, zb1), z1, -xs, xs), (z0, min(z1, zb0), -xs, xs),
+                               (max(z0, zb0), min(z1, zb1), wb, xs), (max(z0, zb0), min(z1, zb1), -xs, -wb)):
+            if b_ - a_ > 0.005 and xb - xa > 0.005:
+                out.append(([car.body_pt(q) for q in ((xa, ys, a_), (xb, ys, a_), (xb, ys, b_), (xa, ys, b_))], []))
+    wins = [d for d in _house_decals(car, car.kind) if d.kind == 'glass']
+    for f in _house(car):
+        if not f.seen(cam):
+            continue
+        fn = S._norm(f.n)
+        holes = [[car.body_pt(q) for q in d.pts] for d in wins if S._dot(S._norm(car.body_dir(d.n_local)), fn) >= 0.98]
+        out.append((f.pts, holes))
+    # the house stands 1-2 cm above the body's top at its foot (top_y 0.93-0.95 under the house's 0.95): a slit the
+    # sight line slipped through into the cabin, showing his shorts as a line along the door top (Sam, 23 Nov,
+    # chat 50: "Little bit of trouser showing there"). A skirt under each of the house's four foot edges shuts it.
+    P = _house_pts(car)
+    cen = car.body_pt((0.0, h['y'][0], sum(h['base']) / 2))
+    for a, b in (() if not SKIRT[0] else  ((P(-1, 0, 0), P(1, 0, 0)), (P(1, 0, 0), P(1, 1, 0)), (P(1, 1, 0), P(-1, 1, 0)), (P(-1, 1, 0), P(-1, 0, 0)))):
+        loc = [a, b, (b[0], b[1] - 0.08, b[2]), (a[0], a[1] - 0.08, a[2])]
+        w = [car.body_pt(q) for q in loc]
+        n = _outward(w, cen)
+        mid = tuple(sum(q[i] for q in w) / 4 for i in range(3))
+        if S._dot(n, S._sub(cam.pos, mid)) > 1e-4:
+            out.append((w, []))
+    for p in _parts(car):
+        for f in p.faces:
+            if f.seen(cam):
+                out.append((f.pts, []))
+    return out
+
+
+def solid_depth(car, cam, scale=1, grow=0.0):
+    """Per dot, how far along the lens the nearest solid of the car is (np.inf where none): the car's own depth
+    buffer at the canvas (1080 x 1920) x scale, for testing a 3D body inside the car dot by dot (GTA v5 notes 2/8/9:
+    "just red or black car parts" below the door's top; his hips still seen through the open window). grow: dots
+    the solid's edges are widened by (its outline line is drawn over him, not half under him)."""
+    W_, H_ = 1080 * scale, 1920 * scale
+    zc = np.full((H_, W_), np.inf)
+    c = np.asarray(cam.pos, float)
+    f_, r_, u_ = (np.asarray(v, float) for v in (cam.f, cam.r, cam.u))
+    cr, sr = math.cos(cam.roll or 0.0), math.sin(cam.roll or 0.0)
+    for pts, holes in solid_faces(car, cam):
+        q2 = cam.clip(pts)
+        if len(q2) < 3:
+            continue
+        m = Image.new('L', (W_, H_), 0)
+        d = ImageDraw.Draw(m)
+        d.polygon([(x * scale, y * scale) for x, y in q2], fill=255)
+        for hp in holes:
+            hq = cam.clip(hp)
+            if len(hq) > 2:
+                d.polygon([(x * scale, y * scale) for x, y in hq], fill=0)
+        bb = m.getbbox()
+        if not bb:
+            continue
+        x0, y0, x1, y1 = bb
+        sel = np.asarray(m.crop(bb)) > 0
+        if not sel.any():
+            continue
+        P = [np.asarray(q, float) for q in pts]
+        n = np.cross(P[1] - P[0], P[2] - P[0])
+        if np.linalg.norm(n) < 1e-12:
+            continue
+        yy, xx = np.nonzero(sel)
+        X = (xx + x0 + 0.5) / scale - 540 - cam.shake[0]
+        Y = (yy + y0 + 0.5) / scale - 960 - cam.shake[1]
+        Xu, Yu = X * cr + Y * sr, -X * sr + Y * cr                  # undo the lens roll (sets.Cam.project)
+        ray = f_[None] + np.outer(Xu / cam.focal, r_) - np.outer(Yu / cam.focal, u_)
+        den = ray @ n
+        ok = np.abs(den) > 1e-9
+        z = np.full(len(X), np.inf)
+        z[ok] = float(n @ (P[0] - c)) / den[ok]
+        z[z < cam.NEAR] = np.inf
+        sub = zc[y0:y1, x0:x1]
+        cur = sub[yy, xx]
+        sub[yy, xx] = np.minimum(cur, z)
+    if grow > 0:
+        from scipy import ndimage
+        k = int(round(grow))
+        zc = ndimage.grey_erosion(zc, size=(2 * k + 1, 2 * k + 1))
+    return zc
 
 
 def _house_ids(decals):

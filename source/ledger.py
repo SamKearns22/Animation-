@@ -318,6 +318,8 @@ def auto(transcript):
         d['chats'].append(row)
     alarm = budget_stop(d) or stage_alarm(d)      # each marks its own step, so none repeats on the next reply
     store(d)
+    if alarm and __import__('override').skip('budget/stage stop: ' + alarm, None, sys.stderr):
+        alarm = None
     if alarm and not ALARMS_PAUSED:               # once never switched off (Sam, 13 Nov); paused 18 Nov, see ALARMS_PAUSED
         print(json.dumps({'decision': 'block', 'reason': alarm}))
     push_row(film, row)                           # startup-fixes 1 (Sam, 16 Nov): straight onto the main line

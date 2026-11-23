@@ -494,11 +494,27 @@ def _cover(car, cam, kw, size, gun=None, kc=None):
     if gun is not None:
         segs.append(('gun', gun[0], gun[1]))
     masks, used = [], []
-    seat_m = None
+    seat_m = door_top = None
     if kc is not None:
         seat_m = G.cover_masks(car, cam, tuple(car.body_pt((0.42, SEAT, 0.0))), size)
         used += [(n, pts, 'seat') for n, pts in seat_m[2]]
-    inside = []                                              # per piece, in the same order as segs
+        # Sam, GTA v5 note 8 ("no green trousers below that black line, just red or black car parts"): seen from
+        # above, the near door's flat top (outer skin to inner trim, at the sill) hides whatever of him is inside
+        # the cabin under it; cover_masks counts only the faces his piece's middle is behind
+        door_top = None
+        lc = np.asarray(G.local_pt(car, tuple(cam.pos)), float)
+        if lc[1] > SILL:
+            sx = 1.0 if lc[0] > 0 else -1.0
+            top = Image.new('L', size, 0)
+            for z0, z1 in ((-0.95, 0.80),):
+                xo = float(G.half_w(car, (z0 + z1) / 2)) + 0.04
+                for quad in (((WIN_X - 0.12, SILL, z0), (xo, SILL, z0), (xo, SILL, z1), (WIN_X - 0.12, SILL, z1)),   # its top
+                             ((xo, 0.30, z0), (xo, SILL, z0), (xo, SILL, z1), (xo, 0.30, z1))):            # its skin
+                    qq = cam.clip([car.body_pt((sx * a_, b_, c_)) for a_, b_, c_ in quad])
+                    if len(qq) > 2:
+                        ImageDraw.Draw(top).polygon([(x * B.SS, y * B.SS) for x, y in qq], fill=255)
+            door_top = np.asarray(top)
+    inside, low = [], []                                     # per piece, in the same order as segs
     if kc is not None:
         for a, b in _BONES:
             ca, cb = np.asarray(kc[a], float), np.asarray(kc[b], float)
@@ -506,6 +522,7 @@ def _cover(car, cam, kw, size, gun=None, kc=None):
             for i in range(n):
                 m = ca + (cb - ca) * (i + 0.5) / n
                 inside.append(abs(m[0]) < IN_CABIN[0] and m[1] < IN_CABIN[1])
+                low.append(bool(inside[-1]))   # any height: a drawn shape spills past its bone (v5 notes 8-9)
     lines = []
     for i, (nm, p0, p1) in enumerate(segs, 1):
         if cam.depth(tuple(p0)) <= cam.NEAR or cam.depth(tuple(p1)) <= cam.NEAR:
@@ -526,6 +543,8 @@ def _cover(car, cam, kw, size, gun=None, kc=None):
         so, gl, us = G.cover_masks(car, cam, tuple(mid), size)
         if seat_m is not None and i <= len(inside) and inside[i - 1]:
             so = Image.fromarray(np.maximum(np.asarray(so), np.asarray(seat_m[0])))
+            if door_top is not None and low[i - 1]:          # under the sill: the door's top hides it (note 8)
+                so = Image.fromarray(np.maximum(np.asarray(so), door_top))
         masks.append((so, gl))
         used += [(n, pts, nm) for n, pts in us]
     for _, xy, i, w in sorted(lines, key=lambda x: -x[0]):

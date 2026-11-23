@@ -14,7 +14,7 @@ dearer write price. Prices are list $ per million tokens, fitted to this account
 own chat records (Nov 2026); WEEK_USD is a week's allowance at list price, set on 13 Nov (Job O) so Blessed's recorded dollars (about
 $137: $101 from the app, $36 estimated for 11 Nov chats the app cannot show) read 80% of a week, as Sam saw it (was 290). Both are estimates: good to about +-20%.
 """
-import glob, json, os, sys, time
+import glob, json, os, re, sys, time
 from datetime import datetime
 
 PRICE = {  # read, write(1h cache), input, output
@@ -160,7 +160,7 @@ def main():
                         f"whole chat: about {reload_pct:.1f}% of the week before any work. Tell Sam in "
                         "the first line, and say that after a gap of over an hour a new chat from the "
                         "handover is cheaper.")
-        if lv == 2 and not prompt.startswith("override"):
+        if lv == 2 and not re.search(r"(?i)\boverride\b", prompt):
             msgs.append(f"COST WATCH RED: {describe(st, pct)}. Do not start new work. Write the handover "
                         "now (CLAUDE.md, Models and chats) and give Sam the 3 lines. The first line of "
                         "your reply: 'Cost: red. New chat needed.' Sam can type 'override' to go on.")

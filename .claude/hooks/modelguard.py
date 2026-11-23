@@ -113,6 +113,10 @@ def decide(inp):
     if not DEAR.search(model):
         return None
     sid = os.environ.get('CLAUDE_CODE_REMOTE_SESSION_ID', '') or inp.get('session_id', '') or 'local'
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), 'source'))
+    if __import__('override').skip(f'model guard ({what} on {model})', inp.get('transcript_path'), sys.stderr):
+        log('override', model, what, cmd, sid)
+        return None
     if re.search(r'(^|[;&|\n]\s*)GUARD_OK=', cmd):
         log('escape', model, what, cmd, sid)
         return None

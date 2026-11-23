@@ -44,6 +44,7 @@ import time
 
 import numpy as np
 from numba import njit, prange
+from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -69,6 +70,57 @@ def _u(a):
     return a / (np.linalg.norm(a) + 1e-12)
 
 
+# Sam, 23 Nov (chat 46): "Jason has lost a lot of his bulk in the new version ... he's a muscled guy" (the game art:
+# broad shoulders, thick arms, deep chest). MakeHuman's own muscle and weight sliders move the shoulders only 3-4%,
+# so the skin is filled out round the house skeleton (the joints, the poses and the clothes' regions are unchanged):
+# the arms grow round their bones, the chest gains depth and the shoulders width. Blended by each point's arm weight,
+# so the armpit and shoulder joins stay smooth.
+FACE_IN = float(os.environ.get('BULK_FI', 1.0))
+BULK = dict(upper=float(os.environ.get('BULK_UP', 1.5)), fore=float(os.environ.get('BULK_FO', 1.2)),
+            chest_w=float(os.environ.get('BULK_CW', 1.06)), chest_d=float(os.environ.get('BULK_CD', 1.06)))
+
+
+def _seg_closest(P, a, b):
+    ab = b - a
+    u = np.clip(((P - a) @ ab) / (ab @ ab), 0, 1)
+    return a + u[:, None] * ab
+
+
+def bulk(V, J, R):
+    """The rest skin filled out to Jason's build (BULK): arms round their bones, chest depth and shoulder width."""
+    V = V.copy()
+    bone = R['bone']
+    w_arm = R['grp'][:, 1]
+    for sd, S_ in (('L', '.L'), ('R', '.R')):
+        for pre, (a, b), f in (('upperarm', ('sh', 'el'), BULK['upper']), ('lowerarm', ('el', 'wr'), BULK['fore'])):
+            m = np.array([str(x).startswith(pre) and str(x).endswith(S_) for x in bone])
+            if not m.any():
+                continue
+            A_, B_ = J[a + sd], J[b + sd]
+            ab = B_ - A_
+            u = np.clip(((V[m] - A_) @ ab) / (ab @ ab), 0, 1)
+            c = A_ + u[:, None] * ab
+            # the muscle swells mid-bone (biceps, forearm), not at the joint: from the armpit in, the bigger arm
+            # pressed 12 cm into the chest (self check, chat 46)
+            tap = np.clip(u / 0.35, 0, 1) * np.clip((1 - u) / 0.2, 0, 1) if pre == 'upperarm' else np.clip((1 - u) / 0.35, 0, 1)
+            tap = tap * tap * (3 - 2 * tap)
+            # the side facing the trunk stays (the arm grows outward, away from the chest)
+            out_ = V[m] - c
+            side_ = np.sign(A_[0]) if abs(A_[0]) > 1e-6 else 1.0
+            face_in = np.clip(-(out_[:, 0] * side_) / (np.linalg.norm(out_, axis=1) + 1e-9), 0, 1)
+            k = 1 + (f - 1) * np.clip(w_arm[m], 0, 1) * tap * (1 - FACE_IN * face_in)
+            V[m] = c + (V[m] - c) * k[:, None]
+    # the trunk from the waist up: wider at the shoulders, deeper at the chest (pelvis at y 0, neck at J['neck'])
+    yn = float(J['neck'][1])
+    tr = R['grp'][:, 0] > 0.5
+    up = np.clip((V[:, 1] - 0.25 * yn) / (0.6 * yn), 0, 1)
+    up = up * up * (3 - 2 * up) * tr * (V[:, 1] < yn + 0.02)
+    V[:, 0] *= 1 + (BULK['chest_w'] - 1) * up
+    zc = 0.0
+    V[:, 2] = zc + (V[:, 2] - zc) * (1 + (BULK['chest_d'] - 1) * up)
+    return V
+
+
 def rig():
     if RIG:
         return RIG
@@ -85,6 +137,7 @@ def rig():
     V = (v - o) * s * MIR                                          # rest body, metres, car-handed, pelvis at 0
     heads = {b: (sk.rest[b][:3, 3] - o) * s * MIR for b in sk.order}
     J = {n: heads[b] for n, b in JOINTS.items()}
+    V = bulk(V, J, R)
     keep = np.zeros(len(v), bool)
     keep[R['used']] = True
     bone = R['bone']
@@ -2010,6 +2063,8 @@ def house_pose(out):
     return k
 
 
+FILM_CAR_HIDES = [False]   # the film (jason3d_film): the bench's stand-in car hides nothing; the film's own drawn
+#   car hides him afterwards (Sam, v5 notes 1-2: the stand-in's dash and door did not line up with the film's car)
 DRESS_HIDE_NECK = True          # a smooth solid neck column (neck_column) stands in for the skinned neck
 
 
@@ -2093,16 +2148,20 @@ def dressed_still(path, name='K4', t=1.95, scale=2):
     return res
 
 
-def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
+def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None, cam=None, xf=None, face=None, car=None,
+                 layer=False, depth_car=None):
     """One solved pose dressed as Jason in the house look (stage 2, chat 44: the still's drawing made a frame
     drawer, so the dressed clip and the still are drawn by the same code): house colours by body part (bench_pose
     part_at), house ink, the house head drawing laid at the head's depth, circle hands, the pistol, the smooth neck
     column. view 'shot' = shot 4's locked camera at t; 'outside' = beside the window (front door cut away).
-    Returns a PIL image at the camera's size x scale."""
+    Returns a PIL image at the camera's size x scale.
+    In the film (jason3d_film, chat 46): cam = the film's camera, xf = car frame -> world (the moving Tulip, car its
+    gta_cars car), face = the head's acting keys, layer=True: only his own dots (body, hands, pistol, the ink round
+    them) on a clear layer; the car solids still hide him by depth. depth_car: the film's car hides him dot by dot
+    (depth_cut, chat 50)."""
     import bench_draw as BD
-    from PIL import Image
     r = rig()
-    sp = dict(r['sp'], mood='stern', squint=0.35, frown=0.07)
+    sp = dict(dict(r['sp'], mood='stern', squint=0.35, frown=0.07), **(face or {}))
     tk = r['tk']
     neckb = np.array([str(b).startswith('neck') for b in r['bone']])
     # only the neck itself is hidden (rest |x| under 0.62 dm; 0.68 left an ink blot at the join): the shoulder tops
@@ -2150,7 +2209,15 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
         Pj = np.concatenate([Pj, Vn])
     tp = np.array(['skin'] * len(tk))    # Jason's colours come per dot from part_at (attrs), not per triangle
     objs = [(Pj, tk, tp, 'jason')] + scene(out)[1:]
-    if view == 'shot':
+    if FILM_CAR_HIDES[0] and layer:
+        objs = [o for o in objs if o[3] == 'jason' or o[3].startswith('hand') or o[3] == 'gun']
+    if xf is not None:
+        objs = [(xf(P_), T_, tp_, nm_) for P_, T_, tp_, nm_ in objs]
+        if DRESS_HIDE_NECK:
+            Vn = xf(Vn)
+    if cam is not None:
+        ob_ = objs
+    elif view == 'shot':
         cam = cam_at(t, shake=shake)
         ob_ = objs
     else:
@@ -2162,26 +2229,127 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None):
     if DRESS_HIDE_NECK:                  # where the neck column is the nearest thing, it never hides the head
         zn = BD.raster(cam, [(Vn, Tn, np.array(['skin'] * len(Tn)), 'neck')], scale)[0]   # drawing (Sam, 23 Nov)
         free = np.isfinite(zn) & (zn <= zb + 1e-6)
-    pb = clean_parts(pb, ob, 9 * scale // 2)
+    # chat 46: the clean-up reaches 1.8 cm on the body, however near the camera (shot 6's close two-shot: the
+    # strap's edge at the raised arm's shoulder zig-zagged 2 cm; 9 dots is ~1 cm there, ~4 cm far off in shot 4)
+    chest = (out['J']['neck'] + out['J']['pelvis']) / 2
+    if xf is not None:
+        chest = xf(chest[None])[0]
+    kk = cam.project(tuple(float(c) for c in chest))[1]
+    pb = clean_parts(pb, ob, max(9 * scale // 2, int(0.018 * kk * scale)))
     edge = BD.ink(zb, pb, ob, 3 * scale)
     from scipy import ndimage                    # ink specks too small to be a line (left at the throat, chat 38)
     lab, nl = ndimage.label(edge)
     if nl:
         sz = ndimage.sum(edge, lab, range(1, nl + 1))
         edge &= ~np.isin(lab, np.where(sz < 60 * scale * scale)[0] + 1)
+    if layer:                            # his own dots and the ink within a line's width of them
+        mine = np.isin(ob, [i for i, n in enumerate(names) if n == 'jason' or n.startswith('hand') or n == 'gun'])
+        near = ndimage.binary_dilation(mine, iterations=3 * scale)
+        pb = np.where(mine, pb, -1)
+        edge = edge & near
     img = BD.compose(zb, pb, ob, names, edge, BD.colours(sp), scale)
-    bg = Image.new('RGBA', img.size, SKY + (255,))
-    bg.alpha_composite(img)
-    img = bg
+    if not layer:
+        bg = Image.new('RGBA', img.size, SKY + (255,))
+        bg.alpha_composite(img)
+        img = bg
     k = house_pose(out)
+    if xf is not None:
+        import leanout as _L
+        k = _L.to_world(k, car)
+        k.aim, k.firing = _u(xf(np.asarray(out['aim'], float)[None] + out['J']['wrR'][None])[0] - xf(out['J']['wrR'][None])[0]), True
     import lying_flat as LF
     LF.HEAD_VD[0] = head_vd
     try:
         head, _ = BD.house_head(cam, k, sp, neck=not DRESS_HIDE_NECK)
     finally:
         LF.HEAD_VD[0] = None
-    BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale, free)
-    return img.convert('RGB')
+    hd = cam.depth(tuple(k['head']))
+    a_before = np.asarray(img.split()[3]).copy() if (layer and depth_car is not None) else None
+    rgb_before = np.asarray(img.convert('RGB')).copy() if a_before is not None else None
+    BD.lay_head(img, head, zb, hd, scale, free)
+    if a_before is not None:             # GTA v5 notes 2/8/9: the film's car hides him dot by dot (depth_cut)
+        headm = np.any(np.asarray(img.convert('RGB')) != rgb_before, 2) | ((np.asarray(img.split()[3]) > 0) & (a_before == 0))
+        img = depth_cut(img, zb, ob, names, cam, depth_car, scale, headm, hd, pb)
+    return img if layer else img.convert('RGB')
+
+
+def depth_cut(img, zb, ob, names, cam, car, scale, headm, hd, pb=None, tol=0.01):
+    """Per dot, his layer is rubbed out where the film car's solid (gta_cars.solid_depth: its sides, bevels, the door
+    tops beside the cabin, bonnet, boot, roof, pillars, parts; the windows are holes) is nearer the lens than he is.
+    Sam, GTA v5 notes 2/8/9: "Make sure you don't see green trousers below that black line, just red or black car
+    parts"; his hips still show through the open window, where nothing is in front of them. His body dots use their
+    own depth, the head drawing the head's, the ink round him the nearest of his dots within a line's width. The car's
+    edges are widened by half its outline so its line is drawn over him, never half under him.
+    Sam (23 Nov, chat 50, his belly drawn over the black strip under the window: "Other side of the door please"):
+    the door is solid up to the window's bottom edge. His clothed body (vest, shorts, shoes) found inside that door
+    (beside the cabin, out from the window's plane, below its bottom edge) is on the other side of it: hidden. His
+    bare arm draped over the door top stays (it lies over the door, it does not pass through it)."""
+    import gta_cars as G
+    from scipy import ndimage
+    zc = G.solid_depth(car, cam, scale, grow=1.1 * scale)
+    mine = np.isin(ob, [i for i, n in enumerate(names) if n == 'jason' or n.startswith('hand') or n == 'gun'])
+    zj = np.where(mine, zb, np.inf)
+    a = np.asarray(img.split()[3]).astype(np.float32)        # the layer is at the canvas; the depths at x scale
+    up = lambda m: np.repeat(np.repeat(m, scale, 0), scale, 1)[:zb.shape[0], :zb.shape[1]]
+    ah = up(a) > 0
+    hm = up(headm)
+    zt = zj.copy()
+    rest = ah & ~mine
+    if rest.any():
+        near = ndimage.grey_erosion(zj, size=(6 * scale + 1, 6 * scale + 1))
+        zt[rest] = near[rest]
+    zt[hm] = hd
+    zt[ah & ~np.isfinite(zt)] = hd
+    hidden = ah & (zc < zt - tol)
+    if pb is not None:
+        hidden |= in_door(car, cam, zb, pb, scale) & ah
+    frac = hidden.reshape(hidden.shape[0] // scale, scale, hidden.shape[1] // scale, scale).mean((1, 3))
+    DEPTH_LAST[0] = dict(hidden=int((frac > 0.5).sum()), shown=int(((a > 0) & (frac <= 0.5)).sum()))
+    a = a * (1 - frac)
+    img.putalpha(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
+    return img
+
+
+DEPTH_LAST = [None]
+
+
+def in_door(car, cam, zb, pb, scale):
+    """His clothed dots (vest, its print, shorts, shoes) that lie inside the car's near door: out from the house's
+    side plane, inside the body's skin, below the side window's bottom edge, along the cabin (chat 50, Sam's note
+    "Other side of the door please")."""
+    import bench_draw as BD
+    import gta_cars as G
+    cloth = np.isin(pb, [i for i, n in enumerate(BD.PART_NAMES) if n in ('vest', 'trousers', 'shoes') or n.startswith('print')])
+    cloth &= np.isfinite(zb)
+    out = np.zeros(zb.shape, bool)
+    if not cloth.any():
+        return out
+    yy, xx = np.nonzero(cloth)
+    cr, sr = math.cos(cam.roll or 0.0), math.sin(cam.roll or 0.0)
+    X = (xx + 0.5) / scale - 540 - cam.shake[0]
+    Y = (yy + 0.5) / scale - 960 - cam.shake[1]
+    Xu, Yu = X * cr + Y * sr, -X * sr + Y * cr
+    f_, r_, u_ = (np.asarray(v, float) for v in (cam.f, cam.r, cam.u))
+    z = zb[yy, xx]
+    Pw = np.asarray(cam.pos, float)[None] + z[:, None] * (f_[None] + np.outer(Xu / cam.focal, r_) - np.outer(Yu / cam.focal, u_))
+    o = np.asarray(car.body_pt((0.0, 0.0, 0.0)), float)
+    M = np.stack([np.asarray(car.body_pt(tuple(e)), float) - o for e in np.eye(3)], 1)
+    L = np.linalg.solve(M, (Pw - o).T).T                       # car frame: x across, y up, z along
+    h = car.spec['house']
+    (zb0, zb1), (wb, wr), (yb, yr) = h['base'], h['hw'], h['y']
+    ywin = yb + 0.10 * (yr - yb)                               # the side window's bottom edge (gta_cars house decals)
+    v = np.clip((L[:, 1] - yb) / (yr - yb), 0, 1)
+    plane = wb + (wr - wb) * v
+    hw = np.array([G.half_w(car, zz) for zz in L[:, 2]])
+    # his shorts and shoes never pass the door at all (Sam, 23 Nov: "Little bit of trouser showing there", a sliver
+    # of shorts out through the door's skin on its top edge; v5 note 7, "lower body and legs are on the wrong side of
+    # the door"): out from the window's plane below its bottom edge they are hidden however far out. The vest only
+    # inside the door (it may hang over the outside). 1.5 cm inside the plane too: the depth test's own slack.
+    legs = np.isin(pb[yy, xx], [i for i, n in enumerate(BD.PART_NAMES) if n in ('trousers', 'shoes')])
+    inside = (np.abs(L[:, 0]) > plane - 0.015) & ((np.abs(L[:, 0]) < hw + 0.02) | legs) & (L[:, 1] < ywin) & \
+        (L[:, 2] > zb0) & (L[:, 2] < zb1)
+    out[yy[inside], xx[inside]] = True
+    return out
 
 
 def head_yaw(out, t):

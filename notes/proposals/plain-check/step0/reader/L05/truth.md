@@ -1,0 +1,3 @@
+The message as written (the writer meant exactly this):
+
+5. **The ledger records notes and repeats by itself, and the film's app figure once Sam gives it.** Problem: 0 notes and 0 repeats on every chat (they were 33 and 4) and a total 10 points off the app's 22%. Steps: (a) count Sam's numbered notes from the notes table when a chat closes, (b) when Sam gives the posted figure, store the ratio (here 0.68) and apply it to the next film's estimate. Added: honest figures. Lost: nothing. Other option: keep it paused.

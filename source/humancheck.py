@@ -437,6 +437,8 @@ def sendgate():
     for f in files:
         if os.path.splitext(f)[1].lower() in ('.mp4', '.mov', '.gif', '.webm'):
             why += send_faults(f if os.path.isabs(f) else os.path.join(root, f))
+    if why and __import__('override').skip('send guard (body check / rule 89): ' + ' | '.join(why), data.get('transcript_path'), sys.stderr):
+        why = []
     if why:
         print('send REFUSED (body check / rule 89):\n' + '\n'.join(why), file=sys.stderr)
         return 2

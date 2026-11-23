@@ -860,9 +860,21 @@ def _crowd(pp, t, dz=0.0):
         # for the shop doorways (the stride turns side-on and reads), arms up over his head against the blast.
         slant = 0.45 if side > 0 else 0.0
         run = RUN_V * max(0.0, u - 0.15) * smooth(u / 0.3)
-        z += away * run * math.cos(slant)
-        x0 = x0 + side * min(1.3, run * math.sin(slant))
-        F = (side * math.sin(slant), 0.0, away * math.cos(slant))
+        # Sam, v5 note 4 ("civilians run through the building instead of down the street"): the slant stops 0.45 m
+        # short of the shop fronts; there they turn and run on along the pavement, never into the wall
+        room = max(0.0, SHOP4 - 0.45 - abs(x0)) if side > 0 else 1.3
+        lat = run * math.sin(slant)
+        along = slant > 0 and lat >= room
+        if along:                                          # the run after reaching the wall: straight on
+            r0 = room / math.sin(slant)
+            z += away * (r0 * math.cos(slant) + (run - r0))
+            x0 = x0 + side * room
+            k = smooth((run - r0) / 0.8)                   # turning along the street over 0.8 m, never a flip
+            F = S._norm((side * math.sin(slant) * (1 - k), 0.0, away * (math.cos(slant) * (1 - k) + k)))
+        else:
+            z += away * run * math.cos(slant)
+            x0 = x0 + side * min(1.3, lat)
+            F = (side * math.sin(slant), 0.0, away * math.cos(slant))
         j = V.standing(sp)
         ph = u * math.pi * 3.2
         _stride(j, ph, 210.0, 90.0, 140.0)
@@ -1191,9 +1203,40 @@ def jason_face(t):
     return f
 
 
+import jason3d_film as J3        # noqa: E402  chat 46: the bench's dressed 3D Jason in the film
+
+
+def jason3d_layer(img, cam, tul, t, lead, info=None):
+    """Jason in shots 3-4 as the bench move Sam approved (23 Nov), dressed, through this camera in the moving Tulip;
+    closed glass in front of him dims him a little; the muzzle flash on each shot's drawing."""
+    face = jason_face(t)
+    ref = None
+    out, _ = J3.pose_at(t)
+    chest = (np.asarray(out['J']['neck']) + np.asarray(out['J']['pelvis'])) / 2
+    ref = tul.body_pt(tuple(float(c) for c in chest))
+    _, pane, _ = G.cover_masks(tul, cam, ref, img.size)
+    gm = np.asarray(pane, np.float32) / 255.0
+    al, J = J3.layer(img, cam, tul, t, face=face, glass=(gm, 0.15))
+    fire = [t - ts for ts in SHOTS if 0.0 <= t - ts < 1.0 / 12]
+    if fire:
+        J3.flash(img, cam, J['_muzzle'], J['_aim'], fire[0])
+        target = lead.body_pt((-0.35, 1.25, 0.9))
+        m, b0, tg = cam.P(tuple(J['_muzzle'])), cam.P(tuple(J['_gun_hand'])), cam.P(target)
+        HC.aim('Jason', m, (m[0] - b0[0], m[1] - b0[1]), tg, firing=True)
+    if info is not None:
+        pts = [(_JN[n], tuple(J[n])) for n in _JN if n in J]
+        pts.append(('chest', tuple((J['pelvis'] + J['neck']) / 2)))
+        pts.append(('gun hand', tuple(J['_gun_hand'])))
+        info.update(toggle=lambda on: HIDE_JASON.__setitem__(0, not on), pts3=pts, erase=[],
+                    may_touch=('the tulip\'s seat',))
+    return al
+
+
 def jason_layer(img, cam, tul, t, lead, info=None):
     """Jason (chat 21 rebuild): the approved lean-out (leanout.at, Sam's Y 21 Nov) in the moving Tulip, drawn through
     this camera with the house's flat pieces; the car hides his legs, the dash and the roof rail per bone half."""
+    if J3.ON[0]:                                                         # chat 46: the dressed 3D Jason (Sam 23 Nov)
+        return jason3d_layer(img, cam, tul, t, lead, info)
     base = JSP.setdefault('sp', dict(GC.cast()['jason'], mood='stern', squint=0.35, frown=0.07))
     face = dict(base, **jason_face(t))
     nod = 0.30 * bump(t, 0.36, 0.42, 0.52)                               # B1: the small decisive nod
@@ -1655,7 +1698,7 @@ def fx_items(cam, t, lead):
     lumps = jet_lumps(t)
     if lumps:
         d = cam.depth((HYDRANT[1][0], 2.0, HYDRANT[1][1]))
-        spr = FX.lumps_sprite(fc, lumps, d)
+        spr = FX.lumps_sprite(fc, lumps, d, floor=0.37)        # v5 note 3: tails stop at the stump's top
         if spr:
             items.append((d, spr.paste))                  # at the stump's own depth (v7 note 7: d - 0.5 put it
             #                                               in front of the cruiser parked beside it)

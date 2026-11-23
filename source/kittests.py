@@ -495,6 +495,60 @@ def named_lines_body_each_answered():
 
 
 @test
+def override_word():
+    """Sam's Override (23 Nov, proposal override-word option 2). Saved example: chat 47 built animatic v5 and the send
+    guard refused it (no body check), so Sam waited a whole chat. Sam's word must open that stop for one ask; a chat
+    writing the word itself, or the word in an older message, must not."""
+    import override as O, tempfile, subprocess
+    d = tempfile.mkdtemp()
+    real = O.LOG
+    O.LOG = os.path.join(d, 'overrides.log')
+
+    def chat(*lines):
+        f = os.path.join(d, f'c{len(os.listdir(d))}.jsonl')
+        with open(f, 'w') as fh:
+            for who, text in lines:
+                e = {'type': who, 'message': {'content': text}}
+                if who == 'tool':
+                    e = {'type': 'user', 'message': {'content': [{'type': 'tool_result', 'content': 'override'}]}}
+                fh.write(json.dumps(e) + '\n')
+        return f
+    sam = chat(('user', 'Override, send me the animatic'), ('assistant', 'ok'), ('tool', ''),
+               ('user', '[SYSTEM NOTIFICATION - NOT USER INPUT] done'))
+    plain = chat(('user', 'send me the animatic'), ('assistant', 'Treating this as an override.'))
+    older = chat(('user', 'override'), ('assistant', 'done'), ('user', 'thanks, now the next one'))
+    video = os.path.join(d, 'v.mp4')
+    open(video, 'wb').write(b'0')
+
+    def send(tr):
+        inp = json.dumps({'tool_name': 'SendUserFile', 'tool_input': {'files': [video]}, 'cwd': os.path.dirname(HERE),
+                          'transcript_path': tr})
+        env = dict(os.environ, PYTHONPATH=HERE)
+        r = subprocess.run([sys.executable, '-c', 'import sys, override; override.LOG = sys.argv[1]; '
+                            'import humancheck; sys.exit(humancheck.sendgate())', O.LOG],
+                           input=inp, capture_output=True, text=True, cwd=HERE, env=env)
+        return r.returncode
+    try:
+        refused, opened, faked, stale = send(plain), send(sam), O.active(plain), O.active(older)
+        logged = os.path.exists(O.LOG) and 'skipped' in open(O.LOG).read()
+    finally:
+        O.LOG = real
+    ok = refused == 2 and opened == 0 and not faked and not stale and logged
+    return ok, (f'no Override: refused {refused == 2}; Sam typed it: sent {opened == 0}; chat wrote it: ignored '
+                f'{not faked}; older message: ignored {not stale}; skip logged {logged}')
+
+
+@test
+def locked_line_not_to_sam():
+    """Sam (23 Nov): no "Locked by Sam" line in messages to him (it stays in the notes). Example: chat 46/47 replies."""
+    import propose as P
+    bad = P.locked_line('Done: v5 built.\nLocked by Sam: every camera, beat, shot length.\nNext: send it.')
+    bad2 = P.locked_line('- **Locked by Sam:** shot 4 25% slower')
+    ok = P.locked_line('Done: v5 built. Your locked shots are unchanged.')
+    return bool(bad) and bool(bad2) and not ok, f'line caught: {bool(bad)}, bold caught: {bool(bad2)}, plain words pass: {not ok}'
+
+
+@test
 def render_lock():
     """Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now."""
     import film_engine as E
@@ -2930,14 +2984,29 @@ def proposal_route_hook():
         raw = ('## Leak\nnone\n## Scores\n| version | quality | notes | cost | risk | undo | total |\n|---|---|---|---|---|---|---|\n'
                + rows + '\n## Sam test\n' + '\n'.join(f'Q{i}: ok' for i in range(1, 9)) +
                '\n## Pick\nV2\n## Why\nbest\n## Faults in the pick\n- F1 [fixed] a\n- F2 [named] b\n'
-               '## Final version\ndo it\n## For Sam\n### Option 1: a\ntext\nLost: x\nAdded: y\n'
-               '### Option 2: b\ntext\nLost: x\nAdded: y\n')
+               '## Final version\ndo it\n## For Sam\n' + PLAIN_OPT.format(n=1) + PLAIN_OPT.format(n=2))
         open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md'), 'w').write(raw.replace('## Sam test\n', '## Sam test\nQ1: only\n').replace('Q8: ok', ''))
         try:
             P.parse(open(os.path.join(tmp, 't1', 'judge', 'verdict-raw.md')).read(), ['V1', 'V2', 'V3'])
             bad.append('a verdict missing Q8 parsed')
         except ValueError:
             pass
+        # 5a. shape 2 (packed from 23 Nov, plain-check Change 1): an option missing a field, or with a code name, is
+        # refused; the same verdict in the old shape (an older proposal) still parses, so no old verdict goes stale
+        for cut, why in (("You'd notice: the answer comes in one look.\n", 'missing field'),
+                         ('Why: ', 'Why: notes/x.md says so; ')):
+            try:
+                P.parse(raw.replace(cut, '' if why == 'missing field' else why, 1), ['V1', 'V2', 'V3'], 2)
+                bad.append(f'a shape-2 verdict with a {why if why == "missing field" else "file name"} parsed')
+            except ValueError:
+                pass
+        old_shape = raw.split('## For Sam')[0] + '## For Sam\n### Option 1: a\ntext\nLost: x\nAdded: y\n### Option 2: b\ntext\nLost: x\nAdded: y\n'
+        try:
+            P.parse(old_shape, ['V1', 'V2', 'V3'], 1)
+        except ValueError:
+            bad.append('an old-shape verdict no longer parses as shape 1')
+        if P._state('t1').get('shape') != 2:
+            bad.append('pack did not mark the proposal shape 2')
         # 5b. V0 (judge.md: no version passes, the judge writes its own) parses; V9 (no such file) does not
         v0 = raw.replace('## Pick\nV2', '## Pick\nV0').replace('| V3 | 3 | 3 | 3 | 3 | 3 | 15 |', '| V3 | 3 | 3 | 3 | 3 | 3 | 15 |\n| V0 | 4 | 4 | 4 | 4 | 4 | 20 |')
         if P.parse(v0, ['V1', 'V2', 'V3'])['pick'] != 'V0':
@@ -2954,6 +3023,12 @@ def proposal_route_hook():
             bad.append('verdict but no Critiqued line: not blocked')
         if run(ask + '\nCritiqued: 2 found, 1 fixed, 1 named.'):
             bad.append('valid verdict + Critiqued line blocked')
+        buf = io.StringIO()
+        with contextlib.redirect_stdout(buf):
+            P.show('t1')
+        order = [buf.getvalue().find(k) for k in ('Problem:', '1. ', 'Why:', "You'd notice:", 'Other option:', 'Lost:', 'Added:')]
+        if -1 in order or order != sorted(order):
+            bad.append('show does not print the fields in order')
         # 6. an edit after the verdict makes it stale; `mark` does not
         P.mark('t1', 'adopted')
         if run(ask + '\nCritiqued: 2 found, 1 fixed, 1 named.'):
@@ -2961,10 +3036,57 @@ def proposal_route_hook():
         open(f, 'a').write('\nmore')
         if not P.verdict_ok('t1')[0] is False:
             bad.append('edit after verdict not stale')
-        return not bad, '; '.join(bad) or 'blocks the 15 Nov asks, passes 5 routine ones, stale and missing verdicts, V0 pick, Critiqued line, stop_hook_active'
+        return not bad, '; '.join(bad) or ('blocks the 15 Nov asks, passes 5 routine ones, stale and missing verdicts, V0 '
+                                           'pick, Critiqued line, stop_hook_active, shape-2 fields (old shape parses)')
     finally:
         P.PROPS = old
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+PLAIN_OPT = ("### Option {n}: two quick stills first\n"
+             "Problem: staging was built three times before Sam saw the framing he wanted.\n"
+             "1. When a note is about framing, draw two small stills of it.\n"
+             "2. Send them in one message, a number on each.\n"
+             "3. Build the one Sam picks.\n"
+             "Why: one cheap look costs less than a whole round.\n"
+             "You'd notice: the answer comes in one look.\n"
+             "Other option: build and send a short clip, as now.\n"
+             "Lost: nothing.\n"
+             "Added: one small picture message before a staging round.\n")
+
+
+@test
+def plain_check_fields():
+    """CLAUDE.md "Back-end proposals are explained plainly" (Sam's Y, 23 Nov; plain-check Change 1, his answer 2):
+    checker A (the fixed fields, no code names) fails all 10 Milburn lessons as they were sent (Sam: "Explain" on 2
+    and 6, "don't know what you mean by brow cap" on 9), passes the same lesson rewritten in the fields, and the
+    review's lesson check (`propose.py plain`) agrees; the blind reader's saved answers (Step 0, reader3) read as
+    advice: L09's list names the brow cap, and every saved answer parses."""
+    import contextlib
+    import io
+    import propose as P
+    base = os.path.join(P.PROPS, 'plain-check', 'step0')
+    bad = []
+    for i in range(1, 11):
+        f = os.path.join(base, 'cases', f'L{i:02d}.md')
+        if not P.shape_faults(open(f).read()):
+            bad.append(f'Milburn lesson {i} passed A')
+        with contextlib.redirect_stdout(io.StringIO()):
+            if P.plain(f) == 0:
+                bad.append(f'plain passed Milburn lesson {i}')
+    if P.shape_faults(PLAIN_OPT.format(n=1)):
+        bad.append('the field-shaped ask failed A: ' + '; '.join(P.shape_faults(PLAIN_OPT.format(n=1))))
+    if not P.shape_faults(PLAIN_OPT.format(n=1).replace('Two quick', 'x').replace('Send them', 'Send them via source/stills.py')):
+        bad.append('a file name in a step passed A')
+    r3 = os.path.join(base, 'reader3')
+    n = 0
+    for k in sorted(os.listdir(r3)):
+        look, res = (open(os.path.join(r3, k, x)).read() for x in ('look.md', 'result.md'))
+        v = P.reader_verdict(look, res)
+        n += 1
+        if k == 'L09' and not any('brow cap' in w.lower() for w in v['words']):
+            bad.append('the reader on L09 does not name the brow cap')
+    return not bad, '; '.join(bad) or f'10/10 Milburn lessons fail A (and plain), the field-shaped ask passes, {n} saved reader answers parse'
 
 
 # ------------------------------------------------------------------------------------------------ code finder (Sam's 1, 16 Nov)
@@ -4388,6 +4510,41 @@ def takes_cleaned_and_registered():
     ok = ok and takes.plays_shared_loader([os.path.join(HERE, 'satire_template.py')]) and \
         not takes.plays_shared_loader([os.path.join(HERE, 'milburn.py')])
     return ok, 'cleaned, registered; the template plays the shared loader, Milburn does not'
+def door_slit():
+    """Sam (23 Nov, chat 50, a marked still at 16.5 s): "Little bit of trouser showing there", a line of Jason's
+    shorts along the Tulip's door top. The car's solid depth (gta_cars.solid_depth, the per-dot depth test that hides
+    the 3D Jason) let the sight line through a 1 cm slit between the body's top and the house's foot. Passes only if
+    the old shape (no skirts) shows that point, the fixed one hides it, and his hips still show through the open
+    window at 22.5 s (v5 notes 2/8/9)."""
+    import gta_cars as G
+    import sets as S
+
+    def setup(cam, car):
+        c = G.Car('tulip', pos=car[0], yaw=car[1], roll=car[2], pitch=0.5)
+        c.open_windows = ((1, 1),)
+        return S.Cam(*cam), c
+
+    def seen(cam, car, loc):
+        p = car.body_pt(loc)
+        (x, y), _ = cam.project(p)
+        if not (0 <= x < 1080 and 0 <= y < 1920):
+            return False
+        zc = G.solid_depth(car, cam, 1)
+        return float(zc[int(y), int(x)]) > cam.depth(p) + 0.01
+    cam, car = setup(((8.6271, 1.35, 37.1733), (5.7117, 1.28, 37.7581), 1650.0, (-2.0633, -1.0781), 0.0),
+                     ((4.9193, 38.4), -0.3598, -0.4839))
+    slit = [(0.80, 0.93, -0.13), (0.75, 0.92, -0.13), (0.70, 0.91, -0.13)]   # the shorts' dots Sam saw (a 1-dot line)
+    G.SKIRT[0] = False
+    try:
+        old = any(seen(cam, car, q) for q in slit)
+    finally:
+        G.SKIRT[0] = True
+    new = any(seen(cam, car, q) for q in slit)
+    cam2, car2 = setup(((7.0048, 1.9414, 138.5708), (7.0042, 0.6367, 122.6688), 1732.79, (-1.9305, 0.9915), 0.0),
+                       ((5.0990, 134.4), -0.0867, 0.3173))
+    hips = any(seen(cam2, car2, (x, y, z)) for x in (0.35, 0.5, 0.6) for y in (0.6, 0.7, 0.8) for z in (-0.4, -0.2, 0.0))
+    ok = old and not new and hips
+    return ok, 'old slit seen %s, fixed slit seen %s, hips through the open window %s' % (old, new, hips)
 
 
 def main():

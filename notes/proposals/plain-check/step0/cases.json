@@ -1,0 +1,1000 @@
+{
+ "L01": {
+  "src": "milburn-review.md section 3, lesson 1 (19 Nov 09:41)",
+  "sam": "Y",
+  "label": "must-fail",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "check",
+   "could not test",
+   "animatic",
+   "name card clipped",
+   "clipping check",
+   "solids or layers",
+   "carried as an old line",
+   "a stop on films that lack data",
+   "chat 13 / end-of-film proposal",
+   "Lost"
+  ],
+  "C2_words": [
+   "name card clipped",
+   "solids or layers",
+   "carried as an old line",
+   "chat 13 / end-of-film proposal"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "L02": {
+  "src": "milburn-review.md section 3, lesson 2 (19 Nov 09:41)",
+  "sam": "Explain; then \"I still don't understand. Are you suggesting permanently deleting checks?\"",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "Red",
+   "always-there checks",
+   "retired",
+   "named\" lines",
+   "48 to 61",
+   "kit tests",
+   "two long-red kit tests",
+   "a real fault looked like noise",
+   "fix in the tool",
+   "the next film's start",
+   "the list",
+   "animatic",
+   "start-of-film job",
+   "Added:\" / \"Lost:\" shorthand",
+   "check"
+  ],
+  "C2_words": [
+   "Red",
+   "always-there checks",
+   "retired",
+   "named\" lines",
+   "two long-red kit tests",
+   "start-of-film job",
+   "Added:\" / \"Lost:\" shorthand"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "L03": {
+  "src": "milburn-review.md section 3, lesson 3 (19 Nov 09:41)",
+  "sam": "Y",
+  "label": "must-fail",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "Staging notes",
+   "framings\" / \"the reverse framing\" / \"equal and centred",
+   "chat 6's staging, chat 10's re-stage",
+   "stills",
+   "build the pick",
+   "a round",
+   "Sam's picture",
+   "clip"
+  ],
+  "C2_words": [
+   "framings\" / \"the reverse framing\" / \"equal and centred",
+   "chat 6's staging, chat 10's re-stage"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "L04": {
+  "src": "milburn-review.md section 3, lesson 4 (19 Nov 09:41)",
+  "sam": "Y",
+  "label": "must-fail",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "fail",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line",
+   "code or file names: milburn.py"
+  ],
+  "C": "fail",
+  "C_words": [
+   "shared tools",
+   "one film's code",
+   "60 false lines",
+   "milburn.py",
+   "cleaned-takes hand-over",
+   "shared pre-flight",
+   "film-code check fix",
+   "the film's notes \"move to shared",
+   "check\" (as in check improvements)"
+  ],
+  "C2_words": [
+   "shared tools",
+   "60 false lines",
+   "cleaned-takes hand-over",
+   "shared pre-flight",
+   "film-code check fix",
+   "the film's notes \"move to shared"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "L05": {
+  "src": "milburn-review.md section 3, lesson 5 (19 Nov 09:41)",
+  "sam": "Already queued and you know this",
+  "label": "must-fail",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "ledger",
+   "repeats",
+   "the film's app figure / the app's 22%",
+   "points off",
+   "posted figure",
+   "the ratio (here 0.68)",
+   "estimate",
+   "notes table",
+   "chat closes",
+   "0 notes and 0 repeats on every chat (they were 33 and 4)",
+   "keep it paused"
+  ],
+  "C2_words": [
+   "the ratio (here 0.68)",
+   "keep it paused"
+  ],
+  "C_wrong": 1,
+  "C2": "fail"
+ },
+ "L06": {
+  "src": "milburn-review.md section 3, lesson 6 (19 Nov 09:41)",
+  "sam": "Explain",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "The guard",
+   "blocks in Milburn",
+   "system changes",
+   "rules, tools, checks and kits",
+   "stage close\" / \"closing a stage",
+   "re-sends",
+   "a system ask phrased as film",
+   "4 of 5"
+  ],
+  "C2_words": [
+   "stage close\" / \"closing a stage",
+   "re-sends",
+   "a system ask phrased as film"
+  ],
+  "C_wrong": 1,
+  "C2": "fail"
+ },
+ "L07": {
+  "src": "milburn-review.md section 3, lesson 7 (19 Nov 09:41)",
+  "sam": "Y but we fixed that last film??",
+  "label": "must-fail",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "the chain",
+   "depth limit",
+   "chat 10 / chat 11",
+   "next chat was refused",
+   "the handover check",
+   "chain depth",
+   "the handover's first line",
+   "fresh scheduled session instead of a child",
+   "Added / Lost",
+   "Other option"
+  ],
+  "C2_words": [
+   "depth limit",
+   "next chat was refused",
+   "chain depth",
+   "the handover's first line",
+   "fresh scheduled session instead of a child"
+  ],
+  "C_wrong": 1,
+  "C2": "fail"
+ },
+ "L08": {
+  "src": "milburn-review.md section 3, lesson 8 (19 Nov 09:41)",
+  "sam": "Y",
+  "label": "must-fail",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "Sonnet",
+   "Opus medium",
+   "model rule",
+   "notes round",
+   "chat 18",
+   "2.3%",
+   "no repeats",
+   "re-render",
+   "text, timing, sound notes\" vs \"look or pose",
+   "Added"
+  ],
+  "C2_words": [
+   "re-render",
+   "text, timing, sound notes\" vs \"look or pose"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "L09": {
+  "src": "milburn-review.md section 3, lesson 9 (19 Nov 09:41)",
+  "sam": "\"Isn't one of these the 3/4 job?...\" then \"I guess I don't know what you mean by brow cap!\"",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "0.14 brow cap",
+   "3/4-parts rule",
+   "the rulebook",
+   "its check",
+   "Milburn's notes",
+   "the kit's notes",
+   "the rulebook's last table"
+  ],
+  "C2_words": [
+   "the rulebook",
+   "the kit's notes",
+   "the rulebook's last table"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "L10": {
+  "src": "milburn-review.md section 3, lesson 10 (19 Nov 09:41)",
+  "sam": "annoyed: already fixed",
+  "label": "must-fail",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "3/4 fix",
+   "torso\" and \"turned torsos",
+   "cast-sheet-tile",
+   "Q1\" and \"Q2",
+   "18 Nov notes",
+   "still open at posting",
+   "Ask once, with the measure first",
+   "the route's own plan",
+   "Critiqued",
+   "Open rule requests\", \"the film's notes",
+   "lesson"
+  ],
+  "C2_words": [
+   "cast-sheet-tile",
+   "Ask once, with the measure first",
+   "the route's own plan",
+   "Critiqued"
+  ],
+  "C_wrong": 1,
+  "C2": "fail"
+ },
+ "S-front-on-focus": {
+  "src": "propose.py show front-on-focus (what Sam was shown, less the judge line)",
+  "sam": "17:36 \"Please summarise again. Our simple communication tool isn't working and I am just not following your explanations\" (chat yAH6EYJT, handover 17:31; matched by time)",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "the BoJack way",
+   "the focus",
+   "Milburn's turned people",
+   "The check ... is closed on every film",
+   "best tool\" / \"named best tool\" / \"Every stage",
+   "planning step",
+   "fresh chat picks",
+   "the goth on both heads",
+   "house head",
+   "invented people",
+   "Unused tools come to you one line each",
+   "three-quarter look",
+   "4% of a week\", \"3% more",
+   "front head\", \"front-quality detail\", \"talking shot",
+   "retire tools\", \"best-tool table\", \"measuring"
+  ],
+  "C2_words": [
+   "The check ... is closed on every film",
+   "best tool\" / \"named best tool\" / \"Every stage",
+   "fresh chat picks",
+   "the goth on both heads",
+   "house head",
+   "invented people",
+   "front head\", \"front-quality detail\", \"talking shot",
+   "retire tools\", \"best-tool table\", \"measuring"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-check-catches": {
+  "src": "propose.py show check-catches (what Sam was shown, less the judge line) (taken from its verdict-raw.md: the recorded copy is stale)",
+  "sam": "20:12 \"Please explain my options in simple language\" (chat Nsi8i8BA, handovers 17:27-28; matched by time, one of four recorded at 17:27)",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [],
+  "C": "fail",
+  "C_words": [
+   "the checks",
+   "Milburn, Protest Tiers, Blessed",
+   "re-runs today's checks on how ... were built",
+   "earn their keep",
+   "the checks save their results every time (today they silently save nothing)",
+   "tagged with the check that should have caught it",
+   "a week\" / \"3-5% of a week",
+   "13 Nov pre-flight review",
+   "retired",
+   "replays",
+   "false alarms and misses\" / \"real catches"
+  ],
+  "C2_words": [
+   "earn their keep",
+   "the checks save their results every time (today they silently save nothing)",
+   "tagged with the check that should have caught it",
+   "13 Nov pre-flight review",
+   "retired",
+   "false alarms and misses\" / \"real catches"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-cold-start": {
+  "src": "propose.py show cold-start (what Sam was shown, less the judge line)",
+  "sam": "same as check-catches",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "your 17 Nov chat-size rule",
+   "chat-size answer",
+   "four figures per chat on its cost record",
+   "how much it cost to get going",
+   "re-reading what the chat before it already knew",
+   "handovers that list exactly what the next chat must read",
+   "the fixed load every step re-reads (the app's own instructions, tools and our rule files)",
+   "the start-up reading job you approved on 16 Nov",
+   "tools or connectors",
+   "your app's real figures"
+  ],
+  "C2_words": [
+   "your 17 Nov chat-size rule",
+   "chat-size answer",
+   "re-reading what the chat before it already knew",
+   "the fixed load every step re-reads (the app's own instructions, tools and our rule files)",
+   "the start-up reading job you approved on 16 Nov",
+   "tools or connectors"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-cost-other": {
+  "src": "propose.py show cost-other (what Sam was shown, less the judge line)",
+  "sam": "same as check-catches",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "Milburn",
+   "the cost meter",
+   "chat",
+   "% of a week",
+   "the week's size is still a guess (that is fixed separately)",
+   "rules every chat re-reads\", \"past work carried along",
+   "other\" pile / \"labels",
+   "step",
+   "Lost",
+   "about 1.5% of a week once"
+  ],
+  "C2_words": [
+   "the cost meter",
+   "the week's size is still a guess (that is fixed separately)",
+   "rules every chat re-reads\", \"past work carried along",
+   "other\" pile / \"labels"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-finder-learn-finish": {
+  "src": "propose.py show finder-learn-finish (what Sam was shown, less the judge line)",
+  "sam": "same as check-catches",
+  "label": "must-fail",
+  "sam_confused": true,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "Milburn",
+   "a tidy-up on 19 Nov",
+   "the record of what was searched",
+   "chat\" (as in \"at the end of every chat\", \"helper chats\", \"old chats\")",
+   "the computer itself writes down the few sentences before each search",
+   "the next film's review\", \"every film",
+   "which kind of search costs most",
+   "about 5% of a week",
+   "1.5-2.5% of a week of reading\" and \"about 2 million words' worth",
+   "Two separate yes/no questions",
+   "the reminder question answered now",
+   "older tools\", \"older setup",
+   "record-loss bug"
+  ],
+  "C2_words": [
+   "a tidy-up on 19 Nov",
+   "the record of what was searched",
+   "the computer itself writes down the few sentences before each search",
+   "the next film's review\", \"every film",
+   "which kind of search costs most",
+   "1.5-2.5% of a week of reading\" and \"about 2 million words' worth",
+   "the reminder question answered now",
+   "older tools\", \"older setup",
+   "record-loss bug"
+  ],
+  "C_wrong": 1,
+  "C2": "fail"
+ },
+ "S-aim-check": {
+  "src": "propose.py show aim-check (what Sam was shown, less the judge line)",
+  "sam": "17:41 \"1.\" (chat AvAPd5rb, handover 17:23; matched by time); adopted",
+  "label": "must-pass",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "the kit",
+   "plan is priced\" / \"a build stage",
+   "1% of a week",
+   "fresh helper that has never seen the plan",
+   "Milburn",
+   "handover",
+   "a check refuses a handover",
+   "The chat takes the advice",
+   "same quality was already in the kit and was missed"
+  ],
+  "C2_words": [
+   "plan is priced\" / \"a build stage",
+   "fresh helper that has never seen the plan"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-could-not-test": {
+  "src": "propose.py show could-not-test (what Sam was shown, less the judge line)",
+  "sam": "22 Nov \"1\" (status line); adopted",
+  "label": "must-pass",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "Milburn",
+   "the check that spots one thing drawn through another",
+   "could not test\" line / Checks line",
+   "waved through with the other known faults",
+   "name card",
+   "a stop that no chat can skip",
+   "feed that check automatically",
+   "cover\" / \"automatic cover",
+   "animatic",
+   "the numbers",
+   "1% of a week"
+  ],
+  "C2_words": [
+   "the check that spots one thing drawn through another",
+   "waved through with the other known faults",
+   "name card",
+   "feed that check automatically",
+   "cover\" / \"automatic cover"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-big-body-moves": {
+  "src": "propose.py show big-body-moves (what Sam was shown, less the judge line)",
+  "sam": "adopted 20 Nov; no explain reply found in his saved messages",
+  "label": "must-pass",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "your 8 body notes",
+   "our existing tools and a fresh critic",
+   "bad version\" / \"replay",
+   "Jason",
+   "3D skeleton ... dressed in our usual flat pieces",
+   "look sheet",
+   "check that looks at every person in every frame as a body",
+   "placed where people are drawn so no shortcut skips it",
+   "big moves\", \"normal poses",
+   "clip\", \"critique",
+   "shot 4\", \"practice file",
+   "pre-send checks\", \"when finishing",
+   "Lost / Added",
+   "gun aimed right\", \"the car"
+  ],
+  "C2_words": [
+   "our existing tools and a fresh critic",
+   "bad version\" / \"replay",
+   "3D skeleton ... dressed in our usual flat pieces",
+   "placed where people are drawn so no shortcut skips it",
+   "big moves\", \"normal poses",
+   "clip\", \"critique",
+   "pre-send checks\", \"when finishing",
+   "gun aimed right\", \"the car"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-one-route-kit": {
+  "src": "propose.py show one-route-kit (what Sam was shown, less the judge line)",
+  "sam": "adopted 20 Nov; no explain reply found",
+  "label": "must-pass",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "kit\" / \"drawing kit",
+   "recut",
+   "snapshot",
+   "the body rules\" / \"body checks\" / \"rule-checked parts",
+   "cast sheets",
+   "the kit list",
+   "working shelf",
+   "Grand Theft Autism",
+   "Blessed, Milburn, the oldest",
+   "in three yeses",
+   "% of a week",
+   "reaches for an old film"
+  ],
+  "C2_words": [
+   "recut",
+   "snapshot",
+   "the body rules\" / \"body checks\" / \"rule-checked parts",
+   "working shelf",
+   "Blessed, Milburn, the oldest",
+   "in three yeses"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-solid-body-moves": {
+  "src": "propose.py show solid-body-moves (what Sam was shown, less the judge line)",
+  "sam": "adopted 22 Nov; no explain reply found",
+  "label": "must-pass",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "test bench",
+   "Jason",
+   "shot 4",
+   "a plain grey figure copied from real footage",
+   "checked by the computer so nothing passes through anything",
+   "the fingered hands\" / \"hand style",
+   "a way of drawing a 3D body in our style",
+   "a style lock",
+   "a list of every past note to pass",
+   "About 14.5% of a week",
+   "the patched-together drawing"
+  ],
+  "C2_words": [
+   "a plain grey figure copied from real footage",
+   "checked by the computer so nothing passes through anything",
+   "the fingered hands\" / \"hand style",
+   "a style lock",
+   "the patched-together drawing"
+  ],
+  "C_wrong": 1,
+  "C2": "fail"
+ },
+ "S-bench-speedup": {
+  "src": "propose.py show bench-speedup (what Sam was shown, less the judge line)",
+  "sam": "adopted 22 Nov; no explain reply found",
+  "label": "must-pass",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "the three body measurements the program currently redoes on every start",
+   "is this point inside the body?\" sum",
+   "the film tool refuses to draw before a full check pass",
+   "the get-up checked fully every time",
+   "redraws only the frames a fix changes",
+   "distance grid",
+   "within 3 mm of the skin",
+   "compiled drawing",
+   "head once",
+   "4 frames at a time\" / \"the processors the inside test already uses",
+   "kept frames on GitHub with a spot re-check",
+   "kept only if old frames come out identical",
+   "4% of a week (an estimate)",
+   "your list"
+  ],
+  "C2_words": [
+   "the three body measurements the program currently redoes on every start",
+   "is this point inside the body?\" sum",
+   "the get-up checked fully every time",
+   "redraws only the frames a fix changes",
+   "distance grid",
+   "compiled drawing",
+   "4 frames at a time\" / \"the processors the inside test already uses",
+   "kept frames on GitHub with a spot re-check",
+   "kept only if old frames come out identical"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "S-fast-climb": {
+  "src": "propose.py show fast-climb (what Sam was shown, less the judge line)",
+  "sam": "declined 23 Nov: a clear decision; no explain reply found",
+  "label": "must-pass",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no numbered step lines (\"1. ...\")",
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "a drawing",
+   "Jason",
+   "jerks\" / \"sudden jerks\" / \"sudden breaks",
+   "the smoothest move your timing allows",
+   "easing in and out, hips first",
+   "the house style",
+   "the check\" / \"the approved rule",
+   "your timing\" / \"half-second\" / \"a third of the time you gave him",
+   "your camera\" / \"on-screen speed",
+   "measured real people climbing fast\" / \"a table of real people's speeds",
+   "joint"
+  ],
+  "C2_words": [
+   "jerks\" / \"sudden jerks\" / \"sudden breaks",
+   "the smoothest move your timing allows",
+   "easing in and out, hips first",
+   "the house style",
+   "your timing\" / \"half-second\" / \"a third of the time you gave him",
+   "your camera\" / \"on-screen speed",
+   "measured real people climbing fast\" / \"a table of real people's speeds",
+   "joint"
+  ],
+  "C_wrong": 2,
+  "C2": "fail"
+ },
+ "S-plain-check": {
+  "src": "propose.py show plain-check (what Sam was shown, less the judge line)",
+  "sam": "19:55 \"This all seems very convoluted for a simple request\" then 19:58 \"Shall we try 1 first and keep a note of 2\" (chat rM7cxWW)",
+  "label": "mixed",
+  "sam_confused": null,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line"
+  ],
+  "C": "fail",
+  "C_words": [
+   "the template that writes my asks to you",
+   "your plain-language rule",
+   "checkers\" / \"a check\" / \"a word-and-shape filter",
+   "your real messages from 19 Nov",
+   "every ask is written in your rule's shape",
+   "a fresh helper",
+   "rewriting the rule on 16 Nov didn't work",
+   "animatics",
+   "a list of banned project words",
+   "guard",
+   "it still lets a message past after one try",
+   "Lost:\" / \"Added:",
+   "Option 1/Option 2 Problem"
+  ],
+  "C2_words": [
+   "the template that writes my asks to you",
+   "your plain-language rule",
+   "checkers\" / \"a check\" / \"a word-and-shape filter",
+   "a fresh helper",
+   "rewriting the rule on 16 Nov didn't work",
+   "a list of banned project words",
+   "it still lets a message past after one try"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ },
+ "R1": {
+  "src": "chain A chat 3 last reply, 23 Nov 05:56 (session_01U3pKR2YR3iNWMqaRbDiMxK, read from the chat record)",
+  "sam": "\"Continue all working chats at 8:35\" (no confusion)",
+  "label": "routine",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line",
+   "no numbered step lines (\"1. ...\")"
+  ],
+  "C": "fail",
+  "C_words": [
+   "Cost",
+   "this chat is now at about 2.4%",
+   "my instructions\", \"the rulebook",
+   "plain-words checker (2a)",
+   "Opus at high effort",
+   "fresh chat",
+   "wake-ups\", \"couldn't wake\", \"idle",
+   "chain B\", \"the other lessons chain",
+   "Grand Theft Autism chats (43 and 44)",
+   "Project alignment\" chat",
+   "double-message fix",
+   "Statement One\", \"every\" or \"normal",
+   "the guard\", \"my Q1 question\", \"routed\", \"critiqued (7 faults found, 3 fixed, 4 named)",
+   "your approved option 1",
+   "main line\", \"GitHub\", \"Animation- project",
+   "1"
+  ],
+  "C2_words": [
+   "my instructions\", \"the rulebook",
+   "plain-words checker (2a)",
+   "fresh chat",
+   "wake-ups\", \"couldn't wake\", \"idle",
+   "Project alignment\" chat",
+   "double-message fix",
+   "Statement One\", \"every\" or \"normal",
+   "the guard\", \"my Q1 question\", \"routed\", \"critiqued (7 faults found, 3 fixed, 4 named)"
+  ],
+  "C_wrong": 1,
+  "C2": "fail"
+ },
+ "R2": {
+  "src": "CLAUDE.md \"Messages to me\": Sam's own model of a note line",
+  "sam": "his model",
+  "label": "routine",
+  "sam_confused": false,
+  "A": "fail",
+  "A_names": "pass",
+  "A_faults": [
+   "no \"Problem:\" line",
+   "no \"Why:\" line",
+   "no \"You'd notice:\" line",
+   "no \"Other option:\" line",
+   "no \"Lost:\" line",
+   "no \"Added:\" line",
+   "no numbered step lines (\"1. ...\")"
+  ],
+  "C": "fail",
+  "C_words": [
+   "8",
+   "fixed",
+   "the whale",
+   "helideck",
+   "knocks the helideck away",
+   "Clip sent"
+  ],
+  "C2_words": [
+   "the whale",
+   "helideck",
+   "knocks the helideck away"
+  ],
+  "C_wrong": 0,
+  "C2": "fail"
+ }
+}

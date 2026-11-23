@@ -1,0 +1,7 @@
+The plan the options describe (the judge's final version):
+
+**Learn (changes nothing; Sonnet; ~0.3% of a week).** Add to milburn-usage.md, from data already in the repo: per chat, the start-up floor (step-1 context, ~90k where unstored, marked estimate, x later steps x read price), carried history, writes, output; and each chat's purpose from its title and the notes table (new work, note fix, handover). Result: Milburn's real dollars by block and by purpose, ranked. No list_events replay.
+
+**Change 1 (this yes; Opus medium; ~1-1.5% of a week).** stepcost splits every step exactly by token origin from its usage: the step-1 context re-read (start-up floor, stored per chat), carried history (split by the call that wrote it, with Claude's own words and edits as kinds), new writes, output. It runs at every chat's end through the Stop hook. Its test, on the fixture transcript, fails unless the parts add to real cost within 1% and the leftover is under 5%. Number to beat: leftover under 5% on every chat of the next film (Milburn: 58-87%); three chats checked against the app's figure within 5%.
+
+**Not in this yes.** The week size (estimates proposal); the ledger counting notes and repeats (Milburn review item 5); the cost cut, proposed next against the block the table ranks first, with its own number.

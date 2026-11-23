@@ -1,6 +1,6 @@
 # Proposal: The plain-language rule has no check, so system-change asks reach Sam unexplained
 
-Status: parked (Sam 19 Nov: try a short rule at the top of CLAUDE.md first; if plain words still slip, build the judged checker, option 1 in the verdict below, which is ready)
+Status: adopted (2026-11-23)
 
 ## Problem
 CLAUDE.md's rule "Back-end proposals are explained plainly" says every proposal Sam can't see (a check, a tool, a
