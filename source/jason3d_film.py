@@ -6,7 +6,7 @@ The pose is the bench's (bench_move: goals -> solved skin), the drawing is the b
 house colours, house ink, house head with its planned views, neck column, circle hands, the pistol with chat 43's
 grip). Only two things are new here: every point goes from the car's frame to the world with the car (its place,
 turn and lean, gta_cars body_pt), and only Jason's own dots (his body, hands, pistol and the ink round them) are kept
-as a layer: the bench's car solids still hide him by depth, the film's car is what shows.
+as a layer: the film's car hides him dot by dot (DEPTH: its solids' depth against his, bench_move.depth_cut).
 
   pose_at(t) ........ the solved bench pose at shot 4's time t (shot 3, t < 0: K1 held, seated, pistol flat on
                       his chest); cached per process
@@ -33,6 +33,8 @@ CHECK = [True]                    # check each shots 5-8 pose as drawn (FAULTS: 
 FAULTS = []
 FAULTS_FILE = os.environ.get('J3_FAULTS', '/tmp/gta-jason3d-faults.txt')   # shots 5-8 (shots 5-8's own clock u)
 FILM_COVER = [True]               # v5 notes 1-2: hidden by the film's car, not the bench's (bench_move.FILM_CAR_HIDES)
+DEPTH = [True]                    # chat 50 (v5 notes 2/8/9): the film's car hides him dot by dot (bench_move.depth_cut),
+#                                   replacing the per-bone cover (leanout._cover, kept for the flat lean-out only)
 ON = [True]                       # the film draws this Jason in shots 3-4 (False: the old flat lean-out)
 HEAD_PLAN_FILE = os.path.join(HERE, 'data', 'gta-jason3d-headplan.json')
 FPS = 24
@@ -177,12 +179,12 @@ def layer(img, cam, car, t, face=None, glass=None, scale=2, goals=None):
     B.SS = 1                                     # the bench draws at the frame's 1080 x 1920 (x scale inside)
     try:
         lay = BM.dressed_draw(out, tt, view='shot', scale=scale, head_vd=hv, cam=cam, xf=f,
-                              face=face, car=car, layer=True)
+                              face=face, car=car, layer=True, depth_car=car if DEPTH[0] else None)
     finally:
         B.SS = ss
     if lay.size != img.size:
         lay = lay.resize(img.size, Image.LANCZOS)
-    if FILM_COVER[0]:                    # Sam, v5 notes 1-2: the film's own car hides him (leanout._cover, the cover
+    if FILM_COVER[0] and not DEPTH[0]:   # Sam, v5 notes 1-2: the film's own car hides him (leanout._cover, the cover
         import leanout as LO             # the flat Jason was tuned on), not the bench's stand-in car
         k = BM.house_pose(out)
         kw = LO.to_world(k, car)

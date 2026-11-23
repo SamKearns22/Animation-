@@ -44,6 +44,7 @@ import time
 
 import numpy as np
 from numba import njit, prange
+from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -2148,7 +2149,7 @@ def dressed_still(path, name='K4', t=1.95, scale=2):
 
 
 def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None, cam=None, xf=None, face=None, car=None,
-                 layer=False):
+                 layer=False, depth_car=None):
     """One solved pose dressed as Jason in the house look (stage 2, chat 44: the still's drawing made a frame
     drawer, so the dressed clip and the still are drawn by the same code): house colours by body part (bench_pose
     part_at), house ink, the house head drawing laid at the head's depth, circle hands, the pistol, the smooth neck
@@ -2156,9 +2157,9 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None, cam=No
     Returns a PIL image at the camera's size x scale.
     In the film (jason3d_film, chat 46): cam = the film's camera, xf = car frame -> world (the moving Tulip, car its
     gta_cars car), face = the head's acting keys, layer=True: only his own dots (body, hands, pistol, the ink round
-    them) on a clear layer; the car solids still hide him by depth."""
+    them) on a clear layer; the car solids still hide him by depth. depth_car: the film's car hides him dot by dot
+    (depth_cut, chat 50)."""
     import bench_draw as BD
-    from PIL import Image
     r = rig()
     sp = dict(dict(r['sp'], mood='stern', squint=0.35, frown=0.07), **(face or {}))
     tk = r['tk']
@@ -2262,8 +2263,93 @@ def dressed_draw(out, t, view='shot', scale=2, shake=False, head_vd=None, cam=No
         head, _ = BD.house_head(cam, k, sp, neck=not DRESS_HIDE_NECK)
     finally:
         LF.HEAD_VD[0] = None
-    BD.lay_head(img, head, zb, cam.depth(tuple(k['head'])), scale, free)
+    hd = cam.depth(tuple(k['head']))
+    a_before = np.asarray(img.split()[3]).copy() if (layer and depth_car is not None) else None
+    rgb_before = np.asarray(img.convert('RGB')).copy() if a_before is not None else None
+    BD.lay_head(img, head, zb, hd, scale, free)
+    if a_before is not None:             # GTA v5 notes 2/8/9: the film's car hides him dot by dot (depth_cut)
+        headm = np.any(np.asarray(img.convert('RGB')) != rgb_before, 2) | ((np.asarray(img.split()[3]) > 0) & (a_before == 0))
+        img = depth_cut(img, zb, ob, names, cam, depth_car, scale, headm, hd, pb)
     return img if layer else img.convert('RGB')
+
+
+def depth_cut(img, zb, ob, names, cam, car, scale, headm, hd, pb=None, tol=0.01):
+    """Per dot, his layer is rubbed out where the film car's solid (gta_cars.solid_depth: its sides, bevels, the door
+    tops beside the cabin, bonnet, boot, roof, pillars, parts; the windows are holes) is nearer the lens than he is.
+    Sam, GTA v5 notes 2/8/9: "Make sure you don't see green trousers below that black line, just red or black car
+    parts"; his hips still show through the open window, where nothing is in front of them. His body dots use their
+    own depth, the head drawing the head's, the ink round him the nearest of his dots within a line's width. The car's
+    edges are widened by half its outline so its line is drawn over him, never half under him.
+    Sam (23 Nov, chat 50, his belly drawn over the black strip under the window: "Other side of the door please"):
+    the door is solid up to the window's bottom edge. His clothed body (vest, shorts, shoes) found inside that door
+    (beside the cabin, out from the window's plane, below its bottom edge) is on the other side of it: hidden. His
+    bare arm draped over the door top stays (it lies over the door, it does not pass through it)."""
+    import gta_cars as G
+    from scipy import ndimage
+    zc = G.solid_depth(car, cam, scale, grow=1.1 * scale)
+    mine = np.isin(ob, [i for i, n in enumerate(names) if n == 'jason' or n.startswith('hand') or n == 'gun'])
+    zj = np.where(mine, zb, np.inf)
+    a = np.asarray(img.split()[3]).astype(np.float32)        # the layer is at the canvas; the depths at x scale
+    up = lambda m: np.repeat(np.repeat(m, scale, 0), scale, 1)[:zb.shape[0], :zb.shape[1]]
+    ah = up(a) > 0
+    hm = up(headm)
+    zt = zj.copy()
+    rest = ah & ~mine
+    if rest.any():
+        near = ndimage.grey_erosion(zj, size=(6 * scale + 1, 6 * scale + 1))
+        zt[rest] = near[rest]
+    zt[hm] = hd
+    zt[ah & ~np.isfinite(zt)] = hd
+    hidden = ah & (zc < zt - tol)
+    if pb is not None:
+        hidden |= in_door(car, cam, zb, pb, scale) & ah
+    frac = hidden.reshape(hidden.shape[0] // scale, scale, hidden.shape[1] // scale, scale).mean((1, 3))
+    DEPTH_LAST[0] = dict(hidden=int((frac > 0.5).sum()), shown=int(((a > 0) & (frac <= 0.5)).sum()))
+    a = a * (1 - frac)
+    img.putalpha(Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)))
+    return img
+
+
+DEPTH_LAST = [None]
+
+
+def in_door(car, cam, zb, pb, scale):
+    """His clothed dots (vest, its print, shorts, shoes) that lie inside the car's near door: out from the house's
+    side plane, inside the body's skin, below the side window's bottom edge, along the cabin (chat 50, Sam's note
+    "Other side of the door please")."""
+    import bench_draw as BD
+    import gta_cars as G
+    cloth = np.isin(pb, [i for i, n in enumerate(BD.PART_NAMES) if n in ('vest', 'trousers', 'shoes') or n.startswith('print')])
+    cloth &= np.isfinite(zb)
+    out = np.zeros(zb.shape, bool)
+    if not cloth.any():
+        return out
+    yy, xx = np.nonzero(cloth)
+    cr, sr = math.cos(cam.roll or 0.0), math.sin(cam.roll or 0.0)
+    X = (xx + 0.5) / scale - 540 - cam.shake[0]
+    Y = (yy + 0.5) / scale - 960 - cam.shake[1]
+    Xu, Yu = X * cr + Y * sr, -X * sr + Y * cr
+    f_, r_, u_ = (np.asarray(v, float) for v in (cam.f, cam.r, cam.u))
+    z = zb[yy, xx]
+    Pw = np.asarray(cam.pos, float)[None] + z[:, None] * (f_[None] + np.outer(Xu / cam.focal, r_) - np.outer(Yu / cam.focal, u_))
+    o = np.asarray(car.body_pt((0.0, 0.0, 0.0)), float)
+    M = np.stack([np.asarray(car.body_pt(tuple(e)), float) - o for e in np.eye(3)], 1)
+    L = np.linalg.solve(M, (Pw - o).T).T                       # car frame: x across, y up, z along
+    h = car.spec['house']
+    (zb0, zb1), (wb, wr), (yb, yr) = h['base'], h['hw'], h['y']
+    ywin = yb + 0.10 * (yr - yb)                               # the side window's bottom edge (gta_cars house decals)
+    v = np.clip((L[:, 1] - yb) / (yr - yb), 0, 1)
+    plane = wb + (wr - wb) * v
+    hw = np.array([G.half_w(car, zz) for zz in L[:, 2]])
+    # his shorts and shoes never pass the door at all (Sam, 23 Nov: "Little bit of trouser showing there", a sliver
+    # of shorts out through the door's skin on its top edge; v5 note 7, "lower body and legs are on the wrong side of
+    # the door"): out from the window's plane below its bottom edge they are hidden however far out. The vest only
+    # inside the door (it may hang over the outside). 1.5 cm inside the plane too: the depth test's own slack.
+    legs = np.isin(pb[yy, xx], [i for i, n in enumerate(BD.PART_NAMES) if n in ('trousers', 'shoes')])
+    inside = (np.abs(L[:, 0]) > plane - 0.015) & ((np.abs(L[:, 0]) < hw + 0.02) | legs) & (L[:, 1] < ywin) & \
+        (L[:, 2] > zb0) & (L[:, 2] < zb1)
+    out[yy[inside], xx[inside]] = True
+    return out
 
 
 def head_yaw(out, t):

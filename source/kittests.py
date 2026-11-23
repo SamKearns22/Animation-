@@ -4405,6 +4405,44 @@ def acting_rows_every_shot():
 
 
 
+@test
+def door_slit():
+    """Sam (23 Nov, chat 50, a marked still at 16.5 s): "Little bit of trouser showing there", a line of Jason's
+    shorts along the Tulip's door top. The car's solid depth (gta_cars.solid_depth, the per-dot depth test that hides
+    the 3D Jason) let the sight line through a 1 cm slit between the body's top and the house's foot. Passes only if
+    the old shape (no skirts) shows that point, the fixed one hides it, and his hips still show through the open
+    window at 22.5 s (v5 notes 2/8/9)."""
+    import gta_cars as G
+    import sets as S
+
+    def setup(cam, car):
+        c = G.Car('tulip', pos=car[0], yaw=car[1], roll=car[2], pitch=0.5)
+        c.open_windows = ((1, 1),)
+        return S.Cam(*cam), c
+
+    def seen(cam, car, loc):
+        p = car.body_pt(loc)
+        (x, y), _ = cam.project(p)
+        if not (0 <= x < 1080 and 0 <= y < 1920):
+            return False
+        zc = G.solid_depth(car, cam, 1)
+        return float(zc[int(y), int(x)]) > cam.depth(p) + 0.01
+    cam, car = setup(((8.6271, 1.35, 37.1733), (5.7117, 1.28, 37.7581), 1650.0, (-2.0633, -1.0781), 0.0),
+                     ((4.9193, 38.4), -0.3598, -0.4839))
+    slit = [(0.80, 0.93, -0.13), (0.75, 0.92, -0.13), (0.70, 0.91, -0.13)]   # the shorts' dots Sam saw (a 1-dot line)
+    G.SKIRT[0] = False
+    try:
+        old = any(seen(cam, car, q) for q in slit)
+    finally:
+        G.SKIRT[0] = True
+    new = any(seen(cam, car, q) for q in slit)
+    cam2, car2 = setup(((7.0048, 1.9414, 138.5708), (7.0042, 0.6367, 122.6688), 1732.79, (-1.9305, 0.9915), 0.0),
+                       ((5.0990, 134.4), -0.0867, 0.3173))
+    hips = any(seen(cam2, car2, (x, y, z)) for x in (0.35, 0.5, 0.6) for y in (0.6, 0.7, 0.8) for z in (-0.4, -0.2, 0.0))
+    ok = old and not new and hips
+    return ok, 'old slit seen %s, fixed slit seen %s, hips through the open window %s' % (old, new, hips)
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
