@@ -61,7 +61,15 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Next (chat 4 on restart, Opus high):** Kemi's own build, measured from several photos of her (Sam 22:28: "maybe check a few photos"; full-length, standing, the search order in guides/job-packs.md Plan; her likeness, so her photos are right here, unlike the general body's size charts), never guessed (Sam: not 'slimmer' than May),
   then run the kit tests on finished films, the cast-sheet check (fails both n5, passes Lucia and Blair), Change 2
   (neckline first: May's striped blouse reads as a tie), cast sheet v3 to Sam.
-- **Needs Sam:** Q2 blood plan (item 18): his Y comes back to chat 3, which writes it here.
+- **Two chats from 23:50 (Sam: "continue the character work here and pass off sets and other essential film work to
+  another chat"):** chat 4 (this one) keeps the people: May, Kemi, Blair, the woman's body, its check, cast sheet v3.
+  The sets chat (Opus high, planning) does the plan for brief items 4-18: the three places (May's dark wood-panelled
+  interview room, Kemi's building site under a grey sky, Blair's oak-panelled room), the wolves (a new animal: the
+  kit catalogue first), the background action, the blood plan (Q2, still waiting for Sam's Y), the estimate and the
+  shot board. It never edits people.py, body.py, views.py, castsheet.py or story/brexit-is-done-people.txt (chat 4's),
+  writes its notes in notes/brexit-is-done-sets.md, and pushes only to its own branch; chat 4 merges both onto the
+  main line once its checks pass.
+- **Needs Sam:** Q2 blood plan (item 18): his Y goes to the sets chat.
 - **Read:** `guides/job-packs.md` Build; notes/proposals/womans-build.md "Final version"; notes/sam-notes/brexit-cast-v2/.
 - **Open rule requests:** none (the proposal's check becomes a rule only with Sam's Y).
 - **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
