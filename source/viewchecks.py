@@ -432,7 +432,11 @@ def _in_poly(x, y, poly):
 BONES = (('shL', 'elL', 'upper arm L'), ('elL', 'wrL', 'forearm L'), ('shR', 'elR', 'upper arm R'),
          ('elR', 'wrR', 'forearm R'), ('hipL', 'kneeL', 'thigh L'), ('kneeL', 'footL', 'shin L'),
          ('hipR', 'kneeR', 'thigh R'), ('kneeR', 'footR', 'shin R'), ('neck', 'chest', 'chest'),
-         ('chest', 'waist', 'belly'))
+         ('chest', 'waist', 'belly'),
+         # rule 17, GTA v7 note 2 (Sam 21 Nov, the see-through bonnet at 0.67 s): the vest between the waist and the
+         # hips showed over the bonnet, and no sample lay there (waist above the bonnet line, hips hidden below it)
+         ('waist', 'hips', 'lower belly'), ('hips', 'hipL', 'pelvis L'), ('hips', 'hipR', 'pelvis R'),
+         ('neck', 'shL', 'collar L'), ('neck', 'shR', 'collar R'))
 
 
 def bone_samples(pts3):
@@ -462,6 +466,90 @@ def _hidden_by(cam, q, solids, skip, step=0.03):
     return None
 
 
+OUTLINE_GRID = 10      # pixels (of 1080) between the outline spots tested
+OUTLINE_MIN = 4        # patch spots behind one solid that make a fault (a patch about 30 x 30 px)
+
+
+def _unproject(cam, X, Y, z):
+    """The world point at camera depth z that the frame point (X, Y) (1080 x 1920 pixels) shows (sets.Cam)."""
+    x, y = X - 540 - cam.shake[0], Y - 960 - cam.shake[1]
+    if getattr(cam, 'roll', 0.0):
+        c, s_ = math.cos(-cam.roll), math.sin(-cam.roll)
+        x, y = x * c - y * s_, x * s_ + y * c
+    a, b = x * z / cam.focal, -y * z / cam.focal
+    return tuple(cam.pos[i] + cam.f[i] * z + cam.r[i] * a + cam.u[i] * b for i in range(3))
+
+
+def outline_shows(cam, shown, sc, samples, solids, skip):
+    """Rule 17, the drawn outline (GTA v7 note 2, Sam 21 Nov, "see through the bonnet to Jason", a repeat of v4 note 3):
+    the bone points passed, because the vest's edge showed over the bonnet between them. So every spot of the person
+    as drawn (shown: the pixels that change when the person is hidden) is tested on a grid: its depth is the nearest
+    body point's on screen, and the line from the lens to it must not pass through a solid first.
+    -> [(solid, spots, (X, Y) of the first)]"""
+    if not all(hasattr(cam, k) for k in ('f', 'r', 'u', 'focal', 'shake')):
+        return []
+    pts = [(cam.project(q)[0], cam.depth(q)) for _, q in samples if cam.depth(q) > 0.05]
+    if not pts:
+        return []
+    P = np.array([p for p, _ in pts], float)
+    D = np.array([d for _, d in pts], float)
+    g = max(1, int(OUTLINE_GRID * sc))
+    ys, xs = np.nonzero(shown[::g, ::g])
+    grid = {}
+    for yy, xx in zip(ys, xs):
+        X, Y = xx * g / sc, yy * g / sc
+        k = int(np.argmin(((P - (X, Y)) ** 2).sum(1)))
+        q = _unproject(cam, X, Y, float(D[k]))
+        hit = _hidden_by(cam, q, solids, skip, step=0.05)
+        if hit:
+            grid[(int(yy), int(xx))] = hit
+    hits = {}                                   # only spots inside a patch count: a hit neighbour across AND down
+    for (yy, xx), hit in sorted(grid.items()):  # (a line of hair grazing a rail's edge is one row: v7 0.00 s)
+        if hit in (grid.get((yy, xx - 1)), grid.get((yy, xx + 1))) and hit in (grid.get((yy - 1, xx)), grid.get((yy + 1, xx))):
+            h = hits.setdefault(hit, [0, (int(xx * g / sc), int(yy * g / sc))])
+            h[0] += 1
+    return [(hit, n, at) for hit, (n, at) in hits.items() if n >= OUTLINE_MIN]
+
+
+GROUND = ('pavement', 'road', 'street', 'ground', 'kerb', 'floor')
+
+
+def effect_shows(cam, rec, full, solids, sc):
+    """Rule 17 for effects (GTA v7 note 7, Sam 21 Nov: "hydrant water clips through the car"; 3.33 s, passed by
+    layer_faults because the water's one distance, 9.3 m, was nearer than the cruiser's middle, 10.2 m, while its
+    bonnet reached nearer still). Each effect (a listed thing named 'effect ...', or with info {'effect': True}) is
+    drawn alone; every spot of it that shows in the finished picture is put back at its listed distance, and the line
+    from the lens must not pass through a solid first (the same patch rule as outline_shows). The ground is left out:
+    one distance cannot place an effect's lowest edge. -> [(effect, solid, spots, (X, Y))]"""
+    out = []
+    if not all(hasattr(cam, k) for k in ('f', 'r', 'u', 'focal', 'shake')):
+        return out
+    sol = [(n, f) for n, f in solids]
+    H, W = full.shape[:2]
+    for e in rec:
+        name, d, fn = e[:3]
+        info = e[3] if len(e) > 3 and e[3] else {}
+        if fn is None or not (str(name).startswith('effect') or info.get('effect')):
+            continue
+        sheet = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+        fn(sheet)
+        a = np.asarray(sheet)
+        shown = (a[..., 3] > 200) & (np.abs(full - a[..., :3].astype(np.int32)).sum(2) < 30)
+        g = max(1, int(OUTLINE_GRID * sc))
+        grid = {}
+        for yy, xx in zip(*np.nonzero(shown[::g, ::g])):
+            q = _unproject(cam, xx * g / sc, yy * g / sc, float(d))
+            hit = _hidden_by(cam, q, sol, set(), step=0.05)
+            if hit and not any(w in hit for w in GROUND):
+                grid[(int(yy), int(xx))] = hit
+        hits = {}
+        for (yy, xx), hit in sorted(grid.items()):
+            if hit in (grid.get((yy, xx - 1)), grid.get((yy, xx + 1))) and hit in (grid.get((yy - 1, xx)), grid.get((yy + 1, xx))):
+                hits.setdefault(hit, [0, (int(xx * g / sc), int(yy * g / sc))])[0] += 1
+        out += [(name, hit, n, at) for hit, (n, at) in hits.items() if n >= OUTLINE_MIN]
+    return out
+
+
 def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
     """Rule 17's other half: what layer_faults cannot see (Grand Theft Autism shot 4, chat 11: a body drawn through a
     car door, a chest floating over an erased waist, people sunk into the pavement, all passed twice by layer_faults).
@@ -476,6 +564,8 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
       ground_px ..... (X, Y) canvas pixels of the ground point under the feet; height_px, the standing height in
                       canvas pixels (None when crouched): drawn alone, the lowest painted row near the feet must be
                       within 3% of their height of Y (sunk or floating) and a standing person at least 85% as tall
+    Effects (named 'effect ...') are tested against the solids too (effect_shows); every person's drawn outline as
+    well as its bone points (outline_shows).
     Faults are grouped per person and kind: first time, how many frames."""
     found = {}
 
@@ -493,6 +583,10 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
         infos = [(e[0], e[2], e[3]) for e in rec if len(e) > 3 and e[3]]
         solids = [(n, inf['solid']) for n, _, inf in infos if 'solid' in inf]
         cam = next((inf['cam'] for _, _, inf in infos if 'cam' in inf), None)
+        if cam is not None and solids:
+            arr = np.asarray(full.convert('RGB')).astype(np.int32)
+            for nm, hit, n, (X, Y) in effect_shows(cam, rec, arr, solids, W / 1080.0):
+                note(nm, 'through ' + hit, t, f'{nm} shows through {hit} at ({X}, {Y}) ({n} spots of it are behind it)')
         for who, fn, inf in infos:
             samples = bone_samples(inf.get('pts3', []))
             for part, q in samples:
@@ -544,6 +638,10 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
                     X, Y = int(X * sc), int(Y * sc)
                     if 2 <= X < W - 2 and 2 <= Y < H - 2 and diff[Y - 2:Y + 3, X - 2:X + 3].mean() > 0.5:
                         note(who, 'shows ' + hit, t, f'{who}: {part} shows through {hit} (it is behind it)')
+                for hit, n, (X, Y) in outline_shows(cam, diff, sc, samples, solids,
+                                                    set(inf.get('may_touch', ())) | set(inf.get('see_through', ()))):
+                    note(who, 'shows ' + hit, t, f'{who}: the drawn body shows through {hit} at ({X}, {Y}) '
+                                                 f'({n} spots of its outline are behind it)')
             if inf.get('ground_px') and fn is not None:
                 gx, gy = inf['ground_px']
                 sc = W / 1080.0                          # ground_px is in 1080 x 1920 pixels
@@ -578,6 +676,8 @@ def solid_faults(shot, length, fps=12, step=1, label='', frames=None):
 
 # ------------------------------------------------------------------------------------------------ rule 18
 def _measure(film, name, t, at, size):
+    if getattr(at, 'boxes', None) is not None:     # kitinputs.Screen: measured where the drawing put it (x, y, px)
+        return at(t)
     import audit as A
     p = np.asarray(at(t) if callable(at) else at, float)
     cam = film.cam_for(t)

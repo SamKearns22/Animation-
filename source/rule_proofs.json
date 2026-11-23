@@ -199,14 +199,16 @@
     "held_over_or_behind_the_head",
     "body_check_shot4_v4",
     "body_check_back_view",
-    "outfit_every_view"
+    "outfit_every_view",
+    "body_check_curled_v4"
    ],
    "example": "kittest hands_round_the_head: Patriots 3 note 21: the Loader's binocular pose from behind (shot 2) hid both hands: arms round his head.",
-   "notes": "G4-6, G4-7, G4-15, G7-1, G7-4, G8 (arms and bodies: check ran and missed); GCS (cast sheet: check never run on it)",
+   "notes": "G4-6, G4-15 caught since chain A chat 5 (body_check_curled_v4); G4-7, G7-1, G7-4, G8 caught before; G4-11 (legs flat in the door frame) still missed; GCS (cast sheet: check never run on it)",
    "rank": 1,
-   "miss": "measured 23 Nov on v4 (560d946d) at Sam's stills, matched to the saved clip (shot 4 time = clip time - 3.0): G4-6 (still 3c, 1.00 s) and G4-15 (still 6b, 4.92 s) pass the body check with no Jason fault; G4-11 (stills 5a-5c, 2.67-3.42 s) is stopped, but for the arms and the back view, never the flat legs in the door frame",
-   "plan": "the body check must learn what \"curled\" and \"legs flat in a door frame\" look like on the drawing (limb overlap with the torso, a leg drawn with no depth turn); kittest on v4 at 1.00, 3.12 and 4.92 s",
-   "kind_before": "code"
+   "miss": "G4-11 (v4 stills 5a-5c, 2.67-3.42 s, 'J's legs are 2D and are sticking inside the doorframe'): the frame is stopped for the arms and the back view, never for the legs. The flat kit draws a leg as hip to foot with a fixed knee, so it cannot show a knee turned toward or away from the lens, and nothing measures that",
+   "plan": "the legs need what the hands got (hand3d): a way to draw a bent leg with its depth turn, then a check of drawn leg against the 3D leg (the knee's turn), proven on v4 at 3.12 s; the door-frame half is rule 17's outline test once v4's shot lists its solids",
+   "kind_before": "code",
+   "done": "23 Nov (chain A chat 5): humancheck._reach: 'reach' (an upper arm more than 60 degrees behind the body) catches v4 1.00 s (74 degrees); 'stub' (a hand behind his back, the forearm end-on away from the lens, under 0.35 of its length) catches v4 4.92 s (0.26); the gallery from 8 views has no false flags (224 drawings)"
   },
   "49": {
    "rule": "Every famous face passes the likeness test before the cast sheet.",
@@ -357,14 +359,18 @@
   },
   "5": {
    "rule": "A bump test on every frame: nothing passes through anything.",
-   "status": "owed",
-   "tests": [],
-   "example": "",
-   "notes": "G4-4, G7-3 (body through the car; ran and missed)",
+   "status": "partly",
+   "tests": [
+    "bump_test_bench_old_poses",
+    "solid_check_shot4_v7"
+   ],
+   "example": "kittest bump_test_bench_old_poses: the old seated still and old lean (chat 33, the poses before the solid-body bench) put Jason's hip 7.4 cm into the seat, the pistol 4.8 cm into his body and his chest into the dash; bench_move's bump tests must catch all three and pass the new move at the same moments",
+   "notes": "G7-3 (body through the car) caught by solid_check_shot4_v7; G4-4 (knees, door, wheel through the car on v4: no solids listed in v4's code)",
    "rank": 3,
-   "owed": "solid-body-moves (bench_move.py proof: the body through the car on the old failed poses, seat 7.4 cm, pistol 4.8 cm); becomes a kittest when that build wires it",
-   "plan": "kittest wrapping bench_move.proof once wired",
-   "kind_before": "code"
+   "plan": "a kittest of audit.py on a saved film fault (a body through furniture) when one is found; G4-4 with rule 17's v4 solids",
+   "kind_before": "code",
+   "miss": "audit.py, the bump test other films use, has no saved example of its own; G4-4 not testable on v4's own code",
+   "done": "23 Nov (chain A chat 5): bench_move.py stays in watcher.py OFF (named: the learning bench, run by each bench chat); its bump tests now proven on the old failed poses"
   },
   "6": {
    "rule": "A pop-in test: nothing appears or vanishes mid-frame; crowds arrive and leave on screen.",
@@ -401,12 +407,12 @@
     "solid_check_shot4_v7"
    ],
    "example": "kittest solid_check_shot4_v7: GTA v7 note 3 (Sam 21 Nov, \"Jason clips through two parts of the car\"): stills 77a3eb10 and 2194502b matched to 1.0 and 1.5 s on the v7 strip; viewchecks.solid_faults on version 7's own code at frames 12 and 18 flags his arm in front of the window frame that rubs it out and his hips through the window pillar",
-   "notes": "G4-2, G4-3, G4-11, G7-2, G7-7 (see-through bonnet, body through car, hydrant water through car: ran and missed); M19 (name card clipping: Milburn had no layers(t))",
+   "notes": "G7-2 (see-through bonnet) and G7-3 caught on v7's frames; G7-7 (hydrant water through the cruiser) caught at 3.33 s; G4-2, G4-3, G4-11 (v4 lists no solids: not testable on its own code); M19 (rule 19's cover)",
    "rank": 2,
-   "plan": "bonnet: test the drawn outline of each body piece against the solid in front (the v8 arm-edge test, for every piece), not bone points; water: effects listed with a distance (layers) so layer_faults can compare them; then add frames 8, 40, 44 to solid_check_shot4_v7",
+   "plan": "v4's see-through cases need its solids listed (a copy of v4 with the car's solid shapes added, as v7 has them) before the outline test can be proven on them",
    "kind_before": "code",
-   "miss": "G7-2 (see-through bonnet, still b03d81c2 ~0.67 s, frame 8) and G7-7 (hydrant water through the cruiser, stills c0d78111/d89a1ff1 ~3.33-3.67 s, frames 40/44): solid_faults and layer_faults both pass them on v7 (measured 23 Nov); M19 (Milburn name cards: rule 19's cover now)",
-   "done": "23 Nov (chain A chat 3): stills timed; G7-3 proven on v7 frames; today's shot 4 at the same times (a later camera and timing, mid-rebuild) still shows footL through the bonnet at 1.00 s and hipR through the window pillar at 1.33 s: told to the GTA notes"
+   "miss": "G4-2, G4-3, G4-11: version 4's code lists no solids, so this check cannot run on Sam's v4 stills; G7-7's second still (3.67 s): the water there is a thin strip, not a patch, and passes",
+   "done": "23 Nov (chain A chat 5): viewchecks.outline_shows (the drawn outline, not only bone points: the vest's edge showed between the waist and the hips) catches G7-2 at 0.67 s (29 spots); effect_shows (each effect at its listed distance against the solids) catches G7-7 at 3.33 s; the test runs today's check on v7's own drawing code (frames 8, 12, 18)"
   },
   "18": {
    "rule": "Every joke prop is big enough to read on a phone.",
@@ -1086,12 +1092,12 @@
   "N26": {
    "rule": "Every rule and fix is for all films: a fix made because of one film's fault goes into the shared tools, template, rulebook or checks; a fix that can only live in one film's code gets a 'move to shared' line, and the handover check stops until it is moved or Sam says it stays.",
    "anchor": "Every rule and fix is for all films (Sam, 23 Nov):",
-   "status": "owed",
-   "tests": [],
+   "status": "proven",
+   "tests": [
+    "move_to_shared_catches_film_fixes"
+   ],
    "example": "Sam, 23 Nov: \"I would have expected the change on Blessed to apply to all films in the future — rules need to be constructed that they work in this way, they are not film specific.\" Blessed built 7 check inputs in its own code (blessed_checks.py scene, solids, SET_FEET, cam_for, audits; blessed.py touch_faults, furniture_faults); Milburn the cleaned voice takes; GTA car and street solids twice (named-lines/learn.md section 3)",
-   "notes": "Sam's Y 23 Nov with \"needs testing\"; written by chain B chat 2",
-   "owed": "named-lines change 3, chain B chat 3 (session_01U3pKR2taFPq31QroZMAKSe): the move-to-shared handover stop; Sam's 'needs testing' = its kittest must catch Blessed's 7, Milburn's voice takes and GTA's solids on the saved code, and pass a film whose rows say moved or Sam keeps it",
-   "plan": "kittest move_to_shared_blessed_replay",
+   "notes": "Sam's Y 23 Nov with \"needs testing\"; written by chain B chat 2; proven by chain B chat 3 (23 Nov): the stop catches all 10 on the saved code and lets a Sam-keeps-it row through",
    "kind_before": "new"
   },
   "N27": {
@@ -1114,6 +1120,17 @@
    ],
    "example": "Sam, 23 Nov 10:54: \"Please remove the 'locked by Sam' section of communication as it doesn't help me\" (chat 46/47 replies carried the line).",
    "notes": "check: propose.py hook locked_line.",
+   "kind_before": "none"
+  },
+  "N29": {
+   "rule": "One message, never twice: if a checker stops a reply after Sam has seen it, the resend is only the changed line, never the whole message again.",
+   "anchor": "One message, never twice (Sam, 22 Nov):",
+   "status": "partly",
+   "tests": [
+    "guard_one_correction"
+   ],
+   "example": "Sam, 22 Nov 23:18: \"You keep sending me messages twice\" (chat 56d8e5c4: the guard stopped a reply at 23:16:58 and the whole reply was sent again at 23:17:10; saved as notes/proposals/guard-film-questions/example-22nov.json). kittest guard_one_correction replays it: the block now names question 2 and asks for one Correction line; the whole resend is caught (logged as a full repeated reply and a let-through), a right one-liner is cleared.",
+   "notes": "check: propose.py hook (guard-film-questions Change 1, chain B chat 4, 23 Nov). Partly: the proposal guard only; the watcher's daily-line stop (watcher.py stop) still asks for a resend, which is precheck-reply's Change 2 (waits on Sam's pick).",
    "kind_before": "none"
   }
  },

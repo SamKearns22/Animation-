@@ -28,7 +28,10 @@ MAP
                      names (or wrote this turn) has no valid verdict, or lacks the Critiqued line; a change question
                      naming no proposal is blocked too. Routine Y/N (animatic, render, clip, budget) passes.
                      stop_hook_active: never blocks twice, logs the reply to notes/proposals/unrouted.md instead
-                     (handover.py end flags this chat's entries)
+                     (handover.py end flags this chat's entries). guard-film-questions (22 Nov): every block is logged
+                     in full to notes/proposals/guard-blocks.jsonl; the block asks for ONE "Correction:" line (Sam has
+                     read the reply); the retry is judged on the text after the block: a right correction = cleared
+  blocks ........... the block log in numbers: blocks, retries cleared / let through, full repeated replies
   review ........... step 6, when Sam declares a film complete: every system change since the film began, beside its
                      results (notes, repeats, cost from the ledger) and the proposals later replaced
   mark ............. a proposal's fate: adopted / declined / replaced:NEW (the measure: how often one is replaced)
@@ -42,6 +45,7 @@ MAP
     python3 source/propose.py reader NAME        (pack; then one NEW Sonnet reader; then again: its phrases)
     python3 source/propose.py plain FILE         (checker A on each "### " item or numbered lesson)
     python3 source/propose.py status
+    python3 source/propose.py blocks [--since 2026-11-23]
     python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"   (a let-through; until then no handover)
     python3 source/propose.py mark NAME adopted|declined|replaced:OTHER
     python3 source/propose.py review FILM [--since 2026-11-12]
@@ -581,8 +585,10 @@ def is_change(q, ctx):
         r'\b(change|build|write|add|edit|remove|take .* out|switch|wire|widen|run|make)\b', q, re.I)))
 
 
-def reply_faults(reply, touched=()):
-    """Why this reply may not go to Sam yet ([] when it may)."""
+def reply_faults(reply, touched=(), lookup=None):
+    """Why this reply may not go to Sam yet ([] when it may). lookup(name) -> (ok, verdict) stands in for verdict_ok
+    when the labelled list (guard-film-questions Learn) is replayed with each proposal as it was then."""
+    lookup = lookup or verdict_ok
     asks = questions(reply)
     if not asks:
         return []
@@ -592,7 +598,7 @@ def reply_faults(reply, touched=()):
     #                deleted this turn (or a glob like dearest-week-*.md in a command) is not one the reply asks about
     faults = []
     for name in names:
-        ok, v = verdict_ok(name)
+        ok, v = lookup(name)
         if not ok:
             faults.append(v)
         elif critiqued(v['faults']) not in reply:
@@ -604,7 +610,7 @@ def reply_faults(reply, touched=()):
                 faults.append(f'this asks Sam to approve a change to the system with no proposal behind it: "{q[:120]}". '
                               'Put it through the route first (`propose.py new NAME`, pack, judge, record) and name '
                               'notes/proposals/NAME.md in the reply. If it is not a change to rules, tools, checks, '
-                              'kits or how films are built, reword the question to say what it is.')
+                              'kits or how films are built, say so in the one Correction line (never resend it).')
                 break
     return faults
 
@@ -669,6 +675,96 @@ def log_unrouted(chat, faults, reply):
                 f'"{q[:120]}"\n')
 
 
+# guard-film-questions (adopted 22 Nov, Sam's option 1). Learn step 1: EVERY block is logged, first time included, with
+# the whole reply and the retry's length (before, only a second stop was logged, cut at 120 characters). Change 1 (the
+# check for Sam's own rule, CLAUDE.md "One message, never twice", 22 Nov): the block tells the chat Sam has already read
+# the reply and asks for ONE "Correction:" line; on the retry only the text written after the block is judged, and a
+# correction that answers every fault is logged as cleared, not as a let-through.
+BLOCKS = 'guard-blocks.jsonl'
+CORRECTION_RE = re.compile(r'(?im)^[\W_]*correction\s*:')
+
+
+def _blocks():
+    out = []
+    for ln in _read(_p(BLOCKS)).splitlines():
+        try:
+            out.append(json.loads(ln))
+        except ValueError:
+            pass
+    return out
+
+
+def _log_block(rec):
+    os.makedirs(PROPS, exist_ok=True)
+    rec = dict({'t': datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S')}, **rec)
+    with open(_p(BLOCKS), 'a', encoding='utf-8') as f:
+        f.write(json.dumps(rec, ensure_ascii=False) + '\n')
+
+
+def correction_needs(faults):
+    """What a one-line correction must carry for each fault: (fault, the words it needs or '' for any Correction line)."""
+    out = []
+    for f in faults:
+        m = re.search(r'must carry "(Critiqued: [^"]+)"', f)
+        out.append((f, m.group(1) if m else '' if 'Locked by Sam' in f else 'withdrawn'))
+    return out
+
+
+def block_reason(faults, reply):
+    """The block's message (Change 1): Sam has read the reply already, so only a one-line correction is sent."""
+    asks = [q for q, _ in questions(reply)]
+    lines = []
+    for f, need in correction_needs(faults):
+        quoted = re.search(r'"(.+?)"', f)          # the question the fault names, else the first numbered ask
+        num = next((m.group(1) for q in ([quoted.group(1)] if quoted else []) + asks
+                    for m in [re.match(r'\W*(\d+)[.)]', q)] if m), '')
+        if need.startswith('Critiqued'):
+            lines.append(f'"Correction: {need}" (the line the proposal\'s ask was missing)')
+        elif need == 'withdrawn':
+            q = f'question {num}' if num else 'my last question'
+            lines.append(f'"Correction: ignore {q}, it is withdrawn" (it goes through the proposal route before Sam is '
+                         f'asked again), or, if it changes nothing in how films are made, "Correction: {q} is not a '
+                         'change, it only asks about <what it is about, in plain words>"')
+        else:
+            lines.append('"Correction: none needed" (the line stays in the notes from now on)')
+    return ('Sam has ALREADY READ this reply: this check runs after it is on his screen (CLAUDE.md "One message, never '
+            'twice", Sam 22 Nov). Do NOT send the reply again, not even reworded. Send only: '
+            + ' and '.join(dict.fromkeys(lines)) + '. Nothing else in that answer. Why it stopped (the proposal route, '
+            'Sam 15 Nov): ' + ' | '.join(faults))
+
+
+def correction_ok(retry, faults):
+    """The retry clears the block: a short answer (at most 3 lines) with a Correction line carrying what each fault
+    needs. Returns (ok, why)."""
+    body = [ln for ln in (retry or '').splitlines() if ln.strip()]
+    if not CORRECTION_RE.search(retry or ''):
+        return False, 'no "Correction:" line'
+    if len(body) > 3:
+        return False, f'{len(body)} lines (a correction is one line)'
+    low = retry.lower()
+    miss = [need for _, need in correction_needs(faults)
+            if need and need.lower() not in low and not (need == 'withdrawn' and 'not a change' in low)]
+    if miss:
+        return False, 'missing ' + ', '.join(f'"{m}"' for m in miss)
+    return True, 'cleared: says not a change (counted for Change 2)' if 'not a change' in low else 'cleared'
+
+
+def _resent_share(blocked, retry):
+    """How much of the blocked reply came back in the retry (share of its lines of 16+ characters)."""
+    lines = [ln.strip() for ln in blocked.splitlines() if len(ln.strip()) >= 16]
+    if not lines:
+        return 0.0
+    return sum(1 for ln in lines if ln in retry) / len(lines)
+
+
+def _retry_text(reply, blocked, last_msg):
+    b = (blocked or '').strip()
+    i = reply.find(b) if b else -1
+    if i >= 0:
+        return reply[i + len(b):].strip()
+    return (last_msg or '').strip()
+
+
 def hook(stdin=None):
     try:
         data = json.loads(stdin if stdin is not None else sys.stdin.read() or '{}')
@@ -677,16 +773,90 @@ def hook(stdin=None):
     reply, touched = last_turn(data.get('transcript_path'))
     if data.get('last_assistant_message') and data['last_assistant_message'] not in reply:
         reply += '\n' + data['last_assistant_message']
+    chat = os.path.basename(data.get('transcript_path') or 'unknown')[:8]
+    pending = None
+    if data.get('stop_hook_active'):
+        pending = next((b for b in reversed(_blocks()) if b.get('chat') == chat and b.get('event') == 'block'
+                        and not b.get('answered')), None)
+    if pending:                               # the retry after this guard's own block: judge only what came after it
+        retry = _retry_text(reply, pending.get('reply', ''), data.get('last_assistant_message'))
+        ok, why = correction_ok(retry, pending.get('faults', []))
+        share = _resent_share(pending.get('reply', ''), retry)
+        _log_block({'chat': chat, 'event': 'retry', 'of': pending.get('t'), 'retry_chars': len(retry),
+                    'shape': 'full' if share >= 0.5 else 'short' if len(retry) <= 400 else 'long',
+                    'resent_share': round(share, 2), 'result': 'cleared' if ok else 'let-through', 'why': why,
+                    'retry': retry[:4000]})
+        _mark_answered(pending)
+        if not ok:
+            log_unrouted(chat, pending.get('faults') or ['(faults not kept)'], pending.get('reply', reply))
+        return 0
     faults = reply_faults(reply, touched) + locked_line(reply)
     if not faults:
         return 0
     if __import__('override').skip('proposal route stop: ' + ' | '.join(faults), data.get('transcript_path'), sys.stderr):
         return 0
-    if data.get('stop_hook_active'):          # blocked once already: never loop; leave a trace for the handover
-        log_unrouted(os.path.basename(data.get('transcript_path') or 'unknown')[:8], faults, reply)
+    if data.get('stop_hook_active'):          # another hook blocked first: never loop; leave a trace for the handover
+        log_unrouted(chat, faults, reply)
         return 0
-    print(json.dumps({'decision': 'block', 'reason': 'The proposal route (Sam, 15 Nov): ' + ' | '.join(faults)}))
+    _log_block({'chat': chat, 'event': 'block', 'faults': faults, 'asks': [q for q, _ in questions(reply)],
+                'reply_chars': len(reply), 'reply': reply})
+    print(json.dumps({'decision': 'block', 'reason': block_reason(faults, reply)}))
     return 0
+
+
+def _mark_answered(rec):
+    """A block whose retry has been judged is not judged again (rewrites its line with answered: true)."""
+    rows = _blocks()
+    for r in rows:
+        if r.get('chat') == rec.get('chat') and r.get('t') == rec.get('t') and r.get('event') == 'block':
+            r['answered'] = True
+    with open(_p(BLOCKS), 'w', encoding='utf-8') as f:
+        f.write(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in rows))
+
+
+GUARD_LIST = os.path.join(ROOT, 'notes', 'proposals', 'guard-film-questions', 'test-list.json')
+
+
+def guard_score(path=GUARD_LIST):
+    """guard-film-questions Learn step 2: replay the guard on the labelled list of its real stops (each proposal as it
+    was then) and on the 15 Nov probe. Returns {wrong: rows stopped although not a system ask, missed: true catches it
+    no longer stops, probe_missed, probe_blocked}."""
+    d = json.load(open(path, encoding='utf-8'))
+
+    def lookup_for(row):
+        def lookup(name):
+            if name == row['touched'] and row['verdict_line']:
+                a, b, c = map(int, re.findall(r'\d+', row['verdict_line']))
+                return True, {'faults': [('fixed', '')] * b + [('named', '')] * c}
+            return False, f'notes/proposals/{name}.md has no judge\'s verdict (as then)'
+        return lookup
+    out = {'wrong': [], 'missed': [], 'probe_missed': [], 'probe_blocked': []}
+    for r in d['rows']:
+        stop = bool(reply_faults(r['text'], {r['touched']} if r['touched'] else set(), lookup_for(r)))
+        if stop and not r['true_catch']:
+            out['wrong'].append(r['n'])
+        elif not stop and r['true_catch']:
+            out['missed'].append(r['n'])
+    none = lambda n: (False, 'none')
+    out['probe_missed'] = [q for q in d['probe_change'] if not reply_faults(q, (), none)]
+    out['probe_blocked'] = [q for q in d['probe_routine'] if reply_faults(q, (), none)]
+    return out
+
+
+def blocks_report(since=''):
+    """The full block log in numbers (the measure for guard-film-questions: full repeated replies per chat to 0)."""
+    rows = [r for r in _blocks() if r.get('t', '') >= since]
+    blocks = [r for r in rows if r.get('event') == 'block']
+    retries = [r for r in rows if r.get('event') == 'retry']
+    out = [f'guard blocks since {since or "the start"}: {len(blocks)}; retries judged {len(retries)}: '
+           f'{sum(r["result"] == "cleared" for r in retries)} cleared, '
+           f'{sum(r["result"] == "let-through" for r in retries)} let through; '
+           f'full repeated replies {sum(r.get("shape") == "full" for r in retries)}']
+    for r in retries:
+        if r.get('shape') == 'full' or r.get('result') != 'cleared':
+            out.append(f'  {r["t"]} chat {r["chat"]}: {r.get("shape")} ({r.get("retry_chars")} chars), '
+                       f'{r["result"]}: {r.get("why")}')
+    return '\n'.join(out)
 
 
 # ------------------------------------------------------------------------------------------------ step 6
@@ -805,6 +975,12 @@ def main(argv):
         return reader(rest[0])
     elif cmd == 'plain':
         return plain(rest[0])
+    elif cmd == 'blocks':
+        print(blocks_report(opt('--since') or ''))
+        g = guard_score()
+        print(f"labelled list: {len(g['wrong'])} wrong stops {g['wrong']}, {len(g['missed'])} true catches missed "
+              f"{g['missed']}; probe: {len(g['probe_missed'])}/12 system asks missed, {len(g['probe_blocked'])}/10 "
+              'routine asks stopped')
     elif cmd == 'status':
         status()
     elif cmd == 'mark':

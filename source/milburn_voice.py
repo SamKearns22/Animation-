@@ -8,7 +8,7 @@ timeline that follows from how long each really is.
   TIMES ........ every shot cut and beat, from the lines (nothing in the film's timing is typed in any more)
   word_times ... when each word of a line is reached (syllables spread over the real speech)
 
-Map: takes 30 | tone and level 70 | timeline 120 | word times 190
+Map: takes 30 | cleaning (takes.clean, shared) 36 | timeline 75 | word times 160
 """
 import math
 import os
@@ -17,6 +17,7 @@ import numpy as np
 
 import mossad_audio as MA
 import mouths
+import takes as T
 from burnham_film import load
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -33,56 +34,12 @@ FUCK = (1.45, 1.77)            # "fuck" in the you-fucker take (seconds in the f
 ORDER = sorted(TAKES)
 
 
-def _trim(x, name):
-    """The take with hum and hiss out, cut to the speech (50 ms before, 80 ms after); also where it started."""
-    y = MA.denoise(MA.dehum(x))
-    st = MA.pauses(y, 0.12)
-    s0 = max(0.0, st[0][0] - 0.05)
-    s1 = min(len(y) / SR, st[-1][1] + 0.08)
-    return y[int(s0 * SR):int(s1 * SR)].copy(), s0
-
-
-def _match_tone(lines):
-    """Make the takes sound like one session: each line's tone nudged towards the average, at most 4 dB, no echo."""
-    from scipy.signal import firwin2, welch, fftconvolve
-    specs = []
-    for x in lines:
-        f, p = welch(x, SR, nperseg=2048)
-        specs.append(p + 1e-14)
-    target = np.exp(np.mean([np.log(p) for p in specs], axis=0))
-    out = []
-    for x, p in zip(lines, specs):
-        g_db = 10 * np.log10(target / p)
-        sm = np.array([np.mean(g_db[(f >= fc / 2 ** (1 / 6)) & (f <= fc * 2 ** (1 / 6))]) if fc > 0 else 0.0 for fc in f])
-        sm = np.clip(np.nan_to_num(sm), -4.0, 4.0)
-        sm[f < 80] = sm[f > 80][0] if np.any(f > 80) else 0.0
-        sm[f > 4000] = np.minimum(sm[f > 4000], 0.0)
-        h = firwin2(1025, f / (SR / 2), 10 ** (sm / 20))
-        out.append(fftconvolve(x, h, mode='same'))
-    return out
-
-
 def _build():
-    raw, fuck_at = {}, None
-    for n in ORDER:
-        parts = []
-        for k, name in enumerate(TAKES[n]):
-            x, s0 = _trim(load(os.path.join(HERE, 'audio', f'milburn-{name}.m4a')), name)
-            if name == 'you-fucker':
-                fuck_at = (FUCK[0] - s0, FUCK[1] - s0)
-            if k:
-                parts.append(np.zeros(int(GAP.get(n, 0.3) * SR)))
-            parts.append(x)
-        raw[n] = np.concatenate(parts)
-    toned = _match_tone([raw[n] for n in ORDER])
-    voices = {}
-    for n, y in zip(ORDER, toned):
-        y = MA.smooth_tail(y * 10 ** ((LUFS - MA.lufs(y)) / 20))
-        k_in, k_out = int(0.01 * SR), int(0.06 * SR)
-        y[:k_in] *= np.linspace(0, 1, k_in)
-        y[-k_out:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, k_out))
-        voices[n] = y
-    return voices, fuck_at
+    """The takes cleaned the shared way (takes.clean: Milburn's chat 18 cleaning, now one means for every film and
+    registered for the voice check); the swear's time moved by where its file was cut."""
+    voices, cut = T.clean('milburn-', TAKES, GAP, LUFS)
+    s0 = cut[(10, 'you-fucker')]
+    return voices, (FUCK[0] - s0, FUCK[1] - s0)
 
 
 VOICES, _FUCK = _build()
@@ -120,7 +77,7 @@ START, END = _timeline()
 
 LINES_TIMED = {}
 for _n in ORDER:
-    _st = MA.pauses(VOICES[_n], 0.18)
+    _st = T.STRETCHES['milburn-' + '+'.join(TAKES[_n])]    # where the take speaks (takes.clean, shared)
     LINES_TIMED[_n] = dict(start=START[_n], end=END[_n], stretches=_st,
                            env=mouths.loudness_open(VOICES[_n], SR), bleep=_FUCK if _n == 10 else None)
 

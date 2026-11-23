@@ -1,0 +1,827 @@
+[
+ {
+  "n": 1,
+  "t": "2026-11-15 22:23",
+  "chat": "13a4cda5",
+  "label": "job",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N to add those two as chat 3's first causes?"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "(chat 4: other -> job: asks whether to queue, widen or restart a job; no change approved) Chat record no longer available; labelled from the guard's fault and question only. Asks whether to add two items to the next chat's list of causes; cannot tell if it is film or system."
+ },
+ {
+  "n": 2,
+  "t": "2026-11-16 09:26",
+  "chat": "e992c7dc",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1 or 2 below."
+  ],
+  "context": "",
+  "proposal_named": "code-finder",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Fault says the exact Critiqued line is absent; wording-only difference cannot be told apart here (assumed missing)."
+ },
+ {
+  "n": 3,
+  "t": "2026-11-16 10:08",
+  "chat": "7406486e",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N – may I save my finished work and carry on, with this chat's cost counted under the startup fixes instead o"
+  ],
+  "context": "",
+  "proposal_named": "startup-fixes",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Fault says the exact Critiqued line is absent (assumed missing); the question itself is about counting cost."
+ },
+ {
+  "n": 4,
+  "t": "2026-11-16 11:21",
+  "chat": "7406486e",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N – may I put a fix for the estimates through the proposal route (the step where helpers draft options and a "
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks to put an estimates fix through the proposal route, which is asking to begin judging."
+ },
+ {
+  "n": 5,
+  "t": "2026-11-16 12:55",
+  "chat": "0007a586",
+  "label": "unjudged-system",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1 Y/N on the Overall and Spain still I sent, and 2 Y/N on the Hook Text rule below."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Part 1 is a film still, part 2 asks Y/N on a Hook Text rule with no judged proposal."
+ },
+ {
+  "n": 6,
+  "t": "2026-11-16 13:12",
+  "chat": "5614ab16",
+  "label": "film",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N to keep spending on the protest film's round 2. It has now used 13.1% of a week against the 2.7% set for it"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to keep spending on the protest film's round 2 (13.1% of a week)."
+ },
+ {
+  "n": 7,
+  "t": "2026-11-16 13:26",
+  "chat": "95d46732",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1, 2 or N for how cost estimates are given (my pick: 1)."
+  ],
+  "context": "",
+  "proposal_named": "startup-fixes",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. How cost estimates are given is a system change; fault says Critiqued line absent (assumed missing)."
+ },
+ {
+  "n": 8,
+  "t": "2026-11-16 21:05",
+  "chat": "2cec4bf1",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: pick 1, 2 or 3 (below)."
+  ],
+  "context": "",
+  "proposal_named": "code-finder",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Fault says the exact Critiqued line is absent (assumed missing)."
+ },
+ {
+  "n": 9,
+  "t": "2026-11-17 00:04",
+  "chat": "97c3cead",
+  "label": "unjudged-system",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1 or 2 for the next craft change."
+  ],
+  "context": "",
+  "proposal_named": "craft-census",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Offers a craft change whose proposal (craft-census) had no judge verdict yet."
+ },
+ {
+  "n": 10,
+  "t": "2026-11-17 00:36",
+  "chat": "c112dcad",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1. Y/N to the new shot-board rule (wording below). 2. Y/N to counting notes you give on the board separately."
+  ],
+  "context": "",
+  "proposal_named": "craft-step2",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. A new shot-board rule from a judged proposal; Critiqued line absent (assumed missing)."
+ },
+ {
+  "n": 11,
+  "t": "2026-11-17 07:54",
+  "chat": "10ea2689",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N to put the fix below through the proposal route (helpers plus a blind judge)."
+  ],
+  "context": "",
+  "proposal_named": "chat-size-and-model",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks to put the fix through the proposal route."
+ },
+ {
+  "n": 12,
+  "t": "2026-11-17 20:07",
+  "chat": "a58b9d21",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: answers to 1–10 below (a number or Y/N each) before I build anything."
+  ],
+  "context": "",
+  "proposal_named": "estimates",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. The guard's own proposal file (guard-film-questions) calls this a true catch: missing Critiqued line."
+ },
+ {
+  "n": 13,
+  "t": "2026-11-17 23:56",
+  "chat": "ce8f146c",
+  "label": "film",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N. Close the props stage and let the 1am run carry on?"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks to close the props stage and let the 1am run carry on; a stage of the film (the proposal file calls it a film question)."
+ },
+ {
+  "n": 14,
+  "t": "2026-11-18 06:11",
+  "chat": "5b682f67",
+  "label": "unjudged-system",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "2. Shall I update the stale test so it knows you approved those two tools? Y/N, my pick Y."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks to update a stale test so it knows two tools were approved; the proposal file calls this a true system ask."
+ },
+ {
+  "n": 15,
+  "t": "2026-11-18 08:57",
+  "chat": "d34bde53",
+  "label": "film",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N, was the file called \"Report\" the opening line (\"The essence of my proposal is quite simple\")? There was no"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks which recording was called \"Report\"; a question about the film (the proposal file counts it as a film question)."
+ },
+ {
+  "n": 16,
+  "t": "2026-11-18 08:59",
+  "chat": "d34bde53",
+  "label": "film",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1. Y or N, should I lower the effects only while someone is speaking (Y recommended, so the dialogue stays clear a"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to lower effects only while someone speaks; a film sound choice."
+ },
+ {
+  "n": 17,
+  "t": "2026-11-18 11:15",
+  "chat": "7f941448",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "1. Y/N: run the proposal route now for the tool map plus the real-figures import, and hand it back as one message?"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to run the proposal route now for the tool map and the real-figures import."
+ },
+ {
+  "n": 18,
+  "t": "2026-11-18 11:54",
+  "chat": "7f941448",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "1. Option 1 or Option 2? (My pick: 1.)"
+  ],
+  "context": "",
+  "proposal_named": "code-finder",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Fault says the exact Critiqued line is absent (assumed missing)."
+ },
+ {
+  "n": 19,
+  "t": "2026-11-19 08:36",
+  "chat": "60c7e293",
+  "label": "meaning",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "3. **Is job 3 \"finish the Learn step\" (the open question from my last message)?** My pick: Y, run it as its own chat. If"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks Sam to confirm what job 3 is (\"finish the Learn step\"), an open question from a previous message."
+ },
+ {
+  "n": 20,
+  "t": "2026-11-19 08:54",
+  "chat": "60c7e293",
+  "label": "job",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N, should I queue a small chat to repair those two checks? My pick: Y. It would run after job 2 and change no"
+  ],
+  "context": "",
+  "proposal_named": "failing-checks",
+  "why": "(chat 4: start-route -> job: asks whether to queue, widen or restart a job; no change approved) Chat record no longer available; labelled from the guard's fault and question only. Asks whether to queue a small chat to repair two failing checks (the later wording asks to run it through the route); the guard cited failing-checks.md, which does not exist."
+ },
+ {
+  "n": 21,
+  "t": "2026-11-19 09:02",
+  "chat": "60c7e293",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: still open from last time. Should I queue a chat after job 2 that puts \"repair the two failing checks\" through the"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to queue a chat that puts \"repair the two failing checks\" through the proposal route."
+ },
+ {
+  "n": 22,
+  "t": "2026-11-19 09:05",
+  "chat": "60c7e293",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N, should I add this audit to job 1's 17:01 chat and have it go through the proposal route? My pick: Y."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to add an audit to a chat and have it go through the proposal route."
+ },
+ {
+  "n": 23,
+  "t": "2026-11-19 09:08",
+  "chat": "60c7e293",
+  "label": "job",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N, should job 1 widen its audit from characters to every stage, as a light survey first? It would cover peopl"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "(chat 4: film -> job: asks whether to queue, widen or restart a job; no change approved) Chat record no longer available; labelled from the guard's fault and question only. Asks whether a job should widen its audit from characters to every stage as a light survey; a running-chats decision that changes nothing."
+ },
+ {
+  "n": 24,
+  "t": "2026-11-19 09:31",
+  "chat": "60c7e293",
+  "label": "job",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N, should I queue a short end-of-film review for Milburn? It's the review your rules call for. It would list "
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "(chat 4: film -> job: asks whether to queue, widen or restart a job; no change approved) Chat record no longer available; labelled from the guard's fault and question only. Asks whether to queue a short end-of-film review for Milburn."
+ },
+ {
+  "n": 25,
+  "t": "2026-11-19 09:47",
+  "chat": "86bc5e6a",
+  "label": "unjudged-system",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "- **Problem:** The guard is the safety that stops me asking you to approve a system change before helpers and a judge ha"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. A back-end proposal write-up (\"Problem: the guard ...\") asking approval of a guard change with no judged proposal behind it (judged from the question text only)."
+ },
+ {
+  "n": 26,
+  "t": "2026-11-19 17:19",
+  "chat": "87a9ac49",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N, should I run it through the proposal route? My pick: Y. Until you decide, I'll do the checks in steps 2 an"
+  ],
+  "context": "",
+  "proposal_named": "scheduled-jobs-attach",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to run scheduled-jobs-attach through the proposal route."
+ },
+ {
+  "n": 27,
+  "t": "2026-11-19 17:25",
+  "chat": "689989ae",
+  "label": "path-misread",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1 or 2 (or N) for the \"aim check\" rule. Your pick isn't written into the rules until you answer."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. The guard looked for notes/proposals/2.md, a file that is not a proposal (probably the text \"option 2\" of the aim-check rule)."
+ },
+ {
+  "n": 28,
+  "t": "2026-11-19 17:37",
+  "chat": "86bc5e6a",
+  "label": "unjudged-system",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "**Need: 1 or 2?** My pick is 2, because it addresses \"struggling to follow all the other chats\". Either way I'll build i"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks Sam to pick option 1 or 2 for a system build with no judged proposal named (judged from the question text only)."
+ },
+ {
+  "n": 29,
+  "t": "2026-11-19 22:37",
+  "chat": "c079f576",
+  "label": "film",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "6. Hook Text (the white-box caption at the start): shall I write three options for you to pick from? (Y)"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to write three Hook Text options for Sam to pick."
+ },
+ {
+  "n": 30,
+  "t": "2026-11-20 10:32",
+  "chat": "4ace415c",
+  "label": "path-misread",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1 or 2 for the kit clean-up, and Y or N on deleting a stray page."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. The guard looked for notes/proposals/one-route-kit-brief.md, a brief and not a proposal; the ask itself is a kit clean-up pick and a stray page."
+ },
+ {
+  "n": 31,
+  "t": "2026-11-20 10:44",
+  "chat": "474881c3",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "1. **Y/N: go ahead with Change 1 (freeze)?** This gives each finished film a bookmark in the project and one recut comma"
+  ],
+  "context": "",
+  "proposal_named": "one-route-kit",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Fault says the exact Critiqued line is absent (assumed missing)."
+ },
+ {
+  "n": 32,
+  "t": "2026-11-20 11:40",
+  "chat": "e3a7708e",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N to start Change 2 (the one clean kit). It is the step that gets you to your best tools."
+  ],
+  "context": "",
+  "proposal_named": "one-route-kit",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Fault says the exact Critiqued line is absent (assumed missing)."
+ },
+ {
+  "n": 33,
+  "t": "2026-11-20 11:29",
+  "chat": "2c5446de",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: 1 or 2 on whether this rule goes through the proposal route."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether a rule goes through the proposal route."
+ },
+ {
+  "n": 34,
+  "t": "2026-11-20 17:20",
+  "chat": "54e4f7a9",
+  "label": "film",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "1. Does that match what you pictured, or is something missing from the screenplay? Y or N."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether a redrawn plan matches what Sam pictured and whether something is missing from the screenplay."
+ },
+ {
+  "n": 35,
+  "t": "2026-11-20 17:26",
+  "chat": "54e4f7a9",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "1. Do you want that as a permanent rule? Y or N. A Y starts the proposal steps, and you'd then see a plain-English summa"
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether Sam wants a permanent rule; a Y only starts the proposal steps."
+ },
+ {
+  "n": 36,
+  "t": "2026-11-20 22:09",
+  "chat": "87a6944f",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "1. Run the proposal route only for cause 1, and skip it for everything else? Y or N (my pick: Y)."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to run the proposal route only for cause 1."
+ },
+ {
+  "n": 37,
+  "t": "2026-11-21 23:24",
+  "chat": "906480b5",
+  "label": "unjudged-system",
+  "true_catch": true,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Needs you: your picks from the 5, and Y/N on the permanent rule."
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks for picks from 5 options and Y/N on a permanent rule (judged from the question text only)."
+ },
+ {
+  "n": 38,
+  "t": "2026-11-21 23:31",
+  "chat": "77034bac",
+  "label": "film",
+  "true_catch": false,
+  "retry": "unknown",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "Need: Y or N to put shot 4's camera back to version 1's? My pick: Y. The old camera settings are saved in the project's "
+  ],
+  "context": "",
+  "proposal_named": "",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. Asks whether to put shot 4's camera back to version 1's; a film shot decision."
+ },
+ {
+  "n": 39,
+  "t": "2026-11-22 17:03",
+  "chat": "f4f681d6",
+  "label": "critiqued-wording",
+  "true_catch": false,
+  "retry": "full",
+  "retry_chars": null,
+  "full_reply_found": false,
+  "ask_lines": [
+   "1. The second-opinion checker: 1 (drop it and make one cheap list of where the money went) or 2 (keep it, but only for r"
+  ],
+  "context": "",
+  "proposal_named": "aim-check-reviewer",
+  "why": "Chat record no longer available; labelled from the guard's fault and question only. The guard's own proposal file records that the proposal was judged and the Critiqued line was not in the exact words, and that Sam saw the message three times."
+ },
+ {
+  "n": 40,
+  "t": "2026-11-22 22:40",
+  "chat": "82f7492f",
+  "label": "critiqued-wording",
+  "true_catch": false,
+  "retry": "short",
+  "retry_chars": 215,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Need: 1 or 2 for the first Milburn lesson.",
+   "1. **Test first, then a stop that can't be skipped (judge's pick, and mine).** A short test chat replays Milburn to find which fix would have caught the hand and caption over the card. The test changes nothing. Then I bring you the numbers and one ask: a stop no chat can skip, and each film feeding that check automatically. If the test shows a need, there's also a check that signs stay readable once captions are on.",
+   "2. **Make it a stop now and build the cover afterwards.** It works straight away, but most films would halt before their animatic until someone builds the cover by hand."
+  ],
+  "context": "",
+  "proposal_named": "could-not-test (the guard named brow-limit)",
+  "why": "The reply carried the judge's numbers (\"found 5 faults, fixed 3, named 2\") in other words than the exact line; the retry only added \"Critiqued: 5 found, 3 fixed, 2 named.\" (the guard cited the wrong proposal name, brow-limit)."
+ },
+ {
+  "n": 41,
+  "t": "2026-11-22 22:41",
+  "chat": "82f7492f",
+  "label": "critiqued-wording",
+  "true_catch": false,
+  "retry": "short",
+  "retry_chars": 47,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Need: 1 or 2 for lesson 1, the check that only said \"could not test\" (asked above; my pick is 1)."
+  ],
+  "context": "",
+  "proposal_named": "could-not-test (the guard named brow-limit)",
+  "why": "The guard stopped a reply that already had the exact Critiqued line; the retry was \"Nothing more from me\" and Sam saw the count line twice."
+ },
+ {
+  "n": 42,
+  "t": "2026-11-22 23:17",
+  "chat": "56d8e5c4",
+  "label": "meaning",
+  "true_catch": false,
+  "retry": "full",
+  "retry_chars": 2304,
+  "full_reply_found": true,
+  "ask_lines": [
+   "2. Should 15% hold for every film (my pick), or only for a normal-size film? The rulebook now allows about 26% for a big one (9 new characters and 3 places).",
+   "**Need: Y or N to the wording below. Then I'll write it in and save it.**",
+   "1. Is the wording above right? Y, or tell me what to change."
+  ],
+  "context": "1. **Measure before cutting.** The author first looked at where the cost actually went. For us that's the cost record each film keeps (its ledger), which still tracks quietly. Right now nothing checks spending while a chat runs, because you paused the budget alarms on 18 Nov.\n2. **The rules file costs money on every step.** Claude re-reads it every step. Over a 100-step chat that adds up, even though repeated reads are cheaper. Yours is about 4,300 tokens (a token is roughly three-quarters of a word); the author aims for under 3,000.\n3. **Reading the same file twice is the biggest waste.** A check could count how often each chat does this.\n4. **A trim must be tested, not just claimed.** The author said \"nothing lost\" without checking, which is risky for quality. Before anything moves out of the rules file, our checks would be run again against your earlier notes.\n**Questions:**\n1. Is the wording above right? Y, or tell me what to change.",
+  "proposal_named": "",
+  "why": "Q2 only asks which figure Sam meant for his own Statement One (every film or normal film); the retry reworded it as \"a question about what you meant\" and re-sent the whole message."
+ },
+ {
+  "n": 43,
+  "t": "2026-11-22 23:19",
+  "chat": "56d8e5c4",
+  "label": "start-route",
+  "true_catch": false,
+  "retry": "short",
+  "retry_chars": 391,
+  "full_reply_found": true,
+  "ask_lines": [
+   "1. Should I start the suggest-and-judge process on way 1? Y or N."
+  ],
+  "context": "1. **Check before sending (my pick).** I'd add a way to run that same checker on my draft before you see it, so a flagged line gets fixed first and you get one message. This changes a tool, so it goes through the suggest-and-judge process before you're asked.\n   Lost: nothing. Added: about one extra step per message that asks you something.\n2. **Resend only the changed line.** If the checker stops me after a message, I send just that line, not the whole message. I can start this today. It doesn't need the process, because it's only about how I write to you.\nMy pick is to do both: 2 from now on, and 1 through the process.\nYour questions from before (the Statement One wording, \"every\" or \"normal\" film, and Y or N to lessons 2 and 3) are still open in the message above.\n**Question:**",
+  "proposal_named": "precheck-reply (not yet judged)",
+  "why": "Asks whether to start the proposal route, which is not approving a change; the retry sent only the changed line."
+ },
+ {
+  "n": 44,
+  "t": "2026-11-22 23:21",
+  "chat": "56d8e5c4",
+  "label": "unjudged-system",
+  "true_catch": true,
+  "retry": "short",
+  "retry_chars": 181,
+  "full_reply_found": true,
+  "ask_lines": [
+   "1. Statement One says 15% for every film, but the rulebook still allows about 26% for a big film (9 new characters and 3 places). Should I lower the big-film figure to match Statement One? Y or N. My pick is N: keep 26% for big films so the quality isn't squeezed.",
+   "2. Should lessons 2 and 3 from the articles go through the same process? Lesson 2 is shrinking the rules file Claude re-reads every step; lesson 3 is counting files a chat reads twice. Y or N. My pick is Y."
+  ],
+  "context": "Statement One is now at the top of your rules file, word for word as written, and it's saved to GitHub.\n- \"Be honest about what I can do\" is now Statement Two.\n- The old 15% line further down now points to Statement One, so the rule is written only once.\n- Way 2 (resend only the changed line) is written in as a rule. If a checker stops a message after you've seen it, you only get the corrected line.\n- Way 1 (check before sending) is going through the suggest-and-judge process. Two separate helpers are writing their ideas now; a judge then compares their ideas with mine without knowing whose is whose. The result comes back to you as one plain proposal for a Y or N.\nStill open, answer whenever you like:",
+  "proposal_named": "precheck-reply (pending, no verdict yet)",
+  "why": "Q1 asks Sam to lower a rulebook figure with no judged proposal; the guard cited the still-unjudged precheck-reply route that the same reply says is running."
+ },
+ {
+  "n": 45,
+  "t": "2026-11-23 03:34",
+  "chat": "9c3f62f3",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "full",
+  "retry_chars": 2783,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Need: Y or N on the new wording for two rules (question 1 below).",
+   "1. Rule wording. My pick is Y."
+  ],
+  "context": "",
+  "proposal_named": "staging-stills",
+  "why": "Rule 11 and 87 wording of a judged proposal sent without its \"Critiqued: 6 found, 3 fixed, 3 named\" line; the retry added it and re-sent the whole message, and the logged stop was then the verdict file that had been edited after it was recorded."
+ },
+ {
+  "n": 46,
+  "t": "2026-11-23 03:34",
+  "chat": "e0605414",
+  "label": "job",
+  "true_catch": false,
+  "retry": "short",
+  "retry_chars": 197,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Needs you: that answer in the lesson 2 chat, and Y or N on restarting your two other chats."
+  ],
+  "context": "Correction to my last message: the lesson 2 build hadn't stopped after all. It finished, saved everything, and has already started lesson 3 in a new chat.\nIt's waiting on one answer from you, which it asked in its own chat: whether to write the new wording for rules 11 and 87.",
+  "proposal_named": "",
+  "why": "(chat 4: film -> job: asks whether to queue, widen or restart a job; no change approved) Asks only whether to restart Sam's two other chats and relays a pending question; not a system change. Order of the blocked reply and retry in this chat is inferred from times."
+ },
+ {
+  "n": 47,
+  "t": "2026-11-23 03:52",
+  "chat": "37f021ea",
+  "label": "path-misread",
+  "true_catch": false,
+  "retry": "short",
+  "retry_chars": 289,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Need: Y or N on each of 1, 2 and 3 below for the warnings lesson (the one where every warning gets its own answer).",
+   "1. **Y (my pick): every warning left gets its own written answer, or the animatic stops.** Each answer says why it stays, where it was checked at full size, and who will fix it. A warning from a check that couldn't see can't be answered away; it stops until the check is given what it needs. An answered warning comes back if its numbers change. New wording for rule 59, replacing the part about the one switch: \"every fault left needs its own written answer in the film's exceptions list (chosen or real; why; where it was looked at full size; who fixes it), or the render refuses; a fault whose check could not see the film cannot be answered, only cured by handing the check what it needs; an answered fault comes back if its numbers change; pre-flight prints how many are answered and every unanswered one in full.\""
+  ],
+  "context": "",
+  "proposal_named": "named-lines (the guard cited lessons-report.md)",
+  "why": "The guard took lessons-report.md for a proposal; the asks belong to named-lines, adopted by Sam; the reply shows no Critiqued line, which may be why it was blocked once."
+ },
+ {
+  "n": 48,
+  "t": "2026-11-23 03:35",
+  "chat": "e0605414",
+  "label": "job",
+  "true_catch": false,
+  "retry": "none",
+  "retry_chars": 0,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Needs you: Y or N on restarting your two other chats, and the lesson 2 chat's question about rules 11 and 87."
+  ],
+  "context": "I've saved the automatic log line to GitHub. It records that the reply checker wrongly read my question about restarting your two other chats as a request to change the system. That's the same kind of wrong stop that lesson 4 is meant to fix.",
+  "proposal_named": "",
+  "why": "(chat 4: film -> job: asks whether to queue, widen or restart a job; no change approved) Same restart-chats ask as row 46, repeated by a woken-up chat; no text reply followed the log entry."
+ },
+ {
+  "n": 49,
+  "t": "2026-11-23 03:58",
+  "chat": "e0605414",
+  "label": "job",
+  "true_catch": false,
+  "retry": "short",
+  "retry_chars": 228,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Needs you: still Y or N on restarting your two other chats, and the lesson 2 chat's question about rules 11 and 87."
+  ],
+  "context": "The lesson 1 build is finished and saved to GitHub: the stop when a check couldn't look at the film, the cover when a check can't run, and the check that the checks' results are readable. Tested on Milburn's record, it caught more than the target on both counts with no false alarms. That chat has sent you its own report.",
+  "proposal_named": "staging-stills (guard named it; reply only points to the lesson 2 chat)",
+  "why": "(chat 4: film -> job: asks whether to queue, widen or restart a job; no change approved) Restart-chats ask plus a pointer to a question already asked elsewhere; the retry was one changed line."
+ },
+ {
+  "n": 50,
+  "t": "2026-11-23 04:04",
+  "chat": "9158c1df",
+  "label": "critiqued-missing",
+  "true_catch": true,
+  "retry": "short",
+  "retry_chars": 319,
+  "full_reply_found": true,
+  "ask_lines": [
+   "1. Add this rule to my instructions: \"No rule without a working check: a rule counts only when its check has caught a saved example of its own fault\"? (My pick: Y.)",
+   "2. 26 rules can't have a working check yet. Which should be learned first? (My pick: 2a.)"
+  ],
+  "context": "- **Before:** of the 38 notes you gave that a rule should have stopped, a test proved only 4 would be caught.\n- **Now:** 10 are proved caught on the exact past mistake: Pat's \"alien carrot man\" dome, Swindon's missing mouth, the scene 4 framing, the clipped name cards, Jason through the car, and the missing acting notes.\n- **Not caught yet, and marked that way:** the see-through bonnet, the hydrant water through the car, Jason \"curled into a monstrosity\", and the climb back in. The page says what each check has to learn to catch these.\n- **The real test:** fewer notes from you on the next film. That can only be measured when it ends.\nAdded: a bald famous head whose dome is too tall now shows in red on the face-picking sheet, whatever its likeness score.\nChecks: while proving these rules I found two clipping faults in today's Grand Theft Autism shot 4: a foot through the bonnet at 1.0 s and a hip through the window post at 1.3 s. I didn't touch the film. They're written in its notes for its next chat.",
+  "proposal_named": "rule-needs-check",
+  "why": "Asks Sam to add a rule from a judged proposal without its \"Critiqued: 7 found, 3 fixed, 4 named\" line anywhere in the reply; retry was a short note about the guard-file fix."
+ },
+ {
+  "n": 51,
+  "t": "2026-11-23 08:38",
+  "chat": "37f021ea",
+  "label": "path-misread",
+  "true_catch": false,
+  "retry": "short",
+  "retry_chars": 37,
+  "full_reply_found": true,
+  "ask_lines": [
+   "Need: Y or N on the rule below.",
+   "1. **Y (my pick):** write it in."
+  ],
+  "context": "",
+  "proposal_named": "named-lines (the guard cited lessons-report.md)",
+  "why": "Sam's own rule request (\"every rule and fix is for all films\") with the guard citing lessons-report.md as a proposal; the retry was just the exact Critiqued line."
+ }
+]

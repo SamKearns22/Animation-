@@ -167,6 +167,25 @@ def _passage_box(o, depth=0.45):
     return (v - depth, a0, v + depth, a1) if ax == 'x' else (a0, v - depth, a1, v + depth)
 
 
+FLAT = 0.05      # m: a thing this thin is a floor surface: people stand on it, never in it
+
+
+def places_apart(P):
+    """{room: group}: rooms joined by openings share a group; a room no opening joins to another is a place apart
+    (a shaft, a field, a room in another city), so where its numbers sit against the others means nothing."""
+    group = {r: r for r in P.rooms}
+
+    def top(r):
+        while group[r] != r:
+            r = group[r]
+        return r
+    for n in P.openings:
+        lo, hi = P.sides(n)
+        if lo and hi:
+            group[top(lo)] = top(hi)
+    return {r: top(r) for r in P.rooms}
+
+
 def faults(film):
     """Rule 1: the plan exists, joins up, and every shot reads from it. Returns faults as lines."""
     P = of(film)
@@ -177,13 +196,14 @@ def faults(film):
     if not P.rooms:
         out.append('plan: no ROOMS')
     names = list(P.rooms)
+    group = places_apart(P)
     for i, a in enumerate(names):
         x0, z0, x1, z1 = P.rooms[a]
         if x1 <= x0 or z1 <= z0:
             out.append(f'plan: room {a} has no size')
-        for b in names[i + 1:]:
-            if _overlap(P.rooms[a], P.rooms[b], 0.01):
-                out.append(f'plan: rooms {a} and {b} overlap')
+        for b in names[i + 1:]:                 # named-lines change 3: rooms no opening joins are separate places
+            if _overlap(P.rooms[a], P.rooms[b], 0.01) and group[a] == group[b]:   # (Milburn's cabinet room, shaft,
+                out.append(f'plan: rooms {a} and {b} overlap')                    # field: 3 false lines)
     for n, o in P.openings.items():
         ax, v = o['wall']
         on_wall = any((ax == 'x' and (abs(x0 - v) < 0.02 or abs(x1 - v) < 0.02) and z0 - 0.02 <= o['span'][0] and
@@ -244,12 +264,14 @@ def faults(film):
         for tname, th in P.things.items():
             if p.get('on') == tname or not th.get('solid', True) or heights(th)[0] > 1.6:
                 continue
+            if heights(th)[1] - heights(th)[0] <= FLAT:     # a floor-flat thing (a platform, a rug) is stood ON
+                continue                                    # (named-lines change 3: Milburn's 5 false lines)
             fx0, fz0, fx1, fz1 = footprint(th)
             if fx0 + 0.05 < x < fx1 - 0.05 and fz0 + 0.05 < z < fz1 - 0.05:
                 out.append(f'plan: {n} stands inside the {tname} (sitting on it? give on="{tname}")')
     for k, c in P.cams.items():
         pts = [c['pos']] if 'pos' in c else list(c.get('path', []))
-        if 'look' not in c and 'look_y' not in c:
+        if 'look' not in c and 'look_y' not in c and 'pitch' not in c:   # a tilt (pitch=) says where it looks
             out.append(f'plan: camera {k} looks at nothing (give look=)')
         for q in pts:
             if P.room_of(q[0], q[2], 0.05) is None and not c.get('outside'):
@@ -270,7 +292,8 @@ def front_faults(film, P=None):
     """Rule 38: each person faces the lens within about 25 degrees, unless the film lists that shot and mark in
     THREE_QUARTER_OK with its reason. Reads the plan's SHOT_MARKS {shot: [people marks]} (said out loud if missing)."""
     P = P or of(film)
-    marks = (P.src.get('SHOT_MARKS') if isinstance(P.src, dict) else getattr(P.src, 'SHOT_MARKS', None)) or {}
+    marks = (P.src.get('SHOT_MARKS') if isinstance(P.src, dict) else getattr(P.src, 'SHOT_MARKS', None)) or \
+        getattr(film, 'SHOT_MARKS', None) or {}             # the film's own, outside its PLAN, counts (Milburn)
     if P.people and P.cams and not marks:
         return ['plan (rule 38): no SHOT_MARKS {shot: [people marks]}, so the front-on check cannot run']
     ok = {(str(a), b): why for a, b, *why in getattr(film, 'THREE_QUARTER_OK', ())}

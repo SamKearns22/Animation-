@@ -773,9 +773,11 @@ def solid_check_shot4_v7():
     """Rule 17 (lesson 7; GTA v7 note 3, Sam 21 Nov: "Jason clips through two parts of the car as he moves"): the
     times of Sam's v7 stills were matched on the v7 strip (77a3eb10 ~1.0 s, 2194502b ~1.5 s); viewchecks.solid_faults
     on version 7's own code at just those frames must flag Jason through the car (his arm in front of the window
-    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, two frames about 2.
-    Known misses, not in this proof: v7 note 2 (the see-through bonnet, 0.67 s) and note 7 (hydrant water through the
-    cruiser, 3.33-3.67 s) are still passed on those frames (rule_proofs.json, rule 17's miss)."""
+    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, three frames about 2.
+    Chain A chat 5 (23 Nov): v7 note 2, the see-through bonnet (still b03d81c2, 0.67 s = frame 8), passed every bone
+    point (the vest's edge showed between them); viewchecks.outline_shows now tests the drawn outline, so frame 8 must
+    flag Jason's body through the tulip's bonnet; and v7 note 7, the hydrant water through the cruiser (still c0d78111,
+    3.33 s = frame 40), effect_shows must flag the water (effect 0) through the cruiser's bonnet."""
     import subprocess
     import tempfile
     root = os.path.dirname(HERE)
@@ -786,17 +788,43 @@ def solid_check_shot4_v7():
             return False, 'COULD NOT TEST: version 7 is not in this copy\'s history'
         subprocess.run(['tar', '-x', '-C', tmp], input=tar, check=True)
         src = os.path.join(tmp, 'source')
-        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks as VC; '
-                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[12, 18], label="v7")))' % src)
+        import shutil                             # today's check on version 7's own drawing code
+        shutil.copy(os.path.join(HERE, 'viewchecks.py'), os.path.join(src, 'viewchecks_now.py'))
+        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks_now as VC; '
+                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18, 40], label="v7")))' % src)
         r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
     finally:
         import shutil
         shutil.rmtree(tmp, ignore_errors=True)
+    water = any(ln.startswith('BODY:') and ' 3.33 s: effect 0 shows through the cruiser' in ln for ln in r.stdout.splitlines())
     lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
     arm = any('rubbed out' in ln for ln in lines)
     hips = any('window pillar' in ln for ln in lines)
-    return arm and hips, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the pillar {hips}' + \
+    bonnet = any('drawn body shows through the tulip\'s bonnet' in ln and ' 0.67 s' in ln for ln in lines)
+    return arm and hips and bonnet and water, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips ' \
+        f'through the pillar {hips}; at 0.67 s the body through the bonnet {bonnet}; at 3.33 s the hydrant water ' \
+        f'through the cruiser {water}' + \
         ('' if r.returncode == 0 else f'; crashed: {r.stderr.strip().splitlines()[-1:]}')
+
+
+@test
+def bump_test_bench_old_poses():
+    """Rule 5 (nothing passes through anything; the fault of GTA v4 note 4 and v7 note 3, Jason's body through the car):
+    the solid-body bench (bench_move.py, the shot 4 rebuild) runs its bump tests on the OLD failed poses it replaced and
+    must catch them: the chat 33 seated still (his hip 7.4 cm into the seat, the pistol 4.8 cm into his body) and the old
+    lean (leanout.at) at K3 (into the dash); and must pass the new move at the same moments (K1, K3). About 10 s.
+    Not in this proof: audit.py, the other films' bump test, has no saved example of its own yet (rule_proofs.json)."""
+    import bench_move as BM
+    import gta_cast as GC
+    import leanout as LO
+    sp = dict(GC.cast()['jason'], mood='stern')
+    T = dict((k, t) for t, k in reversed(BM._times()))
+    old = BM._old_out(LO.seated(sp))
+    seat, gun = BM.car(old).get('seat R', (0, 0))[1], BM.pistol(old).get('pistol in body', (0, 0))[1]
+    dash = 'dash' in BM.car(BM._old_out(LO.at(T['K3'], sp)))
+    new = [k for k in ('K1', 'K3') for o in [BM.solve(BM.goals_at(T[k]))] if BM.car(o) or BM.pistol(o) or BM.gun_car(o)]
+    ok = seat >= 5 and gun >= 3 and dash and not new
+    return ok, f'old still: seat {seat} cm, pistol {gun} cm; old K3 into the dash {dash}; new move faults at {new or "none"}'
 
 
 # ------------------------------------------------------------------------------------------------ running them
@@ -3043,6 +3071,146 @@ def proposal_route_hook():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+@test
+def guard_one_correction():
+    """guard-film-questions Change 1, the check for Sam's rule "One message, never twice" (22 Nov): every block is logged
+    in full; the block tells the chat Sam has read the reply and asks for one "Correction:" line; on the retry only the
+    text after the block is judged: a right correction is cleared (no let-through), a full resend is logged as one."""
+    import io
+    import contextlib
+    import json as J
+    import shutil
+    import tempfile
+    import propose as P
+    tmp = tempfile.mkdtemp()
+    old = P.PROPS
+    P.PROPS = tmp
+    try:
+        f = os.path.join(tmp, 'abcd1234-chat.jsonl')
+
+        def turn(*texts):
+            ents = [{'type': 'user', 'message': {'content': 'go on'}}]
+            for i, t in enumerate(texts):
+                if i:   # the block's reason reaches the chat as a hook message, not as Sam's
+                    ents.append({'type': 'system', 'subtype': 'stop_hook', 'content': 'blocked'})
+                ents.append({'type': 'assistant', 'message': {'content': [{'type': 'text', 'text': t}]}})
+            open(f, 'w').write('\n'.join(J.dumps(e) for e in ents))
+
+        def run(active=False, last=None):
+            buf = io.StringIO()
+            with contextlib.redirect_stdout(buf):
+                P.hook(J.dumps({'transcript_path': f, 'stop_hook_active': active, 'last_assistant_message': last}))
+            return buf.getvalue()
+
+        bad = []
+        unrouted = lambda: P._read(os.path.join(tmp, P.UNROUTED)).count('\n')
+        # 1. Sam's 22 Nov chat (56d8e5c4): an unjudged system ask; the block asks for ONE correction line
+        ask = ('Way 2 is written in as a rule.\nStill open:\n1. Should lessons 2 and 3 from the articles change how the '
+               'rules file is read? Y or N. My pick is Y.\n2. Should I lower the big-film figure in the rulebook? Y or N.')
+        turn(ask)
+        out = run()
+        reason = J.loads(out)['reason'] if out else ''
+        if 'ALREADY READ' not in reason or 'Correction: ignore question 1, it is withdrawn' not in reason \
+                or 'Do NOT send the reply again' not in reason:
+            bad.append(f'block message does not ask for one correction line: {reason[:120]}')
+        log = P._blocks()
+        if not log or log[-1].get('reply') != ask or log[-1].get('event') != 'block':
+            bad.append('first block not logged with the whole reply')
+        # 2. a right one-line correction clears it: logged, no let-through
+        n0 = unrouted()
+        turn(ask, 'Correction: ignore question 1, it is withdrawn.')
+        if run(active=True):
+            bad.append('blocked twice')
+        r = P._blocks()[-1]
+        if r.get('event') != 'retry' or r.get('result') != 'cleared' or r.get('shape') != 'short':
+            bad.append(f'correct one-liner not cleared: {r}')
+        if unrouted() != n0:
+            bad.append('a cleared correction was logged as a let-through')
+        # 3. the fault Sam saw three times (22 Nov, "Why did you write your response 3 times?"): a full resend after
+        # the block is logged as a full repeated reply and a let-through
+        turn(ask)
+        run()
+        turn(ask, 'Sorry, here it is again.\n' + ask)
+        run(active=True)
+        r = P._blocks()[-1]
+        if r.get('shape') != 'full' or r.get('result') != 'let-through' or unrouted() != n0 + 1:
+            bad.append(f'a full resend was not caught: {r.get("shape")}, {r.get("result")}')
+        # 4. a judged proposal missing its Critiqued line: the block names the exact line; only that line clears it
+        fault = ['proposal x: the reply must carry "Critiqued: 6 found, 2 fixed, 4 named" (counted from its file)']
+        rs = P.block_reason(fault, 'Need: 1 or 2 below.')
+        if '"Correction: Critiqued: 6 found, 2 fixed, 4 named"' not in rs:
+            bad.append('Critiqued block does not print the exact line')
+        if not P.correction_ok('Correction: Critiqued: 6 found, 2 fixed, 4 named.', fault)[0]:
+            bad.append('right Critiqued correction refused')
+        if P.correction_ok('Correction: Critiqued: 6 found, 3 fixed, 3 named.', fault)[0]:
+            bad.append('wrong numbers accepted')
+        if P.correction_ok('Critiqued: 6 found, 2 fixed, 4 named\n' + 'more\n' * 4, fault)[0]:
+            bad.append('a long resend accepted as a correction')
+        # 3b. Sam's own example (22 Nov, chat 56d8e5c4, saved from its record): the stopped reply sent again whole 12 s
+        # later; Sam: "You keep sending me messages twice". The check names question 2 and catches the resend.
+        ex = J.load(open(os.path.join(os.path.dirname(HERE), 'notes', 'proposals', 'guard-film-questions',
+                                      'example-22nov.json'), encoding='utf-8'))
+        turn(ex['blocked'])
+        out = run()
+        if 'question 2' not in (J.loads(out)['reason'] if out else ''):
+            bad.append("Sam's 22 Nov reply: the block does not name question 2")
+        turn(ex['blocked'], ex['retry'])
+        run(active=True)
+        r = P._blocks()[-1]
+        if r.get('shape') != 'full' or r.get('result') != 'let-through':
+            bad.append(f"Sam's 22 Nov resend not caught: {r.get('shape')}, {r.get('result')}")
+        n1 = unrouted()
+        turn(ex['blocked'])
+        run()
+        turn(ex['blocked'], 'Correction: question 2 is not a change, it only asks what you meant by 15% per film.')
+        run(active=True)
+        if P._blocks()[-1].get('result') != 'cleared' or unrouted() != n1:
+            bad.append("Sam's 22 Nov reply: the right one-line correction was not cleared")
+        n0 = unrouted() - 1                     # step 5 expects exactly one more let-through
+        # 5. a stop by another hook first (no block of ours pending): never blocks twice, logged as before
+        open(os.path.join(tmp, P.BLOCKS), 'w').close()
+        turn(ask)
+        if run(active=True) or unrouted() != n0 + 2:
+            bad.append('stop_hook_active without our block: blocked, or not logged as a let-through')
+        rep = P.blocks_report()
+        return not bad, '; '.join(bad) or ('block asks for one Correction line; a right one clears (no let-through); a '
+                                           f'full resend is logged; Critiqued line exact; report: {rep.splitlines()[0]}')
+    finally:
+        P.PROPS = old
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+# the guard's score on its labelled list as measured 23 Nov (chain B chat 4, before Change 2): never worse. Change 2
+# (its own yes from Sam) sets all four to 0.
+GUARD_BASELINE = {'wrong': 21, 'missed': 2, 'probe_missed': 9, 'probe_blocked': 1}
+
+
+@test
+def guard_labelled_list():
+    """guard-film-questions Learn step 2: the guard's 51 real stops (15-23 Nov), each labelled from its chat (film
+    question, job, start the route, Critiqued wording, path misread, meaning: wrong stops; Critiqued missing, unjudged
+    system ask: true catches), plus the 15 Nov probe. The guard is replayed on all of them: never worse than measured."""
+    import json as J
+    import propose as P
+    d = J.load(open(P.GUARD_LIST, encoding='utf-8'))
+    bad = []
+    ok_labels = {'film': False, 'job': False, 'start-route': False, 'critiqued-wording': False, 'path-misread': False,
+                 'meaning': False, 'critiqued-missing': True, 'unjudged-system': True}
+    for r in d['rows']:
+        if ok_labels.get(r['label']) is None or ok_labels[r['label']] != r['true_catch']:
+            bad.append(f"row {r['n']}: label {r['label']} / true_catch {r['true_catch']} do not agree")
+    logged = [ln for ln in P._read(P._p(P.UNROUTED)).splitlines() if ln.startswith('- ') and ln[2:18] <= '2026-11-23 08:38']
+    if len(d['rows']) != len(logged) or len(d['probe_change']) != 12 or len(d['probe_routine']) != 10:
+        bad.append(f"list incomplete: {len(d['rows'])} rows for {len(logged)} logged stops; probe "
+                   f"{len(d['probe_change'])}+{len(d['probe_routine'])}")
+    g = P.guard_score()
+    for k, base in GUARD_BASELINE.items():
+        if len(g[k]) > base:
+            bad.append(f'{k}: {len(g[k])} > {base} ({g[k]})')
+    return not bad, '; '.join(bad) or ('51 labelled stops + 22 probe questions; replay: ' + ', '.join(
+        f'{k} {len(g[k])} (at most {GUARD_BASELINE[k]})' for k in GUARD_BASELINE))
+
+
 PLAIN_OPT = ("### Option {n}: two quick stills first\n"
              "Problem: staging was built three times before Sam saw the framing he wanted.\n"
              "1. When a note is about framing, draw two small stills of it.\n"
@@ -4033,6 +4201,48 @@ def body_check_shot4_v4():
     return ok, f'version 4 Jason: {sorted(kinds)}; shot 3: {len(s3)} faults {sorted({x[2] for x in s3})}; gallery: {len(g)} false flags'
 
 
+V4_CURLED = (1.00, 4.92)               # Sam's v4 stills 3c (note 6, "a monstrosity") and 6b (note 15, "in reverse")
+
+
+@test
+def body_check_curled_v4():
+    """Rule 41 (GTA v4 notes 6 and 15, Sam 20 Nov: "Limbs, neck, torso, all curled around each other and in the wrong
+    place. Utterly inhuman", "the horror show in reverse"): both frames passed every check until 23 Nov. The body
+    check must now flag Jason at Sam's two stills (1.00 s: the near arm straight back behind his shoulders, 'reach';
+    4.92 s: his hand behind his back, the forearm end-on as a stump, 'stub'), and pass the gallery poses that a first
+    draft of the stump test wrongly flagged (patting the air from behind, the phone at the ear from three-quarter)
+    plus every gallery pose from the front and side. About 1 minute."""
+    import importlib.util
+    import subprocess
+    import tempfile
+    from PIL import Image
+    import posegallery as PG
+    import body as B
+    import views as V
+    import humancheck as HC
+    src = subprocess.run(['git', 'show', f'{V4_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
+                         capture_output=True, text=True, check=True).stdout
+    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v4c.py')
+    with open(tmp, 'w') as fh:
+        fh.write(src)
+    spec = importlib.util.spec_from_file_location('gta_rehearse_v4c', tmp)
+    R = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(R)
+    got = {t: {k for _, who, k, _ in _body_faults(R.shot4, (t,)) if who == 'Jason'} for t in V4_CURLED}
+    caught = 'reach' in got[1.00] and 'stub' in got[4.92]
+    gal = {n: b for n, b, _ in PG.GALLERY}
+    cases = [('flapping (pat)', 180), ('phone at the ear', 45), ('phone at the ear', -45)]
+    cases += [(n, d) for n in gal for d in (0, 90)]
+    false = []
+    for name, deg in cases:
+        HC.frame_begin()
+        V.person(Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), 540, 500, 0.6, PG.MODEL, 0.0, float(deg),
+                 gal[name](PG.MODEL))
+        false += [(name, deg) for x in HC.frame_end(0.0) if x[2] in ('reach', 'stub')]
+    return caught and not false, f'v4 Jason at 1.00 s {sorted(got[1.00])}, 4.92 s {sorted(got[4.92])}; ' \
+        f'gallery false flags {false or "none"} of {len(cases)}'
+
+
 V3_COMMIT = '9067f25d'                  # GTA animatic v3 as Sam saw it (chat 26): Jason's back at 15.4 and 18.3 s
 V3_BACK = (1.3, 4.2)                    # shot 4's own clock (film 15.4 F1, 18.3 F5)
 
@@ -4406,6 +4616,127 @@ def acting_rows_every_shot():
 
 
 @test
+def named_lines_shared_inputs_milburn():
+    """named-lines change 3 (Sam's Y, 23 Nov): the kits hand the checks what they need from the drawing, no film code.
+    Must beat on Milburn: its blind lines cured (37 at its animatics; the 6 left are named: shot 2b's tiny figures drawn
+    by its own set code x4, no camera for shots 3 and 6, audits) and 0 false voice lines (85 read raw today, 60 then)."""
+    import importlib
+    import kitinputs, plan, housestyle, viewchecks, camfeel, voices, takes
+    import preflight as PF
+    import body as Bd
+    M = importlib.import_module('milburn')
+    has = set(M.HAS)
+    kf, said, kfaults = kitinputs.fill(M, has)
+    cast = PF.cast_faults(M, kf.KIT_ROSTER)
+    pl = plan.faults(kf)
+    hs = housestyle.faults(kf, Bd, has)
+    vc = [x for x in viewchecks.faults(kf) if x.startswith(('EFFECT SHAPES', 'READABILITY'))]
+    cf = camfeel.faults(kf)
+    blind = [x for x in cast + pl + hs + vc + cf if 'never on screen' in x or 'has no ' in x or 'no camera' in x
+             or 'looks at nothing' in x or 'no SHOT_MARKS' in x or 'gives no camera' in x or 'overlap' in x
+             or 'stands inside' in x or 'has no facing' in x]
+    left_ok = sorted(x for x in blind if ('shot 2b' in x and 'never on screen' in x) or 'shot(s) 3, 6' in x
+                     or 'no audits' in x)
+
+    class Check:
+        def __init__(self, f):
+            self._f, self.LINES = f, [{k: v for k, v in ln.items() if k not in ('_voice', '_stretches')} for ln in f.LINES]
+
+        def __getattr__(self, n):
+            return getattr(self._f, n)
+    vo = voices.check(Check(M))
+    raw = [x for x in vo if 'raw recording' in x]
+    ok = len(blind) == len(left_ok) == 6 and not raw and len(vo) <= 2 and not kfaults
+    return ok, f'blind lines left {len(blind)} (named and expected: {len(left_ok)}); voice lines with no film hand-over ' \
+               f'{len(vo)} ({len(raw)} raw reads); kit faults {kfaults[:2]}; inputs handed {len(said)}'
+
+
+@test
+def move_to_shared_catches_film_fixes():
+    """named-lines change 3's stop, the check of CLAUDE.md "Every rule and fix is for all films" (Sam, 23 Nov, N26):
+    handover.py end stops on a check fix written in one film's code. Replayed on the SAVED code of the 10 the look-back
+    found in three films (Blessed 7, Milburn 1, Grand Theft Autism 2, its own renderer); a shared file is never flagged;
+    a film whose notes say Sam keeps it (| stays in film | FILE | why | Sam's Y |) passes."""
+    import tempfile
+    import handover as H
+    want = {'blessed_checks.py': ['def scene(t)', 'def solids(t)', 'def cam_for(t)', 'def audits()', 'SET_FEET = {'],
+            'blessed.py': ['def touch_faults()', 'def furniture_faults()'], 'milburn.py': ['_ln.update(_voice='],
+            'gta_rehearse.py': ['def solids4('], 'gta_shots58.py': ['def solids58(']}   # written twice (learn.md 3)
+    diff = ''
+    for f, starts in want.items():
+        src = open(os.path.join(HERE, f), encoding='utf-8').read().splitlines()
+        got = [next((ln for ln in src if ln.strip().startswith(w)), None) for w in starts]
+        diff += f'+++ b/source/{f}\n' + ''.join(f'+{ln}\n' for ln in got if ln)
+    found = H.film_check_fixes(diff)
+    shared = H.film_check_fixes('+++ b/source/kitinputs.py\n+def scene(t):\n+def cam_for(film, sv):\n')
+    films = sorted({f for _, f, _ in found})
+    stops = H.shared_faults(diff=diff)
+    d = tempfile.mkdtemp()
+    keep = os.path.join(d, 'm.md')
+    open(keep, 'w').write('## Exceptions\n| check | who | why | looked |\n|---|---|---|---|\n'
+                          '| stays in film | milburn.py | its subtitles need the take | Sam\'s Y 23 Nov |\n')
+    real = H._keep_notes
+    H._keep_notes = lambda film: keep if film == 'milburn' else real(film)
+    try:
+        kept = H.shared_faults(diff=diff)
+    finally:
+        H._keep_notes = real
+    ok = len(found) == 10 and not shared and films == ['blessed', 'grand-theft-autism', 'milburn'] and \
+        len(stops) == 10 and all(x.startswith('STOP: MOVE TO SHARED') for x in stops) and len(kept) == 9
+    return ok, f'found {len(found)} of 10 on the saved code in {films}; stops {len(stops)}; with Sam\'s keep row ' \
+               f'{len(kept)}; shared file flagged {len(shared)}'
+
+
+@test
+def kittest_red_twice_stops_handover():
+    """named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at two handovers in a row (different
+    chats), or one that crashed, is a STOP line; red once is a plain line; no finished run is a STOP."""
+    import tempfile
+    import handover as H
+    d = tempfile.mkdtemp()
+    log, reds = os.path.join(d, 'k.log'), os.path.join(d, 'r.log')
+    open(log, 'w').write('FAIL a_test: 1 of 2\nFAIL b_test: crashed: no model\nPASS c_test: ok\nkittests: 2 failed\n')
+    one = H.kittest_gate_faults(log, reds, sid='chat1')
+    again = H.kittest_gate_faults(log, reds, sid='chat1')          # the same chat running end twice: still once
+    two = H.kittest_gate_faults(log, reds, sid='chat2')
+    open(log, 'w').write('FAIL a_test: 1 of 2\n')                   # a run that never finished
+    none = H.kittest_gate_faults(log, reds, sid='chat3')
+    st = lambda fs, w: any(f.startswith('STOP:') and w in f for f in fs)
+    ok = (st(one, 'b_test') and not st(one, 'a_test') and not st(again, 'a_test') and st(two, 'a_test')
+          and (st(none, 'COULD NOT RUN') or st(none, 'STILL RUNNING')))
+    return ok, f'once {len(one)} lines, twice {sum(f.startswith("STOP") for f in two)} stops, unfinished: {none[:1]}'
+
+
+@test
+def plan_places_apart_and_flat_floors():
+    """named-lines change 3: plan.py treats rooms no opening joins as separate places (Milburn's 3 false overlaps),
+    reads a floor-flat thing as stood on (its 5 false 'stands inside'), a tilt (pitch=) as where a camera looks, and the
+    film's own SHOT_MARKS; joined rooms that overlap, and a person inside a real table, are still faults."""
+    import plan
+    P = dict(ROOMS={'a': (0, 0, 4, 4), 'b': (0, 0, 3, 3), 'c': (2, 0, 6, 4), 'd': (5, 0, 9, 4)},
+             OPENINGS={'door': dict(wall=('x', 6.0), span=(1.0, 2.0), sill=0.0, head=2.0)},
+             THINGS={'deck': dict(at=(1, 1), size=(2, 2, 0.0)), 'desk': dict(at=(3.5, 3), size=(1, 1, 0.75))},
+             PEOPLE={'p': dict(at=(1, 1), facing=180), 'q': dict(at=(3.5, 3), facing=180)},
+             CAMS={'1': dict(up=70, pitch=28, lens=1000)})
+    film = type('F', (), {'PLAN': P, 'SHOTS': [('1', 0, 1)], 'SHOT_MARKS': {'1': ['p']}})
+    f = plan.faults(film)
+    over = [x for x in f if 'overlap' in x]
+    ok = over == ['plan: rooms c and d overlap'] or (len(over) == 1 and 'c' in over[0] and 'd' in over[0])
+    ok = ok and not any('p stands inside' in x for x in f) and any('q stands inside the desk' in x for x in f)
+    ok = ok and not any('looks at nothing' in x or 'no SHOT_MARKS' in x for x in f)
+    return ok, f'overlaps {over}; inside {[x for x in f if "inside" in x]}'
+
+
+@test
+def takes_cleaned_and_registered():
+    """named-lines change 3: takes.clean (Milburn's take cleaning, now shared) cleans each line's files and registers
+    the take under its audio name, so voices.py reads what the film plays; a film's code that never calls
+    mossad_audio.line is told when its check reads a raw file."""
+    import takes
+    ok = takes._test()
+    ok = ok and takes.plays_shared_loader([os.path.join(HERE, 'satire_template.py')]) and \
+        not takes.plays_shared_loader([os.path.join(HERE, 'milburn.py')])
+    return ok, 'cleaned, registered; the template plays the shared loader, Milburn does not'
 def door_slit():
     """Sam (23 Nov, chat 50, a marked still at 16.5 s): "Little bit of trouser showing there", a line of Jason's
     shorts along the Tulip's door top. The car's solid depth (gta_cars.solid_depth, the per-dot depth test that hides
