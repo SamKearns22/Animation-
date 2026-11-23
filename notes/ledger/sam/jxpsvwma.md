@@ -38,3 +38,6 @@ What would I need to do to get collaborate on the primary account?
 ### 2026-11-23T20:03:47
 It is a personal. I have sent them a support ticket.
 
+### 2026-11-23T20:04:47
+I have already posted Grand Theft Autism on the main account, so I shouldn't repost it on the second account as a collaboration as it would appear twice on the primary, is that correct?
+
