@@ -1,5 +1,36 @@
 # Grand Theft Autism, chat 41 LIVE LOG (pick up from here)
 
+## HANDOVER TO SAM'S OTHER ACCOUNT (written 23:22 UK, 22 Nov; this account stopped on Sam's word)
+Model: Opus, high effort (building new movement). Read this box, then the Entries at the bottom.
+1. FIRST, IF YOU ARE THE OTHER ACCOUNT'S OWN CHAT 41 (woken by its 00:41 reminder): your work went further than
+   anything on GitHub and was NEVER PUSHED. Before anything else run `git status` and `git diff --stat` in your
+   container. If your changes are still there: commit them on your branch, merge the main line
+   (claude/create-claude-md-oe8z4g) in, push both. Your bench_move.py and this chat's bench_move.py both changed:
+   keep yours for the get-up/sit-down poses; this chat's code additions ('lift', 'lik_R') are only needed by
+   notes/bench/getup41/p4-p11 and can be dropped if yours do the same job.
+   What Sam's screenshots show you had reached (notes/bench/sam-notes/chat41-other-account-*.jpg):
+   hips lift first, the window-side (right) knee onto the seat, then the other knee; get-up 0.5-1.0 s passing every
+   body check (the pistol lowered to his side earlier, as it is by 1.0 s anyway); sit-down nearly clean (one stray
+   point at 7.75 s, the left arm as he sits back); whole-shot checks then flagged sudden JUMPS: a knee leaping up to
+   81 cm in one frame; two snaps found: the LEFT KNEE FLIPS SIDES in one frame at 0.83 s, and the RIGHT FOOT CROSSES
+   THE WHOLE SEAT in about one frame at 0.70 s (too little time given to it). You were fixing both.
+2. IF YOUR CONTAINER LOST THAT WORK (or you are a fresh chat): start from this account's work, all on GitHub:
+   notes/bench/getup41/p10.py (same order as above: rises on the left leg pulling on the door top, right knee down,
+   left foot lifted out of the footwell (new breakdown B1c), left knee down; breakdowns re-spaced so the climb gets
+   more of the half second; Sam's beats unchanged). Load it with notes/bench/getup41/it.py (README there).
+   p10 faults: get-up 0.58-0.63 s right thigh and left arm into his trunk (10-12 cm), right knee into the seat 8 cm,
+   0.71-0.75 seat back 1-2 cm, 0.79-0.83 left knee into the dash 3 cm, 0.96 pistol into the door 1.8 cm; sit-down
+   mirrors these (7.54-7.75 s). JUMPS: right ankle 52, left knee 47 cm "pops" (the same two snaps the other chat
+   found). An automatic search (notes/bench/getup41/opt.py) ran 3.5 min only (score 300 -> 285, saved in
+   opt-best.json); it scores getting up only, so add the sit-down frames (176-189) before trusting it.
+3. THEN (chat 40's plan): put the chosen poses into source/bench_move.py itself (key() B1/B1b/B1c/B2, BREAKDOWNS),
+   span.py 12 26 and 174 190 clean, the whole grey clip `python3 source/bench_move.py clip OUT OUT.mp4` (checks first;
+   name any fault Sam should know), watch it in motion at phone size, send it to Sam; then the 3 cm question
+   (how big a sudden jump may be at this locked speed) via the proposal route (source/propose.py).
+Locked by Sam: every camera and beat of shots 1-8; shot 4's camera and acting-row times (K1 0.5, K2 1.0, K3 1.4 ...
+K2 7.4, K1 7.8); house art style; circle hands. Sam holds the grey-clip body-check proposal: do not raise it.
+LESSON: push to GitHub after every step. The other account's best work was lost to its limit because it wasn't.
+
 Written as I go so Sam's other account (resets 00:41, 23 Nov) can carry on mid-job.
 Newest entry at the BOTTOM. Each entry: time (UK), what was done, what is next.
 
@@ -75,3 +106,10 @@ K2 7.4, K1 7.8); house art style; circle hands. Sam holds the grey-clip body-che
   `python3 notes/bench/getup41/opt.py notes/bench/getup41/p10.py notes/bench/getup41/opt-best.json 35` (it resumes
   from the saved best), then check the SITTING-DOWN frames (7.4-7.8 s: it.py ... full 177 189) which reuse the same
   poses backwards and are not scored by the search.
+- 23:22 STOPPED on Sam's word ("leave handover in file to other account and stop"). Search stopped (score 285.1,
+  opt-best.json). Sam's five screenshots of the other account's chat 41 saved: notes/bench/sam-notes/
+  chat41-other-account-s2.jpg ... s6.jpg (s6 = its newest messages; the 81 cm jump). Handover box at the TOP.
+- 00:55 (23 Nov) OTHER ACCOUNT's chat 41 resumed at 00:41: its work was still in its container; committed, merged
+  with this file's trials, pushed (branch claude/grand-theft-autism-chat-41-u13dlh and the main line). Left knee
+  flip fixed; get-up/sit-down down to small touches. Details: notes/bench/learn-step.md "Get-up re-plan, chat 41".
+  Handover in notes/grand-theft-autism.md "Where things stand (23 Nov, chat 41". Next: chat 42, Opus high.

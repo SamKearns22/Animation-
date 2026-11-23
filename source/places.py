@@ -358,9 +358,12 @@ def painter(desc, view, layer):
         return None
 
     def paint(img, cam, t=0.0, feed=None):
+        import cover                                  # could-not-test (22 Nov): each piece handed to the checks as
+        cover.view(v)                                 # its own layer at its own depth (nothing when not recording)
         for p in chosen:
             p.args['feed'] = feed                     # a TV's picture, passed in by the film (its `tv` view)
-            p.draw(img, cam, t)
+            with cover.piece(img, p):
+                p.draw(img, cam, t)
     return paint
 
 

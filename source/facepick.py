@@ -718,6 +718,9 @@ def sheet(out_dir, name):
         lines.append((f"{v}: {h['what']}", (0, 0, 0)))
         lines.append((f"    likeness {h['score']:.0f}% ({h['good']} good, {h['timid']} timid, {h['wrong']} wrong way), "
                       f"line-up {h['rank']}{nt}", (0, 110, 40) if h['pass'] else (170, 90, 0)))
+        import facehouse as FH                       # rule 49: a carrot dome fails, whatever the likeness score
+        for f in FH.dome_faults(name, None, out_dir, v) if name in FH.CAST else []:
+            lines.append(('    ' + f, (200, 20, 20)))
     small_h = 0
     strip = []
     for t, _ in ptiles[:3] + htiles:

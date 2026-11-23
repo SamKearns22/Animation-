@@ -24,6 +24,8 @@ about anything built that never went on a rough.
                                  (story/FILM-board.txt: camera, lead, focus, next focus, match, choices; a field
                                  missing is printed red "not planned"). --root: a checkout of an older commit (the
                                  learn step draws from a film's first plan). Leaves OUT.jpg.json beside it.
+                                 --shots A,B: only those shots (a re-staged shot drawn as built, before it moves:
+                                 lesson staging-stills, source/staging.py)
     python3 source/rough.py sent FILM OUT.jpg --delivered --board   after sending the board: records each shot and
                                  its frames' digest (story/FILM-board-sent.txt) and ends the ledger's "board" stage;
                                  the pre-flight refuses without it (board_gate: a shot on no board, a shot with nobody
@@ -430,12 +432,15 @@ root, mod, out = sys.argv[1], sys.argv[2], sys.argv[3]
 sys.path.insert(0, os.path.join(root, 'source')); os.chdir(root)
 import importlib; F = importlib.import_module(mod)
 shots = [(n, float(a), float(b)) for n, a, b in F.SHOTS if float(b) > float(a)]
+only = [x for x in os.environ.get('BOARD_ONLY', '').split(',') if x]   # --shots: a re-staged shot's own board
 beats = {k: float(v) for k, v in vars(F).items() if k.isupper() and isinstance(v, (int, float))
          and not isinstance(v, bool) and k not in ('FPS', 'SR', 'W', 'H', 'DUR', 'BLACK_AT')}
 beats.update({k: float(v) for k, v in (getattr(F, 'T', None) or {}).items() if isinstance(v, (int, float))})
 starts = {round(a, 3) for _, a, _ in shots}
 want = {}
 for i, (n, a, b) in enumerate(shots):
+    if only and n not in only:
+        continue
     mid = (a + b) / 2
     inside = [(abs(t - mid), k, t) for k, t in beats.items() if a + 0.3 < t < b - 0.3 and round(t, 3) not in starts]
     key = min(inside)[1:] if inside else ('middle', mid)
@@ -454,6 +459,7 @@ for n, moments in want.items():
                 cache[f] = f'{type(e).__name__}: {str(e)[:50]}'
         done[n].append((lab, round(t, 2), f, cache[f]))
 cast = getattr(F, 'SHOT_CAST', {})
+shots = [s for s in shots if not only or s[0] in only]
 print('BOARD' + json.dumps(dict(shots=shots, frames=done, cast={n: cast.get(n) for n, _, _ in shots})))
 """
 
@@ -476,25 +482,28 @@ def board_rows(film, root=ROOT):
     return rows
 
 
-def board_frames(film, root=ROOT, tmp=None):
-    """Runs the film's own code (at ROOT, or an older checkout) in its own process: its shots, cast and frames."""
+def board_frames(film, root=ROOT, tmp=None, only=()):
+    """Runs the film's own code (at ROOT, or an older checkout) in its own process: its shots, cast and frames.
+    only: just these shots (a re-staged shot drawn as built, lesson staging-stills)."""
     import json
     import subprocess
     import tempfile
     tmp = tmp or tempfile.mkdtemp(prefix='board-')
     r = subprocess.run([sys.executable, '-c', _GRAB, os.path.abspath(root), film.replace('-', '_'), tmp],
-                       capture_output=True, text=True, timeout=3600)
+                       capture_output=True, text=True, timeout=3600,
+                       env=dict(os.environ, BOARD_ONLY=','.join(only)))
     line = next((ln for ln in r.stdout.splitlines() if ln.startswith('BOARD')), None)
     if not line:
         raise RuntimeError(f'the film did not draw: {(r.stderr or r.stdout).strip().splitlines()[-1:]}')
     return json.loads(line[5:])
 
 
-def board(film, out, root=ROOT):
-    """The shot board: one row per shot, four frames (start, key beat, end, next shot's first) and its plan row."""
+def board(film, out, root=ROOT, only=()):
+    """The shot board: one row per shot, four frames (start, key beat, end, next shot's first) and its plan row.
+    only: just these shots (a re-staged shot, before it moves: staging.py)."""
     from PIL import Image, ImageDraw, ImageFont
     font = lambda n: ImageFont.truetype(os.path.join(HERE, 'fonts', 'DejaVuSans-Bold.ttf'), n)      # noqa: E731
-    got = board_frames(film, root)
+    got = board_frames(film, root, only=only)
     rows = board_rows(film, root)
     tw, th, gap = 216, 384, 10
     W = 40 + 4 * (tw + gap) + 30 + 640
@@ -701,6 +710,10 @@ def board_gate(film_mod, name, notes_text='', root=ROOT):
         if fm and fm[0] < first['delivered']:
             out.append(f'the first move ({fm[1]}, {datetime.datetime.fromtimestamp(fm[0]):%d %b %H:%M}) came before '
                        f'the first board reached Sam ({when}) (rule 11: the board before any movement)')
+    if not _before_rule(film_mod, name, root):          # lesson staging-stills: a held framing, or a framing note
+        import staging
+        out += [f for f in staging.gate(name, shots, shots, root, notes_text=notes_text or (None if root == ROOT else ''))
+                if ' has never been on ' not in f]          # (those are counted above)
     return out
 
 
@@ -716,7 +729,8 @@ def main(argv):
     film = argv[1]
     if argv[0] == 'board':
         root = argv[argv.index('--root') + 1] if '--root' in argv else ROOT
-        out, got, missing = board(film, argv[2], root)
+        only = tuple(argv[argv.index('--shots') + 1].split(',')) if '--shots' in argv else ()
+        out, got, missing = board(film, argv[2], root, only)
         print(f'{out}: {len(got["shots"])} shots; plan rows missing fields on {len(missing)} shot(s)'
               + ''.join(f'\n  {n}: {", ".join(m)}' for n, m in list(missing.items())[:3])
               + (f'\n  ... and {len(missing) - 3} more' if len(missing) > 3 else '')

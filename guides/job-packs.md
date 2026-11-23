@@ -38,6 +38,10 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
   `python3 source/page.py FILM show "note words"` (~40 numbered lines of the functions it touches). No greps or sed
   ranges on film files first; only if `show` misses, `page.py FILM find` or a second `show` in the thing's own words.
 - Bite: 30, 87, 89 (with 56, 76, 79 in it), 88. Tools: `critique.py where/before`, `final OUT --small --span T0 T1`.
+- A note about framing or staging (where people are, the camera, what is in frame): `staging.py restage FILM SHOTS
+  --note N "words"`, then 2-3 numbered framings (`staging.py options`, one the script's camera line), Sam's number
+  (`staging.py pick`), the shot as built on the board (`rough.py board FILM OUT.jpg --shots S`); a clip of that shot
+  is refused until then (lesson staging-stills; a wrongly flagged note: `staging.py notframing FILM N "why"`).
 
 ## Checks and animatic (Sonnet): pre-flight, check sheet, render, send
 - Read: `guides/satire.md` Before every render, Render, If a check fails; `guides/preflight.md` Stage 3.

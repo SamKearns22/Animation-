@@ -1,0 +1,24 @@
+{
+ "round": "42-grey",
+ "stage": "moves",
+ "panels": [
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v9-getup.jpg",
+   "parts": "PM",
+   "closeups": false,
+   "is": "A plain grey solid test body (no clothes, no face: a movement test, not the look) for a GTA-style satire cartoon. Shot 4 of a car chase: Jason, passenger of a red 1970s muscle car (the car here is plain blocks: red door, dark window frame, brown seat, grey dashboard). Each picture is two views side by side: LEFT the film's camera (outside, through the windscreen then swinging to his window), RIGHT a test view from outside his window. Written: 0.42-1.12 s, every frame (1/24 s): he gets up from sitting onto his knees on the seat, fast: hips lift pushing on his left thigh, right (window-side) knee up and down onto the seat, then the left knee, then he kneels upright, free hand onto the door top, pistol held at his chest then low at his side. Nothing passes through the car or himself; feet and knees rest on what they touch."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v9-sitdown.jpg",
+   "parts": "PM",
+   "closeups": false,
+   "is": "A plain grey solid test body (no clothes, no face: a movement test, not the look) for a GTA-style satire cartoon. Shot 4 of a car chase: Jason, passenger of a red 1970s muscle car (the car here is plain blocks: red door, dark window frame, brown seat, grey dashboard). Each picture is two views side by side: LEFT the film's camera (outside, through the windscreen then swinging to his window), RIGHT a test view from outside his window. Written: 7.17-7.88 s, every frame: the same move backwards: from kneeling he sits back down in the seat (left knee off first, then the right), ending seated, pistol flat on his chest."
+  },
+  {
+   "img": "source/data/critique-src/grand-theft-autism/v9-whole.jpg",
+   "parts": "PM",
+   "closeups": false,
+   "is": "A plain grey solid test body (no clothes, no face: a movement test, not the look) for a GTA-style satire cartoon. Shot 4 of a car chase: Jason, passenger of a red 1970s muscle car (the car here is plain blocks: red door, dark window frame, brown seat, grey dashboard). Each picture is two views side by side: LEFT the film's camera (outside, through the windscreen then swinging to his window), RIGHT a test view from outside his window. Written: the whole 8.2 s, one frame every 1/3 s: gets up onto his knees, leans out of the open window to the waist turned back, fires four shots at the police car behind (arm kicks), drops back and sits down."
+  }
+ ]
+}

@@ -35,6 +35,7 @@ MAP
     python3 source/propose.py record NAME
     python3 source/propose.py show NAME
     python3 source/propose.py status
+    python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"   (a let-through; until then no handover)
     python3 source/propose.py mark NAME adopted|declined|replaced:OTHER
     python3 source/propose.py review FILM [--since 2026-11-12]
     python3 source/propose.py lock [--verdict NAME]
@@ -543,8 +544,34 @@ def lock(verdict=None):
 
 
 def unrouted_for(chat):
-    """handover.py end: this chat's replies that went to Sam after a block."""
-    return [ln.strip() for ln in _read(_p(UNROUTED)).splitlines() if f' chat {chat}:' in ln]
+    """handover.py end: this chat's replies that went to Sam after a block and are not yet settled (lesson 7 step 3,
+    fail closed: the handover is refused until each is settled; naming it in the notes no longer clears it)."""
+    return [ln.strip() for ln in _read(_p(UNROUTED)).splitlines() if f' chat {chat}:' in ln and SETTLED not in ln]
+
+
+SETTLED = ' || settled: '
+CLOSED_FROM = '2026-11-23'                         # lesson 7 step 3 began; older let-throughs are history (rule table)
+
+
+def open_letthroughs(since=CLOSED_FROM):
+    """Every unsettled let-through since step 3 began, from any chat: finish.py refuses an animatic while one stands."""
+    return [ln.strip() for ln in _read(_p(UNROUTED)).splitlines()
+            if ln.startswith('- ') and ln[2:12] >= since and SETTLED not in ln]
+
+
+def settle(chat, why):
+    """Settle this chat's let-throughs: 'routed: NAME' (put through the route since) or 'false block: why' (the guard
+    was wrong; counted for the end-of-film review). Returns how many lines were settled."""
+    if not re.match(r'(routed: [\w.-]+|false block: .{8,})', why):
+        sys.exit('propose: settle needs "routed: PROPOSAL" or "false block: why (8+ characters)"')
+    if why.startswith('routed: ') and not os.path.exists(_p(why[8:].strip() + '.md')):
+        sys.exit(f'propose: no proposal {why[8:].strip()} in notes/proposals/')
+    lines, n = _read(_p(UNROUTED)).splitlines(True), 0
+    for i, ln in enumerate(lines):
+        if f' chat {chat}:' in ln and SETTLED not in ln:
+            lines[i], n = ln.rstrip('\n') + SETTLED + why + '\n', n + 1
+    open(_p(UNROUTED), 'w').write(''.join(lines))
+    return n
 
 
 def main(argv):
@@ -564,6 +591,8 @@ def main(argv):
         judge(rest[0])
     elif cmd == 'record':
         record(rest[0])
+    elif cmd == 'settle':                        # lesson 7 step 3: propose.py settle CHAT8 "routed: NAME" | "false block: why"
+        print(f'propose: {settle(rest[0][-8:], " ".join(rest[1:]))} let-through(s) settled')
     elif cmd == 'show':
         show(rest[0])
     elif cmd == 'status':

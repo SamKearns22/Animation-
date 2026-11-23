@@ -225,8 +225,9 @@ def key(name):
     """A key pose as goals (car frame, metres). Reference letters: notes/bench/l3-reference.jpg."""
     k = _key(name)
     k.setdefault('leg_ik', 0.0)
-    k.setdefault('lift', 0.0)     # chat 41: hips lifted off the seat this much (metres) before the knees take him
-    k.setdefault('lik_R', k['leg_ik'])   # chat 41: the right leg's own foot-led share (its knee can lead instead)
+    k.setdefault('lift', 0.0)                   # chat 41: the hips lifted off the cushion (metres), seated keys
+    k.setdefault('plant', {sd: float(k['knee_w']) for sd in 'LR'})   # chat 41: ONE knee planted on its spot
+    k.setdefault('lik_R', k['leg_ik'])   # chat 41 (this account's trials, notes/bench/getup41): the right leg's own foot-led share
     return k
 
 
@@ -255,6 +256,8 @@ def _key(name):
                     aim_w=0.0, gun=_v(0, 1, -0.1), kick=0.0, belly=0.0,
                     knee=KNEES,
                     ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)}, knee_w=1.0, seat_w=0.0)
+    if name in ('C1', 'C1b', 'C1c', 'C2', 'C2b', 'C2c', 'C3'):
+        return _climb(name)
     if name == 'B1':          # breakdown, getting up (and its mirror sitting down): rocking back on his seat, knees
         #                       drawn up and turning toward the window, feet lifted off the floor in front of the
         #                       cushion, left hand pushing on the cushion beside his hip, the pistol at his chest
@@ -315,11 +318,91 @@ def _key(name):
     raise KeyError(name)
 
 
+def _gun_with_chest(k, raise_=(0.0, 0.0, 0.0), src='K1'):
+    """K1's pistol hold carried by this key's chest: the gun hand at K1's place from his right shoulder in his
+    chest's frame ('rel'), the barrel turned with the chest (the pistol stays flat on his chest while he climbs)."""
+    k1 = key(src)                                 # chat 41: from C2 on, K2's hold (low at his right side,
+    o = _solve(k1, fold=False)                    # muzzle down), clear of the left arm reaching across his chest
+    off = o['Rc'].T @ (o['balls']['R'] - o['J']['shR']) + np.asarray(raise_, float)   # (his right, up, forward)
+    Rc = _frame(k['c_up'], k['c_fwd'])
+    k['hand']['R'] = ('rel', off, Rc @ (o['Rc'].T @ _u(k1['hand']['R'][1])))
+    k['gun'] = Rc @ (o['Rc'].T @ _u(k1['gun']))
+    return k
+
+
+def _climb(name):
+    """Chat 41: getting up from sitting to kneeling, re-planned from how a person climbs onto a seat on their
+    knees (one knee at a time, the hips lifted first): C1 the hips lifted off the cushion, pushing on the left
+    thigh, both feet still on the floor; C1b the right (window-side) knee lifted high, its foot up in front of the
+    cushion's front edge; C2 the right knee down on its spot (the rear one), the shin across the cushion, the left
+    foot still on the floor, the hips over the middle of the cushion; C2b the left knee lifted, its foot up in
+    front; C3 both knees on their spots, the hips still low and inboard, the left hand on the door top. Right knee
+    FIRST: its spot is the rear one, so the left shin (front) never has to be crossed. Sitting down is the same
+    path backwards (left knee off first)."""
+    up = dict(knee_w=0.0, seat_w=1.0, leg_ik=1.0, aim_w=0.0, kick=0.0, belly=0.0)
+    if name == 'C1':
+        k = dict(up, pelvis=_v(0.41, 0.0, 0.01), p_up=_v(0.12, 1, 0.10), p_fwd=_v(0.35, 0, 1),
+                 c_up=_v(0.45, 1, 0.35), c_fwd=_v(0.6, -0.3, 1), h_fwd=_v(0.7, -0.3, 1), lift=0.10,
+                 hand={'L': (_v(0.32, 0.87, 0.30), _v(-1, -0.6, -0.2)), 'R': None},
+                 knee={'L': _v(0.10, 0.66, 0.42), 'R': _v(0.57, 0.70, 0.36)},
+                 ankle={'L': _v(0.16, 0.19, 0.44), 'R': _v(0.56, 0.18, 0.44)})
+    elif name == 'C1b':
+        k = dict(up, pelvis=_v(0.38, 0.0, 0.02), p_up=_v(0.2, 1, 0.12), p_fwd=_v(0.6, 0, 0.8),
+                 c_up=_v(0.9, 1, 0.1), c_fwd=_v(0.8, -0.4, 0.7), h_fwd=_v(0.8, -0.6, 0.5), lift=0.20,
+                 hand={'L': (_v(0.62, 1.02, 0.28), _v(0.4, -1, 0.6)), 'R': None},
+                 knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.82, 0.58, 0.16)},
+                 ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.60, 0.58, 0.36)})
+    elif name == 'C2':
+        k = dict(up, pelvis=_v(0.26, 0.0, -0.02), p_up=_v(0.3, 1, 0.12), p_fwd=_v(0.85, 0, 0.5),
+                 c_up=_v(1.9, 1, 0.15), c_fwd=_v(1, -0.8, 0.3), h_fwd=_v(1, -1.1, 0.3),
+                 hand={'L': (_v(0.90, SILL + HAND_R + 0.02, 0.20), _v(0.3, -1, 0.6)), 'R': None},
+                 knee={'L': _v(0.16, 0.64, 0.44), 'R': KNEES['R']},
+                 ankle={'L': _v(0.02, 0.21, 0.43), 'R': _v(0.18, ANKLE_Y, -0.16)},
+                 plant={'L': 0.0, 'R': 1.0})
+    elif name == 'C2b':
+        k = dict(up, pelvis=_v(0.30, 0.0, 0.03), p_up=_v(0.35, 1, 0.08), p_fwd=_v(0.95, 0, 0.3),
+                 c_up=_v(1.5, 1, 0.1), c_fwd=_v(1, -0.6, 0.1), h_fwd=_v(1, -0.7, 0.1),
+                 hand={'L': (_v(0.93, SILL + HAND_R + 0.01, 0.18), _v(0.3, -1, 0.6)), 'R': None},
+                 knee={'L': _v(0.52, 0.84, 0.36), 'R': KNEES['R']},
+                 ankle={'L': _v(0.30, 0.50, 0.40), 'R': _v(0.18, ANKLE_Y, -0.16)},
+                 plant={'L': 0.0, 'R': 1.0})
+    elif name == 'C1c':     # sitting down only: the right foot lifted clear of the cushion as the knee comes up off
+        #                     its spot (backwards, the path is shorter: 0.05 s; without it the foot drags through)
+        k = _lerp_goal(key('C2'), key('C1b'), 0.5)
+        k.update(knee={'L': _v(-0.02, 0.64, 0.43), 'R': _v(0.80, 0.62, 0.06)},
+                 ankle={'L': _v(0.02, 0.19, 0.44), 'R': _v(0.48, 0.68, 0.16)}, plant={'L': 0.0, 'R': 0.0},
+                 knee_w=0.0, leg_ik=1.0)
+        k['hand'] = dict(k['hand'])
+        for sd in 'LR':
+            if isinstance(k['hand'][sd], tuple) and k['hand'][sd] and k['hand'][sd][0] == 'mix':
+                k['hand'][sd] = None
+        k['hand']['L'] = (_v(0.80, 1.03, 0.24), _v(0.2, -1, 0.6))
+        k['gun'] = None
+    elif name == 'C2c':     # the left knee coming over the cushion onto its spot, its foot above the front edge
+        k = dict(up, pelvis=_v(0.36, 0.0, 0.03), p_up=_v(0.38, 1, 0.05), p_fwd=_v(1, 0, 0.15),
+                 c_up=_v(1.25, 1, 0.08), c_fwd=_v(1, -0.45, 0.05), h_fwd=_v(1, -0.6, 0.05),
+                 hand={'L': (_v(0.94, SILL + HAND_R + 0.005, 0.17), _v(0.3, -1, 0.6)), 'R': None},
+                 knee={'L': _v(0.62, 0.68, 0.20), 'R': KNEES['R']},
+                 ankle={'L': _v(0.24, 0.62, 0.28), 'R': _v(0.18, ANKLE_Y, -0.16)},
+                 plant={'L': 0.0, 'R': 1.0})
+    else:   # C3
+        k = dict(up, pelvis=_v(0.44, 0.0, 0.02), p_up=_v(0.4, 1, 0.03), p_fwd=_v(1, 0, 0.05),
+                 c_up=_v(1.0, 1, 0.05), c_fwd=_v(1, -0.3, -0.05), h_fwd=_v(1, -0.45, -0.05),
+                 hand={'L': (DOOR_HAND, _v(0.3, -1, 0.6)), 'R': None},
+                 knee=KNEES, ankle={'L': _v(0.20, ANKLE_Y, 0.18), 'R': _v(0.18, ANKLE_Y, -0.16)},
+                 knee_w=1.0, seat_w=0.0, leg_ik=0.0)
+    k['hand'] = dict(k['hand'])
+    lift_gun = {'C1b': (-0.03, 0.16, 0), 'C2': (0.06, 0.04, 0.04), 'C2b': (0.04, 0.02, 0.02), 'C2c': (0.04, 0.02, 0.03), 'C3': (0.03, 0, 0.03), 'C1c': (0, 0.10, 0)}.get(name, (0, 0, 0))   # the gun arm up, clear of the rising knee
+    return _gun_with_chest(k, lift_gun, 'K2' if name == 'C3' else 'K1')
+
+
 KICK_DEG = 7.0                   # the pistol's kick: the forearm flips up this much (a real one-hand kick)
 
 
-BREAKDOWNS = [(0.58, 'B1'), (0.68, 'B1b'), (0.88, 'B2'), (1.2, 'B3'), (7.175, 'B3'), (7.496, 'B2'), (7.656, 'B1b'),
-              (7.736, 'B1')]   # chat 39: the knees' landing given 0.2 s (was 0.14 s; the beats K1 0.5, K2 1.0 unchanged)
+BREAKDOWNS = [(0.56, 'C1'), (0.62, 'C1b'), (0.71, 'C2'), (0.77, 'C2b'), (0.83, 'C2c'), (0.89, 'C3'), (1.2, 'B3'),
+              (7.175, 'B3'), (7.45, 'C3'), (7.49, 'C2c'), (7.53, 'C2b'), (7.57, 'C2'), (7.635, 'C1b'), (7.70, 'C1')]
+#   chat 41: the get-up / sit-down re-planned (_climb: hips first, then one knee at a time, the window-side knee
+#   first; sitting down the same path backwards); chat 39's B1, B1b, B2 kept below, unused   # chat 39: the knees' landing given 0.2 s (was 0.14 s; the beats K1 0.5, K2 1.0 unchanged)
 #   in-between drawings that shape the path between two locked beats (the feet go up over the cushion's front edge, not through it); beats unchanged
 
 
@@ -481,6 +564,10 @@ def goals_at(t):
             tn, nb = T[min(i + 2, len(T) - 1)]
             G = [_KEYC.setdefault(k, key(k)) for k in (pa, a, b, nb)]
             out = _herm_goal(G, [tp, t0, t1, tn], (t - t0) / (t1 - t0), lin, (pa, a, b, nb))
+            if any(_KEYC[k].get('lift', 0) or max(_KEYC[k]['plant'].values()) > 0 and _KEYC[k]['knee_w'] < 0.999
+                   for k in (a, b)) and (ka['knee_w'] >= 0.999) == (kb['knee_w'] >= 0.999):
+                # chat 41: hips lifted, or one knee down: the hips' height follows the keys' own solved heights
+                out['pel_y'] = float(_herm([_pel_y(k) for k in (pa, a, b, nb)], [tp, t0, t1, tn], (t - t0) / (t1 - t0), 0))
             if (ka['knee_w'] >= 0.999) != (kb['knee_w'] >= 0.999):
                 # the weight moving from his seat to his knees (or back): the hips' height follows a smooth path
                 # between the two poses' own heights (blending the two supports' heights jumps)
@@ -549,10 +636,14 @@ class Pose(dict):
     """Joint points (car frame) + .aim (the pistol's way) + .fwd for bench_draw.gun_mesh."""
 
 
+def _planted(g):
+    return g.get('plant') or {'L': 0.0, 'R': 0.0}
+
+
 def solve(g, seat_dy=None):
     """Goals -> the posed body: dict(P points, J joints, R bone turns, balls, gun (points, tris), aim). Kneeling,
     each knee is settled ON the cushion: a first pass measures each knee's skin gap, the second takes it out."""
-    if float(g['knee_w']) <= 0:
+    if float(g['knee_w']) <= 0 and max(_planted(g).values()) < 0.999:
         return _solve(g, seat_dy)
     first = _solve(g, seat_dy, fold=False)
     gaps = knee_gaps(first['P'], first['J'])
@@ -638,12 +729,13 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
         y_knee.append(kg[1] + math.sqrt(max(r['L_th'] ** 2 - dxz ** 2, 0.0)) - hipoff[sd][1])
     y_seat = SEAT_Y if seat_dy is None else seat_dy
     w = float(np.clip(g['knee_w'], 0, 1))
-    pel[1] = (1 - w) * y_seat + w * float(np.mean(y_knee))
+    pel[1] = (1 - w) * y_seat + w * float(np.mean(y_knee)) + (1 - w) * float(g.get('lift', 0.0))
     if 'pel_y' in g:
-        pel[1] = g['pel_y']             # (a seat <-> knees path: each key's own height, its lift already in it)
-    else:
-        pel[1] += float(g.get('lift', 0.0)) * (1 - w)
-    if w > 0:                                   # kneeling unevenly, the hips tip to the side so BOTH knees rest
+        pel[1] = g['pel_y']
+    one = [k for k, sd in enumerate('LR') if _planted(g)[sd] >= 0.999]
+    if w < 0.999 and len(one) == 1:             # chat 41: ONE knee down: the hips' height is what that thigh
+        pel[1] = y_knee[one[0]]                 # reaches (the knee stays on its spot, no sliding)
+    elif w > 0:                                   # kneeling unevenly, the hips tip to the side so BOTH knees rest
         dy = (y_knee[0] - y_knee[1]) * w        # the L hip wants to be this much higher than the R hip
         hw = np.linalg.norm(hipoff['L'] - hipoff['R'])
         from scipy.spatial.transform import Rotation as Ro
@@ -709,7 +801,12 @@ def _solve(g, seat_dy=None, knee_dy=None, fold=True):
         dt = _u(kg - hip)
         kn = hip + dt * r['L_th']
         lik = float(np.clip(g.get('lik_R' if sd == 'R' else 'leg_ik', g.get('leg_ik', 0.0)), 0, 1))
-        if 'thigh' in g and THIGH_BLEND:
+        if w < 0.999 and _planted(g)[sd] >= 0.999:
+            # chat 41: this knee is down on its spot: the thigh reaches it (the hips were set from it)
+            kg[1] = ky
+            dt = _u(kg - hip)
+            kn = hip + dt * r['L_th']
+        elif 'thigh' in g and THIGH_BLEND:
             # the weight moving seat <-> knees: the thigh's way is given (goals_at), the foot follows its goal
             kn = hip + _u(g['thigh'][sd]) * r['L_th']
             dt = _u(kn - hip)
