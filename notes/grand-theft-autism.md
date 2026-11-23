@@ -220,13 +220,14 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - [x] 7 (Sam) Jason's poses and moves are good: only the cut-off and the door order change. Poses untouched.
 - Checks owed (Seeing like Sam 3): none of today's checks tests what is in front of what between two drawings (person/car, wheel/body, effect/ground) or whether a person vanishes at a cut. Owed, through the proposal route: (a) a "layer order" check: each person in a car, the strip between their lowest drawn edge and the car's hiding edge must be them or the car, never what is behind; (b) a "cut continuity" check: everyone in the last frame of a shot who is still in view of the next shot's first frame is drawn there; (c) wheel/arch and effect/ground as cases of (a). Saved examples: notes/sam-notes/gta-v5/1a-6.
 
-## Where things stand (23 Nov, chat 48 done)
-- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1; Override (CLAUDE.md, Asking me before you go on).
-- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; no Hook Text; end line "Grand Theft Follow!".
-- Done: Override built and written (option 2); animatic v5 sent (unchecked) and saved in animations/drafts.
-- Next: Sam's notes on v5 -> Opus medium chat (note round). Before the final: body check + critique on v5's fixes (they were skipped by Override).
-- Needs Sam: notes on animatic v5. Read: pack "Notes round" in guides/job-packs.md; "Chat 48" above.
-- Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix (finish.py held by other chats' let-throughs) as its own proposal.
-- For Claude: end check named: SENTENCE x7 (3 old: Sam's rewordings 21-22 Nov; 4 this chat's in-between wordings, both original sentences back word for word); branches claude/gta-chat46-build (a log only), claude/dreamy-fermi-vkhutz (another account's gta_story_post.py), claude/gta-chat31, claude/gta-v5-sound-draft (its film is now in animations/drafts): left alone. source/override.py; the clean render with sound is animations/drafts/grand-theft-autism-clean.mp4 (no readable record beside it: re-render if the readable check must run).
+## Where things stand (23 Nov, chat 49 done)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 3 (fix the check too); 89 (look at full size before sending).
+- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; Jason's poses and moves (Sam: "otherwise good"); no Hook Text; end line "Grand Theft Follow!".
+- Done: v5 notes 1, 3, 4, 5, 6 fixed and looked at full size (plus the thrown hydrant popping at the shot 5 cut); 2/8/9 part-fixed.
+- Next: Opus HIGH (a new build): the door leak (notes 2/8/9) by a per-dot depth test, see the unticked line in "Sam's notes on animatic v5"; then the movement clips of shot 4 (final OUT --small --span 14.1 24.5) and shot 5's start, sent to Sam; then a Sonnet chat for animatic v6.
+- Needs Sam: nothing until the clips.
+- Read: pack "Notes round" (guides/job-packs.md); "Sam's notes on animatic v5" above; Sam's pictures in notes/sam-notes/gta-v5/.
+- Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix as its own proposal; the three checks owed in the v5 notes list (layer order, cut continuity, wheel/effect as layer order), through the proposal route.
+- For Claude: jason3d_film.FILM_COVER + bench_move.FILM_CAR_HIDES (the stand-in car off in the film); leanout._cover door_top/low (over-hides hips in the window at 22.5: revert when the depth test lands); gta_cars.arch_mask; flying_whales_fx.lumps_sprite floor=; gta_shots58._clear_mouth and the hydrant body in shot 5; gta_rehearse runner wall stop. Test stills: scratchpad many.py (gta_film.frame_image). End check named: branches and SENTENCE x7 as chat 48; RULE 41/49/77/N6 kittests broken (not touched here; the next chat runs kittest on them first); notes at 4,561 words (next chat archives ticked sections); QUICK CHECKs on other films' files left.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 99.5% of 15%; forecast 103.1% (2026-11-23)

@@ -916,3 +916,13 @@ Cost line (recorded every handover; shown to Sam only on a problem): film so far
 - Open rule requests: Sam 23 Nov: drop the 'Locked by Sam' line from messages to him ("doesn't help me"): chat 47 stopped showing it to him now; the notes' line stays (it guards shots for later chats, handover check wants it); route changing CLAUDE.md/check with the Override proposal; Override word (above); build check (bulk note); held-object check; head-flip check; pop check.
 - For Claude: grand_theft_autism.mix(silent,out) rebuilds sound from a silent video without redrawing.
 
+
+## Where things stand (23 Nov, chat 48 done)
+- Rules that bite next: Fix the drawing, never the shot; Seeing like Sam 1; Override (CLAUDE.md, Asking me before you go on).
+- Locked by Sam: every camera, beat, shot length and timing (shot 4 25% slower); house style; circle hands; chat 43's grip; the bench move; no Hook Text; end line "Grand Theft Follow!".
+- Done: Override built and written (option 2); animatic v5 sent (unchecked) and saved in animations/drafts.
+- Next: Sam's notes on v5 -> Opus medium chat (note round). Before the final: body check + critique on v5's fixes (they were skipped by Override).
+- Needs Sam: notes on animatic v5. Read: pack "Notes round" in guides/job-packs.md; "Chat 48" above.
+- Open rule requests: build check (bulk note); held-object check; head-flip check; pop check; option 1's fix (finish.py held by other chats' let-throughs) as its own proposal.
+- For Claude: end check named: SENTENCE x7 (3 old: Sam's rewordings 21-22 Nov; 4 this chat's in-between wordings, both original sentences back word for word); branches claude/gta-chat46-build (a log only), claude/dreamy-fermi-vkhutz (another account's gta_story_post.py), claude/gta-chat31, claude/gta-v5-sound-draft (its film is now in animations/drafts): left alone. source/override.py; the clean render with sound is animations/drafts/grand-theft-autism-clean.mp4 (no readable record beside it: re-render if the readable check must run).
+

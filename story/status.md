@@ -1,3 +1,3 @@
-Grand Theft Autism: animatic v5 sent 23 Nov (unchecked, Sam's Override).
-Override word built and written (Sam's option 2).
-Waiting on Sam's notes on v5; next an Opus medium notes chat.
+Grand Theft Autism: Sam's v5 notes being fixed (1, 3-6 done; door leak 2/8/9 part-done).
+Next: Opus high chat builds the per-dot door test, then movement clips to Sam.
+Then Sonnet: animatic v6.

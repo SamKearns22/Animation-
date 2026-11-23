@@ -1,0 +1,6 @@
+== quick check (2026-11-23): 4 fault(s)
+- CAMERA FEEL: shot *: the film gives no camera the check can read (cam_for(t) returning a B.Cam or a sets.Cam): rule 72 not checked (give it one, or a row in the exceptions: | camera feel | * | why | looked |)
+- caption "have imagined.": 0.80 s on screen at 1.1x for 2 words (too fast to read)
+- the collision and pop-in tests did not run: the film has no scene(t) (audit.py; rules 5 and 6; a film with no people or props says so in HAS)
+- rule 57: the film has effects but no draw_order(t) (names back to front), so nothing checks that a thing never flips from in front to behind mid-shot
+
