@@ -347,7 +347,7 @@ def could_not_test_cover():
         def picture(t):
             img = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
             d = ImageDraw.Draw(img)
-            card = lambda: d.rectangle((400, 1000, 700, 1100), fill=(250, 250, 250), outline=(0, 0, 0))
+            card = lambda: d.rectangle((400, 1000, 700, 1100), fill=(240, 236, 220), outline=(0, 0, 0))
             arm = lambda: d.rectangle((500, 900, 560, 1150), fill=(40, 40, 70))
             steps = {'card': lambda: (cover.thing(img, 'name card', 1.44, flat=flat, surface=0.76 if flat else None),
                                       card),
