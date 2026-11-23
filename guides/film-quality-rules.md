@@ -119,6 +119,7 @@ the end by section.
 | and the reply must list it before I'm told the chat is working | (12 Nov: one opened without it and could do nothing) |
 | A chat on the wrong model for its next stage | (Sam, 15 Nov; `handover.py` flags a Next line that mixes them) |
 | The handover check | (Sam, 13 Nov) |
+| No rule without a working check | (Sam, 23 Nov; lesson 7 option 1; proof: source/rule_proofs.json N25) |
 
 ## Merged numbers (Job C, 9 Nov: the same rule written twice became one; nothing was dropped)
 12 → 5 · 15 → S7 · 23 → 61 · 33 → 8 · 35 → 1 · 45 → 11 · 46 → 79 · 51 → 49 · 53 → 32 · 55 → 24 and 44 ·
