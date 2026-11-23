@@ -3,3 +3,6 @@
 ### 2026-11-23T11:00:40
 Please note that this film won't have an initial hook text as it would get in the way of the opening joke (the logo)
 
+### 2026-11-23T11:01:46
+The end hook text: Grand Theft Follow!
+
