@@ -144,7 +144,7 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
   clip critiqued (r42-grey) and SENT; proposal fast-climb judged (helper B picked).
 - Needs Sam: fast-climb 1 (measure, then jerk check and eased re-draw, each on his Y) or 2 (breaks vs real speeds).
 - Next: on his answer, this chat or the one it opens, Opus high: build the picked option, measuring first.
-- Sonnet chat 42b (now): Sam can't open the grey clip in the app (sent twice, also the GitHub link). Re-encode as a
+- Sonnet chat 42b (DONE 23 Nov: phone-safe animations/drafts/jason-grey-test.mp4 made, ffprobe ok, sent; waiting on whether it opens): Sam can't open the grey clip in the app (sent twice, also the GitHub link). Re-encode as a
   phone-safe copy and send: ffmpeg -i animations/drafts/grey-lean-out-whole.mp4 -c:v libx264 -profile:v baseline -level 3.1
   -pix_fmt yuv420p -vf "scale=540:480,pad=540:960:0:240:color=white" -crf 20 -movflags +faststart -an
   animations/drafts/jason-grey-test.mp4; copy its .bodycheck.json; humancheck.py critiqued it with r42-grey-p1; send.
