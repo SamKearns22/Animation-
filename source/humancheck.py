@@ -15,6 +15,8 @@ gun drawn pointing away from its target. So this tests what is drawn, where it i
   _crossed ........ both forearms crossing, each hand on the other arm's side (Lucia's wheel grip, GTA v4/v7 note 1)
   _joined ......... the person redrawn alone (no props): one joined shape; a piece apart = a limb off its joint
   _lying .......... skeleton-route people (lying_flat): lying.body_faults (arm on its own side, a neck shows)
+  _reach .......... flat people: an upper arm further behind the body than a shoulder goes (reach); a forearm
+                    pointing away from the lens drawn as a stump (stub); GTA v4 notes 6 and 15 (1.00 and 4.92 s)
   _limbs .......... the drawn arm's proportions against the rig: stretched past 1.25x (the sausage), a forearm
                     end-on to the lens (a stub); GTA v7 notes 4 and 10
   headless ........ in frame_end: every person reported has a head drawn after it (views.head_view reports each
@@ -103,6 +105,7 @@ def frame_end(t):
                 out += [(who, k, x) for k, x in _joined(e)]
                 out += [(who, k, x) for k, x in _crossed(e)]
                 out += [(who, k, x) for k, x in _backview(e)]
+                out += [(who, k, x) for k, x in _reach(e)]
             elif e['kind'] == 'skeleton':
                 out += [(who, k, x) for k, x in _lying(e)]
                 out += [(who, k, x) for k, x in _backview(e)]
@@ -331,6 +334,46 @@ def _limbs(e):
                                     f'or the drawing cannot show this angle)'))
             elif r < STRETCH[0] and nm == 'forearm':
                 out.append(('limb', f'{sd} {nm} drawn {r:.1f}x its length (end-on to the lens: reads as a stub)'))
+    return out
+
+
+BACK_REACH = 60.0     # degrees an upper arm can point behind the body's side plane (shoulder extension stops near 60)
+STUB = 0.35           # a flat forearm drawn shorter than this x its length, pointing away from the lens: a stump
+
+
+def _reach(e):
+    """Flat people (rule 41; GTA v4 notes 6 and 15, Sam 20 Nov: "Limbs, neck, torso, all curled around each other and
+    in the wrong place", "the horror show in reverse"; v4 at 1.00 and 4.92 s, both passed by every check then):
+      reach . an upper arm pointing further behind the body than a shoulder can take it (v4 1.00 s: the near arm
+              straight back at shoulder height, 74 degrees behind him, the fist behind his neck);
+      stub .. a hand behind his back with its forearm pointing straight AWAY from the lens: drawn under a third of
+              its length, the hand hidden behind the elbow, it reads as a stump ending in a ball (v4 4.92 s: 0.26 of
+              its length). Tested on the pose gallery from 8 views: a forearm pointing AT the lens (rule 41's allowed
+              case), a hand in front of him (patting the air, hands on a table), a hand drawn over the face (phone at
+              the ear) and an arm hidden behind the body all pass.
+    Works on the pose in the body's own frame (x across, y down, z forward) and the joints as drawn (j2)."""
+    j, j2, depth = e['j'], e.get('j2') or {}, e.get('depth') or {}
+    out = []
+    for sd in 'LR':
+        if not all(k + sd in j for k in ('sh', 'el', 'wr')):
+            continue
+        sh, el, wr = (j[k + sd] for k in ('sh', 'el', 'wr'))
+        up = [el[i] - sh[i] for i in range(3)]
+        n = math.sqrt(sum(v * v for v in up)) or 1.0
+        back = math.degrees(math.asin(max(-1.0, min(1.0, -up[2] / n))))
+        if back > BACK_REACH:
+            out.append(('reach', f'{sd} upper arm points {back:.0f} degrees behind the body (a shoulder stops near '
+                                 f'{BACK_REACH:.0f}): the arm is in the wrong place, curled behind him; fix the pose'))
+        fore = math.sqrt(sum((wr[i] - el[i]) ** 2 for i in range(3)))
+        if fore < 1 or not all(k + sd in j2 for k in ('el', 'wr')):
+            continue
+        d2 = math.hypot(j2['wr' + sd][0] - j2['el' + sd][0], j2['wr' + sd][1] - j2['el' + sd][1])
+        away = depth.get('wr' + sd, 0.0) < depth.get('el' + sd, 0.0) - 0.5 * fore   # the hand well behind the elbow
+        on_back = wr[2] < -0.6 * (e.get('sp') or {}).get('shoulders', 150)         # behind his back's surface
+        shown = sd not in (e.get('behind') or ()) and sd not in (j.get('on_face') or ())
+        if d2 / fore < STUB and away and on_back and shown:
+            out.append(('stub', f'{sd} hand behind his back with the forearm pointing away from the lens, drawn '
+                                f'{d2 / fore:.2f} of its length: reads as a stump; fix the pose or draw the turn'))
     return out
 
 

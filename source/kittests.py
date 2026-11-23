@@ -773,9 +773,10 @@ def solid_check_shot4_v7():
     """Rule 17 (lesson 7; GTA v7 note 3, Sam 21 Nov: "Jason clips through two parts of the car as he moves"): the
     times of Sam's v7 stills were matched on the v7 strip (77a3eb10 ~1.0 s, 2194502b ~1.5 s); viewchecks.solid_faults
     on version 7's own code at just those frames must flag Jason through the car (his arm in front of the window
-    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, two frames about 2.
-    Known misses, not in this proof: v7 note 2 (the see-through bonnet, 0.67 s) and note 7 (hydrant water through the
-    cruiser, 3.33-3.67 s) are still passed on those frames (rule_proofs.json, rule 17's miss)."""
+    frame that rubs it out; his hips through the window pillar). The whole shot takes 8+ minutes, three frames about 2.
+    Chain A chat 5 (23 Nov): v7 note 2, the see-through bonnet (still b03d81c2, 0.67 s = frame 8), passed every bone
+    point (the vest's edge showed between them); viewchecks.outline_shows now tests the drawn outline, so frame 8 must
+    flag Jason's body through the tulip's bonnet."""
     import subprocess
     import tempfile
     root = os.path.dirname(HERE)
@@ -786,8 +787,10 @@ def solid_check_shot4_v7():
             return False, 'COULD NOT TEST: version 7 is not in this copy\'s history'
         subprocess.run(['tar', '-x', '-C', tmp], input=tar, check=True)
         src = os.path.join(tmp, 'source')
-        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks as VC; '
-                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[12, 18], label="v7")))' % src)
+        import shutil                             # today's check on version 7's own drawing code
+        shutil.copy(os.path.join(HERE, 'viewchecks.py'), os.path.join(src, 'viewchecks_now.py'))
+        code = ('import sys; sys.path.insert(0, %r); import gta_rehearse as G, viewchecks_now as VC; '
+                'print("\\n".join(VC.solid_faults(G.shot4, G.SHOT4_LEN, frames=[8, 12, 18], label="v7")))' % src)
         r = subprocess.run([sys.executable, '-c', code], cwd=src, capture_output=True, text=True, timeout=900)
     finally:
         import shutil
@@ -795,8 +798,30 @@ def solid_check_shot4_v7():
     lines = [ln for ln in r.stdout.splitlines() if ln.startswith('BODY:') and 'jason' in ln and 'tulip' in ln]
     arm = any('rubbed out' in ln for ln in lines)
     hips = any('window pillar' in ln for ln in lines)
-    return arm and hips, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the pillar {hips}' + \
+    bonnet = any('drawn body shows through the tulip\'s bonnet' in ln and ' 0.67 s' in ln for ln in lines)
+    return arm and hips and bonnet, f'v7 at 1.0 and 1.5 s: arm through the window frame {arm}; hips through the ' \
+        f'pillar {hips}; at 0.67 s the body through the bonnet {bonnet}' + \
         ('' if r.returncode == 0 else f'; crashed: {r.stderr.strip().splitlines()[-1:]}')
+
+
+@test
+def bump_test_bench_old_poses():
+    """Rule 5 (nothing passes through anything; the fault of GTA v4 note 4 and v7 note 3, Jason's body through the car):
+    the solid-body bench (bench_move.py, the shot 4 rebuild) runs its bump tests on the OLD failed poses it replaced and
+    must catch them: the chat 33 seated still (his hip 7.4 cm into the seat, the pistol 4.8 cm into his body) and the old
+    lean (leanout.at) at K3 (into the dash); and must pass the new move at the same moments (K1, K3). About 10 s.
+    Not in this proof: audit.py, the other films' bump test, has no saved example of its own yet (rule_proofs.json)."""
+    import bench_move as BM
+    import gta_cast as GC
+    import leanout as LO
+    sp = dict(GC.cast()['jason'], mood='stern')
+    T = dict((k, t) for t, k in reversed(BM._times()))
+    old = BM._old_out(LO.seated(sp))
+    seat, gun = BM.car(old).get('seat R', (0, 0))[1], BM.pistol(old).get('pistol in body', (0, 0))[1]
+    dash = 'dash' in BM.car(BM._old_out(LO.at(T['K3'], sp)))
+    new = [k for k in ('K1', 'K3') for o in [BM.solve(BM.goals_at(T[k]))] if BM.car(o) or BM.pistol(o) or BM.gun_car(o)]
+    ok = seat >= 5 and gun >= 3 and dash and not new
+    return ok, f'old still: seat {seat} cm, pistol {gun} cm; old K3 into the dash {dash}; new move faults at {new or "none"}'
 
 
 # ------------------------------------------------------------------------------------------------ running them
@@ -4031,6 +4056,48 @@ def body_check_shot4_v4():
     s3 = _body_faults(Rn.shot3, (0.5, 1.5, 2.5))  # (v4 note 1, caught since chat 23): today's shot 3 must be clean
     ok = {'order', 'aim'} <= kinds and not s3 and not g
     return ok, f'version 4 Jason: {sorted(kinds)}; shot 3: {len(s3)} faults {sorted({x[2] for x in s3})}; gallery: {len(g)} false flags'
+
+
+V4_CURLED = (1.00, 4.92)               # Sam's v4 stills 3c (note 6, "a monstrosity") and 6b (note 15, "in reverse")
+
+
+@test
+def body_check_curled_v4():
+    """Rule 41 (GTA v4 notes 6 and 15, Sam 20 Nov: "Limbs, neck, torso, all curled around each other and in the wrong
+    place. Utterly inhuman", "the horror show in reverse"): both frames passed every check until 23 Nov. The body
+    check must now flag Jason at Sam's two stills (1.00 s: the near arm straight back behind his shoulders, 'reach';
+    4.92 s: his hand behind his back, the forearm end-on as a stump, 'stub'), and pass the gallery poses that a first
+    draft of the stump test wrongly flagged (patting the air from behind, the phone at the ear from three-quarter)
+    plus every gallery pose from the front and side. About 1 minute."""
+    import importlib.util
+    import subprocess
+    import tempfile
+    from PIL import Image
+    import posegallery as PG
+    import body as B
+    import views as V
+    import humancheck as HC
+    src = subprocess.run(['git', 'show', f'{V4_COMMIT}:source/gta_rehearse.py'], cwd=os.path.dirname(HERE),
+                         capture_output=True, text=True, check=True).stdout
+    tmp = os.path.join(tempfile.mkdtemp(), 'gta_rehearse_v4c.py')
+    with open(tmp, 'w') as fh:
+        fh.write(src)
+    spec = importlib.util.spec_from_file_location('gta_rehearse_v4c', tmp)
+    R = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(R)
+    got = {t: {k for _, who, k, _ in _body_faults(R.shot4, (t,)) if who == 'Jason'} for t in V4_CURLED}
+    caught = 'reach' in got[1.00] and 'stub' in got[4.92]
+    gal = {n: b for n, b, _ in PG.GALLERY}
+    cases = [('flapping (pat)', 180), ('phone at the ear', 45), ('phone at the ear', -45)]
+    cases += [(n, d) for n in gal for d in (0, 90)]
+    false = []
+    for name, deg in cases:
+        HC.frame_begin()
+        V.person(Image.new('RGBA', (1080, 1920)), B.Cam(1.0, 540, 960), 540, 500, 0.6, PG.MODEL, 0.0, float(deg),
+                 gal[name](PG.MODEL))
+        false += [(name, deg) for x in HC.frame_end(0.0) if x[2] in ('reach', 'stub')]
+    return caught and not false, f'v4 Jason at 1.00 s {sorted(got[1.00])}, 4.92 s {sorted(got[4.92])}; ' \
+        f'gallery false flags {false or "none"} of {len(cases)}'
 
 
 V3_COMMIT = '9067f25d'                  # GTA animatic v3 as Sam saw it (chat 26): Jason's back at 15.4 and 18.3 s
