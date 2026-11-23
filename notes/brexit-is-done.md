@@ -15,20 +15,20 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Rules that bite next:** 89 (critique before cast sheet), 49 (likeness), 24 (estimate before the build).
-- **Done (chat 1, 23 Nov):** May and Blair faces measured (face tool, pick B provisional); new shared hair pieces `bob` (May)
-  and `back` (Blair), pearl earrings, a hard hat (front and turned), `specs`, `workwear` hi-vis jacket, own-colour sleeves;
-  cast critique hunts 1-2 done; cast sheet v1 sent to Sam (`review/brexit-is-done-cast-v1.jpg`).
-- **Open critique faults (named to Sam):** May's age lines faint and full-body reads weakly as a woman; Blair's back/side hair
-  a plain cap; a small dark dash on the crown in three-quarter heads (turnhead's seam, also on old swept heads).
-- **Next:** Sam's notes on the cast sheet (Opus, medium), then the plan once he sends the script, the site and Blair's place (Opus, high).
-- **Needs Sam:** notes on the three faces; the script; the site; Blair's place.
-- **Read:** `guides/job-packs.md` Plan; `source/facehouse.py` MAP (hair pieces bob/back, hard_hat).
-- **Open rule requests:** none.
-- **For Claude:** cast `story/brexit-is-done-people.txt`; `python3 source/people.py sheet brexit-is-done OUT.jpg`;
-  `python3 source/facehouse.py turns OUT.jpg may blair`; picks in `references/faces/{may,blair}/pick` ('picked': B, provisional).
-  Plan stage not done: no estimate yet (template note: raise the estimates proposal at the plan).
-
+- **Rules that bite next:** 89 (critique before the sheet goes back), 49 (likeness), 30 (a repeat note: find why the first fix failed).
+- **Done (chat 1):** May/Blair faces, hair pieces bob/back, hard hat, specs, workwear; cast sheet v1 sent; Sam's notes saved
+  (`notes/sam-notes/brexit-cast-v1/notes.md`, 3 notes + "your fresh eye points are true too"). Sam said Y to the plan.
+- **Next (chat 2, Opus medium, notes round):** 1 one shape for each new hair piece in every view (the turned crown clamp at -0.44
+  in `_turn_hair0` flattened Blair; turned hair must match the front's height and width); 2 Kemi: orange shoulders and sleeves,
+  navy chest only (her photo), turned hat sits flat/wide, glasses run off the face; 3 May's age lines stronger, reads as a woman
+  at full height; Blair's side/back hair not a plain cap; the dark dash on the crown in three-quarter heads; 4 the new check:
+  front|3/4 pair at one scale, hair and clothes measured in both, fault past 15%, tested on Sam's 3 saved notes; the sheet
+  maker refuses a figure touching a tile edge; 5 critique hunts, then cast sheet v2 to Sam with full figures.
+- **Needs Sam:** notes on v2; the script; the site; Blair's place.
+- **Read:** `guides/job-packs.md` Notes round; `source/facehouse.py` MAP and `_turn_hair0`, `bob_shapes`, `back_shapes`, `turned_hat`.
+- **Open rule requests:** none (the new check goes through the proposal route if it becomes a rule).
+- **For Claude:** `python3 source/people.py sheet brexit-is-done OUT.jpg`; `facehouse.py turns OUT.jpg may blair`; Sam's sheet
+  was assembled by hand in chat 1 (crops of the people sheet): build it in a tool this time.
 ## Handover check, named not fixed (chat 1)
  branches gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz,
   gta-chat31 hold only GTA logs/proposals (film posted): not merged, for a tool chat; CLAUDE.md "Locked by Sam" and
