@@ -220,7 +220,9 @@ Locked by Sam: every camera and beat of shots 1-8 as in animatic v3; script; sho
 - Open rule requests: build check (bulk note); grey-clip body-check (Sam HOLDS); held-object check; house-look lock;
   "pieces" test; head-flip check; pop check (v4 N1); critic's three lines.
 - For Claude: jason3d_film (ON, CHECK, FAULTS_FILE /tmp/gta-jason3d-faults.txt, data/gta-jason3d-headplan.json),
-  bench_move.BULK/bulk(), bench_draw PRINT_*; gta_shots58.goals58; dreamy-fermi-vkhutz, gta-chat31 unmerged (named); kittest
+  bench_move.BULK/bulk(), bench_draw PRINT_*; gta_shots58.goals58; branches claude/dreamy-fermi-vkhutz (story post, awaiting Sam), claude/gta-chat31 (record),
+  claude/gta-chat46-build (a chats log only) not merged on purpose; CLAUDE.md's three "lost" sentences are Sam's own
+  rewording (kept); kittest
   body_check_back_view broken since chat 44 (named, archive).
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.63% of 15%; forecast 97.2% (2026-11-23)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 93.83% of 15%; forecast 97.4% (2026-11-23)

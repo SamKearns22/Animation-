@@ -432,7 +432,13 @@ def house_head(cam, k, sp, neck=True):
         finally:
             V.head_view, LF._neck, LF._arm, LF._leg = old, oldn, olda, oldl
         return img
-    full, nh = layer(False), layer(True)
+    full = layer(False)
+    import humancheck as HC                       # the head-less copy is a working layer, not a drawing of him: the
+    busy, HC._BUSY[0] = HC._BUSY[0], True         # body check must not read it as Jason drawn with no head (chat 46)
+    try:
+        nh = layer(True)
+    finally:
+        HC._BUSY[0] = busy
     a, b = np.asarray(full).astype(int), np.asarray(nh).astype(int)
     m = np.abs(a - b).sum(2) > 0
     out = np.zeros_like(np.asarray(full))

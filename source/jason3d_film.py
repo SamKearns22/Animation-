@@ -187,6 +187,11 @@ def layer(img, cam, car, t, face=None, glass=None, scale=2, goals=None):
         gm, dim = glass
         img.alpha_composite(G.glass_tint(img.size, al * gm * dim))
     J = {n: f(np.asarray(v, float)[None])[0] for n, v in out['J'].items()}
+    # the body check's 'head top' (its head point): the bench's head joint is the skull's base; the top is the house
+    # head's centre plus its half height along the head's up (house_pose places the centre as the drawing does)
+    kh = BM.house_pose(out)
+    J['head'] = f((np.asarray(kh['head'], float) + np.asarray(out['Rh'][:, 1], float) * 0.12)[None])[0]
+    J['neck'] = f(np.asarray(kh['neck'], float)[None])[0]
     J['_gun_hand'] = f(np.asarray(out['balls']['R'], float)[None])[0]
     mz, d = _muzzle(out)
     J['_muzzle'], J['_aim'] = f(mz[None])[0], M @ d
