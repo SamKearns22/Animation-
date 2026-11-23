@@ -8143,7 +8143,169 @@
    "round": null,
    "cost": 2.62,
    "notes": 1,
-   "repeats": []
+   "repeats": [],
+   "steps": 69,
+   "hist_k": 198,
+   "kinds": {
+    "tool search": 28.6,
+    "other": 71.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 61,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 6
+   },
+   "split": {
+    "usd": 4.9388,
+    "total": 4.9388,
+    "floor_k": 84,
+    "blocks": {
+     "new writes": 40.3,
+     "start-up floor": 24.1,
+     "Claude's words": 18.9,
+     "carried history": 16.7
+    },
+    "origins": {
+     "Claude's words": 28.3,
+     "start-up floor": 24.1,
+     "cache re-write": 21.8,
+     "result: tool search": 20.9,
+     "messages and reminders": 3.4,
+     "result: other": 1.0,
+     "Claude's edits": 0.5
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 24.1,
+     "memory lapses (re-paying for the whole chat)": 21.8,
+     "thinking": 12.3,
+     "reading notes": 10.4,
+     "commands": 7.2,
+     "writing notes": 6.4,
+     "reading chat records": 4.9,
+     "reading kit code": 4.1,
+     "messages and reminders": 3.4,
+     "messages to Sam": 1.9,
+     "reading guides": 1.0,
+     "writing code": 1.0,
+     "other commands": 0.7,
+     "start-up and handover tools": 0.6,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 49,
+    "work_pct": 0.77,
+    "reads": [
+     [
+      "notes/proposals/named-lines.md",
+      4.9,
+      0.0948
+     ],
+     [
+      "source/preflight.py",
+      4.2,
+      0.0752
+     ],
+     [
+      "notes/ledger/blessed-preflight-chat3.txt",
+      2.8,
+      0.052
+     ],
+     [
+      "notes/proposals/lessons-report.md",
+      1.3,
+      0.0246
+     ],
+     [
+      "notes/proposals/rule-needs-check/rule-table.md",
+      1.1,
+      0.0192
+     ],
+     [
+      "notes/proposals/could-not-test.md",
+      0.9,
+      0.0163
+     ],
+     [
+      "notes/proposals/could-not-test/test.md",
+      0.9,
+      0.0163
+     ],
+     [
+      "source/waivers.py",
+      0.9,
+      0.0163
+     ],
+     [
+      "notes/archive/blessed-handovers.md",
+      1.0,
+      0.0141
+     ],
+     [
+      "notes/proposals/named-lines/chat.md",
+      0.6,
+      0.0115
+     ],
+     [
+      "notes/grand-theft-autism.md",
+      0.8,
+      0.0112
+     ],
+     [
+      "notes/ledger/milburn/checks.jsonl",
+      0.5,
+      0.0096
+     ],
+     [
+      "source/grand_theft_autism.py",
+      0.5,
+      0.0083
+     ],
+     [
+      "source/kittests.py",
+      0.5,
+      0.0083
+     ],
+     [
+      "notes/logs/broken.md",
+      0.5,
+      0.0083
+     ],
+     [
+      "notes/logs/kittests-last.log",
+      0.5,
+      0.0083
+     ],
+     [
+      "notes/proposal-route.md",
+      0.3,
+      0.0031
+     ],
+     [
+      "notes/archive/proposal-route-handovers.md",
+      0.2,
+      0.0021
+     ],
+     [
+      "notes/archive/milburn.md",
+      0.1,
+      0.0017
+     ],
+     [
+      "story/status.md",
+      0.1,
+      0.001
+     ]
+    ],
+    "base_pct": 20.9
+   }
   },
   {
    "date": "2026-11-23",
@@ -10063,6 +10225,16 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-23",
+   "chat": "4d585828",
+   "model": "opus",
+   "stage": "learn",
+   "round": null,
+   "cost": 3.89,
+   "notes": 0,
+   "repeats": []
   }
  ],
  "checks": {}

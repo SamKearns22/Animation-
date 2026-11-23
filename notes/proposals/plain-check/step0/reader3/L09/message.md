@@ -1,0 +1,1 @@
+9. **The 0.14 brow cap and the 3/4-parts rule are written once in the rulebook, each with its check.** Problem: the brow cap is only in Milburn's notes; the next film can't read it. Steps: write both with their checks, listed in the rulebook's last table. Added: two small lines. Lost: nothing. Other option: keep in the kit's notes.

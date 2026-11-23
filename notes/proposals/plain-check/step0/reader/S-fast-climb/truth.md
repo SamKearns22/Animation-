@@ -1,0 +1,10 @@
+The plan the options describe (the judge's final version):
+
+**Learn first (changes nothing; about 0.5% of a week; Opus high, the next stage-1 chat).** For the get-up (K1 0.5 to K2 1.0 s) and sit-down (K2 7.4 to K1 7.8 s), per joint, print: travel between the locked key poses; the least speed and the least speed change that window allows (speed at least D/N, change at least 4.9 D/N² for a smooth ease), at the delivered 1.1x speed; the measured values; whether it is on screen in each drawing through the film camera; its on-screen step against the limb's own on-screen width. Sort every flag into: goal snap (a goal missing from one key), solver flip (a frame solved into a different pose), crammed spacing (above the floor), or forced speed (at the floor).
+
+**Then one change at a time, each on Sam's Y:**
+1. The speed-change bar: a pop is a speed change over 3 cm a drawing or over its window's smooth-ease value, whichever is larger, at delivered speed. Key poses are locked; travel is taken from them. Proven first on old faults (the 81 cm knee flip, the 33 cm elbow snap, the 22.3 cm elbow pop): all still caught. A goal snap or solver flip is never passable by naming. Target: 283 pops to 0, except joints whose floor is above 3 cm, each printed with it. In jumps(). About 0.3%.
+2. The drawing, judged by bar 1: re-space get-up and sit-down over the whole windows, eased in and out, overlapping (hips lead, gun hand starts with them at 0.5 s, head follows). Camera, beats, times, poses untouched. A 1.1x clip from the film camera, watched at phone size and slowed, with the numbers. About 2.5%.
+3. Only if on-screen steps exceed limb width: the 3 cm step bar becomes that "reads as two drawings" test on visible parts; otherwise it is removed, on Sam's Y. About 0.5%.
+
+Written into the rulebook's motion check for every film; reviewed when the film is done. Total about 3.8%.

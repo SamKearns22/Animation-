@@ -268,6 +268,93 @@ def parse(text, versions):
     return {'scores': scores, 'pick': pick[0], 'faults': faults, 'leak': sec['Leak'], 'options': opts[:2]}
 
 
+# ------------------------------------------------------------------------------------------------ plain words (Sam's Y, 23 Nov)
+# CLAUDE.md "Back-end proposals are explained plainly": the problem in 1-2 sentences, numbered steps, why, what he'd
+# notice, the other option, one Lost and one Added line, no code names. Checker A (fixed) tests the shape and the names;
+# checker C (the blind reader, reader.md) tests whether a stranger understands it. Step 0: notes/proposals/plain-check/step0.
+FIELDS = ('Problem', 'Steps', 'Why', "You'd notice", 'Other option', 'Lost', 'Added')
+FIELD_RE = {'Problem': r'Problem', 'Why': r'Why', "You'd notice": r"You(?:'|’)d notice", 'Other option': r'Other option',
+            'Lost': r'Lost', 'Added': r'Added'}
+PLAIN_OK = {'CranbriJoos', 'TikTok', 'YouTube', 'iPhone', 'GitHub', 'BoJack', 'McFadden', 'MacBook'}  # names, not code
+CODE_RE = re.compile(r'`[^`\n]+`'                                             # anything in code marks
+                     r'|\b[\w-]+\.(?:py|md|json|jsonl|tsv|txt|sh|html|jpg|png|mp4|mov|yaml|toml|lock)\b'  # file names
+                     r'|\b(?:source|notes|guides|animations|\.claude)/[\w./-]*'          # paths
+                     r'|\b[A-Za-z0-9]+(?:_[A-Za-z0-9]+)+\b'                    # joined_with_underscores
+                     r'|\b[a-z]+[A-Z][A-Za-z0-9]*\b|\b[A-Z][a-z]+[A-Z][A-Za-z0-9]*\b'  # joinedCapitals
+                     r'|--[a-z][\w-]+')                                        # command switches
+
+
+def code_names(text):
+    return sorted({m.group(0) for m in CODE_RE.finditer(text) if m.group(0) not in PLAIN_OK})
+
+
+def shape_faults(option):
+    """Checker A on one option (or one message): [] when it has every field of the rule, in plain shape."""
+    body = '\n'.join(option.splitlines()[1:]) if option.lstrip().startswith(('### ', 'Option')) else option
+    faults = []
+    for f, pat in FIELD_RE.items():
+        hits = re.findall(rf'^\s*(?:\*\*)?{pat}(?:\*\*)?\s*:\s*(\S.*)$', body, re.M | re.I)
+        if not hits:
+            faults.append(f'no "{f}:" line')
+        elif len(hits) > 1:
+            faults.append(f'"{f}:" twice')
+    prob = re.search(r'^\s*(?:\*\*)?Problem(?:\*\*)?\s*:\s*(.*)$', body, re.M | re.I)
+    if prob and len(re.findall(r'[.!?](?:\s|$)', prob.group(1).strip() + ' ')) > 2:
+        faults.append('the problem is more than two sentences')
+    if len(re.findall(r'^\s*\d+[.)]\s+\S', body, re.M)) < 1:
+        faults.append('no numbered step lines ("1. ...")')
+    names = code_names(body)
+    if names:
+        faults.append('code or file names: ' + ', '.join(names[:6]))
+    return faults
+
+
+SAM_DIR = os.path.join(ROOT, 'notes', 'ledger', 'sam')      # Sam's own typed messages (handover.py log)
+STOP = set('the a an of to in on at for and or but is are was be it its this that with by as from not no his her '
+           'their our your my we you i he she they them what which who how why when where one two all any each per '
+           'than then so if do does did has have had can could would should will just only also very more most '
+           'used sense unclear never explained said meaning means mean exactly'.split())
+
+
+def _words(text):
+    return {w.rstrip('s') for w in re.findall(r"[a-z][a-z0-9'’-]*", text.lower()) if len(w) > 2}
+
+
+def sam_words():
+    """Every word Sam has typed himself (his saved messages): a word he uses is a word he knows."""
+    txt = ''
+    for f in glob.glob(os.path.join(SAM_DIR, '*.md')):
+        t = re.sub(r'<cross-session-message.*?</cross-session-message>', '', _read(f), flags=re.S)
+        txt += '\n'.join(ln for ln in t.splitlines() if not ln.startswith(('(handover log', '# Sam', '### ')))
+    return _words(txt)
+
+
+def reader_verdict(look, result, known=None):
+    """The blind reader's two files -> {'words', 'unknown', 'wrong', 'pass', 'pass_sam'}. pass = the reader's own
+    strict result (no word it can't explain, every mark RIGHT); pass_sam (C2, Step 0's winner) = no word Sam has never
+    used himself, and no step retold WRONG. Raises ValueError on a half answer."""
+    if not re.search(r'^## Words I can.t explain', look, re.M) or not re.search(r'^## Retelling', look, re.M):
+        raise ValueError('look.md lacks its "Words I can\'t explain" or "Retelling" section')
+    if not re.search(r'^## Result', result, re.M) or not re.search(r'^## Marks', result, re.M):
+        raise ValueError('result.md lacks its "Marks" or "Result" section')
+    sec = look.split('## Retelling')[0]
+    words = []
+    for ln in sec.splitlines():
+        m = re.match(r'\s*-\s*(.+?)(?::\s|$)', ln)
+        if m and m.group(1).strip().lower().strip('."') != 'none':
+            words.append(m.group(1).strip().strip('"“”*'))
+    known = sam_words() if known is None else known
+    unknown = [w for w in words if {x for x in _words(w) if x not in STOP} - known]
+    marks = P_MARK_RE.findall(result.split('## Result')[0])
+    wrong = sum(1 for m in marks if m.upper() == 'WRONG')
+    strict = re.search(r'^## Result\s*\n\s*PASS\b', result, re.M) is not None
+    return {'words': words, 'unknown': unknown, 'wrong': wrong, 'pass': strict and not words,
+            'pass_sam': not unknown and not wrong}
+
+
+P_MARK_RE = re.compile(r':\s*\**(RIGHT|WRONG|PARTLY)\b', re.I)
+
+
 def who_wrote(key, pick):
     return key.get(pick, 'the judge (V0: no version passed, so it wrote a better one)')
 
