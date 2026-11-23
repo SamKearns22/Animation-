@@ -610,7 +610,7 @@ def reply_faults(reply, touched=(), lookup=None):
                 faults.append(f'this asks Sam to approve a change to the system with no proposal behind it: "{q[:120]}". '
                               'Put it through the route first (`propose.py new NAME`, pack, judge, record) and name '
                               'notes/proposals/NAME.md in the reply. If it is not a change to rules, tools, checks, '
-                              'kits or how films are built, reword the question to say what it is.')
+                              'kits or how films are built, say so in the one Correction line (never resend it).')
                 break
     return faults
 
@@ -713,14 +713,18 @@ def correction_needs(faults):
 def block_reason(faults, reply):
     """The block's message (Change 1): Sam has read the reply already, so only a one-line correction is sent."""
     asks = [q for q, _ in questions(reply)]
-    num = next((m.group(1) for q in asks for m in [re.match(r'\W*(\d+)[.)]', q)] if m), '')
     lines = []
     for f, need in correction_needs(faults):
+        quoted = re.search(r'"(.+?)"', f)          # the question the fault names, else the first numbered ask
+        num = next((m.group(1) for q in ([quoted.group(1)] if quoted else []) + asks
+                    for m in [re.match(r'\W*(\d+)[.)]', q)] if m), '')
         if need.startswith('Critiqued'):
             lines.append(f'"Correction: {need}" (the line the proposal\'s ask was missing)')
         elif need == 'withdrawn':
-            lines.append(f'"Correction: ignore {"question " + num if num else "my last question"}, it is withdrawn" '
-                         '(it goes through the proposal route before Sam is asked again)')
+            q = f'question {num}' if num else 'my last question'
+            lines.append(f'"Correction: ignore {q}, it is withdrawn" (it goes through the proposal route before Sam is '
+                         f'asked again), or, if it changes nothing in how films are made, "Correction: {q} is not a '
+                         'change, it only asks about <what it is about, in plain words>"')
         else:
             lines.append('"Correction: none needed" (the line stays in the notes from now on)')
     return ('Sam has ALREADY READ this reply: this check runs after it is on his screen (CLAUDE.md "One message, never '
@@ -737,8 +741,12 @@ def correction_ok(retry, faults):
         return False, 'no "Correction:" line'
     if len(body) > 3:
         return False, f'{len(body)} lines (a correction is one line)'
-    miss = [need for _, need in correction_needs(faults) if need and need.lower() not in retry.lower()]
-    return (not miss), ('missing ' + ', '.join(f'"{m}"' for m in miss)) if miss else 'cleared'
+    low = retry.lower()
+    miss = [need for _, need in correction_needs(faults)
+            if need and need.lower() not in low and not (need == 'withdrawn' and 'not a change' in low)]
+    if miss:
+        return False, 'missing ' + ', '.join(f'"{m}"' for m in miss)
+    return True, 'cleared: says not a change (counted for Change 2)' if 'not a change' in low else 'cleared'
 
 
 def _resent_share(blocked, retry):
@@ -804,6 +812,35 @@ def _mark_answered(rec):
             r['answered'] = True
     with open(_p(BLOCKS), 'w', encoding='utf-8') as f:
         f.write(''.join(json.dumps(r, ensure_ascii=False) + '\n' for r in rows))
+
+
+GUARD_LIST = os.path.join(ROOT, 'notes', 'proposals', 'guard-film-questions', 'test-list.json')
+
+
+def guard_score(path=GUARD_LIST):
+    """guard-film-questions Learn step 2: replay the guard on the labelled list of its real stops (each proposal as it
+    was then) and on the 15 Nov probe. Returns {wrong: rows stopped although not a system ask, missed: true catches it
+    no longer stops, probe_missed, probe_blocked}."""
+    d = json.load(open(path, encoding='utf-8'))
+
+    def lookup_for(row):
+        def lookup(name):
+            if name == row['touched'] and row['verdict_line']:
+                a, b, c = map(int, re.findall(r'\d+', row['verdict_line']))
+                return True, {'faults': [('fixed', '')] * b + [('named', '')] * c}
+            return False, f'notes/proposals/{name}.md has no judge\'s verdict (as then)'
+        return lookup
+    out = {'wrong': [], 'missed': [], 'probe_missed': [], 'probe_blocked': []}
+    for r in d['rows']:
+        stop = bool(reply_faults(r['text'], {r['touched']} if r['touched'] else set(), lookup_for(r)))
+        if stop and not r['true_catch']:
+            out['wrong'].append(r['n'])
+        elif not stop and r['true_catch']:
+            out['missed'].append(r['n'])
+    none = lambda n: (False, 'none')
+    out['probe_missed'] = [q for q in d['probe_change'] if not reply_faults(q, (), none)]
+    out['probe_blocked'] = [q for q in d['probe_routine'] if reply_faults(q, (), none)]
+    return out
 
 
 def blocks_report(since=''):
@@ -940,6 +977,10 @@ def main(argv):
         return plain(rest[0])
     elif cmd == 'blocks':
         print(blocks_report(opt('--since') or ''))
+        g = guard_score()
+        print(f"labelled list: {len(g['wrong'])} wrong stops {g['wrong']}, {len(g['missed'])} true catches missed "
+              f"{g['missed']}; probe: {len(g['probe_missed'])}/12 system asks missed, {len(g['probe_blocked'])}/10 "
+              'routine asks stopped')
     elif cmd == 'status':
         status()
     elif cmd == 'mark':

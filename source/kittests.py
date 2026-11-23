@@ -3146,6 +3146,27 @@ def guard_one_correction():
             bad.append('wrong numbers accepted')
         if P.correction_ok('Critiqued: 6 found, 2 fixed, 4 named\n' + 'more\n' * 4, fault)[0]:
             bad.append('a long resend accepted as a correction')
+        # 3b. Sam's own example (22 Nov, chat 56d8e5c4, saved from its record): the stopped reply sent again whole 12 s
+        # later; Sam: "You keep sending me messages twice". The check names question 2 and catches the resend.
+        ex = J.load(open(os.path.join(os.path.dirname(HERE), 'notes', 'proposals', 'guard-film-questions',
+                                      'example-22nov.json'), encoding='utf-8'))
+        turn(ex['blocked'])
+        out = run()
+        if 'question 2' not in (J.loads(out)['reason'] if out else ''):
+            bad.append("Sam's 22 Nov reply: the block does not name question 2")
+        turn(ex['blocked'], ex['retry'])
+        run(active=True)
+        r = P._blocks()[-1]
+        if r.get('shape') != 'full' or r.get('result') != 'let-through':
+            bad.append(f"Sam's 22 Nov resend not caught: {r.get('shape')}, {r.get('result')}")
+        n1 = unrouted()
+        turn(ex['blocked'])
+        run()
+        turn(ex['blocked'], 'Correction: question 2 is not a change, it only asks what you meant by 15% per film.')
+        run(active=True)
+        if P._blocks()[-1].get('result') != 'cleared' or unrouted() != n1:
+            bad.append("Sam's 22 Nov reply: the right one-line correction was not cleared")
+        n0 = unrouted() - 1                     # step 5 expects exactly one more let-through
         # 5. a stop by another hook first (no block of ours pending): never blocks twice, logged as before
         open(os.path.join(tmp, P.BLOCKS), 'w').close()
         turn(ask)
@@ -3157,6 +3178,37 @@ def guard_one_correction():
     finally:
         P.PROPS = old
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+# the guard's score on its labelled list as measured 23 Nov (chain B chat 4, before Change 2): never worse. Change 2
+# (its own yes from Sam) sets all four to 0.
+GUARD_BASELINE = {'wrong': 21, 'missed': 2, 'probe_missed': 9, 'probe_blocked': 1}
+
+
+@test
+def guard_labelled_list():
+    """guard-film-questions Learn step 2: the guard's 51 real stops (15-23 Nov), each labelled from its chat (film
+    question, job, start the route, Critiqued wording, path misread, meaning: wrong stops; Critiqued missing, unjudged
+    system ask: true catches), plus the 15 Nov probe. The guard is replayed on all of them: never worse than measured."""
+    import json as J
+    import propose as P
+    d = J.load(open(P.GUARD_LIST, encoding='utf-8'))
+    bad = []
+    ok_labels = {'film': False, 'job': False, 'start-route': False, 'critiqued-wording': False, 'path-misread': False,
+                 'meaning': False, 'critiqued-missing': True, 'unjudged-system': True}
+    for r in d['rows']:
+        if ok_labels.get(r['label']) is None or ok_labels[r['label']] != r['true_catch']:
+            bad.append(f"row {r['n']}: label {r['label']} / true_catch {r['true_catch']} do not agree")
+    logged = [ln for ln in P._read(P._p(P.UNROUTED)).splitlines() if ln.startswith('- ') and ln[2:18] <= '2026-11-23 08:38']
+    if len(d['rows']) != len(logged) or len(d['probe_change']) != 12 or len(d['probe_routine']) != 10:
+        bad.append(f"list incomplete: {len(d['rows'])} rows for {len(logged)} logged stops; probe "
+                   f"{len(d['probe_change'])}+{len(d['probe_routine'])}")
+    g = P.guard_score()
+    for k, base in GUARD_BASELINE.items():
+        if len(g[k]) > base:
+            bad.append(f'{k}: {len(g[k])} > {base} ({g[k]})')
+    return not bad, '; '.join(bad) or ('51 labelled stops + 22 probe questions; replay: ' + ', '.join(
+        f'{k} {len(g[k])} (at most {GUARD_BASELINE[k]})' for k in GUARD_BASELINE))
 
 
 PLAIN_OPT = ("### Option {n}: two quick stills first\n"
