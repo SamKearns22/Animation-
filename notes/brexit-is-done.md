@@ -58,7 +58,7 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   line (people.SEXED, BEFORE_SEX; load refuses a new film's person without it), face-tool people now keep their body
   line, crowd women flagged, new build body.FIGS 'female' (old 'woman' kept for GTA) with arms out a little
   (views.standing). Sam's note 7: right for May, wrong for Kemi ("just does not have that body").
-- **Next (chat 4 on restart, Opus high):** Kemi's own build, measured from her photo, never guessed (Sam: not 'slimmer' than May),
+- **Next (chat 4 on restart, Opus high):** Kemi's own build, measured from several photos of her (Sam 22:28: "maybe check a few photos"; full-length, standing, the search order in guides/job-packs.md Plan; her likeness, so her photos are right here, unlike the general body's size charts), never guessed (Sam: not 'slimmer' than May),
   then run the kit tests on finished films, the cast-sheet check (fails both n5, passes Lucia and Blair), Change 2
   (neckline first: May's striped blouse reads as a tie), cast sheet v3 to Sam.
 - **Needs Sam:** Q2 blood plan (item 18): his Y comes back to chat 3, which writes it here.
