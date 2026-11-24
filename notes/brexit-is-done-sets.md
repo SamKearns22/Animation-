@@ -213,6 +213,9 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
   a rule for every film (no rule 90); for this film, locked: all three in the same place and size on screen as May
   (the interview look): face centre about 62% across, chest up, the same eye row and head size, with a decent amount
   of space round each. Kemi (was mid-thigh up) and Blair move closer to match May's chest-up framing.
+  Sam's note 9 (24 Nov 00:42, to chat 7): "I don't mind if you zoom out on May a little to give the Kemi/Tony scenes
+  more room to show their scenes": May framed a little wider than chest up (about waist up), Kemi and Blair matching
+  her place and size, so the site, the wolves and the oak room get more room.
   For the board chat: with Kemi's eyes on May's row, the site's level camera shows less sky over the frame; keep the
   grey sky in view (item 16) by setting the frame further back or a storey lower, never by moving Kemi; the action spots
   stay round her (attack low left, milling left, bars and runner above).
