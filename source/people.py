@@ -226,7 +226,7 @@ BEFORE_SEX = {'blessed': 'posted', 'facetool': 'the face tool test cast', 'grand
               'her own build woman)', 'milburn': 'posted', 'protest-tiers': 'posted'}
 SEXED = {'woman': dict(figure='female', shoulders=138, arm_w=27.0),
          'man': {}}
-BODY_KEYS = ('shoulders', 'figure', 'arm_w', 'arm_bulge', 'bottom', 'leg_k')
+BODY_KEYS = ('shoulders', 'figure', 'arm_w', 'arm_bulge', 'bottom', 'leg_k', 'jacket_hem')
 
 
 def _sexed(sp, d):
@@ -442,6 +442,8 @@ def _fact(d, key, val, people):
                     if v not in ('man', 'woman', 'female', 'straight'):   # (a waist and hips): body.FIGS. Open
                         raise DescriptionError(f'build {v!r}: man, woman, female or straight')   # Wounds chat 6:
                     d['figure'] = v                # 'straight', a woman's straighter build measured from Kemi's photos
+                elif w == 'jacket':                # Open Wounds chat 7: 'jacket 440' ends the jacket there (her photos:
+                    d['jacket_hem'] = int(v)       # above the hip); below it, the trousers' seat (body.trouser_seat)
                 elif w == 'arms':                  # 'arms 35' (the house arm is 30); 'arms 35 muscle' swells them
                     a = v.split()
                     d['arm_w'] = float(a[0])
@@ -588,7 +590,7 @@ def person(d):
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
               'outfit', 'jacket', 'sleeve', 'trousers', 'shirt', 'tie', 'shoe', 'dress', 'seed', 'collar', 'kit_hat',
               'hat_c', 'short_sleeve', 'sleeve_up', 'sleeve_w', 'sleeve_taper', 'smile', 'figure', 'arm_w',
-              'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c', 'bangles'):
+              'arm_bulge', 'leg_cover', 'shorts_print', 'fray', 'shoe_style', 'sole_c', 'bangles', 'jacket_hem'):
         if k in d:
             sp[k] = d[k]
     _sexed(sp, d)

@@ -13,6 +13,10 @@ tiles = []
 for who in ('may', 'kemi', 'blair'):
     for yaw, seated, name in ((0, False, 'front'), (45, False, 'three-quarter'), (180, False, 'back'), (45, True, 'seated 3/4')):
         sp = dict(cast[who]); sp['hair_style'] = 'back'
+        if 'kit_house' in sp:                     # chat 7: 'back' never reached a house head's own hair, so the cut
+            sp['kit_house'] = dict(sp['kit_house'], hair='bald')   # left Kemi's braids as two square blocks on her
+            #   shoulders ("square shoulders", "no hair") and May's strands at the neck (the judge's cue for her
+            #   turned and seated views): the body alone is judged now, for everyone
         for k in ('hat', 'hat_c', 'specs'):
             sp.pop(k, None)
         tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))

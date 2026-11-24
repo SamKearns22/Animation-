@@ -542,12 +542,67 @@ FIG_HEM = {'female': 0.92, 'straight': 0.96}   # the hem's width over the should
 WOMEN_FIGS = ('female', 'straight', 'woman')   # the builds a woman is drawn on (castsheet's build check)
 
 
-def fig_half(fig, y, sw, bottom):
-    """The build's half width at height y (None: the house body's, as front_outline draws it)."""
+def fig_half(fig, y, sw, bottom, hem=None):
+    """The build's half width at height y (None: the house body's, as front_outline draws it). `hem`: the width at
+    the bottom over the shoulders when it is not the build's own (seat_hem: a short jacket, the trousers' seat)."""
     if not fig:
         return float(np.interp(y, [60, 200, bottom], [sw, sw + 6, sw * HEM]))
     ys, ks = zip(*FIGS[fig])
-    return sw * float(np.interp(y, ys + (bottom,), ks + (FIG_HEM.get(fig, HEM),)))
+    return sw * float(np.interp(y, ys + (bottom,), ks + (hem or FIG_HEM.get(fig, HEM),)))
+
+
+# A short jacket (Open Wounds chat 7; Kemi's photos, notes/learn/kemi-build/measures.json: "her blazer ends here,
+# above the hip", 1.35 of the shoulders below the collar = 433 in body units; the blind judge: "straight body, no
+# waist" on the long box jacket): `jacket NNN` in the cast file ends the jacket there; below it the body is her
+# trousers' seat, which curves in from the hip (the build's own widest point, unchanged) to the thighs, so the hip
+# reads as a hip and not a box hem. Its width at the hem over the shoulders: the thigh's outer edge there
+# (views.WOMAN_LEG), so the seat and the thigh are one line.
+SEAT_HEM = 0.87
+
+
+def seat_hem(sp):
+    """The hem width a person's outline ends on (None: the build's own)."""
+    return SEAT_HEM if sp.get('jacket_hem') and sp.get('figure') in ('female', 'straight') else None
+
+
+def trouser_seat(p, sp, body, view_bottom, thighs=None):
+    """A short jacket: the body's outline below the jacket's hem painted in the trousers (the seat), its top edge the
+    jacket's hem line. `body`: the outline just drawn, in the same pen; `thighs`: the legs' outer edges (left, right)
+    at the body's bottom (views.person works them out): no line across the bottom between them (the seat runs on
+    into the thighs, drawn before, their tops under it); where the seat is wider than the thighs (turned, the seat
+    over the back of the thigh), its underside is drawn."""
+    hem = sp.get('jacket_hem')
+    if not hem or hem >= view_bottom - 4:
+        return
+    pts = [tuple(map(float, q)) for q in body]
+    out = []
+    for a, b in zip(pts, pts[1:] + pts[:1]):            # the outline cut to y >= hem (one half-plane)
+        ia, ib = a[1] >= hem, b[1] >= hem
+        if ia:
+            out.append(a)
+        if ia != ib:
+            u = (hem - a[1]) / (b[1] - a[1])
+            out.append((a[0] + (b[0] - a[0]) * u, hem))
+    if len(out) < 3:
+        return
+    col = sp.get('trousers', (40, 40, 46))
+    xs = [x for x, _ in out]
+    p.poly(out, col, None)
+    lo = [q for q in out if q[1] > view_bottom - 1.0]
+    x0, x1 = min(x for x, _ in lo), max(x for x, _ in lo)
+    tl, tr = thighs or (x0, x1)
+    a, b = max(x0, tl) + 1.0, min(x1, tr) - 1.0
+    if b > a:                                            # the body's own bottom line painted out over the thighs
+        p.poly([(a, view_bottom - 4), (b, view_bottom - 4), (b, view_bottom + 6), (a, view_bottom + 6)], col, None)
+    p.line([(min(xs), hem), (max(xs), hem)], INK, 2.6)   # the jacket's hem
+    mid = (x0 + x1) / 2
+    for sg, x, t in ((-1, x0, tl), (1, x1, tr)):         # each side, from the hem down to the thigh's own line
+        side = sorted((q for q in out if q[1] < view_bottom - 1.0 and (q[0] - mid) * sg > 0), key=lambda q: q[1])
+        if (x - t) * sg > 2.0:                           # the seat wider than the thigh: its underside, in to it
+            end = [(x, view_bottom), (t, view_bottom)]
+        else:
+            end = [(x, view_bottom), (x - sg * 2.5, view_bottom + 8)]
+        p.line(side + end, INK, 2.6)
 
 
 def _chaikin(pts, n=2):
@@ -561,7 +616,7 @@ def _chaikin(pts, n=2):
     return pts
 
 
-def front_outline(sw, bottom, o=2.0, fig=None, arm_w=30.0):
+def front_outline(sw, bottom, o=2.0, fig=None, arm_w=30.0, hem=None):
     """The body's outline seen from the front (or the back): the collar, each shoulder sloping down and rounding over
     the top of the arm on the arm's own circle (its joint sits at sw - 14, 60: views.standing), the sides, the hem.
     Was a flat slope to a corner at (0.8 sw, 12): the arm's round top sat lower, so the outline stepped down, then
@@ -579,8 +634,8 @@ def front_outline(sw, bottom, o=2.0, fig=None, arm_w=30.0):
     a1 = math.atan2(-math.sqrt(max(1.0, R * R - (sw - cx) ** 2)), sw - cx)   # where the circle meets the side
     arc = [(cx + R * math.cos(a), cy + R * math.sin(a)) for a in np.linspace(a0, a1, 8)]
     if fig:                                             # the build's side, smooth, from the arm down to the hem
-        side = [(fig_half(fig, y, sw, bottom), y) for y, _ in FIGS[fig] if arc[-1][1] + 20 < y < bottom - 10]
-        right = arc + _chaikin([arc[-1]] + side + [(sw * FIG_HEM.get(fig, HEM), bottom)])[1:]
+        side = [(fig_half(fig, y, sw, bottom, hem), y) for y, _ in FIGS[fig] if arc[-1][1] + 20 < y < bottom - 10]
+        right = arc + _chaikin([arc[-1]] + side + [(sw * (hem or FIG_HEM.get(fig, HEM)), bottom)])[1:]
     else:
         right = arc + [(sw + 6, 200), (sw * HEM, bottom)]
     left = [(-x, y) for x, y in right]
@@ -595,16 +650,28 @@ def front_outline(sw, bottom, o=2.0, fig=None, arm_w=30.0):
 WOMAN_V = (58, 150, 40, 70)
 
 
-def _womans_neckline(p, sp, jc, sc, skin, bottom):
+def _top_y(body, x):
+    """The body outline's top edge (the collar and the shoulder's slope) at x: the highest crossing above y 60."""
+    ys = []
+    for (x0, y0), (x1, y1) in zip(body, body[1:] + body[:1]):
+        if (x0 - x) * (x1 - x) <= 0 and x0 != x1 and min(y0, y1) < 60:
+            ys.append(y0 + (y1 - y0) * (x - x0) / (x1 - x0))
+    return min(ys) if ys else -4.0
+
+
+def _womans_neckline(p, sp, jc, sc, skin, bottom, body=None):
     a, dpt, b, ny = WOMAN_V
-    p.poly([(-a, -4), (a, -4), (b, ny), (0, dpt), (-b, ny)], sc, INK, 2.2)
+    # chat 7: every point kept on or under the body's top edge (the corners at (58, -4) stood above the shoulder's
+    # slope, two square nubs on the shoulders at phone size: the blind judge's "square shoulders" on Kemi's front)
+    inside = (lambda q: [(x, max(y, _top_y(body, x) + 1.5)) for x, y in q]) if body else (lambda q: q)
+    p.poly(inside([(-a, -4), (a, -4), (b, ny), (0, dpt), (-b, ny)]), sc, INK, 2.2)
     for sg in (-1, 1):                                  # the blouse's collar, open and laid flat over the lapels
-        p.poly([(sg * a, -4), (sg * 22, 30), (sg * 30, 46), (sg * (a + 8), 10)], sc, INK, 2.0)
+        p.poly(inside([(sg * a, -4), (sg * 22, 30), (sg * 30, 46), (sg * (a + 8), 10)]), sc, INK, 2.0)
     p.poly([(-22, 30), (22, 30), (0, 54)], skin, None)
     jd = tuple(int(v * 0.72) for v in jc)
     for sg in (-1, 1):                                  # small lapels, the notch high
-        p.poly([(sg * (a - 2), -2), (sg * (a + 22), 22), (sg * (b + 18), 74), (sg * (b + 30), 98), (sg * 4, dpt + 10),
-                (sg * (b - 10), 98)], jc, INK, 2.2)
+        p.poly(inside([(sg * (a - 2), -2), (sg * (a + 22), 22), (sg * (b + 18), 74), (sg * (b + 30), 98),
+                       (sg * 4, dpt + 10), (sg * (b - 10), 98)]), jc, INK, 2.2)
     p.line([(0, dpt + 10), (0, bottom)], jd, 2.2)
     p.ell(6, dpt + 50, 5, 5, jd, None)
 
@@ -620,13 +687,13 @@ def plain_torso(img, p, sp, t):
         p.poly([(-32 + nx, -80 + ny), (32 + nx, -80 + ny), (36, 10), (-36, 10)], skin, INK, 2.6)   # neck_lean: its top
         soft(img, p.cam, [(-32 + nx, -76 + ny), (32 + nx, -76 + ny), (30 + nx * 0.5, -40), (-30 + nx * 0.5, -40)],
              (150, 90, 80), 0.35, 4)                # follows a shifted head, one neck (Ad-Vanced Notice, 8 Nov)
-    body = front_outline(sw, bottom, ink_units(p), sp.get('figure'), sp.get('arm_w', 30.0))
+    body = front_outline(sw, bottom, ink_units(p), sp.get('figure'), sp.get('arm_w', 30.0), seat_hem(sp))
     if out == 'suit':
         jc = sp.get('jacket', NAVY)
         sc = sp.get('shirt', (236, 238, 244))
         p.poly(body, jc, INK, 2.6)
         if sp.get('sex') == 'woman' and not sp.get('tie'):   # Open Wounds chat 6, Change 2 (the learn step's first
-            _womans_neckline(p, sp, jc, sc, skin, bottom)    # finding: May's blouse in the narrow V read as a tie)
+            _womans_neckline(p, sp, jc, sc, skin, bottom, body)   # finding: May's blouse in the narrow V read as a tie)
             out = '_done'
     if out == 'suit':
         p.poly([(-40, -4), (40, -4), (22, 150), (0, 230), (-22, 150)], sc, INK, 2.2)

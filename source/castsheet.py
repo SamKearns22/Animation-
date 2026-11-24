@@ -396,6 +396,9 @@ def build_faults(film, who=None, cast=None, measured=None):
 # JUDGE_MIN or more, on outlines drawn from the CURRENT drawing: the record (notes/judge/FILM-cast.json) is stale once
 # the cast file or the drawing code changes after it (git: a newer commit on those files, or unsaved edits).
 JUDGE_MIN = 3
+JUDGES = 3        # Open Wounds chat 7: three fresh judges a round, the middle verdict kept (notes/judge/FILM-cast.json
+#                   'judges' holds each one's lines): a single judge's score moved by a point on figures that had not
+#                   changed (Kemi front 3, then 2), so one judge could pass or fail a view by luck
 JUDGE_FILES = ('story/{film}-people.txt', 'source/body.py', 'source/views.py', 'source/people.py',
                'source/people_parts.py', 'source/sitting.py')
 
@@ -417,6 +420,9 @@ def judge_faults(film, who=None):
     if dirty or (t_rec and t_draw and int(t_draw) > int(t_rec)) or not t_rec:
         out.append(f'JUDGE: the judge\'s record is older than the drawing (or not committed after it): draw the outlines '
                    'again and ask a fresh judge')
+    if len(rec.get('judges') or {}) < JUDGES:
+        out.append(f'JUDGE: the record holds {len(rec.get("judges") or {})} judge(s); a round needs {JUDGES} fresh ones, each '
+                   'verdict the middle of theirs (chat 7: one judge moved a point on unchanged figures)')
     cast, _ = _setup(film, who)
     for v in rec['verdicts']:
         sex = cast.get(v['who'], {}).get('sex')

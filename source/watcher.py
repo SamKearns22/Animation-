@@ -75,6 +75,7 @@ PROMISES = {
     'size_faults': ('a film\'s notes stay under 4,000 words and its handover under 15 lines, with its rule-requests line', 'kittest handover_status_checks'),
     'ledger_faults': ('every chat logs its stage and Sam\'s notes; finished stages are marked', 'kittest handover_status_checks'),
     'push_faults': ('every chat sends Sam a push notification at its handover', 'kittest handover_status_checks'),
+    'castsheet_faults': ('every woman in a cast is drawn on her own measured build and a fresh blind judge reads her as a woman in all four views, or the handover stops (rule S12)', 'kittest womens_builds'),
     'dearest_faults': ('the week\'s five dearest things are re-ranked at least every 7 days and suggested to Sam', 'kittest dearest_things_named'),
     # pack tools (guides/job-packs.md)
     'catalogue.py': ('the kit list is current', 'live kits'),
