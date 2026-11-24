@@ -557,7 +557,7 @@ def fig_half(fig, y, sw, bottom, hem=None):
 # trousers' seat, which curves in from the hip (the build's own widest point, unchanged) to the thighs, so the hip
 # reads as a hip and not a box hem. Its width at the hem over the shoulders: the thigh's outer edge there
 # (views.WOMAN_LEG), so the seat and the thigh are one line.
-SEAT_HEM = 0.87
+SEAT_HEM = 0.85
 
 
 def seat_hem(sp):
@@ -594,7 +594,7 @@ def trouser_seat(p, sp, body, view_bottom, thighs=None):
     a, b = max(x0, tl) + 1.0, min(x1, tr) - 1.0
     if b > a:                                            # the body's own bottom line painted out over the thighs
         p.poly([(a, view_bottom - 4), (b, view_bottom - 4), (b, view_bottom + 6), (a, view_bottom + 6)], col, None)
-    p.line([(min(xs), hem), (max(xs), hem)], INK, 2.6)   # the jacket's hem
+    p.line([(min(xs) + 1.5, hem), (max(xs) - 1.5, hem)], INK, 2.6)   # the jacket's hem (its ends inside the sides)
     mid = (x0 + x1) / 2
     for sg, x, t in ((-1, x0, tl), (1, x1, tr)):         # each side, from the hem down to the thigh's own line
         side = sorted((q for q in out if q[1] < view_bottom - 1.0 and (q[0] - mid) * sg > 0), key=lambda q: q[1])
