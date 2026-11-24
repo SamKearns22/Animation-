@@ -2308,6 +2308,21 @@ def round_page():
 
 
 @test
+def womens_builds():
+    """Rule S12 (Open Wounds chat 6; Sam's notes 5 and 7): the cast-sheet build check catches both n5 pictures (the
+    women on the man's box) and note 7 (May's hourglass on Kemi, not her body), and passes Lucia and Blair."""
+    sys.path.insert(0, HERE)
+    import contextlib
+    import io
+    import castsheet as CS
+    buf = io.StringIO()
+    with contextlib.redirect_stdout(buf):
+        ok = CS.build_selftest()
+    lines = [ln.split(' | ')[0] for ln in buf.getvalue().splitlines()]
+    return ok, '; '.join(lines)
+
+
+@test
 def people_from_a_description():
     """Ranking item 4 (overnight chat 4): the people kit redraws Blessed's people from their descriptions, pixel for pixel."""
     import glob

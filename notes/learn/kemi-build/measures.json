@@ -1,0 +1,116 @@
+{
+ "photos": {
+  "kemi-full-1-portrait-sam.jpg": {
+   "what": "front, blazer",
+   "outer_shoulder_px": 163,
+   "head_px": 92,
+   "outer_shoulder_of_height": 0.239,
+   "measures": {
+    "hip": {
+     "note": "the dress below the jacket, at its widest (hands clasped in front, not at the sides)",
+     "depth_over_shoulder": 1.5,
+     "depth_of_height": 0.36,
+     "width_px": 139,
+     "width_over_shoulder": 0.85,
+     "width_of_height": 0.204
+    },
+    "thigh": {
+     "note": "the dress over the thighs",
+     "depth_over_shoulder": 1.81,
+     "depth_of_height": 0.433,
+     "width_px": 133,
+     "width_over_shoulder": 0.82,
+     "width_of_height": 0.195
+    },
+    "jacket hem": {
+     "note": "her blazer ends here, above the hip",
+     "depth_over_shoulder": 1.35,
+     "depth_of_height": 0.323
+    }
+   }
+  },
+  "kemi-full-3-walking-sam.jpg": {
+   "what": "front, a little turned, wrap top",
+   "outer_shoulder_px": 161,
+   "head_px": 102,
+   "outer_shoulder_of_height": 0.213,
+   "measures": {
+    "bust": {
+     "note": "row scan: the top 263-385, the left sleeve apart at 213-257",
+     "depth_over_shoulder": 0.62,
+     "depth_of_height": 0.132,
+     "width_px": 122,
+     "width_over_shoulder": 0.76,
+     "width_of_height": 0.162
+    },
+    "waist": {
+     "note": "row scan of the white top, rows 254 and 270 (the wrap band): 116 and 123 wide, 0.72-0.76 of the shoulders; the rows between break on the folds' shadows",
+     "depth_over_shoulder": 0.85,
+     "depth_of_height": 0.182,
+     "width_px": 119,
+     "width_over_shoulder": 0.74,
+     "width_of_height": 0.158
+    },
+    "upper waist": {
+     "note": "row 222, just under the bust: 0.76 (v1 drew 0.67 here: the hourglass pinch)",
+     "depth_over_shoulder": 0.6,
+     "depth_of_height": 0.129,
+     "width_px": 123,
+     "width_over_shoulder": 0.76,
+     "width_of_height": 0.163
+    }
+   }
+  },
+  "kemi-full-2-seated-sam.jpg": {
+   "what": "seated",
+   "outer_shoulder_px": 100,
+   "head_px": 58,
+   "outer_shoulder_of_height": 0.233,
+   "measures": {
+    "knee to sole": {
+     "note": "the standing leg: knee at 275, the heel on the floor at 395 (120 high, 2.07 heads; her heels add about 0.3 head)",
+     "of_height": 0.28
+    }
+   }
+  }
+ },
+ "build_straight": {
+  "bust": {
+   "y": 200,
+   "k": 0.87,
+   "photo_depth_y": 199
+  },
+  "waist": {
+   "y": 275,
+   "k": 0.85,
+   "photo_depth_y": 273
+  },
+  "hip": {
+   "y": 470,
+   "k": 0.97,
+   "photo_depth_y": 482
+  }
+ },
+ "drawn": {
+  "straight": {
+   "bust": 0.76,
+   "waist": 0.74,
+   "hip": 0.85
+  },
+  "female": {
+   "bust": 0.66,
+   "waist": 0.7,
+   "hip": 0.81
+  },
+  "man": {
+   "bust": 0.79,
+   "waist": 0.73,
+   "hip": 0.74
+  },
+  "None": {
+   "bust": 0.91,
+   "waist": 0.87,
+   "hip": 0.76
+  }
+ }
+}

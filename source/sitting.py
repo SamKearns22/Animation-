@@ -473,13 +473,26 @@ def _thigh_rest(seat, sg, u=0.62):
 def spec_upright(sp, seat, hands='thighs'):
     sw = sp.get('shoulders', 150)
     arms = {}
-    if hands == 'thighs':
+    if hands == 'thighs' and sp.get('figure') in V.WOMAN_LEGS:
+        # chat 7 (the blind judge on her seated outline, hands on the thighs near the knee: "seated and bulky", "a
+        # neutral shape": the near arm reached forward over her whole front edge): the hands nearer the hips, the
+        # elbows back at her sides, so the upper arm hangs behind the bust and the front edge shows above the forearm
+        for s in 'LR':
+            arms[s] = arm_free(_thigh_rest(seat, 1, 0.4), (0.3, 0.7, -1.0), 'palm')
+    elif hands == 'thighs':
         for s, sg in (('L', -1), ('R', 1)):
             arms[s] = arm_free(_thigh_rest(seat, 1), (0.25, 0.3, -1.0), 'palm')
     elif hands == 'lap':
         for s in 'LR':
             arms[s] = arm_free((14.0, 420.0, 150.0), (0.6, 0.6, -0.3), 'fist')
+    if sp.get('figure') in V.WOMAN_LEGS:          # Open Wounds chat 7 (Kemi's seated photo; the blind judge on her
+        # seated outline: "seated and bulky"): knees and feet together, as a man's sit apart (feet at 64)
+        return _spec(arms=arms, feet={'L': (-WOMAN_FEET, 235.0), 'R': (WOMAN_FEET, 235.0)},
+                     knee_pole={sd: (-sg * 0.3, -1.0, 0.7) for sd, sg in (('L', -1), ('R', 1))})
     return _spec(arms=arms)
+
+
+WOMAN_FEET = 30.0
 
 
 def spec_hands_folded(sp, seat):

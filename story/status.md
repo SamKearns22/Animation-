@@ -1,3 +1,3 @@
-Open Wounds (brexit-is-done): woman's body learned and half built (May right; Kemi needs her own build).
-Next: chat 6 (Opus high) builds Kemi's body from Sam's photos, the check, May's neckline; cast sheet v3. Branch claude/brexit-chat4.
-Alongside: chat 5 (sets chat) plans the places, wolves and estimate; blood plan waits for Sam's Y.
+Open Wounds: the cast is approved by Sam (cast sheet v3, 24 Nov); notes 8, 10, 11 fixed with their checks; wolves kit built (chat 8).
+Next: chat 9 (Opus high): May's softer turned bust and two small cast faults, then the shots in film order (May, Kemi, Blair).
+Main line holds everything (chats 4-8).

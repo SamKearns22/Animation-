@@ -577,6 +577,21 @@ def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None):
     return out
 
 
+def castsheet_faults(film):
+    """Open Wounds chat 6 (Sam's notes 5 and 7): every woman in a new film's cast reads as a woman in every turned
+    view, every man as a man, and each woman is on HER OWN build (measured from her photos, or Sam's words approving
+    it), and no line runs up from the crotch (note 8, chat 7): source/castsheet.py build. A fault stops the handover; finished films (people.BEFORE_SEX) are not asked."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import people
+    if not film or film in people.BEFORE_SEX or not os.path.exists(os.path.join(ROOT, 'story', f'{film}-people.txt')):
+        return []
+    import castsheet
+    return [f'STOP: CAST SHEET: {x}' for x in castsheet.build_faults(film) + castsheet.crotch_faults(film)
+                                                     + castsheet.teeth_faults(film)
+                                                     + castsheet.mouth_spike_faults(film)
+                                                     + castsheet.judge_faults(film)]
+
+
 def _safe(name, fn):
     """Lesson 7 step 3, fail closed: a handover check that cannot run stops the handover; it is never skipped."""
     try:
@@ -930,7 +945,8 @@ def main(argv):
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
                   ('dearest', dearest_faults), ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
-                  ('rule', rule_faults), ('shared', shared_faults), ('kittest', kittest_gate_faults)]
+                  ('rule', rule_faults), ('shared', shared_faults), ('kittest', kittest_gate_faults),
+                  ('castsheet', lambda: castsheet_faults(film))]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
         return report(faults, f'(end of chat, {film})')

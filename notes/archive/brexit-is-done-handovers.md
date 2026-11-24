@@ -67,6 +67,32 @@
 - **Open rule requests:** none (the proposal's check becomes a rule only with Sam's Y).
 - **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
   chat 3's try: scratch kemi_torso.py style draw via castsheet.draw(sp, yaw, PP).
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: branch `claude/brexit-chat4`** (not on the main line: its people code is not yet tested on finished films). The sets chat (chat 5, session_01U3pKQzpCX39nxRRegF2T7U) works the places, wolves and estimate on its own branch; merge both.
+- **Rules that bite next:** 30 (note 5 repeats GTA's Lucia), 49 (likeness: Kemi's build from her photos), 89.
+- **Done (chat 4):** learn step (notes/learn/womans-build/learn.md: as drawn, May and Kemi read as men in all 10 views; the cast's body lines never reached face-tool people). Change 1 half built: `woman`/`man` in the body line (people.SEXED, BEFORE_SEX; load refuses a new film's person without it), face-tool people keep their body line, crowd women flagged, body.FIGS 'female' (GTA's 'woman' kept), arms a little out (views.standing). Sam's note 7: right for May, wrong for Kemi.
+- **Next (chat 6, Opus high: new build):** Kemi's own build from Sam's full-length photos (he is asked for 2-3; measured, never guessed; not slimmer than May; shown beside the photos); kit tests on finished films (each must draw as before); the cast-sheet check (fails both n5 pictures, passes Lucia as a woman and Blair as a man; wired into handover end, which now lists castsheet as UNWIRED); Change 2 (neckline first: May's striped blouse in a narrow V reads as a tie); cast sheet v3 to Sam; merge chat 5's branch and push the main line.
+- **Kemi's photos from Sam (23 Nov ~00:00):** references/brexit-is-done/kemi-full-1-portrait-sam.jpg (standing, front,
+  dark blazer, cream dress), -2-seated-sam.jpg (perched on a sofa arm, legs crossed, heels), -3-walking-sam.jpg (white
+  wrap top with a peplum, dark trousers). Measure her shoulders, waist, hips and legs from these; never guess.
+- **Needs Sam:** Q2 blood (sets chat).
+- **Read:** `guides/job-packs.md` Build; notes/learn/womans-build/learn.md; notes/proposals/womans-build.md "Final version"; note 7.
+- **Open rule requests:** none.
+- **For Claude:** learn drawings: notes/learn/womans-build/draw.py (draw2 style: sp['figure']='female', castsheet._setup); FIGS 'female', FIG_HEM in body.py; views.standing 'female' arms; Kemi's own build likely a second FIGS entry chosen by a `build` word on her body line.
+
+
+### chat 6 (24 Nov)
+- **Newest work: branch `claude/brexit-chat6`** (chat 4's and chat 5's branches merged in; not on the main line: the cast-sheet check refuses the handover, see Next).
+- **Rules that bite next:** S12 (women's bodies: new, its check `castsheet.py build`), 30, 89.
+- **Done (chat 6):** Kemi's own build `straight`, measured from Sam's 3 photos (notes/learn/kemi-build/measure.py; sheet notes/learn/kemi-build/measure-v1.jpg: bust 0.76, waist 0.74, hip 0.85 of the shoulders, drawn the same; May keeps 'female', approved by Sam). Cast-sheet build check (shape in 4 views, likeness to each woman's photos, the blind judge's record), wired into handover end; catches both n5 and note 7, passes Lucia and Blair (kittest `womens_builds`). Change 2 started: a woman's neckline (wide, shallow, blouse collar out, small lapels), front and three-quarter.
+- **Blind judge, 2 rounds (notes/judge/brexit-is-done-cast.json):** Blair man in all 4 views. Round 2 (after the turned edges took the side's bust and seat, views TURNED_SIDE): May woman in all 4 (front, back 5; turned, seated 3). Kemi still fails: woman only 2 front and back ("could also be a man in a plain jacket"), MAN turned (2) and seated (3): "straight body, no waist".
+- **Next (chat 7, Opus high: new build):** Kemi reads as a woman in every view WITHOUT changing her measured widths (handover end refuses until then: the judge's STOP lines). What is left to learn: her photos show a woman's straight build reads by clothes and posture (her blazer ends at the hip, the dress shows under it; her arms hang clear of the waist): try learn.md items 4-5 (arms, a jacket ending at the hip, the hi-vis shaped as in badenoch-hardhat-sam.jpg) and the seated torso; redraw (judge.py), a FRESH judge each round, save the record; then cast sheet v3; push the main line once end is clean.
+- **Sets (chat 5, notes/brexit-is-done-sets.md):** three places built, wolves catalogued; it opens the wolves build chat once Sam answers.
+- **Needs Sam:** Q2 blood, Q8 the four hardest moves, Q9 estimates (all asked by the sets chat).
+- **Read:** `guides/job-packs.md` Build; notes/learn/womans-build/learn.md "What matters"; this section.
+- **Open rule requests:** none.
+- **For Claude:** FIGS 'straight' + WOMEN_FIGS, _womans_neckline/WOMAN_V in body.py; views.torso_view 'three' woman neckline, _built_outline 'straight' side; castsheet.build_faults / judge_faults / build_selftest; handover.castsheet_faults; Kemi's line `build straight`.
+
 
 
 ## Sets side, chat 5 (moved by chat 8, 24 Nov)
@@ -78,3 +104,16 @@
 - **Read:** `guides/job-packs.md` Build; this file (wolves, background action, hardest moves).
 - **Open rule requests:** none.
 - **For Claude:** wolf.py (side, front, side_pose, head_side); places_site.py; preview of the views: the rough's place_tile at full size.
+
+### chat 7 (24 Nov, before Sam's Y)
+- **Newest work: branch `claude/brexit-chat7`** (chat 6's and chat 5 sets' at b21275a2 merged in; NOT on the main line: handover end stops on the judge, below).
+- **Rules that bite next:** S12 (women's bodies, `castsheet.py build`: shape, likeness, crotch, judges), 30, 89.
+- **Done (chat 7):** Kemi on her measured widths (0.76/0.74/0.85, unchanged): jacket to her hip, seat into the thighs, women's legs, turned bust ahead of the arm (each build at its own bust height), back's curve, seated knees together/hands near hips, her slimmer arms (`arms 24`); nubs fixed (neckline, yoke). Note 8 (camel toe) fixed and its check built (castsheet crotch_faults). Notes 10 and 11 (Blair's teeth 'fleshy'; a spike at his smile's corner) fixed, checks castsheet teeth_faults and mouth_spike_faults; both catch Sam's saved pictures, wired into build and handover end. Judges: three fresh a round, middle verdict (castsheet JUDGES); judge sheet blanks all hair. Cast sheet v3 sent: notes/learn/kemi-build/cast-v3.jpg.
+- **Judges (notes/judge/brexit-is-done-cast.json):** May and Blair pass every view. Kemi front 3, back 3; turned and seated ON THE LINE: her identical drawing got 3/3/3 in both (v5d) then 2/2/2 (v5e, the record; judges compared her with May's figure: "like 1 but no hair strands"). More curve would go against her photos (note 7): Sam asked (Q1 below).
+- **Known faults (fix next):** May turned: the bust bump reads pointed (TURNED_BUST female 28 at 140, SD 42: try wider/softer, keep the judge's 3); Kemi turned: the orange yoke's inner corner hangs as a tab under the near braid (people_parts.workwear_torso yoke, wrapped; on earlier sheets too).
+- **Next (Opus high):** Sam's answer to Q1; the two known faults; judges again; kit tests (a full run on the final code: the chat 7 run was still going at handover); handover end clean; push the main line.
+- **Needs Sam:** Q1: accept Kemi's turned and seated views as they are (on the line to body-only judges; clearly a woman with her head and braids), Y/N.
+- **Read:** `guides/job-packs.md` Build; this section.
+- **Open rule requests:** none.
+- **For Claude:** views WOMAN_LEGS/WOMAN_LEG(_TURNED)/WOMAN_HIP_OUT/WOMAN_THIGH_IN/_hip_out/_thigh_edges/_seat_into_thighs/_woman_knee/TURNED_BUST(_Y); body.seat_hem/trouser_seat/_top_y; people `jacket 440`, `arms 24`; sitting.spec_upright women's branch; castsheet crotch_line/crotch_faults/teeth_share/teeth_faults/JUDGES; faces.house_mouth grin; judge.py hair blank.
+

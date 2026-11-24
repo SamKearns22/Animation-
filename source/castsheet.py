@@ -20,7 +20,9 @@ in the straight on view"; n3 Kemi "the orange is gone from her clothes").
 
     python3 source/castsheet.py sheet FILM OUT.jpg [WHO ...]    the sheet (refuses on a figure touching an edge)
     python3 source/castsheet.py match FILM [WHO ...]            front | 3/4 faults, one line each
-    python3 source/castsheet.py selftest                         the check on Sam's saved notes
+    python3 source/castsheet.py build FILM [WHO ...]            woman or man in every view; each woman on HER build;
+                                                                 no line up from the crotch (note 8)
+    python3 source/castsheet.py selftest                         the checks on Sam's saved notes (n2, n3, n5, n7)
 """
 import os
 import sys
@@ -294,6 +296,377 @@ def selftest():
     return ok
 
 
+# ---------------------------------------------------------------------------------------------- the build check
+# Open Wounds chat 6 (24 Nov). Sam's note 5 on cast v2 ("I'm not sure we have female bodies? Kemi's body seems much
+# more like a man's"; notes/sam-notes/brexit-cast-v2/n5-*.jpg: both women on the man's box) and note 7 on the first
+# woman's build ("Kemi Badenoch just does not have that body. Looks good for May though!": one hourglass for every
+# woman). Two questions, every person, every turned view, read from the drawing's own torso outline (views.
+# torso_outline: exact, no guessing from pixels; a reading of saved pictures was tried and found unreliable: heads
+# and hands move its landmarks):
+#   SHAPE     does the body read as a woman's or a man's? Hip over waist at least WOMAN_HIP_WAIST. Measured on
+#             every build at four turns (chat 6): women 1.08 (Kemi's own build, three-quarter: the weakest) to 1.34,
+#             men 0.94 (the house box) to 1.05 (Jason's 'man'). Hip over chest was tried and dropped: it failed Lucia
+#             three-quarter (0.89), a woman Sam approved.
+#   LIKENESS  is it HER body? Each woman's front widths (bust, waist, hip over the outer shoulder) against the ones
+#             measured from her own photos (references/FILM/WHO-build.json, written by the measuring step), within
+#             LIKE_TOL; or Sam's own words approving that exact build. A woman with neither is a fault: never guessed.
+WOMAN_HIP_WAIST, LIKE_TOL = 1.07, 0.05
+SHAPE_VIEWS = ('front', 'three', 'three_back', 'back')
+BANDS = dict(chest=(160, 220, max), waist=(220, 320, min), hip=(380, None, max))
+
+
+def _width_at(poly, y):
+    xs = []
+    for (x0, y0), (x1, y1) in zip(poly, poly[1:] + poly[:1]):
+        if (y0 - y) * (y1 - y) <= 0 and y0 != y1:
+            xs.append(x0 + (x1 - x0) * (y - y0) / (y1 - y0))
+    return (max(xs) - min(xs)) if len(xs) >= 2 else 0.0
+
+
+def torso_shape(sp, view):
+    """Chest, waist and hip widths of the person's torso in a view (body units), as the drawing makes it."""
+    import views as V
+    bottom = sp.get('bottom', V.JACKET)
+    poly = [tuple(map(float, q)) for q in V.torso_outline(sp, view, bottom)]
+    out = {}
+    for k, (a, b, f) in BANDS.items():
+        out[k] = f(_width_at(poly, y) for y in range(a, int(b or bottom - 6), 4))
+    return out
+
+
+def reads_as(m):
+    return 'woman' if m['hip'] >= WOMAN_HIP_WAIST * m['waist'] else 'man'
+
+
+def front_widths(sp):
+    """Bust, waist, hip over the outer shoulder (the arm tops: 2 (sw + 20.5)), at the measuring step's heights."""
+    import body as B
+    sw = sp.get('shoulders', 150)
+    W = 2 * (sw + 20.5)
+    return {n: round(2 * B.fig_half(sp.get('figure'), y, sw, sp.get('bottom', 505)) / W, 2)
+            for n, y in (('bust', 200), ('waist', 275), ('hip', 470))}
+
+
+def _measured(film, w):
+    import json
+    p = os.path.join(ROOT, 'references', film, f'{w}-build.json')
+    return json.load(open(p)) if os.path.exists(p) else None
+
+
+def build_faults(film, who=None, cast=None, measured=None):
+    """One line per fault: a woman drawn on a man's shape (any view), a man drawn on a woman's, a woman whose build
+    is not hers (or was never measured from her photos)."""
+    if cast is None:
+        cast, _ = _setup(film, who)
+    out = []
+    for w, sp in cast.items():
+        sex = sp.get('sex')
+        if sex not in ('woman', 'man'):
+            continue
+        for view in SHAPE_VIEWS:
+            m = torso_shape(sp, view)
+            if reads_as(m) != sex:
+                out.append(f"BUILD {w} ({sex}) reads as a {reads_as(m)} {view}: hip {m['hip'] / m['waist']:.2f} of "
+                           f"the waist (a woman's: at least {WOMAN_HIP_WAIST}; Sam's note 5)")
+        if sex != 'woman':
+            continue
+        ref = (measured or {}).get(w, 'look') if measured is not None else _measured(film, w)
+        if ref == 'look':
+            ref = _measured(film, w)
+        if not ref:
+            out.append(f'BUILD {w}: her build was never measured from her own photos (references/{film}/{w}-build.json; '
+                       f"notes/learn/kemi-build/measure.py shows how): one woman's body for every woman is note 7's fault")
+            continue
+        if ref.get('approved'):
+            if ref.get('figure') != sp.get('figure'):
+                out.append(f"BUILD {w}: Sam approved build {ref.get('figure')!r} ({ref['approved']}), she is drawn on "
+                           f"{sp.get('figure')!r}")
+            continue
+        got = front_widths(sp)
+        off = {k: (got[k], v) for k, v in ref['widths'].items() if abs(got[k] - v) > LIKE_TOL}
+        if off:
+            out.append(f'BUILD {w}: not her body (her photos, references/{film}/{w}-build.json): ' + ', '.join(
+                f'{k} drawn {a:.2f}, photos {b:.2f}' for k, (a, b) in off.items()) + " (Sam's note 7)")
+    return out
+
+
+# Where the legs part (Open Wounds chat 7, Sam's note 8 on the women's new legs: "This is a bit...camel toe";
+# notes/sam-notes/brexit-cast-v3/n8-camel-toe.jpg: the full thighs overlapped down the middle and the near thigh's
+# inner line ran up from where the legs part, deep into the trousers). From the gap between the feet, up the middle
+# to the crotch, then any outline line carrying on up through the trousers' own colour is measured, over the legs'
+# width there. A crotch is a small round point (the legs part, the line turns aside); a seam line up into the cloth
+# is the fault. Read from the drawing (front and back, every woman and man), so any build and any trousers are seen.
+CROTCH_MAX = 0.12
+
+
+def crotch_line(a):
+    """An RGB picture of a standing figure's legs on white (feet at the bottom): the ink line running up from the
+    crotch through the trousers, over the legs' width there (0: none). None when the legs never part."""
+    g = a.astype(int).sum(2) / 3.0
+    bg = g > 200
+    H, W = g.shape
+    y = H - max(3, H // 12)
+    xs = np.nonzero(~bg[y])[0]
+    if len(xs) < 2:
+        return None
+    runs = [x for x in range(xs.min(), xs.max()) if bg[y, x]]
+    if not runs:
+        return None
+    x = int(np.median(runs))
+    while y > 0 and bg[y - 1, max(0, x - 1):x + 2].any():
+        y -= 1
+    yc = y
+    cloth = np.median(a[H - H // 6:][~bg[H - H // 6:]].astype(int), 0)
+    near = lambda yy, xx: (0 <= xx < W) and np.abs(a[yy, xx].astype(int) - cloth).sum() < 60   # noqa: E731
+    run, miss, yy = 0, 0, yc - 4                 # the gap's own top edge (soft in a saved picture): up to 16 rows
+    while yy > 0 and (miss <= 4 or (run == 0 and yy > yc - 20)):   # before a line starts
+        wide = g[yy, max(0, x - 30):x + 31]
+        if (wide < cloth.mean() - 10).mean() > 0.8:   # a hem line across: the trousers end (a jacket above)
+            break
+        seg = g[yy, max(0, x - 4):x + 5]
+        ink = seg.min() < cloth.mean() - 8 if near(yy, x - 12) and near(yy, x + 12) else False
+        if ink:
+            run, miss = run + 1 + miss, 0
+        else:
+            miss += 1
+        yy -= 1
+    row = np.nonzero(~bg[min(H - 1, yc + 4)])[0]
+    width = (row.max() - row.min()) if len(row) else 1
+    return run / max(1.0, float(width))
+
+
+def crotch_faults(film, who=None, cast=None):
+    """Every standing person front and back: the line up from the crotch (crotch_line) under CROTCH_MAX."""
+    from PIL import Image
+    import views as V
+    import body as B
+    if cast is None:
+        cast, _ = _setup(film, who)
+    out = []
+    for w, sp in cast.items():
+        for yaw, name in ((0, 'front'), (180, 'back')):
+            tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            s = 0.5 * sp['height'] / 1.75
+            y0 = 840 - 928 * s
+            V.person(tile, B.Cam(2.0, 540, 470), 540, y0, s, dict(sp), 0.0, yaw, None)
+            top = int((y0 + 400 * s - 470) * 2.0 + 960)
+            knee = int((y0 + 760 * s - 470) * 2.0 + 960)
+            got = crotch_line(np.asarray(tile.convert('RGB'))[top:knee])
+            if got is not None and got > CROTCH_MAX:
+                out.append(f"CROTCH {w} {name}: a line runs up from where the legs part, {got:.2f} of the legs' width "
+                           f"(at most {CROTCH_MAX}; Sam's note 8, \"camel toe\")")
+    return out
+
+
+# A grin's teeth (Open Wounds chat 7, Sam's note 10: "Tony's teeth look a bit...fleshy";
+# notes/sam-notes/brexit-cast-v3/n10-blair-teeth-fleshy.jpg: a thin strip of teeth at the top of a deep dark mouth,
+# the top lip's line across them). Of the open mouth (its biggest dark-red patch and the half height over it), the
+# share that is teeth: the saved picture 0.26, his photo's full top row about 0.6. Every grinning head, front and
+# three-quarter, drawn big.
+TEETH_MIN = 0.40
+MOUTH_C, TEETH_C = (70, 26, 30), (250, 248, 240)
+
+
+def teeth_share(a):
+    """The teeth's share of the open mouth in an RGB picture (None: no open mouth)."""
+    from scipy import ndimage
+    a = a.astype(int)
+    dark = (np.abs(a - MOUTH_C).sum(2) < 40) & (a[..., 0] - a[..., 1] > 25)
+    lab, n = ndimage.label(dark)
+    if n == 0:
+        return None
+    ys, xs = np.nonzero(lab == 1 + int(np.argmax(ndimage.sum(dark, lab, range(1, n + 1)))))
+    if len(ys) < 20:
+        return None
+    y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
+    box = a[max(0, y0 - (y1 - y0) // 2):y1 + 1, x0:x1 + 1]
+    white = (np.abs(box - TEETH_C).sum(2) < 45).sum()
+    d = ((np.abs(box - MOUTH_C).sum(2) < 40) & (box[..., 0] - box[..., 1] > 25)).sum()
+    return white / max(1, white + d)
+
+
+def doubled_points(pts):
+    """A closed curve through the same point twice in a row overshoots into a spike (Sam's note 11, chat 7: "a stray
+    line comes off the top of his smile on the right": the grin's outline ended its top edge and began its lower
+    edge on the same corner). The number of such points."""
+    P = np.asarray(pts, float)
+    return int((np.hypot(*(P - np.roll(P, -1, 0)).T) < 1e-6).sum()) if len(P) > 2 else 0
+
+
+def mouth_spike_faults(film, who=None, cast=None):
+    """Every house mouth a cast member wears (and each kind): no closed curve through one point twice."""
+    import faces as FA
+    if cast is None:
+        cast, _ = _setup(film, who)
+    hits, orig = [], FA.curve
+    FA.curve = lambda pts, n=6: (hits.append(doubled_points(pts)), orig(pts, n))[1]   # noqa: E731
+    try:
+        class _P:
+            def poly(self, *a, **k):
+                pass
+
+            def line(self, *a, **k):
+                pass
+
+        class _F:
+            def pts(self, q):
+                return [(x * 100.0, y * 100.0) for x, y in q]
+        L = dict(mw=0.28, lip0=0.70, lip13=0.712, lip17=0.756)
+        kinds = {(sp.get('kit_house') or {}).get('mouth', {}).get('kind') for sp in cast.values()} - {None}
+        out = []
+        for kind in sorted(kinds | {'grin', 'soft', 'smirk'}):
+            hits.clear()
+            FA.house_mouth(_P(), _F(), L, kind)
+            if sum(hits):
+                out.append(f"MOUTH {kind}: a curve passes through one point twice ({sum(hits)}): it spikes (Sam's note 11)")
+        return out
+    finally:
+        FA.curve = orig
+
+
+def teeth_faults(film, who=None, cast=None):
+    from PIL import Image
+    import views as V
+    import body as B
+    if cast is None:
+        cast, _ = _setup(film, who)
+    out = []
+    for w, sp in cast.items():
+        if (sp.get('kit_house') or {}).get('mouth', {}).get('kind') != 'grin':
+            continue
+        for yaw, name in ((0, 'front'), (45, 'three-quarter')):
+            tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            V.person(tile, B.Cam(2.0, 540, 470), 540, 500, 1.6, dict(sp), 0.0, yaw, None)
+            got = teeth_share(np.asarray(tile.convert('RGB')))
+            if got is not None and got < TEETH_MIN:
+                out.append(f"TEETH {w} {name}: the teeth fill {got:.2f} of the open grin (at least {TEETH_MIN}; Sam's "
+                           f"note 10, \"fleshy\")")
+    return out
+
+
+# The blind judge (Change 1: "a fresh helper that hasn't seen the cast list says man or woman at phone size"). Chat
+# 6 found the shape test alone too weak: it passed Kemi three-quarter (hip 1.08 of the waist, just over the line)
+# while the judge called her a man there and seated ("boxy straight torso, no waist"): her arms and the straight
+# jacket hide the shape. So a woman (or a man) must also be read right by the judge in every view, with confidence
+# JUDGE_MIN or more, on outlines drawn from the CURRENT drawing: the record (notes/judge/FILM-cast.json) is stale once
+# the cast file or the drawing code changes after it (git: a newer commit on those files, or unsaved edits).
+JUDGE_MIN = 3
+JUDGES = 3        # Open Wounds chat 7: three fresh judges a round, the middle verdict kept (notes/judge/FILM-cast.json
+#                   'judges' holds each one's lines): a single judge's score moved by a point on figures that had not
+#                   changed (Kemi front 3, then 2), so one judge could pass or fail a view by luck
+JUDGE_FILES = ('story/{film}-people.txt', 'source/body.py', 'source/views.py', 'source/people.py',
+               'source/people_parts.py', 'source/sitting.py')
+
+
+def judge_faults(film, who=None):
+    import json
+    import subprocess
+    p = os.path.join(ROOT, 'notes', 'judge', f'{film}-cast.json')
+    if not os.path.exists(p):
+        return [f'JUDGE: no blind judge has read this cast (notes/judge/{film}-cast.json; notes/learn/kemi-build/judge.py '
+                'makes the outlines)']
+    rec = json.load(open(p))
+    files = [f.format(film=film) for f in JUDGE_FILES]
+    git = lambda *a: subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True).stdout.strip()
+    t_rec = git('log', '-1', '--format=%ct', '--', os.path.relpath(p, ROOT))
+    t_draw = git('log', '-1', '--format=%ct', '--', *files)
+    dirty = git('status', '--porcelain', '--', *files)
+    out = []
+    if dirty or (t_rec and t_draw and int(t_draw) > int(t_rec)) or not t_rec:
+        out.append(f'JUDGE: the judge\'s record is older than the drawing (or not committed after it): draw the outlines '
+                   'again and ask a fresh judge')
+    if len(rec.get('judges') or {}) < JUDGES:
+        out.append(f'JUDGE: the record holds {len(rec.get("judges") or {})} judge(s); a round needs {JUDGES} fresh ones, each '
+                   'verdict the middle of theirs (chat 7: one judge moved a point on unchanged figures)')
+    cast, _ = _setup(film, who)
+    sam = {(o['who'], o['view']) for o in rec.get('sam_ok', [])}   # Sam's own eye on this same drawing: his words
+    #   (chat 7: Kemi's turned and seated views sat on the line, 3/3/3 one round and 2/2/2 the next on the
+    #   same drawing; Sam, shown cast sheet v3: "Y to Kemi, cast sheet is ready"). Bound to the record, so a
+    #   later drawing change makes it stale with the rest (above).
+    for v in rec['verdicts']:
+        sex = cast.get(v['who'], {}).get('sex')
+        if (v['who'], v['view']) in sam:
+            continue
+        if sex and (v['said'] != sex or v['conf'] < JUDGE_MIN):
+            out.append(f"JUDGE: {v['who']} ({sex}) {v['view']}: the blind judge said {v['said']} ({v['conf']} of 5): "
+                       f"\"{v['why']}\"")
+    return out
+
+
+def _n5_picture(f, box_):
+    """The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
+    tile's box: arms included, as Sam saw it), so the selftest proves its redraw is the picture's state."""
+    from PIL import Image
+    a = np.asarray(Image.open(os.path.join(ROOT, 'notes', 'sam-notes', 'brexit-cast-v2', f)).convert('RGB'))
+    t = a[box_[1]:box_[3], box_[0]:box_[2]].astype(int)
+    m = np.abs(t - np.median(t[:5].reshape(-1, 3), 0)).sum(2) > 40
+    wid = np.array([(np.ptp(np.nonzero(r)[0]) if r.any() else 0) for r in m], float)
+    ys = np.nonzero(wid)[0]
+    H = ys.max() - ys.min()
+    mid = wid[ys.min() + int(0.40 * H)]
+    sh = int(np.argmax(wid > 0.92 * mid))
+    L = int(0.30 * H)                             # the jacket: about 30% of the figure below the shoulders
+    return wid[sh + int(0.70 * L):sh + int(0.84 * L)].max() / wid[sh + int(0.35 * L):sh + int(0.65 * L)].min()
+
+
+def build_selftest():
+    """Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man)."""
+    ok = True
+    cast, _ = _setup('brexit-is-done', None)
+    n5 = {w: dict(cast[w], figure=None) for w in ('may', 'kemi')}       # cast v2: both on the house (man's) body
+    for w, f in (('may', 'n5-may-body.jpg'), ('kemi', 'n5-kemi-body-like-a-mans.jpg')):
+        pic = _n5_picture(f, (1190, 30, 1455, 790))
+        got = build_faults('brexit-is-done', cast={w: n5[w]}, measured={})
+        hit = any('reads as a man' in g for g in got)
+        print(('CAUGHT' if hit else 'MISSED'), f'n5 {w} (the saved picture\'s hips {pic:.2f} of its waist: a box; '
+              f'"Kemi\'s body seems much more like a man\'s")', '|', (got or ['-'])[0][:110])
+        ok &= hit and pic < WOMAN_HIP_WAIST
+    v1 = {'kemi': dict(cast['kemi'], figure='female')}                  # note 7: May's hourglass on Kemi
+    got = build_faults('brexit-is-done', cast=v1)
+    hit = any('not her body' in g for g in got)
+    print('CAUGHT' if hit else 'MISSED', 'n7 kemi on the hourglass ("Kemi Badenoch just does not have that body")',
+          '|', (got or ['-'])[0][:120])
+    ok &= hit
+    from PIL import Image
+    pic = crotch_line(np.asarray(Image.open(os.path.join(ROOT, 'notes', 'sam-notes', 'brexit-cast-v3',
+                                                         'n8-camel-toe.jpg')).convert('RGB')))
+    hit = pic is not None and pic > CROTCH_MAX
+    print('CAUGHT' if hit else 'MISSED', f'n8 camel toe (the saved picture: a line {pic or 0:.2f} of the legs\' '
+          'width up from the crotch)', '|', '-')
+    ok &= hit
+    from PIL import Image as _I
+    pic = teeth_share(np.asarray(_I.open(os.path.join(ROOT, 'notes', 'sam-notes', 'brexit-cast-v3',
+                                                    'n10-blair-teeth-fleshy.jpg')).convert('RGB')))
+    hit = pic is not None and pic < TEETH_MIN
+    print('CAUGHT' if hit else 'MISSED', f'n10 fleshy teeth (the saved picture: teeth {pic or 0:.2f} of the grin)', '|', '-')
+    ok &= hit
+    hw, l13, l17 = 0.15, 0.712, 0.756                                   # the grin's outline as Sam saw it (note 11)
+    old = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03),
+           (hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
+    hit = doubled_points(old) > 0
+    print('CAUGHT' if hit else 'MISSED', "n11 the grin's right-corner spike (a point twice)", '|', '-')
+    ok &= hit
+    got = mouth_spike_faults('brexit-is-done')
+    print('PASS' if not got else 'FAIL', 'every house mouth now: no point twice', '|', (got or ['-'])[0][:110])
+    ok &= not got
+    got = teeth_faults('brexit-is-done', cast={'blair': cast['blair']})
+    print('PASS' if not got else 'FAIL', 'Blair\'s grin now: a full top row', '|', (got or ['-'])[0][:110])
+    ok &= not got
+    got = crotch_faults('brexit-is-done', cast={w: cast[w] for w in ('kemi', 'may', 'blair')})
+    print('PASS' if not got else 'FAIL', 'the cast now: no line up from the crotch', '|', (got or ['-'])[0][:110])
+    ok &= not got
+    gta, _ = _setup('grand-theft-autism', ['lucia'])
+    lu = dict(gta['lucia'], sex='woman')
+    got = [g for g in build_faults('grand-theft-autism', cast={'lucia': lu}, measured={'lucia': {'approved': 'GTA, '
+           '20 Nov: measured from the game\'s art', 'figure': 'woman'}})]
+    print('PASS' if not got else 'FALSE', 'Lucia reads as a woman in every view', '|', (got or ['-'])[0][:100])
+    ok &= not got
+    got = build_faults('brexit-is-done', cast={'blair': cast['blair']})
+    print('PASS' if not got else 'FALSE', 'Blair reads as a man in every view', '|', (got or ['-'])[0][:100])
+    ok &= not got
+    return ok
+
+
 if __name__ == '__main__':
     a = sys.argv[1:]
     if a[:1] == ['sheet']:
@@ -303,6 +676,12 @@ if __name__ == '__main__':
         print('\n'.join(fs) or 'match: front and three-quarter agree')
         sys.exit(1 if fs else 0)
     elif a[:1] == ['selftest']:
-        sys.exit(0 if selftest() else 1)
+        sys.exit(0 if (selftest() & build_selftest()) else 1)
+    elif a[:1] == ['build']:
+        fs = (build_faults(a[1], a[2:] or None) + crotch_faults(a[1], a[2:] or None) + teeth_faults(a[1], a[2:] or None)
+              + mouth_spike_faults(a[1], a[2:] or None)
+              + judge_faults(a[1], a[2:] or None))
+        print('\n'.join(fs) or 'build: every woman reads as a woman, every man as a man, each woman on her own build')
+        sys.exit(1 if fs else 0)
     else:
         print(__doc__)

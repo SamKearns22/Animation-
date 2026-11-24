@@ -11,7 +11,7 @@ head: house badenoch, hair braids, look detail
 house: hat 1, specs
 outfit: suit 30 34 66, sleeves 236 112 30, shirt 30 34 66, no tie
 extras: workwear
-body: 1.7 m, woman, shoulders 140
+body: 1.7 m, woman, build straight, shoulders 140, jacket 440, arms 24
 
 # blair: Tony Blair today (Sam's photo: grey hair swept back, the grin, dark suit, red tie)
 head: house blair, hair back, look detail
