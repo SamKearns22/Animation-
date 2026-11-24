@@ -67,7 +67,7 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 
 - Sam 24 Nov (sets chat): "We always want the character in centre right of the frame. With a decent amount of space around them." Then: "In the case of this film. For the interview joke. Always in the same position as May." Carried in notes/brexit-is-done-sets.md (shot table: all three centre right, face about 60% across, space round them); note 9 lets May be framed a little wider, Kemi and Blair matching her.
 
-## Handover check, named not fixed (chats 1-6)
+## Handover check, named not fixed (chats 1-7)
 - Chat 6: override.py "never seen running": no prompt from Sam reached chat 6 (it was opened by chat 4's handover), so the
   prompt hook had nothing to run on. Castsheet UNWIRED: wired (handover end, castsheet_faults). Branches as chats 2-4
   named them; claude/brexit-chat4 and claude/brexit-chat5-sets merged into claude/brexit-chat6.
@@ -91,6 +91,10 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
   gta-chat31 hold only GTA logs/proposals (film posted): not merged, for a tool chat; CLAUDE.md "Locked by Sam" and
   "Just go" sentence alerts and kittest move_to_shared_catches_film_fixes (N26) were red before this chat (checked on
   the saved code); no estimate yet: the plan stage sets it once the script comes. No film code yet (no `page.py show`): only the shared face tool and people kit changed.
+
+- chat 7, FINDER: no `page.py show` because no shot exists yet; notes 8, 10, 11 and the build were in the shared kit (views, body, faces, people_parts, sitting), found by drawing the cast, not in a film file.
+- chat 7, SENTENCE lost (34f49840, 0945cc85): earlier chats' commits, not this chat's; both sentences stand in CLAUDE.md reworded by Sam ("Every handover has a "Locked by Sam" line ... It stays in the notes, never in messages to me"; ""Just go" (or any override) skips waiting for my yes, never the checks or the hand-over ..."). This chat did not touch CLAUDE.md.
+- chat 7, COST: no estimate on purpose: Sam's Q9, N (no ledger estimate for this film; the sets chat's answer, 24 Nov).
 
 ## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
 its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees
