@@ -307,6 +307,40 @@ def _thigh_edges(j, yaw, sp, y, gap=False):
     return min(xs), max(xs), ((a1, b0) if b0 > a1 + 1.0 else None)
 
 
+def knee_cap(p, c, hip, rx, ry, col):
+    """A bent knee seen end-on (seated, the thigh at the lens): the thigh's rounded end, not a ball. Filled with no
+    ring, then outlined only on the far side from the hip (the cap's silhouette), so the thigh and the knee read as
+    one limb (Sam, 24 Nov, Open Wounds: "circular knees"; the full ring drew a ball stuck on the leg)."""
+    p.ell(c[0], c[1], rx, ry, col, None)
+    a0 = math.atan2(c[1] - hip[1], c[0] - hip[0])       # the thigh's direction on screen, hip to knee
+    arc = [(c[0] + rx * math.cos(a0 + u), c[1] + ry * math.sin(a0 + u))
+           for u in np.linspace(-math.radians(100), math.radians(100), 24)]
+    p.line(arc, INK, 2.6)
+
+
+BOTTOM_BACK, BOTTOM_DROP, BOTTOM_SIDE = 105.0, 58.0, 50.0   # body units: the bottom's reach behind the hip joints, its depth
+#                                                       below them (to the seat), and its width past each hip joint
+
+
+def seat_bottom(p, j, yaw, sp):
+    """A seated person's bottom: the trousers' seat resting on the chair, rounded at the back, flat where it sits.
+    Drawn before the legs and the torso, so only its rounded back and underside show past the thighs and the hem
+    (Sam, 24 Nov, Open Wounds: "No bum": the jacket's square hem met the seat with nothing under it)."""
+    hl, hr = j['hipL'], j['hipR']
+    cx, cy, cz = (hl[0] + hr[0]) / 2, (hl[1] + hr[1]) / 2, (hl[2] + hr[2]) / 2
+    half = abs(hl[0] - hr[0]) / 2 + BOTTOM_SIDE
+    k = 1.08 if sp.get('figure') in WOMAN_LEGS else 1.0     # a woman's hips a touch rounder (cast sheet v3)
+    pts = []
+    for b in np.linspace(0, math.pi, 9):                     # across the hips
+        for a in np.linspace(0, math.pi, 13):                # the rear half of its profile, top to the seat
+            x = cx + half * k * math.cos(b)
+            r = math.sin(b) ** 0.35                          # rounded at the sides, full in the middle
+            y = cy - 30 + (BOTTOM_DROP + 30) * (1 - math.cos(a)) / 2
+            z = cz - BOTTOM_BACK * k * r * math.sin(a) + 20
+            pts.append(project((x, min(y, cy + BOTTOM_DROP), z), yaw)[0])
+    p.poly(curve(_hull(pts), 3), sp.get('trousers', (40, 40, 46)), INK, 2.4)
+
+
 def leg(p, j, side, yaw, sp, from_u=0.0):
     """One leg, hip to shoe. `from_u` > 0 starts the thigh that far along it (a crossed leg's top thigh drawn again
     over the jacket's hem: its root stays under the jacket)."""
@@ -320,7 +354,8 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
     pts = [project(q, yaw)[0] for q in chain]
     hip3 = chain[0]
     k = sp.get('leg_k', 1.0)                                          # a heavier build (Ad-Vanced Notice, 7 Nov)
-    toward = project(knee3, yaw)[1] - project(hip3, yaw)[1]         # how far the knee comes at us
+    toward = project(knee3, yaw)[1] - project(j['hip' + side], yaw)[1]   # how far the knee comes at us (from the real hip:
+    #   a crossed leg drawn again from 30% got a smaller knee, a second rim inside the first: Open Wounds, 24 Nov)
     tb = _covered(sp) if sp.get('leg_cover') is not None else (lambda p_, q_, w_, c_, u=None: tube(p_, q_, w_, c_))
     t0 = 0.5 + 0.5 * (from_u - 1) if from_u > 1 else 0.5 * from_u   # where the drawn chain starts, as a share of the leg
     if len(pts) == 2:
@@ -331,7 +366,8 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
         tb(p, pts[1:], [36 * k * qk, 27 * k * qa], col, (0.5, 1.0))
         kn = 1.0 + 0.12 * min(1.0, toward / 230)
         tb(p, pts[:2], [48 * k, 46 * k * kn * qk], col, (t0, 0.5))
-        p.ell(pts[1][0], pts[1][1], 47 * k * kn * qk, 44 * k * kn * qk, col if sp.get('leg_cover', 1.0) > 0.5 else sp['skin'], INK, 2.6)
+        knee_cap(p, pts[1], pts[0], 47 * k * kn * qk, 44 * k * kn * qk,
+                 col if sp.get('leg_cover', 1.0) > 0.5 else sp['skin'])
     else:
         col = sp.get('trousers', (40, 40, 46))
         a_, b_ = _sub(pts[0] + (0,), pts[1] + (0,)), _sub(pts[2] + (0,), pts[1] + (0,))
@@ -1431,9 +1467,15 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     hidden = set(j.get('hide_legs', ()))         # a leg the film draws itself (a kick at the lens, foreshortened)
     top = j.get('cross')                          # crossed legs (sitting.py): the top leg is drawn after the other
     legs_order = sorted(hips_far, key=lambda sd: sd == top and view != 'back')
-    for sd in legs_order:
+    bottom = j.get('lap') and view != 'back'      # a seated bottom on the seat, over the thighs' roots (their flat ends)
+    for sd in legs_order:                         # and under the jacket's hem; a crossed top leg lies over it (Sam,
+        if bottom and sd == top and view != 'back':   # 24 Nov, Open Wounds: "No bum")
+            seat_bottom(p, j, view_deg, sp)
+            bottom = False
         if sd not in raised and sd not in hidden:
             leg(p, j, sd, view_deg, sp)
+    if bottom:
+        seat_bottom(p, j, view_deg, sp)
     for sd in 'LR':
         check_arm3(j, sd, f"{sp.get('name', 'someone')}'s {sd} arm")
     for sd in arms_far:
@@ -1498,7 +1540,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
                     leg(p, j, sd, view_deg, sp, from_u=0.3)
                     continue
                 k = sp.get('leg_k', 1.0) * 1.1 * _woman_knee(sp)[0]
-                p.ell(kn[0], kn[1], 47 * k, 44 * k, sp.get('trousers', (40, 40, 46)), INK, 2.6)
+                knee_cap(p, kn, project(j['hip' + sd], view_deg)[0], 47 * k, 44 * k, sp.get('trousers', (40, 40, 46)))
     lap_arms = set(j.get('arms_under', ())) - behind   # hands in his lap behind a desk: the desk is nearer
     for sd in arms_far:
         if sd in lap_arms:

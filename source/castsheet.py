@@ -532,6 +532,70 @@ def hair_spike_faults(film, who=None, cast=None, raw=False):
     return out
 
 
+def seated_faults(film, who=None, cast=None, raw=False):
+    """Every cast member seated (three-quarter both ways, the sitting kit's upright, which crosses a woman's legs):
+    a knee drawn as a ball (an outlined ring the size of the knee at a knee point) or no bottom on the seat (the
+    jacket's square hem meeting the seat with nothing under it). Sam, 24 Nov, Open Wounds: "No bum/circular knees"
+    (notes/learn/seated/no-bum-circular-knees-sam.jpg). raw=True: the drawing as Sam saw it (the ring, no bottom)."""
+    import sitting as S
+    if cast is None:
+        cast, PP = _setup(film, who)
+    else:
+        _, PP = _setup(film, None)
+    V = PP.V
+    rings, bottoms = [], []
+    real_cap, real_bottom = V.knee_cap, V.seat_bottom
+
+    def old_cap(p, c, hip, rx, ry, col):
+        p.ell(c[0], c[1], rx, ry, col, V.INK, 2.6)
+
+    def spy_cap(p, c, hip, rx, ry, col):
+        (old_cap if raw else real_cap)(p, c, hip, rx, ry, col)
+
+    def spy_bottom(p, j, yaw, sp):
+        bottoms.append(1)
+        if not raw:
+            real_bottom(p, j, yaw, sp)
+    out = []
+    from PIL import Image
+    pens = [c for c in list(vars(V).values()) + list(vars(PP.B).values()) if isinstance(c, type) and 'ell' in vars(c)]
+    real = {c: c.ell for c in pens}
+
+    def spying(c):
+        def spy_ell(self, cx, cy, rx, ry, fill, line=V.INK, lw=4, rot=0, n=40):
+            if line is not None and rx >= 30 and ry >= 30:     # a ring the size of a knee (hands are 26 and less)
+                rings.append((rx, ry))
+            return real[c](self, cx, cy, rx, ry, fill, line, lw, rot, n)
+        return spy_ell
+    V.knee_cap, V.seat_bottom = spy_cap, spy_bottom
+    try:
+        for name, sp0 in cast.items():
+            if 'kit_house' not in sp0:
+                continue
+            for yaw in (45, -45):
+                sp = dict(sp0)
+                s_ = 0.5 * sp['height'] / 1.75
+                j = S.pose(sp, 'upright')
+                rings.clear()
+                bottoms.clear()
+                for c in pens:
+                    c.ell = spying(c)
+                try:
+                    PP.V.person(Image.new('RGBA', (1080, 1920)), PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s_, s_, sp,
+                                0.0, yaw, j)
+                finally:
+                    for c in pens:
+                        c.ell = real[c]
+                if rings:
+                    out.append(f"SEATED {name} at {yaw}: a knee drawn as a ball (an outlined ring {rings[0][0]:.0f} "
+                               f"wide): Sam, 24 Nov, \"circular knees\"")
+                if not bottoms or raw:                  # raw: the bottom was never drawn (spy_bottom draws nothing)
+                    out.append(f"SEATED {name} at {yaw}: no bottom on the seat: Sam, 24 Nov, \"No bum\"")
+    finally:
+        V.knee_cap, V.seat_bottom = real_cap, real_bottom
+    return out
+
+
 def mouth_spike_faults(film, who=None, cast=None):
     """Every house mouth a cast member wears (and each kind): no closed curve through one point twice."""
     import faces as FA
@@ -696,6 +760,15 @@ def build_selftest():
     got = hair_spike_faults('brexit-is-done')
     print('PASS' if not got else 'FAIL', 'every hair and hat outline now: no point twice', '|', (got or ['-'])[0][:110])
     ok &= not got
+    got = seated_faults('brexit-is-done', ['may'], raw=True)
+    hit = any('ball' in g for g in got) and any('bottom' in g for g in got)
+    print('CAUGHT' if hit else 'MISSED', 'Open Wounds, 24 Nov: May seated, "No bum/circular knees" (as Sam saw it)', '|',
+          (got or ['-'])[0][:110])
+    ok &= hit
+    got = seated_faults('brexit-is-done')
+    print('PASS' if not got else 'FAIL', 'every cast member seated now: knees end the thigh, a bottom on the seat', '|',
+          (got or ['-'])[0][:110])
+    ok &= not got
     got = teeth_faults('brexit-is-done', cast={'blair': cast['blair']})
     print('PASS' if not got else 'FAIL', 'Blair\'s grin now: a full top row', '|', (got or ['-'])[0][:110])
     ok &= not got
@@ -727,6 +800,7 @@ if __name__ == '__main__':
     elif a[:1] == ['build']:
         fs = (build_faults(a[1], a[2:] or None) + crotch_faults(a[1], a[2:] or None) + teeth_faults(a[1], a[2:] or None)
               + mouth_spike_faults(a[1], a[2:] or None) + hair_spike_faults(a[1], a[2:] or None)
+              + seated_faults(a[1], a[2:] or None)
               + judge_faults(a[1], a[2:] or None))
         print('\n'.join(fs) or 'build: every woman reads as a woman, every man as a man, each woman on her own build')
         sys.exit(1 if fs else 0)

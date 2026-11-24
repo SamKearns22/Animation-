@@ -590,6 +590,7 @@ def castsheet_faults(film):
                                                      + castsheet.teeth_faults(film)
                                                      + castsheet.mouth_spike_faults(film)
                                                      + castsheet.hair_spike_faults(film)
+                                                     + castsheet.seated_faults(film)
                                                      + castsheet.judge_faults(film)]
 
 

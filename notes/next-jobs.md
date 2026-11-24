@@ -30,6 +30,8 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
   double-message fix; Statement One "every" or "normal" film (15% vs about 26% for a big film).
 - **R6. Fix the half-turn heads (Sam, 19 Nov, already reserve):** notes/proposals/front-on-focus/retirement-and-handover.md.
 
+- **R7. Learn to draw a seated person's bottom and knees (Sam, 24 Nov, Open Wounds note 12: "No bum/circular knees"; "you do not *know* how to draw this part of the body as you couldn't do it on blessed either").** What must be learned first: how a seated hip, bottom and thigh look from the front, three-quarter and side (reference photos of people seated on plain chairs, traced into outlines), then one seated outline drawn as a single shape from waist to knee instead of a box torso plus tubes. Stopgap in the kit since 24 Nov (views.knee_cap, views.seat_bottom, check castsheet.seated_faults): better than the ball knee and missing bottom, but not yet a believable seated body. Sam's picture: notes/learn/seated/no-bum-circular-knees-sam.jpg.
+
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
 - **Done:** Sam: "Walliams: put into kit" (22 Nov). David Walliams is a kit person in `story/facetool-people.txt`
