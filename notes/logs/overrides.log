@@ -22,3 +22,4 @@
 2026-11-23T16:20+00:00	c0e9f993	sam	Override
 2026-11-23T16:20+00:00	c0e9f993	skipped	send guard (body check / rule 89): /home/user/Animation-/animations/grand-theft-autism-vertical.mp4: no body check record. Render it with a writer that runs the body check (film_engine render, gta_rehearse clip, or humancheck.Writer), or finish.py from such a render.
 2026-11-24T10:31+00:00	946806fb	sam	1. Override Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body.
+2026-11-24T10:31+00:00	946806fb	skipped	handover stops: STOP: KIT TEST COULD NOT RUN: womens_builds (it crashed): a test that cannot run tests nothing; make it run here | STOP: CAST SHEET: JUDGE: the judge's record is older than the drawing (or not committed after it): draw the outlines again and ask a fresh judge
