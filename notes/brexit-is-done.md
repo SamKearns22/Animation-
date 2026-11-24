@@ -48,16 +48,15 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: branch `claude/open-wounds-chat9`** (also pushed to the main line if allowed; the next chat merges it first).
-- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three centre right in May's place and size, May a little wider (note 9); the cast (cast sheet v3 plus chat 9's three small fixes).
-- **Rules that bite next:** 41 (hands on the steel bars), 74 (each wolf's beats), 5 (feet on boards, struck wolves react).
-- **Done (chat 9):** the three known cast faults fixed: May's turned bust rounder (views.TURNED_BUST female 27, SD 52 at 145); Kemi's hi-vis side strip runs into the waist band (no tab under the braid; front shows orange sides, Added line told to Sam); hair and hat outlines through each point once (Kemi's turned hat nub gone) with check castsheet.hair_spike_faults (catches the old drawing; wired into build and handover end). Two rounds of three fresh blind judges (record v6b): May woman in all 4; Kemi 3/4 and seated 3; Kemi front 2 (Sam's Y on the same drawing), back 2 (Sam: move on from the characters).
-- **Sam, 24 Nov (92% of the week used):** "We might have to move on from the characters now, please, as we are running out of space to complete the film!" No more character work: shots only.
-- **Next (chat 10, Opus high: the board and shots, new moves):** write source/brexit_is_done.py (copy milburn.py's frame route: people.load, scale_at, person(), places.picture lines from story/brexit-is-done-places.txt), shots in film order (May, then Kemi with the site action, then Blair) per notes/brexit-is-done-sets.md shot table; `rough.py board` once May's shot draws.
-- **Needs Sam:** nothing now; the chain is paused at the budget stop (92%).
-- **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md shot table and background action; milburn.py MAP and lines 130-150.
+- **Newest work: branch `claude/open-wounds-chat10`** (also pushed to the main line if allowed; the next chat merges it first).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size on screen (face centre about 62-64% across, eyes on row 700), May about waist up (note 9); the cast (no more character work, Sam 24 Nov).
+- **Rules that bite next:** 74 (May's hand gestures and head on her line), 41 (hands on the steel bars, shot 2), 5 (feet on boards, struck wolves react).
+- **Done (chat 10):** source/brexit_is_done.py (milburn's frame route; MAP at the top): shot 1 draws: May seated turned screen-left in the slatted room, lens 1450 (wider than the 1800 plan, note 9), her chair shown (the tall frame shows her lap), a dark floor (Added). Board for shot 1 (story/brexit-is-done-board.txt) sent to Sam and recorded. Fixed in the film's code: the drawing scale set before the room paints (frame 1 lost the floor).
+- **Next:** on Sam's Y to shot 1's board: Opus high: shot 2 (Kemi in May's place and size, the site, items 6-9 by the background-action table), its board row, then shot 3; May's gestures and lips (moves file) before the animatic. On a note: fix the drawing, never the camera he approved.
+- **Needs Sam:** Y or N to shot 1's board (framing, the chair and floor showing).
+- **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md shot table and background action; brexit_is_done.py MAP.
 - **Open rule requests:** none.
-- **For Claude:** views.TURNED_BUST(_Y,_SD per build); people_parts.workwear_torso `yl`; facehouse.curve (dedupes) over _curve; castsheet.hair_spike_faults(raw=True for the old); judge record sam_ok kemi front/back.
+- **For Claude:** seated(img, who, L, X, d, t, yaw, pose, chair) draws anyone seated through a LevelCam; shot numbers live in dicts (MAY) because the board reads every upper-case number as a beat; board --shots 1 until shot 2 draws (picture raises NotImplementedError past 7.5 s).
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.

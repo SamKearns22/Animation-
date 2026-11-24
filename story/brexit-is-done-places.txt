@@ -2,18 +2,19 @@
 # depth from the lens, z up); each view is one locked camera. Plan and reasons: notes/brexit-is-done-sets.md.
 
 # place: may room (her BBC interview: references/brexit-is-done/may-interview-1..5.jpg)
-colours: slat 40 26 19 | slat light 54 35 25 | streak 70 48 34 | streak hi 84 60 42
+colours: slat 40 26 19 | slat light 54 35 25 | streak 70 48 34 | streak hi 84 60 42 | floor 30 24 22
 
 ## view: may (shot 1: May, chest up, turned to screen-left, looking off-frame left)
-camera: up 1.15, horizon 700, lens 1800
+camera: up 1.15, horizon 850, lens 1450
 people: may 1.6
-panels: x -1.4 to 1.4, z -0.6 to 2.4, depth 3, step 0.13, wall slat, light slat light, seed 4 (the slatted wall)
-block: x -0.88 to -0.81, z -0.6 to 2.4, depth 2.99, colour streak, line 0 (a lamp streak, far left)
-block: x -0.44 to -0.36, z -0.6 to 2.4, depth 2.99, colour streak hi, line 0 (a lamp streak, left)
-block: x -0.07 to -0.02, z -0.6 to 2.4, depth 2.99, colour streak, line 0 (a lamp streak, middle)
-block: x 0.29 to 0.36, z -0.6 to 2.4, depth 2.99, colour streak hi, line 0 (a lamp streak, behind her)
-block: x 0.6 to 0.65, z -0.6 to 2.4, depth 2.99, colour streak, line 0 (a lamp streak, right)
-block: x 0.88 to 0.95, z -0.6 to 2.4, depth 2.99, colour streak hi, line 0 (a lamp streak, far right)
+panels: x -2.6 to 2.6, z 0 to 3.8, depth 3, step 0.13, wall slat, light slat light, seed 4 (the slatted wall)
+block: x -0.88 to -0.81, z 0 to 3.8, depth 2.99, colour streak, line 0 (a lamp streak, far left)
+block: x -0.44 to -0.36, z 0 to 3.8, depth 2.99, colour streak hi, line 0 (a lamp streak, left)
+block: x -0.07 to -0.02, z 0 to 3.8, depth 2.99, colour streak, line 0 (a lamp streak, middle)
+block: x 0.29 to 0.36, z 0 to 3.8, depth 2.99, colour streak hi, line 0 (a lamp streak, behind her)
+block: x 0.6 to 0.65, z 0 to 3.8, depth 2.99, colour streak, line 0 (a lamp streak, right)
+block: x 0.88 to 0.95, z 0 to 3.8, depth 2.99, colour streak hi, line 0 (a lamp streak, far right)
+block: x -6 to 6, z -12 to 0, depth 3, colour floor, line 0 (the floor: dark carpet; Added, the tall frame shows it)
 
 # place: building site (Kemi's: daylight, a grey British sky as badenoch-hardhat-sam.jpg; the site as Sam's words and
 # site-geograph-*.jpg: "an expanse of dusty ground; behind, a large complex under construction, all holes and pipes and
