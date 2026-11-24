@@ -354,6 +354,11 @@ def blood(X, x, y, r, seed=0, flat=0.35):
 
 
 # ------------------------------------------------------------------------------------------------ test sheet
+def cast_sheet(out):
+    """The catalogue's tile (catalogue.py 'cast'): the test sheet."""
+    sheet(out)
+
+
 def sheet(out):
     from PIL import Image, ImageDraw, ImageFont
     from satire_style import Cam, Ctx

@@ -59,6 +59,7 @@ ENTRIES = [
     ('People', 'Musk in Master Chief armour, anime Cortana hologram', 'halo_cast.py', ('frame', 'halo_no_no', 27.2)),
     ('Creatures', 'Chrome Centurion robots', 'prepper_robot.py', ('frame', 'prepper', 60.0)),
     ('Creatures', 'Horse to ride (and donkey, pony), with rider', 'mounts.py', ('frame', 'mounts', 'horse')),
+    ('Creatures', 'Dire wolves (Cry Minister): stand, run, leap, feed, front, net; meat, blood', 'wolf.py', ('cast', 'wolf')),
     ('Props', 'Crossbow', 'prepper_fx.py', ('fx', 'X.crossbow3(img, cam, (0, 0.9, 0), 160)')),
     ('Props', 'Minigun with ammo belt', 'prepper_fx.py', ('fx', 'X.minigun3(img, cam, (0, 0.9, 0), 120)')),
     ('Props', 'Machete', 'prepper_fx.py', ('fx', 'X.machete_floor(img, cam, (0, 0.9, 0), 120)')),
