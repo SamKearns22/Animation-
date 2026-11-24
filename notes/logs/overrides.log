@@ -21,3 +21,4 @@
 2026-11-23T15:19+00:00	17362969	skipped	render REFUSED (rule 59): pre-flight has not been run on kittests in this session: python3 source/preflight.py kittests OUT_DIR
 2026-11-23T16:20+00:00	c0e9f993	sam	Override
 2026-11-23T16:20+00:00	c0e9f993	skipped	send guard (body check / rule 89): /home/user/Animation-/animations/grand-theft-autism-vertical.mp4: no body check record. Render it with a writer that runs the body check (film_engine render, gta_rehearse clip, or humancheck.Writer), or finish.py from such a render.
+2026-11-24T10:31+00:00	946806fb	sam	1. Override Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body.
