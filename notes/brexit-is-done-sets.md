@@ -11,9 +11,9 @@ lunge (13).
 Timing from the word counts at Sam's pace (3.3 words a second); the real takes set it.
 | shot | who | what | camera (one locked camera each: no camera moves, rule 72) | about |
 |---|---|---|---|---|
-| 1 | May | line 1 (22 words), seated, turned to screen-left, hands gesturing, as her photos | 1.15 m up, 1.6 m from her, chest up, as the photos cropped to 9:16; she sits right of centre, room to her left for the look | 7.5 s |
-| 2 | Kemi | line 2 (29 words), standing, staring at the interviewer as if nothing is happening; items 6-9 behind her | 1.5 m up, Kemi 2.2 m away at the right, waist up, filling the bottom 45% of the frame; the site fills the top two-thirds (vertical frame: scaffold levels stacked up the picture) | 10 s |
-| 3 | Blair | line 3 (22 words), then the big grin held 1.5 s, the wolf lunge, cut on the lunge to the sign-off | 1.2 m up, Blair 1.8 m away at the right, seated, chest up; the double doors 7 m behind him, left of his head | 7.5 + 1.5 + 0.4 s |
+| 1 | May | line 1 (22 words), seated, turned to screen-left, hands gesturing, as her photos | 1.15 m up, lens 1800 (was 2500: too tight), May 1.6 m away; her face centre at about 62% across (centre right, Sam 24 Nov; Kemi and Blair match her), chest up with clear space above her head and on both sides, hands inside the frame | 7.5 s |
+| 2 | Kemi | line 2 (29 words), standing, staring at the interviewer as if nothing is happening; items 6-9 behind her | 1.5 m up (horizon row 1300, lens 1500), Kemi in May's place and size on screen (Sam, 24 Nov: chest up, face centre about 62% across, eyes on May's row; distance about 1.3 m: the board sets it); the site fills the frame behind (sky over the top fifth) | 10 s |
+| 3 | Blair | line 3 (22 words), then the big grin held 1.5 s, the wolf lunge, cut on the lunge to the sign-off | 1.2 m up (horizon row 900, lens 1700), Blair in May's place and size on screen (Sam, 24 Nov: chest up, face centre about 62% across, eyes on May's row; about 1.5 m: the board sets it); the double doors 7 m behind, left of his head, the chandelier above | 7.5 + 1.5 + 0.4 s |
 | sign-off | | the CranbriJoos sign-off (finish.py) | | 3 s |
 Length about 30 s with the sign-off. Hook Text "Andy is opening old wounds... 🇬🇧" over shot 1's first seconds (item 15).
 
@@ -28,16 +28,16 @@ Pieces: `panels` (narrow step) + `wash` streaks: KNOWN (places kit). Her chair: 
 - Sky: flat grey overcast, darker cloud masses, as her photo. Daylight, no hard shadows (soft ones under feet).
 - Ground: an expanse of dusty pale-brown dirt from the lens to the building (28 m), tyre ruts, stones, a sand heap,
   a few puddles; dust kicks up wherever a foot or paw lands (rule 5).
-- The complex (Sam: "all holes and pipes and scaffolding"): a five-storey concrete frame 30 m wide (x -14 to 16) at
-  depth 28 m: grey slabs every 3.2 m, square columns, floors open (holes) with dark insides, unfinished stair cores,
+- The complex (Sam: "all holes and pipes and scaffolding"): a four-storey concrete frame 26 m wide (x -12 to 14) at
+  depth 18.6 m (four, not five: five filled the frame and hid the grey sky, item 16): grey slabs every 3.2 m, square columns, floors open (holes) with dark insides, unfinished stair cores,
   rebar bristling from the top; pipes: big concrete pipes stacked on the ground at the left, black and orange pipe runs
   down the face, pipe ends sticking out of the slabs; tube-and-board scaffolding across the front (1.3 m deep, lifts at
-  3.2, 6.4, 9.6, 12.8 m: boards, guard rails, toe boards, ladders between lifts, red-and-yellow edge barriers as the
+  3.2, 6.4, 9.6 m: boards, guard rails, toe boards, ladders between lifts, red-and-yellow edge barriers as the
   photos).
 - Dressing (as the photos; Added): two tower cranes behind (blue and red, as the photos), blue site hoarding at the
   left, Heras fence panels, a skip, a portacabin, pallets of blocks, cones.
-- Who stands where: Kemi at 2.2 m, x +0.45 (right); the attack (item 6) on the dirt at 11 m, x -3 (left of frame, clear
-  of Kemi from the first second); the milling wolves (9) at 14-20 m across the middle; the bar fight (8) on the 6.4 m
+- Who stands where: Kemi at 2.2 m, x +0.45 (right); the attack (item 6) on the dirt at 7 m, x -1.6 (low left, clear
+  of Kemi from the first second); the milling wolves (9) at 10-15 m across the middle; the bar fight (8) on the 6.4 m
   lift, right of centre; the runner (7) on the 9.6 m lift, running leftwards to the scaffold's left end, which sits at
   the frame's left edge so his leap takes him out of frame.
 
@@ -50,7 +50,7 @@ Pieces: `panels` (narrow step) + `wash` streaks: KNOWN (places kit). Her chair: 
 - Blair in a buttoned oxblood leather wing chair (the sitting kit's armchair), turned screen-left.
 - The chase floor: a band from depth 4 to 6.5 m, x -3 to 3, behind him.
 - New pieces: `bookcase` (lifted from Ad-Vanced Notice's study drawing into the places kit), `double doors` that are
-  thrown open (two leaves swing in, bang on the bookcases, bounce, stay open), `chandelier`. The rest KNOWN (panels,
+  thrown open (two leaves swing into the room, hit their stops at 100 degrees, bounce, settle at 92), `chandelier`. The rest KNOWN (panels,
   block rails, portrait, table top, tumbler, curtain, carpet).
 
 ## The wolves (KNOWN: `source/wolf.py`, Cry Minister; it was missing from the kit catalogue, which is why chat 3 called
@@ -72,21 +72,21 @@ Each new pose is drawn alone and critiqued (rule 89) before the cast sheet.
 **Shot 2 (Kemi)**: 5 workers (hi-vis, hard hats: `workwear_torso`), 11 wolves.
 | who | where | beats |
 |---|---|---|
-| worker W1 | dirt, 11 m, left | 0.0 digging with a shovel; 0.2-0.6 two wolves leap on him from the left; 0.6-1.2 knocked down backwards (lying.py fall), the shovel falls and lands; 1.2-10 the two feed on him (head down, rip up, shake); his boots and one arm show from under them, kicking, still by 3 s; his hard hat flies off, tumbles, lands and rolls to rest; torn hi-vis scraps; chunks flung up, blood arcs (the blood plan) |
+| worker W1 | dirt, 7 m, low left | 0.0 digging with a shovel; 0.2-0.6 two wolves leap on him from the left; 0.6-1.2 knocked down backwards (lying.py fall), the shovel falls and lands; 1.2-10 the two feed on him (head down, rip up, shake); his boots and one arm show from under them, kicking, still by 3 s; his hard hat flies off, tumbles, lands and rolls to rest; torn hi-vis scraps; chunks flung up, blood arcs (the blood plan) |
 | wolves Wa, Wb | on W1 | leap 0.2, land on him 0.6, feed the whole shot, out of step with each other |
 | worker W2 | 9.6 m lift | 1.5 runs leftwards along the boards (side-on run; the boards dip a little under each step); 4.6 leaps off the end, out of frame left |
 | wolves Wc, Wd | 9.6 m lift | 1.5 running 2-3 m behind him; 4.8 skid to a halt at the end, snarl down over the edge; 6.0 pace back (Added) |
 | workers W3-W5 | 6.4 m lift, right of centre | the whole shot: jab and swing scaffold tubes (two-hand grip), a step back each time a wolf lunges; one tube clangs on a standard |
 | wolves We-Wg | 6.4 m lift | lunge in turn, snap at the bars, recoil and flinch when struck, circle |
-| wolves Wh-Wk | dirt, 14-20 m | hard hats and vests, blood-drenched: Wh sits (tail sweeps, looks round); Wi paws the dirt (dust, a scrape mark stays); Wj and Wk wander across at a walk, one each way |
-Composition: attack low left, milling across the middle, bar fight right of centre high, runner top crossing to the
+| wolves Wh-Wk | dirt, 10-15 m | hard hats and vests, blood-drenched: Wh sits (tail sweeps, looks round); Wi paws the dirt (dust, a scrape mark stays); Wj and Wk wander across at a walk, one each way |
+Composition (Kemi centre right, Sam 24 Nov): attack low left, milling left of centre and far behind her, bar fight right of centre high, runner top crossing to the
 left edge; nothing behind Kemi's head; the app's buttons (right edge) clear of every action.
 
 **Shot 3 (Blair)**: 4 fleeing people (a butler with a silver tray, a waitress, a man in a dinner suit, a woman in an
 evening gown), 4 wolves and the lunger.
 | who | beats |
 |---|---|
-| double doors | 0.3 thrown open (both leaves swing in, bang on the bookcases, bounce) |
+| double doors | 0.3 thrown open (both leaves swing into the room, hit their stops, bounce: built, `double doors` open at 0.3) |
 | people | 0.4 burst through, running, scattering left and right across the chase band; the butler's tray flies, falls, lands, glasses spill; they leave frame and come back across, staggered, so the back is always busy but never piled |
 | wolves Wl-Wo | 0.5 pour through after them, chasing each person across and out |
 | lunger Wp | at the grin's end (about 9.0 s): enters from frame right in mid-leap at Blair's depth, jaws open; cut at 9.4 s, before it reaches him |
@@ -134,7 +134,21 @@ bring it down without cutting quality: every place built from the places kit's l
 the wolves reused and fixed once in the shared kit, the four hard moves rehearsed as clips before anything else (the
 rounds are the dearest rows: catching faults before Sam sees them is where the money is), and no camera moves.
 
-## Questions for Sam (in the one message)
+## Sam's answers (24 Nov, to Q2, Q8, Q9)
+- Q2 blood: Y. The blood plan above is approved as written (two reds and a shine, arcs that land and soak in, stained
+  muzzles, paws and vests, torn hi-vis, a tumbling hard hat, dust at every leap, chunks, no bones or insides).
+- Q8 hardest moves first: no. Sam: "let's move through the film in chronological order. Problems were caused last time
+  by executing the ambitious shot without the surrounding scenes." So no rehearsal clips ahead of the rest: shots are
+  built and shown in film order (1 May, 2 Kemi, 3 Blair), each with its own background action, before the next. Kit
+  parts a later shot needs (the wolves, their poses) may be built ahead as parts, never staged in a shot early.
+  Rule 8's "Rehearsal clips sent" line for this film: "none: Sam, 24 Nov, build in film order instead".
+  For the end-of-film review: whether film order should replace rule 8's rehearse-first for every film (not asked: Sam
+  did not say "every film").
+- Q9 estimates proposal: N. Sam: until there is an accurate way of measuring budget he sees no point. No
+  `ledger.py estimate` for this film; the table above stays as notes only; the handover check's COST line is answered
+  by this.
+
+## Questions for Sam (asked 24 Nov; answered above)
 - Q2 (still open since chat 3): the blood plan above, Y or N.
 - Q8: the build proposal for the four hardest moves (above): Y to rehearse them as clips first.
 - Q9 (the template's held note): the estimates proposal, option 1 or 2 (notes/proposals/estimates.md "For Sam").
@@ -154,3 +168,51 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
 - NOT CARRIED "obviously, Tony Blair is a man": chat 4's (the body lines).
 - BROKEN override hook never seen running; UNWIRED castsheet: not this chat's job (a tool chat; chat 6 wires castsheet).
 - Branches gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31: as chat 2 named them (GTA only).
+
+## Built (chat 5): the three places as lines, and the new pieces
+- `story/brexit-is-done-places.txt`: views `may`, `site`, `blair` (one locked camera each). New shared pieces in
+  `source/places_site.py` (kit catalogue, Sets). Kit tests `places` pass (Blessed's 13 paintings unchanged, 0.004%).
+- Looked at full size (chat 5): site: the sky shows above the frame, cranes, open floors, scaffold ladders and barriers,
+  pipes, stack, skip, sand, cones, dust; Blair's doors shut / mid-swing / open with the corridor inside the doorway only
+  (the first try spilled the corridor's far wall over the bookcases: fixed); May's streaks toned down to the photo's.
+- Not yet: the far skyline is hidden by the frame (line removed, piece kept); scaffold boards read as thin bands from
+  this low camera (they are the runners' floor: check feet on them at the board); no catalogue tile for the pieces
+  (`places.picture` knows only Blessed: move to shared, tool chat).
+- Rough sent to Sam (rule 11, places only): open-wounds-places-rough.jpg, 24 Nov; recorded in story/brexit-is-done-roughs.txt.
+
+## Where things stand (sets side; chat 4 folds one line into the film's ONE handover when it merges)
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's screen place and size (24 Nov).
+- **Rules that bite next:** 41 (hands on the steel bars), 89 (each new wolf pose critiqued alone), 5 (physics: feet on boards, struck wolves react).
+- **Done (chat 5):** sets plan (this file); 6 references; wolves catalogued; three places built as lines with 18 new shared pieces; places rough sent.
+- **Next (chat 8, Opus high, new build):** the wolves as kit parts (spruce-up fixes 1-4, then walk, sit, paw, lunge-recoil, skid, hard hat and vest, blood stains per the approved plan), each critiqued alone; no shot staged. Shots then go in film order once the cast is approved (Sam, 24 Nov).
+- **Needs Sam:** nothing (Q2 Y, Q8 film order, Q9 N: 24 Nov).
+- **Read:** `guides/job-packs.md` Build; this file (wolves, background action, hardest moves).
+- **Open rule requests:** none.
+- **For Claude:** wolf.py (side, front, side_pose, head_side); places_site.py; preview of the views: the rough's place_tile at full size.
+
+## Handover check at chat 5's end, named
+- FINDER: no film code exists yet (no `source/brexit_is_done.py`), so no `page.py show`; the three hand searches were
+  of Cry Minister's wolf code and the kit, for the plan.
+- BRANCH claude/brexit-chat6: chat 6's people work (Kemi's photos), not this chat's; chat 4/6 merge it.
+- SENTENCE (4): the same Sam's-own-CLAUDE.md-edit alerts chats 1-4 named.
+- FREEZE rose 20 -> 21: caught here (places_site imported a finished film's helpers); fixed (through places_parts), count
+  back to 20, pictures unchanged.
+- COST: no `ledger.py estimate` yet: the template says the estimates proposal (Q9) goes to Sam first; the table above
+  holds the stage figures for when he answers.
+- KIT TEST RED tools_switched_on: castsheet UNWIRED (chat 4/6's). finished_films_keep_their_bookmark: the freeze rise
+  above, fixed.
+- Chat 5 second check (24 Nov): BRANCH claude/brexit-chat6 and claude/brexit-chat7 are the people chain's (chat 6 merged
+  this branch at e784703c; chat 7 merges and pushes the main line). COST: Sam said N to estimates (Q9): no estimate.
+
+## Sam's note, 24 Nov: framing
+- Sam: "We always want the character in centre right of the frame. With a decent amount of space around them."
+  Why nobody saw it: no check measures where the lead sits or the space round them; the plan put Kemi and Blair hard
+  right and May too close, and the places rough's outlines showed it (Kemi and Blair cut by the right edge). Fixed in
+  the plan (shot table: all three centre right, face centre about 60% across, space round them); the board draws it.
+  Sam then (24 Nov): "In the case of this film. For the interview joke. Always in the same position as May." So: not
+  a rule for every film (no rule 90); for this film, locked: all three in the same place and size on screen as May
+  (the interview look): face centre about 62% across, chest up, the same eye row and head size, with a decent amount
+  of space round each. Kemi (was mid-thigh up) and Blair move closer to match May's chest-up framing.
+  For the board chat: with Kemi's eyes on May's row, the site's level camera shows less sky over the frame; keep the
+  grey sky in view (item 16) by setting the frame further back or a storey lower, never by moving Kemi; the action spots
+  stay round her (attack low left, milling left, bars and runner above).

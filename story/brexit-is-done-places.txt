@@ -1,0 +1,65 @@
+# Open Wounds (brexit-is-done): the places (places kit; chat 5, the sets chat, 23 Nov). Every piece in metres (x across,
+# depth from the lens, z up); each view is one locked camera. Plan and reasons: notes/brexit-is-done-sets.md.
+
+# place: may room (her BBC interview: references/brexit-is-done/may-interview-1..5.jpg)
+colours: slat 40 26 19 | slat light 54 35 25 | streak 70 48 34 | streak hi 84 60 42
+
+## view: may (shot 1: May, chest up, turned to screen-left, looking off-frame left)
+camera: up 1.15, horizon 700, lens 1800
+people: may 1.6
+panels: x -1.4 to 1.4, z -0.6 to 2.4, depth 3, step 0.13, wall slat, light slat light, seed 4 (the slatted wall)
+block: x -0.88 to -0.81, z -0.6 to 2.4, depth 2.99, colour streak, line 0 (a lamp streak, far left)
+block: x -0.44 to -0.36, z -0.6 to 2.4, depth 2.99, colour streak hi, line 0 (a lamp streak, left)
+block: x -0.07 to -0.02, z -0.6 to 2.4, depth 2.99, colour streak, line 0 (a lamp streak, middle)
+block: x 0.29 to 0.36, z -0.6 to 2.4, depth 2.99, colour streak hi, line 0 (a lamp streak, behind her)
+block: x 0.6 to 0.65, z -0.6 to 2.4, depth 2.99, colour streak, line 0 (a lamp streak, right)
+block: x 0.88 to 0.95, z -0.6 to 2.4, depth 2.99, colour streak hi, line 0 (a lamp streak, far right)
+
+# place: building site (Kemi's: daylight, a grey British sky as badenoch-hardhat-sam.jpg; the site as Sam's words and
+# site-geograph-*.jpg: "an expanse of dusty ground; behind, a large complex under construction, all holes and pipes and
+# scaffolding")
+colours: sky 206 208 210 | cloud 186 188 192 | cloud dark 168 170 176 | dust 190 170 136
+
+## view: site (shot 2: Kemi waist up at the right; the attack low left, the milling wolves across the middle, the
+## bar fight on the 6.4 m lift, the runner on the 9.6 m lift running to its left end at the frame's edge)
+camera: up 1.5, horizon 1300, lens 1500
+people: kemi 2.2, attack 7, milling 12, lift 17.6
+sky: x -120 to 120, z -10 to 400, depth 150, colour sky (the overcast)
+cloud: at -40 112, depth 150, rx 34, ry 7, colour cloud, seed 11 (a cloud bank)
+cloud: at 22 124, depth 150, rx 46, ry 9, colour cloud dark, seed 12 (a darker bank)
+cloud: at 40 100, depth 150, rx 26, ry 5, colour cloud, seed 13 (a low cloud)
+tower crane: x 7 to 8.6, z 0 to 44, depth 60, jib -34, counter 12, hook 18, colour 52 84 168 (the blue crane)
+tower crane: x -24 to -22.4, z 0 to 66, depth 85, jib 30, counter 10, hook 24, colour 196 58 46 (the red crane)
+concrete frame: x -12 to 14, z 0 to 12.8, depth 18.6, storey 3.2, bay 6, core 7.5 10.5, blocks 0.25, seed 2 (the frame)
+pipe: at 2.4 12.4, depth 18.4, to 2.4 0.4, radius 0.16, colour 38 38 42, open 0 (a drain run down the face)
+pipe: at -2.0 12.6, depth 18.45, to -2.0 3.5, radius 0.3, colour 216 112 40, open 0 (a big orange pipe riser)
+pipe: at 8.6 9.4, depth 18.45, to 8.6 0.3, radius 0.26, colour 216 112 40, open 0 (a second riser)
+pipe: at -4.2 9.5, depth 18.4, to -5.0 9.1, radius 0.3, colour 216 112 40 (a pipe end out of a slab)
+pipe: at 5.1 6.3, depth 18.4, to 6.0 5.9, radius 0.28, colour 216 112 40 (another pipe end)
+scaffold: x -5.4 to 14, z 0 to 11.2, depth 18.2, lifts 3.2 6.4 9.6, part back, ladder 3, seed 3 (the scaffold, inner)
+scaffold: x -5.4 to 14, z 0 to 11.2, depth 16.9, lifts 3.2 6.4 9.6, part front, barrier 0.35, seed 3 (the scaffold, outer)
+hoarding: x -16 to -6.2, z 0 to 2.4, depth 15.5 (the blue hoarding)
+skip: x 0.4 to 4.1, z 0 to 1.2, depth 15, seed 2 (the skip)
+pipe stack: x -6.6 to -3.6, z 0 to 2.6, depth 13.5, radius 0.5, rows 3 (the big pipes)
+pallet: x 2.0 to 3.1, z 0 to 1.0, depth 11, courses 4 (the blocks)
+heap: x 2.6 to 6.4, z 0 to 1.3, depth 13, seed 4 (the sand heap)
+heras fence: x 4.6 to 12, z 0 to 2, depth 10.5 (the fence)
+cone: at -0.6 0, depth 9 (a cone)
+cone: at 1.2 0, depth 6 (a near cone)
+dirt: x -60 to 60, z 0 to 0, depth 19 to 1, colour dust, seed 6 (the dusty ground)
+
+# place: blair room (grand, oak-panelled, book-lined, in London: references/brexit-is-done/oakroom-geograph-*.jpg)
+colours: oak 112 70 38 | oak dark 78 46 24 | oak light 146 98 58 | floor 92 58 34 | rug 120 34 36 | rug line 98 26 30 | ceiling 70 44 26
+
+## view: blair (shot 3: Blair seated, chest up at the right; the double doors behind, left of his head; the chase
+## across the band 4-6.5 m behind him)
+camera: up 1.2, horizon 900, lens 1700
+people: blair 2.0, chase 5
+panels: x -5 to 5, z 0 to 4.8, depth 7, step 0.5, wall oak dark, light oak, seed 7 (the oak panelling)
+block: x -5 to 5, z 3.9 to 4.1, depth 6.98, colour oak light, line 1.6 (the cornice)
+bookcase: x -4.3 to -2.3, z 0 to 3.7, depth 6.9, bays 2, seed 1 (the bookcases, left)
+bookcase: x 0.3 to 4.3, z 0 to 3.7, depth 6.9, bays 4, seed 2 (the bookcases, right)
+double doors: x -1.9 to -0.1, z 0 to 3.0, depth 6.95, open at 0.3 (the double doors)
+block: x -5 to 5, z -12 to 0, depth 7, colour floor, line 0 (the floor)
+carpet: x -3.2 to 3.2, z -3 to -0.6, depth 7, colour rug, lines rug line, n 4, first 60, every 160 (the rug)
+chandelier: at -0.8 3.1, depth 4.5, arms 8, drop 1.3 (the chandelier)
