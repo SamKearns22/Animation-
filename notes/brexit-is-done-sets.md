@@ -11,9 +11,9 @@ lunge (13).
 Timing from the word counts at Sam's pace (3.3 words a second); the real takes set it.
 | shot | who | what | camera (one locked camera each: no camera moves, rule 72) | about |
 |---|---|---|---|---|
-| 1 | May | line 1 (22 words), seated, turned to screen-left, hands gesturing, as her photos | 1.15 m up, 1.6 m from her, chest up, as the photos cropped to 9:16; she sits right of centre, room to her left for the look | 7.5 s |
-| 2 | Kemi | line 2 (29 words), standing, staring at the interviewer as if nothing is happening; items 6-9 behind her | 1.5 m up (horizon row 1300, lens 1500), Kemi 2.2 m away at the right, from mid-thigh up, her head at about row 1220-1380; the site fills the frame above and behind (sky over the frame's top fifth) | 10 s |
-| 3 | Blair | line 3 (22 words), then the big grin held 1.5 s, the wolf lunge, cut on the lunge to the sign-off | 1.2 m up (horizon row 900, lens 1700), Blair 1.4 m away at the right, seated, waist up, filling the right half; the double doors 7 m behind, left of his head, the chandelier above | 7.5 + 1.5 + 0.4 s |
+| 1 | May | line 1 (22 words), seated, turned to screen-left, hands gesturing, as her photos | 1.15 m up, lens 1800 (was 2500: too tight), May 1.6 m away; her face centre at about 62% across (centre right, Sam 24 Nov), chest up with clear space above her head and on both sides, hands inside the frame | 7.5 s |
+| 2 | Kemi | line 2 (29 words), standing, staring at the interviewer as if nothing is happening; items 6-9 behind her | 1.5 m up (horizon row 1300, lens 1500), Kemi 2.2 m away at x +0.15 (was +0.45: hard right, cut by the edge), face centre about 60% across, mid-thigh up, clear space on both sides and above; the site fills the frame behind (sky over the top fifth) | 10 s |
+| 3 | Blair | line 3 (22 words), then the big grin held 1.5 s, the wolf lunge, cut on the lunge to the sign-off | 1.2 m up (horizon row 900, lens 1700), Blair 2.0 m away at x +0.12 (was 1.4 m at +0.18: he filled the right half), face centre about 60% across, waist up with space round him; the double doors 7 m behind, left of his head, the chandelier above | 7.5 + 1.5 + 0.4 s |
 | sign-off | | the CranbriJoos sign-off (finish.py) | | 3 s |
 Length about 30 s with the sign-off. Hook Text "Andy is opening old wounds... 🇬🇧" over shot 1's first seconds (item 15).
 
@@ -79,7 +79,7 @@ Each new pose is drawn alone and critiqued (rule 89) before the cast sheet.
 | workers W3-W5 | 6.4 m lift, right of centre | the whole shot: jab and swing scaffold tubes (two-hand grip), a step back each time a wolf lunges; one tube clangs on a standard |
 | wolves We-Wg | 6.4 m lift | lunge in turn, snap at the bars, recoil and flinch when struck, circle |
 | wolves Wh-Wk | dirt, 10-15 m | hard hats and vests, blood-drenched: Wh sits (tail sweeps, looks round); Wi paws the dirt (dust, a scrape mark stays); Wj and Wk wander across at a walk, one each way |
-Composition: attack low left, milling across the middle, bar fight right of centre high, runner top crossing to the
+Composition (Kemi centre right, Sam 24 Nov): attack low left, milling left of centre and far behind her, bar fight right of centre high, runner top crossing to the
 left edge; nothing behind Kemi's head; the app's buttons (right edge) clear of every action.
 
 **Shot 3 (Blair)**: 4 fleeing people (a butler with a silver tray, a waitress, a man in a dinner suit, a woman in an
@@ -203,3 +203,15 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
   above, fixed.
 - Chat 5 second check (24 Nov): BRANCH claude/brexit-chat6 and claude/brexit-chat7 are the people chain's (chat 6 merged
   this branch at e784703c; chat 7 merges and pushes the main line). COST: Sam said N to estimates (Q9): no estimate.
+
+## Sam's note, 24 Nov: framing
+- Sam: "We always want the character in centre right of the frame. With a decent amount of space around them."
+  Why nobody saw it: no check measures where the lead sits or the space round them; the plan put Kemi and Blair hard
+  right and May too close, and the places rough's outlines showed it (Kemi and Blair cut by the right edge). Fixed in
+  the plan (shot table: all three centre right, face centre about 60% across, space round them); the board draws it.
+  Rule asked for (Sam said "always"): proposed wording below, waiting for his Y; its check is built on his Y.
+- Proposed rule 90 (guides/film-quality-rules.md): "The lead of every shot sits centre right (Sam, 24 Nov): face
+  centre 55-68% across the frame, with a decent amount of space round them: head, shoulders and hands inside the app's
+  safe area (x 60-900) with at least a tenth of the frame's width clear on each side and a head's height clear above.
+  check: the shot board measures each lead as drawn at start, key beat and end (rough.py board), and refuses a board
+  that breaks it; caught first on the places rough of 24 Nov."

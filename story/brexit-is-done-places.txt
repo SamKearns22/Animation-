@@ -5,7 +5,7 @@
 colours: slat 40 26 19 | slat light 54 35 25 | streak 70 48 34 | streak hi 84 60 42
 
 ## view: may (shot 1: May, chest up, turned to screen-left, looking off-frame left)
-camera: up 1.15, horizon 700, lens 2500
+camera: up 1.15, horizon 700, lens 1800
 people: may 1.6
 panels: x -1.4 to 1.4, z -0.6 to 2.4, depth 3, step 0.13, wall slat, light slat light, seed 4 (the slatted wall)
 block: x -0.88 to -0.81, z -0.6 to 2.4, depth 2.99, colour streak, line 0 (a lamp streak, far left)
@@ -54,7 +54,7 @@ colours: oak 112 70 38 | oak dark 78 46 24 | oak light 146 98 58 | floor 92 58 3
 ## view: blair (shot 3: Blair seated, chest up at the right; the double doors behind, left of his head; the chase
 ## across the band 4-6.5 m behind him)
 camera: up 1.2, horizon 900, lens 1700
-people: blair 1.4, chase 5
+people: blair 2.0, chase 5
 panels: x -5 to 5, z 0 to 4.8, depth 7, step 0.5, wall oak dark, light oak, seed 7 (the oak panelling)
 block: x -5 to 5, z 3.9 to 4.1, depth 6.98, colour oak light, line 1.6 (the cornice)
 bookcase: x -4.3 to -2.3, z 0 to 3.7, depth 6.9, bays 2, seed 1 (the bookcases, left)
