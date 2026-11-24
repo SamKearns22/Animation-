@@ -980,7 +980,7 @@ TURNED_SIDE = {'female': 0.7, 'straight': 0.7}
 # the side shape's bust is barely deeper than the house man's chest, d 1.20 against 1.18, so turned it never showed).
 # Turned, a woman's bust stands out in front of the near arm (her walking photo, a little turned: the white top's
 # curve ahead of her arm): a bump on the front edge only, at the bust's height. Units: the body's.
-TURNED_BUST = {'female': 22.0, 'straight': 30.0}
+TURNED_BUST = {'female': 28.0, 'straight': 30.0}
 TURNED_BUST_Y, TURNED_BUST_SD = 170.0, 42.0    # how much of the side's shape a three-quarter edge carries
 
 
