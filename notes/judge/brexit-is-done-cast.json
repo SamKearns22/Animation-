@@ -1,20 +1,20 @@
 {
- "sheet": "notes/learn/kemi-build/judge/outlines-v6b.jpg",
+ "sheet": "notes/learn/kemi-build/judge/outlines-v7.jpg",
  "made_by": "notes/learn/kemi-build/judge.py",
  "date": "2026-11-24",
  "judge": "three fresh helpers, none told the cast; each verdict the middle of the three",
- "note": "chat 9 round 2 (after May's turned bust 27 over SD 52 at 145, Kemi's hi-vis side strip run into the band, the hair and hat outlines through each point once): May woman in all four (three-quarter back to 3); Kemi three-quarter and seated now 3 from all three judges (were 2); Kemi front and back 2 (were 3) on outlines unchanged (front 0 pixels differ from the drawing judged 3 and approved by Sam on cast v3; back 21 pixels): judge noise on her straight build, as chat 7 saw. Front: Sam's Y on cast v3 (the same drawing). Back: never shown to Sam, never in this film: asked with the board (Q).",
+ "note": "chat 12 round (start check: chat 11 changed views.py/people.py for hard hats and side-on arms): redrawn outlines differ from v6b by 13 edge pixels only (JPEG/edge noise). Three fresh judges: May woman 3+ in all four; Blair man 4+ in all four; Kemi front woman 3 (one judge man 2), back woman 3; Kemi three-quarter woman 2 and seated woman 2 (judge noise on her straight build, as chats 7 and 9 saw; Sam's Y on cast v3 for these views stands, the drawing unchanged but for edge pixels).",
  "verdicts": [
   {
    "who": "may",
    "view": "three-quarter",
    "said": "woman",
    "conf": 3,
-   "why": "Side view with a small rounded bump at the chest, narrow shoulders, legs taper to a slim ankle; fine strands at the neck look like long hair",
+   "why": "side view, slim and narrow; a bump on the chest at the front and hair strands at the top",
    "of": [
     "woman 3",
     "woman 3",
-    "woman 3"
+    "woman 2"
    ]
   },
   {
@@ -22,10 +22,10 @@
    "view": "back",
    "said": "man",
    "conf": 4,
-   "why": "Wide square shoulders, boxy straight torso with no waist, thick straight-legged trousers",
+   "why": "broad square shoulders, straight boxy torso with no waist, thick straight legs",
    "of": [
     "man 4",
-    "man 4",
+    "man 5",
     "man 4"
    ]
   },
@@ -34,7 +34,7 @@
    "view": "front",
    "said": "man",
    "conf": 5,
-   "why": "Boxy suit jacket with a deep V and a tie/shirt notch at the neck, square shoulders, straight wide trousers",
+   "why": "suit jacket with a lapel V and a tie line, square shoulders",
    "of": [
     "man 5",
     "man 5",
@@ -45,24 +45,24 @@
    "who": "kemi",
    "view": "back",
    "said": "woman",
-   "conf": 2,
-   "why": "Shoulders a bit narrower than 2, slight flare at the hips and legs that taper to the ankle; little waist, so close to neutral",
+   "conf": 3,
+   "why": "shoulders a bit narrower, slight waist and a small hip flare, legs taper; could be a slim man",
    "of": [
     "woman 2",
     "woman 3",
-    "woman 2"
+    "woman 3"
    ]
   },
   {
    "who": "kemi",
    "view": "three-quarter",
    "said": "woman",
-   "conf": 3,
-   "why": "Same side view as 1: chest bump in profile, slim tapering legs, slim build",
+   "conf": 2,
+   "why": "same side view as 1, faint chest bump; otherwise neutral",
    "of": [
+    "woman 2",
     "woman 3",
-    "woman 3",
-    "woman 3"
+    "woman 2"
    ]
   },
   {
@@ -70,9 +70,9 @@
    "view": "back",
    "said": "woman",
    "conf": 5,
-   "why": "Clear hourglass: pinched waist, curved hips, narrow tapered legs",
+   "why": "clear hourglass shape, narrow waist, rounded hips",
    "of": [
-    "woman 5",
+    "woman 4",
     "woman 5",
     "woman 5"
    ]
@@ -81,20 +81,8 @@
    "who": "kemi",
    "view": "seated 3/4",
    "said": "woman",
-   "conf": 3,
-   "why": "Seated side view with a rounded bulge at the chest and hair-like strands at the neck; slimmer back line",
-   "of": [
-    "woman 3",
-    "woman 3",
-    "woman 3"
-   ]
-  },
-  {
-   "who": "kemi",
-   "view": "front",
-   "said": "woman",
    "conf": 2,
-   "why": "Very like 4: slight hip flare and tapering legs, but torso is fairly straight so less certain",
+   "why": "sitting side-on; the chair and bent pose hide the body shape",
    "of": [
     "woman 2",
     "woman 2",
@@ -102,11 +90,23 @@
    ]
   },
   {
+   "who": "kemi",
+   "view": "front",
+   "said": "woman",
+   "conf": 3,
+   "why": "like 4: soft waist and hip flare, tapering legs, no suit lines",
+   "of": [
+    "man 2",
+    "woman 3",
+    "woman 3"
+   ]
+  },
+  {
    "who": "blair",
    "view": "three-quarter",
    "said": "man",
    "conf": 4,
-   "why": "Side view with a shirt-and-tie notch at the collar, flat straight chest, straight trouser legs",
+   "why": "lapel V and tie line, straight torso and legs",
    "of": [
     "man 4",
     "man 4",
@@ -118,7 +118,7 @@
    "view": "seated 3/4",
    "said": "man",
    "conf": 4,
-   "why": "Seated, collar shows a tie/shirt notch, flat chest line, broad back",
+   "why": "sitting, lapel V and tie line show clearly, square chunky body",
    "of": [
     "man 4",
     "man 4",
@@ -130,7 +130,7 @@
    "view": "front",
    "said": "woman",
    "conf": 5,
-   "why": "Hourglass waist and hips like 6, plus long-hair strands falling over the neckline",
+   "why": "hourglass waist and hips, hair strands at the neckline",
    "of": [
     "woman 5",
     "woman 5",
@@ -142,271 +142,271 @@
    "view": "seated 3/4",
    "said": "woman",
    "conf": 3,
-   "why": "Seated side view like 7, bust bump on the front edge, rounded shoulders",
+   "why": "seated side view with hair strands at the top and a chest bump",
    "of": [
     "woman 3",
-    "woman 4",
-    "woman 3"
+    "woman 3",
+    "woman 2"
    ]
   }
  ],
  "judges": {
-  "D": [
+  "A": [
    {
     "who": "may",
     "view": "three-quarter",
     "said": "woman",
     "conf": 3,
-    "why": "Side view with a rounded bump on the chest, narrow waist, and legs tapering to small feet"
+    "why": "side view, slim and narrow; a bump on the chest at the front and hair strands at the top"
    },
    {
     "who": "blair",
     "view": "back",
     "said": "man",
     "conf": 4,
-    "why": "Wide square shoulders, boxy straight torso with no waist, straight thick legs"
+    "why": "broad square shoulders, straight boxy torso with no waist, thick straight legs"
    },
    {
     "who": "blair",
     "view": "front",
     "said": "man",
     "conf": 5,
-    "why": "Boxy jacket with a white shirt V and tie, broad square shoulders, straight legs"
+    "why": "boxy suit shape with a shirt-and-tie V at the neck, square shoulders"
    },
    {
     "who": "kemi",
     "view": "back",
     "said": "woman",
     "conf": 2,
-    "why": "Shoulders a little narrower and sloped, slight flare at the hips, legs taper; no clear waist, so it could be either"
+    "why": "sloping narrower shoulders, slight taper and thin tapering legs, but no clear waist"
    },
    {
     "who": "kemi",
     "view": "three-quarter",
     "said": "woman",
-    "conf": 3,
-    "why": "Side view with a bust bump at the chest, slim waist, tapered legs; same build as 1"
+    "conf": 2,
+    "why": "same side shape as 1 with a chest bump but no hair, so weaker"
    },
    {
     "who": "may",
     "view": "back",
     "said": "woman",
-    "conf": 5,
-    "why": "Clear hourglass: waist pinched in, hips wider, sloped shoulders, slim tapered legs"
+    "conf": 4,
+    "why": "clear hourglass waist, sloping shoulders, slim tapered legs"
    },
    {
     "who": "kemi",
     "view": "seated 3/4",
     "said": "woman",
-    "conf": 3,
-    "why": "Seated side view with a rounded bust bump on the chest; slim torso"
+    "conf": 2,
+    "why": "seated side view with a chest bump; the chair hides most of the shape"
    },
    {
     "who": "kemi",
     "view": "front",
-    "said": "woman",
+    "said": "man",
     "conf": 2,
-    "why": "Similar to 4: softer sloped shoulders, slight hip flare, tapered legs, but no real waist, so weak"
+    "why": "straight torso with no waist, but sloped shoulders and tapered legs; could go either way"
    },
    {
     "who": "blair",
     "view": "three-quarter",
     "said": "man",
     "conf": 4,
-    "why": "Side view with a flat chest, tie and lapel line, straight square torso, straight legs"
+    "why": "side view with a shirt collar and tie line, straight flat torso"
    },
    {
     "who": "blair",
     "view": "seated 3/4",
     "said": "man",
     "conf": 4,
-    "why": "Seated with a tie and shirt line showing, flat chest, blocky torso"
+    "why": "seated with a visible tie and collar line"
    },
    {
     "who": "may",
     "view": "front",
     "said": "woman",
     "conf": 5,
-    "why": "Hourglass waist, wider hips, sloped shoulders, open neckline, slim tapered legs"
+    "why": "strong hourglass waist, hair strands at the neckline, slim legs"
    },
    {
     "who": "may",
     "view": "seated 3/4",
     "said": "woman",
     "conf": 3,
-    "why": "Seated side view with a bust bump and open collar; same build as 7"
+    "why": "seated side view with hair strands at the top and a chest bump"
    }
   ],
-  "E": [
+  "B": [
    {
     "who": "may",
     "view": "three-quarter",
     "said": "woman",
     "conf": 3,
-    "why": "Side view with a small rounded bump at the chest, narrow shoulders, legs taper to a slim ankle; fine strands at the neck look like long hair"
+    "why": "slim side-on body, narrow waist, a hair-like lump with strands at the back of the neck"
    },
    {
     "who": "blair",
     "view": "back",
     "said": "man",
-    "conf": 4,
-    "why": "Wide square shoulders, boxy straight torso with no waist, thick straight-legged trousers"
+    "conf": 5,
+    "why": "wide square shoulders, straight boxy torso with no waist, straight legs set wide"
    },
    {
     "who": "blair",
     "view": "front",
     "said": "man",
     "conf": 5,
-    "why": "Boxy suit jacket with a deep V and a tie/shirt notch at the neck, square shoulders, straight wide trousers"
+    "why": "suit jacket with a lapel V and a tie line, square shoulders"
    },
    {
     "who": "kemi",
     "view": "back",
     "said": "woman",
     "conf": 3,
-    "why": "Torso narrows slightly then flares at the hip line, legs taper to narrow ankles; shoulders a little sloped"
+    "why": "shoulders a bit narrower, slight waist and a small hip flare, legs taper; could be a slim man"
    },
    {
     "who": "kemi",
     "view": "three-quarter",
     "said": "woman",
     "conf": 3,
-    "why": "Same side view as 1: chest bump in profile, slim tapering legs, slim build"
+    "why": "almost the same as 1: slim side-on body with a hair lump at the back of the neck"
    },
    {
     "who": "may",
     "view": "back",
     "said": "woman",
     "conf": 5,
-    "why": "Clear hourglass: pinched waist, curved hips, narrow tapered legs"
+    "why": "clear hourglass shape, narrow waist, rounded hips"
    },
    {
     "who": "kemi",
     "view": "seated 3/4",
-    "said": "woman",
-    "conf": 3,
-    "why": "Seated side view with a rounded bulge at the chest and hair-like strands at the neck; slimmer back line"
-   },
-   {
-    "who": "kemi",
-    "view": "front",
     "said": "woman",
     "conf": 2,
-    "why": "Very like 4: slight hip flare and tapering legs, but torso is fairly straight so less certain"
+    "why": "sitting side-on; the chair and bent pose hide the body shape"
+   },
+   {
+    "who": "kemi",
+    "view": "front",
+    "said": "woman",
+    "conf": 3,
+    "why": "like 4: soft waist and hip flare, tapering legs, no suit lines"
    },
    {
     "who": "blair",
     "view": "three-quarter",
     "said": "man",
     "conf": 4,
-    "why": "Side view with a shirt-and-tie notch at the collar, flat straight chest, straight trouser legs"
+    "why": "lapel V and tie line, straight torso and legs"
    },
    {
     "who": "blair",
     "view": "seated 3/4",
     "said": "man",
     "conf": 4,
-    "why": "Seated, collar shows a tie/shirt notch, flat chest line, broad back"
+    "why": "sitting, lapel V and tie line show clearly, square chunky body"
    },
    {
     "who": "may",
     "view": "front",
     "said": "woman",
     "conf": 5,
-    "why": "Hourglass waist and hips like 6, plus long-hair strands falling over the neckline"
+    "why": "hourglass waist and hips, hair strands at the neckline"
    },
    {
     "who": "may",
     "view": "seated 3/4",
     "said": "woman",
-    "conf": 4,
-    "why": "Seated side view with a chest bump and long-hair strands at the neck, like 7"
+    "conf": 3,
+    "why": "sitting, hair strands at the neckline; the pose hides the waist and hips"
    }
   ],
-  "F": [
+  "C": [
    {
     "who": "may",
     "view": "three-quarter",
-    "said": "woman",
-    "conf": 3,
-    "why": "Side view with a rounded bump at chest height on the front edge (bust); narrow, rounded shoulders"
-   },
-   {
-    "who": "blair",
-    "view": "back",
-    "said": "man",
-    "conf": 4,
-    "why": "Wide square shoulders, boxy straight torso with no waist, straight wide trouser legs"
-   },
-   {
-    "who": "blair",
-    "view": "front",
-    "said": "man",
-    "conf": 5,
-    "why": "Square shoulders, suit V-collar with a tie in the gap, boxy torso, straight trousers"
-   },
-   {
-    "who": "kemi",
-    "view": "back",
     "said": "woman",
     "conf": 2,
-    "why": "Shoulders a bit narrower than 2, slight flare at the hips and legs that taper to the ankle; little waist, so close to neutral"
+    "why": "side view; slim; small bump at the upper front could be a bust, faint at phone size"
+   },
+   {
+    "who": "blair",
+    "view": "back",
+    "said": "man",
+    "conf": 4,
+    "why": "broad, boxy square shoulders; straight torso with no waist"
+   },
+   {
+    "who": "blair",
+    "view": "front",
+    "said": "man",
+    "conf": 5,
+    "why": "suit lapels with a white shirt V and a tie; square shoulders"
+   },
+   {
+    "who": "kemi",
+    "view": "back",
+    "said": "woman",
+    "conf": 3,
+    "why": "narrower shoulders; slight waist taper; close to a slim man's shape"
    },
    {
     "who": "kemi",
     "view": "three-quarter",
     "said": "woman",
-    "conf": 3,
-    "why": "Same side shape as 1: bust bump on the front edge, soft rounded shoulders"
+    "conf": 2,
+    "why": "same side view as 1, faint chest bump; otherwise neutral"
    },
    {
     "who": "may",
     "view": "back",
     "said": "woman",
     "conf": 5,
-    "why": "Clear hourglass: pinched waist, hips curving out, slim tapered legs"
+    "why": "clear hourglass with a nipped waist and flared hips"
    },
    {
     "who": "kemi",
     "view": "seated 3/4",
     "said": "woman",
-    "conf": 3,
-    "why": "Seated side view with a bust bump at chest height on the front edge; rounded upper back"
+    "conf": 2,
+    "why": "seated side view; slight chest curve; the chair hides most cues"
    },
    {
     "who": "kemi",
     "view": "front",
     "said": "woman",
-    "conf": 2,
-    "why": "Like 4: narrower shoulders, slight hip flare, legs taper; no clear waist, so a weak read"
+    "conf": 3,
+    "why": "same as 4: mild waist taper and tapered legs"
    },
    {
     "who": "blair",
     "view": "three-quarter",
     "said": "man",
     "conf": 4,
-    "why": "Three-quarter view with a shirt collar and tie, flat straight chest and back, no waist curve"
+    "why": "shirt and tie strip down the front; straight torso"
    },
    {
     "who": "blair",
     "view": "seated 3/4",
     "said": "man",
     "conf": 4,
-    "why": "Seated, collar and tie visible, flat straight chest with no bust bump"
+    "why": "seated; shirt and tie strip; blocky torso"
    },
    {
     "who": "may",
     "view": "front",
     "said": "woman",
     "conf": 5,
-    "why": "Hourglass with pinched waist and flared hips, open V neckline"
+    "why": "hourglass waist and hips with a V neckline"
    },
    {
     "who": "may",
     "view": "seated 3/4",
     "said": "woman",
-    "conf": 3,
-    "why": "Seated side view like 7, bust bump on the front edge, rounded shoulders"
+    "conf": 2,
+    "why": "seated side view like 7; faint bust curve; ambiguous at phone size"
    }
   ]
  },
@@ -1652,6 +1652,156 @@
     "kemi front": "[('woman', 3), ('woman', 3), ('woman', 3)]",
     "may seated 3/4": "[('woman', 3), ('woman', 2), ('woman', 3)]"
    }
+  },
+  {
+   "sheet": "notes/learn/kemi-build/judge/outlines-v6b.jpg",
+   "note": "chat 9 round 2 (after May's turned bust 27 over SD 52 at 145, Kemi's hi-vis side strip run into the band, the hair and hat outlines through each point once): May woman in all four (three-quarter back to 3); Kemi three-quarter and seated now 3 from all three judges (were 2); Kemi front and back 2 (were 3) on outlines unchanged (front 0 pixels differ from the drawing judged 3 and approved by Sam on cast v3; back 21 pixels): judge noise on her straight build, as chat 7 saw. Front: Sam's Y on cast v3 (the same drawing). Back: never shown to Sam, never in this film: asked with the board (Q).",
+   "verdicts": [
+    {
+     "who": "may",
+     "view": "three-quarter",
+     "said": "woman",
+     "conf": 3,
+     "why": "Side view with a small rounded bump at the chest, narrow shoulders, legs taper to a slim ankle; fine strands at the neck look like long hair",
+     "of": [
+      "woman 3",
+      "woman 3",
+      "woman 3"
+     ]
+    },
+    {
+     "who": "blair",
+     "view": "back",
+     "said": "man",
+     "conf": 4,
+     "why": "Wide square shoulders, boxy straight torso with no waist, thick straight-legged trousers",
+     "of": [
+      "man 4",
+      "man 4",
+      "man 4"
+     ]
+    },
+    {
+     "who": "blair",
+     "view": "front",
+     "said": "man",
+     "conf": 5,
+     "why": "Boxy suit jacket with a deep V and a tie/shirt notch at the neck, square shoulders, straight wide trousers",
+     "of": [
+      "man 5",
+      "man 5",
+      "man 5"
+     ]
+    },
+    {
+     "who": "kemi",
+     "view": "back",
+     "said": "woman",
+     "conf": 2,
+     "why": "Shoulders a bit narrower than 2, slight flare at the hips and legs that taper to the ankle; little waist, so close to neutral",
+     "of": [
+      "woman 2",
+      "woman 3",
+      "woman 2"
+     ]
+    },
+    {
+     "who": "kemi",
+     "view": "three-quarter",
+     "said": "woman",
+     "conf": 3,
+     "why": "Same side view as 1: chest bump in profile, slim tapering legs, slim build",
+     "of": [
+      "woman 3",
+      "woman 3",
+      "woman 3"
+     ]
+    },
+    {
+     "who": "may",
+     "view": "back",
+     "said": "woman",
+     "conf": 5,
+     "why": "Clear hourglass: pinched waist, curved hips, narrow tapered legs",
+     "of": [
+      "woman 5",
+      "woman 5",
+      "woman 5"
+     ]
+    },
+    {
+     "who": "kemi",
+     "view": "seated 3/4",
+     "said": "woman",
+     "conf": 3,
+     "why": "Seated side view with a rounded bulge at the chest and hair-like strands at the neck; slimmer back line",
+     "of": [
+      "woman 3",
+      "woman 3",
+      "woman 3"
+     ]
+    },
+    {
+     "who": "kemi",
+     "view": "front",
+     "said": "woman",
+     "conf": 2,
+     "why": "Very like 4: slight hip flare and tapering legs, but torso is fairly straight so less certain",
+     "of": [
+      "woman 2",
+      "woman 2",
+      "woman 2"
+     ]
+    },
+    {
+     "who": "blair",
+     "view": "three-quarter",
+     "said": "man",
+     "conf": 4,
+     "why": "Side view with a shirt-and-tie notch at the collar, flat straight chest, straight trouser legs",
+     "of": [
+      "man 4",
+      "man 4",
+      "man 4"
+     ]
+    },
+    {
+     "who": "blair",
+     "view": "seated 3/4",
+     "said": "man",
+     "conf": 4,
+     "why": "Seated, collar shows a tie/shirt notch, flat chest line, broad back",
+     "of": [
+      "man 4",
+      "man 4",
+      "man 4"
+     ]
+    },
+    {
+     "who": "may",
+     "view": "front",
+     "said": "woman",
+     "conf": 5,
+     "why": "Hourglass waist and hips like 6, plus long-hair strands falling over the neckline",
+     "of": [
+      "woman 5",
+      "woman 5",
+      "woman 5"
+     ]
+    },
+    {
+     "who": "may",
+     "view": "seated 3/4",
+     "said": "woman",
+     "conf": 3,
+     "why": "Seated side view like 7, bust bump on the front edge, rounded shoulders",
+     "of": [
+      "woman 3",
+      "woman 4",
+      "woman 3"
+     ]
+    }
+   ]
   }
  ],
  "sam_ok": [
