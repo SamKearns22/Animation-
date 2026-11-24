@@ -134,7 +134,21 @@ bring it down without cutting quality: every place built from the places kit's l
 the wolves reused and fixed once in the shared kit, the four hard moves rehearsed as clips before anything else (the
 rounds are the dearest rows: catching faults before Sam sees them is where the money is), and no camera moves.
 
-## Questions for Sam (in the one message)
+## Sam's answers (24 Nov, to Q2, Q8, Q9)
+- Q2 blood: Y. The blood plan above is approved as written (two reds and a shine, arcs that land and soak in, stained
+  muzzles, paws and vests, torn hi-vis, a tumbling hard hat, dust at every leap, chunks, no bones or insides).
+- Q8 hardest moves first: no. Sam: "let's move through the film in chronological order. Problems were caused last time
+  by executing the ambitious shot without the surrounding scenes." So no rehearsal clips ahead of the rest: shots are
+  built and shown in film order (1 May, 2 Kemi, 3 Blair), each with its own background action, before the next. Kit
+  parts a later shot needs (the wolves, their poses) may be built ahead as parts, never staged in a shot early.
+  Rule 8's "Rehearsal clips sent" line for this film: "none: Sam, 24 Nov, build in film order instead".
+  For the end-of-film review: whether film order should replace rule 8's rehearse-first for every film (not asked: Sam
+  did not say "every film").
+- Q9 estimates proposal: N. Sam: until there is an accurate way of measuring budget he sees no point. No
+  `ledger.py estimate` for this film; the table above stays as notes only; the handover check's COST line is answered
+  by this.
+
+## Questions for Sam (asked 24 Nov; answered above)
 - Q2 (still open since chat 3): the blood plan above, Y or N.
 - Q8: the build proposal for the four hardest moves (above): Y to rehearse them as clips first.
 - Q9 (the template's held note): the estimates proposal, option 1 or 2 (notes/proposals/estimates.md "For Sam").
@@ -167,10 +181,11 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
 - Rough sent to Sam (rule 11, places only): open-wounds-places-rough.jpg, 24 Nov; recorded in story/brexit-is-done-roughs.txt.
 
 ## Where things stand (sets side; chat 4 folds one line into the film's ONE handover when it merges)
-- **Rules that bite next:** 8 (the four hard moves rehearsed, Sam's Y first), 89 (each new wolf pose critiqued alone), 5 (physics: feet on boards, struck wolves react).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order (24 Nov).
+- **Rules that bite next:** 41 (hands on the steel bars), 89 (each new wolf pose critiqued alone), 5 (physics: feet on boards, struck wolves react).
 - **Done (chat 5):** sets plan (this file); 6 references; wolves catalogued; three places built as lines with 18 new shared pieces; places rough sent.
-- **Next (Opus high, new build; opened by this chat once Sam answers):** the wolves: spruce-up fixes 1-4, then the new poses and the hard hat and vest, each critiqued alone; then the rehearsal clips (rule 8) once Sam says Y.
-- **Needs Sam:** Q2 blood, Q8 build proposal, Q9 estimates option (asked 24 Nov).
+- **Next (chat 8, Opus high, new build):** the wolves as kit parts (spruce-up fixes 1-4, then walk, sit, paw, lunge-recoil, skid, hard hat and vest, blood stains per the approved plan), each critiqued alone; no shot staged. Shots then go in film order once the cast is approved (Sam, 24 Nov).
+- **Needs Sam:** nothing (Q2 Y, Q8 film order, Q9 N: 24 Nov).
 - **Read:** `guides/job-packs.md` Build; this file (wolves, background action, hardest moves).
 - **Open rule requests:** none.
 - **For Claude:** wolf.py (side, front, side_pose, head_side); places_site.py; preview of the views: the rough's place_tile at full size.
@@ -186,3 +201,5 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
   holds the stage figures for when he answers.
 - KIT TEST RED tools_switched_on: castsheet UNWIRED (chat 4/6's). finished_films_keep_their_bookmark: the freeze rise
   above, fixed.
+- Chat 5 second check (24 Nov): BRANCH claude/brexit-chat6 and claude/brexit-chat7 are the people chain's (chat 6 merged
+  this branch at e784703c; chat 7 merges and pushes the main line). COST: Sam said N to estimates (Q9): no estimate.
