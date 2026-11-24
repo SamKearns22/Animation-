@@ -547,7 +547,7 @@ def pose(kind='stand', u=0.0, **kw):
         hx = HOME['ff']
         if v < 0.4:
             w = v / 0.4
-            x, y, f = _lerp(hx - 40, hx + 46, _ease(w)), -34 * math.sin(math.pi * w), 0.8 * math.sin(math.pi * w)
+            x, y, f = _lerp(hx - 40, hx + 56, _ease(w)), -64 * math.sin(math.pi * w), 0.9 * math.sin(math.pi * w)
         else:
             w = (v - 0.4) / 0.6
             x, y, f = _lerp(hx + 46, hx - 40, w), 0.0, 0.0
@@ -560,7 +560,7 @@ def pose(kind='stand', u=0.0, **kw):
         v = _ease(u) * (1 - fl)
         P['M'] = (60 * v - 44 * fl, -150.0 - 18 * v + 14 * fl)
         P.update(a=-0.16 * v - 0.12 * fl, cr=0.3 * fl, neck=-0.05 * v - 0.95 * fl, pitch=-0.1 * v - 0.35 * fl,
-                 jaw=0.25 + 0.7 * v + 0.45 * fl, snarl=1.0 - fl, ears=fl, blink=fl > 0.25, yelp=fl > 0.25,
+                 jaw=0.25 + 0.7 * v + 0.3 * fl, snarl=1.0 - fl, ears=fl, blink=fl > 0.25, yelp=fl > 0.25,
                  tail=0.3 * v - 1.3 * fl)
         mx, my = P['M']
         P['paws'].update(ff=(HOME['ff'] + mx + 50 * v, -46 * v), fb=(HOME['fb'] + mx + 30 * v, -30 * v))
@@ -683,8 +683,8 @@ def draw(X, x, y, s, face, pal=0, P=None, wear=None, blood=0.0, seed=0):
     tt = (tm[0] + 46 * math.cos(tip_a), tm[1] + 46 * math.sin(tip_a))
     if P['kind'] == 'sit':                                     # lying along the ground behind it, sweeping
         sw = P['tail'] + 2.2
-        tm = (tr[0] - 44, -24.0)
-        tt = (tm[0] - 46, -22.0 - 30 * sw)
+        tm = (tr[0] - 62, -22.0)
+        tt = (tm[0] - 60, -22.0 - 24 * sw)
         tip_a = math.atan2(tt[1] - tm[1], tt[0] - tm[0])
     a1 = math.atan2(tm[1] - tr[1], tm[0] - tr[0])
     o.part(Wl(shag((tr[0] + tm[0]) / 2, (tr[1] + tm[1]) / 2, 44, 22, 7, 0.2, seed + 2, a1)), base)
@@ -792,14 +792,15 @@ def _hunk(X, H, s, seed):
     (screen down, whatever the head's pitch), a pale fat edge, a strip dangling from it."""
     rd = random.Random(seed)
     tx, ty = H(80, 16)                                  # where the front teeth bite
-    lumps = [(tx + rd.uniform(-6, 6) * s, ty + (14 + 22 * k) * s, (30 - 5 * k) * s * rd.uniform(0.9, 1.1),
-              (20 - 2 * k) * s, rd.uniform(-0.4, 0.4)) for k in range(3)]
+    lumps = [(tx + rd.uniform(-6, 6) * s, ty + (26 + 24 * k) * s, (34 - 5 * k) * s * rd.uniform(0.9, 1.1),
+              (22 - 2 * k) * s, rd.uniform(-0.4, 0.4)) for k in range(3)]
+    X.poly([(tx - 8 * s, ty), (tx + 8 * s, ty), (tx + 14 * s, ty + 28 * s), (tx - 14 * s, ty + 28 * s)], MEAT)
     blob(X, lumps, MEAT, ol=X.ol)
-    X.rell(tx - 6 * s, ty + 8 * s, 22 * s, 7 * s, 0.1, FAT, line=False)                 # the fat edge under the teeth
+    X.rell(tx - 6 * s, ty + 18 * s, 22 * s, 7 * s, 0.1, FAT, line=False)                 # the fat edge under the teeth
     for k in range(3):                                                                # the grain of the muscle
-        X.seg((tx - 16 * s, ty + (22 + 12 * k) * s), (tx + 14 * s, ty + (26 + 12 * k) * s), 3 * s, MEAT_D)
-    X.poly([(tx + 14 * s, ty + 54 * s), (tx + 22 * s, ty + 56 * s), (tx + 18 * s, ty + 84 * s),
-            (tx + 12 * s, ty + 82 * s)], MEAT)                                               # a strip dangling
+        X.seg((tx - 16 * s, ty + (36 + 14 * k) * s), (tx + 14 * s, ty + (40 + 14 * k) * s), 3 * s, MEAT_D)
+    X.poly([(tx + 14 * s, ty + 78 * s), (tx + 22 * s, ty + 80 * s), (tx + 18 * s, ty + 108 * s),
+            (tx + 12 * s, ty + 106 * s)], MEAT)                                               # a strip dangling
 
 
 def W_(pts, W):
@@ -822,7 +823,7 @@ def _head(o, W, hc, P, s, face, base, dark, light, wear, bl, seed):
         q = _rot((px - hinge[0], py - hinge[1]), ja)
         return H(hinge[0] + q[0], hinge[1] + q[1])
     flat = P['ears']
-    ear = lambda base_, tip, back_: [H(*base_), H(_lerp(tip[0], -86, flat), _lerp(tip[1], -46, flat)), H(*back_)]
+    ear = lambda base_, tip, back_: [H(*base_), H(_lerp(tip[0], -96, flat), _lerp(tip[1], -30, flat)), H(*back_)]
     o.part(ear((-34, -26), (-50, -86), (-6, -40)), dark)                                  # the far ear
     o.part([lj(-8, 12), lj(86, 16), lj(90, 30), lj(70, 36), lj(-6, 34)], light)            # the lower jaw
     o.fill([lj(-2, 14), lj(84, 16), lj(84, 22), lj(0, 22)], GUM)
@@ -862,8 +863,8 @@ def _head(o, W, hc, P, s, face, base, dark, light, wear, bl, seed):
     o.fill(ear((-18, -34), (-31, -76), (-4, -40)), dark)
     import eyekit
     if P['blink']:
-        o.line([H(6, -14), H(36, -10)], 4 * s)
-        o.line([H(10, -6), H(30, -2)], 2.5 * s)                                            # squeezed shut
+        o.line([H(4, -20), H(20, -12), H(38, -18)], 5 * s)                                  # squeezed shut: a chevron
+        o.line([H(8, -4), H(32, -6)], 3 * s)
     else:
         eye = [H(6, -12), H(18, -22), H(36, -16), H(26, -6)]
         o.obj(eye, EYE, 0.6)
@@ -901,27 +902,28 @@ def draw_front(X, x, y, s, pal=0, run=None, leap=None, jaw=0.6, blood=0.0, seed=
     vest = wear.get('vest')
     if vest is not None:                                       # the vest's front: straps round the chest, two bands
         col, dk = VEST_COLS[vest % len(VEST_COLS)]
-        o.obj([P_(-92, -196 + yy), P_(92, -196 + yy), P_(80, -118 + yy), P_(-80, -118 + yy)], col)
+        o.obj([P_(-98, -210 + yy), P_(98, -210 + yy), P_(90, -112 + yy), P_(-90, -112 + yy)], col)
         for k in (-1, 1):
-            o.fill([P_(k * 70, -194 + yy), P_(k * 58, -194 + yy), P_(k * 52, -120 + yy), P_(k * 64, -120 + yy)], SILVER)
+            o.fill([P_(k * 78, -208 + yy), P_(k * 62, -208 + yy), P_(k * 56, -114 + yy), P_(k * 72, -114 + yy)], SILVER)
     paws = []
     for k in (-1, 1):                                          # forelegs: pumping in turn, or flung wide (leaping)
         if u > 0:
-            sh, pw = P_(k * 56, -190 + yy), P_(k * (60 + 120 * u), -150 + yy - 190 * u)
+            sh, pw = P_(k * 60, -196 + yy), P_(k * (90 + 100 * u), -190 + yy - 70 * u)   # reaching out and up at us
         else:
             lift = 0.0 if run is None else max(0.0, math.sin(2 * math.pi * run + (0 if k < 0 else math.pi)))
             sh, pw = P_(k * 50, -170 + yy), P_(k * 48, -14 - 70 * lift)        # a planted paw stays on the ground
-        mid = ((sh[0] + pw[0]) / 2 + k * 10 * s, (sh[1] + pw[1]) / 2)
-        _chain(o, [sh, mid, pw], [50 * s, 30 * s, 24 * s], base)
+        mid = ((sh[0] + pw[0]) / 2 + k * (10 + 26 * u) * s, (sh[1] + pw[1]) / 2 + 20 * u * s)
+        _chain(o, [sh, mid, pw], [58 * s, 36 * s, 28 * s], base)
         paws.append(pw)
     for pw in paws:
-        o.part(_ellp(pw[0], pw[1], 26 * s, 16 * s, 0, 18), base)
+        o.part(_ellp(pw[0], pw[1], (26 + 8 * u) * s, (16 + 6 * u) * s, 0, 18), base)
         for d_ in (-12, 0, 12):
             o.line([(pw[0] + d_ * s, pw[1] + 2 * s), (pw[0] + d_ * s, pw[1] + 14 * s)], 3.4 * s,
                    TOOTH if u > 0.3 else OUT)
         if _amount(blood, 'paws') > 0.15:
             stain(o, pw[0], pw[1] - 6 * s, 16 * s * _amount(blood, 'paws'), seed + int(pw[0]), wet=False, drips=0)
-    o.part(shag(*P_(0, -220 + yy), 104 * s, 84 * s, 14, 0.2, seed + 1), light)          # the great ruff
+    rr = 0.72 if vest is not None else 1.0
+    o.part(shag(*P_(0, -226 + yy - 20 * (1 - rr)), 104 * s * rr, 84 * s * rr, 14, 0.2, seed + 1), light)   # the ruff
     if _amount(blood, 'ruff') > 0:
         stain(o, *P_(0, -186 + yy), 40 * s * _amount(blood, 'ruff') + 5 * s, seed + 9, drips=3)
     hy = -300 + yy - 10 * u
@@ -940,12 +942,13 @@ def draw_front(X, x, y, s, pal=0, run=None, leap=None, jaw=0.6, blood=0.0, seed=
     o.call(lambda X: teeth(X, P_(-44, hy + 16), P_(44, hy + 16), 8, 18 * s, 1, big=(0, 7)))
     o.fill([P_(-32, hy + 14 + g), P_(32, hy + 14 + g), P_(30, hy + 24 + g), P_(-30, hy + 24 + g)], GUM)
     o.call(lambda X: teeth(X, P_(-32, hy + 16 + g), P_(32, hy + 16 + g), 6, 16 * s, -1, big=(0, 5)))
-    o.obj([P_(-30, hy - 12), P_(30, hy - 12), P_(22, hy + 8), P_(-22, hy + 8)], light)    # the muzzle, snarling
+    o.fill(shag(*P_(0, hy - 2), 30 * s, 14 * s, 7, 0.1, seed + 4), light)                # the muzzle, snarling
     o.obj(_ellp(*P_(0, hy - 6), 20 * s, 13 * s, 0, 18), NOSE)
     for k in (-1, 1):
         o.line([P_(k * 10, hy - 26), P_(k * 24, hy - 16)], 3 * s)
     if _amount(blood, 'muzzle') > 0:
-        stain(o, *P_(0, hy + 30), 30 * s * _amount(blood, 'muzzle') + 3 * s, seed + 8)
+        for k in (-1, 1):                                      # the lips and jowls, either side of the mouth
+            stain(o, *P_(k * 38, hy + 22), 16 * s * _amount(blood, 'muzzle') + 2 * s, seed + 8 + k, drips=1)
     for k in (-1, 1):                                          # manic eyes through the eye kit, brows driven down
         ex, ey = P_(k * 32, hy - 30)
         if blink:
@@ -1085,10 +1088,13 @@ def hat_prop(X, x, y, s, ang, col=0, blood=0.0, seed=0):
 def scrap(X, x, y, s, ang, col=0, seed=0):
     """A torn scrap of hi-vis vest (flung from a kill): a jagged bit with a piece of silver band."""
     c, dk = VEST_COLS[col % len(VEST_COLS)]
-    pts = [(x + q[0] * s, y + q[1] * s) for q in shag(0, 0, 26, 14, 6, 0.45, seed, ang)]
+    rd = random.Random(seed)
+    base_ = [(-40, -16), (-14, -22), (10, -14), (38, -20), (44, 4), (20, 16), (30, 22), (-8, 18), (-34, 22), (-44, 2)]
+    pts = [(x + q[0] * s, y + q[1] * s) for q in (_rot((px + rd.uniform(-4, 4), py), ang) for px, py in base_)]
     X.poly(pts, c)
-    q0, q1 = _rot((-6, -12), ang), _rot((2, 12), ang)
-    X.seg((x + q0[0] * s, y + q0[1] * s), (x + q1[0] * s, y + q1[1] * s), 7 * s, SILVER)
+    for bx in (-12, 14):
+        band = [_rot((bx - 5, -19), ang), _rot((bx + 5, -19), ang), _rot((bx + 5, 18), ang), _rot((bx - 5, 18), ang)]
+        X.poly([(x + q[0] * s, y + q[1] * s) for q in band], SILVER, line=False)
 
 
 # ------------------------------------------------------------------------------------------------ test sheet
@@ -1100,23 +1106,24 @@ def cast_sheet(out):
 KIT_CELLS = [
     ('stand', dict(P=('stand', 0.0), pal=0)),
     ('walk 0', dict(P=('walk', 0.0), pal=1, wear=dict(hat=0, vest=0, torn=0.2), blood=0.3)),
-    ('walk 1/4', dict(P=('walk', 37.5), pal=1, wear=dict(hat=0, vest=0, torn=0.2), blood=0.3)),
-    ('walk 1/2', dict(P=('walk', 75.0), pal=1, wear=dict(hat=0, vest=0, torn=0.2), blood=0.3)),
+    ('walk 1/3', dict(P=('walk', 50.0), pal=1, wear=dict(hat=0, vest=0, torn=0.2), blood=0.3)),
+    ('walk 2/3', dict(P=('walk', 100.0), pal=1, wear=dict(hat=0, vest=0, torn=0.2), blood=0.3)),
     ('run 0', dict(P=('run', 0.0), pal=3)),
     ('run 1/3', dict(P=('run', 133.0), pal=3)),
     ('leap', dict(P=('leap', 1.0), pal=4, y=-60)),
     ('land', dict(P=('land', 0.2), pal=4)),
-    ('feed: head down', dict(P=('feed', 0.0), pal=2, blood=0.8, wear=dict(vest=1, torn=0.8))),
-    ('feed: ripping up', dict(P=('feed', 1.0, dict(hunk=3)), pal=4, blood=0.9, face=-1)),
+    ('feed: head down (on a kill)', dict(P=('feed', 0.0), pal=2, blood=0.8, wear=dict(vest=1, torn=0.8), kill=True)),
+    ('feed: ripping up', dict(P=('feed', 1.0, dict(hunk=3)), pal=4, blood=dict(ruff=0.8, paws=0.8, muzzle=0.3),
+                              face=-1)),
     ('sit', dict(P=('sit', 0.0), pal=0, wear=dict(hat=1, vest=0, torn=0.6), blood=dict(muzzle=0.5, vest=0.6))),
     ('sit, looks round', dict(P=('sit', 1.0, dict(back=True)), pal=0, wear=dict(hat=1, vest=0, torn=0.6),
                               blood=dict(muzzle=0.5, vest=0.6))),
-    ('paw the dirt', dict(P=('paw', 0.2), pal=1, wear=dict(hat=2, vest=1, torn=0.4), blood=0.4, scrape=1.6)),
+    ('paw the dirt', dict(P=('paw', 0.2 + 2), pal=1, wear=dict(hat=2, vest=1, torn=0.4), blood=0.4, scrape=1.6)),
     ('lunge', dict(P=('lunge', 1.0), pal=3)),
-    ('recoil (struck)', dict(P=('lunge', 1.0, dict(flinch=1.0)), pal=3)),
-    ('skid', dict(P=('skid', 1.0), pal=2, dust=0.25)),
+    ('recoil (struck by a bar)', dict(P=('lunge', 1.0, dict(flinch=1.0)), pal=3, bar=True)),
+    ('skid', dict(P=('skid', 1.0), pal=2, dust=0.25, dx=-60)),
     ('front: run', dict(front=dict(run=0.2), pal=0, wear=dict(hat=0, vest=0), blood=0.4)),
-    ('front: leap at us', dict(front=dict(leap=1.0), pal=1, blood=dict(muzzle=0.7))),
+    ('front: leap at us', dict(front=dict(leap=1.0), pal=1, blood=dict(muzzle=0.7), wear=dict(hat=1), lift=90)),
     ('hat knocked off, scrap, drops', dict(props=True)),
     ('walk, hat and vest, blood 0', dict(P=('walk', 112.0), pal=4, wear=dict(hat=2, vest=1, torn=0.0))),
 ]
@@ -1128,40 +1135,53 @@ def kit_sheet(out, cells=None, cols=4, look=True):
     from satire_style import Cam, Ctx
     cells = cells or KIT_CELLS
     rows = (len(cells) + cols - 1) // cols
-    img = Image.new('RGB', (cols * 450, rows * 420 + 40), (226, 222, 214))
+    img = Image.new('RGB', (cols * 470, rows * 480 + 40), (226, 222, 214))
     X = Ctx(ImageDraw.Draw(img), Cam(0, 0, 1.0, 1), ol=4)
     X.c.p = lambda x, y: (x, y)
     d = ImageDraw.Draw(img)
     f = ImageFont.load_default(size=24)
     for i, (name, c) in enumerate(cells):
-        cx, cy = 225 + (i % cols) * 450, 360 + (i // cols) * 420
-        d.rectangle([cx - 225, cy, cx + 225, cy + 60], fill=(200, 184, 156))
+        cx, cy = 235 + (i % cols) * 470, 420 + (i // cols) * 480
+        d.rectangle([cx - 235, cy, cx + 235, cy + 60], fill=(200, 184, 156))
         if c.get('front'):
-            draw_front(X, cx, cy, 0.8, c.get('pal', 0), wear=c.get('wear'), blood=c.get('blood', 0.0), seed=i,
+            lf = c.get('lift', 0) * 0.8
+            if lf:
+                _blend(X).ellipse([cx - 70, cy - 8, cx + 70, cy + 8], fill=(0, 0, 0, 50))
+            draw_front(X, cx, cy - lf, 0.7, c.get('pal', 0), wear=c.get('wear'), blood=c.get('blood', 0.0), seed=i,
                        **c['front'])
             d.text((cx - 215, cy + 22), name, fill=(0, 0, 0), font=f)
             continue
         if c.get('props'):
-            hat_prop(X, cx - 120, cy - 22, 0.9, 0.5, 0, blood=0.6, seed=2)
-            hat_prop(X, cx - 10, cy - 5, 0.9, 0.0, 1)
-            scrap(X, cx + 80, cy - 8, 0.9, 0.3, 0, seed=4)
-            drops(X, cx + 40, cy - 200, cy, 0.8, 0.2, seed=5)
-            drops(X, cx - 80, cy - 160, cy, 0.8, 0.9, seed=6)
-            dust(X, cx + 150, cy, 0.8, 0.2, seed=7)
+            hat_prop(X, cx - 170, cy - 22, 0.9, 0.5, 0, blood=0.6, seed=2)
+            hat_prop(X, cx - 70, cy - 5, 0.9, 0.0, 1)
+            scrap(X, cx + 20, cy - 10, 1.1, 0.25, 0, seed=4)
+            drops(X, cx - 20, cy - 260, cy + 30, 0.8, 0.15, seed=5)
+            drops(X, cx - 120, cy - 120, cy + 30, 0.8, 0.9, seed=6)
+            dust(X, cx + 150, cy, 0.7, 0.25, seed=7)
             d.text((cx - 215, cy + 22), name, fill=(0, 0, 0), font=f)
             continue
         spec = c['P']
         P = pose(spec[0], spec[1], **(spec[2] if len(spec) > 2 else {}))
         face = c.get('face', 1)
+        cx += c.get('dx', 0)
         shadow(X, cx, cy, 0.8, face, P)
+        if c.get('kill'):                     # a stand-in kill on the dirt: a body in torn hi-vis under the head
+            kx = cx + face * 150 * 0.8
+            X.poly(shag(kx + 20, cy - 16, 60, 18, 8, 0.15, 3), (60, 64, 80))
+            X.poly(shag(kx - 10, cy - 24, 34, 16, 6, 0.3, 4), VEST_COLS[0][0])
+            blood(X, kx + 10, cy + 6, 70, 2, 0.2)
         if c.get('scrape'):
             scrape(X, cx + face * (HOME['ff'] - 20) * 0.8, cy + 4, 0.8, c['scrape'], face=face)
         draw(X, cx, cy + c.get('y', 0), 0.8, face, c.get('pal', 0), P, wear=c.get('wear'), blood=c.get('blood', 0.0),
              seed=i)
+        if c.get('bar'):                      # the steel bar that struck it, at its muzzle
+            jx, jy = cx + face * 170 * 0.8, cy - 230 * 0.8
+            X.seg((jx + 10, jy - 90), (jx + 50, jy + 60), 16, OUT)
+            X.seg((jx + 10, jy - 90), (jx + 50, jy + 60), 10, (150, 156, 164))
         if c.get('dust') is not None:
             for k, nm in enumerate(('ff', 'fb')):
                 px = P['paws'][nm][0]
-                dust(X, cx + face * (px + 20) * 0.8, cy, 0.8, c['dust'] + 0.05 * k, seed=k, spray=1.0)
+                dust(X, cx + face * (px + 20) * 0.8, cy, 0.8, c['dust'] + 0.05 * k, seed=k, spray=1.0, size=1.3)
         d.text((cx - 215, cy + 22), name, fill=(0, 0, 0), font=f)
     if look:
         import house_look

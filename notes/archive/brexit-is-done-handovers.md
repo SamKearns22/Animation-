@@ -67,3 +67,14 @@
 - **Open rule requests:** none (the proposal's check becomes a rule only with Sam's Y).
 - **For Claude:** `castsheet.py sheet brexit-is-done OUT.jpg`; build switch `body: ..., build woman` (body.FIGS);
   chat 3's try: scratch kemi_torso.py style draw via castsheet.draw(sp, yaw, PP).
+
+
+## Sets side, chat 5 (moved by chat 8, 24 Nov)
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's screen place and size (24 Nov).
+- **Rules that bite next:** 41 (hands on the steel bars), 89 (each new wolf pose critiqued alone), 5 (physics: feet on boards, struck wolves react).
+- **Done (chat 5):** sets plan (this file); 6 references; wolves catalogued; three places built as lines with 18 new shared pieces; places rough sent.
+- **Next (chat 8, Opus high, new build):** the wolves as kit parts (spruce-up fixes 1-4, then walk, sit, paw, lunge-recoil, skid, hard hat and vest, blood stains per the approved plan), each critiqued alone; no shot staged. Shots then go in film order once the cast is approved (Sam, 24 Nov).
+- **Needs Sam:** nothing (Q2 Y, Q8 film order, Q9 N: 24 Nov).
+- **Read:** `guides/job-packs.md` Build; this file (wolves, background action, hardest moves).
+- **Open rule requests:** none.
+- **For Claude:** wolf.py (side, front, side_pose, head_side); places_site.py; preview of the views: the rough's place_tile at full size.

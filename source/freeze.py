@@ -30,13 +30,14 @@ BASE = os.path.join(HERE, 'data', 'freeze', 'count-baseline.json')
 DATA = os.path.join(HERE, 'data', 'freeze', 'data')
 SCRATCH = os.path.join(tempfile.gettempdir(), 'freeze')
 
-# a file that belongs to one finished film (not the shared kit); gta_* is the film in progress, never counted
+# a file that belongs to one finished film (not the shared kit); gta_* is the film in progress, never counted.
+# wolf.py is shared kit since 24 Nov (Open Wounds): Cry Minister's side()/front() are kept as they were inside it
 FILM = re.compile(r'^(ad_vanced_notice|bayeux|beaver_asteroid|blessed|burnham|channel_trailer|concept_mother|cryminister|'
                   r'daughter|mother|kitchen|shot$|s\d_|deck_the_halls|duel|ed$|ed_variants|elder_swindon|flying_whales|'
                   r'whale$|gta|halo|hutt|islamocommunism|maul|midterminal|milburn|mossad|netan|newsdesk|patriots|peepee|'
                   r'poker_mon|polanski|power_crime|prepper|press_secretary|professional|protest_tiers|rap|remakes|roadster|'
-                  r'russiadent|salt|sam$|shocking|strictly|terfwarts|thepark|park$|traitors|trial_|walker$|wolf$|horror_|'
-                  r'animation_test|satire_parts|series$|wolf)')
+                  r'russiadent|salt|sam$|shocking|strictly|terfwarts|thepark|park$|traitors|trial_|walker$|horror_|'
+                  r'animation_test|satire_parts|series$)')
 
 
 def sh(*a, cwd=ROOT, check=True):
