@@ -90,7 +90,21 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 ROOT = os.path.dirname(HERE)
 import people_parts as PP                        # noqa: E402  (the house head size, outline; installs the hooks)
-from people_parts import FA, dk, INK, curve, oval  # noqa: E402
+from people_parts import FA, dk, INK, oval  # noqa: E402
+from people_parts import curve as _curve          # noqa: E402
+
+
+def curve(pts, n=6):
+    """The closed curve, through each point once (Open Wounds chat 9: a closed curve through one point twice in a row
+    loops out into a spike, Sam's note 11 on Blair's grin; the hair and hat shapes here did it too: the turned hard
+    hat's two sides met at its top point twice, a nub on Kemi's hat, 6% of its width). Repeats dropped, wrap included."""
+    q = []
+    for x, y in pts:
+        if not q or abs(x - q[-1][0]) > 1e-6 or abs(y - q[-1][1]) > 1e-6:
+            q.append((x, y))
+    while len(q) > 3 and abs(q[0][0] - q[-1][0]) < 1e-6 and abs(q[0][1] - q[-1][1]) < 1e-6:
+        q.pop()
+    return _curve(q, n)
 from faces import blend               # noqa: E402
 from ink import open_curve                        # noqa: E402
 import turnhead as TH  # noqa: E402

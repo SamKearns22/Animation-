@@ -1261,21 +1261,24 @@ def workwear_torso(img, p, sp, t):
     def edge(y):                                    # the body's own half width at y (any build: body.FIGS)
         got = V._span(out, min(max(y, 0.0), bottom - 0.5))
         return float(got[1]) - 1.0 if got else sw
+    hem = min(bottom, sp.get('jacket_hem') or bottom)   # a short jacket (chat 7): the band sits as far over its hem
+    ya, yb = hem - 150, hem - 62                    # the waist band, its silver stripe through the middle
+    yl = max(250.0, ya + 4)                         # chat 9: the side strip runs on into the band (was cut at 250 in
+    #   a point: turned, the near strip showed between arm and body as a tab under the braid; her photo: the orange
+    #   runs from the shoulder down the side into the band, one piece)
     for sgn in (-1, 1):                             # the yoke: orange over each shoulder, from the collar's edge out
         # Its inner edge runs just outside the collar and lapel (the suit's lapel reaches x 70 at y 30, 62 at 150;
         # Sam on cast v2, note 6: "Kemi's orange detailing travels over her white collar"; her photo: the navy
         # collar lies on top, the orange starts at the shoulder outside it). It is drawn after the jacket, so it
         # must never reach inside x 74 above the lapel's foot.
-        yoke = [(sgn * 76, 6), (sgn * edge(30) * 0.78, 18), (sgn * edge(40), 40), (sgn * edge(250), 250),
-                (sgn * edge(250) * 0.8, 240), (sgn * max(edge(130) * 0.74, 96), 118), (sgn * 86, 70), (sgn * 78, 32)]
+        yoke = [(sgn * 76, 6), (sgn * edge(30) * 0.78, 18), (sgn * edge(40), 40), (sgn * edge(yl), yl),
+                (sgn * edge(yl) * 0.8, yl), (sgn * edge(yl - 40) * 0.8, yl - 40), (sgn * max(edge(130) * 0.74, 96), 118), (sgn * 86, 70), (sgn * 78, 32)]
         #   (down the side under the arm, as her photo: the sleeve's shoulder joins orange, never fades to navy)
         # chat 7: the smoothed yoke kept inside the body (its curve stood out over the shoulder's top, a nub on
         # each shoulder: the blind judge's "square shoulders"): each point under the top edge and inside the side
         ins = [(x if y < 60 else sgn * min(abs(x), edge(y) - 0.5), max(y, B._top_y(out, x) + 0.8))
                for x, y in curve(yoke, 3)]
         p.poly(ins, orange, INK, 2.0)
-    hem = min(bottom, sp.get('jacket_hem') or bottom)   # a short jacket (chat 7): the band sits as far over its hem
-    ya, yb = hem - 150, hem - 62                    # the waist band, its silver stripe through the middle
     p.poly([(-edge(ya), ya), (edge(ya), ya), (edge(yb), yb), (-edge(yb), yb)], orange, INK, 2.0)
     sa, sb = ya + 30, ya + 56
     p.poly([(-edge(sa), sa), (edge(sa), sa), (edge(sb), sb), (-edge(sb), sb)], silver, INK, 1.6)

@@ -493,6 +493,45 @@ def doubled_points(pts):
     return int((np.hypot(*(P - np.roll(P, -1, 0)).T) < 1e-6).sum()) if len(P) > 2 else 0
 
 
+def hair_spike_faults(film, who=None, cast=None, raw=False):
+    """Every hair and hat outline the cast draws (front, turned, back, seated): no closed curve through one point
+    twice (Open Wounds chat 9: the turned hard hat's two sides met at its top point twice, a nub on Kemi's hat; 7
+    more hair shapes did the same, smaller). raw=True draws through the bare curve, as before chat 9 (the selftest's
+    old version)."""
+    import facehouse as FH
+    import sitting as S
+    from PIL import Image
+    if cast is None:
+        cast, PP = _setup(film, who)
+    else:
+        _, PP = _setup(film, None)
+    hits, inner, outer = [], FH._curve, FH.curve
+    spy = lambda pts, n=6: (hits.append(doubled_points(pts)), inner(pts, n))[1]   # noqa: E731
+    if raw:
+        FH.curve = spy
+    else:
+        FH._curve = spy
+    out = []
+    try:
+        for name, sp0 in cast.items():
+            if 'kit_house' not in sp0:
+                continue
+            for yaw, seated, view in ((0, False, 'front'), (45, False, 'three-quarter'), (180, False, 'back'),
+                                      (45, True, 'seated 3/4')):
+                hits.clear()
+                sp = dict(sp0)
+                s = 0.5 * sp['height'] / 1.75
+                j = S.pose(sp, 'upright') if seated else None
+                PP.V.person(Image.new('RGBA', (1080, 1920)), PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp,
+                            0.0, yaw, j)
+                if sum(hits):
+                    out.append(f"HAIR {name} {view}: a hair or hat outline passes through one point twice "
+                               f"({sum(hits)}): it spikes (chat 9, Kemi's hat nub; Sam's note 11)")
+    finally:
+        FH._curve, FH.curve = inner, outer
+    return out
+
+
 def mouth_spike_faults(film, who=None, cast=None):
     """Every house mouth a cast member wears (and each kind): no closed curve through one point twice."""
     import faces as FA
@@ -649,6 +688,14 @@ def build_selftest():
     got = mouth_spike_faults('brexit-is-done')
     print('PASS' if not got else 'FAIL', 'every house mouth now: no point twice', '|', (got or ['-'])[0][:110])
     ok &= not got
+    got = hair_spike_faults('brexit-is-done', raw=True)
+    hit = any('kemi three-quarter' in g for g in got)
+    print('CAUGHT' if hit else 'MISSED', "chat 9: Kemi's turned hat nub (the hat's top point twice, as before)", '|',
+          (got or ['-'])[0][:110])
+    ok &= hit
+    got = hair_spike_faults('brexit-is-done')
+    print('PASS' if not got else 'FAIL', 'every hair and hat outline now: no point twice', '|', (got or ['-'])[0][:110])
+    ok &= not got
     got = teeth_faults('brexit-is-done', cast={'blair': cast['blair']})
     print('PASS' if not got else 'FAIL', 'Blair\'s grin now: a full top row', '|', (got or ['-'])[0][:110])
     ok &= not got
@@ -679,7 +726,7 @@ if __name__ == '__main__':
         sys.exit(0 if (selftest() & build_selftest()) else 1)
     elif a[:1] == ['build']:
         fs = (build_faults(a[1], a[2:] or None) + crotch_faults(a[1], a[2:] or None) + teeth_faults(a[1], a[2:] or None)
-              + mouth_spike_faults(a[1], a[2:] or None)
+              + mouth_spike_faults(a[1], a[2:] or None) + hair_spike_faults(a[1], a[2:] or None)
               + judge_faults(a[1], a[2:] or None))
         print('\n'.join(fs) or 'build: every woman reads as a woman, every man as a man, each woman on her own build')
         sys.exit(1 if fs else 0)

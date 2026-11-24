@@ -589,6 +589,7 @@ def castsheet_faults(film):
     return [f'STOP: CAST SHEET: {x}' for x in castsheet.build_faults(film) + castsheet.crotch_faults(film)
                                                      + castsheet.teeth_faults(film)
                                                      + castsheet.mouth_spike_faults(film)
+                                                     + castsheet.hair_spike_faults(film)
                                                      + castsheet.judge_faults(film)]
 
 

@@ -944,7 +944,7 @@ def _built_outline(sp, view, bottom, o, fig):
             u = min(1.0, max(0.0, (y - 70.0) / 50.0))
             x = x * (kf + TURNED_SIDE[fig] * (ks - 1.0) * u)
             if i == 0:                            # chat 7: the bust in front of the near arm (below)
-                x += lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y[fig]) / TURNED_BUST_SD) ** 2)
+                x += lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y[fig]) / TURNED_BUST_SD[fig]) ** 2)
             out.append((x, y))
         if hem:                                   # a short jacket (chat 7): turned, the seat runs into the thighs
             out = _seat_into_thighs(sp, out, view, bottom)   # (was a square corner: a box's; then a tuck by a fixed
@@ -980,9 +980,12 @@ TURNED_SIDE = {'female': 0.7, 'straight': 0.7}
 # the side shape's bust is barely deeper than the house man's chest, d 1.20 against 1.18, so turned it never showed).
 # Turned, a woman's bust stands out in front of the near arm (her walking photo, a little turned: the white top's
 # curve ahead of her arm): a bump on the front edge only, at the bust's height. Units: the body's.
-TURNED_BUST = {'female': 28.0, 'straight': 30.0}
-TURNED_BUST_Y = {'female': 140.0, 'straight': 170.0}   # at each build's own bust (the side shapes': 'female' 140,
-TURNED_BUST_SD = 42.0                                   # 'straight' 165); at 170 May's waist already narrowed behind the arm    # how much of the side's shape a three-quarter edge carries
+TURNED_BUST = {'female': 27.0, 'straight': 30.0}
+TURNED_BUST_Y = {'female': 145.0, 'straight': 170.0}   # at each build's own bust (the side shapes': 'female' 140,
+TURNED_BUST_SD = {'female': 52.0, 'straight': 42.0}    # 'straight' 165); at 170 May's waist already narrowed behind the arm.
+# Chat 9 (handover's known fault: May turned, the bump 28 at 140 over SD 42 read pointed, a cone): 'female' wider,
+# 27 over SD 52 at 145, so the front edge swells and eases back into the waist. 22 over SD 62 (softer still) lost her
+# to the blind judges (three-quarter woman 2: "neutral"); 27/52 brought it back to 3 from all three (record v6b)    # how much of the side's shape a three-quarter edge carries
 
 
 def _side_depths(sp, fig, bottom):
