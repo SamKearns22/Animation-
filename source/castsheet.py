@@ -20,7 +20,8 @@ in the straight on view"; n3 Kemi "the orange is gone from her clothes").
 
     python3 source/castsheet.py sheet FILM OUT.jpg [WHO ...]    the sheet (refuses on a figure touching an edge)
     python3 source/castsheet.py match FILM [WHO ...]            front | 3/4 faults, one line each
-    python3 source/castsheet.py selftest                         the check on Sam's saved notes
+    python3 source/castsheet.py build FILM [WHO ...]            woman or man in every view; each woman on HER build
+    python3 source/castsheet.py selftest                         the checks on Sam's saved notes (n2, n3, n5, n7)
 """
 import os
 import sys
@@ -294,6 +295,183 @@ def selftest():
     return ok
 
 
+# ---------------------------------------------------------------------------------------------- the build check
+# Open Wounds chat 6 (24 Nov). Sam's note 5 on cast v2 ("I'm not sure we have female bodies? Kemi's body seems much
+# more like a man's"; notes/sam-notes/brexit-cast-v2/n5-*.jpg: both women on the man's box) and note 7 on the first
+# woman's build ("Kemi Badenoch just does not have that body. Looks good for May though!": one hourglass for every
+# woman). Two questions, every person, every turned view, read from the drawing's own torso outline (views.
+# torso_outline: exact, no guessing from pixels; a reading of saved pictures was tried and found unreliable: heads
+# and hands move its landmarks):
+#   SHAPE     does the body read as a woman's or a man's? Hip over waist at least WOMAN_HIP_WAIST. Measured on
+#             every build at four turns (chat 6): women 1.08 (Kemi's own build, three-quarter: the weakest) to 1.34,
+#             men 0.94 (the house box) to 1.05 (Jason's 'man'). Hip over chest was tried and dropped: it failed Lucia
+#             three-quarter (0.89), a woman Sam approved.
+#   LIKENESS  is it HER body? Each woman's front widths (bust, waist, hip over the outer shoulder) against the ones
+#             measured from her own photos (references/FILM/WHO-build.json, written by the measuring step), within
+#             LIKE_TOL; or Sam's own words approving that exact build. A woman with neither is a fault: never guessed.
+WOMAN_HIP_WAIST, LIKE_TOL = 1.07, 0.05
+SHAPE_VIEWS = ('front', 'three', 'three_back', 'back')
+BANDS = dict(chest=(160, 220, max), waist=(220, 320, min), hip=(380, None, max))
+
+
+def _width_at(poly, y):
+    xs = []
+    for (x0, y0), (x1, y1) in zip(poly, poly[1:] + poly[:1]):
+        if (y0 - y) * (y1 - y) <= 0 and y0 != y1:
+            xs.append(x0 + (x1 - x0) * (y - y0) / (y1 - y0))
+    return (max(xs) - min(xs)) if len(xs) >= 2 else 0.0
+
+
+def torso_shape(sp, view):
+    """Chest, waist and hip widths of the person's torso in a view (body units), as the drawing makes it."""
+    import views as V
+    bottom = sp.get('bottom', V.JACKET)
+    poly = [tuple(map(float, q)) for q in V.torso_outline(sp, view, bottom)]
+    out = {}
+    for k, (a, b, f) in BANDS.items():
+        out[k] = f(_width_at(poly, y) for y in range(a, int(b or bottom - 6), 4))
+    return out
+
+
+def reads_as(m):
+    return 'woman' if m['hip'] >= WOMAN_HIP_WAIST * m['waist'] else 'man'
+
+
+def front_widths(sp):
+    """Bust, waist, hip over the outer shoulder (the arm tops: 2 (sw + 20.5)), at the measuring step's heights."""
+    import body as B
+    sw = sp.get('shoulders', 150)
+    W = 2 * (sw + 20.5)
+    return {n: round(2 * B.fig_half(sp.get('figure'), y, sw, sp.get('bottom', 505)) / W, 2)
+            for n, y in (('bust', 200), ('waist', 275), ('hip', 470))}
+
+
+def _measured(film, w):
+    import json
+    p = os.path.join(ROOT, 'references', film, f'{w}-build.json')
+    return json.load(open(p)) if os.path.exists(p) else None
+
+
+def build_faults(film, who=None, cast=None, measured=None):
+    """One line per fault: a woman drawn on a man's shape (any view), a man drawn on a woman's, a woman whose build
+    is not hers (or was never measured from her photos)."""
+    if cast is None:
+        cast, _ = _setup(film, who)
+    out = []
+    for w, sp in cast.items():
+        sex = sp.get('sex')
+        if sex not in ('woman', 'man'):
+            continue
+        for view in SHAPE_VIEWS:
+            m = torso_shape(sp, view)
+            if reads_as(m) != sex:
+                out.append(f"BUILD {w} ({sex}) reads as a {reads_as(m)} {view}: hip {m['hip'] / m['waist']:.2f} of "
+                           f"the waist (a woman's: at least {WOMAN_HIP_WAIST}; Sam's note 5)")
+        if sex != 'woman':
+            continue
+        ref = (measured or {}).get(w, 'look') if measured is not None else _measured(film, w)
+        if ref == 'look':
+            ref = _measured(film, w)
+        if not ref:
+            out.append(f'BUILD {w}: her build was never measured from her own photos (references/{film}/{w}-build.json; '
+                       f"notes/learn/kemi-build/measure.py shows how): one woman's body for every woman is note 7's fault")
+            continue
+        if ref.get('approved'):
+            if ref.get('figure') != sp.get('figure'):
+                out.append(f"BUILD {w}: Sam approved build {ref.get('figure')!r} ({ref['approved']}), she is drawn on "
+                           f"{sp.get('figure')!r}")
+            continue
+        got = front_widths(sp)
+        off = {k: (got[k], v) for k, v in ref['widths'].items() if abs(got[k] - v) > LIKE_TOL}
+        if off:
+            out.append(f'BUILD {w}: not her body (her photos, references/{film}/{w}-build.json): ' + ', '.join(
+                f'{k} drawn {a:.2f}, photos {b:.2f}' for k, (a, b) in off.items()) + " (Sam's note 7)")
+    return out
+
+
+# The blind judge (Change 1: "a fresh helper that hasn't seen the cast list says man or woman at phone size"). Chat
+# 6 found the shape test alone too weak: it passed Kemi three-quarter (hip 1.08 of the waist, just over the line)
+# while the judge called her a man there and seated ("boxy straight torso, no waist"): her arms and the straight
+# jacket hide the shape. So a woman (or a man) must also be read right by the judge in every view, with confidence
+# JUDGE_MIN or more, on outlines drawn from the CURRENT drawing: the record (notes/judge/FILM-cast.json) is stale once
+# the cast file or the drawing code changes after it (git: a newer commit on those files, or unsaved edits).
+JUDGE_MIN = 3
+JUDGE_FILES = ('story/{film}-people.txt', 'source/body.py', 'source/views.py', 'source/people.py',
+               'source/people_parts.py', 'source/sitting.py')
+
+
+def judge_faults(film, who=None):
+    import json
+    import subprocess
+    p = os.path.join(ROOT, 'notes', 'judge', f'{film}-cast.json')
+    if not os.path.exists(p):
+        return [f'JUDGE: no blind judge has read this cast (notes/judge/{film}-cast.json; notes/learn/kemi-build/judge.py '
+                'makes the outlines)']
+    rec = json.load(open(p))
+    files = [f.format(film=film) for f in JUDGE_FILES]
+    git = lambda *a: subprocess.run(['git', '-C', ROOT] + list(a), capture_output=True, text=True).stdout.strip()
+    t_rec = git('log', '-1', '--format=%ct', '--', os.path.relpath(p, ROOT))
+    t_draw = git('log', '-1', '--format=%ct', '--', *files)
+    dirty = git('status', '--porcelain', '--', *files)
+    out = []
+    if dirty or (t_rec and t_draw and int(t_draw) > int(t_rec)) or not t_rec:
+        out.append(f'JUDGE: the judge\'s record is older than the drawing (or not committed after it): draw the outlines '
+                   'again and ask a fresh judge')
+    cast, _ = _setup(film, who)
+    for v in rec['verdicts']:
+        sex = cast.get(v['who'], {}).get('sex')
+        if sex and (v['said'] != sex or v['conf'] < JUDGE_MIN):
+            out.append(f"JUDGE: {v['who']} ({sex}) {v['view']}: the blind judge said {v['said']} ({v['conf']} of 5): "
+                       f"\"{v['why']}\"")
+    return out
+
+
+def _n5_picture(f, box_):
+    """The saved n5 picture's own front figure: hip over waist of its silhouette (the head and feet left out by the
+    tile's box: arms included, as Sam saw it), so the selftest proves its redraw is the picture's state."""
+    from PIL import Image
+    a = np.asarray(Image.open(os.path.join(ROOT, 'notes', 'sam-notes', 'brexit-cast-v2', f)).convert('RGB'))
+    t = a[box_[1]:box_[3], box_[0]:box_[2]].astype(int)
+    m = np.abs(t - np.median(t[:5].reshape(-1, 3), 0)).sum(2) > 40
+    wid = np.array([(np.ptp(np.nonzero(r)[0]) if r.any() else 0) for r in m], float)
+    ys = np.nonzero(wid)[0]
+    H = ys.max() - ys.min()
+    mid = wid[ys.min() + int(0.40 * H)]
+    sh = int(np.argmax(wid > 0.92 * mid))
+    L = int(0.30 * H)                             # the jacket: about 30% of the figure below the shoulders
+    return wid[sh + int(0.70 * L):sh + int(0.84 * L)].max() / wid[sh + int(0.35 * L):sh + int(0.65 * L)].min()
+
+
+def build_selftest():
+    """Trusted only when it catches Sam's notes 5 and 7 and passes Lucia (a woman) and Blair (a man)."""
+    ok = True
+    cast, _ = _setup('brexit-is-done', None)
+    n5 = {w: dict(cast[w], figure=None) for w in ('may', 'kemi')}       # cast v2: both on the house (man's) body
+    for w, f in (('may', 'n5-may-body.jpg'), ('kemi', 'n5-kemi-body-like-a-mans.jpg')):
+        pic = _n5_picture(f, (1190, 30, 1455, 790))
+        got = build_faults('brexit-is-done', cast={w: n5[w]}, measured={})
+        hit = any('reads as a man' in g for g in got)
+        print(('CAUGHT' if hit else 'MISSED'), f'n5 {w} (the saved picture\'s hips {pic:.2f} of its waist: a box; '
+              f'"Kemi\'s body seems much more like a man\'s")', '|', (got or ['-'])[0][:110])
+        ok &= hit and pic < WOMAN_HIP_WAIST
+    v1 = {'kemi': dict(cast['kemi'], figure='female')}                  # note 7: May's hourglass on Kemi
+    got = build_faults('brexit-is-done', cast=v1)
+    hit = any('not her body' in g for g in got)
+    print('CAUGHT' if hit else 'MISSED', 'n7 kemi on the hourglass ("Kemi Badenoch just does not have that body")',
+          '|', (got or ['-'])[0][:120])
+    ok &= hit
+    gta, _ = _setup('grand-theft-autism', ['lucia'])
+    lu = dict(gta['lucia'], sex='woman')
+    got = [g for g in build_faults('grand-theft-autism', cast={'lucia': lu}, measured={'lucia': {'approved': 'GTA, '
+           '20 Nov: measured from the game\'s art', 'figure': 'woman'}})]
+    print('PASS' if not got else 'FALSE', 'Lucia reads as a woman in every view', '|', (got or ['-'])[0][:100])
+    ok &= not got
+    got = build_faults('brexit-is-done', cast={'blair': cast['blair']})
+    print('PASS' if not got else 'FALSE', 'Blair reads as a man in every view', '|', (got or ['-'])[0][:100])
+    ok &= not got
+    return ok
+
+
 if __name__ == '__main__':
     a = sys.argv[1:]
     if a[:1] == ['sheet']:
@@ -303,6 +481,10 @@ if __name__ == '__main__':
         print('\n'.join(fs) or 'match: front and three-quarter agree')
         sys.exit(1 if fs else 0)
     elif a[:1] == ['selftest']:
-        sys.exit(0 if selftest() else 1)
+        sys.exit(0 if (selftest() & build_selftest()) else 1)
+    elif a[:1] == ['build']:
+        fs = build_faults(a[1], a[2:] or None) + judge_faults(a[1], a[2:] or None)
+        print('\n'.join(fs) or 'build: every woman reads as a woman, every man as a man, each woman on her own build')
+        sys.exit(1 if fs else 0)
     else:
         print(__doc__)

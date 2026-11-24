@@ -162,7 +162,7 @@ def standing(sp):
         sh = j['sh' + side]
         up = _unit((sg * 0.12, 0.99, -0.04))     # Sam's four rest references (8 Nov, references/figure-rig/):
         fo = _unit((sg * -0.04, 0.99, 0.13))     # elbow at the waist, forearm back in, hands beside the upper thigh
-        if sp.get('figure') == 'female':         # Open Wounds (chat 4; notes/learn/womans-build, arms test): the
+        if sp.get('figure') in ('female', 'straight'):   # Open Wounds (chat 4; notes/learn/womans-build): the
             up = _unit((sg * 0.16, 0.99, -0.04))  # upper arm a little further out and the forearm straight under it,
             fo = _unit((sg * 0.02, 0.99, 0.13))   # so the waist and the hip's curve show between arm and body (the
             #                                       judge: arms hugging the sides hid them; tucked in, a column)
@@ -686,7 +686,18 @@ def torso_view(img, p, sp, view, seated=False):
         body = torso_outline(sp, view, bottom)
         p.poly(body, jc, INK, 2.6)
         _bare_neck(p, sp, [(-22.2, -40), (40.3, -40), (45.2, -4), (-20.5, -4)])
-        if out in ('suit', 'blouse'):
+        if out == 'suit' and sp.get('sex') == 'woman' and not tie:   # Change 2 (chat 6): as body._womans_neckline
+            a, dpt, b, ny = B.WOMAN_V                                # turned: the far side narrower (0.6)
+            p.poly([(o - a * 0.8, -4), (o + a * 0.6, -4), (o + b * 0.6, ny), (o + 2, dpt), (o - b * 0.8, ny)], sc, INK, 2.2)
+            for sg, k in ((-1, 0.8), (1, 0.6)):
+                p.poly([(o + sg * a * k, -4), (o + sg * 22 * k, 30), (o + sg * 30 * k, 46), (o + sg * (a + 8) * k, 10)],
+                       sc, INK, 2.0)
+            p.poly([(o - 18, 30), (o + 14, 30), (o, 52)], skin, None)
+            for sg, k in ((-1, 0.8), (1, 0.6)):
+                p.poly([(o + sg * (a - 2) * k, -2), (o + sg * (a + 22) * k, 22), (o + sg * (b + 18) * k, 74),
+                        (o + sg * (b + 30) * k, 98), (o + sg * 4, dpt + 10), (o + sg * (b - 10) * k, 98)], jc, INK, 2.2)
+            p.line([(o + 2, dpt + 10), (o + 4, bottom)], jd, 2.2)
+        elif out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)
             if tie:
                 p.poly([(o - 8, 16), (o + 10, 16), (o + 13, 180), (o + 2, 206), (o - 10, 180)], tie, INK, 2.0)
@@ -814,6 +825,12 @@ def _built_outline(sp, view, bottom, o, fig):
         elif fig == 'female':                     # Open Wounds: the bust, the waist at 225, the seat out at 350
             pts = [(-34, -8), (-d * 0.92, 22), (-d * 0.98, 120), (-d * 0.82, 225), (-d * 1.1, 350), (-d * 1.08, bottom),
                    (d * 0.96, bottom), (d * 0.9, 330), (d * 0.8, 225), (d * 1.24, 140), (d * 1.04, 80), (d * 0.86, 30),
+                   (30, -6)]
+        elif fig == 'straight':                   # Open Wounds chat 6 (Kemi, measured front only: no side photo):
+            # between 'female' and the house side, each dip scaled by the front's (waist 0.85 not 0.70): the bust,
+            # a shallow waist at 275, the seat a little out at 400
+            pts = [(-34, -8), (-d * 0.94, 22), (-d * 1.0, 120), (-d * 0.92, 275), (-d * 1.03, 400), (-d * 1.0, bottom),
+                   (d * 0.96, bottom), (d * 0.94, 340), (d * 0.92, 275), (d * 1.2, 145), (d * 1.04, 80), (d * 0.86, 30),
                    (30, -6)]
         else:
             pts = [(-34, -8), (-d * 0.96, 22), (-d * 1.06, 130), (-d * 0.92, 320), (-d * 0.92, bottom), (d * 0.94, bottom),

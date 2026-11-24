@@ -439,9 +439,9 @@ def _fact(d, key, val, people):
                     a, b = re.findall(r'\d+', v)
                     d['hw'], d['hh'] = int(a), int(b)
                 elif w == 'build':                 # GTA (20 Nov): 'build man' (a broad chest's taper) or 'build woman'
-                    if v not in ('man', 'woman'):  # (a waist and hips): body.FIGS
-                        raise DescriptionError(f'build {v!r}: man or woman')
-                    d['figure'] = v
+                    if v not in ('man', 'woman', 'female', 'straight'):   # (a waist and hips): body.FIGS. Open
+                        raise DescriptionError(f'build {v!r}: man, woman, female or straight')   # Wounds chat 6:
+                    d['figure'] = v                # 'straight', a woman's straighter build measured from Kemi's photos
                 elif w == 'arms':                  # 'arms 35' (the house arm is 30); 'arms 35 muscle' swells them
                     a = v.split()
                     d['arm_w'] = float(a[0])

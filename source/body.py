@@ -528,8 +528,18 @@ FIGS = {'man': ((110, 0.98), (190, 0.92), (300, 0.81), (420, 0.85)),
         # person marked `woman` gets. Measured from sewing-pattern size charts (notes/learn/womans-build/learn.md):
         # hips as wide as the shoulders (charts about 1.0; 'woman' above had a man's 0.80), the waist higher (about
         # 225 below the neck) at 0.70, the bust 0.92; the jacket shaped over the hip and in a little to the hem.
-        'female': ((100, 0.92), (150, 0.86), (225, 0.70), (300, 0.86), (370, 0.96), (430, 0.95))}
-FIG_HEM = {'female': 0.92}          # the hem's width over the shoulders (else HEM): a shaped jacket over the hip
+        'female': ((100, 0.92), (150, 0.86), (225, 0.70), (300, 0.86), (370, 0.96), (430, 0.95)),
+        # 'straight' (Open Wounds chat 6, 24 Nov; Sam's note 7 "Kemi Badenoch just does not have that body. Looks good
+        # for May though!" and "I don't think Kemi Badenoch is 'slimmer' than Theresa May"): a woman's straighter,
+        # fuller build, MEASURED from her own photos (notes/learn/kemi-build/measures.json, Sam's three photos):
+        # widths over the outer shoulder (arm tops) put in body units (outer shoulder = 2 (sw + 20.5), depth below
+        # the collar in the same units; the photos' depths land on the body's own: bust 199, waist 273, hip 482):
+        # bust 0.87, the waist barely in (0.85, and low: at the elbow, 275), the hips the widest part (0.97, at the
+        # hip joint), wider than the chest; a man's box is widest at the chest (1.04) and narrows to the hip (0.85);
+        # 'female' pinches to 0.70 just under the bust (the hourglass Sam said is May's; Kemi's photo: 0.76 there).
+        'straight': ((100, 0.92), (200, 0.87), (275, 0.85), (470, 0.97))}
+FIG_HEM = {'female': 0.92, 'straight': 0.96}   # the hem's width over the shoulders (else HEM)
+WOMEN_FIGS = ('female', 'straight', 'woman')   # the builds a woman is drawn on (castsheet's build check)
 
 
 def fig_half(fig, y, sw, bottom):
@@ -577,6 +587,28 @@ def front_outline(sw, bottom, o=2.0, fig=None, arm_w=30.0):
     return [(-ax, ay)] + left + right[::-1] + [(ax, ay)]
 
 
+# A woman's neckline (Open Wounds chat 6, Change 2; notes/learn/womans-build/learn.md, ranked first by the blind
+# judge: "a strip down the middle of an open jacket reads as a man's shirt and tie"): a wider, shallower opening,
+# the blouse spread across it, its collar laid out over the lapels, smaller lapels set higher, the jacket closing at
+# 160 (a man's at 250). Only a person marked `woman` (new films: finished films carry no such word, so draw as
+# before). WOMAN_V: (half width at the top, depth, half width at the lapels' notch, notch height).
+WOMAN_V = (58, 150, 40, 70)
+
+
+def _womans_neckline(p, sp, jc, sc, skin, bottom):
+    a, dpt, b, ny = WOMAN_V
+    p.poly([(-a, -4), (a, -4), (b, ny), (0, dpt), (-b, ny)], sc, INK, 2.2)
+    for sg in (-1, 1):                                  # the blouse's collar, open and laid flat over the lapels
+        p.poly([(sg * a, -4), (sg * 22, 30), (sg * 30, 46), (sg * (a + 8), 10)], sc, INK, 2.0)
+    p.poly([(-22, 30), (22, 30), (0, 54)], skin, None)
+    jd = tuple(int(v * 0.72) for v in jc)
+    for sg in (-1, 1):                                  # small lapels, the notch high
+        p.poly([(sg * (a - 2), -2), (sg * (a + 22), 22), (sg * (b + 18), 74), (sg * (b + 30), 98), (sg * 4, dpt + 10),
+                (sg * (b - 10), 98)], jc, INK, 2.2)
+    p.line([(0, dpt + 10), (0, bottom)], jd, 2.2)
+    p.ell(6, dpt + 50, 5, 5, jd, None)
+
+
 def plain_torso(img, p, sp, t):
     out = sp.get('outfit', 'suit')
     skin = sp['skin']
@@ -593,6 +625,10 @@ def plain_torso(img, p, sp, t):
         jc = sp.get('jacket', NAVY)
         sc = sp.get('shirt', (236, 238, 244))
         p.poly(body, jc, INK, 2.6)
+        if sp.get('sex') == 'woman' and not sp.get('tie'):   # Open Wounds chat 6, Change 2 (the learn step's first
+            _womans_neckline(p, sp, jc, sc, skin, bottom)    # finding: May's blouse in the narrow V read as a tie)
+            out = '_done'
+    if out == 'suit':
         p.poly([(-40, -4), (40, -4), (22, 150), (0, 230), (-22, 150)], sc, INK, 2.2)
         if sp.get('tie'):
             p.poly([(-11, 16), (11, 16), (15, 180), (0, 210), (-15, 180)], sp['tie'], INK, 2.0)

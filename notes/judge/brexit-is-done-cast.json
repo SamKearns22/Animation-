@@ -1,0 +1,92 @@
+{
+ "sheet": "notes/learn/kemi-build/judge/outlines-v3.jpg",
+ "made_by": "notes/learn/kemi-build/judge.py",
+ "date": "2026-11-24",
+ "judge": "a fresh helper that saw only the 12 shuffled headless outlines (chat 6)",
+ "verdicts": [
+  {
+   "who": "may",
+   "view": "three-quarter",
+   "said": "woman",
+   "conf": 2,
+   "why": "long hair strands at the neck; otherwise fairly straight, with a slight waist"
+  },
+  {
+   "who": "blair",
+   "view": "back",
+   "said": "man",
+   "conf": 4,
+   "why": "broad square shoulders, boxy straight torso, wide hem"
+  },
+  {
+   "who": "blair",
+   "view": "front",
+   "said": "man",
+   "conf": 5,
+   "why": "tie and jacket lapels (white V at the neck)"
+  },
+  {
+   "who": "kemi",
+   "view": "back",
+   "said": "woman",
+   "conf": 3,
+   "why": "narrow sloping shoulders, flares out to a wider A-line hem like a tunic or dress"
+  },
+  {
+   "who": "kemi",
+   "view": "three-quarter",
+   "said": "man",
+   "conf": 2,
+   "why": "boxy straight torso, no waist, no hair shown"
+  },
+  {
+   "who": "may",
+   "view": "back",
+   "said": "woman",
+   "conf": 5,
+   "why": "clear nipped-in waist and curved hips"
+  },
+  {
+   "who": "kemi",
+   "view": "seated 3/4",
+   "said": "man",
+   "conf": 3,
+   "why": "boxy square torso, no waist or hair cues (seated)"
+  },
+  {
+   "who": "kemi",
+   "view": "front",
+   "said": "woman",
+   "conf": 3,
+   "why": "A-line shape flaring from narrow shoulders to the hem"
+  },
+  {
+   "who": "blair",
+   "view": "three-quarter",
+   "said": "man",
+   "conf": 5,
+   "why": "tie and lapels"
+  },
+  {
+   "who": "blair",
+   "view": "seated 3/4",
+   "said": "man",
+   "conf": 5,
+   "why": "tie and lapels (seated)"
+  },
+  {
+   "who": "may",
+   "view": "front",
+   "said": "woman",
+   "conf": 5,
+   "why": "curved waist and hips, plus hair strands at the neck"
+  },
+  {
+   "who": "may",
+   "view": "seated 3/4",
+   "said": "woman",
+   "conf": 2,
+   "why": "hair strands at the neck are the only cue; the torso itself is boxy and reads male (seated)"
+  }
+ ]
+}
