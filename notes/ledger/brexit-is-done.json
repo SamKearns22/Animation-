@@ -3323,6 +3323,527 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-24",
+   "chat": "ccee3e40",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.35,
+   "src": "estimate",
+   "sid": "session_01U3pKR1PmcimaQUbnV3a3J3",
+   "steps": 83,
+   "hist_k": 284,
+   "kinds": {
+    "tool search": 14.9,
+    "renders": 5.3,
+    "pictures": 2.6,
+    "other": 77.2
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 45,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 10,
+    "pictures": 10,
+    "other": 20
+   },
+   "split": {
+    "usd": 8.3101,
+    "total": 8.3101,
+    "floor_k": 84,
+    "blocks": {
+     "new writes": 35.0,
+     "Claude's words": 28.9,
+     "carried history": 27.2,
+     "start-up floor": 9.0
+    },
+    "origins": {
+     "Claude's words": 40.1,
+     "messages and reminders": 36.7,
+     "start-up floor": 9.1,
+     "result: tool search": 7.7,
+     "result: pictures": 2.9,
+     "result: other": 2.3,
+     "Claude's edits": 1.0,
+     "result: renders": 0.2
+    },
+    "named": {
+     "messages and reminders": 36.7,
+     "writing code": 18.6,
+     "thinking": 15.9,
+     "start-up reading (rules, tools, first files)": 9.1,
+     "reading kit code": 4.6,
+     "commands": 3.9,
+     "looking at pictures": 2.9,
+     "messages to Sam": 1.6,
+     "reading notes": 1.5,
+     "running checks and tools": 1.3,
+     "start-up and handover tools": 1.0,
+     "writing notes": 0.8,
+     "reading guides": 0.8,
+     "other commands": 0.5,
+     "helper and chat prompts": 0.4,
+     "app tools (chats, files sent)": 0.3,
+     "renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 27,
+    "work_pct": 0.76,
+    "reads": [
+     [
+      "notes/brexit-is-done-sets.md",
+      5.4,
+      0.075
+     ],
+     [
+      "source/wolf.py",
+      5.4,
+      0.0711
+     ],
+     [
+      "guides/critique-checklist.md",
+      3.7,
+      0.0495
+     ],
+     [
+      "source/freeze.py",
+      1.8,
+      0.0218
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/ccee3e40-ca89-5aa9-b493-855be3c5b81f/scratchpad/wolf-old.png",
+      1.6,
+      0.0203
+     ],
+     [
+      "source/eyekit.py",
+      1.4,
+      0.0168
+     ],
+     [
+      "source/kit.py",
+      1.4,
+      0.0154
+     ],
+     [
+      "guides/job-packs.md",
+      0.8,
+      0.0106
+     ],
+     [
+      "source/satire_style.py",
+      0.7,
+      0.0084
+     ],
+     [
+      "source/house_look.py",
+      0.7,
+      0.0084
+     ],
+     [
+      "source/cryminister.py",
+      0.3,
+      0.0034
+     ],
+     [
+      "source/data/freeze/count-baseline.json",
+      0.2,
+      0.0027
+     ]
+    ],
+    "base_pct": 15.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 8,
+     "shared:handover.py": 2,
+     "guides": 4,
+     "shared:wolf.py": 10,
+     "shared:critique.py": 9,
+     "shared:cryminister.py": 3,
+     "shared:freeze.py": 6,
+     "shared:satire_style.py": 2,
+     "shared:kit.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git log --oneline -3 && git fetch origin claude/brexit-c",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "notes/.chat8-save-check",
+      "git log --oneline b21275a2..origin/claude/brexit-chat5-sets && git checkout -b c",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01U3pKQzpCX39nxRRegF2T7U --film brexit-",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/brexit-is-done-sets.md",
+      "python3 source/handover.py start session_01U3pKQzpCX39nxRRegF2T7U --film brexit-",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "^#",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py guides/kit-catalogue.md",
+      "^def \\|^class \\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "sed -n 1,35p guides/job-packs.md && sed -n 27,36p guides/job-packs.md >/dev/null",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:critique.py",
+      "guides/critique-checklist.md source/critique.py",
+      "wc -l guides/critique-checklist.md && cat guides/critique-checklist.md | head -8",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "sed -n 1,200p source/wolf.py",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "sed -n 200,391p source/wolf.py",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "import wolf\\|from wolf\\|wolf\\.\\(side\\|front\\|meat\\)",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:cryminister.py",
+      "source/cryminister.py source/kittests.py",
+      "wolf",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "sed -n 1,40p source/freeze.py | head -50; python3 source/freeze.py 2>&1 | head -",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:satire_style.py",
+      "source/satire_style.py source/eyekit.py source/house_look.py",
+      "^def \\|^class \\|    def ",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:satire_style.py",
+      "source/satire_style.py source/house_look.py source/eyekit.py",
+      "sed -n 1,100p source/satire_style.py; sed -n 1,40p source/house_look.py; sed -n ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py source/data/freeze/count-baseline.json",
+      "def count\\|def count_faults\\|FILM\\b\\|FILM\\.\\|BASE",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "sed -n 270,346p source/freeze.py",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "ls source | grep -i wolf; git log --oneline -3 -- source/freeze.py; git log -S\"|",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "source/*.py",
+      "def .*shadow\\|def .*dust\\|def .*puff",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:kit.py",
+      "source/kit.py guides/kit-catalogue.md",
+      "dust\\|smoke\\|puff",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:cryminister.py",
+      "source/cryminister.py",
+      "^def picture\\|^def frame\\|^def render\\|^def draw_frame\\|__main__",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:cryminister.py",
+      "source/cryminister.py",
+      "S=/tmp/claude-0/-home-user-Animation-/ccee3e40-ca89-5aa9-b493-855be3c5b81f/scrat",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "# the tail: from the rump",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      ",\n",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "jaw=_lerp",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "def draw_front",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "git add source/wolf.py && git commit -qm \"Open Wounds chat 8: wolf kit (one outl",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "python3 - <<'EOF' p='source/freeze.py'; s=open(p).read() a=\"r'russiadent|salt|sa",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "timeout 600 python3 source/freeze.py count --lower 2>&1 | tail -2; git diff --st",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique",
+      "def pack",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/grand-theft-autism/cast-spec.json source/critique.py",
+      "head -c 1800 source/data/critique-src/grand-theft-autism/cast-spec.json; echo; s",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique-src/",
+      "def _film_module",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      "curl -s -m 30 -A \"AnimationKit/1.0 (wolf reference)\" \"https://commons.wikimedia.",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "",
+      "head -c 300 references/brexit-is-done/wolf-sitting-ann.jpg; echo; curl -s -m 60 ",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/brexit-is-done/cast-spec.json source/critique.py source",
+      "def third_hunt",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "notes/ledger/brexit-is-done.json source/data/critique-src/brexit-is-done/cast-sp",
+      "git fetch -q origin claude/brexit-chat7 && git log --oneline -5 origin/claude/br",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/brexit-is-done source/data/critique-src/brexit-is-done/",
+      "D=source/data/critique-src/brexit-is-done && python3 -c \" from PIL import Image ",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/brexit-is-done/r3-p1",
+      "python3 source/critique.py record brexit-is-done source/data/critique/brexit-is-",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py",
+      "sh, pw = P_(k \\* 56, -190 + yy)",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique-src/brexit-is-done/wolves-spec.json",
+      "python3 source/critique.py pack brexit-is-done source/data/critique-src/brexit-i",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/brexit-is-done/r3-p2",
+      "python3 source/critique.py record brexit-is-done source/data/critique/brexit-is-",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:wolf.py",
+      "source/wolf.py source/data/critique-src/brexit-is-done source/critique.py",
+      "python3 - <<'EOF' p='source/wolf.py'; s=open(p).read() def rep(a,b): global s as",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "Passed the critique",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "tail -3 notes/logs/kittests-last.log; pgrep -af kittests | head -3",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "other",
+      "notes/ledger notes/logs source/data/critique-src/brexit-is-done",
+      "git add -A notes/ledger notes/logs source/data/critique-src/brexit-is-done && gi",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
