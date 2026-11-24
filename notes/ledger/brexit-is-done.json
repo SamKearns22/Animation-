@@ -2543,70 +2543,72 @@
    "model": "opus",
    "stage": "sets",
    "round": null,
-   "cost": 2.52,
+   "cost": 3.19,
    "notes": 0,
    "repeats": [],
    "src": "estimate",
    "sid": "session_01U3pKQzpCX39nxRRegF2T7U",
-   "steps": 122,
-   "hist_k": 309,
+   "steps": 129,
+   "hist_k": 316,
    "kinds": {
-    "film-file search": 3.2,
-    "tool search": 23.8,
+    "film-file search": 2.5,
+    "tool search": 19.5,
     "page.py": 0.2,
-    "renders": 0.8,
-    "pictures": 3.4,
-    "other": 68.6
+    "renders": 0.6,
+    "pictures": 2.8,
+    "other": 74.4
    },
    "calls": {
     "film-file search": 4,
-    "tool search": 70,
+    "tool search": 72,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
     "renders": 3,
     "pictures": 12,
-    "other": 27
+    "other": 30
    },
    "split": {
-    "usd": 9.2344,
-    "total": 9.2344,
+    "usd": 11.6648,
+    "total": 11.6648,
     "floor_k": 84,
     "blocks": {
-     "carried history": 29.5,
-     "Claude's words": 29.2,
-     "start-up floor": 21.7,
-     "new writes": 19.5
+     "new writes": 32.9,
+     "carried history": 25.5,
+     "Claude's words": 23.5,
+     "start-up floor": 18.1
     },
     "origins": {
-     "Claude's words": 48.1,
-     "start-up floor": 21.7,
-     "result: tool search": 17.2,
-     "result: pictures": 4.0,
-     "messages and reminders": 3.5,
-     "Claude's edits": 2.6,
-     "result: other": 2.4,
-     "result: renders": 0.3,
-     "result: film-file search": 0.2
+     "Claude's words": 39.4,
+     "start-up floor": 18.1,
+     "cache re-write": 17.1,
+     "result: tool search": 14.3,
+     "result: pictures": 3.3,
+     "messages and reminders": 3.1,
+     "result: other": 2.2,
+     "Claude's edits": 2.1,
+     "result: renders": 0.2,
+     "result: film-file search": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 21.7,
-     "thinking": 21.6,
-     "writing code": 11.1,
-     "writing notes": 7.5,
-     "reading guides": 5.6,
-     "commands": 5.4,
-     "reading kit code": 4.3,
-     "looking at pictures": 4.0,
-     "messages to Sam": 4.0,
-     "reading notes": 3.7,
-     "messages and reminders": 3.5,
-     "other commands": 1.8,
-     "start-up and handover tools": 1.4,
-     "running checks and tools": 1.3,
+     "start-up reading (rules, tools, first files)": 18.1,
+     "thinking": 17.5,
+     "memory lapses (re-paying for the whole chat)": 17.1,
+     "writing code": 9.0,
+     "writing notes": 6.2,
+     "reading guides": 4.6,
+     "commands": 4.5,
+     "reading kit code": 3.6,
+     "messages to Sam": 3.4,
+     "looking at pictures": 3.3,
+     "messages and reminders": 3.1,
+     "reading notes": 3.0,
+     "other commands": 1.5,
      "app tools (chats, files sent)": 1.2,
-     "helper and chat prompts": 1.1,
-     "renders": 0.8
+     "start-up and handover tools": 1.2,
+     "running checks and tools": 1.1,
+     "helper and chat prompts": 1.0,
+     "renders": 0.7
     },
     "leftover": 0.0
    },
@@ -2618,92 +2620,92 @@
      [
       "notes/brexit-is-done.md",
       3.1,
-      0.0908
+      0.0948
      ],
      [
       "guides/kit-catalogue.md",
       3.3,
-      0.0894
+      0.0935
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/wolfsheet.png",
       1.6,
-      0.0445
+      0.0465
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/refs.jpg",
       1.6,
-      0.043
-     ],
-     [
-      "guides/preflight.md",
-      1.3,
-      0.0381
-     ],
-     [
-      "guides/satire.md",
-      1.3,
-      0.0381
+      0.0451
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo/thumbs.jpg",
       1.6,
-      0.0379
+      0.0399
+     ],
+     [
+      "guides/preflight.md",
+      1.3,
+      0.0398
+     ],
+     [
+      "guides/satire.md",
+      1.3,
+      0.0398
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo/site3.jpg",
       1.6,
-      0.0367
+      0.0387
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo2/thumbs.jpg",
       1.6,
-      0.0356
+      0.0376
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo2/oak3.jpg",
       1.6,
-      0.035
+      0.037
      ],
      [
       "source/catalogue.py",
       1.5,
-      0.032
+      0.0339
      ],
      [
       "guides/job-packs.md",
       1.0,
-      0.0278
+      0.029
      ],
      [
       "source/wolf.py",
       1.0,
-      0.0269
+      0.0281
      ],
      [
       "notes/ledger/brexit-is-done.md",
       1.0,
-      0.0252
+      0.0264
      ],
      [
       "story/milburn-places.txt",
       0.8,
-      0.0223
+      0.0234
      ],
      [
       "source/rough.py",
       0.9,
-      0.0219
+      0.023
      ],
      [
       "story/blessed-places.txt",
       0.8,
-      0.0204
+      0.0214
      ],
      [
       "source/places_parts.py",
       0.7,
-      0.017
+      0.0178
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/site3.jpg",
@@ -2711,7 +2713,7 @@
       0.0005
      ]
     ],
-    "base_pct": 19.9
+    "base_pct": 16.7
    },
    "search": {
     "show": 0,
@@ -2719,9 +2721,9 @@
      "no show": 4
     },
     "other": {
-     "other": 18,
+     "other": 19,
      "shared:handover.py": 3,
-     "film notes": 7,
+     "film notes": 8,
      "guides": 9,
      "shared:wolf.py": 1,
      "shared:places.py": 6,
@@ -3329,6 +3331,22 @@
       "source/handover.py",
       "^ ",
       ""
+     ],
+     [
+      117,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git add -A && git commit -qm \"Open Wounds chat 5: han",
+      ""
+     ],
+     [
+      119,
+      "other",
+      "film notes",
+      "notes/brexit-is-done-sets.md",
+      "python3 - <<'EOF' p='notes/brexit-is-done-sets.md'; s=open(p).read() s=s.replace",
+      ""
      ]
     ]
    },
@@ -3342,64 +3360,64 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.35,
+   "cost": 2.62,
    "src": "estimate",
    "sid": "session_01U3pKR1PmcimaQUbnV3a3J3",
-   "steps": 83,
-   "hist_k": 284,
+   "steps": 99,
+   "hist_k": 292,
    "kinds": {
-    "tool search": 14.9,
-    "renders": 5.3,
-    "pictures": 2.6,
-    "other": 77.2
+    "tool search": 14.2,
+    "renders": 4.8,
+    "pictures": 2.5,
+    "other": 78.5
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 45,
+    "tool search": 53,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 10,
     "pictures": 10,
-    "other": 20
+    "other": 24
    },
    "split": {
-    "usd": 8.3101,
-    "total": 8.3101,
+    "usd": 9.3033,
+    "total": 9.3033,
     "floor_k": 84,
     "blocks": {
-     "new writes": 35.0,
-     "Claude's words": 28.9,
-     "carried history": 27.2,
-     "start-up floor": 9.0
+     "carried history": 33.2,
+     "new writes": 31.9,
+     "Claude's words": 26.8,
+     "start-up floor": 8.0
     },
     "origins": {
-     "Claude's words": 40.1,
-     "messages and reminders": 36.7,
-     "start-up floor": 9.1,
-     "result: tool search": 7.7,
+     "messages and reminders": 39.9,
+     "Claude's words": 38.2,
+     "start-up floor": 8.1,
+     "result: tool search": 7.4,
      "result: pictures": 2.9,
-     "result: other": 2.3,
-     "Claude's edits": 1.0,
+     "result: other": 2.4,
+     "Claude's edits": 0.9,
      "result: renders": 0.2
     },
     "named": {
-     "messages and reminders": 36.7,
-     "writing code": 18.6,
-     "thinking": 15.9,
-     "start-up reading (rules, tools, first files)": 9.1,
-     "reading kit code": 4.6,
-     "commands": 3.9,
+     "messages and reminders": 39.9,
+     "writing code": 17.2,
+     "thinking": 14.6,
+     "start-up reading (rules, tools, first files)": 8.1,
+     "reading kit code": 4.5,
+     "commands": 4.2,
      "looking at pictures": 2.9,
-     "messages to Sam": 1.6,
-     "reading notes": 1.5,
-     "running checks and tools": 1.3,
-     "start-up and handover tools": 1.0,
-     "writing notes": 0.8,
-     "reading guides": 0.8,
-     "other commands": 0.5,
+     "messages to Sam": 1.8,
+     "reading notes": 1.4,
+     "running checks and tools": 1.2,
+     "start-up and handover tools": 0.9,
+     "writing notes": 0.9,
+     "reading guides": 0.7,
+     "other commands": 0.6,
+     "app tools (chats, files sent)": 0.5,
      "helper and chat prompts": 0.4,
-     "app tools (chats, files sent)": 0.3,
      "renders": 0.1
     },
     "leftover": 0.0
@@ -3470,7 +3488,7 @@
       0.0027
      ]
     ],
-    "base_pct": 15.1
+    "base_pct": 16.1
    },
    "search": {
     "show": 0,
@@ -3478,15 +3496,17 @@
      "no show": 0
     },
     "other": {
-     "other": 8,
-     "shared:handover.py": 2,
+     "other": 11,
+     "shared:handover.py": 4,
      "guides": 4,
      "shared:wolf.py": 10,
      "shared:critique.py": 9,
      "shared:cryminister.py": 3,
      "shared:freeze.py": 6,
      "shared:satire_style.py": 2,
-     "shared:kit.py": 1
+     "shared:kit.py": 1,
+     "shared:kittests.py": 2,
+     "film notes": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -3849,6 +3869,70 @@
       "other",
       "notes/ledger notes/logs source/data/critique-src/brexit-is-done",
       "git add -A notes/ledger notes/logs source/data/critique-src/brexit-is-done && gi",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "other",
+      "",
+      "git log --oneline origin/claude/brexit-chat8-wolves..HEAD; git status --short | ",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:handover.py",
+      "notes/logs/kittests-last.log source/handover.py",
+      "^FAIL",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "git fetch -q origin claude/brexit-chat7 && git merge -q --no-edit origin/claude/",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "other",
+      "notes/ledger notes/logs",
+      "git add -A notes/ledger notes/logs && git commit -qm \"Open Wounds chat 8: logs C",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "shared:kittests.py",
+      "notes/logs/handover-end.log notes/logs/kittest-reds.log notes/logs source/kittes",
+      "for f in notes/logs/handover-end.log notes/logs/kittest-reds.log; do python3 - \"",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^(STOP|handover|Checks|BRANCH|PUSH|COST)",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "film notes",
+      "notes/brexit-is-done-sets.md notes/logs",
+      "python3 - <<'EOF' p='notes/brexit-is-done-sets.md'; s=open(p).read() a=\"COST: no",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "notes/ledger notes/logs",
+      "git status --short | head; git add -A notes/ledger notes/logs && git commit -qm ",
       ""
      ]
     ]
