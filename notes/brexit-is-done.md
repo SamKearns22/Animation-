@@ -65,6 +65,8 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Sam 22:00: "I do think we need multiple body shapes in our kit, maybe 6 for male and female": reserve job R1 (notes/next-jobs.md), waits for Sam to name it.
 - Sam 22:06: "I'd be keen to answer your script questions soon": answered as Q1-Q7 (brief items 13-18); only Q2, the blood, is still open.
 
+- Sam 24 Nov (sets chat): "We always want the character in centre right of the frame. With a decent amount of space around them." Then: "In the case of this film. For the interview joke. Always in the same position as May." Carried in notes/brexit-is-done-sets.md (shot table: all three centre right, face about 60% across, space round them); note 9 lets May be framed a little wider, Kemi and Blair matching her.
+
 ## Handover check, named not fixed (chats 1-6)
 - Chat 6: override.py "never seen running": no prompt from Sam reached chat 6 (it was opened by chat 4's handover), so the
   prompt hook had nothing to run on. Castsheet UNWIRED: wired (handover end, castsheet_faults). Branches as chats 2-4
