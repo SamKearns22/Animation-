@@ -579,8 +579,14 @@ def judge_faults(film, who=None):
         out.append(f'JUDGE: the record holds {len(rec.get("judges") or {})} judge(s); a round needs {JUDGES} fresh ones, each '
                    'verdict the middle of theirs (chat 7: one judge moved a point on unchanged figures)')
     cast, _ = _setup(film, who)
+    sam = {(o['who'], o['view']) for o in rec.get('sam_ok', [])}   # Sam's own eye on this same drawing: his words
+    #   (chat 7: Kemi's turned and seated views sat on the line, 3/3/3 one round and 2/2/2 the next on the
+    #   same drawing; Sam, shown cast sheet v3: "Y to Kemi, cast sheet is ready"). Bound to the record, so a
+    #   later drawing change makes it stale with the rest (above).
     for v in rec['verdicts']:
         sex = cast.get(v['who'], {}).get('sex')
+        if (v['who'], v['view']) in sam:
+            continue
         if sex and (v['said'] != sex or v['conf'] < JUDGE_MIN):
             out.append(f"JUDGE: {v['who']} ({sex}) {v['view']}: the blind judge said {v['said']} ({v['conf']} of 5): "
                        f"\"{v['why']}\"")
