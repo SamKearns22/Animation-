@@ -29,7 +29,6 @@ import people as PK                  # noqa: E402
 import people_parts as PPt           # noqa: E402
 import places as PL                  # noqa: E402
 import sitting as S                  # noqa: E402
-from milburn_sets import LevelCam    # noqa: E402
 from satire_style import install_circle_hands   # noqa: E402
 
 B = PPt.B
@@ -55,6 +54,7 @@ SHOTS = [('1', 0.0, 7.5), ('2', 7.5, 17.5), ('3', 17.5, 26.9)]
 DUR = SHOTS[-1][2]
 T = {'chose_wolves': 6.0, 'grin': 25.0, 'lunge': 26.5}
 SHOT_CAST = {'1': ['may'], '2': ['kemi'], '3': ['blair']}
+SHOT_MARKS = SHOT_CAST                 # rule 38: who the front-on check looks at, per shot
 HOOK = ('Andy is opening old wounds... \U0001F1EC\U0001F1E7', {'y': 300, 'until': 3.0})   # item 15: above her hair (top at about 465)
 
 
@@ -114,8 +114,7 @@ MAY = dict(yaw=-45.0,                # turned to screen-left, as her photos
 
 
 def _cam(view):
-    v = _DESC['views'][view]['camera']
-    return LevelCam(v['up'], v['horizon'], v['lens'])
+    return PL.LevelCam.of(_DESC, view)
 
 
 def _paint(img, view, layer, t):

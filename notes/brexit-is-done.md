@@ -162,3 +162,10 @@ it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover
 
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - 
+
+## Handover check named (chat 10)
+- Rehearsal clips sent: none: Sam, 24 Nov (Q8), build in film order instead.
+- Rule 74 acting rows (shots 1-3) and HEAD LIFE for may, kemi, blair: the moves stage, after each shot's board is approved and before the animatic; shot 1's rows (May's gestures as her photos, head on her line) come first.
+- FINDER: new building (no note was being fixed); page.py show is for notes.
+- FREEZE: rose to 21 on importing milburn_sets.LevelCam; fixed by lifting LevelCam into the places kit (places.LevelCam, with .of(desc, view)); count back to 20. milburn_sets keeps its own copy (a finished film; not touched).
+- COST: no estimate by Sam's Q9 N (24 Nov).

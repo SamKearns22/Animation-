@@ -536,3 +536,23 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv[1:])
+
+
+# ---------------------------------------------------------------------------------------------- the level camera
+class LevelCam:
+    """A level camera: height `up` m, horizon row, lens px; x across, d forward from the lens, z up (metres).
+    (Lifted from milburn_sets into the places kit, 24 Nov, so new films need not load a finished film's file.)"""
+    def __init__(self, up, horizon, lens, centre=540.0):
+        self.up, self.hz, self.L, self.c = up, horizon, lens, centre
+
+    def p(self, x, d, z):
+        return self.c + x * self.L / d, self.hz - (z - self.up) * self.L / d
+
+    def ppm(self, d):
+        return self.L / d
+
+    @classmethod
+    def of(cls, desc, view):
+        """The camera a places file gives a view (its `camera:` line)."""
+        v = desc['views'][view]['camera']
+        return cls(v['up'], v['horizon'], v['lens'])

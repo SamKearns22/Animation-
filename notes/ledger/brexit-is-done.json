@@ -4630,5 +4630,11 @@
   "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)",
   "6": "none (match checks colours, not layering: gap written in castsheet.py MAP)",
   "4": "-"
- }
+ },
+ "quick_checks": [
+  {
+   "at": "2026-11-24T09:40+00:00",
+   "faults": 16
+  }
+ ]
 }
