@@ -4490,7 +4490,103 @@
    "notes": 1,
    "repeats": [
     "No bum/circular knees | castsheet.seated_faults (built now); P7 by hand only"
-   ]
+   ],
+   "steps": 53,
+   "hist_k": 168,
+   "kinds": {
+    "film-file search": 6.3,
+    "tool search": 17.5,
+    "page.py": 0.6,
+    "renders": 1.5,
+    "pictures": 4.1,
+    "other": 70.0
+   },
+   "calls": {
+    "film-file search": 7,
+    "tool search": 30,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 6,
+    "other": 8
+   },
+   "split": {
+    "usd": 2.6323,
+    "total": 2.6323,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 32.6,
+     "new writes": 25.6,
+     "Claude's words": 23.1,
+     "carried history": 18.7
+    },
+    "origins": {
+     "start-up floor": 33.7,
+     "Claude's words": 32.6,
+     "result: tool search": 17.7,
+     "messages and reminders": 7.5,
+     "result: pictures": 4.9,
+     "result: film-file search": 2.3,
+     "Claude's edits": 0.8,
+     "result: renders": 0.3,
+     "result: other": 0.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 33.7,
+     "thinking": 11.2,
+     "commands": 9.6,
+     "writing code": 8.9,
+     "reading kit code": 8.8,
+     "messages and reminders": 7.5,
+     "reading notes": 7.2,
+     "looking at pictures": 4.9,
+     "start-up and handover tools": 4.0,
+     "writing notes": 2.7,
+     "messages to Sam": 1.1,
+     "running checks and tools": 0.3,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 22,
+    "work_pct": 0.3,
+    "reads": [
+     [
+      "source/milburn.py",
+      4.7,
+      0.066
+     ],
+     [
+      "notes/brexit-is-done-sets.md",
+      4.1,
+      0.0615
+     ],
+     [
+      "source/rough.py",
+      1.6,
+      0.0209
+     ],
+     [
+      "story/brexit-is-done-places.txt",
+      1.4,
+      0.0201
+     ],
+     [
+      "source/castsheet.py",
+      0.7,
+      0.0094
+     ],
+     [
+      "story/brexit-is-done-people.txt",
+      0.3,
+      0.0044
+     ]
+    ],
+    "base_pct": 30.0
+   }
   }
  ],
  "checks": {},
