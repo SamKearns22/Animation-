@@ -1229,5 +1229,17 @@
     }
    ]
   }
+ ],
+ "sam_ok": [
+  {
+   "who": "kemi",
+   "view": "three-quarter",
+   "words": "Sam (24 Nov, on cast sheet v3 and Q1 \"does Kemi read as a woman to you, turned and seated?\"): \"Y to Kemi, cast sheet is ready x\""
+  },
+  {
+   "who": "kemi",
+   "view": "seated 3/4",
+   "words": "Sam (24 Nov, on cast sheet v3 and Q1 \"does Kemi read as a woman to you, turned and seated?\"): \"Y to Kemi, cast sheet is ready x\""
+  }
  ]
 }
