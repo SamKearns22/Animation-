@@ -1,92 +1,183 @@
 {
- "sheet": "notes/learn/kemi-build/judge/outlines-v3.jpg",
+ "sheet": "notes/learn/kemi-build/judge/outlines-v3b.jpg",
  "made_by": "notes/learn/kemi-build/judge.py",
  "date": "2026-11-24",
- "judge": "a fresh helper that saw only the 12 shuffled headless outlines (chat 6)",
+ "judge": "a second fresh helper, after the turned edges took the side shape (views._built_outline TURNED_SIDE)",
  "verdicts": [
   {
    "who": "may",
    "view": "three-quarter",
    "said": "woman",
-   "conf": 2,
-   "why": "long hair strands at the neck; otherwise fairly straight, with a slight waist"
+   "conf": 3,
+   "why": "strands of long hair at the neck, rounded narrow shoulders; the torso itself is fairly straight"
   },
   {
    "who": "blair",
    "view": "back",
    "said": "man",
    "conf": 4,
-   "why": "broad square shoulders, boxy straight torso, wide hem"
+   "why": "broad square shoulders, boxy torso with no waist"
   },
   {
    "who": "blair",
    "view": "front",
    "said": "man",
    "conf": 5,
-   "why": "tie and jacket lapels (white V at the neck)"
+   "why": "suit lapels with a shirt and tie"
   },
   {
    "who": "kemi",
    "view": "back",
    "said": "woman",
-   "conf": 3,
-   "why": "narrow sloping shoulders, flares out to a wider A-line hem like a tunic or dress"
+   "conf": 2,
+   "why": "slightly narrower shoulders and the jacket flares out at the hips; could also be a man in a plain jacket"
   },
   {
    "who": "kemi",
    "view": "three-quarter",
    "said": "man",
    "conf": 2,
-   "why": "boxy straight torso, no waist, no hair shown"
+   "why": "straight side-on body with no waist and no hair"
   },
   {
    "who": "may",
    "view": "back",
    "said": "woman",
    "conf": 5,
-   "why": "clear nipped-in waist and curved hips"
+   "why": "clear hourglass waist and curved hips"
   },
   {
    "who": "kemi",
    "view": "seated 3/4",
    "said": "man",
    "conf": 3,
-   "why": "boxy square torso, no waist or hair cues (seated)"
+   "why": "seated and bulky, no hair and no waist"
   },
   {
    "who": "kemi",
    "view": "front",
    "said": "woman",
-   "conf": 3,
-   "why": "A-line shape flaring from narrow shoulders to the hem"
+   "conf": 2,
+   "why": "jacket flares at the hips, shoulders a bit narrow; ambiguous"
   },
   {
    "who": "blair",
    "view": "three-quarter",
    "said": "man",
-   "conf": 5,
-   "why": "tie and lapels"
+   "conf": 4,
+   "why": "lapels and a tie"
   },
   {
    "who": "blair",
    "view": "seated 3/4",
    "said": "man",
-   "conf": 5,
-   "why": "tie and lapels (seated)"
+   "conf": 4,
+   "why": "lapels and a tie, bulky"
   },
   {
    "who": "may",
    "view": "front",
    "said": "woman",
    "conf": 5,
-   "why": "curved waist and hips, plus hair strands at the neck"
+   "why": "hourglass waist, curved hips"
   },
   {
    "who": "may",
    "view": "seated 3/4",
    "said": "woman",
-   "conf": 2,
-   "why": "hair strands at the neck are the only cue; the torso itself is boxy and reads male (seated)"
+   "conf": 3,
+   "why": "seated with strands of long hair at the neck; the body shape alone is ambiguous"
+  }
+ ],
+ "earlier": [
+  {
+   "sheet": "notes/learn/kemi-build/judge/outlines-v3.jpg",
+   "verdicts": [
+    {
+     "who": "may",
+     "view": "three-quarter",
+     "said": "woman",
+     "conf": 2,
+     "why": "long hair strands at the neck; otherwise fairly straight, with a slight waist"
+    },
+    {
+     "who": "blair",
+     "view": "back",
+     "said": "man",
+     "conf": 4,
+     "why": "broad square shoulders, boxy straight torso, wide hem"
+    },
+    {
+     "who": "blair",
+     "view": "front",
+     "said": "man",
+     "conf": 5,
+     "why": "tie and jacket lapels (white V at the neck)"
+    },
+    {
+     "who": "kemi",
+     "view": "back",
+     "said": "woman",
+     "conf": 3,
+     "why": "narrow sloping shoulders, flares out to a wider A-line hem like a tunic or dress"
+    },
+    {
+     "who": "kemi",
+     "view": "three-quarter",
+     "said": "man",
+     "conf": 2,
+     "why": "boxy straight torso, no waist, no hair shown"
+    },
+    {
+     "who": "may",
+     "view": "back",
+     "said": "woman",
+     "conf": 5,
+     "why": "clear nipped-in waist and curved hips"
+    },
+    {
+     "who": "kemi",
+     "view": "seated 3/4",
+     "said": "man",
+     "conf": 3,
+     "why": "boxy square torso, no waist or hair cues (seated)"
+    },
+    {
+     "who": "kemi",
+     "view": "front",
+     "said": "woman",
+     "conf": 3,
+     "why": "A-line shape flaring from narrow shoulders to the hem"
+    },
+    {
+     "who": "blair",
+     "view": "three-quarter",
+     "said": "man",
+     "conf": 5,
+     "why": "tie and lapels"
+    },
+    {
+     "who": "blair",
+     "view": "seated 3/4",
+     "said": "man",
+     "conf": 5,
+     "why": "tie and lapels (seated)"
+    },
+    {
+     "who": "may",
+     "view": "front",
+     "said": "woman",
+     "conf": 5,
+     "why": "curved waist and hips, plus hair strands at the neck"
+    },
+    {
+     "who": "may",
+     "view": "seated 3/4",
+     "said": "woman",
+     "conf": 2,
+     "why": "hair strands at the neck are the only cue; the torso itself is boxy and reads male (seated)"
+    }
+   ]
   }
  ]
 }

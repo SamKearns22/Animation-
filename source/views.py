@@ -841,7 +841,38 @@ def _built_outline(sp, view, bottom, o, fig):
     for (x0, y0), (x1, y1) in zip(base, base[1:] + base[:1]):
         n = max(1, int(math.hypot(x1 - x0, y1 - y0) / 18))
         dense += [(x0 + (x1 - x0) * k / n, y0 + (y1 - y0) * k / n) for k in range(n)]
+    if fig in TURNED_SIDE and view in ('three', 'three_back'):
+        # Open Wounds chat 6 (the blind judge: Kemi three-quarter "boxy straight torso, no waist", May "fairly
+        # straight"): turned, each edge is part front and part side, so it carries the side's shape too: the leading
+        # edge the bust and the waist under it, the trailing edge the back's waist and the seat. Was the front's
+        # widths alone (the bust and seat never showed turned). Only the new women's builds (no finished film).
+        sd, hs = _side_depths(sp, fig, bottom), _side_depths(sp, None, bottom)
+        lead = 1 if view == 'three' else -1       # the body faces right: three's front edge is +x (three_back: -x)
+        out = []
+        for x, y in dense:
+            kf = _fig_k(fig, y, sw, bottom)
+            i = 0 if x * lead > 0 else 1
+            ks = float(np.interp(y, sd[2], sd[i])) / max(1.0, float(np.interp(y, hs[2], hs[i])))
+            u = min(1.0, max(0.0, (y - 70.0) / 50.0))
+            out.append((x * (kf + TURNED_SIDE[fig] * (ks - 1.0) * u), y))
+        return out
     return [(x * _fig_k(fig, y, sw, bottom), y) for x, y in dense]
+
+
+TURNED_SIDE = {'female': 0.7, 'straight': 0.7}    # how much of the side's shape a three-quarter edge carries
+
+
+def _side_depths(sp, fig, bottom):
+    """The side view's front and back depth at each height (the turned outline borrows them)."""
+    poly = torso_outline(dict(sp, figure=fig), 'side', bottom)
+    ys = np.arange(0.0, bottom + 1, 10.0)
+    fr, bk = [], []
+    for y in ys:
+        xs = [x0 + (x1 - x0) * (y - y0) / (y1 - y0) for (x0, y0), (x1, y1) in zip(poly, poly[1:] + poly[:1])
+              if (y0 - y) * (y1 - y) <= 0 and y0 != y1]
+        fr.append(max(xs) if xs else 1.0)
+        bk.append(-min(xs) if xs else 1.0)
+    return np.maximum(fr, 1.0), np.maximum(bk, 1.0), ys
 
 
 def _fig_k(fig, y, sw, bottom):
