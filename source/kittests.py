@@ -2907,7 +2907,25 @@ def kit_people_never_generic():
             V.person(tile, B.Cam(1.0, 540, 960), 540, 900, 1.6, dict(sp), 0.0, 45)
             if TH.GENERIC:
                 bad.append(f'{film}:{w}')
-    return not bad, f'{n} people in {len(films)} people files turned; on the generic head: {bad or "none"}'
+    # Open Wounds chat 12 (the guests seen front-on all drew the engine's bald stand-in, a repeat of GTA 20 Nov): a
+    # crowd member made BEFORE the kit is installed (an action file's module-level crowd) still gets its own head and
+    # torso, so it is drawn as itself straight on (yaw 0) too.
+    saved_h, saved_t = B.HEADS, B.TORSOS
+    crowd_bad, m = [], 0
+    for film in films:
+        for name, d in people.crowds(film).items():
+            B.HEADS, B.TORSOS = {}, {}
+            try:
+                sp = people.crowd_person(d, 0)
+                hooked = B.HEADS.get(sp['who']) is people.kit_head
+            finally:
+                B.HEADS, B.TORSOS = saved_h, saved_t
+            m += 1
+            if not hooked and d.get('crowd_defaults', True):
+                crowd_bad.append(f'{film}:{name}')
+    return not bad and not crowd_bad, (f'{n} people in {len(films)} people files turned; on the generic head: '
+                                       f'{bad or "none"}; {m} crowds made before the install, on the stand-in head: '
+                                       f'{crowd_bad or "none"}')
 
 
 @test

@@ -723,9 +723,10 @@ def crowd_person(d, i, s=0, job=None):
     sp = person(dict(member(d, i, s, job), crowd_member=True))
     if d.get('crowd_defaults', True):               # GTA shot 4 (Sam's notes 5, 10, 14, 20 Nov): a member made on the fly
         import people_parts as PP                   # was never hung on the engine, so its body's 'bald' stand-in drew
-        if PP.B.HEADS and sp['who'] not in PP.B.HEADS:   # (every walker and cop a bald man); hang its own head and torso
-            PP.B.HEADS[sp['who']] = kit_head        # once the kit is installed
-            PP.B.TORSOS[sp['who']] = kit_torso
+        if sp['who'] not in PP.B.HEADS:            # (every walker and cop a bald man); hang its own head and torso.
+            PP.B.HEADS[sp['who']] = kit_head        # Open Wounds chat 12: ALWAYS, not only once the kit is installed
+            PP.B.TORSOS[sp['who']] = kit_torso      # (a film's action file made its guests at import, before the
+            #                                         install: every guest seen front-on was the same bald pale man)
     return sp
 
 

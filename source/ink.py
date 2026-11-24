@@ -3,7 +3,7 @@
 film file (ed.py, now frozen at its bookmark) so no kit file loads a finished film. Same code, same pictures.
 
 Map: INK, HARD | smooth | soft (flat painted shadow) | bent_check (a check printed round a body) | curve (closed) |
-open_curve (ends) | oval | Pen (a plain pen)
+open_curve (ends) | oval | Pen (a plain pen) | glaze (see-through fills that blend)
 """
 import math
 
@@ -130,4 +130,15 @@ class Pen:
 
     def line(self, pts, colr=INK, lw=4):
         self.d.line([self.cam.P(*p) for p in pts], fill=colr, width=max(1, int(self.cam.S(lw) / 2)), joint='curve')
+
+
+def glaze(img):
+    """A drawer whose see-through fills (soft shadows, wet shine) blend onto what is already painted (Open Wounds chat
+    12: ImageDraw.Draw(img, 'RGBA') on an RGBA frame WRITES the fill's alpha instead of blending it, so every soft
+    shadow came out solid black once the frame was turned to RGB). On a frame that is already opaque it blends; on a
+    see-through layer (painted later onto the frame) it writes as before, which is right there."""
+    d = ImageDraw.Draw(img, 'RGBA')
+    if img.mode == 'RGBA' and img.getpixel((0, 0))[3] == 255:
+        d.draw = Image.core.draw(img.im, 1)
+    return d
 

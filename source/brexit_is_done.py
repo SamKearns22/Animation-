@@ -13,7 +13,9 @@ MAP (rule 61)
                       to screen-left (looking off-frame left at the unseen interviewer, item 14)
   shot 2 ............ kemi_shot(t): the site with its background action (brexit_is_done_action.site_actors: the
                       attack, the runner, the bar fight, the milling wolves) painted among the pieces far to near
-  shot 3 ............ (then: blair_shot, the oak room, the chase, the lunge)
+  shot 3 ............ blair_shot(t): the oak room with the chase painted among its pieces (ACT.room_actors: guests
+                      through the doors, the tray, the wolves; the corridor's people through the doorway), Blair,
+                      the lunger (ACT.lunger)
   picture ........... picture(t) -> the clean frame (no captions, no Hook Text: finish.py adds those)
   main .............. stills
 
@@ -173,8 +175,10 @@ def blair_shot(t):
     B.SS = 1
     L = _cam('blair')
     u = scene_of(t)[1]                                 # the room's pieces run on shot time (the doors open at 0.3 s)
-    for layer in ('back', 'mid'):
-        _paint(img, 'blair', layer, u)
+    room, beyond = ACT.room_actors(u, L)               # the chase: guests and wolves among the room's pieces
+    PL.paint_with(img, _DESC, 'blair', B.Cam(1.0, 540, 960), u, room, beyond=beyond)
+    ACT.lunger(img, L, u)                              # Wp, at his depth just behind his shoulder, 9.0 s (cut 9.4)
+    B.SS = 1
     seated(img, 'blair', L, BLAIR['x'], BLAIR['d'], t, BLAIR['yaw'], pose='armchair', chair=True)
     for layer in ('front', 'over'):
         _paint(img, 'blair', layer, u)

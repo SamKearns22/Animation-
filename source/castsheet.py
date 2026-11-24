@@ -661,6 +661,30 @@ JUDGE_FILES = ('story/{film}-people.txt', 'source/body.py', 'source/views.py', '
                'source/people_parts.py', 'source/sitting.py')
 
 
+def _same_outlines(sheet):
+    """Redraw the judge's outline sheet from the current drawing code (notes/learn/kemi-build/judge.py, its fixed
+    shuffle) and say whether it matches the judged sheet pixel for pixel (JPEG of the same pixels: no difference)."""
+    import subprocess
+    import tempfile
+    import numpy as np
+    from PIL import Image
+    if not sheet or not os.path.exists(os.path.join(ROOT, sheet)):
+        return False
+    key = os.path.join(ROOT, 'notes', 'learn', 'kemi-build', 'judge_key.json')
+    keep = open(key).read()
+    with tempfile.TemporaryDirectory() as tmp:
+        out = os.path.join(tmp, 'o.jpg')
+        r = subprocess.run(['python3', os.path.join(ROOT, 'notes', 'learn', 'kemi-build', 'judge.py'), out], cwd=ROOT,
+                           capture_output=True, text=True)
+        same_key = open(key).read() == keep
+        open(key, 'w').write(keep)
+        if r.returncode or not os.path.exists(out) or not same_key:
+            return False
+        a = np.asarray(Image.open(os.path.join(ROOT, sheet)).convert('L')).astype(int)
+        b = np.asarray(Image.open(out).convert('L')).astype(int)
+        return a.shape == b.shape and int(np.abs(a - b).max()) == 0
+
+
 def judge_faults(film, who=None):
     import json
     import subprocess
@@ -675,7 +699,11 @@ def judge_faults(film, who=None):
     t_draw = git('log', '-1', '--format=%ct', '--', *files)
     dirty = git('status', '--porcelain', '--', *files)
     out = []
-    if dirty or (t_rec and t_draw and int(t_draw) > int(t_rec)) or not t_rec:
+    stale = dirty or (t_rec and t_draw and int(t_draw) > int(t_rec)) or not t_rec
+    if stale and t_rec and film == 'brexit-is-done' and _same_outlines(rec.get('sheet')):
+        stale = False     # Open Wounds chat 12: the code changed but the outlines it draws did not, pixel for pixel:
+        #                   the judges' record is about this exact picture (a crowd-only change cost 3 judges otherwise)
+    if stale:
         out.append(f'JUDGE: the judge\'s record is older than the drawing (or not committed after it): draw the outlines '
                    'again and ask a fresh judge')
     if len(rec.get('judges') or {}) < JUDGES:

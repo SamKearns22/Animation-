@@ -172,3 +172,17 @@
 - **Open rule requests:** none.
 - **For Claude:** rerun `python3 source/kittests.py` first (chat 10's full run was stopped mid-way; people_from_a_description passes after the SEAT_DROP name clash was fixed: the new constants are BOTTOM_*); shots' numbers live in dicts (MAY, KEMI, BLAIR) because the board reads upper-case numbers as beats; places.LevelCam.of(desc, view).
 
+
+
+## Where things stood (chat 11) (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: branch `claude/open-wounds-chat11`** (also pushed to the main line if allowed; the next chat merges it first).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size (head top, eye row 700, chin, face centre about 64% across), May about waist up; the cast (no more character work); the seated bottom and knees are reserve job R7, never worked on in this film.
+- **Rules that bite next:** 74 (the guests' and wolves' beats in shot 3; May's gestures), 5 (people through the doorway, never the wall; the tray lands), 41 (hands on the tray; tubes in hands).
+- **Done (chat 11):** shot 2's whole background action by the sets table (source/brexit_is_done_action.py): W1 digs, Wa/Wb leap from the left, knock him down (lying.fall), feed out of step, his hat flies and rolls, the shovel falls flat, scraps, drops that land and soak, a pool; W2 sprints the 9.6 m lift and leaps out of frame left, Wc/Wd chase, skid, snarl, turn, pace back; W3-W5 jab tubes, We/Wf lunge and flinch, Wg circles, W5's swing stops on a standard; Wh sits, Wi paws (grooves stay), Wj/Wk walk across in hats and vests. Shared: places.paint_with (actors among pieces far to near), crowd `hats: hardhat` (people_hats.hardhat), figure.SIDE_ON (a side-on arm is read as side-on). Kit tests: all pass (womens_builds and kit_people_never_generic rerun alone after the mid-run edit).
+- **Next (Opus high: new moves):** shot 3's chase and the lunge (room_actors in the action file: the four guests through the doors at 0.4, the tray, Wl-Wo after them, Wp's leap from frame right cut at 9.4 s; guests are crowd `guest` 0-3), then the moves file (May's gestures, lips on stand-in timing, all three looking off-frame left: the `look` channel), then the Sonnet chat for the animatic (finish.py, Hook Text, sign-off). No more boards unless Sam asks.
+- **Needs Sam:** nothing blocks.
+- **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md background action (shot 3 table); brexit_is_done_action.py MAP; wolf.py catalogue line.
+- **Open rule requests:** none.
+- **For Claude:** views.person's returned points are person units from the neck base, unmirrored (action file's `_screen` turns them to pixels; move to shared: views); the site's outer scaffold seed went 3 -> 13 so no barrier hides the bar fight (dressing only); overrides.log recorded chat 10's prompt to this chat as "sam" because it quoted Sam's Override: source/override.py should count only Sam's own typed messages (move to shared fix, next chat checks it first).
+
+

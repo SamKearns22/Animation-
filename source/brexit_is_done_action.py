@@ -19,7 +19,10 @@ MAP (rule 61)
   shot 2: milling .. milling(u): Wh sits (tail sweeps, looks round), Wi paws the dirt (grooves stay), Wj and Wk walk
                      across, one each way; hard hats, vests, blood-drenched (item 9)
   shot 2 ........... site_actors(t, L): all of the above for shot time t
-  shot 3 ........... room_actors(t, L): (next) the guests through the doors, Wl-Wo chasing, the lunger Wp
+  shot 3 ........... PASSES (who runs where when), along(); _guest_pose (front_run out of the doors, side on
+                     across; the butler's tray hand); tray_state/_tray/_flute/_glass_down (the tray flies, hops,
+                     rattles flat; glasses shatter, pools stay); lunger(img, L, u) (Wp at 9.0, cut 9.4);
+                     room_actors(u, L) -> (room actors far to near, those seen through the doorway)
 """
 import math
 import os
@@ -27,6 +30,8 @@ import random
 import sys
 
 from PIL import ImageDraw
+
+from ink import glaze
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -93,11 +98,11 @@ def wolf_at(img, L, x, d, z, face, P, pal=0, wear=None, blood=0.0, seed=0, shade
 
 
 def wolf_front_at(img, L, x, d, z, pal=0, wear=None, blood=0.0, seed=0, **kw):
-    s = wolf_s(L, d)
+    s = wolf_s(L, d) * WF.FRONT_K                   # the front view at the side view's real size (wolf.FRONT_K)
     px, py = L.p(x, d, z)
     X = _ctx(img, s)
     if z < L.up:
-        WF._blend(X).ellipse([px - 70 * s, py - 8 * s, px + 70 * s, py + 8 * s], fill=(0, 0, 0, 60))
+        WF._blend(X).ellipse([px - 90 * s, py - 10 * s, px + 90 * s, py + 10 * s], fill=(0, 0, 0, 60))
     WF.draw_front(X, px, py, s, pal, wear=wear, blood=blood, seed=seed, **kw)
 
 
@@ -110,7 +115,7 @@ def person_at(img, L, sp, x, d, z, yaw, j, t, shadow=True):
     s = scale_at(L, d, sp)
     px, py = L.p(x, d, z)
     if shadow and z < L.up:
-        dd = ImageDraw.Draw(img, 'RGBA')
+        dd = glaze(img)
         dd.ellipse([px - 150 * s, py - 18 * s, px + 150 * s, py + 18 * s], fill=(0, 0, 0, 55))
     B.SS = 1
     jj = V.person(img, B.Cam(1.0, 540, 960), px, py - FEET * s, s, sp, t, yaw, j)
@@ -524,6 +529,237 @@ def milling(L, u):
     out.append((14.0, lambda img: walker(img, -7.6, 0.85, 14.0, 1, 3, 0, 1, 63)))
     out.append((11.6, lambda img: walker(img, 1.6, -1.0, 11.6, -1, 2, 2, 0, 64)))
     return out
+
+
+# ================================================================================================= shot 3: the chase
+# Blair's room (story/brexit-is-done-places.txt, view blair): back wall at 7 m, the double doors x -1.9 to -0.1 at
+# 6.95 m, thrown open at 0.3 s; each leaf settles at 92 degrees, so its free edge stands out to 6.05 m: whoever comes
+# through runs straight out between the leaves to 5.95 m before turning (rule 5: through the doorway, never a leaf or
+# the wall). The chase band is 4.7-5.85 m, in front of the leaf tips; Blair (2.06 m) hides the right half.
+DOOR = dict(x0=-1.9, x1=-0.1, d=6.95, z1=3.0)
+GUEST_V, WOLF_V = 4.4, 4.4              # m/s: guests in panic (heels, a tray, a gown); the wolves keep pace, never close
+#                                         (chat 12: at 5.0 m/s a wolf's open jaws reached the runner's back foot)
+# (guest, start s, path [(x, d) m], wolf, its lag s): the four burst out of the doors in turn, each with a wolf at
+# their heels; then they come back across, staggered, entering on the side they left by (the back always busy,
+# never piled: at most two pairs in frame at once)
+PASSES = [
+    (0, 0.30, [(-1.30, 7.60), (-1.30, 5.95), (-3.3, 5.35)], 0, 0.65),     # the butler: he threw the doors open
+    (1, 0.52, [(-0.50, 8.60), (-0.50, 5.85), (2.9, 5.50)], 1, 0.55),
+    (2, 0.78, [(-1.05, 9.00), (-1.05, 5.75), (-3.0, 4.70)], 2, 0.55),
+    (3, 1.05, [(-1.50, 9.20), (-1.50, 5.85), (2.9, 5.60)], 3, 0.55),
+    (0, 2.30, [(-2.6, 4.70), (2.7, 4.70)], 0, 0.57),
+    (1, 3.00, [(2.7, 5.60), (-2.7, 5.60)], 1, 0.55),
+    (2, 3.80, [(-2.5, 4.70), (2.7, 4.70)], 2, 0.55),     # its own lane: Wm (5.6 m) is crossing back
+    (3, 4.60, [(2.7, 5.60), (-2.7, 5.65)], 3, 0.55),
+    (0, 5.40, [(2.7, 5.80), (-2.7, 5.80)], 0, 0.55),
+    (1, 6.10, [(-2.6, 4.75), (2.7, 4.75)], 1, 0.55),
+    (2, 6.90, [(2.7, 5.50), (-2.7, 5.50)], 2, 0.57),
+    (3, 7.05, [(-2.6, 4.70), (2.7, 4.70)], 3, 0.55),
+    (0, 8.85, [(-2.6, 5.00), (2.7, 5.00)], 0, 0.55),     # still left of his face at the cut
+]
+# From 8.4 s nothing passes behind Blair's head or shoulders: the lunge from the right is the only thing there.
+ROOM_WOLF = [dict(pal=0, seed=60), dict(pal=2, seed=61), dict(pal=4, seed=62), dict(pal=1, seed=63)]
+TOSS = 0.70                             # the butler swerves at the turn: the tray flies on (shot time)
+RUN_STEP = 0.95                         # m: the run gait's own stride (chat 12: 1.25 kicked the back leg out flat) (feet planted: steps a second = speed / stride)
+
+
+def along(pts, dist):
+    """(x, d, dx, dd) `dist` metres along a path, or None past its end."""
+    for (x0, d0), (x1, d1) in zip(pts, pts[1:]):
+        n = math.hypot(x1 - x0, d1 - d0)
+        if dist <= n:
+            u = dist / n
+            return x0 + (x1 - x0) * u, d0 + (d1 - d0) * u, (x1 - x0) / n, (d1 - d0) / n
+        dist -= n
+    return None
+
+
+def _guest_pose(sp, k, tt, dx, dd, u):
+    """A running guest's yaw and joints: straight at us out of the doorway (front_run), three-quarter on a diagonal,
+    side on across."""
+    if dd < -0.8:
+        yaw, j = 0.0, MV.gait(sp, tt, 'front_run')
+    else:
+        yaw = (-90.0 if dx < 0 else 90.0) if abs(dd) < 0.35 else (-45.0 if dx < 0 else 45.0)
+        j = MV.gait(sp, tt + 0.13 * k, 'run', steps_per_s=GUEST_V / RUN_STEP)
+    if k == 0 and u < TOSS:                                 # the butler's tray up on his right palm, shoulder high
+        V.arm_to(j, 'R', (215.0, -10.0, 150.0), 'out', 'palm')
+    return yaw, j
+
+
+def _beyond_door(d):
+    return d > DOOR['d'] - 0.02
+
+
+def tray_state(u, L):
+    """Where the tray and the three glasses are at shot time u: before TOSS on the butler's palm (None: drawn with
+    him); after it, flying on with his momentum, tumbling, landing (the tray hops once and rattles flat; each glass
+    shatters where it lands and its champagne spreads into a pool that stays)."""
+    if u < TOSS:
+        return None
+    x0, d0 = along(PASSES[0][2], GUEST_V * (TOSS - PASSES[0][1]))[:2]
+    x0 += 0.30
+    z0 = 1.62
+    out = {}
+    for n, (vx, vd, vz, spin) in enumerate([(-0.15, -0.95, 2.4, 11.0), (-0.55, -1.25, 2.8, 15.0), (0.05, -0.70, 3.1, -13.0),
+                                            (-0.35, -1.10, 2.2, 17.0)]):
+        tl = (vz + math.sqrt(vz * vz + 2 * 9.8 * z0)) / 9.8            # time in the air
+        tau = u - TOSS
+        if tau < tl:
+            out[n] = dict(x=x0 + vx * tau, d=d0 + vd * tau, z=z0 + vz * tau - 4.9 * tau * tau, ang=spin * tau, age=None)
+        else:
+            out[n] = dict(x=x0 + vx * tl, d=d0 + vd * tl, z=0.0, ang=spin * tl, age=tau - tl)
+    return out
+
+
+def _tray(img, L, st, held=None):
+    """The silver tray: an ellipse in perspective (thin when level with the eye), tumbling in the air, flat on the
+    floor once landed (a hop, then a rattle that dies away)."""
+    from PIL import ImageDraw
+    dd = glaze(img)
+    if held is not None:
+        (px, py), d, z = held
+        r = 0.21 * L.ppm(d)
+        ry = max(3.0, r * abs(z - L.up) / d)
+        ang = 0.0
+    else:
+        d, z = st['d'], st['z']
+        r = 0.21 * L.ppm(d)
+        px, py = L.p(st['x'], d, z)
+        if st['age'] is None:
+            ry = max(3.0, r * abs(math.cos(st['ang'])))
+            ang = 0.0
+            g = L.p(st['x'], d, 0)
+            dd.ellipse([g[0] - r, g[1] - 0.2 * r, g[0] + r, g[1] + 0.2 * r], fill=(0, 0, 0, 40))
+        else:
+            a = st['age']
+            hop = 0.06 * max(0.0, math.sin(math.pi * a / 0.16)) if a < 0.16 else 0.0
+            px, py = L.p(st['x'], d, hop)
+            flat = r * L.up / d
+            ry = flat * (1 + 0.5 * math.exp(-6 * a) * abs(math.sin(a * 40)))   # the rattle
+            dd.ellipse([px - r, py - flat * 0.9, px + r, py + flat * 0.9], fill=(0, 0, 0, 45))
+    _ell(img, px, py, r, ry, (196, 200, 206), OUT, max(1.5, 0.008 * L.ppm(d)))
+    _ell(img, px, py, r * 0.82, ry * 0.8, (220, 224, 230), None, 0)
+    return px, py, r, ry
+
+
+def _ell(img, x, y, rx, ry, fill, line, w):
+    from PIL import ImageDraw
+    d = ImageDraw.Draw(img)
+    d.ellipse([x - rx, y - ry, x + rx, y + ry], fill=fill, outline=line, width=int(round(w)) if line else 0)
+
+
+def _flute(img, x, y, s, ang, full=1.0):
+    """A champagne flute (stem, foot, bowl) of height 0.2 m * s px-per-m, turned `ang` radians."""
+    from PIL import ImageDraw
+    d = glaze(img)
+    h = 0.2 * s
+    ca, sa = math.cos(ang), math.sin(ang)
+    def P(u, v):
+        return (x + u * ca - v * sa, y + u * sa + v * ca)
+    w = max(1, int(0.006 * s))
+    d.line([P(0, 0), P(0, -0.45 * h)], fill=OUT, width=w + 1)
+    d.line([P(-0.12 * h, 0), P(0.12 * h, 0)], fill=OUT, width=w + 1)
+    bowl = [P(-0.09 * h, -0.45 * h), P(-0.11 * h, -h), P(0.11 * h, -h), P(0.09 * h, -0.45 * h)]
+    d.polygon(bowl, fill=(236, 240, 244, 150), outline=OUT)
+    if full > 0:
+        d.polygon([P(-0.09 * h, -0.45 * h), P(-0.10 * h, -0.85 * h), P(0.10 * h, -0.85 * h), P(0.09 * h, -0.45 * h)],
+                  fill=(232, 196, 96, 220))
+
+
+def _glass_down(img, L, st, n):
+    """A glass that has landed: shards flung a little way and still, champagne spreading into a wet pool."""
+    from PIL import ImageDraw
+    d_, a = st['d'], st['age']
+    s = L.ppm(d_)
+    px, py = L.p(st['x'], d_, 0)
+    flat = L.up / d_
+    r = (0.05 + 0.13 * (1 - math.exp(-5 * a))) * s
+    dd = glaze(img)
+    dd.ellipse([px - r, py - r * flat, px + r, py + r * flat], fill=(214, 176, 80, 150))
+    dd.ellipse([px - r * 0.4, py - r * flat * 0.6, px - r * 0.1, py - r * flat * 0.2], fill=(255, 250, 230, 160))
+    rnd = random.Random(500 + n)
+    slide = min(1.0, a / 0.15)
+    for k in range(6):
+        th = rnd.uniform(0, 2 * math.pi)
+        dist = rnd.uniform(0.05, 0.22) * s * (1 - (1 - slide) ** 2)
+        cx, cy = px + dist * math.cos(th), py + dist * math.sin(th) * flat
+        q = rnd.uniform(0.012, 0.025) * s
+        tri = [(cx + q * math.cos(th + k2 * 2.1 + k), cy + q * flat * 2 * math.sin(th + k2 * 2.1 + k)) for k2 in range(3)]
+        dd.polygon(tri, fill=(236, 242, 246, 230), outline=OUT)
+
+
+def lunger(img, L, u):
+    """Wp: in from frame right in mid-leap at Blair's depth (2.3 m: just behind his shoulder, so his head would hide
+    it, never pass through it), jaws wide, coming down on his head from above right; the film cuts at 9.4 s, before
+    it reaches him (item 13). At his depth a wolf's head is about 260 px long, and the only clear space beside his
+    head is above it (right of it is 210 px of bookcase): its jaws run from the right edge (9.167) to about 60 px
+    above-right of his hair at the last frame (9.333)."""
+    if u < LUNGE_T:
+        return
+    v = (u - LUNGE_T) / 0.333
+    jaw_x = 1310 - 440 * v                              # screen px: off the right edge -> just above his hair
+    jaw_y = 310 + 90 * v                                # coming down on him
+    d = 2.3
+    P = WF.pose('leap', 0.8, jaw=1.0, snarl=1.0)
+    s = wolf_s(L, d)
+    from PIL import Image
+    probe = Image.new('RGBA', (8, 8))
+    jx, jy = WF.draw(_ctx(probe, s), 0.0, 0.0, s, -1, 1, P, blood=0.0, seed=70)
+    WF.draw(_ctx(img, s), jaw_x - jx, jaw_y - jy, s, -1, 1, P, blood=0.0, seed=70)
+
+
+LUNGE_T = 9.0
+
+
+def room_actors(u, L):
+    """Every background actor of shot 3 at shot time u: ([(depth, draw)], [draw] seen through the doorway)."""
+    room, beyond = [], []
+    for k, t0, pts, w, lag in PASSES:
+        for who in ('guest', 'wolf'):
+            start = t0 + (lag if who == 'wolf' else 0.0)
+            v = WOLF_V if who == 'wolf' else GUEST_V
+            if u < start:
+                continue
+            at = along(pts, v * (u - start))
+            if at is None:
+                continue
+            x, d, dx, dd = at
+            if who == 'guest':
+                def draw(img, k=k, x=x, d=d, dx=dx, dd=dd, tt=u - start):
+                    sp = dict(GUESTS[k])
+                    yaw, j = _guest_pose(sp, k, tt, dx, dd, u)
+                    with FG.allow('a guest running side on: the back arm swings behind the body (moves.gait)'):
+                        jj = person_at(img, L, sp, x, d, 0.0, yaw, j, u)
+                    if k == 0 and u < TOSS and 'wrR_px' in jj:           # the tray on his palm, glasses on it
+                        hx, hy = jj['wrR_px']
+                        ppm = L.ppm(d)
+                        tx, ty, r, ry = _tray(img, L, None, held=((hx, hy - 0.03 * ppm), d, 1.62))
+                        for g, off in enumerate((-0.5, 0.05, 0.55)):
+                            _flute(img, tx + off * r, ty - 0.2 * ry, ppm, 0.0)
+            else:
+                def draw(img, w=w, x=x, d=d, dx=dx, dd=dd, dist=v * (u - start)):
+                    m = ROOM_WOLF[w]
+                    if dd < -0.8:
+                        wolf_front_at(img, L, x, d, 0.0, pal=m['pal'], seed=m['seed'], blood=0.3,
+                                      run=dist * 1.6, jaw=0.8)
+                    else:
+                        wolf_at(img, L, x, d, 0.0, -1 if dx < 0 else 1, WF.pose('run', dist * UNITS),
+                                pal=m['pal'], seed=m['seed'], blood=0.3)
+            (beyond if _beyond_door(d) else room).append((d, draw) if not _beyond_door(d) else draw)
+    st = tray_state(u, L)
+    if st:
+        for n, g in st.items():
+            if n == 0:
+                room.append((g['d'], lambda img, g=g: _tray(img, L, g)))
+            elif g['age'] is None:
+                def fly(img, g=g):
+                    px, py = L.p(g['x'], g['d'], g['z'])
+                    _flute(img, px, py, L.ppm(g['d']), g['ang'], full=0.6)
+                room.append((g['d'] - 0.01, fly))
+            else:
+                room.append((g['d'] + 0.05, lambda img, g=g, n=n: _glass_down(img, L, g, n)))
+    return room, beyond
 
 
 # ================================================================================================= shot 2

@@ -370,11 +370,14 @@ def painter(desc, view, layer):
 _SORTED = {}
 
 
-def paint_with(img, desc, view, cam, t, actors, layers=('back', 'mid'), feed=None):
+def paint_with(img, desc, view, cam, t, actors, layers=('back', 'mid'), feed=None, beyond=None):
     """A view's pieces in `layers` and the film's actors painted together, far to near (Open Wounds, 24 Nov: a man on
     a scaffold lift goes between its inner and outer frames, a wolf on the dirt behind the skip). actors: [(depth m,
     draw(img))]; a piece is at its `depth` (the near end of a range); equal depths keep the file's order, pieces first.
-    Pieces with no depth, or an explicit `layer`, keep their layer's place (painted after, as painter() does)."""
+    Pieces with no depth, or an explicit `layer`, keep their layer's place (painted after, as painter() does).
+    beyond: [draw(img)] for whoever is seen THROUGH an opening (Open Wounds chat 12: guests in the corridor behind the
+    double doors): a piece with a space beyond (double doors) calls them after that space and before its own frame
+    and leaves, so the leaves swinging into the room pass in front of them (rule 5). They clip to the opening."""
     import cover
     v = desc['views'][view]
     key = (id(desc), view, tuple(layers))
@@ -389,6 +392,7 @@ def paint_with(img, desc, view, cam, t, actors, layers=('back', 'mid'), feed=Non
     for d, _, _, (what, it) in sorted(todo, key=lambda q: (-q[0], q[1], q[2])):
         if what == 'piece':
             it.args['feed'] = feed
+            it.args['through'] = beyond
             with cover.piece(img, it):
                 it.draw(img, cam, t)
         else:

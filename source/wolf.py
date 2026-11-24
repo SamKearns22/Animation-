@@ -879,6 +879,11 @@ def _head(o, W, hc, P, s, face, base, dark, light, wear, bl, seed):
 
 
 
+FRONT_K = 0.72   # Open Wounds chat 12: draw_front at the same s stands 1.38x taller than draw() (stand: 490 px against
+#                  355 at one depth), so a front-on wolf among side-on ones looked twice the size; a film placing wolves
+#                  at real size multiplies s by this for the front view (Cry Minister's lunges at the lens keep theirs)
+
+
 def draw_front(X, x, y, s, pal=0, run=None, leap=None, jaw=0.6, blood=0.0, seed=0, look=(0.0, 0.0), blink=False,
                wear=None):
     """A dire wolf coming straight at us, with ONE outline and eye-kit eyes (Cry Minister's front(), spruced up).
@@ -973,8 +978,8 @@ def draw_front(X, x, y, s, pal=0, run=None, leap=None, jaw=0.6, blood=0.0, seed=
 
 # ------------------------------------------------------------------------------------------------ on the ground
 def _blend(X):
-    from PIL import ImageDraw
-    return ImageDraw.Draw(X.d._image, 'RGBA')
+    from ink import glaze
+    return glaze(X.d._image)          # blends onto an opaque RGBA frame (ink.glaze: these were solid black)
 
 
 def shadow(X, x, y, s, face, P, alpha=0.26):

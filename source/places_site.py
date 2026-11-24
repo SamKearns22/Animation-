@@ -477,6 +477,20 @@ def door_angle(t, at, swing=0.35):
     return 92.0
 
 
+def _beyond(img, draws, opening):
+    """Whoever is in the space beyond an opening (paint_with's `beyond`), drawn on their own layer and clipped to the
+    opening (screen polygon), so nothing in the corridor shows on the wall beside the doorway."""
+    from PIL import Image, ImageDraw
+    layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
+    for fn in draws:
+        fn(layer)
+    mask = Image.new('L', img.size, 0)
+    ImageDraw.Draw(mask).polygon([tuple(map(float, q)) for q in opening], fill=255)
+    a = np.asarray(layer).copy()
+    a[..., 3] = (a[..., 3].astype(np.uint16) * np.asarray(mask) // 255).astype(np.uint8)
+    img.alpha_composite(Image.fromarray(a))
+
+
 @kind('double doors', params={'colour': 'c', 'panel': 'c', 'beyond': 'c', 'floor': 'c', 'open at': 'n',
                               'swing': 'n', 'open': 'n'},
       defaults={'colour': 'oak', 'panel': 'oak dark', 'beyond': (232, 214, 172), 'floor': (150, 100, 64),
@@ -501,6 +515,8 @@ def double_doors(p, img, cam, a, t):
     p.poly(_face(Lp, x0, x1, D, z0, z1), a['beyond'], INK, 1.2)
     lx, ly = Lp((x0 + x1) / 2, D, z0 + 2.0)
     p.ell(lx, ly, 0.12 * ppm(D), 0.16 * ppm(D), (250, 236, 190), INK, 1.2)
+    if a.get('through'):                                          # who is in the corridor (paint_with's beyond):
+        _beyond(img, a['through'], [pc.L.p(x, d, z) for x, z in ((x0, z0), (x1, z0), (x1, z1), (x0, z1))])
     p.poly(_face(Lp, x0, x1, d + 0.001, z0, z1), None, INK, 2.0)
     # the architrave round the opening
     m = 0.16
