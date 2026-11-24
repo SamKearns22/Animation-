@@ -1703,9 +1703,829 @@
    "model": "opus",
    "stage": "cast",
    "round": null,
-   "cost": 2.3,
+   "cost": 2.55,
    "notes": 2,
-   "repeats": []
+   "repeats": [],
+   "src": "estimate",
+   "sid": "session_01U3pKR3KM1NX7JCAQ7427Vd",
+   "steps": 122,
+   "hist_k": 267,
+   "kinds": {
+    "film-file search": 0.9,
+    "tool search": 18.4,
+    "whole-file .py read": 1.0,
+    "page.py": 0.1,
+    "renders": 0.6,
+    "pictures": 2.8,
+    "other": 76.2
+   },
+   "calls": {
+    "film-file search": 4,
+    "tool search": 77,
+    "whole-file .py read": 3,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 11,
+    "other": 29
+   },
+   "split": {
+    "usd": 8.576,
+    "total": 8.576,
+    "floor_k": 84,
+    "blocks": {
+     "new writes": 32.6,
+     "carried history": 30.6,
+     "Claude's words": 19.4,
+     "start-up floor": 17.4
+    },
+    "origins": {
+     "Claude's words": 35.4,
+     "start-up floor": 17.9,
+     "cache re-write": 15.9,
+     "result: tool search": 14.2,
+     "messages and reminders": 6.2,
+     "result: other": 5.3,
+     "result: pictures": 4.6,
+     "Claude's edits": 0.2,
+     "result: renders": 0.1,
+     "result: film-file search": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 17.9,
+     "memory lapses (re-paying for the whole chat)": 15.9,
+     "thinking": 12.4,
+     "writing code": 7.8,
+     "commands": 6.8,
+     "messages and reminders": 6.2,
+     "reading kit code": 5.4,
+     "writing notes": 5.0,
+     "looking at pictures": 4.6,
+     "app tools (chats, files sent)": 4.6,
+     "reading notes": 4.3,
+     "helper and chat prompts": 2.1,
+     "start-up and handover tools": 2.0,
+     "other commands": 1.9,
+     "messages to Sam": 1.4,
+     "git and saving": 0.5,
+     "running checks and tools": 0.5,
+     "reading guides": 0.2,
+     "renders": 0.1,
+     "helper results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 40,
+    "work_pct": 0.53,
+    "reads": [
+     [
+      "source/castsheet.py",
+      2.4,
+      0.0502
+     ],
+     [
+      "source/sitting.py",
+      2.2,
+      0.0434
+     ],
+     [
+      "notes/next-jobs.md",
+      1.6,
+      0.0363
+     ],
+     [
+      "notes/brexit-is-done.md",
+      1.6,
+      0.0351
+     ],
+     [
+      "notes/sam-notes/brexit-cast-v2/n5-kemi-body-like-a-mans.jpg",
+      1.6,
+      0.0338
+     ],
+     [
+      "notes/sam-notes/brexit-cast-v2/n5-may-body.jpg",
+      1.6,
+      0.0338
+     ],
+     [
+      "source/views.py",
+      1.6,
+      0.0326
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/f960632f-efeb-53d2-a51d-b197756843b8/scratchpad/learn/colour.jpg",
+      1.6,
+      0.0304
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/f960632f-efeb-53d2-a51d-b197756843b8/scratchpad/learn/outline.jpg",
+      1.6,
+      0.0295
+     ],
+     [
+      "source/people.py",
+      1.4,
+      0.0284
+     ],
+     [
+      "notes/proposals/womans-build.md",
+      1.3,
+      0.0282
+     ],
+     [
+      "source/hookran.py",
+      0.4,
+      0.0088
+     ],
+     [
+      "story/brexit-is-done-people.txt",
+      0.3,
+      0.0057
+     ],
+     [
+      "source/body.py",
+      0.2,
+      0.0039
+     ]
+    ],
+    "base_pct": 21.4
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 4
+    },
+    "other": {
+     "other": 18,
+     "shared:handover.py": 6,
+     "film notes": 19,
+     "shared:hookran.py": 1,
+     "shared:override.py": 1,
+     "shared:castsheet.py": 3,
+     "shared:people.py": 12,
+     "shared:views.py": 7,
+     "shared:sitting.py": 2,
+     "shared:body.py": 6,
+     "guides": 1,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current; git log --oneline -1; git ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "notes/logs notes/logs/brexit-is-done-chats.log",
+      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1|tail -1 && git ",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01U3pKR2NkczhDyGCc5Escrh --film brexit-",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/proposals/womans-build.md",
+      "blair",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/proposals/womans-build.md",
+      "sed -n 55,60p notes/brexit-is-done.md; sed -n 91p notes/proposals/womans-build.m",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/proposals/womans-build.md notes/brexit-is-done.md",
+      ",\n",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "timeout 300 python3 source/handover.py start session_01U3pKR2NkczhDyGCc5Escrh --",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/next-jobs.md",
+      "timeout 300 python3 source/handover.py start session_01U3pKR2NkczhDyGCc5Escrh --",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "NOT CARRIED",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "def carried",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "^## ",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 1,9p notes/brexit-is-done.md; sed -n 60,120p notes/brexit-is-done.md",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:hookran.py",
+      "notes/brexit-is-done.md notes/next-jobs.md .claude/settings.json source/hookran.",
+      "override",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:override.py",
+      "/.claude/watcher/ran/ source/override.py",
+      "hookran\\|def main\\|'prompt'",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/proposals/womans-build.md notes/sam-notes/brexit-cast-v2/",
+      "sed -n '/^## Final version/,$p' notes/proposals/womans-build.md | head -60; ls n",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py source/body.py",
+      "FIGS\\|woman\\|def ",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "source/*.py source/.*test",
+      "build woman\\|'build'\\|\\",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:people.py",
+      "source/people.py source/*.py",
+      "'fig'\\|\\['fig'\\]\\|get('fig')",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "other",
+      "source/*.py",
+      "'figure'\\|\\",
+      ""
+     ],
+     [
+      21,
+      "film",
+      "before show",
+      "story/brexit-is-done-people.txt story/grand-theft-autism-people.txt",
+      "build",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "^def \\|^    def ",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py source/views.py",
+      "^def \\|^class \\|seated\\|sit",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def person",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py source/views.py",
+      "^def ",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "sed -n 1388,1437p source/sitting.py; sed -n 539,554p source/sitting.py",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "), (45, True, ",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "sed -n 44,70p source/body.py",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      "^$",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "shoulders",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "elif key == 'body'",
+      ""
+     ],
+     [
+      46,
+      "film",
+      "before show",
+      "story/brexit-is-done-people.txt source/people.py",
+      "^def load",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def load",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 545,600p source/people.py",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def _house",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 612,656p source/people.py",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "notes/sam-notes/ notes/sam-notes/*",
+      "Lucia",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "film notes",
+      "notes/learn/womans-build notes/learn/womans-build/ story/*-people.txt",
+      "build woman",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "film notes",
+      "story/*-people.txt",
+      "python3 - <<'EOF' 2>&1 | tail -80 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "film notes",
+      "story/*-people.txt",
+      "^# \\(guard2\\|juror[0-9]*\\|newsreader\\|judge\\|officer\\|her\\|press\\|walker\\|cop\\|p",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:people.py",
+      "story/blessed-people.txt source/people.py",
+      "member\\b\\|def member",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:people.py",
+      "story/blessed-people.txt source/people.py",
+      "sed -n 20,40p story/blessed-people.txt; sed -n 77,120p story/blessed-people.txt ",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "film notes",
+      "story/blessed-people.txt story/protest-tiers-people.txt story/milburn-people.txt",
+      "juror(7|8|9|1[0-2])|judge|officer:",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "sed -n 515,575p source/body.py",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py",
+      "^HEM\\|^ARM_TOP\\|^JACKET",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "git add -A notes && git commit -qm \"Open Wounds: the woman's-body learn step (ou",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:body.py",
+      "source/*.py source/body.py",
+      "fig_half\\|FIGS\\|HEM\\b",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:body.py",
+      "source/body.py notes/learn/womans-build/learn.md source/views.py source/people_p",
+      "JACKET\\|'bottom'",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:body.py",
+      "source/body.py source/people.py",
+      "BEFORE_DEFAULTS",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "sed -n 214,250p source/people.py",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "shared:people.py",
+      "source/*.py source/people.py",
+      "people\\.load(\\|people\\.parse(\\|P\\.load(\\|PE\\.load(",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:people.py",
+      "source/people.py source/views.py source/body.py",
+      "'neck_w'\\|neck_w",
+      ""
+     ],
+     [
+      73,
+      "film",
+      "before show",
+      "source/people.py story/brexit-is-done-people.txt",
+      "), (45, True, ",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "pelvis\\|seat_patch\\|crotch\\|trouser top\\|waistband\\|_covered",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1240,1330p source/views.py",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "sed -n 72,100p source/body.py",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^import\\|^from",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/f960632f-efeb-53d2-a51d-b197756843b8/scrat",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:views.py",
+      "source/views.py notes/learn/womans-build source/people.py source/body.py",
+      "\nnew=",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:views.py",
+      "source/views.py notes/learn/womans-build",
+      "python3 - <<'EOF' p='source/views.py'; s=open(p).read() old=\"\"\" if sp.get('figur",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "notes/learn/womans-build/outline-female-v1.jpg notes/learn/womans-build/colour-f",
+      "^| 7 |",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/learn/womans-build/learn.md",
+      "python3 - <<'EOF' p='notes/brexit-is-done.md'; s=open(p).read() a=s.index('- **N",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "not 'slimmer'",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "film notes",
+      "guides/job-packs.md notes/brexit-is-done.md",
+      "reference photo\\|search order",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "other",
+      "",
+      "TZ=Europe/London date; cd /home/user/Animation- && git status --short | head -3",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md guides/job-packs.md",
+      "^## Plan\\|^### Plan\\|^## Build\\|^## Sets",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "^- \\[ \\] 18",
+      ""
+     ],
+     [
+      100,
+      "film",
+      "before show",
+      "notes/brexit-is-done.md story/brexit-is-done-people.txt notes/brexit-is-done-set",
+      "\nnew=",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "sed -n 21,24p guides/job-packs.md | cut -c1-900; ls references/brexit-is-done/",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/f960632f-efeb-53d2-a51d-b197756843b8/scra",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "other",
+      "",
+      "https?://[^\"",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "other",
+      "",
+      "(src|data-src|href)=\"[^\"]*(upload|images|media)[^\"]*\"",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "other",
+      "",
+      "<meta[^>]+property=\"og:image\"[^>]+>",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "other",
+      "",
+      "https://c[0-9]\\.alamy\\.com/[^\"]+\\.jpg",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "other",
+      "",
+      "https?://[^\" ]*alamy[^\" ]*\\.(jpg|webp)[^\" ]*",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "python3 - <<'EOF' p='notes/brexit-is-done.md'; s=open(p).read() old=\"- **Needs S",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md notes/learn/wo",
+      "python3 - <<'EOF' p='notes/brexit-is-done.md'; s=open(p).read() a=s.index('## Wh",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "shared:handover.py",
+      "story/status.md source/handover.py",
+      "printf \"Open Wounds (brexit-is-done): woman's body learned and half built (May r",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "shared:ledger.py",
+      "notes/logs/kittests-last.log source/ledger.py",
+      "[k]ittests",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "[k]ittests",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds chat 4: handover (chat 6 next), status",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "film notes",
+      "/root/.claude/uploads/f960632f-efeb-53d2-a51d-b197756843b8 notes/brexit-is-done.",
+      "[k]ittests",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
@@ -1849,7 +2669,6 @@
   "1": "none (sheet maker had no edge test)",
   "2": "none (front and 3/4 never judged side by side)",
   "3": "none",
-  "7": "none (the learn step judged woman or man only, never \"is this HER body\"; Kemi's photo was not measured)",
   "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)",
   "6": "none (match checks colours, not layering: gap written in castsheet.py MAP)",
   "4": "-"
