@@ -48,16 +48,16 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: the main line** (chat 7 pushed it: chats 4-8 merged, the wolves kit included).
-- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three centre right in May's place and size, May a little wider (note 9); the cast as on cast sheet v3 ("Y to Kemi, cast sheet is ready", 24 Nov).
-- **Rules that bite next:** S12 (women's bodies, `castsheet.py build`), 41 (hands on the steel bars), 74 (each wolf's beats).
-- **Done (chat 7):** the cast approved (notes/learn/kemi-build/cast-v3.jpg): Kemi on her measured build, a woman in every view (front and back to three blind judges, turned and seated by Sam's eye); notes 8 (camel toe), 10 (fleshy teeth), 11 (smile spike) fixed, each with a check catching Sam's picture (castsheet crotch_faults, teeth_faults, mouth_spike_faults); three fresh judges a round (JUDGES); all 139 kit tests passed (finished films unchanged).
-- **Known faults, before May's shot:** May turned: the bust bump reads pointed (views.TURNED_BUST female 28 at 140, SD 42: wider and softer; her shot is turned); Kemi turned: the hi-vis yoke's inner corner hangs as a tab under the near braid (people_parts.workwear_torso); 7 closed curves through one point twice in facehouse hair (lines 987, 1042, 1056, 1156, 1385, 1570, 1639, 1651): look for spikes at full size. Any drawing change makes the judge record stale: three fresh judges again (Sam's Y covers only this drawing).
-- **Next (chat 9, Opus high: the board and shots, new moves):** the known faults above, then the shots in film order (May, then Kemi with the site action, then Blair), per notes/brexit-is-done-sets.md (shot table, background action, the wolves kit).
-- **Needs Sam:** nothing (his eye on the wolves sheet: any note goes to the sets chain).
-- **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md "Where things stand" and the shot table; this section.
+- **Newest work: branch `claude/open-wounds-chat9`** (also pushed to the main line if allowed; the next chat merges it first).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three centre right in May's place and size, May a little wider (note 9); the cast (cast sheet v3 plus chat 9's three small fixes).
+- **Rules that bite next:** 41 (hands on the steel bars), 74 (each wolf's beats), 5 (feet on boards, struck wolves react).
+- **Done (chat 9):** the three known cast faults fixed: May's turned bust rounder (views.TURNED_BUST female 27, SD 52 at 145); Kemi's hi-vis side strip runs into the waist band (no tab under the braid; front shows orange sides, Added line told to Sam); hair and hat outlines through each point once (Kemi's turned hat nub gone) with check castsheet.hair_spike_faults (catches the old drawing; wired into build and handover end). Two rounds of three fresh blind judges (record v6b): May woman in all 4; Kemi 3/4 and seated 3; Kemi front 2 (Sam's Y on the same drawing), back 2 (Sam: move on from the characters).
+- **Sam, 24 Nov (92% of the week used):** "We might have to move on from the characters now, please, as we are running out of space to complete the film!" No more character work: shots only.
+- **Next (chat 10, Opus high: the board and shots, new moves):** write source/brexit_is_done.py (copy milburn.py's frame route: people.load, scale_at, person(), places.picture lines from story/brexit-is-done-places.txt), shots in film order (May, then Kemi with the site action, then Blair) per notes/brexit-is-done-sets.md shot table; `rough.py board` once May's shot draws.
+- **Needs Sam:** nothing now; the chain is paused at the budget stop (92%).
+- **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md shot table and background action; milburn.py MAP and lines 130-150.
 - **Open rule requests:** none.
-- **For Claude:** views WOMAN_LEG*/TURNED_BUST(_Y)/_seat_into_thighs; body.trouser_seat; people `jacket 440`, `arms 24`; sitting.spec_upright women's branch; castsheet crotch_/teeth_/mouth_spike_faults, JUDGES, judge record `sam_ok`; faces.house_mouth grin; wolf.py (pose, shadow, draw).
+- **For Claude:** views.TURNED_BUST(_Y,_SD per build); people_parts.workwear_torso `yl`; facehouse.curve (dedupes) over _curve; castsheet.hair_spike_faults(raw=True for the old); judge record sam_ok kemi front/back.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.

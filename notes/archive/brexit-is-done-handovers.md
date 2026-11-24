@@ -117,3 +117,17 @@
 - **Open rule requests:** none.
 - **For Claude:** views WOMAN_LEGS/WOMAN_LEG(_TURNED)/WOMAN_HIP_OUT/WOMAN_THIGH_IN/_hip_out/_thigh_edges/_seat_into_thighs/_woman_knee/TURNED_BUST(_Y); body.seat_hem/trouser_seat/_top_y; people `jacket 440`, `arms 24`; sitting.spec_upright women's branch; castsheet crotch_line/crotch_faults/teeth_share/teeth_faults/JUDGES; faces.house_mouth grin; judge.py hair blank.
 
+
+
+### chat 8/7 handover (moved by chat 9)
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: the main line** (chat 7 pushed it: chats 4-8 merged, the wolves kit included).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three centre right in May's place and size, May a little wider (note 9); the cast as on cast sheet v3 ("Y to Kemi, cast sheet is ready", 24 Nov).
+- **Rules that bite next:** S12 (women's bodies, `castsheet.py build`), 41 (hands on the steel bars), 74 (each wolf's beats).
+- **Done (chat 7):** the cast approved (notes/learn/kemi-build/cast-v3.jpg): Kemi on her measured build, a woman in every view (front and back to three blind judges, turned and seated by Sam's eye); notes 8 (camel toe), 10 (fleshy teeth), 11 (smile spike) fixed, each with a check catching Sam's picture (castsheet crotch_faults, teeth_faults, mouth_spike_faults); three fresh judges a round (JUDGES); all 139 kit tests passed (finished films unchanged).
+- **Known faults, before May's shot:** May turned: the bust bump reads pointed (views.TURNED_BUST female 28 at 140, SD 42: wider and softer; her shot is turned); Kemi turned: the hi-vis yoke's inner corner hangs as a tab under the near braid (people_parts.workwear_torso); 7 closed curves through one point twice in facehouse hair (lines 987, 1042, 1056, 1156, 1385, 1570, 1639, 1651): look for spikes at full size. Any drawing change makes the judge record stale: three fresh judges again (Sam's Y covers only this drawing).
+- **Next (chat 9, Opus high: the board and shots, new moves):** the known faults above, then the shots in film order (May, then Kemi with the site action, then Blair), per notes/brexit-is-done-sets.md (shot table, background action, the wolves kit).
+- **Needs Sam:** nothing (his eye on the wolves sheet: any note goes to the sets chain).
+- **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md "Where things stand" and the shot table; this section.
+- **Open rule requests:** none.
+- **For Claude:** views WOMAN_LEG*/TURNED_BUST(_Y)/_seat_into_thighs; body.trouser_seat; people `jacket 440`, `arms 24`; sitting.spec_upright women's branch; castsheet crotch_/teeth_/mouth_spike_faults, JUDGES, judge record `sam_ok`; faces.house_mouth grin; wolf.py (pose, shadow, draw).
