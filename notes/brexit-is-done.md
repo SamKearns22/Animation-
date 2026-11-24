@@ -170,3 +170,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 - FINDER: new building (no note was being fixed); page.py show is for notes.
 - FREEZE: rose to 21 on importing milburn_sets.LevelCam; fixed by lifting LevelCam into the places kit (places.LevelCam, with .of(desc, view)); count back to 20. milburn_sets keeps its own copy (a finished film; not touched).
 - COST: no estimate by Sam's Q9 N (24 Nov).
+- Chat 10 end check: JUDGE STOP (the record predates views.py's seated stopgap): asked Sam (Q1: Override this one ask, or three fresh judges). Rule 74 acting rows and HEAD LIFE: the moves stage, next chat. FINDER: new building, not notes. COST: Sam's Q9 N. womens_builds: passes (the crash was a run started before views.knee_cap existed).
