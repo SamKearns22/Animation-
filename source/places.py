@@ -367,6 +367,38 @@ def painter(desc, view, layer):
     return paint
 
 
+_SORTED = {}
+
+
+def paint_with(img, desc, view, cam, t, actors, layers=('back', 'mid'), feed=None):
+    """A view's pieces in `layers` and the film's actors painted together, far to near (Open Wounds, 24 Nov: a man on
+    a scaffold lift goes between its inner and outer frames, a wolf on the dirt behind the skip). actors: [(depth m,
+    draw(img))]; a piece is at its `depth` (the near end of a range); equal depths keep the file's order, pieces first.
+    Pieces with no depth, or an explicit `layer`, keep their layer's place (painted after, as painter() does)."""
+    import cover
+    v = desc['views'][view]
+    key = (id(desc), view, tuple(layers))
+    if key not in _SORTED:
+        ps = [p for p in pieces(desc, view) if layer_of(v, p.it) in layers]
+        _SORTED[key] = ([(depth_of(p.it), p) for p in ps if depth_of(p.it) is not None and 'layer' not in p.it['raw']],
+                        [p for p in ps if depth_of(p.it) is None or 'layer' in p.it['raw']])
+    deep, rest = _SORTED[key]
+    todo = [(d, 0, k, ('piece', p)) for k, (d, p) in enumerate(deep)]
+    todo += [(d, 1, k, ('actor', fn)) for k, (d, fn) in enumerate(actors)]
+    cover.view(v)
+    for d, _, _, (what, it) in sorted(todo, key=lambda q: (-q[0], q[1], q[2])):
+        if what == 'piece':
+            it.args['feed'] = feed
+            with cover.piece(img, it):
+                it.draw(img, cam, t)
+        else:
+            it(img)
+    for p in rest:
+        p.args['feed'] = feed
+        with cover.piece(img, p):
+            p.draw(img, cam, t)
+
+
 def install(desc, film_sets):
     """The film's BACK, MID and FRONT tables (the painters it calls) filled from the description."""
     for view in desc['views']:

@@ -70,6 +70,8 @@ def allow(reason):
         _ALLOW.pop()
 
 
+SIDE_ON = [False]   # views.person sets it for a side view (Open Wounds, 24 Nov: a side-on run's back arm, the elbow behind
+                    # and the forearm swinging forward, was read as 'across the body'; side on there is no across)
 NEVER_ALLOWED = ('folded back across the body',)   # Job C 1 (Sam, 13 Nov): caught faults no allow() may wave through
 
 
@@ -260,7 +262,7 @@ def audit_arm(sh, el, wr, where='an arm'):
     # the front). Hands reaching across the body (clutching the chest, clasped) are fine: their wrists go inwards.
     sgn = 1 if sh[0] >= 0 else -1
     if sgn * el[0] < sgn * sh[0] - 0.5 * UPPER and sgn * wr[0] > sgn * el[0] + 0.3 * FORE:
-        if abs(sh[0]) < 0.2 * UPPER:    # side-on, the shoulder on the centre line: no 'across the body' to read (Job C 1:
+        if abs(sh[0]) < 0.2 * UPPER or SIDE_ON[0]:    # side-on, the shoulder on the centre line: no 'across the body' to read (Job C 1:
             fail(f'{where}: elbow folded back, seen side-on')   # a camera held to the face); allow() may cover it
         else:
             fail(f'{where}: elbow folded back across the body (elbow on the chest, forearm pointing back out): '

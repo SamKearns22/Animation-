@@ -38,7 +38,7 @@ pipe: at 8.6 9.4, depth 25.85, to 8.6 0.3, radius 0.26, colour 216 112 40, open 
 pipe: at -4.2 9.5, depth 25.8, to -5.0 9.1, radius 0.3, colour 216 112 40 (a pipe end out of a slab)
 pipe: at 5.1 6.3, depth 25.8, to 6.0 5.9, radius 0.28, colour 216 112 40 (another pipe end)
 scaffold: x -13 to 14, z 0 to 11.2, depth 25.6, lifts 3.2 6.4 9.6, part back, ladder 3, seed 3 (the scaffold, inner)
-scaffold: x -13 to 14, z 0 to 11.2, depth 24.3, lifts 3.2 6.4 9.6, part front, barrier 0.35, seed 3 (the scaffold, outer)
+scaffold: x -13 to 14, z 0 to 11.2, depth 24.3, lifts 3.2 6.4 9.6, part front, barrier 0.35, seed 13 (the scaffold, outer; seed was 3: chat 11 keeps the 6.4 m lift open where the bar fight is, so the barrier boards never hide the tubes)
 hoarding: x -16 to -6.2, z 0 to 2.4, depth 22.9 (the blue hoarding)
 skip: x 0.4 to 4.1, z 0 to 1.2, depth 22.4, seed 2 (the skip)
 pipe stack: x -6.6 to -3.6, z 0 to 2.6, depth 20.9, radius 0.5, rows 3 (the big pipes)

@@ -11,7 +11,8 @@ MAP (rule 61)
   people ............ CAST from story/brexit-is-done-people.txt; scale_at(pxm, sp); seated(img, who, L, x, d, t, yaw)
   shot 1 ............ may_shot(t): the places kit's view `may` (story/brexit-is-done-places.txt), May seated, turned
                       to screen-left (looking off-frame left at the unseen interviewer, item 14)
-  shot 2 ............ (next: kemi_shot, the site and its background action)
+  shot 2 ............ kemi_shot(t): the site with its background action (brexit_is_done_action.site_actors: the
+                      attack, the runner, the bar fight, the milling wolves) painted among the pieces far to near
   shot 3 ............ (then: blair_shot, the oak room, the chase, the lunge)
   picture ........... picture(t) -> the clean frame (no captions, no Hook Text: finish.py adds those)
   main .............. stills
@@ -29,6 +30,7 @@ import people as PK                  # noqa: E402
 import people_parts as PPt           # noqa: E402
 import places as PL                  # noqa: E402
 import sitting as S                  # noqa: E402
+import brexit_is_done_action as ACT  # noqa: E402  the background action (shots 2 and 3)
 from satire_style import install_circle_hands   # noqa: E402
 
 B = PPt.B
@@ -153,8 +155,9 @@ def kemi_shot(t):
     img = Image.new('RGBA', (W, H), (255, 255, 255, 255))
     B.SS = 1
     L = _cam('site')
-    for layer in ('back', 'mid'):
-        _paint(img, 'site', layer, t)
+    u = scene_of(t)[1]
+    PL.paint_with(img, _DESC, 'site', B.Cam(1.0, 540, 960), u, ACT.site_actors(u, L))   # the background action
+    B.SS = 1
     standing(img, 'kemi', L, KEMI['x'], KEMI['d'], t, KEMI['yaw'])
     for layer in ('front', 'over'):
         _paint(img, 'site', layer, t)

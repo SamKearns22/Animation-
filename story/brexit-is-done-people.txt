@@ -17,3 +17,28 @@ body: 1.7 m, woman, build straight, shoulders 140, jacket 440, arms 24
 head: house blair, hair back, look detail
 outfit: suit 28 30 40, shirt white, tie 150 30 40
 body: 1.83 m, man
+
+# worker: the site's workers (shot 2's background: W1 digging, W2 the runner, W3-W5 with the scaffold tubes): hi-vis
+# jackets over dark work clothes, site hard hats (people_hats 'hardhat'), London's mix
+crowd: worker
+body: 1.78 m, man
+outfit: suit 52 56 62, sleeves 236 112 30, shirt 52 56 62, no tie
+extras: workwear
+mix: london
+hats: hardhat
+count: 5
+seed: 1200 + i
+trousers (i): 40 44 52; 62 66 72; 46 52 70; 36 36 40; 70 64 52
+shoes (i): 70 52 36; 30 28 26; 96 70 44; 40 38 36; 60 46 34
+hair (i): crop; short; curly; receding; side
+
+# guest: shot 3's fleeing staff and guests (a butler, a waitress, a man in a dinner suit, a woman in an evening gown)
+crowd: guest
+count: 4
+mix: london
+hats: 0
+seed: 1300 + i
+body (i): 1.80 m, man; 1.66 m, woman; 1.82 m, man; 1.70 m, woman
+outfit (i): suit 24 24 28, shirt white, tie 24 24 28, trousers 24 24 28, shoes 20 20 22; dress, dress 26 26 30, sleeves 26 26 30, shirt white, no tie, trousers 30 30 34, shoes 20 20 22; suit 18 18 22, shirt white, tie 18 18 22, trousers 18 18 22, shoes 20 20 22; dress, dress 120 22 48, sleeves 120 22 48, no tie, trousers 120 22 48, shoes 120 22 48
+extras (i): ; ; ; skirt
+hair (i): receding; bun; side; long

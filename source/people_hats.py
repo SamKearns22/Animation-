@@ -5,7 +5,9 @@ member's hat is sp['kit_hat'] ('beanie' or 'cap'), its colour sp['hat_c'] = (col
 draw() on views.HEAD_WEAR, which draws it over the head in every view. A film that dresses its own heads
 (sp['headwear'], EPR's) is left alone.
 
-Map: head box 20 | beanie 45 | cap 66 | draw 100
+A site hard hat ('hardhat', Open Wounds 24 Nov: `hats: hardhat` in a crowd) sits on the crown with a brim all round.
+
+Map: head box 20 | beanie 45 | cap 66 | hardhat 92 | draw 120
 """
 import numpy as np
 from PIL import Image
@@ -87,8 +89,30 @@ def cap(p, view, sp, hx, hy):
     p.poly(curve(peak, 2), dk, INK, 2.2)
 
 
+def hardhat(p, view, sp, hx, hy):
+    """A site hard hat in sp['hat_c']: a high dome over the crown with a raised ridge down the middle, a brim all round
+    (wider at the front: the peak), sitting at the brow so the face shows below it."""
+    col, dk = sp.get('hat_c', ((246, 246, 240), (178, 178, 172)))
+    l, r, t = head_box(sp, view)
+    H, w = -t, r - l
+    top, brim = hy + t - 0.16 * H, hy + t + 0.42 * H
+    o = 0.1 * w if view == 'three' else -0.1 * w if view == 'three_back' else 0.0
+    side = view == 'side'
+    fwd = 0.16 * w if side else 0.0                 # side on: the peak juts out over the face (screen right)
+    dome = [(hx + l - 5, brim), (hx + l - 6, top + 0.5 * H), (hx + l + 0.18 * w, top + 0.08 * H),
+            (hx + (l + r) / 2 + o, top), (hx + r - 0.18 * w, top + 0.08 * H), (hx + r + 6, top + 0.5 * H),
+            (hx + r + 5, brim)]
+    p.poly(curve(dome, 3), col, INK, 2.4)
+    rx = hx + (l + r) / 2 + o
+    if view not in ('back',):
+        p.line([(rx - 0.04 * w, top + 0.04 * H), (rx + (0.08 * w if side else 0.0), brim - 3)], dk, 2.4)
+    rim = [(hx + l - 12 - (0.04 * w if side else 0), brim - 4), (hx + r + 12 + fwd, brim - 4),
+           (hx + r + 14 + fwd, brim + 5), (hx + l - 12, brim + 5)]
+    p.poly(rim, col, INK, 2.2)
+
+
 def draw(p, view, sp, hx, hy):
     """views.HEAD_WEAR: the kit's hat on a crowd member who has one (never over a film's own headwear)."""
     hat = sp.get('kit_hat')
     if hat and not sp.get('headwear'):
-        (beanie if hat == 'beanie' else cap)(p, view, sp, hx, hy)
+        {'beanie': beanie, 'cap': cap, 'hardhat': hardhat}.get(hat, cap)(p, view, sp, hx, hy)

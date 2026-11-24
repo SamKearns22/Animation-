@@ -1420,6 +1420,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         mirror = False                            # 0 (or 180) degrees his right hand stays where it was (Islamocommunism
     #                                               note 9, Job G's flip test; the head still turns its own way)
     view = VIEWS[view_deg]
+    F.SIDE_ON[0] = view == 'side'                # the arm check reads a side-on arm as side-on (Open Wounds, 24 Nov)
     j = joints or standing(sp)
     lean = j.get('lean', 0.0)
     if j.get('dz'):                              # the whole body moved forward (+) or back in its own frame (sitting.py:

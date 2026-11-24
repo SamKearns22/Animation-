@@ -190,6 +190,8 @@ def _crowd_line(cur, line, n):
 #     hats: 0.3         the share in a beanie or cap (default .22; bald heads may go bare: Sam, 16 Nov); 'hats: 0' none
 #     count: 40         how many the film draws (the check's crowd size; default 24)
 #     same: hat, top because riot police wear one uniform    keys left alike on purpose (the check lets them be)
+KIT_HATS_ALL = {'hardhat': [(246, 246, 240), (244, 204, 32), (240, 128, 28), (246, 246, 240), (40, 96, 170)]}
+#     hats: hardhat     everyone in a site hard hat (white, yellow, orange, white, blue round the crowd: people_hats)
 SKIN_TONES = {'light': [(236, 200, 176), (226, 186, 158)], 'olive': [(204, 160, 120), (190, 146, 106)],
               'tan': [(172, 124, 88)], 'brown': [(140, 96, 66)], 'dark': [(108, 72, 50), (86, 58, 42)],
               'sasian': [(160, 112, 78)]}
@@ -310,7 +312,11 @@ def varied(d, m, i):
     if 'shoes' not in said:
         m['shoe'] = _pick(r, SHOES)
     share = d.get('crowd_hats', .22)
-    if 'hat' not in said and share and m.get('hair_style') not in ('bob', 'pony', 'bun', 'long') and r.random() < share:
+    if d.get('crowd_hat_kind') and 'hat' not in said:           # one kind for all (a site's hard hats, Open Wounds)
+        m['kit_hat'] = d['crowd_hat_kind']
+        c = KIT_HATS_ALL[d['crowd_hat_kind']][i % len(KIT_HATS_ALL[d['crowd_hat_kind']])]
+        m['hat_c'] = (c, tuple(int(v * .72) for v in c))
+    elif 'hat' not in said and share and m.get('hair_style') not in ('bob', 'pony', 'bun', 'long') and r.random() < share:
         m['kit_hat'] = 'beanie' if r.random() < .55 else 'cap'
         c = HATS[(3 * i) % len(HATS)]
         m['hat_c'] = (c, tuple(int(v * .72) for v in c))
@@ -355,8 +361,11 @@ def _fact(d, key, val, people):
             if set(mx) - set(SKIN_TONES):
                 raise DescriptionError(f'mix: a place ({", ".join(MIXES)}) or shares of {", ".join(SKIN_TONES)}')
             d['crowd_mix'] = mx
-    elif key == 'hats':
-        d['crowd_hats'] = float(val)
+    elif key == 'hats':                         # a share in beanies or caps, or a kit hat for everyone ('hats: hardhat')
+        if val.strip() in KIT_HATS_ALL:
+            d['crowd_hat_kind'], d['crowd_hats'] = val.strip(), 1.0
+        else:
+            d['crowd_hats'] = float(val)
     elif key == 'count':
         d['crowd_n'] = int(val)
     elif key == 'same':

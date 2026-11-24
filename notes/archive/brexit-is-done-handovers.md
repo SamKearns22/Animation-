@@ -158,3 +158,17 @@
 - **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md shot table and background action; brexit_is_done.py MAP.
 - **Open rule requests:** none.
 - **For Claude:** seated(img, who, L, X, d, t, yaw, pose, chair) draws anyone seated through a LevelCam; shot numbers live in dicts (MAY) because the board reads every upper-case number as a beat; board --shots 1 until shot 2 draws (picture raises NotImplementedError past 7.5 s).
+
+
+# chat 10
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: branch `claude/open-wounds-chat10`** (also pushed to the main line if allowed; the next chat merges it first).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size (head top, eye row 700, chin, face centre about 64% across), May about waist up; the cast (no more character work); the seated bottom and knees are reserve job R7 (Sam, 24 Nov: "list it as a reserve job"), never worked on in this film.
+- **Rules that bite next:** 74 (each wolf's and worker's beats; May's gestures), 41 (hands on the steel bars), 5 (feet on boards, struck wolves react).
+- **Done (chat 10):** source/brexit_is_done.py draws all three shots (people placed and matched, places from the places file; Kemi's concrete frame moved back to 26 m so the grey sky shows; Blair's doors open on shot time). Board of all three sent to Sam and recorded. Sam's note 12 (seated knees, no bottom): a kit stopgap (views.knee_cap, views.seat_bottom), check castsheet.seated_faults, reserve job R7.
+- **Next (Opus high: new moves):** shot 2's background action by the sets file's table (wolf.py kit; workers through standing(); dust and blood as approved), then shot 3's chase and the lunge, then the moves file (May's gestures, lips on stand-in timing, eyes off-frame left for all three: the `look` channel), then the Sonnet chat for the animatic (finish.py with the Hook Text and sign-off). Sam asked for the animatic next: no more boards unless he asks. The JUDGE stop is skipped by Sam's Override (24 Nov) until R7.
+- **Needs Sam:** his eye on the board (any note to the next chat); nothing blocks.
+- **Read:** `guides/job-packs.md` Build; notes/brexit-is-done-sets.md background action; wolf.py catalogue line; brexit_is_done.py MAP.
+- **Open rule requests:** none.
+- **For Claude:** rerun `python3 source/kittests.py` first (chat 10's full run was stopped mid-way; people_from_a_description passes after the SEAT_DROP name clash was fixed: the new constants are BOTTOM_*); shots' numbers live in dicts (MAY, KEMI, BLAIR) because the board reads upper-case numbers as beats; places.LevelCam.of(desc, view).
+
