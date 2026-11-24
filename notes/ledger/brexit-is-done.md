@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 9.2%; 4 chats, 0 rounds, 7 notes, 2 repeated.**
+**Estimate ?% of a week; spent 11.21%; 5 chats, 0 rounds, 7 notes, 2 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -12,6 +12,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-23 | 9db844b1 | est | opus | auto |  | 2.47 |  | 0 | 0 |
 | 2026-11-23 | f27fff03 | est | opus | cast |  | 2.58 |  | 2 | 1 |
 | 2026-11-23 | f960632f | est | opus | cast |  | 2.3 |  | 2 | 0 |
+| 2026-11-24 | da73dc7c | est | opus | build |  | 2.01 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-23 9db844b1 (auto): 144 steps, history 273k at the end; other 66.1%, tool search 20.6%, pictures 7.1%, renders 5.5%, film-file search 0.6%, page.py 0.2%
@@ -22,7 +23,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-23 f27fff03 (cast): start-up floor 34.7%, carried history 27.4%, Claude's words 19.9%, new writes 18%. Biggest origins: start-up floor 34.7%, Claude's words 33.3%, result: tool search 19%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 4% of the film (0.38% of a week over 2 chats: start 0.38, re-learning 0.00; 0.19% a chat; step-1 context re-read is 28% of a chat on average).
+A new chat's start and re-learning cost 3% of the film (0.38% of a week over 2 chats: start 0.38, re-learning 0.00; 0.19% a chat; step-1 context re-read is 28% of a chat on average).
 - 2026-11-23 9db844b1: step-1 context 84k; first real work at step 17 (0.26% of a week); read before it: source/facehouse.py 4.4k, source/turnhead.py 1.8k, notes/sam-notes/brexit-cast-v1/n2-blair-threequarter-not-same.jpg 1.6k, notes/sam-notes/brexit-cast-v1/n3-kemi-orange-gone-threequarter.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scratchpad/t0.jpg 1.6k, notes/sam-notes/brexit-cast-v1/notes.md 1.4k
 - 2026-11-23 f27fff03: step-1 context 84k; first real work at step 10 (0.12% of a week); read before it: notes/logs/broken.md 1k, source/watcher.py 0.4k, .claude/settings.json 0.3k, source/hookran.py 0.3k, source/data/freeze/films.json 0.2k
 
