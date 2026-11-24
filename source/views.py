@@ -164,10 +164,10 @@ def standing(sp):
         up = _unit((sg * 0.12, 0.99, -0.04))     # Sam's four rest references (8 Nov, references/figure-rig/):
         fo = _unit((sg * -0.04, 0.99, 0.13))     # elbow at the waist, forearm back in, hands beside the upper thigh
         if sp.get('figure') in ('female', 'straight'):   # Open Wounds (chat 4; notes/learn/womans-build): the
-            up = _unit((sg * 0.16, 0.99, -0.09))  # upper arm a little further out and the forearm straight under it,
+            up = _unit((sg * 0.16, 0.99, -0.14))  # upper arm a little further out and the forearm straight under it,
             fo = _unit((sg * 0.02, 0.99, 0.21))   # so the waist and the hip's curve show between arm and body (the
             #                                       judge: arms hugging the sides hid them; tucked in, a column).
-            # Chat 7: the upper arm a little further back (was z -0.04, a man's): turned, the far arm hung in front
+            # Chat 7: the upper arm a little further back (z -0.14; was -0.04, a man's): turned, the far arm hung in front
             # of her whole front edge, so the bust never showed (the judge: "straight side-on body"); her walking
             # photo, a little turned: the arm at her side, the top's curve ahead of it. The forearm comes forward
             # more (0.13 -> 0.21) so the far hand stays clear of the jacket's front (Sam: hands clear of the
@@ -908,11 +908,12 @@ def _built_outline(sp, view, bottom, o, fig):
         elif fig == 'straight':                   # Open Wounds chat 6 (Kemi, measured front only: no side photo):
             # between 'female' and the house side, each dip scaled by the front's (waist 0.85 not 0.70): the bust,
             # a shallow waist at 275, the seat a little out at 400
-            # Chat 7: the back's own curve deeper (in at the small of the back 0.92 -> 0.86, the seat out 1.03 -> 1.1)
+            # Chat 7: the back's own curve deeper (in at the small of the back 0.92 -> 0.84, the seat out 1.03 -> 1.1;
+            # the upper back slimmer, 0.94/1.0 -> 0.88/0.93: seated, a deep upper back read as a hunch, "bulky")
             # and the bust lower and fuller (1.2 at 145 -> 1.26 at 165): a woman's profile is curved even when her
             # front is straight (no side photo of her: a woman's general profile, never her front widths, which
             # stay as measured); the blind judge, turned and seated: "blocky, straight back and torso, no curves"
-            pts = [(-34, -8), (-d * 0.94, 22), (-d * 1.0, 120), (-d * 0.86, 275), (-d * 1.1, 400), (-d * 1.04, bottom),
+            pts = [(-34, -8), (-d * 0.88, 22), (-d * 0.93, 120), (-d * 0.84, 275), (-d * 1.1, 400), (-d * 1.04, bottom),
                    (d * 0.96, bottom), (d * 0.94, 340), (d * 0.9, 260), (d * 1.26, 165), (d * 1.04, 80), (d * 0.86, 30),
                    (30, -6)]
         else:
@@ -979,7 +980,7 @@ TURNED_SIDE = {'female': 0.7, 'straight': 0.7}
 # the side shape's bust is barely deeper than the house man's chest, d 1.20 against 1.18, so turned it never showed).
 # Turned, a woman's bust stands out in front of the near arm (her walking photo, a little turned: the white top's
 # curve ahead of her arm): a bump on the front edge only, at the bust's height. Units: the body's.
-TURNED_BUST = {'female': 22.0, 'straight': 26.0}
+TURNED_BUST = {'female': 22.0, 'straight': 30.0}
 TURNED_BUST_Y, TURNED_BUST_SD = 170.0, 42.0    # how much of the side's shape a three-quarter edge carries
 
 
