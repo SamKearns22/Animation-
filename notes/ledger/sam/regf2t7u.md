@@ -8,3 +8,6 @@
 ### 2026-11-24T00:25:09
 We always want the character in centre right of the frame. With a decent amount of space around them
 
+### 2026-11-24T00:25:58
+In the case of this film. For the interview joke. Always in the same position as May.
+
