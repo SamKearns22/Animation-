@@ -313,7 +313,9 @@ def house_mouth(p, f, L, kind, lip=None, skin=None, wide=1.12, gap=0.0, creases=
     if kind == 'grin':
         hw *= wide
         top = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03)]
-        bot = [(hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
+        bot = [(hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
+        # (chat 7, Sam's note 11, "a stray line comes off the top of his smile on the right": `bot` began with
+        # the right corner, the end of `top` again: the curve through one point twice overshot into a spike)
         p.poly(curve(f.pts(top + bot), 3), (70, 26, 30), INK, 2.2)
         # Open Wounds chat 7 (Sam's note 10 on Blair's grin: "Tony's teeth look a bit...fleshy"): the teeth were a thin
         # strip at the top of a deep dark mouth, the top lip's line ran ACROSS them (its middle at lip0 + 0.008, below

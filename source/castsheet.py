@@ -485,6 +485,45 @@ def teeth_share(a):
     return white / max(1, white + d)
 
 
+def doubled_points(pts):
+    """A closed curve through the same point twice in a row overshoots into a spike (Sam's note 11, chat 7: "a stray
+    line comes off the top of his smile on the right": the grin's outline ended its top edge and began its lower
+    edge on the same corner). The number of such points."""
+    P = np.asarray(pts, float)
+    return int((np.hypot(*(P - np.roll(P, -1, 0)).T) < 1e-6).sum()) if len(P) > 2 else 0
+
+
+def mouth_spike_faults(film, who=None, cast=None):
+    """Every house mouth a cast member wears (and each kind): no closed curve through one point twice."""
+    import faces as FA
+    if cast is None:
+        cast, _ = _setup(film, who)
+    hits, orig = [], FA.curve
+    FA.curve = lambda pts, n=6: (hits.append(doubled_points(pts)), orig(pts, n))[1]   # noqa: E731
+    try:
+        class _P:
+            def poly(self, *a, **k):
+                pass
+
+            def line(self, *a, **k):
+                pass
+
+        class _F:
+            def pts(self, q):
+                return [(x * 100.0, y * 100.0) for x, y in q]
+        L = dict(mw=0.28, lip0=0.70, lip13=0.712, lip17=0.756)
+        kinds = {(sp.get('kit_house') or {}).get('mouth', {}).get('kind') for sp in cast.values()} - {None}
+        out = []
+        for kind in sorted(kinds | {'grin', 'soft', 'smirk'}):
+            hits.clear()
+            FA.house_mouth(_P(), _F(), L, kind)
+            if sum(hits):
+                out.append(f"MOUTH {kind}: a curve passes through one point twice ({sum(hits)}): it spikes (Sam's note 11)")
+        return out
+    finally:
+        FA.curve = orig
+
+
 def teeth_faults(film, who=None, cast=None):
     from PIL import Image
     import views as V
@@ -595,6 +634,15 @@ def build_selftest():
     hit = pic is not None and pic < TEETH_MIN
     print('CAUGHT' if hit else 'MISSED', f'n10 fleshy teeth (the saved picture: teeth {pic or 0:.2f} of the grin)', '|', '-')
     ok &= hit
+    hw, l13, l17 = 0.15, 0.712, 0.756                                   # the grin's outline as Sam saw it (note 11)
+    old = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03),
+           (hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
+    hit = doubled_points(old) > 0
+    print('CAUGHT' if hit else 'MISSED', "n11 the grin's right-corner spike (a point twice)", '|', '-')
+    ok &= hit
+    got = mouth_spike_faults('brexit-is-done')
+    print('PASS' if not got else 'FAIL', 'every house mouth now: no point twice', '|', (got or ['-'])[0][:110])
+    ok &= not got
     got = teeth_faults('brexit-is-done', cast={'blair': cast['blair']})
     print('PASS' if not got else 'FAIL', 'Blair\'s grin now: a full top row', '|', (got or ['-'])[0][:110])
     ok &= not got
@@ -625,6 +673,7 @@ if __name__ == '__main__':
         sys.exit(0 if (selftest() & build_selftest()) else 1)
     elif a[:1] == ['build']:
         fs = (build_faults(a[1], a[2:] or None) + crotch_faults(a[1], a[2:] or None) + teeth_faults(a[1], a[2:] or None)
+              + mouth_spike_faults(a[1], a[2:] or None)
               + judge_faults(a[1], a[2:] or None))
         print('\n'.join(fs) or 'build: every woman reads as a woman, every man as a man, each woman on her own build')
         sys.exit(1 if fs else 0)
