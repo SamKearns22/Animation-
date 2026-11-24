@@ -458,6 +458,53 @@ def crotch_faults(film, who=None, cast=None):
     return out
 
 
+# A grin's teeth (Open Wounds chat 7, Sam's note 10: "Tony's teeth look a bit...fleshy";
+# notes/sam-notes/brexit-cast-v3/n10-blair-teeth-fleshy.jpg: a thin strip of teeth at the top of a deep dark mouth,
+# the top lip's line across them). Of the open mouth (its biggest dark-red patch and the half height over it), the
+# share that is teeth: the saved picture 0.26, his photo's full top row about 0.6. Every grinning head, front and
+# three-quarter, drawn big.
+TEETH_MIN = 0.40
+MOUTH_C, TEETH_C = (70, 26, 30), (250, 248, 240)
+
+
+def teeth_share(a):
+    """The teeth's share of the open mouth in an RGB picture (None: no open mouth)."""
+    from scipy import ndimage
+    a = a.astype(int)
+    dark = (np.abs(a - MOUTH_C).sum(2) < 40) & (a[..., 0] - a[..., 1] > 25)
+    lab, n = ndimage.label(dark)
+    if n == 0:
+        return None
+    ys, xs = np.nonzero(lab == 1 + int(np.argmax(ndimage.sum(dark, lab, range(1, n + 1)))))
+    if len(ys) < 20:
+        return None
+    y0, y1, x0, x1 = ys.min(), ys.max(), xs.min(), xs.max()
+    box = a[max(0, y0 - (y1 - y0) // 2):y1 + 1, x0:x1 + 1]
+    white = (np.abs(box - TEETH_C).sum(2) < 45).sum()
+    d = ((np.abs(box - MOUTH_C).sum(2) < 40) & (box[..., 0] - box[..., 1] > 25)).sum()
+    return white / max(1, white + d)
+
+
+def teeth_faults(film, who=None, cast=None):
+    from PIL import Image
+    import views as V
+    import body as B
+    if cast is None:
+        cast, _ = _setup(film, who)
+    out = []
+    for w, sp in cast.items():
+        if (sp.get('kit_house') or {}).get('mouth', {}).get('kind') != 'grin':
+            continue
+        for yaw, name in ((0, 'front'), (45, 'three-quarter')):
+            tile = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+            V.person(tile, B.Cam(2.0, 540, 470), 540, 500, 1.6, dict(sp), 0.0, yaw, None)
+            got = teeth_share(np.asarray(tile.convert('RGB')))
+            if got is not None and got < TEETH_MIN:
+                out.append(f"TEETH {w} {name}: the teeth fill {got:.2f} of the open grin (at least {TEETH_MIN}; Sam's "
+                           f"note 10, \"fleshy\")")
+    return out
+
+
 # The blind judge (Change 1: "a fresh helper that hasn't seen the cast list says man or woman at phone size"). Chat
 # 6 found the shape test alone too weak: it passed Kemi three-quarter (hip 1.08 of the waist, just over the line)
 # while the judge called her a man there and seated ("boxy straight torso, no waist"): her arms and the straight
@@ -542,6 +589,15 @@ def build_selftest():
     print('CAUGHT' if hit else 'MISSED', f'n8 camel toe (the saved picture: a line {pic or 0:.2f} of the legs\' '
           'width up from the crotch)', '|', '-')
     ok &= hit
+    from PIL import Image as _I
+    pic = teeth_share(np.asarray(_I.open(os.path.join(ROOT, 'notes', 'sam-notes', 'brexit-cast-v3',
+                                                    'n10-blair-teeth-fleshy.jpg')).convert('RGB')))
+    hit = pic is not None and pic < TEETH_MIN
+    print('CAUGHT' if hit else 'MISSED', f'n10 fleshy teeth (the saved picture: teeth {pic or 0:.2f} of the grin)', '|', '-')
+    ok &= hit
+    got = teeth_faults('brexit-is-done', cast={'blair': cast['blair']})
+    print('PASS' if not got else 'FAIL', 'Blair\'s grin now: a full top row', '|', (got or ['-'])[0][:110])
+    ok &= not got
     got = crotch_faults('brexit-is-done', cast={w: cast[w] for w in ('kemi', 'may', 'blair')})
     print('PASS' if not got else 'FAIL', 'the cast now: no line up from the crotch', '|', (got or ['-'])[0][:110])
     ok &= not got
@@ -568,7 +624,8 @@ if __name__ == '__main__':
     elif a[:1] == ['selftest']:
         sys.exit(0 if (selftest() & build_selftest()) else 1)
     elif a[:1] == ['build']:
-        fs = build_faults(a[1], a[2:] or None) + crotch_faults(a[1], a[2:] or None) + judge_faults(a[1], a[2:] or None)
+        fs = (build_faults(a[1], a[2:] or None) + crotch_faults(a[1], a[2:] or None) + teeth_faults(a[1], a[2:] or None)
+              + judge_faults(a[1], a[2:] or None))
         print('\n'.join(fs) or 'build: every woman reads as a woman, every man as a man, each woman on her own build')
         sys.exit(1 if fs else 0)
     else:

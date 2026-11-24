@@ -13,7 +13,7 @@ import math
 import numpy as np
 
 import mouths
-from ink import INK, curve, oval
+from ink import INK, curve, open_curve, oval
 
 
 
@@ -315,19 +315,25 @@ def house_mouth(p, f, L, kind, lip=None, skin=None, wide=1.12, gap=0.0, creases=
         top = [(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.012), (0.0, l13 - 0.008), (hw * 0.5, l13 - 0.012), (hw, l13 - 0.03)]
         bot = [(hw, l13 - 0.03), (hw * 0.55, l17 + 0.012), (0.0, l17 + 0.03), (-hw * 0.55, l17 + 0.012)]
         p.poly(curve(f.pts(top + bot), 3), (70, 26, 30), INK, 2.2)
-        tb = 0.0 if drop is None else max(0.0, 0.5 * (l17 - l13) - 0.02)     # a deeper grin shows more tooth
-        teeth = [(-hw * 0.82, l13 - 0.022), (0.0, l13 - 0.006), (hw * 0.82, l13 - 0.022), (hw * 0.6, l13 + 0.012 + tb),
-                 (0.0, l13 + 0.02 + tb), (-hw * 0.6, l13 + 0.012 + tb)]
+        # Open Wounds chat 7 (Sam's note 10 on Blair's grin: "Tony's teeth look a bit...fleshy"): the teeth were a thin
+        # strip at the top of a deep dark mouth, the top lip's line ran ACROSS them (its middle at lip0 + 0.008, below
+        # the opening's top edge on a thin-lipped face) and, drawn with the closed curve, it doubled back as a loose
+        # line over the mouth. Now (his photo): a full top row filling the opening's upper half, the thin top lip ON
+        # the opening's top edge, every line open (open_curve), so nothing doubles back.
+        D = (l17 + 0.03) - (l13 - 0.008)                                   # the opening's depth at the middle
+        teeth = [(-hw * 0.88, l13 - 0.027), (-hw * 0.5, l13 - 0.011), (0.0, l13 - 0.007), (hw * 0.5, l13 - 0.011),
+                 (hw * 0.88, l13 - 0.027), (hw * 0.66, l13 - 0.008 + 0.40 * D), (0.0, l13 - 0.008 + 0.55 * D),
+                 (-hw * 0.66, l13 - 0.008 + 0.40 * D)]
         p.poly(curve(f.pts(teeth), 3), (250, 248, 240), None)
         if gap:
-            p.poly(curve(f.pts([(-gap / 2, l13 - 0.008), (gap / 2, l13 - 0.008), (gap / 2.4, l13 + 0.016 + tb),
-                                (-gap / 2.4, l13 + 0.016 + tb)]), 2), (70, 26, 30), None)
-        p.line(curve(f.pts([(-hw, l13 - 0.03), (-hw * 0.5, l0 + 0.004), (0.0, l0 + 0.008), (hw * 0.5, l0 + 0.004),
-                            (hw, l13 - 0.03)]), 3), dk(lip, 0.8), 3.0)                   # the thin top lip
+            p.poly(curve(f.pts([(-gap / 2, l13 - 0.008), (gap / 2, l13 - 0.008), (gap / 2.4, l13 + 0.5 * D),
+                                (-gap / 2.4, l13 + 0.5 * D)]), 2), (70, 26, 30), None)
+        p.line(open_curve(f.pts([(-hw, l13 - 0.03), (-hw * 0.5, l13 - 0.014), (0.0, l13 - 0.011), (hw * 0.5, l13 - 0.014),
+                                 (hw, l13 - 0.03)]), 3), dk(lip, 0.8), 3.0)              # the thin top lip, on the edge
         for sgn in (-1, 1):                                                                # smile creases
             if creases:
-                p.line(curve(f.pts([(sgn * (hw + 0.03), l13 - 0.07 * creases), (sgn * (hw + 0.03 + 0.02 * creases),
-                                    l13 - 0.02), (sgn * (hw + 0.035), l13 + 0.03 * creases)]), 3),
+                p.line(open_curve(f.pts([(sgn * (hw + 0.03), l13 - 0.07 * creases), (sgn * (hw + 0.03 + 0.02 * creases),
+                                         l13 - 0.02), (sgn * (hw + 0.035), l13 + 0.03 * creases)]), 3),
                        dk(skin, 0.75 - 0.05 * (creases - 1)), 1.6 * creases)
         return
     if kind == 'soft':
