@@ -255,6 +255,7 @@ def knee_of(j, side):
 # to the ankle, the feet closer. Only the new women's builds ('female', 'straight': no finished film has them).
 WOMAN_LEGS = ('female', 'straight')
 WOMAN_LEG = (64, 34, 24)        # half widths at the hip joint, the knee, the ankle (a man's: 48, 38, 27)
+WOMAN_THIGH_IN = 0.25           # the thigh full from this far down it (above, narrower, hidden in the hips)
 WOMAN_HIP_OUT = 12.0            # the thigh's top drawn this far out from the hip joint (front, back), so the legs part
 #   just under the seat (Sam, 24 Nov, on the wider thighs centred on the joints: "This is a bit...camel toe": they
 #   overlapped down to 605 and the near thigh's inner line ran up the middle into the seat)
@@ -283,13 +284,14 @@ def _hip_out(j, side, yaw):
     return WOMAN_HIP_OUT * dx / 110.0
 
 
-def _thigh_edges(j, yaw, sp, y):
-    """The standing legs' outer edges (left, right) at height y on screen (body.trouser_seat), or None."""
+def _thigh_edges(j, yaw, sp, y, gap=False):
+    """The standing legs' outer edges (left, right) at height y on screen (body.trouser_seat), or None. gap: also
+    the space between them (its left and right edge), or None where they overlap."""
     if sp.get('figure') not in WOMAN_LEGS:
         return None
     w0, w1, _ = _woman_leg(yaw)
     k = sp.get('leg_k', 1.0)
-    xs = []
+    xs, legs = [], []
     for sd in 'LR':
         h, kn = project(j['hip' + sd], yaw)[0], project(knee_of(j, sd), yaw)[0]
         if kn[1] - h[1] < 50:
@@ -298,7 +300,11 @@ def _thigh_edges(j, yaw, sp, y):
         u = min(1.0, max(0.0, (y - h[1]) / (kn[1] - h[1])))
         c, w = h[0] + u * (kn[0] - h[0]), (w0 - u * (w0 - w1)) * k
         xs += [c - w, c + w]
-    return min(xs), max(xs)
+        legs.append((c - w, c + w))
+    if not gap:
+        return min(xs), max(xs)
+    (a0, a1), (b0, b1) = sorted(legs)
+    return min(xs), max(xs), ((a1, b0) if b0 > a1 + 1.0 else None)
 
 
 def leg(p, j, side, yaw, sp, from_u=0.0):
@@ -340,7 +346,10 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
             p.ell(pts[1][0], pts[1][1], 38 * k * qk, 38 * k * qk, col if sp.get('leg_cover', 1.0) > 0.5 else sp['skin'], None)
         elif sp.get('figure') in WOMAN_LEGS and not from_u:
             top = (pts[0][0] + _hip_out(j, side, yaw), pts[0][1])
-            tb(p, [top] + list(pts[1:]), [w * k for w in _woman_leg(yaw)], col, (t0, 1.0))
+            w0, w1, w2 = _woman_leg(yaw)          # its top (hidden in the hips) narrower, full width from
+            u = WOMAN_THIGH_IN                    # WOMAN_THIGH_IN down: the flat top's corners rounded outward
+            full = (top[0] + (pts[1][0] - top[0]) * u, top[1] + (pts[1][1] - top[1]) * u)   # past the hip (ticks)
+            tb(p, [top, full] + list(pts[1:]), [w0 * 0.6 * k, (w0 + (w1 - w0) * u) * k, w1 * k, w2 * k], col, (t0, 1.0))
         else:
             tb(p, pts, [48 * k, 38 * k, 27 * k], col, (t0, 1.0))
     foot_pt = shoe_frame(j, side)
@@ -910,10 +919,8 @@ def _built_outline(sp, view, bottom, o, fig):
             pts = [(-34, -8), (-d * 0.96, 22), (-d * 1.06, 130), (-d * 0.92, 320), (-d * 0.92, bottom), (d * 0.94, bottom),
                    (d * 0.94, 300), (d * 1.18, 150), (d * 0.92, 30), (30, -6)]
         out = curve(pts, 3)
-        if B.seat_hem(sp):                        # chat 7: a short jacket's seat rounds under into the thighs, at the
-            r = SEAT_ROUND * bottom               # back and the front (was square corners: boxy shorts)
-            out = [(x * (1.0 - (1.0 - SEAT_TUCK) * (1.0 - math.sqrt(max(0.0, 1.0 - ((y - bottom + r) / r) ** 2))))
-                    if y > bottom - r else x, y) for x, y in out]
+        if B.seat_hem(sp):                        # chat 7: a short jacket's seat runs into the thighs, at the back
+            out = _seat_into_thighs(sp, out, view, bottom)   # and the front (was square corners: boxy shorts)
         return out
     base = torso_outline(dict(sp, figure=None), view, bottom, o)
     dense = []                                    # the edges cut into short steps, so the waist can show between
@@ -938,15 +945,34 @@ def _built_outline(sp, view, bottom, o, fig):
             if i == 0:                            # chat 7: the bust in front of the near arm (below)
                 x += lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y) / TURNED_BUST_SD) ** 2)
             out.append((x, y))
-        if hem:                                   # a short jacket (chat 7): turned, the seat rounds under into the
-            r = SEAT_ROUND * bottom               # back of the thigh (was a square corner: a box's)
-            out = [(x * (1.0 - (1.0 - SEAT_TUCK) * (1.0 - math.sqrt(max(0.0, 1.0 - ((y - bottom + r) / r) ** 2))))
-                    if x * lead < 0 and y > bottom - r else x, y) for x, y in out]
-        return out
+        if hem:                                   # a short jacket (chat 7): turned, the seat runs into the thighs
+            out = _seat_into_thighs(sp, out, view, bottom)   # (was a square corner: a box's; then a tuck by a fixed
+        return out                                #   share, which overhung the back thigh and fell short of the front)
     return [(x * _fig_k(fig, y, sw, bottom, hem), y) for x, y in dense]
 
 
-SEAT_ROUND, SEAT_TUCK = 0.09, 0.82                 # the seat's round under (a share of the body's length; its edge's share at the bottom)
+SEAT_ROUND = 0.12                                  # the seat's run into the thighs: a share of the body's length
+
+
+def _seat_into_thighs(sp, out, view, bottom):
+    """A short jacket's seat (body.trouser_seat), turned: each side's last SEAT_ROUND of the body eased (a quarter
+    circle) onto the standing thigh's own outer edge at the bottom, so hip and thigh are one line. Standing only
+    (seated, the hem is raised and the thighs go forward)."""
+    if bottom < sp.get('bottom', JACKET) - 0.5:
+        return out
+    deg = {v: k for k, v in VIEWS.items()}[view]
+    te = _thigh_edges(standing(sp), deg, sp, bottom)
+    if not te:
+        return out
+    r = SEAT_ROUND * bottom
+    mid = 0.5 * (min(x for x, _ in out) + max(x for x, _ in out))
+    res = []
+    for x, y in out:
+        if y > bottom - r:
+            f = 1.0 - math.sqrt(max(0.0, 1.0 - ((y - bottom + r) / r) ** 2))
+            x = x + ((te[0] if x < mid else te[1]) - x) * f
+        res.append((x, y))
+    return res
 TURNED_SIDE = {'female': 0.7, 'straight': 0.7}
 # Open Wounds chat 7 (the blind judge, Kemi three-quarter: "straight side-on body with no waist"; measured: her
 # turned front edge ran straight in from the shoulder, 124 to 90, under the near arm, which covers 89-116 there:
@@ -1457,7 +1483,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         sb = min(sp_draw.get('bottom', JACKET), 470) if seated else sp_draw.get('bottom', JACKET)
         pen = B.Pen(img, up)
         B.trouser_seat(pen, sp_draw, torso_outline(sp_draw, view, sb, B.ink_units(pen)), sb,
-                       None if seated else _thigh_edges(j, view_deg, sp_draw, sb))
+                       None if seated else _thigh_edges(j, view_deg, sp_draw, sb + 6.0, gap=True))
     if j.get('lap') and view in ('front', 'three'):   # a low seat lifts the knees to the jacket's hem: they are nearer
         hem = min(sp_draw.get('bottom', JACKET), 470) + 30   # than the jacket, so they show over it (rule 80)
         for sd in legs_order:

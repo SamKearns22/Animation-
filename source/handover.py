@@ -580,13 +580,14 @@ def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None):
 def castsheet_faults(film):
     """Open Wounds chat 6 (Sam's notes 5 and 7): every woman in a new film's cast reads as a woman in every turned
     view, every man as a man, and each woman is on HER OWN build (measured from her photos, or Sam's words approving
-    it): source/castsheet.py build. A fault stops the handover; finished films (people.BEFORE_SEX) are not asked."""
+    it), and no line runs up from the crotch (note 8, chat 7): source/castsheet.py build. A fault stops the handover; finished films (people.BEFORE_SEX) are not asked."""
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     import people
     if not film or film in people.BEFORE_SEX or not os.path.exists(os.path.join(ROOT, 'story', f'{film}-people.txt')):
         return []
     import castsheet
-    return [f'STOP: CAST SHEET: {x}' for x in castsheet.build_faults(film) + castsheet.judge_faults(film)]
+    return [f'STOP: CAST SHEET: {x}' for x in castsheet.build_faults(film) + castsheet.crotch_faults(film)
+                                                     + castsheet.judge_faults(film)]
 
 
 def _safe(name, fn):

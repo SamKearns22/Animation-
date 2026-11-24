@@ -590,19 +590,25 @@ def trouser_seat(p, sp, body, view_bottom, thighs=None):
     p.poly(out, col, None)
     lo = [q for q in out if q[1] > view_bottom - 1.0]
     x0, x1 = min(x for x, _ in lo), max(x for x, _ in lo)
-    tl, tr = thighs or (x0, x1)
+    tl, tr, gap = thighs or (x0, x1, None)
     a, b = max(x0, tl) + 1.0, min(x1, tr) - 1.0
-    if b > a:                                            # the body's own bottom line painted out over the thighs
-        p.poly([(a, view_bottom - 4), (b, view_bottom - 4), (b, view_bottom + 6), (a, view_bottom + 6)], col, None)
+    yb = view_bottom
+    if b > a:                                            # the body's own bottom line painted out over the thighs,
+        floor = [(b, yb + 6), (a, yb + 6)]               # down to where the legs part: the crotch a small round
+        if gap:                                          # point, never a line up into the seat (Sam's note 8,
+            g0, g1 = gap                                 # "camel toe")
+            m, h = 0.5 * (g0 + g1), 0.5 * (g1 - g0) + 3.0
+            arch = [(m + h * math.cos(t), yb + 6 - 6 * math.sin(t)) for t in np.linspace(0, math.pi, 9)]
+            floor = [(b, yb + 6)] + arch + [(a, yb + 6)]
+            p.poly([(a, yb - 4), (b, yb - 4)] + floor, col, None)
+            p.line(arch, INK, 2.6)
+        else:
+            p.poly([(a, yb - 4), (b, yb - 4)] + floor, col, None)
     p.line([(min(xs) + 1.5, hem), (max(xs) - 1.5, hem)], INK, 2.6)   # the jacket's hem (its ends inside the sides)
     mid = (x0 + x1) / 2
-    for sg, x, t in ((-1, x0, tl), (1, x1, tr)):         # each side, from the hem down to the thigh's own line
-        side = sorted((q for q in out if q[1] < view_bottom - 1.0 and (q[0] - mid) * sg > 0), key=lambda q: q[1])
-        if (x - t) * sg > 2.0:                           # the seat wider than the thigh: its underside, in to it
-            end = [(x, view_bottom), (t, view_bottom)]
-        else:
-            end = [(x, view_bottom), (x - sg * 2.5, view_bottom + 8)]
-        p.line(side + end, INK, 2.6)
+    for sg in (-1, 1):                                   # each side, from the hem down the body's own edge
+        side = sorted((q for q in out if (q[0] - mid) * sg > 0), key=lambda q: q[1])
+        p.line(side, INK, 2.6)
 
 
 def _chaikin(pts, n=2):
