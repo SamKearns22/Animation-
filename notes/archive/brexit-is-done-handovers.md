@@ -104,3 +104,16 @@
 - **Read:** `guides/job-packs.md` Build; this file (wolves, background action, hardest moves).
 - **Open rule requests:** none.
 - **For Claude:** wolf.py (side, front, side_pose, head_side); places_site.py; preview of the views: the rough's place_tile at full size.
+
+### chat 7 (24 Nov, before Sam's Y)
+- **Newest work: branch `claude/brexit-chat7`** (chat 6's and chat 5 sets' at b21275a2 merged in; NOT on the main line: handover end stops on the judge, below).
+- **Rules that bite next:** S12 (women's bodies, `castsheet.py build`: shape, likeness, crotch, judges), 30, 89.
+- **Done (chat 7):** Kemi on her measured widths (0.76/0.74/0.85, unchanged): jacket to her hip, seat into the thighs, women's legs, turned bust ahead of the arm (each build at its own bust height), back's curve, seated knees together/hands near hips, her slimmer arms (`arms 24`); nubs fixed (neckline, yoke). Note 8 (camel toe) fixed and its check built (castsheet crotch_faults). Notes 10 and 11 (Blair's teeth 'fleshy'; a spike at his smile's corner) fixed, checks castsheet teeth_faults and mouth_spike_faults; both catch Sam's saved pictures, wired into build and handover end. Judges: three fresh a round, middle verdict (castsheet JUDGES); judge sheet blanks all hair. Cast sheet v3 sent: notes/learn/kemi-build/cast-v3.jpg.
+- **Judges (notes/judge/brexit-is-done-cast.json):** May and Blair pass every view. Kemi front 3, back 3; turned and seated ON THE LINE: her identical drawing got 3/3/3 in both (v5d) then 2/2/2 (v5e, the record; judges compared her with May's figure: "like 1 but no hair strands"). More curve would go against her photos (note 7): Sam asked (Q1 below).
+- **Known faults (fix next):** May turned: the bust bump reads pointed (TURNED_BUST female 28 at 140, SD 42: try wider/softer, keep the judge's 3); Kemi turned: the orange yoke's inner corner hangs as a tab under the near braid (people_parts.workwear_torso yoke, wrapped; on earlier sheets too).
+- **Next (Opus high):** Sam's answer to Q1; the two known faults; judges again; kit tests (a full run on the final code: the chat 7 run was still going at handover); handover end clean; push the main line.
+- **Needs Sam:** Q1: accept Kemi's turned and seated views as they are (on the line to body-only judges; clearly a woman with her head and braids), Y/N.
+- **Read:** `guides/job-packs.md` Build; this section.
+- **Open rule requests:** none.
+- **For Claude:** views WOMAN_LEGS/WOMAN_LEG(_TURNED)/WOMAN_HIP_OUT/WOMAN_THIGH_IN/_hip_out/_thigh_edges/_seat_into_thighs/_woman_knee/TURNED_BUST(_Y); body.seat_hem/trouser_seat/_top_y; people `jacket 440`, `arms 24`; sitting.spec_upright women's branch; castsheet crotch_line/crotch_faults/teeth_share/teeth_faults/JUDGES; faces.house_mouth grin; judge.py hair blank.
+
