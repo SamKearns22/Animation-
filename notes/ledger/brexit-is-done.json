@@ -2530,73 +2530,73 @@
   {
    "date": "2026-11-24",
    "chat": "ea6a7a83",
-   "stage": "auto",
+   "model": "opus",
+   "stage": "sets",
    "round": null,
+   "cost": 2.52,
    "notes": 0,
    "repeats": [],
-   "model": "opus",
-   "cost": 1.98,
    "src": "estimate",
    "sid": "session_01U3pKQzpCX39nxRRegF2T7U",
-   "steps": 96,
-   "hist_k": 279,
+   "steps": 122,
+   "hist_k": 309,
    "kinds": {
-    "film-file search": 3.4,
-    "tool search": 24.7,
-    "page.py": 0.3,
-    "renders": 0.9,
+    "film-file search": 3.2,
+    "tool search": 23.8,
+    "page.py": 0.2,
+    "renders": 0.8,
     "pictures": 3.4,
-    "other": 67.3
+    "other": 68.6
    },
    "calls": {
-    "film-file search": 3,
-    "tool search": 61,
+    "film-file search": 4,
+    "tool search": 70,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
     "renders": 3,
     "pictures": 12,
-    "other": 19
+    "other": 27
    },
    "split": {
-    "usd": 7.2611,
-    "total": 7.2611,
+    "usd": 9.2344,
+    "total": 9.2344,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 32.2,
-     "carried history": 24.1,
-     "start-up floor": 22.2,
-     "new writes": 21.5
+     "carried history": 29.5,
+     "Claude's words": 29.2,
+     "start-up floor": 21.7,
+     "new writes": 19.5
     },
     "origins": {
-     "Claude's words": 49.0,
-     "start-up floor": 22.2,
-     "result: tool search": 17.4,
+     "Claude's words": 48.1,
+     "start-up floor": 21.7,
+     "result: tool search": 17.2,
      "result: pictures": 4.0,
-     "messages and reminders": 2.4,
-     "Claude's edits": 2.4,
-     "result: other": 2.2,
+     "messages and reminders": 3.5,
+     "Claude's edits": 2.6,
+     "result: other": 2.4,
      "result: renders": 0.3,
-     "result: film-file search": 0.1
+     "result: film-file search": 0.2
     },
     "named": {
-     "thinking": 22.3,
-     "start-up reading (rules, tools, first files)": 22.2,
-     "writing code": 12.7,
-     "writing notes": 7.0,
-     "reading guides": 5.8,
-     "commands": 5.6,
-     "reading kit code": 4.2,
+     "start-up reading (rules, tools, first files)": 21.7,
+     "thinking": 21.6,
+     "writing code": 11.1,
+     "writing notes": 7.5,
+     "reading guides": 5.6,
+     "commands": 5.4,
+     "reading kit code": 4.3,
      "looking at pictures": 4.0,
-     "reading notes": 3.8,
-     "messages to Sam": 3.6,
-     "messages and reminders": 2.4,
-     "other commands": 1.9,
-     "start-up and handover tools": 1.3,
-     "running checks and tools": 1.2,
-     "app tools (chats, files sent)": 0.9,
-     "renders": 0.8,
-     "helper and chat prompts": 0.3
+     "messages to Sam": 4.0,
+     "reading notes": 3.7,
+     "messages and reminders": 3.5,
+     "other commands": 1.8,
+     "start-up and handover tools": 1.4,
+     "running checks and tools": 1.3,
+     "app tools (chats, files sent)": 1.2,
+     "helper and chat prompts": 1.1,
+     "renders": 0.8
     },
     "leftover": 0.0
    },
@@ -2608,97 +2608,97 @@
      [
       "notes/brexit-is-done.md",
       3.1,
-      0.0761
+      0.0908
      ],
      [
       "guides/kit-catalogue.md",
       3.3,
-      0.0741
+      0.0894
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/wolfsheet.png",
       1.6,
-      0.037
+      0.0445
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/refs.jpg",
       1.6,
-      0.0356
+      0.043
      ],
      [
       "guides/preflight.md",
       1.3,
-      0.0318
+      0.0381
      ],
      [
       "guides/satire.md",
       1.3,
-      0.0318
+      0.0381
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo/thumbs.jpg",
       1.6,
-      0.0304
+      0.0379
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo/site3.jpg",
       1.6,
-      0.0292
+      0.0367
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo2/thumbs.jpg",
       1.6,
-      0.0281
+      0.0356
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/geo2/oak3.jpg",
       1.6,
-      0.0275
+      0.035
      ],
      [
       "source/catalogue.py",
       1.5,
-      0.025
+      0.032
      ],
      [
       "guides/job-packs.md",
       1.0,
-      0.0233
+      0.0278
      ],
      [
       "source/wolf.py",
       1.0,
-      0.0225
+      0.0269
      ],
      [
       "notes/ledger/brexit-is-done.md",
       1.0,
-      0.0206
+      0.0252
      ],
      [
       "story/milburn-places.txt",
       0.8,
-      0.0184
+      0.0223
      ],
      [
       "source/rough.py",
       0.9,
-      0.0178
+      0.0219
      ],
      [
       "story/blessed-places.txt",
       0.8,
-      0.0168
+      0.0204
      ],
      [
       "source/places_parts.py",
       0.7,
-      0.0138
+      0.017
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/ea6a7a83-115e-5b55-8941-8d3a521b6bc8/scratchpad/site3.jpg",
       0.0,
-      0.0004
+      0.0005
      ]
     ],
     "base_pct": 19.9
@@ -2706,23 +2706,23 @@
    "search": {
     "show": 0,
     "film": {
-     "no show": 3
+     "no show": 4
     },
     "other": {
-     "other": 16,
-     "shared:handover.py": 1,
-     "film notes": 6,
-     "guides": 7,
+     "other": 18,
+     "shared:handover.py": 3,
+     "film notes": 7,
+     "guides": 9,
      "shared:wolf.py": 1,
      "shared:places.py": 6,
-     "shared:ledger.py": 2,
+     "shared:ledger.py": 3,
      "shared:rough.py": 4,
      "shared:places_parts.py": 2,
      "shared:catalogue.py": 4,
      "shared:ad_vanced_notice_sets.py": 2,
      "shared:body.py": 1,
      "shared:places_outside.py": 2,
-     "shared:kittests.py": 3,
+     "shared:kittests.py": 4,
      "shared:freeze.py": 4
     },
     "ticked": 0,
@@ -3238,6 +3238,86 @@
       "other",
       "",
       "python3 -c \" import sys; sys.path.insert(0,'source'); import freeze as F loads,r",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "other",
+      "",
+      "git log --oneline origin/claude/brexit-chat5-sets..HEAD; git status --short | he",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:handover.py",
+      "notes/brexit-is-done-sets.md source/handover.py",
+      "^ ",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "tail -3 notes/logs/kittests-last.log; pgrep -af kittests | head -3",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py notes/brexit-is-done-sets.md",
+      "python3 source/ledger.py log brexit-is-done --stage sets --notes 0 2>&1 | tail -",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "source/kittests.py",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md guides/tiktok-design.md",
+      "centre right\\|center right\\|right third\\|lead.*frame\\|headroom\\|head room\\|safe",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "guides",
+      "guides/film-quality-rules.md",
+      "^| [0-9]* ",
+      ""
+     ],
+     [
+      111,
+      "film",
+      "before show",
+      "notes/brexit-is-done-sets.md guides/film-quality-rules.md story/brexit-is-done-p",
+      ",",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "film notes",
+      "notes/brexit-is-done-sets.md",
+      "\nopen(p,'w').write(s)\ns=open(p).read()\ns=s.replace(",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^ ",
       ""
      ]
     ]
