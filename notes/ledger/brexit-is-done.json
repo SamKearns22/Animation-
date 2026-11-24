@@ -3476,6 +3476,8 @@
   "1": "none (sheet maker had no edge test)",
   "2": "none (front and 3/4 never judged side by side)",
   "3": "none",
+  "9": "none (a wish, not a fault)",
+  "8": "none (no check looks at where the legs part; the blind judges read outlines at phone size, and I looked at the hips for nubs, not the crotch)",
   "7": "none (the learn step judged woman or man only, never \"is this HER body\"; Kemi's photo was not measured)",
   "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)",
   "6": "none (match checks colours, not layering: gap written in castsheet.py MAP)",
