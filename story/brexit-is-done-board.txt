@@ -9,16 +9,16 @@ match: the same face place, eye row and head size in all three interviews
 choices: dark slatted wall with soft warm lamp streaks, as her photos; her chair seen at the right behind her (the tall frame shows her lap); no background action
 
 shot 2
-camera: level, 1.5 m up, lens 1500; the site fills the frame, grey sky across the top
-lead: Kemi, standing, in May's place and size, staring off-frame left
+camera: level at her eye height (1.58 m), lens 1100, Kemi 1.21 m away; the concrete frame moved back to 26 m so the grey sky shows over it (item 16)
+lead: Kemi, standing, turned to screen-left, in May's place and size (same head top, eye row and chin), staring off-frame left
 focus: her face; then the wolves' action around her (attack low left, milling left, bar fight and runner above)
 next focus: Blair's face in the same place
 match: the interview look (face place, eye row, head size)
 choices: daylight under a grey British sky; dust, blood as the approved plan
 
 shot 3
-camera: level, 1.2 m up, lens 1700; the double doors 7 m behind, left of his head
-lead: Blair, seated in a wing chair, in May's place and size
+camera: level, 1.2 m up, lens 1700, Blair 2.06 m away; the double doors 7 m behind, left of his head
+lead: Blair, seated in the armchair, turned to screen-left, in May's place and size
 focus: his face and grin; the doors thrown open behind; the lunge from frame right
 next focus: the sign-off
 match: the interview look

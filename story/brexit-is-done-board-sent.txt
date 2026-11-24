@@ -2,3 +2,7 @@
 # board FILE delivered=EPOCH drawn=EPOCH commit=C moves=N (move blocks when drawn); then one line per shot: shot NAME FRAMES-DIGEST CAST
 board open-wounds-board-shot1.jpg delivered=1795513192 drawn=1795513182 commit=3ef6387d moves=0 (24 Nov 09:39)
 shot 1 339bd25fc4 may
+board open-wounds-board.jpg delivered=1795516062 drawn=1795516053 commit=9bb2073f moves=0 (24 Nov 10:27)
+shot 1 b5619ee94a may
+shot 2 6c18bf28a3 kemi
+shot 3 b707b8d333 blair

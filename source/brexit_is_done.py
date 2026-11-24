@@ -134,12 +134,58 @@ def may_shot(t):
     return img.convert('RGB')
 
 
+# ================================================================================================= shot 2: Kemi
+def standing(img, who, L, X, d, t, yaw, look=None, joints=None):
+    """`who` standing on the ground at depth d (m) through level camera L, body centre at screen X."""
+    sp = dict(look or CAST[who])
+    pxm = L.ppm(d)
+    s = scale_at(pxm, sp)
+    sole_y = L.p(0.0, d, 0.0)[1]
+    B.SS = 1
+    V.person(img, B.Cam(1.0, 540, 960), X, sole_y - FEET * s, s, sp, t, yaw, joints)
+    return s
+
+
+KEMI = dict(yaw=-45.0, d=1.21, x=700)   # May's place and size: face centre about 64% across, eyes on row 700
+
+
+def kemi_shot(t):
+    img = Image.new('RGBA', (W, H), (255, 255, 255, 255))
+    B.SS = 1
+    L = _cam('site')
+    for layer in ('back', 'mid'):
+        _paint(img, 'site', layer, t)
+    standing(img, 'kemi', L, KEMI['x'], KEMI['d'], t, KEMI['yaw'])
+    for layer in ('front', 'over'):
+        _paint(img, 'site', layer, t)
+    return img.convert('RGB')
+
+
+# ================================================================================================= shot 3: Blair
+BLAIR = dict(yaw=-45.0, d=2.06, x=537)  # May's place and size, in the oxblood wing chair (the sitting kit's armchair)
+
+
+def blair_shot(t):
+    img = Image.new('RGBA', (W, H), (255, 255, 255, 255))
+    B.SS = 1
+    L = _cam('blair')
+    u = scene_of(t)[1]                                 # the room's pieces run on shot time (the doors open at 0.3 s)
+    for layer in ('back', 'mid'):
+        _paint(img, 'blair', layer, u)
+    seated(img, 'blair', L, BLAIR['x'], BLAIR['d'], t, BLAIR['yaw'], pose='armchair', chair=True)
+    for layer in ('front', 'over'):
+        _paint(img, 'blair', layer, u)
+    return img.convert('RGB')
+
+
 # ================================================================================================= picture
 def picture(t):
     n = shot_of(t)
     if n == '1':
         return may_shot(t)
-    raise NotImplementedError(f'shot {n} is next (film order: May first)')
+    if n == '2':
+        return kemi_shot(t)
+    return blair_shot(t)
 
 
 def frame_image(t):
