@@ -180,15 +180,22 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
   (`places.picture` knows only Blessed: move to shared, tool chat).
 - Rough sent to Sam (rule 11, places only): open-wounds-places-rough.jpg, 24 Nov; recorded in story/brexit-is-done-roughs.txt.
 
-## Where things stand (sets side; chat 4 folds one line into the film's ONE handover when it merges)
-- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's screen place and size (24 Nov).
-- **Rules that bite next:** 41 (hands on the steel bars), 89 (each new wolf pose critiqued alone), 5 (physics: feet on boards, struck wolves react).
-- **Done (chat 5):** sets plan (this file); 6 references; wolves catalogued; three places built as lines with 18 new shared pieces; places rough sent.
-- **Next (chat 8, Opus high, new build):** the wolves as kit parts (spruce-up fixes 1-4, then walk, sit, paw, lunge-recoil, skid, hard hat and vest, blood stains per the approved plan), each critiqued alone; no shot staged. Shots then go in film order once the cast is approved (Sam, 24 Nov).
-- **Needs Sam:** nothing (Q2 Y, Q8 film order, Q9 N: 24 Nov).
-- **Read:** `guides/job-packs.md` Build; this file (wolves, background action, hardest moves).
+## Where things stand (sets side; chat 7 folds one line into the film's ONE handover when it merges)
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size on screen, May a little wider (about waist up, note 9).
+- **Rules that bite next:** 41 (hands on the steel bars), 5 (physics: feet on boards, struck wolves react), 74 (each wolf's beats).
+- **Done (chat 8):** the wolves as shared kit in source/wolf.py (one outline, planted feet, eye kit, feed head down and the hunk in the jaws, walk, run, sit, paw, lunge-recoil, skid, hard hat, vest, blood, dust, shadows); critique round 3, hunts 1-2 fixed; catalogue lines; Cry Minister's 21 frames unchanged; wolves sheet sent to Sam.
+- **Next:** shots in film order once Sam approves the cast (May, then Kemi with the site action, then Blair); Opus high for the board and shot 2's wolf action (new moves on the kit).
+- **Needs Sam:** his eye on the wolves sheet (any note goes to the sets chat).
+- **Read:** `guides/job-packs.md` Build; this file (background action, hardest moves); the wolves' catalogue line.
 - **Open rule requests:** none.
-- **For Claude:** wolf.py (side, front, side_pose, head_side); places_site.py; preview of the views: the rough's place_tile at full size.
+- **For Claude:** wolf.pose(kind, u) then shadow() and draw(X, x, y, s, face, pal, P, wear, blood, seed); walk/run x moves by face*u*s (paws planted); critique-src/brexit-is-done/wolves-*.jpg; freeze.FILM no longer lists wolf (shared since 24 Nov). Front views weakest (dog-like at phone size; this film uses side views only).
+
+## Chat 8 (the wolves), named
+- Start check: castsheet UNWIRED and the NOT CARRIED framing lines are in chat 7's files (notes/brexit-is-done.md, castsheet); passed to chat 7.
+- Wolf photo references: Wikimedia and Flickr refused this machine (rate limit), one try each; critique judged against Cry Minister's wolf sheet. Sam can send 1-2 photos of real wolves sitting and walking if a later note needs them.
+- Critique round 3 is the wolves' own round (chat 7 used rounds 1-2 for the people): one pack for all the wolves.
+- Handover check (end): BRANCH claude/brexit-chat6 and claude/brexit-chat7 are the people chain's; chat 7 merges them and this branch (claude/brexit-chat8-wolves) and pushes the main line (parent's split). SENTENCE: the same Sam's-own-CLAUDE.md-edit alerts chats 1-7 named. COST: no estimate by Sam's Q9 N. PUSH: sent at the handover.
+- Lost: nothing. Added (for Sam to say no to): torn vests show fur through the rip; a strip of meat dangles from the hunk.
 
 ## Handover check at chat 5's end, named
 - FINDER: no film code exists yet (no `source/brexit_is_done.py`), so no `page.py show`; the three hand searches were
@@ -213,6 +220,9 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
   a rule for every film (no rule 90); for this film, locked: all three in the same place and size on screen as May
   (the interview look): face centre about 62% across, chest up, the same eye row and head size, with a decent amount
   of space round each. Kemi (was mid-thigh up) and Blair move closer to match May's chest-up framing.
+  Sam's note 9 (24 Nov 00:42, to chat 7): "I don't mind if you zoom out on May a little to give the Kemi/Tony scenes
+  more room to show their scenes": May framed a little wider than chest up (about waist up), Kemi and Blair matching
+  her place and size, so the site, the wolves and the oak room get more room.
   For the board chat: with Kemi's eyes on May's row, the site's level camera shows less sky over the frame; keep the
   grey sky in view (item 16) by setting the frame further back or a storey lower, never by moving Kemi; the action spots
   stay round her (attack low left, milling left, bars and runner above).

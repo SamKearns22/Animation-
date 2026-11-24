@@ -1,0 +1,70 @@
+== critique, round 3 pass 1 (2026-11-24): 10 fault(s), 0 can't tell
+-- look.md --
+1: Grey and orange wolves in hi-vis vests walking, one leaping; captions tiny, unreadable ("stand", "walk 0").
+2: White wolf lying, dark bloodied wolf, grey wolves sitting in orange vests; captions too small to read.
+3: Two wolves upright, arms raised, mouth open; red spatter, small debris, dark wolf in yellow vest; captions unreadable.
+-- result.md --
+## Faults
+FAULT C2 P3 [3]: front leap - the flung-wide forelegs are long straight sticks with claw ticks that read as human arms up in a cheer; no shoulders or paws, and the ears and head are cut off by the top of the panel.
+FAULT C2 P3 [3]: front run - a hard-edged lighter rectangle crosses the face under the hat; legs are thin stumps, and the vest shows only as an orange wedge below the ruff, so it is not "on the animal".
+FAULT A1 P2 [2]: recoil (struck) - jaws wide, eyes open, ears up: reads as a snarl, not a yelp with eyes squeezed shut and ears flat. No bar or contact, so nothing is struck (C1).
+FAULT A1 P2 [2]: feed head down - no kill on the ground; the white wolf lies flat and the head at the bottom right is unreadable (right way up? front legs braced?). Feed ripping up: the "hunk" is a red lump stuck to the face and reads as a bloody face, not meat held in jaws (O3).
+FAULT O5 P2 [2]: paw the dirt - no raking forepaw with grooves in the dirt is visible; the paw just stands on the ground.
+FAULT O5 P2 [2]: sit - the tail is not seen lying on the ground; the vest is not clearly torn.
+FAULT O2 P2 [2]: skid - the dust puff is cut off by the right edge of the panel, as is the nose; stray ear shapes poke up under "lunge" at the bottom edge (a leaked crop from another sprite).
+FAULT O3 P3 [3]: torn hi-vis scrap - an orange tip with a white fluffy lump reads as a sausage or a bone, not a scrap of vest. No dust puff is present at all (brief asks for one), and the landed drops are just a few specks by the hat.
+FAULT A2 P1 [1, 2]: reference colours do not match - the leap is near black where the reference is brown-grey, and the land is black. Walk 0, 1/4 and 1/2 are almost identical, so three moments of a walk do not read. The stand and runs have no hat or vest (brief: walk wears them).
+FAULT A2 P3 [3]: front leap has no hat or vest and the wolf stays on the ground with no lift or shadow gap, so it is not leaping.
+CAN'T TELL P1 [1]: planted feet and a vest bending with the body - a close crop of the walk frames would show it.
+CAN'T TELL P2 [2]: whether the white hat on the sitting wolf has a blood mark, and whether the open jaws show through - need full-size crops.
+CAN'T TELL P3 [3]: whether landed drops soak into the dirt - need a full-size crop.
+
+## Checked
+1-3
+
+## Cold look
+look.md was made from a thumbnail where captions could not be read, so every word is unchecked (O1 not provable from it). I named the wolves and vests but missed the hard hats entirely, called the leaping wolf's limbs "arms", called the white wolf "lying" instead of feeding, and named no props beyond "debris" (the two hats and scrap were not seen). Panel 2's sit, paw, lunge, skid and recoil were not told apart. At phone size the props and the feeding poses do not read, which is itself a fault.
+
+## Not on the list
+1. Panel crops cutting heads, noses or effects at the panel edge. Suggested line: nothing in a panel touches or is cut by the panel edge.
+2. Blood placement on a wolf where the brief gives none (front-run chest and paws). Suggested line: marks appear only where the brief puts them.
+3. Hard seams or boxes inside a sprite. Suggested line: no straight-edged patch of different tone inside one animal.
+4. Same pose repeated across frames of a cycle. Suggested line: each numbered moment differs visibly from its neighbour.
+5. Wolf scale differing between views in one panel. Suggested line: the same animal is the same size in every view of a panel.
+
+== critique, round 3 pass 2 (2026-11-24): 3 fault(s), 0 can't tell
+-- look.md --
+1: Grey and orange wolves in high-vis vests walking, running, leaping, lunging; captions too small to read.
+2: Wolves with blood on a white wolf, sitting wolf in orange vest; captions illegible at this size.
+3: Standing dog with yellow vest, barking dog, red specks, small scraps on ground; captions illegible.
+-- result.md --
+## Faults
+FAULT C3 O3 P3 [1, 2]: front-on run and front leap - at phone size they read as dogs or a bear/cat (shepherd-like face, short stubby arms), not dire wolves; leap forelegs are short claw-tipped stubs out to the sides, not flung wide as in the reference (arms up).
+FAULT O3 P3: fourth item on the dirt (pale tan lump beside the scrap) - reads as bread or meat, not a dust puff; no dust puff is named by the picture.
+FAULT O5 C1 P2: recoil - the bar floats beside and above the wolf, touching nothing; the wolf is not visibly struck, and eyes are not squeezed shut or ears flat (jaws snarl, ears up), so it reads as a snarl, not a yelp.
+FAULT A1 P2: sit, looks round - head and pose look the same as plain sit; no look back over the shoulder. Sitting wolf's vest looks whole, not torn.
+FAULT A1 P2: feed ripping up - the meat on the jaws is a flat red blob, not a hunk of raw meat; reads as a red head or balloon. Head-down feed: head position at the kill is hard to read (jaws turned up, could be upside down).
+CAN'T TELL P2 [2]: paw the dirt - a picture of the forepaw mid-rake with grooves in the dirt would show it; no grooves are visible.
+FAULT O2 O1 P3: caption "hat knocked off, scrap, drops" - blood drops and the hat sit on top of the words, so letters are covered.
+FAULT O6 P2 [3]: skid dust puff is clipped by the right edge of the panel; at phone size it is a small pale lump.
+FAULT O4 P3: walk wolf is far bigger than the front-run and front-leap wolves, and the hard hats differ in size against heads; no sense of one pack.
+FAULT A2 P1 [2]: run frames are dark brown-grey, the reference run wolf is tan/orange; colours swap between frames of the same wolf (walk orange, run brown, leap/land black), so it does not read as the same animal.
+FAULT C2 P1: land - legs are hidden or stubby; no clear planted feet, reads as a flat dark slug.
+FAULT A1 P3: front run vest shows only as an orange patch under the chin, no two silver bands; front leap wears no vest.
+FAULT A1 P3: walk wolf - red at the muzzle and mouth despite "no blood".
+
+## Checked
+1-3
+
+## Cold look
+look.md called the front-on wolves "dog" and "barking dog": a real misread (C3). I called the hard hats and vest scrap "small scraps", missed the bar, and could not read any captions at that size, so O1 words could not be checked cold. I missed the hat/vest detail on P1 walks. I guessed "white wolf with blood" correctly but not the feeding action.
+
+## Not on the list
+1. Colour or markings of one wolf changing between frames of the same animal - suggested line: C5 same wolf keeps its coat colour in every frame.
+2. Captions overlapped by props - suggested line: O7 no prop or effect covers a label.
+3. Effects clipped by the panel edge - suggested line: O8 every effect sits fully inside its frame.
+4. Action pose that is identical to a neighbouring pose (sit vs sit, looks round) - suggested line: C6 each named action differs visibly from the one before.
+5. Prop or effect not in the brief that reads as something else (tan lump) - suggested line: O9 nothing unlisted appears in a panel.
+
+critique, pass 2: faults fixed as one list: front leap forelegs reach out and up at us (longer, big paws); skid dust bigger and inside its panel; coat colours differ by design (marked false)
+
