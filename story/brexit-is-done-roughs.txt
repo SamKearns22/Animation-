@@ -1,0 +1,4 @@
+# What Sam has seen on a rough (rule 11; source/rough.py). kind name digest date. Last: open-wounds-places-rough.jpg (places only, chat 5)
+place blair 22b481694a 2026-11-24
+place may e9dd1eddf9 2026-11-24
+place site 0ab3420d8b 2026-11-24
