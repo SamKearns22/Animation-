@@ -944,7 +944,7 @@ def _built_outline(sp, view, bottom, o, fig):
             u = min(1.0, max(0.0, (y - 70.0) / 50.0))
             x = x * (kf + TURNED_SIDE[fig] * (ks - 1.0) * u)
             if i == 0:                            # chat 7: the bust in front of the near arm (below)
-                x += lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y) / TURNED_BUST_SD) ** 2)
+                x += lead * TURNED_BUST[fig] * math.exp(-((y - TURNED_BUST_Y[fig]) / TURNED_BUST_SD) ** 2)
             out.append((x, y))
         if hem:                                   # a short jacket (chat 7): turned, the seat runs into the thighs
             out = _seat_into_thighs(sp, out, view, bottom)   # (was a square corner: a box's; then a tuck by a fixed
@@ -981,7 +981,8 @@ TURNED_SIDE = {'female': 0.7, 'straight': 0.7}
 # Turned, a woman's bust stands out in front of the near arm (her walking photo, a little turned: the white top's
 # curve ahead of her arm): a bump on the front edge only, at the bust's height. Units: the body's.
 TURNED_BUST = {'female': 28.0, 'straight': 30.0}
-TURNED_BUST_Y, TURNED_BUST_SD = 170.0, 42.0    # how much of the side's shape a three-quarter edge carries
+TURNED_BUST_Y = {'female': 140.0, 'straight': 170.0}   # at each build's own bust (the side shapes': 'female' 140,
+TURNED_BUST_SD = 42.0                                   # 'straight' 165); at 170 May's waist already narrowed behind the arm    # how much of the side's shape a three-quarter edge carries
 
 
 def _side_depths(sp, fig, bottom):
