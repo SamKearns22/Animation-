@@ -194,7 +194,7 @@ rounds are the dearest rows: catching faults before Sam sees them is where the m
 - Start check: castsheet UNWIRED and the NOT CARRIED framing lines are in chat 7's files (notes/brexit-is-done.md, castsheet); passed to chat 7.
 - Wolf photo references: Wikimedia and Flickr refused this machine (rate limit), one try each; critique judged against Cry Minister's wolf sheet. Sam can send 1-2 photos of real wolves sitting and walking if a later note needs them.
 - Critique round 3 is the wolves' own round (chat 7 used rounds 1-2 for the people): one pack for all the wolves.
-- Handover check (end): BRANCH claude/brexit-chat6 and claude/brexit-chat7 are the people chain's; chat 7 merges them and this branch (claude/brexit-chat8-wolves) and pushes the main line (parent's split). SENTENCE: the same Sam's-own-CLAUDE.md-edit alerts chats 1-7 named. COST: no estimate by Sam's Q9 N. PUSH: sent at the handover.
+- Handover check (end): BRANCH claude/brexit-chat6 and claude/brexit-chat7 are the people chain's; chat 7 merges them and this branch (claude/brexit-chat8-wolves) and pushes the main line (parent's split). SENTENCE: the same Sam's-own-CLAUDE.md-edit alerts chats 1-7 named. COST: no estimate by Sam's Q9 N. PUSH: sent at the handover. BRANCH claude/open-wounds-chat9: a chats-log branch of the people chain, not this chat's. Chain: the sets chain waits for Sam's cast approval (film order); chat 7 opens the next chat, so this chat opens none.
 - Lost: nothing. Added (for Sam to say no to): torn vests show fur through the rip; a strip of meat dangles from the hunk.
 
 ## Handover check at chat 5's end, named
