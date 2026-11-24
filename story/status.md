@@ -1,3 +1,3 @@
-Open Wounds: chat 7 (cast) made Kemi read as a woman in all four views on her measured build (three blind judges each); fixing Sam note 8 (camel toe).
-Resumes 04:51 London (scheduled, Sam's usage ran out): finish note 8, judges again, kit tests, cast sheet v3 to Sam.
+Open Wounds: chat 7 (cast): Kemi reads as a woman front and back on her measured build; turned and seated on the line to the blind judges (Q1 to Sam). Note 8 fixed with its check.
+Next: Sam's Q1; May's turned bust softer, Kemi's yoke tab; judges; kit tests; main line.
 Sets chat has note 9 (May may be framed a little wider); wolves chat 8 building.
