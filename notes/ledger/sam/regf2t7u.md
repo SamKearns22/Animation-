@@ -5,3 +5,6 @@
 2. Unsure, let's move through the film in chronological order. Problems were caused last time by executing the ambitious shot without the surrounding scenes
 3. You estimates have been consistently off and until we have an accurate way of measuring budget I don't see the point. N
 
+### 2026-11-24T00:25:09
+We always want the character in centre right of the frame. With a decent amount of space around them
+
