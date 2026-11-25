@@ -15,3 +15,6 @@ Is this the way of solving this problem that produces the best quality outcome?
 ### 2026-11-25T19:34:48
 Obviously, it is likely that our animations move.
 
+### 2026-11-25T19:36:23
+Is this the best quality answer for the project? Earlier, you provided a solution that did not take what this project actually does into account (which is worrying)
+
