@@ -35,3 +35,8 @@ Should we be building *all* our characters in the way Jason was built? Is that t
 ### 2026-11-25T19:43:53
 How much percentage in session usage would 1. Take?
 
+### 2026-11-25T19:45:04
+Schedule this full investigation for 22:20.
+
+If we went down this path, what do you estimate the impacts would be on project costs?
+
