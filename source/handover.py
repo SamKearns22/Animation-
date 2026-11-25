@@ -578,7 +578,11 @@ def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None, stale_fn=None
     kit-tests-when (Sam's pick 1, 25 Nov): only the tests whose files changed since their last green run run here
     (notes/kittest-stamps.tsv, source/kitstamps.py), on the chat's final code; the rest pass on their stamps."""
     real = kitlog == KITLOG or stale_fn is not None
-    if real:
+    if real and stale_fn is None and __import__('override').active():   # Sam's typed Override: no run, no wait;
+        st, _ = _kit_stale()                                               # named and logged, and the stale tests
+        if st and __import__('override').skip(f'kit tests: {len(st)} stale not run at this handover'):  # stay stale,
+            return [f'KIT TESTS skipped by Override: {len(st)} stale, not run (they run at the next start, end or '
+                    'finish.py)']                                          # so finish.py still runs them first
         busy = subprocess.run(['pgrep', '-f', 'source/kittests.py'], capture_output=True).returncode == 0
         if busy and stale_fn is None:   # the start-up run (only the stale tests) is not finished yet
             return ['STOP: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for it to '
