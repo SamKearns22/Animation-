@@ -37,14 +37,15 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
     before the knee (R7_ARCH), a calf (R7_CALF), the cloth narrower under the knee; the far/under leg in shade and the
     near leg's edge the whole thigh (_r7_col, R7_FAR); from the front the shins in shade under the knees (a lit lap read
     as the seat: R7_LAP 0); feet staggered (sitting.R7_STAGGER). Check: castsheet.one_tone (chat 3's "one dark mass"
-    saved: notes/learn/seated/examples) and no_bottom reads the cloth in all its tones; kittest seated_r7_look extended.
-    Judges r7c4 (results-r7c4.md): May now a woman in every view; far leg and shoes fixed; scores still 2-3.
+    saved: notes/learn/seated/examples), no_bottom reads all the cloth's tones; seated_r7_look extended. Judges r7c4
+    (results-r7c4.md): May a woman in every view; far leg and shoes fixed; scores still 2-3.
     Next (chat 5, Opus high): results-r7c4.md "For chat 5" 1-6 (crossed shin and shoe; trouser hem breaks; front
     re-judge; far-leg shade read as crossing; Kemi 3/4; shoes from the side), then judges judge_r7.py r7c5.
     Needs Sam: Q1 kittest-resume (judge picked Option 1, built into the kit-tests-when record, still unmerged on
     claude/kit-tests-when-build; Sam's Y was Option 2's shape). Read: this entry; results-r7c4.md; views.py "R7".
-    Open rule requests: none. For Claude: one_tone skipped at yaw 90; kittest-resume verdict recorded (propose.py show);
-    not R7's (named): branches kit-tests-when-build, brexit-chat15, gta-*, dreamy-fermi; chat3 merged.
+    Open rule requests: none. For Claude: not R7's (named, left for their chains): claude/kit-tests-when-build,
+    claude/brexit-chat15, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31;
+    the CLAUDE.md sentence moves; the project "Where things stand" (R7 is a sub-entry). one_tone skipped at yaw 90.
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
