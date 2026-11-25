@@ -562,10 +562,24 @@ def arm(p, j2, side, sp, shape=None):
     sleeved_arm(p, j2, side, sp, shape)
 
 
+def sleeve_colour(sp):
+    """The sleeve's fill. A dark sleeve of the jacket's own cloth is lifted a little (Open Wounds chat 14, critique r5
+    (b): side on, a black sleeve swinging over a black jacket vanished, its ink outline lost in the cloth, so only the
+    round hand showed, floating on the chest): the arm always reads against the body it crosses (kittest
+    dark_sleeve_reads, example notes/learn/dark-sleeve/)."""
+    c = sp.get('sleeve', sp.get('jacket', (40, 40, 46)))
+    if sum(c[:3]) < DARK_SLEEVE and tuple(c[:3]) == tuple(sp.get('jacket', c)[:3]):
+        c = blend(c, (150, 150, 162), DARK_SLEEVE_LIFT)
+    return c
+
+
+DARK_SLEEVE, DARK_SLEEVE_LIFT = 200, 0.14       # sum of RGB below which a sleeve is "dark"; how far it is lifted
+
+
 def sleeved_arm(p, j2, side, sp, shape=None):
     sh, el, wr = j2['sh' + side], j2['el' + side], j2['wr' + side]
     with F.allow('a skeleton arm, checked in 3D (check_arm3); on screen it may be foreshortened'):
-        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sp.get('sleeve', sp.get('jacket', (40, 40, 46))),
+        B.arm(p, sh, el, wr, PROBE[side][0] if PROBE else sleeve_colour(sp),
               **({'w': sp['arm_w'], 'bulge': sp.get('arm_bulge', 0.0)} if 'arm_w' in sp else {}))
     if sp.get('bangles') and not PROBE:
         bangles(p, el, wr, sp.get('arm_w', 30), side)

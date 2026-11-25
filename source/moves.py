@@ -259,6 +259,59 @@ def chase_movers(passes, runner_v, chaser_v, runner='guest', chaser='wolf'):
     return out
 
 
+def kicked(x0, d0, t0, u, movers, reach=0.36, kick=2.4, drag=6.0, dt=1 / 120):
+    """A loose thing lying on the floor (a tray, a can, a hat) that movers' feet reach: it skids away along the
+    mover's way and slows to a stop (Open Wounds chat 14, critique r5 (c): runners trod on a fallen tray and it never
+    moved; rule 5, what is touched responds). It lands at (x0, d0) at t0; movers as chase_movers gives them. Each
+    mover kicks it once. reach: a tray's half width (0.21 m) and a running foot's swing either side of its line
+    (0.15 m). Returns (x, d, s since the last kick or the landing, spin in radians)."""
+    x, d, vx, vd, spin, since = x0, d0, 0.0, 0.0, 0.0, max(0.0, u - t0)
+    done = set()
+    t = t0
+    while t < u:
+        for name, _, at in movers:
+            if name in done:
+                continue
+            a = at(t)
+            if a is None:
+                continue
+            mx, md, dx, dd = a
+            if math.hypot(mx - x, md - d) < reach:
+                n = math.hypot(dx, dd) or 1.0
+                vx, vd = kick * dx / n, kick * dd / n
+                spin = 0.0
+                done.add(name)
+                since = u - t
+        sp = math.hypot(vx, vd)
+        if sp > 0:
+            k = max(0.0, sp - drag * dt) / sp
+            vx, vd = vx * k, vd * k
+            x, d = x + vx * dt, d + vd * dt
+            spin += 9.0 * sp * dt
+        t += dt
+    return x, d, since, spin
+
+
+def trodden(track, movers, t0, t1, reach=0.36, fps=24):
+    """The check for kicked(): a mover's feet within `reach` m of a loose thing on the floor while it stays put for the
+    next 0.2 s. track(t) -> (x, d) or None. Returns [(t, mover)], one per mover."""
+    out, seen = [], set()
+    for i in range(int((t1 - t0) * fps) + 1):
+        t = t0 + i / fps
+        p = track(t)
+        if p is None:
+            continue
+        for name, _, at in movers:
+            a = at(t)
+            if name in seen or a is None or math.hypot(a[0] - p[0], a[1] - p[1]) >= reach:
+                continue
+            q = track(min(t1, t + 0.2))
+            if q is None or math.hypot(q[0] - p[0], q[1] - p[1]) < 0.05:
+                out.append((round(t, 2), name))
+                seen.add(name)
+    return out
+
+
 def footfalls(kind, t0, t1):
     """The moments each foot lands (for footsteps, if the script asks for them)."""
     g = GAITS[kind]
