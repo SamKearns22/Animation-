@@ -503,7 +503,9 @@ def seated_r7_switch():
     import castsheet as CS
     import sitting as S
     from PIL import Image
-    saved = {('blair', 0): 'ea35a4094040', ('blair', 45): '5e30e187e32c', ('blair', 90): '397e4b53c71f',
+    saved = {('blair', 0): 'ea35a4094040', ('blair', 45): 'e865aaf477d4', ('blair', 90): '83ccd9a9c644',   # 45/90: Open
+             #   Wounds' own chain moved them (3d10d4c7, its shared sleeve lift in turned views), proven with R7's
+             #   chat 2 changes taken out (still moved); was 5e30e187e32c / 397e4b53c71f
              ('kemi', 0): 'de19d3438300', ('kemi', 45): 'a9568e8c38ec', ('kemi', 90): '24eac6dedfae',
              ('may', 0): '97cbfbe3e550', ('may', 45): '5e504d91a956', ('may', 90): 'dbeb1214140e'}
     off = [f for f in people.BEFORE_SEATED if people.seat_r7(f)]
