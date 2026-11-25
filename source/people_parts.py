@@ -1282,7 +1282,9 @@ def workwear_torso(img, p, sp, t):
     p.poly([(-edge(ya), ya), (edge(ya), ya), (edge(yb), yb), (-edge(yb), yb)], orange, INK, 2.0)
     sa, sb = ya + 30, ya + 56
     p.poly([(-edge(sa), sa), (edge(sa), sa), (edge(sb), sb), (-edge(sb), sb)], silver, INK, 1.6)
-    p.line([(0, 60), (1, bottom)], dk(navy, 0.5), 2.4)       # the zip (no stand-up collar: hidden by the braids
+    zend = min(bottom, hem) if sp.get('seat_r7') else bottom   # new films (R7 chat 2): the zip ends at the hem (it
+    p.line([(0, 60), (1, zend)], dk(navy, 0.5), 2.4)       # ran on to a standing jacket's length, a stray line
+    #   under the hi-vis when seated). The zip (no stand-up collar: hidden by the braids
     # from the front, it read as a navy scarf turned; chat 2 critique of Sam's n3 picture)
 
 

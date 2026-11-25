@@ -226,6 +226,19 @@ BEFORE_DEFAULTS = {'blessed': 'posted before the defaults (its press pack is red
 # people keep ignoring the body line, as they always did).
 BEFORE_SEX = {'blessed': 'posted', 'facetool': 'the face tool test cast', 'grand-theft-autism': 'posted (Lucia has '
               'her own build woman)', 'milburn': 'posted', 'protest-tiers': 'posted'}
+# R7, the seated lower body (25 Nov; views.seated_lower): one shape from the waist to the feet for anyone seated, in
+# every new film. The films below were made with the stopgap (views.seat_bottom, knee_cap) and keep it pixel for
+# pixel: Open Wounds is locked by Sam ("the seated bottom and knees are reserve job R7, never worked on in this
+# film"); the rest are posted.
+BEFORE_SEATED = {'brexit-is-done': 'Open Wounds, locked by Sam (24 Nov)', 'blessed': 'posted', 'facetool': 'test cast',
+                 'grand-theft-autism': 'posted', 'milburn': 'posted', 'protest-tiers': 'posted'}
+
+
+def seat_r7(film):
+    """Does this film draw seated people with R7's lower body? (every film not in BEFORE_SEATED)"""
+    return film not in BEFORE_SEATED
+
+
 SEXED = {'woman': dict(figure='female', shoulders=138, arm_w=27.0),
          'man': {}}
 BODY_KEYS = ('shoulders', 'figure', 'arm_w', 'arm_bulge', 'bottom', 'leg_k', 'jacket_hem')
@@ -705,7 +718,11 @@ def load(film):
                                    f"(e.g. 'body: 1.70 m, woman'; Sam's note 5, people.BEFORE_SEX)")
         for d in ds.values():
             d['_new'] = True
-    return {w: person(d) for w, d in ds.items()}
+    out = {w: person(d) for w, d in ds.items()}
+    if seat_r7(film):                             # R7: the seated lower body as one shape (BEFORE_SEATED keep the old)
+        for sp in out.values():
+            sp['seat_r7'] = True
+    return out
 
 
 def crowds(film):
@@ -715,12 +732,15 @@ def crowds(film):
     for d in out.values():
         d['crowd_defaults'] = film not in BEFORE_DEFAULTS
         d['crowd_sex'] = film not in BEFORE_SEX     # Open Wounds: crowd women get the woman's body
+        d['seat_r7'] = seat_r7(film)                # R7: a seated crowd member's lower body as one shape
     return out
 
 
 def crowd_person(d, i, s=0, job=None):
     """Crowd member i as the engine's person (their own look; the film adds what they are doing)."""
     sp = person(dict(member(d, i, s, job), crowd_member=True))
+    if d.get('seat_r7'):
+        sp['seat_r7'] = True
     if d.get('crowd_defaults', True):               # GTA shot 4 (Sam's notes 5, 10, 14, 20 Nov): a member made on the fly
         import people_parts as PP                   # was never hung on the engine, so its body's 'bald' stand-in drew
         if sp['who'] not in PP.B.HEADS:            # (every walker and cop a bald man); hang its own head and torso.

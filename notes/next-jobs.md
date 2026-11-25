@@ -31,6 +31,21 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
 - **R6. Fix the half-turn heads (Sam, 19 Nov, already reserve):** notes/proposals/front-on-focus/retirement-and-handover.md.
 
 - **R7. A natural seated lower body: bottom, legs and knees (Sam, 24 Nov, Open Wounds note 12: "No bum/circular knees"; "you do not *know* how to draw this part of the body as you couldn't do it on blessed either"; then: "Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body").** Goal: anyone seated reads with a natural, flowing lower body, waist to feet, in every view; the knees are part of the leg, never balls (the ball-knee fix belongs to this job). What must be learned first: how a seated hip, bottom, thigh and knee look from the front, three-quarter and side (reference photos of people seated on plain chairs, traced into outlines), then one seated outline drawn as a single shape from waist to knee instead of a box torso plus tubes. Stopgap in the kit since 24 Nov (views.knee_cap, views.seat_bottom, check castsheet.seated_faults): better than before, not yet natural. When done: re-run the blind woman/man judge on the seated views (skipped by Sam's Override, 24 Nov). Sam's picture: notes/learn/seated/no-bum-circular-knees-sam.jpg.
+  - **R7, where things stand (chat 2, 25 Nov, session_01U3pKQzwtcxXpPFrs5pH7DZ; next: chat 3, Opus high):**
+    Rules that bite next: 86 (every tool a kittest), 13, 85. Locked by Sam: Open Wounds' seated frames (switch off).
+    Done (chat 2): (1) castsheet.no_bottom reads the hem whole (shaded folds, across hands and stripes, sides skipped,
+    a hand under the edge not judged; a drawing's exact colours): every R7 view and pose passes (lowest 87%), Sam's frame
+    60%, the old drawing fails at 3/4; kittest seated_r7_look asserts all three (and pins views.KIT_LEG: remakes_cast
+    swaps views.leg on import). (2) Front knees: knee 33 across (was 38), no line where the knee's end lies on its own
+    shin, a kneecap curve when seen end-on (R7_END_ON, R7_CAP). (3) Kemi's stray lines: the hi-vis zip ran to a
+    standing length (people_parts.workwear_torso) and the short top's seat piece drew a box (body.trouser_seat r7):
+    both new-films only. (4) 3 blind judges: notes/learn/seated/judge/results-r7.md. Sheet: r7-before-after-v2.jpg. Next (chat 3, Opus high): the judges' faults, fix the drawing: crossed top leg's shoe a floating lump and the knee
+    join; front-view trouser legs too thin (cloth, not calves; show the lap); women seated read as men from the front
+    and side (Kemi). Then fresh judges again (judge_r7.py). Needs Sam: 3 phone photos (asked, chat 2; Commons answers the web-fetch helper now, so chat 3 tries it too).
+    Read: this entry; results-r7.md; views.py "R7: the seated lower body". Open rule requests: none. Branches (not R7's,
+    not merged): claude/open-wounds-chat14 (Open Wounds' own parallel chain), claude/gta-v5-sound-draft, claude/gta-chat46-build,
+    claude/dreamy-fermi-vkhutz (GTA, named in notes/brexit-is-done.md); not R7's: the file's other "Where things stand",
+    CLAUDE.md's "lost sentences" (still there, reworded). For Claude: sp['seat_r7']=True; judges: judge_r7.py + 3 sonnet.
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
