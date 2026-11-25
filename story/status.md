@@ -1,3 +1,3 @@
-Open Wounds: shot 3 chase and lunge built (chat 12); shared fixes: soft shadows, crowd front heads, front wolf size.
-Next: Opus high chat 13 watches shot 3 whole, critique pack, then May's moves file.
-Then the Sonnet chat for the animatic.
+Open Wounds: shot 3's chase fixed (chat 13): runs keep their hips up, guests flee in waves, nobody meets head-on.
+Next: Opus high chat 14 writes the moves (May, Kemi, Blair: gestures, lips, blinks, head life, looks).
+Then the Sonnet chat for the animatic. Lower-body job R7 runs in its own chat.
