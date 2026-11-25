@@ -42,10 +42,8 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
     both new-films only. (4) 3 blind judges: notes/learn/seated/judge/results-r7.md. Sheet: r7-before-after-v2.jpg. Next (chat 3, Opus high): the judges' faults, fix the drawing: crossed top leg's shoe a floating lump and the knee
     join; front-view trouser legs too thin (cloth, not calves; show the lap); women seated read as men from the front
     and side (Kemi). Then fresh judges again (judge_r7.py). Needs Sam: 3 phone photos (asked, chat 2; Commons answers the web-fetch helper now, so chat 3 tries it too).
-    Read: this entry; results-r7.md; views.py "R7: the seated lower body". Open rule requests: none. Branches (not R7's,
-    not merged): claude/open-wounds-chat14 (Open Wounds' own parallel chain), claude/gta-v5-sound-draft, claude/gta-chat46-build,
-    claude/dreamy-fermi-vkhutz (GTA, named in notes/brexit-is-done.md); not R7's: the file's other "Where things stand",
-    CLAUDE.md's "lost sentences" (still there, reworded). For Claude: sp['seat_r7']=True; judges: judge_r7.py + 3 sonnet.
+    Read: this entry; results-r7.md; views.py "R7: the seated lower body". Open rule requests: none. Branches named, not R7's:
+    open-wounds-chat14 (Open Wounds' chain), gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz (notes/brexit-is-done.md). For Claude: seat_r7.
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
@@ -176,3 +174,4 @@ Saves about 2-4% on any film where a chat breaks or drops a note. Lost: nothing.
   ~a quarter of a build chat) against past films' faults; switch only if it catches as much. (Parallel build chats
   dropped: already how we work.)
 
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)

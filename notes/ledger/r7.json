@@ -2,5 +2,13 @@
  "film": "r7",
  "estimate": 6.0,
  "chats": [],
- "checks": {}
+ "checks": {},
+ "cost_flagged": [],
+ "cost_log": [
+  {
+   "date": "2026-11-25",
+   "spent": 0,
+   "forecast": null
+  }
+ ]
 }
