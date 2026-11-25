@@ -33,7 +33,23 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
 - **R7. A natural seated lower body: bottom, legs and knees (Sam, 24 Nov, Open Wounds note 12: "No bum/circular knees"; "you do not *know* how to draw this part of the body as you couldn't do it on blessed either"; then: "Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body").** Goal: anyone seated reads with a natural, flowing lower body, waist to feet, in every view; the knees are part of the leg, never balls (the ball-knee fix belongs to this job). What must be learned first: how a seated hip, bottom, thigh and knee look from the front, three-quarter and side (reference photos of people seated on plain chairs, traced into outlines), then one seated outline drawn as a single shape from waist to knee instead of a box torso plus tubes. Stopgap in the kit since 24 Nov (views.knee_cap, views.seat_bottom, check castsheet.seated_faults): better than before, not yet natural. When done: re-run the blind woman/man judge on the seated views (skipped by Sam's Override, 24 Nov). Sam's picture: notes/learn/seated/no-bum-circular-knees-sam.jpg.
   - **R7, where things stand:** notes/r7.md (moved there by chat 5, 25 Nov).
 
-## Kit tests per film (Sam, 25 Nov, R7 chat 4, word for word): "Make the kit check happen at the beginning and the end of every film. If something major changes in the kits, then you can manually suggest making one to me. Currently, it is wasting usage and time to do this with every chat. We do so many chats." Then "1 y y" (Y to the rule as drafted in that chat; Y to dropping kittest-resume). Next: a fresh chat (Opus high) runs the proposal route on it (`propose.py new kit-tests-per-film`), builds the judged version with its check and kittest, writes the rule; asks Sam only if the judged pick differs from his words.
+## Kit tests per film (rule 90), where things stand (tool job chat 1, 25 Nov, Opus high)
+Sam (25 Nov, word for word): "Make the kit check happen at the beginning and the end of every film. If something major changes in the kits, then you can manually suggest making one to me. Currently, it is wasting usage and time to do this with every chat. We do so many chats." Then "1 y y".
+- **Rules that bite next:** 90 (kit tests at a film's first chat and final only), 86 (every tool has a kittest), 85.
+- **Done:** proposal route (judge picked helper A's V2; notes/proposals/kit-tests-per-film.md, "Built"); `source/kitfilm.py`;
+  handover start/end, setup.sh (no run), finish.py; fixes 1 (stale run only under Override) and 3 (85 tests re-ran on
+  any kitstamps edit); kittest `kit_tests_per_film`; rulebook row 90; catalogue row; watcher promise. kittest-resume dropped.
+- **Next:** none in the chain (waits for Sam's answer below). Then a tool chat (Opus medium): fix 2, the crashing
+  `people_from_a_description` on a fresh machine; Step 0's count if Sam wants it.
+- **Needs Sam:** Q1 keep the kit check before each animatic too (Y, my pick) or only before the final (N): on N set
+  `kitfilm.ANIMATIC_GATE = False`.
+- **Read:** guides/job-packs.md "A tool job"; the proposal's "Built".
+- **Open rule requests:** none.
+- **Branches named, not merged (outside this job):** claude/gta-v5-sound-draft, claude/gta-chat46-build,
+  claude/dreamy-fermi-vkhutz, claude/gta-chat31 (posted-GTA logs, a proposal, two old helpers; gta-chat31 a record only).
+- **For Claude:** first chat = a start row with this chat's id (kitfilm.started_here); the record was seeded with every
+  notes/ledger/*.json name so films already under way are not "first"; Sam's Y to a suggested full run:
+  `python3 source/kittests.py --stale`.
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.

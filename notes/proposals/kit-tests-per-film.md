@@ -123,3 +123,25 @@ You'd notice: No waiting in chats that only work on the film; a chat that change
 Other option: Check only at film start and before you see it (option 1).
 Lost: The start-up check in every chat; checks on other chats' changes at the end of a chat.
 Added: Checks in chats that change the kit, without asking you, which is more than you asked for.
+
+## Built (25 Nov, tool job chat 1, Opus high; Sam's Y given in R7 chat 4)
+- **Change 1:** `source/kitfilm.py`. `handover.py start --film NAME` writes the film's start row
+  (notes/kittest-films.tsv, merge=union; seeded with the 40 films and jobs already in the ledger) and starts the stale
+  kit tests in the background, only in the film's first chat. `handover.py end` waits and runs the stale ones only in
+  the chat that wrote a start row (`started_here`); every other chat runs only a never-passed test (a new tool's own),
+  no wait, no reds row. setup.sh starts no kit run (`setup_faults` is the check).
+- **Major-change line:** end prints "KIT CHANGE (not a stop)" with a plain question for Sam when this chat's own changes
+  made over 20 tests stale (stale at end minus stale at start, saved locally at start).
+- **Change 2 (Sam's open question):** finish.py's gate stays before every animatic as well as the final
+  (`kitfilm.ANIMATIC_GATE = True`); on Sam's N it becomes False (final only). A final that passes leaves a 'final' row.
+- **Fix 1 done:** the handover's stale run sat inside the Override branch (it ran only when Sam typed Override).
+- **Fix 3 done:** the stamp tool's own hook code (`_program`'s inner loop, `git_item`) counted as a read: 85 of 147
+  tests re-ran on any edit to kitstamps.py; now none do (kittest checks it).
+- **Fix 2 not done (named):** `people_from_a_description` still crashes on a fresh machine (needs a `film/blessed` git
+  marker not on GitHub); next tool chat.
+- **Step 0 not run (named):** usage share of kit tests and "did a fault ever reach an animatic" are uncounted; the
+  animatic question goes to Sam with what is known.
+- **Kittest** `kit_tests_per_film`: Sam's saved words; the old start-up hook caught; first chat launches, waits, runs;
+  a later chat neither runs nor waits except a new test; 21 made stale suggests, 20 is silent; hook code not a read.
+- **Lost:** the kit run in every chat (start-up and handover), and early warning of a break another chat made
+  (now found at the next animatic or the final). **Added:** the films record, the suggestion line, one kit test.
