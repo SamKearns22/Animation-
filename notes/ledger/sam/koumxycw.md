@@ -12,3 +12,6 @@ That wasn't 34?
 ### 2026-11-25T18:53:23
 Override. We will finish the seated job then run the checks in case they catch anything.
 
+### 2026-11-25T23:44:03
+Schedule the faults and preflight work for 03:20 and also implement R7.
+
