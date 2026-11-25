@@ -58,6 +58,11 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Open rule requests:** none.
 - **For Claude:** stills times are written 01.00 in file names. May's palm: the right hand ('palm up' place, 3.5-6.5 s). The start-up kit run was stopped and rerun on chat 14's final code (notes/logs/kittests-last.log). castsheet._same_outlines still film-only: move to shared.
 
+## Chat 14 end check, named
+- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-13 did. COST: no ledger estimate (named since chat 4).
+- Start check "NOT CARRIED 07:39" ("Wouldn't it be better to run them at certain key stages?"): Sam's kit-tests question, carried as proposal kit-tests-when (Q1 to Sam).
+- Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: left for the GTA chats.
+
 ## Chat 13 end check, named
 - Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 (a record only, Sam 22 Nov): left for the GTA chats.
 - CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-12 did. Rule 74 acting rows, HEAD LIFE, rehearsal clips: the moves stage, chat 14. Framing quick checks (notes 3, 9): handled chats 9-10.
