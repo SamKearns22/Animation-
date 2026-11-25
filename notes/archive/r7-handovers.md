@@ -32,3 +32,20 @@
     and side (Kemi). Then fresh judges again (judge_r7.py). Also (Sam "1 Y", 25 Nov): kit-test results kept per run,
     each test written as it ends, a restart re-runs only the unfinished; proposal route first, then build. Needs Sam: 3 phone photos (asked, chat 2; Commons answers the web-fetch helper now, so chat 3 tries it too).
     Read: this entry; results-r7.md; views.py "R7: the seated lower body". No rule requests. Branches named in notes/brexit-is-done.md and open-wounds-chat14 (Open Wounds' chain): not R7's.
+
+## Chat 3 handover (archived by chat 4, 25 Nov)
+  - **R7, where things stand (chat 3, 25 Nov, session_01U3pKR3Cspb5BP616FtwQHs; next: chat 4, Opus high):**
+    Rules that bite next: 86, 13, 85. Locked by Sam: Open Wounds' seated frames (switch off; seated_r7_switch passes).
+    Done (chat 3): 16 Commons photos with licences (notes/learn/seated/refs, LICENCES.md). Crossed leg (new films,
+    sitting.R7_CROSS): the top knee rests on the R7 thigh, the shin hangs nearly parallel, foot off the floor, toes down.
+    Shaped shoe turned whole (views._r7_shoe; the old box sheared). Trouser legs as cloth (views.R7_CLOTH; knee 14 cm
+    across, straight to the hem); women's knees together touching (sitting.R7_WOMAN); a thigh pressed on the seat
+    spreads 1.3 (R7_SPREAD). The ball-knee check needs a round patch (castsheet.BALL_ROUND: Blair's two legs fooled it).
+    Judges (results-r7c3.md): Kemi side now woman 3/3; crossed still 2, upright legs "one dark mass", front "no knees".
+    Next (chat 4, Opus high): results-r7c3.md "For chat 4" 1-5 (near leg's edge over the far leg; front knees and lap;
+    side thigh curve; women), then fresh judges (judge_r7.py r7c4). Then Sam's "1 Y": proposal kittest-resume is
+    written (problem, facts, chat.md): `propose.py pack kittest-resume`, two helpers, judge, record, then build + kittest.
+    Needs Sam: nothing (his 3 phone photos not needed). Read: this entry; results-r7c3.md; views.py "R7: the seated
+    lower body". Open rule requests: none. For Claude: sitting.py's R7 changes gated by sp['seat_r7']; not R7's (named,
+    25 Nov): branches kit-tests-when-build, brexit-chat15, gta-*, dreamy-fermi; CLAUDE.md sentence moves; the file's
+    project "Where things stand" (R7 is a sub-entry).
