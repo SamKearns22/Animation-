@@ -220,6 +220,7 @@ def real_skeleton(k, sp, kit_hip_h, seat=None, surfaces=(), held=()):
         wr_t = K['wr' + s] + lift
         hang = _u(K['wr' + s] - K['sh' + s])
         if hang[1] < -0.75 and s not in held:   # an empty arm hanging at the side keeps the kit's direction from the
+            hang = _u(hang + _u(sh - pel - tdir * ((sh - pel) @ tdir)) * 0.12)   # a little out, clear of the hips
             wr_t = sh + hang * (la + lf) * 0.97  # shoulder (the measured hips are wider: sent to the kit's wrist,
         #                                          the elbows bowed out like hands on hips, chat 2)
         for top, a0, a1, b0, b1 in surfaces:
@@ -227,6 +228,8 @@ def real_skeleton(k, sp, kit_hip_h, seat=None, surfaces=(), held=()):
             if a0 <= w0[0] <= a1 and b0 <= w0[2] <= b1 and w0[1] < top + 0.15:
                 wr_t = np.array([w0[0], top + 0.03 * sp.get('height', 1.75) / 1.75, w0[2]])
         pole = K['el' + s] - (K['sh' + s] + K['wr' + s]) / 2
+        if hang[1] < -0.75 and s not in held:
+            pole = -fw                           # a hanging arm's elbow points back, never out
         el, wr = LY.limb(sh, wr_t, la, lf, pole)
         an_t = K['an' + s].copy()
         polek = K['kn' + s] - (K['hip' + s] + K['an' + s]) / 2
@@ -255,7 +258,8 @@ def suit_parts(rv, grp, R, sp):
     ax = np.abs(x)
     g = grp.argmax(1)
     hip, neck, sh = J['pelvis'][1], J['neck'][1], (J['shL'][1] + J['shR'][1]) / 2
-    hem = hip - 0.9                              # the jacket's hem: below the seat (9 cm under the hip joints)
+    hem = hip - 1.6                              # the jacket's hem at the crotch (16 cm under the hip joints; at 9 cm
+    #                                              his trousers showed over the desk and he read as seated, critique r1)
     part = np.full(len(rv), PIX['trousers'])
     upper = ((g == 0) | (g == 1)) & (y >= hem)
     part[upper] = PIX['jacket']
@@ -368,9 +372,10 @@ def flute_mesh(hand, up, fwd, scale):
     P = np.array(pts)
     T = np.array(tris)
     out.append((P, T, 'glass'))
-    # the juice: a cone inside the bowl up to h - 50, drawn as its own solid just inside the glass's front
+    # the juice: the bowl's lower part up to h - 50 as its own solid, a hair outside the glass (the glass is drawn
+    # solid, so juice inside it never showed: the flat flute paints the juice over the glass the same way)
     prof2 = [(w * 0.42, -48), (w * 0.85, -62), (w * 0.9, -h + 50)]
-    pts2 = [hand + (a * math.cos(2 * math.pi * kk / n) * r * 1.02 + b * math.sin(2 * math.pi * kk / n) * r * 1.02
+    pts2 = [hand + (a * math.cos(2 * math.pi * kk / n) * r * 1.1 + b * math.sin(2 * math.pi * kk / n) * r * 1.1
                     - up * yy) * scale for r, yy in prof2 for kk in range(n)]
     tris2 = []
     for i in range(len(prof2) - 1):
@@ -381,7 +386,9 @@ def flute_mesh(hand, up, fwd, scale):
     pts2.append(hand + (-up * (-h + 50)) * scale)
     for kk in range(n):
         tris2.append(((len(prof2) - 1) * n + kk, (len(prof2) - 1) * n + (kk + 1) % n, top))
-    out.append((np.array(pts2), np.array(tris2), 'mimosa'))
+    T2 = np.array(tris2)
+    out.append((np.array(pts2), np.concatenate([T2, T2[:, ::-1]]), 'mimosa'))   # both sides (one way round it
+    #                                              was never drawn: the glasses read empty, critique r1, chat 2)
     return out
 
 
