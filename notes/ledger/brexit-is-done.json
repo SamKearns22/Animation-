@@ -9643,6 +9643,811 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "912f319e",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.0,
+   "src": "estimate",
+   "sid": "session_01U3pKR2NCsgxvii98ojSuyb",
+   "steps": 152,
+   "hist_k": 296,
+   "kinds": {
+    "film-file search": 4.4,
+    "tool search": 10.4,
+    "renders": 8.2,
+    "pictures": 5.6,
+    "other": 71.4
+   },
+   "calls": {
+    "film-file search": 13,
+    "tool search": 68,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 31,
+    "pictures": 22,
+    "other": 18
+   },
+   "split": {
+    "usd": 10.4759,
+    "total": 10.4759,
+    "floor_k": 84,
+    "blocks": {
+     "carried history": 47.6,
+     "new writes": 25.1,
+     "Claude's words": 19.8,
+     "start-up floor": 7.6
+    },
+    "origins": {
+     "messages and reminders": 40.6,
+     "Claude's words": 32.8,
+     "result: pictures": 8.2,
+     "start-up floor": 7.7,
+     "result: tool search": 7.2,
+     "result: film-file search": 2.3,
+     "result: renders": 0.7,
+     "result: other": 0.5
+    },
+    "named": {
+     "messages and reminders": 40.6,
+     "thinking": 12.5,
+     "looking at pictures": 8.2,
+     "start-up reading (rules, tools, first files)": 7.7,
+     "writing notes": 7.2,
+     "commands": 7.1,
+     "writing code": 4.7,
+     "reading notes": 2.6,
+     "running checks and tools": 2.1,
+     "reading kit code": 2.0,
+     "messages to Sam": 1.0,
+     "start-up and handover tools": 1.0,
+     "renders": 0.7,
+     "reading film code": 0.7,
+     "git and saving": 0.5,
+     "reading guides": 0.4,
+     "helper and chat prompts": 0.4,
+     "other commands": 0.3,
+     "app tools (chats, files sent)": 0.3,
+     "reading chat records": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 22,
+    "work_pct": 0.37,
+    "reads": [
+     [
+      "source/acting.py",
+      7.1,
+      0.0955
+     ],
+     [
+      "source/brexit_is_done.py",
+      3.4,
+      0.0452
+     ],
+     [
+      "notes/logs/kittests-last.log",
+      1.6,
+      0.0246
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/912f319e-08e8-5d6b-b234-6e3e3d252a2f/scratchpad/now/sheet.jpg",
+      1.6,
+      0.0203
+     ],
+     [
+      "notes/brexit-is-done.md",
+      1.3,
+      0.0188
+     ],
+     [
+      "story/brexit-is-done-moves.txt",
+      1.2,
+      0.0173
+     ],
+     [
+      ".claude/hooks/setup.sh",
+      0.1,
+      0.0011
+     ]
+    ],
+    "base_pct": 21.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 13
+    },
+    "other": {
+     "other": 21,
+     "shared:handover.py": 2,
+     "film notes": 6,
+     "guides": 2,
+     "shared:acting.py": 4,
+     "shared:views.py": 3,
+     "shared:satire_style.py": 1,
+     "shared:finish.py": 1,
+     "shared:film_engine.py": 2,
+     "shared:elder_swindon.py": 2,
+     "shared:mossad_audio.py": 1,
+     "shared:staging.py": 2,
+     "shared:kittests.py": 6,
+     "shared:humancheck.py": 4,
+     "shared:critique.py": 9,
+     "shared:freeze.py": 2
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status | head -5 && git log --oneline -3 && git push --dry-run origin HEAD 2",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -b claude/brexit-chat15 2>&1 | tail -1 && git push -u origin claude",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/logs/ notes/logs/kittests-last.log",
+      "python3 source/handover.py start session_01U3pKR1ipLftvRyJ1wn1Tcp --film brexit-",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log .claude/hooks/setup.sh",
+      "^(FAIL|RED|ERROR)",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "^## ",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 61,105p notes/brexit-is-done.md",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "awk '/^## Build/,/^## [^B]/' guides/job-packs.md | head -60",
+      ""
+     ],
+     [
+      7,
+      "film",
+      "before show",
+      "source/acting.py story/brexit-is-done-moves.txt",
+      "sed -n 1,90p source/acting.py; echo ----; cat story/brexit-is-done-moves.txt",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "def \\|^FILMS\\|'brexit-is-done'",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "sed -n 456,545p source/acting.py; sed -n 655,775p source/acting.py; sed -n 913,1",
+      ""
+     ],
+     [
+      10,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "faces and moves",
+      ""
+     ],
+     [
+      11,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "sed -n 60,290p source/brexit_is_done.py",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "sed -n 248,302p source/acting.py; python3 -c \" import sys; sys.path.insert(0,'so",
+      ""
+     ],
+     [
+      13,
+      "film",
+      "before show",
+      "guides/job-packs.md source/brexit_is_done.py",
+      "\\-\\-span",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import brexit_is_done as M,",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:views.py",
+      "source/*.py source/views.py source/figure.py",
+      "brow_up=[0-9.]+",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:satire_style.py",
+      "source/satire_style.py",
+      "def install_circle_hands",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:views.py",
+      "source/views.py source/people*.py source/body.py",
+      "gesture_hand",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "sed -n 214,240p source/acting.py; sed -n 331,370p source/acting.py; sed -n 415,4",
+      ""
+     ],
+     [
+      21,
+      "film",
+      "before show",
+      "story/brexit-is-done-moves.txt source/brexit_is_done.py source/acting.py",
+      "referendum",
+      ""
+     ],
+     [
+      22,
+      "film",
+      "before show",
+      "story/brexit-is-done-moves.txt source/acting.py",
+      "sed -i 's/\"referendum, and\"/\"referendum\"/g' story/brexit-is-done-moves.txt && py",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "final OUT\\|--small",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:finish.py",
+      "source/*.py source/finish.py",
+      "\\-\\-span",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py",
+      "span\\|def main\\|small",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:film_engine.py",
+      "source/film_engine.py",
+      "argv\\|def cli\\|'final'",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:elder_swindon.py",
+      "source/elder_swindon.py source/film_engine.py",
+      "'final'",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:elder_swindon.py",
+      "source/*.py source/elder_swindon.py source/mixaudio.py",
+      "^def write_wav",
+      ""
+     ],
+     [
+      42,
+      "other",
+      "shared:mossad_audio.py",
+      "source/mossad_audio.py",
+      "def write_wav",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds chat 15: Sam's acting plan in the move",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "other",
+      "",
+      "git diff --stat f82f553e b6b4c396 | tail -8; git show c72e5800 --stat | head; gi",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "notes/logs/kittest-reds.log notes/logs/kittests-last.log",
+      "^PASS",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:staging.py",
+      "notes/brexit-is-done.md source/staging.py",
+      "^| 3 \\|^| 9 ",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:staging.py",
+      "source/staging.py notes/logs notes/logs/staging*.log",
+      "brexit",
+      ""
+     ],
+     [
+      50,
+      "film",
+      "before show",
+      "story/brexit-is-done-staging.txt source/staging.py notes/brexit-is-done-sets.md",
+      "note 9\\|wider\\|board",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "film notes",
+      "notes/archive/brexit-is-done-handovers.md",
+      "shot 1",
+      ""
+     ],
+     [
+      56,
+      "film",
+      "before show",
+      "story/brexit-is-done-moves.txt source/brexit_is_done.py",
+      "; do sed -i ",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^ ",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:kittests.py",
+      "notes/logs/kittests-last.log source/kittests.py",
+      "FAIL seated_r7_switch",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 498,560p source/kittests.py",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:views.py",
+      "source/views.py source/sitting.py source/people.py source/people_parts.py",
+      "def sleeve_colour",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -4 import sys, hashlib; sys.path.insert(0,'source'",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py'; s=open(p).read() old=\"\"\" saved = {('bl",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^FAIL",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "notes/ledger/sam/",
+      "hook people in the first 3 seconds",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      " -ge 3 ] || grep -qi ",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "",
+      "blair_wait=1; python3 - <<'EOF' 2>&1 | tail -8 import sys; sys.path.insert(0,'so",
+      ""
+     ],
+     [
+      72,
+      "film",
+      "before show",
+      "story/brexit-is-done-moves.txt source/acting.py",
+      ",1)\nold='L: rest at ",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -3 import sys; sys.path.insert(0,'source') import ",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "S=/tmp/claude-0/-home-user-Animation-/912f319e-08e8-5d6b-b234-6e3e3d252a2f/scrat",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import json; d=json.load(open('/tmp/claude-0/-home-user-Animation-/",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "site's workers\\|site.s workers",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "workers",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "shared:humancheck.py",
+      "notes/archive/brexit-is-done-handovers.md notes/brexit-is-done.md source/humanch",
+      "body check\\|humancheck",
+      ""
+     ],
+     [
+      93,
+      "film",
+      "before show",
+      "story/brexit-is-done-moves.txt source/acting.py",
+      ")\nopen(p,'w').write(s2)\na=open('source/acting.py').read()\nanchor=",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py 2>&1 | head -40",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "source/data/critique/brexit-is-done/ source/data/critique/brexit-is-done/*/",
+      "ls source/data/critique/brexit-is-done/ | tail -4; d=$(ls -d source/data/critiqu",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "brexit.*(crit|spec)|spec",
+      ""
+     ],
+     [
+      101,
+      "film",
+      "before show",
+      "story/milburn-crit2.json story/brexit-is-done-crit*",
+      "brexit.*json",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:critique.py",
+      "guides/critique-checklist.md source/critique.py",
+      "^#\\|^## \\|^- \\*\\*[A-Z]",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:critique.py",
+      "source/critique.py guides/critique-checklist.md",
+      "strip",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "'strip'\\|\\",
+      ""
+     ],
+     [
+      106,
+      "film",
+      "before show",
+      "story/brexit-is-done-crit-moves.json source/critique.py",
+      "python3 - <<'EOF' import json; p='story/brexit-is-done-crit-moves.json'; s=json.",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/brexit-is-done/r1-p4",
+      "python3 source/critique.py record brexit-is-done source/data/critique/brexit-is-",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "off",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py status brexit-is-done 2>&1 | tail -12",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/brexit-is-done/r1-p5",
+      "python3 source/critique.py record brexit-is-done source/data/critique/brexit-is-",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "older than the video",
+      ""
+     ],
+     [
+      126,
+      "other",
+      "other",
+      "source/*.py .claude/hooks/*.py",
+      "no fresh critique",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "sed -n 453,475p source/humancheck.py",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "other",
+      "",
+      "ls -la /tmp/claude-0/-home-user-Animation-/912f319e-08e8-5d6b-b234-6e3e3d252a2f/",
+      ""
+     ],
+     [
+      131,
+      "film",
+      "before show",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md story/brexit-i",
+      "brexit",
+      ""
+     ],
+     [
+      133,
+      "other",
+      "shared:kittests.py",
+      "notes/logs/kittests-last.log source/kittests.py source/freeze.py",
+      "finished_films_keep_their_bookmark",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "def count\\|kit_files_loading_a_film_file",
+      ""
+     ],
+     [
+      135,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "python3 -c \" import sys; sys.path.insert(0,'source'); import freeze as F r=F.cou",
+      ""
+     ],
+     [
+      139,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "awk '/^## Notes/,0' notes/brexit-is-done.md | cut -c1-140 | head -30",
+      ""
+     ],
+     [
+      143,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      144,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git merge --no-edit origin/claude/create-claude-md-oe",
+      ""
+     ],
+     [
+      145,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"handover end log Co-Authored-By: Claude Opus 5.5 <",
+      ""
+     ],
+     [
+      146,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "<<<<<<<\\|>>>>>>>\\|=======",
+      ""
+     ],
+     [
+      147,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/handover-end.log notes/logs/kittest-reds.log sourc",
+      "git checkout --theirs source/kittests.py && for f in notes/logs/handover-end.log",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "70f3ba47",
+   "model": "opus",
+   "stage": "fix",
+   "round": null,
+   "cost": 0.74,
+   "notes": 0,
+   "repeats": []
   }
  ],
  "checks": {},
@@ -9741,23 +10546,72 @@
      "7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ",
      "4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile."
     ]
+   },
+   {
+    "round": 1,
+    "pass": 4,
+    "stage": "moves",
+    "date": "2026-11-25",
+    "hunt": 1,
+    "faults": 13,
+    "cant_tell": 2,
+    "open": [
+     "1 P2: May upright, mouth closed; the beat is a breath in, leaning forward, chin up.",
+     "3,6,8 P2: no chopping or pressing hand. May's hand hangs low (3); Kemi's arm swings out loosely (6, 8).",
+     "10,13 P2: Blair shows one open hand, not both palms (10 both lifting, 13 both open to the interviewer).",
+     "12 P2: no palm flip; his hand rests by the chair arm.",
+     "7 P2: Kemi points right, but the wolves are low on her left; she points at nothing.",
+     "9 P2: Kemi's mouth is open in a shocked \"o\"; the beat is flat and brisk.",
+     "4,15 P3 P5: May's arm swings out behind her from an odd point on the shoulder and looks longer than the other; no clear hand-open pose.",
+     "10-14,17 P7: Blair's thighs are drawn as ringed knee circles, and his legs run down to the floor at a different scale from his body. A fault named by Sam on 24 ",
+     "1-5,15 P7: May's chair is a thin slab with no lap or thigh visible; she looks perched, not seated.",
+     "13-14,17 P10: the white and grey wolves overlap Blair's shoulder and chair back with no clear in front/behind; the grey wolf's snout sits on his arm.",
+     "16 M1: at 7.8 s a worker and a dog stand at the left of the site, then vanish without leaving the frame.",
+     "15 M3: May's head and body shift sideways and tilt from frame to frame; the arm stretches in the last frames.",
+     "6-9 A1: the brown animals read as dead dogs, not wolves; they are tiny and unclear.",
+     "2-5,15 P12: whose words the mouths follow; a strip with the speaker labelled would show it.",
+     "17 M4: the doorway moves left to right between frames (double doors at left in frame 1); a first and last frame at full size would show if the set is steady."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 5,
+    "stage": "moves",
+    "date": "2026-11-25",
+    "hunt": 2,
+    "faults": 10,
+    "cant_tell": 2,
+    "open": [
+     "6-10,12 P7: Blair - two round knee balls at the lens and he sits in front of the armchair, not on its seat (the 24 Nov \"no bum/circular knees\" fault).",
+     "1-12 A2 P4: May and Blair have the same tall swept grey quiff; May's reference has short cropped hair. Her scarf is plain stripes, the reference is multicoloure",
+     "1,3,5-6,8-9 P2: beats not shown. 1 sits upright, not leaning in with chin up. 3 has no chopping hand. 5 has no tight smile, only a closed mouth. 6 hands rest on",
+     "2-4,11 P4 M3: May's red lips are in 1 and 5 only. In 2-4 and most strip frames the mouth is a tiny grey tick.",
+     "6,9 P3: Blair's arms are very long, with no elbow where the upper arm ends.",
+     "10 P1 P10: Blair's left hand sits on or in front of the plate. The wolf's head overlaps his shoulder and back, so it reads as through him.",
+     "7 P7: the magnifying glass and the small syringe-like prop float with nobody holding them.",
+     "8-9,12 M1: plates appear on the floor from panel 8 with no one dropping them. The red-dress woman is half cut off at the left edge, not entering through the doo",
+     "9,12 A1: the white creature across Blair's lap reads as a flat hide or rug, not a wolf.",
+     "7,9-10 A2: the wolf is small beside the doorway people in 7 but its head is as big as Blair's in 10, so the scale jumps.",
+     "6-10 P2: whether Blair looks at the off-frame left interviewer. A face crop with the nose and pupils at full size would show it.",
+     "11-12 M2: the red times are unreadable. A strip with larger time labels would show it."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 4,
+    "faults": 6,
     "false": 1
    },
    "P2": {
-    "faults": 3,
-    "false": 0
+    "faults": 10,
+    "false": 1
    },
    "P4": {
-    "faults": 12,
+    "faults": 14,
     "false": 0
    },
    "A2": {
-    "faults": 8,
+    "faults": 10,
     "false": 0
    },
    "P11": {
@@ -9765,7 +10619,7 @@
     "false": 2
    },
    "P1": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P13": {
@@ -9779,22 +10633,38 @@
    "A4": {
     "faults": 1,
     "false": 0
+   },
+   "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "P7": {
+    "faults": 4,
+    "false": 0
+   },
+   "P10": {
+    "faults": 2,
+    "false": 0
+   },
+   "M1": {
+    "faults": 2,
+    "false": 0
+   },
+   "M3": {
+    "faults": 2,
+    "false": 0
    }
   }
  },
  "notes_tags": {
   "12": "none (P7 is a by-hand critique line and the board went out with no critique; the kit still ringed a knee aimed at the lens, and drew no bottom at all)",
-  "1": "none (sheet maker had no edge test)",
-  "2": "none (front and 3/4 never judged side by side)",
-  "3": "none",
-  "11": "none (the curve tool overshoots where a closed curve passes one point twice; nothing looked for it; it was on cast sheets v1-v3 too)",
-  "10": "none (no check looked inside a mouth; the grin's top-lip line was drawn with the closed curve, so it doubled back, and sat across the teeth)",
   "9": "none (a wish, not a fault)",
-  "8": "none (no check looks at where the legs part; the blind judges read outlines at phone size, and I looked at the hips for nubs, not the crotch)",
   "7": "none (the learn step judged woman or man only, never \"is this HER body\"; Kemi's photo was not measured)",
-  "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)",
-  "6": "none (match checks colours, not layering: gap written in castsheet.py MAP)",
-  "4": "-"
+  "5": "none (no check knows who is a woman; the GTA fix was opt-in for Lucia only and never catalogued, so chat 2 told Sam no build existed)"
  },
  "quick_checks": [
   {
@@ -9851,6 +10721,14 @@
   },
   {
    "at": "2026-11-25T08:31+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-25T13:14+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-25T13:16+00:00",
    "faults": 0
   }
  ]

@@ -57,3 +57,94 @@ My look.md named the grey-haired woman in purple, the dark-haired woman in hard 
 
 critique, pass 2: faults fixed as one list: May's hair layers and pearls stronger, jacket plum; Kemi's jacket orange sleeves and bolder silver bands; Blair's ears bigger, hair lifted; left open: ['1 P4 P1: head crops - face is smooth and youthful, no age lines for 70; pearl earrings missing; fringe is not a clear side-swept layered bob; jacket is dark mar', '3 P4: full-body row - the toothy grin is lost at phone size (face is a few dots), and the hair at the back and side reads as a flat grey cap, not swept-back hai', "1-3 A2: full-body row - bodies are thin straight tubes with tiny heads; they don't match the reference proportions, and May reads weakly as a woman (trousers, n"]
 
+== critique, round 1 pass 4 (2026-11-25): 13 fault(s), 2 can't tell
+-- look.md --
+1: Grey-haired woman in purple jacket sits on chair, calm, hands low, wood-panel background.
+2: Same woman raises one hand with pointing finger, mouth slightly open, explaining.
+3: Same woman, left hand low at side, head tilted, speaking.
+4: Same woman leans, left arm swung out behind, animated talking.
+5: Same woman, hands clasped low near lap, mild closed-mouth expression.
+6: Woman in white hard hat, glasses, orange vest; construction site, dead dogs and blood behind; hand out.
+7: Hard-hat woman points right, mouth open in surprise; bloody fallen dogs behind.
+8: Hard-hat woman, arm out left, calm face; bloodied dogs piled behind her.
+9: Narrow crop of hard-hat woman, mouth open, shocked; site with dead dogs behind.
+10: Grey-haired man in dark suit, red tie, sits in armchair in library; butler with tray behind.
+11: Same man talking; grey wolf and dark-suited men enter doorway, small dog, magnifier.
+12: Same man talks, looking aside; empty doorway, spilled food on floor.
+13: Same man in armchair; white wolf snarling behind, woman in red dress, spilled plates.
+14: Man laughing wide; snarling dark wolf with red eye behind him, plate on floor.
+15: Strip of twelve frames: purple-jacket woman gesturing in turns, seated, speaking.
+16: Strip of frames: hard-hat woman shifting arms, dead dogs behind, timecode marks on top.
+17: Strip of frames: suited man in armchair, wolves, servants and woman crossing doorway behind.
+-- result.md --
+## Faults
+FAULT P2 [1]: May upright, mouth closed; the beat is a breath in, leaning forward, chin up.
+FAULT P2 [3, 6, 8]: no chopping or pressing hand. May's hand hangs low (3); Kemi's arm swings out loosely (6, 8).
+FAULT P2 [10, 13]: Blair shows one open hand, not both palms (10 both lifting, 13 both open to the interviewer).
+FAULT P2 [12]: no palm flip; his hand rests by the chair arm.
+FAULT P2 [7]: Kemi points right, but the wolves are low on her left; she points at nothing.
+FAULT P2 [9]: Kemi's mouth is open in a shocked "o"; the beat is flat and brisk.
+FAULT P3 P5 [4, 15]: May's arm swings out behind her from an odd point on the shoulder and looks longer than the other; no clear hand-open pose.
+FAULT P7 [10-14, 17]: Blair's thighs are drawn as ringed knee circles, and his legs run down to the floor at a different scale from his body. A fault named by Sam on 24 Nov.
+FAULT P7 [1-5, 15]: May's chair is a thin slab with no lap or thigh visible; she looks perched, not seated.
+FAULT P10 [13, 14, 17]: the white and grey wolves overlap Blair's shoulder and chair back with no clear in front/behind; the grey wolf's snout sits on his arm.
+FAULT M1 [16]: at 7.8 s a worker and a dog stand at the left of the site, then vanish without leaving the frame.
+FAULT M3 [15]: May's head and body shift sideways and tilt from frame to frame; the arm stretches in the last frames.
+FAULT A1 [6-9]: the brown animals read as dead dogs, not wolves; they are tiny and unclear.
+CAN'T TELL P12 [2-5, 15]: whose words the mouths follow; a strip with the speaker labelled would show it.
+CAN'T TELL M4 [17]: the doorway moves left to right between frames (double doors at left in frame 1); a first and last frame at full size would show if the set is steady.
+
+## Checked
+1-17
+
+## Cold look
+My look.md said calm for 1 (brief: breath in, leaning) and called the animals dogs. Missed: the missing chop and press, the knee circles, the chair, Kemi's wrong pointing direction and Blair's one-handed poses.
+
+## Not on the list
+- A frontal body: the brief says three-quarter turned to screen left, but all three sit square to the lens. Suggested line: body turn matches the brief.
+- Blair does not react to the wolves behind him. Suggested line: people notice what the brief puts at their back.
+- Wolves behind Blair enter a doorway with no door action. Suggested line: set entrances show their door.
+
+== critique, round 1 pass 5 (2026-11-25): 10 fault(s), 2 can't tell
+-- look.md --
+1: Grey-haired woman, purple jacket, seated on chair, hands low, dark striped curtain background. No words.
+2: Same woman, right hand raised pointing, mouth slightly open, speaking. No words.
+3: Same woman, hands resting, neutral face, looking toward viewer. No words.
+4: Same woman, left arm extended outward, mouth slightly open, mid-gesture. No words.
+5: Same woman, narrower crop, hands low, calm, lips closed. No words.
+6: Grey-haired man, dark suit, red tie, armchair, library; butler with tray, woman in doorway. No words.
+7: Man talking, a grey wolf and people entering doorway behind; magnifying glass floating. No words.
+8: Man gesturing, empty doorway, plates on floor, mouth open. No words.
+9: Man leaning, snarling wolf and white rug-like animal, woman in red dress at left edge. No words.
+10: Man smiling, snarling grey wolf at left, plates on floor, hand on knee. No words.
+11: Strip of twelve small frames, purple-jacket woman seated, arm gestures changing. No words.
+12: Strip of small frames, suited man in armchair, doorway figures, wolf appearing and leaving. No words.
+-- result.md --
+## Faults
+FAULT P7 [6-10, 12]: Blair - two round knee balls at the lens and he sits in front of the armchair, not on its seat (the 24 Nov "no bum/circular knees" fault).
+FAULT A2 P4 [1-5, 6-10, 11, 12]: May and Blair have the same tall swept grey quiff; May's reference has short cropped hair. Her scarf is plain stripes, the reference is multicoloured.
+FAULT P2 [1, 3, 5, 6, 8, 9]: beats not shown. 1 sits upright, not leaning in with chin up. 3 has no chopping hand. 5 has no tight smile, only a closed mouth. 6 hands rest on the chair arms, not lifted in a shrug. 8 repeats the hand on chest, no palm flip. 9 has one hand open, the other resting.
+FAULT P4 M3 [2-4, 11]: May's red lips are in 1 and 5 only. In 2-4 and most strip frames the mouth is a tiny grey tick.
+FAULT P3 [6, 9]: Blair's arms are very long, with no elbow where the upper arm ends.
+FAULT P1 P10 [10]: Blair's left hand sits on or in front of the plate. The wolf's head overlaps his shoulder and back, so it reads as through him.
+FAULT P7 [7]: the magnifying glass and the small syringe-like prop float with nobody holding them.
+FAULT M1 [8, 9, 12]: plates appear on the floor from panel 8 with no one dropping them. The red-dress woman is half cut off at the left edge, not entering through the door. In strip 12 the first frame shows a different background (double doors, no doorway).
+FAULT A1 [9, 12]: the white creature across Blair's lap reads as a flat hide or rug, not a wolf.
+FAULT A2 [7, 9, 10]: the wolf is small beside the doorway people in 7 but its head is as big as Blair's in 10, so the scale jumps.
+CAN'T TELL P2 [6-10]: whether Blair looks at the off-frame left interviewer. A face crop with the nose and pupils at full size would show it.
+CAN'T TELL M2 [11, 12]: the red times are unreadable. A strip with larger time labels would show it.
+CAN'T TELL A4 [1]: the Hook Text frame is not supplied.
+
+## Checked
+1-12
+
+## Cold look
+I never named the setting as an interview. I read panels 9 and 12 as "rug-like", which confirms the A1 fault. I called Blair's strip "wolf appearing and leaving" but missed the floor plates popping in. I did not notice that the two hairstyles are identical.
+
+## Not on the list
+1. Two different people share one hair shape. Suggested line: each character's silhouette differs from every other character's at phone size.
+2. Props with no owner (floating magnifier). Suggested line: every prop is held, resting, or falling.
+3. Creature scale between panels. Suggested line: a creature keeps one size relative to the set unless it changes distance.
+4. Furniture too small or thin for the person (May's chair). Suggested line: the seat is as wide as the thighs.
+5. Blood and gore on the wolves. Suggested line: the level of gore fits the channel.
+

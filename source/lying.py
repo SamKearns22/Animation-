@@ -283,6 +283,23 @@ def blend(a, b, u):
             out[n] = a[n] + (b[n] - a[n]) * u
         else:
             out[n] = _unit(a[n] + (b[n] - a[n]) * u + 1e-6)
+    # the trunk is rigid: sliding its points shortens it mid-way (Open Wounds chat 16: the fallen worker's head sank
+    # into his shoulders while he settled from sitting to lying); keep each trunk bone's length along its new
+    # direction, carrying what hangs off it (hands and feet go with their shoulders and hips; the limbs are solved
+    # again below)
+    lerped = {n: out[n].copy() for n in POINTS if n in out}
+    for p, c, carry in (('pelvis', 'waist', ()), ('waist', 'neck', ()), ('neck', 'head', ()),
+                        ('neck', 'shL', ('wrL',)), ('neck', 'shR', ('wrR',)),
+                        ('pelvis', 'hipL', ('anL',)), ('pelvis', 'hipR', ('anR',))):
+        if p not in out or c not in out:
+            continue
+        ln = (1 - u) * float(np.linalg.norm(a[c] - a[p])) + u * float(np.linalg.norm(b[c] - b[p]))
+        new = out[p] + _unit(lerped[c] - lerped[p] + 1e-9) * ln
+        shift = new - out[c]
+        out[c] = new
+        for q in carry:
+            if q in out:
+                out[q] = out[q] + shift
     for side in 'LR':
         for root, mid, end, l1, l2 in (('sh', 'el', 'wr', UPPER, FORE), ('hip', 'kn', 'an', THIGH, SHIN)):
             pa = a[mid + side] - (a[root + side] + a[end + side]) / 2
@@ -1182,7 +1199,44 @@ def fall(sp, t, t0, x, z, facing, ground=0.0, pose='back', flip=1):
     yaw = math.degrees(math.atan2(fz, -fx))              # head towards the back of where they faced
     px, pz = k0['pelvis'][0], k0['pelvis'][2]
     k1, surf = lie(sp, pose, px, pz, yaw, ground, flip)
-    return ('3d', blend(k0, k1, ease((t - t0 - 0.5) / 0.45)), surf)
+    k = blend(k0, k1, ease((t - t0 - 0.5) / 0.45))
+    return ('3d', _brace(k, ground), surf)
+
+
+def _brace(k, ground):
+    """Going over backwards, the arms reach the floor before the back does (Open Wounds chat 16: the fallen worker's
+    elbows hung 11-20 cm up in mid-settle, Elder Swindon 6): as the trunk tips past upright, each elbow is lowered
+    onto the floor along its own side (the upper arm slopes down from the shoulder) and the forearm laid flat beyond
+    it; eased in by the tilt, so no pop, and a pose already on the floor is left as it is."""
+    up = _v(0, 1, 0)
+    c = float(np.dot(_unit(k['neck'] - k['pelvis']), up))
+    f = ease((0.9 - c) / 0.3)                        # 0 sitting up (cos 0.9), 1 by cos 0.6 (where the check starts)
+    if f <= 0.0:
+        return k
+    k = k.copy()
+    for side in 'LR':
+        sh, el, wr = k['sh' + side], k['el' + side], k['wr' + side]
+        hs = float(sh[1] - ground)
+        low = ground + 0.05
+        if el[1] <= low + 0.02:
+            continue
+        flat = _v(el[0] - sh[0], 0, el[2] - sh[2])
+        if np.linalg.norm(flat) < 1e-4:
+            flat = _v(wr[0] - sh[0], 0, wr[2] - sh[2])
+        dy = min(UPPER * 0.999, max(0.0, hs - 0.05))
+        e2 = sh + _unit(flat + 1e-9) * math.sqrt(UPPER ** 2 - dy ** 2) + _v(0, -dy, 0)
+        e2[1] = max(e2[1], low)
+        fl = _v(wr[0] - el[0], 0, wr[2] - el[2])
+        if np.linalg.norm(fl) < 1e-4:
+            fl = flat
+        w2 = e2 + _unit(fl + 1e-9) * FORE
+        w2[1] = ground + 0.044
+        ne = el + (e2 - el) * f
+        nw = wr + (w2 - wr) * f
+        if ne[1] < el[1]:                            # only ever lowers an arm
+            k['el' + side] = ne
+            k['wr' + side] = nw
+    return k
 
 
 def place(cam, x, z, ground=0.0, height=1.75, arms=1.2):

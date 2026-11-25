@@ -238,13 +238,19 @@ def w1(img, L, cam3, u):
     rips = {k: _rips(*FEEDS[k][:2], 11.0) for k in FEEDS}
     out = []
 
+    # he digs side-on, a little towards the lens (facing straight left he was 104 degrees turned away: his back,
+    # chat 16 body check); the wolves' hit twists him 10 degrees as he goes down (HIT to HIT + 0.5), and the lying
+    # body takes over at that same 185 (straight left, 180, still showed his back for 2 drawings mid-fall)
+    tw = math.radians(195.0 - 10.0 * ease((u - HIT) / 0.5))
+    face = (math.cos(tw), math.sin(tw))
+
     def man(img):
         if u < HIT:
             j = _worker1_pose(sp, u)
-            got = lying.stand(img, cam3, sp, x, d, (-1.0, 0.0), j, u)
+            got = lying.stand(img, cam3, sp, x, d, face, j, u)
             if got[0] == '2d':
                 Xf, Yf, s, _, _ = lying.place(cam3, x, d)
-                jj = _screen(got[1], Xf, Yf - FEET * s, s, cam3.yaw_of((x, 0, d), (-1.0, 0.0)))
+                jj = _screen(got[1], Xf, Yf - FEET * s, s, cam3.yaw_of((x, 0, d), face))
                 a, b = jj['wrR_px'], jj['wrL_px']
                 # the shaft runs through both hands and on down to the blade, in the dirt ahead of him
                 gy = L.p(0, d, 0.0)[1] - 0.2 * L.ppm(d)
@@ -253,9 +259,9 @@ def w1(img, L, cam3, u):
                 _shovel(img, L, (a[0] - (b[0] - a[0]) * 0.35, a[1] - (b[1] - a[1]) * 0.35), heel, d)
             return
         bare = dict(sp, kit_hat=None)                              # the hat flies off at the hit
-        kind, *rest = lying.fall(bare, u, HIT, x, d, (-1.0, 0.0))
+        kind, *rest = lying.fall(bare, u, HIT, x, d, (math.cos(math.radians(185.0)), math.sin(math.radians(185.0))))
         if kind == 'views':
-            lying.stand(img, cam3, bare, x, d, (-1.0, 0.0), rest[0], u)
+            lying.stand(img, cam3, bare, x, d, face, rest[0], u)
             return
         k, surf = rest
         if u < 3.0:                                                # boots kicking under them, still by 3 s
@@ -418,8 +424,9 @@ def _bar_man(sp, u, who):
     j['footL'] = (-50, j['footL'][1], 110.0)
     j['footR'] = (50, j['footR'][1], -90.0)
     reach = 150 + 160 * jab
-    V.arm_to(j, 'L', (-40.0, 230.0, reach + 110), 'down', 'fist')
-    V.arm_to(j, 'R', (40.0, 250.0, max(130.0, reach - 30)), 'down', 'fist')
+    pull = 3.5 * min(0.0, lean)                     # leaning back to brace, he draws the tube in to his chest with him
+    V.arm_to(j, 'L', (-40.0, 230.0, reach + 110 + pull), 'down', 'fist')
+    V.arm_to(j, 'R', (40.0, 250.0, max(130.0, reach - 30) + pull), 'down', 'fist')
     return j, jab
 
 

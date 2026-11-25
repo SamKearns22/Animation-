@@ -1,0 +1,238 @@
+{
+ "round": 1,
+ "stage": "moves",
+ "panels": [
+  {
+   "set": "may",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg"
+   ],
+   "parts": "P",
+   "people": [
+    {
+     "name": "may",
+     "box": [
+      250,
+      350,
+      1000,
+      1700
+     ]
+    }
+   ],
+   "t": 0.3,
+   "crop": null,
+   "beat": "the hook: May already moving, a breath in, leaning forward, chin up",
+   "is": "Open Wounds, a talking-head interview: May seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "may",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg"
+   ],
+   "parts": "P",
+   "people": [
+    {
+     "name": "may",
+     "box": [
+      250,
+      350,
+      1000,
+      1700
+     ]
+    }
+   ],
+   "t": 2.0,
+   "crop": null,
+   "beat": "\"would do well\": a schoolmistress raised forefinger",
+   "is": "Open Wounds, a talking-head interview: May seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "may",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg"
+   ],
+   "parts": "P",
+   "people": [
+    {
+     "name": "may",
+     "box": [
+      250,
+      350,
+      1000,
+      1700
+     ]
+    }
+   ],
+   "t": 4.7,
+   "crop": null,
+   "beat": "\"that referendum\": a flat hand chopping down",
+   "is": "Open Wounds, a talking-head interview: May seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "may",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg"
+   ],
+   "parts": "P",
+   "people": [
+    {
+     "name": "may",
+     "box": [
+      250,
+      350,
+      1000,
+      1700
+     ]
+    }
+   ],
+   "t": 6.0,
+   "crop": null,
+   "beat": "\"British Public\": hands open outward a little",
+   "is": "Open Wounds, a talking-head interview: May seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "may",
+   "refs": [
+    "references/brexit-is-done/may-interview-1.jpg"
+   ],
+   "parts": "P",
+   "people": [
+    {
+     "name": "may",
+     "box": [
+      250,
+      350,
+      1000,
+      1700
+     ]
+    }
+   ],
+   "t": 7.3,
+   "crop": null,
+   "beat": "after \"wolves\": a tight satisfied smile",
+   "is": "Open Wounds, a talking-head interview: May seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "blair",
+   "refs": [],
+   "parts": "P",
+   "people": [
+    {
+     "name": "blair",
+     "box": [
+      150,
+      350,
+      1050,
+      1920
+     ]
+    }
+   ],
+   "t": 18.1,
+   "crop": null,
+   "beat": "\"Well\": both hands lift off the chair arms, palms open, a little shrug",
+   "is": "Open Wounds, a talking-head interview: Blair seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "blair",
+   "refs": [],
+   "parts": "P",
+   "people": [
+    {
+     "name": "blair",
+     "box": [
+      150,
+      350,
+      1050,
+      1920
+     ]
+    }
+   ],
+   "t": 18.8,
+   "crop": null,
+   "beat": "\"opinion\": a hand on his chest",
+   "is": "Open Wounds, a talking-head interview: Blair seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "blair",
+   "refs": [],
+   "parts": "P",
+   "people": [
+    {
+     "name": "blair",
+     "box": [
+      150,
+      350,
+      1050,
+      1920
+     ]
+    }
+   ],
+   "t": 22.4,
+   "crop": null,
+   "beat": "\"invaded\": a breezy palm flip outward",
+   "is": "Open Wounds, a talking-head interview: Blair seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "blair",
+   "refs": [],
+   "parts": "P",
+   "people": [
+    {
+     "name": "blair",
+     "box": [
+      150,
+      350,
+      1050,
+      1920
+     ]
+    }
+   ],
+   "t": 23.7,
+   "crop": null,
+   "beat": "\"belong\": both palms open towards the interviewer",
+   "is": "Open Wounds, a talking-head interview: Blair seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "set": "blair",
+   "refs": [],
+   "parts": "P",
+   "people": [
+    {
+     "name": "blair",
+     "box": [
+      150,
+      350,
+      1050,
+      1920
+     ]
+    }
+   ],
+   "t": 25.5,
+   "crop": null,
+   "beat": "the big grin held",
+   "is": "Open Wounds, a talking-head interview: Blair seated/standing, turned three-quarter to screen left, talking to an unseen interviewer off-frame left. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "img": "/tmp/claude-0/-home-user-Animation-/912f319e-08e8-5d6b-b234-6e3e3d252a2f/scratchpad/strips/may.png",
+   "strip": true,
+   "t": 0,
+   "crop": null,
+   "parts": "PM",
+   "set": null,
+   "refs": [],
+   "beat": "May: the whole line, frames left to right with times",
+   "is": "a strip of frames from one shot, times in red. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  },
+  {
+   "img": "/tmp/claude-0/-home-user-Animation-/912f319e-08e8-5d6b-b234-6e3e3d252a2f/scratchpad/strips/blair.png",
+   "strip": true,
+   "t": 0,
+   "crop": null,
+   "parts": "PM",
+   "set": null,
+   "refs": [],
+   "beat": "Blair: the whole line",
+   "is": "a strip of frames from one shot, times in red. Round circle hands (one finger only when pointing); voices not recorded yet, so lip shapes are placeholders"
+  }
+ ]
+}
