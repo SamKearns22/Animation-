@@ -8,66 +8,68 @@
    "model": "opus",
    "stage": "learn (chat 6)",
    "round": null,
-   "cost": 2.05,
+   "cost": 2.32,
    "notes": 0,
    "repeats": [],
    "src": "estimate",
    "sid": "session_01U3pKQzBQSVMGz9aFiBTmTa",
-   "steps": 86,
-   "hist_k": 271,
+   "steps": 101,
+   "hist_k": 283,
    "kinds": {
-    "tool search": 28.5,
-    "renders": 6.5,
+    "tool search": 27.1,
+    "renders": 5.7,
     "pictures": 3.2,
-    "other": 61.8
+    "other": 64.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 61,
+    "tool search": 67,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 7,
     "pictures": 8,
-    "other": 12
+    "other": 18
    },
    "split": {
-    "usd": 6.5244,
-    "total": 6.5244,
+    "usd": 7.5099,
+    "total": 7.5099,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 28.7,
-     "carried history": 26.0,
-     "new writes": 22.9,
-     "start-up floor": 22.4
+     "carried history": 29.5,
+     "Claude's words": 26.8,
+     "start-up floor": 22.5,
+     "new writes": 21.2
     },
     "origins": {
-     "Claude's words": 45.7,
+     "Claude's words": 44.7,
      "result: tool search": 22.5,
-     "start-up floor": 22.4,
-     "result: pictures": 3.8,
-     "messages and reminders": 2.9,
+     "start-up floor": 22.5,
+     "result: pictures": 3.9,
+     "messages and reminders": 3.3,
      "Claude's edits": 1.3,
-     "result: other": 0.9,
+     "result: other": 1.3,
      "result: renders": 0.5
     },
     "named": {
-     "thinking": 22.7,
-     "start-up reading (rules, tools, first files)": 22.4,
-     "reading kit code": 13.4,
-     "writing code": 11.3,
-     "writing notes": 5.8,
-     "reading notes": 5.5,
-     "commands": 4.8,
-     "looking at pictures": 3.8,
-     "messages and reminders": 2.9,
-     "other commands": 2.6,
-     "messages to Sam": 2.0,
+     "start-up reading (rules, tools, first files)": 22.5,
+     "thinking": 21.6,
+     "reading kit code": 13.2,
+     "writing code": 10.6,
+     "reading notes": 5.8,
+     "commands": 5.5,
+     "writing notes": 5.4,
+     "looking at pictures": 3.9,
+     "messages and reminders": 3.3,
+     "other commands": 2.5,
+     "messages to Sam": 2.2,
      "start-up and handover tools": 1.0,
+     "helper and chat prompts": 0.7,
      "running checks and tools": 0.7,
      "renders": 0.5,
-     "helper and chat prompts": 0.4,
-     "helper results": 0.2
+     "reading chat records": 0.3,
+     "helper results": 0.2,
+     "app tools (chats, files sent)": 0.1
     },
     "leftover": 0.0
    },
@@ -79,70 +81,70 @@
      [
       "source/views.py",
       7.1,
-      0.1383
+      0.1573
      ],
      [
       "source/bench_draw.py",
       5.3,
-      0.1131
+      0.1273
      ],
      [
       "source/bench_pose.py",
       3.3,
-      0.0718
+      0.0807
      ],
      [
       "notes/proposals/seated-legs-3d.md",
       2.7,
-      0.0599
+      0.0671
      ],
      [
       "source/mhuman.py",
       2.1,
-      0.0401
+      0.0458
      ],
      [
       "source/bench_move.py",
       1.8,
-      0.0388
+      0.0438
      ],
      [
       "notes/learn/seated/r7-before-after-v4.jpg",
       1.6,
-      0.0324
+      0.0367
      ],
      [
       "source/sitting.py",
       1.3,
-      0.0264
+      0.0299
      ],
      [
       "notes/learn/seated/sheet_r7.py",
       0.7,
-      0.015
+      0.0169
      ],
      [
       "notes/learn/seated/judge_r7.py",
       0.7,
-      0.015
+      0.0169
      ],
      [
       "notes/learn/seated/judge/results-r7c4.md",
       0.7,
-      0.0138
+      0.0156
      ],
      [
       "notes/learn/seated/judge/judge-c4-A.md",
       0.7,
-      0.0138
+      0.0156
      ],
      [
       "notes/logs/kittests-last.log",
       0.5,
-      0.0095
+      0.0108
      ]
     ],
-    "base_pct": 19.9
+    "base_pct": 20.3
    },
    "search": {
     "show": 0,
@@ -150,10 +152,10 @@
      "no show": 0
     },
     "other": {
-     "other": 15,
-     "shared:handover.py": 3,
-     "shared:kittests.py": 4,
-     "film notes": 7,
+     "other": 18,
+     "shared:handover.py": 4,
+     "shared:kittests.py": 5,
+     "film notes": 8,
      "shared:bench_pose.py": 2,
      "shared:bench_draw.py": 3,
      "shared:bench_move.py": 2,
@@ -654,6 +656,54 @@
       "film notes",
       "notes/r7.md",
       "python3 - <<'EOF' f='notes/r7.md'; s=open(f).read() a=\"- [x] 25 Nov: proposal se",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "other",
+      "notes/*wound*.md",
+      "^## Where things stand",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "notes/*.md",
+      "Open Wounds",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/next-chat-prompt.md",
+      "^## Where things stand",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "source/kittests.py",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "shared:handover.py",
+      "notes/logs/kittests-last.log source/handover.py notes/r7.md",
+      "^PASS",
       ""
      ]
     ]
