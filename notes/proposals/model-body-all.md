@@ -22,4 +22,10 @@ Step 2 checks first, before building: MakeHuman's own garment library (on disk? 
 (22 Nov, GTA chat 31; apt install blender, not in setup.sh, so install it first); it drew Jason (L2) but its cloth
 simulation was never tried, then dresses the test in a suit jacket that hangs open; checks: cloth never through body or
 chair, each garment one piece. Name what could not be learned.
+Sam (chat 7): "Do we need to go as far as building 3d clothing models?" Default for step 2: NO garment models or
+cloth simulation first. Our style is flat, so only each garment's outline and seam lines must be right. Clothes as
+SHELLS from the body (already working: Jason's painted vest cut, chat 6/7 trouser shell hanging straight below the knee,
+chat 6 skirt from the body's own skirt surface): a jacket = the trunk pushed out, cut open at the front, its hem hanging
+straight and resting on the lap; lapels and ties painted on. Garment library / Blender cloth only if the shell fails a
+named test (say which). Robes and coats swinging while walking: a lag rule, tested in the clip.
 Push notification at the end of each step, pass or stop. Total cap 8.5% of a week; at the cap, stop and tell Sam.
