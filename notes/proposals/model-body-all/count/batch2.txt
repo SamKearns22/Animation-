@@ -1,0 +1,281 @@
+282	elder-swindon	notes/archive/elder-swindon.md:94	| 6 | A **discarded supermarket sandwich packet** ("maybe", my pick: in) | yes: tumbles past the scroll (shot 3), lies there after |
+283	elder-swindon	notes/archive/elder-swindon.md:95	| 7 | Where the teaser cuts to black: the camera **zooms right out** to the full **Magic Roundabout, Swindon**, traffic moving round it | yes: shot 5 (16.50-17.45), traffic from 16.9 to the end |
+284	elder-swindon	notes/archive/elder-swindon.md:96	| 8 | Title burns in like the teaser: small "The Elder Scrolls VI", big "**SWINDON**" | yes: shot 6 |
+285	elder-swindon	notes/archive/elder-swindon.md:97	| 9 | Our flat cartoon style for the roundabout; the opening as moody and realistic as possible | yes: near-real to 16.8 s, flat from 17.1 s |
+286	elder-swindon	notes/archive/elder-swindon.md:98	| 10 | **The joke:** Swindon is drab, uninspired, full of chavs; every shot after the zoom-out sells that | partly: drab estate, a CLOSING DOWN roof, the drooler and the dog stay in the middle; people too small to read from up there (Sam, Q4: no extra shots) |
+287	elder-swindon	notes/archive/elder-swindon.md:99	| 11 | **Hook Text:** "Elder Scrolls reveals new location!" (exact wording) | yes: `HOOK`, 0.5-4 s, y 1240 (below the can) |
+288	elder-swindon	notes/archive/elder-swindon.md:100	| 12 | Hook Text and the CranbriJoos sign-off (finish.py), as on every film | yes: finish.py on the clean render |
+289	elder-swindon	notes/archive/elder-swindon.md:101	| 13 | (Q2) A patch of soil and grass on the central island, where he lies; the rest of the island paved | yes |
+290	elder-swindon	notes/archive/elder-swindon.md:102	| 14 | (Q3) The man in our usual house style | yes |
+291	elder-swindon	notes/archive/elder-swindon.md:103	| 15 | (Q4) No extra shots after the title: the view from above holds to the end | yes: shot 6 drifts to 30.04 |
+292	elder-swindon	notes/archive/elder-swindon.md:104	| 16 | (Q5) The can reads "EXPORT LAGER"; the packet "EGG MAYO" | yes: label rows moved clear of the buried end (was "RT LAGER") |
+293	elder-swindon	notes/archive/elder-swindon.md:105	| 17 | (Q5) Lager can and splayed arm from the first frame; drooling face soon after | yes: face by 3.5 s |
+294	elder-swindon	notes/archive/elder-swindon.md:106	| 18 | (Q6) Cigarette butts and a ring-pull in the soil | yes |
+295	elder-swindon	notes/archive/elder-swindon.md:107	| 19 | (Q7) The teaser's warm low sun | yes: and its long shadows (the lamp post's crosses his legs) |
+296	elder-swindon	notes/archive/elder-swindon.md:108	| 20 | (Q9) The zoom-out is the Showstopper Shot (elements as listed) | yes: all 6 (see the Showstopper table) |
+297	elder-swindon	notes/archive/elder-swindon.md:109	| 21 | Budget 9% of a week | yes: see the estimate |
+298	elder-swindon	notes/archive/elder-swindon.md:110	| 22 | Animatic: the trailer's sound as it is | yes |
+299	elder-swindon	notes/archive/elder-swindon.md:111	| 23 | (Sam, 8 Nov) A Staffordshire bull terrier angrily attacking the guy's leg as we zoom out | yes: charges in 15.25, clamps 15.72, tugs and shakes to the end |
+300	elder-swindon	notes/archive/elder-swindon.md:112	| 24 | (Sam, 8 Nov) SWINDON burns in letter by letter with a glowing edge, like SENTINEL | yes: 22-27 s, cools to bronze by 29 |
+301	elder-swindon	notes/archive/elder-swindon.md:113	| 25 | (Sam, 8 Nov) The man stays out cold while the dog tugs (only his leg jerks) | yes |
+302	elder-swindon	notes/archive/elder-swindon.md:114	| 26 | (Sam, 8 Nov) The Staffie is brindle (brown, darker stripes, white blaze) | yes |
+303	elder-swindon	notes/archive/elder-swindon.md:115	| 27 | (Notes 1, 18) No CLOSING DOWN sign, no lettering on the building | yes: plain roof |
+304	elder-swindon	notes/archive/elder-swindon.md:116	| 28 | (Note 2) Minis moved out onto the arms; traffic goes round each mini, not the main circle | yes: minis at 56 m (were 42); no car circles the island; cars go mini to next mini |
+305	elder-swindon	notes/archive/elder-swindon.md:117	| 29 | (Note 3) Lamp post readable, its shadow shorter | yes: pole leaning out, double-armed head; shadow 14 m (was 47) |
+306	elder-swindon	notes/archive/elder-swindon.md:118	| 30 | (Note 4) Shot 6 lighter, not dark so fast | yes: dims to 26% (was 55%) over 2.5 s (was 0.85) |
+307	elder-swindon	notes/archive/elder-swindon.md:119	| 31 | (Note 5) "The Elder Scrolls VI" centre-aligned and grander | yes: centred on the frame, 66 px semibold (was 52), rule with diamond ends; SWINDON 132 px so it ends before x 900 |
+308	elder-swindon	notes/archive/elder-swindon.md:120	| 32 | (Note 6) Arm flat on the ground (not curled up), a hoody, vomit nearby; an amalgam of the reference photos, no likeness | yes: arm laid out near straight; grey hoody with the hood down; sick by his face; general traits only (grey hoody, gingery stubble, crop) |
+309	elder-swindon	notes/archive/elder-swindon.md:121	| 33 | (Sam, 8 Nov) "Make him just look like shit in general" | yes: sallow skin, blotchy red cheeks, eye bags, lines, stains on hoody and trackies |
+310	elder-swindon	notes/archive/elder-swindon.md:122	| 34 | (Note 7) The climb slower; the dog attack held long enough to read | yes: climb 16.90-19.86 (was 16.50-17.45), lands on the 19.86 hit |
+311	elder-swindon	notes/archive/elder-swindon.md:123	| 35 | (Note 8) Drool pinned to the mouth and the soil | yes: string from the mouth corner over the cheek to the pool, pool under the face's edge |
+312	elder-swindon	notes/archive/elder-swindon.md:124	| 36 | (Note 9) Swirling magic light round the scroll | yes: gold wisps from 7.6 s, glowing, to the climb |
+313	elder-swindon	notes/archive/elder-swindon.md:125	| 37 | (Note 10) A shopping bag overflowing with rubbish, north of the dog scene | yes: above his head in shot 4 |
+314	elder-swindon	notes/archive/elder-swindon.md:126	| 38 | (Note 11) Early evening: low golden sun, longer shadows | yes: sun 15 deg (was 21), warmer light, bluer shade (lamp shadow kept short: note 3) |
+315	elder-swindon	notes/archive/elder-swindon.md:127	| 39 | (Note 12) Shot 6: people walking on the paths and pavements | yes: pavements, the ring's pavement, a new footpath round the green |
+316	elder-swindon	notes/archive/elder-swindon.md:128	| 40 | (Note 13) Shot 6: two groups of men scuffling on a path | yes: on the footpath, top left |
+317	elder-swindon	notes/archive/elder-swindon.md:129	| 41 | (Note 14) Two hooded teenagers on e-bikes, far too fast, irresponsible | yes: the wrong way round inside the ring, weaving, 14 m/s |
+318	elder-swindon	notes/archive/elder-swindon.md:130	| 42 | (Note 15) A food delivery moped, plain box | yes: one of the traffic, red, no logo |
+319	elder-swindon	notes/archive/elder-swindon.md:131	| 43 | (Note 16) A burnt-out car on the green by the stadium | removed (Sam, animatic 3: it doesn't register) |
+320	elder-swindon	notes/archive/elder-swindon.md:132	| 44 | (Note 17) Framing: the 19.83 s view moved north by 8% of the frame (blue line at the bottom) | yes: END_MY 60 -> 35.1 |
+321	elder-swindon	notes/archive/elder-swindon.md:133	| 45 | (Animatic 2) No pink cheek blotches | yes |
+322	elder-swindon	notes/archive/elder-swindon.md:134	| 46 | (Animatic 2) Shot 1: less time on his face | yes: face reached by 4.4, cut at 6.57 (about 2.5 s on it; was 3.9) |
+323	elder-swindon	notes/archive/elder-swindon.md:135	| 47 | (Animatic 2) Shot 3 a few beats longer; the EGG MAYO packet lands near the scroll | yes: 11.43-15.08 (was 1.2 s, now 3.65 s); lands beside the scroll on the 13.86 hit |
+324	elder-swindon	notes/archive/elder-swindon.md:136	| 48 | (Animatic 2) The dog shot a beat longer | yes: the climb starts 17.45 (was 16.90): 1.7 s of the dog clamped before it |
+325	elder-swindon	notes/archive/elder-swindon.md:137	| 49 | (Animatic 2, and notes 2 before it) The roundabout as in Sam's photo and drone videos: minis inside one grey carriageway round the central island, splitter islands between them, cars on the road round the minis | yes: rebuilt from the video; every car checked on the road, every frame |
+326	elder-swindon	notes/archive/elder-swindon.md:138	| 50 | (Animatic 3) Less greying out of the aerial | yes: dims to 10% (was 26%) |
+327	elder-swindon	notes/archive/elder-swindon.md:139	| 51 | (Animatic 3) Lines in the housing so the terraces aren't one long block | yes: each house its own roof, tone varied, an alley every 7th, chimneys |
+328	elder-swindon	notes/archive/elder-swindon.md:140	| 52 | (Animatic 3) Hold on the aerial view a few more seconds: 5 s more of the track (Sam's second recording) | yes: the film now 35.04 s (+1.6 sign-off); the recording starts at 0:41 of the video, where the first ends; joined with a 20 ms crossfade, faded over the last 0.8 s |
+329	elder-swindon	notes/archive/elder-swindon.md:141	| 53 | (Sam, 9 Nov) Bikes a third smaller, smaller trails, a bit faster | yes: drawn at 2/3 the size, trails shorter and finer, 17 m/s (was 14) |
+330	elder-swindon	notes/archive/elder-swindon.md:142	| 54 | (Sam, 9 Nov) More traffic | yes: 13 cars an arm (was 9), junction limit 14, mix 8: about 38 cars in view (was 28); checked clean |
+331	elder-swindon	notes/archive/elder-swindon.md:143	| 55 | (Sam, 9 Nov) Walkers off the inner circle onto the outer, none next to the road | yes: walkers only on the footpath round the greens (lost: the pavement walkers) |
+332	elder-swindon	notes/archive/elder-swindon.md:144	| 56 | (Sam, 9 Nov) Two women walking with a pram | yes: on the footpath, top right |
+333	elder-swindon	notes/archive/elder-swindon.md:145	| 57 | (Sam, 9 Nov) Pigeons in the central circle | yes: a dozen on the island's paving, pecking |
+334	elder-swindon	notes/archive/elder-swindon.md:146	| 58 | (Sam, 9 Nov) One white van driving like an absolute twat | yes: from 24.1 s: down the centre line past the queue, straight over the mini's dome, weaving inside the splitter, out flat out; never touches anything (`van_faults`) |
+335	elder-swindon	notes/archive/elder-swindon.md:147	| 59 | (Animatic 4) Drool clipped in shots 3 and 4 | yes: from shot 2 the pool lies on the soil under him (drawn before his body); the strand stays on his cheek (shot 1's fix had never reached the other shots) |
+336	elder-swindon	notes/archive/elder-swindon.md:148	| 60 | (Animatic 4) EGG MAYO backwards | yes: the front face was shown from behind; mirrored |
+337	elder-swindon	notes/archive/elder-swindon.md:149	| 61 | (Animatic 4) The shopping bag and items too plain to identify | yes: carrier bag with a stripe and creases, lager can, crisp packet, chicken box with bones, pop bottle, banana skin, coffee cup |
+338	elder-swindon	notes/archive/elder-swindon.md:150	| 62 | (Animatic 4) Pigeons in shots 2-4 so we know what they are from above; they popped in late on the zoom out | yes: four by him from shot 2 (one flies off as the packet lands), a dozen on the island, drawn through every camera and grown smoothly |
+339	elder-swindon	notes/archive/elder-swindon.md:151	| 63 | (Sam, 9 Nov) Pigeon heads had no neck; poor shaping in shot 3; the neck stretch looked weird | yes: rebuilt after a critique (short fixed neck under the body and head, curved body, dark folded wings, feathered wingbeats, grey and eyeless when small); Sam: Y |
+340	elder-swindon	notes/archive/elder-swindon.md:152	| 64 | (Sam, animatic 5) A pigeon too close to his head in shot 1; no pigeons in any shot until shot 3 | yes: none drawn before shot 3 starts (11.43 s); the cut hides their arrival. Why row 62's "from shot 2" failed: the pigeons were drawn through every camera with no start time, so shot 1's glide to his face found one |
+341	elder-swindon	notes/archive/elder-swindon.md:173	1. Does the sound clip have the narrator ("A future lost. A victory undone...")? If Y, the can lands on "A future lost" and the man on "A victory undone".
+342	elder-swindon	notes/archive/elder-swindon.md:174	2. Where the man lies: the real central island is dark paving with a lamp post, not grass. 1 = the island turned into a scruffy patch of soil and grass round the lamp post (a small liberty, so he is dead centre); 2 = a grass verge by a mini roundabout.
+343	elder-swindon	notes/archive/elder-swindon.md:175	3. The man in the near-real shots: 1 = only close parts (cheek in the soil, half-open eye, drool, a limp hand), the whole man (flat, face down, grey tracksuit) seen in the zoom-out; 2 = his whole face near-real (risky).
+344	elder-swindon	notes/archive/elder-swindon.md:176	4. After the title: 1 = aerial with the title to 24.8 s, then two ground-level shots (lads on a moped and a lowered hatchback round a mini; a man in a tracksuit walking a Staffie past the drooler on the island); 2 = the aerial held to the end (3% cheaper; people too small to read from above).
+345	elder-swindon	notes/archive/elder-swindon.md:177	5. The can: 1 = invented brand, "SUPER STRENGTH LAGER 9%"; 2 = plain "EXPORT LAGER". Packet: an invented meal-deal "EGG MAYO".
+346	elder-swindon	notes/archive/elder-swindon.md:178	6. A smirk before 5 s (TikTok rule): 1 = cigarette butts and a ring-pull in the soil in shot 1; 2 = shot 1 kept pure teaser.
+347	elder-swindon	notes/archive/elder-swindon.md:179	7. Light: 1 = the teaser's warm low sun, so it looks real until the reveal; 2 = grey British overcast.
+348	elder-swindon	notes/archive/elder-swindon.md:180	8. Teaser screenshots (YouTube is blocked for me): 4 of them (blowing sand, the staff, the gold rings, the finished title)? Y = you send them; N = I copy your description.
+349	elder-swindon	notes/archive/elder-swindon.md:181	9. The zoom-out as the Showstopper Shot, its 6 elements as listed: Y/N.
+350	elder-swindon	notes/archive/elder-swindon.md:189	1. The title: SWINDON burns in letter by letter with a glowing edge, as the teaser's SENTINEL does (a glow is outside our house style, like Cortana's). Y/N
+351	elder-swindon	notes/archive/elder-swindon.md:190	2. The man stays out cold while the dog tugs (only his leg jerks). Y/N
+352	elder-swindon	notes/archive/elder-swindon.md:191	3. The Staffie: 1 = brindle (brown, darker stripes, white blaze); 2 = blue-grey.
+353	elder-swindon	notes/archive/elder-swindon.md:196	1. **Our own score, built on the same hits** (wind and a low drone; a swell and a bell on the glint, 7.79; deep booms
+354	elder-swindon	notes/archive/elder-swindon.md:200	2. Post with our score, and in the TikTok app swap in the official teaser sound from TikTok's own library, if it is
+355	elder-swindon	notes/archive/elder-swindon.md:202	3. Keep the trailer's sound in the file: likely muted or blocked by the automatic check.
+356	elder-swindon	notes/archive/elder-swindon.md:227	- Note 2 read as: the minis sit out on the arms (centre 56 m from the middle, the ring's tarmac to 49 m), and no car
+357	elder-swindon	notes/archive/elder-swindon.md:232	- Note 3 vs note 11: the evening sun would lengthen shadows, but the lamp's shadow is kept short (14 m) as Sam asked.
+358	elder-swindon	notes/archive/elder-swindon.md:233	- Note 7: the climb now 16.90-19.86 (lands on the 19.86 hit); the rings bloom as it lands (were 17.45, mid-climb
+359	elder-swindon	notes/archive/elder-swindon.md:236	- Note 17: the view's centre moved north by 8% of 1920 px at 168 m wide (23.9 m); the title moved down to fit under
+360	elder-swindon	notes/archive/elder-swindon.md:238	- Note 6 and Sam's photos (re-sent 8 Nov): general traits only (grey hoody, gingery stubble, short crop); the face is
+361	elder-swindon	notes/archive/elder-swindon.md:241	- The opening camera nudged towards his hand (the arm now lies further out) so his face stays out of shot until the
+362	elder-swindon	notes/archive/elder-swindon.md:243	- People from above drawn up to 4x real size, mopeds 2x: Sam said Y (8 Nov). Budget raised to about 10.4% of a week: Sam said Y.
+363	elder-swindon	notes/archive/elder-swindon.md:244	- Pre-flight hang found and fixed (8 Nov): linecheck loaded GNU OpenMP into the main process, so the drawing workers forked
+364	elder-swindon	notes/archive/elder-swindon.md:259	1. Remove the CLOSING DOWN sign on the building (Lost: the sign; it doesn't support the joke).
+365	elder-swindon	notes/archive/elder-swindon.md:260	2. The exterior roundabouts sit on the junctions; move them further in, onto the arms. Traffic goes round each mini, not the main circle.
+366	elder-swindon	notes/archive/elder-swindon.md:261	3. The central lamp post is not clear, yet its shadow is huge: make the pole readable, shorten the shadow.
+367	elder-swindon	notes/archive/elder-swindon.md:262	4. Swindon from above goes too dark too quickly: lighter grade.
+368	elder-swindon	notes/archive/elder-swindon.md:263	5. "The Elder Scrolls VI" title: centre-aligned and grander in size.
+369	elder-swindon	notes/archive/elder-swindon.md:264	6. The drunk man looks asleep. His arm is curled off the ground. Give him a hoody and vomit nearby. Two reference photos are for inspiration only: no realistic likeness of either person. (Not copying the faces; a mugshot-style photo of a real person is not a model for a mocked character.)
+370	elder-swindon	notes/archive/elder-swindon.md:265	7. The zoom up from below is too fast; hold the dog attack long enough to read.
+371	elder-swindon	notes/archive/elder-swindon.md:266	8. The drool floats up from the ground and clips through his face: pin it to the mouth and the soil.
+372	elder-swindon	notes/archive/elder-swindon.md:267	9. Give the scroll swirling magic light, as in the trailer (added: a glow, an exception to the house style; pending Y).
+373	elder-swindon	notes/archive/elder-swindon.md:268	10. Added: a shopping bag overflowing with trash, north of the dog scene.
+374	elder-swindon	notes/archive/elder-swindon.md:269	11. Make it early evening (added: low golden sun, longer shadows; pending Y).
+375	elder-swindon	notes/archive/elder-swindon.md:272	12. Shot 6: foot traffic: people walking on the paths and pavements.
+376	elder-swindon	notes/archive/elder-swindon.md:273	13. Shot 6: two groups of men in a scuffle / fist fight on one of the paths.
+377	elder-swindon	notes/archive/elder-swindon.md:274	14. Shot 6: two teenagers in hoodies on e-bikes, far too fast, riding irresponsibly.
+378	elder-swindon	notes/archive/elder-swindon.md:275	15. Shot 6: a food delivery moped (plain box, no brand).
+379	elder-swindon	notes/archive/elder-swindon.md:276	16. Shot 6: a burnt-out car on the green by the stadium.
+380	elder-swindon	notes/archive/elder-swindon.md:277	17. Shot 6 framing: keep the animatic's angle (19.83 s, `references/elder-swindon/shot6-framing-sam.jpg`), only move the
+381	elder-swindon	notes/archive/elder-swindon.md:280	18. Remove the lettering on the building (the same as note 1: the CLOSING DOWN sign).
+382	flying-whales	notes/archive/flying-whales.md:73	| 1 | The rig whole, from the diagonal, at dusk, close enough for detail (railings, lit windows, lifeboats, name board) | the brief: "close enough to see details", "whole building in shot" |
+383	flying-whales	notes/archive/flying-whales.md:74	| 2 | Calm sea with pink and orange bands, sparkle, a slow swell; the rig's legs with foam at the waterline | dusk refs; the sea is half the frame |
+384	flying-whales	notes/archive/flying-whales.md:75	| 3 | The flare burning before anything happens, with its ribbon of smoke | the dusk refs; it makes the rig live before the attack |
+385	flying-whales	notes/archive/flying-whales.md:76	| 4 | Five humpbacks, each its own size and markings, entering from behind the camera at different heights and times | "a team"; told apart at a glance |
+386	flying-whales	notes/archive/flying-whales.md:77	| 5 | Each whale waves its flippers gently and puffs spray from the blowhole as it comes | the brief |
+387	flying-whales	notes/archive/flying-whales.md:78	| 6 | Each whale speeds up the closer it gets; no slowing on impact | Sam's note: like a hand through a Jenga tower |
+388	flying-whales	notes/archive/flying-whales.md:79	| 7 | Hits spread over the rig, one after another: legs, lower deck, top deck and crane, helipad, flare boom | the rig comes apart in stages and each hit reads |
+389	flying-whales	notes/archive/flying-whales.md:80	| 8 | Whales come out the far side unhurt and fly on, out of frame | "no harm to the whales" |
+390	flying-whales	notes/archive/flying-whales.md:81	| 9 | Debris thrown the way each whale was going, falling under gravity, each piece splashing into the sea | rule 32 and the satire guide |
+391	flying-whales	notes/archive/flying-whales.md:82	| 10 | Bracing crumpling, the deck sagging at the broken end while the rest stands | ref collapse-rig-crumpled |
+392	flying-whales	notes/archive/flying-whales.md:83	| 11 | Deck fires after the first hits; three or four fireballs with black smoke columns in the middle hits | refs fire-*; "some explosions" |
+393	flying-whales	notes/archive/flying-whales.md:84	| 12 | The crane and derrick whipping and toppling; lifeboats popping off | ref collapse-cranes-fireball; life in the collapse |
+394	flying-whales	notes/archive/flying-whales.md:85	| 13 | The finale: the whole deck tips as one block and slides into the sea, the far end rising, the tower last | refs collapse-rig-tilting, -sinking |
+395	flying-whales	notes/archive/flying-whales.md:86	| 14 | A crown splash, white steam at the waterline, foam rings spreading, the sea glowing orange under the fire | refs splash-crown, splash-column-ring, fire-dusk-glow |
+396	flying-whales	notes/archive/flying-whales.md:87	| 15 | Camera shake on each hit, bigger at the finale | weight |
+397	flying-whales	notes/archive/flying-whales.md:88	| 16 | Nobody on the rig, no boats, no helicopters | Sam: "it's only funny if people don't die" |
+398	flying-whales	notes/archive/flying-whales.md:89	| 17 | Two whales loop the loop after their first hit and come back for a second smash (Sam's yes, 1 Nov) | "zooming, looping, attacking whales"; the defying-physics joke |
+399	flying-whales	notes/archive/flying-whales.md:90	| 18 | Every whale wears a heavy, low, cross brow over each eye (Sam's yes, 1 Nov; a change to the approved whale) | the joke: they are angry about climate change |
+400	flying-whales	notes/archive/flying-whales.md:125	| O1 | Hook Text: "Blue Planet III looks 🔥🔥🔥" | yes: `HOOK`, upper band y 352, whole video; emoji now drawn (added by `finish.py`) |
+401	flying-whales	notes/archive/flying-whales.md:126	| O2 | "Humpback whales zooming through the sea." | yes: the pod speeds through open water (0.5-3.6) |
+402	flying-whales	notes/archive/flying-whales.md:127	| O3 | "They come towards the camera, which moves around to follow alongside them." | yes: they come at us on a diagonal, camera swings to their side (0.5-4.6) |
+403	flying-whales	notes/archive/flying-whales.md:128	| O4 | David Attenborough's voice: "This series, we will see animal behaviour we could scarcely have imagined." | changed (Sam, note 7): subtitles only, no voice; placeholder times (0.3-5.0) |
+404	flying-whales	notes/archive/flying-whales.md:129	| O5 | "As he reaches the end of the sentence, the whales are swimming upwards towards the surface." | yes: they tilt up on "imagined" (4.2-5.4) |
+405	flying-whales	notes/archive/flying-whales.md:130	| O6 | "Hard cut to Jackdaw scene" | yes: hard cut at 5.6 |
+406	flying-whales	notes/archive/flying-whales.md:131	| O7 | "In the opening scene, the whales are still beneath the waves." | yes: all under water until 5.6 |
+407	flying-whales	notes/archive/flying-whales.md:132	| O8 | "Near the end of the scene, they start to shoot towards the surface." | yes: they race for the bright surface (4.6-5.4) |
+408	flying-whales	notes/archive/flying-whales.md:133	| O9 | "In the Jackdaw scene, we see them flying." | yes: flying in the rig scene |
+409	flying-whales	notes/archive/flying-whales.md:134	| O11 | The joke (Sam, 1 Nov): "the new behaviour we are seeing is that the animals are so angry about climate change they are defying physics to destroy infrastructure" | yes, by the action (no words state it): angry brows, they wreck the rig |
+410	flying-whales	notes/archive/flying-whales.md:135	| O10 | Sam (1 Nov, about the rig scene): "five whales smash their way through this rig, making it tumble and explode and break into parts in an orgy of effects and destruction and zooming, looping, attacking whales" | yes: five whales, loops (Showstopper 17), fire, pieces, the sinking |
+411	flying-whales	notes/archive/flying-whales.md:140	| U1 | Open blue water, no sea bed: deep navy below, lighter teal towards the surface, fading to blue about 45 m off | Blue Planet's open-ocean humpback shots; nothing to distract from the whales |
+412	flying-whales	notes/archive/flying-whales.md:141	| U2 | The surface seen from below: a bright, wavy, rippling ceiling, warm gold at dusk where the sun is | O5, O8: the whales race "towards the surface", so it must be there to aim at |
+413	flying-whales	notes/archive/flying-whales.md:142	| U3 | Light shafts slanting down from the surface, swaying slowly | the Blue Planet look; makes it read as "under the sea" at a glance |
+414	flying-whales	notes/archive/flying-whales.md:143	| U4 | Specks drifting in the water (marine snow) | the only fixed things in open water: without them the camera's swing can't be seen |
+415	flying-whales	notes/archive/flying-whales.md:144	| U5 | The same five whales (Inky leads; Blaze, Freckle, Bib, Ghost), same patterns and sizes as the rig scene | Sam: "the same five whales" |
+416	flying-whales	notes/archive/flying-whales.md:145	| U6 | A loose, staggered pod (different depths, a length or two apart; each follows the lead's path, so they tilt up one after another) | "a team"; never marching in step (rule 9) |
+417	flying-whales	notes/archive/flying-whales.md:146	| U7 | Each whale's flippers waving, tail beating; they speed up all scene (6 to 8 m/s, then 13 m/s on the rise) | O2 "zooming"; the rig brief: they speed up, never slow |
+418	flying-whales	notes/archive/flying-whales.md:147	| U8 | The heavy low brow on every whale, readable on the lead's close pass (moment 2) | the joke seeds here: they are angry |
+419	flying-whales	notes/archive/flying-whales.md:148	| U9 | The camera: in front as they come at us on a slight diagonal, then swinging round to their right side and pacing them | O3; Sam's answer (diagonal, swing round alongside) |
+420	flying-whales	notes/archive/flying-whales.md:149	| U10 | Freckle passing low under the lens on our side | a foreground layer (rule 4) and a sense of size |
+421	flying-whales	notes/archive/flying-whales.md:150	| U11 | On "imagined": they tilt up 40 degrees and race for the surface, trailing bubbles; the camera drops below them and tilts up | O5, O8 |
+422	flying-whales	notes/archive/flying-whales.md:151	| U12 | Hard cut just before the lead breaks the surface; they burst out in the rig scene heading up and to the right | O6; rule 16 (direction holds: up-right in both) |
+423	flying-whales	notes/archive/flying-whales.md:152	| U13 | The Hook Text on from the first frame, in the upper band (y 245-460), clear of the whales | O1; Sam: Hook Text on the whole video |
+424	flying-whales	notes/archive/flying-whales.md:153	| U14 | A shoal of small silver fish that scatters as the pod charges through (my addition; Sam: yes) | Blue Planet life; shows the speed |
+425	flying-whales	notes/archive/flying-whales.md:154	| U15 | No divers, boats or people; nothing above the surface shows (the rig is a surprise) | Sam: no people; the cut must surprise |
+426	flying-whales	notes/archive/flying-whales.md:209	| B1 | Open water, no sea bed: bright blue up top, deep navy below | rear-three-quarter, pod-from-above | yes (benchmark sheet, 1 Nov) |
+427	flying-whales	notes/archive/flying-whales.md:210	| B2 | The surface from below: a bright wavy ceiling broken into ripple shapes | side-under, side-painting | yes (benchmark sheet, 1 Nov) |
+428	flying-whales	notes/archive/flying-whales.md:211	| B3 | Light shafts fanning down from the surface | side-painting | yes (benchmark sheet, 1 Nov) |
+429	flying-whales	notes/archive/flying-whales.md:212	| B4 | A trail of bubbles behind a whale | pod-from-above | yes (benchmark sheet, 1 Nov) |
+430	flying-whales	notes/archive/flying-whales.md:213	| B5 | Distance fades whales into the blue (the far one paler, less contrast) | pod-from-above, rear-three-quarter | yes (benchmark sheet, 1 Nov) |
+431	flying-whales	notes/archive/flying-whales.md:214	| B6 | Lit from above: backs bright, bellies in shade, white flippers glowing | side-under, belly-flippers | yes (benchmark sheet, 1 Nov) |
+432	flying-whales	notes/archive/flying-whales.md:215	| B7 | Small specks and bubbles hanging in the water near the surface | side-under | yes (benchmark sheet, 1 Nov) |
+433	flying-whales	notes/archive/flying-whales.md:216	| B8 | Near the surface: its underside as a hard line, the whale's back just under it | tail-behind, throat-grooves | yes (benchmark sheet, 1 Nov) |
+434	flying-whales	notes/archive/flying-whales.md:217	| B9 | Whales blue-grey under water (never black), white flippers and bellies the brightest thing | all | yes (benchmark sheet, 1 Nov) |
+435	flying-whales	notes/archive/flying-whales.md:218	| B10 | Ours is dusk (Sam's yes): the same layout, the surface glowing warm gold, the water deeper teal | (our choice) | yes (benchmark sheet, 1 Nov) |
+436	flying-whales	notes/archive/flying-whales.md:221	1. Underwater references (rule 3): none yet. Recommend: Sam sends 4-6 (Blue Planet humpbacks in open blue water from
+437	flying-whales	notes/archive/flying-whales.md:223	2. Light under the sea: recommend dusk (deep blue-teal water, the surface glowing warm gold), the same evening as the
+438	flying-whales	notes/archive/flying-whales.md:225	3. Hook Text: recommend moving it from the middle (y 880) to the upper band for the whole video, since the middle is
+439	flying-whales	notes/archive/flying-whales.md:227	4. The fish shoal (U14, my addition): recommend yes (small, cheap, very Blue Planet).
+440	flying-whales	notes/archive/flying-whales.md:228	5. Bubble trails from the blowholes on the rise (my addition): recommend yes.
+441	flying-whales	notes/archive/flying-whales.md:251	- Whales flying on out of frame after their hit (the brief says "no harm"; it doesn't say where they go).
+442	flying-whales	notes/archive/flying-whales.md:252	- A one- or two-frame freeze on each contact, and camera shake.
+443	flying-whales	notes/archive/flying-whales.md:253	- Lifeboats popping off and crane whipping (set life in the collapse).
+444	flying-whales	notes/archive/flying-whales.md:254	- Sky and sea (1 Nov): seven clouds lit from below; the sun just set left of frame (so the rig is side-lit, not a
+445	flying-whales	notes/archive/flying-whales.md:256	- A small white eye under each brow, the pupil glaring forward (1 Nov; the dark eye merged with the dark brow).
+446	flying-whales	notes/archive/flying-whales.md:257	- Foam slapping round the rig's legs; the flare's flame flickers (1 Nov).
+447	flying-whales	notes/archive/flying-whales.md:258	- The wreck (1 Nov): holes torn in the decks with embers; dust from each holed deck; the gas burst where the flare boom
+448	flying-whales	notes/archive/flying-whales.md:261	- The whales are slate blue-grey, not near-black (so the outline still reads at dusk and the line check can tell skin
+449	flying-whales	notes/archive/flying-whales.md:267	| 1 | all | | dusk, not day (Sam, 1 Nov: "Changed mind. Dusk.") | done: sky and sea painted at dusk |
+450	flying-whales	notes/archive/flying-whales.md:268	| 2 | whale sheet | | "Things look great so far" (Sam, 1 Nov): the whale approved | done |
+451	flying-whales	notes/archive/flying-whales.md:269	| 3 | opening | | the opening scene brief (checklist O1-O11) | set built; clips (a) and (b) sent 1 Nov |
+452	flying-whales	notes/archive/flying-whales.md:270	| 4 | rig | | "zooming, looping, attacking whales" (O10) | Sam: yes, two whales loop (Showstopper 17) |
+453	flying-whales	notes/archive/flying-whales.md:271	| 5 | all | | angry whales: a heavy low brow (Sam's yes) | done: whale.py brow (+ small white eye, flagged) |
+454	flying-whales	notes/archive/flying-whales.md:272	| 6 | rig | | clips (c)-(e): "Clips look good so far" (Sam, 1 Nov) | done: approved as they are |
+455	flying-whales	notes/archive/flying-whales.md:273	| 7 | opening | | "I can't record right now so just use subtitle" (Sam, 1 Nov) | done: Attenborough line as subtitles only, no voice; placeholder times stand |
+456	flying-whales	notes/archive/flying-whales.md:274	| 8 | rig | 10.17 | "a whale clips through the helicopter pad" (Sam, 2 Nov, animatic 1) | done: Bib only nudged it (0.36 of its speed) and caught it up; now batted off its path, out to our left and up (`HELI_SIDE`, `HELI_UP`); clip sent |
+457	flying-whales	notes/archive/flying-whales.md:275	| 9 | rig | 15.36 | "the building clips through its own smoke" | done: in the finale the smoke is wholly behind the rig (it was sorted half in front, half behind); clip sent |
+458	flying-whales	notes/archive/flying-whales.md:276	| 10 | rig | | Blaze's loop: "make him arc higher; most of his journey is blocked by the smoke" | done: the loop's top 70 m to 95 m (about y 490 to y 190), down in front of the smoke; speed at the second hit 75 to 98 m/s; contacts the same; clip sent |
+459	flying-whales	notes/archive/flying-whales.md:277	| 11 | rig | 15.25 | "the spray of water clips behind the Jackdaw sign" | done: finale splashes and bits drawn over the whole rig; clip sent |
+460	flying-whales	notes/archive/flying-whales.md:278	| 12 | rig | | "even bigger throw up of spray and debris" when the rig hits the water | done: crown splash bigger (size 13 to 19 m, 34 to 52 lumps, height x1.4) plus 46 big bits of debris; clip sent |
+461	flying-whales	notes/archive/flying-whales.md:279	| 13 | all | | "The hook text should disappear in the rig scene, it blocks the view" | done: Hook Text off at the cut (`--until 5.6`; `HOOK` in flying_whales.py) |
+462	flying-whales	notes/archive/flying-whales.md:280	| 14 | rig | 12-14 | "The rigs crane clips through the building and jackdaw sign" (Sam, 2 Nov, animatic 2) | fixed: the crane house and boom fell straight down through the decks; now thrown out over the rig's left end (`THROWN` kicks 12 and 10 m/s), tested: no point inside the deck block; clip pending |
+463	flying-whales	notes/archive/flying-whales.md:281	| 15 | rig | 9.79 | "The impact of the leftmost whale looks too much like a clip, the piece it strikes needs to crumple around him" | fixed: Bib through the stair tower, which only tipped once he was inside it (the same fault as note 8: that fix covered the helideck only). The tower now buckles into a V round him (`BUCKLE`, creased at the bends). Also (my addition, flagged): torn, bent panels round every deck hole (`crumples`), and a whale's part
+464	flying-whales	notes/archive/flying-whales.md:282	| 16 | rig | 13.71 | "the front most ream of smoke vanishes" | fixed: my note 9 fix sent every column behind the rig at the finale's start (13.80), so the front one jumped behind the decks. Now each column stays on the side it was on (`SMOKE_FRONT`). Loss: the front columns now cover part of the sinking block; clip pending |
+465	flying-whales	notes/archive/flying-whales.md:283	| 17 | rig | 10.62 | "The whale who comes out the back, I think it should emerge out of an explosion" | done: Blaze flies up out of a new fireball behind the right decks (`EXIT_FB`, story 4.42, 15 m), with its smoke; clip pending |
+466	flying-whales	notes/archive/flying-whales.md:284	| 18 | all | | "The line work is too thick throughout. Reduce the thickness throughout except for the JACKDAW lettering" | done: every outline 0.6 of the house weight (`SEA.LINE`; 5 px to 3 px), rig, whales, sea, effects, under the sea; the lettering unchanged |
+467	flying-whales	notes/archive/flying-whales.md:287	- Opener answers (Sam, 1 Nov: "all is well and you can continue"): Showstopper list U1-U15 approved; no more
+468	flying-whales	notes/archive/flying-whales.md:290	- Opening scene answers (Sam, 1 Nov): Sam records the Attenborough line himself (an impression; remind him: a second
+469	flying-whales	notes/archive/flying-whales.md:296	- Sam (1 Nov): no cost-saving cuts; the whales are needed in the prior scene too, so build them from every view.
+470	flying-whales	notes/archive/flying-whales.md:297	- Sam's answers (1 Nov): a prior scene comes first (not written yet); this shot is 12 s; no Hook Text for now;
+471	flying-whales	notes/archive/flying-whales.md:300	- No people anywhere: empty rig, no boats or helicopters (Sam, 1 Nov).
+472	flying-whales	notes/archive/flying-whales.md:301	- Dusk (Sam's final word, 1 Nov); the pink-purple sky with the calm mirrored sea, warm wave caps in front.
+473	flying-whales	notes/archive/flying-whales.md:302	- House satire style; start from `source/satire_template.py`.
+474	flying-whales	notes/archive/flying-whales.md:303	- One locked camera, 2D painted layers (rule 39).
+475	flying-whales	notes/archive/flying-whales.md:304	- Whales: plain humpbacks, no wings or effects; flippers held out and gently waving; they speed up into each hit.
+476	flying-whales	notes/archive/flying-whales.md:305	- References taken for shape and colour only; nothing from the real disasters appears in the film.
+477	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:6	- [x] Title "Grand Theft Autism"; opening = a send-up of the game-trailer logo reveal (Sam's screen recording, 3.4 s).
+478	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:7	- [x] Opening approved (19 Nov, v4: "It's great"): logo wipes in, grows, city fades in, logo washes pale and dissolves.
+479	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:8	- [x] Sam (20 Nov): "Why did the fire hydrant/cars clipping pass?" Shot 2 drew the hydrant with the street, under every
+480	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:15	- [x] Sam (20 Nov): "No darkness at the beginning of the clip: immediate logo wipe in so that people don't swipe away."
+481	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:19	- [x] Lettering matched to the reference (g's tail, R joined into the h of "theft"). Sam: "great".
+482	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:20	- [x] Sam (20:40): "I will send a screenplay at a later point with full details." Received 22:29 (draft 1).
+483	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:21	- [x] Sam (20:45-20:58) on the opening: "you will need to improve quality in almost every category"; "work more on the
+484	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:24	- [x] Sam (22:36): "Anything else you think you should ask in advance?" Answered by the parent chat's questions 1-7.
+485	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:25	- [x] Sam (22:36): "This is an ambitious build." Priced honestly in the estimate below (20 Nov).
+486	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:26	- [x] Sam (22:41): "You have 2% of this usage session left to spend on whatever you want for this job." Spent in chat 1.
+487	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:27	- [x] Sam's answers (20 Nov, to chat 2's 1-7): 1 Y screenplay is final; 2 Y rehearse the swerve and the lean-out/crash
+488	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:33	- [x] Sam (20 Nov): "Camera movement 7, keep it on all 3." = shot 7 (the rear-view mirror insert) is DROPPED: the camera
+489	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:36	- [x] Sam (20 Nov, 03:35, chat 4): "Make the autistic girl prettier, I want her to be sort of cooler too." Before
+490	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:38	- [x] Sam (20 Nov, chat 4): "look at references of Lucia and Jason from the first few hours of the gameplay before you
+491	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:42	- [x] Sam (20 Nov, 13:06, relayed by one-route-kit chat 5): "These are the new references for Jason and Lucia." (two
+492	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:47	- [x] Sam (20 Nov, 13:06): "Please ensure you are building them the correct body shapes." "Find further references if
+493	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:50	- [x] Sam (20 Nov, characters chat, on the new cast): "Jason should have a very light fade of stubble." (was a full
+494	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:53	- [x] Sam: "The current design of autistic woman is too close to someone I know and I'd like to to approach her face and
+495	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:69	- [x] Sam (20 Nov, chat 9, on the fixed cast sheet; "Overall, good"): (1) "When we look at him from the back, there is a
+496	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:84	- [x] Sam (20 Nov, chat 9, on the five-angle sheet): "The headphones ... look absolutely terrible. They literally clip
+497	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:105	- [x] Sam (20 Nov, chat 10, on the headphones sheet): "the three-quarter turns still have the weird slumped necks that
+498	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:202	- [x] Sam: "Shot 2 looks amazing." (keep the swerve as it is)
+499	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:203	- [x] Sam: "I think some white cloud streaks would be good too." (in the sky of both shots) (chat 14: four more
+500	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:205	- [x] Sam (20 Nov, chat 13): "This part of the screenplay comes first" (shot 3 text, as in the brief items above);
+501	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:214	- [x] Note 1: "Throughout the scene, L's hands are on the wheel in opposite grips." It is "not how humans drive":
+502	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:216	- [x] Notes 3, 6, 7, 15: "The right arm turns into a gross sausage shape and becomes dislocated from the shoulder."
+503	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:221	- [x] Note 9: the cop "should be dead or seriously injured." Blood mist against the glass, a slump (fix 3).
+504	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:222	- [x] Sam's answers: "A 2D body can be animated to do 3D movements like this, though." (lesson 10); "We need to do
+505	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:227	- [x] Sam (21:27): "First of all, please take all the work you have done on shot 4, and all our communication and
+506	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:237	- Shot 5: from shot 4's last frame (matches); she brakes, Lucia yanks the wheel right, the Tulip slides round a T
+507	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:241	- Shot 6: closer two-shot through the windscreen. Line 4: Lucia's eyes and a small head turn to Jason on "you", eyes
+508	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:244	- Shot 7: three-shot held, both forward; the cruisers close in, lights growing over the roof and in the back window.
+509	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:245	- Shot 8: line 6; the spinner stops, she leans in, smiles; Jason's and Lucia's eyes slide to each other on
+510	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:247	- Fixed at full size before any check: windscreen rail across the heads in shot 6 (camera lowered, rule 30: Sam's
+511	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:315	- [x] 1. "Lucia arms still crossed on steering wheel" (REPEAT of chat 16 note 1, rule 30). Likely why: her grips are
+512	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:316	- [x] 2. "We can see through the bonnet to Jason when he moves" (shot 3/4 start: his body shows through the bonnet).
+513	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:317	- [x] 3. "Jason clips through two parts of the car as he moves" (pictures: arm through the door frame and pillar).
+514	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:318	- [x] 5. "Blood splatter is a 2D effect that doesn't turn with the windscreen, is always horizontal on to the camera."
+515	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:319	- [x] 6. "No hydrant strike, there's no physicality, it should be hit and smash forward, like any object hit by a car."
+516	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:320	- [x] 7. "Hydrant water effect clips through car."
+517	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:321	- [x] 8. "No death reaction by officer, stays still" (REPEAT of chat 16 note 9). Likely why: his slump leans him
+518	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:322	- [x] 9. "Let's have the car wobble back and forth along the road for two secs before it turns and crashes."
+519	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:323	- [x] 10. "Ultimately there's so much wrong in this image, I don't know how to teach you to recognise it." (picture
+520	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:326	- [x] F10/F11: Jason in shots 5-8 is drawn on shot 4's own seated skeleton (leanout.seated, K1 with his gesture hand),
+521	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:330	- [x] F9: the wheel is 8 cm lower in shots 3-4 too, Lucia's grip is shots 5-8's (ten and two) in every shot: the rim
+522	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:332	- [x] NEW check (rule 3): source/cutmatch.py, the cut-match check. Same camera across a cut -> anything jumping more
+523	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:337	- [x] F14 (found by the body check on the clip, 41-44 drawings): in shots 5-8 Lucia's and the woman's forearms were
+524	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:340	- [x] NEW back-view check (Seeing like Sam 4), inside the body check, so every clip and animatic runs it: a person
+525	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:345	- [x] F1, F5, F7: shot 4's camera re-chosen (CAM4): the lens reaches his front side before he turns back (it arrived
+526	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:350	- [x] F4: walkers on the shop pavement within 7 m of the lens while it rides there are not on that stretch
+527	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:352	- [x] F3 reads now: the pan along his line of fire lands on the lead cruiser with the street round it.
+528	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:353	- [x] False flag fixed: the crossed-arms test skipped side-on walkers (shoulders one over the other): 8 flags gone.
+529	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:354	- [x] Old test body_check_shot4_v4 was already failing (v4's own shot 3 really had Lucia's crossed arms, v4 note 1):
+530	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:361	- Shot 4 case study (Sam, 20 Nov, chat 16): everything on shot 4 (versions, pictures, Sam's words, causes, lessons,
+531	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:363	- [ ] Sam: "Our scenery needs an appropriately vice city background, as currently the street ends in blank void." Both
+532	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:365	- [ ] Sam on shot 4 (chat 11 version, sent too early): "I am surprised you delivered it to me." The lean-out was a
+533	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:367	- [ ] Sam: "What are the elements you would need to consider with the camera, actors, props and perspective ... walk me
+534	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:369	- [ ] Sam: "Do you think it helps to read the screenplay before working on a scene?" Yes: read shot 4's lines in the
+535	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:372	- [ ] Sam on the civilians: they only stand still (same code in every version); "in yours, the people are tiny and
+536	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:375	- [ ] Sam (uploaded the first clip, references/grand-theft-autism/shot4-original-rehearsal.mp4): the ORIGINAL is
+537	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:379	- [ ] Sam: "Rebuild this scene from scratch following your beat-by-beat analysis. Give Jason an open window so you have
+538	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:386	- [ ] Sam (20 Nov, chat 12): "You are currently putting the actors in the bonnet. You're not starting from the right
+539	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:392	- [ ] Sam (20 Nov, after chat 13): "Keep working on this until you can render the whole film shot sheet." (the chain
+540	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:395	- [ ] Sam (20 Nov 18:06, shot 3 as written): "On the left, Jason, looking hard towards us." "On the driver's side,
+541	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:402	- [ ] Sam (20 Nov ~18:30), note 1: "Y. Just follow your best suggestion for the next hour please, no stopping."
+542	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:543	- L1: pass list of 24 shot-4 Jason notes/faults by cause (10 hiding, 7 look, 7 motion), each with the bench check that
+543	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:545	- L2: Blender installed and draws here (no graphics card needed for its fast engine). One frame both ways, same 3D Jason:
+544	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:548	- L3: CMU has no car move; 3 stock clips found but not watched (previews would not play here); no key poses marked.
+545	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:550	- [x] Sam (22 Nov): "Y 1" (stage 1 on our one-pass drawing). "2 I'm sorry that just isn't possible. You may be able
+546	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:554	- [x] L3: reference found and watched (free Pexels photo + 4 clips; videos.pexels.com allowed by Sam's approval);
+547	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:556	- [~] Stage 1: source/bench_move.py built (goal-driven solid body, own-skeleton IK, all checks); key poses not yet clean.
+548	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:557	- Branch claude/gta-chat31 (leanout.py DOOR_L change, show log): kept as a record only (Sam's Y, chat 32 pick 4); not merged.
+549	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:563	- [ ] Notes 2-4, 11: "When J begins his movement, his lower body becomes visible." "This isn't necessary and I wonder
+550	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:566	- [ ] Note 8: "The gun is not pointing at his target." "It is firing towards the left."
+551	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:567	- [ ] Note 14: "The eternally bald crowd doesn't notice the explosion or react to it." (bald fixed chat 16; the
+552	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:569	- [ ] Note 16: "At no point do our cast display any acting notes." (acting rows below, rule 74)
+553	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:589	- [ ] 1. Acting while they speak lacks imagination: use the front-on focus kit (source/focus.py, the BoJack look: head
+554	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:591	- [ ] 2. Jason always faces forward while he indicates other things: his head and look should go to what he points at.
+555	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:592	- [ ] 3. Jason's arm poses need work (gestures in shot 6: free hand opening, counting, open palm toward her).
+556	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:593	- Chat 19's done list (the focus-kit looks, clip v2): moved to notes/archive/grand-theft-autism-notes.md (chat 33).
+557	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:598	- [ ] 4. "The backwards arm is a gross distended sausage still" (THIRD time: chat 23's fix failed, Sam on the v8 frame sheets: "Shots 0.92-2:42 have the exact same arm problem"; case study section 16, last point) (REPEAT of chat 16 notes 3, 6, 7, 15).
+558	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:608	- Chat 23: all ten done in version 8 (each cause, fix and check in the case study, section 16); note 10 through
+559	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:615	- [ ] F1 15.4: Jason climbs out with his back to us; his arm a plain tube, the hand on the door a blob. Check: none
+560	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:617	- [ ] F2 15.6-16.4: the gun arm is a tube with a round end, no hand; the pistol reads as a stick (15.6), a blade
+561	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:620	- [ ] F3 16.6: the lens right behind the Tulip's tail: a red box with a dark slab out of the boot, nobody in frame.
+562	grand-theft-autism	notes/archive/grand-theft-autism-notes.md:622	- [ ] F4 17.1: a passer-by walks through the lens (half a man in white at the left edge, stick legs). Repeat of chat
