@@ -5100,22 +5100,153 @@ def trodden_things_move():
     return bool(old) and not now and moved > 0.1, f'old: {old}; now: {now or "none"}; kicked {moved:.2f} m'
 
 
+@test
+def kit_tests_rerun_only_what_changed():
+    """kit-tests-when (Sam's pick 1, 25 Nov, notes/proposals/kit-tests-when.md): each green kit test leaves a stamp of
+    the files it read, and only tests whose files changed run again. Proves: (1) a film-only change that a test reads
+    re-runs that test and no other; (2) unchanged files skip; (3) a change that arrives by merging another chain's
+    branch re-runs its test; (4) the notes-archive red (23 Nov, move_to_shared_catches_film_fixes went red when a film's
+    notes were archived: a notes-only change) is caught: the film list's own code records notes/archive as read;
+    (5) a Python program a test starts reports its own reads; any other use of the project's git counts as reading ALL; (6) finish.py refuses an animatic or final without fresh passes."""
+    import shutil
+    import subprocess
+    import tempfile
+    import kitstamps as K
+    d = tempfile.mkdtemp()
+    keep = (K.ROOT, K.KITTESTS)
+    try:
+        src = os.path.join(d, 'source')
+        os.makedirs(src)
+        film = os.path.join(src, 'zz_film_shot.py')
+        shared = os.path.join(src, 'zz_shared_tool.py')
+        open(film, 'w').write('POSE = 1\n\ndef pose():\n    return POSE\n')
+        open(shared, 'w').write('def tool():\n    return 2\n')
+        open(os.path.join(src, 'kittests.py'), 'w').write(
+            '@test\ndef t_film():\n    return 1\n\n\n@test\ndef t_tool():\n    return 2\n')
+        g = lambda *a: subprocess.run(['git', '-C', d, '-c', 'user.name=k', '-c', 'user.email=k@k', *a],
+                                      capture_output=True, text=True)
+        g('init', '-q', '-b', 'main')
+        g('add', '-A')
+        g('commit', '-qm', 'start')
+        K.ROOT, K.KITTESTS = d, os.path.join(src, 'kittests.py')
+        rec = os.path.join(d, 'stamps.tsv')
+
+        def run_film():
+            ns = {}
+            exec(compile(open(film).read(), film, 'exec'), ns)
+            return ns['pose']()
+
+        def run_tool():
+            return open(shared).read()
+        _, r_film = K.traced(run_film)
+        _, r_tool = K.traced(run_tool)
+        r_film = (r_film or set()) | {'source/kittests.py::t_film'}
+        r_tool = (r_tool or set()) | {'source/kittests.py::t_tool'}
+        K.write_green([('t_film', r_film, 1.0), ('t_tool', r_tool, 1.0)], rec)
+        unchanged, _ = K.stale(['t_film', 't_tool'], rec)
+        open(film, 'a').write('POSE = 3\n')                                # (1) a film-only change
+        film_change, _ = K.stale(['t_film', 't_tool'], rec)
+        g('stash', '-q')
+        g('checkout', '-qb', 'other')                                     # (3) another chain changes the shared tool
+        open(shared, 'a').write('# other chain\n')
+        g('commit', '-qam', 'other chain')
+        g('checkout', '-q', 'main')
+        K.write_green([('t_film', r_film, 1.0)], rec)                     # t_film green again on main
+        before_merge, _ = K.stale(['t_film', 't_tool'], rec)
+        g('merge', '-q', 'other')
+        after_merge, _ = K.stale(['t_film', 't_tool'], rec)
+    finally:
+        K.ROOT, K.KITTESTS = keep
+        shutil.rmtree(d, ignore_errors=True)
+    root = os.path.dirname(HERE)                                           # (5) another program: a Python child's own
+    _, r_child = K.traced(lambda: subprocess.run([sys.executable, '-c', 'open("CLAUDE.md").read()'], cwd=root,
+                                                 capture_output=True))     # reads come back; a git command that
+    _, r_prog = K.traced(lambda: K.tracer()._program(['git', '-C', root, 'push'], None))   # is no read is ALL
+    import handover as H                                                   # (4) the notes-archive red
+    _, r_arch = K.traced(H._film_prefixes)
+    import finish                                                          # (6) finish refuses without fresh passes
+    import override
+    import propose
+    real = (K.finish_gate, override.refuse, propose.open_letthroughs, finish.load_film, sys.argv,
+            os.environ.pop('KITTESTS_RUNNING', None))
+    said, loaded = [], []
+    try:
+        K.finish_gate = lambda: 'zz_test without a pass on the current files'
+        propose.open_letthroughs = lambda: []
+        override.refuse = lambda msg, path=None: (_ for _ in ()).throw(SystemExit(msg))
+        finish.load_film = lambda n: loaded.append(n)
+        sys.argv = ['finish.py', 'clean.mp4', 'out.mp4', '--film', 'zz']
+        try:
+            finish.main()
+        except SystemExit as e:
+            said.append(str(e))
+        except Exception as e:
+            said.append(f'ran on: {e}')
+    finally:
+        K.finish_gate, override.refuse, propose.open_letthroughs, finish.load_film, sys.argv, ke = real
+        if ke:
+            os.environ['KITTESTS_RUNNING'] = ke
+    gate_none = K.finish_gate(stale_fn=lambda: ([], {}))
+    gate_left = K.finish_gate(stale_fn=lambda: (['zz_red'], {'zz_red': 3.0}), run_fn=lambda: None)
+    refused = bool(said) and 'kit tests' in said[0] and not loaded
+    ok = (unchanged == [] and film_change == ['t_film'] and before_merge == [] and after_merge == ['t_tool']
+          and K.ALL in (r_prog or set()) and 'CLAUDE.md' in (r_child or set()) and K.ALL not in (r_child or set())
+          and 'notes/archive' in (r_arch or set())
+          and refused and gate_none == '' and 'zz_red' in gate_left)
+    return ok, (f'unchanged: {unchanged or "none"} re-run; film-only change: {film_change}; merged branch: '
+                f'{before_merge or "none"} then {after_merge}; child read: {"CLAUDE.md" in (r_child or ())}; '
+                f'git push: {"ALL" if K.ALL in (r_prog or ()) else "missed"}; '
+                f'notes/archive read: {"notes/archive" in (r_arch or set())}; finish: {said[:1] or "ran"}; '
+                f'gate fresh: {gate_none!r}, stale: {gate_left[:40]!r}')
+
+
 def main():
-    only = sys.argv[1] if len(sys.argv) > 1 else ''
+    """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
+    the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
+    leaves a stamp of the files it read in notes/kittest-stamps.tsv."""
+    import time
+    import kitstamps
+    args = sys.argv[1:]
+    only_stale = '--stale' in args
+    names = None
+    if '--names' in args:
+        names = set(filter(None, args[args.index('--names') + 1].split(',')))
+        args = args[:args.index('--names')] + args[args.index('--names') + 2:]
+    args = [a for a in args if a != '--stale']
+    only = args[0] if args else ''
+    os.environ['KITTESTS_RUNNING'] = '1'           # finish.py's kit gate stands aside for tests that call finish
+    pick = [fn for fn in TESTS if (not only or only in fn.__name__) and (names is None or fn.__name__ in names)]
+    fresh = 0
+    if only_stale:
+        st, secs = kitstamps.stale([fn.__name__ for fn in pick])
+        fresh = len(pick) - len(st)
+        pick = [fn for fn in pick if fn.__name__ in st]
+        print(f'kittests: {len(pick)} stale to run, {fresh} fresh (their files unchanged since a green run); '
+              f'about {kitstamps.say_minutes(kitstamps.estimate(st, secs))}', flush=True)
+    tr = kitstamps.tracer()
     bad = 0
-    for fn in TESTS:
-        if only and only not in fn.__name__:
-            continue
+    t_all = time.time()
+    for fn in pick:
+        t0 = time.time()
+        tr.start()
         try:
             ok, detail = fn()
         except Exception as e:
             import traceback
             traceback.print_exc()
             ok, detail = False, f'crashed: {e}'
+        finally:
+            reads = tr.stop()
         bad += not ok
         print(f"{'PASS' if ok else 'FAIL'} {fn.__name__}: {detail}")
-        print(f"     ({(fn.__doc__ or '').strip().splitlines()[0]})")
-    print('kittests:', 'all passed' if not bad else f'{bad} failed')
+        print(f"     ({(fn.__doc__ or '').strip().splitlines()[0]})", flush=True)
+        if ok and reads is not None:
+            kitstamps.write_green([(fn.__name__, reads, time.time() - t0)])
+        elif ok:
+            print(f'     (no stamp: a file it read changed while it ran, or this Python cannot trace)')
+    took = kitstamps.say_minutes(time.time() - t_all)
+    tail = f' ({len(pick)} run in {took}, {fresh} fresh)' if only_stale else f' ({len(pick)} run in {took})'
+    print('kittests:', ('all passed' if not bad else f'{bad} failed') + tail)
     sys.exit(1 if bad else 0)
 
 

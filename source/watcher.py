@@ -30,7 +30,7 @@ MAP
     python3 source/watcher.py check            (all live checks on this chat; prints faults)
     python3 source/watcher.py unlisted         (systems with no promise)
     python3 source/watcher.py name ID "why"    (a chat owns a fault: named, off the standing list)
-    python3 source/watcher.py kittests-bg      (setup.sh: the kit tests in the background, result to notes/logs)
+    python3 source/watcher.py kittests-bg      (setup.sh: the stale kit tests in the background, result to notes/logs)
 """
 import glob, json, os, re, subprocess, sys
 from datetime import datetime, timezone
@@ -85,6 +85,7 @@ PROMISES = {
     'finish.py': ('Hook Text and sign-off on every animatic and final', 'named: rule 75 checks in preflight'),
     'handover.py': ('nothing Sam says is dropped between chats', 'live saver'),
     'kittests.py': ('every kit check passes against the fault that taught it', 'live kittests'),
+    'kitstamps.py': ('only the kit tests whose files changed run again, and no animatic or final on files a kit test has not passed on (Sam\'s pick 1, 25 Nov)', 'kittest kit_tests_rerun_only_what_changed'),
     'ledger.py': ('every film\'s cost is recorded', 'kittest cost_rows_reach_the_main_line'),
     'page.py': ('a note finds its code in one step', 'live finder'),
     'plan.py': ('the plan stage', 'named: used by hand'),
@@ -563,7 +564,7 @@ def main(argv):
     if cmd == 'kittests-bg':
         os.makedirs(LOGS, exist_ok=True)
         with open(KITLOG, 'w') as f:
-            subprocess.run(['nice', '-n', '19', sys.executable, os.path.join(ROOT, 'source', 'kittests.py')],
+            subprocess.run(['nice', '-n', '19', sys.executable, os.path.join(ROOT, 'source', 'kittests.py'), '--stale'],
                            stdout=f, stderr=subprocess.STDOUT, cwd=ROOT, timeout=1800)
         return 0
     if cmd == 'check':

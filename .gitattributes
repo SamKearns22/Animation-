@@ -2,3 +2,4 @@ notes/ledger/*.json merge=ledger
 notes/ledger/*.md merge=ledger
 notes/ledger/app-costs.tsv merge=ledger
 notes/ledger/sam/*.md merge=union
+notes/kittest-stamps.tsv merge=union

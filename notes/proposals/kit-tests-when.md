@@ -129,3 +129,55 @@ chat 14 (session_01U3pKR1ipLftvRyJ1wn1Tcp). Built in its own chat (Opus high), a
 4. The start-up hook (setup.sh) runs only the stale tests in the background.
 5. A kittest proves it: a film-only change that a test reads re-runs that test; an unchanged file skips; finish refuses
    without fresh stamps. Lost: the full run in every chat. Added: the stamp record; a run before every animatic/final.
+
+## Built (25 Nov, kit-tests build chat 5285aeae, Opus high)
+- **Step 0, the record and the replay (done first, nothing switched off before it):** `source/kitstamps.py` traces each
+  kit test: every function that runs (Python's per-function start event, switched off after its first sighting, so the
+  run is no slower: 23 s traced vs 22.9 s untraced on turned_parts_kept), every `import` named, one step out (what those
+  modules hold by name: constants, compiled functions), every file opened and folder listed, git commands on the project
+  (stamped by what they print), and Python programs a test starts (each traces itself and reports back; no report =
+  ALL). Final full run: 146 of 146 passed in 15 min, all stamped (notes/kittest-stamps.tsv).
+  Replay of the last 7 days (`python3 source/kitstamps.py replay 7`, 128 chats): a full run every chat 1,895 min;
+  the path rule 1,259 min (43 chats film-only); per-test stamps **636 min**: median wait 2.1 min a chat (quartiles
+  0.4 / 2.1 / 11.9), film-only chats median 0.4 min (max 2.6). **Past reds: 7 of 7 caught** (each had a file it reads
+  changed between the green and the red), including the notes-archive red (move_to_shared_catches_film_fixes, 23 Nov:
+  notes/archive's file list is read). Named: the replay uses today's reads for past chats (reads may have differed);
+  the first reds on record (23 Nov 14:13) use a 24 h window.
+- **Change 1:** each green test appends one line (name, stamp, seconds, setup, reads) to notes/kittest-stamps.tsv
+  (merge=union in .gitattributes; newest 3 lines per test kept). `handover.py end` runs only the stale tests, on the
+  chat's final code (`kittests.py --stale`), saying how long; the two-reds and crash STOPs stay.
+- **Change 2:** `finish.py` refuses an animatic or final while any test lacks a pass on the current files, running the
+  stale ones first and saying how long (`kitstamps.finish_gate`; Override still applies). Rule 59's check column names it.
+- **Change 3:** setup.sh's background run (watcher.py kittests-bg) runs `kittests.py --stale` only.
+- **Kittest** `kit_tests_rerun_only_what_changed`: a film-only change re-runs only the test that reads it; unchanged
+  files skip; a merged branch's change re-runs its test; notes/archive recorded as read; a Python child's reads come
+  back and a git command that is no read counts as ALL; finish.py refuses without fresh passes.
+- **Named risks (fail-shut where possible):** a file checked only for existence (os.path.exists) is not recorded; tests
+  run in a smaller set may meet different leftover state from earlier tests; five tests still read ALL (start a program
+  that leaves no report or use git's history), so they re-run whenever source/ or .claude/ changes; a test that
+  depends on a library version re-runs on a new setup (the stamp holds the versions).
+- **Numbers to beat** (end-of-film review): "still running" refusals on unchanged code (17 on record) to 0; animatics or
+  finals on untested files 0; reds first seen by a later chat 0.
+
+## Where things stand (kit-tests build, 25 Nov)
+- **Locked by Sam:** his pick 1 as written above; nothing in any film touched (Open Wounds chat 15 owns its files).
+- **Rules that bite next:** 59 (finish refuses without fresh kit passes), 85 (cost watch), N27 (Override skips the kit gate, logged).
+- **Done:** Steps 0-3 and the kittest, as "Built" above; all 146 kit tests green and stamped.
+- **Next:** none for this job; the next chat of any film just runs `handover.py end` as usual (only stale tests run).
+  Review the numbers to beat at the end of Open Wounds.
+- **Needs Sam:** nothing.
+- **Read:** this file's "Built"; `python3 source/kitstamps.py stale` shows what would run.
+- **Open rule requests:** none.
+- **For Claude:** kitstamps.Tracer (one per process, `tracer()`), `traced(fn)` for nested tracing; KITTESTS_RUNNING=1
+  makes finish.py skip the gate inside kit tests; child tracing via a temp sitecustomize.py that first runs the system's own.
+
+## Handover check named (kit-tests build, 25 Nov)
+- **Branches named:** claude/brexit-chat15 is Open Wounds chat 15's live work (its chat merges it); claude/gta-v5-sound-draft,
+  claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 hold only posted-GTA logs, a proposal and two old
+  helpers: not merged here (outside this job).
+- **Handover check named:** SENTENCE lost (34f49840, 0945cc85): earlier chats' commits, not this one's; both sentences
+  stand in CLAUDE.md as Sam reworded them. COST: a tool job, no film estimate (its cost is filed as tool work).
+  KIT TESTS: Sam typed "Override kit tests" (25 Nov): the hand-over's stale run (38 tests after the merge with chat 15's
+  shared changes) was skipped, logged; they stay stale, so the next start-up run, `handover.py end` or finish.py runs them.
+- **Start check named:** "NOT CARRIED 08:02 ... make sure it's implement" is Sam's acting-plan message in Open Wounds
+  chat 14; it is carried in notes/brexit-is-done.md "Acting plan" (chat 15's job), not this one's.

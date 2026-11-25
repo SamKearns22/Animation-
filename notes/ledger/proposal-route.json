@@ -15697,64 +15697,62 @@
   {
    "date": "2026-11-25",
    "chat": "5285aeae",
-   "stage": "auto",
-   "round": null,
-   "notes": 0,
-   "repeats": [],
    "model": "opus",
-   "cost": 1.21,
-   "src": "estimate",
-   "sid": "session_01U3pKQy8p92uqYawCrUC3wP",
-   "steps": 69,
-   "hist_k": 194,
+   "stage": "build",
+   "round": null,
+   "cost": 1.92,
+   "notes": 1,
+   "repeats": [],
+   "steps": 82,
+   "hist_k": 212,
    "kinds": {
-    "tool search": 27.4,
-    "renders": 6.9,
-    "other": 65.7
+    "tool search": 22.8,
+    "renders": 4.9,
+    "other": 72.3
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 48,
+    "tool search": 57,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 6,
     "pictures": 0,
-    "other": 14
+    "other": 15
    },
    "split": {
-    "usd": 4.4175,
-    "total": 4.4175,
+    "usd": 6.2398,
+    "total": 6.2398,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 34.9,
-     "start-up floor": 27.0,
-     "new writes": 20.0,
-     "carried history": 18.1
+     "new writes": 33.6,
+     "Claude's words": 27.8,
+     "start-up floor": 19.6,
+     "carried history": 19.0
     },
     "origins": {
-     "Claude's words": 53.0,
-     "start-up floor": 27.0,
-     "result: tool search": 15.0,
-     "Claude's edits": 2.4,
-     "messages and reminders": 1.3,
-     "result: renders": 0.7,
-     "result: other": 0.5
+     "Claude's words": 42.1,
+     "messages and reminders": 23.3,
+     "start-up floor": 19.8,
+     "result: tool search": 12.2,
+     "Claude's edits": 1.7,
+     "result: renders": 0.5,
+     "result: other": 0.4
     },
     "named": {
-     "writing code": 27.3,
-     "start-up reading (rules, tools, first files)": 27.0,
-     "thinking": 20.4,
-     "start-up and handover tools": 7.7,
-     "commands": 5.6,
-     "reading notes": 2.7,
-     "running checks and tools": 2.2,
-     "messages to Sam": 2.1,
-     "reading kit code": 1.6,
-     "renders": 1.5,
-     "messages and reminders": 1.3,
-     "reading guides": 0.3,
-     "other commands": 0.2
+     "messages and reminders": 23.3,
+     "writing code": 21.6,
+     "start-up reading (rules, tools, first files)": 19.8,
+     "thinking": 15.9,
+     "start-up and handover tools": 5.5,
+     "commands": 4.7,
+     "running checks and tools": 2.6,
+     "reading notes": 2.2,
+     "messages to Sam": 1.7,
+     "reading kit code": 1.2,
+     "renders": 1.1,
+     "other commands": 0.2,
+     "reading guides": 0.2
     },
     "leftover": 0.0
    },
@@ -15766,456 +15764,51 @@
      [
       "source/kittests.py",
       3.3,
-      0.0631
+      0.0643
      ],
      [
       "notes/proposals/kit-tests-when.md",
       2.5,
-      0.0481
+      0.049
      ],
      [
       "source/handover.py",
       2.2,
-      0.043
+      0.0438
      ],
      [
       "source/finish.py",
       2.3,
-      0.0411
+      0.0419
      ],
      [
       ".claude/hooks/setup.sh",
       1.1,
-      0.0204
+      0.0208
      ],
      [
       "notes/archive/brexit-is-done-notes.md",
       1.0,
-      0.0175
+      0.0179
      ],
      [
       "notes/logs/kittests-last.log",
       0.1,
-      0.0027
+      0.0028
      ],
      [
       "source/watcher.py",
       0.1,
-      0.0027
+      0.0028
      ],
      [
       "notes/logs/kittest-reds.log",
       0.1,
-      0.0027
+      0.0028
      ]
     ],
-    "base_pct": 23.4
-   },
-   "search": {
-    "show": 0,
-    "film": {
-     "no show": 0
-    },
-    "other": {
-     "other": 14,
-     "shared:handover.py": 6,
-     "shared:kittests.py": 9,
-     "shared:watcher.py": 4,
-     "shared:finish.py": 2,
-     "shared:kitstamps.py": 10,
-     "guides": 2,
-     "film notes": 1
-    },
-    "ticked": 0,
-    "edited film code": false,
-    "list": [
-     [
-      0,
-      "other",
-      "other",
-      "",
-      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g -q ",
-      ""
-     ],
-     [
-      1,
-      "other",
-      "shared:handover.py",
-      "source/handover.py",
-      "git push --dry-run origin HEAD:claude/create-claude-md-oe8z4g 2>&1 | tail -2; py",
-      ""
-     ],
-     [
-      2,
-      "other",
-      "shared:handover.py",
-      "source/handover.py notes/proposals/kit-tests-when.md",
-      "python3 source/handover.py start --help 2>&1 | head -20; ls notes/ | head -50; c",
-      ""
-     ],
-     [
-      3,
-      "other",
-      "shared:handover.py",
-      "notes/proposals/kit-tests-when.md source/handover.py",
-      "cat notes/proposals/kit-tests-when.md; sed -n 940,1005p source/handover.py",
-      ""
-     ],
-     [
-      4,
-      "other",
-      "shared:handover.py",
-      "source/handover.py notes/proposals/kit-tests-when.md",
-      "python3 source/handover.py start session_01U3pKR1ipLftvRyJ1wn1Tcp --notes notes/",
-      ""
-     ],
-     [
-      5,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "^def \\|^if __name__\\|sys.argv",
-      ""
-     ],
-     [
-      6,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "^def main\\|^def _run\\|^def run\\b\\|__main__",
-      ""
-     ],
-     [
-      7,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py source/handover.py",
-      "def kittest_gate_faults",
-      ""
-     ],
-     [
-      8,
-      "other",
-      "shared:watcher.py",
-      ".claude/hooks/setup.sh source/watcher.py source/handover.py notes/logs",
-      "kittests",
-      ""
-     ],
-     [
-      9,
-      "other",
-      "shared:watcher.py",
-      "notes/logs/kittests-last.log source/watcher.py notes/logs/kittest-reds.log",
-      "pgrep -af kittests; tail -3 notes/logs/kittests-last.log; git check-ignore -v no",
-      ""
-     ],
-     [
-      10,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py notes/archive/*.md",
-      "Claude-Session: .*",
-      ""
-     ],
-     [
-      11,
-      "other",
-      "shared:kittests.py",
-      "notes/archive/brexit-is-done-notes.md source/kittests.py",
-      "fork\\|Pool(\\|threading\\|concurrent",
-      ""
-     ],
-     [
-      12,
-      "other",
-      "shared:finish.py",
-      "source/finish.py source/override.py",
-      "def main\\|argv\\|override\\|def refuse",
-      ""
-     ],
-     [
-      13,
-      "other",
-      "shared:finish.py",
-      "source/finish.py",
-      "sed -n 193,262p source/finish.py",
-      ""
-     ],
-     [
-      15,
-      "other",
-      "shared:handover.py",
-      "notes/logs/kittest-reds.log source/handover.py",
-      "def _film_prefixes",
-      ""
-     ],
-     [
-      16,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py source/kittests.py",
-      "def _chats",
-      ""
-     ],
-     [
-      18,
-      "other",
-      "other",
-      "",
-      "^|",
-      ""
-     ],
-     [
-      22,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py source/kittests.py notes/kittest-stamps.tsv",
-      "/",
-      ""
-     ],
-     [
-      24,
-      "other",
-      "shared:kittests.py",
-      "notes/kittest-stamps.tsv source/kittests.py notes/logs/kittests-last.log",
-      "rm -f notes/kittest-stamps.tsv && time python3 source/kittests.py > notes/logs/k",
-      ""
-     ],
-     [
-      25,
-      "other",
-      "shared:kitstamps.py",
-      "source/*.py .claude/hooks/* guides/*.md source/kitstamps.py",
-      "kittest_gate_faults\\|KITLOG\\|kittests-bg\\|kittests-last",
-      ""
-     ],
-     [
-      26,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py source/ruleproofs.py source/watcher.py",
-      "sed -n 4835,4870p source/kittests.py; sed -n 50,75p source/ruleproofs.py; sed -n",
-      ""
-     ],
-     [
-      29,
-      "other",
-      "shared:watcher.py",
-      "source/watcher.py notes/logs .claude/hooks/setup.sh source/kitstamps.py notes/ki",
-      "python3 - <<'EOF' p='source/watcher.py' s=open(p).read() old=\"\"\" subprocess.run(",
-      ""
-     ],
-     [
-      30,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py source/kittests.py",
-      "kitstamps.tracer",
-      ""
-     ],
-     [
-      31,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py notes/logs/kittests-last.log",
-      "^PASS\\|^FAIL",
-      ""
-     ],
-     [
-      32,
-      "other",
-      "other",
-      "notes/logs/kittests-last.log notes/kittest-stamps.tsv",
-      "^PASS\\|^FAIL",
-      ""
-     ],
-     [
-      34,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() old=''' gate_none = K.",
-      ""
-     ],
-     [
-      35,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py notes/logs/kittests-last.log",
-      "^PASS\\|^FAIL",
-      ""
-     ],
-     [
-      36,
-      "other",
-      "shared:watcher.py",
-      "source/watcher.py",
-      "python3 source/watcher.py unlisted 2>&1 | tail -5; sed -n 80,95p source/watcher.",
-      ""
-     ],
-     [
-      38,
-      "other",
-      "guides",
-      "guides/job-packs.md guides/film-quality-rules.md notes/logs/kittests-last.log",
-      "kit test\\|kittests",
-      ""
-     ],
-     [
-      39,
-      "other",
-      "guides",
-      "guides/film-quality-rules.md notes/logs/kittests-last.log",
-      "^PASS\\|^FAIL",
-      ""
-     ],
-     [
-      40,
-      "other",
-      "other",
-      "notes/logs/handover-end.log",
-      "STILL RUNNING",
-      ""
-     ],
-     [
-      42,
-      "other",
-      "other",
-      "",
-      "git checkout -q -b claude/kit-tests-when-build && git add -A && git commit -qm \"",
-      ""
-     ],
-     [
-      43,
-      "other",
-      "other",
-      "notes/logs/kittests-last.log notes/kittest-stamps.tsv",
-      "^PASS",
-      ""
-     ],
-     [
-      44,
-      "other",
-      "shared:kitstamps.py",
-      "notes/logs/kittests-last.log source/kitstamps.py",
-      "^kittests:",
-      ""
-     ],
-     [
-      48,
-      "other",
-      "other",
-      "",
-      "^\\s*File\\|^Traceback\\|^\\s\\s\\s\\s",
-      ""
-     ],
-     [
-      49,
-      "other",
-      "other",
-      "",
-      "python3 -c \"import sitecustomize; print(sitecustomize.__file__)\" 2>&1 | tail -1;",
-      ""
-     ],
-     [
-      50,
-      "other",
-      "other",
-      "",
-      "cat /usr/local/lib/python3.13/sitecustomize.py | head -30",
-      ""
-     ],
-     [
-      52,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py",
-      "_REAL_LISTDIR(self",
-      ""
-     ],
-     [
-      57,
-      "other",
-      "other",
-      "",
-      "ALL from\\|^[a-z_]*$",
-      ""
-     ],
-     [
-      58,
-      "other",
-      "other",
-      "",
-      "ALL from\\|^[a-z_]*$",
-      ""
-     ],
-     [
-      59,
-      "other",
-      "shared:kittests.py",
-      "source/kittests.py",
-      "N=$(python3 -c \" import sys; sys.path.insert(0,'source'); import kitstamps as K ",
-      ""
-     ],
-     [
-      60,
-      "other",
-      "other",
-      "notes/logs/kittest-reds.log",
-      "^@@\\|^$",
-      ""
-     ],
-     [
-      61,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py",
-      "format:@@C",
-      ""
-     ],
-     [
-      62,
-      "other",
-      "shared:kitstamps.py",
-      "source/kitstamps.py",
-      "python3 - <<'EOF' p='source/kitstamps.py' s=open(p).read() s=s.replace(\"\"\" '--fo",
-      ""
-     ],
-     [
-      64,
-      "other",
-      "shared:handover.py",
-      "notes/_template.md source/handover.py",
-      "^## ",
-      ""
-     ],
-     [
-      65,
-      "other",
-      "other",
-      "notes/archive notes/proposals/*.md",
-      "tool\\|job",
-      ""
-     ],
-     [
-      66,
-      "other",
-      "film notes",
-      "notes/proposals/override-word.md",
-      "Where things stand",
-      ""
-     ],
-     [
-      67,
-      "other",
-      "other",
-      "",
-      "^PASS\\|^FAIL",
-      ""
-     ]
-    ]
-   },
-   "notes_auto": 0
+    "base_pct": 19.7
+   }
   },
   {
    "date": "2026-11-25",
@@ -17367,6 +16960,763 @@
       "shared:kittests.py",
       "notes/logs/handover-end.log /home/user/Animation-/notes/logs/handover-end.log so",
       "git show :1:notes/logs/handover-end.log > /tmp/claude-0/-home-user-Animation-/8f",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "684643bb",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.25,
+   "src": "estimate",
+   "sid": "session_01GznaASxv3pZQm3sS8pLxQq",
+   "steps": 17,
+   "hist_k": 116,
+   "kinds": {
+    "tool search": 14.5,
+    "other": 85.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 10,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.9049,
+    "total": 0.9049,
+    "floor_k": 102,
+    "blocks": {
+     "start-up floor": 62.9,
+     "Claude's words": 21.5,
+     "new writes": 13.0,
+     "carried history": 2.7
+    },
+    "origins": {
+     "start-up floor": 62.9,
+     "Claude's words": 28.0,
+     "result: tool search": 5.7,
+     "messages and reminders": 2.3,
+     "Claude's edits": 1.0,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 62.9,
+     "thinking": 8.5,
+     "commands": 8.2,
+     "messages to Sam": 6.7,
+     "writing notes": 5.6,
+     "reading kit code": 3.3,
+     "messages and reminders": 2.3,
+     "renders": 1.5,
+     "reading notes": 0.8,
+     "git and saving": 0.1,
+     "app tools (chats, files sent)": 0.1,
+     "edit results": 0.1,
+     "reading chat records": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 102,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/arm3d_film.py",
+      0.4,
+      0.0042
+     ],
+     [
+      "source/bench_blender.py",
+      0.4,
+      0.0042
+     ]
+    ],
+    "base_pct": 32.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 6,
+     "shared:people_parts.py": 1,
+     "shared:arm3d_film.py": 1,
+     "guides": 1,
+     "film notes": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "seated",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "seat",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "source/.*seat source/.*sit source/.*lower",
+      "source/.*seat\\|source/.*sit\\|source/.*lower",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:arm3d_film.py",
+      "source/arm3d_film.py source/bench_blender.py guides/kit-catalogue.md",
+      "blender\\|3d",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "guides",
+      "notes/*.md guides/*.md",
+      "arm3d",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-handovers.md",
+      "arm3d",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git status --short | head; git branch --show-current",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "notes/proposals/guard-blocks.jsonl",
+      "cd /home/user/Animation-; git add notes/proposals/guard-blocks.jsonl && git comm",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "notes/learn/seated/ notes/learn/seated/examples notes/learn/seated/examples/sam-",
+      "cd /home/user/Animation-; ls notes/learn/seated/ | head; ls notes/learn/seated/e",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "notes/learn/seated",
+      "cd /home/user/Animation-; git add notes/learn/seated && git commit -qm \"Seated l",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "b2f8e1d1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 2.23,
+   "src": "estimate",
+   "sid": "session_01U3pKQyiJ2poN3syCEWUzsu",
+   "steps": 62,
+   "hist_k": 194,
+   "kinds": {
+    "tool search": 26.4,
+    "renders": 5.5,
+    "pictures": 1.8,
+    "other": 66.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 44,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 2,
+    "other": 5
+   },
+   "split": {
+    "usd": 3.4582,
+    "total": 3.4582,
+    "floor_k": 98,
+    "blocks": {
+     "start-up floor": 39.4,
+     "new writes": 22.4,
+     "carried history": 19.7,
+     "Claude's words": 18.5
+    },
+    "origins": {
+     "start-up floor": 39.4,
+     "Claude's words": 28.4,
+     "result: tool search": 22.6,
+     "messages and reminders": 6.4,
+     "result: pictures": 2.4,
+     "result: other": 0.5,
+     "result: renders": 0.3
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 39.4,
+     "reading notes": 12.8,
+     "thinking": 8.6,
+     "commands": 8.1,
+     "start-up and handover tools": 7.4,
+     "writing notes": 7.3,
+     "messages and reminders": 6.4,
+     "looking at pictures": 2.4,
+     "messages to Sam": 2.0,
+     "reading kit code": 1.9,
+     "writing code": 1.5,
+     "helper and chat prompts": 0.9,
+     "helper results": 0.5,
+     "renders": 0.4,
+     "other commands": 0.3,
+     "running checks and tools": 0.1,
+     "reading guides": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 98,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/proposals/solid-body-moves.md",
+      3.4,
+      0.0575
+     ],
+     [
+      "notes/next-jobs.md",
+      2.7,
+      0.0483
+     ],
+     [
+      "notes/proposal-route.md",
+      2.7,
+      0.0482
+     ],
+     [
+      "notes/bench/learn-step.md",
+      2.6,
+      0.0427
+     ],
+     [
+      "guides/job-packs.md",
+      2.2,
+      0.0419
+     ],
+     [
+      "notes/learn/seated/examples/sam-25nov-v4-legs-awful-1.jpg",
+      1.6,
+      0.0284
+     ],
+     [
+      "notes/learn/seated/examples/sam-25nov-v4-legs-awful-2.jpg",
+      1.6,
+      0.0284
+     ],
+     [
+      "notes/archive/grand-theft-autism-notes.md",
+      1.7,
+      0.0274
+     ],
+     [
+      "notes/ledger/sam/ycewuzsu.md",
+      1.2,
+      0.023
+     ],
+     [
+      "notes/ledger/r7.md",
+      1.3,
+      0.0198
+     ],
+     [
+      "source/arm3d_film.py",
+      0.7,
+      0.0133
+     ],
+     [
+      "source/hand3d_film.py",
+      0.7,
+      0.0133
+     ],
+     [
+      "story/status.md",
+      0.6,
+      0.0109
+     ],
+     [
+      "source/jason3d_film.py",
+      0.7,
+      0.0106
+     ],
+     [
+      "notes/learn/seated/sheet_r7.py",
+      0.7,
+      0.0106
+     ],
+     [
+      "source/propose.py",
+      0.7,
+      0.0091
+     ],
+     [
+      "notes/proposals/seated-legs-3d.md",
+      0.6,
+      0.0076
+     ],
+     [
+      "notes/ledger/app-costs.tsv",
+      0.2,
+      0.0037
+     ],
+     [
+      "source/handover.py",
+      0.4,
+      0.0029
+     ],
+     [
+      "notes/logs/kittests-last.log",
+      0.2,
+      0.0024
+     ],
+     [
+      "/home/user/Animation-/notes/proposals/seated-legs-3d/chat.md",
+      0.2,
+      0.0022
+     ],
+     [
+      "notes/proposals/seated-legs-3d/judge/V2.md",
+      0.0,
+      0.0004
+     ],
+     [
+      "notes/proposals/seated-legs-3d/helper-b.md",
+      0.0,
+      0.0004
+     ],
+     [
+      "notes/proposals/seated-legs-3d/judge-labels.md",
+      0.0,
+      0.0001
+     ],
+     [
+      "notes/r7.md",
+      0.0,
+      0.0
+     ]
+    ],
+    "base_pct": 31.2
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "guides": 2,
+     "shared:handover.py": 5,
+     "film notes": 16,
+     "shared:propose.py": 5,
+     "shared:arm3d_film.py": 1,
+     "other": 9,
+     "shared:jason3d_film.py": 1,
+     "shared:ledger.py": 1,
+     "shared:bench_pose.py": 1,
+     "shared:kittests.py": 3
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "git status | head -5 && git log --oneline -3 && git branch -a | head -30 && ls &",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "notes/ledger/sam/ycewuzsu.md source/handover.py notes/learn/seated/",
+      "cat notes/ledger/sam/ycewuzsu.md | head -20; python3 source/handover.py --help 2",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/branches.py",
+      "python3 source/handover.py start session_01GznaASxv3pZQm3sS8pLxQq --film r7 2>&1",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/*.md notes/learn/seated/*.md notes/next-jobs.md story/status.md",
+      "R7\\b",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:propose.py",
+      "notes/next-jobs.md notes/proposal-route.md source/propose.py",
+      "sed -n 25,60p notes/next-jobs.md; cat notes/proposal-route.md | head -60; python",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:arm3d_film.py",
+      "notes/learn/seated/examples/ source/arm3d_film.py source/hand3d_film.py",
+      "ls notes/learn/seated/examples/; head -60 source/arm3d_film.py; head -40 source/",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "guides",
+      "notes/ledger/sam/*.md guides/kit-catalogue.md",
+      "arm",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "notes/*.md notes/archive/*.md",
+      "arm3d",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-notes.md notes/archive/grand-theft-autism-hando",
+      "arm3d\\|3d arm\\|measured arm\\|sausage",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposals/solid-body-moves.md",
+      "^$",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "notes/shot4-case-study/ notes/proposals/*.md",
+      "body3d|solid|mesh|mhuman|blender|toon|bench|onepass|single",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "for f in bench_draw bench_pose bench_blender bench_move; do echo \"=== $f\"; sed -",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/bench/ notes/bench/learn-step.md",
+      "sam",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "film notes",
+      "notes/bench/sam-notes notes/bench/learn-step.md",
+      "ls notes/bench/sam-notes; sed -n 140,240p notes/bench/learn-step.md | cut -c1-35",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "dressed\\|one-pass\\|bench",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "film notes",
+      "notes/archive notes/archive/grand-theft-autism-notes.md guides/kit-catalogue.md",
+      "dressed\\|bench_move\\|solid body",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-notes.md",
+      "sed -n 704,722p notes/archive/grand-theft-autism-notes.md | cut -c1-600; sed -n ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:jason3d_film.py",
+      "source/jason3d_film.py notes/learn/seated/sheet_r7.py source/sitting.py",
+      "^def \\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/ source/ledger.py",
+      "^sam$",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "notes/ledger/ notes/ledger/app-costs.tsv",
+      "r7|seat|bench|solid",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "film notes",
+      "notes/ledger/r7.md notes/ledger/r7.json notes/ledger/grand-theft-autism.md",
+      "solid\\|bench\\|stage 1\\|stage 2\\|chat 3[3-9]\\|chat 4[0-6]",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/ notes/proposals/seated-legs-3d.md",
+      "python3 source/propose.py new seated-legs-3d \"Seated legs that read in every vie",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "r7|seated",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "film notes",
+      "notes/proposals/seated-legs-3d.md notes/proposals/seated-legs-3d/ notes/ledger/s",
+      "git add notes/proposals/seated-legs-3d.md notes/proposals/seated-legs-3d/ notes/",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "film notes",
+      "notes/proposals/seated-legs-3d/helper-a.md",
+      "git add notes/proposals/seated-legs-3d/helper-a.md && git commit -qm \"Proposal s",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge seated-legs-3d 2>&1 | tail -10",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "notes/proposals/seated-legs-3d/",
+      "git add notes/proposals/seated-legs-3d/ && git commit -qm \"Proposal seated-legs-",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record seated-legs-3d 2>&1 | tail -8; python3 source/p",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "film notes",
+      "notes/proposals/seated-legs-3d/state.json notes/proposals/seated-legs-3d/judge/V",
+      "python3 -c \"import json;d=json.load(open('notes/proposals/seated-legs-3d/state.j",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:bench_pose.py",
+      "notes/proposals/seated-legs-3d/judge-labels.md notes/next-jobs.md notes/learn/se",
+      "cat > notes/proposals/seated-legs-3d/judge-labels.md <<'EOF' # Named fault in th",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/seated-legs-3d.md",
+      "python3 source/propose.py mark seated-legs-3d adopted 2>&1 | tail -3; sed -n '/^",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "film notes",
+      "notes/logs/kittests-last.log notes/next-jobs.md notes/archive/r7-handovers.md",
+      "[k]ittests",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "kittests",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "other",
+      "",
+      "git add -A notes/ && git status --short | head; git commit -qm \"R7 chat 5: Sam p",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:handover.py",
+      "notes/logs/kittests-last.log source/handover.py notes/next-jobs.md",
+      "^PASS",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "where things stand",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "film/blessed",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/r7.md notes/learn/seated/no-bum-circular-knees-sam.jpg ",
+      "python3 - <<'EOF' p='notes/next-jobs.md' s=open(p).read() i=s.index(' - **R7, wh",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "kittests.py people_from",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "git add -A notes/ && git commit -qm \"R7: own notes file (notes/r7.md) with the o",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:handover.py",
+      "notes/logs/kittests-last.log source/handover.py",
+      "^SENTENCE",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/handover.py",
+      "kittests-last",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "sed -n 555,570p source/handover.py",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "^FAIL",
       ""
      ]
     ]
