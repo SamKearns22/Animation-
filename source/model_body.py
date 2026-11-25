@@ -198,7 +198,8 @@ def real_skeleton(k, sp, kit_hip_h, seat=None, surfaces=(), held=()):
     head = neck + hdir * np.linalg.norm(J['head'] - J['neck']) * s0 + tdir * 0.0
     out = K.copy()
     out['pelvis'], out['neck'] = pel, neck
-    out['head'] = neck + hdir * 0.14 * sp.get('height', 1.75) / 1.75        # the house head's centre over the neck
+    out['head'] = neck + (K['head'] - K['neck'])   # the house head as high over the neck as the kit draws it (it was
+    #                                              14 cm: the body check, chat 2: 'no neck shows', both, every frame)
     x1 = _u(K['hipL'] - K['hipR'])
     x1 = _u(x1 - tdir * (x1 @ tdir))
     x0, y0 = _u(J['hipL'] - J['hipR']), _u(J['neck'] - J['pelvis'])
