@@ -29,3 +29,5 @@
 2026-11-25T17:49+00:00	5285aeae	skipped	kit tests: 38 stale not run at this handover
 2026-11-25T17:50+00:00	5285aeae	skipped	kit tests: 38 stale not run at this handover
 2026-11-25T17:51+00:00	5285aeae	skipped	kit tests: 38 stale not run at this handover
+2026-11-25T17:48+00:00	b2f8e1d1	sam	Override kit tests
+2026-11-25T17:48+00:00	b2f8e1d1	skipped	handover stops: STOP: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 source/kittests.py > notes/logs/kittests-last.log 2>&1`, then end again

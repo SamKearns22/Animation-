@@ -31,28 +31,7 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
 - **R6. Fix the half-turn heads (Sam, 19 Nov, already reserve):** notes/proposals/front-on-focus/retirement-and-handover.md.
 
 - **R7. A natural seated lower body: bottom, legs and knees (Sam, 24 Nov, Open Wounds note 12: "No bum/circular knees"; "you do not *know* how to draw this part of the body as you couldn't do it on blessed either"; then: "Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body").** Goal: anyone seated reads with a natural, flowing lower body, waist to feet, in every view; the knees are part of the leg, never balls (the ball-knee fix belongs to this job). What must be learned first: how a seated hip, bottom, thigh and knee look from the front, three-quarter and side (reference photos of people seated on plain chairs, traced into outlines), then one seated outline drawn as a single shape from waist to knee instead of a box torso plus tubes. Stopgap in the kit since 24 Nov (views.knee_cap, views.seat_bottom, check castsheet.seated_faults): better than before, not yet natural. When done: re-run the blind woman/man judge on the seated views (skipped by Sam's Override, 24 Nov). Sam's picture: notes/learn/seated/no-bum-circular-knees-sam.jpg.
-  - **R7, where things stand (chat 5, 25 Nov, session_01U3pKQyiJ2poN3syCEWUzsu; waits on Sam's answer):**
-    Rules that bite next: 30 (method, not patch), 87 (fails twice stops), 85. Locked by Sam: Open Wounds' seated frames
-    (switch off; seated_r7_switch); the bum/seat he accepted. Done: Sam's 25 Nov notes (notes/learn/seated/
-    handover-sam-25nov.md); proposal seated-legs-3d judged (notes/proposals/seated-legs-3d.md; judge's V2/V3 labels look
-    swapped: seated-legs-3d/judge-labels.md). Needs Sam: Q1 option 1 or 2 (sent 25 Nov). Next on his answer: Opus high,
-    the learn chat of the option he picks (cap and stop as written in its Final version). No code changed.
-    Read: the proposal's Final version; source/bench_pose.py, bench_draw.py MAPs. Open rule requests: none.
-  - **R7, where things stand (chat 4, 25 Nov, session_01U3pKR2q2S17Htq5WHcspgq; next: chat 5, Opus high, after Sam's Q1):**
-    Rules that bite next: 86, 13, 85. Locked by Sam: Open Wounds' seated frames (switch off; seated_r7_switch passes).
-    Done (chat 4): legs drawn by their profile, not a convex hull (views._r7_outline): the thigh's arched top and dip
-    before the knee (R7_ARCH), a calf (R7_CALF), the cloth narrower under the knee; the far/under leg in shade and the
-    near leg's edge the whole thigh (_r7_col, R7_FAR); from the front the shins in shade under the knees (a lit lap read
-    as the seat: R7_LAP 0); feet staggered (sitting.R7_STAGGER). Check: castsheet.one_tone (chat 3's "one dark mass"
-    saved: notes/learn/seated/examples), no_bottom reads all the cloth's tones; seated_r7_look extended. Judges r7c4
-    (results-r7c4.md): May a woman in every view; far leg and shoes fixed; scores still 2-3.
-    Next (chat 5, Opus high): results-r7c4.md "For chat 5" 1-6 (crossed shin and shoe; trouser hem breaks; front
-    re-judge; far-leg shade read as crossing; Kemi 3/4; shoes from the side), then judges judge_r7.py r7c5.
-    Needs Sam: Q1 kittest-resume (judge picked Option 1, built into the kit-tests-when record, still unmerged on
-    claude/kit-tests-when-build; Sam's Y was Option 2's shape). Read: this entry; results-r7c4.md; views.py "R7".
-    Open rule requests: none. For Claude: not R7's (named, left for their chains): claude/kit-tests-when-build,
-    claude/brexit-chat15, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31;
-    the CLAUDE.md sentence moves; the project "Where things stand" (R7 is a sub-entry). one_tone skipped at yaw 90.
+  - **R7, where things stand:** notes/r7.md (moved there by chat 5, 25 Nov).
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.

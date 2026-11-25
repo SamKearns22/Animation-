@@ -1,6 +1,6 @@
 # Proposal: Seated legs that read in every view, after four failed chats of hand-drawn leg outlines
 
-Status: open
+Status: adopted (2026-11-25)
 
 ## Problem
 Seated people in the kit do not have believable legs. On Sam's sheet v4 (25 Nov: May, Kemi and Blair seated, seen

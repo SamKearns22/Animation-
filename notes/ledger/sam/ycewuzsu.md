@@ -60,3 +60,6 @@ His pictures (sheet v4, all four views, three people): `examples/sam-25nov-v4-le
 ### 2026-11-25T17:36:20
 1
 
+### 2026-11-25T17:48:07
+Override kit tests
+
