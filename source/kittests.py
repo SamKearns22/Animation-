@@ -1936,6 +1936,36 @@ def lying_shirt_and_nape():
         B.SS = 1
     return bool(ok), '; '.join(out)
 
+
+@test
+def lying_fall_settle_clean():
+    """Open Wounds chat 16 (body check on shot 2, 8.67-8.92 s): knocked over backwards, the in-between from sitting to
+    lying slid every joint straight to its new place, so the head sank into the shoulders (no neck, 4 drawings) and
+    the elbows hung 13-20 cm over the dirt (3 drawings). Now the trunk keeps its bone lengths through the settle and
+    the arms reach the floor as the back goes down (lying.blend, lying._brace). Measured: body_faults at every
+    1/48 s of the settle, facing four ways; and the old point-sliding in-between is still caught."""
+    import numpy as np
+    import lying as L
+    sp = L._cast()[0]
+    now = []
+    for face in ((-1.0, 0.0), (1.0, 0.0), (0.0, 1.0), (0.6, -0.8)):
+        for t in np.arange(1.1, 1.62, 1 / 48):
+            kind, *r = L.fall(sp, t, 0.6, 0.0, 6.0, face)
+            if kind == '3d':
+                now += [f'{face} {t:.2f}: {f}' for f in L.body_faults(r[0], sp, r[1], who='')]
+    old = 0                                               # the saved fault: plain point sliding, no brace
+    j_sit = L.moves.fall(sp, 1.1, 0.6)[0]
+    k0 = L.from_views(j_sit, sp, 0.0, 6.0, (-1.0, 0.0))
+    k1, surf = L.lie(sp, 'back', k0['pelvis'][0], k0['pelvis'][2], 0.0)
+    for u in np.linspace(0.1, 0.9, 9):
+        k = L.Body()
+        for n in k0:
+            k[n] = k0[n] + (k1[n] - k0[n]) * u if n in L.POINTS else L._unit(k0[n] + (k1[n] - k0[n]) * u + 1e-6)
+        old += len(L.body_faults(k, sp, surf, who=''))
+    ok = not now and old > 0
+    return ok, (f'settle faults now {len(now)} ({"; ".join(now[:3])}); the old sliding in-between caught {old}x')
+
+
 @test
 def lying_neck_from_behind():
     """Job I lying 18 (Sam, 11 Nov, "fix the neck in 14 and 18", a repeated note): curled up and seen from behind,
