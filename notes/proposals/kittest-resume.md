@@ -1,6 +1,6 @@
 # Proposal: A stopped kit-test run loses every result it had
 
-Status: adopted, Option 1 (Sam, 25 Nov, "1. Y"; build in R7 chat 5)
+Status: adopted, Option 1 (Sam, 25 Nov, "1. Y" in R7 chat 4); built in its own chat (Opus high), on the kit-tests-when record
 
 ## Problem
 Sam, 25 Nov 12:17 (R7 chat 2), word for word: "Can we log-as-we-go in the future to prevent that?", then "1 Y" to:
