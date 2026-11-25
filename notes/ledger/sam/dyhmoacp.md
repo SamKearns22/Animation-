@@ -18,3 +18,6 @@ Obviously, it is likely that our animations move.
 ### 2026-11-25T19:36:23
 Is this the best quality answer for the project? Earlier, you provided a solution that did not take what this project actually does into account (which is worrying)
 
+### 2026-11-25T19:38:22
+Our solution needs to take into account dynamic movement: a future film may require any action from an actor. Standing, moving around. Like El-Sayed did in Islamocommunism.
+
