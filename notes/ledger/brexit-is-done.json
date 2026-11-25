@@ -6670,12 +6670,35 @@
      "7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ",
      "4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile."
     ]
+   },
+   {
+    "round": 5,
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-25",
+    "hunt": 1,
+    "faults": 9,
+    "cant_tell": 3,
+    "open": [
+     "1-2 P7: Blair seated - two dark round knee balls at the lens beside his hips, no thigh or lap, and he sits in front of the armchair, not in it; no bottom on the",
+     "1-2 A1 C4: brief wants a chase behind him (guests and butler fleeing, wolf at their heels). Panel 1 has no one fleeing, only a snarling wolf alone at his feet, ",
+     "6 A1: the huge wolf at 26.75 is only a brown blob with teeth at the right edge. It does not read as a wolf leaping at his head.",
+     "8 S4: left of the strip is black (a bar that narrows frame by frame): the edge of the set or a missing picture shows.",
+     "8 S1: the butler's head is cut off at the top; only the chin shows, so the run does not read as a person.",
+     "8 P5: in several frames a pink ball hand sits on his chest or belly with no arm joining it; the other arm is a straight stub with no hand (P6).",
+     "8 P10: his shoe lands on a plate on the floor and the plate does not move or break.",
+     "7 O5 M5: the tray and flutes never visibly land flat and rattle. No champagne pools stay in the last frames.",
+     "7 O3: the flying tray reads as a plate or disc, and the flutes as tiny specks.",
+     "8 A1: a jagged brown zigzag shape sits behind the butler. A frame with the whole room would show what it is.",
+     "4,6-7 M3: wolves look very long and stretched in some frames. A frame at full size would show it.",
+     "1-2 P4: his hair reads as a bulky helmet against the reference. Only one reference photo, in a different pose."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 4,
-    "false": 1
+    "faults": 6,
+    "false": 2
    },
    "P2": {
     "faults": 3,
@@ -6706,6 +6729,42 @@
     "false": 0
    },
    "A4": {
+    "faults": 1,
+    "false": 0
+   },
+   "P7": {
+    "faults": 1,
+    "false": 0
+   },
+   "C4": {
+    "faults": 1,
+    "false": 0
+   },
+   "S4": {
+    "faults": 1,
+    "false": 1
+   },
+   "S1": {
+    "faults": 1,
+    "false": 1
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "P10": {
+    "faults": 1,
+    "false": 0
+   },
+   "O5": {
+    "faults": 1,
+    "false": 0
+   },
+   "M5": {
+    "faults": 1,
+    "false": 0
+   },
+   "O3": {
     "faults": 1,
     "false": 0
    }
