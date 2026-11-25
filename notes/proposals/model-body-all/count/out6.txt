@@ -1,0 +1,277 @@
+1406 | N | TEXT | N | - | sound files are audio, not body
+1407 | N | MOVE | N | - | timing of the shot
+1408 | N | MOVE | N | - | staging of thrown stones
+1409 | N | CONTACT | P | - | helps the turn; glass hit needs solid glass too
+1410 | N | CONTACT | P | - | clipping through set needs solid set as well
+1411 | N | SET | N | - | prop replacement
+1412 | N | SET | N | - | shards behaviour, not body
+1413 | N | MOVE | N | - | kick acting and sign drawing
+1414 | N | OTHER | N | - | glints on heads, not body
+1415 | N | MOVE | N | - | missing props and action choice
+1416 | N | MOVE | N | - | no freeze, action choice
+1417 | X | - | - | - | -
+1418 | N | CAMERA | N | - | camera height
+1419 | N | MOVE | N | - | police action and staging
+1420 | N | CAMERA | N | - | restaging for the raised camera
+1421 | N | CAMERA | N | - | perspective and framing
+1422 | N | MOVE | N | - | extra action time
+1423 | N | CAMERA | N | - | framing check
+1424 | X | - | - | - | -
+1425 | X | - | - | - | -
+1426 | N | SET | N | - | glass cracks spilling past pane
+1427 | N | MOVE | N | - | acting variety, run directions
+1428 | N | CONTACT | P | - | kick landing needs solid board too
+1429 | N | OTHER | N | - | working instruction, not a fault
+1430 | X | - | - | - | -
+1431 | N | SCRIPT | N | - | joke
+1432 | N | SCRIPT | N | - | story scenes
+1433 | N | TEXT | N | - | on-screen text
+1434 | N | MOVE | N | - | scene lengths
+1435 | N | MOVE | N | - | effects and action brief
+1436 | X | - | - | - | -
+1437 | X | - | - | - | -
+1438 | X | - | - | - | -
+1439 | X | - | - | - | -
+1440 | X | - | - | - | -
+1441 | X | - | - | - | -
+1442 | X | - | - | - | -
+1443 | X | - | - | - | -
+1444 | X | - | - | - | -
+1445 | X | - | - | - | -
+1446 | X | - | - | - | -
+1447 | X | - | - | - | -
+1448 | X | - | - | - | -
+1449 | X | - | - | - | -
+1450 | X | - | - | - | -
+1451 | X | - | - | - | -
+1452 | X | - | - | - | -
+1453 | X | - | - | - | -
+1454 | X | - | - | - | -
+1455 | X | - | - | - | -
+1456 | X | - | - | - | -
+1457 | X | - | - | - | -
+1458 | X | - | - | - | -
+1459 | X | - | - | - | -
+1460 | X | - | - | - | -
+1461 | X | - | - | - | -
+1462 | X | - | - | - | -
+1463 | X | - | - | - | -
+1464 | X | - | - | - | -
+1465 | X | - | - | - | -
+1466 | X | - | - | - | -
+1467 | N | CONTACT | P | - | phone held behind head; hand-object contact
+1468 | X | - | - | - | -
+1469 | N | CONTACT | P | - | boots poking past box; needs solid box too
+1470 | N | BODY | Y | - | both legs one stiff tube, unformed body
+1471 | N | SET | N | - | banner in background
+1472 | N | CAMERA | N | - | line-up distance
+1473 | N | SET | N | - | flower box colouring
+1474 | N | CONTACT | P | - | hand on neck; needs solid soldier too
+1475 | X | - | - | - | -
+1476 | N | CONTACT | P | - | whole body turned lifting knees off ground
+1477 | N | MOVE | N | - | gap timing in audio
+1478 | N | BODY | P | R | 2D swivel turns; head views must still snap
+1479 | N | CAMERA | N | - | zoom and townsfolk placement
+1480 | N | CONTACT | P | - | pressing Link to wall; mixed sound and puff notes
+1481 | X | - | - | - | -
+1482 | N | FACE | N | - | terrified stare expression
+1483 | N | OTHER | N | - | flash effect timing
+1484 | N | TEXT | N | - | bleep placement
+1485 | N | MOVE | N | - | too static, blinks and flaps
+1486 | N | MOVE | N | - | timing with dialogue
+1487 | N | OTHER | N | - | explosion effects
+1488 | N | CAMERA | N | - | who is on screen
+1489 | N | OTHER | N | - | blood and impact effects
+1490 | N | CAMERA | N | - | zoom framing
+1491 | N | TEXT | N | - | subtitle wording
+1492 | N | TEXT | N | - | subtitle size and splitting
+1493 | N | TEXT | N | - | bleep and subtitle
+1494 | N | FACE | N | - | mouth shapes front-on close-up
+1495 | N | MOVE | N | - | acting and face dynamics
+1496 | X | - | - | - | -
+1497 | N | CAMERA | N | - | reverse shot choice
+1498 | N | FACE | N | - | brows and mood, Navi bounce
+1499 | X | - | - | - | -
+1500 | N | SET | N | - | background street
+1501 | N | SET | N | - | castle in background
+1502 | N | BODY | Y | - | whole body tipping instead of just gun and head
+1503 | N | MOVE | N | - | staging of a soldier
+1504 | X | - | - | - | -
+1505 | N | BODY | Y | - | corpse looks like a standing model laid down
+1506 | N | MOVE | N | - | KG too still
+1507 | X | - | - | - | -
+1508 | N | SCRIPT | N | - | joke
+1509 | N | TEXT | N | - | hook text
+1510 | N | OTHER | N | - | art style of assets
+1511 | N | CAMERA | N | - | shot list
+1512 | N | SET | N | - | dial numbers
+1513 | N | TEXT | N | - | sound brief
+1514 | X | - | - | - | -
+1515 | N | TEXT | N | - | hydraulic sound
+1516 | N | MOVE | N | - | flip speed
+1517 | N | OTHER | N | - | car crash effect
+1518 | X | - | - | - | -
+1519 | X | - | - | - | -
+1520 | X | - | - | - | -
+1521 | X | - | - | - | -
+1522 | X | - | - | - | -
+1523 | N | TEXT | N | - | HUD dial wording
+1524 | X | - | - | - | -
+1525 | N | FACE | N | - | moustache and face likeness
+1526 | N | CAMERA | N | - | no close-up, helmet name
+1527 | X | - | - | - | -
+1528 | N | CAMERA | N | - | camera follows the original
+1529 | N | CAMERA | N | - | shot rebuilt from the original
+1530 | N | SET | N | - | ramp shape
+1531 | N | SET | N | - | car start position and G-force
+1532 | N | FACE | N | - | sigh expression
+1533 | N | SET | N | - | visor reflection
+1534 | N | SET | N | - | support tower on floor
+1535 | N | SET | N | - | time of day consistency
+1536 | N | SCRIPT | N | - | cast arrangement
+1537 | X | - | - | - | -
+1538 | X | - | - | - | -
+1539 | N | MOVE | N | - | logo timing
+1540 | N | SET | N | - | stage set from photos
+1541 | N | SET | N | - | floor edge tearing
+1542 | N | TEXT | N | - | subtitles and hook text
+1543 | X | - | - | - | -
+1544 | N | CAMERA | N | - | remove a dance shot
+1545 | X | - | - | - | -
+1546 | N | FACE | N | - | costume and likeness of cast
+1547 | X | - | - | - | -
+1548 | N | TEXT | N | - | subtitle wording
+1549 | X | - | - | - | -
+1550 | X | - | - | - | -
+1551 | X | - | - | - | -
+1552 | X | - | - | - | -
+1553 | X | - | - | - | -
+1554 | X | - | - | - | -
+1555 | X | - | - | - | -
+1556 | X | - | - | - | -
+1557 | X | - | - | - | -
+1558 | X | - | - | - | -
+1559 | X | - | - | - | -
+1560 | N | TEXT | N | - | scream and thud sound
+1561 | X | - | - | - | -
+1562 | X | - | - | - | -
+1563 | X | - | - | - | -
+1564 | X | - | - | - | -
+1565 | N | TEXT | N | - | which sound effects
+1566 | X | - | - | - | -
+1567 | X | - | - | - | -
+1568 | N | CAMERA | N | - | shot 1 framing
+1569 | N | SCRIPT | N | - | who places the Hat
+1570 | N | CAMERA | N | - | hook framing
+1571 | N | TEXT | N | - | hook text
+1572 | N | TEXT | N | - | subtitles and shot lengths
+1573 | N | TEXT | N | - | subtitle wording
+1574 | N | BODY | Y | - | arms sticking out; run arm pose
+1575 | N | OTHER | N | - | snot effect length
+1576 | N | CAMERA | N | - | zoom; run arms pumping
+1577 | N | TEXT | N | - | subtitle wording
+1578 | N | BODY | Y | - | back view hands on hips read wrongly
+1579 | N | SET | N | - | blood under door
+1580 | N | FACE | N | - | tear on face
+1581 | N | TEXT | N | - | scream sound muffle
+1582 | N | MOVE | N | - | gesture choice, unclear stance
+1583 | N | TEXT | N | - | subtitle timing
+1584 | N | TEXT | N | - | subtitle word
+1585 | N | CAMERA | N | - | arm blocks camera in shrug
+1586 | N | OTHER | N | - | snot effect
+1587 | N | BODY | Y | - | pointing arm flips between views
+1588 | N | MOVE | N | - | bob acting choice
+1589 | N | BODY | Y | - | front-on run drops to knees
+1590 | N | MOVE | N | - | mouth timing and beat
+1591 | N | MOVE | N | - | acting and subtitle fixes
+1592 | X | - | - | - | -
+1593 | X | - | - | - | -
+1594 | N | TEXT | N | - | subtitle wording
+1595 | N | TEXT | N | - | subtitle pacing and shot lengths
+1596 | N | TEXT | N | - | hook text
+1597 | N | HANDS | P | R | folded arms hide hands; circle hands on real arm
+1598 | N | MOVE | N | - | pose variety choice
+1599 | N | FACE | N | - | no three-quarter turn, eyes instead
+1600 | N | CAMERA | N | - | framing and Hat placement
+1601 | N | SET | N | - | night corridor
+1602 | X | - | - | - | -
+1603 | N | TEXT | N | - | sound design
+1604 | N | SCRIPT | N | - | McGonagall places hat
+1605 | N | CAMERA | N | - | shot 1 framing
+1606 | X | - | - | - | -
+1607 | N | CAMERA | N | - | opening close-up
+1608 | X | - | - | - | -
+1609 | X | - | - | - | -
+1610 | X | - | - | - | -
+1611 | X | - | - | - | -
+1612 | X | - | - | - | -
+1613 | X | - | - | - | -
+1614 | X | - | - | - | -
+1615 | X | - | - | - | -
+1616 | X | - | - | - | -
+1617 | X | - | - | - | -
+1618 | X | - | - | - | -
+1619 | X | - | - | - | -
+1620 | N | CLOTHES | N | - | Claudia's outfit
+1621 | X | - | - | - | -
+1622 | X | - | - | - | -
+1623 | X | - | - | - | -
+1624 | N | CLOTHES | N | - | no cloak
+1625 | X | - | - | - | -
+1626 | N | MOVE | N | - | Zelensky head-in-hands acting
+1627 | N | CAMERA | N | - | closer shot on speech
+1628 | X | - | - | - | -
+1629 | N | TEXT | N | - | subtitle handling
+1630 | N | FACE | N | - | blood and smirk on face
+1631 | X | - | - | - | -
+1632 | N | SET | N | - | goblets props
+1633 | N | TEXT | N | - | hook text
+1634 | X | - | - | - | -
+1635 | N | CAMERA | N | - | framing and May position
+1636 | N | CAMERA | N | - | Kemi framing
+1637 | N | CAMERA | N | - | Blair framing
+1638 | X | - | - | - | -
+1639 | X | - | - | - | -
+1640 | X | - | - | - | -
+1641 | X | - | - | - | -
+1642 | X | - | - | - | -
+1643 | X | - | - | - | -
+1644 | X | - | - | - | -
+1645 | X | - | - | - | -
+1646 | N | CAMERA | N | - | character centre right of frame
+1647 | X | - | - | - | -
+1648 | X | - | - | - | -
+1649 | X | - | - | - | -
+1650 | X | - | - | - | -
+1651 | X | - | - | - | -
+1652 | X | - | - | - | -
+1653 | X | - | - | - | -
+1654 | X | - | - | - | -
+1655 | X | - | - | - | -
+1656 | X | - | - | - | -
+1657 | X | - | - | - | -
+1658 | X | - | - | - | -
+1659 | X | - | - | - | -
+1660 | X | - | - | - | -
+1661 | N | SCRIPT | N | - | grin then wolf lunge
+1662 | N | SCRIPT | N | - | interviewers unseen
+1663 | N | TEXT | N | - | hook text
+1664 | N | SET | N | - | site daylight
+1665 | N | SET | N | - | Blair's room
+1666 | N | OTHER | N | - | blood look
+1667 | X | - | - | - | -
+1668 | X | - | - | - | -
+1669 | X | - | - | - | -
+1670 | X | - | - | - | -
+1671 | X | - | - | - | -
+1672 | X | - | - | - | -
+1673 | N | BODY | Y | - | knees as balls and no bum drawn
+1674 | N | CAMERA | N | - | zoom out wish
+1675 | N | BODY | Y | R | Kemi lacks her own body; shared body repeats fault
+1676 | N | BODY | Y | R | female body read as man's; one shared model risk
+1677 | N | BODY | Y | - | circular knees, no bum
+1678 | X | - | - | - | -
+1679 | N | BODY | Y | - | legs look awful
+1680 | N | OTHER | N | - | cost complaint
+1681 | X | - | - | - | -
+1682 | X | - | - | - | -

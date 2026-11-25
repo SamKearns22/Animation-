@@ -1,0 +1,281 @@
+563 | N | FACE | N | R | heads stay hand-drawn; back of head still hard to draw
+564 | N | MOVE | N | - | crowd stood still; acting choice, not body drawing
+565 | N | BODY | Y | - | arm drawn as tube with round end; solid arm fixes
+566 | N | CONTACT | P | - | head and arm over frame; needs solid car too
+567 | N | SET | N | - | steering wheel position in the set
+568 | N | BODY | P | R | body would match but head drawings still differ
+569 | N | BODY | Y | - | arms missing and loose circle on shoulder
+570 | N | SET | N | - | bonnet size and see-through panel
+571 | N | HANDS | N | R | hands stay circles; realistic arm may clash
+572 | N | BODY | Y | - | forearm end-on stub; solid arm keeps length
+573 | N | SET | N | - | bonnet stripe design
+574 | N | SET | N | - | stray palm trunk in background
+575 | X | - | - | - | -
+576 | X | - | - | - | -
+577 | X | - | - | - | -
+578 | X | - | - | - | -
+579 | X | - | - | - | -
+580 | N | CONTACT | P | - | gap above car edge; car depth still flat drawing
+581 | N | CONTACT | P | - | body through door; needs solid car as well
+582 | N | SET | N | - | water jet effect through pavement
+583 | N | CONTACT | N | - | runners' paths cross shop fronts; path logic
+584 | N | OTHER | N | - | group vanished at a cut; continuity
+585 | N | SET | N | - | car wheel draw order
+586 | X | - | - | - | -
+587 | X | - | - | - | -
+588 | X | - | - | - | -
+589 | X | - | - | - | -
+590 | X | - | - | - | -
+591 | X | - | - | - | -
+592 | X | - | - | - | -
+593 | X | - | - | - | -
+594 | N | SET | N | - | bonnet stripe width and gap
+595 | X | - | - | - | -
+596 | X | - | - | - | -
+597 | X | - | - | - | -
+598 | X | - | - | - | -
+599 | X | - | - | - | -
+600 | X | - | - | - | -
+601 | X | - | - | - | -
+602 | X | - | - | - | -
+603 | X | - | - | - | -
+604 | N | SET | N | - | street blocks popped out as car drove off
+605 | N | CONTACT | P | - | gun hold at chest; hands still circles
+606 | N | SET | N | - | police light-bar glow size
+607 | X | - | - | - | -
+608 | X | - | - | - | -
+609 | N | TEXT | N | - | no Hook Text decision
+610 | N | TEXT | N | - | end hook text wording
+611 | N | CAMERA | N | - | opening shot extended with logo wipe
+612 | N | TEXT | N | - | sound fade to radio volume
+613 | X | - | - | - | -
+614 | N | SCRIPT | N | - | sunset light and subtitle wording answers
+615 | N | OTHER | N | - | reference source rule
+616 | N | CAMERA | N | - | straight cut from skyline to junction
+617 | N | SCRIPT | N | - | crash not softened
+618 | X | - | - | - | -
+619 | X | - | - | - | -
+620 | N | SCRIPT | N | - | topic and joke of the film
+621 | N | CAMERA | N | - | shot 2 low moving camera
+622 | N | SET | N | - | three police cars in pursuit
+623 | N | SET | N | - | getaway car model choice
+624 | N | CAMERA | N | - | shot 3 windscreen view framing
+625 | N | CAMERA | N | - | shot 4 camera follows Jason leaning out
+626 | N | MOVE | N | - | Lucia yanks wheel action
+627 | N | SCRIPT | N | - | dialogue line
+628 | N | SCRIPT | N | - | dialogue line
+629 | N | MOVE | N | - | Jason's eye and gesture acting
+630 | N | MOVE | N | - | pause beat with cops in mirror
+631 | N | SCRIPT | N | - | dialogue line
+632 | N | SET | N | - | pursuing cop cars seen through back window
+633 | N | SCRIPT | N | - | screenplay words
+634 | N | SET | N | - | copy the game's car model
+635 | X | - | - | - | -
+636 | X | - | - | - | -
+637 | X | - | - | - | -
+638 | X | - | - | - | -
+639 | X | - | - | - | -
+640 | X | - | - | - | -
+641 | X | - | - | - | -
+642 | X | - | - | - | -
+643 | X | - | - | - | -
+644 | X | - | - | - | -
+645 | N | HANDS | N | R | hand style problems; circle hands stay on realistic arms
+646 | X | - | - | - | -
+647 | X | - | - | - | -
+648 | X | - | - | - | -
+649 | X | - | - | - | -
+650 | X | - | - | - | -
+651 | N | MOVE | N | - | runners became static crowd
+652 | N | MOVE | N | - | runner directions and wall clipping paths
+653 | N | CLOTHES | N | - | vest print legibility and other detail fixes
+654 | N | BODY | Y | - | unjoined shoulders and arms from separate-pieces kit
+655 | N | MOVE | N | - | runner spacing and acting mix
+656 | X | - | - | - | -
+657 | X | - | - | - | -
+658 | N | CONTACT | P | - | body versus car door order
+659 | X | - | - | - | -
+660 | N | SET | N | - | ring against planet in shot 1
+661 | N | TEXT | N | - | theme music start point
+662 | N | TEXT | N | - | white bold title text
+663 | N | SET | N | - | Tesla armada entering scene
+664 | N | MOVE | N | - | cars spinning in space
+665 | N | MOVE | N | - | armada sweeping diagonal toward planet
+666 | N | CAMERA | N | - | cut to Roadster interior view
+667 | N | FACE | N | - | Musk recognisable through visor
+668 | N | MOVE | N | - | steering turned back and forth
+669 | N | TEXT | N | - | radio voice line and filter
+670 | N | SCRIPT | N | - | dialogue line
+671 | N | CAMERA | N | - | zoom in on Musk
+672 | N | SCRIPT | N | - | dialogue line and subtitle change
+673 | N | CAMERA | N | - | back to windscreen shot
+674 | N | SCRIPT | N | - | Cortana hologram appearance effect
+675 | N | MOVE | N | - | overemphasised Cortana acting
+676 | N | SCRIPT | N | - | dialogue line
+677 | N | CAMERA | N | - | zoom back into Musk
+678 | N | SCRIPT | N | - | dialogue line
+679 | N | SET | N | - | armada skimming ring hull
+680 | N | SCRIPT | N | - | dialogue line
+681 | N | SCRIPT | N | - | dialogue line over ring shot
+682 | N | SCRIPT | N | - | the joke itself
+683 | N | TEXT | N | - | no extra sound effects
+684 | N | OTHER | N | - | everything 2D except Cortana and cars
+685 | N | TEXT | N | - | Hook Text wording
+686 | N | OTHER | N | - | usage budget instruction
+687 | N | TEXT | N | - | music levels
+688 | N | FACE | N | - | Musk likeness; heads stay hand-drawn
+689 | N | BODY | P | R | neck join; head still hand-drawn on body
+690 | N | MOVE | P | - | posable body eases thrust pose; acting still drawn
+691 | N | FACE | N | - | head fills helmet
+692 | N | SET | N | - | galaxy backgrounds differ
+693 | X | - | - | - | -
+694 | X | - | - | - | -
+695 | X | - | - | - | -
+696 | X | - | - | - | -
+697 | X | - | - | - | -
+698 | N | TEXT | N | - | music never stops, level changes
+699 | X | - | - | - | -
+700 | X | - | - | - | -
+701 | X | - | - | - | -
+702 | X | - | - | - | -
+703 | N | SET | N | - | flag direction
+704 | N | TEXT | N | - | Hook Text two rows
+705 | N | SET | N | - | roof flag scale
+706 | N | CAMERA | N | - | flat shots only request
+707 | N | SET | N | - | Oval Office redesign
+708 | N | SET | N | - | flag design change
+709 | N | CLOTHES | N | R | new white suit; real garments harder as shells
+710 | N | TEXT | N | - | Hook Text wording
+711 | N | CLOTHES | N | R | suits, pocket square, pin as real garments
+712 | N | FACE | N | - | hair size and shape
+713 | X | - | - | - | -
+714 | N | FACE | N | - | moustache and goatee
+715 | N | FACE | N | - | beard shape against references
+716 | X | - | - | - | -
+717 | X | - | - | - | -
+718 | X | - | - | - | -
+719 | X | - | - | - | -
+720 | X | - | - | - | -
+721 | N | TEXT | N | - | heading text size
+722 | N | BODY | Y | - | front-on body drawn mirror-image; far hand jumped
+723 | N | MOVE | N | - | rise timing, no lean and sink
+724 | N | CONTACT | P | - | arm resting on desk top
+725 | N | CAMERA | N | - | closer framing for the line
+726 | N | MOVE | N | - | sip tilt amount
+727 | N | SCRIPT | N | - | dialogue line
+728 | N | MOVE | N | - | brow and head moves on words
+729 | N | CONTACT | P | - | hand disappears into table
+730 | N | MOVE | N | - | more excited acting
+731 | N | MOVE | N | - | rise speed
+732 | N | CONTACT | P | - | handset and hands vanished; shared pose bug
+733 | N | MOVE | N | - | stride in and door slam brief
+734 | N | MOVE | N | - | fast angry walk to desk
+735 | N | MOVE | N | - | Satan float and shrug
+736 | N | CAMERA | N | - | reverse on Trump, pointing
+737 | N | SCRIPT | N | - | Satan's line and chuckle
+738 | N | SET | N | - | ghost arrival burst of flames
+739 | N | SCRIPT | N | - | Epstein's line
+740 | N | SCRIPT | N | - | Trump's reply line
+741 | N | MOVE | N | - | ghost waves and melts to skull
+742 | N | SCRIPT | N | - | Trump mocking line
+743 | N | MOVE | N | - | open door from start
+744 | N | BODY | P | - | skull sized from flat drawing with raised arms
+745 | N | SET | N | - | corridor as real space
+746 | N | MOVE | N | - | stop, breath, then anger
+747 | N | HANDS | N | R | pointing finger missing; circle hands remain
+748 | N | BODY | P | - | shrug shape and U arms; posable shoulders help
+749 | N | MOVE | N | - | more expressive arms
+750 | N | CAMERA | N | - | cut timing and wing tears
+751 | N | CLOTHES | Y | - | mirrored flat front view swapped pocket square
+752 | N | CAMERA | N | - | hold shot, no zoom
+753 | N | MOVE | N | - | ghost flames and imploring arms
+754 | N | MOVE | N | - | more variety in acting
+755 | N | OTHER | N | - | skull opacity and melt effect
+756 | N | MOVE | N | - | mocking childish acting
+757 | N | CAMERA | N | - | cut back to shot 2 angle
+758 | N | MOVE | N | - | press hand stays out in room
+759 | N | MOVE | N | - | pointing walk and bigger wings
+760 | N | TEXT | N | - | subtitle wording
+761 | N | MOVE | N | - | gaps between lines halved
+762 | N | MOVE | N | - | anger not smugness
+763 | N | TEXT | N | - | subtitle wording
+764 | N | CAMERA | N | - | staying on Trump, eye roll, subtitle
+765 | X | - | - | - | -
+766 | X | - | - | - | -
+767 | N | TEXT | N | - | title and Hook Text brief
+768 | N | SCRIPT | N | - | context and joke of film
+769 | X | - | - | - | -
+770 | N | MOVE | N | - | pacing gaps between scenes
+771 | N | SET | N | - | drinks and coasters placement
+772 | N | MOVE | N | - | NEETs dodge and fire in character
+773 | N | FACE | N | - | Andy's final cross expression
+774 | N | FACE | N | - | Andy's eyes look at Pat
+775 | N | FACE | N | - | character missing a mouth
+776 | N | CAMERA | N | - | scene composition poor
+777 | N | FACE | N | - | Pat's bald dome shape
+778 | N | FACE | N | - | goth hair shape like alien crest
+779 | N | FACE | N | - | goth piercings
+780 | N | FACE | N | - | goth hair colour streaks
+781 | X | - | - | - | -
+782 | X | - | - | - | -
+783 | X | - | - | - | -
+784 | X | - | - | - | -
+785 | X | - | - | - | -
+786 | X | - | - | - | -
+787 | X | - | - | - | -
+788 | X | - | - | - | -
+789 | X | - | - | - | -
+790 | X | - | - | - | -
+791 | X | - | - | - | -
+792 | X | - | - | - | -
+793 | X | - | - | - | -
+794 | X | - | - | - | -
+795 | X | - | - | - | -
+796 | X | - | - | - | -
+797 | X | - | - | - | -
+798 | X | - | - | - | -
+799 | X | - | - | - | -
+800 | X | - | - | - | -
+801 | X | - | - | - | -
+802 | X | - | - | - | -
+803 | X | - | - | - | -
+804 | N | FACE | N | - | younger presenter hair and beard
+805 | N | SCRIPT | N | - | all three stand throughout
+806 | N | SET | N | - | presenter's chair
+807 | N | CAMERA | N | - | matching close shot on Maul
+808 | N | MOVE | N | - | saber ignition
+809 | N | CLOTHES | N | R | hood falls back; cloth must act as garment
+810 | N | MOVE | N | - | three strike moves
+811 | N | OTHER | N | - | cut faces look
+812 | N | SET | N | - | saber glow
+813 | N | CONTACT | P | - | crouched on seat, hand on armrest
+814 | N | MOVE | N | - | mild surprise acting
+815 | N | TEXT | N | - | bleep and subtitle
+816 | N | TEXT | N | - | Hebrew logo and caption
+817 | N | TEXT | N | - | wording Prime Minister
+818 | X | - | - | - | -
+819 | X | - | - | - | -
+820 | X | - | - | - | -
+821 | N | FACE | N | - | younger presenter brief
+822 | N | SCRIPT | N | - | everyone standing
+823 | N | MOVE | N | - | Netanyahu nod
+824 | N | MOVE | N | - | Maul glower
+825 | N | MOVE | N | - | awkward silent beat
+826 | N | MOVE | N | - | presenter's eye flick
+827 | N | MOVE | P | - | acrobatic leap and roll; posable body helps
+828 | N | MOVE | N | - | alarm acting
+829 | N | MOVE | N | - | slicing and chunks pile
+830 | N | CONTACT | P | - | leaping onto seat; needs solid chair too
+831 | N | SCRIPT | N | - | dialogue line and bleep
+832 | N | SCRIPT | N | - | shock level and no blood
+833 | N | SET | N | - | background screens
+834 | N | CAMERA | N | - | shot 1 zoom
+835 | N | CAMERA | N | - | close shot choices
+836 | N | CAMERA | N | - | shot 4 mid shot
+837 | N | TEXT | N | - | Hook Text and sign-off
+838 | X | - | - | - | -
+839 | N | SET | N | - | no set dressing
+840 | N | SET | N | - | third armchair behind presenter
+841 | N | FACE | N | R | three-quarter head looks like another man
+842 | N | OTHER | N | - | sheet bug squeezed crops
+843 | N | SET | N | - | small explosions not needed
