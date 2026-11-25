@@ -1,0 +1,14 @@
+{
+ "film": "model-body-all",
+ "estimate": 8.5,
+ "chats": [],
+ "checks": {},
+ "cost_flagged": [],
+ "cost_log": [
+  {
+   "date": "2026-11-25",
+   "spent": 0,
+   "forecast": null
+  }
+ ]
+}

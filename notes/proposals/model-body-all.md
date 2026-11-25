@@ -71,5 +71,13 @@ Next: on Sam's 1, step 2 (Opus high, cap 6%): Blender installed, the moving test
 walk) beside the original, clip only; on Sam's 2, the investigation ends and is marked declined.
 Needs Sam: nothing. Sam, 25 Nov (this chat): "1" = go on to step 2.
 Read: this file only; count/hand-check.md for the numbers.
+Open rule requests: none (searched this file).
 For Claude: tally.py in count/; first sort out1-6, blind re-sort out_sample; hand-check overrides by ID.
 Locked by Sam: no film shot is touched by this investigation; Open Wounds stays on the flat kit (question g).
+
+Branches named (not this job's; left for their chains, as notes/r7.md names them): claude/gta-v5-sound-draft,
+claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31. End-check SENTENCE x4: CLAUDE.md edits by
+other chats (34f49840, 0945cc85), named by earlier chats; the sentences are still in CLAUDE.md in bold.
+Unrouted settle (chat cf96c026): the step-1 question was the investigation's own stop rule, a false block.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)
