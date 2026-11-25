@@ -116,7 +116,7 @@ def never_green(names=None, record=None):
     sys.path.insert(0, HERE)
     import kitstamps
     names = names if names is not None else kitstamps.test_names()
-    seen = {r[0] for r in kitstamps._rows(record or kitstamps.RECORD)}
+    seen = {r['name'] for r in kitstamps._rows(record or kitstamps.RECORD)}
     return [n for n in names if n not in seen]
 
 

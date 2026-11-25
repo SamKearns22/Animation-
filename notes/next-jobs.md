@@ -1,17 +1,4 @@
-# Where things stand (project, 14 Nov; no film in progress; the aim: films at 15% of a week)
-- **Newest work:** `claude/overnight-c10-rough` (also on the main line). Item 1 done (chat 10); the overnight list is done.
-- **Rules that bite next:** 11 (every new thing on a rough before it is built: `rough.py`), 74 (acting list), 86.
-- **Done (chat 10, Opus medium, ~0.45%):** ranking item 1, the rough command (`source/rough.py`): one sheet of every
-  new or changed person, place view and moves block, drawn by the kits; a record so nothing is sent twice; pre-flight
-  warning; kittest; catalogue row; rule 11's check column. Blessed: 60 things, ~1 min, `notes/morning/rough-blessed.jpg`.
-- **Next:** none in the chain: every overnight job is done (the face tool's chain hard-stopped at 7.5%). Waits for Sam.
-- **Needs Sam:** the morning report's picks (people kit 1-3; places 1-2; moves: list words + kit Y/N; rough: 1-2).
-- **Read:** `notes/morning-report.md`; for the next film, the pack in `guides/job-packs.md` its handover names.
-- **Open rule requests:** none.
-- **For Claude:** rough.py imports the kits inside functions (kittests' "films using the kit" lists exclude it);
-  Blessed's record `story/blessed-roughs.txt` marks all 60 as seen (the finished film). Old fault: kittest
-  `round_page` (page 16.4% of code, bar 15%).
-
+# Next jobs (the project's shared job list; each job keeps its own section)
 
 ## Reserve jobs (Sam, 23 Nov ~22:05: "add that to our reserve job list ... we aren't doing those right this second")
 Each waits until Sam names it. No chat starts one, opens a chat for one, or asks Sam about one until then.
@@ -45,30 +32,10 @@ Sam (25 Nov, word for word): "Make the kit check happen at the beginning and the
   `kitfilm.ANIMATIC_GATE = False`.
 - **Read:** guides/job-packs.md "A tool job"; the proposal's "Built".
 - **Open rule requests:** none.
-- **Branches named, not merged (outside this job):** claude/gta-v5-sound-draft, claude/gta-chat46-build,
-  claude/dreamy-fermi-vkhutz, claude/gta-chat31 (posted-GTA logs, a proposal, two old helpers; gta-chat31 a record only).
+- **Named:** branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 not merged (outside this job); SENTENCE lost (34f49840, 0945cc85: earlier chats'); COST: a tool job, no film estimate.
 - **For Claude:** first chat = a start row with this chat's id (kitfilm.started_here); the record was seeded with every
   notes/ledger/*.json name so films already under way are not "first"; Sam's Y to a suggested full run:
   `python3 source/kittests.py --stale`.
-
-## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
-- **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
-- **Done:** Sam: "Walliams: put into kit" (22 Nov). David Walliams is a kit person in `story/facetool-people.txt`
-  (`walliams`: the head Sam approved 15 Nov, rounded-dome swept hair, look 'detail', navy suit, white shirt, no tie,
-  1.96 m). Five turns draw his own head. New kittest facehouse_walliams_kit_person; catalogue row added. Andy and Kemi
-  held pixel for pixel (facehouse_whole_head). Blessed's test-only hand-made head left as Blessed's own (its replay).
-  Sheet sent to Sam: `notes/morning/walliams-kit-person.jpg`.
-- **Seen, not fixed (named to Sam):** behind and three-quarter behind, the neck's two lines run up into the back of the
-  head (every house head does this; Andy too); the side view's stubble edge steps behind the jaw (old).
-- **Kittest people_from_a_description** crashes in a fresh copy: it needs a `film/blessed` marker in git that is not
-  on GitHub (not this job's; it crashed before the change too).
-- **Needs Sam:** nothing. **Next:** none for this job; Walliams is ready for any film's people file (copy the 4 lines).
-- **Branches:** claude/gta-chat31 is a record only, never merged (Sam, 22 Nov; notes/grand-theft-autism.md).
-- **Handover check named, not this job's:** a second "Where things stand" in this shared jobs file (another job's);
-  CLAUDE.md's "Choose views the drawing can carry" is still there (in bold; the check misreads it); the cost line errored.
-- **Open rule requests:** none.
-- **For Claude:** FH.CAST['walliams'] holds his house lines; held hash in the kittest is FH.draw('walliams','detail').
-
 
 ## Item 5, places from a description (ranking item 5; overnight run; Opus high; 8%, stop 12%)
 Design (chat 5, 14 Nov): a place is plain lines in `story/FILM-places.txt` (language in `places.py` MAP): `# place:`

@@ -5240,13 +5240,15 @@ def kit_tests_per_film():
     small = KF.major_line('zz', ['a', 'b'] + [f'n{i}' for i in range(20)], sp)
     big = KF.major_line('zz', ['a'] + [f'n{i}' for i in range(21)], sp)
     _, r_git = KS.traced(lambda: KS.tracer()._program(['git', '-C', root, 'push'], None))
-    ok = (example and caught_old and not now_setup and launched == [1] and 'first chat' in first[-1]
+    KS.write_green([('zz_old', {'source/kitfilm.py'}, 1.0)], os.path.join(d, 'stamps.tsv'))   # the real record's
+    new_real = KF.never_green(['zz_old', 'zz_new'], os.path.join(d, 'stamps.tsv'))               # shape (end crashed
+    ok = (new_real == ['zz_new'] and example and caught_old and not now_setup and launched == [1] and 'first chat' in first[-1]
           and 'not this chat' in again[-1] and not tool
           and KF.started_here('chatA', rec) and not KF.started_here('chatB', rec)
           and wait_first and 'STILL RUNNING' in wait_first[0] and ran[0] == ['t1'] and not end_first
           and mid == [] and ran[1:] == [['t_new']] and not mid_new
           and small == '' and 'Y or N' in big and 'source/kitstamps.py' not in (r_git or set()))
-    return ok, (f'old start-up hook caught: {len(caught_old)}; now: {len(now_setup)}; launches {launched}; '
+    return ok, (f'new test found: {new_real}; old start-up hook caught: {len(caught_old)}; now: {len(now_setup)}; launches {launched}; '
                 f'first chat waits: {wait_first[:1]}; runs {ran}; mid-film chat: {mid or "no run, no wait"}; '
                 f'21 made stale: {"suggests" if big else "silent"}; 20: {"silent" if not small else "suggests"}; '
                 f'hook code read: {"source/kitstamps.py" in (r_git or set())}')
