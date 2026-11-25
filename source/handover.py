@@ -525,10 +525,18 @@ def shared_faults(since=None, diff=None):
         prev = [ln.split('\t')[0] for ln in (open(ends, encoding='utf-8') if os.path.exists(ends) else [])
                 if ln.strip() and ln.split('\t')[-1].strip() != me]
         since = since or (prev[-1] if prev else '1 day ago')
-        r = subprocess.run(['git', '-C', ROOT, 'log', f'--since={since}', '-p', '--no-merges', '--format=', '--',
-                            'source/'], capture_output=True, text=True)
-        w = subprocess.run(['git', '-C', ROOT, 'diff', 'HEAD', '--', 'source/'], capture_output=True, text=True)
-        diff = r.stdout + w.stdout
+        # the NET change since then (Open Wounds chat 13: a film-only check moved to the shared kit two commits later
+        # still stopped the handover when each commit's patch was read on its own)
+        base = subprocess.run(['git', '-C', ROOT, 'rev-list', '-1', f'--before={since}', 'HEAD'],
+                              capture_output=True, text=True).stdout.strip()
+        if base:
+            r = subprocess.run(['git', '-C', ROOT, 'diff', base, '--', 'source/'], capture_output=True, text=True)
+            diff = r.stdout
+        else:
+            r = subprocess.run(['git', '-C', ROOT, 'log', f'--since={since}', '-p', '--no-merges', '--format=', '--',
+                                'source/'], capture_output=True, text=True)
+            w = subprocess.run(['git', '-C', ROOT, 'diff', 'HEAD', '--', 'source/'], capture_output=True, text=True)
+            diff = r.stdout + w.stdout
     out, seen = [], set()
     for f, film, line in film_check_fixes(diff):
         notes = _keep_notes(film)

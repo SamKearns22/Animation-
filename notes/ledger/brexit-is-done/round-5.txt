@@ -1,0 +1,37 @@
+== critique, round 5 pass 1 (2026-11-25): 9 fault(s), 3 can't tell
+-- look.md --
+1: Gray-haired man in dark suit, red tie, sits in armchair; snarling bloody gray wolf left; woman far back. No words.
+2: Same man and chair; snarling bloody white wolf right; woman in red dress at doorway; plate on floor. No words.
+3: Contact sheet of tiny frames: suited man, wolves, woman; blank white area bottom. No words readable.
+4: Tiny frame grid: man, gray wolves, woman; large white empty area bottom. No words readable.
+5: Tiny frame grid: man, woman in red, wolves; white blank rectangle bottom. No words readable.
+6: Tiny frame grid: man, wolves, running figures; white blank area bottom right. No words readable.
+7: Larger frames: man, woman, wolves, small speech bubbles with unreadable marks; white blank bottom.
+8: Dark silhouettes of running figures across red floor strip; black empty areas left and below. No words.
+-- result.md --
+## Faults
+FAULT P7 [1, 2]: Blair seated - two dark round knee balls at the lens beside his hips, no thigh or lap, and he sits in front of the armchair, not in it; no bottom on the seat.
+FAULT A1 C4 [1, 2]: brief wants a chase behind him (guests and butler fleeing, wolf at their heels). Panel 1 has no one fleeing, only a snarling wolf alone at his feet, close to his chair. Panel 2 has one woman standing at the doorway and one wolf, not two guests just past and two wolves.
+FAULT A1 [6]: the huge wolf at 26.75 is only a brown blob with teeth at the right edge. It does not read as a wolf leaping at his head.
+FAULT S4 [8]: left of the strip is black (a bar that narrows frame by frame): the edge of the set or a missing picture shows.
+FAULT S1 [8]: the butler's head is cut off at the top; only the chin shows, so the run does not read as a person.
+FAULT P5 [8]: in several frames a pink ball hand sits on his chest or belly with no arm joining it; the other arm is a straight stub with no hand (P6).
+FAULT P10 [8]: his shoe lands on a plate on the floor and the plate does not move or break.
+FAULT O5 M5 [7]: the tray and flutes never visibly land flat and rattle. No champagne pools stay in the last frames.
+FAULT O3 [7]: the flying tray reads as a plate or disc, and the flutes as tiny specks.
+CAN'T TELL A1 [8]: a jagged brown zigzag shape sits behind the butler. A frame with the whole room would show what it is.
+CAN'T TELL M3 [4, 6, 7]: wolves look very long and stretched in some frames. A frame at full size would show it.
+CAN'T TELL P4 [1, 2]: his hair reads as a bulky helmet against the reference. Only one reference photo, in a different pose.
+
+## Checked
+1-8
+
+## Cold look
+I named the wolves, the man in the armchair and the woman correctly. I read panel 7's tray, plates and flutes as "speech bubbles", a misreading from phone size (O3). I called panels 3-6 only "tiny frames", which means they are unreadable at phone size. I missed the zigzag shape in 8 and the cut-off head. I noticed the missing guests in panel 1 only at the check.
+
+## Not on the list
+1. Contact strips are tiny, with large white or black empty areas. suggested line: every strip's frames are at least phone-readable and the sheet has no blank blocks.
+2. Gore (blood on wolf mouths and paws) may be too strong for TikTok. suggested line: violence level suits the platform.
+3. Wolves cut by the frame edge in 1 and 2. suggested line: nothing important is sliced by the frame edge.
+4. Frame time labels are illegible. suggested line: every strip frame label is legible.
+

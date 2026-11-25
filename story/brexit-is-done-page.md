@@ -1,0 +1,160 @@
+# brexit-is-done: the page a notes round reads (python3 source/page.py brexit-is-done; regenerate after any edit)
+
+Read this, then only the lines a note points to (`page.py FILM find "note words"`).
+
+
+## brexit_is_done.py (214 lines)
+- 29: HERE (data)
+- 38: B (data)
+- 39: V (data)
+- 44: NAME (data)
+- 45: FILM (data)
+- 46: NOTES (data)
+- 47: HAS (data)
+- 48: FPS (data)
+- 49: LINES (data)
+- 57: SHOTS (data)
+- 58: DUR (data)
+- 59: T (data)
+- 60: SHOT_CAST (data)
+- 61: SHOT_MARKS (data)
+- 62: HOOK (data)
+- 65: `scene_of` 
+- 73: `shot_of` 
+- 80: FACE_X (data)
+- 81: EYE_Y (data)
+- 82: KEEP_CLEAR (data)
+- 85: CAST (data)
+- 86: FEET (data)
+- 89: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
+- 94: `seated` `who` seated at depth d (m) through level camera L, their body centre at screen X; the sitting kit's pose.
+- 112: _DESC (data)
+- 113: _PAINT (data)
+- 115: MAY (data)
+- 120: `_cam` 
+- 124: `_paint` 
+- 129: `may_shot` 
+- 142: `standing` `who` standing on the ground at depth d (m) through level camera L, body centre at screen X.
+- 153: KEMI (data)
+- 156: `kemi_shot` 
+- 170: BLAIR (data)
+- 173: `blair_shot` 
+- 189: `picture` 
+- 198: `frame_image` 
+- 202: `main` 
+
+## brexit_is_done_action.py (775 lines)
+- 36: HERE (data)
+- 46: B (data)
+- 47: V (data)
+- 48: FEET (data)
+- 51: WOLF_SHOULDER (data)
+- 52: UNITS (data)
+- 53: ATTACK (data)
+- 54: LIFT_D (data)
+- 56: CROWD (data)
+- 57: WORKERS (data)
+- 58: GUESTS (data)
+- 61: `ease` 
+- 66: `lerp` 
+- 70: `keyed` A number from (time, value) keys, eased between them, held outside.
+- 81: `_ctx` 
+- 86: `wolf_s` 
+- 90: `wolf_at` A kit wolf whose body middle stands over (x, d) at height z (m) through level camera L; returns its jaws.
+- 100: `wolf_front_at` 
+- 109: `scale_at` 
+- 113: `person_at` Someone standing on a floor at height z (m), depth d, across x (m) through L; returns the drawn joints.
+- 125: `_screen` views.person's returned points are in person units from the neck base: add the screen ones (key + '_px').
+- 136: `tube` A steel scaffold tube from a to b (screen), w px thick, one outline.
+- 144: WA (data)
+- 145: WB (data)
+- 146: RUN_V (data)
+- 147: HIT (data)
+- 148: FEEDS (data)
+- 151: `_feed_u` Feeding: head down in the kill (worrying), a rip up to the sky (0.3 s), held with the hunk (0.3 s), back down.
+- 167: `_rips` 
+- 175: `_attack_wolf` One of the two: charges in from off frame left, leaps (0.2-0.6), lands on him, feeds.
+- 204: `_worker1_pose` Digging: bent over the shovel, the blade in the dirt, a push down on the handle every 0.6 s.
+- 216: `_shovel` The shovel: a wooden shaft from the top grip a to the blade's heel b (screen points), the blade beyond.
+- 232: `w1` W1 and the two wolves on him: returns [(depth, draw)].
+- 324: RUN_SPEED (data)
+- 327: `_runner_x` 
+- 331: `runner` W2 on the 9.6 m lift and the two wolves after him.
+- 394: BAR_MEN (data)
+- 395: LUNGES (data)
+- 396: STRIKE (data)
+- 397: CLANG (data)
+- 400: `_bar_man` Two hands on the tube at chest height; before a strike he leans back (the wolf comes), then jabs (fast) and
+- 425: `bars` 
+- 498: WEAR (data)
+- 499: BLOODY (data)
+- 502: `milling` 
+- 539: DOOR (data)
+- 545: PASSES (data)
+- 561: ROOM_WOLF (data)
+- 562: TOSS (data)
+- 563: RUN_STEP (data)
+- 566: `along` (x, d, dx, dd) `dist` metres along a path, or None past its end.
+- 577: `_guest_pose` A running guest's yaw and joints: straight at us out of the doorway (front_run), three-quarter on a diagonal,
+- 590: `_beyond_door` 
+- 594: `tray_state` Where the tray and the three glasses are at shot time u: before TOSS on the butler's palm (None: drawn with
+- 615: `_tray` The silver tray: an ellipse in perspective (thin when level with the eye), tumbling in the air, flat on the
+- 646: `_ell` 
+- 652: `_flute` A champagne flute (stem, foot, bowl) of height 0.2 m * s px-per-m, turned `ang` radians.
+- 670: `_glass_down` A glass that has landed: shards flung a little way and still, champagne spreading into a wet pool.
+- 692: `lunger` Wp: in from frame right in mid-leap at Blair's depth (2.3 m: just behind his shoulder, so his head would hide
+- 712: LUNGE_T (data)
+- 715: `room_actors` Every background actor of shot 3 at shot time u: ([(depth, draw)], [draw] seen through the doorway).
+- 766: `set_cam` The level camera as a 3D set camera (lying.py's bodies and floor-placed people need one).
+- 772: `site_actors` Every background actor of shot 2 at shot time u: [(depth, draw)].
+
+## brexit-is-done-people.txt (5 people; a note on a person changes their lines)
+- 3: may (Theresa May (the BBC interview, Nov : plum jacket, patterned blouse, pearls)): head: house may, hair bob, look detail; outfit: suit , shirt white, no tie, open collar; extras: pattern; body: , woman, shoulders
+- 9: kemi (Kemi Badenoch on site (Sam's photo: white hard hat, glasses, braids, orange-and-navy hi-vis)): head: house badenoch, hair braids, look detail; house: hat , specs; outfit: suit , sleeves , shirt , no tie; extras: workwear; body: , woman, build straight, shoulders , jacket , arms
+- 16: blair (Tony Blair today (Sam's photo: grey hair swept back, the grin, dark suit, red tie)): head: house blair, hair back, look detail; outfit: suit , shirt white, tie ; body: , man
+- 21: worker (the site's workers (shot 's background: W digging, W the runner, W -W with the scaffold tubes): hi-vis): crowd: worker; body: , man; outfit: suit , sleeves , shirt , no tie; extras: workwear; mix: london; hats: hardhat; count: ; + i; trousers (i): ; ; ; ; ; shoes (i): ; ; ; ; ; hair (i): crop; short; curly; receding; side
+- 35: guest (shot 's fleeing staff and guests (a butler, a waitress, a man in a dinner suit, a woman in an evening gown)): crowd: guest; count: ; mix: london; hats: ; + i; body (i): , man; , woman; , man; , woman; outfit (i): suit , shirt white, tie , trousers , shoes ; dress, dress , sleeves , shirt white, no tie, trousers , shoes ; suit , shirt white, tie , trousers , shoes ; dress, dress , sleeves , no tie, trousers , shoes ; extras (i): ; ; ; skirt; hair (i): receding; bun; side; long
+
+## brexit-is-done-places.txt (39 pieces; a note on a place changes its line: open that line)
+### may (shot 1
+- 10: May, chest up, turned to screen-left, looking off-frame left): panels (the slatted wall)
+- 11: May, chest up, turned to screen-left, looking off-frame left): block (a lamp streak, far left)
+- 12: May, chest up, turned to screen-left, looking off-frame left): block (a lamp streak, left)
+- 13: May, chest up, turned to screen-left, looking off-frame left): block (a lamp streak, middle)
+- 14: May, chest up, turned to screen-left, looking off-frame left): block (a lamp streak, behind her)
+- 15: May, chest up, turned to screen-left, looking off-frame left): block (a lamp streak, right)
+- 16: May, chest up, turned to screen-left, looking off-frame left): block (a lamp streak, far right)
+- 17: May, chest up, turned to screen-left, looking off-frame left): block (the floor: dark carpet; Added, the tall frame shows it)
+### site (shot 2
+- 28: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): sky (the overcast)
+- 29: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): a cloud bank
+- 30: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): cloud (a darker bank)
+- 31: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): a low cloud
+- 32: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the blue crane
+- 33: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the red crane
+- 34: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the frame
+- 35: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): pipe (a drain run down the face)
+- 36: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): a big orange pipe riser
+- 37: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): pipe (a second riser)
+- 38: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): a pipe end out of a slab
+- 39: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): another pipe end
+- 40: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the scaffold, inner
+- 41: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the scaffold, outer; seed was 3: chat 11 keeps the 6.4 m lift open where the bar fight is, so the barrier boards never hide the tubes
+- 42: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the blue hoarding
+- 43: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the skip
+- 44: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): pipe stack (the big pipes)
+- 45: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): pallet (the blocks)
+- 46: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the sand heap
+- 47: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): the fence
+- 48: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): a cone
+- 49: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): a near cone
+- 50: Kemi in May's place and size, 1.21 m away, eyes on row 700 (horizon 800; chat 10: the frame moved back 7.4 m so the grey sky shows over it, item 16): dirt (the dusty ground)
+### blair
+- 59: panels (the oak panelling)
+- 60: block (the cornice)
+- 61: the bookcases, left
+- 62: the bookcases, right
+- 63: the double doors
+- 64: block (the floor)
+- 65: carpet (the rug)
+- 66: the chandelier
