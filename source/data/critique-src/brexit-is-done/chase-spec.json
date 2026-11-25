@@ -1,0 +1,10 @@
+{"round": 5, "stage": "moves", "panels": [
+ {"t": 21.17, "is": "Shot 3, Tony Blair seated, grinning at an unseen interviewer off-frame left, in an oak-panelled library; behind him a chase: dinner guests and a butler fleeing across the room, a wolf at their heels. He ignores it (that is the joke).", "parts": "APCS", "set": "library", "refs": ["references/brexit-is-done/blair-today-sam.jpg"]},
+ {"t": 23.42, "is": "The same shot later: two guests have just run past, two wolves follow them.", "parts": "APCS", "set": "library"},
+ {"img": "source/data/critique-src/brexit-is-done/chase-1-doors.jpg", "is": "Frames with their times (read left to right, top to bottom): the double doors at the back fly open; a butler carrying a tray of champagne flutes bursts out toward us, swerves left and the tray flies on, tumbling; three guests follow, each with a wolf at their heels, splitting left and right round the room.", "parts": "MCPO"},
+ {"img": "source/data/critique-src/brexit-is-done/chase-2-wave1.jpg", "is": "Frames with their times: two of them come back across together, left to right, one nearer us leading, then their two wolves behind.", "parts": "MCP"},
+ {"img": "source/data/critique-src/brexit-is-done/chase-3-wave2.jpg", "is": "Frames with their times: the other two come back right to left the same way, then their wolves.", "parts": "MCP"},
+ {"img": "source/data/critique-src/brexit-is-done/chase-4-wave3-end.jpg", "is": "Frames with their times: a third pair right to left with their wolves; the room empties; the butler runs in again from the left; at 26.75 a huge wolf leaps in at the top right toward Blair's head (the film cuts before it reaches him).", "parts": "MCP"},
+ {"img": "source/data/critique-src/brexit-is-done/chase-5-tray.jpg", "is": "Frames 1/12 s apart, the left half of the room: the flying tray hops once and rattles flat on the floor; the flutes land and shatter, each leaving a pool of champagne that stays.", "parts": "MO"},
+ {"img": "source/data/critique-src/brexit-is-done/chase-6-run-cycle.jpg", "is": "Frames 1/24 s apart, close: the butler mid-run, side on (partly hidden by Blair at the right).", "parts": "MP"}
+]}

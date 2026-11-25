@@ -540,22 +540,23 @@ DOOR = dict(x0=-1.9, x1=-0.1, d=6.95, z1=3.0)
 GUEST_V, WOLF_V = 4.4, 4.4              # m/s: guests in panic (heels, a tray, a gown); the wolves keep pace, never close
 #                                         (chat 12: at 5.0 m/s a wolf's open jaws reached the runner's back foot)
 # (guest, start s, path [(x, d) m], wolf, its lag s): the four burst out of the doors in turn, each with a wolf at
-# their heels; then they come back across, staggered, entering on the side they left by (the back always busy,
-# never piled: at most two pairs in frame at once)
+# their heels; then they come back across in waves, two side by side (one lane each) with their wolves behind, entering
+# on the side they left by. Everyone in frame runs the same way: the next wave comes the other way only once the frame
+# is clear (chat 13: lanes 0.8, then 1.4 m apart still met nose to nose, and a wolf ran past a guest's hand; moves.head_on).
+# In a pair the near one leads by 0.45 s (moves.within_reach) and the near wolf waits 0.9 s: both guests, then both wolves
+LANE_R, LANE_L = 4.60, 6.00             # m: the near and far lanes
 PASSES = [
-    (0, 0.30, [(-1.30, 7.60), (-1.30, 5.95), (-3.3, 5.35)], 0, 0.65),     # the butler: he threw the doors open
-    (1, 0.52, [(-0.50, 8.60), (-0.50, 5.85), (2.9, 5.50)], 1, 0.55),
-    (2, 0.78, [(-1.05, 9.00), (-1.05, 5.75), (-3.0, 4.70)], 2, 0.55),
-    (3, 1.05, [(-1.50, 9.20), (-1.50, 5.85), (2.9, 5.60)], 3, 0.55),
-    (0, 2.30, [(-2.6, 4.70), (2.7, 4.70)], 0, 0.57),
-    (1, 3.00, [(2.7, 5.60), (-2.7, 5.60)], 1, 0.55),
-    (2, 3.80, [(-2.5, 4.70), (2.7, 4.70)], 2, 0.55),     # its own lane: Wm (5.6 m) is crossing back
-    (3, 4.60, [(2.7, 5.60), (-2.7, 5.65)], 3, 0.55),
-    (0, 5.40, [(2.7, 5.80), (-2.7, 5.80)], 0, 0.55),
-    (1, 6.10, [(-2.6, 4.75), (2.7, 4.75)], 1, 0.55),
-    (2, 6.90, [(2.7, 5.50), (-2.7, 5.50)], 2, 0.57),
-    (3, 7.05, [(-2.6, 4.70), (2.7, 4.70)], 3, 0.55),
-    (0, 8.85, [(-2.6, 5.00), (2.7, 5.00)], 0, 0.55),     # still left of his face at the cut
+    (0, 0.30, [(-1.30, 7.60), (-1.30, 6.15), (-3.3, LANE_L)], 0, 0.65),   # the butler: he threw the doors open
+    (1, 0.52, [(-0.50, 8.60), (-0.50, 5.70), (1.4, LANE_R), (2.9, LANE_R)], 1, 0.55),
+    (2, 0.78, [(-1.05, 9.00), (-1.05, 6.10), (-3.0, LANE_L)], 2, 0.55),
+    (3, 1.05, [(-1.50, 9.20), (-1.50, 5.70), (0.6, LANE_R), (2.9, LANE_R)], 3, 0.55),
+    (0, 2.55, [(-2.7, LANE_R), (2.7, LANE_R)], 0, 0.90),          # wave 1, to the right: the two who left left,
+    (2, 3.00, [(-2.7, LANE_L), (2.7, LANE_L)], 2, 0.55),          # the near one leading (perspective opens the gap)
+    (1, 4.80, [(2.7, LANE_R), (-2.7, LANE_R)], 1, 0.90),          # wave 2, to the left: the two who left right
+    (3, 5.25, [(2.7, LANE_L), (-2.7, LANE_L)], 3, 0.55),
+    (2, 6.40, [(2.7, LANE_R), (-2.7, LANE_R)], 2, 0.90),          # wave 3, to the left: wave 1 back again
+    (0, 6.85, [(2.7, LANE_L), (-2.7, LANE_L)], 0, 0.55),
+    (0, 8.85, [(-2.6, 5.00), (2.7, 5.00)], 0, 0.55),              # still left of his face at the cut
 ]
 # From 8.4 s nothing passes behind Blair's head or shoulders: the lunge from the right is the only thing there.
 ROOM_WOLF = [dict(pal=0, seed=60), dict(pal=2, seed=61), dict(pal=4, seed=62), dict(pal=1, seed=63)]
@@ -572,6 +573,16 @@ def along(pts, dist):
             return x0 + (x1 - x0) * u, d0 + (d1 - d0) * u, (x1 - x0) / n, (d1 - d0) / n
         dist -= n
     return None
+
+
+def movers():
+    """Every guest and wolf of shot 3 as moves.head_on wants them: [(name, pass, at(u))]."""
+    out = []
+    for i, (k, t0, pts, w, lag) in enumerate(PASSES):
+        for who, s0, v in (('guest %d' % k, t0, GUEST_V), ('wolf %d' % w, t0 + lag, WOLF_V)):
+            out.append(('%s (pass %d)' % (who, i), i,
+                        lambda u, s0=s0, v=v, pts=pts: along(pts, v * (u - s0)) if u >= s0 else None))
+    return out
 
 
 def _guest_pose(sp, k, tt, dx, dd, u):

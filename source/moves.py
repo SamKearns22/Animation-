@@ -112,6 +112,10 @@ def speed(kind):
     return g['sps'] * g['step']                               # metres a second
 
 
+RUN_SWEEP = 0.75        # runs: a planted foot travels at most this many leg lengths under the body (touch-down to
+#                         toe-off); a real runner's hips bob about a tenth of a leg, not a quarter
+
+
 def gait(sp, t, kind='walk', stride=None, steps_per_s=None):
     """A pose `t` seconds into a gait. Feet planted on the floor slide back exactly as fast as the body moves on.
     `stride`: step length in person units (default from GAITS)."""
@@ -124,6 +128,12 @@ def gait(sp, t, kind='walk', stride=None, steps_per_s=None):
     duty = g['duty']
     sweep = 2 * duty * step                                   # how far a planted foot travels back under the body
     reach = 0.99 * (V.THIGH + V.SHIN)
+    if g.get('kick', 0.0) > 0 and sweep > RUN_SWEEP * (V.THIGH + V.SHIN):
+        # A faster or longer run touches down for less of each step, never for longer (Open Wounds chat 13: at 0.95 m
+        # steps a planted foot stayed down until it was 0.7 of a leg behind the hips, and the body sank into a lunge,
+        # both feet wide on the floor). Same step and cadence, so the same speed; more time in the air instead.
+        sweep = RUN_SWEEP * (V.THIGH + V.SHIN)
+        duty = sweep / (2 * step)
     planted = {}
     for side, ph0 in (('L', 0.0), ('R', 0.5)):
         u = (cyc + ph0) % 1.0
@@ -180,6 +190,51 @@ def gait(sp, t, kind='walk', stride=None, steps_per_s=None):
     j['lean'] = g['lean']
     j['planted'] = planted
     return j
+
+
+def head_on(actors, t0, t1, gap=3.0, x_lim=3.0, near=0.6, fps=50):
+    """Two movers going opposite ways who meet across the frame less than `gap` m apart in depth (Open Wounds chat 13:
+    0.8 m apart, two guests met nose to nose and passed through each other; at 0.07 m a wolf ran through a guest; at
+    1.4 m two faces still touched on screen and a wolf ran past a guest's hand, so in one room: never).
+    actors: [(name, group, at)] where at(t) -> (x, d, dx, dd) or None; movers of one group (a guest and the wolf at
+    their heels) are never compared, nor two splitting apart. Returns [(t, name1, name2, depth gap)], one per pair."""
+    seen, out = set(), []
+    for i in range(int((t1 - t0) * fps) + 1):
+        t = t0 + i / fps
+        on = [(n, g, a) for n, g, f in actors for a in [f(t)] if a and abs(a[0]) < x_lim]
+        for p in range(len(on)):
+            for q in range(p + 1, len(on)):
+                (n1, g1, a), (n2, g2, b) = on[p], on[q]
+                if g1 == g2 or (n1, n2) in seen or a[2] * b[2] >= 0 or abs(a[0] - b[0]) > near:
+                    continue
+                if (b[0] - a[0]) * (a[2] - b[2]) <= 0:          # already past each other or splitting apart
+                    continue
+                if abs(a[1] - b[1]) < gap:
+                    seen.add((n1, n2))
+                    out.append((round(t, 2), n1, n2, round(abs(a[1] - b[1]), 2)))
+    return out
+
+
+def within_reach(actors, proj, t0, t1, reach=0.9, x_lim=3.0, fps=25, only='guest'):
+    """Two people of different groups closer on screen than an arm's reach (`reach` m at the nearer one's size), so a
+    swinging hand lands on the other's body (Open Wounds chat 13: a runner's hand on the shoulder of the guest beside
+    him read as a grab; two side by side: the NEAR one leads, so perspective opens the gap). proj(x, d) -> (screen x px, px per m). Returns [(t, name1, name2, gap in m)], one per pair."""
+    seen, out = set(), []
+    for i in range(int((t1 - t0) * fps) + 1):
+        t = t0 + i / fps
+        on = [(n, g, a) for n, g, f in actors if n.startswith(only) for a in [f(t)]
+              if a and abs(a[0]) < x_lim and abs(a[3]) < 0.8]       # running at the lens, the arms stay tucked
+        for p in range(len(on)):
+            for q in range(p + 1, len(on)):
+                (n1, g1, a), (n2, g2, b) = on[p], on[q]
+                if g1 == g2 or (n1, n2) in seen:
+                    continue
+                (x1, m1), (x2, m2) = proj(a[0], a[1]), proj(b[0], b[1])
+                gap = abs(x1 - x2) / max(m1, m2)
+                if gap < reach:
+                    seen.add((n1, n2))
+                    out.append((round(t, 2), n1, n2, round(gap, 2)))
+    return out
 
 
 def footfalls(kind, t0, t1):

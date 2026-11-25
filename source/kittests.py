@@ -4880,6 +4880,84 @@ def door_slit():
     return ok, 'old slit seen %s, fixed slit seen %s, hips through the open window %s' % (old, new, hips)
 
 
+@test
+def run_hips_stay_up():
+    """A run never sinks into a lunge (Open Wounds chat 13, notes/learn/run-lunge/): the hips bob at most 0.13 leg."""
+    import moves as MV
+    import views as V
+    leg = V.THIGH + V.SHIN
+    sp = {'height': 1.8, 'pose': 'custom'}
+
+    def worst(kind, step_m=None, speed=None):
+        sps = speed / step_m if speed else MV.GAITS[kind]['sps']
+        stride = step_m / V.M_PER_UNIT if step_m else None
+        return max(MV.gait(sp, i / 60 * 2 / sps, kind, stride=stride, steps_per_s=sps if speed else None)['bob']
+                   for i in range(60)) / leg
+    cases = [('run', None, None), ('sprint', None, None), ('run', 0.95, 4.4), ('run', 1.25, 5.0)]
+    keep = MV.RUN_SWEEP
+    try:
+        MV.RUN_SWEEP = 99.0                          # the old gait: a foot stays down as long as `duty` says
+        old = worst('run', 0.95, 4.4)
+    finally:
+        MV.RUN_SWEEP = keep
+    now = {f'{k} {m or "own"}': worst(k, m, v) for k, m, v in cases}
+    ok = old > 0.13 and all(x <= 0.13 for x in now.values())
+    return ok, 'old run at 0.95 m sank %.2f leg; now %s' % (old, ', '.join('%s %.2f' % kv for kv in now.items()))
+
+
+@test
+def movers_never_meet_head_on():
+    """Two movers going opposite ways never meet on screen within 3 m of depth (Open Wounds chat 13: nose to nose)."""
+    import moves as MV
+    import brexit_is_done_action as A
+    old_passes = [  # chat 12's table: lanes 4.7 and 5.6 m (guests nose to nose at 7.5 s; a wolf through a guest at 3.1)
+        (0, 0.30, [(-1.30, 7.60), (-1.30, 5.95), (-3.3, 5.35)], 0, 0.65), (1, 0.52, [(-0.50, 8.60), (-0.50, 5.85), (2.9, 5.50)], 1, 0.55),
+        (2, 0.78, [(-1.05, 9.00), (-1.05, 5.75), (-3.0, 4.70)], 2, 0.55), (3, 1.05, [(-1.50, 9.20), (-1.50, 5.85), (2.9, 5.60)], 3, 0.55),
+        (0, 2.30, [(-2.6, 4.70), (2.7, 4.70)], 0, 0.57), (1, 3.00, [(2.7, 5.60), (-2.7, 5.60)], 1, 0.55),
+        (2, 3.80, [(-2.5, 4.70), (2.7, 4.70)], 2, 0.55), (3, 4.60, [(2.7, 5.60), (-2.7, 5.65)], 3, 0.55),
+        (0, 5.40, [(2.7, 5.80), (-2.7, 5.80)], 0, 0.55), (1, 6.10, [(-2.6, 4.75), (2.7, 4.75)], 1, 0.55),
+        (2, 6.90, [(2.7, 5.50), (-2.7, 5.50)], 2, 0.57), (3, 7.05, [(-2.6, 4.70), (2.7, 4.70)], 3, 0.55),
+        (0, 8.85, [(-2.6, 5.00), (2.7, 5.00)], 0, 0.55)]
+    keep = A.PASSES
+    try:
+        A.PASSES = old_passes
+        old = MV.head_on(A.movers(), 0, 9.4)
+    finally:
+        A.PASSES = keep
+    new = MV.head_on(A.movers(), 0, 9.4)
+    caught = any(m[3] < 0.1 for m in old) and any(abs(m[0] - 7.5) < 0.1 for m in old)
+    return caught and not new, 'old table: %d meetings (%s); now: %s' % (len(old), old[:2], new or 'none')
+
+
+@test
+def side_by_side_out_of_reach():
+    """Two people running side by side stay more than an arm's reach apart on screen (Open Wounds chat 13: a hand on
+    the shoulder of the guest beside him, notes/learn/chase-meetings/hand-on-shoulder-24.92.jpg)."""
+    import moves as MV
+    import brexit_is_done as F
+    import brexit_is_done_action as A
+    L = F._cam('blair')
+    proj = lambda x, d: (L.p(x, d, 1.0)[0], L.ppm(d))
+    keep = A.PASSES
+    wave = {4: (2, 2.55, A.LANE_L), 5: (0, 2.75, A.LANE_R), 6: (3, 4.65, A.LANE_L), 7: (1, 4.85, A.LANE_R),
+            8: (0, 6.45, A.LANE_L), 9: (2, 6.65, A.LANE_R)}       # the first waves: the far one leading by 0.2 s
+    old_passes = []
+    for i, p in enumerate(keep):
+        if i in wave:
+            k, t0, lane = wave[i]
+            sx = -2.7 if i < 6 else 2.7
+            p = (k, t0, [(sx, lane), (-sx, lane)], k, 0.57 if k in (0,) and i == 5 else 0.55)
+        old_passes.append(p)
+    try:
+        A.PASSES = old_passes
+        old = MV.within_reach(A.movers(), proj, 0, 9.4)
+    finally:
+        A.PASSES = keep
+    new = MV.within_reach(A.movers(), proj, 0, 9.4)
+    caught = any('(pass 8)' in m[1] and '(pass 9)' in m[2] for m in old)    # the pair of the hand on the shoulder
+    return caught and not new, 'first waves: %s; now: %s' % (old, new or 'none')
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
