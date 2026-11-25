@@ -42,3 +42,34 @@ f. The look: posted films vs new ones on the channel; a stranger test on the cli
 g. Open Wounds (live) stays on the flat kit; the switch only between films.
 h. Success measure: the next films' cost and number of Sam's notes vs the last three; a stop rule if worse.
 Push notification at the end of each step, pass or stop. Total cap 8.5% of a week; at the cap, stop and tell Sam.
+
+## Step 1 result (investigation chat 1, 25 Nov, session_01U3pKQyLPecZFf57adRJxjG; Opus high; 1.8% of a week)
+Where I looked: every film notes file in notes/ and notes/archive/ (28 films; handover, plan, acting, estimate and
+work-log sections left out), 1682 lines (count/items.json, each with its file:line). Six Sonnet helpers sorted them
+(count/instructions.md, out1-6.txt); a seventh sorted a random 200 again blind (out_sample.txt: agreed on 164 of 200);
+then every "prevented" call on a body note checked by hand (count/hand-check.md). Tally: count/tally.py.
+- Sam notes: 1058. Places/props 204, moves and timing 202, text/sound 131, camera 104, faces 96, BODY 90, script 86,
+  CONTACT 68, other 41, clothes 26, HANDS 10. Body/pose/contact/hands together: 168 (16% of all notes).
+- Of the 168: a model body prevents 50 outright (30%); 97 more only partly (87% together), nearly all of them a body
+  meeting a flat chair, car, door, desk, table or prop: those need the furniture solid too (question b). 21 not at all.
+  All 10 hand notes: not helped. 34 notes (body 15, face 8, clothes 7, hands 4) could be made worse by it.
+- Body notes repeat about twice as often as the rest (20% read as repeats vs 11%): they are the costly ones.
+- Stop rule: 30% sits right on "about a third", so step 1 stopped and asked Sam (Q1) rather than deciding alone.
+Statement One, what step 1 already says (the rest is for step 3's judge):
+ a. At most 16% of Sam's notes are about bodies; outright, 5% of all notes. Payback must come from the costly repeats
+    (GTA shot 4 alone was about 39% of a week, notes/bench/learn-step.md L1), not from the note count.
+ b. 63 of the 68 contact notes are only partly fixed by a solid body alone: sets would have to join the same depth
+    pass (Jason's car did: learn-step.md L1 row 1). This is the bigger cost and is unmeasured.
+ c. Hands: no hand note is fixed by it. Heads: 8 face notes could get worse (head views on a freely turning body).
+ d-h. Not answerable from the count; step 2's clip and step 3's judge.
+Open rule requests: none found in this investigation's notes.
+
+## Where things stand (investigation chat 1)
+Rules that bite next: 85 (cost watch: step caps), 30 (fix the method), CLAUDE.md "no rule without a working check".
+Done: step 1 (the count), above; pushed to the main line.
+Next: on Sam's 1, step 2 (Opus high, cap 6%): Blender installed, the moving test on a real past shot (sit, stand,
+walk) beside the original, clip only; on Sam's 2, the investigation ends and is marked declined.
+Needs Sam: Q1 (go on to step 2, or stop here).
+Read: this file only; count/hand-check.md for the numbers.
+For Claude: tally.py in count/; first sort out1-6, blind re-sort out_sample; hand-check overrides by ID.
+Locked by Sam: no film shot is touched by this investigation; Open Wounds stays on the flat kit (question g).
