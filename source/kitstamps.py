@@ -43,7 +43,14 @@ ALL_DIRS = ('source', '.claude')
 KEEP = 3                                        # lines kept per test (newest), so the record stays small
 SKIP_PARTS = ('/.git/', '/__pycache__/')
 HARNESS = {'start', 'stop', '_start_event', '_open', '_imp', '_listdir', '_scandir', '_popen', '_from_importer', '_rel',
-           '_program', '_one_step_out', 'tracer', 'traced', '_child_dir', '_done'}
+           '_program', '_one_step_out', 'tracer', 'traced', '_child_dir', '_done', 'git_item'}
+# kit-tests-per-film fix 3 (25 Nov): the hooks' own inner code (a <genexpr> inside _program, git_item) counted as a read
+# of this file by 85 of 147 tests, so any edit here re-ran most of the kit; a code is the harness when any part of its
+# qualified name is (Tracer._program.<locals>.<genexpr> -> _program)
+
+
+def _is_harness(code):
+    return any(p in HARNESS for p in code.co_qualname.split('.'))
 
 
 # ------------------------------------------------------------------------------------------------ the setup a stamp holds
@@ -337,7 +344,7 @@ class Tracer:
         me = os.path.realpath(__file__)
         for c in self.codes:
             fn = c.co_filename
-            if os.path.realpath(fn) == me and c.co_name in HARNESS:
+            if os.path.realpath(fn) == me and _is_harness(c):
                 continue                        # the tracer's own watching, not something the test read
             if os.path.realpath(fn) == kt:
                 names.add(c.co_qualname.split('.')[0])

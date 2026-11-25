@@ -5200,6 +5200,58 @@ def kit_tests_rerun_only_what_changed():
                 f'gate fresh: {gate_none!r}, stale: {gate_left[:40]!r}')
 
 
+@test
+def kit_tests_per_film():
+    """Rule 90 (Sam, 25 Nov, saved in notes/ledger/sam/5whcspgq.md: "Make the kit check happen at the beginning and the
+    end of every film ... it is wasting usage and time to do this with every chat"): the old start-up hook ran the kit
+    tests in every chat (caught; today's passes); a film's first chat starts the run and its end waits for it; a later
+    chat neither runs nor waits, except a never-passed (new) test, and says "suggest a full check to Sam" only after
+    more than 20 tests went stale from its own changes; the stale run no longer needs Override to happen (fix 1); the
+    stamp tool's own hook code is not a read (fix 3)."""
+    import subprocess
+    import tempfile
+    import handover as H
+    import kitfilm as KF
+    import kitstamps as KS
+    root = os.path.dirname(HERE)
+    said = open(os.path.join(root, 'notes', 'ledger', 'sam', '5whcspgq.md'), encoding='utf-8').read()
+    example = 'Make the kit check happen at the beginning and the end of every film' in said
+    old = subprocess.run(['git', '-C', root, 'show', 'fb29ae0a:.claude/hooks/setup.sh'], capture_output=True,
+                         text=True).stdout
+    caught_old, now_setup = KF.setup_faults(old), KF.setup_faults()
+    d = tempfile.mkdtemp()
+    rec, sp, log, reds = (os.path.join(d, n) for n in ('films.tsv', 'start.txt', 'kit.log', 'reds.log'))
+    launched = []
+    first = KF.at_start('zz-film', 'chatA', rec, sp, stale_fn=lambda: ['t1'], launch_fn=lambda: launched.append(1))
+    again = KF.at_start('zz-film', 'chatB', rec, sp, stale_fn=lambda: ['t1'], launch_fn=lambda: launched.append(2))
+    tool = KF.at_start(None, 'chatC', rec, sp, stale_fn=lambda: [], launch_fn=lambda: launched.append(3))
+    ran = []
+
+    def run(names, kitlog):
+        ran.append(list(names))
+        open(kitlog, 'w').write('kittests: all passed\n')
+        return True
+    g = lambda **k: H.kittest_gate_faults(log, reds, sid='zz', stale_fn=lambda: (['t1'], 60.0), run_fn=run, **k)
+    wait_first = g(first_fn=lambda s: True, busy_fn=lambda: True)               # first chat: waits for its run
+    end_first = g(first_fn=lambda s: True, busy_fn=lambda: False)               # then runs the stale, no Override
+    mid = g(first_fn=lambda s: False, busy_fn=lambda: True, new_fn=lambda: [], major_fn=lambda: '')
+    mid_new = g(first_fn=lambda s: False, busy_fn=lambda: True, new_fn=lambda: ['t_new'], major_fn=lambda: '')
+    open(sp, 'w').write('zz\ta,b\n')
+    small = KF.major_line('zz', ['a', 'b'] + [f'n{i}' for i in range(20)], sp)
+    big = KF.major_line('zz', ['a'] + [f'n{i}' for i in range(21)], sp)
+    _, r_git = KS.traced(lambda: KS.tracer()._program(['git', '-C', root, 'push'], None))
+    ok = (example and caught_old and not now_setup and launched == [1] and 'first chat' in first[-1]
+          and 'not this chat' in again[-1] and not tool
+          and KF.started_here('chatA', rec) and not KF.started_here('chatB', rec)
+          and wait_first and 'STILL RUNNING' in wait_first[0] and ran[0] == ['t1'] and not end_first
+          and mid == [] and ran[1:] == [['t_new']] and not mid_new
+          and small == '' and 'Y or N' in big and 'source/kitstamps.py' not in (r_git or set()))
+    return ok, (f'old start-up hook caught: {len(caught_old)}; now: {len(now_setup)}; launches {launched}; '
+                f'first chat waits: {wait_first[:1]}; runs {ran}; mid-film chat: {mid or "no run, no wait"}; '
+                f'21 made stale: {"suggests" if big else "silent"}; 20: {"silent" if not small else "suggests"}; '
+                f'hook code read: {"source/kitstamps.py" in (r_git or set())}')
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test

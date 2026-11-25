@@ -28,8 +28,10 @@ MAP
   shared ........... in end (named-lines change 3): a check fix written in one film's code stops the handover until
                      moved to the shared tools or Sam says it stays (shared_faults, film_check_fixes)
   kittest .......... in end (named-lines change 4, on chain A's gate): a kit test red at two handovers in a row, or
-                     unable to run, stops the handover (kittest_gate_faults; notes/logs/kittest-reds.log); only
-                     the tests whose files changed since their last green run run here (source/kitstamps.py)
+                     unable to run, stops the handover (kittest_gate_faults; notes/logs/kittest-reds.log). Rule 90
+                     (source/kitfilm.py): only a film's first chat runs the stale tests here; other chats run only a
+                     never-passed (new) test and print the "suggest a full check to Sam" line after a big change;
+                     start (kitfilm.at_start) starts the first chat's background run
   dump ............. list_events results saved to files (kinds ["user"], only when there is no log; never page a
                      whole chat: the newest pages, back to the last handover commit's time)
   sam_messages() ... Sam's own typed messages from any of the three sources (no tool results, task or system
@@ -564,44 +566,66 @@ def _kit_run(names, kitlog):
     """Run only these kit tests now, on this chat's final code; the result to kitlog. False when it could not finish."""
     with open(kitlog, 'w') as f:
         try:
-            subprocess.run([sys.executable, os.path.join(ROOT, 'source', 'kittests.py'), '--stale'], stdout=f,
-                           stderr=subprocess.STDOUT, cwd=ROOT, timeout=2400)
+            subprocess.run([sys.executable, os.path.join(ROOT, 'source', 'kittests.py'), '--names', ','.join(names)],
+                           stdout=f, stderr=subprocess.STDOUT, cwd=ROOT, timeout=2400)
         except subprocess.TimeoutExpired:
             return False
     return True
 
 
-def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None, stale_fn=None, run_fn=None):
+def _kit_busy():
+    return subprocess.run(['pgrep', '-f', 'source/kittests.py'], capture_output=True).returncode == 0
+
+
+def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None, stale_fn=None, run_fn=None, film=None,
+                        first_fn=None, new_fn=None, busy_fn=None, major_fn=None):
     """named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at this handover and at the one
     before it (another chat), or one that could not run (it crashed, or no finished run is on record), stops the
     handover (STOP: closed, never named away). This handover's reds are written to notes/logs/kittest-reds.log.
-    kit-tests-when (Sam's pick 1, 25 Nov): only the tests whose files changed since their last green run run here
-    (notes/kittest-stamps.tsv, source/kitstamps.py), on the chat's final code; the rest pass on their stamps."""
+    Rule 90 (kit-tests-per-film, Sam 25 Nov; source/kitfilm.py): only a film's FIRST chat runs and waits for the kit
+    tests here (the stale ones, notes/kittest-stamps.tsv, on the chat's final code); every other chat runs only a
+    test that has never passed (a new tool's own kit test) and, when its own changes made more than 20 tests stale,
+    prints one plain line suggesting a full check to Sam (run only on his Y). The film's final runs the rest
+    (finish.py). Fix 1: the stale run was inside the Override branch (without Override it never ran); now Override
+    only skips it, logged."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import kitfilm
     real = kitlog == KITLOG or stale_fn is not None
-    if real and stale_fn is None and __import__('override').active():   # Sam's typed Override: no run, no wait;
-        st, _ = _kit_stale()                                               # named and logged, and the stale tests
-        if st and __import__('override').skip(f'kit tests: {len(st)} stale not run at this handover'):  # stay stale,
-            return [f'KIT TESTS skipped by Override: {len(st)} stale, not run (they run at the next start, end or '
-                    'finish.py)']                                          # so finish.py still runs them first
-        busy = subprocess.run(['pgrep', '-f', 'source/kittests.py'], capture_output=True).returncode == 0
-        if busy and stale_fn is None:   # the start-up run (only the stale tests) is not finished yet
-            return ['STOP: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for it to '
-                    'finish, then run end again']
-        st, est = (stale_fn or _kit_stale)()
+    out = []
+    if real:
+        sid_k = sid or kitfilm.sid_now()
+        first = (first_fn or kitfilm.started_here)(sid_k)   # at_start wrote this chat's start row
+        busy = (busy_fn or _kit_busy)
+        if first:
+            if stale_fn is None and __import__('override').active():    # Sam's typed Override: no run, no wait,
+                st, _ = _kit_stale()                                      # named and logged; they stay stale, so
+                if st and __import__('override').skip(f'kit tests: {len(st)} stale not run at this handover'):
+                    return [f'KIT TESTS skipped by Override: {len(st)} stale, not run (the final runs them)']
+            if busy():                  # the start-of-film run (only the stale tests) is not finished yet
+                return ['STOP: KIT TESTS STILL RUNNING (the start-of-film run, notes/logs/kittests-last.log): wait for '
+                        'it to finish, then run end again']
+            st, est = (stale_fn or _kit_stale)()
+        else:
+            st = (new_fn or kitfilm.never_green)()        # a new tool's own kit test, once
+            est = 60.0 * len(st)
+            line = (major_fn or kitfilm.major_line)()
+            if line:
+                out.append(line)
+            if not st:
+                return out                                # rule 90: no run, no wait, no reds row
         if st:
-            print(f'handover: {len(st)} kit tests stale (their files changed since a green run): running them now, '
-                  f'about {est / 60:.0f} min', flush=True)
+            print(f'handover: {len(st)} kit tests to run ({"first chat of the film" if first else "never passed: new"}): '
+                  f'running them now, about {max(1, round(est / 60))} min', flush=True)
             if not (run_fn or _kit_run)(st, kitlog):
-                return ['STOP: KIT TESTS COULD NOT RUN: the stale tests did not finish in 40 min: run `python3 '
-                        'source/kittests.py --stale > notes/logs/kittests-last.log 2>&1`, then end again']
+                return out + ['STOP: KIT TESTS COULD NOT RUN: they did not finish in 40 min: run `python3 '
+                              f'source/kittests.py --names {",".join(st)} > notes/logs/kittests-last.log 2>&1`, then end again']
         else:
             os.makedirs(os.path.dirname(kitlog), exist_ok=True)
             with open(kitlog, 'w') as f:
                 f.write('kittests: all passed (0 run: every test fresh on its stamps)\n')
     txt = open(kitlog, encoding='utf-8', errors='replace').read() if os.path.exists(kitlog) else ''
     if 'kittests:' not in txt:
-        busy = subprocess.run(['pgrep', '-f', 'source/kittests.py'], capture_output=True).returncode == 0
-        if busy:                            # the start-up run is not finished yet
+        if _kit_busy():                            # the start-up run is not finished yet
             return ['STOP: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for it to '
                     'finish, then run end again']
         return ['STOP: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 source/kittests.py '
@@ -619,8 +643,8 @@ def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None, stale_fn=None
     os.makedirs(os.path.dirname(reds_log), exist_ok=True)
     with open(reds_log, 'w', encoding='utf-8') as f:
         f.write(''.join('\t'.join(r) + '\n' for r in rows[-60:]))
-    out = [f'STOP: KIT TEST COULD NOT RUN: {n} (it crashed): a test that cannot run tests nothing; make it run here'
-           for n in crashed]
+    out += [f'STOP: KIT TEST COULD NOT RUN: {n} (it crashed): a test that cannot run tests nothing; make it run here'
+            for n in crashed]
     out += [f'STOP: KIT TEST RED AT TWO HANDOVERS IN A ROW: {n} (red at {prev[-1][0]} too): fix it (or the tool it '
             'tests) before handing over' for n in red if n in before]
     out += [f'KIT TEST RED: {n} (once: red again at the next handover stops it)' for n in red if n not in before]
@@ -997,7 +1021,7 @@ def main(argv):
                   ('cost', lambda: cost_faults(film, nf)), ('size', lambda: size_faults(film, nf)),
                   ('ledger', lambda: ledger_faults(film, rec)), ('push', lambda: push_faults(rec)),
                   ('dearest', dearest_faults), ('tag', lambda: tag_faults(film, nf)), ('record', lambda: record_faults(rec)),
-                  ('rule', rule_faults), ('shared', shared_faults), ('kittest', kittest_gate_faults),
+                  ('rule', rule_faults), ('shared', shared_faults), ('kittest', lambda: kittest_gate_faults(film=film)),
                   ('castsheet', lambda: castsheet_faults(film))]
         faults = [f for name, fn in checks for f in _safe(name, fn)]   # lesson 7 step 3: a crash is a STOP
         end_stamp(rec, [f for f in faults if f.startswith('STOP:')])
@@ -1007,6 +1031,12 @@ def main(argv):
         p = os.path.join(LOGDIR, f'{tail}.md')
         for f in model_faults(opt('--film'), opt('--notes')):    # a mixed job is split before any work starts
             print(f)
+        try:                                                     # rule 90: the kit tests at a film's first chat only
+            import kitfilm
+            for ln in kitfilm.at_start(opt('--film')):
+                print(ln)
+        except Exception as e:
+            print(f'BROKEN (kitfilm): the start-of-film kit check could not be set up ({e})')
         try:                                                     # early-warning (Sam's 1, 17 Nov): broken first
             import watcher
             for ln in watcher.start_lines():

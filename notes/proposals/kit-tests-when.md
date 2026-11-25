@@ -1,6 +1,6 @@
 # Proposal: The full kit tests run every chat, even when nothing shared changed
 
-Status: adopted (2026-11-25)
+Status: replaced:kit-tests-per-film (2026-11-25)
 
 ## Problem
 Sam, 25 Nov 07:39, word for word: "Do we need to run checks every chat? Wouldn't it be better to run them at certain

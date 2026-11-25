@@ -213,11 +213,15 @@ def main():
     if slipped:
         __import__('override').refuse('finish REFUSED (the proposal route, fail closed): ' + ' | '.join(x[:140] for x in slipped) +
                  ' ; settle each: python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"')
-    if not os.environ.get('KITTESTS_RUNNING'):    # kit-tests-when change 2 (Sam's pick 1, 25 Nov): no animatic or
-        import kitstamps                          # final on files a kit test has not passed on; the stale ones run first
-        why = kitstamps.finish_gate()
+    import kitfilm                                # rule 90: the film's end-of-film kit check is the gate on its final;
+    final = 'animatic' not in os.path.basename(dst)   # before an animatic only while ANIMATIC_GATE (Sam's open question)
+    if not os.environ.get('KITTESTS_RUNNING') and (final or kitfilm.ANIMATIC_GATE):   # kit-tests-when change 2: no
+        import kitstamps                          # animatic or final on files a kit test has not passed on; the stale
+        why = kitstamps.finish_gate()             # ones run first
         if why:
             __import__('override').refuse('finish REFUSED (kit tests): ' + why)
+        elif final:
+            kitfilm.final_row(name[0])            # the film's end-of-film kit check, on record (notes/kittest-films.tsv)
     film = load_film(name[0])
     if not hasattr(film, 'caption_at'):
         sys.exit(f'finish REFUSED (rule 62): {name[0]}.py has no caption_at(t), so the film would go out with no '

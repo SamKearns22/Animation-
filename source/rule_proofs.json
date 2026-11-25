@@ -1141,6 +1141,16 @@
     "womens_builds"
    ],
    "example": "Sam, 23 Nov, n5 (notes/sam-notes/brexit-cast-v2/n5-*.jpg: \"I'm not sure we have female bodies? Kemi's body seems much more like a man's\") and note 7 (notes/learn/womans-build/outline-female-v1.jpg: \"Kemi Badenoch just does not have that body\"). kittest womens_builds: both n5 caught, n7 caught, Lucia and Blair pass. Partly: the seated view is read only by the blind judge, not by the shape test."
+  },
+  "90": {
+   "rule": "Kit tests at each film's first chat and final only; a full check suggested to Sam after a big kit change.",
+   "status": "proven",
+   "tests": [
+    "kit_tests_per_film"
+   ],
+   "example": "Sam, 25 Nov (notes/ledger/sam/5whcspgq.md): \"Make the kit check happen at the beginning and the end of every film ... it is wasting usage and time to do this with every chat.\" The old start-up hook (fb29ae0a) ran them in every chat; the kittest catches it.",
+   "notes": "check: kitfilm.setup_faults, handover kit gate (started_here), finish.py gate; proposal kit-tests-per-film (V2).",
+   "kind_before": "none"
   }
  },
  "_baseline": {
