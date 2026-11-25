@@ -1,0 +1,3 @@
+# Framing holds (rule 11, lesson staging-stills; source/staging.py). hold/options/pick SHOT EPOCH ...; notframing NOTE EPOCH why
+notframing 3 1795609035 cast sheet note on Kemi's clothes and hat drawing, not a camera or framing; fixed chat 2
+notframing 9 1795609035 the framing wish was built in chat 10 (May wider, lens 1450) and shot 1's board at that framing reached Sam and was recorded; Kemi and Blair match it

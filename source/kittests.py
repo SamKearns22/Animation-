@@ -535,15 +535,20 @@ def seated_r7_look():
     """R7 (25 Nov): the seated look reads the picture as a viewer. It must catch Sam's marked frame (a ball knee and
     no bottom: notes/learn/seated/no-bum-circular-knees-sam.jpg) and the old drawing (the ring knee; no bottom in the
     three-quarter views), and find nothing wrong with R7's lower body in any pose or view (chat 2: the hem is now read
-    whole, across hands and a vest's stripes, which had been taken for the hem)."""
+    whole, across hands and a vest's stripes, which had been taken for the hem). Chat 4: and chat 3's legs in one
+    flat tone (its judges: "one dark mass", "no knees")."""
     import castsheet as CS
-    ex = CS.seated_example_faults()['no-bum-circular-knees-sam']
+    exs = CS.seated_example_faults()
+    ex = exs['no-bum-circular-knees-sam']
     sam = any('ball' in f for f in ex) and any('bottom' in f for f in ex)
+    # chat 4: R7 chat 3's own drawing, as its blind judges saw it ("one dark mass", "no visible knees")
+    tone = all(any('one flat tone' in f for f in exs[n]) for n in ('one-tone-c3-may-34', 'one-tone-c3-kemi-front'))
     raw = CS.seated_look_faults('brexit-is-done', raw=True)
     old = any('ball' in f for f in raw) and any('bottom' in f and ' 45:' in f for f in raw)
     new = CS.seated_look_faults('brexit-is-done', force=True)
-    return sam and old and not new, (f"Sam's frame caught (ball and bottom): {sam}; the old drawing caught (ball and "
-                                     f"bottom): {old}; faults on R7: {len(new)} {new[:2]}")
+    return sam and tone and old and not new, (
+        f"Sam's frame caught (ball and bottom): {sam}; chat 3's one dark mass caught (3/4 and front): {tone}; the old "
+        f"drawing caught (ball and bottom): {old}; faults on R7: {len(new)} {new[:2]}")
 
 
 @test
@@ -1935,6 +1940,36 @@ def lying_shirt_and_nape():
         LF.Slump, TH.neck_over = real, real_over
         B.SS = 1
     return bool(ok), '; '.join(out)
+
+
+@test
+def lying_fall_settle_clean():
+    """Open Wounds chat 16 (body check on shot 2, 8.67-8.92 s): knocked over backwards, the in-between from sitting to
+    lying slid every joint straight to its new place, so the head sank into the shoulders (no neck, 4 drawings) and
+    the elbows hung 13-20 cm over the dirt (3 drawings). Now the trunk keeps its bone lengths through the settle and
+    the arms reach the floor as the back goes down (lying.blend, lying._brace). Measured: body_faults at every
+    1/48 s of the settle, facing four ways; and the old point-sliding in-between is still caught."""
+    import numpy as np
+    import lying as L
+    sp = L._cast()[0]
+    now = []
+    for face in ((-1.0, 0.0), (1.0, 0.0), (0.0, 1.0), (0.6, -0.8)):
+        for t in np.arange(1.1, 1.62, 1 / 48):
+            kind, *r = L.fall(sp, t, 0.6, 0.0, 6.0, face)
+            if kind == '3d':
+                now += [f'{face} {t:.2f}: {f}' for f in L.body_faults(r[0], sp, r[1], who='')]
+    old = 0                                               # the saved fault: plain point sliding, no brace
+    j_sit = L.moves.fall(sp, 1.1, 0.6)[0]
+    k0 = L.from_views(j_sit, sp, 0.0, 6.0, (-1.0, 0.0))
+    k1, surf = L.lie(sp, 'back', k0['pelvis'][0], k0['pelvis'][2], 0.0)
+    for u in np.linspace(0.1, 0.9, 9):
+        k = L.Body()
+        for n in k0:
+            k[n] = k0[n] + (k1[n] - k0[n]) * u if n in L.POINTS else L._unit(k0[n] + (k1[n] - k0[n]) * u + 1e-6)
+        old += len(L.body_faults(k, sp, surf, who=''))
+    ok = not now and old > 0
+    return ok, (f'settle faults now {len(now)} ({"; ".join(now[:3])}); the old sliding in-between caught {old}x')
+
 
 @test
 def lying_neck_from_behind():

@@ -543,6 +543,9 @@ R7_TEST_TROUSERS = (70, 120, 160)   # the trousers' colour while checking (shape
 R7_BOTTOM_SHARE = 0.85              # at least this share of the hem has trousers under it
 R7_EXAMPLES = {   # saved examples the seated look must catch: picture, trousers' colour in it, Sam's pen colour
     'no-bum-circular-knees-sam': ('notes/learn/seated/no-bum-circular-knees-sam.jpg', (51, 50, 56), (124, 180, 76)),
+    # R7 chat 3's drawing as its blind judges saw it (re-drawn in the check's trousers): "one dark mass", "no knees"
+    'one-tone-c3-may-34': ('notes/learn/seated/examples/one-tone-c3-may-34.png', R7_TEST_TROUSERS, None),
+    'one-tone-c3-kemi-front': ('notes/learn/seated/examples/one-tone-c3-kemi-front.png', R7_TEST_TROUSERS, None),
 }
 R7_EXAMPLE_INK = {   # a photo of the screen blurs the ink: how far from INK it may be
     'no-bum-circular-knees-sam': 60,
@@ -551,6 +554,9 @@ R7_EXAMPLE_INK = {   # a photo of the screen blurs the ink: how far from INK it 
 
 def _near(a, rgb, tol):
     return np.abs(a.astype(int) - np.array(rgb)).sum(2) <= tol
+
+
+BALL_ROUND = 0.8   # a ball's patch overlaps its box's ellipse this much (two legs side by side: about 0.7)
 
 
 def ball_knees(a, trousers, tol=18, dmin=40, dmax=400):
@@ -565,9 +571,26 @@ def ball_knees(a, trousers, tol=18, dmin=40, dmax=400):
             continue
         area = (lab[sl] == i).sum()
         fill = area / (np.pi * w * h / 4)
-        if 0.85 <= fill <= 1.1:
+        if not 0.85 <= fill <= 1.1:
+            continue
+        yy, xx = np.mgrid[0:h, 0:w]                     # and round: it must lie on the ellipse its box holds (R7
+        ell = ((xx + 0.5 - w / 2) / (w / 2)) ** 2 + ((yy + 0.5 - h / 2) / (h / 2)) ** 2 <= 1   # chat 3: Blair's two
+        pm = lab[sl] == i                               # front trouser legs, joined at the crotch, filled their box
+        if (pm & ell).sum() / max(1, (pm | ell).sum()) >= BALL_ROUND:   # like a ball by area alone)
             out.append(((sl[1].start + w // 2, sl[0].start + h // 2), w, h, round(fill, 2)))
     return out
+
+
+def cloth(a, trousers, tol):
+    """The trousers in a picture in each tone the kit draws them: their own colour, the far or under leg in shadow
+    and a lap lit from above (views.R7_FAR, R7_LAP; R7 chat 4: the bottom under a crossed leg's shaded under leg
+    was split off and read as no bottom)."""
+    import views as V
+    T = np.array(trousers)
+    m = _near(a, trousers, tol)
+    for c in (T * V.R7_FAR, np.minimum(255, T + V.R7_LAP)):
+        m |= _near(a, tuple(int(x) for x in c), tol)
+    return m
 
 
 def no_bottom(a, trousers, tol=18, ink_gap=14, ink_tol=12):
@@ -577,7 +600,7 @@ def no_bottom(a, trousers, tol=18, ink_gap=14, ink_tol=12):
     joined up across what crosses it (hands resting on the hem, a vest's stripes: R7 chat 2, 25 Nov, when the front
     views and Kemi's vest were read as having no bottom), so its hem is its real lowest edge in each column."""
     H, W = a.shape[:2]
-    T = _near(a, trousers, tol)
+    T = cloth(a, trousers, tol)
     lab, n = ndi.label(ndi.binary_opening(T, iterations=2))
     if not n:
         return None
@@ -593,7 +616,7 @@ def no_bottom(a, trousers, tol=18, ink_gap=14, ink_tol=12):
             y, k = y - 1, k + 1
         if y > 2:
             c = a[y - 2, x].astype(int)
-            if not Ink[y - 2, x] and c.sum() < 690 and np.abs(c - np.array(trousers)).sum() > 45:
+            if not Ink[y - 2, x] and c.sum() < 690 and not cloth(a[y - 2:y - 1, x:x + 1], trousers, 45)[0, 0]:
                 seen.append(tuple(c))
     if not seen:
         return None
@@ -657,9 +680,46 @@ def unmark(a, pen=(124, 180, 76), tol=90):
     _, (iy, ix) = ndi.distance_transform_edt(m, return_indices=True)
     return a[iy, ix]
 
-def seated_look(a, trousers, where='', bottom=True, ink_tol=12):
-    """The faults a viewer would see in one seated picture (an RGB array)."""
+R7_TONE = (0.12, 0.06)   # two legs or a lap told apart: a second tone this much darker or lighter, on this share
+
+
+def leg_tones(a, trousers):
+    """The cloth's tones in a picture: [(brightness as a share of the trousers', share of the cloth's pixels)], the
+    main one first. Only pixels of the trousers' own hue count (chairs, ink and skin are another hue)."""
+    T = np.array(trousers, float)
+    n = np.linalg.norm(T)
+    u = T / n
+    p = a.reshape(-1, 3).astype(float)
+    v = p @ u
+    m = (np.linalg.norm(p - np.outer(v, u), axis=1) < max(8.0, 0.12 * n)) & (v > 0.6 * n) & (v < 1.6 * n)
+    v = v[m] / n
+    if len(v) < 300:
+        return []
+    h, e = np.histogram(v, bins=np.arange(0.6, 1.62, 0.04))
+    return sorted(((round(float(e[i] + 0.02), 2), float(h[i]) / len(v)) for i in range(len(h)) if h[i]),
+                  key=lambda t: -t[1])
+
+
+def one_tone(a, trousers):
+    """Two legs or the lap in one flat tone (R7 judges, chat 3: "the far leg merges with the near leg: one dark
+    mass"; front: "no visible knees"): an ink edge on dark cloth hardly shows, so overlapping legs need a second tone
+    (the far leg in shadow) and a lap seen from the front its lit top. None, or the main tone's share."""
+    t = leg_tones(a, trousers)
+    if not t:
+        return None
+    main = t[0][0]
+    other = sum(sh for v, sh in t if abs(v - main) >= R7_TONE[0])
+    return None if other >= R7_TONE[1] else round(1 - other, 2)
+
+
+def seated_look(a, trousers, where='', bottom=True, ink_tol=12, tones=True):
+    """The faults a viewer would see in one seated picture (an RGB array). tones: the view shows two legs overlapping
+    or a lap (front and three-quarter; not the side, where the far leg is hidden)."""
     out = []
+    ot = one_tone(a, trousers) if tones else None
+    if ot is not None:
+        out.append(f"SEATED {where}: the legs in one flat tone ({ot:.0%} of the cloth): near and far leg, or the lap "
+                   f"and the shins, can't be told apart: R7 judges, 25 Nov, \"one dark mass\", \"no knees\"")
     for c, w, h, fill in ball_knees(a, trousers):
         out.append(f"SEATED {where}: a knee drawn as a ball (a round patch {w}x{h} px shut in an ink ring at {c}): "
                    f"Sam, 24 Nov, \"circular knees\"")
@@ -678,7 +738,8 @@ def seated_example_faults(name=None):
     for n, (path, trousers, pen) in R7_EXAMPLES.items():
         if name and n != name:
             continue
-        a = unmark(np.asarray(Image.open(os.path.join(ROOT, path)).convert('RGB')), pen)
+        a = np.asarray(Image.open(os.path.join(ROOT, path)).convert('RGB'))
+        a = unmark(a, pen) if pen else a
         out[n] = seated_look(a, trousers, n, ink_tol=R7_EXAMPLE_INK.get(n, 12))
     return out
 
@@ -720,7 +781,7 @@ def seated_look_faults(film, who=None, cast=None, force=False, raw=False):
                     img = Image.new('RGBA', (1080, 1920), BG + (255,))
                     V.person(img, PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s_, s_, sp, 0.0, yaw, j)
                     a = np.asarray(img.convert('RGB'))
-                    out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}")
+                    out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}", tones=yaw != 90)
     finally:
         V.knee_cap, V.seat_bottom, V.leg = real_cap, real_bottom, real_leg
     return out

@@ -17623,6 +17623,455 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "b2f8e1d1",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.94,
+   "src": "estimate",
+   "sid": "session_01U3pKQyiJ2poN3syCEWUzsu",
+   "steps": 40,
+   "hist_k": 177,
+   "kinds": {
+    "tool search": 27.3,
+    "renders": 5.9,
+    "pictures": 2.0,
+    "other": 64.8
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 30,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 2,
+    "other": 4
+   },
+   "split": {
+    "usd": 2.4084,
+    "total": 2.4084,
+    "floor_k": 98,
+    "blocks": {
+     "start-up floor": 40.4,
+     "new writes": 26.4,
+     "Claude's words": 19.6,
+     "carried history": 13.6
+    },
+    "origins": {
+     "start-up floor": 40.4,
+     "Claude's words": 27.5,
+     "result: tool search": 23.9,
+     "messages and reminders": 5.0,
+     "result: pictures": 2.6,
+     "result: other": 0.5,
+     "result: renders": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 40.4,
+     "reading notes": 13.8,
+     "thinking": 9.0,
+     "commands": 7.5,
+     "start-up and handover tools": 7.3,
+     "writing notes": 6.2,
+     "messages and reminders": 5.0,
+     "looking at pictures": 2.6,
+     "reading kit code": 2.0,
+     "writing code": 1.9,
+     "messages to Sam": 1.8,
+     "helper and chat prompts": 1.1,
+     "renders": 0.5,
+     "helper results": 0.5,
+     "other commands": 0.3,
+     "reading guides": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 98,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/proposals/solid-body-moves.md",
+      3.4,
+      0.0441
+     ],
+     [
+      "notes/next-jobs.md",
+      2.7,
+      0.0377
+     ],
+     [
+      "notes/proposal-route.md",
+      2.7,
+      0.0377
+     ],
+     [
+      "guides/job-packs.md",
+      2.2,
+      0.0331
+     ],
+     [
+      "notes/bench/learn-step.md",
+      2.6,
+      0.0323
+     ],
+     [
+      "notes/learn/seated/examples/sam-25nov-v4-legs-awful-1.jpg",
+      1.6,
+      0.022
+     ],
+     [
+      "notes/learn/seated/examples/sam-25nov-v4-legs-awful-2.jpg",
+      1.6,
+      0.022
+     ],
+     [
+      "notes/archive/grand-theft-autism-notes.md",
+      1.7,
+      0.0205
+     ],
+     [
+      "notes/ledger/sam/ycewuzsu.md",
+      1.2,
+      0.0181
+     ],
+     [
+      "notes/ledger/r7.md",
+      1.3,
+      0.0146
+     ],
+     [
+      "source/arm3d_film.py",
+      0.7,
+      0.0104
+     ],
+     [
+      "source/hand3d_film.py",
+      0.7,
+      0.0104
+     ],
+     [
+      "story/status.md",
+      0.6,
+      0.0085
+     ],
+     [
+      "source/jason3d_film.py",
+      0.7,
+      0.0079
+     ],
+     [
+      "notes/learn/seated/sheet_r7.py",
+      0.7,
+      0.0079
+     ],
+     [
+      "source/propose.py",
+      0.7,
+      0.0062
+     ],
+     [
+      "notes/ledger/app-costs.tsv",
+      0.2,
+      0.0027
+     ],
+     [
+      "notes/proposals/seated-legs-3d.md",
+      0.2,
+      0.0017
+     ],
+     [
+      "/home/user/Animation-/notes/proposals/seated-legs-3d/chat.md",
+      0.2,
+      0.0016
+     ],
+     [
+      "notes/proposals/seated-legs-3d/judge/V2.md",
+      0.0,
+      0.0003
+     ],
+     [
+      "notes/proposals/seated-legs-3d/helper-b.md",
+      0.0,
+      0.0003
+     ],
+     [
+      "notes/proposals/seated-legs-3d/judge-labels.md",
+      0.0,
+      0.0001
+     ]
+    ],
+    "base_pct": 28.7
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "guides": 2,
+     "shared:handover.py": 2,
+     "film notes": 12,
+     "shared:propose.py": 4,
+     "shared:arm3d_film.py": 1,
+     "other": 6,
+     "shared:jason3d_film.py": 1,
+     "shared:ledger.py": 1,
+     "shared:bench_pose.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "git status | head -5 && git log --oneline -3 && git branch -a | head -30 && ls &",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "notes/ledger/sam/ycewuzsu.md source/handover.py notes/learn/seated/",
+      "cat notes/ledger/sam/ycewuzsu.md | head -20; python3 source/handover.py --help 2",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/branches.py",
+      "python3 source/handover.py start session_01GznaASxv3pZQm3sS8pLxQq --film r7 2>&1",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/*.md notes/learn/seated/*.md notes/next-jobs.md story/status.md",
+      "R7\\b",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:propose.py",
+      "notes/next-jobs.md notes/proposal-route.md source/propose.py",
+      "sed -n 25,60p notes/next-jobs.md; cat notes/proposal-route.md | head -60; python",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:arm3d_film.py",
+      "notes/learn/seated/examples/ source/arm3d_film.py source/hand3d_film.py",
+      "ls notes/learn/seated/examples/; head -60 source/arm3d_film.py; head -40 source/",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "guides",
+      "notes/ledger/sam/*.md guides/kit-catalogue.md",
+      "arm",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "notes/*.md notes/archive/*.md",
+      "arm3d",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-notes.md notes/archive/grand-theft-autism-hando",
+      "arm3d\\|3d arm\\|measured arm\\|sausage",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "film notes",
+      "notes/proposals/solid-body-moves.md",
+      "^$",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "notes/shot4-case-study/ notes/proposals/*.md",
+      "body3d|solid|mesh|mhuman|blender|toon|bench|onepass|single",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "for f in bench_draw bench_pose bench_blender bench_move; do echo \"=== $f\"; sed -",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "film notes",
+      "notes/bench/ notes/bench/learn-step.md",
+      "sam",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "film notes",
+      "notes/bench/sam-notes notes/bench/learn-step.md",
+      "ls notes/bench/sam-notes; sed -n 140,240p notes/bench/learn-step.md | cut -c1-35",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "film notes",
+      "notes/grand-theft-autism.md",
+      "dressed\\|one-pass\\|bench",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "film notes",
+      "notes/archive notes/archive/grand-theft-autism-notes.md guides/kit-catalogue.md",
+      "dressed\\|bench_move\\|solid body",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-notes.md",
+      "sed -n 704,722p notes/archive/grand-theft-autism-notes.md | cut -c1-600; sed -n ",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:jason3d_film.py",
+      "source/jason3d_film.py notes/learn/seated/sheet_r7.py source/sitting.py",
+      "^def \\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/ source/ledger.py",
+      "^sam$",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "notes/ledger/ notes/ledger/app-costs.tsv",
+      "r7|seat|bench|solid",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "film notes",
+      "notes/ledger/r7.md notes/ledger/r7.json notes/ledger/grand-theft-autism.md",
+      "solid\\|bench\\|stage 1\\|stage 2\\|chat 3[3-9]\\|chat 4[0-6]",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/ notes/proposals/seated-legs-3d.md",
+      "python3 source/propose.py new seated-legs-3d \"Seated legs that read in every vie",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "r7|seated",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "film notes",
+      "notes/proposals/seated-legs-3d.md notes/proposals/seated-legs-3d/ notes/ledger/s",
+      "git add notes/proposals/seated-legs-3d.md notes/proposals/seated-legs-3d/ notes/",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "film notes",
+      "notes/proposals/seated-legs-3d/helper-a.md",
+      "git add notes/proposals/seated-legs-3d/helper-a.md && git commit -qm \"Proposal s",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge seated-legs-3d 2>&1 | tail -10",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "notes/proposals/seated-legs-3d/",
+      "git add notes/proposals/seated-legs-3d/ && git commit -qm \"Proposal seated-legs-",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record seated-legs-3d 2>&1 | tail -8; python3 source/p",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "film notes",
+      "notes/proposals/seated-legs-3d/state.json notes/proposals/seated-legs-3d/judge/V",
+      "python3 -c \"import json;d=json.load(open('notes/proposals/seated-legs-3d/state.j",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:bench_pose.py",
+      "notes/proposals/seated-legs-3d/judge-labels.md notes/next-jobs.md notes/learn/se",
+      "cat > notes/proposals/seated-legs-3d/judge-labels.md <<'EOF' # Named fault in th",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
