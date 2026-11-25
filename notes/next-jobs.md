@@ -31,19 +31,7 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
 - **R6. Fix the half-turn heads (Sam, 19 Nov, already reserve):** notes/proposals/front-on-focus/retirement-and-handover.md.
 
 - **R7. A natural seated lower body: bottom, legs and knees (Sam, 24 Nov, Open Wounds note 12: "No bum/circular knees"; "you do not *know* how to draw this part of the body as you couldn't do it on blessed either"; then: "Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body").** Goal: anyone seated reads with a natural, flowing lower body, waist to feet, in every view; the knees are part of the leg, never balls (the ball-knee fix belongs to this job). What must be learned first: how a seated hip, bottom, thigh and knee look from the front, three-quarter and side (reference photos of people seated on plain chairs, traced into outlines), then one seated outline drawn as a single shape from waist to knee instead of a box torso plus tubes. Stopgap in the kit since 24 Nov (views.knee_cap, views.seat_bottom, check castsheet.seated_faults): better than before, not yet natural. When done: re-run the blind woman/man judge on the seated views (skipped by Sam's Override, 24 Nov). Sam's picture: notes/learn/seated/no-bum-circular-knees-sam.jpg.
-  - **R7, where things stand (chat 5, 25 Nov, session_01U3pKQyiJ2poN3syCEWUzsu):**
-    Rules that bite next: 30 (fix the method, not the picture), 87 (a fix failing twice stops), 85 (cost watch).
-    Done: Sam's 25 Nov notes saved (notes/learn/seated/handover-sam-25nov.md); proposal seated-legs-3d judged; Sam
-    picked "1" (adopted). The judge's V2/V3 labels look swapped (seated-legs-3d/judge-labels.md). No code changed.
-    Next: chat 6, Opus high (building new): Learn steps 1-5 of the proposal's Final version, cap 4% of a week, cost in
-    the r7 ledger at each handover; below the pass bar, stop and tell Sam what is missing; no outline patching.
-    Needs Sam: with the learn sheet, in one message: Change 1 Y/N and Change 2 Y/N (each needs its own yes).
-    Locked by Sam: Open Wounds' seated frames (switch off; kittest seated_r7_switch); the bum/seat he accepted.
-    Read: the proposal's Final version; guides/job-packs.md "Build"; MAPs of source/bench_pose.py, bench_draw.py,
-    bench_move.py (dressed_draw), sitting.py realize, views.py _limb3. Open rule requests: none.
-    For Claude: end-check SENTENCE x4 are CLAUDE.md edits by other chats (34f49840, 0945cc85; named by earlier chats),
-    not R7's. Branches not R7's, left for their chains: claude/kit-tests-when-build, claude/gta-v5-sound-draft,
-    claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
+  - **R7, where things stand:** notes/r7.md (moved there by chat 5, 25 Nov).
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
