@@ -15,3 +15,6 @@ You already had the clothes right in the original model? Why are you rebuilding 
 ### 2026-11-25T23:32:58
 So you now have one drawing where the legs and bum are finally correct and another one where the clothes are correct. This sitting down problem has cost 30-40% of a week. Completely inexcusable.
 
+### 2026-11-25T23:34:57
+This is the correct outfit. You have drawn a poor version of it for reasons I can't fathom.
+
