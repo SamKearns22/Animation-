@@ -305,8 +305,17 @@ def posted_frame(t):
 
 
 def _frame_job(t):
+    import humancheck as HC
+    HC.frame_begin()
     im, faults = frame(t)
-    return t, im.resize((540, 960), Image.LANCZOS), faults
+    body = list(HC.frame_end(t))                  # the house body check on what was drawn (the house heads)
+    for who, hit in faults.items():               # and the model body's own: points inside a solid
+        for nm, n in hit.items():
+            if not nm.startswith('reach'):
+                thing = 'the desk chair' if nm.startswith('set@0.00,3.8') or nm.startswith('set@0.00,3.9') or \
+                    nm.startswith('set@0.00,4.') else nm
+                body.append((t, who, 'solid', f'body points inside {thing} ({n} points)'))
+    return t, im.resize((540, 960), Image.LANCZOS), faults, body
 
 
 def clip(t0, t1, out, fps=12):
@@ -326,7 +335,10 @@ def clip(t0, t1, out, fps=12):
     with mp.get_context('fork').Pool(int(os.environ.get('MB_PROCS', '3'))) as pool:
         done = pool.imap(_frame_job, ts)
         rows = list(done)
-    for i, (t, im, faults) in enumerate(rows):
+    import humancheck as HC
+    hc = HC.Writer(os.path.basename(out))
+    for i, (t, im, faults, body) in enumerate(rows):
+        hc.frame(t, body)
         left = Image.frombytes('RGB', (540, 960), p[min(i, n_post - 1) * 540 * 960 * 3:(min(i, n_post - 1) + 1) * 540 * 960 * 3])
         s = Image.new('RGB', (1080, 960))
         s.paste(left, (0, 0))
@@ -339,6 +351,8 @@ def clip(t0, t1, out, fps=12):
                     '-map', '0:v', '-map', '1:a', '-c:v', 'libx264', '-pix_fmt', 'yuv420p', '-crf', '23',
                     '-c:a', 'aac', '-shortest', out], check=True)
     print('frames', n, 'seconds', round(time.time() - t_start), 'faults', log[:20], 'fault frames', len(log))
+    notes = os.path.join(ROOT, 'notes', 'proposals', 'model-body-all.md')
+    hc.finish(out, notes=open(notes).read())
     return log
 
 
