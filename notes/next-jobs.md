@@ -41,7 +41,7 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
     standing length (people_parts.workwear_torso) and the short top's seat piece drew a box (body.trouser_seat r7):
     both new-films only. (4) 3 blind judges: notes/learn/seated/judge/results-r7.md. Sheet: r7-before-after-v2.jpg. Next (chat 3, Opus high): the judges' faults, fix the drawing: crossed top leg's shoe a floating lump and the knee
     join; front-view trouser legs too thin (cloth, not calves; show the lap); women seated read as men from the front
-    and side (Kemi). Then fresh judges again (judge_r7.py). Needs Sam: 3 phone photos (asked, chat 2).
+    and side (Kemi). Then fresh judges again (judge_r7.py). Needs Sam: 3 phone photos (asked, chat 2; Commons answers the web-fetch helper now, so chat 3 tries it too).
     Read: this entry; results-r7.md; views.py "R7: the seated lower body". Open rule requests: none. Branches (not R7's,
     not merged): claude/open-wounds-chat14 (Open Wounds' own parallel chain), claude/gta-v5-sound-draft, claude/gta-chat46-build,
     claude/dreamy-fermi-vkhutz (GTA, named in notes/brexit-is-done.md); not R7's: the file's other "Where things stand",
