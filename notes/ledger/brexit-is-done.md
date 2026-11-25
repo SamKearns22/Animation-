@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 37.45%; 16 chats, 0 rounds, 8 notes, 3 repeated.**
+**Estimate ?% of a week; spent 38.23%; 16 chats, 0 rounds, 8 notes, 3 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -21,7 +21,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-24 | 5e7b21fe | est | opus | auto |  | 2.49 |  | 0 | 0 |
 | 2026-11-25 | e5d6ce05 | est | opus | shot 3 chase watched and fixed, critique r5 |  | 2.15 |  | 0 | 0 |
 | 2026-11-25 | 1f655db8 | est | opus | auto |  | 2.64 |  | 0 | 0 |
-| 2026-11-25 | de98e7e9 | est | opus | build |  | 3.52 |  | 0 | 0 |
+| 2026-11-25 | de98e7e9 | est | opus | build |  | 4.3 |  | 0 | 0 |
 | 2026-11-25 | 39bef7c8 | est | opus | auto |  | 3.33 |  | 0 | 0 |
 | 2026-11-25 | b5e735d0 | est | sonnet | auto |  | 0.07 |  | 0 | 0 |
 
@@ -37,7 +37,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-24 5e7b21fe (auto): 107 steps, history 269k at the end; other 64.8%, tool search 16.4%, film-file search 11%, pictures 6.3%, renders 1.5%
 - 2026-11-25 e5d6ce05 (shot 3 chase watched and fixed, critique r5): 110 steps, history 282k at the end; other 69.2%, tool search 11.7%, pictures 9.7%, film-file search 7.8%, renders 1.1%, page.py 0.6%
 - 2026-11-25 1f655db8 (auto): 115 steps, history 274k at the end; other 71.2%, tool search 22.3%, pictures 3.5%, whole-file .py read 2.6%, renders 0.3%
-- 2026-11-25 de98e7e9 (build): 150 steps, history 288k at the end; other 64.5%, tool search 19.9%, film-file search 9%, pictures 5.4%, renders 0.8%, page.py 0.4%
+- 2026-11-25 de98e7e9 (build): 168 steps, history 304k at the end; other 70.7%, tool search 16.8%, film-file search 7%, pictures 4.6%, renders 0.6%, page.py 0.3%
 - 2026-11-25 39bef7c8 (auto): 137 steps, history 296k at the end; other 74.7%, tool search 16%, pictures 7.8%, whole-file .py read 1.1%, film-file search 0.2%, renders 0.2%
 - 2026-11-25 b5e735d0 (auto): 7 steps, history 105k at the end; other 86.1%, tool search 13.9%
 
@@ -53,7 +53,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-24 5e7b21fe (auto): Claude's words 30%, carried history 25.7%, start-up floor 23.9%, new writes 20.4%. Biggest origins: Claude's words 51%, start-up floor 23.9%, result: tool search 10%. Leftover 0%
 - 2026-11-25 e5d6ce05 (shot 3 chase watched and fixed, critique r5): carried history 49.3%, Claude's words 25.5%, new writes 23.1%, start-up floor 2.1%. Biggest origins: Claude's words 47.7%, result: pictures 19.7%, messages and reminders 15.8%. Leftover 0%
 - 2026-11-25 1f655db8 (auto): new writes 32.5%, Claude's words 24.9%, carried history 22.7%, start-up floor 20%. Biggest origins: Claude's words 43%, start-up floor 20%, cache re-write 16.8%. Leftover 0%
-- 2026-11-25 de98e7e9 (build): carried history 32.7%, start-up floor 26.3%, Claude's words 23.1%, new writes 17.8%. Biggest origins: Claude's words 42.7%, start-up floor 26.3%, result: tool search 14.2%. Leftover 0%
+- 2026-11-25 de98e7e9 (build): carried history 29.8%, new writes 29.6%, start-up floor 21.8%, Claude's words 18.8%. Biggest origins: Claude's words 36.2%, start-up floor 21.8%, cache re-write 15.3%. Leftover 0%
 - 2026-11-25 39bef7c8 (auto): carried history 30.8%, new writes 30.4%, Claude's words 22.2%, start-up floor 16.6%. Biggest origins: Claude's words 38.5%, messages and reminders 28.3%, start-up floor 16.7%. Leftover 0%
 - 2026-11-25 b5e735d0 (auto): start-up floor 74.5%, new writes 12.4%, Claude's words 12.3%, carried history 0.8%. Biggest origins: start-up floor 74.5%, Claude's words 14.4%, result: tool search 9.9%. Leftover 0%
 
