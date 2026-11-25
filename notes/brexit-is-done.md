@@ -95,16 +95,6 @@ interviewer off-frame left; the eyes hold on them except where named.
 - Start check "NOT CARRIED 07:39" ("Wouldn't it be better to run them at certain key stages?"): Sam's kit-tests question, carried as proposal kit-tests-when (Q1 to Sam).
 - Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: left for the GTA chats.
 
-## Chat 13 end check, named
-- Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 (a record only, Sam 22 Nov): left for the GTA chats.
-- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-12 did. Rule 74 acting rows, HEAD LIFE, rehearsal clips: the moves stage, chat 14. Framing quick checks (notes 3, 9): handled chats 9-10.
-- Start check "NOT CARRIED" lines: chat 11's prompt words ("Blair's chase and t...") are the chase, done this chat.
-
-## Chat 12 end check, named
-- Brief checklist "empty" and framing notes 3/9: the checklist is above (unticked); notes 3 and 9 are cast/framing notes already handled (chats 9-10); ticked against the film before the first animatic (Sonnet chat).
-- Rule 74 acting rows (shots 1-3) and HEAD LIFE for may, kemi, blair: the moves stage, next chat (chat 13).
-- FINDER: chat 12 built new (shot 3's chase, the shared fixes), not a note: hand searches on purpose.
-- SENTENCE: the same alerts on Sam's own CLAUDE.md edits that chats 1-11 named. COST: no ledger estimate (named since chat 4).
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
 - Note 1 (Q5) Sam: "Yes, before a wolf lunges at him": Blair's grin then the wolf lunge, brief item 13.
