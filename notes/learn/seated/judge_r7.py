@@ -57,8 +57,10 @@ def sheet(outline, seed, path):
     return {str(i + 1): list(k) for i, (k, _) in enumerate(tiles)}
 
 
-if __name__ == '__main__':
-    key = {'outlines': sheet(True, 725, os.path.join(HERE, 'judge', 'outlines-r7.jpg')),
-           'look': sheet(False, 1125, os.path.join(HERE, 'judge', 'look-r7.jpg'))}
-    json.dump(key, open(os.path.join(HERE, 'judge', 'key-r7.json'), 'w'), indent=1)
-    print('written: judge/outlines-r7.jpg, judge/look-r7.jpg, judge/key-r7.json')
+if __name__ == '__main__':          # python3 judge_r7.py [ROUND]: chat 2 wrote r7 (seeds 725/1125); chat 3: r7c3
+    tag = sys.argv[1] if len(sys.argv) > 1 else 'r7'
+    seed = {'r7': (725, 1125)}.get(tag, (abs(hash(tag)) % 9000 + 11, abs(hash(tag + 'look')) % 9000 + 11))
+    key = {'outlines': sheet(True, seed[0], os.path.join(HERE, 'judge', f'outlines-{tag}.jpg')),
+           'look': sheet(False, seed[1], os.path.join(HERE, 'judge', f'look-{tag}.jpg'))}
+    json.dump(key, open(os.path.join(HERE, 'judge', f'key-{tag}.json'), 'w'), indent=1)
+    print(f'written: judge/outlines-{tag}.jpg, judge/look-{tag}.jpg, judge/key-{tag}.json')

@@ -568,7 +568,8 @@ def pose(sp, name, seat=None, **kw):
 # ------------------------------------------------------------------------------------------------ part 2 poses
 THIGH_R, KNEE_R, ANKLE_R = 24.0, 19.0, 13.5       # the legs' half-widths as views.leg draws them (thigh, knee, ankle)
 R7_CROSS = dict(rest=34.0, toe=-34.0,   # R7 knee over knee: the lower thigh's half-height under the top knee; the
-                shin=lambda sl: (sl * 0.30, 0.78, 0.55))   # hanging foot's toes down; the top shin's hang (forward)
+                shin=lambda sl: (sl * 0.12, 0.80, 0.50))   # hanging foot's toes down; the top shin's hang: nearly
+#   parallel to the lower shin (chat 3 judges on sideways 0.30: "the shin slants out at an odd angle"; ref woman-3q-crossed)
 
 
 def knees(sp, seat, spec):
