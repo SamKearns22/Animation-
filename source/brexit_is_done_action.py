@@ -38,6 +38,7 @@ sys.path.insert(0, HERE)
 import figure as FG                  # noqa: E402
 import lying                         # noqa: E402
 import moves as MV                   # noqa: E402
+along = MV.along
 import people as PK                  # noqa: E402
 import people_parts as PPt           # noqa: E402
 import wolf as WF                    # noqa: E402
@@ -562,27 +563,6 @@ PASSES = [
 ROOM_WOLF = [dict(pal=0, seed=60), dict(pal=2, seed=61), dict(pal=4, seed=62), dict(pal=1, seed=63)]
 TOSS = 0.70                             # the butler swerves at the turn: the tray flies on (shot time)
 RUN_STEP = 0.95                         # m: the run gait's own stride (chat 12: 1.25 kicked the back leg out flat) (feet planted: steps a second = speed / stride)
-
-
-def along(pts, dist):
-    """(x, d, dx, dd) `dist` metres along a path, or None past its end."""
-    for (x0, d0), (x1, d1) in zip(pts, pts[1:]):
-        n = math.hypot(x1 - x0, d1 - d0)
-        if dist <= n:
-            u = dist / n
-            return x0 + (x1 - x0) * u, d0 + (d1 - d0) * u, (x1 - x0) / n, (d1 - d0) / n
-        dist -= n
-    return None
-
-
-def movers():
-    """Every guest and wolf of shot 3 as moves.head_on wants them: [(name, pass, at(u))]."""
-    out = []
-    for i, (k, t0, pts, w, lag) in enumerate(PASSES):
-        for who, s0, v in (('guest %d' % k, t0, GUEST_V), ('wolf %d' % w, t0 + lag, WOLF_V)):
-            out.append(('%s (pass %d)' % (who, i), i,
-                        lambda u, s0=s0, v=v, pts=pts: along(pts, v * (u - s0)) if u >= s0 else None))
-    return out
 
 
 def _guest_pose(sp, k, tt, dx, dd, u):

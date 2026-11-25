@@ -4921,10 +4921,10 @@ def movers_never_meet_head_on():
     keep = A.PASSES
     try:
         A.PASSES = old_passes
-        old = MV.head_on(A.movers(), 0, 9.4)
+        old = MV.head_on(MV.chase_movers(A.PASSES, A.GUEST_V, A.WOLF_V), 0, 9.4)
     finally:
         A.PASSES = keep
-    new = MV.head_on(A.movers(), 0, 9.4)
+    new = MV.head_on(MV.chase_movers(A.PASSES, A.GUEST_V, A.WOLF_V), 0, 9.4)
     caught = any(m[3] < 0.1 for m in old) and any(abs(m[0] - 7.5) < 0.1 for m in old)
     return caught and not new, 'old table: %d meetings (%s); now: %s' % (len(old), old[:2], new or 'none')
 
@@ -4950,10 +4950,10 @@ def side_by_side_out_of_reach():
         old_passes.append(p)
     try:
         A.PASSES = old_passes
-        old = MV.within_reach(A.movers(), proj, 0, 9.4)
+        old = MV.within_reach(MV.chase_movers(A.PASSES, A.GUEST_V, A.WOLF_V), proj, 0, 9.4)
     finally:
         A.PASSES = keep
-    new = MV.within_reach(A.movers(), proj, 0, 9.4)
+    new = MV.within_reach(MV.chase_movers(A.PASSES, A.GUEST_V, A.WOLF_V), proj, 0, 9.4)
     caught = any('(pass 8)' in m[1] and '(pass 9)' in m[2] for m in old)    # the pair of the hand on the shoulder
     return caught and not new, 'first waves: %s; now: %s' % (old, new or 'none')
 

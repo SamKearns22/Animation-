@@ -56,9 +56,11 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Needs Sam:** nothing blocks.
 - **Read:** `guides/job-packs.md` Build; acting.py MAP (lines 1-90) and FILMS (840-905); milburn.py face_sp/acted (195-260); brexit_is_done.py seated/standing (88-150).
 - **Open rule requests:** none.
-- **For Claude:** moves.head_on / within_reach run only in kittests on this film's PASSES: wire them into pre-flight for any film with path movers (move to shared). 8 old film files still draw see-through fills with Draw(img,'RGBA') (move to ink.glaze when touched). The evening gown reads as tunic and trousers front-on and side-on mid-stride: cast locked, name it to Sam with the animatic. override.py's quoted-Override logging still unchecked. castsheet._same_outlines is this film's only: move to shared. The stills command takes times one by one (the old handover's "17.5..26.9" form fails).
+- **For Claude:** moves.head_on / within_reach (shared, catalogued) run in kittests on this film's chase: a later film with movers calls them on its own table (moves.chase_movers). 8 old film files still draw see-through fills with Draw(img,'RGBA') (move to ink.glaze when touched). The evening gown reads as tunic and trousers front-on and side-on mid-stride: cast locked, name it to Sam with the animatic. override.py's quoted-Override logging still unchecked. castsheet._same_outlines is this film's only: move to shared. The stills command takes times one by one (the old handover's "17.5..26.9" form fails).
 
 ## Chat 13 end check, named
+- Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 (a record only, Sam 22 Nov): left for the GTA chats.
+- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-12 did. Rule 74 acting rows, HEAD LIFE, rehearsal clips: the moves stage, chat 14. Framing quick checks (notes 3, 9): handled chats 9-10.
 - Start check "NOT CARRIED" lines: chat 11's prompt words ("Blair's chase and t...") are the chase, done this chat.
 
 ## Chat 12 end check, named

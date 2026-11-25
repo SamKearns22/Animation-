@@ -237,6 +237,28 @@ def within_reach(actors, proj, t0, t1, reach=0.9, x_lim=3.0, fps=25, only='guest
     return out
 
 
+def along(pts, dist):
+    """(x, d, dx, dd) `dist` metres along a path of (x, d) floor points, or None past its end."""
+    for (x0, d0), (x1, d1) in zip(pts, pts[1:]):
+        n = math.hypot(x1 - x0, d1 - d0)
+        if dist <= n:
+            u = dist / n
+            return x0 + (x1 - x0) * u, d0 + (d1 - d0) * u, (x1 - x0) / n, (d1 - d0) / n
+        dist -= n
+    return None
+
+
+def chase_movers(passes, runner_v, chaser_v, runner='guest', chaser='wolf'):
+    """A chase table [(runner, start s, path [(x, d)], chaser, its lag s)] as head_on / within_reach want it:
+    [(name, pass, at(t))]; a runner and the chaser at their heels share a pass (never compared)."""
+    out = []
+    for i, (k, t0, pts, w, lag) in enumerate(passes):
+        for who, s0, v in (('%s %s' % (runner, k), t0, runner_v), ('%s %s' % (chaser, w), t0 + lag, chaser_v)):
+            out.append(('%s (pass %d)' % (who, i), i,
+                        lambda t, s0=s0, v=v, pts=pts: along(pts, v * (t - s0)) if t >= s0 else None))
+    return out
+
+
 def footfalls(kind, t0, t1):
     """The moments each foot lands (for footsteps, if the script asks for them)."""
     g = GAITS[kind]
