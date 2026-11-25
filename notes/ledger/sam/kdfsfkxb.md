@@ -18,3 +18,6 @@ So you now have one drawing where the legs and bum are finally correct and anoth
 ### 2026-11-25T23:34:57
 This is the correct outfit. You have drawn a poor version of it for reasons I can't fathom.
 
+### 2026-11-25T23:36:38
+Please can you implement the full body for her frame and implement the previous clothes in the same way you did before?
+
