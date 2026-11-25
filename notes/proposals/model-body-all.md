@@ -98,6 +98,7 @@ Read: this file only; source/model_body.py MAP; the clip.
 Open rule requests: none.
 For Claude: model_body_test.py clip 12.17 27.84 OUT; _heads() is a 'move to shared' (body.HEADS hook for old films).
 Locked by Sam: Islamocommunism's cameras, times and beats as posted; no posted film is changed; Open Wounds stays flat.
+Locked by Sam: Islamocommunism's cameras, times and beats as posted; no posted film is changed; Open Wounds stays flat.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)
 
