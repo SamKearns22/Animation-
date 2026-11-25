@@ -337,3 +337,5 @@
 2026-11-25T07:42+00:00	REFUSED 1: MOVE TO SHARED: source/brexit_is_done_action.py (brexit-is-done): "def movers():" is	01U3pKR22tY7AvQcv7mHWaoH
 2026-11-25T07:42+00:00	01U3pKR22tY7AvQcv7mHWaoH
 2026-11-25T07:43+00:00	01U3pKR22tY7AvQcv7mHWaoH
+2026-11-25T08:00+00:00	REFUSED 1: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for i	01U3pKR1ipLftvRyJ1wn1Tcp
+2026-11-25T08:01+00:00	REFUSED 1: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for i	01U3pKR1ipLftvRyJ1wn1Tcp
