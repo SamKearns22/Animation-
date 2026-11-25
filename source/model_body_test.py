@@ -208,7 +208,8 @@ def frame(t, scale=2):
         k0, f = skeleton(person)
         import views as V
         kit_hip = (928 - V.standing(sp)['hipL'][1]) * F_M() * f
-        k = MB.real_skeleton(k0, sp, kit_hip, seat=SEAT, surfaces=SURFACES)
+        k = MB.real_skeleton(k0, sp, kit_hip, seat=SEAT, surfaces=SURFACES,
+                             held=set(person['j'].get('grip') or ()) | {d.handset for d in person['j'].get('props', []) if hasattr(d, 'handset')})
         person['gaps'] = (round(float(k['_reach']), 3), round(float(k['_foot']), 3))
         P, R = MB.pose(k, sp)
         oi = len(objs)

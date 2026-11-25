@@ -170,7 +170,7 @@ def pose(k, sp):
     return P, R
 
 
-def real_skeleton(k, sp, kit_hip_h, seat=None, surfaces=()):
+def real_skeleton(k, sp, kit_hip_h, seat=None, surfaces=(), held=()):
     """The kit's pose on the measured body's OWN lengths (the kit draws short legs and a long trunk): the trunk, neck
     and head keep the kit's directions; the whole upper body is raised by the difference in standing hip height (one
     number per person, so nothing pops); a seated bottom rests on the cushion (seat = (top y, x0, x1, z0, z1)); each
@@ -217,6 +217,10 @@ def real_skeleton(k, sp, kit_hip_h, seat=None, surfaces=()):
         la, lf = np.linalg.norm(J['el' + m] - J['sh' + m]) * s0, np.linalg.norm(J['wr' + m] - J['el' + m]) * s0
         lt, ls = np.linalg.norm(J['kn' + m] - J['hip' + m]) * s0, np.linalg.norm(J['an' + m] - J['kn' + m]) * s0
         wr_t = K['wr' + s] + lift
+        hang = _u(K['wr' + s] - K['sh' + s])
+        if hang[1] < -0.75 and s not in held:   # an empty arm hanging at the side keeps the kit's direction from the
+            wr_t = sh + hang * (la + lf) * 0.97  # shoulder (the measured hips are wider: sent to the kit's wrist,
+        #                                          the elbows bowed out like hands on hips, chat 2)
         for top, a0, a1, b0, b1 in surfaces:
             w0 = K['wr' + s]
             if a0 <= w0[0] <= a1 and b0 <= w0[2] <= b1 and w0[1] < top + 0.15:
@@ -230,8 +234,9 @@ def real_skeleton(k, sp, kit_hip_h, seat=None, surfaces=()):
         kn, an = LY.limb(hip, an_t, lt, ls, polek)
         out['sh' + s], out['el' + s], out['wr' + s] = sh, el, wr
         out['hip' + s], out['kn' + s], out['an' + s] = hip, kn, an
-    out['_reach'] = max(np.linalg.norm(out['wr' + s] - (K['wr' + s] + lift)) for s in 'LR')
-    out['_foot'] = max(np.linalg.norm(out['an' + s] - K['an' + s]) for s in 'LR')
+    out['_reach'] = max([np.linalg.norm(out['wr' + s] - (K['wr' + s] + lift)) for s in 'LR'
+                         if not (_u(K['wr' + s] - K['sh' + s])[1] < -0.75 and s not in held)] or [0.0])
+    out['_foot'] = max(np.linalg.norm((out['an' + s] - K['an' + s])[[0, 2]]) for s in 'LR')   # (across the floor)
     return out
 
 
@@ -434,6 +439,15 @@ def crossings(P, solids_named, used):
     out = {}
     Q = P[used]
     for Ps, Ts, nm in solids_named:
+        if len(Ps) == 8 and nm.endswith('leaf'):  # a turned slab (front 0-3, back 4-7): tested in its own frame
+            o = Ps[0]
+            ax = [Ps[1] - o, Ps[3] - o, Ps[4] - o]
+            u = np.stack([((Q - o) @ a) / (a @ a) for a in ax], 1)
+            m = np.all((u > 0.0) & (u < 1.0), 1)
+            m &= np.abs(((Q - o) @ ax[0]) / np.linalg.norm(ax[0]) - np.linalg.norm(ax[0]) / 2) < np.linalg.norm(ax[0]) / 2 - 0.01
+            if m.any():
+                out[nm] = out.get(nm, 0) + int(m.sum())
+            continue
         lo, hi = Ps.min(0) + 0.01, Ps.max(0) - 0.01
         if (hi - lo).min() <= 0:
             continue
