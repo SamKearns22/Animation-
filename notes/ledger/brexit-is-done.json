@@ -8412,23 +8412,72 @@
      "7-9 P8: the tie sits in a rigid white box and stays front-facing under the turned head. The three-quarter torso is still the front torso. The nose line in 8 is ",
      "4-6 P2: the mouth is a tight pursed line and the brows are heavy, so it reads stern. The photo has a calm, slight smile."
     ]
+   },
+   {
+    "round": 1,
+    "pass": 4,
+    "stage": "moves",
+    "date": "2026-11-25",
+    "hunt": 1,
+    "faults": 13,
+    "cant_tell": 2,
+    "open": [
+     "1 P2: May upright, mouth closed; the beat is a breath in, leaning forward, chin up.",
+     "3,6,8 P2: no chopping or pressing hand. May's hand hangs low (3); Kemi's arm swings out loosely (6, 8).",
+     "10,13 P2: Blair shows one open hand, not both palms (10 both lifting, 13 both open to the interviewer).",
+     "12 P2: no palm flip; his hand rests by the chair arm.",
+     "7 P2: Kemi points right, but the wolves are low on her left; she points at nothing.",
+     "9 P2: Kemi's mouth is open in a shocked \"o\"; the beat is flat and brisk.",
+     "4,15 P3 P5: May's arm swings out behind her from an odd point on the shoulder and looks longer than the other; no clear hand-open pose.",
+     "10-14,17 P7: Blair's thighs are drawn as ringed knee circles, and his legs run down to the floor at a different scale from his body. A fault named by Sam on 24 ",
+     "1-5,15 P7: May's chair is a thin slab with no lap or thigh visible; she looks perched, not seated.",
+     "13-14,17 P10: the white and grey wolves overlap Blair's shoulder and chair back with no clear in front/behind; the grey wolf's snout sits on his arm.",
+     "16 M1: at 7.8 s a worker and a dog stand at the left of the site, then vanish without leaving the frame.",
+     "15 M3: May's head and body shift sideways and tilt from frame to frame; the arm stretches in the last frames.",
+     "6-9 A1: the brown animals read as dead dogs, not wolves; they are tiny and unclear.",
+     "2-5,15 P12: whose words the mouths follow; a strip with the speaker labelled would show it.",
+     "17 M4: the doorway moves left to right between frames (double doors at left in frame 1); a first and last frame at full size would show if the set is steady."
+    ]
+   },
+   {
+    "round": 1,
+    "pass": 5,
+    "stage": "moves",
+    "date": "2026-11-25",
+    "hunt": 2,
+    "faults": 10,
+    "cant_tell": 2,
+    "open": [
+     "6-10,12 P7: Blair - two round knee balls at the lens and he sits in front of the armchair, not on its seat (the 24 Nov \"no bum/circular knees\" fault).",
+     "1-12 A2 P4: May and Blair have the same tall swept grey quiff; May's reference has short cropped hair. Her scarf is plain stripes, the reference is multicoloure",
+     "1,3,5-6,8-9 P2: beats not shown. 1 sits upright, not leaning in with chin up. 3 has no chopping hand. 5 has no tight smile, only a closed mouth. 6 hands rest on",
+     "2-4,11 P4 M3: May's red lips are in 1 and 5 only. In 2-4 and most strip frames the mouth is a tiny grey tick.",
+     "6,9 P3: Blair's arms are very long, with no elbow where the upper arm ends.",
+     "10 P1 P10: Blair's left hand sits on or in front of the plate. The wolf's head overlaps his shoulder and back, so it reads as through him.",
+     "7 P7: the magnifying glass and the small syringe-like prop float with nobody holding them.",
+     "8-9,12 M1: plates appear on the floor from panel 8 with no one dropping them. The red-dress woman is half cut off at the left edge, not entering through the doo",
+     "9,12 A1: the white creature across Blair's lap reads as a flat hide or rug, not a wolf.",
+     "7,9-10 A2: the wolf is small beside the doorway people in 7 but its head is as big as Blair's in 10, so the scale jumps.",
+     "6-10 P2: whether Blair looks at the off-frame left interviewer. A face crop with the nose and pupils at full size would show it.",
+     "11-12 M2: the red times are unreadable. A strip with larger time labels would show it."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 4,
+    "faults": 6,
     "false": 1
    },
    "P2": {
-    "faults": 3,
-    "false": 0
+    "faults": 10,
+    "false": 1
    },
    "P4": {
-    "faults": 12,
+    "faults": 14,
     "false": 0
    },
    "A2": {
-    "faults": 8,
+    "faults": 10,
     "false": 0
    },
    "P11": {
@@ -8436,7 +8485,7 @@
     "false": 2
    },
    "P1": {
-    "faults": 1,
+    "faults": 2,
     "false": 0
    },
    "P13": {
@@ -8449,6 +8498,30 @@
    },
    "A4": {
     "faults": 1,
+    "false": 0
+   },
+   "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "P7": {
+    "faults": 4,
+    "false": 0
+   },
+   "P10": {
+    "faults": 2,
+    "false": 0
+   },
+   "M1": {
+    "faults": 2,
+    "false": 0
+   },
+   "M3": {
+    "faults": 2,
     "false": 0
    }
   }
@@ -8522,6 +8595,10 @@
   },
   {
    "at": "2026-11-25T08:31+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-25T13:14+00:00",
    "faults": 0
   }
  ]

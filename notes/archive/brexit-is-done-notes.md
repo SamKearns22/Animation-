@@ -59,3 +59,23 @@
 - Rule 74 acting rows (shots 1-3) and HEAD LIFE for may, kemi, blair: the moves stage, next chat (chat 13).
 - FINDER: chat 12 built new (shot 3's chase, the shared fixes), not a note: hand searches on purpose.
 - SENTENCE: the same alerts on Sam's own CLAUDE.md edits that chats 1-11 named. COST: no ledger estimate (named since chat 4).
+
+
+## Done notes moved from the film notes (chat 15)
+| # | shot | time | note | line | should have caught | status |
+|---|------|------|------|------|--------------------|--------|
+| 1 | cast sheet v1 | - | Sam: "Reference 1: these side images appear cut off?" The three-quarter full figures were cut in half by my sheet crop | new: sheet-edge | none (sheet maker had no edge test) | fixed: the sheet is built by `castsheet.py sheet`, which refuses a figure touching its tile's edge (selftest caught) |
+| 2 | cast sheet v1 | - | Sam, Tony: "Reference 2, Tony: do you see how something is going wrong still with 3/4 views?" "That is not the same person and haircut as presented in the straight on view." Turned hair flattened by the crown clamp | new: front-3/4 match | none (front and 3/4 never judged side by side) | fixed: the turned hair is built to the front piece's own outline (hair shell), side/back strokes added; `castsheet.py match` caught Sam's picture |
+| 3 | cast sheet v1 | - | Kemi: orange gone from her clothes; 3/4 not right (hat flat and wide, glasses off the face) | new: front-3/4 match | none | fixed: orange shoulders and sleeves, navy chest, waist band; turned brim dips like the front, side lines; far braid curtain; zipped navy collar; `match` caught Sam's picture |
+| 11 | Blair's grin v2 | - | Sam (24 Nov): "A stray line comes off the top of his smile on the right" | new: curve spikes | none (the curve tool overshoots where a closed curve passes one point twice; nothing looked for it; it was on cast sheets v1-v3 too) | fixed chat 7: the grin's outline no longer repeats its right corner; check castsheet mouth_spike_faults (every house mouth; catches the old outline). Seen, not fixed (shared with finished films): 7 more closed curves through one point twice in facehouse hair shapes (facehouse.py lines 987, 1042, 1056, 1156, 1385, 1570, 1639, 1651): look at full size for spikes next chat |
+| 10 | cast sheet v3 (Blair's head) | - | Sam (24 Nov): "Tony's teeth look a bit...fleshy" (picture saved: notes/sam-notes/brexit-cast-v3/n10-blair-teeth-fleshy.jpg) | new: grin teeth | none (no check looked inside a mouth; the grin's top-lip line was drawn with the closed curve, so it doubled back, and sat across the teeth) | fixed chat 7: a full top row filling the grin's upper half, the thin lip on its edge, open lines (faces.house_mouth grin: only Blair uses it); check castsheet teeth_faults (catches the saved picture) |
+| 8 | cast work, chat 7 (Kemi's new legs) | - | Sam (24 Nov 00:40, picture notes/sam-notes/brexit-cast-v3/n8-camel-toe.jpg): "This is a bit...camel toe" | new: crotch shape | none (no check looks at where the legs part; the blind judges read outlines at phone size, and I looked at the hips for nubs, not the crotch) | fixed chat 7: the legs part just under the seat, the crotch a small round point; check castsheet crotch_faults (catches the saved picture) |
+| 6 | cast sheet v2 | - | Sam: "Do you see Kemi's orange detailing travels over her white collar?" | new: piece over collar | none (match checks colours, not layering: gap written in castsheet.py MAP) | fixed (chat 3): people_parts.workwear_torso's yoke starts outside the collar and lapel and follows the body's own outline (any build); saved: notes/sam-notes/brexit-cast-v2/n6 |
+| 4 | cast sheet v1 | - | Sam asked: "Are we using our most recent 3/4 kit?" | - | - | answered in chat 1 (yes, the turned head kit; the fault was the hair built apart from the front); Sam said Y to the plan |
+
+
+## Chat 14 end check, named
+- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-13 did. COST: no ledger estimate (named since chat 4).
+- Start check "NOT CARRIED 07:39" ("Wouldn't it be better to run them at certain key stages?"): Sam's kit-tests question, carried as proposal kit-tests-when (Q1 to Sam).
+- Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: left for the GTA chats.
+

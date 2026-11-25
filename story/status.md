@@ -1,3 +1,3 @@
-Open Wounds: Sam asked for fluid acting on every line (25 Nov); the acting plan is written in the film's notes, beat by beat.
-Next: Opus chat 15 builds it (May moving from the first drawing), sends a clip of each line.
-Then the Sonnet chat for the animatic. Sam's Q1 (kit tests) waits; R7 runs in its own chat.
+Open Wounds: the acting plan is built (all three lines move on their words; May moves from the first drawing). Kemi's clip sent.
+Next: Opus chat 16 fixes the background workers on Kemi's site (the body check caught their arms), then the Sonnet chat makes the animatic.
+Sam: "Override" sends May's and Blair's clips; Q1 (kit tests) waits; R7 runs in its own chat.

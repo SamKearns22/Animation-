@@ -136,8 +136,8 @@ MOODS = {
     'brows up': dict(smile=0.06, lid4=0.06, brow_up=0.05),           # ... "remember"; "chose" (a tiny pause)
     'reasonable': dict(smile=0.1, lid4=0.12, brow_up=0.02),
     'firm': dict(smile=-0.12, lid4=0.16, frown=0.025),               # ... the chops (it was decided)
-    'satisfied': dict(smile=0.32, lid4=0.2, brow_up=0.012),          # ... the tight satisfied smile on "wolves"
-    'satisfied brows': dict(smile=0.32, lid4=0.16, brow_up=0.04),    # ... and the small brow raise to the cut
+    'satisfied': dict(smile=0.45, lid4=0.2, brow_up=0.012),  # (critique hunt 2: 0.32 read as a plain closed mouth)          # ... the tight satisfied smile on "wolves"
+    'satisfied brows': dict(smile=0.45, lid4=0.16, brow_up=0.04),    # ... and the small brow raise to the cut
     'disdain': dict(smile=-0.38, lid4=0.24, frown=0.02, brow_up=0.012),   # Kemi: "Andy", lips tight
     'flat': dict(smile=-0.3, lid4=0.14, frown=0.02),                 # ... the manager giving targets
     'sincere': dict(smile=0.3, lid4=0.14, brow_up=0.03, frown=0.01), # Blair: hand on his chest
@@ -297,14 +297,22 @@ def main(argv):
             picture(float(v)).save(p, quality=88)
             print(p)
     elif len(argv) >= 3 and argv[1] == 'final':          # chat 15: clips and renders (silent until Sam records)
+        import wave
         import numpy as np
         import film_engine as E
-        import mossad_audio as MA
+        SR = 44100
+
+        def write_wav(path, x):                         # silent until Sam records (no finished film's file loaded)
+            with wave.open(path, 'wb') as w:
+                w.setnchannels(1)
+                w.setsampwidth(2)
+                w.setframerate(SR)
+                w.writeframes((np.clip(x, -1, 1) * 32767).astype(np.int16).tobytes())
         a = argv[1:]
         small = '--small' in a
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=lambda img, t: img, shot_of=shot_of,
-                 sound=lambda: np.zeros(int(DUR * MA.SR) + 1), write_wav=MA.write_wav,
+                 sound=lambda: np.zeros(int(DUR * SR) + 1), write_wav=write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
                  span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,
