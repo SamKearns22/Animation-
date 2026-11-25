@@ -27,3 +27,4 @@
 2026-11-25T13:18+00:00	70f3ba47	sam	Open Wounds, chat 16 (files named brexit-is-done). Opus, medium effort. Read CLAUDE.md, check you can save to GitHub, then run: python3 source/handover.py start session_01U3pKR2NCsgxvii98ojSuyb --film brexit-is-done, and follow "Where things stand" in notes/brexit-is-done.md: fix shot 2's background
 2026-11-25T17:48+00:00	5285aeae	sam	Override kit tests
 2026-11-25T17:49+00:00	5285aeae	skipped	kit tests: 38 stale not run at this handover
+2026-11-25T17:50+00:00	5285aeae	skipped	kit tests: 38 stale not run at this handover

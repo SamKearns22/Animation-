@@ -168,6 +168,10 @@ chat 14 (session_01U3pKR1ipLftvRyJ1wn1Tcp). Built in its own chat (Opus high), a
 - **Needs Sam:** nothing.
 - **Read:** this file's "Built"; `python3 source/kitstamps.py stale` shows what would run.
 - **Open rule requests:** none.
+- **For Claude:** kitstamps.Tracer (one per process, `tracer()`), `traced(fn)` for nested tracing; KITTESTS_RUNNING=1
+  makes finish.py skip the gate inside kit tests; child tracing via a temp sitecustomize.py that first runs the system's own.
+
+## Handover check named (kit-tests build, 25 Nov)
 - **Branches named:** claude/brexit-chat15 is Open Wounds chat 15's live work (its chat merges it); claude/gta-v5-sound-draft,
   claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 hold only posted-GTA logs, a proposal and two old
   helpers: not merged here (outside this job).
@@ -177,5 +181,3 @@ chat 14 (session_01U3pKR1ipLftvRyJ1wn1Tcp). Built in its own chat (Opus high), a
   shared changes) was skipped, logged; they stay stale, so the next start-up run, `handover.py end` or finish.py runs them.
 - **Start check named:** "NOT CARRIED 08:02 ... make sure it's implement" is Sam's acting-plan message in Open Wounds
   chat 14; it is carried in notes/brexit-is-done.md "Acting plan" (chat 15's job), not this one's.
-- **For Claude:** kitstamps.Tracer (one per process, `tracer()`), `traced(fn)` for nested tracing; KITTESTS_RUNNING=1
-  makes finish.py skip the gate inside kit tests; child tracing via a temp sitecustomize.py that first runs the system's own.
