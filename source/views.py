@@ -480,7 +480,8 @@ R7_ARCH = 11.0   # the thigh's top arched this much at its middle (muscle under 
 R7_CALF = 8.0    # the calf behind the shin, under the cloth, fullest a third of the way down
 R7_FAR = 0.72    # the far leg's cloth this much as bright (in shadow), so the near leg reads over it (chat 3:
 #                  "one dark mass": an ink edge on dark trousers barely shows)
-R7_LAP = 18      # the lap seen from the front (the thighs' tops, facing up, lit) this much brighter than the shins
+R7_LAP = 0       # chat 4 tried the lap lit 18 brighter: from the front it read as the grey chair seat ("a flat
+#                  slab"); the shins in shade instead (R7_FAR)
 
 
 def _r7_arch(t):
@@ -549,14 +550,15 @@ def _r7_leg_over(p, j, sp, sd, yaw, seat_y, t0=0.45, col=None):
     fwd, shin = _r7_parts(j, sp, sd, seat_y, t0)
     hip, knee = j['hip' + sd], knee_of(j, sd)
     hs, _ = _r7_hull(shin, yaw)
-    _r7_union(p, [_r7_outline(shin, yaw, knee, j['foot' + sd])[0]], col)
-    pts, tags = _r7_outline(fwd, yaw, hip, knee)
-    sm = curve(pts, 3)
     a2, b2 = project(hip, yaw)[0], project(knee, yaw)[0]
     L3 = math.sqrt(_dot(_sub(knee, hip), _sub(knee, hip))) or 1.0
     end_on = math.hypot(b2[0] - a2[0], b2[1] - a2[1]) / L3 <= R7_END_ON
-    lit = end_on and not j.get('cross')                     # the lap, lit from above (a crossed top thigh lit
-    p.poly(sm, tuple(min(255, c + R7_LAP) for c in col) if lit else col, None)   # read as a cushion, chat 4)
+    under = end_on and not j.get('cross')                   # from the front the shins stand under the knees in
+    _r7_union(p, [_r7_outline(shin, yaw, knee, j['foot' + sd])[0]],      # shade, so the lap and the knees' edge
+              tuple(int(c * R7_FAR) for c in col) if under else col)     # read over them (chat 4: a lit lap read
+    pts, tags = _r7_outline(fwd, yaw, hip, knee)                         # as the grey chair seat)
+    sm = curve(pts, 3)
+    p.poly(sm, col, None)
     n, m = len(pts), len(sm)
     keep = [tg > t0 + 0.02 for tg in tags]                  # the cut end (t0) is open
     if all(keep) or not any(keep):
