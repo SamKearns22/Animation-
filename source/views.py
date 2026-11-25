@@ -349,12 +349,15 @@ def seat_bottom(p, j, yaw, sp):
 # joints, no ring at a knee. Inside it, each leg's own edge is drawn only where one part of it lies over another (a
 # knee over its shin, one leg over the other), never across the lap. Proportions from figure-drawing measures, body
 # units (1 unit = 1.5 mm): the bottom 12-13 cm behind the hip joints and 9 cm below them to the seat, spreading on the
-# seat to about 1.15 times the hip width; the thigh 18 cm across at its root, flattened on the seat, 12 cm at the knee.
+# seat to about 1.15 times the hip width; the thigh 18 cm across at its root, flattened on the seat, 10 cm at the knee (narrower than the calf below it, 11 cm).
 # On for every new film; off (the stopgap above: seat_bottom, knee_cap) for brexit-is-done and every film already
 # posted (people.BEFORE_SEATED), so their frames stay pixel for pixel.
 SEATED_R7_VIEWS = ('front', 'three', 'side')
 R7 = dict(back=84.0, front=46.0, spread=64.0, drop=58.0, rise=70.0,      # the bottom: reach behind the hips, in front,
-          thigh=(58.0, 46.0), knee=(38.0, 35.0), calf=37.0, ankle=26.0)  # past each hip joint, to the seat, its top;
+          thigh=(58.0, 46.0), knee=(33.0, 34.0), calf=37.0, ankle=26.0)  # past each hip joint, to the seat, its top;
+R7_CAP = (0.22, 1.0)   # the kneecap seen end-on: the middle of the knee's end (22% to 78%), its curve kept whole
+#   (chat 2: the knee 33 across, not 38: narrower than the calf below it, as a real knee; the front knees read as bags)
+R7_END_ON = 0.55   # a thigh drawn shorter than this share of its length points at the camera: its knee seen end-on
 #                                                                          thigh root (across, up-down), knee, calf
 
 
@@ -508,8 +511,55 @@ def _r7_leg_over(p, j, sp, sd, yaw, seat_y, t0=0.45, col=None):
     a, b = run[0], run[-1]                                   # the same stretch on the smoothed outline
     ia, ib = int(round(a * m / n)), int(round(b * m / n))
     seg = [sm[(ia + q) % m] for q in range(((ib - ia) % m) + 1)]
-    if len(seg) >= 2:
-        p.line(seg, INK, 2.6)
+    hip, knee = j['hip' + sd], knee_of(j, sd)
+    a2, b2 = project(hip, yaw)[0], project(knee, yaw)[0]
+    L3 = math.sqrt(_dot(_sub(knee, hip), _sub(knee, hip))) or 1.0
+    if math.hypot(b2[0] - a2[0], b2[1] - a2[1]) / L3 > R7_END_ON:   # the thigh seen along its side: as drawn
+        if len(seg) >= 2:
+            p.line(seg, INK, 2.6)
+        return
+    off, on = _r7_off_shin(seg, hs)                        # the thigh at the camera (from the front): its end was
+    for run in off:                                         # inked whole across the shin, a bag (R7 chat 2). Its
+        if len(run) >= 2:                                   # sides run on into the shin's; over the shin only a
+            p.line(run, INK, 2.6)                           # short shallow kneecap line
+    for run in on:
+        if len(run) >= 5:
+            k = len(run)
+            mid = run[int(k * R7_CAP[0]):int(k * (1 - R7_CAP[0])) + 1]
+            (x0, y0), (x1, y1) = mid[0], mid[-1]
+            cap = []
+            for i, (x, y) in enumerate(mid):
+                f = i / max(1, len(mid) - 1)
+                cy = y0 + (y1 - y0) * f                     # halfway to the straight line between its ends
+                cap.append((x, cy + (y - cy) * R7_CAP[1]))
+            p.line(cap, INK, 2.2)
+
+
+def _r7_off_shin(seg, hs, inset=7.0):
+    """The stretches of a knee's edge not lying over its own shin (the convex outline hs): where the thigh's end lies
+    on the shin it bends into it, one piece of cloth, so no line is drawn there; the sides of the knee stay inked and
+    run on into the shin's own sides. A knee seen end-on (from the front) keeps a short shallow kneecap line."""
+    n = len(hs)
+
+    def depth(q):                                           # how far inside the shin's outline (negative: outside)
+        d = 1e9
+        for i in range(n):
+            a, b = hs[i], hs[(i + 1) % n]
+            ex, ey = b[0] - a[0], b[1] - a[1]
+            L = math.hypot(ex, ey) or 1.0
+            d = min(d, (ex * (q[1] - a[1]) - ey * (q[0] - a[0])) / L)
+        return d
+    off, on, cur, now = [], [], [], None
+    for q in seg:
+        o = depth(q) > inset
+        if o is not now and cur:
+            (on if now else off).append(cur)
+            cur = []
+        now = o
+        cur.append(q)
+    if cur:
+        (on if now else off).append(cur)
+    return off, on
 
 
 def seated_lower(p, j, yaw, sp, order, top=None):
@@ -582,6 +632,10 @@ def leg(p, j, side, yaw, sp, from_u=0.0):
         else:
             tb(p, pts, [48 * k, 38 * k, 27 * k], col, (t0, 1.0))
     shoe(p, j, side, yaw, sp)
+
+KIT_LEG = leg   # the kit's own leg: a film's code may replace views.leg when imported (remakes_cast does), and the
+#                 seated look must draw the kit's (R7 chat 2: seated_r7_look crashed after another test imported it)
+
 
 def shoe(p, j, side, yaw, sp):
     """One shoe at the ankle (the end of leg(); R7 draws the seated legs itself and calls this)."""
@@ -1734,7 +1788,7 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         sb = min(sp_draw.get('bottom', JACKET), 470) if seated else sp_draw.get('bottom', JACKET)
         pen = B.Pen(img, up)
         B.trouser_seat(pen, sp_draw, torso_outline(sp_draw, view, sb, B.ink_units(pen)), sb,
-                       None if seated else _thigh_edges(j, view_deg, sp_draw, sb + 6.0, gap=True))
+                       None if seated else _thigh_edges(j, view_deg, sp_draw, sb + 6.0, gap=True), r7=r7)
     if j.get('lap') and view in ('front', 'three'):   # a low seat lifts the knees to the jacket's hem: they are nearer
         hem = min(sp_draw.get('bottom', JACKET), 470) + 30   # than the jacket, so they show over it (rule 80)
         for sd in legs_order:

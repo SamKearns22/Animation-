@@ -572,7 +572,11 @@ def ball_knees(a, trousers, tol=18, dmin=40, dmax=400):
 
 def no_bottom(a, trousers, tol=18, ink_gap=14, ink_tol=12):
     """The jacket's hem with no bottom under it: along the hem, the share of its width where the next thing below
-    (past the hem's ink line) is the trousers. Returns (share, hem colour, columns)."""
+    (past the hem's ink line) is the trousers; where a hand lies under the edge, the column is not judged.
+    Returns (share, hem colour, columns). The jacket is found whole: its shaded folds count as jacket, and it is
+    joined up across what crosses it (hands resting on the hem, a vest's stripes: R7 chat 2, 25 Nov, when the front
+    views and Kemi's vest were read as having no bottom), so its hem is its real lowest edge in each column."""
+    H, W = a.shape[:2]
     T = _near(a, trousers, tol)
     lab, n = ndi.label(ndi.binary_opening(T, iterations=2))
     if not n:
@@ -590,39 +594,58 @@ def no_bottom(a, trousers, tol=18, ink_gap=14, ink_tol=12):
         if y > 2:
             c = a[y - 2, x].astype(int)
             if not Ink[y - 2, x] and c.sum() < 690 and np.abs(c - np.array(trousers)).sum() > 45:
-                seen.append(tuple(c // 8))
+                seen.append(tuple(c))
     if not seen:
         return None
-    vals, cnt = np.unique(np.array(seen), axis=0, return_counts=True)
-    J = tuple(int(v) * 8 + 4 for v in vals[cnt.argmax()])     # what sits on the trousers most: the jacket
-    Jm = _near(a, J, 40)
-    low = np.full(a.shape[1], -1)
-    rows = Jm.sum(1)                                        # the jacket's block: the longest run of rows where
-    big = rows >= 0.5 * rows.max()                          # it is at least half its widest (not the chair's stem,
-    runs, y0 = [], None                                     # nor the shoes further down)
-    for y in range(len(big) + 1):
-        if y < len(big) and big[y]:
-            y0 = y if y0 is None else y0
-        elif y0 is not None:
-            runs.append((y - y0, y0, y - 1))
-            y0 = None
-    if not runs:
+    seen = np.array(seen)
+    vals, cnt = np.unique(seen // 8, axis=0, return_counts=True)
+    top = vals[cnt.argmax()]
+    vals, cnt = np.unique(seen[(seen // 8 == top).all(1)], axis=0, return_counts=True)
+    J = tuple(int(v) for v in vals[cnt.argmax()])           # what sits on the trousers most: the jacket
+    jt = 40 if ink_tol > 30 else 10                         # a drawing's colours are exact (a dark jacket is not the
+    Jm = (_near(a, J, jt) | _near(a, tuple(int(c * 0.72) for c in J), jt // 2)) & ~T   # dark chair); a photo's blur.
+    #                                                                       Shaded folds too, never the trousers
+    gap = max(9, int(0.07 * H))                             # join the jacket across hands, stripes, its own lines
+    Jc = ndi.binary_closing(Jm, structure=np.ones((gap, 1), bool))
+    Jc = ndi.binary_closing(Jc, structure=np.ones((1, 9), bool))
+    jl, jn = ndi.label(Jc)
+    if not jn:
         return None
-    _, top_j, hem = max(runs)
-    for x in range(a.shape[1]):                             # each column: the jacket's last pixel near the hem
-        yy = np.nonzero(Jm[top_j:hem + 12, x])[0]
-        if len(yy) and yy.max() + top_j >= hem - 30:
-            low[x] = yy.max() + top_j
-    xs_j = np.nonzero(low >= 0)[0]
-    if not len(xs_j):
-        return None
-    good = 0
-    for x in xs_j:
-        y = low[x] + 1
-        while y < a.shape[0] - 1 and y < low[x] + ink_gap and not T[y, x]:   # past the hem's ink line
+    js = ndi.sum(np.ones_like(jl), jl, range(1, jn + 1))
+    C = jl == 1 + int(js.argmax())                          # the jacket: its biggest joined piece
+    rows = np.nonzero(C.any(1))[0]
+    top_j, bot_j = rows.min(), rows.max()
+    O = ~(T | Ink)                                          # everything else; the small pieces shut in ink lying on
+    ol, on = ndi.label(O)                                   # the lap (a hand) hide what is under them
+    small = np.zeros(on + 1, bool)
+    if on:
+        small[1:] = ndi.sum(np.ones_like(ol), ol, range(1, on + 1)) < 0.04 * C.sum()
+    if ink_tol > 30:                                        # a photo's noise breaks everything into small bits
+        small[:] = False
+    r_, g_, b_ = (a[..., i].astype(int) for i in range(3))
+    Sk = (r_ > g_ + 12) & (g_ > b_ + 8) & (r_ - b_ <= 100) & (r_ >= 80)   # skin, any tone (a hand, not a stripe)
+    look = max(ink_gap, int(0.04 * H))
+    good = cols = 0
+    xs = np.nonzero(C.any(0))[0]
+    lows = {x: np.nonzero(C[:, x])[0].max() for x in xs}
+    for x in xs:
+        low = lows[x]
+        if low < bot_j - 0.2 * (bot_j - top_j):             # not the hem (a sleeve's end, a shoulder)
+            continue
+        if abs(lows.get(x + 3, -99) - lows.get(x - 3, 99)) > 9:   # the jacket's side, not its hem running across
+            continue
+        y, hid = low + 1, False
+        while y < H - 1 and y < low + look and not T[y, x] and (Ink[y, x] or small[ol[y, x]] or Sk[y, x] or Jm[y, x]
+                                                                 or y <= low + 3):   # (an edge's blend, a darker ink)
+            hid |= bool(small[ol[y, x]] or Sk[y, x]) and not Jm[y, x]
             y += 1
+        if hid:                                             # a hand lies under the edge here: it hides what is
+            continue                                        # under the hem (a sleeve's end over a hand on the knee)
+        cols += 1
         good += bool(T[y:y + 14, x].size) and T[y:y + 14, x].mean() >= 0.75   # trousers there, not a sliver
-    return good / max(1, len(xs_j)), J, len(xs_j)
+    if not cols:
+        return None
+    return good / cols, J, cols
 
 
 def unmark(a, pen=(124, 180, 76), tol=90):
@@ -675,7 +698,8 @@ def seated_look_faults(film, who=None, cast=None, force=False, raw=False):
     else:
         _, PP = _setup(film, None)
     V = PP.V
-    real_cap, real_bottom = V.knee_cap, V.seat_bottom
+    real_cap, real_bottom, real_leg = V.knee_cap, V.seat_bottom, V.leg
+    V.leg = V.KIT_LEG                             # the kit's own leg, whatever film code was imported before
     if raw:
         V.knee_cap = lambda p, c, hip, rx, ry, col: p.ell(c[0], c[1], rx, ry, col, V.INK, 2.6)
         V.seat_bottom = lambda *a, **k: None
@@ -698,7 +722,7 @@ def seated_look_faults(film, who=None, cast=None, force=False, raw=False):
                     a = np.asarray(img.convert('RGB'))
                     out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}")
     finally:
-        V.knee_cap, V.seat_bottom = real_cap, real_bottom
+        V.knee_cap, V.seat_bottom, V.leg = real_cap, real_bottom, real_leg
     return out
 
 
@@ -714,7 +738,8 @@ def seated_faults(film, who=None, cast=None, raw=False):
         _, PP = _setup(film, None)
     V = PP.V
     rings, bottoms = [], []
-    real_cap, real_bottom = V.knee_cap, V.seat_bottom
+    real_cap, real_bottom, real_leg = V.knee_cap, V.seat_bottom, V.leg
+    V.leg = V.KIT_LEG                             # the kit's own leg, whatever film code was imported before
 
     def old_cap(p, c, hip, rx, ry, col):
         p.ell(c[0], c[1], rx, ry, col, V.INK, 2.6)

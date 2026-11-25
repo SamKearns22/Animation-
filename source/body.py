@@ -565,12 +565,14 @@ def seat_hem(sp):
     return SEAT_HEM if sp.get('jacket_hem') and sp.get('figure') in ('female', 'straight') else None
 
 
-def trouser_seat(p, sp, body, view_bottom, thighs=None):
+def trouser_seat(p, sp, body, view_bottom, thighs=None, r7=False):
     """A short jacket: the body's outline below the jacket's hem painted in the trousers (the seat), its top edge the
     jacket's hem line. `body`: the outline just drawn, in the same pen; `thighs`: the legs' outer edges (left, right)
     at the body's bottom (views.person works them out): no line across the bottom between them (the seat runs on
     into the thighs, drawn before, their tops under it); where the seat is wider than the thighs (turned, the seat
-    over the back of the thigh), its underside is drawn."""
+    over the back of the thigh), its underside is drawn. r7: seated on R7's lower body (views.seated_lower, new
+    films), which already draws the bottom and the hips' outside edge: only the hem line, no sides or bottom line (they
+    stood inside R7's bottom as a box under a short top: R7 chat 2, Kemi's hi-vis)."""
     hem = sp.get('jacket_hem')
     if not hem or hem >= view_bottom - 4:
         return
@@ -588,6 +590,10 @@ def trouser_seat(p, sp, body, view_bottom, thighs=None):
     col = sp.get('trousers', (40, 40, 46))
     xs = [x for x, _ in out]
     p.poly(out, col, None)
+    if r7:                                               # the body's own bottom line painted out too (it lies
+        p.poly([(x, y + 5.0 if y > view_bottom - 8.0 else y) for x, y in out], col, None)   # inside R7's lap)
+        p.line([(min(xs) + 1.5, hem), (max(xs) - 1.5, hem)], INK, 2.6)
+        return
     lo = [q for q in out if q[1] > view_bottom - 1.0]
     x0, x1 = min(x for x, _ in lo), max(x for x, _ in lo)
     tl, tr, gap = thighs or (x0, x1, None)

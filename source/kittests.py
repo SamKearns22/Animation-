@@ -531,16 +531,17 @@ def seated_r7_switch():
 @test
 def seated_r7_look():
     """R7 (25 Nov): the seated look reads the picture as a viewer. It must catch Sam's marked frame (a ball knee and
-    no bottom: notes/learn/seated/no-bum-circular-knees-sam.jpg) and the old drawing (the ring knee, no bottom), and
-    find no ball knee on R7's lower body. (Its bottom reading on R7's own front views is still being tuned: R7 notes.)"""
+    no bottom: notes/learn/seated/no-bum-circular-knees-sam.jpg) and the old drawing (the ring knee; no bottom in the
+    three-quarter views), and find nothing wrong with R7's lower body in any pose or view (chat 2: the hem is now read
+    whole, across hands and a vest's stripes, which had been taken for the hem)."""
     import castsheet as CS
     ex = CS.seated_example_faults()['no-bum-circular-knees-sam']
     sam = any('ball' in f for f in ex) and any('bottom' in f for f in ex)
-    raw = CS.seated_look_faults('brexit-is-done', ['may'], raw=True)
-    old = any('ball' in f for f in raw)
-    new = [f for f in CS.seated_look_faults('brexit-is-done', force=True) if 'ball' in f]
-    return sam and old and not new, (f"Sam's frame caught (ball and bottom): {sam}; the old ring knee caught: {old}; "
-                                     f"ball knees on R7: {len(new)}")
+    raw = CS.seated_look_faults('brexit-is-done', raw=True)
+    old = any('ball' in f for f in raw) and any('bottom' in f and ' 45:' in f for f in raw)
+    new = CS.seated_look_faults('brexit-is-done', force=True)
+    return sam and old and not new, (f"Sam's frame caught (ball and bottom): {sam}; the old drawing caught (ball and "
+                                     f"bottom): {old}; faults on R7: {len(new)} {new[:2]}")
 
 
 @test
