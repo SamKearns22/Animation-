@@ -532,6 +532,176 @@ def hair_spike_faults(film, who=None, cast=None, raw=False):
     return out
 
 
+# ------------------------------------------------------------------------- R7: the seated lower body, seen as a viewer
+# The checks below read the finished PICTURE (Sam's marked frame, or a person drawn seated), not the drawing code, so
+# they would catch the fault whatever drew it (Seeing like Sam 1-2; reserve job R7). A ball knee: a trouser-coloured
+# patch, round, shut inside an ink ring. No bottom: along the jacket's hem, the next thing below is not the trousers
+# (the seat or the background shows under the hem: Sam's frame, 24 Nov, a third of the hem over the seat).
+from scipy import ndimage as ndi   # noqa: E402
+
+R7_TEST_TROUSERS = (70, 120, 160)   # the trousers' colour while checking (shapes only: apart from ink and chairs)
+R7_BOTTOM_SHARE = 0.85              # at least this share of the hem has trousers under it
+R7_EXAMPLES = {   # saved examples the seated look must catch: picture, trousers' colour in it, Sam's pen colour
+    'no-bum-circular-knees-sam': ('notes/learn/seated/no-bum-circular-knees-sam.jpg', (51, 50, 56), (124, 180, 76)),
+}
+R7_EXAMPLE_INK = {   # a photo of the screen blurs the ink: how far from INK it may be
+    'no-bum-circular-knees-sam': 60,
+}
+
+
+def _near(a, rgb, tol):
+    return np.abs(a.astype(int) - np.array(rgb)).sum(2) <= tol
+
+
+def ball_knees(a, trousers, tol=18, dmin=40, dmax=400):
+    """Trouser-coloured patches shut inside an ink ring and round: a knee drawn as a ball."""
+    m = _near(a, trousers, tol)
+    m = ndi.binary_opening(m, iterations=1)
+    lab, n = ndi.label(m)
+    out = []
+    for i, sl in enumerate(ndi.find_objects(lab), 1):
+        h, w = sl[0].stop - sl[0].start, sl[1].stop - sl[1].start
+        if not (dmin <= max(w, h) <= dmax) or not (0.7 <= w / h <= 1.43):
+            continue
+        area = (lab[sl] == i).sum()
+        fill = area / (np.pi * w * h / 4)
+        if 0.85 <= fill <= 1.1:
+            out.append(((sl[1].start + w // 2, sl[0].start + h // 2), w, h, round(fill, 2)))
+    return out
+
+
+def no_bottom(a, trousers, tol=18, ink_gap=14, ink_tol=12):
+    """The jacket's hem with no bottom under it: along the hem, the share of its width where the next thing below
+    (past the hem's ink line) is the trousers. Returns (share, hem colour, columns)."""
+    T = _near(a, trousers, tol)
+    lab, n = ndi.label(ndi.binary_opening(T, iterations=2))
+    if not n:
+        return None
+    size = ndi.sum(np.ones_like(lab), lab, range(1, n + 1))
+    L = np.isin(lab, 1 + np.nonzero(size >= 0.25 * size.max())[0])   # the lower body: the big trouser pieces
+    from ink import INK
+    Ink = _near(a, INK, ink_tol)                            # the outline's own colour (a JPG's blurred: ink_tol 60)
+    seen = []
+    for x in np.nonzero(L.any(0))[0]:
+        y = np.nonzero(L[:, x])[0].min() - 1
+        k = 0
+        while y > 0 and k < ink_gap and (Ink[y, x] or T[y, x]):
+            y, k = y - 1, k + 1
+        if y > 2:
+            c = a[y - 2, x].astype(int)
+            if not Ink[y - 2, x] and c.sum() < 690 and np.abs(c - np.array(trousers)).sum() > 45:
+                seen.append(tuple(c // 8))
+    if not seen:
+        return None
+    vals, cnt = np.unique(np.array(seen), axis=0, return_counts=True)
+    J = tuple(int(v) * 8 + 4 for v in vals[cnt.argmax()])     # what sits on the trousers most: the jacket
+    Jm = _near(a, J, 40)
+    low = np.full(a.shape[1], -1)
+    rows = Jm.sum(1)                                        # the jacket's block: the longest run of rows where
+    big = rows >= 0.5 * rows.max()                          # it is at least half its widest (not the chair's stem,
+    runs, y0 = [], None                                     # nor the shoes further down)
+    for y in range(len(big) + 1):
+        if y < len(big) and big[y]:
+            y0 = y if y0 is None else y0
+        elif y0 is not None:
+            runs.append((y - y0, y0, y - 1))
+            y0 = None
+    if not runs:
+        return None
+    _, top_j, hem = max(runs)
+    for x in range(a.shape[1]):                             # each column: the jacket's last pixel near the hem
+        yy = np.nonzero(Jm[top_j:hem + 12, x])[0]
+        if len(yy) and yy.max() + top_j >= hem - 30:
+            low[x] = yy.max() + top_j
+    xs_j = np.nonzero(low >= 0)[0]
+    if not len(xs_j):
+        return None
+    good = 0
+    for x in xs_j:
+        y = low[x] + 1
+        while y < a.shape[0] - 1 and y < low[x] + ink_gap and not T[y, x]:   # past the hem's ink line
+            y += 1
+        good += bool(T[y:y + 14, x].size) and T[y:y + 14, x].mean() >= 0.75   # trousers there, not a sliver
+    return good / max(1, len(xs_j)), J, len(xs_j)
+
+
+def unmark(a, pen=(124, 180, 76), tol=90):
+    """Sam's pen marks taken off a marked picture: each marked pixel takes the nearest unmarked one's colour."""
+    m = _near(a, pen, tol)
+    m = ndi.binary_dilation(m, iterations=3)
+    if not m.any():
+        return a
+    _, (iy, ix) = ndi.distance_transform_edt(m, return_indices=True)
+    return a[iy, ix]
+
+def seated_look(a, trousers, where='', bottom=True, ink_tol=12):
+    """The faults a viewer would see in one seated picture (an RGB array)."""
+    out = []
+    for c, w, h, fill in ball_knees(a, trousers):
+        out.append(f"SEATED {where}: a knee drawn as a ball (a round patch {w}x{h} px shut in an ink ring at {c}): "
+                   f"Sam, 24 Nov, \"circular knees\"")
+    nb = no_bottom(a, trousers, ink_tol=ink_tol) if bottom else None
+    if bottom and (nb is None or nb[0] < R7_BOTTOM_SHARE):
+        share = 0 if nb is None else nb[0]
+        out.append(f"SEATED {where}: no bottom on the seat: only {share:.0%} of the jacket's hem has the trousers under "
+                   f"it (the seat shows under the rest): Sam, 24 Nov, \"No bum\"")
+    return out
+
+
+def seated_example_faults(name=None):
+    """The seated look run on each saved example (R7_EXAMPLES): every one must be caught."""
+    from PIL import Image
+    out = {}
+    for n, (path, trousers, pen) in R7_EXAMPLES.items():
+        if name and n != name:
+            continue
+        a = unmark(np.asarray(Image.open(os.path.join(ROOT, path)).convert('RGB')), pen)
+        out[n] = seated_look(a, trousers, n, ink_tol=R7_EXAMPLE_INK.get(n, 12))
+    return out
+
+
+R7_POSES = ('upright', 'cross, knee over knee')
+R7_YAWS = (0, 45, -45, 90)
+
+
+def seated_look_faults(film, who=None, cast=None, force=False, raw=False):
+    """Every cast member drawn seated (R7_POSES, from the front, three-quarter both ways and the side), each picture
+    read as a viewer (seated_look). Only people on R7's lower body (sp['seat_r7']: every new film); force: as if on.
+    raw: the drawing as Sam saw it (the ring knee, no bottom), to prove the look still catches it."""
+    import sitting as S
+    from PIL import Image
+    if cast is None:
+        cast, PP = _setup(film, who)
+    else:
+        _, PP = _setup(film, None)
+    V = PP.V
+    real_cap, real_bottom = V.knee_cap, V.seat_bottom
+    if raw:
+        V.knee_cap = lambda p, c, hip, rx, ry, col: p.ell(c[0], c[1], rx, ry, col, V.INK, 2.6)
+        V.seat_bottom = lambda *a, **k: None
+    out = []
+    try:
+        for name, sp0 in cast.items():
+            if not (force or sp0.get('seat_r7')) and not raw:
+                continue
+            for pose in R7_POSES:
+                for yaw in R7_YAWS:
+                    sp = dict(sp0, trousers=R7_TEST_TROUSERS)
+                    if force and not raw:
+                        sp['seat_r7'] = True
+                    if raw:
+                        sp.pop('seat_r7', None)
+                    s_ = 0.5 * sp['height'] / 1.75
+                    j = S.pose(sp, pose)
+                    img = Image.new('RGBA', (1080, 1920), BG + (255,))
+                    V.person(img, PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s_, s_, sp, 0.0, yaw, j)
+                    a = np.asarray(img.convert('RGB'))
+                    out += seated_look(a, R7_TEST_TROUSERS, f"{name} {pose} at {yaw}")
+    finally:
+        V.knee_cap, V.seat_bottom = real_cap, real_bottom
+    return out
+
+
 def seated_faults(film, who=None, cast=None, raw=False):
     """Every cast member seated (three-quarter both ways, the sitting kit's upright, which crosses a woman's legs):
     a knee drawn as a ball (an outlined ring the size of the knee at a knee point) or no bottom on the seat (the
@@ -593,6 +763,8 @@ def seated_faults(film, who=None, cast=None, raw=False):
                     out.append(f"SEATED {name} at {yaw}: no bottom on the seat: Sam, 24 Nov, \"No bum\"")
     finally:
         V.knee_cap, V.seat_bottom = real_cap, real_bottom
+    if not raw:                                   # R7 people (every new film): the pictures read as a viewer too
+        out += seated_look_faults(film, cast=cast)
     return out
 
 

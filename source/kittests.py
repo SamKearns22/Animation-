@@ -495,6 +495,55 @@ def named_lines_body_each_answered():
 
 
 @test
+def seated_r7_switch():
+    """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for Open Wounds (locked by
+    Sam) and every posted film, whose seated people stay pixel for pixel (fingerprints taken before R7 was built)."""
+    import hashlib
+    import people
+    import castsheet as CS
+    import sitting as S
+    from PIL import Image
+    saved = {('blair', 0): 'ea35a4094040', ('blair', 45): '5e30e187e32c', ('blair', 90): '397e4b53c71f',
+             ('kemi', 0): 'de19d3438300', ('kemi', 45): 'a9568e8c38ec', ('kemi', 90): '24eac6dedfae',
+             ('may', 0): '97cbfbe3e550', ('may', 45): '5e504d91a956', ('may', 90): 'dbeb1214140e'}
+    off = [f for f in people.BEFORE_SEATED if people.seat_r7(f)]
+    new_on = people.seat_r7('a-new-film')
+    cast, PP = CS._setup('brexit-is-done', None)
+    marked = [w for w, sp in cast.items() if sp.get('seat_r7')]
+    moved, changed = [], 0
+    for (who, yaw), h in saved.items():
+        for on in (False, True):
+            sp = dict(cast[who])
+            if on:
+                sp['seat_r7'] = True
+            s = 0.5 * sp['height'] / 1.75
+            img = Image.new('RGBA', (1080, 1920), (235, 235, 230, 255))
+            PP.V.person(img, PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0, yaw, S.pose(sp, 'upright'))
+            got = hashlib.md5(img.tobytes()).hexdigest()[:12]
+            if not on and got != h:
+                moved.append(f'{who} {yaw}')
+            changed += on and got != h
+    ok = not off and new_on and not marked and not moved and changed == len(saved)
+    return ok, (f'old films switched on: {off or "none"}; a new film on: {new_on}; Open Wounds people marked: '
+                f'{marked or "none"}; Open Wounds seated frames moved: {moved or "none"}; R7 changes {changed}/9')
+
+
+@test
+def seated_r7_look():
+    """R7 (25 Nov): the seated look reads the picture as a viewer. It must catch Sam's marked frame (a ball knee and
+    no bottom: notes/learn/seated/no-bum-circular-knees-sam.jpg) and the old drawing (the ring knee, no bottom), and
+    find no ball knee on R7's lower body. (Its bottom reading on R7's own front views is still being tuned: R7 notes.)"""
+    import castsheet as CS
+    ex = CS.seated_example_faults()['no-bum-circular-knees-sam']
+    sam = any('ball' in f for f in ex) and any('bottom' in f for f in ex)
+    raw = CS.seated_look_faults('brexit-is-done', ['may'], raw=True)
+    old = any('ball' in f for f in raw)
+    new = [f for f in CS.seated_look_faults('brexit-is-done', force=True) if 'ball' in f]
+    return sam and old and not new, (f"Sam's frame caught (ball and bottom): {sam}; the old ring knee caught: {old}; "
+                                     f"ball knees on R7: {len(new)}")
+
+
+@test
 def override_word():
     """Sam's Override (23 Nov, proposal override-word option 2). Saved example: chat 47 built animatic v5 and the send
     guard refused it (no body check), so Sam waited a whole chat. Sam's word must open that stop for one ask; a chat
