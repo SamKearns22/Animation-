@@ -146,6 +146,14 @@ MOODS = {
 }
 
 
+import subtitles as SUB          # noqa: E402  rule 62: captions from LINES (finish.py burns them in)
+PIECE_FIX = {}
+
+
+def caption_at(t):
+    return SUB.caption_at(LINES, t, PIECE_FIX)      # 3-5 words a piece, each on its syllable
+
+
 def word_at(n, words):
     """When line n reaches `words`: its syllables spread over the line (stand-in timing, as TRACK)."""
     ln = LINES[n - 1]
