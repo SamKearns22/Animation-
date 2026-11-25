@@ -239,9 +239,9 @@ def w1(img, L, cam3, u):
     out = []
 
     # he digs side-on, a little towards the lens (facing straight left he was 104 degrees turned away: his back,
-    # chat 16 body check); the wolves' hit twists him back to straight left as he goes down (HIT to HIT + 0.5, where
-    # the lying body takes over facing straight left)
-    tw = math.radians(195.0 - 15.0 * ease((u - HIT) / 0.5))
+    # chat 16 body check); the wolves' hit twists him 10 degrees as he goes down (HIT to HIT + 0.5), and the lying
+    # body takes over at that same 185 (straight left, 180, still showed his back for 2 drawings mid-fall)
+    tw = math.radians(195.0 - 10.0 * ease((u - HIT) / 0.5))
     face = (math.cos(tw), math.sin(tw))
 
     def man(img):
@@ -259,7 +259,7 @@ def w1(img, L, cam3, u):
                 _shovel(img, L, (a[0] - (b[0] - a[0]) * 0.35, a[1] - (b[1] - a[1]) * 0.35), heel, d)
             return
         bare = dict(sp, kit_hat=None)                              # the hat flies off at the hit
-        kind, *rest = lying.fall(bare, u, HIT, x, d, (-1.0, 0.0))
+        kind, *rest = lying.fall(bare, u, HIT, x, d, (math.cos(math.radians(185.0)), math.sin(math.radians(185.0))))
         if kind == 'views':
             lying.stand(img, cam3, bare, x, d, face, rest[0], u)
             return
