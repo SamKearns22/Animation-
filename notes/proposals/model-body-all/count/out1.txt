@@ -1,0 +1,281 @@
+1 | X | - | - | - | -
+2 | X | - | - | - | -
+3 | X | - | - | - | -
+4 | X | - | - | - | -
+5 | X | - | - | - | -
+6 | X | - | - | - | -
+7 | X | - | - | - | -
+8 | X | - | - | - | -
+9 | X | - | - | - | -
+10 | X | - | - | - | -
+11 | X | - | - | - | -
+12 | X | - | - | - | -
+13 | X | - | - | - | -
+14 | X | - | - | - | -
+15 | X | - | - | - | -
+16 | X | - | - | - | -
+17 | X | - | - | - | -
+18 | X | - | - | - | -
+19 | X | - | - | - | -
+20 | X | - | - | - | -
+21 | X | - | - | - | -
+22 | X | - | - | - | -
+23 | X | - | - | - | -
+24 | N | FACE | N | - | beard on a hand-drawn head, unaffected by body
+25 | N | FACE | N | - | emotion faces are head drawings
+26 | N | FACE | N | - | beard shape on the head
+27 | N | FACE | N | - | beard style, head drawing
+28 | N | FACE | N | - | beard description, head drawing
+29 | N | FACE | N | - | beard texture and colour
+30 | N | FACE | N | - | beard tool, head-only matter
+31 | N | CLOTHES | N | - | shirt sleeve pattern, a costume detail
+32 | N | FACE | N | - | anger scale of the face
+33 | N | CLOTHES | N | - | shirt colours and bands
+34 | N | SCRIPT | N | - | screenplay side error, which shoulder
+35 | N | CLOTHES | N | - | check pattern not reaching the garment edges
+36 | N | SET | N | - | prices on a gas station board
+37 | N | BODY | Y | - | arms looked like separate parts from shoulders
+38 | N | BODY | Y | - | legs bent wrongly, length longer than hip-ankle
+39 | N | BODY | Y | - | arm one straight tube, no elbow bend
+40 | N | BODY | Y | - | elbows bent the wrong way
+41 | N | BODY | Y | - | fabric tufts at bent elbow, flat-piece fill
+42 | X | - | - | - | -
+43 | X | - | - | - | -
+44 | N | CAMERA | N | - | lens and framing choice
+45 | N | SET | N | - | scenery removal
+46 | N | SET | N | - | road ends at cliff edge
+47 | N | SET | N | - | layer order of fire over chair in the set
+48 | N | SET | N | - | grain elevator looks like Stonehenge
+49 | X | - | - | - | -
+50 | N | MOVE | N | - | swivel reveal acting choice
+51 | X | - | - | - | -
+52 | N | SET | N | - | explosion effects, not bodies
+53 | X | - | - | - | -
+54 | N | SET | N | - | lighting glow on him
+55 | X | - | - | - | -
+56 | N | CAMERA | N | - | cut timing
+57 | N | CONTACT | P | - | sleeve reads as through chest; depth pass helps
+58 | N | MOVE | N | - | where he stands and fist-shake acting
+59 | N | MOVE | N | - | pause before speaking
+60 | N | CONTACT | P | - | arm still through man's chest, overlap of two bodies
+61 | N | FACE | N | - | gaze and anger of the face
+62 | N | BODY | Y | R | neck detached from body; hand-drawn head on solid neck
+63 | N | CONTACT | P | - | stepping through another person, depth order
+64 | N | BODY | Y | - | arm separate piece over shoulders
+65 | N | FACE | N | - | eyebrow changes between faces
+66 | N | HANDS | N | - | thumbs look rude
+67 | N | BODY | Y | R | neck pieces and joins; head join to neck
+68 | N | MOVE | N | - | return to neutral timing
+69 | N | HANDS | N | - | rude fingers, house finger shape
+70 | N | BODY | Y | - | shoulder hump where arm meets torso
+71 | N | BODY | Y | - | arm and collar not connected by pixels
+72 | N | MOVE | N | - | choice of snap turn without three-quarter frame
+73 | X | - | - | - | -
+74 | N | SET | N | - | flag drawing holes in flat set item
+75 | N | SET | N | - | portrait clips into clock in the set
+76 | N | BODY | Y | - | arm twisted and chair lost in back view
+77 | N | HANDS | N | - | sausage fingers from steeple hands
+78 | N | FACE | N | - | side and three-quarter faces unlike him
+79 | N | MOVE | N | - | acting for arms during walk
+80 | X | - | - | - | -
+81 | N | FACE | N | - | turned heads of Vance
+82 | X | - | - | - | -
+83 | N | CAMERA | N | - | lens closer
+84 | N | SCRIPT | N | - | add gunshot flash and sound
+85 | N | TEXT | N | - | audio tail of a word cut off
+86 | N | SET | N | - | portrait lacks a neck, set painting
+87 | N | BODY | Y | - | arm twists inhuman, elbow flips
+88 | N | FACE | N | - | mouth closing then smiling
+89 | N | SCRIPT | N | - | ending changed with new lines
+90 | N | CAMERA | N | - | Vance position and camera distance
+91 | N | MOVE | N | - | hands-on-hips acting choice
+92 | N | BODY | N | R | 3D lying body looked like balloon creature
+93 | N | CONTACT | P | - | blows not connecting with body on ground
+94 | N | BODY | P | - | lying body buried, stiff slope, kicks wrongly placed
+95 | N | BODY | P | - | flat lying pose, older face, weak arm raise
+96 | N | BODY | Y | - | both arms on one side, needed neck
+97 | N | BODY | Y | - | arms on one side still
+98 | N | CONTACT | P | - | body hovers off ground, needs solid ground
+99 | N | MOVE | N | - | keep officers attacking
+100 | N | TEXT | N | - | subtitle wording
+101 | N | TEXT | N | - | sound files placed
+102 | N | MOVE | N | - | hands-down move too sudden
+103 | N | MOVE | N | - | man should weakly try to raise hands
+104 | N | MOVE | N | - | fake outrage acting
+105 | X | - | - | - | -
+106 | X | - | - | - | -
+107 | X | - | - | - | -
+108 | X | - | - | - | -
+109 | X | - | - | - | -
+110 | X | - | - | - | -
+111 | X | - | - | - | -
+112 | X | - | - | - | -
+113 | X | - | - | - | -
+114 | X | - | - | - | -
+115 | X | - | - | - | -
+116 | X | - | - | - | -
+117 | X | - | - | - | -
+118 | X | - | - | - | -
+119 | X | - | - | - | -
+120 | X | - | - | - | -
+121 | X | - | - | - | -
+122 | X | - | - | - | -
+123 | X | - | - | - | -
+124 | X | - | - | - | -
+125 | X | - | - | - | -
+126 | X | - | - | - | -
+127 | X | - | - | - | -
+128 | X | - | - | - | -
+129 | X | - | - | - | -
+130 | X | - | - | - | -
+131 | X | - | - | - | -
+132 | X | - | - | - | -
+133 | X | - | - | - | -
+134 | X | - | - | - | -
+135 | X | - | - | - | -
+136 | X | - | - | - | -
+137 | N | FACE | N | - | head and chin size, likeness
+138 | N | FACE | N | - | chin still big, moustache
+139 | X | - | - | - | -
+140 | N | BODY | P | R | blob people from behind; backs of heads hard
+141 | N | BODY | P | - | inmates' proportions mismatch; mouths are face
+142 | N | BODY | Y | - | lying pose looks wrong
+143 | N | CAMERA | N | - | press closer to gate
+144 | N | MOVE | N | - | journalists' facing direction
+145 | N | SCRIPT | N | - | new jury shot
+146 | N | FACE | N | R | ears on long hair from behind
+147 | N | CAMERA | N | - | camera lower and closer
+148 | N | SET | N | - | thicker press crowd
+149 | N | FACE | N | R | dislikes 3/4 Brand, wants front-on; judge mouth
+150 | N | BODY | P | - | neck missing, huge heads; head size hand-drawn
+151 | N | FACE | N | - | mouths missing, empty wall framing
+152 | N | BODY | Y | - | arm from torso, legs not attached
+153 | N | SET | N | - | wall detail, blanket, sigh
+154 | N | CAMERA | N | - | lie flat, camera from above
+155 | N | SCRIPT | N | - | dialogue wording
+156 | N | SET | N | - | prison set below standard
+157 | N | FACE | N | R | 3/4 face one eye, wants front-on
+158 | N | SET | N | - | chairs and room staging
+159 | N | CAMERA | N | - | zoom choices; neck join on head
+160 | N | SET | N | - | press pack realism
+161 | N | SCRIPT | N | - | new satirical news shot
+162 | N | CLOTHES | N | - | prison officer uniform details
+163 | N | TEXT | N | - | background music
+164 | N | FACE | N | - | likeness of Walliams
+165 | N | CAMERA | N | - | staging in background of shot
+166 | N | CAMERA | N | - | camera approaches pack
+167 | N | MOVE | N | - | staging and humourless reactions
+168 | N | SET | N | - | press stands in front of him
+169 | N | MOVE | N | - | unclear gesture
+170 | N | TEXT | N | - | subtitle wording
+171 | N | MOVE | N | - | judge too static
+172 | N | CAMERA | N | - | frame higher
+173 | N | TEXT | N | - | music timing
+174 | N | MOVE | N | - | sigh deeper
+175 | N | MOVE | N | - | tears and arm acting
+176 | N | CAMERA | N | - | lower camera, off-centre
+177 | N | CONTACT | P | - | pool room, body on chair, squashed
+178 | N | TEXT | N | - | voice timing before cut
+179 | N | FACE | N | - | broadcaster loses mouth
+180 | N | CAMERA | N | - | scene consistency across cut
+181 | N | MOVE | N | - | hands at throat gesture
+182 | N | SCRIPT | N | - | new line added
+183 | N | MOVE | N | - | preening acting
+184 | N | TEXT | N | - | voice timing, TV room length
+185 | N | CAMERA | N | - | zoom too sudden
+186 | X | - | - | - | -
+187 | N | BODY | Y | - | arm bends the wrong way
+188 | N | MOVE | N | - | why head moves
+189 | N | CONTACT | P | - | fist through Bible, pillow shape
+190 | N | CAMERA | N | - | perspective question
+191 | N | FACE | N | - | tears look like snot
+192 | N | MOVE | N | - | ambiguous note, stillness brief
+193 | N | SET | N | - | chairs removed
+194 | X | - | - | - | -
+195 | X | - | - | - | -
+196 | N | CONTACT | P | - | player clips through pool table
+197 | N | FACE | N | R | head style changes when he turns
+198 | N | MOVE | N | - | journalists static, arms down
+199 | N | MOVE | N | - | look round the cell, then sigh
+200 | X | - | - | - | -
+201 | N | FACE | N | R | front-on for all; free turning invites 3/4 heads
+202 | N | BODY | Y | - | sitting pose horrible
+203 | X | - | - | - | -
+204 | N | OTHER | N | - | wolf jaws see-through
+205 | N | SET | N | - | street to his feet
+206 | N | SET | N | - | background pub and wolves
+207 | N | SET | N | - | spire and office block
+208 | N | SET | N | - | graffiti tags
+209 | N | SCRIPT | N | - | drunk added
+210 | N | SCRIPT | N | - | shoppers passing
+211 | N | TEXT | N | - | TikTok screen overlay
+212 | N | CLOTHES | N | - | kevlar on arms
+213 | N | FACE | N | - | stress level face
+214 | N | BODY | Y | - | attacked man flat blob not character
+215 | N | BODY | Y | - | running arms crossed on chest
+216 | N | MOVE | N | - | net falls on wolf
+217 | N | MOVE | N | - | old lady extends arm
+218 | N | SET | N | - | remove pub sign
+219 | N | SET | N | - | scale of Andy to shoppers, graffiti
+220 | N | FACE | N | - | mouth vanished
+221 | N | TEXT | N | - | remove code sounds
+222 | N | OTHER | N | - | shoppers drawn in usual style
+223 | N | CLOTHES | N | - | shirt from reference photo
+224 | N | SET | N | - | shopper child-sized, lane scale
+225 | N | BODY | Y | - | walkers faced forward while moving sideways
+226 | N | MOVE | N | - | wolf overshot the man
+227 | N | MOVE | N | - | man stops, frowns, shakes head
+228 | N | SET | N | - | net dipped below floor
+229 | N | FACE | N | - | wolves mix, Andy emotions
+230 | N | MOVE | N | - | more despairing delivery
+231 | N | TEXT | N | - | no in-video title
+232 | N | BODY | Y | - | selfie arm ended in dark block, toward lens
+233 | N | MOVE | N | - | glance back at wolves
+234 | N | SET | N | - | blank buildings
+235 | N | TEXT | N | - | audio crackles
+236 | N | MOVE | N | - | man barely reacted
+237 | N | BODY | Y | - | walkers too thin, body squeezed
+238 | N | FACE | N | - | two mouths at once
+239 | N | MOVE | N | - | arm higher for over-shoulder view
+240 | N | SET | N | - | advertising window poster
+241 | N | TEXT | N | - | crackles at line ends
+242 | N | TEXT | N | - | final z thump
+243 | N | SCRIPT | N | - | line cut
+244 | N | BODY | Y | - | selfie arm swung off side, foreshortened toward lens
+245 | N | TEXT | N | - | double TikTok buttons
+246 | N | TEXT | N | - | fists under real app username
+247 | N | CAMERA | N | - | zoom in 20%
+248 | N | FACE | N | - | mouth kept opening after line
+249 | N | BODY | Y | - | strange arm pose, elbows up
+250 | N | MOVE | N | - | walkers popped into frame
+251 | N | SET | N | - | terraces jumped on loop
+252 | X | - | - | - | -
+253 | X | - | - | - | -
+254 | X | - | - | - | -
+255 | X | - | - | - | -
+256 | X | - | - | - | -
+257 | X | - | - | - | -
+258 | X | - | - | - | -
+259 | X | - | - | - | -
+260 | X | - | - | - | -
+261 | X | - | - | - | -
+262 | X | - | - | - | -
+263 | X | - | - | - | -
+264 | X | - | - | - | -
+265 | X | - | - | - | -
+266 | X | - | - | - | -
+267 | X | - | - | - | -
+268 | X | - | - | - | -
+269 | X | - | - | - | -
+270 | X | - | - | - | -
+271 | X | - | - | - | -
+272 | X | - | - | - | -
+273 | X | - | - | - | -
+274 | X | - | - | - | -
+275 | X | - | - | - | -
+276 | X | - | - | - | -
+277 | X | - | - | - | -
+278 | X | - | - | - | -
+279 | X | - | - | - | -
+280 | X | - | - | - | -
+281 | X | - | - | - | -
