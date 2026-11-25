@@ -17372,6 +17372,185 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "684643bb",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.25,
+   "src": "estimate",
+   "sid": "session_01GznaASxv3pZQm3sS8pLxQq",
+   "steps": 17,
+   "hist_k": 116,
+   "kinds": {
+    "tool search": 14.5,
+    "other": 85.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 10,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 2
+   },
+   "split": {
+    "usd": 0.9049,
+    "total": 0.9049,
+    "floor_k": 102,
+    "blocks": {
+     "start-up floor": 62.9,
+     "Claude's words": 21.5,
+     "new writes": 13.0,
+     "carried history": 2.7
+    },
+    "origins": {
+     "start-up floor": 62.9,
+     "Claude's words": 28.0,
+     "result: tool search": 5.7,
+     "messages and reminders": 2.3,
+     "Claude's edits": 1.0,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 62.9,
+     "thinking": 8.5,
+     "commands": 8.2,
+     "messages to Sam": 6.7,
+     "writing notes": 5.6,
+     "reading kit code": 3.3,
+     "messages and reminders": 2.3,
+     "renders": 1.5,
+     "reading notes": 0.8,
+     "git and saving": 0.1,
+     "app tools (chats, files sent)": 0.1,
+     "edit results": 0.1,
+     "reading chat records": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 102,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "source/arm3d_film.py",
+      0.4,
+      0.0042
+     ],
+     [
+      "source/bench_blender.py",
+      0.4,
+      0.0042
+     ]
+    ],
+    "base_pct": 32.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 6,
+     "shared:people_parts.py": 1,
+     "shared:arm3d_film.py": 1,
+     "guides": 1,
+     "film notes": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "seated",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:people_parts.py",
+      "source/people_parts.py",
+      "seat",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "source/.*seat source/.*sit source/.*lower",
+      "source/.*seat\\|source/.*sit\\|source/.*lower",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:arm3d_film.py",
+      "source/arm3d_film.py source/bench_blender.py guides/kit-catalogue.md",
+      "blender\\|3d",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "guides",
+      "notes/*.md guides/*.md",
+      "arm3d",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/archive/grand-theft-autism-handovers.md",
+      "arm3d",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-; git status --short | head; git branch --show-current",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "notes/proposals/guard-blocks.jsonl",
+      "cd /home/user/Animation-; git add notes/proposals/guard-blocks.jsonl && git comm",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "notes/learn/seated/ notes/learn/seated/examples notes/learn/seated/examples/sam-",
+      "cd /home/user/Animation-; ls notes/learn/seated/ | head; ls notes/learn/seated/e",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "other",
+      "notes/learn/seated",
+      "cd /home/user/Animation-; git add notes/learn/seated && git commit -qm \"Seated l",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
