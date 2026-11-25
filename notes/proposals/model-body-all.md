@@ -69,7 +69,7 @@ Rules that bite next: 85 (cost watch: step caps), 30 (fix the method), CLAUDE.md
 Done: step 1 (the count), above; pushed to the main line.
 Next: on Sam's 1, step 2 (Opus high, cap 6%): Blender installed, the moving test on a real past shot (sit, stand,
 walk) beside the original, clip only; on Sam's 2, the investigation ends and is marked declined.
-Needs Sam: nothing. Sam, 25 Nov (this chat): "1" = go on to step 2.
+Needs Sam: nothing. PAUSED by Sam, 25 Nov (this chat), after his "1": "I don't want to blow my usage on any of this. I'm tired." No step 2, no next chat; nothing runs until Sam asks.
 Read: this file only; count/hand-check.md for the numbers.
 Open rule requests: none (searched this file).
 For Claude: tally.py in count/; first sort out1-6, blind re-sort out_sample; hand-check overrides by ID.
