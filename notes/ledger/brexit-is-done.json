@@ -10438,6 +10438,365 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "70f3ba47",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.51,
+   "src": "estimate",
+   "sid": "session_01U3pKQzpmkHhmMsSUVR8197",
+   "steps": 36,
+   "hist_k": 143,
+   "kinds": {
+    "film-file search": 6.1,
+    "tool search": 26.8,
+    "page.py": 0.9,
+    "other": 66.2
+   },
+   "calls": {
+    "film-file search": 6,
+    "tool search": 27,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 1.8712,
+    "total": 1.8712,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 37.1,
+     "Claude's words": 27.1,
+     "new writes": 25.1,
+     "carried history": 10.8
+    },
+    "origins": {
+     "Claude's words": 38.0,
+     "start-up floor": 37.1,
+     "result: tool search": 13.3,
+     "result: film-file search": 6.8,
+     "messages and reminders": 2.9,
+     "result: page.py": 1.0,
+     "Claude's edits": 0.8,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 37.1,
+     "thinking": 16.4,
+     "writing code": 11.5,
+     "reading kit code": 9.7,
+     "commands": 9.5,
+     "reading film code": 4.8,
+     "start-up and handover tools": 3.4,
+     "reading notes": 3.2,
+     "messages and reminders": 2.9,
+     "messages to Sam": 1.4,
+     "renders": 0.1,
+     "other commands": 0.1,
+     "edit results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 3,
+    "work_pct": 0.06,
+    "reads": [],
+    "base_pct": 28.4
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 2,
+     "miss": 3,
+     "after show": 1
+    },
+    "other": {
+     "other": 21,
+     "shared:handover.py": 1,
+     "guides": 1,
+     "shared:humancheck.py": 2,
+     "shared:lying.py": 1,
+     "film notes": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git fetch origin claude/create-claude-md-oe8z4g -q ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "notes/logs/overrides.log source/handover.py",
+      "git diff notes/logs/overrides.log | head; python3 source/handover.py start sessi",
+      ""
+     ],
+     [
+      2,
+      "film",
+      "before show",
+      "notes/logs/overrides.log notes/brexit-is-done.md source/brexit_is_done_action.py",
+      "chat 16\\|body check\\|body-check",
+      ""
+     ],
+     [
+      3,
+      "film",
+      "before show",
+      "notes/brexit-is-done.md source/brexit_is_done_action.py",
+      "chat 16\\|body check\\|body-check",
+      ""
+     ],
+     [
+      5,
+      "film",
+      "miss",
+      "source/brexit_is_done_action.py",
+      "^def \\|lying\\.\\|def w1",
+      ""
+     ],
+     [
+      6,
+      "film",
+      "miss",
+      "source/brexit_is_done_action.py",
+      "sed -n 200,330p source/brexit_is_done_action.py; sed -n 400,430p source/brexit_i",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "guides",
+      "source/*.py guides/job-packs.md",
+      "lift the head off them\\|a limp arm lies flat\\|comes out on the far side",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/lying.py",
+      "lift the head off them\\|a limp arm lies flat\\|comes out on the far side\\|seen fr",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/lying.py",
+      "sed -n 150,185p source/humancheck.py; sed -n 270,300p source/humancheck.py; sed ",
+      ""
+     ],
+     [
+      10,
+      "film",
+      "miss",
+      "source/brexit_is_done_action.py source/lying.py",
+      "^HIT\\|^FEEDS\\|^WA\\b\\|^WA =\\|^WB =",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:lying.py",
+      "source/lying.py source/*.py",
+      "^HANG\\|^NECK_MIN\\|^HELD_ARMS\\|^SOFT\\|^PROP\\b\\|^PROP =\\|^def blend",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "cd /home/user/Animation-/source && cat > /tmp/claude-0/-home-user-Animation-/70f",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "^POINTS\\|^DIRS\\|^NECK\\b\\|^NECK =\\|^UPPER\\|^FORE\\b",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "python3 /tmp/claude-0/-home-user-Animation-/70f3ba47-9ead-5fd9-a511-6e2d25edaf62",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "other",
+      "",
+      "cat >> /tmp/claude-0/-home-user-Animation-/70f3ba47-9ead-5fd9-a511-6e2d25edaf62/",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "other",
+      "../notes/*.md",
+      "BACK_DEG\\|BIG_FLAT\\|back_ok\\|backview",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "",
+      "site_actors\\|A.set_cam\\|LevelCam\\|def site_cam\\|L = ",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "\nassert old in s; s=s.replace(old,new)\nold2=",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "^def \\|^ON\\|^HOOK",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "other",
+      "",
+      "sed -n 48,128p humancheck.py; sed -n 244,252p brexit_is_done.py",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "cat > /tmp/claude-0/-home-user-Animation-/70f3ba47-9ead-5fd9-a511-6e2d25edaf62/s",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "L",
+      ""
+     ],
+     [
+      26,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "cd /home/user/Animation- && mkdir -p /tmp/claude-0/-home-user-Animation-/70f3ba4",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "other",
+      "",
+      "python3\\|usage\\|--",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "other",
+      "",
+      "lying\\.\\(fall\\|blend\\)\\|L\\.fall\\|L\\.blend\\|\\.blend(\\|\\.fall(",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "other",
+      "",
+      "^def kt_[a-z0-9_]*\\|^    ('[a-z0-9_]*'",
+      ""
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "lying\\|leanout\\|bookmark",
+      ""
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "timeout 900 python3 kittests.py lying 2>&1 | tail -8; timeout 600 python3 kittes",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "",
+      "lying_neck_from_behind",
+      ""
+     ],
+     [
+      33,
+      "other",
+      "other",
+      "",
+      "lying_neck_from_behind\\b\\|^TESTS\\|globals()",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "sed -n 18,30p kittests.py; sed -n 1935,1940p kittests.py",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "^import moves\\|^import .*moves\\|^from .* import",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md story/status.md",
+      "^#",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
