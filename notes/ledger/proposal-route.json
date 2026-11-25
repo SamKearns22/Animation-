@@ -17782,7 +17782,127 @@
    "round": null,
    "cost": 2.46,
    "notes": 0,
-   "repeats": []
+   "repeats": [],
+   "steps": 73,
+   "hist_k": 186,
+   "kinds": {
+    "tool search": 29.7,
+    "renders": 6.5,
+    "other": 63.9
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 54,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 8,
+    "pictures": 0,
+    "other": 10
+   },
+   "split": {
+    "usd": 3.8847,
+    "total": 3.8847,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 32.5,
+     "Claude's words": 27.8,
+     "new writes": 21.0,
+     "carried history": 18.7
+    },
+    "origins": {
+     "Claude's words": 41.2,
+     "start-up floor": 32.5,
+     "result: tool search": 20.2,
+     "messages and reminders": 3.9,
+     "Claude's edits": 1.1,
+     "result: other": 0.8,
+     "result: renders": 0.4
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 32.5,
+     "thinking": 14.0,
+     "writing code": 13.7,
+     "start-up and handover tools": 9.1,
+     "commands": 8.3,
+     "reading notes": 7.3,
+     "writing notes": 4.0,
+     "messages and reminders": 3.9,
+     "reading kit code": 2.3,
+     "messages to Sam": 1.6,
+     "running checks and tools": 1.4,
+     "helper and chat prompts": 0.8,
+     "helper results": 0.5,
+     "renders": 0.3,
+     "reading guides": 0.3,
+     "edit results": 0.1,
+     "git and saving": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 19,
+    "work_pct": 0.26,
+    "reads": [
+     [
+      "notes/proposals/kit-tests-when.md",
+      2.6,
+      0.0531
+     ],
+     [
+      "source/kittests.py",
+      2.6,
+      0.0531
+     ],
+     [
+      "source/finish.py",
+      1.5,
+      0.0285
+     ],
+     [
+      "source/handover.py",
+      1.2,
+      0.023
+     ],
+     [
+      ".claude/hooks/setup.sh",
+      0.7,
+      0.0138
+     ],
+     [
+      "source/kitstamps.py",
+      0.7,
+      0.0138
+     ],
+     [
+      "notes/proposals/kittest-resume.md",
+      0.7,
+      0.0128
+     ],
+     [
+      "source/propose.py",
+      0.7,
+      0.0128
+     ],
+     [
+      "notes/proposals/kit-tests-per-film.md",
+      0.3,
+      0.0055
+     ],
+     [
+      "notes/logs/handover-end.log",
+      0.1,
+      0.0021
+     ],
+     [
+      "notes/logs/brexit-is-done-chats.log",
+      0.1,
+      0.0021
+     ]
+    ],
+    "base_pct": 28.3
+   }
   }
  ],
  "checks": {}

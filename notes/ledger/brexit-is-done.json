@@ -10450,7 +10450,21 @@
    "repeats": []
   }
  ],
- "checks": {},
+ "checks": {
+  "quick check": {
+   "runs": 1,
+   "faults": 34,
+   "kinds": {
+    "benchmark": 1,
+    "blair": 1,
+    "drawing": 25,
+    "house style": 1,
+    "may": 1,
+    "other": 4,
+    "plan": 1
+   }
+  }
+ },
  "critique": {
   "passes": [
    {
@@ -10729,6 +10743,10 @@
   },
   {
    "at": "2026-11-25T13:16+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-25T18:31+00:00",
    "faults": 0
   }
  ]

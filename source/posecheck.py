@@ -127,7 +127,8 @@ def lying_drawn(cam, k, sp, surfaces):
     if lying_flat.face_up_away(cam, k):
         _note(sp, 'both', 'lying: face up away', 'lying on the back, head away from the camera: the face can only be '
               'drawn sat up staring at us (Sam, 10 Nov); move the camera to the side or above', 42)
-    surf = [('floor', surfaces[0][0], surfaces[0][1])] if surfaces else None
+    # surfaces come as (point, normal) or as lying.fall's (name, point, normal): both read here (chat 17: brexit-is-done)
+    surf = [('floor', *surfaces[0][-2:])] if surfaces else None
     for text in lying.body_faults(k, sp, surf, cam, who=''):
         text = text[2:] if text.startswith(': ') else text
         side = 'L' if ' left ' in text else 'R' if ' right ' in text else 'both'

@@ -364,3 +364,6 @@
 2026-11-25T18:33+00:00	REFUSED 1: CHECK COULD NOT RUN: kittest (KeyError: 0); fix the check, then run end again	01U3pKQzzZMT2mVma5pKs3XU
 2026-11-25T18:34+00:00	01U3pKQzzZMT2mVma5pKs3XU
 2026-11-25T18:34+00:00	01U3pKQzzZMT2mVma5pKs3XU
+2026-11-25T18:10+00:00	REFUSED 1: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for i	01U3pKQzBQSVMGz9aFiBTmTa
+2026-11-25T18:16+00:00	01U3pKQzBQSVMGz9aFiBTmTa
+2026-11-25T18:32+00:00	REFUSED 1: KIT TEST COULD NOT RUN: cost_rows_reach_the_main_line (it crashed): a test that cann	01U3pKQzXHX7e8CzkoUmxycw

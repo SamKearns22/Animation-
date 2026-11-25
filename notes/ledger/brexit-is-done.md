@@ -83,3 +83,6 @@ A new chat's start and re-learning cost 17% of the film (7.14% of a week over 15
 - Blair 3/4 not the same person as front | a front-vs-3/4 match check
 - Women drawn on a man's body (GTA Lucia 20 Nov, Open Wounds n5) | none: no check knows who is a woman; the GTA fix was opt-in for one person
 - No bum/circular knees | castsheet.seated_faults (built now); P7 by hand only
+
+## Checks (runs, faults, by kind)
+- quick check: 1 runs, 34 faults (drawing 25, other 4, benchmark 1, blair 1, house style 1, may 1, plan 1)
