@@ -8337,6 +8337,151 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "b5e735d0",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.07,
+   "src": "estimate",
+   "sid": "session_01U3pKQz3PjFhYRqAzDSrPpK",
+   "steps": 7,
+   "hist_k": 105,
+   "kinds": {
+    "tool search": 13.9,
+    "other": 86.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 6,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 0
+   },
+   "split": {
+    "usd": 0.2645,
+    "total": 0.2645,
+    "floor_k": 97,
+    "blocks": {
+     "start-up floor": 74.5,
+     "new writes": 12.4,
+     "Claude's words": 12.3,
+     "carried history": 0.8
+    },
+    "origins": {
+     "start-up floor": 74.5,
+     "Claude's words": 14.4,
+     "result: tool search": 9.9,
+     "messages and reminders": 1.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 74.5,
+     "reading notes": 9.9,
+     "commands": 5.9,
+     "messages to Sam": 5.5,
+     "thinking": 3.0,
+     "messages and reminders": 1.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 97,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/brexit-is-done.md",
+      1.2,
+      0.0047
+     ],
+     [
+      "story/status.md",
+      0.8,
+      0.0035
+     ],
+     [
+      "notes/next-jobs.md",
+      0.7,
+      0.003
+     ],
+     [
+      "notes/ledger/sam/azdsrppk.md",
+      0.7,
+      0.003
+     ]
+    ],
+    "base_pct": 22.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 2,
+     "film notes": 4
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head -20; git branch --show-current; git fetch origin claud",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/next-jobs.md story/status.md notes/ledger/sam/azdsrppk.md",
+      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git status --s",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "notes/*.md notes/open-wounds*.md",
+      "[g]it ",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/*.md story/*.md story/status.md",
+      "wound|open",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/next-chat-prompt.md notes/*wound*",
+      "where things stand",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 50,75p notes/brexit-is-done.md",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
