@@ -3,5 +3,11 @@
  "problem": "e09061b15a8f2436",
  "chat": "fbae722fa1de2786",
  "prompts": "090ab72bc435bcb1",
- "shape": 2
+ "shape": 2,
+ "key": {
+  "V1": "helper A",
+  "V2": "chat",
+  "V3": "helper B"
+ },
+ "judged": 1795627732.034165
 }
