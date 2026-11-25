@@ -32,3 +32,6 @@ We just ran a whole improvement line on sitting using the 3D modelling system. Y
 ### 2026-11-25T19:42:21
 Should we be building *all* our characters in the way Jason was built? Is that the answer to a large amount of our problems?
 
+### 2026-11-25T19:43:53
+How much percentage in session usage would 1. Take?
+
