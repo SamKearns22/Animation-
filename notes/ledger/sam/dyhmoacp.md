@@ -46,3 +46,6 @@ What would you need to add to your skills to learn to dress the characters?
 ### 2026-11-25T20:02:46
 Blender is available we've used it
 
+### 2026-11-25T20:03:47
+Do we need to go as far as building 3d clothing models? Is this the best answer?
+
