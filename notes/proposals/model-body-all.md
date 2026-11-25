@@ -28,4 +28,17 @@ SHELLS from the body (already working: Jason's painted vest cut, chat 6/7 trouse
 chat 6 skirt from the body's own skirt surface): a jacket = the trunk pushed out, cut open at the front, its hem hanging
 straight and resting on the lap; lapels and ties painted on. Garment library / Blender cloth only if the shell fails a
 named test (say which). Robes and coats swinging while walking: a lag rule, tested in the clip.
+## Statement One questions the judge must answer (Sam, chat 7: "What aren't we considering? Aligning with statement one")
+a. Paying for it: the switch is one-off kit cost outside films; when does it pay back (films to break even at a per-film
+   saving from step 1's count)? Every film after must still be top quality within 15%.
+b. Sets: people as model bodies against flat-drawn furniture and rooms is today's seam one level up (contact, depth).
+   How do chairs, desks, doors, cars meet the body (Jason's car and R7's chair were in the same depth pass)?
+c. Heads and hands: hand-drawn heads turning with a freely moving body (angles between our head views; the back of the
+   head: Jason's "brown blob"); circle hands vs real hands holding things.
+d. Moves: who poses a body for any action? Reuse the acting lists and pose kit; free motion-capture libraries as reference.
+e. Checks: the rulebook's checks are built for flat bodies; which carry over, which must be rebuilt and re-proven
+   (no rule without a working check) - a hidden cost.
+f. The look: posted films vs new ones on the channel; a stranger test on the clip at phone size.
+g. Open Wounds (live) stays on the flat kit; the switch only between films.
+h. Success measure: the next films' cost and number of Sam's notes vs the last three; a stop rule if worse.
 Push notification at the end of each step, pass or stop. Total cap 8.5% of a week; at the cap, stop and tell Sam.
