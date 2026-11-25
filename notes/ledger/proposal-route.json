@@ -18337,6 +18337,1023 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "2ac93977",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.72,
+   "src": "estimate",
+   "sid": "session_01U3pKR2JtCxrmd3iuWWRRtx",
+   "steps": 22,
+   "hist_k": 116,
+   "kinds": {
+    "tool search": 26.7,
+    "renders": 5.6,
+    "other": 67.7
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 19,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 0,
+    "other": 5
+   },
+   "split": {
+    "usd": 1.1195,
+    "total": 1.1195,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 43.2,
+     "Claude's words": 28.0,
+     "new writes": 22.9,
+     "carried history": 5.9
+    },
+    "origins": {
+     "start-up floor": 43.2,
+     "Claude's words": 37.6,
+     "result: tool search": 15.2,
+     "messages and reminders": 1.8,
+     "result: other": 1.5,
+     "Claude's edits": 0.6
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 43.2,
+     "writing notes": 12.7,
+     "thinking": 10.9,
+     "commands": 10.3,
+     "start-up and handover tools": 7.8,
+     "reading notes": 5.6,
+     "messages to Sam": 2.1,
+     "running checks and tools": 1.8,
+     "messages and reminders": 1.8,
+     "helper and chat prompts": 1.3,
+     "writing code": 1.0,
+     "reading chat records": 0.9,
+     "helper results": 0.6,
+     "edit results": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 8,
+    "work_pct": 0.13,
+    "reads": [
+     [
+      "source/propose.py",
+      2.5,
+      0.0281
+     ],
+     [
+      "story/status.md",
+      1.2,
+      0.0134
+     ],
+     [
+      "notes/ledger/real-cost.md",
+      0.7,
+      0.0072
+     ],
+     [
+      "notes/ledger/app-costs.tsv",
+      0.7,
+      0.0072
+     ]
+    ],
+    "base_pct": 28.6
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "guides": 2,
+     "shared:propose.py": 4,
+     "film notes": 2,
+     "shared:handover.py": 2,
+     "other": 2,
+     "shared:ledger.py": 1,
+     "shared:costwatch.py": 4,
+     "shared:sentences.py": 1,
+     "shared:gta_story_post.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "guides",
+      "",
+      "git status | head -5 && git branch --show-current && git log --oneline -3 && ls ",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "git checkout -b claude/claude-md-trim-route 2>&1 | tail -1; python3 source/propo",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/ledger* notes/*ledger* story/status.md",
+      "git push -u origin claude/claude-md-trim-route 2>&1 | tail -2; ls notes | head -",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/ledger/real-cost.md notes/ledger/app-costs.tsv",
+      "python3 source/handover.py --help 2>&1 | head -40; ls notes/ledger/real-cost.md ",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "timeout 120 python3 source/handover.py start session_01U3pKQyuXhoNkHrCcj44bM2 2>",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "notes/ledger/sam notes/ledger/sam/",
+      "ls -t notes/ledger/sam | head -5; f=$(ls notes/ledger/sam | grep -i Ccj44bM2 | h",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:ledger.py",
+      "notes/ledger/app-costs.tsv notes/cost-diagnosis.md source/ledger.py",
+      "start\\|fresh chat\\|first step\\|system prompt\\|tool def",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:costwatch.py",
+      "source/costwatch.py notes/cost-diagnosis.md notes/job-e-measurements.md notes/le",
+      "WEEK_USD *=",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:costwatch.py",
+      "notes/job-e-measurements.md .claude/hooks/costwatch.py guides/job-packs.md notes",
+      "WEEK_USD *=",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/*.md notes/proposals notes/proposal-route.md",
+      "route cost\\|helpers cost",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py notes/proposals",
+      "^$",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:costwatch.py",
+      "notes/proposals/ .claude/hooks/costwatch.py",
+      "^## \\|^# ",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:propose.py",
+      "notes/logs/* .claude/agents/*.md source/propose.py notes/proposals/session-value",
+      "compact",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "guides",
+      "notes/ledger/app-costs.tsv .claude/skills guides/job-packs.md guides/film-qualit",
+      "^## \\|^### ",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:sentences.py",
+      "source/sentences.py",
+      "awk '/^# /{if(t)print w\"\\t\"t; t=$0; w=0; next}{w+=NF}END{print w\"\\t\"t}' CLAUDE.m",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py pack session-value 2>&1 | tail -30",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "notes/proposals",
+      "git add -A notes/proposals && git commit -qm \"Proposal route: session-value prob",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:gta_story_post.py",
+      "notes/proposals/unrouted.md notes/logs/grand-theft-autism-chats.log source/gta_s",
+      "gta-v5-sound-draft\\|gta-chat46-build\\|dreamy-fermi\\|gta-chat31",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "film notes",
+      "notes/session-value.md",
+      "git add notes/session-value.md && git commit -qm \"session-value job notes: brief",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "b288d473",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.65,
+   "src": "estimate",
+   "sid": "session_01U3pKQzuMaJ3B7QYkkK55xe",
+   "steps": 81,
+   "hist_k": 262,
+   "kinds": {
+    "tool search": 32.1,
+    "page.py": 0.5,
+    "renders": 0.5,
+    "pictures": 5.4,
+    "other": 61.5
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 67,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 11,
+    "other": 10
+   },
+   "split": {
+    "usd": 6.0451,
+    "total": 6.0451,
+    "floor_k": 84,
+    "blocks": {
+     "Claude's words": 29.9,
+     "carried history": 23.8,
+     "new writes": 23.5,
+     "start-up floor": 22.7
+    },
+    "origins": {
+     "Claude's words": 45.0,
+     "result: tool search": 23.9,
+     "start-up floor": 22.7,
+     "result: pictures": 3.8,
+     "messages and reminders": 1.9,
+     "Claude's edits": 1.8,
+     "result: page.py": 0.5,
+     "result: other": 0.1
+    },
+    "named": {
+     "thinking": 23.1,
+     "start-up reading (rules, tools, first files)": 22.7,
+     "reading kit code": 18.5,
+     "writing code": 16.5,
+     "commands": 4.9,
+     "looking at pictures": 3.8,
+     "reading notes": 2.4,
+     "messages and reminders": 1.9,
+     "messages to Sam": 1.9,
+     "running checks and tools": 1.7,
+     "start-up and handover tools": 0.9,
+     "writing notes": 0.5,
+     "renders": 0.4,
+     "git and saving": 0.4,
+     "other commands": 0.3,
+     "reading chat records": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 45,
+    "work_pct": 0.84,
+    "reads": [
+     [
+      "source/islamocommunism.py",
+      9.1,
+      0.1751
+     ],
+     [
+      "source/views.py",
+      4.5,
+      0.089
+     ],
+     [
+      "notes/proposals/model-body-all.md",
+      2.1,
+      0.045
+     ],
+     [
+      "source/lying.py",
+      2.0,
+      0.0381
+     ],
+     [
+      "source/bench_pose.py",
+      1.8,
+      0.0357
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/orig_sheet.jpg",
+      1.6,
+      0.0275
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/post_sheet.jpg",
+      1.6,
+      0.0269
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/ss2_15.jpg",
+      1.6,
+      0.0263
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/fix_cmp.jpg",
+      1.6,
+      0.0246
+     ],
+     [
+      "source/midterminal_moves.py",
+      1.1,
+      0.0204
+     ],
+     [
+      "source/islamocommunism_cast.py",
+      1.1,
+      0.0197
+     ],
+     [
+      "source/page.py",
+      0.9,
+      0.0196
+     ],
+     [
+      "source/midterminal_set.py",
+      1.0,
+      0.0167
+     ],
+     [
+      "source/stepcost.py",
+      0.5,
+      0.0116
+     ],
+     [
+      "source/costline.py",
+      0.5,
+      0.0116
+     ],
+     [
+      "source/solid_seat.py",
+      0.8,
+      0.0115
+     ],
+     [
+      "source/ledger.py",
+      0.5,
+      0.0113
+     ],
+     [
+      "source/mhuman.py",
+      0.7,
+      0.0101
+     ],
+     [
+      "source/islamocommunism_office.py",
+      0.5,
+      0.0092
+     ],
+     [
+      "source/body.py",
+      0.4,
+      0.0059
+     ]
+    ],
+    "base_pct": 20.1
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 0,
+     "after show": 0
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "other": 11,
+     "shared:islamocommunism.py": 11,
+     "film notes": 2,
+     "shared:solid_seat.py": 5,
+     "shared:stepcost.py": 1,
+     "shared:ledger.py": 2,
+     "shared:midterminal_set.py": 4,
+     "shared:views.py": 4,
+     "shared:bench_pose.py": 1,
+     "shared:bench_draw.py": 1,
+     "shared:lying.py": 2,
+     "shared:islamocommunism_cast.py": 4,
+     "shared:midterminal_moves.py": 2,
+     "shared:islamocommunism_office.py": 1,
+     "shared:lying_flat.py": 3,
+     "shared:mhuman.py": 1,
+     "shared:model_body_test.py": 5,
+     "shared:costwatch.py": 2,
+     "shared:model_body.py": 4
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/proposals/model-body-all.md",
+      "git status | head -3 && git branch --show-current && git fetch origin claude/cre",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "ls source | head -100 | tr '\\n' ' '; echo; for f in bench_pose bench_draw solid_",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "",
+      "for f in bench_pose bench_draw solid_seat; do echo \"=== $f\"; sed -n '1,45p' sour",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py notes/proposals/",
+      "sed -n '1,60p' source/islamocommunism.py; sed -n '120,190p' source/islamocommuni",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/proposals/model-body-all.md notes/proposals/model-body-all",
+      "wc -w notes/proposals/model-body-all.md && sed -n '1,80p' notes/proposals/model-",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py source/bench_draw.py source/bench_pose.py",
+      "^def \\|^class \\|'whole'",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:stepcost.py",
+      "source/stepcost.py source/costline.py",
+      "sed -n '1,30p' source/stepcost.py; python3 source/stepcost.py 2>&1 | tail -5; se",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:ledger.py",
+      "source/*.py source/ledger.py",
+      "rule 85\\|cost watch",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "'[a-z]*'",
+      ""
+     ],
+     [
+      10,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "sed -n '175,253p;419,500p' source/solid_seat.py",
+      ""
+     ],
+     [
+      11,
+      "other",
+      "shared:solid_seat.py",
+      "source/*.py source/solid_seat.py source/midterminal_set.py",
+      "seat_solid\\|solid_seat\\|SS\\.\\(draw\\|lay_over\\)",
+      ""
+     ],
+     [
+      12,
+      "other",
+      "shared:midterminal_set.py",
+      "source/midterminal_set.py source/views.py",
+      "^def draw\\b\\|^def draw(",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "j.get('hide\\|sp.get('hide\\|'head_only'\\|only_head\\|def person\\b\\|def person(",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n '1785,1960p' source/views.py",
+      ""
+     ],
+     [
+      15,
+      "other",
+      "shared:bench_pose.py",
+      "source/bench_pose.py",
+      "sed -n '57,222p' source/bench_pose.py",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "shared:bench_draw.py",
+      "source/bench_draw.py",
+      "sed -n '82,147p;190,224p;340,493p' source/bench_draw.py",
+      ""
+     ],
+     [
+      17,
+      "other",
+      "shared:lying.py",
+      "source/lying.py source/lying_flat.py",
+      "^def \\|^class ",
+      ""
+     ],
+     [
+      18,
+      "other",
+      "shared:islamocommunism_cast.py",
+      "source/islamocommunism_cast.py source/lying.py",
+      "sed -n '1,25p' source/islamocommunism_cast.py | head -30; python3 -c \" import sy",
+      ""
+     ],
+     [
+      19,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py",
+      "^def frame\\|^def items\\|^def picture\\|def render_at\\|^def draw_frame",
+      ""
+     ],
+     [
+      20,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py source/midterminal_moves.py",
+      "^def trump_item",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "shared:midterminal_moves.py",
+      "source/midterminal_moves.py",
+      "^def \\|^[A-Z_]* = ",
+      ""
+     ],
+     [
+      22,
+      "other",
+      "shared:midterminal_moves.py",
+      "source/midterminal_moves.py",
+      "sed -n '60,123p;191,272p' source/midterminal_moves.py",
+      ""
+     ],
+     [
+      23,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py",
+      "sed -n '215,300p' source/islamocommunism.py",
+      ""
+     ],
+     [
+      24,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py",
+      "FLUTE\\|def flute\\|def _aoc_j\\|def aoc_j\\|def elsayed_j\\|def door_d\\|def walk_d\\|",
+      ""
+     ],
+     [
+      25,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py",
+      "sed -n '326,440p' source/islamocommunism.py; sed -n '500,616p' source/islamocomm",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "shared:midterminal_set.py",
+      "source/midterminal_set.py source/islamocommunism_office.py source/islamocommunis",
+      "^def desk\\|^DESK\\|^def chair\\|^def desk_chair\\|DESK_CHAIR =\\|^def render\\|^def w",
+      ""
+     ],
+     [
+      27,
+      "other",
+      "shared:islamocommunism_office.py",
+      "source/islamocommunism_office.py source/midterminal_set.py",
+      "ls /tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scra",
+      ""
+     ],
+     [
+      28,
+      "other",
+      "shared:midterminal_set.py",
+      "source/midterminal_set.py",
+      "^class Face\\|^def obox\\|^def cylinder\\|^def items\\|^def _at",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:midterminal_set.py",
+      "source/midterminal_set.py",
+      "^from\\|^import\\|obox\\b\\|cylinder\\b",
+      ""
+     ],
+     [
+      32,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py source/views.py source/burnham.py source/midterminal_s",
+      "ls -la animations/ | grep -i islam; git log --oneline -1 -- source/islamocommuni",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py",
+      "'stills'",
+      ""
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py",
+      "git show 7e5a027c --stat | head -20; git show 7e5a027c -- source/islamocommunism",
+      ""
+     ],
+     [
+      39,
+      "other",
+      "shared:islamocommunism_cast.py",
+      "source/islamocommunism_cast.py source/islamocommunism.py",
+      "IC\\.\\(install\\|hook\\|setup\\)",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "shared:islamocommunism_cast.py",
+      "source/islamocommunism_cast.py source/*.py",
+      "^import.* as TC\\|^import .*TC",
+      ""
+     ],
+     [
+      41,
+      "other",
+      "shared:islamocommunism_cast.py",
+      "source/islamocommunism_cast.py source/body.py",
+      "TC\\b\\|import",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "",
+      "RGB",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py source/bench_draw.py source/lying.py",
+      "PART_NAMES\\|PART_IX\\|INK_PART\\|PRINT_COLS =",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py source/midterminal_set.py source/islamocommunism_offic",
+      "^FLAGS\\|^VISITOR_CHAIRS",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "shared:islamocommunism.py",
+      "source/islamocommunism.py",
+      "^def people",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py source/sets.py",
+      "^def draw",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "shared:mhuman.py",
+      "source/mhuman.py source/mesh_sdf.py source/satire_style.py",
+      "def vertex_normals",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "python3 - <<'EOF' p='source/model_body_test.py' s=open(p).read() s=s.replace(\"\"\"",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "sed -i \"s|I.desk_arm_item = lambda t: ((0.0, 1.0, 99.0), lambda im, c: None)|I.d",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -20 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      57,
+      "other",
+      "shared:costwatch.py",
+      "/.claude/projects/*/*.jsonl .claude/hooks/costwatch.py",
+      "week\\b\\|WEEK",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:costwatch.py",
+      ".claude/hooks/costwatch.py /.claude/costwatch*",
+      "def \\|st\\[",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:lying.py",
+      "source/lying.py",
+      "sed -n '86,100p' source/lying.py",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def ik3",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "fwd",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "def head_view",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "head_view",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "shared:lying_flat.py",
+      "source/lying_flat.py",
+      "sed -n '330,352p' source/lying_flat.py",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "python3 - <<'EOF' p='source/model_body_test.py' s=open(p).read() s=s.replace(\" F",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -12 import sys; sys.path.insert(0,'source') import",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "python3 - <<'EOF' p='source/model_body.py' s=open(p).read() s=s.replace(\"sit = t",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "python3 - <<'EOF' p='source/model_body.py' s=open(p).read() s=s.replace(\"def rea",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "sed -n '388,409p' source/solid_seat.py",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "s chair never\n    moved). Pushed back 0.4 m over the rise, by the backs of his l",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
+      ""
+     ],
+     [
+      88,
+      "other",
+      "film notes",
+      "notes/proposals/model-body-all.md notes/archive/",
+      "^## Where things stand",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {}
