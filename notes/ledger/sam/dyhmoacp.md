@@ -12,3 +12,6 @@ Would this apply to all future seated people?
 ### 2026-11-25T19:33:58
 Is this the way of solving this problem that produces the best quality outcome?
 
+### 2026-11-25T19:34:48
+Obviously, it is likely that our animations move.
+
