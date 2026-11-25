@@ -16840,62 +16840,62 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.36,
+   "cost": 2.65,
    "src": "estimate",
    "sid": "session_01U3pKR2q2S17Htq5WHcspgq",
-   "steps": 74,
-   "hist_k": 210,
+   "steps": 87,
+   "hist_k": 222,
    "kinds": {
-    "tool search": 23.3,
-    "whole-file .py read": 1.8,
-    "pictures": 6.5,
-    "other": 68.4
+    "tool search": 23.9,
+    "whole-file .py read": 1.6,
+    "pictures": 6.3,
+    "other": 68.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 41,
+    "tool search": 50,
     "whole-file .py read": 3,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 12,
-    "other": 20
+    "other": 23
    },
    "split": {
-    "usd": 4.5528,
-    "total": 4.5528,
+    "usd": 5.3332,
+    "total": 5.3332,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 30.5,
-     "start-up floor": 27.8,
-     "new writes": 22.3,
-     "carried history": 19.4
+     "Claude's words": 29.4,
+     "start-up floor": 27.4,
+     "carried history": 22.4,
+     "new writes": 20.8
     },
     "origins": {
-     "Claude's words": 48.5,
-     "start-up floor": 27.8,
-     "result: tool search": 12.3,
-     "result: pictures": 6.5,
-     "messages and reminders": 3.2,
-     "result: other": 1.1,
-     "result: whole-file .py read": 0.5,
-     "Claude's edits": 0.1
+     "Claude's words": 48.2,
+     "start-up floor": 27.4,
+     "result: tool search": 12.5,
+     "result: pictures": 6.4,
+     "messages and reminders": 3.6,
+     "result: other": 1.2,
+     "result: whole-file .py read": 0.6,
+     "Claude's edits": 0.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 27.8,
-     "thinking": 22.8,
-     "writing code": 15.0,
-     "reading kit code": 7.3,
-     "looking at pictures": 6.5,
-     "commands": 6.3,
-     "reading notes": 3.3,
-     "messages and reminders": 3.2,
-     "helper and chat prompts": 2.4,
-     "start-up and handover tools": 1.6,
-     "messages to Sam": 1.2,
-     "writing notes": 0.9,
+     "start-up reading (rules, tools, first files)": 27.4,
+     "thinking": 21.7,
+     "writing code": 14.7,
+     "commands": 7.2,
+     "reading kit code": 7.1,
+     "looking at pictures": 6.4,
+     "messages and reminders": 3.6,
+     "reading notes": 3.2,
+     "helper and chat prompts": 2.2,
+     "start-up and handover tools": 2.1,
+     "messages to Sam": 1.7,
+     "writing notes": 0.8,
      "running checks and tools": 0.7,
-     "helper results": 0.5,
+     "helper results": 0.6,
      "renders": 0.3,
      "reading guides": 0.1
     },
@@ -16909,45 +16909,45 @@
      [
       "source/views.py",
       5.1,
-      0.1
+      0.112
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/8fb22562-2012-5455-bc1d-896667f626bf/scratchpad/before.jpg",
       1.6,
-      0.0309
+      0.0347
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/8fb22562-2012-5455-bc1d-896667f626bf/scratchpad/t1.jpg",
       1.6,
-      0.0295
+      0.0332
      ],
      [
       "notes/learn/seated/sheet_r7.py",
       0.8,
-      0.0146
+      0.0164
      ],
      [
       "notes/next-jobs.md",
       0.5,
-      0.0105
+      0.0117
      ],
      [
       "notes/learn/seated/judge/results-r7c3.md",
       0.5,
-      0.0105
+      0.0117
      ],
      [
       "source/sitting.py",
       0.5,
-      0.01
+      0.0112
      ],
      [
       "notes/learn/seated/judge_r7.py",
       0.4,
-      0.0084
+      0.0094
      ]
     ],
-    "base_pct": 24.3
+    "base_pct": 24.4
    },
    "search": {
     "show": 0,
@@ -16955,15 +16955,15 @@
      "no show": 0
     },
     "other": {
-     "other": 7,
-     "shared:handover.py": 2,
-     "film notes": 4,
+     "other": 9,
+     "shared:handover.py": 4,
+     "film notes": 6,
      "shared:views.py": 6,
      "shared:sitting.py": 4,
      "shared:ink.py": 2,
-     "shared:kittests.py": 6,
+     "shared:kittests.py": 8,
      "shared:castsheet.py": 5,
-     "shared:propose.py": 3,
+     "shared:propose.py": 4,
      "guides": 2
     },
     "ticked": 0,
@@ -17295,6 +17295,78 @@
       "film notes",
       "notes/archive/r7-handovers.md",
       "{ echo; echo \"## Chat 3 handover (archived by chat 4, 25 Nov)\"; cat /tmp/claude-",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "film notes",
+      "notes/archive/r7-handovers.md",
+      "git add notes/archive/r7-handovers.md && git commit -qm \"R7 chat 4: chat 3 hando",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record kittest-resume 2>&1 | tail -15; python3 source/",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:kittests.py",
+      "notes/proposals/kit-tests-when.md source/kittests.py source/handover.py",
+      "^Status\\|Sam",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/learn/seated/examples story/status.md",
+      "python3 - <<'EOF' f='notes/next-jobs.md'; L=open(f).read().split('\\n') new=''' -",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/next-jobs.md",
+      "git add -A notes/ && git commit -qm \"R7 chat 4 handover; kittest-resume verdict ",
+      ""
+     ],
+     [
+      81,
+      "other",
+      "shared:handover.py",
+      "notes/next-jobs.md notes/learn/seated/examples source/handover.py",
+      "^SENTENCE",
+      ""
+     ],
+     [
+      82,
+      "other",
+      "other",
+      "notes/learn/seated/r7-before-after-v4.jpg",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "other",
+      "notes/ledger/r7.json notes/logs/",
+      "git add -A notes/ledger/r7.json notes/logs/ && git commit -qm \"R7 chat 4: logs a",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "shared:kittests.py",
+      "notes/logs/handover-end.log /home/user/Animation-/notes/logs/handover-end.log so",
+      "git show :1:notes/logs/handover-end.log > /tmp/claude-0/-home-user-Animation-/8f",
       ""
      ]
     ]
