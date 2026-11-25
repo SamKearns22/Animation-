@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 35.67%; 15 chats, 0 rounds, 8 notes, 3 repeated.**
+**Estimate ?% of a week; spent 36.19%; 15 chats, 0 rounds, 8 notes, 3 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -22,7 +22,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-25 | e5d6ce05 | est | opus | shot 3 chase watched and fixed, critique r5 |  | 2.15 |  | 0 | 0 |
 | 2026-11-25 | 1f655db8 | est | opus | auto |  | 1.84 |  | 0 | 0 |
 | 2026-11-25 | de98e7e9 | est | opus | build |  | 3.52 |  | 0 | 0 |
-| 2026-11-25 | 39bef7c8 | est | opus | auto |  | 2.42 |  | 0 | 0 |
+| 2026-11-25 | 39bef7c8 | est | opus | auto |  | 2.94 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-23 9db844b1 (auto): 144 steps, history 273k at the end; other 66.1%, tool search 20.6%, pictures 7.1%, renders 5.5%, film-file search 0.6%, page.py 0.2%
@@ -37,7 +37,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-25 e5d6ce05 (shot 3 chase watched and fixed, critique r5): 110 steps, history 282k at the end; other 69.2%, tool search 11.7%, pictures 9.7%, film-file search 7.8%, renders 1.1%, page.py 0.6%
 - 2026-11-25 1f655db8 (auto): 96 steps, history 256k at the end; other 63%, tool search 28.4%, pictures 4.3%, whole-file .py read 3.8%, renders 0.5%
 - 2026-11-25 de98e7e9 (build): 150 steps, history 288k at the end; other 64.5%, tool search 19.9%, film-file search 9%, pictures 5.4%, renders 0.8%, page.py 0.4%
-- 2026-11-25 39bef7c8 (auto): 111 steps, history 277k at the end; other 66%, tool search 20.8%, pictures 11.1%, whole-file .py read 1.6%, film-file search 0.3%, renders 0.3%
+- 2026-11-25 39bef7c8 (auto): 117 steps, history 282k at the end; other 72.5%, tool search 16.9%, pictures 8.9%, whole-file .py read 1.3%, renders 0.3%, film-file search 0.2%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-23 9db844b1 (auto): carried history 33.2%, start-up floor 27%, Claude's words 22.4%, new writes 17.4%. Biggest origins: Claude's words 41.2%, start-up floor 27%, result: tool search 15%. Leftover 0%
@@ -52,7 +52,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-25 e5d6ce05 (shot 3 chase watched and fixed, critique r5): carried history 49.3%, Claude's words 25.5%, new writes 23.1%, start-up floor 2.1%. Biggest origins: Claude's words 47.7%, result: pictures 19.7%, messages and reminders 15.8%. Leftover 0%
 - 2026-11-25 1f655db8 (auto): Claude's words 31.1%, start-up floor 24.6%, carried history 23.9%, new writes 20.5%. Biggest origins: Claude's words 51.3%, start-up floor 24.6%, result: tool search 14.7%. Leftover 0%
 - 2026-11-25 de98e7e9 (build): carried history 32.7%, start-up floor 26.3%, Claude's words 23.1%, new writes 17.8%. Biggest origins: Claude's words 42.7%, start-up floor 26.3%, result: tool search 14.2%. Leftover 0%
-- 2026-11-25 39bef7c8 (auto): carried history 28.5%, Claude's words 28.1%, start-up floor 23.6%, new writes 19.8%. Biggest origins: Claude's words 50%, start-up floor 23.6%, result: tool search 12.7%. Leftover 0%
+- 2026-11-25 39bef7c8 (auto): new writes 33.7%, carried history 24.5%, Claude's words 22.8%, start-up floor 18.9%. Biggest origins: Claude's words 40.4%, messages and reminders 21.8%, start-up floor 19.1%. Leftover 0%
 
 ## Starting each chat
 A new chat's start and re-learning cost 19% of the film (6.77% of a week over 13 chats: start 6.65, re-learning 0.12; 0.52% a chat; step-1 context re-read is 23% of a chat on average). Over 0.5% a chat: a warm handover goes to Sam through the proposal route.
