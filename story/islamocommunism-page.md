@@ -1,0 +1,273 @@
+# islamocommunism: the page a notes round reads (python3 source/page.py islamocommunism; regenerate after any edit)
+
+Read this, then only the lines a note points to (`page.py FILM find "note words"`).
+
+
+## islamocommunism.py (1015 lines)
+- 20: HERE (data)
+- 52: NAME (data)
+- 53: HAS (data)
+- 54: TITLE (data)
+- 55: TITLE_AT (data)
+- 56: CAST (data)
+- 57: WHO (data)
+- 59: LINES (data)
+- 82: L (data)
+- 100: `_at` 
+- 107: PHRASES (data)
+- 112: `word_at` When line n reaches `words`: the share of the text before them, spread over the take's spoken stretches.
+- 132: T (data)
+- 133: GAP (data)
+- 134: CLEAR (data)
+- 141: WALK (data)
+- 142: DOOR_PATH (data)
+- 146: RISE (data)
+- 168: DUR (data)
+- 169: BLACK_AT (data)
+- 173: `_after` 
+- 177: SHOTS (data)
+- 184: CAMS (data)
+- 188: _AOZ (data)
+- 195: SHOT_CAST (data)
+- 198: LOOKS_AT (data)
+- 199: CHAIR (data)
+- 200: AB (data)
+- 201: AO (data)
+- 202: AO_CLINK (data)
+- 203: ENTER (data)
+- 207: DOOR_PATH (data)
+- 208: PLAN (data)
+- 218: BENCHMARK (data)
+- 226: HOOK (data)
+- 227: KEEP_CLEAR (data)
+- 230: HEIGHTS (data)
+- 232: THREE_QUARTER_OK (data)
+- 233: PORTAL_OK (data)
+- 234: ALLOWED_CONTACTS (data)
+- 236: ALLOWED_POPS (data)
+- 238: SET_EXCLUDE (data)
+- 239: TOUCHES (data)
+- 242: EFFECTS (data)
+- 243: JOKE_PROPS (data)
+- 244: ORDER_SWAPS (data)
+- 245: HANDS_OK (data)
+- 250: `cut_of` The cut on screen at t (its camera and who is drawn).
+- 255: `shot_of` The staging at t (where people stand and what they do): the cut's name before any _camera.
+- 260: `_ramp` 
+- 264: `_ease` 
+- 269: `_bump` 0 -> 1 -> 0: up over `rise` from a, held, down over `fall` ending at b.
+- 274: `_track` 
+- 281: TRACK (data)
+- 283: BLINKS (data)
+- 287: `_face` 
+- 295: BEATS (data)
+- 307: `beat` 
+- 319: `_beat_j` 
+- 326: `elsayed_j` 
+- 330: `aoc_j` 
+- 335: MIMOSA (data)
+- 336: GLASS (data)
+- 337: GLASS_L (data)
+- 340: `flute` A champagne flute of mimosa held at its stem (x, y = the hand), standing up (tilt: degrees, + leans right).
+- 360: `held_flute` 
+- 368: `handset_k` The handset on its way down (k 0-1): from upright at the ear to lying level in the hand, never dangling.
+- 383: `handset` The desk phone's handset at his ear: a dark curved bar, ear cup at the hand, mouthpiece by the chin, the coile
+- 400: `_neck_units` A world point in the person's own drawing units (x across the screen, y down from the neck).
+- 411: `reach` The hand on `side` towards a world point (a handover, a clink), k of the way from where it is.
+- 419: `lift_shoulders` 
+- 428: HOLD (data)
+- 429: SIP (data)
+- 432: `glass_at` 
+- 443: `_mix` 
+- 448: `elsayed_sp` 
+- 470: `_elsayed_j` His pose: seated on the phone (line 1), hangs up, rises (1.6 s), hands at his sides; reaches for the glass she
+- 538: `aoc_sp` 
+- 556: HANDOFF (data)
+- 557: CLINK (data)
+- 560: `_aoc_j` Her pose: two glasses held up in front as she walks (door, then into the two-shot); her left hand (our left,
+- 606: SOLO (data)
+- 609: `door_d` 
+- 613: `walk_d` 
+- 617: `elsayed_item` 
+- 626: `aoc_item` 
+- 646: `cam_for` 
+- 653: PHONE (data)
+- 654: PHONE_HAND (data)
+- 655: PHONE_MID (data)
+- 659: `phone_item` The desk phone's base (Sam's note 16, 4 Nov: the handset goes down onto something, not into the desk): a
+- 682: DESK_ARM (data)
+- 685: `desk_arm_item` The free forearm resting on the desk top, drawn again after the desk (which is in front of him and would hide
+- 712: `people` 
+- 728: `picture` The frame WITHOUT captions (they go on last, so wording notes never re-render a picture).
+- 748: `draw_order` Rule 57: back to front, as MS.render sorts by distance from the camera.
+- 757: _PCACHE (data)
+- 760: `_phrase_caption` Subtitles for a PHRASES line: each phrase's chunks inside its own stretch of the take, never ahead of it.
+- 781: `caption_at` 
+- 791: `overlay` 
+- 799: `frame_image` 
+- 803: `_load_sfx` 
+- 812: CLINK_SFX (data)
+- 813: SLURP_SFX (data)
+- 814: ANTHEM (data)
+- 817: `_anthem` The Star-Spangled Banner from the start, fading gently (in decibels) to 30 dB down by Abdul's first word and
+- 831: `soundtrack` 
+- 851: `checks` Plan checks: seconds. Raises on the first batch of faults; prints the subtitles to proofread.
+- 865: `scene` 
+- 883: `mouths_seen` 
+- 892: `audits` The general audit: each person alone over every frame they are on screen. Returns faults.
+- 920: `LINE_SUBJECTS` 
+- 929: KEYS (data)
+- 955: `keys` 
+- 973: `main` 
+- 1008: _TO_CAM (data)
+
+## islamocommunism_cast.py (314 lines)
+- 30: HERE (data)
+- 37: A_SKIN (data)
+- 38: A_HAIR (data)
+- 39: A_HAIR_L (data)
+- 40: A_IRIS (data)
+- 41: A_LIP (data)
+- 42: A_SUIT (data)
+- 43: O_SKIN (data)
+- 44: O_HAIR (data)
+- 45: O_HAIR_L (data)
+- 46: O_IRIS (data)
+- 47: O_LIP (data)
+- 48: O_JACKET (data)
+- 49: O_TOP (data)
+- 55: _E (data)
+- 58: _LA (data)
+- 71: SMILE (data)
+- 74: `_ears` 
+- 85: `elsayed_head` 
+- 146: `aoc_head` 
+- 189: `aoc_hair_back` 
+- 195: `elsayed_torso` Open collar (no tie), a white pocket square, a small flag pin on his left lapel.
+- 203: `aoc_torso` The white suit (Sam, 4 Nov: refs 436824a4, 4833f72c): an ivory V-neck top in the jacket's open neck, a gold
+- 218: `hair_back` 
+- 228: ELSAYED (data)
+- 232: AOC (data)
+- 236: CAST (data)
+- 240: `sheet` 
+- 246: `_sheet` Front, side, back of both at true heights, a 1.75 m person; then the faces large, front and side.
+- 278: `faces_sheet` The faces large: each mood, plus talking.
+- 298: `head_png` 
+
+## islamocommunism_office.py (410 lines)
+- 39: HERE (data)
+- 46: F_RED (data)
+- 47: F_GREEN (data)
+- 48: F_NAVY (data)
+- 50: TILE (data)
+- 51: TILE_D (data)
+- 52: WHITE (data)
+- 53: BRASS (data)
+- 54: BRASS_D (data)
+- 55: TEA (data)
+- 56: CARPET (data)
+- 57: CARPET_D (data)
+- 61: `_mpd` Metres along the wall per degree at wall angle a (near enough on this gentle oval).
+- 67: `wall_pt` A wall point s metres along the wall from angle a, at height y.
+- 72: `star_pts` A star's outline in 2D: n points (an eight-point star is two squares overlapped).
+- 82: `wall_star` 
+- 88: `_crescent` A crescent opening right (a disc with a smaller disc taken out, drawn as the back colour over it).
+- 95: `_star3` 
+- 99: `flag_parts` The room's two flags on tall poles, hanging in folds, gold crescent finials: 'us' is now the film's flag (red
+- 157: `window` MidTerminal's window, its head made a pointed arch: the corners above the arch in blue tiles with white stars.
+- 178: `valance` MidTerminal's gold swag valance with a band of small eight-point stars along its board.
+- 186: `walls` MidTerminal's walls with the dado tiled: cobalt with white eight-point stars, a border line above.
+- 204: `carpet_art` The oval carpet from above (1 px a cm): a deep green field, a red and gold border with the flower garland kept
+- 247: `portrait_art` An original poster-style painting (no words, no real face): a gold sun rising behind a domed hall with a slim
+- 278: `desk_parts` The Resolute desk as MidTerminal's, its oval carving covered by a gold eight-point star on a red ground.
+- 294: `credenza_parts` The low table behind the desk: the family photos on its left, a brass samovar with two tea glasses on its
+- 325: LANTERNS (data)
+- 329: `lantern_parts` A pierced brass lantern (a domed cap, a six-sided body with star piercings glowing warm, a drop finial).
+- 351: `items` 
+- 359: `install` Swap the room's pieces for ours (MS looks each up by name when it draws).
+- 378: TEST_CAMS (data)
+- 383: `door_cam` Square on to the east door (wall angle 112), from across the room, level.
+- 393: `test` 
+
+## islamocommunism_set.py (812 lines)
+- 42: HERE (data)
+- 48: FLAT (data)
+- 49: FONT (data)
+- 50: REFS (data)
+- 53: SKY (data)
+- 54: CLOUD (data)
+- 55: WHITE (data)
+- 56: SHADE (data)
+- 57: RECESS (data)
+- 58: GLASS (data)
+- 59: GOLD (data)
+- 60: GOLD_D (data)
+- 61: TILE (data)
+- 62: TILE_D (data)
+- 63: TURQ (data)
+- 64: BRICK (data)
+- 65: BRICK_D (data)
+- 66: TREE (data)
+- 67: TREE_D (data)
+- 68: TREE_F (data)
+- 69: HEDGE (data)
+- 70: LAWN (data)
+- 71: LAWN_2 (data)
+- 72: FLOWER (data)
+- 73: FLOWER_D (data)
+- 74: WATER (data)
+- 75: POOL (data)
+- 76: F_RED (data)
+- 77: F_GREEN (data)
+- 78: F_NAVY (data)
+- 79: KEEP_CLEAR (data)
+- 83: `pen` 
+- 87: `wob` Hand-cut corners (the house look): each point nudged by its own fixed amount, the same every frame.
+- 96: `poly` 
+- 100: `rect` 
+- 104: `ell` 
+- 108: `blob` A lumpy round shape (tree crowns, bushes, clouds): never a perfect circle.
+- 120: `fx` Sam's photo 89a1ee64 (the crop) to our frame, across.
+- 125: `fy` 
+- 129: `ppm` Pixels per metre on the lawn at frame height y (the front is about 18 px a metre).
+- 135: `sky` 
+- 142: CAR_COLS (data)
+- 143: LANES (data)
+- 151: `car` A flying car: a rounded body with a bubble canopy, two hover pods underneath, speed streaks behind (flat).
+- 177: `lane` 
+- 193: `dome` The Dome of the Rock's gold dome on its blue-tiled drum, behind the pediment.
+- 223: `onion` 
+- 231: `spire` A St Basil's tower: a red brick body with white trim and a row of small arches, a drum, a striped onion dome,
+- 267: WIN_X (data)
+- 268: COLS_X (data)
+- 271: `window` 
+- 288: `building` 
+- 341: `hammer_sickle` Shapes in a cell of radius r (y down), as on Sam's reference 77252a6f: the sickle's handle lower left, its
+- 372: `crescent` A crescent opening to the right (Sam's reference 9b28a4a2), as one shape: no cut-out disc.
+- 384: `star` 
+- 389: `flag` The flag on its pole, flying RIGHT (wind from the left; Sam turned it round, 4 Nov), waving: 13 red and green 
+- 434: `pole` 
+- 442: `far_trees` 
+- 447: `side_trees` 
+- 456: `hedges` 
+- 462: `dk` 
+- 466: `lawn` 
+- 476: RING (data)
+- 477: SHIFT (data)
+- 480: `flower_ring` 
+- 497: `fountain` 
+- 519: KIDS (data)
+- 520: SKINS (data)
+- 521: HAIRS (data)
+- 524: `tiny` A small far-off person standing (or sitting) with feet at (x, y), `h` pixels tall: flat shapes, one outline,
+- 565: `families` Background only, small simple loops: a picnic, children throwing a ball, a running child, a father with a
+- 617: `paint` The whole front at time t (seconds into shot 1), on a 1080 x 1920 frame.
+- 649: `picture` One frame: the kit catalogue's tile.
+- 655: `heading` The opening heading as the brief has it, lower-middle-left: 'USA', then a second later the line beneath.
+- 672: HOOK (data)
+- 675: `hook` 
+- 684: `test` 
+- 696: BENCHMARK (data)
+- 710: `refsheet` Rule 3 by hand: Sam's photos beside ours, and the list ticked.
+- 746: COMP (data)
+- 757: `comp` The composition sheet: the four key shots, still (people in their places, no moves yet).
