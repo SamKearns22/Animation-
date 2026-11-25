@@ -1931,7 +1931,120 @@
    "notes": 5,
    "repeats": [
     "you changed her clothes? | a sheet of any new drawing beside the person's posted look"
-   ]
+   ],
+   "steps": 113,
+   "hist_k": 261,
+   "kinds": {
+    "tool search": 26.1,
+    "renders": 3.9,
+    "pictures": 5.0,
+    "other": 64.9
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 62,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 15,
+    "other": 27
+   },
+   "split": {
+    "usd": 7.0593,
+    "total": 7.0593,
+    "floor_k": 84,
+    "blocks": {
+     "carried history": 27.9,
+     "start-up floor": 26.4,
+     "Claude's words": 25.7,
+     "new writes": 20.0
+    },
+    "origins": {
+     "Claude's words": 44.2,
+     "start-up floor": 26.4,
+     "result: tool search": 17.4,
+     "result: pictures": 6.1,
+     "messages and reminders": 3.4,
+     "result: other": 2.3,
+     "result: renders": 0.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 26.4,
+     "thinking": 20.3,
+     "writing code": 15.3,
+     "reading kit code": 9.2,
+     "looking at pictures": 6.1,
+     "commands": 5.7,
+     "reading notes": 4.2,
+     "messages and reminders": 3.4,
+     "messages to Sam": 1.9,
+     "reading chat records": 1.7,
+     "git and saving": 1.5,
+     "start-up and handover tools": 1.4,
+     "other commands": 0.7,
+     "writing notes": 0.6,
+     "running checks and tools": 0.6,
+     "helper and chat prompts": 0.4,
+     "helper results": 0.4,
+     "renders": 0.2,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 34,
+    "work_pct": 0.51,
+    "reads": [
+     [
+      "source/views.py",
+      6.2,
+      0.1477
+     ],
+     [
+      "source/solid_seat.py",
+      4.0,
+      0.0965
+     ],
+     [
+      "source/model_body.py",
+      3.6,
+      0.0871
+     ],
+     [
+      "notes/learn/seated/judge/look-r7c6.jpg",
+      1.6,
+      0.0358
+     ],
+     [
+      "notes/r7.md",
+      0.9,
+      0.0241
+     ],
+     [
+      "notes/learn/seated/judge/results-r7c6.md",
+      0.9,
+      0.0241
+     ],
+     [
+      "notes/learn/seated/solid/sheet_solid.py",
+      0.7,
+      0.0186
+     ],
+     [
+      "source/satire_style.py",
+      0.7,
+      0.0168
+     ],
+     [
+      "source/bench_draw.py",
+      0.3,
+      0.0064
+     ]
+    ],
+    "base_pct": 24.1
+   }
   }
  ],
  "checks": {},
