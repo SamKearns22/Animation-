@@ -5072,7 +5072,7 @@ def kit_tests_rerun_only_what_changed():
     re-runs that test and no other; (2) unchanged files skip; (3) a change that arrives by merging another chain's
     branch re-runs its test; (4) the notes-archive red (23 Nov, move_to_shared_catches_film_fixes went red when a film's
     notes were archived: a notes-only change) is caught: the film list's own code records notes/archive as read;
-    (5) a test that starts another program reads ALL; (6) finish.py refuses an animatic or final without fresh passes."""
+    (5) a Python program a test starts reports its own reads; any other use of the project's git counts as reading ALL; (6) finish.py refuses an animatic or final without fresh passes."""
     import shutil
     import subprocess
     import tempfile
@@ -5120,10 +5120,13 @@ def kit_tests_rerun_only_what_changed():
         before_merge, _ = K.stale(['t_film', 't_tool'], rec)
         g('merge', '-q', 'other')
         after_merge, _ = K.stale(['t_film', 't_tool'], rec)
-        _, r_prog = K.traced(lambda: subprocess.run([sys.executable, '-c', 'print(1)'], capture_output=True))  # (5)
     finally:
         K.ROOT, K.KITTESTS = keep
         shutil.rmtree(d, ignore_errors=True)
+    root = os.path.dirname(HERE)                                           # (5) another program: a Python child's own
+    _, r_child = K.traced(lambda: subprocess.run([sys.executable, '-c', 'open("CLAUDE.md").read()'], cwd=root,
+                                                 capture_output=True))     # reads come back; a git command that
+    _, r_prog = K.traced(lambda: K.tracer()._program(['git', '-C', root, 'push'], None))   # is no read is ALL
     import handover as H                                                   # (4) the notes-archive red
     _, r_arch = K.traced(H._film_prefixes)
     import finish                                                          # (6) finish refuses without fresh passes
@@ -5152,10 +5155,12 @@ def kit_tests_rerun_only_what_changed():
     gate_left = K.finish_gate(stale_fn=lambda: (['zz_red'], {'zz_red': 3.0}), run_fn=lambda: None)
     refused = bool(said) and 'kit tests' in said[0] and not loaded
     ok = (unchanged == [] and film_change == ['t_film'] and before_merge == [] and after_merge == ['t_tool']
-          and K.ALL in (r_prog or set()) and 'notes/archive' in (r_arch or set())
+          and K.ALL in (r_prog or set()) and 'CLAUDE.md' in (r_child or set()) and K.ALL not in (r_child or set())
+          and 'notes/archive' in (r_arch or set())
           and refused and gate_none == '' and 'zz_red' in gate_left)
     return ok, (f'unchanged: {unchanged or "none"} re-run; film-only change: {film_change}; merged branch: '
-                f'{before_merge or "none"} then {after_merge}; program started: {"ALL" if K.ALL in (r_prog or ()) else "missed"}; '
+                f'{before_merge or "none"} then {after_merge}; child read: {"CLAUDE.md" in (r_child or ())}; '
+                f'git push: {"ALL" if K.ALL in (r_prog or ()) else "missed"}; '
                 f'notes/archive read: {"notes/archive" in (r_arch or set())}; finish: {said[:1] or "ran"}; '
                 f'gate fresh: {gate_none!r}, stale: {gate_left[:40]!r}')
 
