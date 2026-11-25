@@ -1,0 +1,81 @@
+{
+ "film": "islamocommunism",
+ "estimate": null,
+ "chats": [],
+ "checks": {},
+ "critique": {
+  "passes": [
+   {
+    "round": 1,
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-25",
+    "hunt": 1,
+    "faults": 9,
+    "cant_tell": 1,
+    "open": [
+     "3-4 A1 M2 P3: he is seated low behind the desk, same pose in 3 and 4, no rise; brief says he rises (3) and stands (4). Reads as sitting.",
+     "6 P1 P10 A1: he does not take the glass from her hand. His straight arm ends at a glass hovering above the samovar, while her hand is lowered at her chest, far ",
+     "5 P1 P6: her outstretched glass sits right on top of the samovar. His hand is not reaching, so the handover has no receiver, and the glass is lost against the s",
+     "5-6 P3 P5: her arm in 5 and his in 6 are one stiff straight tube from shoulder to hand, no elbow bend, too long. His starts mid-chest in 6, the cuff is a blob.",
+     "2 P7: she floats or tiptoes. Her toes point down over the rug, and she is huge against the door (far bigger than in 1) with no ground contact line. Not \"stepped",
+     "2,4-5 A4: captions sit over her legs and feet (2), the desk emblem and her body (4, 5). The sentence is split across panels and ends mid-phrase at \"finally\", wi",
+     "4-5 P12: her mouth is an open \"o\" in 4 and shut in 5, while the caption runs through 5. Mouth state does not follow speech.",
+     "1-6 P2: no face shows a feeling. Hers is blank in 1, 2, 5 and 6, and his is not readable at phone size. Neither looks at the other (his gaze is to the lens in 3",
+     "1-2 M1: the door, wallpaper and star border in 1-2 do not match the oval room in 3-6. The cut from a pale room to a gold one needs a visible way in (door or hal",
+     "4-6 P7: yellow bar behind her thighs, as if a seat or chair back. A full-size crop of her hips and legs would show whether she is standing in front of a chair o"
+    ]
+   }
+  ],
+  "lines": {
+   "A1": {
+    "faults": 2,
+    "false": 0
+   },
+   "M2": {
+    "faults": 1,
+    "false": 0
+   },
+   "P3": {
+    "faults": 2,
+    "false": 0
+   },
+   "P1": {
+    "faults": 2,
+    "false": 0
+   },
+   "P10": {
+    "faults": 1,
+    "false": 0
+   },
+   "P6": {
+    "faults": 1,
+    "false": 0
+   },
+   "P5": {
+    "faults": 1,
+    "false": 0
+   },
+   "P7": {
+    "faults": 1,
+    "false": 0
+   },
+   "A4": {
+    "faults": 1,
+    "false": 0
+   },
+   "P12": {
+    "faults": 1,
+    "false": 0
+   },
+   "P2": {
+    "faults": 1,
+    "false": 0
+   },
+   "M1": {
+    "faults": 1,
+    "false": 0
+   }
+  }
+ }
+}

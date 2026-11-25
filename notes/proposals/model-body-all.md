@@ -81,31 +81,38 @@ What the model body found that the flat film hid (each fixed in the drawing, nev
 Checks on the clip (188 frames, 4.6 min to render, 12 frames a second): nothing through the desk, the door leaf,
 the door wall or the chair once he stands; 6 frames (15.0-15.5 s, seated) his bottom presses into the rigid cushion
 box (named); his desk hand rests at the desk's front edge, 0.2-0.28 m short of where the flat pose put it (inside the
-desk). Fixed on my own before sending (2 faults, each fixed once): empty hanging arms bowed out like hands on hips
+desk). Fixed on my own before sending (3 faults, each fixed once; the third found by the body check: both heads sat on the
+collar, no neck, because the head was set 14 cm over the neck instead of the kit's height): empty hanging arms bowed out like hands on hips
 (now they keep the kit's direction from the shoulder); the turned door leaf was tested as a box round it (false hits).
 Cost of step 2: about 1% of a week (chat at 2.1% with its start).
 Not done here (named): clothes are painted on a pushed-out skin (jacket 1.6 cm off the body, trouser shell from
 solid_seat); no garment hangs or swings. The chair cushion is a rigid box: a seated bottom presses up to a few cm in.
 
 ## Where things stand (investigation chat 2)
-Rules that bite next: 85 (cost watch: total cap 8.5%, about 3.9% used), 30/87 (no third try at one fault), Statement Two.
-Done: step 2, the moving test; the clip is sent to Sam (notes/proposals/model-body-all/, 0.7 MB).
-Next (step 3, Opus high, only after Sam's Y): blind judges score posted vs model body on the clip at phone size;
-the proposal route's top two to Sam with Lost/Added and the cost (one-off switch: model_body.py exists now; per film:
-4.6 min of rendering per 16 s, sets must hand their furniture as solids, kneeholes, chairs that move).
-Needs Sam: Y to step 3, or his notes on the clip.
-Read: this file only; source/model_body.py MAP; the clip.
+Sam (25 Nov, on the step 2 work): "The 3D looks much worse." That is step 3's question answered by Sam himself.
+Rules that bite next: Statement Two (say plainly it is worse), 85 (cost: chat 2 at about 3.1%), the proposal route.
+Done: step 2 built and rendered (model_body.py, the side-by-side clip); 3 faults fixed after the fresh-eye look.
+Why it looks worse (Claude's own look): a painted mannequin, not a drawing: lumpy stiff limbs, a jacket that is skin
+with no shape or folds, small drawn heads on big real bodies, real proportions making him look hunched at the desk,
+forearms and shoes shortened when they point at the lens.
+Next: stop the switch (Claude's pick), asked of Sam as Q1. Keep what was learned: the depth check showed the flat
+poses sit 15 cm inside the chair and lay the forearm inside the desk; that check could guard flat films (a proposal,
+not asked). If Sam says go on instead: real hanging clothes, a body drawn in the house's clean curves, poses made
+for 3D; each must be learned first (weeks, not a chat).
+Needs Sam: Q1 (stop, Y/N).
+Read: this file only.
 Open rule requests: none.
 For Claude: model_body_test.py clip 12.17 27.84 OUT; _heads() is a 'move to shared' (body.HEADS hook for old films).
 Locked by Sam: Islamocommunism's cameras, times and beats as posted; no posted film is changed; Open Wounds stays flat.
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)
-
-Handover check answers (chat 2): Branches named (not this job's; left for their chains): claude/adoring-babbage-rtbj6h
-(R7's notes/r7.md, another chat's live work), claude/gta-v5-sound-draft, claude/gta-chat46-build,
-claude/dreamy-fermi-vkhutz, claude/gta-chat31. SENTENCE x4: CLAUDE.md edits by other chats (34f49840, 0945cc85),
-named by earlier chats; the sentences are still in CLAUDE.md in bold. FREEZE / kit test finished_films_keep_their_bookmark
-(21 from 20): source/model_body_test.py loads the posted Islamocommunism file ON PURPOSE (read only: the test must use
-the film's own poses, cameras and times; nothing in it changes). It is an investigation test, not kit or film work;
-if the model body goes ahead, films are built new on model_body.py and never load an old film. If Sam wants the count
-kept at 20, the test moves onto freeze.py's saved copy first (an hour's work, named, not done).
+## Exceptions
+| warning | - | why | looked at | chosen or real | owner |
+|---|---|---|---|---|---|
+| `BODY: side.mp4 12.79 s: Alexandria Ocasio-Cortez: L forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (17 drawings)` | - | model bodies draw a forearm aimed at the lens shortened, as it really is; the film's flat poses (two glasses held out in front, the handover) aim it there freely. A finding for step 3: model-body poses must keep forearms off the lens line | the clip at full size, those frames | real | step 3 / the model-body plan |
+| `BODY: side.mp4 15.04 s: Abdul El-Sayed: no neck shows (1.9 cm; at least 2): the head sits on the shoulders (Ad-Vanced 57: lift the head off them) (6 drawings)` | - | the head lifted to the kit's height this chat (was the fault in every frame); in these 6 frames (a nod, the lean) 2 mm short of the 2 cm bar. Not fixed again to save a render | the clip at full size, those frames | real | the model-body plan |
+| `BODY: side.mp4 15.04 s: elsayed: body points inside the desk chair (133 points) (6 drawings)` | - | the cushion is a rigid box in the test; his seated bottom presses up to a few cm in, as into a soft seat; hidden behind him from this camera | the clip at full size, 15.0-15.5 s | real | the model-body plan (soft seats) |
+| `BODY: side.mp4 22.13 s: Alexandria Ocasio-Cortez: L forearm drawn 0.2x its length (end-on to the lens: reads as a stub) (1 drawing)` | - | model bodies draw a forearm aimed at the lens shortened, as it really is; the film's flat poses (two glasses held out in front, the handover) aim it there freely. A finding for step 3: model-body poses must keep forearms off the lens line | the clip at full size, those frames | real | step 3 / the model-body plan |
+| `BODY: side.mp4 25.38 s: Alexandria Ocasio-Cortez: no neck shows (1.8 cm; at least 2): the head sits on the shoulders (Ad-Vanced 57: lift the head off them) (6 drawings)` | - | the head lifted to the kit's height this chat (was the fault in every frame); in these 6 frames (a nod, the lean) 2 mm short of the 2 cm bar. Not fixed again to save a render | the clip at full size, those frames | real | the model-body plan |
+| `BODY: side.mp4 27.46 s: Alexandria Ocasio-Cortez: R forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (5 drawings)` | - | model bodies draw a forearm aimed at the lens shortened, as it really is; the film's flat poses (two glasses held out in front, the handover) aim it there freely. A finding for step 3: model-body poses must keep forearms off the lens line | the clip at full size, those frames | real | step 3 / the model-body plan |
+| `BODY: side.mp4 27.71 s: Abdul El-Sayed: R forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (1 drawing)` | - | model bodies draw a forearm aimed at the lens shortened, as it really is; the film's flat poses (two glasses held out in front, the handover) aim it there freely. A finding for step 3: model-body poses must keep forearms off the lens line | the clip at full size, those frames | real | step 3 / the model-body plan |
+| `BODY: side.mp4 27.80 s: Abdul El-Sayed: R forearm drawn 0.2x its length (end-on to the lens: reads as a stub) (1 drawing)` | - | model bodies draw a forearm aimed at the lens shortened, as it really is; the film's flat poses (two glasses held out in front, the handover) aim it there freely. A finding for step 3: model-body poses must keep forearms off the lens line | the clip at full size, those frames | real | step 3 / the model-body plan |

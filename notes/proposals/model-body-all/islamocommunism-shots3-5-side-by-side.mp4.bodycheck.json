@@ -1,0 +1,18 @@
+{
+ "video": "side.mp4",
+ "faults": [
+  "BODY: side.mp4 12.79 s: Alexandria Ocasio-Cortez: L forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (17 drawings)",
+  "BODY: side.mp4 15.04 s: Abdul El-Sayed: no neck shows (1.9 cm; at least 2): the head sits on the shoulders (Ad-Vanced 57: lift the head off them) (6 drawings)",
+  "BODY: side.mp4 15.04 s: elsayed: body points inside the desk chair (133 points) (6 drawings)",
+  "BODY: side.mp4 22.13 s: Alexandria Ocasio-Cortez: L forearm drawn 0.2x its length (end-on to the lens: reads as a stub) (1 drawing)",
+  "BODY: side.mp4 25.38 s: Alexandria Ocasio-Cortez: no neck shows (1.8 cm; at least 2): the head sits on the shoulders (Ad-Vanced 57: lift the head off them) (6 drawings)",
+  "BODY: side.mp4 27.46 s: Alexandria Ocasio-Cortez: R forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (5 drawings)",
+  "BODY: side.mp4 27.71 s: Abdul El-Sayed: R forearm drawn 0.3x its length (end-on to the lens: reads as a stub) (1 drawing)",
+  "BODY: side.mp4 27.80 s: Abdul El-Sayed: R forearm drawn 0.2x its length (end-on to the lens: reads as a stub) (1 drawing)"
+ ],
+ "named": true,
+ "critique": null,
+ "answered": 8,
+ "made": 1795648919.7336774,
+ "out": "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/side.mp4"
+}

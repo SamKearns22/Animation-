@@ -1,0 +1,33 @@
+== critique, round 1 pass 1 (2026-11-25): 9 fault(s), 1 can't tell
+-- look.md --
+1: Woman in white suit stands in open doorway holding glasses; ornate wallpaper, blue star border, red carpet. No text.
+2: Same woman nearer, holding two glasses; caption "President El-Sayed?"
+3: Bearded man in dark suit sits at brown desk with red-gold star emblem; gold curtains, window, flags. No text.
+4: Woman in white at right, mouth open; man at desk; caption "Non-alcoholic mimosa. I figured we"
+5: Woman extends arm toward man holding glass; man reaches up; caption "deserved a slow morning after we finally"
+6: Woman holds glass at chest; man's arm stretched toward samovar; no caption.
+-- result.md --
+## Faults
+FAULT A1 M2 P3 [3, 4]: he is seated low behind the desk, same pose in 3 and 4, no rise; brief says he rises (3) and stands (4). Reads as sitting.
+FAULT P1 P10 A1 [6]: he does not take the glass from her hand. His straight arm ends at a glass hovering above the samovar, while her hand is lowered at her chest, far from his. Gap, and the glass reads as on the samovar or inside it.
+FAULT P1 P6 [5]: her outstretched glass sits right on top of the samovar. His hand is not reaching, so the handover has no receiver, and the glass is lost against the samovar.
+FAULT P3 P5 [5, 6]: her arm in 5 and his in 6 are one stiff straight tube from shoulder to hand, no elbow bend, too long. His starts mid-chest in 6, the cuff is a blob.
+FAULT P7 [2]: she floats or tiptoes. Her toes point down over the rug, and she is huge against the door (far bigger than in 1) with no ground contact line. Not "stepped past the door into the room".
+CAN'T TELL P7 [4, 5, 6]: yellow bar behind her thighs, as if a seat or chair back. A full-size crop of her hips and legs would show whether she is standing in front of a chair or sitting.
+FAULT A4 [2, 4, 5]: captions sit over her legs and feet (2), the desk emblem and her body (4, 5). The sentence is split across panels and ends mid-phrase at "finally", with panel 6 empty.
+FAULT P12 [4, 5]: her mouth is an open "o" in 4 and shut in 5, while the caption runs through 5. Mouth state does not follow speech.
+FAULT P2 [1-6]: no face shows a feeling. Hers is blank in 1, 2, 5 and 6, and his is not readable at phone size. Neither looks at the other (his gaze is to the lens in 3, 4).
+FAULT M1 [1, 2]: the door, wallpaper and star border in 1-2 do not match the oval room in 3-6. The cut from a pale room to a gold one needs a visible way in (door or hall), which the brief does not show.
+
+## Checked
+1-6
+
+## Cold look
+look.md missed or got wrong: I wrote "man reaches up" in 5 (his arm is down and he is passive), and "man's arm stretched toward samovar" in 6 without saying that no handover happens. I also failed to name that panel 3 is a seated man, not rising, and that the woman in 2 is still in the doorway. I did not name the samovar as a samovar at first look.
+
+## Not on the list
+1. Prop scale: the glasses are tiny against her hands, and in 5 and 6 the glass looks bigger than the samovar spout. suggested line: P15 props are the right size relative to hands and each other.
+2. Caption sentence broken across panels with a cut word or empty panel. suggested line: A5 each caption reads as a whole thought on its own panel, or the carry-over is planned.
+3. Two characters not looking at each other during a handover. suggested line: P16 gaze goes to the person or object the beat names.
+4. Background object in line with a person making them look seated. suggested line: P17 no set piece lines up with a standing person so as to read as a seat.
+
