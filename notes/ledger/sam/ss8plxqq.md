@@ -12,3 +12,6 @@ Google suggests: Build the rig as a stick-figure skeleton with explicit joint co
 What do you think
 (handover log: not found in the chat record after 20 s; saved as Sam's)
 
+### 2026-11-25T14:01:57
+Are you 100% sure
+
