@@ -553,6 +553,9 @@ def _near(a, rgb, tol):
     return np.abs(a.astype(int) - np.array(rgb)).sum(2) <= tol
 
 
+BALL_ROUND = 0.8   # a ball's patch overlaps its box's ellipse this much (two legs side by side: about 0.7)
+
+
 def ball_knees(a, trousers, tol=18, dmin=40, dmax=400):
     """Trouser-coloured patches shut inside an ink ring and round: a knee drawn as a ball."""
     m = _near(a, trousers, tol)
@@ -565,7 +568,12 @@ def ball_knees(a, trousers, tol=18, dmin=40, dmax=400):
             continue
         area = (lab[sl] == i).sum()
         fill = area / (np.pi * w * h / 4)
-        if 0.85 <= fill <= 1.1:
+        if not 0.85 <= fill <= 1.1:
+            continue
+        yy, xx = np.mgrid[0:h, 0:w]                     # and round: it must lie on the ellipse its box holds (R7
+        ell = ((xx + 0.5 - w / 2) / (w / 2)) ** 2 + ((yy + 0.5 - h / 2) / (h / 2)) ** 2 <= 1   # chat 3: Blair's two
+        pm = lab[sl] == i                               # front trouser legs, joined at the crotch, filled their box
+        if (pm & ell).sum() / max(1, (pm | ell).sum()) >= BALL_ROUND:   # like a ball by area alone)
             out.append(((sl[1].start + w // 2, sl[0].start + h // 2), w, h, round(fill, 2)))
     return out
 
