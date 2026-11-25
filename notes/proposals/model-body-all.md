@@ -16,4 +16,9 @@ Requirement 1 (first test of every option): any action, one body, no visible cha
    bodies and house heads and hands, at its real angle; beside the original. Clip, not a full render.
 3. Blind judges score both; the proposal route's top two to Sam with Lost/Added and the cost impact (one-off switch,
    per film after), from the ledger, no padding.
+Dressing (Sam asked what must be learned, chat 7): Jason's clothes were PAINTED on the skin (bench_pose.part_at) and
+the trousers a pushed-out skin; loose clothes (open jackets, lapels, skirts, coats, robes, hi-vis) need real garments.
+Step 2 checks first, before building: MakeHuman's own garment library (on disk? licence?), Blender installable here
+(its cloth simulation), then dresses the test in a suit jacket that hangs open; checks: cloth never through body or
+chair, each garment one piece. Name what could not be learned.
 Push notification at the end of each step, pass or stop. Total cap 8.5% of a week; at the cap, stop and tell Sam.
