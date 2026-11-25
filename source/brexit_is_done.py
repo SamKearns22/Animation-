@@ -91,14 +91,15 @@ def scale_at(pxm, sp):
     return pxm * sp['height'] * 0.84 / FEET
 
 
-def seated(img, who, L, X, d, t, yaw, pose='upright', look=None, chair=False):
-    """`who` seated at depth d (m) through level camera L, their body centre at screen X; the sitting kit's pose.
-    Seated neck height scales with them (Milburn's 1.06 m at 1.75 m)."""
+def seated(img, who, L, X, d, t, yaw, pose='upright', look=None, chair=False, joints=None):
+    """`who` seated at depth d (m) through level camera L, their body centre at screen X; the sitting kit's pose
+    (or `joints`: the moves kit's acted pose on the same seat). Seated neck height scales with them (Milburn's 1.06 m
+    at 1.75 m)."""
     sp = dict(look or CAST[who])
     pxm = L.ppm(d)
     s = scale_at(pxm, sp)
     neck_y = L.p(0.0, d, 1.06 * sp['height'] / 1.75)[1]
-    j = S.pose(sp, pose)
+    j = joints if joints is not None else S.pose(sp, pose)
     if not chair:
         j['chair_draw'] = lambda *a, **k: None       # the photos hide her chair behind her
     neck_y -= j.get('bob', 0.0) * s                   # the sitting kit drops the body by bob: the neck stays put
@@ -106,6 +107,78 @@ def seated(img, who, L, X, d, t, yaw, pose='upright', look=None, chair=False):
     cam = B.Cam(1.0, 540, 960)
     V.person(img, cam, X, neck_y, s, sp, t, yaw, j)
     return s
+
+
+# ================================================================================================= faces and moves
+# Stand-in timing until Sam records (LINES): each word's time from its syllables spread over its line, the lips on the
+# same spread (mouths.track), blinks (F.blinks), head life on a stand-in loudness made from the lip track (open
+# shapes speak); every number here is re-timed on Sam's takes. The moves are story/brexit-is-done-moves.txt
+# (source/acting.py), each block one acting-list row (rule 74).
+import mouths                        # noqa: E402
+import figure as FG                  # noqa: E402
+
+TRACK = {ln['who']: [(a + ln['start'], b + ln['start'], sh) for a, b, sh in
+                     mouths.track(ln['text'], [(0.0, ln['end'] - ln['start'])])] for ln in LINES}
+BLINKS = {w: FG.blinks(17 + 5 * i, 0.0, DUR, talking=True) for i, w in enumerate(('may', 'kemi', 'blair'))}
+# The house face's channels: smile (-1 .. +1), lid4 (upper lid), brow_up, frown, squint, look (eyes sideways), mouth.
+MOODS = {
+    'neutral': dict(),
+    'composed': dict(smile=0.05, lid4=0.1, brow_up=0.006),          # May: calm, reasonable, firm
+    'pointed': dict(smile=0.18, lid4=0.15, brow_up=0.014),           # ... the faint knowing look on "wolves"
+    'stare': dict(smile=-0.25, lid4=0.1, frown=0.03),                # Kemi: hard, level, unbothered by the carnage
+    'curt': dict(smile=-0.35, lid4=0.14, frown=0.04),                # ... the curt nod on "job"
+    'genial': dict(smile=0.4, lid4=0.12, brow_up=0.01),               # Blair: warm, reasonable, talking
+    'grin': dict(smile=1.0, squint=0.35, lid4=0.14, brow_up=0.02, mouth='v:grin'),   # the big grin held from 25.0
+}
+
+
+def word_at(n, words):
+    """When line n reaches `words`: its syllables spread over the line (stand-in timing, as TRACK)."""
+    ln = LINES[n - 1]
+    k = len(ln['text'][:ln['text'].index(words)].split())
+    syl = [mouths._syllables(w) for w in ln['text'].split()]
+    return ln['start'] + (ln['end'] - ln['start']) * sum(syl[:k]) / max(1, sum(syl))
+
+
+HEAD_LIFE = {}
+
+
+def head_life(who):
+    """Rule 74: the head tilts and nods on the voice (headlife): a stand-in loudness from the lip track until Sam's
+    takes (1 while the mouth is open, 0 at rest), each on their own line only."""
+    if who not in HEAD_LIFE:
+        import numpy as np
+        import headlife
+        n = int(DUR * FPS) + 2
+        env = np.array([0.0 if mouths.at(TRACK[who], i / FPS) in ('rest', 'M') else 1.0 for i in range(n)])
+        HEAD_LIFE[who] = headlife.HeadLife(env, 0.0, fps=FPS, seed=41 + ('may', 'kemi', 'blair').index(who))
+    return HEAD_LIFE[who]
+
+
+def face_sp(shot, who, t, mood, shades=None):
+    """The moves kit's seam: who's build with the face for a mood, lips on their own line, blinks, head life."""
+    d = dict(CAST[who], **MOODS[mood])
+    shape = mouths.at(TRACK[who], t)
+    if shape != 'rest':
+        d['mouth'] = 'v:' + shape
+    d['blink'] = FG.blinking(t, BLINKS[who])
+    d['head_life'] = head_life(who)
+    return d
+
+
+_MOVES = {}
+
+
+def acted(shot, who, t):
+    """(face sp, joints) for who's block in shot at film time t (story/brexit-is-done-moves.txt)."""
+    if not _MOVES:
+        import acting as AC
+        _MOVES.update(AC=AC, desc=AC.load(FILM), film=AC.film_side(FILM))
+    m = _MOVES
+    sp, _, _, j, hy = m['AC'].person(m['desc'], m['film'], shot, t)
+    if hy is not None:
+        j['_head_yaw'] = hy
+    return sp, j
 
 
 # ================================================================================================= shot 1: May
@@ -132,7 +205,8 @@ def may_shot(t):
     L = _cam('may')
     for layer in ('back', 'mid'):
         _paint(img, 'may', layer, t)
-    seated(img, 'may', L, MAY['x'], MAY['d'], t, MAY['yaw'], chair=True)
+    sp, j = acted('1', 'may', t)
+    seated(img, 'may', L, MAY['x'], MAY['d'], t, MAY['yaw'], chair=True, look=sp, joints=j)
     for layer in ('front', 'over'):
         _paint(img, 'may', layer, t)
     return img.convert('RGB')
@@ -160,7 +234,8 @@ def kemi_shot(t):
     u = scene_of(t)[1]
     PL.paint_with(img, _DESC, 'site', B.Cam(1.0, 540, 960), u, ACT.site_actors(u, L))   # the background action
     B.SS = 1
-    standing(img, 'kemi', L, KEMI['x'], KEMI['d'], t, KEMI['yaw'])
+    sp, j = acted('2', 'kemi', t)
+    standing(img, 'kemi', L, KEMI['x'], KEMI['d'], t, KEMI['yaw'], look=sp, joints=j)
     for layer in ('front', 'over'):
         _paint(img, 'site', layer, t)
     return img.convert('RGB')
@@ -179,7 +254,8 @@ def blair_shot(t):
     PL.paint_with(img, _DESC, 'blair', B.Cam(1.0, 540, 960), u, room, beyond=beyond)
     ACT.lunger(img, L, u)                              # Wp, at his depth just behind his shoulder, 9.0 s (cut 9.4)
     B.SS = 1
-    seated(img, 'blair', L, BLAIR['x'], BLAIR['d'], t, BLAIR['yaw'], pose='armchair', chair=True)
+    sp, j = acted('3', 'blair', t)
+    seated(img, 'blair', L, BLAIR['x'], BLAIR['d'], t, BLAIR['yaw'], pose='armchair', chair=True, look=sp, joints=j)
     for layer in ('front', 'over'):
         _paint(img, 'blair', layer, u)
     return img.convert('RGB')

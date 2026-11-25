@@ -1,0 +1,32 @@
+# Open Wounds' moves, from its acting list (the moves kit: source/acting.py; the language is in its MAP).
+# One block per person per shot; each block is one acting-list row: who, the line, the word the move lands on.
+# Stand-in timing until Sam records (each word's time from its syllables spread over its line): re-timed on his takes.
+# All three look off-frame left at the unseen interviewer (item 14): turned -45, the eyes a little further left.
+
+# --- the library this film adds
+place palm up: 60, 330, 250, down, palm     # one hand forward and low, open palm turning up (May's photo 1)
+
+## 1: may, line 1, lands on "referendum"
+row: 4 "...we had a referendum, and in that referendum, the British Public chose wolves." | composed, firm, reasonable, to the interviewer off-frame left | seated, hands low; one open palm turning up on "referendum"; small nods on "referendum" and "wolves"
+stance: upright on office
+face: composed | pointed from "wolves" -0.1
+R: rest at "referendum" -0.45 | palm up from "referendum" -0.05 to "chose" | rest at "wolves" +0.5
+body: nod 0.8 from "referendum" -0.05 to "referendum" +0.4, rise 0.12, fall 0.22
+body: nod 1.0 from "wolves" -0.05 to "wolves" +0.45, rise 0.12, fall 0.25
+keys look: -0.3 at 0
+idle: roll 1.2 shifts 71 0.9 1.6
+
+## 2: kemi, line 2, lands on "job"
+row: 10 "...more time doing his job: reducing the number of British people with their faces chewed off." | staring at the interviewer as if none of it was happening | still, hands at her sides; a curt nod on "job"
+face: stare | curt from "job" -0.05 | stare from "job" +0.7
+body: nod 1.2 from "job" -0.05 to "job" +0.35, rise 0.08, fall 0.2
+keys look: -0.3 at 0
+idle: roll 0.8 shifts 72 1.0 1.8
+
+## 3: blair, line 3, lands on grin
+row: 12-13 "...I belong in The Hague." | genial, then the big grin held about 1.5 s until the wolf lunges | seated in the wing chair, hands on its arms; a small nod on "Hague"; the grin from 25.0
+stance: armchair on armchair
+face: genial | grin from grin
+body: nod 0.8 from "Hague" -0.05 to "Hague" +0.4, rise 0.12, fall 0.22
+keys look: -0.3 at 0
+idle: roll 1.0 shifts 73 0.9 1.6
