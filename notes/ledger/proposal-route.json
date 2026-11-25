@@ -18437,62 +18437,63 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.93,
+   "cost": 2.3,
    "src": "estimate",
    "sid": "session_01U3pKQzuMaJ3B7QYkkK55xe",
-   "steps": 95,
-   "hist_k": 280,
+   "steps": 114,
+   "hist_k": 297,
    "kinds": {
-    "tool search": 31.1,
+    "tool search": 29.8,
     "page.py": 0.4,
-    "renders": 0.5,
-    "pictures": 6.4,
-    "other": 61.6
+    "renders": 1.2,
+    "pictures": 6.5,
+    "other": 62.1
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 76,
+    "tool search": 90,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
-    "renders": 2,
-    "pictures": 15,
-    "other": 12
+    "renders": 4,
+    "pictures": 16,
+    "other": 15
    },
    "split": {
-    "usd": 7.0765,
-    "total": 7.0765,
+    "usd": 8.4302,
+    "total": 8.4302,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 28.5,
-     "carried history": 26.9,
-     "start-up floor": 22.4,
-     "new writes": 22.2
+     "carried history": 30.9,
+     "Claude's words": 26.6,
+     "start-up floor": 22.3,
+     "new writes": 20.3
     },
     "origins": {
-     "Claude's words": 44.7,
-     "result: tool search": 23.4,
-     "start-up floor": 22.4,
-     "result: pictures": 4.8,
-     "messages and reminders": 2.1,
-     "Claude's edits": 1.8,
+     "Claude's words": 44.1,
+     "result: tool search": 23.2,
+     "start-up floor": 22.3,
+     "result: pictures": 5.3,
+     "messages and reminders": 2.4,
+     "Claude's edits": 1.9,
      "result: page.py": 0.5,
-     "result: other": 0.2
+     "result: other": 0.2,
+     "result: renders": 0.1
     },
     "named": {
-     "thinking": 22.5,
-     "start-up reading (rules, tools, first files)": 22.4,
-     "reading kit code": 18.0,
-     "writing code": 16.7,
-     "commands": 5.0,
-     "looking at pictures": 4.8,
+     "start-up reading (rules, tools, first files)": 22.3,
+     "thinking": 21.6,
+     "reading kit code": 17.8,
+     "writing code": 15.6,
+     "commands": 5.4,
+     "looking at pictures": 5.3,
+     "messages and reminders": 2.4,
      "reading notes": 2.3,
-     "messages and reminders": 2.1,
      "messages to Sam": 2.0,
      "running checks and tools": 1.6,
+     "writing notes": 1.4,
      "start-up and handover tools": 0.9,
-     "writing notes": 0.4,
-     "other commands": 0.4,
+     "other commands": 0.5,
      "renders": 0.4,
      "git and saving": 0.3,
      "reading chat records": 0.2
@@ -18507,105 +18508,105 @@
      [
       "source/islamocommunism.py",
       9.1,
-      0.1982
+      0.2294
      ],
      [
       "source/views.py",
       4.5,
-      0.1002
+      0.1155
      ],
      [
       "notes/proposals/model-body-all.md",
       2.1,
-      0.0503
+      0.0574
      ],
      [
       "source/lying.py",
       2.0,
-      0.043
+      0.0497
      ],
      [
       "source/bench_pose.py",
       1.8,
-      0.0403
+      0.0465
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/orig_sheet.jpg",
       1.6,
-      0.0315
+      0.037
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/post_sheet.jpg",
       1.6,
-      0.0309
+      0.0364
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/ss2_15.jpg",
       1.6,
-      0.0304
+      0.0358
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/fix_cmp.jpg",
       1.6,
-      0.0286
+      0.0341
      ],
      [
       "source/midterminal_moves.py",
       1.1,
-      0.0231
+      0.0268
      ],
      [
       "source/islamocommunism_cast.py",
       1.1,
-      0.0225
+      0.0263
      ],
      [
       "source/page.py",
       0.9,
-      0.0219
+      0.0252
      ],
      [
       "source/midterminal_set.py",
       1.0,
-      0.0193
+      0.0228
      ],
      [
       "source/solid_seat.py",
       0.8,
-      0.0134
+      0.016
      ],
      [
       "source/stepcost.py",
       0.5,
-      0.013
+      0.0149
      ],
      [
       "source/costline.py",
       0.5,
-      0.013
+      0.0149
      ],
      [
       "source/ledger.py",
       0.5,
-      0.0126
+      0.0145
      ],
      [
       "source/mhuman.py",
       0.7,
-      0.0119
+      0.0142
      ],
      [
       "source/islamocommunism_office.py",
       0.5,
-      0.0105
+      0.0122
      ],
      [
       "source/body.py",
       0.4,
-      0.0068
+      0.0081
      ]
     ],
-    "base_pct": 20.2
+    "base_pct": 20.3
    },
    "search": {
     "show": 1,
@@ -18616,9 +18617,9 @@
     },
     "other": {
      "shared:handover.py": 1,
-     "other": 13,
+     "other": 15,
      "shared:islamocommunism.py": 11,
-     "film notes": 3,
+     "film notes": 5,
      "shared:solid_seat.py": 5,
      "shared:stepcost.py": 1,
      "shared:ledger.py": 2,
@@ -18632,9 +18633,13 @@
      "shared:islamocommunism_office.py": 1,
      "shared:lying_flat.py": 3,
      "shared:mhuman.py": 1,
-     "shared:model_body_test.py": 7,
+     "shared:model_body_test.py": 9,
      "shared:costwatch.py": 2,
-     "shared:model_body.py": 8
+     "shared:model_body.py": 10,
+     "shared:kittests.py": 1,
+     "shared:freeze.py": 1,
+     "shared:humancheck.py": 3,
+     "shared:gta_rehearse.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -19245,6 +19250,118 @@
       "shared:model_body_test.py",
       "source/model_body_test.py",
       "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "git add -A source/model_body.py source/model_body_test.py && git commit -qm \"Mod",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 source/kittests.py finished_films_keep_their_bookmark 2>&1 | tail -6",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "shared:freeze.py",
+      "source/freeze.py",
+      "^$",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "shared:model_body_test.py",
+      "notes/proposals/model-body-all.md notes/r7.md source/model_body_test.py",
+      "python3 - <<'EOF' p='notes/proposals/model-body-all.md' s=open(p).read() s=s.rep",
+      ""
+     ],
+     [
+      113,
+      "other",
+      "shared:model_body.py",
+      "notes/proposals/model-body-all.md source/model_body.py source/model_body_test.py",
+      "Locked by Sam",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "film notes",
+      "notes/logs/handover-end.log notes/proposals/model-body-all.md",
+      "Locked by Sam",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "film notes",
+      "notes/proposals/model-body-all.md story/status.md",
+      "sed -i '101{/^Locked by Sam/d}' notes/proposals/model-body-all.md && sed -n '90,",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "other",
+      "",
+      "git add -A notes/ && git commit -qm \"Model body handover: one Locked by Sam line",
+      ""
+     ],
+     [
+      120,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py .claude/hooks/*send* .claude/hooks/",
+      "class Writer",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "def frame_begin\\|def frame_faults\\|def take\\b\\|def collect",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py source/gta_rehearse.py",
+      "^def ",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "shared:gta_rehearse.py",
+      "source/gta_rehearse.py",
+      "hc\\.\\|frame_begin\\|frame_end",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py notes/grand-theft-autism.md",
+      "Exceptions",
       ""
      ]
     ]
