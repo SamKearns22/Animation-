@@ -1123,61 +1123,63 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.04,
+   "cost": 1.3,
    "src": "estimate",
    "sid": "session_01U3pKQyzgm44MCDdyHMoACP",
-   "steps": 62,
-   "hist_k": 191,
+   "steps": 77,
+   "hist_k": 209,
    "kinds": {
-    "tool search": 21.3,
-    "whole-file .py read": 2.1,
-    "renders": 3.3,
-    "pictures": 7.1,
-    "other": 66.2
+    "tool search": 19.5,
+    "whole-file .py read": 1.7,
+    "renders": 3.2,
+    "pictures": 6.7,
+    "other": 69.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 29,
+    "tool search": 37,
     "whole-file .py read": 3,
     "page.py": 0,
     "routine": 0,
-    "renders": 3,
+    "renders": 4,
     "pictures": 14,
     "other": 14
    },
    "split": {
-    "usd": 3.8006,
-    "total": 3.8006,
+    "usd": 4.7686,
+    "total": 4.7686,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 32.5,
-     "start-up floor": 28.5,
-     "new writes": 22.6,
-     "carried history": 16.4
+     "Claude's words": 31.7,
+     "start-up floor": 27.5,
+     "new writes": 21.1,
+     "carried history": 19.6
     },
     "origins": {
-     "Claude's words": 48.5,
-     "start-up floor": 28.5,
-     "result: tool search": 12.5,
-     "result: pictures": 7.6,
-     "messages and reminders": 1.2,
-     "result: other": 1.2,
-     "result: renders": 0.3,
+     "Claude's words": 49.5,
+     "start-up floor": 27.5,
+     "result: tool search": 12.1,
+     "result: pictures": 7.4,
+     "messages and reminders": 1.8,
+     "result: other": 1.1,
+     "result: renders": 0.4,
      "result: whole-file .py read": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 28.5,
-     "thinking": 25.9,
-     "writing code": 15.5,
-     "looking at pictures": 7.6,
-     "reading kit code": 7.5,
-     "commands": 6.1,
-     "reading notes": 4.0,
-     "start-up and handover tools": 1.5,
-     "messages and reminders": 1.2,
-     "messages to Sam": 1.1,
+     "start-up reading (rules, tools, first files)": 27.5,
+     "thinking": 26.2,
+     "writing code": 13.2,
+     "looking at pictures": 7.4,
+     "reading kit code": 6.9,
+     "commands": 6.3,
+     "reading notes": 4.2,
+     "messages to Sam": 3.3,
+     "messages and reminders": 1.8,
+     "start-up and handover tools": 1.3,
      "running checks and tools": 0.9,
-     "renders": 0.3
+     "writing notes": 0.6,
+     "renders": 0.4,
+     "git and saving": 0.1
     },
     "leftover": 0.0
    },
@@ -1189,50 +1191,50 @@
      [
       "source/solid_seat.py",
       5.6,
-      0.1008
+      0.1158
      ],
      [
       "source/views.py",
       2.4,
-      0.0395
+      0.046
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/81c58939-0cc1-5da9-b3b9-b991f3cd99d5/scratchpad/c6.jpg",
       1.6,
-      0.0284
+      0.0327
      ],
      [
       "notes/learn/seated/r7-before-after-v4.jpg",
       1.6,
-      0.0266
+      0.0309
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/81c58939-0cc1-5da9-b3b9-b991f3cd99d5/scratchpad/may_side.png",
       1.6,
-      0.0246
+      0.0289
      ],
      [
       "notes/learn/seated/judge/results-r7c6.md",
       0.9,
-      0.0163
+      0.0187
      ],
      [
       "source/castsheet.py",
       0.7,
-      0.0121
+      0.014
      ],
      [
       "notes/learn/seated/solid/sheet_solid.py",
       0.5,
-      0.0095
+      0.0109
      ],
      [
       "source/stepcost.py",
       0.5,
-      0.0091
+      0.0106
      ]
     ],
-    "base_pct": 24.3
+    "base_pct": 24.1
    },
    "search": {
     "show": 0,
@@ -1240,10 +1242,10 @@
      "no show": 0
     },
     "other": {
-     "other": 7,
+     "other": 10,
      "shared:handover.py": 2,
-     "shared:solid_seat.py": 7,
-     "film notes": 2,
+     "shared:solid_seat.py": 8,
+     "film notes": 6,
      "shared:stepcost.py": 2,
      "shared:castsheet.py": 4,
      "shared:views.py": 4,
@@ -1482,6 +1484,70 @@
       "shared:solid_seat.py",
       "source/solid_seat.py notes/learn/seated/solid/sheet_solid.py",
       "python3 - <<'EOF' p='source/solid_seat.py'; s=open(p).read() old=\"front=(m & (ab",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "np.abs(ab\\[..., 6\\]) > 0.5))\\[::scale",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "other",
+      "",
+      "git push -q origin HEAD:refs/heads/claude/r7-chat7; git fetch -q origin claude/c",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "film notes",
+      "",
+      "sits down|stands up|sit down|stand up|seated|crosses (his|her) legs",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "notes/archive/*grand-theft* notes/grand-theft-autism*.md",
+      "bench|jason",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "film notes",
+      "story/blessed-moves.txt story/milburn-moves.txt story/brexit-is-done-moves.txt n",
+      "sit|stand|seat|chair|bench",
+      ""
+     ],
+     [
+      70,
+      "other",
+      "film notes",
+      "notes/*.md notes/archive story/*moves* story/*page*",
+      "el-sayed|elsayed|islamocommunism",
+      ""
+     ],
+     [
+      71,
+      "other",
+      "film notes",
+      "notes/archive/islamocommunism-handovers.md story/metrics.md notes/ranking-list.m",
+      "el-sayed|walk|stand|sit|turn|body|kit|rig",
       ""
      ]
     ]
