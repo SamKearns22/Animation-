@@ -17912,57 +17912,60 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.66,
+   "cost": 2.01,
    "src": "estimate",
    "sid": "session_01U3pKQyLPecZFf57adRJxjG",
-   "steps": 39,
-   "hist_k": 134,
+   "steps": 59,
+   "hist_k": 172,
    "kinds": {
-    "tool search": 26.5,
-    "whole-file .py read": 1.6,
-    "other": 71.9
+    "tool search": 24.2,
+    "whole-file .py read": 1.0,
+    "renders": 0.7,
+    "other": 74.1
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 29,
+    "tool search": 39,
     "whole-file .py read": 1,
     "page.py": 0,
     "routine": 0,
-    "renders": 0,
+    "renders": 1,
     "pictures": 0,
-    "other": 10
+    "other": 16
    },
    "split": {
-    "usd": 1.7782,
-    "total": 1.7782,
+    "usd": 2.9867,
+    "total": 2.9867,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 41.4,
-     "Claude's words": 26.5,
-     "new writes": 22.8,
-     "carried history": 9.3
+     "start-up floor": 34.8,
+     "Claude's words": 27.3,
+     "new writes": 23.6,
+     "carried history": 14.3
     },
     "origins": {
-     "start-up floor": 41.4,
-     "Claude's words": 38.1,
-     "result: tool search": 12.2,
-     "messages and reminders": 4.8,
-     "result: other": 3.4,
+     "Claude's words": 40.8,
+     "start-up floor": 34.8,
+     "result: tool search": 10.7,
+     "result: other": 7.9,
+     "messages and reminders": 5.6,
      "result: whole-file .py read": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 41.4,
-     "thinking": 12.9,
-     "writing code": 12.0,
-     "commands": 8.6,
-     "reading notes": 8.6,
-     "messages and reminders": 4.8,
-     "start-up and handover tools": 4.4,
-     "helper and chat prompts": 3.6,
-     "helper results": 1.6,
-     "messages to Sam": 1.1,
-     "reading kit code": 0.4,
-     "running checks and tools": 0.4,
+     "start-up reading (rules, tools, first files)": 34.8,
+     "thinking": 16.1,
+     "writing code": 11.5,
+     "commands": 7.4,
+     "reading notes": 7.3,
+     "messages and reminders": 5.6,
+     "reading other files": 4.6,
+     "start-up and handover tools": 3.6,
+     "helper and chat prompts": 2.3,
+     "messages to Sam": 2.0,
+     "writing notes": 1.5,
+     "reading kit code": 1.4,
+     "helper results": 1.3,
+     "running checks and tools": 0.3,
      "git and saving": 0.3
     },
     "leftover": 0.0
@@ -17975,30 +17978,30 @@
      [
       "source/propose.py",
       1.6,
-      0.0233
+      0.0292
      ],
      [
       "source/handover.py",
       1.3,
-      0.0184
+      0.0231
      ],
      [
       "notes/proposals/model-body-all.md",
       1.2,
-      0.0169
+      0.0211
      ],
      [
       "story/status.md",
       0.4,
-      0.0049
+      0.0062
      ],
      [
       "notes/ledger/sam",
       0.2,
-      0.002
+      0.0026
      ]
     ],
-    "base_pct": 32.4
+    "base_pct": 29.4
    },
    "search": {
     "show": 0,
@@ -18006,14 +18009,15 @@
      "no show": 0
     },
     "other": {
-     "film notes": 8,
-     "shared:propose.py": 1,
-     "shared:handover.py": 3,
+     "film notes": 11,
+     "shared:propose.py": 2,
+     "shared:handover.py": 4,
      "guides": 1,
-     "other": 12,
+     "other": 16,
      "shared:costline.py": 1,
      "shared:ledger.py": 2,
-     "shared:costwatch.py": 1
+     "shared:costwatch.py": 1,
+     "shared:hand3d_film.py": 1
     },
     "ticked": 0,
     "edited film code": false,
@@ -18248,6 +18252,86 @@
       "other",
       "notes/proposals/model-body-all notes/proposals/model-body-all/count/",
       "git add -A notes/proposals/model-body-all; git commit -qm \"Model body step 1: ba",
+      ""
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "notes/proposals/model-body-all",
+      "git add -A notes/proposals/model-body-all && git commit -qm \"Model body step 1: ",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "film notes",
+      "notes/proposals/model-body-all/count/hand-check.md notes/proposals/model-body-al",
+      "cd /home/user/Animation- && cat > notes/proposals/model-body-all/count/hand-chec",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "film notes",
+      "notes/proposals/model-body-all.md notes/archive/ notes/bench/learn-step.md notes",
+      "s car did: learn-step.md L1 row 1). This is the bigger cost and is unmeasured.\n ",
+      ""
+     ],
+     [
+      50,
+      "other",
+      "other",
+      "",
+      "for f in bench_pose bench_blender bench_draw bench_move solid_seat mesh_sdf; do ",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "shared:hand3d_film.py",
+      "source/hand3d_film.py source/data source/islamocommunism.py",
+      "^MAN\\b\\|MAN =\\|makehuman",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:handover.py",
+      "notes/proposals source/handover.py notes/proposals/model-body-all.md",
+      "SENTENCE lost",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:propose.py",
+      "source/propose.py source/ledger.py notes/proposals/model-body-all.md notes/r7.md",
+      "SENTENCE lost",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "other",
+      "",
+      "git add -A notes source 2>/dev/null; git commit -qm \"Model body: handover for st",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "film notes",
+      "notes/proposals/model-body-all.md",
+      "python3 - <<'EOF' p='notes/proposals/model-body-all.md' s=open(p).read() s=s.rep",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "git pull -q --no-rebase origin claude/create-claude-md-oe8z4g && git push -q ori",
       ""
      ]
     ]
