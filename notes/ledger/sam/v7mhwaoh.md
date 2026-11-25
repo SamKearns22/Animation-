@@ -8,3 +8,6 @@ Set up seperate chat for lower body learn and build job (no bum and circular kne
 ### 2026-11-25T07:36:14
 What is a full kit test run
 
+### 2026-11-25T07:37:03
+Isn't this quite expensive and time consuming? Is there a better way?
+
