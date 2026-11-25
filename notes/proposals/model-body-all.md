@@ -89,27 +89,21 @@ Not done here (named): clothes are painted on a pushed-out skin (jacket 1.6 cm o
 solid_seat); no garment hangs or swings. The chair cushion is a rigid box: a seated bottom presses up to a few cm in.
 
 ## Where things stand (investigation chat 2)
-Rules that bite next: 85 (cost watch: total cap 8.5%, about 3.9% used), 30/87 (no third try at one fault), Statement Two.
-Done: step 2, the moving test; the clip is sent to Sam (notes/proposals/model-body-all/, 0.7 MB).
-Next (step 3, Opus high, only after Sam's Y): blind judges score posted vs model body on the clip at phone size;
-the proposal route's top two to Sam with Lost/Added and the cost (one-off switch: model_body.py exists now; per film:
-4.6 min of rendering per 16 s, sets must hand their furniture as solids, kneeholes, chairs that move).
-Needs Sam: Y to step 3, or his notes on the clip.
-Read: this file only; source/model_body.py MAP; the clip.
+Sam (25 Nov, on the step 2 work): "The 3D looks much worse." That is step 3's question answered by Sam himself.
+Rules that bite next: Statement Two (say plainly it is worse), 85 (cost: chat 2 at about 3.1%), the proposal route.
+Done: step 2 built and rendered (model_body.py, the side-by-side clip); 3 faults fixed after the fresh-eye look.
+Why it looks worse (Claude's own look): a painted mannequin, not a drawing: lumpy stiff limbs, a jacket that is skin
+with no shape or folds, small drawn heads on big real bodies, real proportions making him look hunched at the desk,
+forearms and shoes shortened when they point at the lens.
+Next: stop the switch (Claude's pick), asked of Sam as Q1. Keep what was learned: the depth check showed the flat
+poses sit 15 cm inside the chair and lay the forearm inside the desk; that check could guard flat films (a proposal,
+not asked). If Sam says go on instead: real hanging clothes, a body drawn in the house's clean curves, poses made
+for 3D; each must be learned first (weeks, not a chat).
+Needs Sam: Q1 (stop, Y/N).
+Read: this file only.
 Open rule requests: none.
 For Claude: model_body_test.py clip 12.17 27.84 OUT; _heads() is a 'move to shared' (body.HEADS hook for old films).
 Locked by Sam: Islamocommunism's cameras, times and beats as posted; no posted film is changed; Open Wounds stays flat.
-
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)
-
-Handover check answers (chat 2): Branches named (not this job's; left for their chains): claude/adoring-babbage-rtbj6h
-(R7's notes/r7.md, another chat's live work), claude/gta-v5-sound-draft, claude/gta-chat46-build,
-claude/dreamy-fermi-vkhutz, claude/gta-chat31. SENTENCE x4: CLAUDE.md edits by other chats (34f49840, 0945cc85),
-named by earlier chats; the sentences are still in CLAUDE.md in bold. FREEZE / kit test finished_films_keep_their_bookmark
-(21 from 20): source/model_body_test.py loads the posted Islamocommunism file ON PURPOSE (read only: the test must use
-the film's own poses, cameras and times; nothing in it changes). It is an investigation test, not kit or film work;
-if the model body goes ahead, films are built new on model_body.py and never load an old film. If Sam wants the count
-kept at 20, the test moves onto freeze.py's saved copy first (an hour's work, named, not done).
 
 ## Exceptions
 | warning | - | why | looked at | chosen or real | owner |
