@@ -18437,64 +18437,64 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.65,
+   "cost": 1.93,
    "src": "estimate",
    "sid": "session_01U3pKQzuMaJ3B7QYkkK55xe",
-   "steps": 81,
-   "hist_k": 262,
+   "steps": 95,
+   "hist_k": 280,
    "kinds": {
-    "tool search": 32.1,
-    "page.py": 0.5,
+    "tool search": 31.1,
+    "page.py": 0.4,
     "renders": 0.5,
-    "pictures": 5.4,
-    "other": 61.5
+    "pictures": 6.4,
+    "other": 61.6
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 67,
+    "tool search": 76,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
     "renders": 2,
-    "pictures": 11,
-    "other": 10
+    "pictures": 15,
+    "other": 12
    },
    "split": {
-    "usd": 6.0451,
-    "total": 6.0451,
+    "usd": 7.0765,
+    "total": 7.0765,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 29.9,
-     "carried history": 23.8,
-     "new writes": 23.5,
-     "start-up floor": 22.7
+     "Claude's words": 28.5,
+     "carried history": 26.9,
+     "start-up floor": 22.4,
+     "new writes": 22.2
     },
     "origins": {
-     "Claude's words": 45.0,
-     "result: tool search": 23.9,
-     "start-up floor": 22.7,
-     "result: pictures": 3.8,
-     "messages and reminders": 1.9,
+     "Claude's words": 44.7,
+     "result: tool search": 23.4,
+     "start-up floor": 22.4,
+     "result: pictures": 4.8,
+     "messages and reminders": 2.1,
      "Claude's edits": 1.8,
      "result: page.py": 0.5,
-     "result: other": 0.1
+     "result: other": 0.2
     },
     "named": {
-     "thinking": 23.1,
-     "start-up reading (rules, tools, first files)": 22.7,
-     "reading kit code": 18.5,
-     "writing code": 16.5,
-     "commands": 4.9,
-     "looking at pictures": 3.8,
-     "reading notes": 2.4,
-     "messages and reminders": 1.9,
-     "messages to Sam": 1.9,
-     "running checks and tools": 1.7,
+     "thinking": 22.5,
+     "start-up reading (rules, tools, first files)": 22.4,
+     "reading kit code": 18.0,
+     "writing code": 16.7,
+     "commands": 5.0,
+     "looking at pictures": 4.8,
+     "reading notes": 2.3,
+     "messages and reminders": 2.1,
+     "messages to Sam": 2.0,
+     "running checks and tools": 1.6,
      "start-up and handover tools": 0.9,
-     "writing notes": 0.5,
+     "writing notes": 0.4,
+     "other commands": 0.4,
      "renders": 0.4,
-     "git and saving": 0.4,
-     "other commands": 0.3,
+     "git and saving": 0.3,
      "reading chat records": 0.2
     },
     "leftover": 0.0
@@ -18507,105 +18507,105 @@
      [
       "source/islamocommunism.py",
       9.1,
-      0.1751
+      0.1982
      ],
      [
       "source/views.py",
       4.5,
-      0.089
+      0.1002
      ],
      [
       "notes/proposals/model-body-all.md",
       2.1,
-      0.045
+      0.0503
      ],
      [
       "source/lying.py",
       2.0,
-      0.0381
+      0.043
      ],
      [
       "source/bench_pose.py",
       1.8,
-      0.0357
+      0.0403
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/orig_sheet.jpg",
       1.6,
-      0.0275
+      0.0315
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/post_sheet.jpg",
       1.6,
-      0.0269
+      0.0309
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/ss2_15.jpg",
       1.6,
-      0.0263
+      0.0304
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/fix_cmp.jpg",
       1.6,
-      0.0246
+      0.0286
      ],
      [
       "source/midterminal_moves.py",
       1.1,
-      0.0204
+      0.0231
      ],
      [
       "source/islamocommunism_cast.py",
       1.1,
-      0.0197
+      0.0225
      ],
      [
       "source/page.py",
       0.9,
-      0.0196
+      0.0219
      ],
      [
       "source/midterminal_set.py",
       1.0,
-      0.0167
-     ],
-     [
-      "source/stepcost.py",
-      0.5,
-      0.0116
-     ],
-     [
-      "source/costline.py",
-      0.5,
-      0.0116
+      0.0193
      ],
      [
       "source/solid_seat.py",
       0.8,
-      0.0115
+      0.0134
+     ],
+     [
+      "source/stepcost.py",
+      0.5,
+      0.013
+     ],
+     [
+      "source/costline.py",
+      0.5,
+      0.013
      ],
      [
       "source/ledger.py",
       0.5,
-      0.0113
+      0.0126
      ],
      [
       "source/mhuman.py",
       0.7,
-      0.0101
+      0.0119
      ],
      [
       "source/islamocommunism_office.py",
       0.5,
-      0.0092
+      0.0105
      ],
      [
       "source/body.py",
       0.4,
-      0.0059
+      0.0068
      ]
     ],
-    "base_pct": 20.1
+    "base_pct": 20.2
    },
    "search": {
     "show": 1,
@@ -18616,9 +18616,9 @@
     },
     "other": {
      "shared:handover.py": 1,
-     "other": 11,
+     "other": 13,
      "shared:islamocommunism.py": 11,
-     "film notes": 2,
+     "film notes": 3,
      "shared:solid_seat.py": 5,
      "shared:stepcost.py": 1,
      "shared:ledger.py": 2,
@@ -18632,9 +18632,9 @@
      "shared:islamocommunism_office.py": 1,
      "shared:lying_flat.py": 3,
      "shared:mhuman.py": 1,
-     "shared:model_body_test.py": 5,
+     "shared:model_body_test.py": 7,
      "shared:costwatch.py": 2,
-     "shared:model_body.py": 4
+     "shared:model_body.py": 8
     },
     "ticked": 0,
     "edited film code": false,
@@ -19173,6 +19173,78 @@
       "film notes",
       "notes/proposals/model-body-all.md notes/archive/",
       "^## Where things stand",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py notes/proposals/model-body-all.md",
+      "git checkout -B claude/model-body-all-chat2 -q && git add source/model_body.py s",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "film notes",
+      "notes/kittest-films.tsv notes/kittest-stamps.tsv notes/logs/islamocommunism-show",
+      "git add notes/kittest-films.tsv notes/kittest-stamps.tsv notes/logs/islamocommun",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "other",
+      "",
+      "python3 - <<'EOF' 2>&1 | tail -8 import sys; sys.path.insert(0,'source') import ",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "python3 - <<'EOF' p='source/model_body.py' s=open(p).read() old=\"\"\" wr_t = K['wr",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "python3 - <<'EOF' p='source/model_body.py' s=open(p).read() s=s.replace(\"def rea",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "shared:model_body.py",
+      "source/model_body.py source/model_body_test.py",
+      "python3 - <<'EOF' p='source/model_body.py' s=open(p).read() old=\"\"\" for Ps, Ts, ",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "shared:model_body_test.py",
+      "source/model_body_test.py",
+      "S=/tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scrat",
       ""
      ]
     ]

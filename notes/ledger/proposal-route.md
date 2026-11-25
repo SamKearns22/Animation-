@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 2.5% of a week; spent 147.54% (+145.04); 70 chats, 0 rounds, 2 notes, 0 repeated.**
+**Estimate 2.5% of a week; spent 149.47% (+146.97); 71 chats, 0 rounds, 2 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -78,6 +78,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-25 | f33b5119 | est | opus | tool job: kit-tests-per-film (rule 90) built |  | 2.46 |  | 0 | 0 |
 | 2026-11-25 | cf96c026 | est | opus | auto |  | 2.01 |  | 0 | 0 |
 | 2026-11-25 | 2ac93977 | est | opus | planning |  | 1.53 |  | 0 | 0 |
+| 2026-11-25 | b288d473 | est | opus | auto |  | 1.93 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 83ccf353 (auto): 18 steps, history 141k at the end; other 60.5%, page.py 26.5%, tool search 13%
@@ -136,6 +137,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-25 b2f8e1d1 (auto): 62 steps, history 194k at the end; other 66.4%, tool search 26.4%, renders 5.5%, pictures 1.8%
 - 2026-11-25 f33b5119 (tool job: kit-tests-per-film (rule 90) built): 73 steps, history 186k at the end; other 63.9%, tool search 29.7%, renders 6.5%
 - 2026-11-25 cf96c026 (auto): 59 steps, history 172k at the end; other 74.1%, tool search 24.2%, whole-file .py read 1%, renders 0.7%
+- 2026-11-25 2ac93977 (planning): 22 steps, history 116k at the end; other 67.7%, tool search 26.7%, renders 5.6%
+- 2026-11-25 b288d473 (auto): 95 steps, history 280k at the end; other 61.6%, tool search 31.1%, pictures 6.4%, renders 0.5%, page.py 0.4%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 3a437266 (auto): Claude's words 33%, start-up floor 30.8%, new writes 20.8%, carried history 15.3%. Biggest origins: Claude's words 49.3%, start-up floor 30.8%, result: tool search 16.2%. Leftover 0%
@@ -169,9 +172,11 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-25 b2f8e1d1 (auto): start-up floor 39.4%, new writes 22.4%, carried history 19.7%, Claude's words 18.5%. Biggest origins: start-up floor 39.4%, Claude's words 28.4%, result: tool search 22.6%. Leftover 0%
 - 2026-11-25 f33b5119 (tool job: kit-tests-per-film (rule 90) built): start-up floor 32.5%, Claude's words 27.8%, new writes 21%, carried history 18.7%. Biggest origins: Claude's words 41.2%, start-up floor 32.5%, result: tool search 20.2%. Leftover 0%
 - 2026-11-25 cf96c026 (auto): start-up floor 34.8%, Claude's words 27.3%, new writes 23.6%, carried history 14.3%. Biggest origins: Claude's words 40.8%, start-up floor 34.8%, result: tool search 10.7%. Leftover 0%
+- 2026-11-25 2ac93977 (planning): start-up floor 43.2%, Claude's words 28%, new writes 22.9%, carried history 5.9%. Biggest origins: start-up floor 43.2%, Claude's words 37.6%, result: tool search 15.2%. Leftover 0%
+- 2026-11-25 b288d473 (auto): Claude's words 28.5%, carried history 26.9%, start-up floor 22.4%, new writes 22.2%. Biggest origins: Claude's words 44.7%, result: tool search 23.4%, start-up floor 22.4%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 6% of the film (8.78% of a week over 31 chats: start 8.63, re-learning 0.15; 0.28% a chat; step-1 context re-read is 24% of a chat on average).
+A new chat's start and re-learning cost 7% of the film (9.77% of a week over 33 chats: start 9.60, re-learning 0.17; 0.30% a chat; step-1 context re-read is 24% of a chat on average).
 - 2026-11-19 3a437266: step-1 context 82k; first real work at step 15 (0.26% of a week); read before it: source/stepcost.py 4.6k, notes/proposals/cost-other/milburn-usage.md 1.6k, source/propose.py 1.1k, notes/proposals/cost-other.md 0.9k, notes/proposals/cold-start.md 0.9k, source/ledger.py 0.7k
 - 2026-11-19 3498a80f: step-1 context 83k; first real work at step 31 (0.44% of a week); read before it: source/preflight.py 5.6k, source/posecheck.py 2.2k, source/milburn.py 1.9k, notes/proposals/front-on-focus/retirement-and-handover.md 1.1k, source/film_engine.py 1k, guides/job-packs.md 0.7k
 - 2026-11-19 6a247f23: step-1 context 82k; first real work at step None (None% of a week); read before it: notes/archive/milburn.md 2.8k, source/checkreplay.py 0.9k, notes/proposals/check-catches/replay/milburn.md 0.4k, notes/proposals/check-catches/replay/blessed.md 0.3k, notes/proposals/check-catches/replay/protest-tiers.md 0k
@@ -203,3 +208,5 @@ A new chat's start and re-learning cost 6% of the film (8.78% of a week over 31 
 - 2026-11-25 b2f8e1d1: step-1 context 98k; first real work at step None (None% of a week); read before it: notes/proposals/solid-body-moves.md 3.4k, notes/next-jobs.md 2.7k, notes/proposal-route.md 2.7k, notes/bench/learn-step.md 2.6k, guides/job-packs.md 2.2k, notes/learn/seated/examples/sam-25nov-v4-legs-awful-1.jpg 1.6k
 - 2026-11-25 f33b5119: step-1 context 84k; first real work at step 19 (0.26% of a week); read before it: notes/proposals/kit-tests-when.md 2.6k, source/kittests.py 2.6k, source/finish.py 1.5k, source/handover.py 1.2k, .claude/hooks/setup.sh 0.7k, source/kitstamps.py 0.7k
 - 2026-11-25 cf96c026: step-1 context 84k; first real work at step 12 (0.15% of a week); read before it: source/propose.py 1.6k, source/handover.py 1.3k, notes/proposals/model-body-all.md 1.2k, story/status.md 0.4k, notes/ledger/sam 0.2k
+- 2026-11-25 2ac93977: step-1 context 84k; first real work at step 8 (0.13% of a week); read before it: source/propose.py 2.5k, story/status.md 1.2k, notes/ledger/real-cost.md 0.7k, notes/ledger/app-costs.tsv 0.7k
+- 2026-11-25 b288d473: step-1 context 84k; first real work at step 45 (0.84% of a week); read before it: source/islamocommunism.py 9.1k, source/views.py 4.5k, notes/proposals/model-body-all.md 2.1k, source/lying.py 2k, source/bench_pose.py 1.8k, /tmp/claude-0/-home-user-Animation-/b288d473-cb08-5dff-9669-94b4fc65f428/scratchpad/mb/orig_sheet.jpg 1.6k
