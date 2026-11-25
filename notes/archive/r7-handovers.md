@@ -17,3 +17,18 @@
     Read: this R7 entry; views.py "R7: the seated lower body"; castsheet.py "R7: ... seen as a viewer"; kittests seated_r7_*.
     For Claude: render with R7 on: sp['seat_r7']=True, sitting.pose(sp,'upright'|'cross, knee over knee').
 
+
+  - **R7, where things stand (chat 2, 25 Nov, session_01U3pKQzwtcxXpPFrs5pH7DZ; next: chat 3, Opus high):**
+    Rules that bite next: 86, 13, 85. Locked by Sam: Open Wounds' seated frames (switch off). Lock test: Blair 45/90
+    re-fingerprinted (Open Wounds' own sleeve change moved them; proven R7 not the cause).
+    Done (chat 2): (1) castsheet.no_bottom reads the hem whole (shaded folds, across hands and stripes, sides skipped,
+    a hand under the edge not judged; a drawing's exact colours): every R7 view and pose passes (lowest 87%), Sam's frame
+    60%, the old drawing fails at 3/4; kittest seated_r7_look asserts all three (and pins views.KIT_LEG: remakes_cast
+    swaps views.leg on import). (2) Front knees: knee 33 across (was 38), no line where the knee's end lies on its own
+    shin, a kneecap curve when seen end-on (R7_END_ON, R7_CAP). (3) Kemi's stray lines: the hi-vis zip ran to a
+    standing length (people_parts.workwear_torso) and the short top's seat piece drew a box (body.trouser_seat r7):
+    both new-films only. (4) 3 blind judges: notes/learn/seated/judge/results-r7.md. Sheet: r7-before-after-v2.jpg. Next (chat 3, Opus high): the judges' faults, fix the drawing: crossed top leg's shoe a floating lump and the knee
+    join; front-view trouser legs too thin (cloth, not calves; show the lap); women seated read as men from the front
+    and side (Kemi). Then fresh judges again (judge_r7.py). Also (Sam "1 Y", 25 Nov): kit-test results kept per run,
+    each test written as it ends, a restart re-runs only the unfinished; proposal route first, then build. Needs Sam: 3 phone photos (asked, chat 2; Commons answers the web-fetch helper now, so chat 3 tries it too).
+    Read: this entry; results-r7.md; views.py "R7: the seated lower body". No rule requests. Branches named in notes/brexit-is-done.md and open-wounds-chat14 (Open Wounds' chain): not R7's.

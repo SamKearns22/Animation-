@@ -357,6 +357,7 @@ R7 = dict(back=84.0, front=46.0, spread=64.0, drop=58.0, rise=70.0,      # the b
           thigh=(58.0, 46.0), knee=(33.0, 34.0), calf=37.0, ankle=26.0)  # past each hip joint, to the seat, its top;
 R7_CAP = (0.22, 1.0)   # the kneecap seen end-on: the middle of the knee's end (22% to 78%), its curve kept whole
 #   (chat 2: the knee 33 across, not 38: narrower than the calf below it, as a real knee; the front knees read as bags)
+R7_SPREAD = 1.3   # a thigh pressed on the seat spreads this much sideways (crossed, the seat showed under the hem)
 R7_END_ON = 0.55   # a thigh drawn shorter than this share of its length points at the camera: its knee seen end-on
 #                                                                          thigh root (across, up-down), knee, calf
 
@@ -366,13 +367,19 @@ def r7_on(j, sp, view):
     return bool(sp.get('seat_r7') and j.get('lap') and view in SEATED_R7_VIEWS and sp.get('leg_cover') is None)
 
 
+R7_CLOTH = dict(man=dict(thigh=(58.0, 46.0), knee=(46.0, 40.0), hem=40.0),     # R7 chat 3: trouser legs as CLOTH
+               woman=dict(thigh=(64.0, 50.0), knee=(40.0, 36.0), hem=33.0))  # (blind judges: "thin stiff tubes",
+#   "calves"; a real trouser leg is 14-15 cm across at the knee, 1 unit = 1.5 mm): the knee's radius 46 (14 cm across),
+#   the cloth falling straight to the hem (no calf bulge: cloth hangs from the knee). A woman's: the thigh full at the
+#   hip, tapering harder to a slimmer knee and hem (refs woman-front-a/b: the two knees together span her hips).
+
+
 def _r7_sizes(sp):
     k = sp.get('leg_k', 1.0)
     woman = sp.get('figure') in WOMAN_LEGS
-    qk, qa = _woman_knee(sp)
-    th = (64.0, 50.0) if woman else R7['thigh']
-    return dict(thigh=(th[0] * k, th[1] * k), knee=(R7['knee'][0] * k * qk, R7['knee'][1] * k * qk),
-                calf=R7['calf'] * k * qk, ankle=R7['ankle'] * k * qa, hips=1.08 if woman else 1.0)
+    c = R7_CLOTH['woman' if woman else 'man']
+    return dict(thigh=(c['thigh'][0] * k, c['thigh'][1] * k), knee=(c['knee'][0] * k, c['knee'][1] * k),
+                calf=c['knee'][0] * k, ankle=c['hem'] * k, hips=1.08 if woman else 1.0)
 
 
 def _frame(u):
@@ -398,8 +405,8 @@ def _limb3(a, b, ra, rb, t0=0.0, t1=1.0, cap0=True, cap1=True, floor=None, bulge
         for th in np.linspace(0, 2 * math.pi, 22, endpoint=False):
             q = _add(c, _add(_mul(side, rx * math.cos(th)), _mul(vert, ry * math.sin(th))))
             q = _add(q, _mul(u, w))
-            if floor is not None and q[1] > floor[0] and q[2] < floor[1]:
-                q = (q[0], floor[0], q[2])
+            if floor is not None and q[1] > floor[0] and q[2] < floor[1]:   # pressed flat on the seat, it spreads
+                q = (c[0] + (q[0] - c[0]) * R7_SPREAD, floor[0], q[2])         # sideways (R7 chat 3)
             out.append((q, tag))
     for t in np.linspace(t0, t1, 10):
         rx = ra[0] + (rb[0] - ra[0]) * t
@@ -444,9 +451,7 @@ def _r7_parts(j, sp, sd, seat_y, t0=0.0):
     hip, knee, foot = j['hip' + sd], knee_of(j, sd), j['foot' + sd]
     floor = (seat_y, knee[2] - 40.0)
     thigh = _limb3(hip, knee, z['thigh'], z['knee'], t0=t0, cap0=not t0, floor=floor)
-    calf = lambda t: (z['calf'] - z['knee'][0]) * math.sin(math.pi * min(1.0, t / 0.6)) if t < 0.6 else \
-        (z['calf'] - z['knee'][0]) * 0.0                                       # noqa: E731
-    shin = _limb3(knee, foot, z['knee'], (z['ankle'], z['ankle']), cap1=False, bulge=calf)
+    shin = _limb3(knee, foot, z['knee'], (z['ankle'], z['ankle']), cap1=False)   # cloth: straight from the knee
     return thigh, shin
 
 
@@ -643,6 +648,9 @@ def shoe(p, j, side, yaw, sp):
     if sp.get('shoe_style') == 'trainer':         # a trainer (GTA, 20 Nov: the cast sheet's slab shoes): low and
         _trainer(p, foot_pt, yaw, sp)              # round at the toe, high at the ankle, a pale sole
         return
+    if sp.get('seat_r7'):                         # new films (R7 chat 3): a shaped shoe turned whole with the foot
+        _r7_shoe(p, j, side, yaw, sp)              # (the box above sheared when its toes dropped: a "floating lump")
+        return
     f = WOMAN_SHOE if sp.get('figure') in WOMAN_LEGS else 1.0
     box = [foot_pt(sx * f, sy, sz * f) for sx in (-28, 28) for sy in (0, 36) for sz in (-28, 92)]   # the shoe starts at the ankle
     hull = _hull([project(q, yaw)[0] for q in box])
@@ -655,6 +663,43 @@ def shoe(p, j, side, yaw, sp):
             p.poly(curve(_hull([project(q, yaw)[0] for q in sole]), 3), sc, INK, 2.0)
             heel = [foot_pt(sx, 36, sz) for sx, sz in ((-24, -24), (24, -24), (24, 14), (-24, 14))]
             p.poly(curve(_hull([project(q, yaw)[0] for q in heel]), 2), B.dk(sc, 0.7), INK, 1.6)
+
+
+R7_SHOE = dict(top={-28: -2, 0: -6, 30: 2, 62: 12, 92: 17},      # the upper's top (dy; the sole at 36): heel 6 cm,
+#              instep the highest, the toe 3 cm (chat 3: the first cut, 1-4 cm, read as a slipper from the side)
+               half={-28: 19, 0: 22, 30: 27, 62: 27, 92: 17},     # its half width: heel, instep, ball, toe rounded
+               woman=dict(scale=0.84, toe=10))                    # a woman's: smaller, the toe narrower (pointed)
+
+
+def _r7_frame(j, side):
+    """The shoe's frame with the toe angle turning the WHOLE shoe (sole and all) about the ankle: the old frame moved
+    only the toe down, so a hanging foot's shoe sheared into a lump (R7 judges, chat 2)."""
+    fx, fy, fz = j['foot' + side]
+    a = math.radians(j.get('toe' + side, 0.0))
+    yw, rl = math.radians(j.get('foot_yaw' + side, 0.0)), math.radians(j.get('foot_roll' + side, 0.0))
+
+    def pt(dx, dy, dz):
+        x, y = dx * math.cos(rl) - dy * math.sin(rl), dx * math.sin(rl) + dy * math.cos(rl)
+        y, z = y * math.cos(a) - dz * math.sin(a), y * math.sin(a) + dz * math.cos(a)
+        return (fx + x * math.cos(yw) + z * math.sin(yw), fy + y, fz - x * math.sin(yw) + z * math.cos(yw))
+    return pt
+
+
+def _r7_shoe(p, j, side, yaw, sp):
+    """A leather shoe from any angle (new films): the upper's hull (low at the toe, high at the heel, widest at the
+    ball), then the sole's edge in a lighter tone under it and a heel block, so the shoe reads which way it points."""
+    pt = _r7_frame(j, side)
+    col = sp.get('shoe', (22, 20, 22))
+    w = sp.get('figure') in WOMAN_LEGS
+    f = R7_SHOE['woman']['scale'] if w else 1.0
+    half = {**R7_SHOE['half'], **({92: R7_SHOE['woman']['toe']} if w else {})}
+    tops = R7_SHOE['top']
+    up = [pt(sx * half[z] * f, tops[z], z * f) for z in tops for sx in (-1, 1)]
+    low = [pt(sx * half[z] * f, 30, z * f) for z in tops for sx in (-1, 1)]
+    sc = sp.get('sole_c', B.lt(col, 2.6) if max(col) < 80 else B.dk(col, 0.6))
+    band = [pt(sx * (half[z] + 1.5) * f, dy, z * f) for z in tops for sx in (-1, 1) for dy in (28, 36)]
+    p.poly(curve(_hull([project(q, yaw)[0] for q in band]), 3), sc, INK, 1.6)   # the sole first: from above the
+    p.poly(curve(_hull([project(q, yaw)[0] for q in up + low]), 3), col, INK, 2.4)   # upper hides it but its rim
 
 
 def _covered(sp):

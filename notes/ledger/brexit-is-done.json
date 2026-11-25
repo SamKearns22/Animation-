@@ -6703,62 +6703,64 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.84,
+   "cost": 2.64,
    "src": "estimate",
    "sid": "session_01U3pKR21qH3HD4urog8SVBy",
-   "steps": 96,
-   "hist_k": 256,
+   "steps": 115,
+   "hist_k": 274,
    "kinds": {
-    "tool search": 28.4,
-    "whole-file .py read": 3.8,
-    "renders": 0.5,
-    "pictures": 4.3,
-    "other": 63.0
+    "tool search": 22.3,
+    "whole-file .py read": 2.6,
+    "renders": 0.3,
+    "pictures": 3.5,
+    "other": 71.2
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 62,
+    "tool search": 70,
     "whole-file .py read": 4,
     "page.py": 0,
     "routine": 0,
     "renders": 1,
     "pictures": 10,
-    "other": 20
+    "other": 27
    },
    "split": {
-    "usd": 6.7243,
-    "total": 6.7243,
+    "usd": 9.6782,
+    "total": 9.6782,
     "floor_k": 84,
     "blocks": {
-     "Claude's words": 31.1,
-     "start-up floor": 24.6,
-     "carried history": 23.9,
-     "new writes": 20.5
+     "new writes": 32.5,
+     "Claude's words": 24.9,
+     "carried history": 22.7,
+     "start-up floor": 20.0
     },
     "origins": {
-     "Claude's words": 51.3,
-     "start-up floor": 24.6,
-     "result: tool search": 14.7,
-     "result: pictures": 6.7,
-     "messages and reminders": 1.8,
+     "Claude's words": 43.0,
+     "start-up floor": 20.0,
+     "cache re-write": 16.8,
+     "result: tool search": 12.0,
+     "result: pictures": 5.5,
+     "messages and reminders": 1.7,
      "result: other": 0.9
     },
     "named": {
-     "thinking": 24.7,
-     "start-up reading (rules, tools, first files)": 24.6,
-     "writing code": 19.2,
-     "reading kit code": 8.8,
-     "looking at pictures": 6.7,
-     "commands": 5.1,
-     "reading notes": 2.7,
-     "running checks and tools": 2.6,
-     "messages and reminders": 1.8,
-     "messages to Sam": 1.0,
-     "other commands": 0.9,
-     "writing notes": 0.8,
-     "helper and chat prompts": 0.5,
+     "thinking": 20.5,
+     "start-up reading (rules, tools, first files)": 20.0,
+     "memory lapses (re-paying for the whole chat)": 16.8,
+     "writing code": 15.7,
+     "reading kit code": 7.1,
+     "looking at pictures": 5.5,
+     "commands": 4.3,
+     "reading notes": 2.2,
+     "running checks and tools": 2.1,
+     "messages and reminders": 1.7,
+     "messages to Sam": 1.3,
+     "other commands": 0.8,
+     "writing notes": 0.6,
+     "helper and chat prompts": 0.6,
      "reading guides": 0.5,
-     "app tools (chats, files sent)": 0.1
+     "app tools (chats, files sent)": 0.2
     },
     "leftover": 0.0
    },
@@ -6770,55 +6772,55 @@
      [
       "source/views.py",
       8.8,
-      0.1956
+      0.2256
      ],
      [
       "source/people.py",
       2.7,
-      0.0626
+      0.072
      ],
      [
       "notes/learn/seated/no-bum-circular-knees-sam.jpg",
       1.6,
-      0.0387
+      0.0442
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/1f655db8-3ad8-5162-ba8b-5d5b59989d0d/scratchpad/r7/before.png",
       1.6,
-      0.0353
+      0.0407
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/1f655db8-3ad8-5162-ba8b-5d5b59989d0d/scratchpad/r7/before_zoom.png",
       1.6,
-      0.0347
+      0.0402
      ],
      [
       "source/castsheet.py",
       1.3,
-      0.0301
+      0.0345
      ],
      [
       "guides/job-packs.md",
       1.0,
-      0.0237
+      0.0272
      ],
      [
       "notes/next-jobs.md",
       0.4,
-      0.0096
+      0.011
      ],
      [
       "source/body.py",
       0.2,
-      0.0044
+      0.0052
      ],
      [
       "source/sitting.py",
       0.2,
-      0.0044
+      0.0052
      ]
     ],
-    "base_pct": 21.6
+    "base_pct": 18.0
    },
    "search": {
     "show": 0,
@@ -6826,9 +6828,9 @@
      "no show": 0
     },
     "other": {
-     "other": 21,
-     "film notes": 4,
-     "guides": 2,
+     "other": 25,
+     "film notes": 6,
+     "guides": 4,
      "shared:views.py": 9,
      "shared:castsheet.py": 10,
      "shared:people.py": 5,
@@ -7335,6 +7337,70 @@
       "source/kittests.py",
       "^PASS|^FAIL|kittests:",
       ""
+     ],
+     [
+      99,
+      "other",
+      "other",
+      "",
+      "cd /tmp/claude-0/-home-user-Animation-/1f655db8-3ad8-5162-ba8b-5d5b59989d0d/scra",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "other",
+      "",
+      "git log --oneline origin/claude/r7-seated-lower-body..HEAD | head; for i in 1 2 ",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "",
+      "git log --oneline origin/claude/r7-seated-lower-body..HEAD; git status --short |",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "guides",
+      "guides/job-packs.md",
+      "One failed try per source",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "guides",
+      "guides/job-packs.md guides/film-quality-rules.md",
+      "^## \\|^| ",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "film notes",
+      "notes/learn/site-refusal notes/learn/site-refusal/r7-chat1.md /home/user/Animati",
+      "mkdir -p notes/learn/site-refusal && cat > notes/learn/site-refusal/r7-chat1.md ",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git log --oneline -1",
+      ""
+     ],
+     [
+      110,
+      "other",
+      "film notes",
+      "notes/learn/site-refusal notes/learn/site-refusal/r7-chat1.md /home/user/Animati",
+      "mkdir -p notes/learn/site-refusal && cat > notes/learn/site-refusal/r7-chat1.md ",
+      ""
      ]
     ]
    },
@@ -7346,68 +7412,71 @@
    "model": "opus",
    "stage": "build",
    "round": null,
-   "cost": 3.52,
+   "cost": 4.3,
    "notes": 0,
    "repeats": [],
-   "steps": 150,
-   "hist_k": 288,
+   "steps": 168,
+   "hist_k": 304,
    "kinds": {
-    "film-file search": 9.0,
-    "tool search": 19.9,
-    "page.py": 0.4,
-    "renders": 0.8,
-    "pictures": 5.4,
-    "other": 64.5
+    "film-file search": 7.0,
+    "tool search": 16.8,
+    "page.py": 0.3,
+    "renders": 0.6,
+    "pictures": 4.6,
+    "other": 70.7
    },
    "calls": {
     "film-file search": 27,
-    "tool search": 83,
+    "tool search": 94,
     "whole-file .py read": 0,
     "page.py": 1,
     "routine": 0,
     "renders": 2,
     "pictures": 17,
-    "other": 20
+    "other": 24
    },
    "split": {
-    "usd": 9.1928,
-    "total": 9.1928,
+    "usd": 12.2884,
+    "total": 12.2884,
     "floor_k": 84,
     "blocks": {
-     "carried history": 32.7,
-     "start-up floor": 26.3,
-     "Claude's words": 23.1,
-     "new writes": 17.8
+     "carried history": 29.8,
+     "new writes": 29.6,
+     "start-up floor": 21.8,
+     "Claude's words": 18.8
     },
     "origins": {
-     "Claude's words": 42.7,
-     "start-up floor": 26.3,
-     "result: tool search": 14.2,
-     "result: pictures": 5.3,
-     "messages and reminders": 5.1,
-     "result: film-file search": 5.0,
-     "result: other": 0.8,
-     "result: page.py": 0.5,
+     "Claude's words": 36.2,
+     "start-up floor": 21.8,
+     "cache re-write": 15.3,
+     "result: tool search": 12.2,
+     "messages and reminders": 4.7,
+     "result: pictures": 4.5,
+     "result: film-file search": 4.2,
+     "result: other": 0.7,
+     "result: page.py": 0.4,
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 26.3,
-     "thinking": 16.6,
-     "writing code": 15.0,
-     "commands": 8.1,
-     "reading kit code": 6.8,
-     "start-up and handover tools": 5.6,
-     "looking at pictures": 5.3,
-     "messages and reminders": 5.1,
-     "reading film code": 2.5,
-     "running checks and tools": 2.4,
-     "reading notes": 2.0,
-     "writing notes": 1.6,
-     "messages to Sam": 1.1,
-     "reading guides": 0.5,
-     "helper and chat prompts": 0.4,
-     "helper results": 0.4,
-     "other commands": 0.3
+     "start-up reading (rules, tools, first files)": 21.8,
+     "memory lapses (re-paying for the whole chat)": 15.3,
+     "thinking": 13.7,
+     "writing code": 12.2,
+     "commands": 7.0,
+     "reading kit code": 5.9,
+     "messages and reminders": 4.7,
+     "start-up and handover tools": 4.6,
+     "looking at pictures": 4.5,
+     "reading film code": 2.1,
+     "running checks and tools": 2.0,
+     "reading notes": 1.8,
+     "writing notes": 1.4,
+     "messages to Sam": 1.2,
+     "helper and chat prompts": 0.6,
+     "reading guides": 0.4,
+     "helper results": 0.3,
+     "other commands": 0.3,
+     "app tools (chats, files sent)": 0.1
     },
     "leftover": 0.0
    },
@@ -7419,66 +7488,1070 @@
      [
       "source/handover.py",
       1.5,
-      0.0521
+      0.057
      ],
      [
       "source/propose.py",
       1.4,
-      0.0494
+      0.0541
      ],
      [
       "source/watcher.py",
       1.1,
-      0.0361
+      0.0395
      ],
      [
       "notes/proposals/early-warning.md",
       1.1,
-      0.0361
+      0.0395
      ],
      [
       "notes/proposals/kit-tests-when.md",
       1.0,
-      0.0341
+      0.0374
      ],
      [
       "source/page.py",
       0.8,
-      0.0269
+      0.0296
      ],
      [
       "source/brexit_is_done_action.py",
       0.8,
-      0.0244
+      0.0269
      ],
      [
       "notes/logs/kittests-last.log",
       0.7,
-      0.0222
+      0.0243
      ],
      [
       "source/brexit_is_done.py",
       0.7,
-      0.0211
+      0.0232
      ],
      [
       ".claude/hooks/setup.sh",
       0.6,
-      0.0187
+      0.0206
      ],
      [
       "notes/proposals/kit-tests-when/chat.md",
       0.1,
-      0.0025
+      0.0028
      ],
      [
       "source/data/critique/brexit-is-done/r5-p1/result.md",
       0.0,
-      0.0007
+      0.0008
      ]
     ],
-    "base_pct": 24.5
-   }
+    "base_pct": 20.6
+   },
+   "src": "estimate",
+   "sid": "session_01U3pKR1ipLftvRyJ1wn1Tcp",
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 6,
+     "after show": 21
+    },
+    "other": {
+     "shared:handover.py": 10,
+     "film notes": 8,
+     "shared:propose.py": 5,
+     "shared:watcher.py": 1,
+     "other": 23,
+     "shared:critique.py": 2,
+     "shared:satire_style.py": 1,
+     "shared:people.py": 1,
+     "shared:views.py": 12,
+     "shared:kittests.py": 11,
+     "shared:moves.py": 3,
+     "shared:people_turned.py": 2,
+     "shared:acting.py": 7,
+     "shared:milburn.py": 2,
+     "shared:mouths.py": 1,
+     "shared:sitting.py": 2,
+     "shared:headlife.py": 1,
+     "guides": 1,
+     "shared:ledger.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status | head -5 && git log --oneline -3 && python3 source/handover.py start",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "gta-v5-sound-draft\\|gta-chat46-build\\|dreamy-fermi\\|gta-chat31",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals",
+      "sed -n 1,60p source/propose.py; ls notes/proposals | head -50",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/logs/*.log notes/brexit-is-done.md",
+      "kittest\\|kit test\\|kit_test",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "shared:handover.py",
+      "source/handover.py .claude/hooks/*.sh .claude/settings.json source/*.py source/k",
+      "kittests",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:watcher.py",
+      "source/watcher.py notes/proposals/early-warning notes/proposals/early-warning.md",
+      "def kittests_bg\\|kittests-bg",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:handover.py",
+      "notes/ledger/sam/ notes/logs/kittests-last.log source/handover.py",
+      "key stages",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:handover.py",
+      "source/handover.py source/finish.py source/modelguard.py .claude/hooks/*.py sour",
+      "def film_check_fixes\\|def _film_files\\|FILM_FILES\\|def film_of",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:handover.py",
+      "source/handover.py .claude/hooks/setup.sh",
+      "def _film_prefixes",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/kit-tests-when.md notes/archive/brexit-is-done",
+      "kittest\\|kit test\\|waited\\|wait",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "source/data/critique/brexit-is-done/r5-p1/ source/data/critique/brexit-is-done/r",
+      "ls source/data/critique/brexit-is-done/r5-p1/; sed -n 1,80p source/data/critique",
+      ""
+     ],
+     [
+      14,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "^    python3\\|^  [a-z]* \\.\\.\\.",
+      ""
+     ],
+     [
+      16,
+      "film",
+      "miss",
+      "source/brexit_is_done_action.py source/brexit_is_done*.py",
+      "lunger\\|def shot3\\|CUT\\b\\|9.4",
+      ""
+     ],
+     [
+      17,
+      "film",
+      "miss",
+      "guides/job-packs.md source/brexit_is_done.py",
+      "stills\\|--span\\|frame ",
+      ""
+     ],
+     [
+      18,
+      "film",
+      "miss",
+      "source/brexit_is_done.py",
+      "^SHOTS\\|^DUR\\|SHOTS =",
+      ""
+     ],
+     [
+      23,
+      "film",
+      "miss",
+      "source/brexit_is_done_action.py",
+      "^import\\|^from\\|WF =\\|import .* as WF",
+      ""
+     ],
+     [
+      24,
+      "film",
+      "miss",
+      "source/brexit_is_done_action.py source/wolf*.py",
+      "def pose",
+      ""
+     ],
+     [
+      25,
+      "film",
+      "miss",
+      "source/wolf.py source/brexit_is_done.py",
+      "^def draw\\b\\|^def draw(",
+      ""
+     ],
+     [
+      26,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "^FPS",
+      ""
+     ],
+     [
+      29,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge kit-tests-when 2>&1 | tail -4",
+      ""
+     ],
+     [
+      35,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py source/brexit_is_done.py",
+      "^LUNGE_PATH\\|d = 3.2",
+      ""
+     ],
+     [
+      37,
+      "other",
+      "shared:satire_style.py",
+      "source/satire_style.py",
+      "def install_circle_hands",
+      ""
+     ],
+     [
+      38,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "S=/tmp/claude-0/-home-user-Animation-/de98e7e9-aab7-5398-beab-aa196b17f1c2/scrat",
+      ""
+     ],
+     [
+      40,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "^GUESTS",
+      ""
+     ],
+     [
+      41,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "^CROWD\\b\\|^CROWD =",
+      ""
+     ],
+     [
+      42,
+      "film",
+      "after show",
+      "story/brexit-is-done-people.txt source/people.py",
+      "guest",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "shared:people.py",
+      "source/people.py",
+      "^def kit_head",
+      ""
+     ],
+     [
+      44,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py record kit-tests-when 2>&1 | tail -8 && python3 source",
+      ""
+     ],
+     [
+      45,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "HEADS\\|kit_head\\|'bald'",
+      ""
+     ],
+     [
+      46,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1150,1200p source/views.py; python3 -c \" import sys; sys.path.insert(0,'s",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/de98e7e9-aab7-5398-beab-aa196b17f1c2/scrat",
+      ""
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/de98e7e9-aab7-5398-beab-aa196b17f1c2/scrat",
+      ""
+     ],
+     [
+      51,
+      "film",
+      "after show",
+      ".claude/hooks/costwatch.py source/brexit_is_done_action.py",
+      "def _guest_pose",
+      ""
+     ],
+     [
+      52,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "gesture_hand\\|far arm\\|far_arm\\|back arm",
+      ""
+     ],
+     [
+      53,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "_arm(\\|def _arm\\|draw_arm",
+      ""
+     ],
+     [
+      54,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      " arm(p\\| arm(\\|behind\\b.*arm\\|far = \\|far=",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1440,1500p source/views.py",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/de98e7e9-aab7-5398-beab-aa196b17f1c2/scrat",
+      ""
+     ],
+     [
+      58,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 565,640p source/views.py",
+      ""
+     ],
+     [
+      59,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/burnham.py source/*.py",
+      "unchanged\\|as before\\|golden\\|same_pixels",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "shared:views.py",
+      "source/views.py notes/learn/dark-sleeve/",
+      "\\",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "shared:views.py",
+      "source/views.py source/kittests.py",
+      "^DARK_SLEEVE",
+      ""
+     ],
+     [
+      63,
+      "other",
+      "shared:kittests.py",
+      "notes/learn/dark-sleeve notes/learn/dark-sleeve/before-26.75.jpg notes/learn/dar",
+      "s own cloth a little (DARK_SLEEVE_LIFT), every film.\nCheck: kittest dark_sleeve_",
+      ""
+     ],
+     [
+      64,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "argv\\|usage\\|python3",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def main\\|__main__",
+      ""
+     ],
+     [
+      66,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3 - <<'EOF' p='source/kittests.py' s=open(p).read() i=s.index('\\n\\n@test\\n",
+      ""
+     ],
+     [
+      67,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -i \"s/ img = Image.new('RGB', (400, 600), (235, 235, 235))\\n j = MV.gait(sp,",
+      ""
+     ],
+     [
+      68,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "^TOSS\\|^PASSES\\|^RUN_STEP\\|^LANES\\|^DOOR",
+      ""
+     ],
+     [
+      69,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "sed -n 543,563p source/brexit_is_done_action.py; python3 -c \" import sys; sys.pa",
+      ""
+     ],
+     [
+      70,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "tray_state",
+      ""
+     ],
+     [
+      71,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "sed -n 736,775p source/brexit_is_done_action.py",
+      ""
+     ],
+     [
+      72,
+      "other",
+      "shared:moves.py",
+      "source/moves.py",
+      "^def head_on\\|^def within_reach\\|^def chase_movers",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "shared:moves.py",
+      "source/moves.py",
+      "sed -n 257,270p source/moves.py",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:kittests.py",
+      "/home/user/Animation-/source/kittests.py",
+      "chase_movers",
+      ""
+     ],
+     [
+      83,
+      "other",
+      "shared:moves.py",
+      "source/moves.py source/kittests.py notes/learn/tray-trodden/ notes/learn/tray-tr",
+      " source/moves.py && python3 - <<",
+      ""
+     ],
+     [
+      84,
+      "other",
+      "shared:views.py",
+      "source/people*.py source/views.py source/turnhead.py source/facehouse.py",
+      "'bun'",
+      ""
+     ],
+     [
+      85,
+      "other",
+      "shared:people_turned.py",
+      "source/people_turned.py source/turnhead.py source/views.py",
+      "'knot'",
+      ""
+     ],
+     [
+      86,
+      "other",
+      "shared:people_turned.py",
+      "source/people_turned.py",
+      "def _style\\|kit_face\\|'turned'",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/de98e7e9-aab7-5398-beab-aa196b17f1c2/scrat",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "python3 source/critique.py fixed brexit-is-done \"r5 as one list: (a) the lunge w",
+      ""
+     ],
+     [
+      90,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds chat 14: shot 3 critique r5 fixed as o",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "sed -n 1,90p source/acting.py | cut -c1-200",
+      ""
+     ],
+     [
+      92,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "milburn\\|brexit",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py",
+      "sed -n 195,262p source/milburn.py",
+      ""
+     ],
+     [
+      94,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "sed -n 44,150p source/brexit_is_done.py",
+      ""
+     ],
+     [
+      95,
+      "other",
+      "shared:milburn.py",
+      "source/milburn.py story/milburn-moves.txt",
+      "sed -n 150,196p source/milburn.py; sed -n 1,60p story/milburn-moves.txt",
+      ""
+     ],
+     [
+      96,
+      "film",
+      "after show",
+      "source/milburn.py source/brexit_is_done.py",
+      "^import.*V_\\|V_ =\\|as V_\\|def soundtrack",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "shared:mouths.py",
+      "source/mouths.py source/figure.py",
+      "^def track\\|^def at\\|^def even\\|^def standin\\|^def stand_in",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "^def person\\|^def pose\\|^def _stance\\|stance",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "sed -n 200,225p source/acting.py; sed -n 655,800p source/acting.py",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "^def pose\\b\\|^def pose(",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "^POSES\\b\\|^POSES =",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "sed -n 455,545p source/acting.py",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "other",
+      "",
+      "ls references/brexit-is-done/ | head -30",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "python3 - <<'EOF' p='source/acting.py' s=open(p).read() old=\"\"\" st = b['stance']",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/kittests.py",
+      "python3 - <<'EOF' p='source/acting.py' s=open(p).read() old=\"\"\" continue if True",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "shared:headlife.py",
+      "source/headlife.py source/views.py source/people_parts.py source/mouths.py",
+      "class HeadLife",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "shared:views.py",
+      "source/views.py source/headlife.py",
+      "^FPS\\|^def phrase_starts",
+      ""
+     ],
+     [
+      110,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "grin\\|smile",
+      ""
+     ],
+     [
+      111,
+      "film",
+      "after show",
+      "source/brexit_is_done.py story/brexit-is-done-moves.txt source/acting.py notes/b",
+      "text",
+      ""
+     ],
+     [
+      112,
+      "film",
+      "after show",
+      "story/brexit-is-done-moves.txt source/acting.py",
+      "cat > story/brexit-is-done-moves.txt <<'EOF' # Open Wounds' moves, from its acti",
+      ""
+     ],
+     [
+      113,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "python3 -c \" import sys; sys.path.insert(0,'source'); import brexit_is_done as F",
+      ""
+     ],
+     [
+      114,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "^/tmp",
+      ""
+     ],
+     [
+      117,
+      "other",
+      "other",
+      "",
+      "^brexit-is-done-1\\.",
+      ""
+     ],
+     [
+      120,
+      "film",
+      "after show",
+      "source/brexit_is_done.py notes/logs/kittests-last.log source/kittests.py",
+      "lid4=0.1, brow_up=0.006\\|lid4=0.15\\|lid4=0.12",
+      ""
+     ],
+     [
+      121,
+      "other",
+      "other",
+      "",
+      "kittests.py",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "^## ",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 50,70p notes/brexit-is-done.md | cut -c1-160",
+      ""
+     ],
+     [
+      125,
+      "film",
+      "after show",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md story/brexit-i",
+      "head_on\\|within_reach",
+      ""
+     ],
+     [
+      126,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "moves.py\\|^| moves\\|gait",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "film notes",
+      "guides/kit-catalogue.md notes/brexit-is-done.md story/status.md",
+      "python3 - <<'EOF' p='guides/kit-catalogue.md' s=open(p).read() anchor=\"| kittest",
+      ""
+     ],
+     [
+      128,
+      "other",
+      "film notes",
+      "story/status.md notes/logs/kittests-last.log",
+      " notes/logs/kittests-last.log; grep -c ",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^kittests:",
+      ""
+     ],
+     [
+      130,
+      "other",
+      "other",
+      "/home/user/Animation-/notes/logs/kittests-last.log",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      133,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^ ",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^ ",
+      ""
+     ],
+     [
+      136,
+      "other",
+      "other",
+      "/home/user/Animation-/notes/logs/kittests-last.log",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      137,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "git status --short | head; git add notes/brexit-is-done.md && git commit -qm \"Op",
+      ""
+     ],
+     [
+      138,
+      "other",
+      "other",
+      "notes/logs/handover-end.log",
+      "git add notes/logs/handover-end.log && git commit -qm \"handover end log Co-Autho",
+      ""
+     ],
+     [
+      139,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      140,
+      "film",
+      "after show",
+      "notes/brexit-is-done.md story/brexit-is-done-moves.txt guides/job-packs.md story",
+      "Andy",
+      ""
+     ],
+     [
+      141,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      142,
+      "other",
+      "other",
+      "",
+      "git add -A && git commit -qm \"Open Wounds chat 14: Sam's acting plan (every line",
+      ""
+     ],
+     [
+      143,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def facehouse_whole_head",
+      ""
+     ],
+     [
+      144,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 2758,2792p source/kittests.py",
+      ""
+     ],
+     [
+      145,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source'); import views as V; V.DARK_",
+      ""
+     ],
+     [
+      146,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "python3 - <<'EOF' p='source/views.py' s=open(p).read() old=\"\"\"def sleeve_colour(",
+      ""
+     ],
+     [
+      147,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source'); import kittests as K print",
+      ""
+     ],
+     [
+      148,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "pkill -f \"source/kittests.py\"; sleep 1; git add -A && git commit -qm \"Shared sle",
+      ""
+     ],
+     [
+      149,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^kittests:",
+      ""
+     ],
+     [
+      150,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      151,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^kittests:\\|^FAIL\\|Traceback",
+      ""
+     ],
+     [
+      152,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^ ",
+      ""
+     ],
+     [
+      153,
+      "other",
+      "shared:ledger.py",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-notes.md source/ledger.py s",
+      "^ ",
+      ""
+     ],
+     [
+      156,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "^ ",
+      ""
+     ],
+     [
+      157,
+      "other",
+      "other",
+      "",
+      "^UU\\|^AA\\|^DU\\|^UD",
+      ""
+     ],
+     [
+      158,
+      "other",
+      "other",
+      "notes/logs/handover-end.log notes/logs/kittest-reds.log",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      159,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "git diff 04d9bd3b origin/claude/create-claude-md-oe8z4g --stat -- source/ | tail",
+      ""
+     ],
+     [
+      161,
+      "other",
+      "shared:propose.py",
+      "source/propose.py notes/proposals/kit-tests-when.md",
+      "Sam's pick\\|Status:",
+      ""
+     ],
+     [
+      162,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "next-jobs\\|jobs",
+      ""
+     ],
+     [
+      163,
+      "other",
+      "film notes",
+      "notes/proposals/kit-tests-when.md",
+      "cat >> notes/proposals/kit-tests-when.md <<'EOF' ## Sam's pick and the build (25",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
   },
   {
    "date": "2026-11-25",
@@ -7488,66 +8561,65 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 2.42,
+   "cost": 3.33,
    "src": "estimate",
    "sid": "session_01U3pKQzwtcxXpPFrs5pH7DZ",
-   "steps": 111,
-   "hist_k": 277,
+   "steps": 137,
+   "hist_k": 296,
    "kinds": {
-    "film-file search": 0.3,
-    "tool search": 20.8,
-    "whole-file .py read": 1.6,
-    "renders": 0.3,
-    "pictures": 11.1,
-    "other": 66.0
+    "film-file search": 0.2,
+    "tool search": 16.0,
+    "whole-file .py read": 1.1,
+    "renders": 0.2,
+    "pictures": 7.8,
+    "other": 74.7
    },
    "calls": {
     "film-file search": 2,
-    "tool search": 71,
+    "tool search": 85,
     "whole-file .py read": 5,
     "page.py": 0,
     "routine": 0,
     "renders": 1,
     "pictures": 21,
-    "other": 34
+    "other": 40
    },
    "split": {
-    "usd": 7.8158,
-    "total": 7.8158,
+    "usd": 11.1342,
+    "total": 11.1342,
     "floor_k": 84,
     "blocks": {
-     "carried history": 28.5,
-     "Claude's words": 28.1,
-     "start-up floor": 23.6,
-     "new writes": 19.8
+     "carried history": 30.8,
+     "new writes": 30.4,
+     "Claude's words": 22.2,
+     "start-up floor": 16.6
     },
     "origins": {
-     "Claude's words": 50.0,
-     "start-up floor": 23.6,
-     "result: tool search": 12.7,
-     "result: pictures": 7.3,
-     "messages and reminders": 3.1,
-     "result: other": 3.0,
+     "Claude's words": 38.5,
+     "messages and reminders": 28.3,
+     "start-up floor": 16.7,
+     "result: tool search": 9.0,
+     "result: pictures": 5.1,
+     "result: other": 2.1,
      "result: film-file search": 0.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 23.6,
-     "thinking": 21.7,
-     "writing code": 17.4,
-     "reading kit code": 8.2,
-     "looking at pictures": 7.3,
-     "commands": 5.9,
-     "reading notes": 3.3,
-     "messages and reminders": 3.1,
-     "other commands": 2.7,
-     "writing notes": 2.2,
-     "messages to Sam": 1.5,
+     "messages and reminders": 28.3,
+     "start-up reading (rules, tools, first files)": 16.7,
+     "thinking": 16.0,
+     "writing code": 12.5,
+     "reading kit code": 5.8,
+     "commands": 5.3,
+     "looking at pictures": 5.1,
+     "reading notes": 2.4,
+     "other commands": 1.9,
+     "writing notes": 1.8,
+     "messages to Sam": 1.6,
      "helper and chat prompts": 1.3,
-     "reading guides": 0.8,
-     "start-up and handover tools": 0.5,
-     "helper results": 0.3,
-     "app tools (chats, files sent)": 0.2,
-     "renders": 0.1
+     "reading guides": 0.5,
+     "start-up and handover tools": 0.3,
+     "helper results": 0.2,
+     "app tools (chats, files sent)": 0.2
     },
     "leftover": 0.0
    },
@@ -7707,7 +8779,7 @@
       0.0
      ]
     ],
-    "base_pct": 21.5
+    "base_pct": 18.7
    },
    "search": {
     "show": 0,
@@ -7715,12 +8787,12 @@
      "no show": 2
     },
     "other": {
-     "other": 38,
-     "shared:handover.py": 4,
-     "film notes": 12,
-     "shared:views.py": 4,
+     "other": 42,
+     "shared:handover.py": 6,
+     "film notes": 15,
+     "shared:views.py": 5,
      "shared:castsheet.py": 3,
-     "shared:kittests.py": 7,
+     "shared:kittests.py": 11,
      "guides": 2,
      "shared:remakes_cast.py": 1
     },
@@ -8309,6 +9381,263 @@
       "other",
       "notes/logs/kittest-reds.log",
       "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^FAIL",
+      ""
+     ],
+     [
+      135,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "ls -la notes/logs/kittests-last.log; git log --oneline -3; git log -1 --format=%",
+      ""
+     ],
+     [
+      136,
+      "other",
+      "shared:kittests.py",
+      "notes/logs/kittests-last.log source/kittests.py",
+      "^kittests:",
+      ""
+     ],
+     [
+      137,
+      "other",
+      "other",
+      "",
+      "git push -q origin HEAD:claude/r7-chat2 2>&1 | tail -1; git fetch -q origin clau",
+      ""
+     ],
+     [
+      138,
+      "other",
+      "other",
+      "",
+      "git log --oneline -2; git push -q origin HEAD:claude/r7-chat2 2>&1 | tail -1; gi",
+      ""
+     ],
+     [
+      139,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "First: reference photos\\|Then fresh judges again",
+      ""
+     ],
+     [
+      142,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/logs/kittests-last.log",
+      "^PASS",
+      ""
+     ],
+     [
+      143,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/next-jobs.md",
+      "^BRANCH\\|^SENTENCE",
+      ""
+     ],
+     [
+      144,
+      "other",
+      "film notes",
+      "",
+      "git log --oneline d74cb35a..HEAD --no-merges -- source/ story/ | head -10",
+      ""
+     ],
+     [
+      145,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      146,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py source/people_parts.py source/kittests.py",
+      "PASS\\|FAIL\\|Error",
+      ""
+     ],
+     [
+      148,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      149,
+      "other",
+      "shared:handover.py",
+      "notes/next-jobs.md notes/brexit-is-done.md source/handover.py",
+      "HANDOVER:.*lines\\|STOP\\|REFUSED",
+      ""
+     ],
+     [
+      150,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/next-jobs.md notes/logs/ notes/ledger/",
+      "git add -A source/kittests.py notes/next-jobs.md notes/logs/ notes/ledger/ 2>/de",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-25",
+   "chat": "b5e735d0",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.07,
+   "src": "estimate",
+   "sid": "session_01U3pKQz3PjFhYRqAzDSrPpK",
+   "steps": 7,
+   "hist_k": 105,
+   "kinds": {
+    "tool search": 13.9,
+    "other": 86.1
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 6,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 0
+   },
+   "split": {
+    "usd": 0.2645,
+    "total": 0.2645,
+    "floor_k": 97,
+    "blocks": {
+     "start-up floor": 74.5,
+     "new writes": 12.4,
+     "Claude's words": 12.3,
+     "carried history": 0.8
+    },
+    "origins": {
+     "start-up floor": 74.5,
+     "Claude's words": 14.4,
+     "result: tool search": 9.9,
+     "messages and reminders": 1.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 74.5,
+     "reading notes": 9.9,
+     "commands": 5.9,
+     "messages to Sam": 5.5,
+     "thinking": 3.0,
+     "messages and reminders": 1.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 97,
+    "work_step": null,
+    "work_pct": null,
+    "reads": [
+     [
+      "notes/brexit-is-done.md",
+      1.2,
+      0.0047
+     ],
+     [
+      "story/status.md",
+      0.8,
+      0.0035
+     ],
+     [
+      "notes/next-jobs.md",
+      0.7,
+      0.003
+     ],
+     [
+      "notes/ledger/sam/azdsrppk.md",
+      0.7,
+      0.003
+     ]
+    ],
+    "base_pct": 22.1
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "other": 2,
+     "film notes": 4
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head -20; git branch --show-current; git fetch origin claud",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/next-jobs.md story/status.md notes/ledger/sam/azdsrppk.md",
+      "git checkout -q --detach origin/claude/create-claude-md-oe8z4g && git status --s",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "other",
+      "notes/*.md notes/open-wounds*.md",
+      "[g]it ",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/*.md story/*.md story/status.md",
+      "wound|open",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/next-chat-prompt.md notes/*wound*",
+      "where things stand",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 50,75p notes/brexit-is-done.md",
       ""
      ]
     ]

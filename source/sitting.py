@@ -485,6 +485,10 @@ def spec_upright(sp, seat, hands='thighs'):
     elif hands == 'lap':
         for s in 'LR':
             arms[s] = arm_free((14.0, 420.0, 150.0), (0.6, 0.6, -0.3), 'fist')
+    if sp.get('figure') in V.WOMAN_LEGS and sp.get('seat_r7'):   # R7 chat 3 (new films): knees together TOUCHING, not
+        # pinched through each other (they were 14 apart, each 60 across), the feet under them (ref woman-front-a)
+        return _spec(arms=arms, feet={'L': (-R7_WOMAN['feet'], 235.0), 'R': (R7_WOMAN['feet'], 235.0)},
+                     knee_pole={sd: (-sg * R7_WOMAN['in'], -1.0, 0.7) for sd, sg in (('L', -1), ('R', 1))})
     if sp.get('figure') in V.WOMAN_LEGS:          # Open Wounds chat 7 (Kemi's seated photo; the blind judge on her
         # seated outline: "seated and bulky"): knees and feet together, as a man's sit apart (feet at 64)
         return _spec(arms=arms, feet={'L': (-WOMAN_FEET, 235.0), 'R': (WOMAN_FEET, 235.0)},
@@ -493,6 +497,7 @@ def spec_upright(sp, seat, hands='thighs'):
 
 
 WOMAN_FEET = 30.0
+R7_WOMAN = {'feet': 38.0, 'in': 0.05}   # R7 women seated: feet apart, knees pointing nearly straight
 
 
 def spec_hands_folded(sp, seat):
@@ -562,6 +567,9 @@ def pose(sp, name, seat=None, **kw):
 
 # ------------------------------------------------------------------------------------------------ part 2 poses
 THIGH_R, KNEE_R, ANKLE_R = 24.0, 19.0, 13.5       # the legs' half-widths as views.leg draws them (thigh, knee, ankle)
+R7_CROSS = dict(rest=34.0, toe=-34.0,   # R7 knee over knee: the lower thigh's half-height under the top knee; the
+                shin=lambda sl: (sl * 0.12, 0.80, 0.50))   # hanging foot's toes down; the top shin's hang: nearly
+#   parallel to the lower shin (chat 3 judges on sideways 0.30: "the shin slants out at an odd angle"; ref woman-3q-crossed)
 
 
 def knees(sp, seat, spec):
@@ -600,9 +608,19 @@ def spec_cross_knee(sp, seat, top='R'):
     kn, j = knees(sp, seat, base)
     KL = kn[lo]
     hip = j['hip' + top]
-    want = V._add(KL, (-sl * 22.0, -(THIGH_R + THIGH_R - 6), 26.0))   # on the lower thigh, past its knee
-    K, A, pole = _leg_by_knee(hip, V._sub(want, hip), (sl * 0.32, 0.86, 0.34))
-    base.update(ankle={top: _ankle_spec(j, A)}, knee_pole={top: pole}, toe={top: -18.0},
+    if sp.get('seat_r7'):     # R7 (new films): the top knee rests ON the fuller R7 thigh (its knee's radius over the
+        #   lower thigh's), not sunk into it (blind judges, chat 2: "the knee over knee join muddled, a swollen top
+        #   thigh"); the shin hangs forward across the lower shin, its foot well off the floor at about the middle of
+        #   the lower shin, toes down (Commons refs notes/learn/seated/refs: woman-3q-crossed, man-side-crossed)
+        up = V.R7['knee'][1] + R7_CROSS['rest']
+        want = V._add(KL, (-sl * 22.0, -up, 26.0))
+        K, A, pole = _leg_by_knee(hip, V._sub(want, hip), R7_CROSS['shin'](sl))
+        toe = R7_CROSS['toe']
+    else:
+        want = V._add(KL, (-sl * 22.0, -(THIGH_R + THIGH_R - 6), 26.0))   # on the lower thigh, past its knee
+        K, A, pole = _leg_by_knee(hip, V._sub(want, hip), (sl * 0.32, 0.86, 0.34))
+        toe = -18.0
+    base.update(ankle={top: _ankle_spec(j, A)}, knee_pole={top: pole}, toe={top: toe},
                 on={top: 'air', lo: 'floor'}, cross=top, contact={top: ('thigh on knee', lo)})
     base['arms'] = {s: arm_free(((K[0] + (30 if s == 'R' else -30)) * (1 if s == 'R' else -1), K[1] - 38.0, K[2] - 34.0),
                                 (0.5, 0.7, -0.4), 'palm') for s in 'LR'}     # both hands on the top knee, side by side
