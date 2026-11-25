@@ -1,6 +1,6 @@
 # Proposal: The full kit tests run every chat, even when nothing shared changed
 
-Status: open
+Status: adopted (2026-11-25)
 
 ## Problem
 Sam, 25 Nov 07:39, word for word: "Do we need to run checks every chat? Wouldn't it be better to run them at certain
@@ -117,3 +117,15 @@ You'd notice: film-only chats hand over faster; about three in four chats change
 Other option: test only what changed, by which files each test looks at.
 Lost: the start-of-chat catch of faults another chat left, and tests on film files that shared tests read, until the animatic.
 Added: a test run before every animatic and final.
+
+## Sam's pick and the build (25 Nov)
+Sam picked **1** (the judged version: test only what changed, by the files each test looks at), 25 Nov, Open Wounds
+chat 14 (session_01U3pKR1ipLftvRyJ1wn1Tcp). Built in its own chat (Opus high), as the verdict's steps:
+1. Record which files each kit test reads (trace a full run); first replay the last week's chats to show this way would
+   have caught every fault the tests ever caught. Report the replay before switching anything off.
+2. Each passing test leaves a stamp of the exact files it read (their hashes); at a chat's end (handover.py end), only
+   the tests whose files changed run again; the gate reads the stamps.
+3. finish.py refuses an animatic or final until every test has a fresh pass on the current files (runs the stale ones).
+4. The start-up hook (setup.sh) runs only the stale tests in the background.
+5. A kittest proves it: a film-only change that a test reads re-runs that test; an unchanged file skips; finish refuses
+   without fresh stamps. Lost: the full run in every chat. Added: the stamp record; a run before every animatic/final.
