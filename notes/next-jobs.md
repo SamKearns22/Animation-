@@ -39,13 +39,13 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
     swaps views.leg on import). (2) Front knees: knee 33 across (was 38), no line where the knee's end lies on its own
     shin, a kneecap curve when seen end-on (R7_END_ON, R7_CAP). (3) Kemi's stray lines: the hi-vis zip ran to a
     standing length (people_parts.workwear_torso) and the short top's seat piece drew a box (body.trouser_seat r7):
-    both new-films only. (4) 3 blind judges: notes/learn/seated/judge/results-r7.md. Sheet to Sam: r7-before-after-v2.jpg.
-    Next (chat 3, Opus high): the judges' faults, fix the drawing: crossed top leg's shoe a floating lump and the knee
+    both new-films only. (4) 3 blind judges: notes/learn/seated/judge/results-r7.md. Sheet: r7-before-after-v2.jpg. Next (chat 3, Opus high): the judges' faults, fix the drawing: crossed top leg's shoe a floating lump and the knee
     join; front-view trouser legs too thin (cloth, not calves; show the lap); women seated read as men from the front
     and side (Kemi). Then fresh judges again (judge_r7.py). Needs Sam: 3 phone photos (asked, chat 2).
-    Read: this entry; results-r7.md; views.py "R7: the seated lower body". Open rule requests: none.
-    For Claude: render R7 with sp['seat_r7']=True, sitting.pose(sp,'upright'|'cross, knee over knee'); judges: python3
-    notes/learn/seated/judge_r7.py, then 3 fresh sonnet helpers (prompt as chat 2's: outlines first, then the look).
+    Read: this entry; results-r7.md; views.py "R7: the seated lower body". Open rule requests: none. Branches (not R7's,
+    not merged): claude/open-wounds-chat14 (Open Wounds' own parallel chain), claude/gta-v5-sound-draft, claude/gta-chat46-build,
+    claude/dreamy-fermi-vkhutz (GTA, named in notes/brexit-is-done.md); not R7's: the file's other "Where things stand",
+    CLAUDE.md's "lost sentences" (still there, reworded). For Claude: sp['seat_r7']=True; judges: judge_r7.py + 3 sonnet.
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
