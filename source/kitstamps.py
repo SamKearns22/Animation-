@@ -43,7 +43,7 @@ ALL_DIRS = ('source', '.claude')
 KEEP = 3                                        # lines kept per test (newest), so the record stays small
 SKIP_PARTS = ('/.git/', '/__pycache__/')
 HARNESS = {'start', 'stop', '_start_event', '_open', '_imp', '_listdir', '_scandir', '_popen', '_from_importer', '_rel',
-           '_program', '_one_step_out', 'tracer', 'traced'}
+           '_program', '_one_step_out', 'tracer', 'traced', '_child_dir', '_done'}
 
 
 # ------------------------------------------------------------------------------------------------ the setup a stamp holds
@@ -165,6 +165,7 @@ class Tracer:
         self.names = set()                      # kittests.py functions that ran
         self.mods = set()                       # module names an import statement named
         self.all = False
+        self.children, self._child_out, self._cdir = 0, '', None
         self.t0 = 0.0
         self._real = {}
         self._mon = hasattr(sys, 'monitoring')
@@ -225,7 +226,13 @@ class Tracer:
 
         def _popen(self_, args, *a, **k):
             if me.on:
-                me._program(args, k.get('cwd'))
+                if me._program(args, k.get('cwd')) == 'python':
+                    env = dict(k.get('env') or os.environ)
+                    env['PYTHONPATH'] = me._child_dir() + (os.pathsep + env['PYTHONPATH'] if env.get('PYTHONPATH') else '')
+                    env['KITSTAMPS_CHILD'] = me._child_out
+                    env['KITSTAMPS_FILE'] = os.path.abspath(__file__)
+                    k['env'] = env
+                    me.children += 1
             return real_popen(self_, args, *a, **k)
 
         builtins.open = io.open = _open
@@ -234,33 +241,57 @@ class Tracer:
         subprocess.Popen.__init__ = _popen
 
     def _program(self, args, cwd):
-        """Another program started: ALL unless it is plainly reading nothing that can change (verdict F2)."""
-        argv = [os.fsdecode(a) for a in args] if isinstance(args, (list, tuple)) else [os.fsdecode(args)]
+        """Another program started (verdict F2). Python (or a project script): 'python', traced from inside (its own
+        tracer writes what it read; no record from it means ALL). git on the project reading its history: ALL, except
+        a fixed old version (git show/archive COMMIT) and settings. Any other program: the project files it is
+        handed count as read."""
+        argv = [os.fsdecode(a) for a in args] if isinstance(args, (list, tuple)) else os.fsdecode(args).split()
         exe = os.path.basename(argv[0]) if argv else ''
-        if 'ffmpeg' in exe:                     # ffmpeg reads only the files named; project ones count as read
-            for a in argv[1:]:
-                rel = _rel(a) if os.path.isabs(a) or os.path.exists(a) else None
-                if rel and os.path.exists(os.path.join(ROOT, rel)):
-                    self.reads.add(rel)
-            return
-        if exe == 'tar' or exe in ('mkdir', 'rm', 'cp'):
-            return
+        if exe.startswith('python') or argv and os.path.realpath(argv[0]) == os.path.realpath(sys.executable) \
+                or argv and _rel(argv[0]) and argv[0].endswith('.py'):
+            return 'python'
         if exe == 'git':
             rest = argv[1:]
             where = cwd
-            if rest[:1] == ['-C'] and len(rest) > 1:
-                where, rest = rest[1], rest[2:]
+            while rest[:1] in (['-C'], ['-c']) and len(rest) > 1:
+                if rest[0] == '-C':
+                    where = rest[1]
+                rest = rest[2:]
             if where and not _rel(where) and os.path.realpath(where) != ROOT:
-                return                          # a scratch repository of the test's own
-            if rest[:1] == ['init']:
-                return
-            if rest[:1] in (['show'], ['archive']) and len(rest) > 1 and re.match(r'^[0-9a-f]{7,40}(~\d*)?[:]?', rest[1]):
-                return                          # a fixed old version: it never changes
-        self.all = True
+                return 'other'                  # a scratch repository of the test's own
+            if rest[:1] in (['init'], ['config'], ['--version']) or rest[:2] == ['rev-parse', '--show-toplevel']:
+                return 'other'
+            if rest[:1] in (['show'], ['archive']) and len(rest) > 1 and re.match(r'^[0-9a-f]{7,40}(~\d*)?(:|$)', rest[1]):
+                return 'other'                  # a fixed old version: it never changes
+            self.all = True
+            return 'all'
+        if argv and _rel(argv[0]):               # a project script that is not Python (a hook): ALL
+            self.all = True
+            return 'all'
+        for a in argv[1:]:                      # ffmpeg, tar, ldconfig ...: the project files named
+            if a.startswith('/') or os.path.exists(a):
+                rel = _rel(a if a.startswith('/') else os.path.join(cwd or os.getcwd(), a))
+                if rel and os.path.exists(os.path.join(ROOT, rel)):
+                    self.reads.add(rel)
+        return 'other'
+
+    def _child_dir(self):
+        """A folder holding a sitecustomize.py that starts this tracer in every Python child, made once."""
+        if not getattr(self, '_cdir', None):
+            import tempfile
+            self._cdir = tempfile.mkdtemp(prefix='kitstamps-')
+            with real_open_(os.path.join(self._cdir, 'sitecustomize.py'), 'w') as f:
+                f.write(CHILD_SITE)
+        if not self._child_out:
+            import tempfile
+            self._child_out = tempfile.mkdtemp(prefix='kitstamps-out-')
+        return self._cdir
 
     def start(self):
         self.codes, self.reads, self.written, self.mods = set(), set(), set(), set()
         self.all = False
+        self.children, self._child_out = 0, ''
+
         self.t0 = time.time()
         if self._mon:
             sys.monitoring.set_events(self.TOOL, sys.monitoring.events.PY_START)
@@ -293,6 +324,20 @@ class Tracer:
             if rel and rel != os.path.relpath(kt, ROOT):
                 files.add(rel)
         files |= _one_step_out(files)
+        if self.children:                       # what the Python children read (each wrote its own list)
+            got = 0
+            for fn in _REAL_LISTDIR(self._child_out):
+                got += 1
+                for ln in real_open_(os.path.join(self._child_out, fn), encoding='utf-8'):
+                    it = ln.strip()
+                    if it == ALL:
+                        self.all = True
+                    elif it.startswith('source/kittests.py::'):
+                        continue
+                    elif it:
+                        files.add(it)
+            if not got:
+                self.all = True                 # a child left no list (killed, or started with -S/-I): fail-shut
         files |= {r for r in self.reads if os.path.exists(os.path.join(ROOT, r))}
         files -= self.written
         files.discard(os.path.relpath(kt, ROOT))
@@ -308,6 +353,36 @@ class Tracer:
             items.add(ALL)
         return items
 
+
+_REAL_LISTDIR = os.listdir
+_SELF = os.path.relpath(os.path.realpath(__file__), ROOT)
+real_open_ = builtins.open
+
+# Started in each Python child of a traced test (through PYTHONPATH): load the system's own sitecustomize first, then
+# trace this process and, as it ends, write what it read to a file of its own for the parent test.
+CHILD_SITE = r'''
+import os, sys
+_here = os.path.dirname(os.path.abspath(__file__))
+for _d in sys.path:
+    _p = os.path.join(_d, 'sitecustomize.py')
+    if _d and os.path.abspath(_d) != _here and os.path.exists(_p):
+        exec(compile(open(_p).read(), _p, 'exec'), {'__file__': _p, '__name__': 'sitecustomize'})
+        break
+_out, _ks = os.environ.get('KITSTAMPS_CHILD'), os.environ.get('KITSTAMPS_FILE')
+if _out and _ks and os.path.isdir(_out):
+    import importlib.util, atexit
+    _spec = importlib.util.spec_from_file_location('_kitstamps_child', _ks)
+    _K = importlib.util.module_from_spec(_spec)
+    sys.modules['_kitstamps_child'] = _K
+    _spec.loader.exec_module(_K)
+    _t = _K.tracer()
+    _t.start()
+    def _done():
+        r = _t.stop()
+        with _K.real_open_(os.path.join(_out, str(os.getpid())), 'w') as f:
+            f.write('\n'.join(sorted(r)) if r is not None else _K.ALL)
+    atexit.register(_done)
+'''
 
 _ONE = []
 
@@ -362,7 +437,7 @@ def _one_step_out(files):
                 if isinstance(mn, str) and mn in sys.modules:
                     tgt = getattr(sys.modules[mn], '__file__', None)
             r = _rel(tgt) if isinstance(tgt, str) else None
-            if r:
+            if r and r != _SELF:                # the tracer's own wrappers (open, import) sit in every module's reach
                 out.add(r)
     return out
 
@@ -563,12 +638,7 @@ def replay(days=7, path=RECORD, reds_log=None):
         tot['chats'] += 1
         shared = any(_shared(f, prefixes) for f in files)
         tot['film_only'] += not shared
-        hit = []
-        for n in names:
-            rd = reads.get(n)
-            if rd is None or ALL in rd and any(f.startswith(d + '/') for d in ALL_DIRS for f in files) \
-                    or rd & files or any(f.split('::')[1] in c['fns'] for f in rd if '::' in f):
-                hit.append(n)
+        hit = [n for n in names if reads.get(n) is None or _hits(reads[n], files, c['fns'])]
         tot['path_runs'] += shared
         tot['stamp_runs'] += bool(hit)
         tot['none'] += not hit
@@ -595,7 +665,7 @@ def replay(days=7, path=RECORD, reds_log=None):
             red_check.append((n, when, 'no record of its reads (gone or never green): it always runs, so caught'))
             continue
         r = subprocess.run(['git', '-C', ROOT, 'log', f'--since={_minus(since, 2)}', f'--until={when}', '-U0',
-                            '--format=@@C', '-p', '--', '.'], capture_output=True, text=True)
+                            '--format=format:@@C', '-p', '--', '.'], capture_output=True, text=True, errors='replace')
         touched, fns = set(), set()
         for ln in r.stdout.splitlines():
             if ln.startswith('+++ b/'):
@@ -605,13 +675,24 @@ def replay(days=7, path=RECORD, reds_log=None):
                 m = re.search(r'@@ (?:@test\s*)?def (\w+)', ln[2:])
                 if m:
                     fns.add(m.group(1))
-        hit = sorted(rd & touched) + sorted(f for f in rd if '::' in f and f.split('::')[1] in fns)
-        if ALL in rd and any(t.startswith(tuple(d + '/' for d in ALL_DIRS)) for t in touched):
-            hit.append('ALL (it starts another program)')
+        hit = _hits(rd, touched, fns)
         red_check.append((n, when, f'caught: {len(hit)} of its files changed before it went red ({", ".join(hit[:3])}'
                           f'{" ..." if len(hit) > 3 else ""})' if hit else
                           'MISSED: nothing it reads changed between the green and the red'))
     return dict(tot=tot, per=per, missing=missing, red_check=red_check, tests=len(names), full=full)
+
+
+def _hits(rd, files, fns):
+    """What in a test's reads a set of changed files (and changed kittests.py functions) touches. A folder read
+    counts when a file directly in it changed (added or removed ones change its list)."""
+    rd = set(rd) - {_SELF}                      # the tracer itself did not exist before this build
+    out = sorted(rd & files)
+    dirs = {os.path.dirname(f) for f in files}
+    out += sorted(f'{d} (folder)' for d in rd & dirs if d not in files)
+    out += sorted(f for f in rd if '::' in f and f.split('::')[1] in fns)
+    if ALL in rd and any(f.startswith(tuple(d + '/' for d in ALL_DIRS)) for f in files):
+        out.append('ALL (it starts another program)')
+    return out
 
 
 def _minus(iso, hours):
