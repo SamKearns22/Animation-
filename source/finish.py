@@ -22,6 +22,8 @@ burn in the captions (rule 62), deliver at 1.1x with voices at their normal pitc
   * the readable check (could-not-test 3, 23 Nov): every text piece the places painter drew (name cards, signs,
     notices) and every KEEP_CLEAR box, as the render drew them (CLEAN.mp4.readable.json, written by the render),
     against the captions and the Hook Text: 5% or more of one covered is a fault (each line answered in the notes, as above).
+  * the kit tests (Sam's pick 1, 25 Nov): every kit test must have a pass on the current files (source/kitstamps.py);
+    the stale ones run first, and any still without a pass refuses (Override still applies).
   * a check pre-flight could not run (clipcheck's COULD NOT TEST) refuses even with --faults-named: only that check's
     row in the notes' "## Exceptions" with Sam's Y lets it by (film_engine.untested_fault).
 
@@ -211,6 +213,11 @@ def main():
     if slipped:
         __import__('override').refuse('finish REFUSED (the proposal route, fail closed): ' + ' | '.join(x[:140] for x in slipped) +
                  ' ; settle each: python3 source/propose.py settle CHAT8 "routed: NAME" | "false block: why"')
+    if not os.environ.get('KITTESTS_RUNNING'):    # kit-tests-when change 2 (Sam's pick 1, 25 Nov): no animatic or
+        import kitstamps                          # final on files a kit test has not passed on; the stale ones run first
+        why = kitstamps.finish_gate()
+        if why:
+            __import__('override').refuse('finish REFUSED (kit tests): ' + why)
     film = load_film(name[0])
     if not hasattr(film, 'caption_at'):
         sys.exit(f'finish REFUSED (rule 62): {name[0]}.py has no caption_at(t), so the film would go out with no '

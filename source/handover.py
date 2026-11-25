@@ -28,7 +28,8 @@ MAP
   shared ........... in end (named-lines change 3): a check fix written in one film's code stops the handover until
                      moved to the shared tools or Sam says it stays (shared_faults, film_check_fixes)
   kittest .......... in end (named-lines change 4, on chain A's gate): a kit test red at two handovers in a row, or
-                     unable to run, stops the handover (kittest_gate_faults; notes/logs/kittest-reds.log)
+                     unable to run, stops the handover (kittest_gate_faults; notes/logs/kittest-reds.log); only
+                     the tests whose files changed since their last green run run here (source/kitstamps.py)
   dump ............. list_events results saved to files (kinds ["user"], only when there is no log; never page a
                      whole chat: the newest pages, back to the last handover commit's time)
   sam_messages() ... Sam's own typed messages from any of the three sources (no tool results, task or system
@@ -552,18 +553,55 @@ def shared_faults(since=None, diff=None):
     return out
 
 
-def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None):
+def _kit_stale():
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import kitstamps
+    st, secs = kitstamps.stale(kitstamps.test_names())
+    return st, kitstamps.estimate(st, secs)
+
+
+def _kit_run(names, kitlog):
+    """Run only these kit tests now, on this chat's final code; the result to kitlog. False when it could not finish."""
+    with open(kitlog, 'w') as f:
+        try:
+            subprocess.run([sys.executable, os.path.join(ROOT, 'source', 'kittests.py'), '--stale'], stdout=f,
+                           stderr=subprocess.STDOUT, cwd=ROOT, timeout=2400)
+        except subprocess.TimeoutExpired:
+            return False
+    return True
+
+
+def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None, stale_fn=None, run_fn=None):
     """named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at this handover and at the one
     before it (another chat), or one that could not run (it crashed, or no finished run is on record), stops the
-    handover (STOP: closed, never named away). This handover's reds are written to notes/logs/kittest-reds.log."""
+    handover (STOP: closed, never named away). This handover's reds are written to notes/logs/kittest-reds.log.
+    kit-tests-when (Sam's pick 1, 25 Nov): only the tests whose files changed since their last green run run here
+    (notes/kittest-stamps.tsv, source/kitstamps.py), on the chat's final code; the rest pass on their stamps."""
+    real = kitlog == KITLOG or stale_fn is not None
+    if real:
+        busy = subprocess.run(['pgrep', '-f', 'source/kittests.py'], capture_output=True).returncode == 0
+        if busy and stale_fn is None:   # the start-up run (only the stale tests) is not finished yet
+            return ['STOP: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for it to '
+                    'finish, then run end again']
+        st, est = (stale_fn or _kit_stale)()
+        if st:
+            print(f'handover: {len(st)} kit tests stale (their files changed since a green run): running them now, '
+                  f'about {est / 60:.0f} min', flush=True)
+            if not (run_fn or _kit_run)(st, kitlog):
+                return ['STOP: KIT TESTS COULD NOT RUN: the stale tests did not finish in 40 min: run `python3 '
+                        'source/kittests.py --stale > notes/logs/kittests-last.log 2>&1`, then end again']
+        else:
+            os.makedirs(os.path.dirname(kitlog), exist_ok=True)
+            with open(kitlog, 'w') as f:
+                f.write('kittests: all passed (0 run: every test fresh on its stamps)\n')
     txt = open(kitlog, encoding='utf-8', errors='replace').read() if os.path.exists(kitlog) else ''
     if 'kittests:' not in txt:
         busy = subprocess.run(['pgrep', '-f', 'source/kittests.py'], capture_output=True).returncode == 0
-        if busy:                            # the start-up run (about 15 min on a fresh machine) is not finished yet
+        if busy:                            # the start-up run is not finished yet
             return ['STOP: KIT TESTS STILL RUNNING (the start-up run, notes/logs/kittests-last.log): wait for it to '
                     'finish, then run end again']
         return ['STOP: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 source/kittests.py '
-                '> notes/logs/kittests-last.log 2>&1`, then end again']
+                '--stale > notes/logs/kittests-last.log 2>&1`, then end again']
     fails = re.findall(r'^FAIL (\w+): (.*)$', txt, re.M)
     crashed = sorted({n for n, d in fails if d.startswith('crashed:')})
     red = sorted({n for n, _ in fails} - set(crashed))

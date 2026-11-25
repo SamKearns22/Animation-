@@ -29,6 +29,7 @@ command -v ldconfig >/dev/null && (ldconfig -p | grep -q libEGL.so.1 || timeout 
  # startup-fixes 2 (Sam's Y, 16 Nov): only the branches holding work the main line lacks (was: chats read all ~254)
  timeout 90 python3 source/branches.py start 2>/dev/null || echo "BRANCHES: the scan did not finish; run: python3 source/branches.py scan")
 (cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || cd "$(dirname "$0")/../.."; python3 -c "import sys; sys.path.insert(0, 'source'); import likeness as K; [K._model(n) for n in K.URLS]" >/dev/null 2>&1) &
-# early-warning (Sam's 1, 17 Nov): the kit tests in the background, so the watcher reads a fresh result
+# early-warning (Sam's 1, 17 Nov): the kit tests in the background, so the watcher reads a fresh result; only the
+# stale ones, whose files changed since their last pass (kit-tests-when, Sam's pick 1, 25 Nov: source/kitstamps.py)
 (cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || cd "$(dirname "$0")/../.."; python3 source/watcher.py kittests-bg >/dev/null 2>&1) &
 exit 0
