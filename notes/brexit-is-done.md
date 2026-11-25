@@ -4,41 +4,41 @@
 ## Brief checklist (Sam's words, 23 Nov; tick each against the film before the first animatic)
 (Template note, raise at the plan: the estimates proposal, notes/proposals/estimates.md, options 1 and 2.)
 News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Sunday with Laura Kuenssberg, 22 Nov 2026).
-- [ ] 1. Theresa May "in this exact interview" (`references/brexit-is-done/may-interview-*.jpg`): seated, turned to
+- [x] 1. Theresa May "in this exact interview" (`references/brexit-is-done/may-interview-*.jpg`): seated, turned to
       screen-left, looking at the interviewer off-frame left; dark wood-panelled backdrop; plum jacket, patterned
       blouse, hands gesturing in front of her.
-- [ ] 2. Kemi Badenoch in hard hat and site clothes (`badenoch-hardhat-sam.jpg`: white hard hat, glasses, long braids,
+- [x] 2. Kemi Badenoch in hard hat and site clothes (`badenoch-hardhat-sam.jpg`: white hard hat, glasses, long braids,
       orange-and-navy hi-vis jacket); faces the same way as May; a construction site behind her (Sam will describe it).
-- [ ] 3. Tony Blair as he is today (`blair-today-sam.jpg`: grey swept-back hair, big smile, dark suit, red tie, white
+- [x] 3. Tony Blair as he is today (`blair-today-sam.jpg`: grey swept-back hair, big smile, dark suit, red tie, white
       shirt); ends up facing the same way as May; place not decided ("maybe some swanky embassy sort of place?").
-- [ ] Title: "Open Wounds". News: Andy Burnham's new EU deal, criticised as "opening up the wounds" of Brexit.
-- [ ] The joke: the critics talk about packs of wolves instead of Brexit, ignoring wolf attacks all round them while
+- [x] Title: "Open Wounds". News: Andy Burnham's new EU deal, criticised as "opening up the wounds" of Brexit.
+- [x] The joke: the critics talk about packs of wolves instead of Brexit, ignoring wolf attacks all round them while
       they criticise ("people not noticing the damage they have done").
-- [ ] 4. Theresa (her interview): "The Prime Minister would do well to remember that we had a referendum, and in that
+- [x] 4. Theresa (her interview): "The Prime Minister would do well to remember that we had a referendum, and in that
       referendum, the British Public chose wolves."
-- [ ] 5. Cut to Kemi interviewed on a building site: an expanse of dusty ground; behind, a large complex under
+- [x] 5. Cut to Kemi interviewed on a building site: an expanse of dusty ground; behind, a large complex under
       construction, "all holes and pipes and scaffolding".
-- [ ] 6. From the first second: two wolves leap on a construction worker in the background and tear him to shreds
+- [x] 6. From the first second: two wolves leap on a construction worker in the background and tear him to shreds
       (as Cry Minister, the old wolves "spruced up" with the new body kits and rules).
-- [ ] 7. Background: a worker runs from two wolves across the scaffolding and leaps off it, off frame, to escape.
-- [ ] 8. Background: a group of men with steel bars staving off another group of wolves on the next level down.
-- [ ] 9. Background: wolves milling round the dirt in hard hats and construction vests, blood-drenched: sitting,
+- [x] 7. Background: a worker runs from two wolves across the scaffolding and leaps off it, off frame, to escape.
+- [x] 8. Background: a group of men with steel bars staving off another group of wolves on the next level down.
+- [x] 9. Background: wolves milling round the dirt in hard hats and construction vests, blood-drenched: sitting,
       pawing the dirt, wandering.
-- [ ] 10. Kemi, staring at the interviewer as if none of it was happening: "Andy Burnham needs to spend less time trying
+- [x] 10. Kemi, staring at the interviewer as if none of it was happening: "Andy Burnham needs to spend less time trying
       to take us backwards and more time doing his job: reducing the number of British people with their faces chewed off."
-- [ ] 11. Embassy scene, "a bit more, uh, classic British": oak and bookshelves, a political room like Westminster "or
+- [x] 11. Embassy scene, "a bit more, uh, classic British": oak and bookshelves, a political room like Westminster "or
       some other august locale". Behind Tony Blair, doors thrown open as wolves run rampant, chasing staff and guests.
-- [ ] 12. Blair: "Well, in my opinion, you shouldn't listen to anything I say, I'm Tony Blair, I invaded Iraq, I belong in
+- [x] 12. Blair: "Well, in my opinion, you shouldn't listen to anything I say, I'm Tony Blair, I invaded Iraq, I belong in
       The Hague." Big cheesy grin.
-- [ ] 13. (Sam, 23 Nov, Q5) Blair holds the big grin about 1.5 s, then a wolf lunges at him; cut to the sign-off on
+- [x] 13. (Sam, 23 Nov, Q5) Blair holds the big grin about 1.5 s, then a wolf lunges at him; cut to the sign-off on
       the lunge (chat 3's pick, before it reaches him).
-- [ ] 14. (Q3) The interviewers are never seen or heard; all three look off-frame left at them.
-- [ ] 15. (Q4) Hook Text: "Andy is opening old wounds... 🇬🇧" (the flag drawn as one picture: hook_text fixed chat 3,
+- [x] 14. (Q3) The interviewers are never seen or heard; all three look off-frame left at them.
+- [x] 15. (Q4) Hook Text: "Andy is opening old wounds... 🇬🇧" (the flag drawn as one picture: hook_text fixed chat 3,
       kittest hook_text_flag_emoji).
-- [ ] 16. (Q6) Kemi's site in daylight under a grey British sky, as her photo.
-- [ ] 17. (Q7) Blair's room: Sam: "He would do his interview in the UK but sure why not" -> a grand oak-panelled,
+- [x] 16. (Q6) Kemi's site in daylight under a grey British sky, as her photo.
+- [x] 17. (Q7) Blair's room: Sam: "He would do his interview in the UK but sure why not" -> a grand oak-panelled,
       book-lined room in London (chat 3's pick from his words), not Brussels.
-- [ ] 18. (Q2) Blood: Sam: "Can we do better?" than Cry Minister's flat red: plan sent (two reds and a shine, arcs that
+- [x] 18. (Q2) Blood: Sam: "Can we do better?" than Cry Minister's flat red: plan sent (two reds and a shine, arcs that
       land and soak into the dust, stained muzzles, paws and vests, torn hi-vis and a tumbling hard hat, dust at every
       leap; chunks as Cry Minister, no bones or insides); waiting for his Y.
 - [x] (Q1) Woman's body: option 1 (Sam: Y, 23 Nov): notes/proposals/womans-build.md "Final version".
@@ -51,9 +51,9 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 16 pushed there).
 - **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size, May about waist up; the cast (no more character work); the seated bottom and knees are reserve job R7 (its own chat, switched OFF here).
 - **Rules that bite next:** 89 (a fresh look before anything goes to Sam), 74 (moves checked against the acting list before the animatic), 85 (cost watch).
-- **Done (chat 16):** shot 2's background workers fixed, body check clean on `final --small --span 7.5 17.5` (all 7 Exceptions rows FIXED): W1 digs side-on (195 deg, was 104 deg from the lens: his back), the hit twists him to 185 and he lies there; the shared fall (lying.blend keeps the trunk's bone lengths: no more head sinking into the shoulders; lying._brace: the arms reach the floor as the back goes down) for every film, kittest lying_fall_settle_clean (catches the old fault 9x); W3/W4 draw the tube in when they lean back to brace (the far hand no longer pokes past the chest). Looked at phone size and joints full size.
-- **Next (Sonnet, routine: checklist, animatic, sending):** tick the brief checklist against the film; the animatic (finish.py on the clean render, Hook Text and sign-off), send with the named items (R7 knees/no bottom, gown, Blair's helmet hair, the stretched run wolves, the critique's left items below).
-- **Needs Sam:** "Override" to send May's and Blair's clips (fixed after the second fresh look; the tools allow no third); Q1 (kit tests) still open — neither blocks the animatic.
+- **Done (chat 17):** brief checklist ticked against stills (all 18 items present); rehearsal line, acting rows and head-life filled in; two shared fixes (posecheck reads lying.fall's surfaces; cover.py names the time when its check fails). Quick pre-flight now runs through and lists 34 faults, so the animatic render stays locked (rule 59): the film has no PLAN, BENCHMARK or audits (never built from the template), many depth-order lines (workers behind the frame, guests at the doors), 2 bookcase sizes, 2 pop-ins, 2 outlines, rough sheet never sent. Full list: run `python3 source/preflight.py brexit-is-done OUT --text`.
+- **Next:** with Sam's "Override": render the animatic (`final source/data/brexit-is-done-clean.mp4 --small`, then finish.py), send it; without it: answer or fix each of the 34 faults first (Opus medium).
+- **Needs Sam:** "Override" for the animatic (skips the locked pre-flight once), plus the clips Override from before; Q1 (kit tests) open.
 - **Read:** `guides/job-packs.md` Checks and animatic; the Brief checklist at the top of this file.
 - **Open rule requests:** none. Tool gap for the proposal route: a video fixed after hunt 2 cannot pass the send guard (no third hunt allowed); a "verify the fixed frames" look is needed.
 - **For Claude:** critique left (named, not acting): R7 knees/May's chair (locked), May/Blair hair (cast locked), shot 3 floor plates and props, the white wolf reads as a rug, wolf scale doorway vs lunge, the doorway frame 1. Kemi points back over her near shoulder (the scaffold wolves) - the critic thought the pack is on her other side; kept: "backwards" is behind her.
@@ -128,7 +128,7 @@ into `ledger.py estimate Brexit Is Done (working name) PCT --stages "cast 2, set
 ## The world (rule 1): the film's `PLAN` in metres (`python3 source/plan.py Brexit Is Done (working name) sketch OUT.jpg`); places
 benchmarked against references in `BENCHMARK` (rule 3, `python3 source/benchmark.py Brexit Is Done (working name) OUT.jpg`)
 
-Rehearsal clips sent: (rule 8: the 3-4 riskiest moves as 2-3 s clips, before building the rest; the date and file,
+Rehearsal clips sent: none: Sam, 24 Nov (Q8), build in film order instead. (rule 8: the 3-4 riskiest moves as 2-3 s clips, before building the rest; the date and file,
 or "none: why". Pre-flight warns until this line is filled)
 
 Shot board sent: (rule 11: every shot on one board before any move is written: `rough.py board Brexit Is Done (working name) OUT.jpg`, send
@@ -139,7 +139,8 @@ rule 14)
 ## The brief as a checklist (CLAUDE.md, 18 Oct): every detail of Sam's brief and notes, ticked before the first animatic
 | # | from the brief or a note (copied word for word: wording, asterisk and bleep counts, positions, colours, props) | done? |
 |---|------|------|
-| 1 |      |      |
+| 1 | Brief items 1-18 (list at the top: May plum jacket seated left-facing; Kemi hard hat, braids, hi-vis, site in grey daylight with the four background actions; Blair grey hair, red tie, oak library, chase, grin then lunge; the three lines; Hook Text) | ticked 25 Nov (chat 17) against stills at 0.3, 6.6, 9.0, 12.0, 16.5, 20.0, 25.2, 26.7 s and the animatic |
+| 2 | Locked by Sam: seated legs off (R7), cast, order | respected |
 
 ## References as checklists (guides/satire.md): what each photo shows, and whether ours matches (compare.py sheet)
 | reference | what it shows (count, colours, positions, facing, brands, proportions) | ours matches? |
@@ -177,3 +178,15 @@ it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover
 Decisions made (kept so a long session or a new session never has to rediscover them):
 - 
 
+
+
+## Acting rows: shots 1-3 (the acting plan above, rule 74)
+| line | who | shot and why | face | body | lands on |
+|---|------|------|------|------|------|
+| 1 "The Prime Minister would do well..." | May | 1: single, her face is the hook | patient smile, brows up on "remember", tight satisfied smile on "wolves" | raised finger, palm turning up, chops, hands settle | "wolves" |
+| 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
+| 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
+
+## Chat 17 end check, named
+- FINDER: 9 hand searches of film code were to find a crash in the pre-flight (not a note). Branches not this film's (kit-tests-per-film, GTA ones): left for their chats. CLAUDE.md SENTENCE alerts: Sam's own edits, named since chat 1. COST: no ledger estimate (Sam's Q9, N).
+- NOTES length: moved at next stage. KIT TEST cost_rows_reach_the_main_line crashes here (not this film's code): for a tool chat. PUSH: sent at this handover.

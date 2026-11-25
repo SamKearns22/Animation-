@@ -169,6 +169,10 @@ def head_life(who):
     return HEAD_LIFE[who]
 
 
+for _w in ('may', 'kemi', 'blair'):
+    head_life(_w)
+
+
 def face_sp(shot, who, t, mood, shades=None):
     """The moves kit's seam: who's build with the face for a mood, lips on their own line, blinks, head life."""
     d = dict(CAST[who], **MOODS[mood])

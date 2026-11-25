@@ -409,6 +409,14 @@ def survey_record(film, t):
 
 
 def _one(args):
+    try:
+        return _one_at(args)
+    except Exception:       # name the time in the error: a pool worker's failure hides it (chat 17)
+        import traceback
+        raise RuntimeError(f'cover check failed at t={args[1]}:\n' + traceback.format_exc())
+
+
+def _one_at(args):
     film_name, t = args
     film = sys.modules.get(film_name) or importlib.import_module(film_name)
     import clipcheck as C
