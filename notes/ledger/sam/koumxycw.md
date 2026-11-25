@@ -9,3 +9,6 @@ List the remaining missing pre-flight categories and list whether they are usefu
 ### 2026-11-25T18:48:26
 That wasn't 34?
 
+### 2026-11-25T18:53:23
+Override. We will finish the seated job then run the checks in case they catch anything.
+
