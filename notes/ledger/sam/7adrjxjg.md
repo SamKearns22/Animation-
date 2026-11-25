@@ -14,3 +14,6 @@ No fix gets tried a third time. If it can't be done, I tell you plainly what wou
 
 We already have a 'tell me when you need to learn something new' rule and you've never used it in a key situation like with the failed sitting pose work. Any?
 
+### 2026-11-25T22:35:05
+What  are you going to test the moving bodies on?
+
