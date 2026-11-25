@@ -23,6 +23,11 @@ never read end to end in a film chat. Each pack's "Bite" rules are the ones its 
   euronews, dpa, local papers), free libraries (Wikimedia, Geograph, Openverse, Pexels, Unsplash) only when the news
   has nothing. **One failed try per source, then stop** and give me one numbered list of what to find, which angle and
   why.
+- **A site that refuses (Sam's Y, 25 Nov: "Always ask for permissions when a site fails like that and I'll happily
+  grant it"):** when a site refuses me (a download blocked, "too many requests", a login needed), I ask Sam straight
+  away, in one numbered question, what would let it through (a permission, a key, or another site), instead of giving
+  up. If the block is my tools' own safety check, which Sam can't switch off from his phone, I say so plainly and try
+  the app's page-reading helper (web-fetch) first. Saved example: notes/learn/site-refusal/r7-chat1.md.
 
 ## Build (Opus, high for new things; medium from a clear plan)
 - Read: `guides/figure-rig.md` 2-4, 5c (people); `guides/satire.md` Movement, One set one plan; `guides/pose-gallery.md`

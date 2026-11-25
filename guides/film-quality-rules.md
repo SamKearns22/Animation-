@@ -124,6 +124,7 @@ the end by section.
 | Every rule and fix is for all films | (Sam's Y, 23 Nov, "needs testing"; named-lines; proof owed: source/rule_proofs.json N26) |
 | Override skips everything for one ask | Sam's pick, 23 Nov (proposal override-word, option 2); check: kittest `override_word` (caught chat 47's refused send); `source/override.py` read by every stop: send guard, finish.py, render, proposal hook, watcher, budget/stage alarm, handover end, model guard, cost watch |
 | No "Locked by Sam" line in messages to Sam | Sam, 23 Nov; the notes keep it; check: the reply Stop hook (`propose.py` locked_line; kittest `locked_line_not_to_sam`) |
+| A site that refuses: ask Sam what would let it through | Sam's Y, 25 Nov (guides/job-packs.md, Plan); check owed: a guard that sees a refused download in a chat's work with no numbered question to Sam about it (saved example notes/learn/site-refusal/r7-chat1.md); to build: R7's next chat or the next tool job |
 
 ## Merged numbers (Job C, 9 Nov: the same rule written twice became one; nothing was dropped)
 12 → 5 · 15 → S7 · 23 → 61 · 33 → 8 · 35 → 1 · 45 → 11 · 46 → 79 · 51 → 49 · 53 → 32 · 55 → 24 and 44 ·
