@@ -18,7 +18,8 @@ Requirement 1 (first test of every option): any action, one body, no visible cha
    per film after), from the ledger, no padding.
 Dressing (Sam asked what must be learned, chat 7): Jason's clothes were PAINTED on the skin (bench_pose.part_at) and
 the trousers a pushed-out skin; loose clothes (open jackets, lapels, skirts, coats, robes, hi-vis) need real garments.
-Step 2 checks first, before building: MakeHuman's own garment library (on disk? licence?), Blender installable here
-(its cloth simulation), then dresses the test in a suit jacket that hangs open; checks: cloth never through body or
+Step 2 checks first, before building: MakeHuman's own garment library (on disk? licence?). Blender: Sam said Y to it
+(22 Nov, GTA chat 31; apt install blender, not in setup.sh, so install it first); it drew Jason (L2) but its cloth
+simulation was never tried, then dresses the test in a suit jacket that hangs open; checks: cloth never through body or
 chair, each garment one piece. Name what could not be learned.
 Push notification at the end of each step, pass or stop. Total cap 8.5% of a week; at the cap, stop and tell Sam.
