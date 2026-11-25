@@ -49,6 +49,9 @@ SPREAD_H = 40.0         # ... fading over this height above the seat (6 cm)
 SINK_MAX = 90.0         # deeper than this under the cushion's top is below the seat, not on it (14 cm)
 NECK_X = 1.0             # mode 'whole': the neck's width over the measured body's (the trunk eases to it above the shoulders)
 NECK_LIFT = 40.0         # mode 'whole': the shoulders' tops and the neck's base raised this far (person units, 6 cm)
+HEM_OVERLAP = 20.0       # mode 'body': the solid starts this far (person units) above the flat jacket's hem (no gap)
+BODY_TOP = 2.2           # mode 'body': the solid body stops this far (rest dm) below the shoulder joints (the
+#                          waist: at 1.0 the bust showed past the flat jacket's front from the side, chat 8)
 V_BUTTON = 0.72          # mode 'whole', her jacket: the V closes this share of the way from hips to shoulders (the
 #                          flat May's: at mid chest; chat 8 had 0.42, an opening to the waist: Sam "you changed her clothes?")
 LAPEL_X, SEAM_W = 1.05, 0.022   # her lapel's outer edge at the collar (rest dm off the middle); a drawn seam's half width
@@ -493,13 +496,19 @@ def draw(p, j, yaw, sp, scale=2):
     layer and its kit-frame depth in LAST for lay_over and the checks."""
     import views as V
     skirt = sp.get('skirt_solid')               # a skirt (the body's own skirt surface) over bare or tighted legs
-    whole = sp.get('seat_solid') == 'whole'
-    P, R = pose(j, sp, cloth=not skirt, whole=whole)
+    mode = sp.get('seat_solid')
+    whole = mode in ('whole', 'body')           # 'body' (Sam, chat 8): the whole solid body under the person's own
+    arms = mode == 'whole'                      # flat outfit (views draws the torso, sleeves and hands over it as in
+    P, R = pose(j, sp, cloth=not skirt, whole=whole)   # every film): no solid arms or hands, so never two pairs
     foot = _foot_pts(R)
     if whole:                                   # the whole person: every point but the head and hands (the house
         import model_body as MB                 # head and circle hands are drawn instead: views, and hands() here)
         M = MB.rest(sp)
         T = M['T']
+        if not arms:                            # under the flat outfit: no arms, and nothing above the chest (the
+            sh_y = (M['J']['shL'][1] + M['J']['shR'][1]) / 2   # outfit's own neck and collar; chat 8: the solid neck
+            low = (R['arm'] < 0.05) & (R['v'][:, 1] < sh_y - BODY_TOP)   # showed between the chin and the collar)
+            T = T[low[T].all(1)]
         grp = M['grp']
     else:
         hip_y = (R['J']['hipL'][1] + R['J']['hipR'][1]) / 2
@@ -508,7 +517,7 @@ def draw(p, j, yaw, sp, scale=2):
         grp = np.zeros((len(P), 5))
     T = np.concatenate([T] + [h for h in _shoes(P, R, foot)])
     hand_objs = []
-    if whole:
+    if arms:
         for Ph, Th in hands(j, sp):
             hand_objs.append(Th + len(P))
             P = np.concatenate([P, Ph])
@@ -627,13 +636,18 @@ def draw(p, j, yaw, sp, scale=2):
     lay[m, 3] = 255
     lay[edge & m, :3] = INK
     lay[edge, 3] = 255
+    if whole and not arms:                      # under the flat outfit, only what lies below its jacket's seated hem
+        hem = min(sp.get('bottom') or V.JACKET, 470) - HEM_OVERLAP   # shows (kit y, down): no cut edge of the solid
+        lay[(ab[..., 4] < hem) & (np.abs(ab[..., 6]) < 0.5), 3] = 0   # waist or bust past the jacket (chat 8: a tab
+        #                                         and a notch); never the legs (their tops lie above the hem's line)
+        lay[~m, 3] = np.where(edge[~m], lay[~m, 3], 0)
     L = Image.fromarray(lay, 'RGBA')
     if scale > 1:
         L = L.resize((Wd, Hd), Image.LANCZOS)
     img.alpha_composite(L) if img.mode == 'RGBA' else img.paste(L, (0, 0), L)
     zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
     LAST.clear()
-    LAST.update(whole=whole, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
+    LAST.update(whole=arms, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
                 P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw)
     return L
 
