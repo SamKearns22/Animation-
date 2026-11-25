@@ -1929,63 +1929,63 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.72,
+   "cost": 2.2,
    "src": "estimate",
    "sid": "session_01U3pKQz5xGww8EfKdFsFKXb",
-   "steps": 87,
-   "hist_k": 229,
+   "steps": 113,
+   "hist_k": 261,
    "kinds": {
-    "tool search": 27.6,
-    "renders": 5.1,
-    "pictures": 3.8,
-    "other": 63.5
+    "tool search": 26.1,
+    "renders": 3.9,
+    "pictures": 5.0,
+    "other": 64.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 53,
+    "tool search": 62,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 4,
-    "pictures": 9,
-    "other": 21
+    "pictures": 15,
+    "other": 27
    },
    "split": {
-    "usd": 5.3061,
-    "total": 5.3061,
+    "usd": 7.0593,
+    "total": 7.0593,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 27.7,
-     "Claude's words": 27.2,
-     "carried history": 23.2,
-     "new writes": 21.9
+     "carried history": 27.9,
+     "start-up floor": 26.4,
+     "Claude's words": 25.7,
+     "new writes": 20.0
     },
     "origins": {
-     "Claude's words": 43.9,
-     "start-up floor": 27.7,
-     "result: tool search": 18.4,
-     "result: pictures": 4.4,
-     "messages and reminders": 3.0,
-     "result: other": 2.4,
+     "Claude's words": 44.2,
+     "start-up floor": 26.4,
+     "result: tool search": 17.4,
+     "result: pictures": 6.1,
+     "messages and reminders": 3.4,
+     "result: other": 2.3,
      "result: renders": 0.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 27.7,
-     "thinking": 20.2,
-     "writing code": 15.6,
-     "reading kit code": 9.8,
-     "commands": 5.5,
-     "reading notes": 4.4,
-     "looking at pictures": 4.4,
-     "messages and reminders": 3.0,
-     "reading chat records": 1.9,
-     "git and saving": 1.6,
-     "start-up and handover tools": 1.5,
-     "messages to Sam": 1.4,
-     "writing notes": 0.7,
+     "start-up reading (rules, tools, first files)": 26.4,
+     "thinking": 20.3,
+     "writing code": 15.3,
+     "reading kit code": 9.2,
+     "looking at pictures": 6.1,
+     "commands": 5.7,
+     "reading notes": 4.2,
+     "messages and reminders": 3.4,
+     "messages to Sam": 1.9,
+     "reading chat records": 1.7,
+     "git and saving": 1.5,
+     "start-up and handover tools": 1.4,
      "other commands": 0.7,
-     "running checks and tools": 0.5,
-     "helper and chat prompts": 0.5,
+     "writing notes": 0.6,
+     "running checks and tools": 0.6,
+     "helper and chat prompts": 0.4,
      "helper results": 0.4,
      "renders": 0.2,
      "app tools (chats, files sent)": 0.1
@@ -2000,50 +2000,50 @@
      [
       "source/views.py",
       6.2,
-      0.1187
+      0.1477
      ],
      [
       "source/solid_seat.py",
       4.0,
-      0.0779
+      0.0965
      ],
      [
       "source/model_body.py",
       3.6,
-      0.0702
+      0.0871
      ],
      [
       "notes/learn/seated/judge/look-r7c6.jpg",
       1.6,
-      0.0284
+      0.0358
      ],
      [
       "notes/r7.md",
       0.9,
-      0.02
+      0.0241
      ],
      [
       "notes/learn/seated/judge/results-r7c6.md",
       0.9,
-      0.02
+      0.0241
      ],
      [
       "notes/learn/seated/solid/sheet_solid.py",
       0.7,
-      0.0152
+      0.0186
      ],
      [
       "source/satire_style.py",
       0.7,
-      0.0134
+      0.0168
      ],
      [
       "source/bench_draw.py",
       0.3,
-      0.0051
+      0.0064
      ]
     ],
-    "base_pct": 24.7
+    "base_pct": 24.1
    },
    "search": {
     "show": 0,
@@ -2051,12 +2051,12 @@
      "no show": 0
     },
     "other": {
-     "other": 14,
-     "film notes": 7,
+     "other": 16,
+     "film notes": 9,
      "shared:handover.py": 4,
      "shared:model_body.py": 5,
-     "shared:solid_seat.py": 7,
-     "shared:views.py": 7,
+     "shared:solid_seat.py": 11,
+     "shared:views.py": 8,
      "shared:bench_draw.py": 2,
      "shared:satire_style.py": 1,
      "shared:kittest.py": 1,
@@ -2490,6 +2490,78 @@
       "other",
       "",
       "S=/tmp/claude-0/-home-user-Animation-/5e95c2b2-0f1d-57be-a7af-4830d78e6535/scrat",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git log --oneline origin/claude/adoring-babbage-rtbj6",
+      ""
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "notes/ledger/r7.md",
+      "Estimate",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py source/views.py",
+      "seat_solid')",
+      ""
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/5e95c2b2-0f1d-57be-a7af-4830d78e6535/scrat",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "python3 - <<'E' f='source/solid_seat.py'; s=open(f).read() old=\"\"\" if not arms: ",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "^BODY_TOP",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:views.py",
+      "source/views.py source/solid_seat.py",
+      "^JACKET",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "python3 - <<'E' f='source/solid_seat.py'; s=open(f).read() old=\"\"\" lay[ab[..., 4",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "film notes",
+      "notes/learn/seated/solid/may-body-real-outfit-r7c8.jpg notes/r7.md notes/learn/s",
+      "python3 -c \" from PIL import Image im=Image.open('/tmp/claude-0/-home-user-Anima",
       ""
      ]
     ]
