@@ -48,26 +48,53 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: branch `claude/open-wounds-chat13`** (also pushed to the main line if allowed; the next chat merges it first).
-- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size (head top, eye row 700, chin, face centre about 64% across), May about waist up; the cast (no more character work); the seated bottom and knees are reserve job R7, never worked on in this film (R7 runs in its own chat since 25 Nov: session_01U3pKR21qH3HD4urog8SVBy; its new lower body is switched OFF for this film).
-- **Rules that bite next:** 74 (May's gestures land on her words), 5 (nothing through anything: hands on the chair arms, Kemi's hands), 85 (cost watch).
-- **Done (chat 13):** kit tests: the start-up run passed (139); after the fixes, the run, chase, gait and moves tests passed. shot 3 watched whole and fixed: runners sank into a lunge (shared run: a foot is down for at most 0.75 leg of travel, moves.RUN_SWEEP; kittest run_hips_stay_up, example notes/learn/run-lunge/); guests met head-on nose to nose and a wolf ran through a guest and past a hand (now waves: everyone in frame runs the same way, two abreast, the near one leading by 0.45 s, both wolves behind; shared checks moves.head_on and moves.within_reach, kittests movers_never_meet_head_on and side_by_side_out_of_reach, examples notes/learn/chase-meetings/). 14 passes became 11 (no animatic had them). Critique pack r5 (source/data/critique/brexit-is-done/r5-p1): see the line below.
-- **Next (Opus high):** first, Sam's Y (25 Nov, chat 13, Q1): "the full kit tests run only when a chat changed a shared tool, and always before an animatic and a final render; a chat that changed only its film's files skips the run and the wait": take it through the proposal route (`source/propose.py new kit-tests-when`, pack, judge, record), then build it in handover.py's start-up/end check with a kittest. Then fix critique r5's faults as one list (`critique.py record` printed them; S4, S1 and panel 1-2 A1 were my strip crops, marked false): (a) the lunge wolf shows only as a brown blob with teeth at the right edge for 2 frames (26.75-26.83): make it read as a wolf leaping at his head in the frames before the locked cut; (b) side-on runners: the far arm's round hand shows on the chest while its arm is hidden (P5); (c) near-lane runners tread on the fallen tray and it never moves (rule 5): it skids or tips, or their feet clear it; (d) the tray reads as a disc and the flutes as specks at phone size, and its flat landing and the pools did not read in the strip: look at full size; (e) can't-tells: wolves long and stretched in run frames, Blair's hair a helmet. P7 (Blair's knee balls, no bottom) is R7, locked: name it to Sam with the animatic. Then `critique.py fixed`. Then the moves file story/brexit-is-done-moves.txt and its film side (acting.py FILMS has only blessed and milburn: add `_brexit`, as `_milburn`): May (hands low, one open palm turning up as her photos; small nods on "referendum" and "wolves"), Kemi (staring at the interviewer, a curt nod on "job"), Blair (the big grin held from 25.0); lips on stand-in timing (mouths.track), blinks (F.blinks), head life (headlife) for all three, all three `look` off-frame left; then the Sonnet chat for the animatic (tick the brief checklist first).
-- **Needs Sam:** nothing blocks.
-- **Read:** `guides/job-packs.md` Build; acting.py MAP (lines 1-90) and FILMS (840-905); milburn.py face_sp/acted (195-260); brexit_is_done.py seated/standing (88-150).
+- **Newest work: branch `claude/open-wounds-chat14`** (also pushed to the main line if allowed; the next chat merges it first).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size, May about waist up; the cast (no more character work); the seated bottom and knees are reserve job R7 (its own chat, switched OFF here).
+- **Rules that bite next:** 74 (moves land on their words: check the clip, not just `acting.py check`), 5 (Blair's hands on the chair arms; the kicked tray), 85 (cost watch).
+- **Done (chat 14):** kit-tests-when through the proposal route (judge picked a different version from Sam's Y: Q1 to Sam, not built yet). Shot 3 critique r5 fixed as one list: the lunge wolf's head, eye, jaws and paws in frame for 4 of its 5 frames; shared: dark sleeves lifted so a black arm over a black jacket reads (views.sleeve_colour, kittest dark_sleeve_reads), loose floor things kicked along by feet (moves.kicked/trodden, kittest trodden_things_move); tray rim, shine, handles, flute stems. The moves: story/brexit-is-done-moves.txt and the film's side (acting.FILMS 'brexit-is-done'; brexit_is_done.py faces and moves: word_at, TRACK lips, BLINKS, head life on a stand-in loudness, MOODS); acting kit: any sitting-kit pose as a stance, seated gestures keyed from rest (Blessed draws unchanged: kittest moves_from_the_acting_list).
+- **Next (Opus high, a new build):** build Sam's acting plan ("Acting plan" below, 25 Nov): every beat of all three lines in the moves file (new hand places, moods per beat, May in motion from the first drawing), `acting.py check`, then a short clip of each line, watched at phone size and at full size (hands on laps/chair arms, nothing through anything), fixed, sent to Sam (clips need no yes). Then the Sonnet chat: tick the brief checklist, the animatic (finish.py on the clean render, Hook Text and sign-off), send it to Sam with the named items: P7 Blair's knees/no bottom (R7, locked), the evening gown reads as tunic and trousers mid-stride (cast locked), Blair's hair a smooth helmet (cast locked), the run's long stretched wolves (the approved shared wolf). Then wait for his notes.
+- **Needs Sam:** Q1 (kit tests: the judged version or his own) — does not block the animatic.
+- **Read:** `guides/job-packs.md` Build; acting.py MAP (lines 1-90); the Acting plan below; story/brexit-is-done-moves.txt; brexit_is_done.py faces and moves (search 'faces and moves').
 - **Open rule requests:** none.
-- **For Claude:** moves.head_on / within_reach (shared, catalogued) run in kittests on this film's chase: a later film with movers calls them on its own table (moves.chase_movers). 8 old film files still draw see-through fills with Draw(img,'RGBA') (move to ink.glaze when touched). The evening gown reads as tunic and trousers front-on and side-on mid-stride: cast locked, name it to Sam with the animatic. override.py's quoted-Override logging still unchecked. castsheet._same_outlines is this film's only: move to shared. The stills command takes times one by one (the old handover's "17.5..26.9" form fails).
+- **For Claude:** stills times are written 01.00 in file names. May's palm: the right hand ('palm up' place, 3.5-6.5 s). The start-up kit run was stopped and rerun on chat 14's final code (notes/logs/kittests-last.log). castsheet._same_outlines still film-only: move to shared.
 
-## Chat 13 end check, named
-- Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 (a record only, Sam 22 Nov): left for the GTA chats.
-- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-12 did. Rule 74 acting rows, HEAD LIFE, rehearsal clips: the moves stage, chat 14. Framing quick checks (notes 3, 9): handled chats 9-10.
-- Start check "NOT CARRIED" lines: chat 11's prompt words ("Blair's chase and t...") are the chase, done this chat.
+## Acting plan (Sam, 25 Nov, chat 14: "really fluid acting throughout ... a good acting plan for everyone's lines ... contextually based on the script ... make sure it's implemented")
+Stand-in word times (s, film); re-timed on Sam's takes. Every move lands on its word (rule 74), the face leads the hand by a
+drawing or two, every gesture has an anticipation and a settle, nobody is ever fully still (idle sway, breathing, blinks).
+Hands never pass through anything (rule 5): May's lap and chair, Blair's chair arms. All three talk to the unseen
+interviewer off-frame left; the eyes hold on them except where named.
+**May (0.0-7.5): the hook is her movement from the first drawing.**
+- 0.0-0.6 already in motion: a small breath in, shoulders lift, she shifts forward on the seat and her chin comes up (about to correct someone).
+- "Prime" 0.78: head tips a touch, brows lift, a thin patient smile (talking down to the PM).
+- "would do well" 1.88: her right forefinger comes up from the lap, a schoolmistress's raised finger, a small side-to-side head shake.
+- "remember" 2.25: the finger taps the air once, she leans in, brows up.
+- "had" 3.16: the finger opens into a palm; "referendum" 3.53: palm turning up towards the interviewer (photo 1), a small nod.
+- "that referendum" 4.62: the same hand chops down twice, firm nods with each (it was decided).
+- "British" 5.72: both hands open outward a little (the public); "chose" 6.45: a tiny pause on the face, eyebrows up.
+- "wolves" 6.63: said flat and certain: a firm nod, hands settle in the lap, lips press into a tight satisfied smile; holds to the cut with a small brow raise and a blink.
+**Kemi (7.5-17.5): deadpan, ramrod straight; the carnage behind her is never acknowledged.**
+- 7.5-8.1 before she speaks: a slow blink, a small weight shift, chin set; she never glances back.
+- "Andy" 8.1: a little head tilt with disdain (lips tighten); "less" 9.68: the near hand comes up, palm down, pressing.
+- "backwards" 11.03: a thumb jerked back over her shoulder (towards the wolves behind her: the joke), eyes still on the interviewer.
+- "job" 12.61: a flat hand chops once; the curt nod.
+- "reducing" 12.84: the hand pats the air down, level, like a manager giving targets.
+- "British" 14.42: the hand opens; "faces" 15.77, "chewed off" 16.22-16.67: delivered in the same flat tone, a brisk single nod on "off"; hands back to her sides; she holds the stare, one blink, to the cut.
+**Blair (17.5-26.9): the showman, breezy and charming, then the grin.**
+- 17.5-18.0: settles back in the chair, a relaxed smile, head tilted.
+- "Well" 18.0: both hands lift off the chair arms, palms open, a little shrug and head tilt.
+- "opinion" 18.62: one hand to his chest (sincerity).
+- "listen" 19.65: the hand comes forward, the Blair thumb-on-top chop, small; "anything" 20.27: a light shake of the head, a chuckle on the face.
+- "Tony" 21.51: hand flat to his chest again, the big grin flashes, brows up.
+- "invaded" 22.33: a breezy palm flip outward; "Iraq" 22.95: a shrug, eyebrows up, smile unbroken (no shame).
+- "belong" 23.57: both palms open towards the interviewer; "Hague" 24.39: a nod, he leans back, hands return to the chair arms.
+- 25.0-26.5: the grin held about 1.5 s (locked), small head life only; he doesn't see the wolf. 26.5: the lunge; cut (locked).
+**Built where:** story/brexit-is-done-moves.txt (blocks per shot; new hand places named there: finger up, chop, thumb back, pat down, chest, palms out), the film side in acting.FILMS and brexit_is_done.py faces and moves (moods for each beat). Checked: acting.py check (every move lands), a short clip of each line, looked at whole (CLAUDE.md "Notes on movement get a short clip").
 
-## Chat 12 end check, named
-- Brief checklist "empty" and framing notes 3/9: the checklist is above (unticked); notes 3 and 9 are cast/framing notes already handled (chats 9-10); ticked against the film before the first animatic (Sonnet chat).
-- Rule 74 acting rows (shots 1-3) and HEAD LIFE for may, kemi, blair: the moves stage, next chat (chat 13).
-- FINDER: chat 12 built new (shot 3's chase, the shared fixes), not a note: hand searches on purpose.
-- SENTENCE: the same alerts on Sam's own CLAUDE.md edits that chats 1-11 named. COST: no ledger estimate (named since chat 4).
+## Chat 14 end check, named
+- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-13 did. COST: no ledger estimate (named since chat 4).
+- Start check "NOT CARRIED 07:39" ("Wouldn't it be better to run them at certain key stages?"): Sam's kit-tests question, carried as proposal kit-tests-when (Q1 to Sam).
+- Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: left for the GTA chats.
+
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
 - Note 1 (Q5) Sam: "Yes, before a wolf lunges at him": Blair's grin then the wolf lunge, brief item 13.

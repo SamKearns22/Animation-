@@ -600,7 +600,21 @@ def tray_state(u, L):
             out[n] = dict(x=x0 + vx * tau, d=d0 + vd * tau, z=z0 + vz * tau - 4.9 * tau * tau, ang=spin * tau, age=None)
         else:
             out[n] = dict(x=x0 + vx * tl, d=d0 + vd * tl, z=0.0, ang=spin * tl, age=tau - tl)
+            if n == 0:                       # the tray: kicked along by any feet that reach it (moves.kicked)
+                x, d, since, sp = MV.kicked(out[n]['x'], out[n]['d'], TOSS + tl, u, tray_movers())
+                out[n].update(x=x, d=d, age=since, spin=sp)
     return out
+
+
+def tray_movers():
+    """Every guest and wolf of the chase as moves.kicked / moves.trodden want them."""
+    return MV.chase_movers(PASSES, GUEST_V, WOLF_V)
+
+
+def tray_track(u):
+    """Where the fallen tray lies at u, or None while it is in the air (the check moves.trodden reads it)."""
+    st = tray_state(u, None)
+    return (st[0]['x'], st[0]['d']) if st and st[0]['age'] is not None else None
 
 
 def _tray(img, L, st, held=None):
@@ -629,8 +643,13 @@ def _tray(img, L, st, held=None):
             flat = r * L.up / d
             ry = flat * (1 + 0.5 * math.exp(-6 * a) * abs(math.sin(a * 40)))   # the rattle
             dd.ellipse([px - r, py - flat * 0.9, px + r, py + flat * 0.9], fill=(0, 0, 0, 45))
-    _ell(img, px, py, r, ry, (196, 200, 206), OUT, max(1.5, 0.008 * L.ppm(d)))
-    _ell(img, px, py, r * 0.82, ry * 0.8, (220, 224, 230), None, 0)
+    w = max(1.5, 0.008 * L.ppm(d))
+    _ell(img, px, py, r, ry, (150, 156, 166), OUT, w)                 # the raised rim (chat 14, critique r5 (d): a
+    _ell(img, px, py, r * 0.84, ry * 0.8, (214, 219, 226), OUT, w * 0.6)   # flat disc read as a plate): rim, dish,
+    hl = glaze(img)                                                    # a bright shine across the dish, two handles
+    hl.ellipse([px - r * 0.55, py - ry * 0.55, px - r * 0.05, py - ry * 0.1], fill=(255, 255, 255, 190))
+    for sx in (-1, 1):
+        _ell(img, px + sx * r * 0.92, py, r * 0.05, max(1.5, ry * 0.25), (70, 74, 82), None, 0)
     return px, py, r, ry
 
 
@@ -678,21 +697,35 @@ def _glass_down(img, L, st, n):
         q = rnd.uniform(0.012, 0.025) * s
         tri = [(cx + q * math.cos(th + k2 * 2.1 + k), cy + q * flat * 2 * math.sin(th + k2 * 2.1 + k)) for k2 in range(3)]
         dd.polygon(tri, fill=(236, 242, 246, 230), outline=OUT)
+    # what is left whole: the stem and foot lying on their side by the pool (chat 14, critique r5 (d): shards alone
+    # read as specks at phone size); rolled a little way out with the spill
+    th = rnd.uniform(-0.5, 0.5)
+    h = 0.2 * s
+    bx, by = px + (0.10 * s + 0.06 * s * slide) * (1 if n % 2 else -1), py + 0.02 * s * flat
+    ex, ey = bx + 0.55 * h * math.cos(th), by + 0.55 * h * math.sin(th) * flat
+    w = max(2, int(0.01 * s))
+    dd.line([(bx, by), (ex, ey)], fill=OUT, width=w + 2)
+    dd.line([(bx, by), (ex, ey)], fill=(236, 242, 246, 255), width=w)
+    dd.ellipse([bx - 0.008 * s, by - 0.03 * s, bx + 0.008 * s, by + 0.03 * s], fill=(236, 242, 246, 255), outline=OUT)   # the foot, edge on
+    bowl = [(ex, ey - 0.09 * h), (ex + 0.3 * h * math.cos(th), ey - 0.06 * h + 0.3 * h * math.sin(th) * flat),
+            (ex + 0.3 * h * math.cos(th), ey + 0.06 * h + 0.3 * h * math.sin(th) * flat), (ex, ey + 0.09 * h)]
+    dd.polygon(bowl, fill=(236, 240, 244, 200), outline=OUT)        # the bowl's broken lower half still on the stem
 
 
 def lunger(img, L, u):
-    """Wp: in from frame right in mid-leap at Blair's depth (2.3 m: just behind his shoulder, so his head would hide
-    it, never pass through it), jaws wide, coming down on his head from above right; the film cuts at 9.4 s, before
-    it reaches him (item 13). At his depth a wolf's head is about 260 px long, and the only clear space beside his
-    head is above it (right of it is 210 px of bookcase): its jaws run from the right edge (9.167) to about 60 px
-    above-right of his hair at the last frame (9.333)."""
+    """Wp: in from frame right in mid-leap, coming down on Blair's head from above right, jaws wide, forepaws out; the
+    film cuts at 9.4 s (its last frame 9.333 at 12 fps), before it reaches him (item 13). It closes from 3.0 m to his
+    shoulder's depth (2.3 m: just behind him, so his head would hide it, never pass through it), growing as it comes.
+    Chat 14 (critique r5 (a): "a brown blob with teeth at the right edge for 2 frames"): at 12 fps the lunge has five
+    frames (9.0-9.333); the old path had the jaws off the edge for three of them. Now the jaws are on screen from the
+    first frame and the head (ear, eye, open jaws) and forepaws are in frame from the second."""
     if u < LUNGE_T:
         return
-    v = (u - LUNGE_T) / 0.333
-    jaw_x = 1310 - 440 * v                              # screen px: off the right edge -> just above his hair
-    jaw_y = 310 + 90 * v                                # coming down on him
-    d = 2.3
-    P = WF.pose('leap', 0.8, jaw=1.0, snarl=1.0)
+    v = min(1.0, (u - LUNGE_T) / LUNGE_LEN)
+    (x0, y0), (x1, y1) = LUNGE_PATH
+    jaw_x, jaw_y = x0 + (x1 - x0) * v, y0 + (y1 - y0) * v      # screen px: the right edge -> just above his hair
+    d = 3.2 - 0.85 * v
+    P = WF.pose('leap', 0.75 + 0.25 * v, jaw=1.0, snarl=1.0)
     s = wolf_s(L, d)
     from PIL import Image
     probe = Image.new('RGBA', (8, 8))
@@ -700,6 +733,8 @@ def lunger(img, L, u):
     WF.draw(_ctx(img, s), jaw_x - jx, jaw_y - jy, s, -1, 1, P, blood=0.0, seed=70)
 
 
+LUNGE_LEN = 0.333                                       # s: 9.0 -> the last frame before the cut
+LUNGE_PATH = ((960.0, 215.0), (750.0, 365.0))          # the jaws' front, screen px, first and last frame
 LUNGE_T = 9.0
 
 

@@ -5008,6 +5008,61 @@ def side_by_side_out_of_reach():
     return caught and not new, 'first waves: %s; now: %s' % (old, new or 'none')
 
 
+@test
+def dark_sleeve_reads():
+    """A dark sleeve swinging across a dark jacket reads as an arm, not a floating hand (Open Wounds chat 14, critique
+    r5 (b), notes/learn/dark-sleeve/): side on mid-run, the near arm's fill differs from the jacket's by a visible step
+    and covers its own patch of the body. The old drawing (sleeve = jacket) is refused."""
+    from PIL import Image
+    import views as V
+    import people_parts as PPt
+    import moves as MV
+    import figure as FG
+    B = PPt.B
+    import people as PK
+    sp = PK.crowd_person(PK.crowds('brexit-is-done')['guest'], 0)
+
+    def arm_px(lift):
+        keep = V.DARK_SLEEVE_LIFT
+        V.DARK_SLEEVE_LIFT = lift
+        try:
+            img = Image.new('RGBA', (400, 600), (235, 235, 235, 255))
+            j = MV.gait(sp, 0.0, 'run', steps_per_s=3.5)
+            B.SS = 1
+            with FG.allow('kittest: a side-on runner'):
+                V.person(img, B.Cam(1.0, 540, 960), 200, 60, 0.5, sp, 0.0, 90.0, j)
+            jac = tuple(sp.get('jacket', (40, 40, 46))[:3])
+            slv = tuple(V.sleeve_colour(sp)[:3])
+            px = img.convert('RGB').getdata()
+            n = sum(1 for c in px if sum(abs(a - b) for a, b in zip(c, slv)) <= 6)
+            step = sum(abs(a - b) for a, b in zip(slv, jac))
+            return n, step
+        finally:
+            V.DARK_SLEEVE_LIFT = keep
+    n_old, step_old = arm_px(0.0)
+    n_now, step_now = arm_px(V.DARK_SLEEVE_LIFT)
+    ok = step_old < 18 and step_now >= 18 and n_now >= 400
+    return ok, f'old sleeve {step_old} from the jacket (vanishes); now {step_now}, {n_now} arm pixels seen'
+
+
+@test
+def trodden_things_move():
+    """A loose thing on the floor that runners' feet reach is kicked along, never trodden through (Open Wounds chat 14,
+    critique r5 (c), notes/learn/tray-trodden/): the fallen tray in shot 3's chase. The old tray (lying still while a
+    runner passed 0.30 m from its middle) is caught by moves.trodden; the kicked one passes."""
+    import brexit_is_done_action as A
+    import moves as MV
+    real = MV.kicked
+    try:
+        MV.kicked = lambda x0, d0, t0, u, movers, **k: (x0, d0, max(0.0, u - t0), 0.0)
+        old = MV.trodden(A.tray_track, A.tray_movers(), A.TOSS, 9.4)
+    finally:
+        MV.kicked = real
+    now = MV.trodden(A.tray_track, A.tray_movers(), A.TOSS, 9.4)
+    moved = A.tray_track(9.33)[0] - A.tray_track(8.9)[0]
+    return bool(old) and not now and moved > 0.1, f'old: {old}; now: {now or "none"}; kicked {moved:.2f} m'
+
+
 def main():
     only = sys.argv[1] if len(sys.argv) > 1 else ''
     bad = 0
@@ -5029,3 +5084,4 @@ def main():
 
 if __name__ == '__main__':
     main()
+

@@ -1,3 +1,3 @@
-Open Wounds: shot 3's chase fixed (chat 13): runs keep their hips up, guests flee in waves, nobody meets head-on.
-Next: Opus high chat 14 writes the moves (May, Kemi, Blair: gestures, lips, blinks, head life, looks).
-Then the Sonnet chat for the animatic. Lower-body job R7 runs in its own chat.
+Open Wounds: Sam asked for fluid acting on every line (25 Nov); the acting plan is written in the film's notes, beat by beat.
+Next: Opus chat 15 builds it (May moving from the first drawing), sends a clip of each line.
+Then the Sonnet chat for the animatic. Sam's Q1 (kit tests) waits; R7 runs in its own chat.

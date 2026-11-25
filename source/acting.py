@@ -663,8 +663,13 @@ def _realize_seated(sp, b, film, places, put, add, t):
     import sitting as SIT
     st = b['stance']
     seat = film['seats'][st['seat']]()
-    spec = (SIT.spec_upright if st['kind'] == 'upright' else SIT.spec_slump)(sp, seat)
+    if st['kind'] in ('upright', 'slump'):
+        spec = (SIT.spec_upright if st['kind'] == 'upright' else SIT.spec_slump)(sp, seat)
+    else:                                         # any sitting-kit pose by its name (Open Wounds chat 14: Blair in
+        spec = SIT.POSES[st['kind']][0](sp, seat)  # the wing chair, 'stance: armchair on armchair')
     for side, keys in b['hands']:
+        if keys[0][1] == 'rest':                  # a gesture from where the pose rests the hand: keyed in pose()
+            continue
         a, c, y, z, pole, shp = places[keys[0][1]][:6]
         spec['arms'][side] = SIT.arm_free((c, y, z), pole if not isinstance(pole, str) else V.POLES[pole], shp)
     if 'lean' in put or 'lean' in add:
@@ -673,6 +678,12 @@ def _realize_seated(sp, b, film, places, put, add, t):
     if st.get('lap') is not None:
         j['legs_over'] = {'L': st['lap'], 'R': st['lap']}
     return j
+
+
+def SEATED_KINDS():
+    """The stances the sitting kit realizes: upright, slump, and any of its named poses (sitting.POSES)."""
+    import sitting as SIT
+    return {'upright', 'slump'} | set(SIT.POSES)
 
 
 def pose(desc, film, shot, sp, t):
@@ -713,7 +724,7 @@ def pose(desc, film, shot, sp, t):
         yaw = w.get('facing', 0.0)
         if w.get('turn') and t >= clock(w['turn'][1]):
             yaw = w['turn'][0]
-    elif st['kind'] in ('upright', 'slump'):
+    elif st['kind'] in SEATED_KINDS():
         j = _realize_seated(sp, b, film, places, put, add, t)
     elif st['kind'] == 'seated':
         j = moves.seated(sp)
@@ -723,13 +734,15 @@ def pose(desc, film, shot, sp, t):
     lean_now = put.get('lean', j.get('lean', 0.0)) + add.get('lean', 0.0)
     size = dict(sw=sp.get('shoulders', 150), hw=sp.get('hw', 70))
     seen = set()
-    if st['kind'] not in ('upright', 'slump'):
-        for side, keys in b['hands']:
-            ks = hand_keys(keys, side, size, clock, places, lean_now)
-            if side in seen and t < ks[0][0]:
-                continue                              # a later line for this hand lies over the first from its start
-            seen.add(side)
-            arm_keys(j, sp, side, t, ks)
+    sat = st['kind'] in SEATED_KINDS()
+    for side, keys in b['hands']:
+        if sat and keys[0][1] != 'rest':          # placed by the sitting kit's own arm solve (_realize_seated)
+            continue                              # (chat 14: one from 'rest' is keyed here: May's palm turning up)
+        ks = hand_keys(keys, side, size, clock, places, lean_now)
+        if side in seen and t < ks[0][0]:
+            continue                              # a later line for this hand lies over the first from its start
+        seen.add(side)
+        arm_keys(j, sp, side, t, ks)
     for c, v in put.items():
         if c == 'shoulders':
             continue
@@ -897,7 +910,22 @@ def _milburn():
         mark=lambda shot, who: None, people=set(), acting_list='notes/milburn.md', hooks={}, stands_in={})
 
 
-FILMS = {'blessed': _blessed, 'milburn': _milburn}
+def _brexit():
+    """Open Wounds' side of the kit (chat 14): stand-in timing until Sam records; May and Blair on the sitting kit's
+    seats (her office chair, his wing chair), Kemi standing; the film places everyone itself, so marks are not used."""
+    import brexit_is_done as M
+    import sitting as SIT
+    spans = {s: (a, b) for s, a, b in M.SHOTS}
+    return dict(
+        module=M, T=M.T, word_at=M.word_at, line_end=lambda n: M.LINES[n - 1]['end'],
+        line_start=lambda n: M.LINES[n - 1]['start'], span=lambda shot: spans[shot],
+        ground=lambda on, x, d: None, props={}, extras={},
+        seats={'office': lambda: SIT.seat_for('office'), 'armchair': lambda: SIT.seat_for('armchair')},
+        sp=M.face_sp, mark=lambda shot, who: None, people=set(), acting_list='notes/brexit-is-done.md', hooks={},
+        stands_in={})
+
+
+FILMS = {'blessed': _blessed, 'milburn': _milburn, 'brexit-is-done': _brexit}
 FRAMES = {'blessed': [1.0, 2.3, 2.9, 3.6, 4.1, 5.0, 5.6, 6.6, 12.0, 12.6, 14.2, 15.6, 16.8, 18.5, 21.5, 23.9, 26.4,
                       31.0, 34.6, 37.0, 46.2, 48.3, 49.6, 50.3, 51.6, 52.6, 53.5, 54.6, 54.9, 57.0]}
 

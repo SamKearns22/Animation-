@@ -46,3 +46,16 @@
 - Sam (24 Nov 10:24, on note 12): "I would argue that you do not *know* how to draw this part of the body as you couldn't do it on blessed either"; "You may have to list it as a reserve job for now as we can't expend the rest of the usage on you learning": carried as reserve job R7 (notes/next-jobs.md), never worked on in this film.
 - Sam (24 Nov 10:31, note 1): "Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body": written into R7 (notes/next-jobs.md: goal, the ball-knee fix, what must be learned first).
 - Chat 10 end check: JUDGE STOP (the record predates views.py's seated stopgap): Sam: "1. Override" (24 Nov): Checks: skipped by Override: the JUDGE stop (re-run with reserve job R7). Rule 74 acting rows and HEAD LIFE: the moves stage, next chat. FINDER: new building, not notes. COST: Sam's Q9 N. womens_builds: passes (the crash was a run started before views.knee_cap existed).
+
+
+# Moved by chat 14 (25 Nov)
+## Chat 13 end check, named
+- Branches not this film's (GTA): claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 (a record only, Sam 22 Nov): left for the GTA chats.
+- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-12 did. Rule 74 acting rows, HEAD LIFE, rehearsal clips: the moves stage, chat 14. Framing quick checks (notes 3, 9): handled chats 9-10.
+- Start check "NOT CARRIED" lines: chat 11's prompt words ("Blair's chase and t...") are the chase, done this chat.
+
+## Chat 12 end check, named
+- Brief checklist "empty" and framing notes 3/9: the checklist is above (unticked); notes 3 and 9 are cast/framing notes already handled (chats 9-10); ticked against the film before the first animatic (Sonnet chat).
+- Rule 74 acting rows (shots 1-3) and HEAD LIFE for may, kemi, blair: the moves stage, next chat (chat 13).
+- FINDER: chat 12 built new (shot 3's chase, the shared fixes), not a note: hand searches on purpose.
+- SENTENCE: the same alerts on Sam's own CLAUDE.md edits that chats 1-11 named. COST: no ledger estimate (named since chat 4).
