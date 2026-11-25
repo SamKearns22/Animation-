@@ -913,6 +913,10 @@ def hand(p, j2, side, sp, shape):
     B.gesture_hand(p, el, wr, shape, PROBE[side][1] if PROBE else sp.get('glove', sp['skin']))
 
 
+def _no_arm(*a, **k):
+    """solid_seat mode 'whole': the arms and hands are in the solid body."""
+
+
 def arm(p, j2, side, sp, shape=None):
     """An arm and its hand; a short-sleeved top (sp['short_sleeve']): the bare arm, then the sleeve over the top of
     the upper arm (from MidTerminal's polo, 20 Nov: higher and wider for Grand Theft Autism, so no skin shows over the
@@ -1857,6 +1861,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     legs_order = sorted(hips_far, key=lambda sd: sd == top and view != 'back')
     bottom = j.get('lap') and view != 'back'      # a seated bottom on the seat, over the thighs' roots (their flat ends)
     r7 = r7_on(j, sp, view)                       # R7: the whole seated lower body as one shape (new films)
+    solid_whole = r7 and sp.get('seat_solid') == 'whole'   # R7 option 2 (Sam, 25 Nov): the whole person solid
+    arm = _no_arm if solid_whole else globals()['arm']   # (solid_seat): no flat torso or arms; the house head over it
     if r7:
         seated_lower(p, j, view_deg, sp, [sd for sd in legs_order if sd not in hidden], top)
         bottom, legs_order_old = False, []
@@ -1902,7 +1908,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     under = [] if held_behind or not rear else [d for d in j.get('props', []) if getattr(d, 'rear_under', False)]
     for draw in under:
         draw(p, j2)
-    if view == 'front':
+    if solid_whole:
+        pass                                      # the solid body is the torso (solid_seat.draw, with its hands)
+    elif view == 'front':
         q = dict(sp_draw, pose='none', full=False)
         q.setdefault('bottom', JACKET)
         if seated:
@@ -1918,9 +1926,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         u = min(1.0, max(0.0, (lean - 12) / 8))   # over leans 12 to 20, never a jump (Sam, 20 Oct: his torso popped
         bent = dict(sp_draw, bottom=hem + (min(hem, 470) - hem) * u) if u > 0 else sp_draw   # shorter after the lunge)
         torso_view(img, B.Pen(img, up), bent, view, seated)
-    for draw in j.get('body_props', []):          # clothing over the torso (a vest, hi-vis): drawn in the torso's own
+    for draw in ([] if solid_whole else j.get('body_props', [])):   # clothing over the torso (a vest, hi-vis): drawn in the torso's own
         draw(B.Pen(img, up), view, sp_draw)        # frame, so it leans with the body
-    if sp_draw.get('jacket_hem'):                 # a short jacket (body.trouser_seat): below its hem, the trousers
+    if sp_draw.get('jacket_hem') and not solid_whole:   # a short jacket (body.trouser_seat): below its hem, the trousers
         sb = min(sp_draw.get('bottom', JACKET), 470) if seated else sp_draw.get('bottom', JACKET)
         pen = B.Pen(img, up)
         B.trouser_seat(pen, sp_draw, torso_outline(sp_draw, view, sb, B.ink_units(pen)), sb,

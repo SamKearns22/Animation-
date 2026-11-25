@@ -47,11 +47,18 @@ SPREAD = 0.5           # pressed flesh spreads out this much per unit pressed do
 SPREAD_R = 40.0         # directions ease in over this distance from the middle (no tearing where they meet)
 SPREAD_H = 40.0         # ... fading over this height above the seat (6 cm)
 SINK_MAX = 90.0         # deeper than this under the cushion's top is below the seat, not on it (14 cm)
+NECK_X = 1.0             # mode 'whole': the neck's width over the measured body's (the trunk eases to it above the shoulders)
+NECK_LIFT = 40.0         # mode 'whole': the shoulders' tops and the neck's base raised this far (person units, 6 cm)
+ARM_SEAM = 0.6           # mode 'whole': the arm's own line stops this far (rest dm) below the shoulder joint
+ARM_X = 1.25             # mode 'whole': a sleeve's thickness over the measured arm's (the house arm is stretched
+#                          about 1.4 along: at 1.0 judges saw 'thin stiff tubes', chat 8)
+HAND_R, HAND_OUT = 26.0, 12.0   # the house circle hand (satire_style.install_circle_hands): radius, past the wrist
 HANG = 25.0             # a crossed top leg's foot tips this far down from square to its shin (relaxed)
 SEAT_BLOCK = 40.0       # the cushion's thickness under its top (6 cm): a shin inside it crosses the seat
 SEAT_SOFT = 6.0         # the bottom and thighs pressed flat on the seat: nothing deeper than this into the cushion
 _REST = {}
 LAST = {}
+WHOLE_IX = {'jacket': 'body', 'shirt': 'dash', 'pocket': 'dash', 'pin': 'dash'}   # model_body's suit parts -> part ids here
 
 
 def _u(a):
@@ -176,9 +183,9 @@ def _kit_to_mh(p):
     return np.array([p[0], -p[1], p[2]], float)
 
 
-def pose(j, sp, cloth=True):
+def pose(j, sp, cloth=True, whole=False):
     """Points (N,3) in the kit frame (person units: x across, y down, z forward), triangles, per-point slot weights,
-    and the rest points (for the clothes by dot)."""
+    and the rest points (for the clothes by dot). whole: the trunk, neck and arms too (_upper), not only the legs."""
     import views as V
     R = rest(sp)
     v = R['vc'] if cloth else R['v']
@@ -228,6 +235,9 @@ def pose(j, sp, cloth=True):
     P = np.zeros((len(v), 3))
     for k, (M, a, t) in enumerate(A):
         P += G[:, k:k + 1] * ((v - a) @ M.T + t)
+    if whole:                                   # the trunk slot (arms ride on it) replaced by trunk, neck and arms
+        M0, a0, t0 = A[0]
+        P += _upper(j, sp, v, J, h, H_, sx, s0, Rl) - G[:, :1] * ((v - a0) @ M0.T + t0)
     P[:, 1] *= -1                               # back to the kit frame (y down)
     seat = j.get('seat')
     sy = _seat_y(j)
@@ -249,6 +259,64 @@ def pose(j, sp, cloth=True):
             P[on, 1] = lim[on]
         _press_legs(P, R, j)
     return P, R
+
+
+def _upper(j, sp, v, J, h, H_, sx, s0, Rl):
+    """Mode 'whole' (Sam's pick, 25 Nov, option 2): the trunk, neck and arms of the measured body on the kit's own
+    upper joints (MakeHuman frame, y up), weighted by model_body's twelve slots on the same points. The trunk keeps the
+    legs' scale below the hips (so the seat, bottom and legs are exactly as in mode 'legs') and is stretched above
+    them to the kit's shoulders (the house figure: a longer trunk and wider shoulders than the measured body), easing
+    from the hip width to the shoulder width; the neck narrows back (NECK_X); each arm aimed and stretched to the
+    kit's shoulder, elbow and wrist (leaned with the body, as views draws the flat arm)."""
+    import views as V
+    import model_body as MB
+    M = MB.rest(sp)
+    G12, J12 = M['G'], M['J']
+    lean = j.get('lean', 0.0)
+    T = {}
+    for ks, ms in (('L', 'R'), ('R', 'L')):    # the kit's L (x < 0) is MakeHuman's .R
+        for n in ('sh', 'el', 'wr'):
+            T[n + ms] = _kit_to_mh(V.leaned(j[n + ks], lean))
+    sh_r = (J12['shL'] + J12['shR']) / 2
+    sh_k = (T['shL'] + T['shR']) / 2
+    kt = (sh_k[1] - H_[1]) / ((sh_r[1] - h[1]) * s0)       # the house trunk's length over the body's
+    sxs = (T['shL'][0] - T['shR'][0]) / (J12['shL'][0] - J12['shR'][0])   # across at the shoulders
+    d = v - h
+    u = np.clip(d[:, 1] / (sh_r[1] - h[1]), 0, 1)
+    nk = np.clip((d[:, 1] - (sh_r[1] - h[1])) / max(1e-6, J12['neck'][1] - sh_r[1]), 0, 1)
+    ax = (sx + (sxs - sx) * u) * (1 - nk) + s0 * NECK_X * nk
+    # deep as it is wide (chat 8 judges, side view: stretched up and across but not front to back, "torso very thin,
+    # tube-like", the head thrust forward of a flat chest): the depth keeps the body's own depth-to-width ratio
+    az = ax * (s0 / sx) * (1 - nk) + s0 * NECK_X * nk
+    tq = np.stack([d[:, 0] * ax, s0 * (d[:, 1] + (kt - 1) * np.maximum(d[:, 1], 0)), d[:, 2] * az], 1) @ Rl.T + H_
+    out = (G12[:, 0:1] + G12[:, 1:2]) * tq       # trunk and neck
+    for ms in 'LR':
+        sh_t = T['sh' + ms]
+        for slot, a, b, ta, tb in (('arm', 'sh', 'el', sh_t, T['el' + ms]), ('fore', 'el', 'wr', T['el' + ms], T['wr' + ms])):
+            Ma, a0, a1 = MB._aim(J12[a + ms], J12[b + ms], ta, tb, s0 * ARM_X)
+            k = MB.SLOTS.index(slot + ms)
+            out += G12[:, k:k + 1] * ((v - a0) @ Ma.T + a1)
+    # the house figure's shoulders sit high and square under the chin: everything above the shoulder joints (the
+    # neck's base, the trapezius, the shoulders' tops) raised NECK_LIFT, eased in over the half decimetre below them
+    # (chat 8, first sheet: a long bare neck between the chin and low sloping shoulders)
+    r = np.clip((d[:, 1] - (sh_r[1] - h[1]) + 0.5) / 0.5, 0, 1)
+    up = 1.0 - G12[:, 6:].sum(1)                  # not the legs
+    out[:, 1] += NECK_LIFT * r * r * (3 - 2 * r) * up
+    return out
+
+
+def hands(j, sp):
+    """The house circle hands as solid balls (kit frame): HAND_OUT past each wrist along the forearm, HAND_R round
+    (satire_style's circle hand), so what hides a hand (a knee in front of it, the body) is decided by depth."""
+    import views as V
+    lean = j.get('lean', 0.0)
+    out = []
+    for sd in 'LR':
+        el = np.array(V.leaned(j['el' + sd], lean), float)
+        wr = np.array(V.leaned(j['wr' + sd], lean), float)
+        c = wr + _u(wr - el) * HAND_OUT
+        out.append(BD._ball(c, HAND_R, 16))
+    return out
 
 
 def _fit_bottom(P, R, j, sp, sy):
@@ -421,12 +489,25 @@ def draw(p, j, yaw, sp, scale=2):
     layer and its kit-frame depth in LAST for lay_over and the checks."""
     import views as V
     skirt = sp.get('skirt_solid')               # a skirt (the body's own skirt surface) over bare or tighted legs
-    P, R = pose(j, sp, cloth=not skirt)
-    hip_y = (R['J']['hipL'][1] + R['J']['hipR'][1]) / 2
-    keep_pt = (R['v'][:, 1] < hip_y + 1.6) & (R['arm'] < 0.05)   # waist down, no arms (the flat torso covers the cut)
+    whole = sp.get('seat_solid') == 'whole'
+    P, R = pose(j, sp, cloth=not skirt, whole=whole)
     foot = _foot_pts(R)
-    T = R['tris'][keep_pt[R['tris']].all(1) & ~(foot[R['tris']].all(1))]
+    if whole:                                   # the whole person: every point but the head and hands (the house
+        import model_body as MB                 # head and circle hands are drawn instead: views, and hands() here)
+        M = MB.rest(sp)
+        T = M['T']
+        grp = M['grp']
+    else:
+        hip_y = (R['J']['hipL'][1] + R['J']['hipR'][1]) / 2
+        keep_pt = (R['v'][:, 1] < hip_y + 1.6) & (R['arm'] < 0.05)   # waist down, no arms (the flat torso covers the cut)
+        T = R['tris'][keep_pt[R['tris']].all(1) & ~(foot[R['tris']].all(1))]
+        grp = np.zeros((len(P), 5))
     T = np.concatenate([T] + [h for h in _shoes(P, R, foot)])
+    hand_objs = []
+    if whole:
+        for Ph, Th in hands(j, sp):
+            hand_objs.append(Th + len(P))
+            P = np.concatenate([P, Ph])
     img = p.img
     Wd, Hd = img.size
     a = math.radians(yaw)
@@ -439,18 +520,40 @@ def draw(p, j, yaw, sp, scale=2):
     zb = np.full((Hd * scale, Wd * scale), np.inf)
     pb = np.full(zb.shape, -1, np.int64)
     ob = np.full(zb.shape, -1, np.int64)
-    attrs = np.concatenate([R['v'], P, _legside(R)[:, None]], 1)
+    nv = len(R['v'])
+    if whole:                                   # which arm a point is on (+1 MakeHuman's .L, -1 .R, 0 neither)
+        G12 = M['G']
+        armside = (G12[:, 2] + G12[:, 4]) - (G12[:, 3] + G12[:, 5])
+    else:
+        armside = np.zeros(nv)
+    attrs = np.concatenate([R['v'], P[:nv], _legside(R)[:, None], grp, armside[:, None]], 1)
+    if len(P) > nv:                             # the hands' balls: no rest point of their own (their object says hand)
+        attrs = np.concatenate([attrs, np.zeros((len(P) - nv, attrs.shape[1]))], 0)
+        attrs[nv:, 3:6] = P[nv:]
     ab = np.zeros(zb.shape + (attrs.shape[1],))
     objs = [T]
     if skirt:                                   # knee length: the surface cut a little below the knee line
         knee_y = (R['J']['kneeL'][1] + R['J']['kneeR'][1]) / 2
         Ts = R['skirt'][(R['v'][R['skirt']][:, :, 1] > knee_y - SKIRT_BELOW).all(1)]
         objs.append(Ts)
+    if whole:
+        objs.append(np.zeros((0, 3), int))      # (object 1 is the skirt's)
+        objs += hand_objs                       # objects 2, 3: the hands
     for oi, To in enumerate(objs):
+        if not len(To):
+            continue
         BD._fill(np.ascontiguousarray(xy), np.ascontiguousarray(z), np.ascontiguousarray(To, np.int64),
                  np.zeros(len(To), np.int64), zb, pb, ob, oi, 0.01, ab, np.ascontiguousarray(attrs), True)
     m = ob >= 0
-    pb[ob == 0] = _parts(R, ab[ob == 0][:, :3])
+    if whole:                                   # the suit per dot (model_body.suit_parts), in this drawing's part ids
+        # her jacket buttoned with a V (the flat kit's women's jackets), his open over the shirt, unless the spec says
+        mp = MB.suit_parts(ab[ob == 0][:, :3], ab[ob == 0][:, 7:12], M,
+                           dict(sp, jacket_open=sp.get('jacket_open', not woman(sp))))
+        name = {v_: k_ for k_, v_ in MB.PIX.items()}
+        pb[ob == 0] = [BD.PART_IX[WHOLE_IX.get(name[q], name[q])] for q in mp]
+        pb[ob >= 2] = BD.PART_IX['hand']
+    else:
+        pb[ob == 0] = _parts(R, ab[ob == 0][:, :3])
     if skirt:                                   # the body above the hem is under the skirt: it IS the skirt there
         under = (ob == 0) & (ab[..., 1] > knee_y - SKIRT_BELOW)                 # (chat 6: skin showed at the bum and
         ob[under] = 1                                                           # where a crossed thigh left it)
@@ -464,11 +567,26 @@ def draw(p, j, yaw, sp, scale=2):
         a_, b_ = ls[:ls.shape[0] - dy, :ls.shape[1] - dx], ls[dy:, dx:]
         e = (a_ > 0) & (b_ > 0) & (a_ != b_)
         between[:ls.shape[0] - dy, :ls.shape[1] - dx] |= e
+    if whole:                                   # an arm against the body is its own shape: the house line round
+        J12 = M['J']                             # it wherever it lies on the trunk or the other arm, but never
+        sh_y = (J12['shL'][1] + J12['shR'][1]) / 2   # across the shoulder's top, where the arm grows out of the body
+        lab = np.where(ab[..., 12] > 0.5, 1, np.where(ab[..., 12] < -0.5, 2, 3))
+        lab[(ob != 0) | ~m] = 0
+        low = ab[..., 1] < sh_y - ARM_SEAM
+        for dy, dx in ((0, 1), (1, 0)):
+            a_, b_ = lab[:lab.shape[0] - dy, :lab.shape[1] - dx], lab[dy:, dx:]
+            la, lb = low[:low.shape[0] - dy, :low.shape[1] - dx], low[dy:, dx:]
+            e = (a_ > 0) & (b_ > 0) & (a_ != b_) & la & lb
+            between[:lab.shape[0] - dy, :lab.shape[1] - dx] |= e
     from scipy import ndimage
     edge |= ndimage.binary_dilation(between, iterations=max(1, int(max(2, p.w(2.6)) * scale // 2)))
     cols = {BD.PART_IX['trousers']: tuple(sp.get('trousers', (40, 40, 46))),
             BD.PART_IX['shoes']: tuple(sp.get('shoe', (30, 26, 24))),
-            BD.PART_IX['skin']: tuple(sp.get('tights') or sp['skin']), BD.PART_IX['vest']: tuple(skirt or (0, 0, 0))}
+            BD.PART_IX['skin']: tuple(sp.get('tights') or sp['skin']), BD.PART_IX['vest']: tuple(skirt or (0, 0, 0)),
+            BD.PART_IX['body']: tuple(sp.get('jacket', (40, 40, 46))), BD.PART_IX['dash']: tuple(sp.get('shirt', (246,) * 3)),
+            BD.PART_IX['hand']: tuple(sp.get('glove', sp['skin']))}
+    if whole:                                   # the neck and face's skin is the person's own, never tights
+        cols[BD.PART_IX['skin']] = tuple(sp['skin'])
     lay = np.zeros(zb.shape + (4,), np.uint8)
     for i, cc in cols.items():
         lay[pb == i, :3] = cc
@@ -493,15 +611,15 @@ def draw(p, j, yaw, sp, scale=2):
     img.alpha_composite(L) if img.mode == 'RGBA' else img.paste(L, (0, 0), L)
     zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
     LAST.clear()
-    LAST.update(layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
-                P=P, T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw)
+    LAST.update(whole=whole, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
+                P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw)
     return L
 
 
 def lay_over(img, p=None):
     """After the torso: the legs in front of the torso's front drawn over it (no hand-made list of which part:
     depth in the body's own frame decides), inked along the jacket where they leave it."""
-    if not LAST:
+    if not LAST or LAST.get('whole'):           # (mode 'whole': no flat torso to lie over)
         return
     from scipy import ndimage
     front = LAST['front']

@@ -83,3 +83,20 @@ not R7's. Branches not R7's, left for their chains: claude/kit-tests-when-build,
 claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)
+
+## Where things stand (chat 6, 25 Nov, session_01U3pKQzBQSVMGz9aFiBTmTa)
+Rules that bite next: 30 (fix the method, not the picture), 87 (a fix failing twice stops), 85 (cost watch).
+Done: Learn 1-3 of seated-legs-3d. source/solid_seat.py draws the measured body's legs for ANY kit person on the kit's
+joints and camera (switch seat_solid; off for every film), trousers, shoes, a knee-length skirt from the body's own skirt
+surface (works: May, 4 views). Crossings 0 (Kemi crossed: 6 points under 7 mm, named). Judges (results-r7c6.md): side
+4/4/4 (passes), crossed 3-4, 3/4 3, front 2-3; nothing below chat 4. no_bottom fails every tile: bottom hidden.
+Next: chat 7, Opus high (building new): fixes 1-4 in results-r7c6.md "For the next chat", re-judge (r7c7); add kittest solid_seat (crossings 0 on May; the check finds them with
+PRESS_ROUNDS=0: 29/107 in chat 6). Cap left:
+2.2% (ledger: 1.78% spent). Pass -> step 5 (Sam: winner beside v4, Change 1 Y/N, Change 2 Y/N); cap hit -> tell Sam.
+Order (Sam, 25 Nov 18:15, session at 73%): the Open Wounds animatic first (Sonnet chat 17), then R7 chat 7. Kit tests 147/147.
+Needs Sam: nothing yet. Locked by Sam: Open Wounds' seated frames (seat_r7 switch off); the bum/seat he accepted.
+Read: results-r7c6.md; source/solid_seat.py MAP; proposal Final version; sheet: notes/learn/seated/solid/sheet_solid.py.
+Open rule requests: none. For Claude: whole-person solid (2b) not built yet: chat 7 decides after the legs pass.
+Branches not R7's, left for their chains: claude/kit-tests-when-build, claude/kit-tests-per-film, claude/gta-v5-sound-draft,
+claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31. End-check SENTENCE x4 are CLAUDE.md edits by other
+chats (34f49840, 0945cc85; named by earlier chats), not R7's.
