@@ -26,10 +26,9 @@ Sam (25 Nov, word for word): "Make the kit check happen at the beginning and the
 - **Done:** proposal route (judge picked helper A's V2; notes/proposals/kit-tests-per-film.md, "Built"); `source/kitfilm.py`;
   handover start/end, setup.sh (no run), finish.py; fixes 1 (stale run only under Override) and 3 (85 tests re-ran on
   any kitstamps edit); kittest `kit_tests_per_film`; rulebook row 90; catalogue row; watcher promise. kittest-resume dropped.
-- **Next:** none in the chain (waits for Sam's answer below). Then a tool chat (Opus medium): fix 2, the crashing
+- **Next:** none in the chain. Then a tool chat (Opus medium): fix 2, the crashing
   `people_from_a_description` on a fresh machine; Step 0's count if Sam wants it.
-- **Needs Sam:** Q1 keep the kit check before each animatic too (Y, my pick) or only before the final (N): on N set
-  `kitfilm.ANIMATIC_GATE = False`.
+- **Needs Sam:** nothing. Q1 answered Y (25 Nov, after asking: "wouldn't it be a waste ... if we haven't changed a kit"; told only changed tests run): the check stays before every animatic.
 - **Read:** guides/job-packs.md "A tool job"; the proposal's "Built".
 - **Open rule requests:** none.
 - **Named:** branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 not merged (outside this job); SENTENCE lost (34f49840, 0945cc85: earlier chats'); COST: a tool job, no film estimate.

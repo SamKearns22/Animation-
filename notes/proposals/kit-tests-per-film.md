@@ -145,3 +145,6 @@ Added: Checks in chats that change the kit, without asking you, which is more th
   a later chat neither runs nor waits except a new test; 21 made stale suggests, 20 is silent; hook code not a read.
 - **Lost:** the kit run in every chat (start-up and handover), and early warning of a break another chat made
   (now found at the next animatic or the final). **Added:** the films record, the suggestion line, one kit test.
+
+## Sam's answer to Change 2 (25 Nov)
+Sam asked: "If we haven't changed a kit during a build, wouldn't it be a waste of energy to do a check at those stages?" Told: only the tests whose files changed re-run, so nothing runs when no kit changed. Then "Y": the kit gate stays before every animatic as well as the final (`kitfilm.ANIMATIC_GATE = True`).

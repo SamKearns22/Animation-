@@ -19,7 +19,7 @@ notes/proposals/kit-tests-per-film.md, the judged pick V2).
   final_row() ....... finish.py: a final (not an animatic) that passed the kit gate leaves the film's 'final' row
 
 The setup hook no longer starts any kit run (setup.sh); finish.py's gate before an animatic or final is unchanged
-(Change 2, keeping it before animatics, is Sam's open question; ANIMATIC_GATE).
+(Change 2, keeping it before animatics: Sam's Y, 25 Nov; ANIMATIC_GATE).
 
     python3 source/kitfilm.py status [FILM]      the films' start / final rows
 """
@@ -33,7 +33,7 @@ ROOT = os.path.dirname(HERE)
 FILMS = os.path.join(ROOT, 'notes', 'kittest-films.tsv')
 START_STALE = os.path.join(ROOT, 'notes', 'logs', 'kittest-stale-start.txt')   # local to the machine (.gitignore)
 MAJOR = 20                  # tests made stale by one chat's own changes before a full check is suggested to Sam
-ANIMATIC_GATE = True        # Change 2 (Sam's open question): finish.py's kit gate before every animatic, not only the final
+ANIMATIC_GATE = True        # Change 2 (Sam's Y, 25 Nov): finish.py's kit gate before every animatic, not only the final
 
 
 def sid_now():
