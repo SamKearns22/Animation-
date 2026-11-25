@@ -69,7 +69,7 @@ Rules that bite next: 85 (cost watch: step caps), 30 (fix the method), CLAUDE.md
 Done: step 1 (the count), above; pushed to the main line.
 Next: on Sam's 1, step 2 (Opus high, cap 6%): Blender installed, the moving test on a real past shot (sit, stand,
 walk) beside the original, clip only; on Sam's 2, the investigation ends and is marked declined.
-Needs Sam: Q1 (go on to step 2, or stop here).
+Needs Sam: nothing. Sam, 25 Nov (this chat): "1" = go on to step 2.
 Read: this file only; count/hand-check.md for the numbers.
 For Claude: tally.py in count/; first sort out1-6, blind re-sort out_sample; hand-check overrides by ID.
 Locked by Sam: no film shot is touched by this investigation; Open Wounds stays on the flat kit (question g).
