@@ -49,6 +49,10 @@ SPREAD_H = 40.0         # ... fading over this height above the seat (6 cm)
 SINK_MAX = 90.0         # deeper than this under the cushion's top is below the seat, not on it (14 cm)
 NECK_X = 1.0             # mode 'whole': the neck's width over the measured body's (the trunk eases to it above the shoulders)
 NECK_LIFT = 40.0         # mode 'whole': the shoulders' tops and the neck's base raised this far (person units, 6 cm)
+V_BUTTON = 0.72          # mode 'whole', her jacket: the V closes this share of the way from hips to shoulders (the
+#                          flat May's: at mid chest; chat 8 had 0.42, an opening to the waist: Sam "you changed her clothes?")
+LAPEL_X, SEAM_W = 1.05, 0.022   # her lapel's outer edge at the collar (rest dm off the middle); a drawn seam's half width
+STRIPE_W, STRIPE_WAVE = 0.09, 0.035   # the patterned blouse's stripes: width and wave (rest dm; pattern_torso's 7 and 3 units)
 ARM_SEAM = 0.6           # mode 'whole': the arm's own line stops this far (rest dm) below the shoulder joint
 ARM_X = 1.25             # mode 'whole': a sleeve's thickness over the measured arm's (the house arm is stretched
 #                          about 1.4 along: at 1.0 judges saw 'thin stiff tubes', chat 8)
@@ -548,7 +552,8 @@ def draw(p, j, yaw, sp, scale=2):
     if whole:                                   # the suit per dot (model_body.suit_parts), in this drawing's part ids
         # her jacket buttoned with a V (the flat kit's women's jackets), his open over the shirt, unless the spec says
         mp = MB.suit_parts(ab[ob == 0][:, :3], ab[ob == 0][:, 7:12], M,
-                           dict(sp, jacket_open=sp.get('jacket_open', not woman(sp))))
+                           dict(sp, jacket_open=sp.get('jacket_open', not woman(sp)),
+                                v_button=sp.get('v_button', V_BUTTON if woman(sp) else 0.35)))
         name = {v_: k_ for k_, v_ in MB.PIX.items()}
         pb[ob == 0] = [BD.PART_IX[WHOLE_IX.get(name[q], name[q])] for q in mp]
         pb[ob >= 2] = BD.PART_IX['hand']
@@ -602,6 +607,23 @@ def draw(p, j, yaw, sp, scale=2):
         w = np.clip((ab[..., 6] * sg - 0.2) / 0.6, 0, 1)[tr]
         k = 1 - (1 - V.R7_FAR) * w
         lay[tr, :3] = (np.array(base, float)[None, :] * k[:, None]).astype(np.uint8)
+    if whole and 'pattern' in (sp.get('kit_extras') or ()):   # her patterned blouse (people_parts.pattern_torso:
+        import people_parts as PPa                   # wavy upright stripes, no outlines), laid on the rest body so
+        pc = np.array(sp.get('pattern') or PPa.BLOUSE_STRIPES, np.uint8)   # the stripes turn with her (Sam, chat 8:
+        sh_m = (pb == BD.PART_IX['dash']) & (ob == 0)                      # "you changed her clothes?")
+        xr, yr = ab[..., 0][sh_m], ab[..., 1][sh_m]
+        k = np.floor((xr + STRIPE_WAVE * np.sin(yr / 0.28)) / STRIPE_W).astype(int) % len(pc)
+        lay[sh_m, :3] = pc[k]
+    if whole and woman(sp):                     # her jacket's lapels and the front closing below the V, as the flat
+        J12 = M['J']                             # jacket draws them (Sam, chat 8: "you changed her clothes?")
+        sh_y = (J12['shL'][1] + J12['shR'][1]) / 2
+        collar, button = J12['neck'][1] - 0.35, sh_y * V_BUTTON
+        jk = (pb == BD.PART_IX['body']) & (ob == 0) & (ab[..., 2] > 0.3) & (ab[..., 7] > 0.5)
+        xr, yr = np.abs(ab[..., 0]), ab[..., 1]
+        u = np.clip((collar - yr) / (collar - button), 0, 1)
+        lapel = jk & (yr <= collar) & (yr >= button) & (np.abs(xr - (LAPEL_X * (1 - u) + 0.12 * u)) < SEAM_W)
+        close = jk & (yr < button) & (xr < SEAM_W)
+        lay[lapel | close, :3] = INK
     lay[m, 3] = 255
     lay[edge & m, :3] = INK
     lay[edge, 3] = 255

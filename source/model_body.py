@@ -261,7 +261,8 @@ def suit_parts(rv, grp, R, sp):
     collar = neck - 0.35
     part[(g == 3) | (y > collar + 0.2) & (g != 1)] = PIX['skin']
     # the front opening: a V from the collar (half width 0.62 dm at the collar) to the button, then open or closed
-    button = hip + (sh - hip) * (0.35 if sp.get('jacket_open', True) else 0.42)
+    button = hip + (sh - hip) * sp.get('v_button', 0.35 if sp.get('jacket_open', True) else 0.42)   # (R7 chat 8: a
+    #                                             spec may set where the V closes, a share of hips to shoulders)
     u = np.clip((collar - y) / max(0.1, collar - button), 0, 1)
     vw = 0.62 * (1 - u) + 0.12 * u
     if sp.get('jacket_open', True):
