@@ -31,21 +31,20 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
 - **R6. Fix the half-turn heads (Sam, 19 Nov, already reserve):** notes/proposals/front-on-focus/retirement-and-handover.md.
 
 - **R7. A natural seated lower body: bottom, legs and knees (Sam, 24 Nov, Open Wounds note 12: "No bum/circular knees"; "you do not *know* how to draw this part of the body as you couldn't do it on blessed either"; then: "Add ball knee fix to the seated lower body reserve job. The goal of that job will be to fix the bum, legs, knees, so that someone sat down has a natural and flowing lower body").** Goal: anyone seated reads with a natural, flowing lower body, waist to feet, in every view; the knees are part of the leg, never balls (the ball-knee fix belongs to this job). What must be learned first: how a seated hip, bottom, thigh and knee look from the front, three-quarter and side (reference photos of people seated on plain chairs, traced into outlines), then one seated outline drawn as a single shape from waist to knee instead of a box torso plus tubes. Stopgap in the kit since 24 Nov (views.knee_cap, views.seat_bottom, check castsheet.seated_faults): better than before, not yet natural. When done: re-run the blind woman/man judge on the seated views (skipped by Sam's Override, 24 Nov). Sam's picture: notes/learn/seated/no-bum-circular-knees-sam.jpg.
-  - **R7, where things stand (chat 3, 25 Nov, session_01U3pKR3Cspb5BP616FtwQHs; next: chat 4, Opus high):**
+  - **R7, where things stand (chat 4, 25 Nov, session_01U3pKR2q2S17Htq5WHcspgq; next: chat 5, Opus high, after Sam's Q1):**
     Rules that bite next: 86, 13, 85. Locked by Sam: Open Wounds' seated frames (switch off; seated_r7_switch passes).
-    Done (chat 3): 16 Commons photos with licences (notes/learn/seated/refs, LICENCES.md). Crossed leg (new films,
-    sitting.R7_CROSS): the top knee rests on the R7 thigh, the shin hangs nearly parallel, foot off the floor, toes down.
-    Shaped shoe turned whole (views._r7_shoe; the old box sheared). Trouser legs as cloth (views.R7_CLOTH; knee 14 cm
-    across, straight to the hem); women's knees together touching (sitting.R7_WOMAN); a thigh pressed on the seat
-    spreads 1.3 (R7_SPREAD). The ball-knee check needs a round patch (castsheet.BALL_ROUND: Blair's two legs fooled it).
-    Judges (results-r7c3.md): Kemi side now woman 3/3; crossed still 2, upright legs "one dark mass", front "no knees".
-    Next (chat 4, Opus high): results-r7c3.md "For chat 4" 1-5 (near leg's edge over the far leg; front knees and lap;
-    side thigh curve; women), then fresh judges (judge_r7.py r7c4). Then Sam's "1 Y": proposal kittest-resume is
-    written (problem, facts, chat.md): `propose.py pack kittest-resume`, two helpers, judge, record, then build + kittest.
-    Needs Sam: nothing (his 3 phone photos not needed). Read: this entry; results-r7c3.md; views.py "R7: the seated
-    lower body". Open rule requests: none. For Claude: sitting.py's R7 changes gated by sp['seat_r7']; not R7's (named,
-    25 Nov): branches kit-tests-when-build, brexit-chat15, gta-*, dreamy-fermi; CLAUDE.md sentence moves; the file's
-    project "Where things stand" (R7 is a sub-entry).
+    Done (chat 4): legs drawn by their profile, not a convex hull (views._r7_outline): the thigh's arched top and dip
+    before the knee (R7_ARCH), a calf (R7_CALF), the cloth narrower under the knee; the far/under leg in shade and the
+    near leg's edge the whole thigh (_r7_col, R7_FAR); from the front the shins in shade under the knees (a lit lap read
+    as the seat: R7_LAP 0); feet staggered (sitting.R7_STAGGER). Check: castsheet.one_tone (chat 3's "one dark mass"
+    saved: notes/learn/seated/examples) and no_bottom reads the cloth in all its tones; kittest seated_r7_look extended.
+    Judges r7c4 (results-r7c4.md): May now a woman in every view; far leg and shoes fixed; scores still 2-3.
+    Next (chat 5, Opus high): results-r7c4.md "For chat 5" 1-6 (crossed shin and shoe; trouser hem breaks; front
+    re-judge; far-leg shade read as crossing; Kemi 3/4; shoes from the side), then judges judge_r7.py r7c5.
+    Needs Sam: Q1 kittest-resume (judge picked Option 1, built into the kit-tests-when record, still unmerged on
+    claude/kit-tests-when-build; Sam's Y was Option 2's shape). Read: this entry; results-r7c4.md; views.py "R7".
+    Open rule requests: none. For Claude: one_tone skipped at yaw 90; kittest-resume verdict recorded (propose.py show);
+    not R7's (named): branches kit-tests-when-build, brexit-chat15, gta-*, dreamy-fermi; chat3 merged.
 
 ## Face tool, where things stand (Walliams kit job, chat 1, 22 Nov)
 - **Rules that bite next:** 30 (Walliams was a repeated note), 86 (every tool has a kittest), 85.
