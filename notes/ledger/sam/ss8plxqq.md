@@ -15,3 +15,6 @@ What do you think
 ### 2026-11-25T14:01:57
 Are you 100% sure
 
+### 2026-11-25T14:02:42
+write me a handover for this explaining my notes to the other account.
+
