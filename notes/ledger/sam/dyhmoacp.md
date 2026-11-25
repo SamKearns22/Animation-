@@ -29,3 +29,6 @@ Incorrect. Why did you claim that?
 ### 2026-11-25T19:40:54
 We just ran a whole improvement line on sitting using the 3D modelling system. You are proposing another?
 
+### 2026-11-25T19:42:21
+Should we be building *all* our characters in the way Jason was built? Is that the answer to a large amount of our problems?
+
