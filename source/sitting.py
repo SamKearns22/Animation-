@@ -487,15 +487,20 @@ def spec_upright(sp, seat, hands='thighs'):
             arms[s] = arm_free((14.0, 420.0, 150.0), (0.6, 0.6, -0.3), 'fist')
     if sp.get('figure') in V.WOMAN_LEGS and sp.get('seat_r7'):   # R7 chat 3 (new films): knees together TOUCHING, not
         # pinched through each other (they were 14 apart, each 60 across), the feet under them (ref woman-front-a)
-        return _spec(arms=arms, feet={'L': (-R7_WOMAN['feet'], 235.0), 'R': (R7_WOMAN['feet'], 235.0)},
+        return _spec(arms=arms, feet={'L': (-R7_WOMAN['feet'], 235.0 + R7_STAGGER), 'R': (R7_WOMAN['feet'],
+                                                                                        235.0 - R7_STAGGER)},
                      knee_pole={sd: (-sg * R7_WOMAN['in'], -1.0, 0.7) for sd, sg in (('L', -1), ('R', 1))})
     if sp.get('figure') in V.WOMAN_LEGS:          # Open Wounds chat 7 (Kemi's seated photo; the blind judge on her
         # seated outline: "seated and bulky"): knees and feet together, as a man's sit apart (feet at 64)
         return _spec(arms=arms, feet={'L': (-WOMAN_FEET, 235.0), 'R': (WOMAN_FEET, 235.0)},
                      knee_pole={sd: (-sg * 0.3, -1.0, 0.7) for sd, sg in (('L', -1), ('R', 1))})
+    if sp.get('seat_r7'):     # R7 chat 4 (new films): one foot a little forward, as people sit, so the two shoes
+        # never merge into one from a turned view (judges, chat 3: "shoes overlap")
+        return _spec(arms=arms, feet={'L': (-64.0, 235.0 + R7_STAGGER), 'R': (64.0, 235.0 - R7_STAGGER)})
     return _spec(arms=arms)
 
 
+R7_STAGGER = 22.0   # R7 seated upright: the left foot this far forward of 235, the right this far back
 WOMAN_FEET = 30.0
 R7_WOMAN = {'feet': 38.0, 'in': 0.05}   # R7 women seated: feet apart, knees pointing nearly straight
 

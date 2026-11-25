@@ -535,15 +535,20 @@ def seated_r7_look():
     """R7 (25 Nov): the seated look reads the picture as a viewer. It must catch Sam's marked frame (a ball knee and
     no bottom: notes/learn/seated/no-bum-circular-knees-sam.jpg) and the old drawing (the ring knee; no bottom in the
     three-quarter views), and find nothing wrong with R7's lower body in any pose or view (chat 2: the hem is now read
-    whole, across hands and a vest's stripes, which had been taken for the hem)."""
+    whole, across hands and a vest's stripes, which had been taken for the hem). Chat 4: and chat 3's legs in one
+    flat tone (its judges: "one dark mass", "no knees")."""
     import castsheet as CS
-    ex = CS.seated_example_faults()['no-bum-circular-knees-sam']
+    exs = CS.seated_example_faults()
+    ex = exs['no-bum-circular-knees-sam']
     sam = any('ball' in f for f in ex) and any('bottom' in f for f in ex)
+    # chat 4: R7 chat 3's own drawing, as its blind judges saw it ("one dark mass", "no visible knees")
+    tone = all(any('one flat tone' in f for f in exs[n]) for n in ('one-tone-c3-may-34', 'one-tone-c3-kemi-front'))
     raw = CS.seated_look_faults('brexit-is-done', raw=True)
     old = any('ball' in f for f in raw) and any('bottom' in f and ' 45:' in f for f in raw)
     new = CS.seated_look_faults('brexit-is-done', force=True)
-    return sam and old and not new, (f"Sam's frame caught (ball and bottom): {sam}; the old drawing caught (ball and "
-                                     f"bottom): {old}; faults on R7: {len(new)} {new[:2]}")
+    return sam and tone and old and not new, (
+        f"Sam's frame caught (ball and bottom): {sam}; chat 3's one dark mass caught (3/4 and front): {tone}; the old "
+        f"drawing caught (ball and bottom): {old}; faults on R7: {len(new)} {new[:2]}")
 
 
 @test

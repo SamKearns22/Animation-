@@ -368,10 +368,13 @@ def r7_on(j, sp, view):
 
 
 R7_CLOTH = dict(man=dict(thigh=(58.0, 46.0), knee=(46.0, 40.0), hem=40.0),     # R7 chat 3: trouser legs as CLOTH
-               woman=dict(thigh=(64.0, 50.0), knee=(40.0, 36.0), hem=33.0))  # (blind judges: "thin stiff tubes",
+               woman=dict(thigh=(68.0, 52.0), knee=(38.0, 34.0), hem=28.0))   # chat 4: slimmer below the knee  # (blind judges: "thin stiff tubes",
 #   "calves"; a real trouser leg is 14-15 cm across at the knee, 1 unit = 1.5 mm): the knee's radius 46 (14 cm across),
 #   the cloth falling straight to the hem (no calf bulge: cloth hangs from the knee). A woman's: the thigh full at the
 #   hip, tapering harder to a slimmer knee and hem (refs woman-front-a/b: the two knees together span her hips).
+
+
+R7_HIPS = 1.08   # a woman's seated bottom this much wider (chat 4 tried 1.18: a dark ring round the lap from the front)
 
 
 def _r7_sizes(sp):
@@ -379,7 +382,7 @@ def _r7_sizes(sp):
     woman = sp.get('figure') in WOMAN_LEGS
     c = R7_CLOTH['woman' if woman else 'man']
     return dict(thigh=(c['thigh'][0] * k, c['thigh'][1] * k), knee=(c['knee'][0] * k, c['knee'][1] * k),
-                calf=c['knee'][0] * k, ankle=c['hem'] * k, hips=1.08 if woman else 1.0)
+                calf=c['knee'][0] * k, ankle=c['hem'] * k, hips=R7_HIPS if woman else 1.0)
 
 
 def _frame(u):
@@ -391,10 +394,12 @@ def _frame(u):
     return side, vert
 
 
-def _limb3(a, b, ra, rb, t0=0.0, t1=1.0, cap0=True, cap1=True, floor=None, bulge=None):
+def _limb3(a, b, ra, rb, t0=0.0, t1=1.0, cap0=True, cap1=True, floor=None, bulge=None, bumps=(), rings=10):
     """Sample points of a tapered limb from a to b (elliptical rings: radii ra -> rb, each (across, up-down)), with
     rounded ends; each point tagged with its place along the limb (t; the end caps -1 and 2). floor: (y, z_max): no
-    point below the seat's top where the seat is under it (the thigh lies flat on it). bulge(t) -> extra radius."""
+    point below the seat's top where the seat is under it (the thigh lies flat on it). bulge(t) -> extra radius.
+    bumps: [(direction, f(t))]: the side of each ring facing `direction` pushed out f(t) (R7 chat 4: the thigh's top
+    arched, the calf behind the shin), the other side untouched."""
     d = _sub(b, a)
     L = math.sqrt(_dot(d, d)) or 1.0
     u = _mul(d, 1.0 / L)
@@ -403,12 +408,16 @@ def _limb3(a, b, ra, rb, t0=0.0, t1=1.0, cap0=True, cap1=True, floor=None, bulge
 
     def put(c, rx, ry, w, tag):
         for th in np.linspace(0, 2 * math.pi, 22, endpoint=False):
+            o = _add(_mul(side, math.cos(th)), _mul(vert, math.sin(th)))
             q = _add(c, _add(_mul(side, rx * math.cos(th)), _mul(vert, ry * math.sin(th))))
+            for dv, f in bumps:
+                e = f(min(1.0, max(0.0, tag))) * max(0.0, _dot(o, dv))
+                q = _add(q, _mul(o, e))
             q = _add(q, _mul(u, w))
             if floor is not None and q[1] > floor[0] and q[2] < floor[1]:   # pressed flat on the seat, it spreads
                 q = (c[0] + (q[0] - c[0]) * R7_SPREAD, floor[0], q[2])         # sideways (R7 chat 3)
             out.append((q, tag))
-    for t in np.linspace(t0, t1, 10):
+    for t in np.linspace(t0, t1, rings):
         rx = ra[0] + (rb[0] - ra[0]) * t
         ry = ra[1] + (rb[1] - ra[1]) * t
         e = bulge(t) if bulge else 0.0
@@ -444,14 +453,55 @@ def _r7_hull(samples, yaw):
     return [e[0] for e in h], [e[1] for e in h]
 
 
+def _r7_outline(samples, yaw, a, b):
+    """The projected outline of one limb's samples (22 to a ring, as _limb3 lays them): seen along its side (its axis
+    drawn longer than R7_END_ON of its length), the PROFILE: each ring's outermost point on either side of the drawn
+    axis, in order along it, so a thigh's arched top and the dip before its knee, or a calf, stay curves (a convex
+    outline bridged them flat: "a long flat slab", R7 judges chat 3); seen end-on, the convex outline."""
+    A, Bq = project(a, yaw)[0], project(b, yaw)[0]
+    L3 = math.sqrt(_dot(_sub(b, a), _sub(b, a))) or 1.0
+    dx, dy = Bq[0] - A[0], Bq[1] - A[1]
+    L2 = math.hypot(dx, dy)
+    if L2 / L3 <= R7_END_ON:
+        return _r7_hull(samples, yaw)
+    dx, dy = dx / L2, dy / L2
+    rings = []
+    for i in range(0, len(samples), 22):
+        ring = [(project(q, yaw)[0], tg) for q, tg in samples[i:i + 22]]
+        sv = sum((p[0] - A[0]) * dx + (p[1] - A[1]) * dy for p, _ in ring) / len(ring)
+        per = [((p[0] - A[0]) * -dy + (p[1] - A[1]) * dx, p, tg) for p, tg in ring]
+        rings.append((sv, max(per), min(per)))
+    rings.sort(key=lambda r: r[0])
+    one = [(r[1][1], r[1][2]) for r in rings] + [(r[2][1], r[2][2]) for r in reversed(rings)]
+    return [e[0] for e in one], [e[1] for e in one]
+
+
+R7_ARCH = 11.0   # the thigh's top arched this much at its middle (muscle under cloth), dipping 6 before the knee
+R7_CALF = 8.0    # the calf behind the shin, under the cloth, fullest a third of the way down
+R7_FAR = 0.72    # the far leg's cloth this much as bright (in shadow), so the near leg reads over it (chat 3:
+#                  "one dark mass": an ink edge on dark trousers barely shows)
+R7_LAP = 18      # the lap seen from the front (the thighs' tops, facing up, lit) this much brighter than the shins
+
+
+def _r7_arch(t):
+    return R7_ARCH * math.sin(math.pi * min(t, 0.78) / 0.78) - 6.0 * math.exp(-((t - 0.84) / 0.06) ** 2)
+
+
+def _r7_calf(t):
+    return R7_CALF * math.sin(math.pi * min(t, 0.75) / 0.75) ** 1.5
+
+
 def _r7_parts(j, sp, sd, seat_y, t0=0.0):
     """One leg's 3D samples: the thigh (hip to knee; from t0 along it, its cut end open) and the shin (knee to
     ankle)."""
     z = _r7_sizes(sp)
     hip, knee, foot = j['hip' + sd], knee_of(j, sd), j['foot' + sd]
     floor = (seat_y, knee[2] - 40.0)
-    thigh = _limb3(hip, knee, z['thigh'], z['knee'], t0=t0, cap0=not t0, floor=floor)
-    shin = _limb3(knee, foot, z['knee'], (z['ankle'], z['ankle']), cap1=False)   # cloth: straight from the knee
+    thigh = _limb3(hip, knee, z['thigh'], z['knee'], t0=t0, cap0=not t0, floor=floor, rings=16,
+                   bumps=[((0.0, -1.0, 0.0), _r7_arch)])
+    kn = (z['knee'][0] * 0.9, z['knee'][1] * 0.9)      # the cloth just under the knee a touch narrower: the knee
+    shin = _limb3(knee, foot, kn, (z['ankle'], z['ankle']), cap1=False, rings=14,   # shows at the leg's sides
+                  bumps=[((0.0, 0.0, -1.0), _r7_calf)])
     return thigh, shin
 
 
@@ -495,13 +545,18 @@ def _r7_leg_over(p, j, sp, sd, yaw, seat_y, t0=0.45, col=None):
     """One leg's own edges over the shape: its shin outlined, then the front of its thigh (from t0 to the knee)
     filled and edged on its sides and round the knee only (its cut end is open, so no line crosses the lap). The
     knee is the thigh's rounded end over the top of the shin: never a ring."""
-    col = col or sp.get('trousers', (40, 40, 46))
+    col = col or _r7_col(j, sp, sd, yaw)
     fwd, shin = _r7_parts(j, sp, sd, seat_y, t0)
+    hip, knee = j['hip' + sd], knee_of(j, sd)
     hs, _ = _r7_hull(shin, yaw)
-    _r7_union(p, [hs], col)
-    pts, tags = _r7_hull(fwd, yaw)
+    _r7_union(p, [_r7_outline(shin, yaw, knee, j['foot' + sd])[0]], col)
+    pts, tags = _r7_outline(fwd, yaw, hip, knee)
     sm = curve(pts, 3)
-    p.poly(sm, col, None)
+    a2, b2 = project(hip, yaw)[0], project(knee, yaw)[0]
+    L3 = math.sqrt(_dot(_sub(knee, hip), _sub(knee, hip))) or 1.0
+    end_on = math.hypot(b2[0] - a2[0], b2[1] - a2[1]) / L3 <= R7_END_ON
+    lit = end_on and not j.get('cross')                     # the lap, lit from above (a crossed top thigh lit
+    p.poly(sm, tuple(min(255, c + R7_LAP) for c in col) if lit else col, None)   # read as a cushion, chat 4)
     n, m = len(pts), len(sm)
     keep = [tg > t0 + 0.02 for tg in tags]                  # the cut end (t0) is open
     if all(keep) or not any(keep):
@@ -516,10 +571,7 @@ def _r7_leg_over(p, j, sp, sd, yaw, seat_y, t0=0.45, col=None):
     a, b = run[0], run[-1]                                   # the same stretch on the smoothed outline
     ia, ib = int(round(a * m / n)), int(round(b * m / n))
     seg = [sm[(ia + q) % m] for q in range(((ib - ia) % m) + 1)]
-    hip, knee = j['hip' + sd], knee_of(j, sd)
-    a2, b2 = project(hip, yaw)[0], project(knee, yaw)[0]
-    L3 = math.sqrt(_dot(_sub(knee, hip), _sub(knee, hip))) or 1.0
-    if math.hypot(b2[0] - a2[0], b2[1] - a2[1]) / L3 > R7_END_ON:   # the thigh seen along its side: as drawn
+    if not end_on:                                          # the thigh seen along its side: as drawn
         if len(seg) >= 2:
             p.line(seg, INK, 2.6)
         return
@@ -575,11 +627,28 @@ def seated_lower(p, j, yaw, sp, order, top=None):
     hulls = [_r7_hull(_r7_bottom(j, sp, seat_y), yaw)[0]]
     for sd in 'LR':
         th, sh = _r7_parts(j, sp, sd, seat_y)
-        hulls += [_r7_hull(th, yaw)[0], _r7_hull(sh, yaw)[0]]
+        hulls += [_r7_outline(th, yaw, j['hip' + sd], knee_of(j, sd))[0],
+                  _r7_outline(sh, yaw, knee_of(j, sd), j['foot' + sd])[0]]
     _r7_union(p, hulls, col)
-    for sd in order:
-        _r7_leg_over(p, j, sp, sd, yaw, seat_y, t0=0.3 if sd == top else 0.45)
+    for sd in order:                                        # turned (three-quarter, side) each leg's own edge runs
+        shade = _r7_col(j, sp, sd, yaw) != col             # the whole thigh (chat 4: from the knee only, the
+        t0 = 0.3 if sd == top else (0.45 if shade else 0.12)   # legs fused); a leg in shadow from 0.45: the bottom
+        _r7_leg_over(p, j, sp, sd, yaw, seat_y, t0=t0)     # on the seat keeps the cloth's own tone ("No bum")
         shoe(p, j, sd, yaw, sp)
+
+
+R7_TURNED = 20.0   # a view turned this far: the legs overlap, the far one shaded
+
+
+def _r7_col(j, sp, sd, yaw):
+    """One leg's cloth colour: in shadow, a crossed leg's under leg (from any side), or the far leg of a turned view."""
+    col = sp.get('trousers', (40, 40, 46))
+    o = 'R' if sd == 'L' else 'L'
+    top = j.get('cross')
+    if (top and sd != top) or (not top and abs(yaw) >= R7_TURNED
+                               and project(j['hip' + sd], yaw)[1] < project(j['hip' + o], yaw)[1] - 5.0):
+        return tuple(int(c * R7_FAR) for c in col)
+    return col
 
 
 def seated_knee_over(p, j, yaw, sp, sd, t0):

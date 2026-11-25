@@ -1,4 +1,4 @@
-"""R7's before/after sheet for Sam (chat 2; v3 chat 3): his marked frame (BEFORE) beside May, Kemi and Blair seated on R7's lower
+"""R7's before/after sheet for Sam (chat 2; v3 chat 3; v4 chat 4): his marked frame (BEFORE) beside May, Kemi and Blair seated on R7's lower
 body (front, three-quarter, side), waist to feet, at the size a phone shows. python3 notes/learn/seated/sheet_r7.py OUT"""
 import os, sys
 sys.path.insert(0, 'source')
@@ -32,7 +32,7 @@ d.text((10, 60), '"No bum / circular knees"', fill=(60, 60, 60), font=f3)
 page.paste(sam, (0, 110))
 x0 = sam.width + 30
 d.line([(x0, 0), (x0, page.height)], fill=(170, 170, 170), width=4)
-d.text((x0 + 30, 10), 'AFTER (v3): seated lower body, every new film', fill=(20, 110, 40), font=f1)
+d.text((x0 + 30, 10), 'AFTER (v4): seated lower body, every new film', fill=(20, 110, 40), font=f1)
 for c, name in enumerate(cols):
     d.text((x0 + 190 + c * (tw + 20) + tw // 2 - 90, 66), name, fill='black', font=f2)
 for r, who in enumerate(rows):
