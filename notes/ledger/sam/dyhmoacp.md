@@ -40,3 +40,6 @@ Schedule this full investigation for 22:20.
 
 If we went down this path, what do you estimate the impacts would be on project costs?
 
+### 2026-11-25T19:47:25
+What would you need to add to your skills to learn to dress the characters?
+
