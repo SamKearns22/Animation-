@@ -52,11 +52,43 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size, May about waist up; the cast (no more character work); the seated bottom and knees are reserve job R7 (its own chat, switched OFF here).
 - **Rules that bite next:** 74 (moves land on their words: check the clip, not just `acting.py check`), 5 (Blair's hands on the chair arms; the kicked tray), 85 (cost watch).
 - **Done (chat 14):** kit-tests-when through the proposal route (judge picked a different version from Sam's Y: Q1 to Sam, not built yet). Shot 3 critique r5 fixed as one list: the lunge wolf's head, eye, jaws and paws in frame for 4 of its 5 frames; shared: dark sleeves lifted so a black arm over a black jacket reads (views.sleeve_colour, kittest dark_sleeve_reads), loose floor things kicked along by feet (moves.kicked/trodden, kittest trodden_things_move); tray rim, shine, handles, flute stems. The moves: story/brexit-is-done-moves.txt and the film's side (acting.FILMS 'brexit-is-done'; brexit_is_done.py faces and moves: word_at, TRACK lips, BLINKS, head life on a stand-in loudness, MOODS); acting kit: any sitting-kit pose as a stance, seated gestures keyed from rest (Blessed draws unchanged: kittest moves_from_the_acting_list).
-- **Next (Sonnet, routine):** tick the brief checklist above against the film, then the animatic (finish.py on the clean render, Hook Text and sign-off), send it to Sam with the named items: P7 Blair's knees/no bottom (R7, locked), the evening gown reads as tunic and trousers mid-stride (cast locked), Blair's hair a smooth helmet (cast locked), the run's long stretched wolves (the approved shared wolf). Then wait for his notes.
+- **Next (Opus high, a new build):** build Sam's acting plan ("Acting plan" below, 25 Nov): every beat of all three lines in the moves file (new hand places, moods per beat, May in motion from the first drawing), `acting.py check`, then a short clip of each line, watched at phone size and at full size (hands on laps/chair arms, nothing through anything), fixed, sent to Sam (clips need no yes). Then the Sonnet chat: tick the brief checklist, the animatic (finish.py on the clean render, Hook Text and sign-off), send it to Sam with the named items: P7 Blair's knees/no bottom (R7, locked), the evening gown reads as tunic and trousers mid-stride (cast locked), Blair's hair a smooth helmet (cast locked), the run's long stretched wolves (the approved shared wolf). Then wait for his notes.
 - **Needs Sam:** Q1 (kit tests: the judged version or his own) — does not block the animatic.
-- **Read:** `guides/job-packs.md` Checks and animatic; nothing else unless a check names it.
+- **Read:** `guides/job-packs.md` Build; acting.py MAP (lines 1-90); the Acting plan below; story/brexit-is-done-moves.txt; brexit_is_done.py faces and moves (search 'faces and moves').
 - **Open rule requests:** none.
 - **For Claude:** stills times are written 01.00 in file names. May's palm: the right hand ('palm up' place, 3.5-6.5 s). The start-up kit run was stopped and rerun on chat 14's final code (notes/logs/kittests-last.log). castsheet._same_outlines still film-only: move to shared.
+
+## Acting plan (Sam, 25 Nov, chat 14: "really fluid acting throughout ... a good acting plan for everyone's lines ... contextually based on the script ... make sure it's implemented")
+Stand-in word times (s, film); re-timed on Sam's takes. Every move lands on its word (rule 74), the face leads the hand by a
+drawing or two, every gesture has an anticipation and a settle, nobody is ever fully still (idle sway, breathing, blinks).
+Hands never pass through anything (rule 5): May's lap and chair, Blair's chair arms. All three talk to the unseen
+interviewer off-frame left; the eyes hold on them except where named.
+**May (0.0-7.5): the hook is her movement from the first drawing.**
+- 0.0-0.6 already in motion: a small breath in, shoulders lift, she shifts forward on the seat and her chin comes up (about to correct someone).
+- "Prime" 0.78: head tips a touch, brows lift, a thin patient smile (talking down to the PM).
+- "would do well" 1.88: her right forefinger comes up from the lap, a schoolmistress's raised finger, a small side-to-side head shake.
+- "remember" 2.25: the finger taps the air once, she leans in, brows up.
+- "had" 3.16: the finger opens into a palm; "referendum" 3.53: palm turning up towards the interviewer (photo 1), a small nod.
+- "that referendum" 4.62: the same hand chops down twice, firm nods with each (it was decided).
+- "British" 5.72: both hands open outward a little (the public); "chose" 6.45: a tiny pause on the face, eyebrows up.
+- "wolves" 6.63: said flat and certain: a firm nod, hands settle in the lap, lips press into a tight satisfied smile; holds to the cut with a small brow raise and a blink.
+**Kemi (7.5-17.5): deadpan, ramrod straight; the carnage behind her is never acknowledged.**
+- 7.5-8.1 before she speaks: a slow blink, a small weight shift, chin set; she never glances back.
+- "Andy" 8.1: a little head tilt with disdain (lips tighten); "less" 9.68: the near hand comes up, palm down, pressing.
+- "backwards" 11.03: a thumb jerked back over her shoulder (towards the wolves behind her: the joke), eyes still on the interviewer.
+- "job" 12.61: a flat hand chops once; the curt nod.
+- "reducing" 12.84: the hand pats the air down, level, like a manager giving targets.
+- "British" 14.42: the hand opens; "faces" 15.77, "chewed off" 16.22-16.67: delivered in the same flat tone, a brisk single nod on "off"; hands back to her sides; she holds the stare, one blink, to the cut.
+**Blair (17.5-26.9): the showman, breezy and charming, then the grin.**
+- 17.5-18.0: settles back in the chair, a relaxed smile, head tilted.
+- "Well" 18.0: both hands lift off the chair arms, palms open, a little shrug and head tilt.
+- "opinion" 18.62: one hand to his chest (sincerity).
+- "listen" 19.65: the hand comes forward, the Blair thumb-on-top chop, small; "anything" 20.27: a light shake of the head, a chuckle on the face.
+- "Tony" 21.51: hand flat to his chest again, the big grin flashes, brows up.
+- "invaded" 22.33: a breezy palm flip outward; "Iraq" 22.95: a shrug, eyebrows up, smile unbroken (no shame).
+- "belong" 23.57: both palms open towards the interviewer; "Hague" 24.39: a nod, he leans back, hands return to the chair arms.
+- 25.0-26.5: the grin held about 1.5 s (locked), small head life only; he doesn't see the wolf. 26.5: the lunge; cut (locked).
+**Built where:** story/brexit-is-done-moves.txt (blocks per shot; new hand places named there: finger up, chop, thumb back, pat down, chest, palms out), the film side in acting.FILMS and brexit_is_done.py faces and moves (moods for each beat). Checked: acting.py check (every move lands), a short clip of each line, looked at whole (CLAUDE.md "Notes on movement get a short clip").
 
 ## Chat 14 end check, named
 - CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-13 did. COST: no ledger estimate (named since chat 4).

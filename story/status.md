@@ -1,3 +1,3 @@
-Open Wounds: shot 3's critique faults fixed and the acting written (chat 14): May's palm and nods, Kemi's curt nod, Blair's grin, lips, blinks, head life.
-Next: Sonnet chat 15 ticks the brief checklist, makes the animatic and sends it to Sam.
-Sam's Q1 (kit tests: judged version or his own) waits; lower-body job R7 runs in its own chat.
+Open Wounds: Sam asked for fluid acting on every line (25 Nov); the acting plan is written in the film's notes, beat by beat.
+Next: Opus chat 15 builds it (May moving from the first drawing), sends a clip of each line.
+Then the Sonnet chat for the animatic. Sam's Q1 (kit tests) waits; R7 runs in its own chat.
