@@ -32,14 +32,23 @@ import bench_pose as BP     # noqa: E402
 
 INK = (24, 20, 22)
 SKIRT_BELOW = 0.5       # a knee-length skirt: its hem this far (rest decimetres) below the knee joint
-TORSO_FRONT = 80.0      # person units in front of the hip joints: the jacket's front at the lap (12 cm); legs nearer
-#                         than this are in front of the torso and drawn over it (lay_over)
+TORSO_FRONT = 45.0      # person units in front of the hip joints: the jacket's front where it lies on the lap (7 cm; chat 7,
+#                         was 80: the hem hid the thighs and the knees showed as balls under the hands); legs nearer
+#                         than this are in front of the torso and drawn over it (lay_over; the legs only: the
+#                         belly is under the jacket, chat 7: a trouser flap showed over the jacket's front)
 EASE = 0.12             # trouser cloth this far off the skin (decimetres of the rest body: 1.2 cm)
 HEM_K = 0.85            # the hem this share of the knee's width
 KNEE_CLOTH = 0.72       # a trouser leg's half width at the knee and below (decimetres: 14.4 cm across; proposal)
 TOUCH = 0.005 / 0.00152  # 5 mm in person units: deeper than this inside the other leg is a crossing (bench_move)
 PRESS_ROUNDS = 6        # contact settling rounds (seat, leg on leg)
 EDGE_R = 40.0           # the seat cushion's front edge: rounded over this many person units
+BOTTOM_FADE = 70.0      # the bottom's fit fades over this height up to the waist (10 cm)
+SPREAD = 0.5           # pressed flesh spreads out this much per unit pressed down (volume kept; chat 7)
+SPREAD_R = 40.0         # directions ease in over this distance from the middle (no tearing where they meet)
+SPREAD_H = 40.0         # ... fading over this height above the seat (6 cm)
+SINK_MAX = 90.0         # deeper than this under the cushion's top is below the seat, not on it (14 cm)
+HANG = 25.0             # a crossed top leg's foot tips this far down from square to its shin (relaxed)
+SEAT_BLOCK = 40.0       # the cushion's thickness under its top (6 cm): a shin inside it crosses the seat
 SEAT_SOFT = 6.0         # the bottom and thighs pressed flat on the seat: nothing deeper than this into the cushion
 _REST = {}
 LAST = {}
@@ -148,6 +157,21 @@ def _align(a, b):
     return BP._align(a, b)
 
 
+def _hang(Rs, knee, ank, Tk, Ta):
+    """A relaxed hanging foot's turn (MakeHuman frame): the rest foot carried onto the posed shin, then turned about
+    the shin so its toes point forward (+z), then tipped down HANG degrees (a foot at rest points a little down)."""
+    u2 = _u(ank - knee)
+    s = _u(Ta - Tk)
+    R1 = _align(u2, s)
+    f0 = R1 @ np.array([0.0, 0.0, 1.0])
+    f0p = _u(f0 - (f0 @ s) * s)
+    z = np.array([0.0, 0.0, 1.0])
+    fz = _u(z - (z @ s) * s)
+    a = math.radians(HANG)
+    f = _u(math.cos(a) * fz + math.sin(a) * s)
+    return _align(fz, f) @ _align(f0p, fz) @ R1
+
+
 def _kit_to_mh(p):
     return np.array([p[0], -p[1], p[2]], float)
 
@@ -191,8 +215,10 @@ def pose(j, sp, cloth=True):
         ka2 = np.linalg.norm(T['ankle' + ms] - Tb) / (np.linalg.norm(b2 - a2) * s0)
         A.append((Rs @ (s0 * (np.eye(3) + (ka2 - 1) * np.outer(u2, u2))), a2, Tb))
         top = j.get('cross') == {'R': 'L', 'L': 'R'}[ms]
-        if top:
-            Rf = Rs                             # a crossed top leg's foot hangs with its shin
+        if top:                                 # a crossed top leg's foot hangs from the ankle: its sole square to
+            Rf = _hang(Rs, J['knee' + ms], J['ankle' + ms], Tb, T['ankle' + ms])   # the shin, toes forward and a
+            #                                     little down (chat 7: carried with a turned shin it pointed out sideways:
+            #                                     judges, "the crossed shoe floats out to the left")
         else:                                   # a foot on the floor stays flat, turned only about the upright
             yaw = math.radians(j.get('foot_yaw' + {'R': 'L', 'L': 'R'}[ms], 0.0) or 0.0)
             Rf = np.array([[math.cos(yaw), 0, math.sin(yaw)], [0, 1, 0], [-math.sin(yaw), 0, math.cos(yaw)]])
@@ -205,17 +231,83 @@ def pose(j, sp, cloth=True):
     P[:, 1] *= -1                               # back to the kit frame (y down)
     seat = j.get('seat')
     sy = _seat_y(j)
+    # what rests on the cushion: the bottom and the thighs, never a shin or foot hanging past its front edge (chat 7:
+    # the calf behind the knee was lifted onto the rounded edge: a notch in the side view's calf)
+    soft = (G[:, 2] + G[:, 3] + G[:, 5] + G[:, 6]) < 0.5
     if seat is not None and sy is not None:     # pressed flat on the cushion where it is under them
         # the cushion's front edge is rounded (EDGE_R): past it the thigh's underside leaves the seat gradually, never a
         # step (side view, chat 6: a notch where the pressed thigh met the free one)
         over, lim = _cushion(P, seat, sy)
+        _fit_bottom(P, R, j, sp, sy)
+        over, lim = _cushion(P, seat, sy)
+        sunk = np.where(over & soft, np.clip(P[:, 1] - lim, 0, SINK_MAX), 0.0)
+        _spread(P, R, j, sunk, lim)
     for _ in range(PRESS_ROUNDS):                # the seat and the other leg both press: settled in turn
         if seat is not None and sy is not None:
             over, lim = _cushion(P, seat, sy)
-            on = over & (P[:, 1] > lim)
+            on = over & soft & (P[:, 1] > lim) & (P[:, 1] < lim + SINK_MAX)
             P[on, 1] = lim[on]
         _press_legs(P, R, j)
     return P, R
+
+
+def _fit_bottom(P, R, j, sp, sy):
+    """The seated bottom as big as the one Sam accepted (v4, views._r7_bottom: figure-drawing measures, 12-13 cm behind
+    the hip joints, about 1.15 times the hip width across on the seat; locked, 25 Nov): MakeHuman's standing pelvis is
+    smaller (chat 7: 9 cm behind, 30 cm across: the jacket's hem hid it). The trunk below the waist is stretched out
+    behind and sideways to that size, fading to nothing at the waist (the flat torso covers it there)."""
+    import views as V
+    b = np.array([q for q, _ in V._r7_bottom(j, sp, sy)])
+    hl, hr = np.array(j['hipL'], float), np.array(j['hipR'], float)
+    c = (hl + hr) / 2
+    tw = R['G'][:, 0] * (R['arm'] < 0.05)
+    low = (tw > 0.5) & (P[:, 1] > c[1])
+    if low.sum() < 20:
+        return
+    back_now = c[2] - P[low, 2].min()
+    half_now = np.abs(P[low, 0] - c[0]).max()
+    kz = max(1.0, (c[2] - b[:, 2].min()) / back_now)
+    kx = max(1.0, (np.abs(b[:, 0] - c[0]).max()) / half_now)
+    f = tw * np.clip((P[:, 1] - (c[1] - BOTTOM_FADE)) / BOTTOM_FADE, 0, 1)   # 0 at the waist, 1 from the hips down
+    P[:, 0] = c[0] + (P[:, 0] - c[0]) * (1 + (kx - 1) * f)
+    behind = P[:, 2] < c[2]
+    P[behind, 2] = c[2] + (P[behind, 2] - c[2]) * (1 + (kz - 1) * f[behind])
+
+
+def _spread(P, R, j, sunk, lim):
+    """Flesh pressed on a seat keeps its volume: what the cushion pushes up goes out sideways and back (a seated
+    bottom and thighs are wider and deeper at the seat than standing; refs, and the hip breadth seated is about 1.3
+    times the standing one). Each point near the seat moves out horizontally by SPREAD times the squash of the flesh
+    under it, fading with its height above the seat (SPREAD_H): the bottom from its centre (out and back), a thigh
+    from its own bone line (sideways only)."""
+    if not (sunk > 0).any():
+        return
+    from scipy import ndimage
+    cell = 16.0
+    x0, z0 = P[:, 0].min() - 4 * cell, P[:, 2].min() - 4 * cell
+    gx = ((P[:, 0] - x0) / cell).astype(int)
+    gz = ((P[:, 2] - z0) / cell).astype(int)
+    grid = np.zeros((gx.max() + 1, gz.max() + 1))
+    on = sunk > 0
+    np.maximum.at(grid, (gx[on], gz[on]), sunk[on])
+    grid = ndimage.gaussian_filter(ndimage.maximum_filter(grid, size=5), 2.5)
+    D = grid[gx, gz]
+    h = np.clip(lim - (P[:, 1] - sunk), 0, None)       # height above the seat once pressed
+    amt = SPREAD * D * np.exp(-h / SPREAD_H)
+    G = R['G']
+    hl, hr = np.array(j['hipL'], float), np.array(j['hipR'], float)
+    c = (hl + hr) / 2
+    trunk = G[:, 0]
+    d_t = np.stack([P[:, 0] - c[0], P[:, 2] - c[2]], 1)
+    r = np.linalg.norm(d_t, axis=1)
+    d_t *= (np.minimum(r, SPREAD_R) / SPREAD_R / np.maximum(r, 1e-6))[:, None]
+    d_t[:, 1] = np.minimum(d_t[:, 1], 0.0)     # out and back only: the lap's front is the thighs (chat 7: the crotch
+    #                                            pushed forward showed as a jagged lump between the knees, front view)   # smooth through the middle (chat 7:
+    side = _legside(R)                                                            # spikes at the crotch)
+    d_l = np.stack([np.tanh((P[:, 0] - np.where(side > 0, hl[0], hr[0])) / SPREAD_R), np.zeros(len(P))], 1)
+    d = d_t * trunk[:, None] + d_l * (1 - trunk)[:, None]
+    P[:, 0] += amt * d[:, 0]
+    P[:, 2] += amt * d[:, 1]
 
 
 def _legside(R):
@@ -380,6 +472,18 @@ def draw(p, j, yaw, sp, scale=2):
     lay = np.zeros(zb.shape + (4,), np.uint8)
     for i, cc in cols.items():
         lay[pb == i, :3] = cc
+    # the leg in shadow (the kit's own rule, views._r7_col: a crossed leg's under leg, or a turned view's far leg) at
+    # R7_FAR, easing into the lap's tone where the leg joins the body (chat 7, judges at three-quarter: "thighs merge
+    # into one dark mass"; v4 Sam accepted drew the far leg so)
+    tr = (pb == BD.PART_IX['trousers']) & (ob == 0)
+    for ks, sg in (('L', 1.0), ('R', -1.0)):
+        dark = V._r7_col(j, sp, ks, yaw)
+        base = cols[BD.PART_IX['trousers']]
+        if dark == base:
+            continue
+        w = np.clip((ab[..., 6] * sg - 0.2) / 0.6, 0, 1)[tr]
+        k = 1 - (1 - V.R7_FAR) * w
+        lay[tr, :3] = (np.array(base, float)[None, :] * k[:, None]).astype(np.uint8)
     lay[m, 3] = 255
     lay[edge & m, :3] = INK
     lay[edge, 3] = 255
@@ -389,8 +493,8 @@ def draw(p, j, yaw, sp, scale=2):
     img.alpha_composite(L) if img.mode == 'RGBA' else img.paste(L, (0, 0), L)
     zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
     LAST.clear()
-    LAST.update(layer=L, front=(m & (ab[..., 5] > TORSO_FRONT))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
-                P=P, T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], j=j, sp=sp, yaw=yaw)
+    LAST.update(layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
+                P=P, T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw)
     return L
 
 
@@ -406,7 +510,14 @@ def lay_over(img, p=None):
     a = np.asarray(LAST['layer']).copy()
     keep = ndimage.binary_dilation(front, iterations=1)
     a[~keep, 3] = 0
+    # the torso: where the picture no longer shows the legs' own layer (it was drawn over them). The cut is inked only
+    # where it meets the torso; below the hem the legs run on with no line (chat 7: a line across the thigh at the
+    # jacket's front cut the bottom off from the leg in the side view, and the thighs from the lap in the others)
+    lay = np.asarray(LAST['layer'])
+    now = np.asarray(img.convert('RGBA') if img.mode != 'RGBA' else img)
+    torso = LAST['m'] & (np.abs(now[..., :3].astype(int) - lay[..., :3].astype(int)).sum(-1) > 24)
     cut = keep & ~ndimage.binary_erosion(keep, iterations=2) & ~ndimage.binary_dilation(~LAST['m'], iterations=1)
+    cut &= ndimage.binary_dilation(torso & ~keep, iterations=3)
     a[cut, :3] = INK
     a[cut, 3] = 255
     L = Image.fromarray(a, 'RGBA')
@@ -424,7 +535,17 @@ def checks(j=None, sp=None):
     seat = j.get('seat')
     if seat is not None and sy is not None:
         over, lim = _cushion(P, seat, sy)
-        out['seat crossings'] = int((over & (P[:, 1] > lim + SEAT_SOFT)).sum())
+        G = R['G']
+        soft = (G[:, 2] + G[:, 3] + G[:, 5] + G[:, 6]) < 0.5
+        used = np.zeros(len(P), bool)
+        used[np.unique(T)] = True
+        # the bottom and thighs sunk into the cushion past SEAT_SOFT (any depth); a shin or foot inside the cushion's
+        # block (its top to SEAT_BLOCK under it, behind its front edge) (chat 7: shins hanging past the rounded edge
+        # are below it, not in it)
+        sink = used & over & soft & (P[:, 1] > lim + SEAT_SOFT)
+        shin = used & ~soft & (P[:, 2] < seat.front) & (np.abs(P[:, 0]) < seat.width) & (P[:, 1] > sy + SEAT_SOFT) \
+            & (P[:, 1] < sy + SEAT_BLOCK)
+        out['seat crossings'] = int(sink.sum() + shin.sum())
     # leg against leg: each leg's points against the other's cloth (distance to its bone line below its own radius)
     G = R['G']
     J = R['J']
