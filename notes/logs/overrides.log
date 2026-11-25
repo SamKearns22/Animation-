@@ -33,3 +33,5 @@
 2026-11-25T17:48+00:00	b2f8e1d1	skipped	handover stops: STOP: KIT TESTS COULD NOT RUN: no finished kit-test run on this machine: run `python3 source/kittests.py > notes/logs/kittests-last.log 2>&1`, then end again
 2026-11-25T18:36+00:00	a7520791	sam	Override
 2026-11-25T18:37+00:00	a7520791	skipped	render REFUSED (rule 59): pre-flight has not been run on brexit_is_done in this session: python3 source/preflight.py brexit_is_done OUT_DIR
+2026-11-25T18:53+00:00	a7520791	sam	Override. We will finish the seated job then run the checks in case they catch anything.
+2026-11-25T18:53+00:00	a7520791	skipped	finish REFUSED (the proposal route, fail closed): - 2026-11-23 03:34 chat 9c3f62f3: sent after one block: notes/proposals/staging-stills.md: its verdict was edited after `record` (stale): re | - 2026-11-25 08:33 chat de98e7e9: sent after one block: this asks Sam to approve a change to the system wit
