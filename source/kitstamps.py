@@ -125,11 +125,35 @@ def _all_hash():
     return h.hexdigest()[:16]
 
 
+GIT_READS = {'log', 'show', 'tag', 'rev-parse', 'cat-file', 'status', 'ls-files', 'diff', 'describe', 'merge-base',
+             'rev-list', 'for-each-ref', 'ls-tree', 'blame', 'branch'}
+
+
+def git_item(args):
+    """A git command a test ran on the project, as one record item; its stamp is what the command shows now."""
+    import base64
+    import json
+    return 'git:' + base64.urlsafe_b64encode(json.dumps(list(args)).encode()).decode()
+
+
+def _git_hash(item):
+    import base64
+    import json
+    args = json.loads(base64.urlsafe_b64decode(item[4:]))
+    if not args or args[0] not in GIT_READS or args[0] in ('tag', 'branch') and len(args) > 1 \
+            and not any(a in ('-l', '--list') for a in args[1:]):
+        return 'not-a-read'                     # never run a command that could change anything (tag NAME makes one)
+    r = subprocess.run(['git', '-C', ROOT, *args], capture_output=True)
+    return hashlib.sha1(r.stdout + bytes([r.returncode % 256])).hexdigest()[:16]
+
+
 def item_hash(item, cache=None):
     if cache is not None and item in cache:
         return cache[item]
     if item == ALL:
         v = _all_hash()
+    elif item.startswith('git:'):
+        v = _git_hash(item)
     elif '::' in item:
         v = hashlib.sha1(_fn_sources().get(item.split('::', 1)[1], '<gone>').encode()).hexdigest()[:16]
     else:
@@ -248,7 +272,7 @@ class Tracer:
         argv = [os.fsdecode(a) for a in args] if isinstance(args, (list, tuple)) else os.fsdecode(args).split()
         exe = os.path.basename(argv[0]) if argv else ''
         if exe.startswith('python') or argv and os.path.realpath(argv[0]) == os.path.realpath(sys.executable) \
-                or argv and _rel(argv[0]) and argv[0].endswith('.py'):
+                or argv and argv[0].endswith('.py') and os.path.isfile(argv[0]) and _rel(argv[0]):
             return 'python'
         if exe == 'git':
             rest = argv[1:]
@@ -263,9 +287,12 @@ class Tracer:
                 return 'other'
             if rest[:1] in (['show'], ['archive']) and len(rest) > 1 and re.match(r'^[0-9a-f]{7,40}(~\d*)?(:|$)', rest[1]):
                 return 'other'                  # a fixed old version: it never changes
+            if rest[:1] and rest[0] in GIT_READS and not any(a.startswith('--output') for a in rest):
+                self.reads.add(git_item(rest))  # the project's history or state, as this command shows it
+                return 'other'
             self.all = True
             return 'all'
-        if argv and _rel(argv[0]):               # a project script that is not Python (a hook): ALL
+        if argv and os.path.isfile(argv[0]) and _rel(argv[0]):   # a project script that is not Python (a hook): ALL
             self.all = True
             return 'all'
         for a in argv[1:]:                      # ffmpeg, tar, ldconfig ...: the project files named
@@ -692,7 +719,16 @@ def _hits(rd, files, fns):
     out += sorted(f for f in rd if '::' in f and f.split('::')[1] in fns)
     if ALL in rd and any(f.startswith(tuple(d + '/' for d in ALL_DIRS)) for f in files):
         out.append('ALL (it starts another program)')
+    for it in rd:                               # git log/status/diff show every new commit; tags and old versions don't
+        if it.startswith('git:') and _git_args(it)[:1] in (['log'], ['status'], ['rev-list'], ['diff']):
+            out.append('git ' + ' '.join(_git_args(it))[:40])
     return out
+
+
+def _git_args(item):
+    import base64
+    import json
+    return json.loads(base64.urlsafe_b64decode(item[4:]))
 
 
 def _minus(iso, hours):
