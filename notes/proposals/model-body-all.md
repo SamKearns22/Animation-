@@ -64,6 +64,23 @@ Statement One, what step 1 already says (the rest is for step 3's judge):
  d-h. Not answerable from the count; step 2's clip and step 3's judge.
 Open rule requests: none found in this investigation's notes.
 
+## Step 2 result (investigation chat 2, 25 Nov, session_01U3pKQzuMaJ3B7QYkkK55xe; Opus high)
+Built: source/model_body.py (shared: any kit film's people as model bodies; the film's own people code runs, its
+flat-person calls are caught and that skeleton poses the measured body) and source/model_body_test.py (only what is
+Islamocommunism's own: flutes and handset as solids, the desk's kneehole, the door leaf, the wall round the door).
+Clip: notes/proposals/model-body-all/islamocommunism-shots3-5-side-by-side.mp4 (posted | model body, 12.17-27.84 s).
+What the model body found that the flat film hid (each fixed in the drawing, never the shot):
+- The flat seated pose put his hips 15 cm BELOW the chair's cushion and his desk forearm 13 cm INSIDE the desk; once
+  risen, he stood INSIDE his own chair (the set's chair never moved). Fixes: the measured body's own lengths (the
+  kit's legs are short: standing hips 0.74 m vs a real 1.78 m man's 0.96 m), the bottom resting on the cushion, a hand
+  the film laid on a surface resting on its top, and (Added) his chair rolls back 0.4 m as he stands.
+- Kit drift (not this test's fault): Islamocommunism rebuilt today draws both people BALD with no beard (the film
+  hooks its heads into traitors_cast.HEADS; the kit now draws heads from body.HEADS), and `islamocommunism.py stills`
+  at drawing scale 1 frames the room wrongly (burnham and body each keep their own scale). The posted film is
+  untouched. move to shared: hook old films' heads into body.HEADS too (model_body_test._heads does it for this test).
+Not done here (named): clothes are painted on a pushed-out skin (jacket 1.6 cm off the body, trouser shell from
+solid_seat); no garment hangs or swings. The chair cushion is a rigid box: a seated bottom presses up to a few cm in.
+
 ## Where things stand (investigation chat 1, handing to chat 2)
 Rules that bite next: 85 (cost watch; this step stops at 6% of a week, finished or not), 30 and 87 (no fix tried a
 third time: after two failed fixes of one fault, stop and tell Sam what must be learned first), CLAUDE.md Statement Two.
