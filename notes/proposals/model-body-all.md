@@ -64,27 +64,48 @@ Statement One, what step 1 already says (the rest is for step 3's judge):
  d-h. Not answerable from the count; step 2's clip and step 3's judge.
 Open rule requests: none found in this investigation's notes.
 
-## Where things stand (investigation chat 1, handing to chat 2)
-Rules that bite next: 85 (cost watch; this step stops at 6% of a week, finished or not), 30 and 87 (no fix tried a
-third time: after two failed fixes of one fault, stop and tell Sam what must be learned first), CLAUDE.md Statement Two.
-Done: step 1 (the count, above). Sam paused, then Y (25 Nov, this chat) to step 2 on Islamocommunism shots 3-5.
-Next (chat 2, Opus high): step 2 the moving test. Islamocommunism (posted 5 Nov) shots 3-5 at the film's own cameras
-and times: shot 3 AOC opens the door and walks in with two glasses; shot 4 El-Sayed rises from his chair behind the
-desk (RISE); shot 5 she walks in from the right (two-shot). Model bodies (bench_pose/solid_seat way: MakeHuman body,
-one depth pass with desk, chair, door and glasses solid), house heads, circle hands; his charcoal jacket open as a
-shell. ONE side-by-side clip (original | new), phone size. Pass: a stranger believes every frame (no joins, nothing
-through desk/door/chair, no visible change of drawing). Install Blender first only if needed (apt; not in setup.sh).
-Needs Sam: nothing until the clip.
-Read: this file; source MAPs of bench_pose, bench_draw, solid_seat, islamocommunism (page.py finder for its code).
-Open rule requests: none. Sam asked (25 Nov) why the "say what must be learned" rule never fired on the sitting work:
-answered (it waits on Claude's own judgement); a countable trigger was described, NOT asked; it goes through the
-proposal route first if raised.
-For Claude: count/ holds step 1; tally.py; T['cut3'..'cut5'] and SHOTS at islamocommunism.py L130-180.
+## Step 2 result (investigation chat 2, 25 Nov, session_01U3pKQzuMaJ3B7QYkkK55xe; Opus high)
+Built: source/model_body.py (shared: any kit film's people as model bodies; the film's own people code runs, its
+flat-person calls are caught and that skeleton poses the measured body) and source/model_body_test.py (only what is
+Islamocommunism's own: flutes and handset as solids, the desk's kneehole, the door leaf, the wall round the door).
+Clip: notes/proposals/model-body-all/islamocommunism-shots3-5-side-by-side.mp4 (posted | model body, 12.17-27.84 s).
+What the model body found that the flat film hid (each fixed in the drawing, never the shot):
+- The flat seated pose put his hips 15 cm BELOW the chair's cushion and his desk forearm 13 cm INSIDE the desk; once
+  risen, he stood INSIDE his own chair (the set's chair never moved). Fixes: the measured body's own lengths (the
+  kit's legs are short: standing hips 0.74 m vs a real 1.78 m man's 0.96 m), the bottom resting on the cushion, a hand
+  the film laid on a surface resting on its top, and (Added) his chair rolls back 0.4 m as he stands.
+- Kit drift (not this test's fault): Islamocommunism rebuilt today draws both people BALD with no beard (the film
+  hooks its heads into traitors_cast.HEADS; the kit now draws heads from body.HEADS), and `islamocommunism.py stills`
+  at drawing scale 1 frames the room wrongly (burnham and body each keep their own scale). The posted film is
+  untouched. move to shared: hook old films' heads into body.HEADS too (model_body_test._heads does it for this test).
+Checks on the clip (188 frames, 4.6 min to render, 12 frames a second): nothing through the desk, the door leaf,
+the door wall or the chair once he stands; 6 frames (15.0-15.5 s, seated) his bottom presses into the rigid cushion
+box (named); his desk hand rests at the desk's front edge, 0.2-0.28 m short of where the flat pose put it (inside the
+desk). Fixed on my own before sending (2 faults, each fixed once): empty hanging arms bowed out like hands on hips
+(now they keep the kit's direction from the shoulder); the turned door leaf was tested as a box round it (false hits).
+Cost of step 2: about 1% of a week (chat at 2.1% with its start).
+Not done here (named): clothes are painted on a pushed-out skin (jacket 1.6 cm off the body, trouser shell from
+solid_seat); no garment hangs or swings. The chair cushion is a rigid box: a seated bottom presses up to a few cm in.
+
+## Where things stand (investigation chat 2)
+Rules that bite next: 85 (cost watch: total cap 8.5%, about 3.9% used), 30/87 (no third try at one fault), Statement Two.
+Done: step 2, the moving test; the clip is sent to Sam (notes/proposals/model-body-all/, 0.7 MB).
+Next (step 3, Opus high, only after Sam's Y): blind judges score posted vs model body on the clip at phone size;
+the proposal route's top two to Sam with Lost/Added and the cost (one-off switch: model_body.py exists now; per film:
+4.6 min of rendering per 16 s, sets must hand their furniture as solids, kneeholes, chairs that move).
+Needs Sam: Y to step 3, or his notes on the clip.
+Read: this file only; source/model_body.py MAP; the clip.
+Open rule requests: none.
+For Claude: model_body_test.py clip 12.17 27.84 OUT; _heads() is a 'move to shared' (body.HEADS hook for old films).
 Locked by Sam: Islamocommunism's cameras, times and beats as posted; no posted film is changed; Open Wounds stays flat.
 
-Branches named (not this job's; left for their chains, as notes/r7.md names them): claude/gta-v5-sound-draft,
-claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31. End-check SENTENCE x4: CLAUDE.md edits by
-other chats (34f49840, 0945cc85), named by earlier chats; the sentences are still in CLAUDE.md in bold.
-Unrouted settle (chat cf96c026): the step-1 question was the investigation's own stop rule, a false block.
-
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)
+
+Handover check answers (chat 2): Branches named (not this job's; left for their chains): claude/adoring-babbage-rtbj6h
+(R7's notes/r7.md, another chat's live work), claude/gta-v5-sound-draft, claude/gta-chat46-build,
+claude/dreamy-fermi-vkhutz, claude/gta-chat31. SENTENCE x4: CLAUDE.md edits by other chats (34f49840, 0945cc85),
+named by earlier chats; the sentences are still in CLAUDE.md in bold. FREEZE / kit test finished_films_keep_their_bookmark
+(21 from 20): source/model_body_test.py loads the posted Islamocommunism file ON PURPOSE (read only: the test must use
+the film's own poses, cameras and times; nothing in it changes). It is an investigation test, not kit or film work;
+if the model body goes ahead, films are built new on model_body.py and never load an old film. If Sam wants the count
+kept at 20, the test moves onto freeze.py's saved copy first (an hour's work, named, not done).
