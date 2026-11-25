@@ -57,3 +57,6 @@ His pictures (sheet v4, all four views, three people): `examples/sam-25nov-v4-le
 - For Claude: R7 chats 1–4 on `claude/r7-seated-lower-body` (last: 45fcc6b3, 152bea67); seated code `source/sitting.py`,
   `source/views.py` (leg), sheet `notes/learn/seated/sheet_r7.py`.
 
+### 2026-11-25T17:36:20
+1
+
