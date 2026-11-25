@@ -624,6 +624,10 @@ def _r7_off_shin(seg, hs, inset=7.0):
 def seated_lower(p, j, yaw, sp, order, top=None):
     """R7: everything of a seated person below the waist (the bottom, thighs, knees, shins, shoes) as one shape,
     then each leg's own edges far to near (a crossed top leg last), each shoe after its leg."""
+    if sp.get('seat_solid'):                                # proposal seated-legs-3d (learn): the measured body
+        import solid_seat                                   # drawn solid on the same joints (solid_seat.py)
+        solid_seat.draw(p, j, yaw, sp)
+        return
     col = sp.get('trousers', (40, 40, 46))
     seat_y = _r7_seat(j)
     hulls = [_r7_hull(_r7_bottom(j, sp, seat_y), yaw)[0]]
@@ -1921,7 +1925,10 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         pen = B.Pen(img, up)
         B.trouser_seat(pen, sp_draw, torso_outline(sp_draw, view, sb, B.ink_units(pen)), sb,
                        None if seated else _thigh_edges(j, view_deg, sp_draw, sb + 6.0, gap=True), r7=r7)
-    if j.get('lap') and view in ('front', 'three'):   # a low seat lifts the knees to the jacket's hem: they are nearer
+    if r7 and sp.get('seat_solid'):                # the solid legs: what lies in front of the torso's front is drawn
+        import solid_seat                          # over it, by depth (solid_seat.lay_over)
+        solid_seat.lay_over(img)
+    elif j.get('lap') and view in ('front', 'three'):   # a low seat lifts the knees to the jacket's hem: they are nearer
         hem = min(sp_draw.get('bottom', JACKET), 470) + 30   # than the jacket, so they show over it (rule 80)
         for sd in legs_order:
             kn = project(knee_of(j, sd), view_deg)[0]

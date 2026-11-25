@@ -17,6 +17,8 @@ VIEWS = ((0, 'upright', 'seated front'), (45, 'upright', 'seated 3/4'), (90, 'up
 
 def figure(who, yaw, pose, outline):
     sp = dict(cast[who]); sp['seat_r7'] = True
+    if os.environ.get('SEAT_SOLID'):              # chat 6: the solid legs (solid_seat.py), proposal seated-legs-3d
+        sp['seat_solid'] = os.environ['SEAT_SOLID']
     if outline:
         sp['hair_style'] = 'back'
         if 'kit_house' in sp:

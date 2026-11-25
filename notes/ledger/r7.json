@@ -1,7 +1,18 @@
 {
  "film": "r7",
  "estimate": 6.0,
- "chats": [],
+ "chats": [
+  {
+   "date": "2026-11-25",
+   "chat": "07213d47",
+   "model": "opus",
+   "stage": "learn (chat 6)",
+   "round": null,
+   "cost": 1.78,
+   "notes": 0,
+   "repeats": []
+  }
+ ],
  "checks": {},
  "cost_flagged": [],
  "cost_log": [
@@ -58,6 +69,11 @@
   {
    "date": "2026-11-25",
    "spent": 0,
+   "forecast": null
+  },
+  {
+   "date": "2026-11-25",
+   "spent": 1.78,
    "forecast": null
   }
  ]

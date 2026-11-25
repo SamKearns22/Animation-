@@ -67,3 +67,19 @@
     Open rule requests: none. For Claude: not R7's (named, left for their chains): claude/kit-tests-when-build,
     claude/brexit-chat15, claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31;
     the CLAUDE.md sentence moves; the project "Where things stand" (R7 is a sub-entry). one_tone skipped at yaw 90.
+
+## Where things stand (chat 5, 25 Nov, session_01U3pKQyiJ2poN3syCEWUzsu)
+Rules that bite next: 30 (fix the method, not the picture), 87 (a fix failing twice stops), 85 (cost watch).
+Done: Sam's 25 Nov notes saved (notes/learn/seated/handover-sam-25nov.md); proposal seated-legs-3d judged; Sam
+picked "1" (adopted). The judge's V2/V3 labels look swapped (seated-legs-3d/judge-labels.md). No code changed.
+Next: chat 6, Opus high (building new): Learn steps 1-5 of the proposal's Final version, cap 4% of a week, cost in
+the r7 ledger at each handover; below the pass bar, stop and tell Sam what is missing; no outline patching.
+Needs Sam: with the learn sheet, in one message: Change 1 Y/N and Change 2 Y/N (each needs its own yes).
+Locked by Sam: Open Wounds' seated frames (switch off; kittest seated_r7_switch); the bum/seat he accepted.
+Read: the proposal's Final version; guides/job-packs.md "Build"; MAPs of source/bench_pose.py, bench_draw.py,
+bench_move.py (dressed_draw), sitting.py realize, views.py _limb3. Open rule requests: none.
+For Claude: end-check SENTENCE x4 are CLAUDE.md edits by other chats (34f49840, 0945cc85; named by earlier chats),
+not R7's. Branches not R7's, left for their chains: claude/kit-tests-when-build, claude/gta-v5-sound-draft,
+claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 0% of 15%; forecast not yet planned (2026-11-25)
