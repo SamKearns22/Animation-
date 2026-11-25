@@ -1,0 +1,281 @@
+282 | X | - | - | - | -
+283 | N | CAMERA | N | - | camera choice, not body
+284 | N | TEXT | N | - | title treatment
+285 | N | SET | N | - | style and set look
+286 | N | SCRIPT | N | - | joke content
+287 | N | TEXT | N | - | Hook Text wording
+288 | N | TEXT | N | - | Hook Text and sign-off
+289 | N | SET | N | - | ground patch
+290 | N | OTHER | N | - | house style choice
+291 | N | CAMERA | N | - | shot choice
+292 | N | SET | N | - | prop label text
+293 | N | BODY | N | - | pose choice at start, body model unchanged
+294 | N | SET | N | - | small props
+295 | N | SET | N | - | lighting
+296 | N | CAMERA | N | - | showstopper shot choice
+297 | X | - | - | - | -
+298 | N | TEXT | N | - | sound
+299 | N | MOVE | N | - | dog action
+300 | N | TEXT | N | - | title effect
+301 | N | MOVE | N | - | acting choice
+302 | N | OTHER | N | - | dog colouring
+303 | N | SET | N | - | building lettering
+304 | N | SET | N | - | roundabout layout
+305 | N | SET | N | - | lamp post and shadow
+306 | N | SET | N | - | lighting grade
+307 | N | TEXT | N | - | title layout
+308 | N | BODY | P | - | arm pose better posed, hoody and vomit unaffected
+309 | N | FACE | N | - | face look
+310 | N | MOVE | N | - | camera climb speed
+311 | N | CONTACT | P | - | drool on face, only if face solid
+312 | N | SET | N | - | glow effect
+313 | N | SET | N | - | prop
+314 | N | SET | N | - | lighting time of day
+315 | N | SCRIPT | N | - | added content
+316 | N | SCRIPT | N | - | added content
+317 | N | SCRIPT | N | - | added content
+318 | N | SCRIPT | N | - | added content
+319 | N | SET | N | - | removed prop
+320 | N | CAMERA | N | - | framing
+321 | N | FACE | N | - | cheek blotches
+322 | N | CAMERA | N | - | timing on face
+323 | N | MOVE | N | - | shot length
+324 | N | MOVE | N | - | shot length
+325 | N | SET | N | - | roundabout layout
+326 | N | SET | N | - | grade
+327 | N | SET | N | - | housing
+328 | N | CAMERA | N | - | hold length
+329 | N | SET | N | - | vehicle scale
+330 | N | SET | N | - | traffic amount
+331 | N | SCRIPT | N | - | where walkers are
+332 | N | SCRIPT | N | - | added content
+333 | N | SET | N | - | birds
+334 | N | MOVE | N | - | van action
+335 | N | CONTACT | P | - | drool on face, draw order
+336 | N | TEXT | N | - | prop label mirrored
+337 | N | SET | N | - | prop detail
+338 | N | SET | N | - | birds
+339 | N | OTHER | N | - | bird shape, not human
+340 | N | SET | N | - | bird timing
+341 | X | - | - | - | -
+342 | X | - | - | - | -
+343 | X | - | - | - | -
+344 | X | - | - | - | -
+345 | X | - | - | - | -
+346 | X | - | - | - | -
+347 | X | - | - | - | -
+348 | X | - | - | - | -
+349 | X | - | - | - | -
+350 | X | - | - | - | -
+351 | X | - | - | - | -
+352 | X | - | - | - | -
+353 | X | - | - | - | -
+354 | X | - | - | - | -
+355 | X | - | - | - | -
+356 | X | - | - | - | -
+357 | X | - | - | - | -
+358 | X | - | - | - | -
+359 | X | - | - | - | -
+360 | X | - | - | - | -
+361 | X | - | - | - | -
+362 | X | - | - | - | -
+363 | X | - | - | - | -
+364 | N | SET | N | - | building lettering
+365 | N | SET | N | - | roundabout layout
+366 | N | SET | N | - | lamp post
+367 | N | SET | N | - | grade
+368 | N | TEXT | N | - | title layout
+369 | N | BODY | P | - | arm and pose better posed, rest unaffected
+370 | N | MOVE | N | - | camera speed
+371 | N | CONTACT | P | - | drool on face
+372 | N | SET | N | - | glow effect
+373 | N | SET | N | - | prop
+374 | N | SET | N | - | lighting
+375 | N | SCRIPT | N | - | added content
+376 | N | SCRIPT | N | - | added content
+377 | N | SCRIPT | N | - | added content
+378 | N | SCRIPT | N | - | added content
+379 | N | SCRIPT | N | - | added content
+380 | N | CAMERA | N | - | framing
+381 | N | SET | N | - | building lettering
+382 | N | CAMERA | N | - | framing of rig
+383 | X | - | - | - | -
+384 | X | - | - | - | -
+385 | X | - | - | - | -
+386 | N | MOVE | N | - | whale action
+387 | N | MOVE | N | - | whale speed
+388 | X | - | - | - | -
+389 | N | SCRIPT | N | - | whales unhurt
+390 | X | - | - | - | -
+391 | X | - | - | - | -
+392 | X | - | - | - | -
+393 | X | - | - | - | -
+394 | X | - | - | - | -
+395 | X | - | - | - | -
+396 | X | - | - | - | -
+397 | N | SCRIPT | N | - | nobody on rig
+398 | N | SCRIPT | N | - | whale loops
+399 | N | FACE | N | - | whale brow
+400 | N | TEXT | N | - | Hook Text
+401 | N | MOVE | N | - | whale action
+402 | N | CAMERA | N | - | camera move
+403 | N | TEXT | N | - | subtitles
+404 | N | MOVE | N | - | whale action
+405 | N | CAMERA | N | - | cut
+406 | N | SCRIPT | N | - | scene content
+407 | N | MOVE | N | - | whale action
+408 | N | SCRIPT | N | - | scene content
+409 | N | SCRIPT | N | - | joke
+410 | N | SCRIPT | N | - | scene content
+411 | X | - | - | - | -
+412 | X | - | - | - | -
+413 | X | - | - | - | -
+414 | X | - | - | - | -
+415 | X | - | - | - | -
+416 | X | - | - | - | -
+417 | X | - | - | - | -
+418 | X | - | - | - | -
+419 | X | - | - | - | -
+420 | X | - | - | - | -
+421 | X | - | - | - | -
+422 | X | - | - | - | -
+423 | X | - | - | - | -
+424 | X | - | - | - | -
+425 | X | - | - | - | -
+426 | X | - | - | - | -
+427 | X | - | - | - | -
+428 | X | - | - | - | -
+429 | X | - | - | - | -
+430 | X | - | - | - | -
+431 | X | - | - | - | -
+432 | X | - | - | - | -
+433 | X | - | - | - | -
+434 | X | - | - | - | -
+435 | X | - | - | - | -
+436 | X | - | - | - | -
+437 | X | - | - | - | -
+438 | X | - | - | - | -
+439 | X | - | - | - | -
+440 | X | - | - | - | -
+441 | X | - | - | - | -
+442 | X | - | - | - | -
+443 | X | - | - | - | -
+444 | X | - | - | - | -
+445 | X | - | - | - | -
+446 | X | - | - | - | -
+447 | X | - | - | - | -
+448 | X | - | - | - | -
+449 | N | SET | N | - | dusk lighting
+450 | X | - | - | - | -
+451 | X | - | - | - | -
+452 | X | - | - | - | -
+453 | N | FACE | N | - | whale brow
+454 | X | - | - | - | -
+455 | N | TEXT | N | - | subtitles instead of voice
+456 | N | CONTACT | N | - | whale through rig, not a human body
+457 | N | SET | N | - | smoke draw order
+458 | N | MOVE | N | - | whale loop path
+459 | N | SET | N | - | spray draw order
+460 | N | SET | N | - | spray size
+461 | N | TEXT | N | - | Hook Text timing
+462 | N | CONTACT | N | - | crane through building, set only
+463 | N | CONTACT | N | - | rig crumple, set only
+464 | N | SET | N | - | smoke draw order
+465 | N | SCRIPT | N | - | whale exit effect
+466 | N | OTHER | N | - | line thickness
+467 | X | - | - | - | -
+468 | X | - | - | - | -
+469 | X | - | - | - | -
+470 | X | - | - | - | -
+471 | N | SCRIPT | N | - | no people
+472 | N | SET | N | - | dusk sky
+473 | X | - | - | - | -
+474 | X | - | - | - | -
+475 | X | - | - | - | -
+476 | X | - | - | - | -
+477 | N | TEXT | N | - | title and logo reveal
+478 | X | - | - | - | -
+479 | N | CONTACT | N | - | hydrant and cars, set objects
+480 | N | CAMERA | N | - | opening timing
+481 | N | TEXT | N | - | lettering
+482 | X | - | - | - | -
+483 | N | OTHER | N | - | general quality
+484 | X | - | - | - | -
+485 | X | - | - | - | -
+486 | X | - | - | - | -
+487 | X | - | - | - | -
+488 | N | CAMERA | N | - | shot dropped
+489 | N | FACE | N | - | character look
+490 | N | FACE | N | - | likeness to game references
+491 | X | - | - | - | -
+492 | N | BODY | P | - | correct body shapes, still needs references
+493 | N | FACE | N | - | stubble
+494 | N | FACE | N | - | face likeness
+495 | N | BODY | P | R | back view fault, back of head hard to draw
+496 | N | CLOTHES | P | R | headphones clipping the head, a worn prop on real garment
+497 | N | BODY | Y | R | slumped necks on three-quarter turns, head views must match
+498 | X | - | - | - | -
+499 | N | SET | N | - | sky clouds
+500 | N | SCRIPT | N | - | screenplay order
+501 | N | CONTACT | P | - | hands on wheel, needs solid wheel
+502 | N | BODY | Y | - | arm sausage and dislocated shoulder
+503 | N | MOVE | N | - | death reaction acting
+504 | X | - | - | - | -
+505 | X | - | - | - | -
+506 | X | - | - | - | -
+507 | X | - | - | - | -
+508 | X | - | - | - | -
+509 | X | - | - | - | -
+510 | X | - | - | - | -
+511 | N | CONTACT | P | - | arms on wheel, needs solid wheel
+512 | N | CONTACT | P | - | body through bonnet, needs solid car
+513 | N | CONTACT | P | - | arm through door and pillar, needs solid car
+514 | N | SET | N | - | blood effect
+515 | N | SET | N | - | hydrant physics
+516 | N | SET | N | - | water effect clipping
+517 | N | MOVE | N | - | death reaction acting
+518 | N | MOVE | N | - | car motion
+519 | N | OTHER | N | - | general, not specific
+520 | X | - | - | - | -
+521 | X | - | - | - | -
+522 | X | - | - | - | -
+523 | X | - | - | - | -
+524 | X | - | - | - | -
+525 | X | - | - | - | -
+526 | X | - | - | - | -
+527 | X | - | - | - | -
+528 | X | - | - | - | -
+529 | X | - | - | - | -
+530 | X | - | - | - | -
+531 | N | SET | N | - | background scenery
+532 | N | OTHER | N | - | delivery quality complaint
+533 | X | - | - | - | -
+534 | X | - | - | - | -
+535 | N | MOVE | N | - | crowd only stands still
+536 | X | - | - | - | -
+537 | N | OTHER | N | - | rebuild instruction
+538 | N | CONTACT | P | - | actors placed in bonnet, needs solid car
+539 | X | - | - | - | -
+540 | N | SCRIPT | N | - | shot as written
+541 | X | - | - | - | -
+542 | X | - | - | - | -
+543 | X | - | - | - | -
+544 | X | - | - | - | -
+545 | X | - | - | - | -
+546 | X | - | - | - | -
+547 | X | - | - | - | -
+548 | X | - | - | - | -
+549 | N | CONTACT | P | - | lower body showing through car
+550 | N | BODY | P | - | gun arm aim direction pose
+551 | N | MOVE | N | - | crowd reaction
+552 | N | MOVE | N | - | acting missing
+553 | N | MOVE | N | - | acting imagination
+554 | N | MOVE | N | - | head and look acting
+555 | N | MOVE | N | - | gesture choice
+556 | X | - | - | - | -
+557 | N | BODY | Y | - | backwards arm sausage, third time
+558 | X | - | - | - | -
+559 | X | - | - | - | -
+560 | X | - | - | - | -
+561 | X | - | - | - | -
+562 | X | - | - | - | -

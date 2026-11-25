@@ -1,0 +1,281 @@
+844 | N | CONTACT | P | - | pile pieces on floor need solid 3D too
+845 | N | FACE | N | - | likeness and presenter choice, not body
+846 | N | OTHER | N | - | stale drawing pasted into wrong shot
+847 | N | TEXT | N | - | subtitle wording
+848 | N | TEXT | N | - | Hook Text placement
+849 | N | FACE | N | - | eye direction is face drawing
+850 | N | CAMERA | N | - | zoom framing
+851 | N | CONTACT | P | - | pieces floating, overlapping, shadows; needs solid pieces
+852 | X | - | - | - | -
+853 | X | - | - | - | -
+854 | X | - | - | - | -
+855 | X | - | - | - | -
+856 | X | - | - | - | -
+857 | X | - | - | - | -
+858 | X | - | - | - | -
+859 | X | - | - | - | -
+860 | X | - | - | - | -
+861 | X | - | - | - | -
+862 | X | - | - | - | -
+863 | X | - | - | - | -
+864 | X | - | - | - | -
+865 | X | - | - | - | -
+866 | X | - | - | - | -
+867 | X | - | - | - | -
+868 | X | - | - | - | -
+869 | X | - | - | - | -
+870 | X | - | - | - | -
+871 | X | - | - | - | -
+872 | X | - | - | - | -
+873 | X | - | - | - | -
+874 | X | - | - | - | -
+875 | X | - | - | - | -
+876 | X | - | - | - | -
+877 | X | - | - | - | -
+878 | N | CONTACT | P | - | reach staging read as cuddle; body helps, staging decides
+879 | N | CAMERA | N | - | camera nearer, background choice
+880 | N | CAMERA | N | - | camera position choice
+881 | N | CAMERA | N | - | camera position choice
+882 | N | CLOTHES | P | - | badge depth under forearm; painted-on badge helps
+883 | N | SET | N | - | boat position in scene
+884 | N | SET | N | - | background detail
+885 | N | CLOTHES | N | - | poppy visibility, pose-led choice
+886 | N | CONTACT | P | - | hand on gun needs solid prop too
+887 | N | TEXT | N | - | sound effects
+888 | N | FACE | N | - | gaze and head turn
+889 | N | CONTACT | P | - | arm behind gun; needs solid gun
+890 | N | TEXT | N | - | Hook Text height setting
+891 | N | SCRIPT | N | - | new line added
+892 | N | SCRIPT | N | - | wording change
+893 | N | TEXT | N | - | voice recordings
+894 | N | CLOTHES | P | - | badge drawn at shoulder from behind; shell-painted badge helps
+895 | N | BODY | Y | - | hand placement at sleeve end on a real arm
+896 | N | TEXT | N | - | subtitle wording
+897 | N | BODY | Y | - | sleeve hidden by head shape; flat piece depth order
+898 | N | BODY | Y | - | arm from behind wrapped round head; flat pose fault
+899 | N | TEXT | N | - | stamp overlay left on splice
+900 | X | - | - | - | -
+901 | X | - | - | - | -
+902 | X | - | - | - | -
+903 | X | - | - | - | -
+904 | X | - | - | - | -
+905 | X | - | - | - | -
+906 | X | - | - | - | -
+907 | X | - | - | - | -
+908 | X | - | - | - | -
+909 | X | - | - | - | -
+910 | X | - | - | - | -
+911 | X | - | - | - | -
+912 | N | SET | N | - | table size
+913 | N | SET | N | - | floating table in background
+914 | X | - | - | - | -
+915 | N | SET | N | - | table size
+916 | N | SET | N | - | chair placement and wall
+917 | N | HANDS | N | - | pointing finger drawing on circle hand
+918 | N | CAMERA | N | - | camera closer
+919 | N | CAMERA | N | - | swings read as spinning table
+920 | N | MOVE | N | - | eye acting at the end
+921 | N | CAMERA | N | - | framing so people stay in shot
+922 | N | FACE | N | - | face shape
+923 | N | MOVE | N | - | eye movement acting
+924 | N | OTHER | N | - | patch artefact round hands
+925 | N | FACE | N | - | glasses line flicker
+926 | N | FACE | N | - | eye style consistency
+927 | N | SET | N | - | wall style between rooms
+928 | N | BODY | P | - | foreground pointing arm; flat arm at lens breaks
+929 | N | CAMERA | N | - | seating angles around table
+930 | N | SET | N | - | table size
+931 | N | SCRIPT | N | - | final shot content
+932 | N | SET | N | - | candles and torches
+933 | N | OTHER | N | - | self-review wording
+934 | N | SET | N | - | table size varied per shot
+935 | N | CAMERA | N | - | seating positions cheated
+936 | N | SET | N | - | chairs present
+937 | N | CAMERA | N | - | camera position choice
+938 | N | CAMERA | N | - | revert to earlier framing
+939 | N | TEXT | N | - | bird tweets in audio
+940 | N | CAMERA | N | - | roof and camera height
+941 | N | MOVE | N | - | breathing bob read as floating
+942 | N | TEXT | N | - | bird sounds in audio
+943 | N | SCRIPT | N | - | reactions shot missing
+944 | N | CAMERA | N | - | closer table shots
+945 | X | - | - | - | -
+946 | X | - | - | - | -
+947 | X | - | - | - | -
+948 | X | - | - | - | -
+949 | X | - | - | - | -
+950 | X | - | - | - | -
+951 | X | - | - | - | -
+952 | X | - | - | - | -
+953 | X | - | - | - | -
+954 | X | - | - | - | -
+955 | X | - | - | - | -
+956 | X | - | - | - | -
+957 | X | - | - | - | -
+958 | X | - | - | - | -
+959 | X | - | - | - | -
+960 | X | - | - | - | -
+961 | X | - | - | - | -
+962 | X | - | - | - | -
+963 | X | - | - | - | -
+964 | X | - | - | - | -
+965 | X | - | - | - | -
+966 | X | - | - | - | -
+967 | X | - | - | - | -
+968 | X | - | - | - | -
+969 | X | - | - | - | -
+970 | X | - | - | - | -
+971 | X | - | - | - | -
+972 | X | - | - | - | -
+973 | X | - | - | - | -
+974 | X | - | - | - | -
+975 | X | - | - | - | -
+976 | X | - | - | - | -
+977 | X | - | - | - | -
+978 | X | - | - | - | -
+979 | N | SET | N | - | card and chip scale
+980 | N | FACE | N | - | Dragonite mouth shape
+981 | N | MOVE | N | - | firing scene length
+982 | N | MOVE | N | - | people reacting before hit
+983 | N | FACE | N | - | Dragonite eyes
+984 | X | - | - | - | -
+985 | N | SET | N | - | object detail
+986 | N | CONTACT | P | - | hands under table; needs solid table order
+987 | N | CLOTHES | N | - | Poke Ball details
+988 | N | MOVE | N | - | old man timing
+989 | N | SET | N | - | table population consistency
+990 | N | MOVE | N | - | pandemonium acting
+991 | N | CONTACT | P | - | chips slide with no contact; props must be solid
+992 | N | SET | N | - | chips as individual pieces
+993 | N | FACE | N | - | Dragonite mouth
+994 | N | FACE | N | - | Dragonite head design
+995 | N | CONTACT | P | - | cards floating between hands; hand grip on prop
+996 | N | CONTACT | P | - | cards on wrong side of hands; depth order with props
+997 | N | OTHER | N | - | creature wing colouring, not human body
+998 | N | BODY | N | - | Dragonite head and neck join, not human body
+999 | N | FACE | N | - | smile on Dragonite
+1000 | N | FACE | N | - | mouth opening
+1001 | N | CONTACT | P | - | hands under table; needs solid table order
+1002 | N | FACE | N | - | mouth closed
+1003 | N | FACE | N | - | mouth opening
+1004 | N | SET | N | - | impact craters
+1005 | N | CONTACT | P | - | arms over cards; depth order with props
+1006 | N | SET | N | - | charge light
+1007 | N | CONTACT | P | - | hand clipping through chips; needs solid props
+1008 | N | MOVE | N | - | neutral beat timing
+1009 | N | SET | P | - | chair sorted wrongly against sitter; depth pass helps
+1010 | N | SET | N | - | lighting burn to white
+1011 | N | TEXT | N | - | voice recordings
+1012 | N | TEXT | N | - | remove Dragonite line
+1013 | N | SET | N | - | Poke Ball on chips
+1014 | N | MOVE | N | - | look-down beat
+1015 | N | SET | N | - | window and glass
+1016 | N | SCRIPT | N | - | more people in scene
+1017 | N | TEXT | N | - | hiss in audio
+1018 | N | MOVE | N | - | eye movement acting
+1019 | N | MOVE | N | - | beam sweep choreography
+1020 | N | MOVE | N | - | fall variety
+1021 | N | MOVE | N | - | hit timing against beam
+1022 | N | FACE | N | - | pupil past eye outline
+1023 | N | MOVE | N | - | reaction acting before hit
+1024 | N | MOVE | N | - | gesture acting
+1025 | N | BODY | Y | - | lying people read as flat cardboard
+1026 | N | CAMERA | N | - | shot closer
+1027 | N | SET | N | - | lighting darker shot
+1028 | N | MOVE | N | - | gasp acting
+1029 | N | SET | N | - | glass floating above table
+1030 | N | SET | N | - | objects flying before struck
+1031 | N | MOVE | N | - | gesture and face clarity
+1032 | N | MOVE | N | - | dealer flight not seen
+1033 | N | MOVE | N | - | throw direction
+1034 | N | BODY | Y | - | landed bodies flat cardboard, matchstick lying
+1035 | N | SET | N | - | curtain cutting
+1036 | N | MOVE | N | - | ceiling strike action
+1037 | N | SET | N | - | crater on window
+1038 | N | BODY | Y | - | plastic-looking legs, seam lines on limbs
+1039 | N | SET | N | - | table emblem design
+1040 | X | - | - | - | -
+1041 | X | - | - | - | -
+1042 | X | - | - | - | -
+1043 | X | - | - | - | -
+1044 | X | - | - | - | -
+1045 | X | - | - | - | -
+1046 | X | - | - | - | -
+1047 | X | - | - | - | -
+1048 | X | - | - | - | -
+1049 | X | - | - | - | -
+1050 | X | - | - | - | -
+1051 | X | - | - | - | -
+1052 | X | - | - | - | -
+1053 | X | - | - | - | -
+1054 | X | - | - | - | -
+1055 | X | - | - | - | -
+1056 | N | FACE | N | - | skin and facial hair
+1057 | N | CAMERA | N | - | spoiler framing
+1058 | N | TEXT | N | - | subtitle wording
+1059 | N | MOVE | N | - | opening staging and spin
+1060 | N | BODY | Y | - | arms and legs stiff or blocky
+1061 | N | TEXT | N | - | voice on animatics
+1062 | N | CAMERA | N | - | reveal by frame not blur
+1063 | N | BODY | Y | - | walk cycle looked horrible; real body walks
+1064 | N | BODY | Y | - | turn flips like paper
+1065 | N | MOVE | N | - | reveal timing
+1066 | N | BODY | Y | R | swivel then thin; heads must match turning body
+1067 | N | BODY | Y | R | straight 180 turn; heads must match turning body
+1068 | N | BODY | Y | - | unnatural arm pose
+1069 | N | HANDS | N | - | finger line cut off
+1070 | N | MOVE | N | - | arm gesture choice
+1071 | N | TEXT | N | - | sound effects
+1072 | N | MOVE | N | - | acting enthusiasm
+1073 | N | SET | N | - | laptop on grey box
+1074 | X | - | - | - | -
+1075 | X | - | - | - | -
+1076 | X | - | - | - | -
+1077 | X | - | - | - | -
+1078 | X | - | - | - | -
+1079 | X | - | - | - | -
+1080 | X | - | - | - | -
+1081 | X | - | - | - | -
+1082 | X | - | - | - | -
+1083 | X | - | - | - | -
+1084 | X | - | - | - | -
+1085 | X | - | - | - | -
+1086 | X | - | - | - | -
+1087 | X | - | - | - | -
+1088 | X | - | - | - | -
+1089 | X | - | - | - | -
+1090 | X | - | - | - | -
+1091 | X | - | - | - | -
+1092 | X | - | - | - | -
+1093 | X | - | - | - | -
+1094 | X | - | - | - | -
+1095 | X | - | - | - | -
+1096 | X | - | - | - | -
+1097 | X | - | - | - | -
+1098 | X | - | - | - | -
+1099 | X | - | - | - | -
+1100 | X | - | - | - | -
+1101 | X | - | - | - | -
+1102 | X | - | - | - | -
+1103 | X | - | - | - | -
+1104 | X | - | - | - | -
+1105 | X | - | - | - | -
+1106 | X | - | - | - | -
+1107 | N | FACE | N | - | horror face strength
+1108 | N | CONTACT | P | - | sign cutting into shoulders; needs solid sign
+1109 | N | BODY | Y | - | arm behind back missing, no arms
+1110 | N | BODY | Y | - | blocky arms
+1111 | N | BODY | Y | - | hips too wide, blocky body
+1112 | N | SET | N | - | crowd spacing
+1113 | N | CAMERA | N | - | crowd camera height
+1114 | N | SET | N | - | weather detail
+1115 | N | CAMERA | P | - | models look worse at diagonals; 3D turns fine
+1116 | N | SET | N | - | building accuracy
+1117 | N | OTHER | N | - | pink box overlay
+1118 | N | SET | N | - | ground detail
+1119 | N | SET | N | - | road and traffic
+1120 | N | CAMERA | P | - | wide perspective trouble; 3D body copes better
+1121 | N | SET | N | - | environment detail
+1122 | N | SET | N | - | police spacing
+1123 | N | CAMERA | N | - | sign distance
+1124 | N | SCRIPT | N | - | more swat guys

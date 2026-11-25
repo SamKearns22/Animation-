@@ -1,0 +1,281 @@
+1125 | N | FACE | P | R | head turned fully backwards; heads hand-drawn, body would limit turn
+1126 | N | CAMERA | N | - | shot placement request
+1127 | N | SET | N | - | building drawing order
+1128 | N | SET | N | - | building gap
+1129 | N | SET | N | - | lion prop drawing
+1130 | N | BODY | Y | - | floating limbs and heads, joined body fixes
+1131 | N | CONTACT | P | - | hands through signs; needs solid signs too
+1132 | N | SET | N | - | flags behind police
+1133 | N | MOVE | N | - | officers' entrance staging
+1134 | N | CONTACT | P | - | feet floating, guns not in hands
+1135 | N | OTHER | N | - | stray frame glitch
+1136 | N | CAMERA | N | - | framing and lunge distance
+1137 | N | TEXT | N | - | subtitle wording
+1138 | N | TEXT | N | - | audio
+1139 | N | OTHER | N | - | drawing switch popping in
+1140 | N | OTHER | N | - | drawing switch popping in
+1141 | N | OTHER | N | - | figures disappearing on cut
+1142 | N | CONTACT | P | - | rifle through face, sign vanishing
+1143 | N | OTHER | N | - | officer jumped out of frame
+1144 | N | CONTACT | P | - | door must be solid too
+1145 | N | CONTACT | P | - | finger aimed past chest
+1146 | N | FACE | N | - | expression variety
+1147 | N | CAMERA | N | - | closer framing
+1148 | N | MOVE | N | - | action legibility, timing
+1149 | N | MOVE | N | - | speed of police move
+1150 | N | HANDS | N | - | pointing finger hand
+1151 | N | TEXT | N | - | sound effects
+1152 | N | BODY | Y | - | torso hem changed size mid-move
+1153 | N | SCRIPT | N | - | wording answers for brief
+1154 | N | OTHER | N | - | changes from references
+1155 | N | OTHER | N | - | reference photos request
+1156 | N | CONTACT | P | - | door swing through officer
+1157 | N | TEXT | N | - | hook text placement
+1158 | N | SCRIPT | N | - | missing subtitle, cut timing
+1159 | N | FACE | N | - | mouth hanging open
+1160 | N | MOVE | N | - | gun-checking acting
+1161 | X | - | - | - | -
+1162 | X | - | - | - | -
+1163 | X | - | - | - | -
+1164 | X | - | - | - | -
+1165 | X | - | - | - | -
+1166 | X | - | - | - | -
+1167 | X | - | - | - | -
+1168 | X | - | - | - | -
+1169 | X | - | - | - | -
+1170 | X | - | - | - | -
+1171 | X | - | - | - | -
+1172 | X | - | - | - | -
+1173 | N | MOVE | N | - | head-turn timing choice
+1174 | N | SET | N | - | prop visibility
+1175 | N | CONTACT | P | - | robot through window frame
+1176 | N | MOVE | N | - | static robot acting
+1177 | N | SCRIPT | N | - | added robot
+1178 | N | CAMERA | N | - | shot length
+1179 | N | MOVE | N | - | action choreography
+1180 | N | MOVE | N | - | action choreography
+1181 | N | CAMERA | N | - | camera spin speed
+1182 | N | SET | N | - | damage effects
+1183 | N | BODY | Y | R | head backwards vs body; hands over back
+1184 | N | BODY | Y | - | minigun drawn over back from behind
+1185 | N | SET | N | - | effects drawn over character
+1186 | N | SET | N | - | beans effect look
+1187 | N | SET | N | - | prop size
+1188 | N | BODY | Y | - | arm bent across back, gun over back
+1189 | N | MOVE | N | - | robot hit reactions, extra robots
+1190 | N | SET | N | - | bullet holes on empty frame
+1191 | N | SET | N | - | stray prop in shot
+1192 | N | SET | N | - | flash effect style
+1193 | N | MOVE | N | - | where he looks
+1194 | N | SET | N | - | arrow in wall
+1195 | N | TEXT | N | - | sound effects
+1196 | N | TEXT | N | - | hook text
+1197 | N | BODY | Y | - | squat sitting pose on sofa
+1198 | N | CLOTHES | P | R | sleeve and wrist join; real garment shells needed
+1199 | N | SET | N | - | crossbow prop drawing
+1200 | N | MOVE | N | - | swipe action beat
+1201 | N | MOVE | N | - | robots must walk in
+1202 | N | MOVE | N | - | hold timing, dent effect
+1203 | N | SET | N | - | unclear prop
+1204 | N | SET | N | - | added prop
+1205 | N | TEXT | N | - | bleep clipping word
+1206 | N | MOVE | N | - | robot should stay after hit
+1207 | N | MOVE | N | - | door timing
+1208 | N | MOVE | N | - | snarl and effects staging
+1209 | N | MOVE | N | - | wave gesture
+1210 | N | CLOTHES | P | R | cuff detail drawn separately
+1211 | N | MOVE | N | - | reaching gesture
+1212 | N | TEXT | N | - | subtitle centring
+1213 | N | SET | N | - | coaster and steam
+1214 | N | BODY | Y | - | kicking leg wrapped behind body
+1215 | N | CONTACT | P | - | elbow into doorway needs solid frame
+1216 | N | MOVE | N | - | reaction choice
+1217 | N | CONTACT | P | - | machete wrapped round torso
+1218 | N | SET | N | - | spark effect size
+1219 | N | CONTACT | P | - | clipping doorframe, collision check
+1220 | N | CONTACT | P | - | crossbow wrapped round shoulder
+1221 | N | MOVE | N | - | throw acting
+1222 | N | SET | N | - | flat prop in flight
+1223 | N | MOVE | N | - | pistol pose choice
+1224 | N | CAMERA | N | - | added close-up cuts
+1225 | N | SET | N | - | effect trail shape
+1226 | N | TEXT | N | - | bleep placement
+1227 | N | SET | N | - | belt hangs off table
+1228 | N | CONTACT | P | - | belt wraps head without hands
+1229 | N | SET | N | - | bolt path through head
+1230 | N | CONTACT | P | - | gun clips through table
+1231 | N | FACE | N | - | eye direction
+1232 | N | CONTACT | P | - | hand and tin inconsistent frames
+1233 | N | MOVE | N | - | hold timing
+1234 | N | MOVE | N | - | hold and sound
+1235 | N | SCRIPT | N | - | remove dead robots
+1236 | N | TEXT | N | - | hook text and sign-off
+1237 | X | - | - | - | -
+1238 | X | - | - | - | -
+1239 | X | - | - | - | -
+1240 | X | - | - | - | -
+1241 | X | - | - | - | -
+1242 | X | - | - | - | -
+1243 | X | - | - | - | -
+1244 | X | - | - | - | -
+1245 | X | - | - | - | -
+1246 | X | - | - | - | -
+1247 | X | - | - | - | -
+1248 | X | - | - | - | -
+1249 | N | CAMERA | N | - | shot 8 staging
+1250 | N | SET | N | - | raised platform
+1251 | N | CONTACT | P | - | bodies sunk into floor, chairs needed
+1252 | N | SET | N | - | room dimensions
+1253 | N | FACE | N | - | hair outline
+1254 | N | FACE | N | - | smile
+1255 | N | SET | N | - | stage detail
+1256 | N | SET | N | - | lettering
+1257 | N | FACE | N | - | hair outline
+1258 | N | FACE | N | - | eyelid line
+1259 | N | MOVE | N | - | crowd movements
+1260 | N | BODY | P | R | blocky backs; back of head hard to draw
+1261 | N | SET | N | - | flag drawing
+1262 | N | MOVE | N | - | head-down acting
+1263 | N | TEXT | N | - | audio take
+1264 | N | FACE | N | - | lines across eyes
+1265 | N | MOVE | N | - | acting
+1266 | N | MOVE | N | - | acting
+1267 | N | MOVE | N | - | acting
+1268 | N | MOVE | N | - | acting
+1269 | N | MOVE | N | - | acting
+1270 | N | TEXT | N | - | subtitle alignment
+1271 | N | TEXT | N | - | hook text
+1272 | N | TEXT | N | - | subtitle timing
+1273 | N | MOVE | N | - | mouth acting
+1274 | N | MOVE | N | - | eye acting
+1275 | N | TEXT | N | - | subtitle wording
+1276 | N | MOVE | N | - | eye acting
+1277 | N | TEXT | N | - | subtitle timing
+1278 | N | MOVE | N | - | acting
+1279 | N | SCRIPT | N | - | opening edit
+1280 | N | TEXT | N | - | subtitle pinning
+1281 | N | TEXT | N | - | subtitle pinning
+1282 | N | TEXT | N | - | subtitle pinning
+1283 | N | TEXT | N | - | audio cut
+1284 | N | TEXT | N | - | subtitle wording
+1285 | N | MOVE | N | - | acting
+1286 | N | MOVE | N | - | acting
+1287 | N | SCRIPT | N | - | script line
+1288 | N | MOVE | N | - | acting timing
+1289 | N | MOVE | N | - | acting
+1290 | N | MOVE | N | - | head-lift timing
+1291 | N | FACE | N | - | blink on key face
+1292 | N | MOVE | N | - | acting
+1293 | N | TEXT | N | - | subtitle timing
+1294 | N | TEXT | N | - | subtitle wording
+1295 | N | TEXT | N | - | subtitle timing
+1296 | N | TEXT | N | - | brief: no title, silent
+1297 | N | SET | N | - | rope barrier removed
+1298 | X | - | - | - | -
+1299 | X | - | - | - | -
+1300 | X | - | - | - | -
+1301 | X | - | - | - | -
+1302 | X | - | - | - | -
+1303 | X | - | - | - | -
+1304 | X | - | - | - | -
+1305 | X | - | - | - | -
+1306 | X | - | - | - | -
+1307 | X | - | - | - | -
+1308 | X | - | - | - | -
+1309 | X | - | - | - | -
+1310 | X | - | - | - | -
+1311 | X | - | - | - | -
+1312 | N | SCRIPT | N | - | crowd content in brief
+1313 | N | SET | N | - | flames from windows
+1314 | N | SET | N | - | bullet holes and craters
+1315 | N | SCRIPT | N | - | helicopter story beats
+1316 | N | SCRIPT | N | - | remove salesman
+1317 | N | OTHER | N | - | odd highlight on rider
+1318 | N | CAMERA | N | - | camera further back
+1319 | N | MOVE | N | - | eye movement
+1320 | N | MOVE | N | - | shrug acting
+1321 | N | TEXT | N | - | audio take
+1322 | N | TEXT | N | - | music
+1323 | N | SET | N | - | sandbag wall
+1324 | N | CLOTHES | N | - | hat colours
+1325 | N | BODY | P | - | build variety; parametric body helps
+1326 | N | SET | N | - | wall damage blending
+1327 | N | SET | N | - | sign on building
+1328 | N | SET | N | - | extra mopeds
+1329 | N | FACE | N | - | eye variety
+1330 | N | TEXT | N | - | audio take length
+1331 | N | FACE | N | - | hairstyles by gender
+1332 | N | BODY | Y | - | arm over head faded into hair
+1333 | N | SET | N | - | fire glow lighting
+1334 | N | SET | N | - | flame placement
+1335 | N | FACE | N | - | mouth and head moving with line
+1336 | N | MOVE | N | - | shrug and head shake
+1337 | N | CLOTHES | P | R | floating pocket on seated figure
+1338 | N | SET | N | - | frozen flares
+1339 | N | MOVE | N | - | vehicle speed
+1340 | N | TEXT | N | - | music ducking
+1341 | N | MOVE | N | - | shrug legibility
+1342 | N | SCRIPT | N | - | remove a character
+1343 | N | TEXT | N | - | on-screen number effect
+1344 | N | CLOTHES | N | - | remove sunglasses and visor
+1345 | N | TEXT | N | - | sound effects
+1346 | X | - | - | - | -
+1347 | N | MOVE | N | - | start action mid-throw
+1348 | N | SCRIPT | N | - | fill empty space with crowd
+1349 | N | MOVE | N | - | canister landing
+1350 | N | FACE | N | - | skin variety
+1351 | N | MOVE | N | - | throws too in sync
+1352 | N | SET | N | - | press hut replaced
+1353 | N | MOVE | N | - | police static
+1354 | N | CLOTHES | N | - | clothing variety
+1355 | N | SET | N | - | rock size
+1356 | N | SET | N | - | smoke drift
+1357 | N | MOVE | N | - | crowd sliding backwards
+1358 | N | MOVE | N | - | timing of scene beats
+1359 | X | - | - | - | -
+1360 | X | - | - | - | -
+1361 | X | - | - | - | -
+1362 | X | - | - | - | -
+1363 | X | - | - | - | -
+1364 | X | - | - | - | -
+1365 | X | - | - | - | -
+1366 | X | - | - | - | -
+1367 | X | - | - | - | -
+1368 | X | - | - | - | -
+1369 | X | - | - | - | -
+1370 | X | - | - | - | -
+1371 | X | - | - | - | -
+1372 | N | SCRIPT | N | - | action closer to statue
+1373 | N | BODY | P | - | police variety in build
+1374 | N | SET | N | - | stone look
+1375 | N | SCRIPT | N | - | gap between groups
+1376 | N | SET | N | - | remove bikes, vehicle path
+1377 | N | MOVE | N | - | robotic uniform movement
+1378 | N | SET | N | - | burning car
+1379 | N | SET | N | - | missile variety
+1380 | X | - | - | - | -
+1381 | N | TEXT | N | - | intensity heading
+1382 | N | TEXT | N | - | sign text fit
+1383 | N | TEXT | N | - | hook text style
+1384 | N | FACE | N | - | face and skin variety
+1385 | N | FACE | N | - | bald head shape
+1386 | N | TEXT | N | - | sign font
+1387 | N | SCRIPT | N | - | scene length, keys raised
+1388 | N | SET | N | - | building gaps
+1389 | N | SET | N | - | fireworks thrown
+1390 | N | SET | N | - | burning skip
+1391 | N | SET | N | - | police rank placement
+1392 | N | CLOTHES | N | - | hats on crowd
+1393 | N | TEXT | N | - | number size
+1394 | N | TEXT | N | - | ding sound
+1395 | X | - | - | - | -
+1396 | N | MOVE | N | - | police advance beat
+1397 | N | TEXT | N | - | fireworks sound
+1398 | X | - | - | - | -
+1399 | N | SET | N | - | more foreground protesters
+1400 | N | MOVE | N | - | sign man action
+1401 | N | MOVE | N | - | looters vanishing mid-frame
+1402 | N | SET | N | - | window hits
+1403 | N | CLOTHES | N | - | rioter clothing variety
+1404 | N | MOVE | N | - | looters fleeing directions
+1405 | N | MOVE | N | - | board flies further

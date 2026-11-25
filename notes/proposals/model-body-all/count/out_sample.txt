@@ -1,0 +1,200 @@
+9 | N | SET | N | - | water effects, not body
+25 | N | FACE | N | - | head expressions stay hand-drawn
+47 | N | SET | N | - | fire layer drawn over chair
+77 | N | HANDS | N | - | hands stay hand-drawn circles
+81 | N | FACE | N | R | turned heads must match a freely turning body
+96 | N | BODY | P | - | arms off wrong shoulder fixed; mouth and neck partly
+99 | N | MOVE | N | - | acting continuation choice
+102 | N | MOVE | N | - | timing of hands arriving
+111 | N | CAMERA | N | - | shot choice
+119 | N | MOVE | N | - | beating action brief
+121 | N | MOVE | N | - | staging and acting brief
+122 | N | CAMERA | N | - | camera push
+123 | N | TEXT | N | - | no sound effects
+125 | X | - | - | - | -
+127 | X | - | - | - | -
+129 | X | - | - | - | -
+134 | X | - | - | - | -
+141 | N | BODY | P | - | proportions fixed by body; mouths and heads not
+144 | N | MOVE | N | - | which way people face
+149 | N | FACE | N | - | front-on face choice, mouth missing
+150 | N | BODY | P | - | neck join helped; huge heads not
+159 | N | CAMERA | N | - | zoom target; neck join minor
+166 | N | CAMERA | N | - | camera approach
+168 | N | CAMERA | N | - | crowd staging
+170 | N | TEXT | N | - | subtitle wording
+177 | N | CONTACT | P | - | sitting contact better if chair solid too
+186 | N | FACE | N | - | house face not used
+192 | N | MOVE | N | - | acting brief misread
+193 | N | SET | N | - | chairs removed
+200 | N | TEXT | N | - | sound and music
+212 | N | CLOTHES | N | - | armour detail
+213 | N | MOVE | N | - | acting stress level
+240 | N | SET | N | - | poster in window
+242 | N | TEXT | N | - | sound tail
+254 | N | TEXT | N | - | caption font
+258 | N | CAMERA | N | - | shot staging
+265 | N | SET | N | - | scroll and gust effects
+273 | N | SET | N | - | map elements
+281 | N | BODY | P | R | lying pose helped; face-down head hard to draw
+296 | N | CAMERA | N | - | showstopper shot
+299 | N | MOVE | N | - | dog attack action
+309 | N | FACE | N | - | look and skin
+310 | N | MOVE | N | - | timing
+312 | N | SET | N | - | magic light
+338 | N | SET | N | - | pigeons
+341 | X | - | - | - | -
+345 | X | - | - | - | -
+361 | X | - | - | - | -
+369 | N | BODY | P | - | lying pose helped; clothes and vomit not
+371 | N | CONTACT | N | - | drool effect, not body
+374 | N | SET | N | - | lighting
+385 | N | SET | N | - | whales
+422 | N | CAMERA | N | - | cut and direction
+440 | X | - | - | - | -
+447 | N | SET | N | - | wreck effects
+453 | N | FACE | N | - | whale brow
+458 | N | MOVE | N | - | flight arc
+473 | X | - | - | - | -
+476 | X | - | - | - | -
+478 | X | - | - | - | -
+493 | N | FACE | N | - | stubble
+500 | N | SCRIPT | N | - | screenplay order
+508 | X | - | - | - | -
+509 | X | - | - | - | -
+539 | X | - | - | - | -
+553 | N | MOVE | N | - | acting lacks imagination
+570 | N | CAMERA | N | - | framing and panel over face
+571 | N | HANDS | N | R | circle hands look odd on realistic arms
+578 | N | SET | N | - | hydrant drawing
+583 | N | CONTACT | P | - | passing through walls needs solid set too
+589 | X | - | - | - | -
+590 | X | - | - | - | -
+594 | N | SET | N | - | stripe size
+614 | X | - | - | - | -
+615 | X | - | - | - | -
+632 | N | SET | N | - | cop cars in window
+635 | X | - | - | - | -
+643 | X | - | - | - | -
+644 | X | - | - | - | -
+653 | N | CLOTHES | P | R | print turns with body; real garments needed
+664 | N | MOVE | N | - | cars spinning
+697 | X | - | - | - | -
+701 | X | - | - | - | -
+704 | N | TEXT | N | - | hook text
+711 | N | CLOTHES | N | - | costume colours
+718 | X | - | - | - | -
+728 | N | MOVE | N | - | brow and head acting
+735 | N | MOVE | N | - | shrug acting
+741 | N | MOVE | N | - | arm wave gesture
+749 | N | MOVE | N | - | expressiveness of gestures
+757 | N | CAMERA | N | - | cut back
+763 | N | TEXT | N | - | subtitle
+780 | N | FACE | N | - | hair strands
+791 | X | - | - | - | -
+801 | X | - | - | - | -
+804 | N | FACE | N | - | character look
+808 | N | MOVE | N | - | action timing
+809 | N | CLOTHES | N | - | hood and cloak
+813 | N | CONTACT | P | - | crouch on seat helped if seat solid
+815 | N | TEXT | N | - | bleep sound
+816 | N | TEXT | N | - | Hebrew captions
+818 | X | - | - | - | -
+823 | N | MOVE | N | - | nod acting
+851 | N | CONTACT | P | - | piled pieces resting needs solid pieces
+857 | N | FACE | N | - | character design
+859 | X | - | - | - | -
+864 | X | - | - | - | -
+870 | X | - | - | - | -
+876 | X | - | - | - | -
+882 | N | BODY | Y | - | arm in front of badge: one depth order
+889 | N | CONTACT | P | - | arm behind gun; gun is flat prop
+913 | N | SET | N | - | table legs and shadow
+920 | N | MOVE | N | - | eyes and mouths at end
+929 | N | CAMERA | N | - | seating angles
+935 | N | CAMERA | N | - | wide view seats
+936 | N | SET | N | - | chairs wrongly added
+946 | N | SCRIPT | N | - | game content
+954 | N | CAMERA | N | - | high angle
+971 | N | MOVE | N | - | beam sweep
+994 | N | FACE | N | - | Dragonite face design
+1002 | N | FACE | N | - | mouth closed
+1012 | N | SCRIPT | N | - | line removed
+1014 | N | MOVE | N | - | acting beat
+1017 | N | TEXT | N | - | hiss in sound
+1018 | N | MOVE | N | - | eye movement
+1040 | X | - | - | - | -
+1049 | N | SET | N | - | lighting
+1056 | N | FACE | N | - | skin and facial hair
+1076 | X | - | - | - | -
+1089 | N | SCRIPT | N | - | police arrive
+1095 | N | SCRIPT | N | - | vehicle action
+1098 | N | TEXT | N | - | subtitle wording
+1108 | N | CONTACT | P | - | sign through shoulders; sign is flat prop
+1122 | N | SET | N | - | crowd arrangement
+1126 | N | CAMERA | N | - | shot choice
+1127 | N | SET | N | - | building drawing order
+1129 | N | SET | N | - | lion drawing
+1141 | N | OTHER | N | - | people disappearing from frame
+1143 | N | OTHER | N | - | officer jumps out of frame
+1146 | N | FACE | N | - | expressions too uniform
+1148 | N | MOVE | N | - | action too quick to read
+1156 | N | CONTACT | P | - | door through body needs solid door
+1159 | N | FACE | N | - | mouth open
+1160 | N | MOVE | N | - | pacing behaviour
+1170 | X | - | - | - | -
+1174 | N | SET | N | - | prop drawing order
+1177 | N | SCRIPT | N | - | add robot
+1182 | N | SET | N | - | damage effects
+1184 | N | CONTACT | P | - | gun over back; prop flat, arms depth helped
+1188 | N | CONTACT | P | - | gun over back; prop flat, arms depth helped
+1192 | N | SET | N | - | flash style
+1194 | N | SET | N | - | arrow in wall
+1200 | N | MOVE | N | - | robot swipe
+1207 | N | MOVE | N | - | door timing
+1218 | N | SET | N | - | spark size
+1248 | X | - | - | - | -
+1249 | N | CAMERA | N | - | camera path
+1252 | N | SET | N | - | room dimensions
+1265 | N | MOVE | N | - | acting look down
+1268 | N | FACE | N | - | expression
+1285 | N | FACE | N | - | expression
+1292 | N | FACE | N | - | expression
+1309 | X | - | - | - | -
+1326 | N | SET | N | - | craters on building
+1334 | N | SET | N | - | flames placement
+1342 | N | SCRIPT | N | - | remove character
+1349 | N | SCRIPT | N | - | canister landing place
+1361 | X | - | - | - | -
+1369 | X | - | - | - | -
+1370 | X | - | - | - | -
+1385 | N | FACE | N | - | bald head size
+1394 | N | TEXT | N | - | sound
+1396 | N | MOVE | N | - | police advance
+1397 | N | TEXT | N | - | sound
+1399 | N | SCRIPT | N | - | more protesters
+1415 | N | MOVE | N | - | miming action
+1424 | X | - | - | - | -
+1428 | N | CONTACT | P | - | kick lands on sign; sign flat
+1432 | N | SCRIPT | N | - | new scene
+1437 | X | - | - | - | -
+1447 | X | - | - | - | -
+1459 | X | - | - | - | -
+1468 | X | - | - | - | -
+1494 | N | FACE | N | - | front-on close-up mouths
+1498 | N | MOVE | N | - | bouncing and brows
+1513 | N | TEXT | N | - | sound
+1516 | N | MOVE | N | - | flip timing
+1551 | N | SCRIPT | N | - | scene content
+1566 | N | MOVE | N | - | acting
+1574 | N | BODY | Y | - | arms pump forward; limb toward lens
+1592 | X | - | - | - | -
+1598 | N | MOVE | N | - | pose variety acting
+1617 | X | - | - | - | -
+1627 | N | CAMERA | N | - | cut closer
+1633 | N | TEXT | N | - | hook text
+1635 | N | CAMERA | N | - | framing
+1672 | X | - | - | - | -
+1676 | N | BODY | Y | - | female build on proper body
+1678 | X | - | - | - | -
+1682 | X | - | - | - | -
