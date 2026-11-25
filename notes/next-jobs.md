@@ -41,7 +41,8 @@ Each waits until Sam names it. No chat starts one, opens a chat for one, or asks
     standing length (people_parts.workwear_torso) and the short top's seat piece drew a box (body.trouser_seat r7):
     both new-films only. (4) 3 blind judges: notes/learn/seated/judge/results-r7.md. Sheet: r7-before-after-v2.jpg. Next (chat 3, Opus high): the judges' faults, fix the drawing: crossed top leg's shoe a floating lump and the knee
     join; front-view trouser legs too thin (cloth, not calves; show the lap); women seated read as men from the front
-    and side (Kemi). Then fresh judges again (judge_r7.py). Needs Sam: 3 phone photos (asked, chat 2; Commons answers the web-fetch helper now, so chat 3 tries it too).
+    and side (Kemi). Then fresh judges again (judge_r7.py). Also (Sam "1 Y", 25 Nov): kit-test results kept per run,
+    each test written as it ends, a restart re-runs only the unfinished; proposal route first, then build. Needs Sam: 3 phone photos (asked, chat 2; Commons answers the web-fetch helper now, so chat 3 tries it too).
     Read: this entry; results-r7.md; views.py "R7: the seated lower body". Open rule requests: none. Branches named, not R7's:
     open-wounds-chat14 (Open Wounds' chain), gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz (notes/brexit-is-done.md). For Claude: seat_r7.
 
