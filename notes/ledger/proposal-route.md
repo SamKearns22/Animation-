@@ -2,7 +2,7 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 144.0%; 68 chats, 0 rounds, 2 notes, 0 repeated.**
+**Estimate ?% of a week; spent 145.06%; 69 chats, 0 rounds, 2 notes, 0 repeated.**
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -76,6 +76,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-25 | 684643bb | est | opus | auto |  | 0.25 |  | 0 | 0 |
 | 2026-11-25 | b2f8e1d1 | est | opus | auto |  | 2.23 |  | 0 | 0 |
 | 2026-11-25 | f33b5119 | est | opus | tool job: kit-tests-per-film (rule 90) built |  | 2.46 |  | 0 | 0 |
+| 2026-11-25 | cf96c026 | est | opus | auto |  | 1.06 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-16 83ccf353 (auto): 18 steps, history 141k at the end; other 60.5%, page.py 26.5%, tool search 13%
@@ -132,6 +133,8 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-25 8fb22562 (auto): 97 steps, history 235k at the end; other 74.1%, tool search 19.6%, pictures 5.1%, whole-file .py read 1.2%
 - 2026-11-25 684643bb (auto): 17 steps, history 116k at the end; other 85.5%, tool search 14.5%
 - 2026-11-25 b2f8e1d1 (auto): 62 steps, history 194k at the end; other 66.4%, tool search 26.4%, renders 5.5%, pictures 1.8%
+- 2026-11-25 f33b5119 (tool job: kit-tests-per-film (rule 90) built): 73 steps, history 186k at the end; other 63.9%, tool search 29.7%, renders 6.5%
+- 2026-11-25 cf96c026 (auto): 30 steps, history 125k at the end; other 68.8%, tool search 29.3%, whole-file .py read 1.9%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-19 3a437266 (auto): Claude's words 33%, start-up floor 30.8%, new writes 20.8%, carried history 15.3%. Biggest origins: Claude's words 49.3%, start-up floor 30.8%, result: tool search 16.2%. Leftover 0%
@@ -163,9 +166,11 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-25 8fb22562 (auto): new writes 34.4%, Claude's words 23.5%, start-up floor 22.3%, carried history 19.8%. Biggest origins: Claude's words 39.4%, start-up floor 22.3%, cache re-write 17.6%. Leftover 0%
 - 2026-11-25 684643bb (auto): start-up floor 62.9%, Claude's words 21.5%, new writes 13%, carried history 2.7%. Biggest origins: start-up floor 62.9%, Claude's words 28%, result: tool search 5.7%. Leftover 0%
 - 2026-11-25 b2f8e1d1 (auto): start-up floor 39.4%, new writes 22.4%, carried history 19.7%, Claude's words 18.5%. Biggest origins: start-up floor 39.4%, Claude's words 28.4%, result: tool search 22.6%. Leftover 0%
+- 2026-11-25 f33b5119 (tool job: kit-tests-per-film (rule 90) built): start-up floor 32.5%, Claude's words 27.8%, new writes 21%, carried history 18.7%. Biggest origins: Claude's words 41.2%, start-up floor 32.5%, result: tool search 20.2%. Leftover 0%
+- 2026-11-25 cf96c026 (auto): start-up floor 41.1%, Claude's words 29.8%, new writes 22.7%, carried history 6.4%. Biggest origins: Claude's words 41.2%, start-up floor 41.1%, result: tool search 12.6%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 6% of the film (8.35% of a week over 29 chats: start 8.22, re-learning 0.13; 0.29% a chat; step-1 context re-read is 23% of a chat on average).
+A new chat's start and re-learning cost 6% of the film (8.78% of a week over 31 chats: start 8.63, re-learning 0.15; 0.28% a chat; step-1 context re-read is 24% of a chat on average).
 - 2026-11-19 3a437266: step-1 context 82k; first real work at step 15 (0.26% of a week); read before it: source/stepcost.py 4.6k, notes/proposals/cost-other/milburn-usage.md 1.6k, source/propose.py 1.1k, notes/proposals/cost-other.md 0.9k, notes/proposals/cold-start.md 0.9k, source/ledger.py 0.7k
 - 2026-11-19 3498a80f: step-1 context 83k; first real work at step 31 (0.44% of a week); read before it: source/preflight.py 5.6k, source/posecheck.py 2.2k, source/milburn.py 1.9k, notes/proposals/front-on-focus/retirement-and-handover.md 1.1k, source/film_engine.py 1k, guides/job-packs.md 0.7k
 - 2026-11-19 6a247f23: step-1 context 82k; first real work at step None (None% of a week); read before it: notes/archive/milburn.md 2.8k, source/checkreplay.py 0.9k, notes/proposals/check-catches/replay/milburn.md 0.4k, notes/proposals/check-catches/replay/blessed.md 0.3k, notes/proposals/check-catches/replay/protest-tiers.md 0k
@@ -195,3 +200,5 @@ A new chat's start and re-learning cost 6% of the film (8.35% of a week over 29 
 - 2026-11-25 8fb22562: step-1 context 84k; first real work at step 21 (0.35% of a week); read before it: source/views.py 5.1k, /tmp/claude-0/-home-user-Animation-/8fb22562-2012-5455-bc1d-896667f626bf/scratchpad/before.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/8fb22562-2012-5455-bc1d-896667f626bf/scratchpad/t1.jpg 1.6k, notes/learn/seated/sheet_r7.py 0.8k, notes/next-jobs.md 0.5k, notes/learn/seated/judge/results-r7c3.md 0.5k
 - 2026-11-25 684643bb: step-1 context 102k; first real work at step None (None% of a week); read before it: source/arm3d_film.py 0.4k, source/bench_blender.py 0.4k
 - 2026-11-25 b2f8e1d1: step-1 context 98k; first real work at step None (None% of a week); read before it: notes/proposals/solid-body-moves.md 3.4k, notes/next-jobs.md 2.7k, notes/proposal-route.md 2.7k, notes/bench/learn-step.md 2.6k, guides/job-packs.md 2.2k, notes/learn/seated/examples/sam-25nov-v4-legs-awful-1.jpg 1.6k
+- 2026-11-25 f33b5119: step-1 context 84k; first real work at step 19 (0.26% of a week); read before it: notes/proposals/kit-tests-when.md 2.6k, source/kittests.py 2.6k, source/finish.py 1.5k, source/handover.py 1.2k, .claude/hooks/setup.sh 0.7k, source/kitstamps.py 0.7k
+- 2026-11-25 cf96c026: step-1 context 84k; first real work at step 12 (0.15% of a week); read before it: source/propose.py 1.6k, source/handover.py 1.3k, notes/proposals/model-body-all.md 1.2k, story/status.md 0.4k, notes/ledger/sam 0.2k
