@@ -11,3 +11,6 @@ What is a full kit test run
 ### 2026-11-25T07:37:03
 Isn't this quite expensive and time consuming? Is there a better way?
 
+### 2026-11-25T07:37:59
+What do you mean each chat runs the full set when it starts?
+
