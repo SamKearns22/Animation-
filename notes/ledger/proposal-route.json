@@ -17782,18 +17782,18 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.75,
+   "cost": 1.13,
    "src": "estimate",
    "sid": "session_01U3pKQzzZMT2mVma5pKs3XU",
-   "steps": 24,
-   "hist_k": 125,
+   "steps": 27,
+   "hist_k": 126,
    "kinds": {
-    "tool search": 31.9,
-    "other": 68.1
+    "tool search": 31.1,
+    "other": 68.9
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 22,
+    "tool search": 23,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
@@ -17802,36 +17802,36 @@
     "other": 4
    },
    "split": {
-    "usd": 1.1403,
-    "total": 1.1403,
+    "usd": 1.2257,
+    "total": 1.2257,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 45.1,
-     "new writes": 28.6,
-     "Claude's words": 18.4,
-     "carried history": 7.9
+     "start-up floor": 45.7,
+     "new writes": 27.3,
+     "Claude's words": 17.8,
+     "carried history": 9.1
     },
     "origins": {
-     "start-up floor": 45.1,
-     "result: tool search": 27.4,
-     "Claude's words": 24.5,
-     "messages and reminders": 1.3,
+     "start-up floor": 45.7,
+     "result: tool search": 26.8,
+     "Claude's words": 24.2,
+     "messages and reminders": 1.6,
      "Claude's edits": 0.9,
-     "result: other": 0.8
+     "result: other": 0.7
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 45.1,
-     "reading notes": 12.2,
-     "commands": 10.6,
-     "start-up and handover tools": 9.6,
-     "thinking": 5.6,
-     "writing notes": 5.1,
+     "start-up reading (rules, tools, first files)": 45.7,
+     "reading notes": 11.8,
+     "commands": 10.8,
+     "start-up and handover tools": 9.4,
+     "thinking": 5.3,
+     "writing notes": 4.8,
      "reading kit code": 2.9,
      "running checks and tools": 2.1,
-     "writing code": 1.5,
-     "messages to Sam": 1.3,
-     "helper and chat prompts": 1.3,
-     "messages and reminders": 1.3,
+     "messages and reminders": 1.6,
+     "messages to Sam": 1.5,
+     "writing code": 1.4,
+     "helper and chat prompts": 1.2,
      "helper results": 0.6,
      "renders": 0.4,
      "edit results": 0.1,
@@ -17848,60 +17848,60 @@
      [
       "notes/proposals/kit-tests-when.md",
       2.6,
-      0.0297
+      0.0312
      ],
      [
       "source/kittests.py",
       2.6,
-      0.0297
+      0.0312
      ],
      [
       "source/finish.py",
       1.5,
-      0.0154
+      0.0162
      ],
      [
       "source/handover.py",
       1.2,
-      0.0125
+      0.0131
      ],
      [
       ".claude/hooks/setup.sh",
       0.7,
-      0.0077
+      0.0081
      ],
      [
       "source/kitstamps.py",
       0.7,
-      0.0077
+      0.0081
      ],
      [
       "notes/proposals/kittest-resume.md",
       0.7,
-      0.0071
+      0.0074
      ],
      [
       "source/propose.py",
       0.7,
-      0.0071
+      0.0074
      ],
      [
       "notes/proposals/kit-tests-per-film.md",
       0.3,
-      0.0028
+      0.003
      ],
      [
       "notes/logs/handover-end.log",
       0.1,
-      0.0011
+      0.0012
      ],
      [
       "notes/logs/brexit-is-done-chats.log",
       0.1,
-      0.0011
+      0.0012
      ]
     ],
-    "base_pct": 30.8
+    "base_pct": 32.3
    },
    "search": {
     "show": 0,
@@ -17911,7 +17911,7 @@
     "other": {
      "other": 3,
      "shared:handover.py": 4,
-     "film notes": 1,
+     "film notes": 2,
      "shared:kittests.py": 4,
      "shared:kitstamps.py": 3,
      "shared:propose.py": 3,
@@ -18096,6 +18096,14 @@
       "shared:kittests.py",
       "source/kittests.py",
       "sed -n 5203,5255p source/kittests.py",
+      ""
+     ],
+     [
+      26,
+      "other",
+      "film notes",
+      "notes/proposals/kit-tests-per-film.md notes/proposals/kit-tests-per-film/ notes/",
+      "git add notes/proposals/kit-tests-per-film.md notes/proposals/kit-tests-per-film",
       ""
      ]
     ]
