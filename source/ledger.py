@@ -856,8 +856,9 @@ def coldstart(d):
     """cold-start change (Sam's Y, 19 Nov): the film-end line. Each chat's start (its cost up to the first real work)
     plus its re-learning (re-reading files the film's previous chat also read before ITS first real work), as % of
     the film. Checked against the app: a chat with the app's figure has its measured dollars set beside it."""
-    sys.path.insert(0, os.path.join(ROOT, '.claude', 'hooks'))
-    import costwatch
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.claude', 'hooks'))
+    import costwatch                  # the real hooks folder (a kit test's copied ROOT has none: it passed only when
+                                      # an earlier test had loaded costwatch; kit-tests-per-film run, 25 Nov)
     rows = [c for c in d['chats'] if c.get('start')]
     if not rows:
         return None
