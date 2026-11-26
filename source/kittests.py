@@ -3895,7 +3895,8 @@ def never_blame_long_chats():
     bad = ("Long chats and heavy reading look like a big cause, and that can be checked for about 1-2% of a week. "
            "This chat shows it: each step now costs over three times what it did at the start, because the history is long.")
     ok = "My own handover tool failed here: it should have opened the next chat at 100 steps and didn't."
-    plain = "The nod now turns the head; Kemi's legs part up to the crotch."
+    plain = ("The nod now turns the head; Kemi's legs part up to the crotch. I've recorded it: \"Stop telling me chats "
+             "are long unless you are admitting that your own tool is broken.\"")
     got = [k for k, _, _ in PW.faults(bad, [])]
     return (got.count('chatlong') >= 2 and not PW.faults(ok, []) and not PW.faults(plain, []),
             f'example: {got.count("chatlong")} stopped; owned failure passes; plain passes')

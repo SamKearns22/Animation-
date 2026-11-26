@@ -5,3 +5,4 @@
 {"chat": "686ea287", "event": "block", "faults": [["label", "R8"], ["word", "handover"]], "t": "2026-11-26 23:00"}
 {"chat": "5d708050", "event": "block", "faults": [["word", "handover"]], "t": "2026-11-26 23:03"}
 {"chat": "2fda13cc", "event": "block", "faults": [["word", "kit"]], "t": "2026-11-26 23:05"}
+{"chat": "2fda13cc", "event": "block", "faults": [["chatlong", "chats are long"]], "t": "2026-11-26 23:08"}

@@ -106,7 +106,7 @@ def faults(text, wordlist=None):
         for w in wl:
             if re.search(r'\b' + re.escape(w) + r's?\b', sent, re.I) and not explained(sent, w):
                 add('word', w, sent)
-        m = CHAT_LONG_RE.search(sent)
+        m = CHAT_LONG_RE.search(re.sub(r'"[^"]*"|\u201c[^\u201d]*\u201d', '', sent))   # Sam's own words quoted are not a claim
         if m and not OWN_TOOL_RE.search(sent):
             add('chatlong', m.group(0), sent)
     return out
