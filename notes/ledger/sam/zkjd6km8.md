@@ -18,3 +18,9 @@ How would you increase your ability to understand a screenplay when drawing/anim
 ### 2026-11-26T22:53:16
 Reserve job but just the beat sheet.
 
+### 2026-11-26T22:53:56
+If we made Netanyahoo today, a film I know cost 12%, how much would you predict it would cost us?
+
+### 2026-11-26T22:55:07
+That’s not a fair comparison as many of those films were bloated by expensive tool production.
+
