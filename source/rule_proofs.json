@@ -63,13 +63,13 @@
    "kind_before": "code"
   },
   "24": {
-   "rule": "The cost estimate and forecast (paused by you on 18 Nov).",
+   "rule": "The estimate, tracked quietly (the budget alarms deleted on your word, 26 Nov).",
    "status": "proven",
    "tests": [
-    "estimate_forecast_and_alarm",
-    "stage_share_stop"
+    "quiet_cost_line",
+    "cost_rows_reach_the_main_line"
    ],
-   "example": "kittest estimate_forecast_and_alarm: Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned",
+   "example": "kittest quiet_cost_line: the cost line is recorded at a handover and nothing is shown (no forecast, no warning, no stop: Sam 26 Nov, his answer 2)",
    "notes": "CR1 (stages never marked, notes never logged)",
    "kind_before": "code"
   },
@@ -1406,7 +1406,7 @@
    "The 3 lines at the bottom",
    "The Animation- project is always attached",
    "The brief is a checklist:",
-   "The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work on its job. I never start a chat or type a prompt unless it failed to save.",
+   "The chain stops only at a question for me, a failed save, or a chat that pushed no new work on its job. I never start a chat or type a prompt unless it failed to save.",
    "The channel is topical, absurdist news-of-the-week satire; every film is new.",
    "The cost watch (rule 85):",
    "The handover",
