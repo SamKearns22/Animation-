@@ -1,3 +1,3 @@
-R7 (seated full body): chat 14 fixed Sam's 5 notes (far leg, stray line, crotch tick, rugged knees, chair back) on May, Kemi and Blair; before/after sheets sent.
-Next: Sam's notes on the sheets, then the one pose command (C2) if he says Y.
-Sam: look at the three sheets; Q1 (full kit check) and C2 Y/N.
+R7 (seated full body): chat 14 fixed Sam's 5 notes; Sam found a new stray line on the three-quarter bottom and crossed legs still two colours.
+Next: chat 15 (Opus medium) fixes both, makes the loose-line check run on every view, resends the sheets.
+Sam: Q1 and C2 still open.
