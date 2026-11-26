@@ -22208,44 +22208,44 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 3.44,
+   "cost": 3.7,
    "src": "estimate",
    "sid": "session_01U3pKR1vBToEnKSzkJd6kM8",
-   "steps": 187,
-   "hist_k": 308,
+   "steps": 199,
+   "hist_k": 320,
    "kinds": {
     "film-file search": 1.4,
-    "tool search": 22.6,
-    "page.py": 0.3,
-    "renders": 1.2,
-    "pictures": 5.2,
-    "other": 69.3
+    "tool search": 21.6,
+    "page.py": 0.8,
+    "renders": 1.1,
+    "pictures": 5.1,
+    "other": 69.9
    },
    "calls": {
     "film-file search": 9,
-    "tool search": 105,
+    "tool search": 108,
     "whole-file .py read": 0,
-    "page.py": 1,
+    "page.py": 3,
     "routine": 0,
     "renders": 6,
     "pictures": 19,
     "other": 29
    },
    "split": {
-    "usd": 11.666,
-    "total": 11.666,
+    "usd": 12.6334,
+    "total": 12.6334,
     "floor_k": 85,
     "blocks": {
-     "carried history": 35.6,
-     "start-up floor": 25.9,
-     "Claude's words": 23.3,
-     "new writes": 15.3
+     "carried history": 36.7,
+     "start-up floor": 25.3,
+     "Claude's words": 23.0,
+     "new writes": 14.9
     },
     "origins": {
-     "Claude's words": 45.6,
-     "start-up floor": 25.9,
-     "result: tool search": 14.0,
-     "messages and reminders": 5.8,
+     "Claude's words": 46.0,
+     "start-up floor": 25.3,
+     "result: tool search": 13.8,
+     "messages and reminders": 6.2,
      "result: pictures": 5.4,
      "result: other": 1.3,
      "result: film-file search": 0.7,
@@ -22254,16 +22254,16 @@
      "result: renders": 0.1
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 25.9,
-     "thinking": 18.3,
-     "writing code": 9.2,
-     "reading kit code": 8.0,
+     "start-up reading (rules, tools, first files)": 25.3,
+     "thinking": 18.4,
+     "writing code": 9.0,
+     "reading kit code": 7.9,
      "commands": 7.9,
      "writing notes": 6.5,
-     "messages and reminders": 5.8,
+     "messages and reminders": 6.2,
      "looking at pictures": 5.4,
-     "reading notes": 4.0,
-     "messages to Sam": 3.6,
+     "messages to Sam": 4.2,
+     "reading notes": 4.1,
      "start-up and handover tools": 1.9,
      "other commands": 0.7,
      "running checks and tools": 0.6,
@@ -22283,60 +22283,60 @@
      [
       "source/views.py",
       3.2,
-      0.126
+      0.1328
      ],
      [
       "source/castsheet.py",
       2.8,
-      0.112
+      0.1181
      ],
      [
       "source/solid_seat.py",
       2.3,
-      0.0849
+      0.0899
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/2fda13cc-8d3c-5d22-ad09-f6a5b57482c2/scratchpad/kemi_front.png",
       1.6,
-      0.0626
+      0.0661
      ],
      [
       "notes/sam-notes/brexit-cast-v3/n8-camel-toe.jpg",
       1.6,
-      0.062
+      0.0655
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/2fda13cc-8d3c-5d22-ad09-f6a5b57482c2/scratchpad/kemi_crotch_zoom.png",
       1.6,
-      0.0615
+      0.0649
      ],
      [
       "/tmp/claude-0/-home-user-Animation-/2fda13cc-8d3c-5d22-ad09-f6a5b57482c2/scratchpad/may_crotch_zoom.png",
       1.6,
-      0.06
+      0.0635
      ],
      [
       "source/page.py",
       0.8,
-      0.0312
+      0.0329
      ],
      [
       "source/body.py",
       0.7,
-      0.0281
+      0.0297
      ],
      [
       "guides/job-packs.md",
       0.6,
-      0.0225
+      0.0237
      ],
      [
       "source/people.py",
       0.5,
-      0.0176
+      0.0186
      ]
     ],
-    "base_pct": 24.4
+    "base_pct": 24.0
    },
    "search": {
     "show": 1,
@@ -22346,8 +22346,8 @@
      "after show": 9
     },
     "other": {
-     "other": 41,
-     "shared:handover.py": 2,
+     "other": 43,
+     "shared:handover.py": 3,
      "shared:views.py": 12,
      "guides": 5,
      "shared:castsheet.py": 5,
@@ -23394,6 +23394,33 @@
       "PASS|FAIL",
       "",
       169
+     ],
+     [
+      169,
+      "other",
+      "shared:handover.py",
+      "guides/film-quality-rules.md guides/job-packs.md notes/brexit-is-done.md notes/n",
+      "wc -w CLAUDE.md guides/film-quality-rules.md guides/job-packs.md notes/brexit-is",
+      "",
+      222
+     ],
+     [
+      170,
+      "other",
+      "other",
+      "",
+      "git add -A; git commit -qm \"Chat 39: message log (automatic) Co-Authored-By: Cla",
+      "",
+      53
+     ],
+     [
+      172,
+      "other",
+      "other",
+      "",
+      "git add -A; git commit -qm \"Chat 39: message log (automatic) Co-Authored-By: Cla",
+      "",
+      53
      ]
     ]
    },
