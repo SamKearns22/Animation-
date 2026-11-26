@@ -56,6 +56,7 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - **Next:** chat 21, Opus medium: find which kit file started loading a film file (freeze.py count --list prints nothing for it) and fix it in the kit, or move the baseline only with Sam's Y; then Sonnet: python3 source/finish.py animations/drafts/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done (no new render needed), send, stop.
 - **Needs Sam:** typing "override" lets the animatic be finished now with the freeze check skipped (logged); otherwise it waits for chat 21.
 - **Read:** guides/job-packs.md Checks and animatic; source/freeze.py count.
+- **End check (chat 20), answered:** the GTA branches are GTA's; the CLAUDE.md SENTENCE lines are Sam's own edits, named since chat 1; FREEZE 20 to 21 is the open stop above; the RECORD line is my `preflight.py --help` (no run, saves nothing).
 - **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
@@ -141,4 +142,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 44.03% of 15%; forecast 52% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 46.49% of 15%; forecast 53.5% (2026-11-26)
