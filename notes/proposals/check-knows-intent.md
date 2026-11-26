@@ -1,6 +1,6 @@
 # Proposal: Checks that understand what the scene is trying to do
 
-Status: open
+Status: adopted, option 1 (Sam, 26 Nov, R8 chat: "1"); step 5 (the three resting-hand faults) discarded: Sam: "I don't see anything wrong their resting hands, discard."
 
 ## Problem
 The picture checks (hands, overlaps, rests, pop-ins) judge shapes only. They cannot tell something the scene intends (a crowd running past each other, guests through a doorway, hands behind a runner's body) from a real drawing mistake. They flag the intended, and each "this is fine" answer is tied to one person, second and exact wording, so when the drawing changes the same intended thing comes back as a new fault. Sam (26 Nov, chat 36): "The checks can't be stupid. They need to understand when something is intentional in the image. They need to be able to ask the image and the screenplay, when they are unsure, 'is this normal in the context of what we are trying to achieve'". Checks must also never lock out requested work (rule 93).
