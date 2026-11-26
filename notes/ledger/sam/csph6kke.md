@@ -15,3 +15,6 @@ The bald heads likely come from the shared crowd pack rather than an old drawing
 
 Definitely not the case as this was happening long before the crowd packs existed
 
+### 2026-11-26T15:20:33
+Hello, why are you rendering them again? Because we've already seen them and I said they were fine. Please take note of my message about the crowd packs.
+
