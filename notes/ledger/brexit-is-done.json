@@ -23170,6 +23170,424 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "5d708050",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.61,
+   "src": "estimate",
+   "sid": "session_01J1JB7VYqTs1XsNJB5FmWzH",
+   "steps": 40,
+   "hist_k": 153,
+   "kinds": {
+    "film-file search": 25.2,
+    "tool search": 8.7,
+    "page.py": 0.8,
+    "pictures": 1.5,
+    "other": 63.9
+   },
+   "calls": {
+    "film-file search": 17,
+    "tool search": 15,
+    "whole-file .py read": 0,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 2,
+    "other": 6
+   },
+   "split": {
+    "usd": 2.223,
+    "total": 2.223,
+    "floor_k": 83,
+    "blocks": {
+     "start-up floor": 35.4,
+     "Claude's words": 27.8,
+     "new writes": 25.3,
+     "carried history": 11.5
+    },
+    "origins": {
+     "Claude's words": 39.6,
+     "start-up floor": 35.4,
+     "result: film-file search": 10.9,
+     "result: other": 5.6,
+     "result: tool search": 4.9,
+     "result: pictures": 1.5,
+     "messages and reminders": 1.1,
+     "result: page.py": 1.0
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 35.4,
+     "thinking": 21.3,
+     "commands": 8.8,
+     "reading film code": 6.2,
+     "reading chat records": 5.6,
+     "reading notes": 5.4,
+     "writing notes": 4.5,
+     "writing code": 3.8,
+     "start-up and handover tools": 3.2,
+     "looking at pictures": 1.5,
+     "messages to Sam": 1.3,
+     "reading kit code": 1.2,
+     "messages and reminders": 1.1,
+     "other commands": 0.4,
+     "running checks and tools": 0.3
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 83,
+    "work_step": 24,
+    "work_pct": 0.38,
+    "reads": [
+     [
+      "source/brexit_is_done_action.py",
+      6.2,
+      0.073
+     ],
+     [
+      "story/brexit-is-done-places.txt",
+      1.7,
+      0.0246
+     ],
+     [
+      "source/page.py",
+      0.8,
+      0.0122
+     ],
+     [
+      "source/staging.py",
+      0.8,
+      0.0099
+     ],
+     [
+      "story/brexit-is-done-staging.txt",
+      0.6,
+      0.008
+     ],
+     [
+      "source/places.py",
+      0.2,
+      0.0028
+     ]
+    ],
+    "base_pct": 26.4
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 3,
+     "after show": 14
+    },
+    "other": {
+     "other": 5,
+     "shared:handover.py": 1,
+     "shared:staging.py": 3,
+     "film notes": 3,
+     "shared:places.py": 1,
+     "shared:places_site.py": 1,
+     "shared:rough.py": 1
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch -q origin cl",
+      "",
+      142
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout -q -B claude/open-wounds-shot-2-a7cfu2 origin/claude/create-claude-",
+      "",
+      8289
+     ],
+     [
+      3,
+      "film",
+      "miss",
+      "story/brexit-is-done-places.txt notes/brexit-is-done.md",
+      "framing 2\\|third closer\\|staging.py",
+      "",
+      6879
+     ],
+     [
+      4,
+      "other",
+      "shared:staging.py",
+      "source/staging.py story/*.json notes/*stag*",
+      "framing 2\\|third",
+      "",
+      36
+     ],
+     [
+      5,
+      "other",
+      "shared:staging.py",
+      "story/staging-picks.json source/staging.py",
+      "site\\|framing\\|brexit",
+      "",
+      306
+     ],
+     [
+      6,
+      "film",
+      "miss",
+      "story/brexit-is-done-staging.txt",
+      "shot 2\\|site\\|framing\\|pick",
+      "",
+      698
+     ],
+     [
+      7,
+      "film",
+      "miss",
+      "story/brexit-is-done-staging.txt notes/archive/brexit-is-done*.md notes/brexit-i",
+      "third closer\\|a third nearer\\|framing 2\\|closer.*option\\|options 2",
+      "",
+      2321
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "",
+      "kemi-options\\|options.*site",
+      "",
+      31
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/archive/brexit-is-done-handovers.md",
+      "a third\\|0\\.67\\|2/3\\|options",
+      "",
+      2086
+     ],
+     [
+      11,
+      "other",
+      "shared:staging.py",
+      "source/staging.py",
+      "sed -n 1,35p source/staging.py",
+      "",
+      3040
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "option|framing|closer|stag",
+      "",
+      530
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "framing|option|closer",
+      "",
+      2852
+     ],
+     [
+      14,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "^[A-Z_]+ *=|\\bd=|'d'|depth|LIFT|ATTACK|people_d|place_d",
+      "",
+      9698
+     ],
+     [
+      15,
+      "film",
+      "after show",
+      "source/brexit_is_done.py source/places.py source/film_engine.py source/places*.p",
+      "^W *=\\|^W, H\\|W, H =",
+      "",
+      190
+     ],
+     [
+      16,
+      "other",
+      "shared:places.py",
+      "source/places.py",
+      "sed -n 570,600p source/places.py",
+      "",
+      936
+     ],
+     [
+      19,
+      "other",
+      "other",
+      "notes/logs/brexit-is-done-show.log notes/logs/*brexit*",
+      "option\\|closer\\|framing",
+      "",
+      302
+     ],
+     [
+      20,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py source/brexit_is_done.py",
+      "places_site\\|site_actors\\|'site'",
+      "",
+      3555
+     ],
+     [
+      21,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py source/places_site.py",
+      "def scaffold\\|bay\\|standard",
+      "",
+      6152
+     ],
+     [
+      22,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      "[0-9]+\\.[0-9]+|x=|11\\.0",
+      "",
+      3271
+     ],
+     [
+      23,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py source/places.py",
+      "LIFT_D|ATTACK\\b|ATTACK\\[|BAR_MEN|RUN_FROM|24\\.95|LIFT_D",
+      "",
+      2277
+     ],
+     [
+      24,
+      "film",
+      "after show",
+      "story/brexit-is-done-places.txt",
+      "); continue\n    # depth\n    def dep(m):\n        if ",
+      "",
+      4453
+     ],
+     [
+      25,
+      "other",
+      "shared:places_site.py",
+      "source/places_site.py",
+      "dd *=",
+      "",
+      1069
+     ],
+     [
+      26,
+      "film",
+      "after show",
+      "story/brexit-is-done-places.txt",
+      " \\\n -e ",
+      "",
+      1069
+     ],
+     [
+      28,
+      "film",
+      "after show",
+      "source/brexit_is_done_action.py",
+      ",\n    ",
+      "",
+      551
+     ],
+     [
+      29,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "argv\\|'still'\\|'frame'\\|def main",
+      "",
+      450
+     ],
+     [
+      30,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "S=/tmp/claude-0/-home-user-Animation-/5d708050-6411-5fe3-bdbe-955d25fd7220/scrat",
+      "",
+      591
+     ],
+     [
+      33,
+      "other",
+      "shared:rough.py",
+      "source/rough.py",
+      "mkdir -p animations/drafts && time python3 source/rough.py board brexit-is-done ",
+      "",
+      392
+     ],
+     [
+      35,
+      "other",
+      "film notes",
+      "notes/*.md",
+      "moved back to 26 m",
+      "",
+      30
+     ],
+     [
+      36,
+      "film",
+      "after show",
+      "story/brexit-is-done-board.txt source/rough.py",
+      "\"",
+      "",
+      247
+     ],
+     [
+      38,
+      "film",
+      "after show",
+      "source/rough.py source/staging.py source/brexit_is_done.py",
+      "python3 source/rough.py sent brexit-is-done /tmp/claude-0/-home-user-Animation-/",
+      "",
+      1200
+     ],
+     [
+      39,
+      "film",
+      "after show",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md guides/job-pac",
+      "Notes round",
+      "",
+      151
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge --no-edit -q FET",
+      "",
+      31
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
