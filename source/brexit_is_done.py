@@ -48,17 +48,74 @@ FILM = 'brexit-is-done'
 NOTES = os.path.join(os.path.dirname(HERE), 'notes', 'brexit-is-done.md')
 HAS = {'people', 'rooms', 'props'}
 FPS = 12
-LINES = [   # stand-in timing (Sam's pace, 3.3 words a second) until his recordings set the clock
-    dict(who='may', text='The Prime Minister would do well to remember that we had a referendum, and in that '
-                         'referendum, the British Public chose wolves.', start=0.6, end=7.0),
-    dict(who='kemi', text='Andy Burnham needs to spend less time trying to take us backwards and more time doing his '
-                          'job: reducing the number of British people with their faces chewed off.', start=8.1, end=16.9),
-    dict(who='blair', text="Well, in my opinion, you shouldn't listen to anything I say, I'm Tony Blair, I invaded "
-                           "Iraq, I belong in The Hague.", start=18.0, end=24.6),
+# Sam's recordings set the clock (chat 29, 26 Nov, note 18): each line's words are as he says them on the take (the
+# captions follow the voice), their times heard by speech-to-text (source/words.py, saved beside each take). Kemi's one
+# line is two takes, back to back: Kemi.m4a ("...his job.") then Kemi_2.m4a ("reducing ... chewed off").
+LINES = [
+    dict(who='may', takes=['May'], text='The Prime Minister would do well to remember that we had a referendum, and in '
+                                        'that referendum, the British public chose wolves.'),
+    dict(who='kemi', takes=['Kemi', 'Kemi_2'], text='Andy Burnham needs to spend less time trying to take us backwards '
+         'and more time trying to do his job. Reducing the number of British citizens with their faces chewed off.'),
+    dict(who='blair', takes=['Tony'], text="Well, in my opinion, you shouldn't listen to anything I say. I'm Tony Blair. "
+                                           "I invaded Iraq. I belong in The Hague."),
 ]
-SHOTS = [('1', 0.0, 7.5), ('2', 7.5, 17.5), ('3', 17.5, 26.9)]
+SOUNDS = os.path.join(os.path.dirname(HERE), 'sounds', 'brexit-is-done')
+PRE = {'may': 0.6, 'kemi': 0.6, 'blair': 0.5}      # from the cut to the first word (May's hook: moving from frame 1)
+POST = {'may': 0.5, 'kemi': 0.6}                   # from the last word to the cut
+TAKE_GAP = 0.35                                    # Kemi's breath between her two takes
+GRIN_AFTER, LUNGE_AFTER_GRIN = 0.4, 1.5            # Blair: the grin 0.4 s after his last word, the wolf 1.5 s later
+SR = 48000
+
+
+def _voices():
+    """Each line's voice (hum and hiss out, the silence round the words trimmed, set to one loudness) and its words'
+    times in seconds from the line's first sound."""
+    import numpy as np
+    import burnham_film as BF
+    import mossad_audio as MA
+    import words as WD
+    out = []
+    for ln in LINES:
+        parts, ws, t = [], [], 0.0
+        for k, name in enumerate(ln['takes']):
+            path = os.path.join(SOUNDS, name + '.m4a')
+            x = MA.denoise(MA.dehum(BF.load(path)))
+            st = MA.pauses(x, 0.12)
+            a, b = max(0.0, st[0][0] - 0.05), min(len(x) / SR, st[-1][1] + 0.08)
+            seg = x[int(a * SR):int(b * SR)]
+            parts.append(seg * 10 ** ((-20.0 - MA.lufs(seg)) / 20))
+            for w0, w1, w in WD.times(path):
+                w0, w1 = max(w0, a + 0.05), min(w1, b)       # speech-to-text puts a take's first word at 0.00
+                ws.append((t + w0 - a, t + max(w1, w0 + 0.06) - a, w))
+            t += len(seg) / SR
+            if k < len(ln['takes']) - 1:
+                parts.append(np.zeros(int(TAKE_GAP * SR)))
+                t += TAKE_GAP
+        y = np.concatenate(parts)
+        k_out = int(0.1 * SR)
+        y[-k_out:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, k_out))   # a soft 100 ms fade at the very end
+        out.append((y, ws))
+    return out
+
+
+SHOTS, _t = [], 0.0
+for _i, (_ln, (_v, _w)) in enumerate(zip(LINES, _voices())):
+    _ln['_voice'], _ln['start'] = _v, _t + PRE[_ln['who']]
+    _ln['end'] = _ln['start'] + len(_v) / SR
+    _ln['words'] = [(a + _ln['start'], b + _ln['start'], w) for a, b, w in _w]
+    if _ln['who'] == 'blair':
+        T = {'grin': round(_ln['end'] + GRIN_AFTER, 3)}
+        T['lunge'] = round(T['grin'] + LUNGE_AFTER_GRIN, 3)
+        _cut = T['lunge'] + (9.4 - ACT.LUNGE_T)          # the wolf's leap keeps its own time before the cut
+        ACT.LUNGE_T = T['lunge'] - _t                    # shot time, as the action file reads it
+    else:
+        _cut = _ln['end'] + POST[_ln['who']]
+    SHOTS.append((str(_i + 1), round(_t, 3), round(_cut, 3)))
+    _t = _cut
 DUR = SHOTS[-1][2]
-T = {'chose_wolves': 6.0, 'grin': 25.0, 'lunge': 26.5}
+# The chase behind Blair was built and approved on a 9.4 s shot ending on the lunge; Sam's take makes the shot longer,
+# so the chase starts later by the difference and plays as approved, right up to the lunge (chat 29).
+CHASE_DELAY = max(0.0, round((SHOTS[2][2] - SHOTS[2][1]) - 9.4, 3))
 SHOT_CAST = {'1': ['may'], '2': ['kemi'], '3': ['blair']}
 SHOT_MARKS = SHOT_CAST                 # rule 38: who the front-on check looks at, per shot
 # rule 38: all three are turned to the unseen interviewer off-frame left (item 14), the interview look Sam locked on
@@ -67,13 +124,13 @@ THREE_QUARTER_OK = [('1', 'may', 'locked by Sam: the interview look, turned to t
                     ('2', 'kemi', 'locked by Sam: the interview look, turned to the interviewer off-frame left (item 14)'),
                     ('3', 'blair', 'locked by Sam: the interview look, turned to the interviewer off-frame left (item 14)')]
 # rule 78: Blair's forearms rest on the wing chair's arms between gestures (the acting list: 'hands on its arms')
-RESTS = [('*Blair*.forearmL', 'armrest', 17.5, 26.9, "Blair's left forearm on the wing chair's arm between gestures"),
-         ('*Blair*.forearmR', 'armrest', 17.5, 26.9, "Blair's right forearm on the wing chair's arm between gestures")]
+RESTS = [('*Blair*.forearmL', 'armrest', SHOTS[2][1], SHOTS[2][2], "Blair's left forearm on the wing chair's arm between gestures"),
+         ('*Blair*.forearmR', 'armrest', SHOTS[2][1], SHOTS[2][2], "Blair's right forearm on the wing chair's arm between gestures")]
 # rule 41 exceptions (reasons in the notes' Exceptions): a side-on runner's far hand passes behind his body for one
 # drawing at the back of each swing (chat 19: seen full size, the arm reads swinging; the figure is 40 px tall)
-HANDS_OK = [("*workers 2", 'R', 'no hand', 7.5, 17.5, "the side-on runner's far hand passes behind his body at the "
+HANDS_OK = [("*workers 2", 'R', 'no hand', SHOTS[1][1], SHOTS[1][2], "the side-on runner's far hand passes behind his body at the "
              "back of each swing, as a real runner's does (40 px tall; chat 25: the far arm no longer opens out of his back)"),
-            ("*fleeing staff and guests*", '*', 'no hand', 17.5, 26.9, "the guests run side on and three-quarter across "
+            ("*fleeing staff and guests*", '*', 'no hand', SHOTS[2][1], SHOTS[2][2], "the guests run side on and three-quarter across "
              "the room: each far hand passes behind the body at the back of each swing, as a real runner's does (chat 25: "
              "the far arm no longer opens out of the back, so its hand is hidden on more drawings)")]
 ALLOWED_POPS = [('guest', 17.55, 17.95, 'the butler bursts in through the double doors as they open (seen full size)'),
@@ -191,8 +248,9 @@ def seated(img, who, L, X, d, t, yaw, pose='upright', look=None, chair=False, jo
 import mouths                        # noqa: E402
 import figure as FG                  # noqa: E402
 
-TRACK = {ln['who']: [(a + ln['start'], b + ln['start'], sh) for a, b, sh in
-                     mouths.track(ln['text'], [(0.0, ln['end'] - ln['start'])])] for ln in LINES}
+import words as WD                   # noqa: E402  word times from Sam's takes (speech-to-text)
+TRACK = {ln['who']: WD.track(ln['words']) for ln in LINES}     # each word's lips inside its own heard time
+T['chose_wolves'] = None                                       # set below, once word_at exists
 BLINKS = {w: FG.blinks(17 + 5 * i, 0.0, DUR, talking=True) for i, w in enumerate(('may', 'kemi', 'blair'))}
 # The house face's channels: smile (-1 .. +1), lid4 (upper lid), brow_up, frown, squint, look (eyes sideways), mouth.
 MOODS = {
@@ -202,7 +260,7 @@ MOODS = {
     'stare': dict(smile=-0.25, lid4=0.1, frown=0.03),                # Kemi: hard, level, unbothered by the carnage
     'curt': dict(smile=-0.35, lid4=0.14, frown=0.04),                # ... the curt nod on "job"
     'genial': dict(smile=0.4, lid4=0.12, brow_up=0.01),               # Blair: warm, reasonable, talking
-    'grin': dict(smile=1.0, squint=0.35, lid4=0.14, brow_up=0.02, mouth='v:grin'),   # the big grin held from 25.0
+    'grin': dict(smile=1.0, squint=0.35, lid4=0.14, brow_up=0.02, mouth='v:grin'),   # the big grin held from T["grin"]
     # chat 15, Sam's acting plan (25 Nov): a mood for each beat; the face leads the hand by a drawing or two
     'patient': dict(smile=0.16, lid4=0.2, brow_up=0.03),             # May: the thin patient smile, talking down
     'stern': dict(smile=0.0, lid4=0.12, brow_up=0.035),              # ... the schoolmistress's raised finger
@@ -227,25 +285,28 @@ def caption_at(t):
     return SUB.caption_at(LINES, t, PIECE_FIX)      # 3-5 words a piece, each on its syllable
 
 
-def word_at(n, words):
-    """When line n reaches `words`: its syllables spread over the line (stand-in timing, as TRACK)."""
-    ln = LINES[n - 1]
-    k = len(ln['text'][:ln['text'].index(words)].split())
-    syl = [mouths._syllables(w) for w in ln['text'].split()]
-    return ln['start'] + (ln['end'] - ln['start']) * sum(syl[:k]) / max(1, sum(syl))
+def word_at(n, words, k=1):
+    """When line n reaches `words` (the k-th time): the moment Sam says it on his take."""
+    return WD.at_word(LINES[n - 1]['words'], words, k)
+
+
+T['chose_wolves'] = word_at(1, 'chose')
 
 
 HEAD_LIFE = {}
 
 
 def head_life(who):
-    """Rule 74: the head tilts and nods on the voice (headlife): a stand-in loudness from the lip track until Sam's
-    takes (1 while the mouth is open, 0 at rest), each on their own line only."""
+    """Rule 74: the head tilts and nods on the voice (headlife): the loudness of Sam's take, on their own line only."""
     if who not in HEAD_LIFE:
         import numpy as np
         import headlife
         n = int(DUR * FPS) + 2
-        env = np.array([0.0 if mouths.at(TRACK[who], i / FPS) in ('rest', 'M') else 1.0 for i in range(n)])
+        ln = next(x for x in LINES if x['who'] == who)
+        env = np.zeros(n)                            # the head moves on the voice's own loudness, on their line only
+        loud = mouths.loudness_open(ln['_voice'], SR, rate=FPS)
+        i0 = int(round(ln['start'] * FPS))
+        env[i0:i0 + len(loud)] = loud[:max(0, n - i0)]
         HEAD_LIFE[who] = headlife.HeadLife(env, 0.0, fps=FPS, seed=41 + ('may', 'kemi', 'blair').index(who))
     return HEAD_LIFE[who]
 
@@ -348,15 +409,16 @@ def blair_shot(t):
     img = Image.new('RGBA', (W, H), (255, 255, 255, 255))
     B.SS = 1
     L = _cam('blair')
-    u = scene_of(t)[1]                                 # the room's pieces run on shot time (the doors open at 0.3 s)
-    room, beyond = ACT.room_actors(u, L)               # the chase: guests and wolves among the room's pieces
-    PL.paint_with(img, _DESC, 'blair', B.Cam(1.0, 540, 960), u, room, beyond=beyond)
-    ACT.lunger(img, L, u)                              # Wp, at his depth just behind his shoulder, 9.0 s (cut 9.4)
+    u = scene_of(t)[1]                                 # shot time: the lunge runs on it
+    uc = max(0.0, u - CHASE_DELAY)                     # the chase's own clock: the doors open 0.3 s into it
+    room, beyond = ACT.room_actors(uc, L)              # the chase: guests and wolves among the room's pieces
+    PL.paint_with(img, _DESC, 'blair', B.Cam(1.0, 540, 960), uc, room, beyond=beyond)
+    ACT.lunger(img, L, u)                              # Wp, at his depth just behind his shoulder, just before the cut
     B.SS = 1
     sp, j = acted('3', 'blair', t)
     seated(img, 'blair', L, BLAIR['x'], BLAIR['d'], t, BLAIR['yaw'], pose='armchair', chair=True, look=sp, joints=j)
     for layer in ('front', 'over'):
-        _paint(img, 'blair', layer, u)
+        _paint(img, 'blair', layer, uc)
     return img.convert('RGB')
 
 
@@ -376,9 +438,9 @@ def _alone(shot, who, view, P, kind):
     return draw
 
 
-ALONE = {'may [1]': (0.0, 7.5, _alone('1', 'may', 'may', MAY, 'upright')),
-         'kemi [2]': (7.5, 17.5, _alone('2', 'kemi', 'site', KEMI, 'stand')),
-         'blair [3]': (17.5, 26.9, _alone('3', 'blair', 'blair', BLAIR, 'armchair'))}
+ALONE = {'may [1]': (SHOTS[0][1], SHOTS[0][2], _alone('1', 'may', 'may', MAY, 'upright')),
+         'kemi [2]': (SHOTS[1][1], SHOTS[1][2], _alone('2', 'kemi', 'site', KEMI, 'stand')),
+         'blair [3]': (SHOTS[2][1], SHOTS[2][2], _alone('3', 'blair', 'blair', BLAIR, 'armchair'))}
 
 
 # ================================================================================================= picture
@@ -395,6 +457,39 @@ def frame_image(t):
     return picture(t)
 
 
+# Note 17 (Sam, 26 Nov): the wolf growls "in the background during Kemi and Tony's scenes ... a background growl
+# underneath people talking"; the loud one (alice_soundz, peaks near full scale) brought down further than the other.
+GROWLS = [('freesound_community-doggrowlingsnarlinggrumbling-77634.mp3', 0.0, -34.0),     # (file, from s, loudness)
+          ('alice_soundz-scary-wolf-growling-224086.mp3', 7.0, -38.0)]
+BED_DIP_DB = 9.0                               # how far the growls drop while someone speaks
+VOICE_OVER_BED_DB = 12.0                       # the voice at least this far above the growls wherever anyone speaks
+
+
+def soundtrack(stems=False):
+    """Sam's voices, and the growl bed under shots 2 and 3 (fading in over 0.25 s at the cut to Kemi)."""
+    import numpy as np
+    import burnham_film as BF
+    import mossad_audio as MA
+    n = int(DUR * SR) + 1
+    voice = np.zeros(n)
+    for ln in LINES:
+        i = int(ln['start'] * SR)
+        seg = ln['_voice'][:max(0, n - i)]
+        voice[i:i + len(seg)] += seg
+    bed = MA.bed(voice, [(BF.load(os.path.join(SOUNDS, f)), off, lu) for f, off, lu in GROWLS], SHOTS[1][1],
+                 dip_db=BED_DIP_DB, sr=SR)
+    mix, g = MA.master(voice + bed, n)
+    return (mix, voice * g, bed * g) if stems else mix
+
+
+def sound_faults():
+    """The voice well above the growl bed in every stretch of speech (filmkit.voice_balance)."""
+    import filmkit
+    _, v, r = soundtrack(stems=True)
+    win = [(a, b) for ln in LINES for a, b, _ in ln['words']]
+    return filmkit.voice_balance(v, r, SR, win, min_db=VOICE_OVER_BED_DB, label='voice')
+
+
 def main(argv):
     if len(argv) >= 3 and argv[1] == 'stills':
         os.makedirs(argv[2], exist_ok=True)
@@ -402,13 +497,14 @@ def main(argv):
             p = os.path.join(argv[2], f'brexit-is-done-{float(v):05.2f}.jpg')
             picture(float(v)).save(p, quality=88)
             print(p)
-    elif len(argv) >= 3 and argv[1] == 'final':          # chat 15: clips and renders (silent until Sam records)
+    elif len(argv) >= 2 and argv[1] == 'sound':
+        print('\n'.join(sound_faults()) or 'sound: the voice is well above the growls in every word')
+    elif len(argv) >= 3 and argv[1] == 'final':          # chat 15: clips and renders, with Sam's voices (chat 29)
         import wave
         import numpy as np
         import film_engine as E
-        SR = 44100
 
-        def write_wav(path, x):                         # silent until Sam records (no finished film's file loaded)
+        def write_wav(path, x):
             with wave.open(path, 'wb') as w:
                 w.setnchannels(1)
                 w.setsampwidth(2)
@@ -418,7 +514,7 @@ def main(argv):
         small = '--small' in a
         E.render(NAME, a[1], size=(540, 960) if small else (1080, 1920), ss=1 if small else 2, fps=FPS, dur=DUR,
                  picture=picture, overlay=lambda img, t: img, shot_of=shot_of,
-                 sound=lambda: np.zeros(int(DUR * SR) + 1), write_wav=write_wav,
+                 sound=soundtrack, write_wav=write_wav,
                  set_ss=lambda v: setattr(B, 'SS', v), crf=26 if small else 20, reuse='--reuse' in a,
                  redo=tuple(a[a.index('--redo') + 1].split(',')) if '--redo' in a else (),
                  span=(float(a[a.index('--span') + 1]), float(a[a.index('--span') + 2])) if '--span' in a else None,

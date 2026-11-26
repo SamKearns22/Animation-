@@ -4953,6 +4953,25 @@ def crowd_head_installed():
 
 
 @test
+def words_from_takes():
+    """Chat 29 of Open Wounds (26 Nov; saved example: Sam's Kemi.m4a and Kemi_2.m4a, which chat 28 could not tell apart
+    and called two takes of one line): speech-to-text must hear that they are the line's two halves, give each word
+    its time, and the lips from those times must rest in a pause between sentences."""
+    import words as WD
+    d = os.path.join(os.path.dirname(HERE), 'sounds', 'brexit-is-done')
+    a, b = WD.text(os.path.join(d, 'Kemi.m4a')).lower(), WD.text(os.path.join(d, 'Kemi_2.m4a')).lower()
+    halves = 'burnham' in a and 'job' in a and 'chewed' in b and 'chewed' not in a
+    ws = WD.times(os.path.join(d, 'Tony.m4a'))
+    trk = WD.track(ws)
+    import mouths
+    say, im = WD.at_word(ws, 'say.'), WD.at_word(ws, "I'm")
+    end_say = next(w1 for w0, w1, w in ws if w0 == say)
+    rest = mouths.at(trk, (end_say + im) / 2) == 'rest'
+    talk = mouths.at(trk, WD.at_word(ws, 'Iraq') + 0.08) != 'rest'
+    return halves and rest and talk, f'two halves {halves}, rest in the pause {rest}, open on "Iraq" {talk}'
+
+
+@test
 def crowd_pool():
     """Sam, 26 Nov (crowd pool chat 1: "Open up the crowd pack to all of the combinations that we've used before across
     all cities ... generic people in any of our films ... from a generic pooled crowd pack"): every haircut, hair colour,

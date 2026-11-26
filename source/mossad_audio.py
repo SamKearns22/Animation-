@@ -496,3 +496,26 @@ def main():
 
 if __name__ == '__main__':
     main()
+
+
+def bed(voice, clips, start, dip_db=9.0, sr=None):
+    """A background bed (growls, crowd, rain) under the voice, for any film (Open Wounds note 17, Sam 26 Nov: "a
+    background growl underneath people talking"). clips: [(samples, from_s, loudness_lufs)], laid from `start` seconds
+    to the end; loud peaks tamed by a slow limiter, each set to its loudness, a 0.25 s fade in, and the whole bed
+    dipped by dip_db under every stretch of speech (back up between lines). Check it with filmkit.voice_balance."""
+    sr = sr or SR
+    n, i0 = len(voice), int(start * sr)
+    out = np.zeros(n)
+    for x, off, target in clips:
+        x = np.asarray(x, float)[int(off * sr):][:max(0, n - i0)]
+        if not len(x):
+            continue
+        peak = np.convolve(np.abs(x), np.ones(sr // 100) / (sr // 100), 'same')
+        x = x * np.minimum(1.0, np.percentile(peak, 90) / (peak + 1e-9)) ** 0.7
+        x = x * 10 ** ((target - lufs(x)) / 20)
+        k = min(len(x), int(0.25 * sr))
+        x[:k] *= np.linspace(0, 1, k)
+        out[i0:i0 + len(x)] += x
+    w = int(0.15 * sr)
+    talk = np.convolve((np.abs(voice) > 1e-4).astype(float), np.ones(w) / w, 'same')
+    return out * 10 ** (-dip_db * np.minimum(1.0, talk * 3) / 20)
