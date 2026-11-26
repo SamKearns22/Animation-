@@ -11,3 +11,4 @@
 {"chat": "2fda13cc", "event": "block", "faults": [["word", "handover"], ["word", "drawing tools"]], "t": "2026-11-26 23:10"}
 {"chat": "2fda13cc", "event": "block", "faults": [["file", "notes/next-jobs.md"], ["label", "R12"], ["word", "finder"], ["file", "page.py"], ["file", "handover.py"], ["file", "views.py"], ["word", "handover"], ["file", "notes/brexit-is-done.md"]], "t": "2026-11-26 23:11"}
 {"chat": "2fda13cc", "event": "block", "faults": [["word", "guard"]], "t": "2026-11-26 23:12"}
+{"chat": "81b35345", "event": "block", "faults": [["word", "finder"]], "t": "2026-11-26 23:25"}
