@@ -470,7 +470,7 @@ def _thigh_rest(seat, sg, u=0.62):
     return (sg * 78.0, y, knee_z * u)
 
 
-def spec_upright(sp, seat, hands='thighs'):
+def spec_upright(sp, seat, hands='thighs', apart=False):
     sw = sp.get('shoulders', 150)
     arms = {}
     if hands == 'thighs' and sp.get('figure') in V.WOMAN_LEGS:
@@ -485,6 +485,16 @@ def spec_upright(sp, seat, hands='thighs'):
     elif hands == 'lap':
         for s in 'LR':
             arms[s] = arm_free((14.0, 420.0, 150.0), (0.6, 0.6, -0.3), 'fist')
+    if apart:                 # R7 chat 10 (Sam, 26 Nov, on May's front view: "keep this pose in our arsenal, but
+        # could you create another that is the same but her legs are not pressed in against each other? Relaxed,
+        # perpendicular, a natural gap between them"): the feet under the knees, the knees over the hips' width,
+        # thighs straight forward and shins straight down
+        sp0 = _spec(arms=arms, feet={'L': (-R7_APART, 235.0), 'R': (R7_APART, 235.0)},
+                    knee_pole={sd: (sg * R7_APART_OUT, -1.0, 0.7) for sd, sg in (('L', -1), ('R', 1))})
+        for _ in range(2):                        # each foot moved under its own knee: the shin straight down
+            kn, j0 = knees(sp, seat, sp0)
+            sp0['feet'] = {sd: (_chair(j0, kn[sd])[0], 235.0) for sd in 'LR'}
+        return sp0
     if sp.get('figure') in V.WOMAN_LEGS and sp.get('seat_r7'):   # R7 chat 3 (new films): knees together TOUCHING, not
         # pinched through each other (they were 14 apart, each 60 across), the feet under them (ref woman-front-a)
         return _spec(arms=arms, feet={'L': (-R7_WOMAN['feet'], 235.0 + R7_STAGGER), 'R': (R7_WOMAN['feet'],
@@ -500,6 +510,8 @@ def spec_upright(sp, seat, hands='thighs'):
     return _spec(arms=arms)
 
 
+R7_APART_OUT = 0.3   # and each knee turned out this much (its pole), so the gap runs up to the knees
+R7_APART = 52.0     # R7 'upright, apart': each foot this far out from the middle (under the knee, over the hip)
 R7_STAGGER = 22.0   # R7 seated upright: the left foot this far forward of 235, the right this far back
 WOMAN_FEET = 30.0
 R7_WOMAN = {'feet': 38.0, 'in': 0.05}   # R7 women seated: feet apart, knees pointing nearly straight
@@ -550,6 +562,7 @@ def spec_armrests(sp, seat):
 
 POSES = {
     'upright': (lambda sp, seat: spec_upright(sp, seat), 'office'),
+    'upright, apart': (lambda sp, seat: spec_upright(sp, seat, apart=True), 'office'),   # R7 chat 10, Sam
     'hands folded': (spec_hands_folded, 'office+desk'),
     'lean in': (spec_lean_in, 'office+desk'),
     'lean back': (lambda sp, seat: spec_lean_back(sp, seat, 'head'), 'office'),
