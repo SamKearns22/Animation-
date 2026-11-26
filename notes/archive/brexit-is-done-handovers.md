@@ -565,3 +565,14 @@ Open rule requests: the early move-size check (above).
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
 For Claude: preflight name is the hyphenated 'brexit-is-done' (not brexit_is_done); full pre-flight ~7 min; python3 source/movesize.py brexit-is-done lists the head moves (Sam stopped one run: run it in the background).
 
+
+## Where things stand (chat 36, 26 Nov, session_01J1JB7YNoonB7shJ4bXB2Vq)
+Rules that bite next: 93 (checks advise, never lock; written this chat), 30 (a note seen before), 92 (move size early).
+Done (chat 36): animatic rendered under Sam's Override (16 min 23 s) and sent, 2.4 MB, with Hook Text and sign-off (finish.py), in animations/drafts/. Skipped by Override: the render lock (pre-flight not passed), the handover end check and kit-test gate. The picture checks left 6 hands faults (workers 3/4/5 in the site 11-12 s, Kemi's right hand 17.4 s, guests 1-3 in the oak room 26.4 and 29.3 s) + 3 rests, listed in source/data/brexit_is_done-picture-checks.txt; the video was held by the old lock, copied as the clean render. Rule 93 written (checks never lock) and the lock code changed. Fault 3 (May's finger) left as is: no Y found.
+Next: Sam's notes on the animatic (OPUS, medium). Still to build for rule 93: circled stills + why-line (on Sam's word), kittest checks_advise_never_lock.
+Fault 3 (May's finger): Sam 26 Nov: keep the original; the larger one 'looks like a penis'. Closed. Proposal notes/proposals/answered-faults-return.md awaits Sam's pick.
+Read: guides/job-packs.md "Notes round".
+Open rule requests: none.
+Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
+For Claude: preflight name 'brexit-is-done'; branch claude/open-wounds-chat36.
+
