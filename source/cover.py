@@ -105,9 +105,27 @@ def _diff(before, img):
     return bb, m, np.asarray(img.crop(bb).convert('RGBA')).copy()
 
 
+THROUGH = [False]           # set while people seen THROUGH an opening are drawn (places_site._beyond)
+
+
+@contextlib.contextmanager
+def through():
+    """Whoever is drawn inside is seen through an opening (a doorway) and clipped to it by the painter: the wall and
+    the opening's own frame are never a fault against them (Open Wounds chat 37: the corridor guests' false 'drawn
+    over the panelling' lines buried the real ones, Sam's note 23.4); they are still judged against each other and
+    against anyone drawn in the room."""
+    was = THROUGH[0]
+    THROUGH[0] = True
+    try:
+        yield
+    finally:
+        THROUGH[0] = was
+
+
 def _add(img, rec, **kw):
     if rec is None:
         return
+    kw.setdefault('through', THROUGH[0])
     bb, m, px = rec
     k = 1080.0 / img.size[0]                       # supersampled pictures: boxes kept at 1080 x 1920
     REC[0].items.append(dict(kw, box=bb, mask=m, px=px, k=k, size=img.size))
@@ -158,7 +176,12 @@ def person(img, who, depth, flat_person=True):
     r.depths[who] = depth
     before = img.copy()
     n = len(r.items)
-    yield
+    old = getattr(r, 'alias', None)
+    r.alias = who                                  # the people kit's tap records them under this name (Open Wounds
+    try:                                           # chat 37: four guests shared the crowd name 'guest' and were
+        yield                                      # merged into one, so guest against guest was never judged)
+    finally:
+        r.alias = old
     if len(r.items) == n:                          # nothing tapped: drawn whole (not the people kit)
         _add(img, _diff(before, img), name=f'{who}', owner=who, rng=(depth - TORSO, depth + TORSO), flat=False,
              surface=None, bottom=None, on=None, text='', kind='person')
@@ -172,7 +195,7 @@ def _tap(stage, img, **kw):
         return
     if stage == 'start':
         sp = kw['sp']
-        who = sp.get('who') or sp.get('name') or 'someone'
+        who = getattr(r, 'alias', None) or sp.get('who') or sp.get('name') or 'someone'
         d = None
         if who in r.depths:
             d = r.depths[who]
@@ -332,6 +355,8 @@ def _solid(m, n=2):
 def _excused(near, far):
     """A flat thing lying on a surface (papers, a folder) under something resting on or above that surface: the
     camera looks down on the surface, so what sits on it covers it (Milburn's hands on his papers: no fault)."""
+    if far.get('through') and near.get('kind') != 'person' and not near.get('through'):
+        return True                                  # seen through a doorway: the painter clips them to it
     if near['flat'] and far.get('bottom') is not None and near.get('surface') is not None:
         return far['bottom'] >= near['surface'] - REST   # a resting hand's lowest drawn edge dips below the top
     if near.get('on') and near['on'] == far['name'] or far.get('on') and far['on'] == near['name']:

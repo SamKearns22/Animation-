@@ -124,6 +124,9 @@ RESTS = [('*May*.forearmL', 'thigh', 0.0, 6.5, "May's far hand in her lap from t
          ('*May*.forearmR', 'thigh', 9.0, SHOTS[0][2], "May's near hand settled in her lap after \"wolves\""),
          ('*Blair*.forearmL', 'armrest', SHOTS[2][1], SHOTS[2][2], "Blair's left forearm on the wing chair's arm between gestures"),
          ('*Blair*.forearmR', 'armrest', SHOTS[2][1], SHOTS[2][2], "Blair's right forearm on the wing chair's arm between gestures")]
+# movesize's ceiling (notes' Exceptions): May's opening chin up (0.9) is measured with the opening lean the hook rides on
+# (keys lean 0 to 7.5 by 0.75 s, unchanged since Sam's earlier animatics): the 25 px is the lean's, not the chin's
+MOVESIZE_OK = [('1', 'may', 'chin up', -0.25, "the opening lean carries her head; the chin up itself is 0.9")]
 # rule 41 exceptions (reasons in the notes' Exceptions): a side-on runner's far hand passes behind his body for one
 # drawing at the back of each swing (chat 19: seen full size, the arm reads swinging; the figure is 40 px tall)
 HANDS_OK = [("*workers 2", 'R', 'no hand', SHOTS[1][1], SHOTS[1][2], "the side-on runner's far hand passes behind his body at the "

@@ -35,6 +35,7 @@ from ink import glaze
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+import cover                          # noqa: E402
 import figure as FG                  # noqa: E402
 import lying                         # noqa: E402
 import moves as MV                   # noqa: E402
@@ -893,7 +894,8 @@ def room_actors(u, L):
                 def draw(img, k=k, x=x, d=d, dx=dx, dd=dd, tt=u - start):
                     sp = dict(GUESTS[k])
                     yaw, j = _guest_pose(sp, k, tt, dx, dd, u)
-                    with FG.allow('a guest running side on: the back arm swings behind the body (moves.gait)'):
+                    with FG.allow('a guest running side on: the back arm swings behind the body (moves.gait)'), \
+                            cover.person(img, f'guest {k}', d):       # each guest judged on their own (chat 37)
                         jj = person_at(img, L, sp, x, d, 0.0, yaw, j, u)
                     if k == 0 and u < TOSS and 'wrR_px' in jj:           # the tray on his palm, glasses on it
                         hx, hy = jj['wrR_px']
@@ -904,13 +906,22 @@ def room_actors(u, L):
             else:
                 def draw(img, w=w, x=x, d=d, dx=dx, dd=dd, dist=v * (u - start)):
                     m = ROOM_WOLF[w]
+                    with cover.person(img, f'wolf {w}', d):           # the wolves recorded too (chat 37: unseen)
+                        _room_wolf(img, L, m, x, d, dx, dd, dist)
+
+                def _room_wolf(img, L, m, x, d, dx, dd, dist):
                     if dd < -0.8:
                         wolf_front_at(img, L, x, d, 0.0, pal=m['pal'], seed=m['seed'], blood=0.3,
                                       run=dist * 1.6, jaw=0.8)
                     else:
                         wolf_at(img, L, x, d, 0.0, -1 if dx < 0 else 1, WF.pose('run', dist * UNITS),
                                 pal=m['pal'], seed=m['seed'], blood=0.3)
-            (beyond if _beyond_door(d) else room).append((d, draw) if not _beyond_door(d) else draw)
+            # chat 37 (Sam note 23.4): one fixed order, far to near, in the corridor too (it was drawn in list order, so a
+            # farther guest came out over a nearer wolf and they swapped as they reached the room); at the same depth a
+            # guest is always in front of the wolf at their heels
+            draw.who, draw.at = f'{who} {k}' if who == 'guest' else f'wolf {w}', (x, d, dx, dd)
+            od = d + (0.02 if who == 'wolf' else 0.0)
+            (beyond if _beyond_door(d) else room).append((od, draw))
     st = tray_state(u, L)
     if st:
         for n, g in st.items():

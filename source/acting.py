@@ -98,8 +98,9 @@ PLACES = {
     'chop firm low': (0.0, 100.0, 175.0, 185.0, 'down', 'palm'),  # the chop's stop, the forearm level in front of the chest ('chop raised low' at 250 hung low: "no force, a shrug")
     'open near lap': (1.0, 20.0, 405.0, 215.0, 'down', 'palm'),   # the near hand opens, palm on the top of her thigh, forward of the hem ('open near' sat on the jacket at the hip)
     'press': (0.0, 60.0, 255.0, 235.0, 'down', 'palm'),           # standing: palm down, pressing, forward at the waist (the far hand, out past her body: the near hand in front of her read as holding her stomach)
-    'point back': (1.0, 95.0, -70.0, -50.0, 'front', 'point'),    # a finger back over the shoulder, clear of the braids (our round hands have no thumb)
-    'point back mid': (1.0, 70.0, 110.0, 70.0, 'down', 'palm'),   # its way up and back down, in front of the shoulder (out at the side it read as a hand on the hip;  straight from rest the elbow folded across her body: the figure check)
+    'point back': (1.0, 60.0, 10.0, -95.0, 'front', 'point'),     # a jab back past the shoulder, hand by the ear, elbow bent and low (our round hands have no thumb; Open Wounds chat 37, Sam note 23.3: at y -70, x 95 the arm reached up and out, "over there", not "backwards")
+    'point back mid': (1.0, 75.0, 60.0, -40.0, 'down', 'palm'),   # its way up and back down: the hand by the shoulder, elbow down (chat 37: in front of the chest it crossed the belly)
+    'point back swing': (1.0, 120.0, 230.0, -20.0, 'down', 'palm'),  # first from rest: the arm swings up at her side nearly straight (chat 37: any bent in-between at the waist read as a hand on the hip, Sam note 23.3)
     'hand low front': (1.0, -10.0, 330.0, 110.0, 'down', 'palm'), # from her side to the front of her thigh, elbow down (the swing out from rest read as a hand on the hip)
     'chop wide high': (0.0, 120.0, 130.0, 175.0, 'down', 'palm'),   # the chop out to its own side: a far hand standing three-quarter (chat 18: Kemi's chop high aimed its forearm at the lens)
     'chop wide low': (0.0, 120.0, 270.0, 180.0, 'down', 'palm'),

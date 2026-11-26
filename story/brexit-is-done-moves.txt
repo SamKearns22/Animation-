@@ -15,14 +15,14 @@ L: rest at -0.3 | lap fwd at 0.6   # chat 35 (Sam's fault 6): held on the thigh 
 L: lap fwd at "British" -0.4 | open near lap at "British" +0.04 | open near lap at "chose" +0.1 | lap fwd at "wolves" +0.5
 keys lean: 0 at -0.35 | 7.5 at 0.75 | 5.5 at 2.0 | 4.0 at 7.5
 keys shoulders: -4 at -0.2 | -13 at 0.35 | -1 at 0.9 | 0 at 2.0
-body: chin up 1.4 from -0.25 to "Prime" +0.1, rise 0.5, fall 0.35
+body: chin up 0.9 from -0.25 to "Prime" +0.1, rise 0.5, fall 0.35   # chat 37 (Sam note 23.1): 1.4 with the opening lean moved her head 25 px
 body: tilt 1.0 from "Prime" -0.12 to "well" -0.2, rise 0.15, fall 0.3
 body: head shake 0.7 from "well" -0.05 over 0.6
-body: lean in 15 with roll 3 from "remember" -0.08 to "had" +0.3, rise 0.2, fall 0.35   # chat 32: was 0.8 (degrees, not a share): no lean read (critique r27)
-body: nod 4.5 from "referendum" -0.05 to "referendum" +0.4, rise 0.12, fall 0.22   # chat 32: nods of 1 moved the head 4-8 px (movesize)
-body: nod 4.5 from "that referendum" -0.04 to "that referendum" +0.24, rise 0.1, fall 0.12
-body: nod 4.5 from "that referendum" +0.4 to "that referendum" +0.72, rise 0.1, fall 0.16
-body: nod 5.0 from "wolves" -0.05 to "wolves" +0.45, rise 0.12, fall 0.25
+body: lean in 5 with roll 1 from "remember" -0.08 to "had" +0.3, rise 0.2, fall 0.35   # chat 37 (Sam note 23.1): 15 moved her head 166 px, "comically large"; 0.8 read as none
+body: nod 2.0 from "referendum" -0.05 to "referendum" +0.4, rise 0.12, fall 0.22   # chat 37 (Sam note 23.1): 4.5 moved it ~30 px, comic; 1 moved it 4-8 px, unseen. Aim 12-16 px (movesize window)
+body: nod 2.0 from "that referendum" -0.04 to "that referendum" +0.24, rise 0.1, fall 0.12
+body: nod 2.0 from "that referendum" +0.4 to "that referendum" +0.72, rise 0.1, fall 0.16
+body: nod 2.1 from "wolves" -0.05 to "wolves" +0.45, rise 0.12, fall 0.25
 keys look: -0.3 at 0
 idle: roll 1.2 shifts 71 0.9 1.6
 
@@ -31,13 +31,13 @@ row: 10 "...more time doing his job: reducing the number of British people with 
 # deadpan, ramrod straight; never a glance back at the carnage
 face: stare | blink shut from start +0.15 to start +0.42 | disdain from "Andy" -0.1 | stare from "less" -0.1 | curt from "job" -0.08 | flat from "job" +0.5 | stare from "faces" -0.1 | blink shut from "off" +0.5 to "off" +0.62
 R: rest at "less" -0.4 | press from "less" +0.04 to "less" +0.6 | rest at "backwards" -0.2 | rest at "job" -0.45 | chop wide high at "job" -0.12 | chop wide low at "job" +0.06 | pat high at "reducing" -0.1 | pat low at "reducing" +0.08 | pat high at "reducing" +0.28 | pat low at "reducing" +0.46 | palm open from "British" +0.04 to "faces" -0.2 | rest at "chewed" +0.1
-L: rest at "backwards" -0.62 | hand low front at "backwards" -0.4 | point back mid at "backwards" -0.18 | point back from "backwards" +0.04 to "backwards" +0.6 | point back mid at "backwards" +0.85 | hand low front at "backwards" +1.1 | rest at "job" -0.3
+L: rest at "backwards" -0.5 | point back swing at "backwards" -0.3 | point back mid at "backwards" -0.15 | point back from "backwards" +0.04 to "backwards" +0.6 | point back mid at "backwards" +0.8 | point back swing at "backwards" +0.98 | rest at "backwards" +1.2   # chat 37 (Sam note 23.3): no pass across the belly or hand on the hip; the hand jabs back beside the shoulder
 keys shoulders: 0 at start | -2 at start +0.3 | 0 at start +0.6
-body: chin up 3.2 from start +0.1 over 0.4   # chat 35: 0.4 moved her head 3 px (movesize; bar 22)
+body: chin up 1.7 from start +0.1 over 0.4   # chat 37 (Sam note 23.1: "comically large"): 3.2 moved it 22 px; 0.4 moved it 3
 body: tilt -1.0 from "Andy" -0.1 to "less" -0.3, rise 0.18, fall 0.3
-body: nod 3.6 from "job" -0.05 to "job" +0.35, rise 0.08, fall 0.2
-body: nod 3.4 from "reducing" -0.02 to "reducing" +0.5, rise 0.1, fall 0.2
-body: nod 4.4 from "off" -0.05 to "off" +0.3, rise 0.07, fall 0.18
+body: nod 1.9 from "job" -0.05 to "job" +0.35, rise 0.08, fall 0.2
+body: nod 1.9 from "reducing" -0.02 to "reducing" +0.5, rise 0.1, fall 0.2
+body: nod 2.0 from "off" -0.05 to "off" +0.3, rise 0.07, fall 0.18
 keys look: -0.3 at 0
 idle: roll 0.8 shifts 72 1.0 1.8
 
@@ -53,8 +53,8 @@ body: tilt 1.0 from start to "Well" +0.5, rise 0.3, fall 0.3
 keys shoulders: 0 at "Well" -0.1 | -10 at "Well" +0.1 | 0 at "Well" +0.45 | 0 at "Iraq" -0.1 | -12 at "Iraq" +0.08 | 0 at "Iraq" +0.5
 body: tilt 1.2 from "Well" -0.05 to "Well" +0.5, rise 0.12, fall 0.25
 body: head shake 0.8 from "anything" -0.05 over 0.7
-body: preen 2.6 from "Tony" -0.1 to "Tony" +0.6, rise 0.12, fall 0.3
+body: preen 1.5 from "Tony" -0.1 to "Tony" +0.6, rise 0.12, fall 0.3
 body: lean 2.5 from "belong" -0.1 to "Hague" +0.1, rise 0.2, fall 0.35
-body: nod 3.0 from "Hague" -0.05 to "Hague" +0.4, rise 0.12, fall 0.22
+body: nod 1.3 from "Hague" -0.05 to "Hague" +0.4, rise 0.12, fall 0.22
 keys look: -0.3 at 0
 idle: roll 1.0 shifts 73 0.9 1.6

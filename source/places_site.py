@@ -482,8 +482,13 @@ def _beyond(img, draws, opening):
     opening (screen polygon), so nothing in the corridor shows on the wall beside the doorway."""
     from PIL import Image, ImageDraw
     layer = Image.new('RGBA', img.size, (0, 0, 0, 0))
-    for fn in draws:
-        fn(layer)
+    # far to near (Open Wounds chat 37, Sam's note 23.4: drawn in list order, a farther guest came out over a nearer
+    # wolf in the corridor): (depth m, draw) pairs are sorted; a bare draw keeps its place, farthest
+    keyed = [(float('inf'), n, fn) if callable(fn) else (fn[0], n, fn[1]) for n, fn in enumerate(draws)]
+    import cover
+    with cover.through():
+        for _, _, fn in sorted(keyed, key=lambda q: (-q[0], q[1])):
+            fn(layer)
     mask = Image.new('L', img.size, 0)
     ImageDraw.Draw(mask).polygon([tuple(map(float, q)) for q in opening], fill=255)
     a = np.asarray(layer).copy()

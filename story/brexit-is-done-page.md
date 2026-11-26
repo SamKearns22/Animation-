@@ -3,7 +3,7 @@
 Read this, then only the lines a note points to (`page.py FILM find "note words"`).
 
 
-## brexit_is_done.py (521 lines)
+## brexit_is_done.py (524 lines)
 - 31: HERE (data)
 - 39: READ_TIMES (data)
 - 41: B (data)
@@ -26,52 +26,53 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 114: SHOT_MARKS (data)
 - 117: THREE_QUARTER_OK (data)
 - 121: RESTS (data)
-- 129: HANDS_OK (data)
-- 134: ALLOWED_POPS (data)
-- 140: BENCHMARK (data)
-- 171: PLAN (data)
-- 191: HOOK (data)
-- 194: `scene_of` 
-- 202: `shot_of` 
-- 209: FACE_X (data)
-- 210: EYE_Y (data)
-- 211: KEEP_CLEAR (data)
-- 214: CAST (data)
-- 215: FEET (data)
-- 218: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
-- 223: `seated` `who` seated at depth d (m) through level camera L, their body centre at screen X; the sitting kit's pose
-- 241: DRAWN (data)
-- 253: TRACK (data)
-- 255: BLINKS (data)
-- 257: MOODS (data)
-- 282: PIECE_FIX (data)
-- 285: `caption_at` 
-- 289: `word_at` When line n reaches `words` (the k-th time): the moment Sam says it on his take.
-- 297: HEAD_LIFE (data)
-- 300: `head_life` Rule 74: the head tilts and nods on the voice (headlife): the loudness of Sam's take, on their own line only.
-- 319: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own line, blinks, head life.
-- 330: _MOVES (data)
-- 333: `acted` (face sp, joints) for who's block in shot at film time t (story/brexit-is-done-moves.txt).
-- 346: _DESC (data)
-- 347: _PAINT (data)
-- 349: MAY (data)
-- 354: `_cam` 
-- 358: `_paint` 
-- 363: `may_shot` 
-- 377: `standing` `who` standing on the ground at depth d (m) through level camera L, body centre at screen X.
-- 388: KEMI (data)
-- 391: `kemi_shot` 
-- 406: BLAIR (data)
-- 409: `blair_shot` 
-- 427: `_alone` `who` alone on a clear layer at t (the shared general audit: kitinputs.alone_audit, through ALONE).
-- 442: ALONE (data)
-- 448: `picture` 
-- 457: `frame_image` 
-- 463: GROWLS (data)
-- 465: BED_DIP_DB (data)
-- 466: VOICE_OVER_BED_DB (data)
-- 469: `soundtrack` Sam's voices, and the growl bed under shots 2 and 3 (fading in over 0.25 s at the cut to Kemi).
-- 486: `main` 
+- 129: MOVESIZE_OK (data)
+- 132: HANDS_OK (data)
+- 137: ALLOWED_POPS (data)
+- 143: BENCHMARK (data)
+- 174: PLAN (data)
+- 194: HOOK (data)
+- 197: `scene_of` 
+- 205: `shot_of` 
+- 212: FACE_X (data)
+- 213: EYE_Y (data)
+- 214: KEEP_CLEAR (data)
+- 217: CAST (data)
+- 218: FEET (data)
+- 221: `scale_at` The kit's scale for someone drawn at pxm pixels per metre (their neck base sits at 0.84 of their height).
+- 226: `seated` `who` seated at depth d (m) through level camera L, their body centre at screen X; the sitting kit's pose
+- 244: DRAWN (data)
+- 256: TRACK (data)
+- 258: BLINKS (data)
+- 260: MOODS (data)
+- 285: PIECE_FIX (data)
+- 288: `caption_at` 
+- 292: `word_at` When line n reaches `words` (the k-th time): the moment Sam says it on his take.
+- 300: HEAD_LIFE (data)
+- 303: `head_life` Rule 74: the head tilts and nods on the voice (headlife): the loudness of Sam's take, on their own line only.
+- 322: `face_sp` The moves kit's seam: who's build with the face for a mood, lips on their own line, blinks, head life.
+- 333: _MOVES (data)
+- 336: `acted` (face sp, joints) for who's block in shot at film time t (story/brexit-is-done-moves.txt).
+- 349: _DESC (data)
+- 350: _PAINT (data)
+- 352: MAY (data)
+- 357: `_cam` 
+- 361: `_paint` 
+- 366: `may_shot` 
+- 380: `standing` `who` standing on the ground at depth d (m) through level camera L, body centre at screen X.
+- 391: KEMI (data)
+- 394: `kemi_shot` 
+- 409: BLAIR (data)
+- 412: `blair_shot` 
+- 430: `_alone` `who` alone on a clear layer at t (the shared general audit: kitinputs.alone_audit, through ALONE).
+- 445: ALONE (data)
+- 451: `picture` 
+- 460: `frame_image` 
+- 466: GROWLS (data)
+- 468: BED_DIP_DB (data)
+- 469: VOICE_OVER_BED_DB (data)
+- 472: `soundtrack` Sam's voices, and the growl bed under shots 2 and 3 (fading in over 0.25 s at the cut to Kemi).
+- 489: `main` 
 
 ## brexit_is_done_action.py (939 lines)
 - 36: HERE (data)
@@ -156,11 +157,11 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 936: `site_actors` Every background actor of shot 2 at shot time u: [(depth, draw)].
 
 ## brexit-is-done-people.txt (5 people; a note on a person changes their lines)
-- 3: may (Theresa May (the BBC interview, Nov : plum jacket, patterned blouse, pearls)): head: house may, hair bob, look detail; outfit: suit , shirt white, no tie, open collar; extras: pattern; body: , woman, shoulders
-- 9: kemi (Kemi Badenoch on site (Sam's photo: white hard hat, glasses, braids, orange-and-navy hi-vis)): head: house badenoch, hair braids, look detail; house: hat , specs; outfit: suit , sleeves , shirt , no tie; extras: workwear; body: , woman, build straight, shoulders , jacket , arms
-- 16: blair (Tony Blair today (Sam's photo: grey hair swept back, the grin, dark suit, red tie)): head: house blair, hair back, look detail; outfit: suit , shirt white, tie ; body: , man
-- 21: worker (the site's workers (shot 's background: W digging, W the runner, W -W with the scaffold tubes): hi-vis): crowd: worker; body: , man; outfit: suit , sleeves , shirt , no tie; extras: workwear; mix: london; hats: hardhat; count: ; + i; trousers (i): ; ; ; ; ; shoes (i): ; ; ; ; ; hair (i): crop; short; curly; receding; side
-- 35: guest (shot 's fleeing staff and guests (a butler, a waitress, a man in a dinner suit, a woman in an evening gown)): crowd: guest; count: ; mix: london; hats: ; + i; body (i): , man; , woman; , man; , woman; outfit (i): suit , shirt white, tie , trousers , shoes ; dress, dress , sleeves , shirt white, no tie, trousers , shoes ; suit , shirt white, tie , trousers , shoes ; dress, dress , sleeves , no tie, trousers , shoes ; extras (i): ; ; ; skirt; hair (i): receding; bun; side; long
+- 3: may (Theresa May (the BBC interview, Nov : plum jacket, patterned blouse, pearls)): head: house may, hair bob, look detail; outfit: suit , shirt white, no tie, open collar; extras: pattern; tailoring: v_wide , v_deep , lapel_w , v_collar , v_close , lapel_x , stripe_w , plaid; body: , woman, shoulders
+- 10: kemi (Kemi Badenoch on site (Sam's photo: white hard hat, glasses, braids, orange-and-navy hi-vis)): head: house badenoch, hair braids, look detail; house: hat , specs; outfit: suit , sleeves , shirt , no tie; extras: workwear; body: , woman, build straight, shoulders , jacket , arms
+- 17: blair (Tony Blair today (Sam's photo: grey hair swept back, the grin, dark suit, red tie)): head: house blair, hair back, look detail; outfit: suit , shirt white, tie ; body: , man
+- 22: worker (the site's workers (shot 's background: W digging, W the runner, W -W with the scaffold tubes): hi-vis): crowd: worker; body: , man; outfit: suit , sleeves , shirt , no tie; extras: workwear; mix: london; hats: hardhat; count: ; + i; trousers (i): ; ; ; ; ; shoes (i): ; ; ; ; ; hair (i): crop; short; curly; receding; side
+- 36: guest (shot 's fleeing staff and guests (a butler, a waitress, a man in a dinner suit, a woman in an evening gown)): crowd: guest; count: ; mix: london; hats: ; + i; body (i): , man; , woman; , man; , woman; outfit (i): suit , shirt white, tie , trousers , shoes ; dress, dress , sleeves , shirt white, no tie, trousers , shoes ; suit , shirt white, tie , trousers , shoes ; dress, dress , sleeves , no tie, trousers , shoes ; extras (i): ; ; ; skirt; hair (i): receding; bun; side; long
 
 ## brexit-is-done-places.txt (39 pieces; a note on a place changes its line: open that line)
 ### may (shot 1
@@ -213,15 +214,15 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 - 11: stance: upright on office
 - 12: face: composed | patient Prime | stern well | brows up remember | reasonable had | firm that referendum 
 - 13: R: rest | lap fwd | rest well | finger up well | finger tap remember | finger up remember | palm open ha
-- 14: L: rest | lap fwd | rest
-- 15: L: rest British | open near British | open near chose | rest wolves
+- 14: L: rest | lap fwd # chat Sam's fault : held on the thigh rest sat on the hem
+- 15: L: lap fwd British | open near lap British | open near lap chose | lap fwd wolves
 - 16: keys lean: | | |
 - 17: keys shoulders: | | |
-- 18: body: chin up Prime
+- 18: body: chin up Prime # chat Sam note : with the opening lean moved her head px
 - 19: body: tilt Prime well
 - 20: body: head shake well
-- 21: body: lean in remember had # chat : was degrees not a share : no lean read critique r
-- 22: body: nod referendum referendum # chat : nods of moved the head px movesize
+- 21: body: lean in with roll remember had # chat Sam note : moved her head px comically large; read as none
+- 22: body: nod referendum referendum # chat Sam note : moved it ~ px comic; moved it px unseen. Aim px movesi
 - 23: body: nod that referendum that referendum
 - 24: body: nod that referendum that referendum
 - 25: body: nod wolves wolves
@@ -232,9 +233,9 @@ Read this, then only the lines a note points to (`page.py FILM find "note words"
 ### kemi
 - 32: face: stare | blink shut start start | disdain Andy | stare less | curt job | flat job | stare faces | 
 - 33: R: rest less | press less less | rest backwards | rest job | chop wide high job | chop wide low job | p
-- 34: L: rest backwards | hand low front backwards | point back mid backwards | point back backwards backward
+- 34: L: rest backwards | point back swing backwards | point back mid backwards | point back backwards backwa
 - 35: keys shoulders: start | start | start
-- 36: body: chin up start
+- 36: body: chin up start # chat Sam note : comically large : moved it px; moved it
 - 37: body: tilt Andy less
 - 38: body: nod job job
 - 39: body: nod reducing reducing

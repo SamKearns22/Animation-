@@ -38,9 +38,17 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-MIN_PX = 22.0          # the head's move on the 1080 x 1920 frame: about 5 px on a phone held at arm's length, the
-#                        least a stranger sees as a nod without looking for it (round 27: 7 px read as "no nod"; 21 px still hard to see on a sheet)
+MIN_PX = 10.0          # the head's move on the 1080 x 1920 frame: about 5 px on a phone held at arm's length, the
+#                        least a stranger sees as a nod (round 27: 7 px read as "no nod"; chat 37: 22 px as a floor
+#                        made every nod 22-34 px, comic on the phone, Sam note 23.1; the window's middle, 12-16 px, is the house size)
 HEAD_MOVES = {'nod', 'lean in', 'bow', 'chin up', 'preen', 'peer', 'lean', 'nod by'}
+# The CEILING (Open Wounds chat 37, Sam's note 23.1, 26 Nov: "May's lean, Kemi and May's head bobbing, have all become
+# comically large ... they've lost the coherent acting of previous films. THIS IS A MAJOR ERROR."). With a floor only,
+# chat 32 and 35 pushed every move past it: nods of 22-34 px, May's lean in on "remember" 166 px. A move is a fault
+# outside the window: the floor (MIN_PX, a viewer sees it) and the ceiling (MAX_PX by move, the house's own sizes:
+# the earlier films' strongest nods, Milburn's 1.5-1.6, sit near 12-16 px on this frame).
+MAX_PX = {'nod': 18.0, 'nod by': 18.0, 'chin up': 18.0, 'preen': 18.0, 'peer': 18.0, 'bow': 40.0,
+          'lean in': 70.0, 'lean': 70.0}
 
 
 def _eyes_at(module, who, t):
@@ -93,6 +101,13 @@ def faults(film_name, shots=None, only=None):
                            f'(about {px * 390 / 1080:.0f} on a phone): a viewer sees no {m["move"]}; it needs '
                            f'{MIN_PX:.0f} px or more (a body move\'s amount is in its first channel\'s units: '
                            f'acting.BODY)')
+            elif px > MAX_PX.get(m['move'], 18.0) and not any(
+                    str(o[0]) == str(b['shot']) and o[1] == who and o[2] == m['move'] and abs(o[3] - a) < 0.05
+                    for o in getattr(module, 'MOVESIZE_OK', [])):
+                cap = MAX_PX.get(m['move'], 18.0)
+                out.append(f'shot {b["shot"]} {who}: the {m["move"]} at {a:.2f} s moves the head {px:.0f} px '
+                           f'(about {px * 390 / 1080:.0f} on a phone): comically large, past the house size '
+                           f'({cap:.0f} px; Sam 26 Nov: "comically large ... lost the coherent acting of previous films")')
     return out
 
 
