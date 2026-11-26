@@ -93,6 +93,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "mcp__claude-code-remote__create_trigger",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/triggerguard.py",
+            "timeout": 10
+          }
+        ]
       }
     ]
   }
