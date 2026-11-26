@@ -41,6 +41,7 @@ tracking (costwatch, ledger auto, the cost line recorded).
 Work order (each item with its kittest and a Lost/Added line here): Q5 deletions; C1-C5; B6, B5, B7;
 check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), then steps 2-3 with
 say-once; B4; B3; B8; A2, A6, A4, A5 (Kemi front first), A3, A7 (confirm first), A8. Kit tests at the job's end only.
+Plain words (Sam 26 Nov, Y): CLAUDE.md rule rewritten ("checked on every message"); FIRST job of chat 2: build the every-message checker (a Stop hook like propose.py hook: blocks once, never loops, logs a let-through), with a kittest that catches notes/learn/plain-words/bad-1 and bad-2 and passes good-1; Sam's "I don't understand"/"explain" saves the message he replied to as an example (handover.py log sees his words) and adds its words to the list; rule_proofs N8 status owed until then. Still to ask Sam: one question at a time as the normal way (1, my pick) or all in one message (2); the critique column Y/N.
 Extra (Sam 26 Nov): E1 Y: find why body_check_back_view and finished_films_keep_their_bookmark keep going red; fix the test or the kit.
 Lesson (Sam 26 Nov): "This is the way you should be explaining things in all messages to me": what a thing is in everyday words, one question at a time, no item codes. My first Q1-Q5 and E1/E2 asks used report labels and jargon; CLAUDE.md names plain-check option 1 as the next step when this slips.
 Named branches (not this job, not merged): claude/brexit-chat39 (Open Wounds chat 39, live),
@@ -49,8 +50,8 @@ claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, 
 ## Where things stand
 - Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), "Fix the drawing, never the shot".
 - Done (chat 1): listing tool, kittest, catalogue row; evidence; report sent; Sam answered all five.
-- Next: R8 chat 2 (Opus medium): the work order above, one item at a time.
-- Needs Sam: nothing for R8 (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
+- Next: R8 chat 2 (opened: session_01J1JB7W1VqXUHMQUcpFV4zp, Opus medium, the Animation- project attached): the plain-words checker first, then the work order above, one item at a time.
+- Needs Sam: one-question-at-a-time (1 or 2); the critique column (Y/N) (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
 - Read: guides/job-packs.md "A tool job"; this file; notes/proposals/check-knows-intent.md option 1.
 - Open rule requests: none (Q5 rewords rule 24 on Sam's 2).
 - COST: a tool job, no film estimate.
