@@ -1,0 +1,499 @@
+kind	name	where	runs	faults	distinct	repeats	doc
+hook	setup.sh	SessionStart					
+hook	costwatch.py	UserPromptSubmit					
+hook	handover.py log	UserPromptSubmit					
+hook	override.py prompt	UserPromptSubmit					
+hook	ledger.py auto	Stop					
+hook	propose.py hook	Stop					
+hook	watcher.py stop	Stop					
+hook	costwatch.py	PostToolUse					*
+hook	finderwarn.py	PostToolUse					Bash|Grep|Glob|Read
+hook	humancheck.py sendgate	PreToolUse					SendUserFile
+hook	modelguard.py	PreToolUse					Bash
+hook	triggerguard.py	PreToolUse					mcp__claude-code-remote__create_trigger
+shared check	acting.check_list	acting.py					The acting list itself against the moves file (rule 74): every row with someone moving has a block (matched by the row's first column: '1', 'montage', '(face ch
+film only	ad_vanced_notice.audits	ad_vanced_notice.py					Each person alone over every frame they are on screen (in pieces, popping, stretching, frozen).
+shared check	ad_vanced_notice_cast.check_lines	ad_vanced_notice_cast.py					The shirt's check, printed onto the cloth inside `poly` (_cloth): bent round the body (BENT, ed.bent_check; split: the placket's x), or full-length flat bands e
+shared check	ad_vanced_notice_street.man_faults	ad_vanced_notice_street.py					
+shared check	audit.check_lines	audit.py					
+film only	bayeux_story.gate	bayeux_story.py					Durham's town gate, broken open.
+shared check	beardkit.check_sheet	beardkit.py					
+shared check	bench_move.check_frame	bench_move.py					
+shared check	bench_move.name_faults	bench_move.py					Name the faults of OUT's last check pass (faults.json) so the clip may be drawn; a new fault list needs a new name (the name is filed under the list's fingerpri
+film only	blessed.gates_wide	blessed.py					
+film only	blessed.gates_at	blessed.py					Note 46: where Brand stands (x, d) at t in either release shot; the whole pack looks there.
+film only	blessed.gates_close	blessed.py					
+film only	blessed.gates2_head	blessed.py					Note 49: his head turns to play to the cameras on one side, then the other (degrees, None = ahead).
+film only	blessed.touch_faults	blessed.py					The hands that hold or touch something, sampled through their shots (HANDS is the drawn hand circle's middle): the Bible in Brand's hand, the officer's grip on 
+film only	blessed.furniture_faults	blessed.py					N8 (Sam, 13 Nov: 'how did a squashed person who clips through a pool table get through a 40-minute check process?'): no body point of the pool player (head, sho
+film only	blessed_cast.eye_faults	blessed_cast.py					Rule S5, measured (12 Nov): every face here draws its eyes through traitors_cast.eye (via P4.eyes). Each eye is drawn at the hardest glances this film uses (loo
+film only	blessed_cast.mouth_faults	blessed_cast.py					Notes 5, 13, 15 (a repeated note): nobody drawn with a front face may be on the house head, which draws no lips at rest. people: who -> name; each must have a h
+film only	blessed_checks.audits	blessed_checks.py					Each of the cast alone over every frame they are on screen: in pieces, popping, stretching, frozen (filmkit.silhouette_audit), and the movement library's own ch
+film only	blessed_sets.gates	blessed_sets.py					HMP Wandsworth's gatehouse (ref 18): a wide sooty-brick front, two towers either side of a lower centre block, each tower edged with dark rusticated pilasters; 
+cast sheet	castsheet.build_faults	castsheet.py					One line per fault: a woman drawn on a man's shape (any view), a man drawn on a woman's, a woman whose build is not hers (or was never measured from her photos)
+cast sheet	castsheet.crotch_faults	castsheet.py					Every standing person front and back: the line up from the crotch (crotch_line) under CROTCH_MAX.
+cast sheet	castsheet.hair_spike_faults	castsheet.py					Every hair and hat outline the cast draws (front, turned, back, seated): no closed curve through one point twice (Open Wounds chat 9: the turned hard hat's two 
+cast sheet	castsheet.seated_example_faults	castsheet.py					The seated look run on each saved example (R7_EXAMPLES): every one must be caught.
+cast sheet	castsheet.seated_look_faults	castsheet.py					Every cast member drawn seated (R7_POSES, from the front, three-quarter both ways and the side), each picture read as a viewer (seated_look). Only people on R7'
+cast sheet	castsheet.seated_faults	castsheet.py					Every cast member seated (three-quarter both ways, the sitting kit's upright, which crosses a woman's legs): a knee drawn as a ball (an outlined ring the size o
+cast sheet	castsheet.mouth_spike_faults	castsheet.py					Every house mouth a cast member wears (and each kind): no closed curve through one point twice.
+cast sheet	castsheet.teeth_faults	castsheet.py					
+cast sheet	castsheet.judge_faults	castsheet.py					
+shared check	checks.check_mother	checks.py					
+shared check	checks.check_daughter	checks.py					The girl: arms reach, hands on the ends of her arms, wrists bent naturally, hands resting on the worktop (touching, not sinking in), her forearms not passing in
+shared check	clipcheck.solid_faults	clipcheck.py					Pass-throughs: the first time each pair of owners overlaps (the parts and how deep).
+shared check	clipcheck.motion_faults	clipcheck.py					Teleports (a part faster than it can move), contacts that never touch, stumbles that stop, pushes the wrong way.
+shared check	clipcheck.order_faults	clipcheck.py					Drawing order on screen, and swaps front to back that make a part jump between frames.
+shared check	clipcheck.flip_faults	clipcheck.py					Rule 57: nothing flips from in front to behind (or back) between two frames of a shot unless planned. Checks every pair present in both frames; a pair listed in
+shared check	clipcheck.haze_faults	clipcheck.py					Rule 57's draw order, the haze (critic bench, 14 Nov; Remakes note 73: the near flower box was drawn before the haze and hazed like the far square; no critic an
+shared check	clipcheck.in_shot_faults	clipcheck.py					
+shared check	cover.cover_faults	cover.py					(faults, untested): the clipping check on the recorded drawing; untested names the shots where people were drawn with no depth (or nothing at all was recorded).
+shared check	cover.readable_faults	cover.py					Captions (as finish.py draws them) and the Hook Text against each listed thing's box on the frames the render drew (data: the render's record). One line per thi
+critique	critique.check_sheet	critique.py					check.jpg (check-2.jpg...): each panel (left, numbered) beside its references at the same height.
+critique	critique.check_answer	critique.py					The reasons record refuses (empty: whole). look.md before result.md; every panel looked at; every line that applies answered; the notes answered in a notes roun
+critique	critique.palette_faults	critique.py					
+film only	cryminister.title_check	cryminister.py					
+film only	cryminister.audits	cryminister.py					Each character alone over every frame they are on screen; every gesture on every frame; eyelines.
+shared check	cutmatch.check_cut	cutmatch.py					
+shared check	ed.bent_check	ed.py					A check (or stripes) printed on cloth round a body, not flat on the screen (Job K, proposal 4: a flat grid reads as a pasted texture). The upright bands are spa
+film only	elder_swindon.traffic_faults	elder_swindon.py					No two cars pass into each other (centres closer than their half-lengths and widths allow), and every car stays on the carriageway: off the pavements, the islan
+film only	elder_swindon.van_faults	elder_swindon.py					The van never touches a car, the moped or an e-bike, and stays on the road (its dome run excepted).
+film only	elder_swindon.audits	elder_swindon.py					
+film only	elder_swindon.check_sheet	elder_swindon.py					A labelled sheet of frames (1080 px wide, 4 across), each with its time and shot.
+shared check	elder_swindon_extras.vehicle_faults	elder_swindon_extras.py					Vehicles (and the e-bikes) passing through each other in the held shot.
+shared check	facehouse.dome_faults	facehouse.py					Rule 49's head-shape step (Milburn note 4, 17 Nov: Pat McFadden's bald dome passed the likeness test at 62% and Sam saw "an alien carrot man": the skull drawn 1
+shared check	facehouse.line_faults	facehouse.py					Brexit Is Done note 21 (Sam, 26 Nov): "Kemi, the lines around her mouth and eyes make her look less like the real life Kemi." Why nobody saw it: agelines measur
+shared check	facehouse.doll_faults	facehouse.py					Brexit Is Done note 20 (Sam, 26 Nov): "make sure Tony matches the house style: if you look at previous characters like Netanyahu, Trump or Brand, there's someth
+shared check	figure.audit_arm	figure.py					Measure one drawn arm against the rig (for arms typed by hand or made by other code).
+shared check	figure.check_feet_on	figure.py					A standing person's soles must be on the floor (world units): person_y is the neck base, s the scale.
+shared check	figure.check_seated	figure.py					A seated person's hips sit on the seat (world units).
+shared check	figure.check_on	figure.py					A contact point (a fingertip, a hand on a rail) must land inside box (x0, y0, x1, y1), world units.
+shared check	figure.check_apart	figure.py					Set pieces that must stay separate never overlap. items: {name: (x0, y0, x1, y1)}.
+render lock	film_engine.look_faults	film_engine.py					Rule S7, for pre-flight: the house look is the engine's alone (a film never lays its own paper, so it goes on once), and the film is drawn at 12 a second, so it
+render lock	film_engine.check_mouths	film_engine.py					track: [(t0, t1, shape)] in film time; windows: [(start, end)] when someone speaks. Returns faults.
+shared check	filmkit.silhouette_audit	filmkit.py					actors: {name: (times, draw)} where draw(t) returns that character ALONE on a transparent RGBA picture. Returns a list of faults, each saying who, when and what
+shared check	filmkit.check_joints	filmkit.py					Generic body rules for any pose given as {name: (x, y)}. Each rule is a tuple: ('angle', a, b, c, lo, hi) the angle at joint b stays between lo and hi degrees (
+shared check	filmkit.check_eyelines	filmkit.py					Everyone looks at whoever they are dealing with (twice a fighter stared at nothing). Returns faults. Looks logged with `aim` and `drawn` are measured from the d
+shared check	filmkit.hiss_check	filmkit.py					A steady hiss is a FAULT, never a question: white noise laid under a film as "room tone" comes up with the mastering and hisses through every quiet moment. The 
+shared check	freeze.cmd_check	freeze.py					
+shared check	freeze.count_faults	freeze.py					For the handover check: a rise in any count is a fault; a fall is welcome (use --lower to keep it).
+shared check	freeze.bookmark_faults	freeze.py					Every film in the registry has its bookmark, on the save the registry names; a finished video in animations/ that no film lists is a fault (a new finished film 
+shared check	grips.contact_faults	grips.py					[(side, kind, text)] for every contact noted in j['contacts'] (see the module's note).
+film only	halo_no_no.audits	halo_no_no.py					The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching, frozen), and the eyelines. Returns faults.
+shared check	handcheck.frame_faults	handcheck.py					Every fault in one frame, from the probes in drawing order.
+shared check	handcheck.body_faults	handcheck.py					Job G (9 Nov): faults the hand-visibility test let through (the pose gallery passed all of them as OK). - through the body: the hand is behind his torso from th
+shared check	handcheck.head_faults	handcheck.py					Rule 41 (Sam, 14 Nov, Protest Tiers note 1: the phone held up behind the head, its arm lost behind it; the check saw nothing): anything held is held in front of
+shared check	handcheck.held_faults	handcheck.py					Job G (chat 3): a hand meets what it holds ON THE PICTURE, not only in 3D (grips.contact_faults). The prop (grips.held: a phone, a cup) is drawn alone on its ow
+shared check	handcheck.seam_faults	handcheck.py					Rule 81 (Sam, 7-8 Nov, Ad-Vanced Notice notes 14-17; by hand until Job G, failed four times): the arm and body are one piece. Seven lines are walked out from in
+handover	handover.model_faults	handover.py					Each job on its own model (Sam, 15 Nov: chat 30 ran a fix AND the animatic render on Opus; the 10 Nov rule guarded only the step up to a stronger model, and not
+handover	handover.kept_report_faults	handover.py					Chat 22 (Sam, 26 Nov): a clean render was pushed without its body-check report, so the next chat's send gate refused the animatic and a whole chat was spent. Ev
+handover	handover.draft_faults	handover.py					Rule P16 (Sam, 15 Nov: animatic 2 was lost with its chat, so a 3-second fix meant a 30-minute redraw): once a film's notes say an animatic was sent, its latest 
+handover	handover.quick_faults	handover.py					Late-faults change 1 (Sam's 1, 16 Nov; notes/proposals/late-faults.md): a chat that changed a film's code runs its quick check (preflight --text) before it hand
+handover	handover.finder_faults	handover.py					finder-use change 1 (Sam's 1, 17 Nov), replacing the per-day flag (one show call anywhere that day silenced it for every chat; it never fired on 16 Nov): THIS c
+handover	handover.unrouted_faults	handover.py					The proposal route (Sam, 15 Nov): a change put to Sam that the Stop hook blocked once and then let through (stop_hook_active) is logged by propose.py; the hando
+handover	handover.rule_faults	handover.py					Lesson 7 step 2 (Sam's option 1): no rule without a working check. A new rule (rulebook row or CLAUDE.md rule) with no saved bad example in source/rule_proofs.j
+handover	handover.shared_faults	handover.py					The "move to shared" stop (named-lines change 3; Sam, 23 Nov: "rules need to be constructed that they work in this way, they are not film specific"): each check
+handover	handover.kittest_gate_faults	handover.py					named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at this handover and at the one before it (another chat), or one that could not run (i
+handover	handover.castsheet_faults	handover.py					Open Wounds chat 6 (Sam's notes 5 and 7): every woman in a new film's cast reads as a woman in every turned view, every man as a man, and each woman is on HER O
+handover	handover.branch_faults	handover.py					startup-fixes 2 (Sam's Y, 16 Nov): CLAUDE.md "merge or name every branch the start lists". A fresh scan (source/branches.py: work from the last 7 days whose new
+handover	handover.tag_faults	handover.py					change 2: the handover refuses while any of Sam's notes lacks "should have caught: CHECK / none"; the tags and the count go into the film's record (ledger notes
+handover	handover.record_faults	handover.py					check-catches change 1 (Sam's Y, 20 Nov): this chat ran pre-flight but the check record holds nothing from it.
+handover	handover.cost_faults	handover.py					Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem (costline.py).
+handover	handover.size_faults	handover.py					Status check (Sam, 21 Nov: "everything needs checking"): CLAUDE.md "Reading little" keeps a film's notes under 4,000 words, and "The handover" keeps ONE "Where 
+handover	handover.push_faults	handover.py					Status check (Sam, 21 Nov): CLAUDE.md "Models and chats": push notifications when a render or long job finishes, fails or needs Sam, and at every stage end. Cha
+handover	handover.dearest_faults	handover.py					Cost audit (Sam, 21 Nov): the weekly ranking of the dearest things (source/dearest.py week --open) is due.
+handover	handover.ledger_faults	handover.py					Status check (Sam, 21 Nov): the budget tracker's record of notes, repeated notes and finished stages. On Grand Theft Autism every chat's row read 'auto, 0 notes
+handover	handover.freeze_faults	handover.py					One route to the kit (Sam's Y, 20 Nov): old-film files loaded, steps swapped and the like may never rise; every finished film keeps its bookmark (source/freeze.
+handover	handover.sentence_faults	handover.py					startup fixes 4 (Sam's Y, 16 Nov): no CLAUDE.md sentence lost; text leaves only word for word (sentences.py).
+shared check	hookcheck.plan_faults	hookcheck.py					Rule 75: the Hook Text is planned at the first animatic: the film's HOOK (text and place) and KEEP_CLEAR (what it must never cover; [] only if truly nothing). R
+shared check	horror_preflight.audit	horror_preflight.py					
+shared check	housestyle.eye_faults	housestyle.py					Rule S5 (tool job, 11 Nov): a film's own cast files that draw a pupil must cut it to the eye's outline (eyekit, or clip_convex as remakes_cast does); burnham's 
+body check	humancheck.send_faults	humancheck.py					Why this video may not go to Sam yet ([] = it may).
+body check	humancheck.sendgate	humancheck.py					PreToolUse hook (SendUserFile): exit 2 with the reasons when a video may not go to Sam yet.
+shared check	ink.bent_check	ink.py					A check (or stripes) printed on cloth round a body, not flat on the screen (Job K, proposal 4: a flat grid reads as a pasted texture). The upright bands are spa
+film only	islamocommunism.audits	islamocommunism.py					The general audit: each person alone over every frame they are on screen. Returns faults.
+shared check	kitchecks.same_faults	kitchecks.py					One crowd's (or one frame's) people: the share caps and the place's skin mix. Strings.
+shared check	kitchecks.crowd_list_faults	kitchecks.py					Every crowd the film can make, member by member: CROWDS and the people kit's crowds (no drawing).
+kit tests per film	kitfilm.setup_faults	kitfilm.py					Rule 90's check on the start-up hook: no kit run when a machine starts (the old fault: every chat ran them).
+shared check	kitinputs.pop_faults	kitinputs.py					Rule 6 from the drawing: within a shot, someone on screen in one sample and gone in the next (or the other way) while away from the frame's edge, unless the fil
+shared check	kitinputs.alone_audit	kitinputs.py					The general audit (house style) from a film's ALONE = {name: (t0, t1, draw)}: draw(t) paints that one person alone on a clear RGBA layer; each is checked over e
+shared check	kitstamps.finish_gate	kitstamps.py					Change 2 (Sam's pick 1, 25 Nov): no animatic or final on files a kit test has not passed on. The stale tests run first (saying how long); what is still not fres
+film only	leanout.car_faults	leanout.py					Bone samples inside the car's solid parts (the passenger's window open): [(joint pair, part)].
+cost	ledger.check_film	ledger.py					check-catches change 1 (Sam's Y, 20 Nov): the film a check is saved under, with NO marker file needed: the film named in the command (pre-flight puts it in CHEC
+shared check	lying.contact_faults	lying.py					What rests where it should (within 1.5 cm) and nothing through a surface (more than 0.5 cm), in words.
+shared check	lying.body_faults	lying.py					Sam's lying notes as checks, in words: (1) a neck shows (at least NECK_MIN of it outside the head, chest and shoulders); (2) no arm held up in the air: an elbow
+film only	midterminal.audits	midterminal.py					The general audit: each person alone over every frame they are on screen. Returns faults.
+film only	mossad_audio.limit_check	mossad_audio.py					Faults for the plan checks: limiting deeper than 3 dB anywhere (it sounds like crackle on a phone).
+film only	mossad_audio.gate	mossad_audio.py					Keep only the speech: each phrase from a hair before to a hair after, with short fades, and true silence between (Sam's breaths and phone handling at the start,
+shared check	moves.check_feet	moves.py					track: [(t, side, world X, world Z, planted)] for one person. A planted foot must stay put on the floor.
+shared check	moves.check_facing	moves.py					samples: [(t, yaw, direction of travel in degrees or None)]. Body and face point the way they go.
+shared check	moves.check_head	moves.py					samples: [(t, body yaw, head yaw)]: the head never turns more than about 90 degrees from the body.
+shared check	moves.check_strike	moves.py					The fist or foot actually reaches the target on the contact frame.
+shared check	moves.check_reaction	moves.py					
+shared check	moves.check_on_floor	moves.py					
+shared check	moves.check_gait	moves.py					The gait's numbers stay within the references: one foot always down in a walk, a float in a run.
+shared check	moves.audit	moves.py					Checks every move in the library on its own (run by preflight for any film that uses moves).
+film only	netan_yahoo.audits	netan_yahoo.py					The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching, frozen), and the eyelines. Returns faults.
+film only	patriots2.check_apart	patriots2.py					Stop the render if any two set pieces that must stay separate overlap (a monitor through a curtain, a dispenser through a cupboard). items: {name: (x0, y0, x1, 
+film only	patriots2.check_on_keys	patriots2.py					Stop the render if a typing fingertip is not on the keyboard. kb: (x of middle, front edge y, width, depth).
+film only	patriots3.audits	patriots3.py					The general audit: each person alone over every frame they are on screen; the eyelines. Returns faults.
+film only	patriots3_fx.lintel_bite	patriots3_fx.py					The bite the shell took out of the lintel's edge: raw lighter concrete, a jagged edge (drawn on the slit wall's inner face just above the slit head, from the bl
+film only	patriots4.audits	patriots4.py					The general audit: each person alone over every frame they are on screen (in pieces, popping, stretching, frozen), and the eyelines. Returns faults.
+shared check	people.head_faults	people.py					Sam, 26 Nov (pose-test: "these low-resolution, early film, bald practice heads ... I don't want to see them"): a crowd-pack person drawn while the pack is not i
+shared check	places_outside.arched_gate	places_outside.py					A stone round arch over a timber double gate (x: the opening; z: ground to the arch's spring): a surround `jamb` m wide with voussoirs and a keystone, a square 
+shared check	plan.front_faults	plan.py					Rule 38: each person faces the lens within about 25 degrees, unless the film lists that shot and mark in THREE_QUARTER_OK with its reason. Reads the plan's SHOT
+film only	poker_mon.hit_check	poker_mon.py					Nobody is thrown before the beam touches them (Sam, 19 Oct: the woman in red flipped up into the air before it reached her). At each person's hit, in the blast 
+film only	poker_mon.lying_check	poker_mon.py					Bodies lying on the table stay on it (Sam, 19 Oct: legs hung over the edge in mid-air): the point where each lands is well inside the table, with the body's len
+film only	poker_mon.crater_check	poker_mon.py					No crater on a window, a curtain or the painting (Sam, 19 Oct): every wall hit near one is listed, and the film's crater_spot must have refused it.
+film only	poker_mon.table_check	poker_mon.py					One table plan, nothing inside anything (Sam, 19 Oct: the table well populated, never clipping): no two things on the table overlap (cards may), and nothing sta
+film only	poker_mon.clearance_check	poker_mon.py					Nothing passes through anything (Sam, 19 Oct: player one's resting hand sat in his chip stacks): each hand resting on the felt keeps clear of every thing on the
+film only	poker_mon.hands_check	poker_mon.py					Hands that touch something must be seen touching it (Sam, 19 Oct: player two's hands were hidden under the table as he drew in the pot, then player one's as he 
+film only	poker_mon.contact_check	poker_mon.py					Every touch is real (Sam, 19 Oct: the pot slid to him with no hand on it). Through player one's lay and player two's put-down, reach and pull, every hand must r
+film only	poker_mon.audits	poker_mon.py					The general audit: player one and player two alone over every frame they are on screen (shots 1-5).
+film only	polanski.audits	polanski.py					The satire audit: each man drawn alone on every frame he is in shot (in pieces, popping, stretching, frozen), then the eyelines.
+shared check	posecheck.gate_faults	posecheck.py					Pre-flight's refusals (strings) for a film's code text, notes text, HAS and SHOT_MARKS.
+film only	power_crime.hidden_check	power_crime.py					The rest of her placard is never seen (Sam, 20 Oct: it says Palestine Action, only implied). Every frame she holds it in shot: its unlettered part painted magen
+pre-flight	preflight.picture_faults	preflight.py					The faults from the drawing pass (recs: probe()'s records, one a frame), and who is seen turned. Shared by pre-flight --pictures and the animatic render.
+pre-flight	preflight.gates	preflight.py					Rule 14: what stops pre-flight before it starts: a blank row in the brief checklist, rule 11's shot board (rough.board_gate); rule 75: no Hook Text plan (HOOK a
+pre-flight	preflight.acting_shot_faults	preflight.py					Rule 74 (Sam, 20 Nov, GTA shot 4: "no acting notes anywhere"): every shot gets acting rows, with or without lines. A shot counts as covered when an acting secti
+pre-flight	preflight.gate_warnings	preflight.py					Job J: by-hand rules turned into checks, printed (not yet refusing: Sam's numbers decide): rule 74 (an acting list row per line), rule 8 (risky moves rehearsed:
+pre-flight	preflight.head_life_faults	preflight.py					Rule 74 (Sam, 11 Nov: Remakes' KG and Link talked with still heads although Job K's head acting was in the guide): every speaker in LINES has head acting from t
+pre-flight	preflight.cast_faults	preflight.py					Rule 14 / CLAUDE.md (25 Oct): every shot has everyone the brief puts in it, on screen at some point (SHOT_CAST: {shot: [name or pattern]}, against the audit's r
+film only	prepper.audits	prepper.py					
+film only	professional.check_plan	professional.py					Set pieces that must stay apart, from the plan (front wall pieces in X/Y; floor pieces in X/Z).
+proposal route	propose.pack_faults	propose.py					
+proposal route	propose.shape_faults	propose.py					Checker A on one option (or one message): [] when it has every field of the rule, in plain shape.
+proposal route	propose.reply_faults	propose.py					Why this reply may not go to Sam yet ([] when it may). lookup(name) -> (ok, verdict) stands in for verdict_ok when the labelled list (guard-film-questions Learn
+shared check	protest_tiers.crs_guard	protest_tiers.py					Shields up (0..1). Round 4 (F18, rule 30: F2/F9 lowered them once the cannon came, 4.5 on, while stones still landed): up from the first frame (they are already
+shared check	protest_tiers.audits	protest_tiers.py					
+shared check	rough.gate_faults	rough.py					The pre-flight's rule 11 line: built things (in the description files) never sent on a rough.
+shared check	rough.board_gate	rough.py					Rule 11's refusals for the pre-flight (empty: go).
+film only	russiadent.check_plan	russiadent.py					Set pieces that must stay apart (best-practice 1.3): seats, podium, flag, tripods, plant, crate.
+film only	russiadent.check_outfits	russiadent.py					No two people in the hall look alike (best-practice 1.3): each person's look is unique.
+film only	russiadent.check_crowd	russiadent.py					No two people ever overlap on the floor plan as they move (except a pair meant to touch: an attacker and their victim). Stops the render with the names and the 
+film only	russiadent.check_neck	russiadent.py					Best-practice 1.3: a neck grows out of the body. The two base corners of the neck must lie inside the body outline (so no gap can ever open between them), or th
+film only	russiadent.check_mouths	russiadent.py					Every stretch of speech must move his mouth (once, "Ministry of Health" got through with a still mouth).
+film only	russiadent.check_closeups_seen_in_wides	russiadent.py					Anyone in the close-up's background must already have been seen in shot 2 or 3 (Sam's rule).
+film only	russiadent.audit_specs	russiadent.py					Every character (an attacker with their victim as one) alone, in every shot that shows them, as runs of consecutive frames. Nothing here is specific to arms, ne
+film only	russiadent.audits	russiadent.py					The general audit (guides/preflight.md): the body, the movement and the permanent marks, over the whole film.
+film only	satire_template.title_check	satire_template.py					The title must not cover anyone: the title and each person alone, on a frame where the title shows.
+film only	satire_template.audits	satire_template.py					The general audit: each person alone over every frame they are on screen, the actions on every frame, the eyelines. Returns faults.
+shared check	setcheck.moving_faults	setcheck.py					Every frame from t0 to t1: each mover (who, x, d, (bw, bh)) against each solid thing in feet. Returns faults ('LABEL 3.25s: link stands in the barrel').
+shared check	setcheck.film_faults	setcheck.py					Pre-flight: rule 13's moving-figure check on any film whose set lists SET_FEET (the film's own, or SET_FEET given through the film). A film with people and SET_
+shared check	sets.portal_faults	sets.py					Rule 2's check on the real picture: in each shot (at `per_shot` moments), every opening on screen shows something (more than one flat colour inside it), never a
+shared check	sets.solids_faults	sets.py					What rule 5 needs and a film lacks, said out loud (never skipped in silence).
+film only	shocking.collision_faults	shocking.py					Nobody passes through anybody, or into the desk (Sam, 18 Oct: Jenrick clipped straight through Farage). On every frame of the office shots, the floor-plan dista
+film only	shocking.frame_faults	shocking.py					Jenrick's whole trip and impact stay in shot (Sam, 18 Oct): his drawing never touches the frame's edge.
+film only	shocking.layering_faults	shocking.py					Drawing order (Sam, 18 Oct: Jenrick's arm showed in front of Farage although he was further away): on every frame where Jenrick is drawn a second time over the 
+film only	shocking.item_faults	shocking.py					The things knocked off the desk (Sam, 18 Oct: pens had landed behind Jenrick and were drawn on his legs). They are drawn after the people, so on every frame eac
+film only	shocking.audits	shocking.py					The general audit (filmkit; the template's, which this film was first made without: housestyle, 18 Oct): each dancer alone over every frame of the office shots:
+shared check	sitting.armrest_faults	sitting.py					Open Wounds note 19 (Sam, 26 Nov: Tony's "hands hover rather than resting on the chair arms"). Why nobody saw it: rule 78 checked the forearm lay ON the armrest
+shared check	sitting.check_frame	sitting.py					Faults in one drawing, in plain words.
+shared check	sitting.check_legs	sitting.py					Part 2's leg checks, in plain words: each foot on what it rests on (floor, desk top, the other knee or leg; or clear of everything when dangling), and no leg or
+shared check	sitting.check_back	sitting.py					Back on the chair back (lean back, feet up, slump: the shoulders touch it), clear of it (a perch), never through it.
+shared check	sitting.check_no_sink	sitting.py					Rule 80: front on, the head never drops below its seated height.
+shared check	sitting.check_balance	sitting.py					The hips are a third of the way up only once the neck is over the feet (side on: no rising on air).
+shared check	sitting.check_feet_planted	sitting.py					A foot on the floor stays put (no sliding) unless it is stepping (lifted).
+shared check	sitting.audit	sitting.py					Every pose and move in the kit, checked. Returns the faults (empty = clean).
+shared check	sitting.check_desk_still	sitting.py					The chair follows the turn, the desk doesn't: a desk corner stays on the same spot on screen while he swivels (the person drawn at his own yaw, snapped and mirr
+shared check	sitting.audit_part2	sitting.py					
+shared check	solid_seat.shoe_faults	solid_seat.py					R7 chat 10 (Sam, 26 Nov: "Shoes clipping on 3/4 view", "Confused shoe shapes on side view"; examples/sam-26nov-shoes-clipping-34.jpg, sam-26nov-shoe-shapes-side
+shared check	solid_seat.apart_faults	solid_seat.py					R7 chat 11 (Sam, 26 Nov, on 'upright, apart', examples/sam-26nov-apart-spread-crotch.png): a front view of a person seated with the legs apart, read from the pi
+shared check	solid_seat.short_top_faults	solid_seat.py					R7 chat 13 (Sam, 26 Nov, on learn-sheet-kemi.jpg front: "Kemi's jacket is behaving like a suit jacket at the bottom, and we should have a solid block of trouser
+shared check	solid_seat.leg_tone_faults	solid_seat.py					Sam, 26 Nov, note 1 (examples/sam-26nov-kemi-34-far-leg.jpg): "In 3/4 pose the legs are different colour and the darker right leg doesn't seem connected smoothl
+shared check	solid_seat.rugged_faults	solid_seat.py					Sam, 26 Nov, note 4 (examples/sam-26nov-kemi-apart-crotch-line-knees.jpg): "Front-facing pose knee to calf area could have smoother, less rugged lines": the tro
+shared check	solid_seat.back_clip_faults	solid_seat.py					Sam, 26 Nov, note 5 (examples/sam-26nov-kemi-side-bum-line-chair.jpg): "Back of bum clips slightly into chair in side-on pose and needs stronger lining": from t
+shared check	staging.gate	staging.py					Plain-words refusals for rendering `want` (shot names) of `film`, whose shots are `shots` (in order). now: the moment to judge at (a replay of an old film); not
+shared check	staging.render_gate	staging.py					film_engine.render's call for a clip: [] for films begun before the board, else gate().
+shared check	subtitles.readable_faults	subtitles.py					Rule 62 on the delivered file (rule 70: played at `speed`): each piece at most 5 words and two rows that fit the width, on screen at least 0.8 s and at most 220
+film only	terfwarts.audits	terfwarts.py					The general audit: each person alone over every frame they are on screen; the eyelines. Returns faults.
+film only	thepark.audits	thepark.py					
+film only	traitors.audits	traitors.py					The general audit: each person alone over every frame they are on screen. Returns faults.
+shared check	viewchecks.turn_faults	viewchecks.py					Redraw each logged person-with-a-prop alone at every 30 degrees. poses: kitchecks.POSES entries (where, name, sp, joints, t). Returns faults; `tested` (a set) s
+shared check	viewchecks.shape_faults	viewchecks.py					Rule S7: each listed effect drawn alone and its shape tested (the off-style list in guides/satire.md).
+shared check	viewchecks.direction_faults	viewchecks.py					Rule 16: across every cut, each mover keeps its screen direction and its side of everyone on screen.
+shared check	viewchecks.hide_faults	viewchecks.py					Rule 17: an effect behind a figure is never drawn over it (robots and creatures too, Prepper note 13).
+shared check	viewchecks.layer_faults	viewchecks.py					Rule 17 for any picture painted in layers (practice clips, flat-painted shots): every standing thing is listed by the shot as (name, distance, draw) through sho
+shared check	viewchecks.solid_faults	viewchecks.py					Rule 17's other half: what layer_faults cannot see (Grand Theft Autism shot 4, chat 11: a body drawn through a car door, a chest floating over an erased waist, 
+shared check	viewchecks.readability_faults	viewchecks.py					Rule 18: every prop a joke needs is at least READABLE px on screen (of 1920) wherever it is listed.
+shared check	views.check_arm3	views.py					The arm checker for skeleton arms, in 3D (on screen an arm pointing at the camera is rightly short): both bones at the rig's lengths, and the elbow never folded
+shared check	voices.script_check	voices.py					One line: its phrases, the syllables heard in each, the script's words laid over them, and the faults.
+shared check	voices.caption_check	voices.py					
+shared check	voices.caption_start_check	voices.py					Rule 62's timing (Job L; was by hand): each subtitle piece comes up within 0.3 s of when its first word is said in Sam's take. The word's time comes from the ta
+shared check	voices.bleep_check	voices.py					Rule 26 (Job L; was by hand): every swear in the script has a bleep on that line. Where the bleep sits stays by the sound (Sam sometimes leaves a gap instead of
+shared check	voices.mouth_check	voices.py					
+shared check	voices.audit	voices.py					Every fault (lines of text), plus notes and the tables behind them.
+shared check	voices.raw_faults	voices.py					named-lines change 3: a line checked against a raw recording the film does not play is said out loud (its checks hear a different sound from Sam: Milburn's 60 f
+shared check	waivers.gate_faults	waivers.py					Rule 13 at pre-flight's gate: (faults, listing). Each exception in the film's settings needs a row in the notes' exceptions table with a reason and where it was
+shared check	waivers.look_faults	waivers.py					Rule 13 (the house look): when anyone in the film has their own face, nobody's front head is the house head (Blessed's newsreader, notes 45, 52). The film's own
+shared check	waivers.lap_faults	waivers.py					Rule 80 (Sam, 7 Nov): anyone seated front on (the front or three-quarter view) shows knees and lap (views.py draws them when the pose sets j['lap']: sitting.py'
+shared check	waivers.unseen_faults	waivers.py					Everyone in the film's CAST is drawn through views.person at least once, so the drawing checks (hands, facing, the house look, the lap) see them; someone drawn 
+watcher	watcher.saver_faults	watcher.py					Each message Sam typed in this chat is in his saved log (the saver writes it there within ~20 s).
+watcher	watcher.guard_faults	watcher.py					No routine command ran on Opus/Fable without the guard stopping it (or a logged GUARD_OK escape).
+watcher	watcher.finder_faults	watcher.py					A chat that edited a film's code with no show call was reminded at its first hand search.
+watcher	watcher.kit_faults	watcher.py					The kit list (guides/kit-catalogue.md) carries no "NOT for films until Sam approves" on a kit Sam said Y to.
+watcher	watcher.kittest_faults	watcher.py					The last background kit-test run (setup.sh at chat start) passed.
+watcher	watcher.hook_faults	watcher.py					Every hook command in settings.json points at a file that exists; the watcher itself is wired in.
+watcher	watcher.ran_faults	watcher.py					A step switched on in .claude/settings.json that has never been seen running on this machine, though its event has happened in this chat (Sam's prompt for UserP
+kit test	turned_parts_kept	kittests.py					Milburn (Sam, 17 Nov: "our 3/4 characters still look like shit"): turned, the thin lad lost his pencil moustache and the goth her piercings and blue streaks (pe
+kit test	hands_round_the_head	kittests.py					Patriots 3 note 21: the Loader's binocular pose from behind (shot 2) hid both hands: arms round his head.
+kit test	hands_in_sleeves	kittests.py					Patriots 3 note 18: the flap poses' hands pushed back into the sleeves (21.9-26 s).
+kit test	pose_gallery	kittests.py					Rule 42: every gallery pose passes the hand check from every view except those its AVOID lists. A view avoided because it was SEEN wrong on the sheet (no check 
+kit test	looks_at_the_shot_camera	kittests.py					Patriots 3 note 11: the Loader's profile at the Gunner (41-42.6 s) read as looking at the wall.
+kit test	head_turns_its_own_way	kittests.py					Kit lesson 1 (Patriots 3): a front-on body's head could only turn the way the body's drawing was mirrored.
+kit test	push_in_keeps_the_view	kittests.py					Kit lesson 2 (Patriots 3): sets.Cam.yaw_of used the camera's own right, so a push-in (the camera only turning) changed how someone was drawn: the Patriot popped
+kit test	tilt_at_chest_height	kittests.py					Kit lesson 3 (Patriots 3): lying.stand measured the camera's tilt at the floor, so close up a hand held out at chest height sank (the salute to the chest). Now 
+kit test	held_prop_through_the_camera	kittests.py					Kit lesson 4 (Patriots 3): held 3D props drawn through the real camera with the hands on the grip points the camera sees (held3d.py, from patriots3.hold_gun). S
+kit test	nostamp_in_the_template	kittests.py					Rule 47 / Build list item 5: `--nostamp` is a standard option of satire_template.py's main.
+kit test	order_flip_mid_shot	kittests.py					Rule 57 (Flying Whales note 16): a smoke column sent behind the rig at one instant is caught; a planned swap is not.
+kit test	near_thing_after_the_haze	kittests.py					Rule 57 (critic bench, Remakes note 73): a near flower box drawn before the haze is caught; after it, clear; a film that says it hazes but never names 'haze' in
+kit test	townsfolk_not_in_the_house_walls	kittests.py					Rule 13 (critic bench, Remakes note 68): S11's townsfolk as Sam saw them (two in the house fronts) are caught against the street's SET_FEET; as fixed, clear.
+kit test	hiss_heard_only_between_lines	kittests.py					Rule S3 (Flying Whales): speech full of "s" sounds is not hiss; noise in the gaps between lines still is.
+kit test	could_not_test_cover	kittests.py					could-not-test (Sam's pick 1, 22 Nov): the clipping check is fed by the drawing itself (cover.py). A further thing drawn over a nearer one is a fault; a hand re
+kit test	could_not_test_readable	kittests.py					could-not-test (3): a name card the render drew under the caption is a fault; one clear above it is not.
+kit test	named_lines_each_answered	kittests.py					named-lines change 2 (Sam's Y, 23 Nov; rule 59): Milburn's 61 lines went past every round under one switch; each warning now needs its own written answer, blind
+kit test	named_lines_body_each_answered	kittests.py					named-lines change 2 (Sam's Y, 23 Nov): the body check's whole list was named with one reason (GTA, 11 at once); now --named alone holds the clip, and it goes b
+kit test	turned_curves	kittests.py					R7 chat 10 (Sam, 25 Nov, examples/sam-25nov-may-too-curvaceous.png: "Way too curvaceous from this angle. She's Theresa May not a swimsuit model"): views.turned_
+kit test	jacket_under_hem	kittests.py					R7 chat 10 (Sam, 25 Nov, side view: "Is this bottom purple section supposed to be there or is it supposed to be trousers", examples/r7c10-purple-under-jacket-si
+kit test	short_top_hem	kittests.py					R7 chat 13 (Sam, 26 Nov, on learn-sheet-kemi.jpg front: "Kemi's jacket is behaving like a suit jacket at the bottom, and we should have a solid block of trouser
+kit test	leg_tone	kittests.py					R7 chat 14 (Sam, 26 Nov, note 1: "In 3/4 pose the legs are different colour"; examples/sam-26nov-kemi-34-far-leg.jpg): solid_seat.leg_tone_faults catches Sam's 
+kit test	back_clip	kittests.py					R7 chat 14 (Sam, 26 Nov, note 5: "Back of bum clips slightly into chair in side-on pose and needs stronger lining"; examples/sam-26nov-kemi-side-bum-line-chair.
+kit test	stray_ink	kittests.py					R7 chat 14 (Sam, 26 Nov, note 2: "Stray horizontal line on butt"; examples/sam-26nov-kemi-side-bum-line-chair.jpg): solid_seat.stray_ink finds the loose end of 
+kit test	shoe_shapes	kittests.py					R7 chat 10 (Sam, 26 Nov: "Shoes clipping on 3/4 view", "Confused shoe shapes on side view"; examples/sam-26nov-shoes-clipping-34.jpg, sam-26nov-shoe-shapes-side
+kit test	legs_apart_spread	kittests.py					R7 chat 11 (Sam, 26 Nov, on 'upright, apart': "Those legs are sort of spread ... a bearing the crotch pose"; examples/sam-26nov-apart-spread-crotch.png): apart_
+kit test	jacket_triangle	kittests.py					R7 chat 11 (Sam, 26 Nov: "her purple jacket dips inward in a triangle, rather than having an appropriate trouser section in that area"; same frame): apart_fault
+kit test	solid_crop_same	kittests.py					Speed (Sam's Y, 26 Nov: "A 10 second clip taking 15 mins is unsustainable"): the seated body is drawn over its own box, not the whole picture (solid_seat.CROP).
+kit test	fold_stub	kittests.py					Open Wounds chat 27 (May on the seated body tool, shot 1): a fold line inside her back leg (the calf over the thigh) faded out in the open at the seat's edge, a
+kit test	wolf_house_line	kittests.py					Open Wounds note 16 (Sam, 26 Nov, animatic: "the line work on the wolves is very thick in comparison to our house style"; his frame notes/learn/wolf-line/ow-ani
+kit test	seated_r7_switch	kittests.py					R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose seated people stay pixel for pixel (fingerprints t
+kit test	seated_r7_look	kittests.py					R7 (25 Nov): the seated look reads the picture as a viewer. It must catch Sam's marked frame (a ball knee and no bottom: notes/learn/seated/no-bum-circular-knee
+kit test	override_word	kittests.py					Sam's Override (23 Nov, proposal override-word option 2). Saved example: chat 47 built animatic v5 and the send guard refused it (no body check), so Sam waited 
+kit test	locked_line_not_to_sam	kittests.py					Sam (23 Nov): no "Locked by Sam" line in messages to him (it stays in the notes). Example: chat 46/47 replies.
+kit test	render_lock	kittests.py					Rule 59 (Flying Whales animatic 4): no animatic or final without pre-flight's pass on the code as it is now.
+kit test	subtitles_readable	kittests.py					Rule 62 (Terfwarts, 3 Nov): a fast speaker's subtitles are made readable when cut: on screen at least 0.8 s and at most 220 words a minute, over a fast line and
+kit test	render_leaves_no_old_file	kittests.py					Rule 66 (Terfwarts, 3 Nov): a refused, stopped or failed render leaves no file at its output path. (Run in this process with no pass stamp, so the render is alw
+kit test	house_look_once_in_pairs	kittests.py					Rule S7 (house look, Sam 12 Nov): the engine lays the paper, light edges and shadows on every drawing ONCE, captions stay clean, and a film drawn at 12 a second
+kit test	preflight_lines_grouped	kittests.py					Rule 19 (Sam, 13 Nov, proposals 2-3): one line per fault, grouped by check, shot and who (an extra's number and the frame's time do not make a new fault); one n
+kit test	every_face_has_a_mouth	kittests.py					Rule 13 (Sam, 13 Nov, proposal 5; Blessed notes 5, 15, 45): a face turned to us with no mouth drawn is caught, front and three-quarter; one with its mouth, or s
+kit test	mouth_name_that_does_not_exist_stops	kittests.py					Rule 13 (lesson 7, Milburn note 6, Sam 17 Nov: "character 3 has no mouth"): Swindon's "pow" switched between 'v:O' and 'v:M', a shape name that does not exist, 
+kit test	board_gate_milburn_reverse	kittests.py					Rule 11 (lesson 7, Milburn note 5, Sam 17 Nov: "the scene composition in scene 4 as proposed is poor"): when the reverse two-shot was built, Milburn's only deli
+kit test	solid_check_shot4_v7	kittests.py					Rule 17 (lesson 7; GTA v7 note 3, Sam 21 Nov: "Jason clips through two parts of the car as he moves"): the times of Sam's v7 stills were matched on the v7 strip
+kit test	bump_test_bench_old_poses	kittests.py					Rule 5 (nothing passes through anything; the fault of GTA v4 note 4 and v7 note 3, Jason's body through the car): the solid-body bench (bench_move.py, the shot 
+kit test	audit_door_through_officer	kittests.py					Rule 5 (a bump test on every frame; Power Crime Action note 47, Sam 20 Oct, animatic 3: "The door clips through the character."): the van's rear door swung thro
+kit test	standing_legs_straight_elbows_out	kittests.py					Rule 81 (Sam, 8 Nov, Ad-Vanced Notice notes 15-17): standing at rest, each knee sits within 5 units of the line from hip to ankle (the old solver bent it 36 uni
+kit test	elbow_folded_back_is_a_stop	kittests.py					Rule 41 (Sam, 13 Nov, Blessed animatic 3: an arm bent the wrong way passed 185 flags as 'allowed'): an arm whose elbow sits across the chest with the forearm ru
+kit test	folded_back_never_allowed_on_screen	kittests.py					Job C 1 (Sam, 13 Nov): the on-screen arm check's 'folded back across the body' is never waved through by the 'skeleton arm' allow(); with ARM_FOLD_NAMED it is w
+kit test	point_hand_shows_a_finger	kittests.py					Rule 41 (Sam, 4 Nov, MidTerminal note 33): whenever anyone points, the hand shows a pointing finger: the house circle hands draw one for 'point', and films that
+kit test	grips_contacts_and_carry	kittests.py					Job G (9 Nov): a hand that can't reach the table hovers and is caught (views.arm_to stops at full reach without a word); a hand on the top passes; a cup handed 
+kit test	shoulder_seam_caught	kittests.py					Rule 81 (Sam, 7-8 Nov; Job G, 9 Nov): the shoulder-seam check. Drawn front on and then three-quarter at the same spot (as the gallery and a turning film do), th
+kit test	held_prop_touches	kittests.py					Job G chat 3: a hand meets what it holds on the picture (handcheck.held_faults), not only in 3D. The phone at the ear (redone: the phone sat on top of his head)
+kit test	held_over_or_behind_the_head	kittests.py					Protest Tiers note 1 (chat 7): a held thing up at the head is in front of or beside it (rule 41). Chat 5's phone (hand at the crown, the phone a prop drawn befo
+kit test	critique_library	kittests.py					Job J: a clean critique pass files each panel marked "new" in the catalogue's "Passed the critique" table, once (a second clean pass adds nothing), and panels n
+kit test	lying_and_pose_checks	kittests.py					Job G chat 4: Sam's lying notes caught (Ad-Vanced 57-58: both arms on one side, no neck; Elder Swindon 6: the arm curled up off the ground) and every kit lying 
+kit test	critique_record	kittests.py					Job H (rule 89): critique.py record refuses a half answer and a look written after the result; passes a whole one.
+kit test	critique_closeups	kittests.py					Sam, 14 Nov: every person in a full critique panel gets a close-up (boxes from the spec's "people" or the film's scene(t)); none for a detail, a Glimpse, a pane
+kit test	critique_each_fault_once	kittests.py					Rule 89 (Sam, 11 Nov): the helper lists each fault ONCE with its panels; the old per-panel form still reads, merged.
+kit test	critique_two_hunts_then_sam	kittests.py					Rule 89 (Sam, 11 Nov): two hunts a stage, one pack each; no third; CAN'T TELL never blocks; `fixed` clears hunt 2.
+kit test	critique_helper_kind	kittests.py					Budget job (d), 11 Nov: the pack names one helper kind, never a read-only one (it could not write the cold look); a home-made kind must exist with only Read and
+kit test	critique_redo_one_command	kittests.py					Budget job (c), 11 Nov: one command redraws, runs the checks and builds one sheet of only the changed panels, printing only the fault lines (a fixing chat took 
+kit test	critique_palette_colour	kittests.py					Budget job (e), 11 Nov (lines A2, S3; Blessed "orange, not buff brick"): a main colour of ours the reference shows almost none of is flagged by script; the righ
+kit test	critique_checklist_parts	kittests.py					Job H: the helper's checklist.md holds A plus only the parts asked, with no "Came from", counts or tools.
+kit test	critique_where_pops	kittests.py					Job H (rule 56, line M1): critique.py where flags a thing that pops in mid-shot (Elder Swindon 59, 62, 64).
+kit test	bleeps_every_swear	kittests.py					Rule 26 (Sam, 4 Nov; Job L): every swear in the script is bleeped, asterisks or not: a line with a swear and no bleep is caught; with its bleep, a '[bleep]' gap
+kit test	subtitle_starts_on_its_word	kittests.py					Rule 62's 0.3 s (Terfwarts line 8, Job L): a subtitle piece up 2.3 s before its phrase is said is caught (the subtitle code's syllable fallback, still live); Ad
+kit test	cut_before_the_return	kittests.py					Rule 72 (Job L): an arm posed out, then hanging at rest in the last 0.4 s before a cut, is caught; the same arm held out to the cut, or the film's last shot end
+kit test	famous_face_size	kittests.py					Rule 50 (Job L): a famous person's face is measured as drawn (1920-tall frame): a close-up passes 240 px, a wide shot alone is caught, a name never drawn is cau
+kit test	sounds_and_references_kept	kittests.py					Rule 37 (Job L): a reference or sound file git does not hold is listed at the handover (ledger log / kept).
+kit test	quiet_cost_line	kittests.py					Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem, once, never for a forecast over 15% alone, and never with a cut to
+kit test	estimate_forecast_and_alarm	kittests.py					Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned round pushes it up; the budget stop fires at the b
+kit test	stage_share_stop	kittests.py					Rule 24 (Sam, 11 Nov): the chat is stopped when a stage reaches its share (before: only a quarter over the film's whole estimate), once, and again half a share 
+kit test	copies_in_a_group	kittests.py					Job K (Sam: Y, 10 Nov): two people drawn from one copy in one frame are flagged (Ad-Vanced Notice's officers before they were varied); a varied pair passes; COP
+kit test	lopsided_invented_only	kittests.py					Job K 5 (Sam: Y, 11 Nov): an invented person can be drawn a touch uneven (brow, mouth corner, side hair); a likeness head never is. Since the one-route kit (20 
+kit test	turned_heads_for_anyone	kittests.py					Job I faces (Sam, 11 Nov): any person with a front design turns with their own face (turnhead.register), built only when a shot needs it; old faults: views.head
+kit test	lying_shirt_and_nape	kittests.py					Job I lying fixes (Sam, 11 Nov, for every character): slumped against a wall the shirt was a stiff box (lying 16: square shoulders, straight sides), now bent as
+kit test	lying_fall_settle_clean	kittests.py					Open Wounds chat 16 (body check on shot 2, 8.67-8.92 s): knocked over backwards, the in-between from sitting to lying slid every joint straight to its new place
+kit test	lying_neck_from_behind	kittests.py					Job I lying 18 (Sam, 11 Nov, "fix the neck in 14 and 18", a repeated note): curled up and seen from behind, the head sat straight on the collar with no neck (th
+kit test	eyes_cut_to_the_outline	kittests.py					Rule S5 (tool job, 11 Nov): KG's owl pupil at a hard glance spilled past his eye; eyekit cuts it, and the house-style check names a cast file that draws pupils 
+kit test	hook_text_planned	kittests.py					Rule 75 (tool job, 11 Nov): a film with HOOK but no KEEP_CLEAR was skipped quietly; now it is refused, and pre-flight's gate stops an animatic with no Hook Text
+kit test	hook_text_flag_emoji	kittests.py					Open Wounds chat 3 (Sam's Hook Text "Andy is opening old wounds... 🇬🇧", 23 Nov): a flag is two regional letters; the card drew them as two letter boxes. Now one
+kit test	moving_figures_against_the_set	kittests.py					Rule 13 (tool job, 11 Nov): Remakes' camp check moved into the kit (setcheck.moving_faults); Remakes calls it. Clean on Remakes' camp as built; Link put back in
+kit test	moving_figures_per_shot	kittests.py					Rule 13 (Blessed, 12 Nov): a film with a set per shot gives SET_FEET, SET_CAM and MOVE_SPAN keyed by shot; film_faults runs each shot against its own set, catch
+kit test	finish_captions_by_default	kittests.py					Rule 62 (tool job, 11 Nov): captions were opt-in (SUBTITLES_AT_FINISH) and a film could go out without them; finish.py now refuses a film with no caption_at and
+kit test	finish_delivers_at_one_point_one	kittests.py					Rule 70 (tool job, 11 Nov): 1.1x was done by hand; finish.py now speeds the film after the captions with the voice at its pitch, then adds the Hook Text (still 
+kit test	caption_check_at_delivered_speed	kittests.py					Rule 70: the caption readability check runs at 1.1x: a 3-word piece on for 0.85 s of film time passes at 1x but is caught at 1.1x (0.77 s delivered).
+kit test	follow_line_on_signoff	kittests.py					Rule 52 (Sam, 12 Nov): each film takes the next follow line once and keeps it; finishing stops when the list is used up; the card sits top left inside the safe 
+kit test	exceptions_need_a_written_reason	kittests.py					Rule 13 (tool chat, 12 Nov): every exception in a film's settings (HANDS_OK, LINE_OK, any *_OK, ALLOWED_POPS) needs a row in the notes' "## Exceptions" with a r
+kit test	house_look_and_lap	kittests.py					Rule 13's house look and rule 80 (tool chat, 12 Nov; Blessed notes 45, 52): with anyone on their own face, someone on the house head is caught (not in a film wh
+kit test	camera_feel	kittests.py					Rule 72 (tool chat, 12 Nov; Blessed note 51): a zoom eased over 3 s passes; the same zoom in 0.5 s, or one that starts at full speed, is caught unless the actin
+kit test	handover_drops	kittests.py					Job Q (Sam, 13 Nov): the handover check catches Blessed's real drops: N8-N10 unread when chat 5 broke, note 47's face half.
+kit test	critic_bench_scores	kittests.py					Ranking item 3: the critic bench scores an answer against Sam's real Blessed notes: a hit by line or words, a miss names its line.
+kit test	round_page	kittests.py					Ranking item 6 (overnight chat 3): a round reads Blessed's page (under 15% of its code) and a note finds its lines.
+kit test	womens_builds	kittests.py					Rule S12 (Open Wounds chat 6; Sam's notes 5 and 7): the cast-sheet build check catches both n5 pictures (the women on the man's box) and note 7 (May's hourglass
+kit test	people_from_a_description	kittests.py					Ranking item 4 (overnight chat 4): the people kit redraws Blessed's people from their descriptions, pixel for pixel.
+kit test	kept_report_travels	kittests.py					Chat 22 (Sam, 26 Nov): chat 20 pushed brexit-is-done's clean render with no body-check report, so chat 22 could not send the animatic. The saved example is that
+kit test	places_from_a_description	kittests.py					Ranking item 5 (overnight chat 5d): the places kit redraws Blessed's 13 paintings from 226 lines, and its boxes.
+kit test	moves_from_the_acting_list	kittests.py					Ranking item 7 (overnight chats 7-8): the moves kit redraws Brand's six showman shots (arrival, oath x2, dock, gates, gates2) and (chat 8) the judge, the dock g
+kit test	rough_of_every_new_thing	kittests.py					Ranking item 1 (overnight chat 10): rough.py finds every person, place view and moves block in Blessed's three description files, sends only what is new or chan
+kit test	facepick_extras_after_the_check	kittests.py					Rule 49.3 (face tool, 13-14 Nov): glasses, beard, age lines and the eyes' look are drawn AFTER the likeness check, never into the checked head (the face finder 
+kit test	facepick_beard_from_any_front	kittests.py					Face tool chat 5 (Walliams replay, 14 Nov): his first front photo is nearly shaven, and beardkit keeps only what matches its FIRST photo, so the stubble in his 
+kit test	agelines_by_measure_and_age	kittests.py					Face tool chat 3 (13 Nov): a 56-year-old came out young and round; the age lines are measured in the photos and scaled by age (Badenoch's top light deepened a 4
+kit test	facehouse_brows_sit_on_hers	kittests.py					Face tool chat 10 (Sam on Kemi: "her eyebrows are really far from her eyes"): the arch bends the brow's ends down and leaves its middle where it was measured (i
+kit test	facehouse_whole_head	kittests.py					Face tool chat 11 (Sam: Y to the kit plan): the house head as a film gets it. Andy's and Kemi's finished heads held pixel for pixel (Sam: "Kemi is right", "Andy
+kit test	facehouse_head_from_photos	kittests.py					Face tool chat 16 (Sam on Walliams, 14 Nov: "Very different head shape ... draw the face shape from the reference a lot more intelligently"): a measured head (f
+kit test	dome_not_a_carrot	kittests.py					Rule 49 (lesson 7, Milburn note 4: Pat McFadden's bald dome passed the likeness test at 62% and Sam saw "an alien carrot man"): facehouse.dome_faults flags Pat'
+kit test	face_lines_photos_show	kittests.py					Brexit Is Done note 21 (Sam, 26 Nov: Kemi's mouth and eye lines "make her look less like the real life Kemi"): facehouse.line_faults flags Kemi as drawn (the sh
+kit test	house_head_not_a_doll	kittests.py					Brexit Is Done note 20 (Sam, 26 Nov: Tony "a bit doll like" beside the house's Netanyahu, Trump, Brand): facehouse.doll_faults flags Blair as chat 27 drew him (
+kit test	hands_rest_on_armrests	kittests.py					Open Wounds note 19 (Sam, 26 Nov: Tony's "hands hover rather than resting on the chair arms"): sitting.armrest_faults flags the armchair pose's hands as chat 27
+kit test	pounce_long_enough_to_read	kittests.py					Open Wounds note 22 (Sam, 26 Nov: "The final wolf pounce on Tony, so quick it's barely registered"; note 13 before it): readtime flags the pounce as chat 27 dre
+kit test	facehouse_head_proportions	kittests.py					Face tool chat 17 (rule 30 on Walliams: chat 16's row push x1.3 left his head a light bulb, the narrow chin under wide temples): the measured head's PROPORTIONS
+kit test	kit_people_never_generic	kittests.py					Face tool chat 14 (Sam, 14 Nov, Y: background people move onto the new three-quarter turned head): everyone a people file builds, crowds included, turns through
+kit test	facehouse_beard_turns	kittests.py					Face tool chat 14: a measured beard (Walliams' stubble) is drawn in the turned views too, as Vance's goatee goes round (chat 13 drew it front-on only: his three
+kit test	facehouse_walliams_kit_person	kittests.py					Walliams kit job (Sam, 22 Nov: "Walliams: put into kit"): David Walliams is a proper kit person in the face tool's people file, his head the one Sam approved on
+kit test	outfit_every_view	kittests.py					Face tool chat 15 (one outfit in every view): every piece a person wears over the clothes (each extra, the open collar) shows in the three-quarter and the side 
+kit test	cast_tile_scale_is_one	kittests.py					Sam Y 14 Nov: a cast tile draws at scale 1 (B.SS), whatever the film left it at.
+kit test	head_view_installs_idempotent	kittests.py					Chat 18, 15 Nov: installing the turned/famous/house head kits again (in any order) adds no layer (pre-flight's child re-installed them and head_view wrapped its
+kit test	proposal_route_hook	kittests.py					The proposal route (Sam, 15 Nov): the Stop hook blocks a change put to Sam without a judge's verdict, passes one with it, passes routine Y/N, never blocks twice
+kit test	guard_one_correction	kittests.py					guard-film-questions Change 1, the check for Sam's rule "One message, never twice" (22 Nov): every block is logged in full; the block tells the chat Sam has rea
+kit test	takes_loads_no_film	kittests.py					takes.py (the shared voice clean-up for every film) loads no finished film's file: its cleaning comes from the shared audiokit.py (23 Nov, chain B chat 3; freez
+kit test	guard_labelled_list	kittests.py					guard-film-questions Learn step 2: the guard's 51 real stops (15-23 Nov), each labelled from its chat (film question, job, start the route, Critiqued wording, p
+kit test	plain_check_fields	kittests.py					CLAUDE.md "Back-end proposals are explained plainly" (Sam's Y, 23 Nov; plain-check Change 1, his answer 2): checker A (the fixed fields, no code names) fails al
+kit test	code_finder_replay	kittests.py					The frozen 26-note Blessed replay (notes/proposals/learn/replay-show.py): page.py show, given each note's words, shot and time, must keep at least 25/26 loose, 
+kit test	cost_rows_reach_the_main_line	kittests.py					startup-fixes 1 (Sam, 16 Nov): 7 of 9 chats' cost rows sat on side branches; each row now goes onto the main line alone (never the chat's half-done work), survi
+kit test	branch_printout_lists_only_real_work	kittests.py					startup-fixes 2 (Sam, 16 Nov): chats read all ~254 branches at start; the start now lists only branches whose newest work never reached the main line, judged by
+kit test	notes_printout_reads_only_open_notes	kittests.py					startup-fixes 3 (Sam, 16 Nov): chats read the whole notes file at start (~3.6k tokens); `handover.py start --film` now prints "Where things stand" and only the 
+kit test	process_work_is_never_billed_to_a_film	kittests.py					Sam, 16 Nov: chat 7406486e built a startup fix but was billed to European Protests, Ranked (on hiatus), because it tested on that film's notes 14 times; then bi
+kit test	claude_md_sentences_never_lost	kittests.py					startup fixes 4 (Sam's Y, 16 Nov): CLAUDE.md text may move only word for word (to the rulebook or a pack); a dated tag may leave its sentence only with a row in
+kit test	phone_size_poses	kittests.py					Craft change 2 (Sam, 16 Nov): pre-flight refuses a film with people and no SHOT_MARKS, and every acting-list body move or never-looked-at gallery pose with no '
+kit test	drawn_angle_every_film	kittests.py					C1 (front-on focus, Sam: Y to all, 19 Nov): pre-flight reads the DRAWN angle on every film, rooms plan or not (until then only films with no rooms plan were rea
+kit test	focus_front_heads	kittests.py					C2 (front-on focus, Sam: Y to all, 19 Nov): the focus setting on both front heads (focus.py). At focus 0 every drawing is pixel for pixel what it is with the fo
+kit test	crowd_heads_hung	kittests.py					GTA shot 4 (Sam's notes 5, 10, 14, 20 Nov): a crowd member made on the fly (crowd_person) after the kit is installed draws its OWN head and hair, never the body
+kit test	crowds_varied	kittests.py					Craft change 1 (Sam, 16 Nov): the sameness check: EPR's gold hats (9 of 20 hats), one-model police and one-face rioters, the bald share, a place's skin mix, a c
+kit test	shot_board_every_shot	kittests.py					Craft-step2 learn step (craft chat 7, 17 Nov): rough.py's board draws EVERY shot of a film's SHOTS through the film's own picture(t), in its own process (so an 
+kit test	board_gate_refusals	kittests.py					Rule 11's gate (craft chat 8, 18 Nov): the pre-flight refuses a new film until its shot board has reached Sam (rough.py sent FILM OUT.jpg --delivered --board); 
+kit test	cost_watch_lines	kittests.py					Rule 85 (Sam's Y, 17 Nov): amber at 250k of history, red at 370k; the warning lines count steps and say aim ~100, up to 150 to finish, never mid-fix.
+kit test	model_guard_stops_routine_on_opus	kittests.py					Model guard (Sam's 1, 17 Nov): on 16 Nov the Opus fix chats spliced the animatic with the word check silent; the guard refuses finish.py / whole-film render / s
+kit test	scheduled_task_guard	kittests.py					Scheduled-task guard (Sam, 26 Nov): Open Wounds chat 17 made a scheduled task that started a fresh chat on firing; chat 18 got no project and the default model.
+kit test	message_saver_keeps_typed_messages	kittests.py					Message saver (handover.py log): nothing Sam typed was saved after 16 Nov 19:02, because the app began stamping typed messages with an origin and any origin rea
+kit test	finder_reminder_per_chat	kittests.py					finder-use (Sam's 1, 17 Nov): the per-day flag went silent for every chat once any chat called show (16 Nov: 6 of 19 chats never did). Now: one line at a chat's
+kit test	watcher_catches_last_weeks_four	kittests.py					early-warning (Sam's 1, 17 Nov): the number to beat. Last week's four silent failures, each from its own kind of record: the message saver (chat C, 17 Nov), rou
+kit test	finished_films_keep_their_bookmark	kittests.py					One route to the kit, Change 1 (Sam's Y, 20 Nov): every finished film has a bookmark on its true source save, nothing in animations/ is unlisted, and the count 
+kit test	body_check_shot4_v4	kittests.py					GTA shot 4, version 4 (Sam, 20 Nov: "Utterly inhuman ... It really worries me that this wasn't caught"): the body check (humancheck.py) must catch the right arm
+kit test	body_check_curled_v4	kittests.py					Rule 41 (GTA v4 notes 6 and 15, Sam 20 Nov: "Limbs, neck, torso, all curled around each other and in the wrong place. Utterly inhuman", "the horror show in reve
+kit test	body_check_back_view	kittests.py					GTA v3 F1, F5, F7 (chat 27; changed chat 28 after Sam, 21 Nov: "a great shot but a broken drawing"): a person seen big from behind must be DRAWN to read from be
+kit test	tools_switched_on	kittests.py					Sam, 21 Nov: "Why are tools built then not enabled? Keeps happening. Please ensure that doesn't happen again." The model guard was built and tested on 17 Nov bu
+kit test	handover_status_checks	kittests.py					Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must catch what slipped on Grand Theft Autism: notes ov
+kit test	crowd_head_installed	kittests.py					Sam, 26 Nov (pose-test chat 1, saved example notes/learn/pose-test/sheet-keyframes.jpg): a test scene that never installed the crowd pack drew every worker and 
+kit test	nod_reads_on_screen	kittests.py					Open Wounds chat 32 (saved example: the fresh-eye review, notes/ledger/brexit-is-done/round-27.txt: "never leaning in as she talks", "no nod reads"): May's move
+kit test	head_moves_not_comic	kittests.py					Open Wounds chat 37 (saved example: Sam's note 23.1, 26 Nov, notes/ledger/sam/s3zjpz4k.md: "May's lean, Kemi and May's head bobbing, have all become comically l
+kit test	chase_order_stuck	kittests.py					Open Wounds chat 37 (saved example: Sam's note 23.4, 26 Nov: "The wolves and guests are clipping over each other when they run in ... Decide who is in front of 
+kit test	early_move_size	kittests.py					Open Wounds chat 35 (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, pre-flight 26 Nov 18:57: "MOVE SIZE: shot 2 kemi: the chin up at 
+kit test	camera_measured_on_background	kittests.py					Open Wounds chat 35 (saved example: notes/ledger/brexit-is-done/checks.jsonl, pre-flight 26 Nov 18:57: "CAMERA FEEL: shot 1 6.12-6.38 s, the pan: stops from 81%
+kit test	hand_rests_on_thigh	kittests.py					Open Wounds chat 32 (saved example: round-27.txt, "both ball hands sit loose at the lap edge ... neither clearly rests on a thigh"): with the old 'lap fwd' plac
+kit test	pop_carried_off_edge	kittests.py					Open Wounds chat 32 (saved example: pre-flight, notes/ledger/brexit-is-done/round-0.txt: "shot 3: guest vanishes mid-shot between 33.88 and 34.12 s, away from t
+kit test	words_from_takes	kittests.py					Chat 29 of Open Wounds (26 Nov; saved example: Sam's Kemi.m4a and Kemi_2.m4a, which chat 28 could not tell apart and called two takes of one line): speech-to-te
+kit test	crowd_pool	kittests.py					Sam, 26 Nov (crowd pool chat 1: "Open up the crowd pack to all of the combinations that we've used before across all cities ... generic people in any of our fil
+kit test	practice_mode	kittests.py					Sam, 26 Nov ("override all checks and produce it"; "advise whether you want to run a certain suite of checks"; the proposal route on request): with nothing aske
+kit test	body_send_gate	kittests.py					Change 1 (Sam's Y, 20 Nov): a video made since the gate reaches Sam only with a body check record, clean or named, and a fresh critique (rule 89); videos from b
+kit test	body_check_headless	kittests.py					GTA chat 20 (rule 30): the lean-out sheet showed pose K2 from three-quarter front with no head; the figure guard had stopped the drawing at the arm and the body
+kit test	dearest_things_named	kittests.py					Cost audit (Sam, 21 Nov: "audit every last thing done in order to find the most expensive things and run it through the proposal route"): GTA's record filed 69%
+kit test	rule_proofs_gate	kittests.py					Lesson 7 (rule-needs-check, Sam's option 1, 22 Nov): "no rule without a working check". Step 1 found 61 of 103 rules never proved on a bad example, 19 rows "by 
+kit test	staging_stills_milburn_replay	kittests.py					Lesson staging-stills (Sam's option 1, 22 Nov): no shot moves before Sam has seen its framing. Milburn's own record replayed: chat 6's first build of the Cabine
+kit test	staging_stills_note_finder	kittests.py					Lesson staging-stills: the note finder (staging.FRAMING, on Sam's words) finds every framing or staging note the four-film look back listed (Milburn, Patriots 4
+kit test	acting_rows_every_shot	kittests.py					Rule 74 (Sam, 20 Nov, GTA shot 4 note 16: "no acting notes anywhere"): the gate asked for a row per spoken line only, so shot 4 (no lines) went to Sam with none
+kit test	named_lines_shared_inputs_milburn	kittests.py					named-lines change 3 (Sam's Y, 23 Nov): the kits hand the checks what they need from the drawing, no film code. Must beat on Milburn: its blind lines cured (37 
+kit test	move_to_shared_catches_film_fixes	kittests.py					named-lines change 3's stop, the check of CLAUDE.md "Every rule and fix is for all films" (Sam, 23 Nov, N26): handover.py end stops on a check fix written in on
+kit test	kittest_red_twice_stops_handover	kittests.py					named-lines change 4 (Sam's Y, 23 Nov), on chain A's gate: a kit test red at two handovers in a row (different chats), or one that crashed, is a STOP line; red 
+kit test	plan_places_apart_and_flat_floors	kittests.py					named-lines change 3: plan.py treats rooms no opening joins as separate places (Milburn's 3 false overlaps), reads a floor-flat thing as stood on (its 5 false '
+kit test	takes_cleaned_and_registered	kittests.py					named-lines change 3: takes.clean (Milburn's take cleaning, now shared) cleans each line's files and registers the take under its audio name, so voices.py reads
+kit test	run_hips_stay_up	kittests.py					A run never sinks into a lunge (Open Wounds chat 13, notes/learn/run-lunge/): the hips bob at most 0.13 leg.
+kit test	movers_never_meet_head_on	kittests.py					Two movers going opposite ways never meet on screen within 3 m of depth (Open Wounds chat 13: nose to nose).
+kit test	side_by_side_out_of_reach	kittests.py					Two people running side by side stay more than an arm's reach apart on screen (Open Wounds chat 13: a hand on the shoulder of the guest beside him, notes/learn/
+kit test	dark_sleeve_reads	kittests.py					A dark sleeve swinging across a dark jacket reads as an arm, not a floating hand (Open Wounds chat 14, critique r5 (b), notes/learn/dark-sleeve/): side on mid-r
+kit test	trodden_things_move	kittests.py					A loose thing on the floor that runners' feet reach is kicked along, never trodden through (Open Wounds chat 14, critique r5 (c), notes/learn/tray-trodden/): th
+kit test	kit_tests_rerun_only_what_changed	kittests.py					kit-tests-when (Sam's pick 1, 25 Nov, notes/proposals/kit-tests-when.md): each green kit test leaves a stamp of the files it read, and only tests whose files ch
+kit test	kit_tests_per_film	kittests.py					Rule 90 (Sam, 25 Nov, saved in notes/ledger/sam/5whcspgq.md: "Make the kit check happen at the beginning and the end of every film ... it is wasting usage and t
+kit test	ledger_told_film	kittests.py					pose-kit-format C1 (Sam's Y, 26 Nov; saved example notes/learn/pose-kit/examples/ledger-misfiled-26nov.json): R7 chats 3-5 were billed to proposal-route because
+kit test	ledger_rebook	kittests.py					pose-kit-format C1: misfiled() finds every R7 chat its handovers name that sits in another ledger: all five on the saved 26 Nov copy (1f655db8, 39bef7c8 under b
+kit test	pose_job_line	kittests.py					pose-kit-format C3 as Sam changed it (notes/learn/pose-kit/examples/sam-26nov-default-tool.md: "Just tell me you're using the default tool when you start unless
+kit test	learn_first	kittests.py					Rule 91, the Learn-First rule (Sam, 26 Nov; notes/learn/pose-kit/examples/sam-26nov-learn-first.md: "Next time we need a new pose, quote this rule and what you 
+kit test	check_audit_lists_and_flags_repeats	kittests.py					R8 check audit (Sam, 26 Nov: "audit every check we do in this project"; saved example: Open Wounds' notes/ledger/brexit-is-done/checks.jsonl, where 97% of fault
+kit test	head_moves_never_snap	kittests.py					A nod written as a snap (rise 0.1 s, Sam's note 24.1, Open Wounds chat 38: "very sharp and doesn't correspond to anything a person would actually do") is drawn 
+kit test	suit_one_cloth	kittests.py					A suit with a tie is one cloth (Sam's note 24.3, Open Wounds chat 38: "Tony's suit sleeves are a different colour to the jacket"): Blair's sleeves and trousers 
+kit test	smirk_one_corner	kittests.py					A smirk reads (Sam's note 24.2, Open Wounds chat 38: "doesn't read as a satisfied smirk but a neutral expression"; FACS: one corner pulled up, unilateral AU12):
+rule (by hand)	rule 1	rulebook					`plan.py` (pre-flight, with its true-gap check; skipped for a film with no rooms: `HAS`); the layout by hand
+rule	rule 3	rulebook					`benchmark.py` (pre-flight); the film's own route check (e.g. `traffic_faults`: every car on the road); critique S3, S2
+rule	rule 8	rulebook					`preflight.gate_warnings`: no "Rehearsal clips sent:" line (date and file, or "none: why") refuses a film started from the 10 Nov template, warns on older ones
+rule	rule 10	rulebook					`LOOKS_AT` eyelines; holds: critique M2
+rule	rule 11	rulebook					`python3 source/rough.py board FILM OUT.jpg` (every shot; the row from story/FILM-board.txt); `rough.py sent FILM OUT.jpg --delivered --board` records it (story
+rule	rule 14	rulebook					`preflight.gates`, `cast_faults`
+rule	rule 24	rulebook					`ledger.py estimate FILM PCT --stages` and `ledger.py stage FILM NAME` (the forecast line); `ledger.py auto` (the Stop hook: every chat's cost after every reply
+rule	rule 26	rulebook					`voices.bleep_check` (pre-flight; kittest `bleeps_every_swear`); where the bleep sits: by the sound
+rule (by hand)	rule 28	rulebook					`catalogue.py` sheet; updating by hand
+rule	rule 38	rulebook					`plan.py` (`SHOT_MARKS`, `THREE_QUARTER_OK`); pre-flight refuses a film with people and no `SHOT_MARKS`, and `posecheck.py` reads the DRAWN angle of everyone ma
+rule	rule 74	rulebook					`preflight.gate_warnings`: no acting list refuses a film started from the 10 Nov template, warns on older ones; ticked on the check sheet; layout in `guides/sat
+rule (by hand)	rule 86	rulebook					by hand: the proposal, its cost and Sam's Y in the job's or film's notes before anything is built
+rule	rule 2	rulebook					`sets.house`; `sets.portal_faults`
+rule	rule 13	rulebook					`kitchecks.py`; the exceptions: `waivers.gate_faults` (pre-flight refuses any `*_OK`, `ALLOWED_POPS` entry with no row in the notes' "## Exceptions": check, who
+rule	rule 20	rulebook					`viewchecks.turn_faults`
+rule	rule 22	rulebook					`audit.py`; critique S1
+rule (by hand)	rule 32	rulebook					`lying.py contact_faults` (bodies); pieces by hand (tilt at landing)
+rule	rule 41	rulebook					`handcheck.py` every frame (hands, points, a held thing over or behind the head, hands meeting props, props hidden, the shoulder seam); `views.check_arm3` STOPS
+rule	rule 90	rulebook					`kitfilm.py` (start: `at_start`; end: `handover.py` kit gate; `setup_faults`: no run at machine start; `major_line`); finish.py's kit gate; kittest `kit_tests_p
+rule	rule 91	rulebook					`handover.py start` LEARN-FIRST line; kittest `learn_first`
+rule	rule 92	rulebook					`movesize.early` in the quick check (`preflight.py NAME OUT --text`) and `movesize.py FILM --new`; kittest `early_move_size`
+rule	rule 93	rulebook					`override.advise`; `film_engine.render` (lock and picture checks print `Concerns (advice only, rule 93)` and keep the video); kittest `checks_advise_never_lock`
+rule	rule 49	rulebook					`likeness.py check` (run on the clean twin: the head script's `--clean`, as `blessed_walliams.py head --clean`); `likeness.py card` warns on a thin pack; `namet
+rule	rule 50	rulebook					`kitchecks.faces` from the film's `FAMOUS` list (pre-flight; kittest `famous_face_size`)
+rule	rule 63	rulebook					`moves.audit` (gait numbers); `handcheck`; critique M3
+rule	rule 65	rulebook					`mouths.loudness_open`; `voices.py` mouth check
+rule (by hand)	rule 77	rulebook					`beardkit.py analyse` (its five lines, sent with the empty-face sheet); by hand
+rule (by hand)	rule 78	rulebook					critique P1, P7 (full size, beside the reference photo (`references/body-weight/leaning-on-table-forearm-forward.jpg`: head on one fist, other forearm forward a
+rule	rule 80	rulebook					`sitting.py` checks (`check_no_sink`, the lap drawn when `j['lap']`); on films, `waivers.lap_faults` (pre-flight: seated front or three-quarter on with no lap; 
+rule (by hand)	rule 83	rulebook					`setcheck.py` (the film's checks(), so pre-flight); people and held things by hand: stills of every shot with props at phone size before each animatic
+rule	rule S2	rulebook					`kitchecks` (`TOUCHES`, `FREE_MOVES`)
+rule	rule S5	rulebook					every cast's eyes cut to the outline (`burnham.face`, `remakes_cast._eye`, new casts `eyekit`); pre-flight's house style names a cast file that draws uncut pupi
+rule	rule S7	rulebook					`film_engine.look_faults` (pre-flight); kittest `house_look_once_in_pairs`
+rule	rule S8	rulebook					`kitchecks.marks`
+rule	rule S10	rulebook					`mounts.check`
+rule	rule S12	rulebook					`castsheet.py build` (shape, likeness, judge record); handover end; kittest `womens_builds`
+rule	rule L1	rulebook					`lying.py`; critique P7
+rule	rule 5	rulebook					`audit.py` (`scene(t)`, `ALLOWED_CONTACTS`; `sets.solids`)
+rule	rule 6	rulebook					`audit.py` (`ALLOWED_POPS`); critique M1
+rule	rule 7	rulebook					`voices.py --film`
+rule	rule 16	rulebook					`viewchecks.direction_faults` (`movers(t)`)
+rule	rule 17	rulebook					`viewchecks.hide_faults` (effects against every scene thing); `viewchecks.layer_faults` (every listed thing against every other; allowed overlaps by name with a
+rule	rule 18	rulebook					`viewchecks.readability_faults` (`JOKE_PROPS`)
+rule	rule 19	rulebook					`report.py` (counts COULD NOT TEST in the summary's first line), `round.py`; pre-flight: a film with people and no `solids(t)`/`layers(t)` is COULD NOT TEST (cl
+rule	rule 57	rulebook					`clipcheck.flip_faults` on the film's `draw_order(t)`
+rule	rule 58	rulebook					`preflight.py`
+rule	rule 59	rulebook					`film_engine.render` (the lock, the picture checks while drawing); `preflight.py` (`probe`, `picture_faults`); `kittests.py render_lock`; `waivers.split` (each 
+rule	rule 62	rulebook					`subtitles.py`; pre-flight caption check; `kittests.py subtitles_readable`; the 0.3 s start: `voices.caption_start_check`; the style and timing: `subtitles.draw
+rule	rule 66	rulebook					`film_engine.render`; `kittests.py render_leaves_no_old_file`
+rule (by hand)	rule 67	rulebook					`preflight.py --text`; by hand
+rule	rule 70	rulebook					`finish.py --film NAME`: captions, then 1.1x with pitch kept (`subtitles.SPEED`), then the Hook Text and sign-off; the caption check (`subtitles.readable_faults
+rule (by hand)	rule 72	rulebook					the return: `kitchecks.cut_rests` (pre-flight, standing people; kittest `cut_before_the_return`); behind wings or cape: by hand; the turn: critique M3; camera f
+rule	rule 75	rulebook					`finish.py CLEAN OUT --film NAME`: reads `HOOK` and runs `hookcheck.py` first (refuses on a fault unless that line has its own answer in the notes, rule 59; a f
+rule	rule 85	rulebook					automatic (`.claude/hooks/costwatch.py`, every step and every message; its warning lines count the chat's steps; kittest `cost_watch_lines`); and per film: `led
+rule	rule 29	rulebook					`film_engine.render` stamp
+rule (by hand)	rule 30	rulebook					by hand; end-of-film pass (Stage 5)
+rule	rule 37	rulebook					`ledger.py log` (or `kept`) lists what git does not hold (kittest `sounds_and_references_kept`)
+rule	rule 43	rulebook					`filmkit.eyeline(aim=, drawn=, at=)`, `look_sheet`
+rule	rule 47	rulebook					`film_engine.render` refuses a full-size full render once `animations/NAME.mp4` exists, unless `--full-ok` (Sam's Y, 13 Nov); `kittests.py nostamp`
+rule	rule 48	rulebook					`sheet.py` (default width)
+rule	rule 52	rulebook					`signoff.py` default and `follow_line.line_for` (via `finish.py`, which stops when the list is used up); kittest `follow_line_on_signoff`
+rule	rule 61	rulebook					`preflight.gate_warnings` (no MAP, or a file over 1,000 lines: a warning)
+rule (by hand)	rule 87	rulebook					by hand (the reply to the notes; 'fails twice' from the seen-before mark, rule 30); framing notes: `staging.py` (rule 11)
+rule (by hand)	rule 88	rulebook					by hand
+rule	rule 89	rulebook					`critique.py` (`pack` adds the close-ups from the film's scene(t) or the spec's "people" boxes; a fresh Sonnet helper (Sam, 14 Nov: the repeat test showed no ga
+rule	rule S3	rulebook					`filmkit.hiss_check(voice=)`
+rule (by hand)	rule S4	rulebook					by hand
+rule	rule S9	rulebook					`kitchecks.sounds`
+rule	rule S11	rulebook					automatic: `mossad_audio.POLISH` (on by default); `mossad_audio.py soft NAME` shows each take before and after
+rule (by hand)	rule Messages to me	rulebook					system asks: `propose.py` refuses a judge's verdict without the fields (proposals packed from 23 Nov), `propose.py plain FILE` checks the review's lessons, `pro
+rule (by hand)	rule Asking me before you go on	rulebook					by hand; `preflight.cast_faults`; `finish.py` on the animatic's clean render
+rule	rule Rules are permanent	rulebook					`propose.py hook` (Stop hook refuses an unjudged ask); `propose.py review` at film end; handover search
+rule (by hand)	rule Models and chats	rulebook					by hand; models: handover.py (start and end)
+rule (by hand)	rule The handover	rulebook					by hand
+rule (by hand)	rule Stopped drawings	rulebook					by hand; the picture checks list them as 'could not be drawn'
+rule	rule Drafts kept	rulebook					finish.py saves them; handover.py's DRAFT check
+rule (by hand)	rule Making the films	rulebook					P13 automatic (no cost-watch line means it isn't); the rest by hand

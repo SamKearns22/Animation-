@@ -62,13 +62,19 @@ The start check prints this for the film (handover.py start, LEARN-FIRST; kittes
 Rules that bite next: 11 (shot 2 built only as Sam's framing 2, the site a third closer), 30 (a nod seen twice: 23.1/24.1 were size, 26 the shape), 93 (checks advise, never lock).
 Done (chat 39): note 26 fixed in the shared kit, prevention: views.Pitched turns a nodding head in 3D about the point behind and below the ear (learnt: notes/learn/nod, Wikimedia 'Nodding gesture'), each face's own size (face_box), a hard hat tips whole (NOD_SOLID), long edges cut short while nodding (rest drawings pixel-identical); kittest nod_is_a_turn (the old bob fails). Grey practice clip made (notes/learn/nod/practice.py); film clips of May and Blair rendered but not yet looked at or sent; Kemi's clip refused until shot 2's framing-2 board is sent (rule 11). Stops settled: CROTCH kemi front (solid_seat.STAND_LEG_GAP: standing legs part up to the crotch, as Sam's seated "small gap that runs all the way down"); JUDGE: fresh round on outlines-v8 (Kemi front woman 4, was man 2). Shared tool source/wikifetch.py (Sam: "You have solved the Wikimedia problem before": a client name, 6 s apart, thumbnails only).
 Next: chat 40 (OPUS, MEDIUM: building from a clear plan): shot 2 at Sam's framing 2: the site and all four background actions a third nearer (places file depths: people attack 7, milling 12, lift 25 and the site's set pieces; brexit_is_done_action ATTACK, LIFT_D, runner, bars, milling positions), every action and some grey sky in frame; board (rough.py board brexit-is-done OUT.jpg --shots 2), send, rough.py sent --board; then the nod clips (final OUT --small --span: May 3.4-5.6, Kemi 17.0-19.2, Blair 26.8-29.4; look as a viewer, send) and a Kemi clip 13.5-16 s. Then Sonnet: pre-flight, animatic, finish.py, send.
-Needs Sam: his look at the nod clips (Q1, the 7 px floor, waits on it: movesize may now read Kemi's nods differently); Q2 full kit check now (my pick N); Q3 Y/N on check-knows-intent (V3).
+Needs Sam: his look at the nod clips (Q1, the 7 px floor, waits on it: movesize may now read Kemi's nods differently); Q2 full kit check now (my pick N). (check-knows-intent: answered, option 1, built under R8.)
 Judge faults left (castsheet judge_faults, the women's build: note 5, waiting on Sam's pick): May three-quarter woman 2; Kemi three-quarter woman 2; Kemi back man 2 and seated man 3 (neither view is in this film).
 Read: guides/job-packs.md "Notes round" (stops), "Plan" staging lines (shot 2).
 Open rule requests: none. Notes file over 4,000 words: trim at the animatic.
 Branches: claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: GTA's, left.
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing (shot 2 now framing 2). No change to timing, lines, mouths, soundtrack.
 For Claude: preflight name 'brexit-is-done'; main line claude/create-claude-md-oe8z4g; chat 39 branch claude/brexit-chat39; views.Pitched/face_box/NOD_DEG/NOD_SOLID, solid_seat.STAND_LEG_GAP, source/wikifetch.py; notes/learn/nod/practice.py.
+
+## Open from chat 36 (Sam's picks pending)
+- Proposal check-knows-intent: Sam picked option 1 (26 Nov, R8 chat), built under R8 (notes/check-audit.md).
+- Proposal seeing-five-candidates: Sam picked 1 without the video model (26 Nov, chat 36); to build in its own chat.
+- The 3 resting-hand faults: discarded by Sam (26 Nov, R8 chat: "I don't see anything wrong their resting hands, discard.").
+- Rule 93 still to build: circled stills and why-line (on Sam's word), kittest checks_advise_never_lock.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Sam 26 Nov 21:29 (chat 38): "We have fixed the bum problem with our latest kit, no?": answered yes in chat 38; the seated 'no bum' test deleted (the body kit draws the bottom).
