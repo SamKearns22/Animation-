@@ -2894,6 +2894,952 @@
    "notes_auto": 0
   },
   {
+   "date": "2026-11-25",
+   "chat": "39bef7c8",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 3.33,
+   "src": "estimate",
+   "sid": "session_01U3pKQzwtcxXpPFrs5pH7DZ",
+   "steps": 137,
+   "hist_k": 296,
+   "kinds": {
+    "film-file search": 0.2,
+    "tool search": 16.0,
+    "whole-file .py read": 1.1,
+    "renders": 0.2,
+    "pictures": 7.8,
+    "other": 74.7
+   },
+   "calls": {
+    "film-file search": 2,
+    "tool search": 85,
+    "whole-file .py read": 5,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 1,
+    "pictures": 21,
+    "other": 40
+   },
+   "split": {
+    "usd": 11.1342,
+    "total": 11.1342,
+    "floor_k": 84,
+    "blocks": {
+     "carried history": 30.8,
+     "new writes": 30.4,
+     "Claude's words": 22.2,
+     "start-up floor": 16.6
+    },
+    "origins": {
+     "Claude's words": 38.5,
+     "messages and reminders": 28.3,
+     "start-up floor": 16.7,
+     "result: tool search": 9.0,
+     "result: pictures": 5.1,
+     "result: other": 2.1,
+     "result: film-file search": 0.2
+    },
+    "named": {
+     "messages and reminders": 28.3,
+     "start-up reading (rules, tools, first files)": 16.7,
+     "thinking": 16.0,
+     "writing code": 12.5,
+     "reading kit code": 5.8,
+     "commands": 5.3,
+     "looking at pictures": 5.1,
+     "reading notes": 2.4,
+     "other commands": 1.9,
+     "writing notes": 1.8,
+     "messages to Sam": 1.6,
+     "helper and chat prompts": 1.3,
+     "reading guides": 0.5,
+     "start-up and handover tools": 0.3,
+     "helper results": 0.2,
+     "app tools (chats, files sent)": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 77,
+    "work_pct": 1.54,
+    "reads": [
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/dbg.png",
+      4.8,
+      0.1121
+     ],
+     [
+      "source/views.py",
+      3.6,
+      0.095
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/samdbg.png",
+      3.2,
+      0.0763
+     ],
+     [
+      "source/castsheet.py",
+      3.2,
+      0.073
+     ],
+     [
+      "notes/next-jobs.md",
+      2.3,
+      0.0608
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/now_s.png",
+      1.6,
+      0.0419
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/blair.png",
+      1.6,
+      0.0402
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/sam_s.jpg",
+      1.6,
+      0.0399
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/knees.png",
+      1.6,
+      0.0341
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/knees2.png",
+      1.6,
+      0.033
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/knees3.png",
+      1.6,
+      0.0327
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/variants.png",
+      1.6,
+      0.0324
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/after_s.png",
+      1.6,
+      0.0318
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/kemi.png",
+      1.6,
+      0.0315
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/kemi2.png",
+      1.6,
+      0.0304
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/kemi3.png",
+      1.6,
+      0.0289
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/kemi4.png",
+      1.6,
+      0.0286
+     ],
+     [
+      "notes/learn/seated/judge/outlines-r7.jpg",
+      1.6,
+      0.0266
+     ],
+     [
+      "notes/learn/seated/judge/look-r7.jpg",
+      1.6,
+      0.0266
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/39bef7c8-af4f-570a-b100-0169fc87c6d2/scratchpad/v1_s.jpg",
+      1.6,
+      0.026
+     ],
+     [
+      "notes/learn/seated/r7-before-after-v2.jpg",
+      1.6,
+      0.0243
+     ],
+     [
+      "source/critique.py",
+      1.2,
+      0.0203
+     ],
+     [
+      "notes/learn/kemi-build/judge.py",
+      1.0,
+      0.0171
+     ],
+     [
+      "/home/user/Animation-/notes/learn/seated/judge/judge-C.md",
+      0.6,
+      0.009
+     ],
+     [
+      "notes/learn/kemi-build/judge_prompt.txt",
+      0.4,
+      0.0064
+     ],
+     [
+      "story/brexit-is-done-people.txt",
+      0.2,
+      0.0038
+     ],
+     [
+      "source/remakes_cast.py",
+      0.2,
+      0.0037
+     ],
+     [
+      "/home/user/Animation-/notes/learn/seated/judge/results-r7.md",
+      0.1,
+      0.0019
+     ],
+     [
+      "/home/user/Animation-/notes/learn/seated/judge_r7.py",
+      0.0,
+      0.0003
+     ],
+     [
+      "/home/user/Animation-/notes/learn/seated/sheet_r7.py",
+      0.0,
+      0.0
+     ]
+    ],
+    "base_pct": 18.7
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 2
+    },
+    "other": {
+     "other": 42,
+     "shared:handover.py": 6,
+     "film notes": 15,
+     "shared:views.py": 5,
+     "shared:castsheet.py": 3,
+     "shared:kittests.py": 11,
+     "guides": 2,
+     "shared:remakes_cast.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current; git fetch origin claude/cr",
+      ""
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git checkout -B claude/r7-chat2 origin/claude/create-claude-md-oe8z4g 2>&1 | tai",
+      ""
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01U3pKR21qH3HD4urog8SVBy --film r7 2>&1",
+      ""
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "^#\\+ .*R7\\|R7, where things stand",
+      ""
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "sed -n 1,80p notes/next-jobs.md",
+      ""
+     ],
+     [
+      5,
+      "other",
+      "shared:views.py",
+      "guides/job-packs.md source/views.py source/castsheet.py source/people.py source/",
+      "R7",
+      ""
+     ],
+     [
+      6,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py",
+      "sed -n 535,700p source/castsheet.py",
+      ""
+     ],
+     [
+      7,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "def seated_r7",
+      ""
+     ],
+     [
+      8,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 344,600p source/views.py",
+      ""
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "",
+      "cd source && time python3 -c \" import castsheet as CS for f in CS.seated_look_fa",
+      ""
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'/tmp/claude-0/-home-user-Animation-/",
+      ""
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "0\\.7[0-9]\\b\\|def shade\\|SHADE",
+      ""
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "^def dk\\|^def _setup\\|^BG\\b\\|^BG =",
+      ""
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "^SKIN\\|skin.*=.*(",
+      ""
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "sed -n 195,200p people.py && python3 - <<'EOF' src = open('castsheet.py').read()",
+      ""
+     ],
+     [
+      38,
+      "other",
+      "other",
+      "",
+      "Sk\\b\\|Sk\\[",
+      ""
+     ],
+     [
+      43,
+      "other",
+      "other",
+      "notes/learn/seated/no-bum-circular-knees-sam.jpg",
+      "def seated_look_faults",
+      ""
+     ],
+     [
+      47,
+      "other",
+      "other",
+      "",
+      "def curve\\|def _inside\\|def inside\\|def point_in",
+      ""
+     ],
+     [
+      48,
+      "other",
+      "other",
+      "",
+      "^from\\|^import\\|curve\\b",
+      ""
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "R7_END_ON",
+      ""
+     ],
+     [
+      55,
+      "other",
+      "other",
+      "",
+      "knee=(33\\|R7_CAP =",
+      ""
+     ],
+     [
+      56,
+      "other",
+      "other",
+      "",
+      "sed -i '352s/12 cm at the knee\\./10 cm at the knee (narrower than the calf below",
+      ""
+     ],
+     [
+      60,
+      "other",
+      "other",
+      "",
+      "r7",
+      ""
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "sed -n 1700,1800p views.py",
+      ""
+     ],
+     [
+      62,
+      "other",
+      "other",
+      "",
+      "def trouser_seat",
+      ""
+     ],
+     [
+      65,
+      "other",
+      "other",
+      "",
+      "def .*hivis\\|def .*hi_vis\\|def vest",
+      ""
+     ],
+     [
+      66,
+      "film",
+      "before show",
+      "story/brexit-is-done-people.txt ../story/brexit-is-done-people.txt",
+      "kemi",
+      ""
+     ],
+     [
+      67,
+      "film",
+      "before show",
+      "story/brexit-is-done-people.txt",
+      "'workwear'\\|def workwear\\|hivis\\|hi-vis",
+      ""
+     ],
+     [
+      68,
+      "other",
+      "other",
+      "",
+      "sed -n 1246,1300p people_parts.py",
+      ""
+     ],
+     [
+      69,
+      "other",
+      "other",
+      "",
+      "\n    hem = sp.get('jacket_hem')'''\nnew = '''    over the back of the thigh), its",
+      ""
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "usage\\|argv\\|python3",
+      ""
+     ],
+     [
+      74,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "cd /home/user/Animation- && timeout 900 python3 source/kittests.py seated_r7 2>&",
+      ""
+     ],
+     [
+      75,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 1700 python3 source/kittests.py > /tmp/claude-0/-home-user-Animation-/39",
+      ""
+     ],
+     [
+      76,
+      "other",
+      "guides",
+      "source/*.py guides/job-packs.md",
+      "woman/man\\|woman or man\\|blind judge",
+      ""
+     ],
+     [
+      77,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py source/critique.py",
+      "def .*judge\\|woman/man\\|def blind",
+      ""
+     ],
+     [
+      78,
+      "other",
+      "shared:castsheet.py",
+      "source/castsheet.py source/critique.py",
+      "^$",
+      ""
+     ],
+     [
+      79,
+      "other",
+      "other",
+      "notes/learn/kemi-build/judge.py notes/judge/ notes/learn/kemi-build/",
+      "wc -l notes/learn/kemi-build/judge.py && sed -n 1,40p notes/learn/kemi-build/jud",
+      ""
+     ],
+     [
+      80,
+      "other",
+      "other",
+      "notes/learn/kemi-build/judge.py notes/judge/brexit-is-done-cast.json notes/learn",
+      "sed -n 40,80p notes/learn/kemi-build/judge.py; python3 -c \" import json; r=json.",
+      ""
+     ],
+     [
+      87,
+      "other",
+      "other",
+      "notes/learn/seated/ notes/learn/seated/r7-before-after-v1.jpg",
+      "r7-before-after",
+      ""
+     ],
+     [
+      91,
+      "other",
+      "other",
+      "notes/learn/seated/judge/key-r7.json",
+      "python3 -c \" import json; k=json.load(open('notes/learn/seated/judge/key-r7.json",
+      ""
+     ],
+     [
+      93,
+      "other",
+      "film notes",
+      "/home/user/Animation-/notes/learn/seated/judge/results-r7.md",
+      "cat > /home/user/Animation-/notes/learn/seated/judge/results-r7.md <<'EOF' # R7 ",
+      ""
+     ],
+     [
+      96,
+      "other",
+      "guides",
+      "guides/kit-catalogue.md",
+      "^PASS",
+      ""
+     ],
+     [
+      97,
+      "other",
+      "other",
+      "source/*.py",
+      "def _leg\\|\\.leg = \\|V.leg =\\|views.leg =",
+      ""
+     ],
+     [
+      98,
+      "other",
+      "shared:remakes_cast.py",
+      "source/remakes_cast.py",
+      "V.leg\\b\\|V\\.leg =",
+      ""
+     ],
+     [
+      99,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      100,
+      "other",
+      "other",
+      "",
+      "timeout 900 python3 -c \" import sys, os; sys.path.insert(0,'source'); os.chdir('",
+      ""
+     ],
+     [
+      101,
+      "other",
+      "other",
+      "",
+      "^PASS",
+      ""
+     ],
+     [
+      102,
+      "other",
+      "shared:views.py",
+      "guides/kit-catalogue.md source/views.py notes/learn/seated/judge_r7.py notes/nex",
+      "R7, where things stand (chat 1",
+      ""
+     ],
+     [
+      103,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/archive notes/archive/r7-handovers.md notes/learn/seate",
+      "python3 - <<'EOF' p = 'notes/next-jobs.md' lines = open(p).read().split('\\n') i ",
+      ""
+     ],
+     [
+      104,
+      "other",
+      "other",
+      "notes/*.md",
+      "$b",
+      ""
+     ],
+     [
+      105,
+      "other",
+      "other",
+      "",
+      "^PASS",
+      ""
+     ],
+     [
+      106,
+      "other",
+      "shared:views.py",
+      "source/views.py source/castsheet.py source/body.py source/people_parts.py source",
+      "git add -A source/views.py source/castsheet.py source/body.py source/people_part",
+      ""
+     ],
+     [
+      107,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      ""
+     ],
+     [
+      108,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/next-jobs.md",
+      "python3 source/handover.py end --film r7 --notes notes/next-jobs.md 2>&1 | tail ",
+      ""
+     ],
+     [
+      109,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^ ",
+      ""
+     ],
+     [
+      111,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "^PASS",
+      ""
+     ],
+     [
+      112,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/brexit-is-done.md notes/learn/seated/judge_r7.py",
+      "python3 - <<'EOF' p = 'notes/next-jobs.md' s = open(p).read() old = ''' claude/d",
+      ""
+     ],
+     [
+      114,
+      "other",
+      "other",
+      "",
+      "^kittests:",
+      ""
+     ],
+     [
+      115,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/ledger*",
+      "git status --short | head; git add notes/next-jobs.md && git add -A story/ notes",
+      ""
+     ],
+     [
+      116,
+      "other",
+      "other",
+      "notes/logs/handover-end.log notes/logs/kittest-reds.log",
+      "git add notes/logs/handover-end.log notes/logs/kittest-reds.log && git commit -q",
+      ""
+     ],
+     [
+      119,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "web-fetch helper",
+      ""
+     ],
+     [
+      122,
+      "other",
+      "other",
+      "",
+      "^PASS",
+      ""
+     ],
+     [
+      123,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "git add notes/next-jobs.md && git commit -qm \"R7 chat 2: note Commons reachable ",
+      ""
+     ],
+     [
+      124,
+      "other",
+      "other",
+      "",
+      "^FAIL",
+      ""
+     ],
+     [
+      125,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/handover.py notes/next-jobs.md",
+      "^PASS\\|^FAIL\\|kittests:",
+      ""
+     ],
+     [
+      126,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/logs/kittest-reds.log",
+      "COULD NOT RUN",
+      ""
+     ],
+     [
+      127,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "sed -n 555,570p source/handover.py",
+      ""
+     ],
+     [
+      128,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/logs/kittests-last.log",
+      "^FAIL",
+      ""
+     ],
+     [
+      129,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "awk '/R7, where things stand \\(chat 2/{f=1} f&&/^## /{exit} f' notes/next-jobs.m",
+      ""
+     ],
+     [
+      130,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/brexit-is-done.md",
+      "python3 - <<'EOF' p = 'notes/next-jobs.md' lines = open(p).read().split('\\n') i ",
+      ""
+     ],
+     [
+      131,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "git add notes/next-jobs.md && git commit -qm \"R7 chat 2: handover within 15 line",
+      ""
+     ],
+     [
+      132,
+      "other",
+      "other",
+      "notes/ledger/r7.json notes/logs/handover-end.log notes/logs/kittest-reds.log",
+      "git add notes/ledger/r7.json notes/logs/handover-end.log notes/logs/kittest-reds",
+      ""
+     ],
+     [
+      133,
+      "other",
+      "other",
+      "notes/logs/kittest-reds.log",
+      "^<<<<<<<\\|^=======\\|^>>>>>>>",
+      ""
+     ],
+     [
+      134,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "^FAIL",
+      ""
+     ],
+     [
+      135,
+      "other",
+      "other",
+      "notes/logs/kittests-last.log",
+      "ls -la notes/logs/kittests-last.log; git log --oneline -3; git log -1 --format=%",
+      ""
+     ],
+     [
+      136,
+      "other",
+      "shared:kittests.py",
+      "notes/logs/kittests-last.log source/kittests.py",
+      "^kittests:",
+      ""
+     ],
+     [
+      137,
+      "other",
+      "other",
+      "",
+      "git push -q origin HEAD:claude/r7-chat2 2>&1 | tail -1; git fetch -q origin clau",
+      ""
+     ],
+     [
+      138,
+      "other",
+      "other",
+      "",
+      "git log --oneline -2; git push -q origin HEAD:claude/r7-chat2 2>&1 | tail -1; gi",
+      ""
+     ],
+     [
+      139,
+      "other",
+      "film notes",
+      "notes/next-jobs.md",
+      "First: reference photos\\|Then fresh judges again",
+      ""
+     ],
+     [
+      142,
+      "other",
+      "film notes",
+      "notes/next-jobs.md notes/logs/kittests-last.log",
+      "^PASS",
+      ""
+     ],
+     [
+      143,
+      "other",
+      "shared:handover.py",
+      "source/handover.py notes/next-jobs.md",
+      "^BRANCH\\|^SENTENCE",
+      ""
+     ],
+     [
+      144,
+      "other",
+      "film notes",
+      "",
+      "git log --oneline d74cb35a..HEAD --no-merges -- source/ story/ | head -10",
+      ""
+     ],
+     [
+      145,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      146,
+      "other",
+      "shared:views.py",
+      "source/views.py source/body.py source/people_parts.py source/kittests.py",
+      "PASS\\|FAIL\\|Error",
+      ""
+     ],
+     [
+      148,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^PASS\\|^FAIL",
+      ""
+     ],
+     [
+      149,
+      "other",
+      "shared:handover.py",
+      "notes/next-jobs.md notes/brexit-is-done.md source/handover.py",
+      "HANDOVER:.*lines\\|STOP\\|REFUSED",
+      ""
+     ],
+     [
+      150,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/next-jobs.md notes/logs/ notes/ledger/",
+      "git add -A source/kittests.py notes/next-jobs.md notes/logs/ notes/ledger/ 2>/de",
+      ""
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
    "date": "2026-11-26",
    "chat": "2440e70f",
    "model": "opus",
