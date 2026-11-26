@@ -1,6 +1,6 @@
 # Proposal: Anthropic's session-value article against how this project runs
 
-Status: open
+Status: adopted, slim Option 1 (Sam, 26 Nov): learn steps (a) search printouts, (b) hook printouts, (c) Opus time on routine stages; then one Y/N per gap of 1% of a week a film or more. Not taken: (d) namer test. Job: notes/proposals/session-value/learn-job.md
 
 ## Problem
 Sam asked (25 Nov) whether the project follows the advice in Anthropic's article "Maximizing the value of your
