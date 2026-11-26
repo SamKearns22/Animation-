@@ -26,6 +26,8 @@ def tile(who, yaw, pose, full=False):
     if yaw == 0 and S.POSES[pose][0](sp, S.seat_for(S.POSES[pose][1])).get('lap_open'):   # legs apart, front
         chk['apart faults'] = SO.apart_faults(img.convert('RGB'), sp)   # (R7 chat 11; kittests legs_apart_spread,
         #                                                                 jacket_triangle)
+    if MODE == 'body' and 'workwear' in (sp.get('kit_extras') or ()):   # a short top (R7 chat 13; kittest
+        chk['short top'] = SO.short_top_faults(img.convert('RGB'), sp)       # short_top_hem)
     return (img.convert('RGB') if full else img.convert('RGB').crop((240, 1180, 840, 1740))), chk
 
 

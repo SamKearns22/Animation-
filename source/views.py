@@ -40,6 +40,8 @@ HIGH = 40.0                                   # degrees: a camera steeper than t
 HIP_Y = 450.0
 HC_HOOK = [None]                             # humancheck.install sets it: every person drawn is reported
 JACKET = 505.0                                # jacket hem just below the hips: more leg shows (Sam, 14 Oct)
+SHORT_TOP_RISE = 31.0                         # seated on the full body, a short top's hem this far up: halfway through
+#                                               the hi-vis's navy under its band (R7 chat 13, Sam 26 Nov)
 SEAT_DROP = 222.0                             # seated: the body lower by this (knee-height chair, thighs level)
 LONG_HAIR = {'long': 150, 'bob': 110, 'blonde': 260, 'wavy': 230}
 BALD = {'bald', 'wisps'}
@@ -1906,6 +1908,13 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     r7 = r7_on(j, sp, view)                       # R7: the whole seated lower body as one shape (new films)
     solid_whole = r7 and sp.get('seat_solid') == 'whole'   # R7 option 2 (Sam, 25 Nov): the whole person solid
     arm = _no_arm if solid_whole else globals()['arm']   # (solid_seat): no flat torso or arms; the house head over it
+    if r7 and seated and sp.get('seat_solid') == 'body' and sp_draw.get('jacket_hem') and SHORT_TOP_RISE:
+        # R7 chat 13 (Sam, 26 Nov: Kemi's hi-vis "is behaving like a suit jacket at the bottom ... a solid block of
+        # trouser beginning about halfway through the blue"): seated on the full body, a short top rides up
+        # SHORT_TOP_RISE; its details (the hi-vis band) stay where they were (band_hem); trousers below (check
+        # solid_seat.short_top_faults, kittest short_top_hem)
+        sp_draw['band_hem'] = sp_draw['jacket_hem']
+        sp_draw['jacket_hem'] = sp_draw['jacket_hem'] - SHORT_TOP_RISE
     if r7:
         seated_lower(p, j, view_deg, sp, [sd for sd in legs_order if sd not in hidden], top)
         bottom, legs_order_old = False, []

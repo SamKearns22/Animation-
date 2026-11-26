@@ -537,6 +537,34 @@ def jacket_under_hem():
 
 
 @test
+def short_top_hem():
+    """R7 chat 13 (Sam, 26 Nov, on learn-sheet-kemi.jpg front: "Kemi's jacket is behaving like a suit jacket at the
+    bottom, and we should have a solid block of trouser beginning about halfway through the blue";
+    notes/learn/pose-kit/examples/sam-26nov-kemi-vest-hangs-like-jacket.jpg): solid_seat.short_top_faults catches
+    Sam's frame and Kemi seated on the full body with her hi-vis at suit length (views.SHORT_TOP_RISE 0), and passes
+    her as now (the hem halfway through the navy, trousers below) in the front and three-quarter views."""
+    import sys
+    from PIL import Image
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    import solid_seat as SO
+    import sheet_solid as SH
+    import views as V
+    SH.MODE = 'body'
+    sp = SH.cast['kemi']
+    sam = SO.short_top_faults(Image.open('notes/learn/pose-kit/examples/sam-26nov-kemi-vest-hangs-like-jacket.jpg'), sp)
+    got = {}
+    keep = V.SHORT_TOP_RISE
+    try:
+        for rise in (0.0, keep):
+            V.SHORT_TOP_RISE = rise
+            got[rise] = [SO.short_top_faults(SH.tile('kemi', yaw, 'upright', full=True)[0], sp) for yaw in (0, 45)]
+    finally:
+        V.SHORT_TOP_RISE = keep
+    ok = bool(sam) and all(got[0.0]) and not any(got[keep])
+    return ok, f"Sam's frame: {sam or 'MISSED'}; suit length: {got[0.0]}; as now: {got[keep]}"
+
+
+@test
 def shoe_shapes():
     """R7 chat 10 (Sam, 26 Nov: "Shoes clipping on 3/4 view", "Confused shoe shapes on side view";
     examples/sam-26nov-shoes-clipping-34.jpg, sam-26nov-shoe-shapes-side.jpg): solid_seat.shoe_faults catches May's

@@ -857,3 +857,67 @@ def apart_faults(img, sp):
     if run < 0.08 * W:
         out.append('jacket triangle: only %d of trousers under it' % run)
     return out
+
+
+SHORT_TOP_NAVY = 0.8    # short_top_faults: the jacket colour under a hi-vis band at most this many hands tall anywhere
+#                         (Sam's frame: 0.94; the fix, halfway through the blue as he asked: 0.62)
+SHORT_TOP_DIP = 0.25    # ... and no deeper down the middle than at a third out by more than this many hands
+
+
+def short_top_faults(img, sp):
+    """R7 chat 13 (Sam, 26 Nov, on learn-sheet-kemi.jpg front: "Kemi's jacket is behaving like a suit jacket at the
+    bottom, and we should have a solid block of trouser beginning about halfway through the blue";
+    notes/learn/pose-kit/examples/sam-26nov-kemi-vest-hangs-like-jacket.jpg): a short top with a hi-vis band (a
+    person whose kit_extras has 'workwear'), seated, read from the picture alone (any scale, a JPEG too; the hand
+    lying on the lap is the ruler): under the band's lowest orange, the jacket colour runs no taller than
+    SHORT_TOP_NAVY hands, and does not dip down the middle between the thighs (a suit jacket's hang). Returns the
+    faults as text (empty: none)."""
+    if 'workwear' not in (sp.get('kit_extras') or ()):
+        return []
+    a = np.asarray(img.convert('RGB')).astype(int)
+    near = lambda c, tol: np.abs(a - np.array(c)).sum(-1) <= tol
+    O = near(sp.get('work_c', (236, 112, 30)), 70)
+    N = near(sp.get('jacket', (30, 34, 66)), 24)    # (36: a shaded trouser leg, 36,36,40, read as navy)
+    K = near(sp.get('skin', (136, 96, 67)), 30)
+    oy, ox = np.where(O)
+    if not len(ox):
+        return []                                     # no band in this view
+    lows = {}
+    for x in range(ox.min(), ox.max() + 1):
+        col = np.where(O[:, x])[0]
+        if len(col):
+            lows[x] = col.max()
+    band = int(np.median(list(lows.values())))
+    hand = 0                                          # the tallest skin run below the band: a hand on the lap
+    for x in range(ox.min(), ox.max() + 1):
+        r = n = 0
+        for y in range(band, a.shape[0]):
+            n = n + 1 if K[y, x] else 0
+            r = max(r, n)
+        hand = max(hand, r)
+    if hand < 6:
+        return []                                     # no hand to measure by (C2: another ruler)
+    runs = {}
+    for x, lo in lows.items():
+        if abs(lo - band) > 0.15 * hand or K[lo + 1:lo + int(0.3 * hand), x].any():
+            continue                                  # an arm's orange sleeve or a hand, not the band
+        k = lo + 1
+        while k < a.shape[0] and not N[k, x] and k < lo + 0.25 * hand:   # the ink line under the band (blurred in a JPEG)
+            k += 1
+        n0 = k
+        while k + 2 < a.shape[0] and (N[k, x] or N[k + 1, x] or N[k + 2, x]):
+            k += 1
+        if k > n0:
+            runs[x] = (k - n0) / hand
+    if len(runs) < 5:
+        return []
+    xs = np.array(sorted(runs)); cx = int(np.median(xs)); W = xs.max() - xs.min()
+    mid = [runs[x] for x in xs if abs(x - cx) < 0.06 * W]
+    side = [runs[x] for x in xs if abs(x - cx) > 0.2 * W]
+    out = []
+    every = float(max(runs.values()))
+    if every > SHORT_TOP_NAVY:
+        out.append('short top hangs like a jacket: %.2f hands of jacket colour under the band' % every)
+    if mid and side and max(mid) - np.median(side) > SHORT_TOP_DIP:
+        out.append('short top dips between the thighs: %.2f hands deeper in the middle' % (max(mid) - np.median(side)))
+    return out

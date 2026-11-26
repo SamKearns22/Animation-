@@ -1261,7 +1261,8 @@ def workwear_torso(img, p, sp, t):
     def edge(y):                                    # the body's own half width at y (any build: body.FIGS)
         got = V._span(out, min(max(y, 0.0), bottom - 0.5))
         return float(got[1]) - 1.0 if got else sw
-    hem = min(bottom, sp.get('jacket_hem') or bottom)   # a short jacket (chat 7): the band sits as far over its hem
+    hem = min(bottom, sp.get('band_hem') or sp.get('jacket_hem') or bottom)   # a short jacket (chat 7): the band sits as far over its hem
+    #   (R7 chat 13: seated on the full body the hem rides up, views.SHORT_TOP_RISE; the band stays, band_hem)
     ya, yb = hem - 150, hem - 62                    # the waist band, its silver stripe through the middle
     yl = max(250.0, ya + 4)                         # chat 9: the side strip runs on into the band (was cut at 250 in
     #   a point: turned, the near strip showed between arm and body as a tab under the braid; her photo: the orange

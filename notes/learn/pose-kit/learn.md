@@ -85,3 +85,8 @@ from those figures, with Sam. The records so far, as far as their stage labels l
   cannot be split honestly from the record.
 Sam's own figure ("up to 40 or 50% of a week") includes chats filed under other jobs before C1's booking fix, so the
 records above are lower bounds.
+
+## 4. Sam's note after Learn (26 Nov): Kemi's vest hung like a suit jacket
+Missed above: section 2 read her hi-vis as a jacket ("jacket triangle caught"). The outfit layer did not know the
+garment's length. Fixed in the shared tools (views.SHORT_TOP_RISE; check solid_seat.short_top_faults, kittest
+short_top_hem, proved on Sam's frame). For C2: every garment carries its length, and the tool checks it.
