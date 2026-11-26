@@ -1,15 +1,15 @@
-# Chat 11's own idea (written before the helpers)
+# Chat 11's own idea (rewritten after Sam's note, before the helpers)
 
-A one-page order of work, guides/pose-kit-format.md, named in job-packs.md for any kit job, plus a starter script:
-1. Brief as a picture list: the views Sam will judge (front, 3/4, side, crossed), each at full size with feet in
-   frame; locked poses and films named and fingerprinted first (a kittest that they stay pixel-identical).
-2. References before drawing: saved photos in notes/learn/<kit>/refs first; one search per source; a refused site is
-   asked about at once.
-3. Build by placement, not tuning: limbs placed by joint targets (knee, foot on floor solved), each new look behind a
-   flag on the pose so nothing locked can move; never redraw clothing that already passed; any loss gets a Lost: line.
-4. Every check reads the picture (PNG, not JPEG) and is proved red on Sam's saved frame and green on the fix before
-   Sam sees anything; the standing kit checks (seat, leg crossings, trouser pieces, shoes, jacket under hem, apart)
-   run on every tile of the sheet.
-5. One labelled sheet per round; no judges before Sam unless asked; stop at 2 rounds per note (rule 87).
-6. Cost: estimate per view and per note; a budget line in every handover.
-Lost: nothing. Added: one guide page and a sheet script template (tile + checks + crop guard).
+The format is two layers, always in this order:
+1. BODY: every pose starts from the measured full body (solid_seat mode 'body'; MakeHuman by the person's spec),
+   posed only by joint targets on the kit's own skeleton and camera. No hand-drawn limb outlines, no guessed tubes;
+   a pose that needs a shape changes the joints, never the outline.
+2. CLOTHES: drawn separately on top. The person's posted outfit is kept exactly (never redrawn on the body); the body
+   shows only where the outfit ends (below the hem), and every garment below it is its own layer on the body
+   (trousers shell, seat, shoes, lap opening). Each layer edge gets a picture check, proved red on Sam's saved frame.
+3. A new pose = a pose spec (joint targets + any layer flag), a 4-view sheet of one test person, checks on every tile,
+   locked poses fingerprinted. A new person = the same body built from their spec, their posted outfit on top.
+4. Stop rule: if a fault is in the body, fix the joints; if at a layer edge, fix that layer; two rounds without
+   improvement stops (rule 87). Outline patching is refused.
+Lost: nothing. Added: one guide page (guides/pose-kit-format.md, named in job-packs.md "Film types"/kit jobs), a
+starter pose-sheet script, Kemi/Blair as the first proof.

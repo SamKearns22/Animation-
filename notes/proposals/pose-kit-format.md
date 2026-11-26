@@ -12,24 +12,34 @@ faults he saw at a glance that no check had looked for. The next pose kits (othe
 standing or moving poses) have no written order of work to follow, so they could repeat the same rounds.
 
 ## Facts
-- Cost: notes/ledger/r7.json, estimate 6.0, chats about 2.2-2.3 each on Opus; Sam's budget question at 9.8% (chat 10 handover).
-- Sam's notes that each cost a round, with "Why missed" lines: notes/r7.md Brief checklist (bum/circular knees; "legs
-  look awful" on sheet v4, all four views; "you changed her clothes?" (outfit redrawn unasked); "way too
-  curvaceous"; purple under the jacket hem (side); shoes clipping (3/4) and confused shoe shapes (side), the sheet's
-  crop cut the feet off; legs "spread ... bearing the crotch" and the jacket triangle on 'upright, apart').
-- What Sam passed: "This pose is 100% correct" / "she is FINALLY correct" (chat 8, mode 'body': solid legs and seat
-  under the unchanged flat outfit); chat 10's three-quarters and shoes; chat 11's 'upright, apart' awaits his look.
-- What worked in chat 11 (one round, about 1 chat): Sam's marked picture saved; a picture check written that reads his
-  own frame (solid_seat.apart_faults) and proved red on it and green on the fix (kittests legs_apart_spread,
-  jacket_triangle) before showing him; the limbs placed by where the knee goes (sitting._leg_by_knee) instead of
-  tuning foot numbers (chat 10's foot tuning had pushed the knees out); the locked pose proved pixel-identical; the new
-  look opt-in by a flag on the pose (lap_open, leg_gap) so locked poses and old films cannot move; a 2-pose labelled
-  sheet at full size with the feet in frame.
-- What failed: reference photo search refused by Wikimedia and Openverse (too many requests, chat 11); chat 6-8 judges
-  shown pictures before Sam; outfit changed with no Lost: line (chat 8); checks that passed numbers while the picture
-  was wrong (chat 10 all seated checks 0 on the spread legs); JPEG pictures fooled a colour check (chat 11).
-- Existing pieces: guides/kit-catalogue.md, guides/figure-rig.md, guides/pose-gallery.md, source/solid_seat.py
-  (checks(), shoe_faults, apart_faults), notes/learn/seated/solid/sheet_solid.py and may_sheet.py, source/kittests.py.
+- Sam, 26 Nov (on chat 11's first draft of this job): "I'm not sure you have understood the crux of our improvement
+  which was implementing the full body model and then layering clothes separately. Please check all R7 chats for
+  what worked and then update the job." Chat 11's first facts and idea centred on checks and placement: wrong crux.
+- Chats 1-5 (notes/archive/r7-handovers.md): the legs drawn as hand-made flat outlines and guessed 3D tubes
+  (views.seated_lower, _r7_outline: arch, calf, cloth widths, shade tricks); each patch moved another view; blind
+  judges stayed at 2-3 of 5 for four rounds (results-r7.md .. r7c4.md); Sam: "the legs look awful" (sheet v4).
+  Chat 5's judged proposal (notes/proposals/seated-legs-3d.md, Final version, root cause): "the tubes are guessed ...
+  and hiding is faked by cut-off numbers and shading, so each patch moves another view."
+- Chat 6: source/solid_seat.py: the measured MakeHuman body (the GTA bench's way: posed by its own skin weights as ONE
+  closed body, one depth pass, house flat colours and ink) built from any kit person's spec, posed on the kit's own
+  joints (sitting.realize), drawn through the kit's own camera; trousers as a shell on the body. Judges rose at once
+  (side 4/4/4, the rest 3-4; results-r7c6.md).
+- Chat 7: patching the seams between solid legs and flat torso again; Sam: "Is there a more intelligent way?";
+  Sam picked option 2, the whole person solid (r7.md "Sam's pick").
+- Chat 8: mode seat_solid='body': the WHOLE solid body under May's UNCHANGED flat posted outfit (torso, arms, blouse,
+  lapels drawn as before on top), the solid shown only below the jacket's seated hem. Sam: "This pose is 100%
+  correct", "she is FINALLY correct. She has correct anatomy and outfit." First try had redrawn her clothes on the
+  body: "you changed her clothes?", "This is the correct outfit. You have drawn a poor version of it".
+- Chats 9-11: every later note was at a layer's edge, not the body: curves of the turned flat torso over the body
+  (turned_curves), jacket colour under the hem (trousers seat layer), shoes vs trouser hem (shoe layer), the jacket
+  hanging into the gap between parted legs (lap_open). Each fixed in the layer, with a picture check proved on Sam's
+  saved frame (kittests turned_curves, jacket_under_hem, shoe_shapes, legs_apart_spread, jacket_triangle).
+- New poses on the body are made by joint targets (sitting._leg_by_knee, chat 11) behind a pose flag, so locked
+  poses stay pixel-identical (seated_r7_switch; chat 11's 'upright' diff: none).
+- Cost: notes/ledger/r7.json, estimate 6.0; chats about 2.2-2.3 each on Opus; 9.87% of 15% at chat 10. Chats 1-5
+  and 7 (outline patching) produced nothing kept in the final look.
+- Still untested: mode 'body' for standing and moving poses; other people (Kemi, Blair) in mode 'body'; clothes other
+  than a suit jacket over trousers (vest, skirt, dress). notes/proposals/model-body-all.md is the related chain.
 
 ## Record
 notes/r7.md
@@ -40,6 +50,10 @@ guides/kit-catalogue.md
 guides/figure-rig.md
 guides/pose-gallery.md
 guides/job-packs.md
+notes/proposals/seated-legs-3d.md
+notes/proposals/model-body-all.md
+notes/learn/seated/judge/
+source/views.py
 source/solid_seat.py
 source/sitting.py
 source/kittests.py
