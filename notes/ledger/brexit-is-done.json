@@ -12925,6 +12925,243 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "61e1c6dd",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.24,
+   "src": "estimate",
+   "sid": "session_01U3pKR1e7p3qM3aAUCetdtu",
+   "steps": 22,
+   "hist_k": 106,
+   "kinds": {
+    "film-file search": 2.1,
+    "tool search": 15.9,
+    "routine": 1.2,
+    "renders": 3.9,
+    "other": 76.9
+   },
+   "calls": {
+    "film-file search": 2,
+    "tool search": 12,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 1,
+    "renders": 1,
+    "pictures": 0,
+    "other": 6
+   },
+   "split": {
+    "usd": 0.8897,
+    "total": 0.8897,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 53.9,
+     "Claude's words": 21.1,
+     "new writes": 19.7,
+     "carried history": 5.3
+    },
+    "origins": {
+     "start-up floor": 53.9,
+     "Claude's words": 28.3,
+     "result: tool search": 9.3,
+     "messages and reminders": 4.5,
+     "result: film-file search": 1.7,
+     "result: other": 1.1,
+     "result: renders": 0.5,
+     "Claude's edits": 0.3,
+     "result: routine": 0.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 53.9,
+     "commands": 10.4,
+     "thinking": 6.1,
+     "writing notes": 4.9,
+     "reading kit code": 4.8,
+     "messages and reminders": 4.5,
+     "reading notes": 4.4,
+     "helper and chat prompts": 2.7,
+     "writing code": 2.6,
+     "start-up and handover tools": 2.0,
+     "messages to Sam": 1.9,
+     "running checks and tools": 0.7,
+     "app tools (chats, files sent)": 0.4,
+     "other commands": 0.3,
+     "renders": 0.2
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 8,
+    "work_pct": 0.11,
+    "reads": [
+     [
+      "source/humancheck.py",
+      2.1,
+      0.0231
+     ],
+     [
+      "notes/logs/brexit-is-done-chats.log",
+      0.3,
+      0.0035
+     ],
+     [
+      "source/brexit_is_done.py",
+      0.3,
+      0.0035
+     ]
+    ],
+    "base_pct": 35.8
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 2
+    },
+    "other": {
+     "shared:handover.py": 4,
+     "shared:humancheck.py": 2,
+     "film notes": 3,
+     "other": 3
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status --short | head; git fetch -q origin claude/create-claude-md-oe8z4g &&",
+      "",
+      4572
+     ],
+     [
+      1,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "human|critique|finish|bodycheck",
+      "",
+      1331
+     ],
+     [
+      2,
+      "other",
+      "shared:humancheck.py",
+      "source/humancheck.py",
+      "def \\|argv\\|add_argument\\|'critiqued'\\|subcommand",
+      "",
+      8237
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md guides/job-packs.md",
+      "no new render\\|render lock\\|12 min",
+      "",
+      1166
+     ],
+     [
+      4,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md guides/film-quality-rules.md",
+      "render",
+      "",
+      2738
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "notes/logs notes/logs/brexit-is-done*.log",
+      "film_engine\\|render\\b\\|clean.mp4",
+      "",
+      91
+     ],
+     [
+      6,
+      "film",
+      "before show",
+      "notes/logs/brexit-is-done-chats.log source/brexit_is_done.py",
+      "__main__",
+      "",
+      2656
+     ],
+     [
+      7,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "sed -n 395,430p source/brexit_is_done.py | cut -c1-220; python3 -c \"import json;",
+      "",
+      1646
+     ],
+     [
+      9,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md story/status.md",
+      "sed -n 48,62p notes/brexit-is-done.md; cat story/status.md 2>/dev/null | head",
+      "",
+      2542
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git log --oneline HEAD..FE",
+      "",
+      126
+     ],
+     [
+      13,
+      "other",
+      "other",
+      "",
+      "^+",
+      "",
+      617
+     ],
+     [
+      14,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "def start\\|def cmd_start\\|'start'",
+      "",
+      27
+     ],
+     [
+      15,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "sed -n 1029,1075p source/handover.py | cut -c1-200",
+      "",
+      3094
+     ],
+     [
+      17,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "SEND GATE|BROKEN",
+      "",
+      728
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
