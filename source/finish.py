@@ -296,11 +296,13 @@ def main():
         keep = os.path.join(os.path.dirname(HERE), 'animations', 'drafts')
         os.makedirs(keep, exist_ok=True)
         slug = str(name[0]).replace('_', '-')
+        mine = {os.path.realpath(x) for x in (src, dst, src + cover.SIDE)}   # never delete what this run is using
         for f in os.listdir(keep):
-            if f.startswith(slug + '-'):
+            if f.startswith(slug + '-') and os.path.realpath(os.path.join(keep, f)) not in mine:
                 os.remove(os.path.join(keep, f))   # only the latest is kept
-        shutil.copy(dst, os.path.join(keep, f'{slug}-animatic.mp4'))
-        shutil.copy(src, os.path.join(keep, f'{slug}-clean.mp4'))
+        for a, b in ((dst, f'{slug}-animatic.mp4'), (src, f'{slug}-clean.mp4')):
+            if os.path.realpath(a) != os.path.realpath(os.path.join(keep, b)):
+                shutil.copy(a, os.path.join(keep, b))
         if os.path.exists(src + cover.SIDE):       # what it drew, so a later finish from the kept copy can check it
             shutil.copy(src + cover.SIDE, os.path.join(keep, f'{slug}-clean.mp4' + cover.SIDE))
         print(f'kept on GitHub: animations/drafts/{slug}-animatic.mp4 and -clean.mp4 (commit and push them)')
