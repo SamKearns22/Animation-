@@ -12139,6 +12139,587 @@
   },
   {
    "date": "2026-11-26",
+   "chat": "a43ecdbb",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 0.84,
+   "src": "estimate",
+   "sid": "session_01U3pKR29EmmteJgw6u577Ng",
+   "steps": 69,
+   "hist_k": 161,
+   "kinds": {
+    "film-file search": 2.6,
+    "tool search": 25.8,
+    "renders": 1.8,
+    "pictures": 2.3,
+    "other": 67.6
+   },
+   "calls": {
+    "film-file search": 6,
+    "tool search": 44,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 6,
+    "other": 13
+   },
+   "split": {
+    "usd": 3.0817,
+    "total": 3.0817,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 38.7,
+     "Claude's words": 24.7,
+     "new writes": 20.0,
+     "carried history": 16.7
+    },
+    "origins": {
+     "start-up floor": 38.7,
+     "Claude's words": 38.0,
+     "result: tool search": 12.5,
+     "messages and reminders": 5.9,
+     "result: film-file search": 2.8,
+     "result: pictures": 1.4,
+     "result: other": 0.5,
+     "result: renders": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 38.7,
+     "writing code": 12.5,
+     "thinking": 11.9,
+     "commands": 9.8,
+     "messages and reminders": 5.9,
+     "reading notes": 5.5,
+     "reading kit code": 5.0,
+     "writing notes": 2.8,
+     "reading film code": 2.8,
+     "looking at pictures": 1.4,
+     "other commands": 1.4,
+     "running checks and tools": 1.0,
+     "messages to Sam": 1.0,
+     "start-up and handover tools": 0.2,
+     "renders": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 12,
+    "work_pct": 0.16,
+    "reads": [
+     [
+      "guides/pose-kits.md",
+      2.5,
+      0.0479
+     ],
+     [
+      "notes/r7.md",
+      1.0,
+      0.02
+     ],
+     [
+      "source/people.py",
+      0.9,
+      0.0176
+     ],
+     [
+      "source/kittests.py",
+      0.9,
+      0.0176
+     ],
+     [
+      "notes/learn/seated/solid/sheet_solid.py",
+      0.9,
+      0.0171
+     ],
+     [
+      "source/brexit_is_done.py",
+      0.7,
+      0.0122
+     ]
+    ],
+    "base_pct": 33.5
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 6
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "film notes": 5,
+     "other": 16,
+     "shared:people.py": 4,
+     "shared:kittests.py": 3,
+     "shared:ledger.py": 1,
+     "shared:costline.py": 2,
+     "guides": 1,
+     "shared:solid_seat.py": 10,
+     "shared:body.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status | head -3 && git push --dry-run origin HEAD 2>&1 | tail -2; python3 s",
+      "",
+      6194
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "Where things stand",
+      "",
+      329
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/r7.md guides/pose-kits.md",
+      "^#",
+      "",
+      3724
+     ],
+     [
+      3,
+      "other",
+      "film notes",
+      "guides/pose-kits.md notes/brexit-is-done.md",
+      "Learn-First rule (rule 91) on Open Wounds",
+      "",
+      9820
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "source/*.py",
+      "BEFORE_SEATED\\|seat_r7\\b\\|def seat_r7",
+      "",
+      2412
+     ],
+     [
+      5,
+      "other",
+      "shared:people.py",
+      "source/people.py source/kittests.py source/sheet_solid.py",
+      "seat_solid\\|turned_curves\\|turned_bust",
+      "",
+      7328
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "",
+      "seat_solid",
+      "",
+      1232
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "notes/learn/seated/solid/sheet_solid.py",
+      "sed -n 1,60p notes/learn/seated/solid/sheet_solid.py",
+      "",
+      3641
+     ],
+     [
+      8,
+      "other",
+      "shared:people.py",
+      "source/people.py source/*.py",
+      "^def person\\b\\|^def person(",
+      "",
+      563
+     ],
+     [
+      9,
+      "film",
+      "before show",
+      "source/brexit_is_done.py source/brexit_is_done_action.py",
+      "people.load\\|load(",
+      "",
+      2653
+     ],
+     [
+      10,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "def seated\\b\\|def seated(",
+      "",
+      3724
+     ],
+     [
+      11,
+      "other",
+      "shared:people.py",
+      "source/people.py guides/pose-kits.md source/castsheet.py",
+      "cast\\[who\\]\\|_setup",
+      "",
+      193
+     ],
+     [
+      12,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py source/people.py",
+      "seat_r7'\\] = seat_r7(film)",
+      "",
+      109
+     ],
+     [
+      13,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "python3\\|usage",
+      "",
+      707
+     ],
+     [
+      14,
+      "other",
+      "shared:ledger.py",
+      "source/ledger.py",
+      "cost\\|ledger\\|usage",
+      "",
+      829
+     ],
+     [
+      15,
+      "other",
+      "shared:costline.py",
+      "source/costline.py",
+      "python3 source/costline.py 2>&1 | tail -3",
+      "",
+      159
+     ],
+     [
+      16,
+      "other",
+      "shared:costline.py",
+      "source/costline.py source/stepcost.py",
+      "python3 source/costline.py --help 2>&1 | head -8; python3 source/stepcost.py 2>&",
+      "",
+      175
+     ],
+     [
+      17,
+      "other",
+      "guides",
+      "guides/job-packs.md notes/learn/pose-kit/",
+      "reference photo",
+      "",
+      1126
+     ],
+     [
+      18,
+      "film",
+      "before show",
+      "source/brexit_is_done.py source/sitting.py",
+      "seated(img, 'blair'\\|seated(img, 'may'\\|seated(img, 'kemi'\\|seated(img, who",
+      "",
+      1109
+     ],
+     [
+      19,
+      "film",
+      "before show",
+      "source/brexit_is_done.py source/sitting.py",
+      "seated(",
+      "",
+      2040
+     ],
+     [
+      20,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "def kemi_shot",
+      "",
+      722
+     ],
+     [
+      21,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "def acted",
+      "",
+      1595
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/a43ecdbb-7e72-5025-a4a1-98cf795a5427/tas",
+      "",
+      631
+     ],
+     [
+      23,
+      "other",
+      "shared:people.py",
+      "source/people.py source/kittests.py",
+      "^(PASS|FAIL)",
+      "",
+      7
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 -c \" import sys; sys.path.insert(0,'source') import brexit_i",
+      "",
+      216
+     ],
+     [
+      25,
+      "other",
+      "other",
+      "",
+      "SP=/tmp/claude-0/-home-user-Animation-/a43ecdbb-7e72-5025-a4a1-98cf795a5427/scra",
+      "",
+      182
+     ],
+     [
+      29,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "def stray_ink",
+      "",
+      3408
+     ],
+     [
+      30,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "def trouser_seat",
+      "",
+      3176
+     ],
+     [
+      31,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "^def \\|\\.line(\\|outline",
+      "",
+      40
+     ],
+     [
+      32,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "ink\\|INK\\|edge\\|contour",
+      "",
+      717
+     ],
+     [
+      33,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "LAST\\[",
+      "",
+      633
+     ],
+     [
+      34,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "LAST.update\\|LAST\\.update",
+      "",
+      718
+     ],
+     [
+      35,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 -c \" import sys; sys.path.insert(0,'source') import brexit_i",
+      "",
+      1157
+     ],
+     [
+      36,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "^def _ink",
+      "",
+      2610
+     ],
+     [
+      37,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "sed -n 108,125p source/solid_seat.py; cat /tmp/claude-0/-home-user-Animation-/a4",
+      "",
+      1008
+     ],
+     [
+      38,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "edge = _ink(zb, pb, ob",
+      "",
+      747
+     ],
+     [
+      39,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "s dropped folds",
+      "",
+      66
+     ],
+     [
+      40,
+      "other",
+      "other",
+      "",
+      "timeout 300 python3 -c \" import sys; sys.path.insert(0,'source') import numpy as",
+      "",
+      475
+     ],
+     [
+      43,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "python3 - <<'EOF' p='source/solid_seat.py'; s=open(p).read() old=''' if fold_min",
+      "",
+      25
+     ],
+     [
+      49,
+      "other",
+      "other",
+      "notes/learn/seated/solid",
+      "^$",
+      "",
+      701
+     ],
+     [
+      50,
+      "other",
+      "shared:kittests.py",
+      "notes/learn/pose-kit/examples/ source/kittests.py",
+      "^def stray_ink",
+      "",
+      2432
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "",
+      "cat /tmp/claude-0/-home-user-Animation-/a43ecdbb-7e72-5025-a4a1-98cf795a5427/tas",
+      "",
+      1209
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "notes/learn/seated/solid",
+      "SP=/tmp/claude-0/-home-user-Animation-/a43ecdbb-7e72-5025-a4a1-98cf795a5427/scra",
+      "",
+      530
+     ],
+     [
+      59,
+      "other",
+      "other",
+      "",
+      "brexit_is_done.py final",
+      "",
+      86
+     ],
+     [
+      61,
+      "other",
+      "other",
+      "",
+      "^exit",
+      "",
+      267
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "tail -c 300 /tmp/claude-0/-home-user-Animation-/a43ecdbb-7e72-5025-a4a1-98cf795a",
+      "",
+      84
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "brexit_is_done",
+      "",
+      123
+     ],
+     [
+      65,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/archive/brexit-is-done-handovers.md guides/pose-ki",
+      "body",
+      "",
+      284
+     ],
+     [
+      66,
+      "other",
+      "film notes",
+      "story/status.md.new story/status.md",
+      "^exit",
+      "",
+      701
+     ],
+     [
+      71,
+      "other",
+      "other",
+      "",
+      "tail -2 /tmp/claude-0/-home-user-Animation-/a43ecdbb-7e72-5025-a4a1-98cf795a5427",
+      "",
+      64
+     ]
+    ]
+   },
+   "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
    "chat": "10608c6a",
    "model": "opus",
    "stage": "notes",
