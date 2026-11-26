@@ -135,3 +135,28 @@ Open Wounds' seated frames (switch off); the bum/seat.
 For Claude: sheet = may_sheet.py OUT body (sheet_solid sets turned_curves/turned_bust in mode body). handover end's
 "SENTENCE lost from CLAUDE.md" lines are other chats' CLAUDE.md edits (34f49840, 0945cc85), not R7's.
 
+
+## Where things stand (chat 11, 26 Nov, session_01U3pKQz5SGLAdf578rj5R9v)
+Rules that bite next: 87 (a fix failing twice stops), 30 (fix the method), the proposal route (any change to how films are built).
+Done: Sam's two notes on 'upright, apart' fixed (Brief checklist, chat 11 lines): legs straight forward with one small
+even gap, the jacket opens over the lap with trousers under it. Checks: solid_seat.apart_faults (kittests
+legs_apart_spread, jacket_triangle) catch Sam's frame, pass the fix. Sheet sent: notes/learn/seated/solid/may-front-apart-r7c11.jpg.
+Budget: Sam's notes read as go on (9.8% of a 6% estimate).
+Sam 26 Nov: "N" (the 'upright' jacket point stays), then: "codify what succeeded in this build into a build format that
+can successfully create kits for other poses": proposal pose-kit-format packed (problem, facts, chat.md idea written).
+Next: chat 12, Opus high: run its helpers A and B (propose.py pack pose-kit-format prints the lines), judge, record,
+show Sam the top two plainly; then solid-body-default (mode 'body' as every new film's default people).
+Needs Sam: look at c11; OK on c10c (shoes).
+Read: Brief checklist; sitting.spec_upright (apart); solid_seat.apart_faults. Open rule requests: none. Kit check: not this chat (rule 90).
+Locked by Sam: May mode 'body' front and side; both three-quarters and shoes as on c10c once OKed; 'upright' as it
+was; her posted outfit; Open Wounds' seated frames (switch off); the bum/seat.
+For Claude: sheet = sheet_solid.tile('may',0,POSE,full=True), crop (200,600,940,1780); 'upright'
+still trips apart_faults' jacket triangle (43): it is not an apart pose, so the check runs only where spec lap_open. handover end's "SENTENCE lost" lines are other chats' CLAUDE.md edits (34f49840, 0945cc85), not R7's.
+
+ c10c (shoes); budget Y/N asked (9.8% of a 6% estimate; he sent notes, read as go on). Read: Brief checklist; solid_seat.py draw(); views._built_outline (turned).
+Open rule requests: none. Kit check: not this chat (rule 90; Sam's N by default, the final runs it).
+Locked by Sam: May mode 'body' front and side; both three-quarters and the shoes as on c10c once he OKs it; her posted outfit;
+Open Wounds' seated frames (switch off); the bum/seat.
+For Claude: sheet = may_sheet.py OUT body (sheet_solid sets turned_curves/turned_bust in mode body). handover end's
+"SENTENCE lost from CLAUDE.md" lines are other chats' CLAUDE.md edits (34f49840, 0945cc85), not R7's.
+
