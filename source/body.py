@@ -745,6 +745,27 @@ def plain_torso(img, p, sp, t):
             p.line([(-24, 236 + 16 * k), (24 - 16 * k, 236 + 16 * k)], (160, 160, 170), 2.4)
 
 
+LAP_OPEN = (78.0, 46.0)   # (height above the hem, half-width at the hem): a seated jacket's front opening below the
+#                           button when the knees part (R7 chat 11, Sam, 26 Nov: "her purple jacket dips inward in a
+#                           triangle, rather than having an appropriate trouser section in that area")
+
+
+def lap_open(p, sp, bottom):
+    """Seated, knees apart, front view: the jacket's two front panels part below the button and curve away to the hem,
+    so the trousers' lap shows between them (an upside-down V) and the jacket never hangs into the gap between the
+    thighs. Drawn over the front torso, under the solid legs."""
+    h, w = LAP_OPEN
+    tc = sp.get('trousers', (40, 40, 46))
+    jd = tuple(int(v * 0.72) for v in sp.get('jacket', NAVY))
+    n = 10
+    left = [(-w * (k / n) ** 1.6, bottom - h + h * (k / n)) for k in range(n + 1)]   # each edge curves away (bowed)
+    right = [(-x, y) for x, y in left]
+    p.poly(left[::-1] + right[1:] + [(w, bottom + 14), (-w, bottom + 14)], tc, None)   # past the hem's ink
+    for edge in (left, right):
+        p.line(edge, INK, 2.2)
+    p.line([(0, bottom - h - 30), (0, bottom - h)], jd, 2.2)
+
+
 def torso(img, p, sp, t):
     """The body in its outfit, then the look's own torso pieces (TORSOS)."""
     plain_torso(img, p, sp, t)

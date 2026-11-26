@@ -561,6 +561,40 @@ def shoe_shapes():
     return ok, f"Sam's shoes: {old}; now: {new}"
 
 
+def _apart_pair():
+    """Sam's frame (26 Nov, both of its halves) and 'upright, apart' as drawn now, through solid_seat.apart_faults."""
+    import sys
+    sys.path.insert(0, 'notes/learn/seated/solid')
+    from PIL import Image
+    import solid_seat as SO
+    import sheet_solid as SH
+    SH.MODE = 'body'
+    sam = Image.open('notes/learn/seated/examples/sam-26nov-apart-spread-crotch.png')
+    old = [SO.apart_faults(sam.crop((k * 405, 0, k * 405 + 405, sam.height)), SH.cast['may']) for k in (0, 1)]
+    new = SO.apart_faults(SH.tile('may', 0, 'upright, apart', full=True)[0], SH.cast['may'])
+    return old, new
+
+
+@test
+def legs_apart_spread():
+    """R7 chat 11 (Sam, 26 Nov, on 'upright, apart': "Those legs are sort of spread ... a bearing the crotch pose";
+    examples/sam-26nov-apart-spread-crotch.png): apart_faults' 'legs spread' catches both halves of Sam's frame and
+    passes the pose as now (legs straight forward, a small even gap)."""
+    old, new = _apart_pair()
+    hit = lambda fs: [f for f in fs if f.startswith('legs spread')]
+    return all(hit(o) for o in old) and not hit(new), f"Sam's frame: {[hit(o) for o in old]}; now: {hit(new) or 'passes'}"
+
+
+@test
+def jacket_triangle():
+    """R7 chat 11 (Sam, 26 Nov: "her purple jacket dips inward in a triangle, rather than having an appropriate
+    trouser section in that area"; same frame): apart_faults' 'jacket triangle' catches both halves of Sam's frame and
+    passes the pose as now (the jacket opens over the lap, trousers below it)."""
+    old, new = _apart_pair()
+    hit = lambda fs: [f for f in fs if f.startswith('jacket triangle')]
+    return all(hit(o) for o in old) and not hit(new), f"Sam's frame: {[hit(o) for o in old]}; now: {hit(new) or 'passes'}"
+
+
 @test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for Open Wounds (locked by

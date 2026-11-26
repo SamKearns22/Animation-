@@ -117,3 +117,21 @@ outfit (sam-25nov-may-correct-outfit.jpg); Open Wounds' seated frames (switch of
 For Claude: sheet = notes/learn/seated/solid/may_sheet.py OUT body (sheet_solid tiles, MODE body; crops 240,620,840,1740); HEM_OVERLAP, BODY_TOP;
 mode 'whole' kept unused; model-body-all chain merged (live). Other chains' branches named in chat 6's archive entry.
 
+
+## Where things stand (chat 10, 26 Nov, session_01U3pKQyXrivk6K5JRC22Lv5; cost amber at 117 steps: handed over)
+Rules that bite next: 87 (a fix failing twice stops), 30 (fix the method), the proposal route (any change to how films are built).
+Done: Sam "1 2 yy": both three-quarters hang straight like her boxy jacket with a small bust (turned_curves 0,
+turned_bust 0.6: "a very small amount of bust bump ... The side view is a good representation"); her seat below the
+jacket is trousers (solid_seat SEAT_TROUSERS). Checks: views.turned_curves_fault (kittest turned_curves), seated
+'jacket under the hem' (kittest jacket_under_hem); each catches Sam's frame and passes the fix; Open Wounds untouched.
+Sheet c10b; Sam's two shoe notes on it fixed (low shoes, clean hem; check shoe_faults, kittest
+shoe_shapes); the sheet no longer cuts her feet off. Sheet sent: notes/learn/seated/solid/may-body-r7c10c.jpg.
+Next: chat 11, Opus medium: Sam's two notes on 'upright, apart' (Brief checklist, last lines), a 2-pose front sheet; then the proposal route (source/propose.py solid-body-default; chat 9's draft was lost): mode 'body' (with
+turned_curves 0 / turned_bust 0.6 and the trousers seat) as every new film's default people, Kemi/Blair next test.
+Needs Sam: OK on sheet c10c (shoes); budget Y/N asked (9.8% of a 6% estimate; he sent notes, read as go on). Read: Brief checklist; solid_seat.py draw(); views._built_outline (turned).
+Open rule requests: none. Kit check: not this chat (rule 90; Sam's N by default, the final runs it).
+Locked by Sam: May mode 'body' front and side; both three-quarters and the shoes as on c10c once he OKs it; her posted outfit;
+Open Wounds' seated frames (switch off); the bum/seat.
+For Claude: sheet = may_sheet.py OUT body (sheet_solid sets turned_curves/turned_bust in mode body). handover end's
+"SENTENCE lost from CLAUDE.md" lines are other chats' CLAUDE.md edits (34f49840, 0945cc85), not R7's.
+

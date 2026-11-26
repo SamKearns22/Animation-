@@ -1964,6 +1964,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
             B.torso(img, B.Pen(img, Lean(Lf, lean, view_deg)), q, t)   # (MidTerminal note 37)
         else:
             B.torso(img, B.Pen(img, up), q, t)
+        if seated and (j.get('spec') or {}).get('lap_open'):   # knees apart: the jacket opens over the lap (R7 chat 11)
+            B.lap_open(B.Pen(img, up), q, q['bottom'])
     else:
         hem = sp_draw.get('bottom', JACKET)       # bending: the hem rises to the hips, never a long tail (Sam); eased
         u = min(1.0, max(0.0, (lean - 12) / 8))   # over leans 12 to 20, never a jump (Sam, 20 Oct: his torso popped

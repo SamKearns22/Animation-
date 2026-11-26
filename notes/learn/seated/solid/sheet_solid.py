@@ -23,6 +23,9 @@ def tile(who, yaw, pose, full=False):
     s = 0.5 * sp['height'] / 1.75
     V.person(img, B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0, yaw, S.pose(sp, pose))
     chk = SO.checks()
+    if yaw == 0 and S.POSES[pose][0](sp, S.seat_for(S.POSES[pose][1])).get('lap_open'):   # legs apart, front
+        chk['apart faults'] = SO.apart_faults(img.convert('RGB'), sp)   # (R7 chat 11; kittests legs_apart_spread,
+        #                                                                 jacket_triangle)
     return (img.convert('RGB') if full else img.convert('RGB').crop((240, 1180, 840, 1740))), chk
 
 

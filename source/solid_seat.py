@@ -422,9 +422,11 @@ def _press_legs(P, R, j):
     top = j.get('cross')
     if not top:
         xm = (kL[0] + kR[0]) / 2
+        g = 0.5 * (j.get('spec') or {}).get('leg_gap', 0.0)   # R7 chat 11 ('upright, apart'; Sam, 26 Nov: "a small
+        #   gap that runs all the way down"): relaxed legs apart stop short of each other by this much, crotch to knee
         l, r = side > 0.5, side < -0.5
-        P[l & (P[:, 0] > xm), 0] = xm
-        P[r & (P[:, 0] < xm), 0] = xm
+        P[l & (P[:, 0] > xm - g), 0] = xm - g
+        P[r & (P[:, 0] < xm + g), 0] = xm + g
         return
     under = 'R' if top == 'L' else 'L'
     mine = (side > 0.5) if top == 'L' else (side < -0.5)
@@ -808,4 +810,50 @@ def checks(j=None, sp=None):
         cloth = (pb == BD.PART_IX['body']) | (pb == BD.PART_IX['dash'])
         out['jacket under the hem'] = int((cloth & LAST['shown'] & (LAST['ky'] >= hem + 4)).sum())
         out['shoe faults'] = len(shoe_faults())
+    return out
+
+
+def apart_faults(img, sp):
+    """R7 chat 11 (Sam, 26 Nov, on 'upright, apart', examples/sam-26nov-apart-spread-crotch.png): a front view of a
+    person seated with the legs apart, read from the picture alone (any scale, so it reads Sam's own frame):
+    'legs spread': the gap between the shins wider than 0.8 of a shin, or the legs wider than the jacket ("Those legs
+    are sort of spread ... a bearing the crotch pose"; he wants "a small gap that runs all the way down");
+    'jacket triangle': the jacket hangs below its hem's line between the thighs, or no trousers show under it there
+    ("her purple jacket dips inward in a triangle, rather than having an appropriate trouser section in that area")."""
+    a = np.asarray(img.convert('RGB')).astype(int)
+    near = lambda c: np.abs(a - np.array(c)).sum(-1) <= 15
+    T, J = near(sp.get('trousers', (40, 40, 46))), near(sp.get('jacket', (40, 40, 46)))
+    jy, jx = np.where(J)
+    if not len(jx) or not T.any():
+        return ['no jacket or trousers in the picture']
+    x0, x1 = np.percentile(jx, 1), np.percentile(jx, 99)
+    W, cx = x1 - x0, int(round((x0 + x1) / 2))
+    ink = max(2, int(W * 0.02))                       # an ink line between touching legs is no gap
+    rows = np.where(T.any(1))[0]
+    out = []
+    gaps, legw, wide = [], [], 0
+    for y in rows:
+        xs = np.where(T[y])[0]
+        lft, rgt = xs[xs < cx], xs[xs >= cx]
+        if not len(lft) or not len(rgt):
+            continue
+        g = rgt.min() - lft.max() - 1
+        gaps.append((y, g if g > ink else 0))
+        legw.append((y, lft.max() - lft.min()))
+        wide = max(wide, (xs.max() - xs.min()) - W)
+    lo = [g for y, g in gaps if y > rows[0] + 0.6 * (rows[-1] - rows[0])]       # the shins: the lowest 40%
+    lw = [w for y, w in legw if y > rows[0] + 0.6 * (rows[-1] - rows[0])]
+    if lo and np.median(lo) > 0.8 * np.median(lw):
+        out.append('legs spread: shin gap %.0f, shin %.0f' % (np.median(lo), np.median(lw)))
+    if wide > 0.04 * W:
+        out.append('legs spread: %.0f wider than the jacket' % wide)
+    band = J[:, cx - ink:cx + ink + 1].mean(1) > 0.5   # the jacket down the middle, and at a third out each side
+    tip = np.where(band)[0].max()
+    side = max(np.where(J[:, int(cx + sg * W / 3)])[0].max() for sg in (-1, 1))
+    tb = T[tip + 1:, cx - ink:cx + ink + 1].any(1)
+    run = int(np.argmin(tb)) if not tb.all() else len(tb)
+    if tip - side > 0.05 * W:
+        out.append('jacket triangle: hangs %.0f below its hem between the thighs' % (tip - side))
+    if run < 0.08 * W:
+        out.append('jacket triangle: only %d of trousers under it' % run)
     return out

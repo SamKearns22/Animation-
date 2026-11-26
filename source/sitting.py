@@ -489,11 +489,22 @@ def spec_upright(sp, seat, hands='thighs', apart=False):
         # could you create another that is the same but her legs are not pressed in against each other? Relaxed,
         # perpendicular, a natural gap between them"): the feet under the knees, the knees over the hips' width,
         # thighs straight forward and shins straight down
-        sp0 = _spec(arms=arms, feet={'L': (-R7_APART, 235.0), 'R': (R7_APART, 235.0)},
-                    knee_pole={sd: (sg * R7_APART_OUT, -1.0, 0.7) for sd, sg in (('L', -1), ('R', 1))})
-        for _ in range(2):                        # each foot moved under its own knee: the shin straight down
-            kn, j0 = knees(sp, seat, sp0)
-            sp0['feet'] = {sd: (_chair(j0, kn[sd])[0], 235.0) for sd in 'LR'}
+        # chat 11 (Sam, 26 Nov, on chat 10's knees-out version: "Those legs are sort of spread ... a bearing the crotch
+        # pose"; "a relaxed, straightforward leg, where they just need to point forward with a small gap that runs all
+        # the way down"): each thigh straight forward from its hip, turned out only R7_APART_OUT so the knees part by a
+        # finger or two, each shin hanging straight down under its knee (placed by the knee, as perch_desk)
+        sp0 = _spec(arms=arms)
+        j0 = realize(sp, seat, sp0)
+        ank, pole = {}, {}
+        for sd, sg in (('L', -1), ('R', 1)):
+            hip = tuple(j0['hip' + sd])
+            lo, hi = -0.3, 0.6                    # the thigh's slope down (y per unit forward): the foot on the floor
+            for _ in range(24):
+                dy = 0.5 * (lo + hi)
+                K, A, pole[sd] = _leg_by_knee(hip, (sg * R7_APART_OUT, dy, 1.0), (-sg * R7_APART_SHIN, 1.0, 0.0))
+                lo, hi = (dy, hi) if _chair(j0, A)[1] > ANKLE_UP else (lo, dy)
+            ank[sd] = _ankle_spec(j0, A)
+        sp0.update(ankle=ank, knee_pole=pole, lap_open=True, leg_gap=R7_APART_GAP)
         return sp0
     if sp.get('figure') in V.WOMAN_LEGS and sp.get('seat_r7'):   # R7 chat 3 (new films): knees together TOUCHING, not
         # pinched through each other (they were 14 apart, each 60 across), the feet under them (ref woman-front-a)
@@ -510,8 +521,11 @@ def spec_upright(sp, seat, hands='thighs', apart=False):
     return _spec(arms=arms)
 
 
-R7_APART_OUT = 0.3   # and each knee turned out this much (its pole), so the gap runs up to the knees
-R7_APART = 52.0     # R7 'upright, apart': each foot this far out from the middle (under the knee, over the hip)
+R7_APART_GAP = 18.0  # R7 'upright, apart' (chat 11): the even gap between the legs, crotch to floor (body units)
+R7_APART_SHIN = 0.06  # and each shin leans in this much (x per unit down), so the gap stays even past the knees
+#                       (the shins are narrower than the knees: straight down, the gap doubled below them)
+R7_APART_OUT = 0.04  # R7 'upright, apart' (chat 11): each thigh turned out this much from straight forward (x per
+#                      unit forward), just enough for a small even gap between the legs; chat 10's 0.3 read as spread
 R7_STAGGER = 22.0   # R7 seated upright: the left foot this far forward of 235, the right this far back
 WOMAN_FEET = 30.0
 R7_WOMAN = {'feet': 38.0, 'in': 0.05}   # R7 women seated: feet apart, knees pointing nearly straight
