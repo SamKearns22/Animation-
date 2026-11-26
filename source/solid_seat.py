@@ -49,6 +49,8 @@ SPREAD_H = 40.0         # ... fading over this height above the seat (6 cm)
 SINK_MAX = 90.0         # deeper than this under the cushion's top is below the seat, not on it (14 cm)
 NECK_X = 1.0             # mode 'whole': the neck's width over the measured body's (the trunk eases to it above the shoulders)
 NECK_LIFT = 40.0         # mode 'whole': the shoulders' tops and the neck's base raised this far (person units, 6 cm)
+SEAT_TROUSERS = True     # mode 'body': the trunk below the flat jacket's seated hem is trousers (chat 10; kittest
+#                          jacket_under_hem switches it off to prove its check catches Sam's purple bottom)
 HEM_OVERLAP = 20.0       # mode 'body': the solid starts this far (person units) above the flat jacket's hem (no gap)
 BODY_TOP = 2.2           # mode 'body': the solid body stops this far (rest dm) below the shoulder joints (the
 #                          waist: at 1.0 the bust showed past the flat jacket's front from the side, chat 8)
@@ -566,6 +568,11 @@ def draw(p, j, yaw, sp, scale=2):
         name = {v_: k_ for k_, v_ in MB.PIX.items()}
         pb[ob == 0] = [BD.PART_IX[WHOLE_IX.get(name[q], name[q])] for q in mp]
         pb[ob >= 2] = BD.PART_IX['hand']
+        if not arms and SEAT_TROUSERS:          # under the flat outfit (mode 'body'): below the flat jacket's seated
+            low = (ob == 0) & (ab[..., 4] >= min(sp.get('bottom') or V.JACKET, 470))   # hem the trunk is her
+            pb[low & (pb != BD.PART_IX['shoes'])] = BD.PART_IX['trousers']   # trousers' seat, never the solid's own
+            #                                     jacket (Sam, 25 Nov, side view: "Is this bottom purple section
+            #                                     supposed to be there or is it supposed to be trousers"; chat 10)
     else:
         pb[ob == 0] = _parts(R, ab[ob == 0][:, :3])
     if skirt:                                   # the body above the hem is under the skirt: it IS the skirt there
@@ -648,7 +655,8 @@ def draw(p, j, yaw, sp, scale=2):
     zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
     LAST.clear()
     LAST.update(mode=mode, whole=arms, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
-                P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw)
+                P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw,
+                shown=(lay[..., 3] > 0)[::scale, ::scale], ky=ab[..., 4][::scale, ::scale])
     return L
 
 
@@ -728,4 +736,11 @@ def checks(j=None, sp=None):
     # turned (Sam's "way too curvaceous" crossed three-quarter; views.turned_curves_fault)
     if LAST.get('mode') == 'body' and V.LAST_TURNED:
         out['turned curves'] = len(V.turned_curves_fault())
+    # R7 chat 10 (Sam, 25 Nov, side view: "Is this bottom purple section supposed to be there or is it supposed to be
+    # trousers", examples/r7c10-purple-under-jacket-side.jpg): in mode 'body' no jacket or shirt colour of the solid
+    # shows below the flat jacket's seated hem (dots, at the check's scale)
+    if LAST.get('mode') == 'body':
+        hem = min(LAST['sp'].get('bottom') or V.JACKET, 470)
+        cloth = (pb == BD.PART_IX['body']) | (pb == BD.PART_IX['dash'])
+        out['jacket under the hem'] = int((cloth & LAST['shown'] & (LAST['ky'] >= hem + 4)).sum())
     return out
