@@ -71,7 +71,7 @@ For Claude: preflight name 'brexit-is-done'; main line claude/create-claude-md-o
 
 ## Open from chat 36 (Sam's picks pending)
 - Proposal check-knows-intent: option 1 or 2 (notes/proposals/check-knows-intent.md).
-- Proposal seeing-five-candidates: option 1 or 2 (replaces better-seeing-tools).
+- Proposal seeing-five-candidates: Sam picked 1 without the video model (26 Nov); built in its own chat.
 - The 3 resting-hand faults (May's thigh 2.6 s, Blair's armrests 24 s): fix Y/N.
 - Rule 93 still to build: circled stills and why-line (on Sam's word), kittest checks_advise_never_lock.
 
