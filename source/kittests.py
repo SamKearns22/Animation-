@@ -4955,6 +4955,49 @@ def tools_switched_on():
 
 
 @test
+def castsheet_only_when_cast_changed():
+    """Check audit B5 (Sam's Y, 26 Nov): the cast check at handover runs only for a new or changed cast. 24 of 65
+    refused handovers were the cast check repeating unchanged faults. A clean run stamps the files it read; the next
+    handover skips it while they are unchanged and runs it again once one changes; a cast with faults is never stamped."""
+    import tempfile
+    import shutil
+    import castsheet as C
+    import handover as H
+    tmp = tempfile.mkdtemp()
+    src = os.path.join(os.path.dirname(HERE), 'notes', 'logs', '_kittest-cast.txt')   # inside the project: stamped
+    open(src, 'w').write('kemi: front\n')
+    calls, result = [], [[]]
+
+    def fake(film, *a, **k):
+        calls.append(open(src).read())
+        return list(result[0])
+    names = ('build_faults', 'crotch_faults', 'teeth_faults', 'mouth_spike_faults', 'hair_spike_faults',
+             'seated_faults', 'judge_faults')
+    keep = {n: getattr(C, n) for n in names}
+    keep_stamps = H.CASTSTAMPS
+    try:
+        for n in names:
+            setattr(C, n, fake)
+        H.CASTSTAMPS = os.path.join(tmp, 'stamps.tsv')
+        first = H.castsheet_faults('brexit-is-done'); n1 = len(calls)
+        second = H.castsheet_faults('brexit-is-done'); n2 = len(calls)
+        open(src, 'w').write('kemi: front, new hair\n')
+        third = H.castsheet_faults('brexit-is-done'); n3 = len(calls)
+        result[0] = ['kemi front: crotch line']
+        open(src, 'w').write('kemi: changed again\n')
+        bad1 = H.castsheet_faults('brexit-is-done'); bad2 = H.castsheet_faults('brexit-is-done')
+    finally:
+        for n, f in keep.items():
+            setattr(C, n, f)
+        H.CASTSTAMPS = keep_stamps
+        shutil.rmtree(tmp, ignore_errors=True)
+        os.remove(src)
+    ok = first == [] and n1 == 7 and n2 == n1 and n3 == 14 and third == [] and bad1 and bad2
+    return ok, (f'first run {n1} checks; unchanged: skipped {n2 == n1}; changed: run again {n3 == 14}; '
+                f'faults stop it both times {bool(bad1) and bool(bad2)}')
+
+
+@test
 def handover_status_checks():
     """Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must
     catch what slipped on Grand Theft Autism: notes over 4,000 words, a handover over 15 lines, a chat that never

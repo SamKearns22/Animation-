@@ -674,6 +674,9 @@ def kittest_gate_faults(kitlog=KITLOG, reds_log=KITREDS, sid=None, stale_fn=None
     return out
 
 
+CASTSTAMPS = os.path.join(ROOT, 'notes', 'logs', 'castsheet-stamps.tsv')   # B5: a clean cast's files, stamped
+
+
 def castsheet_faults(film):
     """Open Wounds chat 6 (Sam's notes 5 and 7): every woman in a new film's cast reads as a woman in every turned
     view, every man as a man, and each woman is on HER OWN build (measured from her photos, or Sam's words approving
@@ -683,12 +686,21 @@ def castsheet_faults(film):
     if not film or film in people.BEFORE_SEX or not os.path.exists(os.path.join(ROOT, 'story', f'{film}-people.txt')):
         return []
     import castsheet
-    return [f'STOP: CAST SHEET: {x}' for x in castsheet.build_faults(film) + castsheet.crotch_faults(film)
-                                                     + castsheet.teeth_faults(film)
-                                                     + castsheet.mouth_spike_faults(film)
-                                                     + castsheet.hair_spike_faults(film)
-                                                     + castsheet.seated_faults(film)
-                                                     + castsheet.judge_faults(film)]
+    import kitstamps
+    # check audit B5 (Sam's Y, 26 Nov): only a new or changed cast is checked again. A clean run leaves a stamp of
+    # every file it read (the kit tests' own record, kitstamps); while none of them has changed, the cast is not
+    # re-drawn at every handover (24 of 65 refused handovers were this check repeating the same unchanged faults).
+    name = f'castsheet:{film}'
+    if not kitstamps.stale([name], CASTSTAMPS)[0]:
+        return []
+    t0 = datetime.now(timezone.utc)
+    run = lambda: (castsheet.build_faults(film) + castsheet.crotch_faults(film) + castsheet.teeth_faults(film)
+                   + castsheet.mouth_spike_faults(film) + castsheet.hair_spike_faults(film)
+                   + castsheet.seated_faults(film) + castsheet.judge_faults(film))
+    faults, reads = kitstamps.traced(run)
+    if not faults and reads is not None:
+        kitstamps.write_green([(name, reads, (datetime.now(timezone.utc) - t0).total_seconds())], CASTSTAMPS)
+    return [f'STOP: CAST SHEET: {x}' for x in faults]
 
 
 def _safe(name, fn):
