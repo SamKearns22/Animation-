@@ -40,7 +40,8 @@ E keep: kittests; critique and judges (+ column "Sam noted it too?"); R7 seated 
   kittest and a "Lost:" line; nothing is deleted without his Y.
 - Sam's answers: Q1 Y (26 Nov: move group A into the kit, one at a time, each with its kittest).
 - Missed (26 Nov): Q2 first offered a 'Reopened' list Sam had already declined; I read only the top of answered-faults-return.md (the decline is its last line) and searched no saved messages. Before any proposal: grep notes/ledger/sam/ and the proposal's last lines.
-- Needs Sam: Q2-Q5 in the report (going one at a time, in simple words, Sam 26 Nov).
+- Q2 and Q3 merged (26 Nov): Sam asked whether Q2 already had a proposal and whether Q3 was agreed. Chat 36 record (session_01J1JB7YNoonB7shJ4bXB2Vq, read 20:29-22:18): check-knows-intent asked 20:30, re-asked 4 times, never picked (21:00 Sam asked only whether option 1 applies to all films); his 22:14 '1. Y' answered the seeing-tools re-run. Say-once (B1) is part of check-knows-intent option 1 (recheck and recognise meant as fine), so one question.
+- Needs Sam: merged Q2/Q3 (check-knows-intent option 1 or 2), then Q4, Q5; also open from chat 36: seeing-five-candidates 1 or 2, the 3 resting-hand faults Y/N in the report (going one at a time, in simple words, Sam 26 Nov).
 - Read: guides/job-packs.md "A tool job"; this file; the report.
 - Open rule requests: none.
 - COST: a tool job, no film estimate.
