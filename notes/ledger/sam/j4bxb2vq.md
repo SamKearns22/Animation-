@@ -42,3 +42,6 @@ I think if something changes, it should just recheck the new film and recognise 
 ### 2026-11-26T20:22:24
 Well, I mean, why didn't it decide it was fine this time? Why does it need a new rule when it was already deciding it was fine?
 
+### 2026-11-26T20:23:19
+1. Is it a fault or are the characters contextually doing something that requires overlap?
+
