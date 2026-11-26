@@ -13653,6 +13653,146 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "c87aa725",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "sonnet",
+   "cost": 0.05,
+   "src": "estimate",
+   "sid": "session_01U3pKQzYc9dKqt4sh1M5yE9",
+   "steps": 7,
+   "hist_k": 89,
+   "kinds": {
+    "film-file search": 2.1,
+    "tool search": 11.9,
+    "other": 86.0
+   },
+   "calls": {
+    "film-file search": 1,
+    "tool search": 5,
+    "whole-file .py read": 0,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 0,
+    "pictures": 0,
+    "other": 1
+   },
+   "split": {
+    "usd": 0.1695,
+    "total": 0.1695,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 77.7,
+     "new writes": 12.0,
+     "Claude's words": 9.3,
+     "carried history": 1.0
+    },
+    "origins": {
+     "start-up floor": 77.7,
+     "Claude's words": 11.8,
+     "result: tool search": 8.8,
+     "messages and reminders": 1.5,
+     "result: film-file search": 0.1,
+     "result: other": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 77.7,
+     "commands": 9.8,
+     "start-up and handover tools": 6.3,
+     "running checks and tools": 2.0,
+     "messages to Sam": 1.5,
+     "messages and reminders": 1.5,
+     "thinking": 0.6,
+     "other commands": 0.3,
+     "reading notes": 0.2,
+     "renders": 0.1,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 4,
+    "work_pct": 0.04,
+    "reads": [],
+    "base_pct": 29.9
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 1
+    },
+    "other": {
+     "other": 2,
+     "shared:handover.py": 1,
+     "film notes": 1,
+     "shared:preflight.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current; git remote -v | head -2; g",
+      "",
+      304
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1 | tail -1; pyth",
+      "",
+      6029
+     ],
+     [
+      2,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "Where things stand",
+      "",
+      160
+     ],
+     [
+      3,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "git push --dry-run origin HEAD:claude/create-claude-md-oe8z4g 2>&1 | tail -2; mk",
+      "",
+      2053
+     ],
+     [
+      4,
+      "film",
+      "before show",
+      "source/brexit_is_done.py source/data/brexit-is-done-clean.mp4",
+      "(time python3 source/brexit_is_done.py final source/data/brexit-is-done-clean.mp",
+      "",
+      267
+     ],
+     [
+      5,
+      "other",
+      "other",
+      "",
+      "sleep 590; tail -3 /tmp/claude-0/render.log",
+      "",
+      315
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {
