@@ -6349,6 +6349,57 @@ def smirk_one_corner():
     return ok, f"the near corner raised {lift} px over the old mood's (a smirk: 6 or more; the old mood: none)"
 
 
+@test
+def body_model_downloads_once():
+    """Check audit B7 (Sam's Y, 26 Nov): the kit-inputs survey crashed twice on Open Wounds (41 and 52 frames 'could
+    not be drawn': git clone of the body model) because every drawing worker started the same download at once. Eight
+    workers ask at the same moment: one download, all eight get the finished copy, no worker fails."""
+    import tempfile
+    import time
+    import mhuman as M
+    from multiprocessing import get_context
+    tmp = tempfile.mkdtemp()
+    log = os.path.join(tmp, 'clones.txt')
+    keep = (M.MH_DIR, M.subprocess.run)
+
+    def fake(cmd, check=False, **k):
+        if cmd[1] == 'clone':
+            dest = cmd[-1]
+            if os.path.exists(dest):                      # what git does when two clones meet
+                raise M.subprocess.CalledProcessError(128, cmd)
+            open(log, 'a').write(dest + '\n')
+            time.sleep(0.3)
+            os.makedirs(os.path.join(dest, 'makehuman', 'data', '3dobjs'))
+            open(os.path.join(dest, 'makehuman', 'data', '3dobjs', 'base.obj'), 'w').write('v 0 0 0\n')
+    out = []
+    try:
+        M.MH_DIR = os.path.join(tmp, 'makehuman')
+        M.subprocess.run = fake
+        with get_context('fork').Pool(8) as p:
+            res = p.map(_mh_one, range(8))
+        bad = [r for r in res if not r.startswith(M.MH_DIR)]
+        if bad:
+            out.append(f'{len(bad)} of 8 workers failed: {bad[0][:120]}')
+        n = len(open(log).read().split()) if os.path.exists(log) else 0
+        if n != 1:
+            out.append(f'{n} downloads for 8 workers (want 1)')
+        if any('.part' in f for f in os.listdir(tmp)):
+            out.append('a half-made copy was left behind')
+    finally:
+        M.MH_DIR, M.subprocess.run = keep
+        import shutil
+        shutil.rmtree(tmp, ignore_errors=True)
+    return (not out), ('; '.join(out) or 'one download, all 8 workers got the copy')
+
+
+def _mh_one(_):
+    import mhuman as M
+    try:
+        return M.data_dir()
+    except Exception as e:
+        return f'{type(e).__name__}: {e}'
+
+
 def main():
     """python3 source/kittests.py [WORD] [--stale] [--names a,b]: WORD runs the tests whose name holds it; --stale only
     the tests whose files changed since their last green (source/kitstamps.py, Sam's pick 1, 25 Nov). Every green test
