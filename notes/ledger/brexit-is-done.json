@@ -13466,15 +13466,36 @@
      "1-7 A2 P4 S3: every panel says \"(no reference)\", so faces, hair and set cannot be compared. References are needed beside each panel.",
      "3-4 P11: Kemi's neck is hidden by her braids and the hat is large. A full-size head crop would show it."
     ]
+   },
+   {
+    "round": 27,
+    "pass": 1,
+    "stage": "moves",
+    "date": "2026-11-26",
+    "hunt": 1,
+    "faults": 7,
+    "cant_tell": 3,
+    "open": [
+     "1-3 P2: whole body - she sits upright and square, never \"leaning in as she talks\"; torso and head are the same lean in all three panels.",
+     "3 P2: head and mouth - brief says nodding as she finishes; head is level, near identical to panel 2, no nod reads, and the mouth is a slight open slit, not a fi",
+     "1-3 P7 A1: legs and feet - legs are not crossed as briefed; one dark mass with no readable crossing, no feet in frame (legs run off the bottom edge), thigh and ",
+     "1-3 P7 O4: chair - seat is a thin slab much narrower than her thighs, with one thin post and no base; no bottom is visible on it, and she seems to hover in fron",
+     "2 P12: mouth - panel 2 is mid-sentence but the mouth is a tiny closed dash, so it looks silent; panel 3 has a similar small mouth. Only panel 1 shows speech.",
+     "2-3 P2: acting - the face is blank and flat in both panels; no feeling beyond a neutral stare, small at phone size.",
+     "1 P1: hands - both ball hands sit loose at the lap edge, left one half behind the jacket hem, so neither clearly rests on a thigh.",
+     "1-3 P14: eyes are tiny at this size; a full-size crop of each eye would show whether the pupils sit inside the outline.",
+     "1-3 P4: no reference is shown (\"no reference\" on the check sheet), so hair and face match cannot be confirmed.",
+     "2-3 P5: the raised arm joins the jacket at the side; a full-size shoulder crop would show if there is a step."
+    ]
    }
   ],
   "lines": {
    "A1": {
-    "faults": 6,
+    "faults": 7,
     "false": 1
    },
    "P2": {
-    "faults": 12,
+    "faults": 15,
     "false": 1
    },
    "P4": {
@@ -13490,7 +13511,7 @@
     "false": 2
    },
    "P1": {
-    "faults": 2,
+    "faults": 3,
     "false": 0
    },
    "P13": {
@@ -13514,7 +13535,7 @@
     "false": 0
    },
    "P7": {
-    "faults": 6,
+    "faults": 8,
     "false": 0
    },
    "P10": {
@@ -13534,6 +13555,10 @@
     "false": 0
    },
    "O4": {
+    "faults": 2,
+    "false": 0
+   },
+   "P12": {
     "faults": 1,
     "false": 0
    }
