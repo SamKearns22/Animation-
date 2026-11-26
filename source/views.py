@@ -648,6 +648,25 @@ def seated_lower(p, j, yaw, sp, order, top=None):
 R7_TURNED = 20.0   # a view turned this far: the legs overlap, the far one shaded
 
 
+BACK_INK = 1.5        # r7_back_face: the chair back's face this far (units) behind the outfit's own back line
+
+
+def r7_back_face(j, sp, seated=True):
+    """R7 chat 14 (Sam, 26 Nov, Kemi side: "Back of bum clips slightly into chair in side-on pose";
+    notes/learn/pose-kit/examples/sam-26nov-kemi-side-bum-line-chair.jpg): seated on the full body (mode 'body'), the
+    chair back's face moves back to rest against the outfit's own rearmost line (the jacket's or short top's hem,
+    torso_outline), never inside it: nothing passes through the chair. None: no change (every other film, a seat
+    with no back, a back already clear). Check solid_seat.back_clip_faults (kittest back_clip)."""
+    seat = j.get('seat')
+    if not (seated and sp.get('seat_solid') == 'body' and r7_on(j, sp, 'side') and seat is not None
+            and getattr(seat, 'back_top', None) and getattr(seat, 'kind', '') != 'desk'):
+        return None
+    sb = min(sp.get('bottom', JACKET), 470)
+    rear = min(q[0] for q in torso_outline(sp, 'side', sb)) - BACK_INK
+    rear += j.get('dz', 0.0) - j.get('roll', 0.0)
+    return rear if rear < seat.back_z else None
+
+
 def _r7_col(j, sp, sd, yaw):
     """One leg's cloth colour: in shadow, a crossed leg's under leg (from any side), or the far leg of a turned view."""
     col = sp.get('trousers', (40, 40, 46))
@@ -1894,6 +1913,9 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     if TAP[0]:                                    # cover.py (could-not-test, 22 Nov): each part of him recorded as drawn
         TAP[0]('start', img, sp=sp, s=s, cam=cam, depth=depth, j2=j2, L=L0, x=x, y=y, yaw=yaw)
     if seated:
+        bf = r7_back_face(j, sp, seated)          # R7 chat 14 (Sam's note 5): the chair back rests on her back
+        if bf is not None:
+            j['_back_face'] = bf
         (j.get('chair_draw') or chair)(p, view, j2, sp, under=True)
     for draw in j.get('pre', []):                 # set pieces beyond him in this view (sitting.py: the far side of a desk)
         draw(p, j2, view)
@@ -1986,7 +2008,8 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
         sb = min(sp_draw.get('bottom', JACKET), 470) if seated else sp_draw.get('bottom', JACKET)
         pen = B.Pen(img, up)
         B.trouser_seat(pen, sp_draw, torso_outline(sp_draw, view, sb, B.ink_units(pen)), sb,
-                       None if seated else _thigh_edges(j, view_deg, sp_draw, sb + 6.0, gap=True), r7=r7)
+                       None if seated else _thigh_edges(j, view_deg, sp_draw, sb + 6.0, gap=True), r7=r7,
+                       rear=r7 and seated and sp.get('seat_solid') == 'body' and view in ('side', 'three'))
     if r7 and sp.get('seat_solid'):                # the solid legs: what lies in front of the torso's front is drawn
         import solid_seat                          # over it, by depth (solid_seat.lay_over)
         solid_seat.lay_over(img)

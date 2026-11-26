@@ -45,6 +45,7 @@ EDGE_R = 40.0           # the seat cushion's front edge: rounded over this many 
 BOTTOM_FADE = 70.0      # the bottom's fit fades over this height up to the waist (10 cm)
 SPREAD = 0.5           # pressed flesh spreads out this much per unit pressed down (volume kept; chat 7)
 SPREAD_R = 40.0         # directions ease in over this distance from the middle (no tearing where they meet)
+SPREAD_FRONT = 70.0     # ... a thigh's spread fading to none over this distance to the seat's front edge (chat 14)
 SPREAD_H = 40.0         # ... fading over this height above the seat (6 cm)
 SINK_MAX = 90.0         # deeper than this under the cushion's top is below the seat, not on it (14 cm)
 NECK_X = 1.0             # mode 'whole': the neck's width over the measured body's (the trunk eases to it above the shoulders)
@@ -384,6 +385,11 @@ def _spread(P, R, j, sunk, lim):
     #                                            pushed forward showed as a jagged lump between the knees, front view)   # smooth through the middle (chat 7:
     side = _legside(R)                                                            # spikes at the crotch)
     d_l = np.stack([np.tanh((P[:, 0] - np.where(side > 0, hl[0], hr[0])) / SPREAD_R), np.zeros(len(P))], 1)
+    seat = j.get('seat')
+    if seat is not None and SPREAD_FRONT:      # R7 chat 14 (Sam's note 4: "knee to calf area could have smoother, less
+        d_l *= np.clip((seat.front - P[:, 2]) / SPREAD_FRONT, 0, 1)[:, None]   # rugged lines"): little flesh to
+        #                                        squash near the knee: the thigh's spread fades out before the seat's
+        #                                        front edge (it bulged past the knee there, a lobe over the shin)
     d = d_t * trunk[:, None] + d_l * (1 - trunk)[:, None]
     P[:, 0] += amt * d[:, 0]
     P[:, 2] += amt * d[:, 1]
@@ -599,7 +605,9 @@ def draw(p, j, yaw, sp, scale=2):
                     ob[r, c], pb[r, c], m[r, c] = 0, TRx, True
                     ab[r, c] = ab[tr[-1], c]
         if not arms and SEAT_TROUSERS:          # under the flat outfit (mode 'body'): below the flat jacket's seated
-            low = (ob == 0) & (ab[..., 4] >= min(sp.get('bottom') or V.JACKET, 470))   # hem the trunk is her
+            low = (ob == 0) & (ab[..., 4] >= min(sp.get('bottom') or V.JACKET, 470) - HEM_OVERLAP)   # hem the
+            #                                     trunk is her (from where it shows: chat 14, Sam's note 2, the jacket's
+            #                                     part line at the hem showed as a stray line across Kemi's bottom)
             pb[low & (pb != BD.PART_IX['shoes'])] = BD.PART_IX['trousers']   # trousers' seat, never the solid's own
             #                                     jacket (Sam, 25 Nov, side view: "Is this bottom purple section
             #                                     supposed to be there or is it supposed to be trousers"; chat 10)
@@ -612,7 +620,10 @@ def draw(p, j, yaw, sp, scale=2):
         pb[ob == 1] = BD.PART_IX['vest']                                        # (the skirt's own part for the ink)
     ls = np.where(ab[..., 6] > 0.5, 1, np.where(ab[..., 6] < -0.5, 2, 0))
     ls[ob != 0] = 0
-    edge = BD.ink(zb, pb, ob, max(2, p.w(2.6)) * scale)
+    if mode == 'body':                          # R7 chat 14 (Sam, 26 Nov, note 2: "Stray horizontal line on butt"):
+        edge = _ink(zb, pb, ob, max(2, p.w(2.6)) * scale, (ob == 0) & (ls == 0))   # the trunk is one soft mass:
+    else:                                       # no line where it folds over itself (the seat-pressed bottom bulging
+        edge = BD.ink(zb, pb, ob, max(2, p.w(2.6)) * scale)   # sideways); its outline and the legs' lines stay
     between = np.zeros_like(edge)            # the house line wherever the two legs meet (they are two parts)
     for dy, dx in ((0, 1), (1, 0)):
         a_, b_ = ls[:ls.shape[0] - dy, :ls.shape[1] - dx], ls[dy:, dx:]
@@ -645,11 +656,15 @@ def draw(p, j, yaw, sp, scale=2):
     # R7_FAR, easing into the lap's tone where the leg joins the body (chat 7, judges at three-quarter: "thighs merge
     # into one dark mass"; v4 Sam accepted drew the far leg so)
     tr = (pb == BD.PART_IX['trousers']) & (ob == 0)
+    far_ls = []
     for ks, sg in (('L', 1.0), ('R', -1.0)):
         dark = V._r7_col(j, sp, ks, yaw)
         base = cols[BD.PART_IX['trousers']]
         if dark == base:
             continue
+        if mode == 'body' and not j.get('cross'):   # R7 chat 14 (Sam, 26 Nov, note 1: "In 3/4 pose the legs are
+            far_ls.append(1 if ks == 'L' else 2)    # different colour"): side by side, both legs one cloth (the line
+            continue                                # between them parts them); only a crossed under leg is in shadow
         w = np.clip((ab[..., 6] * sg - 0.2) / 0.6, 0, 1)[tr]
         k = 1 - (1 - V.R7_FAR) * w
         lay[tr, :3] = (np.array(base, float)[None, :] * k[:, None]).astype(np.uint8)
@@ -684,10 +699,30 @@ def draw(p, j, yaw, sp, scale=2):
     img.alpha_composite(L) if img.mode == 'RGBA' else img.paste(L, (0, 0), L)
     zk = ab[..., 5][::scale, ::scale]           # kit-frame z (forward) per dot
     LAST.clear()
-    LAST.update(mode=mode, whole=arms, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
+    LAST.update(mode=mode, whole=arms, far_ls=far_ls, layer=L, front=(m & (ab[..., 5] > TORSO_FRONT) & (np.abs(ab[..., 6]) > 0.5))[::scale, ::scale], m=m[::scale, ::scale], zk=zk,
                 P=P[:nv], T=T, R=R, pb=pb[::scale, ::scale], edge=edge[::scale, ::scale], between=between[::scale, ::scale], ls=ls[::scale, ::scale], j=j, sp=sp, yaw=yaw,
                 shown=(lay[..., 3] > 0)[::scale, ::scale], ky=ab[..., 4][::scale, ::scale], foot=foot)
     return L
+
+
+def _ink(zb, pb, ob, width, soft):
+    """bench_draw.ink, but a depth jump between two `soft` dots is no line (one soft mass folding over itself)."""
+    h, w = zb.shape
+    edge = np.zeros((h, w), bool)
+    zf = np.where(np.isfinite(zb), zb, 1e3)
+    pb = BD.INK_PART[np.clip(pb, -1, len(BD.PART_NAMES) - 1) + 1]
+    for dy, dx in ((0, 1), (1, 0), (1, 1), (1, -1)):
+        a = (slice(0, h - dy), slice(max(0, -dx), w - max(0, dx)))
+        b = (slice(dy, h), slice(max(0, dx), w + min(0, dx)))
+        jump = np.abs(zf[a] - zf[b]) > 0.03 + 0.02 * np.minimum(zf[a], zf[b]) / 4
+        diff = (ob[a] != ob[b]) | (pb[a] != pb[b]) | (jump & ~(soft[a] & soft[b]))
+        near_a = zf[a] <= zf[b]
+        edge[a] |= diff & near_a & (ob[a] >= 0)
+        edge[b] |= diff & ~near_a & (ob[b] >= 0)
+    if width > 1:
+        from scipy import ndimage
+        edge = ndimage.binary_dilation(edge, iterations=int(width // 2))
+    return edge
 
 
 def lay_over(img, p=None):
@@ -696,8 +731,10 @@ def lay_over(img, p=None):
     if not LAST or LAST.get('whole'):           # (mode 'whole': no flat torso to lie over)
         return
     from scipy import ndimage
-    front = LAST['front']
-    if not front.any():
+    front = LAST['front'].copy()
+    for f in LAST.get('far_ls') or ():          # R7 chat 14 (Sam's note 1: the far leg "doesn't seem connected smoothly
+        front &= LAST['ls'] != f                # to the body"): side by side, the far leg goes under the hem, never over
+    if not front.any():                         # it (its top showed over the jacket as a notched lump)
         return
     a = np.asarray(LAST['layer']).copy()
     keep = ndimage.binary_dilation(front, iterations=1)

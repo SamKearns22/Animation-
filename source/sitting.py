@@ -188,6 +188,7 @@ class Seat:
         parts.append((-300, 'pre', lambda p: _box(p, yaw, -w, w, top, top + 30, self.rear, self.front, c, ct, 0, sh)))
         if self.back_top:
             bz = -78 if self.kind in ('office', 'plastic') else -86
+            bz = min(bz, j.get('_back_face', bz))      # R7 chat 14: against the full body's back (views.r7_back_face)
             thick = 28 if self.kind in ('office', 'plastic') else 60
             bw = w - 10 if self.kind in ('office', 'plastic') else w + 50
 

@@ -565,7 +565,7 @@ def seat_hem(sp):
     return SEAT_HEM if sp.get('jacket_hem') and sp.get('figure') in ('female', 'straight') else None
 
 
-def trouser_seat(p, sp, body, view_bottom, thighs=None, r7=False):
+def trouser_seat(p, sp, body, view_bottom, thighs=None, r7=False, rear=False):
     """A short jacket: the body's outline below the jacket's hem painted in the trousers (the seat), its top edge the
     jacket's hem line. `body`: the outline just drawn, in the same pen; `thighs`: the legs' outer edges (left, right)
     at the body's bottom (views.person works them out): no line across the bottom between them (the seat runs on
@@ -593,6 +593,16 @@ def trouser_seat(p, sp, body, view_bottom, thighs=None, r7=False):
     if r7:                                               # the body's own bottom line painted out too (it lies
         p.poly([(x, y + 5.0 if y > view_bottom - 8.0 else y) for x, y in out], col, None)   # inside R7's lap)
         p.line([(min(xs) + 1.5, hem), (max(xs) - 1.5, hem)], INK, 2.6)
+        if rear:                                         # turned, on the full body (R7 chat 14, Sam's note 5: "needs
+            x0 = min(xs)                                 # stronger lining as with the rest of the model"): the seat's
+            drawn = [(x, y + 5.0 if y > view_bottom - 8.0 else y) for x, y in out]   # back line is the person's
+            on = [q[0] < x0 + 0.3 * (max(xs) - x0) for q in drawn]                    # outline, down to the seat:
+            if any(on) and not all(on):                                               # the outline's one run of
+                k = on.index(False)                                                   # points on the back side,
+                drawn, on = drawn[k:] + drawn[:k], on[k:] + on[:k]                    # in its own order
+                back = [q for q, o in zip(drawn, on) if o]
+                if len(back) > 1:
+                    p.line(back, INK, 2.6)
         return
     lo = [q for q in out if q[1] > view_bottom - 1.0]
     x0, x1 = min(x for x, _ in lo), max(x for x, _ in lo)
