@@ -25,3 +25,8 @@ I don't know what this means
 ### 2026-11-26T20:15:11
 Y
 
+### 2026-11-26T20:16:43
+May's finger: keep the original. Frankly the larger one looks like a penis 
+
+2 write it up
+
