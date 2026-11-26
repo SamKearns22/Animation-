@@ -292,7 +292,7 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         small = ss == 1 and size[0] < 1080
         why = lock_fault(film, named, final=not small)
         if why:
-            __import__('override').refuse('render REFUSED (rule 59): ' + why)
+            __import__('override').advise('pre-flight (rule 59): ' + why)
         check = not (read_pass(film) or {}).get('pictures')   # the animatic runs the picture checks as it draws
         if check:
             import preflight
@@ -382,17 +382,15 @@ def render(name, out, *, size, ss, fps, dur, picture, overlay, shot_of, sound, w
         done, left = waivers.split(found, open(notes_p).read() if os.path.exists(notes_p) else '', main)
         if done:
             print(f'picture checks: {len(done)} line(s) answered in the notes, {len(left)} not', flush=True)
-        if left:                                  # chat 30 (Sam's Y, 15 Nov: a stopped 31-minute render was thrown
-            os.replace(out, held)                 # away): kept aside, never under OUT's name, so nothing sends it unnamed
-            with open(held + '.faults.json', 'w') as fh:
+        if left:                                  # rule 93 (Sam, 26 Nov): advice, never a lock; the video stays
+            with open(out + '.faults.json', 'w') as fh:
                 json.dump({'out': out, 'faults': found}, fh)
-            sys.exit(f'render STOPPED (rule 59): the picture checks left {len(left)} line(s) without a written answer, '
-                     f'listed above. The video is held as {held} (not a pass). Fix them and render again, or answer '
-                     f'each in the notes\' "## Exceptions" (| `the exact words` | - | why | looked at | chosen or real '
-                     f'| owner |), then: python3 source/waivers.py release {film} {held} (no second render). '
-                     f'--faults-named no longer passes this list.')
-        stamp0 = read_pass(film) or {}
-        write_pass(film, stamp0.get('faults', 0), pictures=True)   # every line fixed or answered: the final may go
+            print(f'Concerns (advice only, rule 93): the picture checks left {len(left)} line(s) without a written '
+                  f'answer, listed above; the video is kept as {out}. Circled stills and why each was drawn wrong '
+                  f'on Sam\'s word.', flush=True)
+        else:
+            stamp0 = read_pass(film) or {}
+            write_pass(film, stamp0.get('faults', 0), pictures=True)
     import preflight as _pf                       # named-lines: each body line answered in the film's notes
     _np = _pf.notes_path(main, film)
     hc.finish(out, named='--body-named' in sys.argv, notes=open(_np).read() if os.path.exists(_np) else '')

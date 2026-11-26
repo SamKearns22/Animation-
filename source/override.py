@@ -105,6 +105,12 @@ def refuse(msg, path=None):
     sys.exit(msg)
 
 
+def advise(msg):
+    """Rule 119 (Sam, 26 Nov): a pre-flight or body check never locks out work Sam asked for. It prints its concern
+    (with the circled stills and the why-line when Sam asks for them) and the work goes ahead."""
+    print('Concerns (advice only, rule 93): ' + msg, flush=True)
+
+
 def prompt(stdin=None):
     try:
         data = json.loads(stdin if stdin is not None else sys.stdin.read() or '{}')
