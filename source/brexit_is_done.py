@@ -68,33 +68,26 @@ SR = 48000
 
 
 def _voices():
-    """Each line's voice (hum and hiss out, the silence round the words trimmed, set to one loudness) and its words'
-    times in seconds from the line's first sound."""
-    import numpy as np
-    import burnham_film as BF
-    import mossad_audio as MA
+    """Each line's voice, cleaned by the shared takes.clean (hum and hiss out, cut to the speech, the takes of one line
+    joined, tone matched, levelled, faded; registered for the voice check), and its words' times in seconds from the
+    line's first sound (speech-to-text's times on each file, less what the cleaner cut from its start)."""
+    import takes as TK
     import words as WD
+    rel = os.path.relpath(SOUNDS, os.path.join(HERE, 'audio')) + os.sep      # takes.clean reads source/audio/PREFIX+NAME
+    voices, cut = TK.clean(rel, {i + 1: ln['takes'] for i, ln in enumerate(LINES)}, gap={2: TAKE_GAP})
     out = []
-    for ln in LINES:
-        parts, ws, t = [], [], 0.0
+    for i, ln in enumerate(LINES):
+        ws, t = [], 0.0
         for k, name in enumerate(ln['takes']):
             path = os.path.join(SOUNDS, name + '.m4a')
-            x = MA.denoise(MA.dehum(BF.load(path)))
-            st = MA.pauses(x, 0.12)
-            a, b = max(0.0, st[0][0] - 0.05), min(len(x) / SR, st[-1][1] + 0.08)
-            seg = x[int(a * SR):int(b * SR)]
-            parts.append(seg * 10 ** ((-20.0 - MA.lufs(seg)) / 20))
+            a = cut[(i + 1, name)]
+            part = len(TK._trim(TK.read(path))[0]) / SR if k < len(ln['takes']) - 1 else None
             for w0, w1, w in WD.times(path):
-                w0, w1 = max(w0, a + 0.05), min(w1, b)       # speech-to-text puts a take's first word at 0.00
+                w0 = max(w0, a + 0.05)                       # speech-to-text puts a take's first word at 0.00
                 ws.append((t + w0 - a, t + max(w1, w0 + 0.06) - a, w))
-            t += len(seg) / SR
-            if k < len(ln['takes']) - 1:
-                parts.append(np.zeros(int(TAKE_GAP * SR)))
-                t += TAKE_GAP
-        y = np.concatenate(parts)
-        k_out = int(0.1 * SR)
-        y[-k_out:] *= 0.5 + 0.5 * np.cos(np.linspace(0, np.pi, k_out))   # a soft 100 ms fade at the very end
-        out.append((y, ws))
+            if part is not None:
+                t += part + TAKE_GAP
+        out.append((voices[i + 1], ws))
     return out
 
 
@@ -468,26 +461,18 @@ VOICE_OVER_BED_DB = 12.0                       # the voice at least this far abo
 def soundtrack(stems=False):
     """Sam's voices, and the growl bed under shots 2 and 3 (fading in over 0.25 s at the cut to Kemi)."""
     import numpy as np
-    import burnham_film as BF
-    import mossad_audio as MA
+    import audiokit as AK
+    import takes as TK
     n = int(DUR * SR) + 1
     voice = np.zeros(n)
     for ln in LINES:
         i = int(ln['start'] * SR)
         seg = ln['_voice'][:max(0, n - i)]
         voice[i:i + len(seg)] += seg
-    bed = MA.bed(voice, [(BF.load(os.path.join(SOUNDS, f)), off, lu) for f, off, lu in GROWLS], SHOTS[1][1],
+    bed = AK.bed(voice, [(TK.read(os.path.join(SOUNDS, f)), off, lu) for f, off, lu in GROWLS], SHOTS[1][1],
                  dip_db=BED_DIP_DB, sr=SR)
-    mix, g = MA.master(voice + bed, n)
+    mix, g = AK.master(voice + bed, n)
     return (mix, voice * g, bed * g) if stems else mix
-
-
-def sound_faults():
-    """The voice well above the growl bed in every stretch of speech (filmkit.voice_balance)."""
-    import filmkit
-    _, v, r = soundtrack(stems=True)
-    win = [(a, b) for ln in LINES for a, b, _ in ln['words']]
-    return filmkit.voice_balance(v, r, SR, win, min_db=VOICE_OVER_BED_DB, label='voice')
 
 
 def main(argv):
@@ -498,7 +483,8 @@ def main(argv):
             picture(float(v)).save(p, quality=88)
             print(p)
     elif len(argv) >= 2 and argv[1] == 'sound':
-        print('\n'.join(sound_faults()) or 'sound: the voice is well above the growls in every word')
+        import filmkit
+        print('\n'.join(filmkit.voice_over_bed(soundtrack, LINES, SR, VOICE_OVER_BED_DB)) or 'sound: the voice is well above the growls in every word')
     elif len(argv) >= 3 and argv[1] == 'final':          # chat 15: clips and renders, with Sam's voices (chat 29)
         import wave
         import numpy as np

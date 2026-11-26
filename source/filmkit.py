@@ -408,6 +408,15 @@ def look_sheet(frame, records, out, size=(480, 853)):
 
 
 # ------------------------------------------------------------------------------------------------ sound
+def voice_over_bed(soundtrack, lines, sr, min_db=12.0):
+    """A bed under the talking (growls, crowd, rain; Open Wounds note 17): every heard word of every line at least
+    min_db above it. soundtrack(stems=True) -> (mix, voice, rest); lines carry 'words' [(start, end, word)] (words.py)
+    or else 'start'/'end'. Returns faults."""
+    _, v, r = soundtrack(stems=True)
+    win = [(a, b) for ln in lines for a, b, _ in (ln.get('words') or [(ln['start'], ln['end'], '')])]
+    return voice_balance(v, r, sr, win, min_db=min_db, label='voice')
+
+
 def voice_balance(voice, rest, sr, windows, min_db=6.0, label='voice'):
     """The voice must sit clearly above everything else (crowd, music, effects) wherever someone speaks: at least
     min_db louder, measured over each speech window [(start, end) seconds]. Returns faults."""
