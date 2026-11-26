@@ -12,3 +12,9 @@ Why have usage costs spiralled out of control?
 ### 2026-11-26T19:36:39
 1. Y
 
+### 2026-11-26T20:09:49
+1.     
+
+
+How do we make our initial drawing tools make less of the mistakes reported by GTA and OW?
+
