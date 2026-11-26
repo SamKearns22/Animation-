@@ -3,5 +3,13 @@
  "problem": "ae79341acba6bce6",
  "chat": "67b652e8876fd09b",
  "prompts": "090ab72bc435bcb1",
- "shape": 2
+ "shape": 2,
+ "key": {
+  "V1": "helper A",
+  "V2": "helper B",
+  "V3": "chat"
+ },
+ "judged": 1795730925.678127,
+ "recorded": 1795730991.853257,
+ "pick": "helper B"
 }
