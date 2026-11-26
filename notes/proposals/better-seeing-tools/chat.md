@@ -1,0 +1,1 @@
+Chat's own first idea (Sonnet, chat 36): (1) draw a flat-colour who-is-where copy of each frame with our own engine; (2) measure motion between frames with a standard video tool; later, on a test, cut-out picture models. Pose finders look poor for flat drawings. Weakness: untested; network limits.
