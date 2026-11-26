@@ -2920,55 +2920,55 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 0.91,
+   "cost": 1.54,
    "src": "estimate",
    "sid": "session_01U3pKQzd7WtTW95LHF7F6LQ",
-   "steps": 22,
-   "hist_k": 102,
+   "steps": 26,
+   "hist_k": 105,
    "kinds": {
-    "tool search": 16.1,
-    "other": 83.9
+    "tool search": 15.0,
+    "other": 85.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 15,
+    "tool search": 16,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 6
+    "other": 8
    },
    "split": {
-    "usd": 0.7815,
-    "total": 0.7815,
+    "usd": 0.8934,
+    "total": 0.8934,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 61.4,
+     "start-up floor": 60.5,
      "new writes": 19.0,
-     "Claude's words": 15.2,
-     "carried history": 4.4
+     "Claude's words": 15.1,
+     "carried history": 5.4
     },
     "origins": {
-     "start-up floor": 61.4,
-     "Claude's words": 21.1,
-     "result: tool search": 7.2,
-     "messages and reminders": 5.3,
-     "result: other": 5.0
+     "start-up floor": 60.5,
+     "Claude's words": 21.2,
+     "result: tool search": 6.9,
+     "messages and reminders": 6.1,
+     "result: other": 5.2
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 61.4,
-     "commands": 11.1,
-     "messages and reminders": 5.3,
-     "reading notes": 3.7,
-     "helper and chat prompts": 3.5,
-     "start-up and handover tools": 2.9,
-     "thinking": 2.8,
-     "git and saving": 2.1,
-     "helper results": 1.9,
-     "messages to Sam": 1.8,
-     "writing notes": 1.8,
-     "app tools (chats, files sent)": 1.6
+     "start-up reading (rules, tools, first files)": 60.5,
+     "commands": 10.8,
+     "messages and reminders": 6.1,
+     "helper and chat prompts": 4.2,
+     "reading notes": 3.6,
+     "start-up and handover tools": 2.8,
+     "thinking": 2.7,
+     "helper results": 2.2,
+     "git and saving": 2.0,
+     "messages to Sam": 1.9,
+     "writing notes": 1.6,
+     "app tools (chats, files sent)": 1.5
     },
     "leftover": 0.0
    },
@@ -2980,20 +2980,20 @@
      [
       "notes/r7.md",
       0.7,
-      0.0078
+      0.0084
      ],
      [
       "notes/proposals/pose-kit-format.md",
       0.8,
-      0.0074
+      0.0079
      ],
      [
       "notes/proposals/pose-kit-format/chat.md",
       0.3,
-      0.0034
+      0.0037
      ]
     ],
-    "base_pct": 40.8
+    "base_pct": 42.5
    },
    "search": {
     "show": 0,
@@ -3003,7 +3003,7 @@
     "other": {
      "shared:handover.py": 1,
      "film notes": 9,
-     "shared:propose.py": 3,
+     "shared:propose.py": 4,
      "other": 2
     },
     "ticked": 0,
@@ -3143,6 +3143,15 @@
       "git add -A notes/proposals/pose-kit-format && git commit -qm \"R7 chat 12: main l",
       "",
       31
+     ],
+     [
+      22,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py judge pose-kit-format 2>&1 | tail -5",
+      "",
+      486
      ]
     ]
    },
