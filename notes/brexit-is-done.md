@@ -48,16 +48,16 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 19 pushed there and to its own branch).
-- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF (R7 not the default for this film).
-- **Rules that bite next:** 89 (the fresh look: the full pre-flight refuses until the critique pass is clean or named), 41 (hands), 85 (cost watch).
-- **Done (chat 19):** May's chop is now 'chop raised' (shared place: forearm upright, hand clear of the sleeve); Kemi 12.42 passes; guests 1-3 spaced in the doorway (no hand on another); Blair's resting elbows: the float was the check counting gestures (kitchecks.rests now skips lifted arms, still tests sinking), the sink fixed in the shared acting kit (elbow stays on the armrest mid-gesture); runner and guests' far hands: HANDS_OK rows (real staging); 4 pop-ins: ALLOWED_POPS rows; 34 pre-flight lines answered in Exceptions; PLAN, BENCHMARK and the body audit built (audit: 0 faults); cost estimate 52% (44% spent). New: `preflight.py FILM OUT --span T0 T1` (picture checks on a few seconds); waivers match a depth line whatever its pixel count.
-- **Next:** chat 20, Sonnet: the full pre-flight (python3 source/preflight.py brexit-is-done OUT); every new line fixed or answered (waivers.py todo); the critique pass (rule 89); the animatic (final --small, finish.py: Hook Text and sign-off); send it to Sam with the faults named; push the main line and animations/drafts; push notification. Stop after one animatic.
-- **Needs Sam:** notes on the animatic; Q1 (kit tests) open.
-- **Read:** `guides/job-packs.md` Checks and animatic; the Brief checklist at the top of this file.
-- **Open rule requests:** none.
-- **End check (chat 19), answered:** branches claude/gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31 are GTA's, left to their chats; the CLAUDE.md SENTENCE lines are Sam's own edits (34f49840, 0945cc85), named since chat 1; FREEZE 20 to 21 predates chat 19; RECORD lines for FILM and patriots2 are the usage text in pre-flight's own help, not runs (chat 19 ran only --span and --text, which save no record).
-- **For Claude:** shared changes this chat: acting.PLACES 'chop raised'/'chop raised low', acting._elbows_on_rests, kitchecks.rests 'moving', waivers._norm, preflight --span. Freeze count 21 predates chat 19. The scheduled-chat question (06:40 "investigate why the scheduled job was set up wrong") was answered in chat 18: it had no project attached and the wrong model.
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 20 pushed there).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
+- **Rules that bite next:** 59 (render lock), 89 (fresh look), 13 (every waived line has its row).
+- **Done (chat 20):** full pre-flight clean (34 answered; 6 critique lines named). Fixed in the shared tools: the pass stamp now reads either spelling of a film's name (the render called it brexit_is_done, pre-flight brexit-is-done, so the render refused). Animatic drawn in 12 min: 3 hands lines (May 1.75 s, Kemi 12.42 s, scaffold workers 8.67 s) answered in Exceptions as real, seen full size. CLEAN render saved: animations/drafts/brexit-is-done-clean.mp4 (1.3 MB). Two old unsettled let-throughs settled (staging-stills routed; kit-tests-when false block).
+- **STOPPED at finish.py:** it refuses: kit test finished_films_keep_their_bookmark fails because freeze count kit_files_loading_a_film_file is 21 against baseline 20. Predates chat 19; no list of which file. NOT hidden by moving the baseline.
+- **Next:** chat 21, Opus medium: find which kit file started loading a film file (freeze.py count --list prints nothing for it) and fix it in the kit, or move the baseline only with Sam's Y; then Sonnet: python3 source/finish.py animations/drafts/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done (no new render needed), send, stop.
+- **Needs Sam:** typing "override" lets the animatic be finished now with the freeze check skipped (logged); otherwise it waits for chat 21.
+- **Read:** guides/job-packs.md Checks and animatic; source/freeze.py count.
+- **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats.
+
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
 - Note 1 (Q5) Sam: "Yes, before a wolf lunges at him": Blair's grin then the wolf lunge, brief item 13.

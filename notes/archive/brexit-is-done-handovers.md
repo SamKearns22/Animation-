@@ -336,3 +336,15 @@ into `ledger.py estimate Brexit Is Done (working name) PCT --stages "cast 2, set
 | thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | estimate (% of a week) | measured from | spent |
 |---|---|---|---|---|---|---|
 |   |   |   |   |   |   |   |
+
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 19 pushed there and to its own branch).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF (R7 not the default for this film).
+- **Rules that bite next:** 89 (the fresh look: the full pre-flight refuses until the critique pass is clean or named), 41 (hands), 85 (cost watch).
+- **Done (chat 19):** May's chop is now 'chop raised' (shared place: forearm upright, hand clear of the sleeve); Kemi 12.42 passes; guests 1-3 spaced in the doorway (no hand on another); Blair's resting elbows: the float was the check counting gestures (kitchecks.rests now skips lifted arms, still tests sinking), the sink fixed in the shared acting kit (elbow stays on the armrest mid-gesture); runner and guests' far hands: HANDS_OK rows (real staging); 4 pop-ins: ALLOWED_POPS rows; 34 pre-flight lines answered in Exceptions; PLAN, BENCHMARK and the body audit built (audit: 0 faults); cost estimate 52% (44% spent). New: `preflight.py FILM OUT --span T0 T1` (picture checks on a few seconds); waivers match a depth line whatever its pixel count.
+- **Next:** chat 20, Sonnet: the full pre-flight (python3 source/preflight.py brexit-is-done OUT); every new line fixed or answered (waivers.py todo); the critique pass (rule 89); the animatic (final --small, finish.py: Hook Text and sign-off); send it to Sam with the faults named; push the main line and animations/drafts; push notification. Stop after one animatic.
+- **Needs Sam:** notes on the animatic; Q1 (kit tests) open.
+- **Read:** `guides/job-packs.md` Checks and animatic; the Brief checklist at the top of this file.
+- **Open rule requests:** none.
+- **End check (chat 19), answered:** branches claude/gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31 are GTA's, left to their chats; the CLAUDE.md SENTENCE lines are Sam's own edits (34f49840, 0945cc85), named since chat 1; FREEZE 20 to 21 predates chat 19; RECORD lines for FILM and patriots2 are the usage text in pre-flight's own help, not runs (chat 19 ran only --span and --text, which save no record).
+- **For Claude:** shared changes this chat: acting.PLACES 'chop raised'/'chop raised low', acting._elbows_on_rests, kitchecks.rests 'moving', waivers._norm, preflight --span. Freeze count 21 predates chat 19. The scheduled-chat question (06:40 "investigate why the scheduled job was set up wrong") was answered in chat 18: it had no project attached and the wrong model.
