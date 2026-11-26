@@ -51,29 +51,29 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 The new pose tool is proven only on sitting upright. Open Wounds now draws everyone with the flat house kit (seated legs OFF,
 locked by Sam), so nothing changes until Sam picks. Before any shot moves to the new tool, what must be learned:
 - Shot 1, May on the office chair: sitting proven; her lean in and nods: the hips' angle as she leans, a motion clip checked frame by frame.
-- Shot 2, Kemi: as May (same seat, place and size).
+- Shot 2, Kemi: she STANDS on the site (chat 27): standing, the legs straight under the outfit, feet on the floor, a reference photo, a sheet.
 - Shot 3, Blair in the armchair: the armchair's height and depth, his lean back, a reference photo, a sheet.
 - Background, worker torn by wolves (item 6): the body on the ground, its weight, a reference photo, a sheet.
 - Background, worker running and leaping (7); staff fleeing (11): the legs through a stride, feet on the ground, a motion clip.
 - Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
-## Where things stand (R7 chat 15, 26 Nov, session_01U3pKR2jCSbFoPHuV4dYE3T; Sam: "These fixes were built specifically for Open Wounds ... Implement.")
-Rules that bite next: 91 (Learn-First: quote it and what must be learned before each unproven pose), 87, 59 (render lock).
-Done: R7's seated body tool (mode 'body': the 3D body under the posted outfit) proven on May, Kemi, Blair sitting upright on the
-office chair (notes/r7.md; sheets notes/learn/pose-kit/*-r7c15-before-after.jpg). Rule 91's list for this film is the section above.
-Next: chat 27, Opus medium (building from a clear plan): (1) switch Open Wounds' seated people to mode 'body' (people.BEFORE_SEATED /
-seat_r7, sheet_solid's spec: seat_solid='body', turned_curves 0, turned_bust 0.6); update kittest seated_r7_switch (Open Wounds now
-on, by Sam's word, 26 Nov) and re-run it plus the ten R7 kittests (seated_r7_switch, short_top_hem, shoe_shapes, legs_apart_spread,
-jacket_triangle, turned_curves, jacket_under_hem, leg_tone, back_clip, stray_ink); (2) May and Kemi: short clip of each shot
-(final OUT --small --span) with the sheet checks (stray_ink, leg_tone) on sampled frames: the lean and nods are rule 91's
-"leaning while seated"; (3) Blair's armchair: rule 91, "sitting other seats": reference photo, a sheet of Blair in mode 'body' on
-the armchair beside the posted look, checks, before his shot switches; (4) background people (runners, the torn worker, men with
-bars) stay on the house drawing (standing/running/arms not proven). Send clips and sheet; then the animatic (Sonnet).
-Needs Sam: nothing until the clips and sheet. Read: guides/pose-kits.md; this section, rule 91's above; notes/r7.md Where things stand.
+## Where things stand (chat 27, 26 Nov, session_01U3pKR29EmmteJgw6u577Ng)
+Rules that bite next: 91 (Learn-First: quote it first), 87, 59 (render lock).
+Done: May (shot 1) on the seated body tool (people.SEAT_BODY, kittest seated_r7_switch updated, ten R7 kittests pass);
+a loose fold tick on her back calf found by stray_ink on the clip frames, fixed in the shared drawing (solid_seat FOLD_MIN,
+kittest fold_stub; the c15 sheets lose only tiny line hooks). Clip sent: animations/drafts/ow-shot1-may-body.mp4.
+Correction: Kemi STANDS in shot 2 (not seated as the last handover said): standing is unproven (rule 91), she stays on the house
+drawing; shot 2 needs no clip until standing is learned.
+Next: chat 28, Opus high (learning a new seat is building new): Blair's armchair under rule 91: reference photo (Plan pack
+search order), Blair in mode 'body' on the armchair (sitting.spec_armrests) beside the posted look, checks, a sheet; then his
+shot switches (add 'blair' to people.SEAT_BODY). Then the animatic (Sonnet).
+Needs Sam: his look at May's clip.
+Read: guides/pose-kits.md; this section and rule 91's above.
 Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
-three in May's place and size; the cast; every camera and framing (seated legs OFF lifted by Sam, 26 Nov). For Claude: sheet_solid.tile shows the spec; solid_seat.LAST per drawing; body.SEAT_BACK_CORNER test flag.
+three in May's place and size; the cast; every camera and framing.
+For Claude: people.SEAT_BODY / seat_body / BODY_SPEC; solid_seat._ink fold_min, FOLD_LOG; kittests fold_stub, seated_r7_switch.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.

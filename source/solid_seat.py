@@ -755,10 +755,21 @@ def _smooth(zb, pb, ob, ab, r):
             zb[cut], pb[cut], ob[cut], ab[cut] = np.inf, -1, -1, 0
 
 
-def _ink(zb, pb, ob, width, soft):
+FOLD_MIN = 40           # mode 'body': a fold line (a depth jump inside one part) shorter than this many dots (at the
+#                         drawing's 2x) that meets other ink at one place only is not drawn (Open Wounds chat 27:
+#                         May's back calf over its thigh, a crease fading out in the open: a loose tick; the stubs
+#                         there were 1-26 dots, the real fold lines 64 and up; kittest fold_stub)
+FOLD_LOG = []           # each drawing's dropped folds' sizes (for the kittest)
+
+
+def _ink(zb, pb, ob, width, soft, fold_min=None):
     """bench_draw.ink, but a depth jump between two dots of the same `soft` piece (a label above 0) is no line (one
-    soft mass folding over itself: the trunk, each leg)."""
+    soft mass folding over itself: the trunk, each leg). fold_min: a fold (a jump inside one part, not on an
+    outline or a part's edge) whose own piece of line is shorter than this is dropped: every house line closes or
+    meets another along its length, never a stub fading out (kittest stray_ink)."""
     h, w = zb.shape
+    fold_min = FOLD_MIN if fold_min is None else fold_min
+    fold = np.zeros((h, w), bool)
     edge = np.zeros((h, w), bool)
     zf = np.where(np.isfinite(zb), zb, 1e3)
     pb = BD.INK_PART[np.clip(pb, -1, len(BD.PART_NAMES) - 1) + 1]
@@ -768,8 +779,32 @@ def _ink(zb, pb, ob, width, soft):
         jump = np.abs(zf[a] - zf[b]) > 0.03 + 0.02 * np.minimum(zf[a], zf[b]) / 4
         diff = (ob[a] != ob[b]) | (pb[a] != pb[b]) | (jump & ~((soft[a] > 0) & (soft[a] == soft[b])))
         near_a = zf[a] <= zf[b]
-        edge[a] |= diff & near_a & (ob[a] >= 0)
-        edge[b] |= diff & ~near_a & (ob[b] >= 0)
+        hard = (ob[a] != ob[b]) | (pb[a] != pb[b])
+        edge[a] |= hard & near_a & (ob[a] >= 0)
+        edge[b] |= hard & ~near_a & (ob[b] >= 0)
+        jf = diff & ~hard
+        fold[a] |= jf & near_a & (ob[a] >= 0)
+        fold[b] |= jf & ~near_a & (ob[b] >= 0)
+    if fold_min:                                # a short fold that meets other ink at one place only (a stub
+        from scipy import ndimage               # fading out in the open); a piece of a longer line between two
+        own = fold & ~edge                      # others (a crossed leg's line, broken by the part edges) stays
+        lab, n = ndimage.label(ndimage.binary_dilation(own, iterations=2), structure=np.ones((3, 3)))
+        lab = np.where(own, lab, 0)
+        size = ndimage.sum(own, lab, np.arange(1, n + 1)) if n else []
+        dropped = []
+        for i, sz in enumerate(size, 1):
+            if sz >= fold_min:
+                continue
+            ys, xs = np.where(lab == i)
+            y0, y1, x0, x1 = max(0, ys.min() - 8), ys.max() + 9, max(0, xs.min() - 8), xs.max() + 9
+            me = lab[y0:y1, x0:x1] == i
+            ring = ndimage.binary_dilation(me, iterations=4) & ~me
+            other = (edge[y0:y1, x0:x1] | (fold[y0:y1, x0:x1] & ~me)) & ring
+            if ndimage.label(other, structure=np.ones((3, 3)))[1] < 2:
+                fold[y0:y1, x0:x1] &= ~me
+                dropped.append(int(sz))
+        FOLD_LOG.append(dropped)
+    edge |= fold
     if width > 1:
         from scipy import ndimage
         edge = ndimage.binary_dilation(edge, iterations=int(width // 2))

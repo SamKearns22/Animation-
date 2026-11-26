@@ -700,9 +700,40 @@ def jacket_triangle():
 
 
 @test
+def fold_stub():
+    """Open Wounds chat 27 (May on the seated body tool, shot 1): a fold line inside her back leg (the calf over the
+    thigh) faded out in the open at the seat's edge, a loose ink tick (examples/ow-c27-may-calf-fold-tick.png, the
+    sheet check stray_ink caught it on every sampled frame). solid_seat._ink now drops a short fold that meets other
+    ink at one place only (FOLD_MIN). Red on the saved frame and on the drawing with the drop off; green now."""
+    import sys
+    from PIL import Image
+    from scipy import ndimage
+    sys.path.insert(0, 'source')
+    import solid_seat as SO
+    import brexit_is_done as F
+    sp, _ = F.acted('1', 'may', 3.0)
+    ex = SO.stray_ink(Image.open('notes/learn/pose-kit/examples/ow-c27-may-calf-fold-tick.png'), sp)
+    saved = [e for e in ex if 140 < e[0] < 160 and 140 < e[1] < 160]   # the tick (the frame at 404, 1564)
+    got = {}
+    keep = SO.FOLD_MIN
+    try:
+        for fm in (0, keep):
+            SO.FOLD_MIN = fm
+            img = F.may_shot(3.0).convert('RGB')
+            got[fm] = SO.stray_ink(img, sp, where=ndimage.binary_erosion(SO.LAST['shown'], iterations=6))
+    finally:
+        SO.FOLD_MIN = keep
+    return bool(saved) and bool(got[0]) and not got[keep], (
+        f"saved frame: {saved or 'MISSED'}; drop off: {got[0] or 'MISSED'}; now: {got[keep] or 'none'}")
+
+
+@test
 def seated_r7_switch():
-    """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for Open Wounds (locked by
-    Sam) and every posted film, whose seated people stay pixel for pixel (fingerprints taken before R7 was built)."""
+    """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose
+    seated people stay pixel for pixel (fingerprints taken before R7 was built). Open Wounds (Sam, 26 Nov: "These
+    fixes were built specifically for Open Wounds ... Implement."): May and Kemi on the seated body tool (mode
+    'body', people.SEAT_BODY); Blair and the crowds stay on the house drawing until their poses are learned (rule
+    91); with the tool taken off, all three still draw exactly the old frames."""
     import hashlib
     import people
     import castsheet as CS
@@ -713,16 +744,21 @@ def seated_r7_switch():
              #   chat 2 changes taken out (still moved); was 5e30e187e32c / 397e4b53c71f
              ('kemi', 0): 'de19d3438300', ('kemi', 45): 'a9568e8c38ec', ('kemi', 90): '24eac6dedfae',
              ('may', 0): '97cbfbe3e550', ('may', 45): '5e504d91a956', ('may', 90): 'dbeb1214140e'}
-    off = [f for f in people.BEFORE_SEATED if people.seat_r7(f)]
+    off = [f for f in people.BEFORE_SEATED if people.seat_r7(f) and f != 'brexit-is-done']
     new_on = people.seat_r7('a-new-film')
     cast, PP = CS._setup('brexit-is-done', None)
-    marked = [w for w, sp in cast.items() if sp.get('seat_r7')]
+    want = set(people.SEAT_BODY['brexit-is-done'])
+    marked = {w for w, sp in cast.items() if sp.get('seat_r7')}
+    body = {w for w, sp in cast.items() if sp.get('seat_solid') == 'body'}
+    crowd_on = [w for w, d in people.crowds('brexit-is-done').items() if d.get('seat_r7')]
     moved, changed = [], 0
     for (who, yaw), h in saved.items():
         for on in (False, True):
             sp = dict(cast[who])
+            for k in ('seat_r7', 'seat_solid', 'turned_curves', 'turned_bust'):
+                sp.pop(k, None)
             if on:
-                sp['seat_r7'] = True
+                people.seat_body(sp)
             s = 0.5 * sp['height'] / 1.75
             img = Image.new('RGBA', (1080, 1920), (235, 235, 230, 255))
             PP.V.person(img, PP.B.Cam(2.0, 540, 470), 540, 840 - 928 * s, s, sp, 0.0, yaw, S.pose(sp, 'upright'))
@@ -730,9 +766,11 @@ def seated_r7_switch():
             if not on and got != h:
                 moved.append(f'{who} {yaw}')
             changed += on and got != h
-    ok = not off and new_on and not marked and not moved and changed == len(saved)
-    return ok, (f'old films switched on: {off or "none"}; a new film on: {new_on}; Open Wounds people marked: '
-                f'{marked or "none"}; Open Wounds seated frames moved: {moved or "none"}; R7 changes {changed}/9')
+    ok = (not off and new_on and marked == want and body == want and not crowd_on and not moved
+          and changed == len(saved))
+    return ok, (f'posted films switched on: {off or "none"}; a new film on: {new_on}; Open Wounds on the body tool: '
+                f'{sorted(body)} (want {sorted(want)}); crowds on: {crowd_on or "none"}; old frames moved with the '
+                f'tool off: {moved or "none"}; body tool changes {changed}/9')
 
 
 @test
