@@ -3923,6 +3923,61 @@ def plain_check_fields():
     return not bad, '; '.join(bad) or f'10/10 Milburn lessons fail A (and plain), the field-shaped ask passes, {n} saved reader answers parse'
 
 
+@test
+def plain_words_every_message():
+    """CLAUDE.md "Checked on every message" (Sam, 26 Nov; R8 chat 2): the every-message plain-words check sends back
+    the two replies Sam could not follow (bad-1: "Let's move through these one at a time in simple language"; bad-2:
+    "I don't understand") and passes the one he called the model (good-1); the Stop hook blocks once and lets the
+    second try through with a log line (never loops); Sam's "I don't understand" saves the reply as a new example and
+    puts its project words on the list."""
+    import io
+    import contextlib
+    import shutil
+    import tempfile
+    import plainwords as PW
+    bad = []
+    for b, (want, fs) in PW.score().items():
+        if b.split('-')[1] in ('1', '2') and b.startswith(('bad-1-', 'bad-2-', 'good-1-')) and bool(fs) != (want == 'fail'):
+            bad.append(f'{b} did not {want}')
+    msg = PW.example_text(os.path.join(PW.EX, 'bad-2-two-small-items.md'))
+    tmp = tempfile.mkdtemp()
+    keep = PW.EX, PW.WORDS, PW.LET_LOG
+    try:
+        PW.LET_LOG = os.path.join(tmp, 'log')
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            PW.hook(json.dumps({'last_assistant_message': msg, 'stop_hook_active': False}))
+        if '"block"' not in out.getvalue():
+            bad.append('the hook did not send bad-2 back')
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            PW.hook(json.dumps({'last_assistant_message': msg, 'stop_hook_active': True}))
+        if out.getvalue().strip() or 'let-through' not in open(PW.LET_LOG).read():
+            bad.append('the second try was blocked again or not logged')
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            PW.hook(json.dumps({'last_assistant_message': PW.example_text(
+                os.path.join(PW.EX, 'good-1-failing-tests.md')), 'stop_hook_active': False}))
+        if out.getvalue().strip():
+            bad.append('the hook sent good-1 back')
+        PW.EX = tmp
+        PW.WORDS = os.path.join(tmp, 'words.json')
+        shutil.copy(keep[1], PW.WORDS)
+        confusing = 'The **bay splitter** now runs on every take, and the "wobble pass" is next.'
+        with contextlib.redirect_stdout(io.StringIO()):
+            PW.learn(sam_text="I don't understand", reply=confusing)
+            PW.learn(sam_text='Y, go', reply='Done.')
+        saved = [f for f in os.listdir(tmp) if f.startswith('bad-')]
+        if len(saved) != 1:
+            bad.append(f'{len(saved)} examples saved (want 1: only the reply Sam did not follow)')
+        if not PW.faults('The bay splitter is next.'):
+            bad.append('a learned word ("bay splitter") is not caught next time')
+    finally:
+        PW.EX, PW.WORDS, PW.LET_LOG = keep
+        shutil.rmtree(tmp, ignore_errors=True)
+    return not bad, '; '.join(bad) or 'bad-1 and bad-2 sent back, good-1 passes; one block then a logged let-through; a confused reply saved and its words learned'
+
+
 # ------------------------------------------------------------------------------------------------ code finder (Sam's 1, 16 Nov)
 @test
 def code_finder_replay():

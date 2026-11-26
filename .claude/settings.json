@@ -26,6 +26,11 @@
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/source/override.py prompt"
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/source/plainwords.py learn",
+            "timeout": 10
           }
         ]
       }
@@ -47,6 +52,11 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR\"/source/watcher.py stop",
             "timeout": 30
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/source/plainwords.py hook",
+            "timeout": 10
           }
         ]
       }
