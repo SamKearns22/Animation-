@@ -27,3 +27,6 @@ That’s not a fair comparison as many of those films were bloated by expensive 
 ### 2026-11-26T22:56:12
 If I asked you to build Netanyahoo from scratch from the same information I gave you then, would that be a more reasonable test?
 
+### 2026-11-26T22:57:13
+Whole film rebuild. Patriots 2 instead. New reserve job.
+
