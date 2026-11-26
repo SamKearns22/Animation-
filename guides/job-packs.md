@@ -7,6 +7,8 @@ guides/kit-catalogue.md`), only when a note or a fault names it. The whole ruleb
 never read end to end in a film chat. Each pack's "Bite" rules are the ones its stage breaks most.
 
 ## Plan (Opus, high): the brief, staging, questions, the estimate
+- When Sam gives the screenplay and title: `python3 source/kitfilm.py begin FILM` (the film's start: the kit tests run in the background; rule 90).
+- When Sam asks for the film's lessons: `python3 source/kitfilm.py lessons FILM` first (the film's end: the kit tests; rule 90).
 - Read: `guides/preflight.md` Stage 1-2; `guides/satire.md` Start, Getting it right first time, The acting list;
   `guides/tiktok-design.md` Hook Text; the film's notes from `notes/_template.md`.
 - Only when a shot has a mass crowd, a big vista or wide action: `research/crowds-and-big-action.md` "The lessons"

@@ -844,5 +844,28 @@
    "notes_auto": 0
   }
  ],
- "checks": {}
+ "checks": {},
+ "cost_flagged": [],
+ "cost_log": [
+  {
+   "date": "2026-11-26",
+   "spent": 2.0,
+   "forecast": null
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 2.0,
+   "forecast": null
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 2.0,
+   "forecast": null
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 2.0,
+   "forecast": null
+  }
+ ]
 }

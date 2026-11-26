@@ -80,11 +80,13 @@ at session start (`.claude/hooks/setup.sh`).
   before a final render and wait for a clear yes**; "fix this before the final" is not a go-ahead.
 - **Every animatic carries the Hook Text and the CranbriJoos sign-off**, made as the final is (`finish.py` on its
   clean render); a check sheet, when I ask for one, shows the Hook Text frame.
+- **Frame-by-frame line checks only when I ask (Sam, 26 Nov):** "please no longer do this automatically. Please suggest
+  when you think it's needed." Suggest one in a line when it's needed; run it only on my word.
 - **Checks are advised, not automatic (Sam, 26 Nov):** "sometimes I just need an animatic or a clip to see how
   something moves. It doesn't have to be perfect." Before a clip or animatic, one line names the checks I'd run, why
   now and how long; they run on my Y or when I ask. Finals keep their checks. **Practice clips** (`Kind: practice` in
   the job's notes, results in `notes/learn/`): no kit tests, body check or critique; sent as made. The body check runs
-  only when asked (`BODYCHECK=1`); kit tests at a major film's start and end only (kittest `practice_mode`).
+  only when asked (`BODYCHECK=1`); kit tests at a major film's start (when I give the screenplay and title) and end (when I ask for the film's lessons) only (kittest `practice_mode`, `kit_tests_per_film`).
   **Always test anything we build** (its own kit test, run once).
 - **No check sheet before an animatic unless I ask**: render the animatic and send it; my notes come on the animatic itself.
   **No animatic while a shot is missing anyone the brief puts in it**: say so instead.

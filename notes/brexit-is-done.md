@@ -60,12 +60,14 @@ The start check prints this for the film (handover.py start, LEARN-FIRST; kittes
 
 ## Where things stand (chat 28, 26 Nov, session_01U3pKR2gyjRcVjW35wkF7BD)
 Rules that bite next: 91 (Learn-First), 59 (render lock), 30 (a note seen before).
-Done: Sam's animatic notes 13-18 saved with his voices and wolf growls (sounds/brexit-is-done/). Fixed 13 (the pounce lands on
+Done (chat 27, parallel): May, Kemi (standing) and Blair (armchair) on the body tool (people.SEAT_BODY, STAND_BODY); the
+body drawn over its own box, 3x faster (kittest solid_crop_same). Done (chat 28): Sam's animatic notes 13-18 saved with his voices and wolf growls (sounds/brexit-is-done/). Fixed 13 (the pounce lands on
 him, he falls on it, a beat first), 14 (the bar fight), 15 (the corridor and who comes from where), 16 (wolf lines). Clips sent:
 animations/drafts/ow-n13-14-site-attack.mp4, ow-n15-room-doors.mp4.
 Next: chat 29, Opus medium: Sam's takes set the clock (LINES start/end from the takes, as cryminister._voices; mouths and head
 life from the voice), the growl bed under shots 2-3 (note 17); a 10 s clip of each line's lips. Then the strike-lands check (13).
-NO animatic: Sam waits for the new body kit across the film. Old Next (Blair's armchair, rule 91) still stands, after this.
+NO animatic: Sam waits for the new body kit across the film (the crowds: workers, guests). Rule 91 changed by Sam: remind him
+of the learn-first suggestions in one line; checks only on his word.
 Needs Sam: Q1, which Kemi take (Kemi.m4a 8.9 s whole line, or Kemi_2.m4a 5.8 s); no speech-to-text here to tell them apart.
 Read: guides/job-packs.md "Notes round"; cryminister.py _voices/soundtrack (lines 136-215, 1593-1610).
 Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
@@ -73,7 +75,8 @@ Handover check: REFUSED on 11 STOPs, all May's seated cast sheet (no bum, legs o
 before this chat (nothing here touches sitting): first job of the body-kit chat. Finder: not used (the fixes were new builds).
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
 three in May's place and size; the cast; every camera and framing.
-For Claude: ACT.LEAD/HIT/REACH/POUNCE, _exchange, _from_passage/PASSAGE_D; places_site double doors corridor/passage; WF.house_ctx.
+For Claude: legs_soft vs FOLD_MIN: two fixes for one knee tick, merge to one. ACT.LEAD/HIT/REACH/POUNCE, _exchange, _from_passage/PASSAGE_D; places_site double doors corridor/passage; WF.house_ctx.
+
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
 - Note 1 (Q5) Sam: "Yes, before a wolf lunges at him": Blair's grin then the wolf lunge, brief item 13.

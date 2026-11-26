@@ -5706,9 +5706,24 @@ def kit_tests_per_film():
     d = tempfile.mkdtemp()
     rec, sp, log, reds = (os.path.join(d, n) for n in ('films.tsv', 'start.txt', 'kit.log', 'reds.log'))
     launched = []
-    first = KF.at_start('zz-film', 'chatA', rec, sp, stale_fn=lambda: ['t1'], launch_fn=lambda: launched.append(1))
-    again = KF.at_start('zz-film', 'chatB', rec, sp, stale_fn=lambda: ['t1'], launch_fn=lambda: launched.append(2))
+    nd = os.path.join(d, 'notes')                        # Sam, 26 Nov (crowd pool chat 1, saved example: the crowd
+    os.makedirs(nd)                                      # pool job's first chat started all 81 tests): a film starts
+    open(os.path.join(nd, 'zz-film.md'), 'w').write('# zz\n\nScreenplay and title: given 26 Nov\n')   # when Sam gives
+    open(os.path.join(nd, 'zz-pool.md'), 'w').write('# a tool or pool job, no screenplay\n')         # the screenplay
+    pool = KF.at_start('zz-pool', 'chatP', rec, sp, stale_fn=lambda: ['t1'], launch_fn=lambda: launched.append(0),
+                       notes_dir=nd)
+    first = KF.at_start('zz-film', 'chatA', rec, sp, stale_fn=lambda: ['t1'], launch_fn=lambda: launched.append(1),
+                        notes_dir=nd)
+    again = KF.at_start('zz-film', 'chatB', rec, sp, stale_fn=lambda: ['t1'], launch_fn=lambda: launched.append(2),
+                        notes_dir=nd)
     tool = KF.at_start(None, 'chatC', rec, sp, stale_fn=lambda: [], launch_fn=lambda: launched.append(3))
+    open(os.path.join(nd, 'zz-late.md'), 'w').write('# given mid-chat\n')
+    began = KF.begin('zz-late', nd, 'chatL', rec, launch_fn=lambda: launched.append(4))
+    late_ok = KF.begun('zz-late', nd) and KF.started_here('chatL', rec)
+    ended = KF.lessons('zz-film', 'chatE', rec, run_fn=lambda: True) and any(
+        r[0] == 'zz-film' and r[1] == 'end' for r in KF.rows(rec))
+    import finish as FN                                  # a final render no longer runs or waits for kit tests
+    no_final_gate = 'kitfilm.ANIMATIC_GATE and not final' in open(FN.__file__, encoding='utf-8').read()
     ran = []
 
     def run(names, kitlog):
@@ -5726,13 +5741,16 @@ def kit_tests_per_film():
     _, r_git = KS.traced(lambda: KS.tracer()._program(['git', '-C', root, 'push'], None))
     KS.write_green([('zz_old', {'source/kitfilm.py'}, 1.0)], os.path.join(d, 'stamps.tsv'))   # the real record's
     new_real = KF.never_green(['zz_old', 'zz_new'], os.path.join(d, 'stamps.tsv'))               # shape (end crashed
-    ok = (new_real == ['zz_new'] and example and caught_old and not now_setup and launched == [1] and 'first chat' in first[-1]
+    ok = (new_real == ['zz_new'] and example and caught_old and not now_setup and launched == [1, 4] and 'first chat' in first[-1]
+          and 'not yet' in pool[-1] and 'starts' in began and late_ok and ended and no_final_gate
           and 'not this chat' in again[-1] and not tool
           and KF.started_here('chatA', rec) and not KF.started_here('chatB', rec)
           and wait_first and 'STILL RUNNING' in wait_first[0] and ran[0] == ['t1'] and not end_first
           and mid == [] and ran[1:] == [['t_new']] and not mid_new
           and small == '' and 'Y or N' in big and 'source/kitstamps.py' not in (r_git or set()))
-    return ok, (f'new test found: {new_real}; old start-up hook caught: {len(caught_old)}; now: {len(now_setup)}; launches {launched}; '
+    return ok, (f'pool job (no screenplay): {pool[-1][:40]}; begun mid-chat: {late_ok}; lessons end row: {ended}; '
+                f'final gate off: {no_final_gate}; '
+                f'new test found: {new_real}; old start-up hook caught: {len(caught_old)}; now: {len(now_setup)}; launches {launched}; '
                 f'first chat waits: {wait_first[:1]}; runs {ran}; mid-film chat: {mid or "no run, no wait"}; '
                 f'21 made stale: {"suggests" if big else "silent"}; 20: {"silent" if not small else "suggests"}; '
                 f'hook code read: {"source/kitstamps.py" in (r_git or set())}')
