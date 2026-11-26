@@ -66,7 +66,7 @@ Open rule requests: none found in this investigation's notes.
 
 ## Step 2 result (investigation chat 2, 25 Nov, session_01U3pKQzuMaJ3B7QYkkK55xe; Opus high)
 Built: source/model_body.py (shared: any kit film's people as model bodies; the film's own people code runs, its
-flat-person calls are caught and that skeleton poses the measured body) and source/model_body_test.py (only what is
+flat-person calls are caught and that skeleton poses the measured body) and source/islamocommunism_model_body.py (only what is
 Islamocommunism's own: flutes and handset as solids, the desk's kneehole, the door leaf, the wall round the door).
 Clip: notes/proposals/model-body-all/islamocommunism-shots3-5-side-by-side.mp4 (posted | model body, 12.17-27.84 s).
 What the model body found that the flat film hid (each fixed in the drawing, never the shot):
@@ -77,7 +77,7 @@ What the model body found that the flat film hid (each fixed in the drawing, nev
 - Kit drift (not this test's fault): Islamocommunism rebuilt today draws both people BALD with no beard (the film
   hooks its heads into traitors_cast.HEADS; the kit now draws heads from body.HEADS), and `islamocommunism.py stills`
   at drawing scale 1 frames the room wrongly (burnham and body each keep their own scale). The posted film is
-  untouched. move to shared: hook old films' heads into body.HEADS too (model_body_test._heads does it for this test).
+  untouched. move to shared: hook old films' heads into body.HEADS too (islamocommunism_model_body._heads does it for this test).
 Checks on the clip (188 frames, 4.6 min to render, 12 frames a second): nothing through the desk, the door leaf,
 the door wall or the chair once he stands; 6 frames (15.0-15.5 s, seated) his bottom presses into the rigid cushion
 box (named); his desk hand rests at the desk's front edge, 0.2-0.28 m short of where the flat pose put it (inside the
@@ -102,7 +102,7 @@ for 3D; each must be learned first (weeks, not a chat).
 Needs Sam: Q1 (stop, Y/N).
 Read: this file only.
 Open rule requests: none.
-For Claude: model_body_test.py clip 12.17 27.84 OUT; _heads() is a 'move to shared' (body.HEADS hook for old films).
+For Claude: islamocommunism_model_body.py clip 12.17 27.84 OUT; _heads() is a 'move to shared' (body.HEADS hook for old films).
 Locked by Sam: Islamocommunism's cameras, times and beats as posted; no posted film is changed; Open Wounds stays flat.
 
 ## Exceptions

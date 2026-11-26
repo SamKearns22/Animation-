@@ -48,16 +48,15 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 20 pushed there).
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 21 pushed there).
 - **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
 - **Rules that bite next:** 59 (render lock), 89 (fresh look), 13 (every waived line has its row).
-- **Done (chat 20):** full pre-flight clean (34 answered; 6 critique lines named). Fixed in the shared tools: the pass stamp now reads either spelling of a film's name (the render called it brexit_is_done, pre-flight brexit-is-done, so the render refused). Animatic drawn in 12 min: 3 hands lines (May 1.75 s, Kemi 12.42 s, scaffold workers 8.67 s) answered in Exceptions as real, seen full size. CLEAN render saved: animations/drafts/brexit-is-done-clean.mp4 (1.3 MB). Two old unsettled let-throughs settled (staging-stills routed; kit-tests-when false block).
-- **STOPPED at finish.py:** it refuses: kit test finished_films_keep_their_bookmark fails because freeze count kit_files_loading_a_film_file is 21 against baseline 20. Predates chat 19; no list of which file. NOT hidden by moving the baseline.
-- **Next:** chat 21, Opus medium: find which kit file started loading a film file (freeze.py count --list prints nothing for it) and fix it in the kit, or move the baseline only with Sam's Y; then Sonnet: python3 source/finish.py animations/drafts/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done (no new render needed), send, stop.
-- **Needs Sam:** typing "override" lets the animatic be finished now with the freeze check skipped (logged); otherwise it waits for chat 21.
-- **Read:** guides/job-packs.md Checks and animatic; source/freeze.py count.
-- **End check (chat 20), answered:** the GTA branches are GTA's; the CLAUDE.md SENTENCE lines are Sam's own edits, named since chat 1; FREEZE 20 to 21 is the open stop above; the RECORD line is my `preflight.py --help` (no run, saves nothing).
-- **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats.
+- **Done (chat 21):** freeze stop fixed in the kit, baseline untouched: the 21st file was model_body_test.py (the finished model-body investigation, added 25 Nov), which redraws Islamocommunism and holds only that film's pieces; filed on the film side as source/islamocommunism_model_body.py. Freeze count back to 20, no faults.
+- **Next:** chat 22, Sonnet: python3 source/finish.py animations/drafts/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done (no new render; clean render 1.3 MB, drawn in 12 min in chat 20); send the animatic to Sam in the chat with any Checks line, its size and the 12 min; push main line and animations/drafts; push notification; stop.
+- **Needs Sam:** nothing until the animatic.
+- **Read:** guides/job-packs.md Checks and animatic.
+- **End check (chat 21), answered:** QUICK CHECK islamocommunism (2 ALLOWED_POPS rows, aoc through the door) is the posted film, its code untouched; it shows only because the renamed test now sits under its name: left to that film, no change. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats. The CLAUDE.md SENTENCE lines are Sam's own edits (named since chat 1).
+- **Open rule requests:** none. **For Claude:** kit-tests-when.md verdict is stale (record again); 4 GTA branches left to GTA chats (named chat 20).
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
@@ -142,4 +141,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 46.49% of 15%; forecast 53.5% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 46.69% of 15%; forecast 53.7% (2026-11-26)

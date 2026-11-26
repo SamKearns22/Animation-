@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""MAP  model_body_test: the investigation's moving test (model-body-all step 2, Sam's Y 25 Nov). Islamocommunism
+"""MAP  islamocommunism_model_body (was model_body_test; filed on the film side 26 Nov, freeze count 21->20): the investigation's moving test (model-body-all step 2, Sam's Y 25 Nov). Islamocommunism
 (posted 5 Nov) shots 3-5 redrawn with model bodies (model_body.py) at the film's own cameras, times and poses; the
 posted film beside it. This file holds only what is Islamocommunism's own (its flutes and handset as solids, the
 desk's kneehole, the door leaf and the wall round the doorway); the drawing itself is model_body's.
@@ -10,8 +10,8 @@ desk's kneehole, the door leaf and the wall round the doorway); the drawing itse
   frame(t) .......... one 1080 x 1920 frame (and its faults: crossings, gaps between hand and arm)
   clip(t0, t1, out) . side by side at phone size: posted | model body
 
-    python3 source/model_body_test.py still T OUT.png
-    python3 source/model_body_test.py clip T0 T1 OUT.mp4
+    python3 source/islamocommunism_model_body.py still T OUT.png
+    python3 source/islamocommunism_model_body.py clip T0 T1 OUT.mp4
 """
 import math
 import os
