@@ -2920,55 +2920,55 @@
    "notes": 0,
    "repeats": [],
    "model": "opus",
-   "cost": 1.54,
+   "cost": 1.95,
    "src": "estimate",
    "sid": "session_01U3pKQzd7WtTW95LHF7F6LQ",
-   "steps": 26,
-   "hist_k": 105,
+   "steps": 37,
+   "hist_k": 116,
    "kinds": {
-    "tool search": 15.0,
-    "other": 85.0
+    "tool search": 17.0,
+    "other": 83.0
    },
    "calls": {
     "film-file search": 0,
-    "tool search": 16,
+    "tool search": 22,
     "whole-file .py read": 0,
     "page.py": 0,
     "routine": 0,
     "renders": 0,
     "pictures": 0,
-    "other": 8
+    "other": 11
    },
    "split": {
-    "usd": 0.8934,
-    "total": 0.8934,
+    "usd": 1.3205,
+    "total": 1.3205,
     "floor_k": 84,
     "blocks": {
-     "start-up floor": 60.5,
-     "new writes": 19.0,
-     "Claude's words": 15.1,
-     "carried history": 5.4
+     "start-up floor": 53.6,
+     "new writes": 19.8,
+     "Claude's words": 19.0,
+     "carried history": 7.7
     },
     "origins": {
-     "start-up floor": 60.5,
-     "Claude's words": 21.2,
-     "result: tool search": 6.9,
-     "messages and reminders": 6.1,
-     "result: other": 5.2
+     "start-up floor": 53.6,
+     "Claude's words": 26.2,
+     "result: tool search": 8.4,
+     "messages and reminders": 7.5,
+     "result: other": 4.3
     },
     "named": {
-     "start-up reading (rules, tools, first files)": 60.5,
-     "commands": 10.8,
-     "messages and reminders": 6.1,
-     "helper and chat prompts": 4.2,
-     "reading notes": 3.6,
-     "start-up and handover tools": 2.8,
-     "thinking": 2.7,
-     "helper results": 2.2,
-     "git and saving": 2.0,
-     "messages to Sam": 1.9,
-     "writing notes": 1.6,
-     "app tools (chats, files sent)": 1.5
+     "start-up reading (rules, tools, first files)": 53.6,
+     "commands": 10.2,
+     "messages and reminders": 7.5,
+     "writing notes": 5.0,
+     "reading notes": 4.9,
+     "thinking": 4.2,
+     "messages to Sam": 3.8,
+     "start-up and handover tools": 3.3,
+     "helper and chat prompts": 3.0,
+     "helper results": 1.8,
+     "git and saving": 1.6,
+     "app tools (chats, files sent)": 1.2
     },
     "leftover": 0.0
    },
@@ -2980,20 +2980,25 @@
      [
       "notes/r7.md",
       0.7,
-      0.0084
+      0.0099
      ],
      [
       "notes/proposals/pose-kit-format.md",
       0.8,
-      0.0079
+      0.0095
+     ],
+     [
+      "source/propose.py",
+      0.8,
+      0.0075
      ],
      [
       "notes/proposals/pose-kit-format/chat.md",
       0.3,
-      0.0037
+      0.0044
      ]
     ],
-    "base_pct": 42.5
+    "base_pct": 41.4
    },
    "search": {
     "show": 0,
@@ -3002,9 +3007,9 @@
     },
     "other": {
      "shared:handover.py": 1,
-     "film notes": 9,
-     "shared:propose.py": 4,
-     "other": 2
+     "film notes": 10,
+     "shared:propose.py": 6,
+     "other": 5
     },
     "ticked": 0,
     "edited film code": false,
@@ -3152,6 +3157,60 @@
       "python3 source/propose.py judge pose-kit-format 2>&1 | tail -5",
       "",
       486
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "notes/proposals/pose-kit-format",
+      "git add -A notes/proposals/pose-kit-format && git commit -qm \"R7 chat 12: pose-k",
+      "",
+      31
+     ],
+     [
+      26,
+      "other",
+      "other",
+      "notes/ledger/",
+      "for f in r7 brexit-is-done proposal-route; do echo \"== $f\"; python3 -c \" import ",
+      "",
+      4424
+     ],
+     [
+      27,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py parse pose-kit-format 2>&1 | tail -8 && python3 source",
+      "",
+      3357
+     ],
+     [
+      28,
+      "other",
+      "shared:propose.py",
+      "source/propose.py",
+      "python3 source/propose.py parse pose-kit-format 2>&1 | head -5; python3 source/p",
+      "",
+      609
+     ],
+     [
+      29,
+      "other",
+      "film notes",
+      "notes/r7.md guides/job-packs.md. notes/proposals/pose-kit-format.md notes/archiv",
+      "python3 - <<'EOF' p='notes/r7.md'; s=open(p).read() i=s.index('## Where things s",
+      "",
+      113
+     ],
+     [
+      30,
+      "other",
+      "other",
+      "",
+      "git fetch -q origin claude/create-claude-md-oe8z4g && git merge -q --no-edit ori",
+      "",
+      115
      ]
     ]
    },
