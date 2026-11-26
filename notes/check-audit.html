@@ -1,0 +1,187 @@
+<title>Check Audit R8</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Layout: one reading column; each group a band with its own colour chip; rows as stacked cards on a phone */
+:root{
+  --bg:#f6f7f4; --fg:#1d2420; --muted:#5b6760; --line:#d9ded8; --card:#ffffff;
+  --prevent:#2f7d5b; --smart:#2b62a8; --merge:#8a5a12; --dead:#a23b3b; --other:#6b5aa0;
+  --display:"Space Grotesk",system-ui,sans-serif; --text:"Inter",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#141917; --fg:#e7ece8; --muted:#9aa79f; --line:#2c3531; --card:#1c2320;
+  --prevent:#5cc394; --smart:#7aa9e8; --merge:#e0ad5c; --dead:#ec7f7f; --other:#b3a4ea; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141917; --fg:#e7ece8; --muted:#9aa79f; --line:#2c3531; --card:#1c2320;
+  --prevent:#5cc394; --smart:#7aa9e8; --merge:#e0ad5c; --dead:#ec7f7f; --other:#b3a4ea; color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:15px/1.55 var(--text);
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+main{max-width:760px;margin:0 auto;display:grid;gap:28px}
+h1,h2{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:1.9rem} h2{font-size:1.25rem;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+p{margin:0} .lead{color:var(--muted)}
+section{display:grid;gap:12px}
+.chip{font:600 .7rem/1 var(--text);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:4px;color:var(--bg)}
+.prevent .chip{background:var(--prevent)} .smart .chip{background:var(--smart)} .merge .chip{background:var(--merge)}
+.dead .chip{background:var(--dead)} .other .chip{background:var(--other)}
+.facts{display:grid;gap:8px;padding:0;margin:0;list-style:none}
+.facts li{padding:10px 12px;background:var(--card);border:1px solid var(--line);border-radius:6px}
+.facts b{font-variant-numeric:tabular-nums}
+.row{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--c);border-radius:6px;padding:12px 14px;display:grid;gap:6px;min-width:0}
+.prevent .row{--c:var(--prevent)} .smart .row{--c:var(--smart)} .merge .row{--c:var(--merge)} .dead .row{--c:var(--dead)} .other .row{--c:var(--other)}
+.row h3{margin:0;font:600 1rem/1.3 var(--display)}
+.row .caught{color:var(--muted);font-size:.92rem}
+.ll{font-size:.9rem;display:grid;gap:2px}
+.ll span{display:block} .ll .k{font-weight:600}
+.qs{display:grid;gap:8px;padding-left:1.4em;margin:0}
+.small{font-size:.85rem;color:var(--muted)}
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Space+Grotesk:wght@600&display=swap">
+<main>
+<header style="display:grid;gap:8px">
+  <h1>Check audit (R8)</h1>
+  <p class="lead">Every check in the project, what it actually caught in the last three films (Milburn, Grand Theft Autism, Open Wounds), and what I suggest for each one. 26 Nov.</p>
+</header>
+
+<section>
+  <h2>What I found</h2>
+  <ul class="facts">
+    <li>We have about <b>500 checks</b>: 184 kit tests, about 140 checks the tools run on a film, 20 at every handover, 12 that run on every message or step, 60 inside old films' own code, and 77 rulebook rows.</li>
+    <li>You gave <b>24 notes</b> on Open Wounds. For <b>22</b> of them no check could have caught it. For the other 2 a check was looking and missed (the doorway pop-in, the thick wolf lines).</li>
+    <li>In the same weeks the checks printed <b>372 fault lines</b>. <b>361 of them (97%)</b> were the same faults coming back unchanged, run after run, and never acted on. That noise hides the real faults.</li>
+    <li><b>65 of 430</b> handovers were stopped. <b>37</b> of those stops were the checking machinery tripping over itself (kit tests still running, crashed or not run). <b>24</b> were the same cast sheet faults again, mostly the seated "no bum" test you deleted today.</li>
+    <li>What worked: every fault fixed <b>inside the drawing tools</b> has stayed fixed (a nod can no longer snap, the wolves take the people's line weight, mouths are drawn with open lines). Faults that were only <b>caught</b> by a check came back (the leg gap, the smirk, the 3/4 shirt ridge).</li>
+  </ul>
+  <p>So my overall suggestion is fewer checks that catch mistakes and more limits inside the tools, so the mistake can't be drawn. That's your "not make this mistake in the first place".</p>
+</section>
+
+<section class="prevent">
+  <h2><span class="chip">Move into the kit</span> Prevent, don't catch</h2>
+  <div class="row"><h3>A1. "Drawn over" (what is in front of what)</h3>
+    <p class="caught">Open Wounds: 30 faults back unchanged on 11 runs. It counts the ground, walls, pipes and wood panelling as things standing in front of people.</p>
+    <p>Have the drawing order come from the plan's distances automatically, and never count flat backdrops as things in front (the places kit already does this for its own pieces). The film check then retires, and a kit test keeps the order right.</p>
+    <div class="ll"><span><span class="k">Lost:</span> the check on every pre-flight.</span><span><span class="k">Added:</span> automatic order by distance in the drawing engine.</span></div></div>
+  <div class="row"><h3>A2. Captions "too fast to read"</h3>
+    <p class="caught">8 captions flagged on every run. Your voice sets the pace, so nothing could ever fix them.</p>
+    <p>The caption maker splits a line into shorter pieces until each one can be read in time. It only says something when no split works.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing.</span><span><span class="k">Added:</span> automatic splitting of long captions.</span></div></div>
+  <div class="row"><h3>A3. Head move size (rule 92)</h3>
+    <p class="caught">Caught nods that were too small on May, Kemi and Blair, but only at pre-flight, ten rounds after the moves were written.</p>
+    <p>The acting tool turns the words ("small nod", "curt") into a size that reads at that camera's distance, so a move too small to see can't be written. The size check becomes a kit test.</p>
+    <div class="ll"><span><span class="k">Lost:</span> the pre-flight line.</span><span><span class="k">Added:</span> move sizes worked out from the camera distance.</span></div></div>
+  <div class="row"><h3>A4. Stray and doubled lines (hair, mouth, loose ink)</h3>
+    <p class="caught">You caught the stray line off Blair's smile and his fleshy teeth first; the checks were added after. Both came from one curve tool that doubles back on itself.</p>
+    <p>Mouths are already drawn with open lines, which fixed it in the tool. Draw hair and hats the same way, then delete the two cast sheet checks and keep one kit test on the curve tool.</p>
+    <div class="ll"><span><span class="k">Lost:</span> two cast sheet checks.</span><span><span class="k">Added:</span> hair and hats drawn with open lines.</span></div></div>
+  <div class="row"><h3>A5. The line where the legs part (your "camel toe" note)</h3>
+    <p class="caught">Added after your note 8. On 26 Nov it flagged Kemi's front view (0.96 of her trousers), which nobody has looked at yet.</p>
+    <p>The body tool draws where the legs part with a fixed limit, so the line can't run up. The check becomes a kit test. First I look at Kemi's front at full size to see whether that flag is real.</p>
+    <div class="ll"><span><span class="k">Lost:</span> one cast sheet check.</span><span><span class="k">Added:</span> a limit in the body drawing.</span></div></div>
+  <div class="row"><h3>A6. Line weight on non-people (house look, rule S7)</h3>
+    <p class="caught">Missed your note 16: the wolves were twice as thick, because the check only measures people. Fixed for the wolves inside the tool.</p>
+    <p>Every kit (animals, vehicles, props) takes its line weight from the same place the people do. The house look check then only has to confirm the house look is switched on.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing.</span><span><span class="k">Added:</span> one shared line weight for every kit.</span></div></div>
+  <div class="row"><h3>A7. Hands pushed into sleeves, arms coming out the far side</h3>
+    <p class="caught">May's hand went into her sleeve twice on 26 Nov, and Blair's hidden arm came out on the far side. The hand check catches these after the drawing is made.</p>
+    <p>The arm tool can't pull a hand back past the cuff unless the pose says the hand is hidden. I haven't yet confirmed what the arm tool already does here; that's the first step.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing (the hand check stays for other faults).</span><span><span class="k">Added:</span> a cuff limit in the arm tool.</span></div></div>
+  <div class="row"><h3>A8. Video joins at 24 frames a second (rule S4, by hand)</h3>
+    <p class="caught">Never checked by anything; it's a rule with no check.</p>
+    <p>One joining tool that always uses 24, so there's nothing left to remember.</p>
+    <div class="ll"><span><span class="k">Lost:</span> a by-hand rule.</span><span><span class="k">Added:</span> one joining tool.</span></div></div>
+</section>
+
+<section class="smart">
+  <h2><span class="chip">Smarter</span> Better tool or way of working</h2>
+  <div class="row"><h3>B1. "Say it once" for every picture check (the biggest win)</h3>
+    <p class="caught">97% of fault lines were repeats.</p>
+    <p>A fault that comes back unchanged is shown once, with a still and one line. After it's answered it stays quiet until the drawing in that spot changes, and then it comes back as "Reopened", with the old and new stills side by side. This replaces the open "answered faults come back" proposal.</p>
+    <div class="ll"><span><span class="k">Lost:</span> the long repeated lists.</span><span><span class="k">Added:</span> one still per fault, and a short "Reopened" list.</span></div></div>
+  <div class="row"><h3>B2. Pop-ins that understand doors</h3>
+    <p class="caught">Flagged guests coming through the door 4 times unchanged, yet missed your note 15 (people appearing out of a blank void in the doorway).</p>
+    <p>Someone arriving through a door has to come from the room behind it, with real depth. That gets checked, instead of doorways being ignored. This is part of the open "checks that understand what the scene is trying to do" proposal, which is still waiting for your Y or N.</p>
+    <div class="ll"><span><span class="k">Lost:</span> the blanket pass for doorways.</span><span><span class="k">Added:</span> a door rule that reads the plan.</span></div></div>
+  <div class="row"><h3>B3. Real sizes (the bookcases)</h3>
+    <p class="caught">The same two bookcases flagged as too wide on 10 runs.</p>
+    <p>The size check reads the set's own description, so it can tell a row of shelves from a single bookcase.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing.</span><span><span class="k">Added:</span> sizes read from the set's own description.</span></div></div>
+  <div class="row"><h3>B4. Missing-paperwork stops (no plan, no reference sheet, no acting list, no rehearsal line, no code map)</h3>
+    <p class="caught">"No plan", "no reference sheet" and "no general audit" printed on every Open Wounds run and were never answered.</p>
+    <p>All of these become one list, asked once at planning. It goes in the brief checklist, so pre-flight stops repeating them.</p>
+    <div class="ll"><span><span class="k">Lost:</span> five separate stops at pre-flight.</span><span><span class="k">Added:</span> one planning list.</span></div></div>
+  <div class="row"><h3>B5. Cast sheet at every handover</h3>
+    <p class="caught">Stopped 24 handovers with the same faults.</p>
+    <p>It runs only when a cast member is new or changed.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing.</span><span><span class="k">Added:</span> a "changed?" test before it runs.</span></div></div>
+  <div class="row"><h3>B6. Kit tests at the handover</h3>
+    <p class="caught">37 stops were the tests themselves (still running, crashed, not run), not faults in a film.</p>
+    <p>Since your 25 Nov rule (kit tests at a film's start and end only), the handover waits for them only at those two points. A crashed test is fixed in a tool chat and never stops a film chat.</p>
+    <div class="ll"><span><span class="k">Lost:</span> mid-film stops for the tests.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+  <div class="row"><h3>B7. Sample drawings fetched from GitHub ("kit inputs")</h3>
+    <p class="caught">Crashed on every run because this machine couldn't fetch the files.</p>
+    <p>It uses the copy already on the machine.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+  <div class="row"><h3>B8. "Edge with no line" on May and Blair</h3>
+    <p class="caught">Flagged on every run, unchanged. I don't know yet whether it's a real gap in the outline.</p>
+    <p>One look at full size. Then either the drawing gets fixed or the check learns why that spot is fine.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+</section>
+
+<section class="merge">
+  <h2><span class="chip">Duplicates</span> Merge</h2>
+  <div class="row"><h3>C1. The "show me the code before searching" reminder: three checks</h3>
+    <p>Keep the one that reminds at the moment it matters. Delete the two that complain afterwards (the daily watcher and the handover).</p>
+    <div class="ll"><span><span class="k">Lost:</span> two after-the-fact reminders.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+  <div class="row"><h3>C2. Right model for the job: three checks</h3>
+    <p>The guard that stops routine work on the expensive model stays. The watcher's second look at the same thing goes.</p>
+    <div class="ll"><span><span class="k">Lost:</span> one duplicate.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+  <div class="row"><h3>C3. Your typed messages saved: three checks</h3>
+    <p>The saver and its kit test stay. The watcher's re-check goes.</p>
+    <div class="ll"><span><span class="k">Lost:</span> one duplicate.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+  <div class="row"><h3>C4. "Did the kit tests run?": four checks in four places</h3>
+    <p>One place (the kit-tests-per-film tool) answers it. The watcher's and handover's own versions go.</p>
+    <div class="ll"><span><span class="k">Lost:</span> three copies.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+  <div class="row"><h3>C5. Checks that check the checks (hook wiring, "never seen running")</h3>
+    <p>Two watcher checks become one. The rule-proof check stays, because it works: it stopped 8 handovers where a new rule had no saved example.</p>
+    <div class="ll"><span><span class="k">Lost:</span> one duplicate.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+</section>
+
+<section class="dead">
+  <h2><span class="chip">Dead</span> Delete</h2>
+  <div class="row"><h3>D1. The seated "no bum" test</h3>
+    <p>Already deleted by you today.</p></div>
+  <div class="row"><h3>D2. The handover's weekly "dearest things" reminder and its cost-line warning</h3>
+    <p class="caught">Never stopped a handover. Both are budget alarms, which you paused on 18 Nov.</p>
+    <p>See question 5.</p>
+    <div class="ll"><span><span class="k">Lost:</span> two paused alarms.</span><span><span class="k">Added:</span> nothing.</span></div></div>
+  <div class="row"><h3>D3. Kit tests that only test a check deleted above</h3>
+    <p>Each goes with its check (named in the notes as each one is done).</p></div>
+</section>
+
+<section class="other">
+  <h2><span class="chip">Other</span> Keep as they are, with why</h2>
+  <div class="row"><h3>E1. The 184 kit tests</h3>
+    <p>Each one holds a fix you once asked for and runs twice per film, so it's cheap and it's how prevention stays prevented. Two went red again and again (the back-view body check, 4 times; the finished films' bookmark, 5 times). A tool chat finds out whether the test or the kit is wrong.</p></div>
+  <div class="row"><h3>E2. The fresh-eye critique and the blind judges</h3>
+    <p class="caught">The only checks that look the way a viewer does. On GTA they found Jason too pale, the wrong headphone colour, and a car that read as a road.</p>
+    <p>Keep them. Add one column: did you later make the same note? Then we'll know how well they predict you.</p>
+    <div class="ll"><span><span class="k">Lost:</span> nothing.</span><span><span class="k">Added:</span> one column in the notes.</span></div></div>
+  <div class="row"><h3>E3. The seated-body checks (knees as balls, flat leg tone, the seated look)</h3>
+    <p>They're the stopgap for reserve job R7 (the seated lower body). They stay until R7 is done, then become kit tests.</p></div>
+  <div class="row"><h3>E4. Handover checks that never stopped a handover but guard against losing work</h3>
+    <p>Your words saved, no rule sentence lost, the latest animatic kept, the body-check report kept with its video, the "should have caught" column filled. They cost under a second and print nothing when they pass. Keep them as insurance.</p></div>
+  <div class="row"><h3>E5. Old films' own checks (60)</h3>
+    <p>They only run if an old film is drawn again, so they cost nothing. Leave them.</p></div>
+</section>
+
+<section>
+  <h2>Questions (your pick first)</h2>
+  <ol class="qs">
+    <li>Do group A (move into the kit) in a tool chat, one item at a time, each with its kit test? <b>Y</b> / N</li>
+    <li>"Say it once" (B1), replacing the open "answered faults" proposal? <b>Y</b> / N</li>
+    <li>The door rule (B2), as your Y to the open "checks that understand the scene" proposal? <b>Y</b> / N</li>
+    <li>Do the rest of B, and merge C? <b>Y</b> / N</li>
+    <li>The paused budget alarms: 1 keep them asleep until you switch alarms back on (my pick), 2 delete them.</li>
+  </ol>
+  <p class="small">The full list of all 500 checks, made by the new listing tool, is in the project (notes/checks/audit.tsv) for the next audit.</p>
+</section>
+</main>
