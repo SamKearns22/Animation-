@@ -9,3 +9,6 @@ Do you see the problem if something is being designed in a way that will later f
 ### 2026-11-26T19:11:57
 Yes sure. Fix the 5 faults. List the remaining faults and I'll Y or N them
 
+### 2026-11-26T19:12:17
+List the other faults first
+
