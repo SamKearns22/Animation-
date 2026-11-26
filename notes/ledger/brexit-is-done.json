@@ -14002,6 +14002,12 @@
   }
  },
  "notes_tags": {
+  "13": "none (no check compares a leaper's landing point with its target's body, nor a beat before the first action)",
+  "14": "none (the acting list named \"jab\", not how hard or how far)",
+  "15": "AUDIT pops (it ignores people who arrive inside a doorway's frame; the corridor beyond had no depth to come from)",
+  "16": "house look (it measures people's lines, not the wolf kit's)",
+  "17": "none (a wish)",
+  "18": "none",
   "12": "none (P7 is a by-hand critique line and the board went out with no critique; the kit still ringed a knee aimed at the lens, and drew no bottom at all)",
   "9": "none (a wish, not a fault)",
   "7": "none (the learn step judged woman or man only, never \"is this HER body\"; Kemi's photo was not measured)",
@@ -14106,6 +14112,10 @@
   },
   {
    "at": "2026-11-26T09:21+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T16:05+00:00",
    "faults": 0
   }
  ],
@@ -14237,6 +14247,11 @@
    "date": "2026-11-26",
    "spent": 42.27,
    "forecast": 52.0
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 45.39,
+   "forecast": 52.4
   }
  ]
 }

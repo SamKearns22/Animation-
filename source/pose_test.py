@@ -203,7 +203,7 @@ def bars(u):
         x = (m['x'] - A.BAR_MEN[1]['x']) * 1.15 + 0.15
         z = (m['d'] - A.LIFT_D) * 1.6
         if n < 2:
-            j, jab = A._bar_man(sp, u, n)
+            j, jab, _ = A._bar_man(sp, u, n)
         else:
             j = V.standing(sp)
             v = u - (A.CLANG - 0.45)

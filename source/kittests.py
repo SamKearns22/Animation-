@@ -760,6 +760,52 @@ def fold_stub():
         f"saved frame: {saved or 'MISSED'}; drop off: {got[0] or 'MISSED'}; now: {got[keep] or 'none'}")
 
 
+def _ring_px(img):
+    """The outline's thickness round a drawing on white: ink within 8 px of the open background, per edge pixel."""
+    import numpy as np
+    from scipy import ndimage as ND
+    a = np.asarray(img.convert('RGB')).astype(int)
+    white = a.min(-1) > 245
+    lab, _ = ND.label(white)
+    bg = np.isin(lab, np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]])))
+    ink = a.sum(-1) < 150
+    near = ND.distance_transform_edt(~bg) <= 8
+    edge = ink & ND.binary_dilation(bg)
+    return float((ink & near).sum()) / max(1, int(edge.sum()))
+
+
+@test
+def wolf_house_line():
+    """Open Wounds note 16 (Sam, 26 Nov, animatic: "the line work on the wolves is very thick in comparison to our house
+    style"; his frame notes/learn/wolf-line/ow-animatic-wolves-thick-sam-26nov.png): a kit wolf's outline was 5 wolf
+    units, about twice a worker's at the same depth. wolf.house_ctx now sets it to the people's own weight
+    (lying._lw). Red with the old weight, green now: the wolf's outline within 1.3 times the worker's at 5 and 7 m."""
+    import sys
+    from PIL import Image
+    sys.path.insert(0, 'source')
+    import brexit_is_done as F
+    ACT, WF = F.ACT, F.ACT.WF
+    L = F._cam('site')
+    keep = WF.house_ctx
+    res = {}
+    try:
+        for name, fn in (('old', lambda X, s, ppm: X), ('now', keep)):
+            WF.house_ctx = fn
+            r = []
+            for d in (5.0, 7.0):
+                a = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+                ACT.wolf_at(a, L, 0, d, 0, 1, WF.pose('stand', 0), pal=1, shade=False)
+                b = Image.new('RGBA', (1080, 1920), (255, 255, 255, 255))
+                ACT.person_at(b, L, ACT.WORKERS[0], 0, d, 0, 90, None, 0.0, shadow=False)
+                r.append(_ring_px(a) / _ring_px(b))
+            res[name] = r
+    finally:
+        WF.house_ctx = keep
+    return max(res['old']) > 1.45 and max(res['now']) <= 1.3, (
+        'wolf outline / worker outline at 5, 7 m: old ' + ', '.join(f'{v:.2f}' for v in res['old'])
+        + '; now ' + ', '.join(f'{v:.2f}' for v in res['now']))
+
+
 @test
 def seated_r7_switch():
     """R7 (25 Nov): the seated lower body as one shape is on for every new film and off for every posted film, whose

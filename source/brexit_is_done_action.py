@@ -51,7 +51,7 @@ FEET = 928.0
 # ================================================================================================= setup
 WOLF_SHOULDER = 0.85                 # m: half a man's height (Cry Minister's dire wolves; the kit's s=1 is 200 units)
 UNITS = 200.0 / WOLF_SHOULDER        # wolf units a metre
-ATTACK = dict(x=-1.75, d=7.0)        # W1 digging, low left (places file: people attack 7)
+ATTACK = dict(x=-1.4, d=7.0)         # W1 digging in the open ground left of Kemi (note 13; places file: people attack 7)
 LIFT_D = 24.95                       # between the scaffold's inner (25.6) and outer (24.3) frames: the boards
 TOP, MID = 9.6, 6.4                  # the runner's lift, the bar fight's lift (board tops, m)
 CROWD = PK.crowds('brexit-is-done')
@@ -80,8 +80,9 @@ def keyed(t, keys):
 
 # ================================================================================================= placing
 def _ctx(img, s):
+    """Note 16: the house line weight (wolf.house_ctx), the people's own at the wolf's depth."""
     X = Ctx(ImageDraw.Draw(img), SCam(540, 960, 1.0, 1), ol=max(1.0, 5.0 * s))
-    return X
+    return WF.house_ctx(X, s, s * 200.0 / WOLF_SHOULDER)
 
 
 def wolf_s(L, d):
@@ -160,11 +161,20 @@ def tube(img, a, b, w, col=(150, 156, 164)):
 
 
 # ================================================================================================= shot 2: attack
-WA = dict(d=6.75, land=-0.62, pal=1, seed=21)      # nearer him: lands over his chest
-WB = dict(d=7.3, land=-1.42, pal=3, seed=22)       # behind him: over his belly and legs
-RUN_V = 9.0                                         # m/s, the wolves' charge
-HIT = 0.6                                           # they hit him
-FEEDS = {'a': (1.05, 1.7, 0.0), 'b': (1.25, 2.1, 0.5)}   # (first rip, period, phase): out of step
+# Note 13 (Sam, 26 Nov: "you don't get a moment to take in the scene"; "the wolves jump over the construction worker
+# and go past him, yet the construction worker does the falling down motion"; "see the wolves doing their pounce,
+# landing on him, and at the moment they land on him, that's when he falls"; as Cry Minister's short leap ONTO the
+# man, none overshooting): he stands in the open ground left of Kemi; the attack's clock runs LEAD s late (a beat of
+# him digging first); each wolf runs in, crouches, springs a short pounce whose forepaws strike him where he is
+# (WA his chest at HIT, WB his hips as he buckles, 0.2 s later), rides him down as he falls, then feeds.
+LEAD = 1.1                                          # s of the shot before the attack's own clock starts
+WA = dict(d=6.75, land=ATTACK['x'] + 0.1, pal=1, seed=21, hit=0.0, strike=1.25)    # nearer him: jaws at his chest
+WB = dict(d=7.3, land=ATTACK['x'] - 0.2, pal=3, seed=22, hit=0.2, strike=0.85)     # behind him: at his belly
+RUN_V = 5.5                                         # m/s, the wolves' run in (seen crossing the open ground)
+HIT = 0.6                                           # WA's forepaws strike him (attack clock): he starts to fall
+REACH = 0.95                                        # m from a leaping wolf's middle to its forepaws (leap pose, v 1)
+POUNCE = 0.3                                        # s in the air: a short spring from close, as Cry Minister's
+FEEDS = {'a': (1.55, 1.7, 0.0), 'b': (1.8, 2.1, 0.5)}    # (first rip, period, phase): out of step, once settled
 
 
 def _feed_u(u, start, period):
@@ -192,20 +202,35 @@ def _rips(start, period, until):
 
 
 def _attack_wolf(img, L, u, w, key, blood_k):
-    """One of the two: charges in from off frame left, leaps (0.2-0.6), lands on him, feeds."""
+    """One of the two (note 13): runs in from off frame left, crouches (0.15 s), springs a short pounce whose forepaws
+    land ON him where he stands (at its hit: WA his chest, WB his hips), rides him down as he falls (0.5 s to his
+    hips, 0.45 s onto his back), settles and feeds standing over his legs, head down at his chest or belly."""
     s = wolf_s(L, w['d'])
     gy = L.p(0, w['d'], 0)[1]
-    x_leap0 = w['land'] - 1.9
-    if u < 0.2:                                     # the charge
-        x = x_leap0 - RUN_V * (0.2 - u)
-        P = WF.pose('run', (x - (x_leap0 - RUN_V * 0.2)) * UNITS)
-    elif u < HIT:                                   # the leap: off the ground at 0.2, onto him at 0.6
-        v = (u - 0.2) / (HIT - 0.2)
-        x = lerp(x_leap0, w['land'], v)
-        P = WF.pose('leap', v, lift=150 * math.sin(math.pi * v) + 40 * v)
-    elif u < 0.95:
-        x = w['land']
-        P = WF.pose('land', (u - HIT) / 0.35)
+    hit = HIT + w['hit']
+    x_hit = ATTACK['x'] - 0.15 - REACH             # its middle as the forepaws reach his front (he faces left)
+    x_spring = x_hit - 0.7                          # a short spring from close: none overshoots him
+    t_spring = hit - POUNCE
+    t_crouch = t_spring - 0.15
+    lift_hit = w['strike'] / WOLF_SHOULDER * 200.0 - 110.0     # leap pose v 1: forepaws 110 units over the lift
+    if u < t_crouch:                                # the run in
+        x = x_spring - RUN_V * (t_crouch - u)
+        P = WF.pose('run', (x - x_spring) * UNITS)
+    elif u < t_spring:                              # gathers: low, braced (the leap pose's crouch)
+        x = x_spring
+        P = WF.pose('leap', 0.0, lift=-18 * math.sin(math.pi * (u - t_crouch) / 0.15))
+    elif u < hit:                                   # the pounce: an arc up to his chest (or hips)
+        v = (u - t_spring) / POUNCE
+        x = lerp(x_spring, x_hit, v)
+        P = WF.pose('leap', 0.3 + 0.7 * v, lift=lift_hit * v + 60 * math.sin(math.pi * v))
+    elif u < hit + 0.5:                             # rides him down: paws on him as he buckles onto his hips
+        v = ease((u - hit) / 0.5)
+        x = lerp(x_hit, lerp(x_hit, w['land'], 0.55), v)
+        P = WF.pose('leap', 1.0, lift=lerp(lift_hit, 25.0, v))
+    elif u < hit + 0.95:                            # and onto his back: settles over him
+        v = (u - hit - 0.5) / 0.45
+        x = lerp(lerp(x_hit, w['land'], 0.55), w['land'], ease(v))
+        P = WF.pose('land', v)
     else:
         x = w['land']
         st, per, ph = FEEDS[key]
@@ -214,9 +239,9 @@ def _attack_wolf(img, L, u, w, key, blood_k):
     bl = dict(muzzle=min(1.0, blood_k * 1.2), ruff=min(1.0, blood_k), paws=min(1.0, blood_k * 0.9))
     jaws = wolf_at(img, L, x, w['d'], 0.0, 1, P, w['pal'], blood=bl if blood_k > 0 else 0.0, seed=w['seed'])
     X = _ctx(img, s)
-    for t0 in (0.2, HIT + 0.02):                   # dust where it takes off and where it lands
-        px = L.p(x_leap0 if t0 < 0.5 else w['land'], w['d'], 0)[0]
-        WF.dust(X, px, gy, s, u - t0, seed=int(w['seed'] + t0 * 10), size=1.1)
+    for t0, at in ((t_spring, x_spring + 0.3), (hit + 0.5, ATTACK['x'] + 0.3)):   # the spring; his hips hit the dirt
+        if u >= t0:
+            WF.dust(X, L.p(at, w['d'], 0)[0], gy, s, u - t0, seed=int(w['seed'] + t0 * 10), size=1.1)
     return jaws
 
 
@@ -249,7 +274,8 @@ def _shovel(img, L, a, b, d):
 
 
 def w1(img, L, cam3, u):
-    """W1 and the two wolves on him: returns [(depth, draw)]."""
+    """W1 and the two wolves on him: returns [(depth, draw)]. u is shot time; the attack's clock starts LEAD s in."""
+    u = u - LEAD
     sp = dict(WORKERS[0])
     x, d = ATTACK['x'], ATTACK['d']
     gy = L.p(0, d, 0)[1]
@@ -265,6 +291,8 @@ def w1(img, L, cam3, u):
     def man(img):
         if u < HIT:
             j = _worker1_pose(sp, u)
+            k = ease((u - (HIT - 0.32)) / 0.26)            # sees them spring: jerks upright, rocks back on his heels
+            j['lean'] = lerp(j['lean'], -7.0, k)
             got = lying.stand(img, cam3, sp, x, d, face, j, u)
             if got[0] == '2d':
                 Xf, Yf, s, _, _ = lying.place(cam3, x, d)
@@ -418,36 +446,59 @@ def runner(img_unused, L, u):
 
 # ================================================================================================= shot 2: bars
 BAR_MEN = [dict(i=2, x=9.95, d=LIFT_D - 0.2), dict(i=3, x=10.75, d=LIFT_D + 0.25), dict(i=4, x=11.6, d=LIFT_D)]
-LUNGES = [(0.5 + 1.5 * k, k % 2) for k in range(7)]          # (time, which wolf): We and Wf in turn
-STRIKE = 0.32                                                 # the tube lands this long after the lunge starts
+# Note 14 (Sam, 26 Nov: "more vigorous and desperate on both sides... hitting and stabbing and retreating, advancing,
+# really trying to stop wolves from killing them. And the wolves... attacks and pushing forward and bites and
+# snarls"): an exchange every 0.75 s, the two wolves in turn (each every 1.5 s), never a still moment. A wolf presses
+# in snapping, lunges (pushing 0.45 m forward); its man gives ground as it comes, then steps in with the blow (a
+# stab, or a clubbing overhead hit, by turns), and the struck wolf is knocked back, flinching, and comes again.
+LUNGES = [(0.3 + 0.75 * k, k % 2) for k in range(16)]        # (time, which wolf): We and Wf in turn
+STRIKE = 0.26                                                 # the blow lands this long after the lunge starts
 CLANG = 4.3                                                   # W5's swing stops dead on the outer standard at x 11
 
 
+def _exchange(u, k):
+    """The latest exchange of wolf (or man) k at time u: (seconds into it, its number) or (None, -1)."""
+    best = (None, -1)
+    for n, (t0, kk) in enumerate(LUNGES):
+        if kk == k and u >= t0:
+            best = (u - t0, n)
+    return best
+
+
 def _bar_man(sp, u, who):
-    """Two hands on the tube at chest height; before a strike he leans back (the wolf comes), then jabs (fast) and
-    draws back. Returns (pose, jab 0-1)."""
+    """Two hands on the tube at chest height. As his wolf lunges he gives ground (a step back, leaning away, the tube
+    drawn in), then steps in with the blow: a stab (fast, at full reach) or, every other time, a clubbing hit (the
+    tube raised and brought down). Returns (pose, jab 0-1, dx m: his step along the boards, + away from the wolves)."""
     j = V.standing(sp)
-    jab = 0.0
-    lean = 0.0
-    for t0, k in LUNGES:
-        if (who == 0 and k == 0) or (who == 1 and k == 1):
-            v = u - t0
-            if 0.0 <= v < STRIKE:
-                lean = -8 * ease(v / STRIKE)
-                jab = -0.25 * ease(v / STRIKE)
-            elif STRIKE <= v < STRIKE + 0.12:
-                jab = lerp(-0.25, 1.0, (v - STRIKE) / 0.12)
-            elif STRIKE + 0.12 <= v < STRIKE + 0.6:
-                jab = 1.0 - ease((v - STRIKE - 0.12) / 0.48)
-    j['lean'] = 4 + lean + 6 * max(0.0, jab)
-    j['footL'] = (-50, j['footL'][1], 110.0)
+    jab, lean, club, dx = 0.0, 0.0, 0.0, 0.0
+    v, n = _exchange(u, who)
+    hard = (n // 2) % 2 == 1                                   # every other blow a clubbing hit
+    if v is not None and v < 1.5:
+        if v < STRIKE:                                         # the wolf comes: back a step, brace
+            e = ease(v / STRIKE)
+            lean, jab, dx = -12 * e, -0.3 * e, 0.22 * e
+            club = 0.9 * e if hard else 0.0
+        elif v < STRIKE + 0.1:                                 # the blow: a lunge forward with everything
+            e = (v - STRIKE) / 0.1
+            lean, jab, dx = lerp(-12, 14, e), lerp(-0.3, 1.0, e), lerp(0.22, -0.16, e)
+            club = lerp(0.9, -0.2, e) if hard else 0.0
+        elif v < STRIKE + 0.7:                                 # drawn back, ready again
+            e = ease((v - STRIKE - 0.1) / 0.6)
+            lean, jab, dx = lerp(14, 2, e), lerp(1.0, 0.0, e), lerp(-0.16, 0.0, e)
+            club = lerp(-0.2, 0.0, e) if hard else 0.0
+        else:                                                  # never still: the tube jabs short, feinting
+            lean = 3 * math.sin((u + who) * 9.0)
+            jab = 0.15 * max(0.0, math.sin((u + who * 0.4) * 11.0))
+    j['lean'] = 4 + lean
+    j['footL'] = (-50, j['footL'][1], 110.0 + 40 * max(0.0, jab))      # the front foot reaches with the blow
     j['footR'] = (50, j['footR'][1], -90.0)
-    reach = 150 + 160 * jab
+    reach = 150 + 220 * jab
     pull = 3.5 * min(0.0, lean)                     # leaning back to brace, he draws the tube in to his chest with him
     up = 45.0 if who == 0 else 0.0                  # chat 18: the nearest man's grip was level with the lift's front
-    V.arm_to(j, 'L', (-40.0, 230.0 - up, reach + 110 + pull), 'down', 'fist')     # guard rail: hands hidden behind it
-    V.arm_to(j, 'R', (40.0, 250.0 - up, max(130.0, reach - 30) + pull), 'down', 'fist')
-    return j, jab
+    lift = 200.0 * club                             # a clubbing hit: the front hand high, then down through the wolf
+    V.arm_to(j, 'L', (-40.0, 230.0 - up - lift, reach + 110 + pull), 'down', 'fist')   # guard rail: hands hidden behind it
+    V.arm_to(j, 'R', (40.0, 250.0 - up - lift * 0.45, max(130.0, reach - 30) + pull), 'down', 'fist')
+    return j, jab, dx
 
 
 def bars(L, u):
@@ -455,18 +506,22 @@ def bars(L, u):
     for n, m in enumerate(BAR_MEN):
         def man(img, n=n, m=m):
             sp = dict(WORKERS[m['i']])
+            dx = 0.0
             if n < 2:
-                j, jab = _bar_man(sp, u, n)
+                j, jab, dx = _bar_man(sp, u, n)
             else:                                                   # W5: an overhead swing that clangs on a standard
                 j = V.standing(sp)
                 v = (u - (CLANG - 0.45))
                 ang = keyed(v, [(0.0, 0.0), (0.3, 1.0), (0.45, 0.55), (0.52, 0.62), (0.7, 0.58), (1.6, 0.0)])
+                if not 0.0 <= v < 1.6:                              # note 14: brandished high over the others, shaking
+                    ang = 0.32 + 0.14 * math.sin(u * 7.0) + 0.06 * math.sin(u * 17.0)
+                    dx = 0.12 * math.sin(u * 3.1)                   # shuffling behind them, looking for a way in
                 j['lean'] = 4 + 8 * ang
                 hy = 300.0 - 260.0 * math.sin(math.pi * ang * 0.9)
                 V.arm_to(j, 'L', (-40.0, hy, 240.0 - 40 * ang), 'down', 'fist')
                 V.arm_to(j, 'R', (40.0, hy + 40, 140.0 - 20 * ang), 'down', 'fist')
                 jab = 0.0
-            jj = person_at(img, L, sp, m['x'], m['d'], MID, -90.0, j, u)
+            jj = person_at(img, L, sp, m['x'] + dx, m['d'], MID, -90.0, j, u)
             a, b = jj['wrR_px'], jj['wrL_px']                       # back hand, front hand
             dx, dy = b[0] - a[0], b[1] - a[1]
             nn = math.hypot(dx, dy) or 1.0
@@ -489,19 +544,22 @@ def bars(L, u):
     for k in range(2):                                              # We and Wf: lunge in turn, struck, flinch
         def wolf(img, k=k):
             d = (LIFT_D - 0.05, LIFT_D + 0.3)[k]
-            x = (8.45, 9.25)[k]
-            P = WF.pose('stand', 0.0, neck=-0.1, jaw=0.5, snarl=1.0)
-            for t0, kk in LUNGES:
-                if kk != k:
-                    continue
-                v = u - t0
-                if 0.0 <= v < STRIKE:
-                    P = WF.pose('lunge', ease(v / STRIKE))
-                elif STRIKE <= v < STRIKE + 0.9:
-                    w = v - STRIKE
-                    fl = min(1.0, w / 0.12) if w < 0.4 else max(0.0, 1.0 - (w - 0.4) / 0.5)
-                    P = WF.pose('lunge', 1.0 - min(1.0, w / 0.5), flinch=fl)
-            wolf_at(img, L, x, d, MID, 1, P, pal=(2, 3)[k], seed=50 + k)
+            x = (8.0, 8.7)[k]                                        # back from the men: the bars, not bodies, meet
+            # between lunges it presses in, snapping and snarling, edging forward and back (note 14)
+            snap = 0.5 + 0.45 * max(0.0, math.sin((u + 0.7 * k) * 10.0))
+            P = WF.pose('lunge', 0.25 + 0.15 * math.sin((u + k) * 5.0), jaw=snap, snarl=1.0)
+            push = 0.1 * math.sin((u + 0.5 * k) * 4.3)
+            v, _ = _exchange(u, k)
+            if v is not None and v < STRIKE:                        # the lunge: jaws wide, 0.3 m forward
+                P = WF.pose('lunge', ease(v / STRIKE), snarl=1.0)
+                push += 0.3 * ease(v / STRIKE)
+            elif v is not None and v < STRIKE + 0.9:                # struck: knocked back, flinching, then again
+                w = v - STRIKE
+                fl = min(1.0, w / 0.08) if w < 0.35 else max(0.0, 1.0 - (w - 0.35) / 0.4)
+                P = WF.pose('lunge', 1.0 - min(1.0, w / 0.4), flinch=fl)
+                back = keyed(w, [(0.0, 0.3), (0.12, -0.3), (0.9, 0.0)])
+                push = back + (push if w > 0.6 else 0.0) * (w - 0.6) / 0.3
+            wolf_at(img, L, x + push, d, MID, 1, P, pal=(2, 3)[k], seed=50 + k)
         out.append(((LIFT_D - 0.05, LIFT_D + 0.3)[k], wolf))
 
     def wg(img):                                                    # Wg circles behind them on the boards
@@ -576,9 +634,9 @@ GUEST_V, WOLF_V = 4.4, 4.4              # m/s: guests in panic (heels, a tray, a
 LANE_R, LANE_L = 4.60, 6.00             # m: the near and far lanes
 PASSES = [
     (0, 0.30, [(-1.30, 7.60), (-1.30, 6.15), (-3.3, LANE_L)], 0, 0.65),   # the butler: he threw the doors open
-    (1, 0.52, [(-0.38, 8.60), (-0.38, 5.70), (1.4, LANE_R), (2.9, LANE_R)], 1, 0.55),
-    (2, 0.78, [(-1.10, 9.00), (-1.10, 6.10), (-3.0, LANE_L)], 2, 0.55),   # chat 19: guests 1 and 2 0.72 m apart in the doorway (0.55 put his hand on her arm)
-    (3, 1.05, [(-1.60, 9.20), (-1.60, 5.70), (0.6, LANE_R), (2.9, LANE_R)], 3, 0.55),
+    (1, 0.85, [(-0.38, 8.60), (-0.38, 5.70), (1.4, LANE_R), (2.9, LANE_R)], 1, 0.55),
+    (2, 1.40, [(-1.10, 9.00), (-1.10, 6.10), (-3.0, LANE_L)], 2, 0.55),   # chat 19: guests 1 and 2 0.72 m apart in the doorway (0.55 put his hand on her arm)
+    (3, 1.95, [(-1.60, 9.20), (-1.60, 5.70), (0.6, LANE_R), (2.9, LANE_R)], 3, 0.55),
     (0, 2.55, [(-2.7, LANE_R), (2.7, LANE_R)], 0, 0.90),          # wave 1, to the right: the two who left left,
     (2, 3.00, [(-2.7, LANE_L), (2.7, LANE_L)], 2, 0.55),          # the near one leading (perspective opens the gap)
     (1, 4.80, [(2.7, LANE_R), (-2.7, LANE_R)], 1, 0.90),          # wave 2, to the left: the two who left right
@@ -587,6 +645,25 @@ PASSES = [
     (0, 6.85, [(2.7, LANE_L), (-2.7, LANE_L)], 0, 0.55),
     (0, 8.85, [(-2.6, 5.00), (2.7, 5.00)], 0, 0.55),              # still left of his face at the cut
 ]
+# Note 15 (Sam, 26 Nov: they "appear from a sudden blank void at the end of the corridor... materialize suddenly"): the
+# corridor now runs 9 m back with a cross passage at 13.35-14.95 m (story/brexit-is-done-places.txt). The four who burst
+# out of the doors come from its right-hand opening, out of sight behind the corridor's right wall until they turn
+# into it, and run the length of it towards us; each keeps the moment it reaches the doorway (the start moves earlier
+# by the extra distance), and each wolf comes round the same corner at its heels.
+PASSAGE_D = 14.15                       # m: the cross passage's middle
+PASSAGE_X = 1.4                         # m: where they start, out of sight in the passage's right arm
+
+
+def _from_passage(row):
+    k, t0, pts, w, lag = row
+    lead = [(PASSAGE_X, PASSAGE_D), (pts[0][0], PASSAGE_D)]
+    extra = math.hypot(lead[0][0] - lead[1][0], 0) + abs(PASSAGE_D - pts[0][1])
+    return (k, t0 - extra / GUEST_V, lead + list(pts), w, lag)
+
+
+PASSES[:4] = [_from_passage(r) for r in PASSES[:4]]
+# Note 15 too: the doorway times were 0.26 s apart (all four and their wolves in one clump in the doorway); now about
+# 0.55 s apart (each about 2.4 m behind the last down the corridor): the butler 0.30, then 0.85, 1.40, 1.95.
 # From 8.4 s nothing passes behind Blair's head or shoulders: the lunge from the right is the only thing there.
 ROOM_WOLF = [dict(pal=0, seed=60), dict(pal=2, seed=61), dict(pal=4, seed=62), dict(pal=1, seed=63)]
 TOSS = 0.70                             # the butler swerves at the turn: the tray flies on (shot time)

@@ -1,3 +1,3 @@
-Crowd pool built (26 Nov): every new film's generic people come from one pooled crowd pack of every look used before; Open Wounds' builders checked (crowd pack, clean); sheet of 12 sent.
-Next: Open Wounds chat 27 (Opus medium) carries on; the pool waits only on Sam's notes on the sheet.
-Sam: a look at the pooled crowd sheet.
+Open Wounds chat 28 (26 Nov): Sam's animatic notes fixed: the pounce lands on the worker, a fiercer bar fight, a real corridor behind Tony's doors, wolf lines at house weight; voices and growls saved; two clips sent.
+Next: chat 29 (Opus medium) sets the timing from Sam's voices and lays the growl bed; no animatic until the new body kit is across the film.
+Sam: which Kemi take (Q1).

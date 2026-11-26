@@ -431,6 +431,7 @@ class _Ops:
 
     def render(self, X):
         ol = X.ol
+        k_line = getattr(X, 'line_k', 1.0)        # house_ctx: the coat's creases thin with the outline (note 16)
         X.ol = ol * 2
         for op in self.ops:
             if op[0] == 'part':
@@ -446,7 +447,7 @@ class _Ops:
                 X.ol = ol
             elif k == 'line':
                 P = [X.c.p(*q) for q in op[1]]
-                X.d.line(P, fill=op[3], width=max(1, int(X.c.w(op[2]))), joint='curve')
+                X.d.line(P, fill=op[3], width=max(1, int(round(X.c.w(op[2]) * k_line))), joint='curve')
             else:
                 op[1](X)
 
@@ -462,6 +463,23 @@ def _chain(o, pts, widths, col):
                 (b[0] - nx * wb, b[1] - ny * wb), (a[0] - nx * wa, a[1] - ny * wa)], col)
     for p, w in zip(pts, widths):
         o.part(_ellp(p[0], p[1], w / 2, w / 2, 0, 18), col)
+
+
+def house_ol(ppm):
+    """Open Wounds note 16 (Sam, 26 Nov: "the line work on the wolves is very thick in comparison to our house style"):
+    a kit wolf's outline is the house line of a person standing at the same depth (lying._lw, the people's own weight
+    for a body this many frame pixels a metre), never the old 5 wolf units, which drew about twice the people's."""
+    import lying
+    return float(lying._lw(ppm))
+
+
+def house_ctx(X, s, ppm):
+    """Set a drawing context for a kit wolf of scale s at ppm frame pixels a metre to the house line weight: the
+    outline (X.ol) and every crease and brow line in proportion (X.line_k). Every film's wolves go through this."""
+    ol = house_ol(ppm)
+    X.line_k = min(1.0, ol / max(1e-6, 5.0 * s))
+    X.ol = min(5.0 * s, ol) if 5.0 * s > 1.0 else ol
+    return X
 
 
 # ------------------------------------------------------------------------------------------------ poses

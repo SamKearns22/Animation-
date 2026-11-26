@@ -492,9 +492,9 @@ def _beyond(img, draws, opening):
 
 
 @kind('double doors', params={'colour': 'c', 'panel': 'c', 'beyond': 'c', 'floor': 'c', 'open at': 'n',
-                              'swing': 'n', 'open': 'n'},
+                              'swing': 'n', 'open': 'n', 'corridor': 'n', 'passage': 'n'},
       defaults={'colour': 'oak', 'panel': 'oak dark', 'beyond': (232, 214, 172), 'floor': (150, 100, 64),
-                'open at': -1.0, 'swing': 0.35, 'open': 0.0})
+                'open at': -1.0, 'swing': 0.35, 'open': 0.0, 'corridor': 3.0, 'passage': 0.0})
 def double_doors(p, img, cam, a, t):
     """A pair of tall panelled doors in a moulded architrave; from `open at` s they are thrown open into the room
     (both leaves swing towards the lens, hit their stops, bounce, stay), showing the lit corridor beyond (its back
@@ -504,17 +504,43 @@ def double_doors(p, img, cam, a, t):
     d, x0, x1, z0, z1 = pc.d0, pc.x0, pc.x1, pc.z0, pc.z1
     pp = ppm(d)
     ang = 92.0 if a['open'] else door_angle(t, a['open at'] if a['open at'] >= 0 else None, a['swing'])
-    # the corridor beyond, seen through the opening only: its floor, side walls and ceiling running 3 m back to its
-    # far wall (each face from the opening's edge, so perspective keeps all of it inside the doorway), a wall light
-    D = d + 3
+    # the corridor beyond, seen through the opening only: its floor, side walls and ceiling running `corridor` m back
+    # to its far wall (each face from the opening's edge, so perspective keeps all of it inside the doorway), a wall
+    # light. Open Wounds note 15 (Sam, 26 Nov: "all of the characters appear from a sudden blank void at the end of the
+    # corridor"): a long corridor (`corridor` 9) is a real place to come from: a runner down the floor, panelled doors
+    # and lights along the walls, a tall lit window at its end, and (`passage` m from the doorway) a cross passage whose
+    # openings people come round, out of sight behind the corridor's walls until they turn into it.
+    D = d + a['corridor']
     shade = mix(a['beyond'], (120, 100, 80), 0.3)
     p.poly([Lp(x0, d, z0), Lp(x1, d, z0), Lp(x1, D, z0), Lp(x0, D, z0)], a['floor'], None)
     p.poly([Lp(x0, d, z1), Lp(x1, d, z1), Lp(x1, D, z1), Lp(x0, D, z1)], dk(a['beyond'], 0.8), None)
     p.poly([Lp(x0, d, z0), Lp(x0, D, z0), Lp(x0, D, z1), Lp(x0, d, z1)], shade, None)
     p.poly([Lp(x1, d, z0), Lp(x1, D, z0), Lp(x1, D, z1), Lp(x1, d, z1)], shade, None)
     p.poly(_face(Lp, x0, x1, D, z0, z1), a['beyond'], INK, 1.2)
-    lx, ly = Lp((x0 + x1) / 2, D, z0 + 2.0)
-    p.ell(lx, ly, 0.12 * ppm(D), 0.16 * ppm(D), (250, 236, 190), INK, 1.2)
+    long_ = a['corridor'] > 4.0
+    if long_:
+        w_ = x1 - x0
+        p.poly([Lp(x0 + w_ * 0.22, d, z0), Lp(x1 - w_ * 0.22, d, z0), Lp(x1 - w_ * 0.22, D, z0),
+                Lp(x0 + w_ * 0.22, D, z0)], (120, 34, 36), INK, 1.0)                  # the runner down the floor
+        for wd in [d + k for k in (1.6, 3.6)] + ([d + a['passage'] - 1.4] if a['passage'] else []):
+            if wd + 1.0 < D:                                                        # panelled doors in the left wall
+                p.poly([Lp(x0, wd, z0), Lp(x0, wd + 0.9, z0), Lp(x0, wd + 0.9, z0 + 2.1), Lp(x0, wd, z0 + 2.1)],
+                       dk(shade, 0.85), INK, 1.0)
+        if a['passage']:                                                            # the cross passage: dark mouths
+            pa, pb = d + a['passage'], d + a['passage'] + 1.6
+            for xw in (x0, x1):
+                p.poly([Lp(xw, pa, z0), Lp(xw, pb, z0), Lp(xw, pb, z0 + 2.5), Lp(xw, pa, z0 + 2.5)],
+                       dk(shade, 0.62), INK, 1.0)
+        wx0, wx1 = x0 + w_ * 0.25, x1 - w_ * 0.25                                   # the tall window at the end
+        p.poly(_face(Lp, wx0, wx1, D - 0.01, z0 + 0.6, z1 - 0.3), (214, 228, 236), INK, 1.2)
+        p.poly(_face(Lp, (wx0 + wx1) / 2 - 0.03, (wx0 + wx1) / 2 + 0.03, D - 0.02, z0 + 0.6, z1 - 0.3), a['beyond'], None)
+        for ld in (d + 2.6, d + 6.0):                                               # wall lights down the left wall
+            if ld < D:
+                lx, ly = Lp(x0, ld, z0 + 2.0)
+                p.ell(lx, ly, 0.08 * ppm(ld), 0.12 * ppm(ld), (250, 236, 190), INK, 1.0)
+    else:
+        lx, ly = Lp((x0 + x1) / 2, D, z0 + 2.0)
+        p.ell(lx, ly, 0.12 * ppm(D), 0.16 * ppm(D), (250, 236, 190), INK, 1.2)
     if a.get('through'):                                          # who is in the corridor (paint_with's beyond):
         _beyond(img, a['through'], [pc.L.p(x, d, z) for x, z in ((x0, z0), (x1, z0), (x1, z1), (x0, z1))])
     p.poly(_face(Lp, x0, x1, d + 0.001, z0, z1), None, INK, 2.0)

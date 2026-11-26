@@ -60,7 +60,7 @@ panels: x -5 to 5, z 0 to 4.8, depth 7, step 0.5, wall oak dark, light oak, seed
 block: x -5 to 5, z 3.9 to 4.1, depth 6.98, colour oak light, line 1.6 (the cornice)
 bookcase: x -4.3 to -2.3, z 0 to 3.7, depth 6.9, bays 2, seed 1 (the bookcases, left)
 bookcase: x 0.3 to 4.3, z 0 to 3.7, depth 6.9, bays 4, seed 2 (the bookcases, right)
-double doors: x -1.9 to -0.1, z 0 to 3.0, depth 6.95, open at 0.3 (the double doors)
+double doors: x -1.9 to -0.1, z 0 to 3.0, depth 6.95, open at 0.3, corridor 9, passage 6.4 (the double doors; the corridor behind, its cross passage at 13.35-14.95 m: note 15)
 block: x -5 to 5, z -12 to 0, depth 7, colour floor, line 0 (the floor)
 carpet: x -3.2 to 3.2, z -3 to -0.6, depth 7, colour rug, lines rug line, n 4, first 60, every 160 (the rug)
 chandelier: at -0.8 3.1, depth 4.5, arms 8, drop 1.3 (the chandelier)

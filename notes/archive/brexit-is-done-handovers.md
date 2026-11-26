@@ -428,3 +428,21 @@ Needs Sam: nothing until the clips and sheet. Read: guides/pose-kits.md; this se
 Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
 three in May's place and size; the cast; every camera and framing (seated legs OFF lifted by Sam, 26 Nov). For Claude: sheet_solid.tile shows the spec; solid_seat.LAST per drawing; body.SEAT_BACK_CORNER test flag.
+
+## Where things stand (chat 27, 26 Nov, session_01U3pKR29EmmteJgw6u577Ng)
+Rules that bite next: 91 (Learn-First: quote it first), 87, 59 (render lock).
+Done: May (shot 1) on the seated body tool (people.SEAT_BODY, kittest seated_r7_switch updated, ten R7 kittests pass);
+a loose fold tick on her back calf found by stray_ink on the clip frames, fixed in the shared drawing (solid_seat FOLD_MIN,
+kittest fold_stub; the c15 sheets lose only tiny line hooks). Clip sent: animations/drafts/ow-shot1-may-body.mp4.
+Correction: Kemi STANDS in shot 2 (not seated as the last handover said): standing is unproven (rule 91), she stays on the house
+drawing; shot 2 needs no clip until standing is learned.
+Next: chat 28, Opus high (learning a new seat is building new): Blair's armchair under rule 91: reference photo (Plan pack
+search order), Blair in mode 'body' on the armchair (sitting.spec_armrests) beside the posted look, checks, a sheet; then his
+shot switches (add 'blair' to people.SEAT_BODY). Then the animatic (Sonnet).
+Needs Sam: his look at May's clip.
+Read: guides/pose-kits.md; this section and rule 91's above.
+Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
+Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
+three in May's place and size; the cast; every camera and framing.
+For Claude: people.SEAT_BODY / seat_body / BODY_SPEC; solid_seat._ink fold_min (kittest fold_stub). The pose test chat fixed the same knee tick with opt-in legs_soft: merge to one (move to shared).
+
