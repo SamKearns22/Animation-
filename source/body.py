@@ -600,7 +600,9 @@ def trouser_seat(p, sp, body, view_bottom, thighs=None, r7=False, rear=False):
             if any(on) and not all(on):                                               # the outline's one run of
                 k = on.index(False)                                                   # points on the back side,
                 drawn, on = drawn[k:] + drawn[:k], on[k:] + on[:k]                    # in its own order
-                back = [q for q, o in zip(drawn, on) if o]
+                back = [q for q, o in zip(drawn, on) if o and q[1] <= view_bottom - 8.0]   # never round the
+                #                                 flat outline's bottom corner: the solid draws the bottom (R7 chat 15,
+                #                                 Sam's note 6: it ran on into the trousers as a stray line, kittest stray_ink)
                 if len(back) > 1:
                     p.line(back, INK, 2.6)
         return

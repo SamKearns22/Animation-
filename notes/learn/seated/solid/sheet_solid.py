@@ -9,6 +9,7 @@ import solid_seat as SO
 cast, PP = CS._setup('brexit-is-done', None)
 B, V = PP.B, PP.V
 MODE = sys.argv[2] if len(sys.argv) > 2 else 'legs'
+INNER = 6               # sheet checks: loose ink ends this many dots inside the solid layer count (chat 15)
 VIEWS = ((0, 'upright', 'front'), (45, 'upright', 'three-quarter'), (90, 'upright', 'side'),
          (-45, 'cross, knee over knee', 'legs crossed'))
 
@@ -28,6 +29,16 @@ def tile(who, yaw, pose, full=False):
         #                                                                 jacket_triangle)
     if MODE == 'body' and 'workwear' in (sp.get('kit_extras') or ()):   # a short top (R7 chat 13; kittest
         chk['short top'] = SO.short_top_faults(img.convert('RGB'), sp)       # short_top_hem)
+    if MODE == 'body':                          # R7 chat 15 (Sam's note 6: "Investigate why the check did not pick up
+        rgb = img.convert('RGB')                # such a huge stray line": stray_ink ran on one side-view crop only):
+        from scipy import ndimage               # every tile, every person: loose ink ends inside the solid layer
+        inner = ndimage.binary_erosion(SO.LAST['shown'], iterations=INNER)   # (not its own outline's corners)
+        ends = SO.stray_ink(rgb, sp, where=inner)
+        if ends:
+            chk['stray ink'] = ends
+        tone = SO.leg_tone_faults(rgb, sp)      # note 7: one leg colour in every pose (crossed too)
+        if tone:
+            chk['leg tone'] = tone
     return (img.convert('RGB') if full else img.convert('RGB').crop((240, 1180, 840, 1740))), chk
 
 

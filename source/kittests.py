@@ -576,8 +576,12 @@ def leg_tone():
     import sheet_solid as SH
     SH.MODE = 'body'
     sam = SO.leg_tone_faults(Image.open('notes/learn/pose-kit/examples/sam-26nov-kemi-34-far-leg.jpg'), SH.cast['kemi'])
-    now = {w: SO.leg_tone_faults(SH.tile(w, 45, 'upright', full=True)[0], SH.cast[w]) for w in ('may', 'kemi', 'blair')}
-    return bool(sam) and not any(now.values()), f"Sam's frame: {sam or 'MISSED'}; as now: {now}"
+    sam7 = SO.leg_tone_faults(Image.open('notes/learn/pose-kit/examples/sam-26nov-c14-crossed-two-colours.jpg'),
+                              SH.cast['kemi'])          # chat 15, note 7: "On the crossed legs, they are still different colors"
+    now = {(w, yaw): SO.leg_tone_faults(SH.tile(w, yaw, pose, full=True)[0], SH.cast[w]) for w in ('may', 'kemi', 'blair')
+           for yaw, pose in ((45, 'upright'), (-45, 'cross, knee over knee'))}
+    now = {k: v for k, v in now.items() if v}
+    return bool(sam) and bool(sam7) and not now, f"Sam's frames: {sam or 'MISSED'} / crossed {sam7 or 'MISSED'}; as now: {now or 'clean'}"
 
 
 @test
@@ -621,7 +625,11 @@ def stray_ink():
     im = SH.tile('kemi', 90, 'upright', full=True)[0].crop((480, 1400, 720, 1470))   # under the hem, where the line was
     #   (from 480: the bottom's back corner on the seat has a small step of its own, open in notes/r7.md, chat 14)
     now = SO.stray_ink(im, sp)
-    return bool(hit) and not now, f"Sam's frame: {hit or 'MISSED'}; Kemi's bottom now: {now}"
+    sam6 = [e for e in SO.stray_ink(Image.open('notes/learn/pose-kit/examples/sam-26nov-c14-34-bottom-line.jpg'), sp)
+            if 180 < e[0] < 240 and 125 < e[1] < 155]   # chat 15, note 6: the line's open end on Sam's three-quarter
+    k34 = SO.stray_ink(SH.tile('kemi', 45, 'upright', full=True)[0].crop((420, 1400, 560, 1470)), sp)   # where it was
+    return bool(hit) and bool(sam6) and not now and not k34, \
+        f"Sam's frames: {hit or 'MISSED'} / 3-4 {sam6 or 'MISSED'}; Kemi's bottom now: side {now}, 3-4 {k34}"
 
 
 @test

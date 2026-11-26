@@ -675,9 +675,11 @@ def draw(p, j, yaw, sp, scale=2):
         base = cols[BD.PART_IX['trousers']]
         if dark == base:
             continue
-        if mode == 'body' and not j.get('cross'):   # R7 chat 14 (Sam, 26 Nov, note 1: "In 3/4 pose the legs are
-            far_ls.append(1 if ks == 'L' else 2)    # different colour"): side by side, both legs one cloth (the line
-            continue                                # between them parts them); only a crossed under leg is in shadow
+        if mode == 'body':                          # R7 chat 14 (Sam, 26 Nov, note 1: "In 3/4 pose the legs are
+            if not j.get('cross'):                  # different colour"): both legs one cloth (the line between them
+                far_ls.append(1 if ks == 'L' else 2)   # (side by side only: the far leg also goes under the hem)
+            continue                                # parts them); chat 15 (note 7: "On the crossed legs, they are
+            #                                         still different colors"): crossed too, every pose
         w = np.clip((ab[..., 6] * sg - 0.2) / 0.6, 0, 1)[tr]
         k = 1 - (1 - V.R7_FAR) * w
         lay[tr, :3] = (np.array(base, float)[None, :] * k[:, None]).astype(np.uint8)
@@ -1046,7 +1048,11 @@ def stray_ink(img, sp, where=None):
     another. `where`: only ends inside this mask (the solid layer). Returns the ends (x, y). Kittest stray_ink."""
     import math as _m
     a = np.asarray(img.convert('RGB')).astype(int)
-    ink = a.max(-1) < 31
+    tr = np.array(sp.get('trousers', (40, 40, 46)), float)
+    k = np.clip(((a - np.array(INK)) * (tr - np.array(INK))).sum(-1) / ((tr - np.array(INK)) ** 2).sum(), 0, 1)
+    blend = np.abs(a - (np.array(INK) + k[..., None] * (tr - np.array(INK)))).sum(-1) <= 12   # between ink and cloth
+    ink = (a.max(-1) < 31) | (blend & (k < 0.5))   # chat 15 (Sam's note 6): on his phone picture (scaled, JPEG) a thin
+    #                                                 line is a soft dark stroke, its middle above the house ink's 31
     runs = []
     for y in range(0, a.shape[0], 7):
         d = np.diff(np.r_[0, ink[y].astype(int), 0])
@@ -1057,8 +1063,8 @@ def stray_ink(img, sp, where=None):
     ang = np.linspace(0, 2 * _m.pi, n, endpoint=False)
     dy, dx = np.round(R * np.sin(ang)).astype(int), np.round(R * np.cos(ang)).astype(int)
     H, Wd = ink.shape
-    tr = np.array(sp.get('trousers', (40, 40, 46)), float)
-    trs = ((np.abs(a - tr).sum(-1) <= 20) | (np.abs(a - tr * 0.72).sum(-1) <= 8)) & ~ink    # inside the trousers
+    trs = ((np.abs(a - tr).sum(-1) <= 20) | (np.abs(a - tr * 0.72).sum(-1) <= 8) | blend) & ~ink   # the trousers
+    #                                             (and a line's soft edge on them: chat 15)
     seat = ((np.abs(a - np.array((58, 60, 68))).sum(-1) <= 16) | (np.abs(a - np.array((84, 86, 96))).sum(-1) <= 16))
     ends = []
     ys, xs = np.where(ink if where is None else ink & where)
