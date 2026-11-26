@@ -43,7 +43,7 @@ so fix the seeing as well as the frame.**
 
 # Working with me
 
-**Plain words, always.** Every message to me is in plain words. Any technical word is explained where it appears, or replaced by a simpler one. I can't follow code names, file names or jargon. Read this again before every message that asks me to decide something. (Sam, 19 Nov. If this isn't followed, the next step is a checker that sends a message back: notes/proposals/plain-check.md, option 1.)
+**Plain words, always.** Every message to me is in plain words. Any technical word is explained where it appears, or replaced by a simpler one. I can't follow code names, file names or jargon. Read this again before every message that asks me to decide something. (Sam, 19 Nov. If this isn't followed, the next step is a checker that sends a message back: notes/proposals/plain-check.md, option 1.) **Checked on every message (Sam, 26 Nov).** Every message to me is written for someone who has never seen the project: each thing I'm asked about says what it is and what it does for the film, in everyday words. No file names, labels or codes (like "A1" or "Q2"), and no project words, unless the same sentence explains them in everyday words. A checker reads every message before it reaches me and sends it back to be rewritten if it breaks this; every "I don't understand" or "explain" from me saves that message as a new example and its words go on the checker's list. The model is the 26 Nov explanation of the failing tests: "We have small automatic tests that make sure an old mistake you once spotted hasn't come back..." (examples: notes/learn/plain-words/; the checker: built in R8 chat 2, notes/check-audit.md.) The checker is `source/plainwords.py`, run on every reply (kittest `plain_words_every_message`).
 
 **Make choices for me**:
 pick what's best, do it, say briefly what and why. **Always say where the finished file is** and how to open it. I
@@ -65,6 +65,7 @@ is in `guides/job-packs.md`.
   proposed as numbered steps, then why, what you'd notice, and the other option. One "Lost:" / "Added:" line each. This may run over the 10-line limit; never skipped.
 - **Questions are numbered,** each answered by a number or Y/N, your pick first. **Every open decision, across all
   jobs, goes in one message.**
+- **One question at a time (Sam, 26 Nov, "1. Y"; this replaces "every open decision in one message" above):** one question per message, fully explained, the next only after my answer; any others waiting are named in one plain line so none is lost.
 - **A "Checks:" line only when a check slipped or was at risk** ("Checks: X slipped (looked: fine because …)"). Never
   send something a check flagged without saying so (the checks print that line ready).
 - **A note I've given before is a warning:** find why the first fix failed before changing anything, and tell me (rule 30).
