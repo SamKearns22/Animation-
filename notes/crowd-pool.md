@@ -43,16 +43,29 @@ Locked by Sam: every posted film's crowds as drawn; Open Wounds' shots, cameras 
 - "How long until Kemi, Tony and May are updated in the new style?" / "why are you rendering them again? we've already
   seen them and I said they were fine": no re-render; Open Wounds chat 27 carries them as Sam passed them.
 
+## Kit test rule: where a film starts and ends (Sam, 26 Nov, this chat)
+Sam: "The beginning of the film is when I give you the screenplay and title. The end of the film is when I ask for any
+lessons on the film that need to be learned." Done: kitfilm.py begin FILM / lessons FILM; a job with no screenplay
+(this one) never starts the run; a final no longer waits for kit tests; CLAUDE.md, rulebook row 90 and the Plan pack
+say so; kittest kit_tests_per_film covers it (saved example: this job's first chat started all 81 tests). This job's
+wrong start row removed. Lost: the kit tests before a final (they now run at the lessons instead).
+Reds from the stopped background run, not this job's (named, not fixed): seated_r7_look and womens_builds (May seated:
+knees and bottom; rule S12 shows BROKEN) are Open Wounds chat 27's seated work, told; places_from_a_description
+(Blessed's room paintings about 1% off) predates this chat (places kit untouched here).
+
 ## Where things stand (crowd pool chat 1, 26 Nov, session_01U3pKQz4KnhPvQAepNUUdMg)
-Rules that bite next: people in tests are the crowd pack or grey; reuse before building; checks advised, not automatic.
-Done: Open Wounds' builders checked (crowd pack, clean); the pooled crowd pack built, tested (kittest crowd_pool) and the default for new films; sheet of 12 sent (notes/sheets/crowd-pool-12.jpg).
-Next: nothing unless Sam has notes on the sheet (Opus medium for a round of notes on it).
-Needs Sam: his look at the sheet.
+Rules that bite next: people in tests are the crowd pack or grey; reuse before building; 90 (kit tests: screenplay and title to lessons).
+Done: Open Wounds' builders checked (crowd pack, clean); the pooled crowd pack built, tested and the default for new films; sheet of 12 sent; kit test start and end defined. HALTED by Sam ("good enough, not priority").
+Next: none (halted). Any notes on the sheet: Opus medium.
+Needs Sam: nothing.
 Read: guides/kit-catalogue.md row 45 (the pool sentence); source/people.py "the pooled crowd pack".
 Open rule requests: none.
-For Claude: people.POOL_*, pool_varied, pooled, BEFORE_POOL; people_turned pony_edge; kittest crowd_pool.
+For Claude: people.POOL_*, pool_varied, pooled, BEFORE_POOL; people_turned pony_edge; kitfilm begin/lessons/begun; kittests crowd_pool, kit_tests_per_film.
+
 
 ## Branches named at the start (not merged here)
-- claude/open-wounds-chat27: Open Wounds chat 27's own live work (kittests.py, solid_seat.py); it merges its own.
+- claude/open-wounds-chat27: Open Wounds chat 27's own live work; it merges its own.
 - claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31: Grand Theft
   Autism (posted) leftovers, logs and one draft each; not this job's work.
+
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 2% of 15%; forecast not yet planned (2026-11-26)

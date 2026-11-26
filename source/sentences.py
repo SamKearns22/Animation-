@@ -89,10 +89,14 @@ SAM_REWORDED = {   # sentences Sam himself rewrote (his words now stand in their
     'Every handover has a "Locked by Sam" line naming the cameras and beats that must not move':
         'the same sentence, now "... It stays in the notes, never in messages to me" (Sam, 23 Nov)',
     '"Just go"': '"Just go" (or any override) skips waiting for my yes ... (Sam\'s Override pick, 23 Nov)',
-    'No check sheet before an animatic unless I ask: once the checks pass':
+    'No check sheet before an animatic unless I ask':
         '"No check sheet before an animatic unless I ask: render the animatic and send it" (checks advised, Sam 26 Nov)',
     'The proposal route: "Every change to rules': 'The proposal route, on request only (Sam, 26 Nov)',
+    'The proposal route (Sam, 15 Nov': 'The proposal route, on request only (Sam, 26 Nov)',
     'The guard refuses an unjudged ask': 'The proposal route, on request only: "No automatic guard" (Sam, 26 Nov)',
+    'The body check runs only when asked (`BODYCHECK=1`); kit tests at a major film\'s start and end only': 'the same sentence; the film\'s start and end now named (Sam, 26 Nov: "The '
+                                        'beginning of the film is when I give you the screenplay and title. The end of '
+                                        'the film is when I ask for any lessons on the film")',
     'Changes made without asking are listed and judged in the end-of-film review':
         'The proposal route, on request only (Sam, 26 Nov): run when Sam asks',
     'Choose views the drawing can carry.': 'Seeing like Sam 4, now bold-split by Sam\'s 21 Nov wording',
