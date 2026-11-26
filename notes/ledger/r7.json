@@ -2191,6 +2191,605 @@
    "cost": 2.18,
    "notes": 5,
    "repeats": []
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "629809da",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.0,
+   "src": "estimate",
+   "sid": "session_01U3pKQz5SGLAdf578rj5R9v",
+   "steps": 72,
+   "hist_k": 181,
+   "kinds": {
+    "tool search": 25.8,
+    "whole-file .py read": 0.4,
+    "page.py": 1.5,
+    "renders": 1.2,
+    "pictures": 9.7,
+    "other": 61.4
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 49,
+    "whole-file .py read": 1,
+    "page.py": 1,
+    "routine": 0,
+    "renders": 2,
+    "pictures": 14,
+    "other": 14
+   },
+   "split": {
+    "usd": 3.6425,
+    "total": 3.6425,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 34.1,
+     "Claude's words": 28.7,
+     "new writes": 21.3,
+     "carried history": 15.9
+    },
+    "origins": {
+     "Claude's words": 44.0,
+     "start-up floor": 34.1,
+     "result: tool search": 10.9,
+     "result: pictures": 7.6,
+     "messages and reminders": 1.6,
+     "result: other": 1.1,
+     "result: whole-file .py read": 0.5,
+     "result: renders": 0.1
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 34.1,
+     "thinking": 19.5,
+     "writing code": 10.5,
+     "commands": 8.4,
+     "looking at pictures": 7.6,
+     "reading kit code": 5.0,
+     "writing notes": 4.9,
+     "reading notes": 4.0,
+     "messages and reminders": 1.6,
+     "other commands": 1.5,
+     "start-up and handover tools": 1.1,
+     "messages to Sam": 0.7,
+     "renders": 0.6,
+     "running checks and tools": 0.5
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 35,
+    "work_pct": 0.41,
+    "reads": [
+     [
+      "notes/learn/seated/examples/sam-26nov-apart-spread-crotch.png",
+      1.6,
+      0.0321
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/refs4.jpg",
+      1.6,
+      0.0312
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/mfa.jpg",
+      1.6,
+      0.0286
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/before.jpg",
+      1.6,
+      0.0266
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/try1.jpg",
+      1.6,
+      0.0243
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scratchpad/try2.jpg",
+      1.6,
+      0.024
+     ],
+     [
+      "source/sitting.py",
+      1.1,
+      0.019
+     ],
+     [
+      "notes/r7.md",
+      0.6,
+      0.0127
+     ],
+     [
+      "notes/learn/seated/solid/sheet_solid.py",
+      0.6,
+      0.0102
+     ],
+     [
+      "notes/learn/seated/solid/may_sheet.py",
+      0.4,
+      0.0075
+     ],
+     [
+      "source/page.py",
+      0.0,
+      0.0004
+     ]
+    ],
+    "base_pct": 29.6
+   },
+   "search": {
+    "show": 1,
+    "film": {
+     "before show": 0,
+     "miss": 0,
+     "after show": 0
+    },
+    "other": {
+     "other": 17,
+     "shared:handover.py": 1,
+     "shared:sitting.py": 9,
+     "guides": 1,
+     "shared:may_sheet.py": 1,
+     "shared:solid_seat.py": 6,
+     "shared:views.py": 4,
+     "shared:body.py": 4,
+     "shared:kittests.py": 4,
+     "film notes": 2
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch origin claud",
+      "",
+      140
+     ],
+     [
+      1,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git checkout --detach origin/claude/create-claude-md-oe8z4g 2>&1|tail -1 && git ",
+      "",
+      4013
+     ],
+     [
+      2,
+      "other",
+      "shared:sitting.py",
+      "notes/r7.md notes/learn/seated/examples/ source/sitting.py",
+      "26 Nov",
+      "",
+      2431
+     ],
+     [
+      3,
+      "other",
+      "shared:sitting.py",
+      "notes/r7.md source/sitting.py",
+      "sed -n 46,52p notes/r7.md; sed -n 465,530p source/sitting.py",
+      "",
+      5080
+     ],
+     [
+      5,
+      "other",
+      "guides",
+      "guides/job-packs.md notes/learn/seated/",
+      "reference photo",
+      "",
+      1335
+     ],
+     [
+      6,
+      "other",
+      "other",
+      "notes/learn/seated/refs/ notes/learn/seated/refs/*.md",
+      "ls notes/learn/seated/refs/ && cat notes/learn/seated/refs/*.md 2>/dev/null | he",
+      "",
+      3526
+     ],
+     [
+      12,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      20
+     ],
+     [
+      14,
+      "other",
+      "other",
+      "/home/user/Animation-/source/*.py",
+      "commons.wikimedia",
+      "",
+      274
+     ],
+     [
+      15,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      31
+     ],
+     [
+      16,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      72
+     ],
+     [
+      19,
+      "other",
+      "shared:sitting.py",
+      "notes/r7.md notes/learn/seated/*.py notes/logs/*r7* source/sitting.py",
+      "front-apart\\|upright, apart",
+      "",
+      580
+     ],
+     [
+      20,
+      "other",
+      "shared:may_sheet.py",
+      "source/may_sheet.py",
+      "pose\\|def \\|argv",
+      "",
+      52
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "notes/learn/seated/solid/",
+      "find . -name \"may_sheet*\" -not -path \"./.git/*\"; ls notes/learn/seated/solid/ | ",
+      "",
+      228
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "notes/learn/seated/solid/*.py notes/learn/seated/solid/may_sheet.py notes/learn/",
+      "def \\|apart\\|argv",
+      "",
+      1751
+     ],
+     [
+      24,
+      "other",
+      "other",
+      "notes/learn/seated/solid",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      369
+     ],
+     [
+      28,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "def \\|hem\\|SEAT_TROUSERS",
+      "",
+      3958
+     ],
+     [
+      29,
+      "other",
+      "shared:views.py",
+      "source/views.py source/sitting.py",
+      "^HIP\\|HIP_W\\|HIP_X\\|HIP_Y *=",
+      "",
+      929
+     ],
+     [
+      30,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "^def pose",
+      "",
+      1137
+     ],
+     [
+      31,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import castsheet as CS, sit",
+      "",
+      960
+     ],
+     [
+      32,
+      "other",
+      "other",
+      "notes/learn/seated/solid",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      470
+     ],
+     [
+      34,
+      "other",
+      "other",
+      "",
+      "crossings': 0, 'leg-leg crossings': 0, 'trousers pieces (picture)': 0, 'shoes pi",
+      "",
+      31
+     ],
+     [
+      36,
+      "other",
+      "shared:sitting.py",
+      "source/*.py source/sitting.py",
+      "_leg_by_knee",
+      "",
+      1448
+     ],
+     [
+      37,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "sed -n 712,740p source/sitting.py",
+      "",
+      1719
+     ],
+     [
+      38,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py source/*.py notes/learn",
+      "R7_APART\\b\\|R7_APART[^_]",
+      "",
+      458
+     ],
+     [
+      39,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      469
+     ],
+     [
+      41,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "cutaway\\|cut_away\\|quarters\\|below the button\\|front opening\\|jacket_open\\|'open",
+      "",
+      216
+     ],
+     [
+      42,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "JACKET\\b\\|JACKET *=\\|'bottom'",
+      "",
+      803
+     ],
+     [
+      43,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1160,1200p source/views.py; sed -n 1420,1445p source/views.py; sed -n 195",
+      "",
+      7452
+     ],
+     [
+      44,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "^def torso\\b\\|^def torso(",
+      "",
+      226
+     ],
+     [
+      45,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "^def plain_torso",
+      "",
+      35
+     ],
+     [
+      46,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "sed -n 691,747p source/body.py",
+      "",
+      3311
+     ],
+     [
+      47,
+      "other",
+      "shared:body.py",
+      "source/body.py source/views.py source/sitting.py source/castsheet.py",
+      "'trousers'",
+      "",
+      31
+     ],
+     [
+      48,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "python3 - <<'EOF' p='source/sitting.py'; s=open(p).read() old=\"\"\" K, A, pole[sd]",
+      "",
+      470
+     ],
+     [
+      50,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "_press_legs(",
+      "",
+      1977
+     ],
+     [
+      51,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      469
+     ],
+     [
+      53,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "sed -n 262,274p source/solid_seat.py",
+      "",
+      545
+     ],
+     [
+      54,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py source/sitting.py notes/learn/seated/solid",
+      "python3 - <<'EOF' p='source/solid_seat.py'; s=open(p).read() old=\"\"\" xm = (kL[0]",
+      "",
+      38
+     ],
+     [
+      58,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py source/body.py",
+      "python3 - <<'EOF' p='source/sitting.py'; s=open(p).read() s=s.replace(\"K, A, pol",
+      "",
+      151
+     ],
+     [
+      60,
+      "other",
+      "other",
+      "source/*.py",
+      "jacket_under_hem\\|shoe_shapes",
+      "",
+      361
+     ],
+     [
+      61,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^TESTS\\|jacket_under_hem\\b",
+      "",
+      3854
+     ],
+     [
+      62,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py notes/learn/seated/examples/sam-26nov-apart-spread-crotch.p",
+      "cat >> source/solid_seat.py <<'EOF' def apart_faults(img, sp): \"\"\"R7 chat 11 (Sa",
+      "",
+      860
+     ],
+     [
+      63,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      3615
+     ],
+     [
+      64,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/629809da-af1e-5169-8e4d-1832b09f1846/scrat",
+      "",
+      188
+     ],
+     [
+      66,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py notes/learn/seated/examples/sam-26nov-apart-spread-crotch.p",
+      "sed -i 's/ tb = T\\[tip + 1:, cx - ink:cx + ink + 1\\].mean(1) > 0.3/ tb = T[tip +",
+      "",
+      513
+     ],
+     [
+      69,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/learn/seated/solid notes/learn/seated/examples/sam-26no",
+      "def main\\|argv",
+      "",
+      335
+     ],
+     [
+      70,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 5408,5424p source/kittests.py",
+      "",
+      941
+     ],
+     [
+      71,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 900 python3 source/kittests.py --names legs_apart_spread,jacket_triangle",
+      "",
+      1572
+     ],
+     [
+      74,
+      "other",
+      "film notes",
+      "notes/r7.md story/status.md",
+      "sed -n 52,58p notes/r7.md; sed -n 60,90p notes/r7.md | cut -c1-80; cat story/sta",
+      "",
+      3109
+     ],
+     [
+      77,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "sed -i \"s#so the check runs only where spec lap_open.#so the check runs only whe",
+      "",
+      449
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
