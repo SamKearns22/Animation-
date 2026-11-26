@@ -709,8 +709,18 @@ def search_record(path, film=None):
     the first show / a miss (within MISS calls after a show) / later after a show / in a chat with no show; other
     searches by target (shared tools named per file); notes ticked; whether the chat edited the film's code."""
     film_re = _film_paths(film)
-    seq, whys = [], []
+    seq, whys, ids, sizes = [], [], [], {}
     for raw in open(path, encoding='utf-8', errors='replace'):
+        if '"tool_result"' in raw:                  # printout size per call (Sam's Y, 26 Nov): characters of each result
+            try:
+                u = json.loads(raw)
+            except ValueError:
+                u = {}
+            for b in ((u.get('message') or {}).get('content') or []) if isinstance(u.get('message'), dict) else []:
+                if isinstance(b, dict) and b.get('type') == 'tool_result':
+                    c = b.get('content')
+                    sizes[b.get('tool_use_id')] = len(c) if isinstance(c, str) else sum(
+                        len(x.get('text', '')) for x in c or [] if isinstance(x, dict))
         if '"tool_use"' not in raw:
             continue
         try:
@@ -725,10 +735,11 @@ def search_record(path, film=None):
                 said = (b.get('text') or '').strip()[-WHY:] or said
             if isinstance(b, dict) and b.get('type') == 'tool_use':
                 seq.append((b.get('name'), b.get('input') or {}))
+                ids.append(b.get('id'))
                 whys.append(said)
                 said = ''
     out = {'show': 0, 'film': {'before show': 0, 'miss': 0, 'after show': 0}, 'other': {}, 'ticked': 0,
-           'edited film code': False, 'list': []}     # list: [call number, kind, target, file, pattern, reason] per search
+           'edited film code': False, 'list': []}     # list: [call number, kind, target, file, pattern, reason, printout chars] per search
     last_show = None
     for i, (name, inp) in enumerate(seq):
         cmd = inp.get('command', '') if name == 'Bash' else ''
@@ -740,11 +751,11 @@ def search_record(path, film=None):
         if k == 'film-file search':
             key = 'before show' if last_show is None else 'miss' if i - last_show <= MISS else 'after show'
             out['film'][key] += 1
-            out['list'].append([i, 'film', key] + list(_what(name, inp)) + [whys[i]])
+            out['list'].append([i, 'film', key] + list(_what(name, inp)) + [whys[i], sizes.get(ids[i], 0)])
         elif k == 'tool search':
             t = _target(name, inp)
             out['other'][t] = out['other'].get(t, 0) + 1
-            out['list'].append([i, 'other', t] + list(_what(name, inp)) + [whys[i]])
+            out['list'].append([i, 'other', t] + list(_what(name, inp)) + [whys[i], sizes.get(ids[i], 0)])
         out['ticked'] += _ticked(name, inp)
         out['edited film code'] |= _edits_film(name, inp, film_re)
     if not out['show']:
@@ -792,7 +803,7 @@ def test():
     sr = (m or {}).get('search') or {}
     check('every search is listed with its file and pattern',
           sr.get('list') and len(sr['list']) == sum(sr['film'].values()) + sum(sr['other'].values())
-          and all(len(x) == 6 for x in sr['list']))
+          and all(len(x) == 7 and isinstance(x[6], int) for x in sr["list"]))
     import tempfile
     tj = os.path.join(tempfile.mkdtemp(), 't.jsonl')       # change 2 (19 Nov): the words before a search are its reason
     with open(tj, 'w') as f:

@@ -16,3 +16,5 @@ Source: ledger rows of Grand Theft Autism (GTA, 108% of a week, 52 of 58 chats s
 
 Notes: (a) is by what was searched, not by command: the ledger keeps each search's text but not its size, so each chat's search cost was shared evenly over its searches. (c): routine stages (animatic, finish, sending) are already handed to Sonnet; the Opus cost sits in builds, fixes and notes rounds.
 Gaps at 1% or more of a week a film: search printouts overall (GTA 14, Brexit 5.4), messages and reminders (9.0, 4.7); inside them only film-notes and gta_rehearse.py searches (GTA) clear 1%. Hooks, namer, CLAUDE.md: not gaps / not measured.
+
+Update 26 Nov (Sam's Y on "measure first"): stepcost now records each search's printout size (characters) as the 7th item of every ledger search entry, from the next chat on. Next film: after it, rank searches by size and bring Sam a firm figure. Changed nothing else.
