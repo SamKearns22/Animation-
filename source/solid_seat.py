@@ -624,7 +624,10 @@ def draw(p, j, yaw, sp, scale=2):
     ls = np.where(ab[..., 6] > 0.5, 1, np.where(ab[..., 6] < -0.5, 2, 0))
     ls[ob != 0] = 0
     if mode == 'body':                          # R7 chat 14 (Sam, 26 Nov, note 2: "Stray horizontal line on butt"):
-        edge = _ink(zb, pb, ob, max(2, p.w(2.6)) * scale, np.where((ob == 0) & (ls == 0), 1, 0))   # the trunk is one soft mass:
+        soft = np.where((ob == 0) & (ls == 0), 1, 0)
+        if sp.get('legs_soft'):                 # pose-test (26 Nov, standing and running on the body: a loose crease tick
+            soft = np.where(ob == 0, ls + 1, 0)  # inside a bent knee): each leg one soft mass too (only specs that ask)
+        edge = _ink(zb, pb, ob, max(2, p.w(2.6)) * scale, soft)   # the trunk is one soft mass:
     else:                                       # no line where it folds over itself (the seat-pressed bottom bulging
         edge = BD.ink(zb, pb, ob, max(2, p.w(2.6)) * scale)   # sideways); its outline and the legs' lines stay
     between = np.zeros_like(edge)            # the house line wherever the two legs meet (they are two parts)

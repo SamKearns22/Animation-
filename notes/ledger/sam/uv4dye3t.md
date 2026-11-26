@@ -18,3 +18,6 @@ Please be conscious of usage and unnecessary steps
 ### 2026-11-26T14:15:03
 N. These fixes were built specifically for Open Wounds, and similar problems going forward. Implement.
 
+### 2026-11-26T14:28:49
+Open a fresh chat and open a blank test environment. Run the background people and their movements on the new model engine and show me a five second render of each of what they look like.
+
