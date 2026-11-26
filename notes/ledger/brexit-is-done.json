@@ -23661,6 +23661,15 @@
    }
   },
   {
+   "name": "board",
+   "pct": 0.0,
+   "done": {
+    "date": "2026-11-26",
+    "spent": 67.51
+   },
+   "unplanned": true
+  },
+  {
    "name": "animatic1",
    "pct": 1.0,
    "done": null
@@ -23813,5 +23822,6 @@
    "spent": 67.23,
    "forecast": 74.2
   }
- ]
+ ],
+ "budget_stop": 3
 }

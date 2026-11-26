@@ -4,7 +4,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 
 **Estimate 52.0% of a week; spent 67.51% (+15.51); 38 chats, 0 rounds, 15 notes, 7 repeated.**
 
-**Forecast: Spent 67.51% of the 44% planned so far; at this rate the film lands at 74.5%.**
+**Forecast: Spent 67.51% of the 44% planned so far; at this rate the film lands at 79.8%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -13,6 +13,7 @@ Written by `source/ledger.py` (do not edit by hand; the record is the .json besi
 | board | 2 | 2026-11-26 | 44.03 |
 | moves | 27 | 2026-11-26 | 44.03 |
 | fixes | 2.5 | 2026-11-26 | 44.03 |
+| board (unplanned) | 0 | 2026-11-26 | 67.51 |
 | animatic1 | 1 |  |  |
 | round | 4 |  |  |
 | final | 1 |  |  |
