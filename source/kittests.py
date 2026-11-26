@@ -1980,68 +1980,31 @@ def sounds_and_references_kept():
 
 @test
 def quiet_cost_line():
-    """Job 2 (Sam, 19 Nov): the cost line is recorded at every handover and shown only on a problem, once, never for
-    a forecast over 15% alone, and never with a cut to the content."""
+    """Job 2 (Sam, 19 Nov) and the check audit (Sam, 26 Nov, his answer 2: the paused budget alarms deleted, "tracked
+    quietly"): the cost line is recorded in the ledger and the notes at a handover and nothing is shown: no forecast,
+    no warning, no stop, also for a stage far over its share and a film over its estimate."""
+    import shutil
+    import tempfile
     import costline, ledger
-    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
-         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 5')}
-    d['chats'][0]['cost'] = 3.0; ledger.mark_stage(d, 'cast')
-    calm = costline.problems(d)                                    # on plan: nothing to show
-    d['chats'][0]['cost'] = 9.0; ledger.mark_stage(d, 'sets')      # sets cost 6 against 2 planned
-    first = costline.problems(d); again = costline.problems(d)
-    ok = calm == [] and len(first) >= 1 and 'sets' in first[0] and again == [] and 'cut' not in costline.SAVE.lower()
-    return ok, f'quiet on plan {calm == []}, overrun shown {bool(first)}, once only {again == []}'
-
-
-@test
-def estimate_forecast_and_alarm():
-    """Rule 24 (Job M; Sam, 13 Nov): the stages' forecast is spent / share of the plan done x estimate, an unplanned
-    round pushes it up; the budget stop fires at the budget and at every 10% over it, once each, and cannot be
-    switched off (an old alarms_off does nothing)."""
-    import ledger
-    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
-         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5'),
-         'alarms_off': 'old switch'}
-    spend = lambda x: d['chats'][0].update(cost=x)
-    spend(3.0); ledger.mark_stage(d, 'cast')
-    on_plan = ledger.forecast(d)                                   # 3 of 3 planned: lands at 10
-    spend(7.0)
-    mid = ledger.forecast(d)[2]                                    # 7 + (2 + 1 + 1.5 + .5) x 1 = 12
-    ledger.mark_stage(d, 'sets')
-    over = ledger.forecast(d)[2]                                   # 7 of 5 planned: lands at 14
-    under = ledger.budget_stop(d) is None                          # 7 of 10: quiet
-    spend(10.0); at = ledger.budget_stop(d); again = ledger.budget_stop(d)
-    spend(10.9); quiet = ledger.budget_stop(d) is None             # 109%: not yet the next step
-    spend(11.0); five = ledger.budget_stop(d)                      # 110%: stops again
-    spend(13.0); jump = ledger.budget_stop(d); step = d['budget_stop']   # 130%: one stop, at step 4
-    ledger.mark_stage(d, 'moves'); ledger.mark_stage(d, 'animatic1'); ledger.mark_stage(d, 'round')
-    extra = ledger.mark_stage(d, 'round')                          # a second round, not in the plan: no share
-    ok = (on_plan == (3.0, 3.0, 10.0) and mid == 12.0 and over == 14.0 and under and at and 'Stop' in at
-          and again is None and quiet and five and jump and step == 4 and extra.get('unplanned') and extra['pct'] == 0)
-    return ok, f'on plan {on_plan}, mid-stage {mid}, after sets {over}, stops at 100% {bool(at)}, once {again is None}, ' \
-               f'110% {bool(five)}, 130% step {step}, alarms_off ignored {bool(at)}'
-
-
-@test
-def stage_share_stop():
-    """Rule 24 (Sam, 11 Nov): the chat is stopped when a stage reaches its share (before: only a quarter over the film's
-    whole estimate), once, and again half a share on; a stage under its share, or already marked done, is quiet."""
-    import ledger
-    d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 0.0, 'round': None, 'notes': 0, 'repeats': []}],
-         'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2, moves 2, animatic1 1, round 1.5, final 0.5')}
-    spend = lambda x: d['chats'][0].update(cost=x)
-    spend(2.9); under = ledger.stage_alarm(d)                      # cast at 2.9 of 3
-    spend(3.1); first, again = ledger.stage_alarm(d), ledger.stage_alarm(d)
-    old_way = 3.1 >= d['estimate']                                 # the only spend stop before: the whole estimate
-    spend(4.7); half_on = ledger.stage_alarm(d)                    # 1.5 shares
-    ledger.mark_stage(d, 'cast')
-    spend(6.0); sets_under = ledger.stage_alarm(d)                 # sets at 1.3 of 2
-    spend(6.8); sets_stop = ledger.stage_alarm(d)                  # sets at 2.1 of 2, the film at 68% of its estimate
-    ok = (under is None and first and "'cast'" in first and 'stop this work' in first and again is None and not old_way
-          and half_on and sets_under is None and sets_stop and "'sets'" in sets_stop and 'moves 2' in sets_stop)
-    return ok, (f"cast at 2.9 of 3: quiet {under is None}; at 3.1: stopped {bool(first)}, once {again is None}; half a "
-                f"share on: {bool(half_on)}; sets at 2.1 of 2 with the film at 68% of its estimate: stopped "
-                f"{bool(sets_stop)} (before: nothing until 100%)")
+    tmp = tempfile.mkdtemp()
+    keep = ledger.DIR
+    try:
+        ledger.DIR = tmp
+        d = {'film': 'zz', 'estimate': 10.0, 'chats': [{'cost': 30.0, 'round': None, 'notes': 0, 'repeats': [],
+             'date': '2026-11-26', 'chat': 'aaaaaaaa', 'model': 'opus', 'stage': 'x'}], 'checks': {}, 'stages': ledger.parse_stages('cast 3, sets 2')}
+        ledger.mark_stage(d, 'cast')
+        ledger.store(d)
+        notes = os.path.join(tmp, 'zz.md')
+        open(notes, 'w').write('# zz\n')
+        shown = costline.faults('zz', notes)
+        logged = ledger.load('zz').get('cost_log') or []
+        in_notes = costline.MARK in open(notes).read()
+        gone = [n for n in ('forecast', 'budget_stop', 'stage_alarm', 'problems') if hasattr(ledger, n) or hasattr(costline, n)]
+    finally:
+        ledger.DIR = keep
+        shutil.rmtree(tmp, ignore_errors=True)
+    ok = shown == [] and len(logged) == 1 and logged[0]['spent'] == 30.0 and in_notes and not gone
+    return ok, f'shown {shown}, recorded {logged}, in the notes {in_notes}, alarms left {gone}'
 
 
 @test
@@ -5068,9 +5031,9 @@ def handover_status_checks():
     finally:
         ledger.load = real_load
     ok = (len(sz_big) == 3 and not sz_small and not_sent and not sent_ok
-          and no_push and not push and st)
+          and no_push and not push and not st)          # stages: no nag (Sam 26 Nov: the stage stop deleted)
     return ok, (f'big notes {len(sz_big)} faults, clean {len(sz_small)}; refused send caught {bool(not_sent)}, real send '
-                f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages {bool(st)}')
+                f'quiet {not sent_ok}; push missing {bool(no_push)}, present quiet {not push}; stages not nagged {not st}')
 
 
 @test

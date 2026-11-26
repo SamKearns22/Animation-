@@ -18,15 +18,8 @@ MAP
   estimate ......... the film's estimate (% of a week), for estimate versus actual; --stages gives the plan's stages
                      and shares (Job M, rule 24): "cast 2, sets 2.5, board 0.5, moves 3, animatic1 1, round 1.5, final 0.5"
   stage ............ marks a stage done at its end (the first open one of that name; one not in the plan is added
-                     with no share) and prints the forecast line for Sam's first line
-  forecast() ....... spent / (share of the plan done) x estimate; mid-stage, never less than spent so far plus the
-                     stages after the open one at the rate so far (the line Sam gets at each stage's end)
-  budget_stop() .... rule 24 (Sam, 13 Nov): the chain stops at the film's budget, then at every 10% over it (110%,
-                     120%, ... of the budget; Sam, 13 Nov: 10, not 5), on the real figures (app rows; a chat not yet imported counts at its
-                     running figure). It can be answered, never switched off (there is no alarms_off any more).
-                     Checked by auto after every reply, by `app` when the real figures come in, and at each stage
-  stage_alarm() .... rule 24 (Sam, 11 Nov): auto stops the chat when the stage being worked on reaches its share, and
-                     at each half share beyond (before: only when the whole film was a quarter over its estimate)
+                     with no share): kept quietly for later study. The forecast, the budget stop and the stage stop
+                     were deleted on Sam's word (R8 check audit, 26 Nov, his answer 2: "tracked quietly")
   push_row() ....... startup-fixes 1 (Sam, 16 Nov): every row goes onto the main line as its own commit holding only
                      the ledger files (mainline.to_main: fetch, commit, push, 3 tries); the chat's HEAD is never pushed
   union() .......... two copies of a ledger as one, each chat once (sid, then transcript id; an app row beats an
@@ -268,12 +261,6 @@ def film_of(transcript):
     return max(count, key=count.get) if count else None
 
 
-# Sam, 18 Nov (Milburn chat 11): "disable budget alarms and budget readings permanently until system fixed at a later
-# date; all readings and estimates [are] worthless. Quietly continue to track until this film is done so we can analyse
-# the data later." Rows and marks are still written and pushed; no alarm reaches the chat. Undo: False, on Sam's word.
-ALARMS_PAUSED = True
-
-
 def auto(transcript):
     """Stop hook: this chat's running cost into its film's ledger (one row per chat, replaced as it grows); committed
     and pushed to the chat's branch when it moved by 0.25% of a week or the chat is new to the ledger."""
@@ -319,12 +306,7 @@ def auto(transcript):
         d['chats'][d['chats'].index(old)] = row
     else:
         d['chats'].append(row)
-    alarm = budget_stop(d) or stage_alarm(d)      # each marks its own step, so none repeats on the next reply
-    store(d)
-    if alarm and __import__('override').skip('budget/stage stop: ' + alarm, None, sys.stderr):
-        alarm = None
-    if alarm and not ALARMS_PAUSED:               # once never switched off (Sam, 13 Nov); paused 18 Nov, see ALARMS_PAUSED
-        print(json.dumps({'decision': 'block', 'reason': alarm}))
+    store(d)                                      # tracked quietly: no alarm (Sam, 26 Nov: the budget alarms deleted)
     push_row(film, row)                           # startup-fixes 1 (Sam, 16 Nov): straight onto the main line
 
 
@@ -709,10 +691,7 @@ def app_import(path=APP):
             if sid not in have:
                 d['chats'].append(row)
         d['chats'].sort(key=lambda c: c['date'])
-        msg = budget_stop(d)                     # the real figures are in: the budget stop on them
         store(d)
-        if msg:
-            print(msg)
         out[film] = (len(rs), totals(d)[0])
     return out
 
@@ -730,7 +709,7 @@ def parse_stages(text):
 
 def mark_stage(d, name):
     """The first open planned stage of that name is done, at today's spend; a stage not in the plan is added, done,
-    with no share (so an unplanned round pushes the forecast up, as it should)."""
+    with no share."""
     spent = totals(d)[0]
     st = d.setdefault('stages', [])
     s = next((x for x in st if x['name'] == name and x['done'] is None), None)
@@ -740,53 +719,6 @@ def mark_stage(d, name):
         st.insert(last + 1, s)
     s['done'] = {'date': str(date.today()), 'spent': spent}
     return s
-
-
-def forecast(d):
-    """(spent, planned so far in % of a week, forecast in % of a week), or None without an estimate and stages."""
-    st, est = d.get('stages') or [], d.get('estimate')
-    plan = sum(x['pct'] for x in st)
-    if not est or not plan:
-        return None
-    spent = totals(d)[0]
-    done = [x for x in st if x['done'] is not None]
-    f_done = sum(x['pct'] for x in done) / plan
-    at_mark = max((x['done']['spent'] for x in done), default=0.0)
-    rate = at_mark / (f_done * est) if f_done else 1.0           # cost per planned % so far (1 before any stage ends)
-    open_ = [x for x in st if x['done'] is None]
-    after = sum(x['pct'] for x in open_[1:]) / plan * est       # the stages after the open one
-    fc = max(at_mark / f_done if f_done else 0.0, spent + after * rate)
-    return spent, round(f_done * est, 2), round(fc, 1)
-
-
-def forecast_line(d):
-    f = forecast(d)
-    if not f:
-        return None
-    return f'Spent {f[0]:g}% of the {f[1]:g}% planned so far; at this rate the film lands at {f[2]:g}%.'
-
-
-STEP = 0.10                     # the budget stop's step over the budget (Sam, 13 Nov: every 10%)
-
-
-def budget_stop(d):
-    """Rule 24 (Sam, 13 Nov): at the film's budget, then at every 10% over it, the chain stops for Sam's Y; once per
-    step (the step is kept in the ledger, so answering it lets the chain go on to the next). Returns the message or
-    None. On the real figures: app rows, plus the running figure of a chat not yet imported."""
-    spent, est = totals(d)[0], d.get('estimate')
-    if not est or spent < est or d.get('no_film_stop'):   # Sam, 15 Nov (Protest Tiers): a film whose early chats
-        return None                                        # carried research and tool work turns the film stop off
-    step = int(round((spent / est - 1) / STEP, 6)) + 1
-    if step <= d.get('budget_stop', 0):
-        return None
-    d['budget_stop'] = step
-    real = round(sum(c['cost'] for c in d['chats'] if c.get('src') == 'app'), 2)
-    left = ', '.join(f"{x['name']} {x['pct']:g}" for x in d.get('stages') or [] if x['done'] is None) or 'not planned'
-    return (f"BUDGET STOP (ledger, rule 24): {d['film']} has spent {spent}% of a week ({real}% from the app's real "
-            f"figures, the rest from chats not yet read from the app) against its budget of {est}% ({spent / est:.0%}). Stop "
-            f"this work now, finish nothing more. First line to Sam: that figure, what exists, what is left ({left}), "
-            f"and the cheapest way on that keeps the quality; ask Y/N. Do not go on before his Y. The next stop is at "
-            f"{est * (1 + STEP * step):.1f}%.")
 
 
 def compare_line(d):
@@ -810,41 +742,6 @@ def compare_line(d):
     return (f"{d['film']}: {spent}% of a week, against the last {len(past)} films' average {avg:.1f}% ("
             + ', '.join(f'{n} {v}' for _, n, v in past) + f"): {spent / avg:.1f}x"
             + ('. OVER 1.5x: the next chat finds why before any film work.' if over else '.')), over
-
-
-def open_stage(d):
-    """(index, the stage being worked on, its share in % of a week, spent in it so far): the first planned stage not
-    done after the last one done. None without an estimate and stages, or with nothing planned left."""
-    st, est = d.get('stages') or [], d.get('estimate')
-    plan = sum(x['pct'] for x in st)
-    if not est or not plan:
-        return None
-    last = max((i for i, x in enumerate(st) if x['done'] is not None), default=-1)
-    i = next((i for i in range(last + 1, len(st)) if st[i]['pct'] > 0), None)
-    if i is None:
-        return None
-    at_mark = max((x['done']['spent'] for x in st if x['done'] is not None), default=0.0)
-    return i, st[i], round(st[i]['pct'] / plan * est, 2), round(totals(d)[0] - at_mark, 2)
-
-
-def stage_alarm(d):
-    """Rule 24: the stage being worked on has reached its share: once at the share and once at each half share beyond.
-    Returns the message or None."""
-    o = open_stage(d)
-    if not o or o[3] < o[2]:
-        return None
-    i, s, share, spent = o
-    step = int((spent / share - 1) / 0.5) + 1
-    seen = d.setdefault('stage_alarm', {})
-    if step <= seen.get(f"{i}:{s['name']}", 0):
-        return None
-    seen[f"{i}:{s['name']}"] = step
-    left = ', '.join(f"{x['name']} {x['pct']:g}" for x in d['stages'][i + 1:] if x['done'] is None) or 'nothing planned'
-    return (f"STAGE STOP (ledger, rule 24): {d['film']}: the '{s['name']}' stage has spent {spent:g}% of a week against "
-            f"its share of {share:g}%. If that stage is in fact finished, run `ledger.py stage {d['film']} {s['name']}` "
-            f"and carry on. Otherwise stop this work now. First line to Sam: that figure, what exists, what is left "
-            f"of this stage, and the cheapest way on that keeps the quality; ask Y/N. The stages after it ({left}) "
-            f"keep their shares: do not spend them here. Do not go on before his Y.")
 
 
 def totals(d):
@@ -900,7 +797,7 @@ def render(d):
            f"{notes} notes, {len(reps)} repeated.**", '',
            ]
     if d.get('stages'):
-        out += [f'**Forecast: {forecast_line(d)}**', '', '| stage | planned % | done | spent at its end |',
+        out += ['**Stages (tracked quietly):**', '', '| stage | planned % | done | spent at its end |',
                 '|---|---|---|---|']
         out += [f"| {x['name']}{' (unplanned)' if x.get('unplanned') else ''} | {x['pct']:g} | "
                 f"{x['done']['date'] if x['done'] else ''} | {x['done']['spent'] if x['done'] else ''} |"
@@ -1116,7 +1013,7 @@ def main():
             d['stages'] = parse_stages(o.stages)
             plan = sum(x['pct'] for x in d['stages'])
             print(f'ledger: {o.film}: estimate {o.pct}%, {len(d["stages"])} stages adding to {plan:g}%'
-                  + (f' (the forecast scales them to {o.pct}%)' if abs(plan - o.pct) > 0.05 else ''))
+                  + (f' (scaled to {o.pct}%)' if abs(plan - o.pct) > 0.05 else ''))
             if old:
                 print('ledger: stages already marked done are cleared; mark them again with: ledger.py stage')
     elif o.cmd == 'stage':
@@ -1131,10 +1028,6 @@ def main():
             sys.exit(f'ledger: {o.film} has no stages; run: ledger.py estimate {o.film} PCT --stages "..."')
         s_ = mark_stage(d, o.name)
         print(f"ledger: {o.film}: stage '{o.name}' done" + (' (not in the plan: no share)' if s_.get('unplanned') else ''))
-        print(forecast_line(d))
-        msg = budget_stop(d)
-        if msg:
-            print(msg)
     elif o.cmd == 'round':
         os.makedirs(DIR, exist_ok=True)
         open(CURRENT, 'w').write(f'{o.film} {o.n}\n')

@@ -141,7 +141,7 @@ at session start (`.claude/hooks/setup.sh`).
   handover's model, effort and its place ("chat 3"); first it checks it can save to GitHub, else it stops and tells me.
   **The Animation- project is always attached** (`source_url` of the repo, revision the main line), and the reply must
   list it before I'm told the chat is working; a chat without it adds it before any work and says so.
-  **The chain stops only at the budget stop (rule 24), a question for me, a failed save, or a chat that pushed no new work
+  **The chain stops only at a question for me, a failed save, or a chat that pushed no new work
   on its job. I never start a chat or type a prompt unless it failed to save.** When a chat ends on a question
   for me, my answer comes back to that chat, which (or the chat it opens, if it is on amber or red) carries straight on;
   the chain then goes on. A chat on the wrong model for its next stage opens one on the right model, never
