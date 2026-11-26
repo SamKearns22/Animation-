@@ -36,3 +36,6 @@ What's a reopened list
 ### 2026-11-26T20:19:05
 No, that doesn't seem like a good solution.
 
+### 2026-11-26T20:21:03
+I think if something changes, it should just recheck the new film and recognise that it is fine again, so long as it is? Here, it introduced things as new faults when actually it had decided before that it was already fine.
+
