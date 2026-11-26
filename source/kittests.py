@@ -4955,6 +4955,49 @@ def tools_switched_on():
 
 
 @test
+def castsheet_only_when_cast_changed():
+    """Check audit B5 (Sam's Y, 26 Nov): the cast check at handover runs only for a new or changed cast. 24 of 65
+    refused handovers were the cast check repeating unchanged faults. A clean run stamps the files it read; the next
+    handover skips it while they are unchanged and runs it again once one changes; a cast with faults is never stamped."""
+    import tempfile
+    import shutil
+    import castsheet as C
+    import handover as H
+    tmp = tempfile.mkdtemp()
+    src = os.path.join(os.path.dirname(HERE), 'notes', 'logs', '_kittest-cast.txt')   # inside the project: stamped
+    open(src, 'w').write('kemi: front\n')
+    calls, result = [], [[]]
+
+    def fake(film, *a, **k):
+        calls.append(open(src).read())
+        return list(result[0])
+    names = ('build_faults', 'crotch_faults', 'teeth_faults', 'mouth_spike_faults', 'hair_spike_faults',
+             'seated_faults', 'judge_faults')
+    keep = {n: getattr(C, n) for n in names}
+    keep_stamps = H.CASTSTAMPS
+    try:
+        for n in names:
+            setattr(C, n, fake)
+        H.CASTSTAMPS = os.path.join(tmp, 'stamps.tsv')
+        first = H.castsheet_faults('brexit-is-done'); n1 = len(calls)
+        second = H.castsheet_faults('brexit-is-done'); n2 = len(calls)
+        open(src, 'w').write('kemi: front, new hair\n')
+        third = H.castsheet_faults('brexit-is-done'); n3 = len(calls)
+        result[0] = ['kemi front: crotch line']
+        open(src, 'w').write('kemi: changed again\n')
+        bad1 = H.castsheet_faults('brexit-is-done'); bad2 = H.castsheet_faults('brexit-is-done')
+    finally:
+        for n, f in keep.items():
+            setattr(C, n, f)
+        H.CASTSTAMPS = keep_stamps
+        shutil.rmtree(tmp, ignore_errors=True)
+        os.remove(src)
+    ok = first == [] and n1 == 7 and n2 == n1 and n3 == 14 and third == [] and bad1 and bad2
+    return ok, (f'first run {n1} checks; unchanged: skipped {n2 == n1}; changed: run again {n3 == 14}; '
+                f'faults stop it both times {bool(bad1) and bool(bad2)}')
+
+
+@test
 def handover_status_checks():
     """Status chat (Sam, 21 Nov: "everything needs step by step checking, fixing, testing"): the handover check must
     catch what slipped on Grand Theft Autism: notes over 4,000 words, a handover over 15 lines, a chat that never
@@ -6304,6 +6347,57 @@ def smirk_one_corner():
     lift = out['now'] - out['old']                  # the same to both, so the smirk is the change
     ok = lift >= 6
     return ok, f"the near corner raised {lift} px over the old mood's (a smirk: 6 or more; the old mood: none)"
+
+
+@test
+def body_model_downloads_once():
+    """Check audit B7 (Sam's Y, 26 Nov): the kit-inputs survey crashed twice on Open Wounds (41 and 52 frames 'could
+    not be drawn': git clone of the body model) because every drawing worker started the same download at once. Eight
+    workers ask at the same moment: one download, all eight get the finished copy, no worker fails."""
+    import tempfile
+    import time
+    import mhuman as M
+    from multiprocessing import get_context
+    tmp = tempfile.mkdtemp()
+    log = os.path.join(tmp, 'clones.txt')
+    keep = (M.MH_DIR, M.subprocess.run)
+
+    def fake(cmd, check=False, **k):
+        if cmd[1] == 'clone':
+            dest = cmd[-1]
+            if os.path.exists(dest):                      # what git does when two clones meet
+                raise M.subprocess.CalledProcessError(128, cmd)
+            open(log, 'a').write(dest + '\n')
+            time.sleep(0.3)
+            os.makedirs(os.path.join(dest, 'makehuman', 'data', '3dobjs'))
+            open(os.path.join(dest, 'makehuman', 'data', '3dobjs', 'base.obj'), 'w').write('v 0 0 0\n')
+    out = []
+    try:
+        M.MH_DIR = os.path.join(tmp, 'makehuman')
+        M.subprocess.run = fake
+        with get_context('fork').Pool(8) as p:
+            res = p.map(_mh_one, range(8))
+        bad = [r for r in res if not r.startswith(M.MH_DIR)]
+        if bad:
+            out.append(f'{len(bad)} of 8 workers failed: {bad[0][:120]}')
+        n = len(open(log).read().split()) if os.path.exists(log) else 0
+        if n != 1:
+            out.append(f'{n} downloads for 8 workers (want 1)')
+        if any('.part' in f for f in os.listdir(tmp)):
+            out.append('a half-made copy was left behind')
+    finally:
+        M.MH_DIR, M.subprocess.run = keep
+        import shutil
+        shutil.rmtree(tmp, ignore_errors=True)
+    return (not out), ('; '.join(out) or 'one download, all 8 workers got the copy')
+
+
+def _mh_one(_):
+    import mhuman as M
+    try:
+        return M.data_dir()
+    except Exception as e:
+        return f'{type(e).__name__}: {e}'
 
 
 def main():

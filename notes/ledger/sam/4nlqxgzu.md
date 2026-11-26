@@ -55,3 +55,18 @@ Y
 
 2. N
 
+### 2026-11-26T22:58:18
+Incorrect.
+
+
+You asked:
+
+1.	Write the plain-words rule and build the checker that reads every message before you see it? Y (my pick) or N
+	2.	Make one question at a time the normal way? 1 one at a time (my pick), 2 keep all in one message.
+
+1. Y
+2. N
+
+### 2026-11-26T23:02:17
+1. Y
+
