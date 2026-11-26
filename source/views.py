@@ -1094,6 +1094,79 @@ class Rolled:
         return self.L.S(v)
 
 
+# A nod is a pitch, never a bob (Open Wounds chat 39, Sam's note 26, 26 Nov: "It's not a nod, it's a head-bob": the
+# kit slid the whole head down and up). Learnt from a real nod side-on (notes/learn/nod: Wikimedia 'Nodding
+# gesture', public domain): the head turns about a point just below and behind the ear (the top of the neck); the
+# chin goes down and in toward the collar, the nose tips down, the ear and the back of the skull barely move, the neck
+# and collar not at all. Drawn flat, each mark on the head is given a depth from a head-shaped ellipsoid (the face
+# nearest us, the outline at the edge) and turned in 3D about that point, then seen straight on again: from the front
+# the eyes, nose and mouth slide down inside the outline and the lower face shortens, the chin tucks over the
+# collar, the crown moves about a third as far; side-on it is the reference's turn; three-quarter a mix.
+NOD_DEG = 4.5          # degrees of pitch per nod unit (a moves file's 'nod': 0.9 a unit; 'chin up' -2.5 = 11 up)
+NOD_PIVOT = (0.35, 0.2)   # the pivot below the head's centre (of hh) and behind it (of the head's depth)
+NOD_DEPTH = 1.15       # the head's depth front to back over its width (hw)
+NOD_FACING = {'front': (0.0, 1.0), 'three': (0.70710678, 0.70710678), 'side': (1.0, 0.0),
+              'three_back': (0.70710678, -0.70710678), 'back': (0.0, -1.0)}   # where the face points (x, toward us),
+#                                                 in head units (turned heads face right: plain_head_view)
+
+
+_FACE_BOX = {}
+
+
+def face_box(img, frame, sp, t, view, hx, hy):
+    """The face's own shape in head units (its largest skin-coloured mark, as the head draws it: hair, hats, braids
+    and ears left out): centre, half width, half height. A house head is drawn about 1.5 times the kit's hw/hh and
+    higher (Open Wounds chat 39: a nod turned about the kit's numbers pivoted far below May's ear and slid her head
+    down side-on). Measured once per head and view by drawing it unseen."""
+    key = (sp.get('name'), view, repr(sp.get('kit_house')), sp.get('hw'), sp.get('hh'), round(hx, 1), round(hy, 1))
+    if key not in _FACE_BOX:
+        hook, HC_HOOK[0] = HC_HOOK[0], None
+        try:
+            pen = Eyes(B.Pen(Image.new('RGBA', img.size, (0, 0, 0, 0)), frame))
+            head_view(pen.img, pen, dict(sp), t, view, hx, hy)
+        finally:
+            HC_HOOK[0] = hook
+        skin = tuple(sp['skin'][:3])
+        boxes = [(lo, hi) for lo, hi, fill, _ in pen.marks if fill == skin]
+        if boxes:
+            lo, hi = max(boxes, key=lambda b: (b[1][0] - b[0][0]) * (b[1][1] - b[0][1]))
+            _FACE_BOX[key] = (((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2), (hi[0] - lo[0]) / 2, (hi[1] - lo[1]) / 2 / 1.1)
+        else:
+            _FACE_BOX[key] = ((hx, hy), sp.get('hw', 72), sp.get('hh', 90))
+    return _FACE_BOX[key]
+
+
+class Pitched:
+    """A head's frame nodded `deg` degrees (chin down: +) about the top of the neck, in 3D (NOD_* above): a nod as
+    the head turning, never sliding. `c` the head's centre (head units), hw/hh its half width and height, `view` the
+    head's view."""
+    def __init__(self, L, deg, c, hw, hh, view):
+        self.L, self.cam, self.s, self.flip = L, L.cam, L.s, getattr(L, 'flip', 1)
+        fx, fz = NOD_FACING.get(view, (0.0, 1.0))
+        th = math.radians(deg)
+        self.co, self.si = math.cos(th), math.sin(th)
+        self.cx, self.cy, self.rx, self.ry, self.rz = c[0], c[1], hw, 1.1 * hh, NOD_DEPTH * hw
+        self.f = np.array([fx, 0.0, fz])
+        self.a = np.cross(self.f, [0.0, 1.0, 0.0])          # the axis: the forward line tips toward down (+y)
+        self.pv = np.array([c[0], c[1] + NOD_PIVOT[0] * hh, 0.0]) - NOD_PIVOT[1] * self.rz * self.f
+
+    def depth(self, x, y):
+        """How far toward us the head's surface is at (x, y): an ellipsoid, the jaw fuller below the middle (the
+        chin stands forward, so it tucks rather than staying on the outline)."""
+        u, v = (x - self.cx) / self.rx, (y - self.cy) / self.ry
+        q = u * u + (0.5 * v * v if v > 0 else v * v)
+        return self.rz * math.sqrt(max(0.0, 1.0 - q))
+
+    def P(self, x, y):
+        v = np.array([x, y, self.depth(x, y)]) - self.pv
+        a = self.a
+        r = v * self.co + np.cross(a, v) * self.si + a * (a @ v) * (1 - self.co)
+        return self.L.P(self.pv[0] + r[0], self.pv[1] + r[1])
+
+    def S(self, v):
+        return self.L.S(v)
+
+
 WHITE = (250, 250, 248)                       # the whites of the eyes, in every head the kit draws
 
 
@@ -2096,8 +2169,11 @@ def _person(img, cam, x, y, s, sp, t, yaw, joints, head_yaw, squash):
     life = sp.get('head_life')                    # head acting from the voice (headlife.py) or set by hand in the pose
     roll, nod = life.at_time(t) if life is not None and t is not None else (0.0, 0.0)
     roll, nod = roll + j.get('head_roll', 0.0), nod + j.get('nod', 0.0)
-    if roll or nod:                               # tipped about the top of the neck; a nod drops the head and looks down
-        up_head = Rolled(up_head, roll, (hdx, -50.0 + sp_draw['head_dy']), nod * 5.0)
+    if roll:                                      # tipped sideways about the top of the neck
+        up_head = Rolled(up_head, roll, (hdx, -50.0 + sp_draw['head_dy']))
+    if nod:                                       # a nod turns the head about the top of the neck, chin down and in,
+        c, fw, fh = face_box(img, up_head, sp_draw, t, hv, hdx, -150.0 + sp_draw['head_dy'])   # never slides it
+        up_head = Pitched(up_head, NOD_DEG * nod, c, fw, fh, hv)                                # (note 26)
         sp_draw['down'] = sp_draw.get('down', 0.0) + 0.35 * nod
     head_pen = Eyes(B.Pen(img, up_head))
     # what was drawn, for the facing check (Sam, 24 Oct): the head never turned past the shoulder, and seen from behind
