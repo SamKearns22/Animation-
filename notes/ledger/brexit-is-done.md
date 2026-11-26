@@ -2,7 +2,21 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate ?% of a week; spent 44.03%; 19 chats, 0 rounds, 8 notes, 3 repeated.**
+**Estimate 52.0% of a week; spent 44.03% (-7.97); 19 chats, 0 rounds, 8 notes, 3 repeated.**
+
+**Forecast: Spent 44.03% of the 44% planned so far; at this rate the film lands at 52%.**
+
+| stage | planned % | done | spent at its end |
+|---|---|---|---|
+| cast | 9.5 | 2026-11-26 | 44.03 |
+| sets | 3 | 2026-11-26 | 44.03 |
+| board | 2 | 2026-11-26 | 44.03 |
+| moves | 27 | 2026-11-26 | 44.03 |
+| fixes | 2.5 | 2026-11-26 | 44.03 |
+| animatic1 | 1 |  |  |
+| round | 4 |  |  |
+| final | 1 |  |  |
+| post | 2 |  |  |
 
 Source: **app** = the app’s own figure for that chat (real); **est** = the transcript estimate (chats the app cannot show, or not yet imported with `ledger.py app`).
 
@@ -89,4 +103,4 @@ A new chat's start and re-learning cost 17% of the film (7.53% of a week over 16
 - No bum/circular knees | castsheet.seated_faults (built now); P7 by hand only
 
 ## Checks (runs, faults, by kind)
-- quick check: 2 runs, 73 faults (drawing 50, other 8, caption 5, benchmark 2, blair 2, house style 2, may 2, plan 2)
+- quick check: 7 runs, 257 faults (drawing 175, caption 30, other 26, blair 7, may 7, benchmark 4, house style 4, plan 4)

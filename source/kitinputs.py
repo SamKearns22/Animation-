@@ -370,6 +370,22 @@ class Film:
         return getattr(self._film, n)
 
 
+def alone_audit(film):
+    """The general audit (house style) from a film's ALONE = {name: (t0, t1, draw)}: draw(t) paints that one person
+    alone on a clear RGBA layer; each is checked over every frame of its span for in pieces, popping, stretching and
+    frozen (filmkit.silhouette_audit). So a film never writes its own audits() (Open Wounds chat 19)."""
+    def audits():
+        import math
+        import filmkit
+        fps = getattr(film, 'FPS', 12)
+        actors = {name: ([i / fps for i in range(math.ceil(t0 * fps), int(t1 * fps))], draw)
+                  for name, (t0, t1, draw) in film.ALONE.items()}
+        allow = [(k, a, b, why) for n, a, b, why in getattr(film, 'ALLOWED_POPS', ()) for k in actors
+                 if k.split(' [')[0] == n]
+        return filmkit.silhouette_audit(actors, fps=fps, still_ok=getattr(film, 'STILL_OK', ()), allow=allow)
+    return audits
+
+
 def fill(film, has, survey_pool=True):
     """(Film, lines said, faults): what the kits hand the checks, ONLY where the film gave nothing."""
     import cover
@@ -386,6 +402,9 @@ def fill(film, has, survey_pool=True):
         said.append('who is in each shot: from the drawing')
         faults += pop_faults(film, sv)
         said.append('pop-ins (rule 6): from the drawing')
+    if not hasattr(film, 'audits') and getattr(film, 'ALONE', None):
+        extra['audits'] = alone_audit(film)
+        said.append(f'audits: the general audit on each of ALONE ({len(film.ALONE)}), drawn alone')
     if getattr(film, 'PLAN', None) is not None:
         P, s = plan(film, sv)
         if s:

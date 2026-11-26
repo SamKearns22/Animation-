@@ -31,6 +31,7 @@ Usage:
     python3 preflight.py patriots2 OUT_DIR            before the animatic (~1 min; the render checks the pictures)
     python3 preflight.py patriots2 OUT_DIR --pictures the picture checks here too, and the contact sheet
     python3 preflight.py patriots2 OUT_DIR --audit    list every fault, pictures included (for a finished film)
+    python3 preflight.py patriots2 OUT_DIR --span 4 5 the picture checks on those seconds only (testing a fix)
     ... --faults-named    the round's critique faults are named to Sam (rule 89): the animatic may go ahead
 """
 import fnmatch
@@ -618,6 +619,18 @@ def main():
     pictures = audit or any(a in sys.argv for a in ('--pictures', '--full', '--sheet'))
     global _FILM, _FPS
     _FILM, _FPS = film, fps
+    if '--span' in sys.argv:                    # chat 19 (Open Wounds): the picture checks on a few seconds only, to
+        k = sys.argv.index('--span')            # test a fix in minutes; prints the faults, never a pass stamp
+        t0, t1 = float(sys.argv[k + 1]), float(sys.argv[k + 2])
+        from multiprocessing import Pool
+        with Pool(os.cpu_count()) as pool:
+            recs = list(pool.imap(_check_frame, range(int(t0 * fps), int(t1 * fps) + 1), chunksize=2))
+        pf = picture_faults(film, name, recs, fps, new_template)[0]
+        import report
+        for x in report.group(pf, getattr(film, 'SHOTS', [])):
+            print(x)
+        print(f'span {t0}-{t1} s: {len(pf)} picture fault(s) (no pass stamp: run the full pre-flight before an animatic)')
+        sys.exit(1 if pf else 0)
     if people and not pictures:                 # rule 38 (C1): the drawn angle, before any animatic is drawn
         problems += turn_sample(film)
     n_frames = int(end * fps)

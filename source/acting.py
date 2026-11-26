@@ -99,6 +99,8 @@ PLACES = {
     'hand low front': (1.0, -10.0, 330.0, 110.0, 'down', 'palm'), # from her side to the front of her thigh, elbow down (the swing out from rest read as a hand on the hip)
     'chop wide high': (0.0, 120.0, 130.0, 175.0, 'down', 'palm'),   # the chop out to its own side: a far hand standing three-quarter (chat 18: Kemi's chop high aimed its forearm at the lens)
     'chop wide low': (0.0, 120.0, 270.0, 180.0, 'down', 'palm'),
+    'chop raised': (0.0, 120.0, 40.0, 90.0, 'down', 'palm'),     # a seated near hand's chop up: forearm upright beside the shoulder (chat 19: May's chop high, from a forward hand, aimed the forearm at the lens and hid the hand in the sleeve)
+    'chop raised low': (0.0, 120.0, 250.0, 140.0, 'down', 'palm'),  # ... chopped down beside her, not forward at the lens
     'pat high': (0.0, 110.0, 215.0, 205.0, 'down', 'palm'),        # patting the air down, level (targets)
     'pat low': (0.0, 110.0, 270.0, 205.0, 'down', 'palm'),         # 
     'palms lift': (1.0, 40.0, 225.0, 210.0, 'out', 'palm'),       # seated: both hands up off the chair arms, palms open
@@ -523,6 +525,7 @@ def arm_keys(j, sp, side, t, keys):
         u = ease(ramp(t, t0, t1))
     if a is rest and b is rest:
         return j
+    j.setdefault('_moving', set()).add(side)     # off its rest: kitchecks.rests tests only arms at rest (chat 19)
     tgt = moves.lerp(a[0], b[0], u)
     pole = moves.lerp(a[1], b[1], u)
     off = F.HAND.get(a[2], 14) + (F.HAND.get(b[2], 14) - F.HAND.get(a[2], 14)) * u
@@ -557,6 +560,26 @@ def unlean(p, lean):
     x, y, z = p
     dy = y - V.HIP_Y
     return x, V.HIP_Y + cs * dy - sn * z, sn * dy + cs * z
+
+
+def _elbows_on_rests(j):
+    """A seated gesture from an armrest or desk: the elbow stays on the surface it rested on (never sinks into it;
+    rule 78). Lengths kept: the elbow moves on the circle the upper arm and forearm allow (Open Wounds chat 19: Blair's
+    elbow sank 1 cm into the wing chair's arm on his heart and chop gestures)."""
+    import sitting as SIT
+    spec, lean = j.get('spec') or {}, j.get('lean', 0.0)
+    for s in sorted(j.get('_moving') or ()):
+        a = (spec.get('arms') or {}).get(s)
+        plane = a and (a.get('rest') if a.get('rest') is not None else a.get('elbow_rest'))
+        if plane is None:
+            continue
+        S, E, H = (V.leaned(j[k + s], lean) for k in ('sh', 'el', 'wr'))
+        if E[1] <= plane + 1.0:                   # above or on it: free
+            continue
+        U, Fo = math.dist(S, E), math.dist(E, H)
+        E2 = SIT._elbow_on_plane(S, H, plane, U, Fo, 1 if s == 'R' else -1)
+        if E2 is not None:
+            j['el' + s] = tuple(V.leaned(E2, -lean))
 
 
 def hand_keys(keys, side, sw, clock, places, lean=0.0):
@@ -772,6 +795,8 @@ def pose(desc, film, shot, sp, t):
             continue                              # a later line for this hand lies over the first from its start
         seen.add(side)
         arm_keys(j, sp, side, t, ks)
+    if sat:
+        _elbows_on_rests(j)
     for c, v in put.items():
         if c == 'shoulders':
             continue

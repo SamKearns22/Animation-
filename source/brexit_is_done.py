@@ -22,6 +22,7 @@ MAP (rule 61)
     python3 source/brexit_is_done.py stills OUT_DIR T [T ...]
     python3 source/brexit_is_done.py final OUT.mp4 [--small] [--span T0 T1]     a clip, the animatic, the final
 """
+import math
 import os
 import sys
 
@@ -68,6 +69,69 @@ THREE_QUARTER_OK = [('1', 'may', 'locked by Sam: the interview look, turned to t
 # rule 78: Blair's forearms rest on the wing chair's arms between gestures (the acting list: 'hands on its arms')
 RESTS = [('*Blair*.forearmL', 'armrest', 17.5, 26.9, "Blair's left forearm on the wing chair's arm between gestures"),
          ('*Blair*.forearmR', 'armrest', 17.5, 26.9, "Blair's right forearm on the wing chair's arm between gestures")]
+# rule 41 exceptions (reasons in the notes' Exceptions): a side-on runner's far hand passes behind his body for one
+# drawing at the back of each swing (chat 19: seen full size, the arm reads swinging; the figure is 40 px tall)
+HANDS_OK = [("*workers 2", 'R', 'no hand', 10.7, 12.1, "the side-on runner's far hand passes behind his body for one "
+             "drawing each swing, as a real runner's does (40 px tall)"),
+            ("*fleeing staff and guests*", '*', 'no hand', 20.9, 24.8, "the guests run side on across the room: each far "
+             "hand passes behind the body for one drawing per swing, as a real runner's does")]
+ALLOWED_POPS = [('guest', 17.55, 17.95, 'the butler bursts in through the double doors as they open (seen full size)'),
+                ('guest', 19.85, 20.25, 'the woman in red runs off the frame\'s right edge at 4.4 m/s, half out the '
+                 'frame the drawing before (seen full size, chat 19)'),
+                ('guest', 22.4, 22.75, "a guest comes in at the frame's right edge behind Blair's shoulder (seen full size)"),
+                ('guest', 25.2, 25.55, 'the last guest runs off the left edge ahead of the wolves (seen full size)')]
+# rule 3: what makes each place recognisable, ours beside the references (chat 19; python3 source/benchmark.py)
+BENCHMARK = [
+    dict(place='may room', refs=['may-interview-1.jpg', 'may-interview-2.jpg'], at=3.0,
+         items=[('a dark, near-black backdrop behind her', 'done: the slatted wall, dark brown'),
+                ('soft vertical light streaks on the backdrop', 'done: six lamp streaks, two tones'),
+                ('the backdrop out of focus, no detail to read', 'done: flat streaks, no line work'),
+                ('her chest-up, turned off-frame left to an unseen interviewer', 'done: locked by Sam (item 14)'),
+                ('warm key light on her face, the room dark', 'done: the house look; the wall darker than her'),
+                ('nothing else in the room: no props, no desk', 'done: only the chair back shows'),
+                ('the chair she sits on, barely seen', 'done: the chair back, dark grey'),
+                ('the TV caption and logos', 'left out: our film carries its own Hook Text; no broadcaster marks')]),
+    dict(place='building site', refs=['site-geograph-6863924.jpg', 'site-geograph-6921180.jpg'], at=12.0,
+         items=[('a grey overcast British sky', 'done: the overcast and cloud banks'),
+                ('tower cranes, red and blue', 'done: the red crane and the blue crane'),
+                ('a concrete frame several floors high', 'done: the frame, slabs and columns'),
+                ('scaffolding with lifts across the face', 'done: inner and outer scaffold, the 6.4 and 9.6 m lifts'),
+                ('red-and-white barrier boards on the lifts', 'done: the barrier boards'),
+                ('pipes and risers (Sam: "all holes and pipes")', 'done: orange risers, pipe ends, the big pipes'),
+                ('blue site hoarding', 'done: the blue hoarding'),
+                ('dusty open ground with clutter: cones, a skip, a sand heap', 'done: all four'),
+                ('Heras fencing', 'done: the fence')]),
+    dict(place='blair room', refs=['oakroom-geograph-4684411.jpg', 'oakroom-geograph-7898479.jpg'], at=22.0,
+         items=[('oak panelling, square panels', 'done: the oak panelling'),
+                ('a heavy cornice and a coffered or beamed ceiling line', 'done: the cornice'),
+                ('a brass chandelier with candle lights', 'done: the chandelier'),
+                ('tall doors in the panelling', 'done: the double doors (the guests burst through them)'),
+                ('warm polished floor', 'done: the floor and a rug'),
+                ('book-lined walls (the brief: "book-lined")', 'done: the bookcases, left and right'),
+                ('leaded windows', 'left out: the locked camera faces the doors and bookcases, no window wall in view'),
+                ('a grand, quiet, old London room', 'done: oxblood wing chair, oak, books')])]
+# rule 1: the three places in metres, top down (x across, z away from the lens; each set laid 100 m apart). Each is
+# one locked camera; every piece's own size and depth is in story/brexit-is-done-places.txt (chat 19)
+PLAN = dict(
+    CEIL=4.0,                                        # the oak room's cornice at 3.9-4.1 m
+    ROOMS={'may room': (-6.0, -1.0, 6.0, 3.0), 'building site': (88.0, -1.0, 112.0, 35.0),
+           'blair room': (195.0, -1.0, 205.0, 7.0), 'corridor': (198.1, 7.0, 199.9, 11.0)},
+    OPENINGS={'double doors': dict(wall=('z', 7.0), span=(198.1, 199.9), sill=0.0, head=3.0, to='corridor')},
+    THINGS={'may chair': dict(at=(0.3, 1.75), size=(0.6, 0.6, 1.0), facing=225),
+            'slatted wall': dict(at=(0.0, 2.95), size=(12.0, 0.1, 3.8), facing=180),
+            'site frame': dict(at=(100.0, 26.0), size=(24.0, 1.0, 14.0), facing=180),
+            'big pipes': dict(at=(96.0, 20.9), size=(2.0, 1.0, 1.8), facing=0),
+            'blue hoarding': dict(at=(92.0, 22.9), size=(6.0, 0.1, 2.0), facing=180),
+            'wing chair': dict(at=(200.3, 2.25), size=(0.85, 0.85, 1.0), facing=225),
+            'bookcases, left': dict(at=(196.8, 6.8), size=(2.0, 0.3, 3.0), facing=180,
+                                    why='built-in wall units, not free-standing cases'),
+            'bookcases, right': dict(at=(202.0, 6.8), size=(4.0, 0.3, 3.0), facing=180,
+                                     why='built-in wall units, not free-standing cases')},
+    PEOPLE={'may': dict(at=(0.3, 1.6), facing=225, who='may', on='may chair'),
+            'kemi': dict(at=(100.3, 1.21), facing=225, who='kemi'),
+            'blair': dict(at=(200.3, 2.06), facing=225, who='blair', on='wing chair')},
+    CAMS={1: dict(pos=(0.0, 1.2, 0.0), look=(0.0, 1.2, 3.0)), 2: dict(pos=(100.0, 1.6, 0.0), look=(100.0, 1.6, 3.0)),
+          3: dict(pos=(200.0, 1.2, 0.0), look=(200.0, 1.2, 3.0))})
 HOOK = ('Andy is opening old wounds... \U0001F1EC\U0001F1E7', {'y': 300, 'until': 3.0})   # item 15: above her hair (top at about 465)
 
 
@@ -293,6 +357,27 @@ def blair_shot(t):
     for layer in ('front', 'over'):
         _paint(img, 'blair', layer, u)
     return img.convert('RGB')
+
+
+# ================================================================================================= the general audit
+def _alone(shot, who, view, P, kind):
+    """`who` alone on a clear layer at t (the shared general audit: kitinputs.alone_audit, through ALONE)."""
+    def draw(t):
+        B.SS = 1
+        lay = Image.new('RGBA', (W, H), (0, 0, 0, 0))
+        L = _cam(view)
+        sp, j = acted(shot, who, t)
+        if kind == 'stand':
+            standing(lay, who, L, P['x'], P['d'], t, P['yaw'], look=sp, joints=j)
+        else:
+            seated(lay, who, L, P['x'], P['d'], t, P['yaw'], pose=kind, chair=False, look=sp, joints=j)
+        return lay
+    return draw
+
+
+ALONE = {'may [1]': (0.0, 7.5, _alone('1', 'may', 'may', MAY, 'upright')),
+         'kemi [2]': (7.5, 17.5, _alone('2', 'kemi', 'site', KEMI, 'stand')),
+         'blair [3]': (17.5, 26.9, _alone('3', 'blair', 'blair', BLAIR, 'armchair'))}
 
 
 # ================================================================================================= picture

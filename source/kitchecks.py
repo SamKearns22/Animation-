@@ -561,6 +561,7 @@ def _rest_record(j, t):
         for s, a in ((j.get('spec') or {}).get('arms') or {}).items():
             if a and (a.get('rest') is not None or a.get('elbow_rest') is not None):
                 rec['posed'][s] = True                   # the kit posed this forearm resting on something
+        rec['moving'] = sorted(j.get('_moving') or ())   # acting keyed it off its rest (a gesture): not resting now
         return rec
     except Exception:
         return None
@@ -601,7 +602,8 @@ def rests(film, records):
                     found.setdefault(('below', name, s, surf), []).append(
                         (t, f'{where}: {name}\'s resting {s} {part} goes {cm(deep):.0f} cm below the {surf} top '
                             f'(rule 78: never below the surface; RESTS: {why})'))
-                if line - el[1] > FLOAT_U:
+                if line - el[1] > FLOAT_U and s not in r.get('moving', ()):   # mid-gesture it is lifted on purpose
+                    # (Open Wounds chat 19: Blair's gestures counted as 'floating' elbows); it still may never sink
                     found.setdefault(('up', name, s, surf), []).append(
                         (t, f'{where}: {name}\'s resting {s} elbow floats {cm(line - el[1]):.0f} cm above the '
                             f'{surf} (rule 78: the weight on it; RESTS: {why})'))

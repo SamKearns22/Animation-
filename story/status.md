@@ -1,3 +1,3 @@
-Open Wounds: chat 18 fixed most hand faults (raised fingers, Kemi's point and chop, the workers' grips, runners' back arms) and listed the locked angles.
-Next: chat 19 (Opus medium) finishes the last hand faults and the 39 pre-flight lines, then a Sonnet chat renders the animatic.
+Open Wounds: chat 19 fixed the last hand faults (May's chop, the guests in the doorway, Blair's elbows on the chair arm), answered every pre-flight line, built the plan, place checklists and body audit; estimate 52% of a week (44% spent).
+Next: chat 20 (Sonnet) runs the full pre-flight and the fresh look, renders the animatic with the Hook Text and sign-off, sends it to Sam and stops.
 Sam: "Override" sends May's and Blair's clips; kit tests now run only at each film's first chat and final (rule 90; one question on animatics); R7: May is right (Sam: "FINALLY correct") except the curves in one view; chat 9 fixes them, then proposes it as the default.

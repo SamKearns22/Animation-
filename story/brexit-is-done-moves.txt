@@ -10,7 +10,7 @@ row: 4 "...we had a referendum, and in that referendum, the British Public chose
 # the hook: in motion from the first drawing (a breath in, the shoulders up, forward on the seat, chin up)
 stance: upright on office
 face: composed | patient from "Prime" -0.12 | stern from "well" -0.12 | brows up from "remember" -0.1 | reasonable from "had" -0.1 | firm from "that referendum" -0.12 | reasonable from "British" -0.1 | brows up from "chose" -0.08 | satisfied from "wolves" -0.08 | satisfied brows from "wolves" +0.6
-R: rest at -0.3 | lap fwd at 0.55 | rest at "well" -0.4 | finger up at "well" +0.04 | finger tap at "remember" +0.04 | finger up at "remember" +0.3 | palm open at "had" +0.04 | palm up from "referendum" +0.04 to "that referendum" -0.4 | chop high at "that referendum" -0.12 | chop low at "that referendum" +0.08 | chop high at "that referendum" +0.32 | chop low at "that referendum" +0.52 | open out at "British" +0.04 | open out at "chose" +0.1 | rest at "wolves" +0.45
+R: rest at -0.3 | lap fwd at 0.55 | rest at "well" -0.4 | finger up at "well" +0.04 | finger tap at "remember" +0.04 | finger up at "remember" +0.3 | palm open at "had" +0.04 | palm up from "referendum" +0.04 to "that referendum" -0.4 | chop raised at "that referendum" -0.12 | chop raised low at "that referendum" +0.08 | chop raised at "that referendum" +0.32 | chop raised low at "that referendum" +0.52 | open out at "British" +0.04 | open out at "chose" +0.1 | rest at "wolves" +0.45
 L: rest at -0.3 | lap fwd at 0.6 | rest at 1.5
 L: rest at "British" -0.4 | open near at "British" +0.04 | open near at "chose" +0.1 | rest at "wolves" +0.5
 keys lean: 0 at -0.35 | 7.5 at 0.75 | 5.5 at 2.0 | 4.0 at 7.5

@@ -252,3 +252,87 @@
 - **Open rule requests:** none. Tool gap for the proposal route: a video fixed after hunt 2 cannot pass the send guard (no third hunt allowed); a "verify the fixed frames" look is needed.
 - **For Claude:** critique left (named, not acting): R7 knees/May's chair (locked), May/Blair hair (cast locked), shot 3 floor plates and props, the white wolf reads as a rug, wolf scale doorway vs lunge, the doorway frame 1. Kemi points back over her near shoulder (the scaffold wolves) - the critic thought the pack is on her other side; kept: "backwards" is behind her.
 
+
+
+## Where things stand (chat 18) (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 18 pushed there and to `claude/vigilant-meitner-mg5lag`).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF (R7 chat 9 still open, not yet the default).
+- **Rules that bite next:** 41 (every arm ends in a visible hand), 89 (a fresh look before anything goes to Sam), 85 (cost watch).
+- **Done (chat 18):** the 03:20 scheduled chat never ran (no project, wrong model); chat 18 took the job. Hands: raised fingers and the over-the-shoulder point are bent on purpose (acting.RAISED, shared); Kemi's near hand no longer hides in her braids (point back mid); Kemi's chop is 'chop wide' (new shared place); the bar men's hands drawn over their tubes (grip_hands); side-on runners open the back elbow (moves.open_back, shared, opt-in): the runner and guests' hidden hands down to single drawings. Mirrored poses listed (THREE_QUARTER_OK + Exceptions rows); Blair's RESTS rows added.
+- **Hand faults left (scratch probe: picture checks on a span, 4 workers):** May R in sleeve 4.42, 4.92 (the chops: rising from rest the forearm aims at the lens; the wide chop did not cure May); Kemi R 12.42 (one drawing, rest to chop); runner far hand single drawings 10.75-12.08, worker 3 at 11.67; guests 2/3 hand over each other 18.33-18.67 (out of the doors side by side); guests' far hands single drawings 20.9-24.8; Blair RESTS: elbows float 3 cm (17.83) and sink 1 cm (18.67): fix the armchair pose or the rows' times.
+- **Pre-flight (--text) 39:** 25 depth-order lines (worker v. ground/frame at 25-27 m: painting order, to list; the corridor guests 18.25-19.0 look clipped to the doorway by eye, so likely the check not knowing the doorway cut: confirm full size and list); 2 pop-ins (guests through the doors: ALLOWED_POPS with why); 2 outlines (Blair 502,14; May 674,14); 2 bookcases (built-in wall units: list); 5 captions too fast (new: finish.py's caption grouping); no PLAN, BENCHMARK, audit.
+- **Next:** chat 19, Opus medium: finish the hand faults and the pre-flight list above, look at every changed frame (rule 89), then open the Sonnet chat: full pre-flight, animatic (final --small, finish.py), send, push.
+- **Needs Sam:** notes on the animatic; Q1 (kit tests) open.
+- **Read:** `guides/job-packs.md` Checks and animatic; the Brief checklist at the top of this file.
+- **Open rule requests:** none. Tool gap: no shared way to run the picture checks on a span (chat 18 used a scratch probe; worth a `preflight.py --span`).
+- **For Claude:** probe = preflight.install_probes(film) then preflight.probe(t, film.picture) in a Pool, then preflight.picture_faults(film, name, recs, 12). Freeze count rose to 21 before this chat.
+
+
+Handover check (chat 18), answered: the four "SENTENCE lost from CLAUDE.md" lines are from other chats' commits (34f49840, 0945cc85); FREEZE 20 to 21 predates this chat; COST: no estimate in the ledger yet (chat 19 sets one); KIT: shared tools changed (acting places, moves.open_back): Sam's kit-check question goes with the animatic (rule 90: the final runs it).
+
+## Chat 15 end check, named
+- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-14 did. COST: no ledger estimate (named since chat 4).
+- FINDER: chat 15 built new moves (the acting plan), not a note, so it searched the film's code on purpose.
+- Branches not this film's: claude/kit-tests-when-build (the kit-tests-when proposal's own build chat), and the GTA branches (claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31): left to their chats.
+- Kit run at start: seated_r7_switch red (Blair's stale fingerprints: only chat 14's sleeve lift moved him; re-taken, passes); finished_films_keep_their_bookmark red from this chat's clip command loading a finished film's sound file (removed; passes).
+
+## Chat 16 end check, named
+- CLAUDE.md SENTENCE alerts: Sam's own edits (34f49840, 0945cc85), named as chats 1-15 did. COST: no ledger estimate (named since chat 4).
+- Branch claude/r7-chat4: reserve job R7's own chat (the seated bottom and knees, switched OFF here); left to it. Other branches as chat 15 named.
+- Shared change: lying.blend (trunk keeps bone lengths) is also used by leanout.py (GTA shot 4, finished): its in-betweens can only get more rigid; kittests lying* and finished_films_keep_their_bookmark pass.
+
+## Chat 17 end check, named
+- FINDER: 9 hand searches of film code were to find a crash in the pre-flight (not a note). Branches not this film's (kit-tests-per-film, GTA ones): left for their chats. CLAUDE.md SENTENCE alerts: Sam's own edits, named since chat 1. COST: no ledger estimate (Sam's Q9, N).
+- NOTES length: moved at next stage. KIT TEST cost_rows_reach_the_main_line crashes here (not this film's code): for a tool chat. PUSH: sent at this handover.
+
+
+## Moved from the notes at chat 19 (built; kept for reference)
+
+## Acting plan (Sam, 25 Nov, chat 14: "really fluid acting throughout ... a good acting plan for everyone's lines ... contextually based on the script ... make sure it's implemented")
+Stand-in word times (s, film); re-timed on Sam's takes. Every move lands on its word (rule 74), the face leads the hand by a
+drawing or two, every gesture has an anticipation and a settle, nobody is ever fully still (idle sway, breathing, blinks).
+Hands never pass through anything (rule 5): May's lap and chair, Blair's chair arms. All three talk to the unseen
+interviewer off-frame left; the eyes hold on them except where named.
+**May (0.0-7.5): the hook is her movement from the first drawing.**
+- 0.0-0.6 already in motion: a small breath in, shoulders lift, she shifts forward on the seat and her chin comes up (about to correct someone).
+- "Prime" 0.78: head tips a touch, brows lift, a thin patient smile (talking down to the PM).
+- "would do well" 1.88: her right forefinger comes up from the lap, a schoolmistress's raised finger, a small side-to-side head shake.
+- "remember" 2.25: the finger taps the air once, she leans in, brows up.
+- "had" 3.16: the finger opens into a palm; "referendum" 3.53: palm turning up towards the interviewer (photo 1), a small nod.
+- "that referendum" 4.62: the same hand chops down twice, firm nods with each (it was decided).
+- "British" 5.72: both hands open outward a little (the public); "chose" 6.45: a tiny pause on the face, eyebrows up.
+- "wolves" 6.63: said flat and certain: a firm nod, hands settle in the lap, lips press into a tight satisfied smile; holds to the cut with a small brow raise and a blink.
+**Kemi (7.5-17.5): deadpan, ramrod straight; the carnage behind her is never acknowledged.**
+- 7.5-8.1 before she speaks: a slow blink, a small weight shift, chin set; she never glances back.
+- "Andy" 8.1: a little head tilt with disdain (lips tighten); "less" 9.68: the near hand comes up, palm down, pressing.
+- "backwards" 11.03: a thumb jerked back over her shoulder (towards the wolves behind her: the joke), eyes still on the interviewer.
+- "job" 12.61: a flat hand chops once; the curt nod.
+- "reducing" 12.84: the hand pats the air down, level, like a manager giving targets.
+- "British" 14.42: the hand opens; "faces" 15.77, "chewed off" 16.22-16.67: delivered in the same flat tone, a brisk single nod on "off"; hands back to her sides; she holds the stare, one blink, to the cut.
+**Blair (17.5-26.9): the showman, breezy and charming, then the grin.**
+- 17.5-18.0: settles back in the chair, a relaxed smile, head tilted.
+- "Well" 18.0: both hands lift off the chair arms, palms open, a little shrug and head tilt.
+- "opinion" 18.62: one hand to his chest (sincerity).
+- "listen" 19.65: the hand comes forward, the Blair thumb-on-top chop, small; "anything" 20.27: a light shake of the head, a chuckle on the face.
+- "Tony" 21.51: hand flat to his chest again, the big grin flashes, brows up.
+- "invaded" 22.33: a breezy palm flip outward; "Iraq" 22.95: a shrug, eyebrows up, smile unbroken (no shame).
+- "belong" 23.57: both palms open towards the interviewer; "Hague" 24.39: a nod, he leans back, hands return to the chair arms.
+- 25.0-26.5: the grin held about 1.5 s (locked), small head life only; he doesn't see the wolf. 26.5: the lunge; cut (locked).
+**Built (chat 15):** as above, with three changes found by looking: May's raised finger tipped towards the listener (upright, a lone finger read rude); Kemi gestures with her far hand (the near hand in front of her read as holding her stomach) and points with a finger, not a thumb (our round hands have no thumb); Blair's near hand opens to its own side (in front of the chest the two hands read as one).
+**Built where:** story/brexit-is-done-moves.txt (blocks per shot; new hand places named there: finger up, chop, thumb back, pat down, chest, palms out), the film side in acting.FILMS and brexit_is_done.py faces and moves (moods for each beat). Checked: acting.py check (every move lands), a short clip of each line, looked at whole (CLAUDE.md "Notes on movement get a short clip").
+
+## Plan extras (rules 24-26, 54, 55): ambition estimate as a table, one row per new build and risky move, each with
+its own share of a week and, for anything split into parts, how its ending looks and which parts the camera sees
+break; eyelines and holds per shot; every sound effect (what, when, needed by); bleeped words (said, or a gap left?)
+
+Every person, set, prop, pose and move in the brief gets a row: KNOWN (its kit-catalogue line, pose-gallery row or
+"Passed the critique" row: almost free) or NEW (priced; drawn alone and critiqued before the cast sheet, rule 89).
+
+First line: how much of the total is unmeasured. Each cost is the nearest measured past cost in `notes/ledger/`
+(name the film and row), or 'unmeasured'; no padding, no multipliers. Each row names its stage (cast, sets, board, moves,
+animatic1, round, final; board: the shot board of rule 11, ended by `rough.py sent Brexit Is Done (working name) OUT.jpg --delivered --board`; one 'round' row per notes round, priced from past films' real rounds); the stage totals go
+into `ledger.py estimate Brexit Is Done (working name) PCT --stages "cast 2, sets 2.5, ..."` and each stage's end runs `ledger.py stage FILM NAME`.
+
+| thing, build or risky move | KNOWN (where) or NEW | why (3D? parts the camera sees) | stage | estimate (% of a week) | measured from | spent |
+|---|---|---|---|---|---|---|
+|   |   |   |   |   |   |   |

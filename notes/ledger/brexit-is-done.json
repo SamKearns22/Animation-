@@ -1,6 +1,6 @@
 {
  "film": "brexit-is-done",
- "estimate": null,
+ "estimate": 52.0,
  "chats": [
   {
    "date": "2026-11-23",
@@ -11379,17 +11379,17 @@
  ],
  "checks": {
   "quick check": {
-   "runs": 2,
-   "faults": 73,
+   "runs": 7,
+   "faults": 257,
    "kinds": {
-    "benchmark": 2,
-    "blair": 2,
-    "drawing": 50,
-    "house style": 2,
-    "may": 2,
-    "other": 8,
-    "plan": 2,
-    "caption": 5
+    "benchmark": 4,
+    "blair": 7,
+    "drawing": 175,
+    "house style": 4,
+    "may": 7,
+    "other": 26,
+    "plan": 4,
+    "caption": 30
    }
   }
  },
@@ -11688,6 +11688,89 @@
   {
    "at": "2026-11-26T06:39+00:00",
    "faults": 0
+  },
+  {
+   "at": "2026-11-26T07:31+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T07:34+00:00",
+   "faults": 0
+  }
+ ],
+ "stages": [
+  {
+   "name": "cast",
+   "pct": 9.5,
+   "done": {
+    "date": "2026-11-26",
+    "spent": 44.03
+   }
+  },
+  {
+   "name": "sets",
+   "pct": 3.0,
+   "done": {
+    "date": "2026-11-26",
+    "spent": 44.03
+   }
+  },
+  {
+   "name": "board",
+   "pct": 2.0,
+   "done": {
+    "date": "2026-11-26",
+    "spent": 44.03
+   }
+  },
+  {
+   "name": "moves",
+   "pct": 27.0,
+   "done": {
+    "date": "2026-11-26",
+    "spent": 44.03
+   }
+  },
+  {
+   "name": "fixes",
+   "pct": 2.5,
+   "done": {
+    "date": "2026-11-26",
+    "spent": 44.03
+   }
+  },
+  {
+   "name": "animatic1",
+   "pct": 1.0,
+   "done": null
+  },
+  {
+   "name": "round",
+   "pct": 4.0,
+   "done": null
+  },
+  {
+   "name": "final",
+   "pct": 1.0,
+   "done": null
+  },
+  {
+   "name": "post",
+   "pct": 2.0,
+   "done": null
+  }
+ ],
+ "cost_flagged": [],
+ "cost_log": [
+  {
+   "date": "2026-11-26",
+   "spent": 44.03,
+   "forecast": 86.5
+  },
+  {
+   "date": "2026-11-26",
+   "spent": 44.03,
+   "forecast": 52.0
   }
  ]
 }

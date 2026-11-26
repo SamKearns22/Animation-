@@ -222,7 +222,10 @@ BLIND = re.compile(r"COULD NOT TEST|could not (test|run|see)|did not run|cannot 
 
 
 def _norm(line):
-    return re.sub(r'\s+', ' ', str(line).replace('|', '/').strip().lstrip('-').strip().strip('`')).strip()
+    # the pixel count of a depth-order line varies a little run to run (chat 19, Open Wounds: 26389 then 25235 px for
+    # the same overlap), so an answer matches the line whatever the count
+    s = re.sub(r'\s+', ' ', str(line).replace('|', '/').strip().lstrip('-').strip().strip('`')).strip()
+    return re.sub(r'up to \d+ px\)', 'up to N px)', s)
 
 
 def is_blind(line, film=None):
@@ -260,7 +263,8 @@ def split(lines, text, film=None):
     table, bad = answers(text)
     done, left = [], list(bad)
     for x in lines:
-        row = table.get(_norm(x))
+        row = table.get(_norm(x)) or next((r for k, r in table.items() if '*' in k and fnmatch.fnmatchcase(_norm(x), k)),
+                                          None)   # a pattern answers a family of lines with one reason (chat 19)
         if is_blind(x, film):
             left.append(x if not row else f'{x} [BLIND: a check that could not see the film cannot be answered; '
                                           'hand it what it needs]')

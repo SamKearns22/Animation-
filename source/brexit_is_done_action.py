@@ -575,9 +575,9 @@ GUEST_V, WOLF_V = 4.4, 4.4              # m/s: guests in panic (heels, a tray, a
 LANE_R, LANE_L = 4.60, 6.00             # m: the near and far lanes
 PASSES = [
     (0, 0.30, [(-1.30, 7.60), (-1.30, 6.15), (-3.3, LANE_L)], 0, 0.65),   # the butler: he threw the doors open
-    (1, 0.52, [(-0.50, 8.60), (-0.50, 5.70), (1.4, LANE_R), (2.9, LANE_R)], 1, 0.55),
-    (2, 0.78, [(-1.05, 9.00), (-1.05, 6.10), (-3.0, LANE_L)], 2, 0.55),
-    (3, 1.05, [(-1.50, 9.20), (-1.50, 5.70), (0.6, LANE_R), (2.9, LANE_R)], 3, 0.55),
+    (1, 0.52, [(-0.38, 8.60), (-0.38, 5.70), (1.4, LANE_R), (2.9, LANE_R)], 1, 0.55),
+    (2, 0.78, [(-1.10, 9.00), (-1.10, 6.10), (-3.0, LANE_L)], 2, 0.55),   # chat 19: guests 1 and 2 0.72 m apart in the doorway (0.55 put his hand on her arm)
+    (3, 1.05, [(-1.60, 9.20), (-1.60, 5.70), (0.6, LANE_R), (2.9, LANE_R)], 3, 0.55),
     (0, 2.55, [(-2.7, LANE_R), (2.7, LANE_R)], 0, 0.90),          # wave 1, to the right: the two who left left,
     (2, 3.00, [(-2.7, LANE_L), (2.7, LANE_L)], 2, 0.55),          # the near one leading (perspective opens the gap)
     (1, 4.80, [(2.7, LANE_R), (-2.7, LANE_R)], 1, 0.90),          # wave 2, to the left: the two who left right
