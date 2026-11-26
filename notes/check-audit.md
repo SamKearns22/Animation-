@@ -41,7 +41,6 @@ tracking (costwatch, ledger auto, the cost line recorded).
 Work order (each item with its kittest and a Lost/Added line here): Q5 deletions; C1-C5; B6, B5, B7;
 check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), then steps 2-3 with
 say-once; B4; B3; B8; A2, A6, A4, A5 (Kemi front first), A3, A7 (confirm first), A8. Kit tests at the job's end only.
-<<<<<<< HEAD
 Plain words (Sam 26 Nov, Y): CLAUDE.md rule rewritten ("checked on every message"); FIRST job of chat 2: build the every-message checker (a Stop hook like propose.py hook: blocks once, never loops, logs a let-through), with a kittest that catches notes/learn/plain-words/bad-1 and bad-2 and passes good-1; Sam's "I don't understand"/"explain" saves the message he replied to as an example (handover.py log sees his words) and adds its words to the list; rule_proofs N8 status owed until then. Still to ask Sam: one question at a time as the normal way (1, my pick) or all in one message (2); the critique column Y/N.
 Plain-words checker BUILT (chat 2, 26 Nov): source/plainwords.py, a Stop hook on every reply plus a learn hook on Sam's messages; kittest plain_words_every_message passed once (0 s); rule_proofs N8 now proven. Catches bad-1 (R8, kit, pop-in) and bad-2 (kit tests, R7, critique), passes good-1. On the 19 Nov cases: catches 5 of the 8 Sam was confused by; misses S-cold-start, S-cost-other, S-finder-learn-finish (no code or listed word; dense ideas: only a reader that retells the message can catch those, plain-check Change 3).
 Lost: a reply with a code name, label or unexplained project word costs one rewrite before Sam sees it; code names only on a "For Claude:" line.
@@ -56,24 +55,21 @@ B6 ALREADY SO (chat 2): since rule 90 (25 Nov) the handover's kit-test gate runs
 B5 DONE (chat 2, 26 Nov): the handover's cast check runs only for a new or changed cast: a clean run stamps every file it read (kitstamps' own record, notes/logs/castsheet-stamps.tsv) and is skipped while they are unchanged; a cast with faults is never stamped, so it still stops every handover until fixed. Kittest castsheet_only_when_cast_changed passed; the real Open Wounds run still finds its 4 judge faults (1 min 50 s).
 Lost: nothing a changed cast needs; an unchanged clean cast is not re-drawn at each handover.
 Added: one stamp file.
-Sam's words carried (handover start, chat 2): 22:19 "Let's move through these one at a time in simple language" is his reply to bad-1 (saved there) and leans to one question at a time (the parent chat asks it formally); 22:21 "We have discussed reopened as a concept before in another chat": carried as B1 above (no 'Reopened' list; he declined it 26 Nov 20:19).
-=======
-Plain words (Sam 26 Nov, Y): CLAUDE.md rule rewritten ("checked on every message"); FIRST job of chat 2: build the every-message checker (a Stop hook like propose.py hook: blocks once, never loops, logs a let-through), with a kittest that catches notes/learn/plain-words/bad-1 and bad-2 and passes good-1; Sam's "I don't understand"/"explain" saves the message he replied to as an example (handover.py log sees his words) and adds its words to the list; rule_proofs N8 status owed until then. Sam's answers (26 Nov): one question at a time as the normal way: N (keep every open decision in one message; CLAUDE.md unchanged). I first misread his "1. Y" (it re-answered the checker question) as a Y to one-at-a-time and wrote a line in, then removed it. The critique column: still unanswered.
->>>>>>> origin/claude/create-claude-md-oe8z4g
+Sam's words carried (handover start, chat 2): 22:19 "Let's move through these one at a time in simple language" is his reply to bad-1 (saved there) (asked formally by the parent chat: Sam answered N, every open decision stays in one message); 22:21 "We have discussed reopened as a concept before in another chat": carried as B1 above (no 'Reopened' list; he declined it 26 Nov 20:19).
 Extra (Sam 26 Nov): E1 Y: find why body_check_back_view and finished_films_keep_their_bookmark keep going red; fix the test or the kit.
 Lesson (Sam 26 Nov): "This is the way you should be explaining things in all messages to me": what a thing is in everyday words, one question at a time, no item codes. My first Q1-Q5 and E1/E2 asks used report labels and jargon; CLAUDE.md names plain-check option 1 as the next step when this slips.
 Named branches (not this job, not merged): claude/seeing-test-chat1 (another chat's live seeing-tools test); claude/brexit-chat39 (Open Wounds chat 39, live),
 claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
 
 ## Where things stand
-- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), "Fix the drawing, never the shot".
-- Done (chat 1): listing tool, kittest, catalogue row; evidence; report sent; Sam answered all five.
-- Next: R8 chat 2 (opened: session_01J1JB7W1VqXUHMQUcpFV4zp, Opus medium, the Animation- project attached): the plain-words checker first, then the work order above, one item at a time.
-- Needs Sam: the critique column (Y/N), asked in plain words (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
+- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), N8 (plain words, now checked on every reply).
+- Done (chat 2): the plain-words checker (every reply, learns from Sam's "I don't understand"); Q5 budget alarms deleted; C1-C5 duplicates merged; B5 cast check only on change; B6 already so.
+- Next: R8 chat 3 (Opus, medium): B7, then check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), steps 2-3 with say-once, then B4, B3, B8, A2, A6, A4, A5 (Kemi front first), A3, A7, A8.
+- Needs Sam: the critique column (Y/N), asked by the parent chat in plain words (one at a time: Sam said N, 26 Nov: every open decision stays in one message).
 - Read: guides/job-packs.md "A tool job"; this file; notes/proposals/check-knows-intent.md option 1.
-- Open rule requests: none (Q5 rewords rule 24 on Sam's 2).
-- COST: a tool job, no film estimate.
-- SENTENCE in 7a775f28 ("The chain stops only at the budget stop..."): another chat's commit, not this job; named for its chat.
-- For Claude: kittest check_audit_lists_and_flags_repeats; chat 36 record session_01J1JB7YNoonB7shJ4bXB2Vq.
+- Open rule requests: none.
+- COST: a tool job, no film estimate (tracked quietly).
+- Named branches: claude/seeing-test-chat1 (live, not this job; not merged).
+- For Claude: source/plainwords.py (check/score; list notes/learn/plain-words/words.json; let-throughs notes/logs/plainwords.log); kittests plain_words_every_message, quiet_cost_line, castsheet_only_when_cast_changed; watcher.wiring_faults.
 
 Cost line (recorded every handover; shown to Sam only on a problem): film so far 2.3% of a week (2026-11-26)
