@@ -48,16 +48,15 @@ News: Theresa May "aghast" at Burnham's EU plans, says "Brexit is done" (BBC, Su
 - Reuse: Badenoch's face is already built (`source/facehouse.py` 'badenoch'); May and Blair are new faces.
 
 ## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
-- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 22 pushed there).
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 23 pushed there).
 - **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing; seated legs OFF.
 - **Rules that bite next:** 89 (fresh look; the send gate), 59 (render lock), 13.
-- **Done (chat 22):** animatic made by finish.py (Hook Text, sign-off; 1.3 MB) and kept in animations/drafts; two tool bugs fixed in finish.py (it deleted its own inputs when they sat in animations/drafts; it did not keep the body-check records). Places kit test failed once inside the full run, passed alone (flaky, not a drawing fault).
-- **Blocked:** the send gate refused the animatic: the clean render's body-check record (animations/drafts/*.bodycheck.json) was never pushed by chat 20, so this container has none, and rule 89 also wants a fresh critique. Nothing forged. Sam has NOT seen the animatic.
-- **Next:** chat 23, Opus medium: either re-run the body check on the clean render (needs the drawing run again, about 12 min, Sam said no new render so ask or take it as routine under rule 59) or rebuild the record from the clean render's frames if humancheck can; then critique.py pack with a fresh helper, humancheck.py critiqued, finish.py from a copy outside animations/drafts, send, push, stop.
-- **Needs Sam:** nothing.
+- **Done (chat 23, Opus):** found the body-check record can only come from drawing the film again (humancheck runs while frames are drawn; it cannot read a finished video), so the old animatic cannot be sent as is. No code changed. The model guard sent the redraw to Sonnet.
+- **Next:** chat 24, Sonnet: (1) `python3 source/brexit_is_done.py final source/data/brexit-is-done-clean.mp4 --small` (same code as chat 20's clean render, about 12 min; one wait) gives the clean render WITH its body-check record; any body fault: stop and hand back to Opus, nothing named blind. (2) `python3 source/critique.py pack` on it, a NEW critic helper, then `python3 source/humancheck.py critiqued source/data/brexit-is-done-clean.mp4 PACKDIR`. (3) `python3 source/finish.py source/data/brexit-is-done-clean.mp4 animations/drafts/brexit-is-done-animatic.mp4 --film brexit-is-done` (replaces the unsent one; keep the new clean render in animations/drafts too). (4) Send the animatic to Sam with size, render time and any Checks line; push; notification; stop after one animatic.
+- **Needs Sam:** nothing until the animatic arrives.
 - **Read:** guides/job-packs.md Checks and animatic.
-- **End check (chat 22), answered as in chat 21:** branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats; the CLAUDE.md SENTENCE lines (34f49840, 0945cc85) are Sam's own edits, named since chat 1.
-- **Open rule requests:** none. **For Claude:** 4 GTA branches left to GTA chats; kit-tests-when.md verdict stale.
+- **End check (chat 23):** FINDER line: no film code was edited (only notes; read main() to find the render command); short chat because the model guard moved the render to Sonnet. Branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31 are GTA's, left to GTA chats; the CLAUDE.md SENTENCE lines (34f49840, 0945cc85) are Sam's own edits, named since chat 1.
+- **Open rule requests:** none. **For Claude:** 4 GTA branches left to GTA chats; kit-tests-when.md verdict stale; finish.py should keep the clean render's .bodycheck.json beside it in animations/drafts (chat 22 fix) so this never repeats.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
@@ -142,4 +141,4 @@ Decisions made (kept so a long session or a new session never has to rediscover 
 | 2 "Andy Burnham needs to spend less time..." | Kemi | 2: single, deadpan against the carnage | disdain, flat stare, curt nod | ramrod straight, hand presses, thumb back, chop, pat | "backwards", "job" |
 | 3 "Well, in my opinion..." | Blair | 3: single, the grin then the lunge | genial, sincere, chuckle, big grin | hand on chest, breezy shrug, grin held 1.5 s | "Hague", then the lunge |
 
-Cost line (recorded every handover; shown to Sam only on a problem): film so far 46.99% of 15%; forecast 54% (2026-11-26)
+Cost line (recorded every handover; shown to Sam only on a problem): film so far 47.14% of 15%; forecast 54.1% (2026-11-26)

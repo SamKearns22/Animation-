@@ -1,3 +1,3 @@
-Open Wounds: chat 21 cleared the last stop before the animatic (a test file from the finished body investigation was filed under the wrong side; moved, check passes).
-Next: chat 22 (Sonnet) adds the Hook Text and sign-off to the clean render, sends the animatic to Sam and stops.
+Open Wounds: chat 23 found the animatic's body check can only come from drawing the film again; handed to Sonnet.
+Next: chat 24 (Sonnet) redraws the clean render with its checks, gets a fresh look, finishes and sends the animatic, then stops.
 Sam: nothing needed until the animatic arrives.
