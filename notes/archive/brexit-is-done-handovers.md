@@ -238,3 +238,17 @@
 - **Read:** `guides/job-packs.md` Notes round; brexit_is_done_action.py MAP; the Exceptions rows for shot 2.
 - **Open rule requests:** none. Tool gap for the proposal route: a video fixed after hunt 2 cannot pass the send guard (no third hunt allowed); a "verify the fixed frames" look is needed.
 - **For Claude:** critique left (named, not acting): R7 knees/May's chair (locked), May/Blair hair (cast locked), shot 3 floor plates and props, the white wolf reads as a rug, wolf scale doorway vs lunge, the doorway frame 1. Kemi points back over her near shoulder (the scaffold wolves) - the critic thought the pack is on her other side; kept: "backwards" is behind her.
+
+
+### chat 17 (archived by chat 18, 26 Nov)
+## Where things stand (the ONE handover, 15 lines at most: overwrite it at every stage switch; move the old one to notes/archive/brexit-is-done-handovers.md)
+- **Newest work: the main line** `claude/create-claude-md-oe8z4g` (chat 16 pushed there).
+- **Locked by Sam:** the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size, May about waist up; the cast (no more character work); the seated bottom and knees are reserve job R7 (its own chat, switched OFF here).
+- **Rules that bite next:** 89 (a fresh look before anything goes to Sam), 74 (moves checked against the acting list before the animatic), 85 (cost watch).
+- **Done (chat 17):** animatic sent to Sam under Override (25 Nov): drawn, then held by the picture checks (16 faults: hands on May 1.75/2.83 s, Kemi 9-12.4 s, guests 18-25 s; the 'mirrored' poses = locked camera, to list; Blair's RESTS rows); finish.py added Hook Text, captions (film now has caption_at) and sign-off; file animations/drafts/brexit-is-done-animatic.mp4. Quick pre-flight lists 34 faults (25 depth-order, 2 pop-ins, 2 outlines, 2 bookcases, no PLAN/BENCHMARK/audit). Shared fixes: posecheck surfaces, cover.py error names the time.
+- **Next (Sam: finish the seated job R7 first, then run the checks):** R7 chat 7 builds the seated legs; then switch them on here, fix the 16 picture-check faults and the 34 pre-flight faults (Opus medium), render again.
+- **Needs Sam:** notes on the animatic; Q1 (kit tests) open.
+- **Read:** `guides/job-packs.md` Checks and animatic; the Brief checklist at the top of this file.
+- **Open rule requests:** none. Tool gap for the proposal route: a video fixed after hunt 2 cannot pass the send guard (no third hunt allowed); a "verify the fixed frames" look is needed.
+- **For Claude:** critique left (named, not acting): R7 knees/May's chair (locked), May/Blair hair (cast locked), shot 3 floor plates and props, the white wolf reads as a rug, wolf scale doorway vs lunge, the doorway frame 1. Kemi points back over her near shoulder (the scaffold wolves) - the critic thought the pack is on her other side; kept: "backwards" is behind her.
+

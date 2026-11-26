@@ -88,8 +88,8 @@ PLACES = {
     'finger up': (0.0, 40.0, 40.0, 245.0, 'back', 'point'),       # the schoolmistress's raised forefinger, tipped at the listener (upright reads rude)
     'finger tap': (0.0, 40.0, 95.0, 270.0, 'back', 'point'),      # ... tapping the air once, forward
     'palm open': (0.0, 60.0, 200.0, 215.0, 'back', 'palm'),       # the finger opens into a palm, forward at the chest
-    'chop high': (0.0, 120.0, 130.0, 175.0, 'down', 'palm'),       # a flat hand up, about to chop
-    'chop low': (0.0, 120.0, 270.0, 180.0, 'down', 'palm'),        # ... chopped down, level with the lap / waist
+    'chop high': (0.0, 50.0, 115.0, 195.0, 'down', 'palm'),       # a flat hand up, about to chop
+    'chop low': (0.0, 50.0, 270.0, 200.0, 'down', 'palm'),        # ... chopped down, level with the lap / waist
     'open out': (1.0, -40.0, 230.0, 235.0, 'down', 'palm'),         # both hands open outward a little (the public): the far hand, forward not out wide (critique r1: wide, the arm swung out behind her)
     'open near': (1.0, 30.0, 300.0, 170.0, 'down', 'palm'),       # ... the near hand opens on her lap (higher, the elbow jutted: hands on hips)
     'lap fwd': (0.0, 70.0, 378.0, 125.0, 'down', 'palm'),         # both hands slide forward on the lap as she shifts forward (the hook)
@@ -97,6 +97,8 @@ PLACES = {
     'point back': (1.0, 95.0, -70.0, -50.0, 'front', 'point'),    # a finger back over the shoulder, clear of the braids (our round hands have no thumb)
     'point back mid': (1.0, 70.0, 110.0, 70.0, 'down', 'palm'),   # its way up and back down, in front of the shoulder (out at the side it read as a hand on the hip;  straight from rest the elbow folded across her body: the figure check)
     'hand low front': (1.0, -10.0, 330.0, 110.0, 'down', 'palm'), # from her side to the front of her thigh, elbow down (the swing out from rest read as a hand on the hip)
+    'chop wide high': (0.0, 120.0, 130.0, 175.0, 'down', 'palm'),   # the chop out to its own side: a far hand standing three-quarter (chat 18: Kemi's chop high aimed its forearm at the lens)
+    'chop wide low': (0.0, 120.0, 270.0, 180.0, 'down', 'palm'),
     'pat high': (0.0, 110.0, 215.0, 205.0, 'down', 'palm'),        # patting the air down, level (targets)
     'pat low': (0.0, 110.0, 270.0, 205.0, 'down', 'palm'),         # 
     'palms lift': (1.0, 40.0, 225.0, 210.0, 'out', 'palm'),       # seated: both hands up off the chair arms, palms open

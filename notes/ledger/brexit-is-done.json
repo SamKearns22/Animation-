@@ -10452,16 +10452,17 @@
  ],
  "checks": {
   "quick check": {
-   "runs": 1,
-   "faults": 34,
+   "runs": 2,
+   "faults": 73,
    "kinds": {
-    "benchmark": 1,
-    "blair": 1,
-    "drawing": 25,
-    "house style": 1,
-    "may": 1,
-    "other": 4,
-    "plan": 1
+    "benchmark": 2,
+    "blair": 2,
+    "drawing": 50,
+    "house style": 2,
+    "may": 2,
+    "other": 8,
+    "plan": 2,
+    "caption": 5
    }
   }
  },
@@ -10747,6 +10748,18 @@
   },
   {
    "at": "2026-11-25T18:31+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T06:37+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T06:38+00:00",
+   "faults": 0
+  },
+  {
+   "at": "2026-11-26T06:39+00:00",
    "faults": 0
   }
  ]

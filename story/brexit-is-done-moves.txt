@@ -30,7 +30,7 @@ idle: roll 1.2 shifts 71 0.9 1.6
 row: 10 "...more time doing his job: reducing the number of British people with their faces chewed off." | staring at the interviewer as if none of it was happening | still, hands at her sides; a curt nod on "job"
 # deadpan, ramrod straight; never a glance back at the carnage
 face: stare | blink shut from start +0.15 to start +0.42 | disdain from "Andy" -0.1 | stare from "less" -0.1 | curt from "job" -0.08 | flat from "job" +0.5 | stare from "faces" -0.1 | blink shut from "off" +0.5 to "off" +0.62
-R: rest at "less" -0.4 | press from "less" +0.04 to "less" +0.6 | rest at "backwards" -0.2 | rest at "job" -0.45 | chop high at "job" -0.12 | chop low at "job" +0.06 | pat high at "reducing" -0.1 | pat low at "reducing" +0.08 | pat high at "reducing" +0.28 | pat low at "reducing" +0.46 | palm open from "British" +0.04 to "faces" -0.2 | rest at "chewed" +0.1
+R: rest at "less" -0.4 | press from "less" +0.04 to "less" +0.6 | rest at "backwards" -0.2 | rest at "job" -0.45 | chop wide high at "job" -0.12 | chop wide low at "job" +0.06 | pat high at "reducing" -0.1 | pat low at "reducing" +0.08 | pat high at "reducing" +0.28 | pat low at "reducing" +0.46 | palm open from "British" +0.04 to "faces" -0.2 | rest at "chewed" +0.1
 L: rest at "backwards" -0.62 | hand low front at "backwards" -0.4 | point back mid at "backwards" -0.18 | point back from "backwards" +0.04 to "backwards" +0.6 | point back mid at "backwards" +0.85 | hand low front at "backwards" +1.1 | rest at "job" -0.3
 keys shoulders: 0 at start | -2 at start +0.3 | 0 at start +0.6
 body: chin up 0.4 from start +0.1 over 0.4
