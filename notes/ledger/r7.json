@@ -6452,6 +6452,544 @@
    "repeats": [
     "Kemi's vest hangs like a suit jacket | a check that knows a short top's length (short_top_faults)"
    ]
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "de3dcad2",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.74,
+   "src": "estimate",
+   "sid": "session_01U3pKR1movU8e9xJf8nbpnk",
+   "steps": 75,
+   "hist_k": 229,
+   "kinds": {
+    "tool search": 17.2,
+    "whole-file .py read": 5.9,
+    "renders": 3.4,
+    "pictures": 7.7,
+    "other": 65.7
+   },
+   "calls": {
+    "film-file search": 0,
+    "tool search": 38,
+    "whole-file .py read": 10,
+    "page.py": 0,
+    "routine": 0,
+    "renders": 3,
+    "pictures": 24,
+    "other": 19
+   },
+   "split": {
+    "usd": 6.3865,
+    "total": 6.3865,
+    "floor_k": 84,
+    "blocks": {
+     "new writes": 35.6,
+     "Claude's words": 28.3,
+     "carried history": 20.4,
+     "start-up floor": 15.6
+    },
+    "origins": {
+     "Claude's words": 41.2,
+     "messages and reminders": 29.1,
+     "start-up floor": 15.8,
+     "result: tool search": 9.9,
+     "result: pictures": 3.1,
+     "result: whole-file .py read": 0.5,
+     "result: other": 0.2,
+     "result: renders": 0.2
+    },
+    "named": {
+     "messages and reminders": 29.1,
+     "thinking": 23.9,
+     "start-up reading (rules, tools, first files)": 15.8,
+     "writing code": 12.8,
+     "reading kit code": 6.3,
+     "commands": 4.1,
+     "looking at pictures": 3.1,
+     "reading notes": 2.6,
+     "git and saving": 0.7,
+     "running checks and tools": 0.7,
+     "messages to Sam": 0.4,
+     "other commands": 0.2,
+     "renders": 0.2,
+     "writing notes": 0.1,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 44,
+    "work_pct": 0.84,
+    "reads": [
+     [
+      "source/solid_seat.py",
+      9.1,
+      0.1448
+     ],
+     [
+      "source/views.py",
+      3.3,
+      0.0442
+     ],
+     [
+      "notes/learn/pose-kit/examples/sam-26nov-kemi-34-far-leg.jpg",
+      1.6,
+      0.0278
+     ],
+     [
+      "notes/learn/pose-kit/examples/sam-26nov-kemi-side-bum-line-chair.jpg",
+      1.6,
+      0.0278
+     ],
+     [
+      "notes/learn/pose-kit/examples/sam-26nov-kemi-apart-crotch-line-knees.jpg",
+      1.6,
+      0.0278
+     ],
+     [
+      "notes/learn/pose-kit/learn_sheet.py",
+      1.5,
+      0.0258
+     ],
+     [
+      "source/sitting.py",
+      1.6,
+      0.0247
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_side.png",
+      1.6,
+      0.0243
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_front_apart.png",
+      1.6,
+      0.024
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_three-quarter.png",
+      1.6,
+      0.024
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/c_front.png",
+      1.6,
+      0.024
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/z34.png",
+      1.6,
+      0.0237
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/zside.png",
+      1.6,
+      0.0237
+     ],
+     [
+      "guides/pose-kits.md",
+      1.4,
+      0.0236
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/sides.png",
+      1.6,
+      0.0229
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/edgeside.png",
+      1.6,
+      0.0191
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/hits.png",
+      1.6,
+      0.018
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scratchpad/aparts.png",
+      1.6,
+      0.0171
+     ],
+     [
+      "notes/learn/seated/solid/sheet_solid.py",
+      0.5,
+      0.0087
+     ]
+    ],
+    "base_pct": 17.6
+   },
+   "search": {
+    "show": 0,
+    "film": {
+     "no show": 0
+    },
+    "other": {
+     "shared:handover.py": 1,
+     "film notes": 2,
+     "guides": 1,
+     "shared:solid_seat.py": 5,
+     "other": 7,
+     "shared:views.py": 12,
+     "shared:sitting.py": 7,
+     "shared:bench_draw.py": 1,
+     "shared:body.py": 1,
+     "shared:castsheet.py": 1
+    },
+    "ticked": 0,
+    "edited film code": false,
+    "list": [
+     [
+      0,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "git status | head -3 && git log --oneline -1 && git push --dry-run origin HEAD 2",
+      "",
+      4380
+     ],
+     [
+      1,
+      "other",
+      "film notes",
+      "notes/r7.md",
+      "Sam's notes, 26 Nov (on Kemi",
+      "",
+      6490
+     ],
+     [
+      2,
+      "other",
+      "guides",
+      "guides/pose-kits.md notes/learn/pose-kit/ notes/learn/pose-kit/examples/",
+      "wc -l guides/pose-kits.md && sed -n 1,80p guides/pose-kits.md; ls notes/learn/po",
+      "",
+      5449
+     ],
+     [
+      6,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py notes/learn/pose-kit/learn_sheet.py",
+      "^def \\|^[A-Z_]* = ",
+      "",
+      11994
+     ],
+     [
+      7,
+      "other",
+      "other",
+      "notes/learn/pose-kit/learn_sheet.py",
+      "S=/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scrat",
+      "",
+      7
+     ],
+     [
+      8,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "sed -n 506,720p source/solid_seat.py",
+      "",
+      14857
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a70e95/scrat",
+      "",
+      31
+     ],
+     [
+      11,
+      "other",
+      "shared:views.py",
+      "notes/learn/seated/solid/sheet_solid.py source/views.py",
+      "solid_seat\\|SO\\.\\|lay_over\\|def tile\\|chair",
+      "",
+      1103
+     ],
+     [
+      12,
+      "other",
+      "shared:views.py",
+      "source/views.py notes/learn/seated/solid/sheet_solid.py",
+      "sed -n 600,640p source/views.py; sed -n 1,40p notes/learn/seated/solid/sheet_sol",
+      "",
+      4300
+     ],
+     [
+      13,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py source/solid_seat.py",
+      "chair\\|back",
+      "",
+      3836
+     ],
+     [
+      14,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py",
+      "sed -n 197,275p source/solid_seat.py; sed -n 333,456p source/solid_seat.py",
+      "",
+      11318
+     ],
+     [
+      15,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "sed -n 95,200p source/sitting.py",
+      "",
+      6360
+     ],
+     [
+      25,
+      "other",
+      "shared:bench_draw.py",
+      "source/bench_draw.py",
+      "^def ink",
+      "",
+      1712
+     ],
+     [
+      27,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "SHORT_TOP_RISE",
+      "",
+      428
+     ],
+     [
+      29,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "def check_back",
+      "",
+      1673
+     ],
+     [
+      30,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "def back_gap",
+      "",
+      1243
+     ],
+     [
+      33,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "_r7_bottom\\|def _r7_seat\\|back_z",
+      "",
+      117
+     ],
+     [
+      34,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "flare\\|hem_back\\|rear",
+      "",
+      1947
+     ],
+     [
+      35,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 320,350p source/views.py",
+      "",
+      2126
+     ],
+     [
+      36,
+      "other",
+      "other",
+      "source/*.py notes/learn/seated/solid",
+      "seat_bottom(",
+      "",
+      199
+     ],
+     [
+      37,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 1900,1995p source/views.py",
+      "",
+      7406
+     ],
+     [
+      38,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def torso_outline",
+      "",
+      657
+     ],
+     [
+      39,
+      "other",
+      "shared:views.py",
+      "source/views.py notes/learn/seated/solid",
+      "sed -n 1880,1899p source/views.py; cat > /tmp/claude-0/-home-user-Animation-/de3",
+      "",
+      1654
+     ],
+     [
+      40,
+      "other",
+      "shared:body.py",
+      "source/body.py",
+      "^def trouser_seat",
+      "",
+      2767
+     ],
+     [
+      44,
+      "other",
+      "shared:solid_seat.py",
+      "notes/learn/seated/solid source/solid_seat.py",
+      "python3 -c \" import sys; sys.path.insert(0,'source'); sys.path.insert(0,'notes/l",
+      "",
+      4148
+     ],
+     [
+      52,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def chair",
+      "",
+      2635
+     ],
+     [
+      53,
+      "other",
+      "shared:sitting.py",
+      "source/*.py source/sitting.py",
+      "chair_draw",
+      "",
+      512
+     ],
+     [
+      54,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "seat.draw\\|\\.draw(p, view\\|'pre'\\]\\|j\\['pre'\\]\\|props'\\]",
+      "",
+      572
+     ],
+     [
+      55,
+      "other",
+      "shared:views.py",
+      "source/views.py notes/learn/pose-kit/examples/sam-26nov-kemi-side-bum-line-chair",
+      "_back_face",
+      "",
+      1036
+     ],
+     [
+      58,
+      "other",
+      "other",
+      "notes/learn/pose-kit/learn_sheet.py",
+      "error\\|Trace",
+      "",
+      614
+     ],
+     [
+      61,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^def person",
+      "",
+      38
+     ],
+     [
+      62,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "sed -n 425,465p source/sitting.py",
+      "",
+      2226
+     ],
+     [
+      63,
+      "other",
+      "shared:castsheet.py",
+      "notes/learn/seated/solid source/castsheet.py",
+      "seated_r7_switch\\|def _setup",
+      "",
+      101
+     ],
+     [
+      73,
+      "other",
+      "other",
+      "",
+      "git status --short | head; git branch --show-current; ls /tmp/claude-0/-home-use",
+      "",
+      222
+     ],
+     [
+      74,
+      "other",
+      "other",
+      "",
+      "git add -A source && git commit -qm \"R7 chat 14: WIP fixes for Sam's 5 full-body",
+      "",
+      31
+     ],
+     [
+      78,
+      "other",
+      "film notes",
+      "notes/learn/pose-kit/examples/sam-26nov-kemi-apart-crotch-line-knees.jpg notes/r",
+      "crotch\\|vertical line",
+      "",
+      577
+     ],
+     [
+      82,
+      "other",
+      "shared:solid_seat.py",
+      "source/solid_seat.py notes/learn/pose-kit/learn_sheet.py",
+      "error\\|traceback",
+      "",
+      701
+     ],
+     [
+      88,
+      "other",
+      "other",
+      "",
+      "sleep 60; ls /tmp/claude-0/-home-user-Animation-/de3dcad2-73e4-5673-9d17-56b476a",
+      "",
+      489
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {},
