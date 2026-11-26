@@ -6,3 +6,8 @@ Begin R8
 ### 2026-11-26T22:19:30
 Let's move through these one at a time in simple language.
 
+### 2026-11-26T22:20:34
+Y
+
+Next
+
