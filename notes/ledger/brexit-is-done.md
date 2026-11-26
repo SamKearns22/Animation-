@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 52.0% of a week; spent 56.99% (+4.99); 35 chats, 0 rounds, 10 notes, 4 repeated.**
+**Estimate 52.0% of a week; spent 58.86% (+6.86); 36 chats, 0 rounds, 10 notes, 4 repeated.**
 
-**Forecast: Spent 56.99% of the 44% planned so far; at this rate the film lands at 64%.**
+**Forecast: Spent 58.86% of the 44% planned so far; at this rate the film lands at 65.9%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -57,6 +57,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-26 | 52d590cb | est | sonnet | auto |  | 0.09 |  | 0 | 0 |
 | 2026-11-26 | 1190ae09 | est | opus | auto |  | 2.12 |  | 0 | 0 |
 | 2026-11-26 | 3083f467 | est | sonnet | auto |  | 1.49 |  | 0 | 0 |
+| 2026-11-26 | 05626271 | est | opus | auto |  | 1.87 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-23 9db844b1 (auto): 144 steps, history 273k at the end; other 66.1%, tool search 20.6%, pictures 7.1%, renders 5.5%, film-file search 0.6%, page.py 0.2%
@@ -89,6 +90,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 52d590cb (auto): 15 steps, history 99k at the end; other 78.9%, tool search 13.5%, film-file search 4%, routine 3.6%
 - 2026-11-26 1190ae09 (auto): 142 steps, history 252k at the end; other 63.8%, tool search 20%, pictures 9.3%, film-file search 4.8%, page.py 1%, renders 0.6%, whole-file .py read 0.3%
 - 2026-11-26 3083f467 (auto): 103 steps, history 169k at the end; other 78.2%, tool search 14.7%, renders 5.1%, pictures 1.4%, film-file search 0.6%
+- 2026-11-26 05626271 (auto): 123 steps, history 247k at the end; other 64.6%, tool search 18%, film-file search 10.1%, pictures 4.8%, renders 1.4%, page.py 0.7%, whole-file .py read 0.3%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-23 9db844b1 (auto): carried history 33.2%, start-up floor 27%, Claude's words 22.4%, new writes 17.4%. Biggest origins: Claude's words 41.2%, start-up floor 27%, result: tool search 15%. Leftover 0%
@@ -121,9 +123,10 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 52d590cb (auto): start-up floor 64.1%, new writes 19.1%, Claude's words 12.9%, carried history 3.9%. Biggest origins: start-up floor 64.1%, Claude's words 16.9%, result: tool search 8.9%. Leftover 0%
 - 2026-11-26 1190ae09 (auto): carried history 31.3%, start-up floor 29.8%, Claude's words 21.6%, new writes 17.3%. Biggest origins: Claude's words 39.1%, start-up floor 29.8%, result: tool search 14%. Leftover 0%
 - 2026-11-26 3083f467 (auto): start-up floor 44%, Claude's words 21.4%, carried history 19.1%, new writes 15.4%. Biggest origins: start-up floor 44%, Claude's words 33.1%, result: tool search 10.7%. Leftover 0%
+- 2026-11-26 05626271 (auto): start-up floor 36.2%, carried history 26.2%, Claude's words 20.4%, new writes 17.3%. Biggest origins: start-up floor 36.2%, Claude's words 35.1%, result: tool search 13.6%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 15% of the film (8.52% of a week over 30 chats: start 8.27, re-learning 0.25; 0.28% a chat; step-1 context re-read is 28% of a chat on average).
+A new chat's start and re-learning cost 15% of the film (8.83% of a week over 31 chats: start 8.58, re-learning 0.25; 0.28% a chat; step-1 context re-read is 28% of a chat on average).
 - 2026-11-23 9db844b1: step-1 context 84k; first real work at step 17 (0.26% of a week); read before it: source/facehouse.py 4.4k, source/turnhead.py 1.8k, notes/sam-notes/brexit-cast-v1/n2-blair-threequarter-not-same.jpg 1.6k, notes/sam-notes/brexit-cast-v1/n3-kemi-orange-gone-threequarter.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scratchpad/t0.jpg 1.6k, notes/sam-notes/brexit-cast-v1/notes.md 1.4k
 - 2026-11-23 f27fff03: step-1 context 84k; first real work at step 10 (0.12% of a week); read before it: notes/logs/broken.md 1k, source/watcher.py 0.4k, .claude/settings.json 0.3k, source/hookran.py 0.3k, source/data/freeze/films.json 0.2k
 - 2026-11-23 f960632f: step-1 context 84k; first real work at step 40 (0.53% of a week); read before it: source/castsheet.py 2.4k, source/sitting.py 2.2k, notes/next-jobs.md 1.6k, notes/brexit-is-done.md 1.6k, notes/sam-notes/brexit-cast-v2/n5-kemi-body-like-a-mans.jpg 1.6k, notes/sam-notes/brexit-cast-v2/n5-may-body.jpg 1.6k
@@ -154,6 +157,7 @@ A new chat's start and re-learning cost 15% of the film (8.52% of a week over 30
 - 2026-11-26 52d590cb: step-1 context 84k; first real work at step 7 (0.05% of a week); read before it: source/brexit_is_done.py 0.9k, guides/job-packs.md 0.8k
 - 2026-11-26 1190ae09: step-1 context 84k; first real work at step 16 (0.21% of a week); read before it: source/facehouse.py 2.6k, notes/ledger/brexit-is-done/round-27.txt 1.9k, /tmp/claude-0/-home-user-Animation-/1190ae09-a120-589c-b648-bea0002a2928/scratchpad/cmp.jpg 1.6k, source/brexit_is_done.py 1.4k, story/brexit-is-done-moves.txt 1.4k, source/turnhead.py 1.2k
 - 2026-11-26 3083f467: step-1 context 84k; first real work at step 5 (0.04% of a week); read before it: 
+- 2026-11-26 05626271: step-1 context 99k; first real work at step 20 (0.31% of a week); read before it: notes/brexit-is-done.md 2.8k, source/movesize.py 1.7k, story/status.md 0.4k
 
 ## Repeated notes (what would have caught them)
 - Blair 3/4 not the same person as front | a front-vs-3/4 match check
