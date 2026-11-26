@@ -160,3 +160,18 @@ Open Wounds' seated frames (switch off); the bum/seat.
 For Claude: sheet = may_sheet.py OUT body (sheet_solid sets turned_curves/turned_bust in mode body). handover end's
 "SENTENCE lost from CLAUDE.md" lines are other chats' CLAUDE.md edits (34f49840, 0945cc85), not R7's.
 
+
+## Where things stand (chat 12, 26 Nov, session_01U3pKQzd7WtTW95LHF7F6LQ)
+Rules that bite next: the proposal route (build only what Sam picks), 87 (a fix failing twice stops), 30 (fix the method).
+Done: main line merged (chat 11's rewrite: crux = full body under separate clothing layers); pose-kit-format
+helpers A, B and blind judge run; verdict recorded (picked helper A; Critiqued 9 found, 5 fixed, 4 named); top two sent.
+Cost found by helper A: R7 rows also sit in brexit-is-done.json (chats 1-2) and proposal-route.json (chats 3-5);
+r7.json alone is 11.2% for chats 6-11. Both options book every chat to its own job.
+Needs Sam: 1 or 2 for pose-kit-format; look at c11 (upright, apart); OK on c10c (shoes).
+Next: on his pick, this chat (Opus high) builds it: the Kemi/Blair look first (changes nothing), then the tool or the
+hand-over list, each check proved on a saved example; guide page named in guides/job-packs.md. Then solid-body-default.
+Read: Brief checklist; notes/proposals/pose-kit-format.md (Verdict). Open rule requests: none. Kit check: not this chat (rule 90).
+Locked by Sam: May mode 'body' front and side; both three-quarters and shoes as on c10c once OKed; 'upright' as it
+was (jacket point stays, Sam N 26 Nov); her posted outfit; Open Wounds' seated frames (switch off); the bum/seat.
+For Claude: propose.py show pose-kit-format prints both options; verdict in pose-kit-format.md. Branch claude/r7-chat12-pose-kit-format.
+
