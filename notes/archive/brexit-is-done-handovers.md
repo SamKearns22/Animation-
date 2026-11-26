@@ -548,3 +548,20 @@ Read: guides/job-packs.md "Checks and animatic".
 Open rule requests: none. Branches claude/gta-*: GTA's, left.
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
 For Claude: castsheet.seated_look tones still ask crossed body-kit legs for two tones (conflicts with Sam's note 7): handover STOPs on it are waived by Sam's Y (chat 33); fix the test to the body kit later.
+
+## Where things stand (chat 34, 26 Nov, session_01J1JB7ZiGN74A5xC2A1weQQ)
+Rules that bite next: 59 (render lock: pre-flight must pass or each warning answered), 30 (a note seen before), 89 (critique gate).
+Done (chat 34): full pre-flight run (6 m 50 s); render REFUSED by rule 59: 5 pre-flight faults + critique r27 pass 2. Sam's rulings (26 Nov):
+ FIX (Y): 1 May's hair (tall quiff vs short rounded grey bob, see reference); 2 'remember' lean-in reads as a lean away; 4 gestures on 'referendum' and the firm chop hang low (no force); 5 'wolves' tight satisfied smile (mouth is an open 'oh'); 6 near hand on the thigh, not the jacket hem; 7 blouse wide plaid between broad lapels, jacket tailored not cardigan.
+ 3 raised finger: Sam wants a PICTURE of the proposed fix first (hands are plain circles; a finger shows only when pointing); wait for his OK before drawing it into the film.
+ 8 pupils inside eyes: Sam says they are fine. 9 mouths on 'remember'/'referendum': Sam can't tell until the animatic.
+ Not faults (Sam): torso 'not front on', legs one mass.
+ Also fix, Sam Y: 4 small head moves (Kemi chin up 9.89 s 3 px, Kemi nod 17.55 s 8 px, Blair preen 28.83 s 12 px, Blair nod 32.48 s 15 px; bar 22 px; the acting list says small/curt nods: make them clear without changing timing) and the shot 1 pan 6.12-6.38 s (stops from 81% of top speed, no ease out: soften the stop only, never where it goes).
+ Sam's Y: write the early move-size rule for all films (check each move in the acting list the moment it is written; 'small/curt' wording gets its own line; tested on these four moves): rulebook + its check.
+Next: Opus medium: fix the above efficiently (picture for 3 first, to Sam). Then open the SONNET chat: Sam typed 'Once you get to animatic stage, override everything and deliver the animatic': render the animatic with Override (log each skip, 'Checks: skipped by Override: ...'), finish.py (Hook Text, sign-off), save both to animations/drafts/, push, send with size and render time.
+Needs Sam: the picture for fault 3 (OK or not).
+Read: guides/job-packs.md "Checks and animatic"; story/brexit-is-done-moves.txt; notes/ledger/brexit-is-done/round-27.txt.
+Open rule requests: the early move-size check (above).
+Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
+For Claude: preflight name is the hyphenated 'brexit-is-done' (not brexit_is_done); full pre-flight ~7 min; python3 source/movesize.py brexit-is-done lists the head moves (Sam stopped one run: run it in the background).
+

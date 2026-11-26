@@ -960,17 +960,20 @@ def bob_shapes(L, kh, hc):
     pu = kh.get('part', -0.12)
     crown = kh.get('bob_crown', -0.5)
     fe = lambda v: _face_u(L, v)                          # noqa: E731
-    outer_r = [(c * 0.55, crown + 0.02), (c * 0.85, crown + 0.1), (c, -0.22), (c + 0.01, 0.0), (c - 0.005, 0.2),
+    kr = kh.get('bob_right', 1.0)                        # the top of the right side as a share (May turned left: it
+    outer_r = [(c * 0.5 * kr, crown + 0.06), (c * 0.8 * kr, crown + 0.13), (c * (0.5 + 0.47 * kr), crown + 0.24), (c, -0.1), (c + 0.01, 0.0), (c - 0.005, 0.2),
                (c - 0.02, 0.36), (c + 0.02, low - 0.03), (c + 0.05, low + 0.01)]        # the flick out at the tip
     inner_r = [(fe(low - 0.02) + 0.02, low - 0.02), (fe(0.36) - 0.005, 0.36), (fe(0.2) - 0.015, 0.2),
                (fe(0.08) - 0.025, 0.08)]
     # the fringe: from the parting it sweeps down and across to our right, ending on the brow at the temple
-    fringe = [(fe(0.08) - 0.03, 0.06), (e * 0.72, 0.1), (e * 0.45, 0.04), (e * 0.15, -0.04), (pu + 0.06, -0.1),
-              (pu, -0.13)]
+    fd = kh.get('fringe_down', 0.0)                      # May (chat 35): the fringe swept low across the forehead
+    fringe = [(fe(0.08) - 0.03, 0.06), (e * 0.72, 0.1), (e * 0.45, 0.04 + fd * 0.5), (e * 0.15, -0.04 + fd),
+              (pu + 0.06, -0.1 + fd), (pu, -0.13 + fd * 0.6)]
     left_hl = [(pu - 0.08, -0.1), (-e * 0.6, -0.08), (-(fe(0.0) - 0.03), -0.02), (-(fe(0.12) - 0.02), 0.12),
                (-(fe(0.36) - 0.005), 0.36), (-(fe(low - 0.02) + 0.02), low - 0.02)]
-    outer_l = [(-u, v) for u, v in outer_r[::-1]]
-    top = [(-c * 0.55, crown + 0.02), (-c * 0.2, crown - 0.005), (c * 0.15, crown - 0.01)]
+    kl = kh.get('bob_left', 1.0)                         # the left side's width as a share (May turned left: the side
+    outer_l = [(-u * kl, v) for u, v in outer_r[::-1]]   # is carried in front of the brow; full width, a quiff)
+    top = [(-c * kl * 0.45, crown + 0.07), (-c * 0.2, crown + 0.005), (c * 0.15, crown - 0.005)]
     cap = (top + outer_r + inner_r + fringe + left_hl + outer_l)
     cap = FA.tufts(cap[:len(top) + len(outer_r)], 0.004, 0.035, out=1.0, seed=41) + cap[len(top) + len(outer_r):]
     light = tuple(kh.get('light') or blend(hc, (250, 248, 242), 0.6))
@@ -1499,7 +1502,7 @@ HAIR = ('swept', 'braids', 'bald', 'bob', 'back')
 TURN_PROF = {'swept': dict(hair_low=0.36, nape=0.62, volume=0.015),         # clipped short at the back
              'braids': dict(hair_low=0.5, nape=0.78, volume=0.05),
              'bald': dict(hair_low=0.3, nape=0.6, volume=0.0),
-             'bob': dict(hair_low=0.5, nape=0.66, volume=0.06),       # May: full, to the lobe, the nape covered
+             'bob': dict(hair_low=0.5, nape=0.66, volume=0.06, shell_front=0.3),       # May: full, to the lobe, the nape covered
              'back': dict(hair_low=0.3, nape=0.6, volume=0.03)}       # Blair: short at the back and sides               # bald: the skull is the head's own          # the plaits' bulk over the skull
 
 
@@ -1803,7 +1806,7 @@ CAST = {   # the test pair (Sam, 14 Nov): the lines a people file would hold. Ch
                                                                          # (Blessed's hand-made, Sam: "That's him")
     'mcfadden': dict(hair='bald', outfit=('suit', (40, 42, 56)), shirt=(246, 246, 246), tie=(70, 96, 140),   # Milburn
                      grey=(184, 170, 156), ear_k=1.3, side_proud=0.034, dome=-0.33, dome_wide=0.405),   # chat 5: bald, grey-ginger sides, his ears
-    'may': dict(hair='bob', outfit=('suit', (118, 38, 92)), shirt=(246, 246, 246), height=1.73, collar='open',   # Brexit
+    'may': dict(hair='bob', outfit=('suit', (118, 38, 92)), shirt=(246, 246, 246), height=1.73, collar='open', bob_crown=-0.46, bob_wide=0.15, bob_low=0.46, bob_right=0.6, fringe_down=0.08,   # Brexit
                 pearls=True, hair_c=(208, 202, 192), brow_c=(150, 124, 108), brow_thick=0.034, age_boost=1.5,
                 brow_arch=0.03, brow_taper=0.5, head=False),                                                                     # Is Done, 23 Nov: first try
     'blair': dict(hair='back', ear_k=1.35, lift=0.08, hair_c=(208, 204, 198), back_crown=-0.54, neck_up=0.09,

@@ -5064,6 +5064,82 @@ def nod_reads_on_screen():
 
 
 @test
+def early_move_size():
+    """Open Wounds chat 35 (Sam's Y, 26 Nov; saved example: notes/ledger/brexit-is-done/checks.jsonl, pre-flight 26 Nov
+    18:57: "MOVE SIZE: shot 2 kemi: the chin up at 9.89 s moves the head 3 px ... the nod at 17.55 s ... 8 px ... shot
+    3 blair: the preen at 28.83 s ... 12 px ... the nod at 32.48 s ... 15 px", caught only at pre-flight, ten rounds
+    after the moves were written 'small' and 'curt'). The early check measures a head move the moment it is new or
+    changed: with those four old amounts it must flag all four, with the film's own amounts none; a second early pass
+    over moves it has already measured measures nothing; and the 'curt'/'small' rows each get their own line."""
+    import acting as A
+    import movesize as MS
+    import brexit_is_done as F
+    real = A.load
+    OLD = {('2', 'chin up'): 0.4, ('2', 'nod', '"job"'): 1.2, ('3', 'preen'): 1.0, ('3', 'nod', '"Hague"'): 0.8}
+
+    def four(film, old):
+        d = real(film)
+        for key in ('2', '3'):
+            b = d['shots'][key]
+            keep = []
+            for m in b['body']:
+                for k, v in OLD.items():
+                    if k[0] == key and m['move'] == k[1] and (len(k) < 3 or k[2] in str(m['a'])):
+                        keep.append(dict(m, amount=v) if old else m)
+            b['body'] = keep
+        d['shots'] = {k: d['shots'][k] for k in ('2', '3')}
+        return d
+    try:
+        A.load = lambda f: four(f, True)
+        F._MOVES.clear()
+        before, n0 = MS.early('brexit-is-done', seen=set(), save=False)
+        A.load = lambda f: four(f, False)
+        F._MOVES.clear()
+        now, n1 = MS.early('brexit-is-done', seen=set(), save=False)
+        seen = set()
+        d = A.load('brexit-is-done')
+        for key in d['shots']:
+            b = A.block_for(d, key)
+            seen |= {MS._sig(b['shot'], b.get('who') or key, m) for m in b['body'] if m['move'] in MS.HEAD_MOVES}
+        again, n2 = MS.early('brexit-is-done', seen=seen, save=False)
+        words = MS.wording('brexit-is-done')
+    finally:
+        A.load = real
+        F._MOVES.clear()
+    curt = [w for w in words if 'curt nod' in w]
+    return (len(before) == 4 and not now and n2 == 0 and curt,
+            f'old amounts: {len(before)} of 4 flagged; the film now: {now}; measured again: {n2}; curt line: {bool(curt)}')
+
+
+@test
+def camera_measured_on_background():
+    """Open Wounds chat 35 (saved example: notes/ledger/brexit-is-done/checks.jsonl, pre-flight 26 Nov 18:57: "CAMERA
+    FEEL: shot 1 6.12-6.38 s, the pan: stops from 81% of its top speed (no ease out)"; shot 1's camera never moves:
+    the 'pan' was May's chop and lean, measured over the whole frame, and Sam was asked to soften it). The camera is
+    measured on the background above everyone drawn: over May's lean in on 'remember' the whole frame must read a
+    shift and the band none; a real pan (the frame slid 6 thumb px) must still read on the band."""
+    import numpy as np
+    import kitinputs as KI
+    import cover
+    import brexit_is_done as F
+    recs = []
+    for t in (2.42, 2.5, 2.58):
+        r = cover.survey_record(F, t)
+        im = r['image']
+        th = np.asarray(im.convert('L').resize(KI.THUMB), np.float32)
+        top = int(min(p['box'][1] for p in r['people']) * KI.THUMB[1] / im.size[1]) - 3
+        recs.append((th, top))
+    whole = sum(abs(KI._shift_zoom(a[0], b[0])[0]) + abs(KI._shift_zoom(a[0], b[0])[1]) for a, b in zip(recs, recs[1:]))
+    band = min(r[1] for r in recs)
+    still = sum(abs(KI._shift_zoom(a[0], b[0], band)[0]) + abs(KI._shift_zoom(a[0], b[0], band)[1])
+                for a, b in zip(recs, recs[1:]))
+    slid = np.roll(recs[0][0], 6, axis=1)
+    pan = KI._shift_zoom(recs[0][0], slid, band)[0]
+    ok = band >= KI.FREE_BAND * KI.THUMB[1] and whole > 0 and still == 0 and abs(abs(pan) - 6) <= 1
+    return ok, f'band {band} rows; whole frame shift {whole:.0f}, band shift {still:.0f}; a real 6 px pan reads {pan:.0f}'
+
+
+@test
 def hand_rests_on_thigh():
     """Open Wounds chat 32 (saved example: round-27.txt, "both ball hands sit loose at the lap edge ... neither clearly
     rests on a thigh"): with the old 'lap fwd' place (y 378) May's hands hover over her thighs at 1.0 s; the resting

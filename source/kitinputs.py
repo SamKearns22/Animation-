@@ -70,7 +70,10 @@ def _one(args):
     except Exception as e:                       # a frame that cannot be drawn is said, never skipped in silence
         return dict(t=t, shot=shot, error=f'{type(e).__name__}: {e}'[:200], people=[], texts=[], view=None)
     r['shot'] = shot
-    r['thumb'] = np.asarray(r.pop('image').convert('L').resize(THUMB), np.float32)   # the camera is measured on it
+    im = r.pop('image')
+    r['thumb'] = np.asarray(im.convert('L').resize(THUMB), np.float32)   # the camera is measured on it
+    tops = [p['box'][1] for p in r.get('people') or [] if p.get('box')]
+    r['free_top'] = int(min(tops) * THUMB[1] / im.size[1]) - 3 if tops else THUMB[1]   # rows above everyone drawn
     return r
 
 
@@ -214,11 +217,20 @@ def plan(film, sv):
 
 
 # ---------------------------------------------------------------------------------------------- camera
-def _shift_zoom(a, b):
-    """How the picture moved from a to b: (dx, dy) in thumb px and a zoom, by phase correlation over a few zooms."""
+FREE_BAND = 0.12          # Open Wounds chat 35: a band of background at least this share of the frame's height above
+#                           everyone drawn: the camera is measured on it alone (measured on the whole frame, May's
+#                           lean and chop in a locked-off shot read as a 'pan' that stops dead; Sam was asked to
+#                           soften a camera move that never happened)
+
+
+def _shift_zoom(a, b, rows=None):
+    """How the picture moved from a to b: (dx, dy) in thumb px and a zoom, by phase correlation over a few zooms.
+    rows: measure on the frame's rows [0, rows) only (the background above the people)."""
     from PIL import Image
     best = (0.0, 0.0, 1.0, -1.0)
-    A = a - a.mean()
+    cut = (lambda x: x[:rows]) if rows else (lambda x: x)
+    A = cut(a)
+    A = A - A.mean()
     for z in (0.94, 0.97, 1.0, 1.03, 1.06):
         if z == 1.0:
             Bz = b
@@ -232,6 +244,7 @@ def _shift_zoom(a, b):
                 pad = Image.new('F', THUMB, float(b.mean()))
                 pad.paste(im, (-x0, -y0))
                 Bz = np.asarray(pad, np.float32)
+        Bz = cut(Bz)
         Bm = Bz - Bz.mean()
         F = np.fft.fft2(A) * np.conj(np.fft.fft2(Bm))
         R = np.abs(np.fft.ifft2(F / (np.abs(F) + 1e-6)))
@@ -255,13 +268,14 @@ def cam_track(film, sv):
     out, by_shot = {}, {}
     for r in sv:
         if r.get('thumb') is not None:
-            by_shot.setdefault(r['shot'], []).append((r['t'], r['thumb']))
+            by_shot.setdefault(r['shot'], []).append((r['t'], r['thumb'], r.get('free_top', 0)))
     for shot, tt in by_shot.items():
-        ts, th = [t for t, _ in tt], [x for _, x in tt]
+        ts, th, ft = [x[0] for x in tt], [x[1] for x in tt], [x[2] for x in tt]
         z, cx, cy = 1.0, 540.0, 960.0
         tr = [(ts[0], z, cx, cy)]
         for i in range(1, len(ts)):
-            dx, dy, dz, _ = _shift_zoom(th[i - 1], th[i])
+            band = min(ft[i - 1], ft[i])                 # the background above everyone in both frames, if enough
+            dx, dy, dz, _ = _shift_zoom(th[i - 1], th[i], band if band >= FREE_BAND * THUMB[1] else None)
             z = z / dz                       # the content moved by (-dx, -dy): the camera by (dx, dy)
             cx, cy = cx + dx * k / z, cy + dy * k / z
             tr.append((ts[i], z, cx, cy))

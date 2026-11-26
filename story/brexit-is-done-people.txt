@@ -4,6 +4,7 @@
 head: house may, hair bob, look detail
 outfit: suit 118 38 92, shirt white, no tie, open collar
 extras: pattern
+tailoring: v_wide 1.9, v_deep 1.05, lapel_w 1.9, v_collar 1.0, v_close 0.28, lapel_x 1.6, stripe_w 0.15, plaid
 body: 1.73 m, woman, shoulders 138
 
 # kemi: Kemi Badenoch on site (Sam's photo: white hard hat, glasses, braids, orange-and-navy hi-vis)

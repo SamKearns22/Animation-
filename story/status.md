@@ -1,3 +1,3 @@
-Open Wounds chat 33 (26 Nov): Blair's false seat alarms fixed (a check bug); Sam said May's body and leg line are fine, skip the rest of the review.
-Next: Sonnet chat renders the animatic (Hook Text, sign-off) and sends it.
-Sam: nothing needed.
+Open Wounds chat 35 (26 Nov): May's hair, lean, gestures, smile, hand and blouse fixed; six head moves made clear; early move-size rule 92 written.
+Next: Sonnet chat renders the animatic with Override (Hook Text, sign-off) and sends it.
+Sam: Y or N on the finger picture (fault 3).

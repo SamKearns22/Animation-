@@ -376,7 +376,10 @@ def hair_point(f, prof, psi, v):
         _, zf = f.ring(0.0, vr)
         _, zb = f.ring(180.0, vr)
         zc = (float(zf) + float(zb)) / 2 * puff
-        x, z = x * k, zc + (z - zc) * k
+        kz = k
+        if (z - zc) * (float(zf) - zc) > 0:          # the front half: 'shell_front' of the swell only (Open Wounds
+            kz = 1.0 + (k - 1.0) * prof.get('shell_front', 1.0)   # chat 35: May's full width pushed forward of the
+        x, z = x * k, zc + (z - zc) * kz             # brow read as a quiff, Sam's fault 1)
     X, _ = f.view(x, z)
     return (f.cx + X * H, f.top + (v - 0.012 * min(1.0, max(0.0, -v / 0.3))) * H)
 

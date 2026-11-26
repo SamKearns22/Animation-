@@ -705,8 +705,15 @@ def draw(p, j, yaw, sp, scale=2):
         pc = np.array(sp.get('pattern') or PPa.BLOUSE_STRIPES, np.uint8)   # the stripes turn with her (Sam, chat 8:
         sh_m = (pb == BD.PART_IX['dash']) & (ob == 0)                      # "you changed her clothes?")
         xr, yr = ab[..., 0][sh_m], ab[..., 1][sh_m]
-        k = np.floor((xr + STRIPE_WAVE * np.sin(yr / 0.28)) / STRIPE_W).astype(int) % len(pc)
-        lay[sh_m, :3] = pc[k]
+        sw = sp.get('stripe_w', STRIPE_W)
+        k = np.floor((xr + STRIPE_WAVE * np.sin(yr / 0.28)) / sw).astype(int) % len(pc)
+        col = pc[k].astype(float)
+        if sp.get('plaid'):                      # a plaid (May, chat 35, Sam's fault 7: "wide plaid"): bands across
+            kb = np.floor(yr / (sw * 1.6)).astype(int)                     # the stripes, every other one darker and
+            cross = pc[(kb * 2 + 1) % len(pc)].astype(float)               # tinted by its own colour (the check)
+            on = (kb % 2 == 0)[:, None]
+            col = np.where(on, col * 0.55 + cross * 0.45, col)
+        lay[sh_m, :3] = col.astype(np.uint8)
     if whole and woman(sp):                     # her jacket's lapels and the front closing below the V, as the flat
         J12 = M['J']                             # jacket draws them (Sam, chat 8: "you changed her clothes?")
         sh_y = (J12['shL'][1] + J12['shR'][1]) / 2
@@ -714,8 +721,14 @@ def draw(p, j, yaw, sp, scale=2):
         jk = (pb == BD.PART_IX['body']) & (ob == 0) & (ab[..., 2] > 0.3) & (ab[..., 7] > 0.5)
         xr, yr = np.abs(ab[..., 0]), ab[..., 1]
         u = np.clip((collar - yr) / (collar - button), 0, 1)
-        lapel = jk & (yr <= collar) & (yr >= button) & (np.abs(xr - (LAPEL_X * (1 - u) + 0.12 * u)) < SEAM_W)
+        lx = sp.get('lapel_x', LAPEL_X) * (1 - u) + sp.get('v_close', 0.12) * u
+        lapel = jk & (yr <= collar) & (yr >= button) & (np.abs(xr - lx) < SEAM_W)
         close = jk & (yr < button) & (xr < SEAM_W)
+        if sp.get('lapel_x'):                    # broad tailored lapels (May, chat 35, fault 7: "jacket tailored, not
+            face = jk & (yr <= collar) & (yr >= button) & (xr < lx)        # a cardigan"): the lapel's face a shade
+            lay[face, :3] = np.clip(lay[face, :3].astype(float) * 1.16 + 6, 0, 255).astype(np.uint8)   # lighter
+            notch = jk & (np.abs(yr - (collar - 0.28)) < SEAM_W) & (xr < sp['lapel_x']) & (xr > sp['lapel_x'] - 0.32)
+            lay[notch, :3] = INK                 # the notch where the collar meets the lapel
         lay[lapel | close, :3] = INK
     lay[m, 3] = 255
     lay[edge & m, :3] = INK

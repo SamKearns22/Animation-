@@ -773,6 +773,16 @@ def _fact(d, key, val, people):
             if p not in EXTRAS:
                 raise DescriptionError(f'extra {p!r}: one of {", ".join(EXTRAS)}')
         d['extras'] = parts
+    elif key == 'tailoring':                       # Open Wounds chat 35 (Sam's fault 7, May): the jacket's front:
+        t = {}                                     # 'v_collar 1.0' (the V's half width at the collar, dm), 'v_close',
+        for part in val.split(','):                # 'v_button', 'lapel_x' (broad lapels: their seam at the collar),
+            w = part.split()                       # 'stripe_w' (the blouse's stripes), 'plaid' (bands across them)
+            if not w:
+                continue
+            if w[0] not in TAILORING:
+                raise DescriptionError(f'tailoring {w[0]!r}: one of {", ".join(TAILORING)}')
+            t[w[0]] = True if len(w) == 1 else float(w[1])
+        d['tailoring'] = t
     elif key == 'seed':
         if val.replace(' ', '').endswith('+i'):          # a crowd: member i's seed
             d['seed_base'] = int(val.split('+')[0])
@@ -782,11 +792,16 @@ def _fact(d, key, val, people):
         raise DescriptionError(f'unknown line {key!r}')
 
 
+TAILORING = ('v_collar', 'v_close', 'v_button', 'lapel_x', 'stripe_w', 'plaid', 'v_wide', 'v_deep', 'lapel_w')
+
+
 # ---------------------------------------------------------------------------------------------- the engine's person
 def person(d):
     """One description -> the engine's person dict (views.person), with its face card in 'kit_face'."""
     if d.get('house'):
-        return _house(d)
+        sp = _house(d)
+        sp.update(d.get('tailoring') or {})
+        return sp
     sp = dict(DEFAULTS)
     style = d.get('hair_style', 'crop')
     for k in ('who', 'name', 'skin', 'hw', 'hh', 'height', 'shoulders', 'neck_w', 'bottom', 'leg_k', 'hair_c',
@@ -836,6 +851,7 @@ def person(d):
         sp.update(kit_head=d['head_part'], neck_shade=True)
     elif d.get('measured'):
         _famous(d, sp)
+    sp.update(d.get("tailoring") or {})
     return sp
 
 

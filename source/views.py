@@ -1215,14 +1215,20 @@ def torso_view(img, p, sp, view, seated=False):
         _bare_neck(p, sp, [(-22.2, -40), (40.3, -40), (45.2, -4), (-20.5, -4)])
         if out == 'suit' and sp.get('sex') == 'woman' and not tie:   # Change 2 (chat 6): as body._womans_neckline
             a, dpt, b, ny = B.WOMAN_V                                # turned: the far side narrower (0.6)
+            vw_, lw = sp.get('v_wide', 1.0), sp.get('lapel_w', 1.0)  # tailoring (Open Wounds chat 35, Sam's fault 7:
+            b = b * vw_                                              # "wide plaid between broad lapels, tailored"):
+            dpt = dpt * sp.get('v_deep', 1.0)                        # the opening wider below the neck, the lapels broad
             p.poly([(o - a * 0.8, -4), (o + a * 0.6, -4), (o + b * 0.6, ny), (o + 2, dpt), (o - b * 0.8, ny)], sc, INK, 2.2)
             for sg, k in ((-1, 0.8), (1, 0.6)):
                 p.poly([(o + sg * a * k, -4), (o + sg * 22 * k, 30), (o + sg * 30 * k, 46), (o + sg * (a + 8) * k, 10)],
                        sc, INK, 2.0)
             p.poly([(o - 18, 30), (o + 14, 30), (o, 52)], skin, None)
+            lc = B.lt(jc, 1.12) if lw > 1.0 else jc                 # broad lapels catch the light: a shade lighter
             for sg, k in ((-1, 0.8), (1, 0.6)):
-                p.poly([(o + sg * (a - 2) * k, -2), (o + sg * (a + 22) * k, 22), (o + sg * (b + 18) * k, 74),
-                        (o + sg * (b + 30) * k, 98), (o + sg * 4, dpt + 10), (o + sg * (b - 10) * k, 98)], jc, INK, 2.2)
+                p.poly([(o + sg * (a - 2) * k, -2), (o + sg * (a + 22 * lw) * k, 22), (o + sg * (b + 18 * lw) * k, 74),
+                        (o + sg * (b + 30 * lw) * k, 98), (o + sg * 4, dpt + 10), (o + sg * (b - 10) * k, 98)], lc, INK, 2.2)
+                if lw > 1.0:                                         # the notch where the collar meets the lapel
+                    p.line([(o + sg * (a + 22 * lw) * k, 22), (o + sg * (a + 4) * k, 34)], INK, 2.0)
             p.line([(o + 2, dpt + 10), (o + 4, bottom)], jd, 2.2)
         elif out in ('suit', 'blouse'):
             p.poly([(o - 28, -4), (o + 26, -4), (o + 14, 150), (o + 2, 220), (o - 18, 150)], sc, INK, 2.2)

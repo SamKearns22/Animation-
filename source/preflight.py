@@ -426,6 +426,13 @@ def _text_only(film, problems, end, fps):
     long = [f'{s[0]} {s[2] - s[1]:.1f} s' for s in getattr(film, 'SHOTS', []) if s[2] - s[1] > MAX_SHOT]
     if long:                                    # an info line (Sam, 13 Nov, proposal 4)
         print(f'info: shots over {MAX_SHOT:.0f} s (fine when chosen): ' + ', '.join(long))
+    if os.path.exists(os.path.join(ROOT, 'story', f'{film.NAME}-moves.txt')) and hasattr(film, 'DRAWN'):
+        import movesize                         # the early move size (Open Wounds chat 35, Sam's Y): each head move
+        fs, n = movesize.early(film.NAME)       # new or changed since the last quick check is measured now (a few
+        problems += [f if f.startswith('MOVE SIZE') else 'MOVE SIZE: ' + f for f in fs]   # frames each)
+        print(f'info: movesize (early): {n} new or changed head move(s) measured')
+        for w in movesize.wording(film.NAME):   # each 'small'/'curt' row gets its own line (Sam's Y)
+            print('info: ' + w)
     import report
     problems[:] = report.group(problems, getattr(film, 'SHOTS', []))
     import ledger                               # check-catches change 1: the quick check is recorded too (it never was)

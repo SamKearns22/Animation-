@@ -58,23 +58,21 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 - Background, men with steel bars (8): arms as part of the body (now flat, drawn on top), hands gripping the bars.
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
-## Where things stand (chat 34, 26 Nov, session_01J1JB7ZiGN74A5xC2A1weQQ)
-Rules that bite next: 59 (render lock: pre-flight must pass or each warning answered), 30 (a note seen before), 89 (critique gate).
-Done (chat 34): full pre-flight run (6 m 50 s); render REFUSED by rule 59: 5 pre-flight faults + critique r27 pass 2. Sam's rulings (26 Nov):
- FIX (Y): 1 May's hair (tall quiff vs short rounded grey bob, see reference); 2 'remember' lean-in reads as a lean away; 4 gestures on 'referendum' and the firm chop hang low (no force); 5 'wolves' tight satisfied smile (mouth is an open 'oh'); 6 near hand on the thigh, not the jacket hem; 7 blouse wide plaid between broad lapels, jacket tailored not cardigan.
- 3 raised finger: Sam wants a PICTURE of the proposed fix first (hands are plain circles; a finger shows only when pointing); wait for his OK before drawing it into the film.
- 8 pupils inside eyes: Sam says they are fine. 9 mouths on 'remember'/'referendum': Sam can't tell until the animatic.
- Not faults (Sam): torso 'not front on', legs one mass.
- Also fix, Sam Y: 4 small head moves (Kemi chin up 9.89 s 3 px, Kemi nod 17.55 s 8 px, Blair preen 28.83 s 12 px, Blair nod 32.48 s 15 px; bar 22 px; the acting list says small/curt nods: make them clear without changing timing) and the shot 1 pan 6.12-6.38 s (stops from 81% of top speed, no ease out: soften the stop only, never where it goes).
- Sam's Y: write the early move-size rule for all films (check each move in the acting list the moment it is written; 'small/curt' wording gets its own line; tested on these four moves): rulebook + its check.
-Next: Opus medium: fix the above efficiently (picture for 3 first, to Sam). Then open the SONNET chat: Sam typed 'Once you get to animatic stage, override everything and deliver the animatic': render the animatic with Override (log each skip, 'Checks: skipped by Override: ...'), finish.py (Hook Text, sign-off), save both to animations/drafts/, push, send with size and render time.
-Needs Sam: the picture for fault 3 (OK or not).
-Read: guides/job-packs.md "Checks and animatic"; story/brexit-is-done-moves.txt; notes/ledger/brexit-is-done/round-27.txt.
-Open rule requests: the early move-size check (above).
+## Where things stand (chat 35, 26 Nov, session_01J1JB7W6fe75b1JDhgHTCLp)
+Rules that bite next: 59 (render lock: Sam's Override skips it for this animatic only, each skip named), 92 (move size early), 30 (a note seen before).
+Done (chat 35): May's faults 1 hair (short rounded bob: the turned hair's front no longer juts as a quiff; fringe low), 2 lean in on 'remember' (15, roll 3: reads as a lean towards the interviewer), 4 gestures at chest height ('palm up chest', chop stops 'chop firm low'), 5 tight satisfied smile from the end of 'wolves' to the cut (during the word the lips still say it: mouths locked), 6 near hand held on the thigh ('lap fwd', 'open near lap'), 7 blouse a wide plaid between broad lighter notched lapels ('tailoring:' line, shared). Six head moves enlarged, timing kept (Sam's four + Kemi's nods on 'reducing' and 'off', same fault). The shot 1 'pan' was May's own body (no camera moves in shot 1): the camera check now measures on the background above everyone (kitinputs FREE_BAND; kittest camera_measured_on_background). Rule 92 (early move size) written with kittest early_move_size.
+Next: SONNET (routine: animatic). Sam typed "Once you get to animatic stage, override everything and deliver the animatic": render with Override (log each skip, "Checks: skipped by Override: ..."), finish.py (Hook Text, sign-off), save both to animations/drafts/, push, send with size and render time. Fault 3 stays as is in the animatic unless Sam has said Y to the finger picture.
+Needs Sam: fault 3 finger picture (notes/brexit-is-done-finger-fix.jpg, sent): Y to draw it in, N to leave.
+Read: guides/job-packs.md "Checks and animatic".
+Open rule requests: none (rule 92 written).
 Locked by Sam: the script (as recorded), who is where, every background action, the three places' briefs, the cut on the lunge; film order; all three in May's place and size; the cast; every camera and framing. No change to timing, lines, mouths, soundtrack.
-For Claude: preflight name is the hyphenated 'brexit-is-done' (not brexit_is_done); full pre-flight ~7 min; python3 source/movesize.py brexit-is-done lists the head moves (Sam stopped one run: run it in the background).
+For Claude: preflight name 'brexit-is-done'; fault 3's proposed finger is a scratch patch of B.gesture_hand (longer finger, 72 units, over the circle from its edge), not in the kit yet; movesize.py FILM --new measures only new/changed moves.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
+- Sam 26 Nov 19:09: "Question: if these were not right, why were they animated in that way originally?" and 19:10: "Do you see the problem if something is being designed in a way that will later fail a check?": answered in chat 34; the fix is rule 92 (move size checked the moment a move is written, chat 35).
+- Sam 26 Nov, note 1 (fault 3): "Please provide a picture of how you would fix this." / "Our characters have circle hands and only show a finger when they point.": the picture was made and sent in chat 35 (notes/brexit-is-done-finger-fix.jpg); waiting for his Y.
+- Sam 26 Nov, note 1 (fault 9): "No idea until animatic": the mouths on 'remember'/'referendum' are judged on the animatic.
+- Sam 26 Nov, note 1: "Once you get to animatic stage, override everything and deliver the animatic.": the Sonnet chat's task (Where things stand).
 - Sam 26 Nov (chat 28, voice notes): "Point number two." / "Point number three." / "That doesn't look very good, and I think it affects the choreography of the rest of the scene.": the headings and words of notes 14 and 15.
 - Sam 26 Nov 16:08: "What safety check is holding up the speech-to-text install, and how can we get past it?": answered in chat 28; Sam then said "Y install" (chat 29 installed it the normal way, faster-whisper).
 - Sam 26 Nov (Q1): "Kemi question - 1". Speech-to-text then showed Kemi.m4a and Kemi_2.m4a are the two halves of her one line ("...his job." / "reducing the number of British citizens with their faces chewed off"): both used, back to back.

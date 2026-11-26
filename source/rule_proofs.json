@@ -1226,6 +1226,15 @@
    "example": "Sam, 26 Nov (CLAUDE.md): \"please no longer do this automatically. Please suggest when you think it's needed.\" kittest practice_mode replays a clip and an animatic run with nothing asked: no check runs on its own; only a final is held.",
    "notes": "Entry written by Open Wounds chat 29 (the handover check found the rule with none). Known miss: no check yet that a reply suggests a line check when one is needed.",
    "kind_before": "new"
+  },
+  "92": {
+   "rule": "Move size, checked early: every head move in the acting list measured on screen when it is written or changed (22 px or more); 'small/curt' rows get their own line.",
+   "anchor": "| 92 | **Move size, checked early",
+   "status": "proven",
+   "tests": [
+    "early_move_size"
+   ],
+   "example": "Open Wounds pre-flight, 26 Nov 18:57 (notes/ledger/brexit-is-done/checks.jsonl): Kemi's chin up 3 px, Kemi's nod 8 px, Blair's preen 12 px, Blair's nod 15 px, all written 'small'/'curt' and caught only at pre-flight; Sam's Y (26 Nov): check each move the moment it is written."
   }
  },
  "_baseline": {

@@ -1311,9 +1311,15 @@ def pattern_torso(img, p, sp, t):
     else:
         draw = lp
     try:
-        for k, x in enumerate(np.arange(-90, 91, 7)):       # side by side, no shirt left between them
+        step = 7.0 * sp.get('stripe_w', 0.09) / 0.09        # tailoring 'stripe_w' (Open Wounds chat 35: wider)
+        for k, x in enumerate(np.arange(-90, 91, step)):    # side by side, no shirt left between them
             pts = [(x + 3 * math.sin(y / 22.0 + k), y) for y in np.arange(-30, 330, 10)]
-            draw.line(pts, cols[k % len(cols)], 9.0)
+            draw.line(pts, cols[k % len(cols)], step + 2.0)
+        if sp.get('plaid'):                                 # a plaid (Sam's fault 7, May: "wide plaid"): bands across
+            for k, y in enumerate(np.arange(-30, 330, step * 1.6)):   # the stripes, every other one, in a darker colour
+                if k % 2 == 0:
+                    c = cols[(2 * k + 1) % len(cols)]
+                    draw.line([(-95, y), (95, y)], tuple(int(v * 0.7) for v in c), step * 0.55)
     finally:
         if hasattr(p, 'pen'):
             p.pen = old

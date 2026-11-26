@@ -270,7 +270,7 @@ def suit_parts(rv, grp, R, sp):
     button = hip + (sh - hip) * sp.get('v_button', 0.35 if sp.get('jacket_open', True) else 0.42)   # (R7 chat 8: a
     #                                             spec may set where the V closes, a share of hips to shoulders)
     u = np.clip((collar - y) / max(0.1, collar - button), 0, 1)
-    vw = 0.62 * (1 - u) + 0.12 * u
+    vw = sp.get('v_collar', 0.62) * (1 - u) + sp.get('v_close', 0.12) * u   # (spec may widen it: May, chat 35)
     if sp.get('jacket_open', True):
         vw = np.where(y < button, 0.12 + 0.10 * np.clip((button - y) / max(0.1, button - hem), 0, 1), vw)
         gap = (y >= hem) & (y <= collar + 0.2)
