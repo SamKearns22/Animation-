@@ -33,22 +33,23 @@ D dead: D2 handover.dearest_faults, cost_faults (alarms paused; Q5); D3 kittests
 E keep: kittests; critique and judges (+ column "Sam noted it too?"); R7 seated checks until R7; loss-guards
 (sentence, saver, draft, kept_report, tag); old films' own checks.
 
+## Sam's answers (26 Nov)
+Q1 Y (group A into the kit); Q2/Q3 merged: option 1 of check-knows-intent (includes say-once B1 and doors B2);
+resting-hand faults discarded; Q4 Y (B3-B8, C1-C5); Q5 2: DELETE the paused budget alarms (forecast, stage stop,
+dearest weekly list, cost warnings, their kittests; rulebook row 24 reworded to "tracked quietly"); keep the quiet
+tracking (costwatch, ledger auto, the cost line recorded).
+Work order (each item with its kittest and a Lost/Added line here): Q5 deletions; C1-C5; B6, B5, B7;
+check-knows-intent step 1 (sort every Open Wounds flag: meant, real, unclear; nothing changes), then steps 2-3 with
+say-once; B4; B3; B8; A2, A6, A4, A5 (Kemi front first), A3, A7 (confirm first), A8. Kit tests at the job's end only.
+Named branches (not this job, not merged): claude/brexit-chat39 (Open Wounds chat 39, live),
+claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31.
+
 ## Where things stand
-- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), 85.
-- Done: listing tool + kittest + catalogue row; evidence gathered; report sent to Sam.
-- Next: on Sam's answers, a tool chat (Opus medium) does the Y'd items one at a time, A first, each with its
-  kittest and a "Lost:" line; nothing is deleted without his Y.
-- Sam's answers: Q1 Y (26 Nov: move group A into the kit, one at a time, each with its kittest).
-- Missed (26 Nov): Q2 first offered a 'Reopened' list Sam had already declined; I read only the top of answered-faults-return.md (the decline is its last line) and searched no saved messages. Before any proposal: grep notes/ledger/sam/ and the proposal's last lines.
-- Q2 and Q3 merged (26 Nov): Sam asked whether Q2 already had a proposal and whether Q3 was agreed. Chat 36 record (session_01J1JB7YNoonB7shJ4bXB2Vq, read 20:29-22:18): check-knows-intent asked 20:30, re-asked 4 times, never picked (21:00 Sam asked only whether option 1 applies to all films); his 22:14 '1. Y' answered the seeing-tools re-run. Say-once (B1) is part of check-knows-intent option 1 (recheck and recognise meant as fine), so one question.
-- Sam's answers: Q2/Q3 option 1 (check-knows-intent, includes say-once B1 and doors B2); resting-hand faults discarded ("I don't see anything wrong their resting hands, discard.").
-- Sam's answers: Q4 Y (26 Nov: rest of B and merge C).
-- Named: claude/brexit-chat39 (Open Wounds chat 39, live, not this job's) not merged here.
-- Needs Sam: Q5; seeing-five-candidates 1 or 2 (chat 36) in the report (going one at a time, in simple words, Sam 26 Nov).
-- Read: guides/job-packs.md "A tool job"; this file; the report.
-- Open rule requests: none.
+- Rules that bite next: 86 (every tool a kittest), 13 (checks in the shared kit), "Fix the drawing, never the shot".
+- Done (chat 1): listing tool, kittest, catalogue row; evidence; report sent; Sam answered all five.
+- Next: R8 chat 2 (Opus medium): the work order above, one item at a time.
+- Needs Sam: nothing for R8 (seeing-five-candidates 1 or 2 is Open Wounds chat 36's, still open).
+- Read: guides/job-packs.md "A tool job"; this file; notes/proposals/check-knows-intent.md option 1.
+- Open rule requests: none (Q5 rewords rule 24 on Sam's 2).
 - COST: a tool job, no film estimate.
-- Named: branches claude/gta-v5-sound-draft, claude/gta-chat46-build, claude/dreamy-fermi-vkhutz, claude/gta-chat31
-  not merged (outside this job, as named before). Open Wounds chain (chat 39) untouched.
-- For Claude: kittest name check_audit_lists_and_flags_repeats; evidence() keys picture-layer faults as
-  'layers (drawn over, rule 17)'.
+- For Claude: kittest check_audit_lists_and_flags_repeats; chat 36 record session_01J1JB7YNoonB7shJ4bXB2Vq.
