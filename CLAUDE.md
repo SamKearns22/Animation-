@@ -80,6 +80,8 @@ at session start (`.claude/hooks/setup.sh`).
   before a final render and wait for a clear yes**; "fix this before the final" is not a go-ahead.
 - **Every animatic carries the Hook Text and the CranbriJoos sign-off**, made as the final is (`finish.py` on its
   clean render); a check sheet, when I ask for one, shows the Hook Text frame.
+- **Frame-by-frame line checks only when I ask (Sam, 26 Nov):** "please no longer do this automatically. Please suggest
+  when you think it's needed." Suggest one in a line when it's needed; run it only on my word.
 - **Checks are advised, not automatic (Sam, 26 Nov):** "sometimes I just need an animatic or a clip to see how
   something moves. It doesn't have to be perfect." Before a clip or animatic, one line names the checks I'd run, why
   now and how long; they run on my Y or when I ask. Finals keep their checks. **Practice clips** (`Kind: practice` in

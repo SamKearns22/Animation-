@@ -59,21 +59,20 @@ locked by Sam), so nothing changes until Sam picks. Before any shot moves to the
 The start check prints this for the film (handover.py start, LEARN-FIRST; kittest learn_first).
 
 ## Where things stand (chat 27, 26 Nov, session_01U3pKR29EmmteJgw6u577Ng)
-Rules that bite next: 91 (Learn-First: quote it first), 87, 59 (render lock).
-Done: May (shot 1) on the seated body tool (people.SEAT_BODY, kittest seated_r7_switch updated, ten R7 kittests pass);
-a loose fold tick on her back calf found by stray_ink on the clip frames, fixed in the shared drawing (solid_seat FOLD_MIN,
-kittest fold_stub; the c15 sheets lose only tiny line hooks). Clip sent: animations/drafts/ow-shot1-may-body.mp4.
-Correction: Kemi STANDS in shot 2 (not seated as the last handover said): standing is unproven (rule 91), she stays on the house
-drawing; shot 2 needs no clip until standing is learned.
-Next: chat 28, Opus high (learning a new seat is building new): Blair's armchair under rule 91: reference photo (Plan pack
-search order), Blair in mode 'body' on the armchair (sitting.spec_armrests) beside the posted look, checks, a sheet; then his
-shot switches (add 'blair' to people.SEAT_BODY). Then the animatic (Sonnet).
-Needs Sam: his look at May's clip.
-Read: guides/pose-kits.md; this section and rule 91's above.
-Open rule requests: none. GTA branches (gta-v5-sound-draft, gta-chat46-build, dreamy-fermi-vkhutz, gta-chat31): GTA's, left.
+Rules that bite next: 91 (changed by Sam: remind him of the learn-first suggestions in one line; he picks), checks only on his
+word (CLAUDE.md: frame-by-frame line checks only when he asks), 59 (render lock).
+Done: May, Kemi (standing) and Blair (armchair) on the body tool in the film (people.SEAT_BODY, STAND_BODY; Sam: "just put
+those two characters in the scene now"); May's shot 1 clip and stills of Kemi and Blair sent; a loose fold tick fixed for every
+film (kittest fold_stub); the body drawn over its own box, 3x faster, pixel for pixel the same (kittest solid_crop_same).
+A fresh-eye check on May's clip flagged: crossed legs read as one dark mass, seat thinner than her thighs, the lean barely shows.
+Next: the animatic (Sonnet; Sam sees them moving there). Say in one line which checks you'd suggest; run only on his Y.
+Needs Sam: notes on the four stills and May's clip, if any.
+Read: the Checks and animatic pack in guides/job-packs.md; this section.
+Open rule requests: none (both of Sam's 26 Nov changes written). GTA branches: GTA's, left.
 Locked by Sam: the script, who is where, every background action, the three places' briefs, the cut on the lunge; film order; all
 three in May's place and size; the cast; every camera and framing.
-For Claude: people.SEAT_BODY / seat_body / BODY_SPEC; solid_seat._ink fold_min (kittest fold_stub). The pose test chat fixed the same knee tick with opt-in legs_soft: merge to one (move to shared).
+For Claude: views.r7_on takes stand_solid; solid_seat.lay_over seated only; pose_test's own patches now duplicate these (move to
+shared done; pose_test may drop them). legs_soft vs FOLD_MIN: two fixes for one knee tick, merge to one.
 
 ## Sam's words held elsewhere (chat 4, so the handover check finds each)
 - Note 1 (Q4) Hook Text, Sam: "Andy is opening old wounds..." with the British flag: brief item 15.
@@ -141,6 +140,12 @@ it, e.g. AUDIT, SHOT CAST, caption), or "none" when no check could; the handover
 
 | # | shot | time | note | line | should have caught | status |
 |---|------|------|------|------|--------------------|--------|
+| 13 | 2 (site, the attack) | 7.5-9.5 | Sam (26 Nov, animatic): "you don't get a moment to take in the scene before the wolves pounce... the wolves jump over the construction worker and go past him, yet the construction worker does the falling down motion. The construction worker needs to be standing in that center spot to the left of Kemi, and we need to see the wolves doing their pounce, landing on him, and at the moment they land on him, that's when he falls and they start feeding on him. Please refer to Crime Minister" | new: contact (the strike lands where the body is; the fall starts on the landing) | none (no check compares a leaper's landing point with its target's body, nor a beat before the first action) | open (chat 28) |
+| 14 | 2 (site, bar fight, upper right) | all | Sam (26 Nov): "needs to be made more vigorous and desperate on both sides... hitting and stabbing and retreating, advancing... the wolves should also be similar in kind with their attacks and pushing forward and bites and snarls" | new: acting (fight energy) | none (the acting list named "jab", not how hard or how far) | open (chat 28) |
+| 15 | 3 (room, doorway) | 17.5-24 | Sam (26 Nov): "when the door opens into Tony's room, all of the characters appear from a sudden blank void at the end of the corridor, and they just materialize suddenly... a bit more planning needs to go into that, and you might want to draw the room so that you have an understanding of where everyone goes and when" | seen before kind: a pop (someone appears from nowhere): rule on pops | AUDIT pops (it ignores people who arrive inside a doorway's frame; the corridor beyond had no depth to come from) | open (chat 28) |
+| 16 | 2 and 3 (wolves) | all | Sam (26 Nov): "the line work on the wolves is very thick in comparison to our house style, so that needs to be dragged back into compliance" | new: line weight (the wolf kit's ink is not the house's) | house look (it measures people's lines, not the wolf kit's) | open (chat 28) |
+| 17 | 2 and 3 (sound) | all | Sam (26 Nov): "I have included wolf sound effects. They should be in the background during Kemi and Tony's scenes. They should not overwhelm the dialogue... one of them in particular is quite loud... reduced to a volume where it's kind of a background growl underneath people talking." Files: sounds/brexit-is-done/ (two growl files) | new: sound | none (a wish) | open (chat 28) |
+| 18 | all (voices) | all | Sam (26 Nov): "The dialogue is also attached." sounds/brexit-is-done/May.m4a, Kemi.m4a, Kemi_2.m4a, Tony.m4a (they set the clock in place of the stand-in timing). "Do not proceed to create an animatic after this work is complete, as we are waiting on the new body kit to be implemented across this film." | new | none | open (chat 28); NO animatic until the body kit is across the film |
 | 12 | 1 (May, board) | all | Sam (24 Nov, marked picture notes/learn/seated/no-bum-circular-knees-sam.jpg): "No bum/circular knees" | seen before: P7 (knee balls; the film after Blessed): rule 30 | none (P7 is a by-hand critique line and the board went out with no critique; the kit still ringed a knee aimed at the lens, and drew no bottom at all) | fixed in the shared kit (views.knee_cap: the knee is the thigh's rounded end, outlined only on its far side; views.seat_bottom: a seated bottom on the seat, under the hem, under a crossed top leg); check castsheet.seated_faults (catches Sam's frame, passes now; in castsheet build and the handover end); Blessed unchanged (0.01%). Sam (24 Nov): a reserve job, R7 in notes/next-jobs.md; the stopgap stays; shots go on. R7 (25 Nov): this film is kept on the stopgap by the switch people.BEFORE_SEATED (frames unchanged; kittest seated_r7_switch) |
 | 9 | framing (all three interviews) | - | Sam (24 Nov 00:42): "I don't mind if you zoom out on May a little to give the Kemi/Tony scenes more room to show their scenes" | new: framing | none (a wish, not a fault) | passed to the sets chat (staging): May may be framed a little wider, Kemi and Blair match her |
 | 7 | woman's body v1 (outlines, chat 4) | - | Sam (23 Nov 22:23): "How do I say this. Kemi Badenoch just does not have that body. Looks good for May though!" (picture: notes/learn/womans-build/outline-female-v1.jpg) | new: one woman's body for every woman is the same fault as one man's box for everyone | none (the learn step judged woman or man only, never "is this HER body"; Kemi's photo was not measured) | chat 6: Kemi measured from her 3 photos (build straight; numbers match the drawing), check built (catches n5 and n7); chat 7: woman in all 4 views to three fresh judges (v4g), on her measured widths |

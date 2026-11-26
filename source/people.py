@@ -244,11 +244,13 @@ def seat_r7(film):
 
 # R7's seated body tool (mode 'body': the measured 3D body under the posted outfit, guides/pose-kits.md) switched on
 # person by person, once proven on them in this film's poses (rule 91). Open Wounds chat 27 (Sam, 26 Nov: "These
-# fixes were built specifically for Open Wounds ... Implement."): May on the office chair. Kemi STANDS on the site
-# in shot 2 (standing not proven, rule 91; the handover's "Kemi as May" was wrong); Blair waits for his armchair
-# (rule 91, "sitting other seats"); crowds stay on the house drawing (standing/running not proven).
-SEAT_BODY = {'brexit-is-done': ('may',)}
+# fixes were built specifically for Open Wounds ... Implement."): May on the office chair; then (Sam, 26 Nov: "just
+# put those two characters in the scene now as quickly as possible"): Kemi standing on the site, Blair in his
+# armchair. Crowds stay on the house drawing.
+SEAT_BODY = {'brexit-is-done': ('may', 'kemi', 'blair')}
 BODY_SPEC = dict(seat_solid='body', turned_curves=0.0, turned_bust=0.6)   # the spec Sam passed on the c15 sheets
+STAND_BODY = {'brexit-is-done': ('kemi',)}      # standing on the body tool (the pose test's spec: stand_solid,
+#                                                 legs_soft: each leg one soft mass, no crease ticks at a bent knee)
 
 
 def seat_body(sp):
@@ -904,8 +906,10 @@ def load(film):
     if seat_r7(film):                             # R7: the seated lower body as one shape (BEFORE_SEATED keep the old)
         for sp in out.values():
             sp['seat_r7'] = True
-    for who in SEAT_BODY.get(film, ()):          # rule 91: the body tool only on the people proven in this film
+    for who in SEAT_BODY.get(film, ()):          # the body tool, person by person
         seat_body(out[who])
+    for who in STAND_BODY.get(film, ()):
+        out[who].update(stand_solid=True, legs_soft=True)
     return out
 
 

@@ -21,8 +21,9 @@ you start unless I say otherwise." So another tool is allowed; name it and why i
    new look sits behind a flag on the pose (`lap_open`, `leg_gap`), so locked poses and posted films cannot move.
 
 ## The Learn-First rule (rule 91, Sam, 26 Nov)
-**Before any pose the default tool has not been proven on, quote this rule to Sam and say what must be learned first;
-only then build it.** Proven means on a sheet Sam passed with its checks green. The start check prints the rule and the
+**Changed by Sam (26 Nov): before a new pose, remind Sam of these suggestions in one line, each with its time; he picks
+which to do, if any. Nothing waits on them unless he picks.** (Was: learn first, then build.) Sam: standing, running
+and sitting work on the body tool (the pose test's practice clips; May). Proven means on a sheet Sam passed with its checks green. The start check prints the rule and the
 list for every pose family a job's notes name that is not proven (`handover.py start`, LEARN-FIRST; kittest `learn_first`).
 The families, as the check reads them (`family | proven? | words that name it | what must be learned`):
 

@@ -842,6 +842,8 @@ def lay_over(img, p=None):
     depth in the body's own frame decides), inked along the jacket where they leave it."""
     if not LAST or LAST.get('whole'):           # (mode 'whole': no flat torso to lie over)
         return
+    if not (LAST.get('j') or {}).get('lap'):    # standing on the body tool: no seated knees to lay over the jacket
+        return                                  # (pose test, 26 Nov)
     from scipy import ndimage
     front = LAST['front'].copy()
     for f in LAST.get('far_ls') or ():          # R7 chat 14 (Sam's note 1: the far leg "doesn't seem connected smoothly
