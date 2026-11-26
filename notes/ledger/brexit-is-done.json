@@ -16792,6 +16792,960 @@
     ]
    },
    "notes_auto": 0
+  },
+  {
+   "date": "2026-11-26",
+   "chat": "3dde2eca",
+   "stage": "auto",
+   "round": null,
+   "notes": 0,
+   "repeats": [],
+   "model": "opus",
+   "cost": 1.89,
+   "src": "estimate",
+   "sid": "session_01J1JB7Wb6BUtbWVgVLvbPyy",
+   "steps": 132,
+   "hist_k": 230,
+   "kinds": {
+    "film-file search": 5.2,
+    "tool search": 21.7,
+    "page.py": 1.1,
+    "renders": 1.2,
+    "pictures": 3.7,
+    "other": 67.2
+   },
+   "calls": {
+    "film-file search": 13,
+    "tool search": 76,
+    "whole-file .py read": 0,
+    "page.py": 2,
+    "routine": 0,
+    "renders": 4,
+    "pictures": 11,
+    "other": 27
+   },
+   "split": {
+    "usd": 6.7178,
+    "total": 6.7178,
+    "floor_k": 84,
+    "blocks": {
+     "start-up floor": 32.3,
+     "carried history": 28.4,
+     "Claude's words": 22.0,
+     "new writes": 17.4
+    },
+    "origins": {
+     "Claude's words": 38.4,
+     "start-up floor": 32.3,
+     "result: tool search": 15.4,
+     "result: film-file search": 4.9,
+     "result: pictures": 3.7,
+     "messages and reminders": 2.9,
+     "result: page.py": 1.0,
+     "result: other": 0.8,
+     "Claude's edits": 0.4,
+     "result: renders": 0.2
+    },
+    "named": {
+     "start-up reading (rules, tools, first files)": 32.3,
+     "thinking": 14.0,
+     "writing code": 13.0,
+     "commands": 8.3,
+     "reading kit code": 8.0,
+     "reading notes": 5.3,
+     "looking at pictures": 3.7,
+     "messages and reminders": 2.9,
+     "running checks and tools": 2.7,
+     "start-up and handover tools": 2.2,
+     "reading film code": 2.2,
+     "messages to Sam": 1.7,
+     "writing notes": 1.3,
+     "other commands": 1.1,
+     "helper and chat prompts": 0.5,
+     "git and saving": 0.3,
+     "renders": 0.2,
+     "reading chat records": 0.1,
+     "app tools (chats, files sent)": 0.1
+    },
+    "leftover": 0.0
+   },
+   "start": {
+    "floor_k": 84,
+    "work_step": 33,
+    "work_pct": 0.4,
+    "reads": [
+     [
+      "source/acting.py",
+      4.6,
+      0.1255
+     ],
+     [
+      "notes/brexit-is-done.md",
+      2.5,
+      0.075
+     ],
+     [
+      "source/brexit_is_done.py",
+      2.5,
+      0.0712
+     ],
+     [
+      "/tmp/claude-0/-home-user-Animation-/3dde2eca-d5d9-5538-ab64-21c0c65b652a/scratchpad/s/may3.jpg",
+      1.6,
+      0.0453
+     ],
+     [
+      "source/rough.py",
+      1.1,
+      0.0301
+     ],
+     [
+      "source/views.py",
+      1.0,
+      0.0275
+     ],
+     [
+      "notes/ledger/brexit-is-done/round-27.txt",
+      0.8,
+      0.0236
+     ],
+     [
+      "source/page.py",
+      0.8,
+      0.0232
+     ]
+    ],
+    "base_pct": 29.8
+   },
+   "search": {
+    "show": 2,
+    "film": {
+     "before show": 2,
+     "miss": 3,
+     "after show": 8
+    },
+    "other": {
+     "other": 19,
+     "shared:handover.py": 1,
+     "shared:waivers.py": 1,
+     "film notes": 8,
+     "shared:critique.py": 8,
+     "shared:acting.py": 8,
+     "shared:views.py": 6,
+     "shared:preflight.py": 6,
+     "shared:sitting.py": 5,
+     "shared:collisions.py": 1,
+     "shared:kitchecks.py": 6,
+     "shared:kittests.py": 4,
+     "shared:kitinputs.py": 3
+    },
+    "ticked": 0,
+    "edited film code": true,
+    "list": [
+     [
+      0,
+      "other",
+      "other",
+      "",
+      "git status --short | head && git branch --show-current && git fetch origin claud",
+      "",
+      203
+     ],
+     [
+      1,
+      "other",
+      "other",
+      "",
+      "git log --oneline -3 origin/claude/create-claude-md-oe8z4g; git merge-base --is-",
+      "",
+      461
+     ],
+     [
+      2,
+      "other",
+      "shared:handover.py",
+      "source/handover.py",
+      "python3 source/handover.py start session_01J1JB7WQi6LkF56PZE9rCCe --film brexit-",
+      "",
+      6454
+     ],
+     [
+      3,
+      "other",
+      "other",
+      "notes/critique*",
+      "round 27",
+      "",
+      953
+     ],
+     [
+      4,
+      "other",
+      "other",
+      "notes/ledger/brexit-is-done/round-27.txt notes/ledger/brexit-is-done/round-0.txt",
+      "cat notes/ledger/brexit-is-done/round-27.txt | head -60; ls -t work 2>/dev/null ",
+      "",
+      3078
+     ],
+     [
+      5,
+      "other",
+      "shared:waivers.py",
+      "notes/brexit-is-done.md source/waivers.py",
+      "^## \\|^### ",
+      "",
+      1346
+     ],
+     [
+      6,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 1,50p notes/brexit-is-done.md; sed -n 157,200p notes/brexit-is-done.md",
+      "",
+      5577
+     ],
+     [
+      7,
+      "other",
+      "shared:critique.py",
+      "notes/brexit-is-done.md source/critique.py",
+      "round 27\\|critique",
+      "",
+      3331
+     ],
+     [
+      8,
+      "other",
+      "other",
+      "source/data/critique/brexit-is-done/ source/data/critique/brexit-is-done/r27-p1 ",
+      "ls source/data/critique/brexit-is-done/ 2>/dev/null; ls source/data/critique/bre",
+      "",
+      381
+     ],
+     [
+      9,
+      "other",
+      "other",
+      "notes/ledger/brexit-is-done/checks.jsonl source/data/critique-src/brexit-is-done",
+      "\"round\": *27\\|r27",
+      "",
+      369
+     ],
+     [
+      10,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "git show 753fc638 --stat | head -30; git show 753fc638 -- notes/brexit-is-done.m",
+      "",
+      658
+     ],
+     [
+      11,
+      "other",
+      "other",
+      "notes/ledger/brexit-is-done.json",
+      "python3 -c \" import json;d=json.load(open('notes/ledger/brexit-is-done.json')) p",
+      "",
+      2878
+     ],
+     [
+      12,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "lean\\|cross\\|nod",
+      "",
+      1183
+     ],
+     [
+      13,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md",
+      "sed -n 50,60p notes/brexit-is-done.md; sed -n 133,156p notes/brexit-is-done.md |",
+      "",
+      4507
+     ],
+     [
+      14,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "head -60 source/brexit_is_done.py",
+      "",
+      3770
+     ],
+     [
+      15,
+      "film",
+      "before show",
+      "source/brexit_is_done.py",
+      "mkdir -p /tmp/claude-0/-home-user-Animation-/3dde2eca-d5d9-5538-ab64-21c0c65b652",
+      "",
+      723
+     ],
+     [
+      19,
+      "film",
+      "miss",
+      "source/brexit_is_done.py",
+      "sed -n 219,340p source/brexit_is_done.py",
+      "",
+      6289
+     ],
+     [
+      20,
+      "film",
+      "miss",
+      "story/brexit-is-done-moves.txt source/acting.py",
+      "wc -l story/brexit-is-done-moves.txt && awk '/may/{f=1} f' story/brexit-is-done-",
+      "",
+      9836
+     ],
+     [
+      21,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import brexit_is_done as F ",
+      "",
+      1214
+     ],
+     [
+      22,
+      "other",
+      "other",
+      "",
+      "python3 -c \" import sys; sys.path.insert(0,'source') import brexit_is_done as F ",
+      "",
+      1478
+     ],
+     [
+      23,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "'nod'\\|'lean in'\\|\\",
+      "",
+      353
+     ],
+     [
+      24,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/views.py source/sitting.py source/people_parts.py",
+      "j.get('nod'\\|\\['nod'\\]\\|get('lean'",
+      "",
+      4457
+     ],
+     [
+      25,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "sed -n 2055,2085p source/views.py; sed -n 1878,1895p source/views.py",
+      "",
+      4083
+     ],
+     [
+      26,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "^class Rolled",
+      "",
+      1473
+     ],
+     [
+      27,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/preflight.py",
+      "^def \\|acting\\.\\|AC\\.",
+      "",
+      1102
+     ],
+     [
+      28,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/*.py",
+      "AC.check\\|acting.check\\|import acting",
+      "",
+      4095
+     ],
+     [
+      29,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/rough.py",
+      "check_list\\|\\.check(",
+      "",
+      261
+     ],
+     [
+      30,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/rough.py",
+      "acting\\|rough",
+      "",
+      4592
+     ],
+     [
+      31,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "head_pen.found\\|\\.found\\b\\|EYES_SEEN\\|LAST_EYES\\|eyes_drawn",
+      "",
+      317
+     ],
+     [
+      32,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "    j2 = \\|^    return",
+      "",
+      743
+     ],
+     [
+      33,
+      "film",
+      "after show",
+      "source/brexit_is_done.py source/acting.py",
+      "def picture",
+      "",
+      793
+     ],
+     [
+      34,
+      "film",
+      "after show",
+      "source/brexit_is_done.py source/acting.py",
+      "V.person\\|seated(img",
+      "",
+      1679
+     ],
+     [
+      35,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "sed -n 370,382p source/brexit_is_done.py",
+      "",
+      502
+     ],
+     [
+      36,
+      "film",
+      "after show",
+      "source/brexit_is_done.py source/acting.py",
+      "def person",
+      "",
+      197
+     ],
+     [
+      37,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "sed -n 595,625p source/acting.py; sed -n 145,155p source/acting.py",
+      "",
+      1701
+     ],
+     [
+      39,
+      "other",
+      "shared:acting.py",
+      "source/acting.py source/movesize.py",
+      "def block_for",
+      "",
+      482
+     ],
+     [
+      41,
+      "other",
+      "shared:views.py",
+      "source/views.py source/movesize.py",
+      "python3 - <<'EOF' p='source/views.py'; s=open(p).read() old=\" j2['_drawn']['eyes",
+      "",
+      977
+     ],
+     [
+      42,
+      "film",
+      "after show",
+      "story/brexit-is-done-moves.txt source/movesize.py",
+      "python3 - <<'EOF' p='story/brexit-is-done-moves.txt'; s=open(p).read() rep=[('bo",
+      "",
+      81
+     ],
+     [
+      50,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py source/acting.py",
+      "lap",
+      "",
+      1670
+     ],
+     [
+      51,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "def spec_upright",
+      "",
+      3823
+     ],
+     [
+      52,
+      "film",
+      "after show",
+      "source/acting.py story/brexit-is-done-moves.txt",
+      "'lap fwd'\\|lap fwd",
+      "",
+      760
+     ],
+     [
+      53,
+      "other",
+      "other",
+      "source/*.py source/brexit",
+      "RESTS",
+      "",
+      750
+     ],
+     [
+      54,
+      "other",
+      "shared:collisions.py",
+      "source/collisions.py source/contacts.py",
+      "\\.RESTS\\b\\|'RESTS'\\|getattr(.*RESTS",
+      "",
+      53
+     ],
+     [
+      55,
+      "other",
+      "shared:kitchecks.py",
+      "source/kitchecks.py",
+      "RESTS",
+      "",
+      1036
+     ],
+     [
+      56,
+      "other",
+      "shared:kitchecks.py",
+      "source/kitchecks.py",
+      "sed -n 570,640p source/kitchecks.py",
+      "",
+      4489
+     ],
+     [
+      57,
+      "other",
+      "other",
+      "source/*.py",
+      "'_rest'\\]\\|\\['_rest'\\] =\\|_rest = \\|tops=",
+      "",
+      945
+     ],
+     [
+      58,
+      "other",
+      "shared:kitchecks.py",
+      "source/kitchecks.py",
+      "sed -n 530,568p source/kitchecks.py; sed -n 295,312p source/kitchecks.py",
+      "",
+      3100
+     ],
+     [
+      60,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "def _thigh_rest",
+      "",
+      1045
+     ],
+     [
+      61,
+      "other",
+      "shared:views.py",
+      "source/views.py",
+      "V.HIP_Y\\|^HIP_Y",
+      "",
+      506
+     ],
+     [
+      62,
+      "other",
+      "shared:kitchecks.py",
+      "source/kitchecks.py",
+      "^FLOAT_U\\|^SINK_U\\|def _flat_surface",
+      "",
+      429
+     ],
+     [
+      63,
+      "other",
+      "shared:kitchecks.py",
+      "source/kitchecks.py source/preflight.py",
+      "def _hit",
+      "",
+      776
+     ],
+     [
+      64,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py source/kitchecks.py",
+      "sed -n 200,227p source/preflight.py; sed -n 285,294p source/kitchecks.py; sed -n",
+      "",
+      3637
+     ],
+     [
+      65,
+      "film",
+      "after show",
+      "source/brexit_is_done.py",
+      "python3 - <<'EOF' p='source/brexit_is_done.py'; s=open(p).read() old=\"\"\"RESTS = ",
+      "",
+      701
+     ],
+     [
+      67,
+      "other",
+      "other",
+      "",
+      "tail -8 /tmp/claude-0/-home-user-Animation-/3dde2eca-d5d9-5538-ab64-21c0c65b652a",
+      "",
+      1334
+     ],
+     [
+      68,
+      "other",
+      "film notes",
+      "",
+      "lap fwd",
+      "",
+      118
+     ],
+     [
+      69,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "'lap fwd'",
+      "",
+      405
+     ],
+     [
+      73,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "cushion",
+      "",
+      1639
+     ],
+     [
+      74,
+      "other",
+      "shared:sitting.py",
+      "source/sitting.py",
+      "sed -n 155,215p source/sitting.py",
+      "",
+      3815
+     ],
+     [
+      77,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "^def test_\\|^TESTS\\|^def kt_\\|@test\\|^    '",
+      "",
+      114
+     ],
+     [
+      78,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "sed -n 22,68p source/kittests.py; sed -n 5018,5050p source/kittests.py; tail -20",
+      "",
+      4395
+     ],
+     [
+      79,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py notes/ledger/brexit-is-done/round-27.txt",
+      "def main",
+      "",
+      363
+     ],
+     [
+      80,
+      "other",
+      "shared:kittests.py",
+      "source/kittests.py",
+      "timeout 600 python3 source/kittests.py --names hand_rests_on_thigh,nod_reads_on_",
+      "",
+      778
+     ],
+     [
+      81,
+      "other",
+      "shared:acting.py",
+      "source/acting.py",
+      "PLACES",
+      "",
+      403
+     ],
+     [
+      84,
+      "other",
+      "shared:kitchecks.py",
+      "source/kitchecks.py source/kittests.py",
+      "HAND_ON = 21",
+      "",
+      399
+     ],
+     [
+      85,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "sed -n 575,582p source/preflight.py",
+      "",
+      683
+     ],
+     [
+      86,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "^HERE\\|^import os\\|^import.*os",
+      "",
+      57
+     ],
+     [
+      87,
+      "other",
+      "shared:preflight.py",
+      "source/preflight.py",
+      "def \\|name",
+      "",
+      346
+     ],
+     [
+      89,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md notes/ledger/brexit-is-done/*.txt notes/archive/brexit-i",
+      "riser",
+      "",
+      1263
+     ],
+     [
+      94,
+      "other",
+      "other",
+      "",
+      "S=/tmp/claude-0/-home-user-Animation-/3dde2eca-d5d9-5538-ab64-21c0c65b652a/scrat",
+      "",
+      6
+     ],
+     [
+      97,
+      "film",
+      "miss",
+      "source/brexit_is_done_action.py",
+      "^PASSES",
+      "",
+      5974
+     ],
+     [
+      102,
+      "other",
+      "other",
+      "source/*.py",
+      "vanishes mid-shot",
+      "",
+      31
+     ],
+     [
+      103,
+      "other",
+      "other",
+      "source/*.py",
+      "mid-shot between\\|away from the frame's edge",
+      "",
+      409
+     ],
+     [
+      104,
+      "other",
+      "shared:kitinputs.py",
+      "source/kitinputs.py",
+      "sed -n 105,175p source/kitinputs.py",
+      "",
+      3272
+     ],
+     [
+      105,
+      "other",
+      "shared:kitinputs.py",
+      "source/kitinputs.py source/kittests.py notes/ledger/brexit-is-done/round-0.txt",
+      "python3 - <<'EOF' p='source/kitinputs.py'; s=open(p).read() old=\"\"\" for shot, rs",
+      "",
+      228
+     ],
+     [
+      106,
+      "other",
+      "shared:kitinputs.py",
+      "source/kitinputs.py source/kittests.py",
+      "^EDGE",
+      "",
+      452
+     ],
+     [
+      108,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "p.get('t')\\|panel\\['t'\\]\\|'t' in p\\|get(\\",
+      "",
+      1022
+     ],
+     [
+      109,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/brexit-is-done/may-moves-spec.json source/critique.py",
+      "python3 - <<'EOF' import json base=(\"Theresa May in her BBC interview (shot 1 of",
+      "",
+      600
+     ],
+     [
+      110,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "'people'",
+      "",
+      123
+     ],
+     [
+      111,
+      "other",
+      "shared:critique.py",
+      "source/critique.py",
+      "sed -n 158,185p source/critique.py",
+      "",
+      1383
+     ],
+     [
+      112,
+      "other",
+      "shared:critique.py",
+      "source/data/critique-src/brexit-is-done/may-moves-spec.json source/data/critique",
+      "python3 - <<'EOF' import json p='source/data/critique-src/brexit-is-done/may-mov",
+      "",
+      265
+     ],
+     [
+      114,
+      "other",
+      "shared:critique.py",
+      "source/data/critique/brexit-is-done/r27-p2.spec.json source/critique.py source/d",
+      "rm source/data/critique/brexit-is-done/r27-p2.spec.json && timeout 900 python3 s",
+      "",
+      325
+     ],
+     [
+      117,
+      "other",
+      "shared:critique.py",
+      "source/critique.py source/data/critique/brexit-is-done/r27-p2",
+      "python3 source/critique.py record brexit-is-done source/data/critique/brexit-is-",
+      "",
+      779
+     ],
+     [
+      118,
+      "film",
+      "after show",
+      "story/brexit-is-done-moves.txt source/brexit_is_done.py",
+      "lean in 9 with roll -5",
+      "",
+      46
+     ],
+     [
+      121,
+      "other",
+      "film notes",
+      "notes/brexit-is-done.md guides/job-packs.md source/data/critique/brexit-is-done/",
+      "python3 - <<'EOF' p='notes/brexit-is-done.md'; s=open(p).read() a=s.index('## Wh",
+      "",
+      348
+     ],
+     [
+      123,
+      "other",
+      "film notes",
+      "",
+      "git add -A source/ story/ notes/ && git status --short | head -20 && git commit ",
+      "",
+      746
+     ],
+     [
+      124,
+      "other",
+      "other",
+      "",
+      "git push -q origin claude/brexit-chat32 2>&1 | tail -1; git fetch -q origin clau",
+      "",
+      144
+     ],
+     [
+      125,
+      "other",
+      "other",
+      "",
+      "sleep 1; tail -c 1500 /tmp/claude-0/-home-user-Animation-/3dde2eca-d5d9-5538-ab6",
+      "",
+      31
+     ],
+     [
+      127,
+      "other",
+      "other",
+      "",
+      "tail -c 1800 /tmp/claude-0/-home-user-Animation-/3dde2eca-d5d9-5538-ab64-21c0c65",
+      "",
+      1525
+     ],
+     [
+      128,
+      "other",
+      "other",
+      "",
+      "^STOP:",
+      "",
+      331
+     ]
+    ]
+   },
+   "notes_auto": 0
   }
  ],
  "checks": {

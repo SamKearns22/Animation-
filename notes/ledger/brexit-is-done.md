@@ -2,9 +2,9 @@
 
 Written by `source/ledger.py` (do not edit by hand; the record is the .json beside it). Each round's check results and check sheet text are in the folder of the same name.
 
-**Estimate 52.0% of a week; spent 51.4% (-0.60); 31 chats, 0 rounds, 10 notes, 4 repeated.**
+**Estimate 52.0% of a week; spent 53.29% (+1.29); 32 chats, 0 rounds, 10 notes, 4 repeated.**
 
-**Forecast: Spent 51.4% of the 44% planned so far; at this rate the film lands at 58.4%.**
+**Forecast: Spent 53.29% of the 44% planned so far; at this rate the film lands at 60.3%.**
 
 | stage | planned % | done | spent at its end |
 |---|---|---|---|
@@ -53,6 +53,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 | 2026-11-26 | cdac3a24 | est | opus | auto |  | 1.39 |  | 0 | 0 |
 | 2026-11-26 | e079ef40 | est | opus | auto |  | 2.28 |  | 0 | 0 |
 | 2026-11-26 | 6aa6bf9b | est | sonnet | auto |  | 0.07 |  | 0 | 0 |
+| 2026-11-26 | 3dde2eca | est | opus | auto |  | 1.89 |  | 0 | 0 |
 
 ## Cost by kind of step (share of each chat; measured from its transcript)
 - 2026-11-23 9db844b1 (auto): 144 steps, history 273k at the end; other 66.1%, tool search 20.6%, pictures 7.1%, renders 5.5%, film-file search 0.6%, page.py 0.2%
@@ -81,6 +82,7 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 cdac3a24 (auto): 96 steps, history 201k at the end; other 67.1%, tool search 16.7%, film-file search 11.3%, renders 3.5%, pictures 0.9%, page.py 0.5%
 - 2026-11-26 e079ef40 (auto): 143 steps, history 276k at the end; other 59.3%, tool search 22.9%, pictures 9.7%, film-file search 5%, renders 2.8%, page.py 0.4%
 - 2026-11-26 6aa6bf9b (auto): 9 steps, history 98k at the end; other 77.2%, tool search 9.1%, film-file search 6.3%, renders 5.3%, routine 2.1%
+- 2026-11-26 3dde2eca (auto): 132 steps, history 230k at the end; other 67.2%, tool search 21.7%, film-file search 5.2%, pictures 3.7%, renders 1.2%, page.py 1.1%
 
 ## Where the money went (blocks and origins; leftover = cost nothing explains, aim under 5%)
 - 2026-11-23 9db844b1 (auto): carried history 33.2%, start-up floor 27%, Claude's words 22.4%, new writes 17.4%. Biggest origins: Claude's words 41.2%, start-up floor 27%, result: tool search 15%. Leftover 0%
@@ -109,9 +111,10 @@ Source: **app** = the app’s own figure for that chat (real); **est** = the tra
 - 2026-11-26 cdac3a24 (auto): start-up floor 32.3%, Claude's words 28.1%, carried history 21.3%, new writes 18.4%. Biggest origins: Claude's words 46.2%, start-up floor 32.3%, result: tool search 11.3%. Leftover 0%
 - 2026-11-26 e079ef40 (auto): carried history 30.3%, start-up floor 28.4%, Claude's words 22.8%, new writes 18.5%. Biggest origins: Claude's words 40.1%, start-up floor 28.4%, result: tool search 14.1%. Leftover 0%
 - 2026-11-26 6aa6bf9b (auto): start-up floor 65.5%, new writes 22.1%, Claude's words 10%, carried history 2.4%. Biggest origins: start-up floor 65.5%, Claude's words 12.9%, result: tool search 7%. Leftover 0%
+- 2026-11-26 3dde2eca (auto): start-up floor 32.3%, carried history 28.4%, Claude's words 22%, new writes 17.4%. Biggest origins: Claude's words 38.4%, start-up floor 32.3%, result: tool search 15.4%. Leftover 0%
 
 ## Starting each chat
-A new chat's start and re-learning cost 15% of the film (7.81% of a week over 26 chats: start 7.57, re-learning 0.24; 0.30% a chat; step-1 context re-read is 27% of a chat on average).
+A new chat's start and re-learning cost 15% of the film (8.21% of a week over 27 chats: start 7.97, re-learning 0.24; 0.30% a chat; step-1 context re-read is 27% of a chat on average).
 - 2026-11-23 9db844b1: step-1 context 84k; first real work at step 17 (0.26% of a week); read before it: source/facehouse.py 4.4k, source/turnhead.py 1.8k, notes/sam-notes/brexit-cast-v1/n2-blair-threequarter-not-same.jpg 1.6k, notes/sam-notes/brexit-cast-v1/n3-kemi-orange-gone-threequarter.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/9db844b1-280f-5d8a-a457-8c9f20d932da/scratchpad/t0.jpg 1.6k, notes/sam-notes/brexit-cast-v1/notes.md 1.4k
 - 2026-11-23 f27fff03: step-1 context 84k; first real work at step 10 (0.12% of a week); read before it: notes/logs/broken.md 1k, source/watcher.py 0.4k, .claude/settings.json 0.3k, source/hookran.py 0.3k, source/data/freeze/films.json 0.2k
 - 2026-11-23 f960632f: step-1 context 84k; first real work at step 40 (0.53% of a week); read before it: source/castsheet.py 2.4k, source/sitting.py 2.2k, notes/next-jobs.md 1.6k, notes/brexit-is-done.md 1.6k, notes/sam-notes/brexit-cast-v2/n5-kemi-body-like-a-mans.jpg 1.6k, notes/sam-notes/brexit-cast-v2/n5-may-body.jpg 1.6k
@@ -138,6 +141,7 @@ A new chat's start and re-learning cost 15% of the film (7.81% of a week over 26
 - 2026-11-26 cdac3a24: step-1 context 84k; first real work at step 13 (0.19% of a week); read before it: notes/brexit-is-done.md 2.3k, guides/job-packs.md 0.9k, story/status.md 0.9k, .claude/hooks/setup.sh 0.8k
 - 2026-11-26 e079ef40: step-1 context 84k; first real work at step 38 (0.48% of a week); read before it: source/facehouse.py 4.1k, source/brexit_is_done.py 2k, /tmp/claude-0/-home-user-Animation-/e079ef40-61a7-5934-aa65-3ace0380292d/scratchpad/st/brexit-is-done-20.00.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/e079ef40-61a7-5934-aa65-3ace0380292d/scratchpad/st/brexit-is-done-24.00.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/e079ef40-61a7-5934-aa65-3ace0380292d/scratchpad/st/brexit-is-done-12.00.jpg 1.6k, /tmp/claude-0/-home-user-Animation-/e079ef40-61a7-5934-aa65-3ace0380292d/scratchpad/house/sheet.png 1.6k
 - 2026-11-26 6aa6bf9b: step-1 context 84k; first real work at step 4 (0.05% of a week); read before it: 
+- 2026-11-26 3dde2eca: step-1 context 84k; first real work at step 33 (0.4% of a week); read before it: source/acting.py 4.6k, notes/brexit-is-done.md 2.5k, source/brexit_is_done.py 2.5k, /tmp/claude-0/-home-user-Animation-/3dde2eca-d5d9-5538-ab64-21c0c65b652a/scratchpad/s/may3.jpg 1.6k, source/rough.py 1.1k, source/views.py 1k
 
 ## Repeated notes (what would have caught them)
 - Blair 3/4 not the same person as front | a front-vs-3/4 match check
