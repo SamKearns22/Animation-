@@ -627,7 +627,7 @@ def stray_ink():
     now = SO.stray_ink(im, sp)
     sam6 = [e for e in SO.stray_ink(Image.open('notes/learn/pose-kit/examples/sam-26nov-c14-34-bottom-line.jpg'), sp)
             if 180 < e[0] < 240 and 125 < e[1] < 155]   # chat 15, note 6: the line's open end on Sam's three-quarter
-    k34 = SO.stray_ink(SH.tile('kemi', 45, 'upright', full=True)[0].crop((420, 1400, 560, 1470)), sp)   # where it was
+    k34 = SH.tile('kemi', 45, 'upright', full=True)[1].get('stray ink')   # the sheet's own check, where it was
     import body as B                    # the sheet's own check (every tile) red on chat 14's line, put back
     keep = B.SEAT_BACK_CORNER
     try:

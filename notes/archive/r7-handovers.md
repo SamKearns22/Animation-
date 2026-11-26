@@ -227,3 +227,18 @@ Locked by Sam: May mode 'body' front, side, both three-quarters, shoes (c10c), '
 only these 5 notes may move them; her posted outfit; Open Wounds' seated frames (switch off); the bum/seat. Kemi/Blair: posted films untouched.
 For Claude: sheets via notes/learn/pose-kit/learn_sheet.py OUTDIR (add 'short top' check); kittest short_top_hem. Cost: R7 28.5% of a 6% estimate (Sam told). GTA branches not R7's, left.
 
+
+## Where things stand (chat 14, 26 Nov, session_01U3pKR1movU8e9xJf8nbpnk)
+Rules that bite next: 87 (two flat rounds on one note: stop), 5 (each note a check proven on Sam's frame), Locked (May moves only for these 5 notes).
+Done: Sam's 5 notes fixed in the shared solid_seat/views/body/sitting code, on May, Kemi, Blair (sheets
+notes/learn/pose-kit/{may,kemi,blair}-r7c14-before-after.jpg, sent). Checks proven red on Sam's frame and green now: leg_tone (note 1
+colour), back_clip (note 5), stray_ink (note 2). Not yet proven: note 1's join, note 3's crotch tick, note 4's rugged outline (tries missed Sam's frame).
+Next: chat 15, Opus medium (Sam's notes 6-7 below): wire stray_ink into every sheet tile and prove it red on Sam's frame, fix the 3/4 bottom line; crossed legs one colour; resend the three sheets. Then Q1/C2 still open.
+Needs Sam (asked in chat 14, unanswered): Q1 the full kit check (Y/N; pick N, the final runs it); C2, the one pose command (notes/proposals/pose-kit-format.md).
+Read: guides/pose-kits.md; this section; solid_seat.py MAP and the chat 14 checks at the file's end.
+Open rule requests: none.
+Locked by Sam: May mode 'body' (all views, shoes, 'upright', 'upright, apart') as on the c14 sheet; her posted outfit; Open Wounds' seated frames (switch off);
+the bum/seat. Kemi/Blair: posted films untouched (only mode 'body' code paths changed; seated_r7_switch run).
+For Claude: views.r7_back_face + sitting bz; body.trouser_seat(rear=); solid_seat _smooth/_ink/SMOOTH_R/SPECK/BETWEEN_MIN/SPREAD_FRONT; kittests leg_tone,
+back_clip, stray_ink. Handover check's 'SENTENCE lost' lines: old CLAUDE.md commits (34f49840, 0945cc85), not this chat; both sentences stand reworded in CLAUDE.md now. Known small: a jog in Kemi's side outline where the bottom meets the seat; a spur on the crotch's right line. GTA branches not R7's, left.
+
